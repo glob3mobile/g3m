@@ -384,7 +384,7 @@
       }
       /**/
 
-      /*
+      /**/
       NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/boundary_lines_land"
                                                                   ofType: @"geojson"];
       if (geoJSONFilePath) {
@@ -394,10 +394,10 @@
         if (nsGEOJSON) {
           std::string geoJSON = [nsGEOJSON UTF8String];
 
-          GEOObject* geoObject = GEOJSONParser::parse(context, geoJSON);
+          GEOObject* geoObject = GEOJSONParser::parse(geoJSON);
         }
       }
-      */
+      /**/
     }
   };
 
