@@ -14,7 +14,7 @@
 		383BD37E1577EDC00012AC53 /* Logger_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 383BD37B1577EDC00012AC53 /* Logger_iOS.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
 		383BD3841577EDDB0012AC53 /* ES2Renderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 383BD3801577EDDB0012AC53 /* ES2Renderer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		383BD3851577EDDB0012AC53 /* ES2Renderer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 383BD3811577EDDB0012AC53 /* ES2Renderer.mm */; };
-		383BD3861577EDDB0012AC53 /* G3MWidget_iOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 383BD3821577EDDB0012AC53 /* G3MWidget_iOS.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		383BD3861577EDDB0012AC53 /* G3MWidget_iOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 383BD3821577EDDB0012AC53 /* G3MWidget_iOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		383BD3871577EDDB0012AC53 /* G3MWidget_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 383BD3831577EDDB0012AC53 /* G3MWidget_iOS.mm */; };
 		383BD3971577EE500012AC53 /* Context.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 383BD38E1577EE500012AC53 /* Context.cpp */; };
 		383BD3981577EE500012AC53 /* Context.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 383BD38F1577EE500012AC53 /* Context.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -286,12 +286,12 @@
 		E8891FB31647DCF500B0E481 /* AppParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8891FB11647DCF500B0E481 /* AppParser.cpp */; };
 		E8891FB41647DCF500B0E481 /* AppParser.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E8891FB21647DCF500B0E481 /* AppParser.hpp */; };
 		E8891FBA1647DD0E00B0E481 /* GEOJSONDownloadListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8891FB61647DD0D00B0E481 /* GEOJSONDownloadListener.cpp */; };
-		E8891FBB1647DD0E00B0E481 /* GEOJSONDownloadListener.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E8891FB71647DD0D00B0E481 /* GEOJSONDownloadListener.hpp */; };
+		E8891FBB1647DD0E00B0E481 /* GEOJSONDownloadListener.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E8891FB71647DD0D00B0E481 /* GEOJSONDownloadListener.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		E8891FBC1647DD0E00B0E481 /* SceneParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8891FB81647DD0D00B0E481 /* SceneParser.cpp */; };
 		E8891FBD1647DD0E00B0E481 /* SceneParser.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E8891FB91647DD0D00B0E481 /* SceneParser.hpp */; };
-		E8891FC01647DD5200B0E481 /* G3MJSONBuilder_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E8891FBE1647DD5200B0E481 /* G3MJSONBuilder_iOS.hpp */; };
+		E8891FC01647DD5200B0E481 /* G3MJSONBuilder_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E8891FBE1647DD5200B0E481 /* G3MJSONBuilder_iOS.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		E8891FC11647DD5200B0E481 /* G3MJSONBuilder_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = E8891FBF1647DD5200B0E481 /* G3MJSONBuilder_iOS.mm */; };
-		E8891FC31647DD7400B0E481 /* IG3MJSONBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E8891FC21647DD7400B0E481 /* IG3MJSONBuilder.hpp */; };
+		E8891FC31647DD7400B0E481 /* IG3MJSONBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E8891FC21647DD7400B0E481 /* IG3MJSONBuilder.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -1066,6 +1066,10 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E8891FBB1647DD0E00B0E481 /* GEOJSONDownloadListener.hpp in Headers */,
+				E8891FC31647DD7400B0E481 /* IG3MJSONBuilder.hpp in Headers */,
+				E8891FC01647DD5200B0E481 /* G3MJSONBuilder_iOS.hpp in Headers */,
+				383BD3861577EDDB0012AC53 /* G3MWidget_iOS.h in Headers */,
 				CF11E8C7164D653000935052 /* SGLayerNode.hpp in Headers */,
 				CFC3BCCA164C6C7300A8D37D /* SGShape.hpp in Headers */,
 				CF857B2F164C757A0089F1DE /* SGRotateNode.hpp in Headers */,
@@ -1208,7 +1212,6 @@
 				D8F42FBF15EB6D78000D1822 /* SQLiteStorage_iOS.hpp in Headers */,
 				D8A723AC15E4D42B00ABDF07 /* StringBuilder_iOS.hpp in Headers */,
 				383BD37C1577EDC00012AC53 /* Factory_iOS.hpp in Headers */,
-				383BD3861577EDDB0012AC53 /* G3MWidget_iOS.h in Headers */,
 				383BD37E1577EDC00012AC53 /* Logger_iOS.hpp in Headers */,
 				CF8A234E15C4306800FD56C9 /* Downloader_iOS_Handler.h in Headers */,
 				CF8A235315C4340900FD56C9 /* Downloader_iOS_Listener.h in Headers */,
@@ -1220,10 +1223,7 @@
 				CFA189A015F8D9F80048BF46 /* IntBuffer_iOS.hpp in Headers */,
 				A74072CF161EEEA300182A39 /* BingLayer.hpp in Headers */,
 				E8891FB41647DCF500B0E481 /* AppParser.hpp in Headers */,
-				E8891FBB1647DD0E00B0E481 /* GEOJSONDownloadListener.hpp in Headers */,
 				E8891FBD1647DD0E00B0E481 /* SceneParser.hpp in Headers */,
-				E8891FC01647DD5200B0E481 /* G3MJSONBuilder_iOS.hpp in Headers */,
-				E8891FC31647DD7400B0E481 /* IG3MJSONBuilder.hpp in Headers */,
 				CF9592AF1652E28500CB7AC8 /* OrderedRenderable.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
