@@ -216,15 +216,15 @@ GEOFeature* GEOJSONParser::createFeature(const JSONObject* jsonObject) const {
 
   const JSONBaseObject* jsId = JSONBaseObject::deepCopy( jsonObject->get("id") );
 
-#ifdef C_CODE
   const JSONObject* jsGeometry = jsonObject->getAsObject("geometry");
+  GEOGeometry* geometry = createGeometry(jsGeometry);
+
+#ifdef C_CODE
+  const JSONObject* jsProperties = jsonObject->getAsObject("properties");
 #endif
 #ifdef JAVA_CODE
   JSONObject jsProperties = jsonObject.getAsObject("properties");
 #endif
-  GEOGeometry* geometry = createGeometry(jsGeometry);
-
-  const JSONObject* jsProperties = jsonObject->getAsObject("properties");
   if (jsProperties != NULL) {
     jsProperties = jsProperties->deepCopy();
   }
