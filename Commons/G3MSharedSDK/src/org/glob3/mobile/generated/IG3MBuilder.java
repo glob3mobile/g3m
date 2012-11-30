@@ -70,11 +70,6 @@ public abstract class IG3MBuilder
     
 		if (_nativeGL != null)
 		{
-			if (_threadUtils == null)
-			{
-				_threadUtils = createThreadUtils();
-			}
-    
 			if (_storage == null)
 			{
 				_storage = createStorage();
@@ -85,12 +80,26 @@ public abstract class IG3MBuilder
 				_downloader = createDownloader();
 			}
     
-			Color backgroundColor = Color.fromRGBA(_backgroundColor.getRed(), _backgroundColor.getGreen(), _backgroundColor.getBlue(), _backgroundColor.getAlpha());
+			if (_threadUtils == null)
+			{
+				_threadUtils = createThreadUtils();
+			}
+    
+			if (_planet == null)
+			{
+				_planet = Planet.createEarth();
+			}
     
 			if (_cameraConstraints.size() == 0)
 			{
 				_cameraConstraints = createCameraConstraints();
 			}
+    
+			if (_cameraRenderer == null)
+			{
+				_cameraRenderer = createCameraRenderer();
+			}
+    
     
 			if (_tileRenderer == null)
 			{
@@ -121,17 +130,25 @@ public abstract class IG3MBuilder
 			if (_renderers.size() > 0)
 			{
 				mainRenderer = new CompositeRenderer();
-				((CompositeRenderer)mainRenderer).addRenderer(_tileRenderer);
+				((CompositeRenderer) mainRenderer).addRenderer(_tileRenderer);
     
 				for (int i = 0; i < _renderers.size(); i++)
 				{
-					((CompositeRenderer)mainRenderer).addRenderer(_renderers.get(i));
+					((CompositeRenderer) mainRenderer).addRenderer(_renderers.get(i));
 				}
 			}
 			else
 			{
 				mainRenderer = _tileRenderer;
 			}
+    
+    
+			if (_busyRenderer == null)
+			{
+				_busyRenderer = new BusyMeshRenderer();
+			}
+    
+			Color backgroundColor = Color.fromRGBA(_backgroundColor.getRed(), _backgroundColor.getGreen(), _backgroundColor.getBlue(), _backgroundColor.getAlpha());
     
 			G3MWidget g3mWidget = G3MWidget.create(_nativeGL, _storage, _downloader, _threadUtils, _planet, _cameraConstraints, _cameraRenderer, mainRenderer, _busyRenderer, backgroundColor, _logFPS, _logDownloaderStatistics, _initializationTask, _autoDeleteInitializationTask, _periodicalTasks);
     
@@ -172,7 +189,8 @@ public abstract class IG3MBuilder
 	{
 		if (_cameraRenderer != null)
 			_cameraRenderer.dispose();
-		_backgroundColor = null;
+		if (_backgroundColor != null)
+			_backgroundColor.dispose();
 		if (_layerSet != null)
 			_layerSet.dispose();
 		if (_tileRenderer != null)
@@ -212,7 +230,8 @@ public abstract class IG3MBuilder
 	{
 		if (_backgroundColor != backgroundColor)
 		{
-			_backgroundColor = null;
+			if (_backgroundColor != null)
+				_backgroundColor.dispose();
 			_backgroundColor = backgroundColor;
 		}
 	}
