@@ -11,7 +11,6 @@
 
 #include <string>
 
-class G3MContext;
 class IByteBuffer;
 
 class JSONObject;
@@ -30,12 +29,9 @@ class Geodetic2D;
 class GEOJSONParser {
 private:
   const std::string _json;
-  const G3MContext* _context;
 
-  GEOJSONParser(const G3MContext* context,
-                const std::string& json) :
-  _json(json),
-  _context(context)
+  GEOJSONParser(const std::string& json) :
+  _json(json)
   {
 
   }
@@ -56,11 +52,9 @@ private:
 
 public:
 
-  static GEOObject* parse(const G3MContext* context,
-                          const std::string& json);
+  static GEOObject* parse(const std::string& json);
 
-  static GEOObject* parse(const G3MContext* context,
-                          const IByteBuffer* json);
+  static GEOObject* parse(const IByteBuffer* json);
   
 };
 

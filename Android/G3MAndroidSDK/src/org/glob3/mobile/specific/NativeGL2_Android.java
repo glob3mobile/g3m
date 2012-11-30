@@ -243,12 +243,11 @@ public final class NativeGL2_Android
                                    final IFloatBuffer buffer) {
       final FloatBuffer floatBuffer = ((FloatBuffer_Android) buffer).getBuffer();
 
-      System.err.println("vertexAttribPointer(index=" + index + //
-                         ", size=" + size + //
-                         ", normalized=" + normalized + //
-                         ", stride=" + stride + //
-                         ", floatBuffer=" + floatBuffer + ")");
-
+      //      System.err.println("vertexAttribPointer(index=" + index + //
+      //                         ", size=" + size + //
+      //                         ", normalized=" + normalized + //
+      //                         ", stride=" + stride + //
+      //                         ", floatBuffer=" + floatBuffer + ")");
 
       GLES20.glVertexAttribPointer(index, size, GLES20.GL_FLOAT, normalized, stride, floatBuffer);
    }
@@ -260,9 +259,9 @@ public final class NativeGL2_Android
                             final IIntBuffer indices) {
       final IntBuffer indexBuffer = ((IntBuffer_Android) indices).getBuffer();
 
-      System.err.println("drawElements(mode=" + mode + //
-                         ", count=" + count + //
-                         ", indexBuffer=" + indexBuffer + ")");
+      //      System.err.println("drawElements(mode=" + mode + //
+      //                         ", count=" + count + //
+      //                         ", indexBuffer=" + indexBuffer + ")");
 
       GLES20.glDrawElements(mode, count, GLES20.GL_UNSIGNED_INT, indexBuffer);
    }

@@ -23,16 +23,12 @@
 
 #include "Geodetic2D.hpp"
 
-GEOObject* GEOJSONParser::parse(const G3MContext* context,
-                                const IByteBuffer* json) {
-  return parse(context,
-               json->getAsString());
+GEOObject* GEOJSONParser::parse(const IByteBuffer* json) {
+  return parse(json->getAsString());
 }
 
-GEOObject* GEOJSONParser::parse(const G3MContext* context,
-                                const std::string& json) {
-  GEOJSONParser parser(context,
-                       json);
+GEOObject* GEOJSONParser::parse(const std::string& json) {
+  GEOJSONParser parser(json);
   return parser.pvtParse();
 }
 
@@ -220,7 +216,12 @@ GEOFeature* GEOJSONParser::createFeature(const JSONObject* jsonObject) const {
 
   const JSONBaseObject* jsId = JSONBaseObject::deepCopy( jsonObject->get("id") );
 
+#ifdef C_CODE
   const JSONObject* jsGeometry = jsonObject->getAsObject("geometry");
+#endif
+#ifdef JAVA_CODE
+  JSONObject jsProperties = jsonObject.getAsObject("properties");
+#endif
   GEOGeometry* geometry = createGeometry(jsGeometry);
 
   const JSONObject* jsProperties = jsonObject->getAsObject("properties");
