@@ -127,10 +127,10 @@ public class GEOJSONParser
   
 	final JSONBaseObject jsId = JSONBaseObject.deepCopy(jsonObject.get("id"));
   
-	JSONObject jsProperties = jsonObject.getAsObject("properties");
+	final JSONObject jsGeometry = jsonObject.getAsObject("geometry");
 	GEOGeometry geometry = createGeometry(jsGeometry);
   
-	final JSONObject jsProperties = jsonObject.getAsObject("properties");
+	JSONObject jsProperties = jsonObject.getAsObject("properties");
 	if (jsProperties != null)
 	{
 	  jsProperties = jsProperties.deepCopy();
