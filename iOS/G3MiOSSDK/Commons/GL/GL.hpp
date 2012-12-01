@@ -71,7 +71,8 @@ private:
   float _flatColorB;
   float _flatColorA;
   float _flatColorIntensity;
-
+  float _lineWidth;
+  
   inline void loadModelView();
 
   const IGLTextureId* getGLTextureId();
@@ -129,7 +130,8 @@ public:
   _flatColorB(0),
   _flatColorA(0),
   _flatColorIntensity(0),
-  _billboardTexCoord(NULL)
+  _billboardTexCoord(NULL),
+  _lineWidth(1)
   {
     //Init Constants
     GLCullFace::init(_nativeGL);

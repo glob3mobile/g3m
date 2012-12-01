@@ -346,7 +346,10 @@ void GL::lineWidth(float width) {
     ILogger::instance()->logInfo("GL::lineWidth()");
   }
 
-  _nativeGL->lineWidth(width);
+  if (_lineWidth != width) {
+    _nativeGL->lineWidth(width);
+    _lineWidth = width;
+  }
 }
 
 void GL::pointSize(float size) {
