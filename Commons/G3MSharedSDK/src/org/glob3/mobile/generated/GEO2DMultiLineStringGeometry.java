@@ -24,6 +24,19 @@ public class GEO2DMultiLineStringGeometry extends GEOMultiLineStringGeometry
 {
   private java.util.ArrayList<java.util.ArrayList<Geodetic2D>> _coordinatesArray;
 
+  protected final Mesh createMesh(G3MRenderContext rc)
+  {
+	CompositeMesh composite = new CompositeMesh();
+	final int coordinatesArrayCount = _coordinatesArray.size();
+	for (int i = 0; i < coordinatesArrayCount; i++)
+	{
+	  java.util.ArrayList<Geodetic2D> coordinates = _coordinatesArray.get(i);
+  
+	  composite.addMesh(create2DBoundaryMesh(coordinates, rc));
+	}
+	return composite;
+  }
+
 
   public GEO2DMultiLineStringGeometry(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray)
   {

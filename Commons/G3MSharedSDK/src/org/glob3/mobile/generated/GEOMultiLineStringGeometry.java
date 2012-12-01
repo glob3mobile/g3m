@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class GEOMultiLineStringGeometry extends GEOGeometry
+public abstract class GEOMultiLineStringGeometry extends GEOGeometry
 {
 
 }

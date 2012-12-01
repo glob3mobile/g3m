@@ -41,4 +41,14 @@ public class GEOFeatureCollection extends GEOObject
 	}
   }
 
+  public final void render(G3MRenderContext rc)
+  {
+	final int featuresCount = _features.size();
+	for (int i = 0; i < featuresCount; i++)
+	{
+	  GEOFeature feature = _features.get(i);
+	  feature.render(rc);
+	}
+  }
+
 }

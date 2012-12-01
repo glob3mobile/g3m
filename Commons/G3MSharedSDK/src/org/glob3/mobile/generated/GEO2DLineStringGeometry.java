@@ -25,6 +25,11 @@ public class GEO2DLineStringGeometry extends GEOLineStringGeometry
 {
   private java.util.ArrayList<Geodetic2D> _coordinates;
 
+  protected final Mesh createMesh(G3MRenderContext rc)
+  {
+	return create2DBoundaryMesh(_coordinates, rc);
+  }
+
 
   public GEO2DLineStringGeometry(java.util.ArrayList<Geodetic2D> coordinates)
   {

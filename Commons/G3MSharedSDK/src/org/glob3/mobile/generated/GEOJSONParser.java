@@ -45,9 +45,22 @@ public class GEOJSONParser
 {
   private final String _json;
 
+  // statistics
+  private int _coordinates2DCount;
+  private int _lineStrings2DCount;
+  private int _multiLineStrings2DCount;
+  private int _featuresCount;
+  private int _featuresCollectionCount;
+
+
   private GEOJSONParser(String json)
   {
 	  _json = json;
+	  _coordinates2DCount = 0;
+	  _lineStrings2DCount = 0;
+	  _multiLineStrings2DCount = 0;
+	  _featuresCount = 0;
+	  _featuresCollectionCount = 0;
 
   }
 
@@ -71,6 +84,8 @@ public class GEOJSONParser
   
 	if (jsonBaseObject != null)
 		jsonBaseObject.dispose();
+  
+	showStatistics();
   
 	return result;
   }
@@ -118,6 +133,7 @@ public class GEOJSONParser
 	  }
 	}
   
+	_featuresCollectionCount++;
 	return geo;
   }
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -136,6 +152,7 @@ public class GEOJSONParser
 	  jsProperties = jsProperties.deepCopy();
 	}
   
+	_featuresCount++;
 	return new GEOFeature(jsId, geometry, jsProperties);
   }
 
@@ -206,6 +223,7 @@ public class GEOJSONParser
 	  if (coordinates != null)
 	  {
 		geo = new GEO2DLineStringGeometry(coordinates);
+		_lineStrings2DCount++;
 	  }
 	}
 	/*
@@ -271,6 +289,7 @@ public class GEOJSONParser
 	  }
   
 	  geo = new GEO2DMultiLineStringGeometry(coordinatesArray);
+	  _multiLineStrings2DCount++;
 	}
 	/*
 	 else if (dimensions >= 3) {
@@ -326,9 +345,17 @@ public class GEOJSONParser
   
 	  Geodetic2D coordinate = new Geodetic2D(Angle.fromDegrees(latitudeDegrees), Angle.fromDegrees(longitudeDegrees));
 	  coordinates.add(coordinate);
+	  _coordinates2DCount++;
 	}
   
 	return coordinates;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: void showStatistics() const
+  private void showStatistics()
+  {
+	ILogger.instance().logInfo("GEOJSONParser Statistics: Coordinates2D=%d, LineStrings2D=%d, MultiLineStrings2D=%d, features=%d, featuresCollection=%d", _coordinates2DCount, _lineStrings2DCount, _multiLineStrings2DCount, _featuresCount, _featuresCollectionCount);
   }
 
 
