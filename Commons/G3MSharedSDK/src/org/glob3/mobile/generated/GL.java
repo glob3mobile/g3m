@@ -72,6 +72,7 @@ public class GL
   private float _flatColorB;
   private float _flatColorA;
   private float _flatColorIntensity;
+  private float _lineWidth;
 
   private void loadModelView()
   {
@@ -223,6 +224,7 @@ public class GL
 	  _flatColorA = 0F;
 	  _flatColorIntensity = 0F;
 	  _billboardTexCoord = null;
+	  _lineWidth = 1F;
 	//Init Constants
 	GLCullFace.init(_nativeGL);
 	GLBufferType.init(_nativeGL);
@@ -591,7 +593,11 @@ public class GL
 	  ILogger.instance().logInfo("GL::lineWidth()");
 	}
   
-	_nativeGL.lineWidth(width);
+	if (_lineWidth != width)
+	{
+	  _nativeGL.lineWidth(width);
+	  _lineWidth = width;
+	}
   }
 
   public final void pointSize(float size)
