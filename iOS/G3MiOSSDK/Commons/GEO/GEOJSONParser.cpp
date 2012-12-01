@@ -33,10 +33,11 @@ GEOObject* GEOJSONParser::parse(const std::string& json) {
 }
 
 void GEOJSONParser::showStatistics() const {
-  ILogger::instance()->logInfo("GEOJSONParser Statistics: Coordinates2D=%d, LineStrings2D=%d, MultiLineStrings2D=%d, features=%d, featuresCollection=%d",
+  ILogger::instance()->logInfo("GEOJSONParser Statistics: Coordinates2D=%d, LineStrings2D=%d, MultiLineStrings2D=%d (LineStrings2D=%d), features=%d, featuresCollection=%d",
                                _coordinates2DCount,
                                _lineStrings2DCount,
                                _multiLineStrings2DCount,
+                               _lineStringsInMultiLineString2DCount,
                                _featuresCount,
                                _featuresCollectionCount);
 }
@@ -174,6 +175,7 @@ GEOMultiLineStringGeometry* GEOJSONParser::createMultiLineStringGeometry(const J
       std::vector<Geodetic2D*>* coordinates = create2DCoordinates(jsCoordinates);
       if (coordinates != NULL) {
         coordinatesArray->push_back( coordinates );
+        _lineStringsInMultiLineString2DCount++;
       }
     }
 

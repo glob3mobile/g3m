@@ -391,6 +391,14 @@
       /**/
       NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/boundary_lines_land"
                                                                   ofType: @"geojson"];
+//    Info: GEOJSONParser Statistics: Coordinates2D=77622, LineStrings2D=89, MultiLineStrings2D=372, features=461, featuresCollection=1
+
+
+//      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/extremadura-roads"
+//                                                                  ofType: @"geojson"];
+//    Info: GEOJSONParser Statistics: Coordinates2D=398140, LineStrings2D=7988, MultiLineStrings2D=0, features=7988, featuresCollection=1
+
+
       if (geoJSONFilePath) {
         NSString *nsGEOJSON = [NSString stringWithContentsOfFile: geoJSONFilePath
                                                           encoding: NSUTF8StringEncoding

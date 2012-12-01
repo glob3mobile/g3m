@@ -34,6 +34,7 @@ private:
   mutable int _coordinates2DCount;
   mutable int _lineStrings2DCount;
   mutable int _multiLineStrings2DCount;
+  mutable int _lineStringsInMultiLineString2DCount;
   mutable int _featuresCount;
   mutable int _featuresCollectionCount;
 
@@ -43,6 +44,7 @@ private:
   _coordinates2DCount(0),
   _lineStrings2DCount(0),
   _multiLineStrings2DCount(0),
+  _lineStringsInMultiLineString2DCount(0),
   _featuresCount(0),
   _featuresCollectionCount(0)
   {
