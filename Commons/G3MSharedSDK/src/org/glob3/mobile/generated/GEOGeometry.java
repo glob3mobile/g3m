@@ -21,6 +21,8 @@ package org.glob3.mobile.generated;
 //class Geodetic2D;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Mesh;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class Color;
 
 public abstract class GEOGeometry extends GEOObject
 {
@@ -37,7 +39,7 @@ public abstract class GEOGeometry extends GEOObject
 
   protected abstract Mesh createMesh(G3MRenderContext rc);
 
-  protected final Mesh create2DBoundaryMesh(java.util.ArrayList<Geodetic2D> coordinates, G3MRenderContext rc)
+  protected final Mesh create2DBoundaryMesh(java.util.ArrayList<Geodetic2D> coordinates, Color color, float lineWidth, G3MRenderContext rc)
   {
 	FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.firstVertex(), rc.getPlanet(), Geodetic2D.zero());
   
@@ -48,9 +50,7 @@ public abstract class GEOGeometry extends GEOObject
 	  vertices.add(coordinate);
 	}
   
-	Color color = Color.newFromRGBA(1, 1, 0, 1);
-  
-	return new DirectMesh(GLPrimitive.lineStrip(), true, vertices.getCenter(), vertices.create(), 2, color);
+	return new DirectMesh(GLPrimitive.lineStrip(), true, vertices.getCenter(), vertices.create(), lineWidth, color);
   }
 
   public GEOGeometry()
@@ -64,7 +64,12 @@ public abstract class GEOGeometry extends GEOObject
 	Mesh mesh = getMesh(rc);
 	if (mesh != null)
 	{
-	  mesh.render(rc);
+	  final Extent extent = mesh.getExtent();
+  
+	  if (extent.touches(rc.getCurrentCamera().getFrustumInModelCoordinates()))
+	  {
+		mesh.render(rc);
+	  }
 	}
   }
 

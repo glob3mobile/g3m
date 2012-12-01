@@ -27,7 +27,9 @@ public class GEO2DLineStringGeometry extends GEOLineStringGeometry
 
   protected final Mesh createMesh(G3MRenderContext rc)
   {
-	return create2DBoundaryMesh(_coordinates, rc);
+	Color color = Color.newFromRGBA(1, 1, 0, 1);
+  
+	return create2DBoundaryMesh(_coordinates, color, 2, rc);
   }
 
 
