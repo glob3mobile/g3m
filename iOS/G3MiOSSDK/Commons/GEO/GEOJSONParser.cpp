@@ -32,6 +32,15 @@ GEOObject* GEOJSONParser::parse(const std::string& json) {
   return parser.pvtParse();
 }
 
+void GEOJSONParser::showStatistics() const {
+  ILogger::instance()->logInfo("GEOJSONParser Statistics: Coordinates2D=%d, LineStrings2D=%d, MultiLineStrings2D=%d, features=%d, featuresCollection=%d",
+                               _coordinates2DCount,
+                               _lineStrings2DCount,
+                               _multiLineStrings2DCount,
+                               _featuresCount,
+                               _featuresCollectionCount);
+}
+
 GEOObject* GEOJSONParser::pvtParse() const {
   JSONBaseObject* jsonBaseObject =  IJSONParser::instance()->parse(_json);
 
@@ -46,6 +55,8 @@ GEOObject* GEOJSONParser::pvtParse() const {
   }
 
   delete jsonBaseObject;
+
+  showStatistics();
 
   return result;
 }
@@ -84,6 +95,7 @@ std::vector<Geodetic2D*>* GEOJSONParser::create2DCoordinates(const JSONArray* js
     Geodetic2D* coordinate = new Geodetic2D(Angle::fromDegrees(latitudeDegrees),
                                             Angle::fromDegrees(longitudeDegrees));
     coordinates->push_back( coordinate );
+    _coordinates2DCount++;
   }
 
   return coordinates;
@@ -110,6 +122,7 @@ GEOLineStringGeometry* GEOJSONParser::createLineStringGeometry(const JSONObject*
     std::vector<Geodetic2D*>* coordinates = create2DCoordinates(jsCoordinates);
     if (coordinates != NULL) {
       geo = new GEO2DLineStringGeometry(coordinates);
+      _lineStrings2DCount++;
     }
   }
   /*
@@ -165,6 +178,7 @@ GEOMultiLineStringGeometry* GEOJSONParser::createMultiLineStringGeometry(const J
     }
 
     geo = new GEO2DMultiLineStringGeometry(coordinatesArray);
+    _multiLineStrings2DCount++;
   }
   /*
    else if (dimensions >= 3) {
@@ -229,6 +243,7 @@ GEOFeature* GEOJSONParser::createFeature(const JSONObject* jsonObject) const {
     jsProperties = jsProperties->deepCopy();
   }
 
+  _featuresCount++;
   return new GEOFeature(jsId, geometry, jsProperties);
 }
 
@@ -247,6 +262,7 @@ GEOFeatureCollection* GEOJSONParser::createFeaturesCollection(const JSONObject* 
     }
   }
 
+  _featuresCollectionCount++;
   return geo;
 }
 

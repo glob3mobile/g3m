@@ -30,8 +30,21 @@ class GEOJSONParser {
 private:
   const std::string _json;
 
+  // statistics
+  mutable int _coordinates2DCount;
+  mutable int _lineStrings2DCount;
+  mutable int _multiLineStrings2DCount;
+  mutable int _featuresCount;
+  mutable int _featuresCollectionCount;
+
+
   GEOJSONParser(const std::string& json) :
-  _json(json)
+  _json(json),
+  _coordinates2DCount(0),
+  _lineStrings2DCount(0),
+  _multiLineStrings2DCount(0),
+  _featuresCount(0),
+  _featuresCollectionCount(0)
   {
 
   }
@@ -49,6 +62,8 @@ private:
 
 
   std::vector<Geodetic2D*>* create2DCoordinates(const JSONArray* jsCoordinates) const;
+
+  void showStatistics() const;
 
 public:
 
