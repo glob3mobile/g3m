@@ -9,6 +9,7 @@
 #include "GEO2DLineStringGeometry.hpp"
 
 #include "Geodetic2D.hpp"
+#include "Color.hpp"
 
 GEO2DLineStringGeometry::~GEO2DLineStringGeometry() {
   const int coordinatesCount = _coordinates->size();
@@ -20,5 +21,7 @@ GEO2DLineStringGeometry::~GEO2DLineStringGeometry() {
 }
 
 Mesh* GEO2DLineStringGeometry::createMesh(const G3MRenderContext* rc) {
-  return create2DBoundaryMesh(_coordinates, rc);
+  Color* color = Color::newFromRGBA(1, 1, 0, 1);
+
+  return create2DBoundaryMesh(_coordinates, color, 2, rc);
 }

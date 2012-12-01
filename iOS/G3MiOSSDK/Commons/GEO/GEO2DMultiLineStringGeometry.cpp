@@ -10,6 +10,7 @@
 
 #include "Geodetic2D.hpp"
 #include "CompositeMesh.hpp"
+#include "Color.hpp"
 
 GEO2DMultiLineStringGeometry::~GEO2DMultiLineStringGeometry() {
   const int coordinatesArrayCount = _coordinatesArray->size();
@@ -32,7 +33,9 @@ Mesh* GEO2DMultiLineStringGeometry::createMesh(const G3MRenderContext* rc) {
   for (int i = 0; i < coordinatesArrayCount; i++) {
     std::vector<Geodetic2D*>* coordinates = _coordinatesArray->at(i);
 
-    composite->addMesh( create2DBoundaryMesh(coordinates, rc) );
+    Color* color = Color::newFromRGBA(1, 1, 0, 1);
+
+    composite->addMesh( create2DBoundaryMesh(coordinates, color, 2, rc) );
   }
   return composite;
 }

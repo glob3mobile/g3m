@@ -14,6 +14,7 @@
 #include <vector>
 class Geodetic2D;
 class Mesh;
+class Color;
 
 class GEOGeometry : public GEOObject {
 private:
@@ -25,6 +26,8 @@ protected:
   virtual Mesh* createMesh(const G3MRenderContext* rc) = 0;
 
   Mesh* create2DBoundaryMesh(std::vector<Geodetic2D*>* coordinates,
+                             Color* color,
+                             float lineWidth,
                              const G3MRenderContext* rc);
 
 public:
