@@ -39,8 +39,8 @@ public class GL
 
   private final java.util.LinkedList<IGLTextureId> _texturesIdBag = new java.util.LinkedList<IGLTextureId>();
   private int _texturesIdAllocationCounter;
-//  long                        _texturesIdGetCounter;
-//  long                        _texturesIdTakeCounter;
+  //  long                        _texturesIdGetCounter;
+  //  long                        _texturesIdTakeCounter;
 
   // state handling
   private boolean _enableTextures;
@@ -124,14 +124,14 @@ public class GL
 	return result;
   }
 
-//  int _lastTextureWidth;
-//  int _lastTextureHeight;
-///#ifdef C_CODE
-//  unsigned char* _lastImageData;
-///#endif
-///#ifdef JAVA_CODE
-//  byte[] _lastImageData;
-///#endif
+  //  int _lastTextureWidth;
+  //  int _lastTextureHeight;
+  ///#ifdef C_CODE
+  //  unsigned char* _lastImageData;
+  ///#endif
+  ///#ifdef JAVA_CODE
+  //  byte[] _lastImageData;
+  ///#endif
 
   //Get Locations warning of errors
   private boolean _errorGettingLocationOcurred;
@@ -192,9 +192,9 @@ public class GL
 
 
   public GL(INativeGL nativeGL, boolean verbose)
-//  _enableFlatColor(false),
-//  _texturesIdGetCounter(0),
-//  _texturesIdTakeCounter(0),
+  //  _enableFlatColor(false),
+  //  _texturesIdGetCounter(0),
+  //  _texturesIdTakeCounter(0),
   {
 	  _nativeGL = nativeGL;
 	  _verbose = verbose;
@@ -492,74 +492,14 @@ public class GL
 	}
   }
 
-  public final void drawTriangles(IIntBuffer indices)
+  public final void drawElements(int mode, IIntBuffer indices)
   {
 	if (_verbose)
 	{
-	  ILogger.instance().logInfo("GL::drawTriangles(%s)", indices.description());
+	  ILogger.instance().logInfo("GL::drawElements(%d, %s)", mode, indices.description());
 	}
   
-	_nativeGL.drawElements(GLPrimitive.triangles(), indices.size(), indices);
-  }
-
-  public final void drawTriangleStrip(IIntBuffer indices)
-  {
-	if (_verbose)
-	{
-	  ILogger.instance().logInfo("GL::drawTriangleStrip(%s)", indices.description());
-	}
-  
-	_nativeGL.drawElements(GLPrimitive.triangleStrip(), indices.size(), indices);
-  }
-
-  public final void drawTriangleFan(IIntBuffer indices)
-  {
-	if (_verbose)
-	{
-	  ILogger.instance().logInfo("GL::drawTriangleFan(%s)", indices.description());
-	}
-  
-	_nativeGL.drawElements(GLPrimitive.triangleFan(), indices.size(), indices);
-  }
-
-  public final void drawLines(IIntBuffer indices)
-  {
-	if (_verbose)
-	{
-	  ILogger.instance().logInfo("GL::drawLines(%s)", indices.description());
-	}
-  
-	_nativeGL.drawElements(GLPrimitive.lines(), indices.size(), indices);
-  }
-
-  public final void drawLineStrip(IIntBuffer indices)
-  {
-	if (_verbose)
-	{
-	  ILogger.instance().logInfo("GL::drawLineStrip(%s)", indices.description());
-	}
-  
-	_nativeGL.drawElements(GLPrimitive.lineStrip(), indices.size(), indices);
-  }
-
-  public final void drawLineLoop(IIntBuffer indices)
-  {
-	if (_verbose)
-	{
-	  ILogger.instance().logInfo("GL::drawLineLoop(%s)", indices.description());
-	}
-  
-	_nativeGL.drawElements(GLPrimitive.lineLoop(), indices.size(), indices);
-  }
-
-  public final void drawPoints(IIntBuffer indices)
-  {
-	if (_verbose)
-	{
-	  ILogger.instance().logInfo("GL::drawPoints(%s)", indices.description());
-	}
-  
-	_nativeGL.drawElements(GLPrimitive.points(), indices.size(), indices);
+	_nativeGL.drawElements(mode, indices.size(), indices);
   }
 
   public final void setProjection(MutableMatrix44D projection)
@@ -965,10 +905,10 @@ public class GL
   public void dispose()
   {
 
-//    if (_lastImageData != NULL) {
-//      delete [] _lastImageData;
-//      _lastImageData = NULL;
-//    }
+	//    if (_lastImageData != NULL) {
+	//      delete [] _lastImageData;
+	//      _lastImageData = NULL;
+	//    }
 
 	if (_vertices != null)
 		_vertices.dispose();

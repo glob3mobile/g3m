@@ -27,11 +27,15 @@ public class DummyRenderer extends LeafRenderer
 
   private double _halfSize;
 
-  private IIntBuffer _index;
+  private IIntBuffer _indices;
   private IFloatBuffer _vertices;
 
   public void dispose()
   {
+	if (_indices != null)
+		_indices.dispose();
+	if (_vertices != null)
+		_vertices.dispose();
   }
 
   public final void initialize(G3MContext context)
@@ -62,9 +66,9 @@ public class DummyRenderer extends LeafRenderer
 	  {
   
 		vertices.add((float)0, (float)(-_halfSize + i / (float)(res - 1) * 2 *_halfSize), (float)(_halfSize - j / (float)(res - 1) * 2 *_halfSize));
-  //      _vertices[n++] = (float) 0;
-  //      _vertices[n++] = (float) (-_halfSize + i / (float) (res - 1) * 2*_halfSize);
-  //      _vertices[n++] = (float) (_halfSize - j / (float) (res - 1) * 2*_halfSize);
+		//      _vertices[n++] = (float) 0;
+		//      _vertices[n++] = (float) (-_halfSize + i / (float) (res - 1) * 2*_halfSize);
+		//      _vertices[n++] = (float) (_halfSize - j / (float) (res - 1) * 2*_halfSize);
 	  }
 	}
   
@@ -80,14 +84,14 @@ public class DummyRenderer extends LeafRenderer
 	  {
 		index.add(j * res + i);
 		index.add(j * res + i + res);
-  //      _index[n++] = (j * res + i);
-  //      _index[n++] = (j * res + i + res);
+		//      _index[n++] = (j * res + i);
+		//      _index[n++] = (j * res + i + res);
 	  }
 	  index.add(j * res + 2 * res - 1);
 	  //_index[n++] = (j * res + 2 * res - 1);
 	}
   
-	_index = index.create();
+	_indices = index.create();
 	_vertices = vertices.create();
   }
 
@@ -109,7 +113,7 @@ public class DummyRenderer extends LeafRenderer
 	  gl.pushMatrix();
 	  MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(new Vector3D(_halfSize,0,0));
 	  gl.multMatrixf(T);
-	  gl.drawTriangleStrip(_index);
+	  gl.drawElements(GLPrimitive.triangleStrip(), _indices);
 	  gl.popMatrix();
 	}
   
@@ -120,7 +124,7 @@ public class DummyRenderer extends LeafRenderer
 	  MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(new Vector3D(0,_halfSize,0));
 	  MutableMatrix44D R = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(90), new Vector3D(0,0,1));
 	  gl.multMatrixf(T.multiply(R));
-	  gl.drawTriangleStrip(_index);
+	  gl.drawElements(GLPrimitive.triangleStrip(), _indices);
 	  gl.popMatrix();
 	}
   
@@ -131,7 +135,7 @@ public class DummyRenderer extends LeafRenderer
 	  MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(new Vector3D(0,-_halfSize,0));
 	  MutableMatrix44D R = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(-90), new Vector3D(0,0,1));
 	  gl.multMatrixf(T.multiply(R));
-	  gl.drawTriangleStrip(_index);
+	  gl.drawElements(GLPrimitive.triangleStrip(), _indices);
 	  gl.popMatrix();
 	}
   
@@ -142,7 +146,7 @@ public class DummyRenderer extends LeafRenderer
 	  MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(new Vector3D(0,0,-_halfSize));
 	  MutableMatrix44D R = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(90), new Vector3D(0,1,0));
 	  gl.multMatrixf(T.multiply(R));
-	  gl.drawTriangleStrip(_index);
+	  gl.drawElements(GLPrimitive.triangleStrip(), _indices);
 	  gl.popMatrix();
 	}
   
@@ -153,7 +157,7 @@ public class DummyRenderer extends LeafRenderer
 	  MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(new Vector3D(0,0,_halfSize));
 	  MutableMatrix44D R = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(-90), new Vector3D(0,1,0));
 	  gl.multMatrixf(T.multiply(R));
-	  gl.drawTriangleStrip(_index);
+	  gl.drawElements(GLPrimitive.triangleStrip(), _indices);
 	  gl.popMatrix();
 	}
   
@@ -164,7 +168,7 @@ public class DummyRenderer extends LeafRenderer
 	  MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(new Vector3D(-_halfSize,0,0));
 	  MutableMatrix44D R = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(180), new Vector3D(0,0,1));
 	  gl.multMatrixf(T.multiply(R));
-	  gl.drawTriangleStrip(_index);
+	  gl.drawElements(GLPrimitive.triangleStrip(), _indices);
 	  gl.popMatrix();
 	}
   

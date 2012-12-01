@@ -174,34 +174,7 @@ public class IndexedMesh extends Mesh
 	  gl.multMatrixf(_translationMatrix);
 	}
   
-	if (_primitive == GLPrimitive.triangles())
-	{
-	  gl.drawTriangles(_indices);
-	}
-	else if (_primitive == GLPrimitive.triangleStrip())
-	{
-	  gl.drawTriangleStrip(_indices);
-	}
-	else if (_primitive == GLPrimitive.triangleFan())
-	{
-	  gl.drawTriangleFan(_indices);
-	}
-	else if (_primitive == GLPrimitive.lines())
-	{
-	  gl.drawLines(_indices);
-	}
-	else if (_primitive == GLPrimitive.lineStrip())
-	{
-	  gl.drawLineStrip(_indices);
-	}
-	else if (_primitive == GLPrimitive.lineLoop())
-	{
-	  gl.drawLineLoop(_indices);
-	}
-	else if (_primitive == GLPrimitive.points())
-	{
-	  gl.drawPoints(_indices);
-	}
+	gl.drawElements(_primitive, _indices);
   
 	if (_translationMatrix != null)
 	{
