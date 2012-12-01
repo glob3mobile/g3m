@@ -22,7 +22,7 @@ package org.glob3.mobile.generated;
 
 public class GEORenderer extends LeafRenderer
 {
-  private final G3MContext _context;
+  private G3MContext _context;
   private java.util.ArrayList<GEOObject> _children = new java.util.ArrayList<GEOObject>();
 
 
