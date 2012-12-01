@@ -49,6 +49,7 @@ public class GEOJSONParser
   private int _coordinates2DCount;
   private int _lineStrings2DCount;
   private int _multiLineStrings2DCount;
+  private int _lineStringsInMultiLineString2DCount;
   private int _featuresCount;
   private int _featuresCollectionCount;
 
@@ -59,6 +60,7 @@ public class GEOJSONParser
 	  _coordinates2DCount = 0;
 	  _lineStrings2DCount = 0;
 	  _multiLineStrings2DCount = 0;
+	  _lineStringsInMultiLineString2DCount = 0;
 	  _featuresCount = 0;
 	  _featuresCollectionCount = 0;
 
@@ -285,6 +287,7 @@ public class GEOJSONParser
 		if (coordinates != null)
 		{
 		  coordinatesArray.add(coordinates);
+		  _lineStringsInMultiLineString2DCount++;
 		}
 	  }
   
@@ -355,7 +358,7 @@ public class GEOJSONParser
 //ORIGINAL LINE: void showStatistics() const
   private void showStatistics()
   {
-	ILogger.instance().logInfo("GEOJSONParser Statistics: Coordinates2D=%d, LineStrings2D=%d, MultiLineStrings2D=%d, features=%d, featuresCollection=%d", _coordinates2DCount, _lineStrings2DCount, _multiLineStrings2DCount, _featuresCount, _featuresCollectionCount);
+	ILogger.instance().logInfo("GEOJSONParser Statistics: Coordinates2D=%d, LineStrings2D=%d, MultiLineStrings2D=%d (LineStrings2D=%d), features=%d, featuresCollection=%d", _coordinates2DCount, _lineStrings2DCount, _multiLineStrings2DCount, _lineStringsInMultiLineString2DCount, _featuresCount, _featuresCollectionCount);
   }
 
 
