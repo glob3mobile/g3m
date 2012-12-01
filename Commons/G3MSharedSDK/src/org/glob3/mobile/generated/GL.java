@@ -504,6 +504,16 @@ public class GL
 	_nativeGL.drawElements(mode, indices.size(), indices);
   }
 
+  public final void drawArrays(int mode, int first, int count)
+  {
+	if (_verbose)
+	{
+	  ILogger.instance().logInfo("GL::drawArrays(%d, %d, %d)", mode, first, count);
+	}
+  
+	_nativeGL.drawArrays(mode, first, count);
+  }
+
   public final void setProjection(MutableMatrix44D projection)
   {
 	if (_verbose)

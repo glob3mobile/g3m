@@ -41,20 +41,16 @@ public abstract class GEOGeometry extends GEOObject
   {
 	FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.firstVertex(), rc.getPlanet(), Geodetic2D.zero());
   
-	IntBufferBuilder indices = new IntBufferBuilder();
-  
 	final int coordinatesCount = coordinates.size();
 	for (int i = 0; i < coordinatesCount; i++)
 	{
 	  Geodetic2D coordinate = coordinates.get(i);
 	  vertices.add(coordinate);
-  
-	  indices.add(i);
 	}
   
 	Color color = Color.newFromRGBA(1, 1, 0, 1);
   
-	return new IndexedMesh(GLPrimitive.lineStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), 2, color);
+	return new DirectMesh(GLPrimitive.lineStrip(), true, vertices.getCenter(), vertices.create(), 2, color);
   }
 
   public GEOGeometry()
