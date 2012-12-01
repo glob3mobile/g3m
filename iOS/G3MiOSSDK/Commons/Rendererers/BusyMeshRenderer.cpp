@@ -19,6 +19,7 @@
 #include "IMathUtils.hpp"
 
 #include "FloatBufferBuilderFromColor.hpp"
+#include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "IntBufferBuilder.hpp"
 
 #include "GLConstants.hpp"

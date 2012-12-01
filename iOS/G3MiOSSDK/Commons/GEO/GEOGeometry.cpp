@@ -14,6 +14,7 @@
 #include "IntBufferBuilder.hpp"
 #include "IndexedMesh.hpp"
 #include "GLConstants.hpp"
+#include "Color.hpp"
 
 Mesh* GEOGeometry::getMesh(const G3MRenderContext* rc) {
   if (_mesh == NULL) {

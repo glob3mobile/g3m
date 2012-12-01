@@ -228,6 +228,8 @@
 		CFDAE7AD16684929006F6A00 /* GEOFeature.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFDAE7AB16684929006F6A00 /* GEOFeature.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFDAE7B016691982006F6A00 /* GEOGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFDAE7AE16691982006F6A00 /* GEOGeometry.cpp */; };
 		CFDAE7B116691982006F6A00 /* GEOGeometry.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFDAE7AF16691982006F6A00 /* GEOGeometry.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		CFDFC05D166AB22A0065BC1F /* AbstractMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFDFC05B166AB22A0065BC1F /* AbstractMesh.cpp */; };
+		CFDFC05E166AB22A0065BC1F /* AbstractMesh.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFDFC05C166AB22A0065BC1F /* AbstractMesh.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
 		CFE029541601367100D1E75B /* IImageDownloadListener.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFE029531601367100D1E75B /* IImageDownloadListener.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFE0844515E27B9A0004EC0E /* Petition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE0844315E27B9A0004EC0E /* Petition.cpp */; };
 		CFE3B579164AE32E009975A5 /* SceneJSShapesParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE3B577164AE32E009975A5 /* SceneJSShapesParser.cpp */; };
@@ -537,6 +539,8 @@
 		CFDAE7AB16684929006F6A00 /* GEOFeature.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEOFeature.hpp; path = Commons/GEO/GEOFeature.hpp; sourceTree = "<group>"; };
 		CFDAE7AE16691982006F6A00 /* GEOGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEOGeometry.cpp; path = Commons/GEO/GEOGeometry.cpp; sourceTree = "<group>"; };
 		CFDAE7AF16691982006F6A00 /* GEOGeometry.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEOGeometry.hpp; path = Commons/GEO/GEOGeometry.hpp; sourceTree = "<group>"; };
+		CFDFC05B166AB22A0065BC1F /* AbstractMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AbstractMesh.cpp; path = Commons/Mesh/AbstractMesh.cpp; sourceTree = "<group>"; };
+		CFDFC05C166AB22A0065BC1F /* AbstractMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = AbstractMesh.hpp; path = Commons/Mesh/AbstractMesh.hpp; sourceTree = "<group>"; };
 		CFE029531601367100D1E75B /* IImageDownloadListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IImageDownloadListener.hpp; path = Commons/Downloader/IImageDownloadListener.hpp; sourceTree = "<group>"; };
 		CFE0844015E27A310004EC0E /* TerrainTouchEventListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TerrainTouchEventListener.hpp; path = Commons/Basic/TerrainTouchEventListener.hpp; sourceTree = "<group>"; };
 		CFE0844315E27B9A0004EC0E /* Petition.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Petition.cpp; path = Commons/Basic/Petition.cpp; sourceTree = "<group>"; };
@@ -1054,6 +1058,8 @@
 				D8A5602315AEF69200035086 /* TexturedMesh.hpp */,
 				CC96079115AF23F600D438D4 /* TextureMapping.cpp */,
 				CCB2564D15B5A30900079B96 /* TextureMapping.hpp */,
+				CFDFC05B166AB22A0065BC1F /* AbstractMesh.cpp */,
+				CFDFC05C166AB22A0065BC1F /* AbstractMesh.hpp */,
 			);
 			name = Mesh;
 			sourceTree = "<group>";
@@ -1264,6 +1270,7 @@
 				A70F5616161C8F9A00340256 /* JSONBoolean.hpp in Headers */,
 				A70F5618161C94A100340256 /* JSONString.hpp in Headers */,
 				A7EE001E161B25FD00C77604 /* JSONArray.hpp in Headers */,
+				CFDFC05E166AB22A0065BC1F /* AbstractMesh.hpp in Headers */,
 				CF6DD7861637488300685212 /* GLTextureId_iOS.hpp in Headers */,
 				CF9D832A15FF7A1C0069B555 /* Downloader_iOS.hpp in Headers */,
 				CF9D832B15FF7A1C0069B555 /* StringUtils_iOS.hpp in Headers */,
@@ -1471,6 +1478,7 @@
 				CFBF0D121669368F0045B882 /* GEOMultiLineStringGeometry.cpp in Sources */,
 				CFBF0D16166946350045B882 /* GEO2DMultiLineStringGeometry.cpp in Sources */,
 				CFC54E0F1669766C00E1CD15 /* GEORenderer.cpp in Sources */,
+				CFDFC05D166AB22A0065BC1F /* AbstractMesh.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

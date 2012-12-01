@@ -9,31 +9,18 @@
 #ifndef G3MiOSSDK_IndexedMesh_h
 #define G3MiOSSDK_IndexedMesh_h
 
-#include "Mesh.hpp"
-#include "Color.hpp"
-#include "Vector3D.hpp"
-#include "FloatBufferBuilderFromCartesian3D.hpp"
+#include "AbstractMesh.hpp"
 
 class IIntBuffer;
 
-class IndexedMesh : public Mesh {
+class IndexedMesh : public AbstractMesh {
 private:
-  const int _primitive;
-  const bool        _owner;
-  Vector3D          _center;
-  const MutableMatrix44D* _translationMatrix;
-  IFloatBuffer*     _vertices;
   IIntBuffer*       _indices;
-  Color*            _flatColor;
-  IFloatBuffer*     _colors;
-  const float       _colorsIntensity;
-  const float       _lineWidth;
 
-  mutable Extent*   _extent;
-  
-  Extent* computeExtent() const;
-  
-  
+protected:
+  void rawRender(const G3MRenderContext* rc) const;
+
+
 public:
   IndexedMesh(const int primitive,
               bool owner,
@@ -44,18 +31,8 @@ public:
               Color* flatColor = NULL,
               IFloatBuffer* colors = NULL,
               const float colorsIntensity = (float)0.0);
-  
-  ~IndexedMesh();
-  
-  virtual void render(const G3MRenderContext* rc) const;
-  
-  Extent* getExtent() const;
-  
-  int getVertexCount() const;
-  
-  const Vector3D getVertex(int i) const;
 
-  bool isTransparent(const G3MRenderContext* rc) const;
+  ~IndexedMesh();
 
 };
 
