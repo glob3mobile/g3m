@@ -341,6 +341,21 @@ void GL::drawElements(int mode,
                           indices);
 }
 
+void GL::drawArrays(int mode,
+                    int first,
+                    int count) {
+  if (_verbose) {
+    ILogger::instance()->logInfo("GL::drawArrays(%d, %d, %d)",
+                                 mode,
+                                 first,
+                                 count);
+  }
+
+  _nativeGL->drawArrays(mode,
+                        first,
+                        count);
+}
+
 void GL::lineWidth(float width) {
   if (_verbose) {
     ILogger::instance()->logInfo("GL::lineWidth()");

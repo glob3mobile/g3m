@@ -11,8 +11,7 @@
 #include "Mesh.hpp"
 
 #include "FloatBufferBuilderFromGeodetic.hpp"
-#include "IntBufferBuilder.hpp"
-#include "IndexedMesh.hpp"
+#include "DirectMesh.hpp"
 #include "GLConstants.hpp"
 #include "Color.hpp"
 
@@ -40,23 +39,18 @@ Mesh* GEOGeometry::create2DBoundaryMesh(std::vector<Geodetic2D*>* coordinates,
                                           rc->getPlanet(),
                                           Geodetic2D::zero());
 
-  IntBufferBuilder indices;
-
   const int coordinatesCount = coordinates->size();
   for (int i = 0; i < coordinatesCount; i++) {
     Geodetic2D* coordinate = coordinates->at(i);
     vertices.add(*coordinate);
-
-    indices.add(i);
   }
 
   Color* color = Color::newFromRGBA(1, 1, 0, 1);
 
-  return new IndexedMesh(GLPrimitive::lineStrip(),
-                         true,
-                         vertices.getCenter(),
-                         vertices.create(),
-                         indices.create(),
-                         2,
-                         color);
+  return new DirectMesh(GLPrimitive::lineStrip(),
+                        true,
+                        vertices.getCenter(),
+                        vertices.create(),
+                        2,
+                        color);
 }

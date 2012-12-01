@@ -190,6 +190,10 @@ public:
   void drawElements(int mode,
                     IIntBuffer* indices);
 
+  void drawArrays(int mode,
+                  int first,
+                  int count);
+
   void setProjection(const MutableMatrix44D &projection);
 
   bool useProgram(IGLProgramId* program);

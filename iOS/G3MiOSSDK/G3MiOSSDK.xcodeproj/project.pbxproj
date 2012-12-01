@@ -228,6 +228,8 @@
 		CFDAE7AD16684929006F6A00 /* GEOFeature.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFDAE7AB16684929006F6A00 /* GEOFeature.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFDAE7B016691982006F6A00 /* GEOGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFDAE7AE16691982006F6A00 /* GEOGeometry.cpp */; };
 		CFDAE7B116691982006F6A00 /* GEOGeometry.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFDAE7AF16691982006F6A00 /* GEOGeometry.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		CFDB7B73166AB99B00756DE8 /* DirectMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFDB7B71166AB99B00756DE8 /* DirectMesh.cpp */; };
+		CFDB7B74166AB99B00756DE8 /* DirectMesh.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFDB7B72166AB99B00756DE8 /* DirectMesh.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFDFC05D166AB22A0065BC1F /* AbstractMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFDFC05B166AB22A0065BC1F /* AbstractMesh.cpp */; };
 		CFDFC05E166AB22A0065BC1F /* AbstractMesh.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFDFC05C166AB22A0065BC1F /* AbstractMesh.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
 		CFE029541601367100D1E75B /* IImageDownloadListener.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFE029531601367100D1E75B /* IImageDownloadListener.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -539,6 +541,8 @@
 		CFDAE7AB16684929006F6A00 /* GEOFeature.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEOFeature.hpp; path = Commons/GEO/GEOFeature.hpp; sourceTree = "<group>"; };
 		CFDAE7AE16691982006F6A00 /* GEOGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEOGeometry.cpp; path = Commons/GEO/GEOGeometry.cpp; sourceTree = "<group>"; };
 		CFDAE7AF16691982006F6A00 /* GEOGeometry.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEOGeometry.hpp; path = Commons/GEO/GEOGeometry.hpp; sourceTree = "<group>"; };
+		CFDB7B71166AB99B00756DE8 /* DirectMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DirectMesh.cpp; path = Commons/Mesh/DirectMesh.cpp; sourceTree = "<group>"; };
+		CFDB7B72166AB99B00756DE8 /* DirectMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DirectMesh.hpp; path = Commons/Mesh/DirectMesh.hpp; sourceTree = "<group>"; };
 		CFDFC05B166AB22A0065BC1F /* AbstractMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AbstractMesh.cpp; path = Commons/Mesh/AbstractMesh.cpp; sourceTree = "<group>"; };
 		CFDFC05C166AB22A0065BC1F /* AbstractMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = AbstractMesh.hpp; path = Commons/Mesh/AbstractMesh.hpp; sourceTree = "<group>"; };
 		CFE029531601367100D1E75B /* IImageDownloadListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IImageDownloadListener.hpp; path = Commons/Downloader/IImageDownloadListener.hpp; sourceTree = "<group>"; };
@@ -1046,8 +1050,12 @@
 		D8A5601915AEF47300035086 /* Mesh */ = {
 			isa = PBXGroup;
 			children = (
+				CFDFC05B166AB22A0065BC1F /* AbstractMesh.cpp */,
+				CFDFC05C166AB22A0065BC1F /* AbstractMesh.hpp */,
 				CFCB5ED816582BCC007D051A /* CompositeMesh.cpp */,
 				CFCB5ED916582BCC007D051A /* CompositeMesh.hpp */,
+				CFDB7B71166AB99B00756DE8 /* DirectMesh.cpp */,
+				CFDB7B72166AB99B00756DE8 /* DirectMesh.hpp */,
 				D8A5601B15AEF64E00035086 /* IndexedMesh.cpp */,
 				D8A5601C15AEF64E00035086 /* IndexedMesh.hpp */,
 				CF8FF98915D5539F000F79D1 /* LeveledTexturedMesh.cpp */,
@@ -1058,8 +1066,6 @@
 				D8A5602315AEF69200035086 /* TexturedMesh.hpp */,
 				CC96079115AF23F600D438D4 /* TextureMapping.cpp */,
 				CCB2564D15B5A30900079B96 /* TextureMapping.hpp */,
-				CFDFC05B166AB22A0065BC1F /* AbstractMesh.cpp */,
-				CFDFC05C166AB22A0065BC1F /* AbstractMesh.hpp */,
 			);
 			name = Mesh;
 			sourceTree = "<group>";
@@ -1125,6 +1131,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CFDB7B74166AB99B00756DE8 /* DirectMesh.hpp in Headers */,
 				CFC54E101669766C00E1CD15 /* GEORenderer.hpp in Headers */,
 				CF94EB901669225600F2283C /* GEOLineStringGeometry.hpp in Headers */,
 				CF94EB951669307700F2283C /* GEO2DLineStringGeometry.hpp in Headers */,
@@ -1479,6 +1486,7 @@
 				CFBF0D16166946350045B882 /* GEO2DMultiLineStringGeometry.cpp in Sources */,
 				CFC54E0F1669766C00E1CD15 /* GEORenderer.cpp in Sources */,
 				CFDFC05D166AB22A0065BC1F /* AbstractMesh.cpp in Sources */,
+				CFDB7B73166AB99B00756DE8 /* DirectMesh.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
