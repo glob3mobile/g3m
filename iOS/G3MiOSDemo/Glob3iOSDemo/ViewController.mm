@@ -29,6 +29,7 @@
 #include "SceneJSShapesParser.hpp"
 #include "G3MWidget.hpp"
 #include "GEOJSONParser.hpp"
+#include "GEORenderer.hpp"
 
 @implementation ViewController
 
@@ -346,12 +347,15 @@
   private:
     G3MWidget_iOS*  _iosWidget;
     ShapesRenderer* _shapesRenderer;
+    GEORenderer*    _geoRenderer;
 
   public:
     SampleInitializationTask(G3MWidget_iOS* iosWidget,
-                             ShapesRenderer* shapesRenderer) :
+                             ShapesRenderer* shapesRenderer,
+                             GEORenderer*    geoRenderer) :
     _iosWidget(iosWidget),
-    _shapesRenderer(shapesRenderer)
+    _shapesRenderer(shapesRenderer),
+    _geoRenderer(geoRenderer)
     {
 
     }
@@ -395,11 +399,16 @@
           std::string geoJSON = [nsGEOJSON UTF8String];
 
           GEOObject* geoObject = GEOJSONParser::parse(geoJSON);
+
+          _geoRenderer->addGEOObject(geoObject);
         }
       }
       /**/
     }
   };
+
+  GEORenderer* geoRenderer = new GEORenderer();
+  renderers.push_back(geoRenderer);
 
   UserData* userData = NULL;
   const bool incrementalTileQuality = false;
@@ -408,7 +417,9 @@
                              incrementalTileQuality: incrementalTileQuality
                                           renderers: renderers
                                            userData: userData
-                                 initializationTask: new SampleInitializationTask([self G3MWidget], shapesRenderer)
+                                 initializationTask: new SampleInitializationTask([self G3MWidget],
+                                                                                  shapesRenderer,
+                                                                                  geoRenderer)
                                     periodicalTasks: periodicalTasks];
 }
 

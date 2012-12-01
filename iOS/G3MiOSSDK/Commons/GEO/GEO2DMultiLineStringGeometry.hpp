@@ -18,6 +18,9 @@ class GEO2DMultiLineStringGeometry : public GEOMultiLineStringGeometry {
 private:
   std::vector<std::vector<Geodetic2D*>*>* _coordinatesArray;
 
+protected:
+  Mesh* createMesh(const G3MRenderContext* rc);
+
 public:
 
   GEO2DMultiLineStringGeometry(std::vector<std::vector<Geodetic2D*>*>* coordinatesArray) :

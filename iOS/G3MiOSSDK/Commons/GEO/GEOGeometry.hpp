@@ -11,11 +11,33 @@
 
 #include "GEOObject.hpp"
 
+#include <vector>
+class Geodetic2D;
+class Mesh;
+
 class GEOGeometry : public GEOObject {
 private:
+  Mesh* _mesh;
+
+protected:
+  virtual Mesh* getMesh(const G3MRenderContext* rc);
+
+  virtual Mesh* createMesh(const G3MRenderContext* rc) = 0;
+
+  Mesh* create2DBoundaryMesh(std::vector<Geodetic2D*>* coordinates,
+                             const G3MRenderContext* rc);
 
 public:
-  
+  GEOGeometry() :
+  _mesh(NULL)
+  {
+
+  }
+
+  void render(const G3MRenderContext* rc);
+
+  ~GEOGeometry();
+
 };
 
 #endif

@@ -18,3 +18,7 @@ GEO2DLineStringGeometry::~GEO2DLineStringGeometry() {
   }
   delete _coordinates;
 }
+
+Mesh* GEO2DLineStringGeometry::createMesh(const G3MRenderContext* rc) {
+  return create2DBoundaryMesh(_coordinates, rc);
+}

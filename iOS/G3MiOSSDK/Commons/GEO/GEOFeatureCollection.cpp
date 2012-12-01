@@ -14,6 +14,14 @@ void GEOFeatureCollection::addFeature(GEOFeature* feature) {
   _features.push_back(feature);
 }
 
+void GEOFeatureCollection::render(const G3MRenderContext* rc) {
+  const int featuresCount = _features.size();
+  for (int i = 0; i < featuresCount; i++) {
+    GEOFeature* feature = _features[i];
+    feature->render(rc);
+  }
+}
+
 GEOFeatureCollection::~GEOFeatureCollection() {
   const int featuresCount = _features.size();
   for (int i = 0; i < featuresCount; i++) {

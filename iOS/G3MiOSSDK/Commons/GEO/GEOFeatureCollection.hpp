@@ -24,6 +24,8 @@ public:
 
   virtual ~GEOFeatureCollection();
 
+  void render(const G3MRenderContext* rc);
+
 };
 
 #endif

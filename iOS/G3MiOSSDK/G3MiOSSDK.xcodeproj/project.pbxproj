@@ -205,6 +205,8 @@
 		CFBF0D17166946350045B882 /* GEO2DMultiLineStringGeometry.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFBF0D15166946350045B882 /* GEO2DMultiLineStringGeometry.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFC3BCC9164C6C7300A8D37D /* SGShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFC3BCC7164C6C7300A8D37D /* SGShape.cpp */; };
 		CFC3BCCA164C6C7300A8D37D /* SGShape.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFC3BCC8164C6C7300A8D37D /* SGShape.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		CFC54E0F1669766C00E1CD15 /* GEORenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFC54E0D1669766B00E1CD15 /* GEORenderer.cpp */; };
+		CFC54E101669766C00E1CD15 /* GEORenderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFC54E0E1669766B00E1CD15 /* GEORenderer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFCB5EDA16582BCC007D051A /* CompositeMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFCB5ED816582BCC007D051A /* CompositeMesh.cpp */; };
 		CFCB5EDB16582BCC007D051A /* CompositeMesh.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFCB5ED916582BCC007D051A /* CompositeMesh.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFCE679D15EFB06700B35FE0 /* IThreadUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFCE679B15EFB06700B35FE0 /* IThreadUtils.cpp */; };
@@ -511,6 +513,8 @@
 		CFBF0D15166946350045B882 /* GEO2DMultiLineStringGeometry.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEO2DMultiLineStringGeometry.hpp; path = Commons/GEO/GEO2DMultiLineStringGeometry.hpp; sourceTree = "<group>"; };
 		CFC3BCC7164C6C7300A8D37D /* SGShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGShape.cpp; path = Commons/Rendererers/SGShape.cpp; sourceTree = "<group>"; };
 		CFC3BCC8164C6C7300A8D37D /* SGShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SGShape.hpp; path = Commons/Rendererers/SGShape.hpp; sourceTree = "<group>"; };
+		CFC54E0D1669766B00E1CD15 /* GEORenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEORenderer.cpp; path = Commons/GEO/GEORenderer.cpp; sourceTree = "<group>"; };
+		CFC54E0E1669766B00E1CD15 /* GEORenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEORenderer.hpp; path = Commons/GEO/GEORenderer.hpp; sourceTree = "<group>"; };
 		CFCB5ED816582BCC007D051A /* CompositeMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CompositeMesh.cpp; path = Commons/Mesh/CompositeMesh.cpp; sourceTree = "<group>"; };
 		CFCB5ED916582BCC007D051A /* CompositeMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = CompositeMesh.hpp; path = Commons/Mesh/CompositeMesh.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFCE679B15EFB06700B35FE0 /* IThreadUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IThreadUtils.cpp; path = Commons/Basic/IThreadUtils.cpp; sourceTree = "<group>"; };
@@ -954,6 +958,8 @@
 				CFBF0D111669368F0045B882 /* GEOMultiLineStringGeometry.hpp */,
 				CFDAE7A2166841C2006F6A00 /* GEOObject.cpp */,
 				CFDAE7A3166841C2006F6A00 /* GEOObject.hpp */,
+				CFC54E0D1669766B00E1CD15 /* GEORenderer.cpp */,
+				CFC54E0E1669766B00E1CD15 /* GEORenderer.hpp */,
 			);
 			name = GEO;
 			sourceTree = "<group>";
@@ -1113,6 +1119,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CFC54E101669766C00E1CD15 /* GEORenderer.hpp in Headers */,
 				CF94EB901669225600F2283C /* GEOLineStringGeometry.hpp in Headers */,
 				CF94EB951669307700F2283C /* GEO2DLineStringGeometry.hpp in Headers */,
 				CFBF0D131669368F0045B882 /* GEOMultiLineStringGeometry.hpp in Headers */,
@@ -1463,6 +1470,7 @@
 				CF94EB941669307700F2283C /* GEO2DLineStringGeometry.cpp in Sources */,
 				CFBF0D121669368F0045B882 /* GEOMultiLineStringGeometry.cpp in Sources */,
 				CFBF0D16166946350045B882 /* GEO2DMultiLineStringGeometry.cpp in Sources */,
+				CFC54E0F1669766C00E1CD15 /* GEORenderer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

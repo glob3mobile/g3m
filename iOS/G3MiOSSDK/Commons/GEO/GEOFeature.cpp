@@ -16,3 +16,7 @@ GEOFeature::~GEOFeature() {
   delete _geometry;
   delete _properties;
 }
+
+void GEOFeature::render(const G3MRenderContext* rc) {
+  _geometry->render(rc);
+}
