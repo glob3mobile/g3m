@@ -29,7 +29,7 @@ class IGLUniformID;
 
 class GL {
 private:
-  INativeGL* const _gl;
+  INativeGL* const _nativeGL;
   
   MutableMatrix44D            _modelView;
   
@@ -98,9 +98,9 @@ private:
 
 public:
   
-  GL(INativeGL* const gl,
+  GL(INativeGL* const nativeGL,
      bool verbose) :
-  _gl(gl),
+  _nativeGL(nativeGL),
   _verbose(verbose),
   _enableTextures(false),
   _enableTexture2D(false),
@@ -132,19 +132,19 @@ public:
   _billboardTexCoord(NULL)
   {
     //Init Constants
-    GLCullFace::init(gl);
-    GLBufferType::init(gl);
-    GLFeature::init(gl);
-    GLType::init(gl);
-    GLPrimitive::init(gl);
-    GLBlendFactor::init(gl);
-    GLTextureType::init(gl);
-    GLTextureParameter::init(gl);
-    GLTextureParameterValue::init(gl);
-    GLAlignment::init(gl);
-    GLFormat::init(gl);
-    GLVariable::init(gl);
-    GLError::init(gl);
+    GLCullFace::init(_nativeGL);
+    GLBufferType::init(_nativeGL);
+    GLFeature::init(_nativeGL);
+    GLType::init(_nativeGL);
+    GLPrimitive::init(_nativeGL);
+    GLBlendFactor::init(_nativeGL);
+    GLTextureType::init(_nativeGL);
+    GLTextureParameter::init(_nativeGL);
+    GLTextureParameterValue::init(_nativeGL);
+    GLAlignment::init(_nativeGL);
+    GLFormat::init(_nativeGL);
+    GLVariable::init(_nativeGL);
+    GLError::init(_nativeGL);
   }
   
   void enableVerticesPosition();
@@ -307,12 +307,12 @@ public:
   void getViewport(int v[]) {
     if (_verbose) ILogger::instance()->logInfo("GL::getViewport()");
 
-    _gl->getIntegerv(GLVariable::viewport(), v);
+    _nativeGL->getIntegerv(GLVariable::viewport(), v);
   }
   
   ~GL() {
 #ifdef C_CODE
-    delete _gl;
+    delete _nativeGL;
 #endif
     
 //    if (_lastImageData != NULL) {

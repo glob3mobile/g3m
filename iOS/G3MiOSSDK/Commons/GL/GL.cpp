@@ -111,7 +111,7 @@ int GL::checkedGetAttribLocation(IGLProgramId* program, const std::string& name)
     ILogger::instance()->logInfo("GL::checkedGetAttribLocation()");
   }
 
-  int l = _gl->getAttribLocation(program, name);
+  int l = _nativeGL->getAttribLocation(program, name);
   if (l == -1) {
     ILogger::instance()->logError("Error fetching Attribute, Program = %d, Variable = %s", program, name.c_str());
     _errorGettingLocationOcurred = true;
@@ -123,7 +123,7 @@ IGLUniformID* GL::checkedGetUniformLocation(IGLProgramId* program, const std::st
     ILogger::instance()->logInfo("GL::checkedGetUniformLocation()");
   }
 
-  IGLUniformID* uID = _gl->getUniformLocation(program, name);
+  IGLUniformID* uID = _nativeGL->getUniformLocation(program, name);
   if (!uID->isValid()) {
     ILogger::instance()->logError("Error fetching Uniform, Program = %d, Variable = %s", program, name.c_str());
     _errorGettingLocationOcurred = true;
@@ -137,7 +137,7 @@ bool GL::useProgram(IGLProgramId* program) {
   }
 
   // set shaders
-  _gl->useProgram(program);
+  _nativeGL->useProgram(program);
 
   //Methods checkedGetAttribLocation and checkedGetUniformLocation
   //will turn _errorGettingLocationOcurred to true is that happens
@@ -161,14 +161,14 @@ bool GL::useProgram(IGLProgramId* program) {
   Uniforms.PointSize           = checkedGetUniformLocation(program, "PointSize");
 
   // default values
-  _gl->uniform2f(Uniforms.ScaleTexCoord, _scaleX, _scaleY);
-  _gl->uniform2f(Uniforms.TranslationTexCoord, _translationX, _translationY);
-  _gl->uniform1f(Uniforms.PointSize, 1);
+  _nativeGL->uniform2f(Uniforms.ScaleTexCoord, _scaleX, _scaleY);
+  _nativeGL->uniform2f(Uniforms.TranslationTexCoord, _translationX, _translationY);
+  _nativeGL->uniform1f(Uniforms.PointSize, 1);
 
   //BILLBOARDS
   Uniforms.BillBoard     = checkedGetUniformLocation(program, "BillBoard");
   Uniforms.ViewPortRatio = checkedGetUniformLocation(program, "ViewPortRatio");
-  _gl->uniform1i(Uniforms.BillBoard, 0); //NOT DRAWING BILLBOARD
+  _nativeGL->uniform1i(Uniforms.BillBoard, 0); //NOT DRAWING BILLBOARD
 
   //FOR FLAT COLOR MIXING
   Uniforms.FlatColorIntensity      = checkedGetUniformLocation(program, "FlatColorIntensity");
@@ -185,9 +185,9 @@ void GL::loadModelView() {
     ILogger::instance()->logInfo("GL::loadModelView()");
   }
 
-  _gl->uniformMatrix4fv(Uniforms.Modelview,
-                        false,
-                        &_modelView);
+  _nativeGL->uniformMatrix4fv(Uniforms.Modelview,
+                              false,
+                              &_modelView);
 }
 
 void GL::setProjection(const MutableMatrix44D &projection) {
@@ -195,9 +195,9 @@ void GL::setProjection(const MutableMatrix44D &projection) {
     ILogger::instance()->logInfo("GL::setProjection()");
   }
 
-  _gl->uniformMatrix4fv(Uniforms.Projection,
-                        false,
-                        &projection);
+  _nativeGL->uniformMatrix4fv(Uniforms.Projection,
+                              false,
+                              &projection);
 }
 
 void GL::loadMatrixf(const MutableMatrix44D &modelView) {
@@ -244,8 +244,8 @@ void GL::clearScreen(float r, float g, float b, float a) {
     ILogger::instance()->logInfo("GL::clearScreen()");
   }
 
-  _gl->clearColor(r, g, b, a);
-  _gl->clear(GLBufferType::colorBuffer() | GLBufferType::depthBuffer());
+  _nativeGL->clearColor(r, g, b, a);
+  _nativeGL->clear(GLBufferType::colorBuffer() | GLBufferType::depthBuffer());
 }
 
 void GL::color(float r, float g, float b, float a) {
@@ -259,7 +259,7 @@ void GL::color(float r, float g, float b, float a) {
       (_flatColorB != b) ||
       (_flatColorA != a)
       ) {
-    _gl->uniform4f(Uniforms.FlatColor, r, g, b, a);
+    _nativeGL->uniform4f(Uniforms.FlatColor, r, g, b, a);
 
     _flatColorR = r;
     _flatColorG = g;
@@ -277,17 +277,17 @@ void GL::transformTexCoords(float scaleX,
   }
 
   if ((_scaleX != scaleX) || (_scaleY != scaleY)) {
-    _gl->uniform2f(Uniforms.ScaleTexCoord,
-                   scaleX,
-                   scaleY);
+    _nativeGL->uniform2f(Uniforms.ScaleTexCoord,
+                         scaleX,
+                         scaleY);
     _scaleX = scaleX;
     _scaleY = scaleY;
   }
 
   if ((_translationX != translationX) || (_translationY != translationY)) {
-    _gl->uniform2f(Uniforms.TranslationTexCoord,
-                   translationX,
-                   translationY);
+    _nativeGL->uniform2f(Uniforms.TranslationTexCoord,
+                         translationX,
+                         translationY);
     _translationX = translationX;
     _translationY = translationY;
   }
@@ -298,8 +298,8 @@ void GL::enablePolygonOffset(float factor, float units) {
     ILogger::instance()->logInfo("GL::enablePolygonOffset()");
   }
 
-  _gl->enable(GLFeature::polygonOffsetFill());
-  _gl->polygonOffset(factor, units);
+  _nativeGL->enable(GLFeature::polygonOffsetFill());
+  _nativeGL->polygonOffset(factor, units);
 }
 
 void GL::disablePolygonOffset() {
@@ -307,7 +307,7 @@ void GL::disablePolygonOffset() {
     ILogger::instance()->logInfo("GL::disablePolygonOffset()");
   }
 
-  _gl->disable(GLFeature::polygonOffsetFill());
+  _nativeGL->disable(GLFeature::polygonOffsetFill());
 }
 
 void GL::vertexPointer(int size,
@@ -322,7 +322,7 @@ void GL::vertexPointer(int size,
 
   if ((_vertices != vertices) ||
       (_verticesTimestamp != vertices->timestamp()) ) {
-    _gl->vertexAttribPointer(Attributes.Position, size, false, stride, vertices);
+    _nativeGL->vertexAttribPointer(Attributes.Position, size, false, stride, vertices);
     _vertices = vertices;
     _verticesTimestamp = _vertices->timestamp();
   }
@@ -334,9 +334,9 @@ void GL::drawTriangles(IIntBuffer* indices) {
                                  indices->description().c_str());
   }
 
-  _gl->drawElements(GLPrimitive::triangles(),
-                    indices->size(),
-                    indices);
+  _nativeGL->drawElements(GLPrimitive::triangles(),
+                          indices->size(),
+                          indices);
 }
 
 void GL::drawTriangleStrip(IIntBuffer* indices) {
@@ -345,9 +345,9 @@ void GL::drawTriangleStrip(IIntBuffer* indices) {
                                  indices->description().c_str());
   }
 
-  _gl->drawElements(GLPrimitive::triangleStrip(),
-                    indices->size(),
-                    indices);
+  _nativeGL->drawElements(GLPrimitive::triangleStrip(),
+                          indices->size(),
+                          indices);
 }
 
 void GL::drawTriangleFan(IIntBuffer* indices) {
@@ -356,9 +356,9 @@ void GL::drawTriangleFan(IIntBuffer* indices) {
                                  indices->description().c_str());
   }
 
-  _gl->drawElements(GLPrimitive::triangleFan(),
-                    indices->size(),
-                    indices);
+  _nativeGL->drawElements(GLPrimitive::triangleFan(),
+                          indices->size(),
+                          indices);
 }
 
 void GL::drawLines(IIntBuffer* indices) {
@@ -367,9 +367,9 @@ void GL::drawLines(IIntBuffer* indices) {
                                  indices->description().c_str());
   }
 
-  _gl->drawElements(GLPrimitive::lines(),
-                    indices->size(),
-                    indices);
+  _nativeGL->drawElements(GLPrimitive::lines(),
+                          indices->size(),
+                          indices);
 }
 
 void GL::drawLineStrip(IIntBuffer* indices) {
@@ -378,9 +378,9 @@ void GL::drawLineStrip(IIntBuffer* indices) {
                                  indices->description().c_str());
   }
 
-  _gl->drawElements(GLPrimitive::lineStrip(),
-                    indices->size(),
-                    indices);
+  _nativeGL->drawElements(GLPrimitive::lineStrip(),
+                          indices->size(),
+                          indices);
 }
 
 void GL::drawLineLoop(IIntBuffer* indices) {
@@ -389,9 +389,9 @@ void GL::drawLineLoop(IIntBuffer* indices) {
                                  indices->description().c_str());
   }
 
-  _gl->drawElements(GLPrimitive::lineLoop(),
-                    indices->size(),
-                    indices);
+  _nativeGL->drawElements(GLPrimitive::lineLoop(),
+                          indices->size(),
+                          indices);
 }
 
 void GL::drawPoints(IIntBuffer* indices) {
@@ -400,9 +400,9 @@ void GL::drawPoints(IIntBuffer* indices) {
                                  indices->description().c_str());
   }
 
-  _gl->drawElements(GLPrimitive::points(),
-                    indices->size(),
-                    indices);
+  _nativeGL->drawElements(GLPrimitive::points(),
+                          indices->size(),
+                          indices);
 }
 
 void GL::lineWidth(float width) {
@@ -410,7 +410,7 @@ void GL::lineWidth(float width) {
     ILogger::instance()->logInfo("GL::lineWidth()");
   }
 
-  _gl->lineWidth(width);
+  _nativeGL->lineWidth(width);
 }
 
 void GL::pointSize(float size) {
@@ -418,7 +418,7 @@ void GL::pointSize(float size) {
     ILogger::instance()->logInfo("GL::pointSize()");
   }
 
-  _gl->uniform1f(Uniforms.PointSize, size);
+  _nativeGL->uniform1f(Uniforms.PointSize, size);
 }
 
 int GL::getError() {
@@ -426,7 +426,7 @@ int GL::getError() {
     ILogger::instance()->logInfo("GL::getError()()");
   }
 
-  return _gl->getError();
+  return _nativeGL->getError();
 }
 
 const IGLTextureId* GL::uploadTexture(const IImage* image, int format, bool generateMipmap){
@@ -436,26 +436,26 @@ const IGLTextureId* GL::uploadTexture(const IImage* image, int format, bool gene
 
   const IGLTextureId* texId = getGLTextureId();
   if (texId != NULL) {
-    _gl->blendFunc(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
-    _gl->pixelStorei(GLAlignment::unpack(), 1);
+    _nativeGL->blendFunc(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
+    _nativeGL->pixelStorei(GLAlignment::unpack(), 1);
 
-    _gl->bindTexture(GLTextureType::texture2D(), texId);
-    _gl->texParameteri(GLTextureType::texture2D(),
-                       GLTextureParameter::minFilter(),
-                       GLTextureParameterValue::linear());
-    _gl->texParameteri(GLTextureType::texture2D(),
-                       GLTextureParameter::magFilter(),
-                       GLTextureParameterValue::linear());
-    _gl->texParameteri(GLTextureType::texture2D(),
-                       GLTextureParameter::wrapS(),
-                       GLTextureParameterValue::clampToEdge());
-    _gl->texParameteri(GLTextureType::texture2D(),
-                       GLTextureParameter::wrapT(),
-                       GLTextureParameterValue::clampToEdge());
-    _gl->texImage2D(image, format);
+    _nativeGL->bindTexture(GLTextureType::texture2D(), texId);
+    _nativeGL->texParameteri(GLTextureType::texture2D(),
+                             GLTextureParameter::minFilter(),
+                             GLTextureParameterValue::linear());
+    _nativeGL->texParameteri(GLTextureType::texture2D(),
+                             GLTextureParameter::magFilter(),
+                             GLTextureParameterValue::linear());
+    _nativeGL->texParameteri(GLTextureType::texture2D(),
+                             GLTextureParameter::wrapS(),
+                             GLTextureParameterValue::clampToEdge());
+    _nativeGL->texParameteri(GLTextureType::texture2D(),
+                             GLTextureParameter::wrapT(),
+                             GLTextureParameterValue::clampToEdge());
+    _nativeGL->texImage2D(image, format);
 
     if (generateMipmap) {
-      _gl->generateMipmap(GLTextureType::texture2D());
+      _nativeGL->generateMipmap(GLTextureType::texture2D());
     }
   }
   else {
@@ -478,7 +478,7 @@ void GL::setTextureCoordinates(int size,
 
   if ((_textureCoordinates != textureCoordinates) ||
       (_textureCoordinatesTimestamp != textureCoordinates->timestamp()) ) {
-    _gl->vertexAttribPointer(Attributes.TextureCoord, size, false, stride, textureCoordinates);
+    _nativeGL->vertexAttribPointer(Attributes.TextureCoord, size, false, stride, textureCoordinates);
     _textureCoordinates = textureCoordinates;
     _textureCoordinatesTimestamp = _textureCoordinates->timestamp();
   }
@@ -489,7 +489,7 @@ void GL::bindTexture(const IGLTextureId* textureId) {
     ILogger::instance()->logInfo("GL::bindTexture()");
   }
 
-  _gl->bindTexture(GLTextureType::texture2D(), textureId);
+  _nativeGL->bindTexture(GLTextureType::texture2D(), textureId);
 }
 
 IFloatBuffer* GL::getBillboardTexCoord() {
@@ -518,9 +518,9 @@ void GL::drawBillBoard(const IGLTextureId* textureId,
 
   int TODO_refactor_billboard;
 
-  _gl->uniform1i(Uniforms.BillBoard, 1);
+  _nativeGL->uniform1i(Uniforms.BillBoard, 1);
 
-  _gl->uniform1f(Uniforms.ViewPortRatio, viewPortRatio);
+  _nativeGL->uniform1f(Uniforms.ViewPortRatio, viewPortRatio);
 
   disableDepthTest();
 
@@ -532,11 +532,11 @@ void GL::drawBillBoard(const IGLTextureId* textureId,
   vertexPointer(3, 0, vertices);
   setTextureCoordinates(2, 0, getBillboardTexCoord());
 
-  _gl->drawArrays(GLPrimitive::triangleStrip(), 0, vertices->size() / 3);
+  _nativeGL->drawArrays(GLPrimitive::triangleStrip(), 0, vertices->size() / 3);
 
   enableDepthTest();
 
-  _gl->uniform1i(Uniforms.BillBoard, 0);
+  _nativeGL->uniform1i(Uniforms.BillBoard, 0);
 }
 
 // state handling
@@ -546,7 +546,7 @@ void GL::enableTextures() {
   }
 
   if (!_enableTextures) {
-    _gl->enableVertexAttribArray(Attributes.TextureCoord);
+    _nativeGL->enableVertexAttribArray(Attributes.TextureCoord);
     _enableTextures = true;
   }
 }
@@ -557,7 +557,7 @@ void GL::disableTextures() {
   }
 
   if (_enableTextures) {
-    _gl->disableVertexAttribArray(Attributes.TextureCoord);
+    _nativeGL->disableVertexAttribArray(Attributes.TextureCoord);
     _enableTextures = false;
   }
 }
@@ -568,7 +568,7 @@ void GL::enableTexture2D() {
   }
 
   if (!_enableTexture2D) {
-    _gl->uniform1i(Uniforms.EnableTexture, 1);
+    _nativeGL->uniform1i(Uniforms.EnableTexture, 1);
     _enableTexture2D = true;
   }
 }
@@ -579,7 +579,7 @@ void GL::disableTexture2D() {
   }
 
   if (_enableTexture2D) {
-    _gl->uniform1i(Uniforms.EnableTexture, 0);
+    _nativeGL->uniform1i(Uniforms.EnableTexture, 0);
     _enableTexture2D = false;
   }
 }
@@ -592,19 +592,19 @@ void GL::enableVertexColor(IFloatBuffer* colors, float intensity) {
   }
 
   if (!_enableVertexColor) {
-    _gl->uniform1i(Uniforms.EnableColorPerVertex, 1);
-    _gl->enableVertexAttribArray(Attributes.Color);
+    _nativeGL->uniform1i(Uniforms.EnableColorPerVertex, 1);
+    _nativeGL->enableVertexAttribArray(Attributes.Color);
     _enableVertexColor = true;
   }
 
   if ((_colors != colors) ||
       (_colorsTimestamp != colors->timestamp()) ) {
-    _gl->vertexAttribPointer(Attributes.Color, 4, false, 0, colors);
+    _nativeGL->vertexAttribPointer(Attributes.Color, 4, false, 0, colors);
     _colors = colors;
     _colorsTimestamp = _colors->timestamp();
   }
 
-  _gl->uniform1f(Uniforms.ColorPerVertexIntensity, intensity);
+  _nativeGL->uniform1f(Uniforms.ColorPerVertexIntensity, intensity);
 }
 
 void GL::disableVertexColor() {
@@ -613,8 +613,8 @@ void GL::disableVertexColor() {
   }
 
   if (_enableVertexColor) {
-    _gl->disableVertexAttribArray(Attributes.Color);
-    _gl->uniform1i(Uniforms.EnableColorPerVertex, 0);
+    _nativeGL->disableVertexAttribArray(Attributes.Color);
+    _nativeGL->uniform1i(Uniforms.EnableColorPerVertex, 0);
     _enableVertexColor = false;
   }
 }
@@ -625,7 +625,7 @@ void GL::enableVerticesPosition() {
   }
 
   if (!_enableVerticesPosition) {
-    _gl->enableVertexAttribArray(Attributes.Position);
+    _nativeGL->enableVertexAttribArray(Attributes.Position);
     _enableVerticesPosition = true;
   }
 }
@@ -636,7 +636,7 @@ void GL::disableVerticesPosition() {
   }
 
   if (_enableVerticesPosition) {
-    _gl->disableVertexAttribArray(Attributes.Position);
+    _nativeGL->disableVertexAttribArray(Attributes.Position);
     _enableVerticesPosition = false;
   }
 }
@@ -648,7 +648,7 @@ void GL::enableVertexFlatColor(float r, float g, float b, float a,
   }
 
   if (!_enableFlatColor) {
-    _gl->uniform1i(Uniforms.EnableFlatColor, 1);
+    _nativeGL->uniform1i(Uniforms.EnableFlatColor, 1);
     _enableFlatColor = true;
   }
 
@@ -656,7 +656,7 @@ void GL::enableVertexFlatColor(float r, float g, float b, float a,
 
   //  _gl->uniform1f(Uniforms.FlatColorIntensity, intensity);
   if (_flatColorIntensity != intensity) {
-    _gl->uniform1f(Uniforms.FlatColorIntensity, intensity);
+    _nativeGL->uniform1f(Uniforms.FlatColorIntensity, intensity);
     _flatColorIntensity = intensity;
   }
 }
@@ -667,7 +667,7 @@ void GL::disableVertexFlatColor() {
   }
 
   if (_enableFlatColor) {
-    _gl->uniform1i(Uniforms.EnableFlatColor, 0);
+    _nativeGL->uniform1i(Uniforms.EnableFlatColor, 0);
     _enableFlatColor = false;
   }
 }
@@ -678,7 +678,7 @@ void GL::enableDepthTest() {
   }
 
   if (!_enableDepthTest) {
-    _gl->enable(GLFeature::depthTest());
+    _nativeGL->enable(GLFeature::depthTest());
     _enableDepthTest = true;
   }
 }
@@ -689,7 +689,7 @@ void GL::disableDepthTest() {
   }
 
   if (_enableDepthTest) {
-    _gl->disable(GLFeature::depthTest());
+    _nativeGL->disable(GLFeature::depthTest());
     _enableDepthTest = false;
   }
 }
@@ -700,7 +700,7 @@ void GL::enableBlend() {
   }
 
   if (!_enableBlend) {
-    _gl->enable(GLFeature::blend());
+    _nativeGL->enable(GLFeature::blend());
     _enableBlend = true;
   }
 }
@@ -711,7 +711,7 @@ void GL::disableBlend() {
   }
 
   if (_enableBlend) {
-    _gl->disable(GLFeature::blend());
+    _nativeGL->disable(GLFeature::blend());
     _enableBlend = false;
   }
 
@@ -722,7 +722,7 @@ void GL::setBlendFuncSrcAlpha() {
     ILogger::instance()->logInfo("GL::setBlendFuncSrcAlpha()");
   }
 
-  _gl->blendFunc(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
+  _nativeGL->blendFunc(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
 }
 
 void GL::enableCullFace(int face) {
@@ -731,12 +731,12 @@ void GL::enableCullFace(int face) {
   }
 
   if (!_enableCullFace) {
-    _gl->enable(GLFeature::cullFace());
+    _nativeGL->enable(GLFeature::cullFace());
     _enableCullFace = true;
   }
 
   if (_cullFace_face != face) {
-    _gl->cullFace(face);
+    _nativeGL->cullFace(face);
     _cullFace_face = face;
   }
 }
@@ -747,7 +747,7 @@ void GL::disableCullFace() {
   }
 
   if (_enableCullFace) {
-    _gl->disable(GLFeature::cullFace());
+    _nativeGL->disable(GLFeature::cullFace());
     _enableCullFace = false;
   }
 }
@@ -762,7 +762,7 @@ const IGLTextureId* GL::getGLTextureId() {
 
     ILogger::instance()->logInfo("= Creating %d texturesIds...", bugdetSize);
 
-    const std::vector<IGLTextureId*> ids = _gl->genTextures(bugdetSize);
+    const std::vector<IGLTextureId*> ids = _nativeGL->genTextures(bugdetSize);
 
     for (int i = 0; i < bugdetSize; i++) {
       //      _texturesIdBag.push_back(ids[i]);
@@ -785,7 +785,7 @@ const IGLTextureId* GL::getGLTextureId() {
   //         _texturesIdGetCounter,
   //         _texturesIdTakeCounter,
   //         _texturesIdGetCounter - _texturesIdTakeCounter);
-
+  
   return result;
 }
 
@@ -795,7 +795,7 @@ void GL::deleteTexture(const IGLTextureId* texture) {
   }
   
   if (texture != NULL) {
-    if ( _gl->deleteTexture(texture) ) {
+    if ( _nativeGL->deleteTexture(texture) ) {
       _texturesIdBag.push_back(texture);
     }
     
