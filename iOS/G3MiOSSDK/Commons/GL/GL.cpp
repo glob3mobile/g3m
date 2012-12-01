@@ -328,79 +328,15 @@ void GL::vertexPointer(int size,
   }
 }
 
-void GL::drawTriangles(IIntBuffer* indices) {
+void GL::drawElements(int mode,
+                      IIntBuffer* indices) {
   if (_verbose) {
-    ILogger::instance()->logInfo("GL::drawTriangles(%s)",
+    ILogger::instance()->logInfo("GL::drawElements(%d, %s)",
+                                 mode,
                                  indices->description().c_str());
   }
 
-  _nativeGL->drawElements(GLPrimitive::triangles(),
-                          indices->size(),
-                          indices);
-}
-
-void GL::drawTriangleStrip(IIntBuffer* indices) {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::drawTriangleStrip(%s)",
-                                 indices->description().c_str());
-  }
-
-  _nativeGL->drawElements(GLPrimitive::triangleStrip(),
-                          indices->size(),
-                          indices);
-}
-
-void GL::drawTriangleFan(IIntBuffer* indices) {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::drawTriangleFan(%s)",
-                                 indices->description().c_str());
-  }
-
-  _nativeGL->drawElements(GLPrimitive::triangleFan(),
-                          indices->size(),
-                          indices);
-}
-
-void GL::drawLines(IIntBuffer* indices) {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::drawLines(%s)",
-                                 indices->description().c_str());
-  }
-
-  _nativeGL->drawElements(GLPrimitive::lines(),
-                          indices->size(),
-                          indices);
-}
-
-void GL::drawLineStrip(IIntBuffer* indices) {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::drawLineStrip(%s)",
-                                 indices->description().c_str());
-  }
-
-  _nativeGL->drawElements(GLPrimitive::lineStrip(),
-                          indices->size(),
-                          indices);
-}
-
-void GL::drawLineLoop(IIntBuffer* indices) {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::drawLineLoop(%s)",
-                                 indices->description().c_str());
-  }
-
-  _nativeGL->drawElements(GLPrimitive::lineLoop(),
-                          indices->size(),
-                          indices);
-}
-
-void GL::drawPoints(IIntBuffer* indices) {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::drawPoints(%s)",
-                                 indices->description().c_str());
-  }
-
-  _nativeGL->drawElements(GLPrimitive::points(),
+  _nativeGL->drawElements(mode,
                           indices->size(),
                           indices);
 }
@@ -785,7 +721,7 @@ const IGLTextureId* GL::getGLTextureId() {
   //         _texturesIdGetCounter,
   //         _texturesIdTakeCounter,
   //         _texturesIdGetCounter - _texturesIdTakeCounter);
-  
+
   return result;
 }
 

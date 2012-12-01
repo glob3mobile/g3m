@@ -19,7 +19,7 @@ class DummyRenderer: public LeafRenderer {
 private:
   double _halfSize;
   
-  IIntBuffer* _index;
+  IIntBuffer*   _indices;
   IFloatBuffer* _vertices;
 
 public:
