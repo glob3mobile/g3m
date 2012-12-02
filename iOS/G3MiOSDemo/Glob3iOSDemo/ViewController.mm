@@ -389,6 +389,10 @@
       /**/
 
       /**/
+//      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/coastline"
+//                                                                  ofType: @"geojson"];
+
+
       NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/boundary_lines_land"
                                                                   ofType: @"geojson"];
 //    Info: GEOJSONParser Statistics: Coordinates2D=77622, LineStrings2D=89, MultiLineStrings2D=372, features=461, featuresCollection=1

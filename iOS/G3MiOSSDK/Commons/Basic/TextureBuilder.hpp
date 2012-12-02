@@ -14,29 +14,30 @@
 #include "IFactory.hpp"
 #include <vector>
 
-class TextureBuilder
-{
+class TextureBuilder {
 public:
-  
-  virtual const IImage* createTextureFromImage(GL * gl,
+
+  virtual const IImage* createTextureFromImage(GL* gl,
                                                const IFactory* factory,
                                                const IImage* image,
                                                int width,
                                                int height) const = 0;
-  
-  virtual const IImage* createTextureFromImages(GL * gl,
+
+  virtual const IImage* createTextureFromImages(GL* gl,
                                                 const IFactory* factory,
                                                 const std::vector<const IImage*> images,
                                                 int width,
                                                 int height) const = 0;
-  
-  virtual const IImage* createTextureFromImages(GL * gl,
+
+  virtual const IImage* createTextureFromImages(GL* gl,
                                                 const IFactory* factory,
                                                 const std::vector<const IImage*> images,
                                                 const std::vector<const RectangleD*> rectangles,
                                                 int width,
                                                 int height) const = 0;
-  virtual ~TextureBuilder() {}
+  virtual ~TextureBuilder() {
+  }
+
 };
 
 #endif

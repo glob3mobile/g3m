@@ -14,6 +14,7 @@
 #include "DirectMesh.hpp"
 #include "GLConstants.hpp"
 #include "Camera.hpp"
+#include "GL.hpp"
 
 GEOGeometry::~GEOGeometry() {
   delete _mesh;
@@ -31,6 +32,7 @@ Mesh* GEOGeometry::create2DBoundaryMesh(std::vector<Geodetic2D*>* coordinates,
   for (int i = 0; i < coordinatesCount; i++) {
     Geodetic2D* coordinate = coordinates->at(i);
     vertices.add(*coordinate);
+    // vertices.add( Geodetic3D(*coordinate, 50) );
   }
 
   return new DirectMesh(GLPrimitive::lineStrip(),
@@ -54,7 +56,13 @@ void GEOGeometry::render(const G3MRenderContext* rc) {
     const Extent* extent = mesh->getExtent();
 
     if ( extent->touches( rc->getCurrentCamera()->getFrustumInModelCoordinates() ) ) {
+
+      GL* gl = rc->getGL();
+//      gl->enablePolygonOffset(40, 40);
+      gl->disableDepthTest();
       mesh->render(rc);
+//      gl->disablePolygonOffset();
+      gl->enableDepthTest();
     }
   }
 }

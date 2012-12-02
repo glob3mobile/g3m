@@ -390,7 +390,7 @@ const IGLTextureId* GL::uploadTexture(const IImage* image, int format, bool gene
 
   const IGLTextureId* texId = getGLTextureId();
   if (texId != NULL) {
-    _nativeGL->blendFunc(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
+    //_nativeGL->blendFunc(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
     _nativeGL->pixelStorei(GLAlignment::unpack(), 1);
 
     _nativeGL->bindTexture(GLTextureType::texture2D(), texId);
