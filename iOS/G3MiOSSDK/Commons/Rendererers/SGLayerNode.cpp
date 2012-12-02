@@ -143,7 +143,7 @@ void SGLayerNode::prepareRender(const G3MRenderContext* rc) {
     //      gl->enableBlend();
     //    }
 
-    // OJO
+    int TEMP_commented_by_Agustin_until_decision_about_glstate;
     //gl->enableTextures();
     //gl->enableTexture2D();
 
@@ -156,9 +156,9 @@ void SGLayerNode::prepareRender(const G3MRenderContext* rc) {
 
 void SGLayerNode::cleanUpRender(const G3MRenderContext* rc) {
   if (_textureBound) {
-    GL *gl = rc->getGL();
 
-    // OJO
+    int TEMP_commented_by_Agustin_until_decision_about_glstate;
+    //GL *gl = rc->getGL();
     //gl->disableTexture2D();
     //gl->disableTextures();
 

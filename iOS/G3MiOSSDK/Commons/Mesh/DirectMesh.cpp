@@ -26,15 +26,6 @@ AbstractMesh(primitive,
              colors,
              colorsIntensity)
 {
- /* _glState->enableVerticesPosition();
-  if (_colors) 
-    _glState->enableVertexColor(_colors, _colorsIntensity);
-  if (_flatColor) {   
-    _glState->enableFlatColor(*_flatColor, _colorsIntensity);
-    if (_flatColor->isTransparent()) {
-      _glState->enableBlend();
-    }
-  }*/
 }
 
 void DirectMesh::rawRender(const G3MRenderContext* rc) const {

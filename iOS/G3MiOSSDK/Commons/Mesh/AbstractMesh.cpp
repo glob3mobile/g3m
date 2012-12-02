@@ -49,6 +49,15 @@ _translationMatrix(( center.isNan() || center.isZero() )
 _lineWidth(lineWidth),
 _glState(new GLState)
 {
+  _glState->enableVerticesPosition();
+  if (_colors) 
+    _glState->enableVertexColor(_colors, _colorsIntensity);
+  if (_flatColor) {   
+    _glState->enableFlatColor(*_flatColor, _colorsIntensity);
+    if (_flatColor->isTransparent()) {
+      _glState->enableBlend();
+    }
+  }
 }
 
 Extent* AbstractMesh::computeExtent() const {
