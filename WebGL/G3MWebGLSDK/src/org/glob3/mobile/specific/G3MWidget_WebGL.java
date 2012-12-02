@@ -372,7 +372,7 @@ private final static String    _vertexShader   = "attribute vec4 Position;"
       //_program = new Shaders_WebGL(_webGLContext).createProgram();
       
       final NativeGL_WebGL nativeGL = new NativeGL_WebGL(_webGLContext);
-      _gl = new GL(nativeGL);
+      _gl = new GL(nativeGL,false);
       
       _shaderProgram = new ShaderProgram(_gl);
       if (_shaderProgram.loadShaders(_vertexShader, _fragmentShader)==false) {

@@ -32,7 +32,7 @@ public final class ES2Renderer
    public ES2Renderer(final G3MWidget_Android widget) {
       _widgetAndroid = widget;
       final NativeGL2_Android nativeGL = new NativeGL2_Android();
-      _gl = new GL(nativeGL);
+      _gl = new GL(nativeGL,false);
    }
 
 
