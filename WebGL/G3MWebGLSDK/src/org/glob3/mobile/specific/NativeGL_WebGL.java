@@ -29,6 +29,8 @@ public final class NativeGL_WebGL
    */
 
    private final JavaScriptObject _gl;
+   
+   private java.util.ArrayList<JavaScriptObject> _shaderList = new java.util.ArrayList<JavaScriptObject>();
 
 
    public NativeGL_WebGL(final JavaScriptObject webGLContext) {
@@ -666,74 +668,75 @@ public final class NativeGL_WebGL
    }
 
 
-private native void jsUseProgram(final int program) /*-{
+private native void jsUseProgram(final JavaScriptObject program) /*-{
 	this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.useProgram(program);
 }-*/;
 
 @Override
 public void useProgram(ShaderProgram program) {
-    jsUseProgram(program.getProgram());
+    jsUseProgram(_shaderList.get(program.getProgram()-1));
 }
 
 
-private native int jsGetAttribLocation(final int program, final String name) /*-{
+private native int jsGetAttribLocation(final JavaScriptObject program, final String name) /*-{
 	return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.getAttribLocation(program, name);
 }-*/;
 
 @Override
 public int getAttribLocation(ShaderProgram program, String name) {
-	return jsGetAttribLocation(program.getProgram(), name);
+	return jsGetAttribLocation(_shaderList.get(program.getProgram()-1), name);
 }
 
 
-private native int jsGetUniformLocation(final int program, final String name) /*-{
+private native int jsGetUniformLocation(final JavaScriptObject program, final String name) /*-{
 	return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.getUniformLocation(program, name);
 }-*/;
 
 @Override
 public IGLUniformID getUniformLocation(ShaderProgram program, String name) {
-    final int id = jsGetUniformLocation(program.getProgram(), name);
+    final int id = jsGetUniformLocation(_shaderList.get(program.getProgram()-1), name);
     final IGLUniformID result = new GLUniformID_WebGL(id);
     return result;
 }
 
 
-private native int jsCreateProgram() /*-{
+private native JavaScriptObject jsCreateProgram() /*-{
 	return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.createProgram();
 }-*/;
 
 @Override
 public int createProgram() {
-	return jsCreateProgram();
+	_shaderList.add(jsCreateProgram());
+	return _shaderList.size();
 }
 
 
-private native void jsDeleteProgram(final int program) /*-{
+private native void jsDeleteProgram(final JavaScriptObject program) /*-{
 	this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.deleteProgram(program);
 }-*/;
 
 @Override
 public void deleteProgram(int program) {
-	jsDeleteProgram(program);
+	jsDeleteProgram(_shaderList.get(program-1));
 }
 
 
-private native void jsAttachShader(final int program, final int shader) /*-{
+private native void jsAttachShader(final JavaScriptObject program, final JavaScriptObject shader) /*-{
 	this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.attachShader(program, shader);
 }-*/;
 
 @Override
 public void attachShader(int program, int shader) {
-	jsAttachShader(program, shader);
+	jsAttachShader(_shaderList.get(program-1), _shaderList.get(shader-1));
 }
 
 
-private native int jsCreateVertexShader() /*-{
+private native JavaScriptObject jsCreateVertexShader() /*-{
 	var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 	return gl.createShader(gl.VERTEX_SHADER);
 }-*/;
 
-private native int jsCreateFragmentShader() /*-{
+private native JavaScriptObject jsCreateFragmentShader() /*-{
 	var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 	return gl.createShader(gl.FRAGMENT_SHADER);
 }-*/;
@@ -742,15 +745,17 @@ private native int jsCreateFragmentShader() /*-{
 public int createShader(ShaderType type) {
     switch (type) {
     case VERTEX_SHADER:
-        return jsCreateVertexShader();
+    	_shaderList.add(jsCreateVertexShader());
+    	return _shaderList.size();
     case FRAGMENT_SHADER:
-        return jsCreateFragmentShader();
+        _shaderList.add(jsCreateFragmentShader());
+        return _shaderList.size();
     default:
     	return 0;
   }  
 }
 
-private native boolean jsCompileShader(final int shader, final String source) /*-{
+private native boolean jsCompileShader(final JavaScriptObject shader, final String source) /*-{
 	var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 	gl.shaderSource(shader, source);
 	gl.compileShader(shader);
@@ -762,21 +767,21 @@ private native boolean jsCompileShader(final int shader, final String source) /*
 
 @Override
 public boolean compileShader(int shader, String source) {
-	return jsCompileShader(shader, source);
+	return jsCompileShader(_shaderList.get(shader-1), source);
 }
 
 
-private native void jsDeleteShader(final int shader) /*-{
+private native void jsDeleteShader(final JavaScriptObject shader) /*-{
 	this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.deleteShader(shader);
 }-*/;
 
 @Override
 public void deleteShader(int shader) {
-	jsDeleteShader(shader);
+	jsDeleteShader(_shaderList.get(shader-1));
 }
 
 
-private native void jsPrintShaderInfoLog(final int shader) /*-{
+private native void jsPrintShaderInfoLog(final JavaScriptObject shader) /*-{
 	var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 	if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS))
 		alert("Error compiling shaders: " + gl.getShaderInfoLog(shader));
@@ -784,11 +789,11 @@ private native void jsPrintShaderInfoLog(final int shader) /*-{
 
 @Override
 public void printShaderInfoLog(int shader) {
-	jsPrintShaderInfoLog(shader);
+	jsPrintShaderInfoLog(_shaderList.get(shader-1));
 }
 
 
-private native boolean jsLinkProgram(final int program) /*-{
+private native boolean jsLinkProgram(final JavaScriptObject program) /*-{
 	var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 	gl.linkProgram(program);
 	if (!gl.getProgramParameter(program, gl.LINK_STATUS))
@@ -799,11 +804,11 @@ private native boolean jsLinkProgram(final int program) /*-{
 
 @Override
 public boolean linkProgram(int program) {
-	return jsLinkProgram(program);
+	return jsLinkProgram(_shaderList.get(program-1));
 }
 
 
-private native void jsPrintProgramInfoLog(final int program) /*-{
+private native void jsPrintProgramInfoLog(final JavaScriptObject program) /*-{
 	var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 	if (!gl.getProgramParameter(program, gl.LINK_STATUS))
 		alert("Error linking program: ");
@@ -811,7 +816,7 @@ private native void jsPrintProgramInfoLog(final int program) /*-{
 
 @Override
 public void printProgramInfoLog(int program) {
-	jsPrintProgramInfoLog(program);
+	jsPrintProgramInfoLog(_shaderList.get(program-1));
 }
 
 
