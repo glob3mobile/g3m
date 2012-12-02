@@ -10,6 +10,9 @@
 #include "ILogger.hpp"
 #include "IStringBuilder.hpp"
 
+#include "JSONString.hpp"
+#include "JSONBoolean.hpp"
+#include "JSONNumber.hpp"
 
 JSONObject::~JSONObject(){
 #ifdef C_CODE
@@ -21,7 +24,7 @@ JSONObject::~JSONObject(){
 
 }
 
-JSONBaseObject* JSONObject::get(const std::string& key) const {
+const JSONBaseObject* JSONObject::get(const std::string& key) const {
 #ifdef C_CODE
   std::map<std::string, JSONBaseObject*>::const_iterator it = _entries.find(key);
   if (it != _entries.end()){
@@ -45,30 +48,49 @@ int JSONObject::size() const {
   return _entries.size();
 }
 
-JSONObject* JSONObject::getAsObject(const std::string& key) const {
-  JSONBaseObject* object = get(key);
+const JSONObject* JSONObject::getAsObject(const std::string& key) const {
+  const JSONBaseObject* object = get(key);
   return (object == NULL) ? NULL : object->asObject();
 }
 
-JSONArray* JSONObject::getAsArray(const std::string& key) const {
-  JSONBaseObject* object = get(key);
+const JSONArray* JSONObject::getAsArray(const std::string& key) const {
+  const JSONBaseObject* object = get(key);
   return (object == NULL) ? NULL : object->asArray();
 }
 
-JSONBoolean* JSONObject::getAsBoolean(const std::string& key) const {
-  JSONBaseObject* object = get(key);
+const JSONBoolean* JSONObject::getAsBoolean(const std::string& key) const {
+  const JSONBaseObject* object = get(key);
   return (object == NULL) ? NULL : object->asBoolean();
 }
 
-JSONNumber* JSONObject::getAsNumber(const std::string& key) const {
-  JSONBaseObject* object = get(key);
+const JSONNumber* JSONObject::getAsNumber(const std::string& key) const {
+  const JSONBaseObject* object = get(key);
   return (object == NULL) ? NULL : object->asNumber();
 }
 
-JSONString* JSONObject::getAsString(const std::string& key) const {
-  JSONBaseObject* object = get(key);
+const JSONString* JSONObject::getAsString(const std::string& key) const {
+  const JSONBaseObject* object = get(key);
   return (object == NULL) ? NULL : object->asString();
 }
+
+bool JSONObject::getAsBoolean(const std::string& key,
+                              bool defaultValue) const {
+  const JSONBoolean* jsBool = getAsBoolean(key);
+  return (jsBool == NULL) ? defaultValue : jsBool->value();
+}
+
+double JSONObject::getAsNumber(const std::string& key,
+                               double defaultValue) const {
+  const JSONNumber* jsNumber = getAsNumber(key);
+  return (jsNumber == NULL) ? defaultValue : jsNumber->value();
+}
+
+const std::string JSONObject::getAsString(const std::string& key,
+                                          const std::string& defaultValue) const {
+  const JSONString* jsString = getAsString(key);
+  return (jsString == NULL) ? defaultValue : jsString->value();
+}
+
 
 std::vector<std::string> JSONObject::keys() const {
 #ifdef C_CODE
@@ -116,4 +138,18 @@ const std::string JSONObject::description() const {
   const std::string s = isb->getString();
   delete isb;
   return s;
+}
+
+JSONObject* JSONObject::deepCopy() const {
+  JSONObject* result = new JSONObject();
+
+  std::vector<std::string> keys = this->keys();
+
+  int keysCount = keys.size();
+  for (int i = 0; i < keysCount; i++) {
+    std::string key = keys[i];
+    result->put(key, JSONBaseObject::deepCopy( get(key) ) );
+  }
+
+  return result;
 }

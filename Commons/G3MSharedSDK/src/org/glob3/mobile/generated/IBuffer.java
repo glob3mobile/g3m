@@ -16,6 +16,7 @@ package org.glob3.mobile.generated;
 //
 
 
+
 public interface IBuffer
 {
 
@@ -36,5 +37,9 @@ public interface IBuffer
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual int timestamp() const = 0;
   int timestamp();
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual const String description() const = 0;
+  String description();
 
 }

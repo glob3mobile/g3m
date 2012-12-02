@@ -21,7 +21,7 @@ private:
   double        _halfSize;
   GLState*      _glState;
   
-  IIntBuffer*   _index;
+  IIntBuffer*   _indices;
   IFloatBuffer* _vertices;
 
 public:

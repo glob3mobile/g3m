@@ -28,11 +28,8 @@ public class CircleShape extends MeshShape
   
 	FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
   
-	IntBufferBuilder indices = new IntBufferBuilder();
-  
 	// first is the center
 	vertices.add(0.0, 0.0, 0.0);
-	indices.add(0);
   
 	final double twicePi = IMathUtils.instance().pi() * 2;
   
@@ -42,13 +39,11 @@ public class CircleShape extends MeshShape
 	  final double x = _radius * IMathUtils.instance().cos(angleInRadians);
 	  final double y = _radius * IMathUtils.instance().sin(angleInRadians);
 	  vertices.add(x, y, 0);
-  
-	  indices.add(i + 1);
 	}
   
 	Color color = (_color == null) ? null : new Color(_color);
   
-	return new IndexedMesh(GLPrimitive.triangleFan(), true, Vector3D.zero(), vertices.create(), indices.create(), 1, color);
+	return new DirectMesh(GLPrimitive.triangleFan(), true, Vector3D.zero(), vertices.create(), 1, color);
   }
 
   public CircleShape(Geodetic3D position, float radius, Color color)
@@ -72,7 +67,8 @@ public class CircleShape extends MeshShape
 
   public void dispose()
   {
-	_color = null;
+	if (_color != null)
+		_color.dispose();
   }
 
   public final void setRadius(float radius)
@@ -88,7 +84,8 @@ public class CircleShape extends MeshShape
   {
 	if (_color != color)
 	{
-	  _color = null;
+	  if (_color != null)
+		  _color.dispose();
 	  _color = color;
 	  cleanMesh();
 	}

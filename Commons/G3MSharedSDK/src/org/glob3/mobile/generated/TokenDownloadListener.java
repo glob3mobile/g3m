@@ -22,9 +22,9 @@ public class TokenDownloadListener implements IBufferDownloadListener
 	}
 	else
 	{
-	  JSONObject data = json.asObject().getAsArray("resourceSets").getAsObject(0).getAsArray("resources").getAsObject(0);
+	  final JSONObject data = json.asObject().getAsArray("resourceSets").getAsObject(0).getAsArray("resources").getAsObject(0);
   
-	  JSONArray subDomArray = data.getAsArray("imageUrlSubdomains");
+	  final JSONArray subDomArray = data.getAsArray("imageUrlSubdomains");
 	  java.util.ArrayList<String> subdomains = new java.util.ArrayList<String>();
 	  int numSubdomains = subDomArray.size();
 	  for (int i = 0; i<numSubdomains; i++)

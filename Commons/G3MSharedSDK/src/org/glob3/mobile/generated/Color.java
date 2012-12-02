@@ -32,6 +32,11 @@ public class Color
 	  _alpha = that._alpha;
   }
 
+  public void dispose()
+  {
+
+  }
+
   public static Color fromRGBA(float red, float green, float blue, float alpha)
   {
 	return new Color(red, green, blue, alpha);

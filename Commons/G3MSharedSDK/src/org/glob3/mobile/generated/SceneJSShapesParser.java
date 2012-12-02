@@ -40,18 +40,23 @@ package org.glob3.mobile.generated;
 //class SGTranslateNode;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class SGLayerNode;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class Color;
 
 public class SceneJSShapesParser
 {
   private Shape _rootShape;
+  private final String _uriPrefix;
 
-  private SceneJSShapesParser(String json)
+  private SceneJSShapesParser(String json, String uriPrefix)
   {
+	  _uriPrefix = uriPrefix;
 	  _rootShape = null;
 	pvtParse(json);
   }
-  private SceneJSShapesParser(IByteBuffer json)
+  private SceneJSShapesParser(IByteBuffer json, String uriPrefix)
   {
+	  _uriPrefix = uriPrefix;
 	  _rootShape = null;
 	pvtParse(json.getAsString());
   }
@@ -71,14 +76,14 @@ public class SceneJSShapesParser
   
 	SGNode node = toNode(jsonRootObject);
   
-	_rootShape = new SGShape(node, "file:///");
+	_rootShape = new SGShape(node, _uriPrefix);
   
 	if (jsonRootObject != null)
 		jsonRootObject.dispose();
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: SGNode* toNode(JSONBaseObject* jsonBaseObject) const
+//ORIGINAL LINE: SGNode* toNode(const JSONBaseObject* jsonBaseObject) const
   private SGNode toNode(JSONBaseObject jsonBaseObject)
   {
   
@@ -88,13 +93,13 @@ public class SceneJSShapesParser
 	}
   
 	int ____DIEGO_AT_WORK;
-	JSONObject jsonObject = jsonBaseObject.asObject();
+	final JSONObject jsonObject = jsonBaseObject.asObject();
   
 	SGNode result = null;
   
 	if (jsonObject != null)
 	{
-	  JSONString jsType = jsonObject.getAsString("type");
+	  final JSONString jsType = jsonObject.getAsString("type");
 	  if (jsType != null)
 	  {
 		final String type = jsType.value();
@@ -124,7 +129,7 @@ public class SceneJSShapesParser
 		}
 		else
 		{
-		  ILogger.instance().logWarning("Unknown type \"%s\"", type);
+		  ILogger.instance().logWarning("SceneJS: Unknown type \"%s\"", type);
 		}
 	  }
 	}
@@ -133,32 +138,18 @@ public class SceneJSShapesParser
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: int parseCommons(JSONObject* jsonObject, SGNode* node) const
-  private int parseCommons(JSONObject jsonObject, SGNode node)
+//ORIGINAL LINE: int parseChildren(const JSONObject* jsonObject, SGNode* node) const
+  private int parseChildren(JSONObject jsonObject, SGNode node)
   {
 	int processedKeys = 0;
   
-	JSONString jsId = jsonObject.getAsString("id");
-	if (jsId != null)
-	{
-	  node.setId(jsId.value());
-	  processedKeys++;
-	}
-  
-	JSONString jsSId = jsonObject.getAsString("sid");
-	if (jsSId != null)
-	{
-	  node.setSId(jsSId.value());
-	  processedKeys++;
-	}
-  
-	JSONArray jsNodes = jsonObject.getAsArray("nodes");
+	final JSONArray jsNodes = jsonObject.getAsArray("nodes");
 	if (jsNodes != null)
 	{
 	  final int nodesCount = jsNodes.size();
 	  for (int i = 0; i < nodesCount; i++)
 	  {
-		JSONObject child = jsNodes.getAsObject(i);
+		final JSONObject child = jsNodes.getAsObject(i);
 		if (child != null)
 		{
 		  SGNode childNode = toNode(child);
@@ -175,7 +166,7 @@ public class SceneJSShapesParser
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void checkProcessedKeys(JSONObject* jsonObject, int processedKeys) const
+//ORIGINAL LINE: void checkProcessedKeys(const JSONObject* jsonObject, int processedKeys) const
   private void checkProcessedKeys(JSONObject jsonObject, int processedKeys)
   {
 	java.util.ArrayList<String> keys = jsonObject.keys();
@@ -191,15 +182,27 @@ public class SceneJSShapesParser
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: SGNode* createNode(JSONObject* jsonObject) const
+//ORIGINAL LINE: SGNode* createNode(const JSONObject* jsonObject) const
   private SGNode createNode(JSONObject jsonObject)
   {
   
 	int processedKeys = 1; // "type" is already processed
   
-	SGNode node = new SGNode();
+	final String id = jsonObject.getAsString("id", "");
+	if (id.compareTo("") != 0)
+	{
+	  processedKeys++;
+	}
   
-	processedKeys += parseCommons(jsonObject, node);
+	final String sId = jsonObject.getAsString("sid", "");
+	if (sId.compareTo("") != 0)
+	{
+	  processedKeys++;
+	}
+  
+	SGNode node = new SGNode(id, sId);
+  
+	processedKeys += parseChildren(jsonObject, node);
   
 	//  std::vector<std::string> keys = jsonObject->keys();
 	//  if (processedKeys != keys.size()) {
@@ -217,137 +220,224 @@ public class SceneJSShapesParser
 	return node;
   }
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: SGRotateNode* createRotateNode(JSONObject* jsonObject) const
+//ORIGINAL LINE: SGRotateNode* createRotateNode(const JSONObject* jsonObject) const
   private SGRotateNode createRotateNode(JSONObject jsonObject)
   {
 	int processedKeys = 1; // "type" is already processed
   
-	SGRotateNode node = new SGRotateNode();
+	final String id = jsonObject.getAsString("id", "");
+	if (id.compareTo("") != 0)
+	{
+	  processedKeys++;
+	}
   
-	processedKeys += parseCommons(jsonObject, node);
+	final String sId = jsonObject.getAsString("sid", "");
+	if (sId.compareTo("") != 0)
+	{
+	  processedKeys++;
+	}
   
-	JSONNumber jsX = jsonObject.getAsNumber("x");
+	final JSONNumber jsX = jsonObject.getAsNumber("x");
+	double x = 0.0;
 	if (jsX != null)
 	{
-	  node.setX(jsX.value());
+	  x = jsX.value();
 	  processedKeys++;
 	}
   
-	JSONNumber jsY = jsonObject.getAsNumber("y");
+	final JSONNumber jsY = jsonObject.getAsNumber("y");
+	double y = 0.0;
 	if (jsY != null)
 	{
-	  node.setY(jsY.value());
+	  y = jsY.value();
 	  processedKeys++;
 	}
   
-	JSONNumber jsZ = jsonObject.getAsNumber("z");
+	final JSONNumber jsZ = jsonObject.getAsNumber("z");
+	double z = 0.0;
 	if (jsZ != null)
 	{
-	  node.setZ(jsZ.value());
+	  z = jsZ.value();
 	  processedKeys++;
 	}
   
-	JSONNumber jsAngle = jsonObject.getAsNumber("angle");
+	final JSONNumber jsAngle = jsonObject.getAsNumber("angle");
+	double angle = 0;
 	if (jsAngle != null)
 	{
-	  node.setAngle(jsAngle.value());
+	  angle = jsAngle.value();
 	  processedKeys++;
 	}
+  
+	SGRotateNode node = new SGRotateNode(id, sId, x, y, z, angle);
+  
+	processedKeys += parseChildren(jsonObject, node);
   
 	checkProcessedKeys(jsonObject, processedKeys);
   
 	return node;
   }
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: SGTranslateNode* createTranslateNode(JSONObject* jsonObject) const
+//ORIGINAL LINE: SGTranslateNode* createTranslateNode(const JSONObject* jsonObject) const
   private SGTranslateNode createTranslateNode(JSONObject jsonObject)
   {
 	int processedKeys = 1; // "type" is already processed
   
-	SGTranslateNode node = new SGTranslateNode();
+	final String id = jsonObject.getAsString("id", "");
+	if (id.compareTo("") != 0)
+	{
+	  processedKeys++;
+	}
   
-	processedKeys += parseCommons(jsonObject, node);
+	final String sId = jsonObject.getAsString("sid", "");
+	if (sId.compareTo("") != 0)
+	{
+	  processedKeys++;
+	}
   
-	JSONNumber jsX = jsonObject.getAsNumber("x");
+	final JSONNumber jsX = jsonObject.getAsNumber("x");
+	double x = 0.0;
 	if (jsX != null)
 	{
-	  node.setX(jsX.value());
+	  x = jsX.value();
 	  processedKeys++;
 	}
   
-	JSONNumber jsY = jsonObject.getAsNumber("y");
+	final JSONNumber jsY = jsonObject.getAsNumber("y");
+	double y = 0.0;
 	if (jsY != null)
 	{
-	  node.setY(jsY.value());
+	  y = jsY.value();
 	  processedKeys++;
 	}
   
-	JSONNumber jsZ = jsonObject.getAsNumber("z");
+	final JSONNumber jsZ = jsonObject.getAsNumber("z");
+	double z = 0.0;
 	if (jsZ != null)
 	{
-	  node.setZ(jsZ.value());
+	  z = jsZ.value();
 	  processedKeys++;
 	}
+  
+	SGTranslateNode node = new SGTranslateNode(id, sId, x, y, z);
+  
+	processedKeys += parseChildren(jsonObject, node);
   
 	checkProcessedKeys(jsonObject, processedKeys);
   
 	return node;
   }
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: SGMaterialNode* createMaterialNode(JSONObject* jsonObject) const
+//ORIGINAL LINE: SGMaterialNode* createMaterialNode(const JSONObject* jsonObject) const
   private SGMaterialNode createMaterialNode(JSONObject jsonObject)
   {
 	int processedKeys = 1; // "type" is already processed
   
-	SGMaterialNode node = new SGMaterialNode();
-  
-	processedKeys += parseCommons(jsonObject, node);
-  
-	JSONObject jsSpecularColor = jsonObject.getAsObject("specularColor");
-	if (jsSpecularColor != null)
+	final String id = jsonObject.getAsString("id", "");
+	if (id.compareTo("") != 0)
 	{
-	  final double r = jsSpecularColor.getAsNumber("r").value();
-	  final double g = jsSpecularColor.getAsNumber("g").value();
-	  final double b = jsSpecularColor.getAsNumber("b").value();
-	  final double a = jsSpecularColor.getAsNumber("a").value();
-	  node.setSpecularColor(Color.newFromRGBA((float) r, (float) g, (float) b, (float) a));
 	  processedKeys++;
 	}
   
-	JSONNumber jsShine = jsonObject.getAsNumber("shine");
+	final String sId = jsonObject.getAsString("sid", "");
+	if (sId.compareTo("") != 0)
+	{
+	  processedKeys++;
+	}
+  
+	final JSONObject jsBaseColor = jsonObject.getAsObject("baseColor");
+	Color baseColor;
+	if (jsBaseColor == null)
+	{
+	  baseColor = Color.newFromRGBA(0, 0, 0, 1);
+	}
+	else
+	{
+	  baseColor = parseColor(jsBaseColor);
+	  processedKeys++;
+	}
+  
+	final JSONObject jsSpecularColor = jsonObject.getAsObject("specularColor");
+	Color specularColor;
+	if (jsSpecularColor == null)
+	{
+	  specularColor = Color.newFromRGBA(0, 0, 0, 1);
+	}
+	else
+	{
+	  specularColor = parseColor(jsSpecularColor);
+	  processedKeys++;
+	}
+  
+	final JSONNumber jsShine = jsonObject.getAsNumber("shine");
+	double shine = 10;
 	if (jsShine != null)
 	{
-	  node.setShine(jsShine.value());
+	  shine = jsShine.value();
 	  processedKeys++;
 	}
-	JSONNumber jsSpecular = jsonObject.getAsNumber("specular");
+  
+	final JSONNumber jsSpecular = jsonObject.getAsNumber("specular");
+	double specular = 1.0;
 	if (jsSpecular != null)
 	{
-	  node.setSpecular(jsSpecular.value());
+	  specular = jsSpecular.value();
 	  processedKeys++;
 	}
+  
+	final JSONNumber jsAlpha = jsonObject.getAsNumber("alpha");
+	double alpha = 1.0;
+	if (jsAlpha != null)
+	{
+	  alpha = jsAlpha.value();
+	  processedKeys++;
+	}
+  
+	final JSONNumber jsEmit = jsonObject.getAsNumber("emit");
+	double emit = 0.0;
+	if (jsEmit != null)
+	{
+	  emit = jsEmit.value();
+	  processedKeys++;
+	}
+  
+	SGMaterialNode node = new SGMaterialNode(id, sId, baseColor, specularColor, specular, shine, alpha, emit);
+  
+	processedKeys += parseChildren(jsonObject, node);
   
 	checkProcessedKeys(jsonObject, processedKeys);
   
 	return node;
   }
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: SGTextureNode* createTextureNode(JSONObject* jsonObject) const
+//ORIGINAL LINE: SGTextureNode* createTextureNode(const JSONObject* jsonObject) const
   private SGTextureNode createTextureNode(JSONObject jsonObject)
   {
 	int processedKeys = 1; // "type" is already processed
   
-	SGTextureNode node = new SGTextureNode();
+	final String id = jsonObject.getAsString("id", "");
+	if (id.compareTo("") != 0)
+	{
+	  processedKeys++;
+	}
   
-	processedKeys += parseCommons(jsonObject, node);
+	final String sId = jsonObject.getAsString("sid", "");
+	if (sId.compareTo("") != 0)
+	{
+	  processedKeys++;
+	}
   
-	JSONArray jsLayers = jsonObject.getAsArray("layers");
+	SGTextureNode node = new SGTextureNode(id, sId);
+  
+	processedKeys += parseChildren(jsonObject, node);
+  
+	final JSONArray jsLayers = jsonObject.getAsArray("layers");
 	if (jsLayers != null)
 	{
 	  int layersCount = jsLayers.size();
 	  for (int i = 0; i < layersCount; i++)
 	  {
-		JSONObject jsLayer = jsLayers.getAsObject(i);
+		final JSONObject jsLayer = jsLayers.getAsObject(i);
 		if (jsLayer != null)
 		{
 		  node.addLayer(createLayerNode(jsLayer));
@@ -362,12 +452,25 @@ public class SceneJSShapesParser
 	return node;
   }
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: SGGeometryNode* createGeometryNode(JSONObject* jsonObject) const
+//ORIGINAL LINE: SGGeometryNode* createGeometryNode(const JSONObject* jsonObject) const
   private SGGeometryNode createGeometryNode(JSONObject jsonObject)
   {
 	int processedKeys = 1; // "type" is already processed
   
-	JSONString jsPrimitive = jsonObject.getAsString("primitive");
+	final String id = jsonObject.getAsString("id", "");
+	if (id.compareTo("") != 0)
+	{
+	  processedKeys++;
+	}
+  
+	final String sId = jsonObject.getAsString("sid", "");
+	if (sId.compareTo("") != 0)
+	{
+	  processedKeys++;
+	}
+  
+  
+	final JSONString jsPrimitive = jsonObject.getAsString("primitive");
 	int primitive = GLPrimitive.triangles(); // triangles is the default
 	if (jsPrimitive != null)
 	{
@@ -403,7 +506,7 @@ public class SceneJSShapesParser
 	  }
 	}
   
-	JSONArray jsPositions = jsonObject.getAsArray("positions");
+	final JSONArray jsPositions = jsonObject.getAsArray("positions");
 	if (jsPositions == null)
 	{
 	  ILogger.instance().logError("Mandatory positions are not present");
@@ -417,7 +520,7 @@ public class SceneJSShapesParser
 	  vertices.put(i, (float) jsPositions.getAsNumber(i).value());
 	}
   
-	JSONArray jsColors = jsonObject.getAsArray("colors");
+	final JSONArray jsColors = jsonObject.getAsArray("colors");
 	IFloatBuffer colors = null;
 	if (jsColors != null)
 	{
@@ -430,27 +533,36 @@ public class SceneJSShapesParser
 	  processedKeys++;
 	}
   
-	JSONArray jsUV = jsonObject.getAsArray("uv");
+	final JSONArray jsUV = jsonObject.getAsArray("uv");
 	IFloatBuffer uv = null;
 	if (jsUV != null)
 	{
 	  final int uvCount = jsUV.size();
 	  uv = IFactory.instance().createFloatBuffer(uvCount);
+	  boolean isY = false;
 	  for (int i = 0; i < uvCount; i++)
 	  {
-		uv.put(i, (float) jsUV.getAsNumber(i).value());
+		float value = (float) jsUV.getAsNumber(i).value();
+		if (isY)
+		{
+		  value = 1 - value;
+		}
+		isY = !isY;
+		uv.put(i, value);
+  
+		int __TEXTURES_AT_WORK;
 	  }
 	  processedKeys++;
 	}
   
-	JSONArray jsNormals = jsonObject.getAsArray("normals");
+	final JSONArray jsNormals = jsonObject.getAsArray("normals");
 	IFloatBuffer normals = null;
 	if (jsNormals != null)
 	{
 	  processedKeys++;
 	}
   
-	JSONArray jsIndices = jsonObject.getAsArray("indices");
+	final JSONArray jsIndices = jsonObject.getAsArray("indices");
 	if (jsIndices == null)
 	{
 	  ILogger.instance().logError("Non indexed geometries not supported");
@@ -464,9 +576,9 @@ public class SceneJSShapesParser
 	}
 	processedKeys++;
   
-	SGGeometryNode node = new SGGeometryNode(primitive, vertices, colors, uv, normals, indices);
+	SGGeometryNode node = new SGGeometryNode(id, sId, primitive, vertices, colors, uv, normals, indices);
   
-	processedKeys += parseCommons(jsonObject, node);
+	processedKeys += parseChildren(jsonObject, node);
   
 	checkProcessedKeys(jsonObject, processedKeys);
   
@@ -474,85 +586,103 @@ public class SceneJSShapesParser
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: SGLayerNode* createLayerNode(JSONObject* jsonObject) const
+//ORIGINAL LINE: SGLayerNode* createLayerNode(const JSONObject* jsonObject) const
   private SGLayerNode createLayerNode(JSONObject jsonObject)
   {
 	int processedKeys = 0; // Layer has not "type"
   
-	SGLayerNode node = new SGLayerNode();
   
-	processedKeys += parseCommons(jsonObject, node);
-  
-	JSONString jsUri = jsonObject.getAsString("uri");
-	if (jsUri != null)
+	final String id = jsonObject.getAsString("id", "");
+	if (id.compareTo("") != 0)
 	{
-	  node.setUri(jsUri.value());
 	  processedKeys++;
 	}
   
-	JSONString jsApplyTo = jsonObject.getAsString("applyTo");
-	if (jsApplyTo != null)
+	final String sId = jsonObject.getAsString("sid", "");
+	if (sId.compareTo("") != 0)
 	{
-	  node.setApplyTo(jsApplyTo.value());
 	  processedKeys++;
 	}
   
-	JSONString jsBlendMode = jsonObject.getAsString("blendMode");
-	if (jsBlendMode != null)
+	final String uri = jsonObject.getAsString("uri", "");
+	if (uri.compareTo("") != 0)
 	{
-	  node.setBlendMode(jsBlendMode.value());
 	  processedKeys++;
 	}
   
-	JSONBoolean jsFlipY = jsonObject.getAsBoolean("flipY");
+	final String applyTo = jsonObject.getAsString("applyTo", "");
+	if (applyTo.compareTo("") != 0)
+	{
+	  processedKeys++;
+	}
+  
+	final String blendMode = jsonObject.getAsString("blendMode", "");
+	if (blendMode.compareTo("") != 0)
+	{
+	  processedKeys++;
+	}
+  
+	final JSONBoolean jsFlipY = jsonObject.getAsBoolean("flipY");
+	boolean flipY = true;
 	if (jsFlipY != null)
 	{
-	  node.setFlipY(jsFlipY.value());
+	  flipY = jsFlipY.value();
 	  processedKeys++;
 	}
   
-	JSONString jsMagFilter = jsonObject.getAsString("magFilter");
-	if (jsMagFilter != null)
+	final String magFilter = jsonObject.getAsString("magFilter", "");
+	if (magFilter.compareTo("") != 0)
 	{
-	  node.setMagFilter(jsMagFilter.value());
 	  processedKeys++;
 	}
   
-	JSONString jsMinFilter = jsonObject.getAsString("minFilter");
-	if (jsMinFilter != null)
+	final String minFilter = jsonObject.getAsString("minFilter", "");
+	if (minFilter.compareTo("") != 0)
 	{
-	  node.setMinFilter(jsMinFilter.value());
 	  processedKeys++;
 	}
   
-	JSONString jsWrapS = jsonObject.getAsString("wrapS");
-	if (jsWrapS != null)
+	final String wrapS = jsonObject.getAsString("wrapS", "");
+	if (wrapS.compareTo("") != 0)
 	{
-	  node.setWrapS(jsWrapS.value());
 	  processedKeys++;
 	}
   
-	JSONString jsWrapT = jsonObject.getAsString("wrapT");
-	if (jsWrapT != null)
+	final String wrapT = jsonObject.getAsString("wrapT", "");
+	if (wrapT.compareTo("") != 0)
 	{
-	  node.setWrapT(jsWrapT.value());
 	  processedKeys++;
 	}
+  
+	SGLayerNode node = new SGLayerNode(id, sId, uri, applyTo, blendMode, flipY, magFilter, minFilter, wrapS, wrapT);
+  
+	processedKeys += parseChildren(jsonObject, node);
   
 	checkProcessedKeys(jsonObject, processedKeys);
   
 	return node;
   }
 
-
-
-  public static Shape parse(String json)
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Color* parseColor(const JSONObject* jsColor) const
+  private Color parseColor(JSONObject jsColor)
   {
-	return new SceneJSShapesParser(json).getRootShape();
+	final float r = (float) jsColor.getAsNumber("r", 0.0);
+	final float g = (float) jsColor.getAsNumber("g", 0.0);
+	final float b = (float) jsColor.getAsNumber("b", 0.0);
+	final float a = (float) jsColor.getAsNumber("a", 1.0);
+  
+	return Color.newFromRGBA(r, g, b, a);
   }
-  public static Shape parse(IByteBuffer json)
+
+
+  public static Shape parse(String json, String uriPrefix)
   {
-	return new SceneJSShapesParser(json).getRootShape();
+	return new SceneJSShapesParser(json, uriPrefix).getRootShape();
+  }
+  public static Shape parse(IByteBuffer json, String uriPrefix)
+  {
+	return new SceneJSShapesParser(json, uriPrefix).getRootShape();
   }
 
 }

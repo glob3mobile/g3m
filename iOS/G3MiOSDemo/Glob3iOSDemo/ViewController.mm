@@ -30,6 +30,8 @@
 #include "G3MWidget.hpp"
 #include "DummyRenderer.hpp"
 #include "LatLonMeshRenderer.hpp"
+#include "GEOJSONParser.hpp"
+#include "GEORenderer.hpp"
 
 @implementation ViewController
 
@@ -104,10 +106,11 @@
                                   "",
                                   false,
                                   NULL);
+    bing->setEnable(true);
     layerSet->addLayer(bing);
   }
 
-  bool useOSM = false;
+  bool useOSM = true;
   if (useOSM) {
     //    WMSLayer *osm = new WMSLayer("osm",
     //                                 URL("http://wms.latlon.org/"),
@@ -129,6 +132,7 @@
                                  "",
                                  false,
                                  NULL);
+    osm->setEnable(false);
     layerSet->addLayer(osm);
 
   }
@@ -235,7 +239,7 @@
 
 
     Mark* m2 = new Mark("Las Palmas",
-                        URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false),
+                        URL("file:///plane.png", false),
                         Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-15.36), 0));
     marksRenderer->addMark(m2);
 
@@ -351,12 +355,15 @@
   private:
     G3MWidget_iOS*  _iosWidget;
     ShapesRenderer* _shapesRenderer;
+    GEORenderer*    _geoRenderer;
 
   public:
     SampleInitializationTask(G3MWidget_iOS* iosWidget,
-                             ShapesRenderer* shapesRenderer) :
+                             ShapesRenderer* shapesRenderer,
+                             GEORenderer*    geoRenderer) :
     _iosWidget(iosWidget),
-    _shapesRenderer(shapesRenderer)
+    _shapesRenderer(shapesRenderer),
+    _geoRenderer(geoRenderer)
     {
 
     }
@@ -368,28 +375,56 @@
                                                                 Angle::fromDegreesMinutes(-122, 25),
                                                                 1000000),
                                                      TimeInterval::fromSeconds(5));
-      /*
-      NSString *filePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
-                                                           ofType: @"json"];
-      if (filePath) {
-        NSString *nsString = [NSString stringWithContentsOfFile: filePath
+      /**/
+      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
+                                                                ofType: @"json"];
+      if (planeFilePath) {
+        NSString *nsPlaneJSON = [NSString stringWithContentsOfFile: planeFilePath
                                                        encoding: NSUTF8StringEncoding
                                                           error: nil];
-        if (nsString) {
-          std::string str = [nsString UTF8String];
-          Shape* plane = SceneJSShapesParser::parse(str);
+        if (nsPlaneJSON) {
+          std::string planeJSON = [nsPlaneJSON UTF8String];
+          Shape* plane = SceneJSShapesParser::parse(planeJSON, "file:///");
 
           plane->setPosition( new Geodetic3D(Angle::fromDegrees(37.78333333),
                                              Angle::fromDegrees(-122.41666666666667),
-                                             100) );
+                                             500) );
           plane->setScale(100, 100, 100);
-          plane->setPitch(Angle::fromDegrees(-90));
+          plane->setPitch(Angle::fromDegrees(90));
           _shapesRenderer->addShape(plane);
         }
       }
-      */
+      /**/
+
+      /**/
+      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/boundary_lines_land"
+                                                                  ofType: @"geojson"];
+//    Info: GEOJSONParser Statistics: Coordinates2D=77622, LineStrings2D=89, MultiLineStrings2D=372, features=461, featuresCollection=1
+
+
+//      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/extremadura-roads"
+//                                                                  ofType: @"geojson"];
+//    Info: GEOJSONParser Statistics: Coordinates2D=398140, LineStrings2D=7988, MultiLineStrings2D=0, features=7988, featuresCollection=1
+
+
+      if (geoJSONFilePath) {
+        NSString *nsGEOJSON = [NSString stringWithContentsOfFile: geoJSONFilePath
+                                                          encoding: NSUTF8StringEncoding
+                                                             error: nil];
+        if (nsGEOJSON) {
+          std::string geoJSON = [nsGEOJSON UTF8String];
+
+          GEOObject* geoObject = GEOJSONParser::parse(geoJSON);
+
+          _geoRenderer->addGEOObject(geoObject);
+        }
+      }
+      /**/
     }
   };
+
+  GEORenderer* geoRenderer = new GEORenderer();
+  renderers.push_back(geoRenderer);
 
   UserData* userData = NULL;
   const bool incrementalTileQuality = false;
@@ -398,7 +433,9 @@
                              incrementalTileQuality: incrementalTileQuality
                                           renderers: renderers
                                            userData: userData
-                                 initializationTask: new SampleInitializationTask([self G3MWidget], shapesRenderer)
+                                 initializationTask: new SampleInitializationTask([self G3MWidget],
+                                                                                  shapesRenderer,
+                                                                                  geoRenderer)
                                     periodicalTasks: periodicalTasks];
 }
 

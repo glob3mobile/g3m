@@ -173,7 +173,7 @@ public final class SQLiteStorage_Android
 
 
    @Override
-   public IByteBuffer readBuffer(final URL url) {
+   public synchronized IByteBuffer readBuffer(final URL url) {
       final String name = url.getPath();
 
       final Cursor cursor = _readDB.query("buffer", new String[] { "contents" }, "name = ?", new String[] { name }, null, null,
@@ -254,7 +254,7 @@ public final class SQLiteStorage_Android
 
 
    @Override
-   public IImage readImage(final URL url) {
+   public synchronized IImage readImage(final URL url) {
       IImage result = null;
 
       final String name = url.getPath();

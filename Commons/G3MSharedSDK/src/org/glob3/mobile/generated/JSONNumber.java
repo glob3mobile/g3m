@@ -6,6 +6,14 @@ public class JSONNumber extends JSONBaseObject
   private double _doubleValue;
   private final number_type _type;
 
+  private JSONNumber(int intValue, float floatValue, double doubleValue, number_type type)
+  {
+	  _intValue = intValue;
+	  _floatValue = floatValue;
+	  _doubleValue = doubleValue;
+	  _type = type;
+  }
+
 
   public JSONNumber(int value)
   {
@@ -87,6 +95,8 @@ public class JSONNumber extends JSONBaseObject
 	return 0;
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const JSONNumber* asNumber() const
   public final JSONNumber asNumber()
   {
 	return this;
@@ -124,6 +134,13 @@ public class JSONNumber extends JSONBaseObject
 	if (isb != null)
 		isb.dispose();
 	return s;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: JSONNumber* deepCopy() const
+  public final JSONNumber deepCopy()
+  {
+	return new JSONNumber(_intValue, _floatValue, _doubleValue, _type);
   }
 
 }

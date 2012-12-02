@@ -28,6 +28,8 @@
 #include "IDownloader.hpp"
 #include "Petition.hpp"
 
+#define TILE_DOWNLOAD_PRIORITY 1000000000
+
 enum PetitionStatus {
   STATUS_PENDING,
   STATUS_DOWNLOADED,
@@ -226,10 +228,11 @@ public:
     for (int i = 0; i < _petitionsCount; i++) {
       const Petition* petition = _petitions[i];
       
-      const long long priority =  (_parameters->_incrementalTileQuality
-                                   ? 1000 - _tile->getLevel()
-                                   : _tile->getLevel());
-      
+//      const long long priority =  (_parameters->_incrementalTileQuality
+//                                   ? 1000 - _tile->getLevel()
+//                                   : _tile->getLevel());
+      const long long priority = TILE_DOWNLOAD_PRIORITY + _tile->getLevel();
+
       const long long requestId = _downloader->requestImage(URL(petition->getURL()),
                                                             priority,
                                                             new BuilderDownloadStepDownloadListener(this, i),
@@ -263,63 +266,74 @@ public:
   }
   
   void composeAndUploadTexture() const {
-    std::vector<const IImage*>     images;
-    std::vector<const RectangleD*> rectangles;
-    std::string textureId = _tile->getKey().tinyDescription();
-    
-    const int textureWidth  = _parameters->_tileTextureWidth;
-    const int textureHeight = _parameters->_tileTextureHeight;
-    
-    const Sector tileSector = _tile->getSector();
-    
-    for (int i = 0; i < _petitionsCount; i++) {
-      const Petition* petition = _petitions[i];
-      const IImage* image = petition->getImage();
-      
-      if (image != NULL) {
-        images.push_back(image);
-        
-        rectangles.push_back(getImageRectangleInTexture(tileSector,
-                                                        petition->getSector(),
-                                                        textureWidth,
-                                                        textureHeight));
-        
-        textureId += petition->getURL().getPath();
-        textureId += "_";
+#ifdef JAVA_CODE
+    synchronized (this) {
+#endif
+
+      if (_mesh == NULL) {
+        return;
       }
-    }
-    
-    if (images.size() > 0) {
-      //        int __TESTING_mipmapping;
-      const bool isMipmap = false;
-      
-      const IImage* image = _textureBuilder->createTextureFromImages(_gl,
-                                                                     _factory,
-                                                                     images,
-                                                                     rectangles,
-                                                                     textureWidth,
-                                                                     textureHeight);
-      
-      const IGLTextureId* glTextureId = _texturesHandler->getGLTextureId(image,
-                                                                         GLFormat::rgba(),
-                                                                         textureId,
-                                                                         isMipmap);
-      
-      if (glTextureId != NULL) {
-        if (!_mesh->setGLTextureIdForLevel(0, glTextureId)) {
-          _texturesHandler->releaseGLTextureId(glTextureId);
+
+      std::vector<const IImage*>     images;
+      std::vector<const RectangleD*> rectangles;
+      std::string textureId = _tile->getKey().tinyDescription();
+
+      const int textureWidth  = _parameters->_tileTextureWidth;
+      const int textureHeight = _parameters->_tileTextureHeight;
+
+      const Sector tileSector = _tile->getSector();
+
+      for (int i = 0; i < _petitionsCount; i++) {
+        const Petition* petition = _petitions[i];
+        const IImage* image = petition->getImage();
+
+        if (image != NULL) {
+          images.push_back(image);
+
+          rectangles.push_back(getImageRectangleInTexture(tileSector,
+                                                          petition->getSector(),
+                                                          textureWidth,
+                                                          textureHeight));
+
+          textureId += petition->getURL().getPath();
+          textureId += "_";
         }
       }
-      
-      delete image;
-    }
-    
+
+      if (images.size() > 0) {
+        //        int __TESTING_mipmapping;
+        const bool isMipmap = false;
+
+        const IImage* image = _textureBuilder->createTextureFromImages(_gl,
+                                                                       _factory,
+                                                                       images,
+                                                                       rectangles,
+                                                                       textureWidth,
+                                                                       textureHeight);
+
+        const IGLTextureId* glTextureId = _texturesHandler->getGLTextureId(image,
+                                                                           GLFormat::rgba(),
+                                                                           textureId,
+                                                                           isMipmap);
+
+        if (glTextureId != NULL) {
+          if (!_mesh->setGLTextureIdForLevel(0, glTextureId)) {
+            _texturesHandler->releaseGLTextureId(glTextureId);
+          }
+        }
+
+        delete image;
+      }
+
 #ifdef C_CODE
-    for (int i = 0; i < rectangles.size(); i++) {
-      delete rectangles[i];
+      for (int i = 0; i < rectangles.size(); i++) {
+        delete rectangles[i];
+      }
+#endif
+      
+#ifdef JAVA_CODE
     }
 #endif
-    
   }
   
   void finalize() {
@@ -462,9 +476,17 @@ public:
   }
   
   void cleanMesh() {
-    if (_mesh != NULL) {
-      _mesh = NULL;
+#ifdef JAVA_CODE
+    synchronized (this) {
+#endif
+
+      if (_mesh != NULL) {
+        _mesh = NULL;
+      }
+
+#ifdef JAVA_CODE
     }
+#endif
   }
   
   void cleanTile() {
@@ -523,7 +545,7 @@ void BuilderDownloadStepDownloadListener::onCancel(const URL& url) {
 MultiLayerTileTexturizer::MultiLayerTileTexturizer() :
 _parameters(NULL),
 _texCoordsCache(NULL),
-_pendingTopTileRequests(0),
+//_pendingTopTileRequests(0),
 _texturesHandler(NULL)
 {
   
@@ -706,71 +728,17 @@ IFloatBuffer* MultiLayerTileTexturizer::getTextureCoordinates(const TileRenderCo
   return _texCoordsCache;
 }
 
-class TopTileDownloadListener : public IImageDownloadListener {
-private:
-  MultiLayerTileTexturizer* _texturizer;
-  
-public:
-  TopTileDownloadListener(MultiLayerTileTexturizer* texturizer) :
-  _texturizer(texturizer)
-  {
-  }
-  
-  virtual ~TopTileDownloadListener() {
-    
-  }
-  
-  void onDownload(const URL& url,
-                  const IImage* image) {
-    _texturizer->countTopTileRequest();
-  }
-  
-  void onError(const URL& url) {
-    _texturizer->countTopTileRequest();
-  }
-  
-  void onCanceledDownload(const URL& url,
-                          const IImage* image) {
-  }
-  
-  void onCancel(const URL& url) {
-    _texturizer->countTopTileRequest();
-  }
-  
-};
-
 void MultiLayerTileTexturizer::justCreatedTopTile(const G3MRenderContext* rc,
                                                   Tile* tile,
                                                   LayerSet* layerSet) {
-  std::vector<Petition*> petitions = layerSet->createTileMapPetitions(rc,
-                                                                      tile,
-                                                                      _parameters->_tileTextureWidth,
-                                                                      _parameters->_tileTextureHeight);
-  
-  _pendingTopTileRequests += petitions.size();
-  
-  const long priority = 1000000000;  // very big priority for toplevel tiles
-  for (int i = 0; i < petitions.size(); i++) {
-    const Petition* petition = petitions[i];
-    rc->getDownloader()->requestImage(URL(petition->getURL()),
-                                      priority,
-                                      new TopTileDownloadListener(this),
-                                      true);
-    
-    delete petition;
-  }
 }
 
 bool MultiLayerTileTexturizer::isReady(const G3MRenderContext *rc,
                                        LayerSet* layerSet) {
-  if (_pendingTopTileRequests > 0) {
-    return false;
-  }
   if (layerSet != NULL) {
     return layerSet->isReady();
   }
   return true;
-  //  return (_pendingTopTileRequests <= 0) && _layerSet->isReady();
 }
 
 void MultiLayerTileTexturizer::onTerrainTouchEvent(const G3MEventContext* ec,

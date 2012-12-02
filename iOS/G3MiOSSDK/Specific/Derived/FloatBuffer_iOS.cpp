@@ -7,3 +7,20 @@
 //
 
 #include "FloatBuffer_iOS.hpp"
+
+#include <sstream>
+
+const std::string FloatBuffer_iOS::description() const {
+  std::ostringstream oss;
+
+  oss << "FloatBuffer_iOS(";
+  oss << "size=";
+  oss << _size;
+  oss << ", timestamp=";
+  oss << _timestamp;
+  oss << ", values=";
+  oss << _values;
+  oss << ")";
+
+  return oss.str();
+}

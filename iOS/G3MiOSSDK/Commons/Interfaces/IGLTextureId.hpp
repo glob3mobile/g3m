@@ -11,7 +11,7 @@
 
 #include <string>
 
-class IGLTextureId{
+class IGLTextureId {
 public:
 
   virtual bool isEqualsTo(const IGLTextureId* that) const = 0;

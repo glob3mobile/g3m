@@ -69,6 +69,11 @@ G3MWidget::G3MWidget(GL*                              gl,
 _frameTasksExecutor( new FrameTasksExecutor() ),
 _effectsScheduler( new EffectsScheduler() ),
 _gl(gl),
+/*
+ =======
+_gl( new GL(nativeGL, false) ),
+>>>>>>> origin/webgl-port
+ */
 _downloader(downloader),
 _storage(storage),
 _threadUtils(threadUtils),
@@ -289,15 +294,6 @@ void G3MWidget::render() {
   }
   _currentCamera->copyFrom(*_nextCamera);
 
-
-  if (_initializationTask != NULL) {
-    _initializationTask->run(_context);
-    if (_autoDeleteInitializationTask) {
-      delete _initializationTask;
-    }
-    _initializationTask = NULL;
-  }
-
   G3MRenderContext rc(_frameTasksExecutor,
                       IFactory::instance(),
                       IStringUtils::instance(),
@@ -316,11 +312,22 @@ void G3MWidget::render() {
                       IFactory::instance()->createTimer(),
                       _storage);
 
+  _mainRendererReady = _mainRenderer->isReadyToRender(&rc);
+
+  if (_mainRendererReady) {
+    if (_initializationTask != NULL) {
+      _initializationTask->run(_context);
+      if (_autoDeleteInitializationTask) {
+        delete _initializationTask;
+      }
+      _initializationTask = NULL;
+    }
+  }
+
   _effectsScheduler->doOneCyle(&rc);
 
   _frameTasksExecutor->doPreRenderCycle(&rc);
 
-  _mainRendererReady = _mainRenderer->isReadyToRender(&rc);
 
   Renderer* selectedRenderer = _mainRendererReady ? _mainRenderer : _busyRenderer;
   if (selectedRenderer != _selectedRenderer) {

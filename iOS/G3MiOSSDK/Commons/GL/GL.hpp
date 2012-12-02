@@ -32,17 +32,17 @@ class IGLUniformID;
 
 class GL {
 private:
-  INativeGL* const _gl;
-  
+  INativeGL* const _nativeGL;
+
   MutableMatrix44D            _modelView;
-  
+
   // stack of ModelView matrices
   std::list<MutableMatrix44D> _matrixStack;
-  
+
   std::list<const IGLTextureId*>      _texturesIdBag;
   long                        _texturesIdAllocationCounter;
-//  long                        _texturesIdGetCounter;
-//  long                        _texturesIdTakeCounter;
+  //  long                        _texturesIdGetCounter;
+  //  long                        _texturesIdTakeCounter;
 
   // state handling
   bool _enableDepthTest;
@@ -53,39 +53,40 @@ private:
   bool _enableVerticesPosition;
   bool _enableFlatColor;
   bool _enableCullFace;
-  
+
   int _cullFace_face;
 
   float _scaleX;
   float _scaleY;
   float _translationX;
   float _translationY;
-  
+
   IFloatBuffer* _vertices;
   int           _verticesTimestamp;
   IFloatBuffer* _textureCoordinates;
   int           _textureCoordinatesTimestamp;
   IFloatBuffer* _colors;
   int           _colorsTimestamp;
-  
+
   float _flatColorR;
   float _flatColorG;
   float _flatColorB;
   float _flatColorA;
   float _flatColorIntensity;
+  float _lineWidth;
   
   inline void loadModelView();
-  
+
   const IGLTextureId* getGLTextureId();
-  
-//  int _lastTextureWidth;
-//  int _lastTextureHeight;
-//#ifdef C_CODE
-//  unsigned char* _lastImageData;
-//#endif
-//#ifdef JAVA_CODE
-//  byte[] _lastImageData;
-//#endif
+
+  //  int _lastTextureWidth;
+  //  int _lastTextureHeight;
+  //#ifdef C_CODE
+  //  unsigned char* _lastImageData;
+  //#endif
+  //#ifdef JAVA_CODE
+  //  byte[] _lastImageData;
+  //#endif
 
   //Get Locations warning of errors
   bool _errorGettingLocationOcurred;
@@ -98,16 +99,19 @@ private:
   //void enableDepthTest();
   //void disableDepthTest();
   
-  
+  const bool _verbose;
+
 public:
-  
-  GL(INativeGL* const gl) :
-  _gl(gl),
+
+  GL(INativeGL* const nativeGL,
+     bool verbose) :
+  _nativeGL(nativeGL),
+  _verbose(verbose),
   _enableTextures(false),
   _enableTexture2D(false),
   _enableVertexColor(false),
   _enableVerticesPosition(false),
-//  _enableFlatColor(false),
+  //  _enableFlatColor(false),
   _enableBlend(false),
   _enableDepthTest(false),
   _enableCullFace(false),
@@ -117,8 +121,8 @@ public:
   _scaleY(1),
   _translationX(0),
   _translationY(0),
-//  _texturesIdGetCounter(0),
-//  _texturesIdTakeCounter(0),
+  //  _texturesIdGetCounter(0),
+  //  _texturesIdTakeCounter(0),
   _vertices(NULL),
   _verticesTimestamp(0),
   _textureCoordinates(NULL),
@@ -130,22 +134,23 @@ public:
   _flatColorB(0),
   _flatColorA(0),
   _flatColorIntensity(0),
-  _billboardTexCoord(NULL)
+  _billboardTexCoord(NULL),
+  _lineWidth(1)
   {
     //Init Constants
-    GLCullFace::init(gl);
-    GLBufferType::init(gl);
-    GLFeature::init(gl);
-    GLType::init(gl);
-    GLPrimitive::init(gl);
-    GLBlendFactor::init(gl);
-    GLTextureType::init(gl);
-    GLTextureParameter::init(gl);
-    GLTextureParameterValue::init(gl);
-    GLAlignment::init(gl);
-    GLFormat::init(gl);
-    GLVariable::init(gl);
-    GLError::init(gl);
+    GLCullFace::init(_nativeGL);
+    GLBufferType::init(_nativeGL);
+    GLFeature::init(_nativeGL);
+    GLType::init(_nativeGL);
+    GLPrimitive::init(_nativeGL);
+    GLBlendFactor::init(_nativeGL);
+    GLTextureType::init(_nativeGL);
+    GLTextureParameter::init(_nativeGL);
+    GLTextureParameterValue::init(_nativeGL);
+    GLAlignment::init(_nativeGL);
+    GLFormat::init(_nativeGL);
+    GLVariable::init(_nativeGL);
+    GLError::init(_nativeGL);
   }
   
   //void enableVerticesPosition();
@@ -167,7 +172,7 @@ public:
   //void disableTextures();
   
   void clearScreen(float r, float g, float b, float a);
-  
+
   void color(float r, float g, float b, float a);
   
   //void enableVertexColor(IFloatBuffer* colors, float intensity);
@@ -175,62 +180,61 @@ public:
   //void disableVertexColor();
   
   void pushMatrix();
-  
+
   void popMatrix();
-  
+
   void loadMatrixf(const MutableMatrix44D &m);
-  
+
   void multMatrixf(const MutableMatrix44D &m);
-  
-  void vertexPointer(int size, int stride, IFloatBuffer* vertices);
-  
-  void drawTriangles(IIntBuffer* indices);
-  
-  void drawTriangleStrip(IIntBuffer* indices);
 
-  void drawTriangleFan(IIntBuffer* indices);
+  void vertexPointer(int size,
+                     int stride,
+                     IFloatBuffer* vertices);
 
-  void drawLines(IIntBuffer* indices);
-  
-  void drawLineStrip(IIntBuffer* indices);
-  
-  void drawLineLoop(IIntBuffer* indices);
-  
-  void drawPoints(IIntBuffer* indices);
-  
+  void drawElements(int mode,
+                    IIntBuffer* indices);
+
+  void drawArrays(int mode,
+                  int first,
+                  int count);
+
   void setProjection(const MutableMatrix44D &projection);
   
   bool useProgram(ShaderProgram* program);
   
   void enablePolygonOffset(float factor, float units);
-  
+
   void disablePolygonOffset();
-  
+
   void lineWidth(float width);
-  
+
   void pointSize(float size);
-  
+
   int getError();
-  
+
   const IGLTextureId* uploadTexture(const IImage* image, int format, bool generateMipmap);
-  
+
   //  const const GLTextureId*uploadTexture(const IImage* image,
   //                                  int textureWidth, int textureHeight,
   //                                  bool generateMipmap);
-  
+
   void setTextureCoordinates(int size,
                              int stride,
                              IFloatBuffer* texcoord);
-  
+
   void bindTexture(const IGLTextureId* textureId);
-  
+
   //void enableBlend();
   //void disableBlend();
   
+
+  //void enableDepthTest();
+  //void disableDepthTest();
+
   void drawBillBoard(const IGLTextureId* textureId,
                      IFloatBuffer* vertices,
                      const float viewPortRatio);
-  
+
   void deleteTexture(const IGLTextureId* textureId);
   
   /*void enableCullFace(int face);
@@ -240,42 +244,52 @@ public:
                           float scaleY,
                           float translationX,
                           float translationY);
-  
+
   void transformTexCoords(double scaleX,
                           double scaleY,
                           double translationX,
                           double translationY) {
+    if (_verbose) ILogger::instance()->logInfo("GL::transformTexCoords()");
+
     transformTexCoords((float) scaleX,
                        (float) scaleY,
                        (float) translationX,
                        (float) translationY);
   }
-  
+
   void transformTexCoords(const Vector2D& scale,
                           const Vector2D& translation) {
+    if (_verbose) ILogger::instance()->logInfo("GL::transformTexCoords()");
+
     transformTexCoords((float) scale._x,
                        (float) scale._y,
                        (float) translation._x,
                        (float) translation._y);
   }
-  
+
   void transformTexCoords(const MutableVector2D& scale,
                           const MutableVector2D& translation) {
+    if (_verbose) ILogger::instance()->logInfo("GL::transformTexCoords()");
+
     transformTexCoords((float) scale.x(),
                        (float) scale.y(),
                        (float) translation.x(),
                        (float) translation.y());
   }
-  
-  
+
+
   void color(const Color& col) {
+    if (_verbose) ILogger::instance()->logInfo("GL::color()");
+
     color(col.getRed(),
           col.getGreen(),
           col.getBlue(),
           col.getAlpha());
   }
-  
-  void clearScreen(const Color& col){
+
+  void clearScreen(const Color& col) {
+    if (_verbose) ILogger::instance()->logInfo("GL::clearScreen()");
+
     clearScreen(col.getRed(),
                 col.getGreen(),
                 col.getBlue(),
@@ -283,65 +297,68 @@ public:
   }
   
   /*void enableVertexFlatColor(const Color& c, float intensity) {
+   if (_verbose) ILogger::instance()->logInfo("GL::enableVertexFlatColor()");
     enableVertexFlatColor(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha(), intensity);
   }*/
   
   void setBlendFuncSrcAlpha();
-  
-  void getViewport(int v[]){
-    _gl->getIntegerv(GLVariable::viewport(), v);
+
+  void getViewport(int v[]) {
+    if (_verbose) ILogger::instance()->logInfo("GL::getViewport()");
+
+    _nativeGL->getIntegerv(GLVariable::viewport(), v);
   }
-  
+
   ~GL() {
 #ifdef C_CODE
-    delete _gl;
+    delete _nativeGL;
 #endif
-    
-//    if (_lastImageData != NULL) {
-//      delete [] _lastImageData;
-//      _lastImageData = NULL;
-//    }
+
+    //    if (_lastImageData != NULL) {
+    //      delete [] _lastImageData;
+    //      _lastImageData = NULL;
+    //    }
 
     delete _vertices;
     delete _textureCoordinates;
     delete _colors;
-     
+    
   }
   
   int createProgram() const {
-    return _gl->createProgram();
+    return _nativeGL->createProgram();  
   }
     
   void attachShader(int program, int shader) const {
-    _gl->attachShader(program, shader);
+    _nativeGL->attachShader(program, shader);
   }
   
   int createShader(ShaderType type) const {
-    return _gl->createShader(type);
+    return _nativeGL->createShader(type);
   }
   
   bool compileShader(int shader, const std::string& source) const {
-    return _gl->compileShader(shader, source);
+    return _nativeGL->compileShader(shader, source);
   }
 
   void deleteShader(int shader) const {
-    _gl->deleteShader(shader);
+    _nativeGL->deleteShader(shader);
   }
   
   void printShaderInfoLog(int shader) const {
-    _gl->printShaderInfoLog(shader);
+    _nativeGL->printShaderInfoLog(shader);
   }
   
   bool linkProgram(int program) const {
-    return _gl->linkProgram(program);
+    return _nativeGL->linkProgram(program);
   }
   
   void printProgramInfoLog(int program) const {
-    _gl->linkProgram(program);
+    _nativeGL->linkProgram(program);
   }
   
   void deleteProgram(int program) const  {
-    _gl->deleteProgram(program);
+    _nativeGL->deleteProgram(program);
   }
   
   void setState(GLState* state);

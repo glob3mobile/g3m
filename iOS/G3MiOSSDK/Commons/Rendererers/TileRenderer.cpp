@@ -45,10 +45,6 @@ void TileRenderer::recreateTiles() {
 }
 
 void TileRenderer::changed(const LayerSet* layerSet) {
-//  pruneTopLevelTiles();
-//  clearTopLevelTiles();
-//  _firstRender = true;
-//  createTopLevelTiles(_context);
   recreateTiles();
 }
 
@@ -120,17 +116,44 @@ void TileRenderer::initialize(const G3MContext* context) {
 
 bool TileRenderer::isReadyToRender(const G3MRenderContext *rc) {
   if (_topTilesJustCreated) {
+    _topTilesJustCreated = false;
+
+    const int topLevelTilesCount = _topLevelTiles.size();
+
+    if (_parameters->_forceTopLevelTilesRenderOnStart) {
+      TilesStatistics statistics;
+
+      TileRenderContext trc(_tessellator,
+                            _texturizer,
+                            _layerSet,
+                            _parameters,
+                            &statistics,
+                            _lastSplitTimer,
+                            true);
+
+      for (int i = 0; i < topLevelTilesCount; i++) {
+        Tile* tile = _topLevelTiles[i];
+        tile->prepareForFullRendering(rc, &trc);
+      }
+    }
+
     if (_texturizer != NULL) {
-      const int topLevelTilesSize = _topLevelTiles.size();
-      for (int i = 0; i < topLevelTilesSize; i++) {
+      for (int i = 0; i < topLevelTilesCount; i++) {
         Tile* tile = _topLevelTiles[i];
         _texturizer->justCreatedTopTile(rc, tile, _layerSet);
       }
     }
-    _topTilesJustCreated = false;
   }
 
   if (_parameters->_forceTopLevelTilesRenderOnStart) {
+    const int topLevelTilesCount = _topLevelTiles.size();
+    for (int i = 0; i < topLevelTilesCount; i++) {
+      Tile* tile = _topLevelTiles[i];
+      if (!tile->isTextureSolved()) {
+        return false;
+      }
+    }
+
     if (_tessellator != NULL) {
       if (!_tessellator->isReady(rc)) {
         return false;
@@ -161,12 +184,14 @@ void TileRenderer::render(const G3MRenderContext* rc) {
                         _lastSplitTimer,
                         _firstRender /* if first render, force full render */);
 
+  const int topLevelTilesCount = _topLevelTiles.size();
+
   if (_firstRender && _parameters->_forceTopLevelTilesRenderOnStart) {
-    // force one render of the topLevel tiles to make the (toplevel) textures loaded as they
-    // will be used as last-chance fallback texture for any tile.
+    // force one render pass of the topLevel tiles to make the (toplevel) textures loaded
+    // as they will be used as last-chance fallback texture for any tile.
     _firstRender = false;
 
-    for (int i = 0; i < _topLevelTiles.size(); i++) {
+    for (int i = 0; i < topLevelTilesCount; i++) {
       Tile* tile = _topLevelTiles[i];
       tile->render(rc,
                    &trc,
@@ -175,7 +200,7 @@ void TileRenderer::render(const G3MRenderContext* rc) {
   }
   else {
     std::list<Tile*> toVisit;
-    for (int i = 0; i < _topLevelTiles.size(); i++) {
+    for (int i = 0; i < topLevelTilesCount; i++) {
       toVisit.push_back(_topLevelTiles[i]);
     }
 

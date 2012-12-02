@@ -26,8 +26,8 @@ package org.glob3.mobile.generated;
 
 public class SGNode
 {
-  private String _id;
-  private String _sId;
+  private final String _id;
+  private final String _sId;
 
   private SGNode _parent;
   private java.util.ArrayList<SGNode> _children = new java.util.ArrayList<SGNode>();
@@ -42,24 +42,11 @@ public class SGNode
 
   protected SGShape _shape;
 
-  protected void prepareRender(G3MRenderContext rc)
-  {
-  
-  }
 
-  protected void cleanUpRender(G3MRenderContext rc)
+  public SGNode(String id, String sId)
   {
-  
-  }
-
-  protected void rawRender(G3MRenderContext rc)
-  {
-  
-  }
-
-
-  public SGNode()
-  {
+	  _id = id;
+	  _sId = sId;
 	  _context = null;
 	  _shape = null;
 	  _parent = null;
@@ -77,7 +64,7 @@ public class SGNode
 	}
   }
 
-  public final void initialize(G3MContext context, SGShape shape)
+  public void initialize(G3MContext context, SGShape shape)
   {
 	_context = context;
 	_shape = shape;
@@ -100,16 +87,6 @@ public class SGNode
 	}
   }
 
-  public final void setId(String id)
-  {
-	_id = id;
-  }
-
-  public final void setSId(String sId)
-  {
-	_sId = sId;
-  }
-
   public boolean isReadyToRender(G3MRenderContext rc)
   {
 	final int childrenCount = _children.size();
@@ -123,6 +100,21 @@ public class SGNode
 	}
   
 	return true;
+  }
+
+  public void prepareRender(G3MRenderContext rc)
+  {
+  
+  }
+
+  public void cleanUpRender(G3MRenderContext rc)
+  {
+  
+  }
+
+  public void rawRender(G3MRenderContext rc)
+  {
+  
   }
 
   public final void render(G3MRenderContext rc)

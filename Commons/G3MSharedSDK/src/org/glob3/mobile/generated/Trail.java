@@ -36,16 +36,13 @@ public class Trail
   private Mesh createMesh(Planet planet)
   {
 	FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.firstVertex(), planet, Geodetic3D.fromDegrees(0, 0, 0));
-	IntBufferBuilder indices = new IntBufferBuilder();
   
 	for (int i = 0; i < _positions.size(); i++)
 	{
   	  vertices.add( _positions.get(i) );
-  
-	  indices.add(i);
 	}
   
-	return new IndexedMesh(GLPrimitive.lineStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), _lineWidth, new Color(_color));
+	return new DirectMesh(GLPrimitive.lineStrip(), true, vertices.getCenter(), vertices.create(), _lineWidth, new Color(_color));
   }
 
   private Mesh _mesh;
@@ -67,7 +64,7 @@ public class Trail
 	  _visible = true;
 	  _positionsDirty = true;
 	  _mesh = null;
-	  _color = color;
+	  _color = new Color(color);
 	  _lineWidth = lineWidth;
   }
 

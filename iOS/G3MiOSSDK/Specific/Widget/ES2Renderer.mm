@@ -41,7 +41,7 @@ enum {
   self = [super init];
   _shaderProgram = NULL;
   NativeGL2_iOS* nGL = new NativeGL2_iOS();
-  _gl = new GL(nGL);
+  _gl = new GL(nGL,false);
 
   if (self) {
     _firstRender = true;

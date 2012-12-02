@@ -96,25 +96,28 @@ public class G3MWidget
 	}
 	_currentCamera.copyFrom(_nextCamera);
   
-  
-	if (_initializationTask != null)
-	{
-	  _initializationTask.run(_context);
-	  if (_autoDeleteInitializationTask)
-	  {
-		if (_initializationTask != null)
-			_initializationTask.dispose();
-	  }
-	  _initializationTask = null;
-	}
-  
 	G3MRenderContext rc = new G3MRenderContext(_frameTasksExecutor, IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _gl, _currentCamera, _nextCamera, _texturesHandler, _textureBuilder, _downloader, _effectsScheduler, IFactory.instance().createTimer(), _storage);
+  
+	_mainRendererReady = _mainRenderer.isReadyToRender(rc);
+  
+	if (_mainRendererReady)
+	{
+	  if (_initializationTask != null)
+	  {
+		_initializationTask.run(_context);
+		if (_autoDeleteInitializationTask)
+		{
+		  if (_initializationTask != null)
+			  _initializationTask.dispose();
+		}
+		_initializationTask = null;
+	  }
+	}
   
 	_effectsScheduler.doOneCyle(rc);
   
 	_frameTasksExecutor.doPreRenderCycle(rc);
   
-	_mainRendererReady = _mainRenderer.isReadyToRender(rc);
   
 	Renderer selectedRenderer = _mainRendererReady ? _mainRenderer : _busyRenderer;
 	if (selectedRenderer != _selectedRenderer)
@@ -465,7 +468,11 @@ public class G3MWidget
   {
 	  _frameTasksExecutor = new FrameTasksExecutor();
 	  _effectsScheduler = new EffectsScheduler();
+<<<<<<< HEAD
 	  _gl = gl;
+=======
+	  _gl = new GL(nativeGL, false);
+>>>>>>> origin/webgl-port
 	  _downloader = downloader;
 	  _storage = storage;
 	  _threadUtils = threadUtils;
@@ -478,7 +485,7 @@ public class G3MWidget
 	  _busyRenderer = busyRenderer;
 	  _currentCamera = new Camera(width, height);
 	  _nextCamera = new Camera(width, height);
-	  _backgroundColor = backgroundColor;
+	  _backgroundColor = new Color(backgroundColor);
 	  _timer = IFactory.instance().createTimer();
 	  _renderCounter = 0;
 	  _totalRenderTime = 0;

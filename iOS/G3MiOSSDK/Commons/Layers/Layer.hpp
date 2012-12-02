@@ -29,6 +29,8 @@ private:
 
   LayerSet* _layerSet;
 
+  bool _enable;
+
 protected:
   void notifyChanges() const;
   
@@ -36,13 +38,25 @@ public:
   
   Layer(LayerCondition* condition) :
   _condition(condition),
-  _layerSet(NULL)
+  _layerSet(NULL),
+  _enable(true)
   {
     
   }
-  
+
+  virtual void setEnable(bool enable) {
+    if (enable != _enable) {
+      _enable = enable;
+      notifyChanges();
+    }
+  }
+
+  virtual bool isEnable() const {
+    return _enable;
+  }
+
   virtual ~Layer() {
-  };
+  }
   
   virtual std::vector<Petition*> getMapPetitions(const G3MRenderContext* rc,
                                                  const Tile* tile,

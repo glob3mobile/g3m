@@ -13,7 +13,7 @@
 #include "IntBufferBuilder.hpp"
 
 #include "GLConstants.hpp"
-
+#include "Color.hpp"
 
 const std::vector<Vector3D> Box::getCorners() const {
 #ifdef C_CODE

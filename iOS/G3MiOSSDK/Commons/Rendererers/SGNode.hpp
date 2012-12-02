@@ -18,8 +18,8 @@ class SGShape;
 
 class SGNode {
 private:
-  std::string _id;
-  std::string _sId;
+  const std::string _id;
+  const std::string _sId;
 
   SGNode*              _parent;
   std::vector<SGNode*> _children;
@@ -37,15 +37,12 @@ protected:
 
   SGShape *_shape;
 
-  virtual void prepareRender(const G3MRenderContext* rc);
-
-  virtual void cleanUpRender(const G3MRenderContext* rc);
-
-  virtual void rawRender(const G3MRenderContext* rc);
-
 public:
 
-  SGNode() :
+  SGNode(const std::string& id,
+         const std::string& sId) :
+  _id(id),
+  _sId(sId),
   _context(NULL),
   _shape(NULL),
   _parent(NULL)
@@ -55,20 +52,18 @@ public:
 
   virtual ~SGNode();
 
-  void initialize(const G3MContext* context,
-                  SGShape *shape);
+  virtual void initialize(const G3MContext* context,
+                          SGShape *shape);
 
   void addNode(SGNode* child);
 
-  void setId(const std::string& id) {
-    _id = id;
-  }
-
-  void setSId(const std::string& sId) {
-    _sId = sId;
-  }
-
   virtual bool isReadyToRender(const G3MRenderContext* rc);
+
+  virtual void prepareRender(const G3MRenderContext* rc);
+
+  virtual void cleanUpRender(const G3MRenderContext* rc);
+
+  virtual void rawRender(const G3MRenderContext* rc);
 
   void render(const G3MRenderContext* rc);
 

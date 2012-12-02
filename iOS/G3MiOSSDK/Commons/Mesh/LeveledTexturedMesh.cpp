@@ -28,11 +28,16 @@ void LazyTextureMapping::bind(const G3MRenderContext* rc) const {
     _initialized = true;
   }
 
-  GL* gl = rc->getGL();
+  if (_texCoords != NULL) {
+    GL* gl = rc->getGL();
 
-  gl->transformTexCoords(_scale, _translation);
-  gl->bindTexture(_glTextureId);
-  gl->setTextureCoordinates(2, 0, _texCoords);
+    gl->transformTexCoords(_scale, _translation);
+    gl->bindTexture(_glTextureId);
+    gl->setTextureCoordinates(2, 0, _texCoords);
+  }
+  else {
+    ILogger::instance()->logError("LazyTextureMapping::bind() with _texCoords == NULL");
+  }
 }
 
 

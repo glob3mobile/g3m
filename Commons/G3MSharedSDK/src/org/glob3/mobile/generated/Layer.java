@@ -34,13 +34,15 @@ public abstract class Layer
 
   private LayerSet _layerSet;
 
+  private boolean _enable;
+
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: void notifyChanges() const
   protected final void notifyChanges()
   {
 	if (_layerSet == null)
 	{
-	  ILogger.instance().logError("Can't notify changes, _layerSet was not set");
+  //    ILogger::instance()->logError("Can't notify changes, _layerSet was not set");
 	}
 	else
 	{
@@ -53,7 +55,24 @@ public abstract class Layer
   {
 	  _condition = condition;
 	  _layerSet = null;
+	  _enable = true;
 
+  }
+
+  public void setEnable(boolean enable)
+  {
+	if (enable != _enable)
+	{
+	  _enable = enable;
+	  notifyChanges();
+	}
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual boolean isEnable() const
+  public boolean isEnable()
+  {
+	return _enable;
   }
 
   public void dispose()
@@ -68,6 +87,10 @@ public abstract class Layer
 //ORIGINAL LINE: virtual boolean isAvailable(const G3MRenderContext* rc, const Tile* tile) const
   public boolean isAvailable(G3MRenderContext rc, Tile tile)
   {
+	if (!isEnable())
+	{
+	  return false;
+	}
 	if (_condition == null)
 	{
 	  return true;
@@ -79,6 +102,10 @@ public abstract class Layer
 //ORIGINAL LINE: virtual boolean isAvailable(const G3MEventContext* ec, const Tile* tile) const
   public boolean isAvailable(G3MEventContext ec, Tile tile)
   {
+	if (!isEnable())
+	{
+	  return false;
+	}
 	if (_condition == null)
 	{
 	  return true;

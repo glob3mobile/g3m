@@ -129,13 +129,15 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   
 	TileRenderContext trc = new TileRenderContext(_tessellator, _texturizer, _layerSet, _parameters, statistics, _lastSplitTimer, _firstRender); // if first render, force full render
   
+	final int topLevelTilesCount = _topLevelTiles.size();
+  
 	if (_firstRender && _parameters._forceTopLevelTilesRenderOnStart)
 	{
-	  // force one render of the topLevel tiles to make the (toplevel) textures loaded as they
-	  // will be used as last-chance fallback texture for any tile.
+	  // force one render pass of the topLevel tiles to make the (toplevel) textures loaded
+	  // as they will be used as last-chance fallback texture for any tile.
 	  _firstRender = false;
   
-	  for (int i = 0; i < _topLevelTiles.size(); i++)
+	  for (int i = 0; i < topLevelTilesCount; i++)
 	  {
 		Tile tile = _topLevelTiles.get(i);
 		tile.render(rc, trc, null);
@@ -144,7 +146,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 	else
 	{
 	  java.util.LinkedList<Tile> toVisit = new java.util.LinkedList<Tile>();
-	  for (int i = 0; i < _topLevelTiles.size(); i++)
+	  for (int i = 0; i < topLevelTilesCount; i++)
 	  {
 		toVisit.addLast(_topLevelTiles.get(i));
 	  }
@@ -223,20 +225,45 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   {
 	if (_topTilesJustCreated)
 	{
+	  _topTilesJustCreated = false;
+  
+	  final int topLevelTilesCount = _topLevelTiles.size();
+  
+	  if (_parameters._forceTopLevelTilesRenderOnStart)
+	  {
+		TilesStatistics statistics = new TilesStatistics();
+  
+		TileRenderContext trc = new TileRenderContext(_tessellator, _texturizer, _layerSet, _parameters, statistics, _lastSplitTimer, true);
+  
+		for (int i = 0; i < topLevelTilesCount; i++)
+		{
+		  Tile tile = _topLevelTiles.get(i);
+		  tile.prepareForFullRendering(rc, trc);
+		}
+	  }
+  
 	  if (_texturizer != null)
 	  {
-		final int topLevelTilesSize = _topLevelTiles.size();
-		for (int i = 0; i < topLevelTilesSize; i++)
+		for (int i = 0; i < topLevelTilesCount; i++)
 		{
 		  Tile tile = _topLevelTiles.get(i);
 		  _texturizer.justCreatedTopTile(rc, tile, _layerSet);
 		}
 	  }
-	  _topTilesJustCreated = false;
 	}
   
 	if (_parameters._forceTopLevelTilesRenderOnStart)
 	{
+	  final int topLevelTilesCount = _topLevelTiles.size();
+	  for (int i = 0; i < topLevelTilesCount; i++)
+	  {
+		Tile tile = _topLevelTiles.get(i);
+		if (!tile.isTextureSolved())
+		{
+		  return false;
+		}
+	  }
+  
 	  if (_tessellator != null)
 	  {
 		if (!_tessellator.isReady(rc))
@@ -295,10 +322,6 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 
   public final void changed(LayerSet layerSet)
   {
-  //  pruneTopLevelTiles();
-  //  clearTopLevelTiles();
-  //  _firstRender = true;
-  //  createTopLevelTiles(_context);
 	recreateTiles();
   }
 

@@ -7,3 +7,21 @@
 //
 
 #include "IntBuffer_iOS.hpp"
+
+
+#include <sstream>
+
+const std::string IntBuffer_iOS::description() const {
+  std::ostringstream oss;
+
+  oss << "IntBuffer_iOS(";
+  oss << "size=";
+  oss << _size;
+  oss << ", timestamp=";
+  oss << _timestamp;
+  oss << ", values=";
+  oss << _values;
+  oss << ")";
+
+  return oss.str();
+}

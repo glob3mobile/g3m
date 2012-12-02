@@ -61,7 +61,6 @@ public final class G3MWidget_Android
 
    private G3MWidget                                      _g3mWidget;
    private ES2Renderer                                    _es2renderer;
-   //   private SQLiteStorage_Android                          _storage              = null;
 
    private final MotionEventProcessor                     _motionEventProcessor = new MotionEventProcessor();
    private final OnDoubleTapListener                      _doubleTapListener;
@@ -72,7 +71,6 @@ public final class G3MWidget_Android
    private ArrayList<org.glob3.mobile.generated.Renderer> _renderers;
    private UserData                                       _userData;
 
-   //   private IDownloader                                    _downloader;
    private GTask                                          _initializationTask;
    private ArrayList<PeriodicalTask>                      _periodicalTasks;
    private boolean                                        _incrementalTileQuality;
@@ -99,7 +97,8 @@ public final class G3MWidget_Android
       setLongClickable(true);
 
       // Debug flags
-      // setDebugFlags(DEBUG_CHECK_GL_ERROR | DEBUG_LOG_GL_CALLS);
+      //      setDebugFlags(DEBUG_CHECK_GL_ERROR | DEBUG_LOG_GL_CALLS);
+      setDebugFlags(DEBUG_CHECK_GL_ERROR);
 
       if (!isInEditMode()) { // needed to avoid visual edition of this widget
          //Double Tap Listener
@@ -335,7 +334,7 @@ public final class G3MWidget_Android
       final int readTimeout = 30000;
       final boolean saveInBackground = true;
       final IDownloader downloader = new CachedDownloader( //
-               new Downloader_Android(8, connectTimeout, readTimeout), //
+               new Downloader_Android(8, connectTimeout, readTimeout, getContext()), //
                storage, //
                saveInBackground);
 

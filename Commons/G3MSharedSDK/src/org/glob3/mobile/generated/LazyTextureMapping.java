@@ -81,11 +81,18 @@ public class LazyTextureMapping extends TextureMapping
 	  _initialized = true;
 	}
   
-	GL gl = rc.getGL();
+	if (_texCoords != null)
+	{
+	  GL gl = rc.getGL();
   
-	gl.transformTexCoords(_scale, _translation);
-	gl.bindTexture(_glTextureId);
-	gl.setTextureCoordinates(2, 0, _texCoords);
+	  gl.transformTexCoords(_scale, _translation);
+	  gl.bindTexture(_glTextureId);
+	  gl.setTextureCoordinates(2, 0, _texCoords);
+	}
+	else
+	{
+	  ILogger.instance().logError("LazyTextureMapping::bind() with _texCoords == NULL");
+	}
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
