@@ -39,6 +39,8 @@ public class DummyRenderer extends LeafRenderer
 		_indices.dispose();
 	if (_vertices != null)
 		_vertices.dispose();
+	if (_glState != null)
+		_glState.dispose();
   }
 
   public final void initialize(G3MContext context)
@@ -72,16 +74,9 @@ public class DummyRenderer extends LeafRenderer
 	  {
   
 		vertices.add((float)0, (float)(-_halfSize + i / (float)(res - 1) * 2 *_halfSize), (float)(_halfSize - j / (float)(res - 1) * 2 *_halfSize));
-<<<<<<< HEAD
-		System.out.printf ("%f %f %f\n",(float)0, (float)(-_halfSize + i / (float)(res - 1) * 2 *_halfSize), (float)(_halfSize - j / (float)(res - 1) * 2 *_halfSize));
-  //      _vertices[n++] = (float) 0;
-  //      _vertices[n++] = (float) (-_halfSize + i / (float) (res - 1) * 2*_halfSize);
-  //      _vertices[n++] = (float) (_halfSize - j / (float) (res - 1) * 2*_halfSize);
-=======
 		//      _vertices[n++] = (float) 0;
 		//      _vertices[n++] = (float) (-_halfSize + i / (float) (res - 1) * 2*_halfSize);
 		//      _vertices[n++] = (float) (_halfSize - j / (float) (res - 1) * 2*_halfSize);
->>>>>>> origin/webgl-port
 	  }
 	}
   

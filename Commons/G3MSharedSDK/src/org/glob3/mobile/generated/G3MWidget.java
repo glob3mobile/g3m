@@ -465,14 +465,15 @@ public class G3MWidget
   private boolean _paused;
 
   private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, int width, int height, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks)
+  /*
+   =======
+  _gl( new GL(nativeGL, false) ),
+  >>>>>>> origin/webgl-port
+   */
   {
 	  _frameTasksExecutor = new FrameTasksExecutor();
 	  _effectsScheduler = new EffectsScheduler();
-<<<<<<< HEAD
 	  _gl = gl;
-=======
-	  _gl = new GL(nativeGL, false);
->>>>>>> origin/webgl-port
 	  _downloader = downloader;
 	  _storage = storage;
 	  _threadUtils = threadUtils;
