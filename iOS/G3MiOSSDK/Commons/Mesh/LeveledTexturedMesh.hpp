@@ -50,7 +50,7 @@ private:
   mutable IFloatBuffer*    _texCoords;
   mutable MutableVector2D  _translation;
   mutable MutableVector2D  _scale;
-  
+    
   TexturesHandler* _texturesHandler;
   
   LazyTextureMapping& operator=(const LazyTextureMapping& that);
@@ -75,7 +75,6 @@ public:
   _ownedTexCoords(ownedTexCoords),
   _transparent(transparent)
   {
-    
   }
   
   virtual ~LazyTextureMapping() {
@@ -125,7 +124,7 @@ private:
   
   mutable int  _currentLevel;
   mutable bool _currentLevelIsValid;
-  
+    
   LazyTextureMapping* getCurrentTextureMapping() const;
 
 public:
@@ -161,6 +160,8 @@ public:
 //                                      const const GLTextureId*glTextureId);
   
   const IGLTextureId* getTopLevelGLTextureId() const;
+  
+  GLState* getGLState() const { return _mesh->getGLState(); }
 
   bool isTransparent(const G3MRenderContext* rc) const;
   

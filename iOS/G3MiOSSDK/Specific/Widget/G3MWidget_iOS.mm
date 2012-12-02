@@ -27,8 +27,10 @@
 #include "LayerSet.hpp"
 #include "CachedDownloader.hpp"
 #include "Downloader_iOS.hpp"
-#include "INativeGL.hpp"
-#include "GL.hpp"
+
+//#include "INativeGL.hpp"
+//#include "GL.hpp"
+
 #include "MultiLayerTileTexturizer.hpp"
 #include "TilesRenderParameters.hpp"
 #include "IStringBuilder.hpp"
@@ -39,7 +41,7 @@
 #include "ThreadUtils_iOS.hpp"
 #include "Logger_iOS.hpp"
 #include "Factory_iOS.hpp"
-#include "NativeGL2_iOS.hpp"
+//#include "NativeGL2_iOS.hpp"
 #include "StringUtils_iOS.hpp"
 #include "JSONParser_iOS.hpp"
 #include "StringBuilder_iOS.hpp"
@@ -117,7 +119,7 @@
   const int width  = (int) [self frame].size.width;
   const int height = (int) [self frame].size.height;
 
-  NativeGL2_iOS* nativeGL = new NativeGL2_iOS();
+  //NativeGL2_iOS* nativeGL = new NativeGL2_iOS();
 
   IStorage* storage = new SQLiteStorage_iOS("g3m.cache");
 
@@ -145,12 +147,10 @@
   for (int i = 0; i < renderers.size(); i++) {
     mainRenderer->addRenderer(renderers[i]);
   }
-
   const Planet* planet = Planet::createEarth();
 
   Renderer* busyRenderer = new BusyMeshRenderer();
-
-  _widgetVP = G3MWidget::create(nativeGL,
+  _widgetVP = G3MWidget::create([_renderer getGL],
                                 storage,
                                 downloader,
                                 threadUtils,

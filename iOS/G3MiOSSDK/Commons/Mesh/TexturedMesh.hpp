@@ -13,6 +13,7 @@
 #include "TextureMapping.hpp"
 #include "Vector3D.hpp"
 
+
 class TexturedMesh: public Mesh
 {
 private:
@@ -21,6 +22,7 @@ private:
   const bool            _ownedMesh;
   const bool            _ownedTexMapping;
   const bool            _transparent;
+
   
 public:
   
@@ -34,8 +36,14 @@ public:
   _textureMapping(textureMapping),
   _ownedTexMapping(ownedTexMapping),
   _transparent(transparent)
+
   {
-    
+    GLState* state = _mesh->getGLState();
+    state->enableTextures();
+    state->enableTexture2D();
+    if (_transparent) {
+      state->enableBlend();
+    }
   }
   
   ~TexturedMesh(){
@@ -67,10 +75,11 @@ public:
     return _textureMapping;
   }
 
+  GLState* getGLState() const { return _mesh->getGLState(); }
+
   bool isTransparent(const G3MRenderContext* rc) const {
     return _transparent;
   }
-
 };
 
 #endif

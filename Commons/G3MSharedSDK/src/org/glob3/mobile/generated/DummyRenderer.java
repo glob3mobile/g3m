@@ -21,11 +21,14 @@ package org.glob3.mobile.generated;
 //class IFloatBuffer;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IIntBuffer;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class GLState;
 
 public class DummyRenderer extends LeafRenderer
 {
 
   private double _halfSize;
+  private GLState _glState;
 
   private IIntBuffer _indices;
   private IFloatBuffer _vertices;
@@ -36,10 +39,15 @@ public class DummyRenderer extends LeafRenderer
 		_indices.dispose();
 	if (_vertices != null)
 		_vertices.dispose();
+	if (_glState != null)
+		_glState.dispose();
   }
 
   public final void initialize(G3MContext context)
   {
+	_glState = new GLState();
+	_glState.enableVerticesPosition();
+  
 	int res = 12;
 	//_vertices = new float[res * res * 3];
 	//_numIndices = 2 * (res - 1) * (res + 1);
@@ -100,11 +108,13 @@ public class DummyRenderer extends LeafRenderer
   
 	// obtaing gl object reference
 	GL gl = rc.getGL();
+	gl.setState(_glState);
   
-	gl.enableVerticesPosition();
+  
+	//gl->enableVerticesPosition();
   
 	// insert pointers
-	gl.disableTextures();
+	//gl->disableTextures();
 	gl.vertexPointer(3, 0, _vertices);
   
 	{
@@ -172,7 +182,7 @@ public class DummyRenderer extends LeafRenderer
 	  gl.popMatrix();
 	}
   
-	gl.enableTextures();
+	//gl->enableTextures();
   
   }
 

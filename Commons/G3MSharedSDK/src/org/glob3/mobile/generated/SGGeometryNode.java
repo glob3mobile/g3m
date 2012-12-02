@@ -62,17 +62,17 @@ public class SGGeometryNode extends SGNode
   {
 	GL gl = rc.getGL();
   
-	gl.enableVerticesPosition();
+	// TEMP_commented_by_Agustin_until_decision_about_glstate
+	/*
+	gl->enableVerticesPosition();
   
-	if (_colors == null)
-	{
-	  gl.disableVertexColor();
+	if (_colors == NULL) {
+	  gl->disableVertexColor();
 	}
-	else
-	{
-	  final float colorsIntensity = 1F;
-	  gl.enableVertexColor(_colors, colorsIntensity);
-	}
+	else {
+	  const float colorsIntensity = 1;
+	  gl->enableVertexColor(_colors, colorsIntensity);
+	}*/
   
 	if (_uv != null)
 	{
@@ -104,7 +104,7 @@ public class SGGeometryNode extends SGNode
   
 	gl.drawElements(_primitive, _indices);
   
-	gl.disableVerticesPosition();
+	//gl->disableVerticesPosition();
   }
 
 }

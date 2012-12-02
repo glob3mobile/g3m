@@ -42,7 +42,7 @@ public class G3MDemoActivity
       simpleG3MButton.setOnClickListener(new OnClickListener() {
          @Override
          public void onClick(final View v) {
-            final Intent intent = new Intent(getApplicationContext(), G3MSimplestGlob3Activity.class);
+             final Intent intent = new Intent(getApplicationContext(), G3MSimplestGlob3Activity.class);
             startActivity(intent);
          }
       });

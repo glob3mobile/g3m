@@ -18,6 +18,7 @@ private:
   Extent* calculateExtent() const;
 
   mutable Extent* _extent;
+  
 
 public:
   virtual ~CompositeMesh();
@@ -33,6 +34,9 @@ public:
   bool isTransparent(const G3MRenderContext* rc) const;
 
   void addMesh(Mesh* mesh);
+  
+  GLState* getGLState() const { return NULL; }
+
 
 };
 

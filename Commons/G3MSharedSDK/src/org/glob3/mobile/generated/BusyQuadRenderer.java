@@ -71,6 +71,10 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
   
 	_quadMesh = new TexturedMesh(im, true, texMap, true, false);
   
+	// set mesh glstate
+	GLState state = _quadMesh.getGLState();
+	state.enableBlend();
+  
 	return true;
   }
 
@@ -129,7 +133,7 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
 	// clear screen
 	gl.clearScreen(0.0f, 0.0f, 0.0f, 1.0f);
   
-	gl.enableBlend();
+	//gl->enableBlend();
 	gl.setBlendFuncSrcAlpha();
   
 	gl.pushMatrix();
@@ -142,7 +146,7 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
   
 	gl.popMatrix();
   
-	gl.disableBlend();
+	//gl->disableBlend();
   
   }
 

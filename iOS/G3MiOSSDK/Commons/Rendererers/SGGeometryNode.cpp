@@ -25,6 +25,8 @@ SGGeometryNode::~SGGeometryNode() {
 void SGGeometryNode::rawRender(const G3MRenderContext* rc) {
   GL *gl = rc->getGL();
 
+  // TEMP_commented_by_Agustin_until_decision_about_glstate
+  /*
   gl->enableVerticesPosition();
 
   if (_colors == NULL) {
@@ -33,7 +35,7 @@ void SGGeometryNode::rawRender(const G3MRenderContext* rc) {
   else {
     const float colorsIntensity = 1;
     gl->enableVertexColor(_colors, colorsIntensity);
-  }
+  }*/
 
   if (_uv != NULL) {
     gl->transformTexCoords(1.0f, 1.0f,
@@ -65,5 +67,5 @@ void SGGeometryNode::rawRender(const G3MRenderContext* rc) {
 
   gl->drawElements(_primitive, _indices);
 
-  gl->disableVerticesPosition();
+  //gl->disableVerticesPosition();
 }

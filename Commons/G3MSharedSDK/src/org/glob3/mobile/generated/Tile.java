@@ -140,6 +140,8 @@ public class Tile
   private void rawRender(G3MRenderContext rc, TileRenderContext trc)
   {
   
+	int __TODO_include_glstate_in_TileRenderContext;
+  
 	Mesh tessellatorMesh = getTessellatorMesh(rc, trc);
 	if (tessellatorMesh == null)
 	{

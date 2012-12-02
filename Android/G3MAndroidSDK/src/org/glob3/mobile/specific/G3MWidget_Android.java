@@ -299,7 +299,7 @@ public final class G3MWidget_Android
       final int width = getWidth();
       final int height = getHeight();
 
-      final NativeGL2_Android nativeGL = new NativeGL2_Android();
+      //final NativeGL2_Android nativeGL = new NativeGL2_Android();
 
       final CompositeRenderer mainRenderer = new CompositeRenderer();
 
@@ -339,7 +339,8 @@ public final class G3MWidget_Android
                saveInBackground);
 
       _g3mWidget = G3MWidget.create( //
-               nativeGL, //
+               //nativeGL, //
+    		   _es2renderer.getGL(),
                storage, //
                downloader, //
                threadUtils, //

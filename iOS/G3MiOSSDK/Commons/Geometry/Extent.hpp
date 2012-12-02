@@ -18,6 +18,7 @@ class Vector3D;
 
 class Frustum;
 class Box;
+class GLState;
 
 class Extent {
 public:

@@ -22,7 +22,7 @@
 
 #include "FloatBufferBuilderFromCartesian2D.hpp"
 
-#include "IGLProgramId.hpp"
+//#include "IGLProgramId.hpp"
 
 #include "IGLUniformID.hpp"
 
@@ -106,11 +106,10 @@ struct AttributesStruct {
   int Color;
 } Attributes;
 
-int GL::checkedGetAttribLocation(IGLProgramId* program, const std::string& name) {
+int GL::checkedGetAttribLocation(ShaderProgram* program, const std::string& name) {
   if (_verbose) {
     ILogger::instance()->logInfo("GL::checkedGetAttribLocation()");
   }
-
   int l = _nativeGL->getAttribLocation(program, name);
   if (l == -1) {
     ILogger::instance()->logError("Error fetching Attribute, Program = %d, Variable = %s", program, name.c_str());
@@ -118,11 +117,11 @@ int GL::checkedGetAttribLocation(IGLProgramId* program, const std::string& name)
   }
   return l;
 }
-IGLUniformID* GL::checkedGetUniformLocation(IGLProgramId* program, const std::string& name) {
+
+IGLUniformID* GL::checkedGetUniformLocation(ShaderProgram* program, const std::string& name) {
   if (_verbose) {
     ILogger::instance()->logInfo("GL::checkedGetUniformLocation()");
   }
-
   IGLUniformID* uID = _nativeGL->getUniformLocation(program, name);
   if (!uID->isValid()) {
     ILogger::instance()->logError("Error fetching Uniform, Program = %d, Variable = %s", program, name.c_str());
@@ -131,11 +130,10 @@ IGLUniformID* GL::checkedGetUniformLocation(IGLProgramId* program, const std::st
   return uID;
 }
 
-bool GL::useProgram(IGLProgramId* program) {
+bool GL::useProgram(ShaderProgram* program) {
   if (_verbose) {
     ILogger::instance()->logInfo("GL::useProgram()");
   }
-
   // set shaders
   _nativeGL->useProgram(program);
 
@@ -476,9 +474,9 @@ void GL::drawBillBoard(const IGLTextureId* textureId,
 
   _nativeGL->uniform1f(Uniforms.ViewPortRatio, viewPortRatio);
 
-  disableDepthTest();
+  //disableDepthTest();
 
-  enableTexture2D();
+  //enableTexture2D();
   color(1, 1, 1, 1);
 
   bindTexture(textureId);
@@ -488,188 +486,183 @@ void GL::drawBillBoard(const IGLTextureId* textureId,
 
   _nativeGL->drawArrays(GLPrimitive::triangleStrip(), 0, vertices->size() / 3);
 
-  enableDepthTest();
+  //enableDepthTest();
 
   _nativeGL->uniform1i(Uniforms.BillBoard, 0);
 }
 
-// state handling
-void GL::enableTextures() {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::enableTextures()");
-  }
+/*// state handling
+ void GL::enableTextures() {
+ if (_verbose) {
+ ILogger::instance()->logInfo("GL::enableTextures()");
+ }
 
-  if (!_enableTextures) {
-    _nativeGL->enableVertexAttribArray(Attributes.TextureCoord);
-    _enableTextures = true;
-  }
-}
+ if (!_enableTextures) {
+ _nativeGL->enableVertexAttribArray(Attributes.TextureCoord);
+ _enableTextures = true;
+ }
+ }
 
-void GL::disableTextures() {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::disableTextures()");
-  }
+ void GL::disableTextures() {
+ if (_verbose) {
+ ILogger::instance()->logInfo("GL::disableTextures()");
+ }
 
-  if (_enableTextures) {
-    _nativeGL->disableVertexAttribArray(Attributes.TextureCoord);
-    _enableTextures = false;
-  }
-}
+ if (_enableTextures) {
+ _nativeGL->disableVertexAttribArray(Attributes.TextureCoord);
+ _enableTextures = false;
+ }
+ }
 
-void GL::enableTexture2D() {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::enableTexture2D()");
-  }
+ void GL::enableTexture2D() {
+ if (_verbose) {
+ ILogger::instance()->logInfo("GL::enableTexture2D()");
+ }
 
-  if (!_enableTexture2D) {
-    _nativeGL->uniform1i(Uniforms.EnableTexture, 1);
-    _enableTexture2D = true;
-  }
-}
+ if (!_enableTexture2D) {
+ _nativeGL->uniform1i(Uniforms.EnableTexture, 1);
+ _enableTexture2D = true;
+ }
+ }
 
-void GL::disableTexture2D() {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::disableTexture2D()");
-  }
+ void GL::disableTexture2D() {
+ if (_verbose) {
+ ILogger::instance()->logInfo("GL::disableTexture2D()");
+ }
 
-  if (_enableTexture2D) {
-    _nativeGL->uniform1i(Uniforms.EnableTexture, 0);
-    _enableTexture2D = false;
-  }
-}
+ if (_enableTexture2D) {
+ _nativeGL->uniform1i(Uniforms.EnableTexture, 0);
+ _enableTexture2D = false;
+ }
+ }*/
 
-void GL::enableVertexColor(IFloatBuffer* colors, float intensity) {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::enableVertexColor(color=%s, intensity=%f)",
-                                 colors->description().c_str(),
-                                 intensity);
-  }
+/*void GL::enableVertexColor(IFloatBuffer* colors, float intensity) {
+ if (_verbose) {
+ ILogger::instance()->logInfo("GL::enableVertexColor(color=%s, intensity=%f)",
+ colors->description().c_str(),
+ intensity);
+ }
+ if (!_enableVertexColor) {
+ _nativeGL->uniform1i(Uniforms.EnableColorPerVertex, 1);
+ _nativeGL->enableVertexAttribArray(Attributes.Color);
+ _enableVertexColor = true;
+ }
 
-  if (!_enableVertexColor) {
-    _nativeGL->uniform1i(Uniforms.EnableColorPerVertex, 1);
-    _nativeGL->enableVertexAttribArray(Attributes.Color);
-    _enableVertexColor = true;
-  }
+ if ((_colors != colors) ||
+ (_colorsTimestamp != colors->timestamp()) ) {
+ _nativeGL->vertexAttribPointer(Attributes.Color, 4, false, 0, colors);
+ _colors = colors;
+ _colorsTimestamp = _colors->timestamp();
+ }
 
-  if ((_colors != colors) ||
-      (_colorsTimestamp != colors->timestamp()) ) {
-    _nativeGL->vertexAttribPointer(Attributes.Color, 4, false, 0, colors);
-    _colors = colors;
-    _colorsTimestamp = _colors->timestamp();
-  }
+ _nativeGL->uniform1f(Uniforms.ColorPerVertexIntensity, intensity);
+ }
 
-  _nativeGL->uniform1f(Uniforms.ColorPerVertexIntensity, intensity);
-}
+ void GL::disableVertexColor() {
+ if (_verbose) {
+ ILogger::instance()->logInfo("GL::disableVertexColor()");
+ }
 
-void GL::disableVertexColor() {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::disableVertexColor()");
-  }
+ if (_enableVertexColor) {
+ _nativeGL->disableVertexAttribArray(Attributes.Color);
+ _nativeGL->uniform1i(Uniforms.EnableColorPerVertex, 0);
+ _enableVertexColor = false;
+ }
+ }*/
 
-  if (_enableVertexColor) {
-    _nativeGL->disableVertexAttribArray(Attributes.Color);
-    _nativeGL->uniform1i(Uniforms.EnableColorPerVertex, 0);
-    _enableVertexColor = false;
-  }
-}
+/*void GL::enableVerticesPosition() {
+ if (_verbose) {
+ ILogger::instance()->logInfo("GL::enableVerticesPosition()");
+ }
+ if (!_enableVerticesPosition) {
+ _nativeGL->enableVertexAttribArray(Attributes.Position);
+ _enableVerticesPosition = true;
+ }
+ }
 
-void GL::enableVerticesPosition() {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::enableVerticesPosition()");
-  }
+ void GL::disableVerticesPosition() {
+ if (_verbose) {
+ ILogger::instance()->logInfo("GL::disableVerticesPosition()");
+ }
 
-  if (!_enableVerticesPosition) {
-    _nativeGL->enableVertexAttribArray(Attributes.Position);
-    _enableVerticesPosition = true;
-  }
-}
+ if (_enableVerticesPosition) {
+ _nativeGL->disableVertexAttribArray(Attributes.Position);
+ _enableVerticesPosition = false;
+ }
+ }*/
 
-void GL::disableVerticesPosition() {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::disableVerticesPosition()");
-  }
+/*void GL::enableVertexFlatColor(float r, float g, float b, float a,
+ float intensity) {
+ if (_verbose) {
+ ILogger::instance()->logInfo("GL::enableVertexFlatColor()");
+ }
 
-  if (_enableVerticesPosition) {
-    _nativeGL->disableVertexAttribArray(Attributes.Position);
-    _enableVerticesPosition = false;
-  }
-}
+ if (!_enableFlatColor) {
+ _nativeGL->uniform1i(Uniforms.EnableFlatColor, 1);
+ _enableFlatColor = true;
+ }
 
-void GL::enableVertexFlatColor(float r, float g, float b, float a,
-                               float intensity) {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::enableVertexFlatColor()");
-  }
+ color(r, g, b, a);
 
-  if (!_enableFlatColor) {
-    _nativeGL->uniform1i(Uniforms.EnableFlatColor, 1);
-    _enableFlatColor = true;
-  }
+ //  _gl->uniform1f(Uniforms.FlatColorIntensity, intensity);
+ if (_flatColorIntensity != intensity) {
+ _nativeGL->uniform1f(Uniforms.FlatColorIntensity, intensity);
+ _flatColorIntensity = intensity;
+ }
+ }
 
-  color(r, g, b, a);
+ void GL::disableVertexFlatColor() {
+ if (_verbose) {
+ ILogger::instance()->logInfo("GL::disableVertexFlatColor()");
+ }
 
-  //  _gl->uniform1f(Uniforms.FlatColorIntensity, intensity);
-  if (_flatColorIntensity != intensity) {
-    _nativeGL->uniform1f(Uniforms.FlatColorIntensity, intensity);
-    _flatColorIntensity = intensity;
-  }
-}
+ if (_enableFlatColor) {
+ _nativeGL->uniform1i(Uniforms.EnableFlatColor, 0);
+ _enableFlatColor = false;
+ }
+ }*/
 
-void GL::disableVertexFlatColor() {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::disableVertexFlatColor()");
-  }
+/*void GL::enableDepthTest() {
+ if (_verbose) {
+ ILogger::instance()->logInfo("GL::enableDepthTest()");
+ }
+ if (!_enableDepthTest) {
+ _nativeGL->enable(GLFeature::depthTest());
+ _enableDepthTest = true;
+ }
+ }
 
-  if (_enableFlatColor) {
-    _nativeGL->uniform1i(Uniforms.EnableFlatColor, 0);
-    _enableFlatColor = false;
-  }
-}
+ void GL::disableDepthTest() {
+ if (_verbose) {
+ ILogger::instance()->logInfo("GL::disableDepthTest()");
+ }
 
-void GL::enableDepthTest() {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::enableDepthTest()");
-  }
+ if (_enableDepthTest) {
+ _nativeGL->disable(GLFeature::depthTest());
+ _enableDepthTest = false;
+ }
+ }*/
 
-  if (!_enableDepthTest) {
-    _nativeGL->enable(GLFeature::depthTest());
-    _enableDepthTest = true;
-  }
-}
+/*void GL::enableBlend() {
+ if (_verbose) {
+ ILogger::instance()->logInfo("GL::enableBlend()");
+ }
+ if (!_enableBlend) {
+ _nativeGL->enable(GLFeature::blend());
+ _enableBlend = true;
+ }
+ }
 
-void GL::disableDepthTest() {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::disableDepthTest()");
-  }
+ void GL::disableBlend() {
+ if (_verbose) {
+ ILogger::instance()->logInfo("GL::disableBlend()");
+ }
 
-  if (_enableDepthTest) {
-    _nativeGL->disable(GLFeature::depthTest());
-    _enableDepthTest = false;
-  }
-}
-
-void GL::enableBlend() {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::enableBlend()");
-  }
-
-  if (!_enableBlend) {
-    _nativeGL->enable(GLFeature::blend());
-    _enableBlend = true;
-  }
-}
-
-void GL::disableBlend() {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::disableBlend()");
-  }
-
-  if (_enableBlend) {
-    _nativeGL->disable(GLFeature::blend());
-    _enableBlend = false;
-  }
-
-}
+ if (_enableBlend) {
+ _nativeGL->disable(GLFeature::blend());
+ _enableBlend = false;
+ }
+ }*/
 
 void GL::setBlendFuncSrcAlpha() {
   if (_verbose) {
@@ -679,32 +672,31 @@ void GL::setBlendFuncSrcAlpha() {
   _nativeGL->blendFunc(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
 }
 
-void GL::enableCullFace(int face) {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::enableCullFace()");
-  }
+/*void GL::enableCullFace(int face) {
+ if (_verbose) {
+ ILogger::instance()->logInfo("GL::enableCullFace()");
+ }
+ if (!_enableCullFace) {
+ _nativeGL->enable(GLFeature::cullFace());
+ _enableCullFace = true;
+ }
 
-  if (!_enableCullFace) {
-    _nativeGL->enable(GLFeature::cullFace());
-    _enableCullFace = true;
-  }
+ if (_cullFace_face != face) {
+ _nativeGL->cullFace(face);
+ _cullFace_face = face;
+ }
+ }
 
-  if (_cullFace_face != face) {
-    _nativeGL->cullFace(face);
-    _cullFace_face = face;
-  }
-}
+ void GL::disableCullFace() {
+ if (_verbose) {
+ ILogger::instance()->logInfo("GL::disableCullFace()");
+ }
 
-void GL::disableCullFace() {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::disableCullFace()");
-  }
-
-  if (_enableCullFace) {
-    _nativeGL->disable(GLFeature::cullFace());
-    _enableCullFace = false;
-  }
-}
+ if (_enableCullFace) {
+ _nativeGL->disable(GLFeature::cullFace());
+ _enableCullFace = false;
+ }
+ }*/
 
 const IGLTextureId* GL::getGLTextureId() {
   if (_verbose) {
@@ -747,12 +739,128 @@ void GL::deleteTexture(const IGLTextureId* texture) {
   if (_verbose) {
     ILogger::instance()->logInfo("GL::deleteTexture()");
   }
-  
+
   if (texture != NULL) {
     if ( _nativeGL->deleteTexture(texture) ) {
       _texturesIdBag.push_back(texture);
     }
-    
+
     //    _texturesIdTakeCounter++;
   }
 }
+
+void GL::setState(GLState *state) {
+
+  // Depth Testh
+  if (_enableDepthTest != state->isEnabledDepthTest()) {
+    _enableDepthTest = state->isEnabledDepthTest();
+    if (_enableDepthTest) {
+      _nativeGL->enable(GLFeature::depthTest());
+    }
+    else {
+      _nativeGL->disable(GLFeature::depthTest());
+    }
+  }
+
+  // Blending
+  if (_enableBlend != state->isEnabledBlend()) {
+    _enableBlend = state->isEnabledBlend();
+    if (_enableBlend) {
+      _nativeGL->enable(GLFeature::blend());
+    }
+    else {
+      _nativeGL->disable(GLFeature::blend());
+    }
+  }
+
+  // Textures
+  if (_enableTextures != state->isEnabledTextures()) {
+    _enableTextures = state->isEnabledTextures();
+    if (_enableTextures) {
+      _nativeGL->enableVertexAttribArray(Attributes.TextureCoord);
+    }
+    else {
+      _nativeGL->disableVertexAttribArray(Attributes.TextureCoord);
+    }
+  }
+
+  // Texture2D
+  if (_enableTexture2D != state->isEnabledTexture2D()) {
+    _enableTexture2D = state->isEnabledTexture2D();
+    if (_enableTexture2D) {
+      _nativeGL->uniform1i(Uniforms.EnableTexture, 1);
+    }
+    else {
+      _nativeGL->uniform1i(Uniforms.EnableTexture, 0);
+    }
+  }
+
+  // VertexColor
+  if (_enableVertexColor != state->isEnabledVertexColor()) {
+    _enableVertexColor = state->isEnabledVertexColor();
+    if (_enableVertexColor) {
+      _nativeGL->uniform1i(Uniforms.EnableColorPerVertex, 1);
+      _nativeGL->enableVertexAttribArray(Attributes.Color);
+      IFloatBuffer* colors = state->getColors();
+      if ((_colors != colors) ||
+          (_colorsTimestamp != colors->timestamp()) ) {
+        _nativeGL->vertexAttribPointer(Attributes.Color, 4, false, 0, colors);
+        _colors = colors;
+        _colorsTimestamp = _colors->timestamp();
+      }
+    }
+    else {
+      _nativeGL->disableVertexAttribArray(Attributes.Color);
+      _nativeGL->uniform1i(Uniforms.EnableColorPerVertex, 0);
+    }
+  }
+
+  // Vertices Position
+  if (_enableVerticesPosition != state->isEnabledVerticesPosition()) {
+    _enableVerticesPosition = state->isEnabledVerticesPosition();
+    if (_enableVerticesPosition) {
+      _nativeGL->enableVertexAttribArray(Attributes.Position);
+    }
+    else {
+      _nativeGL->disableVertexAttribArray(Attributes.Position);
+    }
+  }
+
+  // Flat Color
+  if (_enableFlatColor != state->isEnabledFlatColor()) {
+    _enableFlatColor = state->isEnabledFlatColor();
+    if (_enableFlatColor) {
+      _nativeGL->uniform1i(Uniforms.EnableFlatColor, 1);
+    }
+    else {
+      _nativeGL->uniform1i(Uniforms.EnableFlatColor, 0);
+    }
+  }
+
+  if (_enableFlatColor) {
+    color(state->getFlatColor());
+    const float intensity = state->getIntensity();
+    if (_flatColorIntensity != intensity) {
+      _nativeGL->uniform1f(Uniforms.FlatColorIntensity, intensity);
+      _flatColorIntensity = intensity;
+    }
+  }
+
+  // Cull Face
+  if (_enableCullFace != state->isEnabledCullFace()) {
+    _enableCullFace = state->isEnabledCullFace();
+    if (_enableCullFace) {
+      _nativeGL->enable(GLFeature::cullFace());
+      const int face = state->getCulledFace();
+      if (_cullFace_face != face) {
+        _nativeGL->cullFace(face);
+        _cullFace_face = face;
+      }
+    }
+    else {
+      _nativeGL->disable(GLFeature::cullFace());
+    }
+  }
+
+}
+

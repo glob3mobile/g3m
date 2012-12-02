@@ -12,24 +12,16 @@
 
 void TexturedMesh::render(const G3MRenderContext* rc) const
 {
-  GL *gl = rc->getGL();
-
-  if (_transparent) {
-    gl->enableBlend();
-  }
-
-  gl->enableTextures();
-  gl->enableTexture2D();
+  //GL *gl = rc->getGL();
+  
+  //gl->enableTextures();
+  //gl->enableTexture2D();
   
   _textureMapping->bind(rc);
   
   _mesh->render(rc);
   
-  gl->disableTexture2D();
-  gl->disableTextures();
-
-  if (_transparent) {
-    gl->disableBlend();
-  }
+  //gl->disableTexture2D();
+  //gl->disableTextures();
 
 }

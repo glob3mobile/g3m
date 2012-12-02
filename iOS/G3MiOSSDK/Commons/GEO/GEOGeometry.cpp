@@ -57,12 +57,11 @@ void GEOGeometry::render(const G3MRenderContext* rc) {
 
     if ( extent->touches( rc->getCurrentCamera()->getFrustumInModelCoordinates() ) ) {
 
-      GL* gl = rc->getGL();
-//      gl->enablePolygonOffset(40, 40);
-      gl->disableDepthTest();
+      int _____DIEGO_AT_WORK_TODO_disableDepthTest;
+      //      GL* gl = rc->getGL();
+      //      gl->disableDepthTest();
       mesh->render(rc);
-//      gl->disablePolygonOffset();
-      gl->enableDepthTest();
+      //      gl->enableDepthTest();
     }
   }
 }

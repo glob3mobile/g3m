@@ -203,6 +203,7 @@ public class SimplePlanetRenderer extends LeafRenderer
 	  }
 	}
   
+	GLState state = new GLState();
 	_mesh.render(rc);
   }
 

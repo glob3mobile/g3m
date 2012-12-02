@@ -14,7 +14,7 @@ class TouchEvent;
 class Planet;
 class ILogger;
 class GL;
-class INativeGL;
+//class INativeGL;
 class TexturesHandler;
 class Downloader;
 class IDownloader;
@@ -75,7 +75,7 @@ public:
                              IMathUtils*          mathUtils,
                              IJSONParser*         jsonParser);
 
-  static G3MWidget* create(INativeGL*                       nativeGL,
+  static G3MWidget* create(GL*                              gl,
                            IStorage*                        storage,
                            IDownloader*                     downloader,
                            IThreadUtils*                    threadUtils,
@@ -206,7 +206,7 @@ private:
 
   bool _paused;
 
-  G3MWidget(INativeGL*                       nativeGL,
+  G3MWidget(GL*                              gl,
             IStorage*                        storage,
             IDownloader*                     downloader,
             IThreadUtils*                    threadUtils,

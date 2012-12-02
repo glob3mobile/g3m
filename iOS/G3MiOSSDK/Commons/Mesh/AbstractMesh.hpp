@@ -30,6 +30,8 @@ protected:
 
   mutable Extent* _extent;
   Extent* computeExtent() const;
+  
+  GLState*          _glState;
 
   AbstractMesh(const int primitive,
                bool owner,
@@ -54,6 +56,8 @@ public:
   const Vector3D getVertex(int i) const;
 
   bool isTransparent(const G3MRenderContext* rc) const;
+  
+  GLState* getGLState() const { return _glState; } 
 
 };
 

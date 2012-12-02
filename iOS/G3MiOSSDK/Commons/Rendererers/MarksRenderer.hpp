@@ -13,6 +13,8 @@
 #include "LeafRenderer.hpp"
 #include "Mark.hpp"
 
+class GLState;
+
 class MarkTouchListener {
 public:
   virtual ~MarkTouchListener() {
@@ -27,6 +29,7 @@ class MarksRenderer : public LeafRenderer {
 private:
   const bool         _readyWhenMarksReady;
   std::vector<Mark*> _marks;
+  GLState*           _glState;
   
 #ifdef C_CODE
   const G3MContext* _context;
@@ -41,15 +44,8 @@ private:
   bool               _autoDeleteMarkTouchListener;
   
 public:
-  
-  MarksRenderer(bool readyWhenMarksReady) :
-  _readyWhenMarksReady(readyWhenMarksReady),
-  _context(NULL),
-  _lastCamera(NULL),
-  _markTouchListener(NULL),
-  _autoDeleteMarkTouchListener(false)
-  {
-  }
+
+  MarksRenderer(bool readyWhenMarksReady);  
   
   void setMarkTouchListener(MarkTouchListener* markTouchListener,
                             bool autoDelete) {
@@ -61,17 +57,7 @@ public:
     _autoDeleteMarkTouchListener = autoDelete;
   }
   
-  virtual ~MarksRenderer() {
-    int marksSize = _marks.size();
-    for (int i = 0; i < marksSize; i++) {
-      delete _marks[i];
-    }
-    
-    if ( _autoDeleteMarkTouchListener ) {
-      delete _markTouchListener;
-    }
-    _markTouchListener = NULL;
-  };
+  virtual ~MarksRenderer();
   
   virtual void initialize(const G3MContext* context);
   

@@ -151,36 +151,6 @@ void CameraDoubleDragHandler::onMove(const G3MEventContext *eventContext,
   //tempCamera.updateModelMatrix();
   Vector3D centerPoint2 = tempCamera.getXYZCenterOfView();
   
-//<<<<<<< HEAD
-//  // rotate the camera
-//  {
-//    tempCamera.updateModelMatrix();
-//    Vector3D normal = _planet->geodeticSurfaceNormal(_initialPoint.asVector3D());
-//    tempCamera.rotateWithAxis(normal, Angle::fromRadians(angle));
-//  }
-//   
-//  // detect new final point
-//  {
-//    // compute 3D point of view center
-//    tempCamera.updateModelMatrix();
-//    Vector3D newCenterPoint = tempCamera.centerOfViewOnPlanet(_planet);
-//    
-//    // middle point in 3D
-//    Vector3D ray0 = tempCamera.pixel2Ray(pixel0);
-//    Vector3D P0 = _planet->closestIntersection(tempCamera.getPosition(), ray0);
-//    Vector3D ray1 = tempCamera.pixel2Ray(pixel1);
-//    Vector3D P1 = _planet->closestIntersection(tempCamera.getPosition(), ray1);
-//    Geodetic2D g = _planet->getMidPoint(_planet->toGeodetic2D(P0), _planet->toGeodetic2D(P1));
-//    Vector3D finalPoint = _planet->toVector3D(g);    
-//    
-//    // rotate globe from newCenterPoint to finalPoint
-//    const Vector3D rotationAxis = newCenterPoint.cross(finalPoint);
-//    const Angle rotationDelta = Angle::fromRadians( - acos(newCenterPoint.normalized().dot(finalPoint.normalized())) );
-//    if (rotationDelta.isNan()) {
-//      return;
-//    }
-//    tempCamera.rotateWithAxis(rotationAxis, rotationDelta);  
-//=======
   // middle point in 3D
   Vector3D P0 = tempCamera.pixel2PlanetPoint(pixel0);
   Vector3D P1 = tempCamera.pixel2PlanetPoint(pixel1);
@@ -193,7 +163,6 @@ void CameraDoubleDragHandler::onMove(const G3MEventContext *eventContext,
   const Angle rotationDelta = Angle::fromRadians( - GMath.acos(centerPoint2.normalized().dot(finalPoint.normalized())) );
   if (rotationDelta.isNan()) {
     return;
-//>>>>>>> master
   }
   tempCamera.rotateWithAxis(rotationAxis, rotationDelta);  
   

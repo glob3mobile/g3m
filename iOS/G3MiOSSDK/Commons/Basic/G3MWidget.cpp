@@ -49,7 +49,7 @@ void G3MWidget::initSingletons(ILogger*            logger,
   }
 }
 
-G3MWidget::G3MWidget(INativeGL*                       nativeGL,
+G3MWidget::G3MWidget(GL*                              gl,
                      IStorage*                        storage,
                      IDownloader*                     downloader,
                      IThreadUtils*                    threadUtils,
@@ -68,7 +68,12 @@ G3MWidget::G3MWidget(INativeGL*                       nativeGL,
                      std::vector<PeriodicalTask*>     periodicalTasks):
 _frameTasksExecutor( new FrameTasksExecutor() ),
 _effectsScheduler( new EffectsScheduler() ),
+_gl(gl),
+/*
+ =======
 _gl( new GL(nativeGL, false) ),
+>>>>>>> origin/webgl-port
+ */
 _downloader(downloader),
 _storage(storage),
 _threadUtils(threadUtils),
@@ -133,7 +138,7 @@ _paused(false)
 }
 
 
-G3MWidget* G3MWidget::create(INativeGL*                       nativeGL,
+G3MWidget* G3MWidget::create(GL*                              gl,
                              IStorage*                        storage,
                              IDownloader*                     downloader,
                              IThreadUtils*                    threadUtils,
@@ -151,7 +156,7 @@ G3MWidget* G3MWidget::create(INativeGL*                       nativeGL,
                              bool                             autoDeleteInitializationTask,
                              std::vector<PeriodicalTask*>     periodicalTasks) {
 
-  return new G3MWidget(nativeGL,
+  return new G3MWidget(gl,
                        storage,
                        downloader,
                        threadUtils,
@@ -170,9 +175,9 @@ G3MWidget* G3MWidget::create(INativeGL*                       nativeGL,
 }
 
 void G3MWidget::initializeGL() {
-  _gl->enableDepthTest();
+  //_gl->enableDepthTest();
 
-  _gl->enableCullFace(GLCullFace::back());
+  //_gl->enableCullFace(GLCullFace::back());
 }
 
 G3MWidget::~G3MWidget() {

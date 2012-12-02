@@ -12,7 +12,36 @@
 #include "TouchEvent.hpp"
 #include "RectangleI.hpp"
 
+MarksRenderer::MarksRenderer(bool readyWhenMarksReady) :
+_readyWhenMarksReady(readyWhenMarksReady),
+_context(NULL),
+_lastCamera(NULL),
+_markTouchListener(NULL),
+_autoDeleteMarkTouchListener(false)
+{
+  _glState = new GLState();
+  _glState->disableDepthTest();
+  _glState->enableBlend();
+  _glState->enableTextures();
+  _glState->enableTexture2D();
+  _glState->enableVerticesPosition();
+}
 
+
+MarksRenderer::~MarksRenderer() {
+  int marksSize = _marks.size();
+  for (int i = 0; i < marksSize; i++) {
+    delete _marks[i];
+  }
+  
+  if ( _autoDeleteMarkTouchListener ) {
+    delete _markTouchListener;
+  }
+  _markTouchListener = NULL;
+  delete _glState;
+};
+
+  
 void MarksRenderer::initialize(const G3MContext* context) {
   _context = context;
 
@@ -118,11 +147,12 @@ void MarksRenderer::render(const G3MRenderContext* rc) {
   
   GL* gl = rc->getGL();
   
-  gl->enableVerticesPosition();
-  gl->enableTextures();
+  //gl->enableVerticesPosition();
+  //gl->enableTextures();
+  //gl->enableBlend();
   
-  gl->disableDepthTest();
-  gl->enableBlend();
+  //gl->disableDepthTest();
+  gl->setState(_glState);
   
   const Vector3D radius = rc->getPlanet()->getRadii();
   const double minDistanceToCamera = (radius._x + radius._y + radius._z) / 3 * 0.75;
@@ -137,10 +167,10 @@ void MarksRenderer::render(const G3MRenderContext* rc) {
     }
   }
   
-  gl->enableDepthTest();
-  gl->disableBlend();
+  //gl->enableDepthTest();
+  //gl->disableBlend();
   
-  gl->disableTextures();
-  gl->disableVerticesPosition();
-  gl->disableTexture2D();
+  //gl->disableTextures();
+  //gl->disableVerticesPosition();
+  //gl->disableTexture2D();
 }

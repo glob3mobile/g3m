@@ -134,22 +134,24 @@ const IGLTextureId* LeveledTexturedMesh::getTopLevelGLTextureId() const {
 
 void LeveledTexturedMesh::render(const G3MRenderContext* rc) const {
   LazyTextureMapping* mapping = getCurrentTextureMapping();
-
   if (mapping == NULL) {
     _mesh->render(rc);
   }
   else {
-    GL *gl = rc->getGL();
-
-    gl->enableTextures();
-    gl->enableTexture2D();
+    //GL *gl = rc->getGL();
+    GLState* state = _mesh->getGLState();
+    state->enableTextures();
+    state->enableTexture2D();
+    
+    //gl->enableTextures();
+    //gl->enableTexture2D();
 
     mapping->bind(rc);
 
     _mesh->render(rc);
-
-    gl->disableTexture2D();
-    gl->disableTextures();
+    
+    //gl->disableTexture2D();
+    //gl->disableTextures();
   }
 }
 

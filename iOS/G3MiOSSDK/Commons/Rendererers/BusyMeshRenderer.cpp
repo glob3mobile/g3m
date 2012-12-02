@@ -69,6 +69,10 @@ void BusyMeshRenderer::initialize(const G3MContext* context)
                           1,
                           NULL,
                           colors.create());
+  
+  // set mesh glstate
+  GLState *state = _mesh->getGLState();
+  state->enableBlend();
 }
 
 void BusyMeshRenderer::start() {
@@ -104,8 +108,8 @@ void BusyMeshRenderer::render(const G3MRenderContext* rc)
   
   // clear screen
   gl->clearScreen(0.0f, 0.0f, 0.0f, 1.0f);
-  
-  gl->enableBlend();
+    
+  //gl->enableBlend();
   gl->setBlendFuncSrcAlpha();
   
   gl->pushMatrix();
@@ -118,5 +122,5 @@ void BusyMeshRenderer::render(const G3MRenderContext* rc)
   
   gl->popMatrix();
   
-  gl->disableBlend();
+  //gl->disableBlend();
 }

@@ -19,10 +19,10 @@ public class G3MWidget
 	}
   }
 
-  public static G3MWidget create(INativeGL nativeGL, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, int width, int height, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks)
+  public static G3MWidget create(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, int width, int height, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks)
   {
   
-	return new G3MWidget(nativeGL, storage, downloader, threadUtils, planet, cameraConstrainers, cameraRenderer, mainRenderer, busyRenderer, width, height, backgroundColor, logFPS, logDownloaderStatistics, initializationTask, autoDeleteInitializationTask, periodicalTasks);
+	return new G3MWidget(gl, storage, downloader, threadUtils, planet, cameraConstrainers, cameraRenderer, mainRenderer, busyRenderer, width, height, backgroundColor, logFPS, logDownloaderStatistics, initializationTask, autoDeleteInitializationTask, periodicalTasks);
   }
 
   public void dispose()
@@ -455,20 +455,25 @@ public class G3MWidget
 
   private void initializeGL()
   {
-	_gl.enableDepthTest();
+	//_gl->enableDepthTest();
   
-	_gl.enableCullFace(GLCullFace.back());
+	//_gl->enableCullFace(GLCullFace::back());
   }
 
   private final G3MContext _context;
 
   private boolean _paused;
 
-  private G3MWidget(INativeGL nativeGL, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, int width, int height, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks)
+  private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, int width, int height, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks)
+  /*
+   =======
+  _gl( new GL(nativeGL, false) ),
+  >>>>>>> origin/webgl-port
+   */
   {
 	  _frameTasksExecutor = new FrameTasksExecutor();
 	  _effectsScheduler = new EffectsScheduler();
-	  _gl = new GL(nativeGL, false);
+	  _gl = gl;
 	  _downloader = downloader;
 	  _storage = storage;
 	  _threadUtils = threadUtils;

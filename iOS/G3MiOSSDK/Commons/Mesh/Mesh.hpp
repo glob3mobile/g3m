@@ -11,6 +11,7 @@
 
 #include "Context.hpp"
 #include "Extent.hpp"
+#include "GLState.hpp"
 
 class Vector3D;
 
@@ -26,6 +27,8 @@ public:
   virtual void render(const G3MRenderContext* rc) const = 0;
   
   virtual Extent* getExtent() const = 0;
+  
+  virtual GLState* getGLState() const = 0;
 
   virtual bool isTransparent(const G3MRenderContext* rc) const = 0;
 

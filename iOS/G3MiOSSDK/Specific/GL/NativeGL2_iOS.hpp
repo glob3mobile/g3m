@@ -13,25 +13,31 @@
 
 #include "INativeGL.hpp"
 
-#include "GLProgramId_iOS.hpp"
+//#include "GLProgramId_iOS.hpp"
 #include "GLUniformID_iOS.hpp"
 #include "GLTextureId_iOS.hpp"
+#include "FloatBuffer_iOS.hpp"
+#include "IntBuffer_iOS.hpp"
+#include "Image_iOS.hpp"
 
 class NativeGL2_iOS: public INativeGL {
 public:
 
-  void useProgram(IGLProgramId* program) const {
-    glUseProgram(((GLProgramId_iOS*)program)->getID());
+  void useProgram(ShaderProgram* program) const {
+//    glUseProgram(((GLProgramId_iOS*)program)->getID());
+    glUseProgram(program->getProgram());
   }
 
-  int getAttribLocation(IGLProgramId* program,
+  int getAttribLocation(ShaderProgram* program,
                         const std::string& name) const {
-    return glGetAttribLocation(((GLProgramId_iOS*)program)->getID(), name.c_str());
+//    return glGetAttribLocation(((GLProgramId_iOS*)program)->getID(), name.c_str());
+    return glGetAttribLocation(program->getProgram(), name.c_str());
   }
 
-  IGLUniformID* getUniformLocation(IGLProgramId* program,
+  IGLUniformID* getUniformLocation(ShaderProgram* program,
                                    const std::string& name) const {
-    const int id = glGetUniformLocation(((GLProgramId_iOS*)program)->getID(), name.c_str());
+//    const int id = glGetUniformLocation(((GLProgramId_iOS*)program)->getID(), name.c_str());
+    const int id = glGetUniformLocation(program->getProgram(), name.c_str());
     return (IGLUniformID*) new GLUniformID_iOS(id);
   }
 
@@ -334,6 +340,69 @@ public:
 
   int Error_NoError() const {
     return GL_NO_ERROR;
+  }
+  
+  int createProgram() const {
+    return glCreateProgram();
+  }
+  
+  void deleteProgram(int program) const {
+    glDeleteProgram(program);
+  }
+  
+  void attachShader(int program, int shader) const {
+    glAttachShader(program, shader);
+  }
+  
+  int createShader(ShaderType type) const {
+    switch (type) {
+      case VERTEX_SHADER:
+        return glCreateShader(GL_VERTEX_SHADER);
+      case FRAGMENT_SHADER:
+        return glCreateShader(GL_FRAGMENT_SHADER);
+    }  
+  }
+  
+  bool compileShader(int shader, const std::string& source) const {
+    int status;
+    const char *s = source.c_str();
+    glShaderSource(shader, 1, &s, NULL);
+    glCompileShader(shader);
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
+    return status;
+  }
+
+  void deleteShader(int shader) const {
+    glDeleteShader(shader);
+  }
+  
+  void printShaderInfoLog(int shader) const {
+    GLint logLength;
+    glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &logLength);
+    if (logLength > 0) {
+      GLchar* log = (GLchar* ) malloc(logLength);
+      glGetShaderInfoLog(shader, logLength, &logLength, log);
+      NSLog(@"Shader compile log:\n%s", log);
+      free(log);
+    }
+  }
+  
+  bool linkProgram(int program) const {
+    int status;
+    glLinkProgram(program);
+    glGetProgramiv(program, GL_LINK_STATUS, &status);
+    return status;
+  }
+  
+  void printProgramInfoLog(int program) const {
+    GLint logLength;
+    glGetProgramiv(program, GL_INFO_LOG_LENGTH, &logLength);
+    if (logLength > 0) {
+      GLchar* log = (GLchar* ) malloc(logLength);
+      glGetProgramInfoLog(program, logLength, &logLength, log);
+      NSLog(@"Program link log:\n%s", log);
+      free(log);
+    }
   }
   
 };

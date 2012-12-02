@@ -180,5 +180,6 @@ void SimplePlanetRenderer::render(const G3MRenderContext* rc){
     }
   }
   
+  GLState state;
   _mesh->render(rc);
 }

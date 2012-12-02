@@ -161,8 +161,9 @@ public class SGLayerNode extends SGNode
 	  //      gl->enableBlend();
 	  //    }
   
-	  gl.enableTextures();
-	  gl.enableTexture2D();
+	  int TEMP_commented_by_Agustin_until_decision_about_glstate;
+	  //gl->enableTextures();
+	  //gl->enableTexture2D();
   
 	  //    _textureMapping->bind(rc);
 	  //    gl->transformTexCoords(_scale, _translation);
@@ -175,10 +176,11 @@ public class SGLayerNode extends SGNode
   {
 	if (_textureBound)
 	{
-	  GL gl = rc.getGL();
   
-	  gl.disableTexture2D();
-	  gl.disableTextures();
+	  int TEMP_commented_by_Agustin_until_decision_about_glstate;
+	  //GL *gl = rc->getGL();
+	  //gl->disableTexture2D();
+	  //gl->disableTextures();
   
 	  //    if (_transparent) {
 	  //      gl->disableBlend();

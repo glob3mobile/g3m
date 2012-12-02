@@ -24,16 +24,13 @@ package org.glob3.mobile.generated;
 public class IndexedMesh extends AbstractMesh
 {
   private IIntBuffer _indices;
-
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: void rawRender(const G3MRenderContext* rc) const
   protected final void rawRender(G3MRenderContext rc)
   {
 	GL gl = rc.getGL();
-  
 	gl.drawElements(_primitive, _indices);
   }
-
 
   public IndexedMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, IIntBuffer indices, float lineWidth, Color flatColor, IFloatBuffer colors)
   {

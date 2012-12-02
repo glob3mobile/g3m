@@ -20,10 +20,14 @@
 DummyRenderer::~DummyRenderer() {
   delete _indices;
   delete _vertices;
+  delete _glState;
 }
 
 void DummyRenderer::initialize(const G3MContext* context)
 {
+  _glState = new GLState();
+  _glState->enableVerticesPosition();
+  
   int res = 12;
   //_vertices = new float[res * res * 3];
   //_numIndices = 2 * (res - 1) * (res + 1);
@@ -84,11 +88,13 @@ void DummyRenderer::render(const G3MRenderContext* rc) {
 
   // obtaing gl object reference
   GL *gl = rc->getGL();
+  gl->setState(_glState);
 
-  gl->enableVerticesPosition();
-
+  
+  //gl->enableVerticesPosition();
+  
   // insert pointers
-  gl->disableTextures();
+  //gl->disableTextures();
   gl->vertexPointer(3, 0, _vertices);
 
   {
@@ -162,6 +168,6 @@ void DummyRenderer::render(const G3MRenderContext* rc) {
     gl->popMatrix();
   }
   
-  gl->enableTextures();
+  //gl->enableTextures();
   
 }

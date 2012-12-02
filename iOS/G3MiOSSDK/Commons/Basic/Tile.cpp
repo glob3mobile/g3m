@@ -15,6 +15,7 @@
 #include "TileRenderer.hpp"
 #include "TilesRenderParameters.hpp"
 #include "TileKey.hpp"
+#include "GLState.hpp"
 
 Tile::Tile(TileTexturizer* texturizer,
            Tile* parent,
@@ -207,6 +208,8 @@ void Tile::prepareForFullRendering(const G3MRenderContext* rc,
 
 void Tile::rawRender(const G3MRenderContext *rc,
                      const TileRenderContext* trc) {
+  
+  int __TODO_include_glstate_in_TileRenderContext;
   
   Mesh* tessellatorMesh = getTessellatorMesh(rc, trc);
   if (tessellatorMesh == NULL) {

@@ -87,6 +87,10 @@ bool BusyQuadRenderer::initMesh(const G3MRenderContext* rc) {
   
   _quadMesh = new TexturedMesh(im, true, texMap, true, false);
   
+  // set mesh glstate
+  GLState* state = _quadMesh->getGLState();
+  state->enableBlend();
+
   return true;
 }
 
@@ -122,8 +126,8 @@ void BusyQuadRenderer::render(const G3MRenderContext* rc) {
   
   // clear screen
   gl->clearScreen(0.0f, 0.0f, 0.0f, 1.0f);
-  
-  gl->enableBlend();
+    
+  //gl->enableBlend();
   gl->setBlendFuncSrcAlpha();
   
   gl->pushMatrix();
@@ -136,6 +140,6 @@ void BusyQuadRenderer::render(const G3MRenderContext* rc) {
   
   gl->popMatrix();
   
-  gl->disableBlend();
+  //gl->disableBlend();
   
 }
