@@ -73,7 +73,6 @@ public class TexturedMesh extends Mesh
 	  gl.setBlendFuncSrcAlpha();
 	}
   
-	gl.setState(state);
 	_textureMapping.bind(rc);
   
 	_mesh.render(rc, state);

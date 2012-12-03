@@ -35,24 +35,6 @@ public class SGLayerNode extends SGNode
   private final String _wrapS;
   private final String _wrapT;
 
-
-  //void SGLayerNode::setURI(const std::string& uri) {
-  //  if (_uri.compare(uri) == 0) {
-  //    return;
-  //  }
-  //
-  //  _uri = uri;
-  //
-  //  if (_requestInProgress != -1) {
-  //    if (_context != NULL) {
-  //      _context->getDownloader()->cancelRequest(_requestInProgress);
-  //      _requestInProgress = -1;
-  //    }
-  //  }
-  //
-  //  int __release_texture_id_uploaded;
-  //}
-  
   private IGLTextureId getTextureId(G3MRenderContext rc)
   {
 	if (_textureId == null)
@@ -120,12 +102,6 @@ public class SGLayerNode extends SGNode
 
   }
 
-
-  //void TextureDownloadListener::onDownload(const URL& url,
-  //                                         const IImage* image) {
-  //  _layerNode->onImageDownload(image);
-  //}
-  
   public final void onImageDownload(IImage image)
   {
 	if (_downloadedImage != null)
@@ -152,20 +128,11 @@ public class SGLayerNode extends SGNode
 	}
   
 	GLState state = new GLState(parentState);
-  
-	GL gl = rc.getGL();
-  
-	//  if (_transparent) {
-	//      gl->enableBlend();
-	//    }
-  
 	state.enableTextures();
 	state.enableTexture2D();
   
-	//    _textureMapping->bind(rc);
-	//    gl->transformTexCoords(_scale, _translation);
+	GL gl = rc.getGL();
 	gl.bindTexture(texId);
-	//    gl->setTextureCoordinates(2, 0, _texCoords);
   
 	return state;
   }

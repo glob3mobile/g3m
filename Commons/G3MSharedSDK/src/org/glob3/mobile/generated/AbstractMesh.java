@@ -142,9 +142,6 @@ public abstract class AbstractMesh extends Mesh
 		gl.setBlendFuncSrcAlpha();
 	  }
 	}
-  //  else {
-  //    state.disableFlatColor();
-  //  }
   
 	gl.vertexPointer(3, 0, _vertices);
   

@@ -81,33 +81,6 @@ public class GL
 	_nativeGL.uniformMatrix4fv(GlobalMembersGL.Uniforms.Modelview, false, _modelView);
   }
 
-
-  /*void GL::enableCullFace(int face) {
-   if (_verbose) {
-   ILogger::instance()->logInfo("GL::enableCullFace()");
-   }
-   if (!_enableCullFace) {
-   _nativeGL->enable(GLFeature::cullFace());
-   _enableCullFace = true;
-   }
-  
-   if (_cullFace_face != face) {
-   _nativeGL->cullFace(face);
-   _cullFace_face = face;
-   }
-   }
-  
-   void GL::disableCullFace() {
-   if (_verbose) {
-   ILogger::instance()->logInfo("GL::disableCullFace()");
-   }
-  
-   if (_enableCullFace) {
-   _nativeGL->disable(GLFeature::cullFace());
-   _enableCullFace = false;
-   }
-   }*/
-  
   private IGLTextureId getGLTextureId()
   {
 	if (_verbose)
@@ -148,15 +121,6 @@ public class GL
   
 	return result;
   }
-
-  //  int _lastTextureWidth;
-  //  int _lastTextureHeight;
-  ///#ifdef C_CODE
-  //  unsigned char* _lastImageData;
-  ///#endif
-  ///#ifdef JAVA_CODE
-  //  byte[] _lastImageData;
-  ///#endif
 
   //Get Locations warning of errors
   private boolean _errorGettingLocationOcurred;
@@ -210,10 +174,8 @@ public class GL
 	return _billboardTexCoord;
   }
 
-  //void enableDepthTest();
-  //void disableDepthTest();
-
   private final boolean _verbose;
+
 
 
   public GL(INativeGL nativeGL, boolean verbose)
@@ -265,24 +227,8 @@ public class GL
 	GLError.init(_nativeGL);
   }
 
-  //void enableVerticesPosition();
-
-  //void enableTextures();
-
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  void verticesColors(boolean v);
-
-  //void enableTexture2D();
-
-  //void enableVertexFlatColor(float r, float g, float b, float a,float intensity);
-
-  //void disableVertexFlatColor();
-
-  //void disableTexture2D();
-
-  //void disableVerticesPosition();
-
-  //void disableTextures();
 
   public final void clearScreen(float r, float g, float b, float a)
   {
@@ -312,10 +258,6 @@ public class GL
 	  _flatColorA = a;
 	}
   }
-
-  //void enableVertexColor(IFloatBuffer* colors, float intensity);
-
-  //void disableVertexColor();
 
   public final void pushMatrix()
   {
@@ -549,10 +491,6 @@ public class GL
 	return texId;
   }
 
-  //  const const GLTextureId*uploadTexture(const IImage* image,
-  //                                  int textureWidth, int textureHeight,
-  //                                  bool generateMipmap);
-
   public final void setTextureCoordinates(int size, int stride, IFloatBuffer textureCoordinates)
   {
 	if (_verbose)
@@ -577,13 +515,6 @@ public class GL
   
 	_nativeGL.bindTexture(GLTextureType.texture2D(), textureId);
   }
-
-  //void enableBlend();
-  //void disableBlend();
-
-
-  //void enableDepthTest();
-  //void disableDepthTest();
 
   public final void drawBillBoard(IGLTextureId textureId, IFloatBuffer vertices, float viewPortRatio)
   {
@@ -632,9 +563,6 @@ public class GL
 	  //    _texturesIdTakeCounter++;
 	}
   }
-
-  /*void enableCullFace(int face);
-  void disableCullFace();*/
 
   public final void transformTexCoords(float scaleX, float scaleY, float translationX, float translationY)
   {
@@ -750,133 +678,6 @@ public class GL
    }
    }*/
   
-  /*void GL::enableVertexColor(IFloatBuffer* colors, float intensity) {
-   if (_verbose) {
-   ILogger::instance()->logInfo("GL::enableVertexColor(color=%s, intensity=%f)",
-   colors->description().c_str(),
-   intensity);
-   }
-   if (!_enableVertexColor) {
-   _nativeGL->uniform1i(Uniforms.EnableColorPerVertex, 1);
-   _nativeGL->enableVertexAttribArray(Attributes.Color);
-   _enableVertexColor = true;
-   }
-  
-   if ((_colors != colors) ||
-   (_colorsTimestamp != colors->timestamp()) ) {
-   _nativeGL->vertexAttribPointer(Attributes.Color, 4, false, 0, colors);
-   _colors = colors;
-   _colorsTimestamp = _colors->timestamp();
-   }
-  
-   _nativeGL->uniform1f(Uniforms.ColorPerVertexIntensity, intensity);
-   }
-  
-   void GL::disableVertexColor() {
-   if (_verbose) {
-   ILogger::instance()->logInfo("GL::disableVertexColor()");
-   }
-  
-   if (_enableVertexColor) {
-   _nativeGL->disableVertexAttribArray(Attributes.Color);
-   _nativeGL->uniform1i(Uniforms.EnableColorPerVertex, 0);
-   _enableVertexColor = false;
-   }
-   }*/
-  
-  /*void GL::enableVerticesPosition() {
-   if (_verbose) {
-   ILogger::instance()->logInfo("GL::enableVerticesPosition()");
-   }
-   if (!_enableVerticesPosition) {
-   _nativeGL->enableVertexAttribArray(Attributes.Position);
-   _enableVerticesPosition = true;
-   }
-   }
-  
-   void GL::disableVerticesPosition() {
-   if (_verbose) {
-   ILogger::instance()->logInfo("GL::disableVerticesPosition()");
-   }
-  
-   if (_enableVerticesPosition) {
-   _nativeGL->disableVertexAttribArray(Attributes.Position);
-   _enableVerticesPosition = false;
-   }
-   }*/
-  
-  /*void GL::enableVertexFlatColor(float r, float g, float b, float a,
-   float intensity) {
-   if (_verbose) {
-   ILogger::instance()->logInfo("GL::enableVertexFlatColor()");
-   }
-  
-   if (!_enableFlatColor) {
-   _nativeGL->uniform1i(Uniforms.EnableFlatColor, 1);
-   _enableFlatColor = true;
-   }
-  
-   color(r, g, b, a);
-  
-   //  _gl->uniform1f(Uniforms.FlatColorIntensity, intensity);
-   if (_flatColorIntensity != intensity) {
-   _nativeGL->uniform1f(Uniforms.FlatColorIntensity, intensity);
-   _flatColorIntensity = intensity;
-   }
-   }
-  
-   void GL::disableVertexFlatColor() {
-   if (_verbose) {
-   ILogger::instance()->logInfo("GL::disableVertexFlatColor()");
-   }
-  
-   if (_enableFlatColor) {
-   _nativeGL->uniform1i(Uniforms.EnableFlatColor, 0);
-   _enableFlatColor = false;
-   }
-   }*/
-  
-  /*void GL::enableDepthTest() {
-   if (_verbose) {
-   ILogger::instance()->logInfo("GL::enableDepthTest()");
-   }
-   if (!_enableDepthTest) {
-   _nativeGL->enable(GLFeature::depthTest());
-   _enableDepthTest = true;
-   }
-   }
-  
-   void GL::disableDepthTest() {
-   if (_verbose) {
-   ILogger::instance()->logInfo("GL::disableDepthTest()");
-   }
-  
-   if (_enableDepthTest) {
-   _nativeGL->disable(GLFeature::depthTest());
-   _enableDepthTest = false;
-   }
-   }*/
-  
-  /*void GL::enableBlend() {
-   if (_verbose) {
-   ILogger::instance()->logInfo("GL::enableBlend()");
-   }
-   if (!_enableBlend) {
-   _nativeGL->enable(GLFeature::blend());
-   _enableBlend = true;
-   }
-   }
-  
-   void GL::disableBlend() {
-   if (_verbose) {
-   ILogger::instance()->logInfo("GL::disableBlend()");
-   }
-  
-   if (_enableBlend) {
-   _nativeGL->disable(GLFeature::blend());
-   _enableBlend = false;
-   }
-   }*/
   
   public final void setBlendFuncSrcAlpha()
   {
@@ -899,18 +700,12 @@ public class GL
   public void dispose()
   {
 
-	//    if (_lastImageData != NULL) {
-	//      delete [] _lastImageData;
-	//      _lastImageData = NULL;
-	//    }
-
 	if (_vertices != null)
 		_vertices.dispose();
 	if (_textureCoordinates != null)
 		_textureCoordinates.dispose();
 	if (_colors != null)
 		_colors.dispose();
-
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -1118,4 +913,5 @@ public class GL
 	}
   
   }
+
 }

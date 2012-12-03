@@ -79,7 +79,6 @@ public class SGGeometryNode extends SGNode
 	if (_uv != null)
 	{
 	  gl.transformTexCoords(1.0f, 1.0f, 0.0f, 0.0f);
-  
 	  gl.setTextureCoordinates(2, 0, _uv);
 	}
   
