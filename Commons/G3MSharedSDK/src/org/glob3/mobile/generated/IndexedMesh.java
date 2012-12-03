@@ -25,8 +25,8 @@ public class IndexedMesh extends AbstractMesh
 {
   private IIntBuffer _indices;
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void rawRender(const G3MRenderContext* rc) const
-  protected final void rawRender(G3MRenderContext rc)
+//ORIGINAL LINE: void rawRender(const G3MRenderContext* rc, const GLState& parentState) const
+  protected final void rawRender(G3MRenderContext rc, GLState parentState)
   {
 	GL gl = rc.getGL();
 	gl.drawElements(_primitive, _indices);
@@ -34,18 +34,18 @@ public class IndexedMesh extends AbstractMesh
 
   public IndexedMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, IIntBuffer indices, float lineWidth, Color flatColor, IFloatBuffer colors)
   {
-	  this(primitive, owner, center, vertices, indices, lineWidth, flatColor, colors, (float)0.0);
+	  this(primitive, owner, center, vertices, indices, lineWidth, flatColor, colors, 0.0f);
   }
   public IndexedMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, IIntBuffer indices, float lineWidth, Color flatColor)
   {
-	  this(primitive, owner, center, vertices, indices, lineWidth, flatColor, null, (float)0.0);
+	  this(primitive, owner, center, vertices, indices, lineWidth, flatColor, null, 0.0f);
   }
   public IndexedMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, IIntBuffer indices, float lineWidth)
   {
-	  this(primitive, owner, center, vertices, indices, lineWidth, null, null, (float)0.0);
+	  this(primitive, owner, center, vertices, indices, lineWidth, null, null, 0.0f);
   }
 //C++ TO JAVA CONVERTER NOTE: Java does not allow default values for parameters. Overloaded methods are inserted above.
-//ORIGINAL LINE: IndexedMesh(const int primitive, boolean owner, const Vector3D& center, IFloatBuffer* vertices, IIntBuffer* indices, float lineWidth, Color* flatColor = null, IFloatBuffer* colors = null, const float colorsIntensity = (float)0.0) : AbstractMesh(primitive, owner, center, vertices, lineWidth, flatColor, colors, colorsIntensity), _indices(indices)
+//ORIGINAL LINE: IndexedMesh(const int primitive, boolean owner, const Vector3D& center, IFloatBuffer* vertices, IIntBuffer* indices, float lineWidth, Color* flatColor = null, IFloatBuffer* colors = null, const float colorsIntensity = 0.0f) : AbstractMesh(primitive, owner, center, vertices, lineWidth, flatColor, colors, colorsIntensity), _indices(indices)
   public IndexedMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, IIntBuffer indices, float lineWidth, Color flatColor, IFloatBuffer colors, float colorsIntensity)
   {
 	  super(primitive, owner, center, vertices, lineWidth, flatColor, colors, colorsIntensity);

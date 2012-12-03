@@ -50,7 +50,7 @@ public class SGMaterialNode extends SGNode
 
   public final void prepareRender(G3MRenderContext rc)
   {
-	//GL *gl = rc->getGL();
+	//GL* gl = rc->getGL();
   
 	int TEMP_commented_by_Agustin_until_decision_about_glstate;
 	/*
@@ -60,14 +60,15 @@ public class SGMaterialNode extends SGNode
 	else {
 	  const float colorsIntensity = 1;
 	  gl->enableVertexFlatColor(*_specularColor, colorsIntensity);
-	}*/
+	}
+	 */
   
 	super.prepareRender(rc);
   }
 
   public final void cleanUpRender(G3MRenderContext rc)
   {
-	//GL *gl = rc->getGL();
+	//GL* gl = rc->getGL();
   
 	int TEMP_commented_by_Agustin_until_decision_about_glstate;
 	/*
@@ -75,6 +76,20 @@ public class SGMaterialNode extends SGNode
 	 */
   
 	super.cleanUpRender(rc);
+  }
+
+  public final GLState createState(G3MRenderContext rc, GLState parentState)
+  {
+	if (_specularColor == null)
+	{
+	  return null;
+	}
+  
+	GLState state = new GLState(parentState);
+	final float colorsIntensity = 1F;
+	state.enableFlatColor(_specularColor, colorsIntensity);
+  
+	return state;
   }
 
 }

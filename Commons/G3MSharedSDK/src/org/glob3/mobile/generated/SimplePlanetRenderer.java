@@ -136,9 +136,9 @@ public class SimplePlanetRenderer extends LeafRenderer
   
 	//FLAT COLOR
 	Color flatColor = null;
-  //  if (false){
-  //    flatColor = new Color( Color::fromRGBA(0.0, 1.0, 0.0, 1.0) );
-  //  }
+	//  if (false){
+	//    flatColor = new Color( Color::fromRGBA(0.0, 1.0, 0.0, 1.0) );
+	//  }
   
 	IndexedMesh im = new IndexedMesh(GLPrimitive.triangleStrip(), true, Vector3D.zero(), ver, ind, 1, flatColor, vertexColors);
   
@@ -193,7 +193,7 @@ public class SimplePlanetRenderer extends LeafRenderer
   
   }
 
-  public final void render(G3MRenderContext rc)
+  public final void render(G3MRenderContext rc, GLState parentState)
   {
 	if (_mesh == null)
 	{
@@ -203,8 +203,7 @@ public class SimplePlanetRenderer extends LeafRenderer
 	  }
 	}
   
-	GLState state = new GLState();
-	_mesh.render(rc);
+	_mesh.render(rc, parentState);
   }
 
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)

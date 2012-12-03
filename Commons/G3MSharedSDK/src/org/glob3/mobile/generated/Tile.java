@@ -137,10 +137,8 @@ public class Tile
 	return subTiles;
   }
 
-  private void rawRender(G3MRenderContext rc, TileRenderContext trc)
+  private void rawRender(G3MRenderContext rc, TileRenderContext trc, GLState parentState)
   {
-  
-	int __TODO_include_glstate_in_TileRenderContext;
   
 	Mesh tessellatorMesh = getTessellatorMesh(rc, trc);
 	if (tessellatorMesh == null)
@@ -151,7 +149,7 @@ public class Tile
 	TileTexturizer texturizer = trc.getTexturizer();
 	if (texturizer == null)
 	{
-	  tessellatorMesh.render(rc);
+	  tessellatorMesh.render(rc, parentState);
 	}
 	else
 	{
@@ -165,22 +163,22 @@ public class Tile
   
 	  if (_texturizedMesh != null)
 	  {
-		_texturizedMesh.render(rc);
+		_texturizedMesh.render(rc, parentState);
 	  }
 	  else
 	  {
-		tessellatorMesh.render(rc);
+		tessellatorMesh.render(rc, parentState);
 	  }
 	}
   
   }
 
-  private void debugRender(G3MRenderContext rc, TileRenderContext trc)
+  private void debugRender(G3MRenderContext rc, TileRenderContext trc, GLState parentState)
   {
 	Mesh debugMesh = getDebugMesh(rc, trc);
 	if (debugMesh != null)
 	{
-	  debugMesh.render(rc);
+	  debugMesh.render(rc, parentState);
 	}
   }
 
@@ -290,9 +288,9 @@ public class Tile
 
   public void dispose()
   {
-  //  if (_isVisible) {
-  //    deleteTexturizedMesh();
-  //  }
+	//  if (_isVisible) {
+	//    deleteTexturizedMesh();
+	//  }
   
 	prune(null);
   
@@ -372,7 +370,7 @@ public class Tile
 	}
   }
 
-  public final void render(G3MRenderContext rc, TileRenderContext trc, java.util.LinkedList<Tile> toVisitInNextIteration)
+  public final void render(G3MRenderContext rc, TileRenderContext trc, GLState parentState, java.util.LinkedList<Tile> toVisitInNextIteration)
   {
 	TilesStatistics statistics = trc.getStatistics();
   
@@ -387,10 +385,10 @@ public class Tile
   
 	  if (isRawRender)
 	  {
-		rawRender(rc, trc);
+		rawRender(rc, trc, parentState);
 		if (trc.getParameters()._renderDebug)
 		{
-		  debugRender(rc, trc);
+		  debugRender(rc, trc, parentState);
 		}
   
 		statistics.computeTileRendered(this);
@@ -518,7 +516,7 @@ public class Tile
   
 	  //    printf("= pruned tile %s\n", getKey().description().c_str());
   
-  //    TileTexturizer* texturizer = (trc == NULL) ? NULL : trc->getTexturizer();
+	  //    TileTexturizer* texturizer = (trc == NULL) ? NULL : trc->getTexturizer();
   
 	  final int subtilesSize = _subtiles.size();
 	  for (int i = 0; i < subtilesSize; i++)

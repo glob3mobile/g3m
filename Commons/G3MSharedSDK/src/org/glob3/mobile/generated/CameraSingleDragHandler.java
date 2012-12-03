@@ -45,7 +45,7 @@ public class CameraSingleDragHandler extends CameraEventHandler
   //  // TEMP TO DRAW A POINT WHERE USER PRESS
   //  if (false) {
   //    if (cameraContext->getCurrentGesture() == Drag) {
-  //      GL *gl = rc->getGL();
+  //      GL* gl = rc->getGL();
   //      float vertices[] = { 0,0,0};
   //      int indices[] = {0};
   //      gl->enableVerticesPosition();

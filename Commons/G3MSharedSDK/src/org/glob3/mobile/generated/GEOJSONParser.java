@@ -313,18 +313,6 @@ public class GEOJSONParser
 //ORIGINAL LINE: java.util.ArrayList<Geodetic2D*>* create2DCoordinates(const JSONArray* jsCoordinates) const
   private java.util.ArrayList<Geodetic2D> create2DCoordinates(JSONArray jsCoordinates)
   {
-	//    std::vector<Geodetic2D*>* coordinates = new std::vector<Geodetic2D*>();
-	//    for (int i = 0; i < coordinatesCount; i++) {
-	//      const JSONArray* jsCoordinate = jsCoordinates->getAsArray(i);
-	//
-	//      const double latitudeDegrees  = jsCoordinate->getAsNumber(1, 0.0);
-	//      const double longitudeDegrees = jsCoordinate->getAsNumber(0, 0.0);
-	//
-	//      Geodetic2D* coordinate = new Geodetic2D(Angle::fromDegrees(latitudeDegrees),
-	//                                              Angle::fromDegrees(longitudeDegrees));
-	//      coordinates->push_back( coordinate );
-	//    }
-  
 	if (jsCoordinates == null)
 	{
 	  ILogger.instance().logError("Mandatory \"coordinates\" attribute is not present");

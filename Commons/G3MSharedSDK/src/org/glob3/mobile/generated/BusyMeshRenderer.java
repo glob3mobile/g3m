@@ -77,9 +77,6 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
 	// create mesh
 	_mesh = new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, null, colors.create());
   
-	// set mesh glstate
-	GLState state = _mesh.getGLState();
-	state.enableBlend();
   }
 
   public final boolean isReadyToRender(G3MRenderContext rc)
@@ -89,9 +86,13 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
 
 //C++ TO JAVA CONVERTER NOTE: This was formerly a static local variable declaration (not allowed in Java):
   private boolean render_firstTime = true;
-  public final void render(G3MRenderContext rc)
+  public final void render(G3MRenderContext rc, GLState parentState)
   {
 	GL gl = rc.getGL();
+  
+	// set mesh glstate
+	GLState state = new GLState(parentState);
+	state.enableBlend();
   
 	// init effect in the first render
 //C++ TO JAVA CONVERTER NOTE: This static local variable declaration (not allowed in Java) has been moved just prior to the method:
@@ -115,6 +116,8 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
 	// clear screen
 	gl.clearScreen(0.0f, 0.0f, 0.0f, 1.0f);
   
+	gl.setState(state);
+  
 	//gl->enableBlend();
 	gl.setBlendFuncSrcAlpha();
   
@@ -124,7 +127,7 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
 	gl.multMatrixf(R1.multiply(R2));
   
 	// draw mesh
-	_mesh.render(rc);
+	_mesh.render(rc, state);
   
 	gl.popMatrix();
   

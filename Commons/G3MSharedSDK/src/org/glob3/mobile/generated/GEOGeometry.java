@@ -48,6 +48,7 @@ public abstract class GEOGeometry extends GEOObject
 	{
 	  Geodetic2D coordinate = coordinates.get(i);
 	  vertices.add(coordinate);
+	  // vertices.add( Geodetic3D(*coordinate, 50) );
 	}
   
 	return new DirectMesh(GLPrimitive.lineStrip(), true, vertices.getCenter(), vertices.create(), lineWidth, color);
@@ -59,7 +60,7 @@ public abstract class GEOGeometry extends GEOObject
 
   }
 
-  public final void render(G3MRenderContext rc)
+  public final void render(G3MRenderContext rc, GLState parentState)
   {
 	Mesh mesh = getMesh(rc);
 	if (mesh != null)
@@ -68,7 +69,9 @@ public abstract class GEOGeometry extends GEOObject
   
 	  if (extent.touches(rc.getCurrentCamera().getFrustumInModelCoordinates()))
 	  {
-		mesh.render(rc);
+		GLState state = new GLState(parentState);
+		state.disableDepthTest();
+		mesh.render(rc, state);
 	  }
 	}
   }

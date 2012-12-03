@@ -74,14 +74,14 @@ public class Trail
 		_mesh.dispose();
   }
 
-  public final void render(G3MRenderContext rc)
+  public final void render(G3MRenderContext rc, GLState parentState)
   {
 	if (_visible)
 	{
 	  Mesh mesh = getMesh(rc.getPlanet());
 	  if (mesh != null)
 	  {
-		mesh.render(rc);
+		mesh.render(rc, parentState);
 	  }
 	}
   }

@@ -21,7 +21,7 @@ package org.glob3.mobile.generated;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Mesh;
 
-public class LatLonMeshRenderer extends LeafRenderer
+public abstract class LatLonMeshRenderer extends LeafRenderer
 {
 
   private Mesh _mesh;

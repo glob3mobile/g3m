@@ -92,14 +92,14 @@ public class CompositeMesh extends Mesh
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void render(const G3MRenderContext* rc) const
-  public final void render(G3MRenderContext rc)
+//ORIGINAL LINE: void render(const G3MRenderContext* rc, const GLState& parentState) const
+  public final void render(G3MRenderContext rc, GLState parentState)
   {
 	final int childrenCount = _children.size();
 	for (int i = 0; i < childrenCount; i++)
 	{
 	  Mesh child = _children.get(i);
-	  child.render(rc);
+	  child.render(rc, parentState);
 	}
   }
 
@@ -137,13 +137,5 @@ public class CompositeMesh extends Mesh
   
 	_children.add(mesh);
   }
-
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: GLState* getGLState() const
-  public final GLState getGLState()
-  {
-	  return null;
-  }
-
 
 }

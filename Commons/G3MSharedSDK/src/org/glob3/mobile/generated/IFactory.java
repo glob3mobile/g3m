@@ -41,7 +41,7 @@ public abstract class IFactory
   {
 	if (_instance != null)
 	{
-	  ILogger.instance().logWarning("Warning, ILooger instance set two times\n");
+	  ILogger.instance().logWarning("Warning, ILogger instance set two times\n");
 	}
 	_instance = factory;
   }

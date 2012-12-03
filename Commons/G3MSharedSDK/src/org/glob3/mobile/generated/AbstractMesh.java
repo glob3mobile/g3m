@@ -83,7 +83,7 @@ public abstract class AbstractMesh extends Mesh
 	return new Box(new Vector3D(minx, miny, minz), new Vector3D(maxx, maxy, maxz));
   }
 
-  protected GLState _glState;
+//  GLState*          _glState;
 
   protected AbstractMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, Color flatColor, IFloatBuffer colors, float colorsIntensity)
   {
@@ -97,23 +97,11 @@ public abstract class AbstractMesh extends Mesh
 	  _center = new Vector3D(center);
 	  _translationMatrix = (center.isNan() || center.isZero()) ? null : new MutableMatrix44D(MutableMatrix44D.createTranslationMatrix(center));
 	  _lineWidth = lineWidth;
-	  _glState = new GLState();
-	_glState.enableVerticesPosition();
-	if (_colors != null)
-	  _glState.enableVertexColor(_colors, _colorsIntensity);
-	if (_flatColor != null)
-	{
-	  _glState.enableFlatColor(_flatColor, _colorsIntensity);
-	  if (_flatColor.isTransparent())
-	  {
-		_glState.enableBlend();
-	  }
-	}
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual void rawRender(const G3MRenderContext* rc) const = 0;
-  protected abstract void rawRender(G3MRenderContext rc);
+//ORIGINAL LINE: virtual void rawRender(const G3MRenderContext* rc, const GLState& parentState) const = 0;
+  protected abstract void rawRender(G3MRenderContext rc, GLState parentState);
 
   public void dispose()
   {
@@ -127,42 +115,59 @@ public abstract class AbstractMesh extends Mesh
 		  _flatColor.dispose();
 	}
   
-	if (_glState != null)
-		_glState.dispose();
 	_extent = null;
 	if (_translationMatrix != null)
 		_translationMatrix.dispose();
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void render(const G3MRenderContext *rc) const
-  public final void render(G3MRenderContext rc)
+//ORIGINAL LINE: void render(const G3MRenderContext *rc, const GLState& parentState) const
+  public final void render(G3MRenderContext rc, GLState parentState)
   {
 	GL gl = rc.getGL();
   
-	gl.setState(_glState);
-  
-  /*  gl->enableVerticesPosition();
-  
-	if (_colors == NULL) {
-	  gl->disableVertexColor();
+	GLState state = new GLState(parentState);
+	state.enableVerticesPosition();
+	if (_colors != null)
+	{
+	  state.enableVertexColor(_colors, _colorsIntensity);
 	}
-	else {
-	  gl->enableVertexColor(_colors, _colorsIntensity);
-	}
-  
-	bool blend = false;
-	if (_flatColor == NULL) {
-	  gl->disableVertexFlatColor();
-	}
-	else {
-	  if (_flatColor->isTransparent()) {
-		gl->enableBlend();
-		gl->setBlendFuncSrcAlpha();
-		blend = true;
+	if (_flatColor != null)
+	{
+	  state.enableFlatColor(_flatColor, _colorsIntensity);
+	  if (_flatColor.isTransparent())
+	  {
+		state.enableBlend();
 	  }
-	  gl->enableVertexFlatColor(*_flatColor, _colorsIntensity);
-	}*/
+	}
+	else
+	{
+	  state.disableVertexColor();
+	}
+  
+	/*
+	 gl->enableVerticesPosition();
+  
+	 if (_colors == NULL) {
+	 gl->disableVertexColor();
+	 }
+	 else {
+	 gl->enableVertexColor(_colors, _colorsIntensity);
+	 }
+  
+	 bool blend = false;
+	 if (_flatColor == NULL) {
+	 gl->disableVertexFlatColor();
+	 }
+	 else {
+	 if (_flatColor->isTransparent()) {
+	 gl->enableBlend();
+	 gl->setBlendFuncSrcAlpha();
+	 blend = true;
+	 }
+	 gl->enableVertexFlatColor(*_flatColor, _colorsIntensity);
+	 }
+	 */
   
 	gl.vertexPointer(3, 0, _vertices);
   
@@ -174,9 +179,8 @@ public abstract class AbstractMesh extends Mesh
 	  gl.multMatrixf(_translationMatrix);
 	}
   
-  
-	//  gl->drawElements(_primitive, _indices);
-	rawRender(rc);
+	gl.setState(state);
+	rawRender(rc, state);
   
   
 	if (_translationMatrix != null)
@@ -185,11 +189,11 @@ public abstract class AbstractMesh extends Mesh
 	}
   
 	/*
-	if (blend) {
-	  gl->disableBlend();
-	}
+	 if (blend) {
+	 gl->disableBlend();
+	 }
 	
-	gl->disableVerticesPosition();*/
+	 gl->disableVerticesPosition();*/
   
   }
 
@@ -228,13 +232,6 @@ public abstract class AbstractMesh extends Mesh
 	  return false;
 	}
 	return _flatColor.isTransparent();
-  }
-
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: GLState* getGLState() const
-  public final GLState getGLState()
-  {
-	  return _glState;
   }
 
 }

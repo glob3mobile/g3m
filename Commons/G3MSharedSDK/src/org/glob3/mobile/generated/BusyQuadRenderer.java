@@ -71,10 +71,6 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
   
 	_quadMesh = new TexturedMesh(im, true, texMap, true, false);
   
-	// set mesh glstate
-	GLState state = _quadMesh.getGLState();
-	state.enableBlend();
-  
 	return true;
   }
 
@@ -98,9 +94,12 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
 
 //C++ TO JAVA CONVERTER NOTE: This was formerly a static local variable declaration (not allowed in Java):
   private boolean render_firstTime = true;
-  public final void render(G3MRenderContext rc)
+  public final void render(G3MRenderContext rc, GLState parentState)
   {
 	GL gl = rc.getGL();
+  
+	GLState state = new GLState(parentState);
+	state.enableBlend();
   
 	if (_quadMesh == null)
 	{
@@ -133,6 +132,8 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
 	// clear screen
 	gl.clearScreen(0.0f, 0.0f, 0.0f, 1.0f);
   
+	gl.setState(state);
+  
 	//gl->enableBlend();
 	gl.setBlendFuncSrcAlpha();
   
@@ -142,7 +143,7 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
 	gl.multMatrixf(R1.multiply(R2));
   
 	// draw mesh
-	_quadMesh.render(rc);
+	_quadMesh.render(rc, parentState);
   
 	gl.popMatrix();
   

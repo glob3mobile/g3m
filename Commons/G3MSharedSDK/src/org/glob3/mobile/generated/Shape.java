@@ -175,7 +175,7 @@ public abstract class Shape implements EffectTarget
   }
 
 
-  public final void render(G3MRenderContext rc)
+  public final void render(G3MRenderContext rc, GLState parentState)
   {
 	if (isReadyToRender(rc))
 	{
@@ -195,7 +195,7 @@ public abstract class Shape implements EffectTarget
   
 	  gl.multMatrixf(getTransformMatrix(rc.getPlanet()));
   
-	  rawRender(rc);
+	  rawRender(rc, parentState);
   
 	  gl.popMatrix();
 	}
@@ -208,7 +208,7 @@ public abstract class Shape implements EffectTarget
 
   public abstract boolean isReadyToRender(G3MRenderContext rc);
 
-  public abstract void rawRender(G3MRenderContext rc);
+  public abstract void rawRender(G3MRenderContext rc, GLState parentState);
 
   public abstract boolean isTransparent(G3MRenderContext rc);
 

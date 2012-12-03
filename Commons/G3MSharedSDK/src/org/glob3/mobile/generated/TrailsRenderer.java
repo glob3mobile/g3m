@@ -69,13 +69,13 @@ public class TrailsRenderer extends LeafRenderer
 
   }
 
-  public final void render(G3MRenderContext rc)
+  public final void render(G3MRenderContext rc, GLState parentState)
   {
 	final int trailsCount = _trails.size();
 	for (int i = 0; i < trailsCount; i++)
 	{
 	  Trail trail = _trails.get(i);
-	  trail.render(rc);
+	  trail.render(rc, parentState);
 	}
   }
 

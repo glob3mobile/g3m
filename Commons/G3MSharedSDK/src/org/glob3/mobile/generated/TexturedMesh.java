@@ -36,16 +36,16 @@ public class TexturedMesh extends Mesh
 	  _textureMapping = textureMapping;
 	  _ownedTexMapping = ownedTexMapping;
 	  _transparent = transparent;
-	GLState state = _mesh.getGLState();
-	state.enableTextures();
-	state.enableTexture2D();
-	if (_transparent)
-	  state.enableBlend();
+//    GLState* state = _mesh->getGLState();
+//    state->enableTextures();
+//    state->enableTexture2D();
+//    if (_transparent) {
+//      state->enableBlend();
+//    }
   }
 
   public void dispose()
   {
-///#ifdef C_CODE
 	if (_ownedMesh)
 	{
 	  if (_mesh != null)
@@ -56,25 +56,32 @@ public class TexturedMesh extends Mesh
 	  if (_textureMapping != null)
 		  _textureMapping.dispose();
 	}
-///#endif
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void render(const G3MRenderContext* rc) const
-  public final void render(G3MRenderContext rc)
+//ORIGINAL LINE: void render(const G3MRenderContext* rc, const GLState& parentState) const
+  public final void render(G3MRenderContext rc, GLState parentState)
   {
-	//GL *gl = rc->getGL();
+	GL gl = rc.getGL();
   
 	//gl->enableTextures();
 	//gl->enableTexture2D();
   
+	GLState state = new GLState(parentState);
+	state.enableTextures();
+	state.enableTexture2D();
+	if (_transparent)
+	{
+	  state.enableBlend();
+	}
+  
+	gl.setState(state);
 	_textureMapping.bind(rc);
   
-	_mesh.render(rc);
+	_mesh.render(rc, state);
   
 	//gl->disableTexture2D();
 	//gl->disableTextures();
-  
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -103,13 +110,6 @@ public class TexturedMesh extends Mesh
   public final TextureMapping getTextureMapping()
   {
 	return _textureMapping;
-  }
-
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: GLState* getGLState() const
-  public final GLState getGLState()
-  {
-	  return _mesh.getGLState();
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:

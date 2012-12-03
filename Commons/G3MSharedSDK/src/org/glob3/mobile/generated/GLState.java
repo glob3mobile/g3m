@@ -14,7 +14,6 @@ package org.glob3.mobile.generated;
 
 public class GLState
 {
-
   private boolean _depthTest;
   private boolean _blend;
   private boolean _textures;
@@ -23,6 +22,7 @@ public class GLState
   private boolean _verticesPosition;
   private boolean _flatColor;
   private boolean _cullFace;
+  private int _culledFace;
 
   private IFloatBuffer _colors;
   private float _intensity;
@@ -30,10 +30,9 @@ public class GLState
   private float _flatColorG;
   private float _flatColorB;
   private float _flatColorA;
-  private int _culledFace;
 
 
-  public GLState()
+  private GLState()
   {
 	  _depthTest = true;
 	  _blend = false;
@@ -44,6 +43,38 @@ public class GLState
 	  _flatColor = false;
 	  _cullFace = true;
 	  _culledFace = GLCullFace.back();
+	  _colors = null;
+	  _intensity = 0F;
+	  _flatColorR = 0F;
+	  _flatColorG = 0F;
+	  _flatColorB = 0F;
+	  _flatColorA = 0F;
+  }
+
+
+
+  public static GLState newDefault()
+  {
+	return new GLState();
+  }
+
+  public GLState(GLState parentState)
+  {
+	  _depthTest = parentState._depthTest;
+	  _blend = parentState._blend;
+	  _textures = parentState._textures;
+	  _texture2D = parentState._texture2D;
+	  _vertexColor = parentState._vertexColor;
+	  _verticesPosition = parentState._verticesPosition;
+	  _flatColor = parentState._flatColor;
+	  _cullFace = parentState._cullFace;
+	  _culledFace = parentState._culledFace;
+	  _colors = parentState._colors;
+	  _intensity = parentState._intensity;
+	  _flatColorR = parentState._flatColorR;
+	  _flatColorG = parentState._flatColorG;
+	  _flatColorB = parentState._flatColorB;
+	  _flatColorA = parentState._flatColorA;
   }
 
   public void dispose()
@@ -154,13 +185,13 @@ public class GLState
 	  return _verticesPosition;
   }
 
-  public final void enableFlatColor(Color c, float intensity)
+  public final void enableFlatColor(Color color, float intensity)
   {
 	_flatColor = true;
-	_flatColorR = c.getRed();
-	_flatColorG = c.getGreen();
-	_flatColorB = c.getBlue();
-	_flatColorA = c.getAlpha();
+	_flatColorR = color.getRed();
+	_flatColorG = color.getGreen();
+	_flatColorB = color.getBlue();
+	_flatColorA = color.getAlpha();
 	_intensity = intensity;
   }
   public final void disableFlatColor()
@@ -201,5 +232,4 @@ public class GLState
   {
 	  return _culledFace;
   }
-
 }

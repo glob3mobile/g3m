@@ -87,30 +87,30 @@ public class GL
 
 
   /*void GL::enableCullFace(int face) {
-	if (_verbose) {
-	  ILogger::instance()->logInfo("GL::enableCullFace()");
-	}
-	if (!_enableCullFace) {
-	  _nativeGL->enable(GLFeature::cullFace());
-	  _enableCullFace = true;
-	}
+   if (_verbose) {
+   ILogger::instance()->logInfo("GL::enableCullFace()");
+   }
+   if (!_enableCullFace) {
+   _nativeGL->enable(GLFeature::cullFace());
+   _enableCullFace = true;
+   }
   
-	if (_cullFace_face != face) {
-	  _nativeGL->cullFace(face);
-	  _cullFace_face = face;
-	}
-  }
+   if (_cullFace_face != face) {
+   _nativeGL->cullFace(face);
+   _cullFace_face = face;
+   }
+   }
   
-  void GL::disableCullFace() {
-	if (_verbose) {
-	  ILogger::instance()->logInfo("GL::disableCullFace()");
-	}
+   void GL::disableCullFace() {
+   if (_verbose) {
+   ILogger::instance()->logInfo("GL::disableCullFace()");
+   }
   
-	if (_enableCullFace) {
-	  _nativeGL->disable(GLFeature::cullFace());
-	  _enableCullFace = false;
-	}
-  }*/
+   if (_enableCullFace) {
+   _nativeGL->disable(GLFeature::cullFace());
+   _enableCullFace = false;
+   }
+   }*/
   
   private IGLTextureId getGLTextureId()
   {
@@ -528,7 +528,7 @@ public class GL
 	final IGLTextureId texId = getGLTextureId();
 	if (texId != null)
 	{
-	  _nativeGL.blendFunc(GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha());
+	  //_nativeGL->blendFunc(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
 	  _nativeGL.pixelStorei(GLAlignment.unpack(), 1);
   
 	  _nativeGL.bindTexture(GLTextureType.texture2D(), texId);
@@ -709,177 +709,177 @@ public class GL
 
 
   /* // state handling
-  void GL::enableTextures() {
-	if (_verbose) {
-	  ILogger::instance()->logInfo("GL::enableTextures()");
-	}
+   void GL::enableTextures() {
+   if (_verbose) {
+   ILogger::instance()->logInfo("GL::enableTextures()");
+   }
   
-	if (!_enableTextures) {
-	  _nativeGL->enableVertexAttribArray(Attributes.TextureCoord);
-	  _enableTextures = true;
-	}
-  }
+   if (!_enableTextures) {
+   _nativeGL->enableVertexAttribArray(Attributes.TextureCoord);
+   _enableTextures = true;
+   }
+   }
   
-  void GL::disableTextures() {
-	if (_verbose) {
-	  ILogger::instance()->logInfo("GL::disableTextures()");
-	}
+   void GL::disableTextures() {
+   if (_verbose) {
+   ILogger::instance()->logInfo("GL::disableTextures()");
+   }
   
-	if (_enableTextures) {
-	  _nativeGL->disableVertexAttribArray(Attributes.TextureCoord);
-	  _enableTextures = false;
-	}
-  }
+   if (_enableTextures) {
+   _nativeGL->disableVertexAttribArray(Attributes.TextureCoord);
+   _enableTextures = false;
+   }
+   }
   
-  void GL::enableTexture2D() {
-	if (_verbose) {
-	  ILogger::instance()->logInfo("GL::enableTexture2D()");
-	}
+   void GL::enableTexture2D() {
+   if (_verbose) {
+   ILogger::instance()->logInfo("GL::enableTexture2D()");
+   }
   
-	if (!_enableTexture2D) {
-	  _nativeGL->uniform1i(Uniforms.EnableTexture, 1);
-	  _enableTexture2D = true;
-	}
-  }
+   if (!_enableTexture2D) {
+   _nativeGL->uniform1i(Uniforms.EnableTexture, 1);
+   _enableTexture2D = true;
+   }
+   }
   
-  void GL::disableTexture2D() {
-	if (_verbose) {
-	  ILogger::instance()->logInfo("GL::disableTexture2D()");
-	}
+   void GL::disableTexture2D() {
+   if (_verbose) {
+   ILogger::instance()->logInfo("GL::disableTexture2D()");
+   }
   
-	if (_enableTexture2D) {
-	  _nativeGL->uniform1i(Uniforms.EnableTexture, 0);
-	  _enableTexture2D = false;
-	}
-  }*/
+   if (_enableTexture2D) {
+   _nativeGL->uniform1i(Uniforms.EnableTexture, 0);
+   _enableTexture2D = false;
+   }
+   }*/
   
   /*void GL::enableVertexColor(IFloatBuffer* colors, float intensity) {
-	if (_verbose) {
-	  ILogger::instance()->logInfo("GL::enableVertexColor(color=%s, intensity=%f)",
-								   colors->description().c_str(),
-								   intensity);
-	}
-	if (!_enableVertexColor) {
-	  _nativeGL->uniform1i(Uniforms.EnableColorPerVertex, 1);
-	  _nativeGL->enableVertexAttribArray(Attributes.Color);
-	  _enableVertexColor = true;
-	}
+   if (_verbose) {
+   ILogger::instance()->logInfo("GL::enableVertexColor(color=%s, intensity=%f)",
+   colors->description().c_str(),
+   intensity);
+   }
+   if (!_enableVertexColor) {
+   _nativeGL->uniform1i(Uniforms.EnableColorPerVertex, 1);
+   _nativeGL->enableVertexAttribArray(Attributes.Color);
+   _enableVertexColor = true;
+   }
   
-	if ((_colors != colors) ||
-		(_colorsTimestamp != colors->timestamp()) ) {
-	  _nativeGL->vertexAttribPointer(Attributes.Color, 4, false, 0, colors);
-	  _colors = colors;
-	  _colorsTimestamp = _colors->timestamp();
-	}
+   if ((_colors != colors) ||
+   (_colorsTimestamp != colors->timestamp()) ) {
+   _nativeGL->vertexAttribPointer(Attributes.Color, 4, false, 0, colors);
+   _colors = colors;
+   _colorsTimestamp = _colors->timestamp();
+   }
   
-	_nativeGL->uniform1f(Uniforms.ColorPerVertexIntensity, intensity);
-  }
+   _nativeGL->uniform1f(Uniforms.ColorPerVertexIntensity, intensity);
+   }
   
-  void GL::disableVertexColor() {
-	if (_verbose) {
-	  ILogger::instance()->logInfo("GL::disableVertexColor()");
-	}
+   void GL::disableVertexColor() {
+   if (_verbose) {
+   ILogger::instance()->logInfo("GL::disableVertexColor()");
+   }
   
-	if (_enableVertexColor) {
-	  _nativeGL->disableVertexAttribArray(Attributes.Color);
-	  _nativeGL->uniform1i(Uniforms.EnableColorPerVertex, 0);
-	  _enableVertexColor = false;
-	}
-  }*/
+   if (_enableVertexColor) {
+   _nativeGL->disableVertexAttribArray(Attributes.Color);
+   _nativeGL->uniform1i(Uniforms.EnableColorPerVertex, 0);
+   _enableVertexColor = false;
+   }
+   }*/
   
   /*void GL::enableVerticesPosition() {
-	if (_verbose) {
-	  ILogger::instance()->logInfo("GL::enableVerticesPosition()");
-	}
-	if (!_enableVerticesPosition) {
-	  _nativeGL->enableVertexAttribArray(Attributes.Position);
-	  _enableVerticesPosition = true;
-	}
-  }
+   if (_verbose) {
+   ILogger::instance()->logInfo("GL::enableVerticesPosition()");
+   }
+   if (!_enableVerticesPosition) {
+   _nativeGL->enableVertexAttribArray(Attributes.Position);
+   _enableVerticesPosition = true;
+   }
+   }
   
-  void GL::disableVerticesPosition() {
-	if (_verbose) {
-	  ILogger::instance()->logInfo("GL::disableVerticesPosition()");
-	}
+   void GL::disableVerticesPosition() {
+   if (_verbose) {
+   ILogger::instance()->logInfo("GL::disableVerticesPosition()");
+   }
   
-	if (_enableVerticesPosition) {
-	  _nativeGL->disableVertexAttribArray(Attributes.Position);
-	  _enableVerticesPosition = false;
-	}
-  }*/
+   if (_enableVerticesPosition) {
+   _nativeGL->disableVertexAttribArray(Attributes.Position);
+   _enableVerticesPosition = false;
+   }
+   }*/
   
   /*void GL::enableVertexFlatColor(float r, float g, float b, float a,
-								 float intensity) {
-	if (_verbose) {
-	  ILogger::instance()->logInfo("GL::enableVertexFlatColor()");
-	}
+   float intensity) {
+   if (_verbose) {
+   ILogger::instance()->logInfo("GL::enableVertexFlatColor()");
+   }
   
-	if (!_enableFlatColor) {
-	  _nativeGL->uniform1i(Uniforms.EnableFlatColor, 1);
-	  _enableFlatColor = true;
-	}
+   if (!_enableFlatColor) {
+   _nativeGL->uniform1i(Uniforms.EnableFlatColor, 1);
+   _enableFlatColor = true;
+   }
   
-	color(r, g, b, a);
+   color(r, g, b, a);
   
-	//  _gl->uniform1f(Uniforms.FlatColorIntensity, intensity);
-	if (_flatColorIntensity != intensity) {
-	  _nativeGL->uniform1f(Uniforms.FlatColorIntensity, intensity);
-	  _flatColorIntensity = intensity;
-	}
-  }
+   //  _gl->uniform1f(Uniforms.FlatColorIntensity, intensity);
+   if (_flatColorIntensity != intensity) {
+   _nativeGL->uniform1f(Uniforms.FlatColorIntensity, intensity);
+   _flatColorIntensity = intensity;
+   }
+   }
   
-  void GL::disableVertexFlatColor() {
-	if (_verbose) {
-	  ILogger::instance()->logInfo("GL::disableVertexFlatColor()");
-	}
+   void GL::disableVertexFlatColor() {
+   if (_verbose) {
+   ILogger::instance()->logInfo("GL::disableVertexFlatColor()");
+   }
   
-	if (_enableFlatColor) {
-	  _nativeGL->uniform1i(Uniforms.EnableFlatColor, 0);
-	  _enableFlatColor = false;
-	}
-  }*/
+   if (_enableFlatColor) {
+   _nativeGL->uniform1i(Uniforms.EnableFlatColor, 0);
+   _enableFlatColor = false;
+   }
+   }*/
   
   /*void GL::enableDepthTest() {
-	if (_verbose) {
-	  ILogger::instance()->logInfo("GL::enableDepthTest()");
-	}
-	if (!_enableDepthTest) {
-	  _nativeGL->enable(GLFeature::depthTest());
-	  _enableDepthTest = true;
-	}
-  }
+   if (_verbose) {
+   ILogger::instance()->logInfo("GL::enableDepthTest()");
+   }
+   if (!_enableDepthTest) {
+   _nativeGL->enable(GLFeature::depthTest());
+   _enableDepthTest = true;
+   }
+   }
   
-  void GL::disableDepthTest() {
-	if (_verbose) {
-	  ILogger::instance()->logInfo("GL::disableDepthTest()");
-	}
+   void GL::disableDepthTest() {
+   if (_verbose) {
+   ILogger::instance()->logInfo("GL::disableDepthTest()");
+   }
   
-	if (_enableDepthTest) {
-	  _nativeGL->disable(GLFeature::depthTest());
-	  _enableDepthTest = false;
-	}
-  }*/
+   if (_enableDepthTest) {
+   _nativeGL->disable(GLFeature::depthTest());
+   _enableDepthTest = false;
+   }
+   }*/
   
   /*void GL::enableBlend() {
-	if (_verbose) {
-	  ILogger::instance()->logInfo("GL::enableBlend()");
-	}
-	if (!_enableBlend) {
-	  _nativeGL->enable(GLFeature::blend());
-	  _enableBlend = true;
-	}
-  }
+   if (_verbose) {
+   ILogger::instance()->logInfo("GL::enableBlend()");
+   }
+   if (!_enableBlend) {
+   _nativeGL->enable(GLFeature::blend());
+   _enableBlend = true;
+   }
+   }
   
-  void GL::disableBlend() {
-	if (_verbose) {
-	  ILogger::instance()->logInfo("GL::disableBlend()");
-	}
+   void GL::disableBlend() {
+   if (_verbose) {
+   ILogger::instance()->logInfo("GL::disableBlend()");
+   }
   
-	if (_enableBlend) {
-	  _nativeGL->disable(GLFeature::blend());
-	  _enableBlend = false;
-	}
-  }*/
+   if (_enableBlend) {
+   _nativeGL->disable(GLFeature::blend());
+   _enableBlend = false;
+   }
+   }*/
   
   public final void setBlendFuncSrcAlpha()
   {
@@ -987,9 +987,13 @@ public class GL
 	{
 	  _enableDepthTest = state.isEnabledDepthTest();
 	  if (_enableDepthTest)
+	  {
 		_nativeGL.enable(GLFeature.depthTest());
+	  }
 	  else
+	  {
 		_nativeGL.disable(GLFeature.depthTest());
+	  }
 	}
   
 	// Blending
@@ -997,9 +1001,13 @@ public class GL
 	{
 	  _enableBlend = state.isEnabledBlend();
 	  if (_enableBlend)
+	  {
 		_nativeGL.enable(GLFeature.blend());
+	  }
 	  else
+	  {
 		_nativeGL.disable(GLFeature.blend());
+	  }
 	}
   
 	// Textures
@@ -1007,9 +1015,13 @@ public class GL
 	{
 	  _enableTextures = state.isEnabledTextures();
 	  if (_enableTextures)
+	  {
 		_nativeGL.enableVertexAttribArray(GlobalMembersGL.Attributes.TextureCoord);
+	  }
 	  else
+	  {
 		_nativeGL.disableVertexAttribArray(GlobalMembersGL.Attributes.TextureCoord);
+	  }
 	}
   
 	// Texture2D
@@ -1017,9 +1029,13 @@ public class GL
 	{
 	  _enableTexture2D = state.isEnabledTexture2D();
 	  if (_enableTexture2D)
+	  {
 		_nativeGL.uniform1i(GlobalMembersGL.Uniforms.EnableTexture, 1);
+	  }
 	  else
+	  {
 		_nativeGL.uniform1i(GlobalMembersGL.Uniforms.EnableTexture, 0);
+	  }
 	}
   
 	// VertexColor
@@ -1050,9 +1066,13 @@ public class GL
 	{
 	  _enableVerticesPosition = state.isEnabledVerticesPosition();
 	  if (_enableVerticesPosition)
+	  {
 		_nativeGL.enableVertexAttribArray(GlobalMembersGL.Attributes.Position);
+	  }
 	  else
+	  {
 		_nativeGL.disableVertexAttribArray(GlobalMembersGL.Attributes.Position);
+	  }
 	}
   
 	// Flat Color
@@ -1060,14 +1080,19 @@ public class GL
 	{
 	  _enableFlatColor = state.isEnabledFlatColor();
 	  if (_enableFlatColor)
+	  {
 		_nativeGL.uniform1i(GlobalMembersGL.Uniforms.EnableFlatColor, 1);
+	  }
 	  else
+	  {
 		_nativeGL.uniform1i(GlobalMembersGL.Uniforms.EnableFlatColor, 0);
+	  }
 	}
+  
 	if (_enableFlatColor)
 	{
 	  color(state.getFlatColor());
-	  float intensity = state.getIntensity();
+	  final float intensity = state.getIntensity();
 	  if (_flatColorIntensity != intensity)
 	  {
 		_nativeGL.uniform1f(GlobalMembersGL.Uniforms.FlatColorIntensity, intensity);
@@ -1082,7 +1107,7 @@ public class GL
 	  if (_enableCullFace)
 	  {
 		_nativeGL.enable(GLFeature.cullFace());
-		int face = state.getCulledFace();
+		final int face = state.getCulledFace();
 		if (_cullFace_face != face)
 		{
 		  _nativeGL.cullFace(face);
@@ -1090,7 +1115,9 @@ public class GL
 		}
 	  }
 	  else
+	  {
 		_nativeGL.disable(GLFeature.cullFace());
+	  }
 	}
   
   }

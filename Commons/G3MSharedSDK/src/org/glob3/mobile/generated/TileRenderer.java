@@ -120,7 +120,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 	_texturizer.initialize(context, _parameters);
   }
 
-  public final void render(G3MRenderContext rc)
+  public final void render(G3MRenderContext rc, GLState parentState)
   {
 	// Saving camera for use in onTouchEvent
 	_lastCamera = rc.getCurrentCamera();
@@ -140,7 +140,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 	  for (int i = 0; i < topLevelTilesCount; i++)
 	  {
 		Tile tile = _topLevelTiles.get(i);
-		tile.render(rc, trc, null);
+		tile.render(rc, trc, parentState, null);
 	  }
 	}
 	else
@@ -159,7 +159,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 		{
 		  Tile tile = iter.next();
   
-		  tile.render(rc, trc, toVisitInNextIteration);
+		  tile.render(rc, trc, parentState, toVisitInNextIteration);
 		}
   
 		toVisit = toVisitInNextIteration;

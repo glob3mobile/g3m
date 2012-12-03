@@ -20,6 +20,8 @@ package org.glob3.mobile.generated;
 //class G3MContext;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class G3MRenderContext;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class GLState;
 
 public abstract class GEOObject
 {
@@ -38,6 +40,6 @@ public abstract class GEOObject
 	return true;
   }
 
-  public abstract void render(G3MRenderContext rc);
+  public abstract void render(G3MRenderContext rc, GLState parentState);
 
 }

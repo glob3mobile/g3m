@@ -58,21 +58,24 @@ public class SGGeometryNode extends SGNode
 		_indices.dispose();
   }
 
-  public final void rawRender(G3MRenderContext rc)
+  public final void rawRender(G3MRenderContext rc, GLState parentState)
   {
 	GL gl = rc.getGL();
   
-	// TEMP_commented_by_Agustin_until_decision_about_glstate
-	/*
-	gl->enableVerticesPosition();
+	GLState state = new GLState(parentState);
   
-	if (_colors == NULL) {
-	  gl->disableVertexColor();
+	int TEMP_commented_by_Agustin_until_decision_about_glstate;
+	state.enableVerticesPosition();
+  
+	if (_colors == null)
+	{
+	  state.disableVertexColor();
 	}
-	else {
-	  const float colorsIntensity = 1;
-	  gl->enableVertexColor(_colors, colorsIntensity);
-	}*/
+	else
+	{
+	  final float colorsIntensity = 1F;
+	  state.enableVertexColor(_colors, colorsIntensity);
+	}
   
 	if (_uv != null)
 	{
@@ -99,12 +102,18 @@ public class SGGeometryNode extends SGNode
   //    gl->disableBlend();
   //  }
   
+	gl.setState(state);
   
 	gl.vertexPointer(3, 0, _vertices);
   
 	gl.drawElements(_primitive, _indices);
   
 	//gl->disableVerticesPosition();
+  }
+
+  public final GLState createState(G3MRenderContext rc, GLState parentState)
+  {
+	return null;
   }
 
 }
