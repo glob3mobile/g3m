@@ -89,15 +89,11 @@ public class DummyRenderer extends LeafRenderer
 	GLState state = new GLState(parentState);
 	state.enableVerticesPosition();
   
-  
-	// obtaing gl object reference
 	GL gl = rc.getGL();
+  
 	gl.setState(state);
   
-	//gl->enableVerticesPosition();
   
-	// insert pointers
-	//gl->disableTextures();
 	gl.vertexPointer(3, 0, _vertices);
   
 	{
@@ -164,8 +160,6 @@ public class DummyRenderer extends LeafRenderer
 	  gl.drawElements(GLPrimitive.triangleStrip(), _indices);
 	  gl.popMatrix();
 	}
-  
-	//gl->enableTextures();
   
   }
 

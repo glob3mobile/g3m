@@ -93,6 +93,7 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
 	// set mesh glstate
 	GLState state = new GLState(parentState);
 	state.enableBlend();
+	gl.setBlendFuncSrcAlpha();
   
 	// init effect in the first render
 //C++ TO JAVA CONVERTER NOTE: This static local variable declaration (not allowed in Java) has been moved just prior to the method:
@@ -107,19 +108,14 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
 	// init modelview matrix
 	int[] currentViewport = new int[4];
 	gl.getViewport(currentViewport);
-	int halfWidth = currentViewport[2] / 2;
-	int halfHeight = currentViewport[3] / 2;
+	final int halfWidth = currentViewport[2] / 2;
+	final int halfHeight = currentViewport[3] / 2;
 	MutableMatrix44D M = MutableMatrix44D.createOrthographicProjectionMatrix(-halfWidth, halfWidth, -halfHeight, halfHeight, -halfWidth, halfWidth);
 	gl.setProjection(M);
 	gl.loadMatrixf(MutableMatrix44D.identity());
   
 	// clear screen
 	gl.clearScreen(0.0f, 0.0f, 0.0f, 1.0f);
-  
-	gl.setState(state);
-  
-	//gl->enableBlend();
-	gl.setBlendFuncSrcAlpha();
   
 	gl.pushMatrix();
 	MutableMatrix44D R1 = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(0), new Vector3D(-1, 0, 0));
@@ -130,8 +126,6 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
 	_mesh.render(rc, state);
   
 	gl.popMatrix();
-  
-	//gl->disableBlend();
   }
 
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)

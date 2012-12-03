@@ -64,24 +64,19 @@ public class TexturedMesh extends Mesh
   {
 	GL gl = rc.getGL();
   
-	//gl->enableTextures();
-	//gl->enableTexture2D();
-  
 	GLState state = new GLState(parentState);
 	state.enableTextures();
 	state.enableTexture2D();
 	if (_transparent)
 	{
 	  state.enableBlend();
+	  gl.setBlendFuncSrcAlpha();
 	}
   
 	gl.setState(state);
 	_textureMapping.bind(rc);
   
 	_mesh.render(rc, state);
-  
-	//gl->disableTexture2D();
-	//gl->disableTextures();
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:

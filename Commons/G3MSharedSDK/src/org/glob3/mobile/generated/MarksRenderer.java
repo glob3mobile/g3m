@@ -77,12 +77,8 @@ public class MarksRenderer extends LeafRenderer
   
 	GL gl = rc.getGL();
   
-	//gl->enableVerticesPosition();
-	//gl->enableTextures();
-	//gl->enableBlend();
-  
-	//gl->disableDepthTest();
 	gl.setState(state);
+	gl.setBlendFuncSrcAlpha();
   
 	final Vector3D radius = rc.getPlanet().getRadii();
 	final double minDistanceToCamera = (radius._x + radius._y + radius._z) / 3 * 0.75;
@@ -98,13 +94,6 @@ public class MarksRenderer extends LeafRenderer
 		mark.render(rc, state, minDistanceToCamera);
 	  }
 	}
-  
-	//gl->enableDepthTest();
-	//gl->disableBlend();
-  
-	//gl->disableTextures();
-	//gl->disableVerticesPosition();
-	//gl->disableTexture2D();
   }
 
   public final void addMark(Mark mark)

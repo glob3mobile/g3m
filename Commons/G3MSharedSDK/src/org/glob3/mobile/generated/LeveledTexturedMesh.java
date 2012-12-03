@@ -121,22 +121,16 @@ public class LeveledTexturedMesh extends Mesh
 	}
 	else
 	{
-	  GL gl = rc.getGL();
 	  GLState state = new GLState(parentState);
 	  state.enableTextures();
 	  state.enableTexture2D();
   
-	  //gl->enableTextures();
-	  //gl->enableTexture2D();
-  
+	  GL gl = rc.getGL();
 	  gl.setState(state);
   
 	  mapping.bind(rc);
   
 	  _mesh.render(rc, state);
-  
-	  //gl->disableTexture2D();
-	  //gl->disableTextures();
 	}
   }
 

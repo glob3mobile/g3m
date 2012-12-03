@@ -132,6 +132,7 @@ public abstract class AbstractMesh extends Mesh
 	{
 	  state.enableVertexColor(_colors, _colorsIntensity);
 	}
+  
 	if (_flatColor != null)
 	{
 	  state.enableFlatColor(_flatColor, _colorsIntensity);
@@ -141,34 +142,9 @@ public abstract class AbstractMesh extends Mesh
 		gl.setBlendFuncSrcAlpha();
 	  }
 	}
-	else
-	{
-	  state.disableVertexColor();
-	}
-  
-	/*
-	 gl->enableVerticesPosition();
-  
-	 if (_colors == NULL) {
-	 gl->disableVertexColor();
-	 }
-	 else {
-	 gl->enableVertexColor(_colors, _colorsIntensity);
-	 }
-  
-	 bool blend = false;
-	 if (_flatColor == NULL) {
-	 gl->disableVertexFlatColor();
-	 }
-	 else {
-	 if (_flatColor->isTransparent()) {
-	 gl->enableBlend();
-	 gl->setBlendFuncSrcAlpha();
-	 blend = true;
-	 }
-	 gl->enableVertexFlatColor(*_flatColor, _colorsIntensity);
-	 }
-	 */
+  //  else {
+  //    state.disableFlatColor();
+  //  }
   
 	gl.vertexPointer(3, 0, _vertices);
   
@@ -183,18 +159,10 @@ public abstract class AbstractMesh extends Mesh
 	gl.setState(state);
 	rawRender(rc, state);
   
-  
 	if (_translationMatrix != null)
 	{
 	  gl.popMatrix();
 	}
-  
-	/*
-	 if (blend) {
-	 gl->disableBlend();
-	 }
-	
-	 gl->disableVerticesPosition();*/
   
   }
 
