@@ -75,10 +75,6 @@ public:
   void initialize(const G3MContext* context,
                   SGShape *shape);
 
-  void prepareRender(const G3MRenderContext* rc);
-
-  void cleanUpRender(const G3MRenderContext* rc);
-
   const GLState* createState(const G3MRenderContext* rc,
                              const GLState& parentState);
 

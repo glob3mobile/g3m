@@ -390,7 +390,7 @@
       }
       /**/
 
-      /**/
+      /*
 //      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/coastline"
 //                                                                  ofType: @"geojson"];
 
@@ -417,7 +417,7 @@
           _geoRenderer->addGEOObject(geoObject);
         }
       }
-      /**/
+      */
     }
   };
 
