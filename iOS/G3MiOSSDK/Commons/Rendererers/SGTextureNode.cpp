@@ -90,12 +90,12 @@ SGTextureNode::~SGTextureNode() {
 void SGTextureNode::render(const G3MRenderContext* rc,
                            const GLState& parentState) {
   const GLState* myState = createState(rc, parentState);
-  const GLState* state;
+  const GLState* state2;
   if (myState == NULL) {
-    state = &parentState;
+    state2 = &parentState;
   }
   else {
-    state = myState;
+    state2 = myState;
   }
 
   prepareRender(rc);
@@ -106,10 +106,10 @@ void SGTextureNode::render(const G3MRenderContext* rc,
   for (int i = 0; i < layersCount; i++) {
     SGLayerNode* layer = _layers[i];
 
-    const GLState* layerState = layer->createState(rc, *state);
+    const GLState* layerState = layer->createState(rc, *state2);
     const GLState* state;
     if (layerState == NULL) {
-      state = &parentState;
+      state = state2;
     }
     else {
       state = layerState;
