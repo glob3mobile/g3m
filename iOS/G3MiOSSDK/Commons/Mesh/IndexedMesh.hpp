@@ -29,7 +29,7 @@ public:
               float lineWidth,
               Color* flatColor = NULL,
               IFloatBuffer* colors = NULL,
-              const float colorsIntensity = (float)0.0);
+              const float colorsIntensity = 0.0f);
 
   ~IndexedMesh();
 

@@ -34,8 +34,8 @@ public:
   void initialize(const G3MContext* context,
                   SGShape *shape);
 
-  void rawRender(const G3MRenderContext* rc,
-                 const GLState& parentState);
+//  void rawRender(const G3MRenderContext* rc,
+//                 const GLState& parentState);
 
   void prepareRender(const G3MRenderContext* rc);
 
@@ -45,6 +45,10 @@ public:
                              const GLState& parentState) {
     return  NULL;
   }
+
+  void render(const G3MRenderContext* rc,
+              const GLState& parentState);
+  
   
 };
 

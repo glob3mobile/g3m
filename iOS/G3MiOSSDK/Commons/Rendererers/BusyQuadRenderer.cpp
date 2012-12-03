@@ -60,33 +60,33 @@ bool BusyQuadRenderer::initMesh(const G3MRenderContext* rc) {
   vertices.add(-halfSize, -halfSize, 0);
   vertices.add(+halfSize, +halfSize, 0);
   vertices.add(+halfSize, -halfSize, 0);
-  
+
   IntBufferBuilder indices;
   indices.add(0);
   indices.add(1);
   indices.add(2);
   indices.add(3);
-  
+
   FloatBufferBuilderFromCartesian2D texCoords;
   texCoords.add(0, 0);
   texCoords.add(0, 1);
   texCoords.add(1, 0);
   texCoords.add(1, 1);
-  
+
   IndexedMesh *im = new IndexedMesh(GLPrimitive::triangleStrip(),
                                     true,
                                     Vector3D::zero(),
                                     vertices.create(),
                                     indices.create(),
                                     1);
-  
+
   TextureMapping* texMap = new SimpleTextureMapping(texId,
                                                     texCoords.create(),
                                                     true,
                                                     false);
-  
+
   _quadMesh = new TexturedMesh(im, true, texMap, true, false);
-  
+
   return true;
 }
 
@@ -94,7 +94,7 @@ bool BusyQuadRenderer::initMesh(const G3MRenderContext* rc) {
 void BusyQuadRenderer::render(const G3MRenderContext* rc,
                               const GLState& parentState) {
   GL* gl = rc->getGL();
-  
+
   GLState state(parentState);
   state.enableBlend();
 
@@ -103,8 +103,8 @@ void BusyQuadRenderer::render(const G3MRenderContext* rc,
       return;
     }
   }
-  
-  
+
+
   // init effect in the first render
   static bool firstTime = true;
   if (firstTime) {
@@ -112,7 +112,7 @@ void BusyQuadRenderer::render(const G3MRenderContext* rc,
     Effect *effect = new BusyEffect(this);
     rc->getEffectsScheduler()->startEffect(effect, this);
   }
-  
+
   // init modelview matrix
   int currentViewport[4];
   gl->getViewport(currentViewport);
@@ -123,23 +123,25 @@ void BusyQuadRenderer::render(const G3MRenderContext* rc,
                                                                             -halfWidth, halfWidth);
   gl->setProjection(M);
   gl->loadMatrixf(MutableMatrix44D::identity());
-  
+
   // clear screen
   gl->clearScreen(0.0f, 0.0f, 0.0f, 1.0f);
-    
+
+  gl->setState(state);
+
   //gl->enableBlend();
   gl->setBlendFuncSrcAlpha();
-  
+
   gl->pushMatrix();
   MutableMatrix44D R1 = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(0), Vector3D(-1, 0, 0));
   MutableMatrix44D R2 = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, 1));
   gl->multMatrixf(R1.multiply(R2));
-  
+
   // draw mesh
   _quadMesh->render(rc, parentState);
-  
+
   gl->popMatrix();
-  
+
   //gl->disableBlend();
   
 }

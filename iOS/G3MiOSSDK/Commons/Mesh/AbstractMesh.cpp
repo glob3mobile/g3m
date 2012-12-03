@@ -119,7 +119,9 @@ void AbstractMesh::render(const G3MRenderContext *rc,
       state.enableBlend();
     }
   }
-
+  else {
+    state.disableVertexColor();
+  }
 
   /*
    gl->enableVerticesPosition();

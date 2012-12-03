@@ -18,7 +18,7 @@ class SGShape;
 class GLState;
 
 class SGNode {
-private:
+protected:
   const std::string _id;
   const std::string _sId;
 
@@ -67,8 +67,8 @@ public:
   virtual void rawRender(const G3MRenderContext* rc,
                          const GLState& parentState);
 
-  void render(const G3MRenderContext* rc,
-              const GLState& parentState);
+  virtual void render(const G3MRenderContext* rc,
+                      const GLState& parentState);
 
   SGShape* getShape() const {
     if (_shape != NULL) {

@@ -12,7 +12,7 @@
 
 void TexturedMesh::render(const G3MRenderContext* rc,
                           const GLState& parentState) const {
-  //GL* gl = rc->getGL();
+  GL* gl = rc->getGL();
 
   //gl->enableTextures();
   //gl->enableTexture2D();
@@ -24,6 +24,7 @@ void TexturedMesh::render(const G3MRenderContext* rc,
     state.enableBlend();
   }
 
+  gl->setState(state);
   _textureMapping->bind(rc);
 
   _mesh->render(rc, state);

@@ -53,6 +53,8 @@ private:
   {
   }
 
+
+
 public:
   static GLState* newDefault() {
     return new GLState();
@@ -76,10 +78,6 @@ public:
   _flatColorA(parentState._flatColorA)
   {
   }
-
-//  static GLState* newDefault() {
-//    return new GLState();
-//  }
 
   ~GLState() {}
 
