@@ -64,7 +64,6 @@ public class SGGeometryNode extends SGNode
   
 	GLState state = new GLState(parentState);
   
-	int TEMP_commented_by_Agustin_until_decision_about_glstate;
 	state.enableVerticesPosition();
   
 	if (_colors == null)
@@ -84,31 +83,11 @@ public class SGGeometryNode extends SGNode
 	  gl.setTextureCoordinates(2, 0, _uv);
 	}
   
-  //  if (_transparent) {
-  //    gl->enableBlend();
-  //  }
-  //
-  //  gl->enableTextures();
-  //  gl->enableTexture2D();
-  //
-  //  _textureMapping->bind(rc);
-  //
-  //  _mesh->render(rc);
-  //
-  //  gl->disableTexture2D();
-  //  gl->disableTextures();
-  //
-  //  if (_transparent) {
-  //    gl->disableBlend();
-  //  }
-  
 	gl.setState(state);
   
 	gl.vertexPointer(3, 0, _vertices);
   
 	gl.drawElements(_primitive, _indices);
-  
-	//gl->disableVerticesPosition();
   }
 
   public final GLState createState(G3MRenderContext rc, GLState parentState)

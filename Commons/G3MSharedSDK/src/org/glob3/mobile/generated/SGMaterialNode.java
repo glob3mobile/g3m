@@ -48,36 +48,6 @@ public class SGMaterialNode extends SGNode
 		_specularColor.dispose();
   }
 
-  public final void prepareRender(G3MRenderContext rc)
-  {
-	//GL* gl = rc->getGL();
-  
-	int TEMP_commented_by_Agustin_until_decision_about_glstate;
-	/*
-	if (_specularColor == NULL) {
-	  gl->disableVertexFlatColor();
-	}
-	else {
-	  const float colorsIntensity = 1;
-	  gl->enableVertexFlatColor(*_specularColor, colorsIntensity);
-	}
-	 */
-  
-	super.prepareRender(rc);
-  }
-
-  public final void cleanUpRender(G3MRenderContext rc)
-  {
-	//GL* gl = rc->getGL();
-  
-	int TEMP_commented_by_Agustin_until_decision_about_glstate;
-	/*
-	gl->disableVertexFlatColor();
-	 */
-  
-	super.cleanUpRender(rc);
-  }
-
   public final GLState createState(G3MRenderContext rc, GLState parentState)
   {
 	if (_specularColor == null)

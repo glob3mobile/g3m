@@ -143,51 +143,6 @@ public class SGLayerNode extends SGNode
 	requestImage();
   }
 
-  public final void prepareRender(G3MRenderContext rc)
-  {
-	super.prepareRender(rc);
-	int TEMP_commented_by_Agustin_until_decision_about_glstate;
-  
-  //  //  SGShape* shape = getShape();
-  //
-  //  const IGLTextureId* texId = getTextureId(rc);
-  //  _textureBound = (texId != NULL);
-  //  if (_textureBound) {
-  //    GL* gl = rc->getGL();
-  //
-  //    //    if (_transparent) {
-  //    //      gl->enableBlend();
-  //    //    }
-  //
-  //    //gl->enableTextures();
-  //    //gl->enableTexture2D();
-  //
-  //    //    _textureMapping->bind(rc);
-  //    //    gl->transformTexCoords(_scale, _translation);
-  //    gl->bindTexture(texId);
-  //    //    gl->setTextureCoordinates(2, 0, _texCoords);
-  //  }
-  }
-
-  public final void cleanUpRender(G3MRenderContext rc)
-  {
-	int TEMP_commented_by_Agustin_until_decision_about_glstate;
-  //  if (_textureBound) {
-  //
-  //    //GL* gl = rc->getGL();
-  //    //gl->disableTexture2D();
-  //    //gl->disableTextures();
-  //
-  //    //    if (_transparent) {
-  //    //      gl->disableBlend();
-  //    //    }
-  //
-  //    _textureBound = false;
-  //  }
-  //
-	super.cleanUpRender(rc);
-  }
-
   public final GLState createState(G3MRenderContext rc, GLState parentState)
   {
 	final IGLTextureId texId = getTextureId(rc);
@@ -204,7 +159,6 @@ public class SGLayerNode extends SGNode
 	//      gl->enableBlend();
 	//    }
   
-	int TEMP_commented_by_Agustin_until_decision_about_glstate;
 	state.enableTextures();
 	state.enableTexture2D();
   
