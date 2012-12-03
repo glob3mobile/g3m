@@ -164,9 +164,9 @@ public class SGTextureNode extends SGNode
 	  layer.rawRender(rc, state);
   
 	  final int childrenCount = _children.size();
-	  for (int i = 0; i < childrenCount; i++)
+	  for (int j = 0; j < childrenCount; j++)
 	  {
-		SGNode child = _children.get(i);
+		SGNode child = _children.get(j);
 		child.render(rc, state);
 	  }
   
