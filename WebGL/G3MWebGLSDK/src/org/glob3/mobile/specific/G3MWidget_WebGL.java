@@ -15,6 +15,7 @@ import org.glob3.mobile.generated.CameraSingleDragHandler;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.CompositeRenderer;
 import org.glob3.mobile.generated.EllipsoidalTileTessellator;
+import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.G3MWidget;
 import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.Geodetic3D;
@@ -124,15 +125,11 @@ public final class G3MWidget_WebGL
       final ILogger logger = new Logger_WebGL(LogLevel.InfoLevel);
       final IFactory factory = new Factory_WebGL();
       final IStringUtils stringUtils = new StringUtils_WebGL();
-      final IThreadUtils threadUtils = new ThreadUtils_WebGL(_delayMillis);
       final IStringBuilder stringBuilder = new StringBuilder_WebGL();
       final IMathUtils mathUtils = new MathUtils_WebGL();
       final IJSONParser jsonParser = new JSONParser_WebGL();
-      final IStorage storage = null;
-      final IDownloader downloader = new Downloader_WebGL(8, _delayMillis, _proxy);
 
-      G3MWidget.initSingletons(logger, factory, stringUtils, threadUtils, stringBuilder, mathUtils, jsonParser, storage,
-               downloader);
+      G3MWidget.initSingletons(logger, factory, stringUtils, stringBuilder, mathUtils, jsonParser);
    }
 
 
@@ -336,8 +333,16 @@ public final class G3MWidget_WebGL
       final boolean logFPS = false;
       final boolean logDownloaderStatistics = false;
 
+      final IThreadUtils threadUtils = new ThreadUtils_WebGL(_delayMillis);
+      final IStorage storage = null;
+      final IDownloader downloader = new Downloader_WebGL(8, _delayMillis, _proxy);
+
+
       _widget = G3MWidget.create( //
                nativeGL, //
+               storage, //
+               downloader, //
+               threadUtils, //
                planet, //
                _cameraConstraints, //
                cameraRenderer, //
@@ -500,6 +505,11 @@ public final class G3MWidget_WebGL
 
    public void resetCameraPosition() {
       getG3MWidget().resetCameraPosition();
+   }
+
+
+   public G3MContext getG3MContext() {
+      return getG3MWidget().getG3MContext();
    }
 
 }

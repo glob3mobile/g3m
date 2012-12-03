@@ -48,17 +48,17 @@ public:
   
   void addLayer(Layer* layer);
   
-  std::vector<Petition*> createTileMapPetitions(const RenderContext* rc,
+  std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
                                                 const Tile* tile,
                                                 int width, int height) const;
   
-  void onTerrainTouchEvent(const EventContext* ec,
+  void onTerrainTouchEvent(const G3MEventContext* ec,
                            const Geodetic3D& g3d,
                            const Tile* tile) const;
   
   bool isReady() const;
   
-  void initialize(const InitializationContext* ic)const;
+  void initialize(const G3MContext* context)const;
   
   int size() const {
     return _layers.size();

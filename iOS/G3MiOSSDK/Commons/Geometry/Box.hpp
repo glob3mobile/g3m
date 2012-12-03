@@ -42,16 +42,25 @@ public:
   
   inline const std::vector<Vector3D> getCorners() const;
   
-  double squaredProjectedArea(const RenderContext* rc) const;
-  Vector2I projectedExtent(const RenderContext* rc) const;
+  double squaredProjectedArea(const G3MRenderContext* rc) const;
+  Vector2I projectedExtent(const G3MRenderContext* rc) const;
   
   bool contains(const Vector3D& p) const;
   
   Vector3D intersectionWithRay(const Vector3D& origin, const Vector3D& direction) const;
   
-  void render(const RenderContext* rc);
-  
+  void render(const G3MRenderContext* rc);
+
   bool touchesBox(const Box* box) const;
+
+  Extent* mergedWith(const Extent* that) const {
+    if (that == NULL) {
+      return NULL;
+    }
+    return that->mergedWithBox(this);
+  }
+
+  Extent* mergedWithBox(const Box* that) const;
 
   
 private:
@@ -59,11 +68,11 @@ private:
   const Vector3D _upper;
   
 #ifdef JAVA_CODE
-  java.util.ArrayList<Vector3D> _corners = null; // cache for getCorners() method
+  private java.util.ArrayList<Vector3D> _corners = null; // cache for getCorners() method
 #endif
   
   Mesh *_mesh;  
-  void createMesh();
+  void createMesh(Color *flatColor);
 
 };
 

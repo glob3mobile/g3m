@@ -23,10 +23,12 @@ public:
   
   virtual const Vector3D getVertex(int i) const = 0;
   
-  virtual void render(const RenderContext* rc) const = 0;
+  virtual void render(const G3MRenderContext* rc) const = 0;
   
   virtual Extent* getExtent() const = 0;
-  
+
+  virtual bool isTransparent(const G3MRenderContext* rc) const = 0;
+
 };
 
 

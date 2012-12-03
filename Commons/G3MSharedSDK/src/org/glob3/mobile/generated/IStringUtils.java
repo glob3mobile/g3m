@@ -70,8 +70,8 @@ public abstract class IStringUtils
 //ORIGINAL LINE: virtual String substring(const String& String, int beginIndex) const
   public String substring(String String, int beginIndex)
   {
-//    return substring(string, beginIndex, string.size() + 1);
-	  return substring(String, beginIndex, String.length());
+	//    return substring(string, beginIndex, string.size() + 1);
+	return substring(String, beginIndex, String.length());
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -84,20 +84,18 @@ public abstract class IStringUtils
 	{
 	  return originalString;
 	}
-	int endIndex = startIndex+toReplace.length();
-	String left = substring(originalString, 0, startIndex);
-	String right = substring(originalString, endIndex);
-	String result = left+replaceWith+right;
+	final int endIndex = startIndex+toReplace.length();
+	final String left = substring(originalString, 0, startIndex);
+	final String right = substring(originalString, endIndex);
+	final String result = left+replaceWith+right;
 	startIndex = indexOf(result, toReplace);
 	if (startIndex != -1)
 	{
 	  //recursive call to replace other ocurrences
 	  return replaceSubstring(result, toReplace, replaceWith);
 	}
-	else
-	{
-	  return result;
-	}
+
+	return result;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:

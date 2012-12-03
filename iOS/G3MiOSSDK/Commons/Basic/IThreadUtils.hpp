@@ -10,33 +10,44 @@
 #define __G3MiOSSDK__IThreadUtils__
 
 #include "GTask.hpp"
+#include <stdlib.h>
+
+class G3MContext;
 
 class IThreadUtils {
-private:
-  static IThreadUtils* _instance;
-  
+protected:
+#ifdef C_CODE
+  const G3MContext* _context;
+#endif
+#ifdef JAVA_CODE
+  protected G3MContext _context;
+#endif
+
 public:
-  
-  static void setInstance(IThreadUtils* logger) {
-    //    if (_instance != NULL) {
-    //      printf("Warning, IThreadUtils instance set two times\n");
-    //    }
-    _instance = logger;
+
+  IThreadUtils() :
+  _context(NULL)
+  {
+
   }
+
+  virtual void onResume(const G3MContext* context) = 0;
+
+  virtual void onPause(const G3MContext* context) = 0;
+
+  virtual void onDestroy(const G3MContext* context) = 0;
   
-  static IThreadUtils* instance() {
-    return _instance;
-  }
-  
+  virtual void initialize(const G3MContext* context);
+
   virtual ~IThreadUtils() {
     
   }
   
   virtual void invokeInRendererThread(GTask* task,
-                                      bool autoDelete) = 0;
+                                      bool autoDelete) const = 0;
   
   virtual void invokeInBackground(GTask* task,
-                                  bool autoDelete) = 0;
+                                  bool autoDelete) const = 0;
   
 };
 

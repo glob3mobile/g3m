@@ -21,6 +21,7 @@ package org.glob3.mobile.generated;
 public class CachedDownloader extends IDownloader
 {
   private IDownloader _downloader;
+  private IStorage _storage;
 
   private int _requestsCounter;
   private int _cacheHitsCounter;
@@ -28,9 +29,10 @@ public class CachedDownloader extends IDownloader
 
   private final boolean _saveInBackground;
 
-  public CachedDownloader(IDownloader downloader, boolean saveInBackground)
+  public CachedDownloader(IDownloader downloader, IStorage storage, boolean saveInBackground)
   {
 	  _downloader = downloader;
+	  _storage = storage;
 	  _requestsCounter = 0;
 	  _cacheHitsCounter = 0;
 	  _savesCounter = 0;
@@ -47,7 +49,7 @@ public class CachedDownloader extends IDownloader
 
   public final void start()
   {
-	  _downloader.start();
+	_downloader.start();
   }
 
   public final void stop()
@@ -59,56 +61,52 @@ public class CachedDownloader extends IDownloader
   {
 	_requestsCounter++;
   
-	final IByteBuffer cachedBuffer = IStorage.instance().isAvailable() ? IStorage.instance().readBuffer(url) : null;
+	final IByteBuffer cachedBuffer = _storage.isAvailable() ? _storage.readBuffer(url) : null;
 	if (cachedBuffer == null)
 	{
 	  // cache miss
-	  return _downloader.requestBuffer(url, priority, new BufferSaverDownloadListener(this, listener, deleteListener), true);
+	  return _downloader.requestBuffer(url, priority, new BufferSaverDownloadListener(this, listener, deleteListener, _storage), true);
 	}
-	else
+  
+	// cache hit
+	_cacheHitsCounter++;
+  
+	listener.onDownload(url, cachedBuffer);
+  
+	if (deleteListener)
 	{
-	  // cache hit
-	  _cacheHitsCounter++;
-  
-	  listener.onDownload(url, cachedBuffer);
-  
-	  if (deleteListener)
-	  {
-		listener = null;
-	  }
-  
-	  if (cachedBuffer != null)
-		  cachedBuffer.dispose();
-	  return -1;
+	  listener = null;
 	}
+  
+	if (cachedBuffer != null)
+		cachedBuffer.dispose();
+	return -1;
   }
 
   public final long requestImage(URL url, long priority, IImageDownloadListener listener, boolean deleteListener)
   {
 	_requestsCounter++;
   
-	final IImage cachedImage = IStorage.instance().isAvailable() ? IStorage.instance().readImage(url) : null;
+	final IImage cachedImage = _storage.isAvailable() ? _storage.readImage(url) : null;
 	if (cachedImage == null)
 	{
 	  // cache miss
-	  return _downloader.requestImage(url, priority, new ImageSaverDownloadListener(this, listener, deleteListener), true);
+	  return _downloader.requestImage(url, priority, new ImageSaverDownloadListener(this, listener, deleteListener, _storage), true);
 	}
-	else
+  
+	// cache hit
+	_cacheHitsCounter++;
+  
+	listener.onDownload(url, cachedImage);
+  
+	if (deleteListener)
 	{
-	  // cache hit
-	  _cacheHitsCounter++;
-  
-	  listener.onDownload(url, cachedImage);
-  
-	  if (deleteListener)
-	  {
-		listener = null;
-	  }
-  
-	  if (cachedImage != null)
-		  cachedImage.dispose();
-	  return -1;
+	  listener = null;
 	}
+  
+	if (cachedImage != null)
+		cachedImage.dispose();
+	return -1;
   }
 
   public final void cancelRequest(long requestId)
@@ -118,6 +116,8 @@ public class CachedDownloader extends IDownloader
 
   public void dispose()
   {
+	if (_downloader != null)
+		_downloader.dispose();
   }
 
   public final String statistics()
@@ -130,8 +130,8 @@ public class CachedDownloader extends IDownloader
 	isb.addString(", saves=");
 	isb.addInt(_savesCounter);
 	isb.addString(", downloader=");
-  //  isb->addString(IDownloader::instance()->statistics());
-	  isb.addString(_downloader.statistics());
+	//isb->addString(IDownloader::instance()->statistics());
+	isb.addString(_downloader.statistics());
 	final String s = isb.getString();
 	if (isb != null)
 		isb.dispose();
@@ -143,18 +143,24 @@ public class CachedDownloader extends IDownloader
 	_savesCounter++;
   }
 
-  public final void onResume(InitializationContext ic)
+  public final void onResume(G3MContext context)
   {
-  //  IDownloader::instance()->onResume(ic);
-	  _downloader.onResume(ic);
-	  IStorage.instance().onResume(ic);
+	_downloader.onResume(context);
   }
 
-  public final void onPause(InitializationContext ic)
+  public final void onPause(G3MContext context)
   {
-  //  IDownloader::instance()->onPause(ic);
-	  _downloader.onPause(ic);
-	IStorage.instance().onPause(ic);
+	_downloader.onPause(context);
+  }
+
+  public final void onDestroy(G3MContext context)
+  {
+	_downloader.onDestroy(context);
+  }
+
+  public final void initialize(G3MContext context)
+  {
+	_downloader.initialize(context);
   }
 
 }

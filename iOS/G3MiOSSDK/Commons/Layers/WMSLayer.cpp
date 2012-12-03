@@ -12,7 +12,7 @@
 
 #include "IStringBuilder.hpp"
 
-std::vector<Petition*> WMSLayer::getMapPetitions(const RenderContext* rc,
+std::vector<Petition*> WMSLayer::getMapPetitions(const G3MRenderContext* rc,
                                                  const Tile* tile,
                                                  int width, int height) const {
   std::vector<Petition*> petitions;

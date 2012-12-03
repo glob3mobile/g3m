@@ -24,7 +24,7 @@
 
 #include "GLConstants.hpp"
 
-Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
+Mesh* EllipsoidalTileTessellator::createMesh(const G3MRenderContext* rc,
                                              const Tile* tile) const {
   
   const Sector sector = tile->getSector();
@@ -185,7 +185,7 @@ IFloatBuffer* EllipsoidalTileTessellator::createUnitTextCoords() const {
 }
 
 
-Mesh* EllipsoidalTileTessellator::createDebugMesh(const RenderContext* rc,
+Mesh* EllipsoidalTileTessellator::createDebugMesh(const G3MRenderContext* rc,
                                                   const Tile* tile) const
 {
   const Sector sector = tile->getSector();

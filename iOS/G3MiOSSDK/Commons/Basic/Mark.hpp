@@ -51,61 +51,59 @@ private:
     bool    _renderedMark;
     
 public:
-    Mark(const std::string name,
-         const URL         textureURL,
-         const Geodetic3D  position,
-         void* userData=NULL, const double minDistanceToCamera=0) :
-    _name(name),
-    _textureURL(textureURL),
-    _position(position),
-    _userData(userData),
-    _minDistanceToCamera(minDistanceToCamera),
-    _textureId(NULL),
-    _cartesianPosition(NULL),
-    _vertices(NULL),
-    _textureSolved(false),
-    _textureImage(NULL),
-    _renderedMark(false),
-    _textureWidth(0),
-    _textureHeight(0)
-    {
-
-    }
+  Mark(const std::string name,
+       const URL         textureURL,
+       const Geodetic3D  position,
+       void* userData=NULL, const double minDistanceToCamera=0) :
+  _name(name),
+  _textureURL(textureURL),
+  _position(position),
+  _userData(userData),
+  _minDistanceToCamera(minDistanceToCamera),
+  _textureId(NULL),
+  _cartesianPosition(NULL),
+  _vertices(NULL),
+  _textureSolved(false),
+  _textureImage(NULL),
+  _renderedMark(false),
+  _textureWidth(0),
+  _textureHeight(0)
+  {
     
-    ~Mark();
-    
-    const std::string getName() const {
-        return _name;
-    }
-    
-    const Geodetic3D getPosition() const {
-        return _position;
-    }
-    
-    void initialize(const InitializationContext* ic);
-    
-    void render(const RenderContext* rc);
-    
-    bool isReady() const;
-    
-    bool isRendered() const {
-        return _renderedMark;
-    }
-    
-    void onTextureDownloadError();
-    
-    void onTextureDownload(const IImage* image);
-    
-    int getTextureWidth() const;
-    int getTextureHeight() const;
-    Vector2I getTextureExtent() const;
-    
+  }
+  
+  ~Mark();
+  
+  const std::string getName() const {
+    return _name;
+  }
+  
+  const Geodetic3D getPosition() const {
+    return _position;
+  }
+  
+  void initialize(const G3MContext* context);
+  
+  void render(const G3MRenderContext* rc);
+  
+  bool isReady() const;
+  
+  bool isRendered() const {
+    return _renderedMark;
+  }
+  
+  void onTextureDownloadError();
+  
+  void onTextureDownload(const IImage* image);
+  
+  int getTextureWidth() const;
+  int getTextureHeight() const;
+  Vector2I getTextureExtent() const;
+  
     const void* getUserData() const {
         return _userData;
     }
     
-    void setUserData(void* userData);
-    
-};
+    void setUserData(void* userData);};
 
 #endif

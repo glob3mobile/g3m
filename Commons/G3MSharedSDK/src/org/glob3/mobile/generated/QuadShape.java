@@ -31,7 +31,7 @@ public class QuadShape extends MeshShape
   private final float _width;
   private final float _height;
 
-  private IGLTextureId getTextureId(RenderContext rc)
+  private IGLTextureId getTextureId(G3MRenderContext rc)
   {
 	if (_textureImage == null)
 	{
@@ -54,11 +54,11 @@ public class QuadShape extends MeshShape
 	return texId;
   }
 
-  protected final Mesh createMesh(RenderContext rc)
+  protected final Mesh createMesh(G3MRenderContext rc)
   {
   
-	final float halfWidth = (float) _width / 2.0f;
-	final float halfHeight = (float) _height / 2.0f;
+	final float halfWidth = _width / 2.0f;
+	final float halfHeight = _height / 2.0f;
   
 	final float left = -halfWidth;
 	final float right = +halfWidth;
@@ -94,7 +94,7 @@ public class QuadShape extends MeshShape
 	texCoords.add(0, 0);
 	texCoords.add(1, 0);
   
-	TextureMapping texMap = new SimpleTextureMapping(texId, texCoords.create(), true);
+	TextureMapping texMap = new SimpleTextureMapping(texId, texCoords.create(), true, true);
   
 	return new TexturedMesh(im, true, texMap, true, true);
   }

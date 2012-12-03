@@ -105,7 +105,7 @@ public class SimplePlanetRenderer extends LeafRenderer
 	return texCoords.create();
   }
 
-  private boolean initializeMesh(RenderContext rc)
+  private boolean initializeMesh(G3MRenderContext rc)
   {
   
   
@@ -136,10 +136,9 @@ public class SimplePlanetRenderer extends LeafRenderer
   
 	//FLAT COLOR
 	Color flatColor = null;
-	if (false)
-	{
-	  flatColor = new Color(Color.fromRGBA((float) 0.0, (float) 1.0, (float) 0.0, (float) 1.0));
-	}
+  //  if (false){
+  //    flatColor = new Color( Color::fromRGBA(0.0, 1.0, 0.0, 1.0) );
+  //  }
   
 	IndexedMesh im = new IndexedMesh(GLPrimitive.triangleStrip(), true, Vector3D.zero(), ver, ind, 1, flatColor, vertexColors);
   
@@ -166,12 +165,10 @@ public class SimplePlanetRenderer extends LeafRenderer
 	  }
 	  texC = createTextureCoordinates();
   
-	  TextureMapping texMap = new SimpleTextureMapping(texId, texC, true);
+	  TextureMapping texMap = new SimpleTextureMapping(texId, texC, true, false);
   
 	  _mesh = new TexturedMesh(im, true, texMap, true, false);
 	}
-  
-  
   
 	return true;
   }
@@ -191,12 +188,12 @@ public class SimplePlanetRenderer extends LeafRenderer
 		_mesh.dispose();
   }
 
-  public final void initialize(InitializationContext ic)
+  public final void initialize(G3MContext context)
   {
   
   }
 
-  public final void render(RenderContext rc)
+  public final void render(G3MRenderContext rc)
   {
 	if (_mesh == null)
 	{
@@ -209,17 +206,17 @@ public class SimplePlanetRenderer extends LeafRenderer
 	_mesh.render(rc);
   }
 
-  public final boolean onTouchEvent(EventContext ec, TouchEvent touchEvent)
+  public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
 	return false;
   }
 
-  public final void onResizeViewportEvent(EventContext ec, int width, int height)
+  public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
 
   }
 
-  public final boolean isReadyToRender(RenderContext rc)
+  public final boolean isReadyToRender(G3MRenderContext rc)
   {
 	return true;
   }
@@ -234,15 +231,19 @@ public class SimplePlanetRenderer extends LeafRenderer
 
   }
 
-  public final void onResume(InitializationContext ic)
+  public final void onResume(G3MContext context)
   {
 
   }
 
-  public final void onPause(InitializationContext ic)
+  public final void onPause(G3MContext context)
   {
 
   }
 
+  public final void onDestroy(G3MContext context)
+  {
+
+  }
 
 }

@@ -149,4 +149,10 @@ public final class IntBuffer_WebGL
    }-*/;
 
 
+   @Override
+   public String description() {
+      return "IntBuffer_WebGL(timestamp=" + _timestamp + ", buffer=" + _buffer + ")";
+   }
+
+
 }

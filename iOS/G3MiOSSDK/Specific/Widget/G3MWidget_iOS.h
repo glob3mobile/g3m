@@ -24,6 +24,7 @@ class TilesRenderParameters;
 class G3MWidget;
 class PeriodicalTask;
 class GTask;
+class G3MContext;
 
 // opengl versions value
 enum GL_version {
@@ -86,5 +87,7 @@ enum GL_version {
 - (G3MWidget*) widget;
 
 - (void)initSingletons;
+
+- (const G3MContext*)getG3MContext;
 
 @end

@@ -18,14 +18,16 @@ package org.glob3.mobile.generated;
 
 
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class InitializationContext;
+//class G3MContext;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class RenderContext;
+//class G3MRenderContext;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class SGShape;
 
 public class SGNode
 {
-  private String _id;
-  private String _sId;
+  private final String _id;
+  private final String _sId;
 
   private SGNode _parent;
   private java.util.ArrayList<SGNode> _children = new java.util.ArrayList<SGNode>();
@@ -36,27 +38,17 @@ public class SGNode
 	_parent = parent;
   }
 
-  protected InitializationContext _initializationContext;
+  protected G3MContext _context;
 
-  protected void prepareRender(RenderContext rc)
+  protected SGShape _shape;
+
+
+  public SGNode(String id, String sId)
   {
-  
-  }
-
-  protected void cleanUpRender(RenderContext rc)
-  {
-  
-  }
-
-  protected void rawRender(RenderContext rc)
-  {
-  
-  }
-
-
-  public SGNode()
-  {
-	  _initializationContext = null;
+	  _id = id;
+	  _sId = sId;
+	  _context = null;
+	  _shape = null;
 	  _parent = null;
 
   }
@@ -72,15 +64,16 @@ public class SGNode
 	}
   }
 
-  public final void initialize(InitializationContext ic)
+  public void initialize(G3MContext context, SGShape shape)
   {
-	_initializationContext = ic;
+	_context = context;
+	_shape = shape;
   
 	final int childrenCount = _children.size();
 	for (int i = 0; i < childrenCount; i++)
 	{
 	  SGNode child = _children.get(i);
-	  child.initialize(ic);
+	  child.initialize(context, shape);
 	}
   }
 
@@ -88,23 +81,13 @@ public class SGNode
   {
 	child.setParent(this);
 	_children.add(child);
-	if (_initializationContext != null)
+	if (_context != null)
 	{
-	  child.initialize(_initializationContext);
+	  child.initialize(_context, _shape);
 	}
   }
 
-  public final void setId(String id)
-  {
-	_id = id;
-  }
-
-  public final void setSId(String sId)
-  {
-	_sId = sId;
-  }
-
-  public boolean isReadyToRender(RenderContext rc)
+  public boolean isReadyToRender(G3MRenderContext rc)
   {
 	final int childrenCount = _children.size();
 	for (int i = 0; i < childrenCount; i++)
@@ -119,7 +102,22 @@ public class SGNode
 	return true;
   }
 
-  public final void render(RenderContext rc)
+  public void prepareRender(G3MRenderContext rc)
+  {
+  
+  }
+
+  public void cleanUpRender(G3MRenderContext rc)
+  {
+  
+  }
+
+  public void rawRender(G3MRenderContext rc)
+  {
+  
+  }
+
+  public final void render(G3MRenderContext rc)
   {
 	prepareRender(rc);
   
@@ -135,4 +133,19 @@ public class SGNode
 	cleanUpRender(rc);
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: SGShape* getShape() const
+  public final SGShape getShape()
+  {
+	// return (_parent == NULL) ? _shape : _parent->getShape();
+	if (_shape != null)
+	{
+	  return _shape;
+	}
+	if (_parent != null)
+	{
+	  return _parent.getShape();
+	}
+	return null;
+  }
 }

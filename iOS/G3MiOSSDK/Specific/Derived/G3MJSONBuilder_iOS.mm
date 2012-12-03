@@ -40,21 +40,23 @@ void  G3MJSONBuilder_iOS::initWidgetWithCameraConstraints (std::vector<ICameraCo
         GTask* _customInitializationTask;
         MarksRenderer* _marksRenderer;
         std::map<std::string, std::string> _mapGeoJSONSources;
+        G3MWidget_iOS* _g3mWidget;
     public:
-        G3MJSONBuilderInitializationTask(GTask* customInitializationTask, MarksRenderer* marksRenderer){
+        G3MJSONBuilderInitializationTask(GTask* customInitializationTask, MarksRenderer* marksRenderer, G3MWidget_iOS* g3mWidget){
             _customInitializationTask = customInitializationTask;
             _marksRenderer = marksRenderer;
             _mapGeoJSONSources = SceneParser::instance()->getMapGeoJSONSources();
+            _g3mWidget = g3mWidget;
         }
         
-        void run() {            
+        void run(const G3MContext* context) {            
             if(!_mapGeoJSONSources.empty()){
                 for (std::map<std::string, std::string>::iterator it=_mapGeoJSONSources.begin(); it!=_mapGeoJSONSources.end(); it++){
-                    IDownloader::instance()->requestBuffer(URL(it->first, false), 100000000L, new GEOJSONDownloadListener(_marksRenderer, it->second), true);
+                    [_g3mWidget getG3MContext]->getDownloader()->requestBuffer(URL(it->first, false), 100000000L, new GEOJSONDownloadListener(_marksRenderer, it->second), true);
                 }            
             }
             if (_customInitializationTask!=NULL){
-                _customInitializationTask->run();
+                _customInitializationTask->run(context);
             }
         }
     };
@@ -65,7 +67,7 @@ void  G3MJSONBuilder_iOS::initWidgetWithCameraConstraints (std::vector<ICameraCo
                          incrementalTileQuality: incrementalTileQuality
                                       renderers: renderers
                                        userData: userData
-                             initializationTask: new G3MJSONBuilderInitializationTask(initializationTask, marksRenderer)
+                             initializationTask: new G3MJSONBuilderInitializationTask(initializationTask, marksRenderer, _g3mWidget)
                                 periodicalTasks: periodicalTasks];
     
 }

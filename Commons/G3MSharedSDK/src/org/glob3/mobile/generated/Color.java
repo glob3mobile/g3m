@@ -32,6 +32,11 @@ public class Color
 	  _alpha = that._alpha;
   }
 
+  public void dispose()
+  {
+
+  }
+
   public static Color fromRGBA(float red, float green, float blue, float alpha)
   {
 	return new Color(red, green, blue, alpha);
@@ -99,6 +104,13 @@ public class Color
 	final float newAlpha = (getAlpha() * frac2) + (that.getAlpha() * frac1);
 
 	return Color.fromRGBA(newRed, newGreen, newBlue, newAlpha);
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isTransparent() const
+  public final boolean isTransparent()
+  {
+	return (_alpha < 1);
   }
 
 }

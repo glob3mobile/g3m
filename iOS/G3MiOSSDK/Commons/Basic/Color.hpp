@@ -36,6 +36,10 @@ public:
   _alpha(that._alpha) {
   }
 
+  ~Color() {
+
+  }
+
   static Color fromRGBA(const float red,
                         const float green,
                         const float blue,
@@ -89,6 +93,10 @@ public:
     const float newAlpha = (getAlpha() * frac2) + (that.getAlpha() * frac1);
     
     return Color::fromRGBA(newRed, newGreen, newBlue, newAlpha);
+  }
+
+  bool isTransparent() const {
+    return (_alpha < 1);
   }
     
 };

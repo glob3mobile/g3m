@@ -104,7 +104,22 @@ public:
   
   virtual int toInt(double value) const = 0;
   virtual int toInt(float value) const = 0;
-  
+
+  virtual double min(double d1, double d2) const = 0;
+  virtual double max(double d1, double d2) const = 0;
+
+  virtual double lerp(double from,
+                      double to,
+                      double alpha) {
+    return from + ((to - from) * alpha);
+  }
+
+  virtual float lerp(float from,
+                     float to,
+                     float alpha) {
+    return from + ((to - from) * alpha);
+  }
+
 };
 
 

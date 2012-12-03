@@ -116,6 +116,15 @@ public:
   int toInt(double value) const { return (int) value; }
   int toInt(float value) const { return (int) value; }
 
+
+  double min(double d1, double d2) const {
+    return (d1 < d2) ? d1 : d2;
+  }
+
+  double max(double d1, double d2) const {
+    return (d1 > d2) ? d1 : d2;
+  }
+
 };
 
 #endif

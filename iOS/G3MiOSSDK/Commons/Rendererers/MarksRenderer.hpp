@@ -29,12 +29,12 @@ private:
   std::vector<Mark*> _marks;
   
 #ifdef C_CODE
-  const InitializationContext* _initializationContext;
-  const Camera*                _lastCamera;
+  const G3MContext* _context;
+  const Camera*     _lastCamera;
 #endif
 #ifdef JAVA_CODE
-  private InitializationContext _initializationContext;
-  private Camera                _lastCamera;
+  private G3MContext _context;
+  private Camera     _lastCamera;
 #endif
   
   MarkTouchListener* _markTouchListener;
@@ -44,7 +44,7 @@ public:
   
   MarksRenderer(bool readyWhenMarksReady) :
   _readyWhenMarksReady(readyWhenMarksReady),
-  _initializationContext(NULL),
+  _context(NULL),
   _lastCamera(NULL),
   _markTouchListener(NULL),
   _autoDeleteMarkTouchListener(false)
@@ -73,21 +73,21 @@ public:
     _markTouchListener = NULL;
   };
   
-  virtual void initialize(const InitializationContext* ic);
+  virtual void initialize(const G3MContext* context);
   
-  virtual void render(const RenderContext* rc);
+  virtual void render(const G3MRenderContext* rc);
   
   void addMark(Mark* mark);
   
-  bool onTouchEvent(const EventContext* ec,
+  bool onTouchEvent(const G3MEventContext* ec,
                     const TouchEvent* touchEvent);
 
-  void onResizeViewportEvent(const EventContext* ec,
+  void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height) {
     
   }
   
-  bool isReadyToRender(const RenderContext* rc);
+  bool isReadyToRender(const G3MRenderContext* rc);
   
   void start() {
     
@@ -97,14 +97,18 @@ public:
     
   }
   
-  void onResume(const InitializationContext* ic) {
-    _initializationContext = ic;
+  void onResume(const G3MContext* context) {
+    _context = context;
   }
   
-  void onPause(const InitializationContext* ic) {
-    
+  void onPause(const G3MContext* context) {
+
   }
-  
+
+  void onDestroy(const G3MContext* context) {
+
+  }
+
 };
 
 #endif

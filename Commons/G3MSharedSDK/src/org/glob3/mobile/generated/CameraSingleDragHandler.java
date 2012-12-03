@@ -3,10 +3,10 @@ public class CameraSingleDragHandler extends CameraEventHandler
 {
 
   public CameraSingleDragHandler(boolean useInertia)
+//  _initialPixel(0,0),
   {
 	  _camera0 = new Camera(new Camera(0, 0));
 	  _initialPoint = new MutableVector3D(0,0,0);
-	  _initialPixel = new MutableVector2I(0,0);
 	  _useInertia = useInertia;
   }
 
@@ -15,7 +15,7 @@ public class CameraSingleDragHandler extends CameraEventHandler
   }
 
 
-  public final boolean onTouchEvent(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  public final boolean onTouchEvent(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
 	// only one finger needed
 	if (touchEvent.getTouchCount()!=1)
@@ -40,7 +40,7 @@ public class CameraSingleDragHandler extends CameraEventHandler
 	return true;
   }
 
-  public final void render(RenderContext rc, CameraContext cameraContext)
+  public final void render(G3MRenderContext rc, CameraContext cameraContext)
   {
   //  // TEMP TO DRAW A POINT WHERE USER PRESS
   //  if (false) {
@@ -67,7 +67,7 @@ public class CameraSingleDragHandler extends CameraEventHandler
   }
 
   public final boolean _useInertia;
-  public final void onDown(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  public final void onDown(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
 	Camera camera = cameraContext.getNextCamera();
 	_camera0.copyFrom(camera);
@@ -77,12 +77,12 @@ public class CameraSingleDragHandler extends CameraEventHandler
   
 	// dragging
 	final Vector2I pixel = touchEvent.getTouch(0).getPos();
-	_initialPixel = pixel.asMutableVector2I();
+	//_initialPixel = pixel.asMutableVector2I();
 	_initialPoint = _camera0.pixel2PlanetPoint(pixel).asMutableVector3D();
   
 	//printf ("down 1 finger. Initial point = %f %f %f\n", _initialPoint.x(), _initialPoint.y(), _initialPoint.z());
   }
-  public final void onMove(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  public final void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
   
 	if (cameraContext.getCurrentGesture()!=Gesture.Drag)
@@ -122,7 +122,7 @@ public class CameraSingleDragHandler extends CameraEventHandler
 	_radiansStep = radians - _lastRadians;
 	_lastRadians = radians;
   }
-  public final void onUp(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  public final void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
 	if (_useInertia)
 	{
@@ -144,13 +144,13 @@ public class CameraSingleDragHandler extends CameraEventHandler
   
 	// update gesture
 	cameraContext.setCurrentGesture(Gesture.None);
-	_initialPixel = MutableVector2I.zero();
+	//_initialPixel = MutableVector2I::zero();
   }
 
   private Camera _camera0 ; //Initial Camera saved on Down event
 
   private MutableVector3D _initialPoint = new MutableVector3D(); //Initial point at dragging
-  private MutableVector2I _initialPixel = new MutableVector2I(); //Initial pixel at start of gesture
+  //MutableVector2I _initialPixel;  //Initial pixel at start of gesture
 
   private MutableVector3D _axis = new MutableVector3D();
   private double _lastRadians;

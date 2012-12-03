@@ -27,8 +27,8 @@ public class EllipsoidalTileTessellator extends TileTessellator
   private final boolean _skirted;
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Mesh* createDebugMesh(const RenderContext* rc, const Tile* tile) const
-  public final Mesh createDebugMesh(RenderContext rc, Tile tile)
+//ORIGINAL LINE: Mesh* createDebugMesh(const G3MRenderContext* rc, const Tile* tile) const
+  public final Mesh createDebugMesh(G3MRenderContext rc, Tile tile)
   {
 	final Sector sector = tile.getSector();
 	final Planet planet = rc.getPlanet();
@@ -100,8 +100,8 @@ public class EllipsoidalTileTessellator extends TileTessellator
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Mesh* createMesh(const RenderContext* rc, const Tile* tile) const
-  public final Mesh createMesh(RenderContext rc, Tile tile)
+//ORIGINAL LINE: Mesh* createMesh(const G3MRenderContext* rc, const Tile* tile) const
+  public final Mesh createMesh(G3MRenderContext rc, Tile tile)
   {
   
 	final Sector sector = tile.getSector();
@@ -201,8 +201,8 @@ public class EllipsoidalTileTessellator extends TileTessellator
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isReady(const RenderContext *rc) const
-  public final boolean isReady(RenderContext rc)
+//ORIGINAL LINE: boolean isReady(const G3MRenderContext *rc) const
+  public final boolean isReady(G3MRenderContext rc)
   {
 	return true;
   }

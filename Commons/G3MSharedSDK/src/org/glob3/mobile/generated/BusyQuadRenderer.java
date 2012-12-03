@@ -30,7 +30,7 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
   private final String _textureFilename;
   private Mesh _quadMesh;
 
-  private boolean initMesh(RenderContext rc)
+  private boolean initMesh(G3MRenderContext rc)
   {
 	//TEXTURED
 	IGLTextureId texId = null;
@@ -67,7 +67,7 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
   
 	IndexedMesh im = new IndexedMesh(GLPrimitive.triangleStrip(), true, Vector3D.zero(), vertices.create(), indices.create(), 1);
   
-	TextureMapping texMap = new SimpleTextureMapping(texId, texCoords.create(), true);
+	TextureMapping texMap = new SimpleTextureMapping(texId, texCoords.create(), true, false);
   
 	_quadMesh = new TexturedMesh(im, true, texMap, true, false);
   
@@ -83,18 +83,18 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
 	  _textureFilename = textureFilename;
   }
 
-  public final void initialize(InitializationContext ic)
+  public final void initialize(G3MContext context)
   {
   }
 
-  public final boolean isReadyToRender(RenderContext rc)
+  public final boolean isReadyToRender(G3MRenderContext rc)
   {
 	return true;
   }
 
 //C++ TO JAVA CONVERTER NOTE: This was formerly a static local variable declaration (not allowed in Java):
   private boolean render_firstTime = true;
-  public final void render(RenderContext rc)
+  public final void render(G3MRenderContext rc)
   {
 	GL gl = rc.getGL();
   
@@ -146,12 +146,12 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
   
   }
 
-  public final boolean onTouchEvent(EventContext ec, TouchEvent touchEvent)
+  public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
 	return false;
   }
 
-  public final void onResizeViewportEvent(EventContext ec, int width, int height)
+  public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
 
   }
@@ -177,12 +177,17 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
 	//int _TODO_stop_effects;
   }
 
-  public final void onResume(InitializationContext ic)
+  public final void onResume(G3MContext context)
   {
 
   }
 
-  public final void onPause(InitializationContext ic)
+  public final void onPause(G3MContext context)
+  {
+
+  }
+
+  public final void onDestroy(G3MContext context)
   {
 
   }

@@ -52,16 +52,16 @@ public:
 };
 
 
-void Mark::initialize(const InitializationContext* ic) {
-    //  todo;
-    if (!_textureSolved) {
-        IDownloader* downloader = ic->getDownloader();
-        
-        downloader->requestImage(_textureURL,
-                                 1000000,
-                                 new TextureDownloadListener(this),
-                                 true);
-    }
+void Mark::initialize(const G3MContext* context) {
+  //  todo;
+  if (!_textureSolved) {
+    IDownloader* downloader = context->getDownloader();
+    
+    downloader->requestImage(_textureURL,
+                             1000000,
+                             new TextureDownloadListener(this),
+                             true);
+  }
 }
 
 void Mark::onTextureDownloadError() {
@@ -109,15 +109,20 @@ IFloatBuffer* Mark::getVertices(const Planet* planet) {
     return _vertices;
 }
 
-void Mark::render(const RenderContext* rc) {
-    const Camera* camera = rc->getCurrentCamera();
-    const Planet* planet = rc->getPlanet();
-    
-    const Vector3D cameraPosition = camera->getCartesianPosition();
-    const Vector3D* markPosition = getCartesianPosition(planet);
-    
-    const Vector3D markCameraVector = markPosition->sub(cameraPosition);
-    const double distanceToCamera = markCameraVector.length();
+void Mark::render(const G3MRenderContext* rc) {
+  const Camera* camera = rc->getCurrentCamera();
+  const Planet* planet = rc->getPlanet();
+  
+  const Vector3D cameraPosition = camera->getCartesianPosition();
+  const Vector3D* markPosition = getCartesianPosition(planet);
+  
+  const Vector3D markCameraVector = markPosition->sub(cameraPosition);
+  const double distanceToCamera = markCameraVector.length();
+//  _renderedMark = distanceToCamera <= minDistanceToCamera;
+//  const bool renderMark = true;
+  
+  if (_renderedMark) {
+    const Vector3D normalAtMarkPosition = planet->geodeticSurfaceNormal(*markPosition);
     
     if (_minDistanceToCamera!=0) {
         _renderedMark = distanceToCamera <= _minDistanceToCamera;
@@ -167,7 +172,7 @@ void Mark::render(const RenderContext* rc) {
             }
         }
     }
-    
+  }
 }
 
 int Mark::getTextureWidth() const {

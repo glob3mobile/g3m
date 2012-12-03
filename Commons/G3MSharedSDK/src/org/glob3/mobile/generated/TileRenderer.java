@@ -25,7 +25,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   
 	_topLevelTiles.clear();
   }
-  private void createTopLevelTiles(InitializationContext ic)
+  private void createTopLevelTiles(G3MContext context)
   {
 	final Angle fromLatitude = _parameters._topSector.lower().latitude();
 	final Angle fromLongitude = _parameters._topSector.lower().longitude();
@@ -55,7 +55,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 	  }
 	}
   
-	ic.getLogger().logInfo("Created %d top level tiles", _topLevelTiles.size());
+	context.getLogger().logInfo("Created %d top level tiles", _topLevelTiles.size());
   
 	_topTilesJustCreated = true;
   }
@@ -65,7 +65,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   private boolean _firstRender;
 
 //  const InitializationContext* _initializationContext;
-  private InitializationContext _initializationContext;
+  private G3MContext _context;
 
   private void pruneTopLevelTiles()
   {
@@ -88,7 +88,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 	  _lastSplitTimer = null;
 	  _lastCamera = null;
 	  _firstRender = false;
-	  _initializationContext = null;
+	  _context = null;
 	_layerSet.setChangeListener(this);
   }
 
@@ -105,22 +105,22 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 		_lastSplitTimer.dispose();
   }
 
-  public final void initialize(InitializationContext ic)
+  public final void initialize(G3MContext context)
   {
-	_initializationContext = ic;
+	_context = context;
   
 	clearTopLevelTiles();
-	createTopLevelTiles(ic);
+	createTopLevelTiles(context);
   
 	if (_lastSplitTimer != null)
 		_lastSplitTimer.dispose();
-	_lastSplitTimer = ic.getFactory().createTimer();
+	_lastSplitTimer = context.getFactory().createTimer();
   
-	_layerSet.initialize(ic);
-	_texturizer.initialize(ic, _parameters);
+	_layerSet.initialize(context);
+	_texturizer.initialize(context, _parameters);
   }
 
-  public final void render(RenderContext rc)
+  public final void render(G3MRenderContext rc)
   {
 	// Saving camera for use in onTouchEvent
 	_lastCamera = rc.getCurrentCamera();
@@ -129,13 +129,15 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   
 	TileRenderContext trc = new TileRenderContext(_tessellator, _texturizer, _layerSet, _parameters, statistics, _lastSplitTimer, _firstRender); // if first render, force full render
   
+	final int topLevelTilesCount = _topLevelTiles.size();
+  
 	if (_firstRender && _parameters._forceTopLevelTilesRenderOnStart)
 	{
-	  // force one render of the topLevel tiles to make the (toplevel) textures loaded as they
-	  // will be used as last-chance fallback texture for any tile.
+	  // force one render pass of the topLevel tiles to make the (toplevel) textures loaded
+	  // as they will be used as last-chance fallback texture for any tile.
 	  _firstRender = false;
   
-	  for (int i = 0; i < _topLevelTiles.size(); i++)
+	  for (int i = 0; i < topLevelTilesCount; i++)
 	  {
 		Tile tile = _topLevelTiles.get(i);
 		tile.render(rc, trc, null);
@@ -144,7 +146,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 	else
 	{
 	  java.util.LinkedList<Tile> toVisit = new java.util.LinkedList<Tile>();
-	  for (int i = 0; i < _topLevelTiles.size(); i++)
+	  for (int i = 0; i < topLevelTilesCount; i++)
 	  {
 		toVisit.addLast(_topLevelTiles.get(i));
 	  }
@@ -175,7 +177,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   
   }
 
-  public final boolean onTouchEvent(EventContext ec, TouchEvent touchEvent)
+  public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
 	boolean handled = false;
   
@@ -214,29 +216,54 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 	return handled;
   }
 
-  public final void onResizeViewportEvent(EventContext ec, int width, int height)
+  public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
 
   }
 
-  public final boolean isReadyToRender(RenderContext rc)
+  public final boolean isReadyToRender(G3MRenderContext rc)
   {
 	if (_topTilesJustCreated)
 	{
+	  _topTilesJustCreated = false;
+  
+	  final int topLevelTilesCount = _topLevelTiles.size();
+  
+	  if (_parameters._forceTopLevelTilesRenderOnStart)
+	  {
+		TilesStatistics statistics = new TilesStatistics();
+  
+		TileRenderContext trc = new TileRenderContext(_tessellator, _texturizer, _layerSet, _parameters, statistics, _lastSplitTimer, true);
+  
+		for (int i = 0; i < topLevelTilesCount; i++)
+		{
+		  Tile tile = _topLevelTiles.get(i);
+		  tile.prepareForFullRendering(rc, trc);
+		}
+	  }
+  
 	  if (_texturizer != null)
 	  {
-		final int topLevelTilesSize = _topLevelTiles.size();
-		for (int i = 0; i < topLevelTilesSize; i++)
+		for (int i = 0; i < topLevelTilesCount; i++)
 		{
 		  Tile tile = _topLevelTiles.get(i);
 		  _texturizer.justCreatedTopTile(rc, tile, _layerSet);
 		}
 	  }
-	  _topTilesJustCreated = false;
 	}
   
 	if (_parameters._forceTopLevelTilesRenderOnStart)
 	{
+	  final int topLevelTilesCount = _topLevelTiles.size();
+	  for (int i = 0; i < topLevelTilesCount; i++)
+	  {
+		Tile tile = _topLevelTiles.get(i);
+		if (!tile.isTextureSolved())
+		{
+		  return false;
+		}
+	  }
+  
 	  if (_tessellator != null)
 	  {
 		if (!_tessellator.isReady(rc))
@@ -268,12 +295,17 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 	_firstRender = false;
   }
 
-  public final void onResume(InitializationContext ic)
+  public final void onResume(G3MContext context)
   {
 
   }
 
-  public final void onPause(InitializationContext ic)
+  public final void onPause(G3MContext context)
+  {
+	recreateTiles();
+  }
+
+  public final void onDestroy(G3MContext context)
   {
 
   }
@@ -290,10 +322,15 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 
   public final void changed(LayerSet layerSet)
   {
+	recreateTiles();
+  }
+
+  public final void recreateTiles()
+  {
 	pruneTopLevelTiles();
 	clearTopLevelTiles();
 	_firstRender = true;
-	createTopLevelTiles(_initializationContext);
+	createTopLevelTiles(_context);
   }
 
 }

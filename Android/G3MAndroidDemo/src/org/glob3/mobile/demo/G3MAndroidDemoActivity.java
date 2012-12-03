@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import org.glob3.mobile.generated.Angle;
-import org.glob3.mobile.generated.CircleShape;
-import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraConstrainer;
@@ -34,7 +32,6 @@ public class G3MAndroidDemoActivity
          extends
             G3MBaseActivity {
 
-   @Override
    protected void initializeWidget(final G3MWidget_Android widget) {
       final LayerSet layerSet = new LayerSet();
 
@@ -209,20 +206,20 @@ public class G3MAndroidDemoActivity
          //         quad.setPitch(Angle.fromDegrees(0));
          //         shapesRenderer.addShape(quad);
 
-         final Geodetic3D circlePosition = new Geodetic3D( //
-                  Angle.fromDegrees(37.78333333), //
-                  Angle.fromDegrees(-122.41666666666667), //
-                  8000);
-         final int circleRadius = 50000;
-         final Color circleColor = Color.newFromRGBA(1, 1, 0, 1);
-         final CircleShape circle = new CircleShape(circlePosition, circleRadius, circleColor);
+         //         final Geodetic3D circlePosition = new Geodetic3D( //
+         //                  Angle.fromDegrees(37.78333333), //
+         //                  Angle.fromDegrees(-122.41666666666667), //
+         //                  8000);
+         //         final int circleRadius = 50000;
+         //         final Color circleColor = Color.newFromRGBA(1, 1, 0, 1);
+         //         final CircleShape circle = new CircleShape(circlePosition, circleRadius, circleColor);
 
          //circle.setHeading(Angle.fromDegrees(45));
          //circle.setPitch(Angle.fromDegrees(45));
          //circle.setScale(2.0, 0.5, 1);
          //circle.setRadius(circleRadius);
 
-         shapesRenderer.addShape(circle);
+         //    shapesRenderer.addShape(circle);
 
          renderers.add(shapesRenderer);
       }
@@ -248,5 +245,12 @@ public class G3MAndroidDemoActivity
                periodicalTasks, //
                incrementalTileQuality);
 
+   }
+
+
+   @Override
+   protected G3MWidget_Android getWidgetAndroid() {
+      // TODO Auto-generated method stub
+      return null;
    }
 }

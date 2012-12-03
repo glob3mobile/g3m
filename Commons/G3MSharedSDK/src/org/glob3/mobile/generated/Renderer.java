@@ -11,11 +11,11 @@ package org.glob3.mobile.generated;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class TouchEvent;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class InitializationContext;
+//class G3MContext;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class RenderContext;
+//class G3MRenderContext;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class EventContext;
+//class G3MEventContext;
 
 public abstract class Renderer
 {
@@ -25,24 +25,21 @@ public abstract class Renderer
 
   public abstract void setEnable(boolean enable);
 
-  public abstract void onResume(InitializationContext ic);
 
-  public abstract void onPause(InitializationContext ic);
+  public abstract void initialize(G3MContext context);
 
-  public abstract void initialize(InitializationContext ic);
+  public abstract boolean isReadyToRender(G3MRenderContext rc);
 
-  public abstract boolean isReadyToRender(RenderContext rc);
-
-  public abstract void render(RenderContext rc);
+  public abstract void render(G3MRenderContext rc);
 
   /*
    Gives to Renderer the opportunity to process touch, events.
    
    The Renderer answer true if the event was processed.
    */
-  public abstract boolean onTouchEvent(EventContext ec, TouchEvent touchEvent);
+  public abstract boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent);
 
-  public abstract void onResizeViewportEvent(EventContext ec, int width, int height);
+  public abstract void onResizeViewportEvent(G3MEventContext ec, int width, int height);
 
   public abstract void start();
 
@@ -51,4 +48,12 @@ public abstract class Renderer
   public void dispose()
   {
   }
+
+  // Android activity lifecyle
+  public abstract void onResume(G3MContext context);
+
+  public abstract void onPause(G3MContext context);
+
+  public abstract void onDestroy(G3MContext context);
+
 }

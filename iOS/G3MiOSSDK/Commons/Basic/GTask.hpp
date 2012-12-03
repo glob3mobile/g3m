@@ -9,13 +9,16 @@
 #ifndef __G3MiOSSDK__GTask__
 #define __G3MiOSSDK__GTask__
 
+class G3MContext;
+
 class GTask {
 public:
   virtual ~GTask() {
     
   }
   
-  virtual void run() = 0;
+  virtual void run(const G3MContext* context) = 0;
+  
 };
 
 

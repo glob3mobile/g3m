@@ -9,7 +9,7 @@ public class FrameTasksExecutor
 
   private java.util.LinkedList<FrameTask> _preRenderTasks = new java.util.LinkedList<FrameTask>();
 
-  private boolean canExecutePreRenderStep(RenderContext rc, int executedCounter)
+  private boolean canExecutePreRenderStep(G3MRenderContext rc, int executedCounter)
   {
 	final int tasksCount = _preRenderTasks.size();
 	if (tasksCount == 0)
@@ -83,7 +83,7 @@ public class FrameTasksExecutor
 	_preRenderTasks.addLast(preRenderTask);
   }
 
-  public final void doPreRenderCycle(RenderContext rc)
+  public final void doPreRenderCycle(G3MRenderContext rc)
   {
   
   //  int canceledCounter = 0;

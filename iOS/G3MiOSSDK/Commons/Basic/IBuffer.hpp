@@ -9,6 +9,8 @@
 #ifndef __G3MiOSSDK__IBuffer__
 #define __G3MiOSSDK__IBuffer__
 
+#include <string>
+
 class IBuffer {
 public:
   
@@ -29,7 +31,9 @@ public:
    It provides a fast method to check if the Buffer has changed.
    **/
   virtual int timestamp() const = 0;
-  
+
+  virtual const std::string description() const = 0;
+
 };
 
 #endif

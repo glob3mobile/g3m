@@ -121,6 +121,7 @@ public class Mark
 		return _position;
 	}
 
+<<<<<<< HEAD
 	public final void initialize(InitializationContext ic)
 	{
 		//  todo;
@@ -130,11 +131,22 @@ public class Mark
     
 			downloader.requestImage(_textureURL, 1000000, new TextureDownloadListener(this), true);
 		}
+=======
+  public final void initialize(G3MContext context)
+  {
+	//  todo;
+	if (!_textureSolved)
+	{
+	  IDownloader downloader = context.getDownloader();
+  
+	  downloader.requestImage(_textureURL, 1000000, new TextureDownloadListener(this), true);
+>>>>>>> webgl-port
 	}
 
 //C++ TO JAVA CONVERTER NOTE: This was formerly a static local variable declaration (not allowed in Java):
 	private Vector2D render_textureTranslation = new Vector2D(0.0, 0.0);
 //C++ TO JAVA CONVERTER NOTE: This was formerly a static local variable declaration (not allowed in Java):
+<<<<<<< HEAD
 	private Vector2D render_textureScale = new Vector2D(1.0, 1.0);
 	public final void render(RenderContext rc)
 	{
@@ -152,6 +164,37 @@ public class Mark
 			_renderedMark = distanceToCamera <= _minDistanceToCamera;
 		}
 		else
+=======
+  private Vector2D render_textureScale = new Vector2D(1.0, 1.0);
+  public final void render(G3MRenderContext rc, double minDistanceToCamera)
+  {
+	final Camera camera = rc.getCurrentCamera();
+	final Planet planet = rc.getPlanet();
+  
+	final Vector3D cameraPosition = camera.getCartesianPosition();
+	final Vector3D markPosition = getCartesianPosition(planet);
+  
+	final Vector3D markCameraVector = markPosition.sub(cameraPosition);
+	final double distanceToCamera = markCameraVector.length();
+	_renderedMark = distanceToCamera <= minDistanceToCamera;
+  //  const bool renderMark = true;
+  
+	if (_renderedMark)
+	{
+	  final Vector3D normalAtMarkPosition = planet.geodeticSurfaceNormal(markPosition);
+  
+	  if (normalAtMarkPosition.angleBetween(markCameraVector)._radians > IMathUtils.instance().halfPi())
+	  {
+		GL gl = rc.getGL();
+  
+//C++ TO JAVA CONVERTER NOTE: This static local variable declaration (not allowed in Java) has been moved just prior to the method:
+//		static Vector2D textureTranslation(0.0, 0.0);
+//C++ TO JAVA CONVERTER NOTE: This static local variable declaration (not allowed in Java) has been moved just prior to the method:
+//		static Vector2D textureScale(1.0, 1.0);
+		gl.transformTexCoords(render_textureScale, render_textureTranslation);
+  
+		if (_textureId == null)
+>>>>>>> webgl-port
 		{
 			final Vector3D radius = rc.getPlanet().getRadii();
 			final double minDistanceToCamera = (radius._x + radius._y + radius._z) / 3 * 0.75;

@@ -11,26 +11,37 @@
 
 #include "Shape.hpp"
 
+#include <string>
+
 class SGNode;
 
 class SGShape : public Shape {
 private:
   SGNode* _node;
-
+  const std::string _uriPrefix;
+  
 public:
 
-  SGShape(SGNode* node) :
+  SGShape(SGNode* node,
+          const std::string& uriPrefix) :
   Shape(NULL),
-  _node(node)
+  _node(node),
+  _uriPrefix(uriPrefix)
   {
 
   }
 
-  void initialize(const InitializationContext* ic);
-  
-  bool isReadyToRender(const RenderContext* rc);
+  const std::string getURIPrefix() const {
+    return _uriPrefix;
+  }
 
-  void rawRender(const RenderContext* rc);
+  void initialize(const G3MContext* context);
+  
+  bool isReadyToRender(const G3MRenderContext* rc);
+
+  void rawRender(const G3MRenderContext* rc);
+
+  bool isTransparent(const G3MRenderContext* rc);
 
 };
 

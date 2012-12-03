@@ -13,7 +13,7 @@
 #include "Tile.hpp"
 #include "Petition.hpp"
 
-std::vector<Petition*> StaticImageLayer::getMapPetitions(const RenderContext* rc,
+std::vector<Petition*> StaticImageLayer::getMapPetitions(const G3MRenderContext* rc,
                                                          const Tile* tile, int width, int height) const {
   std::vector<Petition*> res;
   

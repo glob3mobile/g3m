@@ -33,8 +33,6 @@ package org.glob3.mobile.generated;
 
 public class MultiLayerTileTexturizer extends TileTexturizer
 {
-//  LayerSet* _layerSet;
-
   private TilesRenderParameters _parameters;
 
   private IFloatBuffer _texCoordsCache;
@@ -50,7 +48,7 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 	return _texCoordsCache;
   }
 
-  private int _pendingTopTileRequests;
+//  long _pendingTopTileRequests;
 
   private TexturesHandler _texturesHandler;
 
@@ -63,18 +61,17 @@ public class MultiLayerTileTexturizer extends TileTexturizer
   }
 
   public MultiLayerTileTexturizer()
+  //_pendingTopTileRequests(0),
   {
 	  _parameters = null;
 	  _texCoordsCache = null;
-	  _pendingTopTileRequests = 0;
 	  _texturesHandler = null;
   
   }
 
-  public final void countTopTileRequest()
-  {
-	_pendingTopTileRequests--;
-  }
+//  void countTopTileRequest() {
+//    _pendingTopTileRequests--;
+//  }
 
   public void dispose()
   {
@@ -83,27 +80,22 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 	  _texCoordsCache = null;
   }
 
-  public final boolean isReady(RenderContext rc, LayerSet layerSet)
+  public final boolean isReady(G3MRenderContext rc, LayerSet layerSet)
   {
-	if (_pendingTopTileRequests > 0)
-	{
-	  return false;
-	}
 	if (layerSet != null)
 	{
 	  return layerSet.isReady();
 	}
 	return true;
-	//  return (_pendingTopTileRequests <= 0) && _layerSet->isReady();
   }
 
-  public final void initialize(InitializationContext ic, TilesRenderParameters parameters)
+  public final void initialize(G3MContext context, TilesRenderParameters parameters)
   {
 	_parameters = parameters;
   //  _layerSet->initialize(ic);
   }
 
-  public final Mesh texturize(RenderContext rc, TileRenderContext trc, Tile tile, Mesh tessellatorMesh, Mesh previousMesh)
+  public final Mesh texturize(G3MRenderContext rc, TileRenderContext trc, Tile tile, Mesh tessellatorMesh, Mesh previousMesh)
   {
 	_texturesHandler = rc.getTexturesHandler();
   
@@ -139,12 +131,12 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 //		  _builder->_release();
 //		}
 //  
-//		void execute(const RenderContext* rc)
+//		void execute(const G3MRenderContext* rc)
 //		{
 //		  _builder->start();
 //		}
 //  
-//		boolean isCanceled(const RenderContext *rc)
+//		boolean isCanceled(const G3MRenderContext *rc)
 //		{
 //		  return _builder->isCanceled();
 //		}
@@ -181,21 +173,8 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 	return false;
   }
 
-  public final void justCreatedTopTile(RenderContext rc, Tile tile, LayerSet layerSet)
+  public final void justCreatedTopTile(G3MRenderContext rc, Tile tile, LayerSet layerSet)
   {
-	java.util.ArrayList<Petition> petitions = layerSet.createTileMapPetitions(rc, tile, _parameters._tileTextureWidth, _parameters._tileTextureHeight);
-  
-	_pendingTopTileRequests += petitions.size();
-  
-	final int priority = 1000000000; // very big priority for toplevel tiles
-	for (int i = 0; i < petitions.size(); i++)
-	{
-	  final Petition petition = petitions.get(i);
-	  rc.getDownloader().requestImage(new URL(petition.getURL()), priority, new TopTileDownloadListener(this), true);
-  
-	  if (petition != null)
-		  petition.dispose();
-	}
   }
 
   public final void ancestorTexturedSolvedChanged(Tile tile, Tile ancestorTile, boolean textureSolved)
@@ -243,7 +222,7 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 	return (mesh == null) ? null : mesh.getTopLevelGLTextureId();
   }
 
-  public final void onTerrainTouchEvent(EventContext ec, Geodetic3D position, Tile tile, LayerSet layerSet)
+  public final void onTerrainTouchEvent(G3MEventContext ec, Geodetic3D position, Tile tile, LayerSet layerSet)
   {
 	if (layerSet != null)
 	{

@@ -24,28 +24,23 @@ public class SGTextureNode extends SGNode
 {
   private java.util.ArrayList<SGLayerNode> _layers = new java.util.ArrayList<SGLayerNode>();
 
-
-  protected final void rawRender(RenderContext rc)
+  public SGTextureNode(String id, String sId)
   {
-	final int layersCount = _layers.size();
-	for (int i = 0; i < layersCount; i++)
-	{
-	  SGLayerNode layer = _layers.get(i);
-	  layer.render(rc);
-	}
+	  super(id, sId);
+
   }
 
   public final void addLayer(SGLayerNode layer)
   {
 	_layers.add(layer);
   
-	if (_initializationContext != null)
+	if (_context != null)
 	{
-	  layer.initialize(_initializationContext);
+	  layer.initialize(_context, _shape);
 	}
   }
 
-  public final boolean isReadyToRender(RenderContext rc)
+  public final boolean isReadyToRender(G3MRenderContext rc)
   {
 	final int layersCount = _layers.size();
 	for (int i = 0; i < layersCount; i++)
@@ -58,6 +53,48 @@ public class SGTextureNode extends SGNode
 	}
   
 	return super.isReadyToRender(rc);
+  }
+
+  public final void initialize(G3MContext context, SGShape shape)
+  {
+	super.initialize(context, shape);
+  
+	final int layersCount = _layers.size();
+	for (int i = 0; i < layersCount; i++)
+	{
+	  SGLayerNode child = _layers.get(i);
+	  child.initialize(context, shape);
+	}
+  }
+
+  public final void rawRender(G3MRenderContext rc)
+  {
+	final int layersCount = _layers.size();
+	for (int i = 0; i < layersCount; i++)
+	{
+	  SGLayerNode layer = _layers.get(i);
+	  layer.rawRender(rc);
+	}
+  }
+
+  public final void prepareRender(G3MRenderContext rc)
+  {
+	final int layersCount = _layers.size();
+	for (int i = 0; i < layersCount; i++)
+	{
+	  SGLayerNode layer = _layers.get(i);
+	  layer.prepareRender(rc);
+	}
+  }
+
+  public final void cleanUpRender(G3MRenderContext rc)
+  {
+	final int layersCount = _layers.size();
+	for (int i = 0; i < layersCount; i++)
+	{
+	  SGLayerNode layer = _layers.get(i);
+	  layer.cleanUpRender(rc);
+	}
   }
 
 }

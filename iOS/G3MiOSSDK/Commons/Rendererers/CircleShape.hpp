@@ -19,7 +19,7 @@ private:
   Color* _color;
 
 protected:
-  Mesh* createMesh(const RenderContext* rc);
+  Mesh* createMesh(const G3MRenderContext* rc);
 
 public:
   CircleShape(Geodetic3D* position,
@@ -46,9 +46,11 @@ public:
   }
 
   void setColor(Color* color) {
-    delete _color;
-    _color = color;
-    cleanMesh();
+    if (_color != color) {
+      delete _color;
+      _color = color;
+      cleanMesh();
+    }
   }
   
 

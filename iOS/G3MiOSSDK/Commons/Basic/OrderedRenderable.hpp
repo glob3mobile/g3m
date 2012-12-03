@@ -13,9 +13,9 @@
 
 class OrderedRenderable {
 public:
-  virtual double distanceFromEye() const = 0;
+  virtual double squaredDistanceFromEye() const = 0;
 
-  virtual void render(const RenderContext* rc) = 0;
+  virtual void render(const G3MRenderContext* rc) = 0;
 
   virtual ~OrderedRenderable() {
 

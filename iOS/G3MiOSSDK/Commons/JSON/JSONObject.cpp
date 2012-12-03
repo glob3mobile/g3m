@@ -10,6 +10,9 @@
 #include "ILogger.hpp"
 #include "IStringBuilder.hpp"
 
+#include "JSONString.hpp"
+#include "JSONBoolean.hpp"
+#include "JSONNumber.hpp"
 
 JSONObject::~JSONObject(){
 #ifdef C_CODE
@@ -69,6 +72,25 @@ JSONString* JSONObject::getAsString(const std::string& key) const {
   JSONBaseObject* object = get(key);
   return (object == NULL) ? NULL : object->asString();
 }
+
+bool JSONObject::getAsBoolean(const std::string& key,
+                              bool defaultValue) const {
+  JSONBaseObject* object = get(key);
+  return (object == NULL) ? defaultValue : object->asBoolean()->value();
+}
+
+double JSONObject::getAsNumber(const std::string& key,
+                               double defaultValue) const {
+  JSONBaseObject* object = get(key);
+  return (object == NULL) ? defaultValue : object->asNumber()->value();
+}
+
+const std::string JSONObject::getAsString(const std::string& key,
+                                          const std::string& defaultValue) const {
+  JSONBaseObject* object = get(key);
+  return (object == NULL) ? defaultValue : object->asString()->value();
+}
+
 
 std::vector<std::string> JSONObject::keys() const {
 #ifdef C_CODE

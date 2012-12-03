@@ -31,7 +31,9 @@ public class LazyTextureMapping extends TextureMapping
 	}
   }
 
-  public LazyTextureMapping(LazyTextureMappingInitializer initializer, TexturesHandler texturesHandler, boolean ownedTexCoords)
+  private final boolean _transparent;
+
+  public LazyTextureMapping(LazyTextureMappingInitializer initializer, TexturesHandler texturesHandler, boolean ownedTexCoords, boolean transparent)
   {
 	  _initializer = initializer;
 	  _glTextureId = null;
@@ -41,6 +43,7 @@ public class LazyTextureMapping extends TextureMapping
 	  _scale = new MutableVector2D(1,1);
 	  _texturesHandler = texturesHandler;
 	  _ownedTexCoords = ownedTexCoords;
+	  _transparent = transparent;
 
   }
 
@@ -61,8 +64,8 @@ public class LazyTextureMapping extends TextureMapping
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void bind(const RenderContext* rc) const
-  public final void bind(RenderContext rc)
+//ORIGINAL LINE: void bind(const G3MRenderContext* rc) const
+  public final void bind(G3MRenderContext rc)
   {
 	if (!_initialized)
 	{
@@ -79,11 +82,18 @@ public class LazyTextureMapping extends TextureMapping
 	  _initialized = true;
 	}
   
-	GL gl = rc.getGL();
+	if (_texCoords != null)
+	{
+	  GL gl = rc.getGL();
   
-	gl.transformTexCoords(_scale, _translation);
-	gl.bindTexture(_glTextureId);
-	gl.setTextureCoordinates(2, 0, _texCoords);
+	  gl.transformTexCoords(_scale, _translation);
+	  gl.bindTexture(_glTextureId);
+	  gl.setTextureCoordinates(2, 0, _texCoords);
+	}
+	else
+	{
+	  ILogger.instance().logError("LazyTextureMapping::bind() with _texCoords == NULL");
+	}
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -105,6 +115,13 @@ public class LazyTextureMapping extends TextureMapping
   public final IGLTextureId getGLTextureId()
   {
 	return _glTextureId;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isTransparent(const G3MRenderContext* rc) const
+  public final boolean isTransparent(G3MRenderContext rc)
+  {
+	return _transparent;
   }
 
 }
