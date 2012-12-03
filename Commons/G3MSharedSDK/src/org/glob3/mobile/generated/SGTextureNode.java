@@ -131,14 +131,14 @@ public class SGTextureNode extends SGNode
   public final void render(G3MRenderContext rc, GLState parentState)
   {
 	final GLState myState = createState(rc, parentState);
-	final GLState state;
+	final GLState state2;
 	if (myState == null)
 	{
-	  state = parentState;
+	  state2 = parentState;
 	}
 	else
 	{
-	  state = myState;
+	  state2 = myState;
 	}
   
 	prepareRender(rc);
@@ -150,11 +150,11 @@ public class SGTextureNode extends SGNode
 	{
 	  SGLayerNode layer = _layers.get(i);
   
-	  final GLState layerState = layer.createState(rc, state);
+	  final GLState layerState = layer.createState(rc, state2);
 	  final GLState state;
 	  if (layerState == null)
 	  {
-		state = parentState;
+		state = state2;
 	  }
 	  else
 	  {
