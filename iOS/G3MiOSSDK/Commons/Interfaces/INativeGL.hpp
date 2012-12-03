@@ -9,14 +9,10 @@
 #ifndef G3MiOSSDK_INativeGL_hpp
 #define G3MiOSSDK_INativeGL_hpp
 
-//class IGLProgramId;
-
 class IFloatBuffer;
 class IIntBuffer;
 class IImage;
-
 class IGLUniformID;
-
 class IGLTextureId;
 
 #include <vector>
@@ -31,7 +27,6 @@ public:
   
   virtual ~INativeGL() { };
   
-  //virtual void useProgram(IGLProgramId* program) const = 0;
   virtual void useProgram(ShaderProgram* program) const = 0;
 
   virtual int getAttribLocation(ShaderProgram* program,

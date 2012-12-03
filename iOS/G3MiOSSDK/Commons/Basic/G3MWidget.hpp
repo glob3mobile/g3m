@@ -161,9 +161,9 @@ public:
   }
 
 private:
-  IStorage*            _storage;
-  IDownloader*         _downloader;
-  IThreadUtils*        _threadUtils;
+  IStorage*           _storage;
+  IDownloader*        _downloader;
+  IThreadUtils*       _threadUtils;
 
   FrameTasksExecutor* _frameTasksExecutor;
   GL*                 _gl;

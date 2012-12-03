@@ -13,19 +13,11 @@
 #include "IImage.hpp"
 #include "Vector3D.hpp"
 #include "Vector2D.hpp"
-
 #include "INativeGL.hpp"
-
 #include "IIntBuffer.hpp"
-
 #include "IFactory.hpp"
-
 #include "FloatBufferBuilderFromCartesian2D.hpp"
-
-//#include "IGLProgramId.hpp"
-
 #include "IGLUniformID.hpp"
-
 #include "IGLTextureId.hpp"
 
 class UniformsStruct {
@@ -106,7 +98,8 @@ struct AttributesStruct {
   int Color;
 } Attributes;
 
-int GL::checkedGetAttribLocation(ShaderProgram* program, const std::string& name) {
+int GL::checkedGetAttribLocation(ShaderProgram* program,
+                                 const std::string& name) {
   if (_verbose) {
     ILogger::instance()->logInfo("GL::checkedGetAttribLocation()");
   }
@@ -118,7 +111,8 @@ int GL::checkedGetAttribLocation(ShaderProgram* program, const std::string& name
   return l;
 }
 
-IGLUniformID* GL::checkedGetUniformLocation(ShaderProgram* program, const std::string& name) {
+IGLUniformID* GL::checkedGetUniformLocation(ShaderProgram* program,
+                                            const std::string& name) {
   if (_verbose) {
     ILogger::instance()->logInfo("GL::checkedGetUniformLocation()");
   }
@@ -134,6 +128,7 @@ bool GL::useProgram(ShaderProgram* program) {
   if (_verbose) {
     ILogger::instance()->logInfo("GL::useProgram()");
   }
+
   // set shaders
   _nativeGL->useProgram(program);
 

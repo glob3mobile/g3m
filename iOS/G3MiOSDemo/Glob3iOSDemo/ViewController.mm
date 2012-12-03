@@ -279,7 +279,7 @@
                             Vector3D(20000, 30000, 50000),
                             2,
                             Color::newFromRGBA(0,    1, 0, 0.5),
-                            Color::newFromRGBA(0.75, 0, 0, 0.75));
+                            Color::newFromRGBA(0, 0.75, 0, 0.75));
 
   box->setAnimatedScale(1, 1, 20);
 

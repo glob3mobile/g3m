@@ -117,6 +117,7 @@ void AbstractMesh::render(const G3MRenderContext *rc,
     state.enableFlatColor(*_flatColor, _colorsIntensity);
     if (_flatColor->isTransparent()) {
       state.enableBlend();
+      gl->setBlendFuncSrcAlpha();
     }
   }
   else {

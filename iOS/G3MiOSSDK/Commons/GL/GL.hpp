@@ -15,13 +15,9 @@
 #include "MutableMatrix44D.hpp"
 #include "Color.hpp"
 #include "MutableVector2D.hpp"
-
 #include "IFloatBuffer.hpp"
-
 #include "GLConstants.hpp"
-
 #include "GLState.hpp"
-
 
 #include <list>
 
@@ -90,8 +86,10 @@ private:
 
   //Get Locations warning of errors
   bool _errorGettingLocationOcurred;
-  int checkedGetAttribLocation(ShaderProgram* program, const std::string& name);
-  IGLUniformID* checkedGetUniformLocation(ShaderProgram* program, const std::string& name);
+  int checkedGetAttribLocation(ShaderProgram* program,
+                               const std::string& name);
+  IGLUniformID* checkedGetUniformLocation(ShaderProgram* program,
+                                          const std::string& name);
   
   IFloatBuffer* _billboardTexCoord;
   IFloatBuffer* getBillboardTexCoord();
