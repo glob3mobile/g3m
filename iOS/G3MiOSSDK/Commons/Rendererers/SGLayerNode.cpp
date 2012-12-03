@@ -131,43 +131,70 @@ const IGLTextureId* SGLayerNode::getTextureId(const G3MRenderContext* rc) {
 
 void SGLayerNode::prepareRender(const G3MRenderContext* rc) {
   SGNode::prepareRender(rc);
+  int TEMP_commented_by_Agustin_until_decision_about_glstate;
 
-  //  SGShape* shape = getShape();
-
-  const IGLTextureId* texId = getTextureId(rc);
-  _textureBound = (texId != NULL);
-  if (_textureBound) {
-    GL *gl = rc->getGL();
-
-    //    if (_transparent) {
-    //      gl->enableBlend();
-    //    }
-
-    int TEMP_commented_by_Agustin_until_decision_about_glstate;
-    //gl->enableTextures();
-    //gl->enableTexture2D();
-
-    //    _textureMapping->bind(rc);
-    //    gl->transformTexCoords(_scale, _translation);
-    gl->bindTexture(texId);
-    //    gl->setTextureCoordinates(2, 0, _texCoords);
-  }
+//  //  SGShape* shape = getShape();
+//
+//  const IGLTextureId* texId = getTextureId(rc);
+//  _textureBound = (texId != NULL);
+//  if (_textureBound) {
+//    GL* gl = rc->getGL();
+//
+//    //    if (_transparent) {
+//    //      gl->enableBlend();
+//    //    }
+//
+//    //gl->enableTextures();
+//    //gl->enableTexture2D();
+//
+//    //    _textureMapping->bind(rc);
+//    //    gl->transformTexCoords(_scale, _translation);
+//    gl->bindTexture(texId);
+//    //    gl->setTextureCoordinates(2, 0, _texCoords);
+//  }
 }
 
 void SGLayerNode::cleanUpRender(const G3MRenderContext* rc) {
-  if (_textureBound) {
-
-    int TEMP_commented_by_Agustin_until_decision_about_glstate;
-    //GL *gl = rc->getGL();
-    //gl->disableTexture2D();
-    //gl->disableTextures();
-
-    //    if (_transparent) {
-    //      gl->disableBlend();
-    //    }
-    
-    _textureBound = false;
-  }
-  
+  int TEMP_commented_by_Agustin_until_decision_about_glstate;
+//  if (_textureBound) {
+//
+//    //GL* gl = rc->getGL();
+//    //gl->disableTexture2D();
+//    //gl->disableTextures();
+//
+//    //    if (_transparent) {
+//    //      gl->disableBlend();
+//    //    }
+//
+//    _textureBound = false;
+//  }
+//
   SGNode::cleanUpRender(rc);
+}
+
+const GLState* SGLayerNode::createState(const G3MRenderContext* rc,
+                                        const GLState& parentState) {
+  const IGLTextureId* texId = getTextureId(rc);
+  if (texId == NULL) {
+    return NULL;
+  }
+
+  GLState* state = new GLState(parentState);
+
+  GL* gl = rc->getGL();
+
+  //  if (_transparent) {
+  //      gl->enableBlend();
+  //    }
+
+  int TEMP_commented_by_Agustin_until_decision_about_glstate;
+  state->enableTextures();
+  state->enableTexture2D();
+
+  //    _textureMapping->bind(rc);
+  //    gl->transformTexCoords(_scale, _translation);
+  gl->bindTexture(texId);
+  //    gl->setTextureCoordinates(2, 0, _texCoords);
+
+  return state;
 }

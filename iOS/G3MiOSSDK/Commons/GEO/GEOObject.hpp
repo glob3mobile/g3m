@@ -11,6 +11,7 @@
 
 class G3MContext;
 class G3MRenderContext;
+class GLState;
 
 class GEOObject {
 public:
@@ -26,7 +27,8 @@ public:
     return true;
   }
 
-  virtual void render(const G3MRenderContext* rc) = 0;
+  virtual void render(const G3MRenderContext* rc,
+                      const GLState& parentState) = 0;
 
 };
 

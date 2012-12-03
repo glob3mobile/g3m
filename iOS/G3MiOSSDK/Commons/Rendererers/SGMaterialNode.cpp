@@ -12,7 +12,7 @@
 #include "GL.hpp"
 
 void SGMaterialNode::prepareRender(const G3MRenderContext* rc) {
-  //GL *gl = rc->getGL();
+  //GL* gl = rc->getGL();
 
   int TEMP_commented_by_Agustin_until_decision_about_glstate;
   /*
@@ -22,13 +22,14 @@ void SGMaterialNode::prepareRender(const G3MRenderContext* rc) {
   else {
     const float colorsIntensity = 1;
     gl->enableVertexFlatColor(*_specularColor, colorsIntensity);
-  }*/
+  }
+   */
 
   SGNode::prepareRender(rc);
 }
 
 void SGMaterialNode::cleanUpRender(const G3MRenderContext* rc) {
-  //GL *gl = rc->getGL();
+  //GL* gl = rc->getGL();
 
   int TEMP_commented_by_Agustin_until_decision_about_glstate;
   /*
@@ -36,4 +37,17 @@ void SGMaterialNode::cleanUpRender(const G3MRenderContext* rc) {
    */
 
   SGNode::cleanUpRender(rc);
+}
+
+const GLState* SGMaterialNode::createState(const G3MRenderContext* rc,
+                                           const GLState& parentState) {
+  if (_specularColor == NULL) {
+    return NULL;
+  }
+  
+  GLState* state = new GLState(parentState);
+  const float colorsIntensity = 1;
+  state->enableFlatColor(*_specularColor, colorsIntensity);
+
+  return state;
 }

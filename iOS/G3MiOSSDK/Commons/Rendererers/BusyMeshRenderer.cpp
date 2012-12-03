@@ -70,9 +70,6 @@ void BusyMeshRenderer::initialize(const G3MContext* context)
                           NULL,
                           colors.create());
   
-  // set mesh glstate
-  GLState *state = _mesh->getGLState();
-  state->enableBlend();
 }
 
 void BusyMeshRenderer::start() {
@@ -83,10 +80,15 @@ void BusyMeshRenderer::stop() {
   //int _TODO_stop_effects;
 }
 
-void BusyMeshRenderer::render(const G3MRenderContext* rc)
+void BusyMeshRenderer::render(const G3MRenderContext* rc,
+                              const GLState& parentState)
 {
   GL* gl = rc->getGL();
-  
+
+  // set mesh glstate
+  GLState state(parentState);
+  state.enableBlend();
+
   // init effect in the first render
   static bool firstTime = true;
   if (firstTime) {
@@ -118,7 +120,7 @@ void BusyMeshRenderer::render(const G3MRenderContext* rc)
   gl->multMatrixf(R1.multiply(R2));
   
   // draw mesh
-  _mesh->render(rc);
+  _mesh->render(rc, state);
   
   gl->popMatrix();
   

@@ -361,7 +361,7 @@ public:
     _nativeGL->deleteProgram(program);
   }
   
-  void setState(GLState* state);
+  void setState(const GLState& state);
 };
 
 #endif

@@ -66,6 +66,7 @@ G3MWidget::G3MWidget(GL*                              gl,
                      GTask*                           initializationTask,
                      bool                             autoDeleteInitializationTask,
                      std::vector<PeriodicalTask*>     periodicalTasks):
+_rootState(GLState::newDefault()),
 _frameTasksExecutor( new FrameTasksExecutor() ),
 _effectsScheduler( new EffectsScheduler() ),
 _gl(gl),
@@ -220,6 +221,8 @@ G3MWidget::~G3MWidget() {
 #endif
 
   delete _context;
+
+  delete _rootState;
 }
 
 void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
@@ -340,21 +343,22 @@ void G3MWidget::render() {
 
   _gl->clearScreen(_backgroundColor);
 
+  _gl->setState(*_rootState);
+
   if (_mainRendererReady) {
-    _cameraRenderer->render(&rc);
+    _cameraRenderer->render(&rc, *_rootState);
   }
 
   if (_selectedRenderer->isEnable()) {
-    _selectedRenderer->render(&rc);
+    _selectedRenderer->render(&rc, *_rootState);
   }
-
 
   std::vector<OrderedRenderable*>* orderedRenderables = rc.getSortedOrderedRenderables();
   if (orderedRenderables != NULL) {
     const int orderedRenderablesCount = orderedRenderables->size();
     for (int i = 0; i < orderedRenderablesCount; i++) {
       OrderedRenderable* orderedRenderable = orderedRenderables->at(i);
-      orderedRenderable->render(&rc);
+      orderedRenderable->render(&rc, *_rootState);
       delete orderedRenderable;
     }
   }

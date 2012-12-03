@@ -205,7 +205,7 @@ void CameraDoubleDragHandler::render(const G3MRenderContext* rc,
 //  // TEMP TO DRAW A POINT WHERE USER PRESS
 //  if (false) {
 //    if (cameraContext->getCurrentGesture() == DoubleDrag) {
-//      GL *gl = rc->getGL();
+//      GL* gl = rc->getGL();
 //      float vertices[] = { 0,0,0};
 //      int indices[] = {0};
 //      gl->enableVerticesPosition();

@@ -31,7 +31,7 @@ protected:
   mutable Extent* _extent;
   Extent* computeExtent() const;
   
-  GLState*          _glState;
+//  GLState*          _glState;
 
   AbstractMesh(const int primitive,
                bool owner,
@@ -42,12 +42,14 @@ protected:
                IFloatBuffer* colors,
                const float colorsIntensity);
   
-  virtual void rawRender(const G3MRenderContext* rc) const = 0;
+  virtual void rawRender(const G3MRenderContext* rc,
+                         const GLState& parentState) const = 0;
 
 public:
   ~AbstractMesh();
 
-  void render(const G3MRenderContext* rc) const;
+  void render(const G3MRenderContext* rc,
+              const GLState& parentState) const;
 
   Extent* getExtent() const;
 
@@ -56,8 +58,6 @@ public:
   const Vector3D getVertex(int i) const;
 
   bool isTransparent(const G3MRenderContext* rc) const;
-  
-  GLState* getGLState() const { return _glState; } 
 
 };
 

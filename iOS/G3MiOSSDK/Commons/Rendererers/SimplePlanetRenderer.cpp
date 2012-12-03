@@ -39,7 +39,7 @@ SimplePlanetRenderer::~SimplePlanetRenderer()
 
 void SimplePlanetRenderer::initialize(const G3MContext* context)
 {
-  
+
 }
 
 IFloatBuffer* SimplePlanetRenderer::createVertices(const Planet& planet) const
@@ -53,18 +53,18 @@ IFloatBuffer* SimplePlanetRenderer::createVertices(const Planet& planet) const
     for (double j = 0.0; j < _latRes; j++) {
       const Angle lat = Angle::fromDegrees( (j * 180.0 / latRes1)  -90.0 );
       const Geodetic2D g(lat, lon);
-      
+
       vertices.add(g);
     }
   }
-  
+
   return vertices.create();
 }
 
 IIntBuffer* SimplePlanetRenderer::createMeshIndex() const
 {
   IntBufferBuilder indices;
-  
+
   const int res = _lonRes;
   for (int j = 0; j < res - 1; j++) {
     if (j > 0){
@@ -76,7 +76,7 @@ IIntBuffer* SimplePlanetRenderer::createMeshIndex() const
     }
     indices.add(j * res + 2 * res - 1);
   }
-  
+
   return indices.create();
 }
 
@@ -93,41 +93,41 @@ IFloatBuffer* SimplePlanetRenderer::createTextureCoordinates() const
       texCoords.add((float)u, (float)v);
     }
   }
-  
+
   return texCoords.create();
 }
 
 bool SimplePlanetRenderer::initializeMesh(const G3MRenderContext* rc) {
-  
-  
+
+
   const Planet* planet = rc->getPlanet();
   IIntBuffer* ind = createMeshIndex();
   IFloatBuffer* ver = createVertices(*planet);
   IFloatBuffer* texC = NULL;
   FloatBufferBuilderFromColor colors;
-  
-  const bool colorPerVertex = false;
-  
 
-  
+  const bool colorPerVertex = false;
+
+
+
   //COLORS PER VERTEX
   IFloatBuffer* vertexColors = NULL;
   if (colorPerVertex){
     int numVertices = _lonRes * _lonRes * 4;
     for(int i = 0; i < numVertices; ){
-      
+
       float val = (float) (0.5 + GMath.sin( (float) (2.0 * GMath.pi() * ((float) i) / numVertices) ) / 2.0);
-      
+
       colors.add(val, (float)0.0, (float)(1.0 - val), (float)1.0);
     }
     vertexColors = colors.create();
   }
-  
+
   //FLAT COLOR
   Color * flatColor = NULL;
-//  if (false){
-//    flatColor = new Color( Color::fromRGBA(0.0, 1.0, 0.0, 1.0) );
-//  }
+  //  if (false){
+  //    flatColor = new Color( Color::fromRGBA(0.0, 1.0, 0.0, 1.0) );
+  //  }
 
   IndexedMesh *im = new IndexedMesh(GLPrimitive::triangleStrip(),
                                     true,
@@ -137,49 +137,49 @@ bool SimplePlanetRenderer::initializeMesh(const G3MRenderContext* rc) {
                                     1,
                                     flatColor,
                                     vertexColors);
-  
+
   //TEXTURED
   if (true) {
-    
+
     IImage* image = rc->getFactory()->createImageFromFileName(_textureFilename);
-    
-    const IImage* scaledImage = rc->getTextureBuilder()->createTextureFromImage(rc->getGL(), 
-                                                                                rc->getFactory(), 
+
+    const IImage* scaledImage = rc->getTextureBuilder()->createTextureFromImage(rc->getGL(),
+                                                                                rc->getFactory(),
                                                                                 image, _texWidth,
                                                                                 _texHeight);
     if (image != scaledImage){
       rc->getFactory()->deleteImage(image);
     }
-    
+
     const IGLTextureId* texId = rc->getTexturesHandler()->getGLTextureId(scaledImage, GLFormat::rgba(),
                                                                          _textureFilename, false);
-    
+
     rc->getFactory()->deleteImage(scaledImage);
-    
+
     if (texId == NULL) {
       rc->getLogger()->logError("Can't load file %s", _textureFilename.c_str());
       return false;
     }
     texC = createTextureCoordinates();
-    
+
     TextureMapping* texMap = new SimpleTextureMapping(texId,
                                                       texC,
                                                       true,
                                                       false);
-    
+
     _mesh = new TexturedMesh(im, true, texMap, true, false);
   }
-  
+
   return true;
 }
 
-void SimplePlanetRenderer::render(const G3MRenderContext* rc){
+void SimplePlanetRenderer::render(const G3MRenderContext* rc,
+                                  const GLState& parentState){
   if (_mesh == NULL){
     if (!initializeMesh(rc)) {
       return;
     }
   }
-  
-  GLState state;
-  _mesh->render(rc);
+
+  _mesh->render(rc, parentState);
 }

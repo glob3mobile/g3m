@@ -20,6 +20,7 @@
 class IImage;
 class IFloatBuffer;
 class IGLTextureId;
+class GLState;
 
 class Mark {
 private:
@@ -80,6 +81,7 @@ public:
   void initialize(const G3MContext* context);
   
   void render(const G3MRenderContext* rc,
+              const GLState& parentState,
               const double minDistanceToCamera);
   
   bool isReady() const;

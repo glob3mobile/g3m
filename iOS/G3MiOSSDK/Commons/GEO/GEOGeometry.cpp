@@ -50,18 +50,16 @@ Mesh* GEOGeometry::getMesh(const G3MRenderContext* rc) {
   return _mesh;
 }
 
-void GEOGeometry::render(const G3MRenderContext* rc) {
+void GEOGeometry::render(const G3MRenderContext* rc,
+                         const GLState& parentState) {
   Mesh* mesh = getMesh(rc);
   if (mesh != NULL) {
     const Extent* extent = mesh->getExtent();
 
     if ( extent->touches( rc->getCurrentCamera()->getFrustumInModelCoordinates() ) ) {
-
-      int _____DIEGO_AT_WORK_TODO_disableDepthTest;
-      //      GL* gl = rc->getGL();
-      //      gl->disableDepthTest();
-      mesh->render(rc);
-      //      gl->enableDepthTest();
+      GLState state(parentState);
+      state.disableDepthTest();
+      mesh->render(rc, state);
     }
   }
 }

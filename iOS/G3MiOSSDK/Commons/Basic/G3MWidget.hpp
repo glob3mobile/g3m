@@ -45,6 +45,7 @@ class IStorage;
 #include "Angle.hpp"
 
 class G3MContext;
+class GLState;
 
 class UserData {
 private:
@@ -205,6 +206,8 @@ private:
   const G3MContext* _context;
 
   bool _paused;
+  
+  const GLState* _rootState;
 
   G3MWidget(GL*                              gl,
             IStorage*                        storage,

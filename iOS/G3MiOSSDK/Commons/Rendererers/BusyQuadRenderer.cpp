@@ -87,17 +87,17 @@ bool BusyQuadRenderer::initMesh(const G3MRenderContext* rc) {
   
   _quadMesh = new TexturedMesh(im, true, texMap, true, false);
   
-  // set mesh glstate
-  GLState* state = _quadMesh->getGLState();
-  state->enableBlend();
-
   return true;
 }
 
 
-void BusyQuadRenderer::render(const G3MRenderContext* rc) {
+void BusyQuadRenderer::render(const G3MRenderContext* rc,
+                              const GLState& parentState) {
   GL* gl = rc->getGL();
   
+  GLState state(parentState);
+  state.enableBlend();
+
   if (_quadMesh == NULL){
     if (!initMesh(rc)) {
       return;
@@ -136,7 +136,7 @@ void BusyQuadRenderer::render(const G3MRenderContext* rc) {
   gl->multMatrixf(R1.multiply(R2));
   
   // draw mesh
-  _quadMesh->render(rc);
+  _quadMesh->render(rc, parentState);
   
   gl->popMatrix();
   

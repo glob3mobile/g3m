@@ -38,10 +38,11 @@ bool GEORenderer::isReadyToRender(const G3MRenderContext* rc) {
   return true;
 }
 
-void GEORenderer::render(const G3MRenderContext* rc) {
+void GEORenderer::render(const G3MRenderContext* rc,
+                         const GLState& parentState) {
   const int childrenCount = _children.size();
   for (int i = 0; i < childrenCount; i++) {
     GEOObject* geoObject = _children[i];
-    geoObject->render(rc);
+    geoObject->render(rc, parentState);
   }
 }

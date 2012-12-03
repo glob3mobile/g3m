@@ -17,7 +17,8 @@ class IndexedMesh : public AbstractMesh {
 private:
   IIntBuffer*       _indices;
 protected:
-  void rawRender(const G3MRenderContext* rc) const;
+  void rawRender(const G3MRenderContext* rc,
+                 const GLState& parentState) const;
 
 public:
   IndexedMesh(const int primitive,

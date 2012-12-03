@@ -48,9 +48,9 @@ _texturizerData(NULL)
 }
 
 Tile::~Tile() {
-//  if (_isVisible) {
-//    deleteTexturizedMesh();
-//  }
+  //  if (_isVisible) {
+  //    deleteTexturizedMesh();
+  //  }
 
   prune(NULL);
 
@@ -71,11 +71,11 @@ void Tile::ancestorTexturedSolvedChanged(Tile* ancestor,
   if (textureSolved && isTextureSolved()) {
     return;
   }
-  
+
   if (_texturizer != NULL) {
     _texturizer->ancestorTexturedSolvedChanged(this, ancestor, textureSolved);
   }
-  
+
   if (_subtiles != NULL) {
     const int subtilesSize = _subtiles->size();
     for (int i = 0; i < subtilesSize; i++) {
@@ -88,7 +88,7 @@ void Tile::ancestorTexturedSolvedChanged(Tile* ancestor,
 void Tile::setTextureSolved(bool textureSolved) {
   if (textureSolved != _textureSolved) {
     _textureSolved = textureSolved;
-    
+
     if (_subtiles != NULL) {
       const int subtilesSize = _subtiles->size();
       for (int i = 0; i < subtilesSize; i++) {
@@ -121,7 +121,7 @@ bool Tile::isVisible(const G3MRenderContext *rc,
   //  if (_sector.isBackOriented(rc)) {
   //    return false;
   //  }
-  
+
   Extent* extent = getTessellatorMesh(rc, trc)->getExtent();
   if (extent == NULL) {
     return false;
@@ -133,24 +133,24 @@ bool Tile::isVisible(const G3MRenderContext *rc,
 bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
                                const TileRenderContext* trc) {
   const TilesRenderParameters* parameters = trc->getParameters();
-  
+
   if (_level >= parameters->_maxLevel) {
     return true;
   }
-  
+
   //  if (timer != NULL) {
   //    if ( timer->elapsedTime().milliseconds() > 50 ) {
   //      return true;
   //    }
   //  }
-  
+
   TileTexturizer* texturizer = trc->getTexturizer();
   if (texturizer != NULL) {
     if (texturizer->tileMeetsRenderCriteria(this)) {
       return true;
     }
   }
-  
+
   Extent* extent = getTessellatorMesh(rc, trc)->getExtent();
   if (extent == NULL) {
     return true;
@@ -165,22 +165,22 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
   if ( t <= ((parameters->_tileTextureWidth + parameters->_tileTextureHeight) * 1.75) ) {
     return true;
   }
-  
-  
+
+
   if (trc->getParameters()->_useTilesSplitBudget) {
     if (_subtiles == NULL) { // the tile needs to create the subtiles
       if (trc->getStatistics()->getSplitsCountInFrame() > 1) {
         // there are not more splitsCount-budget to spend
         return true;
       }
-      
+
       if (trc->getLastSplitTimer()->elapsedTime().milliseconds() < 25) {
         // there are not more time-budget to spend
         return true;
       }
     }
   }
-  
+
   return false;
 }
 
@@ -207,10 +207,9 @@ void Tile::prepareForFullRendering(const G3MRenderContext* rc,
 }
 
 void Tile::rawRender(const G3MRenderContext *rc,
-                     const TileRenderContext* trc) {
-  
-  int __TODO_include_glstate_in_TileRenderContext;
-  
+                     const TileRenderContext* trc,
+                     const GLState& parentState) {
+
   Mesh* tessellatorMesh = getTessellatorMesh(rc, trc);
   if (tessellatorMesh == NULL) {
     return;
@@ -218,7 +217,7 @@ void Tile::rawRender(const G3MRenderContext *rc,
 
   TileTexturizer* texturizer = trc->getTexturizer();
   if (texturizer == NULL) {
-    tessellatorMesh->render(rc);
+    tessellatorMesh->render(rc, parentState);
   }
   else {
     // const bool needsToCallTexturizer = (!isTextureSolved() || (_texturizedMesh == NULL)) && isTexturizerDirty();
@@ -233,20 +232,21 @@ void Tile::rawRender(const G3MRenderContext *rc,
     }
 
     if (_texturizedMesh != NULL) {
-      _texturizedMesh->render(rc);
+      _texturizedMesh->render(rc, parentState);
     }
     else {
-      tessellatorMesh->render(rc);
+      tessellatorMesh->render(rc, parentState);
     }
   }
 
 }
 
 void Tile::debugRender(const G3MRenderContext* rc,
-                       const TileRenderContext* trc) {
+                       const TileRenderContext* trc,
+                       const GLState& parentState) {
   Mesh* debugMesh = getDebugMesh(rc, trc);
   if (debugMesh != NULL) {
-    debugMesh->render(rc);
+    debugMesh->render(rc, parentState);
   }
 }
 
@@ -260,27 +260,27 @@ std::vector<Tile*>* Tile::getSubTiles() {
 
 void Tile::prune(TileTexturizer* texturizer) {
   if (_subtiles != NULL) {
-    
+
     //    printf("= pruned tile %s\n", getKey().description().c_str());
-    
-//    TileTexturizer* texturizer = (trc == NULL) ? NULL : trc->getTexturizer();
+
+    //    TileTexturizer* texturizer = (trc == NULL) ? NULL : trc->getTexturizer();
 
     const int subtilesSize = _subtiles->size();
     for (int i = 0; i < subtilesSize; i++) {
       Tile* subtile = _subtiles->at(i);
-      
+
       subtile->setIsVisible(false, texturizer);
-      
+
       subtile->prune(texturizer);
       if (texturizer != NULL) {
         texturizer->tileToBeDeleted(subtile, subtile->_texturizedMesh);
       }
       delete subtile;
     }
-    
+
     delete _subtiles;
     _subtiles = NULL;
-    
+
   }
 }
 
@@ -288,7 +288,7 @@ void Tile::setIsVisible(bool isVisible,
                         TileTexturizer* texturizer) {
   if (_isVisible != isVisible) {
     _isVisible = isVisible;
-    
+
     if (!_isVisible) {
       deleteTexturizedMesh(texturizer);
     }
@@ -297,19 +297,19 @@ void Tile::setIsVisible(bool isVisible,
 
 void Tile::deleteTexturizedMesh(TileTexturizer* texturizer) {
   if ((_level > 0) && (_texturizedMesh != NULL)) {
-    
+
     if (texturizer != NULL) {
       texturizer->tileMeshToBeDeleted(this, _texturizedMesh);
     }
-    
+
     delete _texturizedMesh;
     _texturizedMesh = NULL;
-    
+
 #ifdef C_CODE
     delete _texturizerData;
 #endif
     _texturizerData = NULL;
-    
+
     setTexturizerDirty(true);
     setTextureSolved(false);
   }
@@ -317,13 +317,14 @@ void Tile::deleteTexturizedMesh(TileTexturizer* texturizer) {
 
 void Tile::render(const G3MRenderContext* rc,
                   const TileRenderContext* trc,
+                  const GLState& parentState,
                   std::list<Tile*>* toVisitInNextIteration) {
   TilesStatistics* statistics = trc->getStatistics();
-  
+
   statistics->computeTileProcessed(this);
   if (isVisible(rc, trc)) {
     setIsVisible(true, trc->getTexturizer());
-    
+
     statistics->computeVisibleTile(this);
 
     const bool isRawRender = (
@@ -333,13 +334,13 @@ void Tile::render(const G3MRenderContext* rc,
                               );
 
     if (isRawRender) {
-      rawRender(rc, trc);
+      rawRender(rc, trc, parentState);
       if (trc->getParameters()->_renderDebug) {
-        debugRender(rc, trc);
+        debugRender(rc, trc, parentState);
       }
-      
+
       statistics->computeTileRendered(this);
-      
+
       prune(trc->getTexturizer());
     }
     else {
@@ -349,7 +350,7 @@ void Tile::render(const G3MRenderContext* rc,
         statistics->computeSplitInFrame();
         _justCreatedSubtiles = false;
       }
-      
+
       const int subTilesSize = subTiles->size();
       for (int i = 0; i < subTilesSize; i++) {
         Tile* subTile = subTiles->at(i);
@@ -359,7 +360,7 @@ void Tile::render(const G3MRenderContext* rc,
   }
   else {
     setIsVisible(false, trc->getTexturizer());
-    
+
     prune(trc->getTexturizer());
   }
 }
@@ -378,37 +379,37 @@ Tile* Tile::createSubTile(const Angle& lowerLat, const Angle& lowerLon,
 std::vector<Tile*>* Tile::createSubTiles() {
   const Geodetic2D lower = _sector.lower();
   const Geodetic2D upper = _sector.upper();
-  
+
   const Angle midLat = Angle::midAngle(lower.latitude(), upper.latitude());
   const Angle midLon = Angle::midAngle(lower.longitude(), upper.longitude());
-  
+
   const int nextLevel = _level + 1;
-  
+
   std::vector<Tile*>* subTiles = new std::vector<Tile*>();
   subTiles->push_back( createSubTile(lower.latitude(), lower.longitude(),
                                      midLat, midLon,
                                      nextLevel,
                                      2 * _row,
                                      2 * _column ) );
-  
+
   subTiles->push_back( createSubTile(lower.latitude(), midLon,
                                      midLat, upper.longitude(),
                                      nextLevel,
                                      2 * _row,
                                      2 * _column + 1 ) );
-  
+
   subTiles->push_back( createSubTile(midLat, lower.longitude(),
                                      upper.latitude(), midLon,
                                      nextLevel,
                                      2 * _row + 1,
                                      2 * _column ) );
-  
+
   subTiles->push_back( createSubTile(midLat, midLon,
                                      upper.latitude(), upper.longitude(),
                                      nextLevel,
                                      2 * _row + 1,
                                      2 * _column + 1) );
-  
+
   return subTiles;
 }
 
@@ -430,6 +431,6 @@ const Tile* Tile::getDeepestTileContaining(const Geodetic3D& position) const {
       }
     }
   }
-
+  
   return NULL;
 }

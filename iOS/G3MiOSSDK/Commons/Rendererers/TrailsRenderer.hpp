@@ -48,7 +48,8 @@ public:
 
   ~Trail();
 
-  void render(const G3MRenderContext* rc);
+  void render(const G3MRenderContext* rc,
+              const GLState& parentState);
 
   void setVisible(bool visible) {
     _visible = visible;
@@ -133,7 +134,8 @@ public:
 
   }
 
-  void render(const G3MRenderContext* rc);
+  void render(const G3MRenderContext* rc,
+              const GLState& parentState);
   
 };
 

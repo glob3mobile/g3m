@@ -15,6 +15,7 @@
 class G3MContext;
 class G3MRenderContext;
 class SGShape;
+class GLState;
 
 class SGNode {
 private:
@@ -63,12 +64,13 @@ public:
 
   virtual void cleanUpRender(const G3MRenderContext* rc);
 
-  virtual void rawRender(const G3MRenderContext* rc);
+  virtual void rawRender(const G3MRenderContext* rc,
+                         const GLState& parentState);
 
-  void render(const G3MRenderContext* rc);
+  void render(const G3MRenderContext* rc,
+              const GLState& parentState);
 
   SGShape* getShape() const {
-    // return (_parent == NULL) ? _shape : _parent->getShape();
     if (_shape != NULL) {
       return _shape;
     }
@@ -77,6 +79,10 @@ public:
     }
     return NULL;
   }
+
+  virtual const GLState* createState(const G3MRenderContext* rc,
+                                     const GLState& parentState);
+
 };
 
 #endif

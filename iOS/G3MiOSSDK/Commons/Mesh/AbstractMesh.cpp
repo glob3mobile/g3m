@@ -19,13 +19,10 @@ AbstractMesh::~AbstractMesh() {
     delete _colors;
     delete _flatColor;
   }
-  
-  delete _glState;
+
   delete _extent;
   delete _translationMatrix;
 }
-
-
 
 AbstractMesh::AbstractMesh(const int primitive,
                            bool owner,
@@ -46,19 +43,8 @@ _center(center),
 _translationMatrix(( center.isNan() || center.isZero() )
                    ? NULL
                    : new MutableMatrix44D(MutableMatrix44D::createTranslationMatrix(center)) ),
-_lineWidth(lineWidth),
-_glState(new GLState())
+_lineWidth(lineWidth)
 {
-  _glState->enableVerticesPosition();
-  if (_colors) {
-    _glState->enableVertexColor(_colors, _colorsIntensity);
-  }
-  if (_flatColor) {
-    _glState->enableFlatColor(*_flatColor, _colorsIntensity);
-    if (_flatColor->isTransparent()) {
-      _glState->enableBlend();
-    }
-  }
 }
 
 Extent* AbstractMesh::computeExtent() const {
@@ -118,34 +104,46 @@ bool AbstractMesh::isTransparent(const G3MRenderContext* rc) const {
 }
 
 
-void AbstractMesh::render(const G3MRenderContext *rc) const {
-  GL *gl = rc->getGL();
-  
-  gl->setState(_glState);
+void AbstractMesh::render(const G3MRenderContext *rc,
+                          const GLState& parentState) const {
+  GL* gl = rc->getGL();
+
+  GLState state(parentState);
+  state.enableVerticesPosition();
+  if (_colors) {
+    state.enableVertexColor(_colors, _colorsIntensity);
+  }
+  if (_flatColor) {
+    state.enableFlatColor(*_flatColor, _colorsIntensity);
+    if (_flatColor->isTransparent()) {
+      state.enableBlend();
+    }
+  }
+
 
   /*
-  gl->enableVerticesPosition();
+   gl->enableVerticesPosition();
 
-  if (_colors == NULL) {
-    gl->disableVertexColor();
-  }
-  else {
-    gl->enableVertexColor(_colors, _colorsIntensity);
-  }
+   if (_colors == NULL) {
+   gl->disableVertexColor();
+   }
+   else {
+   gl->enableVertexColor(_colors, _colorsIntensity);
+   }
 
-  bool blend = false;
-  if (_flatColor == NULL) {
-    gl->disableVertexFlatColor();
-  }
-  else {
-    if (_flatColor->isTransparent()) {
-      gl->enableBlend();
-      gl->setBlendFuncSrcAlpha();
-      blend = true;
-    }
-    gl->enableVertexFlatColor(*_flatColor, _colorsIntensity);
-  }
-  */
+   bool blend = false;
+   if (_flatColor == NULL) {
+   gl->disableVertexFlatColor();
+   }
+   else {
+   if (_flatColor->isTransparent()) {
+   gl->enableBlend();
+   gl->setBlendFuncSrcAlpha();
+   blend = true;
+   }
+   gl->enableVertexFlatColor(*_flatColor, _colorsIntensity);
+   }
+   */
 
   gl->vertexPointer(3, 0, _vertices);
 
@@ -156,8 +154,8 @@ void AbstractMesh::render(const G3MRenderContext *rc) const {
     gl->multMatrixf(*_translationMatrix);
   }
 
-
-  rawRender(rc);
+  gl->setState(state);
+  rawRender(rc, state);
 
 
   if (_translationMatrix != NULL) {
@@ -165,10 +163,10 @@ void AbstractMesh::render(const G3MRenderContext *rc) const {
   }
 
   /*
-  if (blend) {
-    gl->disableBlend();
-  }
-  
-  gl->disableVerticesPosition();*/
+   if (blend) {
+   gl->disableBlend();
+   }
+   
+   gl->disableVerticesPosition();*/
   
 }

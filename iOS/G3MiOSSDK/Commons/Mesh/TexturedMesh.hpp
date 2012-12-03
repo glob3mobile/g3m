@@ -38,26 +38,25 @@ public:
   _transparent(transparent)
 
   {
-    GLState* state = _mesh->getGLState();
-    state->enableTextures();
-    state->enableTexture2D();
-    if (_transparent) {
-      state->enableBlend();
-    }
+//    GLState* state = _mesh->getGLState();
+//    state->enableTextures();
+//    state->enableTexture2D();
+//    if (_transparent) {
+//      state->enableBlend();
+//    }
   }
   
   ~TexturedMesh(){
-//#ifdef C_CODE
     if (_ownedMesh) {
       delete _mesh;
     } 
     if (_ownedTexMapping){
       delete _textureMapping;
     }
-//#endif
   }
   
-  void render(const G3MRenderContext* rc) const;
+  void render(const G3MRenderContext* rc,
+              const GLState& parentState) const;
 
   Extent* getExtent()  const {
     return (_mesh == NULL) ? NULL : _mesh->getExtent();
@@ -74,8 +73,6 @@ public:
   const TextureMapping* const getTextureMapping() const {
     return _textureMapping;
   }
-
-  GLState* getGLState() const { return _mesh->getGLState(); }
 
   bool isTransparent(const G3MRenderContext* rc) const {
     return _transparent;

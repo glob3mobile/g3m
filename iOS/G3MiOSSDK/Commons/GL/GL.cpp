@@ -749,11 +749,11 @@ void GL::deleteTexture(const IGLTextureId* texture) {
   }
 }
 
-void GL::setState(GLState *state) {
+void GL::setState(const GLState& state) {
 
   // Depth Testh
-  if (_enableDepthTest != state->isEnabledDepthTest()) {
-    _enableDepthTest = state->isEnabledDepthTest();
+  if (_enableDepthTest != state.isEnabledDepthTest()) {
+    _enableDepthTest = state.isEnabledDepthTest();
     if (_enableDepthTest) {
       _nativeGL->enable(GLFeature::depthTest());
     }
@@ -763,8 +763,8 @@ void GL::setState(GLState *state) {
   }
 
   // Blending
-  if (_enableBlend != state->isEnabledBlend()) {
-    _enableBlend = state->isEnabledBlend();
+  if (_enableBlend != state.isEnabledBlend()) {
+    _enableBlend = state.isEnabledBlend();
     if (_enableBlend) {
       _nativeGL->enable(GLFeature::blend());
     }
@@ -774,8 +774,8 @@ void GL::setState(GLState *state) {
   }
 
   // Textures
-  if (_enableTextures != state->isEnabledTextures()) {
-    _enableTextures = state->isEnabledTextures();
+  if (_enableTextures != state.isEnabledTextures()) {
+    _enableTextures = state.isEnabledTextures();
     if (_enableTextures) {
       _nativeGL->enableVertexAttribArray(Attributes.TextureCoord);
     }
@@ -785,8 +785,8 @@ void GL::setState(GLState *state) {
   }
 
   // Texture2D
-  if (_enableTexture2D != state->isEnabledTexture2D()) {
-    _enableTexture2D = state->isEnabledTexture2D();
+  if (_enableTexture2D != state.isEnabledTexture2D()) {
+    _enableTexture2D = state.isEnabledTexture2D();
     if (_enableTexture2D) {
       _nativeGL->uniform1i(Uniforms.EnableTexture, 1);
     }
@@ -796,12 +796,12 @@ void GL::setState(GLState *state) {
   }
 
   // VertexColor
-  if (_enableVertexColor != state->isEnabledVertexColor()) {
-    _enableVertexColor = state->isEnabledVertexColor();
+  if (_enableVertexColor != state.isEnabledVertexColor()) {
+    _enableVertexColor = state.isEnabledVertexColor();
     if (_enableVertexColor) {
       _nativeGL->uniform1i(Uniforms.EnableColorPerVertex, 1);
       _nativeGL->enableVertexAttribArray(Attributes.Color);
-      IFloatBuffer* colors = state->getColors();
+      IFloatBuffer* colors = state.getColors();
       if ((_colors != colors) ||
           (_colorsTimestamp != colors->timestamp()) ) {
         _nativeGL->vertexAttribPointer(Attributes.Color, 4, false, 0, colors);
@@ -816,8 +816,8 @@ void GL::setState(GLState *state) {
   }
 
   // Vertices Position
-  if (_enableVerticesPosition != state->isEnabledVerticesPosition()) {
-    _enableVerticesPosition = state->isEnabledVerticesPosition();
+  if (_enableVerticesPosition != state.isEnabledVerticesPosition()) {
+    _enableVerticesPosition = state.isEnabledVerticesPosition();
     if (_enableVerticesPosition) {
       _nativeGL->enableVertexAttribArray(Attributes.Position);
     }
@@ -827,8 +827,8 @@ void GL::setState(GLState *state) {
   }
 
   // Flat Color
-  if (_enableFlatColor != state->isEnabledFlatColor()) {
-    _enableFlatColor = state->isEnabledFlatColor();
+  if (_enableFlatColor != state.isEnabledFlatColor()) {
+    _enableFlatColor = state.isEnabledFlatColor();
     if (_enableFlatColor) {
       _nativeGL->uniform1i(Uniforms.EnableFlatColor, 1);
     }
@@ -838,8 +838,8 @@ void GL::setState(GLState *state) {
   }
 
   if (_enableFlatColor) {
-    color(state->getFlatColor());
-    const float intensity = state->getIntensity();
+    color(state.getFlatColor());
+    const float intensity = state.getIntensity();
     if (_flatColorIntensity != intensity) {
       _nativeGL->uniform1f(Uniforms.FlatColorIntensity, intensity);
       _flatColorIntensity = intensity;
@@ -847,11 +847,11 @@ void GL::setState(GLState *state) {
   }
 
   // Cull Face
-  if (_enableCullFace != state->isEnabledCullFace()) {
-    _enableCullFace = state->isEnabledCullFace();
+  if (_enableCullFace != state.isEnabledCullFace()) {
+    _enableCullFace = state.isEnabledCullFace();
     if (_enableCullFace) {
       _nativeGL->enable(GLFeature::cullFace());
-      const int face = state->getCulledFace();
+      const int face = state.getCulledFace();
       if (_cullFace_face != face) {
         _nativeGL->cullFace(face);
         _cullFace_face = face;

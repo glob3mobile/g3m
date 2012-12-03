@@ -149,7 +149,8 @@ public:
   
   const Vector3D getVertex(int i) const;
   
-  void render(const G3MRenderContext* rc) const;
+  void render(const G3MRenderContext* rc,
+              const GLState& parentState) const;
   
   Extent* getExtent() const;
 
@@ -161,8 +162,6 @@ public:
   
   const IGLTextureId* getTopLevelGLTextureId() const;
   
-  GLState* getGLState() const { return _mesh->getGLState(); }
-
   bool isTransparent(const G3MRenderContext* rc) const;
   
 };
