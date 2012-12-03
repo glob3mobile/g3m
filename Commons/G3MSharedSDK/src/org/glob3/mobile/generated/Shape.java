@@ -150,6 +150,12 @@ public abstract class Shape implements EffectTarget
 	setScale(scale._x, scale._y, scale._z);
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Vector3D getScale() const
+  public final Vector3D getScale()
+  {
+	return new Vector3D(_scaleX, _scaleY, _scaleZ);
+  }
 
   public final void setAnimatedScale(TimeInterval duration, double scaleX, double scaleY, double scaleZ)
   {

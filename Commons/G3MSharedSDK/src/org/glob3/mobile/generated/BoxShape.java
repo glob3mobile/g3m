@@ -145,6 +145,13 @@ public class BoxShape extends MeshShape
 	}
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Vector3D getExtent() const
+  public final Vector3D getExtent()
+  {
+	return new Vector3D(_extentX, _extentY, _extentZ);
+  }
+
   public final void setSurfaceColor(Color color)
   {
 	if (_surfaceColor != null)

@@ -70,6 +70,7 @@ public class GL
   private float _flatColorA;
   private float _flatColorIntensity;
   private float _lineWidth;
+  private float _pointSize;
 
   private void loadModelView()
   {
@@ -98,7 +99,6 @@ public class GL
   
 	  for (int i = 0; i < bugdetSize; i++)
 	  {
-		//      _texturesIdBag.push_back(ids[i]);
 		_texturesIdBag.addFirst(ids.get(i));
 	  }
   
@@ -211,6 +211,7 @@ public class GL
 	  _flatColorIntensity = 0F;
 	  _billboardTexCoord = null;
 	  _lineWidth = 1F;
+	  _pointSize = 1F;
 	//Init Constants
 	GLCullFace.init(_nativeGL);
 	GLBufferType.init(_nativeGL);
@@ -423,29 +424,9 @@ public class GL
 	_nativeGL.disable(GLFeature.polygonOffsetFill());
   }
 
-  public final void lineWidth(float width)
-  {
-	if (_verbose)
-	{
-	  ILogger.instance().logInfo("GL::lineWidth()");
-	}
-  
-	if (_lineWidth != width)
-	{
-	  _nativeGL.lineWidth(width);
-	  _lineWidth = width;
-	}
-  }
-
-  public final void pointSize(float size)
-  {
-	if (_verbose)
-	{
-	  ILogger.instance().logInfo("GL::pointSize()");
-	}
-  
-	_nativeGL.uniform1f(GlobalMembersGL.Uniforms.PointSize, size);
-  }
+//  void lineWidth(float width);
+//
+//  void pointSize(float size);
 
   public final int getError()
   {
@@ -529,9 +510,6 @@ public class GL
   
 	_nativeGL.uniform1f(GlobalMembersGL.Uniforms.ViewPortRatio, viewPortRatio);
   
-	//disableDepthTest();
-  
-	//enableTexture2D();
 	color(1, 1, 1, 1);
   
 	bindTexture(textureId);
@@ -540,8 +518,6 @@ public class GL
 	setTextureCoordinates(2, 0, getBillboardTexCoord());
   
 	_nativeGL.drawArrays(GLPrimitive.triangleStrip(), 0, vertices.size() / 3);
-  
-	//enableDepthTest();
   
 	_nativeGL.uniform1i(GlobalMembersGL.Uniforms.BillBoard, 0);
   }
@@ -632,53 +608,6 @@ public class GL
 	enableVertexFlatColor(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha(), intensity);
   }*/
 
-
-  /* // state handling
-   void GL::enableTextures() {
-   if (_verbose) {
-   ILogger::instance()->logInfo("GL::enableTextures()");
-   }
-  
-   if (!_enableTextures) {
-   _nativeGL->enableVertexAttribArray(Attributes.TextureCoord);
-   _enableTextures = true;
-   }
-   }
-  
-   void GL::disableTextures() {
-   if (_verbose) {
-   ILogger::instance()->logInfo("GL::disableTextures()");
-   }
-  
-   if (_enableTextures) {
-   _nativeGL->disableVertexAttribArray(Attributes.TextureCoord);
-   _enableTextures = false;
-   }
-   }
-  
-   void GL::enableTexture2D() {
-   if (_verbose) {
-   ILogger::instance()->logInfo("GL::enableTexture2D()");
-   }
-  
-   if (!_enableTexture2D) {
-   _nativeGL->uniform1i(Uniforms.EnableTexture, 1);
-   _enableTexture2D = true;
-   }
-   }
-  
-   void GL::disableTexture2D() {
-   if (_verbose) {
-   ILogger::instance()->logInfo("GL::disableTexture2D()");
-   }
-  
-   if (_enableTexture2D) {
-   _nativeGL->uniform1i(Uniforms.EnableTexture, 0);
-   _enableTexture2D = false;
-   }
-   }*/
-  
-  
   public final void setBlendFuncSrcAlpha()
   {
 	if (_verbose)
@@ -910,6 +839,19 @@ public class GL
 	  {
 		_nativeGL.disable(GLFeature.cullFace());
 	  }
+	}
+  
+	final float lineWidth = state.lineWidth();
+	if (_lineWidth != lineWidth)
+	{
+	  _nativeGL.lineWidth(lineWidth);
+	  _lineWidth = lineWidth;
+	}
+  
+	final float pointSize = state.pointSize();
+	if (_pointSize != pointSize)
+	{
+	  _nativeGL.uniform1f(GlobalMembersGL.Uniforms.PointSize, pointSize);
 	}
   
   }

@@ -31,6 +31,9 @@ public class GLState
   private float _flatColorB;
   private float _flatColorA;
 
+  private float _lineWidth;
+  private float _pointSize;
+
 
   private GLState()
   {
@@ -49,6 +52,8 @@ public class GLState
 	  _flatColorG = 0F;
 	  _flatColorB = 0F;
 	  _flatColorA = 0F;
+	  _lineWidth = 1F;
+	  _pointSize = 1F;
   }
 
 
@@ -75,6 +80,8 @@ public class GLState
 	  _flatColorG = parentState._flatColorG;
 	  _flatColorB = parentState._flatColorB;
 	  _flatColorA = parentState._flatColorA;
+	  _lineWidth = parentState._lineWidth;
+	  _pointSize = parentState._pointSize;
   }
 
   public void dispose()
@@ -232,4 +239,27 @@ public class GLState
   {
 	  return _culledFace;
   }
+
+  public final void setLineWidth(float lineWidth)
+  {
+	  _lineWidth = lineWidth;
+  }
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: float lineWidth() const
+  public final float lineWidth()
+  {
+	  return _lineWidth;
+  }
+
+  public final void setPointSize(float pointSize)
+  {
+	  _pointSize = pointSize;
+  }
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: float pointSize() const
+  public final float pointSize()
+  {
+	  return _pointSize;
+  }
+
 }
