@@ -138,6 +138,7 @@ public abstract class AbstractMesh extends Mesh
 	  if (_flatColor.isTransparent())
 	  {
 		state.enableBlend();
+		gl.setBlendFuncSrcAlpha();
 	  }
 	}
 	else
