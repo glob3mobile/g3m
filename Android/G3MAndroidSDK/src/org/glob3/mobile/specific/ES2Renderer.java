@@ -7,7 +7,6 @@ import javax.microedition.khronos.opengles.GL10;
 
 import org.glob3.mobile.generated.G3MWidget;
 import org.glob3.mobile.generated.GL;
-//import org.glob3.mobile.generated.IGLProgramId;
 import org.glob3.mobile.generated.ShaderProgram;
 
 import android.opengl.GLES20;
@@ -16,23 +15,27 @@ import android.os.Looper;
 import android.util.Log;
 
 
+//import org.glob3.mobile.generated.IGLProgramId;
+
+
 public final class ES2Renderer
          implements
             GLSurfaceView.Renderer {
 
    final private G3MWidget_Android _widgetAndroid;
 
-   //private IGLProgramId            _program;
    private boolean                 _hasRendered = false;
-   private GL 					   _gl;
-   private ShaderProgram		   _shaderProgram;
-   private ShaderProgram		   _shaderProgram2;
+   private final GL                _gl;
+   private ShaderProgram           _shaderProgram;
+
+
+   // private ShaderProgram		   _shaderProgram2;
 
 
    public ES2Renderer(final G3MWidget_Android widget) {
       _widgetAndroid = widget;
       final NativeGL2_Android nativeGL = new NativeGL2_Android();
-      _gl = new GL(nativeGL,false);
+      _gl = new GL(nativeGL, false);
    }
 
 
@@ -76,16 +79,17 @@ public final class ES2Renderer
    public void onSurfaceCreated(final GL10 glUnused,
                                 final EGLConfig config) {
       //_program = new GLProgramId_Android(GL2Shaders.createProgram(GL2Shaders.getVertexShader(), GL2Shaders.getFragmentShader()));
-	  _shaderProgram = new ShaderProgram(_gl); 
-	  if (_shaderProgram.loadShaders(GL2Shaders.getVertexShader(), GL2Shaders.getFragmentShader())==false)
-		  Log.e("GL2Shaders", "Failed to load shaders");  
-	  
-	  //_shaderProgram2 = new ShaderProgram(_gl);
+      _shaderProgram = new ShaderProgram(_gl);
+      if (_shaderProgram.loadShaders(GL2Shaders.getVertexShader(), GL2Shaders.getFragmentShader()) == false) {
+         Log.e("GL2Shaders", "Failed to load shaders");
+      }
+
+      //_shaderProgram2 = new ShaderProgram(_gl);
    }
 
-   public final GL getGL()
-   {
- 	return _gl;
+
+   public final GL getGL() {
+      return _gl;
    }
 
 

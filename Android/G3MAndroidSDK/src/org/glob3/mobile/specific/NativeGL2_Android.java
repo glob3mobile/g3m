@@ -542,12 +542,7 @@ public final class NativeGL2_Android
       GLES20.glCompileShader(shader);
       final int[] compiled = new int[1];
       GLES20.glGetShaderiv(shader, GLES20.GL_COMPILE_STATUS, compiled, 0);
-      if (compiled[0] == 0) {
-         return false;
-      }
-      else {
-         return true;
-      }
+      return (compiled[0] != 0);
    }
 
 
@@ -573,12 +568,7 @@ public final class NativeGL2_Android
       GLES20.glLinkProgram(program);
       final int[] linkStatus = new int[1];
       GLES20.glGetProgramiv(program, GLES20.GL_LINK_STATUS, linkStatus, 0);
-      if (linkStatus[0] == GLES20.GL_TRUE) {
-         return true;
-      }
-      else {
-         return false;
-      }
+      return (linkStatus[0] == GLES20.GL_TRUE);
    }
 
 
