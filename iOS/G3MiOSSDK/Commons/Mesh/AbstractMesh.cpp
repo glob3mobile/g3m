@@ -113,6 +113,7 @@ void AbstractMesh::render(const G3MRenderContext *rc,
   if (_colors) {
     state.enableVertexColor(_colors, _colorsIntensity);
   }
+
   if (_flatColor) {
     state.enableFlatColor(*_flatColor, _colorsIntensity);
     if (_flatColor->isTransparent()) {
@@ -120,33 +121,9 @@ void AbstractMesh::render(const G3MRenderContext *rc,
       gl->setBlendFuncSrcAlpha();
     }
   }
-  else {
-    state.disableVertexColor();
-  }
-
-  /*
-   gl->enableVerticesPosition();
-
-   if (_colors == NULL) {
-   gl->disableVertexColor();
-   }
-   else {
-   gl->enableVertexColor(_colors, _colorsIntensity);
-   }
-
-   bool blend = false;
-   if (_flatColor == NULL) {
-   gl->disableVertexFlatColor();
-   }
-   else {
-   if (_flatColor->isTransparent()) {
-   gl->enableBlend();
-   gl->setBlendFuncSrcAlpha();
-   blend = true;
-   }
-   gl->enableVertexFlatColor(*_flatColor, _colorsIntensity);
-   }
-   */
+//  else {
+//    state.disableFlatColor();
+//  }
 
   gl->vertexPointer(3, 0, _vertices);
 
@@ -160,16 +137,8 @@ void AbstractMesh::render(const G3MRenderContext *rc,
   gl->setState(state);
   rawRender(rc, state);
 
-
   if (_translationMatrix != NULL) {
     gl->popMatrix();
   }
-
-  /*
-   if (blend) {
-   gl->disableBlend();
-   }
-   
-   gl->disableVerticesPosition();*/
   
 }

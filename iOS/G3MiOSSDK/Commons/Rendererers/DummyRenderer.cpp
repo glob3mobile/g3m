@@ -22,7 +22,7 @@ DummyRenderer::~DummyRenderer() {
   delete _vertices;
 }
 
-void DummyRenderer::initialize(const G3MContext* context) {  
+void DummyRenderer::initialize(const G3MContext* context) {
   int res = 12;
 
   FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero());
@@ -73,15 +73,11 @@ void DummyRenderer::render(const G3MRenderContext* rc,
   GLState state(parentState);
   state.enableVerticesPosition();
 
-
-  // obtaing gl object reference
   GL* gl = rc->getGL();
+
   gl->setState(state);
-  
-  //gl->enableVerticesPosition();
-  
-  // insert pointers
-  //gl->disableTextures();
+
+
   gl->vertexPointer(3, 0, _vertices);
 
   {
@@ -154,7 +150,5 @@ void DummyRenderer::render(const G3MRenderContext* rc,
                      _indices);
     gl->popMatrix();
   }
-  
-  //gl->enableTextures();
   
 }

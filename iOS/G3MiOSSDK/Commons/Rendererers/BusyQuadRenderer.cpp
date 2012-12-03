@@ -116,8 +116,8 @@ void BusyQuadRenderer::render(const G3MRenderContext* rc,
   // init modelview matrix
   int currentViewport[4];
   gl->getViewport(currentViewport);
-  int halfWidth = currentViewport[2] / 2;
-  int halfHeight = currentViewport[3] / 2;
+  const int halfWidth = currentViewport[2] / 2;
+  const int halfHeight = currentViewport[3] / 2;
   MutableMatrix44D M = MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth, halfWidth,
                                                                             -halfHeight, halfHeight,
                                                                             -halfWidth, halfWidth);
@@ -129,7 +129,6 @@ void BusyQuadRenderer::render(const G3MRenderContext* rc,
 
   gl->setState(state);
 
-  //gl->enableBlend();
   gl->setBlendFuncSrcAlpha();
 
   gl->pushMatrix();
@@ -141,7 +140,4 @@ void BusyQuadRenderer::render(const G3MRenderContext* rc,
   _quadMesh->render(rc, parentState);
 
   gl->popMatrix();
-
-  //gl->disableBlend();
-  
 }

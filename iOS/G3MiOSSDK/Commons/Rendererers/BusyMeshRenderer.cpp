@@ -88,6 +88,7 @@ void BusyMeshRenderer::render(const G3MRenderContext* rc,
   // set mesh glstate
   GLState state(parentState);
   state.enableBlend();
+  gl->setBlendFuncSrcAlpha();
 
   // init effect in the first render
   static bool firstTime = true;
@@ -100,8 +101,8 @@ void BusyMeshRenderer::render(const G3MRenderContext* rc,
   // init modelview matrix
   int currentViewport[4];
   gl->getViewport(currentViewport);
-  int halfWidth = currentViewport[2] / 2;
-  int halfHeight = currentViewport[3] / 2;
+  const int halfWidth = currentViewport[2] / 2;
+  const int halfHeight = currentViewport[3] / 2;
   MutableMatrix44D M = MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth, halfWidth,
                                                                             -halfHeight, halfHeight,
                                                                             -halfWidth, halfWidth);
@@ -111,11 +112,6 @@ void BusyMeshRenderer::render(const G3MRenderContext* rc,
   // clear screen
   gl->clearScreen(0.0f, 0.0f, 0.0f, 1.0f);
 
-  gl->setState(state);
-
-  //gl->enableBlend();
-  gl->setBlendFuncSrcAlpha();
-
   gl->pushMatrix();
   MutableMatrix44D R1 = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(0), Vector3D(-1, 0, 0));
   MutableMatrix44D R2 = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, -1));
@@ -123,8 +119,6 @@ void BusyMeshRenderer::render(const G3MRenderContext* rc,
 
   // draw mesh
   _mesh->render(rc, state);
-
+  
   gl->popMatrix();
-
-  //gl->disableBlend();
 }
