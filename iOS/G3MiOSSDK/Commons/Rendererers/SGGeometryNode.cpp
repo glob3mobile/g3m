@@ -41,7 +41,6 @@ void SGGeometryNode::rawRender(const G3MRenderContext* rc,
   if (_uv != NULL) {
     gl->transformTexCoords(1.0f, 1.0f,
                            0.0f, 0.0f);
-
     gl->setTextureCoordinates(2, 0, _uv);
   }
 

@@ -22,7 +22,6 @@ void TexturedMesh::render(const G3MRenderContext* rc,
     gl->setBlendFuncSrcAlpha();
   }
 
-  gl->setState(state);
   _textureMapping->bind(rc);
 
   _mesh->render(rc, state);

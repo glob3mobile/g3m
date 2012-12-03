@@ -121,9 +121,6 @@ void AbstractMesh::render(const G3MRenderContext *rc,
       gl->setBlendFuncSrcAlpha();
     }
   }
-//  else {
-//    state.disableFlatColor();
-//  }
 
   gl->vertexPointer(3, 0, _vertices);
 

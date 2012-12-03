@@ -75,15 +75,6 @@ private:
 
   const IGLTextureId* getGLTextureId();
 
-  //  int _lastTextureWidth;
-  //  int _lastTextureHeight;
-  //#ifdef C_CODE
-  //  unsigned char* _lastImageData;
-  //#endif
-  //#ifdef JAVA_CODE
-  //  byte[] _lastImageData;
-  //#endif
-
   //Get Locations warning of errors
   bool _errorGettingLocationOcurred;
   int checkedGetAttribLocation(ShaderProgram* program,
@@ -94,12 +85,10 @@ private:
   IFloatBuffer* _billboardTexCoord;
   IFloatBuffer* getBillboardTexCoord();
   
-  //void enableDepthTest();
-  //void disableDepthTest();
-  
   const bool _verbose;
 
 public:
+
 
   GL(INativeGL* const nativeGL,
      bool verbose) :
@@ -151,31 +140,11 @@ public:
     GLError::init(_nativeGL);
   }
   
-  //void enableVerticesPosition();
-  
-  //void enableTextures();
-  
   void verticesColors(bool v);
-  
-  //void enableTexture2D();
-  
-  //void enableVertexFlatColor(float r, float g, float b, float a,float intensity);
-  
-  //void disableVertexFlatColor();
-  
-  //void disableTexture2D();
-  
-  //void disableVerticesPosition();
-  
-  //void disableTextures();
   
   void clearScreen(float r, float g, float b, float a);
 
   void color(float r, float g, float b, float a);
-  
-  //void enableVertexColor(IFloatBuffer* colors, float intensity);
-  
-  //void disableVertexColor();
   
   void pushMatrix();
 
@@ -212,31 +181,17 @@ public:
 
   const IGLTextureId* uploadTexture(const IImage* image, int format, bool generateMipmap);
 
-  //  const const GLTextureId*uploadTexture(const IImage* image,
-  //                                  int textureWidth, int textureHeight,
-  //                                  bool generateMipmap);
-
   void setTextureCoordinates(int size,
                              int stride,
                              IFloatBuffer* texcoord);
 
   void bindTexture(const IGLTextureId* textureId);
 
-  //void enableBlend();
-  //void disableBlend();
-  
-
-  //void enableDepthTest();
-  //void disableDepthTest();
-
   void drawBillBoard(const IGLTextureId* textureId,
                      IFloatBuffer* vertices,
                      const float viewPortRatio);
 
   void deleteTexture(const IGLTextureId* textureId);
-  
-  /*void enableCullFace(int face);
-  void disableCullFace();*/
   
   void transformTexCoords(float scaleX,
                           float scaleY,
@@ -312,15 +267,9 @@ public:
     delete _nativeGL;
 #endif
 
-    //    if (_lastImageData != NULL) {
-    //      delete [] _lastImageData;
-    //      _lastImageData = NULL;
-    //    }
-
     delete _vertices;
     delete _textureCoordinates;
     delete _colors;
-    
   }
   
   int createProgram() const {
@@ -358,8 +307,9 @@ public:
   void deleteProgram(int program) const  {
     _nativeGL->deleteProgram(program);
   }
-  
+
   void setState(const GLState& state);
+
 };
 
 #endif

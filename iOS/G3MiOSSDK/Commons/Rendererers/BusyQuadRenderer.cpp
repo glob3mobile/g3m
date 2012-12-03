@@ -132,7 +132,7 @@ void BusyQuadRenderer::render(const G3MRenderContext* rc,
   gl->setBlendFuncSrcAlpha();
 
   gl->pushMatrix();
-  MutableMatrix44D R1 = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(0), Vector3D(-1, 0, 0));
+  MutableMatrix44D R1 = MutableMatrix44D::createRotationMatrix(Angle::zero(), Vector3D(-1, 0, 0));
   MutableMatrix44D R2 = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, 1));
   gl->multMatrixf(R1.multiply(R2));
 

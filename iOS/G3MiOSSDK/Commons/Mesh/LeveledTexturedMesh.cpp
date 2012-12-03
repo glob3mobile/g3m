@@ -143,9 +143,6 @@ void LeveledTexturedMesh::render(const G3MRenderContext* rc,
     state.enableTextures();
     state.enableTexture2D();
     
-    GL* gl = rc->getGL();
-    gl->setState(state);
-
     mapping->bind(rc);
 
     _mesh->render(rc, state);
