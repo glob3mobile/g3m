@@ -83,7 +83,7 @@ public:
     cleanTransformMatrix();
   }
 
-  
+
   void setScale(double scaleX,
                 double scaleY,
                 double scaleZ) {
@@ -99,7 +99,12 @@ public:
              scale._z);
   }
 
-  
+  Vector3D getScale() const {
+    return Vector3D(_scaleX,
+                    _scaleY,
+                    _scaleZ);
+  }
+
   void setAnimatedScale(const TimeInterval& duration,
                         double scaleX,
                         double scaleY,
@@ -138,12 +143,12 @@ public:
 
   virtual void rawRender(const G3MRenderContext* rc,
                          const GLState& parentState) = 0;
-  
-  virtual bool isTransparent(const G3MRenderContext* rc) = 0;
 
+  virtual bool isTransparent(const G3MRenderContext* rc) = 0;
+  
   void unusedMethod() const {
   }
-
+  
 };
 
 #endif

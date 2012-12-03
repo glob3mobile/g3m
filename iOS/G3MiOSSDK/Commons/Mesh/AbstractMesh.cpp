@@ -110,10 +110,10 @@ void AbstractMesh::render(const G3MRenderContext *rc,
 
   GLState state(parentState);
   state.enableVerticesPosition();
+  state.setLineWidth(_lineWidth);
   if (_colors) {
     state.enableVertexColor(_colors, _colorsIntensity);
   }
-
   if (_flatColor) {
     state.enableFlatColor(*_flatColor, _colorsIntensity);
     if (_flatColor->isTransparent()) {
@@ -123,8 +123,6 @@ void AbstractMesh::render(const G3MRenderContext *rc,
   }
 
   gl->vertexPointer(3, 0, _vertices);
-
-  gl->lineWidth(_lineWidth);
 
   if (_translationMatrix != NULL){
     gl->pushMatrix();

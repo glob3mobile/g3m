@@ -27,9 +27,7 @@ void SGGeometryNode::rawRender(const G3MRenderContext* rc,
   GL* gl = rc->getGL();
 
   GLState state(parentState);
-
   state.enableVerticesPosition();
-
   if (_colors == NULL) {
     state.disableVertexColor();
   }

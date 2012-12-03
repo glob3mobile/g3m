@@ -349,25 +349,6 @@ void GL::drawArrays(int mode,
                         count);
 }
 
-void GL::lineWidth(float width) {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::lineWidth()");
-  }
-
-  if (_lineWidth != width) {
-    _nativeGL->lineWidth(width);
-    _lineWidth = width;
-  }
-}
-
-void GL::pointSize(float size) {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::pointSize()");
-  }
-
-  _nativeGL->uniform1f(Uniforms.PointSize, size);
-}
-
 int GL::getError() {
   if (_verbose) {
     ILogger::instance()->logInfo("GL::getError()()");
@@ -469,9 +450,6 @@ void GL::drawBillBoard(const IGLTextureId* textureId,
 
   _nativeGL->uniform1f(Uniforms.ViewPortRatio, viewPortRatio);
 
-  //disableDepthTest();
-
-  //enableTexture2D();
   color(1, 1, 1, 1);
 
   bindTexture(textureId);
@@ -481,56 +459,8 @@ void GL::drawBillBoard(const IGLTextureId* textureId,
 
   _nativeGL->drawArrays(GLPrimitive::triangleStrip(), 0, vertices->size() / 3);
 
-  //enableDepthTest();
-
   _nativeGL->uniform1i(Uniforms.BillBoard, 0);
 }
-
-/*// state handling
- void GL::enableTextures() {
- if (_verbose) {
- ILogger::instance()->logInfo("GL::enableTextures()");
- }
-
- if (!_enableTextures) {
- _nativeGL->enableVertexAttribArray(Attributes.TextureCoord);
- _enableTextures = true;
- }
- }
-
- void GL::disableTextures() {
- if (_verbose) {
- ILogger::instance()->logInfo("GL::disableTextures()");
- }
-
- if (_enableTextures) {
- _nativeGL->disableVertexAttribArray(Attributes.TextureCoord);
- _enableTextures = false;
- }
- }
-
- void GL::enableTexture2D() {
- if (_verbose) {
- ILogger::instance()->logInfo("GL::enableTexture2D()");
- }
-
- if (!_enableTexture2D) {
- _nativeGL->uniform1i(Uniforms.EnableTexture, 1);
- _enableTexture2D = true;
- }
- }
-
- void GL::disableTexture2D() {
- if (_verbose) {
- ILogger::instance()->logInfo("GL::disableTexture2D()");
- }
-
- if (_enableTexture2D) {
- _nativeGL->uniform1i(Uniforms.EnableTexture, 0);
- _enableTexture2D = false;
- }
- }*/
-
 
 void GL::setBlendFuncSrcAlpha() {
   if (_verbose) {
@@ -553,7 +483,6 @@ const IGLTextureId* GL::getGLTextureId() {
     const std::vector<IGLTextureId*> ids = _nativeGL->genTextures(bugdetSize);
 
     for (int i = 0; i < bugdetSize; i++) {
-      //      _texturesIdBag.push_back(ids[i]);
       _texturesIdBag.push_front(ids[i]);
     }
 
@@ -702,6 +631,17 @@ void GL::setState(const GLState& state) {
     else {
       _nativeGL->disable(GLFeature::cullFace());
     }
+  }
+
+  const float lineWidth = state.lineWidth();
+  if (_lineWidth != lineWidth) {
+    _nativeGL->lineWidth(lineWidth);
+    _lineWidth = lineWidth;
+  }
+  
+  const float pointSize = state.pointSize();
+  if (_pointSize != pointSize) {
+    _nativeGL->uniform1f(Uniforms.PointSize, pointSize);
   }
   
 }

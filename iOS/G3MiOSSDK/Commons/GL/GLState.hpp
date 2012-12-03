@@ -33,6 +33,9 @@ private:
   float         _flatColorB;
   float         _flatColorA;
 
+  float _lineWidth;
+  float _pointSize;
+
 
   GLState() :
   _depthTest(true),
@@ -49,7 +52,9 @@ private:
   _flatColorR(0),
   _flatColorG(0),
   _flatColorB(0),
-  _flatColorA(0)
+  _flatColorA(0),
+  _lineWidth(1),
+  _pointSize(1)
   {
   }
 
@@ -75,7 +80,9 @@ public:
   _flatColorR(parentState._flatColorR),
   _flatColorG(parentState._flatColorG),
   _flatColorB(parentState._flatColorB),
-  _flatColorA(parentState._flatColorA)
+  _flatColorA(parentState._flatColorA),
+  _lineWidth(parentState._lineWidth),
+  _pointSize(parentState._pointSize)
   {
   }
 
@@ -134,6 +141,13 @@ public:
   void disableCullFace() { _cullFace = false; }
   bool isEnabledCullFace() const { return _cullFace; }
   int getCulledFace() const { return _culledFace; }
+
+  void setLineWidth(float lineWidth) { _lineWidth = lineWidth; }
+  float lineWidth() const { return _lineWidth; }
+
+  void setPointSize(float pointSize) { _pointSize = pointSize; }
+  float pointSize() const { return _pointSize; }
+  
 };
 
 #endif

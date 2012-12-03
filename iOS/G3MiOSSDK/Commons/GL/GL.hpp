@@ -35,8 +35,8 @@ private:
   // stack of ModelView matrices
   std::list<MutableMatrix44D> _matrixStack;
 
-  std::list<const IGLTextureId*>      _texturesIdBag;
-  long                        _texturesIdAllocationCounter;
+  std::list<const IGLTextureId*> _texturesIdBag;
+  long                           _texturesIdAllocationCounter;
   //  long                        _texturesIdGetCounter;
   //  long                        _texturesIdTakeCounter;
 
@@ -70,6 +70,7 @@ private:
   float _flatColorA;
   float _flatColorIntensity;
   float _lineWidth;
+  float _pointSize;
   
   inline void loadModelView();
 
@@ -122,7 +123,8 @@ public:
   _flatColorA(0),
   _flatColorIntensity(0),
   _billboardTexCoord(NULL),
-  _lineWidth(1)
+  _lineWidth(1),
+  _pointSize(1)
   {
     //Init Constants
     GLCullFace::init(_nativeGL);
@@ -173,9 +175,9 @@ public:
 
   void disablePolygonOffset();
 
-  void lineWidth(float width);
-
-  void pointSize(float size);
+//  void lineWidth(float width);
+//
+//  void pointSize(float size);
 
   int getError();
 
