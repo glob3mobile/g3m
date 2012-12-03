@@ -1,8 +1,4 @@
 package org.glob3.mobile.generated; 
-///#include "IGLProgramId.hpp"
-
-
-
 public class UniformsStruct
 {
 
