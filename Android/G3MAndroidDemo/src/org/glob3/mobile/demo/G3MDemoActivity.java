@@ -58,5 +58,27 @@ public class G3MDemoActivity
          }
       });
 
+
+      final Button switchLayerG3MButton = (Button) findViewById(R.id.switchLayersG3MButton);
+
+
+      switchLayerG3MButton.setOnClickListener(new OnClickListener() {
+         @Override
+         public void onClick(final View v) {
+            final Intent intent = new Intent(getApplicationContext(), G3MSwitchLayerActivity.class);
+            startActivity(intent);
+         }
+      });
+
+
+      final Button drawingShapesG3MButton = (Button) findViewById(R.id.threedshapes);
+      drawingShapesG3MButton.setOnClickListener(new OnClickListener() {
+         @Override
+         public void onClick(final View v) {
+            final Intent intent = new Intent(getApplicationContext(), G3MDrawingShapesActivity.class);
+            startActivity(intent);
+         }
+      });
+
    }
 }

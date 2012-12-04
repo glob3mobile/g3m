@@ -8,6 +8,7 @@ import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.BoxShape;
 import org.glob3.mobile.generated.CircleShape;
 import org.glob3.mobile.generated.Color;
+import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraConstrainer;
@@ -18,6 +19,7 @@ import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.Shape;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.SimpleCameraConstrainer;
+import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.UserData;
 import org.glob3.mobile.generated.Vector3D;
@@ -97,29 +99,27 @@ public class G3MBuilder {
 
 
       final ArrayList<Renderer> renderers = new ArrayList<Renderer>();
-      
+
       final boolean useQuadShapes = true;
       if (useQuadShapes) {
          final ShapesRenderer shapesRenderer = new ShapesRenderer();
-         
-         final Geodetic3D circlePosition = new Geodetic3D( 
-              Angle.fromDegrees(37.78333333), //
-              Angle.fromDegrees(-122.76666666666667), //
-              8000);
+
+         final Geodetic3D circlePosition = new Geodetic3D(Angle.fromDegrees(37.78333333), //
+                  Angle.fromDegrees(-122.76666666666667), //
+                  8000);
          final Color circleColor = Color.newFromRGBA(1, 1, 0, 0.5f);
-         Shape circle = new CircleShape(circlePosition, 50000, circleColor);
+         final Shape circle = new CircleShape(circlePosition, 50000, circleColor);
          shapesRenderer.addShape(circle);
-         
-         final Geodetic3D boxPosition = new Geodetic3D( 
-                 Angle.fromDegrees(37.78333333), //
-                 Angle.fromDegrees(-122.41666666666667), //
-                 45000);
+
+         final Geodetic3D boxPosition = new Geodetic3D(Angle.fromDegrees(37.78333333), //
+                  Angle.fromDegrees(-122.41666666666667), //
+                  45000);
          final Vector3D size = new Vector3D(20000, 30000, 50000);
          final Color boxColor = Color.newFromRGBA(0, 1, 0, 0.5f);
          final Color edgeColor = Color.newFromRGBA(0.75f, 0, 0, 0.75f);
-         Shape box = new BoxShape(boxPosition, size, 2, boxColor, edgeColor);
+         final Shape box = new BoxShape(boxPosition, size, 2, boxColor, edgeColor);
          shapesRenderer.addShape(box);
-         
+
          renderers.add(shapesRenderer);
       }
 
@@ -163,15 +163,13 @@ public class G3MBuilder {
    }
 
 
-   public G3MWidget_Android getGlob3WithCustomLayers(final Context context) {
+   public G3MWidget_Android getCustomLayersGlob3(final Context context,
+                                                 final LayerSet layerSet) {
 
       final G3MWidget_Android glob3 = new G3MWidget_Android(context);
 
+      initParams();
       cameraConstraints.add(scc);
-
-      final LayerSet layerSet = new LayerSet();
-      layerSet.addLayer(osmLayer);
-
 
       final ArrayList<Renderer> renderers = new ArrayList<Renderer>();
 
@@ -185,7 +183,91 @@ public class G3MBuilder {
                incrementalTileQuality);
 
       return glob3;
+
    }
 
 
+   public G3MWidget_Android getRenderersGlob3(final Context context,
+                                              final ArrayList<Renderer> renderers) {
+      final G3MWidget_Android glob3 = new G3MWidget_Android(context);
+
+      initParams();
+      cameraConstraints.add(scc);
+
+      final LayerSet layerSet = new LayerSet();
+      layerSet.addLayer(bingLayer);
+
+      glob3.initWidget( //
+               cameraConstraints, //
+               layerSet, //
+               renderers, //
+               userData, //
+               initializationTask, //
+               periodicalTasks, //
+               incrementalTileQuality);
+
+      return glob3;
+
+   }
+
+
+   public G3MWidget_Android getRenderersAnimationGlob3(final Context context,
+                                                       final ArrayList<Renderer> renderers,
+                                                       final ArrayList<PeriodicalTask> periodicalTasks2) {
+      final G3MWidget_Android glob3 = new G3MWidget_Android(context);
+
+      initParams();
+      cameraConstraints.add(scc);
+
+      final LayerSet layerSet = new LayerSet();
+      layerSet.addLayer(bingLayer);
+
+      glob3.initWidget( //
+               cameraConstraints, //
+               layerSet, //
+               renderers, //
+               userData, //
+               initializationTask, //
+               periodicalTasks2, //
+               incrementalTileQuality);
+
+      return glob3;
+   }
+
+
+   public G3MWidget_Android getRenderersAnimationGlob3InitialPosition(final Context context,
+                                                                      final ArrayList<Renderer> renderers,
+                                                                      final ArrayList<PeriodicalTask> periodicalTasks2,
+                                                                      final Geodetic3D position) {
+      final G3MWidget_Android glob3 = new G3MWidget_Android(context);
+
+      initParams();
+      cameraConstraints.add(scc);
+
+
+      final GTask initializationTask1 = new GTask() {
+
+         @Override
+         public void run(final G3MContext context1) {
+            glob3.setAnimatedCameraPosition( //
+                     position, //
+                     TimeInterval.fromSeconds(5));
+         }
+
+      };
+
+      final LayerSet layerSet = new LayerSet();
+      layerSet.addLayer(bingLayer);
+
+      glob3.initWidget( //
+               cameraConstraints, //
+               layerSet, //
+               renderers, //
+               userData, //
+               initializationTask1, //
+               periodicalTasks2, //
+               incrementalTileQuality);
+
+      return glob3;
+   }
 }

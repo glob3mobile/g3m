@@ -63,9 +63,7 @@ public class SGGeometryNode extends SGNode
 	GL gl = rc.getGL();
   
 	GLState state = new GLState(parentState);
-  
 	state.enableVerticesPosition();
-  
 	if (_colors == null)
 	{
 	  state.disableVertexColor();

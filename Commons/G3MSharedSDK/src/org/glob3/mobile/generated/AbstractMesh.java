@@ -128,11 +128,11 @@ public abstract class AbstractMesh extends Mesh
   
 	GLState state = new GLState(parentState);
 	state.enableVerticesPosition();
+	state.setLineWidth(_lineWidth);
 	if (_colors != null)
 	{
 	  state.enableVertexColor(_colors, _colorsIntensity);
 	}
-  
 	if (_flatColor != null)
 	{
 	  state.enableFlatColor(_flatColor, _colorsIntensity);
@@ -144,8 +144,6 @@ public abstract class AbstractMesh extends Mesh
 	}
   
 	gl.vertexPointer(3, 0, _vertices);
-  
-	gl.lineWidth(_lineWidth);
   
 	if (_translationMatrix != null)
 	{
