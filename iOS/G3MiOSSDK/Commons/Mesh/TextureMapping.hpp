@@ -24,7 +24,7 @@ public:
   }
   
   virtual void bind(const G3MRenderContext* rc) const = 0;
-  
+
   virtual bool isTransparent(const G3MRenderContext* rc) const = 0;
 
 };

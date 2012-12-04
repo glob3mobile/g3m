@@ -11,9 +11,37 @@
 #include "Mesh.hpp"
 
 #include "FloatBufferBuilderFromGeodetic.hpp"
-#include "IntBufferBuilder.hpp"
-#include "IndexedMesh.hpp"
+#include "DirectMesh.hpp"
 #include "GLConstants.hpp"
+#include "Camera.hpp"
+#include "GL.hpp"
+
+GEOGeometry::~GEOGeometry() {
+  delete _mesh;
+}
+
+Mesh* GEOGeometry::create2DBoundaryMesh(std::vector<Geodetic2D*>* coordinates,
+                                        Color* color,
+                                        float lineWidth,
+                                        const G3MRenderContext* rc) {
+  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
+                                          rc->getPlanet(),
+                                          Geodetic2D::zero());
+
+  const int coordinatesCount = coordinates->size();
+  for (int i = 0; i < coordinatesCount; i++) {
+    Geodetic2D* coordinate = coordinates->at(i);
+    vertices.add(*coordinate);
+    // vertices.add( Geodetic3D(*coordinate, 50) );
+  }
+
+  return new DirectMesh(GLPrimitive::lineStrip(),
+                        true,
+                        vertices.getCenter(),
+                        vertices.create(),
+                        lineWidth,
+                        color);
+}
 
 Mesh* GEOGeometry::getMesh(const G3MRenderContext* rc) {
   if (_mesh == NULL) {
@@ -22,40 +50,16 @@ Mesh* GEOGeometry::getMesh(const G3MRenderContext* rc) {
   return _mesh;
 }
 
-void GEOGeometry::render(const G3MRenderContext* rc) {
+void GEOGeometry::render(const G3MRenderContext* rc,
+                         const GLState& parentState) {
   Mesh* mesh = getMesh(rc);
   if (mesh != NULL) {
-    mesh->render(rc);
+    const Extent* extent = mesh->getExtent();
+
+    if ( extent->touches( rc->getCurrentCamera()->getFrustumInModelCoordinates() ) ) {
+      GLState state(parentState);
+      state.disableDepthTest();
+      mesh->render(rc, state);
+    }
   }
-}
-
-GEOGeometry::~GEOGeometry() {
-  delete _mesh;
-}
-
-Mesh* GEOGeometry::create2DBoundaryMesh(std::vector<Geodetic2D*>* coordinates,
-                                        const G3MRenderContext* rc) {
-  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
-                                          rc->getPlanet(),
-                                          Geodetic2D::zero());
-
-  IntBufferBuilder indices;
-
-  const int coordinatesCount = coordinates->size();
-  for (int i = 0; i < coordinatesCount; i++) {
-    Geodetic2D* coordinate = coordinates->at(i);
-    vertices.add(*coordinate);
-
-    indices.add(i);
-  }
-
-  Color* color = Color::newFromRGBA(1, 1, 0, 1);
-
-  return new IndexedMesh(GLPrimitive::lineStrip(),
-                         true,
-                         vertices.getCenter(),
-                         vertices.create(),
-                         indices.create(),
-                         2,
-                         color);
 }

@@ -224,30 +224,30 @@ public class G3MWebGLDemo
          //         quad.setPitch(Angle.fromDegrees(0));
          //         shapesRenderer.addShape(quad);
 
-         final Geodetic3D circlePosition = new Geodetic3D( 
-                 Angle.fromDegrees(37.78333333), //
-                 Angle.fromDegrees(-122.76666666666667), //
-                 8000);
-            final Color circleColor = Color.newFromRGBA(1, 1, 0, 0.5f);
-            Shape circle = new CircleShape(circlePosition, 50000, circleColor);
+         final Geodetic3D circlePosition = new Geodetic3D( //
+                  Angle.fromDegrees(37.78333333), //
+                  Angle.fromDegrees(-122.41666666666667), //
+                  8000);
 
          //circle.setHeading(Angle.fromDegrees(45));
          //circle.setPitch(Angle.fromDegrees(45));
          //circle.setScale(2.0, 0.5, 1);
          //circle.setRadius(circleRadius);
-
-         shapesRenderer.addShape(circle);
          
-         final Geodetic3D boxPosition = new Geodetic3D( 
-                 Angle.fromDegrees(37.78333333), //
-                 Angle.fromDegrees(-122.41666666666667), //
-                 45000);
-         final Vector3D size = new Vector3D(20000, 30000, 50000);
-         final Color boxColor = Color.newFromRGBA(0, 1, 0, 0.5f);
-         final Color edgeColor = Color.newFromRGBA(0.75f, 0, 0, 0.75f);
-         Shape box = new BoxShape(boxPosition, size, 2, boxColor, edgeColor);
-         shapesRenderer.addShape(box);
-
+            final Color circleColor = Color.newFromRGBA(1, 1, 0, 0.5f);
+            Shape circle = new CircleShape(circlePosition, 50000, circleColor);
+            shapesRenderer.addShape(circle);
+            
+            final Geodetic3D boxPosition = new Geodetic3D( 
+                    Angle.fromDegrees(37.78333333), //
+                    Angle.fromDegrees(-122.41666666666667), //
+                    45000);
+            final Vector3D size = new Vector3D(20000, 30000, 50000);
+            final Color boxColor = Color.newFromRGBA(0, 1, 0, 0.5f);
+            final Color edgeColor = Color.newFromRGBA(0.75f, 0, 0, 0.75f);
+            Shape box = new BoxShape(boxPosition, size, 2, boxColor, edgeColor);
+            shapesRenderer.addShape(box);
+            
          renderers.add(shapesRenderer);
       }
       

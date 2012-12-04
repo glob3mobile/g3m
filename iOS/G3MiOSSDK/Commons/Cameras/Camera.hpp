@@ -154,7 +154,8 @@ public:
   
   void resizeViewport(int width, int height);
   
-  void render(const G3MRenderContext* rc) const;
+  void render(const G3MRenderContext* rc,
+              const GLState& parentState) const;
   
   Vector3D pixel2Ray(const Vector2I& pixel) const;
   

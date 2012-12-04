@@ -32,7 +32,9 @@ public class GEO2DMultiLineStringGeometry extends GEOMultiLineStringGeometry
 	{
 	  java.util.ArrayList<Geodetic2D> coordinates = _coordinatesArray.get(i);
   
-	  composite.addMesh(create2DBoundaryMesh(coordinates, rc));
+	  Color color = Color.newFromRGBA(1, 1, 0, 1);
+  
+	  composite.addMesh(create2DBoundaryMesh(coordinates, color, 2, rc));
 	}
 	return composite;
   }

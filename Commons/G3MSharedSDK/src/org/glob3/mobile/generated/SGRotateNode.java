@@ -52,4 +52,9 @@ public class SGRotateNode extends SGNode
 	super.prepareRender(rc);
   }
 
+  public final GLState createState(G3MRenderContext rc, GLState parentState)
+  {
+	return null;
+  }
+
 }

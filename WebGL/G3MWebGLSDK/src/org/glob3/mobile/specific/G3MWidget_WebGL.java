@@ -17,12 +17,13 @@ import org.glob3.mobile.generated.CompositeRenderer;
 import org.glob3.mobile.generated.EllipsoidalTileTessellator;
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.G3MWidget;
+import org.glob3.mobile.generated.GL;
 import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IFactory;
-import org.glob3.mobile.generated.IGLProgramId;
+//import org.glob3.mobile.generated.IGLProgramId;
 import org.glob3.mobile.generated.IJSONParser;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IMathUtils;
@@ -36,6 +37,7 @@ import org.glob3.mobile.generated.MultiLayerTileTexturizer;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.Renderer;
+import org.glob3.mobile.generated.ShaderProgram;
 import org.glob3.mobile.generated.TileRenderer;
 import org.glob3.mobile.generated.TilesRenderParameters;
 import org.glob3.mobile.generated.TimeInterval;
@@ -56,6 +58,66 @@ public final class G3MWidget_WebGL
          extends
             Composite {
 
+	   private final static String    _fragmentShader = "varying mediump vec2 TextureCoordOut;"
+               + "uniform mediump vec2 TranslationTexCoord;"
+               + "uniform mediump vec2 ScaleTexCoord;"
+               + ""
+               + "varying mediump vec4 VertexColor;"
+               + ""
+               + "uniform sampler2D Sampler;"
+               + "uniform bool EnableTexture;"
+               + "uniform lowp vec4 FlatColor;"
+               + ""
+               + "uniform bool EnableColorPerVertex;"
+               + "uniform bool EnableFlatColor;"
+               + "uniform mediump float FlatColorIntensity;"
+               + "uniform mediump float ColorPerVertexIntensity;"
+               + ""
+               + "void main() {"
+               + "  "
+               + "  if (EnableTexture) {"
+               + "    gl_FragColor = texture2D(Sampler, TextureCoordOut * ScaleTexCoord + TranslationTexCoord);"
+               + ""
+               + "    if (EnableFlatColor || EnableColorPerVertex){"
+               + "      lowp vec4 color;"
+               + "      if (EnableFlatColor) {"
+               + "        color = FlatColor;"
+               + "        if (EnableColorPerVertex) {"
+               + "          color = color * VertexColor;"
+               + "        }"
+               + "      }"
+               + "      else {"
+               + "        color = VertexColor;"
+               + "      }"
+               + "      "
+               + "      lowp float intensity = (FlatColorIntensity + ColorPerVertexIntensity) / 2.0;"
+               + "      gl_FragColor = mix(gl_FragColor,"
+               + "                         VertexColor,"
+               + "                         intensity);" + "    }" + "  }" + "  else {"
+               + "    " + "    if (EnableColorPerVertex) {"
+               + "      gl_FragColor = VertexColor;" + "      if (EnableFlatColor) {"
+               + "        gl_FragColor = gl_FragColor * FlatColor;" + "      }" + "    }"
+               + "    else {" + "      gl_FragColor = FlatColor;" + "    }" + "    " + "  }"
+               + "  " + "}";
+
+private final static String    _vertexShader   = "attribute vec4 Position;"
+               + "attribute vec2 TextureCoord; "
+               + "attribute vec4 Color;"
+               + "uniform mat4 Projection;"
+               + "uniform mat4 Modelview;"
+               + "uniform bool BillBoard;"
+               + "uniform float ViewPortRatio;"
+               + "uniform float PointSize;"
+               + "varying vec4 VertexColor;"
+               + "varying vec2 TextureCoordOut;"
+               + "void main() {"
+               + "  gl_Position = Projection * Modelview * Position;"
+               + "  if (BillBoard) {"
+               + "    gl_Position.x += (-0.05 + TextureCoord.x * 0.1) * gl_Position.w;"
+               + "    gl_Position.y -= (-0.05 + TextureCoord.y * 0.1) * gl_Position.w * ViewPortRatio;"
+               + "  }" + "  TextureCoordOut = TextureCoord;" + "  VertexColor = Color;"
+               + "  gl_PointSize = PointSize;" + "}";
+
 
    public static final String            CANVAS_ID             = "g3m-canvas";
 
@@ -67,9 +129,12 @@ public final class G3MWidget_WebGL
    private ArrayList<Renderer>           _renderers            = null;
    private UserData                      _userData             = null;
 
-   private IGLProgramId                  _program              = null;
+   //private IGLProgramId                  _program              = null;
    private JavaScriptObject              _webGLContext         = null;
 
+   private ShaderProgram		   _shaderProgram;
+   private ShaderProgram		   _shaderProgram2;
+   
    private G3MWidget                     _widget;
 
    private int                           _width;
@@ -84,6 +149,8 @@ public final class G3MWidget_WebGL
    private ArrayList<PeriodicalTask>     _periodicalTasks;
 
    private boolean                       _incrementalTileQuality;
+   
+   private GL							 _gl;
 
 
    public G3MWidget_WebGL(final String proxy) {
@@ -302,9 +369,15 @@ public final class G3MWidget_WebGL
       }
 
       //CREATING SHADERS PROGRAM
-      _program = new Shaders_WebGL(_webGLContext).createProgram();
-
+      //_program = new Shaders_WebGL(_webGLContext).createProgram();
+      
       final NativeGL_WebGL nativeGL = new NativeGL_WebGL(_webGLContext);
+      _gl = new GL(nativeGL,false);
+      
+      _shaderProgram = new ShaderProgram(_gl);
+      if (_shaderProgram.loadShaders(_vertexShader, _fragmentShader)==false) {
+    	  ILogger.instance().logInfo("failed to load shaders");
+      }
 
       final CompositeRenderer mainRenderer = new CompositeRenderer();
       //      composite.addRenderer(cameraRenderer);
@@ -339,7 +412,8 @@ public final class G3MWidget_WebGL
 
 
       _widget = G3MWidget.create( //
-               nativeGL, //
+//               nativeGL, //
+    		   _gl,
                storage, //
                downloader, //
                threadUtils, //
@@ -390,12 +464,12 @@ public final class G3MWidget_WebGL
 
       _motionEventProcessor = new MotionEventProcessor(_widget);
 
-      if (_program != null) {
+/*      if (_program != null) {
          _widget.getGL().useProgram(_program);
       }
       else {
          throw new RuntimeException("PROGRAM INVALID");
-      }
+      }*/
 
       startRenderLoop();
    }
@@ -439,6 +513,9 @@ public final class G3MWidget_WebGL
       //      if (_program != null) {
       //jsGLInit();
       //         _widget.getGL().useProgram(_program);
+	   
+
+	  _widget.getGL().useProgram(_shaderProgram);	   
       _widget.render();
       //      }
       //      else {

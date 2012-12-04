@@ -87,7 +87,6 @@ public final class ThreadUtils_Android
 
    @Override
    public synchronized void onResume(final G3MContext context) {
-      final int ___DIEGO_AT_WORK;
       if (!_running) {
          _running = true;
          drainQueues();

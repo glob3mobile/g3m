@@ -25,7 +25,7 @@ public class GLErrorRenderer extends LeafRenderer
   
   }
 
-  public final void render(G3MRenderContext rc)
+  public final void render(G3MRenderContext rc, GLState parentState)
   {
 	GL gl = rc.getGL();
 	final ILogger logger = rc.getLogger();

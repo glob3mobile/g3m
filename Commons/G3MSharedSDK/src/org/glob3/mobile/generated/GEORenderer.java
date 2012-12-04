@@ -76,13 +76,13 @@ public class GEORenderer extends LeafRenderer
 	return true;
   }
 
-  public final void render(G3MRenderContext rc)
+  public final void render(G3MRenderContext rc, GLState parentState)
   {
 	final int childrenCount = _children.size();
 	for (int i = 0; i < childrenCount; i++)
 	{
 	  GEOObject geoObject = _children.get(i);
-	  geoObject.render(rc);
+	  geoObject.render(rc, parentState);
 	}
   }
 

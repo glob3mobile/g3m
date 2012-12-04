@@ -210,13 +210,13 @@ public class Box extends Extent
 	return Vector3D.nan();
   }
 
-  public final void render(G3MRenderContext rc)
+  public final void render(G3MRenderContext rc, GLState parentState)
   {
 	if (_mesh == null)
 	{
 	  createMesh(Color.newFromRGBA((float)1.0, (float)1.0, (float)0.0, (float)1.0));
 	}
-	_mesh.render(rc);
+	_mesh.render(rc, parentState);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:

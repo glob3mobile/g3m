@@ -24,6 +24,8 @@ package org.glob3.mobile.generated;
 //class IFloatBuffer;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IGLTextureId;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class GLState;
 
 public class Mark
 {
@@ -122,7 +124,7 @@ public class Mark
   private Vector2D render_textureTranslation = new Vector2D(0.0, 0.0);
 //C++ TO JAVA CONVERTER NOTE: This was formerly a static local variable declaration (not allowed in Java):
   private Vector2D render_textureScale = new Vector2D(1.0, 1.0);
-  public final void render(G3MRenderContext rc, double minDistanceToCamera)
+  public final void render(G3MRenderContext rc, GLState parentState, double minDistanceToCamera)
   {
 	final Camera camera = rc.getCurrentCamera();
 	final Planet planet = rc.getPlanet();

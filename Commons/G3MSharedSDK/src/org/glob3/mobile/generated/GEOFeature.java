@@ -50,9 +50,9 @@ public class GEOFeature extends GEOObject
 		_properties.dispose();
   }
 
-  public final void render(G3MRenderContext rc)
+  public final void render(G3MRenderContext rc, GLState parentState)
   {
-	_geometry.render(rc);
+	_geometry.render(rc, parentState);
   }
 
 }

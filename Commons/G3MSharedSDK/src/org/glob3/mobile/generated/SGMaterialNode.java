@@ -48,30 +48,18 @@ public class SGMaterialNode extends SGNode
 		_specularColor.dispose();
   }
 
-  public final void prepareRender(G3MRenderContext rc)
+  public final GLState createState(G3MRenderContext rc, GLState parentState)
   {
-	GL gl = rc.getGL();
-  
 	if (_specularColor == null)
 	{
-	  gl.disableVertexFlatColor();
-	}
-	else
-	{
-	  final float colorsIntensity = 1F;
-	  gl.enableVertexFlatColor(_specularColor, colorsIntensity);
+	  return null;
 	}
   
-	super.prepareRender(rc);
-  }
-
-  public final void cleanUpRender(G3MRenderContext rc)
-  {
-	GL gl = rc.getGL();
+	GLState state = new GLState(parentState);
+	final float colorsIntensity = 1F;
+	state.enableFlatColor(_specularColor, colorsIntensity);
   
-	gl.disableVertexFlatColor();
-  
-	super.cleanUpRender(rc);
+	return state;
   }
 
 }

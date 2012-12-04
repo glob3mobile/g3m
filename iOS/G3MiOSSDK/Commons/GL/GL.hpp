@@ -15,10 +15,9 @@
 #include "MutableMatrix44D.hpp"
 #include "Color.hpp"
 #include "MutableVector2D.hpp"
-
 #include "IFloatBuffer.hpp"
-
 #include "GLConstants.hpp"
+#include "GLState.hpp"
 
 #include <list>
 
@@ -36,20 +35,19 @@ private:
   // stack of ModelView matrices
   std::list<MutableMatrix44D> _matrixStack;
 
-  std::list<const IGLTextureId*>      _texturesIdBag;
-  long                        _texturesIdAllocationCounter;
+  std::list<const IGLTextureId*> _texturesIdBag;
+  long                           _texturesIdAllocationCounter;
   //  long                        _texturesIdGetCounter;
   //  long                        _texturesIdTakeCounter;
 
   // state handling
+  bool _enableDepthTest;
+  bool _enableBlend;
   bool _enableTextures;
   bool _enableTexture2D;
   bool _enableVertexColor;
   bool _enableVerticesPosition;
   bool _enableFlatColor;
-  bool _enableDepthTest;
-  bool _enableBlend;
-
   bool _enableCullFace;
 
   int _cullFace_face;
@@ -71,32 +69,27 @@ private:
   float _flatColorB;
   float _flatColorA;
   float _flatColorIntensity;
-
+  float _lineWidth;
+  float _pointSize;
+  
   inline void loadModelView();
 
   const IGLTextureId* getGLTextureId();
 
-  //  int _lastTextureWidth;
-  //  int _lastTextureHeight;
-  //#ifdef C_CODE
-  //  unsigned char* _lastImageData;
-  //#endif
-  //#ifdef JAVA_CODE
-  //  byte[] _lastImageData;
-  //#endif
-
   //Get Locations warning of errors
   bool _errorGettingLocationOcurred;
-  int checkedGetAttribLocation(IGLProgramId* program, const std::string& name);
-  IGLUniformID* checkedGetUniformLocation(IGLProgramId* program, const std::string& name);
-
+  int checkedGetAttribLocation(ShaderProgram* program,
+                               const std::string& name);
+  IGLUniformID* checkedGetUniformLocation(ShaderProgram* program,
+                                          const std::string& name);
+  
   IFloatBuffer* _billboardTexCoord;
   IFloatBuffer* getBillboardTexCoord();
-
-
+  
   const bool _verbose;
 
 public:
+
 
   GL(INativeGL* const nativeGL,
      bool verbose) :
@@ -129,7 +122,9 @@ public:
   _flatColorB(0),
   _flatColorA(0),
   _flatColorIntensity(0),
-  _billboardTexCoord(NULL)
+  _billboardTexCoord(NULL),
+  _lineWidth(1),
+  _pointSize(1)
   {
     //Init Constants
     GLCullFace::init(_nativeGL);
@@ -146,33 +141,13 @@ public:
     GLVariable::init(_nativeGL);
     GLError::init(_nativeGL);
   }
-
-  void enableVerticesPosition();
-
-  void enableTextures();
-
-  void enableTexture2D();
-
-  void enableVertexFlatColor(float r, float g, float b, float a,
-                             float intensity);
-
-  void disableVertexFlatColor();
-
-  void disableTexture2D();
-
-  void disableVerticesPosition();
-
-  void disableTextures();
-
+  
+  void verticesColors(bool v);
+  
   void clearScreen(float r, float g, float b, float a);
 
   void color(float r, float g, float b, float a);
-
-  void enableVertexColor(IFloatBuffer* colors,
-                         float intensity);
-
-  void disableVertexColor();
-
+  
   void pushMatrix();
 
   void popMatrix();
@@ -188,25 +163,25 @@ public:
   void drawElements(int mode,
                     IIntBuffer* indices);
 
+  void drawArrays(int mode,
+                  int first,
+                  int count);
+
   void setProjection(const MutableMatrix44D &projection);
-
-  bool useProgram(IGLProgramId* program);
-
+  
+  bool useProgram(ShaderProgram* program);
+  
   void enablePolygonOffset(float factor, float units);
 
   void disablePolygonOffset();
 
-  void lineWidth(float width);
-
-  void pointSize(float size);
+//  void lineWidth(float width);
+//
+//  void pointSize(float size);
 
   int getError();
 
   const IGLTextureId* uploadTexture(const IImage* image, int format, bool generateMipmap);
-
-  //  const const GLTextureId*uploadTexture(const IImage* image,
-  //                                  int textureWidth, int textureHeight,
-  //                                  bool generateMipmap);
 
   void setTextureCoordinates(int size,
                              int stride,
@@ -214,21 +189,12 @@ public:
 
   void bindTexture(const IGLTextureId* textureId);
 
-  void enableDepthTest();
-  void disableDepthTest();
-
-  void enableBlend();
-  void disableBlend();
-
   void drawBillBoard(const IGLTextureId* textureId,
                      IFloatBuffer* vertices,
                      const float viewPortRatio);
 
   void deleteTexture(const IGLTextureId* textureId);
-
-  void enableCullFace(int face);
-  void disableCullFace();
-
+  
   void transformTexCoords(float scaleX,
                           float scaleY,
                           float translationX,
@@ -284,13 +250,12 @@ public:
                 col.getBlue(),
                 col.getAlpha());
   }
-
-  void enableVertexFlatColor(const Color& c, float intensity) {
-    if (_verbose) ILogger::instance()->logInfo("GL::enableVertexFlatColor()");
-
+  
+  /*void enableVertexFlatColor(const Color& c, float intensity) {
+   if (_verbose) ILogger::instance()->logInfo("GL::enableVertexFlatColor()");
     enableVertexFlatColor(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha(), intensity);
-  }
-
+  }*/
+  
   void setBlendFuncSrcAlpha();
 
   void getViewport(int v[]) {
@@ -304,17 +269,49 @@ public:
     delete _nativeGL;
 #endif
 
-    //    if (_lastImageData != NULL) {
-    //      delete [] _lastImageData;
-    //      _lastImageData = NULL;
-    //    }
-
     delete _vertices;
     delete _textureCoordinates;
     delete _colors;
-    
   }
   
+  int createProgram() const {
+    return _nativeGL->createProgram();  
+  }
+    
+  void attachShader(int program, int shader) const {
+    _nativeGL->attachShader(program, shader);
+  }
+  
+  int createShader(ShaderType type) const {
+    return _nativeGL->createShader(type);
+  }
+  
+  bool compileShader(int shader, const std::string& source) const {
+    return _nativeGL->compileShader(shader, source);
+  }
+
+  void deleteShader(int shader) const {
+    _nativeGL->deleteShader(shader);
+  }
+  
+  void printShaderInfoLog(int shader) const {
+    _nativeGL->printShaderInfoLog(shader);
+  }
+  
+  bool linkProgram(int program) const {
+    return _nativeGL->linkProgram(program);
+  }
+  
+  void printProgramInfoLog(int program) const {
+    _nativeGL->linkProgram(program);
+  }
+  
+  void deleteProgram(int program) const  {
+    _nativeGL->deleteProgram(program);
+  }
+
+  void setState(const GLState& state);
+
 };
 
 #endif

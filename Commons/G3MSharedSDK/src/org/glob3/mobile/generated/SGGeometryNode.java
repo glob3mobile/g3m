@@ -58,53 +58,38 @@ public class SGGeometryNode extends SGNode
 		_indices.dispose();
   }
 
-  public final void rawRender(G3MRenderContext rc)
+  public final void rawRender(G3MRenderContext rc, GLState parentState)
   {
 	GL gl = rc.getGL();
   
-	gl.enableVerticesPosition();
-  
+	GLState state = new GLState(parentState);
+	state.enableVerticesPosition();
 	if (_colors == null)
 	{
-	  gl.disableVertexColor();
+	  state.disableVertexColor();
 	}
 	else
 	{
 	  final float colorsIntensity = 1F;
-	  gl.enableVertexColor(_colors, colorsIntensity);
+	  state.enableVertexColor(_colors, colorsIntensity);
 	}
   
 	if (_uv != null)
 	{
 	  gl.transformTexCoords(1.0f, 1.0f, 0.0f, 0.0f);
-  
 	  gl.setTextureCoordinates(2, 0, _uv);
 	}
   
-  //  if (_transparent) {
-  //    gl->enableBlend();
-  //  }
-  //
-  //  gl->enableTextures();
-  //  gl->enableTexture2D();
-  //
-  //  _textureMapping->bind(rc);
-  //
-  //  _mesh->render(rc);
-  //
-  //  gl->disableTexture2D();
-  //  gl->disableTextures();
-  //
-  //  if (_transparent) {
-  //    gl->disableBlend();
-  //  }
-  
+	gl.setState(state);
   
 	gl.vertexPointer(3, 0, _vertices);
   
 	gl.drawElements(_primitive, _indices);
-  
-	gl.disableVerticesPosition();
+  }
+
+  public final GLState createState(G3MRenderContext rc, GLState parentState)
+  {
+	return null;
   }
 
 }

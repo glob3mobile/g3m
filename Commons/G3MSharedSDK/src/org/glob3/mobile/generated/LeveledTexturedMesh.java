@@ -111,28 +111,23 @@ public class LeveledTexturedMesh extends Mesh
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void render(const G3MRenderContext* rc) const
-  public final void render(G3MRenderContext rc)
+//ORIGINAL LINE: void render(const G3MRenderContext* rc, const GLState& parentState) const
+  public final void render(G3MRenderContext rc, GLState parentState)
   {
 	LazyTextureMapping mapping = getCurrentTextureMapping();
-  
 	if (mapping == null)
 	{
-	  _mesh.render(rc);
+	  _mesh.render(rc, parentState);
 	}
 	else
 	{
-	  GL gl = rc.getGL();
-  
-	  gl.enableTextures();
-	  gl.enableTexture2D();
+	  GLState state = new GLState(parentState);
+	  state.enableTextures();
+	  state.enableTexture2D();
   
 	  mapping.bind(rc);
   
-	  _mesh.render(rc);
-  
-	  gl.disableTexture2D();
-	  gl.disableTextures();
+	  _mesh.render(rc, state);
 	}
   }
 

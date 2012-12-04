@@ -54,12 +54,12 @@ public abstract class MeshShape extends Shape
 	return (mesh != null);
   }
 
-  public final void rawRender(G3MRenderContext rc)
+  public final void rawRender(G3MRenderContext rc, GLState parentState)
   {
 	final Mesh mesh = getMesh(rc);
 	if (mesh != null)
 	{
-	  mesh.render(rc);
+	  mesh.render(rc, parentState);
 	}
   }
 

@@ -19,10 +19,10 @@ public class G3MWidget
 	}
   }
 
-  public static G3MWidget create(INativeGL nativeGL, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, int width, int height, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks)
+  public static G3MWidget create(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, int width, int height, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks)
   {
   
-	return new G3MWidget(nativeGL, storage, downloader, threadUtils, planet, cameraConstrainers, cameraRenderer, mainRenderer, busyRenderer, width, height, backgroundColor, logFPS, logDownloaderStatistics, initializationTask, autoDeleteInitializationTask, periodicalTasks);
+	return new G3MWidget(gl, storage, downloader, threadUtils, planet, cameraConstrainers, cameraRenderer, mainRenderer, busyRenderer, width, height, backgroundColor, logFPS, logDownloaderStatistics, initializationTask, autoDeleteInitializationTask, periodicalTasks);
   }
 
   public void dispose()
@@ -67,6 +67,9 @@ public class G3MWidget
   
 	if (_context != null)
 		_context.dispose();
+  
+	if (_rootState != null)
+		_rootState.dispose();
   }
 
   public final void render()
@@ -134,14 +137,13 @@ public class G3MWidget
   
 	if (_mainRendererReady)
 	{
-	  _cameraRenderer.render(rc);
+	  _cameraRenderer.render(rc, _rootState);
 	}
   
 	if (_selectedRenderer.isEnable())
 	{
-	  _selectedRenderer.render(rc);
+	  _selectedRenderer.render(rc, _rootState);
 	}
-  
   
 	java.util.ArrayList<OrderedRenderable> orderedRenderables = rc.getSortedOrderedRenderables();
 	if (orderedRenderables != null)
@@ -150,7 +152,7 @@ public class G3MWidget
 	  for (int i = 0; i < orderedRenderablesCount; i++)
 	  {
 		OrderedRenderable orderedRenderable = orderedRenderables.get(i);
-		orderedRenderable.render(rc);
+		orderedRenderable.render(rc, _rootState);
 		if (orderedRenderable != null)
 			orderedRenderable.dispose();
 	  }
@@ -455,20 +457,28 @@ public class G3MWidget
 
   private void initializeGL()
   {
-	_gl.enableDepthTest();
+	//_gl->enableDepthTest();
   
-	_gl.enableCullFace(GLCullFace.back());
+	//_gl->enableCullFace(GLCullFace::back());
   }
 
   private final G3MContext _context;
 
   private boolean _paused;
 
-  private G3MWidget(INativeGL nativeGL, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, int width, int height, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks)
+  private final GLState _rootState;
+
+  private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, int width, int height, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks)
+  /*
+   =======
+  _gl( new GL(nativeGL, false) ),
+  >>>>>>> origin/webgl-port
+   */
   {
+	  _rootState = GLState.newDefault();
 	  _frameTasksExecutor = new FrameTasksExecutor();
 	  _effectsScheduler = new EffectsScheduler();
-	  _gl = new GL(nativeGL, false);
+	  _gl = gl;
 	  _downloader = downloader;
 	  _storage = storage;
 	  _threadUtils = threadUtils;

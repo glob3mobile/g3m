@@ -17,6 +17,7 @@ GEOFeature::~GEOFeature() {
   delete _properties;
 }
 
-void GEOFeature::render(const G3MRenderContext* rc) {
-  _geometry->render(rc);
+void GEOFeature::render(const G3MRenderContext* rc,
+                        const GLState& parentState) {
+  _geometry->render(rc, parentState);
 }

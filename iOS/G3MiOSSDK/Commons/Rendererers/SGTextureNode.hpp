@@ -25,6 +25,8 @@ public:
 
   }
 
+  virtual ~SGTextureNode();
+
   void addLayer(SGLayerNode* layer);
 
   bool isReadyToRender(const G3MRenderContext* rc);
@@ -32,12 +34,22 @@ public:
   void initialize(const G3MContext* context,
                   SGShape *shape);
 
-  void rawRender(const G3MRenderContext* rc);
+//  void rawRender(const G3MRenderContext* rc,
+//                 const GLState& parentState);
 
   void prepareRender(const G3MRenderContext* rc);
 
   void cleanUpRender(const G3MRenderContext* rc);
 
+  const GLState* createState(const G3MRenderContext* rc,
+                             const GLState& parentState) {
+    return  NULL;
+  }
+
+  void render(const G3MRenderContext* rc,
+              const GLState& parentState);
+  
+  
 };
 
 #endif

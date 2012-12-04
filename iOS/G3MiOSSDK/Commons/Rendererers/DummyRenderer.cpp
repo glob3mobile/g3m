@@ -22,12 +22,8 @@ DummyRenderer::~DummyRenderer() {
   delete _vertices;
 }
 
-void DummyRenderer::initialize(const G3MContext* context)
-{
+void DummyRenderer::initialize(const G3MContext* context) {
   int res = 12;
-  //_vertices = new float[res * res * 3];
-  //_numIndices = 2 * (res - 1) * (res + 1);
-  //_index = new int[_numIndices];
 
   FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero());
   IntBufferBuilder index;
@@ -41,33 +37,24 @@ void DummyRenderer::initialize(const G3MContext* context)
     _halfSize = 7e6;
   }
 
-  //int n = 0;
   for (int j = 0; j < res; j++) {
     for (int i = 0; i < res; i++) {
 
       vertices.add((float)0,
                    (float)(-_halfSize + i / (float) (res - 1) * 2*_halfSize),
-                   (float)(_halfSize - j / (float) (res - 1) * 2*_halfSize));
-      //      _vertices[n++] = (float) 0;
-      //      _vertices[n++] = (float) (-_halfSize + i / (float) (res - 1) * 2*_halfSize);
-      //      _vertices[n++] = (float) (_halfSize - j / (float) (res - 1) * 2*_halfSize);
+                   (float)(+_halfSize - j / (float) (res - 1) * 2*_halfSize));
     }
   }
 
-  //n = 0;
   for (int j = 0; j < res - 1; j++) {
     if (j > 0){
-      //_index[n++] = (char) (j * res);
       index.add(j * res);
     }
     for (int i = 0; i < res; i++) {
       index.add(j * res + i);
       index.add(j * res + i + res);
-      //      _index[n++] = (j * res + i);
-      //      _index[n++] = (j * res + i + res);
     }
     index.add(j * res + 2 * res - 1);
-    //_index[n++] = (j * res + 2 * res - 1);
   }
 
   _indices = index.create();
@@ -80,15 +67,17 @@ bool DummyRenderer::onTouchEvent(const G3MEventContext* ec,
   return false;
 }
 
-void DummyRenderer::render(const G3MRenderContext* rc) {
+void DummyRenderer::render(const G3MRenderContext* rc,
+                           const GLState& parentState) {
 
-  // obtaing gl object reference
-  GL *gl = rc->getGL();
+  GLState state(parentState);
+  state.enableVerticesPosition();
 
-  gl->enableVerticesPosition();
+  GL* gl = rc->getGL();
 
-  // insert pointers
-  gl->disableTextures();
+  gl->setState(state);
+
+
   gl->vertexPointer(3, 0, _vertices);
 
   {
@@ -161,7 +150,5 @@ void DummyRenderer::render(const G3MRenderContext* rc) {
                      _indices);
     gl->popMatrix();
   }
-  
-  gl->enableTextures();
   
 }

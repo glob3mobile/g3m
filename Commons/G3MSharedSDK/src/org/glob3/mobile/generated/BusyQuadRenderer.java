@@ -94,9 +94,12 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
 
 //C++ TO JAVA CONVERTER NOTE: This was formerly a static local variable declaration (not allowed in Java):
   private boolean render_firstTime = true;
-  public final void render(G3MRenderContext rc)
+  public final void render(G3MRenderContext rc, GLState parentState)
   {
 	GL gl = rc.getGL();
+  
+	GLState state = new GLState(parentState);
+	state.enableBlend();
   
 	if (_quadMesh == null)
 	{
@@ -120,8 +123,8 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
 	// init modelview matrix
 	int[] currentViewport = new int[4];
 	gl.getViewport(currentViewport);
-	int halfWidth = currentViewport[2] / 2;
-	int halfHeight = currentViewport[3] / 2;
+	final int halfWidth = currentViewport[2] / 2;
+	final int halfHeight = currentViewport[3] / 2;
 	MutableMatrix44D M = MutableMatrix44D.createOrthographicProjectionMatrix(-halfWidth, halfWidth, -halfHeight, halfHeight, -halfWidth, halfWidth);
 	gl.setProjection(M);
 	gl.loadMatrixf(MutableMatrix44D.identity());
@@ -129,21 +132,19 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
 	// clear screen
 	gl.clearScreen(0.0f, 0.0f, 0.0f, 1.0f);
   
-	gl.enableBlend();
+	gl.setState(state);
+  
 	gl.setBlendFuncSrcAlpha();
   
 	gl.pushMatrix();
-	MutableMatrix44D R1 = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(0), new Vector3D(-1, 0, 0));
+	MutableMatrix44D R1 = MutableMatrix44D.createRotationMatrix(Angle.zero(), new Vector3D(-1, 0, 0));
 	MutableMatrix44D R2 = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_degrees), new Vector3D(0, 0, 1));
 	gl.multMatrixf(R1.multiply(R2));
   
 	// draw mesh
-	_quadMesh.render(rc);
+	_quadMesh.render(rc, parentState);
   
 	gl.popMatrix();
-  
-	gl.disableBlend();
-  
   }
 
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)

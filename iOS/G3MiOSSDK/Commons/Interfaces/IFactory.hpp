@@ -25,36 +25,37 @@ class IByteBuffer;
 class ILogger;
 
 class IFactory {
+private:
   static IFactory* _instance;
-  
+
 public:
   static void setInstance(IFactory* factory) {
     if (_instance != NULL) {
-      ILogger::instance()->logWarning("Warning, ILooger instance set two times\n");
+      ILogger::instance()->logWarning("Warning, ILogger instance set two times\n");
     }
     _instance = factory;
   }
-  
+
   static IFactory* instance() {
     return _instance;
   }
 
   virtual ~IFactory() {
-    
+
   }
-  
+
   virtual ITimer* createTimer() const = 0;
-  
+
   virtual void deleteTimer(const ITimer* timer) const = 0;
-  
+
   virtual IImage* createImageFromFileName(const std::string filename) const = 0;
-  
+
   virtual IImage* createImageFromBuffer(const IByteBuffer* buffer) const = 0;
-  
+
   virtual IImage* createImageFromSize(int width, int height) const = 0;
 
   virtual void deleteImage(const IImage* image) const = 0;
-  
+
   virtual IFloatBuffer* createFloatBuffer(int size) const = 0;
 
   /* special factory method for creating floatbuffers from matrix */
@@ -74,13 +75,13 @@ public:
                                           float f13,
                                           float f14,
                                           float f15) const = 0;
-  
+
   virtual IIntBuffer* createIntBuffer(int size) const = 0;
-  
+
   virtual IByteBuffer* createByteBuffer(int length) const = 0;
-  
+
   virtual IByteBuffer* createByteBuffer(unsigned char data[], int length) const = 0;
-  
+
 };
 
 #endif

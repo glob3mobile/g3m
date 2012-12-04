@@ -14,7 +14,7 @@ class TouchEvent;
 class Planet;
 class ILogger;
 class GL;
-class INativeGL;
+//class INativeGL;
 class TexturesHandler;
 class Downloader;
 class IDownloader;
@@ -45,6 +45,7 @@ class IStorage;
 #include "Angle.hpp"
 
 class G3MContext;
+class GLState;
 
 class UserData {
 private:
@@ -75,7 +76,7 @@ public:
                              IMathUtils*          mathUtils,
                              IJSONParser*         jsonParser);
 
-  static G3MWidget* create(INativeGL*                       nativeGL,
+  static G3MWidget* create(GL*                              gl,
                            IStorage*                        storage,
                            IDownloader*                     downloader,
                            IThreadUtils*                    threadUtils,
@@ -160,9 +161,9 @@ public:
   }
 
 private:
-  IStorage*            _storage;
-  IDownloader*         _downloader;
-  IThreadUtils*        _threadUtils;
+  IStorage*           _storage;
+  IDownloader*        _downloader;
+  IThreadUtils*       _threadUtils;
 
   FrameTasksExecutor* _frameTasksExecutor;
   GL*                 _gl;
@@ -205,8 +206,10 @@ private:
   const G3MContext* _context;
 
   bool _paused;
+  
+  const GLState* _rootState;
 
-  G3MWidget(INativeGL*                       nativeGL,
+  G3MWidget(GL*                              gl,
             IStorage*                        storage,
             IDownloader*                     downloader,
             IThreadUtils*                    threadUtils,

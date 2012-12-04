@@ -7,43 +7,46 @@ import java.nio.IntBuffer;
 import java.util.ArrayList;
 
 import org.glob3.mobile.generated.IFloatBuffer;
-import org.glob3.mobile.generated.IGLProgramId;
 import org.glob3.mobile.generated.IGLTextureId;
 import org.glob3.mobile.generated.IGLUniformID;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IIntBuffer;
 import org.glob3.mobile.generated.INativeGL;
 import org.glob3.mobile.generated.MutableMatrix44D;
+import org.glob3.mobile.generated.ShaderProgram;
+import org.glob3.mobile.generated.ShaderType;
 
 import android.graphics.Bitmap;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
+import android.util.Log;
 
 
 public final class NativeGL2_Android
          extends
             INativeGL {
 
-
-   @Override
-   public void useProgram(final IGLProgramId program) {
-      GLES20.glUseProgram(((GLProgramId_Android) program).getProgram());
-   }
-
-
-   @Override
-   public int getAttribLocation(final IGLProgramId program,
-                                final String name) {
-      return GLES20.glGetAttribLocation(((GLProgramId_Android) program).getProgram(), name);
-   }
+   /*
+      @Override
+      public void useProgram(final IGLProgramId program) {
+         GLES20.glUseProgram(((GLProgramId_Android) program).getProgram());
+      }
 
 
-   @Override
-   public IGLUniformID getUniformLocation(final IGLProgramId program,
-                                          final String name) {
-      final int id = GLES20.glGetUniformLocation(((GLProgramId_Android) program).getProgram(), name);
-      return (new GLUniformID_Android(id));
-   }
+      @Override
+      public int getAttribLocation(final IGLProgramId program,
+                                   final String name) {
+         return GLES20.glGetAttribLocation(((GLProgramId_Android) program).getProgram(), name);
+      }
+
+
+      @Override
+      public IGLUniformID getUniformLocation(final IGLProgramId program,
+                                             final String name) {
+         final int id = GLES20.glGetUniformLocation(((GLProgramId_Android) program).getProgram(), name);
+         return (new GLUniformID_Android(id));
+      }
+      */
 
 
    @Override
@@ -476,6 +479,107 @@ public final class NativeGL2_Android
    @Override
    public int Error_NoError() {
       return GLES20.GL_NO_ERROR;
+   }
+
+
+   @Override
+   public void useProgram(final ShaderProgram program) {
+      GLES20.glUseProgram(program.getProgram());
+   }
+
+
+   @Override
+   public int getAttribLocation(final ShaderProgram program,
+                                final String name) {
+      return GLES20.glGetAttribLocation(program.getProgram(), name);
+   }
+
+
+   @Override
+   public IGLUniformID getUniformLocation(final ShaderProgram program,
+                                          final String name) {
+      final int id = GLES20.glGetUniformLocation(program.getProgram(), name);
+      return new GLUniformID_Android(id);
+   }
+
+
+   @Override
+   public int createProgram() {
+      return GLES20.glCreateProgram();
+   }
+
+
+   @Override
+   public void deleteProgram(final int program) {
+      GLES20.glDeleteProgram(program);
+   }
+
+
+   @Override
+   public void attachShader(final int program,
+                            final int shader) {
+      GLES20.glAttachShader(program, shader);
+   }
+
+
+   @Override
+   public int createShader(final ShaderType type) {
+      switch (type) {
+         case VERTEX_SHADER:
+            return GLES20.glCreateShader(GLES20.GL_VERTEX_SHADER);
+         case FRAGMENT_SHADER:
+            return GLES20.glCreateShader(GLES20.GL_FRAGMENT_SHADER);
+         default:
+            return 0;
+      }
+   }
+
+
+   @Override
+   public boolean compileShader(final int shader,
+                                final String source) {
+      GLES20.glShaderSource(shader, source);
+      GLES20.glCompileShader(shader);
+      final int[] compiled = new int[1];
+      GLES20.glGetShaderiv(shader, GLES20.GL_COMPILE_STATUS, compiled, 0);
+      return (compiled[0] != 0);
+   }
+
+
+   @Override
+   public void deleteShader(final int shader) {
+      GLES20.glDeleteShader(shader);
+   }
+
+
+   @Override
+   public void printShaderInfoLog(final int shader) {
+      final int[] compiled = new int[1];
+      GLES20.glGetShaderiv(shader, GLES20.GL_COMPILE_STATUS, compiled, 0);
+      if (compiled[0] == 0) {
+         Log.e("GL2Shaders", "Could not compile shader " + shader + ":");
+         Log.e("GL2Shaders", GLES20.glGetShaderInfoLog(shader));
+      }
+   }
+
+
+   @Override
+   public boolean linkProgram(final int program) {
+      GLES20.glLinkProgram(program);
+      final int[] linkStatus = new int[1];
+      GLES20.glGetProgramiv(program, GLES20.GL_LINK_STATUS, linkStatus, 0);
+      return (linkStatus[0] == GLES20.GL_TRUE);
+   }
+
+
+   @Override
+   public void printProgramInfoLog(final int program) {
+      final int[] linkStatus = new int[1];
+      GLES20.glGetProgramiv(program, GLES20.GL_LINK_STATUS, linkStatus, 0);
+      if (linkStatus[0] == GLES20.GL_TRUE) {
+         Log.e("GL2Shaders", "Could not link program: ");
+         Log.e("GL2Shaders", GLES20.glGetProgramInfoLog(program));
+      }
    }
 
 

@@ -63,18 +63,6 @@ GEOObject* GEOJSONParser::pvtParse() const {
 }
 
 std::vector<Geodetic2D*>* GEOJSONParser::create2DCoordinates(const JSONArray* jsCoordinates) const {
-  //    std::vector<Geodetic2D*>* coordinates = new std::vector<Geodetic2D*>();
-  //    for (int i = 0; i < coordinatesCount; i++) {
-  //      const JSONArray* jsCoordinate = jsCoordinates->getAsArray(i);
-  //
-  //      const double latitudeDegrees  = jsCoordinate->getAsNumber(1, 0.0);
-  //      const double longitudeDegrees = jsCoordinate->getAsNumber(0, 0.0);
-  //
-  //      Geodetic2D* coordinate = new Geodetic2D(Angle::fromDegrees(latitudeDegrees),
-  //                                              Angle::fromDegrees(longitudeDegrees));
-  //      coordinates->push_back( coordinate );
-  //    }
-
   if (jsCoordinates == NULL) {
     ILogger::instance()->logError("Mandatory \"coordinates\" attribute is not present");
     return NULL;

@@ -18,6 +18,8 @@ package org.glob3.mobile.generated;
 //class Frustum;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Box;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class GLState;
 
 public abstract class Extent
 {
@@ -49,7 +51,7 @@ public abstract class Extent
 //ORIGINAL LINE: virtual Vector3D intersectionWithRay(const Vector3D& origin, const Vector3D& direction) const = 0;
   public abstract Vector3D intersectionWithRay(Vector3D origin, Vector3D direction);
 
-  public abstract void render(G3MRenderContext rc);
+  public abstract void render(G3MRenderContext rc, GLState parentState);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual boolean touchesBox(const Box *box) const = 0;
