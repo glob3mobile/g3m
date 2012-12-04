@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import org.glob3.mobile.generated.Angle;
-import org.glob3.mobile.generated.CircleShape;
-import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraConstrainer;
@@ -18,7 +16,6 @@ import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Renderer;
 import org.glob3.mobile.generated.Sector;
-import org.glob3.mobile.generated.Shape;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.SimpleCameraConstrainer;
 import org.glob3.mobile.generated.URL;
@@ -223,7 +220,7 @@ public class G3MAndroidDemoActivity
          //circle.setRadius(circleRadius);
 
          //    shapesRenderer.addShape(circle);
-         
+
          renderers.add(shapesRenderer);
       }
 
