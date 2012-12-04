@@ -374,8 +374,8 @@
                                                                 ofType: @"json"];
       if (planeFilePath) {
         NSString *nsPlaneJSON = [NSString stringWithContentsOfFile: planeFilePath
-                                                       encoding: NSUTF8StringEncoding
-                                                          error: nil];
+                                                          encoding: NSUTF8StringEncoding
+                                                             error: nil];
         if (nsPlaneJSON) {
           std::string planeJSON = [nsPlaneJSON UTF8String];
           Shape* plane = SceneJSShapesParser::parse(planeJSON, "file:///");

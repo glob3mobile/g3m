@@ -55,8 +55,7 @@ private:
   SGMaterialNode*  createMaterialNode (const JSONObject* jsonObject) const;
   SGTextureNode*   createTextureNode  (const JSONObject* jsonObject) const;
   SGGeometryNode*  createGeometryNode (const JSONObject* jsonObject) const;
-
-  SGLayerNode*     createLayerNode  (const JSONObject* jsonObject) const;
+  SGLayerNode*     createLayerNode    (const JSONObject* jsonObject) const;
 
   Color* parseColor(const JSONObject* jsColor) const;
 

@@ -65,7 +65,9 @@ void SceneJSShapesParser::pvtParse(const std::string& json) {
 
   SGNode* node = toNode(jsonRootObject);
 
-  _rootShape = new SGShape(node, _uriPrefix);
+  if (node != NULL) {
+    _rootShape = new SGShape(node, _uriPrefix);
+  }
 
   delete jsonRootObject;
 }
@@ -123,17 +125,6 @@ SGNode* SceneJSShapesParser::createNode(const JSONObject* jsonObject) const {
   SGNode* node = new SGNode(id, sId);
 
   processedKeys += parseChildren(jsonObject, node);
-
-  //  std::vector<std::string> keys = jsonObject->keys();
-  //  if (processedKeys != keys.size()) {
-  //    for (int i = 0; i < keys.size(); i++) {
-  //      printf("%s\n", keys.at(i).c_str());
-  //    }
-  //
-  ////    ILogger::instance()->logWarning("Not all keys processed in node of type \"%s\"", type.c_str());
-  //    ILogger::instance()->logWarning("Not all keys processed in node");
-  //  }
-  //
 
   checkProcessedKeys(jsonObject, processedKeys);
 
@@ -546,8 +537,6 @@ SGGeometryNode* SceneJSShapesParser::createGeometryNode(const JSONObject* jsonOb
 
   return node;
 }
-
-
 
 SGNode* SceneJSShapesParser::toNode(const JSONBaseObject* jsonBaseObject) const {
 
