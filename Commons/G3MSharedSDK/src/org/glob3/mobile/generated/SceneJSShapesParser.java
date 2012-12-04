@@ -76,7 +76,10 @@ public class SceneJSShapesParser
   
 	SGNode node = toNode(jsonRootObject);
   
-	_rootShape = new SGShape(node, _uriPrefix);
+	if (node != null)
+	{
+	  _rootShape = new SGShape(node, _uriPrefix);
+	}
   
 	if (jsonRootObject != null)
 		jsonRootObject.dispose();
@@ -203,17 +206,6 @@ public class SceneJSShapesParser
 	SGNode node = new SGNode(id, sId);
   
 	processedKeys += parseChildren(jsonObject, node);
-  
-	//  std::vector<std::string> keys = jsonObject->keys();
-	//  if (processedKeys != keys.size()) {
-	//    for (int i = 0; i < keys.size(); i++) {
-	//      printf("%s\n", keys.at(i).c_str());
-	//    }
-	//
-	////    ILogger::instance()->logWarning("Not all keys processed in node of type \"%s\"", type.c_str());
-	//    ILogger::instance()->logWarning("Not all keys processed in node");
-	//  }
-	//
   
 	checkProcessedKeys(jsonObject, processedKeys);
   
@@ -584,7 +576,6 @@ public class SceneJSShapesParser
   
 	return node;
   }
-
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: SGLayerNode* createLayerNode(const JSONObject* jsonObject) const
   private SGLayerNode createLayerNode(JSONObject jsonObject)
