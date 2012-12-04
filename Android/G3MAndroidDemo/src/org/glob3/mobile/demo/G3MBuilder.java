@@ -4,13 +4,16 @@ package org.glob3.mobile.demo;
 
 import java.util.ArrayList;
 
+import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GTask;
+import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Renderer;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.SimpleCameraConstrainer;
+import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.UserData;
 import org.glob3.mobile.generated.WMSLayer;
@@ -129,15 +132,13 @@ public class G3MBuilder {
    }
 
 
-   public G3MWidget_Android getGlob3WithCustomLayers(final Context context) {
+   public G3MWidget_Android getCustomLayersGlob3(final Context context,
+                                                 final LayerSet layerSet) {
 
       final G3MWidget_Android glob3 = new G3MWidget_Android(context);
 
+      initParams();
       cameraConstraints.add(scc);
-
-      final LayerSet layerSet = new LayerSet();
-      layerSet.addLayer(osmLayer);
-
 
       final ArrayList<Renderer> renderers = new ArrayList<Renderer>();
 
@@ -151,7 +152,91 @@ public class G3MBuilder {
                incrementalTileQuality);
 
       return glob3;
+
    }
 
 
+   public G3MWidget_Android getRenderersGlob3(final Context context,
+                                              final ArrayList<Renderer> renderers) {
+      final G3MWidget_Android glob3 = new G3MWidget_Android(context);
+
+      initParams();
+      cameraConstraints.add(scc);
+
+      final LayerSet layerSet = new LayerSet();
+      layerSet.addLayer(bingLayer);
+
+      glob3.initWidget( //
+               cameraConstraints, //
+               layerSet, //
+               renderers, //
+               userData, //
+               initializationTask, //
+               periodicalTasks, //
+               incrementalTileQuality);
+
+      return glob3;
+
+   }
+
+
+   public G3MWidget_Android getRenderersAnimationGlob3(final Context context,
+                                                       final ArrayList<Renderer> renderers,
+                                                       final ArrayList<PeriodicalTask> periodicalTasks2) {
+      final G3MWidget_Android glob3 = new G3MWidget_Android(context);
+
+      initParams();
+      cameraConstraints.add(scc);
+
+      final LayerSet layerSet = new LayerSet();
+      layerSet.addLayer(bingLayer);
+
+      glob3.initWidget( //
+               cameraConstraints, //
+               layerSet, //
+               renderers, //
+               userData, //
+               initializationTask, //
+               periodicalTasks2, //
+               incrementalTileQuality);
+
+      return glob3;
+   }
+
+
+   public G3MWidget_Android getRenderersAnimationGlob3InitialPosition(final Context context,
+                                                                      final ArrayList<Renderer> renderers,
+                                                                      final ArrayList<PeriodicalTask> periodicalTasks2,
+                                                                      final Geodetic3D position) {
+      final G3MWidget_Android glob3 = new G3MWidget_Android(context);
+
+      initParams();
+      cameraConstraints.add(scc);
+
+
+      final GTask initializationTask1 = new GTask() {
+
+         @Override
+         public void run(final G3MContext context1) {
+            glob3.setAnimatedCameraPosition( //
+                     position, //
+                     TimeInterval.fromSeconds(5));
+         }
+
+      };
+
+      final LayerSet layerSet = new LayerSet();
+      layerSet.addLayer(bingLayer);
+
+      glob3.initWidget( //
+               cameraConstraints, //
+               layerSet, //
+               renderers, //
+               userData, //
+               initializationTask1, //
+               periodicalTasks2, //
+               incrementalTileQuality);
+
+      return glob3;
+   }
 }
