@@ -34,8 +34,9 @@ Mesh* GEO2DMultiLineStringGeometry::createMesh(const G3MRenderContext* rc) {
     std::vector<Geodetic2D*>* coordinates = _coordinatesArray->at(i);
 
     Color* color = Color::newFromRGBA(1, 1, 0, 1);
+    const float lineWidth = 2;
 
-    composite->addMesh( create2DBoundaryMesh(coordinates, color, 2, rc) );
+    composite->addMesh( create2DBoundaryMesh(coordinates, color, lineWidth, rc) );
   }
   return composite;
 }

@@ -93,12 +93,10 @@ public final class G3MWidget_Android
       // CHANNEL, HAVING TO FORCE PROPER BUFFER
       // ALLOCATION
 
-      // Detect Long-Press events
       setLongClickable(true);
 
-      // Debug flags
-      //      setDebugFlags(DEBUG_CHECK_GL_ERROR | DEBUG_LOG_GL_CALLS);
-      setDebugFlags(DEBUG_CHECK_GL_ERROR);
+      // setDebugFlags(DEBUG_CHECK_GL_ERROR | DEBUG_LOG_GL_CALLS);
+      // setDebugFlags(DEBUG_CHECK_GL_ERROR);
 
       if (!isInEditMode()) { // needed to avoid visual edition of this widget
          //Double Tap Listener
@@ -171,7 +169,7 @@ public final class G3MWidget_Android
    @Override
    public boolean onTouchEvent(final MotionEvent event) {
 
-      //Notifing gestureDetector for DoubleTap recognition
+      //Notifying gestureDetector for DoubleTap recognition
       _gestureDetector.onTouchEvent(event);
 
       final TouchEvent te = _motionEventProcessor.processEvent(event);
@@ -340,8 +338,7 @@ public final class G3MWidget_Android
 
       _g3mWidget = G3MWidget.create( //
                //nativeGL, //
-    		   _es2renderer.getGL(),
-               storage, //
+               _es2renderer.getGL(), storage, //
                downloader, //
                threadUtils, //
                planet, //
