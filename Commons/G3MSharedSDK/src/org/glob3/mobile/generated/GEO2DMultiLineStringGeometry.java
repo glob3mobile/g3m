@@ -33,8 +33,9 @@ public class GEO2DMultiLineStringGeometry extends GEOMultiLineStringGeometry
 	  java.util.ArrayList<Geodetic2D> coordinates = _coordinatesArray.get(i);
   
 	  Color color = Color.newFromRGBA(1, 1, 0, 1);
+	  final float lineWidth = 2F;
   
-	  composite.addMesh(create2DBoundaryMesh(coordinates, color, 2, rc));
+	  composite.addMesh(create2DBoundaryMesh(coordinates, color, lineWidth, rc));
 	}
 	return composite;
   }
