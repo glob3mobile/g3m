@@ -24,7 +24,7 @@
 #include "ShapesRenderer.hpp"
 //#include "QuadShape.hpp"
 #include "CircleShape.hpp"
-//#include "BoxShape.hpp"
+#include "BoxShape.hpp"
 //#include "CompositeShape.hpp"
 #include "SceneJSShapesParser.hpp"
 #include "G3MWidget.hpp"
@@ -411,7 +411,7 @@
                                           renderers: renderers
                                            userData: userData
                                  initializationTask: new SampleInitializationTask([self G3MWidget], shapesRenderer)
-//                                    periodicalTasks: periodicalTasks];
+                                    periodicalTasks: periodicalTasks];
 //    }else{
 //        
 //        class CustomTouchListener : public MarkTouchListener {
