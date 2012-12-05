@@ -11,7 +11,30 @@
 #include "GL.hpp"
 #include "TouchEvent.hpp"
 #include "RectangleI.hpp"
+#include "Mark.hpp"
+#include "MarkTouchListener.hpp"
 
+void MarksRenderer::setMarkTouchListener(MarkTouchListener* markTouchListener,
+                          bool autoDelete) {
+    if ( _autoDeleteMarkTouchListener ) {
+        delete _markTouchListener;
+    }
+    
+    _markTouchListener = markTouchListener;
+    _autoDeleteMarkTouchListener = autoDelete;
+}
+
+ MarksRenderer::~MarksRenderer() {
+    int marksSize = _marks.size();
+    for (int i = 0; i < marksSize; i++) {
+        delete _marks[i];
+    }
+    
+    if ( _autoDeleteMarkTouchListener ) {
+        delete _markTouchListener;
+    }
+    _markTouchListener = NULL;
+};
 
 void MarksRenderer::initialize(const G3MContext* context) {
   _context = context;

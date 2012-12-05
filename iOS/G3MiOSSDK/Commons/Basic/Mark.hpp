@@ -20,6 +20,7 @@
 class IImage;
 class IFloatBuffer;
 class IGLTextureId;
+class MarkTouchListener;
 
 class Mark {
 private:
@@ -29,6 +30,7 @@ private:
     const Geodetic3D  _position;
     void* _userData;
     const double _minDistanceToCamera;
+    const MarkTouchListener* _listener;
     
 #ifdef C_CODE
     const IGLTextureId* _textureId;
@@ -54,11 +56,12 @@ public:
   Mark(const std::string name,
        const URL         textureURL,
        const Geodetic3D  position,
-       void* userData=NULL, const double minDistanceToCamera=0) :
+       void* userData=NULL, const double minDistanceToCamera=0, const MarkTouchListener* listener=NULL) :
   _name(name),
   _textureURL(textureURL),
   _position(position),
   _userData(userData),
+  _listener(listener),
   _minDistanceToCamera(minDistanceToCamera),
   _textureId(NULL),
   _cartesianPosition(NULL),
@@ -100,10 +103,16 @@ public:
   int getTextureHeight() const;
   Vector2I getTextureExtent() const;
   
-    const void* getUserData() const {
-        return _userData;
-    }
+  const void* getUserData() const {
+    return _userData;
+  }
+
+  void setUserData(void* userData);
     
-    void setUserData(void* userData);};
+  const MarkTouchListener* getListener(){
+    return _listener;      
+  }
+
+};
 
 #endif

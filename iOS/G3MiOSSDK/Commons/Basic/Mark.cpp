@@ -118,11 +118,11 @@ void Mark::render(const G3MRenderContext* rc) {
   
   const Vector3D markCameraVector = markPosition->sub(cameraPosition);
   const double distanceToCamera = markCameraVector.length();
-//  _renderedMark = distanceToCamera <= minDistanceToCamera;
-//  const bool renderMark = true;
+  //_renderedMark = distanceToCamera <= _minDistanceToCamera;
+  //const bool renderMark = true;
   
-  if (_renderedMark) {
-    const Vector3D normalAtMarkPosition = planet->geodeticSurfaceNormal(*markPosition);
+  //if (_renderedMark) {
+  //const Vector3D normalAtMarkPosition = planet->geodeticSurfaceNormal(*markPosition);
     
     if (_minDistanceToCamera!=0) {
         _renderedMark = distanceToCamera <= _minDistanceToCamera;
@@ -172,7 +172,7 @@ void Mark::render(const G3MRenderContext* rc) {
             }
         }
     }
-  }
+  //}
 }
 
 int Mark::getTextureWidth() const {

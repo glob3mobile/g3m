@@ -289,6 +289,7 @@
 		D8F42FBF15EB6D78000D1822 /* SQLiteStorage_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF8B21B115DD32820068601A /* SQLiteStorage_iOS.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
 		D8F42FD415EB7B95000D1822 /* IStringBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8A723A715E4D2C500ABDF07 /* IStringBuilder.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		E745CC7916484A9A00819711 /* IStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E745CC7716484A9900819711 /* IStorage.cpp */; };
+		E86A5B86166FBFC90098449B /* MarkTouchListener.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E86A5B84166FB86D0098449B /* MarkTouchListener.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		E8891FB31647DCF500B0E481 /* AppParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8891FB11647DCF500B0E481 /* AppParser.cpp */; };
 		E8891FB41647DCF500B0E481 /* AppParser.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E8891FB21647DCF500B0E481 /* AppParser.hpp */; };
 		E8891FBA1647DD0E00B0E481 /* GEOJSONDownloadListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8891FB61647DD0D00B0E481 /* GEOJSONDownloadListener.cpp */; };
@@ -586,6 +587,7 @@
 		D8FEDAC615E7BD23007633A0 /* IMathUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IMathUtils.hpp; path = Commons/Interfaces/IMathUtils.hpp; sourceTree = "<group>"; };
 		D8FEDAC815E7C219007633A0 /* MathUtils_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MathUtils_iOS.hpp; path = Specific/Derived/MathUtils_iOS.hpp; sourceTree = "<group>"; };
 		E745CC7716484A9900819711 /* IStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IStorage.cpp; path = Commons/Interfaces/IStorage.cpp; sourceTree = "<group>"; };
+		E86A5B84166FB86D0098449B /* MarkTouchListener.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MarkTouchListener.hpp; path = Commons/Rendererers/MarkTouchListener.hpp; sourceTree = "<group>"; };
 		E8891FB11647DCF500B0E481 /* AppParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppParser.cpp; sourceTree = "<group>"; };
 		E8891FB21647DCF500B0E481 /* AppParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AppParser.hpp; sourceTree = "<group>"; };
 		E8891FB61647DD0D00B0E481 /* GEOJSONDownloadListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GEOJSONDownloadListener.cpp; sourceTree = "<group>"; };
@@ -925,6 +927,7 @@
 				CFA71BE715D2F6C500F8C78D /* TilesRenderParameters.hpp */,
 				CFCEFF4B163721EA00FC4AB0 /* TrailsRenderer.cpp */,
 				CFCEFF4C163721EA00FC4AB0 /* TrailsRenderer.hpp */,
+				E86A5B84166FB86D0098449B /* MarkTouchListener.hpp */,
 			);
 			name = Renderers;
 			sourceTree = "<group>";
@@ -1084,6 +1087,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E86A5B86166FBFC90098449B /* MarkTouchListener.hpp in Headers */,
 				A70F560A161B5C6000340256 /* JSONParser_iOS.hpp in Headers */,
 				A70F5605161B53D000340256 /* IJSONParser.hpp in Headers */,
 				E8891FBB1647DD0E00B0E481 /* GEOJSONDownloadListener.hpp in Headers */,
