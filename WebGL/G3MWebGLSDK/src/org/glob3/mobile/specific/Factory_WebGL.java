@@ -8,6 +8,7 @@ import org.glob3.mobile.generated.IByteBuffer;
 import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IFloatBuffer;
 import org.glob3.mobile.generated.IImage;
+import org.glob3.mobile.generated.IImageListener;
 import org.glob3.mobile.generated.IIntBuffer;
 import org.glob3.mobile.generated.ITimer;
 
@@ -37,9 +38,11 @@ public final class Factory_WebGL
 
 
    @Override
-   public IImage createImageFromFileName(final String filename) {
-      return _downloadedImages.get(filename);
-
+   public void createImageFromFileName(final String filename,
+                                       final IImageListener listener,
+                                       final boolean autodelete) {
+      final IImage result = _downloadedImages.get(filename);
+      listener.imageCreated(result);
       //      throw new RuntimeException("NOT IMPLEMENTED FROM FILENAME");
    }
 
@@ -63,16 +66,19 @@ public final class Factory_WebGL
 
 
    @Override
-   public IImage createImageFromSize(final int width,
-                                     final int height) {
+   public void createImageFromSize(final int width,
+                                   final int height,
+                                   final IImageListener listener,
+                                   final boolean autodelete) {
       return new Image_WebGL(width, height);
    }
 
 
    @Override
-   public IImage createImageFromBuffer(final IByteBuffer buffer) {
+   public void createImageFromBuffer(final IByteBuffer buffer, final IImageListener listener, final boolean autodelete) {
       // TODO Auto-generated method stub
       throw new RuntimeException("NOT IMPLEMENTED IMAGE FORM BUFFER");
+      DIEGO_AT_WORK;
    }
 
 
