@@ -15,9 +15,11 @@ class IImageListener {
 public:
   virtual void imageCreated(IImage* image) = 0;
 
+#ifdef C_CODE
   virtual ~IImageListener() {
 
   }
+#endif
 };
 
 #endif

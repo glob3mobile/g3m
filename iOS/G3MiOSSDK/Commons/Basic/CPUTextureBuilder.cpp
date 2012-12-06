@@ -111,7 +111,7 @@ const void CPUTextureBuilder::createTextureFromImages(GL* gl,
                                  listener, autodelete);
   }
   else if (imagesSize == 1) {
-    images[0]->subImage(*rectangles.at(0),
+    images[0]->subImage(*(rectangles[0]),
                         new SubImageImageLister(width, height,
                                                 listener, autodelete),
                         true);
