@@ -66,7 +66,7 @@ public class CPUTextureBuilder extends TextureBuilder
 	}
 	else if (imagesSize == 1)
 	{
-	  images.get(0).subImage(*rectangles.get(0), new SubImageImageLister(width, height, listener, autodelete), true);
+	  images.get(0).subImage(*(rectangles.get(0)), new SubImageImageLister(width, height, listener, autodelete), true);
 	}
 	else
 	{
