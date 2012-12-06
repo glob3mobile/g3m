@@ -32,11 +32,6 @@ public class CPUTextureBuilder extends TextureBuilder
 	else if (image.getHeight() == height && image.getWidth() == width)
 	{
 	  listener.imageCreated(image.shallowCopy());
-	  if (autodelete)
-	  {
-		if (listener != null)
-			listener.dispose();
-	  }
 	}
 	else
 	{
@@ -66,7 +61,8 @@ public class CPUTextureBuilder extends TextureBuilder
 	}
 	else if (imagesSize == 1)
 	{
-	  images.get(0).subImage(*(rectangles.get(0)), new SubImageImageLister(width, height, listener, autodelete), true);
+	  RectangleI rectangle = rectangles.get(0);
+	  images.get(0).subImage(rectangle, new SubImageImageLister(width, height, listener, autodelete), true);
 	}
 	else
 	{
