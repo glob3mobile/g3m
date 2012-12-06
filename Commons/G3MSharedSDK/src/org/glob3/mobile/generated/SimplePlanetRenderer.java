@@ -29,9 +29,9 @@ package org.glob3.mobile.generated;
 public class SimplePlanetRenderer extends LeafRenderer
 {
 
-  private final String _textureFilename;
-  private final int _texWidth;
-  private final int _texHeight;
+//  const std::string _textureFilename;
+//  const int _texWidth, _texHeight;
+  private IImage _image;
 
   private final int _latRes;
   private final int _lonRes;
@@ -40,7 +40,7 @@ public class SimplePlanetRenderer extends LeafRenderer
 
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: IFloatBuffer* createVertices(const Planet& planet) const
+//ORIGINAL LINE: IFloatBuffer* createVertices(const Planet* planet) const
   private IFloatBuffer createVertices(Planet planet)
   {
 	//Vertices with Center in zero
@@ -94,7 +94,7 @@ public class SimplePlanetRenderer extends LeafRenderer
 	//int p = 0;
 	for(double i = 0.0; i < _lonRes; i++)
 	{
-	  double u = (i / lonRes1);
+	  final double u = (i / lonRes1);
 	  for (double j = 0.0; j < _latRes; j++)
 	  {
 		final double v = 1.0 - (j / latRes1);
@@ -105,29 +105,22 @@ public class SimplePlanetRenderer extends LeafRenderer
 	return texCoords.create();
   }
 
-  private boolean initializeMesh(G3MRenderContext rc)
+  private Mesh createMesh(G3MRenderContext rc)
   {
-  
-  
-	final Planet planet = rc.getPlanet();
-	IIntBuffer ind = createMeshIndex();
-	IFloatBuffer ver = createVertices(planet);
-	IFloatBuffer texC = null;
-	FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
-  
-	final boolean colorPerVertex = false;
-  
-  
+	IIntBuffer indices = createMeshIndex();
+	IFloatBuffer vertices = createVertices(rc.getPlanet());
   
 	//COLORS PER VERTEX
 	IFloatBuffer vertexColors = null;
+	final boolean colorPerVertex = false;
 	if (colorPerVertex)
 	{
-	  int numVertices = _lonRes * _lonRes * 4;
-	  for(int i = 0; i < numVertices;)
-	  {
+	  FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
   
-		float val = (float)(0.5 + IMathUtils.instance().sin((float)(2.0 * IMathUtils.instance().pi() * ((float) i) / numVertices)) / 2.0);
+	  final int numVertices = _lonRes * _lonRes * 4;
+	  for (int i = 0; i < numVertices; i++)
+	  {
+		final float val = (float)(0.5 + IMathUtils.instance().sin((float)(2.0 * IMathUtils.instance().pi() * ((float) i) / numVertices)) / 2.0);
   
 		colors.add(val, (float)0.0, (float)(1.0 - val), (float)1.0);
 	  }
@@ -136,56 +129,49 @@ public class SimplePlanetRenderer extends LeafRenderer
   
 	//FLAT COLOR
 	Color flatColor = null;
-	//  if (false){
+	//  if (false) {
 	//    flatColor = new Color( Color::fromRGBA(0.0, 1.0, 0.0, 1.0) );
 	//  }
   
-	IndexedMesh im = new IndexedMesh(GLPrimitive.triangleStrip(), true, Vector3D.zero(), ver, ind, 1, flatColor, vertexColors);
+	IndexedMesh indexedMesh = new IndexedMesh(GLPrimitive.triangleStrip(), true, Vector3D.zero(), vertices, indices, 1, flatColor, vertexColors);
   
 	//TEXTURED
-	if (true)
+	final IGLTextureId texId = rc.getTexturesHandler().getGLTextureId(_image, GLFormat.rgba(), "SimplePlanetRenderer-Texture", false);
+  
+	if (texId == null)
 	{
-  
-	  IImage image = rc.getFactory().createImageFromFileName(_textureFilename);
-  
-	  final IImage scaledImage = rc.getTextureBuilder().createTextureFromImage(rc.getGL(), rc.getFactory(), image, _texWidth, _texHeight);
-	  if (image != scaledImage)
-	  {
-		rc.getFactory().deleteImage(image);
-	  }
-  
-	  final IGLTextureId texId = rc.getTexturesHandler().getGLTextureId(scaledImage, GLFormat.rgba(), _textureFilename, false);
-  
-	  rc.getFactory().deleteImage(scaledImage);
-  
-	  if (texId == null)
-	  {
-		rc.getLogger().logError("Can't load file %s", _textureFilename);
-		return false;
-	  }
-	  texC = createTextureCoordinates();
-  
-	  TextureMapping texMap = new SimpleTextureMapping(texId, texC, true, false);
-  
-	  _mesh = new TexturedMesh(im, true, texMap, true, false);
+	  rc.getLogger().logError("Can't load texture to GPU");
+	  if (indexedMesh != null)
+		  indexedMesh.dispose();
+	  return null;
 	}
   
-	return true;
+	// the image is not needed as it's already uploaded to the GPU
+	if (_image != null)
+		_image.dispose();
+	_image = null;
+  
+	IFloatBuffer texCoords = createTextureCoordinates();
+  
+	TextureMapping textureMapping = new SimpleTextureMapping(texId, texCoords, true, false);
+  
+	return new TexturedMesh(indexedMesh, true, textureMapping, true, false);
   }
 
-  public SimplePlanetRenderer(String textureFilename)
+  public SimplePlanetRenderer(IImage image)
   {
+	  _image = image;
 	  _latRes = 30;
 	  _lonRes = 30;
-	  _textureFilename = textureFilename;
 	  _mesh = null;
-	  _texWidth = 2048;
-	  _texHeight = 1024;
   }
+
   public void dispose()
   {
 	if (_mesh != null)
 		_mesh.dispose();
+	if (_image != null)
+		_image.dispose();
   }
 
   public final void initialize(G3MContext context)
@@ -197,13 +183,12 @@ public class SimplePlanetRenderer extends LeafRenderer
   {
 	if (_mesh == null)
 	{
-	  if (!initializeMesh(rc))
-	  {
-		return;
-	  }
+	  _mesh = createMesh(rc);
 	}
-  
-	_mesh.render(rc, parentState);
+	if (_mesh != null)
+	{
+	  _mesh.render(rc, parentState);
+	}
   }
 
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)

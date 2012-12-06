@@ -13,7 +13,7 @@ package org.glob3.mobile.generated;
 
 public class Planet extends Ellipsoid
 {
-  private String _name;
+  private final String _name;
 
 
   public Planet(String name, Vector3D radii)

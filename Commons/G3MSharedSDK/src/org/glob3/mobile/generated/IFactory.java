@@ -32,6 +32,8 @@ package org.glob3.mobile.generated;
 //class IByteBuffer;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class ILogger;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IImageListener;
 
 public abstract class IFactory
 {
@@ -56,6 +58,28 @@ public abstract class IFactory
 
   }
 
+//  virtual IImage* createImageFromFileName(const std::string& filename) const = 0;
+//
+//  virtual IImage* createImageFromBuffer(const IByteBuffer* buffer) const = 0;
+//
+//  virtual IImage* createImageFromSize(int width, int height) const = 0;
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual void createImageFromFileName(const String& filename, IImageListener* listener, boolean autodelete) const = 0;
+  public abstract void createImageFromFileName(String filename, IImageListener listener, boolean autodelete);
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual void createImageFromBuffer(const IByteBuffer* buffer, IImageListener* listener, boolean autodelete) const = 0;
+  public abstract void createImageFromBuffer(IByteBuffer buffer, IImageListener listener, boolean autodelete);
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual void createImageFromSize(int width, int height, IImageListener* listener, boolean autodelete) const = 0;
+  public abstract void createImageFromSize(int width, int height, IImageListener listener, boolean autodelete);
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual void deleteImage(const IImage* image) const = 0;
+  public abstract void deleteImage(IImage image);
+
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual ITimer* createTimer() const = 0;
   public abstract ITimer createTimer();
@@ -63,22 +87,6 @@ public abstract class IFactory
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual void deleteTimer(const ITimer* timer) const = 0;
   public abstract void deleteTimer(ITimer timer);
-
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual IImage* createImageFromFileName(const String filename) const = 0;
-  public abstract IImage createImageFromFileName(String filename);
-
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual IImage* createImageFromBuffer(const IByteBuffer* buffer) const = 0;
-  public abstract IImage createImageFromBuffer(IByteBuffer buffer);
-
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual IImage* createImageFromSize(int width, int height) const = 0;
-  public abstract IImage createImageFromSize(int width, int height);
-
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual void deleteImage(const IImage* image) const = 0;
-  public abstract void deleteImage(IImage image);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual IFloatBuffer* createFloatBuffer(int size) const = 0;

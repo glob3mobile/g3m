@@ -75,9 +75,9 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 
   public void dispose()
   {
-	  if (_texCoordsCache != null)
-		  _texCoordsCache.dispose();
-	  _texCoordsCache = null;
+	if (_texCoordsCache != null)
+		_texCoordsCache.dispose();
+	_texCoordsCache = null;
   }
 
   public final boolean isReady(G3MRenderContext rc, LayerSet layerSet)
@@ -92,7 +92,7 @@ public class MultiLayerTileTexturizer extends TileTexturizer
   public final void initialize(G3MContext context, TilesRenderParameters parameters)
   {
 	_parameters = parameters;
-  //  _layerSet->initialize(ic);
+	//  _layerSet->initialize(ic);
   }
 
   public final Mesh texturize(G3MRenderContext rc, TileRenderContext trc, Tile tile, Mesh tessellatorMesh, Mesh previousMesh)
