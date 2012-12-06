@@ -25,9 +25,11 @@ const void CPUTextureBuilder::createTextureFromImage(GL* gl,
   }
   else if (image->getHeight() == height && image->getWidth() == width) {
     listener->imageCreated( image->shallowCopy() );
+#ifdef C_CODE
     if (autodelete) {
       delete listener;
     }
+#endif
   }
   else {
     image->scale(width, height, listener, autodelete);
@@ -111,7 +113,8 @@ const void CPUTextureBuilder::createTextureFromImages(GL* gl,
                                  listener, autodelete);
   }
   else if (imagesSize == 1) {
-    images[0]->subImage(*(rectangles[0]),
+    RectangleI* rectangle = rectangles[0];
+    images[0]->subImage(*rectangle,
                         new SubImageImageLister(width, height,
                                                 listener, autodelete),
                         true);
