@@ -3,7 +3,7 @@ public class TextureUploader implements IImageListener
 {
   private TileTextureBuilder _builder;
 
-  private final java.util.ArrayList<const RectangleI> _rectangles = new java.util.ArrayList<const RectangleI>();
+  private final java.util.ArrayList<RectangleI> _rectangles = new java.util.ArrayList<RectangleI>();
   private final String _textureId;
 
   public TextureUploader(TileTextureBuilder builder, java.util.ArrayList<RectangleI> rectangles, String textureId)
