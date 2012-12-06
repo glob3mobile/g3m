@@ -38,8 +38,8 @@ public abstract class TextureBuilder
 //                                             bool autodelete) const = 0;
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual const void createTextureFromImages(GL* gl, const IFactory* factory, const java.util.ArrayList<const IImage*>& images, const java.util.ArrayList<const RectangleI*>& rectangles, int width, int height, IImageListener* listener, boolean autodelete) const = 0;
-  public abstract void createTextureFromImages(GL gl, IFactory factory, java.util.ArrayList<IImage> images, java.util.ArrayList<const RectangleI> rectangles, int width, int height, IImageListener listener, boolean autodelete);
+//ORIGINAL LINE: virtual const void createTextureFromImages(GL* gl, const IFactory* factory, const java.util.ArrayList<const IImage*>& images, const java.util.ArrayList<RectangleI*>& rectangles, int width, int height, IImageListener* listener, boolean autodelete) const = 0;
+  public abstract void createTextureFromImages(GL gl, IFactory factory, java.util.ArrayList<IImage> images, java.util.ArrayList<RectangleI> rectangles, int width, int height, IImageListener listener, boolean autodelete);
 
   public void dispose()
   {

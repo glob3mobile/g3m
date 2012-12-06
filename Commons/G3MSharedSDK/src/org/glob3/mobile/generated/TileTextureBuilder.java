@@ -128,7 +128,7 @@ public class TileTextureBuilder extends RCObject
 	  }
 
 	  final java.util.ArrayList<IImage> images = new java.util.ArrayList<IImage>();
-	  final java.util.ArrayList<RectangleI> rectangles = new java.util.ArrayList<RectangleI>();
+	  java.util.ArrayList<RectangleI> rectangles = new java.util.ArrayList<RectangleI>();
 	  String textureId = _tile.getKey().tinyDescription();
 
 	  final int textureWidth = _parameters._tileTextureWidth;

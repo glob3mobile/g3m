@@ -41,8 +41,8 @@ public abstract class IImage
   public abstract void combineWith(IImage other, RectangleI rect, int width, int height, IImageListener listener, boolean autodelete);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual void combineWith(const java.util.ArrayList<const IImage*>& images, const java.util.ArrayList<const RectangleI*>& rectangles, int width, int height, IImageListener* listener, boolean autodelete) const = 0;
-  public abstract void combineWith(java.util.ArrayList<IImage> images, java.util.ArrayList<const RectangleI> rectangles, int width, int height, IImageListener listener, boolean autodelete);
+//ORIGINAL LINE: virtual void combineWith(const java.util.ArrayList<const IImage*>& images, const java.util.ArrayList<RectangleI*>& rectangles, int width, int height, IImageListener* listener, boolean autodelete) const = 0;
+  public abstract void combineWith(java.util.ArrayList<IImage> images, java.util.ArrayList<RectangleI> rectangles, int width, int height, IImageListener listener, boolean autodelete);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual void subImage(const RectangleI& rect, IImageListener* listener, boolean autodelete) const = 0;
