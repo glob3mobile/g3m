@@ -58,7 +58,8 @@ bool ShaderProgram::loadShaders(const std::string& vertexSource, const std::stri
 }
   
 
-bool ShaderProgram::compileShader(int shader, const std::string source)
+bool ShaderProgram::compileShader(int shader,
+                                  const std::string& source)
 {
   bool result = _gl->compileShader(shader, source);
   

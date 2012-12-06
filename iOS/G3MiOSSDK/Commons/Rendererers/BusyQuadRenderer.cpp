@@ -42,15 +42,18 @@ bool BusyQuadRenderer::initMesh(const G3MRenderContext* rc) {
 #ifdef JAVA_CODE
   IGLTextureId texId = null;
 #endif
-  IImage* image = rc->getFactory()->createImageFromFileName(_textureFilename);
+//  IImage* image = rc->getFactory()->createImageFromFileName(_textureFilename);
 
-  texId = rc->getTexturesHandler()->getGLTextureId(image, GLFormat::rgba(),
-                                                   _textureFilename, false);
+  texId = rc->getTexturesHandler()->getGLTextureId(_image,
+                                                   GLFormat::rgba(),
+                                                   "BusyQuadRenderer-Texture",
+                                                   false);
 
-  rc->getFactory()->deleteImage(image);
+  rc->getFactory()->deleteImage(_image);
+  _image = NULL;
 
   if (texId == NULL) {
-    rc->getLogger()->logError("Can't load file %s", _textureFilename.c_str());
+    rc->getLogger()->logError("Can't upload texture to GPU");
     return false;
   }
 

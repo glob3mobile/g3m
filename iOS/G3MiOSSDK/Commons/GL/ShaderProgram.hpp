@@ -26,7 +26,8 @@ private:
   GL*   _gl;
   int   _vertexShader, _fragmentShader;
   
-  bool compileShader(int shader, const std::string source); 
+  bool compileShader(int shader,
+                     const std::string& source);
   bool linkProgram();
 
   
@@ -35,7 +36,8 @@ public:
   ShaderProgram(GL* gl);
   ~ShaderProgram();
   
-  bool loadShaders(const std::string& vertexSource, const std::string& fragmentSource);
+  bool loadShaders(const std::string& vertexSource,
+                   const std::string& fragmentSource);
   
   
   // TEMP

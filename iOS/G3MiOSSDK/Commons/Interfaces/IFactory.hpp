@@ -23,6 +23,7 @@ class IFloatBuffer;
 class IIntBuffer;
 class IByteBuffer;
 class ILogger;
+class IImageListener;
 
 class IFactory {
 private:
@@ -44,17 +45,29 @@ public:
 
   }
 
+//  virtual IImage* createImageFromFileName(const std::string& filename) const = 0;
+//
+//  virtual IImage* createImageFromBuffer(const IByteBuffer* buffer) const = 0;
+//
+//  virtual IImage* createImageFromSize(int width, int height) const = 0;
+
+  virtual void createImageFromFileName(const std::string& filename,
+                                       IImageListener* listener,
+                                       bool autodelete) const = 0;
+
+  virtual void createImageFromBuffer(const IByteBuffer* buffer,
+                                     IImageListener* listener,
+                                     bool autodelete) const = 0;
+
+  virtual void createImageFromSize(int width, int height,
+                                   IImageListener* listener,
+                                   bool autodelete) const = 0;
+
+  virtual void deleteImage(const IImage* image) const = 0;
+
   virtual ITimer* createTimer() const = 0;
 
   virtual void deleteTimer(const ITimer* timer) const = 0;
-
-  virtual IImage* createImageFromFileName(const std::string filename) const = 0;
-
-  virtual IImage* createImageFromBuffer(const IByteBuffer* buffer) const = 0;
-
-  virtual IImage* createImageFromSize(int width, int height) const = 0;
-
-  virtual void deleteImage(const IImage* image) const = 0;
 
   virtual IFloatBuffer* createFloatBuffer(int size) const = 0;
 

@@ -19,36 +19,31 @@
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "FloatBufferBuilderFromCartesian2D.hpp"
 #include "FloatBufferBuilderFromColor.hpp"
-
 #include "IGLTextureId.hpp"
+#include "GLConstants.hpp"
 
-SimplePlanetRenderer::SimplePlanetRenderer(const std::string textureFilename):
-_latRes(30),//FOR NOW THEY MUST BE EQUAL
-_lonRes(30),
-_textureFilename(textureFilename),
-_mesh(NULL),
-_texWidth(2048),
-_texHeight(1024)
+SimplePlanetRenderer::SimplePlanetRenderer(IImage* image):
+_image(image),
+_latRes(30), _lonRes(30), //FOR NOW THEY MUST BE EQUAL
+_mesh(NULL)
 {
 }
 
-SimplePlanetRenderer::~SimplePlanetRenderer()
-{
+SimplePlanetRenderer::~SimplePlanetRenderer() {
   delete _mesh;
+  delete _image;
 }
 
-void SimplePlanetRenderer::initialize(const G3MContext* context)
-{
+void SimplePlanetRenderer::initialize(const G3MContext* context) {
 
 }
 
-IFloatBuffer* SimplePlanetRenderer::createVertices(const Planet& planet) const
-{
+IFloatBuffer* SimplePlanetRenderer::createVertices(const Planet* planet) const {
   //Vertices with Center in zero
-  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(), &planet, Vector3D::zero());
+  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(), planet, Vector3D::zero());
   const double lonRes1 = (double) (_lonRes-1);
   const double latRes1 = (double) (_latRes-1);
-  for(double i = 0.0; i < _lonRes; i++){
+  for(double i = 0.0; i < _lonRes; i++) {
     const Angle lon = Angle::fromDegrees( (i * 360 / lonRes1) -180);
     for (double j = 0.0; j < _latRes; j++) {
       const Angle lat = Angle::fromDegrees( (j * 180.0 / latRes1)  -90.0 );
@@ -61,13 +56,12 @@ IFloatBuffer* SimplePlanetRenderer::createVertices(const Planet& planet) const
   return vertices.create();
 }
 
-IIntBuffer* SimplePlanetRenderer::createMeshIndex() const
-{
+IIntBuffer* SimplePlanetRenderer::createMeshIndex() const {
   IntBufferBuilder indices;
 
   const int res = _lonRes;
   for (int j = 0; j < res - 1; j++) {
-    if (j > 0){
+    if (j > 0) {
       indices.add((int) (j * res));
     }
     for (int i = 0; i < res; i++) {
@@ -80,14 +74,13 @@ IIntBuffer* SimplePlanetRenderer::createMeshIndex() const
   return indices.create();
 }
 
-IFloatBuffer* SimplePlanetRenderer::createTextureCoordinates() const
-{
+IFloatBuffer* SimplePlanetRenderer::createTextureCoordinates() const {
   FloatBufferBuilderFromCartesian2D texCoords;
   const double lonRes1 = (double) (_lonRes-1);
   const double latRes1 = (double) (_latRes-1);
   //int p = 0;
-  for(double i = 0.0; i < _lonRes; i++){
-    double u = (i / lonRes1);
+  for(double i = 0.0; i < _lonRes; i++) {
+    const double u = (i / lonRes1);
     for (double j = 0.0; j < _latRes; j++) {
       const double v = 1.0 - (j / latRes1);
       texCoords.add((float)u, (float)v);
@@ -97,26 +90,19 @@ IFloatBuffer* SimplePlanetRenderer::createTextureCoordinates() const
   return texCoords.create();
 }
 
-bool SimplePlanetRenderer::initializeMesh(const G3MRenderContext* rc) {
-
-
-  const Planet* planet = rc->getPlanet();
-  IIntBuffer* ind = createMeshIndex();
-  IFloatBuffer* ver = createVertices(*planet);
-  IFloatBuffer* texC = NULL;
-  FloatBufferBuilderFromColor colors;
-
-  const bool colorPerVertex = false;
-
-
+Mesh* SimplePlanetRenderer::createMesh(const G3MRenderContext* rc) {
+  IIntBuffer* indices = createMeshIndex();
+  IFloatBuffer* vertices = createVertices( rc->getPlanet() );
 
   //COLORS PER VERTEX
   IFloatBuffer* vertexColors = NULL;
-  if (colorPerVertex){
-    int numVertices = _lonRes * _lonRes * 4;
-    for(int i = 0; i < numVertices; ){
+  const bool colorPerVertex = false;
+  if (colorPerVertex) {
+    FloatBufferBuilderFromColor colors;
 
-      float val = (float) (0.5 + GMath.sin( (float) (2.0 * GMath.pi() * ((float) i) / numVertices) ) / 2.0);
+    const int numVertices = _lonRes * _lonRes * 4;
+    for (int i = 0; i < numVertices; i++) {
+      const float val = (float) (0.5 + GMath.sin( (float) (2.0 * GMath.pi() * ((float) i) / numVertices) ) / 2.0);
 
       colors.add(val, (float)0.0, (float)(1.0 - val), (float)1.0);
     }
@@ -125,61 +111,51 @@ bool SimplePlanetRenderer::initializeMesh(const G3MRenderContext* rc) {
 
   //FLAT COLOR
   Color * flatColor = NULL;
-  //  if (false){
+  //  if (false) {
   //    flatColor = new Color( Color::fromRGBA(0.0, 1.0, 0.0, 1.0) );
   //  }
 
-  IndexedMesh *im = new IndexedMesh(GLPrimitive::triangleStrip(),
-                                    true,
-                                    Vector3D::zero(),
-                                    ver,
-                                    ind,
-                                    1,
-                                    flatColor,
-                                    vertexColors);
+  IndexedMesh *indexedMesh = new IndexedMesh(GLPrimitive::triangleStrip(),
+                                             true,
+                                             Vector3D::zero(),
+                                             vertices,
+                                             indices,
+                                             1,
+                                             flatColor,
+                                             vertexColors);
 
   //TEXTURED
-  if (true) {
+  const IGLTextureId* texId = rc->getTexturesHandler()->getGLTextureId(_image,
+                                                                       GLFormat::rgba(),
+                                                                       "SimplePlanetRenderer-Texture",
+                                                                       false);
 
-    IImage* image = rc->getFactory()->createImageFromFileName(_textureFilename);
-
-    const IImage* scaledImage = rc->getTextureBuilder()->createTextureFromImage(rc->getGL(),
-                                                                                rc->getFactory(),
-                                                                                image, _texWidth,
-                                                                                _texHeight);
-    if (image != scaledImage){
-      rc->getFactory()->deleteImage(image);
-    }
-
-    const IGLTextureId* texId = rc->getTexturesHandler()->getGLTextureId(scaledImage, GLFormat::rgba(),
-                                                                         _textureFilename, false);
-
-    rc->getFactory()->deleteImage(scaledImage);
-
-    if (texId == NULL) {
-      rc->getLogger()->logError("Can't load file %s", _textureFilename.c_str());
-      return false;
-    }
-    texC = createTextureCoordinates();
-
-    TextureMapping* texMap = new SimpleTextureMapping(texId,
-                                                      texC,
-                                                      true,
-                                                      false);
-
-    _mesh = new TexturedMesh(im, true, texMap, true, false);
+  if (texId == NULL) {
+    rc->getLogger()->logError("Can't load texture to GPU");
+    delete indexedMesh;
+    return NULL;
   }
 
-  return true;
+  // the image is not needed as it's already uploaded to the GPU
+  delete _image;
+  _image = NULL;
+
+  IFloatBuffer* texCoords = createTextureCoordinates();
+
+  TextureMapping* textureMapping = new SimpleTextureMapping(texId,
+                                                            texCoords,
+                                                            true,
+                                                            false);
+
+  return new TexturedMesh(indexedMesh, true, textureMapping, true, false);
 }
 
 void SimplePlanetRenderer::render(const G3MRenderContext* rc,
-                                  const GLState& parentState){
-  if (_mesh == NULL){
-    if (!initializeMesh(rc)) {
-      return;
-    }
+                                  const GLState& parentState) {
+  if (_mesh == NULL) {
+    _mesh = createMesh(rc);
   }
-
-  _mesh->render(rc, parentState);
+  if (_mesh != NULL) {
+    _mesh->render(rc, parentState);
+  }
 }

@@ -50,9 +50,9 @@ private:
   bool    _renderedMark;
   
 public:
-  Mark(const std::string name,
-       const URL         textureURL,
-       const Geodetic3D  position) :
+  Mark(const std::string& name,
+       const URL          textureURL,
+       const Geodetic3D   position) :
   _name(name),
   _textureURL(textureURL),
   _position(position),
