@@ -140,7 +140,12 @@ class TextureUploader : public IImageListener {
 private:
   TileTextureBuilder* _builder;
 
+#ifdef C_CODE
   const std::vector<const RectangleI*> _rectangles;
+#endif
+#ifdef JAVA_CODE
+  private final java.util.ArrayList<RectangleI> _rectangles = new java.util.ArrayList<RectangleI>();
+#endif
   const std::string _textureId;
 
 public:
