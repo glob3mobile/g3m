@@ -97,7 +97,7 @@ public:
 const void CPUTextureBuilder::createTextureFromImages(GL* gl,
                                                       const IFactory* factory,
                                                       const std::vector<const IImage*>& images,
-                                                      const std::vector<const RectangleI*>& rectangles,
+                                                      const std::vector<RectangleI*>& rectangles,
                                                       int width, int height,
                                                       IImageListener* listener,
                                                       bool autodelete) const{
@@ -118,7 +118,7 @@ const void CPUTextureBuilder::createTextureFromImages(GL* gl,
   }
   else {
     std::vector<const IImage*> tailImages;
-    std::vector<const RectangleI*> tailRectangles;
+    std::vector<RectangleI*> tailRectangles;
     for (int i = 0; i < imagesSize; i++) {
       tailImages.push_back( images[i] );
       tailRectangles.push_back( rectangles[i] );

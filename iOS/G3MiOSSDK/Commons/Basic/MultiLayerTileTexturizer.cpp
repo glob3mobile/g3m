@@ -140,17 +140,12 @@ class TextureUploader : public IImageListener {
 private:
   TileTextureBuilder* _builder;
 
-#ifdef C_CODE
-  const std::vector<const RectangleI*> _rectangles;
-#endif
-#ifdef JAVA_CODE
-  private final java.util.ArrayList<RectangleI> _rectangles = new java.util.ArrayList<RectangleI>();
-#endif
+  const std::vector<RectangleI*> _rectangles;
   const std::string _textureId;
 
 public:
   TextureUploader(TileTextureBuilder* builder,
-                  std::vector<const RectangleI*> rectangles,
+                  std::vector<RectangleI*> rectangles,
                   const std::string& textureId) :
   _builder(builder),
   _rectangles(rectangles),
@@ -300,8 +295,8 @@ public:
         return;
       }
 
-      std::vector<const IImage*>     images;
-      std::vector<const RectangleI*> rectangles;
+      std::vector<const IImage*> images;
+      std::vector<RectangleI*>   rectangles;
       std::string textureId = _tile->getKey().tinyDescription();
 
       const int textureWidth  = _parameters->_tileTextureWidth;
@@ -372,7 +367,7 @@ public:
   }
 
   void imageCreated(IImage* image,
-                    std::vector<const RectangleI*> rectangles,
+                    std::vector<RectangleI*> rectangles,
                     const std::string& textureId) {
 #ifdef JAVA_CODE
     synchronized (this) {

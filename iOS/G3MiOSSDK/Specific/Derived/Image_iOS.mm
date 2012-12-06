@@ -117,7 +117,7 @@ void Image_iOS::combineWith(const IImage& other,
 }
 
 void Image_iOS::combineWith(const std::vector<const IImage*>& images,
-                            const std::vector<const RectangleI*>& rectangles,
+                            const std::vector<RectangleI*>& rectangles,
                             int width, int height,
                             IImageListener* listener,
                             bool autodelete) const {
