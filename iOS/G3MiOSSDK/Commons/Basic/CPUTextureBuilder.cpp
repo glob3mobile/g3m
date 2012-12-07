@@ -122,7 +122,7 @@ const void CPUTextureBuilder::createTextureFromImages(GL* gl,
   else {
     std::vector<const IImage*> tailImages;
     std::vector<RectangleI*> tailRectangles;
-    for (int i = 0; i < imagesSize; i++) {
+    for (int i = 1; i < imagesSize; i++) {
       tailImages.push_back( images[i] );
       tailRectangles.push_back( rectangles[i] );
     }

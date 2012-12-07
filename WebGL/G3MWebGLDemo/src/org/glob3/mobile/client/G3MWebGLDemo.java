@@ -87,20 +87,6 @@ public class G3MWebGLDemo
          layerSet.addLayer(bing);
       }
 
-      final boolean usePnoa = false;
-      if (usePnoa) {
-         final WMSLayer pnoa = new WMSLayer( //
-                  "PNOA", //
-                  new URL("http://www.idee.es/wms/PNOA/PNOA", false), //
-                  WMSServerVersion.WMS_1_1_0, Sector.fromDegrees(21, -18, 45, 6), //
-                  "image/png", //
-                  "EPSG:4326", //
-                  "", //
-                  true, //
-                  null);
-         layerSet.addLayer(pnoa);
-      }
-
       final boolean useOSMLatLon = true;
       if (useOSMLatLon) {
          //         final WMSLayer osm = new WMSLayer( //
@@ -130,19 +116,18 @@ public class G3MWebGLDemo
          layerSet.addLayer(osm);
       }
 
-
-      final boolean testURLescape = false;
-      if (testURLescape) {
-         final WMSLayer ayto = new WMSLayer(URL.escape("Ejes de via"), //
-                  new URL("http://sig.caceres.es/wms_callejero.mapdef?", false), //
-                  WMSServerVersion.WMS_1_1_0,//  
-                  Sector.fullSphere(), //
+      final boolean usePnoa = true;
+      if (usePnoa) {
+         final WMSLayer pnoa = new WMSLayer( //
+                  "PNOA", //
+                  new URL("http://www.idee.es/wms/PNOA/PNOA", false), //
+                  WMSServerVersion.WMS_1_1_0, Sector.fromDegrees(21, -18, 45, 6), //
                   "image/png", //
                   "EPSG:4326", //
                   "", //
                   true, //
                   null);
-         layerSet.addLayer(ayto);
+         layerSet.addLayer(pnoa);
       }
 
 
@@ -233,24 +218,23 @@ public class G3MWebGLDemo
          //circle.setPitch(Angle.fromDegrees(45));
          //circle.setScale(2.0, 0.5, 1);
          //circle.setRadius(circleRadius);
-         
-            final Color circleColor = Color.newFromRGBA(1, 1, 0, 0.5f);
-            Shape circle = new CircleShape(circlePosition, 50000, circleColor);
-            shapesRenderer.addShape(circle);
-            
-            final Geodetic3D boxPosition = new Geodetic3D( 
-                    Angle.fromDegrees(37.78333333), //
-                    Angle.fromDegrees(-122.41666666666667), //
-                    45000);
-            final Vector3D size = new Vector3D(20000, 30000, 50000);
-            final Color boxColor = Color.newFromRGBA(0, 1, 0, 0.5f);
-            final Color edgeColor = Color.newFromRGBA(0.75f, 0, 0, 0.75f);
-            Shape box = new BoxShape(boxPosition, size, 2, boxColor, edgeColor);
-            shapesRenderer.addShape(box);
-            
+
+         final Color circleColor = Color.newFromRGBA(1, 1, 0, 0.5f);
+         final Shape circle = new CircleShape(circlePosition, 50000, circleColor);
+         shapesRenderer.addShape(circle);
+
+         final Geodetic3D boxPosition = new Geodetic3D(Angle.fromDegrees(37.78333333), //
+                  Angle.fromDegrees(-122.41666666666667), //
+                  45000);
+         final Vector3D size = new Vector3D(20000, 30000, 50000);
+         final Color boxColor = Color.newFromRGBA(0, 1, 0, 0.5f);
+         final Color edgeColor = Color.newFromRGBA(0.75f, 0, 0, 0.75f);
+         final Shape box = new BoxShape(boxPosition, size, 2, boxColor, edgeColor);
+         shapesRenderer.addShape(box);
+
          renderers.add(shapesRenderer);
       }
-      
+
 
       final UserData userData = null;
 

@@ -190,7 +190,7 @@ public final class Image_WebGL
 					this.@org.glob3.mobile.specific.Image_WebGL::_imgObject, 0,
 					0, width, height);
 
-			for ( var i = 0; i < imagesSizel; i++) {
+			for ( var i = 0; i < imagesSize; i++) {
 				var other = images.@java.util.ArrayList::get(I)(i);
 				var jsOther = other.@org.glob3.mobile.specific.Image_WebGL::_imgObject;
 
