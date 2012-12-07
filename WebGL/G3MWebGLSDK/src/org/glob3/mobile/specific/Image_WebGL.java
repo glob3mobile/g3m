@@ -173,7 +173,8 @@ public final class Image_WebGL
                                   final int height,
                                   final IImageListener listener,
                                   final boolean autodelete) /*-{
-		var imagesSize = images.@java.util.ArrayList::size();
+
+		var imagesSize = images.@java.util.ArrayList::size()();
 		if (imagesSize == 0) {
 			this.@org.glob3.mobile.specific.Image_WebGL::scale(IILorg/glob3/mobile/generated/IImageListener;Z)(width, height, listener, autodelete);
 		} else if (imagesSize == 1) {
@@ -203,14 +204,15 @@ public final class Image_WebGL
 				context.drawImage(jsOther, rectX,
 						(height - (rectY + rectHeight)), rectWidth, rectHeight);
 			}
-		}
 
-		var jsResult = new Image();
-		jsResult.onload = function() {
-			var result = @org.glob3.mobile.specific.Image_WebGL::new(Lcom/google/gwt/core/client/JavaScriptObject;)(jsResult);
-			listener.@org.glob3.mobile.generated.IImageListener::imageCreated(Lorg/glob3/mobile/generated/IImage;)(result);
-		};
-		jsResult.src = canvas.toDataURL();
+			var jsResult = new Image();
+			jsResult.onload = function() {
+				var result = @org.glob3.mobile.specific.Image_WebGL::new(Lcom/google/gwt/core/client/JavaScriptObject;)(jsResult);
+				listener.@org.glob3.mobile.generated.IImageListener::imageCreated(Lorg/glob3/mobile/generated/IImage;)(result);
+			};
+			jsResult.src = canvas.toDataURL();
+
+		}
 
 		//      final int imagesSize = images.size();
 		//

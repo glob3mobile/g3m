@@ -286,10 +286,10 @@ public:
     const double widthFactor  = imageSector.getDeltaLongitude().div(wholeSector.getDeltaLongitude());
     const double heightFactor = imageSector.getDeltaLatitude().div(wholeSector.getDeltaLatitude());
 
-    return new RectangleI((int) (lowerFactor._x         * textureWidth),
-                          (int) ((1.0 - lowerFactor._y) * textureHeight),
-                          (int) (widthFactor  * textureWidth),
-                          (int) (heightFactor * textureHeight));
+    return new RectangleI((int) GMath.round( lowerFactor._x         * textureWidth ),
+                          (int) GMath.round( (1.0 - lowerFactor._y) * textureHeight ),
+                          (int) GMath.round( widthFactor            * textureWidth ),
+                          (int) GMath.round( heightFactor           * textureHeight ));
   }
 
   void composeAndUploadTexture() {

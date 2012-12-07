@@ -136,7 +136,7 @@
 
   }
 
-  const bool usePnoaLayer = false;
+  const bool usePnoaLayer = true;
   if (usePnoaLayer) {
     WMSLayer *pnoa = new WMSLayer("PNOA",
                                   URL("http://www.idee.es/wms/PNOA/PNOA", false),
@@ -148,21 +148,6 @@
                                   true,
                                   NULL);
     layerSet->addLayer(pnoa);
-  }
-
-  const bool testURLescape = false;
-  if (testURLescape) {
-    WMSLayer *ayto = new WMSLayer(URL::escape("Ejes de via"),
-                                  URL("http://sig.caceres.es/wms_callejero.mapdef?", false),
-                                  WMS_1_1_0,
-                                  Sector::fullSphere(),
-                                  "image/png",
-                                  "EPSG:4326",
-                                  "",
-                                  true,
-                                  NULL);
-    layerSet->addLayer(ayto);
-
   }
 
   //  WMSLayer *vias = new WMSLayer("VIAS",
