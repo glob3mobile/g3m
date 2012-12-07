@@ -33,7 +33,6 @@ public final class Factory_WebGL
    }
 
    // TODO TEMP HACK TO PRELOAD IMAGES
-
    final HashMap<String, IImage> _downloadedImages = new HashMap<String, IImage>();
 
 
@@ -57,28 +56,42 @@ public final class Factory_WebGL
    }
 
 
-   // END TEMP HACK TO PRELOAD IMAGES
-
-
    @Override
    public void deleteImage(final IImage image) {
+      if (image != null) {
+         image.dispose();
+      }
    }
 
 
    @Override
-   public void createImageFromSize(final int width,
-                                   final int height,
-                                   final IImageListener listener,
-                                   final boolean autodelete) {
-      return new Image_WebGL(width, height);
-   }
+   public native void createImageFromSize(final int width,
+                                          final int height,
+                                          final IImageListener listener,
+                                          final boolean autodelete) /*-{
+		//      return new Image_WebGL(width, height);
+
+		var canvas = $doc.createElement("canvas");
+		canvas.width = width;
+		canvas.height = height;
+
+		var context = canvas.getContext("2d");
+		context.clearRect(0, 0, width, height);
+
+		var jsResult = new Image();
+		jsResult.onload = function() {
+			var result = @org.glob3.mobile.specific.Image_WebGL::new(Lcom/google/gwt/core/client/JavaScriptObject;)(jsResult);
+			listener.@org.glob3.mobile.generated.IImageListener::imageCreated(Lorg/glob3/mobile/generated/IImage;)(result);
+		};
+		jsResult.src = canvas.toDataURL();
+   }-*/;
 
 
    @Override
-   public void createImageFromBuffer(final IByteBuffer buffer, final IImageListener listener, final boolean autodelete) {
-      // TODO Auto-generated method stub
+   public void createImageFromBuffer(final IByteBuffer buffer,
+                                     final IImageListener listener,
+                                     final boolean autodelete) {
       throw new RuntimeException("NOT IMPLEMENTED IMAGE FORM BUFFER");
-      DIEGO_AT_WORK;
    }
 
 
