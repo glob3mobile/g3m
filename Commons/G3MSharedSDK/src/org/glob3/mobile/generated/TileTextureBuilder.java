@@ -115,7 +115,7 @@ public class TileTextureBuilder extends RCObject
 	final double widthFactor = imageSector.getDeltaLongitude().div(wholeSector.getDeltaLongitude());
 	final double heightFactor = imageSector.getDeltaLatitude().div(wholeSector.getDeltaLatitude());
 
-	return new RectangleI((int)(lowerFactor._x * textureWidth), (int)((1.0 - lowerFactor._y) * textureHeight), (int)(widthFactor * textureWidth), (int)(heightFactor * textureHeight));
+	return new RectangleI((int) IMathUtils.instance().round(lowerFactor._x * textureWidth), (int) IMathUtils.instance().round((1.0 - lowerFactor._y) * textureHeight), (int) IMathUtils.instance().round(widthFactor * textureWidth), (int) IMathUtils.instance().round(heightFactor * textureHeight));
   }
 
   public final void composeAndUploadTexture()
