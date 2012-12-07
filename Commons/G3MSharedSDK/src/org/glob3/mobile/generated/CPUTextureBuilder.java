@@ -68,7 +68,7 @@ public class CPUTextureBuilder extends TextureBuilder
 	{
 	  final java.util.ArrayList<IImage> tailImages = new java.util.ArrayList<IImage>();
 	  java.util.ArrayList<RectangleI> tailRectangles = new java.util.ArrayList<RectangleI>();
-	  for (int i = 0; i < imagesSize; i++)
+	  for (int i = 1; i < imagesSize; i++)
 	  {
 		tailImages.add(images.get(i));
 		tailRectangles.add(rectangles.get(i));
