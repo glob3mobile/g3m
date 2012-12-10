@@ -45,11 +45,11 @@ public class GEO2DMultiLineStringGeometry extends GEOMultiLineStringGeometry
 	{
 	  java.util.ArrayList<Geodetic2D> coordinates = _coordinatesArray.get(i);
 	  final int coordinatesCount = coordinates.size();
-	  for (int i = 0; i < coordinatesCount; i++)
+	  for (int j = 0; j < coordinatesCount; j++)
 	  {
-		Geodetic2D coordinate = coordinates.get(i);
+		Geodetic2D coordinate = coordinates.get(j);
 		vertices.add(coordinate);
-		if ((i > 0) && (i < (coordinatesCount-1)))
+		if ((j > 0) && (j < (coordinatesCount-1)))
 		{
 		  vertices.add(coordinate);
 		}
