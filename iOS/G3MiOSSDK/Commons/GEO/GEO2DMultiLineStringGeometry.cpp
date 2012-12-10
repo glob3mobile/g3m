@@ -53,10 +53,10 @@ Mesh* GEO2DMultiLineStringGeometry::createMesh(const G3MRenderContext* rc) {
   for (int i = 0; i < coordinatesArrayCount; i++) {
     std::vector<Geodetic2D*>* coordinates = _coordinatesArray->at(i);
     const int coordinatesCount = coordinates->size();
-    for (int i = 0; i < coordinatesCount; i++) {
-      Geodetic2D* coordinate = coordinates->at(i);
+    for (int j = 0; j < coordinatesCount; j++) {
+      Geodetic2D* coordinate = coordinates->at(j);
       vertices.add(*coordinate);
-      if ((i > 0) && (i < (coordinatesCount-1))) {
+      if ((j > 0) && (j < (coordinatesCount-1))) {
         vertices.add(*coordinate);
       }
     }
