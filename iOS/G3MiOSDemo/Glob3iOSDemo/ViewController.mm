@@ -136,7 +136,7 @@
 
   }
 
-  const bool usePnoaLayer = true;
+  const bool usePnoaLayer = false;
   if (usePnoaLayer) {
     WMSLayer *pnoa = new WMSLayer("PNOA",
                                   URL("http://www.idee.es/wms/PNOA/PNOA", false),
@@ -377,6 +377,8 @@
         }
       }
       */
+
+      /**/
 
       /*
 //      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/coastline"

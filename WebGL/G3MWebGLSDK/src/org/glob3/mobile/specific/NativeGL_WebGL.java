@@ -5,7 +5,6 @@ package org.glob3.mobile.specific;
 import java.util.ArrayList;
 
 import org.glob3.mobile.generated.IFloatBuffer;
-//import org.glob3.mobile.generated.IGLProgramId;
 import org.glob3.mobile.generated.IGLTextureId;
 import org.glob3.mobile.generated.IGLUniformID;
 import org.glob3.mobile.generated.IImage;
@@ -17,6 +16,7 @@ import org.glob3.mobile.generated.ShaderType;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArrayInteger;
+//import org.glob3.mobile.generated.IGLProgramId;
 
 
 public final class NativeGL_WebGL
@@ -28,9 +28,9 @@ public final class NativeGL_WebGL
    attrib 0 array enabled, by using bindAttribLocation to bind some always-used attribute to location 0.
    */
 
-   private final JavaScriptObject _gl;
-   
-   private java.util.ArrayList<JavaScriptObject> _shaderList = new java.util.ArrayList<JavaScriptObject>();
+   private final JavaScriptObject                      _gl;
+
+   private final java.util.ArrayList<JavaScriptObject> _shaderList = new java.util.ArrayList<JavaScriptObject>();
 
 
    public NativeGL_WebGL(final JavaScriptObject webGLContext) {
@@ -46,20 +46,20 @@ public final class NativeGL_WebGL
    }*/
 
 
-//   private native void jsUseProgram(JavaScriptObject program) /*-{
-//		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.useProgram(program);
-//   }-*/;
-   
+   //   private native void jsUseProgram(JavaScriptObject program) /*-{
+   //		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.useProgram(program);
+   //   }-*/;
 
-/*
-   @Override
-   public int getAttribLocation(final IGLProgramId program,
-                                final String name) {
-      final JavaScriptObject p = ((GLProgramId_WebGL) program).getProgram();
-      final int result = jsGetAttribLocation(p, name);
-      //  printGLError();
-      return result;
-   }*/
+
+   /*
+      @Override
+      public int getAttribLocation(final IGLProgramId program,
+                                   final String name) {
+         final JavaScriptObject p = ((GLProgramId_WebGL) program).getProgram();
+         final int result = jsGetAttribLocation(p, name);
+         //  printGLError();
+         return result;
+      }*/
 
 
    //   private void printGLError() {
@@ -67,29 +67,29 @@ public final class NativeGL_WebGL
    //   }
 
 
-//   private native int jsGetAttribLocation(final JavaScriptObject program,
-//                                         final String name) /*-{
-//		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
-//				.getAttribLocation(program, name);
-//   }-*/;
+   //   private native int jsGetAttribLocation(final JavaScriptObject program,
+   //                                         final String name) /*-{
+   //		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
+   //				.getAttribLocation(program, name);
+   //   }-*/;
 
-/*
-   @Override
-   public IGLUniformID getUniformLocation(final IGLProgramId program,
-                                          final String name) {
-      final JavaScriptObject p = ((GLProgramId_WebGL) program).getProgram();
-      final JavaScriptObject u = jsGetUniformLocation(p, name);
-      final IGLUniformID result = new GLUniformID_WebGL(u);
-      //  printGLError();
-      return result;
-   }*/
+   /*
+      @Override
+      public IGLUniformID getUniformLocation(final IGLProgramId program,
+                                             final String name) {
+         final JavaScriptObject p = ((GLProgramId_WebGL) program).getProgram();
+         final JavaScriptObject u = jsGetUniformLocation(p, name);
+         final IGLUniformID result = new GLUniformID_WebGL(u);
+         //  printGLError();
+         return result;
+      }*/
 
 
-//   private native JavaScriptObject jsGetUniformLocation(final JavaScriptObject program,
-//                                                        final String name) /*-{
-//		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
-//				.getUniformLocation(program, name);
-//   }-*/;
+   //   private native JavaScriptObject jsGetUniformLocation(final JavaScriptObject program,
+   //                                                        final String name) /*-{
+   //		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
+   //				.getUniformLocation(program, name);
+   //   }-*/;
 
 
    @Override
@@ -668,156 +668,184 @@ public final class NativeGL_WebGL
    }
 
 
-private native void jsUseProgram(final JavaScriptObject program) /*-{
-	this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.useProgram(program);
-}-*/;
-
-@Override
-public void useProgram(ShaderProgram program) {
-    jsUseProgram(_shaderList.get(program.getProgram()-1));
-}
+   private native void jsUseProgram(final JavaScriptObject program) /*-{
+		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.useProgram(program);
+   }-*/;
 
 
-private native int jsGetAttribLocation(final JavaScriptObject program, final String name) /*-{
-	return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.getAttribLocation(program, name);
-}-*/;
-
-@Override
-public int getAttribLocation(ShaderProgram program, String name) {
-	return jsGetAttribLocation(_shaderList.get(program.getProgram()-1), name);
-}
+   @Override
+   public void useProgram(final ShaderProgram program) {
+      jsUseProgram(_shaderList.get(program.getProgram() - 1));
+   }
 
 
-private native int jsGetUniformLocation(final JavaScriptObject program, final String name) /*-{
-	return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.getUniformLocation(program, name);
-}-*/;
-
-@Override
-public IGLUniformID getUniformLocation(ShaderProgram program, String name) {
-    final int id = jsGetUniformLocation(_shaderList.get(program.getProgram()-1), name);
-    final IGLUniformID result = new GLUniformID_WebGL(id);
-    return result;
-}
+   private native int jsGetAttribLocation(final JavaScriptObject program,
+                                          final String name) /*-{
+		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
+				.getAttribLocation(program, name);
+   }-*/;
 
 
-private native JavaScriptObject jsCreateProgram() /*-{
-	return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.createProgram();
-}-*/;
-
-@Override
-public int createProgram() {
-	_shaderList.add(jsCreateProgram());
-	return _shaderList.size();
-}
+   @Override
+   public int getAttribLocation(final ShaderProgram program,
+                                final String name) {
+      return jsGetAttribLocation(_shaderList.get(program.getProgram() - 1), name);
+   }
 
 
-private native void jsDeleteProgram(final JavaScriptObject program) /*-{
-	this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.deleteProgram(program);
-}-*/;
-
-@Override
-public void deleteProgram(int program) {
-	jsDeleteProgram(_shaderList.get(program-1));
-}
+   private native int jsGetUniformLocation(final JavaScriptObject program,
+                                           final String name) /*-{
+		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
+				.getUniformLocation(program, name);
+   }-*/;
 
 
-private native void jsAttachShader(final JavaScriptObject program, final JavaScriptObject shader) /*-{
-	this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.attachShader(program, shader);
-}-*/;
-
-@Override
-public void attachShader(int program, int shader) {
-	jsAttachShader(_shaderList.get(program-1), _shaderList.get(shader-1));
-}
-
-
-private native JavaScriptObject jsCreateVertexShader() /*-{
-	var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
-	return gl.createShader(gl.VERTEX_SHADER);
-}-*/;
-
-private native JavaScriptObject jsCreateFragmentShader() /*-{
-	var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
-	return gl.createShader(gl.FRAGMENT_SHADER);
-}-*/;
-
-@Override
-public int createShader(ShaderType type) {
-    switch (type) {
-    case VERTEX_SHADER:
-    	_shaderList.add(jsCreateVertexShader());
-    	return _shaderList.size();
-    case FRAGMENT_SHADER:
-        _shaderList.add(jsCreateFragmentShader());
-        return _shaderList.size();
-    default:
-    	return 0;
-  }  
-}
-
-private native boolean jsCompileShader(final JavaScriptObject shader, final String source) /*-{
-	var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
-	gl.shaderSource(shader, source);
-	gl.compileShader(shader);
-	if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS))
-		return false;
-	else
-		return true;
-}-*/;
-
-@Override
-public boolean compileShader(int shader, String source) {
-	return jsCompileShader(_shaderList.get(shader-1), source);
-}
+   @Override
+   public IGLUniformID getUniformLocation(final ShaderProgram program,
+                                          final String name) {
+      final int id = jsGetUniformLocation(_shaderList.get(program.getProgram() - 1), name);
+      final IGLUniformID result = new GLUniformID_WebGL(id);
+      return result;
+   }
 
 
-private native void jsDeleteShader(final JavaScriptObject shader) /*-{
-	this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.deleteShader(shader);
-}-*/;
-
-@Override
-public void deleteShader(int shader) {
-	jsDeleteShader(_shaderList.get(shader-1));
-}
+   private native JavaScriptObject jsCreateProgram() /*-{
+		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
+				.createProgram();
+   }-*/;
 
 
-private native void jsPrintShaderInfoLog(final JavaScriptObject shader) /*-{
-	var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
-	if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS))
-		alert("Error compiling shaders: " + gl.getShaderInfoLog(shader));
-}-*/;
-
-@Override
-public void printShaderInfoLog(int shader) {
-	jsPrintShaderInfoLog(_shaderList.get(shader-1));
-}
+   @Override
+   public int createProgram() {
+      _shaderList.add(jsCreateProgram());
+      return _shaderList.size();
+   }
 
 
-private native boolean jsLinkProgram(final JavaScriptObject program) /*-{
-	var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
-	gl.linkProgram(program);
-	if (!gl.getProgramParameter(program, gl.LINK_STATUS))
-		return false;
-	else
-		return true;
-}-*/;
-
-@Override
-public boolean linkProgram(int program) {
-	return jsLinkProgram(_shaderList.get(program-1));
-}
+   private native void jsDeleteProgram(final JavaScriptObject program) /*-{
+		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
+				.deleteProgram(program);
+   }-*/;
 
 
-private native void jsPrintProgramInfoLog(final JavaScriptObject program) /*-{
-	var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
-	if (!gl.getProgramParameter(program, gl.LINK_STATUS))
-		alert("Error linking program: ");
-}-*/;
+   @Override
+   public void deleteProgram(final int program) {
+      jsDeleteProgram(_shaderList.get(program - 1));
+   }
 
-@Override
-public void printProgramInfoLog(int program) {
-	jsPrintProgramInfoLog(_shaderList.get(program-1));
-}
+
+   private native void jsAttachShader(final JavaScriptObject program,
+                                      final JavaScriptObject shader) /*-{
+		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.attachShader(
+				program, shader);
+   }-*/;
+
+
+   @Override
+   public void attachShader(final int program,
+                            final int shader) {
+      jsAttachShader(_shaderList.get(program - 1), _shaderList.get(shader - 1));
+   }
+
+
+   private native JavaScriptObject jsCreateVertexShader() /*-{
+		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+		return gl.createShader(gl.VERTEX_SHADER);
+   }-*/;
+
+
+   private native JavaScriptObject jsCreateFragmentShader() /*-{
+		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+		return gl.createShader(gl.FRAGMENT_SHADER);
+   }-*/;
+
+
+   @Override
+   public int createShader(final ShaderType type) {
+      switch (type) {
+         case VERTEX_SHADER:
+            _shaderList.add(jsCreateVertexShader());
+            return _shaderList.size();
+         case FRAGMENT_SHADER:
+            _shaderList.add(jsCreateFragmentShader());
+            return _shaderList.size();
+         default:
+            return 0;
+      }
+   }
+
+
+   private native boolean jsCompileShader(final JavaScriptObject shader,
+                                          final String source) /*-{
+		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+		gl.shaderSource(shader, source);
+		gl.compileShader(shader);
+		if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS))
+			return false;
+		else
+			return true;
+   }-*/;
+
+
+   @Override
+   public boolean compileShader(final int shader,
+                                final String source) {
+      return jsCompileShader(_shaderList.get(shader - 1), source);
+   }
+
+
+   private native void jsDeleteShader(final JavaScriptObject shader) /*-{
+		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
+				.deleteShader(shader);
+   }-*/;
+
+
+   @Override
+   public void deleteShader(final int shader) {
+      jsDeleteShader(_shaderList.get(shader - 1));
+   }
+
+
+   private native void jsPrintShaderInfoLog(final JavaScriptObject shader) /*-{
+		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+		if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS))
+			alert("Error compiling shaders: " + gl.getShaderInfoLog(shader));
+   }-*/;
+
+
+   @Override
+   public void printShaderInfoLog(final int shader) {
+      jsPrintShaderInfoLog(_shaderList.get(shader - 1));
+   }
+
+
+   private native boolean jsLinkProgram(final JavaScriptObject program) /*-{
+		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+		gl.linkProgram(program);
+		if (!gl.getProgramParameter(program, gl.LINK_STATUS))
+			return false;
+		else
+			return true;
+   }-*/;
+
+
+   @Override
+   public boolean linkProgram(final int program) {
+      return jsLinkProgram(_shaderList.get(program - 1));
+   }
+
+
+   private native void jsPrintProgramInfoLog(final JavaScriptObject program) /*-{
+		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+		if (!gl.getProgramParameter(program, gl.LINK_STATUS))
+			alert("Error linking program: ");
+   }-*/;
+
+
+   @Override
+   public void printProgramInfoLog(final int program) {
+      jsPrintProgramInfoLog(_shaderList.get(program - 1));
+   }
 
 
 }

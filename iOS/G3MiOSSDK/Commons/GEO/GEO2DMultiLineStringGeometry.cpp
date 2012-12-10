@@ -9,8 +9,13 @@
 #include "GEO2DMultiLineStringGeometry.hpp"
 
 #include "Geodetic2D.hpp"
-#include "CompositeMesh.hpp"
+//#include "CompositeMesh.hpp"
 #include "Color.hpp"
+
+#include "FloatBufferBuilderFromGeodetic.hpp"
+#include "DirectMesh.hpp"
+#include "GLConstants.hpp"
+
 
 GEO2DMultiLineStringGeometry::~GEO2DMultiLineStringGeometry() {
   const int coordinatesArrayCount = _coordinatesArray->size();
@@ -28,15 +33,42 @@ GEO2DMultiLineStringGeometry::~GEO2DMultiLineStringGeometry() {
 }
 
 Mesh* GEO2DMultiLineStringGeometry::createMesh(const G3MRenderContext* rc) {
-  CompositeMesh* composite = new CompositeMesh();
+//  CompositeMesh* composite = new CompositeMesh();
+//  const int coordinatesArrayCount = _coordinatesArray->size();
+//  for (int i = 0; i < coordinatesArrayCount; i++) {
+//    std::vector<Geodetic2D*>* coordinates = _coordinatesArray->at(i);
+//
+//    Color* color = Color::newFromRGBA(1, 1, 0, 1);
+//    const float lineWidth = 2;
+//
+//    composite->addMesh( create2DBoundaryMesh(coordinates, color, lineWidth, rc) );
+//  }
+//  return composite;
+
+  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
+                                          rc->getPlanet(),
+                                          Geodetic2D::zero());
+
   const int coordinatesArrayCount = _coordinatesArray->size();
   for (int i = 0; i < coordinatesArrayCount; i++) {
     std::vector<Geodetic2D*>* coordinates = _coordinatesArray->at(i);
-
-    Color* color = Color::newFromRGBA(1, 1, 0, 1);
-    const float lineWidth = 2;
-
-    composite->addMesh( create2DBoundaryMesh(coordinates, color, lineWidth, rc) );
+    const int coordinatesCount = coordinates->size();
+    for (int i = 0; i < coordinatesCount; i++) {
+      Geodetic2D* coordinate = coordinates->at(i);
+      vertices.add(*coordinate);
+      if ((i > 0) && (i < (coordinatesCount-1))) {
+        vertices.add(*coordinate);
+      }
+    }
   }
-  return composite;
+
+  Color* color = Color::newFromRGBA(1, 1, 1, 1);
+  const float lineWidth = 2;
+
+  return new DirectMesh(GLPrimitive::lines(),
+                        true,
+                        vertices.getCenter(),
+                        vertices.create(),
+                        lineWidth,
+                        color);
 }
