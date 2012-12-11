@@ -109,9 +109,12 @@ bool MarksRenderer::onTouchEvent(const G3MEventContext* ec,
       }
       
       if (nearestMark != NULL) {
-        handled = _markTouchListener->touchedMark(nearestMark);
+        if (nearestMark->getListener() != NULL){
+            handled = nearestMark->getListener()->touchedMark(nearestMark);
+        } else {
+            handled = _markTouchListener->touchedMark(nearestMark);
+        }
       }
-      
     }
     
   }

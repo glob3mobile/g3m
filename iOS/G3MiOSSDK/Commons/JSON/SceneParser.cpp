@@ -57,14 +57,15 @@ SceneParser* SceneParser::instance(){
 
 SceneParser::SceneParser(){
     _mapLayerType["WMS"] = WMS;
-    _mapLayerType["THREED"] = THREED;
-    _mapLayerType["PANO"] = PANO;
+    _mapLayerType["3D"] = THREED;
+    _mapLayerType["PANORAMICA"] = PANO;
     _mapLayerType["GEOJSON"] = GEOJSON;  
 }
 
 void SceneParser::parse(LayerSet* layerSet, std::string namelessParameter){
     
     _mapGeoJSONSources.clear();
+    _panoSources.clear();
     
     JSONObject* json = IJSONParser::instance()->parse(namelessParameter)->asObject();
     parserJSONLayerList(layerSet, json->getAsObject(LAYERS));
@@ -92,7 +93,7 @@ void SceneParser::parserJSONLayerList(LayerSet* layerSet, JSONObject* jsonLayers
                 parserGEOJSONLayer(layerSet, jsonLayer);
                 break;
         }
-        
+        delete isb;
     }
 }
 
@@ -142,6 +143,23 @@ void SceneParser::parserJSON3DLayer(LayerSet* layerSet, JSONObject* jsonLayer){
 
 void SceneParser::parserJSONPanoLayer(LayerSet* layerSet, JSONObject* jsonLayer){
     cout << "Parsing Pano Layer " << jsonLayer->getAsString(NAME)->value() << "..." << endl;
+    
+    const std::string geojsonDatasource = jsonLayer->getAsString(DATASOURCE)->value();
+    
+    JSONArray* jsonItems = jsonLayer->getAsArray(ITEMS);
+    for (int i = 0; i<jsonItems->size(); i++) {
+        
+        const std::string namefile = jsonItems->getAsObject(i)->getAsString(NAME)->value();
+        
+        IStringBuilder *url = IStringBuilder::newStringBuilder();
+        url->addString(geojsonDatasource);
+        url->addString("/");
+        url->addString(namefile);
+        
+        _panoSources.push_back(url->getString());
+    }
+
+    
 }
 
 void SceneParser::parserGEOJSONLayer(LayerSet* layerSet, JSONObject* jsonLayer){
@@ -166,5 +184,9 @@ void SceneParser::parserGEOJSONLayer(LayerSet* layerSet, JSONObject* jsonLayer){
 
 std::map<std::string, std::string> SceneParser::getMapGeoJSONSources(){
     return _mapGeoJSONSources;   
+}
+
+std::vector<std::string> SceneParser::getPanoSources(){
+    return _panoSources;   
 }
 

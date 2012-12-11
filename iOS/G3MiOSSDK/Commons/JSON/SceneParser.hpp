@@ -39,12 +39,14 @@ class SceneParser{
     static SceneParser* _instance;
     std::map<std::string, layer_type> _mapLayerType;
     std::map<std::string, std::string> _mapGeoJSONSources;
+    std::vector<std::string> _panoSources;
     
 public:
     
     static SceneParser* instance();
     void parse(LayerSet* layerSet, std::string namelessParameter);
     std::map<std::string, std::string> getMapGeoJSONSources();
+    std::vector<std::string> getPanoSources();
     
 private:
     void parserJSONLayerList(LayerSet* layerSet,JSONObject* jsonLayers);

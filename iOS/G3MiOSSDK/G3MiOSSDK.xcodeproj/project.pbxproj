@@ -290,6 +290,8 @@
 		D8F42FD415EB7B95000D1822 /* IStringBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8A723A715E4D2C500ABDF07 /* IStringBuilder.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		E745CC7916484A9A00819711 /* IStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E745CC7716484A9900819711 /* IStorage.cpp */; };
 		E86A5B86166FBFC90098449B /* MarkTouchListener.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E86A5B84166FB86D0098449B /* MarkTouchListener.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		E86A5B8B167211900098449B /* PanoDownloadListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E86A5B891672118F0098449B /* PanoDownloadListener.cpp */; };
+		E86A5B8C167211900098449B /* PanoDownloadListener.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E86A5B8A1672118F0098449B /* PanoDownloadListener.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		E8891FB31647DCF500B0E481 /* AppParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8891FB11647DCF500B0E481 /* AppParser.cpp */; };
 		E8891FB41647DCF500B0E481 /* AppParser.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E8891FB21647DCF500B0E481 /* AppParser.hpp */; };
 		E8891FBA1647DD0E00B0E481 /* GEOJSONDownloadListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8891FB61647DD0D00B0E481 /* GEOJSONDownloadListener.cpp */; };
@@ -588,6 +590,8 @@
 		D8FEDAC815E7C219007633A0 /* MathUtils_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MathUtils_iOS.hpp; path = Specific/Derived/MathUtils_iOS.hpp; sourceTree = "<group>"; };
 		E745CC7716484A9900819711 /* IStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IStorage.cpp; path = Commons/Interfaces/IStorage.cpp; sourceTree = "<group>"; };
 		E86A5B84166FB86D0098449B /* MarkTouchListener.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MarkTouchListener.hpp; path = Commons/Rendererers/MarkTouchListener.hpp; sourceTree = "<group>"; };
+		E86A5B891672118F0098449B /* PanoDownloadListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PanoDownloadListener.cpp; sourceTree = "<group>"; };
+		E86A5B8A1672118F0098449B /* PanoDownloadListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PanoDownloadListener.hpp; sourceTree = "<group>"; };
 		E8891FB11647DCF500B0E481 /* AppParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppParser.cpp; sourceTree = "<group>"; };
 		E8891FB21647DCF500B0E481 /* AppParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AppParser.hpp; sourceTree = "<group>"; };
 		E8891FB61647DD0D00B0E481 /* GEOJSONDownloadListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GEOJSONDownloadListener.cpp; sourceTree = "<group>"; };
@@ -840,6 +844,8 @@
 		A7BF53831607643400662135 /* JSON */ = {
 			isa = PBXGroup;
 			children = (
+				E86A5B891672118F0098449B /* PanoDownloadListener.cpp */,
+				E86A5B8A1672118F0098449B /* PanoDownloadListener.hpp */,
 				E8891FB61647DD0D00B0E481 /* GEOJSONDownloadListener.cpp */,
 				E8891FB71647DD0D00B0E481 /* GEOJSONDownloadListener.hpp */,
 				E8891FB81647DD0D00B0E481 /* SceneParser.cpp */,
@@ -1087,6 +1093,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E86A5B8C167211900098449B /* PanoDownloadListener.hpp in Headers */,
 				E86A5B86166FBFC90098449B /* MarkTouchListener.hpp in Headers */,
 				A70F560A161B5C6000340256 /* JSONParser_iOS.hpp in Headers */,
 				A70F5605161B53D000340256 /* IJSONParser.hpp in Headers */,
@@ -1432,6 +1439,7 @@
 				CF5A8A321656B67F00508C38 /* BoxShape.cpp in Sources */,
 				CFCB5EDA16582BCC007D051A /* CompositeMesh.cpp in Sources */,
 				CFD1A47516602B050039EFA9 /* ShapeScaleEffect.cpp in Sources */,
+				E86A5B8B167211900098449B /* PanoDownloadListener.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

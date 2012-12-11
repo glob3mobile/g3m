@@ -30,7 +30,7 @@ private:
     const Geodetic3D  _position;
     void* _userData;
     const double _minDistanceToCamera;
-    const MarkTouchListener* _listener;
+    MarkTouchListener* _listener;
     
 #ifdef C_CODE
     const IGLTextureId* _textureId;
@@ -56,7 +56,7 @@ public:
   Mark(const std::string name,
        const URL         textureURL,
        const Geodetic3D  position,
-       void* userData=NULL, const double minDistanceToCamera=0, const MarkTouchListener* listener=NULL) :
+       void* userData=NULL, const double minDistanceToCamera=0, MarkTouchListener* listener=NULL) :
   _name(name),
   _textureURL(textureURL),
   _position(position),
@@ -109,7 +109,7 @@ public:
 
   void setUserData(void* userData);
     
-  const MarkTouchListener* getListener(){
+  MarkTouchListener* getListener() const{
     return _listener;      
   }
 

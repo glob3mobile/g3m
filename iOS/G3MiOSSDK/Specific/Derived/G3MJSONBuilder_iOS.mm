@@ -15,6 +15,9 @@
 #include "Downloader_iOS.hpp"
 #include "MarksRenderer.hpp"
 #include "GEOJSONDownloadListener.hpp"
+#include "PanoDownloadListener.hpp"
+#include "IStringBuilder.hpp"
+
 
 #include "IStorage.hpp"
 #include "IDownloader.hpp"
@@ -40,12 +43,14 @@ void  G3MJSONBuilder_iOS::initWidgetWithCameraConstraints (std::vector<ICameraCo
         GTask* _customInitializationTask;
         MarksRenderer* _marksRenderer;
         std::map<std::string, std::string> _mapGeoJSONSources;
+        std::vector<std::string> _panoSources;
         G3MWidget_iOS* _g3mWidget;
     public:
         G3MJSONBuilderInitializationTask(GTask* customInitializationTask, MarksRenderer* marksRenderer, G3MWidget_iOS* g3mWidget){
             _customInitializationTask = customInitializationTask;
             _marksRenderer = marksRenderer;
             _mapGeoJSONSources = SceneParser::instance()->getMapGeoJSONSources();
+            _panoSources = SceneParser::instance()->getPanoSources();
             _g3mWidget = g3mWidget;
         }
         
@@ -54,6 +59,15 @@ void  G3MJSONBuilder_iOS::initWidgetWithCameraConstraints (std::vector<ICameraCo
                 for (std::map<std::string, std::string>::iterator it=_mapGeoJSONSources.begin(); it!=_mapGeoJSONSources.end(); it++){
                     [_g3mWidget getG3MContext]->getDownloader()->requestBuffer(URL(it->first, false), 100000000L, new GEOJSONDownloadListener(_marksRenderer, it->second), true);
                 }            
+            }
+            if(!_panoSources.empty()){
+                for (std::vector<std::string>::iterator it=_panoSources.begin(); it!=_panoSources.end(); it++) {
+                    IStringBuilder *url = IStringBuilder::newStringBuilder();
+                    url->addString(*it);
+                    url->addString("/metadata.json");
+                    [_g3mWidget getG3MContext]->getDownloader()->requestBuffer(URL(url->getString(), false), 100000000L, new PanoDownloadListener(_marksRenderer), true);
+                    delete url;
+                }
             }
             if (_customInitializationTask!=NULL){
                 _customInitializationTask->run(context);
