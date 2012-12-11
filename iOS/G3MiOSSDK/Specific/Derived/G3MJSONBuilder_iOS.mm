@@ -26,7 +26,7 @@ G3MJSONBuilder_iOS::G3MJSONBuilder_iOS(std::string jsonSource, G3MWidget_iOS* g3
 };
 
 
-void  G3MJSONBuilder_iOS::initWidgetWithCameraConstraints (std::vector<ICameraConstrainer*> cameraConstraints,  LayerSet* layerSet, bool incrementalTileQuality, std::vector<Renderer*> renderers, UserData* userData, GTask* initializationTask, std::vector<PeriodicalTask*> periodicalTasks, MarkTouchListener* markTouchListener){
+void  G3MJSONBuilder_iOS::initWidgetWithCameraConstraints (std::vector<ICameraConstrainer*> cameraConstraints,  LayerSet* layerSet, bool incrementalTileQuality, std::vector<Renderer*> renderers, UserData* userData, GTask* initializationTask, std::vector<PeriodicalTask*> periodicalTasks, MarkTouchListener* markTouchListener, MarkTouchListener* panoTouchListener){
     
     const bool readyWhenMarksReady = false;
     MarksRenderer* marksRenderer = new MarksRenderer(readyWhenMarksReady);
@@ -44,13 +44,15 @@ void  G3MJSONBuilder_iOS::initWidgetWithCameraConstraints (std::vector<ICameraCo
         MarksRenderer* _marksRenderer;
         std::map<std::string, std::string> _mapGeoJSONSources;
         std::vector<std::string> _panoSources;
+        MarkTouchListener* _panoTouchListener;
         G3MWidget_iOS* _g3mWidget;
     public:
-        G3MJSONBuilderInitializationTask(GTask* customInitializationTask, MarksRenderer* marksRenderer, G3MWidget_iOS* g3mWidget){
+        G3MJSONBuilderInitializationTask(GTask* customInitializationTask, MarksRenderer* marksRenderer, G3MWidget_iOS* g3mWidget, MarkTouchListener* panoTouchListener){
             _customInitializationTask = customInitializationTask;
             _marksRenderer = marksRenderer;
             _mapGeoJSONSources = SceneParser::instance()->getMapGeoJSONSources();
             _panoSources = SceneParser::instance()->getPanoSources();
+            _panoTouchListener = panoTouchListener;
             _g3mWidget = g3mWidget;
         }
         
@@ -65,7 +67,7 @@ void  G3MJSONBuilder_iOS::initWidgetWithCameraConstraints (std::vector<ICameraCo
                     IStringBuilder *url = IStringBuilder::newStringBuilder();
                     url->addString(*it);
                     url->addString("/metadata.json");
-                    [_g3mWidget getG3MContext]->getDownloader()->requestBuffer(URL(url->getString(), false), 100000000L, new PanoDownloadListener(_marksRenderer), true);
+                    [_g3mWidget getG3MContext]->getDownloader()->requestBuffer(URL(url->getString(), false), 100000000L, new PanoDownloadListener(_marksRenderer,_panoTouchListener), true);
                     delete url;
                 }
             }
@@ -81,7 +83,7 @@ void  G3MJSONBuilder_iOS::initWidgetWithCameraConstraints (std::vector<ICameraCo
                          incrementalTileQuality: incrementalTileQuality
                                       renderers: renderers
                                        userData: userData
-                             initializationTask: new G3MJSONBuilderInitializationTask(initializationTask, marksRenderer, _g3mWidget)
+                             initializationTask: new G3MJSONBuilderInitializationTask(initializationTask, marksRenderer, _g3mWidget, panoTouchListener)
                                 periodicalTasks: periodicalTasks];
     
 }
