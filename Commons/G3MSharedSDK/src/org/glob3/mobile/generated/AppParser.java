@@ -59,7 +59,7 @@ public class AppParser
 	  JSONObject jsonGeometry = point.getAsObject(GEOMETRY);
 	  JSONArray jsonCoordinates = jsonGeometry.getAsArray(COORDINATES);
   
-	  Mark mark = new Mark(jsonProperties.getAsString(NAME).value(), new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png",false), new Geodetic3D(Angle.fromDegrees(jsonCoordinates.getAsNumber(1).doubleValue()), Angle.fromDegrees(jsonCoordinates.getAsNumber(0).doubleValue()), 0), 0, null);
+	  Mark mark = new Mark(jsonProperties.getAsString(NAME).value(), new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png",false), new Geodetic3D(Angle.fromDegrees(jsonCoordinates.getAsNumber(1).doubleValue()), Angle.fromDegrees(jsonCoordinates.getAsNumber(0).doubleValue()), 0), null, 0, null);
   
 	  marks.addMark(mark);
   }

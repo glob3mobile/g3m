@@ -68,7 +68,7 @@ public class PanoDownloadListener implements IBufferDownloadListener
 		final Angle latitude = Angle.fromDegrees(json.getAsObject(POSITION).getAsNumber(LAT).doubleValue());
 		final Angle longitude = Angle.fromDegrees(json.getAsObject(POSITION).getAsNumber(LON).doubleValue());
     
-		Mark mark = new Mark(json.getAsString(NAME).value(), new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png",false), new Geodetic3D(latitude, longitude, 0),new URL(url, false),0,_panoTouchListener);
+		Mark mark = new Mark(json.getAsString(NAME).value(), new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png",false), new Geodetic3D(latitude, longitude, 0), new URL(url, false), 0, _panoTouchListener);
     
 		_marksRenderer.addMark(mark);
     
