@@ -51,7 +51,7 @@ void PanoDownloadListener::parseMETADATA(std::string url, JSONObject* json){
     
     Mark* mark = new Mark(json->getAsString(NAME)->value(),
                     URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png",false),
-                    Geodetic3D(latitude, longitude, 0),new URL(url, false),0,_panoTouchListener);
+                    Geodetic3D(latitude, longitude, 0), new URL(url, false), 0, _panoTouchListener);
     
     _marksRenderer->addMark(mark);
 
