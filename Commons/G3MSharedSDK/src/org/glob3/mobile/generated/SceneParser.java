@@ -17,6 +17,7 @@ public class SceneParser
 	private static SceneParser _instance = null;
 	private java.util.HashMap<String, layer_type> _mapLayerType = new java.util.HashMap<String, layer_type>();
 	private java.util.HashMap<String, String> _mapGeoJSONSources = new java.util.HashMap<String, String>();
+	private java.util.ArrayList<String> _panoSources = new java.util.ArrayList<String>();
 
 
 	public static SceneParser instance()
@@ -31,6 +32,7 @@ public class SceneParser
 	{
     
 		_mapGeoJSONSources.clear();
+		_panoSources.clear();
     
 		JSONObject json = IJSONParser.instance().parse(namelessParameter).asObject();
 		parserJSONLayerList(layerSet, json.getAsObject(LAYERS));
@@ -39,6 +41,10 @@ public class SceneParser
 	public final java.util.HashMap<String, String> getMapGeoJSONSources()
 	{
 		return _mapGeoJSONSources;
+	}
+	public final java.util.ArrayList<String> getPanoSources()
+	{
+		return _panoSources;
 	}
 
 	private void parserJSONLayerList(LayerSet layerSet, JSONObject jsonLayers)
@@ -65,7 +71,8 @@ public class SceneParser
 					parserGEOJSONLayer(layerSet, jsonLayer);
 					break;
 			}
-    
+			if (isb != null)
+				isb.dispose();
 		}
 	}
 	private void parserJSONWMSLayer(LayerSet layerSet, JSONObject jsonLayer)
@@ -120,6 +127,24 @@ public class SceneParser
 		System.out.print(jsonLayer.getAsString(NAME).value());
 		System.out.print("...");
 		System.out.print("\n");
+    
+		final String geojsonDatasource = jsonLayer.getAsString(DATASOURCE).value();
+    
+		JSONArray jsonItems = jsonLayer.getAsArray(ITEMS);
+		for (int i = 0; i<jsonItems.size(); i++)
+		{
+    
+			final String namefile = jsonItems.getAsObject(i).getAsString(NAME).value();
+    
+			IStringBuilder url = IStringBuilder.newStringBuilder();
+			url.addString(geojsonDatasource);
+			url.addString("/");
+			url.addString(namefile);
+    
+			_panoSources.add(url.getString());
+		}
+    
+    
 	}
 	private void parserGEOJSONLayer(LayerSet layerSet, JSONObject jsonLayer)
 	{
@@ -149,8 +174,8 @@ public class SceneParser
 	protected SceneParser()
 	{
 		_mapLayerType.put("WMS", layer_type.WMS);
-		_mapLayerType.put("THREED", layer_type.THREED);
-		_mapLayerType.put("PANO", layer_type.PANO);
+		_mapLayerType.put("3D", layer_type.THREED);
+		_mapLayerType.put("PANORAMICA", layer_type.PANO);
 		_mapLayerType.put("GEOJSON", layer_type.GEOJSON);
 	}
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:

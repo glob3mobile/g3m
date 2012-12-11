@@ -1,4 +1,30 @@
 package org.glob3.mobile.generated; 
+//
+//  MarksRenderer.cpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 05/06/12.
+//  Copyright (c) 2012 IGO Software SL. All rights reserved.
+//
+
+//
+//  MarksRenderer.hpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 05/06/12.
+//  Copyright (c) 2012 IGO Software SL. All rights reserved.
+//
+
+
+
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class Mark;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class Camera;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class MarkTouchListener;
+
+
 public class MarksRenderer extends LeafRenderer
 {
   private final boolean _readyWhenMarksReady;
@@ -22,32 +48,32 @@ public class MarksRenderer extends LeafRenderer
 
   public final void setMarkTouchListener(MarkTouchListener markTouchListener, boolean autoDelete)
   {
-	if (_autoDeleteMarkTouchListener)
-	{
-	  if (_markTouchListener != null)
-		  _markTouchListener.dispose();
-	}
-
-	_markTouchListener = markTouchListener;
-	_autoDeleteMarkTouchListener = autoDelete;
+	  if (_autoDeleteMarkTouchListener)
+	  {
+		  if (_markTouchListener != null)
+			  _markTouchListener.dispose();
+	  }
+  
+	  _markTouchListener = markTouchListener;
+	  _autoDeleteMarkTouchListener = autoDelete;
   }
 
   public void dispose()
   {
-	int marksSize = _marks.size();
-	for (int i = 0; i < marksSize; i++)
-	{
-	  if (_marks.get(i) != null)
-		  _marks.get(i).dispose();
-	}
-
-	if (_autoDeleteMarkTouchListener)
-	{
-	  if (_markTouchListener != null)
-		  _markTouchListener.dispose();
-	}
-	_markTouchListener = null;
-  }
+	 int marksSize = _marks.size();
+	 for (int i = 0; i < marksSize; i++)
+	 {
+		 if (_marks.get(i) != null)
+			 _marks.get(i).dispose();
+	 }
+ 
+	 if (_autoDeleteMarkTouchListener)
+	 {
+		 if (_markTouchListener != null)
+			 _markTouchListener.dispose();
+	 }
+	 _markTouchListener = null;
+ }
 
   public void initialize(G3MContext context)
   {
@@ -174,9 +200,15 @@ public class MarksRenderer extends LeafRenderer
   
 		if (nearestMark != null)
 		{
-		  handled = _markTouchListener.touchedMark(nearestMark);
+		  if (nearestMark.getListener() != null)
+		  {
+			  handled = nearestMark.getListener().touchedMark(nearestMark);
+		  }
+		  else
+		  {
+			  handled = _markTouchListener.touchedMark(nearestMark);
+		  }
 		}
-  
 	  }
   
 	}

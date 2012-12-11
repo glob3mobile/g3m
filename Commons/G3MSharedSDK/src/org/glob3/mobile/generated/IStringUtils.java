@@ -119,7 +119,6 @@ public abstract class IStringUtils
   {
 	return rtrim(ltrim(String));
   }
-
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual String capitalize(const String& String) const = 0;
   public abstract String capitalize(String String);
