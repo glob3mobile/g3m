@@ -10,8 +10,6 @@
 		443BBC8315A5C22000EAE280 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 443BBC8215A5C21F00EAE280 /* CoreData.framework */; };
 		44EEB5E0159B2B8B0086F243 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 44EEB5DF159B2B8B0086F243 /* libsqlite3.dylib */; };
 		A717C99615EBA71D00EEC830 /* mercator.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A717C99515EBA71D00EEC830 /* mercator.jpg */; };
-		CC42F3FD164A6F5B0080F8D3 /* Shader_dummy.fsh in Resources */ = {isa = PBXBuildFile; fileRef = CC42F3FB164A6F480080F8D3 /* Shader_dummy.fsh */; };
-		CC8E650E1639A983007D1223 /* Shader_dummy.vsh in Resources */ = {isa = PBXBuildFile; fileRef = CC8E650C1639A903007D1223 /* Shader_dummy.vsh */; };
 		CCD7885415D9A3FA0065A7E1 /* ProgressWheel.png in Resources */ = {isa = PBXBuildFile; fileRef = CCD7885315D9A3FA0065A7E1 /* ProgressWheel.png */; };
 		CF0223831668318600024B73 /* geojson in Resources */ = {isa = PBXBuildFile; fileRef = CF0223821668318600024B73 /* geojson */; };
 		CF7A708815CFD0A50086FDE6 /* g3m-marker.png in Resources */ = {isa = PBXBuildFile; fileRef = CF7A708715CFD0A50086FDE6 /* g3m-marker.png */; };
@@ -69,8 +67,6 @@
 		443BBC8215A5C21F00EAE280 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		44EEB5DF159B2B8B0086F243 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		A717C99515EBA71D00EEC830 /* mercator.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = mercator.jpg; sourceTree = "<group>"; };
-		CC42F3FB164A6F480080F8D3 /* Shader_dummy.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Shader_dummy.fsh; sourceTree = "<group>"; };
-		CC8E650C1639A903007D1223 /* Shader_dummy.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Shader_dummy.vsh; sourceTree = "<group>"; };
 		CCD7885315D9A3FA0065A7E1 /* ProgressWheel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ProgressWheel.png; sourceTree = "<group>"; };
 		CF0223821668318600024B73 /* geojson */ = {isa = PBXFileReference; lastKnownFileType = folder; path = geojson; sourceTree = "<group>"; };
 		CF7A708715CFD0A50086FDE6 /* g3m-marker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "g3m-marker.png"; sourceTree = "<group>"; };
@@ -226,8 +222,6 @@
 				D8E93BDF1588A171009D497C /* world.jpg */,
 				D8EEF4241577B0D3003FEB5E /* Shader.vsh */,
 				D8EEF4231577B0D3003FEB5E /* Shader.fsh */,
-				CC8E650C1639A903007D1223 /* Shader_dummy.vsh */,
-				CC42F3FB164A6F480080F8D3 /* Shader_dummy.fsh */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -299,8 +293,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CC42F3FD164A6F5B0080F8D3 /* Shader_dummy.fsh in Resources */,
-				CC8E650E1639A983007D1223 /* Shader_dummy.vsh in Resources */,
 				D8EEF4281577B0FD003FEB5E /* Shader.vsh in Resources */,
 				D8EEF4291577B0FD003FEB5E /* Shader.fsh in Resources */,
 				D8EEF3951577920B003FEB5E /* InfoPlist.strings in Resources */,

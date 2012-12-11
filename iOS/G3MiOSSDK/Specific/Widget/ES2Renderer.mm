@@ -120,26 +120,21 @@ enum {
 }
 
 - (BOOL)loadShaders {
-  NSString *vertShaderPathname, *fragShaderPathname;
-  vertShaderPathname = [[NSBundle mainBundle] pathForResource:@"Shader" ofType:@"vsh"];
-  std::string vertexSource ([[NSString stringWithContentsOfFile:vertShaderPathname encoding:NSUTF8StringEncoding error:nil] UTF8String]);
-  fragShaderPathname = [[NSBundle mainBundle] pathForResource:@"Shader" ofType:@"fsh"];
-  std::string fragmentSource ([[NSString stringWithContentsOfFile:fragShaderPathname encoding:NSUTF8StringEncoding error:nil] UTF8String]);
-  
+  NSString* vertShaderPathname = [[NSBundle mainBundle] pathForResource: @"Shader"
+                                                                 ofType: @"vsh"];
+  const std::string vertexSource ([[NSString stringWithContentsOfFile: vertShaderPathname
+                                                             encoding: NSUTF8StringEncoding
+                                                                error: nil] UTF8String]);
+
+  NSString* fragShaderPathname = [[NSBundle mainBundle] pathForResource: @"Shader"
+                                                                 ofType: @"fsh"];
+  const std::string fragmentSource ([[NSString stringWithContentsOfFile: fragShaderPathname
+                                                               encoding: NSUTF8StringEncoding
+                                                                  error: nil] UTF8String]);
+
   // Create shader program
   _shaderProgram = new ShaderProgram(_gl);
   if (_shaderProgram->loadShaders(vertexSource, fragmentSource)==false) {
-    NSLog(@"Failed to load shaders");
-    return FALSE;
-  }
-  
-  // Create second dummy shader program
-  vertShaderPathname = [[NSBundle mainBundle] pathForResource:@"Shader_dummy" ofType:@"vsh"];
-  std::string vertexSource2 ([[NSString stringWithContentsOfFile:vertShaderPathname encoding:NSUTF8StringEncoding error:nil] UTF8String]);
-  fragShaderPathname = [[NSBundle mainBundle] pathForResource:@"Shader_dummy" ofType:@"fsh"];
-  std::string fragmentSource2 ([[NSString stringWithContentsOfFile:fragShaderPathname encoding:NSUTF8StringEncoding error:nil] UTF8String]);
-  _shaderProgram2 = new ShaderProgram(_gl);
-  if (_shaderProgram2->loadShaders(vertexSource2, fragmentSource2)==false) {
     NSLog(@"Failed to load shaders");
     return FALSE;
   }

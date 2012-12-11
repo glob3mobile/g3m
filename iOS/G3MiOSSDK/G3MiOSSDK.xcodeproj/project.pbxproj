@@ -111,6 +111,9 @@
 		CF527E20162E33F500E0BDE0 /* LeafRenderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF527E1E162E33F500E0BDE0 /* LeafRenderer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF527E21162E359900E0BDE0 /* JSONBaseObject.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A7BF53841607643400662135 /* JSONBaseObject.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF527E23162E35BA00E0BDE0 /* IGLUniformID.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D80D3A5D160A0A47004831C5 /* IGLUniformID.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		CF55B0011677A0CB00BA6221 /* GLState.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CC8EFFFC163BE8A0006586B0 /* GLState.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		CF55B0021677A0CB00BA6221 /* ShaderProgram.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CC733B461637EF040035C4CC /* ShaderProgram.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		CF55B0031677A0CB00BA6221 /* GoToPositionEffect.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8EB78831637F6B500C4EB57 /* GoToPositionEffect.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF59DF8F15C04AFC002173EC /* ILogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF59DF8E15C04AFC002173EC /* ILogger.cpp */; };
 		CF5A8A321656B67F00508C38 /* BoxShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF5A8A301656B67F00508C38 /* BoxShape.cpp */; };
 		CF5A8A331656B67F00508C38 /* BoxShape.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF5A8A311656B67F00508C38 /* BoxShape.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1132,6 +1135,9 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CF55B0011677A0CB00BA6221 /* GLState.hpp in Headers */,
+				CF55B0021677A0CB00BA6221 /* ShaderProgram.hpp in Headers */,
+				CF55B0031677A0CB00BA6221 /* GoToPositionEffect.hpp in Headers */,
 				A74072CF161EEEA300182A39 /* BingLayer.hpp in Headers */,
 				CF00E445166FD77E0098CABD /* IImageListener.hpp in Headers */,
 				CFDB7B74166AB99B00756DE8 /* DirectMesh.hpp in Headers */,
