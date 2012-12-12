@@ -29,6 +29,7 @@
 #include "IStorage.hpp"
 #include "OrderedRenderable.hpp"
 #include <math.h>
+#include "GInitializationTask.hpp"
 
 void G3MWidget::initSingletons(ILogger*            logger,
                                IFactory*           factory,
@@ -63,7 +64,7 @@ G3MWidget::G3MWidget(GL*                              gl,
                      Color                            backgroundColor,
                      const bool                       logFPS,
                      const bool                       logDownloaderStatistics,
-                     GTask*                           initializationTask,
+                     GInitializationTask*             initializationTask,
                      bool                             autoDeleteInitializationTask,
                      std::vector<PeriodicalTask*>     periodicalTasks):
 _rootState(GLState::newDefault()),
@@ -109,7 +110,8 @@ _context(new G3MContext(IFactory::instance(),
                         downloader,
                         _effectsScheduler,
                         storage)),
-_paused(false)
+_paused(false),
+_initializationTaskWasRun(false)
 {
   initializeGL();
 
@@ -153,7 +155,7 @@ G3MWidget* G3MWidget::create(GL*                              gl,
                              Color                            backgroundColor,
                              const bool                       logFPS,
                              const bool                       logDownloaderStatistics,
-                             GTask*                           initializationTask,
+                             GInitializationTask*             initializationTask,
                              bool                             autoDeleteInitializationTask,
                              std::vector<PeriodicalTask*>     periodicalTasks) {
 
@@ -319,11 +321,20 @@ void G3MWidget::render() {
 
   if (_mainRendererReady) {
     if (_initializationTask != NULL) {
-      _initializationTask->run(_context);
-      if (_autoDeleteInitializationTask) {
-        delete _initializationTask;
+      if (!_initializationTaskWasRun) {
+        _initializationTask->run(_context);
+        _initializationTaskWasRun = true;
       }
-      _initializationTask = NULL;
+
+      if (_initializationTask->isDone(_context)) {
+        if (_autoDeleteInitializationTask) {
+          delete _initializationTask;
+        }
+        _initializationTask = NULL;
+      }
+      else {
+        _mainRendererReady = false;
+      }
     }
   }
 

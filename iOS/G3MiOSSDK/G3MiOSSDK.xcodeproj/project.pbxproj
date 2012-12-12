@@ -94,6 +94,8 @@
 		CF0D9BB41601F46B00F28B7D /* ByteBuffer_iOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF0D9BB31601F46A00F28B7D /* ByteBuffer_iOS.cpp */; };
 		CF11E8C6164D653000935052 /* SGLayerNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF11E8C4164D653000935052 /* SGLayerNode.cpp */; };
 		CF11E8C7164D653000935052 /* SGLayerNode.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF11E8C5164D653000935052 /* SGLayerNode.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		CF2CDD991678292E002A78A9 /* GInitializationTask.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF2CDD971678292E002A78A9 /* GInitializationTask.cpp */; };
+		CF2CDD9A1678292E002A78A9 /* GInitializationTask.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF2CDD981678292E002A78A9 /* GInitializationTask.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF31CBF1158776130085E8F1 /* Effects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF31CBF0158776120085E8F1 /* Effects.cpp */; };
 		CF3E07E81649B65000B5CA51 /* CompositeShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF3E07E61649B65000B5CA51 /* CompositeShape.cpp */; };
 		CF3E07E91649B65000B5CA51 /* CompositeShape.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF3E07E71649B65000B5CA51 /* CompositeShape.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -421,6 +423,8 @@
 		CF0D9BB31601F46A00F28B7D /* ByteBuffer_iOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ByteBuffer_iOS.cpp; path = Specific/Derived/ByteBuffer_iOS.cpp; sourceTree = "<group>"; };
 		CF11E8C4164D653000935052 /* SGLayerNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGLayerNode.cpp; path = Commons/Rendererers/SGLayerNode.cpp; sourceTree = "<group>"; };
 		CF11E8C5164D653000935052 /* SGLayerNode.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SGLayerNode.hpp; path = Commons/Rendererers/SGLayerNode.hpp; sourceTree = "<group>"; };
+		CF2CDD971678292E002A78A9 /* GInitializationTask.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GInitializationTask.cpp; path = Commons/Basic/GInitializationTask.cpp; sourceTree = "<group>"; };
+		CF2CDD981678292E002A78A9 /* GInitializationTask.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GInitializationTask.hpp; path = Commons/Basic/GInitializationTask.hpp; sourceTree = "<group>"; };
 		CF31CBEE158776020085E8F1 /* Effects.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Effects.hpp; path = Commons/Basic/Effects.hpp; sourceTree = "<group>"; };
 		CF31CBF0158776120085E8F1 /* Effects.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Effects.cpp; path = Commons/Basic/Effects.cpp; sourceTree = "<group>"; };
 		CF31CBF215878AF90085E8F1 /* ITimer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ITimer.hpp; path = Commons/Interfaces/ITimer.hpp; sourceTree = "<group>"; };
@@ -783,6 +787,8 @@
 				CFFEC12415C2EB96003FA986 /* URL.hpp */,
 				CF8D0BFB15AF0D23005B5433 /* TileTexturizer.hpp */,
 				CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */,
+				CF2CDD971678292E002A78A9 /* GInitializationTask.cpp */,
+				CF2CDD981678292E002A78A9 /* GInitializationTask.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -1135,6 +1141,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CF2CDD9A1678292E002A78A9 /* GInitializationTask.hpp in Headers */,
 				CF55B0011677A0CB00BA6221 /* GLState.hpp in Headers */,
 				CF55B0021677A0CB00BA6221 /* ShaderProgram.hpp in Headers */,
 				CF55B0031677A0CB00BA6221 /* GoToPositionEffect.hpp in Headers */,
@@ -1493,6 +1500,7 @@
 				CFDFC05D166AB22A0065BC1F /* AbstractMesh.cpp in Sources */,
 				CFDB7B73166AB99B00756DE8 /* DirectMesh.cpp in Sources */,
 				CF00E444166FD77E0098CABD /* IImageListener.cpp in Sources */,
+				CF2CDD991678292E002A78A9 /* GInitializationTask.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

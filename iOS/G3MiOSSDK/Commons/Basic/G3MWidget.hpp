@@ -14,7 +14,6 @@ class TouchEvent;
 class Planet;
 class ILogger;
 class GL;
-//class INativeGL;
 class TexturesHandler;
 class Downloader;
 class IDownloader;
@@ -22,6 +21,7 @@ class Camera;
 class EffectsScheduler;
 class IStringUtils;
 class IThreadUtils;
+class GInitializationTask;
 class GTask;
 class TimeInterval;
 class IFactory;
@@ -90,7 +90,7 @@ public:
                            Color                            backgroundColor,
                            const bool                       logFPS,
                            const bool                       logDownloaderStatistics,
-                           GTask*                           initializationTask,
+                           GInitializationTask*             initializationTask,
                            bool                             autoDeleteInitializationTask,
                            std::vector<PeriodicalTask*>     periodicalTasks);
 
@@ -196,8 +196,8 @@ private:
 
   UserData* _userData;
 
-  GTask* _initializationTask;
-  bool   _autoDeleteInitializationTask;
+  GInitializationTask* _initializationTask;
+  bool                 _autoDeleteInitializationTask;
 
   std::vector<PeriodicalTask*> _periodicalTasks;
 
@@ -208,6 +208,8 @@ private:
   bool _paused;
   
   const GLState* _rootState;
+
+  bool _initializationTaskWasRun;
 
   G3MWidget(GL*                              gl,
             IStorage*                        storage,
@@ -223,7 +225,7 @@ private:
             Color                            backgroundColor,
             const bool                       logFPS,
             const bool                       logDownloaderStatistics,
-            GTask*                           initializationTask,
+            GInitializationTask*             initializationTask,
             bool                             autoDeleteInitializationTask,
             std::vector<PeriodicalTask*>     periodicalTasks);
   

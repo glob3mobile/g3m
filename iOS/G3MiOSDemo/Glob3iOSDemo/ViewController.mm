@@ -31,6 +31,7 @@
 #include "DummyRenderer.hpp"
 #include "GEOJSONParser.hpp"
 #include "GEORenderer.hpp"
+#include "GInitializationTask.hpp"
 
 @implementation ViewController
 
@@ -330,14 +331,14 @@
   cameraConstraints.push_back(scc);
 
 
-  class SampleInitializationTask : public GTask {
+  class SampleInitializationTask : public GInitializationTask {
   private:
     G3MWidget_iOS*  _iosWidget;
     ShapesRenderer* _shapesRenderer;
     GEORenderer*    _geoRenderer;
 
   public:
-    SampleInitializationTask(G3MWidget_iOS* iosWidget,
+    SampleInitializationTask(G3MWidget_iOS*  iosWidget,
                              ShapesRenderer* shapesRenderer,
                              GEORenderer*    geoRenderer) :
     _iosWidget(iosWidget),
@@ -404,6 +405,11 @@
       }
       */
     }
+
+    bool isDone(const G3MContext* context) {
+      return true;
+    }
+
   };
 
   GEORenderer* geoRenderer = new GEORenderer();

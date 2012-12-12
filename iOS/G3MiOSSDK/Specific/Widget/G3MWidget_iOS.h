@@ -23,7 +23,7 @@ class UserData;
 class TilesRenderParameters;
 class G3MWidget;
 class PeriodicalTask;
-class GTask;
+class GInitializationTask;
 
 // opengl versions value
 enum GL_version {
@@ -63,7 +63,7 @@ enum GL_version {
                  incrementalTileQuality: (bool) incrementalTileQuality
                               renderers: (std::vector<Renderer*>) renderers
                                userData: (UserData*) userData
-                     initializationTask: (GTask*) initializationTask
+                     initializationTask: (GInitializationTask*) initializationTask
                         periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks;
 
 - (void)initWidgetWithCameraRenderer: (CameraRenderer*) cameraRenderer
@@ -72,7 +72,7 @@ enum GL_version {
                tilesRenderParameters: (TilesRenderParameters*) parameters
                            renderers: (std::vector<Renderer*>) renderers
                             userData: (UserData*) userData
-                  initializationTask: (GTask*) initializationTask
+                  initializationTask: (GInitializationTask*) initializationTask
                      periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks;
 
 - (G3MWidget*) widget;
