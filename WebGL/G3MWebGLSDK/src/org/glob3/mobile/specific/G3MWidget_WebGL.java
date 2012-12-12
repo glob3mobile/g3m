@@ -23,7 +23,6 @@ import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IFactory;
-//import org.glob3.mobile.generated.IGLProgramId;
 import org.glob3.mobile.generated.IJSONParser;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IMathUtils;
@@ -54,69 +53,73 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 
 
+//import org.glob3.mobile.generated.IGLProgramId;
+
+
 public final class G3MWidget_WebGL
          extends
             Composite {
 
-	   private final static String    _fragmentShader = "varying mediump vec2 TextureCoordOut;"
-               + "uniform mediump vec2 TranslationTexCoord;"
-               + "uniform mediump vec2 ScaleTexCoord;"
-               + ""
-               + "varying mediump vec4 VertexColor;"
-               + ""
-               + "uniform sampler2D Sampler;"
-               + "uniform bool EnableTexture;"
-               + "uniform lowp vec4 FlatColor;"
-               + ""
-               + "uniform bool EnableColorPerVertex;"
-               + "uniform bool EnableFlatColor;"
-               + "uniform mediump float FlatColorIntensity;"
-               + "uniform mediump float ColorPerVertexIntensity;"
-               + ""
-               + "void main() {"
-               + "  "
-               + "  if (EnableTexture) {"
-               + "    gl_FragColor = texture2D(Sampler, TextureCoordOut * ScaleTexCoord + TranslationTexCoord);"
-               + ""
-               + "    if (EnableFlatColor || EnableColorPerVertex){"
-               + "      lowp vec4 color;"
-               + "      if (EnableFlatColor) {"
-               + "        color = FlatColor;"
-               + "        if (EnableColorPerVertex) {"
-               + "          color = color * VertexColor;"
-               + "        }"
-               + "      }"
-               + "      else {"
-               + "        color = VertexColor;"
-               + "      }"
-               + "      "
-               + "      lowp float intensity = (FlatColorIntensity + ColorPerVertexIntensity) / 2.0;"
-               + "      gl_FragColor = mix(gl_FragColor,"
-               + "                         VertexColor,"
-               + "                         intensity);" + "    }" + "  }" + "  else {"
-               + "    " + "    if (EnableColorPerVertex) {"
-               + "      gl_FragColor = VertexColor;" + "      if (EnableFlatColor) {"
-               + "        gl_FragColor = gl_FragColor * FlatColor;" + "      }" + "    }"
-               + "    else {" + "      gl_FragColor = FlatColor;" + "    }" + "    " + "  }"
-               + "  " + "}";
+   private final static String           _fragmentShader       = "varying mediump vec2 TextureCoordOut;"
+                                                                 + "uniform mediump vec2 TranslationTexCoord;"
+                                                                 + "uniform mediump vec2 ScaleTexCoord;"
+                                                                 + ""
+                                                                 + "varying mediump vec4 VertexColor;"
+                                                                 + ""
+                                                                 + "uniform sampler2D Sampler;"
+                                                                 + "uniform bool EnableTexture;"
+                                                                 + "uniform lowp vec4 FlatColor;"
+                                                                 + ""
+                                                                 + "uniform bool EnableColorPerVertex;"
+                                                                 + "uniform bool EnableFlatColor;"
+                                                                 + "uniform mediump float FlatColorIntensity;"
+                                                                 + "uniform mediump float ColorPerVertexIntensity;"
+                                                                 + ""
+                                                                 + "void main() {"
+                                                                 + "  "
+                                                                 + "  if (EnableTexture) {"
+                                                                 + "    gl_FragColor = texture2D(Sampler, TextureCoordOut * ScaleTexCoord + TranslationTexCoord);"
+                                                                 + ""
+                                                                 + "    if (EnableFlatColor || EnableColorPerVertex){"
+                                                                 + "      lowp vec4 color;"
+                                                                 + "      if (EnableFlatColor) {"
+                                                                 + "        color = FlatColor;"
+                                                                 + "        if (EnableColorPerVertex) {"
+                                                                 + "          color = color * VertexColor;"
+                                                                 + "        }"
+                                                                 + "      }"
+                                                                 + "      else {"
+                                                                 + "        color = VertexColor;"
+                                                                 + "      }"
+                                                                 + "      "
+                                                                 + "      lowp float intensity = (FlatColorIntensity + ColorPerVertexIntensity) / 2.0;"
+                                                                 + "      gl_FragColor = mix(gl_FragColor,"
+                                                                 + "                         VertexColor,"
+                                                                 + "                         intensity);" + "    }" + "  }"
+                                                                 + "  else {" + "    " + "    if (EnableColorPerVertex) {"
+                                                                 + "      gl_FragColor = VertexColor;"
+                                                                 + "      if (EnableFlatColor) {"
+                                                                 + "        gl_FragColor = gl_FragColor * FlatColor;" + "      }"
+                                                                 + "    }" + "    else {" + "      gl_FragColor = FlatColor;"
+                                                                 + "    }" + "    " + "  }" + "  " + "}";
 
-private final static String    _vertexShader   = "attribute vec4 Position;"
-               + "attribute vec2 TextureCoord; "
-               + "attribute vec4 Color;"
-               + "uniform mat4 Projection;"
-               + "uniform mat4 Modelview;"
-               + "uniform bool BillBoard;"
-               + "uniform float ViewPortRatio;"
-               + "uniform float PointSize;"
-               + "varying vec4 VertexColor;"
-               + "varying vec2 TextureCoordOut;"
-               + "void main() {"
-               + "  gl_Position = Projection * Modelview * Position;"
-               + "  if (BillBoard) {"
-               + "    gl_Position.x += (-0.05 + TextureCoord.x * 0.1) * gl_Position.w;"
-               + "    gl_Position.y -= (-0.05 + TextureCoord.y * 0.1) * gl_Position.w * ViewPortRatio;"
-               + "  }" + "  TextureCoordOut = TextureCoord;" + "  VertexColor = Color;"
-               + "  gl_PointSize = PointSize;" + "}";
+   private final static String           _vertexShader         = "attribute vec4 Position;"
+                                                                 + "attribute vec2 TextureCoord; "
+                                                                 + "attribute vec4 Color;"
+                                                                 + "uniform mat4 Projection;"
+                                                                 + "uniform mat4 Modelview;"
+                                                                 + "uniform bool BillBoard;"
+                                                                 + "uniform float ViewPortRatio;"
+                                                                 + "uniform float PointSize;"
+                                                                 + "varying vec4 VertexColor;"
+                                                                 + "varying vec2 TextureCoordOut;"
+                                                                 + "void main() {"
+                                                                 + "  gl_Position = Projection * Modelview * Position;"
+                                                                 + "  if (BillBoard) {"
+                                                                 + "    gl_Position.x += (-0.05 + TextureCoord.x * 0.1) * gl_Position.w;"
+                                                                 + "    gl_Position.y -= (-0.05 + TextureCoord.y * 0.1) * gl_Position.w * ViewPortRatio;"
+                                                                 + "  }" + "  TextureCoordOut = TextureCoord;"
+                                                                 + "  VertexColor = Color;" + "  gl_PointSize = PointSize;" + "}";
 
 
    public static final String            CANVAS_ID             = "g3m-canvas";
@@ -132,9 +135,9 @@ private final static String    _vertexShader   = "attribute vec4 Position;"
    //private IGLProgramId                  _program              = null;
    private JavaScriptObject              _webGLContext         = null;
 
-   private ShaderProgram		   _shaderProgram;
-   private ShaderProgram		   _shaderProgram2;
-   
+   private ShaderProgram                 _shaderProgram;
+   private ShaderProgram                 _shaderProgram2;
+
    private G3MWidget                     _widget;
 
    private int                           _width;
@@ -149,8 +152,8 @@ private final static String    _vertexShader   = "attribute vec4 Position;"
    private ArrayList<PeriodicalTask>     _periodicalTasks;
 
    private boolean                       _incrementalTileQuality;
-   
-   private GL							 _gl;
+
+   private GL                            _gl;
 
 
    public G3MWidget_WebGL(final String proxy) {
@@ -295,6 +298,11 @@ private final static String    _vertexShader   = "attribute vec4 Position;"
 				} catch (e) {
 				}
 				if (context) {
+					canvas.addEventListener("webglcontextlost",
+							function(event) {
+								event.preventDefault();
+								$wnd.alert("webglcontextlost");
+							}, false);
 					break;
 				}
 			}
@@ -370,13 +378,13 @@ private final static String    _vertexShader   = "attribute vec4 Position;"
 
       //CREATING SHADERS PROGRAM
       //_program = new Shaders_WebGL(_webGLContext).createProgram();
-      
+
       final NativeGL_WebGL nativeGL = new NativeGL_WebGL(_webGLContext);
-      _gl = new GL(nativeGL,false);
-      
+      _gl = new GL(nativeGL, false);
+
       _shaderProgram = new ShaderProgram(_gl);
-      if (_shaderProgram.loadShaders(_vertexShader, _fragmentShader)==false) {
-    	  ILogger.instance().logInfo("failed to load shaders");
+      if (_shaderProgram.loadShaders(_vertexShader, _fragmentShader) == false) {
+         ILogger.instance().logInfo("failed to load shaders");
       }
 
       final CompositeRenderer mainRenderer = new CompositeRenderer();
@@ -412,9 +420,8 @@ private final static String    _vertexShader   = "attribute vec4 Position;"
 
 
       _widget = G3MWidget.create( //
-//               nativeGL, //
-    		   _gl,
-               storage, //
+               //               nativeGL, //
+               _gl, storage, //
                downloader, //
                threadUtils, //
                planet, //
@@ -464,12 +471,12 @@ private final static String    _vertexShader   = "attribute vec4 Position;"
 
       _motionEventProcessor = new MotionEventProcessor(_widget);
 
-/*      if (_program != null) {
-         _widget.getGL().useProgram(_program);
-      }
-      else {
-         throw new RuntimeException("PROGRAM INVALID");
-      }*/
+      /*      if (_program != null) {
+               _widget.getGL().useProgram(_program);
+            }
+            else {
+               throw new RuntimeException("PROGRAM INVALID");
+            }*/
 
       startRenderLoop();
    }
@@ -513,9 +520,9 @@ private final static String    _vertexShader   = "attribute vec4 Position;"
       //      if (_program != null) {
       //jsGLInit();
       //         _widget.getGL().useProgram(_program);
-	   
 
-	  _widget.getGL().useProgram(_shaderProgram);	   
+
+      _widget.getGL().useProgram(_shaderProgram);
       _widget.render();
       //      }
       //      else {
