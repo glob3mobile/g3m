@@ -18,7 +18,7 @@ import org.glob3.mobile.generated.CompositeRenderer;
 import org.glob3.mobile.generated.EllipsoidalTileTessellator;
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.G3MWidget;
-import org.glob3.mobile.generated.GTask;
+import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
@@ -71,7 +71,7 @@ public final class G3MWidget_Android
    private ArrayList<org.glob3.mobile.generated.Renderer> _renderers;
    private UserData                                       _userData;
 
-   private GTask                                          _initializationTask;
+   private GInitializationTask                            _initializationTask;
    private ArrayList<PeriodicalTask>                      _periodicalTasks;
    private boolean                                        _incrementalTileQuality;
 
@@ -252,7 +252,7 @@ public final class G3MWidget_Android
                           final LayerSet layerSet,
                           final ArrayList<org.glob3.mobile.generated.Renderer> renderers,
                           final UserData userData,
-                          final GTask initializationTask,
+                          final GInitializationTask initializationTask,
                           final ArrayList<PeriodicalTask> periodicalTasks,
                           final boolean incrementalTileQuality) {
       _cameraConstraints = cameraConstraints;
@@ -291,7 +291,7 @@ public final class G3MWidget_Android
 
    private void initWidget(final CameraRenderer cameraRenderer,
                            final TilesRenderParameters parameters,
-                           final GTask initializationTask) {
+                           final GInitializationTask initializationTask) {
 
       // create GLOB3M WIDGET
       final int width = getWidth();

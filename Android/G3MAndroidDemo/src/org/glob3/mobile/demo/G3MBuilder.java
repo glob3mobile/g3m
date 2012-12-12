@@ -9,7 +9,7 @@ import org.glob3.mobile.generated.BoxShape;
 import org.glob3.mobile.generated.CircleShape;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.G3MContext;
-import org.glob3.mobile.generated.GTask;
+import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.LayerSet;
@@ -45,7 +45,7 @@ public class G3MBuilder {
    //You can storage any object in the glob3, for example a data model or wathever thing
    UserData                      userData;
    //Gtask (like java runnable) is a task that always is done before launch the globe (start downloader, move the camera, etc....)
-   GTask                         initializationTask;
+   GInitializationTask           initializationTask;
    //Task that are executed every periodical time. For example, launch a downloader every period
    ArrayList<PeriodicalTask>     periodicalTasks;
    //false-> Always try to download first the last level , true -> download all the levels secuencially
@@ -245,8 +245,7 @@ public class G3MBuilder {
       cameraConstraints.add(scc);
 
 
-      final GTask initializationTask1 = new GTask() {
-
+      final GInitializationTask initializationTask1 = new GInitializationTask() {
          @Override
          public void run(final G3MContext context1) {
             glob3.setAnimatedCameraPosition( //
@@ -254,6 +253,11 @@ public class G3MBuilder {
                      TimeInterval.fromSeconds(5));
          }
 
+
+         @Override
+         public boolean isDone(final G3MContext context1) {
+            return true;
+         }
       };
 
       final LayerSet layerSet = new LayerSet();
