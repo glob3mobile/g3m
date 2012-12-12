@@ -9,7 +9,7 @@ import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.BoxShape;
 import org.glob3.mobile.generated.CircleShape;
 import org.glob3.mobile.generated.Color;
-import org.glob3.mobile.generated.GTask;
+import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.ILogger;
@@ -242,7 +242,7 @@ public class G3MWebGLDemo
 
       final ArrayList<String> imagesToPreload = new ArrayList<String>();
       //      imagesToPreload.add("../images/world.jpg");
-      final GTask initializationTask = null;
+      final GInitializationTask initializationTask = null;
       final ArrayList<PeriodicalTask> periodicalTasks = null;
       final boolean incrementalTileQuality = true;
       _widget.initWidget(cameraConstraints, layerSet, renderers, userData, imagesToPreload, initializationTask, periodicalTasks,

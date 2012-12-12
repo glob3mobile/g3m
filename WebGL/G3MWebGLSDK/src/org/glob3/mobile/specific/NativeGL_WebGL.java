@@ -16,6 +16,7 @@ import org.glob3.mobile.generated.ShaderType;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArrayInteger;
+//import org.glob3.mobile.generated.IGLProgramId;
 
 
 //import org.glob3.mobile.generated.IGLProgramId;
@@ -636,7 +637,6 @@ public final class NativeGL_WebGL
 		var id = shaderList.@java.util.ArrayList::size()() - 1;
 
 		return id;
-
    }-*/;
 
 

@@ -17,8 +17,8 @@ import org.glob3.mobile.generated.CompositeRenderer;
 import org.glob3.mobile.generated.EllipsoidalTileTessellator;
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.G3MWidget;
+import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.GL;
-import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
@@ -136,7 +136,7 @@ public final class G3MWidget_WebGL
    private JavaScriptObject              _webGLContext         = null;
 
    private ShaderProgram                 _shaderProgram;
-   private ShaderProgram                 _shaderProgram2;
+   //   private ShaderProgram                 _shaderProgram2;
 
    private G3MWidget                     _widget;
 
@@ -147,7 +147,7 @@ public final class G3MWidget_WebGL
 
    private ArrayList<String>             _imagesToPreload;
 
-   private GTask                         _initializationTask;
+   private GInitializationTask           _initializationTask;
 
    private ArrayList<PeriodicalTask>     _periodicalTasks;
 
@@ -322,7 +322,7 @@ public final class G3MWidget_WebGL
                           final ArrayList<Renderer> renderers,
                           final UserData userData,
                           final ArrayList<String> images,
-                          final GTask initializationTask,
+                          final GInitializationTask initializationTask,
                           final ArrayList<PeriodicalTask> periodicalTasks,
                           final boolean incrementalTileQuality) {
       jsDefineG3MBrowserObjects();

@@ -71,7 +71,7 @@
                   incrementalTileQuality: (bool) incrementalTileQuality
                                renderers: (std::vector<Renderer*>) renderers
                                 userData: (UserData*) userData
-                      initializationTask: (GTask *) initializationTask
+                      initializationTask: (GInitializationTask*) initializationTask
                          periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
 {
   // creates default camera-renderer and camera-handlers
@@ -112,10 +112,9 @@
                 tilesRenderParameters: (TilesRenderParameters*) parameters
                             renderers: (std::vector<Renderer*>) renderers
                              userData: (UserData*) userData
-                   initializationTask: (GTask*) initializationTask
+                   initializationTask: (GInitializationTask*) initializationTask
                       periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
 {
-
   const int width  = (int) [self frame].size.width;
   const int height = (int) [self frame].size.height;
 

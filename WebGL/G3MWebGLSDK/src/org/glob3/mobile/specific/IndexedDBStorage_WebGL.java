@@ -23,10 +23,10 @@ public final class IndexedDBStorage_WebGL
    }
 
 
-   @Override
-   public boolean containsBuffer(final URL url) {
-      return false;
-   }
+   //   @Override
+   //   public boolean containsBuffer(final URL url) {
+   //      return false;
+   //   }
 
 
    @Override
@@ -36,10 +36,10 @@ public final class IndexedDBStorage_WebGL
    }
 
 
-   @Override
-   public boolean containsImage(final URL url) {
-      return false;
-   }
+   //   @Override
+   //   public boolean containsImage(final URL url) {
+   //      return false;
+   //   }
 
 
    @Override
