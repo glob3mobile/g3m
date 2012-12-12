@@ -26,7 +26,6 @@ package org.glob3.mobile.generated;
 //class ILogger;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class GL;
-//class INativeGL;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class TexturesHandler;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
@@ -41,6 +40,8 @@ package org.glob3.mobile.generated;
 //class IStringUtils;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IThreadUtils;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class GInitializationTask;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class GTask;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
