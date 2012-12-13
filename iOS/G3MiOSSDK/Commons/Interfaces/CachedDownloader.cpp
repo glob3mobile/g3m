@@ -20,7 +20,12 @@ private:
   IBufferDownloadListener* _listener;
   const bool               _deleteListener;
   IStorage*                _storage;
+#ifdef C_CODE
   const TimeInterval       _timeToCache;
+#endif
+#ifdef JAVA_CODE
+  private final TimeInterval _timeToCache;
+#endif
 
 public:
   BufferSaverDownloadListener(CachedDownloader* downloader,
@@ -100,7 +105,12 @@ private:
   IImageDownloadListener* _listener;
   const bool              _deleteListener;
   IStorage*               _storage;
-  const TimeInterval      _timeToCache;
+#ifdef C_CODE
+  const TimeInterval       _timeToCache;
+#endif
+#ifdef JAVA_CODE
+  private final TimeInterval _timeToCache;
+#endif
 
 public:
   ImageSaverDownloadListener(CachedDownloader* downloader,

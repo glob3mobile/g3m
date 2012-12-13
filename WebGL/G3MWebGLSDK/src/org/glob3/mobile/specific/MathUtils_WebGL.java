@@ -216,13 +216,13 @@ public final class MathUtils_WebGL
 
 
    @Override
-   public int maxInt() {
+   public int maxInt32() {
       return Integer.MAX_VALUE;
    }
 
 
    @Override
-   public int minInt() {
+   public int minInt32() {
       return Integer.MIN_VALUE;
    }
 
@@ -287,5 +287,18 @@ public final class MathUtils_WebGL
                      final double d2) {
       return (d1 > d2) ? d1 : d2;
    }
+
+
+   @Override
+   public long maxInt64() {
+      return Long.MAX_VALUE;
+   }
+
+
+   @Override
+   public long minInt64() {
+      return Long.MIN_VALUE;
+   }
+
 
 }

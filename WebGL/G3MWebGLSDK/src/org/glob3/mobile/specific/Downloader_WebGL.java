@@ -10,6 +10,7 @@ import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.IBufferDownloadListener;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IImageDownloadListener;
+import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 
 import com.google.gwt.core.client.GWT;
@@ -82,6 +83,7 @@ public final class Downloader_WebGL
    @Override
    public long requestBuffer(final URL url,
                              final long priority,
+                             final TimeInterval timeToExpires,
                              final IBufferDownloadListener listener,
                              final boolean deleteListener) {
 
@@ -127,6 +129,7 @@ public final class Downloader_WebGL
    @Override
    public long requestImage(final URL url,
                             final long priority,
+                            final TimeInterval timeToExpires,
                             final IImageDownloadListener listener,
                             final boolean deleteListener) {
       final long requestId;
