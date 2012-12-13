@@ -149,8 +149,7 @@ public final class SQLiteStorage_Android
                         rawSave(table, name, contents, timeToExpires);
                      }
                   }, //
-                  true //
-         );
+                  true);
       }
       else {
          rawSave(table, name, contents, timeToExpires);
@@ -250,8 +249,7 @@ public final class SQLiteStorage_Android
                         rawSave(table, name, contentsF, timeToExpires);
                      }
                   }, //
-                  true //
-         );
+                  true);
       }
       else {
          rawSave(table, name, contents, timeToExpires);
