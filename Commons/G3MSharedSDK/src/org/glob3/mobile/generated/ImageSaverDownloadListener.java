@@ -5,7 +5,7 @@ public class ImageSaverDownloadListener implements IImageDownloadListener
   private IImageDownloadListener _listener;
   private final boolean _deleteListener;
   private IStorage _storage;
-  private final TimeInterval _timeToCache = new TimeInterval();
+  private final TimeInterval _timeToCache;
 
   public ImageSaverDownloadListener(CachedDownloader downloader, IImageDownloadListener listener, boolean deleteListener, IStorage storage, TimeInterval timeToCache)
   {
@@ -13,7 +13,7 @@ public class ImageSaverDownloadListener implements IImageDownloadListener
 	  _listener = listener;
 	  _deleteListener = deleteListener;
 	  _storage = storage;
-	  _timeToCache = new TimeInterval(timeToCache);
+	  _timeToCache = timeToCache;
 
   }
 
