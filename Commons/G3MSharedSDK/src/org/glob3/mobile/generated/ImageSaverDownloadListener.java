@@ -5,13 +5,15 @@ public class ImageSaverDownloadListener implements IImageDownloadListener
   private IImageDownloadListener _listener;
   private final boolean _deleteListener;
   private IStorage _storage;
+  private final TimeInterval _timeToCache = new TimeInterval();
 
-  public ImageSaverDownloadListener(CachedDownloader downloader, IImageDownloadListener listener, boolean deleteListener, IStorage storage)
+  public ImageSaverDownloadListener(CachedDownloader downloader, IImageDownloadListener listener, boolean deleteListener, IStorage storage, TimeInterval timeToCache)
   {
 	  _downloader = downloader;
 	  _listener = listener;
 	  _deleteListener = deleteListener;
 	  _storage = storage;
+	  _timeToCache = new TimeInterval(timeToCache);
 
   }
 
@@ -32,7 +34,7 @@ public class ImageSaverDownloadListener implements IImageDownloadListener
 		//if (!_cacheStorage->containsImage(url)) {
 		_downloader.countSave();
 
-		_storage.saveImage(url, image, _downloader.saveInBackground());
+		_storage.saveImage(url, image, _timeToCache, _downloader.saveInBackground());
 		//}
 	  }
 	  else
