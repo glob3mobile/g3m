@@ -47,8 +47,8 @@ public final class SQLiteStorage_Android
 
 
       private void createTables(final SQLiteDatabase db) {
-         db.execSQL("DELETE TABLE IF EXISTS buffer;");
-         db.execSQL("DELETE TABLE IF EXISTS image;");
+         db.execSQL("DROP TABLE IF EXISTS buffer;");
+         db.execSQL("DROP TABLE IF EXISTS image;");
 
          db.execSQL("CREATE TABLE IF NOT EXISTS buffer2 (name TEXT, contents TEXT, expiration TEXT);");
          db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS buffer_name ON buffer2(name);");
@@ -197,7 +197,7 @@ public final class SQLiteStorage_Android
          final String expirationS = cursor.getString(1);
          final long expirationInterval = Long.parseLong(expirationS);
 
-         if (expirationInterval <= System.currentTimeMillis()) {
+         if (expirationInterval > System.currentTimeMillis()) {
             result = new ByteBuffer_Android(data);
          }
       }
@@ -288,7 +288,7 @@ public final class SQLiteStorage_Android
          final String expirationS = cursor.getString(1);
          final long expirationInterval = Long.parseLong(expirationS);
 
-         if (expirationInterval <= System.currentTimeMillis()) {
+         if (expirationInterval > System.currentTimeMillis()) {
             final Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
             if (bitmap == null) {
                ILogger.instance().logError("Can't create bitmap from content of storage");
