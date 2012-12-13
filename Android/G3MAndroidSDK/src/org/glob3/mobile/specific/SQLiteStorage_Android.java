@@ -318,4 +318,5 @@ public final class SQLiteStorage_Android
       return (_readDB != null) && (_writeDB != null);
    }
 
+
 }
