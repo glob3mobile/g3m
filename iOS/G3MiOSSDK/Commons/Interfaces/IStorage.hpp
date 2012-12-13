@@ -9,10 +9,16 @@
 #ifndef G3MiOSSDK_Storage_h
 #define G3MiOSSDK_Storage_h
 
-#include "URL.hpp"
-#include "IByteBuffer.hpp"
-#include "IImage.hpp"
+//#include "URL.hpp"
+//#include "IByteBuffer.hpp"
+//#include "IImage.hpp"
+class URL;
+class IByteBuffer;
+class IImage;
 class G3MContext;
+class TimeInterval;
+
+#include <stddef.h>
 
 class IStorage {
 protected:
@@ -41,6 +47,7 @@ public:
 
   virtual void saveBuffer(const URL& url,
                           const IByteBuffer* buffer,
+                          const TimeInterval& timeToExpires,
                           bool saveInBackground) = 0;
 
   virtual const IByteBuffer* readBuffer(const URL& url) = 0;
@@ -51,6 +58,7 @@ public:
 
   virtual void saveImage(const URL& url,
                          const IImage* image,
+                         const TimeInterval& timeToExpires,
                          bool saveInBackground) = 0;
 
   virtual const IImage* readImage(const URL& url) = 0;

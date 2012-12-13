@@ -12,23 +12,27 @@
 #include "IStringBuilder.hpp"
 #include "ILogger.hpp"
 #include "IStorage.hpp"
-
+#include "TimeInterval.hpp"
 
 class BufferSaverDownloadListener : public IBufferDownloadListener {
+private:
   CachedDownloader*        _downloader;
   IBufferDownloadListener* _listener;
   const bool               _deleteListener;
   IStorage*                _storage;
-  
+  const TimeInterval       _timeToCache;
+
 public:
   BufferSaverDownloadListener(CachedDownloader* downloader,
                               IBufferDownloadListener* listener,
                               bool deleteListener,
-                              IStorage* storage) :
+                              IStorage* storage,
+                              const TimeInterval& timeToCache) :
   _downloader(downloader),
   _listener(listener),
   _deleteListener(deleteListener),
-  _storage(storage)
+  _storage(storage),
+  _timeToCache(timeToCache)
   {
 
   }
@@ -49,7 +53,7 @@ public:
         //if (!_cacheStorage->containsBuffer(url)) {
         _downloader->countSave();
 
-        _storage->saveBuffer(url, buffer, _downloader->saveInBackground());
+        _storage->saveBuffer(url, buffer, _timeToCache, _downloader->saveInBackground());
         //}
       }
       else {
@@ -91,20 +95,24 @@ public:
 };
 
 class ImageSaverDownloadListener : public IImageDownloadListener {
+private:
   CachedDownloader*       _downloader;
   IImageDownloadListener* _listener;
   const bool              _deleteListener;
   IStorage*               _storage;
+  const TimeInterval      _timeToCache;
 
 public:
   ImageSaverDownloadListener(CachedDownloader* downloader,
                              IImageDownloadListener* listener,
                              bool deleteListener,
-                             IStorage* storage) :
+                             IStorage* storage,
+                             const TimeInterval& timeToCache) :
   _downloader(downloader),
   _listener(listener),
   _deleteListener(deleteListener),
-  _storage(storage)
+  _storage(storage),
+  _timeToCache(timeToCache)
   {
 
   }
@@ -125,7 +133,7 @@ public:
         //if (!_cacheStorage->containsImage(url)) {
         _downloader->countSave();
 
-        _storage->saveImage(url, image, _downloader->saveInBackground());
+        _storage->saveImage(url, image, _timeToCache, _downloader->saveInBackground());
         //}
       }
       else {
@@ -180,6 +188,7 @@ void CachedDownloader::cancelRequest(long long requestId) {
 
 long long CachedDownloader::requestImage(const URL& url,
                                          long long priority,
+                                         const TimeInterval& timeToCache,
                                          IImageDownloadListener* listener,
                                          bool deleteListener) {
   _requestsCounter++;
@@ -189,10 +198,12 @@ long long CachedDownloader::requestImage(const URL& url,
     // cache miss
     return _downloader->requestImage(url,
                                      priority,
+                                     TimeInterval::zero(),
                                      new ImageSaverDownloadListener(this,
                                                                     listener,
                                                                     deleteListener,
-                                                                    _storage),
+                                                                    _storage,
+                                                                    timeToCache),
                                      true);
   }
 
@@ -215,6 +226,7 @@ long long CachedDownloader::requestImage(const URL& url,
 
 long long CachedDownloader::requestBuffer(const URL& url,
                                           long long priority,
+                                          const TimeInterval& timeToCache,
                                           IBufferDownloadListener* listener,
                                           bool deleteListener) {
   _requestsCounter++;
@@ -224,10 +236,12 @@ long long CachedDownloader::requestBuffer(const URL& url,
     // cache miss
     return _downloader->requestBuffer(url,
                                       priority,
+                                      TimeInterval::zero(),
                                       new BufferSaverDownloadListener(this,
                                                                       listener,
                                                                       deleteListener,
-                                                                      _storage),
+                                                                      _storage,
+                                                                      timeToCache),
                                       true);
   }
 

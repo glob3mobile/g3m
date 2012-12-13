@@ -95,10 +95,15 @@ public:
   virtual double log(double v) const = 0;
   virtual float log(float v) const = 0;
   
-  virtual int maxInt() const = 0;
-  virtual int minInt() const = 0;
+  virtual int maxInt32() const = 0;
+  virtual int minInt32() const = 0;
+  
+  virtual long long maxInt64() const = 0;
+  virtual long long minInt64() const = 0;
+
   virtual double maxDouble() const = 0;
   virtual double minDouble() const = 0;
+
   virtual float maxFloat() const = 0;
   virtual float minFloat() const = 0;
   

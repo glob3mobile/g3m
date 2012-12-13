@@ -13,6 +13,8 @@
 
 #import "SQDatabase.h"
 
+#include <string>
+
 class SQLiteStorage_iOS : public IStorage {
 private:
   const std::string _databaseName;
@@ -34,7 +36,8 @@ private:
 public:
   void rawSave(NSString* table,
                NSString* name,
-               NSData* contents);
+               NSData* contents,
+               const TimeInterval& timeToExpires);
   
   SQLiteStorage_iOS(const std::string &databaseName);
   
@@ -45,6 +48,7 @@ public:
 
   void saveBuffer(const URL& url,
                   const IByteBuffer* buffer,
+                  const TimeInterval& timeToExpires,
                   bool saveInBackground);
   
   const IByteBuffer* readBuffer(const URL& url);
@@ -54,6 +58,7 @@ public:
 
   void saveImage(const URL& url,
                  const IImage* buffer,
+                 const TimeInterval& timeToExpires,
                  bool saveInBackground);
   
   const IImage* readImage(const URL& url);
