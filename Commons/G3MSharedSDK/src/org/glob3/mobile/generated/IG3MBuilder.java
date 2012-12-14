@@ -22,7 +22,7 @@ package org.glob3.mobile.generated;
 public abstract class IG3MBuilder
 {
 
-	private INativeGL _nativeGL;
+	private GL _gl;
 	private IDownloader _downloader;
 	private IThreadUtils _threadUtils;
 	private Planet _planet; // REMOVED FINAL WORD BY CONVERSOR RULE
@@ -34,7 +34,7 @@ public abstract class IG3MBuilder
 	private TileRenderer _tileRenderer;
 	private Renderer _busyRenderer;
 	private java.util.ArrayList<Renderer> _renderers = new java.util.ArrayList<Renderer>();
-	private GTask _initializationTask;
+	private GInitializationTask _initializationTask;
 	private boolean _autoDeleteInitializationTask;
 	private java.util.ArrayList<PeriodicalTask> _periodicalTasks = new java.util.ArrayList<PeriodicalTask>();
 	private boolean _logFPS;
@@ -68,7 +68,7 @@ public abstract class IG3MBuilder
 	protected final G3MWidget create()
 	{
     
-		if (_nativeGL != null)
+		if (_gl != null)
 		{
 			if (_storage == null)
 			{
@@ -150,7 +150,7 @@ public abstract class IG3MBuilder
     
 			Color backgroundColor = Color.fromRGBA(_backgroundColor.getRed(), _backgroundColor.getGreen(), _backgroundColor.getBlue(), _backgroundColor.getAlpha());
     
-			G3MWidget g3mWidget = G3MWidget.create(_nativeGL, _storage, _downloader, _threadUtils, _planet, _cameraConstraints, _cameraRenderer, mainRenderer, _busyRenderer, backgroundColor, _logFPS, _logDownloaderStatistics, _initializationTask, _autoDeleteInitializationTask, _periodicalTasks);
+			G3MWidget g3mWidget = G3MWidget.create(_gl, _storage, _downloader, _threadUtils, _planet, _cameraConstraints, _cameraRenderer, mainRenderer, _busyRenderer, backgroundColor, _logFPS, _logDownloaderStatistics, _initializationTask, _autoDeleteInitializationTask, _periodicalTasks);
     
 			g3mWidget.setUserData(_userData);
     
@@ -158,17 +158,13 @@ public abstract class IG3MBuilder
 		}
 		return null;
 	}
-	protected final void setNativeGL(INativeGL nativeGL)
-	{
-		_nativeGL = nativeGL;
-	}
 	protected abstract IThreadUtils createThreadUtils();
 	protected abstract IStorage createStorage();
 	protected abstract IDownloader createDownloader();
 
 	public IG3MBuilder()
 	{
-		_nativeGL = null;
+		_gl = null;
 		_storage = null;
 		_downloader = null;
 		_threadUtils = null;
@@ -187,6 +183,14 @@ public abstract class IG3MBuilder
 	}
 	public void dispose()
 	{
+		if (_gl != null)
+			_gl.dispose();
+		if (_storage != null)
+			_storage.dispose();
+		if (_downloader != null)
+			_downloader.dispose();
+		if (_threadUtils != null)
+			_threadUtils.dispose();
 		if (_cameraRenderer != null)
 			_cameraRenderer.dispose();
 		if (_backgroundColor != null)
@@ -202,21 +206,48 @@ public abstract class IG3MBuilder
 		if (_userData != null)
 			_userData.dispose();
 	}
+	public final void setGL(GL gl)
+	{
+		if (_gl != gl)
+		{
+			if (_gl != null)
+				_gl.dispose();
+			_gl = gl;
+		}
+	}
 	public final void setStorage(IStorage storage)
 	{
-		_storage = storage;
+		if (_storage != storage)
+		{
+			if (_storage != null)
+				_storage.dispose();
+			_storage = storage;
+		}
 	}
 	public final void setDownloader(IDownloader downloader)
 	{
-		_downloader = downloader;
+		if (_downloader != downloader)
+		{
+			if (_downloader != null)
+				_downloader.dispose();
+			_downloader = downloader;
+		}
 	}
 	public final void setThreadUtils(IThreadUtils threadUtils)
 	{
-		_threadUtils = threadUtils;
+		if (_threadUtils != threadUtils)
+		{
+			if (_threadUtils != null)
+				_threadUtils.dispose();
+			_threadUtils = threadUtils;
+		}
 	}
 	public final void setPlanet(Planet planet)
 	{
-		_planet = planet;
+		if (_planet != planet)
+		{
+			_planet = planet;
+		}
 	}
 	public final void addCameraConstraint(ICameraConstrainer cameraConstraint)
 	{
@@ -224,7 +255,12 @@ public abstract class IG3MBuilder
 	}
 	public final void setCameraRenderer(CameraRenderer cameraRenderer)
 	{
-		_cameraRenderer = cameraRenderer;
+		if (_cameraRenderer != cameraRenderer)
+		{
+			if (_cameraRenderer != null)
+				_cameraRenderer.dispose();
+			_cameraRenderer = cameraRenderer;
+		}
 	}
 	public final void setBackgroundColor(Color backgroundColor)
 	{
@@ -287,7 +323,7 @@ public abstract class IG3MBuilder
 	{
 		_renderers.add(renderer);
 	}
-	public final void setInitializationTask(GTask initializationTask)
+	public final void setInitializationTask(GInitializationTask initializationTask)
 	{
 		if (_initializationTask != initializationTask)
 		{
