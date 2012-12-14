@@ -90,6 +90,10 @@ public class Geodetic2D
 	return new Geodetic2D(_latitude.div(magnitude), _longitude.div(magnitude));
   }
 
+  public void dispose()
+  {
+
+  }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: boolean closeTo(const Geodetic2D &other) const

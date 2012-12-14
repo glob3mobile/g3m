@@ -9,20 +9,16 @@ package org.glob3.mobile.generated;
 
 
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class IGLProgramId;
-
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IFloatBuffer;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IIntBuffer;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IImage;
-
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IGLUniformID;
-
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IGLTextureId;
+
 
 
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
@@ -36,16 +32,16 @@ public abstract class INativeGL
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual void useProgram(IGLProgramId* program) const = 0;
-  public abstract void useProgram(IGLProgramId program);
+//ORIGINAL LINE: virtual void useProgram(ShaderProgram* program) const = 0;
+  public abstract void useProgram(ShaderProgram program);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual int getAttribLocation(IGLProgramId* program, const String& name) const = 0;
-  public abstract int getAttribLocation(IGLProgramId program, String name);
+//ORIGINAL LINE: virtual int getAttribLocation(ShaderProgram* program, const String& name) const = 0;
+  public abstract int getAttribLocation(ShaderProgram program, String name);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual IGLUniformID* getUniformLocation(IGLProgramId* program, const String& name) const = 0;
-  public abstract IGLUniformID getUniformLocation(IGLProgramId program, String name);
+//ORIGINAL LINE: virtual IGLUniformID* getUniformLocation(ShaderProgram* program, const String& name) const = 0;
+  public abstract IGLUniformID getUniformLocation(ShaderProgram program, String name);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual void uniform2f(IGLUniformID* loc, float x, float y) const = 0;
@@ -291,5 +287,33 @@ public abstract class INativeGL
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual int Error_NoError() const = 0;
   public abstract int Error_NoError();
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual int createProgram() const = 0;
+  public abstract int createProgram();
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual void deleteProgram(int program) const = 0;
+  public abstract void deleteProgram(int program);
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual void attachShader(int program, int shader) const = 0;
+  public abstract void attachShader(int program, int shader);
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual int createShader(ShaderType type) const = 0;
+  public abstract int createShader(ShaderType type);
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual boolean compileShader (int shader, const String& source) const = 0;
+  public abstract boolean compileShader (int shader, String source);
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual void deleteShader(int shader) const = 0;
+  public abstract void deleteShader(int shader);
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual void printShaderInfoLog(int shader) const = 0;
+  public abstract void printShaderInfoLog(int shader);
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual boolean linkProgram(int program) const = 0;
+  public abstract boolean linkProgram(int program);
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual void printProgramInfoLog(int program) const = 0;
+  public abstract void printProgramInfoLog(int program);
 
 }

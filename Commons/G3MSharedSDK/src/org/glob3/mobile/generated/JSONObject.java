@@ -41,13 +41,15 @@ public class JSONObject extends JSONBaseObject
   
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const JSONObject* asObject() const
   public final JSONObject asObject()
   {
 	return this;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: JSONBaseObject* get(const String& key) const
+//ORIGINAL LINE: const JSONBaseObject* get(const String& key) const
   public final JSONBaseObject get(String key)
   {
   
@@ -55,38 +57,38 @@ public class JSONObject extends JSONBaseObject
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: JSONObject* getAsObject(const String& key) const
+//ORIGINAL LINE: const JSONObject* getAsObject(const String& key) const
   public final JSONObject getAsObject(String key)
   {
-	JSONBaseObject object = get(key);
+	final JSONBaseObject object = get(key);
 	return (object == null) ? null : object.asObject();
   }
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: JSONArray* getAsArray(const String& key) const
+//ORIGINAL LINE: const JSONArray* getAsArray(const String& key) const
   public final JSONArray getAsArray(String key)
   {
-	JSONBaseObject object = get(key);
+	final JSONBaseObject object = get(key);
 	return (object == null) ? null : object.asArray();
   }
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: JSONBoolean* getAsBoolean(const String& key) const
+//ORIGINAL LINE: const JSONBoolean* getAsBoolean(const String& key) const
   public final JSONBoolean getAsBoolean(String key)
   {
-	JSONBaseObject object = get(key);
+	final JSONBaseObject object = get(key);
 	return (object == null) ? null : object.asBoolean();
   }
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: JSONNumber* getAsNumber(const String& key) const
+//ORIGINAL LINE: const JSONNumber* getAsNumber(const String& key) const
   public final JSONNumber getAsNumber(String key)
   {
-	JSONBaseObject object = get(key);
+	final JSONBaseObject object = get(key);
 	return (object == null) ? null : object.asNumber();
   }
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: JSONString* getAsString(const String& key) const
+//ORIGINAL LINE: const JSONString* getAsString(const String& key) const
   public final JSONString getAsString(String key)
   {
-	JSONBaseObject object = get(key);
+	final JSONBaseObject object = get(key);
 	return (object == null) ? null : object.asString();
   }
 
@@ -94,24 +96,24 @@ public class JSONObject extends JSONBaseObject
 //ORIGINAL LINE: boolean getAsBoolean(const String& key, boolean defaultValue) const
   public final boolean getAsBoolean(String key, boolean defaultValue)
   {
-	JSONBaseObject object = get(key);
-	return (object == null) ? defaultValue : object.asBoolean().value();
+	final JSONBoolean jsBool = getAsBoolean(key);
+	return (jsBool == null) ? defaultValue : jsBool.value();
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: double getAsNumber(const String& key, double defaultValue) const
   public final double getAsNumber(String key, double defaultValue)
   {
-	JSONBaseObject object = get(key);
-	return (object == null) ? defaultValue : object.asNumber().value();
+	final JSONNumber jsNumber = getAsNumber(key);
+	return (jsNumber == null) ? defaultValue : jsNumber.value();
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: const String getAsString(const String& key, const String& defaultValue) const
   public final String getAsString(String key, String defaultValue)
   {
-	JSONBaseObject object = get(key);
-	return (object == null) ? defaultValue : object.asString().value();
+	final JSONString jsString = getAsString(key);
+	return (jsString == null) ? defaultValue : jsString.value();
   }
 
   public final void put(String key, JSONBaseObject object)
@@ -163,6 +165,24 @@ public class JSONObject extends JSONBaseObject
 	if (isb != null)
 		isb.dispose();
 	return s;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: JSONObject* deepCopy() const
+  public final JSONObject deepCopy()
+  {
+	JSONObject result = new JSONObject();
+  
+	java.util.ArrayList<String> keys = this.keys();
+  
+	int keysCount = keys.size();
+	for (int i = 0; i < keysCount; i++)
+	{
+	  String key = keys.get(i);
+	  result.put(key, JSONBaseObject.deepCopy(get(key)));
+	}
+  
+	return result;
   }
 
 }

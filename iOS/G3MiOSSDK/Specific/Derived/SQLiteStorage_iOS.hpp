@@ -41,8 +41,8 @@ public:
   virtual ~SQLiteStorage_iOS() {
   }
   
-  bool containsBuffer(const URL& url);
-  
+//  bool containsBuffer(const URL& url);
+
   void saveBuffer(const URL& url,
                   const IByteBuffer* buffer,
                   bool saveInBackground);
@@ -50,8 +50,8 @@ public:
   const IByteBuffer* readBuffer(const URL& url);
   
   
-  bool containsImage(const URL& url);
-  
+//  bool containsImage(const URL& url);
+
   void saveImage(const URL& url,
                  const IImage* buffer,
                  bool saveInBackground);

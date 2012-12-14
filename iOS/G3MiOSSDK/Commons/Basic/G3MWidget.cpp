@@ -29,6 +29,7 @@
 #include "IStorage.hpp"
 #include "OrderedRenderable.hpp"
 #include <math.h>
+#include "GInitializationTask.hpp"
 
 void G3MWidget::initSingletons(ILogger*            logger,
                                IFactory*           factory,
@@ -49,7 +50,7 @@ void G3MWidget::initSingletons(ILogger*            logger,
   }
 }
 
-G3MWidget::G3MWidget(INativeGL*                       nativeGL,
+G3MWidget::G3MWidget(GL*                              gl,
                      IStorage*                        storage,
                      IDownloader*                     downloader,
                      IThreadUtils*                    threadUtils,
@@ -61,12 +62,18 @@ G3MWidget::G3MWidget(INativeGL*                       nativeGL,
                      Color                            backgroundColor,
                      const bool                       logFPS,
                      const bool                       logDownloaderStatistics,
-                     GTask*                           initializationTask,
+                     GInitializationTask*             initializationTask,
                      bool                             autoDeleteInitializationTask,
                      std::vector<PeriodicalTask*>     periodicalTasks):
+_rootState(GLState::newDefault()),
 _frameTasksExecutor( new FrameTasksExecutor() ),
 _effectsScheduler( new EffectsScheduler() ),
+_gl(gl),
+/*
+ =======
 _gl( new GL(nativeGL, false) ),
+>>>>>>> origin/webgl-port
+ */
 _downloader(downloader),
 _storage(storage),
 _threadUtils(threadUtils),
@@ -103,7 +110,8 @@ _context(new G3MContext(IFactory::instance(),
                         downloader,
                         _effectsScheduler,
                         storage)),
-_paused(false)
+_paused(false),
+_initializationTaskWasRun(false)
 {
   initializeGL();
 
@@ -133,7 +141,7 @@ _paused(false)
 }
 
 
-G3MWidget* G3MWidget::create(INativeGL*                       nativeGL,
+G3MWidget* G3MWidget::create(GL*                              gl,
                              IStorage*                        storage,
                              IDownloader*                     downloader,
                              IThreadUtils*                    threadUtils,
@@ -145,11 +153,11 @@ G3MWidget* G3MWidget::create(INativeGL*                       nativeGL,
                              Color                            backgroundColor,
                              const bool                       logFPS,
                              const bool                       logDownloaderStatistics,
-                             GTask*                           initializationTask,
+                             GInitializationTask*             initializationTask,
                              bool                             autoDeleteInitializationTask,
                              std::vector<PeriodicalTask*>     periodicalTasks) {
 
-  return new G3MWidget(nativeGL,
+  return new G3MWidget(gl,
                        storage,
                        downloader,
                        threadUtils,
@@ -167,9 +175,9 @@ G3MWidget* G3MWidget::create(INativeGL*                       nativeGL,
 }
 
 void G3MWidget::initializeGL() {
-  _gl->enableDepthTest();
+  //_gl->enableDepthTest();
 
-  _gl->enableCullFace(GLCullFace::back());
+  //_gl->enableCullFace(GLCullFace::back());
 }
 
 G3MWidget::~G3MWidget() {
@@ -212,6 +220,8 @@ G3MWidget::~G3MWidget() {
 #endif
 
   delete _context;
+
+  delete _rootState;
 }
 
 void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
@@ -318,11 +328,20 @@ void G3MWidget::render(int width, int height) {
 
   if (_mainRendererReady) {
     if (_initializationTask != NULL) {
-      _initializationTask->run(_context);
-      if (_autoDeleteInitializationTask) {
-        delete _initializationTask;
+      if (!_initializationTaskWasRun) {
+        _initializationTask->run(_context);
+        _initializationTaskWasRun = true;
       }
-      _initializationTask = NULL;
+
+      if (_initializationTask->isDone(_context)) {
+        if (_autoDeleteInitializationTask) {
+          delete _initializationTask;
+        }
+        _initializationTask = NULL;
+      }
+      else {
+        _mainRendererReady = false;
+      }
     }
   }
 
@@ -343,20 +362,19 @@ void G3MWidget::render(int width, int height) {
   _gl->clearScreen(_backgroundColor);
 
   if (_mainRendererReady) {
-    _cameraRenderer->render(&rc);
+    _cameraRenderer->render(&rc, *_rootState);
   }
 
   if (_selectedRenderer->isEnable()) {
-    _selectedRenderer->render(&rc);
+    _selectedRenderer->render(&rc, *_rootState);
   }
-
 
   std::vector<OrderedRenderable*>* orderedRenderables = rc.getSortedOrderedRenderables();
   if (orderedRenderables != NULL) {
     const int orderedRenderablesCount = orderedRenderables->size();
     for (int i = 0; i < orderedRenderablesCount; i++) {
       OrderedRenderable* orderedRenderable = orderedRenderables->at(i);
-      orderedRenderable->render(&rc);
+      orderedRenderable->render(&rc, *_rootState);
       delete orderedRenderable;
     }
   }

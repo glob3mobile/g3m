@@ -170,7 +170,8 @@ bool TileRenderer::isReadyToRender(const G3MRenderContext *rc) {
   return true;
 }
 
-void TileRenderer::render(const G3MRenderContext* rc) {
+void TileRenderer::render(const G3MRenderContext* rc,
+                          const GLState& parentState) {
   // Saving camera for use in onTouchEvent
   _lastCamera = rc->getCurrentCamera();
 
@@ -195,6 +196,7 @@ void TileRenderer::render(const G3MRenderContext* rc) {
       Tile* tile = _topLevelTiles[i];
       tile->render(rc,
                    &trc,
+                   parentState,
                    NULL);
     }
   }
@@ -214,6 +216,7 @@ void TileRenderer::render(const G3MRenderContext* rc) {
 
         tile->render(rc,
                      &trc,
+                     parentState,
                      &toVisitInNextIteration);
       }
 

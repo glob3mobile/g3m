@@ -10,12 +10,12 @@ import org.glob3.mobile.generated.CameraRenderer;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.G3MWidget;
-import org.glob3.mobile.generated.GTask;
+import org.glob3.mobile.generated.GInitializationTask;
+import org.glob3.mobile.generated.GL;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IFactory;
-import org.glob3.mobile.generated.IGLProgramId;
 import org.glob3.mobile.generated.IJSONParser;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IMathUtils;
@@ -28,6 +28,7 @@ import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.Renderer;
+import org.glob3.mobile.generated.ShaderProgram;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.UserData;
 
@@ -39,19 +40,82 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 
+//import org.glob3.mobile.generated.IGLProgramId;
+
+
 public final class G3MWidget_WebGL
          extends
             Composite {
 
+   private final static String  _fragmentShader = "varying mediump vec2 TextureCoordOut;"
+                                                  + "uniform mediump vec2 TranslationTexCoord;"
+                                                  + "uniform mediump vec2 ScaleTexCoord;"
+                                                  + ""
+                                                  + "varying mediump vec4 VertexColor;"
+                                                  + ""
+                                                  + "uniform sampler2D Sampler;"
+                                                  + "uniform bool EnableTexture;"
+                                                  + "uniform lowp vec4 FlatColor;"
+                                                  + ""
+                                                  + "uniform bool EnableColorPerVertex;"
+                                                  + "uniform bool EnableFlatColor;"
+                                                  + "uniform mediump float FlatColorIntensity;"
+                                                  + "uniform mediump float ColorPerVertexIntensity;"
+                                                  + ""
+                                                  + "void main() {"
+                                                  + "  "
+                                                  + "  if (EnableTexture) {"
+                                                  + "    gl_FragColor = texture2D(Sampler, TextureCoordOut * ScaleTexCoord + TranslationTexCoord);"
+                                                  + ""
+                                                  + "    if (EnableFlatColor || EnableColorPerVertex){"
+                                                  + "      lowp vec4 color;"
+                                                  + "      if (EnableFlatColor) {"
+                                                  + "        color = FlatColor;"
+                                                  + "        if (EnableColorPerVertex) {"
+                                                  + "          color = color * VertexColor;"
+                                                  + "        }"
+                                                  + "      }"
+                                                  + "      else {"
+                                                  + "        color = VertexColor;"
+                                                  + "      }"
+                                                  + "      "
+                                                  + "      lowp float intensity = (FlatColorIntensity + ColorPerVertexIntensity) / 2.0;"
+                                                  + "      gl_FragColor = mix(gl_FragColor,"
+                                                  + "                         VertexColor,"
+                                                  + "                         intensity);" + "    }" + "  }" + "  else {"
+                                                  + "    " + "    if (EnableColorPerVertex) {"
+                                                  + "      gl_FragColor = VertexColor;" + "      if (EnableFlatColor) {"
+                                                  + "        gl_FragColor = gl_FragColor * FlatColor;" + "      }" + "    }"
+                                                  + "    else {" + "      gl_FragColor = FlatColor;" + "    }" + "    " + "  }"
+                                                  + "  " + "}";
+
+   private final static String  _vertexShader   = "attribute vec4 Position;"
+                                                  + "attribute vec2 TextureCoord; "
+                                                  + "attribute vec4 Color;"
+                                                  + "uniform mat4 Projection;"
+                                                  + "uniform mat4 Modelview;"
+                                                  + "uniform bool BillBoard;"
+                                                  + "uniform float ViewPortRatio;"
+                                                  + "uniform float PointSize;"
+                                                  + "varying vec4 VertexColor;"
+                                                  + "varying vec2 TextureCoordOut;"
+                                                  + "void main() {"
+                                                  + "  gl_Position = Projection * Modelview * Position;"
+                                                  + "  if (BillBoard) {"
+                                                  + "    gl_Position.x += (-0.05 + TextureCoord.x * 0.1) * gl_Position.w;"
+                                                  + "    gl_Position.y -= (-0.05 + TextureCoord.y * 0.1) * gl_Position.w * ViewPortRatio;"
+                                                  + "  }" + "  TextureCoordOut = TextureCoord;" + "  VertexColor = Color;"
+                                                  + "  gl_PointSize = PointSize;" + "}";
+
 
    private Canvas               _canvas;
-   private MotionEventProcessor _motionEventProcessor;
+   private JavaScriptObject     _webGLContext;
    private int                  _width;
    private int                  _height;
-
-   private IGLProgramId         _program;
-   private JavaScriptObject     _webGLContext;
-
+   private MotionEventProcessor _motionEventProcessor;
+   private GL                   _gl;
+   private ShaderProgram        _shaderProgram;
+   //   private ShaderProgram                 _shaderProgram2;
    private G3MWidget            _g3mWidget;
 
 
@@ -62,24 +126,23 @@ public final class G3MWidget_WebGL
       _canvas = Canvas.createIfSupported();
       if (_canvas == null) {
          initWidget(createUnsupportedMessage("Your browser does not support the HTML5 Canvas."));
-
          return;
       }
 
       _webGLContext = jsGetWebGLContext(_canvas.getCanvasElement());
       if (_webGLContext == null) {
          initWidget(createUnsupportedMessage("Your browser does not support WebGL."));
-
          return;
       }
+
 
       initWidget(_canvas);
       onSizeChanged(1, 1);
 
-      jsDefineG3MBrowserObjects();
+      final INativeGL nativeGL = new NativeGL_WebGL(_webGLContext);
+      _gl = new GL(nativeGL, false);
 
-      // CREATING SHADERS PROGRAM
-      _program = new Shaders_WebGL(_webGLContext).createProgram();
+      jsDefineG3MBrowserObjects();
 
       // Events
       sinkEvents(Event.MOUSEEVENTS | Event.ONCONTEXTMENU | Event.KEYEVENTS | Event.ONDBLCLICK | Event.ONMOUSEWHEEL);
@@ -225,6 +288,11 @@ public final class G3MWidget_WebGL
 				} catch (e) {
 				}
 				if (context) {
+					jsCanvas.addEventListener("webglcontextlost", function(
+							event) {
+						event.preventDefault();
+						$wnd.alert("webglcontextlost");
+					}, false);
 					break;
 				}
 			}
@@ -239,7 +307,7 @@ public final class G3MWidget_WebGL
    }-*/;
 
 
-   public void initWidget(final INativeGL nativeGL,
+   public void initWidget(/*final INativeGL nativeGL,*/
                           final IStorage storage,
                           final IDownloader downloader,
                           final IThreadUtils threadUtils,
@@ -251,13 +319,13 @@ public final class G3MWidget_WebGL
                           final Color backgroundColor,
                           final boolean logFPS,
                           final boolean logDownloaderStatistics,
-                          final GTask initializationTask,
+                          final GInitializationTask initializationTask,
                           final boolean autoDeleteInitializationTask,
                           final ArrayList<PeriodicalTask> periodicalTasks,
                           final UserData userData) {
 
       _g3mWidget = G3MWidget.create(//
-               nativeGL, //
+               _gl, //
                storage, //
                downloader, //
                threadUtils, //
@@ -280,17 +348,24 @@ public final class G3MWidget_WebGL
 
 
    public void startWidget() {
-      _motionEventProcessor = new MotionEventProcessor(_g3mWidget, _canvas.getCanvasElement());
-      jsAddResizeHandler(_canvas.getCanvasElement());
+      if (_g3mWidget != null) {
+         _shaderProgram = new ShaderProgram(_g3mWidget.getGL());
+         if (_shaderProgram.loadShaders(_vertexShader, _fragmentShader) == false) {
+            ILogger.instance().logInfo("Failed to load shaders");
+         }
 
-      if (_program != null) {
-         _g3mWidget.getGL().useProgram(_program);
-      }
-      else {
-         throw new RuntimeException("PROGRAM INVALID");
-      }
+         _motionEventProcessor = new MotionEventProcessor(_g3mWidget, _canvas.getCanvasElement());
+         jsAddResizeHandler(_canvas.getCanvasElement());
 
-      jsStartRenderLoop();
+         /*      if (_program != null) {
+                  _widget.getGL().useProgram(_program);
+               }
+               else {
+                  throw new RuntimeException("PROGRAM INVALID");
+               }*/
+
+         jsStartRenderLoop();
+      }
    }
 
 
@@ -305,8 +380,9 @@ public final class G3MWidget_WebGL
       //USING PROGRAM
       //      if (_program != null) {
       //jsGLInit();
-      //         _g3mWidget.getGL().useProgram(_program);
+      _g3mWidget.getGL().useProgram(_shaderProgram);
       _g3mWidget.render(_width, _height);
+
       //      }
       //      else {
       //         throw new RuntimeException("PROGRAM INVALID");
@@ -379,4 +455,8 @@ public final class G3MWidget_WebGL
       return getG3MWidget().getG3MContext();
    }
 
+
+   public GL getGL() {
+      return _gl;
+   }
 }

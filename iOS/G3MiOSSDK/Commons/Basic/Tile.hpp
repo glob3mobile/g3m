@@ -22,6 +22,7 @@ class TilesStatistics;
 class TileRenderContext;
 class TileKey;
 class Vector3D;
+class GLState;
 
 class ITexturizerData {
 public:
@@ -66,10 +67,12 @@ private:
   inline std::vector<Tile*>* createSubTiles();
   
   inline void rawRender(const G3MRenderContext* rc,
-                        const TileRenderContext* trc);
+                        const TileRenderContext* trc,
+                        const GLState& parentState);
   
   void debugRender(const G3MRenderContext* rc,
-                   const TileRenderContext* trc);
+                   const TileRenderContext* trc,
+                   const GLState& parentState);
   
   inline Tile* createSubTile(const Angle& lowerLat, const Angle& lowerLon,
                              const Angle& upperLat, const Angle& upperLon,
@@ -132,6 +135,7 @@ public:
 
   void render(const G3MRenderContext* rc,
               const TileRenderContext* trc,
+              const GLState& parentState,
               std::list<Tile*>* toVisitInNextIteration);
   
   const TileKey getKey() const;

@@ -19,8 +19,9 @@ bool SGShape::isReadyToRender(const G3MRenderContext* rc) {
   return _node->isReadyToRender(rc);
 }
 
-void SGShape::rawRender(const G3MRenderContext* rc) {
-  _node->render(rc);
+void SGShape::rawRender(const G3MRenderContext* rc,
+                        const GLState& parentState) {
+  _node->render(rc, parentState);
 }
 
 bool SGShape::isTransparent(const G3MRenderContext* rc) {

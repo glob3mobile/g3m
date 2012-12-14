@@ -39,18 +39,21 @@ public abstract class IStorage
 	_context = context;
   }
 
-  public abstract boolean containsBuffer(URL url);
+
+//  virtual bool containsBuffer(const URL& url) = 0;
 
   public abstract void saveBuffer(URL url, IByteBuffer buffer, boolean saveInBackground);
 
   public abstract IByteBuffer readBuffer(URL url);
 
 
-  public abstract boolean containsImage(URL url);
+
+//  virtual bool containsImage(const URL& url) = 0;
 
   public abstract void saveImage(URL url, IImage image, boolean saveInBackground);
 
   public abstract IImage readImage(URL url);
+
 
 
   public abstract void onResume(G3MContext context);

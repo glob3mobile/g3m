@@ -150,6 +150,12 @@ public abstract class Shape implements EffectTarget
 	setScale(scale._x, scale._y, scale._z);
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Vector3D getScale() const
+  public final Vector3D getScale()
+  {
+	return new Vector3D(_scaleX, _scaleY, _scaleZ);
+  }
 
   public final void setAnimatedScale(TimeInterval duration, double scaleX, double scaleY, double scaleZ)
   {
@@ -175,7 +181,7 @@ public abstract class Shape implements EffectTarget
   }
 
 
-  public final void render(G3MRenderContext rc)
+  public final void render(G3MRenderContext rc, GLState parentState)
   {
 	if (isReadyToRender(rc))
 	{
@@ -195,7 +201,7 @@ public abstract class Shape implements EffectTarget
   
 	  gl.multMatrixf(getTransformMatrix(rc.getPlanet()));
   
-	  rawRender(rc);
+	  rawRender(rc, parentState);
   
 	  gl.popMatrix();
 	}
@@ -208,7 +214,7 @@ public abstract class Shape implements EffectTarget
 
   public abstract boolean isReadyToRender(G3MRenderContext rc);
 
-  public abstract void rawRender(G3MRenderContext rc);
+  public abstract void rawRender(G3MRenderContext rc, GLState parentState);
 
   public abstract boolean isTransparent(G3MRenderContext rc);
 

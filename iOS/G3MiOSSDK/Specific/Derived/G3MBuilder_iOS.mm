@@ -8,8 +8,6 @@
 
 #import "G3MBuilder_iOS.hpp"
 #include "Factory_iOS.hpp"
-#include "GL.hpp"
-#include "NativeGL2_iOS.hpp"
 #include "ThreadUtils_iOS.hpp"
 #include "SQLiteStorage_iOS.hpp"
 #include "CachedDownloader.hpp"
@@ -22,9 +20,8 @@ G3MBuilder_iOS::G3MBuilder_iOS(G3MWidget_iOS* nativeWidget) {
 }
 
 void G3MBuilder_iOS::initializeWidget() {
-    NativeGL2_iOS* nativeGL = new NativeGL2_iOS();
-    setNativeGL(nativeGL);
-
+    setGL([_nativeWidget getGL]);
+    
     [_nativeWidget setWidget: create()];
 }
 

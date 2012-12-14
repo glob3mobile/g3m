@@ -13,10 +13,10 @@
 
 class NullStorage: public IStorage {
 public:
-  bool containsBuffer(const URL& url) {
-    return false;
-  }
-  
+//  bool containsBuffer(const URL& url) {
+//    return false;
+//  }
+
   void saveBuffer(const URL& url,
                   const IByteBuffer& buffer) {
     
@@ -26,10 +26,10 @@ public:
     return NULL;
   }
   
-  bool containsImage(const URL& url) {
-    return false;
-  }
-  
+//  bool containsImage(const URL& url) {
+//    return false;
+//  }
+
   void saveImage(const URL& url,
                  const IImage& buffer) {
     

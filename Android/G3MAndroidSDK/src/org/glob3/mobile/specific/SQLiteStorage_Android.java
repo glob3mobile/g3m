@@ -117,14 +117,14 @@ public final class SQLiteStorage_Android
    }
 
 
-   @Override
-   public boolean containsBuffer(final URL url) {
-      final String name = url.getPath();
-      final Cursor cursor = _readDB.query("buffer", new String[] { "1" }, "name = ?", new String[] { name }, null, null, null);
-      final boolean hasAny = (cursor.getCount() > 0);
-      cursor.close();
-      return hasAny;
-   }
+   //   @Override
+   //   public boolean containsBuffer(final URL url) {
+   //      final String name = url.getPath();
+   //      final Cursor cursor = _readDB.query("buffer", new String[] { "1" }, "name = ?", new String[] { name }, null, null, null);
+   //      final boolean hasAny = (cursor.getCount() > 0);
+   //      cursor.close();
+   //      return hasAny;
+   //   }
 
 
    @Override
@@ -190,14 +190,14 @@ public final class SQLiteStorage_Android
    }
 
 
-   @Override
-   public boolean containsImage(final URL url) {
-      final String name = url.getPath();
-      final Cursor cursor = _readDB.query("image", new String[] { "1" }, "name = ?", new String[] { name }, null, null, null);
-      final boolean hasAny = (cursor.getCount() > 0);
-      cursor.close();
-      return hasAny;
-   }
+   //   @Override
+   //   public boolean containsImage(final URL url) {
+   //      final String name = url.getPath();
+   //      final Cursor cursor = _readDB.query("image", new String[] { "1" }, "name = ?", new String[] { name }, null, null, null);
+   //      final boolean hasAny = (cursor.getCount() > 0);
+   //      cursor.close();
+   //      return hasAny;
+   //   }
 
 
    @Override

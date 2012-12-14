@@ -65,6 +65,9 @@ public:
                       _longitude.div(magnitude));
   }
 
+  ~Geodetic2D() {
+
+  }
   
   bool closeTo(const Geodetic2D& other) const;
   

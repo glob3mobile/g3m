@@ -45,7 +45,8 @@ MutableMatrix44D* Shape::getTransformMatrix(const Planet* planet) {
   return _transformMatrix;
 }
 
-void Shape::render(const G3MRenderContext* rc) {
+void Shape::render(const G3MRenderContext* rc,
+                   const GLState& parentState) {
   if (isReadyToRender(rc)) {
     if (_pendingEffect != NULL) {
       EffectsScheduler* effectsScheduler = rc->getEffectsScheduler();
@@ -62,7 +63,7 @@ void Shape::render(const G3MRenderContext* rc) {
 
     gl->multMatrixf( *getTransformMatrix( rc->getPlanet() ) );
 
-    rawRender(rc);
+    rawRender(rc, parentState);
 
     gl->popMatrix();
   }

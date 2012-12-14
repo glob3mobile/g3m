@@ -29,13 +29,15 @@ public:
     return _squaredDistanceFromEye;
   }
 
-  void render(const G3MRenderContext* rc) {
-    _shape->render(rc);
+  void render(const G3MRenderContext* rc,
+              const GLState& parentState) {
+    _shape->render(rc, parentState);
   }
 
 };
 
-void ShapesRenderer::render(const G3MRenderContext* rc) {
+void ShapesRenderer::render(const G3MRenderContext* rc,
+                            const GLState& parentState) {
   const Vector3D cameraPosition = rc->getCurrentCamera()->getCartesianPosition();
 
   const int shapesCount = _shapes.size();
@@ -50,7 +52,7 @@ void ShapesRenderer::render(const G3MRenderContext* rc) {
                                                            squaredDistanceFromEye));
     }
     else {
-      shape->render(rc);
+      shape->render(rc, parentState);
     }
   }
 }

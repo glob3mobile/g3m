@@ -10,12 +10,12 @@
 #import <QuartzCore/QuartzCore.h>
 
 #import "TouchEvent.hpp"
+#import "GL.hpp"
 
 //class G3MWidget;
 
 @class ES2Renderer;
 
-class INativeGL;
 class IStorage;
 class IDownloader;
 class IThreadUtils;
@@ -30,7 +30,7 @@ class TileRenderer;
 class TilesRenderParameters;
 class G3MWidget;
 class PeriodicalTask;
-class GTask;
+class GInitializationTask;
 
 // opengl versions value
 enum GL_version {
@@ -65,8 +65,7 @@ enum GL_version {
 
 - (void)drawView: (id)sender;
 
-- (void)initWidget: (INativeGL*) nativeGL
-           storage: (IStorage*) storage
+- (void)initWidget: (IStorage*) storage
         downloader: (IDownloader*) downloader
        threadUtils: (IThreadUtils*) threadUtils
             planet: (const Planet*) planet
@@ -77,10 +76,12 @@ enum GL_version {
    backgroundColor: (Color) backgroundColor
             logFPS: (bool) logFPS
 logDownloaderStatistics: (bool) logDownloaderStatistics
-initializationTask: (GTask*) initializationTask
+initializationTask: (GInitializationTask*) initializationTask
 autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
    periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
           userData: (UserData*) userData;
+
+- (GL*)getGL;
 
 - (void)setWidget: (G3MWidget*) widget;
 

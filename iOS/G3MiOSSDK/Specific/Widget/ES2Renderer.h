@@ -14,7 +14,11 @@
 #import <OpenGLES/ES2/gl.h>
 #import <OpenGLES/ES2/glext.h>
 
-#include "GLProgramId_iOS.hpp"
+//#include "GLProgramId_iOS.hpp"
+#include "ShaderProgram.hpp"
+
+class GL;
+
 
 @interface ES2Renderer :NSObject  {
 @private
@@ -27,14 +31,20 @@
   // The OpenGL ES names for the framebuffer and renderbuffer used to render to this view
   GLuint defaultFramebuffer, colorRenderbuffer, depthRenderbuffer;
   
-  IGLProgramId* program;
-  
+  //IGLProgramId* program;
+  ShaderProgram* _shaderProgram;
+//  ShaderProgram* _shaderProgram2;
+
   BOOL _firstRender;
+  
+  GL* _gl;
 }
 
 - (void)render: (void*) widget;
 
 - (BOOL)resizeFromLayer:(CAEAGLLayer *)layer;
+
+- (GL*)getGL;
 
 @end
 

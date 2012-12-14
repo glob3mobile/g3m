@@ -62,6 +62,10 @@ public:
     }
   }
 
+  Vector3D getExtent() const {
+    return Vector3D(_extentX, _extentY, _extentZ);
+  }
+
   void setSurfaceColor(Color* color) {
     delete _surfaceColor;
     _surfaceColor = color;

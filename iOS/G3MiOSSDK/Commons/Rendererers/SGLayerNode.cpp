@@ -52,11 +52,6 @@ public:
 };
 
 
-//void TextureDownloadListener::onDownload(const URL& url,
-//                                         const IImage* image) {
-//  _layerNode->onImageDownload(image);
-//}
-
 void SGLayerNode::onImageDownload(const IImage* image) {
   if (_downloadedImage != NULL) {
     delete _downloadedImage;
@@ -96,23 +91,6 @@ void SGLayerNode::initialize(const G3MContext* context,
   requestImage();
 }
 
-//void SGLayerNode::setURI(const std::string& uri) {
-//  if (_uri.compare(uri) == 0) {
-//    return;
-//  }
-//
-//  _uri = uri;
-//
-//  if (_requestInProgress != -1) {
-//    if (_context != NULL) {
-//      _context->getDownloader()->cancelRequest(_requestInProgress);
-//      _requestInProgress = -1;
-//    }
-//  }
-//
-//  int __release_texture_id_uploaded;
-//}
-
 const IGLTextureId* SGLayerNode::getTextureId(const G3MRenderContext* rc) {
   if (_textureId == NULL) {
     if (_downloadedImage != NULL) {
@@ -129,43 +107,19 @@ const IGLTextureId* SGLayerNode::getTextureId(const G3MRenderContext* rc) {
   return _textureId;
 }
 
-void SGLayerNode::prepareRender(const G3MRenderContext* rc) {
-  SGNode::prepareRender(rc);
-
-  //  SGShape* shape = getShape();
-
+const GLState* SGLayerNode::createState(const G3MRenderContext* rc,
+                                        const GLState& parentState) {
   const IGLTextureId* texId = getTextureId(rc);
-  _textureBound = (texId != NULL);
-  if (_textureBound) {
-    GL *gl = rc->getGL();
-
-    //    if (_transparent) {
-    //      gl->enableBlend();
-    //    }
-
-    gl->enableTextures();
-    gl->enableTexture2D();
-
-    //    _textureMapping->bind(rc);
-    //    gl->transformTexCoords(_scale, _translation);
-    gl->bindTexture(texId);
-    //    gl->setTextureCoordinates(2, 0, _texCoords);
+  if (texId == NULL) {
+    return NULL;
   }
-}
 
-void SGLayerNode::cleanUpRender(const G3MRenderContext* rc) {
-  if (_textureBound) {
-    GL *gl = rc->getGL();
+  GLState* state = new GLState(parentState);
+  state->enableTextures();
+  state->enableTexture2D();
 
-    gl->disableTexture2D();
-    gl->disableTextures();
+  GL* gl = rc->getGL();
+  gl->bindTexture(texId);
 
-    //    if (_transparent) {
-    //      gl->disableBlend();
-    //    }
-    
-    _textureBound = false;
-  }
-  
-  SGNode::cleanUpRender(rc);
+  return state;
 }

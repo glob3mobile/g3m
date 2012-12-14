@@ -10,13 +10,17 @@
 #define __G3MiOSSDK__IG3MBuilder__
 
 #include <vector>
+#include "GL.hpp"
+#include "IStorage.hpp"
+#include "IDownloader.hpp"
+#include "IThreadUtils.hpp"
 #include "CameraRenderer.hpp"
 #include "CameraConstraints.hpp"
 #include "Color.hpp"
 #include "LayerSet.hpp"
 #include "TilesRenderParameters.hpp"
 #include "TileRenderer.hpp"
-#include "GTask.hpp"
+#include "GInitializationTask.hpp"
 #include "PeriodicalTask.hpp"
 #include "G3MWidget.hpp"
 
@@ -25,7 +29,7 @@
 class IG3MBuilder {
 
 private:
-    INativeGL* _nativeGL;
+    GL* _gl;
     IDownloader* _downloader;
     IThreadUtils* _threadUtils;
     const Planet* _planet;
@@ -37,7 +41,7 @@ private:
     TileRenderer* _tileRenderer;
     Renderer* _busyRenderer;
     std::vector<Renderer*> _renderers;
-    GTask* _initializationTask;
+    GInitializationTask* _initializationTask;
     bool _autoDeleteInitializationTask;
     std::vector<PeriodicalTask*> _periodicalTasks;
     bool _logFPS;
@@ -51,7 +55,6 @@ protected:
     IStorage* _storage;
     
     G3MWidget* create();
-    void setNativeGL(INativeGL* nativeGL);
     virtual IThreadUtils* createThreadUtils() = 0;
     virtual IStorage* createStorage() = 0;
     virtual IDownloader* createDownloader() = 0;
@@ -59,6 +62,7 @@ protected:
 public:
     IG3MBuilder();
     virtual ~IG3MBuilder();
+    void setGL(GL* gl);
     void setStorage(IStorage* storage);
     void setDownloader(IDownloader* downloader);
     void setThreadUtils(IThreadUtils* threadUtils);
@@ -71,7 +75,7 @@ public:
     void setTileRenderer(TileRenderer * tileRenderer);
     void setBusyRenderer(Renderer* busyRenderer);
     void addRenderer(Renderer* renderer);
-    void setInitializationTask(GTask* initializationTask);
+    void setInitializationTask(GInitializationTask* initializationTask);
     void setAutoDeleteInitializationTask(const bool autoDeleteInitializationTask);
     void addPeriodicalTask(PeriodicalTask* periodicalTask);
     void setLogFPS(const bool logFPS);

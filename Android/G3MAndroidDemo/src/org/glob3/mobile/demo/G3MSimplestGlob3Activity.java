@@ -13,7 +13,7 @@ import org.glob3.mobile.generated.CameraRotationHandler;
 import org.glob3.mobile.generated.CameraSingleDragHandler;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.CompositeRenderer;
-import org.glob3.mobile.generated.GTask;
+import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IStorage;
@@ -32,7 +32,6 @@ import org.glob3.mobile.generated.WMSServerVersion;
 import org.glob3.mobile.specific.Downloader_Android;
 import org.glob3.mobile.specific.G3MBaseActivity;
 import org.glob3.mobile.specific.G3MWidget_Android;
-import org.glob3.mobile.specific.NativeGL2_Android;
 import org.glob3.mobile.specific.SQLiteStorage_Android;
 import org.glob3.mobile.specific.ThreadUtils_Android;
 
@@ -59,8 +58,6 @@ public class G3MSimplestGlob3Activity
 
       // initialize a customized widget without using any builder
       _widgetAndroid = new G3MWidget_Android(this);
-
-      final NativeGL2_Android nativeGL = new NativeGL2_Android();
 
       final IStorage storage = new SQLiteStorage_Android("g3m.cache", this);
 
@@ -114,7 +111,7 @@ public class G3MSimplestGlob3Activity
 
       final boolean logDownloaderStatistics = false;
 
-      final GTask initializationTask = null;
+      final GInitializationTask initializationTask = null;
 
       final boolean autoDeleteInitializationTask = true;
 
@@ -123,7 +120,6 @@ public class G3MSimplestGlob3Activity
       final UserData userData = null;
 
       _widgetAndroid.initWidget(//
-               nativeGL, //
                storage, // 
                downloader, //
                threadUtils, //

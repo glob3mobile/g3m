@@ -60,16 +60,11 @@ public class Angle
 
   public static Angle min(Angle a1, Angle a2)
   {
-	//    if (a1._degrees < a2._degrees) return a1;
-	//    else return a2;
-
 	return (a1._degrees < a2._degrees) ? a1 : a2;
   }
 
   public static Angle max(Angle a1, Angle a2)
   {
-//    if (a1._degrees > a2._degrees) return a1;
-//    else return a2;
 	return (a1._degrees > a2._degrees) ? a1 : a2;
   }
 
@@ -268,23 +263,23 @@ public class Angle
 	public int hashCode() {
 		return Double.toString(_degrees).hashCode();
 	}
-  
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		final Angle other = (Angle) obj;
-		if (_degrees != other._degrees) {
-			return false;
-		}
-		return true;
+	  return true;
+	}
+	if (obj == null) {
+	  return false;
+	}
+	if (getClass() != obj.getClass()) {
+	  return false;
+	}
+	final Angle other = (Angle) obj;
+	if (_degrees != other._degrees) {
+	  return false;
+	}
+	return true;
 	}
 
   public void dispose()
@@ -304,4 +299,5 @@ public class Angle
 		isb.dispose();
 	return s;
   }
+
 }

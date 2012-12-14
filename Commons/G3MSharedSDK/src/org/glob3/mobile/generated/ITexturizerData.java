@@ -37,6 +37,8 @@ package org.glob3.mobile.generated;
 //class TileKey;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Vector3D;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class GLState;
 
 public interface ITexturizerData
 {

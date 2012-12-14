@@ -10,7 +10,8 @@ import org.glob3.mobile.generated.CameraRenderer;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.G3MWidget;
-import org.glob3.mobile.generated.GTask;
+import org.glob3.mobile.generated.GInitializationTask;
+import org.glob3.mobile.generated.GL;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
@@ -18,7 +19,6 @@ import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IJSONParser;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IMathUtils;
-import org.glob3.mobile.generated.INativeGL;
 import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IStringBuilder;
 import org.glob3.mobile.generated.IStringUtils;
@@ -73,12 +73,13 @@ public final class G3MWidget_Android
       // CHANNEL, HAVING TO FORCE PROPER BUFFER
       // ALLOCATION
 
-      // Detect Long-Press events
+      _es2renderer = new ES2Renderer(this);
+      setRenderer(_es2renderer);
+
       setLongClickable(true);
 
-      // Debug flags
-      //      setDebugFlags(DEBUG_CHECK_GL_ERROR | DEBUG_LOG_GL_CALLS);
-      setDebugFlags(DEBUG_CHECK_GL_ERROR);
+      // setDebugFlags(DEBUG_CHECK_GL_ERROR | DEBUG_LOG_GL_CALLS);
+      // setDebugFlags(DEBUG_CHECK_GL_ERROR);
 
       if (!isInEditMode()) { // needed to allow visual edition of this widget
          //Double Tap Listener
@@ -141,17 +142,17 @@ public final class G3MWidget_Android
                                 final int oldh) {
       super.onSizeChanged(w, h, oldw, oldh);
 
-      if (_es2renderer == null) {
-         _es2renderer = new ES2Renderer(this);
-         setRenderer(_es2renderer);
-      }
+      //      if (_es2renderer == null) {
+      //         _es2renderer = new ES2Renderer(this);
+      //         setRenderer(_es2renderer);
+      //      }
    }
 
 
    @Override
    public boolean onTouchEvent(final MotionEvent event) {
 
-      //Notifing gestureDetector for DoubleTap recognition
+      //Notifying gestureDetector for DoubleTap recognition
       _gestureDetector.onTouchEvent(event);
 
       final TouchEvent te = _motionEventProcessor.processEvent(event);
@@ -237,8 +238,7 @@ public final class G3MWidget_Android
    private LayerSet                                       _layerSet;
    private ArrayList<org.glob3.mobile.generated.Renderer> _renderers;
    private UserData                                       _userData;
-
-   private GTask                                          _initializationTask;
+   private GInitializationTask                            _initializationTask;
    private ArrayList<PeriodicalTask>                      _periodicalTasks;
    private boolean                                        _incrementalTileQuality;
          
@@ -268,14 +268,10 @@ public final class G3MWidget_Android
 
       private void initWidget(final CameraRenderer cameraRenderer,
                               final TilesRenderParameters parameters,
-                              final GTask initializationTask) {
-
+                              final GInitializationTask initializationTask) {
          // create GLOB3M WIDGET
          final NativeGL2_Android nativeGL = new NativeGL2_Android();
-
          final CompositeRenderer mainRenderer = new CompositeRenderer();
-
-         // composite.addRenderer(cameraRenderer);
 
          if (_layerSet != null) {
             final boolean showStatistics = false;
@@ -362,8 +358,7 @@ public final class G3MWidget_Android
    */
 
 
-   public void initWidget(final INativeGL nativeGL,
-                          final IStorage storage,
+   public void initWidget(final IStorage storage,
                           final IDownloader downloader,
                           final IThreadUtils threadUtils,
                           final Planet planet,
@@ -374,13 +369,13 @@ public final class G3MWidget_Android
                           final Color backgroundColor,
                           final boolean logFPS,
                           final boolean logDownloaderStatistics,
-                          final GTask initializationTask,
+                          final GInitializationTask initializationTask,
                           final boolean autoDeleteInitializationTask,
                           final ArrayList<PeriodicalTask> periodicalTasks,
                           final UserData userData) {
 
       _g3mWidget = G3MWidget.create(//
-               nativeGL, //
+               getGL(), //
                storage, //
                downloader, //
                threadUtils, //
@@ -482,6 +477,11 @@ public final class G3MWidget_Android
 
    public void setWidget(final G3MWidget widget) {
       _g3mWidget = widget;
+   }
+
+
+   public GL getGL() {
+      return _es2renderer.getGL();
    }
 
 

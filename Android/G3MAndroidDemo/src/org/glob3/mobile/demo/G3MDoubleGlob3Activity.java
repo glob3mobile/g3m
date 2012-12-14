@@ -79,23 +79,6 @@ public class G3MDoubleGlob3Activity
    }
 
 
-   //   @Override
-   //   protected void onResume() {
-   //      IDownloader.instance().start();
-   //      super.onResume();
-   //   }
-   //
-   //
-   //   @Override
-   //   protected void onDestroy() {
-   //      super.onDestroy();
-   //      Log.d("Demo", "Activity destroyed");
-   //      //TODO HACK TO CLOSE SQL DB
-   //      //      _widgetAndroidUp.closeStorage();
-   //      //      _widgetAndroidDown.closeStorage();
-   //      //      android.os.Process.killProcess(android.os.Process.myPid());
-   //   }
-
    @Override
    protected void onResume() {
       super.onResume();

@@ -14,7 +14,6 @@ class TouchEvent;
 class Planet;
 class ILogger;
 class GL;
-class INativeGL;
 class TexturesHandler;
 class Downloader;
 class IDownloader;
@@ -22,6 +21,7 @@ class Camera;
 class EffectsScheduler;
 class IStringUtils;
 class IThreadUtils;
+class GInitializationTask;
 class GTask;
 class TimeInterval;
 class IFactory;
@@ -45,6 +45,7 @@ class IStorage;
 #include "Angle.hpp"
 
 class G3MContext;
+class GLState;
 
 class UserData {
 private:
@@ -75,7 +76,7 @@ public:
                              IMathUtils*          mathUtils,
                              IJSONParser*         jsonParser);
 
-  static G3MWidget* create(INativeGL*                       nativeGL,
+  static G3MWidget* create(GL*                              gl,
                            IStorage*                        storage,
                            IDownloader*                     downloader,
                            IThreadUtils*                    threadUtils,
@@ -87,7 +88,7 @@ public:
                            Color                            backgroundColor,
                            const bool                       logFPS,
                            const bool                       logDownloaderStatistics,
-                           GTask*                           initializationTask,
+                           GInitializationTask*             initializationTask,
                            bool                             autoDeleteInitializationTask,
                            std::vector<PeriodicalTask*>     periodicalTasks);
 
@@ -158,9 +159,9 @@ public:
   }
 
 private:
-  IStorage*            _storage;
-  IDownloader*         _downloader;
-  IThreadUtils*        _threadUtils;
+  IStorage*           _storage;
+  IDownloader*        _downloader;
+  IThreadUtils*       _threadUtils;
 
   FrameTasksExecutor* _frameTasksExecutor;
   GL*                 _gl;
@@ -193,8 +194,8 @@ private:
 
   UserData* _userData;
 
-  GTask* _initializationTask;
-  bool   _autoDeleteInitializationTask;
+  GInitializationTask* _initializationTask;
+  bool                 _autoDeleteInitializationTask;
 
   std::vector<PeriodicalTask*> _periodicalTasks;
     
@@ -206,8 +207,12 @@ private:
   const G3MContext* _context;
 
   bool _paused;
+  
+  const GLState* _rootState;
 
-  G3MWidget(INativeGL*                       nativeGL,
+  bool _initializationTaskWasRun;
+
+  G3MWidget(GL*                              gl,
             IStorage*                        storage,
             IDownloader*                     downloader,
             IThreadUtils*                    threadUtils,
@@ -219,7 +224,7 @@ private:
             Color                            backgroundColor,
             const bool                       logFPS,
             const bool                       logDownloaderStatistics,
-            GTask*                           initializationTask,
+            GInitializationTask*             initializationTask,
             bool                             autoDeleteInitializationTask,
             std::vector<PeriodicalTask*>     periodicalTasks);
   

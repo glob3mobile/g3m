@@ -11,10 +11,9 @@ package org.glob3.mobile.generated;
 
 public abstract class NullStorage extends IStorage
 {
-  public final boolean containsBuffer(URL url)
-  {
-	return false;
-  }
+//  bool containsBuffer(const URL& url) {
+//    return false;
+//  }
 
   public final void saveBuffer(URL url, IByteBuffer buffer)
   {
@@ -26,10 +25,9 @@ public abstract class NullStorage extends IStorage
 	return null;
   }
 
-  public final boolean containsImage(URL url)
-  {
-	return false;
-  }
+//  bool containsImage(const URL& url) {
+//    return false;
+//  }
 
   public final void saveImage(URL url, IImage buffer)
   {

@@ -27,11 +27,15 @@ public:
     return _value;
   }
 
-  JSONString* asString() {
+  const JSONString* asString() const {
     return this;
   }
 
   const std::string description() const;
+
+  JSONString* deepCopy() const {
+    return new JSONString(_value);
+  }
 
 };
 

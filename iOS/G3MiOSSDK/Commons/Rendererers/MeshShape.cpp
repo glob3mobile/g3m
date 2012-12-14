@@ -32,10 +32,11 @@ bool MeshShape::isReadyToRender(const G3MRenderContext* rc) {
   return (mesh != NULL);
 }
 
-void MeshShape::rawRender(const G3MRenderContext* rc) {
+void MeshShape::rawRender(const G3MRenderContext* rc,
+                          const GLState& parentState) {
   const Mesh* mesh = getMesh(rc);
   if (mesh != NULL) {
-    mesh->render(rc);
+    mesh->render(rc, parentState);
   }
 }
 

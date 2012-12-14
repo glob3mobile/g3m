@@ -20,6 +20,7 @@
 class IImage;
 class IFloatBuffer;
 class IGLTextureId;
+class GLState;
 
 class Mark {
 private:
@@ -49,9 +50,9 @@ private:
   bool    _renderedMark;
   
 public:
-  Mark(const std::string name,
-       const URL         textureURL,
-       const Geodetic3D  position) :
+  Mark(const std::string& name,
+       const URL          textureURL,
+       const Geodetic3D   position) :
   _name(name),
   _textureURL(textureURL),
   _position(position),
@@ -80,6 +81,7 @@ public:
   void initialize(const G3MContext* context);
   
   void render(const G3MRenderContext* rc,
+              const GLState& parentState,
               const double minDistanceToCamera);
   
   bool isReady() const;

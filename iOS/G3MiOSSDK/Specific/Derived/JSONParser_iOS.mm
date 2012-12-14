@@ -14,7 +14,7 @@
 #import "JSONString.hpp"
 
 
-JSONBaseObject* JSONParser_iOS::parse(IByteBuffer* buffer){
+JSONBaseObject* JSONParser_iOS::parse(IByteBuffer* buffer) {
   return parse(buffer->getAsString());
 }
 
@@ -31,7 +31,7 @@ JSONBaseObject* JSONParser_iOS::parse(const std::string& inputString) {
   if ([nsJsonObject isKindOfClass:[NSArray class]]) {
     NSArray *jsonArray = (NSArray *)nsJsonObject;
     JSONArray* topLevelArray = new JSONArray();
-    for (NSObject *element in jsonArray){
+    for (NSObject *element in jsonArray) {
       topLevelArray->add(makeJSONElement(element));
     }
     return topLevelArray;
@@ -41,7 +41,7 @@ JSONBaseObject* JSONParser_iOS::parse(const std::string& inputString) {
     JSONObject* topLevelObject = new JSONObject();
     NSArray *keys = [jsonDictionary allKeys];
     const int count = [keys count];
-    for (int i = 0; i<count; i++){
+    for (int i = 0; i<count; i++) {
       const std::string key = std::string( [[keys objectAtIndex:i] UTF8String] );
       topLevelObject->put(key,
                           makeJSONElement([jsonDictionary objectForKey:[keys objectAtIndex:i]]));
@@ -54,11 +54,11 @@ JSONBaseObject* JSONParser_iOS::parse(const std::string& inputString) {
   return NULL;
 }
 
-JSONBaseObject* JSONParser_iOS::makeJSONElement(NSObject* object){
+JSONBaseObject* JSONParser_iOS::makeJSONElement(NSObject* object) {
   if ([object isKindOfClass:[NSArray class]]) {
     NSArray *jsonArray = (NSArray *)object;
     JSONArray* array = new JSONArray();
-    for (NSObject *element in jsonArray){
+    for (NSObject *element in jsonArray) {
       array->add(makeJSONElement(element));
     }
     return array;
@@ -68,7 +68,7 @@ JSONBaseObject* JSONParser_iOS::makeJSONElement(NSObject* object){
     JSONObject* dictionary = new JSONObject();
     NSArray *keys = [jsonDict allKeys];
     const int count = [keys count];
-    for (int i = 0; i<count; i++){
+    for (int i = 0; i<count; i++) {
       NSUInteger objI = i;
       const std::string key = std::string( [[keys objectAtIndex:objI] UTF8String] );
       dictionary->put(key,
@@ -76,7 +76,7 @@ JSONBaseObject* JSONParser_iOS::makeJSONElement(NSObject* object){
     }
     return dictionary;
   }
-  else if ([object isKindOfClass:[NSNumber class]]){
+  else if ([object isKindOfClass:[NSNumber class]]) {
     NSNumber *jsonNumber = (NSNumber *) object;
 
     //Booleans are also encoded as NSNumbers
@@ -94,7 +94,7 @@ JSONBaseObject* JSONParser_iOS::makeJSONElement(NSObject* object){
       return numberObj;
     }
   }
-  else if ([object isKindOfClass:[NSString class]]){
+  else if ([object isKindOfClass:[NSString class]]) {
     return new JSONString([(NSString *) object UTF8String]);
   }
 

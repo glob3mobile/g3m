@@ -8,6 +8,8 @@
 
 #include "SGNode.hpp"
 
+#include "GLState.hpp"
+
 SGNode::~SGNode() {
   const int childrenCount = _children.size();
   for (int i = 0; i < childrenCount; i++) {
@@ -61,20 +63,39 @@ void SGNode::cleanUpRender(const G3MRenderContext* rc) {
 
 }
 
-void SGNode::rawRender(const G3MRenderContext* rc) {
+void SGNode::rawRender(const G3MRenderContext* rc,
+                       const GLState& parentState) {
 
 }
 
-void SGNode::render(const G3MRenderContext* rc) {
+const GLState* SGNode::createState(const G3MRenderContext* rc,
+                                   const GLState& parentState) {
+  return  NULL;
+}
+
+
+void SGNode::render(const G3MRenderContext* rc,
+                    const GLState& parentState) {
+  const GLState* myState = createState(rc, parentState);
+  const GLState* state;
+  if (myState == NULL) {
+    state = &parentState;
+  }
+  else {
+    state = myState;
+  }
+
   prepareRender(rc);
 
-  rawRender(rc);
+  rawRender(rc, *state);
 
   const int childrenCount = _children.size();
   for (int i = 0; i < childrenCount; i++) {
     SGNode* child = _children[i];
-    child->render(rc);
+    child->render(rc, *state);
   }
 
   cleanUpRender(rc);
+  
+  delete myState;
 }

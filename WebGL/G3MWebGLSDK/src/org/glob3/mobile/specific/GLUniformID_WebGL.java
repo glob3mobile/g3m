@@ -29,5 +29,4 @@ public final class GLUniformID_WebGL
       return _id != null;
    }
 
-
 }

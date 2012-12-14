@@ -36,8 +36,8 @@ public abstract class Mesh
   public abstract Vector3D getVertex(int i);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual void render(const G3MRenderContext* rc) const = 0;
-  public abstract void render(G3MRenderContext rc);
+//ORIGINAL LINE: virtual void render(const G3MRenderContext* rc, const GLState& parentState) const = 0;
+  public abstract void render(G3MRenderContext rc, GLState parentState);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual Extent* getExtent() const = 0;

@@ -20,68 +20,82 @@ class Image_iOS: public IImage {
 private:
   UIImage*        _image;
   mutable NSData* _sourceBuffer;
-  
+
   Image_iOS(const Image_iOS& that);
   void operator=(const Image_iOS& that);
-  
+
 public:
-  
+
   virtual ~Image_iOS() {
     _image        = NULL;
     _sourceBuffer = NULL;
   }
-  
+
   Image_iOS(UIImage* image,
             NSData* sourceBuffer) :
   _image(image),
   _sourceBuffer(sourceBuffer)
   {
-    
+
   }
-  
+
   Image_iOS(int width, int height);
-  
+
   UIImage* getUIImage() const {
     return _image;
   }
-  
+
   NSData* getSourceBuffer() const {
     return _sourceBuffer;
   }
-  
+
   void releaseSourceBuffer() const {
     _sourceBuffer = NULL;
   }
-  
+
   int getWidth() const {
     return (_image == NULL) ? 0 : (int) _image.size.width;
   }
-  
+
   int getHeight() const {
     return (_image == NULL) ? 0 : (int) _image.size.height;
   }
-  
+
   Vector2I getExtent() const {
     return Vector2I(getWidth(), getHeight());
   }
-  
-  IImage* combineWith(const IImage& other,
-                      int width, int height) const;
-  
-  IImage* combineWith(const IImage& other,
-                      const RectangleD& rect,
-                      int width, int height) const;
-  
-  IImage* subImage(const RectangleD& rect) const;
-  
+
+  //  void combineWith(const IImage& other,
+  //                   int width, int height,
+  //                   IImageListener* listener,
+  //                   bool autodelete) const;
+
+  void combineWith(const IImage& other,
+                   const RectangleI& rect,
+                   int width, int height,
+                   IImageListener* listener,
+                   bool autodelete) const;
+
+  void combineWith(const std::vector<const IImage*>& images,
+                   const std::vector<RectangleI*>& rectangles,
+                   int width, int height,
+                   IImageListener* listener,
+                   bool autodelete) const;
+
+  void subImage(const RectangleI& rect,
+                IImageListener* listener,
+                bool autodelete) const;
+
   unsigned char* createByteArrayRGBA8888() const;
-  
-  IImage* scale(int width, int height) const;
+
+  void scale(int width, int height,
+             IImageListener* listener,
+             bool autodelete) const;
 
   const std::string description() const;
-  
+
   IImage* shallowCopy() const;
-  
+
 };
 
 #endif

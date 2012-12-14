@@ -16,7 +16,7 @@
 #include "CompositeRenderer.hpp"
 
 IG3MBuilder::IG3MBuilder() {
-    _nativeGL = NULL;
+    _gl = NULL;
     _storage = NULL;
     _downloader = NULL;
     _threadUtils = NULL;
@@ -39,6 +39,10 @@ IG3MBuilder::~IG3MBuilder() {
     delete _planet;
     delete _parameters;
 #endif
+    delete _gl;
+    delete _storage;
+    delete _downloader;
+    delete _threadUtils;
     delete _cameraRenderer;
     delete _backgroundColor;
     delete _layerSet;
@@ -49,8 +53,8 @@ IG3MBuilder::~IG3MBuilder() {
 }
 
 G3MWidget* IG3MBuilder::create() {
-    
-    if (_nativeGL) {
+
+    if (_gl) {
         if (!_storage) {
             _storage = createStorage();
         }
@@ -115,7 +119,7 @@ G3MWidget* IG3MBuilder::create() {
         
         Color backgroundColor = Color::fromRGBA(_backgroundColor->getRed(), _backgroundColor->getGreen(), _backgroundColor->getBlue(), _backgroundColor->getAlpha());
     
-        G3MWidget * g3mWidget = G3MWidget::create(_nativeGL,
+        G3MWidget * g3mWidget = G3MWidget::create(_gl,
                                                   _storage,
                                                   _downloader,
                                                   _threadUtils,
@@ -160,25 +164,41 @@ CameraRenderer* IG3MBuilder::createCameraRenderer() {
     return cameraRenderer;
 }
 
-
-void IG3MBuilder::setNativeGL(INativeGL *nativeGL) {
-    _nativeGL = nativeGL;
+void IG3MBuilder::setGL(GL *gl) {
+    if (_gl != gl) {
+        delete _gl;
+        _gl = gl;
+    }
 }
 
 void IG3MBuilder::setStorage(IStorage *storage) {
-    _storage = storage;
+    if (_storage != storage) {
+        delete _storage;
+        _storage = storage;
+    }
 }
 
 void IG3MBuilder::setDownloader(IDownloader *downloader) {
-    _downloader = downloader;
+    if (_downloader != downloader) {
+        delete _downloader;
+        _downloader = downloader;
+    }
 }
 
 void IG3MBuilder::setThreadUtils(IThreadUtils *threadUtils) {
-    _threadUtils = threadUtils;
+    if (_threadUtils != threadUtils) {
+        delete _threadUtils;
+        _threadUtils = threadUtils;
+    }
 }
 
 void IG3MBuilder::setPlanet(const Planet *planet) {
-    _planet = planet;
+    if (_planet != planet) {
+#ifdef C_CODE
+        delete _planet;
+#endif
+        _planet = planet;
+    }
 }
 
 void IG3MBuilder::addCameraConstraint(ICameraConstrainer* cameraConstraint) {
@@ -186,7 +206,10 @@ void IG3MBuilder::addCameraConstraint(ICameraConstrainer* cameraConstraint) {
 }
 
 void IG3MBuilder::setCameraRenderer(CameraRenderer *cameraRenderer) {
-    _cameraRenderer = cameraRenderer;
+    if (_cameraRenderer != cameraRenderer) {
+        delete _cameraRenderer;
+        _cameraRenderer = cameraRenderer;
+    }
 }
 
 void IG3MBuilder::setBackgroundColor(Color* backgroundColor) {
@@ -240,7 +263,7 @@ void IG3MBuilder::addRenderer(Renderer *renderer) {
     _renderers.push_back(renderer);
 }
 
-void IG3MBuilder::setInitializationTask(GTask *initializationTask) {
+void IG3MBuilder::setInitializationTask(GInitializationTask *initializationTask) {
     if (_initializationTask != initializationTask) {
         delete _initializationTask;
         _initializationTask = initializationTask;

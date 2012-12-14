@@ -24,7 +24,18 @@ private:
   float             _floatValue;
   double            _doubleValue;
   const number_type _type;
-  
+
+  JSONNumber(int               intValue,
+             float             floatValue,
+             double            doubleValue,
+             const number_type type) :
+  _intValue(intValue),
+  _floatValue(floatValue),
+  _doubleValue(doubleValue),
+  _type(type)
+  {
+  }
+
 public:
 
   JSONNumber(int value) :
@@ -42,7 +53,7 @@ public:
   _type(float_type)
   {
   }
-  
+
   JSONNumber(double value) :
   _intValue(0),
   _floatValue(0.0),
@@ -57,11 +68,18 @@ public:
 
   double value() const;
 
-  JSONNumber* asNumber(){
+  const JSONNumber* asNumber() const {
     return this;
   }
-  
+
   const std::string description() const;
+
+  JSONNumber* deepCopy() const {
+    return new JSONNumber(_intValue,
+                          _floatValue,
+                          _doubleValue,
+                          _type);
+  }
 
 };
 

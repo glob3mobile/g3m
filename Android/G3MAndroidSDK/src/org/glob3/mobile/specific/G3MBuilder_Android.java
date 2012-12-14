@@ -26,8 +26,7 @@ public class G3MBuilder_Android
 
 
    public G3MWidget_Android createWidget() {
-      final NativeGL2_Android nativeGL = new NativeGL2_Android();
-      setNativeGL(nativeGL);
+      setGL(_nativeWidget.getGL());
 
       _nativeWidget.setWidget(create());
 

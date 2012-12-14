@@ -226,9 +226,9 @@ public:
 #ifdef C_CODE
   float* getColumnMajorFloatArray() const {
 #else
-    float[] getColumnMajorFloatArray() const {
+  float[] getColumnMajorFloatArray() const {
 #endif
-      if (_columnMajorFloatArray == NULL){
+      if (_columnMajorFloatArray == NULL) {
         _columnMajorFloatArray = new float[16];
 
         _columnMajorFloatArray[ 0] = (float) _m00;
@@ -253,7 +253,7 @@ public:
       }
       return _columnMajorFloatArray;
     }
-
+    
 
     void print(const std::string& name, const ILogger* log) const;
 

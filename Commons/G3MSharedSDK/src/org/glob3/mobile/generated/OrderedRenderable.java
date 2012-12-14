@@ -16,6 +16,8 @@ package org.glob3.mobile.generated;
 //
 
 
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class GLState;
 
 public abstract class OrderedRenderable
 {
@@ -23,7 +25,7 @@ public abstract class OrderedRenderable
 //ORIGINAL LINE: virtual double squaredDistanceFromEye() const = 0;
   public abstract double squaredDistanceFromEye();
 
-  public abstract void render(G3MRenderContext rc);
+  public abstract void render(G3MRenderContext rc, GLState parentState);
 
   public void dispose()
   {

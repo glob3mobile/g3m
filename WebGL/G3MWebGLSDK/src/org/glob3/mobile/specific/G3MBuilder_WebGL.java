@@ -24,8 +24,8 @@ public class G3MBuilder_WebGL
 
    public G3MWidget_WebGL createWidget() {
       if (_nativeWidget.isSupported()) {
-         final NativeGL_WebGL nativeGL = new NativeGL_WebGL(_nativeWidget.getWebGLContext());
-         setNativeGL(nativeGL);
+
+         setGL(_nativeWidget.getGL());
 
          _nativeWidget.setG3MWidget(create());
          _nativeWidget.startWidget();

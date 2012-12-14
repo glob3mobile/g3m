@@ -38,8 +38,8 @@
   return [CAEAGLLayer class];
 }
 
-- (void)initWidget: (INativeGL*) nativeGL
-           storage: (IStorage*) storage
+
+- (void)initWidget: (IStorage*) storage
         downloader: (IDownloader*) downloader
        threadUtils: (IThreadUtils*) threadUtils
             planet: (const Planet*) planet
@@ -50,12 +50,12 @@
    backgroundColor: (Color) backgroundColor
             logFPS: (bool) logFPS
 logDownloaderStatistics: (bool) logDownloaderStatistics
-initializationTask: (GTask*) initializationTask
+initializationTask: (GInitializationTask*) initializationTask
 autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
    periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
           userData: (UserData*) userData
 {
-    _widgetVP = G3MWidget::create(nativeGL,
+    _widgetVP = G3MWidget::create([_renderer getGL],
                                   storage,
                                   downloader,
                                   threadUtils,
@@ -73,10 +73,13 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
     [self widget]->setUserData(userData);
 }
 
+- (GL*)getGL {
+    return [_renderer getGL];
+}
+
 - (void)setWidget:(G3MWidget*) widget {
     _widgetVP = widget;
 }
-
 
 //The EAGL view is stored in the nib file. When it's unarchived it's sent -initWithCoder:
 - (id)initWithCoder:(NSCoder *)coder {

@@ -401,8 +401,8 @@ public class MutableMatrix44D
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: float[] getColumnMajorFloatArray() const
-	public final float[] getColumnMajorFloatArray()
-	{
+  public final float[] getColumnMajorFloatArray()
+  {
 	  if (_columnMajorFloatArray == null)
 	  {
 		_columnMajorFloatArray = new float[16];

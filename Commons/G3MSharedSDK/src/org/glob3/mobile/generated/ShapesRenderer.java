@@ -99,7 +99,7 @@ public class ShapesRenderer extends LeafRenderer
   {
   }
 
-  public final void render(G3MRenderContext rc)
+  public final void render(G3MRenderContext rc, GLState parentState)
   {
 	final Vector3D cameraPosition = rc.getCurrentCamera().getCartesianPosition();
   
@@ -117,7 +117,7 @@ public class ShapesRenderer extends LeafRenderer
 	  }
 	  else
 	  {
-		shape.render(rc);
+		shape.render(rc, parentState);
 	  }
 	}
   }

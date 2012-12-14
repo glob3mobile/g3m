@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import org.glob3.mobile.generated.Angle;
-import org.glob3.mobile.generated.GTask;
+import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.LayerSet;
@@ -233,7 +233,7 @@ public class G3MAndroidDemoActivity
 
       final UserData userData = null;
 
-      final GTask initializationTask = null;
+      final GInitializationTask initializationTask = null;
       final ArrayList<PeriodicalTask> periodicalTasks = new ArrayList<PeriodicalTask>();
       final boolean incrementalTileQuality = false;
       //      widget.initWidget( //
