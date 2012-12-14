@@ -9,14 +9,14 @@
 #ifndef G3MiOSSDK_IDownloader_hpp
 #define G3MiOSSDK_IDownloader_hpp
 
-#include "URL.hpp"
-#include "ILogger.hpp"
-
-#include <string>
-
+class URL;
+class G3MContext;
 class IBufferDownloadListener;
 class IImageDownloadListener;
-class G3MContext;
+
+class TimeInterval;
+
+#include <string>
 
 class IDownloader {
 public:
@@ -37,11 +37,13 @@ public:
 
   virtual long long requestBuffer(const URL& url,
                                   long long priority,
+                                  const TimeInterval& timeToCache,
                                   IBufferDownloadListener* listener,
                                   bool deleteListener) = 0;
 
   virtual long long requestImage(const URL& url,
                                  long long priority,
+                                 const TimeInterval& timeToCache,
                                  IImageDownloadListener* listener,
                                  bool deleteListener) = 0;
 

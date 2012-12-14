@@ -65,7 +65,7 @@ public class SGLayerNode extends SGNode
 	  return;
 	}
   
-	_context.getDownloader().requestImage(getURL(), DefineConstants.TEXTURES_DOWNLOAD_PRIORITY, new ImageDownloadListener(this), true);
+	_context.getDownloader().requestImage(getURL(), DefineConstants.TEXTURES_DOWNLOAD_PRIORITY, TimeInterval.fromDays(30), new ImageDownloadListener(this), true);
   }
 
   private IGLTextureId _textureId;

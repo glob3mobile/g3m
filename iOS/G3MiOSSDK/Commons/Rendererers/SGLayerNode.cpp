@@ -80,6 +80,7 @@ void SGLayerNode::requestImage() {
 
   _context->getDownloader()->requestImage(getURL(),
                                           TEXTURES_DOWNLOAD_PRIORITY,
+                                          TimeInterval::fromDays(30),
                                           new ImageDownloadListener(this),
                                           true);
 }

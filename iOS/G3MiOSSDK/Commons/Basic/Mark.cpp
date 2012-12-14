@@ -59,6 +59,7 @@ void Mark::initialize(const G3MContext* context) {
     
     downloader->requestImage(_textureURL,
                              1000000,
+                             TimeInterval::fromDays(30),
                              new TextureDownloadListener(this),
                              true);
   }

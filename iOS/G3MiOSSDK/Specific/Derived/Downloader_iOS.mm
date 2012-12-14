@@ -169,24 +169,24 @@ Downloader_iOS_Handler* Downloader_iOS::getHandlerToRun() {
 
 long long Downloader_iOS::requestImage(const URL& url,
                                        long long priority,
+                                       const TimeInterval& timeToCache,
                                        IImageDownloadListener* cppListener,
                                        bool deleteListener) {
-  
-  Downloader_iOS_Listener* iosListener = [[Downloader_iOS_Listener alloc]
-                                          initWithCPPImageListener: cppListener
-                                          deleteListener: deleteListener];
+
+  Downloader_iOS_Listener* iosListener = [[Downloader_iOS_Listener alloc] initWithCPPImageListener: cppListener
+                                                                                    deleteListener: deleteListener];
   
   return request(url, priority, iosListener);
 }
 
 long long Downloader_iOS::requestBuffer(const URL &url,
                                         long long priority,
+                                        const TimeInterval& timeToCache,
                                         IBufferDownloadListener* cppListener,
                                         bool deleteListener) {
   
-  Downloader_iOS_Listener* iosListener = [[Downloader_iOS_Listener alloc]
-                                          initWithCPPBufferListener: cppListener
-                                          deleteListener: deleteListener];
+  Downloader_iOS_Listener* iosListener = [[Downloader_iOS_Listener alloc] initWithCPPBufferListener: cppListener
+                                                                                     deleteListener: deleteListener];
   
   return request(url, priority, iosListener);
 }

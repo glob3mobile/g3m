@@ -116,7 +116,7 @@ public class Mark
 	{
 	  IDownloader downloader = context.getDownloader();
   
-	  downloader.requestImage(_textureURL, 1000000, new TextureDownloadListener(this), true);
+	  downloader.requestImage(_textureURL, 1000000, TimeInterval.fromDays(30), new TextureDownloadListener(this), true);
 	}
   }
 

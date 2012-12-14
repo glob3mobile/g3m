@@ -48,11 +48,13 @@ public:
   
   long long requestBuffer(const URL& url,
                           long long priority,
+                          const TimeInterval& timeToCache,
                           IBufferDownloadListener* listener,
                           bool deleteListener);
   
   long long requestImage(const URL& url,
                          long long priority,
+                         const TimeInterval& timeToCache,
                          IImageDownloadListener* listener,
                          bool deleteListener);
   
