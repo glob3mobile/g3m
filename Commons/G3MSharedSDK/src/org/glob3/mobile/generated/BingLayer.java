@@ -109,7 +109,7 @@ public class BingLayer extends Layer
 	tileURL+=_key;
   
 	final URL url = new URL(tileURL, false);
-	context.getDownloader().requestBuffer(url, 100000000, new TokenDownloadListener(this), true);
+	context.getDownloader().requestBuffer(url, 100000000, TimeInterval.fromDays(30), new TokenDownloadListener(this), true);
   
   }
 

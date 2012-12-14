@@ -23,7 +23,7 @@
 #include "JSONBoolean.hpp"
 
 #include "IStringUtils.hpp"
-
+#include "TimeInterval.hpp"
 
 
 class TokenDownloadListener : public IBufferDownloadListener {
@@ -97,7 +97,11 @@ void BingLayer::initialize(const G3MContext* context){
   tileURL+=_key;
 
   const URL url = URL(tileURL, false);
-  context->getDownloader()->requestBuffer(url, 100000000L, new TokenDownloadListener(this), true);
+  context->getDownloader()->requestBuffer(url,
+                                          100000000L,
+                                          TimeInterval::fromDays(30),
+                                          new TokenDownloadListener(this),
+                                          true);
   
 }
 

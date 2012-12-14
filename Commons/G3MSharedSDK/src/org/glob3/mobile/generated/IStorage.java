@@ -16,8 +16,20 @@ package org.glob3.mobile.generated;
 //
 
 
+///#include "URL.hpp"
+///#include "IByteBuffer.hpp"
+///#include "IImage.hpp"
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class URL;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IByteBuffer;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IImage;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class G3MContext;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class TimeInterval;
+
 
 public abstract class IStorage
 {
@@ -42,7 +54,7 @@ public abstract class IStorage
 
 //  virtual bool containsBuffer(const URL& url) = 0;
 
-  public abstract void saveBuffer(URL url, IByteBuffer buffer, boolean saveInBackground);
+  public abstract void saveBuffer(URL url, IByteBuffer buffer, TimeInterval timeToExpires, boolean saveInBackground);
 
   public abstract IByteBuffer readBuffer(URL url);
 
@@ -50,7 +62,7 @@ public abstract class IStorage
 
 //  virtual bool containsImage(const URL& url) = 0;
 
-  public abstract void saveImage(URL url, IImage image, boolean saveInBackground);
+  public abstract void saveImage(URL url, IImage image, TimeInterval timeToExpires, boolean saveInBackground);
 
   public abstract IImage readImage(URL url);
 

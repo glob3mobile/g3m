@@ -90,7 +90,7 @@ public class TileTextureBuilder extends RCObject
 	  //                                   : _tile->getLevel());
 	  final long priority = DefineConstants.TILE_DOWNLOAD_PRIORITY + _tile.getLevel();
 
-	  final long requestId = _downloader.requestImage(new URL(petition.getURL()), priority, new BuilderDownloadStepDownloadListener(this, i), true);
+	  final long requestId = _downloader.requestImage(new URL(petition.getURL()), priority, TimeInterval.fromDays(30), new BuilderDownloadStepDownloadListener(this, i), true);
 
 	  _requestsIds.add(requestId);
 	}

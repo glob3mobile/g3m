@@ -5,13 +5,15 @@ public class BufferSaverDownloadListener implements IBufferDownloadListener
   private IBufferDownloadListener _listener;
   private final boolean _deleteListener;
   private IStorage _storage;
+  private final TimeInterval _timeToCache;
 
-  public BufferSaverDownloadListener(CachedDownloader downloader, IBufferDownloadListener listener, boolean deleteListener, IStorage storage)
+  public BufferSaverDownloadListener(CachedDownloader downloader, IBufferDownloadListener listener, boolean deleteListener, IStorage storage, TimeInterval timeToCache)
   {
 	  _downloader = downloader;
 	  _listener = listener;
 	  _deleteListener = deleteListener;
 	  _storage = storage;
+	  _timeToCache = timeToCache;
 
   }
 
@@ -32,7 +34,7 @@ public class BufferSaverDownloadListener implements IBufferDownloadListener
 		//if (!_cacheStorage->containsBuffer(url)) {
 		_downloader.countSave();
 
-		_storage.saveBuffer(url, buffer, _downloader.saveInBackground());
+		_storage.saveBuffer(url, buffer, _timeToCache, _downloader.saveInBackground());
 		//}
 	  }
 	  else

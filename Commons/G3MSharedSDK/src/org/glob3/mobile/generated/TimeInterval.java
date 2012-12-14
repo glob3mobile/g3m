@@ -26,10 +26,10 @@ public class TimeInterval
 
   }
 
-  public TimeInterval()
-  {
-	  _milliseconds = 0;
-  }
+  //  TimeInterval() :
+  //  _milliseconds(0)
+  //  {
+  //  }
 
   public static TimeInterval fromMilliseconds(long milliseconds)
   {
@@ -38,7 +38,32 @@ public class TimeInterval
 
   public static TimeInterval fromSeconds(double seconds)
   {
-	return TimeInterval.fromMilliseconds((long)(seconds *1000.0));
+	return TimeInterval.fromMilliseconds((long)(seconds * 1000.0));
+  }
+
+  public static TimeInterval fromMinutes(double minutes)
+  {
+	return TimeInterval.fromSeconds(minutes * 60.0);
+  }
+
+  public static TimeInterval fromHours(double hours)
+  {
+	return TimeInterval.fromMinutes(hours * 60.0);
+  }
+
+  public static TimeInterval fromDays(double days)
+  {
+	return TimeInterval.fromHours(days * 24.0);
+  }
+
+  public static TimeInterval forever()
+  {
+	return new TimeInterval(IMathUtils.instance().maxInt64());
+  }
+
+  public static TimeInterval zero()
+  {
+	return new TimeInterval(0);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
