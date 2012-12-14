@@ -298,6 +298,11 @@ public final class G3MWidget_WebGL
 				} catch (e) {
 				}
 				if (context) {
+					canvas.addEventListener("webglcontextlost",
+							function(event) {
+								event.preventDefault();
+								$wnd.alert("webglcontextlost");
+							}, false);
 					break;
 				}
 			}
