@@ -19,7 +19,7 @@
 #include "MarksRenderer.hpp"
 
 enum layer_type {
-    WMS,THREED,PANO,GEOJSON
+    WMS,THREED,PLANARIMAGE,GEOJSON,SPHERICALIMAGE
 };
 
 class SceneParser{
@@ -52,7 +52,8 @@ private:
     void parserJSONLayerList(LayerSet* layerSet,JSONObject* jsonLayers);
     void parserJSONWMSLayer(LayerSet* layerSet, JSONObject* jsonLayer);
     void parserJSON3DLayer(LayerSet* layerSet, JSONObject* jsonLayer);
-    void parserJSONPanoLayer(LayerSet* layerSet, JSONObject* jsonLayer);
+    void parserJSONPlanarImageLayer(LayerSet* layerSet, JSONObject* jsonLayer);
+    void parserJSONSphericalImageLayer(LayerSet* layerSet, JSONObject* jsonLayer);
     void parserGEOJSONLayer(LayerSet* layerSet, JSONObject* jsonLayer);
     
 protected:

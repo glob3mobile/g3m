@@ -57,9 +57,11 @@ SceneParser* SceneParser::instance(){
 
 SceneParser::SceneParser(){
     _mapLayerType["WMS"] = WMS;
-    _mapLayerType["3D"] = THREED;
-    _mapLayerType["PANORAMICA"] = PANO;
+    _mapLayerType["THREED"] = THREED;
+    _mapLayerType["PLANARIMAGE"] = PLANARIMAGE;
     _mapLayerType["GEOJSON"] = GEOJSON;  
+    _mapLayerType["SPHERICALIMAGE"] = SPHERICALIMAGE;
+
 }
 
 void SceneParser::parse(LayerSet* layerSet, std::string namelessParameter){
@@ -86,11 +88,14 @@ void SceneParser::parserJSONLayerList(LayerSet* layerSet, JSONObject* jsonLayers
             case THREED:
                 parserJSON3DLayer(layerSet, jsonLayer);
                 break;
-            case PANO:
-                parserJSONPanoLayer(layerSet, jsonLayer);
+            case PLANARIMAGE:
+                parserJSONPlanarImageLayer(layerSet, jsonLayer);
                 break;
             case GEOJSON:
                 parserGEOJSONLayer(layerSet, jsonLayer);
+                break;
+            case SPHERICALIMAGE:
+                parserJSONSphericalImageLayer(layerSet, jsonLayer);
                 break;
         }
         delete isb;
@@ -141,7 +146,7 @@ void SceneParser::parserJSON3DLayer(LayerSet* layerSet, JSONObject* jsonLayer){
     cout << "Parsing 3D Layer " << jsonLayer->getAsString(NAME)->value() << "..." << endl;
 }
 
-void SceneParser::parserJSONPanoLayer(LayerSet* layerSet, JSONObject* jsonLayer){
+void SceneParser::parserJSONPlanarImageLayer(LayerSet* layerSet, JSONObject* jsonLayer){
     cout << "Parsing Pano Layer " << jsonLayer->getAsString(NAME)->value() << "..." << endl;
     
     const std::string geojsonDatasource = jsonLayer->getAsString(DATASOURCE)->value();
@@ -180,6 +185,10 @@ void SceneParser::parserGEOJSONLayer(LayerSet* layerSet, JSONObject* jsonLayer){
         
         _mapGeoJSONSources[url->getString()] = icon;
     }
+}
+
+void SceneParser::parserJSONSphericalImageLayer(LayerSet* layerSet, JSONObject* jsonLayer){
+    cout << "Parsing GEOJSON Layer not available" << endl;
 }
 
 std::map<std::string, std::string> SceneParser::getMapGeoJSONSources(){
