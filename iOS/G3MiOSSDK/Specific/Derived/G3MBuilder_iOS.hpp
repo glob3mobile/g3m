@@ -13,18 +13,18 @@
 #import "G3MWidget_iOS.h"
 
 class G3MBuilder_iOS : public IG3MBuilder {
-
 private:
-    G3MWidget_iOS* _nativeWidget;
-    
+  G3MWidget_iOS* _nativeWidget;
+
 protected:
-    IThreadUtils* createThreadUtils();
-    IStorage* createStorage();
-    IDownloader* createDownloader();
+  IThreadUtils* createThreadUtils();
+  IStorage*     createStorage();
+  IDownloader*  createDownloader();
 
 public:
-    G3MBuilder_iOS(G3MWidget_iOS* nativeWidget);
-    void initializeWidget();
+  G3MBuilder_iOS(G3MWidget_iOS* nativeWidget);
+
+  void initializeWidget();
 
 };
 

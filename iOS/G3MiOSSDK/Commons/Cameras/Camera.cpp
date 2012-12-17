@@ -46,11 +46,11 @@ void Camera::copyFrom(const Camera &that) {
   _geodeticCenterOfView = (that._geodeticCenterOfView == NULL) ? NULL : new Geodetic3D(*that._geodeticCenterOfView);
 
 #ifdef C_CODE
-    delete _frustum;
-    delete _frustumInModelCoordinates;
-    delete _halfFrustum;
-    delete _halfFrustumInModelCoordinates;
-    delete _camEffectTarget;
+  delete _frustum;
+  delete _frustumInModelCoordinates;
+  delete _halfFrustum;
+  delete _halfFrustumInModelCoordinates;
+  delete _camEffectTarget;
 #endif
 
   _camEffectTarget = new CameraEffectTarget();
@@ -287,6 +287,6 @@ Angle Camera::compute3DAngularDistance(const Vector2I& pixel0,
   if (point1.isNan()) {
     return Angle::nan();
   }
-
+  
   return point0.angleBetween(point1);
 }
