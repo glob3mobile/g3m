@@ -112,7 +112,6 @@ G3MWidget* IG3MBuilder::create() {
       mainRenderer = _tileRenderer;
     }
 
-
     if (!_busyRenderer) {
       _busyRenderer = new BusyMeshRenderer();
     }
@@ -263,14 +262,12 @@ void IG3MBuilder::addRenderer(Renderer *renderer) {
   _renderers.push_back(renderer);
 }
 
-void IG3MBuilder::setInitializationTask(GInitializationTask *initializationTask) {
+void IG3MBuilder::setInitializationTask(GInitializationTask *initializationTask,
+                                        const bool autoDeleteInitializationTask) {
   if (_initializationTask != initializationTask) {
     delete _initializationTask;
     _initializationTask = initializationTask;
   }
-}
-
-void IG3MBuilder::setAutoDeleteInitializationTask(const bool autoDeleteInitializationTask) {
   _autoDeleteInitializationTask = autoDeleteInitializationTask;
 }
 

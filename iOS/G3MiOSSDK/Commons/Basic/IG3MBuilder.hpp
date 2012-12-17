@@ -75,8 +75,8 @@ public:
   void setTileRenderer(TileRenderer * tileRenderer);
   void setBusyRenderer(Renderer* busyRenderer);
   void addRenderer(Renderer* renderer);
-  void setInitializationTask(GInitializationTask* initializationTask);
-  void setAutoDeleteInitializationTask(const bool autoDeleteInitializationTask);
+  void setInitializationTask(GInitializationTask* initializationTask,
+                             const bool autoDeleteInitializationTask);
   void addPeriodicalTask(PeriodicalTask* periodicalTask);
   void setLogFPS(const bool logFPS);
   void setLogDownloaderStatistics(const bool logDownloaderStatistics);
