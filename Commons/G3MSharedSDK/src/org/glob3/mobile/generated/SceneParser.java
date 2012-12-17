@@ -64,11 +64,14 @@ public class SceneParser
 				case THREED:
 					parserJSON3DLayer(layerSet, jsonLayer);
 					break;
-				case PANO:
-					parserJSONPanoLayer(layerSet, jsonLayer);
+				case PLANARIMAGE:
+					parserJSONPlanarImageLayer(layerSet, jsonLayer);
 					break;
 				case GEOJSON:
 					parserGEOJSONLayer(layerSet, jsonLayer);
+					break;
+				case SPHERICALIMAGE:
+					parserJSONSphericalImageLayer(layerSet, jsonLayer);
 					break;
 			}
 			if (isb != null)
@@ -121,7 +124,7 @@ public class SceneParser
 		System.out.print("...");
 		System.out.print("\n");
 	}
-	private void parserJSONPanoLayer(LayerSet layerSet, JSONObject jsonLayer)
+	private void parserJSONPlanarImageLayer(LayerSet layerSet, JSONObject jsonLayer)
 	{
 		System.out.print("Parsing Pano Layer ");
 		System.out.print(jsonLayer.getAsString(NAME).value());
@@ -145,6 +148,11 @@ public class SceneParser
 		}
     
     
+	}
+	private void parserJSONSphericalImageLayer(LayerSet layerSet, JSONObject jsonLayer)
+	{
+		System.out.print("Parsing GEOJSON Layer not available");
+		System.out.print("\n");
 	}
 	private void parserGEOJSONLayer(LayerSet layerSet, JSONObject jsonLayer)
 	{
@@ -174,9 +182,11 @@ public class SceneParser
 	protected SceneParser()
 	{
 		_mapLayerType.put("WMS", layer_type.WMS);
-		_mapLayerType.put("3D", layer_type.THREED);
-		_mapLayerType.put("PANORAMICA", layer_type.PANO);
+		_mapLayerType.put("THREED", layer_type.THREED);
+		_mapLayerType.put("PLANARIMAGE", layer_type.PLANARIMAGE);
 		_mapLayerType.put("GEOJSON", layer_type.GEOJSON);
+		_mapLayerType.put("SPHERICALIMAGE", layer_type.SPHERICALIMAGE);
+    
 	}
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //	SceneParser(SceneParser NamelessParameter);

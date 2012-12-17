@@ -24,8 +24,9 @@ public enum layer_type
 {
 	WMS,
 	THREED,
-	PANO,
-	GEOJSON;
+	PLANARIMAGE,
+	GEOJSON,
+	SPHERICALIMAGE;
 
 	public int getValue()
 	{
