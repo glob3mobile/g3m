@@ -283,7 +283,7 @@
         layerSet->addLayer(bing);
     }
     
-    bool useOSM = true;
+    bool useOSM = false;
     if (useOSM) {
         //    WMSLayer *osm = new WMSLayer("osm",
         //                                 URL("http://wms.latlon.org/"),
@@ -634,6 +634,7 @@
 
 - (void)viewDidUnload
 {
+        G3MWidget = nil;
   [super viewDidUnload];
   // Release any retained subviews of the main view.
   // e.g. self.myOutlet = nil;
@@ -656,6 +657,7 @@
 
 - (void)viewDidDisappear:(BOOL)animated
 {
+        [G3MWidget stopAnimation];
 	[super viewDidDisappear:animated];
 }
 
