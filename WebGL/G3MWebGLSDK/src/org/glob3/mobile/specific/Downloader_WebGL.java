@@ -44,7 +44,12 @@ public final class Downloader_WebGL
       _downloadingHandlers = new HashMap<URL, Downloader_WebGL_Handler>();
       _queuedHandlers = new HashMap<URL, Downloader_WebGL_Handler>();
       _delayMillis = delayMillis;
-      _proxy = proxy;
+      if ((proxy != null) && !proxy.trim().equals("")) {
+         _proxy = proxy.trim();
+      }
+      else {
+         _proxy = defineDefaultProxy();
+      }
 
       final Downloader_WebGL thisDownloader = this;
       _timer = new Timer() {
@@ -251,6 +256,13 @@ public final class Downloader_WebGL
       }
 
       return selectedHandler;
+   }
+
+
+   private String defineDefaultProxy() {
+      final String defaultProxy = GWT.getHostPageBaseURL() + "proxy?url=";
+
+      return defaultProxy;
    }
 
 

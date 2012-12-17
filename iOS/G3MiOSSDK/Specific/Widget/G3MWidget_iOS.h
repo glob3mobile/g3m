@@ -10,16 +10,23 @@
 #import <QuartzCore/QuartzCore.h>
 
 #import "TouchEvent.hpp"
+#import "GL.hpp"
 
 //class G3MWidget;
 
 @class ES2Renderer;
 
+class IStorage;
+class IDownloader;
+class IThreadUtils;
+class Planet;
+class Color;
 class CameraRenderer;
 class LayerSet;
 class ICameraConstrainer;
 class Renderer;
 class UserData;
+class TileRenderer;
 class TilesRenderParameters;
 class G3MWidget;
 class PeriodicalTask;
@@ -58,22 +65,25 @@ enum GL_version {
 
 - (void)drawView: (id)sender;
 
-- (void)initWidgetWithCameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstraints
-                               layerSet: (LayerSet*) layerSet
-                 incrementalTileQuality: (bool) incrementalTileQuality
-                              renderers: (std::vector<Renderer*>) renderers
-                               userData: (UserData*) userData
-                     initializationTask: (GInitializationTask*) initializationTask
-                        periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks;
+- (void)initWidget: (IStorage*) storage
+        downloader: (IDownloader*) downloader
+       threadUtils: (IThreadUtils*) threadUtils
+            planet: (const Planet*) planet
+ cameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstrainers
+    cameraRenderer: (CameraRenderer*) cameraRenderer
+      mainRenderer: (Renderer*) mainRenderer
+      busyRenderer: (Renderer*) busyRenderer
+   backgroundColor: (Color) backgroundColor
+            logFPS: (bool) logFPS
+logDownloaderStatistics: (bool) logDownloaderStatistics
+initializationTask: (GInitializationTask*) initializationTask
+autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
+   periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
+          userData: (UserData*) userData;
 
-- (void)initWidgetWithCameraRenderer: (CameraRenderer*) cameraRenderer
-                   cameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstraints
-                            layerSet: (LayerSet*) layerSet
-               tilesRenderParameters: (TilesRenderParameters*) parameters
-                           renderers: (std::vector<Renderer*>) renderers
-                            userData: (UserData*) userData
-                  initializationTask: (GInitializationTask*) initializationTask
-                     periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks;
+- (GL*)getGL;
+
+- (void)setWidget: (G3MWidget*) widget;
 
 - (G3MWidget*) widget;
 

@@ -59,8 +59,6 @@ G3MWidget::G3MWidget(GL*                              gl,
                      CameraRenderer*                  cameraRenderer,
                      Renderer*                        mainRenderer,
                      Renderer*                        busyRenderer,
-                     int                              width,
-                     int                              height,
                      Color                            backgroundColor,
                      const bool                       logFPS,
                      const bool                       logDownloaderStatistics,
@@ -86,8 +84,10 @@ _cameraConstrainers(cameraConstrainers),
 _cameraRenderer(cameraRenderer),
 _mainRenderer(mainRenderer),
 _busyRenderer(busyRenderer),
-_currentCamera(new Camera(width, height)),
-_nextCamera(new Camera(width, height)),
+_width(1),
+_height(1),
+_currentCamera(new Camera(_width, _height)),
+_nextCamera(new Camera(_width, _height)),
 _backgroundColor(backgroundColor),
 _timer(IFactory::instance()->createTimer()),
 _renderCounter(0),
@@ -150,8 +150,6 @@ G3MWidget* G3MWidget::create(GL*                              gl,
                              CameraRenderer*                  cameraRenderer,
                              Renderer*                        mainRenderer,
                              Renderer*                        busyRenderer,
-                             int                              width,
-                             int                              height,
                              Color                            backgroundColor,
                              const bool                       logFPS,
                              const bool                       logDownloaderStatistics,
@@ -168,7 +166,6 @@ G3MWidget* G3MWidget::create(GL*                              gl,
                        cameraRenderer,
                        mainRenderer,
                        busyRenderer,
-                       width, height,
                        backgroundColor,
                        logFPS,
                        logDownloaderStatistics,
@@ -266,6 +263,8 @@ void G3MWidget::onResizeViewportEvent(int width, int height) {
 
     _nextCamera->resizeViewport(width, height);
 
+       _nextCamera->resizeViewport(width, height);
+      
     _cameraRenderer->onResizeViewportEvent(&ec, width, height);
 
     if (_mainRenderer->isEnable()) {
@@ -274,10 +273,18 @@ void G3MWidget::onResizeViewportEvent(int width, int height) {
   }
 }
 
-void G3MWidget::render() {
-  if (_paused) {
-    return;
-  }
+
+void G3MWidget::render(int width, int height) {
+    if (_paused) {
+        return;
+    }
+
+    if ((_width != width || _height != height) && _mainRendererReady) {
+        _width = width;
+        _height = height;
+        
+        onResizeViewportEvent(_width, _height);
+    }
 
   _timer->start();
   _renderCounter++;

@@ -13,6 +13,7 @@ import org.glob3.mobile.generated.TouchEventType;
 import org.glob3.mobile.generated.Vector2I;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
@@ -21,16 +22,19 @@ import com.google.gwt.user.client.Event;
 
 public final class MotionEventProcessor {
 
-   final static String     TAG        = "MotionEventProcessor";
+   final static String            TAG        = "MotionEventProcessor";
 
-   private final G3MWidget _widget;
-   private boolean         _mouseDown = false;
-   private boolean         _keyDown   = false;
-   private Vector2I        _prevPos   = null;
+   private final G3MWidget        _widget;
+   private final JavaScriptObject _canvas;
+   private boolean                _mouseDown = false;
+   private boolean                _keyDown   = false;
+   private Vector2I               _prevPos   = null;
 
 
-   public MotionEventProcessor(final G3MWidget widget) {
+   public MotionEventProcessor(final G3MWidget widget,
+                               final JavaScriptObject canvas) {
       _widget = widget;
+      _canvas = canvas;
 
       jsAddMouseWheelListener();
    }
@@ -227,8 +231,7 @@ public final class MotionEventProcessor {
 		//      debugger;
 		var thisInstance = this;
 
-		var canvas = $doc
-				.getElementById(@org.glob3.mobile.specific.G3MWidget_WebGL::CANVAS_ID);
+		var canvas = this.@org.glob3.mobile.specific.MotionEventProcessor::_canvas;
 
 		$wnd.g3mMouseWheelHandler = function(e) {
 			// cross-browser wheel delta

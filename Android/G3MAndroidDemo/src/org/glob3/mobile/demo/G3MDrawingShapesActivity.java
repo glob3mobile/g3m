@@ -10,6 +10,7 @@ import org.glob3.mobile.generated.BoxShape;
 import org.glob3.mobile.generated.CircleShape;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.G3MContext;
+import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.PeriodicalTask;
@@ -18,6 +19,7 @@ import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.Vector3D;
 import org.glob3.mobile.specific.G3MBaseActivity;
+import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
 
 import android.os.Bundle;
@@ -43,26 +45,21 @@ public class G3MDrawingShapesActivity
    public void onCreate(final Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
 
-
       setContentView(R.layout.bar_glob3_template);
 
-      final G3MBuilder glob3Builder = new G3MBuilder();
-
-      final ArrayList<Renderer> renderers = new ArrayList<Renderer>();
-
-
-      initializeShapes(renderers);
       initializeToolbar();
 
-      final ArrayList<PeriodicalTask> periodicalTasks = new ArrayList<PeriodicalTask>();
+      final G3MBuilder_Android g3mBuilder = new G3MBuilder_Android(this);
 
+      final ArrayList<Renderer> renderers = new ArrayList<Renderer>();
+      initializeShapes(renderers);
+      for (final Renderer renderer : renderers) {
+         g3mBuilder.addRenderer(renderer);
+      }
 
       final PeriodicalTask task = new PeriodicalTask(TimeInterval.fromSeconds(2), new GTask() {
-
          @Override
          public void run(final G3MContext context) {
-
-
             if (_animationFlag) {
 
                final int min = -50;
@@ -78,15 +75,74 @@ public class G3MDrawingShapesActivity
             }
          }
       });
-
-
-      periodicalTasks.add(task);
+      g3mBuilder.addPeriodicalTask(task);
 
       final Geodetic3D position = new Geodetic3D(G3MGlob3Constants.SAN_FRANCISCO_POSITION, 5000000);
-      _widgetAndroid = glob3Builder.getRenderersAnimationGlob3InitialPosition(getApplicationContext(), renderers,
-               periodicalTasks, position);
+      final GInitializationTask initializationTask = new GInitializationTask() {
+         @Override
+         public void run(final G3MContext context) {
+            _widgetAndroid.setAnimatedCameraPosition(position, TimeInterval.fromSeconds(5));
+         }
+
+
+         @Override
+         public boolean isDone(final G3MContext context) {
+            return true;
+         }
+      };
+      g3mBuilder.setInitializationTask(initializationTask);
+
+      _widgetAndroid = g3mBuilder.createWidget();
       final LinearLayout layout = (LinearLayout) findViewById(R.id.glob3);
       layout.addView(_widgetAndroid);
+
+
+      //      super.onCreate(savedInstanceState);
+      //
+      //
+      //      setContentView(R.layout.bar_glob3_template);
+      //
+      //      final G3MBuilder glob3Builder = new G3MBuilder();
+      //
+      //      final ArrayList<Renderer> renderers = new ArrayList<Renderer>();
+      //
+      //
+      //      initializeShapes(renderers);
+      //      initializeToolbar();
+      //
+      //      final ArrayList<PeriodicalTask> periodicalTasks = new ArrayList<PeriodicalTask>();
+      //
+      //
+      //      final PeriodicalTask task = new PeriodicalTask(TimeInterval.fromSeconds(2), new GTask() {
+      //
+      //         @Override
+      //         public void run(final G3MContext context) {
+      //
+      //
+      //            if (_animationFlag) {
+      //
+      //               final int min = -50;
+      //               final int max = 50;
+      //
+      //               final Random r = new Random();
+      //               final int i1 = r.nextInt((max - min) + 1) + min;
+      //
+      //               _boxShape.setAnimatedScale(1, 1, i1);
+      //               _circleShape.setPosition(new Geodetic3D(G3MGlob3Constants.SAN_FRANCISCO_POSITION.latitude().add(
+      //                        Angle.fromDegrees(i1 / 5)), G3MGlob3Constants.SAN_FRANCISCO_POSITION.longitude().add(
+      //                        Angle.fromDegrees(i1 / 5)), Math.abs(i1) * 5000));
+      //            }
+      //         }
+      //      });
+      //
+      //
+      //      periodicalTasks.add(task);
+      //
+      //      final Geodetic3D position = new Geodetic3D(G3MGlob3Constants.SAN_FRANCISCO_POSITION, 5000000);
+      //      _widgetAndroid = glob3Builder.getRenderersAnimationGlob3InitialPosition(getApplicationContext(), renderers,
+      //               periodicalTasks, position);
+      //      final LinearLayout layout = (LinearLayout) findViewById(R.id.glob3);
+      //      layout.addView(_widgetAndroid);
 
 
    }

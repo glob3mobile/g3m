@@ -25,8 +25,8 @@ class GL;
   EAGLContext *context;
   
   // The pixel dimensions of the CAEAGLLayer
-  GLint backingWidth;
-  GLint backingHeight;
+  GLint _width;
+  GLint _height;
   
   // The OpenGL ES names for the framebuffer and renderbuffer used to render to this view
   GLuint defaultFramebuffer, colorRenderbuffer, depthRenderbuffer;

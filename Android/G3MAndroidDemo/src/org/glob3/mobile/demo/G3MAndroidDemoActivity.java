@@ -236,14 +236,14 @@ public class G3MAndroidDemoActivity
       final GInitializationTask initializationTask = null;
       final ArrayList<PeriodicalTask> periodicalTasks = new ArrayList<PeriodicalTask>();
       final boolean incrementalTileQuality = false;
-      widget.initWidget( //
-               cameraConstraints, //
-               layerSet, //
-               renderers, //
-               userData, //
-               initializationTask, //
-               periodicalTasks, //
-               incrementalTileQuality);
+      //      widget.initWidget( //
+      //               cameraConstraints, //
+      //               layerSet, //
+      //               renderers, //
+      //               userData, //
+      //               initializationTask, //
+      //               periodicalTasks, //
+      //               incrementalTileQuality);
 
    }
 

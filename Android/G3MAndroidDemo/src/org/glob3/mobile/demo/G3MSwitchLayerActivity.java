@@ -4,6 +4,7 @@ package org.glob3.mobile.demo;
 
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.WMSLayer;
+import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
 
 import android.app.Activity;
@@ -28,26 +29,45 @@ public class G3MSwitchLayerActivity
    @Override
    public void onCreate(final Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
+
       //Don't forget to assign the layout and inflate it
       setContentView(R.layout.bar_glob3_template);
 
       initializeToolbar();
 
-      final G3MBuilder glob3Builder = new G3MBuilder();
+      final G3MBuilder_Android g3mBuilder = new G3MBuilder_Android(this);
 
       final LayerSet layers = new LayerSet();
-
       _BingLayer.setEnable(true);
       _OSMLayer.setEnable(false);
-
       layers.addLayer(_BingLayer);
       layers.addLayer(_OSMLayer);
+      g3mBuilder.setLayerSet(layers);
 
-      _widgetAndroid = glob3Builder.getCustomLayersGlob3(getApplicationContext(), layers);
+      _widgetAndroid = g3mBuilder.createWidget();
       final LinearLayout layout = (LinearLayout) findViewById(R.id.glob3);
       layout.addView(_widgetAndroid);
 
 
+      //      super.onCreate(savedInstanceState);
+      //      //Don't forget to assign the layout and inflate it
+      //      setContentView(R.layout.bar_glob3_template);
+      //
+      //      initializeToolbar();
+      //
+      //      final G3MBuilder glob3Builder = new G3MBuilder();
+      //
+      //      final LayerSet layers = new LayerSet();
+      //
+      //      _BingLayer.setEnable(true);
+      //      _OSMLayer.setEnable(false);
+      //
+      //      layers.addLayer(_BingLayer);
+      //      layers.addLayer(_OSMLayer);
+      //
+      //      _widgetAndroid = glob3Builder.getCustomLayersGlob3(getApplicationContext(), layers);
+      //      final LinearLayout layout = (LinearLayout) findViewById(R.id.glob3);
+      //      layout.addView(_widgetAndroid);
    }
 
 

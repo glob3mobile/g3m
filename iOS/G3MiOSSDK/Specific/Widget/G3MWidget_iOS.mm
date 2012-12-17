@@ -11,37 +11,9 @@
 #import "ES2Renderer.h"
 
 #include "G3MWidget.hpp"
-#include "CompositeRenderer.hpp"
-#include "Planet.hpp"
-#include "CameraRenderer.hpp"
-#include "CameraSingleDragHandler.hpp"
-#include "CameraDoubleDragHandler.hpp"
-#include "CameraRotationHandler.hpp"
-#include "CameraDoubleTapHandler.hpp"
-#include "CameraConstraints.hpp"
-#include "TileRenderer.hpp"
-#include "EllipsoidalTileTessellator.hpp"
-#include "SQLiteStorage_iOS.hpp"
-#include "BusyMeshRenderer.hpp"
-#include "CPUTextureBuilder.hpp"
-#include "LayerSet.hpp"
-#include "CachedDownloader.hpp"
-#include "Downloader_iOS.hpp"
-
-//#include "INativeGL.hpp"
-//#include "GL.hpp"
-
-#include "MultiLayerTileTexturizer.hpp"
-#include "TilesRenderParameters.hpp"
-#include "IStringBuilder.hpp"
-#include "Box.hpp"
-#include "TexturesHandler.hpp"
-#include "WMSLayer.hpp"
 #include "MathUtils_iOS.hpp"
-#include "ThreadUtils_iOS.hpp"
 #include "Logger_iOS.hpp"
 #include "Factory_iOS.hpp"
-//#include "NativeGL2_iOS.hpp"
 #include "StringUtils_iOS.hpp"
 #include "JSONParser_iOS.hpp"
 #include "StringBuilder_iOS.hpp"
@@ -66,106 +38,47 @@
   return [CAEAGLLayer class];
 }
 
-- (void) initWidgetWithCameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstraints
-                                layerSet: (LayerSet*) layerSet
-                  incrementalTileQuality: (bool) incrementalTileQuality
-                               renderers: (std::vector<Renderer*>) renderers
-                                userData: (UserData*) userData
-                      initializationTask: (GInitializationTask*) initializationTask
-                         periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
+
+- (void)initWidget: (IStorage*) storage
+        downloader: (IDownloader*) downloader
+       threadUtils: (IThreadUtils*) threadUtils
+            planet: (const Planet*) planet
+ cameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstraints
+    cameraRenderer: (CameraRenderer*) cameraRenderer
+      mainRenderer: (Renderer*) mainRenderer
+      busyRenderer: (Renderer*) busyRenderer
+   backgroundColor: (Color) backgroundColor
+            logFPS: (bool) logFPS
+logDownloaderStatistics: (bool) logDownloaderStatistics
+initializationTask: (GInitializationTask*) initializationTask
+autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
+   periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
+          userData: (UserData*) userData
 {
-  // creates default camera-renderer and camera-handlers
-  CameraRenderer *cameraRenderer = new CameraRenderer();
-
-  const bool useInertia = true;
-  cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
-
-  const bool processRotation = true;
-  const bool processZoom = true;
-  cameraRenderer->addHandler(new CameraDoubleDragHandler(processRotation,
-                                                         processZoom));
-  cameraRenderer->addHandler(new CameraRotationHandler());
-  cameraRenderer->addHandler(new CameraDoubleTapHandler());
-
-  const bool renderDebug = false;
-  const bool useTilesSplitBudget = true;
-  const bool forceTopLevelTilesRenderOnStart = true;
-
-  TilesRenderParameters* parameters = TilesRenderParameters::createDefault(renderDebug,
-                                                                           useTilesSplitBudget,
-                                                                           forceTopLevelTilesRenderOnStart,
-                                                                           incrementalTileQuality);
-
-  [self initWidgetWithCameraRenderer: cameraRenderer
-                   cameraConstraints: cameraConstraints
-                            layerSet: layerSet
-               tilesRenderParameters: parameters
-                           renderers: renderers
-                            userData: userData
-                  initializationTask: initializationTask
-                     periodicalTasks: periodicalTasks];
+    _widgetVP = G3MWidget::create([_renderer getGL],
+                                  storage,
+                                  downloader,
+                                  threadUtils,
+                                  planet,
+                                  cameraConstraints,
+                                  cameraRenderer,
+                                  mainRenderer,
+                                  busyRenderer,
+                                  backgroundColor,
+                                  logFPS,
+                                  logDownloaderStatistics,
+                                  initializationTask,
+                                  autoDeleteInitializationTask,
+                                  periodicalTasks);
+    [self widget]->setUserData(userData);
 }
 
-- (void) initWidgetWithCameraRenderer: (CameraRenderer*) cameraRenderer
-                    cameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstraints
-                             layerSet: (LayerSet*) layerSet
-                tilesRenderParameters: (TilesRenderParameters*) parameters
-                            renderers: (std::vector<Renderer*>) renderers
-                             userData: (UserData*) userData
-                   initializationTask: (GInitializationTask*) initializationTask
-                      periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
-{
-  const int width  = (int) [self frame].size.width;
-  const int height = (int) [self frame].size.height;
+- (GL*)getGL {
+    return [_renderer getGL];
+}
 
-  //NativeGL2_iOS* nativeGL = new NativeGL2_iOS();
-
-  IStorage* storage = new SQLiteStorage_iOS("g3m.cache");
-
-  const bool saveInBackground = true;
-  IDownloader* downloader = new CachedDownloader(new Downloader_iOS(8),
-                                                 storage,
-                                                 saveInBackground);
-
-  IThreadUtils* threadUtils = new ThreadUtils_iOS();
-
-  CompositeRenderer* mainRenderer = new CompositeRenderer();
-
-  if (layerSet != NULL) {
-    TileTexturizer* texturizer = new MultiLayerTileTexturizer();
-
-    const bool showStatistics = false;
-    TileRenderer* tr = new TileRenderer(new EllipsoidalTileTessellator(parameters->_tileResolution, true),
-                                        texturizer,
-                                        layerSet,
-                                        parameters,
-                                        showStatistics);
-    mainRenderer->addRenderer(tr);
-  }
-
-  for (int i = 0; i < renderers.size(); i++) {
-    mainRenderer->addRenderer(renderers[i]);
-  }
-  const Planet* planet = Planet::createEarth();
-
-  Renderer* busyRenderer = new BusyMeshRenderer();
-  _widgetVP = G3MWidget::create([_renderer getGL],
-                                storage,
-                                downloader,
-                                threadUtils,
-                                planet,
-                                cameraConstraints,
-                                cameraRenderer,
-                                mainRenderer,
-                                busyRenderer,
-                                width, height,
-                                Color::fromRGBA((float)0, (float)0.1, (float)0.2, (float)1),
-                                true,
-                                false,
-                                initializationTask,
-                                true,
-                                periodicalTasks);
-  [self widget]->setUserData(userData);
+- (void)setWidget:(G3MWidget*) widget {
+    _widgetVP = widget;
 }
 
 //The EAGL view is stored in the nib file. When it's unarchived it's sent -initWithCoder:

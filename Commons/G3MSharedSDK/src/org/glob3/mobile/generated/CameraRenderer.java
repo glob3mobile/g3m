@@ -79,7 +79,7 @@ public class CameraRenderer extends LeafRenderer
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
-	// moved to G3MWidget::onResizeViewportEvent
+  //  moved to G3MWidget::onResizeViewportEvent
   //  if (_cameraContext != NULL) {
   //    _cameraContext->getNextCamera()->resizeViewport(width, height);
   //  }

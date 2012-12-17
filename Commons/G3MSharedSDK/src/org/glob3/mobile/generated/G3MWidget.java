@@ -19,10 +19,10 @@ public class G3MWidget
 	}
   }
 
-  public static G3MWidget create(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, int width, int height, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks)
+  public static G3MWidget create(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks)
   {
   
-	return new G3MWidget(gl, storage, downloader, threadUtils, planet, cameraConstrainers, cameraRenderer, mainRenderer, busyRenderer, width, height, backgroundColor, logFPS, logDownloaderStatistics, initializationTask, autoDeleteInitializationTask, periodicalTasks);
+	return new G3MWidget(gl, storage, downloader, threadUtils, planet, cameraConstrainers, cameraRenderer, mainRenderer, busyRenderer, backgroundColor, logFPS, logDownloaderStatistics, initializationTask, autoDeleteInitializationTask, periodicalTasks);
   }
 
   public void dispose()
@@ -72,12 +72,20 @@ public class G3MWidget
 		_rootState.dispose();
   }
 
-  public final void render()
+  public final void render(int width, int height)
   {
-	if (_paused)
-	{
-	  return;
-	}
+	  if (_paused)
+	  {
+		  return;
+	  }
+  
+	  if ((_width != width || _height != height) && _mainRendererReady)
+	  {
+		  _width = width;
+		  _height = height;
+  
+		  onResizeViewportEvent(_width, _height);
+	  }
   
 	_timer.start();
 	_renderCounter++;
@@ -246,6 +254,8 @@ public class G3MWidget
 	  G3MEventContext ec = new G3MEventContext(IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _downloader, _effectsScheduler, _storage);
   
 	  _nextCamera.resizeViewport(width, height);
+  
+		 _nextCamera.resizeViewport(width, height);
   
 	  _cameraRenderer.onResizeViewportEvent(ec, width, height);
   
@@ -467,6 +477,9 @@ public class G3MWidget
 
   private java.util.ArrayList<PeriodicalTask> _periodicalTasks = new java.util.ArrayList<PeriodicalTask>();
 
+	private int _width;
+	private int _height;
+
   private void initializeGL()
   {
 	//_gl->enableDepthTest();
@@ -482,7 +495,7 @@ public class G3MWidget
 
   private boolean _initializationTaskWasRun;
 
-  private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, int width, int height, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks)
+  private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks)
   /*
    =======
   _gl( new GL(nativeGL, false) ),
@@ -503,8 +516,10 @@ public class G3MWidget
 	  _cameraRenderer = cameraRenderer;
 	  _mainRenderer = mainRenderer;
 	  _busyRenderer = busyRenderer;
-	  _currentCamera = new Camera(width, height);
-	  _nextCamera = new Camera(width, height);
+	  _width = 1;
+	  _height = 1;
+	  _currentCamera = new Camera(_width, _height);
+	  _nextCamera = new Camera(_width, _height);
 	  _backgroundColor = new Color(backgroundColor);
 	  _timer = IFactory.instance().createTimer();
 	  _renderCounter = 0;

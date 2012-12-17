@@ -124,14 +124,14 @@ public class G3MBuilder {
       }
 
 
-      glob3.initWidget( //
-               cameraConstraints, //
-               layerSet, //
-               renderers, //
-               userData, //
-               initializationTask, //
-               periodicalTasks, //
-               incrementalTileQuality);
+      //      glob3.initWidget( //
+      //               cameraConstraints, //
+      //               layerSet, //
+      //               renderers, //
+      //               userData, //
+      //               initializationTask, //
+      //               periodicalTasks, //
+      //               incrementalTileQuality);
 
       return glob3;
    }
@@ -150,14 +150,14 @@ public class G3MBuilder {
 
       final ArrayList<Renderer> renderers = new ArrayList<Renderer>();
 
-      glob3.initWidget( //
-               cameraConstraints, //
-               layerSet, //
-               renderers, //
-               userData, //
-               initializationTask, //
-               periodicalTasks, //
-               incrementalTileQuality);
+      //      glob3.initWidget( //
+      //               cameraConstraints, //
+      //               layerSet, //
+      //               renderers, //
+      //               userData, //
+      //               initializationTask, //
+      //               periodicalTasks, //
+      //               incrementalTileQuality);
 
       return glob3;
    }
@@ -173,14 +173,14 @@ public class G3MBuilder {
 
       final ArrayList<Renderer> renderers = new ArrayList<Renderer>();
 
-      glob3.initWidget( //
-               cameraConstraints, //
-               layerSet, //
-               renderers, //
-               userData, //
-               initializationTask, //
-               periodicalTasks, //
-               incrementalTileQuality);
+      //      glob3.initWidget( //
+      //               cameraConstraints, //
+      //               layerSet, //
+      //               renderers, //
+      //               userData, //
+      //               initializationTask, //
+      //               periodicalTasks, //
+      //               incrementalTileQuality);
 
       return glob3;
 
@@ -197,14 +197,14 @@ public class G3MBuilder {
       final LayerSet layerSet = new LayerSet();
       layerSet.addLayer(bingLayer);
 
-      glob3.initWidget( //
-               cameraConstraints, //
-               layerSet, //
-               renderers, //
-               userData, //
-               initializationTask, //
-               periodicalTasks, //
-               incrementalTileQuality);
+      //      glob3.initWidget( //
+      //               cameraConstraints, //
+      //               layerSet, //
+      //               renderers, //
+      //               userData, //
+      //               initializationTask, //
+      //               periodicalTasks, //
+      //               incrementalTileQuality);
 
       return glob3;
 
@@ -222,14 +222,14 @@ public class G3MBuilder {
       final LayerSet layerSet = new LayerSet();
       layerSet.addLayer(bingLayer);
 
-      glob3.initWidget( //
-               cameraConstraints, //
-               layerSet, //
-               renderers, //
-               userData, //
-               initializationTask, //
-               periodicalTasks2, //
-               incrementalTileQuality);
+      //      glob3.initWidget( //
+      //               cameraConstraints, //
+      //               layerSet, //
+      //               renderers, //
+      //               userData, //
+      //               initializationTask, //
+      //               periodicalTasks2, //
+      //               incrementalTileQuality);
 
       return glob3;
    }
@@ -263,14 +263,14 @@ public class G3MBuilder {
       final LayerSet layerSet = new LayerSet();
       layerSet.addLayer(bingLayer);
 
-      glob3.initWidget( //
-               cameraConstraints, //
-               layerSet, //
-               renderers, //
-               userData, //
-               initializationTask1, //
-               periodicalTasks2, //
-               incrementalTileQuality);
+      //      glob3.initWidget( //
+      //               cameraConstraints, //
+      //               layerSet, //
+      //               renderers, //
+      //               userData, //
+      //               initializationTask1, //
+      //               periodicalTasks2, //
+      //               incrementalTileQuality);
 
       return glob3;
    }
