@@ -51,13 +51,18 @@ private:
   std::vector<ICameraConstrainer*> createCameraConstraints();
   CameraRenderer* createCameraRenderer();
 
+  void pvtSetInitializationTask(GInitializationTask* initializationTask,
+                                const bool autoDeleteInitializationTask);
+
+
 protected:
   IStorage* _storage;
 
   G3MWidget* create();
+
   virtual IThreadUtils* createThreadUtils() = 0;
-  virtual IStorage* createStorage() = 0;
-  virtual IDownloader* createDownloader() = 0;
+  virtual IStorage*     createStorage()     = 0;
+  virtual IDownloader*  createDownloader()  = 0;
 
 public:
   IG3MBuilder();
@@ -75,14 +80,25 @@ public:
   void setTileRenderer(TileRenderer * tileRenderer);
   void setBusyRenderer(Renderer* busyRenderer);
   void addRenderer(Renderer* renderer);
-  void setInitializationTask(GInitializationTask* initializationTask,
-                             const bool autoDeleteInitializationTask);
   void addPeriodicalTask(PeriodicalTask* periodicalTask);
   void setLogFPS(const bool logFPS);
   void setLogDownloaderStatistics(const bool logDownloaderStatistics);
   void setUserData(UserData* userData);
 
-};
+#ifdef C_CODE
+  void setInitializationTask(GInitializationTask* initializationTask,
+                             const bool autoDeleteInitializationTask) {
+    pvtSetInitializationTask(initializationTask,
+                             autoDeleteInitializationTask);
+  }
+#endif
+#ifdef JAVA_CODE
+  public final void setInitializationTask(GInitializationTask initializationTask) {
+    pvtSetInitializationTask(initializationTask,
+                             true /* parameter ignored in Java code */);
+  }
+#endif
 
+};
 
 #endif /* defined(__G3MiOSSDK__IG3MBuilder__) */

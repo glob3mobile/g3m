@@ -15,130 +15,156 @@
 #include "BusyMeshRenderer.hpp"
 #include "CompositeRenderer.hpp"
 
-IG3MBuilder::IG3MBuilder() {
-  _gl = NULL;
-  _storage = NULL;
-  _downloader = NULL;
-  _threadUtils = NULL;
-  _planet = Planet::createEarth();
-  _cameraRenderer = createCameraRenderer();
-  _backgroundColor = Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1);
-  _layerSet = NULL;
-  _parameters = NULL;
-  _tileRenderer = NULL;
-  _busyRenderer = new BusyMeshRenderer();
-  _initializationTask = NULL;
-  _logFPS = true;
-  _logDownloaderStatistics = false;
-  _autoDeleteInitializationTask = true;
-  _userData = NULL;
+IG3MBuilder::IG3MBuilder() :
+_gl(NULL),
+_storage(NULL),
+_downloader(NULL),
+_threadUtils(NULL),
+_planet(NULL), //Planet::createEarth();
+_cameraRenderer(NULL), //createCameraRenderer();
+_backgroundColor(Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1)),
+_layerSet(NULL),
+_parameters(NULL),
+_tileRenderer(NULL),
+_busyRenderer(NULL), // new BusyMeshRenderer()),
+_initializationTask(NULL),
+_autoDeleteInitializationTask(true),
+_logFPS(true),
+_logDownloaderStatistics(false),
+_userData(NULL)
+{
+  /*
+   _gl = NULL;
+   _storage = NULL;
+   _downloader = NULL;
+   _threadUtils = NULL;
+   _planet = NULL;
+   _cameraRenderer = NULL;
+   _backgroundColor = Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1);
+   _layerSet = NULL;
+   _parameters = NULL;
+   _tileRenderer = NULL;
+   _busyRenderer = new BusyMeshRenderer();
+   _initializationTask = NULL;
+   _logFPS = true;
+   _logDownloaderStatistics = false;
+   _autoDeleteInitializationTask = true;
+   _userData = NULL;
+   */
 }
 
 IG3MBuilder::~IG3MBuilder() {
-//#ifdef C_CODE
-//  delete _planet;
-//  delete _parameters;
-//#endif
-//  delete _gl;
-//  delete _storage;
-//  delete _downloader;
-//  delete _threadUtils;
-//  delete _cameraRenderer;
-//  delete _backgroundColor;
-//  delete _layerSet;
-//  delete _tileRenderer;
-//  delete _busyRenderer;
-//  delete _initializationTask;
-//  delete _userData;
+  delete _backgroundColor;
+
+  //#ifdef C_CODE
+  //  delete _planet;
+  //  delete _parameters;
+  //#endif
+  //  delete _gl;
+  //  delete _storage;
+  //  delete _downloader;
+  //  delete _threadUtils;
+  //  delete _cameraRenderer;
+  //  delete _layerSet;
+  //  delete _tileRenderer;
+  //  delete _busyRenderer;
+  //  delete _initializationTask;
+  //  delete _userData;
 }
 
 G3MWidget* IG3MBuilder::create() {
 
-  if (_gl) {
-    if (!_storage) {
-      _storage = createStorage();
-    }
-
-    if (!_downloader) {
-      _downloader = createDownloader();
-    }
-
-    if (!_threadUtils) {
-      _threadUtils = createThreadUtils();
-    }
-
-    if (!_planet) {
-      _planet = Planet::createEarth();
-    }
-
-    if (_cameraConstraints.size() == 0) {
-      _cameraConstraints = createCameraConstraints();
-    }
-
-    if (!_cameraRenderer) {
-      _cameraRenderer = createCameraRenderer();
-    }
-
-
-    if (!_tileRenderer) {
-      TileRendererBuilder tileRendererBuilder;
-      if (_layerSet) {
-        tileRendererBuilder.setLayerSet(_layerSet);
-      }
-      if (_parameters) {
-        tileRendererBuilder.setTileRendererParameters(_parameters);
-      }
-      _tileRenderer = tileRendererBuilder.create();
-    }
-    else {
-      if (_layerSet) {
-        ILogger::instance()->logWarning("LayerSet will be ignored because TileRenderer was also set");
-      }
-      if (_parameters) {
-        ILogger::instance()->logWarning("TilesRendererParameters will be ignored because TileRenderer was also set");
-      }
-    }
-
-    Renderer* mainRenderer = NULL;
-    if (_renderers.size() > 0) {
-      mainRenderer = new CompositeRenderer();
-      ((CompositeRenderer *) mainRenderer)->addRenderer(_tileRenderer);
-
-      for (int i = 0; i < _renderers.size(); i++) {
-        ((CompositeRenderer *) mainRenderer)->addRenderer(_renderers[i]);
-      }
-    }
-    else {
-      mainRenderer = _tileRenderer;
-    }
-
-    if (!_busyRenderer) {
-      _busyRenderer = new BusyMeshRenderer();
-    }
-
-    Color backgroundColor = Color::fromRGBA(_backgroundColor->getRed(), _backgroundColor->getGreen(), _backgroundColor->getBlue(), _backgroundColor->getAlpha());
-
-    G3MWidget * g3mWidget = G3MWidget::create(_gl,
-                                              _storage,
-                                              _downloader,
-                                              _threadUtils,
-                                              _planet,
-                                              _cameraConstraints,
-                                              _cameraRenderer,
-                                              mainRenderer,
-                                              _busyRenderer,
-                                              backgroundColor,
-                                              _logFPS,
-                                              _logDownloaderStatistics,
-                                              _initializationTask,
-                                              _autoDeleteInitializationTask,
-                                              _periodicalTasks);
-
-    g3mWidget->setUserData(_userData);
-
-    return g3mWidget;
+  if (_gl == NULL) {
+    ILogger::instance()->logError("Logic Error: _gl not initialized");
+    return NULL;
   }
-  return NULL;
+
+  if (!_storage) {
+    _storage = createStorage();
+  }
+
+  if (!_downloader) {
+    _downloader = createDownloader();
+  }
+
+  if (!_threadUtils) {
+    _threadUtils = createThreadUtils();
+  }
+
+  if (!_planet) {
+    _planet = Planet::createEarth();
+  }
+
+  if (_cameraConstraints.size() == 0) {
+    _cameraConstraints = createCameraConstraints();
+  }
+
+  if (!_cameraRenderer) {
+    _cameraRenderer = createCameraRenderer();
+  }
+
+
+  if (!_tileRenderer) {
+    TileRendererBuilder tileRendererBuilder;
+    if (_layerSet) {
+      tileRendererBuilder.setLayerSet(_layerSet);
+    }
+    if (_parameters) {
+      tileRendererBuilder.setTileRendererParameters(_parameters);
+    }
+    _tileRenderer = tileRendererBuilder.create();
+  }
+  else {
+    if (_layerSet) {
+      ILogger::instance()->logWarning("LayerSet will be ignored because TileRenderer was also set");
+    }
+    if (_parameters) {
+      ILogger::instance()->logWarning("TilesRendererParameters will be ignored because TileRenderer was also set");
+    }
+  }
+
+  Renderer* mainRenderer = NULL;
+  if (_renderers.size() > 0) {
+    mainRenderer = new CompositeRenderer();
+    ((CompositeRenderer *) mainRenderer)->addRenderer(_tileRenderer);
+
+    for (int i = 0; i < _renderers.size(); i++) {
+      ((CompositeRenderer *) mainRenderer)->addRenderer(_renderers[i]);
+    }
+  }
+  else {
+    mainRenderer = _tileRenderer;
+  }
+
+  if (!_busyRenderer) {
+    _busyRenderer = new BusyMeshRenderer();
+  }
+
+  Color backgroundColor = Color::fromRGBA(_backgroundColor->getRed(),
+                                          _backgroundColor->getGreen(),
+                                          _backgroundColor->getBlue(),
+                                          _backgroundColor->getAlpha());
+
+  G3MWidget * g3mWidget = G3MWidget::create(_gl,
+                                            _storage,
+                                            _downloader,
+                                            _threadUtils,
+                                            _planet,
+                                            _cameraConstraints,
+                                            _cameraRenderer,
+                                            mainRenderer,
+                                            _busyRenderer,
+                                            backgroundColor,
+                                            _logFPS,
+                                            _logDownloaderStatistics,
+                                            _initializationTask,
+                                            _autoDeleteInitializationTask,
+                                            _periodicalTasks);
+
+  g3mWidget->setUserData(_userData);
+
+  return g3mWidget;
+
 }
 
 std::vector<ICameraConstrainer*> IG3MBuilder::createCameraConstraints() {
@@ -262,8 +288,8 @@ void IG3MBuilder::addRenderer(Renderer *renderer) {
   _renderers.push_back(renderer);
 }
 
-void IG3MBuilder::setInitializationTask(GInitializationTask *initializationTask,
-                                        const bool autoDeleteInitializationTask) {
+void IG3MBuilder::pvtSetInitializationTask(GInitializationTask *initializationTask,
+                                           const bool autoDeleteInitializationTask) {
   if (_initializationTask != initializationTask) {
     delete _initializationTask;
     _initializationTask = initializationTask;
