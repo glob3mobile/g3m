@@ -192,7 +192,7 @@ public abstract class IG3MBuilder
 	  _busyRenderer = null;
 	  _initializationTask = null;
 	  _autoDeleteInitializationTask = true;
-	  _logFPS = true;
+	  _logFPS = false;
 	  _logDownloaderStatistics = false;
 	  _userData = null;
 	/*
