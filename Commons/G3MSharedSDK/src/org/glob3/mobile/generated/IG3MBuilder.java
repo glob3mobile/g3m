@@ -63,140 +63,176 @@ public abstract class IG3MBuilder
 	return cameraRenderer;
   }
 
+  private void pvtSetInitializationTask(GInitializationTask initializationTask, boolean autoDeleteInitializationTask)
+  {
+	if (_initializationTask != initializationTask)
+	{
+	  if (_initializationTask != null)
+		  _initializationTask.dispose();
+	  _initializationTask = initializationTask;
+	}
+	_autoDeleteInitializationTask = autoDeleteInitializationTask;
+  }
+
+
   protected IStorage _storage;
 
   protected final G3MWidget create()
   {
   
-	if (_gl != null)
+	if (_gl == null)
 	{
-	  if (_storage == null)
-	  {
-		_storage = createStorage();
-	  }
-  
-	  if (_downloader == null)
-	  {
-		_downloader = createDownloader();
-	  }
-  
-	  if (_threadUtils == null)
-	  {
-		_threadUtils = createThreadUtils();
-	  }
-  
-	  if (_planet == null)
-	  {
-		_planet = Planet.createEarth();
-	  }
-  
-	  if (_cameraConstraints.size() == 0)
-	  {
-		_cameraConstraints = createCameraConstraints();
-	  }
-  
-	  if (_cameraRenderer == null)
-	  {
-		_cameraRenderer = createCameraRenderer();
-	  }
-  
-  
-	  if (_tileRenderer == null)
-	  {
-		TileRendererBuilder tileRendererBuilder = new TileRendererBuilder();
-		if (_layerSet != null)
-		{
-		  tileRendererBuilder.setLayerSet(_layerSet);
-		}
-		if (_parameters != null)
-		{
-		  tileRendererBuilder.setTileRendererParameters(_parameters);
-		}
-		_tileRenderer = tileRendererBuilder.create();
-	  }
-	  else
-	  {
-		if (_layerSet != null)
-		{
-		  ILogger.instance().logWarning("LayerSet will be ignored because TileRenderer was also set");
-		}
-		if (_parameters != null)
-		{
-		  ILogger.instance().logWarning("TilesRendererParameters will be ignored because TileRenderer was also set");
-		}
-	  }
-  
-	  Renderer mainRenderer = null;
-	  if (_renderers.size() > 0)
-	  {
-		mainRenderer = new CompositeRenderer();
-		((CompositeRenderer) mainRenderer).addRenderer(_tileRenderer);
-  
-		for (int i = 0; i < _renderers.size(); i++)
-		{
-		  ((CompositeRenderer) mainRenderer).addRenderer(_renderers.get(i));
-		}
-	  }
-	  else
-	  {
-		mainRenderer = _tileRenderer;
-	  }
-  
-	  if (_busyRenderer == null)
-	  {
-		_busyRenderer = new BusyMeshRenderer();
-	  }
-  
-	  Color backgroundColor = Color.fromRGBA(_backgroundColor.getRed(), _backgroundColor.getGreen(), _backgroundColor.getBlue(), _backgroundColor.getAlpha());
-  
-	  G3MWidget g3mWidget = G3MWidget.create(_gl, _storage, _downloader, _threadUtils, _planet, _cameraConstraints, _cameraRenderer, mainRenderer, _busyRenderer, backgroundColor, _logFPS, _logDownloaderStatistics, _initializationTask, _autoDeleteInitializationTask, _periodicalTasks);
-  
-	  g3mWidget.setUserData(_userData);
-  
-	  return g3mWidget;
+	  ILogger.instance().logError("Logic Error: _gl not initialized");
+	  return null;
 	}
-	return null;
+  
+	if (_storage == null)
+	{
+	  _storage = createStorage();
+	}
+  
+	if (_downloader == null)
+	{
+	  _downloader = createDownloader();
+	}
+  
+	if (_threadUtils == null)
+	{
+	  _threadUtils = createThreadUtils();
+	}
+  
+	if (_planet == null)
+	{
+	  _planet = Planet.createEarth();
+	}
+  
+	if (_cameraConstraints.size() == 0)
+	{
+	  _cameraConstraints = createCameraConstraints();
+	}
+  
+	if (_cameraRenderer == null)
+	{
+	  _cameraRenderer = createCameraRenderer();
+	}
+  
+  
+	if (_tileRenderer == null)
+	{
+	  TileRendererBuilder tileRendererBuilder = new TileRendererBuilder();
+	  if (_layerSet != null)
+	  {
+		tileRendererBuilder.setLayerSet(_layerSet);
+	  }
+	  if (_parameters != null)
+	  {
+		tileRendererBuilder.setTileRendererParameters(_parameters);
+	  }
+	  _tileRenderer = tileRendererBuilder.create();
+	}
+	else
+	{
+	  if (_layerSet != null)
+	  {
+		ILogger.instance().logWarning("LayerSet will be ignored because TileRenderer was also set");
+	  }
+	  if (_parameters != null)
+	  {
+		ILogger.instance().logWarning("TilesRendererParameters will be ignored because TileRenderer was also set");
+	  }
+	}
+  
+	Renderer mainRenderer = null;
+	if (_renderers.size() > 0)
+	{
+	  mainRenderer = new CompositeRenderer();
+	  ((CompositeRenderer) mainRenderer).addRenderer(_tileRenderer);
+  
+	  for (int i = 0; i < _renderers.size(); i++)
+	  {
+		((CompositeRenderer) mainRenderer).addRenderer(_renderers.get(i));
+	  }
+	}
+	else
+	{
+	  mainRenderer = _tileRenderer;
+	}
+  
+	if (_busyRenderer == null)
+	{
+	  _busyRenderer = new BusyMeshRenderer();
+	}
+  
+	Color backgroundColor = Color.fromRGBA(_backgroundColor.getRed(), _backgroundColor.getGreen(), _backgroundColor.getBlue(), _backgroundColor.getAlpha());
+  
+	G3MWidget g3mWidget = G3MWidget.create(_gl, _storage, _downloader, _threadUtils, _planet, _cameraConstraints, _cameraRenderer, mainRenderer, _busyRenderer, backgroundColor, _logFPS, _logDownloaderStatistics, _initializationTask, _autoDeleteInitializationTask, _periodicalTasks);
+  
+	g3mWidget.setUserData(_userData);
+  
+	return g3mWidget;
+  
   }
+
   protected abstract IThreadUtils createThreadUtils();
   protected abstract IStorage createStorage();
   protected abstract IDownloader createDownloader();
 
   public IG3MBuilder()
   {
-	_gl = null;
-	_storage = null;
-	_downloader = null;
-	_threadUtils = null;
-	_planet = Planet.createEarth();
-	_cameraRenderer = createCameraRenderer();
-	_backgroundColor = Color.newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1);
-	_layerSet = null;
-	_parameters = null;
-	_tileRenderer = null;
-	_busyRenderer = new BusyMeshRenderer();
-	_initializationTask = null;
-	_logFPS = true;
-	_logDownloaderStatistics = false;
-	_autoDeleteInitializationTask = true;
-	_userData = null;
+	  _gl = null;
+	  _storage = null;
+	  _downloader = null;
+	  _threadUtils = null;
+	  _planet = null;
+	  _cameraRenderer = null;
+	  _backgroundColor = Color.newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1);
+	  _layerSet = null;
+	  _parameters = null;
+	  _tileRenderer = null;
+	  _busyRenderer = null;
+	  _initializationTask = null;
+	  _autoDeleteInitializationTask = true;
+	  _logFPS = true;
+	  _logDownloaderStatistics = false;
+	  _userData = null;
+	/*
+	 _gl = NULL;
+	 _storage = NULL;
+	 _downloader = NULL;
+	 _threadUtils = NULL;
+	 _planet = NULL;
+	 _cameraRenderer = NULL;
+	 _backgroundColor = Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1);
+	 _layerSet = NULL;
+	 _parameters = NULL;
+	 _tileRenderer = NULL;
+	 _busyRenderer = new BusyMeshRenderer();
+	 _initializationTask = NULL;
+	 _logFPS = true;
+	 _logDownloaderStatistics = false;
+	 _autoDeleteInitializationTask = true;
+	 _userData = NULL;
+	 */
   }
   public void dispose()
   {
-  ///#ifdef C_CODE
-  //  delete _planet;
-  //  delete _parameters;
-  ///#endif
-  //  delete _gl;
-  //  delete _storage;
-  //  delete _downloader;
-  //  delete _threadUtils;
-  //  delete _cameraRenderer;
-  //  delete _backgroundColor;
-  //  delete _layerSet;
-  //  delete _tileRenderer;
-  //  delete _busyRenderer;
-  //  delete _initializationTask;
-  //  delete _userData;
+	if (_backgroundColor != null)
+		_backgroundColor.dispose();
+  
+	///#ifdef C_CODE
+	//  delete _planet;
+	//  delete _parameters;
+	///#endif
+	//  delete _gl;
+	//  delete _storage;
+	//  delete _downloader;
+	//  delete _threadUtils;
+	//  delete _cameraRenderer;
+	//  delete _layerSet;
+	//  delete _tileRenderer;
+	//  delete _busyRenderer;
+	//  delete _initializationTask;
+	//  delete _userData;
   }
   public final void setGL(GL gl)
   {
@@ -315,16 +351,6 @@ public abstract class IG3MBuilder
   {
 	_renderers.add(renderer);
   }
-  public final void setInitializationTask(GInitializationTask initializationTask, boolean autoDeleteInitializationTask)
-  {
-	if (_initializationTask != initializationTask)
-	{
-	  if (_initializationTask != null)
-		  _initializationTask.dispose();
-	  _initializationTask = initializationTask;
-	}
-	_autoDeleteInitializationTask = autoDeleteInitializationTask;
-  }
   public final void addPeriodicalTask(PeriodicalTask periodicalTask)
   {
 	_periodicalTasks.add(periodicalTask);
@@ -345,6 +371,12 @@ public abstract class IG3MBuilder
 		  _userData.dispose();
 	  _userData = userData;
 	}
+  }
+
+  public final void setInitializationTask(GInitializationTask initializationTask) {
+	pvtSetInitializationTask(initializationTask,
+							 true // parameter ignored in Java code 
+);
   }
 
 }
