@@ -45,8 +45,8 @@ public:
     
     ~GEOJSONDownloadListener(){}
 private:
-    void parseGEOJSON(JSONObject* jsonCustomData);
-    void parsePointObject(JSONObject* point);
+    void parseGEOJSON(const JSONObject* jsonCustomData);
+    void parsePointObject(const JSONObject* point);
 
 };
 

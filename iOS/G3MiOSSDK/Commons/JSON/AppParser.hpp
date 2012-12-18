@@ -31,14 +31,14 @@ class AppParser {
 
 private:
 
-  void parseWorldConfiguration(LayerSet* layerSet, MarksRenderer* marks, JSONObject* jsonLayers); 
-  void parseGEOJSONPointObject(MarksRenderer* marks, JSONObject* point);
+  void parseWorldConfiguration(LayerSet* layerSet, MarksRenderer* marks, const JSONObject* jsonLayers); 
+  void parseGEOJSONPointObject(MarksRenderer* marks, const JSONObject* point);
 
 public:
   
   static AppParser* instance();
   void parse(LayerSet* layerSet, MarksRenderer* marks, std::string namelessParameter);
-    void parseCustomData(MarksRenderer* marks, JSONObject* jsonLayers);
+    void parseCustomData(MarksRenderer* marks, const JSONObject* jsonLayers);
   
 protected:
   

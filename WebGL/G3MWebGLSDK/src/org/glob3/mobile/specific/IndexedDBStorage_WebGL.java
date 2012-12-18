@@ -6,6 +6,7 @@ import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.IByteBuffer;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IStorage;
+import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 
 import com.google.gwt.core.client.JavaScriptObject;
@@ -23,10 +24,10 @@ public final class IndexedDBStorage_WebGL
    }
 
 
-   @Override
-   public boolean containsBuffer(final URL url) {
-      return false;
-   }
+   //   @Override
+   //   public boolean containsBuffer(final URL url) {
+   //      return false;
+   //   }
 
 
    @Override
@@ -36,10 +37,10 @@ public final class IndexedDBStorage_WebGL
    }
 
 
-   @Override
-   public boolean containsImage(final URL url) {
-      return false;
-   }
+   //   @Override
+   //   public boolean containsImage(final URL url) {
+   //      return false;
+   //   }
 
 
    @Override
@@ -121,6 +122,7 @@ public final class IndexedDBStorage_WebGL
    @Override
    public void saveBuffer(final URL url,
                           final IByteBuffer buffer,
+                          final TimeInterval timeToExpires,
                           final boolean saveInBackground) {
    }
 
@@ -128,6 +130,7 @@ public final class IndexedDBStorage_WebGL
    @Override
    public void saveImage(final URL url,
                          final IImage image,
+                         final TimeInterval timeToExpires,
                          final boolean saveInBackground) {
    }
 

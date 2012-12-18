@@ -21,6 +21,7 @@ class IImage;
 class IFloatBuffer;
 class IGLTextureId;
 class MarkTouchListener;
+class GLState;
 
 class Mark {
 private:
@@ -28,7 +29,7 @@ private:
     const std::string _name;
     URL               _textureURL;
     const Geodetic3D  _position;
-    void* _userData;
+    const void* _userData;
     const double _minDistanceToCamera;
     MarkTouchListener* _listener;
     
@@ -56,13 +57,13 @@ public:
   Mark(const std::string name,
        const URL         textureURL,
        const Geodetic3D  position,
-       void* userData=NULL, const double minDistanceToCamera=0, MarkTouchListener* listener=NULL) :
+       const void* userData=NULL, const double minDistanceToCamera=0, MarkTouchListener* listener=NULL) :
   _name(name),
   _textureURL(textureURL),
   _position(position),
   _userData(userData),
-  _listener(listener),
   _minDistanceToCamera(minDistanceToCamera),
+  _listener(listener),
   _textureId(NULL),
   _cartesianPosition(NULL),
   _vertices(NULL),
@@ -87,7 +88,8 @@ public:
   
   void initialize(const G3MContext* context);
   
-  void render(const G3MRenderContext* rc);
+  void render(const G3MRenderContext* rc,
+              const GLState& parentState);
   
   bool isReady() const;
   

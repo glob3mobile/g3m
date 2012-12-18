@@ -42,7 +42,7 @@ public class G3MDemoActivity
       simpleG3MButton.setOnClickListener(new OnClickListener() {
          @Override
          public void onClick(final View v) {
-            final Intent intent = new Intent(getApplicationContext(), G3MSimplestGlob3Activity.class);
+             final Intent intent = new Intent(getApplicationContext(), G3MSimplestGlob3Activity.class);
             startActivity(intent);
          }
       });
@@ -54,6 +54,28 @@ public class G3MDemoActivity
          @Override
          public void onClick(final View v) {
             final Intent intent = new Intent(getApplicationContext(), G3MDoubleGlob3Activity.class);
+            startActivity(intent);
+         }
+      });
+
+
+      final Button switchLayerG3MButton = (Button) findViewById(R.id.switchLayersG3MButton);
+
+
+      switchLayerG3MButton.setOnClickListener(new OnClickListener() {
+         @Override
+         public void onClick(final View v) {
+            final Intent intent = new Intent(getApplicationContext(), G3MSwitchLayerActivity.class);
+            startActivity(intent);
+         }
+      });
+
+
+      final Button drawingShapesG3MButton = (Button) findViewById(R.id.threedshapes);
+      drawingShapesG3MButton.setOnClickListener(new OnClickListener() {
+         @Override
+         public void onClick(final View v) {
+            final Intent intent = new Intent(getApplicationContext(), G3MDrawingShapesActivity.class);
             startActivity(intent);
          }
       });

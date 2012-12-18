@@ -8,6 +8,7 @@ import org.glob3.mobile.generated.IByteBuffer;
 import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IFloatBuffer;
 import org.glob3.mobile.generated.IImage;
+import org.glob3.mobile.generated.IImageListener;
 import org.glob3.mobile.generated.IIntBuffer;
 import org.glob3.mobile.generated.ITimer;
 
@@ -32,14 +33,15 @@ public final class Factory_WebGL
    }
 
    // TODO TEMP HACK TO PRELOAD IMAGES
-
    final HashMap<String, IImage> _downloadedImages = new HashMap<String, IImage>();
 
 
    @Override
-   public IImage createImageFromFileName(final String filename) {
-      return _downloadedImages.get(filename);
-
+   public void createImageFromFileName(final String filename,
+                                       final IImageListener listener,
+                                       final boolean autodelete) {
+      final IImage result = _downloadedImages.get(filename);
+      listener.imageCreated(result);
       //      throw new RuntimeException("NOT IMPLEMENTED FROM FILENAME");
    }
 
@@ -54,24 +56,41 @@ public final class Factory_WebGL
    }
 
 
-   // END TEMP HACK TO PRELOAD IMAGES
-
-
    @Override
    public void deleteImage(final IImage image) {
+      if (image != null) {
+         image.dispose();
+      }
    }
 
 
    @Override
-   public IImage createImageFromSize(final int width,
-                                     final int height) {
-      return new Image_WebGL(width, height);
-   }
+   public native void createImageFromSize(final int width,
+                                          final int height,
+                                          final IImageListener listener,
+                                          final boolean autodelete) /*-{
+		//      return new Image_WebGL(width, height);
+
+		var canvas = $doc.createElement("canvas");
+		canvas.width = width;
+		canvas.height = height;
+
+		var context = canvas.getContext("2d");
+		context.clearRect(0, 0, width, height);
+
+		var jsResult = new Image();
+		jsResult.onload = function() {
+			var result = @org.glob3.mobile.specific.Image_WebGL::new(Lcom/google/gwt/core/client/JavaScriptObject;)(jsResult);
+			listener.@org.glob3.mobile.generated.IImageListener::imageCreated(Lorg/glob3/mobile/generated/IImage;)(result);
+		};
+		jsResult.src = canvas.toDataURL();
+   }-*/;
 
 
    @Override
-   public IImage createImageFromBuffer(final IByteBuffer buffer) {
-      // TODO Auto-generated method stub
+   public void createImageFromBuffer(final IByteBuffer buffer,
+                                     final IImageListener listener,
+                                     final boolean autodelete) {
       throw new RuntimeException("NOT IMPLEMENTED IMAGE FORM BUFFER");
    }
 

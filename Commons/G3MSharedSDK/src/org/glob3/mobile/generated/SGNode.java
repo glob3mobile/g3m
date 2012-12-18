@@ -23,17 +23,19 @@ package org.glob3.mobile.generated;
 //class G3MRenderContext;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class SGShape;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class GLState;
 
 public class SGNode
 {
-  private final String _id;
-  private final String _sId;
+  protected final String _id;
+  protected final String _sId;
 
-  private SGNode _parent;
-  private java.util.ArrayList<SGNode> _children = new java.util.ArrayList<SGNode>();
+  protected SGNode _parent;
+  protected java.util.ArrayList<SGNode> _children = new java.util.ArrayList<SGNode>();
 
 
-  private void setParent(SGNode parent)
+  protected final void setParent(SGNode parent)
   {
 	_parent = parent;
   }
@@ -112,32 +114,45 @@ public class SGNode
   
   }
 
-  public void rawRender(G3MRenderContext rc)
+  public void rawRender(G3MRenderContext rc, GLState parentState)
   {
   
   }
 
-  public final void render(G3MRenderContext rc)
+  public void render(G3MRenderContext rc, GLState parentState)
   {
+	final GLState myState = createState(rc, parentState);
+	final GLState state;
+	if (myState == null)
+	{
+	  state = parentState;
+	}
+	else
+	{
+	  state = myState;
+	}
+  
 	prepareRender(rc);
   
-	rawRender(rc);
+	rawRender(rc, state);
   
 	final int childrenCount = _children.size();
 	for (int i = 0; i < childrenCount; i++)
 	{
 	  SGNode child = _children.get(i);
-	  child.render(rc);
+	  child.render(rc, state);
 	}
   
 	cleanUpRender(rc);
+  
+	if (myState != null)
+		myState.dispose();
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: SGShape* getShape() const
   public final SGShape getShape()
   {
-	// return (_parent == NULL) ? _shape : _parent->getShape();
 	if (_shape != null)
 	{
 	  return _shape;
@@ -148,4 +163,10 @@ public class SGNode
 	}
 	return null;
   }
+
+  public GLState createState(G3MRenderContext rc, GLState parentState)
+  {
+	return null;
+  }
+
 }

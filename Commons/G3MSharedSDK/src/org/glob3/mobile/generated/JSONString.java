@@ -37,6 +37,8 @@ public class JSONString extends JSONBaseObject
 	return _value;
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const JSONString* asString() const
   public final JSONString asString()
   {
 	return this;
@@ -56,6 +58,13 @@ public class JSONString extends JSONBaseObject
 	if (isb != null)
 		isb.dispose();
 	return s;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: JSONString* deepCopy() const
+  public final JSONString deepCopy()
+  {
+	return new JSONString(_value);
   }
 
 }

@@ -11,30 +11,31 @@
 
 #include "TextureBuilder.hpp"
 
-class CPUTextureBuilder:public TextureBuilder
-{
+class CPUTextureBuilder:public TextureBuilder {
 public:
-  
-  //Scales but may return the same image
-  const IImage* createTextureFromImage(GL* gl,
-                                       const IFactory* factory,
-                                       const IImage* image,
-                                       int width,
-                                       int height) const;
-  
-  const IImage* createTextureFromImages(GL* gl,
-                                        const IFactory* factory,
-                                        const std::vector<const IImage*> images,
-                                        int width,
-                                        int height) const;
-  
-  const IImage* createTextureFromImages(GL* gl,
-                                        const IFactory* factory,
-                                        const std::vector<const IImage*> images,
-                                        const std::vector<const RectangleD*> rectangles,
-                                        int width,
-                                        int height) const;
-  
+
+  const void createTextureFromImage(GL* gl,
+                                    const IFactory* factory,
+                                    const IImage* image,
+                                    int width, int height,
+                                    IImageListener* listener,
+                                    bool autodelete) const;
+
+//  const void createTextureFromImages(GL* gl,
+//                                     const IFactory* factory,
+//                                     const std::vector<const IImage*>& images,
+//                                     int width, int height,
+//                                     IImageListener* listener,
+//                                     bool autodelete) const;
+
+  const void createTextureFromImages(GL* gl,
+                                     const IFactory* factory,
+                                     const std::vector<const IImage*>& images,
+                                     const std::vector<RectangleI*>& rectangles,
+                                     int width, int height,
+                                     IImageListener* listener,
+                                     bool autodelete) const;
+
 };
 
 #endif

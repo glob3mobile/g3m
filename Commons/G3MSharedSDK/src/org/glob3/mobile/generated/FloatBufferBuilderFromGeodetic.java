@@ -20,32 +20,32 @@ public class FloatBufferBuilderFromGeodetic extends FloatBufferBuilder
 
   private void setCenter(Vector3D center)
   {
-	_cx = (float)center._x;
-	_cy = (float)center._y;
-	_cz = (float)center._z;
+	_cx = (float) center._x;
+	_cy = (float) center._y;
+	_cz = (float) center._z;
   }
 
   private Planet _planet; // REMOVED FINAL WORD BY CONVERSOR RULE
 
 
-  public FloatBufferBuilderFromGeodetic(int cs, Planet planet, Vector3D center)
+  public FloatBufferBuilderFromGeodetic(int centerStrategy, Planet planet, Vector3D center)
   {
 	  _planet = planet;
-	  _centerStrategy = cs;
+	  _centerStrategy = centerStrategy;
 	setCenter(center);
   }
 
-  public FloatBufferBuilderFromGeodetic(int cs, Planet planet, Geodetic2D center)
+  public FloatBufferBuilderFromGeodetic(int centerStrategy, Planet planet, Geodetic2D center)
   {
 	  _planet = planet;
-	  _centerStrategy = cs;
+	  _centerStrategy = centerStrategy;
 	setCenter(_planet.toCartesian(center));
   }
 
-  public FloatBufferBuilderFromGeodetic(int cs, Planet planet, Geodetic3D center)
+  public FloatBufferBuilderFromGeodetic(int centerStrategy, Planet planet, Geodetic3D center)
   {
 	  _planet = planet;
-	  _centerStrategy = cs;
+	  _centerStrategy = centerStrategy;
 	setCenter(_planet.toCartesian(center));
   }
 

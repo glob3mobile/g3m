@@ -92,3 +92,4 @@ Mesh* QuadShape::createMesh(const G3MRenderContext* rc) {
   return new TexturedMesh(im, true, texMap, true, true);
 }
 
+

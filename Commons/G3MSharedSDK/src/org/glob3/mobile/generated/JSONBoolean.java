@@ -19,7 +19,7 @@ package org.glob3.mobile.generated;
 
 public class JSONBoolean extends JSONBaseObject
 {
-  private boolean _value;
+  private final boolean _value;
 
   public JSONBoolean(boolean value)
   {
@@ -33,6 +33,8 @@ public class JSONBoolean extends JSONBaseObject
 	return _value;
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const JSONBoolean* asBoolean() const
   public final JSONBoolean asBoolean()
   {
 	return this;
@@ -49,5 +51,13 @@ public class JSONBoolean extends JSONBaseObject
 		isb.dispose();
 	return s;
   }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: JSONBoolean* deepCopy() const
+  public final JSONBoolean deepCopy()
+  {
+	return new JSONBoolean(_value);
+  }
+
 
 }

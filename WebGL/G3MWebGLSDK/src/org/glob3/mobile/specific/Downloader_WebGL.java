@@ -10,6 +10,7 @@ import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.IBufferDownloadListener;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IImageDownloadListener;
+import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 
 import com.google.gwt.core.client.GWT;
@@ -43,7 +44,12 @@ public final class Downloader_WebGL
       _downloadingHandlers = new HashMap<URL, Downloader_WebGL_Handler>();
       _queuedHandlers = new HashMap<URL, Downloader_WebGL_Handler>();
       _delayMillis = delayMillis;
-      _proxy = proxy;
+      if ((proxy != null) && !proxy.trim().equals("")) {
+         _proxy = proxy.trim();
+      }
+      else {
+         _proxy = defineDefaultProxy();
+      }
 
       final Downloader_WebGL thisDownloader = this;
       _timer = new Timer() {
@@ -82,6 +88,7 @@ public final class Downloader_WebGL
    @Override
    public long requestBuffer(final URL url,
                              final long priority,
+                             final TimeInterval timeToExpires,
                              final IBufferDownloadListener listener,
                              final boolean deleteListener) {
 
@@ -127,6 +134,7 @@ public final class Downloader_WebGL
    @Override
    public long requestImage(final URL url,
                             final long priority,
+                            final TimeInterval timeToExpires,
                             final IImageDownloadListener listener,
                             final boolean deleteListener) {
       final long requestId;
@@ -248,6 +256,13 @@ public final class Downloader_WebGL
       }
 
       return selectedHandler;
+   }
+
+
+   private String defineDefaultProxy() {
+      final String defaultProxy = GWT.getHostPageBaseURL() + "proxy?url=";
+
+      return defaultProxy;
    }
 
 

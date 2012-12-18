@@ -17,6 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 public class TexturedMesh extends Mesh
 {
   private final Mesh _mesh;
@@ -26,19 +27,25 @@ public class TexturedMesh extends Mesh
   private final boolean _transparent;
 
 
+
   public TexturedMesh(Mesh mesh, boolean ownedMesh, TextureMapping textureMapping, boolean ownedTexMapping, boolean transparent)
+
   {
 	  _mesh = mesh;
 	  _ownedMesh = ownedMesh;
 	  _textureMapping = textureMapping;
 	  _ownedTexMapping = ownedTexMapping;
 	  _transparent = transparent;
-
+//    GLState* state = _mesh->getGLState();
+//    state->enableTextures();
+//    state->enableTexture2D();
+//    if (_transparent) {
+//      state->enableBlend();
+//    }
   }
 
   public void dispose()
   {
-///#ifdef C_CODE
 	if (_ownedMesh)
 	{
 	  if (_mesh != null)
@@ -49,35 +56,26 @@ public class TexturedMesh extends Mesh
 	  if (_textureMapping != null)
 		  _textureMapping.dispose();
 	}
-///#endif
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void render(const G3MRenderContext* rc) const
-  public final void render(G3MRenderContext rc)
+//ORIGINAL LINE: void render(const G3MRenderContext* rc, const GLState& parentState) const
+  public final void render(G3MRenderContext rc, GLState parentState)
   {
 	GL gl = rc.getGL();
   
+	GLState state = new GLState(parentState);
+	state.enableTextures();
+	state.enableTexture2D();
 	if (_transparent)
 	{
-	  gl.enableBlend();
+	  state.enableBlend();
+	  gl.setBlendFuncSrcAlpha();
 	}
-  
-	gl.enableTextures();
-	gl.enableTexture2D();
   
 	_textureMapping.bind(rc);
   
-	_mesh.render(rc);
-  
-	gl.disableTexture2D();
-	gl.disableTextures();
-  
-	if (_transparent)
-	{
-	  gl.disableBlend();
-	}
-  
+	_mesh.render(rc, state);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -114,5 +112,4 @@ public class TexturedMesh extends Mesh
   {
 	return _transparent;
   }
-
 }

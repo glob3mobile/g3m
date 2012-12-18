@@ -19,20 +19,21 @@ void CameraRenderer::initialize(const G3MContext* context) {
 
 void CameraRenderer::onResizeViewportEvent(const G3MEventContext* ec,
                                            int width, int height) {
-  // moved to G3MWidget::onResizeViewportEvent
+//  moved to G3MWidget::onResizeViewportEvent
 //  if (_cameraContext != NULL) {
 //    _cameraContext->getNextCamera()->resizeViewport(width, height);
 //  }
 }
 
-void CameraRenderer::render(const G3MRenderContext* rc) {
+void CameraRenderer::render(const G3MRenderContext* rc,
+                            const GLState& parentState) {
   // create the CameraContext
   if (_cameraContext == NULL) {
     _cameraContext = new CameraContext(None, rc->getNextCamera());
   }
   
   // render camera object
-  rc->getCurrentCamera()->render(rc);
+  rc->getCurrentCamera()->render(rc, parentState);
 
   const int handlersSize = _handlers.size();
   for (unsigned int i = 0; i < handlersSize; i++) {

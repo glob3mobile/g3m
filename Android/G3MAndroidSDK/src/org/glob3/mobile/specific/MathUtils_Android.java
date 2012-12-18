@@ -4,8 +4,6 @@ package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.IMathUtils;
 
-import android.util.FloatMath;
-
 
 public final class MathUtils_Android
          extends
@@ -61,7 +59,8 @@ public final class MathUtils_Android
 
    @Override
    public float sin(final float v) {
-      return FloatMath.sin(v);
+      //      return FloatMath.sin(v);
+      return (float) Math.sin(v);
    }
 
 
@@ -85,7 +84,8 @@ public final class MathUtils_Android
 
    @Override
    public float cos(final float v) {
-      return FloatMath.cos(v);
+      //      return FloatMath.cos(v);
+      return (float) Math.cos(v);
    }
 
 
@@ -177,7 +177,8 @@ public final class MathUtils_Android
 
    @Override
    public float sqrt(final float v) {
-      return FloatMath.sqrt(v);
+      //      return FloatMath.sqrt(v);
+      return (float) Math.sqrt(v);
    }
 
 
@@ -220,13 +221,13 @@ public final class MathUtils_Android
 
 
    @Override
-   public int maxInt() {
+   public int maxInt32() {
       return Integer.MAX_VALUE;
    }
 
 
    @Override
-   public int minInt() {
+   public int minInt32() {
       return Integer.MIN_VALUE;
    }
 
@@ -290,6 +291,18 @@ public final class MathUtils_Android
    public double max(final double d1,
                      final double d2) {
       return (d1 > d2) ? d1 : d2;
+   }
+
+
+   @Override
+   public long maxInt64() {
+      return Long.MAX_VALUE;
+   }
+
+
+   @Override
+   public long minInt64() {
+      return Long.MIN_VALUE;
    }
 
 

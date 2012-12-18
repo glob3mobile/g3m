@@ -27,7 +27,7 @@ public class CameraRenderer extends LeafRenderer
 	_processTouchEvents = processTouchEvents;
   }
 
-  public final void render(G3MRenderContext rc)
+  public final void render(G3MRenderContext rc, GLState parentState)
   {
 	// create the CameraContext
 	if (_cameraContext == null)
@@ -36,7 +36,7 @@ public class CameraRenderer extends LeafRenderer
 	}
   
 	// render camera object
-	rc.getCurrentCamera().render(rc);
+	rc.getCurrentCamera().render(rc, parentState);
   
 	final int handlersSize = _handlers.size();
 	for (int i = 0; i < handlersSize; i++)
@@ -79,7 +79,7 @@ public class CameraRenderer extends LeafRenderer
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
-	// moved to G3MWidget::onResizeViewportEvent
+  //  moved to G3MWidget::onResizeViewportEvent
   //  if (_cameraContext != NULL) {
   //    _cameraContext->getNextCamera()->resizeViewport(width, height);
   //  }

@@ -43,19 +43,19 @@ GEOJSONDownloadListener::GEOJSONDownloadListener(MarksRenderer* marksRenderer, s
 void GEOJSONDownloadListener::onDownload(const URL& url,
                                          const IByteBuffer* buffer){
     std::string string = buffer->getAsString();
-    JSONObject* json = IJSONParser::instance()->parse(string)->asObject();
+    JSONBaseObject* json = IJSONParser::instance()->parse(string);
     ILogger::instance()->logInfo(url.getPath());
-    parseGEOJSON(json);
+    parseGEOJSON(json->asObject());
     IJSONParser::instance()->deleteJSONData(json);
     
 }
 
 
-void GEOJSONDownloadListener::parseGEOJSON(JSONObject* geojson){
-    JSONArray* jsonFeatures = geojson->get(FEATURES)->asArray();
+void GEOJSONDownloadListener::parseGEOJSON(const JSONObject* geojson){
+    const JSONArray* jsonFeatures = geojson->get(FEATURES)->asArray();
     for (int i = 0; i < jsonFeatures->size(); i++) {
-        JSONObject* jsonFeature = jsonFeatures->getAsObject(i);
-        JSONObject* jsonGeometry = jsonFeature->getAsObject(GEOMETRY);
+        const JSONObject* jsonFeature = jsonFeatures->getAsObject(i);
+        const JSONObject* jsonGeometry = jsonFeature->getAsObject(GEOMETRY);
         std::string jsonType = jsonGeometry->getAsString(TYPE)->value();
         if (jsonType == "Point"){
             parsePointObject(jsonFeature);
@@ -63,16 +63,16 @@ void GEOJSONDownloadListener::parseGEOJSON(JSONObject* geojson){
     }
 }
 
-void GEOJSONDownloadListener::parsePointObject(JSONObject* point){
-    JSONObject* jsonProperties = point->getAsObject(PROPERTIES);
-    JSONObject* jsonGeometry = point->getAsObject(GEOMETRY);
-    JSONArray* jsonCoordinates = jsonGeometry->getAsArray(COORDINATES);
+void GEOJSONDownloadListener::parsePointObject(const JSONObject* point){
+    const JSONObject* jsonProperties = point->getAsObject(PROPERTIES);
+    const JSONObject* jsonGeometry = point->getAsObject(GEOMETRY);
+    const JSONArray* jsonCoordinates = jsonGeometry->getAsArray(COORDINATES);
     
     const Angle latitude = Angle::fromDegrees( jsonCoordinates->getAsNumber(1)->doubleValue() );
     const Angle longitude = Angle::fromDegrees( jsonCoordinates->getAsNumber(0)->doubleValue() );
     
-    JSONBaseObject* denominaci = jsonProperties->get(DENOMINATION);
-    JSONBaseObject* clase = jsonProperties->get(CLASE);
+    const JSONBaseObject* denominaci = jsonProperties->get(DENOMINATION);
+    const JSONBaseObject* clase = jsonProperties->get(CLASE);
     
     Mark* mark;
     
@@ -86,16 +86,16 @@ void GEOJSONDownloadListener::parsePointObject(JSONObject* point){
         if (_icon.length() > 0) {
             mark = new Mark(name->getString(),
                                   URL(_icon,false),
-                            Geodetic3D(latitude, longitude, 0),jsonProperties->getAsString(URLWEB),10000);
+                                  Geodetic3D(latitude, longitude, 0), jsonProperties->getAsString(URLWEB), 10000, NULL);      
         } else {
             mark = new Mark(name->getString(),
                                   URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png",false),
-                                  Geodetic3D(latitude, longitude, 0),jsonProperties->getAsString(URLWEB),10000);
+                                  Geodetic3D(latitude, longitude, 0), jsonProperties->getAsString(URLWEB) ,10000, NULL);
         }
     } else {
         mark = new Mark("Unknown POI",
                         URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png",false),
-                        Geodetic3D(latitude, longitude, 0),NULL,10000);
+                        Geodetic3D(latitude, longitude, 0), NULL, 10000, NULL);
     }
     _marksRenderer->addMark(mark);
 }

@@ -85,12 +85,12 @@ public class TileTextureBuilder extends RCObject
 	{
 	  final Petition petition = _petitions.get(i);
 
-//      const long long priority =  (_parameters->_incrementalTileQuality
-//                                   ? 1000 - _tile->getLevel()
-//                                   : _tile->getLevel());
+	  //      const long long priority =  (_parameters->_incrementalTileQuality
+	  //                                   ? 1000 - _tile->getLevel()
+	  //                                   : _tile->getLevel());
 	  final long priority = DefineConstants.TILE_DOWNLOAD_PRIORITY + _tile.getLevel();
 
-	  final long requestId = _downloader.requestImage(new URL(petition.getURL()), priority, new BuilderDownloadStepDownloadListener(this, i), true);
+	  final long requestId = _downloader.requestImage(new URL(petition.getURL()), priority, TimeInterval.fromDays(30), new BuilderDownloadStepDownloadListener(this, i), true);
 
 	  _requestsIds.add(requestId);
 	}
@@ -107,19 +107,17 @@ public class TileTextureBuilder extends RCObject
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: RectangleD* getImageRectangleInTexture(const Sector& wholeSector, const Sector& imageSector, int textureWidth, int textureHeight) const
-  public final RectangleD getImageRectangleInTexture(Sector wholeSector, Sector imageSector, int textureWidth, int textureHeight)
+//ORIGINAL LINE: RectangleI* getImageRectangleInTexture(const Sector& wholeSector, const Sector& imageSector, int textureWidth, int textureHeight) const
+  public final RectangleI getImageRectangleInTexture(Sector wholeSector, Sector imageSector, int textureWidth, int textureHeight)
   {
 	final Vector2D lowerFactor = wholeSector.getUVCoordinates(imageSector.lower());
 
 	final double widthFactor = imageSector.getDeltaLongitude().div(wholeSector.getDeltaLongitude());
 	final double heightFactor = imageSector.getDeltaLatitude().div(wholeSector.getDeltaLatitude());
 
-	return new RectangleD(lowerFactor._x * textureWidth, (1.0 - lowerFactor._y) * textureHeight, widthFactor * textureWidth, heightFactor * textureHeight);
+	return new RectangleI((int) IMathUtils.instance().round(lowerFactor._x * textureWidth), (int) IMathUtils.instance().round((1.0 - lowerFactor._y) * textureHeight), (int) IMathUtils.instance().round(widthFactor * textureWidth), (int) IMathUtils.instance().round(heightFactor * textureHeight));
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void composeAndUploadTexture() const
   public final void composeAndUploadTexture()
   {
 	synchronized (this) {
@@ -130,7 +128,7 @@ public class TileTextureBuilder extends RCObject
 	  }
 
 	  final java.util.ArrayList<IImage> images = new java.util.ArrayList<IImage>();
-	  final java.util.ArrayList<RectangleD> rectangles = new java.util.ArrayList<RectangleD>();
+	  java.util.ArrayList<RectangleI> rectangles = new java.util.ArrayList<RectangleI>();
 	  String textureId = _tile.getKey().tinyDescription();
 
 	  final int textureWidth = _parameters._tileTextureWidth;
@@ -157,23 +155,63 @@ public class TileTextureBuilder extends RCObject
 	  if (images.size() > 0)
 	  {
 		//        int __TESTING_mipmapping;
-		final boolean isMipmap = false;
+		//        const bool isMipmap = false;
 
-		IImage image = _textureBuilder.createTextureFromImages(_gl, _factory, images, rectangles, textureWidth, textureHeight);
+		//        const IImage* image = _textureBuilder->createTextureFromImages(_gl,
+		//                                                                       _factory,
+		//                                                                       images,
+		//                                                                       rectangles,
+		//                                                                       textureWidth,
+		//                                                                       textureHeight);
+		_textureBuilder.createTextureFromImages(_gl, _factory, images, rectangles, textureWidth, textureHeight, new TextureUploader(this, rectangles, textureId), true);
 
-		final IGLTextureId glTextureId = _texturesHandler.getGLTextureId(image, GLFormat.rgba(), textureId, isMipmap);
 
-		if (glTextureId != null)
-		{
-		  if (!_mesh.setGLTextureIdForLevel(0, glTextureId))
-		  {
-			_texturesHandler.releaseGLTextureId(glTextureId);
-		  }
-		}
-
-		if (image != null)
-			image.dispose();
+		//        const IGLTextureId* glTextureId = _texturesHandler->getGLTextureId(image,
+		//                                                                           GLFormat::rgba(),
+		//                                                                           textureId,
+		//                                                                           isMipmap);
+		//
+		//        if (glTextureId != NULL) {
+		//          if (!_mesh->setGLTextureIdForLevel(0, glTextureId)) {
+		//            _texturesHandler->releaseGLTextureId(glTextureId);
+		//          }
+		//        }
+		//
+		//        delete image;
 	  }
+
+	  ///#ifdef C_CODE
+	  //      for (int i = 0; i < rectangles.size(); i++) {
+	  //        delete rectangles[i];
+	  //      }
+	  ///#endif
+
+	}
+  }
+
+  public final void imageCreated(IImage image, java.util.ArrayList<RectangleI> rectangles, String textureId)
+  {
+	synchronized (this) {
+
+	  if (_mesh == null)
+	  {
+		return;
+	  }
+
+	  final boolean isMipmap = false;
+
+	  final IGLTextureId glTextureId = _texturesHandler.getGLTextureId(image, GLFormat.rgba(), textureId, isMipmap);
+
+	  if (glTextureId != null)
+	  {
+		if (!_mesh.setGLTextureIdForLevel(0, glTextureId))
+		{
+		  _texturesHandler.releaseGLTextureId(glTextureId);
+		}
+	  }
+
+	  if (image != null)
+		  image.dispose();
 
 
 	}

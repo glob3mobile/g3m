@@ -60,6 +60,7 @@ public class MarksRenderer extends LeafRenderer
 
   public void dispose()
   {
+<<<<<<< HEAD
 	 int marksSize = _marks.size();
 	 for (int i = 0; i < marksSize; i++)
 	 {
@@ -74,6 +75,22 @@ public class MarksRenderer extends LeafRenderer
 	 }
 	 _markTouchListener = null;
  }
+=======
+	int marksSize = _marks.size();
+	for (int i = 0; i < marksSize; i++)
+	{
+	  if (_marks.get(i) != null)
+		  _marks.get(i).dispose();
+	}
+  
+	if (_autoDeleteMarkTouchListener)
+	{
+	  if (_markTouchListener != null)
+		  _markTouchListener.dispose();
+	}
+	_markTouchListener = null;
+  }
+>>>>>>> webgl-port
 
   public void initialize(G3MContext context)
   {
@@ -87,21 +104,24 @@ public class MarksRenderer extends LeafRenderer
 	}
   }
 
-  public void render(G3MRenderContext rc)
+  public void render(G3MRenderContext rc, GLState parentState)
   {
 	//  rc.getLogger()->logInfo("MarksRenderer::render()");
   
 	// Saving camera for use in onTouchEvent
 	_lastCamera = rc.getCurrentCamera();
   
+	GLState state = new GLState(parentState);
+	state.disableDepthTest();
+	state.enableBlend();
+	state.enableTextures();
+	state.enableTexture2D();
+	state.enableVerticesPosition();
   
 	GL gl = rc.getGL();
   
-	gl.enableVerticesPosition();
-	gl.enableTextures();
-  
-	gl.disableDepthTest();
-	gl.enableBlend();
+	gl.setState(state);
+	gl.setBlendFuncSrcAlpha();
   
   //  const Vector3D radius = rc->getPlanet()->getRadii();
   //  const double minDistanceToCamera = (radius._x + radius._y + radius._z) / 3 * 0.75;
@@ -114,17 +134,14 @@ public class MarksRenderer extends LeafRenderer
   
 	  if (mark.isReady())
 	  {
+<<<<<<< HEAD
   //      mark->render(rc, minDistanceToCamera);
 		  mark.render(rc);
+=======
+		mark.render(rc, state, minDistanceToCamera);
+>>>>>>> webgl-port
 	  }
 	}
-  
-	gl.enableDepthTest();
-	gl.disableBlend();
-  
-	gl.disableTextures();
-	gl.disableVerticesPosition();
-	gl.disableTexture2D();
   }
 
   public final void addMark(Mark mark)

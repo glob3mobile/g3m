@@ -57,7 +57,7 @@ public class CachedDownloader extends IDownloader
 	_downloader.stop();
   }
 
-  public final long requestBuffer(URL url, long priority, IBufferDownloadListener listener, boolean deleteListener)
+  public final long requestBuffer(URL url, long priority, TimeInterval timeToCache, IBufferDownloadListener listener, boolean deleteListener)
   {
 	_requestsCounter++;
   
@@ -65,7 +65,7 @@ public class CachedDownloader extends IDownloader
 	if (cachedBuffer == null)
 	{
 	  // cache miss
-	  return _downloader.requestBuffer(url, priority, new BufferSaverDownloadListener(this, listener, deleteListener, _storage), true);
+	  return _downloader.requestBuffer(url, priority, TimeInterval.zero(), new BufferSaverDownloadListener(this, listener, deleteListener, _storage, timeToCache), true);
 	}
   
 	// cache hit
@@ -83,7 +83,7 @@ public class CachedDownloader extends IDownloader
 	return -1;
   }
 
-  public final long requestImage(URL url, long priority, IImageDownloadListener listener, boolean deleteListener)
+  public final long requestImage(URL url, long priority, TimeInterval timeToCache, IImageDownloadListener listener, boolean deleteListener)
   {
 	_requestsCounter++;
   
@@ -91,7 +91,7 @@ public class CachedDownloader extends IDownloader
 	if (cachedImage == null)
 	{
 	  // cache miss
-	  return _downloader.requestImage(url, priority, new ImageSaverDownloadListener(this, listener, deleteListener, _storage), true);
+	  return _downloader.requestImage(url, priority, TimeInterval.zero(), new ImageSaverDownloadListener(this, listener, deleteListener, _storage, timeToCache), true);
 	}
   
 	// cache hit

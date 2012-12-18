@@ -23,7 +23,7 @@
 #include "JSONBoolean.hpp"
 
 #include "IStringUtils.hpp"
-
+#include "TimeInterval.hpp"
 
 
 class TokenDownloadListener : public IBufferDownloadListener {
@@ -63,9 +63,9 @@ void TokenDownloadListener::onDownload(const URL& url,
     ILogger::instance()->logError("Could not validate against Bing. Please check your key!");
   }
   else {
-    JSONObject* data = json->asObject()->getAsArray("resourceSets")->getAsObject(0)->getAsArray("resources")->getAsObject(0);
+    const JSONObject* data = json->asObject()->getAsArray("resourceSets")->getAsObject(0)->getAsArray("resources")->getAsObject(0);
     
-    JSONArray* subDomArray = data->getAsArray("imageUrlSubdomains");
+    const JSONArray* subDomArray = data->getAsArray("imageUrlSubdomains");
     std::vector<std::string> subdomains;
     int numSubdomains = subDomArray->size();
     for (int i = 0; i<numSubdomains; i++){
@@ -97,7 +97,11 @@ void BingLayer::initialize(const G3MContext* context){
   tileURL+=_key;
 
   const URL url = URL(tileURL, false);
-  context->getDownloader()->requestBuffer(url, 100000000L, new TokenDownloadListener(this), true);
+  context->getDownloader()->requestBuffer(url,
+                                          100000000L,
+                                          TimeInterval::fromDays(30),
+                                          new TokenDownloadListener(this),
+                                          true);
   
 }
 

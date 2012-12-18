@@ -18,6 +18,7 @@ private:
   Extent* calculateExtent() const;
 
   mutable Extent* _extent;
+  
 
 public:
   virtual ~CompositeMesh();
@@ -26,7 +27,8 @@ public:
 
   const Vector3D getVertex(int i) const;
 
-  void render(const G3MRenderContext* rc) const;
+  void render(const G3MRenderContext* rc,
+              const GLState& parentState) const;
 
   Extent* getExtent() const;
 

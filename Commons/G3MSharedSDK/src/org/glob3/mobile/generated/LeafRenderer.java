@@ -57,7 +57,7 @@ public abstract class LeafRenderer extends Renderer
 
   public abstract boolean isReadyToRender(G3MRenderContext rc);
 
-  public abstract void render(G3MRenderContext rc);
+  public abstract void render(G3MRenderContext rc, GLState parentState);
 
   public abstract boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent);
 

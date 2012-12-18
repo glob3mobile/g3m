@@ -41,7 +41,7 @@ public:
     
     ~PanoDownloadListener(){}
 private:
-    void parseMETADATA(std::string url, JSONObject* jsonCustomData);
+    void parseMETADATA(std::string url, const JSONObject* jsonCustomData);
 };
 
 #endif

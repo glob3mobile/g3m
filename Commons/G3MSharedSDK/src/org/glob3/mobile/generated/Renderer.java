@@ -16,6 +16,8 @@ package org.glob3.mobile.generated;
 //class G3MRenderContext;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class G3MEventContext;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class GLState;
 
 public abstract class Renderer
 {
@@ -30,7 +32,7 @@ public abstract class Renderer
 
   public abstract boolean isReadyToRender(G3MRenderContext rc);
 
-  public abstract void render(G3MRenderContext rc);
+  public abstract void render(G3MRenderContext rc, GLState parentState);
 
   /*
    Gives to Renderer the opportunity to process touch, events.

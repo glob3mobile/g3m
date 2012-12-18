@@ -25,7 +25,11 @@ package org.glob3.mobile.generated;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IGLTextureId;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+<<<<<<< HEAD
 //class MarkTouchListener;
+=======
+//class GLState;
+>>>>>>> webgl-port
 
 public class Mark
 {
@@ -136,7 +140,7 @@ public class Mark
 	{
 	  IDownloader downloader = context.getDownloader();
   
-	  downloader.requestImage(_textureURL, 1000000, new TextureDownloadListener(this), true);
+	  downloader.requestImage(_textureURL, 1000000, TimeInterval.fromDays(30), new TextureDownloadListener(this), true);
 	}
   }
 
@@ -144,7 +148,11 @@ public class Mark
   private Vector2D render_textureTranslation = new Vector2D(0.0, 0.0);
 //C++ TO JAVA CONVERTER NOTE: This was formerly a static local variable declaration (not allowed in Java):
   private Vector2D render_textureScale = new Vector2D(1.0, 1.0);
+<<<<<<< HEAD
   public final void render(G3MRenderContext rc)
+=======
+  public final void render(G3MRenderContext rc, GLState parentState, double minDistanceToCamera)
+>>>>>>> webgl-port
   {
 	final Camera camera = rc.getCurrentCamera();
 	final Planet planet = rc.getPlanet();

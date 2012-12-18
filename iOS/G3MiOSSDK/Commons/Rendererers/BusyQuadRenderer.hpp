@@ -21,19 +21,21 @@
 class BusyQuadRenderer : public LeafRenderer, EffectTarget {
 private:
   double  _degrees;
-  const std::string _textureFilename;
-  Mesh *  _quadMesh;
+//  const std::string _textureFilename;
+  IImage* _image;
+  Mesh*   _quadMesh;
   
   bool initMesh(const G3MRenderContext* rc);
   
   
   
 public:
-  BusyQuadRenderer(const std::string textureFilename):
+  BusyQuadRenderer(IImage* image):
   _degrees(0),
   _quadMesh(NULL),
-  _textureFilename(textureFilename)
-  {}
+  _image(image)
+  {
+  }
   
   void initialize(const G3MContext* context) {
   }
@@ -42,7 +44,8 @@ public:
     return true;
   }
   
-  void render(const G3MRenderContext* rc);
+  void render(const G3MRenderContext* rc,
+              const GLState& parentState);
   
   bool onTouchEvent(const G3MEventContext* ec,
                     const TouchEvent* touchEvent) {

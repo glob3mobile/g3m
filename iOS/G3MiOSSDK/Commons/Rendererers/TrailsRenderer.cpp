@@ -9,9 +9,8 @@
 #include "TrailsRenderer.hpp"
 
 #include "Mesh.hpp"
-#include "IndexedMesh.hpp"
+#include "DirectMesh.hpp"
 #include "FloatBufferBuilderFromGeodetic.hpp"
-#include "IntBufferBuilder.hpp"
 #include "Planet.hpp"
 #include "GLConstants.hpp"
 
@@ -23,8 +22,7 @@ Mesh* Trail::createMesh(const Planet* planet) {
   FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
                                           planet,
                                           Geodetic3D::fromDegrees(0, 0, 0));
-  IntBufferBuilder indices;
-  
+
   for (int i = 0; i < _positions.size(); i++) {
 #ifdef C_CODE
     vertices.add( *(_positions[i]) );
@@ -32,33 +30,31 @@ Mesh* Trail::createMesh(const Planet* planet) {
 #ifdef JAVA_CODE
 	  vertices.add( _positions.get(i) );
 #endif
-    
-    indices.add(i);
   }
-  
-  return new IndexedMesh(GLPrimitive::lineStrip(),
-                         true,
-                         vertices.getCenter(),
-                         vertices.create(),
-                         indices.create(),
-                         _lineWidth,
-                         new Color(_color));
+
+  return new DirectMesh(GLPrimitive::lineStrip(),
+                        true,
+                        vertices.getCenter(),
+                        vertices.create(),
+                        _lineWidth,
+                        new Color(_color));
 }
 
 Mesh* Trail::getMesh(const Planet* planet) {
   if (_positionsDirty || (_mesh == NULL)) {
     delete _mesh;
-    
+
     _mesh = createMesh(planet);
   }
   return _mesh;
 }
 
-void Trail::render(const G3MRenderContext* rc) {
+void Trail::render(const G3MRenderContext* rc,
+                   const GLState& parentState) {
   if (_visible) {
     Mesh* mesh = getMesh(rc->getPlanet());
     if (mesh != NULL) {
-      mesh->render(rc);
+      mesh->render(rc, parentState);
     }
   }
 }
@@ -76,10 +72,11 @@ void TrailsRenderer::addTrail(Trail* trail) {
   _trails.push_back(trail);
 }
 
-void TrailsRenderer::render(const G3MRenderContext* rc) {
+void TrailsRenderer::render(const G3MRenderContext* rc,
+                            const GLState& parentState) {
   const int trailsCount = _trails.size();
   for (int i = 0; i < trailsCount; i++) {
     Trail* trail = _trails[i];
-    trail->render(rc);
+    trail->render(rc, parentState);
   }
 }

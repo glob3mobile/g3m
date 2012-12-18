@@ -28,8 +28,6 @@ private:
   const std::string _wrapS;
   const std::string _wrapT;
 
-  bool _textureBound;
-
   const IGLTextureId* getTextureId(const G3MRenderContext* rc);
 
   IImage* _downloadedImage;
@@ -65,7 +63,7 @@ public:
   _minFilter(minFilter),
   _wrapS(wrapS),
   _wrapT(wrapT),
-  _textureBound(false),
+//  _textureBound(false),
   _downloadedImage(NULL),
   _textureId(NULL)
   {
@@ -77,9 +75,8 @@ public:
   void initialize(const G3MContext* context,
                   SGShape *shape);
 
-  void prepareRender(const G3MRenderContext* rc);
-
-  void cleanUpRender(const G3MRenderContext* rc);
+  const GLState* createState(const G3MRenderContext* rc,
+                             const GLState& parentState);
 
 };
 

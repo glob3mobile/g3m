@@ -69,16 +69,16 @@ void SceneParser::parse(LayerSet* layerSet, std::string namelessParameter){
     _mapGeoJSONSources.clear();
     _panoSources.clear();
     
-    JSONObject* json = IJSONParser::instance()->parse(namelessParameter)->asObject();
-    parserJSONLayerList(layerSet, json->getAsObject(LAYERS));
+    JSONBaseObject* json = IJSONParser::instance()->parse(namelessParameter);
+    parserJSONLayerList(layerSet, json->asObject()->getAsObject(LAYERS));
     IJSONParser::instance()->deleteJSONData(json);
 }
 
-void SceneParser::parserJSONLayerList(LayerSet* layerSet, JSONObject* jsonLayers){
+void SceneParser::parserJSONLayerList(LayerSet* layerSet, const JSONObject* jsonLayers){
     for (int i = 0; i < jsonLayers->size(); i++) {
         IStringBuilder* isb = IStringBuilder::newStringBuilder();
         isb->addInt(i);
-        JSONObject* jsonLayer = jsonLayers->getAsObject(isb->getString());
+        const JSONObject* jsonLayer = jsonLayers->getAsObject(isb->getString());
         const layer_type layerType = _mapLayerType[jsonLayer->getAsString(TYPE)->value()];
         
         switch (layerType) {
@@ -102,7 +102,7 @@ void SceneParser::parserJSONLayerList(LayerSet* layerSet, JSONObject* jsonLayers
     }
 }
 
-void SceneParser::parserJSONWMSLayer(LayerSet* layerSet, JSONObject* jsonLayer){
+void SceneParser::parserJSONWMSLayer(LayerSet* layerSet, const JSONObject* jsonLayer){
     cout << "Parsing WMS Layer " << jsonLayer->getAsString(NAME)->value() << "..." << endl;
     
     const std::string jsonDatasource = jsonLayer->getAsString(DATASOURCE)->value();
@@ -110,7 +110,7 @@ void SceneParser::parserJSONWMSLayer(LayerSet* layerSet, JSONObject* jsonLayer){
     const std::string jsonURL = IStringUtils::instance()->substring(jsonDatasource, 0, lastIndex+1);
     const std::string jsonVersion = jsonLayer->getAsString(VERSION)->value();
     
-    JSONArray* jsonItems = jsonLayer->getAsArray(ITEMS);
+    const JSONArray* jsonItems = jsonLayer->getAsArray(ITEMS);
     IStringBuilder *layersName = IStringBuilder::newStringBuilder();
     
     for (int i = 0; i<jsonItems->size(); i++) {
@@ -142,16 +142,16 @@ void SceneParser::parserJSONWMSLayer(LayerSet* layerSet, JSONObject* jsonLayer){
     layerSet->addLayer(wmsLayer);
 }
 
-void SceneParser::parserJSON3DLayer(LayerSet* layerSet, JSONObject* jsonLayer){
+void SceneParser::parserJSON3DLayer(LayerSet* layerSet, const JSONObject* jsonLayer){
     cout << "Parsing 3D Layer " << jsonLayer->getAsString(NAME)->value() << "..." << endl;
 }
 
-void SceneParser::parserJSONPlanarImageLayer(LayerSet* layerSet, JSONObject* jsonLayer){
+void SceneParser::parserJSONPlanarImageLayer(LayerSet* layerSet, const JSONObject* jsonLayer){
     cout << "Parsing Pano Layer " << jsonLayer->getAsString(NAME)->value() << "..." << endl;
     
     const std::string geojsonDatasource = jsonLayer->getAsString(DATASOURCE)->value();
     
-    JSONArray* jsonItems = jsonLayer->getAsArray(ITEMS);
+    const JSONArray* jsonItems = jsonLayer->getAsArray(ITEMS);
     for (int i = 0; i<jsonItems->size(); i++) {
         
         const std::string namefile = jsonItems->getAsObject(i)->getAsString(NAME)->value();
@@ -167,12 +167,12 @@ void SceneParser::parserJSONPlanarImageLayer(LayerSet* layerSet, JSONObject* jso
     
 }
 
-void SceneParser::parserGEOJSONLayer(LayerSet* layerSet, JSONObject* jsonLayer){
+void SceneParser::parserGEOJSONLayer(LayerSet* layerSet, const JSONObject* jsonLayer){
     cout << "Parsing GEOJSON Layer " << jsonLayer->getAsString(NAME)->value() << "..." << endl;
     
     const std::string geojsonDatasource = jsonLayer->getAsString(DATASOURCE)->value();
     
-    JSONArray* jsonItems = jsonLayer->getAsArray(ITEMS);
+    const JSONArray* jsonItems = jsonLayer->getAsArray(ITEMS);
     for (int i = 0; i<jsonItems->size(); i++) {
     
         const std::string namefile = jsonItems->getAsObject(i)->getAsString(NAME)->value();
@@ -187,7 +187,7 @@ void SceneParser::parserGEOJSONLayer(LayerSet* layerSet, JSONObject* jsonLayer){
     }
 }
 
-void SceneParser::parserJSONSphericalImageLayer(LayerSet* layerSet, JSONObject* jsonLayer){
+void SceneParser::parserJSONSphericalImageLayer(LayerSet* layerSet, const JSONObject* jsonLayer){
     cout << "Parsing GEOJSON Layer not available" << endl;
 }
 

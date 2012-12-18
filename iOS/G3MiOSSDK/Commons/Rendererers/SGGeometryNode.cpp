@@ -22,68 +22,29 @@ SGGeometryNode::~SGGeometryNode() {
   delete _indices;
 }
 
-void SGGeometryNode::rawRender(const G3MRenderContext* rc) {
-  GL *gl = rc->getGL();
+void SGGeometryNode::rawRender(const G3MRenderContext* rc,
+                               const GLState& parentState) {
+  GL* gl = rc->getGL();
 
-  gl->enableVerticesPosition();
-
+  GLState state(parentState);
+  state.enableVerticesPosition();
   if (_colors == NULL) {
-    gl->disableVertexColor();
+    state.disableVertexColor();
   }
   else {
     const float colorsIntensity = 1;
-    gl->enableVertexColor(_colors, colorsIntensity);
+    state.enableVertexColor(_colors, colorsIntensity);
   }
 
   if (_uv != NULL) {
     gl->transformTexCoords(1.0f, 1.0f,
                            0.0f, 0.0f);
-
     gl->setTextureCoordinates(2, 0, _uv);
   }
 
-//  if (_transparent) {
-//    gl->enableBlend();
-//  }
-//
-//  gl->enableTextures();
-//  gl->enableTexture2D();
-//
-//  _textureMapping->bind(rc);
-//
-//  _mesh->render(rc);
-//
-//  gl->disableTexture2D();
-//  gl->disableTextures();
-//
-//  if (_transparent) {
-//    gl->disableBlend();
-//  }
-
+  gl->setState(state);
 
   gl->vertexPointer(3, 0, _vertices);
 
-  if (_primitive == GLPrimitive::triangles()) {
-    gl->drawTriangles(_indices);
-  }
-  else if (_primitive == GLPrimitive::triangleStrip()) {
-    gl->drawTriangleStrip(_indices);
-  }
-  else if (_primitive == GLPrimitive::triangleFan()) {
-    gl->drawTriangleFan(_indices);
-  }
-  else if (_primitive == GLPrimitive::lines()) {
-    gl->drawLines(_indices);
-  }
-  else if (_primitive == GLPrimitive::lineStrip()) {
-    gl->drawLineStrip(_indices);
-  }
-  else if (_primitive == GLPrimitive::lineLoop()) {
-    gl->drawLineLoop(_indices);
-  }
-  else if (_primitive == GLPrimitive::points()) {
-    gl->drawPoints(_indices);
-  }
-
-  gl->disableVerticesPosition();
+  gl->drawElements(_primitive, _indices);
 }

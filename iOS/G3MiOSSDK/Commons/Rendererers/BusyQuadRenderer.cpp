@@ -42,15 +42,18 @@ bool BusyQuadRenderer::initMesh(const G3MRenderContext* rc) {
 #ifdef JAVA_CODE
   IGLTextureId texId = null;
 #endif
-  IImage* image = rc->getFactory()->createImageFromFileName(_textureFilename);
+//  IImage* image = rc->getFactory()->createImageFromFileName(_textureFilename);
 
-  texId = rc->getTexturesHandler()->getGLTextureId(image, GLFormat::rgba(),
-                                                   _textureFilename, false);
+  texId = rc->getTexturesHandler()->getGLTextureId(_image,
+                                                   GLFormat::rgba(),
+                                                   "BusyQuadRenderer-Texture",
+                                                   false);
 
-  rc->getFactory()->deleteImage(image);
+  rc->getFactory()->deleteImage(_image);
+  _image = NULL;
 
   if (texId == NULL) {
-    rc->getLogger()->logError("Can't load file %s", _textureFilename.c_str());
+    rc->getLogger()->logError("Can't upload texture to GPU");
     return false;
   }
 
@@ -60,47 +63,51 @@ bool BusyQuadRenderer::initMesh(const G3MRenderContext* rc) {
   vertices.add(-halfSize, -halfSize, 0);
   vertices.add(+halfSize, +halfSize, 0);
   vertices.add(+halfSize, -halfSize, 0);
-  
+
   IntBufferBuilder indices;
   indices.add(0);
   indices.add(1);
   indices.add(2);
   indices.add(3);
-  
+
   FloatBufferBuilderFromCartesian2D texCoords;
   texCoords.add(0, 0);
   texCoords.add(0, 1);
   texCoords.add(1, 0);
   texCoords.add(1, 1);
-  
+
   IndexedMesh *im = new IndexedMesh(GLPrimitive::triangleStrip(),
                                     true,
                                     Vector3D::zero(),
                                     vertices.create(),
                                     indices.create(),
                                     1);
-  
+
   TextureMapping* texMap = new SimpleTextureMapping(texId,
                                                     texCoords.create(),
                                                     true,
                                                     false);
-  
+
   _quadMesh = new TexturedMesh(im, true, texMap, true, false);
-  
+
   return true;
 }
 
 
-void BusyQuadRenderer::render(const G3MRenderContext* rc) {
+void BusyQuadRenderer::render(const G3MRenderContext* rc,
+                              const GLState& parentState) {
   GL* gl = rc->getGL();
-  
+
+  GLState state(parentState);
+  state.enableBlend();
+
   if (_quadMesh == NULL){
     if (!initMesh(rc)) {
       return;
     }
   }
-  
-  
+
+
   // init effect in the first render
   static bool firstTime = true;
   if (firstTime) {
@@ -108,34 +115,32 @@ void BusyQuadRenderer::render(const G3MRenderContext* rc) {
     Effect *effect = new BusyEffect(this);
     rc->getEffectsScheduler()->startEffect(effect, this);
   }
-  
+
   // init modelview matrix
   int currentViewport[4];
   gl->getViewport(currentViewport);
-  int halfWidth = currentViewport[2] / 2;
-  int halfHeight = currentViewport[3] / 2;
+  const int halfWidth = currentViewport[2] / 2;
+  const int halfHeight = currentViewport[3] / 2;
   MutableMatrix44D M = MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth, halfWidth,
                                                                             -halfHeight, halfHeight,
                                                                             -halfWidth, halfWidth);
   gl->setProjection(M);
   gl->loadMatrixf(MutableMatrix44D::identity());
-  
+
   // clear screen
   gl->clearScreen(0.0f, 0.0f, 0.0f, 1.0f);
-  
-  gl->enableBlend();
+
+  gl->setState(state);
+
   gl->setBlendFuncSrcAlpha();
-  
+
   gl->pushMatrix();
-  MutableMatrix44D R1 = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(0), Vector3D(-1, 0, 0));
+  MutableMatrix44D R1 = MutableMatrix44D::createRotationMatrix(Angle::zero(), Vector3D(-1, 0, 0));
   MutableMatrix44D R2 = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, 1));
   gl->multMatrixf(R1.multiply(R2));
-  
+
   // draw mesh
-  _quadMesh->render(rc);
-  
+  _quadMesh->render(rc, parentState);
+
   gl->popMatrix();
-  
-  gl->disableBlend();
-  
 }

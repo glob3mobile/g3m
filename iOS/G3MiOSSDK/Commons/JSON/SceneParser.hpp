@@ -49,12 +49,12 @@ public:
     std::vector<std::string> getPanoSources();
     
 private:
-    void parserJSONLayerList(LayerSet* layerSet,JSONObject* jsonLayers);
-    void parserJSONWMSLayer(LayerSet* layerSet, JSONObject* jsonLayer);
-    void parserJSON3DLayer(LayerSet* layerSet, JSONObject* jsonLayer);
-    void parserJSONPlanarImageLayer(LayerSet* layerSet, JSONObject* jsonLayer);
-    void parserJSONSphericalImageLayer(LayerSet* layerSet, JSONObject* jsonLayer);
-    void parserGEOJSONLayer(LayerSet* layerSet, JSONObject* jsonLayer);
+    void parserJSONLayerList(LayerSet* layerSet,const JSONObject* jsonLayers);
+    void parserJSONWMSLayer(LayerSet* layerSet, const JSONObject* jsonLayer);
+    void parserJSON3DLayer(LayerSet* layerSet, const JSONObject* jsonLayer);
+    void parserJSONPlanarImageLayer(LayerSet* layerSet, const JSONObject* jsonLayer);
+    void parserJSONSphericalImageLayer(LayerSet* layerSet, const JSONObject* jsonLayer);
+    void parserGEOJSONLayer(LayerSet* layerSet, const JSONObject* jsonLayer);
     
 protected:
     SceneParser();

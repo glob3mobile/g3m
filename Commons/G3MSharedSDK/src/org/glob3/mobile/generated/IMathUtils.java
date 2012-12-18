@@ -172,17 +172,26 @@ public abstract class IMathUtils
   public abstract float log(float v);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual int maxInt() const = 0;
-  public abstract int maxInt();
+//ORIGINAL LINE: virtual int maxInt32() const = 0;
+  public abstract int maxInt32();
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual int minInt() const = 0;
-  public abstract int minInt();
+//ORIGINAL LINE: virtual int minInt32() const = 0;
+  public abstract int minInt32();
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual long maxInt64() const = 0;
+  public abstract long maxInt64();
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual long minInt64() const = 0;
+  public abstract long minInt64();
+
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual double maxDouble() const = 0;
   public abstract double maxDouble();
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual double minDouble() const = 0;
   public abstract double minDouble();
+
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual float maxFloat() const = 0;
   public abstract float maxFloat();

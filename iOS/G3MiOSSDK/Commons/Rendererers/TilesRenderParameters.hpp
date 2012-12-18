@@ -97,10 +97,9 @@ public:
     const int tileTextureWidth = 256;
     const int tRes = 10;
 
-    //    Sector sector = Sector::fullSphere();
     //    Sector sector = Sector(Geodetic2D(Angle::fromDegrees(-90), Angle::fromDegrees(-180)),
     //                           Geodetic2D(Angle::fromDegrees(90), Angle::fromDegrees(180)));
-    Sector sector = Sector(Geodetic2D(Angle::fromDegrees(0), Angle::fromDegrees(0)),
+    Sector sector = Sector(Geodetic2D(Angle::zero(), Angle::zero()),
                            Geodetic2D(Angle::fromDegrees(90), Angle::fromDegrees(90)));
     
     return new TilesRenderParameters(sector,

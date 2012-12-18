@@ -13,6 +13,7 @@ class TouchEvent;
 class G3MContext;
 class G3MRenderContext;
 class G3MEventContext;
+class GLState;
 
 class Renderer {
 public:
@@ -25,7 +26,8 @@ public:
   
   virtual bool isReadyToRender(const G3MRenderContext* rc) = 0;
   
-  virtual void render(const G3MRenderContext* rc) = 0;
+  virtual void render(const G3MRenderContext* rc,
+                      const GLState& parentState) = 0;
 
   /*
    Gives to Renderer the opportunity to process touch, events.

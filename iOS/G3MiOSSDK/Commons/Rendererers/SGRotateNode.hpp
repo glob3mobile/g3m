@@ -38,6 +38,11 @@ public:
 
   void cleanUpRender(const G3MRenderContext* rc);
 
+  const GLState* createState(const G3MRenderContext* rc,
+                             const GLState& parentState) {
+    return NULL;
+  }
+
 };
 
 #endif

@@ -17,9 +17,9 @@ class IIntBuffer;
 class DummyRenderer: public LeafRenderer {
 
 private:
-  double _halfSize;
-  
-  IIntBuffer* _index;
+  double        _halfSize;
+
+  IIntBuffer*   _indices;
   IFloatBuffer* _vertices;
 
 public:
@@ -27,7 +27,8 @@ public:
   
   void initialize(const G3MContext* context);  
   
-  void render(const G3MRenderContext* rc);
+  void render(const G3MRenderContext* rc,
+              const GLState& parentState);
   
   bool onTouchEvent(const G3MEventContext* ec,
                     const TouchEvent* touchEvent);

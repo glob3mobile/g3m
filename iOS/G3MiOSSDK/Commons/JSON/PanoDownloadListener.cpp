@@ -36,15 +36,14 @@ PanoDownloadListener::PanoDownloadListener(MarksRenderer* marksRenderer, MarkTou
 void PanoDownloadListener::onDownload(const URL& url,
                                          const IByteBuffer* buffer){
     std::string string = buffer->getAsString();
-    JSONObject* json = IJSONParser::instance()->parse(string)->asObject();
+    JSONBaseObject* json = IJSONParser::instance()->parse(string);
     ILogger::instance()->logInfo(url.getPath());
-    parseMETADATA(IStringUtils::instance()->substring(url.getPath(), 0, IStringUtils::instance()->indexOf(url.getPath(), "/metadata.json")),json);
+    parseMETADATA(IStringUtils::instance()->substring(url.getPath(), 0, IStringUtils::instance()->indexOf(url.getPath(), "/metadata.json")),json->asObject());
     IJSONParser::instance()->deleteJSONData(json);
-    
 }
 
 
-void PanoDownloadListener::parseMETADATA(std::string url, JSONObject* json){
+void PanoDownloadListener::parseMETADATA(std::string url, const JSONObject* json){
     
     const Angle latitude = Angle::fromDegrees(json->getAsObject(POSITION)->getAsNumber(LAT)->doubleValue());
     const Angle longitude = Angle::fromDegrees(json->getAsObject(POSITION)->getAsNumber(LON)->doubleValue());
@@ -54,5 +53,4 @@ void PanoDownloadListener::parseMETADATA(std::string url, JSONObject* json){
                     Geodetic3D(latitude, longitude, 0), new URL(url, false), 0, _panoTouchListener);
     
     _marksRenderer->addMark(mark);
-
 }

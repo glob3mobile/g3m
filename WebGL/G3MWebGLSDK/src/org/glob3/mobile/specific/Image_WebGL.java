@@ -2,8 +2,11 @@
 
 package org.glob3.mobile.specific;
 
+import java.util.ArrayList;
+
 import org.glob3.mobile.generated.IImage;
-import org.glob3.mobile.generated.RectangleD;
+import org.glob3.mobile.generated.IImageListener;
+import org.glob3.mobile.generated.RectangleI;
 import org.glob3.mobile.generated.Vector2I;
 
 import com.google.gwt.core.client.JavaScriptObject;
@@ -13,87 +16,121 @@ public final class Image_WebGL
          extends
             IImage {
 
-   private JavaScriptObject       _imgObject;    //IMAGE JS
+   private JavaScriptObject _imgObject; //IMAGE JS
+
 
    // image handling functions
-   private final JavaScriptObject _canvas = null;
-   private JavaScriptObject       _context;
+   //   private JavaScriptObject _canvas;
+   //   private JavaScriptObject _context;
 
 
-   public Image_WebGL() {
-      _imgObject = null;
-   }
+   //   private static class CanvasContext {
+   //      final private JavaScriptObject _canvas;
+   //      final private JavaScriptObject _context;
+   //
+   //
+   //      private CanvasContext(final JavaScriptObject canvas,
+   //                            final JavaScriptObject context) {
+   //         _canvas = canvas;
+   //         _context = context;
+   //      }
+   //
+   //
+   //      public JavaScriptObject getCanvas() {
+   //         return _canvas;
+   //      }
+   //
+   //
+   //      public JavaScriptObject getContext() {
+   //         return _context;
+   //      }
+   //   }
+
+
+   //   private static native CanvasContext createCanvasContext(final int width,
+   //                                                           final int height) /*-{
+   //		var canvas = $doc.createElement("canvas");
+   //		var context = canvas.getContext("2d");
+   //
+   //		canvas.width = width;
+   //		canvas.height = height;
+   //
+   //		//context.clearRect(0, 0, width, height);
+   //
+   //		return @org.glob3.mobile.specific.Image_WebGL.CanvasContext::new(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;)(canvas, context);
+   //   }-*/;
+
+
+   //   public Image_WebGL() {
+   //      _imgObject = null;
+   //   }
 
 
    public Image_WebGL(final JavaScriptObject data) {
       _imgObject = data;
-      if ((jsGetWidth() <= 0) || (jsGetHeight() <= 0)) {
+      if ((getWidth() <= 0) || (getHeight() <= 0)) {
          _imgObject = null;
       }
    }
 
 
-   public Image_WebGL(final JavaScriptObject data,
-                      final int width,
-                      final int height) {
-      _imgObject = data;
-      if (!jsIsDataValid(width, height)) {
-         _imgObject = null;
-      }
-   }
+   //   public Image_WebGL(final JavaScriptObject data,
+   //                      final int width,
+   //                      final int height) {
+   //      _imgObject = data;
+   //      if (!jsIsDataValid(width, height)) {
+   //         _imgObject = null;
+   //      }
+   //   }
 
 
-   public Image_WebGL(final int width,
-                      final int height) {
-      jsInitImgHandlingObjects(width, height);
-      _imgObject = jsCreateFromCanvasDataURL(width, height);
-   }
+   //   public Image_WebGL(final int width,
+   //                      final int height) {
+   //      jsInitImgHandlingObjects(width, height);
+   //      _imgObject = jsCreateFromCanvasDataURL(width, height);
+   //   }
 
 
-   private native boolean jsIsDataValid(final int width,
-                                        final int height) /*-{
-		var that = this;
-		if (that.@org.glob3.mobile.specific.Image_WebGL::_imgObject.src == "data:,") {
-			return false;
-		} else {
-			that.@org.glob3.mobile.specific.Image_WebGL::_imgObject.width = width;
-			that.@org.glob3.mobile.specific.Image_WebGL::_imgObject.height = height;
-			return true;
-		}
-   }-*/;
+   //   private native boolean jsIsDataValid(final int width,
+   //                                        final int height) /*-{
+   //		if (this.@org.glob3.mobile.specific.Image_WebGL::_imgObject.src == "data:,") {
+   //			return false;
+   //		} else {
+   //			this.@org.glob3.mobile.specific.Image_WebGL::_imgObject.width = width;
+   //			this.@org.glob3.mobile.specific.Image_WebGL::_imgObject.height = height;
+   //			return true;
+   //		}
+   //   }-*/;
 
 
-   private native JavaScriptObject jsCreateFromCanvasDataURL(final int width,
-                                                             final int height) /*-{
-		var img = new Image();
-		img.src = this.@org.glob3.mobile.specific.Image_WebGL::_canvas
-				.toDataURL();
-		img.width = width;
-		img.height = height;
+   //   private native JavaScriptObject jsCreateFromCanvasDataURL(final int width,
+   //                                                             final int height) /*-{
+   //		var img = new Image();
+   //		img.src = this.@org.glob3.mobile.specific.Image_WebGL::_canvas
+   //				.toDataURL();
+   //		img.width = width;
+   //		img.height = height;
+   //
+   //		return img;
+   //
+   //   }-*/;
 
-		return img;
 
-   }-*/;
-
-
-   private native void jsInitImgHandlingObjects(final int width,
-                                                final int height) /*-{
-		var that = this;
-
-		if (that.@org.glob3.mobile.specific.Image_WebGL::_canvas == null) {
-
-			that.@org.glob3.mobile.specific.Image_WebGL::_canvas = $doc
-					.createElement("canvas");
-			that.@org.glob3.mobile.specific.Image_WebGL::_context = that.@org.glob3.mobile.specific.Image_WebGL::_canvas
-					.getContext("2d");
-		}
-
-		that.@org.glob3.mobile.specific.Image_WebGL::_canvas.width = width;
-		that.@org.glob3.mobile.specific.Image_WebGL::_canvas.height = height;
-
-		that.@org.glob3.mobile.specific.Image_WebGL::_context.clearRect(0, 0,
-				width, height);
-   }-*/;
+   //   private native void jsInitImgHandlingObjects(final int width,
+   //                                                final int height) /*-{
+   //		if (this.@org.glob3.mobile.specific.Image_WebGL::_canvas == null) {
+   //			this.@org.glob3.mobile.specific.Image_WebGL::_canvas = $doc
+   //					.createElement("canvas");
+   //			this.@org.glob3.mobile.specific.Image_WebGL::_context = this.@org.glob3.mobile.specific.Image_WebGL::_canvas
+   //					.getContext("2d");
+   //		}
+   //
+   //		this.@org.glob3.mobile.specific.Image_WebGL::_canvas.width = width;
+   //		this.@org.glob3.mobile.specific.Image_WebGL::_canvas.height = height;
+   //
+   //		this.@org.glob3.mobile.specific.Image_WebGL::_context.clearRect(0, 0,
+   //				width, height);
+   //   }-*/;
 
 
    public JavaScriptObject getImage() {
@@ -102,23 +139,25 @@ public final class Image_WebGL
 
 
    @Override
-   public int getWidth() {
-      return jsGetWidth();
-   }
-
-
-   private native int jsGetWidth() /*-{
-		if (this.@org.glob3.mobile.specific.Image_WebGL::_imgObject) {
-			return this.@org.glob3.mobile.specific.Image_WebGL::_imgObject.width;
-		}
-		return 0;
+   public native int getWidth() /*-{
+		//		if (this.@org.glob3.mobile.specific.Image_WebGL::_imgObject) {
+		//			return this.@org.glob3.mobile.specific.Image_WebGL::_imgObject.width;
+		//		}
+		//		return 0;
+		var jsImage = this.@org.glob3.mobile.specific.Image_WebGL::_imgObject;
+		return jsImage ? jsImage.width : 0;
    }-*/;
 
 
    @Override
-   public int getHeight() {
-      return jsGetHeight();
-   }
+   public native int getHeight() /*-{
+		//		if (this.@org.glob3.mobile.specific.Image_WebGL::_imgObject) {
+		//			return this.@org.glob3.mobile.specific.Image_WebGL::_imgObject.height;
+		//		}
+		//		return 0;
+		var jsImage = this.@org.glob3.mobile.specific.Image_WebGL::_imgObject;
+		return jsImage ? jsImage.height : 0;
+   }-*/;
 
 
    @Override
@@ -127,263 +166,350 @@ public final class Image_WebGL
    }
 
 
-   private native int jsGetHeight() /*-{
-		if (this.@org.glob3.mobile.specific.Image_WebGL::_imgObject) {
-			return this.@org.glob3.mobile.specific.Image_WebGL::_imgObject.height;
-		}
-		return 0;
-   }-*/;
-
-
    @Override
-   public IImage combineWith(final IImage other,
-                             final int width,
-                             final int height) {
-      jsInitImgHandlingObjects(width, height);
+   public native void combineWith(final ArrayList<IImage> images,
+                                  final ArrayList<RectangleI> rectangles,
+                                  final int width,
+                                  final int height,
+                                  final IImageListener listener,
+                                  final boolean autodelete) /*-{
 
-      final JavaScriptObject combinedImgJs = jsCombineWith(((Image_WebGL) other).getImage(), width, height);
-      final Image_WebGL combinedImg = new Image_WebGL(combinedImgJs, width, height);
-
-      if (combinedImg.getImage() != null) {
-         return combinedImg;
-      }
-      throw new RuntimeException("Unable to combine image");
-   }
-
-
-   private native JavaScriptObject jsCombineWith(final JavaScriptObject other,
-                                                 final int width,
-                                                 final int height) /*-{
-		//		debugger;
-		var that = this;
-
-		if ((that.@org.glob3.mobile.specific.Image_WebGL::_imgObject.width != width)
-				|| (that.@org.glob3.mobile.specific.Image_WebGL::_imgObject.height != height)) {
-			that.@org.glob3.mobile.specific.Image_WebGL::_context.drawImage(
-					that.@org.glob3.mobile.specific.Image_WebGL::_imgObject, 0,
-					0, width, height);
+		var imagesSize = images.@java.util.ArrayList::size()();
+		if (imagesSize == 0) {
+			this.@org.glob3.mobile.specific.Image_WebGL::scale(IILorg/glob3/mobile/generated/IImageListener;Z)(width, height, listener, autodelete);
+		} else if (imagesSize == 1) {
+			var other = images.@java.util.ArrayList::get(I)(0);
+			var rect = rectangles.@java.util.ArrayList::get(I)(0);
+			this.@org.glob3.mobile.specific.Image_WebGL::combineWith(Lorg/glob3/mobile/generated/IImage;Lorg/glob3/mobile/generated/RectangleI;IILorg/glob3/mobile/generated/IImageListener;Z)(other, rect, width, height, listener, autodelete);
 		} else {
-			that.@org.glob3.mobile.specific.Image_WebGL::_context.drawImage(
-					that.@org.glob3.mobile.specific.Image_WebGL::_imgObject, 0,
-					0);
-		}
-		if ((other.width != width) || (other.height != height)) {
-			that.@org.glob3.mobile.specific.Image_WebGL::_context.drawImage(
-					other, 0, 0, width, height);
-		} else {
-			that.@org.glob3.mobile.specific.Image_WebGL::_context.drawImage(
-					other, 0, 0);
-		}
-		var combinedImg = new Image();
-		combinedImg.src = that.@org.glob3.mobile.specific.Image_WebGL::_canvas
-				.toDataURL();
+			var canvas = $doc.createElement("canvas");
+			canvas.width = width;
+			canvas.height = height;
 
-		return combinedImg;
-   }-*/;
-
-
-   @Override
-   public IImage combineWith(final IImage other,
-                             final RectangleD rect,
-                             final int width,
-                             final int height) {
-      jsInitImgHandlingObjects(width, height);
-
-      final JavaScriptObject combinedImgJs = jsCombineWithRect(((Image_WebGL) other).getImage(), (int) rect._x, (int) rect._y,
-               (int) rect._width, (int) rect._height, width, height);
-      final Image_WebGL combinedImg = new Image_WebGL(combinedImgJs, width, height);
-
-      if (combinedImg.getImage() != null) {
-         return combinedImg;
-      }
-      throw new RuntimeException("Unable to combine rect image");
-   }
-
-
-   private native JavaScriptObject jsCombineWithRect(final JavaScriptObject other,
-                                                     final int rectX,
-                                                     final int rectY,
-                                                     final int rectWidth,
-                                                     final int rectHeight,
-                                                     final int width,
-                                                     final int height) /*-{
-		//		debugger;
-		var that = this;
-
-		if ((that.@org.glob3.mobile.specific.Image_WebGL::_imgObject.width != width)
-				|| (that.@org.glob3.mobile.specific.Image_WebGL::_imgObject.height != height)) {
-			that.@org.glob3.mobile.specific.Image_WebGL::_context.drawImage(
-					that.@org.glob3.mobile.specific.Image_WebGL::_imgObject, 0,
-					0, width, height);
-		} else {
-			that.@org.glob3.mobile.specific.Image_WebGL::_context.drawImage(
-					that.@org.glob3.mobile.specific.Image_WebGL::_imgObject, 0,
-					0);
-		}
-
-		that.@org.glob3.mobile.specific.Image_WebGL::_context.drawImage(other,
-				rectX, (height - (rectY + rectHeight)), rectWidth, rectHeight);
-
-		var combinedImg = new Image();
-		combinedImg.src = that.@org.glob3.mobile.specific.Image_WebGL::_canvas
-				.toDataURL();
-
-		return combinedImg;
-   }-*/;
-
-
-   @Override
-   public IImage subImage(final RectangleD rect) {
-      jsInitImgHandlingObjects((int) rect._width, (int) rect._height);
-
-      final JavaScriptObject subImgJs = jsSubImage(rect._x, rect._y, rect._width, rect._height);
-      final Image_WebGL subImg = new Image_WebGL(subImgJs);
-
-      if (subImg.getImage() != null) {
-         return subImg;
-      }
-      throw new RuntimeException("Unable to create subimage");
-   }
-
-
-   private native JavaScriptObject jsSubImage(final double x,
-                                              final double y,
-                                              final double width,
-                                              final double height) /*-{
-		//	debugger;
-		var that = this;
-
-		that.@org.glob3.mobile.specific.Image_WebGL::_context.drawImage(
-				that.@org.glob3.mobile.specific.Image_WebGL::_imgObject, x, y,
-				width, height, 0, 0, width, height);
-		var subImage = new Image();
-		subImage.src = that.@org.glob3.mobile.specific.Image_WebGL::_canvas
-				.toDataURL();
-
-		return subImage;
-   }-*/;
-
-
-   @Override
-   public IImage scale(final int width,
-                       final int height) {
-      jsInitImgHandlingObjects(width, height);
-
-      final JavaScriptObject scaledImgJs = jsScaleImage(width, height);
-      final Image_WebGL scaledImg = new Image_WebGL(scaledImgJs);
-
-      if (scaledImg.getImage() != null) {
-         return scaledImg;
-      }
-      throw new RuntimeException("Unable to scale image");
-   }
-
-
-   private native JavaScriptObject jsScaleImage(final int width,
-                                                final int height) /*-{
-		//     debugger;
-		var that = this;
-
-		if ((that.@org.glob3.mobile.specific.Image_WebGL::_imgObject.width != width)
-				|| (that.@org.glob3.mobile.specific.Image_WebGL::_imgObject.height != height)) {
-			that.@org.glob3.mobile.specific.Image_WebGL::_context.drawImage(
-					that.@org.glob3.mobile.specific.Image_WebGL::_imgObject, 0,
+			var context = canvas.getContext("2d");
+			context.drawImage(
+					this.@org.glob3.mobile.specific.Image_WebGL::_imgObject, 0,
 					0, width, height);
 
-			var scaledImage = new Image();
-			scaledImage.src = that.@org.glob3.mobile.specific.Image_WebGL::_canvas
-					.toDataURL();
+			for ( var i = 0; i < imagesSize; i++) {
+				var other = images.@java.util.ArrayList::get(I)(i);
+				var jsOther = other.@org.glob3.mobile.specific.Image_WebGL::_imgObject;
 
-			return scaledImage;
-		} else {
-			return that.@org.glob3.mobile.specific.Image_WebGL::_imgObject;
+				var rect = rectangles.@java.util.ArrayList::get(I)(i);
+				var rectX = rect.@org.glob3.mobile.generated.RectangleI::_x;
+				var rectY = rect.@org.glob3.mobile.generated.RectangleI::_y;
+				var rectWidth = rect.@org.glob3.mobile.generated.RectangleI::_width;
+				var rectHeight = rect.@org.glob3.mobile.generated.RectangleI::_height;
+
+				context.drawImage(jsOther, rectX,
+						(height - (rectY + rectHeight)), rectWidth, rectHeight);
+			}
+
+			var jsResult = new Image();
+			jsResult.onload = function() {
+				var result = @org.glob3.mobile.specific.Image_WebGL::new(Lcom/google/gwt/core/client/JavaScriptObject;)(jsResult);
+				listener.@org.glob3.mobile.generated.IImageListener::imageCreated(Lorg/glob3/mobile/generated/IImage;)(result);
+			};
+			jsResult.src = canvas.toDataURL();
+
 		}
 
+		//      final int imagesSize = images.size();
+		//
+		//      if (imagesSize == 0) {
+		//         scale(width, height, listener, autodelete);
+		//      }
+		//      else {
+		//         final Canvas canvas = Canvas.createIfSupported();
+		//         canvas.setWidth(width + "px");
+		//         canvas.setHeight(height + "px");
+		//         canvas.setCoordinateSpaceWidth(width);
+		//         canvas.setCoordinateSpaceHeight(height);
+		//
+		//         final Image image = new Image();
+		//         final image.
+		//         final ImageElement ie = ImageElement.
+		//final CanvasElement ce;
+		//
+		//         final Context2d context = canvas.getContext2d();
+		////         context.drawImage(_imgObject, 0, 0, width, height);
+		////         context.drawImage
+		//
+		//         for (int i = 0; i < imagesSize; i++) {
+		//            final Image_WebGL image = (Image_WebGL) images.get(i);
+		//            final RectangleI rect = rectangles.get(i);
+		//         }
+		//      }
+		//
+		//      //context.;
+		//      //     canvas.
+		//      final String url = canvas.toDataUrl();
+		//
+		//      jsInitImgHandlingObjects(width, height);
+		//
+		//      final JavaScriptObject combinedImgJs = jsCombineWithRect( //
+		//               ((Image_WebGL) other).getImage(), //
+		//               rect._x, rect._y, rect._width, rect._height, //
+		//               width, height);
+		//      final Image_WebGL combinedImg = new Image_WebGL(combinedImgJs, width, height);
+		//
+		//      if (combinedImg.getImage() != null) {
+		//         return combinedImg;
+		//      }
+		//      throw new RuntimeException("Unable to combine rect image");
    }-*/;
+
+
+   //   @Override
+   //   public void combineWith(final IImage other,
+   //                           final int width,
+   //                           final int height,
+   //                           final IImageListener listener,
+   //                           final boolean autodelete) {
+   //      jsInitImgHandlingObjects(width, height);
+   //
+   //      final JavaScriptObject combinedImgJs = jsCombineWith(((Image_WebGL) other).getImage(), width, height);
+   //      final Image_WebGL combinedImg = new Image_WebGL(combinedImgJs, width, height);
+   //
+   //      if (combinedImg.getImage() != null) {
+   //         return combinedImg;
+   //      }
+   //      throw new RuntimeException("Unable to combine image");
+   //   }
+
+
+   //   private native JavaScriptObject jsCombineWith(final JavaScriptObject other,
+   //                                                 final int width,
+   //                                                 final int height) /*-{
+   //		//		debugger;
+   //
+   //		if ((this.@org.glob3.mobile.specific.Image_WebGL::_imgObject.width != width)
+   //				|| (this.@org.glob3.mobile.specific.Image_WebGL::_imgObject.height != height)) {
+   //			this.@org.glob3.mobile.specific.Image_WebGL::_context.drawImage(
+   //					this.@org.glob3.mobile.specific.Image_WebGL::_imgObject, 0,
+   //					0, width, height);
+   //		} else {
+   //			this.@org.glob3.mobile.specific.Image_WebGL::_context.drawImage(
+   //					this.@org.glob3.mobile.specific.Image_WebGL::_imgObject, 0,
+   //					0);
+   //		}
+   //		if ((other.width != width) || (other.height != height)) {
+   //			this.@org.glob3.mobile.specific.Image_WebGL::_context.drawImage(
+   //					other, 0, 0, width, height);
+   //		} else {
+   //			this.@org.glob3.mobile.specific.Image_WebGL::_context.drawImage(
+   //					other, 0, 0);
+   //		}
+   //		var combinedImg = new Image();
+   //		combinedImg.src = this.@org.glob3.mobile.specific.Image_WebGL::_canvas
+   //				.toDataURL();
+   //
+   //		return combinedImg;
+   //   }-*/;
+
+
+   @Override
+   public native void combineWith(final IImage other,
+                                  final RectangleI rect,
+                                  final int width,
+                                  final int height,
+                                  final IImageListener listener,
+                                  final boolean autodelete) /*-{
+		//      jsInitImgHandlingObjects(width, height);
+		//
+		//      final JavaScriptObject combinedImgJs = jsCombineWithRect( //
+		//               ((Image_WebGL) other).getImage(), //
+		//               rect._x, rect._y, rect._width, rect._height, //
+		//               width, height);
+		//      final Image_WebGL combinedImg = new Image_WebGL(combinedImgJs, width, height);
+		//
+		//      if (combinedImg.getImage() != null) {
+		//         return combinedImg;
+		//      }
+		//      throw new RuntimeException("Unable to combine rect image");
+
+		var canvas = $doc.createElement("canvas");
+		canvas.width = width;
+		canvas.height = height;
+
+		var context = canvas.getContext("2d");
+		context.drawImage(
+				this.@org.glob3.mobile.specific.Image_WebGL::_imgObject, 0, 0,
+				width, height);
+
+		var jsOther = other.@org.glob3.mobile.specific.Image_WebGL::_imgObject;
+
+		var rectX = rect.@org.glob3.mobile.generated.RectangleI::_x;
+		var rectY = rect.@org.glob3.mobile.generated.RectangleI::_y;
+		var rectWidth = rect.@org.glob3.mobile.generated.RectangleI::_width;
+		var rectHeight = rect.@org.glob3.mobile.generated.RectangleI::_height;
+
+		context.drawImage(jsOther, rectX, (height - (rectY + rectHeight)),
+				rectWidth, rectHeight);
+
+		var jsResult = new Image();
+		jsResult.onload = function() {
+			var result = @org.glob3.mobile.specific.Image_WebGL::new(Lcom/google/gwt/core/client/JavaScriptObject;)(jsResult);
+			listener.@org.glob3.mobile.generated.IImageListener::imageCreated(Lorg/glob3/mobile/generated/IImage;)(result);
+		};
+		jsResult.src = canvas.toDataURL();
+
+   }-*/;
+
+
+   //   private native JavaScriptObject jsCombineWithRect(final JavaScriptObject other,
+   //                                                     final int rectX,
+   //                                                     final int rectY,
+   //                                                     final int rectWidth,
+   //                                                     final int rectHeight,
+   //                                                     final int width,
+   //                                                     final int height) /*-{
+   //		//		debugger;
+   //
+   //		var context = this.@org.glob3.mobile.specific.Image_WebGL::_context;
+   //
+   //		if ((this.@org.glob3.mobile.specific.Image_WebGL::_imgObject.width != width)
+   //				|| (this.@org.glob3.mobile.specific.Image_WebGL::_imgObject.height != height)) {
+   //			context.drawImage(
+   //					this.@org.glob3.mobile.specific.Image_WebGL::_imgObject, 0,
+   //					0, width, height);
+   //		} else {
+   //			context.drawImage(
+   //					this.@org.glob3.mobile.specific.Image_WebGL::_imgObject, 0,
+   //					0);
+   //		}
+   //
+   //		context.drawImage(other, rectX, (height - (rectY + rectHeight)),
+   //				rectWidth, rectHeight);
+   //
+   //		var result = new Image();
+   //
+   //		//		result.onload = function() {
+   //		//		};
+   //
+   //		result.src = this.@org.glob3.mobile.specific.Image_WebGL::_canvas
+   //				.toDataURL();
+   //
+   //		return result;
+   //
+   //		//		return @org.glob3.mobile.specific.Image_WebGL::new(Lcom/google/gwt/core/client/JavaScriptObject;II)(result, width, height);
+   //   }-*/;
+
+
+   @Override
+   public native void subImage(final RectangleI rect,
+                               final IImageListener listener,
+                               final boolean autodelete) /*-{
+		var x = rect.@org.glob3.mobile.generated.RectangleI::_x;
+		var y = rect.@org.glob3.mobile.generated.RectangleI::_y;
+		var width = rect.@org.glob3.mobile.generated.RectangleI::_width;
+		var height = rect.@org.glob3.mobile.generated.RectangleI::_height;
+
+		var imgObject = this.@org.glob3.mobile.specific.Image_WebGL::_imgObject;
+
+		if ((x == 0) && (y == 0) && (imgObject.width == width)
+				&& (imgObject.height == height)) {
+			listener.@org.glob3.mobile.generated.IImageListener::imageCreated(Lorg/glob3/mobile/generated/IImage;)(this);
+		} else {
+			var canvas = $doc.createElement("canvas");
+			canvas.width = width;
+			canvas.height = height;
+
+			var context = canvas.getContext("2d");
+			context.drawImage(imgObject, x, y, width, height, 0, 0, width,
+					height);
+
+			var jsResult = new Image();
+			jsResult.onload = function() {
+				var result = @org.glob3.mobile.specific.Image_WebGL::new(Lcom/google/gwt/core/client/JavaScriptObject;)(jsResult);
+				listener.@org.glob3.mobile.generated.IImageListener::imageCreated(Lorg/glob3/mobile/generated/IImage;)(result);
+			};
+			jsResult.src = canvas.toDataURL();
+		}
+   }-*/;
+
+
+   @Override
+   public native void scale(final int width,
+                            final int height,
+                            final IImageListener listener,
+                            final boolean autodelete) /*-{
+		var imgObject = this.@org.glob3.mobile.specific.Image_WebGL::_imgObject;
+
+		if ((imgObject.width == width) && (imgObject.height == height)) {
+			listener.@org.glob3.mobile.generated.IImageListener::imageCreated(Lorg/glob3/mobile/generated/IImage;)(this);
+		} else {
+			var canvas = $doc.createElement("canvas");
+			canvas.width = width;
+			canvas.height = height;
+
+			var context = canvas.getContext("2d");
+			context.drawImage(imgObject, 0, 0, width, height);
+
+			var jsResult = new Image();
+			jsResult.onload = function() {
+				var result = @org.glob3.mobile.specific.Image_WebGL::new(Lcom/google/gwt/core/client/JavaScriptObject;)(jsResult);
+				listener.@org.glob3.mobile.generated.IImageListener::imageCreated(Lorg/glob3/mobile/generated/IImage;)(result);
+			};
+			jsResult.src = canvas.toDataURL();
+		}
+   }-*/;
+
+
+   //		}
+
+   //      if ((width == getWidth()) && (height == getHeight())) {
+   //         listener.imageCreated(this);
+   //      }
+   //      else {
+   //         final CanvasContext cc = CanvasContext.create(width, height);
+   //         
+   //      }
+
+   //      jsInitImgHandlingObjects(width, height);
+   //
+   //      final JavaScriptObject scaledImgJs = jsScaleImage(width, height);
+   //      final Image_WebGL scaledImg = new Image_WebGL(scaledImgJs);
+   //
+   //      if (scaledImg.getImage() != null) {
+   //         return scaledImg;
+   //      }
+   //      throw new RuntimeException("Unable to scale image");
+   //   }-*/;
+
+
+   //   private native JavaScriptObject jsScaleImage(final int width,
+   //                                                final int height) /*-{
+   //		//     debugger;
+   //
+   //		if ((this.@org.glob3.mobile.specific.Image_WebGL::_imgObject.width != width)
+   //				|| (this.@org.glob3.mobile.specific.Image_WebGL::_imgObject.height != height)) {
+   //			this.@org.glob3.mobile.specific.Image_WebGL::_context.drawImage(
+   //					this.@org.glob3.mobile.specific.Image_WebGL::_imgObject, 0,
+   //					0, width, height);
+   //
+   //			var scaledImage = new Image();
+   //			scaledImage.src = this.@org.glob3.mobile.specific.Image_WebGL::_canvas
+   //					.toDataURL();
+   //
+   //			return scaledImage;
+   //		} else {
+   //			return this.@org.glob3.mobile.specific.Image_WebGL::_imgObject;
+   //		}
+   //
+   //   }-*/;
 
 
    @Override
    public String description() {
-      // TODO review
-      return "Image WebGL " + jsGetWidth() + " x " + jsGetHeight() + ", _image=(" + _imgObject + ")";
+      return "Image WebGL " + getWidth() + " x " + getHeight() + ", _image=(" + _imgObject + ")";
    }
 
 
    @Override
    public IImage shallowCopy() {
-      final IImage imgCopy = new Image_WebGL(_imgObject);
-      //      final IImage imgCopy = new Image_WebGL(jsShallowCopy(_imgObject));
-
-      return imgCopy;
+      return new Image_WebGL(_imgObject);
    }
 
-
-   //   private native JavaScriptObject jsShallowCopy(final JavaScriptObject img) /*-{
-   //		var copyImg = new Image();
-   //		copyImg.src = img.src;
-   //		copyImg.width = img.width;
-   //		copyImg.height = img.height;
-   //
-   //		return copyImg;
-   //   }-*/;
-
-
-   //   private boolean          _isValid = false;
-   //   
-   //   
-   //   // TODO Check if used. Functions to load image from "file name"
-   //   private boolean _arrived = false;
-   //   
-   //   
-   //   public Image_WebGL(final String url) {
-   //      loadFromURL(url);
-   //   }
-   //   
-   //   
-   //   public void loadFromURL(final String url) {
-   //      _imgObject = jsCreateImgObject(url);
-   //   }
-   //   
-   //   
-   //   public boolean isLoadedFromURL() {
-   //      return _arrived;
-   //   }
-   //   
-   //   
-   //   private native JavaScriptObject jsCreateImgObject(String url) /*-{
-   //		debugger;
-   //		var thisInstance = this;
-   //
-   //		var imgObject = new Image();
-   //		imgObject.onload = function() {
-   //			//			debugger;
-   //			thisInstance.@org.glob3.mobile.specific.Image_WebGL::onArrive()();
-   //			console.log("loaded");
-   //		}
-   //		imgObject.onabort = function() {
-   //			//			debugger;
-   //			thisInstance.@org.glob3.mobile.specific.Image_WebGL::onError()();
-   //			console.log("abort");
-   //		}
-   //		imgObject.onerror = function() {
-   //			//			debugger;
-   //			thisInstance.@org.glob3.mobile.specific.Image_WebGL::onError()();
-   //			console.log("error");
-   //		}
-   //
-   //		imgObject.src = url;
-   //
-   //		return imgObject;
-   //   }-*/;
-   //   
-   //   
-   //   private void onArrive() {
-   //      _arrived = true;
-   //   }
-   //   
-   //   
-   //   private void onError() {
-   //      _arrived = false;
-   //   }
 
 }

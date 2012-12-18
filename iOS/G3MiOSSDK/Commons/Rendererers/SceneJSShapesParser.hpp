@@ -29,7 +29,7 @@ class SceneJSShapesParser {
 private:
   Shape* _rootShape;
   const std::string& _uriPrefix;
-  
+
   SceneJSShapesParser(const std::string& json,
                       const std::string& uriPrefix);
   SceneJSShapesParser(const IByteBuffer* json,
@@ -41,25 +41,23 @@ private:
 
   void pvtParse(const std::string& json);
 
-  SGNode* toNode(JSONBaseObject* jsonBaseObject) const;
+  SGNode* toNode(const JSONBaseObject* jsonBaseObject) const;
 
-  int parseChildren(JSONObject* jsonObject,
+  int parseChildren(const JSONObject* jsonObject,
                     SGNode* node) const;
 
-  void checkProcessedKeys(JSONObject* jsonObject,
+  void checkProcessedKeys(const JSONObject* jsonObject,
                           int processedKeys) const;
 
-  SGNode*          createNode         (JSONObject* jsonObject) const;
-  SGRotateNode*    createRotateNode   (JSONObject* jsonObject) const;
-  SGTranslateNode* createTranslateNode(JSONObject* jsonObject) const;
-  SGMaterialNode*  createMaterialNode (JSONObject* jsonObject) const;
-  SGTextureNode*   createTextureNode  (JSONObject* jsonObject) const;
-  SGGeometryNode*  createGeometryNode (JSONObject* jsonObject) const;
+  SGNode*          createNode         (const JSONObject* jsonObject) const;
+  SGRotateNode*    createRotateNode   (const JSONObject* jsonObject) const;
+  SGTranslateNode* createTranslateNode(const JSONObject* jsonObject) const;
+  SGMaterialNode*  createMaterialNode (const JSONObject* jsonObject) const;
+  SGTextureNode*   createTextureNode  (const JSONObject* jsonObject) const;
+  SGGeometryNode*  createGeometryNode (const JSONObject* jsonObject) const;
+  SGLayerNode*     createLayerNode    (const JSONObject* jsonObject) const;
 
-  SGLayerNode*     createLayerNode  (JSONObject* jsonObject) const;
-
-
-  Color* parseColor(JSONObject* jsColor) const;
+  Color* parseColor(const JSONObject* jsColor) const;
 
 public:
 
@@ -67,7 +65,7 @@ public:
                       const std::string& uriPrefix);
   static Shape* parse(const IByteBuffer* json,
                       const std::string& uriPrefix);
-
+  
 };
 
 #endif

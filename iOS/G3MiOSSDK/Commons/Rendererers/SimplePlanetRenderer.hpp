@@ -23,28 +23,31 @@ class IGLTextureId;
 class SimplePlanetRenderer: public LeafRenderer {
 private:
   
-  const std::string _textureFilename;
-  const int _texWidth, _texHeight;
-  
+//  const std::string _textureFilename;
+//  const int _texWidth, _texHeight;
+  IImage* _image;
+
   const int _latRes;
   const int _lonRes;
   
-  Mesh * _mesh;
+  Mesh* _mesh;
   
   
-  IFloatBuffer* createVertices(const Planet& planet) const;
+  IFloatBuffer* createVertices(const Planet* planet) const;
   IIntBuffer*  createMeshIndex() const;
   IFloatBuffer* createTextureCoordinates() const;
   
-  bool initializeMesh(const G3MRenderContext* rc);
+  Mesh* createMesh(const G3MRenderContext* rc);
   
 public:
-  SimplePlanetRenderer(const std::string textureFilename);
+  SimplePlanetRenderer(IImage* image);
+  
   ~SimplePlanetRenderer();
   
   void initialize(const G3MContext* context);  
   
-  void render(const G3MRenderContext* rc);
+  void render(const G3MRenderContext* rc,
+              const GLState& parentState);
   
   bool onTouchEvent(const G3MEventContext* ec,
                     const TouchEvent* touchEvent) {

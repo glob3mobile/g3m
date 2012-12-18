@@ -27,7 +27,8 @@ public:
     
     IG3MJSONBuilder(std::string jsonSource):_jsonSource(jsonSource){};
     
-    virtual void initWidgetWithCameraConstraints (std::vector<ICameraConstrainer*> cameraConstraints, LayerSet* layerSet, bool incrementalTileQuality, std::vector<Renderer*> renderers, UserData* userData, GTask* initializationTask, std::vector<PeriodicalTask*> periodicalTasks, MarkTouchListener* markTouchListener, MarkTouchListener* panoTouchListener)=0;
+    virtual void initWidgetWithCameraConstraints (std::vector<ICameraConstrainer*> cameraConstraints, LayerSet* layerSet, bool incrementalTileQuality, std::vector<Renderer*> renderers, UserData* userData, GInitializationTask* initializationTask, std::vector<PeriodicalTask*> periodicalTasks, MarkTouchListener* markTouchListener, MarkTouchListener* panoTouchListener)=0;
+    virtual void create(LayerSet* layerSet, GInitializationTask* initializationTask, MarkTouchListener* markTouchListener, MarkTouchListener* panoTouchListener)=0;
     virtual ~IG3MJSONBuilder(){};
     
 };

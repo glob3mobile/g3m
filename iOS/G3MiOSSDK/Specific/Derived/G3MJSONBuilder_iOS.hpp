@@ -12,6 +12,8 @@
 #include "IG3MJSONBuilder.hpp"
 
 #include "G3MWidget_iOS.h"
+#include "GEORenderer.hpp"
+
 
 class G3MJSONBuilder_iOS : public IG3MJSONBuilder {
     
@@ -19,7 +21,14 @@ class G3MJSONBuilder_iOS : public IG3MJSONBuilder {
     
 public:
     G3MJSONBuilder_iOS(std::string jsonSource, G3MWidget_iOS* g3mWidget);
-    void initWidgetWithCameraConstraints (std::vector<ICameraConstrainer*> cameraConstraints, LayerSet* layerSet, bool incrementalTileQuality, std::vector<Renderer*> renderers, UserData* userData, GTask* initializationTask, std::vector<PeriodicalTask*> periodicalTasks, MarkTouchListener* markTouchListener, MarkTouchListener* panoTouchListener);
+    void initWidgetWithCameraConstraints (std::vector<ICameraConstrainer*> cameraConstraints, LayerSet* layerSet, bool incrementalTileQuality, std::vector<Renderer*> renderers, UserData* userData, GInitializationTask* initializationTask, std::vector<PeriodicalTask*> periodicalTasks, MarkTouchListener* markTouchListener, MarkTouchListener* panoTouchListener);
+    void create(LayerSet* layerSet, GInitializationTask* initializationTask, MarkTouchListener* markTouchListener, MarkTouchListener* panoTouchListener);
+//private:
+//    TilesRenderParameters* createTileRenderParameters();
+//    TileRenderer* createTileRenderer(TilesRenderParameters* parameters, LayerSet* layerSet);
+//    GEORenderer* createGEORenderer();
+//    CameraRenderer* createCameraRenderer();
+
 };
 
 #endif

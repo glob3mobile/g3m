@@ -6,11 +6,16 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import org.glob3.mobile.generated.G3MWidget;
-import org.glob3.mobile.generated.IGLProgramId;
+import org.glob3.mobile.generated.GL;
+import org.glob3.mobile.generated.ShaderProgram;
 
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.os.Looper;
+import android.util.Log;
+
+
+//import org.glob3.mobile.generated.IGLProgramId;
 
 
 public final class ES2Renderer
@@ -19,12 +24,22 @@ public final class ES2Renderer
 
    final private G3MWidget_Android _widgetAndroid;
 
-   private IGLProgramId            _program;
    private boolean                 _hasRendered = false;
+   private int                     _width;
+   private int                     _height;
+   private final GL                _gl;
+   private ShaderProgram           _shaderProgram;
+
+
+   // private ShaderProgram		   _shaderProgram2;
 
 
    public ES2Renderer(final G3MWidget_Android widget) {
       _widgetAndroid = widget;
+      _width = 1;
+      _height = 1;
+      final NativeGL2_Android nativeGL = new NativeGL2_Android();
+      _gl = new GL(nativeGL, false);
    }
 
 
@@ -39,14 +54,14 @@ public final class ES2Renderer
 
       final G3MWidget widget = _widgetAndroid.getG3MWidget();
 
-      GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
-      widget.getGL().useProgram(_program);
+      //GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
+      widget.getGL().useProgram(_shaderProgram);
 
       // Enable the depth tests and Cull Face
-      GLES20.glEnable(GLES20.GL_DEPTH_TEST);
-      GLES20.glEnable(GLES20.GL_CULL_FACE);
+      //GLES20.glEnable(GLES20.GL_DEPTH_TEST);
+      //GLES20.glEnable(GLES20.GL_CULL_FACE);
 
-      widget.render();
+      widget.render(_width, _height);
    }
 
 
@@ -57,6 +72,8 @@ public final class ES2Renderer
       // Ignore the passed-in GL10 interface, and use the GLES20
       // class's static methods instead.
       GLES20.glViewport(0, 0, width, height);
+      _width = width;
+      _height = height;
 
       if (_hasRendered) {
          _widgetAndroid.getG3MWidget().onResizeViewportEvent(width, height);
@@ -67,7 +84,18 @@ public final class ES2Renderer
    @Override
    public void onSurfaceCreated(final GL10 glUnused,
                                 final EGLConfig config) {
-      _program = new GLProgramId_Android(GL2Shaders.createProgram(GL2Shaders.getVertexShader(), GL2Shaders.getFragmentShader()));
+      //_program = new GLProgramId_Android(GL2Shaders.createProgram(GL2Shaders.getVertexShader(), GL2Shaders.getFragmentShader()));
+      _shaderProgram = new ShaderProgram(_gl);
+      if (_shaderProgram.loadShaders(GL2Shaders.getVertexShader(), GL2Shaders.getFragmentShader()) == false) {
+         Log.e("GL2Shaders", "Failed to load shaders");
+      }
+
+      //_shaderProgram2 = new ShaderProgram(_gl);
+   }
+
+
+   public final GL getGL() {
+      return _gl;
    }
 
 

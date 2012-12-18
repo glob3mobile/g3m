@@ -59,6 +59,7 @@ void Mark::initialize(const G3MContext* context) {
     
     downloader->requestImage(_textureURL,
                              1000000,
+                             TimeInterval::fromDays(30),
                              new TextureDownloadListener(this),
                              true);
   }
@@ -109,7 +110,8 @@ IFloatBuffer* Mark::getVertices(const Planet* planet) {
     return _vertices;
 }
 
-void Mark::render(const G3MRenderContext* rc) {
+void Mark::render(const G3MRenderContext* rc,
+                  const GLState& parentState) {
   const Camera* camera = rc->getCurrentCamera();
   const Planet* planet = rc->getPlanet();
   

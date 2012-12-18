@@ -51,4 +51,9 @@ public class SGTranslateNode extends SGNode
 	super.cleanUpRender(rc);
   }
 
+  public final GLState createState(G3MRenderContext rc, GLState parentState)
+  {
+	return null;
+  }
+
 }

@@ -16,11 +16,11 @@
 
 class Planet : public Ellipsoid {
 private:
-  std::string _name;
+  const std::string _name;
   
 public:
   
-  Planet(const std::string name,
+  Planet(const std::string& name,
          const Vector3D& radii) :
   Ellipsoid(radii),
   _name(name)
