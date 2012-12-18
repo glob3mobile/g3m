@@ -29,7 +29,7 @@ _tileRenderer(NULL),
 _busyRenderer(NULL), // new BusyMeshRenderer()),
 _initializationTask(NULL),
 _autoDeleteInitializationTask(true),
-_logFPS(true),
+_logFPS(false),
 _logDownloaderStatistics(false),
 _userData(NULL)
 {
