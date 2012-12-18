@@ -126,10 +126,12 @@ public final class ByteBuffer_WebGL
 
 
    private native String jsGetAsString() /*-{
-		var thisInstance = this;
-		return String.fromCharCode
-				.apply(
-						null,
-						thisInstance.@org.glob3.mobile.specific.ByteBuffer_WebGL::_buffer);
+		var result = "";
+		var buffer = this.@org.glob3.mobile.specific.ByteBuffer_WebGL::_buffer;
+		for ( var i = 0; i < buffer.byteLength; i++) {
+			result += String.fromCharCode(buffer[i]);
+		}
+		return result;
    }-*/;
+
 }
