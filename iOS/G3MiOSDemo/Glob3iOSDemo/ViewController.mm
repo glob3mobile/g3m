@@ -17,7 +17,6 @@
 #include "MarksRenderer.hpp"
 #include "CameraConstraints.hpp"
 //#include "GLErrorRenderer.hpp"
-//#include "LatLonMeshRenderer.hpp"
 #include "LevelTileCondition.hpp"
 #include "BingLayer.hpp"
 #include "TrailsRenderer.hpp"
@@ -184,10 +183,7 @@
 
   GInitializationTask* initializationTask = [self createSampleInitializationTask: shapesRenderer
                                                                      geoRenderer: geoRenderer];
-  builder->setInitializationTask(initializationTask);
-
-  const bool autoDeleteInitializationTask = true;
-  builder->setAutoDeleteInitializationTask(autoDeleteInitializationTask);
+  builder->setInitializationTask(initializationTask, true);
 
   PeriodicalTask* periodicalTask = [self createSamplePeriodicalTask:(builder)];
   builder->addPeriodicalTask(periodicalTask);
@@ -588,12 +584,6 @@
   trail->addPosition(position);
   trailsRenderer->addTrail(trail);
   builder->addRenderer(trailsRenderer);
-
-  //    if (false) {
-  //        LatLonMeshRenderer *renderer = new LatLonMeshRenderer();
-  //        builder->addRenderer(renderer);
-  //    }
-
 
   //  renderers.push_back(new GLErrorRenderer());
 
