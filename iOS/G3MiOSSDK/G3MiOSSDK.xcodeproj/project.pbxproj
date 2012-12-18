@@ -93,9 +93,9 @@
 		CF0C396A157F988100646A2F /* Mark.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF0C3969157F988100646A2F /* Mark.cpp */; };
 		CF0D9BB41601F46B00F28B7D /* ByteBuffer_iOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF0D9BB31601F46A00F28B7D /* ByteBuffer_iOS.cpp */; };
 		CF11E8C6164D653000935052 /* SGLayerNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF11E8C4164D653000935052 /* SGLayerNode.cpp */; };
-		CF11E8C7164D653000935052 /* SGLayerNode.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF11E8C5164D653000935052 /* SGLayerNode.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		CF11E8C7164D653000935052 /* SGLayerNode.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF11E8C5164D653000935052 /* SGLayerNode.hpp */; settings = {ATTRIBUTES = (); }; };
 		CF2CDD991678292E002A78A9 /* GInitializationTask.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF2CDD971678292E002A78A9 /* GInitializationTask.cpp */; };
-		CF2CDD9A1678292E002A78A9 /* GInitializationTask.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF2CDD981678292E002A78A9 /* GInitializationTask.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		CF2CDD9A1678292E002A78A9 /* GInitializationTask.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF2CDD981678292E002A78A9 /* GInitializationTask.hpp */; settings = {ATTRIBUTES = (); }; };
 		CF31CBF1158776130085E8F1 /* Effects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF31CBF0158776120085E8F1 /* Effects.cpp */; };
 		CF3E07E81649B65000B5CA51 /* CompositeShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF3E07E61649B65000B5CA51 /* CompositeShape.cpp */; };
 		CF3E07E91649B65000B5CA51 /* CompositeShape.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF3E07E71649B65000B5CA51 /* CompositeShape.hpp */; settings = {ATTRIBUTES = (); }; };
@@ -302,25 +302,25 @@
 		D8D347BA15E5133B00EDB394 /* IStringBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8D347B915E5133B00EDB394 /* IStringBuilder.cpp */; };
 		D8E76951160742FD008EC7B9 /* GLConstants.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8E76950160742FD008EC7B9 /* GLConstants.hpp */; settings = {ATTRIBUTES = (); }; };
 		D8EEF3B91577924D003FEB5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF3B81577924D003FEB5E /* Foundation.framework */; };
-		D8F42FB515EB6D78000D1822 /* RCObject.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFF8C4BC15DEB6A70034A576 /* RCObject.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		D8F42FB615EB6D78000D1822 /* Petition.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFE0844415E27B9A0004EC0E /* Petition.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		D8F42FB715EB6D78000D1822 /* FrameTasksExecutor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF73BFDA15E114E3001CE412 /* FrameTasksExecutor.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		D8F42FB815EB6D78000D1822 /* SQDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = CF8B21BD15DD345D0068601A /* SQDatabase.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D8F42FB915EB6D78000D1822 /* TileKey.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFD0021A15D3C94C00735FD8 /* TileKey.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		D8F42FBA15EB6D78000D1822 /* TerrainTouchEventListener.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFE0844015E27A310004EC0E /* TerrainTouchEventListener.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		D8F42FBB15EB6D78000D1822 /* GL.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D81BA16E15CBF19E004EF0B0 /* GL.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		D8F42FBC15EB6D78000D1822 /* CachedDownloader.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF9CD89915DBE2C800C6FD7E /* CachedDownloader.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		D8F42FBD15EB6D78000D1822 /* IGLTextureId.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF08483515D41EF700327171 /* IGLTextureId.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		D8F42FBE15EB6D78000D1822 /* LeveledTexturedMesh.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF8FF98A15D5539F000F79D1 /* LeveledTexturedMesh.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		D8F42FBF15EB6D78000D1822 /* SQLiteStorage_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF8B21B115DD32820068601A /* SQLiteStorage_iOS.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
-		D8F42FD415EB7B95000D1822 /* IStringBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8A723A715E4D2C500ABDF07 /* IStringBuilder.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		D8F42FB515EB6D78000D1822 /* RCObject.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFF8C4BC15DEB6A70034A576 /* RCObject.hpp */; settings = {ATTRIBUTES = (); }; };
+		D8F42FB615EB6D78000D1822 /* Petition.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFE0844415E27B9A0004EC0E /* Petition.hpp */; settings = {ATTRIBUTES = (); }; };
+		D8F42FB715EB6D78000D1822 /* FrameTasksExecutor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF73BFDA15E114E3001CE412 /* FrameTasksExecutor.hpp */; settings = {ATTRIBUTES = (); }; };
+		D8F42FB815EB6D78000D1822 /* SQDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = CF8B21BD15DD345D0068601A /* SQDatabase.h */; settings = {ATTRIBUTES = (); }; };
+		D8F42FB915EB6D78000D1822 /* TileKey.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFD0021A15D3C94C00735FD8 /* TileKey.hpp */; settings = {ATTRIBUTES = (); }; };
+		D8F42FBA15EB6D78000D1822 /* TerrainTouchEventListener.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFE0844015E27A310004EC0E /* TerrainTouchEventListener.hpp */; settings = {ATTRIBUTES = (); }; };
+		D8F42FBB15EB6D78000D1822 /* GL.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D81BA16E15CBF19E004EF0B0 /* GL.hpp */; settings = {ATTRIBUTES = (); }; };
+		D8F42FBC15EB6D78000D1822 /* CachedDownloader.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF9CD89915DBE2C800C6FD7E /* CachedDownloader.hpp */; settings = {ATTRIBUTES = (); }; };
+		D8F42FBD15EB6D78000D1822 /* IGLTextureId.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF08483515D41EF700327171 /* IGLTextureId.hpp */; settings = {ATTRIBUTES = (); }; };
+		D8F42FBE15EB6D78000D1822 /* LeveledTexturedMesh.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF8FF98A15D5539F000F79D1 /* LeveledTexturedMesh.hpp */; settings = {ATTRIBUTES = (); }; };
+		D8F42FBF15EB6D78000D1822 /* SQLiteStorage_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF8B21B115DD32820068601A /* SQLiteStorage_iOS.hpp */; settings = {ATTRIBUTES = (); }; };
+		D8F42FD415EB7B95000D1822 /* IStringBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8A723A715E4D2C500ABDF07 /* IStringBuilder.hpp */; settings = {ATTRIBUTES = (); }; };
 		E705123C165E782C00AEADB9 /* TileRendererBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E705123A165E782C00AEADB9 /* TileRendererBuilder.cpp */; };
-		E705123D165E782C00AEADB9 /* TileRendererBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E705123B165E782C00AEADB9 /* TileRendererBuilder.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		E7051241165E916000AEADB9 /* G3MBuilder_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E705123F165E916000AEADB9 /* G3MBuilder_iOS.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
+		E705123D165E782C00AEADB9 /* TileRendererBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E705123B165E782C00AEADB9 /* TileRendererBuilder.hpp */; settings = {ATTRIBUTES = (); }; };
+		E7051241165E916000AEADB9 /* G3MBuilder_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E705123F165E916000AEADB9 /* G3MBuilder_iOS.hpp */; settings = {ATTRIBUTES = (); }; };
 		E7051242165E916000AEADB9 /* G3MBuilder_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7051240165E916000AEADB9 /* G3MBuilder_iOS.mm */; };
 		E745CC7916484A9A00819711 /* IStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E745CC7716484A9900819711 /* IStorage.cpp */; };
 		E77A100A165BEDC500FE5515 /* IG3MBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E77A1008165BEDC500FE5515 /* IG3MBuilder.cpp */; };
-		E77A100B165BEDC500FE5515 /* IG3MBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E77A1009165BEDC500FE5515 /* IG3MBuilder.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		E77A100B165BEDC500FE5515 /* IG3MBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E77A1009165BEDC500FE5515 /* IG3MBuilder.hpp */; settings = {ATTRIBUTES = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -341,7 +341,7 @@
 		383BD39E1577EE5A0012AC53 /* Angle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Angle.cpp; path = Commons/Geometry/Angle.cpp; sourceTree = "<group>"; };
 		383BD39F1577EE5A0012AC53 /* Angle.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = Angle.hpp; path = Commons/Geometry/Angle.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		383BD3A01577EE5A0012AC53 /* Ellipsoid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Ellipsoid.cpp; path = Commons/Geometry/Ellipsoid.cpp; sourceTree = "<group>"; };
-		383BD3A11577EE5A0012AC53 /* Ellipsoid.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = Ellipsoid.hpp; path = Commons/Geometry/Ellipsoid.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		383BD3A11577EE5A0012AC53 /* Ellipsoid.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = Ellipsoid.hpp; path = Commons/Geometry/Ellipsoid.hpp; sourceTree = "<group>"; };
 		383BD3A21577EE5A0012AC53 /* Geodetic2D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Geodetic2D.cpp; path = Commons/Geometry/Geodetic2D.cpp; sourceTree = "<group>"; };
 		383BD3A31577EE5A0012AC53 /* Geodetic2D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Geodetic2D.hpp; path = Commons/Geometry/Geodetic2D.hpp; sourceTree = "<group>"; };
 		383BD3A41577EE5A0012AC53 /* Geodetic3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Geodetic3D.cpp; path = Commons/Geometry/Geodetic3D.cpp; sourceTree = "<group>"; };
@@ -1159,6 +1159,9 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				383BD3861577EDDB0012AC53 /* G3MWidget_iOS.h in Headers */,
+				CFDFC05E166AB22A0065BC1F /* AbstractMesh.hpp in Headers */,
+				E7051241165E916000AEADB9 /* G3MBuilder_iOS.hpp in Headers */,
 				E705123D165E782C00AEADB9 /* TileRendererBuilder.hpp in Headers */,
 				E77A100B165BEDC500FE5515 /* IG3MBuilder.hpp in Headers */,
 				CF2CDD9A1678292E002A78A9 /* GInitializationTask.hpp in Headers */,
@@ -1309,15 +1312,18 @@
 				A70F5616161C8F9A00340256 /* JSONBoolean.hpp in Headers */,
 				A70F5618161C94A100340256 /* JSONString.hpp in Headers */,
 				A7EE001E161B25FD00C77604 /* JSONArray.hpp in Headers */,
-				E7051241165E916000AEADB9 /* G3MBuilder_iOS.hpp in Headers */,
-				CFDFC05E166AB22A0065BC1F /* AbstractMesh.hpp in Headers */,
+				D80D525615EE66D700ACEA16 /* INativeGL.hpp in Headers */,
+				CFB73CDE15EFC51B00261631 /* MathUtils_iOS.hpp in Headers */,
 				CF6DD7861637488300685212 /* GLTextureId_iOS.hpp in Headers */,
 				CF9D832A15FF7A1C0069B555 /* Downloader_iOS.hpp in Headers */,
 				CF9D832B15FF7A1C0069B555 /* StringUtils_iOS.hpp in Headers */,
 				CF9D832C15FF7A1C0069B555 /* ByteBuffer_iOS.hpp in Headers */,
 				D89DA21915FF6C32008CD5F5 /* Image_iOS.hpp in Headers */,
 				CF47030C15EFB4C000426B8B /* ThreadUtils_iOS.hpp in Headers */,
-				D80D525615EE66D700ACEA16 /* INativeGL.hpp in Headers */,
+				D8F42FBF15EB6D78000D1822 /* SQLiteStorage_iOS.hpp in Headers */,
+				D8A723AC15E4D42B00ABDF07 /* StringBuilder_iOS.hpp in Headers */,
+				383BD37C1577EDC00012AC53 /* Factory_iOS.hpp in Headers */,
+				383BD37E1577EDC00012AC53 /* Logger_iOS.hpp in Headers */,
 				CF8A234E15C4306800FD56C9 /* Downloader_iOS_Handler.h in Headers */,
 				CF8A235315C4340900FD56C9 /* Downloader_iOS_Listener.h in Headers */,
 				CF6D404715C8278C008D8D78 /* Downloader_iOS_WorkerThread.h in Headers */,
@@ -1531,7 +1537,6 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -1558,7 +1563,6 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PREPROCESSOR_DEFINITIONS = C_CODE;
@@ -1579,7 +1583,6 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
-				CODE_SIGN_IDENTITY = "";
 				DSTROOT = /tmp/Glob3iOSSDK.dst;
 				GCC_INCREASE_PRECOMPILED_HEADER_SHARING = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -1595,7 +1598,6 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_NAME = G3MiOSSDK;
-				PUBLIC_HEADERS_FOLDER_PATH = include/$TARGET_NAME;
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SKIP_INSTALL = YES;
 			};
@@ -1606,7 +1608,6 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
-				CODE_SIGN_IDENTITY = "";
 				DSTROOT = /tmp/Glob3iOSSDK.dst;
 				GCC_INCREASE_PRECOMPILED_HEADER_SHARING = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -1622,7 +1623,6 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_NAME = G3MiOSSDK;
-				PUBLIC_HEADERS_FOLDER_PATH = include/$TARGET_NAME;
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SKIP_INSTALL = YES;
 			};
