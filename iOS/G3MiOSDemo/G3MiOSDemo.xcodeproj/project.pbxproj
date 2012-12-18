@@ -44,6 +44,9 @@
 		E71B153F1626D27F003D1013 /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B15341626D27F003D1013 /* Icon-Small@2x.png */; };
 		E71B15401626D27F003D1013 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B15351626D27F003D1013 /* Icon.png */; };
 		E71B15411626D27F003D1013 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B15361626D27F003D1013 /* Icon@2x.png */; };
+		E751B7661680E2D90032413F /* satellite_on_96x48.png in Resources */ = {isa = PBXBuildFile; fileRef = E751B7651680E2D90032413F /* satellite_on_96x48.png */; };
+		E751B7681680E5850032413F /* map_on_96x48.png in Resources */ = {isa = PBXBuildFile; fileRef = E751B7671680E5850032413F /* map_on_96x48.png */; };
+		E751B76B1680EEE50032413F /* SimpleGlob3ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E751B76A1680EEE50032413F /* SimpleGlob3ViewController.mm */; };
 		E7B776A5167B56900005ED14 /* DoubleGlob3ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7B776A4167B56900005ED14 /* DoubleGlob3ViewController.mm */; };
 		E7B776A8167F68730005ED14 /* LayerSwitchViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7B776A7167F68730005ED14 /* LayerSwitchViewController.mm */; };
 /* End PBXBuildFile section */
@@ -282,6 +285,10 @@
 		E71B15341626D27F003D1013 /* Icon-Small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-Small@2x.png"; path = "Resources/Icon-Small@2x.png"; sourceTree = "<group>"; };
 		E71B15351626D27F003D1013 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = Resources/Icon.png; sourceTree = "<group>"; };
 		E71B15361626D27F003D1013 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "Resources/Icon@2x.png"; sourceTree = "<group>"; };
+		E751B7651680E2D90032413F /* satellite_on_96x48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = satellite_on_96x48.png; sourceTree = "<group>"; };
+		E751B7671680E5850032413F /* map_on_96x48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = map_on_96x48.png; sourceTree = "<group>"; };
+		E751B7691680EEE50032413F /* SimpleGlob3ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleGlob3ViewController.h; sourceTree = "<group>"; };
+		E751B76A1680EEE50032413F /* SimpleGlob3ViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SimpleGlob3ViewController.mm; sourceTree = "<group>"; };
 		E7B776A3167B56900005ED14 /* DoubleGlob3ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DoubleGlob3ViewController.h; sourceTree = "<group>"; };
 		E7B776A4167B56900005ED14 /* DoubleGlob3ViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DoubleGlob3ViewController.mm; sourceTree = "<group>"; };
 		E7B776A6167F68730005ED14 /* LayerSwitchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayerSwitchViewController.h; sourceTree = "<group>"; };
@@ -527,6 +534,8 @@
 				D8EEF3991577920B003FEB5E /* AppDelegate.h */,
 				D8EEF39A1577920B003FEB5E /* AppDelegate.m */,
 				D8EEF39C1577920B003FEB5E /* MainStoryboard_iPhone.storyboard */,
+				E751B7691680EEE50032413F /* SimpleGlob3ViewController.h */,
+				E751B76A1680EEE50032413F /* SimpleGlob3ViewController.mm */,
 				D8EEF39F1577920B003FEB5E /* MainStoryboard_iPad.storyboard */,
 				D8EEF3A21577920B003FEB5E /* ViewController.h */,
 				D8EEF3A31577920B003FEB5E /* ViewController.mm */,
@@ -564,6 +573,8 @@
 		D8EEF4271577B0D6003FEB5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				E751B7671680E5850032413F /* map_on_96x48.png */,
+				E751B7651680E2D90032413F /* satellite_on_96x48.png */,
 				CF0223821668318600024B73 /* geojson */,
 				CFEA76671666DCB000E89BC7 /* images */,
 				CFE3DBB0164B0E7D00910037 /* seymour-plane.json */,
@@ -682,6 +693,8 @@
 				CFE3DBB1164B0E7D00910037 /* seymour-plane.json in Resources */,
 				CFEA76681666DCB000E89BC7 /* images in Resources */,
 				CF0223831668318600024B73 /* geojson in Resources */,
+				E751B7661680E2D90032413F /* satellite_on_96x48.png in Resources */,
+				E751B7681680E5850032413F /* map_on_96x48.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -698,6 +711,7 @@
 				D8EEF40B1577A93D003FEB5E /* G3W.mm in Sources */,
 				E7B776A5167B56900005ED14 /* DoubleGlob3ViewController.mm in Sources */,
 				E7B776A8167F68730005ED14 /* LayerSwitchViewController.mm in Sources */,
+				E751B76B1680EEE50032413F /* SimpleGlob3ViewController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

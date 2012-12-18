@@ -7,12 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
+
 #import "G3MWidget_iOS.h"
 
 @interface DoubleGlob3ViewController : UIViewController{
+
+  IBOutlet G3MWidget_iOS* _upperGlob3;
+  IBOutlet G3MWidget_iOS* _lowerGlob3;
+  
 }
 
-@property (retain, nonatomic) IBOutlet G3MWidget_iOS *_upperGlob3;
-@property (retain, nonatomic) IBOutlet G3MWidget_iOS *_lowerGlob3;
+@property (retain, nonatomic) G3MWidget_iOS *_upperGlob3;
+@property (retain, nonatomic) G3MWidget_iOS *_lowerGlob3;
 
 @end
