@@ -208,7 +208,7 @@ public abstract class IG3MBuilder
 	 _tileRenderer = NULL;
 	 _busyRenderer = new BusyMeshRenderer();
 	 _initializationTask = NULL;
-	 _logFPS = true;
+	 _logFPS = false;
 	 _logDownloaderStatistics = false;
 	 _autoDeleteInitializationTask = true;
 	 _userData = NULL;
