@@ -330,8 +330,8 @@ public class G3MWidget
 
   public final void setUserData(UserData userData)
   {
-	  if (_userData != null)
-		  _userData.dispose();
+	if (_userData != null)
+		_userData.dispose();
 
 	_userData = userData;
 	if (_userData != null)

@@ -25,12 +25,12 @@ TileRendererBuilder::TileRendererBuilder() {
 }
 
 TileRendererBuilder::~TileRendererBuilder() {
-    delete _tileTessellator;
-    delete _texturizer;
-    delete _layerSet;
-#ifdef C_CODE
-    delete _parameters;
-#endif
+//    delete _tileTessellator;
+//    delete _texturizer;
+//    delete _layerSet;
+//#ifdef C_CODE
+//    delete _parameters;
+//#endif
 }
 
 TileRenderer* TileRendererBuilder::create() {

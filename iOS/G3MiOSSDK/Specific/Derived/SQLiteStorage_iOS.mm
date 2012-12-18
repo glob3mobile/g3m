@@ -224,7 +224,7 @@ const IByteBuffer* SQLiteStorage_iOS::readBuffer(const URL& url) {
     const double expirationInterval = [[rs stringColumnByIndex:1] doubleValue];
     NSDate* expiration = [NSDate dateWithTimeIntervalSince1970:expirationInterval];
 
-    if ([expiration earlierDate:[NSDate date]]) {
+    if ([expiration compare:[NSDate date]] == NSOrderedDescending) {
       NSUInteger length = [nsData length];
       unsigned char* bytes = new unsigned char[length];
       [nsData getBytes: bytes
@@ -291,7 +291,7 @@ const IImage* SQLiteStorage_iOS::readImage(const URL& url) {
     const double expirationInterval = [[rs stringColumnByIndex:1] doubleValue];
     NSDate* expiration = [NSDate dateWithTimeIntervalSince1970:expirationInterval];
 
-    if ([expiration earlierDate:[NSDate date]]) {
+    if ([expiration compare:[NSDate date]] == NSOrderedDescending) {
       UIImage* uiImage = [UIImage imageWithData:data];
       if (uiImage) {
         result = new Image_iOS(uiImage,

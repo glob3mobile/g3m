@@ -67,12 +67,12 @@ public class TileRendererBuilder
 	}
 	public void dispose()
 	{
-		if (_tileTessellator != null)
-			_tileTessellator.dispose();
-		if (_texturizer != null)
-			_texturizer.dispose();
-		if (_layerSet != null)
-			_layerSet.dispose();
+	//    delete _tileTessellator;
+	//    delete _texturizer;
+	//    delete _layerSet;
+	///#ifdef C_CODE
+	//    delete _parameters;
+	///#endif
 	}
 	public final TileRenderer create()
 	{

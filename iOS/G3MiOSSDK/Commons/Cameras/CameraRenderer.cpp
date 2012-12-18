@@ -11,6 +11,14 @@
 #include "CameraEventHandler.hpp"
 #include "TouchEvent.hpp"
 
+CameraRenderer::~CameraRenderer() {
+  delete _cameraContext;
+  const int handlersSize = _handlers.size();
+  for (int i = 0; i < handlersSize; i++) {
+    CameraEventHandler* handler = _handlers[i];
+    delete handler;
+  }
+}
 
 void CameraRenderer::initialize(const G3MContext* context) {
   //_logger = ic->getLogger();
@@ -19,10 +27,10 @@ void CameraRenderer::initialize(const G3MContext* context) {
 
 void CameraRenderer::onResizeViewportEvent(const G3MEventContext* ec,
                                            int width, int height) {
-//  moved to G3MWidget::onResizeViewportEvent
-//  if (_cameraContext != NULL) {
-//    _cameraContext->getNextCamera()->resizeViewport(width, height);
-//  }
+  //  moved to G3MWidget::onResizeViewportEvent
+  //  if (_cameraContext != NULL) {
+  //    _cameraContext->getNextCamera()->resizeViewport(width, height);
+  //  }
 }
 
 void CameraRenderer::render(const G3MRenderContext* rc,
@@ -31,7 +39,7 @@ void CameraRenderer::render(const G3MRenderContext* rc,
   if (_cameraContext == NULL) {
     _cameraContext = new CameraContext(None, rc->getNextCamera());
   }
-  
+
   // render camera object
   rc->getCurrentCamera()->render(rc, parentState);
 
@@ -58,7 +66,7 @@ bool CameraRenderer::onTouchEvent(const G3MEventContext* ec,
       }
     }
   }
-  
+
   // if no handler processed the event, return not-handled
   return false;
 }

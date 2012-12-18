@@ -2,7 +2,7 @@ package org.glob3.mobile.generated;
 public class CameraRenderer extends LeafRenderer
 {
   private boolean _processTouchEvents;
-  private java.util.ArrayList<CameraEventHandler > _handlers = new java.util.ArrayList<CameraEventHandler >();
+  private java.util.ArrayList<CameraEventHandler> _handlers = new java.util.ArrayList<CameraEventHandler>();
   private CameraContext _cameraContext;
 
   public CameraRenderer()
@@ -13,8 +13,15 @@ public class CameraRenderer extends LeafRenderer
 
   public void dispose()
   {
-	  if (_cameraContext != null)
-		  _cameraContext.dispose();
+	if (_cameraContext != null)
+		_cameraContext.dispose();
+	final int handlersSize = _handlers.size();
+	for (int i = 0; i < handlersSize; i++)
+	{
+	  CameraEventHandler handler = _handlers.get(i);
+	  if (handler != null)
+		  handler.dispose();
+	}
   }
 
   public final void addHandler(CameraEventHandler handler)
@@ -79,10 +86,10 @@ public class CameraRenderer extends LeafRenderer
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
-  //  moved to G3MWidget::onResizeViewportEvent
-  //  if (_cameraContext != NULL) {
-  //    _cameraContext->getNextCamera()->resizeViewport(width, height);
-  //  }
+	//  moved to G3MWidget::onResizeViewportEvent
+	//  if (_cameraContext != NULL) {
+	//    _cameraContext->getNextCamera()->resizeViewport(width, height);
+	//  }
   }
 
   public final boolean isReadyToRender(G3MRenderContext rc)
