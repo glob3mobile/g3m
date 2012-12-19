@@ -39,7 +39,7 @@ public class AppParser
   private void parseWorldConfiguration(LayerSet layerSet, MarksRenderer marks, JSONObject jsonWorld)
   {
 	String jsonBaseLayer = jsonWorld.getAsString(BASELAYER).value();
-	JSONArray jsonBbox = jsonWorld.getAsArray(BBOX);
+	final JSONArray jsonBbox = jsonWorld.getAsArray(BBOX);
   
 	if (jsonBaseLayer.equals("BING"))
 	{
@@ -55,9 +55,9 @@ public class AppParser
   }
   private void parseGEOJSONPointObject(MarksRenderer marks, JSONObject point)
   {
-	  JSONObject jsonProperties = point.getAsObject(PROPERTIES);
-	  JSONObject jsonGeometry = point.getAsObject(GEOMETRY);
-	  JSONArray jsonCoordinates = jsonGeometry.getAsArray(COORDINATES);
+	  final JSONObject jsonProperties = point.getAsObject(PROPERTIES);
+	  final JSONObject jsonGeometry = point.getAsObject(GEOMETRY);
+	  final JSONArray jsonCoordinates = jsonGeometry.getAsArray(COORDINATES);
   
 	  Mark mark = new Mark(jsonProperties.getAsString(NAME).value(), new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png",false), new Geodetic3D(Angle.fromDegrees(jsonCoordinates.getAsNumber(1).doubleValue()), Angle.fromDegrees(jsonCoordinates.getAsNumber(0).doubleValue()), 0), null, 0, null);
   
@@ -75,17 +75,17 @@ public class AppParser
   }
   public final void parse(LayerSet layerSet, MarksRenderer marks, String namelessParameter)
   {
-	JSONObject json = IJSONParser.instance().parse(namelessParameter).asObject();
-	parseWorldConfiguration(layerSet, marks, json.get(WORLD).asObject());
+	JSONBaseObject json = IJSONParser.instance().parse(namelessParameter);
+	parseWorldConfiguration(layerSet, marks, json.asObject().getAsObject(WORLD));
 	IJSONParser.instance().deleteJSONData(json);
   }
 	public final void parseCustomData(MarksRenderer marks, JSONObject jsonCustomData)
 	{
-	  JSONArray jsonFeatures = jsonCustomData.getAsArray(FEATURES);
+	  final JSONArray jsonFeatures = jsonCustomData.getAsArray(FEATURES);
 	  for (int i = 0; i < jsonFeatures.size(); i++)
 	  {
-		JSONObject jsonFeature = jsonFeatures.getAsObject(i);
-		  JSONObject jsonGeometry = jsonFeature.getAsObject(GEOMETRY);
+		final JSONObject jsonFeature = jsonFeatures.getAsObject(i);
+		final JSONObject jsonGeometry = jsonFeature.getAsObject(GEOMETRY);
 		String jsonType = jsonGeometry.getAsString(TYPE).value();
 		if (jsonType.equals("Point"))
 		{

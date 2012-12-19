@@ -36,19 +36,21 @@ public class GEOJSONDownloadListener implements IBufferDownloadListener
 
 	private MarksRenderer _marksRenderer;
 	private String _icon;
+	private double _minDistance;
 
-	public GEOJSONDownloadListener(MarksRenderer marksRenderer, String icon)
+	public GEOJSONDownloadListener(MarksRenderer marksRenderer, String icon, double minDistance)
 	{
 		_marksRenderer = marksRenderer;
 		_icon = icon;
+		_minDistance = minDistance;
 	}
 
 	public final void onDownload(URL url, IByteBuffer buffer)
 	{
 		String String = buffer.getAsString();
-		JSONObject json = IJSONParser.instance().parse(String).asObject();
+		JSONBaseObject json = IJSONParser.instance().parse(String);
 		ILogger.instance().logInfo(url.getPath());
-		parseGEOJSON(json);
+		parseGEOJSON(json.asObject());
 		IJSONParser.instance().deleteJSONData(json);
     
 	}
@@ -70,11 +72,11 @@ public class GEOJSONDownloadListener implements IBufferDownloadListener
 	}
 	private void parseGEOJSON(JSONObject geojson)
 	{
-		JSONArray jsonFeatures = geojson.get(FEATURES).asArray();
+		final JSONArray jsonFeatures = geojson.get(FEATURES).asArray();
 		for (int i = 0; i < jsonFeatures.size(); i++)
 		{
-			JSONObject jsonFeature = jsonFeatures.getAsObject(i);
-			JSONObject jsonGeometry = jsonFeature.getAsObject(GEOMETRY);
+			final JSONObject jsonFeature = jsonFeatures.getAsObject(i);
+			final JSONObject jsonGeometry = jsonFeature.getAsObject(GEOMETRY);
 			String jsonType = jsonGeometry.getAsString(TYPE).value();
 			if (jsonType.equals("Point"))
 			{
@@ -84,15 +86,15 @@ public class GEOJSONDownloadListener implements IBufferDownloadListener
 	}
 	private void parsePointObject(JSONObject point)
 	{
-		JSONObject jsonProperties = point.getAsObject(PROPERTIES);
-		JSONObject jsonGeometry = point.getAsObject(GEOMETRY);
-		JSONArray jsonCoordinates = jsonGeometry.getAsArray(COORDINATES);
+		final JSONObject jsonProperties = point.getAsObject(PROPERTIES);
+		final JSONObject jsonGeometry = point.getAsObject(GEOMETRY);
+		final JSONArray jsonCoordinates = jsonGeometry.getAsArray(COORDINATES);
     
 		final Angle latitude = Angle.fromDegrees(jsonCoordinates.getAsNumber(1).doubleValue());
 		final Angle longitude = Angle.fromDegrees(jsonCoordinates.getAsNumber(0).doubleValue());
     
-		JSONBaseObject denominaci = jsonProperties.get(DENOMINATION);
-		JSONBaseObject clase = jsonProperties.get(CLASE);
+		final JSONBaseObject denominaci = jsonProperties.get(DENOMINATION);
+		final JSONBaseObject clase = jsonProperties.get(CLASE);
     
 		Mark mark;
     
@@ -104,18 +106,28 @@ public class GEOJSONDownloadListener implements IBufferDownloadListener
 			name.addString(" ");
 			name.addString(denominaci.asString().value());
     
-			if (_icon.length() > 0)
+			URL url;
+			if (jsonProperties.getAsString(URLWEB)!= null || jsonProperties.getAsString(URLWEB).value().length() == 0)
 			{
-				mark = new Mark(name.getString(), new URL(_icon,false), new Geodetic3D(latitude, longitude, 0),jsonProperties.getAsString(URLWEB),10000);
+				url = new URL(jsonProperties.getAsString(URLWEB).value(),false);
 			}
 			else
 			{
-				mark = new Mark(name.getString(), new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png",false), new Geodetic3D(latitude, longitude, 0),jsonProperties.getAsString(URLWEB),10000);
+				url = new URL("http://sig.caceres.es/SerWeb/fichatoponimo.asp?mslink=0",false);
+			}
+    
+			if (_icon.length() > 0)
+			{
+				mark = new Mark(name.getString(), new URL(_icon,false), new Geodetic3D(latitude, longitude, 0), url, _minDistance, null);
+			}
+			else
+			{
+				mark = new Mark(name.getString(), new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png",false), new Geodetic3D(latitude, longitude, 0), url, _minDistance, null);
 			}
 		}
 		else
 		{
-			mark = new Mark("Unknown POI", new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png",false), new Geodetic3D(latitude, longitude, 0),null,10000);
+			mark = new Mark("Unknown POI", new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png",false), new Geodetic3D(latitude, longitude, 0), null, _minDistance, null);
 		}
 		_marksRenderer.addMark(mark);
 	}
