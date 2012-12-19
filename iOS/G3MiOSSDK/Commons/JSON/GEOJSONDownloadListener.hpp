@@ -29,9 +29,10 @@ class GEOJSONDownloadListener : public IBufferDownloadListener {
     
     MarksRenderer* _marksRenderer;
     std::string _icon;
+    double _minDistance;
     
 public:
-    GEOJSONDownloadListener(MarksRenderer* _marksRenderer, std::string icon);
+    GEOJSONDownloadListener(MarksRenderer* _marksRenderer, std::string icon, double minDistance);
     
     void onDownload(const URL& url,
                     const IByteBuffer* buffer);

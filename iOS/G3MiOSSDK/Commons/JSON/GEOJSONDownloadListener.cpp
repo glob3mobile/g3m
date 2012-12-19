@@ -36,9 +36,10 @@ const std::string GEOJSONDownloadListener::URLWEB = "URL";
 
 
 
-GEOJSONDownloadListener::GEOJSONDownloadListener(MarksRenderer* marksRenderer, std::string icon){
+GEOJSONDownloadListener::GEOJSONDownloadListener(MarksRenderer* marksRenderer, std::string icon, double minDistance){
     _marksRenderer = marksRenderer;
     _icon = icon;
+    _minDistance = minDistance;
 }
 
 void GEOJSONDownloadListener::onDownload(const URL& url,
@@ -83,20 +84,27 @@ void GEOJSONDownloadListener::parsePointObject(const JSONObject* point){
         name->addString(IStringUtils::instance()->capitalize(clase->asString()->value()));
         name->addString(" ");
         name->addString(denominaci->asString()->value());
+        
+        URL* url;
+        if (jsonProperties->getAsString(URLWEB)!= NULL || jsonProperties->getAsString(URLWEB)->value().empty()) {
+            url = new URL(jsonProperties->getAsString(URLWEB)->value(),false);
+        }else{
+            url = new URL("http://sig.caceres.es/SerWeb/fichatoponimo.asp?mslink=0",false);
+        }
                
         if (_icon.length() > 0) {
             mark = new Mark(name->getString(),
                                   URL(_icon,false),
-                                  Geodetic3D(latitude, longitude, 0), new URL(jsonProperties->getAsString(URLWEB)->value(),false), 10000, NULL);      
+                                  Geodetic3D(latitude, longitude, 0), url, _minDistance, NULL);      
         } else {
             mark = new Mark(name->getString(),
                                   URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png",false),
-                                  Geodetic3D(latitude, longitude, 0), new URL(jsonProperties->getAsString(URLWEB)->value(),false) ,10000, NULL);
+                                  Geodetic3D(latitude, longitude, 0), url, _minDistance, NULL);
         }
     } else {
         mark = new Mark("Unknown POI",
                         URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png",false),
-                        Geodetic3D(latitude, longitude, 0), NULL, 10000, NULL);
+                        Geodetic3D(latitude, longitude, 0), NULL, _minDistance, NULL);
     }
     _marksRenderer->addMark(mark);
 }

@@ -18,6 +18,7 @@
 #include "GInitializationTask.hpp"
 #include "G3MBuilder_iOS.hpp"
 
+
 G3MJSONBuilder_iOS::G3MJSONBuilder_iOS(std::string jsonSource, G3MWidget_iOS* g3mWidget): IG3MJSONBuilder(jsonSource), _g3mWidget(g3mWidget) {
 };
 
@@ -29,7 +30,7 @@ void G3MJSONBuilder_iOS::create(LayerSet* layerSet, GInitializationTask* initial
     private:
         GInitializationTask* _customInitializationTask;
         MarksRenderer* _marksRenderer;
-        std::map<std::string, std::string> _mapGeoJSONSources;
+        std::map<std::string, std::map<std::string, std::string> > _mapGeoJSONSources;
         std::vector<std::string> _panoSources;
         MarkTouchListener* _panoTouchListener;
         G3MWidget_iOS* _g3mWidget;
@@ -45,8 +46,8 @@ void G3MJSONBuilder_iOS::create(LayerSet* layerSet, GInitializationTask* initial
         
         void run(const G3MContext* context) {            
             if(!_mapGeoJSONSources.empty()){
-                for (std::map<std::string, std::string>::iterator it=_mapGeoJSONSources.begin(); it!=_mapGeoJSONSources.end(); it++){
-                    [_g3mWidget getG3MContext]->getDownloader()->requestBuffer(URL(it->first, false), 100000000L,                                           TimeInterval::fromDays(30),new GEOJSONDownloadListener(_marksRenderer, it->second), true);
+                for (std::map<std::string, std::map<std::string, std::string> >::iterator it=_mapGeoJSONSources.begin(); it!=_mapGeoJSONSources.end(); it++){
+                    [_g3mWidget getG3MContext]->getDownloader()->requestBuffer(URL(it->first, false), 100000000L,                                           TimeInterval::fromDays(30),new GEOJSONDownloadListener(_marksRenderer, it->second.operator[]("urlIcon"), ::atof(it->second.operator[]("minDistance").c_str())), true);
                 }            
             }
             if(!_panoSources.empty()){

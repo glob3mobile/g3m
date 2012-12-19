@@ -31,6 +31,7 @@ class SceneParser{
     static const std::string STATUS;
     static const std::string NAME;
     static const std::string URLICON;
+    static const std::string MINDISTANCE;
     
     static const std::string WMS110;
     static const std::string WMS111;
@@ -38,14 +39,14 @@ class SceneParser{
     
     static SceneParser* _instance;
     std::map<std::string, layer_type> _mapLayerType;
-    std::map<std::string, std::string> _mapGeoJSONSources;
+    std::map<std::string, std::map<std::string, std::string> > _mapGeoJSONSources;
     std::vector<std::string> _panoSources;
     
 public:
     
     static SceneParser* instance();
     void parse(LayerSet* layerSet, std::string namelessParameter);
-    std::map<std::string, std::string> getMapGeoJSONSources();
+    std::map<std::string, std::map<std::string, std::string> > getMapGeoJSONSources();
     std::vector<std::string> getPanoSources();
     
 private:
