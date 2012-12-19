@@ -25,11 +25,9 @@ package org.glob3.mobile.generated;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IGLTextureId;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-<<<<<<< HEAD
 //class MarkTouchListener;
-=======
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class GLState;
->>>>>>> webgl-port
 
 public class Mark
 {
@@ -37,7 +35,7 @@ public class Mark
 	private final String _name;
 	private URL _textureURL = new URL();
 	private final Geodetic3D _position ;
-	private Object _userData;
+	private final Object _userData;
 	private final double _minDistanceToCamera;
 	private MarkTouchListener _listener;
 
@@ -91,15 +89,15 @@ public class Mark
 	  this(name, textureURL, position, null, 0, null);
   }
 //C++ TO JAVA CONVERTER NOTE: Java does not allow default values for parameters. Overloaded methods are inserted above.
-//ORIGINAL LINE: Mark(const String name, const URL textureURL, const Geodetic3D position, Object* userData=null, const double minDistanceToCamera=0, MarkTouchListener* listener=null) : _name(name), _textureURL(textureURL), _position(position), _userData(userData), _listener(listener), _minDistanceToCamera(minDistanceToCamera), _textureId(null), _cartesianPosition(null), _vertices(null), _textureSolved(false), _textureImage(null), _renderedMark(false), _textureWidth(0), _textureHeight(0)
+//ORIGINAL LINE: Mark(const String name, const URL textureURL, const Geodetic3D position, const Object* userData=null, const double minDistanceToCamera=0, MarkTouchListener* listener=null) : _name(name), _textureURL(textureURL), _position(position), _userData(userData), _minDistanceToCamera(minDistanceToCamera), _listener(listener), _textureId(null), _cartesianPosition(null), _vertices(null), _textureSolved(false), _textureImage(null), _renderedMark(false), _textureWidth(0), _textureHeight(0)
   public Mark(String name, URL textureURL, Geodetic3D position, Object userData, double minDistanceToCamera, MarkTouchListener listener)
   {
 	  _name = name;
 	  _textureURL = new URL(textureURL);
 	  _position = new Geodetic3D(position);
 	  _userData = userData;
-	  _listener = listener;
 	  _minDistanceToCamera = minDistanceToCamera;
+	  _listener = listener;
 	  _textureId = null;
 	  _cartesianPosition = null;
 	  _vertices = null;
@@ -148,11 +146,7 @@ public class Mark
   private Vector2D render_textureTranslation = new Vector2D(0.0, 0.0);
 //C++ TO JAVA CONVERTER NOTE: This was formerly a static local variable declaration (not allowed in Java):
   private Vector2D render_textureScale = new Vector2D(1.0, 1.0);
-<<<<<<< HEAD
-  public final void render(G3MRenderContext rc)
-=======
-  public final void render(G3MRenderContext rc, GLState parentState, double minDistanceToCamera)
->>>>>>> webgl-port
+  public final void render(G3MRenderContext rc, GLState parentState)
   {
 	final Camera camera = rc.getCurrentCamera();
 	final Planet planet = rc.getPlanet();

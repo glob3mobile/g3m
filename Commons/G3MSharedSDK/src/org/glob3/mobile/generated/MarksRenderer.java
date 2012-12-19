@@ -24,7 +24,6 @@ package org.glob3.mobile.generated;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class MarkTouchListener;
 
-
 public class MarksRenderer extends LeafRenderer
 {
   private final boolean _readyWhenMarksReady;
@@ -60,22 +59,6 @@ public class MarksRenderer extends LeafRenderer
 
   public void dispose()
   {
-<<<<<<< HEAD
-	 int marksSize = _marks.size();
-	 for (int i = 0; i < marksSize; i++)
-	 {
-		 if (_marks.get(i) != null)
-			 _marks.get(i).dispose();
-	 }
- 
-	 if (_autoDeleteMarkTouchListener)
-	 {
-		 if (_markTouchListener != null)
-			 _markTouchListener.dispose();
-	 }
-	 _markTouchListener = null;
- }
-=======
 	int marksSize = _marks.size();
 	for (int i = 0; i < marksSize; i++)
 	{
@@ -90,7 +73,6 @@ public class MarksRenderer extends LeafRenderer
 	}
 	_markTouchListener = null;
   }
->>>>>>> webgl-port
 
   public void initialize(G3MContext context)
   {
@@ -134,12 +116,8 @@ public class MarksRenderer extends LeafRenderer
   
 	  if (mark.isReady())
 	  {
-<<<<<<< HEAD
-  //      mark->render(rc, minDistanceToCamera);
-		  mark.render(rc);
-=======
-		mark.render(rc, state, minDistanceToCamera);
->>>>>>> webgl-port
+  //      mark->render(rc, state, minDistanceToCamera);
+		  mark.render(rc, state);
 	  }
 	}
   }
@@ -226,6 +204,7 @@ public class MarksRenderer extends LeafRenderer
 			  handled = _markTouchListener.touchedMark(nearestMark);
 		  }
 		}
+  
 	  }
   
 	}

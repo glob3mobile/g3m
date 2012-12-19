@@ -20,10 +20,8 @@ public abstract class IG3MJSONBuilder
 	{
 		_jsonSource = jsonSource;
 	}
-
-	public abstract void initWidgetWithCameraConstraints (java.util.ArrayList<ICameraConstrainer> cameraConstraints, LayerSet layerSet, boolean incrementalTileQuality, java.util.ArrayList<Renderer> renderers, UserData userData, GTask initializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, MarkTouchListener markTouchListener, MarkTouchListener panoTouchListener);
+	public abstract void create(LayerSet layerSet, GInitializationTask initializationTask, MarkTouchListener markTouchListener, MarkTouchListener panoTouchListener);
 	public void dispose()
 	{
 	}
-
 }

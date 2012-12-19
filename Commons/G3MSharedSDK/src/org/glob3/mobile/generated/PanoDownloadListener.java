@@ -40,11 +40,10 @@ public class PanoDownloadListener implements IBufferDownloadListener
 	public final void onDownload(URL url, IByteBuffer buffer)
 	{
 		String String = buffer.getAsString();
-		JSONObject json = IJSONParser.instance().parse(String).asObject();
+		JSONBaseObject json = IJSONParser.instance().parse(String);
 		ILogger.instance().logInfo(url.getPath());
-		parseMETADATA(IStringUtils.instance().substring(url.getPath(), 0, IStringUtils.instance().indexOf(url.getPath(), "/metadata.json")), json);
+		parseMETADATA(IStringUtils.instance().substring(url.getPath(), 0, IStringUtils.instance().indexOf(url.getPath(), "/metadata.json")), json.asObject());
 		IJSONParser.instance().deleteJSONData(json);
-    
 	}
 
 	public final void onError(URL url)
@@ -71,6 +70,5 @@ public class PanoDownloadListener implements IBufferDownloadListener
 		Mark mark = new Mark(json.getAsString(NAME).value(), new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png",false), new Geodetic3D(latitude, longitude, 0), new URL(url, false), 0, _panoTouchListener);
     
 		_marksRenderer.addMark(mark);
-    
 	}
 }

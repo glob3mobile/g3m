@@ -9,6 +9,7 @@ public class SceneParser
 	private static final String STATUS = "status";
 	private static final String NAME = "name";
 	private static final String URLICON = "urlIcon";
+	private static final String MINDISTANCE = "minDistance";
 
 	private static final String WMS110 = "1.1.0";
 	private static final String WMS111 = "1.1.1";
@@ -16,7 +17,7 @@ public class SceneParser
 
 	private static SceneParser _instance = null;
 	private java.util.HashMap<String, layer_type> _mapLayerType = new java.util.HashMap<String, layer_type>();
-	private java.util.HashMap<String, String> _mapGeoJSONSources = new java.util.HashMap<String, String>();
+	private java.util.HashMap<String, java.util.HashMap<String, String> > _mapGeoJSONSources = new java.util.HashMap<String, java.util.HashMap<String, String> >();
 	private java.util.ArrayList<String> _panoSources = new java.util.ArrayList<String>();
 
 
@@ -34,11 +35,11 @@ public class SceneParser
 		_mapGeoJSONSources.clear();
 		_panoSources.clear();
     
-		JSONObject json = IJSONParser.instance().parse(namelessParameter).asObject();
-		parserJSONLayerList(layerSet, json.getAsObject(LAYERS));
+		JSONBaseObject json = IJSONParser.instance().parse(namelessParameter);
+		parserJSONLayerList(layerSet, json.asObject().getAsObject(LAYERS));
 		IJSONParser.instance().deleteJSONData(json);
 	}
-	public final java.util.HashMap<String, String> getMapGeoJSONSources()
+	public final java.util.HashMap<String, java.util.HashMap<String, String> > getMapGeoJSONSources()
 	{
 		return _mapGeoJSONSources;
 	}
@@ -47,37 +48,8 @@ public class SceneParser
 		return _panoSources;
 	}
 
-	private void parserJSONLayerList(LayerSet layerSet, JSONObject jsonLayers)
-	{
-		for (int i = 0; i < jsonLayers.size(); i++)
-		{
-			IStringBuilder isb = IStringBuilder.newStringBuilder();
-			isb.addInt(i);
-			JSONObject jsonLayer = jsonLayers.getAsObject(isb.getString());
-			final layer_type layerType = _mapLayerType.get(jsonLayer.getAsString(TYPE).value());
-    
-			switch (layerType)
-			{
-				case WMS:
-					parserJSONWMSLayer(layerSet, jsonLayer);
-					break;
-				case THREED:
-					parserJSON3DLayer(layerSet, jsonLayer);
-					break;
-				case PLANARIMAGE:
-					parserJSONPlanarImageLayer(layerSet, jsonLayer);
-					break;
-				case GEOJSON:
-					parserGEOJSONLayer(layerSet, jsonLayer);
-					break;
-				case SPHERICALIMAGE:
-					parserJSONSphericalImageLayer(layerSet, jsonLayer);
-					break;
-			}
-			if (isb != null)
-				isb.dispose();
-		}
-	}
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//	void parserJSONLayerList(LayerSet layerSet, JSONObject jsonLayers);
 	private void parserJSONWMSLayer(LayerSet layerSet, JSONObject jsonLayer)
 	{
 		System.out.print("Parsing WMS Layer ");
@@ -90,7 +62,7 @@ public class SceneParser
 		final String jsonURL = IStringUtils.instance().substring(jsonDatasource, 0, lastIndex+1);
 		final String jsonVersion = jsonLayer.getAsString(VERSION).value();
     
-		JSONArray jsonItems = jsonLayer.getAsArray(ITEMS);
+		final JSONArray jsonItems = jsonLayer.getAsArray(ITEMS);
 		IStringBuilder layersName = IStringBuilder.newStringBuilder();
     
 		for (int i = 0; i<jsonItems.size(); i++)
@@ -133,7 +105,7 @@ public class SceneParser
     
 		final String geojsonDatasource = jsonLayer.getAsString(DATASOURCE).value();
     
-		JSONArray jsonItems = jsonLayer.getAsArray(ITEMS);
+		final JSONArray jsonItems = jsonLayer.getAsArray(ITEMS);
 		for (int i = 0; i<jsonItems.size(); i++)
 		{
     
@@ -163,19 +135,25 @@ public class SceneParser
     
 		final String geojsonDatasource = jsonLayer.getAsString(DATASOURCE).value();
     
-		JSONArray jsonItems = jsonLayer.getAsArray(ITEMS);
+		final JSONArray jsonItems = jsonLayer.getAsArray(ITEMS);
 		for (int i = 0; i<jsonItems.size(); i++)
 		{
     
 			final String namefile = jsonItems.getAsObject(i).getAsString(NAME).value();
 			final String icon = jsonItems.getAsObject(i).getAsString(URLICON).value();
+			final String minDistance = jsonItems.getAsObject(i).getAsString(MINDISTANCE).value();
+    
     
 			IStringBuilder url = IStringBuilder.newStringBuilder();
 			url.addString(geojsonDatasource);
 			url.addString("/");
 			url.addString(namefile);
     
-			_mapGeoJSONSources.put(url.getString(), icon);
+			java.util.HashMap<String, String> attr = new java.util.HashMap<String, String>();
+			attr.put(URLICON, icon);
+			attr.put(MINDISTANCE, minDistance);
+    
+			_mapGeoJSONSources.put(url.getString(), attr);
 		}
 	}
 
