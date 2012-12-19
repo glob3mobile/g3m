@@ -89,7 +89,7 @@ public class Mark
 	  this(name, textureURL, position, null, 0, null);
   }
 //C++ TO JAVA CONVERTER NOTE: Java does not allow default values for parameters. Overloaded methods are inserted above.
-//ORIGINAL LINE: Mark(const String name, const URL textureURL, const Geodetic3D position, const Object* userData=null, const double minDistanceToCamera=0, MarkTouchListener* listener=null) : _name(name), _textureURL(textureURL), _position(position), _userData(userData), _minDistanceToCamera(minDistanceToCamera), _listener(listener), _textureId(null), _cartesianPosition(null), _vertices(null), _textureSolved(false), _textureImage(null), _renderedMark(false), _textureWidth(0), _textureHeight(0)
+//ORIGINAL LINE: Mark(const String name, const URL textureURL, const Geodetic3D position, Object* userData=null, double minDistanceToCamera=0, MarkTouchListener* listener=null) : _name(name), _textureURL(textureURL), _position(position), _userData(userData), _minDistanceToCamera(minDistanceToCamera), _listener(listener), _textureId(null), _cartesianPosition(null), _vertices(null), _textureSolved(false), _textureImage(null), _renderedMark(false), _textureWidth(0), _textureHeight(0)
   public Mark(String name, URL textureURL, Geodetic3D position, Object userData, double minDistanceToCamera, MarkTouchListener listener)
   {
 	  _name = name;
