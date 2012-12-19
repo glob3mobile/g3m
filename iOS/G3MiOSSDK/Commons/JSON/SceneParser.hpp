@@ -50,7 +50,7 @@ public:
     std::vector<std::string> getPanoSources();
     
 private:
-    void parserJSONLayerList(LayerSet* layerSet,const JSONObject* jsonLayers);
+    void parserJSONLayerList(LayerSet* layerSet, const JSONObject* jsonLayers);
     void parserJSONWMSLayer(LayerSet* layerSet, const JSONObject* jsonLayer);
     void parserJSON3DLayer(LayerSet* layerSet, const JSONObject* jsonLayer);
     void parserJSONPlanarImageLayer(LayerSet* layerSet, const JSONObject* jsonLayer);

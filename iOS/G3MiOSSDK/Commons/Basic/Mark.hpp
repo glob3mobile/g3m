@@ -29,8 +29,8 @@ private:
     const std::string _name;
     URL               _textureURL;
     const Geodetic3D  _position;
-    const void* _userData;
-    const double _minDistanceToCamera;
+    void* _userData;
+    double _minDistanceToCamera;
     MarkTouchListener* _listener;
     
 #ifdef C_CODE
