@@ -37,7 +37,8 @@ public:
                     const IByteBuffer* buffer);
     
     void onError(const URL& url){
-        ILogger::instance()->logError("The requested geojson file could not be found!");    }
+        ILogger::instance()->logError("The requested geojson file could not be found!");    
+    }
     
     void onCancel(const URL& url){}
     void onCanceledDownload(const URL& url,

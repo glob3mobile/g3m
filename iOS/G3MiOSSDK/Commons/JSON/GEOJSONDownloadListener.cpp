@@ -20,6 +20,7 @@
 #include "JSONArray.hpp"
 #include "JSONString.hpp"
 #include "JSONNumber.hpp"
+#include "URL.hpp"
 
 
 const std::string GEOJSONDownloadListener::FEATURES = "features";
@@ -86,11 +87,11 @@ void GEOJSONDownloadListener::parsePointObject(const JSONObject* point){
         if (_icon.length() > 0) {
             mark = new Mark(name->getString(),
                                   URL(_icon,false),
-                                  Geodetic3D(latitude, longitude, 0), jsonProperties->getAsString(URLWEB), 10000, NULL);      
+                                  Geodetic3D(latitude, longitude, 0), new URL(jsonProperties->getAsString(URLWEB)->value(),false), 10000, NULL);      
         } else {
             mark = new Mark(name->getString(),
                                   URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png",false),
-                                  Geodetic3D(latitude, longitude, 0), jsonProperties->getAsString(URLWEB) ,10000, NULL);
+                                  Geodetic3D(latitude, longitude, 0), new URL(jsonProperties->getAsString(URLWEB)->value(),false) ,10000, NULL);
         }
     } else {
         mark = new Mark("Unknown POI",
