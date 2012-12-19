@@ -48,8 +48,37 @@ public class SceneParser
 		return _panoSources;
 	}
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//	void parserJSONLayerList(LayerSet layerSet, JSONObject jsonLayers);
+	private void parserJSONLayerList(LayerSet layerSet, JSONObject jsonLayers)
+	{
+		for (int i = 0; i < jsonLayers.size(); i++)
+		{
+			IStringBuilder isb = IStringBuilder.newStringBuilder();
+			isb.addInt(i);
+			final JSONObject jsonLayer = jsonLayers.getAsObject(isb.getString());
+			final layer_type layerType = _mapLayerType.get(jsonLayer.getAsString(TYPE).value());
+    
+			switch (layerType)
+			{
+				case WMS:
+					parserJSONWMSLayer(layerSet, jsonLayer);
+					break;
+				case THREED:
+					parserJSON3DLayer(layerSet, jsonLayer);
+					break;
+				case PLANARIMAGE:
+					parserJSONPlanarImageLayer(layerSet, jsonLayer);
+					break;
+				case GEOJSON:
+					parserGEOJSONLayer(layerSet, jsonLayer);
+					break;
+				case SPHERICALIMAGE:
+					parserJSONSphericalImageLayer(layerSet, jsonLayer);
+					break;
+			}
+			if (isb != null)
+				isb.dispose();
+		}
+	}
 	private void parserJSONWMSLayer(LayerSet layerSet, JSONObject jsonLayer)
 	{
 		System.out.print("Parsing WMS Layer ");

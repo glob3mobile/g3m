@@ -35,8 +35,8 @@ public class Mark
 	private final String _name;
 	private URL _textureURL = new URL();
 	private final Geodetic3D _position ;
-	private final Object _userData;
-	private final double _minDistanceToCamera;
+	private Object _userData;
+	private double _minDistanceToCamera;
 	private MarkTouchListener _listener;
 
 	private IGLTextureId _textureId;
