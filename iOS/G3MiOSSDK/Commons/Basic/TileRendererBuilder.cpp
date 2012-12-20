@@ -93,7 +93,6 @@ void TileRendererBuilder::setIncrementalTileQuality(const bool incrementalTileQu
   _incrementalTileQuality = incrementalTileQuality;
 }
 
-
 LayerSet* TileRendererBuilder::createLayerSet() {
   LayerSet* layerSet = new LayerSet();
 
