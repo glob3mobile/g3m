@@ -1,4 +1,7 @@
-package org.glob3.mobile.generated; 
+
+
+package org.glob3.mobile.generated;
+
 //
 //  IG3MJSONBuilder.hpp
 //  G3MiOSSDK
@@ -8,20 +11,16 @@ package org.glob3.mobile.generated;
 //
 
 
+public abstract class IG3MJSONBuilder {
+
+   protected String _jsonSource;
 
 
-public abstract class IG3MJSONBuilder
-{
+   public IG3MJSONBuilder(final String jsonSource) {
+      _jsonSource = jsonSource;
+   }
 
-	protected String _jsonSource;
 
-
-	public IG3MJSONBuilder(String jsonSource)
-	{
-		_jsonSource = jsonSource;
-	}
-	public abstract void create(LayerSet layerSet, GInitializationTask initializationTask, MarkTouchListener markTouchListener, MarkTouchListener panoTouchListener);
-	public void dispose()
-	{
-	}
+   public void dispose() {
+   }
 }

@@ -3,104 +3,97 @@
 package org.glob3.mobile.specific;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Map.Entry;
 
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GEOJSONDownloadListener;
-import org.glob3.mobile.generated.GTask;
-import org.glob3.mobile.generated.ICameraConstrainer;
+import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.IG3MJSONBuilder;
 import org.glob3.mobile.generated.IStringBuilder;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.MarkTouchListener;
 import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.PanoDownloadListener;
-import org.glob3.mobile.generated.PeriodicalTask;
-import org.glob3.mobile.generated.Renderer;
 import org.glob3.mobile.generated.SceneParser;
+import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
-import org.glob3.mobile.generated.UserData;
+
+import android.content.Context;
 
 
 public class G3MJSONBuilder_Android
          extends
             IG3MJSONBuilder {
 
-   private final G3MWidget_Android _g3mWidget;
+   private final Context _context;
 
 
    public G3MJSONBuilder_Android(final String jsonSource,
-                                 final G3MWidget_Android g3mWidget) {
+                                 final Context context) {
       super(jsonSource);
-      _g3mWidget = g3mWidget;
+      _context = context;
    }
 
 
-   @Override
-   public void initWidgetWithCameraConstraints(final ArrayList<ICameraConstrainer> cameraConstraints,
-                                               final LayerSet layerSet,
-                                               final boolean incrementalTileQuality,
-                                               final ArrayList<Renderer> renderers,
-                                               final UserData userData,
-                                               final GTask initializationTask,
-                                               final ArrayList<PeriodicalTask> periodicalTasks,
-                                               final MarkTouchListener markTouchListener,
-                                               final MarkTouchListener panoTouchListener) {
+   public G3MWidget_Android create(final LayerSet layerSet,
+                                   final GInitializationTask initializationTask,
+                                   final MarkTouchListener markTouchListener,
+                                   final MarkTouchListener panoTouchListener) {
+
+      final G3MBuilder_Android builder = new G3MBuilder_Android(_context);
+
+      SceneParser.instance().parse(layerSet, _jsonSource);
+      builder.setLayerSet(layerSet);
 
       final boolean readyWhenMarksReady = false;
       final MarksRenderer marksRenderer = new MarksRenderer(readyWhenMarksReady);
-
       if (markTouchListener != null) {
          marksRenderer.setMarkTouchListener(markTouchListener, true);
       }
-      renderers.add(marksRenderer);
 
-      SceneParser.instance().parse(layerSet, _jsonSource);
-
-      _g3mWidget.initWidget(cameraConstraints, layerSet, renderers, userData, new G3MJSONBuilderInitializationTask(
-               initializationTask, marksRenderer, SceneParser.instance().getMapGeoJSONSources(),
-               SceneParser.instance().getPanoSources(), _g3mWidget, panoTouchListener), periodicalTasks, incrementalTileQuality);
+      builder.setInitializationTask(new G3MJSONBuilderInitializationTask(initializationTask, marksRenderer, panoTouchListener));
+      builder.addRenderer(marksRenderer);
+      return builder.createWidget();
    }
 }
 
 
 class G3MJSONBuilderInitializationTask
          extends
-            GTask {
+            GInitializationTask {
 
-   private final GTask               _customInitializationTask;
-   private final MarksRenderer       _marksRenderer;
-   private final Map<String, String> _mapGeoJSONSources;
-   private final ArrayList<String>   _panoSources;
-   private final MarkTouchListener   _panoTouchListener;
-   private final G3MWidget_Android   _g3mWidget;
+   private final GInitializationTask        _customInitializationTask;
+   private final MarksRenderer              _marksRenderer;
+   HashMap<String, HashMap<String, String>> _mapGeoJSONSources;
+   private final ArrayList<String>          _panoSources;
+   private final MarkTouchListener          _panoTouchListener;
 
 
-   public G3MJSONBuilderInitializationTask(final GTask customInitializationTask,
+   public G3MJSONBuilderInitializationTask(final GInitializationTask customInitializationTask,
                                            final MarksRenderer marksRenderer,
-                                           final Map<String, String> mapGeoJSONSources,
-                                           final ArrayList<String> panoSources,
-                                           final G3MWidget_Android g3mWidget,
                                            final MarkTouchListener panoTouchListener) {
       _customInitializationTask = customInitializationTask;
       _marksRenderer = marksRenderer;
-      _mapGeoJSONSources = mapGeoJSONSources;
-      _panoSources = panoSources;
+      _mapGeoJSONSources = SceneParser.instance().getMapGeoJSONSources();
+      _panoSources = SceneParser.instance().getPanoSources();
       _panoTouchListener = panoTouchListener;
-      _g3mWidget = g3mWidget;
    }
 
 
    @Override
    public void run(final G3MContext context) {
       if (!_mapGeoJSONSources.isEmpty()) {
-         final Iterator<Entry<String, String>> it = _mapGeoJSONSources.entrySet().iterator();
+         final Iterator<Entry<String, HashMap<String, String>>> it = _mapGeoJSONSources.entrySet().iterator();
          while (it.hasNext()) {
-            final Entry<String, String> entry = it.next();
-            _g3mWidget.getG3MContext().getDownloader().requestBuffer(new URL(entry.getKey(), false), 100000000L,
-                     new GEOJSONDownloadListener(_marksRenderer, entry.getValue()), true);
+            final Entry<String, HashMap<String, String>> entry = it.next();
+            context.getDownloader().requestBuffer(
+                     new URL(entry.getKey(), false),
+                     100000000L,
+                     TimeInterval.fromDays(30),
+                     new GEOJSONDownloadListener(_marksRenderer, entry.getValue().get("urlIcon"), Double.valueOf(
+                              entry.getValue().get("minDistance")).doubleValue()), true);
          }
       }
 
@@ -110,7 +103,7 @@ class G3MJSONBuilderInitializationTask
             final IStringBuilder url = IStringBuilder.newStringBuilder();
             url.addString(it.next());
             url.addString("/metadata.json");
-            _g3mWidget.getG3MContext().getDownloader().requestBuffer(new URL(url.getString(), false), 100000000L,
+            context.getDownloader().requestBuffer(new URL(url.getString(), false), 100000000L, TimeInterval.fromDays(30),
                      new PanoDownloadListener(_marksRenderer, _panoTouchListener), true);
          }
       }
@@ -118,5 +111,11 @@ class G3MJSONBuilderInitializationTask
       if (_customInitializationTask != null) {
          _customInitializationTask.run(context);
       }
+   }
+
+
+   @Override
+   public boolean isDone(final G3MContext context) {
+      return true;
    }
 }

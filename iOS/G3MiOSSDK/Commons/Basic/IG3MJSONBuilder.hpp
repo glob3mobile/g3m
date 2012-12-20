@@ -23,7 +23,7 @@ protected:
 public:
     
     IG3MJSONBuilder(std::string jsonSource):_jsonSource(jsonSource){};
-    virtual void create(LayerSet* layerSet, GInitializationTask* initializationTask, MarkTouchListener* markTouchListener, MarkTouchListener* panoTouchListener)=0;
+//    virtual void create(LayerSet* layerSet, GInitializationTask* initializationTask, MarkTouchListener* markTouchListener, MarkTouchListener* panoTouchListener)=0;
     virtual ~IG3MJSONBuilder(){};
 };
 
