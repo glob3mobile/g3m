@@ -62,15 +62,27 @@ bool Sector::isBackOriented(const G3MRenderContext *rc) const {
   return (dot < 0) ? true : false;  
 }
 
-Sector Sector::intersection(const Sector& s) const {
-  const Angle lowLat = Angle::max(lower().latitude(),  s.lower().latitude());
-  const Angle lowLon = Angle::max(lower().longitude(), s.lower().longitude());
+Sector Sector::intersection(const Sector& that) const {
+  const Angle lowLat = Angle::max(lower().latitude(),  that.lower().latitude());
+  const Angle lowLon = Angle::max(lower().longitude(), that.lower().longitude());
   const Geodetic2D low(lowLat, lowLon);
   
-  const Angle upLat = Angle::min(upper().latitude(),  s.upper().latitude());
-  const Angle upLon = Angle::min(upper().longitude(), s.upper().longitude());
+  const Angle upLat = Angle::min(upper().latitude(),  that.upper().latitude());
+  const Angle upLon = Angle::min(upper().longitude(), that.upper().longitude());
   const Geodetic2D up(upLat, upLon);
   
+  return Sector(low, up);
+}
+
+Sector Sector::mergedWith(const Sector& that) const {
+  const Angle lowLat = Angle::min(lower().latitude(),  that.lower().latitude());
+  const Angle lowLon = Angle::min(lower().longitude(), that.lower().longitude());
+  const Geodetic2D low(lowLat, lowLon);
+
+  const Angle upLat = Angle::max(upper().latitude(),  that.upper().latitude());
+  const Angle upLon = Angle::max(upper().longitude(), that.upper().longitude());
+  const Geodetic2D up(upLat, upLon);
+
   return Sector(low, up);
 }
 
