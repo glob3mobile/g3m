@@ -1,28 +1,27 @@
 //
-//  SimpleGlob3ViewController.m
+//  G3M3DModelViewController.mm
 //  G3MiOSDemo
 //
-//  Created by Mari Luz Mateo on 18/12/12.
+//  Created by Mari Luz Mateo on 20/12/12.
 //
 //
 
-#import "SimpleGlob3ViewController.h"
+#import "G3M3DModelViewController.h"
 
 #include "G3MBuilder_iOS.hpp"
 
-@interface SimpleGlob3ViewController ()
+@interface G3M3DModelViewController ()
 
 @end
 
-@implementation SimpleGlob3ViewController
-
-@synthesize G3MWidget;
+@implementation G3M3DModelViewController
+@synthesize glob3;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
   self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
   if (self) {
-      // Custom initialization
+    // Custom initialization
   }
   return self;
 }
@@ -32,31 +31,29 @@
   [super viewDidLoad];
   
   // Create a builder
-  G3MBuilder_iOS builder([self G3MWidget]);
+  G3MBuilder_iOS builder([self glob3]);
+  
   // Initialize widget
   builder.initializeWidget();
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-  [super viewDidAppear:animated];
   
-  [[self G3MWidget] startAnimation];
+  // Let's get the show on the road!
+  [[self glob3] startAnimation];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
-  [[self G3MWidget] stopAnimation];
-
+  // Stop the glob3 render
+  [[self glob3] stopAnimation];
+  
 	[super viewDidDisappear:animated];
 }
 
 - (void)viewDidUnload
 {
-  G3MWidget = nil;
-  [self setG3MWidget:nil];
+  [self setGlob3:nil];
   
   [super viewDidUnload];
+  // Release any retained subviews of the main view.
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

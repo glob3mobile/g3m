@@ -1,25 +1,25 @@
 //
-//  DoubleGlob3ViewController.m
+//  G3MDoubleGlob3ViewController.mm
 //  G3MiOSDemo
 //
 //  Created by Mari Luz Mateo on 14/12/12.
 //
 //
 
-#import "DoubleGlob3ViewController.h"
+#import "G3MDoubleGlob3ViewController.h"
 
 #include "G3MBuilder_iOS.hpp"
 #include "LayerSet.hpp"
 #include "WMSLayer.hpp"
 
-@interface DoubleGlob3ViewController ()
+@interface G3MDoubleGlob3ViewController ()
 
 @end
 
-@implementation DoubleGlob3ViewController
+@implementation G3MDoubleGlob3ViewController
 
-@synthesize _upperGlob3;
-@synthesize _lowerGlob3;
+@synthesize upperGlob3;
+@synthesize lowerGlob3;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -34,33 +34,44 @@
 {
   [super viewDidLoad];
   
-  [self initUpperWidget];
-  [self initLowerWidget];
-    
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-  [super viewDidAppear:animated];
+  // Create two builders
+  G3MBuilder_iOS upperBuilder(self.upperGlob3);
+  G3MBuilder_iOS lowerBuilder(self.lowerGlob3);
   
-  [[self _upperGlob3] startAnimation];
-  [[self _lowerGlob3] startAnimation];
+  // Create and populate two layer sets
+  LayerSet* upperLayerSet = new LayerSet();
+  upperLayerSet->addLayer([self createLayer: "bing"
+                                    enabled: true]);
+  LayerSet* lowerLayerSet = new LayerSet();
+  lowerLayerSet->addLayer([self createLayer: "osm"
+                                    enabled: true]);
+
+  // Set the layer sets to be used in the widgets
+  upperBuilder.setLayerSet(upperLayerSet);
+  lowerBuilder.setLayerSet(lowerLayerSet);
+  
+  // Initialize the glob3 widgets
+  upperBuilder.initializeWidget();
+  lowerBuilder.initializeWidget();
+  
+  // Let's get the show on the road!
+  [[self upperGlob3] startAnimation];
+  [[self lowerGlob3] startAnimation];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
-  [[self _upperGlob3] stopAnimation];
-  [[self _lowerGlob3] stopAnimation];
+  // Stop the widgets render
+  [[self upperGlob3] stopAnimation];
+  [[self lowerGlob3] stopAnimation];
   
 	[super viewDidDisappear:animated];
 }
 
 - (void)viewDidUnload
 {
-  _upperGlob3 = nil;
-  [self set_upperGlob3:nil];
-  _lowerGlob3 = nil;
-  [self set_lowerGlob3:nil];
+  self.upperGlob3 = nil;
+  self.lowerGlob3 = nil;
 
   [super viewDidUnload];
 }
@@ -74,33 +85,6 @@
     return YES;
   }
 }
-
-- (void) initUpperWidget
-{
-  G3MBuilder_iOS builder(_upperGlob3);
-  
-  LayerSet* layerSet = new LayerSet();
-  layerSet->addLayer([self createLayer: "bing"
-                               enabled: true]);
-  builder.setLayerSet(layerSet);
-    
-  // initialization
-  builder.initializeWidget();
-}
-
-- (void) initLowerWidget
-{
-  G3MBuilder_iOS builder(_lowerGlob3);
-  
-  LayerSet* layerSet = new LayerSet();
-  layerSet->addLayer([self createLayer: "bing"
-                               enabled: true]);
-  builder.setLayerSet(layerSet);
-  
-  // initialization
-  builder.initializeWidget();
-}
-
 
 - (WMSLayer*) createLayer: (const std::string) name
                   enabled: (bool) enabled

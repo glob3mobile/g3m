@@ -100,7 +100,7 @@
                                             <rect key="frame" x="10" y="0.0" width="280" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="3D Model" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ffB-zD-Jqs">
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Markers" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ffB-zD-Jqs">
                                                     <rect key="frame" x="46" y="0.0" width="224" height="43"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
@@ -114,6 +114,9 @@
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
+                                        <connections>
+                                            <segue destination="QYg-sU-i2R" kind="push" id="YeD-GS-tlv"/>
+                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" indentationWidth="10" textLabel="xai-v1-4FW" imageView="cWC-OC-Nub" style="IBUITableViewCellStyleDefault" id="qud-bB-6Mt">
                                         <rect key="frame" x="0.0" y="223" width="320" height="44"/>
@@ -122,7 +125,7 @@
                                             <rect key="frame" x="10" y="0.0" width="280" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Layer Switch" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="xai-v1-4FW">
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Drawing Shapes" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="xai-v1-4FW">
                                                     <rect key="frame" x="46" y="0.0" width="224" height="43"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
@@ -136,6 +139,9 @@
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
+                                        <connections>
+                                            <segue destination="zoh-1i-KPz" kind="push" id="bRU-Ao-wJr"/>
+                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" indentationWidth="10" textLabel="yTC-6X-sjI" imageView="NuR-q9-thN" style="IBUITableViewCellStyleDefault" id="bXt-95-Xfy">
                                         <rect key="frame" x="0.0" y="267" width="320" height="45"/>
@@ -144,7 +150,7 @@
                                             <rect key="frame" x="10" y="0.0" width="280" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Layer Switch" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="yTC-6X-sjI">
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="3D Model" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="yTC-6X-sjI">
                                                     <rect key="frame" x="46" y="0.0" width="224" height="43"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
@@ -158,6 +164,9 @@
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
+                                        <connections>
+                                            <segue destination="tVX-sy-e2T" kind="push" id="jSf-xg-YLC"/>
+                                        </connections>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
@@ -176,7 +185,7 @@
         <scene sceneID="aH1-n5-OyC">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jk8-dg-A5S" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <viewController id="fPc-Hh-AGK" customClass="DoubleGlob3ViewController" sceneMemberID="viewController">
+                <viewController id="fPc-Hh-AGK" customClass="G3MDoubleGlob3ViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Kdx-Bg-Bjd">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -196,18 +205,18 @@
                     </view>
                     <navigationItem key="navigationItem" title="Double glob3" id="2gO-ag-74q"/>
                     <connections>
-                        <outlet property="_lowerGlob3" destination="m37-aA-6MJ" id="kts-tT-Zz5"/>
-                        <outlet property="_upperGlob3" destination="XBh-FJ-Mb8" id="2xy-XF-1ac"/>
+                        <outlet property="lowerGlob3" destination="m37-aA-6MJ" id="5yF-T0-5YQ"/>
+                        <outlet property="upperGlob3" destination="XBh-FJ-Mb8" id="LFb-7e-pGE"/>
                     </connections>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="1353" y="-1044"/>
+            <point key="canvasLocation" x="1119" y="-898"/>
         </scene>
         <!--Layer Switch View Controller - Layer Switch-->
         <scene sceneID="kaw-yk-AU9">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zw1-ok-H2u" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <viewController title="Layer Switch" id="Rf4-i9-3w3" customClass="LayerSwitchViewController" sceneMemberID="viewController">
+                <viewController title="Layer Switch" id="Rf4-i9-3w3" customClass="G3MLayerSwitchViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Xxe-fP-KgT">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -244,18 +253,103 @@
                     </view>
                     <navigationItem key="navigationItem" title="Layer Switch" id="chc-Hd-G8X"/>
                     <connections>
-                        <outlet property="_glob3" destination="Sc8-BP-6Em" id="gWC-OH-KKl"/>
-                        <outlet property="_layerSwitcher" destination="lTp-KS-YFG" id="nYe-h4-Xl6"/>
+                        <outlet property="glob3" destination="Sc8-BP-6Em" id="cqC-HP-EAE"/>
+                        <outlet property="layerSwitcher" destination="lTp-KS-YFG" id="bYq-PF-2ul"/>
                     </connections>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="1353" y="-427"/>
+            <point key="canvasLocation" x="1715" y="-693"/>
+        </scene>
+        <!--Markers View Controller - Markers-->
+        <scene sceneID="VIu-8i-4WY">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ajx-Ru-gUT" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewController title="Markers" id="QYg-sU-i2R" customClass="G3MMarkersViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="SKE-1b-ksa" customClass="G3MWidget_iOS">
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Markers" id="7rM-Fk-dbu"/>
+                    <connections>
+                        <outlet property="glob3" destination="SKE-1b-ksa" id="un1-ZB-ZKq"/>
+                    </connections>
+                </viewController>
+            </objects>
+            <point key="canvasLocation" x="2265" y="-379"/>
+        </scene>
+        <!--Model View Controller - 3D Model-->
+        <scene sceneID="2rP-ed-RE4">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="QQk-Xr-3J7" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewController title="3D Model" id="tVX-sy-e2T" customClass="G3M3DModelViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="7mj-wx-9MA" customClass="G3MWidget_iOS">
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="3D Model" id="9c3-HS-CRu"/>
+                    <connections>
+                        <outlet property="glob3" destination="7mj-wx-9MA" id="fIc-vr-geC"/>
+                    </connections>
+                </viewController>
+            </objects>
+            <point key="canvasLocation" x="1825" y="642"/>
+        </scene>
+        <!--Drawing Shapes View Controller - Drawing Shapes-->
+        <scene sceneID="C6H-MY-jBA">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="TWb-LV-uLq" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewController id="zoh-1i-KPz" customClass="G3MDrawingShapesViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="KGZ-aU-PpB">
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" id="OSf-1F-wRo" customClass="G3MWidget_iOS">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            </view>
+                            <view opaque="NO" contentMode="scaleToFill" id="BXZ-Yy-qPu">
+                                <rect key="frame" x="0.0" y="362" width="320" height="54"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="qEe-dV-ddO">
+                                        <rect key="frame" x="136" y="3" width="48" height="48"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                        <state key="normal" image="play.png">
+                                            <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="switchLayer:" destination="Rf4-i9-3w3" eventType="touchUpInside" id="QE4-Z0-jSB"/>
+                                            <action selector="toggleShapesAnimation:" destination="zoh-1i-KPz" eventType="touchUpInside" id="klH-cs-wp5"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.69999999999999996" colorSpace="calibratedRGB"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Drawing Shapes" id="Ccr-Ex-FKe"/>
+                    <connections>
+                        <outlet property="glob3" destination="OSf-1F-wRo" id="P0o-n4-vZB"/>
+                        <outlet property="playButton" destination="qEe-dV-ddO" id="0xs-Xq-yzh"/>
+                    </connections>
+                </viewController>
+            </objects>
+            <point key="canvasLocation" x="2265" y="241"/>
         </scene>
         <!--Simple Glob3 View Controller - Simple glob3-->
         <scene sceneID="L0K-S4-ViS">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eoy-xD-D1z" sceneMemberID="firstResponder"/>
-                <viewController id="PPz-AV-qzl" customClass="SimpleGlob3ViewController" sceneMemberID="viewController">
+                <viewController id="PPz-AV-qzl" customClass="G3MSimpleGlob3ViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="eeF-v6-C69">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -275,7 +369,7 @@
                     </connections>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="785" y="-1150"/>
+            <point key="canvasLocation" x="537" y="-898"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="SlF-C0-SHH">
@@ -298,32 +392,53 @@
     </scenes>
     <resources>
         <image name="Icon-Small.png" width="29" height="29"/>
+        <image name="play.png" width="48" height="48"/>
         <image name="satellite_on_96x48.png" width="96" height="48"/>
     </resources>
     <classes>
-        <class className="DoubleGlob3ViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/DoubleGlob3ViewController.h"/>
+        <class className="G3M3DModelViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/G3M3DModelViewController.h"/>
             <relationships>
-                <relationship kind="outlet" name="_lowerGlob3" candidateClass="G3MWidget_iOS"/>
-                <relationship kind="outlet" name="_upperGlob3" candidateClass="G3MWidget_iOS"/>
+                <relationship kind="outlet" name="glob3" candidateClass="G3MWidget_iOS"/>
+            </relationships>
+        </class>
+        <class className="G3MDoubleGlob3ViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/G3MDoubleGlob3ViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="lowerGlob3" candidateClass="G3MWidget_iOS"/>
+                <relationship kind="outlet" name="upperGlob3" candidateClass="G3MWidget_iOS"/>
+            </relationships>
+        </class>
+        <class className="G3MDrawingShapesViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/G3MDrawingShapesViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="toggleShapesAnimation:"/>
+                <relationship kind="outlet" name="glob3" candidateClass="G3MWidget_iOS"/>
+                <relationship kind="outlet" name="playButton" candidateClass="UIButton"/>
+            </relationships>
+        </class>
+        <class className="G3MLayerSwitchViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/G3MLayerSwitchViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="switchLayer:"/>
+                <relationship kind="outlet" name="glob3" candidateClass="G3MWidget_iOS"/>
+                <relationship kind="outlet" name="layerSwitcher" candidateClass="UIButton"/>
+            </relationships>
+        </class>
+        <class className="G3MMarkersViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/G3MMarkersViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="glob3" candidateClass="G3MWidget_iOS"/>
+            </relationships>
+        </class>
+        <class className="G3MSimpleGlob3ViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/G3MSimpleGlob3ViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="G3MWidget" candidateClass="G3MWidget_iOS"/>
             </relationships>
         </class>
         <class className="G3MWidget_iOS" superclassName="UIView">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/G3MWidget_iOS.h"/>
-        </class>
-        <class className="LayerSwitchViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/LayerSwitchViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="switchLayer:"/>
-                <relationship kind="outlet" name="_glob3" candidateClass="G3MWidget_iOS"/>
-                <relationship kind="outlet" name="_layerSwitcher" candidateClass="UIButton"/>
-            </relationships>
-        </class>
-        <class className="SimpleGlob3ViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/SimpleGlob3ViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="G3MWidget" candidateClass="G3MWidget_iOS"/>
-            </relationships>
         </class>
     </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

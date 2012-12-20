@@ -1,18 +1,29 @@
 //
-//  LayerSwitchViewController.m
+//  G3MLayerSwitchViewController.mm
 //  G3MiOSDemo
 //
 //  Created by Mari Luz Mateo on 17/12/12.
 //
 //
 
-#import "LayerSwitchViewController.h"
+#import "G3MLayerSwitchViewController.h"
 
 #include "G3MBuilder_iOS.hpp"
 #include "LayerSet.hpp"
 #include "WMSLayer.hpp"
 
-@implementation LayerSwitchViewController
+@interface G3MLayerSwitchViewController ()
+
+@end
+
+@implementation G3MLayerSwitchViewController
+
+@synthesize glob3;
+@synthesize layerSwitcher;
+@synthesize bingLayer;
+@synthesize osmLayer;
+@synthesize satelliteLayer;
+
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -26,33 +37,50 @@
 - (void)viewDidLoad
 {
   [super viewDidLoad];
-	// Do any additional setup after loading the view.
+
+  // Create a builder
+  G3MBuilder_iOS builder(self.glob3);
+
+  // Initialize layer flag
+  self.satelliteLayer = true;
+
+  // Initialize layers
+  self.bingLayer = [self createLayer: "bing"
+                         enabled: true];
+  self.osmLayer = [self createLayer: "osm"
+                        enabled: false];
   
-  satelliteLayer = true;
+  // Create and populate a layer set
+  LayerSet* layerSet = new LayerSet();
+  layerSet->addLayer(self.bingLayer);
+  layerSet->addLayer(self.osmLayer);
   
-  [self initWidget];
+  // Set the layer set to be used in the glob3
+  builder.setLayerSet(layerSet);
+  
+  // Initialize the glob3
+  builder.initializeWidget();
+
+  // Let's get the show on the road!
+  [[self glob3] startAnimation];
 }
 
 - (void)viewDidUnload
 {
-  _glob3 = nil;
-  _layerSwitcher = nil;
-  [super viewDidUnload];
-  // Release any retained subviews of the main view.
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-  [super viewDidAppear:animated];
+  [self setGlob3:nil];
+  [self setLayerSwitcher:nil];
   
-  [_glob3 startAnimation];
+  self.bingLayer = nil;
+  self.osmLayer = nil;
+  
+  [super viewDidUnload];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
-  [super viewDidDisappear:animated];
+  [[self glob3] stopAnimation];
   
-  [_glob3 stopAnimation];
+  [super viewDidDisappear:animated];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -63,23 +91,6 @@
   } else {
     return YES;
   }
-}
-
-- (void) initWidget
-{
-  G3MBuilder_iOS builder(_glob3);
-  
-  LayerSet* layerSet = new LayerSet();
-  _bingLayer = [self createLayer: "bing"
-                         enabled: true];
-  layerSet->addLayer(_bingLayer);
-  _osmLayer = [self createLayer: "osm"
-                        enabled: false];
-  layerSet->addLayer(_osmLayer);
-  builder.setLayerSet(layerSet);
-    
-  // initialization
-  builder.initializeWidget();
 }
 
 - (WMSLayer*) createLayer: (const std::string) name
@@ -121,16 +132,16 @@
 
 
 - (IBAction)switchLayer:(id)sender {
-  satelliteLayer = !satelliteLayer;
+  self.satelliteLayer = !self.satelliteLayer;
   
-  _bingLayer->setEnable(satelliteLayer);
-  _osmLayer->setEnable(!satelliteLayer);
+  self.bingLayer->setEnable(self.satelliteLayer);
+  self.osmLayer->setEnable(!self.satelliteLayer);
 
-  if (satelliteLayer) {
-    [_layerSwitcher setImage:[UIImage imageNamed:@"satellite_on_96x48.png"] forState:UIControlStateNormal];
+  if (self.satelliteLayer) {
+    [[self layerSwitcher] setImage:[UIImage imageNamed:@"satellite_on_96x48.png"] forState:UIControlStateNormal];
   }
   else {
-    [_layerSwitcher setImage:[UIImage imageNamed:@"map_on_96x48.png"] forState:UIControlStateNormal];
+    [[self layerSwitcher] setImage:[UIImage imageNamed:@"map_on_96x48.png"] forState:UIControlStateNormal];
   }
 }
 @end

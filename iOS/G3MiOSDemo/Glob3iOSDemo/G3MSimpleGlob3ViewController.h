@@ -1,5 +1,5 @@
 //
-//  SimpleGlob3ViewController.h
+//  G3MSimpleGlob3ViewController.h
 //  G3MiOSDemo
 //
 //  Created by Mari Luz Mateo on 18/12/12.
@@ -10,7 +10,7 @@
 
 #import "G3MWidget_iOS.h"
 
-@interface SimpleGlob3ViewController : UIViewController {
+@interface G3MSimpleGlob3ViewController : UIViewController {
 
   IBOutlet G3MWidget_iOS* G3MWidget;
   

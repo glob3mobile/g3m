@@ -46,9 +46,14 @@
 		E71B15411626D27F003D1013 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B15361626D27F003D1013 /* Icon@2x.png */; };
 		E751B7661680E2D90032413F /* satellite_on_96x48.png in Resources */ = {isa = PBXBuildFile; fileRef = E751B7651680E2D90032413F /* satellite_on_96x48.png */; };
 		E751B7681680E5850032413F /* map_on_96x48.png in Resources */ = {isa = PBXBuildFile; fileRef = E751B7671680E5850032413F /* map_on_96x48.png */; };
-		E751B76B1680EEE50032413F /* SimpleGlob3ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E751B76A1680EEE50032413F /* SimpleGlob3ViewController.mm */; };
-		E7B776A5167B56900005ED14 /* DoubleGlob3ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7B776A4167B56900005ED14 /* DoubleGlob3ViewController.mm */; };
-		E7B776A8167F68730005ED14 /* LayerSwitchViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7B776A7167F68730005ED14 /* LayerSwitchViewController.mm */; };
+		E751B76B1680EEE50032413F /* G3MSimpleGlob3ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E751B76A1680EEE50032413F /* G3MSimpleGlob3ViewController.mm */; };
+		E751B76E1681DB460032413F /* G3MMarkersViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E751B76D1681DB460032413F /* G3MMarkersViewController.mm */; };
+		E751B78316823D7C0032413F /* G3MDrawingShapesViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E751B78216823D7C0032413F /* G3MDrawingShapesViewController.mm */; };
+		E751B7A1168247830032413F /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = E751B79F168247830032413F /* play.png */; };
+		E751B7A2168247830032413F /* stop.png in Resources */ = {isa = PBXBuildFile; fileRef = E751B7A0168247830032413F /* stop.png */; };
+		E7B776A5167B56900005ED14 /* G3MDoubleGlob3ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7B776A4167B56900005ED14 /* G3MDoubleGlob3ViewController.mm */; };
+		E7B776A8167F68730005ED14 /* G3MLayerSwitchViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7B776A7167F68730005ED14 /* G3MLayerSwitchViewController.mm */; };
+		E7CDA66F16837CB0006DA377 /* G3M3DModelViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7CDA66E16837CB0006DA377 /* G3M3DModelViewController.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -287,12 +292,20 @@
 		E71B15361626D27F003D1013 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "Resources/Icon@2x.png"; sourceTree = "<group>"; };
 		E751B7651680E2D90032413F /* satellite_on_96x48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = satellite_on_96x48.png; sourceTree = "<group>"; };
 		E751B7671680E5850032413F /* map_on_96x48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = map_on_96x48.png; sourceTree = "<group>"; };
-		E751B7691680EEE50032413F /* SimpleGlob3ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleGlob3ViewController.h; sourceTree = "<group>"; };
-		E751B76A1680EEE50032413F /* SimpleGlob3ViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SimpleGlob3ViewController.mm; sourceTree = "<group>"; };
-		E7B776A3167B56900005ED14 /* DoubleGlob3ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DoubleGlob3ViewController.h; sourceTree = "<group>"; };
-		E7B776A4167B56900005ED14 /* DoubleGlob3ViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DoubleGlob3ViewController.mm; sourceTree = "<group>"; };
-		E7B776A6167F68730005ED14 /* LayerSwitchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayerSwitchViewController.h; sourceTree = "<group>"; };
-		E7B776A7167F68730005ED14 /* LayerSwitchViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LayerSwitchViewController.mm; sourceTree = "<group>"; };
+		E751B7691680EEE50032413F /* G3MSimpleGlob3ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = G3MSimpleGlob3ViewController.h; sourceTree = "<group>"; };
+		E751B76A1680EEE50032413F /* G3MSimpleGlob3ViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MSimpleGlob3ViewController.mm; sourceTree = "<group>"; };
+		E751B76C1681DB460032413F /* G3MMarkersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = G3MMarkersViewController.h; sourceTree = "<group>"; };
+		E751B76D1681DB460032413F /* G3MMarkersViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MMarkersViewController.mm; sourceTree = "<group>"; };
+		E751B78116823D7C0032413F /* G3MDrawingShapesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = G3MDrawingShapesViewController.h; sourceTree = "<group>"; };
+		E751B78216823D7C0032413F /* G3MDrawingShapesViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MDrawingShapesViewController.mm; sourceTree = "<group>"; };
+		E751B79F168247830032413F /* play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play.png; sourceTree = "<group>"; };
+		E751B7A0168247830032413F /* stop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = stop.png; sourceTree = "<group>"; };
+		E7B776A3167B56900005ED14 /* G3MDoubleGlob3ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = G3MDoubleGlob3ViewController.h; sourceTree = "<group>"; };
+		E7B776A4167B56900005ED14 /* G3MDoubleGlob3ViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MDoubleGlob3ViewController.mm; sourceTree = "<group>"; };
+		E7B776A6167F68730005ED14 /* G3MLayerSwitchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = G3MLayerSwitchViewController.h; sourceTree = "<group>"; };
+		E7B776A7167F68730005ED14 /* G3MLayerSwitchViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MLayerSwitchViewController.mm; sourceTree = "<group>"; };
+		E7CDA66D16837CB0006DA377 /* G3M3DModelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = G3M3DModelViewController.h; sourceTree = "<group>"; };
+		E7CDA66E16837CB0006DA377 /* G3M3DModelViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3M3DModelViewController.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -534,18 +547,24 @@
 				D8EEF3991577920B003FEB5E /* AppDelegate.h */,
 				D8EEF39A1577920B003FEB5E /* AppDelegate.m */,
 				D8EEF39C1577920B003FEB5E /* MainStoryboard_iPhone.storyboard */,
-				E751B7691680EEE50032413F /* SimpleGlob3ViewController.h */,
-				E751B76A1680EEE50032413F /* SimpleGlob3ViewController.mm */,
 				D8EEF39F1577920B003FEB5E /* MainStoryboard_iPad.storyboard */,
 				D8EEF3A21577920B003FEB5E /* ViewController.h */,
 				D8EEF3A31577920B003FEB5E /* ViewController.mm */,
 				D8EEF3911577920B003FEB5E /* Supporting Files */,
 				D8EEF4091577A93D003FEB5E /* G3W.h */,
 				D8EEF40A1577A93D003FEB5E /* G3W.mm */,
-				E7B776A3167B56900005ED14 /* DoubleGlob3ViewController.h */,
-				E7B776A4167B56900005ED14 /* DoubleGlob3ViewController.mm */,
-				E7B776A6167F68730005ED14 /* LayerSwitchViewController.h */,
-				E7B776A7167F68730005ED14 /* LayerSwitchViewController.mm */,
+				E751B7691680EEE50032413F /* G3MSimpleGlob3ViewController.h */,
+				E751B76A1680EEE50032413F /* G3MSimpleGlob3ViewController.mm */,
+				E7B776A3167B56900005ED14 /* G3MDoubleGlob3ViewController.h */,
+				E7B776A4167B56900005ED14 /* G3MDoubleGlob3ViewController.mm */,
+				E7B776A6167F68730005ED14 /* G3MLayerSwitchViewController.h */,
+				E7B776A7167F68730005ED14 /* G3MLayerSwitchViewController.mm */,
+				E751B76C1681DB460032413F /* G3MMarkersViewController.h */,
+				E751B76D1681DB460032413F /* G3MMarkersViewController.mm */,
+				E751B78116823D7C0032413F /* G3MDrawingShapesViewController.h */,
+				E751B78216823D7C0032413F /* G3MDrawingShapesViewController.mm */,
+				E7CDA66D16837CB0006DA377 /* G3M3DModelViewController.h */,
+				E7CDA66E16837CB0006DA377 /* G3M3DModelViewController.mm */,
 			);
 			name = G3MiOSDemo;
 			path = Glob3iOSDemo;
@@ -573,6 +592,8 @@
 		D8EEF4271577B0D6003FEB5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				E751B79F168247830032413F /* play.png */,
+				E751B7A0168247830032413F /* stop.png */,
 				E751B7671680E5850032413F /* map_on_96x48.png */,
 				E751B7651680E2D90032413F /* satellite_on_96x48.png */,
 				CF0223821668318600024B73 /* geojson */,
@@ -695,6 +716,8 @@
 				CF0223831668318600024B73 /* geojson in Resources */,
 				E751B7661680E2D90032413F /* satellite_on_96x48.png in Resources */,
 				E751B7681680E5850032413F /* map_on_96x48.png in Resources */,
+				E751B7A1168247830032413F /* play.png in Resources */,
+				E751B7A2168247830032413F /* stop.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -709,9 +732,12 @@
 				D8EEF39B1577920B003FEB5E /* AppDelegate.m in Sources */,
 				D8EEF3A41577920B003FEB5E /* ViewController.mm in Sources */,
 				D8EEF40B1577A93D003FEB5E /* G3W.mm in Sources */,
-				E7B776A5167B56900005ED14 /* DoubleGlob3ViewController.mm in Sources */,
-				E7B776A8167F68730005ED14 /* LayerSwitchViewController.mm in Sources */,
-				E751B76B1680EEE50032413F /* SimpleGlob3ViewController.mm in Sources */,
+				E7B776A5167B56900005ED14 /* G3MDoubleGlob3ViewController.mm in Sources */,
+				E7B776A8167F68730005ED14 /* G3MLayerSwitchViewController.mm in Sources */,
+				E751B76B1680EEE50032413F /* G3MSimpleGlob3ViewController.mm in Sources */,
+				E751B76E1681DB460032413F /* G3MMarkersViewController.mm in Sources */,
+				E751B78316823D7C0032413F /* G3MDrawingShapesViewController.mm in Sources */,
+				E7CDA66F16837CB0006DA377 /* G3M3DModelViewController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
