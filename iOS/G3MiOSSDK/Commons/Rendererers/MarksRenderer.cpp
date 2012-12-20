@@ -65,6 +65,24 @@ void MarksRenderer::addMark(Mark* mark) {
   }
 }
 
+void MarksRenderer::removeMark(Mark* mark){
+    int pos = -1;
+    for (int i = 0; i < _marks.size(); i++) {
+        if (_marks[i] == mark) {
+            pos = i;
+        }
+        break;
+    }
+    _marks.erase(_marks.begin()+pos);
+}
+
+void MarksRenderer::removeAllMarks(){
+    for (int i = 0; i < _marks.size(); i++) {
+        delete _marks[i];
+    }
+    _marks.clear();
+}
+
 bool MarksRenderer::onTouchEvent(const G3MEventContext* ec,
                                  const TouchEvent* touchEvent) {
   if (_markTouchListener == NULL) {

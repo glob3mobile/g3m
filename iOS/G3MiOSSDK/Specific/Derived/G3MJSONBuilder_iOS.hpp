@@ -20,7 +20,7 @@ class G3MJSONBuilder_iOS : public IG3MJSONBuilder {
     
 public:
     G3MJSONBuilder_iOS(std::string jsonSource, G3MWidget_iOS* g3mWidget);
-    void create(LayerSet* layerSet, GInitializationTask* initializationTask, MarkTouchListener* markTouchListener, MarkTouchListener* panoTouchListener);
+    void create(LayerSet* layerSet, MarksRenderer* marksRenderer, GInitializationTask* initializationTask, MarkTouchListener* markTouchListener, MarkTouchListener* panoTouchListener);
 };
 
 #endif

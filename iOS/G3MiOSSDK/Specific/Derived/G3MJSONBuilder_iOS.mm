@@ -22,7 +22,7 @@
 G3MJSONBuilder_iOS::G3MJSONBuilder_iOS(std::string jsonSource, G3MWidget_iOS* g3mWidget): IG3MJSONBuilder(jsonSource), _g3mWidget(g3mWidget) {
 };
 
-void G3MJSONBuilder_iOS::create(LayerSet* layerSet, GInitializationTask* initializationTask, MarkTouchListener* markTouchListener, MarkTouchListener* panoTouchListener){
+void G3MJSONBuilder_iOS::create(LayerSet* layerSet, MarksRenderer* marksRenderer, GInitializationTask* initializationTask, MarkTouchListener* markTouchListener, MarkTouchListener* panoTouchListener){
     
     SceneParser::instance()->parse(layerSet, _jsonSource);
     
@@ -73,8 +73,6 @@ void G3MJSONBuilder_iOS::create(LayerSet* layerSet, GInitializationTask* initial
     G3MBuilder_iOS* builder = new G3MBuilder_iOS(_g3mWidget);
     builder->setLayerSet(layerSet);
 
-    const bool readyWhenMarksReady = false;
-    MarksRenderer* marksRenderer = new MarksRenderer(readyWhenMarksReady);
     if (markTouchListener != NULL) {
         marksRenderer->setMarkTouchListener(markTouchListener, true);
     }

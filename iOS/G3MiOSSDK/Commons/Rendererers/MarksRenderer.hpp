@@ -48,6 +48,10 @@ public:
                       const GLState& parentState);
 
   void addMark(Mark* mark);
+    
+  void removeMark(Mark* mark);
+  
+  void removeAllMarks();
 
   bool onTouchEvent(const G3MEventContext* ec,
                     const TouchEvent* touchEvent);
