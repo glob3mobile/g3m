@@ -197,7 +197,7 @@
                             </view>
                             <view contentMode="scaleToFill" id="m37-aA-6MJ" customClass="G3MWidget_iOS">
                                 <rect key="frame" x="0.0" y="216" width="320" height="208"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             </view>
                         </subviews>
@@ -231,8 +231,8 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="lTp-KS-YFG">
-                                        <rect key="frame" x="124" y="6" width="72" height="37"/>
-                                        <autoresizingMask key="autoresizingMask"/>
+                                        <rect key="frame" x="8" y="7" width="72" height="36"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                         <state key="normal" image="satellite_on_96x48.png">
                                             <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -245,6 +245,13 @@
                                             <action selector="switchLayer:" destination="Rf4-i9-3w3" eventType="touchUpInside" id="XtZ-Uu-TNZ"/>
                                         </connections>
                                     </button>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Push the button to switch base layers" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="bou-Po-Tna">
+                                        <rect key="frame" x="90" y="14" width="208" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="1" green="0.81928131282421091" blue="0.26897251739049743" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.70000000000000007" colorSpace="calibratedRGB"/>
                             </view>
@@ -267,7 +274,7 @@
                 <viewController title="Markers" id="QYg-sU-i2R" customClass="G3MMarkersViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="SKE-1b-ksa" customClass="G3MWidget_iOS">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" title="Markers" id="7rM-Fk-dbu"/>
@@ -285,7 +292,7 @@
                 <viewController title="3D Model" id="tVX-sy-e2T" customClass="G3M3DModelViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="7mj-wx-9MA" customClass="G3MWidget_iOS">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" title="3D Model" id="9c3-HS-CRu"/>
@@ -307,16 +314,16 @@
                         <subviews>
                             <view contentMode="scaleToFill" id="OSf-1F-wRo" customClass="G3MWidget_iOS">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             </view>
                             <view opaque="NO" contentMode="scaleToFill" id="BXZ-Yy-qPu">
-                                <rect key="frame" x="0.0" y="362" width="320" height="54"/>
+                                <rect key="frame" x="0.0" y="366" width="320" height="50"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="qEe-dV-ddO">
-                                        <rect key="frame" x="136" y="3" width="48" height="48"/>
-                                        <autoresizingMask key="autoresizingMask"/>
+                                        <rect key="frame" x="6" y="8" width="36" height="36"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                         <state key="normal" image="play.png">
                                             <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -330,6 +337,13 @@
                                             <action selector="toggleShapesAnimation:" destination="zoh-1i-KPz" eventType="touchUpInside" id="klH-cs-wp5"/>
                                         </connections>
                                     </button>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Push the button to get the shapes changing" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="cND-hk-T2y">
+                                        <rect key="frame" x="51" y="14" width="250" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="1" green="0.81928131280000005" blue="0.2689725174" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.69999999999999996" colorSpace="calibratedRGB"/>
                             </view>
