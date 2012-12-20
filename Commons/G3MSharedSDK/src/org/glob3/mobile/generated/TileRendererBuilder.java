@@ -32,107 +32,107 @@ public class TileRendererBuilder
 
 	private LayerSet createLayerSet()
 	{
-		LayerSet layerSet = new LayerSet();
+	  LayerSet layerSet = new LayerSet();
     
-		WMSLayer bing = new WMSLayer("ve", new URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?", false), WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/jpeg", "EPSG:4326", "", false, null);
-		layerSet.addLayer(bing);
+	  WMSLayer bing = new WMSLayer("ve", new URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?", false), WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/jpeg", "EPSG:4326", "", false, null);
+	  layerSet.addLayer(bing);
     
-		return layerSet;
+	  return layerSet;
 	}
 	private TilesRenderParameters createTileRendererParameters()
 	{
-		TilesRenderParameters parameters = TilesRenderParameters.createDefault(_renderDebug, _useTilesSplitBudget, _forceTopLevelTilesRenderOnStart, _incrementalTileQuality);
+	  TilesRenderParameters parameters = TilesRenderParameters.createDefault(_renderDebug, _useTilesSplitBudget, _forceTopLevelTilesRenderOnStart, _incrementalTileQuality);
     
-		return parameters;
+	  return parameters;
 	}
 	private TileTessellator createTileTessellator()
 	{
-		TileTessellator tileTessellator = new EllipsoidalTileTessellator(_parameters._tileResolution, true);
+	  TileTessellator tileTessellator = new EllipsoidalTileTessellator(_parameters._tileResolution, true);
     
-		return tileTessellator;
+	  return tileTessellator;
 	}
 
 	public TileRendererBuilder()
 	{
-		_showStatistics = false;
-		_renderDebug = false;
-		_useTilesSplitBudget = true;
-		_forceTopLevelTilesRenderOnStart = true;
-		_incrementalTileQuality = true;
+	  _showStatistics = false;
+	  _renderDebug = false;
+	  _useTilesSplitBudget = true;
+	  _forceTopLevelTilesRenderOnStart = true;
+	  _incrementalTileQuality = false;
     
-		_parameters = createTileRendererParameters();
-		_layerSet = createLayerSet();
-		_texturizer = new MultiLayerTileTexturizer();
-		_tileTessellator = createTileTessellator();
+	  _parameters = createTileRendererParameters();
+	  _layerSet = createLayerSet();
+	  _texturizer = new MultiLayerTileTexturizer();
+	  _tileTessellator = createTileTessellator();
 	}
 	public void dispose()
 	{
-	//    delete _tileTessellator;
-	//    delete _texturizer;
-	//    delete _layerSet;
-	///#ifdef C_CODE
-	//    delete _parameters;
-	///#endif
+	  //    delete _tileTessellator;
+	  //    delete _texturizer;
+	  //    delete _layerSet;
+	  ///#ifdef C_CODE
+	  //    delete _parameters;
+	  ///#endif
 	}
 	public final TileRenderer create()
 	{
-		TileRenderer tileRenderer = new TileRenderer(_tileTessellator, _texturizer, _layerSet, _parameters, _showStatistics);
+	  TileRenderer tileRenderer = new TileRenderer(_tileTessellator, _texturizer, _layerSet, _parameters, _showStatistics);
     
-		return tileRenderer;
+	  return tileRenderer;
 	}
 	public final void setTileTessellator(TileTessellator tileTessellator)
 	{
-		if (_tileTessellator != tileTessellator)
-		{
-			if (_tileTessellator != null)
-				_tileTessellator.dispose();
-			_tileTessellator = tileTessellator;
-		}
+	  if (_tileTessellator != tileTessellator)
+	  {
+		if (_tileTessellator != null)
+			_tileTessellator.dispose();
+		_tileTessellator = tileTessellator;
+	  }
 	}
 	public final void setTileTexturizer(TileTexturizer tileTexturizer)
 	{
-		if (_texturizer != tileTexturizer)
-		{
-			if (_texturizer != null)
-				_texturizer.dispose();
-			_texturizer = tileTexturizer;
-		}
+	  if (_texturizer != tileTexturizer)
+	  {
+		if (_texturizer != null)
+			_texturizer.dispose();
+		_texturizer = tileTexturizer;
+	  }
 	}
 	public final void setLayerSet(LayerSet layerSet)
 	{
-		if (_layerSet != layerSet)
-		{
-			if (_layerSet != null)
-				_layerSet.dispose();
-			_layerSet = layerSet;
-		}
+	  if (_layerSet != layerSet)
+	  {
+		if (_layerSet != null)
+			_layerSet.dispose();
+		_layerSet = layerSet;
+	  }
 	}
 	public final void setTileRendererParameters(TilesRenderParameters parameters)
 	{
-		if (_parameters != parameters)
-		{
-			_parameters = parameters;
-		}
+	  if (_parameters != parameters)
+	  {
+		_parameters = parameters;
+	  }
 	}
 	public final void setShowStatistics(boolean showStatistics)
 	{
-		_showStatistics = showStatistics;
+	  _showStatistics = showStatistics;
 	}
 	public final void setRenderDebug(boolean renderDebug)
 	{
-		_renderDebug = renderDebug;
+	  _renderDebug = renderDebug;
 	}
 	public final void setUseTilesSplitBuget(boolean useTilesSplitBudget)
 	{
-		_useTilesSplitBudget = useTilesSplitBudget;
+	  _useTilesSplitBudget = useTilesSplitBudget;
 	}
 	public final void setForceTopLevelTilesRenderOnStart(boolean forceTopLevelTilesRenderOnStart)
 	{
-		_forceTopLevelTilesRenderOnStart = forceTopLevelTilesRenderOnStart;
+	  _forceTopLevelTilesRenderOnStart = forceTopLevelTilesRenderOnStart;
 	}
 	public final void setIncrementalTileQuality(boolean incrementalTileQuality)
 	{
-		_incrementalTileQuality = incrementalTileQuality;
+	  _incrementalTileQuality = incrementalTileQuality;
 	}
 
 }
