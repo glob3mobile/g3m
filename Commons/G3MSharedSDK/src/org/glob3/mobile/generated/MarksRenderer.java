@@ -131,6 +131,31 @@ public class MarksRenderer extends LeafRenderer
 	}
   }
 
+  public final void removeMark(Mark mark)
+  {
+	  int pos = -1;
+	  for (int i = 0; i < _marks.size(); i++)
+	  {
+		  if (_marks.get(i) == mark)
+		  {
+			  pos = i;
+		  }
+		  break;
+	  }
+//C++ TO JAVA CONVERTER TODO TASK: There is no direct equivalent to the STL vector 'erase' method in Java:
+	  _marks.erase(_marks.iterator()+pos);
+  }
+
+  public final void removeAllMarks()
+  {
+	  for (int i = 0; i < _marks.size(); i++)
+	  {
+		  if (_marks.get(i) != null)
+			  _marks.get(i).dispose();
+	  }
+	  _marks.clear();
+  }
+
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
 	if (_markTouchListener == null)
