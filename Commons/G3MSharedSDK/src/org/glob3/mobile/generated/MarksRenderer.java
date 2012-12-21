@@ -142,8 +142,7 @@ public class MarksRenderer extends LeafRenderer
 		  }
 		  break;
 	  }
-//C++ TO JAVA CONVERTER TODO TASK: There is no direct equivalent to the STL vector 'erase' method in Java:
-	  _marks.erase(_marks.iterator()+pos);
+  	_marks.remove(pos);
   }
 
   public final void removeAllMarks()
