@@ -90,7 +90,7 @@ public class G3MDrawingShapesActivity
             return true;
          }
       };
-      g3mBuilder.setInitializationTask(initializationTask, true);
+      g3mBuilder.setInitializationTask(initializationTask);
 
       _widgetAndroid = g3mBuilder.createWidget();
       final LinearLayout layout = (LinearLayout) findViewById(R.id.glob3);
