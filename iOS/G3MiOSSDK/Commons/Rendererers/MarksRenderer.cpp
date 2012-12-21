@@ -72,8 +72,13 @@ void MarksRenderer::removeMark(Mark* mark){
             pos = i;
         }
         break;
-    }
+    }    
+#ifdef C_CODE
     _marks.erase(_marks.begin()+pos);
+#endif
+#ifdef JAVA_CODE
+    _marks.remove(pos);
+#endif
 }
 
 void MarksRenderer::removeAllMarks(){
