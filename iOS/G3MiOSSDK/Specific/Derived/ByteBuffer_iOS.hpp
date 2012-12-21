@@ -25,7 +25,7 @@ public:
     
   }
   
-  ByteBuffer_iOS(unsigned char*  values, int size) :
+  ByteBuffer_iOS(unsigned char* values, int size) :
   _values(values),
   _size(size),
   _timestamp(0) {
