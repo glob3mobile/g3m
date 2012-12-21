@@ -11,6 +11,7 @@
 #include "G3MBuilder_iOS.hpp"
 #include "LayerSet.hpp"
 #include "WMSLayer.hpp"
+#include "LayerBuilder.hpp"
 
 @interface G3MLayerSwitchViewController ()
 
@@ -45,17 +46,15 @@
   self.satelliteLayer = true;
 
   // Initialize layers
-  self.bingLayer = [self createLayer: "bing"
-                         enabled: true];
-  self.osmLayer = [self createLayer: "osm"
-                        enabled: false];
+  self.bingLayer = LayerBuilder::createBingLayer(true);
+  self.osmLayer = LayerBuilder::createOSMLayer(false);
   
   // Create and populate a layer set
   LayerSet* layerSet = new LayerSet();
   layerSet->addLayer(self.bingLayer);
   layerSet->addLayer(self.osmLayer);
   
-  // Set the layer set to be used in the glob3
+  // Set the layer set to be used by the glob3
   builder.setLayerSet(layerSet);
   
   // Initialize the glob3
@@ -92,44 +91,6 @@
     return YES;
   }
 }
-
-- (WMSLayer*) createLayer: (const std::string) name
-                  enabled: (bool) enabled
-{
-  if (name == "bing") {
-    WMSLayer* bing = new WMSLayer("ve",
-                                  URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?", false),
-                                  WMS_1_1_0,
-                                  Sector::fullSphere(),
-                                  "image/jpeg",
-                                  "EPSG:4326",
-                                  "",
-                                  false,
-                                  NULL);
-    bing->setEnable(enabled);
-        
-    return bing;
-  }
-    
-  if (name == "osm") {
-    WMSLayer* osm = new WMSLayer("osm_auto:all",
-                                 URL("http://129.206.228.72/cached/osm", false),
-                                 WMS_1_1_0,
-                                 // Sector::fromDegrees(-85.05, -180.0, 85.05, 180.0),
-                                 Sector::fullSphere(),
-                                 "image/jpeg",
-                                 "EPSG:4326",
-                                 "",
-                                 false,
-                                 NULL);
-    osm->setEnable(enabled);
-        
-    return osm;
-  }
-  
-  return NULL;
-}
-
 
 - (IBAction)switchLayer:(id)sender {
   self.satelliteLayer = !self.satelliteLayer;

@@ -321,6 +321,8 @@
 		E745CC7916484A9A00819711 /* IStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E745CC7716484A9900819711 /* IStorage.cpp */; };
 		E77A100A165BEDC500FE5515 /* IG3MBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E77A1008165BEDC500FE5515 /* IG3MBuilder.cpp */; };
 		E77A100B165BEDC500FE5515 /* IG3MBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E77A1009165BEDC500FE5515 /* IG3MBuilder.hpp */; settings = {ATTRIBUTES = (); }; };
+		E7AF21821684516500C421F0 /* LayerBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7AF21801684516500C421F0 /* LayerBuilder.cpp */; };
+		E7AF21831684516500C421F0 /* LayerBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E7AF21811684516500C421F0 /* LayerBuilder.hpp */; settings = {ATTRIBUTES = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -640,6 +642,8 @@
 		E745CC7716484A9900819711 /* IStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IStorage.cpp; path = Commons/Interfaces/IStorage.cpp; sourceTree = "<group>"; };
 		E77A1008165BEDC500FE5515 /* IG3MBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IG3MBuilder.cpp; path = Commons/Basic/IG3MBuilder.cpp; sourceTree = "<group>"; };
 		E77A1009165BEDC500FE5515 /* IG3MBuilder.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = IG3MBuilder.hpp; path = Commons/Basic/IG3MBuilder.hpp; sourceTree = "<group>"; };
+		E7AF21801684516500C421F0 /* LayerBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LayerBuilder.cpp; path = Commons/Basic/LayerBuilder.cpp; sourceTree = "<group>"; };
+		E7AF21811684516500C421F0 /* LayerBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = LayerBuilder.hpp; path = Commons/Basic/LayerBuilder.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -805,6 +809,8 @@
 				E77A1009165BEDC500FE5515 /* IG3MBuilder.hpp */,
 				E705123A165E782C00AEADB9 /* TileRendererBuilder.cpp */,
 				E705123B165E782C00AEADB9 /* TileRendererBuilder.hpp */,
+				E7AF21801684516500C421F0 /* LayerBuilder.cpp */,
+				E7AF21811684516500C421F0 /* LayerBuilder.hpp */,
 				CF2CDD971678292E002A78A9 /* GInitializationTask.cpp */,
 				CF2CDD981678292E002A78A9 /* GInitializationTask.hpp */,
 			);
@@ -1159,6 +1165,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E7AF21831684516500C421F0 /* LayerBuilder.hpp in Headers */,
 				383BD3861577EDDB0012AC53 /* G3MWidget_iOS.h in Headers */,
 				CFDFC05E166AB22A0065BC1F /* AbstractMesh.hpp in Headers */,
 				E7051241165E916000AEADB9 /* G3MBuilder_iOS.hpp in Headers */,
@@ -1525,6 +1532,7 @@
 				CFDB7B73166AB99B00756DE8 /* DirectMesh.cpp in Sources */,
 				CF00E444166FD77E0098CABD /* IImageListener.cpp in Sources */,
 				CF2CDD991678292E002A78A9 /* GInitializationTask.cpp in Sources */,
+				E7AF21821684516500C421F0 /* LayerBuilder.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

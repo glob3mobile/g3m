@@ -11,6 +11,7 @@
 #include "G3MBuilder_iOS.hpp"
 #include "LayerSet.hpp"
 #include "WMSLayer.hpp"
+#include "LayerBuilder.hpp"
 
 @interface G3MDoubleGlob3ViewController ()
 
@@ -40,13 +41,11 @@
   
   // Create and populate two layer sets
   LayerSet* upperLayerSet = new LayerSet();
-  upperLayerSet->addLayer([self createLayer: "bing"
-                                    enabled: true]);
+  upperLayerSet->addLayer(LayerBuilder::createBingLayer(true));
   LayerSet* lowerLayerSet = new LayerSet();
-  lowerLayerSet->addLayer([self createLayer: "osm"
-                                    enabled: true]);
+  lowerLayerSet->addLayer(LayerBuilder::createOSMLayer(true));
 
-  // Set the layer sets to be used in the widgets
+  // Set the layer sets to be used by the widgets
   upperBuilder.setLayerSet(upperLayerSet);
   lowerBuilder.setLayerSet(lowerLayerSet);
   
@@ -84,58 +83,6 @@
   } else {
     return YES;
   }
-}
-
-- (WMSLayer*) createLayer: (const std::string) name
-                  enabled: (bool) enabled
-{
-  if (name == "bing") {
-      WMSLayer* bing = new WMSLayer("ve",
-                                    URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?", false),
-                                    WMS_1_1_0,
-                                    Sector::fullSphere(),
-                                    "image/jpeg",
-                                    "EPSG:4326",
-                                    "",
-                                    false,
-                                    NULL);
-      bing->setEnable(enabled);
-        
-      return bing;
-  }
-
-  if (name == "osm") {
-      WMSLayer* osm = new WMSLayer("osm_auto:all",
-                                    URL("http://129.206.228.72/cached/osm", false),
-                                    WMS_1_1_0,
-                                    // Sector::fromDegrees(-85.05, -180.0, 85.05, 180.0),
-                                    Sector::fullSphere(),
-                                    "image/jpeg",
-                                    "EPSG:4326",
-                                    "",
-                                    false,
-                                    NULL);
-    osm->setEnable(enabled);
-        
-    return osm;
-  }
-
-  if (name == "pnoa") {
-      WMSLayer *pnoa = new WMSLayer("PNOA",
-                                    URL("http://www.idee.es/wms/PNOA/PNOA", false),
-                                    WMS_1_1_0,
-                                    Sector::fromDegrees(21, -18, 45, 6),
-                                    "image/png",
-                                    "EPSG:4326",
-                                    "",
-                                    true,
-                                    NULL);
-    pnoa->setEnable(enabled);
-        
-    return pnoa;
-  }
-  
-  return NULL;
 }
 
 @end

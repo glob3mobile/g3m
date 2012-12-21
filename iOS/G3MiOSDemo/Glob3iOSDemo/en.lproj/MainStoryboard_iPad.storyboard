@@ -192,12 +192,12 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" id="6ur-GK-Lak" customClass="G3MWidget_iOS">
-                                <rect key="frame" x="0.0" y="0.0" width="768" height="752"/>
+                                <rect key="frame" x="0.0" y="0.0" width="768" height="480"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             </view>
                             <view contentMode="scaleToFill" id="x0c-Rs-wS2" customClass="G3MWidget_iOS">
-                                <rect key="frame" x="0.0" y="216" width="768" height="752"/>
+                                <rect key="frame" x="0.0" y="480" width="768" height="480"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             </view>
