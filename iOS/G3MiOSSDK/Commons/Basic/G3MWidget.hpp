@@ -52,6 +52,12 @@ private:
   G3MWidget* _widget;
 
 public:
+  UserData() :
+  _widget(NULL)
+  {
+
+  }
+
   virtual ~UserData() {
 
   }
@@ -119,8 +125,8 @@ public:
   }
 
   void setUserData(UserData* userData) {
-      delete _userData;
-        
+    delete _userData;
+
     _userData = userData;
     if (_userData != NULL) {
       _userData->setWidget(this);

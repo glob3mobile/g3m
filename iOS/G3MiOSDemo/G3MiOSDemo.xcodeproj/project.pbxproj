@@ -74,6 +74,179 @@
 		A717C99515EBA71D00EEC830 /* mercator.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = mercator.jpg; sourceTree = "<group>"; };
 		CCD7885315D9A3FA0065A7E1 /* ProgressWheel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ProgressWheel.png; sourceTree = "<group>"; };
 		CF0223821668318600024B73 /* geojson */ = {isa = PBXFileReference; lastKnownFileType = folder; path = geojson; sourceTree = "<group>"; };
+		CF629FFF168008E900649BBC /* G3MWidget_iOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = G3MWidget_iOS.h; path = ../G3MiOSSDK/Specific/Widget/G3MWidget_iOS.h; sourceTree = "<group>"; };
+		CF62A000168008E900649BBC /* AbstractMesh.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = AbstractMesh.hpp; path = ../G3MiOSSDK/Commons/Mesh/AbstractMesh.hpp; sourceTree = "<group>"; };
+		CF62A001168008E900649BBC /* G3MBuilder_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = G3MBuilder_iOS.hpp; path = ../G3MiOSSDK/Specific/Derived/G3MBuilder_iOS.hpp; sourceTree = "<group>"; };
+		CF62A002168008E900649BBC /* TileRendererBuilder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TileRendererBuilder.hpp; path = ../G3MiOSSDK/Commons/Basic/TileRendererBuilder.hpp; sourceTree = "<group>"; };
+		CF62A003168008E900649BBC /* IG3MBuilder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IG3MBuilder.hpp; path = ../G3MiOSSDK/Commons/Basic/IG3MBuilder.hpp; sourceTree = "<group>"; };
+		CF62A004168008E900649BBC /* GInitializationTask.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = GInitializationTask.hpp; path = ../G3MiOSSDK/Commons/Basic/GInitializationTask.hpp; sourceTree = "<group>"; };
+		CF62A005168008E900649BBC /* GLState.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = GLState.hpp; path = ../G3MiOSSDK/Commons/GL/GLState.hpp; sourceTree = "<group>"; };
+		CF62A006168008E900649BBC /* ShaderProgram.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ShaderProgram.hpp; path = ../G3MiOSSDK/Commons/GL/ShaderProgram.hpp; sourceTree = "<group>"; };
+		CF62A007168008E900649BBC /* GoToPositionEffect.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = GoToPositionEffect.hpp; path = ../G3MiOSSDK/Commons/Basic/GoToPositionEffect.hpp; sourceTree = "<group>"; };
+		CF62A008168008E900649BBC /* BingLayer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = BingLayer.hpp; path = ../G3MiOSSDK/Commons/Layers/BingLayer.hpp; sourceTree = "<group>"; };
+		CF62A009168008E900649BBC /* IImageListener.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IImageListener.hpp; path = ../G3MiOSSDK/Commons/Interfaces/IImageListener.hpp; sourceTree = "<group>"; };
+		CF62A00A168008E900649BBC /* DirectMesh.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = DirectMesh.hpp; path = ../G3MiOSSDK/Commons/Mesh/DirectMesh.hpp; sourceTree = "<group>"; };
+		CF62A00B168008E900649BBC /* GEORenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = GEORenderer.hpp; path = ../G3MiOSSDK/Commons/GEO/GEORenderer.hpp; sourceTree = "<group>"; };
+		CF62A00C168008E900649BBC /* GEOLineStringGeometry.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = GEOLineStringGeometry.hpp; path = ../G3MiOSSDK/Commons/GEO/GEOLineStringGeometry.hpp; sourceTree = "<group>"; };
+		CF62A00D168008E900649BBC /* GEO2DLineStringGeometry.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = GEO2DLineStringGeometry.hpp; path = ../G3MiOSSDK/Commons/GEO/GEO2DLineStringGeometry.hpp; sourceTree = "<group>"; };
+		CF62A00E168008E900649BBC /* GEOMultiLineStringGeometry.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = GEOMultiLineStringGeometry.hpp; path = ../G3MiOSSDK/Commons/GEO/GEOMultiLineStringGeometry.hpp; sourceTree = "<group>"; };
+		CF62A00F168008E900649BBC /* GEO2DMultiLineStringGeometry.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = GEO2DMultiLineStringGeometry.hpp; path = ../G3MiOSSDK/Commons/GEO/GEO2DMultiLineStringGeometry.hpp; sourceTree = "<group>"; };
+		CF62A010168008E900649BBC /* GEOObject.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = GEOObject.hpp; path = ../G3MiOSSDK/Commons/GEO/GEOObject.hpp; sourceTree = "<group>"; };
+		CF62A011168008E900649BBC /* GEOFeatureCollection.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = GEOFeatureCollection.hpp; path = ../G3MiOSSDK/Commons/GEO/GEOFeatureCollection.hpp; sourceTree = "<group>"; };
+		CF62A012168008E900649BBC /* GEOFeature.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = GEOFeature.hpp; path = ../G3MiOSSDK/Commons/GEO/GEOFeature.hpp; sourceTree = "<group>"; };
+		CF62A013168008E900649BBC /* GEOGeometry.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = GEOGeometry.hpp; path = ../G3MiOSSDK/Commons/GEO/GEOGeometry.hpp; sourceTree = "<group>"; };
+		CF62A014168008E900649BBC /* ShapeScaleEffect.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ShapeScaleEffect.hpp; path = ../G3MiOSSDK/Commons/Rendererers/ShapeScaleEffect.hpp; sourceTree = "<group>"; };
+		CF62A015168008E900649BBC /* GEOJSONParser.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = GEOJSONParser.hpp; path = ../G3MiOSSDK/Commons/GEO/GEOJSONParser.hpp; sourceTree = "<group>"; };
+		CF62A016168008E900649BBC /* CompositeMesh.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = CompositeMesh.hpp; path = ../G3MiOSSDK/Commons/Mesh/CompositeMesh.hpp; sourceTree = "<group>"; };
+		CF62A017168008E900649BBC /* OrderedRenderable.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = OrderedRenderable.hpp; path = ../G3MiOSSDK/Commons/Basic/OrderedRenderable.hpp; sourceTree = "<group>"; };
+		CF62A018168008E900649BBC /* BoxShape.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = BoxShape.hpp; path = ../G3MiOSSDK/Commons/Rendererers/BoxShape.hpp; sourceTree = "<group>"; };
+		CF62A019168008E900649BBC /* SGLayerNode.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = SGLayerNode.hpp; path = ../G3MiOSSDK/Commons/Rendererers/SGLayerNode.hpp; sourceTree = "<group>"; };
+		CF62A01A168008E900649BBC /* SGShape.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = SGShape.hpp; path = ../G3MiOSSDK/Commons/Rendererers/SGShape.hpp; sourceTree = "<group>"; };
+		CF62A01B168008E900649BBC /* SGRotateNode.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = SGRotateNode.hpp; path = ../G3MiOSSDK/Commons/Rendererers/SGRotateNode.hpp; sourceTree = "<group>"; };
+		CF62A01C168008E900649BBC /* SGMaterialNode.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = SGMaterialNode.hpp; path = ../G3MiOSSDK/Commons/Rendererers/SGMaterialNode.hpp; sourceTree = "<group>"; };
+		CF62A01D168008E900649BBC /* SGTextureNode.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = SGTextureNode.hpp; path = ../G3MiOSSDK/Commons/Rendererers/SGTextureNode.hpp; sourceTree = "<group>"; };
+		CF62A01E168008E900649BBC /* SGGeometryNode.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = SGGeometryNode.hpp; path = ../G3MiOSSDK/Commons/Rendererers/SGGeometryNode.hpp; sourceTree = "<group>"; };
+		CF62A01F168008E900649BBC /* SGTranslateNode.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = SGTranslateNode.hpp; path = ../G3MiOSSDK/Commons/Rendererers/SGTranslateNode.hpp; sourceTree = "<group>"; };
+		CF62A020168008E900649BBC /* SGNode.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = SGNode.hpp; path = ../G3MiOSSDK/Commons/Rendererers/SGNode.hpp; sourceTree = "<group>"; };
+		CF62A021168008E900649BBC /* SceneJSShapesParser.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = SceneJSShapesParser.hpp; path = ../G3MiOSSDK/Commons/Rendererers/SceneJSShapesParser.hpp; sourceTree = "<group>"; };
+		CF62A022168008E900649BBC /* CompositeShape.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = CompositeShape.hpp; path = ../G3MiOSSDK/Commons/Rendererers/CompositeShape.hpp; sourceTree = "<group>"; };
+		CF62A023168008E900649BBC /* CircleShape.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = CircleShape.hpp; path = ../G3MiOSSDK/Commons/Rendererers/CircleShape.hpp; sourceTree = "<group>"; };
+		CF62A024168008E900649BBC /* MeshShape.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MeshShape.hpp; path = ../G3MiOSSDK/Commons/Rendererers/MeshShape.hpp; sourceTree = "<group>"; };
+		CF62A025168008E900649BBC /* Shape.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Shape.hpp; path = ../G3MiOSSDK/Commons/Rendererers/Shape.hpp; sourceTree = "<group>"; };
+		CF62A026168008E900649BBC /* QuadShape.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = QuadShape.hpp; path = ../G3MiOSSDK/Commons/Rendererers/QuadShape.hpp; sourceTree = "<group>"; };
+		CF62A027168008E900649BBC /* ShapesRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ShapesRenderer.hpp; path = ../G3MiOSSDK/Commons/Rendererers/ShapesRenderer.hpp; sourceTree = "<group>"; };
+		CF62A028168008E900649BBC /* PeriodicalTask.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PeriodicalTask.hpp; path = ../G3MiOSSDK/Commons/Basic/PeriodicalTask.hpp; sourceTree = "<group>"; };
+		CF62A029168008E900649BBC /* TrailsRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TrailsRenderer.hpp; path = ../G3MiOSSDK/Commons/Rendererers/TrailsRenderer.hpp; sourceTree = "<group>"; };
+		CF62A02A168008E900649BBC /* RectangleI.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = RectangleI.hpp; path = ../G3MiOSSDK/Commons/Geometry/RectangleI.hpp; sourceTree = "<group>"; };
+		CF62A02B168008E900649BBC /* MutableVector2I.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MutableVector2I.hpp; path = ../G3MiOSSDK/Commons/Geometry/MutableVector2I.hpp; sourceTree = "<group>"; };
+		CF62A02C168008E900649BBC /* Vector2I.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Vector2I.hpp; path = ../G3MiOSSDK/Commons/Geometry/Vector2I.hpp; sourceTree = "<group>"; };
+		CF62A02D168008E900649BBC /* JSONBaseObject.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = JSONBaseObject.hpp; path = ../G3MiOSSDK/Commons/JSON/JSONBaseObject.hpp; sourceTree = "<group>"; };
+		CF62A02E168008E900649BBC /* IGLUniformID.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IGLUniformID.hpp; path = ../G3MiOSSDK/Commons/Interfaces/IGLUniformID.hpp; sourceTree = "<group>"; };
+		CF62A02F168008E900649BBC /* GLConstants.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = GLConstants.hpp; path = ../G3MiOSSDK/Commons/GL/GLConstants.hpp; sourceTree = "<group>"; };
+		CF62A030168008E900649BBC /* GLUniformID_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = GLUniformID_iOS.hpp; path = ../G3MiOSSDK/Specific/GL/GLUniformID_iOS.hpp; sourceTree = "<group>"; };
+		CF62A031168008E900649BBC /* Vector4D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Vector4D.hpp; path = ../G3MiOSSDK/Commons/Geometry/Vector4D.hpp; sourceTree = "<group>"; };
+		CF62A032168008E900649BBC /* GTask.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = GTask.hpp; path = ../G3MiOSSDK/Commons/Basic/GTask.hpp; sourceTree = "<group>"; };
+		CF62A033168008E900649BBC /* LeafRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = LeafRenderer.hpp; path = ../G3MiOSSDK/Commons/Rendererers/LeafRenderer.hpp; sourceTree = "<group>"; };
+		CF62A034168008E900649BBC /* IImageDownloadListener.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IImageDownloadListener.hpp; path = ../G3MiOSSDK/Commons/Downloader/IImageDownloadListener.hpp; sourceTree = "<group>"; };
+		CF62A035168008E900649BBC /* FloatBufferBuilderFromCartesian2D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = FloatBufferBuilderFromCartesian2D.hpp; path = ../G3MiOSSDK/Commons/Basic/FloatBufferBuilderFromCartesian2D.hpp; sourceTree = "<group>"; };
+		CF62A036168008E900649BBC /* FloatBufferBuilderFromCartesian3D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = FloatBufferBuilderFromCartesian3D.hpp; path = ../G3MiOSSDK/Commons/Basic/FloatBufferBuilderFromCartesian3D.hpp; sourceTree = "<group>"; };
+		CF62A037168008E900649BBC /* FloatBufferBuilderFromGeodetic.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = FloatBufferBuilderFromGeodetic.hpp; path = ../G3MiOSSDK/Commons/Basic/FloatBufferBuilderFromGeodetic.hpp; sourceTree = "<group>"; };
+		CF62A038168008E900649BBC /* SimpleFloatBufferBuilder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = SimpleFloatBufferBuilder.hpp; path = ../G3MiOSSDK/Commons/Basic/SimpleFloatBufferBuilder.hpp; sourceTree = "<group>"; };
+		CF62A039168008E900649BBC /* FloatBufferBuilderFromColor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = FloatBufferBuilderFromColor.hpp; path = ../G3MiOSSDK/Commons/Basic/FloatBufferBuilderFromColor.hpp; sourceTree = "<group>"; };
+		CF62A03A168008E900649BBC /* IFloatBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IFloatBuffer.hpp; path = ../G3MiOSSDK/Commons/Basic/IFloatBuffer.hpp; sourceTree = "<group>"; };
+		CF62A03B168008E900649BBC /* IIntBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IIntBuffer.hpp; path = ../G3MiOSSDK/Commons/Basic/IIntBuffer.hpp; sourceTree = "<group>"; };
+		CF62A03C168008E900649BBC /* IBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IBuffer.hpp; path = ../G3MiOSSDK/Commons/Basic/IBuffer.hpp; sourceTree = "<group>"; };
+		CF62A03D168008E900649BBC /* FloatBufferBuilder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = FloatBufferBuilder.hpp; path = ../G3MiOSSDK/Commons/Basic/FloatBufferBuilder.hpp; sourceTree = "<group>"; };
+		CF62A03E168008E900649BBC /* IntBufferBuilder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IntBufferBuilder.hpp; path = ../G3MiOSSDK/Commons/Basic/IntBufferBuilder.hpp; sourceTree = "<group>"; };
+		CF62A03F168008E900649BBC /* IThreadUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IThreadUtils.hpp; path = ../G3MiOSSDK/Commons/Basic/IThreadUtils.hpp; sourceTree = "<group>"; };
+		CF62A040168008E900649BBC /* IStringUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IStringUtils.hpp; path = ../G3MiOSSDK/Commons/Interfaces/IStringUtils.hpp; sourceTree = "<group>"; };
+		CF62A041168008E900649BBC /* LayerCondition.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = LayerCondition.hpp; path = ../G3MiOSSDK/Commons/Layers/LayerCondition.hpp; sourceTree = "<group>"; };
+		CF62A042168008E900649BBC /* LevelTileCondition.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = LevelTileCondition.hpp; path = ../G3MiOSSDK/Commons/Layers/LevelTileCondition.hpp; sourceTree = "<group>"; };
+		CF62A043168008E900649BBC /* MultiLayerTileTexturizer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MultiLayerTileTexturizer.hpp; path = ../G3MiOSSDK/Commons/Basic/MultiLayerTileTexturizer.hpp; sourceTree = "<group>"; };
+		CF62A044168008E900649BBC /* URL.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = URL.hpp; path = ../G3MiOSSDK/Commons/Basic/URL.hpp; sourceTree = "<group>"; };
+		CF62A045168008E900649BBC /* CameraDoubleTapHandler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = CameraDoubleTapHandler.hpp; path = ../G3MiOSSDK/Commons/Cameras/CameraDoubleTapHandler.hpp; sourceTree = "<group>"; };
+		CF62A046168008E900649BBC /* CameraRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = CameraRenderer.hpp; path = ../G3MiOSSDK/Commons/Cameras/CameraRenderer.hpp; sourceTree = "<group>"; };
+		CF62A047168008E900649BBC /* CameraRotationHandler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = CameraRotationHandler.hpp; path = ../G3MiOSSDK/Commons/Cameras/CameraRotationHandler.hpp; sourceTree = "<group>"; };
+		CF62A048168008E900649BBC /* IDownloader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IDownloader.hpp; path = ../G3MiOSSDK/Commons/Interfaces/IDownloader.hpp; sourceTree = "<group>"; };
+		CF62A049168008E900649BBC /* BusyQuadRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = BusyQuadRenderer.hpp; path = ../G3MiOSSDK/Commons/Rendererers/BusyQuadRenderer.hpp; sourceTree = "<group>"; };
+		CF62A04A168008E900649BBC /* TilesRenderParameters.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TilesRenderParameters.hpp; path = ../G3MiOSSDK/Commons/Rendererers/TilesRenderParameters.hpp; sourceTree = "<group>"; };
+		CF62A04B168008E900649BBC /* CameraConstraints.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = CameraConstraints.hpp; path = ../G3MiOSSDK/Commons/Cameras/CameraConstraints.hpp; sourceTree = "<group>"; };
+		CF62A04C168008E900649BBC /* CameraEventHandler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = CameraEventHandler.hpp; path = ../G3MiOSSDK/Commons/Cameras/CameraEventHandler.hpp; sourceTree = "<group>"; };
+		CF62A04D168008E900649BBC /* CameraSingleDragHandler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = CameraSingleDragHandler.hpp; path = ../G3MiOSSDK/Commons/Cameras/CameraSingleDragHandler.hpp; sourceTree = "<group>"; };
+		CF62A04E168008E900649BBC /* CameraDoubleDragHandler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = CameraDoubleDragHandler.hpp; path = ../G3MiOSSDK/Commons/Cameras/CameraDoubleDragHandler.hpp; sourceTree = "<group>"; };
+		CF62A04F168008E900649BBC /* TileRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TileRenderer.hpp; path = ../G3MiOSSDK/Commons/Rendererers/TileRenderer.hpp; sourceTree = "<group>"; };
+		CF62A050168008E900649BBC /* Camera.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Camera.hpp; path = ../G3MiOSSDK/Commons/Cameras/Camera.hpp; sourceTree = "<group>"; };
+		CF62A051168008E900649BBC /* ES2Renderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ES2Renderer.h; path = ../G3MiOSSDK/Specific/Widget/ES2Renderer.h; sourceTree = "<group>"; };
+		CF62A052168008E900649BBC /* Context.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Context.hpp; path = ../G3MiOSSDK/Commons/Basic/Context.hpp; sourceTree = "<group>"; };
+		CF62A053168008E900649BBC /* IByteBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IByteBuffer.hpp; path = ../G3MiOSSDK/Commons/Interfaces/IByteBuffer.hpp; sourceTree = "<group>"; };
+		CF62A054168008E900649BBC /* TouchEvent.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TouchEvent.hpp; path = ../G3MiOSSDK/Commons/Basic/TouchEvent.hpp; sourceTree = "<group>"; };
+		CF62A055168008E900649BBC /* Angle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Angle.hpp; path = ../G3MiOSSDK/Commons/Geometry/Angle.hpp; sourceTree = "<group>"; };
+		CF62A056168008E900649BBC /* Ellipsoid.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Ellipsoid.hpp; path = ../G3MiOSSDK/Commons/Geometry/Ellipsoid.hpp; sourceTree = "<group>"; };
+		CF62A057168008E900649BBC /* Geodetic2D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Geodetic2D.hpp; path = ../G3MiOSSDK/Commons/Geometry/Geodetic2D.hpp; sourceTree = "<group>"; };
+		CF62A058168008E900649BBC /* Geodetic3D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Geodetic3D.hpp; path = ../G3MiOSSDK/Commons/Geometry/Geodetic3D.hpp; sourceTree = "<group>"; };
+		CF62A059168008E900649BBC /* Planet.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Planet.hpp; path = ../G3MiOSSDK/Commons/Geometry/Planet.hpp; sourceTree = "<group>"; };
+		CF62A05A168008E900649BBC /* Vector2D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Vector2D.hpp; path = ../G3MiOSSDK/Commons/Geometry/Vector2D.hpp; sourceTree = "<group>"; };
+		CF62A05B168008E900649BBC /* Vector3D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Vector3D.hpp; path = ../G3MiOSSDK/Commons/Geometry/Vector3D.hpp; sourceTree = "<group>"; };
+		CF62A05C168008E900649BBC /* IFactory.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IFactory.hpp; path = ../G3MiOSSDK/Commons/Interfaces/IFactory.hpp; sourceTree = "<group>"; };
+		CF62A05D168008E900649BBC /* ILogger.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ILogger.hpp; path = ../G3MiOSSDK/Commons/Interfaces/ILogger.hpp; sourceTree = "<group>"; };
+		CF62A05E168008E900649BBC /* IImage.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IImage.hpp; path = ../G3MiOSSDK/Commons/Interfaces/IImage.hpp; sourceTree = "<group>"; };
+		CF62A05F168008E900649BBC /* MutableVector3D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MutableVector3D.hpp; path = ../G3MiOSSDK/Commons/Geometry/MutableVector3D.hpp; sourceTree = "<group>"; };
+		CF62A060168008E900649BBC /* MutableVector2D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MutableVector2D.hpp; path = ../G3MiOSSDK/Commons/Geometry/MutableVector2D.hpp; sourceTree = "<group>"; };
+		CF62A061168008E900649BBC /* NullStorage.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = NullStorage.hpp; path = ../G3MiOSSDK/Commons/Downloader/NullStorage.hpp; sourceTree = "<group>"; };
+		CF62A062168008E900649BBC /* IStorage.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IStorage.hpp; path = ../G3MiOSSDK/Commons/Interfaces/IStorage.hpp; sourceTree = "<group>"; };
+		CF62A063168008E900649BBC /* IBufferDownloadListener.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IBufferDownloadListener.hpp; path = ../G3MiOSSDK/Commons/Downloader/IBufferDownloadListener.hpp; sourceTree = "<group>"; };
+		CF62A064168008E900649BBC /* IndexedMesh.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IndexedMesh.hpp; path = ../G3MiOSSDK/Commons/Mesh/IndexedMesh.hpp; sourceTree = "<group>"; };
+		CF62A065168008E900649BBC /* Mesh.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Mesh.hpp; path = ../G3MiOSSDK/Commons/Mesh/Mesh.hpp; sourceTree = "<group>"; };
+		CF62A066168008E900649BBC /* TextureMapping.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TextureMapping.hpp; path = ../G3MiOSSDK/Commons/Mesh/TextureMapping.hpp; sourceTree = "<group>"; };
+		CF62A067168008E900649BBC /* Layer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Layer.hpp; path = ../G3MiOSSDK/Commons/Layers/Layer.hpp; sourceTree = "<group>"; };
+		CF62A068168008E900649BBC /* LayerSet.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = LayerSet.hpp; path = ../G3MiOSSDK/Commons/Layers/LayerSet.hpp; sourceTree = "<group>"; };
+		CF62A069168008E900649BBC /* Sector.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Sector.hpp; path = ../G3MiOSSDK/Commons/Geometry/Sector.hpp; sourceTree = "<group>"; };
+		CF62A06A168008E900649BBC /* WMSLayer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = WMSLayer.hpp; path = ../G3MiOSSDK/Commons/Layers/WMSLayer.hpp; sourceTree = "<group>"; };
+		CF62A06B168008E900649BBC /* IStringBuilder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IStringBuilder.hpp; path = ../G3MiOSSDK/Commons/Interfaces/IStringBuilder.hpp; sourceTree = "<group>"; };
+		CF62A06C168008E900649BBC /* CPUTextureBuilder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = CPUTextureBuilder.hpp; path = ../G3MiOSSDK/Commons/Basic/CPUTextureBuilder.hpp; sourceTree = "<group>"; };
+		CF62A06D168008E900649BBC /* TextureBuilder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TextureBuilder.hpp; path = ../G3MiOSSDK/Commons/Basic/TextureBuilder.hpp; sourceTree = "<group>"; };
+		CF62A06E168008E900649BBC /* RectangleD.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = RectangleD.hpp; path = ../G3MiOSSDK/Commons/Geometry/RectangleD.hpp; sourceTree = "<group>"; };
+		CF62A06F168008E900649BBC /* TexturedMesh.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TexturedMesh.hpp; path = ../G3MiOSSDK/Commons/Mesh/TexturedMesh.hpp; sourceTree = "<group>"; };
+		CF62A070168008E900649BBC /* Color.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Color.hpp; path = ../G3MiOSSDK/Commons/Basic/Color.hpp; sourceTree = "<group>"; };
+		CF62A071168008E900649BBC /* Effects.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Effects.hpp; path = ../G3MiOSSDK/Commons/Basic/Effects.hpp; sourceTree = "<group>"; };
+		CF62A072168008E900649BBC /* EllipsoidalTileTessellator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = EllipsoidalTileTessellator.hpp; path = ../G3MiOSSDK/Commons/Basic/EllipsoidalTileTessellator.hpp; sourceTree = "<group>"; };
+		CF62A073168008E900649BBC /* Mark.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Mark.hpp; path = ../G3MiOSSDK/Commons/Basic/Mark.hpp; sourceTree = "<group>"; };
+		CF62A074168008E900649BBC /* TexturesHandler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TexturesHandler.hpp; path = ../G3MiOSSDK/Commons/Basic/TexturesHandler.hpp; sourceTree = "<group>"; };
+		CF62A075168008E900649BBC /* Tile.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Tile.hpp; path = ../G3MiOSSDK/Commons/Basic/Tile.hpp; sourceTree = "<group>"; };
+		CF62A076168008E900649BBC /* TileTessellator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TileTessellator.hpp; path = ../G3MiOSSDK/Commons/Basic/TileTessellator.hpp; sourceTree = "<group>"; };
+		CF62A077168008E900649BBC /* TimeInterval.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TimeInterval.hpp; path = ../G3MiOSSDK/Commons/Basic/TimeInterval.hpp; sourceTree = "<group>"; };
+		CF62A078168008E900649BBC /* ITimer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ITimer.hpp; path = ../G3MiOSSDK/Commons/Interfaces/ITimer.hpp; sourceTree = "<group>"; };
+		CF62A079168008E900649BBC /* Box.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Box.hpp; path = ../G3MiOSSDK/Commons/Geometry/Box.hpp; sourceTree = "<group>"; };
+		CF62A07A168008E900649BBC /* TileTexturizer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TileTexturizer.hpp; path = ../G3MiOSSDK/Commons/Basic/TileTexturizer.hpp; sourceTree = "<group>"; };
+		CF62A07B168008E900649BBC /* MutableMatrix44D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MutableMatrix44D.hpp; path = ../G3MiOSSDK/Commons/Geometry/MutableMatrix44D.hpp; sourceTree = "<group>"; };
+		CF62A07C168008E900649BBC /* G3MWidget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = G3MWidget.hpp; path = ../G3MiOSSDK/Commons/Basic/G3MWidget.hpp; sourceTree = "<group>"; };
+		CF62A07D168008E900649BBC /* BusyMeshRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = BusyMeshRenderer.hpp; path = ../G3MiOSSDK/Commons/Rendererers/BusyMeshRenderer.hpp; sourceTree = "<group>"; };
+		CF62A07E168008E900649BBC /* CompositeRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = CompositeRenderer.hpp; path = ../G3MiOSSDK/Commons/Rendererers/CompositeRenderer.hpp; sourceTree = "<group>"; };
+		CF62A07F168008E900649BBC /* DummyRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = DummyRenderer.hpp; path = ../G3MiOSSDK/Commons/Rendererers/DummyRenderer.hpp; sourceTree = "<group>"; };
+		CF62A080168008E900649BBC /* GLErrorRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = GLErrorRenderer.hpp; path = ../G3MiOSSDK/Commons/Rendererers/GLErrorRenderer.hpp; sourceTree = "<group>"; };
+		CF62A081168008E900649BBC /* MarksRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MarksRenderer.hpp; path = ../G3MiOSSDK/Commons/Rendererers/MarksRenderer.hpp; sourceTree = "<group>"; };
+		CF62A082168008E900649BBC /* Renderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Renderer.hpp; path = ../G3MiOSSDK/Commons/Rendererers/Renderer.hpp; sourceTree = "<group>"; };
+		CF62A083168008E900649BBC /* GL.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = GL.hpp; path = ../G3MiOSSDK/Commons/GL/GL.hpp; sourceTree = "<group>"; };
+		CF62A084168008E900649BBC /* TileKey.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TileKey.hpp; path = ../G3MiOSSDK/Commons/Basic/TileKey.hpp; sourceTree = "<group>"; };
+		CF62A085168008E900649BBC /* IGLTextureId.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IGLTextureId.hpp; path = ../G3MiOSSDK/Commons/Interfaces/IGLTextureId.hpp; sourceTree = "<group>"; };
+		CF62A086168008E900649BBC /* LeveledTexturedMesh.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = LeveledTexturedMesh.hpp; path = ../G3MiOSSDK/Commons/Mesh/LeveledTexturedMesh.hpp; sourceTree = "<group>"; };
+		CF62A087168008E900649BBC /* CachedDownloader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = CachedDownloader.hpp; path = ../G3MiOSSDK/Commons/Interfaces/CachedDownloader.hpp; sourceTree = "<group>"; };
+		CF62A088168008E900649BBC /* SQDatabase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SQDatabase.h; path = ../G3MiOSSDK/Specific/SQDatabase.h; sourceTree = "<group>"; };
+		CF62A089168008E900649BBC /* RCObject.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = RCObject.hpp; path = ../G3MiOSSDK/Commons/Basic/RCObject.hpp; sourceTree = "<group>"; };
+		CF62A08A168008E900649BBC /* FrameTasksExecutor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = FrameTasksExecutor.hpp; path = ../G3MiOSSDK/Commons/Basic/FrameTasksExecutor.hpp; sourceTree = "<group>"; };
+		CF62A08B168008E900649BBC /* TerrainTouchEventListener.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TerrainTouchEventListener.hpp; path = ../G3MiOSSDK/Commons/Basic/TerrainTouchEventListener.hpp; sourceTree = "<group>"; };
+		CF62A08C168008E900649BBC /* Petition.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Petition.hpp; path = ../G3MiOSSDK/Commons/Basic/Petition.hpp; sourceTree = "<group>"; };
+		CF62A08D168008E900649BBC /* SimplePlanetRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = SimplePlanetRenderer.hpp; path = ../G3MiOSSDK/Commons/Rendererers/SimplePlanetRenderer.hpp; sourceTree = "<group>"; };
+		CF62A08E168008E900649BBC /* IMathUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IMathUtils.hpp; path = ../G3MiOSSDK/Commons/Interfaces/IMathUtils.hpp; sourceTree = "<group>"; };
+		CF62A08F168008E900649BBC /* Extent.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Extent.hpp; path = ../G3MiOSSDK/Commons/Geometry/Extent.hpp; sourceTree = "<group>"; };
+		CF62A090168008E900649BBC /* Frustum.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Frustum.hpp; path = ../G3MiOSSDK/Commons/Geometry/Frustum.hpp; sourceTree = "<group>"; };
+		CF62A091168008E900649BBC /* Plane.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Plane.hpp; path = ../G3MiOSSDK/Commons/Geometry/Plane.hpp; sourceTree = "<group>"; };
+		CF62A092168008E900649BBC /* JSONObject.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = JSONObject.hpp; path = ../G3MiOSSDK/Commons/JSON/JSONObject.hpp; sourceTree = "<group>"; };
+		CF62A093168008E900649BBC /* IJSONParser.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IJSONParser.hpp; path = ../G3MiOSSDK/Commons/JSON/IJSONParser.hpp; sourceTree = "<group>"; };
+		CF62A094168008E900649BBC /* JSONNumber.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = JSONNumber.hpp; path = ../G3MiOSSDK/Commons/JSON/JSONNumber.hpp; sourceTree = "<group>"; };
+		CF62A095168008E900649BBC /* JSONBoolean.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = JSONBoolean.hpp; path = ../G3MiOSSDK/Commons/JSON/JSONBoolean.hpp; sourceTree = "<group>"; };
+		CF62A096168008E900649BBC /* JSONString.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = JSONString.hpp; path = ../G3MiOSSDK/Commons/JSON/JSONString.hpp; sourceTree = "<group>"; };
+		CF62A097168008E900649BBC /* JSONArray.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = JSONArray.hpp; path = ../G3MiOSSDK/Commons/JSON/JSONArray.hpp; sourceTree = "<group>"; };
+		CF62A098168008E900649BBC /* INativeGL.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = INativeGL.hpp; path = ../G3MiOSSDK/Commons/Interfaces/INativeGL.hpp; sourceTree = "<group>"; };
+		CF62A099168008E900649BBC /* MathUtils_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MathUtils_iOS.hpp; path = ../G3MiOSSDK/Specific/Derived/MathUtils_iOS.hpp; sourceTree = "<group>"; };
+		CF62A09A168008E900649BBC /* GLTextureId_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = GLTextureId_iOS.hpp; path = ../G3MiOSSDK/Specific/GL/GLTextureId_iOS.hpp; sourceTree = "<group>"; };
+		CF62A09B168008E900649BBC /* Downloader_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Downloader_iOS.hpp; path = ../G3MiOSSDK/Specific/Derived/Downloader_iOS.hpp; sourceTree = "<group>"; };
+		CF62A09C168008E900649BBC /* StringUtils_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = StringUtils_iOS.hpp; path = ../G3MiOSSDK/Specific/Derived/StringUtils_iOS.hpp; sourceTree = "<group>"; };
+		CF62A09D168008E900649BBC /* ByteBuffer_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ByteBuffer_iOS.hpp; path = ../G3MiOSSDK/Specific/Derived/ByteBuffer_iOS.hpp; sourceTree = "<group>"; };
+		CF62A09E168008E900649BBC /* Image_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Image_iOS.hpp; path = ../G3MiOSSDK/Specific/Derived/Image_iOS.hpp; sourceTree = "<group>"; };
+		CF62A09F168008E900649BBC /* ThreadUtils_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ThreadUtils_iOS.hpp; path = ../G3MiOSSDK/Specific/Derived/ThreadUtils_iOS.hpp; sourceTree = "<group>"; };
+		CF62A0A0168008E900649BBC /* SQLiteStorage_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = SQLiteStorage_iOS.hpp; path = ../G3MiOSSDK/Specific/Derived/SQLiteStorage_iOS.hpp; sourceTree = "<group>"; };
+		CF62A0A1168008E900649BBC /* StringBuilder_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = StringBuilder_iOS.hpp; path = ../G3MiOSSDK/Specific/Derived/StringBuilder_iOS.hpp; sourceTree = "<group>"; };
+		CF62A0A2168008E900649BBC /* Factory_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Factory_iOS.hpp; path = ../G3MiOSSDK/Specific/Derived/Factory_iOS.hpp; sourceTree = "<group>"; };
+		CF62A0A3168008E900649BBC /* Logger_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Logger_iOS.hpp; path = ../G3MiOSSDK/Specific/Derived/Logger_iOS.hpp; sourceTree = "<group>"; };
+		CF62A0A4168008E900649BBC /* Downloader_iOS_Handler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Downloader_iOS_Handler.h; path = ../G3MiOSSDK/Specific/Derived/Downloader_iOS_Handler.h; sourceTree = "<group>"; };
+		CF62A0A5168008E900649BBC /* Downloader_iOS_Listener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Downloader_iOS_Listener.h; path = ../G3MiOSSDK/Specific/Derived/Downloader_iOS_Listener.h; sourceTree = "<group>"; };
+		CF62A0A6168008E900649BBC /* Downloader_iOS_WorkerThread.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Downloader_iOS_WorkerThread.h; path = ../G3MiOSSDK/Specific/Derived/Downloader_iOS_WorkerThread.h; sourceTree = "<group>"; };
+		CF62A0A7168008E900649BBC /* NativeGL2_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = NativeGL2_iOS.hpp; path = ../G3MiOSSDK/Specific/GL/NativeGL2_iOS.hpp; sourceTree = "<group>"; };
+		CF62A0A8168008E900649BBC /* Timer_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Timer_iOS.hpp; path = ../G3MiOSSDK/Specific/Derived/Timer_iOS.hpp; sourceTree = "<group>"; };
+		CF62A0A9168008E900649BBC /* FloatBuffer_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = FloatBuffer_iOS.hpp; path = ../G3MiOSSDK/Specific/Derived/FloatBuffer_iOS.hpp; sourceTree = "<group>"; };
+		CF62A0AA168008E900649BBC /* JSONParser_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = JSONParser_iOS.hpp; path = ../G3MiOSSDK/Specific/Derived/JSONParser_iOS.hpp; sourceTree = "<group>"; };
+		CF62A0AB168008E900649BBC /* IntBuffer_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IntBuffer_iOS.hpp; path = ../G3MiOSSDK/Specific/Derived/IntBuffer_iOS.hpp; sourceTree = "<group>"; };
 		CF7A708715CFD0A50086FDE6 /* g3m-marker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "g3m-marker.png"; sourceTree = "<group>"; };
 		CF883B831591053100AEE39C /* mark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mark.png; sourceTree = "<group>"; };
 		CFE3DBB0164B0E7D00910037 /* seymour-plane.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "seymour-plane.json"; sourceTree = "<group>"; };
@@ -138,9 +311,190 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CF629FFE168008D200649BBC /* Public Headers G3M */ = {
+			isa = PBXGroup;
+			children = (
+				CF629FFF168008E900649BBC /* G3MWidget_iOS.h */,
+				CF62A000168008E900649BBC /* AbstractMesh.hpp */,
+				CF62A001168008E900649BBC /* G3MBuilder_iOS.hpp */,
+				CF62A002168008E900649BBC /* TileRendererBuilder.hpp */,
+				CF62A003168008E900649BBC /* IG3MBuilder.hpp */,
+				CF62A004168008E900649BBC /* GInitializationTask.hpp */,
+				CF62A005168008E900649BBC /* GLState.hpp */,
+				CF62A006168008E900649BBC /* ShaderProgram.hpp */,
+				CF62A007168008E900649BBC /* GoToPositionEffect.hpp */,
+				CF62A008168008E900649BBC /* BingLayer.hpp */,
+				CF62A009168008E900649BBC /* IImageListener.hpp */,
+				CF62A00A168008E900649BBC /* DirectMesh.hpp */,
+				CF62A00B168008E900649BBC /* GEORenderer.hpp */,
+				CF62A00C168008E900649BBC /* GEOLineStringGeometry.hpp */,
+				CF62A00D168008E900649BBC /* GEO2DLineStringGeometry.hpp */,
+				CF62A00E168008E900649BBC /* GEOMultiLineStringGeometry.hpp */,
+				CF62A00F168008E900649BBC /* GEO2DMultiLineStringGeometry.hpp */,
+				CF62A010168008E900649BBC /* GEOObject.hpp */,
+				CF62A011168008E900649BBC /* GEOFeatureCollection.hpp */,
+				CF62A012168008E900649BBC /* GEOFeature.hpp */,
+				CF62A013168008E900649BBC /* GEOGeometry.hpp */,
+				CF62A014168008E900649BBC /* ShapeScaleEffect.hpp */,
+				CF62A015168008E900649BBC /* GEOJSONParser.hpp */,
+				CF62A016168008E900649BBC /* CompositeMesh.hpp */,
+				CF62A017168008E900649BBC /* OrderedRenderable.hpp */,
+				CF62A018168008E900649BBC /* BoxShape.hpp */,
+				CF62A019168008E900649BBC /* SGLayerNode.hpp */,
+				CF62A01A168008E900649BBC /* SGShape.hpp */,
+				CF62A01B168008E900649BBC /* SGRotateNode.hpp */,
+				CF62A01C168008E900649BBC /* SGMaterialNode.hpp */,
+				CF62A01D168008E900649BBC /* SGTextureNode.hpp */,
+				CF62A01E168008E900649BBC /* SGGeometryNode.hpp */,
+				CF62A01F168008E900649BBC /* SGTranslateNode.hpp */,
+				CF62A020168008E900649BBC /* SGNode.hpp */,
+				CF62A021168008E900649BBC /* SceneJSShapesParser.hpp */,
+				CF62A022168008E900649BBC /* CompositeShape.hpp */,
+				CF62A023168008E900649BBC /* CircleShape.hpp */,
+				CF62A024168008E900649BBC /* MeshShape.hpp */,
+				CF62A025168008E900649BBC /* Shape.hpp */,
+				CF62A026168008E900649BBC /* QuadShape.hpp */,
+				CF62A027168008E900649BBC /* ShapesRenderer.hpp */,
+				CF62A028168008E900649BBC /* PeriodicalTask.hpp */,
+				CF62A029168008E900649BBC /* TrailsRenderer.hpp */,
+				CF62A02A168008E900649BBC /* RectangleI.hpp */,
+				CF62A02B168008E900649BBC /* MutableVector2I.hpp */,
+				CF62A02C168008E900649BBC /* Vector2I.hpp */,
+				CF62A02D168008E900649BBC /* JSONBaseObject.hpp */,
+				CF62A02E168008E900649BBC /* IGLUniformID.hpp */,
+				CF62A02F168008E900649BBC /* GLConstants.hpp */,
+				CF62A030168008E900649BBC /* GLUniformID_iOS.hpp */,
+				CF62A031168008E900649BBC /* Vector4D.hpp */,
+				CF62A032168008E900649BBC /* GTask.hpp */,
+				CF62A033168008E900649BBC /* LeafRenderer.hpp */,
+				CF62A034168008E900649BBC /* IImageDownloadListener.hpp */,
+				CF62A035168008E900649BBC /* FloatBufferBuilderFromCartesian2D.hpp */,
+				CF62A036168008E900649BBC /* FloatBufferBuilderFromCartesian3D.hpp */,
+				CF62A037168008E900649BBC /* FloatBufferBuilderFromGeodetic.hpp */,
+				CF62A038168008E900649BBC /* SimpleFloatBufferBuilder.hpp */,
+				CF62A039168008E900649BBC /* FloatBufferBuilderFromColor.hpp */,
+				CF62A03A168008E900649BBC /* IFloatBuffer.hpp */,
+				CF62A03B168008E900649BBC /* IIntBuffer.hpp */,
+				CF62A03C168008E900649BBC /* IBuffer.hpp */,
+				CF62A03D168008E900649BBC /* FloatBufferBuilder.hpp */,
+				CF62A03E168008E900649BBC /* IntBufferBuilder.hpp */,
+				CF62A03F168008E900649BBC /* IThreadUtils.hpp */,
+				CF62A040168008E900649BBC /* IStringUtils.hpp */,
+				CF62A041168008E900649BBC /* LayerCondition.hpp */,
+				CF62A042168008E900649BBC /* LevelTileCondition.hpp */,
+				CF62A043168008E900649BBC /* MultiLayerTileTexturizer.hpp */,
+				CF62A044168008E900649BBC /* URL.hpp */,
+				CF62A045168008E900649BBC /* CameraDoubleTapHandler.hpp */,
+				CF62A046168008E900649BBC /* CameraRenderer.hpp */,
+				CF62A047168008E900649BBC /* CameraRotationHandler.hpp */,
+				CF62A048168008E900649BBC /* IDownloader.hpp */,
+				CF62A049168008E900649BBC /* BusyQuadRenderer.hpp */,
+				CF62A04A168008E900649BBC /* TilesRenderParameters.hpp */,
+				CF62A04B168008E900649BBC /* CameraConstraints.hpp */,
+				CF62A04C168008E900649BBC /* CameraEventHandler.hpp */,
+				CF62A04D168008E900649BBC /* CameraSingleDragHandler.hpp */,
+				CF62A04E168008E900649BBC /* CameraDoubleDragHandler.hpp */,
+				CF62A04F168008E900649BBC /* TileRenderer.hpp */,
+				CF62A050168008E900649BBC /* Camera.hpp */,
+				CF62A051168008E900649BBC /* ES2Renderer.h */,
+				CF62A052168008E900649BBC /* Context.hpp */,
+				CF62A053168008E900649BBC /* IByteBuffer.hpp */,
+				CF62A054168008E900649BBC /* TouchEvent.hpp */,
+				CF62A055168008E900649BBC /* Angle.hpp */,
+				CF62A056168008E900649BBC /* Ellipsoid.hpp */,
+				CF62A057168008E900649BBC /* Geodetic2D.hpp */,
+				CF62A058168008E900649BBC /* Geodetic3D.hpp */,
+				CF62A059168008E900649BBC /* Planet.hpp */,
+				CF62A05A168008E900649BBC /* Vector2D.hpp */,
+				CF62A05B168008E900649BBC /* Vector3D.hpp */,
+				CF62A05C168008E900649BBC /* IFactory.hpp */,
+				CF62A05D168008E900649BBC /* ILogger.hpp */,
+				CF62A05E168008E900649BBC /* IImage.hpp */,
+				CF62A05F168008E900649BBC /* MutableVector3D.hpp */,
+				CF62A060168008E900649BBC /* MutableVector2D.hpp */,
+				CF62A061168008E900649BBC /* NullStorage.hpp */,
+				CF62A062168008E900649BBC /* IStorage.hpp */,
+				CF62A063168008E900649BBC /* IBufferDownloadListener.hpp */,
+				CF62A064168008E900649BBC /* IndexedMesh.hpp */,
+				CF62A065168008E900649BBC /* Mesh.hpp */,
+				CF62A066168008E900649BBC /* TextureMapping.hpp */,
+				CF62A067168008E900649BBC /* Layer.hpp */,
+				CF62A068168008E900649BBC /* LayerSet.hpp */,
+				CF62A069168008E900649BBC /* Sector.hpp */,
+				CF62A06A168008E900649BBC /* WMSLayer.hpp */,
+				CF62A06B168008E900649BBC /* IStringBuilder.hpp */,
+				CF62A06C168008E900649BBC /* CPUTextureBuilder.hpp */,
+				CF62A06D168008E900649BBC /* TextureBuilder.hpp */,
+				CF62A06E168008E900649BBC /* RectangleD.hpp */,
+				CF62A06F168008E900649BBC /* TexturedMesh.hpp */,
+				CF62A070168008E900649BBC /* Color.hpp */,
+				CF62A071168008E900649BBC /* Effects.hpp */,
+				CF62A072168008E900649BBC /* EllipsoidalTileTessellator.hpp */,
+				CF62A073168008E900649BBC /* Mark.hpp */,
+				CF62A074168008E900649BBC /* TexturesHandler.hpp */,
+				CF62A075168008E900649BBC /* Tile.hpp */,
+				CF62A076168008E900649BBC /* TileTessellator.hpp */,
+				CF62A077168008E900649BBC /* TimeInterval.hpp */,
+				CF62A078168008E900649BBC /* ITimer.hpp */,
+				CF62A079168008E900649BBC /* Box.hpp */,
+				CF62A07A168008E900649BBC /* TileTexturizer.hpp */,
+				CF62A07B168008E900649BBC /* MutableMatrix44D.hpp */,
+				CF62A07C168008E900649BBC /* G3MWidget.hpp */,
+				CF62A07D168008E900649BBC /* BusyMeshRenderer.hpp */,
+				CF62A07E168008E900649BBC /* CompositeRenderer.hpp */,
+				CF62A07F168008E900649BBC /* DummyRenderer.hpp */,
+				CF62A080168008E900649BBC /* GLErrorRenderer.hpp */,
+				CF62A081168008E900649BBC /* MarksRenderer.hpp */,
+				CF62A082168008E900649BBC /* Renderer.hpp */,
+				CF62A083168008E900649BBC /* GL.hpp */,
+				CF62A084168008E900649BBC /* TileKey.hpp */,
+				CF62A085168008E900649BBC /* IGLTextureId.hpp */,
+				CF62A086168008E900649BBC /* LeveledTexturedMesh.hpp */,
+				CF62A087168008E900649BBC /* CachedDownloader.hpp */,
+				CF62A088168008E900649BBC /* SQDatabase.h */,
+				CF62A089168008E900649BBC /* RCObject.hpp */,
+				CF62A08A168008E900649BBC /* FrameTasksExecutor.hpp */,
+				CF62A08B168008E900649BBC /* TerrainTouchEventListener.hpp */,
+				CF62A08C168008E900649BBC /* Petition.hpp */,
+				CF62A08D168008E900649BBC /* SimplePlanetRenderer.hpp */,
+				CF62A08E168008E900649BBC /* IMathUtils.hpp */,
+				CF62A08F168008E900649BBC /* Extent.hpp */,
+				CF62A090168008E900649BBC /* Frustum.hpp */,
+				CF62A091168008E900649BBC /* Plane.hpp */,
+				CF62A092168008E900649BBC /* JSONObject.hpp */,
+				CF62A093168008E900649BBC /* IJSONParser.hpp */,
+				CF62A094168008E900649BBC /* JSONNumber.hpp */,
+				CF62A095168008E900649BBC /* JSONBoolean.hpp */,
+				CF62A096168008E900649BBC /* JSONString.hpp */,
+				CF62A097168008E900649BBC /* JSONArray.hpp */,
+				CF62A098168008E900649BBC /* INativeGL.hpp */,
+				CF62A099168008E900649BBC /* MathUtils_iOS.hpp */,
+				CF62A09A168008E900649BBC /* GLTextureId_iOS.hpp */,
+				CF62A09B168008E900649BBC /* Downloader_iOS.hpp */,
+				CF62A09C168008E900649BBC /* StringUtils_iOS.hpp */,
+				CF62A09D168008E900649BBC /* ByteBuffer_iOS.hpp */,
+				CF62A09E168008E900649BBC /* Image_iOS.hpp */,
+				CF62A09F168008E900649BBC /* ThreadUtils_iOS.hpp */,
+				CF62A0A0168008E900649BBC /* SQLiteStorage_iOS.hpp */,
+				CF62A0A1168008E900649BBC /* StringBuilder_iOS.hpp */,
+				CF62A0A2168008E900649BBC /* Factory_iOS.hpp */,
+				CF62A0A3168008E900649BBC /* Logger_iOS.hpp */,
+				CF62A0A4168008E900649BBC /* Downloader_iOS_Handler.h */,
+				CF62A0A5168008E900649BBC /* Downloader_iOS_Listener.h */,
+				CF62A0A6168008E900649BBC /* Downloader_iOS_WorkerThread.h */,
+				CF62A0A7168008E900649BBC /* NativeGL2_iOS.hpp */,
+				CF62A0A8168008E900649BBC /* Timer_iOS.hpp */,
+				CF62A0A9168008E900649BBC /* FloatBuffer_iOS.hpp */,
+				CF62A0AA168008E900649BBC /* JSONParser_iOS.hpp */,
+				CF62A0AB168008E900649BBC /* IntBuffer_iOS.hpp */,
+			);
+			name = "Public Headers G3M";
+			sourceTree = "<group>";
+		};
 		D8EEF37B1577920A003FEB5E = {
 			isa = PBXGroup;
 			children = (
+				CF629FFE168008D200649BBC /* Public Headers G3M */,
 				D8EEF3891577920B003FEB5E /* Frameworks */,
 				D8EEF3901577920B003FEB5E /* G3MiOSDemo */,
 				D8EEF4161577AEC8003FEB5E /* G3MiOSSDK.xcodeproj */,

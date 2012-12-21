@@ -76,7 +76,7 @@ void G3MJSONBuilder_iOS::create(LayerSet* layerSet, MarksRenderer* marksRenderer
     if (markTouchListener != NULL) {
         marksRenderer->setMarkTouchListener(markTouchListener, true);
     }
-    builder->setInitializationTask(new G3MJSONBuilderInitializationTask(initializationTask, marksRenderer, _g3mWidget, panoTouchListener));
+    builder->setInitializationTask(new G3MJSONBuilderInitializationTask(initializationTask, marksRenderer, _g3mWidget, panoTouchListener), true);
     builder->addRenderer(marksRenderer);
     builder->initializeWidget();
     

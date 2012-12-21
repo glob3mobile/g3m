@@ -17,7 +17,6 @@
 #include "MarksRenderer.hpp"
 #include "CameraConstraints.hpp"
 //#include "GLErrorRenderer.hpp"
-//#include "LatLonMeshRenderer.hpp"
 #include "LevelTileCondition.hpp"
 #include "BingLayer.hpp"
 #include "TrailsRenderer.hpp"
@@ -188,10 +187,7 @@
 
   GInitializationTask* initializationTask = [self createSampleInitializationTask: shapesRenderer
                                                                      geoRenderer: geoRenderer];
-  builder->setInitializationTask(initializationTask);
-
-  const bool autoDeleteInitializationTask = true;
-  builder->setAutoDeleteInitializationTask(autoDeleteInitializationTask);
+  builder->setInitializationTask(initializationTask, true);
 
   PeriodicalTask* periodicalTask = [self createSamplePeriodicalTask:(builder)];
   builder->addPeriodicalTask(periodicalTask);
@@ -520,28 +516,28 @@
                                                                 1000000),
                                                      TimeInterval::fromSeconds(5));
       /*
-       NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
-       ofType: @"json"];
-       //      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"3dmodels/Macba_Google_Earth-1"
-       //                                                                ofType: @"json"];
-       if (planeFilePath) {
-       NSString *nsPlaneJSON = [NSString stringWithContentsOfFile: planeFilePath
-       encoding: NSUTF8StringEncoding
-       error: nil];
-       if (nsPlaneJSON) {
-       std::string planeJSON = [nsPlaneJSON UTF8String];
-       Shape* plane = SceneJSShapesParser::parse(planeJSON, "file:///");
-       if (plane) {
-       plane->setPosition( new Geodetic3D(Angle::fromDegrees(37.78333333),
-       Angle::fromDegrees(-122.41666666666667),
-       500) );
-       plane->setScale(100, 100, 100);
-       plane->setPitch(Angle::fromDegrees(90));
-       _shapesRenderer->addShape(plane);
-       }
-       }
-       }
-       */
+      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
+                                                                ofType: @"json"];
+      //      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"3dmodels/Macba_Google_Earth-1"
+      //                                                                ofType: @"json"];
+      if (planeFilePath) {
+        NSString *nsPlaneJSON = [NSString stringWithContentsOfFile: planeFilePath
+                                                          encoding: NSUTF8StringEncoding
+                                                             error: nil];
+        if (nsPlaneJSON) {
+          std::string planeJSON = [nsPlaneJSON UTF8String];
+          Shape* plane = SceneJSShapesParser::parse(planeJSON, "file:///");
+          if (plane) {
+            plane->setPosition( new Geodetic3D(Angle::fromDegrees(37.78333333),
+                                               Angle::fromDegrees(-122.41666666666667),
+                                               500) );
+            plane->setScale(100, 100, 100);
+            plane->setPitch(Angle::fromDegrees(90));
+            _shapesRenderer->addShape(plane);
+          }
+        }
+      }
+      */
 
       /**/
 
@@ -592,12 +588,6 @@
   trail->addPosition(position);
   trailsRenderer->addTrail(trail);
   builder->addRenderer(trailsRenderer);
-
-  //    if (false) {
-  //        LatLonMeshRenderer *renderer = new LatLonMeshRenderer();
-  //        builder->addRenderer(renderer);
-  //    }
-
 
   //  renderers.push_back(new GLErrorRenderer());
 

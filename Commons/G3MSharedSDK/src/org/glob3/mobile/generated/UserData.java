@@ -84,6 +84,12 @@ public class UserData
 {
   private G3MWidget _widget;
 
+  public UserData()
+  {
+	  _widget = null;
+
+  }
+
   public void dispose()
   {
 
