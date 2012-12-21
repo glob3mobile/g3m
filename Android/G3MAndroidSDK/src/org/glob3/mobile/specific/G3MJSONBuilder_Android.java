@@ -38,6 +38,7 @@ public class G3MJSONBuilder_Android
 
 
    public G3MWidget_Android create(final LayerSet layerSet,
+                                   final MarksRenderer marksRenderer,
                                    final GInitializationTask initializationTask,
                                    final MarkTouchListener markTouchListener,
                                    final MarkTouchListener panoTouchListener) {
@@ -47,8 +48,6 @@ public class G3MJSONBuilder_Android
       SceneParser.instance().parse(layerSet, _jsonSource);
       builder.setLayerSet(layerSet);
 
-      final boolean readyWhenMarksReady = false;
-      final MarksRenderer marksRenderer = new MarksRenderer(readyWhenMarksReady);
       if (markTouchListener != null) {
          marksRenderer.setMarkTouchListener(markTouchListener, true);
       }
