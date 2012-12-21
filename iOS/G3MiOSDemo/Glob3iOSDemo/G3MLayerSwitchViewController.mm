@@ -77,6 +77,7 @@
 
 - (void)viewDidDisappear:(BOOL)animated
 {
+  // Stop the glob3 render
   [[self glob3] stopAnimation];
   
   [super viewDidDisappear:animated];
