@@ -78,6 +78,7 @@ public final class StringUtils_Android
    }
 
 
+   @Override
    public String capitalize(final String string) {
       if (!string.isEmpty()) {
          return string.substring(0, 1).toUpperCase() + string.substring(1, string.length()).toLowerCase();
