@@ -41,6 +41,18 @@ public class MeshRenderer extends LeafRenderer
 	_meshes.add(mesh);
   }
 
+  public final void clearMeshes()
+  {
+	final int meshesCount = _meshes.size();
+	for (int i = 0; i < meshesCount; i++)
+	{
+	  Mesh mesh = _meshes.get(i);
+	  if (mesh != null)
+		  mesh.dispose();
+	}
+	_meshes.clear();
+  }
+
   public final void onResume(G3MContext context)
   {
 
