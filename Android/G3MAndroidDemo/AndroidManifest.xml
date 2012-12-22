@@ -34,6 +34,10 @@
         </activity>
             <activity android:name="G3MDrawingShapesActivity" >
         </activity>
+            <activity android:name="G3MShowMarkersActivity" >
+        </activity>
+            <activity android:name="G3MNetCDFActivity" >
+        </activity>
     </application>
 
 </manifest>

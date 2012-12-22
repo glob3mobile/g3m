@@ -64,4 +64,8 @@ public class G3MGlob3Constants {
    public static final Geodetic2D LOS_ANGELES_POSITION       = new Geodetic2D( //
                                                                       Angle.fromDegreesMinutes(34, 3), //
                                                                       Angle.fromDegreesMinutes(-118, 15));
+
+   public static final Geodetic2D EAST_AUSTRALIA_POSITION    = new Geodetic2D( //
+                                                                      Angle.fromDegreesMinutes(-27, 43), //
+                                                                      Angle.fromDegreesMinutes(153, 15));
 }

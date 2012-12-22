@@ -90,59 +90,11 @@ public class G3MDrawingShapesActivity
             return true;
          }
       };
-      g3mBuilder.setInitializationTask(initializationTask, true);
+      g3mBuilder.setInitializationTask(initializationTask);
 
       _widgetAndroid = g3mBuilder.createWidget();
       final LinearLayout layout = (LinearLayout) findViewById(R.id.glob3);
       layout.addView(_widgetAndroid);
-
-
-      //      super.onCreate(savedInstanceState);
-      //
-      //
-      //      setContentView(R.layout.bar_glob3_template);
-      //
-      //      final G3MBuilder glob3Builder = new G3MBuilder();
-      //
-      //      final ArrayList<Renderer> renderers = new ArrayList<Renderer>();
-      //
-      //
-      //      initializeShapes(renderers);
-      //      initializeToolbar();
-      //
-      //      final ArrayList<PeriodicalTask> periodicalTasks = new ArrayList<PeriodicalTask>();
-      //
-      //
-      //      final PeriodicalTask task = new PeriodicalTask(TimeInterval.fromSeconds(2), new GTask() {
-      //
-      //         @Override
-      //         public void run(final G3MContext context) {
-      //
-      //
-      //            if (_animationFlag) {
-      //
-      //               final int min = -50;
-      //               final int max = 50;
-      //
-      //               final Random r = new Random();
-      //               final int i1 = r.nextInt((max - min) + 1) + min;
-      //
-      //               _boxShape.setAnimatedScale(1, 1, i1);
-      //               _circleShape.setPosition(new Geodetic3D(G3MGlob3Constants.SAN_FRANCISCO_POSITION.latitude().add(
-      //                        Angle.fromDegrees(i1 / 5)), G3MGlob3Constants.SAN_FRANCISCO_POSITION.longitude().add(
-      //                        Angle.fromDegrees(i1 / 5)), Math.abs(i1) * 5000));
-      //            }
-      //         }
-      //      });
-      //
-      //
-      //      periodicalTasks.add(task);
-      //
-      //      final Geodetic3D position = new Geodetic3D(G3MGlob3Constants.SAN_FRANCISCO_POSITION, 5000000);
-      //      _widgetAndroid = glob3Builder.getRenderersAnimationGlob3InitialPosition(getApplicationContext(), renderers,
-      //               periodicalTasks, position);
-      //      final LinearLayout layout = (LinearLayout) findViewById(R.id.glob3);
-      //      layout.addView(_widgetAndroid);
 
 
    }
