@@ -138,7 +138,6 @@ public class G3MWebGLDemo
       final Color flatColor = null;
       return new DirectMesh(GLPrimitive.points(), true, vertices.getCenter(), vertices.create(), lineWidth, flatColor,
                colors.create());
-
    }
 
 

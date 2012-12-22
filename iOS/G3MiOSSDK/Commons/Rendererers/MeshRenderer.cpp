@@ -11,6 +11,15 @@
 #include "Mesh.hpp"
 #include "Camera.hpp"
 
+void MeshRenderer::clearMeshes() {
+  const int meshesCount = _meshes.size();
+  for (int i = 0; i < meshesCount; i++) {
+    Mesh* mesh = _meshes[i];
+    delete mesh;
+  }
+  _meshes.clear();
+}
+
 MeshRenderer::~MeshRenderer() {
   const int meshesCount = _meshes.size();
   for (int i = 0; i < meshesCount; i++) {

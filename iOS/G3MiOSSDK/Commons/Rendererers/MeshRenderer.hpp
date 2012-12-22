@@ -18,13 +18,15 @@ class Mesh;
 class MeshRenderer : public LeafRenderer {
 private:
   std::vector<Mesh*> _meshes;
-  
+
 public:
   ~MeshRenderer();
 
   void addMesh(Mesh* mesh) {
     _meshes.push_back(mesh);
   }
+
+  void clearMeshes();
 
   void onResume(const G3MContext* context) {
 
@@ -33,7 +35,7 @@ public:
   void onPause(const G3MContext* context) {
 
   }
-  
+
   void onDestroy(const G3MContext* context) {
 
   }
@@ -62,11 +64,11 @@ public:
   void start() {
 
   }
-
+  
   void stop() {
-
+    
   }
-
+  
 };
 
 #endif
