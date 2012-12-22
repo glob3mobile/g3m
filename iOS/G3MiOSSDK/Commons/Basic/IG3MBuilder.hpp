@@ -72,6 +72,7 @@ public:
   void setDownloader(IDownloader* downloader);
   void setThreadUtils(IThreadUtils* threadUtils);
   void setPlanet(const Planet* planet);
+  const Planet* getPlanet();
   void addCameraConstraint(ICameraConstrainer* cameraConstraint);
   void setCameraRenderer(CameraRenderer* cameraRenderer);
   void setBackgroundColor(Color* backgroundColor);

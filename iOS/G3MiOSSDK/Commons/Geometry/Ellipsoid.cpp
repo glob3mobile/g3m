@@ -92,7 +92,6 @@ std::vector<double> Ellipsoid::intersectionsDistances(const Vector3D& origin,
   return intersections;
 }
 
-
 Vector3D Ellipsoid::toCartesian(const Geodetic3D& geodetic) const {
   const Vector3D n = geodeticSurfaceNormal(geodetic);
   const Vector3D k = _radiiSquared.times(n);

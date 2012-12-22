@@ -247,6 +247,8 @@
 		CFEEE4BD164867B600F45F59 /* CircleShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFEEE4BB164867B600F45F59 /* CircleShape.cpp */; };
 		CFEEE4BE164867B600F45F59 /* CircleShape.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFEEE4BC164867B600F45F59 /* CircleShape.hpp */; settings = {ATTRIBUTES = (); }; };
 		CFF0999B15C18AAD005EAF12 /* TileTexturizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF8D0BFB15AF0D23005B5433 /* TileTexturizer.hpp */; settings = {ATTRIBUTES = (); }; };
+		CFF76BE5168614AD00F658CC /* MeshRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFF76BE3168614AD00F658CC /* MeshRenderer.cpp */; };
+		CFF76BE6168614AD00F658CC /* MeshRenderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFF76BE4168614AD00F658CC /* MeshRenderer.hpp */; };
 		CFF8C4BD15DEB6A70034A576 /* RCObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFF8C4BB15DEB6A70034A576 /* RCObject.cpp */; };
 		CFFEC11E15C2E645003FA986 /* IDownloader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFEC11D15C2E645003FA986 /* IDownloader.cpp */; };
 		CFFEC12315C2EA5F003FA986 /* Downloader_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFFEC12215C2EA5F003FA986 /* Downloader_iOS.mm */; };
@@ -572,6 +574,8 @@
 		CFE3DBAA164AFDB000910037 /* JSONString.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JSONString.cpp; sourceTree = "<group>"; };
 		CFEEE4BB164867B600F45F59 /* CircleShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CircleShape.cpp; path = Commons/Rendererers/CircleShape.cpp; sourceTree = "<group>"; };
 		CFEEE4BC164867B600F45F59 /* CircleShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CircleShape.hpp; path = Commons/Rendererers/CircleShape.hpp; sourceTree = "<group>"; };
+		CFF76BE3168614AD00F658CC /* MeshRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MeshRenderer.cpp; path = Commons/Rendererers/MeshRenderer.cpp; sourceTree = "<group>"; };
+		CFF76BE4168614AD00F658CC /* MeshRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MeshRenderer.hpp; path = Commons/Rendererers/MeshRenderer.hpp; sourceTree = "<group>"; };
 		CFF8C4BB15DEB6A70034A576 /* RCObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RCObject.cpp; path = Commons/Basic/RCObject.cpp; sourceTree = "<group>"; };
 		CFF8C4BC15DEB6A70034A576 /* RCObject.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = RCObject.hpp; path = Commons/Basic/RCObject.hpp; sourceTree = "<group>"; };
 		CFF95F741588DF0A00B56E11 /* TimeInterval.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TimeInterval.hpp; path = Commons/Basic/TimeInterval.hpp; sourceTree = "<group>"; };
@@ -958,6 +962,8 @@
 				CF527E1E162E33F500E0BDE0 /* LeafRenderer.hpp */,
 				CCC2A02315CA6C7D00923850 /* MarksRenderer.cpp */,
 				CCC2A02415CA6C7D00923850 /* MarksRenderer.hpp */,
+				CFF76BE3168614AD00F658CC /* MeshRenderer.cpp */,
+				CFF76BE4168614AD00F658CC /* MeshRenderer.hpp */,
 				CCC2A02715CA6C7D00923850 /* Renderer.hpp */,
 				CFEEE4BA1648676800F45F59 /* Shapes */,
 				CCC2A02A15CA6C7D00923850 /* SimplePlanetRenderer.cpp */,
@@ -1332,6 +1338,7 @@
 				CFA1899B15F8D7CA0048BF46 /* FloatBuffer_iOS.hpp in Headers */,
 				A70F560A161B5C6000340256 /* JSONParser_iOS.hpp in Headers */,
 				CFA189A015F8D9F80048BF46 /* IntBuffer_iOS.hpp in Headers */,
+				CFF76BE6168614AD00F658CC /* MeshRenderer.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1525,6 +1532,7 @@
 				CFDB7B73166AB99B00756DE8 /* DirectMesh.cpp in Sources */,
 				CF00E444166FD77E0098CABD /* IImageListener.cpp in Sources */,
 				CF2CDD991678292E002A78A9 /* GInitializationTask.cpp in Sources */,
+				CFF76BE5168614AD00F658CC /* MeshRenderer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

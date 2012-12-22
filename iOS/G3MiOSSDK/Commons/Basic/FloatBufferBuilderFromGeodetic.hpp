@@ -62,17 +62,16 @@ public:
     setCenter( _planet->toCartesian(center) );
   }
 
-  void add(const Geodetic3D& g) {
-    const Vector3D vector = _planet->toCartesian(g);
-
-    float x = (float) vector._x;
-    float y = (float) vector._y;
-    float z = (float) vector._z;
+  void add(const Geodetic3D& position) {
+    const Vector3D vector = _planet->toCartesian(position);
 
     if (_centerStrategy == CenterStrategy::firstVertex() && _values.size() == 0) {
       setCenter(vector);
     }
 
+    float x = (float) vector._x;
+    float y = (float) vector._y;
+    float z = (float) vector._z;
     if (_centerStrategy != CenterStrategy::noCenter()) {
       x -= _cx;
       y -= _cy;
@@ -84,17 +83,16 @@ public:
     _values.push_back(z);
   }
 
-  void add(const Geodetic2D& g) {
-    const Vector3D vector = _planet->toCartesian(g);
-
-    float x = (float) vector._x;
-    float y = (float) vector._y;
-    float z = (float) vector._z;
+  void add(const Geodetic2D& position) {
+    const Vector3D vector = _planet->toCartesian(position);
 
     if (_centerStrategy == CenterStrategy::firstVertex() && _values.size() == 0) {
       setCenter(vector);
     }
 
+    float x = (float) vector._x;
+    float y = (float) vector._y;
+    float z = (float) vector._z;
     if (_centerStrategy != CenterStrategy::noCenter()) {
       x -= _cx;
       y -= _cy;
