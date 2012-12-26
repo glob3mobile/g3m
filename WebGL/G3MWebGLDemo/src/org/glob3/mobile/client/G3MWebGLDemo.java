@@ -12,10 +12,15 @@ import org.glob3.mobile.generated.CameraDoubleTapHandler;
 import org.glob3.mobile.generated.CameraRenderer;
 import org.glob3.mobile.generated.CameraRotationHandler;
 import org.glob3.mobile.generated.CameraSingleDragHandler;
+import org.glob3.mobile.generated.CenterStrategy;
 import org.glob3.mobile.generated.CircleShape;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.CompositeRenderer;
+import org.glob3.mobile.generated.DirectMesh;
+import org.glob3.mobile.generated.FloatBufferBuilderFromColor;
+import org.glob3.mobile.generated.FloatBufferBuilderFromGeodetic;
 import org.glob3.mobile.generated.GInitializationTask;
+import org.glob3.mobile.generated.GLPrimitive;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
@@ -25,6 +30,8 @@ import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarkTouchListener;
 import org.glob3.mobile.generated.MarksRenderer;
+import org.glob3.mobile.generated.Mesh;
+import org.glob3.mobile.generated.MeshRenderer;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.Sector;
@@ -68,10 +75,10 @@ public class G3MWebGLDemo
          //         initWithoutBuilder();
 
          // initialize a default widget by using a builder
-         initDefaultWithBuilder();
+         // initDefaultWithBuilder();
 
          // initialize a customized widget by using a builder
-         //         initCustomizedWithBuilder();
+         initCustomizedWithBuilder();
 
          final Panel g3mWidgetHolder = RootPanel.get(_g3mWidgetHolderId);
          g3mWidgetHolder.add(_widget);
@@ -89,14 +96,48 @@ public class G3MWebGLDemo
    public void initCustomizedWithBuilder() {
       final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
 
-      final Color backgroundColor = Color.fromRGBA(0, (float) 0.3, (float) 0.2, 1);
-      builder.setBackgroundColor(backgroundColor);
+      final MeshRenderer meshRenderer = new MeshRenderer();
+      meshRenderer.addMesh(createPointsMesh(builder.getPlanet()));
+      builder.addRenderer(meshRenderer);
 
       final String proxy = "";
       final Downloader_WebGL downloader = new Downloader_WebGL(8, 10, proxy);
       builder.setDownloader(downloader);
 
       _widget = builder.createWidget();
+   }
+
+
+   private Mesh createPointsMesh(final Planet planet) {
+      final FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.firstVertex(), planet,
+               Geodetic3D.zero());
+      final FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
+
+      final Angle centerLat = Angle.fromDegreesMinutesSeconds(38, 53, 42);
+      final Angle centerLon = Angle.fromDegreesMinutesSeconds(-77, 02, 11);
+
+      final Angle deltaLat = Angle.fromDegrees(1).div(16);
+      final Angle deltaLon = Angle.fromDegrees(1).div(16);
+
+      final int steps = 128;
+      final int halfSteps = steps / 2;
+      for (int i = -halfSteps; i < halfSteps; i++) {
+         final Angle lat = centerLat.add(deltaLat.times(i));
+         for (int j = -halfSteps; j < halfSteps; j++) {
+            final Angle lon = centerLon.add(deltaLon.times(j));
+
+            vertices.add(new Geodetic3D(lat, lon, 100000));
+
+            final float red = (float) (i + halfSteps + 1) / steps;
+            final float green = (float) (j + halfSteps + 1) / steps;
+            colors.add(Color.fromRGBA(red, green, 0, 1));
+         }
+      }
+
+      final float lineWidth = 1;
+      final Color flatColor = null;
+      return new DirectMesh(GLPrimitive.points(), true, vertices.getCenter(), vertices.create(), lineWidth, flatColor,
+               colors.create());
    }
 
 

@@ -49,19 +49,18 @@ public class FloatBufferBuilderFromGeodetic extends FloatBufferBuilder
 	setCenter(_planet.toCartesian(center));
   }
 
-  public final void add(Geodetic3D g)
+  public final void add(Geodetic3D position)
   {
-	final Vector3D vector = _planet.toCartesian(g);
-
-	float x = (float) vector._x;
-	float y = (float) vector._y;
-	float z = (float) vector._z;
+	final Vector3D vector = _planet.toCartesian(position);
 
 	if (_centerStrategy == CenterStrategy.firstVertex() && _values.size() == 0)
 	{
 	  setCenter(vector);
 	}
 
+	float x = (float) vector._x;
+	float y = (float) vector._y;
+	float z = (float) vector._z;
 	if (_centerStrategy != CenterStrategy.noCenter())
 	{
 	  x -= _cx;
@@ -74,19 +73,18 @@ public class FloatBufferBuilderFromGeodetic extends FloatBufferBuilder
 	_values.add(z);
   }
 
-  public final void add(Geodetic2D g)
+  public final void add(Geodetic2D position)
   {
-	final Vector3D vector = _planet.toCartesian(g);
-
-	float x = (float) vector._x;
-	float y = (float) vector._y;
-	float z = (float) vector._z;
+	final Vector3D vector = _planet.toCartesian(position);
 
 	if (_centerStrategy == CenterStrategy.firstVertex() && _values.size() == 0)
 	{
 	  setCenter(vector);
 	}
 
+	float x = (float) vector._x;
+	float y = (float) vector._y;
+	float z = (float) vector._z;
 	if (_centerStrategy != CenterStrategy.noCenter())
 	{
 	  x -= _cx;

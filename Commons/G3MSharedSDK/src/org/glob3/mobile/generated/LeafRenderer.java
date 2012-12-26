@@ -53,6 +53,8 @@ public abstract class LeafRenderer extends Renderer
 
   public abstract void onPause(G3MContext context);
 
+  public abstract void onDestroy(G3MContext context);
+
   public abstract void initialize(G3MContext context);
 
   public abstract boolean isReadyToRender(G3MRenderContext rc);

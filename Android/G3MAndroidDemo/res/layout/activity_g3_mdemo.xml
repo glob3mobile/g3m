@@ -60,6 +60,32 @@
             android:textColor="#7a8e27"
             android:text="@string/threedshapes" />
   </TableRow> 
+  
+                          <TableRow android:layout_margin="3dp" >
+                        <Button
+            android:id="@+id/markersGlob3G3MButton"
+            android:layout_width="fill_parent"
+           android:layout_height="75dp"
+             android:background="@drawable/buttonbackground"
+            android:layout_weight="0.5"
+             android:layout_margin="2dp"
+               android:textSize="20sp"
+           android:textColor="@color/g3mGreenDark"
+            android:text="@string/markersLbl" />
+                        
+            <Button
+            android:id="@+id/netCDFG3MButton"
+            android:layout_width="fill_parent"
+           android:layout_height="75dp"
+             android:background="@drawable/buttonbackground"
+            android:layout_weight="0.5"
+             android:layout_margin="2dp"
+               android:textSize="20sp"
+            android:textColor="#7a8e27"
+            android:text="@string/netCDF" />
+  </TableRow>
+             
+             
     </TableLayout>
 
 </RelativeLayout>

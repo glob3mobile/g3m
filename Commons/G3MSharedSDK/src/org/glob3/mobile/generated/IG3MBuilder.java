@@ -101,11 +101,6 @@ public abstract class IG3MBuilder
 	  _threadUtils = createThreadUtils();
 	}
   
-	if (_planet == null)
-	{
-	  _planet = Planet.createEarth();
-	}
-  
 	if (_cameraConstraints.size() == 0)
 	{
 	  _cameraConstraints = createCameraConstraints();
@@ -165,7 +160,7 @@ public abstract class IG3MBuilder
   
 	Color backgroundColor = Color.fromRGBA(_backgroundColor.getRed(), _backgroundColor.getGreen(), _backgroundColor.getBlue(), _backgroundColor.getAlpha());
   
-	G3MWidget g3mWidget = G3MWidget.create(_gl, _storage, _downloader, _threadUtils, _planet, _cameraConstraints, _cameraRenderer, mainRenderer, _busyRenderer, backgroundColor, _logFPS, _logDownloaderStatistics, _initializationTask, _autoDeleteInitializationTask, _periodicalTasks);
+	G3MWidget g3mWidget = G3MWidget.create(_gl, _storage, _downloader, _threadUtils, getPlanet(), _cameraConstraints, _cameraRenderer, mainRenderer, _busyRenderer, backgroundColor, _logFPS, _logDownloaderStatistics, _initializationTask, _autoDeleteInitializationTask, _periodicalTasks);
   
 	g3mWidget.setUserData(_userData);
   
@@ -276,6 +271,14 @@ public abstract class IG3MBuilder
 	{
 	  _planet = planet;
 	}
+  }
+  public final Planet getPlanet()
+  {
+	if (_planet == null)
+	{
+	  _planet = Planet.createEarth();
+	}
+	return _planet;
   }
   public final void addCameraConstraint(ICameraConstrainer cameraConstraint)
   {

@@ -42,7 +42,7 @@ public class G3MDemoActivity
       simpleG3MButton.setOnClickListener(new OnClickListener() {
          @Override
          public void onClick(final View v) {
-             final Intent intent = new Intent(getApplicationContext(), G3MSimplestGlob3Activity.class);
+            final Intent intent = new Intent(getApplicationContext(), G3MSimplestGlob3Activity.class);
             startActivity(intent);
          }
       });
@@ -79,6 +79,26 @@ public class G3MDemoActivity
             startActivity(intent);
          }
       });
+
+
+      final Button markG3MButton = (Button) findViewById(R.id.markersGlob3G3MButton);
+      markG3MButton.setOnClickListener(new OnClickListener() {
+         @Override
+         public void onClick(final View v) {
+            final Intent intent = new Intent(getApplicationContext(), G3MShowMarkersActivity.class);
+            startActivity(intent);
+         }
+      });
+
+      final Button netCDFButton = (Button) findViewById(R.id.netCDFG3MButton);
+      netCDFButton.setOnClickListener(new OnClickListener() {
+         @Override
+         public void onClick(final View v) {
+            final Intent intent = new Intent(getApplicationContext(), G3MNetCDFActivity.class);
+            startActivity(intent);
+         }
+      });
+
 
    }
 }

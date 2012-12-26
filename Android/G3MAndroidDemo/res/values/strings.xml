@@ -11,6 +11,8 @@
     <string name="title_activity_g3_msimplest">G3MSimplestActivity</string>
      <string name="doubleGlob3">Double Glob3</string>
      <string name="threedshapes">3d shapes</string>
+     <string name="markersLbl">Markers</string>
+      <string name="netCDF">NetCDF</string>
       <string name="switchText">  Press button to switch base layer</string>
        <string name="animation">  Press button to move or stop the shapes</string>
 </resources>
