@@ -33,6 +33,7 @@
 		D8EEF4221577AEE0003FEB5E /* libG3MiOSSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF41E1577AEC8003FEB5E /* libG3MiOSSDK.a */; };
 		D8EEF4281577B0FD003FEB5E /* Shader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = D8EEF4241577B0D3003FEB5E /* Shader.vsh */; };
 		D8EEF4291577B0FD003FEB5E /* Shader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = D8EEF4231577B0D3003FEB5E /* Shader.fsh */; };
+		E70F3ED7168B7886006E9289 /* G3MUITableViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E70F3ED6168B7886006E9289 /* G3MUITableViewController.mm */; };
 		E71B15371626D27F003D1013 /* Default-Landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B152C1626D27F003D1013 /* Default-Landscape.png */; };
 		E71B15381626D27F003D1013 /* Default-Landscape@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B152D1626D27F003D1013 /* Default-Landscape@2x.png */; };
 		E71B15391626D27F003D1013 /* Default-Portrait.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B152E1626D27F003D1013 /* Default-Portrait.png */; };
@@ -44,6 +45,7 @@
 		E71B153F1626D27F003D1013 /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B15341626D27F003D1013 /* Icon-Small@2x.png */; };
 		E71B15401626D27F003D1013 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B15351626D27F003D1013 /* Icon.png */; };
 		E71B15411626D27F003D1013 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B15361626D27F003D1013 /* Icon@2x.png */; };
+		E74C0927168B6CA9009E0D2F /* G3MNetCDFViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E74C0926168B6CA9009E0D2F /* G3MNetCDFViewController.mm */; };
 		E751B7661680E2D90032413F /* satellite_on_96x48.png in Resources */ = {isa = PBXBuildFile; fileRef = E751B7651680E2D90032413F /* satellite_on_96x48.png */; };
 		E751B7681680E5850032413F /* map_on_96x48.png in Resources */ = {isa = PBXBuildFile; fileRef = E751B7671680E5850032413F /* map_on_96x48.png */; };
 		E751B76B1680EEE50032413F /* G3MSimpleGlob3ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E751B76A1680EEE50032413F /* G3MSimpleGlob3ViewController.mm */; };
@@ -280,6 +282,8 @@
 		D8EEF4161577AEC8003FEB5E /* G3MiOSSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = G3MiOSSDK.xcodeproj; path = ../G3MiOSSDK/G3MiOSSDK.xcodeproj; sourceTree = "<group>"; };
 		D8EEF4231577B0D3003FEB5E /* Shader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Shader.fsh; sourceTree = "<group>"; };
 		D8EEF4241577B0D3003FEB5E /* Shader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Shader.vsh; sourceTree = "<group>"; };
+		E70F3ED5168B7886006E9289 /* G3MUITableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = G3MUITableViewController.h; sourceTree = "<group>"; };
+		E70F3ED6168B7886006E9289 /* G3MUITableViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MUITableViewController.mm; sourceTree = "<group>"; };
 		E71B152C1626D27F003D1013 /* Default-Landscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Landscape.png"; path = "Resources/Default-Landscape.png"; sourceTree = "<group>"; };
 		E71B152D1626D27F003D1013 /* Default-Landscape@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Landscape@2x.png"; path = "Resources/Default-Landscape@2x.png"; sourceTree = "<group>"; };
 		E71B152E1626D27F003D1013 /* Default-Portrait.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Portrait.png"; path = "Resources/Default-Portrait.png"; sourceTree = "<group>"; };
@@ -291,6 +295,8 @@
 		E71B15341626D27F003D1013 /* Icon-Small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-Small@2x.png"; path = "Resources/Icon-Small@2x.png"; sourceTree = "<group>"; };
 		E71B15351626D27F003D1013 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = Resources/Icon.png; sourceTree = "<group>"; };
 		E71B15361626D27F003D1013 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "Resources/Icon@2x.png"; sourceTree = "<group>"; };
+		E74C0925168B6CA9009E0D2F /* G3MNetCDFViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = G3MNetCDFViewController.h; sourceTree = "<group>"; };
+		E74C0926168B6CA9009E0D2F /* G3MNetCDFViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MNetCDFViewController.mm; sourceTree = "<group>"; };
 		E751B7651680E2D90032413F /* satellite_on_96x48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = satellite_on_96x48.png; sourceTree = "<group>"; };
 		E751B7671680E5850032413F /* map_on_96x48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = map_on_96x48.png; sourceTree = "<group>"; };
 		E751B7691680EEE50032413F /* G3MSimpleGlob3ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = G3MSimpleGlob3ViewController.h; sourceTree = "<group>"; };
@@ -556,6 +562,8 @@
 				D8EEF4091577A93D003FEB5E /* G3W.h */,
 				D8EEF40A1577A93D003FEB5E /* G3W.mm */,
 				E751B7691680EEE50032413F /* G3MSimpleGlob3ViewController.h */,
+				E70F3ED5168B7886006E9289 /* G3MUITableViewController.h */,
+				E70F3ED6168B7886006E9289 /* G3MUITableViewController.mm */,
 				E751B76A1680EEE50032413F /* G3MSimpleGlob3ViewController.mm */,
 				E7B776A3167B56900005ED14 /* G3MDoubleGlob3ViewController.h */,
 				E7B776A4167B56900005ED14 /* G3MDoubleGlob3ViewController.mm */,
@@ -567,6 +575,8 @@
 				E751B78216823D7C0032413F /* G3MDrawingShapesViewController.mm */,
 				E7CDA66D16837CB0006DA377 /* G3M3DModelViewController.h */,
 				E7CDA66E16837CB0006DA377 /* G3M3DModelViewController.mm */,
+				E74C0925168B6CA9009E0D2F /* G3MNetCDFViewController.h */,
+				E74C0926168B6CA9009E0D2F /* G3MNetCDFViewController.mm */,
 			);
 			name = G3MiOSDemo;
 			path = Glob3iOSDemo;
@@ -740,6 +750,8 @@
 				E751B76E1681DB460032413F /* G3MMarkersViewController.mm in Sources */,
 				E751B78316823D7C0032413F /* G3MDrawingShapesViewController.mm in Sources */,
 				E7CDA66F16837CB0006DA377 /* G3M3DModelViewController.mm in Sources */,
+				E74C0927168B6CA9009E0D2F /* G3MNetCDFViewController.mm in Sources */,
+				E70F3ED7168B7886006E9289 /* G3MUITableViewController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -854,6 +866,7 @@
 				PRODUCT_NAME = G3MiOSDemo;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -872,6 +885,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = G3MiOSDemo;
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

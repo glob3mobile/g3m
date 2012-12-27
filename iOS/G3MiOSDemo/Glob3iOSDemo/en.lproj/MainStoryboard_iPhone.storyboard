@@ -9,7 +9,7 @@
         <scene sceneID="8Vk-J2-qNf">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ff5-6O-5zI" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <tableViewController storyboardIdentifier="MainView" title="Glob3 Mobile" id="BWH-oS-Eqg" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="MainView" title="Glob3 Mobile" id="BWH-oS-Eqg" customClass="G3MUITableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="1Je-Jb-3AQ">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -144,7 +144,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" indentationWidth="10" textLabel="yTC-6X-sjI" imageView="NuR-q9-thN" style="IBUITableViewCellStyleDefault" id="bXt-95-Xfy">
-                                        <rect key="frame" x="0.0" y="267" width="320" height="45"/>
+                                        <rect key="frame" x="0.0" y="267" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="10" y="0.0" width="280" height="43"/>
@@ -168,6 +168,31 @@
                                             <segue destination="tVX-sy-e2T" kind="push" id="jSf-xg-YLC"/>
                                         </connections>
                                     </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" indentationWidth="10" textLabel="Q8c-Is-niP" imageView="2N1-KU-BMF" style="IBUITableViewCellStyleDefault" id="fb4-vM-Oeg">
+                                        <rect key="frame" x="0.0" y="311" width="320" height="45"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="10" y="0.0" width="280" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="NetCDF" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Q8c-Is-niP">
+                                                    <rect key="frame" x="46" y="0.0" width="224" height="43"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </label>
+                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" image="Icon-Small.png" id="2N1-KU-BMF">
+                                                    <rect key="frame" x="7" y="7" width="29" height="29"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                </imageView>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <connections>
+                                            <segue destination="KuK-lY-z7J" kind="push" id="L1R-Mg-r2J"/>
+                                        </connections>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                         </sections>
@@ -176,10 +201,28 @@
                             <outlet property="delegate" destination="BWH-oS-Eqg" id="Blg-qm-wcN"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="glob3 mobile" id="dJ8-QF-nXZ"/>
+                    <navigationItem key="navigationItem" title="glob3 mobile" id="dJ8-QF-nXZ" customClass="G3M"/>
                 </tableViewController>
             </objects>
             <point key="canvasLocation" x="242" y="-155"/>
+        </scene>
+        <!--NetCDF View Controller - NetCDF-->
+        <scene sceneID="BdN-Li-d05">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0cq-hf-jsv" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewController id="KuK-lY-z7J" customClass="G3MNetCDFViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="xRz-hi-0Le" customClass="G3MWidget_iOS">
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="NetCDF" id="RNL-N9-br2"/>
+                    <connections>
+                        <outlet property="glob3" destination="xRz-hi-0Le" id="EGP-Aj-r7H"/>
+                    </connections>
+                </viewController>
+            </objects>
+            <point key="canvasLocation" x="1727" y="283"/>
         </scene>
         <!--Double Glob3 View Controller - Double glob3-->
         <scene sceneID="aH1-n5-OyC">
@@ -210,7 +253,7 @@
                     </connections>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="1119" y="-898"/>
+            <point key="canvasLocation" x="1131" y="-1684"/>
         </scene>
         <!--Layer Switch View Controller - Layer Switch-->
         <scene sceneID="kaw-yk-AU9">
@@ -265,7 +308,7 @@
                     </connections>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="1715" y="-693"/>
+            <point key="canvasLocation" x="1727" y="-1479"/>
         </scene>
         <!--Markers View Controller - Markers-->
         <scene sceneID="VIu-8i-4WY">
@@ -283,7 +326,7 @@
                     </connections>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="2265" y="-379"/>
+            <point key="canvasLocation" x="2277" y="-1165"/>
         </scene>
         <!--Model View Controller - 3D Model-->
         <scene sceneID="2rP-ed-RE4">
@@ -301,7 +344,7 @@
                     </connections>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="1825" y="642"/>
+            <point key="canvasLocation" x="2277" y="-155"/>
         </scene>
         <!--Drawing Shapes View Controller - Drawing Shapes-->
         <scene sceneID="C6H-MY-jBA">
@@ -357,7 +400,7 @@
                     </connections>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="2265" y="241"/>
+            <point key="canvasLocation" x="2657" y="-737"/>
         </scene>
         <!--Simple Glob3 View Controller - Simple glob3-->
         <scene sceneID="L0K-S4-ViS">
@@ -383,7 +426,7 @@
                     </connections>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="537" y="-898"/>
+            <point key="canvasLocation" x="549" y="-1684"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="SlF-C0-SHH">
@@ -445,11 +488,20 @@
                 <relationship kind="outlet" name="glob3" candidateClass="G3MWidget_iOS"/>
             </relationships>
         </class>
+        <class className="G3MNetCDFViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/G3MNetCDFViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="glob3" candidateClass="G3MWidget_iOS"/>
+            </relationships>
+        </class>
         <class className="G3MSimpleGlob3ViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/G3MSimpleGlob3ViewController.h"/>
             <relationships>
                 <relationship kind="outlet" name="G3MWidget" candidateClass="G3MWidget_iOS"/>
             </relationships>
+        </class>
+        <class className="G3MUITableViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/G3MUITableViewController.h"/>
         </class>
         <class className="G3MWidget_iOS" superclassName="UIView">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/G3MWidget_iOS.h"/>

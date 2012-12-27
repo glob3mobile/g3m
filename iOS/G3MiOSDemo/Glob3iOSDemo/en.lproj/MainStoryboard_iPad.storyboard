@@ -9,7 +9,7 @@
         <scene sceneID="aZO-fq-3Os">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IJe-95-YdE" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <tableViewController storyboardIdentifier="MainView" title="Glob3 Mobile" id="ijV-D5-MqH" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="MainView" title="Glob3 Mobile" id="ijV-D5-MqH" customClass="G3MUITableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="b6f-lg-HKe">
                         <rect key="frame" x="0.0" y="64" width="768" height="960"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -457,6 +457,9 @@
             <relationships>
                 <relationship kind="outlet" name="G3MWidget" candidateClass="G3MWidget_iOS"/>
             </relationships>
+        </class>
+        <class className="G3MUITableViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/G3MUITableViewController.h"/>
         </class>
         <class className="G3MWidget_iOS" superclassName="UIView">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/G3MWidget_iOS.h"/>
