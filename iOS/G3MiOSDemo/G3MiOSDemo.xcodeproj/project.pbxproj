@@ -307,6 +307,10 @@
 		E751B78216823D7C0032413F /* G3MDrawingShapesViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MDrawingShapesViewController.mm; sourceTree = "<group>"; };
 		E751B79F168247830032413F /* play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play.png; sourceTree = "<group>"; };
 		E751B7A0168247830032413F /* stop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = stop.png; sourceTree = "<group>"; };
+		E7A91B26168DA7A800DC5EE4 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = Resources/Default.png; sourceTree = "<group>"; };
+		E7A91B27168DA7A800DC5EE4 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "Resources/Default@2x.png"; sourceTree = "<group>"; };
+		E7A91B28168DA7A800DC5EE4 /* iTunesArtwork.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = iTunesArtwork.png; path = Resources/iTunesArtwork.png; sourceTree = "<group>"; };
+		E7A91B29168DA7A800DC5EE4 /* iTunesArtwork@2x */ = {isa = PBXFileReference; lastKnownFileType = file; name = "iTunesArtwork@2x"; path = "Resources/iTunesArtwork@2x"; sourceTree = "<group>"; };
 		E7B776A3167B56900005ED14 /* G3MDoubleGlob3ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = G3MDoubleGlob3ViewController.h; sourceTree = "<group>"; };
 		E7B776A4167B56900005ED14 /* G3MDoubleGlob3ViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MDoubleGlob3ViewController.mm; sourceTree = "<group>"; };
 		E7B776A6167F68730005ED14 /* G3MLayerSwitchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = G3MLayerSwitchViewController.h; sourceTree = "<group>"; };
@@ -611,6 +615,10 @@
 				CF0223821668318600024B73 /* geojson */,
 				CFEA76671666DCB000E89BC7 /* images */,
 				CFE3DBB0164B0E7D00910037 /* seymour-plane.json */,
+				E7A91B27168DA7A800DC5EE4 /* Default@2x.png */,
+				E7A91B26168DA7A800DC5EE4 /* Default.png */,
+				E7A91B28168DA7A800DC5EE4 /* iTunesArtwork.png */,
+				E7A91B29168DA7A800DC5EE4 /* iTunesArtwork@2x */,
 				E71B152C1626D27F003D1013 /* Default-Landscape.png */,
 				E71B152D1626D27F003D1013 /* Default-Landscape@2x.png */,
 				E71B152E1626D27F003D1013 /* Default-Portrait.png */,
