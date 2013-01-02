@@ -10,6 +10,8 @@
 
 #include "G3MBuilder_iOS.hpp"
 #include "MarksRenderer.hpp"
+#include "Downloader_iOS.hpp"
+#include "GEOJSONParser.hpp"
 
 @interface G3MMarkersViewController ()
 
@@ -35,11 +37,13 @@
   // Create a builder
   G3MBuilder_iOS builder([self glob3]);
   
+  const bool readyWhenMarksReady = false;
+  MarksRenderer* markerRenderer = new MarksRenderer(readyWhenMarksReady);
   // Add markers renderer
   builder.addRenderer([self createMarksRenderer]);
   
   // Set a initialization task to go to the markers's position
-  builder.setInitializationTask([self createInitializationTask], true);
+  builder.setInitializationTask([self createInitializationTask:markerRenderer], true);
   
   // Initialize widget
   builder.initializeWidget();
@@ -112,20 +116,30 @@
   
 }
 
-- (GInitializationTask*) createInitializationTask
+- (GInitializationTask*) createInitializationTask: (MarksRenderer*) marksRenderer
 {
   class SampleInitializationTask : public GInitializationTask {
   private:
     G3MWidget_iOS*  _widget;
+    MarksRenderer* _marksRenderer;
       
     public:
-      SampleInitializationTask(G3MWidget_iOS*  widget) :
-      _widget(widget)
+      SampleInitializationTask(G3MWidget_iOS*  widget, MarksRenderer* mRenderer) :
+      _widget(widget),
+      _marksRenderer(mRenderer)
       {
         
       }
       
       void run(const G3MContext* context) {
+        Downloader_iOS* downloader = (Downloader_iOS*) context->getDownloader();
+        MarkersDemoBufferDownloadListener* listener = new MarkersDemoBufferDownloadListener(this, _marksRenderer);
+        downloader->requestBuffer(URL("http://poiproxy.mapps.es/browseByLonLat?service=wikilocation&lon=-122.415985&lat=37.766372&dist=10000", false),
+                                  200000,
+                                  TimeInterval::forever(),
+                                  listener,
+                                  true);
+        
         [_widget widget]->setAnimatedCameraPosition(Geodetic3D(Angle::fromDegrees(28.05),
                                                                   Angle::fromDegrees(-15),
                                                                   1000000),
@@ -137,9 +151,44 @@
       }
     };
     
-    GInitializationTask* initializationTask = new SampleInitializationTask([self glob3]);
+    GInitializationTask* initializationTask = new SampleInitializationTask([self glob3], marksRenderer);
     
     return initializationTask;
 }
+
+class MarkersDemoBufferDownloadListener : public IBufferDownloadListener {
+private:
+  GInitializationTask* _initTask;
+  MarksRenderer* _markRenderer;
+public:
+  MarkersDemoBufferDownloadListener(GInitializationTask* initTask, MarksRenderer* markRenderer) {
+    _initTask = initTask;
+    _markRenderer = markRenderer;
+  }
+  void onDownload(const URL& url,
+                  const IByteBuffer* buffer) {
+
+  }
+  
+  void onError(const URL& url) {
+    NSString* message = [NSString stringWithFormat: @"We are really sorry.\nThere was a problem getting markers info"];
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"glob3 mobile"
+                                                    message:message
+                                                   delegate:nil
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
+    [alert show];
+  }
+  
+  void onCancel(const URL& url) {
+    
+  }
+  
+  void onCanceledDownload(const URL& url,
+                          const IByteBuffer* data) {
+    
+  }
+};
 
 @end
