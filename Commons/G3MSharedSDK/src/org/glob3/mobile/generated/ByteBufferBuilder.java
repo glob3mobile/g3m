@@ -76,12 +76,12 @@ public class ByteBufferBuilder
 	_values.set(i + 3, b4);
   }
 
-  public final void addStringZeroTerminated(String String)
+  public final void addStringZeroTerminated(String str)
   {
-	final int size = String.length();
+	final int size = str.length();
 	for (int i = 0; i < size; i++)
 	{
-	  final byte c = String.charAt(i);
+	  final byte c = str.charAt(i);
 	  _values.add(c);
 	}
 	_values.add((byte) 0);
