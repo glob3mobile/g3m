@@ -82,7 +82,7 @@ IByteBuffer* ByteBufferIterator::nextBufferUpTo(unsigned char sentinel) {
 }
 
 const std::string ByteBufferIterator::nextZeroTerminatedString() {
-  IByteBuffer* buffer = nextBufferUpTo('\0');
+  IByteBuffer* buffer = nextBufferUpTo((unsigned char) 0);
   const std::string result = buffer->getAsString();
   delete buffer;
   return result;
