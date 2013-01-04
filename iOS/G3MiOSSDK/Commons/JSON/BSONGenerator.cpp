@@ -45,13 +45,13 @@ void BSONGenerator::addCurrentKey() {
 }
 
 void BSONGenerator::visitBoolean(const JSONBoolean* value) {
-  _builder->add(0x08);
+  _builder->add((unsigned char) 0x08);
   addCurrentKey();
   if (value->value()) {
-    _builder->add(0x01);
+    _builder->add((unsigned char) 0x01);
   }
   else {
-    _builder->add(0x00);
+    _builder->add((unsigned char) 0x00);
   }
 }
 
