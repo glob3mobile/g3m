@@ -40,6 +40,13 @@ public class JSONNumber extends JSONBaseObject
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const number_type getType() const
+  public final number_type getType()
+  {
+	return _type;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: int intValue() const
   public final int intValue()
   {
@@ -141,6 +148,13 @@ public class JSONNumber extends JSONBaseObject
   public final JSONNumber deepCopy()
   {
 	return new JSONNumber(_intValue, _floatValue, _doubleValue, _type);
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: void acceptVisitor(JSONVisitor* visitor) const
+  public final void acceptVisitor(JSONVisitor visitor)
+  {
+	visitor.visitNumber(this);
   }
 
 }

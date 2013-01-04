@@ -67,4 +67,11 @@ public class JSONString extends JSONBaseObject
 	return new JSONString(_value);
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: void acceptVisitor(JSONVisitor* visitor) const
+  public final void acceptVisitor(JSONVisitor visitor)
+  {
+	visitor.visitString(this);
+  }
+
 }

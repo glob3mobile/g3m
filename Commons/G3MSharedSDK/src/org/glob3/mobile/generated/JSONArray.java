@@ -181,4 +181,24 @@ public class JSONArray extends JSONBaseObject
 	return result;
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: void acceptVisitor(JSONVisitor* visitor) const
+  public final void acceptVisitor(JSONVisitor visitor)
+  {
+	visitor.visitArrayBeforeChildren(this);
+  
+	final int size = this.size();
+	for (int i = 0; i < size; i++)
+	{
+	  if (i != 0)
+	  {
+		visitor.visitArrayInBetweenChildren(this);
+	  }
+	  visitor.visitArrayBeforeChild(this, i);
+	  get(i).acceptVisitor(visitor);
+	}
+  
+	visitor.visitArrayAfterChildren(this);
+  }
+
 }

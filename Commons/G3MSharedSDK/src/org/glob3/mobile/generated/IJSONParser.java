@@ -22,7 +22,6 @@ package org.glob3.mobile.generated;
 
 public abstract class IJSONParser
 {
-
   private static IJSONParser _instance = null;
 
 
@@ -39,7 +38,6 @@ public abstract class IJSONParser
   {
 	return _instance;
   }
-
 
   public void dispose()
   {

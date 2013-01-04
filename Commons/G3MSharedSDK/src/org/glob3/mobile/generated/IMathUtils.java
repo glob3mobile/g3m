@@ -223,4 +223,11 @@ public abstract class IMathUtils
 	return from + ((to - from) * alpha);
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual long doubleToRawLongBits(double value) const = 0;
+  public abstract long doubleToRawLongBits(double value);
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual double rawLongBitsToDouble(long value) const = 0;
+  public abstract double rawLongBitsToDouble(long value);
+
 }
