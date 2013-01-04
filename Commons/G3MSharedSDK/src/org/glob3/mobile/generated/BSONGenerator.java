@@ -89,17 +89,17 @@ public class BSONGenerator extends JSONVisitor
 	switch (value.getType())
 	{
 	  case int_type:
-		_builder.add(0x10);
+		_builder.add((byte) 0x10);
 		addCurrentKey();
 		_builder.addInt32(value.intValue());
 		break;
 	  case float_type:
-		_builder.add(0x01);
+		_builder.add((byte) 0x01);
 		addCurrentKey();
 		_builder.addDouble(value.floatValue());
 		break;
 	  case double_type:
-		_builder.add(0x01);
+		_builder.add((byte) 0x01);
 		addCurrentKey();
 		_builder.addDouble(value.doubleValue());
 		break;
@@ -111,7 +111,7 @@ public class BSONGenerator extends JSONVisitor
   }
   public final void visitString(JSONString value)
   {
-	_builder.add(0x02); // type string
+	_builder.add((byte) 0x02); // type string
 	addCurrentKey();
   
 	final String str = value.value();
@@ -121,8 +121,8 @@ public class BSONGenerator extends JSONVisitor
 
   public final void visitArrayBeforeChildren(JSONArray value)
   {
-  //  _builder->add(0x04); // type array
-	_builder.add(0x44); // type customized-array
+  //  _builder->add((unsigned char) 0x04); // type array
+	_builder.add((byte) 0x44); // type customized-array
 	addCurrentKey();
   
 	_positionsStack.add(_builder.size()); // store current position, to update the size later
@@ -145,7 +145,7 @@ public class BSONGenerator extends JSONVisitor
 	int sizePosition = _positionsStack.get(_positionsStack.size() - 1);
 	_positionsStack.remove(_positionsStack.size() - 1);
   
-	_builder.add(0);
+	_builder.add((byte) 0);
 	_builder.setInt32(sizePosition, _builder.size() - sizePosition);
   }
 
@@ -154,7 +154,7 @@ public class BSONGenerator extends JSONVisitor
 	if (_positionsStack.size() != 0)
 	{
 	  // if positions back is not empty, it means the object is not the outer object
-	  _builder.add(0x03); // type document
+	  _builder.add((byte) 0x03); // type document
 	  addCurrentKey();
 	}
   
@@ -174,7 +174,7 @@ public class BSONGenerator extends JSONVisitor
 	int sizePosition = _positionsStack.get(_positionsStack.size() - 1);
 	_positionsStack.remove(_positionsStack.size() - 1);
   
-	_builder.add(0);
+	_builder.add((byte) 0);
 	_builder.setInt32(sizePosition, _builder.size() - sizePosition);
   }
 
