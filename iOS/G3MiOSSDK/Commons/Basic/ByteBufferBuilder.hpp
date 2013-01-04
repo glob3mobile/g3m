@@ -64,7 +64,7 @@ public:
     _values[i + 3] = b4;
   }
 
-  void addStringZeroTerminated(const std::string& string);
+  void addStringZeroTerminated(const std::string& str);
 
   void add(unsigned char value) {
     _values.push_back(value);

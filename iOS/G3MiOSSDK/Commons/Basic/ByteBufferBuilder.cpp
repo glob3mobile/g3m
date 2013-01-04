@@ -24,10 +24,10 @@ IByteBuffer* ByteBufferBuilder::create() const {
   return result;
 }
 
-void ByteBufferBuilder::addStringZeroTerminated(const std::string& string) {
-  const int size = string.size();
+void ByteBufferBuilder::addStringZeroTerminated(const std::string& str) {
+  const int size = str.size();
   for (int i = 0; i < size; i++) {
-    const char c = string.at(i);
+    const char c = str.at(i);
     _values.push_back(c);
   }
   _values.push_back((unsigned char) 0);
