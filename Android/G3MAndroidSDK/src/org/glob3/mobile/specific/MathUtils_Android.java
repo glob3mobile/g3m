@@ -306,4 +306,15 @@ public final class MathUtils_Android
    }
 
 
+   @Override
+   public long doubleToRawLongBits(final double value) {
+      return Double.doubleToRawLongBits(value);
+   }
+
+
+   @Override
+   public double rawLongBitsToDouble(final long value) {
+      return Double.longBitsToDouble(value);
+   }
+
 }

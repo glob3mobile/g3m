@@ -39,7 +39,7 @@ IByteBuffer* BSONGenerator::generate(const JSONBaseObject* value) {
 }
 
 void BSONGenerator::addCurrentKey() {
-  if (!_currentKey.empty()) {
+  if (_currentKey.size() != 0) {
     _builder->addStringZeroTerminated(_currentKey);
   }
 }

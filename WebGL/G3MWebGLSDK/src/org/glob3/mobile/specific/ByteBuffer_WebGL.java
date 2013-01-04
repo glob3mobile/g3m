@@ -72,6 +72,13 @@ public final class ByteBuffer_WebGL
 
 
    @Override
+   public void rawPut(final int i,
+                      final byte value) {
+      jsRawPut(i, value);
+   }
+
+
+   @Override
    public String description() {
       return "ByteBuffer_WebGL (size=" + size() + ")";
    }
@@ -115,13 +122,17 @@ public final class ByteBuffer_WebGL
 
    private native void jsPut(int i,
                              byte value) /*-{
-		var thisInstance = this;
-		if (thisInstance.@org.glob3.mobile.specific.ByteBuffer_WebGL::_buffer
-				.get(i) != value) {
-			thisInstance.@org.glob3.mobile.specific.ByteBuffer_WebGL::_buffer
-					.set(i, value);
-			thisInstance.@org.glob3.mobile.specific.ByteBuffer_WebGL::incTimestamp()();
+		if (this.@org.glob3.mobile.specific.ByteBuffer_WebGL::_buffer.get(i) != value) {
+			this.@org.glob3.mobile.specific.ByteBuffer_WebGL::_buffer.set(i,
+					value);
+			this.@org.glob3.mobile.specific.ByteBuffer_WebGL::incTimestamp()();
 		}
+   }-*/;
+
+
+   private native void jsRawPut(int i,
+                                byte value) /*-{
+		this.@org.glob3.mobile.specific.ByteBuffer_WebGL::_buffer.set(i, value);
    }-*/;
 
 
