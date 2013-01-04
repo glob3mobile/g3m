@@ -47,7 +47,7 @@ public class BSONGenerator extends JSONVisitor
 
   private void addCurrentKey()
   {
-	if (!_currentKey.length() == 0)
+	if (_currentKey.length() != 0)
 	{
 	  _builder.addStringZeroTerminated(_currentKey);
 	}
