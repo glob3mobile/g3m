@@ -30,7 +30,7 @@ void ByteBufferBuilder::addStringZeroTerminated(const std::string& string) {
     const char c = string.at(i);
     _values.push_back(c);
   }
-  _values.push_back(0);
+  _values.push_back((unsigned char) 0);
 }
 
 void ByteBufferBuilder::addDouble(double value) {

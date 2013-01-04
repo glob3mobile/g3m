@@ -19,14 +19,14 @@ private:
 public:
 
   void addInt64(long long value) {
-    const unsigned char b1 = (value      ) & 0xFF;
-    const unsigned char b2 = (value >>  8) & 0xFF;
-    const unsigned char b3 = (value >> 16) & 0xFF;
-    const unsigned char b4 = (value >> 24) & 0xFF;
-    const unsigned char b5 = (value >> 32) & 0xFF;
-    const unsigned char b6 = (value >> 40) & 0xFF;
-    const unsigned char b7 = (value >> 48) & 0xFF;
-    const unsigned char b8 = (value >> 56) & 0xFF;
+    const unsigned char b1 = (unsigned char) ((value      ) & 0xFF);
+    const unsigned char b2 = (unsigned char) ((value >>  8) & 0xFF);
+    const unsigned char b3 = (unsigned char) ((value >> 16) & 0xFF);
+    const unsigned char b4 = (unsigned char) ((value >> 24) & 0xFF);
+    const unsigned char b5 = (unsigned char) ((value >> 32) & 0xFF);
+    const unsigned char b6 = (unsigned char) ((value >> 40) & 0xFF);
+    const unsigned char b7 = (unsigned char) ((value >> 48) & 0xFF);
+    const unsigned char b8 = (unsigned char) ((value >> 56) & 0xFF);
 
     _values.push_back(b1);
     _values.push_back(b2);
@@ -41,10 +41,10 @@ public:
   void addDouble(double value);
   
   void addInt32(int value) {
-    const unsigned char b1 = (value      ) & 0xFF;
-    const unsigned char b2 = (value >>  8) & 0xFF;
-    const unsigned char b3 = (value >> 16) & 0xFF;
-    const unsigned char b4 = (value >> 24) & 0xFF;
+    const unsigned char b1 = (unsigned char) ((value      ) & 0xFF);
+    const unsigned char b2 = (unsigned char) ((value >>  8) & 0xFF);
+    const unsigned char b3 = (unsigned char) ((value >> 16) & 0xFF);
+    const unsigned char b4 = (unsigned char) ((value >> 24) & 0xFF);
 
     _values.push_back(b1);
     _values.push_back(b2);
@@ -53,10 +53,10 @@ public:
   }
 
   void setInt32(int i, int value) {
-    const unsigned char b1 = (value      ) & 0xFF;
-    const unsigned char b2 = (value >>  8) & 0xFF;
-    const unsigned char b3 = (value >> 16) & 0xFF;
-    const unsigned char b4 = (value >> 24) & 0xFF;
+    const unsigned char b1 = (unsigned char) ((value      ) & 0xFF);
+    const unsigned char b2 = (unsigned char) ((value >>  8) & 0xFF);
+    const unsigned char b3 = (unsigned char) ((value >> 16) & 0xFF);
+    const unsigned char b4 = (unsigned char) ((value >> 24) & 0xFF);
 
     _values[i    ] = b1;
     _values[i + 1] = b2;
