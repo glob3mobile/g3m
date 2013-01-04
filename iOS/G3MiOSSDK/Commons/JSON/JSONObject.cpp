@@ -13,6 +13,7 @@
 #include "JSONString.hpp"
 #include "JSONBoolean.hpp"
 #include "JSONNumber.hpp"
+#include "JSONVisitor.hpp"
 
 JSONObject::~JSONObject(){
 #ifdef C_CODE
@@ -113,7 +114,7 @@ void JSONObject::putKeyAndValueDescription(const std::string& key,
                                            IStringBuilder *isb) const {
   isb->addString("\"");
   isb->addString(key);
-  isb->addString("\"=");
+  isb->addString("\":");
   isb->addString(get(key)->description());
 }
 
@@ -152,4 +153,23 @@ JSONObject* JSONObject::deepCopy() const {
   }
 
   return result;
+}
+
+void JSONObject::acceptVisitor(JSONVisitor* visitor) const {
+  visitor->visitObjectBeforeChildren(this);
+
+  std::vector<std::string> keys = this->keys();
+
+  int keysCount = keys.size();
+  for (int i = 0; i < keysCount; i++) {
+    if (i != 0) {
+      visitor->visitObjectInBetweenChildren(this);
+    }
+    std::string key = keys[i];
+    visitor->visitObjectBeforeChild(this, key);
+    const JSONBaseObject* child = get(key);
+    child->acceptVisitor(visitor);
+  }
+
+  visitor->visitObjectAfterChildren(this);
 }

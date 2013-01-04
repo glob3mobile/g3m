@@ -8,6 +8,7 @@
 
 #include "JSONNumber.hpp"
 #include "IStringBuilder.hpp"
+#include "JSONVisitor.hpp"
 
 int JSONNumber::intValue() const {
   if (_type != int_type) {
@@ -76,4 +77,8 @@ const std::string JSONNumber::description() const {
   const std::string s = isb->getString();
   delete isb;
   return s;
+}
+
+void JSONNumber::acceptVisitor(JSONVisitor* visitor) const {
+  visitor->visitNumber(this);
 }

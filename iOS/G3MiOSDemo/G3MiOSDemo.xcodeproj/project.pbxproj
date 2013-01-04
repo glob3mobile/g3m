@@ -69,6 +69,12 @@
 		A717C99515EBA71D00EEC830 /* mercator.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = mercator.jpg; sourceTree = "<group>"; };
 		CCD7885315D9A3FA0065A7E1 /* ProgressWheel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ProgressWheel.png; sourceTree = "<group>"; };
 		CF0223821668318600024B73 /* geojson */ = {isa = PBXFileReference; lastKnownFileType = folder; path = geojson; sourceTree = "<group>"; };
+		CF4FAACE1695E6B1009734CA /* ByteBufferIterator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ByteBufferIterator.hpp; path = ../G3MiOSSDK/Commons/Basic/ByteBufferIterator.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		CF4FAACF1695E6B1009734CA /* BSONParser.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = BSONParser.hpp; path = ../G3MiOSSDK/Commons/JSON/BSONParser.hpp; sourceTree = "<group>"; };
+		CF4FAAD01695E6B1009734CA /* ByteBufferBuilder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ByteBufferBuilder.hpp; path = ../G3MiOSSDK/Commons/Basic/ByteBufferBuilder.hpp; sourceTree = "<group>"; };
+		CF4FAAD11695E6B1009734CA /* JSONVisitor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = JSONVisitor.hpp; path = ../G3MiOSSDK/Commons/JSON/JSONVisitor.hpp; sourceTree = "<group>"; };
+		CF4FAAD21695E6B1009734CA /* JSONGenerator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = JSONGenerator.hpp; path = ../G3MiOSSDK/Commons/JSON/JSONGenerator.hpp; sourceTree = "<group>"; };
+		CF4FAAD71695F407009734CA /* BSONGenerator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = BSONGenerator.hpp; path = ../G3MiOSSDK/Commons/JSON/BSONGenerator.hpp; sourceTree = "<group>"; };
 		CF629FFF168008E900649BBC /* G3MWidget_iOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = G3MWidget_iOS.h; path = ../G3MiOSSDK/Specific/Widget/G3MWidget_iOS.h; sourceTree = "<group>"; };
 		CF62A000168008E900649BBC /* AbstractMesh.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = AbstractMesh.hpp; path = ../G3MiOSSDK/Commons/Mesh/AbstractMesh.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF62A001168008E900649BBC /* G3MBuilder_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = G3MBuilder_iOS.hpp; path = ../G3MiOSSDK/Specific/Derived/G3MBuilder_iOS.hpp; sourceTree = "<group>"; };
@@ -155,7 +161,7 @@
 		CF62A052168008E900649BBC /* Context.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Context.hpp; path = ../G3MiOSSDK/Commons/Basic/Context.hpp; sourceTree = "<group>"; };
 		CF62A053168008E900649BBC /* IByteBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IByteBuffer.hpp; path = ../G3MiOSSDK/Commons/Interfaces/IByteBuffer.hpp; sourceTree = "<group>"; };
 		CF62A054168008E900649BBC /* TouchEvent.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TouchEvent.hpp; path = ../G3MiOSSDK/Commons/Basic/TouchEvent.hpp; sourceTree = "<group>"; };
-		CF62A055168008E900649BBC /* Angle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Angle.hpp; path = ../G3MiOSSDK/Commons/Geometry/Angle.hpp; sourceTree = "<group>"; };
+		CF62A055168008E900649BBC /* Angle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Angle.hpp; path = ../G3MiOSSDK/Commons/Geometry/Angle.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF62A056168008E900649BBC /* Ellipsoid.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Ellipsoid.hpp; path = ../G3MiOSSDK/Commons/Geometry/Ellipsoid.hpp; sourceTree = "<group>"; };
 		CF62A057168008E900649BBC /* Geodetic2D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Geodetic2D.hpp; path = ../G3MiOSSDK/Commons/Geometry/Geodetic2D.hpp; sourceTree = "<group>"; };
 		CF62A058168008E900649BBC /* Geodetic3D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Geodetic3D.hpp; path = ../G3MiOSSDK/Commons/Geometry/Geodetic3D.hpp; sourceTree = "<group>"; };
@@ -305,6 +311,12 @@
 		CF629FFE168008D200649BBC /* Public Headers G3M */ = {
 			isa = PBXGroup;
 			children = (
+				CF4FAAD71695F407009734CA /* BSONGenerator.hpp */,
+				CF4FAACE1695E6B1009734CA /* ByteBufferIterator.hpp */,
+				CF4FAACF1695E6B1009734CA /* BSONParser.hpp */,
+				CF4FAAD01695E6B1009734CA /* ByteBufferBuilder.hpp */,
+				CF4FAAD11695E6B1009734CA /* JSONVisitor.hpp */,
+				CF4FAAD21695E6B1009734CA /* JSONGenerator.hpp */,
 				CFF76BE81686154400F658CC /* MeshRenderer.hpp */,
 				CF629FFF168008E900649BBC /* G3MWidget_iOS.h */,
 				CF62A000168008E900649BBC /* AbstractMesh.hpp */,

@@ -107,6 +107,14 @@
 		CF47030C15EFB4C000426B8B /* ThreadUtils_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF47030A15EFB4C000426B8B /* ThreadUtils_iOS.hpp */; settings = {ATTRIBUTES = (); }; };
 		CF4CA477164C669D009BB7EB /* SGNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF4CA475164C669D009BB7EB /* SGNode.cpp */; };
 		CF4CA478164C669D009BB7EB /* SGNode.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF4CA476164C669D009BB7EB /* SGNode.hpp */; settings = {ATTRIBUTES = (); }; };
+		CF4FAAC31695C66F009734CA /* ByteBufferBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF4FAAC11695C66F009734CA /* ByteBufferBuilder.cpp */; };
+		CF4FAAC41695C66F009734CA /* ByteBufferBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF4FAAC21695C66F009734CA /* ByteBufferBuilder.hpp */; };
+		CF4FAAC81695D010009734CA /* JSONVisitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF4FAAC61695D010009734CA /* JSONVisitor.cpp */; };
+		CF4FAAC91695D010009734CA /* JSONVisitor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF4FAAC71695D010009734CA /* JSONVisitor.hpp */; };
+		CF4FAACC1695E4A8009734CA /* JSONGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF4FAACA1695E4A8009734CA /* JSONGenerator.cpp */; };
+		CF4FAACD1695E4A8009734CA /* JSONGenerator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF4FAACB1695E4A8009734CA /* JSONGenerator.hpp */; };
+		CF4FAAD51695F344009734CA /* BSONGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF4FAAD31695F344009734CA /* BSONGenerator.cpp */; };
+		CF4FAAD61695F344009734CA /* BSONGenerator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF4FAAD41695F344009734CA /* BSONGenerator.hpp */; };
 		CF527E1B162E2B4200E0BDE0 /* GTask.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF527E19162E2B4200E0BDE0 /* GTask.cpp */; };
 		CF527E1C162E2B4200E0BDE0 /* GTask.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF527E1A162E2B4200E0BDE0 /* GTask.hpp */; settings = {ATTRIBUTES = (); }; };
 		CF527E1F162E33F500E0BDE0 /* LeafRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF527E1D162E33F500E0BDE0 /* LeafRenderer.cpp */; };
@@ -149,6 +157,10 @@
 		CF7E626215F7D6FC0086B71D /* FloatBufferBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF7E626015F7D6FC0086B71D /* FloatBufferBuilder.hpp */; settings = {ATTRIBUTES = (); }; };
 		CF7E626615F7DD740086B71D /* IntBufferBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7E626415F7DD740086B71D /* IntBufferBuilder.cpp */; };
 		CF7E626715F7DD740086B71D /* IntBufferBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF7E626515F7DD740086B71D /* IntBufferBuilder.hpp */; settings = {ATTRIBUTES = (); }; };
+		CF7EDA0516948302002C760A /* ByteBufferIterator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7EDA0316948302002C760A /* ByteBufferIterator.cpp */; };
+		CF7EDA0616948302002C760A /* ByteBufferIterator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF7EDA0416948302002C760A /* ByteBufferIterator.hpp */; };
+		CF7EDA0A1694914A002C760A /* BSONParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7EDA081694914A002C760A /* BSONParser.cpp */; };
+		CF7EDA0B1694914A002C760A /* BSONParser.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF7EDA091694914A002C760A /* BSONParser.hpp */; };
 		CF857B2E164C757A0089F1DE /* SGRotateNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF857B2C164C757A0089F1DE /* SGRotateNode.cpp */; };
 		CF857B2F164C757A0089F1DE /* SGRotateNode.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF857B2D164C757A0089F1DE /* SGRotateNode.hpp */; settings = {ATTRIBUTES = (); }; };
 		CF857B33164C77B00089F1DE /* SGMaterialNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF857B31164C77B00089F1DE /* SGMaterialNode.cpp */; };
@@ -447,6 +459,14 @@
 		CF47030A15EFB4C000426B8B /* ThreadUtils_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ThreadUtils_iOS.hpp; path = Specific/Derived/ThreadUtils_iOS.hpp; sourceTree = "<group>"; };
 		CF4CA475164C669D009BB7EB /* SGNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGNode.cpp; path = Commons/Rendererers/SGNode.cpp; sourceTree = "<group>"; };
 		CF4CA476164C669D009BB7EB /* SGNode.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SGNode.hpp; path = Commons/Rendererers/SGNode.hpp; sourceTree = "<group>"; };
+		CF4FAAC11695C66F009734CA /* ByteBufferBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ByteBufferBuilder.cpp; path = Commons/Basic/ByteBufferBuilder.cpp; sourceTree = "<group>"; };
+		CF4FAAC21695C66F009734CA /* ByteBufferBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ByteBufferBuilder.hpp; path = Commons/Basic/ByteBufferBuilder.hpp; sourceTree = "<group>"; };
+		CF4FAAC61695D010009734CA /* JSONVisitor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JSONVisitor.cpp; sourceTree = "<group>"; };
+		CF4FAAC71695D010009734CA /* JSONVisitor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JSONVisitor.hpp; sourceTree = "<group>"; };
+		CF4FAACA1695E4A8009734CA /* JSONGenerator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JSONGenerator.cpp; sourceTree = "<group>"; };
+		CF4FAACB1695E4A8009734CA /* JSONGenerator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JSONGenerator.hpp; sourceTree = "<group>"; };
+		CF4FAAD31695F344009734CA /* BSONGenerator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BSONGenerator.cpp; sourceTree = "<group>"; };
+		CF4FAAD41695F344009734CA /* BSONGenerator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BSONGenerator.hpp; sourceTree = "<group>"; };
 		CF527E19162E2B4200E0BDE0 /* GTask.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GTask.cpp; path = Commons/Basic/GTask.cpp; sourceTree = "<group>"; };
 		CF527E1A162E2B4200E0BDE0 /* GTask.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GTask.hpp; path = Commons/Basic/GTask.hpp; sourceTree = "<group>"; };
 		CF527E1D162E33F500E0BDE0 /* LeafRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LeafRenderer.cpp; path = Commons/Rendererers/LeafRenderer.cpp; sourceTree = "<group>"; };
@@ -472,6 +492,10 @@
 		CF7E626015F7D6FC0086B71D /* FloatBufferBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FloatBufferBuilder.hpp; path = Commons/Basic/FloatBufferBuilder.hpp; sourceTree = "<group>"; };
 		CF7E626415F7DD740086B71D /* IntBufferBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IntBufferBuilder.cpp; path = Commons/Basic/IntBufferBuilder.cpp; sourceTree = "<group>"; };
 		CF7E626515F7DD740086B71D /* IntBufferBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IntBufferBuilder.hpp; path = Commons/Basic/IntBufferBuilder.hpp; sourceTree = "<group>"; };
+		CF7EDA0316948302002C760A /* ByteBufferIterator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = ByteBufferIterator.cpp; path = Commons/Basic/ByteBufferIterator.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		CF7EDA0416948302002C760A /* ByteBufferIterator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = ByteBufferIterator.hpp; path = Commons/Basic/ByteBufferIterator.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		CF7EDA081694914A002C760A /* BSONParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BSONParser.cpp; sourceTree = "<group>"; };
+		CF7EDA091694914A002C760A /* BSONParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BSONParser.hpp; sourceTree = "<group>"; };
 		CF857B2C164C757A0089F1DE /* SGRotateNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGRotateNode.cpp; path = Commons/Rendererers/SGRotateNode.cpp; sourceTree = "<group>"; };
 		CF857B2D164C757A0089F1DE /* SGRotateNode.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SGRotateNode.hpp; path = Commons/Rendererers/SGRotateNode.hpp; sourceTree = "<group>"; };
 		CF857B31164C77B00089F1DE /* SGMaterialNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGMaterialNode.cpp; path = Commons/Rendererers/SGMaterialNode.cpp; sourceTree = "<group>"; };
@@ -742,6 +766,10 @@
 		383BD3891577EDF40012AC53 /* Basic */ = {
 			isa = PBXGroup;
 			children = (
+				CF4FAAC11695C66F009734CA /* ByteBufferBuilder.cpp */,
+				CF4FAAC21695C66F009734CA /* ByteBufferBuilder.hpp */,
+				CF7EDA0316948302002C760A /* ByteBufferIterator.cpp */,
+				CF7EDA0416948302002C760A /* ByteBufferIterator.hpp */,
 				CFF95F761588E82200B56E11 /* Color.hpp */,
 				383BD38E1577EE500012AC53 /* Context.cpp */,
 				383BD38F1577EE500012AC53 /* Context.hpp */,
@@ -761,6 +789,8 @@
 				CF73BFDA15E114E3001CE412 /* FrameTasksExecutor.hpp */,
 				383BD3901577EE500012AC53 /* G3MWidget.cpp */,
 				D88B5E5115C162AF0083A43F /* G3MWidget.hpp */,
+				CF2CDD971678292E002A78A9 /* GInitializationTask.cpp */,
+				CF2CDD981678292E002A78A9 /* GInitializationTask.hpp */,
 				D8EB78831637F6B500C4EB57 /* GoToPositionEffect.hpp */,
 				CF527E19162E2B4200E0BDE0 /* GTask.cpp */,
 				CF527E1A162E2B4200E0BDE0 /* GTask.hpp */,
@@ -768,6 +798,8 @@
 				CF9D2D8715F7D3C100B5CE2E /* IBuffer.hpp */,
 				CF6873A315F77F54002EDFD0 /* IFloatBuffer.cpp */,
 				CF6873A415F77F54002EDFD0 /* IFloatBuffer.hpp */,
+				E77A1008165BEDC500FE5515 /* IG3MBuilder.cpp */,
+				E77A1009165BEDC500FE5515 /* IG3MBuilder.hpp */,
 				CF6873A815F77FFC002EDFD0 /* IIntBuffer.cpp */,
 				CF6873A915F77FFC002EDFD0 /* IIntBuffer.hpp */,
 				CF7E626415F7DD740086B71D /* IntBufferBuilder.cpp */,
@@ -794,6 +826,8 @@
 				38D786E41587B3DD003BBC75 /* Tile.hpp */,
 				CFD0021915D3C94C00735FD8 /* TileKey.cpp */,
 				CFD0021A15D3C94C00735FD8 /* TileKey.hpp */,
+				E705123A165E782C00AEADB9 /* TileRendererBuilder.cpp */,
+				E705123B165E782C00AEADB9 /* TileRendererBuilder.hpp */,
 				D80D525815EE698E00ACEA16 /* TileTessellator.cpp */,
 				CF9AEBBD159B3B95004C3558 /* TileTessellator.hpp */,
 				CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */,
@@ -805,12 +839,6 @@
 				CFFEC12415C2EB96003FA986 /* URL.hpp */,
 				CF8D0BFB15AF0D23005B5433 /* TileTexturizer.hpp */,
 				CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */,
-				E77A1008165BEDC500FE5515 /* IG3MBuilder.cpp */,
-				E77A1009165BEDC500FE5515 /* IG3MBuilder.hpp */,
-				E705123A165E782C00AEADB9 /* TileRendererBuilder.cpp */,
-				E705123B165E782C00AEADB9 /* TileRendererBuilder.hpp */,
-				CF2CDD971678292E002A78A9 /* GInitializationTask.cpp */,
-				CF2CDD981678292E002A78A9 /* GInitializationTask.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -894,6 +922,8 @@
 		A7BF53831607643400662135 /* JSON */ = {
 			isa = PBXGroup;
 			children = (
+				CF7EDA081694914A002C760A /* BSONParser.cpp */,
+				CF7EDA091694914A002C760A /* BSONParser.hpp */,
 				A70F5607161B54A400340256 /* IJSONParser.cpp */,
 				A70F5604161B53D000340256 /* IJSONParser.hpp */,
 				A7EE001F161B274300C77604 /* JSONArray.cpp */,
@@ -902,12 +932,18 @@
 				A7BF53841607643400662135 /* JSONBaseObject.hpp */,
 				CFE3DBA5164AFC4100910037 /* JSONBoolean.cpp */,
 				A70F5615161C8F9A00340256 /* JSONBoolean.hpp */,
+				CF4FAACA1695E4A8009734CA /* JSONGenerator.cpp */,
+				CF4FAACB1695E4A8009734CA /* JSONGenerator.hpp */,
 				A70F5611161C4F8F00340256 /* JSONNumber.cpp */,
 				A70F5613161C4FD000340256 /* JSONNumber.hpp */,
 				A7EE00191619D01900C77604 /* JSONObject.cpp */,
 				A7EE00171619CE2B00C77604 /* JSONObject.hpp */,
-				A70F5617161C94A100340256 /* JSONString.hpp */,
 				CFE3DBAA164AFDB000910037 /* JSONString.cpp */,
+				A70F5617161C94A100340256 /* JSONString.hpp */,
+				CF4FAAC61695D010009734CA /* JSONVisitor.cpp */,
+				CF4FAAC71695D010009734CA /* JSONVisitor.hpp */,
+				CF4FAAD31695F344009734CA /* BSONGenerator.cpp */,
+				CF4FAAD41695F344009734CA /* BSONGenerator.hpp */,
 			);
 			name = JSON;
 			path = Commons/JSON;
@@ -1339,6 +1375,12 @@
 				A70F560A161B5C6000340256 /* JSONParser_iOS.hpp in Headers */,
 				CFA189A015F8D9F80048BF46 /* IntBuffer_iOS.hpp in Headers */,
 				CFF76BE6168614AD00F658CC /* MeshRenderer.hpp in Headers */,
+				CF7EDA0616948302002C760A /* ByteBufferIterator.hpp in Headers */,
+				CF7EDA0B1694914A002C760A /* BSONParser.hpp in Headers */,
+				CF4FAAC41695C66F009734CA /* ByteBufferBuilder.hpp in Headers */,
+				CF4FAAC91695D010009734CA /* JSONVisitor.hpp in Headers */,
+				CF4FAACD1695E4A8009734CA /* JSONGenerator.hpp in Headers */,
+				CF4FAAD61695F344009734CA /* BSONGenerator.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1533,6 +1575,12 @@
 				CF00E444166FD77E0098CABD /* IImageListener.cpp in Sources */,
 				CF2CDD991678292E002A78A9 /* GInitializationTask.cpp in Sources */,
 				CFF76BE5168614AD00F658CC /* MeshRenderer.cpp in Sources */,
+				CF7EDA0516948302002C760A /* ByteBufferIterator.cpp in Sources */,
+				CF7EDA0A1694914A002C760A /* BSONParser.cpp in Sources */,
+				CF4FAAC31695C66F009734CA /* ByteBufferBuilder.cpp in Sources */,
+				CF4FAAC81695D010009734CA /* JSONVisitor.cpp in Sources */,
+				CF4FAACC1695E4A8009734CA /* JSONGenerator.cpp in Sources */,
+				CF4FAAD51695F344009734CA /* BSONGenerator.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

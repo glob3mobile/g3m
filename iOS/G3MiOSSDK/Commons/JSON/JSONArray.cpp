@@ -12,6 +12,7 @@
 #include "JSONBoolean.hpp"
 #include "JSONNumber.hpp"
 #include "JSONString.hpp"
+#include "JSONVisitor.hpp"
 
 JSONArray::~JSONArray() {
   for (int i = 0; i < _entries.size(); i++) {
@@ -123,4 +124,19 @@ const std::string JSONArray::getAsString(const int index,
                                          const std::string& defaultValue) const {
   const JSONString* jsString = getAsString(index);
   return (jsString == NULL) ? defaultValue : jsString->value();
+}
+
+void JSONArray::acceptVisitor(JSONVisitor* visitor) const {
+  visitor->visitArrayBeforeChildren(this);
+
+  const int size = this->size();
+  for (int i = 0; i < size; i++) {
+    if (i != 0) {
+      visitor->visitArrayInBetweenChildren(this);
+    }
+    visitor->visitArrayBeforeChild(this, i);
+    get(i)->acceptVisitor(visitor);
+  }
+
+  visitor->visitArrayAfterChildren(this);
 }

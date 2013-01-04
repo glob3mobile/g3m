@@ -129,6 +129,27 @@ public:
     return (d1 > d2) ? d1 : d2;
   }
 
+
+  long long doubleToRawLongBits(double value) const {
+    union DoubleAndLong {
+      double    _d;
+      long long _l;
+    } dal;
+
+    dal._d = value;
+    return dal._l;
+  }
+
+  double rawLongBitsToDouble(long long value) const {
+    union DoubleAndLong {
+      double    _d;
+      long long _l;
+    } dal;
+
+    dal._l = value;
+    return dal._d;
+  }
+
 };
 
 #endif

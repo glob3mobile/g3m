@@ -62,6 +62,10 @@ public:
   {
   }
 
+  const number_type getType() const {
+    return _type;
+  }
+
   int    intValue()    const;
   float  floatValue()  const;
   double doubleValue() const;
@@ -81,8 +85,8 @@ public:
                           _type);
   }
 
+  void acceptVisitor(JSONVisitor* visitor) const;
+  
 };
-
-
 
 #endif

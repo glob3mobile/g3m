@@ -19,31 +19,30 @@
 #define JSONParser IJSONParser.instance() //FOR JAVA CONVERTER
 #endif
 
-class IJSONParser{ 
-  
+class IJSONParser{
+private:
   static IJSONParser* _instance;
-  
+
 public:
-  
+
   static void setInstance(IJSONParser* parser){
     if (_instance != NULL){
       ILogger::instance()->logWarning("Warning, IJSONParser instance set two times\n");
     }
     _instance = parser;
   }
-  
+
   static IJSONParser* instance(){
     return _instance;
   }
-  
-  
+
   virtual ~IJSONParser(){}
-  
+
   virtual JSONBaseObject* parse(const std::string& json) = 0;
 
   virtual JSONBaseObject* parse(IByteBuffer* buffer) = 0;
 
-  virtual void deleteJSONData(JSONBaseObject* object){
+  virtual void deleteJSONData(JSONBaseObject* object) {
     delete object;
   }
   

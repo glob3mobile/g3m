@@ -11,10 +11,10 @@
 
 #include "JSONBaseObject.hpp"
 
-class JSONString : public JSONBaseObject{
+class JSONString : public JSONBaseObject {
 private:
   const std::string _value;
-  
+
 public:
   ~JSONString() { }
 
@@ -36,6 +36,8 @@ public:
   JSONString* deepCopy() const {
     return new JSONString(_value);
   }
+
+  void acceptVisitor(JSONVisitor* visitor) const;
 
 };
 

@@ -10,11 +10,8 @@
 #define __G3MiOSSDK__FloatBufferBuilder__
 
 #include <vector>
-#include "Vector2D.hpp"
-#include "Vector3D.hpp"
 
 class IFloatBuffer;
-class IFactory;
 
 class FloatBufferBuilder {
 protected:
