@@ -58,17 +58,17 @@ void BSONGenerator::visitBoolean(const JSONBoolean* value) {
 void BSONGenerator::visitNumber(const JSONNumber* value) {
   switch ( value->getType() ) {
     case int_type:
-      _builder->add(0x10);
+      _builder->add((unsigned char) 0x10);
       addCurrentKey();
       _builder->addInt32( value->intValue() );
       break;
     case float_type:
-      _builder->add(0x01);
+      _builder->add((unsigned char) 0x01);
       addCurrentKey();
       _builder->addDouble( value->floatValue() );
       break;
     case double_type:
-      _builder->add(0x01);
+      _builder->add((unsigned char) 0x01);
       addCurrentKey();
       _builder->addDouble( value->doubleValue() );
       break;
@@ -80,7 +80,7 @@ void BSONGenerator::visitNumber(const JSONNumber* value) {
 }
 
 void BSONGenerator::visitString(const JSONString* value) {
-  _builder->add(0x02); // type string
+  _builder->add((unsigned char) 0x02); // type string
   addCurrentKey();
 
   const std::string str = value->value();
@@ -89,8 +89,8 @@ void BSONGenerator::visitString(const JSONString* value) {
 }
 
 void BSONGenerator::visitArrayBeforeChildren(const JSONArray* value) {
-//  _builder->add(0x04); // type array
-  _builder->add(0x44); // type customized-array
+//  _builder->add((unsigned char) 0x04); // type array
+  _builder->add((unsigned char) 0x44); // type customized-array
   addCurrentKey();
 
   _positionsStack.push_back(_builder->size()); // store current position, to update the size later
@@ -114,14 +114,14 @@ void BSONGenerator::visitArrayAfterChildren(const JSONArray* value) {
   unsigned int sizePosition = _positionsStack.back();
   _positionsStack.pop_back();
 
-  _builder->add(0);
+  _builder->add((unsigned char) 0);
   _builder->setInt32(sizePosition, _builder->size() - sizePosition);
 }
 
 void BSONGenerator::visitObjectBeforeChildren(const JSONObject* value) {
   if (_positionsStack.size() != 0) {
     // if positions back is not empty, it means the object is not the outer object
-    _builder->add(0x03); // type document
+    _builder->add((unsigned char) 0x03); // type document
     addCurrentKey();
   }
 
@@ -142,6 +142,6 @@ void BSONGenerator::visitObjectAfterChildren(const JSONObject* value) {
   unsigned int sizePosition = _positionsStack.back();
   _positionsStack.pop_back();
 
-  _builder->add(0);
+  _builder->add((unsigned char) 0);
   _builder->setInt32(sizePosition, _builder->size() - sizePosition);
 }
