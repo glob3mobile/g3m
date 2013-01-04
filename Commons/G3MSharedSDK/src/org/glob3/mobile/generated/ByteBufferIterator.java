@@ -109,7 +109,7 @@ public class ByteBufferIterator
 
   public final String nextZeroTerminatedString()
   {
-	IByteBuffer buffer = nextBufferUpTo('\0');
+	IByteBuffer buffer = nextBufferUpTo((byte) 0);
 	final String result = buffer.getAsString();
 	if (buffer != null)
 		buffer.dispose();
