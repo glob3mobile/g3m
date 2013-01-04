@@ -15,6 +15,7 @@
 #include "JSONString.hpp"
 #include "JSONArray.hpp"
 #include "JSONNumber.hpp"
+#include "JSONBoolean.hpp"
 
 JSONBaseObject* BSONParser::parse(IByteBuffer* buffer) {
 
@@ -60,6 +61,12 @@ JSONBaseObject* BSONParser::parseValue(const unsigned char type,
     case 0x10: {
       return parseInt(iterator);
     }
+    case 0x08: {
+      return parseBool(iterator);
+    }
+    case 0x03: {
+      return parseObject(iterator);
+    }
     default: {
       ILogger::instance()->logError("Unknown type %d", type);
       return NULL;
@@ -82,7 +89,8 @@ JSONString* BSONParser::parseString(ByteBufferIterator* iterator) {
 }
 
 JSONArray* BSONParser::parseArray(ByteBufferIterator* iterator) {
-  const int arraySize = iterator->nextInt32();
+  //const int arraySize = iterator->nextInt32();
+  iterator->nextInt32(); // consumes the size
 
   JSONArray* result = new JSONArray();
   while (iterator->hasNext()) {
@@ -102,11 +110,38 @@ JSONArray* BSONParser::parseArray(ByteBufferIterator* iterator) {
 }
 
 JSONNumber* BSONParser::parseDouble(ByteBufferIterator* iterator) {
-  const double d = iterator->nextDouble();
-  return new JSONNumber(d);
+  return new JSONNumber( iterator->nextDouble() );
 }
 
 JSONNumber* BSONParser::parseInt(ByteBufferIterator* iterator) {
-  const int i = iterator->nextInt32();
-  return new JSONNumber(i);
+  return new JSONNumber( iterator->nextInt32() );
+}
+
+JSONBoolean* BSONParser::parseBool(ByteBufferIterator* iterator) {
+  unsigned char b = iterator->nextUInt8();
+  if (b == 0x01) {
+    return new JSONBoolean(true);
+  }
+  return new JSONBoolean(false);
+}
+
+JSONObject* BSONParser::parseObject(ByteBufferIterator* iterator) {
+  //const int objectSize = iterator->nextInt32();
+  iterator->nextInt32(); // consumes the size
+
+  JSONObject* result = new JSONObject();
+  while (iterator->hasNext()) {
+    const unsigned char type = iterator->nextUInt8();
+    if (type == 0) {
+      break;
+    }
+
+    const std::string key = iterator->nextZeroTerminatedString();
+    JSONBaseObject* value = parseValue(type, iterator);
+    if (value != NULL) {
+      result->put(key, value);
+    }
+  }
+
+  return result;
 }
