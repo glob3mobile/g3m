@@ -26,14 +26,14 @@ public class ByteBufferBuilder
 
   public final void addInt64(long value)
   {
-	final byte b1 = (value) & 0xFF;
-	final byte b2 = (value >> 8) & 0xFF;
-	final byte b3 = (value >> 16) & 0xFF;
-	final byte b4 = (value >> 24) & 0xFF;
-	final byte b5 = (value >> 32) & 0xFF;
-	final byte b6 = (value >> 40) & 0xFF;
-	final byte b7 = (value >> 48) & 0xFF;
-	final byte b8 = (value >> 56) & 0xFF;
+	final byte b1 = (byte)((value) & 0xFF);
+	final byte b2 = (byte)((value >> 8) & 0xFF);
+	final byte b3 = (byte)((value >> 16) & 0xFF);
+	final byte b4 = (byte)((value >> 24) & 0xFF);
+	final byte b5 = (byte)((value >> 32) & 0xFF);
+	final byte b6 = (byte)((value >> 40) & 0xFF);
+	final byte b7 = (byte)((value >> 48) & 0xFF);
+	final byte b8 = (byte)((value >> 56) & 0xFF);
 
 	_values.add(b1);
 	_values.add(b2);
@@ -52,10 +52,10 @@ public class ByteBufferBuilder
 
   public final void addInt32(int value)
   {
-	final byte b1 = (value) & 0xFF;
-	final byte b2 = (value >> 8) & 0xFF;
-	final byte b3 = (value >> 16) & 0xFF;
-	final byte b4 = (value >> 24) & 0xFF;
+	final byte b1 = (byte)((value) & 0xFF);
+	final byte b2 = (byte)((value >> 8) & 0xFF);
+	final byte b3 = (byte)((value >> 16) & 0xFF);
+	final byte b4 = (byte)((value >> 24) & 0xFF);
 
 	_values.add(b1);
 	_values.add(b2);
@@ -65,10 +65,10 @@ public class ByteBufferBuilder
 
   public final void setInt32(int i, int value)
   {
-	final byte b1 = (value) & 0xFF;
-	final byte b2 = (value >> 8) & 0xFF;
-	final byte b3 = (value >> 16) & 0xFF;
-	final byte b4 = (value >> 24) & 0xFF;
+	final byte b1 = (byte)((value) & 0xFF);
+	final byte b2 = (byte)((value >> 8) & 0xFF);
+	final byte b3 = (byte)((value >> 16) & 0xFF);
+	final byte b4 = (byte)((value >> 24) & 0xFF);
 
 	_values.set(i, b1);
 	_values.set(i + 1, b2);
@@ -84,7 +84,7 @@ public class ByteBufferBuilder
 	  final byte c = String.charAt(i);
 	  _values.add(c);
 	}
-	_values.add(0);
+	_values.add((byte) 0);
   }
 
   public final void add(byte value)
