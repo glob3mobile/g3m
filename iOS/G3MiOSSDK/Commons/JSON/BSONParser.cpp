@@ -67,6 +67,9 @@ JSONBaseObject* BSONParser::parseValue(const unsigned char type,
     case 0x03: {
       return parseObject(iterator);
     }
+    case 0x44: {
+      return parseCustomizedArray(iterator);
+    }
     default: {
       ILogger::instance()->logError("Unknown type %d", type);
       return NULL;
@@ -108,6 +111,28 @@ JSONArray* BSONParser::parseArray(ByteBufferIterator* iterator) {
 
   return result;
 }
+
+JSONArray* BSONParser::parseCustomizedArray(ByteBufferIterator* iterator) {
+  //const int arraySize = iterator->nextInt32();
+  iterator->nextInt32(); // consumes the size
+
+  JSONArray* result = new JSONArray();
+  while (iterator->hasNext()) {
+    const unsigned char type = iterator->nextUInt8();
+    if (type == 0) {
+      break;
+    }
+
+    //const std::string key = iterator->nextZeroTerminatedString();
+    JSONBaseObject* value = parseValue(type, iterator);
+    if (value != NULL) {
+      result->add(value);
+    }
+  }
+
+  return result;
+}
+
 
 JSONNumber* BSONParser::parseDouble(ByteBufferIterator* iterator) {
   return new JSONNumber( iterator->nextDouble() );

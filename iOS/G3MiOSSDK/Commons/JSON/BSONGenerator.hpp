@@ -29,6 +29,8 @@ private:
 
   std::vector<unsigned int> _positionsStack;
 
+  void addCurrentKey();
+
 public:
   virtual ~BSONGenerator();
 

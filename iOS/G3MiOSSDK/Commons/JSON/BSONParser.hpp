@@ -30,6 +30,7 @@ private:
 
   static JSONString*  parseString(ByteBufferIterator* iterator);
   static JSONArray*   parseArray(ByteBufferIterator* iterator);
+  static JSONArray*   parseCustomizedArray(ByteBufferIterator* iterator);
   static JSONNumber*  parseDouble(ByteBufferIterator* iterator);
   static JSONNumber*  parseInt(ByteBufferIterator* iterator);
   static JSONBoolean* parseBool(ByteBufferIterator* iterator);
