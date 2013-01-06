@@ -82,7 +82,7 @@ public class ByteBufferBuilder
 //#if JAVA_CODE
 	try
 	{
-	  final[] byte bytesArray = str.getBytes("UTF8");
+	  byte[] bytesArray = str.getBytes("UTF8");
   
 	  final int size = bytesArray.length;
 	  for (int i = 0; i < size; i++)
