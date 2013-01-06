@@ -35,16 +35,16 @@ void ByteBufferBuilder::addStringZeroTerminated(const std::string& str) {
 #endif
 #if JAVA_CODE
   try {
-    final byte[] bytes = str.getBytes("UTF8");
+    final byte[] bytesArray = str.getBytes("UTF8");
 
-    final int size = bytes.length;
+    final int size = bytesArray.length;
     for (int i = 0; i < size; i++) {
-      final byte c = bytes[i];
+      final byte c = bytesArray[i];
       _values.add(c);
     }
     _values.add((byte) 0);
   }
-  catch (final UnsupportedEncodingException e) {
+  catch (final java.io.UnsupportedEncodingException e) {
     e.printStackTrace();
   }
 #endif
