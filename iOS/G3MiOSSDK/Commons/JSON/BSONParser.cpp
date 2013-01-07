@@ -102,7 +102,8 @@ JSONArray* BSONParser::parseArray(ByteBufferIterator* iterator) {
       break;
     }
     
-    const std::string key = iterator->nextZeroTerminatedString();
+    // const std::string key = iterator->nextZeroTerminatedString();
+    iterator->nextZeroTerminatedString(); // consumes the key
     JSONBaseObject* value = parseValue(type, iterator);
     if (value != NULL) {
       result->add(value);
