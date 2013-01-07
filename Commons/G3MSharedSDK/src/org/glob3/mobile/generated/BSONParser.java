@@ -108,7 +108,8 @@ public class BSONParser
 		break;
 	  }
   
-	  final String key = iterator.nextZeroTerminatedString();
+	  // const std::string key = iterator->nextZeroTerminatedString();
+	  iterator.nextZeroTerminatedString(); // consumes the key
 	  JSONBaseObject value = parseValue(type, iterator);
 	  if (value != null)
 	  {
