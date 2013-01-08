@@ -10,10 +10,8 @@
 
 #import "G3MWidget_iOS.h"
 
-@interface ViewController : UIViewController{
-
-IBOutlet G3MWidget_iOS* G3MWidget;
-    
+@interface ViewController : UIViewController {
+  IBOutlet G3MWidget_iOS* G3MWidget;
 }
 
 @property (retain, nonatomic) G3MWidget_iOS* G3MWidget;
