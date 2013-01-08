@@ -72,6 +72,14 @@ IG3MBuilder::~IG3MBuilder() {
   //  delete _userData;
 }
 
+const Planet* IG3MBuilder::getPlanet() {
+  if (!_planet) {
+    _planet = Planet::createEarth();
+  }
+  return _planet;
+}
+
+
 G3MWidget* IG3MBuilder::create() {
 
   if (_gl == NULL) {
@@ -89,10 +97,6 @@ G3MWidget* IG3MBuilder::create() {
 
   if (!_threadUtils) {
     _threadUtils = createThreadUtils();
-  }
-
-  if (!_planet) {
-    _planet = Planet::createEarth();
   }
 
   if (_cameraConstraints.size() == 0) {
@@ -149,7 +153,7 @@ G3MWidget* IG3MBuilder::create() {
                                             _storage,
                                             _downloader,
                                             _threadUtils,
-                                            _planet,
+                                            getPlanet(),
                                             _cameraConstraints,
                                             _cameraRenderer,
                                             mainRenderer,

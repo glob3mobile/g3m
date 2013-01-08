@@ -25,11 +25,19 @@ import org.glob3.mobile.generated.UserData;
 import org.glob3.mobile.generated.Vector3D;
 import org.glob3.mobile.generated.WMSLayer;
 import org.glob3.mobile.generated.WMSServerVersion;
+import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
 
 import android.content.Context;
 
 
+/**
+ * Does some thing in old style.
+ * 
+ * @deprecated use {@link G3MBuilder_Android} instead.
+ */
+
+@Deprecated
 public class G3MBuilder {
 
 

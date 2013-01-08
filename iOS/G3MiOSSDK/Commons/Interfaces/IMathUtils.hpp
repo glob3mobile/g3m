@@ -125,8 +125,10 @@ public:
     return from + ((to - from) * alpha);
   }
 
-};
+  virtual long long doubleToRawLongBits(double value) const = 0;
+  virtual double rawLongBitsToDouble(long long value) const = 0;
 
+};
 
 
 #endif

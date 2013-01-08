@@ -49,6 +49,14 @@
 #include "Downloader_iOS.hpp"
 #include "ThreadUtils_iOS.hpp"
 #include "Planet.hpp"
+#include "MeshRenderer.hpp"
+#include "FloatBufferBuilderFromGeodetic.hpp"
+#include "FloatBufferBuilderFromColor.hpp"
+#include "DirectMesh.hpp"
+#include "IJSONParser.hpp"
+#include "JSONGenerator.hpp"
+#include "BSONGenerator.hpp"
+#include "BSONParser.hpp"
 
 #include "Mark.hpp"
 #include "MarkTouchListener.hpp"
@@ -71,13 +79,13 @@
 
   // initialize a customized widget without using a builder
   [[self G3MWidget] initSingletons];
-  [self initWithoutBuilder];
+  // [self initWithoutBuilder];
 
   // initizalize a default widget by using a builder
   //    [self initDefaultWithBuilder];
 
   // initialize a customized widget by using a buider
-  //    [self initCustomizedWithBuilder];
+  [self initCustomizedWithBuilder];
 
   [[self G3MWidget] startAnimation];
 }
@@ -185,6 +193,11 @@
   GEORenderer* geoRenderer = [self createGEORenderer];
   builder->addRenderer(geoRenderer);
 
+  MeshRenderer* meshRenderer = new MeshRenderer();
+  builder->addRenderer( meshRenderer );
+
+  meshRenderer->addMesh([self createPointsMesh: builder->getPlanet() ]);
+
   GInitializationTask* initializationTask = [self createSampleInitializationTask: shapesRenderer
                                                                      geoRenderer: geoRenderer];
   builder->setInitializationTask(initializationTask, true);
@@ -203,6 +216,45 @@
 
   // initialization
   builder->initializeWidget();
+}
+
+- (Mesh*) createPointsMesh: (const Planet*)planet
+{
+  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
+                                          planet,
+                                          Geodetic2D::zero());
+  FloatBufferBuilderFromColor colors;
+
+  const Angle centerLat = Angle::fromDegreesMinutesSeconds(38, 53, 42);
+  const Angle centerLon = Angle::fromDegreesMinutesSeconds(-77, 02, 11);
+
+  const Angle deltaLat = Angle::fromDegrees(1).div(16);
+  const Angle deltaLon = Angle::fromDegrees(1).div(16);
+
+  const int steps = 128;
+  const int halfSteps = steps/2;
+  for (int i = -halfSteps; i < halfSteps; i++) {
+    Angle lat = centerLat.add( deltaLat.times(i) );
+    for (int j = -halfSteps; j < halfSteps; j++) {
+      Angle lon = centerLon.add( deltaLon.times(j) );
+
+      vertices.add( Geodetic3D(lat, lon, 100000) );
+
+      const float red   = (float) (i + halfSteps + 1) / steps;
+      const float green = (float) (j + halfSteps + 1) / steps;
+      colors.add(Color::fromRGBA(red, green, 0, 1));
+    }
+  }
+
+  float lineWidth = 1;
+  Color* flatColor = NULL;
+  return new DirectMesh(GLPrimitive::points(),
+                        true,
+                        vertices.getCenter(),
+                        vertices.create(),
+                        lineWidth,
+                        flatColor,
+                        colors.create());
 }
 
 - (CameraRenderer*) createCameraRenderer
@@ -563,6 +615,43 @@
           _geoRenderer->addGEOObject(geoObject);
         }
       }
+      */
+
+      /*
+      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
+                                                                ofType: @"json"];
+      if (planeFilePath) {
+        NSString *nsPlaneJSON = [NSString stringWithContentsOfFile: planeFilePath
+                                                          encoding: NSUTF8StringEncoding
+                                                             error: nil];
+        if (nsPlaneJSON) {
+          std::string planeJSON = [nsPlaneJSON UTF8String];
+          JSONBaseObject* jsonObject = IJSONParser::instance()->parse(planeJSON);
+
+          IByteBuffer* bson = BSONGenerator::generate(jsonObject);
+          printf("%s\n", bson->description().c_str());
+        }
+      }
+       */
+
+      /*
+      // JSONBaseObject* jsonObject = IJSONParser::instance()->parse("{\"key1\":\"string\", \"key2\": 100, \"key3\": false, \"key4\":123.5}");
+      //JSONBaseObject* jsonObject = IJSONParser::instance()->parse("{\"hello\":\"world\"}");
+      JSONBaseObject* jsonObject = IJSONParser::instance()->parse("{\"BSON\": [\"awesome\", 5.05, 1986, true, false], \"X\": {\"foo\": 100}}");
+      printf("%s\n", jsonObject->description().c_str());
+
+      std::string jsonString = JSONGenerator::generate(jsonObject);
+      printf("%s (lenght=%lu)\n", jsonString.c_str(), jsonString.size());
+
+      IByteBuffer* bson = BSONGenerator::generate(jsonObject);
+      printf("%s\n", bson->description().c_str());
+
+      JSONBaseObject* bsonObject = BSONParser::parse(bson);
+      printf("%s\n", bsonObject->description().c_str());
+
+      delete bson;
+
+      delete jsonObject;
       */
     }
 

@@ -28,6 +28,9 @@ package org.glob3.mobile.generated;
 //class JSONString;
 
 
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class JSONVisitor;
+
 public abstract class JSONBaseObject
 {
 
@@ -84,5 +87,9 @@ public abstract class JSONBaseObject
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual const String description() const = 0;
   public abstract String description();
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual void acceptVisitor(JSONVisitor* visitor) const = 0;
+  public abstract void acceptVisitor(JSONVisitor visitor);
 
 }

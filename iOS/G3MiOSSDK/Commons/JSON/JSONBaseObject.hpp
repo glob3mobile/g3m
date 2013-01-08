@@ -17,8 +17,10 @@ class JSONString;
 
 #include <string>
 
+class JSONVisitor;
+
 class JSONBaseObject {
-  
+
 public:
 
   static JSONBaseObject* deepCopy(const JSONBaseObject* object) {
@@ -26,8 +28,8 @@ public:
   }
 
   virtual ~JSONBaseObject() {
-  };
-  
+  }
+
   virtual const JSONObject*  asObject()  const;
   virtual const JSONArray*   asArray()   const;
   virtual const JSONBoolean* asBoolean() const;
@@ -37,6 +39,8 @@ public:
   virtual JSONBaseObject* deepCopy() const = 0;
 
   virtual const std::string description() const = 0;
+
+  virtual void acceptVisitor(JSONVisitor* visitor) const = 0;
 
 };
 

@@ -59,5 +59,11 @@ public class JSONBoolean extends JSONBaseObject
 	return new JSONBoolean(_value);
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: void acceptVisitor(JSONVisitor* visitor) const
+  public final void acceptVisitor(JSONVisitor visitor)
+  {
+	visitor.visitBoolean(this);
+  }
 
 }

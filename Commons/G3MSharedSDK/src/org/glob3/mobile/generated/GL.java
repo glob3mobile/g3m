@@ -852,8 +852,8 @@ public class GL
 	if (_pointSize != pointSize)
 	{
 	  _nativeGL.uniform1f(GlobalMembersGL.Uniforms.PointSize, pointSize);
+	  _pointSize = pointSize;
 	}
-  
   }
 
 }

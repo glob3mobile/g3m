@@ -31,7 +31,7 @@ public class JSONObject extends JSONBaseObject
   {
 	isb.addString("\"");
 	isb.addString(key);
-	isb.addString("\"=");
+	isb.addString("\":");
 	isb.addString(get(key).description());
   }
 
@@ -183,6 +183,30 @@ public class JSONObject extends JSONBaseObject
 	}
   
 	return result;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: void acceptVisitor(JSONVisitor* visitor) const
+  public final void acceptVisitor(JSONVisitor visitor)
+  {
+	visitor.visitObjectBeforeChildren(this);
+  
+	java.util.ArrayList<String> keys = this.keys();
+  
+	int keysCount = keys.size();
+	for (int i = 0; i < keysCount; i++)
+	{
+	  if (i != 0)
+	  {
+		visitor.visitObjectInBetweenChildren(this);
+	  }
+	  String key = keys.get(i);
+	  visitor.visitObjectBeforeChild(this, key);
+	  final JSONBaseObject child = get(key);
+	  child.acceptVisitor(visitor);
+	}
+  
+	visitor.visitObjectAfterChildren(this);
   }
 
 }

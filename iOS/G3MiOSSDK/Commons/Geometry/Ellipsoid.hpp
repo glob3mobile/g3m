@@ -53,7 +53,7 @@ public:
                                              const Vector3D& direction) const;
   
   Vector3D toCartesian(const Geodetic3D& geodetic) const;
-  
+
   Vector3D toCartesian(const Geodetic2D& geodetic) const {
     return toCartesian(Geodetic3D(geodetic, 0.0));
   }

@@ -642,7 +642,6 @@ void GL::setState(const GLState& state) {
   const float pointSize = state.pointSize();
   if (_pointSize != pointSize) {
     _nativeGL->uniform1f(Uniforms.PointSize, pointSize);
+    _pointSize = pointSize;
   }
-  
 }
-
