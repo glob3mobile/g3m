@@ -10,18 +10,20 @@
 #include "GL.hpp"
 
 DirectMesh::DirectMesh(const int primitive,
-                         bool owner,
-                         const Vector3D& center,
-                         IFloatBuffer* vertices,
-                         float lineWidth,
-                         Color* flatColor,
-                         IFloatBuffer* colors,
-                         const float colorsIntensity) :
+                       bool owner,
+                       const Vector3D& center,
+                       IFloatBuffer* vertices,
+                       float lineWidth,
+                       float pointSize,
+                       Color* flatColor,
+                       IFloatBuffer* colors,
+                       const float colorsIntensity) :
 AbstractMesh(primitive,
              owner,
              center,
              vertices,
              lineWidth,
+             pointSize,
              flatColor,
              colors,
              colorsIntensity)

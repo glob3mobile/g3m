@@ -67,6 +67,7 @@ void BusyMeshRenderer::initialize(const G3MContext* context)
                           vertices.create(),
                           indices.create(),
                           1,
+                          1,
                           NULL,
                           colors.create());
 

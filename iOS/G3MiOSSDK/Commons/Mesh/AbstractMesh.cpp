@@ -29,6 +29,7 @@ AbstractMesh::AbstractMesh(const int primitive,
                            const Vector3D& center,
                            IFloatBuffer* vertices,
                            float lineWidth,
+                           float pointSize,
                            Color* flatColor,
                            IFloatBuffer* colors,
                            const float colorsIntensity) :
@@ -43,7 +44,8 @@ _center(center),
 _translationMatrix(( center.isNan() || center.isZero() )
                    ? NULL
                    : new MutableMatrix44D(MutableMatrix44D::createTranslationMatrix(center)) ),
-_lineWidth(lineWidth)
+_lineWidth(lineWidth),
+_pointSize(pointSize)
 {
 }
 
@@ -111,6 +113,7 @@ void AbstractMesh::render(const G3MRenderContext *rc,
   GLState state(parentState);
   state.enableVerticesPosition();
   state.setLineWidth(_lineWidth);
+  state.setPointSize(_pointSize);
   if (_colors) {
     state.enableVertexColor(_colors, _colorsIntensity);
   }

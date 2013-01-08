@@ -121,6 +121,7 @@ Mesh* SimplePlanetRenderer::createMesh(const G3MRenderContext* rc) {
                                              vertices,
                                              indices,
                                              1,
+                                             1,
                                              flatColor,
                                              vertexColors);
 

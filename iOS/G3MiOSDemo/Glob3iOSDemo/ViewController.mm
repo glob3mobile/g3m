@@ -243,12 +243,14 @@
   }
 
   float lineWidth = 1;
+  float pointSize = 2;
   Color* flatColor = NULL;
   return new DirectMesh(GLPrimitive::points(),
                         true,
                         vertices.getCenter(),
                         vertices.create(),
                         lineWidth,
+                        pointSize,
                         flatColor,
                         colors.create());
 }
