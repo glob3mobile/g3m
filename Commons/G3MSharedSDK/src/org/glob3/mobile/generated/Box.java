@@ -293,7 +293,7 @@ public class Box extends Extent
 	  indices.add(i[n]);
 	}
   
-	_mesh = new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, color);
+	_mesh = new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, color);
   }
 
 }

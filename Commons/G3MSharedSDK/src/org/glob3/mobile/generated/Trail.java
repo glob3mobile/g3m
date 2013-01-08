@@ -42,7 +42,7 @@ public class Trail
   	  vertices.add( _positions.get(i) );
 	}
   
-	return new DirectMesh(GLPrimitive.lineStrip(), true, vertices.getCenter(), vertices.create(), _lineWidth, new Color(_color));
+	return new DirectMesh(GLPrimitive.lineStrip(), true, vertices.getCenter(), vertices.create(), _lineWidth, 1, new Color(_color));
   }
 
   private Mesh _mesh;
