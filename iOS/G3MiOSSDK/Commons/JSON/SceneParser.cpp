@@ -164,8 +164,6 @@ void SceneParser::parserJSONPlanarImageLayer(LayerSet* layerSet, const JSONObjec
         
         _panoSources.push_back(url->getString());
     }
-
-    
 }
 
 void SceneParser::parserGEOJSONLayer(LayerSet* layerSet, const JSONObject* jsonLayer){
@@ -179,7 +177,6 @@ void SceneParser::parserGEOJSONLayer(LayerSet* layerSet, const JSONObject* jsonL
         const std::string namefile = jsonItems->getAsObject(i)->getAsString(NAME)->value();
         const std::string icon = jsonItems->getAsObject(i)->getAsString(URLICON)->value();
         const std::string minDistance = jsonItems->getAsObject(i)->getAsString(MINDISTANCE)->value();
-
         
         IStringBuilder *url = IStringBuilder::newStringBuilder();
         url->addString(geojsonDatasource);

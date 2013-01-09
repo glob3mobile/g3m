@@ -23,6 +23,16 @@
 
 #include "Geodetic2D.hpp"
 
+GEOLineStringGeometry* GEOJSONParser::createLineString(const JSONObject* jsonObject){
+    GEOJSONParser parser("");
+    return parser.createLineStringGeometry(jsonObject);
+}
+
+GEOMultiLineStringGeometry* GEOJSONParser::createMultiLineString(const JSONObject* jsonObject){
+    GEOJSONParser parser("");
+    return parser.createMultiLineStringGeometry(jsonObject);
+}
+
 GEOObject* GEOJSONParser::parse(const IByteBuffer* json) {
   return parse(json->getAsString());
 }
@@ -160,7 +170,7 @@ GEOMultiLineStringGeometry* GEOJSONParser::createMultiLineStringGeometry(const J
 
     for (int i = 0; i < coordinatesArrayCount; i++) {
       const JSONArray* jsCoordinates = jsCoordinatesArray->getAsArray(i);
-      std::vector<Geodetic2D*>* coordinates = create2DCoordinates(jsCoordinates);
+        std::vector<Geodetic2D*>* coordinates = create2DCoordinates(jsCoordinates);
       if (coordinates != NULL) {
         coordinatesArray->push_back( coordinates );
         _lineStringsInMultiLineString2DCount++;

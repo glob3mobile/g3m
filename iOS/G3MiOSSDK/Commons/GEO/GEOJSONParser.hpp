@@ -50,6 +50,7 @@ private:
   {
 
   }
+    
 
   GEOObject* pvtParse() const;
 
@@ -68,6 +69,10 @@ private:
   void showStatistics() const;
 
 public:
+    
+  static GEOLineStringGeometry* createLineString(const JSONObject* jsonObject);
+    
+  static GEOMultiLineStringGeometry* createMultiLineString(const JSONObject* jsonObject);
 
   static GEOObject* parse(const std::string& json);
 

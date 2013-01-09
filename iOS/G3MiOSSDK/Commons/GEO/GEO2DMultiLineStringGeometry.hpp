@@ -12,19 +12,26 @@
 #include "GEOMultiLineStringGeometry.hpp"
 
 #include <vector>
+#include "Color.hpp"
+
 class Geodetic2D;
 
 class GEO2DMultiLineStringGeometry : public GEOMultiLineStringGeometry {
 private:
   std::vector<std::vector<Geodetic2D*>*>* _coordinatesArray;
+  Color* _color;
+  const float _lineWidth;
 
 protected:
   Mesh* createMesh(const G3MRenderContext* rc);
 
 public:
 
-  GEO2DMultiLineStringGeometry(std::vector<std::vector<Geodetic2D*>*>* coordinatesArray) :
-  _coordinatesArray(coordinatesArray) {
+    GEO2DMultiLineStringGeometry(std::vector<std::vector<Geodetic2D*>*>* coordinatesArray, Color* color = Color::newFromRGBA(1, 1, 1, 1), const float lineWidth = 2) :
+  _coordinatesArray(coordinatesArray),
+  _color(color),
+  _lineWidth(lineWidth)
+  {
 
   }
 

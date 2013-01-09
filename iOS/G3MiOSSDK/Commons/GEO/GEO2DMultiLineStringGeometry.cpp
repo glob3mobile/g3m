@@ -62,13 +62,10 @@ Mesh* GEO2DMultiLineStringGeometry::createMesh(const G3MRenderContext* rc) {
     }
   }
 
-  Color* color = Color::newFromRGBA(1, 1, 1, 1);
-  const float lineWidth = 2;
-
   return new DirectMesh(GLPrimitive::lines(),
                         true,
                         vertices.getCenter(),
                         vertices.create(),
-                        lineWidth,
-                        color);
+                        _lineWidth,
+                        _color);
 }
