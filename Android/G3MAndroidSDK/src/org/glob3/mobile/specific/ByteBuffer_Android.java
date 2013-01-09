@@ -58,6 +58,13 @@ public final class ByteBuffer_Android
    }
 
 
+   @Override
+   public void rawPut(final int i,
+                      final byte value) {
+      _buffer.put(i, value);
+   }
+
+
    public ByteBuffer getBuffer() {
       return _buffer;
    }
@@ -74,5 +81,6 @@ public final class ByteBuffer_Android
       final byte[] bytes = _buffer.array();
       return new String(bytes);
    }
+
 
 }

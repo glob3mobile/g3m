@@ -8,6 +8,8 @@
 
 #import "G3MMarkersViewController.h"
 
+#import "G3MWebViewController.h"
+
 #include "G3MBuilder_iOS.hpp"
 #include "MarksRenderer.hpp"
 #include "Downloader_iOS.hpp"
@@ -19,7 +21,6 @@
 #include "JSONString.hpp"
 
 @interface G3MMarkersViewController ()
-
 @end
 
 @implementation G3MMarkersViewController
@@ -38,7 +39,7 @@
 - (void)viewDidLoad
 {
   [super viewDidLoad];
-
+  
   // Create a builder
   G3MBuilder_iOS builder([self glob3]);
   
@@ -52,7 +53,12 @@
   
   // Initialize widget
   builder.initializeWidget();
-  
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+  [super viewDidAppear:animated];
+
   // Let's get the show on the road!
   [[self glob3] startAnimation];
 }
@@ -85,15 +91,26 @@
 - (MarksRenderer*) createMarksRenderer
 {
   class TestMarkTouchListener : public MarkTouchListener {
+  private:
+    G3MMarkersViewController* _vc;
   public:
+    TestMarkTouchListener(G3MMarkersViewController* vc) {
+      _vc = vc;
+    }
     bool touchedMark(Mark* mark) {
-      NSString* message = [NSString stringWithFormat: @"Touched on mark \"%s\"", mark->getName().c_str()];
+      NSString* message = [NSString stringWithFormat: @"%s", mark->getName().c_str()];
+
+      UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"glob3 mobile"
+                                                      message: message
+                                                     delegate: _vc
+                                            cancelButtonTitle: @"OK"
+                                            otherButtonTitles: @"Learn more...",nil];
       
-      UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"glob3 mobile"
-                                                      message:message
-                                                     delegate:nil
-                                            cancelButtonTitle:@"OK"
-                                            otherButtonTitles:nil];
+      UserData* markerUD = ((MarkerDemo*) mark)->getUserData();
+      URL markUrl = ((MarkerUserData*) markerUD)->getUrl();
+      [_vc setValue: [NSString stringWithCString: markUrl.getPath().c_str()
+                                        encoding: NSUTF8StringEncoding]
+             forKey: @"urlMarkString"];
       [alert show];
       
       return true;
@@ -103,7 +120,7 @@
   const bool readyWhenMarksReady = false;
   MarksRenderer* marksRenderer = new MarksRenderer(readyWhenMarksReady);
   
-  marksRenderer->setMarkTouchListener(new TestMarkTouchListener(), true);
+  marksRenderer->setMarkTouchListener(new TestMarkTouchListener(self), true);
   
   return marksRenderer;  
 }
@@ -148,6 +165,46 @@
     return initializationTask;
 }
 
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+  NSString *title = [alertView buttonTitleAtIndex:buttonIndex];
+  
+  if([title isEqualToString:@"Learn more..."]) {
+    G3MWebViewController *webView = [self.storyboard instantiateViewControllerWithIdentifier:@"G3MWebViewController"];
+    [self presentModalViewController: webView
+                            animated: YES];
+    [webView loadUrl: [NSURL URLWithString:urlMarkString]];
+  }
+}
+
+class MarkerDemo : public Mark {
+private:
+  UserData* _userData;
+public:
+  MarkerDemo(const std::string& name,
+             const URL textureURL,
+             const Geodetic3D position,
+             UserData* userData) : Mark(name, textureURL, position) {
+    _userData = userData;
+  }
+  
+  UserData* getUserData() {
+    return _userData;
+  }
+};
+
+class MarkerUserData : public UserData {
+private:
+  const URL _url;
+public:
+  MarkerUserData(const URL url) : _url(url) {
+    
+  }
+  
+  URL getUrl() {
+    return _url;
+  }
+};
+
 class MarkersDemoBufferDownloadListener : public IBufferDownloadListener {
 private:
   GInitializationTask* _initTask;
@@ -167,19 +224,21 @@ public:
       
       const JSONObject* properties = item->asObject()->getAsObject("properties");
       std::string title = properties->getAsString("title")->value();
+      std::string urlStr = properties->getAsString("url")->value();
       
       const JSONArray* coordinates = item->asObject()->getAsObject("geometry")->asObject()->getAsArray("coordinates");
-      
-      Mark* marker = new Mark(title,
-                          URL("file:///Icon-Small.png", false),
-                          Geodetic3D(Angle::fromDegrees(coordinates->getAsNumber(1)->doubleValue()), Angle::fromDegrees(coordinates->getAsNumber(0)->doubleValue()), 0));
+
+      Mark* marker = new MarkerDemo(title,
+                                    URL("file:///marker-wikipedia-72x72.png", false),
+                                    Geodetic3D(Angle::fromDegrees(coordinates->getAsNumber(1)->doubleValue()), Angle::fromDegrees(coordinates->getAsNumber(0)->doubleValue()), 0),
+                                    new MarkerUserData(URL(urlStr, false)));
       _markRenderer->addMark(marker);
     }
     IJSONParser::instance()->deleteJSONData(json);
   }
   
   void onError(const URL& url) {
-    NSString* message = [NSString stringWithFormat: @"We are really sorry.\nThere was a problem getting markers info"];
+    NSString* message = [NSString stringWithFormat: @"Oops!\nThere was a problem getting markers info"];
     
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"glob3 mobile"
                                                     message:message

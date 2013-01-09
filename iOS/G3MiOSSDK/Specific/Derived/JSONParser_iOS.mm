@@ -50,7 +50,7 @@ JSONBaseObject* JSONParser_iOS::parse(const std::string& inputString) {
   }
 
   ILogger::instance()->logWarning("JSON Parser: Malformed JSON: The top-level object is neither an Object nor an Array");
-  
+
   return NULL;
 }
 
@@ -86,8 +86,14 @@ JSONBaseObject* JSONParser_iOS::makeJSONElement(NSObject* object) {
     else if (strcmp([jsonNumber objCType], @encode(int))==0) {
       return new JSONNumber([jsonNumber intValue]);
     }
+    else if (strcmp([jsonNumber objCType], @encode(long long))==0) {
+      return new JSONNumber([jsonNumber intValue]);
+    }
     else if (strcmp([jsonNumber objCType], @encode(float))==0) {
       return new JSONNumber([jsonNumber floatValue]);
+    }
+    else if (strcmp([jsonNumber objCType], @encode(double))==0) {
+      return new JSONNumber([jsonNumber doubleValue]);
     }
     else {
       JSONNumber* numberObj = new JSONNumber([jsonNumber doubleValue]);

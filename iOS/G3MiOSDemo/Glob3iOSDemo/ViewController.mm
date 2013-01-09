@@ -52,6 +52,10 @@
 #include "FloatBufferBuilderFromGeodetic.hpp"
 #include "FloatBufferBuilderFromColor.hpp"
 #include "DirectMesh.hpp"
+#include "IJSONParser.hpp"
+#include "JSONGenerator.hpp"
+#include "BSONGenerator.hpp"
+#include "BSONParser.hpp"
 
 @implementation ViewController
 
@@ -607,6 +611,43 @@
           _geoRenderer->addGEOObject(geoObject);
         }
       }
+      */
+
+      /*
+      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
+                                                                ofType: @"json"];
+      if (planeFilePath) {
+        NSString *nsPlaneJSON = [NSString stringWithContentsOfFile: planeFilePath
+                                                          encoding: NSUTF8StringEncoding
+                                                             error: nil];
+        if (nsPlaneJSON) {
+          std::string planeJSON = [nsPlaneJSON UTF8String];
+          JSONBaseObject* jsonObject = IJSONParser::instance()->parse(planeJSON);
+
+          IByteBuffer* bson = BSONGenerator::generate(jsonObject);
+          printf("%s\n", bson->description().c_str());
+        }
+      }
+       */
+
+      /*
+      // JSONBaseObject* jsonObject = IJSONParser::instance()->parse("{\"key1\":\"string\", \"key2\": 100, \"key3\": false, \"key4\":123.5}");
+      //JSONBaseObject* jsonObject = IJSONParser::instance()->parse("{\"hello\":\"world\"}");
+      JSONBaseObject* jsonObject = IJSONParser::instance()->parse("{\"BSON\": [\"awesome\", 5.05, 1986, true, false], \"X\": {\"foo\": 100}}");
+      printf("%s\n", jsonObject->description().c_str());
+
+      std::string jsonString = JSONGenerator::generate(jsonObject);
+      printf("%s (lenght=%lu)\n", jsonString.c_str(), jsonString.size());
+
+      IByteBuffer* bson = BSONGenerator::generate(jsonObject);
+      printf("%s\n", bson->description().c_str());
+
+      JSONBaseObject* bsonObject = BSONParser::parse(bson);
+      printf("%s\n", bsonObject->description().c_str());
+
+      delete bson;
+
+      delete jsonObject;
       */
     }
 

@@ -365,6 +365,44 @@
             </objects>
             <point key="canvasLocation" x="-2964" y="-179"/>
         </scene>
+        <!--Web View Controller-->
+        <scene sceneID="8DL-gQ-1IM">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="aUV-oI-2oK" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewController storyboardIdentifier="G3MWebViewController" id="c55-U9-MvI" customClass="G3MWebViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="fp9-z7-0iP">
+                        <rect key="frame" x="0.0" y="20" width="768" height="1004"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" id="Qge-mB-FOM" customClass="UIWebView">
+                                <rect key="frame" x="0.0" y="44" width="768" height="960"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            </view>
+                            <navigationBar contentMode="scaleToFill" id="Ft1-Lf-O0x">
+                                <rect key="frame" x="0.0" y="0.0" width="768" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <items>
+                                    <navigationItem title="glob3 mobile" id="Ah6-kg-2Ww">
+                                        <barButtonItem key="rightBarButtonItem" title="Close" id="1ff-iS-BVG">
+                                            <connections>
+                                                <action selector="pushBackButton:" destination="c55-U9-MvI" id="Ffv-t2-Pk8"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackTranslucent"/>
+                    <connections>
+                        <outlet property="webView" destination="Qge-mB-FOM" id="0tG-nb-QOJ"/>
+                    </connections>
+                </viewController>
+            </objects>
+            <point key="canvasLocation" x="-2166" y="-1799"/>
+        </scene>
     </scenes>
     <resources>
         <image name="play.png" width="48" height="48"/>
@@ -414,6 +452,13 @@
         </class>
         <class className="G3MUITableViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/G3MUITableViewController.h"/>
+        </class>
+        <class className="G3MWebViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/G3MWebViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="pushBackButton:"/>
+                <relationship kind="outlet" name="webView" candidateClass="UIWebView"/>
+            </relationships>
         </class>
         <class className="G3MWidget_iOS" superclassName="UIView">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/G3MWidget_iOS.h"/>

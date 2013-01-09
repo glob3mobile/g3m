@@ -9,6 +9,7 @@
 #include "JSONBoolean.hpp"
 
 #include "IStringBuilder.hpp"
+#include "JSONVisitor.hpp"
 
 const std::string JSONBoolean::description() const {
   IStringBuilder *isb = IStringBuilder::newStringBuilder();
@@ -16,4 +17,8 @@ const std::string JSONBoolean::description() const {
   const std::string s = isb->getString();
   delete isb;
   return s;
+}
+
+void JSONBoolean::acceptVisitor(JSONVisitor* visitor) const {
+  visitor->visitBoolean(this);
 }

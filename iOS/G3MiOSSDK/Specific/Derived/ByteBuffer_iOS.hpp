@@ -1,4 +1,4 @@
- //
+//
 //  ByteBuffer_iOS.hpp
 //  G3MiOSSDK
 //
@@ -16,49 +16,53 @@ private:
   const int            _size;
   unsigned char* const _values;
   int                  _timestamp;
-  
+
 public:
   ByteBuffer_iOS(int size) :
   _values(new unsigned char[size]),
   _size(size),
   _timestamp(0) {
-    
+
   }
-  
+
   ByteBuffer_iOS(unsigned char* values, int size) :
   _values(values),
   _size(size),
   _timestamp(0) {
-    
+
   }
-  
+
   virtual ~ByteBuffer_iOS() {
     delete [] _values;
   }
-  
+
   int size() const {
     return _size;
   }
-  
+
   int timestamp() const {
     return _timestamp;
   }
-  
+
   unsigned char get(int i) const {
     return _values[i];
   }
-  
+
   void put(int i, unsigned char value) {
     if (_values[i] != value) {
       _values[i] = value;
       _timestamp++;
     }
   }
-  
+
+  void rawPut(int i, unsigned char value) {
+    _values[i] = value;
+  }
+
   unsigned char* getPointer() const {
     return _values;
   }
-  
+
   const std::string description() const;
 
   const std::string getAsString() const;

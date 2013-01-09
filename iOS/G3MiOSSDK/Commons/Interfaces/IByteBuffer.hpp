@@ -13,24 +13,25 @@
 
 class IByteBuffer {
 public:
-  
-  virtual ~IByteBuffer() {
-    
-  }
-  
-  virtual int size() const = 0;
-  
-  virtual int timestamp() const = 0;
-  
-  virtual unsigned char get(int i) const = 0;
-  
-  virtual void put(int i, unsigned char value) = 0;
-  
-  virtual const std::string description() const = 0;
-  
-  virtual const std::string getAsString() const = 0;
-  
-};
 
+  virtual ~IByteBuffer() {
+
+  }
+
+  virtual int size() const = 0;
+
+  virtual int timestamp() const = 0;
+
+  virtual unsigned char get(int i) const = 0;
+
+  virtual void put(int i, unsigned char value) = 0;
+
+  virtual void rawPut(int i, unsigned char value) = 0;
+
+  virtual const std::string description() const = 0;
+
+  virtual const std::string getAsString() const = 0;
+
+};
 
 #endif

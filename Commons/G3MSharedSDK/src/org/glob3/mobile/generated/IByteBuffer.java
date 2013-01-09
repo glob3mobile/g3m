@@ -31,6 +31,8 @@ public abstract class IByteBuffer
 
   public abstract void put(int i, byte value);
 
+  public abstract void rawPut(int i, byte value);
+
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual const String description() const = 0;
   public abstract String description();

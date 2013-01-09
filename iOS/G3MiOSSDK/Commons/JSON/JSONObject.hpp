@@ -57,6 +57,8 @@ public:
   const std::string description() const;
 
   JSONObject* deepCopy() const;
+
+  void acceptVisitor(JSONVisitor* visitor) const;
   
 };
 

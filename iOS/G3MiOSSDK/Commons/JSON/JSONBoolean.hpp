@@ -14,7 +14,7 @@
 class JSONBoolean : public JSONBaseObject {
 private:
   const bool _value;
-  
+
 public:
   JSONBoolean(bool value) :
   _value(value)
@@ -24,20 +24,19 @@ public:
   const bool value() const {
     return _value;
   }
-  
+
   const JSONBoolean* asBoolean() const {
     return this;
   }
 
   const std::string description() const;
-  
+
   JSONBoolean* deepCopy() const {
     return new JSONBoolean(_value);
   }
-
+  
+  void acceptVisitor(JSONVisitor* visitor) const;
 
 };
-
-
 
 #endif

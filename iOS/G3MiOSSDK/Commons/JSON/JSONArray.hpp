@@ -46,9 +46,11 @@ public:
   void add(JSONBaseObject* object);
 
   const std::string description() const;
-  
+
   JSONArray* deepCopy() const;
 
+  void acceptVisitor(JSONVisitor* visitor) const;
+  
 };
 
 #endif

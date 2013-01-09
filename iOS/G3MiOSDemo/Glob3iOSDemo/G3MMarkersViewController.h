@@ -10,7 +10,10 @@
 
 #import "G3MWidget_iOS.h"
 
-@interface G3MMarkersViewController : UIViewController
+@interface G3MMarkersViewController : UIViewController <UIAlertViewDelegate> {
+  NSString* urlMarkString;
+}
+
 
 @property (strong, nonatomic) IBOutlet G3MWidget_iOS *glob3;
 

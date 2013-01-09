@@ -12,7 +12,6 @@
 		A717C99615EBA71D00EEC830 /* mercator.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A717C99515EBA71D00EEC830 /* mercator.jpg */; };
 		CCD7885415D9A3FA0065A7E1 /* ProgressWheel.png in Resources */ = {isa = PBXBuildFile; fileRef = CCD7885315D9A3FA0065A7E1 /* ProgressWheel.png */; };
 		CF0223831668318600024B73 /* geojson in Resources */ = {isa = PBXBuildFile; fileRef = CF0223821668318600024B73 /* geojson */; };
-		CF7A708815CFD0A50086FDE6 /* g3m-marker.png in Resources */ = {isa = PBXBuildFile; fileRef = CF7A708715CFD0A50086FDE6 /* g3m-marker.png */; };
 		CF883B841591053100AEE39C /* mark.png in Resources */ = {isa = PBXBuildFile; fileRef = CF883B831591053100AEE39C /* mark.png */; };
 		CFE3DBB1164B0E7D00910037 /* seymour-plane.json in Resources */ = {isa = PBXBuildFile; fileRef = CFE3DBB0164B0E7D00910037 /* seymour-plane.json */; };
 		CFEA76681666DCB000E89BC7 /* images in Resources */ = {isa = PBXBuildFile; fileRef = CFEA76671666DCB000E89BC7 /* images */; };
@@ -61,6 +60,9 @@
 		E751B78316823D7C0032413F /* G3MDrawingShapesViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E751B78216823D7C0032413F /* G3MDrawingShapesViewController.mm */; };
 		E751B7A1168247830032413F /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = E751B79F168247830032413F /* play.png */; };
 		E751B7A2168247830032413F /* stop.png in Resources */ = {isa = PBXBuildFile; fileRef = E751B7A0168247830032413F /* stop.png */; };
+		E770CAD9169C425600F892BE /* g3m-marker.png in Resources */ = {isa = PBXBuildFile; fileRef = E770CAD8169C425600F892BE /* g3m-marker.png */; };
+		E770CAE4169C808700F892BE /* G3MWebViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E770CAE3169C808700F892BE /* G3MWebViewController.mm */; };
+		E770CAE7169D988C00F892BE /* marker-wikipedia-72x72.png in Resources */ = {isa = PBXBuildFile; fileRef = E770CAE6169D988C00F892BE /* marker-wikipedia-72x72.png */; };
 		E7B776A5167B56900005ED14 /* G3MDoubleGlob3ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7B776A4167B56900005ED14 /* G3MDoubleGlob3ViewController.mm */; };
 		E7B776A8167F68730005ED14 /* G3MLayerSwitchViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7B776A7167F68730005ED14 /* G3MLayerSwitchViewController.mm */; };
 		E7CDA66F16837CB0006DA377 /* G3M3DModelViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7CDA66E16837CB0006DA377 /* G3M3DModelViewController.mm */; };
@@ -89,6 +91,12 @@
 		A717C99515EBA71D00EEC830 /* mercator.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = mercator.jpg; sourceTree = "<group>"; };
 		CCD7885315D9A3FA0065A7E1 /* ProgressWheel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ProgressWheel.png; sourceTree = "<group>"; };
 		CF0223821668318600024B73 /* geojson */ = {isa = PBXFileReference; lastKnownFileType = folder; path = geojson; sourceTree = "<group>"; };
+		CF4FAACE1695E6B1009734CA /* ByteBufferIterator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ByteBufferIterator.hpp; path = ../G3MiOSSDK/Commons/Basic/ByteBufferIterator.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		CF4FAACF1695E6B1009734CA /* BSONParser.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = BSONParser.hpp; path = ../G3MiOSSDK/Commons/JSON/BSONParser.hpp; sourceTree = "<group>"; };
+		CF4FAAD01695E6B1009734CA /* ByteBufferBuilder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ByteBufferBuilder.hpp; path = ../G3MiOSSDK/Commons/Basic/ByteBufferBuilder.hpp; sourceTree = "<group>"; };
+		CF4FAAD11695E6B1009734CA /* JSONVisitor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = JSONVisitor.hpp; path = ../G3MiOSSDK/Commons/JSON/JSONVisitor.hpp; sourceTree = "<group>"; };
+		CF4FAAD21695E6B1009734CA /* JSONGenerator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = JSONGenerator.hpp; path = ../G3MiOSSDK/Commons/JSON/JSONGenerator.hpp; sourceTree = "<group>"; };
+		CF4FAAD71695F407009734CA /* BSONGenerator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = BSONGenerator.hpp; path = ../G3MiOSSDK/Commons/JSON/BSONGenerator.hpp; sourceTree = "<group>"; };
 		CF629FFF168008E900649BBC /* G3MWidget_iOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = G3MWidget_iOS.h; path = ../G3MiOSSDK/Specific/Widget/G3MWidget_iOS.h; sourceTree = "<group>"; };
 		CF62A000168008E900649BBC /* AbstractMesh.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = AbstractMesh.hpp; path = ../G3MiOSSDK/Commons/Mesh/AbstractMesh.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF62A001168008E900649BBC /* G3MBuilder_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = G3MBuilder_iOS.hpp; path = ../G3MiOSSDK/Specific/Derived/G3MBuilder_iOS.hpp; sourceTree = "<group>"; };
@@ -262,7 +270,6 @@
 		CF62A0A9168008E900649BBC /* FloatBuffer_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = FloatBuffer_iOS.hpp; path = ../G3MiOSSDK/Specific/Derived/FloatBuffer_iOS.hpp; sourceTree = "<group>"; };
 		CF62A0AA168008E900649BBC /* JSONParser_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = JSONParser_iOS.hpp; path = ../G3MiOSSDK/Specific/Derived/JSONParser_iOS.hpp; sourceTree = "<group>"; };
 		CF62A0AB168008E900649BBC /* IntBuffer_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IntBuffer_iOS.hpp; path = ../G3MiOSSDK/Specific/Derived/IntBuffer_iOS.hpp; sourceTree = "<group>"; };
-		CF7A708715CFD0A50086FDE6 /* g3m-marker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "g3m-marker.png"; sourceTree = "<group>"; };
 		CF883B831591053100AEE39C /* mark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mark.png; sourceTree = "<group>"; };
 		CFE3DBB0164B0E7D00910037 /* seymour-plane.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "seymour-plane.json"; sourceTree = "<group>"; };
 		CFEA76671666DCB000E89BC7 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
@@ -323,6 +330,10 @@
 		E751B78216823D7C0032413F /* G3MDrawingShapesViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MDrawingShapesViewController.mm; sourceTree = "<group>"; };
 		E751B79F168247830032413F /* play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play.png; sourceTree = "<group>"; };
 		E751B7A0168247830032413F /* stop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = stop.png; sourceTree = "<group>"; };
+		E770CAD8169C425600F892BE /* g3m-marker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "g3m-marker.png"; sourceTree = "<group>"; };
+		E770CAE2169C808700F892BE /* G3MWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = G3MWebViewController.h; sourceTree = "<group>"; };
+		E770CAE3169C808700F892BE /* G3MWebViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MWebViewController.mm; sourceTree = "<group>"; };
+		E770CAE6169D988C00F892BE /* marker-wikipedia-72x72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "marker-wikipedia-72x72.png"; sourceTree = "<group>"; };
 		E7A91B26168DA7A800DC5EE4 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = Resources/Default.png; sourceTree = "<group>"; };
 		E7A91B27168DA7A800DC5EE4 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "Resources/Default@2x.png"; sourceTree = "<group>"; };
 		E7A91B28168DA7A800DC5EE4 /* iTunesArtwork.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = iTunesArtwork.png; path = Resources/iTunesArtwork.png; sourceTree = "<group>"; };
@@ -357,6 +368,12 @@
 		CF629FFE168008D200649BBC /* Public Headers G3M */ = {
 			isa = PBXGroup;
 			children = (
+				CF4FAAD71695F407009734CA /* BSONGenerator.hpp */,
+				CF4FAACE1695E6B1009734CA /* ByteBufferIterator.hpp */,
+				CF4FAACF1695E6B1009734CA /* BSONParser.hpp */,
+				CF4FAAD01695E6B1009734CA /* ByteBufferBuilder.hpp */,
+				CF4FAAD11695E6B1009734CA /* JSONVisitor.hpp */,
+				CF4FAAD21695E6B1009734CA /* JSONGenerator.hpp */,
 				CFF76BE81686154400F658CC /* MeshRenderer.hpp */,
 				CF629FFF168008E900649BBC /* G3MWidget_iOS.h */,
 				CF62A000168008E900649BBC /* AbstractMesh.hpp */,
@@ -581,6 +598,8 @@
 				D8EEF3911577920B003FEB5E /* Supporting Files */,
 				D8EEF4091577A93D003FEB5E /* G3W.h */,
 				D8EEF40A1577A93D003FEB5E /* G3W.mm */,
+				E770CAE2169C808700F892BE /* G3MWebViewController.h */,
+				E770CAE3169C808700F892BE /* G3MWebViewController.mm */,
 				E751B7691680EEE50032413F /* G3MSimpleGlob3ViewController.h */,
 				E70F3ED5168B7886006E9289 /* G3MUITableViewController.h */,
 				E70F3ED6168B7886006E9289 /* G3MUITableViewController.mm */,
@@ -624,6 +643,8 @@
 		D8EEF4271577B0D6003FEB5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				E770CAE6169D988C00F892BE /* marker-wikipedia-72x72.png */,
+				E770CAD8169C425600F892BE /* g3m-marker.png */,
 				E74C793916944351001CDD1F /* Bg-Pad-Landscape.png */,
 				E74C793A16944351001CDD1F /* Bg-Pad-Landscape@2x.png */,
 				E74C793B16944351001CDD1F /* Bg-Pad-Portrait.png */,
@@ -656,7 +677,6 @@
 				E71B15361626D27F003D1013 /* Icon@2x.png */,
 				A717C99515EBA71D00EEC830 /* mercator.jpg */,
 				CCD7885315D9A3FA0065A7E1 /* ProgressWheel.png */,
-				CF7A708715CFD0A50086FDE6 /* g3m-marker.png */,
 				CF883B831591053100AEE39C /* mark.png */,
 				CFF95F7C158A748F00B56E11 /* plane.png */,
 				D8E93BDF1588A171009D497C /* world.jpg */,
@@ -741,7 +761,6 @@
 				D8E93BE01588A171009D497C /* world.jpg in Resources */,
 				CFF95F7D158A748F00B56E11 /* plane.png in Resources */,
 				CF883B841591053100AEE39C /* mark.png in Resources */,
-				CF7A708815CFD0A50086FDE6 /* g3m-marker.png in Resources */,
 				CCD7885415D9A3FA0065A7E1 /* ProgressWheel.png in Resources */,
 				A717C99615EBA71D00EEC830 /* mercator.jpg in Resources */,
 				E71B15371626D27F003D1013 /* Default-Landscape.png in Resources */,
@@ -770,6 +789,8 @@
 				E74C794616944351001CDD1F /* Bg-Phone-Landscape@2x.png in Resources */,
 				E74C794716944351001CDD1F /* Bg-Phone-Portrait.png in Resources */,
 				E74C794816944351001CDD1F /* Bg-Phone-Portrait@2x.png in Resources */,
+				E770CAD9169C425600F892BE /* g3m-marker.png in Resources */,
+				E770CAE7169D988C00F892BE /* marker-wikipedia-72x72.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -792,6 +813,7 @@
 				E7CDA66F16837CB0006DA377 /* G3M3DModelViewController.mm in Sources */,
 				E74C0927168B6CA9009E0D2F /* G3MNetCDFViewController.mm in Sources */,
 				E70F3ED7168B7886006E9289 /* G3MUITableViewController.mm in Sources */,
+				E770CAE4169C808700F892BE /* G3MWebViewController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
