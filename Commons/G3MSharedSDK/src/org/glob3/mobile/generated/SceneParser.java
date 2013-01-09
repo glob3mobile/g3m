@@ -147,8 +147,6 @@ public class SceneParser
     
 			_panoSources.add(url.getString());
 		}
-    
-    
 	}
 	private void parserJSONSphericalImageLayer(LayerSet layerSet, JSONObject jsonLayer)
 	{
@@ -171,7 +169,6 @@ public class SceneParser
 			final String namefile = jsonItems.getAsObject(i).getAsString(NAME).value();
 			final String icon = jsonItems.getAsObject(i).getAsString(URLICON).value();
 			final String minDistance = jsonItems.getAsObject(i).getAsString(MINDISTANCE).value();
-    
     
 			IStringBuilder url = IStringBuilder.newStringBuilder();
 			url.addString(geojsonDatasource);

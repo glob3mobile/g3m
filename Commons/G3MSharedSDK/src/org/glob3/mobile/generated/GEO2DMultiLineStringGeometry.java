@@ -17,12 +17,15 @@ package org.glob3.mobile.generated;
 
 
 
+
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Geodetic2D;
 
 public class GEO2DMultiLineStringGeometry extends GEOMultiLineStringGeometry
 {
   private java.util.ArrayList<java.util.ArrayList<Geodetic2D>> _coordinatesArray;
+  private Color _color;
+  private final float _lineWidth;
 
   protected final Mesh createMesh(G3MRenderContext rc)
   {
@@ -56,16 +59,25 @@ public class GEO2DMultiLineStringGeometry extends GEOMultiLineStringGeometry
 	  }
 	}
   
-	Color color = Color.newFromRGBA(1, 1, 1, 1);
-	final float lineWidth = 2F;
-  
-	return new DirectMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), lineWidth, color);
+	return new DirectMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), _lineWidth, _color);
   }
 
 
-  public GEO2DMultiLineStringGeometry(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray)
+	public GEO2DMultiLineStringGeometry(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray, Color color)
+	{
+		this(coordinatesArray, color, 2);
+	}
+	public GEO2DMultiLineStringGeometry(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray)
+	{
+		this(coordinatesArray, Color.newFromRGBA(1, 1, 1, 1), 2);
+	}
+//C++ TO JAVA CONVERTER NOTE: Java does not allow default values for parameters. Overloaded methods are inserted above.
+//ORIGINAL LINE: GEO2DMultiLineStringGeometry(java.util.ArrayList<java.util.ArrayList<Geodetic2D*>*>* coordinatesArray, Color* color = Color::newFromRGBA(1, 1, 1, 1), const float lineWidth = 2) : _coordinatesArray(coordinatesArray), _color(color), _lineWidth(lineWidth)
+	public GEO2DMultiLineStringGeometry(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray, Color color, float lineWidth)
   {
-	  _coordinatesArray = coordinatesArray;
+		_coordinatesArray = coordinatesArray;
+		_color = color;
+		_lineWidth = lineWidth;
 
   }
 

@@ -66,6 +66,7 @@ public class GEOJSONParser
 
   }
 
+
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: GEOObject* pvtParse() const
   private GEOObject pvtParse()
@@ -283,7 +284,7 @@ public class GEOJSONParser
 	  for (int i = 0; i < coordinatesArrayCount; i++)
 	  {
 		final JSONArray jsCoordinates = jsCoordinatesArray.getAsArray(i);
-		java.util.ArrayList<Geodetic2D> coordinates = create2DCoordinates(jsCoordinates);
+		  java.util.ArrayList<Geodetic2D> coordinates = create2DCoordinates(jsCoordinates);
 		if (coordinates != null)
 		{
 		  coordinatesArray.add(coordinates);
@@ -349,6 +350,18 @@ public class GEOJSONParser
 	ILogger.instance().logInfo("GEOJSONParser Statistics: Coordinates2D=%d, LineStrings2D=%d, MultiLineStrings2D=%d (LineStrings2D=%d), features=%d, featuresCollection=%d", _coordinates2DCount, _lineStrings2DCount, _multiLineStrings2DCount, _lineStringsInMultiLineString2DCount, _featuresCount, _featuresCollectionCount);
   }
 
+
+  public static GEOLineStringGeometry createLineString(JSONObject jsonObject)
+  {
+	  GEOJSONParser parser = new GEOJSONParser("");
+	  return parser.createLineStringGeometry(jsonObject);
+  }
+
+  public static GEOMultiLineStringGeometry createMultiLineString(JSONObject jsonObject)
+  {
+	  GEOJSONParser parser = new GEOJSONParser("");
+	  return parser.createMultiLineStringGeometry(jsonObject);
+  }
 
   public static GEOObject parse(String json)
   {
