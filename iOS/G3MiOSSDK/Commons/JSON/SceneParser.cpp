@@ -28,7 +28,6 @@
 #include <string.h>
 
 #include "MarksRenderer.hpp"
-#include "GEOJSONDownloadListener.hpp"
 
 using namespace std;
 
