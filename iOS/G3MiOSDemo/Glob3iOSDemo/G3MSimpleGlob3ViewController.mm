@@ -51,7 +51,7 @@
 
 - (void)viewDidUnload
 {
-  self.G3MWidget = nil;
+  [self setG3MWidget: nil];
   
   [super viewDidUnload];
 }

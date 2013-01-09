@@ -269,9 +269,10 @@ public:
     delete _nativeGL;
 #endif
 
-    delete _vertices;
-    delete _textureCoordinates;
-    delete _colors;
+    // There's no need to delete these attributes because this class is not the owner
+//    delete _vertices;
+//    delete _textureCoordinates;
+//    delete _colors;
   }
   
   int createProgram() const {

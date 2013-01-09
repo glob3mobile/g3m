@@ -347,6 +347,8 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
 
 - (void)dealloc {
   delete lastTouchEvent;
+  [self setRenderer: nil];
+  delete (G3MWidget*) _widgetVP;
 }
 
 - (G3MWidget*) widget {
