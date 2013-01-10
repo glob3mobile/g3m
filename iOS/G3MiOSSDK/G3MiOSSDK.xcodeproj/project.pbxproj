@@ -335,6 +335,7 @@
 		E745CC7916484A9A00819711 /* IStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E745CC7716484A9900819711 /* IStorage.cpp */; };
 		E77A100A165BEDC500FE5515 /* IG3MBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E77A1008165BEDC500FE5515 /* IG3MBuilder.cpp */; };
 		E77A100B165BEDC500FE5515 /* IG3MBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E77A1009165BEDC500FE5515 /* IG3MBuilder.hpp */; settings = {ATTRIBUTES = (); }; };
+		E87424B1169F4B9400C8A227 /* MarkTouchListener.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E87424B0169F4B9400C8A227 /* MarkTouchListener.hpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -668,6 +669,7 @@
 		E745CC7716484A9900819711 /* IStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IStorage.cpp; path = Commons/Interfaces/IStorage.cpp; sourceTree = "<group>"; };
 		E77A1008165BEDC500FE5515 /* IG3MBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IG3MBuilder.cpp; path = Commons/Basic/IG3MBuilder.cpp; sourceTree = "<group>"; };
 		E77A1009165BEDC500FE5515 /* IG3MBuilder.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = IG3MBuilder.hpp; path = Commons/Basic/IG3MBuilder.hpp; sourceTree = "<group>"; };
+		E87424B0169F4B9400C8A227 /* MarkTouchListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MarkTouchListener.hpp; path = Commons/Rendererers/MarkTouchListener.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -984,6 +986,7 @@
 		CCC2A01A15CA6B8200923850 /* Renderers */ = {
 			isa = PBXGroup;
 			children = (
+				E87424B0169F4B9400C8A227 /* MarkTouchListener.hpp */,
 				CCC2A01B15CA6C7D00923850 /* BusyMeshRenderer.cpp */,
 				CCC2A01C15CA6C7D00923850 /* BusyMeshRenderer.hpp */,
 				CC041F5215D98FF000D6AC5D /* BusyQuadRenderer.cpp */,
@@ -1381,6 +1384,7 @@
 				CF4FAAC91695D010009734CA /* JSONVisitor.hpp in Headers */,
 				CF4FAACD1695E4A8009734CA /* JSONGenerator.hpp in Headers */,
 				CF4FAAD61695F344009734CA /* BSONGenerator.hpp in Headers */,
+				E87424B1169F4B9400C8A227 /* MarkTouchListener.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

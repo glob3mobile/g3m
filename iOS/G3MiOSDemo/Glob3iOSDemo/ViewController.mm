@@ -56,6 +56,8 @@
 //#include "JSONGenerator.hpp"
 //#include "BSONGenerator.hpp"
 //#include "BSONParser.hpp"
+#include "Mark.hpp"
+#include "MarkTouchListener.hpp"
 
 @implementation ViewController
 
@@ -471,13 +473,13 @@
 
   Mark* m1 = new Mark("Fuerteventura",
                       URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false),
-                      Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-14.36), 0));
+                      Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-14.36), 0), NULL, 0, NULL);
   marksRenderer->addMark(m1);
 
 
   Mark* m2 = new Mark("Las Palmas",
                       URL("file:///plane.png", false),
-                      Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-15.36), 0));
+                      Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-15.36), 0), NULL, 0, NULL);
   marksRenderer->addMark(m2);
 
   if (false) {
@@ -487,7 +489,7 @@
 
       marksRenderer->addMark(new Mark("Random",
                                       URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false),
-                                      Geodetic3D(latitude, longitude, 0)));
+                                      Geodetic3D(latitude, longitude, 0), NULL, 0, NULL));
     }
   }
 

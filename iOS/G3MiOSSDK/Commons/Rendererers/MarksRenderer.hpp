@@ -11,88 +11,78 @@
 
 #include <vector>
 #include "LeafRenderer.hpp"
-#include "Mark.hpp"
 
-class MarkTouchListener {
-public:
-  virtual ~MarkTouchListener() {
-
-  }
-
-  virtual bool touchedMark(Mark* mark) = 0;
-};
-
+class Mark;
+class Camera;
+class MarkTouchListener;
 
 class MarksRenderer : public LeafRenderer {
 private:
-  const bool         _readyWhenMarksReady;
-  std::vector<Mark*> _marks;
-
+    const bool         _readyWhenMarksReady;
+    std::vector<Mark*> _marks;
+    
 #ifdef C_CODE
-  const G3MContext* _context;
-  const Camera*     _lastCamera;
+    const G3MContext* _context;
+    const Camera*     _lastCamera;
 #endif
 #ifdef JAVA_CODE
-  private G3MContext _context;
-  private Camera     _lastCamera;
+    private G3MContext _context;
+    private Camera     _lastCamera;
 #endif
-
-  MarkTouchListener* _markTouchListener;
-  bool               _autoDeleteMarkTouchListener;
-
+    
+    MarkTouchListener* _markTouchListener;
+    bool               _autoDeleteMarkTouchListener;
+    
 public:
-
-  MarksRenderer(bool readyWhenMarksReady);
-
-  void setMarkTouchListener(MarkTouchListener* markTouchListener,
-                            bool autoDelete) {
-    if ( _autoDeleteMarkTouchListener ) {
-      delete _markTouchListener;
+    
+    MarksRenderer(bool readyWhenMarksReady);
+    
+    void setMarkTouchListener(MarkTouchListener* markTouchListener,
+                              bool autoDelete);
+    
+    virtual ~MarksRenderer();
+    
+    virtual void initialize(const G3MContext* context);
+    
+    virtual void render(const G3MRenderContext* rc,
+                        const GLState& parentState);
+    
+    void addMark(Mark* mark);
+    
+    void removeMark(Mark* mark);
+    
+    void removeAllMarks();
+    
+    bool onTouchEvent(const G3MEventContext* ec,
+                      const TouchEvent* touchEvent);
+    
+    void onResizeViewportEvent(const G3MEventContext* ec,
+                               int width, int height) {
+        
     }
-
-    _markTouchListener = markTouchListener;
-    _autoDeleteMarkTouchListener = autoDelete;
-  }
-
-  virtual ~MarksRenderer();
-
-  virtual void initialize(const G3MContext* context);
-
-  virtual void render(const G3MRenderContext* rc,
-                      const GLState& parentState);
-
-  void addMark(Mark* mark);
-
-  bool onTouchEvent(const G3MEventContext* ec,
-                    const TouchEvent* touchEvent);
-
-  void onResizeViewportEvent(const G3MEventContext* ec,
-                             int width, int height) {
-
-  }
-
-  bool isReadyToRender(const G3MRenderContext* rc);
-
-  void start() {
-
-  }
-
-  void stop() {
-
-  }
-
-  void onResume(const G3MContext* context) {
-    _context = context;
-  }
-
-  void onPause(const G3MContext* context) {
-
-  }
-
-  void onDestroy(const G3MContext* context) {
-
-  }
-  
+    
+    bool isReadyToRender(const G3MRenderContext* rc);
+    
+    void start() {
+        
+    }
+    
+    void stop() {
+        
+    }
+    
+    void onResume(const G3MContext* context) {
+        _context = context;
+    }
+    
+    void onPause(const G3MContext* context) {
+        
+    }
+    
+    void onDestroy(const G3MContext* context) {
+        
+    }
+    
 };
 
 #endif

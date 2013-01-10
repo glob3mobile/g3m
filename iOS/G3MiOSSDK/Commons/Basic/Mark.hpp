@@ -20,84 +20,101 @@
 class IImage;
 class IFloatBuffer;
 class IGLTextureId;
+class MarkTouchListener;
 class GLState;
 
 class Mark {
 private:
-  
-  const std::string _name;
-  URL               _textureURL;
-  const Geodetic3D  _position;
-  
+    
+    const std::string _name;
+    URL               _textureURL;
+    const Geodetic3D  _position;
+    void* _userData;
+    double _minDistanceToCamera;
+    MarkTouchListener* _listener;
+    
 #ifdef C_CODE
-  const IGLTextureId* _textureId;
+    const IGLTextureId* _textureId;
 #endif
 #ifdef JAVA_CODE
-  private IGLTextureId _textureId;
+    private IGLTextureId _textureId;
 #endif
-  
-  Vector3D* _cartesianPosition;
-  Vector3D* getCartesianPosition(const Planet* planet);
-  
-  IFloatBuffer* _vertices;
-  IFloatBuffer* getVertices(const Planet* planet);
-  
-  bool    _textureSolved;
-  IImage* _textureImage;
-  int _textureWidth;
-  int _textureHeight;
-
-  bool    _renderedMark;
-  
-public:
-  Mark(const std::string& name,
-       const URL          textureURL,
-       const Geodetic3D   position) :
-  _name(name),
-  _textureURL(textureURL),
-  _position(position),
-  _textureId(NULL),
-  _cartesianPosition(NULL),
-  _vertices(NULL),
-  _textureSolved(false),
-  _textureImage(NULL),
-  _renderedMark(false),
-  _textureWidth(0),
-  _textureHeight(0)
-  {
     
-  }
-  
-  ~Mark();
-  
-  const std::string getName() const {
-    return _name;
-  }
-  
-  const Geodetic3D getPosition() const {
-    return _position;
-  }
-  
-  void initialize(const G3MContext* context);
-  
-  void render(const G3MRenderContext* rc,
-              const GLState& parentState,
-              const double minDistanceToCamera);
-  
-  bool isReady() const;
-  
-  bool isRendered() const {
-    return _renderedMark;
-  }
-  
-  void onTextureDownloadError();
-  
-  void onTextureDownload(const IImage* image);
-  
-  int getTextureWidth() const;
-  int getTextureHeight() const;
-  Vector2I getTextureExtent() const;
-  
+    Vector3D* _cartesianPosition;
+    Vector3D* getCartesianPosition(const Planet* planet);
+    
+    IFloatBuffer* _vertices;
+    IFloatBuffer* getVertices(const Planet* planet);
+    
+    bool    _textureSolved;
+    IImage* _textureImage;
+    int _textureWidth;
+    int _textureHeight;
+    
+    bool    _renderedMark;
+    
+public:
+    Mark(const std::string name,
+         const URL         textureURL,
+         const Geodetic3D  position,
+         void* userData=NULL, double minDistanceToCamera=0, MarkTouchListener* listener=NULL) :
+    _name(name),
+    _textureURL(textureURL),
+    _position(position),
+    _userData(userData),
+    _minDistanceToCamera(minDistanceToCamera),
+    _listener(listener),
+    _textureId(NULL),
+    _cartesianPosition(NULL),
+    _vertices(NULL),
+    _textureSolved(false),
+    _textureImage(NULL),
+    _renderedMark(false),
+    _textureWidth(0),
+    _textureHeight(0)
+    {
+        
+    }
+    
+    ~Mark();
+    
+    const std::string getName() const {
+        return _name;
+    }
+    
+    const Geodetic3D getPosition() const {
+        return _position;
+    }
+    
+    void initialize(const G3MContext* context);
+    
+    void render(const G3MRenderContext* rc,
+                const GLState& parentState);
+    
+    bool isReady() const;
+    
+    bool isRendered() const {
+        return _renderedMark;
+    }
+    
+    void onTextureDownloadError();
+    
+    void onTextureDownload(const IImage* image);
+    
+    int getTextureWidth() const;
+    int getTextureHeight() const;
+    Vector2I getTextureExtent() const;
+    
+    const void* getUserData() const {
+        return _userData;
+    }
+    
+    void setUserData(void* userData);
+    
+    MarkTouchListener* getListener() const{
+        return _listener;      
+    }
+    
 };
 
 #endif
