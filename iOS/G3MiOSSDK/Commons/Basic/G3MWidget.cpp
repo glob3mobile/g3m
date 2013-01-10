@@ -183,13 +183,13 @@ void G3MWidget::initializeGL() {
 G3MWidget::~G3MWidget() {
   delete _userData;
 
-  delete _gl;
 #ifdef C_CODE
   delete _planet;
 #endif
   delete _cameraRenderer;
   delete _mainRenderer;
   delete _busyRenderer;
+  delete _gl;
   delete _effectsScheduler;
   delete _currentCamera;
   delete _nextCamera;

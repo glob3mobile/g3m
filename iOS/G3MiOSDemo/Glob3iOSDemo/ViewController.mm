@@ -482,7 +482,7 @@
 
   if (false) {
     for (int i = 0; i < 2000; i++) {
-      const Angle latitude = Angle::fromDegrees( (int) (arc4random() % 180) - 90 );
+      const Angle latitude  = Angle::fromDegrees( (int) (arc4random() % 180) - 90 );
       const Angle longitude = Angle::fromDegrees( (int) (arc4random() % 360) - 180 );
 
       marksRenderer->addMark(new Mark("Random",

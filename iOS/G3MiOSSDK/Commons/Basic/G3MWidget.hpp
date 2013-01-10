@@ -75,12 +75,12 @@ public:
 class G3MWidget {
 public:
 
-  static void initSingletons(ILogger*             logger,
-                             IFactory*            factory,
-                             const IStringUtils*  stringUtils,
-                             IStringBuilder*      stringBuilder,
-                             IMathUtils*          mathUtils,
-                             IJSONParser*         jsonParser);
+  static void initSingletons(ILogger*            logger,
+                             IFactory*           factory,
+                             const IStringUtils* stringUtils,
+                             IStringBuilder*     stringBuilder,
+                             IMathUtils*         mathUtils,
+                             IJSONParser*        jsonParser);
 
   static G3MWidget* create(GL*                              gl,
                            IStorage*                        storage,

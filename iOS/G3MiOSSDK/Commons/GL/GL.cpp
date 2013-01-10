@@ -34,7 +34,9 @@ public:
 
   //FOR BILLBOARDING
   IGLUniformID* BillBoard;
-  IGLUniformID* ViewPortRatio;
+  IGLUniformID* ViewPortExtent;
+  IGLUniformID* TextureExtent;
+
 
   //FOR COLOR MIXING
   IGLUniformID* FlatColorIntensity;
@@ -54,7 +56,8 @@ public:
 
     //FOR BILLBOARDING
     BillBoard = NULL;
-    ViewPortRatio = NULL;
+    ViewPortExtent = NULL;
+    TextureExtent = NULL;
 
     //FOR COLOR MIXING
     FlatColorIntensity = NULL;
@@ -76,7 +79,8 @@ public:
 
     //FOR BILLBOARDING
     delete BillBoard;
-    delete ViewPortRatio;
+    delete ViewPortExtent;
+    delete TextureExtent;
 
     //FOR COLOR MIXING
     delete FlatColorIntensity;
@@ -105,7 +109,7 @@ int GL::checkedGetAttribLocation(ShaderProgram* program,
   }
   int l = _nativeGL->getAttribLocation(program, name);
   if (l == -1) {
-    ILogger::instance()->logError("Error fetching Attribute, Program = %d, Variable = %s", program, name.c_str());
+    ILogger::instance()->logError("Error fetching Attribute, Program=%d, Variable=\"%s\"", program, name.c_str());
     _errorGettingLocationOcurred = true;
   }
   return l;
@@ -118,7 +122,7 @@ IGLUniformID* GL::checkedGetUniformLocation(ShaderProgram* program,
   }
   IGLUniformID* uID = _nativeGL->getUniformLocation(program, name);
   if (!uID->isValid()) {
-    ILogger::instance()->logError("Error fetching Uniform, Program = %d, Variable = %s", program, name.c_str());
+    ILogger::instance()->logError("Error fetching Uniform, Program=%d, Variable=\"%s\"", program, name.c_str());
     _errorGettingLocationOcurred = true;
   }
   return uID;
@@ -159,8 +163,10 @@ bool GL::useProgram(ShaderProgram* program) {
   _nativeGL->uniform1f(Uniforms.PointSize, 1);
 
   //BILLBOARDS
-  Uniforms.BillBoard     = checkedGetUniformLocation(program, "BillBoard");
-  Uniforms.ViewPortRatio = checkedGetUniformLocation(program, "ViewPortRatio");
+  Uniforms.BillBoard      = checkedGetUniformLocation(program, "BillBoard");
+  Uniforms.ViewPortExtent = checkedGetUniformLocation(program, "ViewPortExtent");
+  Uniforms.TextureExtent  = checkedGetUniformLocation(program, "TextureExtent");
+  
   _nativeGL->uniform1i(Uniforms.BillBoard, 0); //NOT DRAWING BILLBOARD
 
   //FOR FLAT COLOR MIXING
@@ -437,29 +443,47 @@ IFloatBuffer* GL::getBillboardTexCoord() {
   return _billboardTexCoord;
 }
 
+void GL::startBillBoardDrawing(int viewPortWidth,
+                               int viewPortHeight) {
+  _nativeGL->uniform1i(Uniforms.BillBoard, 1);
+  _nativeGL->uniform2f(Uniforms.ViewPortExtent, viewPortWidth, viewPortHeight);
+
+  color(1, 1, 1, 1);
+
+  setTextureCoordinates(2, 0, getBillboardTexCoord());
+}
+
+void GL::stopBillBoardDrawing() {
+  _nativeGL->uniform1i(Uniforms.BillBoard, 0);
+}
+
+
 void GL::drawBillBoard(const IGLTextureId* textureId,
                        IFloatBuffer* vertices,
-                       const float viewPortRatio) {
+//                       int viewPortWidth,
+//                       int viewPortHeight,
+                       int textureWidth,
+                       int textureHeight) {
   if (_verbose) {
     ILogger::instance()->logInfo("GL::drawBillBoard()");
   }
 
   int TODO_refactor_billboard;
 
-  _nativeGL->uniform1i(Uniforms.BillBoard, 1);
+//  _nativeGL->uniform1i(Uniforms.BillBoard, 1);
+//  _nativeGL->uniform2f(Uniforms.ViewPortExtent, viewPortWidth, viewPortHeight);
+  _nativeGL->uniform2f(Uniforms.TextureExtent, textureWidth, textureHeight);
 
-  _nativeGL->uniform1f(Uniforms.ViewPortRatio, viewPortRatio);
-
-  color(1, 1, 1, 1);
+//  color(1, 1, 1, 1);
 
   bindTexture(textureId);
 
   vertexPointer(3, 0, vertices);
-  setTextureCoordinates(2, 0, getBillboardTexCoord());
+//  setTextureCoordinates(2, 0, getBillboardTexCoord());
 
   _nativeGL->drawArrays(GLPrimitive::triangleStrip(), 0, vertices->size() / 3);
 
-  _nativeGL->uniform1i(Uniforms.BillBoard, 0);
+//  _nativeGL->uniform1i(Uniforms.BillBoard, 0);
 }
 
 void GL::setBlendFuncSrcAlpha() {

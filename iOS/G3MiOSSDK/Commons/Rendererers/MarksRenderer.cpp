@@ -150,9 +150,15 @@ void MarksRenderer::render(const G3MRenderContext* rc,
   gl->setState(state);
   gl->setBlendFuncSrcAlpha();
 
+  const Camera* camera = rc->getCurrentCamera();
+
+  gl->startBillBoardDrawing(camera->getWidth(),
+                            camera->getHeight());
+
   const Vector3D radius = rc->getPlanet()->getRadii();
   const double minDistanceToCamera = (radius._x + radius._y + radius._z) / 3 * 0.75;
 
+  
   int marksSize = _marks.size();
   for (int i = 0; i < marksSize; i++) {
     Mark* mark = _marks[i];
@@ -162,4 +168,6 @@ void MarksRenderer::render(const G3MRenderContext* rc,
       mark->render(rc, state, minDistanceToCamera);
     }
   }
+
+  gl->stopBillBoardDrawing();
 }
