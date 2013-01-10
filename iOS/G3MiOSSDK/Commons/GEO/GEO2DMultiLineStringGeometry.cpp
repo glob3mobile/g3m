@@ -70,5 +70,6 @@ Mesh* GEO2DMultiLineStringGeometry::createMesh(const G3MRenderContext* rc) {
                         vertices.getCenter(),
                         vertices.create(),
                         lineWidth,
+                        1,
                         color);
 }

@@ -40,6 +40,7 @@ Mesh* GEOGeometry::create2DBoundaryMesh(std::vector<Geodetic2D*>* coordinates,
                         vertices.getCenter(),
                         vertices.create(),
                         lineWidth,
+                        1,
                         color);
 }
 

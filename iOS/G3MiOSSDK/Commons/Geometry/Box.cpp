@@ -186,6 +186,7 @@ void Box::createMesh(Color* color) {
                           vertices.create(),
                           indices.create(),
                           1,
+                          1,
                           color);
 }
 

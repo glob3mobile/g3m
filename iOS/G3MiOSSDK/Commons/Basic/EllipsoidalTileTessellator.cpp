@@ -122,6 +122,7 @@ Mesh* EllipsoidalTileTessellator::createMesh(const G3MRenderContext* rc,
                          vertices.create(),
                          indices.create(),
                          1,
+                         1,
                          color);
 }
 
@@ -245,6 +246,7 @@ Mesh* EllipsoidalTileTessellator::createDebugMesh(const G3MRenderContext* rc,
                          center,
                          vertices.create(),
                          indices.create(),
+                         1,
                          1,
                          color);
 }

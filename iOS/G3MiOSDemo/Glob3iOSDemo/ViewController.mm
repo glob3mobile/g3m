@@ -52,10 +52,10 @@
 #include "FloatBufferBuilderFromGeodetic.hpp"
 #include "FloatBufferBuilderFromColor.hpp"
 #include "DirectMesh.hpp"
-#include "IJSONParser.hpp"
-#include "JSONGenerator.hpp"
-#include "BSONGenerator.hpp"
-#include "BSONParser.hpp"
+//#include "IJSONParser.hpp"
+//#include "JSONGenerator.hpp"
+//#include "BSONGenerator.hpp"
+//#include "BSONParser.hpp"
 
 @implementation ViewController
 
@@ -74,7 +74,7 @@
   [super viewDidLoad];
 
   // initialize a customized widget without using a builder
-  [[self G3MWidget] initSingletons];
+  //[[self G3MWidget] initSingletons];
   // [self initWithoutBuilder];
 
   // initizalize a default widget by using a builder
@@ -142,38 +142,38 @@
 
 - (void) initDefaultWithBuilder
 {
-  G3MBuilder_iOS* builder = new G3MBuilder_iOS([self G3MWidget]);
+  G3MBuilder_iOS builder([self G3MWidget]);
 
   // initialization
-  builder->initializeWidget();
+  builder.initializeWidget();
 }
 
 - (void) initCustomizedWithBuilder
 {
-  G3MBuilder_iOS* builder = new G3MBuilder_iOS([self G3MWidget]);
+  G3MBuilder_iOS builder([self G3MWidget]);
 
   SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
-  builder->addCameraConstraint(scc);
+  builder.addCameraConstraint(scc);
 
-  builder->setCameraRenderer([self createCameraRenderer]);
+  builder.setCameraRenderer([self createCameraRenderer]);
 
-  builder->setPlanet(Planet::createEarth());
+  builder.setPlanet(Planet::createEarth());
 
   Color* bgColor = Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1);
-  builder->setBackgroundColor(bgColor);
+  builder.setBackgroundColor(bgColor);
 
   LayerSet* layerSet = [self createLayerSet];
-  builder->setLayerSet(layerSet);
+  builder.setLayerSet(layerSet);
 
   TilesRenderParameters* parameters = [self createTileRenderParameters];
-  builder->setTileRendererParameters(parameters);
+  builder.setTileRendererParameters(parameters);
 
   TileRenderer* tileRenderer = [self createTileRenderer: parameters
                                                layerSet: layerSet];
-  builder->setTileRenderer(tileRenderer);
+  builder.setTileRenderer(tileRenderer);
 
   Renderer* busyRenderer = new BusyMeshRenderer();
-  builder->setBusyRenderer(busyRenderer);
+  builder.setBusyRenderer(busyRenderer);
 
   //    DummyRenderer* dum = new DummyRenderer();
   //    builder->addRenderer(dum);
@@ -181,37 +181,37 @@
   //    builder->addRenderer(spr);
 
   MarksRenderer* marksRenderer = [self createMarksRenderer];
-  builder->addRenderer(marksRenderer);
+  builder.addRenderer(marksRenderer);
 
   ShapesRenderer* shapesRenderer = [self createShapesRenderer];
-  builder->addRenderer(shapesRenderer);
+  builder.addRenderer(shapesRenderer);
 
   GEORenderer* geoRenderer = [self createGEORenderer];
-  builder->addRenderer(geoRenderer);
+  builder.addRenderer(geoRenderer);
 
   MeshRenderer* meshRenderer = new MeshRenderer();
-  builder->addRenderer( meshRenderer );
+  builder.addRenderer( meshRenderer );
 
-  meshRenderer->addMesh([self createPointsMesh: builder->getPlanet() ]);
+  meshRenderer->addMesh([self createPointsMesh: builder.getPlanet() ]);
 
   GInitializationTask* initializationTask = [self createSampleInitializationTask: shapesRenderer
                                                                      geoRenderer: geoRenderer];
-  builder->setInitializationTask(initializationTask, true);
+  builder.setInitializationTask(initializationTask, true);
 
-  PeriodicalTask* periodicalTask = [self createSamplePeriodicalTask:(builder)];
-  builder->addPeriodicalTask(periodicalTask);
+  PeriodicalTask* periodicalTask = [self createSamplePeriodicalTask: &builder];
+  builder.addPeriodicalTask(periodicalTask);
 
   const bool logFPS = true;
-  builder->setLogFPS(logFPS);
+  builder.setLogFPS(logFPS);
 
   const bool logDownloaderStatistics = false;
-  builder->setLogDownloaderStatistics(logDownloaderStatistics);
+  builder.setLogDownloaderStatistics(logDownloaderStatistics);
 
   UserData* userData = NULL;
-  builder->setUserData(userData);
+  builder.setUserData(userData);
 
   // initialization
-  builder->initializeWidget();
+  builder.initializeWidget();
 }
 
 - (Mesh*) createPointsMesh: (const Planet*)planet
@@ -242,13 +242,15 @@
     }
   }
 
-  float lineWidth = 1;
+  const float lineWidth = 1;
+  const float pointSize = 2;
   Color* flatColor = NULL;
   return new DirectMesh(GLPrimitive::points(),
                         true,
                         vertices.getCenter(),
                         vertices.create(),
                         lineWidth,
+                        pointSize,
                         flatColor,
                         colors.create());
 }
@@ -626,9 +628,18 @@
 
           IByteBuffer* bson = BSONGenerator::generate(jsonObject);
           printf("%s\n", bson->description().c_str());
+
+          JSONBaseObject* bsonObject = BSONParser::parse(bson);
+          printf("%s\n", bsonObject->description().c_str());
+
+          delete bson;
+
+          delete jsonObject;
+
+          delete bsonObject;
         }
       }
-       */
+      */
 
       /*
       // JSONBaseObject* jsonObject = IJSONParser::instance()->parse("{\"key1\":\"string\", \"key2\": 100, \"key3\": false, \"key4\":123.5}");

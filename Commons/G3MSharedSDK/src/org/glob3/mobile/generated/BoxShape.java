@@ -58,7 +58,7 @@ public class BoxShape extends MeshShape
   
 	Color borderColor = (_borderColor != null) ? _borderColor : _surfaceColor;
   
-	return new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), _borderWidth, borderColor);
+	return new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), _borderWidth, 1, borderColor);
   }
   private Mesh createSurfaceMesh(G3MRenderContext rc)
   {
@@ -88,7 +88,7 @@ public class BoxShape extends MeshShape
 	  indices.add(i[n]);
 	}
   
-	return new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), _borderWidth, _surfaceColor);
+	return new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), _borderWidth, 1, _surfaceColor);
   }
 
   protected final Mesh createMesh(G3MRenderContext rc)

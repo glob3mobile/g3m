@@ -43,7 +43,7 @@ public class CircleShape extends MeshShape
   
 	Color color = (_color == null) ? null : new Color(_color);
   
-	return new DirectMesh(GLPrimitive.triangleFan(), true, Vector3D.zero(), vertices.create(), 1, color);
+	return new DirectMesh(GLPrimitive.triangleFan(), true, Vector3D.zero(), vertices.create(), 1, 1, color);
   }
 
   public CircleShape(Geodetic3D position, float radius, Color color)

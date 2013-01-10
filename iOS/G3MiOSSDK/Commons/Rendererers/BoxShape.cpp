@@ -63,6 +63,7 @@ Mesh* BoxShape::createBorderMesh(const G3MRenderContext* rc) {
                          vertices.create(),
                          indices.create(),
                          _borderWidth,
+                         1,
                          borderColor);
 }
 
@@ -110,6 +111,7 @@ Mesh* BoxShape::createSurfaceMesh(const G3MRenderContext* rc) {
                          vertices.create(),
                          indices.create(),
                          _borderWidth,
+                         1,
                          _surfaceColor);
 }
 

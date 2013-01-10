@@ -133,7 +133,7 @@ public class SimplePlanetRenderer extends LeafRenderer
 	//    flatColor = new Color( Color::fromRGBA(0.0, 1.0, 0.0, 1.0) );
 	//  }
   
-	IndexedMesh indexedMesh = new IndexedMesh(GLPrimitive.triangleStrip(), true, Vector3D.zero(), vertices, indices, 1, flatColor, vertexColors);
+	IndexedMesh indexedMesh = new IndexedMesh(GLPrimitive.triangleStrip(), true, Vector3D.zero(), vertices, indices, 1, 1, flatColor, vertexColors);
   
 	//TEXTURED
 	final IGLTextureId texId = rc.getTexturesHandler().getGLTextureId(_image, GLFormat.rgba(), "SimplePlanetRenderer-Texture", false);

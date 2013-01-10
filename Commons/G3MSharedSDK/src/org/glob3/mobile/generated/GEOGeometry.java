@@ -51,7 +51,7 @@ public abstract class GEOGeometry extends GEOObject
 	  // vertices.add( Geodetic3D(*coordinate, 50) );
 	}
   
-	return new DirectMesh(GLPrimitive.lineStrip(), true, vertices.getCenter(), vertices.create(), lineWidth, color);
+	return new DirectMesh(GLPrimitive.lineStrip(), true, vertices.getCenter(), vertices.create(), lineWidth, 1, color);
   }
 
   public GEOGeometry()

@@ -27,21 +27,21 @@ protected:
   IFloatBuffer*            _colors;
   const float              _colorsIntensity;
   const float              _lineWidth;
+  const float              _pointSize;
 
   mutable Extent* _extent;
   Extent* computeExtent() const;
-  
-//  GLState*          _glState;
 
   AbstractMesh(const int primitive,
                bool owner,
                const Vector3D& center,
                IFloatBuffer* vertices,
                float lineWidth,
+               float pointSize,
                Color* flatColor,
                IFloatBuffer* colors,
                const float colorsIntensity);
-  
+
   virtual void rawRender(const G3MRenderContext* rc,
                          const GLState& parentState) const = 0;
 
@@ -58,7 +58,7 @@ public:
   const Vector3D getVertex(int i) const;
 
   bool isTransparent(const G3MRenderContext* rc) const;
-
+  
 };
 
 #endif

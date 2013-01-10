@@ -135,8 +135,9 @@ public class G3MWebGLDemo
       }
 
       final float lineWidth = 1;
+      final float pointSize = 2;
       final Color flatColor = null;
-      return new DirectMesh(GLPrimitive.points(), true, vertices.getCenter(), vertices.create(), lineWidth, flatColor,
+      return new DirectMesh(GLPrimitive.points(), true, vertices.getCenter(), vertices.create(), lineWidth, pointSize, flatColor,
                colors.create());
    }
 

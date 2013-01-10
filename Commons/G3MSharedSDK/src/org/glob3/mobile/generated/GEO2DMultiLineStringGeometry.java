@@ -59,7 +59,7 @@ public class GEO2DMultiLineStringGeometry extends GEOMultiLineStringGeometry
 	Color color = Color.newFromRGBA(1, 1, 1, 1);
 	final float lineWidth = 2F;
   
-	return new DirectMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), lineWidth, color);
+	return new DirectMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), lineWidth, 1, color);
   }
 
 

@@ -30,23 +30,23 @@ public class DirectMesh extends AbstractMesh
   }
 
 
-  public DirectMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, Color flatColor, IFloatBuffer colors)
+  public DirectMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors)
   {
-	  this(primitive, owner, center, vertices, lineWidth, flatColor, colors, 0.0f);
+	  this(primitive, owner, center, vertices, lineWidth, pointSize, flatColor, colors, 0.0f);
   }
-  public DirectMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, Color flatColor)
+  public DirectMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor)
   {
-	  this(primitive, owner, center, vertices, lineWidth, flatColor, null, 0.0f);
+	  this(primitive, owner, center, vertices, lineWidth, pointSize, flatColor, null, 0.0f);
   }
-  public DirectMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth)
+  public DirectMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize)
   {
-	  this(primitive, owner, center, vertices, lineWidth, null, null, 0.0f);
+	  this(primitive, owner, center, vertices, lineWidth, pointSize, null, null, 0.0f);
   }
 //C++ TO JAVA CONVERTER NOTE: Java does not allow default values for parameters. Overloaded methods are inserted above.
-//ORIGINAL LINE: DirectMesh(const int primitive, boolean owner, const Vector3D& center, IFloatBuffer* vertices, float lineWidth, Color* flatColor = null, IFloatBuffer* colors = null, const float colorsIntensity = 0.0f) : AbstractMesh(primitive, owner, center, vertices, lineWidth, flatColor, colors, colorsIntensity)
-  public DirectMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, Color flatColor, IFloatBuffer colors, float colorsIntensity)
+//ORIGINAL LINE: DirectMesh(const int primitive, boolean owner, const Vector3D& center, IFloatBuffer* vertices, float lineWidth, float pointSize, Color* flatColor = null, IFloatBuffer* colors = null, const float colorsIntensity = 0.0f) : AbstractMesh(primitive, owner, center, vertices, lineWidth, pointSize, flatColor, colors, colorsIntensity)
+  public DirectMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors, float colorsIntensity)
   {
-	  super(primitive, owner, center, vertices, lineWidth, flatColor, colors, colorsIntensity);
+	  super(primitive, owner, center, vertices, lineWidth, pointSize, flatColor, colors, colorsIntensity);
   }
 
   public void dispose()
