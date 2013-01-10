@@ -460,8 +460,6 @@ void GL::stopBillBoardDrawing() {
 
 void GL::drawBillBoard(const IGLTextureId* textureId,
                        IFloatBuffer* vertices,
-//                       int viewPortWidth,
-//                       int viewPortHeight,
                        int textureWidth,
                        int textureHeight) {
   if (_verbose) {
@@ -470,20 +468,13 @@ void GL::drawBillBoard(const IGLTextureId* textureId,
 
   int TODO_refactor_billboard;
 
-//  _nativeGL->uniform1i(Uniforms.BillBoard, 1);
-//  _nativeGL->uniform2f(Uniforms.ViewPortExtent, viewPortWidth, viewPortHeight);
   _nativeGL->uniform2f(Uniforms.TextureExtent, textureWidth, textureHeight);
-
-//  color(1, 1, 1, 1);
 
   bindTexture(textureId);
 
   vertexPointer(3, 0, vertices);
-//  setTextureCoordinates(2, 0, getBillboardTexCoord());
 
   _nativeGL->drawArrays(GLPrimitive::triangleStrip(), 0, vertices->size() / 3);
-
-//  _nativeGL->uniform1i(Uniforms.BillBoard, 0);
 }
 
 void GL::setBlendFuncSrcAlpha() {

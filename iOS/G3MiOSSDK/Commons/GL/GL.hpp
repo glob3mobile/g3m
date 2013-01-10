@@ -195,8 +195,6 @@ public:
 
   void drawBillBoard(const IGLTextureId* textureId,
                      IFloatBuffer* vertices,
-//                     int viewPortWidth,
-//                     int viewPortHeight,
                      int textureWidth,
                      int textureHeight);
 

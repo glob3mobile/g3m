@@ -94,9 +94,17 @@ public:
 
   void onTextureDownload(const IImage* image);
 
-  int getTextureWidth() const;
-  int getTextureHeight() const;
-  Vector2I getTextureExtent() const;
+  int getTextureWidth() const {
+    return _textureWidth;
+  }
+
+  int getTextureHeight() const {
+    return _textureHeight;
+  }
+
+  Vector2I getTextureExtent() const {
+    return Vector2I(_textureWidth, _textureHeight);
+  }
 
 };
 

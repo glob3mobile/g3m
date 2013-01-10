@@ -158,16 +158,15 @@ void MarksRenderer::render(const G3MRenderContext* rc,
   const Vector3D radius = rc->getPlanet()->getRadii();
   const double minDistanceToCamera = (radius._x + radius._y + radius._z) / 3 * 0.75;
 
-  
   int marksSize = _marks.size();
   for (int i = 0; i < marksSize; i++) {
     Mark* mark = _marks[i];
     //rc->getLogger()->logInfo("Rendering Mark: \"%s\"", mark->getName().c_str());
-    
+
     if (mark->isReady()) {
       mark->render(rc, state, minDistanceToCamera);
     }
   }
-
+  
   gl->stopBillBoardDrawing();
 }

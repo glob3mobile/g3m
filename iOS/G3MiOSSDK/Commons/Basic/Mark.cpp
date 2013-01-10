@@ -122,7 +122,6 @@ void Mark::render(const G3MRenderContext* rc,
   const Vector3D markCameraVector = markPosition->sub(cameraPosition);
   const double distanceToCamera = markCameraVector.length();
   _renderedMark = distanceToCamera <= minDistanceToCamera;
-  //  const bool renderMark = true;
 
   if (_renderedMark) {
     const Vector3D normalAtMarkPosition = planet->geodeticSurfaceNormal(*markPosition);
@@ -135,15 +134,6 @@ void Mark::render(const G3MRenderContext* rc,
       gl->transformTexCoords(textureScale, textureTranslation);
 
       if (_textureId == NULL) {
-        //        IImage* image = rc->getFactory()->createImageFromFileName(_textureFilename);
-        //
-        //        _textureId = rc->getTexturesHandler()->getGLTextureId(image,
-        //                                                              GLFormat::rgba(),
-        //                                                              _textureFilename,
-        //                                                              false);
-        //
-        //        rc->getFactory()->deleteImage(image);
-
         if (_textureImage != NULL) {
           _textureId = rc->getTexturesHandler()->getGLTextureId(_textureImage,
                                                                 GLFormat::rgba(),
@@ -158,27 +148,10 @@ void Mark::render(const G3MRenderContext* rc,
       if (_textureId != NULL) {
         gl->drawBillBoard(_textureId,
                           getVertices(planet),
-//                          camera->getWidth(),
-//                          camera->getHeight(),
                           _textureWidth,
                           _textureHeight);
       }
     }
   }
 
-}
-
-int Mark::getTextureWidth() const {
-  //  return (_textureImage == NULL) ? 0 : _textureImage->getWidth();
-  return _textureWidth;
-}
-
-int Mark::getTextureHeight() const {
-  //  return (_textureImage == NULL) ? 0 : _textureImage->getHeight();
-  return _textureHeight;
-}
-
-Vector2I Mark::getTextureExtent() const {
-  //  return (_textureImage == NULL) ? Vector2I::zero() : _textureImage->getExtent();
-  return Vector2I(_textureWidth, _textureHeight);
 }
