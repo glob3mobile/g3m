@@ -37,6 +37,7 @@ class IJSONParser;
 class Geodetic3D;
 class CameraRenderer;
 class IStorage;
+class ITextUtils;
 
 #include <vector>
 #include <string>
@@ -80,7 +81,8 @@ public:
                              const IStringUtils* stringUtils,
                              IStringBuilder*     stringBuilder,
                              IMathUtils*         mathUtils,
-                             IJSONParser*        jsonParser);
+                             IJSONParser*        jsonParser,
+                             ITextUtils*         textUtils);
 
   static G3MWidget* create(GL*                              gl,
                            IStorage*                        storage,

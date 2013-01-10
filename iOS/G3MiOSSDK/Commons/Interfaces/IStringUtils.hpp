@@ -25,7 +25,7 @@ private:
 public:
   static void setInstance(const IStringUtils* instance) {
     if (_instance != NULL) {
-      ILogger::instance()->logWarning("Warning, IStringUtils instance set two times\n");
+      ILogger::instance()->logWarning("IStringUtils instance already set!");
     }
     _instance = instance;
   }

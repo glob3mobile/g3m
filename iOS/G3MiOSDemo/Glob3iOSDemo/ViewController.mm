@@ -56,6 +56,7 @@
 //#include "JSONGenerator.hpp"
 //#include "BSONGenerator.hpp"
 //#include "BSONParser.hpp"
+#include "ITextUtils.hpp"
 
 @implementation ViewController
 
@@ -475,10 +476,18 @@
   marksRenderer->addMark(m1);
 
 
-  Mark* m2 = new Mark("Las Palmas",
+  Mark* m2 = new Mark("Las Palmas - Icon",
                       URL("file:///plane.png", false),
                       Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-15.36), 0));
   marksRenderer->addMark(m2);
+
+  IImage* image = ITextUtils::instance()->createLabelBitmap("Washington, DC");
+  Mark* m3 = new Mark("Washington, DC",
+                      image,
+                      Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
+                                 Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
+                                 1000));
+  marksRenderer->addMark(m3);
 
   if (false) {
     for (int i = 0; i < 2000; i++) {

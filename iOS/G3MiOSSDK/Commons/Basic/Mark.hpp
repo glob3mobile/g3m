@@ -52,21 +52,11 @@ private:
 public:
   Mark(const std::string& name,
        const URL          textureURL,
-       const Geodetic3D   position) :
-  _name(name),
-  _textureURL(textureURL),
-  _position(position),
-  _textureId(NULL),
-  _cartesianPosition(NULL),
-  _vertices(NULL),
-  _textureSolved(false),
-  _textureImage(NULL),
-  _renderedMark(false),
-  _textureWidth(0),
-  _textureHeight(0)
-  {
-
-  }
+       const Geodetic3D   position);
+  
+  Mark(const std::string& name,
+       IImage*            textureImage,
+       const Geodetic3D   position);
 
   ~Mark();
 

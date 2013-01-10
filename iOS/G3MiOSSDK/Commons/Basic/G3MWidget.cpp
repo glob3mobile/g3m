@@ -30,13 +30,15 @@
 #include "OrderedRenderable.hpp"
 #include <math.h>
 #include "GInitializationTask.hpp"
+#include "ITextUtils.hpp"
 
 void G3MWidget::initSingletons(ILogger*            logger,
                                IFactory*           factory,
                                const IStringUtils* stringUtils,
                                IStringBuilder*     stringBuilder,
                                IMathUtils*         mathUtils,
-                               IJSONParser*        jsonParser) {
+                               IJSONParser*        jsonParser,
+                               ITextUtils*         textUtils) {
   if (ILogger::instance() == NULL) {
     ILogger::setInstance(logger);
     IFactory::setInstance(factory);
@@ -44,6 +46,7 @@ void G3MWidget::initSingletons(ILogger*            logger,
     IStringBuilder::setInstance(stringBuilder);
     IMathUtils::setInstance(mathUtils);
     IJSONParser::setInstance(jsonParser);
+    ITextUtils::setInstance(textUtils);
   }
   else {
     ILogger::instance()->logWarning("Singletons already set");

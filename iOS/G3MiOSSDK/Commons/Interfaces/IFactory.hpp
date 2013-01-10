@@ -32,7 +32,7 @@ private:
 public:
   static void setInstance(IFactory* factory) {
     if (_instance != NULL) {
-      ILogger::instance()->logWarning("Warning, ILogger instance set two times\n");
+      ILogger::instance()->logWarning("IFactory instance already set!");
     }
     _instance = factory;
   }

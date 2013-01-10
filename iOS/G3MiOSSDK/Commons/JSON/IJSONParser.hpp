@@ -27,7 +27,7 @@ public:
 
   static void setInstance(IJSONParser* parser){
     if (_instance != NULL){
-      ILogger::instance()->logWarning("Warning, IJSONParser instance set two times\n");
+      ILogger::instance()->logWarning("IJSONParser instance already set!");
     }
     _instance = parser;
   }

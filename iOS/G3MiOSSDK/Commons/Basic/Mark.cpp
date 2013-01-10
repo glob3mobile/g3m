@@ -52,6 +52,43 @@ public:
 };
 
 
+Mark::Mark(const std::string& name,
+           const URL          textureURL,
+           const Geodetic3D   position) :
+_name(name),
+_textureURL(textureURL),
+_position(position),
+_textureId(NULL),
+_cartesianPosition(NULL),
+_vertices(NULL),
+_textureSolved(false),
+_textureImage(NULL),
+_renderedMark(false),
+_textureWidth(0),
+_textureHeight(0)
+{
+
+}
+
+Mark::Mark(const std::string& name,
+           IImage*            textureImage,
+           const Geodetic3D   position) :
+_name(name),
+_textureURL("", false),
+_position(position),
+_textureId(NULL),
+_cartesianPosition(NULL),
+_vertices(NULL),
+_textureSolved(true),
+_textureImage(textureImage),
+_renderedMark(false),
+_textureWidth(textureImage->getWidth()),
+_textureHeight(textureImage->getHeight())
+{
+
+}
+
+
 void Mark::initialize(const G3MContext* context) {
   //  todo;
   if (!_textureSolved) {
@@ -77,7 +114,6 @@ void Mark::onTextureDownload(const IImage* image) {
   _textureWidth = _textureImage->getWidth();
   _textureHeight = _textureImage->getHeight();
 }
-
 
 bool Mark::isReady() const {
   return _textureSolved;

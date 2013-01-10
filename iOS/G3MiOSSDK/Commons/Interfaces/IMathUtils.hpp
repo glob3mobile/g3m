@@ -32,7 +32,7 @@ class IMathUtils{
 public:
   static void setInstance(IMathUtils* math) {
     if (_instance != NULL) {
-      ILogger::instance()->logWarning("Warning, IMathUtils instance set two times\n");
+      ILogger::instance()->logWarning("IMathUtils instance already set!");
     }
     _instance = math;
   }
