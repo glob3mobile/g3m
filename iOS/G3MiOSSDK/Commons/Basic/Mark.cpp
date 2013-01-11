@@ -11,12 +11,11 @@
 #include "GL.hpp"
 #include "TexturesHandler.hpp"
 #include "TextureBuilder.hpp"
-
 #include "FloatBufferBuilderFromCartesian3D.hpp"
-
 #include "IGLTextureId.hpp"
 #include "IDownloader.hpp"
 #include "IImageDownloadListener.hpp"
+#include "MarkTouchListener.hpp"
 
 
 class TextureDownloadListener : public IImageDownloadListener {
@@ -36,12 +35,12 @@ public:
   }
 
   void onError(const URL& url) {
-    //    ILogger::instance()->logError("Error trying to download image \"%s\"", url.getPath().c_str());
+    ILogger::instance()->logError("Error trying to download image \"%s\"", url.getPath().c_str());
     _mark->onTextureDownloadError();
   }
 
   void onCancel(const URL& url) {
-    //    ILogger::instance()->logError("Download canceled for image \"%s\"", url.getPath().c_str());
+    // ILogger::instance()->logError("Download canceled for image \"%s\"", url.getPath().c_str());
     _mark->onTextureDownloadError();
   }
 
@@ -54,7 +53,11 @@ public:
 
 Mark::Mark(const std::string& name,
            const URL          textureURL,
-           const Geodetic3D   position) :
+           const Geodetic3D   position,
+           double minDistanceToCamera,
+           void* userData,
+           MarkTouchListener* listener,
+           bool autoDeleteListener) :
 _name(name),
 _textureURL(textureURL),
 _position(position),
@@ -65,14 +68,22 @@ _textureSolved(false),
 _textureImage(NULL),
 _renderedMark(false),
 _textureWidth(0),
-_textureHeight(0)
+_textureHeight(0),
+_userData(userData),
+_minDistanceToCamera(minDistanceToCamera),
+_listener(listener),
+_autoDeleteListener(autoDeleteListener)
 {
 
 }
 
 Mark::Mark(const std::string& name,
            IImage*            textureImage,
-           const Geodetic3D   position) :
+           const Geodetic3D   position,
+           double minDistanceToCamera,
+           void* userData,
+           MarkTouchListener* listener,
+           bool autoDeleteListener) :
 _name(name),
 _textureURL("", false),
 _position(position),
@@ -83,14 +94,17 @@ _textureSolved(true),
 _textureImage(textureImage),
 _renderedMark(false),
 _textureWidth(textureImage->getWidth()),
-_textureHeight(textureImage->getHeight())
+_textureHeight(textureImage->getHeight()),
+_userData(userData),
+_minDistanceToCamera(minDistanceToCamera),
+_listener(listener),
+_autoDeleteListener(autoDeleteListener)
 {
 
 }
 
 
 void Mark::initialize(const G3MContext* context) {
-  //  todo;
   if (!_textureSolved) {
     IDownloader* downloader = context->getDownloader();
 
@@ -106,6 +120,17 @@ void Mark::onTextureDownloadError() {
   _textureSolved = true;
 
   ILogger::instance()->logError("Can't load image \"%s\"", _textureURL.getPath().c_str());
+  //=======
+  //    //  todo;
+  //    if (!_textureSolved) {
+  //        IDownloader* downloader = context->getDownloader();
+  //
+  //        downloader->requestImage(_textureURL,
+  //                                 1000000,
+  //                                 TimeInterval::fromDays(30),
+  //                                 new TextureDownloadListener(this),
+  //                                 true);
+  //    }
 }
 
 void Mark::onTextureDownload(const IImage* image) {
@@ -122,6 +147,9 @@ bool Mark::isReady() const {
 Mark::~Mark() {
   delete _cartesianPosition;
   delete _vertices;
+  if (_autoDeleteListener) {
+    delete _listener;
+  }
 }
 
 Vector3D* Mark::getCartesianPosition(const Planet* planet) {
@@ -147,8 +175,7 @@ IFloatBuffer* Mark::getVertices(const Planet* planet) {
 }
 
 void Mark::render(const G3MRenderContext* rc,
-                  const GLState& parentState,
-                  const double minDistanceToCamera) {
+                  const GLState& parentState) {
   const Camera* camera = rc->getCurrentCamera();
   const Planet* planet = rc->getPlanet();
 
@@ -157,17 +184,13 @@ void Mark::render(const G3MRenderContext* rc,
 
   const Vector3D markCameraVector = markPosition->sub(cameraPosition);
   const double distanceToCamera = markCameraVector.length();
-  _renderedMark = distanceToCamera <= minDistanceToCamera;
+
+  _renderedMark = (_minDistanceToCamera == 0) || (distanceToCamera <= _minDistanceToCamera);
 
   if (_renderedMark) {
     const Vector3D normalAtMarkPosition = planet->geodeticSurfaceNormal(*markPosition);
 
     if (normalAtMarkPosition.angleBetween(markCameraVector)._radians > GMath.halfPi()) {
-      GL* gl = rc->getGL();
-
-      static Vector2D textureTranslation(0.0, 0.0);
-      static Vector2D textureScale(1.0, 1.0);
-      gl->transformTexCoords(textureScale, textureTranslation);
 
       if (_textureId == NULL) {
         if (_textureImage != NULL) {
@@ -182,6 +205,12 @@ void Mark::render(const G3MRenderContext* rc,
       }
 
       if (_textureId != NULL) {
+        GL* gl = rc->getGL();
+
+        // static Vector2D textureTranslation(0.0, 0.0);
+        // static Vector2D textureScale(1.0, 1.0);
+        // gl->transformTexCoords(textureScale, textureTranslation);
+
         gl->drawBillBoard(_textureId,
                           getVertices(planet),
                           _textureWidth,
@@ -189,5 +218,11 @@ void Mark::render(const G3MRenderContext* rc,
       }
     }
   }
+}
 
+bool Mark::touched() {
+  if (_listener == NULL) {
+    return false;
+  }
+  return _listener->touchedMark(this);
 }

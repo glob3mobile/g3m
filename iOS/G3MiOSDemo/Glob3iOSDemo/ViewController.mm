@@ -57,6 +57,8 @@
 //#include "BSONGenerator.hpp"
 //#include "BSONParser.hpp"
 #include "ITextUtils.hpp"
+#include "Mark.hpp"
+#include "MarkTouchListener.hpp"
 
 @implementation ViewController
 
@@ -486,7 +488,8 @@
                       image,
                       Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
                                  Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
-                                 1000));
+                                 1000),
+                      0);
   marksRenderer->addMark(m3);
 
   if (false) {
