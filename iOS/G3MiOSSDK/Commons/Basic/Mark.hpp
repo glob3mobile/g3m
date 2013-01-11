@@ -81,8 +81,7 @@ public:
 
   void initialize(const G3MContext* context);
 
-  void render(const G3MRenderContext* rc,
-              const GLState& parentState);
+  void render(const G3MRenderContext* rc);
 
   bool isReady() const;
 

@@ -174,20 +174,20 @@ void MarksRenderer::render(const G3MRenderContext* rc,
   // Saving camera for use in onTouchEvent
   _lastCamera = rc->getCurrentCamera();
 
+  GL* gl = rc->getGL();
+
   GLState state(parentState);
   state.disableDepthTest();
   state.enableBlend();
   state.enableTextures();
   state.enableTexture2D();
   state.enableVerticesPosition();
-
-  GL* gl = rc->getGL();
+  gl->setState(state);
 
   static Vector2D textureTranslation(0.0, 0.0);
   static Vector2D textureScale(1.0, 1.0);
   gl->transformTexCoords(textureScale, textureTranslation);
 
-  gl->setState(state);
   gl->setBlendFuncSrcAlpha();
 
   const Camera* camera = rc->getCurrentCamera();
@@ -199,9 +199,9 @@ void MarksRenderer::render(const G3MRenderContext* rc,
   for (int i = 0; i < marksSize; i++) {
     Mark* mark = _marks[i];
     //rc->getLogger()->logInfo("Rendering Mark: \"%s\"", mark->getName().c_str());
-
+    
     if (mark->isReady()) {
-      mark->render(rc, state);
+      mark->render(rc);
     }
   }
   
