@@ -133,7 +133,7 @@ public class GL
 	int l = _nativeGL.getAttribLocation(program, name);
 	if (l == -1)
 	{
-	  ILogger.instance().logError("Error fetching Attribute, Program=%d, Variable=\"%s\"", program, name);
+	  ILogger.instance().logError("Error fetching Attribute, Program=%s, Variable=\"%s\"", program.description(), name);
 	  _errorGettingLocationOcurred = true;
 	}
 	return l;
@@ -147,7 +147,7 @@ public class GL
 	IGLUniformID uID = _nativeGL.getUniformLocation(program, name);
 	if (!uID.isValid())
 	{
-	  ILogger.instance().logError("Error fetching Uniform, Program=%d, Variable=\"%s\"", program, name);
+	  ILogger.instance().logError("Error fetching Uniform, Program=%s, Variable=\"%s\"", program.description(), name);
 	  _errorGettingLocationOcurred = true;
 	}
 	return uID;
