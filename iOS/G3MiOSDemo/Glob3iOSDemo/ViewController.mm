@@ -55,10 +55,11 @@
 //#include "IJSONParser.hpp"
 //#include "JSONGenerator.hpp"
 //#include "BSONGenerator.hpp"
-//#include "BSONParser.hpp"
+#include "BSONParser.hpp"
 #include "ITextUtils.hpp"
 #include "Mark.hpp"
 #include "MarkTouchListener.hpp"
+#include "JSONBaseObject.hpp"
 
 @implementation ViewController
 
@@ -488,7 +489,7 @@
                       image,
                       Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
                                  Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
-                                 1000),
+                                 0),
                       0);
   marksRenderer->addMark(m3);
 
@@ -577,6 +578,32 @@
                                                                 Angle::fromDegreesMinutes(-122, 25),
                                                                 1000000),
                                                      TimeInterval::fromSeconds(5));
+
+      /*
+      NSString *bsonFilePath = [[NSBundle mainBundle] pathForResource: @"test"
+                                                               ofType: @"bson"];
+      if (bsonFilePath) {
+
+        NSData* data = [NSData dataWithContentsOfFile: bsonFilePath];
+
+        const int length = [data length];
+        unsigned char* bytes = new unsigned char[ length ]; // will be deleted by IByteBuffer's destructor
+        [data getBytes: bytes
+                length: length];
+        
+
+        IByteBuffer* buffer = new ByteBuffer_iOS(bytes, length);
+
+        JSONBaseObject* bson = BSONParser::parse(buffer);
+
+        printf("%s\n", bson->description().c_str());
+
+        delete bson;
+
+        delete buffer;
+      }
+      */
+
       /*
       NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
                                                                 ofType: @"json"];

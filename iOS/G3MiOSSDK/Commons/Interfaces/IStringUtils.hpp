@@ -26,6 +26,7 @@ public:
   static void setInstance(const IStringUtils* instance) {
     if (_instance != NULL) {
       ILogger::instance()->logWarning("IStringUtils instance already set!");
+      delete _instance;
     }
     _instance = instance;
   }

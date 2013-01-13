@@ -33,6 +33,7 @@ public:
   static void setInstance(IFactory* factory) {
     if (_instance != NULL) {
       ILogger::instance()->logWarning("IFactory instance already set!");
+      delete _instance;
     }
     _instance = factory;
   }

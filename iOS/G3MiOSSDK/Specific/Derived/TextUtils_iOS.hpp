@@ -11,9 +11,18 @@
 
 #include "ITextUtils.hpp"
 
+#import <UIKit/UIKit.h>
+
+
 class TextUtils_iOS : public ITextUtils {
+private:
+  CGColorRef toCGColor(const Color* color);
+
 public:
-  IImage* createLabelBitmap(const std::string& label);
+  IImage* createLabelBitmap(const std::string& label,
+                            float fontSize,
+                            const Color* color,
+                            const Color* shadowColor);
 
 };
 

@@ -8,31 +8,47 @@
 
 #include "TextUtils_iOS.hpp"
 
-#import <UIKit/UIKit.h>
 
 #include "Image_iOS.hpp"
+#include "Color.hpp"
 
-IImage* TextUtils_iOS::createLabelBitmap(const std::string& label) {
+CGColorRef TextUtils_iOS::toCGColor(const Color* color) {
+  if (color == NULL) {
+    return NULL;
+  }
+
+  return [[UIColor colorWithRed: color->getRed()
+                          green: color->getGreen()
+                           blue: color->getBlue()
+                          alpha: color->getAlpha()] CGColor];
+}
+
+IImage* TextUtils_iOS::createLabelBitmap(const std::string& label,
+                                         float fontSize,
+                                         const Color* color,
+                                         const Color* shadowColor) {
   NSString* text = [NSString stringWithCString: label.c_str()
                                       encoding: NSUTF8StringEncoding];
 
-  // set the font type and size
-  //UIFont *font = [UIFont systemFontOfSize:20.0];
-  UIFont *font = [UIFont systemFontOfSize:22.0];
-  CGSize textSize  = [text sizeWithFont:font];
+  UIFont *font = [UIFont systemFontOfSize: fontSize];
+  CGSize textSize = [text sizeWithFont: font];
 
-  CGSize imageSize = CGSizeMake(textSize.width + 2, textSize.height + 2);
+  CGSize imageSize = (shadowColor == NULL) ? textSize : CGSizeMake(textSize.width + 2,
+                                                                   textSize.height + 2);
 
   UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
 
-  // optional: add a shadow, to avoid clipping the shadow you should make the context size bigger
   CGContextRef ctx = UIGraphicsGetCurrentContext();
-  CGContextSetFillColorWithColor(ctx, [[UIColor yellowColor] CGColor]);
-  //CGContextSetShadowWithColor(ctx, CGSizeMake(1.0, 1.0), 5.0, [[UIColor blackColor] CGColor]);
-  CGContextSetShadowWithColor(ctx, CGSizeMake(2.0, 2.0), 2.0, [[UIColor blackColor] CGColor]);
+
+  CGContextSetFillColorWithColor(ctx, toCGColor(color));
+
+  if (shadowColor != NULL) {
+    CGContextSetShadowWithColor(ctx, CGSizeMake(2.0, 2.0), 1.0, toCGColor(shadowColor));
+  }
 
   // draw in context, you can use also drawInRect:withFont:
-  [text drawAtPoint:CGPointMake(0.0, 0.0) withFont:font];
+  [text drawAtPoint: CGPointMake(0.0, 0.0)
+           withFont: font];
 
   // transfer image
   UIImage *image = UIGraphicsGetImageFromCurrentImageContext();

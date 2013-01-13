@@ -11,6 +11,7 @@
 
 #include "ILogger.hpp"
 class IImage;
+class Color;
 
 class ITextUtils {
 private:
@@ -20,6 +21,7 @@ public:
   static void setInstance(ITextUtils* factory) {
     if (_instance != NULL) {
       ILogger::instance()->logWarning("ITextUtils instance already set!");
+      delete _instance;
     }
     _instance = factory;
   }
@@ -32,7 +34,12 @@ public:
 
   }
 
-  virtual IImage* createLabelBitmap(const std::string& label) = 0;
+  virtual IImage* createLabelBitmap(const std::string& label);
+  
+  virtual IImage* createLabelBitmap(const std::string& label,
+                                    float fontSize,
+                                    const Color* color,
+                                    const Color* shadowColor) = 0;
 
 };
 

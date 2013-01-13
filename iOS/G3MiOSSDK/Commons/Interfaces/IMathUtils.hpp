@@ -33,6 +33,7 @@ public:
   static void setInstance(IMathUtils* math) {
     if (_instance != NULL) {
       ILogger::instance()->logWarning("IMathUtils instance already set!");
+      delete _instance;
     }
     _instance = math;
   }
