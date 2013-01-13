@@ -33,9 +33,11 @@ public class TextUtils_Android
                                    final float fontSize,
                                    final org.glob3.mobile.generated.Color color,
                                    final org.glob3.mobile.generated.Color shadowColor) {
-      final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+      //final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+      final Paint paint = new Paint();
+      paint.setAntiAlias(true);
       paint.setColor(toAndroidColor(color));
-      paint.setTextSize(fontSize);
+      paint.setTextSize((fontSize * 3) / 2);
       if (shadowColor != null) {
          paint.setShadowLayer(1f, 2f, 2f, toAndroidColor(shadowColor));
       }
@@ -51,8 +53,9 @@ public class TextUtils_Android
 
       final Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
       final Canvas canvas = new Canvas(bitmap);
+      // canvas.drawARGB(255, 0, 255, 0); // for visualization
 
-      canvas.drawText(label, 0, 0, paint);
+      canvas.drawText(label, 0, height - textBounds.bottom - 2, paint);
 
       return new Image_Android(bitmap, null);
    }
