@@ -109,7 +109,9 @@ int GL::checkedGetAttribLocation(ShaderProgram* program,
   }
   int l = _nativeGL->getAttribLocation(program, name);
   if (l == -1) {
-    ILogger::instance()->logError("Error fetching Attribute, Program=%d, Variable=\"%s\"", program, name.c_str());
+    ILogger::instance()->logError("Error fetching Attribute, Program=%s, Variable=\"%s\"",
+                                  program->description().c_str(),
+                                  name.c_str());
     _errorGettingLocationOcurred = true;
   }
   return l;
@@ -122,7 +124,9 @@ IGLUniformID* GL::checkedGetUniformLocation(ShaderProgram* program,
   }
   IGLUniformID* uID = _nativeGL->getUniformLocation(program, name);
   if (!uID->isValid()) {
-    ILogger::instance()->logError("Error fetching Uniform, Program=%d, Variable=\"%s\"", program, name.c_str());
+    ILogger::instance()->logError("Error fetching Uniform, Program=%s, Variable=\"%s\"",
+                                  program->description().c_str(),
+                                  name.c_str());
     _errorGettingLocationOcurred = true;
   }
   return uID;
