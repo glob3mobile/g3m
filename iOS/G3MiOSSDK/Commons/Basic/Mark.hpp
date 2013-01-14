@@ -70,7 +70,7 @@ public:
   Mark(const std::string&  label,
        const URL           iconURL,
        const Geodetic3D    position,
-       const LabelPosition labelPosition=Right,
+       const LabelPosition labelPosition,
        double minDistanceToCamera=4.5e+06,
        MarkUserData* userData=NULL,
        bool autoDeleteUserData=true,
