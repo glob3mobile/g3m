@@ -92,9 +92,9 @@ public class TextUtils_Android
 
       final Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
       final Canvas canvas = new Canvas(bitmap);
-      // canvas.drawARGB(255, 0, 255, 0); // for visualization
+      //canvas.drawARGB(255, 0, 255, 0); // for visualization
 
-      canvas.drawText(label, 0, height - textBounds.bottom - 2, paint);
+      canvas.drawText(label, 0, -textBounds.top, paint);
 
       final Image_Android result = new Image_Android(bitmap, null);
       listener.imageCreated(result);
@@ -146,8 +146,9 @@ public class TextUtils_Android
          return;
       }
 
-      final Bitmap bitmap = Bitmap.createBitmap(imageWidth, imageHeight, Bitmap.Config.ARGB_8888);
+      final Bitmap bitmap = Bitmap.createBitmap(imageWidth + 2, imageHeight + 2, Bitmap.Config.ARGB_8888);
       final Canvas canvas = new Canvas(bitmap);
+      //canvas.drawARGB(255, 0, 255, 0); // for visualization
 
       final Bitmap androidBitmap = ((Image_Android) image).getBitmap();
       if (labelPosition == LabelPosition.Bottom) {
@@ -171,10 +172,18 @@ public class TextUtils_Android
       }
 
       if (labelPosition == LabelPosition.Bottom) {
-         drawText();
+         canvas.drawText( //
+                  label, //
+                  (imageWidth - labelWidth) / 2, //
+                  (image.getHeight() + separation) - textBounds.top, //
+                  paint);
       }
       else if (labelPosition == LabelPosition.Right) {
-         drawText();
+         canvas.drawText( //
+                  label, //
+                  image.getWidth() + separation, //
+                  ((imageHeight - labelHeight) / 2) - textBounds.top, //
+                  paint);
       }
 
       final Image_Android result = new Image_Android(bitmap, null);
