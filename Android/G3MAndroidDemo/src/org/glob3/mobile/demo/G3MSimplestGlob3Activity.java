@@ -112,7 +112,7 @@ public class G3MSimplestGlob3Activity
       final Mark m1 = new Mark("Fuerteventura", //
                new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false), //
                new Geodetic3D(Angle.fromDegrees(28.05), Angle.fromDegrees(-14.36), 0), //
-               true);
+               false);
       marksRenderer.addMark(m1);
 
       final Mark m3 = new Mark(
