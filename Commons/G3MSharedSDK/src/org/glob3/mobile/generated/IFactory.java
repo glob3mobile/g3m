@@ -60,12 +60,6 @@ public abstract class IFactory
 
   }
 
-//  virtual IImage* createImageFromFileName(const std::string& filename) const = 0;
-//
-//  virtual IImage* createImageFromBuffer(const IByteBuffer* buffer) const = 0;
-//
-//  virtual IImage* createImageFromSize(int width, int height) const = 0;
-
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual void createImageFromFileName(const String& filename, IImageListener* listener, boolean autodelete) const = 0;
   public abstract void createImageFromFileName(String filename, IImageListener listener, boolean autodelete);

@@ -329,7 +329,7 @@ public class G3MWidget
 	return _nextCamera;
   }
 
-  public final void setUserData(UserData userData)
+  public final void setUserData(WidgetUserData userData)
   {
 	if (_userData != null)
 		_userData.dispose();
@@ -342,8 +342,8 @@ public class G3MWidget
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: UserData* getUserData() const
-  public final UserData getUserData()
+//ORIGINAL LINE: WidgetUserData* getUserData() const
+  public final WidgetUserData getUserData()
   {
 	return _userData;
   }
@@ -471,7 +471,7 @@ public class G3MWidget
 
   private ITimer _renderStatisticsTimer;
 
-  private UserData _userData;
+  private WidgetUserData _userData;
 
   private GInitializationTask _initializationTask;
   private boolean _autoDeleteInitializationTask;
