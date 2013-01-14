@@ -63,8 +63,12 @@ public class Mark
   {
 	  this(label, iconURL, position, labelPosition, 4.5e+06, null, true, null, false);
   }
+  public Mark(String label, URL iconURL, Geodetic3D position)
+  {
+	  this(label, iconURL, position, Right, 4.5e+06, null, true, null, false);
+  }
 //C++ TO JAVA CONVERTER NOTE: Java does not allow default values for parameters. Overloaded methods are inserted above.
-//ORIGINAL LINE: Mark(const String& label, const URL iconURL, const Geodetic3D position, const LabelPosition labelPosition, double minDistanceToCamera =4.5e+06, MarkUserData* userData =null, boolean autoDeleteUserData =true, MarkTouchListener* listener =null, boolean autoDeleteListener =false) : _label(label), _iconURL(iconURL), _position(position), _labelPosition(labelPosition), _textureId(null), _cartesianPosition(null), _vertices(null), _textureSolved(false), _textureImage(null), _renderedMark(false), _textureWidth(0), _textureHeight(0), _userData(userData), _autoDeleteUserData(autoDeleteUserData), _minDistanceToCamera(minDistanceToCamera), _listener(listener), _autoDeleteListener(autoDeleteListener)
+//ORIGINAL LINE: Mark(const String& label, const URL iconURL, const Geodetic3D position, const LabelPosition labelPosition =Right, double minDistanceToCamera =4.5e+06, MarkUserData* userData =null, boolean autoDeleteUserData =true, MarkTouchListener* listener =null, boolean autoDeleteListener =false) : _label(label), _iconURL(iconURL), _position(position), _labelPosition(labelPosition), _textureId(null), _cartesianPosition(null), _vertices(null), _textureSolved(false), _textureImage(null), _renderedMark(false), _textureWidth(0), _textureHeight(0), _userData(userData), _autoDeleteUserData(autoDeleteUserData), _minDistanceToCamera(minDistanceToCamera), _listener(listener), _autoDeleteListener(autoDeleteListener)
   public Mark(String label, URL iconURL, Geodetic3D position, LabelPosition labelPosition, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener, boolean autoDeleteListener)
   {
 	  _label = label;
