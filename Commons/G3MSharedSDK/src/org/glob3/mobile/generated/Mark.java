@@ -2,7 +2,7 @@ package org.glob3.mobile.generated;
 public class Mark
 {
   private final String _label;
-  private final URL _iconURL = new URL();
+  private URL _iconURL = new URL();
   private final Geodetic3D _position ;
   private final double _minDistanceToCamera;
 
