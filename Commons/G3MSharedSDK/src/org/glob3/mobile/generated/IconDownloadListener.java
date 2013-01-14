@@ -3,13 +3,13 @@ public class IconDownloadListener implements IImageDownloadListener
 {
   private Mark _mark;
   private final String _label;
-  private final LabelPosition _labelPosition = new LabelPosition();
+  private final boolean _labelBottom;
 
-  public IconDownloadListener(Mark mark, String label, LabelPosition labelPosition)
+  public IconDownloadListener(Mark mark, String label, boolean labelBottom)
   {
 	  _mark = mark;
 	  _label = label;
-	  _labelPosition = labelPosition;
+	  _labelBottom = labelBottom;
 
   }
 
@@ -19,7 +19,7 @@ public class IconDownloadListener implements IImageDownloadListener
 
 	if (hasLabel)
 	{
-	  ITextUtils.instance().labelImage(image, _label, _labelPosition, new MarkLabelImageListener(_mark), true);
+	  ITextUtils.instance().labelImage(image, _label, _labelBottom ? Bottom : Right, new MarkLabelImageListener(_mark), true);
 	}
 	else
 	{
