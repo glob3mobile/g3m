@@ -20,7 +20,6 @@ import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IThreadUtils;
-import org.glob3.mobile.generated.LabelPosition;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarksRenderer;
@@ -113,7 +112,7 @@ public class G3MSimplestGlob3Activity
       final Mark m1 = new Mark("Fuerteventura", //
                new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false), //
                new Geodetic3D(Angle.fromDegrees(28.05), Angle.fromDegrees(-14.36), 0), //
-               LabelPosition.Right);
+               true);
       marksRenderer.addMark(m1);
 
       final Mark m3 = new Mark(

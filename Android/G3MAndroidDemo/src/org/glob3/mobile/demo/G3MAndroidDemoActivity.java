@@ -9,7 +9,6 @@ import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraConstrainer;
-import org.glob3.mobile.generated.LabelPosition;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarkTouchListener;
@@ -165,7 +164,7 @@ public class G3MAndroidDemoActivity
          final Mark m2 = new Mark( //
                   "Las Palmas", //
                   new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false), //
-                  new Geodetic3D(Angle.fromDegrees(28.05), Angle.fromDegrees(-15.36), 0), LabelPosition.Right);
+                  new Geodetic3D(Angle.fromDegrees(28.05), Angle.fromDegrees(-15.36), 0), false);
          marksRenderer.addMark(m2);
 
          final boolean randomMarkers = false;
@@ -177,8 +176,7 @@ public class G3MAndroidDemoActivity
 
                marksRenderer.addMark(new Mark("Random #" + i, //
                         new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false), //
-                        new Geodetic3D(latitude, longitude, 0), //
-                        LabelPosition.Bottom));
+                        new Geodetic3D(latitude, longitude, 0)));
 
             }
          }

@@ -65,9 +65,11 @@ public:
     const bool hasLabel = ( _label.length() != 0 );
 
     if (hasLabel) {
+      LabelPosition labelPosition = _labelBottom ? Bottom : Right;
+
       ITextUtils::instance()->labelImage(image,
                                          _label,
-                                         _labelBottom ? Bottom : Right,
+                                         labelPosition,
                                          new MarkLabelImageListener(_mark),
                                          true);
     }
