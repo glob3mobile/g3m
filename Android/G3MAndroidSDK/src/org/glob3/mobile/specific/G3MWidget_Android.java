@@ -31,8 +31,8 @@ import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.Touch;
 import org.glob3.mobile.generated.TouchEvent;
 import org.glob3.mobile.generated.TouchEventType;
-import org.glob3.mobile.generated.UserData;
 import org.glob3.mobile.generated.Vector2I;
+import org.glob3.mobile.generated.WidgetUserData;
 
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
@@ -374,7 +374,7 @@ public final class G3MWidget_Android
                           final GInitializationTask initializationTask,
                           final boolean autoDeleteInitializationTask,
                           final ArrayList<PeriodicalTask> periodicalTasks,
-                          final UserData userData) {
+                          final WidgetUserData userData) {
 
       _g3mWidget = G3MWidget.create(//
                getGL(), //
@@ -436,7 +436,7 @@ public final class G3MWidget_Android
    }
 
 
-   public UserData getUserData() {
+   public WidgetUserData getUserData() {
       return getG3MWidget().getUserData();
    }
 
