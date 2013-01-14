@@ -35,7 +35,7 @@ public:
 class Mark {
 private:
   const std::string   _label;
-  const LabelPosition _labelPosition;
+  LabelPosition _labelPosition;
 
   URL               _iconURL;
   const Geodetic3D  _position;
