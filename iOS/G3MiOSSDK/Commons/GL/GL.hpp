@@ -72,6 +72,8 @@ private:
   float _lineWidth;
   float _pointSize;
 
+  ShaderProgram* _program;
+
   inline void loadModelView();
 
   const IGLTextureId* getGLTextureId();
@@ -124,7 +126,8 @@ public:
   _flatColorIntensity(0),
   _billboardTexCoord(NULL),
   _lineWidth(1),
-  _pointSize(1)
+  _pointSize(1),
+  _program(NULL)
   {
     //Init Constants
     GLCullFace::init(_nativeGL);

@@ -56,7 +56,7 @@
 //#include "JSONGenerator.hpp"
 //#include "BSONGenerator.hpp"
 #include "BSONParser.hpp"
-#include "ITextUtils.hpp"
+//#include "ITextUtils.hpp"
 #include "Mark.hpp"
 #include "MarkTouchListener.hpp"
 #include "JSONBaseObject.hpp"
@@ -211,7 +211,7 @@
   const bool logDownloaderStatistics = false;
   builder.setLogDownloaderStatistics(logDownloaderStatistics);
 
-  UserData* userData = NULL;
+  WidgetUserData* userData = NULL;
   builder.setUserData(userData);
 
   // initialization
@@ -453,7 +453,7 @@
   class TestMarkTouchListener : public MarkTouchListener {
   public:
     bool touchedMark(Mark* mark) {
-      NSString* message = [NSString stringWithFormat: @"Touched on mark \"%s\"", mark->getName().c_str()];
+      NSString* message = [NSString stringWithFormat: @"Touched on mark \"%s\"", mark->getLabel().c_str()];
 
       UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Glob3 Demo"
                                                       message:message
@@ -479,14 +479,12 @@
   marksRenderer->addMark(m1);
 
 
-  Mark* m2 = new Mark("Las Palmas - Icon",
+  Mark* m2 = new Mark("",
                       URL("file:///plane.png", false),
                       Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-15.36), 0));
   marksRenderer->addMark(m2);
 
-  IImage* image = ITextUtils::instance()->createLabelBitmap("Washington, DC");
   Mark* m3 = new Mark("Washington, DC",
-                      image,
                       Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
                                  Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
                                  0),

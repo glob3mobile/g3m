@@ -46,12 +46,6 @@ public:
 
   }
 
-//  virtual IImage* createImageFromFileName(const std::string& filename) const = 0;
-//
-//  virtual IImage* createImageFromBuffer(const IByteBuffer* buffer) const = 0;
-//
-//  virtual IImage* createImageFromSize(int width, int height) const = 0;
-
   virtual void createImageFromFileName(const std::string& filename,
                                        IImageListener* listener,
                                        bool autodelete) const = 0;

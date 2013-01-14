@@ -48,18 +48,18 @@ class ITextUtils;
 class G3MContext;
 class GLState;
 
-class UserData {
+class WidgetUserData {
 private:
   G3MWidget* _widget;
 
 public:
-  UserData() :
+  WidgetUserData() :
   _widget(NULL)
   {
 
   }
 
-  virtual ~UserData() {
+  virtual ~WidgetUserData() {
 
   }
 
@@ -126,7 +126,7 @@ public:
     return _nextCamera;
   }
 
-  void setUserData(UserData* userData) {
+  void setUserData(WidgetUserData* userData) {
     delete _userData;
 
     _userData = userData;
@@ -135,7 +135,7 @@ public:
     }
   }
 
-  UserData* getUserData() const {
+  WidgetUserData* getUserData() const {
     return _userData;
   }
 
@@ -200,7 +200,7 @@ private:
 
   ITimer* _renderStatisticsTimer;
 
-  UserData* _userData;
+  WidgetUserData* _userData;
 
   GInitializationTask* _initializationTask;
   bool                 _autoDeleteInitializationTask;

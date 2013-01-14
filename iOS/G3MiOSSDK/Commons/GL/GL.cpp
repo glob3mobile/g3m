@@ -137,6 +137,11 @@ bool GL::useProgram(ShaderProgram* program) {
     ILogger::instance()->logInfo("GL::useProgram()");
   }
 
+  if (_program == program) {
+    return true;
+  }
+  _program = program;
+  
   // set shaders
   _nativeGL->useProgram(program);
 

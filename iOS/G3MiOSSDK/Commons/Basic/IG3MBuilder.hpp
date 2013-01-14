@@ -46,7 +46,7 @@ private:
   std::vector<PeriodicalTask*> _periodicalTasks;
   bool _logFPS;
   bool _logDownloaderStatistics;
-  UserData* _userData;
+  WidgetUserData* _userData;
 
   std::vector<ICameraConstrainer*> createCameraConstraints();
   CameraRenderer* createCameraRenderer();
@@ -84,7 +84,7 @@ public:
   void addPeriodicalTask(PeriodicalTask* periodicalTask);
   void setLogFPS(const bool logFPS);
   void setLogDownloaderStatistics(const bool logDownloaderStatistics);
-  void setUserData(UserData* userData);
+  void setUserData(WidgetUserData* userData);
 
 #ifdef C_CODE
   void setInitializationTask(GInitializationTask* initializationTask,

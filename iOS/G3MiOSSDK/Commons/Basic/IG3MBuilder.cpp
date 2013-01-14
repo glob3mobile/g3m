@@ -313,7 +313,7 @@ void IG3MBuilder::setLogDownloaderStatistics(const bool logDownloaderStatistics)
   _logDownloaderStatistics = logDownloaderStatistics;
 }
 
-void IG3MBuilder::setUserData(UserData *userData) {
+void IG3MBuilder::setUserData(WidgetUserData *userData) {
   if (_userData != userData) {
     delete _userData;
     _userData = userData;

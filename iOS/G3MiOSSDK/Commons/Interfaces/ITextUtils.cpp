@@ -13,14 +13,41 @@
 ITextUtils* ITextUtils::_instance = NULL;
 
 
-IImage* ITextUtils::createLabelBitmap(const std::string& label) {
+void ITextUtils::createLabelImage(const std::string& label,
+                                  IImageListener* listener,
+                                  bool autodelete) {
   const float fontSize = 20;
 
   const Color color       = Color::yellow();
   const Color shadowColor = Color::black();
 
-  return createLabelBitmap(label,
-                           fontSize,
-                           &color,
-                           &shadowColor);
+  createLabelImage(label,
+                   fontSize,
+                   &color,
+                   &shadowColor,
+                   listener,
+                   autodelete);
+}
+
+void ITextUtils::labelImage(const IImage* image,
+                            const std::string& label,
+                            const LabelPosition labelPosition,
+                            IImageListener* listener,
+                            bool autodelete) {
+  const float fontSize = 20;
+
+  const Color color       = Color::yellow();
+  const Color shadowColor = Color::black();
+
+  const int separation = 2;
+
+  labelImage(image,
+             label,
+             labelPosition,
+             separation,
+             fontSize,
+             &color,
+             &shadowColor,
+             listener,
+             autodelete);
 }
