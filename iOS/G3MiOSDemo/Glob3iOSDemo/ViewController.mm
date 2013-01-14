@@ -55,7 +55,11 @@
 //#include "IJSONParser.hpp"
 //#include "JSONGenerator.hpp"
 //#include "BSONGenerator.hpp"
-//#include "BSONParser.hpp"
+#include "BSONParser.hpp"
+#include "ITextUtils.hpp"
+#include "Mark.hpp"
+#include "MarkTouchListener.hpp"
+#include "JSONBaseObject.hpp"
 
 @implementation ViewController
 
@@ -475,14 +479,23 @@
   marksRenderer->addMark(m1);
 
 
-  Mark* m2 = new Mark("Las Palmas",
+  Mark* m2 = new Mark("Las Palmas - Icon",
                       URL("file:///plane.png", false),
                       Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-15.36), 0));
   marksRenderer->addMark(m2);
 
+  IImage* image = ITextUtils::instance()->createLabelBitmap("Washington, DC");
+  Mark* m3 = new Mark("Washington, DC",
+                      image,
+                      Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
+                                 Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
+                                 0),
+                      0);
+  marksRenderer->addMark(m3);
+
   if (false) {
     for (int i = 0; i < 2000; i++) {
-      const Angle latitude = Angle::fromDegrees( (int) (arc4random() % 180) - 90 );
+      const Angle latitude  = Angle::fromDegrees( (int) (arc4random() % 180) - 90 );
       const Angle longitude = Angle::fromDegrees( (int) (arc4random() % 360) - 180 );
 
       marksRenderer->addMark(new Mark("Random",
@@ -565,6 +578,32 @@
                                                                 Angle::fromDegreesMinutes(-122, 25),
                                                                 1000000),
                                                      TimeInterval::fromSeconds(5));
+
+      /*
+      NSString *bsonFilePath = [[NSBundle mainBundle] pathForResource: @"test"
+                                                               ofType: @"bson"];
+      if (bsonFilePath) {
+
+        NSData* data = [NSData dataWithContentsOfFile: bsonFilePath];
+
+        const int length = [data length];
+        unsigned char* bytes = new unsigned char[ length ]; // will be deleted by IByteBuffer's destructor
+        [data getBytes: bytes
+                length: length];
+        
+
+        IByteBuffer* buffer = new ByteBuffer_iOS(bytes, length);
+
+        JSONBaseObject* bson = BSONParser::parse(buffer);
+
+        printf("%s\n", bson->description().c_str());
+
+        delete bson;
+
+        delete buffer;
+      }
+      */
+
       /*
       NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
                                                                 ofType: @"json"];

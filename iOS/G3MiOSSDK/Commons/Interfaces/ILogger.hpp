@@ -31,7 +31,8 @@ protected:
 public:
   static void setInstance(ILogger* logger) {
     if (_instance != NULL) {
-      ILogger::instance()->logWarning("Warning, ILooger instance set two times\n");
+      ILogger::instance()->logWarning("ILooger instance already set!");
+      delete _instance;
     }
     _instance = logger;
   }

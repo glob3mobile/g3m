@@ -13,7 +13,9 @@ public class UniformsStruct
 
   //FOR BILLBOARDING
   public IGLUniformID BillBoard;
-  public IGLUniformID ViewPortRatio;
+  public IGLUniformID ViewPortExtent;
+  public IGLUniformID TextureExtent;
+
 
   //FOR COLOR MIXING
   public IGLUniformID FlatColorIntensity;
@@ -34,7 +36,8 @@ public class UniformsStruct
 
 	//FOR BILLBOARDING
 	BillBoard = null;
-	ViewPortRatio = null;
+	ViewPortExtent = null;
+	TextureExtent = null;
 
 	//FOR COLOR MIXING
 	FlatColorIntensity = null;

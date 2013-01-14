@@ -25,26 +25,23 @@ package org.glob3.mobile.generated;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IGLTextureId;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class MarkTouchListener;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class GLState;
 
 public class Mark
 {
-
   private final String _name;
   private URL _textureURL = new URL();
   private final Geodetic3D _position ;
+  private Object _userData;
+  private double _minDistanceToCamera;
+  private MarkTouchListener _listener;
+  private boolean _autoDeleteListener;
 
   private IGLTextureId _textureId;
 
   private Vector3D _cartesianPosition;
-  private Vector3D getCartesianPosition(Planet planet)
-  {
-	if (_cartesianPosition == null)
-	{
-	  _cartesianPosition = new Vector3D(planet.toCartesian(_position));
-	}
-	return _cartesianPosition;
-  }
 
   private IFloatBuffer _vertices;
   private IFloatBuffer getVertices(Planet planet)
@@ -71,7 +68,25 @@ public class Mark
 
   private boolean _renderedMark;
 
+  public Mark(String name, URL textureURL, Geodetic3D position, double minDistanceToCamera, Object userData, MarkTouchListener listener)
+  {
+	  this(name, textureURL, position, minDistanceToCamera, userData, listener, false);
+  }
+  public Mark(String name, URL textureURL, Geodetic3D position, double minDistanceToCamera, Object userData)
+  {
+	  this(name, textureURL, position, minDistanceToCamera, userData, null, false);
+  }
+  public Mark(String name, URL textureURL, Geodetic3D position, double minDistanceToCamera)
+  {
+	  this(name, textureURL, position, minDistanceToCamera, null, null, false);
+  }
   public Mark(String name, URL textureURL, Geodetic3D position)
+  {
+	  this(name, textureURL, position, 4.5e+06, null, null, false);
+  }
+//C++ TO JAVA CONVERTER NOTE: Java does not allow default values for parameters. Overloaded methods are inserted above.
+//ORIGINAL LINE: Mark(const String& name, const URL textureURL, const Geodetic3D position, double minDistanceToCamera =4.5e+06, Object* userData =null, MarkTouchListener* listener =null, boolean autoDeleteListener =false) : _name(name), _textureURL(textureURL), _position(position), _textureId(null), _cartesianPosition(null), _vertices(null), _textureSolved(false), _textureImage(null), _renderedMark(false), _textureWidth(0), _textureHeight(0), _userData(userData), _minDistanceToCamera(minDistanceToCamera), _listener(listener), _autoDeleteListener(autoDeleteListener)
+  public Mark(String name, URL textureURL, Geodetic3D position, double minDistanceToCamera, Object userData, MarkTouchListener listener, boolean autoDeleteListener)
   {
 	  _name = name;
 	  _textureURL = new URL(textureURL);
@@ -84,7 +99,49 @@ public class Mark
 	  _renderedMark = false;
 	  _textureWidth = 0;
 	  _textureHeight = 0;
+	  _userData = userData;
+	  _minDistanceToCamera = minDistanceToCamera;
+	  _listener = listener;
+	  _autoDeleteListener = autoDeleteListener;
+  
+  }
 
+  public Mark(String name, IImage textureImage, Geodetic3D position, double minDistanceToCamera, Object userData, MarkTouchListener listener)
+  {
+	  this(name, textureImage, position, minDistanceToCamera, userData, listener, false);
+  }
+  public Mark(String name, IImage textureImage, Geodetic3D position, double minDistanceToCamera, Object userData)
+  {
+	  this(name, textureImage, position, minDistanceToCamera, userData, null, false);
+  }
+  public Mark(String name, IImage textureImage, Geodetic3D position, double minDistanceToCamera)
+  {
+	  this(name, textureImage, position, minDistanceToCamera, null, null, false);
+  }
+  public Mark(String name, IImage textureImage, Geodetic3D position)
+  {
+	  this(name, textureImage, position, 4.5e+06, null, null, false);
+  }
+//C++ TO JAVA CONVERTER NOTE: Java does not allow default values for parameters. Overloaded methods are inserted above.
+//ORIGINAL LINE: Mark(const String& name, IImage* textureImage, const Geodetic3D position, double minDistanceToCamera =4.5e+06, Object* userData =null, MarkTouchListener* listener =null, boolean autoDeleteListener =false) : _name(name), _textureURL("", false), _position(position), _textureId(null), _cartesianPosition(null), _vertices(null), _textureSolved(true), _textureImage(textureImage), _renderedMark(false), _textureWidth(textureImage->getWidth()), _textureHeight(textureImage->getHeight()), _userData(userData), _minDistanceToCamera(minDistanceToCamera), _listener(listener), _autoDeleteListener(autoDeleteListener)
+  public Mark(String name, IImage textureImage, Geodetic3D position, double minDistanceToCamera, Object userData, MarkTouchListener listener, boolean autoDeleteListener)
+  {
+	  _name = name;
+	  _textureURL = new URL("", false);
+	  _position = new Geodetic3D(position);
+	  _textureId = null;
+	  _cartesianPosition = null;
+	  _vertices = null;
+	  _textureSolved = true;
+	  _textureImage = textureImage;
+	  _renderedMark = false;
+	  _textureWidth = textureImage.getWidth();
+	  _textureHeight = textureImage.getHeight();
+	  _userData = userData;
+	  _minDistanceToCamera = minDistanceToCamera;
+	  _listener = listener;
+	  _autoDeleteListener = autoDeleteListener;
+  
   }
 
   public void dispose()
@@ -93,6 +150,11 @@ public class Mark
 		_cartesianPosition.dispose();
 	if (_vertices != null)
 		_vertices.dispose();
+	if (_autoDeleteListener)
+	{
+	  if (_listener != null)
+		  _listener.dispose();
+	}
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -111,7 +173,6 @@ public class Mark
 
   public final void initialize(G3MContext context)
   {
-	//  todo;
 	if (!_textureSolved)
 	{
 	  IDownloader downloader = context.getDownloader();
@@ -120,11 +181,7 @@ public class Mark
 	}
   }
 
-//C++ TO JAVA CONVERTER NOTE: This was formerly a static local variable declaration (not allowed in Java):
-  private Vector2D render_textureTranslation = new Vector2D(0.0, 0.0);
-//C++ TO JAVA CONVERTER NOTE: This was formerly a static local variable declaration (not allowed in Java):
-  private Vector2D render_textureScale = new Vector2D(1.0, 1.0);
-  public final void render(G3MRenderContext rc, GLState parentState, double minDistanceToCamera)
+  public final void render(G3MRenderContext rc)
   {
 	final Camera camera = rc.getCurrentCamera();
 	final Planet planet = rc.getPlanet();
@@ -134,8 +191,8 @@ public class Mark
   
 	final Vector3D markCameraVector = markPosition.sub(cameraPosition);
 	final double distanceToCamera = markCameraVector.length();
-	_renderedMark = distanceToCamera <= minDistanceToCamera;
-  //  const bool renderMark = true;
+  
+	_renderedMark = (_minDistanceToCamera == 0) || (distanceToCamera <= _minDistanceToCamera);
   
 	if (_renderedMark)
 	{
@@ -143,25 +200,9 @@ public class Mark
   
 	  if (normalAtMarkPosition.angleBetween(markCameraVector)._radians > IMathUtils.instance().halfPi())
 	  {
-		GL gl = rc.getGL();
-  
-//C++ TO JAVA CONVERTER NOTE: This static local variable declaration (not allowed in Java) has been moved just prior to the method:
-//		static Vector2D textureTranslation(0.0, 0.0);
-//C++ TO JAVA CONVERTER NOTE: This static local variable declaration (not allowed in Java) has been moved just prior to the method:
-//		static Vector2D textureScale(1.0, 1.0);
-		gl.transformTexCoords(render_textureScale, render_textureTranslation);
   
 		if (_textureId == null)
 		{
-		  //        IImage* image = rc->getFactory()->createImageFromFileName(_textureFilename);
-		  //
-		  //        _textureId = rc->getTexturesHandler()->getGLTextureId(image,
-		  //                                                              GLFormat::rgba(),
-		  //                                                              _textureFilename,
-		  //                                                              false);
-		  //
-		  //        rc->getFactory()->deleteImage(image);
-  
 		  if (_textureImage != null)
 		  {
 			_textureId = rc.getTexturesHandler().getGLTextureId(_textureImage, GLFormat.rgba(), _textureURL.getPath(), false);
@@ -173,11 +214,16 @@ public class Mark
   
 		if (_textureId != null)
 		{
-		  gl.drawBillBoard(_textureId, getVertices(planet), camera.getViewPortRatio());
+		  GL gl = rc.getGL();
+  
+		  // static Vector2D textureTranslation(0.0, 0.0);
+		  // static Vector2D textureScale(1.0, 1.0);
+		  // gl->transformTexCoords(textureScale, textureTranslation);
+  
+		  gl.drawBillBoard(_textureId, getVertices(planet), _textureWidth, _textureHeight);
 		}
 	  }
 	}
-  
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -199,6 +245,17 @@ public class Mark
 	_textureSolved = true;
   
 	ILogger.instance().logError("Can't load image \"%s\"", _textureURL.getPath());
+	//=======
+	//    //  todo;
+	//    if (!_textureSolved) {
+	//        IDownloader* downloader = context->getDownloader();
+	//
+	//        downloader->requestImage(_textureURL,
+	//                                 1000000,
+	//                                 TimeInterval::fromDays(30),
+	//                                 new TextureDownloadListener(this),
+	//                                 true);
+	//    }
   }
 
   public final void onTextureDownload(IImage image)
@@ -213,22 +270,51 @@ public class Mark
 //ORIGINAL LINE: int getTextureWidth() const
   public final int getTextureWidth()
   {
-  //  return (_textureImage == NULL) ? 0 : _textureImage->getWidth();
 	return _textureWidth;
   }
+
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: int getTextureHeight() const
   public final int getTextureHeight()
   {
-  //  return (_textureImage == NULL) ? 0 : _textureImage->getHeight();
 	return _textureHeight;
   }
+
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: Vector2I getTextureExtent() const
   public final Vector2I getTextureExtent()
   {
-  //  return (_textureImage == NULL) ? Vector2I::zero() : _textureImage->getExtent();
 	return new Vector2I(_textureWidth, _textureHeight);
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const Object* getUserData() const
+  public final Object getUserData()
+  {
+	return _userData;
+  }
+
+  public final void setUserData(Object userData)
+  {
+	_userData = userData;
+  }
+
+  public final boolean touched()
+  {
+	if (_listener == null)
+	{
+	  return false;
+	}
+	return _listener.touchedMark(this);
+  }
+
+  public final Vector3D getCartesianPosition(Planet planet)
+  {
+	if (_cartesianPosition == null)
+	{
+	  _cartesianPosition = new Vector3D(planet.toCartesian(_position));
+	}
+	return _cartesianPosition;
   }
 
 }

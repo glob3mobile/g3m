@@ -17,6 +17,7 @@
 #include "StringUtils_iOS.hpp"
 #include "JSONParser_iOS.hpp"
 #include "StringBuilder_iOS.hpp"
+#include "TextUtils_iOS.hpp"
 
 @interface G3MWidget_iOS ()
 @property(nonatomic, getter=isAnimating) BOOL animating;
@@ -362,13 +363,15 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
   IStringBuilder*     stringBuilder   = new StringBuilder_iOS();
   IMathUtils*         mathUtils       = new MathUtils_iOS();
   IJSONParser*        jsonParser      = new JSONParser_iOS();
-
+  ITextUtils*         textUtils       = new TextUtils_iOS();
+  
   G3MWidget::initSingletons(logger,
                             factory,
                             stringUtils,
                             stringBuilder,
                             mathUtils,
-                            jsonParser);
+                            jsonParser,
+                            textUtils);
 }
 
 @end

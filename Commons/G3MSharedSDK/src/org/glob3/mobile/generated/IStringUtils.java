@@ -26,7 +26,9 @@ public abstract class IStringUtils
   {
 	if (_instance != null)
 	{
-	  ILogger.instance().logWarning("Warning, IStringUtils instance set two times\n");
+	  ILogger.instance().logWarning("IStringUtils instance already set!");
+	  if (_instance != null)
+		  _instance.dispose();
 	}
 	_instance = instance;
   }

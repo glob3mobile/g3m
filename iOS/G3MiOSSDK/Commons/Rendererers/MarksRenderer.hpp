@@ -11,17 +11,10 @@
 
 #include <vector>
 #include "LeafRenderer.hpp"
-#include "Mark.hpp"
 
-class MarkTouchListener {
-public:
-  virtual ~MarkTouchListener() {
-
-  }
-
-  virtual bool touchedMark(Mark* mark) = 0;
-};
-
+class Mark;
+class Camera;
+class MarkTouchListener;
 
 class MarksRenderer : public LeafRenderer {
 private:
@@ -45,14 +38,7 @@ public:
   MarksRenderer(bool readyWhenMarksReady);
 
   void setMarkTouchListener(MarkTouchListener* markTouchListener,
-                            bool autoDelete) {
-    if ( _autoDeleteMarkTouchListener ) {
-      delete _markTouchListener;
-    }
-
-    _markTouchListener = markTouchListener;
-    _autoDeleteMarkTouchListener = autoDelete;
-  }
+                            bool autoDelete);
 
   virtual ~MarksRenderer();
 
@@ -63,22 +49,23 @@ public:
 
   void addMark(Mark* mark);
 
+  void removeMark(Mark* mark);
+
+  void removeAllMarks();
+
   bool onTouchEvent(const G3MEventContext* ec,
                     const TouchEvent* touchEvent);
 
   void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height) {
-
   }
 
   bool isReadyToRender(const G3MRenderContext* rc);
 
   void start() {
-
   }
 
   void stop() {
-
   }
 
   void onResume(const G3MContext* context) {
@@ -86,13 +73,11 @@ public:
   }
 
   void onPause(const G3MContext* context) {
-
   }
 
   void onDestroy(const G3MContext* context) {
-
   }
-  
+
 };
 
 #endif

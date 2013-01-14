@@ -23,6 +23,7 @@ import org.glob3.mobile.generated.INativeGL;
 import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IStringBuilder;
 import org.glob3.mobile.generated.IStringUtils;
+import org.glob3.mobile.generated.ITextUtils;
 import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.PeriodicalTask;
@@ -171,8 +172,9 @@ public final class G3MWidget_WebGL
       final IStringBuilder stringBuilder = new StringBuilder_WebGL();
       final IMathUtils mathUtils = new MathUtils_WebGL();
       final IJSONParser jsonParser = new JSONParser_WebGL();
+      final ITextUtils textUtils = new TextUtils_WebGL();
 
-      G3MWidget.initSingletons(logger, factory, stringUtils, stringBuilder, mathUtils, jsonParser);
+      G3MWidget.initSingletons(logger, factory, stringUtils, stringBuilder, mathUtils, jsonParser, textUtils);
    }
 
 

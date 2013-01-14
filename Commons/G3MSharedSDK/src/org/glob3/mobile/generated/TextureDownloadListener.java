@@ -16,13 +16,13 @@ public class TextureDownloadListener implements IImageDownloadListener
 
   public final void onError(URL url)
   {
-	//    ILogger::instance()->logError("Error trying to download image \"%s\"", url.getPath().c_str());
+	ILogger.instance().logError("Error trying to download image \"%s\"", url.getPath());
 	_mark.onTextureDownloadError();
   }
 
   public final void onCancel(URL url)
   {
-	//    ILogger::instance()->logError("Download canceled for image \"%s\"", url.getPath().c_str());
+	// ILogger::instance()->logError("Download canceled for image \"%s\"", url.getPath().c_str());
 	_mark.onTextureDownloadError();
   }
 

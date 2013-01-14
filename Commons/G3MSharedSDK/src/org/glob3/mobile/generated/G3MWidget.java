@@ -2,7 +2,7 @@ package org.glob3.mobile.generated;
 public class G3MWidget
 {
 
-  public static void initSingletons(ILogger logger, IFactory factory, IStringUtils stringUtils, IStringBuilder stringBuilder, IMathUtils mathUtils, IJSONParser jsonParser)
+  public static void initSingletons(ILogger logger, IFactory factory, IStringUtils stringUtils, IStringBuilder stringBuilder, IMathUtils mathUtils, IJSONParser jsonParser, ITextUtils textUtils)
   {
 	if (ILogger.instance() == null)
 	{
@@ -12,6 +12,7 @@ public class G3MWidget
 	  IStringBuilder.setInstance(stringBuilder);
 	  IMathUtils.setInstance(mathUtils);
 	  IJSONParser.setInstance(jsonParser);
+	  ITextUtils.setInstance(textUtils);
 	}
 	else
 	{
@@ -30,14 +31,14 @@ public class G3MWidget
 	if (_userData != null)
 		_userData.dispose();
   
-	if (_gl != null)
-		_gl.dispose();
 	if (_cameraRenderer != null)
 		_cameraRenderer.dispose();
 	if (_mainRenderer != null)
 		_mainRenderer.dispose();
 	if (_busyRenderer != null)
 		_busyRenderer.dispose();
+	if (_gl != null)
+		_gl.dispose();
 	if (_effectsScheduler != null)
 		_effectsScheduler.dispose();
 	if (_currentCamera != null)

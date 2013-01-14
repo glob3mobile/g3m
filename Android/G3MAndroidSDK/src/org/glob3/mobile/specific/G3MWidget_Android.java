@@ -22,6 +22,7 @@ import org.glob3.mobile.generated.IMathUtils;
 import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IStringBuilder;
 import org.glob3.mobile.generated.IStringUtils;
+import org.glob3.mobile.generated.ITextUtils;
 import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.PeriodicalTask;
@@ -130,8 +131,9 @@ public final class G3MWidget_Android
       final IStringBuilder stringBuilder = new StringBuilder_Android();
       final IMathUtils mathUtils = new MathUtils_Android();
       final IJSONParser jsonParser = new JSONParser_Android();
+      final ITextUtils textUtils = new TextUtils_Android();
 
-      G3MWidget.initSingletons(logger, factory, stringUtils, stringBuilder, mathUtils, jsonParser);
+      G3MWidget.initSingletons(logger, factory, stringUtils, stringBuilder, mathUtils, jsonParser, textUtils);
    }
 
 
