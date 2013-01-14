@@ -18,9 +18,7 @@ import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
-import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IStorage;
-import org.glob3.mobile.generated.ITextUtils;
 import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.Mark;
@@ -34,6 +32,7 @@ import org.glob3.mobile.generated.TileRendererBuilder;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.WMSLayer;
 import org.glob3.mobile.generated.WMSServerVersion;
+import org.glob3.mobile.generated.WidgetUserData;
 import org.glob3.mobile.specific.Downloader_Android;
 import org.glob3.mobile.specific.G3MBaseActivity;
 import org.glob3.mobile.specific.G3MWidget_Android;
@@ -115,10 +114,8 @@ public class G3MSimplestGlob3Activity
                new Geodetic3D(Angle.fromDegrees(28.05), Angle.fromDegrees(-14.36), 0));
       marksRenderer.addMark(m1);
 
-      final IImage image = ITextUtils.instance().createLabelBitmap("Washington, DC");
       final Mark m3 = new Mark(
                "Washington, DC", //
-               image, //
                new Geodetic3D(Angle.fromDegreesMinutesSeconds(38, 53, 42.24), Angle.fromDegreesMinutesSeconds(-77, 2, 10.92), 100), //
                0);
       marksRenderer.addMark(m3);
@@ -139,7 +136,7 @@ public class G3MSimplestGlob3Activity
 
       final ArrayList<PeriodicalTask> periodicalTasks = new ArrayList<PeriodicalTask>();
 
-      final UserData userData = null;
+      final WidgetUserData userData = null;
 
       _widgetAndroid.initWidget(//
                storage, // 
