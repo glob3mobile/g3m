@@ -46,13 +46,16 @@ public:
 class IconDownloadListener : public IImageDownloadListener {
 private:
   Mark*             _mark;
-  const std::string _label;
+  const std::string   _label;
+  const LabelPosition _labelPosition;
 
 public:
   IconDownloadListener(Mark* mark,
-                       const std::string& label) :
+                       const std::string& label,
+                       const LabelPosition labelPosition) :
   _mark(mark),
-  _label(label)
+  _label(label),
+  _labelPosition(labelPosition)
   {
 
   }
@@ -64,8 +67,7 @@ public:
     if (hasLabel) {
       ITextUtils::instance()->labelImage(image,
                                          _label,
-                                         // Right,
-                                         Bottom,
+                                         _labelPosition,
                                          new MarkLabelImageListener(_mark),
                                          true);
     }
@@ -97,6 +99,7 @@ public:
 Mark::Mark(const std::string& label,
            const URL          iconURL,
            const Geodetic3D   position,
+           const LabelPosition labelPosition,
            double minDistanceToCamera,
            MarkUserData* userData,
            bool autoDeleteUserData,
@@ -105,6 +108,7 @@ Mark::Mark(const std::string& label,
 _label(label),
 _iconURL(iconURL),
 _position(position),
+_labelPosition(labelPosition),
 _textureId(NULL),
 _cartesianPosition(NULL),
 _vertices(NULL),
@@ -130,6 +134,7 @@ Mark::Mark(const std::string& label,
            MarkTouchListener* listener,
            bool autoDeleteListener) :
 _label(label),
+_labelPosition(Bottom),
 _iconURL("", false),
 _position(position),
 _textureId(NULL),
@@ -157,6 +162,7 @@ Mark::Mark(const URL          iconURL,
            MarkTouchListener* listener,
            bool autoDeleteListener) :
 _label(""),
+_labelPosition(Bottom),
 _iconURL(iconURL),
 _position(position),
 _textureId(NULL),
@@ -187,7 +193,7 @@ void Mark::initialize(const G3MContext* context) {
       downloader->requestImage(_iconURL,
                                1000000,
                                TimeInterval::fromDays(30),
-                               new IconDownloadListener(this, _label),
+                               new IconDownloadListener(this, _label, _labelPosition),
                                true);
     }
     else {

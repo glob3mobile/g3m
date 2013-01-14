@@ -5,6 +5,7 @@ package org.glob3.mobile.specific;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IImageListener;
+import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.ITextUtils;
 import org.glob3.mobile.generated.LabelPosition;
 
@@ -95,7 +96,8 @@ public class TextUtils_Android
 
       canvas.drawText(label, 0, height - textBounds.bottom - 2, paint);
 
-      listener.imageCreated(new Image_Android(bitmap, null));
+      final Image_Android result = new Image_Android(bitmap, null);
+      listener.imageCreated(result);
    }
 
 
@@ -109,6 +111,73 @@ public class TextUtils_Android
                           final Color shadowColor,
                           final IImageListener listener,
                           final boolean autodelete) {
-      TODO;
+
+      if (image == null) {
+         createLabelImage(label, fontSize, color, shadowColor, listener, autodelete);
+         return;
+      }
+
+      final Paint paint = new Paint();
+      paint.setAntiAlias(true);
+      paint.setTextSize((fontSize * 3) / 2);
+
+      final Rect textBounds = new Rect();
+      paint.getTextBounds(label, 0, label.length(), textBounds);
+      int labelWidth = textBounds.width();
+      int labelHeight = textBounds.height();
+      if (shadowColor != null) {
+         labelWidth += 2;
+         labelHeight += 2;
+      }
+
+      final int imageWidth;
+      final int imageHeight;
+      if (labelPosition == LabelPosition.Bottom) {
+         imageWidth = Math.max(labelWidth, image.getWidth());
+         imageHeight = labelHeight + separation + image.getHeight();
+      }
+      else if (labelPosition == LabelPosition.Right) {
+         imageWidth = labelWidth + separation + image.getWidth();
+         imageHeight = Math.max(labelHeight, image.getHeight());
+      }
+      else {
+         ILogger.instance().logError("Unsupported LabelPosition");
+         listener.imageCreated(null);
+         return;
+      }
+
+      final Bitmap bitmap = Bitmap.createBitmap(imageWidth, imageHeight, Bitmap.Config.ARGB_8888);
+      final Canvas canvas = new Canvas(bitmap);
+
+      final Bitmap androidBitmap = ((Image_Android) image).getBitmap();
+      if (labelPosition == LabelPosition.Bottom) {
+         canvas.drawBitmap( //
+                  androidBitmap, //
+                  (imageWidth - image.getWidth()) / 2, //
+                  0, //
+                  paint);
+      }
+      else if (labelPosition == LabelPosition.Right) {
+         canvas.drawBitmap( //
+                  androidBitmap, //
+                  0, //
+                  (imageHeight - image.getHeight()) / 2, //
+                  paint);
+      }
+
+      paint.setColor(toAndroidColor(color));
+      if (shadowColor != null) {
+         paint.setShadowLayer(1f, 2f, 2f, toAndroidColor(shadowColor));
+      }
+
+      if (labelPosition == LabelPosition.Bottom) {
+         drawText();
+      }
+      else if (labelPosition == LabelPosition.Right) {
+         drawText();
+      }
+
+      final Image_Android result = new Image_Android(bitmap, null);
+      listener.imageCreated(result);
    }
 }

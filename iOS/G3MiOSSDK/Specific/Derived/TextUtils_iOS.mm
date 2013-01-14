@@ -113,19 +113,19 @@ void TextUtils_iOS::labelImage(const IImage* image,
       return;
     }
 
-    UIImage* uiImage = ((const Image_iOS*) image)->getUIImage();
 
     UIGraphicsBeginImageContextWithOptions(CGSizeMake(imageWidth, imageHeight), NO, 0.0);
 
     CGContextRef ctx = UIGraphicsGetCurrentContext();
 
+    UIImage* uiImage = ((const Image_iOS*) image)->getUIImage();
     if (labelPosition == Bottom) {
-      [uiImage drawAtPoint: CGPointMake((imageWidth - image->getHeight()) / 2,
+      [uiImage drawAtPoint: CGPointMake((imageWidth - image->getWidth()) / 2,
                                         0.0) ];
     }
     else if (labelPosition == Right) {
       [uiImage drawAtPoint: CGPointMake(0.0,
-                                        0.0) ];
+                                        (imageHeight - image->getHeight()) / 2) ];
     }
 
     CGContextSetFillColorWithColor(ctx, toCGColor(color));
