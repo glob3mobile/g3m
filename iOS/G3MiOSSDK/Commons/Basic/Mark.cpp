@@ -65,7 +65,12 @@ public:
     const bool hasLabel = ( _label.length() != 0 );
 
     if (hasLabel) {
+#ifdef C_CODE
       LabelPosition labelPosition = _labelBottom ? Bottom : Right;
+#endif
+#ifdef JAVA_CODE
+      LabelPosition labelPosition = _labelBottom ? LabelPosition.Bottom : LabelPosition.Right;
+#endif
 
       ITextUtils::instance()->labelImage(image,
                                          _label,
