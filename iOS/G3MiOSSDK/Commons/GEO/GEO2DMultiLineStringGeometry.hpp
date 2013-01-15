@@ -27,13 +27,14 @@ protected:
 
 public:
 
-    GEO2DMultiLineStringGeometry(std::vector<std::vector<Geodetic2D*>*>* coordinatesArray, Color* color = Color::newFromRGBA(1, 1, 1, 1), const float lineWidth = 2) :
+    GEO2DMultiLineStringGeometry(std::vector<std::vector<Geodetic2D*>*>* coordinatesArray, Color* color, const float lineWidth) :
   _coordinatesArray(coordinatesArray),
   _color(color),
   _lineWidth(lineWidth)
   {
 
   }
+ 
 
   ~GEO2DMultiLineStringGeometry();
 

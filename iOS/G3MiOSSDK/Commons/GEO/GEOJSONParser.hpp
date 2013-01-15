@@ -22,6 +22,7 @@ class GEOFeature;
 class GEOGeometry;
 class GEOLineStringGeometry;
 class GEOMultiLineStringGeometry;
+class Color;
 
 #include <vector>
 class Geodetic2D;
@@ -60,8 +61,8 @@ private:
   GEOFeature*           createFeature(const JSONObject* jsonObject) const;
 
   GEOGeometry*                createGeometry(const JSONObject* jsonObject) const;
-  GEOLineStringGeometry*      createLineStringGeometry(const JSONObject* jsonObject) const;
-  GEOMultiLineStringGeometry* createMultiLineStringGeometry(const JSONObject* jsonObject) const;
+  GEOLineStringGeometry*      createLineStringGeometry(const JSONObject* jsonObject, Color* color, const float lineWidth) const;
+  GEOMultiLineStringGeometry* createMultiLineStringGeometry(const JSONObject* jsonObject, Color* color, const float lineWidth) const;
 
 
   std::vector<Geodetic2D*>* create2DCoordinates(const JSONArray* jsCoordinates) const;
@@ -70,9 +71,9 @@ private:
 
 public:
     
-  static GEOLineStringGeometry* createLineString(const JSONObject* jsonObject);
+  static GEOLineStringGeometry* createLineString(const JSONObject* jsonObject, Color* color, const float lineWidth);
     
-  static GEOMultiLineStringGeometry* createMultiLineString(const JSONObject* jsonObject);
+  static GEOMultiLineStringGeometry* createMultiLineString(const JSONObject* jsonObject, Color* color, const float lineWidth);
 
   static GEOObject* parse(const std::string& json);
 
