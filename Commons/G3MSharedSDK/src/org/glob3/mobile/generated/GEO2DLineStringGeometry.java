@@ -25,7 +25,7 @@ public class GEO2DLineStringGeometry extends GEOLineStringGeometry
 {
   private java.util.ArrayList<Geodetic2D> _coordinates;
   private Color _color;
-  private float _lineWidth;
+  private final float _lineWidth;
 
   protected final Mesh createMesh(G3MRenderContext rc)
   {
@@ -34,16 +34,6 @@ public class GEO2DLineStringGeometry extends GEOLineStringGeometry
   }
 
 
-  public GEO2DLineStringGeometry(java.util.ArrayList<Geodetic2D> coordinates, Color color)
-  {
-	  this(coordinates, color, 2);
-  }
-  public GEO2DLineStringGeometry(java.util.ArrayList<Geodetic2D> coordinates)
-  {
-	  this(coordinates, Color.newFromRGBA(1, 1, 0, 1), 2);
-  }
-//C++ TO JAVA CONVERTER NOTE: Java does not allow default values for parameters. Overloaded methods are inserted above.
-//ORIGINAL LINE: GEO2DLineStringGeometry(java.util.ArrayList<Geodetic2D*>* coordinates, Color* color = Color::newFromRGBA(1, 1, 0, 1), float lineWidth = 2) : _coordinates(coordinates), _color(color), _lineWidth(lineWidth)
   public GEO2DLineStringGeometry(java.util.ArrayList<Geodetic2D> coordinates, Color color, float lineWidth)
   {
 	  _coordinates = coordinates;
@@ -51,6 +41,7 @@ public class GEO2DLineStringGeometry extends GEOLineStringGeometry
 	  _lineWidth = lineWidth;
 
   }
+
 
   public void dispose()
   {
