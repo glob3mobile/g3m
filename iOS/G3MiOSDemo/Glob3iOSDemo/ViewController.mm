@@ -167,6 +167,18 @@
   builder.setBackgroundColor(bgColor);
 
   LayerSet* layerSet = [self createLayerSet];
+
+//  layerSet->addLayer(new WMSLayer("precipitation", //
+//                                  URL("http://wms.openweathermap.org/service", false), //
+//                                  WMS_1_1_0, //
+//                                  Sector::fromDegrees(-85.05, -180.0, 85.05, 180.0), //
+//                                  "image/png", //
+//                                  "EPSG:4326", //
+//                                  "", //
+//                                  true, //
+//                                  NULL)
+//                     );
+
   builder.setLayerSet(layerSet);
 
   TilesRenderParameters* parameters = [self createTileRenderParameters];
@@ -475,8 +487,7 @@
 
   Mark* m1 = new Mark("Fuerteventura",
                       URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false),
-                      Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-14.36), 0),
-                      false);
+                      Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-14.36), 0));
   marksRenderer->addMark(m1);
 
 
@@ -491,7 +502,7 @@
                       0);
   marksRenderer->addMark(m3);
 
-  if (true) {
+  if (false) {
     for (int i = 0; i < 2000; i++) {
       const Angle latitude  = Angle::fromDegrees( (int) (arc4random() % 180) - 90 );
       const Angle longitude = Angle::fromDegrees( (int) (arc4random() % 360) - 180 );
