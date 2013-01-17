@@ -77,7 +77,9 @@ public:
   ~VisibleSectorListenerEntry() {
     delete _listener;
 
-    IFactory::instance()->deleteTimer(_timer);
+    if (_timer != NULL) {
+      IFactory::instance()->deleteTimer(_timer);
+    }
   }
 };
 
