@@ -63,7 +63,6 @@ public:
         _whenNotifyInMS = now + _stabilizationInterval.milliseconds();
       }
 
-      //if ( (_whenNotifyInMS != 0) && (_lastSector != NULL) ) {
       if (_whenNotifyInMS != 0) {
         if (now >= _whenNotifyInMS) {
           _listener->onVisibleSectorChange(_lastSector);
@@ -98,7 +97,7 @@ _lastSplitTimer(NULL),
 _lastCamera(NULL),
 _firstRender(false),
 _context(NULL),
-_lastRenderedSector(NULL)
+_lastVisibleSector(NULL)
 {
   _layerSet->setChangeListener(this);
 }
@@ -125,7 +124,7 @@ TileRenderer::~TileRenderer() {
 
   delete _lastSplitTimer;
 
-  delete _lastRenderedSector;
+  delete _lastVisibleSector;
 
   const int visibleSectorListenersCount = _visibleSectorListeners.size();
   for (int i = 0; i < visibleSectorListenersCount; i++) {
@@ -305,17 +304,17 @@ void TileRenderer::render(const G3MRenderContext* rc,
 
   const Sector* renderedSector = statistics.getRenderedSector();
   if (renderedSector != NULL) {
-    if ( (_lastRenderedSector == NULL) || !renderedSector->isEqualsTo(*_lastRenderedSector) ) {
-      delete _lastRenderedSector;
-      _lastRenderedSector = new Sector(*renderedSector);
+    if ( (_lastVisibleSector == NULL) || !renderedSector->isEqualsTo(*_lastVisibleSector) ) {
+      delete _lastVisibleSector;
+      _lastVisibleSector = new Sector(*renderedSector);
     }
   }
 
-  if (_lastRenderedSector != NULL) {
+  if (_lastVisibleSector != NULL) {
     const int visibleSectorListenersCount = _visibleSectorListeners.size();
     for (int i = 0; i < visibleSectorListenersCount; i++) {
       VisibleSectorListenerEntry* entry = _visibleSectorListeners[i];
-      entry->tryToNotifyListener(_lastRenderedSector);
+      entry->tryToNotifyListener(_lastVisibleSector);
     }
   }
 

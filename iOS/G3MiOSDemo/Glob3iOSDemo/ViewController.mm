@@ -322,7 +322,8 @@ public:
                                         "EPSG:4326",
                                         "",
                                         false,
-                                        new LevelTileCondition(0, 6));
+                                        new LevelTileCondition(0, 6),
+                                        TimeInterval::fromDays(30));
     layerSet->addLayer(blueMarble);
 
     WMSLayer* i3Landsat = new WMSLayer("esat",
@@ -333,7 +334,8 @@ public:
                                        "EPSG:4326",
                                        "",
                                        false,
-                                       new LevelTileCondition(7, 100));
+                                       new LevelTileCondition(7, 100),
+                                       TimeInterval::fromDays(30));
     layerSet->addLayer(i3Landsat);
   }
 
@@ -358,7 +360,8 @@ public:
                                   "EPSG:4326",
                                   "",
                                   false,
-                                  NULL);
+                                  NULL,
+                                  TimeInterval::fromDays(30));
     bing->setEnable(true);
     layerSet->addLayer(bing);
   }
@@ -384,7 +387,8 @@ public:
                                  "EPSG:4326",
                                  "",
                                  false,
-                                 NULL);
+                                 NULL,
+                                 TimeInterval::fromDays(30));
     osm->setEnable(false);
     layerSet->addLayer(osm);
 
@@ -400,7 +404,8 @@ public:
                                   "EPSG:4326",
                                   "",
                                   true,
-                                  NULL);
+                                  NULL,
+                                  TimeInterval::fromDays(30));
     layerSet->addLayer(pnoa);
   }
 
@@ -414,7 +419,8 @@ public:
                                   "EPSG:4326",
                                   "",
                                   true,
-                                  NULL);
+                                  NULL,
+                                  TimeInterval::fromDays(30));
     layerSet->addLayer(ayto);
 
   }
@@ -453,11 +459,11 @@ public:
   const bool useTilesSplitBudget = true;
   const bool forceTopLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
-  TilesRenderParameters* parameters = TilesRenderParameters::createDefault(renderDebug,
-                                                                           useTilesSplitBudget,
-                                                                           forceTopLevelTilesRenderOnStart,
-                                                                           incrementalTileQuality);
-  return parameters;
+
+  return TilesRenderParameters::createDefault(renderDebug,
+                                              useTilesSplitBudget,
+                                              forceTopLevelTilesRenderOnStart,
+                                              incrementalTileQuality);
 }
 
 - (TileRenderer*) createTileRenderer: (TilesRenderParameters*) parameters

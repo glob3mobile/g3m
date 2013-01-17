@@ -262,7 +262,7 @@ private:
 
   void pruneTopLevelTiles();
 
-  Sector* _lastRenderedSector;
+  Sector* _lastVisibleSector;
 
   std::vector<VisibleSectorListenerEntry*> _visibleSectorListeners;
 
@@ -328,13 +328,26 @@ public:
 
   void recreateTiles();
 
-  const Sector* getRenderedSector() const {
-    return _lastRenderedSector;
+  /**
+   Answer the visible-sector, it can be null if globe was not yet rendered.
+   */
+  const Sector* getVisibleSector() const {
+    return _lastVisibleSector;
   }
 
+  /**
+   Add a listener for notification of visible-sector changes.
+
+   @param stabilizationInterval How many time the visible-sector has to be settled (without changes) before triggering the event.  Useful for avoid process while the camera is being moved (as in animations).  If stabilizationInterval is zero, the event is triggered inmediatly. 
+   */
   void addVisibleSectorListener(VisibleSectorListener* listener,
                                 const TimeInterval& stabilizationInterval);
 
+  /**
+   Add a listener for notification of visible-sector changes.
+
+   The event is triggered immediately without waiting for the visible-sector get settled.
+   */
   void addVisibleSectorListener(VisibleSectorListener* listener) {
     addVisibleSectorListener(listener, TimeInterval::zero());
   }

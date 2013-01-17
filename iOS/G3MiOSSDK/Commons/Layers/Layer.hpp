@@ -16,6 +16,7 @@
 #include "Context.hpp"
 #include "URL.hpp"
 #include "TerrainTouchEventListener.hpp"
+#include "TimeInterval.hpp"
 
 class Petition;
 class Tile;
@@ -32,13 +33,17 @@ private:
   bool _enable;
 
 protected:
+  const TimeInterval& _timeToCache;
+
   void notifyChanges() const;
   
 public:
   
-  Layer(LayerCondition* condition) :
+  Layer(LayerCondition* condition,
+        const TimeInterval& timeToCache) :
   _condition(condition),
   _layerSet(NULL),
+  _timeToCache(timeToCache),
   _enable(true)
   {
     

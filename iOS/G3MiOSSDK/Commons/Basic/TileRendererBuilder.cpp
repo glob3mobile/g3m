@@ -104,7 +104,8 @@ LayerSet* TileRendererBuilder::createLayerSet() {
                                 "EPSG:4326",
                                 "",
                                 false,
-                                NULL);
+                                NULL,
+                                TimeInterval::fromDays(30));
   layerSet->addLayer(bing);
 
   return layerSet;

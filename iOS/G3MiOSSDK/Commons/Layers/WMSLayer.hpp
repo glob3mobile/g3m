@@ -60,8 +60,9 @@ public:
            const std::string srs,
            const std::string& style,
            const bool isTransparent,
-           LayerCondition* condition):
-  Layer(condition),
+           LayerCondition* condition,
+           const TimeInterval& timeToCache):
+  Layer(condition, timeToCache),
   _mapLayer(mapLayer),
   _mapServerURL(mapServerURL),
   _mapServerVersion(mapServerVersion),
@@ -86,8 +87,9 @@ public:
            const std::string srs,
            const std::string& style,
            const bool isTransparent,
-           LayerCondition* condition):
-  Layer(condition),
+           LayerCondition* condition,
+           const TimeInterval& timeToCache):
+  Layer(condition, timeToCache),
   _mapLayer(mapLayer),
   _mapServerURL(mapServerURL),
   _mapServerVersion(mapServerVersion),

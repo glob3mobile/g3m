@@ -136,7 +136,7 @@ std::vector<Petition*> WMSLayer::getMapPetitions(const G3MRenderContext* rc,
     req += _extraParameter;
   }
   
-  Petition *petition = new Petition(sector, URL(req, false));
+  Petition *petition = new Petition(sector, URL(req, false), _timeToCache);
   petitions.push_back(petition);
   
 	return petitions;
