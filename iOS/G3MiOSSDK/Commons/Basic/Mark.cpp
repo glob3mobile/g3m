@@ -45,14 +45,17 @@ public:
 
 class IconDownloadListener : public IImageDownloadListener {
 private:
-  Mark*             _mark;
-  const std::string _label;
+  Mark*              _mark;
+  const std::string  _label;
+  const bool         _labelBottom;
 
 public:
   IconDownloadListener(Mark* mark,
-                       const std::string& label) :
+                       const std::string& label,
+                       bool  labelBottom) :
   _mark(mark),
-  _label(label)
+  _label(label),
+  _labelBottom(labelBottom)
   {
 
   }
@@ -62,10 +65,16 @@ public:
     const bool hasLabel = ( _label.length() != 0 );
 
     if (hasLabel) {
+#ifdef C_CODE
+      LabelPosition labelPosition = _labelBottom ? Bottom : Right;
+#endif
+#ifdef JAVA_CODE
+      LabelPosition labelPosition = _labelBottom ? LabelPosition.Bottom : LabelPosition.Right;
+#endif
+
       ITextUtils::instance()->labelImage(image,
                                          _label,
-                                         // Right,
-                                         Bottom,
+                                         labelPosition,
                                          new MarkLabelImageListener(_mark),
                                          true);
     }
@@ -97,6 +106,7 @@ public:
 Mark::Mark(const std::string& label,
            const URL          iconURL,
            const Geodetic3D   position,
+           const bool         labelBottom,
            double minDistanceToCamera,
            MarkUserData* userData,
            bool autoDeleteUserData,
@@ -105,6 +115,7 @@ Mark::Mark(const std::string& label,
 _label(label),
 _iconURL(iconURL),
 _position(position),
+_labelBottom(labelBottom),
 _textureId(NULL),
 _cartesianPosition(NULL),
 _vertices(NULL),
@@ -130,6 +141,7 @@ Mark::Mark(const std::string& label,
            MarkTouchListener* listener,
            bool autoDeleteListener) :
 _label(label),
+_labelBottom(true),
 _iconURL("", false),
 _position(position),
 _textureId(NULL),
@@ -157,6 +169,7 @@ Mark::Mark(const URL          iconURL,
            MarkTouchListener* listener,
            bool autoDeleteListener) :
 _label(""),
+_labelBottom(true),
 _iconURL(iconURL),
 _position(position),
 _textureId(NULL),
@@ -187,7 +200,7 @@ void Mark::initialize(const G3MContext* context) {
       downloader->requestImage(_iconURL,
                                1000000,
                                TimeInterval::fromDays(30),
-                               new IconDownloadListener(this, _label),
+                               new IconDownloadListener(this, _label, _labelBottom),
                                true);
     }
     else {

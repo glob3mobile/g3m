@@ -10,6 +10,7 @@
 
 #include "Color.hpp"
 
+
 ITextUtils* ITextUtils::_instance = NULL;
 
 

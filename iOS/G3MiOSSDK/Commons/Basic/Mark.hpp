@@ -30,10 +30,11 @@ public:
   }
 };
 
-
 class Mark {
 private:
   const std::string _label;
+  const bool        _labelBottom;
+
   URL               _iconURL;
   const Geodetic3D  _position;
   const double      _minDistanceToCamera;
@@ -64,9 +65,10 @@ private:
   bool    _renderedMark;
 
 public:
-  Mark(const std::string& label,
-       const URL          iconURL,
-       const Geodetic3D   position,
+  Mark(const std::string&  label,
+       const URL           iconURL,
+       const Geodetic3D    position,
+       const bool          labelBottom=true,
        double minDistanceToCamera=4.5e+06,
        MarkUserData* userData=NULL,
        bool autoDeleteUserData=true,

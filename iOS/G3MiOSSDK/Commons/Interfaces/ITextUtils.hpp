@@ -14,11 +14,7 @@ class IImage;
 class Color;
 class IImageListener;
 
-
-enum LabelPosition {
-  Bottom,
-  Right
-};
+#include "LabelPosition.h"
 
 class ITextUtils {
 private:

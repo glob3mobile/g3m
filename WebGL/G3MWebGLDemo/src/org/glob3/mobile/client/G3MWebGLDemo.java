@@ -271,7 +271,6 @@ public class G3MWebGLDemo
 
 
             final Mark m1 = new Mark(//
-                     "Fuerteventura", //
                      new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false), //
                      new Geodetic3D(Angle.fromDegrees(28.05), Angle.fromDegrees(-14.36), 0));
             //m1->addTouchListener(listener);
@@ -280,7 +279,8 @@ public class G3MWebGLDemo
             final Mark m2 = new Mark( //
                      "Las Palmas", //
                      new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false), //
-                     new Geodetic3D(Angle.fromDegrees(28.05), Angle.fromDegrees(-15.36), 0));
+                     new Geodetic3D(Angle.fromDegrees(28.05), Angle.fromDegrees(-15.36), 0), //
+                     false);
             //m2->addTouchListener(listener);
             marksRenderer.addMark(m2);
 

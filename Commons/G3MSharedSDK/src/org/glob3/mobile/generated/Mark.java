@@ -2,6 +2,8 @@ package org.glob3.mobile.generated;
 public class Mark
 {
   private final String _label;
+  private final boolean _labelBottom;
+
   private URL _iconURL = new URL();
   private final Geodetic3D _position ;
   private final double _minDistanceToCamera;
@@ -41,33 +43,38 @@ public class Mark
 
   private boolean _renderedMark;
 
-  public Mark(String label, URL iconURL, Geodetic3D position, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener)
+  public Mark(String label, URL iconURL, Geodetic3D position, boolean labelBottom, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener)
   {
-	  this(label, iconURL, position, minDistanceToCamera, userData, autoDeleteUserData, listener, false);
+	  this(label, iconURL, position, labelBottom, minDistanceToCamera, userData, autoDeleteUserData, listener, false);
   }
-  public Mark(String label, URL iconURL, Geodetic3D position, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData)
+  public Mark(String label, URL iconURL, Geodetic3D position, boolean labelBottom, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData)
   {
-	  this(label, iconURL, position, minDistanceToCamera, userData, autoDeleteUserData, null, false);
+	  this(label, iconURL, position, labelBottom, minDistanceToCamera, userData, autoDeleteUserData, null, false);
   }
-  public Mark(String label, URL iconURL, Geodetic3D position, double minDistanceToCamera, MarkUserData userData)
+  public Mark(String label, URL iconURL, Geodetic3D position, boolean labelBottom, double minDistanceToCamera, MarkUserData userData)
   {
-	  this(label, iconURL, position, minDistanceToCamera, userData, true, null, false);
+	  this(label, iconURL, position, labelBottom, minDistanceToCamera, userData, true, null, false);
   }
-  public Mark(String label, URL iconURL, Geodetic3D position, double minDistanceToCamera)
+  public Mark(String label, URL iconURL, Geodetic3D position, boolean labelBottom, double minDistanceToCamera)
   {
-	  this(label, iconURL, position, minDistanceToCamera, null, true, null, false);
+	  this(label, iconURL, position, labelBottom, minDistanceToCamera, null, true, null, false);
+  }
+  public Mark(String label, URL iconURL, Geodetic3D position, boolean labelBottom)
+  {
+	  this(label, iconURL, position, labelBottom, 4.5e+06, null, true, null, false);
   }
   public Mark(String label, URL iconURL, Geodetic3D position)
   {
-	  this(label, iconURL, position, 4.5e+06, null, true, null, false);
+	  this(label, iconURL, position, true, 4.5e+06, null, true, null, false);
   }
 //C++ TO JAVA CONVERTER NOTE: Java does not allow default values for parameters. Overloaded methods are inserted above.
-//ORIGINAL LINE: Mark(const String& label, const URL iconURL, const Geodetic3D position, double minDistanceToCamera =4.5e+06, MarkUserData* userData =null, boolean autoDeleteUserData =true, MarkTouchListener* listener =null, boolean autoDeleteListener =false) : _label(label), _iconURL(iconURL), _position(position), _textureId(null), _cartesianPosition(null), _vertices(null), _textureSolved(false), _textureImage(null), _renderedMark(false), _textureWidth(0), _textureHeight(0), _userData(userData), _autoDeleteUserData(autoDeleteUserData), _minDistanceToCamera(minDistanceToCamera), _listener(listener), _autoDeleteListener(autoDeleteListener)
-  public Mark(String label, URL iconURL, Geodetic3D position, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener, boolean autoDeleteListener)
+//ORIGINAL LINE: Mark(const String& label, const URL iconURL, const Geodetic3D position, const boolean labelBottom =true, double minDistanceToCamera =4.5e+06, MarkUserData* userData =null, boolean autoDeleteUserData =true, MarkTouchListener* listener =null, boolean autoDeleteListener =false) : _label(label), _iconURL(iconURL), _position(position), _labelBottom(labelBottom), _textureId(null), _cartesianPosition(null), _vertices(null), _textureSolved(false), _textureImage(null), _renderedMark(false), _textureWidth(0), _textureHeight(0), _userData(userData), _autoDeleteUserData(autoDeleteUserData), _minDistanceToCamera(minDistanceToCamera), _listener(listener), _autoDeleteListener(autoDeleteListener)
+  public Mark(String label, URL iconURL, Geodetic3D position, boolean labelBottom, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener, boolean autoDeleteListener)
   {
 	  _label = label;
 	  _iconURL = new URL(iconURL);
 	  _position = new Geodetic3D(position);
+	  _labelBottom = labelBottom;
 	  _textureId = null;
 	  _cartesianPosition = null;
 	  _vertices = null;
@@ -105,10 +112,11 @@ public class Mark
 	  this(label, position, 4.5e+06, null, true, null, false);
   }
 //C++ TO JAVA CONVERTER NOTE: Java does not allow default values for parameters. Overloaded methods are inserted above.
-//ORIGINAL LINE: Mark(const String& label, const Geodetic3D position, double minDistanceToCamera =4.5e+06, MarkUserData* userData =null, boolean autoDeleteUserData =true, MarkTouchListener* listener =null, boolean autoDeleteListener =false) : _label(label), _iconURL("", false), _position(position), _textureId(null), _cartesianPosition(null), _vertices(null), _textureSolved(false), _textureImage(null), _renderedMark(false), _textureWidth(0), _textureHeight(0), _userData(userData), _autoDeleteUserData(autoDeleteUserData), _minDistanceToCamera(minDistanceToCamera), _listener(listener), _autoDeleteListener(autoDeleteListener)
+//ORIGINAL LINE: Mark(const String& label, const Geodetic3D position, double minDistanceToCamera =4.5e+06, MarkUserData* userData =null, boolean autoDeleteUserData =true, MarkTouchListener* listener =null, boolean autoDeleteListener =false) : _label(label), _labelBottom(true), _iconURL("", false), _position(position), _textureId(null), _cartesianPosition(null), _vertices(null), _textureSolved(false), _textureImage(null), _renderedMark(false), _textureWidth(0), _textureHeight(0), _userData(userData), _autoDeleteUserData(autoDeleteUserData), _minDistanceToCamera(minDistanceToCamera), _listener(listener), _autoDeleteListener(autoDeleteListener)
   public Mark(String label, Geodetic3D position, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener, boolean autoDeleteListener)
   {
 	  _label = label;
+	  _labelBottom = true;
 	  _iconURL = new URL("", false);
 	  _position = new Geodetic3D(position);
 	  _textureId = null;
@@ -148,10 +156,11 @@ public class Mark
 	  this(iconURL, position, 4.5e+06, null, true, null, false);
   }
 //C++ TO JAVA CONVERTER NOTE: Java does not allow default values for parameters. Overloaded methods are inserted above.
-//ORIGINAL LINE: Mark(const URL iconURL, const Geodetic3D position, double minDistanceToCamera =4.5e+06, MarkUserData* userData =null, boolean autoDeleteUserData =true, MarkTouchListener* listener =null, boolean autoDeleteListener =false) : _label(""), _iconURL(iconURL), _position(position), _textureId(null), _cartesianPosition(null), _vertices(null), _textureSolved(false), _textureImage(null), _renderedMark(false), _textureWidth(0), _textureHeight(0), _userData(userData), _autoDeleteUserData(autoDeleteUserData), _minDistanceToCamera(minDistanceToCamera), _listener(listener), _autoDeleteListener(autoDeleteListener)
+//ORIGINAL LINE: Mark(const URL iconURL, const Geodetic3D position, double minDistanceToCamera =4.5e+06, MarkUserData* userData =null, boolean autoDeleteUserData =true, MarkTouchListener* listener =null, boolean autoDeleteListener =false) : _label(""), _labelBottom(true), _iconURL(iconURL), _position(position), _textureId(null), _cartesianPosition(null), _vertices(null), _textureSolved(false), _textureImage(null), _renderedMark(false), _textureWidth(0), _textureHeight(0), _userData(userData), _autoDeleteUserData(autoDeleteUserData), _minDistanceToCamera(minDistanceToCamera), _listener(listener), _autoDeleteListener(autoDeleteListener)
   public Mark(URL iconURL, Geodetic3D position, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener, boolean autoDeleteListener)
   {
 	  _label = "";
+	  _labelBottom = true;
 	  _iconURL = new URL(iconURL);
 	  _position = new Geodetic3D(position);
 	  _textureId = null;
@@ -213,7 +222,7 @@ public class Mark
 	  {
 		IDownloader downloader = context.getDownloader();
   
-		downloader.requestImage(_iconURL, 1000000, TimeInterval.fromDays(30), new IconDownloadListener(this, _label), true);
+		downloader.requestImage(_iconURL, 1000000, TimeInterval.fromDays(30), new IconDownloadListener(this, _label, _labelBottom), true);
 	  }
 	  else
 	  {

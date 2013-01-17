@@ -477,12 +477,12 @@
 
   Mark* m1 = new Mark("Fuerteventura",
                       URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false),
-                      Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-14.36), 0));
+                      Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-14.36), 0),
+                      false);
   marksRenderer->addMark(m1);
 
 
-  Mark* m2 = new Mark("",
-                      URL("file:///plane.png", false),
+  Mark* m2 = new Mark(URL("file:///plane.png", false),
                       Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-15.36), 0));
   marksRenderer->addMark(m2);
 
@@ -493,7 +493,7 @@
                       0);
   marksRenderer->addMark(m3);
 
-  if (false) {
+  if (true) {
     for (int i = 0; i < 2000; i++) {
       const Angle latitude  = Angle::fromDegrees( (int) (arc4random() % 180) - 90 );
       const Angle longitude = Angle::fromDegrees( (int) (arc4random() % 360) - 180 );
