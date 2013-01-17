@@ -30,13 +30,16 @@ private:
   LayerSet* _layerSet;
 
   bool _enable;
-
+  
+  const std::string _name;
+  
 protected:
   void notifyChanges() const;
   
 public:
-  
-  Layer(LayerCondition* condition) :
+  Layer(const std::string& name,
+        LayerCondition* condition) :
+  _name(name),
   _condition(condition),
   _layerSet(NULL),
   _enable(true)
@@ -96,6 +99,8 @@ public:
   }
 
   void setLayerSet(LayerSet* layerSet);
+  
+  const std::string getName();
   
 };
 

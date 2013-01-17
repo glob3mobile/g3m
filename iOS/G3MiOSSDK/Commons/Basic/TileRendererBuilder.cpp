@@ -96,7 +96,8 @@ void TileRendererBuilder::setIncrementalTileQuality(const bool incrementalTileQu
 LayerSet* TileRendererBuilder::createLayerSet() {
   LayerSet* layerSet = new LayerSet();
 
-  WMSLayer* bing = new WMSLayer("ve",
+  WMSLayer* bing = new WMSLayer("Satellite",
+                                "ve",
                                 URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?", false),
                                 WMS_1_1_0,
                                 Sector::fullSphere(),

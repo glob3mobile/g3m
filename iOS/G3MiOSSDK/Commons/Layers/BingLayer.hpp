@@ -56,8 +56,14 @@ private:
   
 public:
   
-  BingLayer(const URL& mapServerURL, LayerCondition* condition, const Sector& sector, const MapType mapType, Language locale, const std::string key):
-  Layer(condition),
+  BingLayer(const std::string& layerName,
+            const URL& mapServerURL,
+            LayerCondition* condition,
+            const Sector& sector,
+            const MapType mapType,
+            Language locale,
+            const std::string key):
+  Layer(layerName, condition),
   _sector(sector),
   _mapServerURL(mapServerURL),
   _mapType(mapType),

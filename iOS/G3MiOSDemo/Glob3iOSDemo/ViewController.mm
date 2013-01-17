@@ -288,7 +288,7 @@
   LayerSet* layerSet = new LayerSet();
 
   if (false) {
-    WMSLayer* blueMarble = new WMSLayer("bmng200405",
+    WMSLayer* blueMarble = new WMSLayer("Blue Marble", "bmng200405",
                                         URL("http://www.nasa.network.com/wms?", false),
                                         WMS_1_1_0,
                                         Sector::fullSphere(),
@@ -299,7 +299,7 @@
                                         new LevelTileCondition(0, 6));
     layerSet->addLayer(blueMarble);
 
-    WMSLayer* i3Landsat = new WMSLayer("esat",
+    WMSLayer* i3Landsat = new WMSLayer("i3Landsat", "esat",
                                        URL("http://data.worldwind.arc.nasa.gov/wms?", false),
                                        WMS_1_1_0,
                                        Sector::fullSphere(),
@@ -324,7 +324,7 @@
 
   bool useBing = true;
   if (useBing) {
-    WMSLayer* bing = new WMSLayer("ve",
+    WMSLayer* bing = new WMSLayer("Bing", "ve",
                                   URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?", false),
                                   WMS_1_1_0,
                                   Sector::fullSphere(),
@@ -349,7 +349,7 @@
     //                                 false,
     //                                 NULL);
     //    layerSet->addLayer(osm);
-    WMSLayer *osm = new WMSLayer("osm_auto:all",
+    WMSLayer *osm = new WMSLayer("OSM", "osm_auto:all",
                                  URL("http://129.206.228.72/cached/osm", false),
                                  WMS_1_1_0,
                                  // Sector::fromDegrees(-85.05, -180.0, 85.05, 180.0),
@@ -367,6 +367,7 @@
   const bool usePnoaLayer = false;
   if (usePnoaLayer) {
     WMSLayer *pnoa = new WMSLayer("PNOA",
+                                  "PNOA",
                                   URL("http://www.idee.es/wms/PNOA/PNOA", false),
                                   WMS_1_1_0,
                                   Sector::fromDegrees(21, -18, 45, 6),
@@ -380,7 +381,8 @@
 
   const bool testURLescape = false;
   if (testURLescape) {
-    WMSLayer *ayto = new WMSLayer(URL::escape("Ejes de via"),
+    WMSLayer *ayto = new WMSLayer("AYTOCC",
+                                  URL::escape("Ejes de via"),
                                   URL("http://sig.caceres.es/wms_callejero.mapdef?", false),
                                   WMS_1_1_0,
                                   Sector::fullSphere(),
