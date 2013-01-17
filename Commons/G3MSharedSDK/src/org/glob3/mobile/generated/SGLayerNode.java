@@ -44,8 +44,7 @@ public class SGLayerNode extends SGNode
 		final boolean hasMipMap = false;
 		_textureId = rc.getTexturesHandler().getGLTextureId(_downloadedImage, GLFormat.rgba(), getURL().getPath(), hasMipMap);
   
-		if (_downloadedImage != null)
-			_downloadedImage.dispose();
+		IFactory.instance().deleteImage(_downloadedImage);
 		_downloadedImage = null;
 	  }
 	}
@@ -106,8 +105,7 @@ public class SGLayerNode extends SGNode
   {
 	if (_downloadedImage != null)
 	{
-	  if (_downloadedImage != null)
-		  _downloadedImage.dispose();
+	  IFactory.instance().deleteImage(_downloadedImage);
 	}
 	_downloadedImage = image.shallowCopy();
   }

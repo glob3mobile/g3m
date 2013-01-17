@@ -60,7 +60,7 @@ public class Petition
 
   public final void releaseImage()
   {
-	_image = null;
+	IFactory.instance().deleteImage(_image);
 	_image = null;
   }
 

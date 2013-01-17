@@ -147,8 +147,7 @@ public class SimplePlanetRenderer extends LeafRenderer
 	}
   
 	// the image is not needed as it's already uploaded to the GPU
-	if (_image != null)
-		_image.dispose();
+	IFactory.instance().deleteImage(_image);
 	_image = null;
   
 	IFloatBuffer texCoords = createTextureCoordinates();
@@ -170,8 +169,7 @@ public class SimplePlanetRenderer extends LeafRenderer
   {
 	if (_mesh != null)
 		_mesh.dispose();
-	if (_image != null)
-		_image.dispose();
+	IFactory.instance().deleteImage(_image);
   }
 
   public final void initialize(G3MContext context)
