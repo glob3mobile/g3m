@@ -16,9 +16,9 @@ public class BingLayer extends Layer
 
 
 
-  public BingLayer(URL mapServerURL, LayerCondition condition, Sector sector, MapType mapType, Language locale, String key)
+  public BingLayer(URL mapServerURL, LayerCondition condition, Sector sector, MapType mapType, Language locale, String key, TimeInterval timeToCache)
   {
-	  super(condition);
+	  super(condition, timeToCache);
 	  _sector = new Sector(sector);
 	  _mapServerURL = new URL(mapServerURL);
 	  _mapType = mapType;
@@ -180,7 +180,7 @@ public class BingLayer extends Layer
 		//set the subDomain (round-robbin)
 		url = IStringUtils.instance().replaceSubstring(url, "{subdomain}", _subDomains.get(currentSubDomain % numSubDomains));
 		currentSubDomain++;
-		petitions.add(new Petition(bingSector, new URL(url, false)));
+		petitions.add(new Petition(bingSector, new URL(url, false), _timeToCache));
   
 	  }
   

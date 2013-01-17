@@ -36,10 +36,10 @@ public class PeriodicalTask
 
   public void dispose()
   {
-	  if (_task != null)
-		  _task.dispose();
+	if (_task != null)
+		_task.dispose();
 
-	  IFactory.instance().deleteTimer(_timer);
+	IFactory.instance().deleteTimer(_timer);
   }
 
   public final void executeIfNecessary(G3MContext context)

@@ -36,6 +36,8 @@ public abstract class Layer
 
   private boolean _enable;
 
+  protected final TimeInterval _timeToCache;
+
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: void notifyChanges() const
   protected final void notifyChanges()
@@ -51,10 +53,11 @@ public abstract class Layer
   }
 
 
-  public Layer(LayerCondition condition)
+  public Layer(LayerCondition condition, TimeInterval timeToCache)
   {
 	  _condition = condition;
 	  _layerSet = null;
+	  _timeToCache = new TimeInterval(timeToCache);
 	  _enable = true;
 
   }

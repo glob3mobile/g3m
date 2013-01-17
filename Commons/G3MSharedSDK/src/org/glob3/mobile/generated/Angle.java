@@ -259,6 +259,13 @@ public class Angle
 	return (_degrees == 0);
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isEqualsTo(const Angle& that) const
+  public final boolean isEqualsTo(Angle that)
+  {
+	return (_degrees == that._degrees) || (_radians == that._radians);
+  }
+
   @Override
 	public int hashCode() {
 		return Double.toString(_degrees).hashCode();

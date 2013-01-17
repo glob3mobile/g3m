@@ -18,6 +18,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Tile;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
@@ -35,6 +36,8 @@ public class Petition
   final private URL _url; //Conversor creates class "Url"
   private IImage _image;
 
+  private final TimeInterval _timeToCache = new TimeInterval();
+
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  Petition(Petition that);
 
@@ -42,10 +45,11 @@ public class Petition
 //  void operator =(Petition that);
 
 
-  public Petition(Sector sector, URL url)
+  public Petition(Sector sector, URL url, TimeInterval timeToCache)
   {
 	  _sector = new Sector(sector);
 	  _url = url;
+	  _timeToCache = new TimeInterval(timeToCache);
 	  _image = null;
   }
 
@@ -92,6 +96,13 @@ public class Petition
   public final IImage getImage()
   {
 	return _image;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const TimeInterval getTimeToCache() const
+  public final TimeInterval getTimeToCache()
+  {
+	return _timeToCache;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
