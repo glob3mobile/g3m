@@ -35,6 +35,8 @@ public class VisibleSectorListenerEntry
 	{
 	  if ((_lastSector == null) || (!_lastSector.isEqualsTo(visibleSector)))
 	  {
+		if (_lastSector != null)
+			_lastSector.dispose();
 		_lastSector = new Sector(visibleSector);
 		_listener.onVisibleSectorChange(_lastSector);
 	  }
@@ -45,6 +47,8 @@ public class VisibleSectorListenerEntry
 
 	  if ((_lastSector == null) || (!_lastSector.isEqualsTo(visibleSector)))
 	  {
+		if (_lastSector != null)
+			_lastSector.dispose();
 		_lastSector = new Sector(visibleSector);
 		_whenNotifyInMS = now + _stabilizationIntervalInMS;
 	  }
