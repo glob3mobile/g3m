@@ -2,7 +2,7 @@ package org.glob3.mobile.generated;
 public class VisibleSectorListenerEntry
 {
   private VisibleSectorListener _listener;
-  private final TimeInterval _stabilizationInterval = new TimeInterval();
+  private final long _stabilizationIntervalInMS;
 
   private Sector _lastSector;
   private long _whenNotifyInMS;
@@ -22,7 +22,7 @@ public class VisibleSectorListenerEntry
   public VisibleSectorListenerEntry(VisibleSectorListener listener, TimeInterval stabilizationInterval)
   {
 	  _listener = listener;
-	  _stabilizationInterval = new TimeInterval(stabilizationInterval);
+	  _stabilizationIntervalInMS = stabilizationInterval.milliseconds();
 	  _lastSector = null;
 	  _timer = null;
 	  _whenNotifyInMS = 0;
@@ -31,7 +31,7 @@ public class VisibleSectorListenerEntry
 
   public final void tryToNotifyListener(Sector visibleSector)
   {
-	if (_stabilizationInterval.isZero())
+	if (_stabilizationIntervalInMS == 0)
 	{
 	  if ((_lastSector == null) || (!_lastSector.isEqualsTo(visibleSector)))
 	  {
@@ -46,7 +46,7 @@ public class VisibleSectorListenerEntry
 	  if ((_lastSector == null) || (!_lastSector.isEqualsTo(visibleSector)))
 	  {
 		_lastSector = new Sector(visibleSector);
-		_whenNotifyInMS = now + _stabilizationInterval.milliseconds();
+		_whenNotifyInMS = now + _stabilizationIntervalInMS;
 	  }
 
 	  if (_whenNotifyInMS != 0)

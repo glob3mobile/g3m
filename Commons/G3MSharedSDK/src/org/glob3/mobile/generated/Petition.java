@@ -36,7 +36,7 @@ public class Petition
   final private URL _url; //Conversor creates class "Url"
   private IImage _image;
 
-  private final TimeInterval _timeToCache = new TimeInterval();
+  private final long _timeToCacheInMS;
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  Petition(Petition that);
@@ -49,7 +49,7 @@ public class Petition
   {
 	  _sector = new Sector(sector);
 	  _url = url;
-	  _timeToCache = new TimeInterval(timeToCache);
+	  _timeToCacheInMS = timeToCache.milliseconds();
 	  _image = null;
   }
 
@@ -102,7 +102,7 @@ public class Petition
 //ORIGINAL LINE: const TimeInterval getTimeToCache() const
   public final TimeInterval getTimeToCache()
   {
-	return _timeToCache;
+	return TimeInterval.fromMilliseconds(_timeToCacheInMS);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
