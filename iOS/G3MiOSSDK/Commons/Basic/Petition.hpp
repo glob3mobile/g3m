@@ -36,7 +36,7 @@ private:
   private IImage _image;
 #endif
 
-  const TimeInterval _timeToCache;
+  const long long _timeToCacheInMS;
   
   Petition(const Petition& that);
   
@@ -49,7 +49,7 @@ public:
            const TimeInterval& timeToCache):
   _sector(new Sector(sector)),
   _url(url),
-  _timeToCache(timeToCache),
+  _timeToCacheInMS(timeToCache.milliseconds()),
   _image(NULL)
   {
   }
@@ -88,7 +88,7 @@ public:
   }
 
   const TimeInterval getTimeToCache() const {
-    return _timeToCache;
+    return TimeInterval::fromMilliseconds(_timeToCacheInMS);
   }
 
   const std::string description() const;
