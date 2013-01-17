@@ -14,6 +14,7 @@
 #include <sstream>
 
 #include "ILogger.hpp"
+#include "IMathUtils.hpp"
 
 
 class Color {
@@ -34,54 +35,43 @@ private:
   {
 
   }
-
     
-    static int hexToDec(const std::string &hex) {
-        std::istringstream istr(hex);
-        size_t val;
-        istr >> std::hex >> val;
-        return val;
-    }
-    
-    static bool isValidHex(const std::string &hex) {
-        static const std::string allowedChars = "#0123456789abcdefABCDEF";
-        
-        if (hex[0] == '#') {
-            if (hex.length() != 7) {
-                return false;
-            }
-        }
-        else {
-            if (hex.length() != 6) {
-                return false;
-            }
-        }
-        
-        // Check for non allowed chars:
-        if (hex.find_first_not_of(allowedChars) != hex.npos) {
-            return false;
-        }
-        
-        return true;
-    }
-    
-    static Color* hexToRGB(std::string hex) {
-        if (!isValidHex(hex)) {
-            ILogger::instance()->logError("The value received is not avalid hex string!");
-        }
-        
-        if (hex[0] == '#') {
-            hex.erase(hex.begin());
-        }
-        
-        std::string R = hex.substr(0, 2);
-        std::string G = hex.substr(2, 2);
-        std::string B = hex.substr(4, 2);
-        
-        std::cout << hex << " converted to " << hexToDec(R) << ", " << hexToDec(G) << ", " << hexToDec(B) << "\n";
-        
-        return new Color(hexToDec(R),hexToDec(G),hexToDec(B),1);
-    }
+  static bool isValidHex(const std::string &hex) {
+      static const std::string allowedChars = "#0123456789abcdefABCDEF";
+      
+      if (hex[0] == '#') {
+          if (hex.length() != 7) {
+              return false;
+          }
+      }
+      else {
+          if (hex.length() != 6) {
+              return false;
+          }
+      }
+      
+      if (hex.find_first_not_of(allowedChars) != hex.npos) {
+          return false;
+      }
+      
+      return true;
+  }
+  
+  static Color* hexToRGB(std::string hex) {
+      if (!isValidHex(hex)) {
+          ILogger::instance()->logError("The value received is not avalid hex string!");
+      }
+      
+      if (hex[0] == '#') {
+          hex.erase(hex.begin());
+      }
+      
+      std::string R = hex.substr(0, 2);
+      std::string G = hex.substr(2, 2);
+      std::string B = hex.substr(4, 2);
+      
+      return new Color((float)IMathUtils::instance()->parseIntHex(R)/255,(float)IMathUtils::instance()->parseIntHex(G)/255,(float)IMathUtils::instance()->parseIntHex(B)/255,1);
+  }
 
 public:
   Color(const Color& that):
