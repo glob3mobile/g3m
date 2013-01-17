@@ -23,6 +23,7 @@ import org.glob3.mobile.generated.INativeGL;
 import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IStringBuilder;
 import org.glob3.mobile.generated.IStringUtils;
+import org.glob3.mobile.generated.ITextUtils;
 import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.PeriodicalTask;
@@ -30,7 +31,7 @@ import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.Renderer;
 import org.glob3.mobile.generated.ShaderProgram;
 import org.glob3.mobile.generated.TimeInterval;
-import org.glob3.mobile.generated.UserData;
+import org.glob3.mobile.generated.WidgetUserData;
 
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.core.client.JavaScriptObject;
@@ -171,8 +172,9 @@ public final class G3MWidget_WebGL
       final IStringBuilder stringBuilder = new StringBuilder_WebGL();
       final IMathUtils mathUtils = new MathUtils_WebGL();
       final IJSONParser jsonParser = new JSONParser_WebGL();
+      final ITextUtils textUtils = new TextUtils_WebGL();
 
-      G3MWidget.initSingletons(logger, factory, stringUtils, stringBuilder, mathUtils, jsonParser);
+      G3MWidget.initSingletons(logger, factory, stringUtils, stringBuilder, mathUtils, jsonParser, textUtils);
    }
 
 
@@ -322,7 +324,7 @@ public final class G3MWidget_WebGL
                           final GInitializationTask initializationTask,
                           final boolean autoDeleteInitializationTask,
                           final ArrayList<PeriodicalTask> periodicalTasks,
-                          final UserData userData) {
+                          final WidgetUserData userData) {
 
       _g3mWidget = G3MWidget.create(//
                _gl, //
@@ -410,7 +412,7 @@ public final class G3MWidget_WebGL
    }
 
 
-   public UserData getUserData() {
+   public WidgetUserData getUserData() {
       return getG3MWidget().getUserData();
    }
 

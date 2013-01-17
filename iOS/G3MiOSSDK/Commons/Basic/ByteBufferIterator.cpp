@@ -51,7 +51,11 @@ int ByteBufferIterator::nextInt32() {
   unsigned char b3 = nextUInt8();
   unsigned char b4 = nextUInt8();
 
-  return ((unsigned int) b1) + (b2 << 8) + (b3 << 16) + (b4 << 24);
+  return
+  ((int) b1) |
+  ((int) b2 << 8) |
+  ((int) b3 << 16) |
+  ((int) b4 << 24);
 }
 
 long long ByteBufferIterator::nextInt64() {
@@ -65,7 +69,15 @@ long long ByteBufferIterator::nextInt64() {
   unsigned char b7 = nextUInt8();
   unsigned char b8 = nextUInt8();
 
-  return ((long long) b1) + (b2 << 8) + (b3 << 16) + (b4 << 24) + ((long long) b5 << 32) + ((long long) b6 << 40) + ((long long) b7 << 48) + ((long long) b8 << 56);
+  return
+  ((long long) b1) |
+  ((long long) b2 << 8) |
+  ((long long) b3 << 16) |
+  ((long long) b4 << 24) |
+  ((long long) b5 << 32) |
+  ((long long) b6 << 40) |
+  ((long long) b7 << 48) |
+  ((long long) b8 << 56);
 }
 
 

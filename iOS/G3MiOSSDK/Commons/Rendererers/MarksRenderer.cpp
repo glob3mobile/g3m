@@ -11,6 +11,19 @@
 #include "GL.hpp"
 #include "TouchEvent.hpp"
 #include "RectangleI.hpp"
+#include "Mark.hpp"
+#include "MarkTouchListener.hpp"
+
+void MarksRenderer::setMarkTouchListener(MarkTouchListener* markTouchListener,
+                                         bool autoDelete) {
+  if ( _autoDeleteMarkTouchListener ) {
+    delete _markTouchListener;
+  }
+
+  _markTouchListener = markTouchListener;
+  _autoDeleteMarkTouchListener = autoDelete;
+}
+
 
 MarksRenderer::MarksRenderer(bool readyWhenMarksReady) :
 _readyWhenMarksReady(readyWhenMarksReady),
@@ -52,11 +65,31 @@ void MarksRenderer::addMark(Mark* mark) {
   }
 }
 
+void MarksRenderer::removeMark(Mark* mark){
+  int pos = -1;
+  for (int i = 0; i < _marks.size(); i++) {
+    if (_marks[i] == mark) {
+      pos = i;
+    }
+    break;
+  }
+#ifdef C_CODE
+  _marks.erase(_marks.begin()+pos);
+#endif
+#ifdef JAVA_CODE
+  _marks.remove(pos);
+#endif
+}
+
+void MarksRenderer::removeAllMarks(){
+  for (int i = 0; i < _marks.size(); i++) {
+    delete _marks[i];
+  }
+  _marks.clear();
+}
+
 bool MarksRenderer::onTouchEvent(const G3MEventContext* ec,
                                  const TouchEvent* touchEvent) {
-  if (_markTouchListener == NULL) {
-    return false;
-  }
 
   bool handled = false;
 
@@ -69,7 +102,7 @@ bool MarksRenderer::onTouchEvent(const G3MEventContext* ec,
       double minSqDistance = IMathUtils::instance()->maxDouble();
       Mark* nearestMark = NULL;
 
-      int marksSize = _marks.size();
+      const int marksSize = _marks.size();
       for (int i = 0; i < marksSize; i++) {
         Mark* mark = _marks[i];
 
@@ -90,8 +123,8 @@ bool MarksRenderer::onTouchEvent(const G3MEventContext* ec,
           continue;
         }
 
-        const Vector3D cartesianMarkPosition = planet->toCartesian( mark->getPosition() );
-        const Vector2I markPixel = _lastCamera->point2Pixel(cartesianMarkPosition);
+        const Vector3D* cartesianMarkPosition = mark->getCartesianPosition(planet);
+        const Vector2I markPixel = _lastCamera->point2Pixel(*cartesianMarkPosition);
 
         const RectangleI markPixelBounds(markPixel._x - (textureWidth / 2),
                                          markPixel._y - (textureHeight / 2),
@@ -108,11 +141,14 @@ bool MarksRenderer::onTouchEvent(const G3MEventContext* ec,
       }
 
       if (nearestMark != NULL) {
-        handled = _markTouchListener->touchedMark(nearestMark);
+        handled = nearestMark->touched();
+        if (!handled) {
+          if (_markTouchListener != NULL) {
+            handled = _markTouchListener->touchedMark(nearestMark);
+          }
+        }
       }
-
     }
-
   }
 
   return handled;
@@ -138,28 +174,36 @@ void MarksRenderer::render(const G3MRenderContext* rc,
   // Saving camera for use in onTouchEvent
   _lastCamera = rc->getCurrentCamera();
 
+  GL* gl = rc->getGL();
+
   GLState state(parentState);
   state.disableDepthTest();
   state.enableBlend();
   state.enableTextures();
   state.enableTexture2D();
   state.enableVerticesPosition();
-
-  GL* gl = rc->getGL();
-
   gl->setState(state);
+
+  static Vector2D textureTranslation(0.0, 0.0);
+  static Vector2D textureScale(1.0, 1.0);
+  gl->transformTexCoords(textureScale, textureTranslation);
+
   gl->setBlendFuncSrcAlpha();
 
-  const Vector3D radius = rc->getPlanet()->getRadii();
-  const double minDistanceToCamera = (radius._x + radius._y + radius._z) / 3 * 0.75;
+  const Camera* camera = rc->getCurrentCamera();
 
-  int marksSize = _marks.size();
+  gl->startBillBoardDrawing(camera->getWidth(),
+                            camera->getHeight());
+
+  const int marksSize = _marks.size();
   for (int i = 0; i < marksSize; i++) {
     Mark* mark = _marks[i];
     //rc->getLogger()->logInfo("Rendering Mark: \"%s\"", mark->getName().c_str());
     
     if (mark->isReady()) {
-      mark->render(rc, state, minDistanceToCamera);
+      mark->render(rc);
     }
   }
+  
+  gl->stopBillBoardDrawing();
 }

@@ -21,10 +21,10 @@ import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.SimpleCameraConstrainer;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
-import org.glob3.mobile.generated.UserData;
 import org.glob3.mobile.generated.Vector3D;
 import org.glob3.mobile.generated.WMSLayer;
 import org.glob3.mobile.generated.WMSServerVersion;
+import org.glob3.mobile.generated.WidgetUserData;
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
 
@@ -51,7 +51,7 @@ public class G3MBuilder {
    // Simplest implementation of  <ICameraConstrainer>, for example, evits that the earth goes so little
    SimpleCameraConstrainer       scc;
    //You can storage any object in the glob3, for example a data model or wathever thing
-   UserData                      userData;
+   WidgetUserData                userData;
    //Gtask (like java runnable) is a task that always is done before launch the globe (start downloader, move the camera, etc....)
    GInitializationTask           initializationTask;
    //Task that are executed every periodical time. For example, launch a downloader every period

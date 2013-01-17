@@ -12,6 +12,7 @@
 		A717C99615EBA71D00EEC830 /* mercator.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A717C99515EBA71D00EEC830 /* mercator.jpg */; };
 		CCD7885415D9A3FA0065A7E1 /* ProgressWheel.png in Resources */ = {isa = PBXBuildFile; fileRef = CCD7885315D9A3FA0065A7E1 /* ProgressWheel.png */; };
 		CF0223831668318600024B73 /* geojson in Resources */ = {isa = PBXBuildFile; fileRef = CF0223821668318600024B73 /* geojson */; };
+		CF09A94E16A0A0F500E72811 /* test.bson in Resources */ = {isa = PBXBuildFile; fileRef = CF09A94D16A09F7000E72811 /* test.bson */; };
 		CF7A708815CFD0A50086FDE6 /* g3m-marker.png in Resources */ = {isa = PBXBuildFile; fileRef = CF7A708715CFD0A50086FDE6 /* g3m-marker.png */; };
 		CF883B841591053100AEE39C /* mark.png in Resources */ = {isa = PBXBuildFile; fileRef = CF883B831591053100AEE39C /* mark.png */; };
 		CFE3DBB1164B0E7D00910037 /* seymour-plane.json in Resources */ = {isa = PBXBuildFile; fileRef = CFE3DBB0164B0E7D00910037 /* seymour-plane.json */; };
@@ -69,6 +70,7 @@
 		A717C99515EBA71D00EEC830 /* mercator.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = mercator.jpg; sourceTree = "<group>"; };
 		CCD7885315D9A3FA0065A7E1 /* ProgressWheel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ProgressWheel.png; sourceTree = "<group>"; };
 		CF0223821668318600024B73 /* geojson */ = {isa = PBXFileReference; lastKnownFileType = folder; path = geojson; sourceTree = "<group>"; };
+		CF09A94D16A09F7000E72811 /* test.bson */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.bson; sourceTree = "<group>"; };
 		CF4FAACE1695E6B1009734CA /* ByteBufferIterator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ByteBufferIterator.hpp; path = ../G3MiOSSDK/Commons/Basic/ByteBufferIterator.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		CF4FAACF1695E6B1009734CA /* BSONParser.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = BSONParser.hpp; path = ../G3MiOSSDK/Commons/JSON/BSONParser.hpp; sourceTree = "<group>"; };
 		CF4FAAD01695E6B1009734CA /* ByteBufferBuilder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ByteBufferBuilder.hpp; path = ../G3MiOSSDK/Commons/Basic/ByteBufferBuilder.hpp; sourceTree = "<group>"; };
@@ -140,7 +142,7 @@
 		CF62A03D168008E900649BBC /* FloatBufferBuilder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = FloatBufferBuilder.hpp; path = ../G3MiOSSDK/Commons/Basic/FloatBufferBuilder.hpp; sourceTree = "<group>"; };
 		CF62A03E168008E900649BBC /* IntBufferBuilder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IntBufferBuilder.hpp; path = ../G3MiOSSDK/Commons/Basic/IntBufferBuilder.hpp; sourceTree = "<group>"; };
 		CF62A03F168008E900649BBC /* IThreadUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IThreadUtils.hpp; path = ../G3MiOSSDK/Commons/Basic/IThreadUtils.hpp; sourceTree = "<group>"; };
-		CF62A040168008E900649BBC /* IStringUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IStringUtils.hpp; path = ../G3MiOSSDK/Commons/Interfaces/IStringUtils.hpp; sourceTree = "<group>"; };
+		CF62A040168008E900649BBC /* IStringUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = IStringUtils.hpp; path = ../G3MiOSSDK/Commons/Interfaces/IStringUtils.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF62A041168008E900649BBC /* LayerCondition.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = LayerCondition.hpp; path = ../G3MiOSSDK/Commons/Layers/LayerCondition.hpp; sourceTree = "<group>"; };
 		CF62A042168008E900649BBC /* LevelTileCondition.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = LevelTileCondition.hpp; path = ../G3MiOSSDK/Commons/Layers/LevelTileCondition.hpp; sourceTree = "<group>"; };
 		CF62A043168008E900649BBC /* MultiLayerTileTexturizer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MultiLayerTileTexturizer.hpp; path = ../G3MiOSSDK/Commons/Basic/MultiLayerTileTexturizer.hpp; sourceTree = "<group>"; };
@@ -156,7 +158,7 @@
 		CF62A04D168008E900649BBC /* CameraSingleDragHandler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = CameraSingleDragHandler.hpp; path = ../G3MiOSSDK/Commons/Cameras/CameraSingleDragHandler.hpp; sourceTree = "<group>"; };
 		CF62A04E168008E900649BBC /* CameraDoubleDragHandler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = CameraDoubleDragHandler.hpp; path = ../G3MiOSSDK/Commons/Cameras/CameraDoubleDragHandler.hpp; sourceTree = "<group>"; };
 		CF62A04F168008E900649BBC /* TileRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TileRenderer.hpp; path = ../G3MiOSSDK/Commons/Rendererers/TileRenderer.hpp; sourceTree = "<group>"; };
-		CF62A050168008E900649BBC /* Camera.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Camera.hpp; path = ../G3MiOSSDK/Commons/Cameras/Camera.hpp; sourceTree = "<group>"; };
+		CF62A050168008E900649BBC /* Camera.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Camera.hpp; path = ../G3MiOSSDK/Commons/Cameras/Camera.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF62A051168008E900649BBC /* ES2Renderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ES2Renderer.h; path = ../G3MiOSSDK/Specific/Widget/ES2Renderer.h; sourceTree = "<group>"; };
 		CF62A052168008E900649BBC /* Context.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Context.hpp; path = ../G3MiOSSDK/Commons/Basic/Context.hpp; sourceTree = "<group>"; };
 		CF62A053168008E900649BBC /* IByteBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IByteBuffer.hpp; path = ../G3MiOSSDK/Commons/Interfaces/IByteBuffer.hpp; sourceTree = "<group>"; };
@@ -168,8 +170,8 @@
 		CF62A059168008E900649BBC /* Planet.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Planet.hpp; path = ../G3MiOSSDK/Commons/Geometry/Planet.hpp; sourceTree = "<group>"; };
 		CF62A05A168008E900649BBC /* Vector2D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Vector2D.hpp; path = ../G3MiOSSDK/Commons/Geometry/Vector2D.hpp; sourceTree = "<group>"; };
 		CF62A05B168008E900649BBC /* Vector3D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Vector3D.hpp; path = ../G3MiOSSDK/Commons/Geometry/Vector3D.hpp; sourceTree = "<group>"; };
-		CF62A05C168008E900649BBC /* IFactory.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IFactory.hpp; path = ../G3MiOSSDK/Commons/Interfaces/IFactory.hpp; sourceTree = "<group>"; };
-		CF62A05D168008E900649BBC /* ILogger.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ILogger.hpp; path = ../G3MiOSSDK/Commons/Interfaces/ILogger.hpp; sourceTree = "<group>"; };
+		CF62A05C168008E900649BBC /* IFactory.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = IFactory.hpp; path = ../G3MiOSSDK/Commons/Interfaces/IFactory.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		CF62A05D168008E900649BBC /* ILogger.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = ILogger.hpp; path = ../G3MiOSSDK/Commons/Interfaces/ILogger.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF62A05E168008E900649BBC /* IImage.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IImage.hpp; path = ../G3MiOSSDK/Commons/Interfaces/IImage.hpp; sourceTree = "<group>"; };
 		CF62A05F168008E900649BBC /* MutableVector3D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MutableVector3D.hpp; path = ../G3MiOSSDK/Commons/Geometry/MutableVector3D.hpp; sourceTree = "<group>"; };
 		CF62A060168008E900649BBC /* MutableVector2D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MutableVector2D.hpp; path = ../G3MiOSSDK/Commons/Geometry/MutableVector2D.hpp; sourceTree = "<group>"; };
@@ -218,12 +220,12 @@
 		CF62A08B168008E900649BBC /* TerrainTouchEventListener.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TerrainTouchEventListener.hpp; path = ../G3MiOSSDK/Commons/Basic/TerrainTouchEventListener.hpp; sourceTree = "<group>"; };
 		CF62A08C168008E900649BBC /* Petition.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Petition.hpp; path = ../G3MiOSSDK/Commons/Basic/Petition.hpp; sourceTree = "<group>"; };
 		CF62A08D168008E900649BBC /* SimplePlanetRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = SimplePlanetRenderer.hpp; path = ../G3MiOSSDK/Commons/Rendererers/SimplePlanetRenderer.hpp; sourceTree = "<group>"; };
-		CF62A08E168008E900649BBC /* IMathUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IMathUtils.hpp; path = ../G3MiOSSDK/Commons/Interfaces/IMathUtils.hpp; sourceTree = "<group>"; };
+		CF62A08E168008E900649BBC /* IMathUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = IMathUtils.hpp; path = ../G3MiOSSDK/Commons/Interfaces/IMathUtils.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF62A08F168008E900649BBC /* Extent.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Extent.hpp; path = ../G3MiOSSDK/Commons/Geometry/Extent.hpp; sourceTree = "<group>"; };
 		CF62A090168008E900649BBC /* Frustum.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Frustum.hpp; path = ../G3MiOSSDK/Commons/Geometry/Frustum.hpp; sourceTree = "<group>"; };
 		CF62A091168008E900649BBC /* Plane.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Plane.hpp; path = ../G3MiOSSDK/Commons/Geometry/Plane.hpp; sourceTree = "<group>"; };
 		CF62A092168008E900649BBC /* JSONObject.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = JSONObject.hpp; path = ../G3MiOSSDK/Commons/JSON/JSONObject.hpp; sourceTree = "<group>"; };
-		CF62A093168008E900649BBC /* IJSONParser.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IJSONParser.hpp; path = ../G3MiOSSDK/Commons/JSON/IJSONParser.hpp; sourceTree = "<group>"; };
+		CF62A093168008E900649BBC /* IJSONParser.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = IJSONParser.hpp; path = ../G3MiOSSDK/Commons/JSON/IJSONParser.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF62A094168008E900649BBC /* JSONNumber.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = JSONNumber.hpp; path = ../G3MiOSSDK/Commons/JSON/JSONNumber.hpp; sourceTree = "<group>"; };
 		CF62A095168008E900649BBC /* JSONBoolean.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = JSONBoolean.hpp; path = ../G3MiOSSDK/Commons/JSON/JSONBoolean.hpp; sourceTree = "<group>"; };
 		CF62A096168008E900649BBC /* JSONString.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = JSONString.hpp; path = ../G3MiOSSDK/Commons/JSON/JSONString.hpp; sourceTree = "<group>"; };
@@ -254,6 +256,7 @@
 		CFEA76671666DCB000E89BC7 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
 		CFF76BE81686154400F658CC /* MeshRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MeshRenderer.hpp; path = ../G3MiOSSDK/Commons/Rendererers/MeshRenderer.hpp; sourceTree = "<group>"; };
 		CFF95F7C158A748F00B56E11 /* plane.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plane.png; sourceTree = "<group>"; };
+		CFFAFD75169F48F800BCE129 /* ITextUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = ITextUtils.hpp; path = ../G3MiOSSDK/Commons/Interfaces/ITextUtils.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		D8E93BDF1588A171009D497C /* world.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = world.jpg; sourceTree = "<group>"; };
 		D8EEF3861577920B003FEB5E /* G3MiOSDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = G3MiOSDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8EEF38A1577920B003FEB5E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -287,6 +290,7 @@
 		E71B15341626D27F003D1013 /* Icon-Small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-Small@2x.png"; path = "Resources/Icon-Small@2x.png"; sourceTree = "<group>"; };
 		E71B15351626D27F003D1013 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = Resources/Icon.png; sourceTree = "<group>"; };
 		E71B15361626D27F003D1013 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "Resources/Icon@2x.png"; sourceTree = "<group>"; };
+		E87424B3169F4E5700C8A227 /* MarkTouchListener.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MarkTouchListener.hpp; path = ../G3MiOSSDK/Commons/Rendererers/MarkTouchListener.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -311,6 +315,8 @@
 		CF629FFE168008D200649BBC /* Public Headers G3M */ = {
 			isa = PBXGroup;
 			children = (
+				CFFAFD75169F48F800BCE129 /* ITextUtils.hpp */,
+				E87424B3169F4E5700C8A227 /* MarkTouchListener.hpp */,
 				CF4FAAD71695F407009734CA /* BSONGenerator.hpp */,
 				CF4FAACE1695E6B1009734CA /* ByteBufferIterator.hpp */,
 				CF4FAACF1695E6B1009734CA /* BSONParser.hpp */,
@@ -568,6 +574,7 @@
 		D8EEF4271577B0D6003FEB5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CF09A94D16A09F7000E72811 /* test.bson */,
 				CF0223821668318600024B73 /* geojson */,
 				CFEA76671666DCB000E89BC7 /* images */,
 				CFE3DBB0164B0E7D00910037 /* seymour-plane.json */,
@@ -661,6 +668,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CF09A94E16A0A0F500E72811 /* test.bson in Resources */,
 				D8EEF4281577B0FD003FEB5E /* Shader.vsh in Resources */,
 				D8EEF4291577B0FD003FEB5E /* Shader.fsh in Resources */,
 				D8EEF3951577920B003FEB5E /* InfoPlist.strings in Resources */,

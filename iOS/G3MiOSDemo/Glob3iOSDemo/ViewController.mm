@@ -55,7 +55,11 @@
 //#include "IJSONParser.hpp"
 //#include "JSONGenerator.hpp"
 //#include "BSONGenerator.hpp"
-//#include "BSONParser.hpp"
+#include "BSONParser.hpp"
+//#include "ITextUtils.hpp"
+#include "Mark.hpp"
+#include "MarkTouchListener.hpp"
+#include "JSONBaseObject.hpp"
 
 @implementation ViewController
 
@@ -207,7 +211,7 @@
   const bool logDownloaderStatistics = false;
   builder.setLogDownloaderStatistics(logDownloaderStatistics);
 
-  UserData* userData = NULL;
+  WidgetUserData* userData = NULL;
   builder.setUserData(userData);
 
   // initialization
@@ -449,7 +453,7 @@
   class TestMarkTouchListener : public MarkTouchListener {
   public:
     bool touchedMark(Mark* mark) {
-      NSString* message = [NSString stringWithFormat: @"Touched on mark \"%s\"", mark->getName().c_str()];
+      NSString* message = [NSString stringWithFormat: @"Touched on mark \"%s\"", mark->getLabel().c_str()];
 
       UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Glob3 Demo"
                                                       message:message
@@ -471,18 +475,25 @@
 
   Mark* m1 = new Mark("Fuerteventura",
                       URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false),
-                      Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-14.36), 0));
+                      Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-14.36), 0),
+                      false);
   marksRenderer->addMark(m1);
 
 
-  Mark* m2 = new Mark("Las Palmas",
-                      URL("file:///plane.png", false),
+  Mark* m2 = new Mark(URL("file:///plane.png", false),
                       Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-15.36), 0));
   marksRenderer->addMark(m2);
 
-  if (false) {
+  Mark* m3 = new Mark("Washington, DC",
+                      Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
+                                 Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
+                                 0),
+                      0);
+  marksRenderer->addMark(m3);
+
+  if (true) {
     for (int i = 0; i < 2000; i++) {
-      const Angle latitude = Angle::fromDegrees( (int) (arc4random() % 180) - 90 );
+      const Angle latitude  = Angle::fromDegrees( (int) (arc4random() % 180) - 90 );
       const Angle longitude = Angle::fromDegrees( (int) (arc4random() % 360) - 180 );
 
       marksRenderer->addMark(new Mark("Random",
@@ -565,6 +576,32 @@
                                                                 Angle::fromDegreesMinutes(-122, 25),
                                                                 1000000),
                                                      TimeInterval::fromSeconds(5));
+
+      /*
+      NSString *bsonFilePath = [[NSBundle mainBundle] pathForResource: @"test"
+                                                               ofType: @"bson"];
+      if (bsonFilePath) {
+
+        NSData* data = [NSData dataWithContentsOfFile: bsonFilePath];
+
+        const int length = [data length];
+        unsigned char* bytes = new unsigned char[ length ]; // will be deleted by IByteBuffer's destructor
+        [data getBytes: bytes
+                length: length];
+        
+
+        IByteBuffer* buffer = new ByteBuffer_iOS(bytes, length);
+
+        JSONBaseObject* bson = BSONParser::parse(buffer);
+
+        printf("%s\n", bson->description().c_str());
+
+        delete bson;
+
+        delete buffer;
+      }
+      */
+
       /*
       NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
                                                                 ofType: @"json"];

@@ -35,7 +35,9 @@ public abstract class IMathUtils
   {
 	if (_instance != null)
 	{
-	  ILogger.instance().logWarning("Warning, IMathUtils instance set two times\n");
+	  ILogger.instance().logWarning("IMathUtils instance already set!");
+	  if (_instance != null)
+		  _instance.dispose();
 	}
 	_instance = math;
   }

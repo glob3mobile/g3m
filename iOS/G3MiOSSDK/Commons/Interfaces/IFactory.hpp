@@ -32,7 +32,8 @@ private:
 public:
   static void setInstance(IFactory* factory) {
     if (_instance != NULL) {
-      ILogger::instance()->logWarning("Warning, ILogger instance set two times\n");
+      ILogger::instance()->logWarning("IFactory instance already set!");
+      delete _instance;
     }
     _instance = factory;
   }
@@ -44,12 +45,6 @@ public:
   virtual ~IFactory() {
 
   }
-
-//  virtual IImage* createImageFromFileName(const std::string& filename) const = 0;
-//
-//  virtual IImage* createImageFromBuffer(const IByteBuffer* buffer) const = 0;
-//
-//  virtual IImage* createImageFromSize(int width, int height) const = 0;
 
   virtual void createImageFromFileName(const std::string& filename,
                                        IImageListener* listener,

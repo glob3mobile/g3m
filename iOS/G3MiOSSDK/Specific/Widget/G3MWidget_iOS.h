@@ -25,7 +25,7 @@ class CameraRenderer;
 class LayerSet;
 class ICameraConstrainer;
 class Renderer;
-class UserData;
+class WidgetUserData;
 class TileRenderer;
 class TilesRenderParameters;
 class G3MWidget;
@@ -79,7 +79,7 @@ logDownloaderStatistics: (bool) logDownloaderStatistics
 initializationTask: (GInitializationTask*) initializationTask
 autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
    periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
-          userData: (UserData*) userData;
+          userData: (WidgetUserData*) userData;
 
 - (GL*)getGL;
 

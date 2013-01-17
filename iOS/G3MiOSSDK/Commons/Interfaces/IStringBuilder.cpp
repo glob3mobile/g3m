@@ -13,7 +13,7 @@ IStringBuilder* IStringBuilder::_instance = NULL;
 
 void IStringBuilder::setInstance(IStringBuilder* isb) {
   if (_instance != NULL) {
-    ILogger::instance()->logWarning("Warning, ISB instance set two times\n");
+    ILogger::instance()->logWarning("IStringBuilder set two times");
   }
   _instance = isb;
 }

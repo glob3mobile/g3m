@@ -19,9 +19,9 @@ import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.SimpleCameraConstrainer;
 import org.glob3.mobile.generated.URL;
-import org.glob3.mobile.generated.UserData;
 import org.glob3.mobile.generated.WMSLayer;
 import org.glob3.mobile.generated.WMSServerVersion;
+import org.glob3.mobile.generated.WidgetUserData;
 import org.glob3.mobile.specific.G3MBaseActivity;
 import org.glob3.mobile.specific.G3MWidget_Android;
 
@@ -142,7 +142,7 @@ public class G3MAndroidDemoActivity
                   @Override
                   public void run() {
                      final AlertDialog.Builder builder = new AlertDialog.Builder(G3MAndroidDemoActivity.this);
-                     builder.setMessage("Touched on mark \"" + mark.getName() + "\"");
+                     builder.setMessage("Touched on mark \"" + mark.getLabel() + "\"");
                      builder.setTitle("G3M Demo");
 
                      final AlertDialog dialog = builder.create();
@@ -157,7 +157,6 @@ public class G3MAndroidDemoActivity
          renderers.add(marksRenderer);
 
          final Mark m1 = new Mark(//
-                  "Fuerteventura", //
                   new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false), //
                   new Geodetic3D(Angle.fromDegrees(28.05), Angle.fromDegrees(-14.36), 0));
          marksRenderer.addMark(m1);
@@ -165,7 +164,7 @@ public class G3MAndroidDemoActivity
          final Mark m2 = new Mark( //
                   "Las Palmas", //
                   new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false), //
-                  new Geodetic3D(Angle.fromDegrees(28.05), Angle.fromDegrees(-15.36), 0));
+                  new Geodetic3D(Angle.fromDegrees(28.05), Angle.fromDegrees(-15.36), 0), false);
          marksRenderer.addMark(m2);
 
          final boolean randomMarkers = false;
@@ -175,8 +174,7 @@ public class G3MAndroidDemoActivity
                final Angle latitude = Angle.fromDegrees((random.nextInt() % 180) - 90);
                final Angle longitude = Angle.fromDegrees((random.nextInt() % 360) - 180);
 
-               marksRenderer.addMark(new Mark( //
-                        "Random #" + i, //
+               marksRenderer.addMark(new Mark("Random #" + i, //
                         new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false), //
                         new Geodetic3D(latitude, longitude, 0)));
 
@@ -231,7 +229,7 @@ public class G3MAndroidDemoActivity
       final SimpleCameraConstrainer scc = new SimpleCameraConstrainer();
       cameraConstraints.add(scc);
 
-      final UserData userData = null;
+      final WidgetUserData userData = null;
 
       final GInitializationTask initializationTask = null;
       final ArrayList<PeriodicalTask> periodicalTasks = new ArrayList<PeriodicalTask>();

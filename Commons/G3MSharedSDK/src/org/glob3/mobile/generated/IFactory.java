@@ -43,7 +43,9 @@ public abstract class IFactory
   {
 	if (_instance != null)
 	{
-	  ILogger.instance().logWarning("Warning, ILogger instance set two times\n");
+	  ILogger.instance().logWarning("IFactory instance already set!");
+	  if (_instance != null)
+		  _instance.dispose();
 	}
 	_instance = factory;
   }
@@ -57,12 +59,6 @@ public abstract class IFactory
   {
 
   }
-
-//  virtual IImage* createImageFromFileName(const std::string& filename) const = 0;
-//
-//  virtual IImage* createImageFromBuffer(const IByteBuffer* buffer) const = 0;
-//
-//  virtual IImage* createImageFromSize(int width, int height) const = 0;
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual void createImageFromFileName(const String& filename, IImageListener* listener, boolean autodelete) const = 0;

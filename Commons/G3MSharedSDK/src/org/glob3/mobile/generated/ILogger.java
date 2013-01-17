@@ -14,7 +14,9 @@ public abstract class ILogger
   {
 	if (_instance != null)
 	{
-	  ILogger.instance().logWarning("Warning, ILooger instance set two times\n");
+	  ILogger.instance().logWarning("ILooger instance already set!");
+	  if (_instance != null)
+		  _instance.dispose();
 	}
 	_instance = logger;
   }

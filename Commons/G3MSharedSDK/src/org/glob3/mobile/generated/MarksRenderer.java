@@ -1,4 +1,29 @@
 package org.glob3.mobile.generated; 
+//
+//  MarksRenderer.cpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 05/06/12.
+//  Copyright (c) 2012 IGO Software SL. All rights reserved.
+//
+
+//
+//  MarksRenderer.hpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 05/06/12.
+//  Copyright (c) 2012 IGO Software SL. All rights reserved.
+//
+
+
+
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class Mark;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class Camera;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class MarkTouchListener;
+
 public class MarksRenderer extends LeafRenderer
 {
   private final boolean _readyWhenMarksReady;
@@ -27,7 +52,7 @@ public class MarksRenderer extends LeafRenderer
 	  if (_markTouchListener != null)
 		  _markTouchListener.dispose();
 	}
-
+  
 	_markTouchListener = markTouchListener;
 	_autoDeleteMarkTouchListener = autoDelete;
   }
@@ -61,6 +86,10 @@ public class MarksRenderer extends LeafRenderer
 	}
   }
 
+//C++ TO JAVA CONVERTER NOTE: This was formerly a static local variable declaration (not allowed in Java):
+  private Vector2D render_textureTranslation = new Vector2D(0.0, 0.0);
+//C++ TO JAVA CONVERTER NOTE: This was formerly a static local variable declaration (not allowed in Java):
+  private Vector2D render_textureScale = new Vector2D(1.0, 1.0);
   public void render(G3MRenderContext rc, GLState parentState)
   {
 	//  rc.getLogger()->logInfo("MarksRenderer::render()");
@@ -68,22 +97,29 @@ public class MarksRenderer extends LeafRenderer
 	// Saving camera for use in onTouchEvent
 	_lastCamera = rc.getCurrentCamera();
   
+	GL gl = rc.getGL();
+  
 	GLState state = new GLState(parentState);
 	state.disableDepthTest();
 	state.enableBlend();
 	state.enableTextures();
 	state.enableTexture2D();
 	state.enableVerticesPosition();
-  
-	GL gl = rc.getGL();
-  
 	gl.setState(state);
+  
+//C++ TO JAVA CONVERTER NOTE: This static local variable declaration (not allowed in Java) has been moved just prior to the method:
+//	static Vector2D textureTranslation(0.0, 0.0);
+//C++ TO JAVA CONVERTER NOTE: This static local variable declaration (not allowed in Java) has been moved just prior to the method:
+//	static Vector2D textureScale(1.0, 1.0);
+	gl.transformTexCoords(render_textureScale, render_textureTranslation);
+  
 	gl.setBlendFuncSrcAlpha();
   
-	final Vector3D radius = rc.getPlanet().getRadii();
-	final double minDistanceToCamera = (radius._x + radius._y + radius._z) / 3 * 0.75;
+	final Camera camera = rc.getCurrentCamera();
   
-	int marksSize = _marks.size();
+	gl.startBillBoardDrawing(camera.getWidth(), camera.getHeight());
+  
+	final int marksSize = _marks.size();
 	for (int i = 0; i < marksSize; i++)
 	{
 	  Mark mark = _marks.get(i);
@@ -91,9 +127,11 @@ public class MarksRenderer extends LeafRenderer
   
 	  if (mark.isReady())
 	  {
-		mark.render(rc, state, minDistanceToCamera);
+		mark.render(rc);
 	  }
 	}
+  
+	gl.stopBillBoardDrawing();
   }
 
   public final void addMark(Mark mark)
@@ -105,12 +143,32 @@ public class MarksRenderer extends LeafRenderer
 	}
   }
 
+  public final void removeMark(Mark mark)
+  {
+	int pos = -1;
+	for (int i = 0; i < _marks.size(); i++)
+	{
+	  if (_marks.get(i) == mark)
+	  {
+		pos = i;
+	  }
+	  break;
+	}
+	_marks.remove(pos);
+  }
+
+  public final void removeAllMarks()
+  {
+	for (int i = 0; i < _marks.size(); i++)
+	{
+	  if (_marks.get(i) != null)
+		  _marks.get(i).dispose();
+	}
+	_marks.clear();
+  }
+
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
-	if (_markTouchListener == null)
-	{
-	  return false;
-	}
   
 	boolean handled = false;
   
@@ -125,7 +183,7 @@ public class MarksRenderer extends LeafRenderer
 		double minSqDistance = IMathUtils.instance().maxDouble();
 		Mark nearestMark = null;
   
-		int marksSize = _marks.size();
+		final int marksSize = _marks.size();
 		for (int i = 0; i < marksSize; i++)
 		{
 		  Mark mark = _marks.get(i);
@@ -151,7 +209,7 @@ public class MarksRenderer extends LeafRenderer
 			continue;
 		  }
   
-		  final Vector3D cartesianMarkPosition = planet.toCartesian(mark.getPosition());
+		  final Vector3D cartesianMarkPosition = mark.getCartesianPosition(planet);
 		  final Vector2I markPixel = _lastCamera.point2Pixel(cartesianMarkPosition);
   
 		  final RectangleI markPixelBounds = new RectangleI(markPixel._x - (textureWidth / 2), markPixel._y - (textureHeight / 2), textureWidth, textureHeight);
@@ -169,11 +227,16 @@ public class MarksRenderer extends LeafRenderer
   
 		if (nearestMark != null)
 		{
-		  handled = _markTouchListener.touchedMark(nearestMark);
+		  handled = nearestMark.touched();
+		  if (!handled)
+		  {
+			if (_markTouchListener != null)
+			{
+			  handled = _markTouchListener.touchedMark(nearestMark);
+			}
+		  }
 		}
-  
 	  }
-  
 	}
   
 	return handled;
@@ -181,7 +244,6 @@ public class MarksRenderer extends LeafRenderer
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
-
   }
 
   public final boolean isReadyToRender(G3MRenderContext rc)
@@ -203,12 +265,10 @@ public class MarksRenderer extends LeafRenderer
 
   public final void start()
   {
-
   }
 
   public final void stop()
   {
-
   }
 
   public final void onResume(G3MContext context)
@@ -218,12 +278,10 @@ public class MarksRenderer extends LeafRenderer
 
   public final void onPause(G3MContext context)
   {
-
   }
 
   public final void onDestroy(G3MContext context)
   {
-
   }
 
 }

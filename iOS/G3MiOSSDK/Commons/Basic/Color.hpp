@@ -62,6 +62,17 @@ public:
     return Color::fromRGBA(1, 1, 1, 1);
   }
 
+  static Color yellow() {
+    return Color::fromRGBA(1, 1, 0, 1);
+  }
+  
+  static Color cyan() {
+    return Color::fromRGBA(0, 1, 1, 1);
+  }
+
+  static Color magenta() {
+    return Color::fromRGBA(1, 0, 1, 1);
+  }
 
   float getRed() const {
     return _red;

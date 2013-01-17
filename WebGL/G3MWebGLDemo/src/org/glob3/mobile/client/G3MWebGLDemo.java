@@ -41,10 +41,10 @@ import org.glob3.mobile.generated.SimpleCameraConstrainer;
 import org.glob3.mobile.generated.TileRenderer;
 import org.glob3.mobile.generated.TileRendererBuilder;
 import org.glob3.mobile.generated.URL;
-import org.glob3.mobile.generated.UserData;
 import org.glob3.mobile.generated.Vector3D;
 import org.glob3.mobile.generated.WMSLayer;
 import org.glob3.mobile.generated.WMSServerVersion;
+import org.glob3.mobile.generated.WidgetUserData;
 import org.glob3.mobile.specific.Downloader_WebGL;
 import org.glob3.mobile.specific.G3MBuilder_WebGL;
 import org.glob3.mobile.specific.G3MWidget_WebGL;
@@ -264,14 +264,13 @@ public class G3MWebGLDemo
             marksRenderer.setMarkTouchListener(new MarkTouchListener() {
                @Override
                public boolean touchedMark(final Mark mark) {
-                  Window.alert("Touched on mark: " + mark.getName());
+                  Window.alert("Touched on mark: " + mark.getLabel());
                   return true;
                }
             }, true);
 
 
             final Mark m1 = new Mark(//
-                     "Fuerteventura", //
                      new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false), //
                      new Geodetic3D(Angle.fromDegrees(28.05), Angle.fromDegrees(-14.36), 0));
             //m1->addTouchListener(listener);
@@ -280,7 +279,8 @@ public class G3MWebGLDemo
             final Mark m2 = new Mark( //
                      "Las Palmas", //
                      new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false), //
-                     new Geodetic3D(Angle.fromDegrees(28.05), Angle.fromDegrees(-15.36), 0));
+                     new Geodetic3D(Angle.fromDegrees(28.05), Angle.fromDegrees(-15.36), 0), //
+                     false);
             //m2->addTouchListener(listener);
             marksRenderer.addMark(m2);
 
@@ -361,7 +361,7 @@ public class G3MWebGLDemo
 
          final ArrayList<PeriodicalTask> periodicalTasks = new ArrayList<PeriodicalTask>();
 
-         final UserData userData = null;
+         final WidgetUserData userData = null;
 
 
          _widget.initWidget(//

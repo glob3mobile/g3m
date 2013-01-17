@@ -14,34 +14,37 @@
 class GL;
 
 enum ShaderType {
-  VERTEX_SHADER,   
+  VERTEX_SHADER,
   FRAGMENT_SHADER
 };
 
 
 class ShaderProgram {
-  
+
 private:
   int   _program;
   GL*   _gl;
-  int   _vertexShader, _fragmentShader;
-  
+
   bool compileShader(int shader,
                      const std::string& source);
   bool linkProgram();
 
-  
-  
+
+
 public:
   ShaderProgram(GL* gl);
   ~ShaderProgram();
-  
+
   bool loadShaders(const std::string& vertexSource,
                    const std::string& fragmentSource);
-  
-  
+
+
   // TEMP
-  int getProgram() { return _program; }
+  int getProgram() const {
+    return _program;
+  }
+
+  const std::string description() const;
 
 };
 

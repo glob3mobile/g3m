@@ -72,6 +72,8 @@ public class GL
   private float _lineWidth;
   private float _pointSize;
 
+  private ShaderProgram _program;
+
   private void loadModelView()
   {
 	if (_verbose)
@@ -133,7 +135,7 @@ public class GL
 	int l = _nativeGL.getAttribLocation(program, name);
 	if (l == -1)
 	{
-	  ILogger.instance().logError("Error fetching Attribute, Program = %d, Variable = %s", program, name);
+	  ILogger.instance().logError("Error fetching Attribute, Program=%s, Variable=\"%s\"", program.description(), name);
 	  _errorGettingLocationOcurred = true;
 	}
 	return l;
@@ -147,7 +149,7 @@ public class GL
 	IGLUniformID uID = _nativeGL.getUniformLocation(program, name);
 	if (!uID.isValid())
 	{
-	  ILogger.instance().logError("Error fetching Uniform, Program = %d, Variable = %s", program, name);
+	  ILogger.instance().logError("Error fetching Uniform, Program=%s, Variable=\"%s\"", program.description(), name);
 	  _errorGettingLocationOcurred = true;
 	}
 	return uID;
@@ -212,6 +214,7 @@ public class GL
 	  _billboardTexCoord = null;
 	  _lineWidth = 1F;
 	  _pointSize = 1F;
+	  _program = null;
 	//Init Constants
 	GLCullFace.init(_nativeGL);
 	GLBufferType.init(_nativeGL);
@@ -359,6 +362,12 @@ public class GL
 	  ILogger.instance().logInfo("GL::useProgram()");
 	}
   
+	if (_program == program)
+	{
+	  return true;
+	}
+	_program = program;
+  
 	// set shaders
 	_nativeGL.useProgram(program);
   
@@ -390,7 +399,9 @@ public class GL
   
 	//BILLBOARDS
 	GlobalMembersGL.Uniforms.BillBoard = checkedGetUniformLocation(program, "BillBoard");
-	GlobalMembersGL.Uniforms.ViewPortRatio = checkedGetUniformLocation(program, "ViewPortRatio");
+	GlobalMembersGL.Uniforms.ViewPortExtent = checkedGetUniformLocation(program, "ViewPortExtent");
+	GlobalMembersGL.Uniforms.TextureExtent = checkedGetUniformLocation(program, "TextureExtent");
+  
 	_nativeGL.uniform1i(GlobalMembersGL.Uniforms.BillBoard, 0); //NOT DRAWING BILLBOARD
   
 	//FOR FLAT COLOR MIXING
@@ -424,9 +435,9 @@ public class GL
 	_nativeGL.disable(GLFeature.polygonOffsetFill());
   }
 
-//  void lineWidth(float width);
-//
-//  void pointSize(float size);
+  //  void lineWidth(float width);
+  //
+  //  void pointSize(float size);
 
   public final int getError()
   {
@@ -497,7 +508,21 @@ public class GL
 	_nativeGL.bindTexture(GLTextureType.texture2D(), textureId);
   }
 
-  public final void drawBillBoard(IGLTextureId textureId, IFloatBuffer vertices, float viewPortRatio)
+  public final void startBillBoardDrawing(int viewPortWidth, int viewPortHeight)
+  {
+	_nativeGL.uniform1i(GlobalMembersGL.Uniforms.BillBoard, 1);
+	_nativeGL.uniform2f(GlobalMembersGL.Uniforms.ViewPortExtent, viewPortWidth, viewPortHeight);
+  
+	color(1, 1, 1, 1);
+  
+	setTextureCoordinates(2, 0, getBillboardTexCoord());
+  }
+  public final void stopBillBoardDrawing()
+  {
+	_nativeGL.uniform1i(GlobalMembersGL.Uniforms.BillBoard, 0);
+  }
+
+  public final void drawBillBoard(IGLTextureId textureId, IFloatBuffer vertices, int textureWidth, int textureHeight)
   {
 	if (_verbose)
 	{
@@ -506,20 +531,13 @@ public class GL
   
 	int TODO_refactor_billboard;
   
-	_nativeGL.uniform1i(GlobalMembersGL.Uniforms.BillBoard, 1);
-  
-	_nativeGL.uniform1f(GlobalMembersGL.Uniforms.ViewPortRatio, viewPortRatio);
-  
-	color(1, 1, 1, 1);
+	_nativeGL.uniform2f(GlobalMembersGL.Uniforms.TextureExtent, textureWidth, textureHeight);
   
 	bindTexture(textureId);
   
 	vertexPointer(3, 0, vertices);
-	setTextureCoordinates(2, 0, getBillboardTexCoord());
   
 	_nativeGL.drawArrays(GLPrimitive.triangleStrip(), 0, vertices.size() / 3);
-  
-	_nativeGL.uniform1i(GlobalMembersGL.Uniforms.BillBoard, 0);
   }
 
   public final void deleteTexture(IGLTextureId texture)
@@ -605,8 +623,8 @@ public class GL
 
   /*void enableVertexFlatColor(const Color& c, float intensity) {
    if (_verbose) ILogger::instance()->logInfo("GL::enableVertexFlatColor()");
-	enableVertexFlatColor(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha(), intensity);
-  }*/
+   enableVertexFlatColor(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha(), intensity);
+   }*/
 
   public final void setBlendFuncSrcAlpha()
   {
