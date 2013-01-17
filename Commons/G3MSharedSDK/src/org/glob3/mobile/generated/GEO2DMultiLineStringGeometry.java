@@ -63,16 +63,6 @@ public class GEO2DMultiLineStringGeometry extends GEOMultiLineStringGeometry
   }
 
 
-	public GEO2DMultiLineStringGeometry(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray, Color color)
-	{
-		this(coordinatesArray, color, 2);
-	}
-	public GEO2DMultiLineStringGeometry(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray)
-	{
-		this(coordinatesArray, Color.newFromRGBA(1, 1, 1, 1), 2);
-	}
-//C++ TO JAVA CONVERTER NOTE: Java does not allow default values for parameters. Overloaded methods are inserted above.
-//ORIGINAL LINE: GEO2DMultiLineStringGeometry(java.util.ArrayList<java.util.ArrayList<Geodetic2D*>*>* coordinatesArray, Color* color = Color::newFromRGBA(1, 1, 1, 1), const float lineWidth = 2) : _coordinatesArray(coordinatesArray), _color(color), _lineWidth(lineWidth)
 	public GEO2DMultiLineStringGeometry(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray, Color color, float lineWidth)
   {
 		_coordinatesArray = coordinatesArray;
@@ -80,6 +70,7 @@ public class GEO2DMultiLineStringGeometry extends GEOMultiLineStringGeometry
 		_lineWidth = lineWidth;
 
   }
+
 
 
   ///#include "CompositeMesh.hpp"

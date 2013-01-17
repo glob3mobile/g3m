@@ -8,6 +8,9 @@ package org.glob3.mobile.generated;
 //
 
 
+
+
+
 public class Color
 {
   private final float _red;
@@ -23,6 +26,70 @@ public class Color
 	  _alpha = alpha;
 
   }
+
+
+	private static int hexToDec(String hex)
+	{
+		std.istringstream istr = new std.istringstream(hex);
+		int val;
+		istr >> std.hex >> val;
+		return val;
+	}
+
+	private static boolean isValidHex(String hex)
+	{
+		final String allowedChars = "#0123456789abcdefABCDEF";
+
+		if (hex.charAt(0) == '#')
+		{
+			if (hex.length() != 7)
+			{
+				return false;
+			}
+		}
+		else
+		{
+			if (hex.length() != 6)
+			{
+				return false;
+			}
+		}
+
+		// Check for non allowed chars:
+		if (hex.find_first_not_of(allowedChars) != hex.npos)
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	private static Color hexToRGB(String hex)
+	{
+		if (!isValidHex(hex))
+		{
+			ILogger.instance().logError("The value received is not avalid hex string!");
+		}
+
+		if (hex.charAt(0) == '#')
+		{
+			hex = hex.substring(0, hex.iterator());
+		}
+
+		String R = hex.substring(0, 2);
+		String G = hex.substring(2, 4);
+		String B = hex.substring(4, 6);
+
+		System.out.printf("%x", " converted to ");
+		System.out.printf("%x", hexToDec(R));
+		System.out.printf("%x", ", ");
+		System.out.printf("%x", hexToDec(G));
+		System.out.printf("%x", ", ");
+		System.out.printf("%x", hexToDec(B));
+		System.out.printf("%x", "\n");
+
+		return new Color(hexToDec(R), hexToDec(G), hexToDec(B), 1);
+	}
 
   public Color(Color that)
   {
@@ -45,6 +112,11 @@ public class Color
   public static Color newFromRGBA(float red, float green, float blue, float alpha)
   {
 	return new Color(red, green, blue, alpha);
+  }
+
+  public static Color newFromHEX(String hex)
+  {
+	  return hexToRGB(hex);
   }
 
   public static Color black()

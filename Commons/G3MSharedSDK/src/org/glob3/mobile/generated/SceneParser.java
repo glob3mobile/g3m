@@ -10,6 +10,8 @@ public class SceneParser
 	private static final String NAME = "name";
 	private static final String URLICON = "urlIcon";
 	private static final String MINDISTANCE = "minDistance";
+	private static final String COLORLINE = "colorLine";
+	private static final String SIZELINE = "sizeLine";
 
 	private static final String WMS110 = "1.1.0";
 	private static final String WMS111 = "1.1.1";
@@ -169,6 +171,9 @@ public class SceneParser
 			final String namefile = jsonItems.getAsObject(i).getAsString(NAME).value();
 			final String icon = jsonItems.getAsObject(i).getAsString(URLICON).value();
 			final String minDistance = jsonItems.getAsObject(i).getAsString(MINDISTANCE).value();
+			final String colorLine = jsonItems.getAsObject(i).getAsString(COLORLINE).value();
+			final String sizeLine = jsonItems.getAsObject(i).getAsString(SIZELINE).value();
+    
     
 			IStringBuilder url = IStringBuilder.newStringBuilder();
 			url.addString(geojsonDatasource);
@@ -178,6 +183,8 @@ public class SceneParser
 			java.util.HashMap<String, String> attr = new java.util.HashMap<String, String>();
 			attr.put(URLICON, icon);
 			attr.put(MINDISTANCE, minDistance);
+			attr.put(COLORLINE, colorLine);
+			attr.put(SIZELINE, sizeLine);
     
 			_mapGeoJSONSources.put(url.getString(), attr);
 		}

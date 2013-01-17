@@ -37,6 +37,8 @@ package org.glob3.mobile.generated;
 //class GEOLineStringGeometry;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class GEOMultiLineStringGeometry;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class Color;
 
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Geodetic2D;
@@ -185,11 +187,11 @@ public class GEOJSONParser
   
 	if (type.compareTo("LineString") == 0)
 	{
-	  geo = createLineStringGeometry(jsonObject);
+	  geo = createLineStringGeometry(jsonObject, Color.newFromRGBA(1, 1, 0, 1), 2);
 	}
 	else if (type.compareTo("MultiLineString") == 0)
 	{
-	  geo = createMultiLineStringGeometry(jsonObject);
+	  geo = createMultiLineStringGeometry(jsonObject, Color.newFromRGBA(1, 1, 1, 1), 2);
 	}
 	else
 	{
@@ -199,8 +201,8 @@ public class GEOJSONParser
 	return geo;
   }
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: GEOLineStringGeometry* createLineStringGeometry(const JSONObject* jsonObject) const
-  private GEOLineStringGeometry createLineStringGeometry(JSONObject jsonObject)
+//ORIGINAL LINE: GEOLineStringGeometry* createLineStringGeometry(const JSONObject* jsonObject, Color* color, const float lineWidth) const
+  private GEOLineStringGeometry createLineStringGeometry(JSONObject jsonObject, Color color, float lineWidth)
   {
   
 	final JSONArray jsCoordinates = jsonObject.getAsArray("coordinates");
@@ -225,7 +227,7 @@ public class GEOJSONParser
 	  java.util.ArrayList<Geodetic2D> coordinates = create2DCoordinates(jsCoordinates);
 	  if (coordinates != null)
 	  {
-		geo = new GEO2DLineStringGeometry(coordinates);
+		geo = new GEO2DLineStringGeometry(coordinates, color, lineWidth);
 		_lineStrings2DCount++;
 	  }
 	}
@@ -243,8 +245,8 @@ public class GEOJSONParser
 	return geo;
   }
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: GEOMultiLineStringGeometry* createMultiLineStringGeometry(const JSONObject* jsonObject) const
-  private GEOMultiLineStringGeometry createMultiLineStringGeometry(JSONObject jsonObject)
+//ORIGINAL LINE: GEOMultiLineStringGeometry* createMultiLineStringGeometry(const JSONObject* jsonObject, Color* color, const float lineWidth) const
+  private GEOMultiLineStringGeometry createMultiLineStringGeometry(JSONObject jsonObject, Color color, float lineWidth)
   {
   
 	final JSONArray jsCoordinatesArray = jsonObject.getAsArray("coordinates");
@@ -292,7 +294,7 @@ public class GEOJSONParser
 		}
 	  }
   
-	  geo = new GEO2DMultiLineStringGeometry(coordinatesArray);
+	  geo = new GEO2DMultiLineStringGeometry(coordinatesArray, color, lineWidth);
 	  _multiLineStrings2DCount++;
 	}
 	/*
@@ -351,16 +353,16 @@ public class GEOJSONParser
   }
 
 
-  public static GEOLineStringGeometry createLineString(JSONObject jsonObject)
+  public static GEOLineStringGeometry createLineString(JSONObject jsonObject, Color color, float lineWidth)
   {
 	  GEOJSONParser parser = new GEOJSONParser("");
-	  return parser.createLineStringGeometry(jsonObject);
+	  return parser.createLineStringGeometry(jsonObject, color, lineWidth);
   }
 
-  public static GEOMultiLineStringGeometry createMultiLineString(JSONObject jsonObject)
+  public static GEOMultiLineStringGeometry createMultiLineString(JSONObject jsonObject, Color color, float lineWidth)
   {
 	  GEOJSONParser parser = new GEOJSONParser("");
-	  return parser.createMultiLineStringGeometry(jsonObject);
+	  return parser.createMultiLineStringGeometry(jsonObject, color, lineWidth);
   }
 
   public static GEOObject parse(String json)
