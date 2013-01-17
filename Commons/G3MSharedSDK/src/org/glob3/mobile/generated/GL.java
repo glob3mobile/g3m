@@ -647,12 +647,10 @@ public class GL
   public void dispose()
   {
 
-	if (_vertices != null)
-		_vertices.dispose();
-	if (_textureCoordinates != null)
-		_textureCoordinates.dispose();
-	if (_colors != null)
-		_colors.dispose();
+	// There's no need to delete these attributes because this class is not the owner
+//    delete _vertices;
+//    delete _textureCoordinates;
+//    delete _colors;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:

@@ -16,9 +16,9 @@ public class BingLayer extends Layer
 
 
 
-  public BingLayer(URL mapServerURL, LayerCondition condition, Sector sector, MapType mapType, Language locale, String key)
+  public BingLayer(String layerName, URL mapServerURL, LayerCondition condition, Sector sector, MapType mapType, Language locale, String key)
   {
-	  super(condition);
+	  super(layerName, condition);
 	  _sector = new Sector(sector);
 	  _mapServerURL = new URL(mapServerURL);
 	  _mapType = mapType;
