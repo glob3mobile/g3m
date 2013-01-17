@@ -111,12 +111,10 @@ LayerSet* TileRendererBuilder::createLayerSet() {
 }
 
 TilesRenderParameters* TileRendererBuilder::createTileRendererParameters() {
-  TilesRenderParameters* parameters = TilesRenderParameters::createDefault(_renderDebug,
-                                                                           _useTilesSplitBudget,
-                                                                           _forceTopLevelTilesRenderOnStart,
-                                                                           _incrementalTileQuality);
-
-  return parameters;
+  return TilesRenderParameters::createDefault(_renderDebug,
+                                              _useTilesSplitBudget,
+                                              _forceTopLevelTilesRenderOnStart,
+                                              _incrementalTileQuality);
 }
 
 TileTessellator* TileRendererBuilder::createTileTessellator() {

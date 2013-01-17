@@ -64,6 +64,7 @@ void TextUtils_iOS::createLabelImage(const std::string& label,
   if (autodelete) {
     delete listener;
   }
+  delete result;
 }
 
 
@@ -154,6 +155,6 @@ void TextUtils_iOS::labelImage(const IImage* image,
     if (autodelete) {
       delete listener;
     }
-    
+    delete result;
   }
 }

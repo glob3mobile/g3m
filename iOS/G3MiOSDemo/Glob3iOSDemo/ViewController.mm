@@ -60,6 +60,16 @@
 #include "Mark.hpp"
 #include "MarkTouchListener.hpp"
 #include "JSONBaseObject.hpp"
+#include "VisibleSectorListener.hpp"
+
+
+class TestVisibleSectorListener : public VisibleSectorListener {
+public:
+  void onVisibleSectorChange(const Sector* visibleSector) {
+    ILogger::instance()->logInfo("VisibleSector=%s", visibleSector->description().c_str());
+  }
+};
+
 
 @implementation ViewController
 
@@ -186,6 +196,10 @@
 
   TileRenderer* tileRenderer = [self createTileRenderer: parameters
                                                layerSet: layerSet];
+
+  tileRenderer->addVisibleSectorListener(new TestVisibleSectorListener(),
+                                         TimeInterval::fromSeconds(3));
+
   builder.setTileRenderer(tileRenderer);
 
   Renderer* busyRenderer = new BusyMeshRenderer();
@@ -217,7 +231,7 @@
   PeriodicalTask* periodicalTask = [self createSamplePeriodicalTask: &builder];
   builder.addPeriodicalTask(periodicalTask);
 
-  const bool logFPS = true;
+  const bool logFPS = false;
   builder.setLogFPS(logFPS);
 
   const bool logDownloaderStatistics = false;
@@ -438,7 +452,7 @@
   const bool renderDebug = false;
   const bool useTilesSplitBudget = true;
   const bool forceTopLevelTilesRenderOnStart = true;
-  const bool incrementalTileQuality = true;
+  const bool incrementalTileQuality = false;
   TilesRenderParameters* parameters = TilesRenderParameters::createDefault(renderDebug,
                                                                            useTilesSplitBudget,
                                                                            forceTopLevelTilesRenderOnStart,

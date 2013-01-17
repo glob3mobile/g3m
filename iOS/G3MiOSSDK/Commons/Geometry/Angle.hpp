@@ -164,6 +164,10 @@ public:
     return (_degrees == 0);
   }
 
+  bool isEqualsTo(const Angle& that) const {
+    return (_degrees == that._degrees) || (_radians == that._radians);
+  }
+
 #ifdef JAVA_CODE
   @Override
 	public int hashCode() {

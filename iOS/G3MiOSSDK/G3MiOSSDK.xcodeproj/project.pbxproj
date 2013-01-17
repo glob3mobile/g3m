@@ -88,6 +88,7 @@
 		CF00E445166FD77E0098CABD /* IImageListener.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF00E443166FD77E0098CABD /* IImageListener.hpp */; settings = {ATTRIBUTES = (); }; };
 		CF022386166836F500024B73 /* GEOJSONParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF022384166836F500024B73 /* GEOJSONParser.cpp */; };
 		CF022387166836F500024B73 /* GEOJSONParser.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF022385166836F500024B73 /* GEOJSONParser.hpp */; settings = {ATTRIBUTES = (); }; };
+		CF024DC816A84F330051255C /* VisibleSectorListener.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF024DC616A84F330051255C /* VisibleSectorListener.hpp */; };
 		CF03683616A499F1006CE160 /* LabelPosition.h in Headers */ = {isa = PBXBuildFile; fileRef = CF03683416A499F0006CE160 /* LabelPosition.h */; };
 		CF0A8183163303E800036277 /* MutableVector2I.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF0A8181163303E800036277 /* MutableVector2I.cpp */; };
 		CF0A8184163303E800036277 /* MutableVector2I.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF0A8182163303E800036277 /* MutableVector2I.hpp */; settings = {ATTRIBUTES = (); }; };
@@ -441,6 +442,7 @@
 		CF00E443166FD77E0098CABD /* IImageListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IImageListener.hpp; path = Commons/Interfaces/IImageListener.hpp; sourceTree = "<group>"; };
 		CF022384166836F500024B73 /* GEOJSONParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEOJSONParser.cpp; path = Commons/GEO/GEOJSONParser.cpp; sourceTree = "<group>"; };
 		CF022385166836F500024B73 /* GEOJSONParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEOJSONParser.hpp; path = Commons/GEO/GEOJSONParser.hpp; sourceTree = "<group>"; };
+		CF024DC616A84F330051255C /* VisibleSectorListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = VisibleSectorListener.hpp; path = Commons/Rendererers/VisibleSectorListener.hpp; sourceTree = "<group>"; };
 		CF03683416A499F0006CE160 /* LabelPosition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LabelPosition.h; path = Commons/Basic/LabelPosition.h; sourceTree = "<group>"; };
 		CF08483515D41EF700327171 /* IGLTextureId.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IGLTextureId.hpp; path = Commons/Interfaces/IGLTextureId.hpp; sourceTree = "<group>"; };
 		CF0A8181163303E800036277 /* MutableVector2I.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MutableVector2I.cpp; path = Commons/Geometry/MutableVector2I.cpp; sourceTree = "<group>"; };
@@ -1028,6 +1030,7 @@
 				CFA71BE715D2F6C500F8C78D /* TilesRenderParameters.hpp */,
 				CFCEFF4B163721EA00FC4AB0 /* TrailsRenderer.cpp */,
 				CFCEFF4C163721EA00FC4AB0 /* TrailsRenderer.hpp */,
+				CF024DC616A84F330051255C /* VisibleSectorListener.hpp */,
 			);
 			name = Renderers;
 			sourceTree = "<group>";
@@ -1403,6 +1406,7 @@
 				CFFAFD74169F2E3000BCE129 /* TextUtils_iOS.hpp in Headers */,
 				E87424B1169F4B9400C8A227 /* MarkTouchListener.hpp in Headers */,
 				CF03683616A499F1006CE160 /* LabelPosition.h in Headers */,
+				CF024DC816A84F330051255C /* VisibleSectorListener.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
