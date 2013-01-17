@@ -84,3 +84,21 @@ void LayerSet::layerChanged(const Layer* layer) const {
     _listener->changed(this);
   }
 }
+
+Layer* LayerSet::get(int index) {
+  if (index < _layers.size()) {
+    return _layers[index];
+  }
+  
+  return NULL;
+}
+
+Layer* LayerSet::getLayer(const std::string &name) {
+  for (int i = 0; i < _layers.size(); i++) {
+    if (_layers[i]->getName() == name) {
+      return _layers[i];
+    }
+  }
+
+  return NULL;
+}

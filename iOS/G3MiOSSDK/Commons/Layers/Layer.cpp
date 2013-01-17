@@ -47,3 +47,7 @@ void Layer::notifyChanges() const {
     _layerSet->layerChanged(this);
   }
 }
+
+const std::string Layer::getName() {
+  return _name;
+}

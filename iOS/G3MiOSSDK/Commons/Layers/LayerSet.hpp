@@ -73,6 +73,9 @@ public:
     _listener = listener;
   }
 
+  Layer* get(int index);
+  
+  Layer* getLayer(const std::string& name);
 };
 
 #endif
