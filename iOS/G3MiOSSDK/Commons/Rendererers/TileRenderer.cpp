@@ -51,6 +51,7 @@ public:
   void tryToNotifyListener(const Sector* visibleSector) {
     if ( _stabilizationIntervalInMS == 0 ) {
       if ( (_lastSector == NULL) || (!_lastSector->isEqualsTo(*visibleSector)) ) {
+        delete _lastSector;
         _lastSector = new Sector(*visibleSector);
         _listener->onVisibleSectorChange(_lastSector);
       }
@@ -59,6 +60,7 @@ public:
       const long long now = getTimer()->now().milliseconds();
 
       if ( (_lastSector == NULL) || (!_lastSector->isEqualsTo(*visibleSector)) ) {
+        delete _lastSector;
         _lastSector = new Sector(*visibleSector);
         _whenNotifyInMS = now + _stabilizationIntervalInMS;
       }
