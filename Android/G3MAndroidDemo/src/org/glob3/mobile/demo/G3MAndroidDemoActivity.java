@@ -19,9 +19,9 @@ import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.SimpleCameraConstrainer;
 import org.glob3.mobile.generated.URL;
-import org.glob3.mobile.generated.UserData;
 import org.glob3.mobile.generated.WMSLayer;
 import org.glob3.mobile.generated.WMSServerVersion;
+import org.glob3.mobile.generated.WidgetUserData;
 import org.glob3.mobile.specific.G3MBaseActivity;
 import org.glob3.mobile.specific.G3MWidget_Android;
 
@@ -142,7 +142,7 @@ public class G3MAndroidDemoActivity
                   @Override
                   public void run() {
                      final AlertDialog.Builder builder = new AlertDialog.Builder(G3MAndroidDemoActivity.this);
-                     builder.setMessage("Touched on mark \"" + mark.getName() + "\"");
+                     builder.setMessage("Touched on mark \"" + mark.getLabel() + "\"");
                      builder.setTitle("G3M Demo");
 
                      final AlertDialog dialog = builder.create();
@@ -231,7 +231,7 @@ public class G3MAndroidDemoActivity
       final SimpleCameraConstrainer scc = new SimpleCameraConstrainer();
       cameraConstraints.add(scc);
 
-      final UserData userData = null;
+      final WidgetUserData userData = null;
 
       final GInitializationTask initializationTask = null;
       final ArrayList<PeriodicalTask> periodicalTasks = new ArrayList<PeriodicalTask>();

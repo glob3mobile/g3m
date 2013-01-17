@@ -11,6 +11,9 @@
 
 #include "Image_iOS.hpp"
 #include "Color.hpp"
+#include "IImageListener.hpp"
+
+#include <math.h>
 
 CGColorRef TextUtils_iOS::toCGColor(const Color* color) {
   if (color == NULL) {
@@ -23,10 +26,12 @@ CGColorRef TextUtils_iOS::toCGColor(const Color* color) {
                           alpha: color->getAlpha()] CGColor];
 }
 
-IImage* TextUtils_iOS::createLabelBitmap(const std::string& label,
-                                         float fontSize,
-                                         const Color* color,
-                                         const Color* shadowColor) {
+void TextUtils_iOS::createLabelImage(const std::string& label,
+                                     float fontSize,
+                                     const Color* color,
+                                     const Color* shadowColor,
+                                     IImageListener* listener,
+                                     bool autodelete) {
   NSString* text = [NSString stringWithCString: label.c_str()
                                       encoding: NSUTF8StringEncoding];
 
@@ -46,7 +51,6 @@ IImage* TextUtils_iOS::createLabelBitmap(const std::string& label,
     CGContextSetShadowWithColor(ctx, CGSizeMake(2.0, 2.0), 1.0, toCGColor(shadowColor));
   }
 
-  // draw in context, you can use also drawInRect:withFont:
   [text drawAtPoint: CGPointMake(0.0, 0.0)
            withFont: font];
 
@@ -54,5 +58,101 @@ IImage* TextUtils_iOS::createLabelBitmap(const std::string& label,
   UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
   UIGraphicsEndImageContext();
 
-  return new Image_iOS(image, NULL);
+  IImage* result = new Image_iOS(image, NULL);
+  listener->imageCreated(result);
+  if (autodelete) {
+    delete listener;
+  }
+}
+
+
+void TextUtils_iOS::labelImage(const IImage* image,
+                               const std::string& label,
+                               const LabelPosition labelPosition,
+                               int separation,
+                               float fontSize,
+                               const Color* color,
+                               const Color* shadowColor,
+                               IImageListener* listener,
+                               bool autodelete) {
+
+  if (image == NULL) {
+    createLabelImage(label,
+                     fontSize,
+                     color,
+                     shadowColor,
+                     listener,
+                     autodelete);
+  }
+  else {
+    NSString* text = [NSString stringWithCString: label.c_str()
+                                        encoding: NSUTF8StringEncoding];
+
+    UIFont *font = [UIFont systemFontOfSize: fontSize];
+    CGSize textSize = [text sizeWithFont: font];
+
+    CGSize labelSize = (shadowColor == NULL) ? textSize : CGSizeMake(textSize.width + 2,
+                                                                     textSize.height + 2);
+
+    float imageWidth;
+    float imageHeight;
+    if (labelPosition == Bottom) {
+      imageWidth = fmaxf(labelSize.width, image->getWidth());
+      imageHeight = labelSize.height + separation + image->getHeight();
+    }
+    else if (labelPosition == Right) {
+      imageWidth = labelSize.width + separation + image->getWidth();
+      imageHeight = fmaxf(labelSize.height, image->getHeight());
+    }
+    else {
+      ILogger::instance()->logError("Unsupported LabelPosition");
+      listener->imageCreated(NULL);
+      if (autodelete) {
+        delete listener;
+      }
+      return;
+    }
+
+    UIImage* uiImage = ((const Image_iOS*) image)->getUIImage();
+
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(imageWidth, imageHeight), NO, 0.0);
+
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+
+    if (labelPosition == Bottom) {
+      [uiImage drawAtPoint: CGPointMake((imageWidth - image->getHeight()) / 2,
+                                        0.0) ];
+    }
+    else if (labelPosition == Right) {
+      [uiImage drawAtPoint: CGPointMake(0.0,
+                                        0.0) ];
+    }
+
+    CGContextSetFillColorWithColor(ctx, toCGColor(color));
+
+    if (shadowColor != NULL) {
+      CGContextSetShadowWithColor(ctx, CGSizeMake(2.0, 2.0), 1.0, toCGColor(shadowColor));
+    }
+
+    if (labelPosition == Bottom) {
+      [text drawAtPoint: CGPointMake((imageWidth - labelSize.width) / 2,
+                                     image->getHeight() + separation)
+               withFont: font];
+    }
+    else if (labelPosition == Right) {
+      [text drawAtPoint: CGPointMake(image->getWidth() + separation,
+                                     (imageHeight - textSize.height) / 2)
+               withFont: font];
+    }
+
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+
+    IImage* result = new Image_iOS(image, NULL);
+    listener->imageCreated(result);
+    if (autodelete) {
+      delete listener;
+    }
+    
+  }
 }

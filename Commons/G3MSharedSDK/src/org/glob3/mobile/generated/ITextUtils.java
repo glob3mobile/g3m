@@ -1,26 +1,4 @@
 package org.glob3.mobile.generated; 
-//
-//  ITextUtils.cpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 1/10/13.
-//
-//
-
-//
-//  ITextUtils.hpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 1/10/13.
-//
-//
-
-
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class IImage;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class Color;
-
 public abstract class ITextUtils
 {
   private static ITextUtils _instance = null;
@@ -46,16 +24,32 @@ public abstract class ITextUtils
 
   }
 
-  public IImage createLabelBitmap(String label)
+
+  public void createLabelImage(String label, IImageListener listener, boolean autodelete)
   {
 	final float fontSize = 20F;
   
 	final Color color = Color.yellow();
 	final Color shadowColor = Color.black();
   
-	return createLabelBitmap(label, fontSize, color, shadowColor);
+	createLabelImage(label, fontSize, color, shadowColor, listener, autodelete);
   }
 
-  public abstract IImage createLabelBitmap(String label, float fontSize, Color color, Color shadowColor);
+  public abstract void createLabelImage(String label, float fontSize, Color color, Color shadowColor, IImageListener listener, boolean autodelete);
+
+
+  public void labelImage(IImage image, String label, LabelPosition labelPosition, IImageListener listener, boolean autodelete)
+  {
+	final float fontSize = 20F;
+  
+	final Color color = Color.yellow();
+	final Color shadowColor = Color.black();
+  
+	final int separation = 2;
+  
+	labelImage(image, label, labelPosition, separation, fontSize, color, shadowColor, listener, autodelete);
+  }
+
+  public abstract void labelImage(IImage image, String label, LabelPosition labelPosition, int separation, float fontSize, Color color, Color shadowColor, IImageListener listener, boolean autodelete);
 
 }

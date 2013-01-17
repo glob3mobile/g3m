@@ -12,6 +12,13 @@
 #include "ILogger.hpp"
 class IImage;
 class Color;
+class IImageListener;
+
+
+enum LabelPosition {
+  Bottom,
+  Right
+};
 
 class ITextUtils {
 private:
@@ -34,13 +41,35 @@ public:
 
   }
 
-  virtual IImage* createLabelBitmap(const std::string& label);
-  
-  virtual IImage* createLabelBitmap(const std::string& label,
-                                    float fontSize,
-                                    const Color* color,
-                                    const Color* shadowColor) = 0;
 
+  virtual void createLabelImage(const std::string& label,
+                                IImageListener* listener,
+                                bool autodelete);
+
+  virtual void createLabelImage(const std::string& label,
+                                float fontSize,
+                                const Color* color,
+                                const Color* shadowColor,
+                                IImageListener* listener,
+                                bool autodelete) = 0;
+
+
+  virtual void labelImage(const IImage* image,
+                          const std::string& label,
+                          const LabelPosition labelPosition,
+                          IImageListener* listener,
+                          bool autodelete);
+
+  virtual void labelImage(const IImage* image,
+                          const std::string& label,
+                          const LabelPosition labelPosition,
+                          int separation,
+                          float fontSize,
+                          const Color* color,
+                          const Color* shadowColor,
+                          IImageListener* listener,
+                          bool autodelete) = 0;
+  
 };
 
 #endif

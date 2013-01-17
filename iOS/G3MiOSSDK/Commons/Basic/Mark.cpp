@@ -16,22 +16,62 @@
 #include "IDownloader.hpp"
 #include "IImageDownloadListener.hpp"
 #include "MarkTouchListener.hpp"
+#include "ITextUtils.hpp"
+#include "IImageListener.hpp"
 
 
-class TextureDownloadListener : public IImageDownloadListener {
+class MarkLabelImageListener : public IImageListener {
 private:
   Mark* _mark;
 
 public:
-  TextureDownloadListener(Mark* mark) :
+  MarkLabelImageListener(Mark* mark) :
   _mark(mark)
+  {
+
+  }
+
+  void imageCreated(IImage* image) {
+    if (image == NULL) {
+      _mark->onTextureDownloadError();
+    }
+    else {
+      _mark->onTextureDownload(image);
+    }
+  }
+};
+
+
+
+class IconDownloadListener : public IImageDownloadListener {
+private:
+  Mark*             _mark;
+  const std::string _label;
+
+public:
+  IconDownloadListener(Mark* mark,
+                       const std::string& label) :
+  _mark(mark),
+  _label(label)
   {
 
   }
 
   void onDownload(const URL& url,
                   const IImage* image) {
-    _mark->onTextureDownload(image);
+    const bool hasLabel = ( _label.length() != 0 );
+
+    if (hasLabel) {
+      ITextUtils::instance()->labelImage(image,
+                                         _label,
+                                         // Right,
+                                         Bottom,
+                                         new MarkLabelImageListener(_mark),
+                                         true);
+    }
+    else {
+      _mark->onTextureDownload(image);
+    }
   }
 
   void onError(const URL& url) {
@@ -51,15 +91,19 @@ public:
 };
 
 
-Mark::Mark(const std::string& name,
-           const URL          textureURL,
+
+
+
+Mark::Mark(const std::string& label,
+           const URL          iconURL,
            const Geodetic3D   position,
            double minDistanceToCamera,
-           void* userData,
+           MarkUserData* userData,
+           bool autoDeleteUserData,
            MarkTouchListener* listener,
            bool autoDeleteListener) :
-_name(name),
-_textureURL(textureURL),
+_label(label),
+_iconURL(iconURL),
 _position(position),
 _textureId(NULL),
 _cartesianPosition(NULL),
@@ -70,6 +114,7 @@ _renderedMark(false),
 _textureWidth(0),
 _textureHeight(0),
 _userData(userData),
+_autoDeleteUserData(autoDeleteUserData),
 _minDistanceToCamera(minDistanceToCamera),
 _listener(listener),
 _autoDeleteListener(autoDeleteListener)
@@ -77,25 +122,26 @@ _autoDeleteListener(autoDeleteListener)
 
 }
 
-Mark::Mark(const std::string& name,
-           IImage*            textureImage,
+Mark::Mark(const std::string& label,
            const Geodetic3D   position,
            double minDistanceToCamera,
-           void* userData,
+           MarkUserData* userData,
+           bool autoDeleteUserData,
            MarkTouchListener* listener,
            bool autoDeleteListener) :
-_name(name),
-_textureURL("", false),
+_label(label),
+_iconURL("", false),
 _position(position),
 _textureId(NULL),
 _cartesianPosition(NULL),
 _vertices(NULL),
-_textureSolved(true),
-_textureImage(textureImage),
+_textureSolved(false),
+_textureImage(NULL),
 _renderedMark(false),
-_textureWidth(textureImage->getWidth()),
-_textureHeight(textureImage->getHeight()),
+_textureWidth(0),
+_textureHeight(0),
 _userData(userData),
+_autoDeleteUserData(autoDeleteUserData),
 _minDistanceToCamera(minDistanceToCamera),
 _listener(listener),
 _autoDeleteListener(autoDeleteListener)
@@ -103,34 +149,66 @@ _autoDeleteListener(autoDeleteListener)
 
 }
 
+Mark::Mark(const URL          iconURL,
+           const Geodetic3D   position,
+           double minDistanceToCamera,
+           MarkUserData* userData,
+           bool autoDeleteUserData,
+           MarkTouchListener* listener,
+           bool autoDeleteListener) :
+_label(""),
+_iconURL(iconURL),
+_position(position),
+_textureId(NULL),
+_cartesianPosition(NULL),
+_vertices(NULL),
+_textureSolved(false),
+_textureImage(NULL),
+_renderedMark(false),
+_textureWidth(0),
+_textureHeight(0),
+_userData(userData),
+_autoDeleteUserData(autoDeleteUserData),
+_minDistanceToCamera(minDistanceToCamera),
+_listener(listener),
+_autoDeleteListener(autoDeleteListener)
+{
+
+}
 
 void Mark::initialize(const G3MContext* context) {
   if (!_textureSolved) {
-    IDownloader* downloader = context->getDownloader();
+    const bool hasLabel   = ( _label.length()             != 0 );
+    const bool hasIconURL = ( _iconURL.getPath().length() != 0 );
 
-    downloader->requestImage(_textureURL,
-                             1000000,
-                             TimeInterval::fromDays(30),
-                             new TextureDownloadListener(this),
-                             true);
+    if (hasIconURL) {
+      IDownloader* downloader = context->getDownloader();
+
+      downloader->requestImage(_iconURL,
+                               1000000,
+                               TimeInterval::fromDays(30),
+                               new IconDownloadListener(this, _label),
+                               true);
+    }
+    else {
+      if (hasLabel) {
+        ITextUtils::instance()->createLabelImage(_label,
+                                                 new MarkLabelImageListener(this),
+                                                 true);
+      }
+      else {
+        ILogger::instance()->logWarning("Marker created without label nor icon");
+      }
+    }
   }
 }
 
 void Mark::onTextureDownloadError() {
   _textureSolved = true;
 
-  ILogger::instance()->logError("Can't load image \"%s\"", _textureURL.getPath().c_str());
-  //=======
-  //    //  todo;
-  //    if (!_textureSolved) {
-  //        IDownloader* downloader = context->getDownloader();
-  //
-  //        downloader->requestImage(_textureURL,
-  //                                 1000000,
-  //                                 TimeInterval::fromDays(30),
-  //                                 new TextureDownloadListener(this),
-  //                                 true);
-  //    }
+  ILogger::instance()->logError("Can't create texture for Mark (iconURL=\"%s\", label=\"%s\")",
+                                _iconURL.getPath().c_str(),
+                                _label.c_str());
 }
 
 void Mark::onTextureDownload(const IImage* image) {
@@ -149,6 +227,9 @@ Mark::~Mark() {
   delete _vertices;
   if (_autoDeleteListener) {
     delete _listener;
+  }
+  if (_autoDeleteUserData) {
+    delete _userData;
   }
 }
 
@@ -195,7 +276,7 @@ void Mark::render(const G3MRenderContext* rc) {
         if (_textureImage != NULL) {
           _textureId = rc->getTexturesHandler()->getGLTextureId(_textureImage,
                                                                 GLFormat::rgba(),
-                                                                _textureURL.getPath(),
+                                                                _iconURL.getPath() + "_" + _label,
                                                                 false);
 
           rc->getFactory()->deleteImage(_textureImage);
@@ -205,10 +286,6 @@ void Mark::render(const G3MRenderContext* rc) {
 
       if (_textureId != NULL) {
         GL* gl = rc->getGL();
-
-        // static Vector2D textureTranslation(0.0, 0.0);
-        // static Vector2D textureScale(1.0, 1.0);
-        // gl->transformTexCoords(textureScale, textureTranslation);
 
         gl->drawBillBoard(_textureId,
                           getVertices(planet),

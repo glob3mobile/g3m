@@ -23,15 +23,26 @@ class IGLTextureId;
 class MarkTouchListener;
 class GLState;
 
+class MarkUserData {
+public:
+  virtual ~MarkUserData() {
+
+  }
+};
+
+
 class Mark {
 private:
-  const std::string _name;
-  URL               _textureURL;
+  const std::string _label;
+  URL               _iconURL;
   const Geodetic3D  _position;
-  void* _userData;
-  double _minDistanceToCamera;
+  const double      _minDistanceToCamera;
+
+  MarkUserData* _userData;
+  const bool    _autoDeleteUserData;
+
   MarkTouchListener* _listener;
-  bool _autoDeleteListener;
+  const bool         _autoDeleteListener;
 
 #ifdef C_CODE
   const IGLTextureId* _textureId;
@@ -53,26 +64,35 @@ private:
   bool    _renderedMark;
 
 public:
-  Mark(const std::string& name,
-       const URL          textureURL,
+  Mark(const std::string& label,
+       const URL          iconURL,
        const Geodetic3D   position,
        double minDistanceToCamera=4.5e+06,
-       void* userData=NULL,
+       MarkUserData* userData=NULL,
+       bool autoDeleteUserData=true,
        MarkTouchListener* listener=NULL,
        bool autoDeleteListener=false);
 
-  Mark(const std::string& name,
-       IImage*            textureImage,
+  Mark(const std::string& label,
        const Geodetic3D   position,
        double minDistanceToCamera=4.5e+06,
-       void* userData=NULL,
+       MarkUserData* userData=NULL,
+       bool autoDeleteUserData=true,
+       MarkTouchListener* listener=NULL,
+       bool autoDeleteListener=false);
+
+  Mark(const URL          iconURL,
+       const Geodetic3D   position,
+       double minDistanceToCamera=4.5e+06,
+       MarkUserData* userData=NULL,
+       bool autoDeleteUserData=true,
        MarkTouchListener* listener=NULL,
        bool autoDeleteListener=false);
 
   ~Mark();
 
-  const std::string getName() const {
-    return _name;
+  const std::string getLabel() const {
+    return _label;
   }
 
   const Geodetic3D getPosition() const {
@@ -109,7 +129,10 @@ public:
     return _userData;
   }
 
-  void setUserData(void* userData){
+  void setUserData(MarkUserData* userData) {
+    if (_autoDeleteUserData) {
+      delete _userData;
+    }
     _userData = userData;
   }
 

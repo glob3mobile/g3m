@@ -39,7 +39,7 @@ public abstract class IG3MBuilder
   private java.util.ArrayList<PeriodicalTask> _periodicalTasks = new java.util.ArrayList<PeriodicalTask>();
   private boolean _logFPS;
   private boolean _logDownloaderStatistics;
-  private UserData _userData;
+  private WidgetUserData _userData;
 
   private java.util.ArrayList<ICameraConstrainer> createCameraConstraints()
   {
@@ -366,7 +366,7 @@ public abstract class IG3MBuilder
   {
 	_logDownloaderStatistics = logDownloaderStatistics;
   }
-  public final void setUserData(UserData userData)
+  public final void setUserData(WidgetUserData userData)
   {
 	if (_userData != userData)
 	{

@@ -1,17 +1,29 @@
 package org.glob3.mobile.generated; 
-public class TextureDownloadListener implements IImageDownloadListener
+public class IconDownloadListener implements IImageDownloadListener
 {
   private Mark _mark;
+  private final String _label;
 
-  public TextureDownloadListener(Mark mark)
+  public IconDownloadListener(Mark mark, String label)
   {
 	  _mark = mark;
+	  _label = label;
 
   }
 
   public final void onDownload(URL url, IImage image)
   {
-	_mark.onTextureDownload(image);
+	final boolean hasLabel = (_label.length() != 0);
+
+	if (hasLabel)
+	{
+	  ITextUtils.instance().labelImage(image, _label, LabelPosition.Bottom, new MarkLabelImageListener(_mark), true);
+										 // Right,
+	}
+	else
+	{
+	  _mark.onTextureDownload(image);
+	}
   }
 
   public final void onError(URL url)

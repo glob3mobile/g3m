@@ -19,11 +19,23 @@ private:
   CGColorRef toCGColor(const Color* color);
 
 public:
-  IImage* createLabelBitmap(const std::string& label,
-                            float fontSize,
-                            const Color* color,
-                            const Color* shadowColor);
+  void createLabelImage(const std::string& label,
+                        float fontSize,
+                        const Color* color,
+                        const Color* shadowColor,
+                        IImageListener* listener,
+                        bool autodelete);
 
+  void labelImage(const IImage* image,
+                  const std::string& label,
+                  const LabelPosition labelPosition,
+                  int separation,
+                  float fontSize,
+                  const Color* color,
+                  const Color* shadowColor,
+                  IImageListener* listener,
+                  bool autodelete);
+  
 };
 
 #endif

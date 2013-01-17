@@ -2,8 +2,11 @@
 
 package org.glob3.mobile.specific;
 
+import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.IImage;
+import org.glob3.mobile.generated.IImageListener;
 import org.glob3.mobile.generated.ITextUtils;
+import org.glob3.mobile.generated.LabelPosition;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -28,11 +31,46 @@ public class TextUtils_Android
    }
 
 
+   //   @Override
+   //   public IImage createLabelBitmap(final String label,
+   //                                   final float fontSize,
+   //                                   final org.glob3.mobile.generated.Color color,
+   //                                   final org.glob3.mobile.generated.Color shadowColor) {
+   //      //final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+   //      final Paint paint = new Paint();
+   //      paint.setAntiAlias(true);
+   //      paint.setColor(toAndroidColor(color));
+   //      paint.setTextSize((fontSize * 3) / 2);
+   //      if (shadowColor != null) {
+   //         paint.setShadowLayer(1f, 2f, 2f, toAndroidColor(shadowColor));
+   //      }
+   //
+   //      final Rect textBounds = new Rect();
+   //      paint.getTextBounds(label, 0, label.length(), textBounds);
+   //      int width = textBounds.width();
+   //      int height = textBounds.height();
+   //      if (shadowColor != null) {
+   //         width += 2;
+   //         height += 2;
+   //      }
+   //
+   //      final Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+   //      final Canvas canvas = new Canvas(bitmap);
+   //      // canvas.drawARGB(255, 0, 255, 0); // for visualization
+   //
+   //      canvas.drawText(label, 0, height - textBounds.bottom - 2, paint);
+   //
+   //      return new Image_Android(bitmap, null);
+   //   }
+
+
    @Override
-   public IImage createLabelBitmap(final String label,
-                                   final float fontSize,
-                                   final org.glob3.mobile.generated.Color color,
-                                   final org.glob3.mobile.generated.Color shadowColor) {
+   public void createLabelImage(final String label,
+                                final float fontSize,
+                                final Color color,
+                                final Color shadowColor,
+                                final IImageListener listener,
+                                final boolean autodelete) {
       //final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
       final Paint paint = new Paint();
       paint.setAntiAlias(true);
@@ -57,7 +95,20 @@ public class TextUtils_Android
 
       canvas.drawText(label, 0, height - textBounds.bottom - 2, paint);
 
-      return new Image_Android(bitmap, null);
+      listener.imageCreated(new Image_Android(bitmap, null));
    }
 
+
+   @Override
+   public void labelImage(final IImage image,
+                          final String label,
+                          final LabelPosition labelPosition,
+                          final int separation,
+                          final float fontSize,
+                          final Color color,
+                          final Color shadowColor,
+                          final IImageListener listener,
+                          final boolean autodelete) {
+      TODO;
+   }
 }

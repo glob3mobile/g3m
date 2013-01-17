@@ -54,7 +54,7 @@ logDownloaderStatistics: (bool) logDownloaderStatistics
 initializationTask: (GInitializationTask*) initializationTask
 autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
    periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
-          userData: (UserData*) userData
+          userData: (WidgetUserData*) userData
 {
     _widgetVP = G3MWidget::create([_renderer getGL],
                                   storage,

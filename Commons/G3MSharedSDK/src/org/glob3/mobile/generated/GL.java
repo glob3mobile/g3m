@@ -72,6 +72,8 @@ public class GL
   private float _lineWidth;
   private float _pointSize;
 
+  private ShaderProgram _program;
+
   private void loadModelView()
   {
 	if (_verbose)
@@ -212,6 +214,7 @@ public class GL
 	  _billboardTexCoord = null;
 	  _lineWidth = 1F;
 	  _pointSize = 1F;
+	  _program = null;
 	//Init Constants
 	GLCullFace.init(_nativeGL);
 	GLBufferType.init(_nativeGL);
@@ -358,6 +361,12 @@ public class GL
 	{
 	  ILogger.instance().logInfo("GL::useProgram()");
 	}
+  
+	if (_program == program)
+	{
+	  return true;
+	}
+	_program = program;
   
 	// set shaders
 	_nativeGL.useProgram(program);
