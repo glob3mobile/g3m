@@ -27,69 +27,51 @@ public class Color
 
   }
 
+  private static boolean isValidHex(String hex)
+  {
+	  final String allowedChars = "#0123456789abcdefABCDEF";
 
-	private static int hexToDec(String hex)
-	{
-		std.istringstream istr = new std.istringstream(hex);
-		int val;
-		istr >> std.hex >> val;
-		return val;
-	}
+	  if (hex.charAt(0) == '#')
+	  {
+		  if (hex.length() != 7)
+		  {
+			  return false;
+		  }
+	  }
+	  else
+	  {
+		  if (hex.length() != 6)
+		  {
+			  return false;
+		  }
+	  }
 
-	private static boolean isValidHex(String hex)
-	{
-		final String allowedChars = "#0123456789abcdefABCDEF";
+	  if (hex.find_first_not_of(allowedChars) != hex.npos)
+	  {
+		  return false;
+	  }
 
-		if (hex.charAt(0) == '#')
-		{
-			if (hex.length() != 7)
-			{
-				return false;
-			}
-		}
-		else
-		{
-			if (hex.length() != 6)
-			{
-				return false;
-			}
-		}
+	  return true;
+  }
 
-		// Check for non allowed chars:
-		if (hex.find_first_not_of(allowedChars) != hex.npos)
-		{
-			return false;
-		}
+  private static Color hexToRGB(String hex)
+  {
+	  if (!isValidHex(hex))
+	  {
+		  ILogger.instance().logError("The value received is not avalid hex string!");
+	  }
 
-		return true;
-	}
+	  if (hex.charAt(0) == '#')
+	  {
+		  hex = hex.substring(0, hex.iterator());
+	  }
 
-	private static Color hexToRGB(String hex)
-	{
-		if (!isValidHex(hex))
-		{
-			ILogger.instance().logError("The value received is not avalid hex string!");
-		}
+	  String R = hex.substring(0, 2);
+	  String G = hex.substring(2, 4);
+	  String B = hex.substring(4, 6);
 
-		if (hex.charAt(0) == '#')
-		{
-			hex = hex.substring(0, hex.iterator());
-		}
-
-		String R = hex.substring(0, 2);
-		String G = hex.substring(2, 4);
-		String B = hex.substring(4, 6);
-
-		System.out.printf("%x", " converted to ");
-		System.out.printf("%x", hexToDec(R));
-		System.out.printf("%x", ", ");
-		System.out.printf("%x", hexToDec(G));
-		System.out.printf("%x", ", ");
-		System.out.printf("%x", hexToDec(B));
-		System.out.printf("%x", "\n");
-
-		return new Color(hexToDec(R), hexToDec(G), hexToDec(B), 1);
-	}
+	  return new Color((float)IMathUtils.instance().parseIntHex(R)/255, (float)IMathUtils.instance().parseIntHex(G)/255, (float)IMathUtils.instance().parseIntHex(B)/255, 1);
+  }
 
   public Color(Color that)
   {
