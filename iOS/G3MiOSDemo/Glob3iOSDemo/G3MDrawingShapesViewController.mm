@@ -193,7 +193,7 @@
 }
 
 
-class SampleUserData : public UserData {
+class SampleUserData : public WidgetUserData {
 private:
   bool _animRunning;
 public:

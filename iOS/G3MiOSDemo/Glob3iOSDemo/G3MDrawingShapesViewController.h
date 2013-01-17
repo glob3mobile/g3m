@@ -18,7 +18,7 @@
   Geodetic2D* LOS_ANGELES_POSITION;
   BoxShape* box;
   CircleShape* circle;
-  UserData* data;
+  WidgetUserData* data;
 }
 
 @property (weak, nonatomic) IBOutlet G3MWidget_iOS *glob3;

@@ -116,7 +116,7 @@
   return periodicalTask;  
 }
 
-class MyUserData : public UserData {
+class MyUserData : public WidgetUserData {
 private:
   bool _isDone;
   int _period;

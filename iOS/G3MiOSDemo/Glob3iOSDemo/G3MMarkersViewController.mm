@@ -100,7 +100,7 @@
       _vc = vc;
     }
     bool touchedMark(Mark* mark) {
-      NSString* message = [NSString stringWithFormat: @"%s", mark->getName().c_str()];
+      NSString* message = [NSString stringWithFormat: @"%s", mark->getLabel().c_str()];
 
       UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"glob3 mobile"
                                                       message: message
@@ -177,6 +177,24 @@
   }
 }
 
+
+class MarkerUserData : public MarkUserData {
+  
+private:
+  const URL _url;
+  
+public:
+  MarkerUserData(const URL &url) :
+  _url(url) {
+  }
+  
+  URL getUrl() {
+    return _url;
+  }
+  
+};
+
+
 class MarkersDemoBufferDownloadListener : public IBufferDownloadListener {
 private:
   GInitializationTask* _initTask;
@@ -204,7 +222,8 @@ public:
                               URL("file:///marker-wikipedia-72x72.png", false),
                               Geodetic3D(Angle::fromDegrees(coordinates->getAsNumber(1)->doubleValue()), Angle::fromDegrees(coordinates->getAsNumber(0)->doubleValue()), 0));
 
-      marker->setUserData(new URL(urlStr, false));
+      MarkUserData* mud = new MarkerUserData(URL(urlStr, false));
+      marker->setUserData(mud);
       
       _markRenderer->addMark(marker);
     }
