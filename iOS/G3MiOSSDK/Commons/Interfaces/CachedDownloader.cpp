@@ -13,6 +13,7 @@
 #include "ILogger.hpp"
 #include "IStorage.hpp"
 #include "TimeInterval.hpp"
+#include "IFactory.hpp"
 
 class BufferSaverDownloadListener : public IBufferDownloadListener {
 private:
@@ -230,7 +231,7 @@ long long CachedDownloader::requestImage(const URL& url,
 #endif
   }
 
-  delete cachedImage;
+  IFactory::instance()->deleteImage(cachedImage);
   return -1;
 }
 

@@ -61,10 +61,7 @@ public:
     releaseImage();
   }
   
-  void releaseImage() {
-    delete _image;
-    _image = NULL;
-  }
+  void releaseImage();
   
   bool hasImage() const {
     return (_image != NULL);
