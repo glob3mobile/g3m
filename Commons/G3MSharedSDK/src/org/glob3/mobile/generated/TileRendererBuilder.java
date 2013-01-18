@@ -34,16 +34,14 @@ public class TileRendererBuilder
   {
 	LayerSet layerSet = new LayerSet();
   
-	WMSLayer bing = new WMSLayer("ve", new URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?", false), WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/jpeg", "EPSG:4326", "", false, null);
+	WMSLayer bing = new WMSLayer("ve", new URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?", false), WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/jpeg", "EPSG:4326", "", false, null, TimeInterval.fromDays(30));
 	layerSet.addLayer(bing);
   
 	return layerSet;
   }
   private TilesRenderParameters createTileRendererParameters()
   {
-	TilesRenderParameters parameters = TilesRenderParameters.createDefault(_renderDebug, _useTilesSplitBudget, _forceTopLevelTilesRenderOnStart, _incrementalTileQuality);
-  
-	return parameters;
+	return TilesRenderParameters.createDefault(_renderDebug, _useTilesSplitBudget, _forceTopLevelTilesRenderOnStart, _incrementalTileQuality);
   }
   private TileTessellator createTileTessellator()
   {

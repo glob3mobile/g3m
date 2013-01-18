@@ -14,6 +14,7 @@
 #include "IImageListener.hpp"
 
 #include <math.h>
+#include "IFactory.hpp"
 
 CGColorRef TextUtils_iOS::toCGColor(const Color* color) {
   if (color == NULL) {
@@ -64,7 +65,7 @@ void TextUtils_iOS::createLabelImage(const std::string& label,
   if (autodelete) {
     delete listener;
   }
-  delete result;
+  IFactory::instance()->deleteImage(result);
 }
 
 
@@ -155,6 +156,6 @@ void TextUtils_iOS::labelImage(const IImage* image,
     if (autodelete) {
       delete listener;
     }
-    delete result;
+    IFactory::instance()->deleteImage(result);
   }
 }

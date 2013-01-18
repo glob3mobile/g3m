@@ -478,8 +478,8 @@ public class G3MWidget
 
   private java.util.ArrayList<PeriodicalTask> _periodicalTasks = new java.util.ArrayList<PeriodicalTask>();
 
-	private int _width;
-	private int _height;
+  private int _width;
+  private int _height;
 
   private void initializeGL()
   {

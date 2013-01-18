@@ -54,7 +54,7 @@ public:
 
 void SGLayerNode::onImageDownload(const IImage* image) {
   if (_downloadedImage != NULL) {
-    delete _downloadedImage;
+    IFactory::instance()->deleteImage(_downloadedImage);
   }
   _downloadedImage = image->shallowCopy();
 }
@@ -101,7 +101,7 @@ const IGLTextureId* SGLayerNode::getTextureId(const G3MRenderContext* rc) {
                                                             getURL().getPath(),
                                                             hasMipMap);
 
-      delete _downloadedImage;
+      IFactory::instance()->deleteImage(_downloadedImage);
       _downloadedImage = NULL;
     }
   }

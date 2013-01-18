@@ -165,6 +165,13 @@ public class Geodetic2D
 	return s;
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isEqualsTo(const Geodetic2D& that) const
+  public final boolean isEqualsTo(Geodetic2D that)
+  {
+	return _latitude.isEqualsTo(that._latitude) && _longitude.isEqualsTo(that._longitude);
+  }
+
   @Override
 	public int hashCode() {
 		final int prime = 31;

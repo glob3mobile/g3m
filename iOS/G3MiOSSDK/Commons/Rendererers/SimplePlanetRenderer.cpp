@@ -31,7 +31,7 @@ _mesh(NULL)
 
 SimplePlanetRenderer::~SimplePlanetRenderer() {
   delete _mesh;
-  delete _image;
+  IFactory::instance()->deleteImage(_image);
 }
 
 void SimplePlanetRenderer::initialize(const G3MContext* context) {
@@ -138,7 +138,7 @@ Mesh* SimplePlanetRenderer::createMesh(const G3MRenderContext* rc) {
   }
 
   // the image is not needed as it's already uploaded to the GPU
-  delete _image;
+  IFactory::instance()->deleteImage(_image);
   _image = NULL;
 
   IFloatBuffer* texCoords = createTextureCoordinates();

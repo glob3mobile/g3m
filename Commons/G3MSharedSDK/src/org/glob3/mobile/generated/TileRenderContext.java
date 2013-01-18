@@ -16,8 +16,6 @@ package org.glob3.mobile.generated;
 //
 
 
-
-
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Tile;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
@@ -26,55 +24,11 @@ package org.glob3.mobile.generated;
 //class TileTexturizer;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class LayerSet;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class VisibleSectorListenerEntry;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class VisibleSectorListener;
 
-
-
-
-//class TileCacheEntry {
-//public:
-//  Tile* _tile;
-//  long  _timestamp;
-//
-//  TileCacheEntry(Tile* tile,
-//                 long  timestamp) :
-//  _tile(tile),
-//  _timestamp(timestamp)
-//  {
-//
-//  }
-//
-//  ~TileCacheEntry() {
-//    if (_tile != NULL) {
-//      delete _tile;
-//    }
-//  }
-//};
-//
-//class TileRenderer;
-//
-//class TilesCache {
-//private:
-//  TileRenderer*                _tileRenderer;
-//  const int                    _maxElements;
-//  std::vector<TileCacheEntry*> _entries;
-//
-//  long _tsCounter;
-//
-//public:
-//  TilesCache(TileRenderer* tileRenderer, int maxElements) :
-//  _tileRenderer(tileRenderer),
-//  _maxElements(maxElements),
-//  _tsCounter(0)
-//  {
-//
-//  }
-//
-//  Tile* getTile(const int level,
-//                const int row, const int column);
-//
-//  void putTile(Tile* tile);
-//
-//};
 
 
 public class TileRenderContext

@@ -40,6 +40,7 @@ import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.SimpleCameraConstrainer;
 import org.glob3.mobile.generated.TileRenderer;
 import org.glob3.mobile.generated.TileRendererBuilder;
+import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.Vector3D;
 import org.glob3.mobile.generated.WMSLayer;
@@ -245,7 +246,8 @@ public class G3MWebGLDemo
                      "EPSG:4326", //
                      "", //
                      false, //
-                     null);
+                     null, //
+                     TimeInterval.fromDays(30));
             layerSet.addLayer(bing);
          }
          final boolean useOSMLatLon = true;
@@ -273,7 +275,8 @@ public class G3MWebGLDemo
                      "", //
                      false, //
                      // new LevelTileCondition(3, 100));
-                     null);
+                     null, //
+                     TimeInterval.fromDays(30));
             layerSet.addLayer(osm);
          }
 
@@ -287,7 +290,8 @@ public class G3MWebGLDemo
                      "EPSG:4326", //
                      "", //
                      true, //
-                     null);
+                     null, //
+                     TimeInterval.fromDays(30));
             layerSet.addLayer(pnoa);
          }
 
@@ -301,7 +305,8 @@ public class G3MWebGLDemo
                      "EPSG:4326", //
                      "", //
                      true, //
-                     null);
+                     null, //
+                     TimeInterval.fromDays(30));
             layerSet.addLayer(ayto);
          }
 

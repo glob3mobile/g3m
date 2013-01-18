@@ -104,8 +104,7 @@ public class CachedDownloader extends IDownloader
 	  listener = null;
 	}
   
-	if (cachedImage != null)
-		cachedImage.dispose();
+	IFactory.instance().deleteImage(cachedImage);
 	return -1;
   }
 

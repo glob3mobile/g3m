@@ -84,6 +84,9 @@ public final class Factory_Android
 
    @Override
    public void deleteImage(final IImage image) {
+      if (image != null) {
+         image.dispose();
+      }
    }
 
 

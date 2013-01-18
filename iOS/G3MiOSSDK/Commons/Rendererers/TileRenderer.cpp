@@ -21,7 +21,7 @@
 class VisibleSectorListenerEntry {
 private:
   VisibleSectorListener* _listener;
-  const TimeInterval     _stabilizationInterval;
+  const long long        _stabilizationIntervalInMS;
 
   Sector* _lastSector;
   long long _whenNotifyInMS;
@@ -40,7 +40,7 @@ public:
   VisibleSectorListenerEntry(VisibleSectorListener* listener,
                              const TimeInterval& stabilizationInterval) :
   _listener(listener),
-  _stabilizationInterval(stabilizationInterval),
+  _stabilizationIntervalInMS(stabilizationInterval.milliseconds()),
   _lastSector(NULL),
   _timer(NULL),
   _whenNotifyInMS(0)
@@ -49,8 +49,9 @@ public:
   }
 
   void tryToNotifyListener(const Sector* visibleSector) {
-    if ( _stabilizationInterval.isZero() ) {
+    if ( _stabilizationIntervalInMS == 0 ) {
       if ( (_lastSector == NULL) || (!_lastSector->isEqualsTo(*visibleSector)) ) {
+        delete _lastSector;
         _lastSector = new Sector(*visibleSector);
         _listener->onVisibleSectorChange(_lastSector);
       }
@@ -59,8 +60,9 @@ public:
       const long long now = getTimer()->now().milliseconds();
 
       if ( (_lastSector == NULL) || (!_lastSector->isEqualsTo(*visibleSector)) ) {
+        delete _lastSector;
         _lastSector = new Sector(*visibleSector);
-        _whenNotifyInMS = now + _stabilizationInterval.milliseconds();
+        _whenNotifyInMS = now + _stabilizationIntervalInMS;
       }
 
       if (_whenNotifyInMS != 0) {
@@ -77,7 +79,9 @@ public:
   ~VisibleSectorListenerEntry() {
     delete _listener;
 
-    IFactory::instance()->deleteTimer(_timer);
+    if (_timer != NULL) {
+      IFactory::instance()->deleteTimer(_timer);
+    }
   }
 };
 
