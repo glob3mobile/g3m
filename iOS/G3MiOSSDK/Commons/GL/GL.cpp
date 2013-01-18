@@ -554,6 +554,7 @@ void GL::deleteTexture(const IGLTextureId* texture) {
     //      _texturesIdBag.push_back(texture);
     //    }
 
+    int __TESTING_TEXTUREIDs_DELETION;
     //_nativeGL->deleteTexture(texture);
     _texturesIdBag.push_back(texture);
 
