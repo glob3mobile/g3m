@@ -99,17 +99,23 @@ public class GL
   
 	  final java.util.ArrayList<IGLTextureId> ids = _nativeGL.genTextures(bugdetSize);
   
-	  for (int i = 0; i < bugdetSize; i++)
+	  for (int i = 0; i < ids.size(); i++)
 	  {
 		_texturesIdBag.addFirst(ids.get(i));
 	  }
   
-	  _texturesIdAllocationCounter += bugdetSize;
+	  _texturesIdAllocationCounter += ids.size();
   
 	  ILogger.instance().logInfo("= Created %d texturesIds (accumulated %d).", bugdetSize, _texturesIdAllocationCounter);
 	}
   
 	//  _texturesIdGetCounter++;
+  
+	if (_texturesIdBag.size() == 0)
+	{
+	  ILogger.instance().logError("TextureIds bag exhausted");
+	  return null;
+	}
   
 	final IGLTextureId result = _texturesIdBag.getLast();
 	_texturesIdBag.removeLast();
@@ -443,7 +449,7 @@ public class GL
   {
 	if (_verbose)
 	{
-	  ILogger.instance().logInfo("GL::getError()()");
+	  ILogger.instance().logInfo("GL::getError()");
 	}
   
 	return _nativeGL.getError();
@@ -505,7 +511,14 @@ public class GL
 	  ILogger.instance().logInfo("GL::bindTexture()");
 	}
   
-	_nativeGL.bindTexture(GLTextureType.texture2D(), textureId);
+	if (textureId == null)
+	{
+	  ILogger.instance().logError("Can't bind a NULL texture");
+	}
+	else
+	{
+	  _nativeGL.bindTexture(GLTextureType.texture2D(), textureId);
+	}
   }
 
   public final void startBillBoardDrawing(int viewPortWidth, int viewPortHeight)
