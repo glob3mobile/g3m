@@ -125,7 +125,7 @@ public:
   }
 
   void bindTexture(int target, const IGLTextureId* texture) const {
-    const int id = ((GLTextureId_iOS*)texture)->getGLTextureId();
+    const int id = ((GLTextureId_iOS*) texture)->getGLTextureId();
     if (id < 0) {
       ILogger::instance()->logError("Trying to bind invalid IGLTextureId");
     }
@@ -157,11 +157,17 @@ public:
   }
 
   std::vector<IGLTextureId*> genTextures(int n) const {
-    GLuint textures[n];
-    glGenTextures(n, textures);
+    GLuint textureIds[n];
+    glGenTextures(n, textureIds);
     std::vector<IGLTextureId*> ts;
     for(int i = 0; i < n; i++) {
-      ts.push_back( new GLTextureId_iOS(textures[i]) );
+      GLuint textureId = textureIds[i];
+      if (textureId == 0) {
+        ILogger::instance()->logError("Can't create a textureId");
+      }
+      else {
+        ts.push_back( new GLTextureId_iOS(textureId) );
+      }
     }
     return ts;
   }

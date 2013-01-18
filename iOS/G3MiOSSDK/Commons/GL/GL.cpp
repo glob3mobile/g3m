@@ -366,7 +366,7 @@ void GL::drawArrays(int mode,
 
 int GL::getError() {
   if (_verbose) {
-    ILogger::instance()->logInfo("GL::getError()()");
+    ILogger::instance()->logInfo("GL::getError()");
   }
 
   return _nativeGL->getError();
@@ -432,7 +432,12 @@ void GL::bindTexture(const IGLTextureId* textureId) {
     ILogger::instance()->logInfo("GL::bindTexture()");
   }
 
-  _nativeGL->bindTexture(GLTextureType::texture2D(), textureId);
+  if (textureId == NULL) {
+    ILogger::instance()->logError("Can't bind a NULL texture");
+  }
+  else {
+    _nativeGL->bindTexture(GLTextureType::texture2D(), textureId);
+  }
 }
 
 IFloatBuffer* GL::getBillboardTexCoord() {
@@ -502,20 +507,28 @@ const IGLTextureId* GL::getGLTextureId() {
   if (_texturesIdBag.size() == 0) {
     const int bugdetSize = 256;
 
-    ILogger::instance()->logInfo("= Creating %d texturesIds...", bugdetSize);
+    ILogger::instance()->logInfo("= Creating %d texturesIds...",
+                                 bugdetSize);
 
     const std::vector<IGLTextureId*> ids = _nativeGL->genTextures(bugdetSize);
 
-    for (int i = 0; i < bugdetSize; i++) {
+    for (int i = 0; i < ids.size(); i++) {
       _texturesIdBag.push_front(ids[i]);
     }
 
-    _texturesIdAllocationCounter += bugdetSize;
+    _texturesIdAllocationCounter += ids.size();
 
-    ILogger::instance()->logInfo("= Created %d texturesIds (accumulated %d).", bugdetSize, _texturesIdAllocationCounter);
+    ILogger::instance()->logInfo("= Created %d texturesIds (accumulated %d).",
+                                 bugdetSize,
+                                 _texturesIdAllocationCounter);
   }
 
   //  _texturesIdGetCounter++;
+
+  if (_texturesIdBag.size() == 0) {
+    ILogger::instance()->logError("TextureIds bag exhausted");
+    return NULL;
+  }
 
   const IGLTextureId* result = _texturesIdBag.back();
   _texturesIdBag.pop_back();

@@ -184,7 +184,9 @@ public:
 
   int getError();
 
-  const IGLTextureId* uploadTexture(const IImage* image, int format, bool generateMipmap);
+  const IGLTextureId* uploadTexture(const IImage* image,
+                                    int format,
+                                    bool generateMipmap);
 
   void setTextureCoordinates(int size,
                              int stride,

@@ -11,6 +11,7 @@ import org.glob3.mobile.generated.IGLTextureId;
 import org.glob3.mobile.generated.IGLUniformID;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IIntBuffer;
+import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.INativeGL;
 import org.glob3.mobile.generated.MutableMatrix44D;
 import org.glob3.mobile.generated.ShaderProgram;
@@ -191,14 +192,20 @@ public final class NativeGL2_Android
 
 
    @Override
-   public ArrayList<IGLTextureId> genTextures(final int n) {
-      final ArrayList<IGLTextureId> ai = new ArrayList<IGLTextureId>();
-      final int[] tex = new int[n];
-      GLES20.glGenTextures(n, tex, 0);
-      for (int i = 0; i < n; i++) {
-         ai.add(new GLTextureId_Android(tex[i]));
+   public ArrayList<IGLTextureId> genTextures(final int count) {
+      final ArrayList<IGLTextureId> result = new ArrayList<IGLTextureId>(count);
+      final int[] textureIds = new int[count];
+      GLES20.glGenTextures(count, textureIds, 0);
+      for (int i = 0; i < count; i++) {
+         final int textureId = textureIds[i];
+         if (textureId == 0) {
+            ILogger.instance().logError("Can't create a textureId");
+         }
+         else {
+            result.add(new GLTextureId_Android(textureId));
+         }
       }
-      return ai;
+      return result;
    }
 
 
