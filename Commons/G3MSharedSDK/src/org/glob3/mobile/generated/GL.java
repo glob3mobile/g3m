@@ -562,10 +562,10 @@ public class GL
   
 	if (texture != null)
 	{
-	  if (_nativeGL.deleteTexture(texture))
-	  {
-		_texturesIdBag.addLast(texture);
-	  }
+	  //    if ( _nativeGL->deleteTexture(texture) ) {
+	  //      _texturesIdBag.push_back(texture);
+	  //    }
+	  _nativeGL.deleteTexture(texture);
   
 	  //    _texturesIdTakeCounter++;
 	}
