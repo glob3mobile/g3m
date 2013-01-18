@@ -70,6 +70,7 @@
 		A717C99515EBA71D00EEC830 /* mercator.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = mercator.jpg; sourceTree = "<group>"; };
 		CCD7885315D9A3FA0065A7E1 /* ProgressWheel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ProgressWheel.png; sourceTree = "<group>"; };
 		CF0223821668318600024B73 /* geojson */ = {isa = PBXFileReference; lastKnownFileType = folder; path = geojson; sourceTree = "<group>"; };
+		CF024DCA16A863380051255C /* VisibleSectorListener.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = VisibleSectorListener.hpp; path = ../G3MiOSSDK/Commons/Rendererers/VisibleSectorListener.hpp; sourceTree = "<group>"; };
 		CF09A94D16A09F7000E72811 /* test.bson */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.bson; sourceTree = "<group>"; };
 		CF4FAACE1695E6B1009734CA /* ByteBufferIterator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ByteBufferIterator.hpp; path = ../G3MiOSSDK/Commons/Basic/ByteBufferIterator.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		CF4FAACF1695E6B1009734CA /* BSONParser.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = BSONParser.hpp; path = ../G3MiOSSDK/Commons/JSON/BSONParser.hpp; sourceTree = "<group>"; };
@@ -315,6 +316,7 @@
 		CF629FFE168008D200649BBC /* Public Headers G3M */ = {
 			isa = PBXGroup;
 			children = (
+				CF024DCA16A863380051255C /* VisibleSectorListener.hpp */,
 				CFFAFD75169F48F800BCE129 /* ITextUtils.hpp */,
 				E87424B3169F4E5700C8A227 /* MarkTouchListener.hpp */,
 				CF4FAAD71695F407009734CA /* BSONGenerator.hpp */,

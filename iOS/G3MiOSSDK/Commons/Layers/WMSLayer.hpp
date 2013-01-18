@@ -49,8 +49,7 @@ private:
 public:
   
   
-  WMSLayer(const std::string& layerName,
-           const std::string& mapLayer,
+  WMSLayer(const std::string& mapLayer,
            const URL& mapServerURL,
            const WMSServerVersion mapServerVersion,
            const std::string& queryLayer,
@@ -61,8 +60,9 @@ public:
            const std::string srs,
            const std::string& style,
            const bool isTransparent,
-           LayerCondition* condition):
-  Layer(layerName, condition),
+           LayerCondition* condition,
+           const TimeInterval& timeToCache):
+  Layer(condition, mapLayer, timeToCache),
   _mapLayer(mapLayer),
   _mapServerURL(mapServerURL),
   _mapServerVersion(mapServerVersion),
@@ -79,8 +79,7 @@ public:
     
   }
   
-  WMSLayer(const std::string& layerName,
-           const std::string& mapLayer,
+  WMSLayer(const std::string& mapLayer,
            const URL& mapServerURL,
            const WMSServerVersion mapServerVersion,
            const Sector& sector,
@@ -88,8 +87,9 @@ public:
            const std::string srs,
            const std::string& style,
            const bool isTransparent,
-           LayerCondition* condition):
-  Layer(layerName, condition),
+           LayerCondition* condition,
+           const TimeInterval& timeToCache):
+  Layer(condition, mapLayer, timeToCache),
   _mapLayer(mapLayer),
   _mapServerURL(mapServerURL),
   _mapServerVersion(mapServerVersion),

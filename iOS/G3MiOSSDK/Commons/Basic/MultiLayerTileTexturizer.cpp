@@ -262,7 +262,7 @@ public:
 
       const long long requestId = _downloader->requestImage(URL(petition->getURL()),
                                                             priority,
-                                                            TimeInterval::fromDays(30),
+                                                            petition->getTimeToCache(),
                                                             new BuilderDownloadStepDownloadListener(this, i),
                                                             true);
 

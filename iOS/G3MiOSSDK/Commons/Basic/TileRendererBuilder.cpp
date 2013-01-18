@@ -96,8 +96,7 @@ void TileRendererBuilder::setIncrementalTileQuality(const bool incrementalTileQu
 LayerSet* TileRendererBuilder::createLayerSet() {
   LayerSet* layerSet = new LayerSet();
 
-  WMSLayer* bing = new WMSLayer("Satellite",
-                                "ve",
+  WMSLayer* bing = new WMSLayer("ve",
                                 URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?", false),
                                 WMS_1_1_0,
                                 Sector::fullSphere(),
@@ -105,19 +104,18 @@ LayerSet* TileRendererBuilder::createLayerSet() {
                                 "EPSG:4326",
                                 "",
                                 false,
-                                NULL);
+                                NULL,
+                                TimeInterval::fromDays(30));
   layerSet->addLayer(bing);
 
   return layerSet;
 }
 
 TilesRenderParameters* TileRendererBuilder::createTileRendererParameters() {
-  TilesRenderParameters* parameters = TilesRenderParameters::createDefault(_renderDebug,
-                                                                           _useTilesSplitBudget,
-                                                                           _forceTopLevelTilesRenderOnStart,
-                                                                           _incrementalTileQuality);
-
-  return parameters;
+  return TilesRenderParameters::createDefault(_renderDebug,
+                                              _useTilesSplitBudget,
+                                              _forceTopLevelTilesRenderOnStart,
+                                              _incrementalTileQuality);
 }
 
 TileTessellator* TileRendererBuilder::createTileTessellator() {

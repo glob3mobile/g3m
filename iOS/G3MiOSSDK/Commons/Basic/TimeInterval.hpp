@@ -73,6 +73,10 @@ public:
   bool lowerThan(const TimeInterval& that) const {
     return _milliseconds < that._milliseconds;
   }
+
+  bool isZero() const {
+    return _milliseconds == 0;
+  }
   
 };
 

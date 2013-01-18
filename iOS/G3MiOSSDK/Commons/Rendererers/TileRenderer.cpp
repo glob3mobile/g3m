@@ -8,7 +8,6 @@
 
 #include "TileRenderer.hpp"
 #include "Tile.hpp"
-
 #include "TileTessellator.hpp"
 #include "TileTexturizer.hpp"
 #include "Camera.hpp"
@@ -16,6 +15,72 @@
 #include "TilesRenderParameters.hpp"
 #include "TouchEvent.hpp"
 #include "LayerSet.hpp"
+#include "VisibleSectorListener.hpp"
+
+
+class VisibleSectorListenerEntry {
+private:
+  VisibleSectorListener* _listener;
+  const TimeInterval     _stabilizationInterval;
+
+  Sector* _lastSector;
+  long long _whenNotifyInMS;
+
+  ITimer*  _timer;
+
+  ITimer* getTimer() {
+    if (_timer == NULL) {
+      _timer = IFactory::instance()->createTimer();
+    }
+    return _timer;
+  }
+
+
+public:
+  VisibleSectorListenerEntry(VisibleSectorListener* listener,
+                             const TimeInterval& stabilizationInterval) :
+  _listener(listener),
+  _stabilizationInterval(stabilizationInterval),
+  _lastSector(NULL),
+  _timer(NULL),
+  _whenNotifyInMS(0)
+  {
+
+  }
+
+  void tryToNotifyListener(const Sector* visibleSector) {
+    if ( _stabilizationInterval.isZero() ) {
+      if ( (_lastSector == NULL) || (!_lastSector->isEqualsTo(*visibleSector)) ) {
+        _lastSector = new Sector(*visibleSector);
+        _listener->onVisibleSectorChange(_lastSector);
+      }
+    }
+    else {
+      const long long now = getTimer()->now().milliseconds();
+
+      if ( (_lastSector == NULL) || (!_lastSector->isEqualsTo(*visibleSector)) ) {
+        _lastSector = new Sector(*visibleSector);
+        _whenNotifyInMS = now + _stabilizationInterval.milliseconds();
+      }
+
+      if (_whenNotifyInMS != 0) {
+        if (now >= _whenNotifyInMS) {
+          _listener->onVisibleSectorChange(_lastSector);
+
+          _whenNotifyInMS = 0;
+        }
+      }
+    }
+
+  }
+
+  ~VisibleSectorListenerEntry() {
+    delete _listener;
+
+    IFactory::instance()->deleteTimer(_timer);
+  }
+};
+
 
 TileRenderer::TileRenderer(const TileTessellator* tessellator,
                            TileTexturizer*  texturizer,
@@ -27,12 +92,12 @@ _texturizer(texturizer),
 _layerSet(layerSet),
 _parameters(parameters),
 _showStatistics(showStatistics),
-_lastStatistics(),
 _topTilesJustCreated(false),
 _lastSplitTimer(NULL),
 _lastCamera(NULL),
 _firstRender(false),
-_context(NULL)
+_context(NULL),
+_lastVisibleSector(NULL)
 {
   _layerSet->setChangeListener(this);
 }
@@ -58,6 +123,14 @@ TileRenderer::~TileRenderer() {
 #endif
 
   delete _lastSplitTimer;
+
+  delete _lastVisibleSector;
+
+  const int visibleSectorListenersCount = _visibleSectorListeners.size();
+  for (int i = 0; i < visibleSectorListenersCount; i++) {
+    VisibleSectorListenerEntry* entry = _visibleSectorListeners[i];
+    delete entry;
+  }
 }
 
 void TileRenderer::clearTopLevelTiles() {
@@ -108,7 +181,7 @@ void TileRenderer::initialize(const G3MContext* context) {
   createTopLevelTiles(context);
 
   delete _lastSplitTimer;
-  _lastSplitTimer      = context->getFactory()->createTimer();
+  _lastSplitTimer = context->getFactory()->createTimer();
 
   _layerSet->initialize(context);
   _texturizer->initialize(context, _parameters);
@@ -225,9 +298,23 @@ void TileRenderer::render(const G3MRenderContext* rc,
   }
 
   if (_showStatistics) {
-    if (!_lastStatistics.equalsTo(statistics)) {
-      _lastStatistics  = statistics;
-      statistics.log(rc->getLogger());
+    statistics.log( rc->getLogger() );
+  }
+
+
+  const Sector* renderedSector = statistics.getRenderedSector();
+  if (renderedSector != NULL) {
+    if ( (_lastVisibleSector == NULL) || !renderedSector->isEqualsTo(*_lastVisibleSector) ) {
+      delete _lastVisibleSector;
+      _lastVisibleSector = new Sector(*renderedSector);
+    }
+  }
+
+  if (_lastVisibleSector != NULL) {
+    const int visibleSectorListenersCount = _visibleSectorListeners.size();
+    for (int i = 0; i < visibleSectorListenersCount; i++) {
+      VisibleSectorListenerEntry* entry = _visibleSectorListeners[i];
+      entry->tryToNotifyListener(_lastVisibleSector);
     }
   }
 
@@ -274,4 +361,10 @@ void TileRenderer::pruneTopLevelTiles() {
     Tile* tile = _topLevelTiles[i];
     tile->prune(_texturizer);
   }
+}
+
+void TileRenderer::addVisibleSectorListener(VisibleSectorListener* listener,
+                                            const TimeInterval& stabilizationInterval) {
+  _visibleSectorListeners.push_back( new VisibleSectorListenerEntry(listener,
+                                                                    stabilizationInterval) );
 }

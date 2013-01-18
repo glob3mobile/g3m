@@ -107,6 +107,10 @@ public:
   
   const std::string description() const;
 
+  bool isEqualsTo(const Geodetic2D& that) const {
+    return _latitude.isEqualsTo(that._latitude) && _longitude.isEqualsTo(that._longitude);
+  }
+
 #ifdef JAVA_CODE
   @Override
 	public int hashCode() {

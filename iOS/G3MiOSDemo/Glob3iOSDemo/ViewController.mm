@@ -60,6 +60,16 @@
 #include "Mark.hpp"
 #include "MarkTouchListener.hpp"
 #include "JSONBaseObject.hpp"
+#include "VisibleSectorListener.hpp"
+
+
+class TestVisibleSectorListener : public VisibleSectorListener {
+public:
+  void onVisibleSectorChange(const Sector* visibleSector) {
+    ILogger::instance()->logInfo("VisibleSector=%s", visibleSector->description().c_str());
+  }
+};
+
 
 @implementation ViewController
 
@@ -167,6 +177,18 @@
   builder.setBackgroundColor(bgColor);
 
   LayerSet* layerSet = [self createLayerSet];
+
+//  layerSet->addLayer(new WMSLayer("precipitation", //
+//                                  URL("http://wms.openweathermap.org/service", false), //
+//                                  WMS_1_1_0, //
+//                                  Sector::fromDegrees(-85.05, -180.0, 85.05, 180.0), //
+//                                  "image/png", //
+//                                  "EPSG:4326", //
+//                                  "", //
+//                                  true, //
+//                                  NULL)
+//                     );
+
   builder.setLayerSet(layerSet);
 
   TilesRenderParameters* parameters = [self createTileRenderParameters];
@@ -174,6 +196,10 @@
 
   TileRenderer* tileRenderer = [self createTileRenderer: parameters
                                                layerSet: layerSet];
+
+  tileRenderer->addVisibleSectorListener(new TestVisibleSectorListener(),
+                                         TimeInterval::fromSeconds(3));
+
   builder.setTileRenderer(tileRenderer);
 
   Renderer* busyRenderer = new BusyMeshRenderer();
@@ -205,7 +231,7 @@
   PeriodicalTask* periodicalTask = [self createSamplePeriodicalTask: &builder];
   builder.addPeriodicalTask(periodicalTask);
 
-  const bool logFPS = true;
+  const bool logFPS = false;
   builder.setLogFPS(logFPS);
 
   const bool logDownloaderStatistics = false;
@@ -288,7 +314,7 @@
   LayerSet* layerSet = new LayerSet();
 
   if (false) {
-    WMSLayer* blueMarble = new WMSLayer("Blue Marble", "bmng200405",
+    WMSLayer* blueMarble = new WMSLayer("bmng200405",
                                         URL("http://www.nasa.network.com/wms?", false),
                                         WMS_1_1_0,
                                         Sector::fullSphere(),
@@ -296,10 +322,11 @@
                                         "EPSG:4326",
                                         "",
                                         false,
-                                        new LevelTileCondition(0, 6));
+                                        new LevelTileCondition(0, 6),
+                                        TimeInterval::fromDays(30));
     layerSet->addLayer(blueMarble);
 
-    WMSLayer* i3Landsat = new WMSLayer("i3Landsat", "esat",
+    WMSLayer* i3Landsat = new WMSLayer("esat",
                                        URL("http://data.worldwind.arc.nasa.gov/wms?", false),
                                        WMS_1_1_0,
                                        Sector::fullSphere(),
@@ -307,7 +334,8 @@
                                        "EPSG:4326",
                                        "",
                                        false,
-                                       new LevelTileCondition(7, 100));
+                                       new LevelTileCondition(7, 100),
+                                       TimeInterval::fromDays(30));
     layerSet->addLayer(i3Landsat);
   }
 
@@ -324,7 +352,7 @@
 
   bool useBing = true;
   if (useBing) {
-    WMSLayer* bing = new WMSLayer("Bing", "ve",
+    WMSLayer* bing = new WMSLayer("ve",
                                   URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?", false),
                                   WMS_1_1_0,
                                   Sector::fullSphere(),
@@ -332,7 +360,8 @@
                                   "EPSG:4326",
                                   "",
                                   false,
-                                  NULL);
+                                  NULL,
+                                  TimeInterval::fromDays(30));
     bing->setEnable(true);
     layerSet->addLayer(bing);
   }
@@ -349,7 +378,7 @@
     //                                 false,
     //                                 NULL);
     //    layerSet->addLayer(osm);
-    WMSLayer *osm = new WMSLayer("OSM", "osm_auto:all",
+    WMSLayer *osm = new WMSLayer("osm_auto:all",
                                  URL("http://129.206.228.72/cached/osm", false),
                                  WMS_1_1_0,
                                  // Sector::fromDegrees(-85.05, -180.0, 85.05, 180.0),
@@ -358,7 +387,8 @@
                                  "EPSG:4326",
                                  "",
                                  false,
-                                 NULL);
+                                 NULL,
+                                 TimeInterval::fromDays(30));
     osm->setEnable(false);
     layerSet->addLayer(osm);
 
@@ -367,7 +397,6 @@
   const bool usePnoaLayer = false;
   if (usePnoaLayer) {
     WMSLayer *pnoa = new WMSLayer("PNOA",
-                                  "PNOA",
                                   URL("http://www.idee.es/wms/PNOA/PNOA", false),
                                   WMS_1_1_0,
                                   Sector::fromDegrees(21, -18, 45, 6),
@@ -375,14 +404,14 @@
                                   "EPSG:4326",
                                   "",
                                   true,
-                                  NULL);
+                                  NULL,
+                                  TimeInterval::fromDays(30));
     layerSet->addLayer(pnoa);
   }
 
   const bool testURLescape = false;
   if (testURLescape) {
-    WMSLayer *ayto = new WMSLayer("AYTOCC",
-                                  URL::escape("Ejes de via"),
+    WMSLayer *ayto = new WMSLayer(URL::escape("Ejes de via"),
                                   URL("http://sig.caceres.es/wms_callejero.mapdef?", false),
                                   WMS_1_1_0,
                                   Sector::fullSphere(),
@@ -390,7 +419,8 @@
                                   "EPSG:4326",
                                   "",
                                   true,
-                                  NULL);
+                                  NULL,
+                                  TimeInterval::fromDays(30));
     layerSet->addLayer(ayto);
 
   }
@@ -428,12 +458,12 @@
   const bool renderDebug = false;
   const bool useTilesSplitBudget = true;
   const bool forceTopLevelTilesRenderOnStart = true;
-  const bool incrementalTileQuality = true;
-  TilesRenderParameters* parameters = TilesRenderParameters::createDefault(renderDebug,
-                                                                           useTilesSplitBudget,
-                                                                           forceTopLevelTilesRenderOnStart,
-                                                                           incrementalTileQuality);
-  return parameters;
+  const bool incrementalTileQuality = false;
+
+  return TilesRenderParameters::createDefault(renderDebug,
+                                              useTilesSplitBudget,
+                                              forceTopLevelTilesRenderOnStart,
+                                              incrementalTileQuality);
 }
 
 - (TileRenderer*) createTileRenderer: (TilesRenderParameters*) parameters
@@ -477,8 +507,7 @@
 
   Mark* m1 = new Mark("Fuerteventura",
                       URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false),
-                      Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-14.36), 0),
-                      false);
+                      Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-14.36), 0));
   marksRenderer->addMark(m1);
 
 
@@ -493,7 +522,7 @@
                       0);
   marksRenderer->addMark(m3);
 
-  if (true) {
+  if (false) {
     for (int i = 0; i < 2000; i++) {
       const Angle latitude  = Angle::fromDegrees( (int) (arc4random() % 180) - 90 );
       const Angle longitude = Angle::fromDegrees( (int) (arc4random() % 360) - 180 );

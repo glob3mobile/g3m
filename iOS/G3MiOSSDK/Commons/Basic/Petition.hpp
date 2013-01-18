@@ -16,6 +16,8 @@
 #include "Sector.hpp"
 #include "IImage.hpp"
 
+#include "TimeInterval.hpp"
+
 class Tile;
 class Rectangle;
 class Sector;
@@ -33,6 +35,8 @@ private:
   final private URL _url; //Conversor creates class "Url"
   private IImage _image;
 #endif
+
+  const TimeInterval _timeToCache;
   
   Petition(const Petition& that);
   
@@ -41,9 +45,11 @@ private:
 public:
   
   Petition(const Sector& sector,
-           const URL& url):
+           const URL& url,
+           const TimeInterval& timeToCache):
   _sector(new Sector(sector)),
   _url(url),
+  _timeToCache(timeToCache),
   _image(NULL)
   {
   }
@@ -80,7 +86,11 @@ public:
   const IImage* getImage() const {
     return _image;
   }
-  
+
+  const TimeInterval getTimeToCache() const {
+    return _timeToCache;
+  }
+
   const std::string description() const;
   
 };

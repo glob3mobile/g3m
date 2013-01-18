@@ -89,8 +89,24 @@ public:
     return _lower;
   }
 
+  const Angle lowerLatitude() const {
+    return _lower.latitude();
+  }
+
+  const Angle lowerLongitude() const {
+    return _lower.longitude();
+  }
+
   const Geodetic2D upper() const {
     return _upper;
+  }
+
+  const Angle upperLatitude() const {
+    return _upper.latitude();
+  }
+
+  const Angle upperLongitude() const {
+    return _upper.longitude();
   }
 
   bool contains(const Geodetic2D& position) const;
@@ -98,7 +114,6 @@ public:
   bool contains(const Geodetic3D& position) const {
     return contains(position.asGeodetic2D());
   }
-
 
   bool touchesWith(const Sector& that) const;
 
@@ -161,7 +176,10 @@ public:
 
     return new Sector(_lower.add( delta ),
                       _upper.sub( delta ) );
+  }
 
+  bool isEqualsTo(const Sector& that) const {
+    return _lower.isEqualsTo(that._lower) && _upper.isEqualsTo(that._upper);
   }
 
 };
