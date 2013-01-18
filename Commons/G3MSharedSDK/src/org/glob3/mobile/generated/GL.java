@@ -93,7 +93,8 @@ public class GL
   
 	if (_texturesIdBag.size() == 0)
 	{
-	  final int bugdetSize = 256;
+	  //const int bugdetSize = 256;
+	  final int bugdetSize = 10240;
   
 	  ILogger.instance().logInfo("= Creating %d texturesIds...", bugdetSize);
   
@@ -565,7 +566,10 @@ public class GL
 	  //    if ( _nativeGL->deleteTexture(texture) ) {
 	  //      _texturesIdBag.push_back(texture);
 	  //    }
-	  _nativeGL.deleteTexture(texture);
+  
+	  int __TESTING_TEXTUREIDs_DELETION;
+	  //_nativeGL->deleteTexture(texture);
+	  _texturesIdBag.addLast(texture);
   
 	  //    _texturesIdTakeCounter++;
 	}
