@@ -166,9 +166,8 @@ public final class NativeGL2_Android
 
 
    @Override
-   public boolean deleteTexture(final IGLTextureId texture) {
+   public void deleteTexture(final IGLTextureId texture) {
       GLES20.glDeleteTextures(1, new int[] { ((GLTextureId_Android) texture).getGLTextureId() }, 0);
-      return false;
    }
 
 

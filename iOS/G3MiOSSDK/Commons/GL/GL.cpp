@@ -505,7 +505,8 @@ const IGLTextureId* GL::getGLTextureId() {
   }
 
   if (_texturesIdBag.size() == 0) {
-    const int bugdetSize = 256;
+    //const int bugdetSize = 256;
+    const int bugdetSize = 10240;
 
     ILogger::instance()->logInfo("= Creating %d texturesIds...",
                                  bugdetSize);
@@ -552,7 +553,9 @@ void GL::deleteTexture(const IGLTextureId* texture) {
     //    if ( _nativeGL->deleteTexture(texture) ) {
     //      _texturesIdBag.push_back(texture);
     //    }
-    _nativeGL->deleteTexture(texture);
+
+    //_nativeGL->deleteTexture(texture);
+    _texturesIdBag.push_back(texture);
 
     //    _texturesIdTakeCounter++;
   }

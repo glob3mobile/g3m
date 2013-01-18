@@ -279,12 +279,10 @@ public final class NativeGL_WebGL
 
 
    @Override
-   public native boolean deleteTexture(final IGLTextureId texture) /*-{
+   public native void deleteTexture(final IGLTextureId texture) /*-{
 		var textureID = texture.@org.glob3.mobile.specific.GLTextureId_WebGL::getWebGLTexture()();
 		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
 				.deleteTexture(textureID);
-
-		return false;
    }-*/;
 
 
