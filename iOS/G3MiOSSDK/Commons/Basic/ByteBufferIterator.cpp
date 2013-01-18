@@ -46,11 +46,19 @@ unsigned char ByteBufferIterator::nextUInt8() {
 
 int ByteBufferIterator::nextInt32() {
   // LittleEndian
+#ifdef C_CODE
   unsigned char b1 = nextUInt8();
   unsigned char b2 = nextUInt8();
   unsigned char b3 = nextUInt8();
   unsigned char b4 = nextUInt8();
-
+#endif
+#ifdef JAVA_CODE
+  int b1 = nextUInt8() & 0xFF;
+  int b2 = nextUInt8() & 0xFF;
+  int b3 = nextUInt8() & 0xFF;
+  int b4 = nextUInt8() & 0xFF;
+#endif
+  
   return
   ((int) b1) |
   ((int) b2 << 8) |
@@ -60,6 +68,7 @@ int ByteBufferIterator::nextInt32() {
 
 long long ByteBufferIterator::nextInt64() {
   // LittleEndian
+#ifdef C_CODE
   unsigned char b1 = nextUInt8();
   unsigned char b2 = nextUInt8();
   unsigned char b3 = nextUInt8();
@@ -68,6 +77,17 @@ long long ByteBufferIterator::nextInt64() {
   unsigned char b6 = nextUInt8();
   unsigned char b7 = nextUInt8();
   unsigned char b8 = nextUInt8();
+#endif
+#ifdef JAVA_CODE
+  int b1 = nextUInt8() & 0xFF;
+  int b2 = nextUInt8() & 0xFF;
+  int b3 = nextUInt8() & 0xFF;
+  int b4 = nextUInt8() & 0xFF;
+  int b5 = nextUInt8() & 0xFF;
+  int b6 = nextUInt8() & 0xFF;
+  int b7 = nextUInt8() & 0xFF;
+  int b8 = nextUInt8() & 0xFF;
+#endif
 
   return
   ((long long) b1) |
