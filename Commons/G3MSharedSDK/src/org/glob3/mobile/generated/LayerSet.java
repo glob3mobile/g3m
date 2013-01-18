@@ -135,4 +135,26 @@ public class LayerSet
 	_listener = listener;
   }
 
+  public final Layer get(int index)
+  {
+	if (index < _layers.size())
+	{
+	  return _layers.get(index);
+	}
+  
+	return null;
+  }
+
+  public final Layer getLayer(String name)
+  {
+	for (int i = 0; i < _layers.size(); i++)
+	{
+	  if (name.equals(_layers.get(i).getName()))
+	  {
+		return _layers.get(i);
+	  }
+	}
+  
+	return null;
+  }
 }
