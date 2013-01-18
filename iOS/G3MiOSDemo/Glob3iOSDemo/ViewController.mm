@@ -61,6 +61,7 @@
 #include "MarkTouchListener.hpp"
 #include "JSONBaseObject.hpp"
 #include "VisibleSectorListener.hpp"
+#include "LayerBuilder.hpp"
 
 
 class TestVisibleSectorListener : public VisibleSectorListener {
@@ -352,17 +353,19 @@ public:
 
   bool useBing = true;
   if (useBing) {
-    WMSLayer* bing = new WMSLayer("ve",
-                                  URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?", false),
-                                  WMS_1_1_0,
-                                  Sector::fullSphere(),
-                                  "image/jpeg",
-                                  "EPSG:4326",
-                                  "",
-                                  false,
-                                  NULL,
-                                  TimeInterval::fromDays(30));
-    bing->setEnable(true);
+    bool enabled = true;
+    WMSLayer* bing = LayerBuilder::createBingLayer(enabled);
+//    WMSLayer* bing = new WMSLayer("ve",
+//                                  URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?", false),
+//                                  WMS_1_1_0,
+//                                  Sector::fullSphere(),
+//                                  "image/jpeg",
+//                                  "EPSG:4326",
+//                                  "",
+//                                  false,
+//                                  NULL,
+//                                  TimeInterval::fromDays(30));
+//    bing->setEnable(true);
     layerSet->addLayer(bing);
   }
 
