@@ -55,7 +55,7 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
 	vertices.add(+halfSize, +halfSize, 0);
 	vertices.add(+halfSize, -halfSize, 0);
   
-	IntBufferBuilder indices = new IntBufferBuilder();
+	ShortBufferBuilder indices = new ShortBufferBuilder();
 	indices.add(0);
 	indices.add(1);
 	indices.add(2);

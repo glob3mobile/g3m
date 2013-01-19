@@ -44,7 +44,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
 	// create vectors
 	FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.givenCenter(), planet, sector.getCenter());
 	// create indices
-	IntBufferBuilder indices = new IntBufferBuilder();
+	ShortBufferBuilder indices = new ShortBufferBuilder();
   
 	// west side
 	for (int j = 0; j < resolutionMinus1; j++)
@@ -52,7 +52,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
 	  final Geodetic3D g = new Geodetic3D(sector.getInnerPoint(0, (double)j/resolutionMinus1), offset);
   
 	  vertices.add(g);
-	  indices.add(posS++);
+	  indices.add((short) posS++);
 	}
   
 	// south side
@@ -61,7 +61,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
 	  final Geodetic3D g = new Geodetic3D(sector.getInnerPoint((double)i/resolutionMinus1, 1), offset);
   
 	  vertices.add(g);
-	  indices.add(posS++);
+	  indices.add((short) posS++);
 	}
   
 	// east side
@@ -70,7 +70,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
 	  final Geodetic3D g = new Geodetic3D(sector.getInnerPoint(1, (double)j/resolutionMinus1), offset);
   
 	  vertices.add(g);
-	  indices.add(posS++);
+	  indices.add((short) posS++);
 	}
   
 	// north side
@@ -79,7 +79,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
 	  final Geodetic3D g = new Geodetic3D(sector.getInnerPoint((double)i/resolutionMinus1, 0), offset);
   
 	  vertices.add(g);
-	  indices.add(posS++);
+	  indices.add((short) posS++);
 	}
   
 	Color color = new Color(Color.fromRGBA((float) 1.0, (float) 0, (float) 0, (float) 1.0));
@@ -123,19 +123,19 @@ public class EllipsoidalTileTessellator extends TileTessellator
 	}
   
 	// create indices
-	IntBufferBuilder indices = new IntBufferBuilder();
+	ShortBufferBuilder indices = new ShortBufferBuilder();
 	for (int j = 0; j < resolutionMinus1; j++)
 	{
 	  if (j > 0)
 	  {
-		indices.add(j *resolution);
+		indices.add((short)(j *resolution));
 	  }
 	  for (int i = 0; i < resolution; i++)
 	  {
-		indices.add(j *resolution + i);
-		indices.add(j *resolution + i + resolution);
+		indices.add((short)(j *resolution + i));
+		indices.add((short)(j *resolution + i + resolution));
 	  }
-	  indices.add(j *resolution + 2 *resolution - 1);
+	  indices.add((short)(j *resolution + 2 *resolution - 1));
 	}
   
 	// create skirts
@@ -156,8 +156,8 @@ public class EllipsoidalTileTessellator extends TileTessellator
 		final Geodetic3D g = new Geodetic3D(sector.getInnerPoint(0, (double)j/resolutionMinus1), -skirtHeight);
 		vertices.add(g);
   
-		indices.add(j *resolution);
-		indices.add(posS++);
+		indices.add((short)(j *resolution));
+		indices.add((short) posS++);
 	  }
   
 	  // south side
@@ -166,8 +166,8 @@ public class EllipsoidalTileTessellator extends TileTessellator
 		final Geodetic3D g = new Geodetic3D(sector.getInnerPoint((double)i/resolutionMinus1, 1), -skirtHeight);
 		vertices.add(g);
   
-		indices.add(resolutionMinus1 *resolution + i);
-		indices.add(posS++);
+		indices.add((short)(resolutionMinus1 *resolution + i));
+		indices.add((short) posS++);
 	  }
   
 	  // east side
@@ -176,8 +176,8 @@ public class EllipsoidalTileTessellator extends TileTessellator
 		final Geodetic3D g = new Geodetic3D(sector.getInnerPoint(1, (double)j/resolutionMinus1), -skirtHeight);
 		vertices.add(g);
   
-		indices.add(j *resolution + resolutionMinus1);
-		indices.add(posS++);
+		indices.add((short)(j *resolution + resolutionMinus1));
+		indices.add((short) posS++);
 	  }
   
 	  // north side
@@ -186,13 +186,13 @@ public class EllipsoidalTileTessellator extends TileTessellator
 		final Geodetic3D g = new Geodetic3D(sector.getInnerPoint((double)i/resolutionMinus1, 0), -skirtHeight);
 		vertices.add(g);
   
-		indices.add(i);
-		indices.add(posS++);
+		indices.add((short) i);
+		indices.add((short) posS++);
 	  }
   
 	  // last triangle
 	  indices.add(0);
-	  indices.add(resolution *resolution);
+	  indices.add((short)(resolution *resolution));
 	}
   
 	Color color = new Color(Color.fromRGBA((float) 0.1, (float) 0.1, (float) 0.1, (float) 1.0));

@@ -1,4 +1,6 @@
 package org.glob3.mobile.generated; 
+///#include "IIntBuffer.hpp"
+
 public class UniformsStruct
 {
 

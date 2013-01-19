@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  IntBufferBuilder.h
+//  IntBufferBuilder.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 05/09/12.
@@ -19,8 +19,6 @@ package org.glob3.mobile.generated;
 
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IIntBuffer;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class IFactory;
 
 public class IntBufferBuilder
 {

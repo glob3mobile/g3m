@@ -10,8 +10,9 @@ package org.glob3.mobile.generated;
 
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IFloatBuffer;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IIntBuffer;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IShortBuffer;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IImage;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
@@ -97,9 +98,12 @@ public abstract class INativeGL
 //ORIGINAL LINE: virtual void vertexAttribPointer(int index, int size, boolean normalized, int stride, IFloatBuffer* buffer) const = 0;
   public abstract void vertexAttribPointer(int index, int size, boolean normalized, int stride, IFloatBuffer buffer);
 
+//  virtual void drawElements(int mode,
+//                            int count,
+//                            IIntBuffer* indices) const = 0;
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual void drawElements(int mode, int count, IIntBuffer* indices) const = 0;
-  public abstract void drawElements(int mode, int count, IIntBuffer indices);
+//ORIGINAL LINE: virtual void drawElements(int mode, int count, IShortBuffer* indices) const = 0;
+  public abstract void drawElements(int mode, int count, IShortBuffer indices);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual void lineWidth(float width) const = 0;

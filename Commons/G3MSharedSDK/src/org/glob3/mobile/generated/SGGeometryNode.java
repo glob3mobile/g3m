@@ -20,7 +20,7 @@ package org.glob3.mobile.generated;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IFloatBuffer;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class IIntBuffer;
+//class IShortBuffer;
 
 public class SGGeometryNode extends SGNode
 {
@@ -29,10 +29,10 @@ public class SGGeometryNode extends SGNode
   private IFloatBuffer _colors;
   private IFloatBuffer _uv;
   private IFloatBuffer _normals;
-  private IIntBuffer _indices;
+  private IShortBuffer _indices;
 
 
-  public SGGeometryNode(String id, String sId, int primitive, IFloatBuffer vertices, IFloatBuffer colors, IFloatBuffer uv, IFloatBuffer normals, IIntBuffer indices)
+  public SGGeometryNode(String id, String sId, int primitive, IFloatBuffer vertices, IFloatBuffer colors, IFloatBuffer uv, IFloatBuffer normals, IShortBuffer indices)
   {
 	  super(id, sId);
 	  _primitive = primitive;

@@ -71,7 +71,7 @@ public class QuadShape extends MeshShape
 	vertices.add(left, top, 0);
 	vertices.add(right, top, 0);
   
-	IntBufferBuilder indices = new IntBufferBuilder();
+	ShortBufferBuilder indices = new ShortBufferBuilder();
 	indices.add(0);
 	indices.add(1);
 	indices.add(2);

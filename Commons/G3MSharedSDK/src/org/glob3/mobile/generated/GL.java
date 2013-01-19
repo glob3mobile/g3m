@@ -332,7 +332,22 @@ public class GL
 	}
   }
 
-  public final void drawElements(int mode, IIntBuffer indices)
+//  void drawElements(int mode,
+//                    IIntBuffer* indices);
+
+  //void GL::drawElements(int mode,
+  //                      IIntBuffer* indices) {
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("GL::drawElements(%d, %s)",
+  //                                 mode,
+  //                                 indices->description().c_str());
+  //  }
+  //
+  //  _nativeGL->drawElements(mode,
+  //                          indices->size(),
+  //                          indices);
+  //}
+  public final void drawElements(int mode, IShortBuffer indices)
   {
 	if (_verbose)
 	{
