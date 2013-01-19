@@ -27,7 +27,7 @@
 #include "GLConstants.hpp"
 #include "IFactory.hpp"
 #include "IFloatBuffer.hpp"
-#include "IIntBuffer.hpp"
+#include "IShortBuffer.hpp"
 
 
 Shape* SceneJSShapesParser::parse(const std::string& json,
@@ -517,9 +517,9 @@ SGGeometryNode* SceneJSShapesParser::createGeometryNode(const JSONObject* jsonOb
     return NULL;
   }
   int indicesCount = jsIndices->size();
-  IIntBuffer* indices = IFactory::instance()->createIntBuffer(indicesCount);
+  IShortBuffer* indices = IFactory::instance()->createShortBuffer(indicesCount);
   for (int i = 0; i < indicesCount; i++) {
-    indices->put(i, (int) jsIndices->getAsNumber(i)->value());
+    indices->rawPut(i, (short) jsIndices->getAsNumber(i)->value());
   }
   processedKeys++;
 

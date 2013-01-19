@@ -21,6 +21,7 @@ class ITimer;
 class IImage;
 class IFloatBuffer;
 class IIntBuffer;
+class IShortBuffer;
 class IByteBuffer;
 class ILogger;
 class IImageListener;
@@ -85,6 +86,8 @@ public:
                                           float f15) const = 0;
 
   virtual IIntBuffer* createIntBuffer(int size) const = 0;
+
+  virtual IShortBuffer* createShortBuffer(int size) const = 0;
 
   virtual IByteBuffer* createByteBuffer(int length) const = 0;
 

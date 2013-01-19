@@ -272,7 +272,17 @@ public final class NativeGL2_Android
       //                         ", count=" + count + //
       //                         ", indexBuffer=" + indexBuffer + ")");
 
+      // 1280 GL_INVALID_ENUM in Galaxy phones
+      //   GL_INVALID_ENUM is generated if mode is not an accepted value.
+      //   GL_INVALID_ENUM is generated if type is not GL_UNSIGNED_BYTE or GL_UNSIGNED_SHORT.
+
       GLES20.glDrawElements(mode, count, GLES20.GL_UNSIGNED_INT, indexBuffer);
+
+      //      final ShortBuffer indexShortBuffer = ShortBuffer.wrap(new short[indexBuffer.capacity()]);
+      //      for (int i = 0; i < indexBuffer.capacity(); i++) {
+      //         indexShortBuffer.put(i, (short) indexBuffer.get(i));
+      //      }
+      //      GLES20.glDrawElements(mode, count, GLES20.GL_UNSIGNED_SHORT, indexShortBuffer);
    }
 
 

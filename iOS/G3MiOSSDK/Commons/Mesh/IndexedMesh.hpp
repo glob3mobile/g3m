@@ -11,11 +11,11 @@
 
 #include "AbstractMesh.hpp"
 
-class IIntBuffer;
+class IShortBuffer;
 
 class IndexedMesh : public AbstractMesh {
 private:
-  IIntBuffer*       _indices;
+  IShortBuffer*       _indices;
 protected:
   void rawRender(const G3MRenderContext* rc,
                  const GLState& parentState) const;
@@ -25,7 +25,7 @@ public:
               bool owner,
               const Vector3D& center,
               IFloatBuffer* vertices,
-              IIntBuffer* indices,
+              IShortBuffer* indices,
               float lineWidth,
               float pointSize = 1,
               Color* flatColor = NULL,

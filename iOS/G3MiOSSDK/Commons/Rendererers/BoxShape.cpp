@@ -9,7 +9,7 @@
 #include "BoxShape.hpp"
 
 #include "FloatBufferBuilderFromCartesian3D.hpp"
-#include "IntBufferBuilder.hpp"
+#include "ShortBufferBuilder.hpp"
 #include "IndexedMesh.hpp"
 #include "GLConstants.hpp"
 #include "CompositeMesh.hpp"
@@ -34,7 +34,7 @@ Mesh* BoxShape::createBorderMesh(const G3MRenderContext* rc) {
   };
 
   const int numIndices = 48;
-  int i[] = {
+  short i[] = {
     0, 1, 1, 2, 2, 3, 3, 0,
     1, 5, 5, 6, 6, 2, 2, 1,
     5, 4, 4, 7, 7, 6, 6, 5,
@@ -44,7 +44,7 @@ Mesh* BoxShape::createBorderMesh(const G3MRenderContext* rc) {
   };
 
   FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero());
-  IntBufferBuilder indices;
+  ShortBufferBuilder indices;
 
   const unsigned int numVertices = 8;
   for (unsigned int n=0; n<numVertices; n++) {
@@ -87,14 +87,14 @@ Mesh* BoxShape::createSurfaceMesh(const G3MRenderContext* rc) {
   };
 
   const int numIndices = 23;
-  int i[] = {
+  short i[] = {
     3, 0, 7, 4, 6, 5, 2, 1, 3, 0, 0,
     2, 2, 3, 6, 7, 7,
     5, 5, 4, 1, 0, 0
   };
 
   FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero());
-  IntBufferBuilder indices;
+  ShortBufferBuilder indices;
 
   const unsigned int numVertices = 8;
   for (unsigned int n=0; n<numVertices; n++) {

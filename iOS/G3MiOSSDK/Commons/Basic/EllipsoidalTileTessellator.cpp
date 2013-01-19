@@ -13,15 +13,12 @@
 #include "IndexedMesh.hpp"
 #include "TextureMapping.hpp"
 #include "TexturedMesh.hpp"
-
 #include "FloatBufferBuilder.hpp"
-#include "IntBufferBuilder.hpp"
-
+#include "ShortBufferBuilder.hpp"
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "FloatBufferBuilderFromCartesian2D.hpp"
 #include "FloatBufferBuilderFromGeodetic.hpp"
 #include "SimpleFloatBufferBuilder.hpp"
-
 #include "GLConstants.hpp"
 #include "Color.hpp"
 
@@ -46,16 +43,16 @@ Mesh* EllipsoidalTileTessellator::createMesh(const G3MRenderContext* rc,
   }
   
   // create indices
-  IntBufferBuilder indices;
+  ShortBufferBuilder indices;
   for (int j = 0; j < resolutionMinus1; j++) {
     if (j > 0) {
-      indices.add(j*resolution);
+      indices.add((short) (j*resolution));
     }
     for (int i = 0; i < resolution; i++) {
-      indices.add(j*resolution + i);
-      indices.add(j*resolution + i + resolution);
+      indices.add((short) (j*resolution + i));
+      indices.add((short) (j*resolution + i + resolution));
     }
-    indices.add(j*resolution + 2*resolution - 1);
+    indices.add((short) (j*resolution + 2*resolution - 1));
   }
   
   // create skirts
@@ -75,8 +72,8 @@ Mesh* EllipsoidalTileTessellator::createMesh(const G3MRenderContext* rc,
                          -skirtHeight);
       vertices.add(g);
       
-      indices.add(j*resolution);
-      indices.add(posS++);
+      indices.add((short) (j*resolution));
+      indices.add((short) posS++);
     }
     
     // south side
@@ -85,8 +82,8 @@ Mesh* EllipsoidalTileTessellator::createMesh(const G3MRenderContext* rc,
                          -skirtHeight);
       vertices.add(g);
       
-      indices.add(resolutionMinus1*resolution + i);
-      indices.add(posS++);
+      indices.add((short) (resolutionMinus1*resolution + i));
+      indices.add((short) posS++);
     }
     
     // east side
@@ -95,8 +92,8 @@ Mesh* EllipsoidalTileTessellator::createMesh(const G3MRenderContext* rc,
                          -skirtHeight);
       vertices.add(g);
       
-      indices.add(j*resolution + resolutionMinus1);
-      indices.add(posS++);
+      indices.add((short) (j*resolution + resolutionMinus1));
+      indices.add((short) posS++);
     }
     
     // north side
@@ -105,13 +102,13 @@ Mesh* EllipsoidalTileTessellator::createMesh(const G3MRenderContext* rc,
                          -skirtHeight);
       vertices.add(g);
       
-      indices.add(i);
-      indices.add(posS++);
+      indices.add((short) i);
+      indices.add((short) posS++);
     }
     
     // last triangle
     indices.add(0);
-    indices.add(resolution*resolution);
+    indices.add((short) (resolution*resolution));
   }
   
   Color* color = new Color( Color::fromRGBA((float) 0.1, (float) 0.1, (float) 0.1, (float) 1.0) );
@@ -204,14 +201,14 @@ Mesh* EllipsoidalTileTessellator::createDebugMesh(const G3MRenderContext* rc,
   // create vectors
   FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(), planet, sector.getCenter());
   // create indices
-  IntBufferBuilder indices;
+  ShortBufferBuilder indices;
   
   // west side
   for (int j = 0; j < resolutionMinus1; j++) {
     const Geodetic3D g(sector.getInnerPoint(0, (double)j/resolutionMinus1), offset);
     
     vertices.add(g);
-    indices.add(posS++);
+    indices.add((short) posS++);
   }
   
   // south side
@@ -219,7 +216,7 @@ Mesh* EllipsoidalTileTessellator::createDebugMesh(const G3MRenderContext* rc,
     const Geodetic3D g(sector.getInnerPoint((double)i/resolutionMinus1, 1), offset);
     
     vertices.add(g);
-    indices.add(posS++);
+    indices.add((short) posS++);
   }
   
   // east side
@@ -227,7 +224,7 @@ Mesh* EllipsoidalTileTessellator::createDebugMesh(const G3MRenderContext* rc,
     const Geodetic3D g(sector.getInnerPoint(1, (double)j/resolutionMinus1), offset);
     
     vertices.add(g);
-    indices.add(posS++);
+    indices.add((short) posS++);
   }
   
   // north side
@@ -235,7 +232,7 @@ Mesh* EllipsoidalTileTessellator::createDebugMesh(const G3MRenderContext* rc,
     const Geodetic3D g(sector.getInnerPoint((double)i/resolutionMinus1, 0), offset);
     
     vertices.add(g);
-    indices.add(posS++);
+    indices.add((short) posS++);
   }
   
   Color *color = new Color(Color::fromRGBA((float) 1.0, (float) 0, (float) 0, (float) 1.0));

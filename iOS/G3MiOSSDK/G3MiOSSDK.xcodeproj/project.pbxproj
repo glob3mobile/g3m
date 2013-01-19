@@ -183,6 +183,8 @@
 		CF8B21C015DD345D0068601A /* SQDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = CF8B21BE15DD345D0068601A /* SQDatabase.m */; };
 		CF8D0BFE15AF0D32005B5433 /* TileTexturizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */; };
 		CF8FF98B15D5539F000F79D1 /* LeveledTexturedMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8FF98915D5539F000F79D1 /* LeveledTexturedMesh.cpp */; };
+		CF923CA416AB126D00D04301 /* ShortBufferBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF923CA216AB126D00D04301 /* ShortBufferBuilder.cpp */; };
+		CF923CA516AB126D00D04301 /* ShortBufferBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF923CA316AB126D00D04301 /* ShortBufferBuilder.hpp */; };
 		CF94EB8F1669225600F2283C /* GEOLineStringGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF94EB8D1669225600F2283C /* GEOLineStringGeometry.cpp */; };
 		CF94EB901669225600F2283C /* GEOLineStringGeometry.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF94EB8E1669225600F2283C /* GEOLineStringGeometry.hpp */; settings = {ATTRIBUTES = (); }; };
 		CF94EB941669307700F2283C /* GEO2DLineStringGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF94EB921669307700F2283C /* GEO2DLineStringGeometry.cpp */; };
@@ -219,6 +221,10 @@
 		CFB72A6A15E6808900A5BAF4 /* IStringUtils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFB72A6815E6808900A5BAF4 /* IStringUtils.hpp */; settings = {ATTRIBUTES = (); }; };
 		CFB72A6E15E682B400A5BAF4 /* StringUtils_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFB72A6C15E682B400A5BAF4 /* StringUtils_iOS.mm */; };
 		CFB73CDE15EFC51B00261631 /* MathUtils_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8FEDAC815E7C219007633A0 /* MathUtils_iOS.hpp */; settings = {ATTRIBUTES = (); }; };
+		CFBD42DB16AA151100663F21 /* IShortBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBD42D916AA151100663F21 /* IShortBuffer.cpp */; };
+		CFBD42DC16AA151100663F21 /* IShortBuffer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFBD42DA16AA151100663F21 /* IShortBuffer.hpp */; };
+		CFBD42E016AA1A8900663F21 /* ShortBuffer_iOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBD42DE16AA1A8900663F21 /* ShortBuffer_iOS.cpp */; };
+		CFBD42E116AA1A8900663F21 /* ShortBuffer_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFBD42DF16AA1A8900663F21 /* ShortBuffer_iOS.hpp */; };
 		CFBF0D121669368F0045B882 /* GEOMultiLineStringGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBF0D101669368F0045B882 /* GEOMultiLineStringGeometry.cpp */; };
 		CFBF0D131669368F0045B882 /* GEOMultiLineStringGeometry.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFBF0D111669368F0045B882 /* GEOMultiLineStringGeometry.hpp */; settings = {ATTRIBUTES = (); }; };
 		CFBF0D16166946350045B882 /* GEO2DMultiLineStringGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBF0D14166946350045B882 /* GEO2DMultiLineStringGeometry.cpp */; };
@@ -532,6 +538,8 @@
 		CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileTexturizer.cpp; path = Commons/Basic/TileTexturizer.cpp; sourceTree = "<group>"; };
 		CF8FF98915D5539F000F79D1 /* LeveledTexturedMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LeveledTexturedMesh.cpp; path = Commons/Mesh/LeveledTexturedMesh.cpp; sourceTree = "<group>"; };
 		CF8FF98A15D5539F000F79D1 /* LeveledTexturedMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = LeveledTexturedMesh.hpp; path = Commons/Mesh/LeveledTexturedMesh.hpp; sourceTree = "<group>"; };
+		CF923CA216AB126D00D04301 /* ShortBufferBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ShortBufferBuilder.cpp; path = Commons/Basic/ShortBufferBuilder.cpp; sourceTree = "<group>"; };
+		CF923CA316AB126D00D04301 /* ShortBufferBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ShortBufferBuilder.hpp; path = Commons/Basic/ShortBufferBuilder.hpp; sourceTree = "<group>"; };
 		CF94EB8D1669225600F2283C /* GEOLineStringGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEOLineStringGeometry.cpp; path = Commons/GEO/GEOLineStringGeometry.cpp; sourceTree = "<group>"; };
 		CF94EB8E1669225600F2283C /* GEOLineStringGeometry.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEOLineStringGeometry.hpp; path = Commons/GEO/GEOLineStringGeometry.hpp; sourceTree = "<group>"; };
 		CF94EB921669307700F2283C /* GEO2DLineStringGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEO2DLineStringGeometry.cpp; path = Commons/GEO/GEO2DLineStringGeometry.cpp; sourceTree = "<group>"; };
@@ -565,6 +573,10 @@
 		CFB72A6815E6808900A5BAF4 /* IStringUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = IStringUtils.hpp; path = Commons/Interfaces/IStringUtils.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFB72A6C15E682B400A5BAF4 /* StringUtils_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = StringUtils_iOS.mm; path = Specific/Derived/StringUtils_iOS.mm; sourceTree = "<group>"; };
 		CFB72A6D15E682B400A5BAF4 /* StringUtils_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = StringUtils_iOS.hpp; path = Specific/Derived/StringUtils_iOS.hpp; sourceTree = "<group>"; };
+		CFBD42D916AA151100663F21 /* IShortBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IShortBuffer.cpp; path = Commons/Basic/IShortBuffer.cpp; sourceTree = "<group>"; };
+		CFBD42DA16AA151100663F21 /* IShortBuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IShortBuffer.hpp; path = Commons/Basic/IShortBuffer.hpp; sourceTree = "<group>"; };
+		CFBD42DE16AA1A8900663F21 /* ShortBuffer_iOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ShortBuffer_iOS.cpp; path = Specific/Derived/ShortBuffer_iOS.cpp; sourceTree = "<group>"; };
+		CFBD42DF16AA1A8900663F21 /* ShortBuffer_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ShortBuffer_iOS.hpp; path = Specific/Derived/ShortBuffer_iOS.hpp; sourceTree = "<group>"; };
 		CFBF0D101669368F0045B882 /* GEOMultiLineStringGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEOMultiLineStringGeometry.cpp; path = Commons/GEO/GEOMultiLineStringGeometry.cpp; sourceTree = "<group>"; };
 		CFBF0D111669368F0045B882 /* GEOMultiLineStringGeometry.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEOMultiLineStringGeometry.hpp; path = Commons/GEO/GEOMultiLineStringGeometry.hpp; sourceTree = "<group>"; };
 		CFBF0D14166946350045B882 /* GEO2DMultiLineStringGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEO2DMultiLineStringGeometry.cpp; path = Commons/GEO/GEO2DMultiLineStringGeometry.cpp; sourceTree = "<group>"; };
@@ -750,6 +762,8 @@
 				CF47030A15EFB4C000426B8B /* ThreadUtils_iOS.hpp */,
 				CF47030915EFB4C000426B8B /* ThreadUtils_iOS.mm */,
 				CF31CBF315878BE40085E8F1 /* Timer_iOS.hpp */,
+				CFBD42DE16AA1A8900663F21 /* ShortBuffer_iOS.cpp */,
+				CFBD42DF16AA1A8900663F21 /* ShortBuffer_iOS.hpp */,
 			);
 			name = Derived;
 			sourceTree = "<group>";
@@ -862,6 +876,10 @@
 				CF8D0BFB15AF0D23005B5433 /* TileTexturizer.hpp */,
 				CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */,
 				CF03683416A499F0006CE160 /* LabelPosition.h */,
+				CFBD42D916AA151100663F21 /* IShortBuffer.cpp */,
+				CFBD42DA16AA151100663F21 /* IShortBuffer.hpp */,
+				CF923CA216AB126D00D04301 /* ShortBufferBuilder.cpp */,
+				CF923CA316AB126D00D04301 /* ShortBufferBuilder.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -1414,6 +1432,9 @@
 				CF03683616A499F1006CE160 /* LabelPosition.h in Headers */,
 				CF024DC816A84F330051255C /* VisibleSectorListener.hpp in Headers */,
 				E7B9964F16A94EC400753FC3 /* LayerBuilder.hpp in Headers */,
+				CFBD42DC16AA151100663F21 /* IShortBuffer.hpp in Headers */,
+				CFBD42E116AA1A8900663F21 /* ShortBuffer_iOS.hpp in Headers */,
+				CF923CA516AB126D00D04301 /* ShortBufferBuilder.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1617,6 +1638,9 @@
 				CFFAFD6F169F2C1500BCE129 /* ITextUtils.cpp in Sources */,
 				CFFAFD73169F2E3000BCE129 /* TextUtils_iOS.mm in Sources */,
 				E7B9964E16A94EC400753FC3 /* LayerBuilder.cpp in Sources */,
+				CFBD42DB16AA151100663F21 /* IShortBuffer.cpp in Sources */,
+				CFBD42E016AA1A8900663F21 /* ShortBuffer_iOS.cpp in Sources */,
+				CF923CA416AB126D00D04301 /* ShortBufferBuilder.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

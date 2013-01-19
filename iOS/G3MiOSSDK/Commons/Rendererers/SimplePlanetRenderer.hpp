@@ -17,7 +17,7 @@
 #include "TexturedMesh.hpp"
 
 class IFloatBuffer;
-class IIntBuffer;
+class IShortBuffer;
 class IGLTextureId;
 
 class SimplePlanetRenderer: public LeafRenderer {
@@ -34,7 +34,7 @@ private:
   
   
   IFloatBuffer* createVertices(const Planet* planet) const;
-  IIntBuffer*  createMeshIndex() const;
+  IShortBuffer*  createMeshIndex() const;
   IFloatBuffer* createTextureCoordinates() const;
   
   Mesh* createMesh(const G3MRenderContext* rc);

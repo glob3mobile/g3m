@@ -15,13 +15,10 @@
 #include "Context.hpp"
 #include "GL.hpp"
 #include "MutableMatrix44D.hpp"
-
 #include "IMathUtils.hpp"
-
 #include "FloatBufferBuilderFromColor.hpp"
 #include "FloatBufferBuilderFromCartesian3D.hpp"
-#include "IntBufferBuilder.hpp"
-
+#include "ShortBufferBuilder.hpp"
 #include "GLConstants.hpp"
 
 void BusyMeshRenderer::initialize(const G3MContext* context)
@@ -30,7 +27,7 @@ void BusyMeshRenderer::initialize(const G3MContext* context)
 
   FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero());
   FloatBufferBuilderFromColor colors;
-  IntBufferBuilder indices;
+  ShortBufferBuilder indices;
 
   int indicesCounter=0;
   const float r1=12;
@@ -43,8 +40,8 @@ void BusyMeshRenderer::initialize(const G3MContext* context)
     vertices.add( (r1 * c), (r1 * s), 0);
     vertices.add( (r2 * c), (r2 * s), 0);
 
-    indices.add(indicesCounter++);
-    indices.add(indicesCounter++);
+    indices.add((short) (indicesCounter++));
+    indices.add((short) (indicesCounter++));
 
     float col = (float) (1.1 * step / numStrides);
     if (col>1) {

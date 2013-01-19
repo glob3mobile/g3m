@@ -13,7 +13,7 @@
 #include "IFactory.hpp"
 #include "TexturesHandler.hpp"
 #include "FloatBufferBuilderFromCartesian3D.hpp"
-#include "IntBufferBuilder.hpp"
+#include "ShortBufferBuilder.hpp"
 #include "FloatBufferBuilderFromCartesian2D.hpp"
 #include "IndexedMesh.hpp"
 #include "GLConstants.hpp"
@@ -57,7 +57,7 @@ Mesh* QuadShape::createMesh(const G3MRenderContext* rc) {
   vertices.add(left,  top,    0);
   vertices.add(right, top,    0);
 
-  IntBufferBuilder indices;
+  ShortBufferBuilder indices;
   indices.add(0);
   indices.add(1);
   indices.add(2);

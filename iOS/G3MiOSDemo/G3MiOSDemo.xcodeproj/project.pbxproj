@@ -253,6 +253,9 @@
 		CF62A0AB168008E900649BBC /* IntBuffer_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IntBuffer_iOS.hpp; path = ../G3MiOSSDK/Specific/Derived/IntBuffer_iOS.hpp; sourceTree = "<group>"; };
 		CF7A708715CFD0A50086FDE6 /* g3m-marker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "g3m-marker.png"; sourceTree = "<group>"; };
 		CF883B831591053100AEE39C /* mark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mark.png; sourceTree = "<group>"; };
+		CF923CA716AB159800D04301 /* ShortBuffer_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ShortBuffer_iOS.hpp; path = ../G3MiOSSDK/Specific/Derived/ShortBuffer_iOS.hpp; sourceTree = "<group>"; };
+		CF923CA816AB159800D04301 /* ShortBufferBuilder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ShortBufferBuilder.hpp; path = ../G3MiOSSDK/Commons/Basic/ShortBufferBuilder.hpp; sourceTree = "<group>"; };
+		CFBD42E216AA1B7300663F21 /* IShortBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IShortBuffer.hpp; path = ../G3MiOSSDK/Commons/Basic/IShortBuffer.hpp; sourceTree = "<group>"; };
 		CFE3DBB0164B0E7D00910037 /* seymour-plane.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "seymour-plane.json"; sourceTree = "<group>"; };
 		CFEA76671666DCB000E89BC7 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
 		CFF76BE81686154400F658CC /* MeshRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MeshRenderer.hpp; path = ../G3MiOSSDK/Commons/Rendererers/MeshRenderer.hpp; sourceTree = "<group>"; };
@@ -317,6 +320,9 @@
 		CF629FFE168008D200649BBC /* Public Headers G3M */ = {
 			isa = PBXGroup;
 			children = (
+				CF923CA716AB159800D04301 /* ShortBuffer_iOS.hpp */,
+				CF923CA816AB159800D04301 /* ShortBufferBuilder.hpp */,
+				CFBD42E216AA1B7300663F21 /* IShortBuffer.hpp */,
 				E7B9965116A9526D00753FC3 /* LayerBuilder.hpp */,
 				CF024DCA16A863380051255C /* VisibleSectorListener.hpp */,
 				CFFAFD75169F48F800BCE129 /* ITextUtils.hpp */,

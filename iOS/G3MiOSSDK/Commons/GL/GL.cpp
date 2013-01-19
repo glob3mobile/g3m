@@ -14,7 +14,8 @@
 #include "Vector3D.hpp"
 #include "Vector2D.hpp"
 #include "INativeGL.hpp"
-#include "IIntBuffer.hpp"
+//#include "IIntBuffer.hpp"
+#include "IShortBuffer.hpp"
 #include "IFactory.hpp"
 #include "FloatBufferBuilderFromCartesian2D.hpp"
 #include "IGLUniformID.hpp"
@@ -336,8 +337,20 @@ void GL::vertexPointer(int size,
   }
 }
 
+//void GL::drawElements(int mode,
+//                      IIntBuffer* indices) {
+//  if (_verbose) {
+//    ILogger::instance()->logInfo("GL::drawElements(%d, %s)",
+//                                 mode,
+//                                 indices->description().c_str());
+//  }
+//
+//  _nativeGL->drawElements(mode,
+//                          indices->size(),
+//                          indices);
+//}
 void GL::drawElements(int mode,
-                      IIntBuffer* indices) {
+                      IShortBuffer* indices) {
   if (_verbose) {
     ILogger::instance()->logInfo("GL::drawElements(%d, %s)",
                                  mode,

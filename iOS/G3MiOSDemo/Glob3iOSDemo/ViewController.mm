@@ -636,7 +636,7 @@ public:
       }
       */
 
-      /*
+      /**/
       NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
                                                                 ofType: @"json"];
       //      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"3dmodels/Macba_Google_Earth-1"
@@ -658,7 +658,7 @@ public:
           }
         }
       }
-      */
+      /**/
 
       /**/
 

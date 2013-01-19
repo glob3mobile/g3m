@@ -10,7 +10,7 @@
 
 #include "IndexedMesh.hpp"
 #include "GL.hpp"
-#include "IIntBuffer.hpp"
+#include "IShortBuffer.hpp"
 
 IndexedMesh::~IndexedMesh() {
   if (_owner) {
@@ -22,7 +22,7 @@ IndexedMesh::IndexedMesh(const int primitive,
                          bool owner,
                          const Vector3D& center,
                          IFloatBuffer* vertices,
-                         IIntBuffer* indices,
+                         IShortBuffer* indices,
                          float lineWidth,
                          float pointSize,
                          Color* flatColor,

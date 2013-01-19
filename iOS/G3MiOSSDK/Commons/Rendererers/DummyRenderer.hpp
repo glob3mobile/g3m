@@ -12,14 +12,14 @@
 #include "LeafRenderer.hpp"
 
 class IFloatBuffer;
-class IIntBuffer;
+class IShortBuffer;
 
 class DummyRenderer: public LeafRenderer {
 
 private:
   double        _halfSize;
 
-  IIntBuffer*   _indices;
+  IShortBuffer* _indices;
   IFloatBuffer* _vertices;
 
 public:

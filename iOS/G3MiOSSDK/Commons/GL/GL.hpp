@@ -163,8 +163,10 @@ public:
                      int stride,
                      IFloatBuffer* vertices);
 
+//  void drawElements(int mode,
+//                    IIntBuffer* indices);
   void drawElements(int mode,
-                    IIntBuffer* indices);
+                    IShortBuffer* indices);
 
   void drawArrays(int mode,
                   int first,

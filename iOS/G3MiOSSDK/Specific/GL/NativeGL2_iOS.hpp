@@ -17,7 +17,8 @@
 #include "GLUniformID_iOS.hpp"
 #include "GLTextureId_iOS.hpp"
 #include "FloatBuffer_iOS.hpp"
-#include "IntBuffer_iOS.hpp"
+//#include "IntBuffer_iOS.hpp"
+#include "ShortBuffer_iOS.hpp"
 #include "Image_iOS.hpp"
 
 class NativeGL2_iOS: public INativeGL {
@@ -104,12 +105,18 @@ public:
     glVertexAttribPointer(index, size, GL_FLOAT, normalized, stride, pointer);
   }
 
+//  void drawElements(int mode,
+//                    int count,
+//                    IIntBuffer* buffer) const {
+//    int has_to_set_GL_UNSIGNED_INT; //???????
+//    const int* pointer = ((IntBuffer_iOS*) buffer)->getPointer();
+//    glDrawElements(mode, count, GL_UNSIGNED_INT, pointer);
+//  }
   void drawElements(int mode,
                     int count,
-                    IIntBuffer* buffer) const {
-    int has_to_set_GL_UNSIGNED_INT; //???????
-    const int* pointer = ((IntBuffer_iOS*) buffer)->getPointer();
-    glDrawElements(mode, count, GL_UNSIGNED_INT, pointer);
+                    IShortBuffer* buffer) const {
+    const short* pointer = ((ShortBuffer_iOS*) buffer)->getPointer();
+    glDrawElements(mode, count, GL_UNSIGNED_SHORT, pointer);
   }
 
   void lineWidth(float width) const {
