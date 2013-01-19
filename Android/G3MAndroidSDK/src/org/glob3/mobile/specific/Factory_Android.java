@@ -12,6 +12,7 @@ import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IImageListener;
 import org.glob3.mobile.generated.IIntBuffer;
 import org.glob3.mobile.generated.ILogger;
+import org.glob3.mobile.generated.IShortBuffer;
 import org.glob3.mobile.generated.ITimer;
 
 import android.content.Context;
@@ -115,12 +116,6 @@ public final class Factory_Android
 
 
    @Override
-   public IIntBuffer createIntBuffer(final int size) {
-      return new IntBuffer_Android(size);
-   }
-
-
-   @Override
    public IByteBuffer createByteBuffer(final byte[] data,
                                        final int length) {
       return new ByteBuffer_Android(data);
@@ -171,5 +166,16 @@ public final class Factory_Android
       return new FloatBuffer_Android(f0, f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f13, f14, f15);
    }
 
+
+   @Override
+   public IIntBuffer createIntBuffer(final int size) {
+      return new IntBuffer_Android(size);
+   }
+
+
+   @Override
+   public IShortBuffer createShortBuffer(final int size) {
+      return new ShortBuffer_Android(size);
+   }
 
 }

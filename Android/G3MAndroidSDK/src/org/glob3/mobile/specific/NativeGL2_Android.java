@@ -3,16 +3,16 @@
 package org.glob3.mobile.specific;
 
 import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
+import java.nio.ShortBuffer;
 import java.util.ArrayList;
 
 import org.glob3.mobile.generated.IFloatBuffer;
 import org.glob3.mobile.generated.IGLTextureId;
 import org.glob3.mobile.generated.IGLUniformID;
 import org.glob3.mobile.generated.IImage;
-import org.glob3.mobile.generated.IIntBuffer;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.INativeGL;
+import org.glob3.mobile.generated.IShortBuffer;
 import org.glob3.mobile.generated.MutableMatrix44D;
 import org.glob3.mobile.generated.ShaderProgram;
 import org.glob3.mobile.generated.ShaderType;
@@ -262,27 +262,40 @@ public final class NativeGL2_Android
    }
 
 
+   //   @Override
+   //   public void drawElements(final int mode,
+   //                            final int count,
+   //                            final IIntBuffer indices) {
+   //      final IntBuffer indexBuffer = ((IntBuffer_Android) indices).getBuffer();
+   //
+   //      //      System.err.println("drawElements(mode=" + mode + //
+   //      //                         ", count=" + count + //
+   //      //                         ", indexBuffer=" + indexBuffer + ")");
+   //
+   //      // 1280 GL_INVALID_ENUM in Galaxy phones
+   //      //   GL_INVALID_ENUM is generated if mode is not an accepted value.
+   //      //   GL_INVALID_ENUM is generated if type is not GL_UNSIGNED_BYTE or GL_UNSIGNED_SHORT.
+   //
+   //      GLES20.glDrawElements(mode, count, GLES20.GL_UNSIGNED_INT, indexBuffer);
+   //
+   //      //      final ShortBuffer indexShortBuffer = ShortBuffer.wrap(new short[indexBuffer.capacity()]);
+   //      //      for (int i = 0; i < indexBuffer.capacity(); i++) {
+   //      //         indexShortBuffer.put(i, (short) indexBuffer.get(i));
+   //      //      }
+   //      //      GLES20.glDrawElements(mode, count, GLES20.GL_UNSIGNED_SHORT, indexShortBuffer);
+   //   }
+
    @Override
    public void drawElements(final int mode,
                             final int count,
-                            final IIntBuffer indices) {
-      final IntBuffer indexBuffer = ((IntBuffer_Android) indices).getBuffer();
+                            final IShortBuffer indices) {
+      final ShortBuffer indexBuffer = ((ShortBuffer_Android) indices).getBuffer();
 
       //      System.err.println("drawElements(mode=" + mode + //
       //                         ", count=" + count + //
       //                         ", indexBuffer=" + indexBuffer + ")");
 
-      // 1280 GL_INVALID_ENUM in Galaxy phones
-      //   GL_INVALID_ENUM is generated if mode is not an accepted value.
-      //   GL_INVALID_ENUM is generated if type is not GL_UNSIGNED_BYTE or GL_UNSIGNED_SHORT.
-
-      GLES20.glDrawElements(mode, count, GLES20.GL_UNSIGNED_INT, indexBuffer);
-
-      //      final ShortBuffer indexShortBuffer = ShortBuffer.wrap(new short[indexBuffer.capacity()]);
-      //      for (int i = 0; i < indexBuffer.capacity(); i++) {
-      //         indexShortBuffer.put(i, (short) indexBuffer.get(i));
-      //      }
-      //      GLES20.glDrawElements(mode, count, GLES20.GL_UNSIGNED_SHORT, indexShortBuffer);
+      GLES20.glDrawElements(mode, count, GLES20.GL_UNSIGNED_SHORT, indexBuffer);
    }
 
 
