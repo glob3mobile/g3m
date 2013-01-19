@@ -8,18 +8,14 @@ import org.glob3.mobile.generated.IFloatBuffer;
 import org.glob3.mobile.generated.IGLTextureId;
 import org.glob3.mobile.generated.IGLUniformID;
 import org.glob3.mobile.generated.IImage;
-import org.glob3.mobile.generated.IIntBuffer;
 import org.glob3.mobile.generated.INativeGL;
+import org.glob3.mobile.generated.IShortBuffer;
 import org.glob3.mobile.generated.MutableMatrix44D;
 import org.glob3.mobile.generated.ShaderProgram;
 import org.glob3.mobile.generated.ShaderType;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArrayInteger;
-//import org.glob3.mobile.generated.IGLProgramId;
-
-
-//import org.glob3.mobile.generated.IGLProgramId;
 
 
 public final class NativeGL_WebGL
@@ -205,20 +201,18 @@ public final class NativeGL_WebGL
    @Override
    public native void drawElements(final int mode,
                                    final int count,
-                                   final IIntBuffer indices) /*-{
+                                   final IShortBuffer indices) /*-{
+		//debugger;
+
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 
-		// var buffer = gl.createBuffer();
-		var webGLBuffer = indices.@org.glob3.mobile.specific.IntBuffer_WebGL::getWebGLBuffer(Lcom/google/gwt/core/client/JavaScriptObject;)(gl);
+		var webGLBuffer = indices.@org.glob3.mobile.specific.ShortBuffer_WebGL::getWebGLBuffer(Lcom/google/gwt/core/client/JavaScriptObject;)(gl);
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, webGLBuffer);
 
-		var array = indices.@org.glob3.mobile.specific.IntBuffer_WebGL::getBuffer()();
+		var array = indices.@org.glob3.mobile.specific.ShortBuffer_WebGL::getBuffer()();
 		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, array, gl.STATIC_DRAW);
 
-		//TODO CHECK UNSIGNED SHORT
 		gl.drawElements(mode, count, gl.UNSIGNED_SHORT, 0);
-
-		//		gl.deleteBuffer(buffer);
    }-*/;
 
 
