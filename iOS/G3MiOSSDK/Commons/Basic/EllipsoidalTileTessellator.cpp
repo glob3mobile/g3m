@@ -63,7 +63,7 @@ Mesh* EllipsoidalTileTessellator::createMesh(const G3MRenderContext* rc,
     const Vector3D nw = planet->toCartesian(sector.getNW());
     const double skirtHeight = nw.sub(sw).length() * 0.05;
     
-    indices.add(0);
+    indices.add((short) 0);
     int posS = resolution * resolution;
     
     // west side
@@ -107,7 +107,7 @@ Mesh* EllipsoidalTileTessellator::createMesh(const G3MRenderContext* rc,
     }
     
     // last triangle
-    indices.add(0);
+    indices.add((short) 0);
     indices.add((short) (resolution*resolution));
   }
   

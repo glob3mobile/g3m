@@ -58,10 +58,10 @@ Mesh* QuadShape::createMesh(const G3MRenderContext* rc) {
   vertices.add(right, top,    0);
 
   ShortBufferBuilder indices;
-  indices.add(0);
-  indices.add(1);
-  indices.add(2);
-  indices.add(3);
+  indices.add((short) 0);
+  indices.add((short) 1);
+  indices.add((short) 2);
+  indices.add((short) 3);
 
 
   const Vector3D center = Vector3D::zero();

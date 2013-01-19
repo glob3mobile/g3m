@@ -54,8 +54,8 @@ void BusyMeshRenderer::initialize(const G3MContext* context)
   }
 
   // the two last indices
-  indices.add(0);
-  indices.add(1);
+  indices.add((short) 0);
+  indices.add((short) 1);
 
   // create mesh
   _mesh = new IndexedMesh(GLPrimitive::triangleStrip(),
