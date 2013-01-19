@@ -72,10 +72,10 @@ public class QuadShape extends MeshShape
 	vertices.add(right, top, 0);
   
 	ShortBufferBuilder indices = new ShortBufferBuilder();
-	indices.add(0);
-	indices.add(1);
-	indices.add(2);
-	indices.add(3);
+	indices.add((short) 0);
+	indices.add((short) 1);
+	indices.add((short) 2);
+	indices.add((short) 3);
   
   
 	final Vector3D center = Vector3D.zero();

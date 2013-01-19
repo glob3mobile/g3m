@@ -71,8 +71,8 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
 	}
   
 	// the two last indices
-	indices.add(0);
-	indices.add(1);
+	indices.add((short) 0);
+	indices.add((short) 1);
   
 	// create mesh
 	_mesh = new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, null, colors.create());

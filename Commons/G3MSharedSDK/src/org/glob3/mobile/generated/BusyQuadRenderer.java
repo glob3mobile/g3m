@@ -56,10 +56,10 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
 	vertices.add(+halfSize, -halfSize, 0);
   
 	ShortBufferBuilder indices = new ShortBufferBuilder();
-	indices.add(0);
-	indices.add(1);
-	indices.add(2);
-	indices.add(3);
+	indices.add((short) 0);
+	indices.add((short) 1);
+	indices.add((short) 2);
+	indices.add((short) 3);
   
 	FloatBufferBuilderFromCartesian2D texCoords = new FloatBufferBuilderFromCartesian2D();
 	texCoords.add(0, 0);
