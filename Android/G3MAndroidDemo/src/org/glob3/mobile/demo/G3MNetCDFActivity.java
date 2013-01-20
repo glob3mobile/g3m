@@ -267,9 +267,6 @@ public class G3MNetCDFActivity
                         }
 
 
-                        Log.d(G3MNetCDFActivity.this.toString(), "longitude:" + feature.getAsNumber("lon").doubleValue());
-                        Log.d(G3MNetCDFActivity.this.toString(), "latitude:" + feature.getAsNumber("lat").doubleValue());
-
                         _isDone = true;
                      }
 
@@ -308,11 +305,11 @@ public class G3MNetCDFActivity
                }
 
             };
-            //            downloader.requestBuffer(new URL("file:///ACCESS-A.2011020104.nc3.slice10.json", false), 0, TimeInterval.forever(),
-            //                     listener, false);
-
-            downloader.requestBuffer(new URL("file:///test.bson", false), 0, TimeInterval.forever(), listener, false);
-
+            downloader.requestBuffer(new URL("file:///ACCESS-A.2011020104.nc3.slice10.bson", false), 0, TimeInterval.forever(),
+                     listener, false);
+            //
+            //            downloader.requestBuffer(new URL("file:///test.bson", false), 0, TimeInterval.forever(), listener, false);
+            //
 
          }
 
