@@ -176,10 +176,16 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
   int w = (int) [self frame].size.width;
   int h = (int) [self frame].size.height;
   NSLog(@"ResizeViewportEvent: %dx%d", w, h);
-  [self widget]->onResizeViewportEvent(w,h);
 
-  [_renderer resizeFromLayer:(CAEAGLLayer *) self.layer];
-  [self drawView:nil];
+  if ([self widget]) {
+    [self widget]->onResizeViewportEvent(w,h);
+
+    [_renderer resizeFromLayer:(CAEAGLLayer *) self.layer];
+    [self drawView:nil];
+  }
+  else {
+    NSLog(@"Widget is not set");
+  }
 }
 
 //- (NSInteger)animationFrameInterval {
