@@ -1,7 +1,4 @@
-
-
-package org.glob3.mobile.generated;
-
+package org.glob3.mobile.generated; 
 //
 //  Color.hpp
 //  G3MiOSSDK
@@ -11,8 +8,11 @@ package org.glob3.mobile.generated;
 //
 
 
-public class Color {
-  
+
+
+
+public class Color
+{
   private final float _red;
   private final float _green;
   private final float _blue;
@@ -58,7 +58,7 @@ public class Color {
 
 	  if (hex.charAt(0) == '#')
 	  {
-		  hex = hex.substring(0, hex.iterator());
+		  hex = hex.substring(0, 0) + hex.substring(0 + 1);
 	  }
 
 	  String R = hex.substring(0, 2);
@@ -163,4 +163,3 @@ public class Color {
   }
 
 }
->>>>>>> 108542e33da756b69cdcbdc706decbdda4054671

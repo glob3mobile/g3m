@@ -1,7 +1,4 @@
-
-
-package org.glob3.mobile.generated;
-
+package org.glob3.mobile.generated; 
 //
 //  MarksRenderer.cpp
 //  G3MiOSSDK
@@ -19,6 +16,7 @@ package org.glob3.mobile.generated;
 //
 
 
+
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Mark;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
@@ -26,8 +24,8 @@ package org.glob3.mobile.generated;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class MarkTouchListener;
 
-
-public class MarksRenderer extends LeafRenderer {
+public class MarksRenderer extends LeafRenderer
+{
   private final boolean _readyWhenMarksReady;
   private java.util.ArrayList<Mark> _marks = new java.util.ArrayList<Mark>();
 
@@ -284,4 +282,3 @@ public class MarksRenderer extends LeafRenderer {
   }
 
 }
->>>>>>> 108542e33da756b69cdcbdc706decbdda4054671
