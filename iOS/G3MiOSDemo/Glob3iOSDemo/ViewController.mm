@@ -190,19 +190,11 @@ public:
 //                                  NULL)
 //                     );
 
-  builder.setLayerSet(layerSet);
-
-  TilesRenderParameters* parameters = [self createTileRenderParameters];
-  builder.setTileRendererParameters(parameters);
-
-  TileRenderer* tileRenderer = [self createTileRenderer: parameters
-                                               layerSet: layerSet];
-
-  tileRenderer->addVisibleSectorListener(new TestVisibleSectorListener(),
-                                         TimeInterval::fromSeconds(3));
-
-  builder.setTileRenderer(tileRenderer);
-
+  builder.getTileRendererBuilder()->setLayerSet(layerSet);
+  builder.getTileRendererBuilder()->setTileRendererParameters([self createTileRenderParameters]);
+  builder.getTileRendererBuilder()->addVisibleSectorListener(new TestVisibleSectorListener(),
+                                                            TimeInterval::fromSeconds(3));
+  
   Renderer* busyRenderer = new BusyMeshRenderer();
   builder.setBusyRenderer(busyRenderer);
 

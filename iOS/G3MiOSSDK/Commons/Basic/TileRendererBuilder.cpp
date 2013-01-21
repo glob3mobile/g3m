@@ -10,6 +10,8 @@
 #include "WMSLayer.hpp"
 #include "MultiLayerTileTexturizer.hpp"
 #include "EllipsoidalTileTessellator.hpp"
+#include "LayerBuilder.hpp"
+
 
 TileRendererBuilder::TileRendererBuilder() {
   _showStatistics = false;
@@ -39,8 +41,35 @@ TileRenderer* TileRendererBuilder::create() {
                                                 _layerSet,
                                                 _parameters,
                                                 _showStatistics);
-
+  
+  for (int i = 0; i < _visibleSectorListeners.size(); i++) {
+    tileRenderer->addVisibleSectorListener(_visibleSectorListeners[i],
+                                           TimeInterval::fromMilliseconds(_stabilizationMilliSeconds[i]));
+  }
+  
   return tileRenderer;
+}
+
+LayerSet* TileRendererBuilder::createLayerSet() {
+  LayerSet* layerSet = new LayerSet();
+  
+  WMSLayer* bing = LayerBuilder::createBingLayer(true);
+  layerSet->addLayer(bing);
+  
+  return layerSet;
+}
+
+TilesRenderParameters* TileRendererBuilder::createTileRendererParameters() {
+  return TilesRenderParameters::createDefault(_renderDebug,
+                                              _useTilesSplitBudget,
+                                              _forceTopLevelTilesRenderOnStart,
+                                              _incrementalTileQuality);
+}
+
+TileTessellator* TileRendererBuilder::createTileTessellator() {
+  TileTessellator* tileTessellator = new EllipsoidalTileTessellator(_parameters->_tileResolution, true);
+  
+  return tileTessellator;
 }
 
 void TileRendererBuilder::setTileTessellator(TileTessellator *tileTessellator) {
@@ -93,33 +122,8 @@ void TileRendererBuilder::setIncrementalTileQuality(const bool incrementalTileQu
   _incrementalTileQuality = incrementalTileQuality;
 }
 
-LayerSet* TileRendererBuilder::createLayerSet() {
-  LayerSet* layerSet = new LayerSet();
-
-  WMSLayer* bing = new WMSLayer("ve",
-                                URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?", false),
-                                WMS_1_1_0,
-                                Sector::fullSphere(),
-                                "image/jpeg",
-                                "EPSG:4326",
-                                "",
-                                false,
-                                NULL,
-                                TimeInterval::fromDays(30));
-  layerSet->addLayer(bing);
-
-  return layerSet;
-}
-
-TilesRenderParameters* TileRendererBuilder::createTileRendererParameters() {
-  return TilesRenderParameters::createDefault(_renderDebug,
-                                              _useTilesSplitBudget,
-                                              _forceTopLevelTilesRenderOnStart,
-                                              _incrementalTileQuality);
-}
-
-TileTessellator* TileRendererBuilder::createTileTessellator() {
-  TileTessellator* tileTessellator = new EllipsoidalTileTessellator(_parameters->_tileResolution, true);
-
-  return tileTessellator;
+void TileRendererBuilder::addVisibleSectorListener(VisibleSectorListener* listener,
+                                                   const TimeInterval& stabilizationInterval) {
+  _visibleSectorListeners.push_back(listener);
+  _stabilizationMilliSeconds.push_back(stabilizationInterval.milliseconds());
 }
