@@ -317,4 +317,10 @@ public final class MathUtils_Android
       return Double.longBitsToDouble(value);
    }
 
+
+   @Override
+   public int parseIntHex(final String hex) {
+      return Integer.parseInt(hex, 16);
+   }
+
 }

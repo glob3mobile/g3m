@@ -36,9 +36,7 @@ private:
 
   }
     
-  static bool isValidHex(const std::string &hex) {
-      static const std::string allowedChars = "#0123456789abcdefABCDEF";
-      
+  static bool isValidHex(const std::string &hex) {      
       if (hex[0] == '#') {
           if (hex.length() != 7) {
               return false;
@@ -49,11 +47,14 @@ private:
               return false;
           }
       }
-      
-      if (hex.find_first_not_of(allowedChars) != hex.npos) {
-          return false;
-      }
-      
+        
+      #ifdef C_CODE
+      if(hex.find_first_not_of("#0123456789abcdefABCDEF") != hex.npos){ return false;}
+      #endif
+      #ifdef JAVA_CODE
+      if(!hex.matches("^#?([a-f]|[A-F]|[0-9]){3}(([a-f]|[A-F]|[0-9]){3})?$")){ return false;}
+      #endif
+    
       return true;
   }
   
