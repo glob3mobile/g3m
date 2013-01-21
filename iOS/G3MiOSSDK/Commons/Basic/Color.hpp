@@ -64,7 +64,7 @@ private:
       }
       
       if (hex[0] == '#') {
-          hex.erase(hex.begin());
+          hex.erase(0,1);
       }
       
       std::string R = hex.substr(0, 2);
