@@ -29,8 +29,6 @@ public class Color
 
   private static boolean isValidHex(String hex)
   {
-	  final String allowedChars = "#0123456789abcdefABCDEF";
-
 	  if (hex.charAt(0) == '#')
 	  {
 		  if (hex.length() != 7)
@@ -46,10 +44,7 @@ public class Color
 		  }
 	  }
 
-	  if (hex.find_first_not_of(allowedChars) != hex.npos)
-	  {
-		  return false;
-	  }
+	  if(!hex.matches("^#?([a-f]|[A-F]|[0-9]){3}(([a-f]|[A-F]|[0-9]){3})?$")){ return false;}
 
 	  return true;
   }
