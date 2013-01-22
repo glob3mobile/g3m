@@ -16,7 +16,7 @@
 #include "Mark.hpp"
 
 class PanoMarkUserData : public MarkUserData {
-  std::string _name;
+  const std::string _name;
   
 #ifdef C_CODE
   const URL* _url;
@@ -27,12 +27,11 @@ class PanoMarkUserData : public MarkUserData {
   
 public:
   
-  PanoMarkUserData(std::string name, const URL* url){
-    _name = name;
-    _url = url;
-  }
+  PanoMarkUserData(const std::string name, const URL* url):
+  _name(name),
+  _url(url){};
   
-  std::string getName(){
+  const std::string getName(){
     return _name;
   }
   
