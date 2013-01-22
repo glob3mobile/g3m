@@ -20,15 +20,15 @@ package org.glob3.mobile.generated;
 
 public class PanoMarkUserData extends MarkUserData
 {
-  private String _name;
+  private final String _name;
 
   private final URL _url;
 
 
   public PanoMarkUserData(String name, URL url)
   {
-	_name = name;
-	_url = url;
+	  _name = name;
+	  _url = url;
   }
 
   public final String getName()
