@@ -71,26 +71,26 @@ public class ByteBufferIterator
   public final int nextInt32()
   {
 	// LittleEndian
-	byte b1 = nextUInt8();
-	byte b2 = nextUInt8();
-	byte b3 = nextUInt8();
-	byte b4 = nextUInt8();
+	int b1 = nextUInt8() & 0xFF;
+	int b2 = nextUInt8() & 0xFF;
+	int b3 = nextUInt8() & 0xFF;
+	int b4 = nextUInt8() & 0xFF;
   
-	return ((int) b1) + (b2 << 8) + (b3 << 16) + (b4 << 24);
+	return ((int) b1) | ((int) b2 << 8) | ((int) b3 << 16) | ((int) b4 << 24);
   }
   public final long nextInt64()
   {
 	// LittleEndian
-	byte b1 = nextUInt8();
-	byte b2 = nextUInt8();
-	byte b3 = nextUInt8();
-	byte b4 = nextUInt8();
-	byte b5 = nextUInt8();
-	byte b6 = nextUInt8();
-	byte b7 = nextUInt8();
-	byte b8 = nextUInt8();
+	int b1 = nextUInt8() & 0xFF;
+	int b2 = nextUInt8() & 0xFF;
+	int b3 = nextUInt8() & 0xFF;
+	int b4 = nextUInt8() & 0xFF;
+	int b5 = nextUInt8() & 0xFF;
+	int b6 = nextUInt8() & 0xFF;
+	int b7 = nextUInt8() & 0xFF;
+	int b8 = nextUInt8() & 0xFF;
   
-	return ((long) b1) + (b2 << 8) + (b3 << 16) + (b4 << 24) + ((long) b5 << 32) + ((long) b6 << 40) + ((long) b7 << 48) + ((long) b8 << 56);
+	return ((long) b1) | ((long) b2 << 8) | ((long) b3 << 16) | ((long) b4 << 24) | ((long) b5 << 32) | ((long) b6 << 40) | ((long) b7 << 48) | ((long) b8 << 56);
   }
 
   public final IByteBuffer nextBufferUpTo(byte sentinel)

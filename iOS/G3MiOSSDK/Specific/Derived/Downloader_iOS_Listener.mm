@@ -58,7 +58,7 @@
     if (uiImage) {
       IImage* image = new Image_iOS(uiImage, data);
       _cppImageListener->onDownload(url, image);
-      delete image;
+      IFactory::instance()->deleteImage(image);
     }
     else {
       _cppImageListener->onError(url);
@@ -109,7 +109,7 @@
     if (uiImage) {
       IImage* image = new Image_iOS(uiImage, data);
       _cppImageListener->onCanceledDownload(url, image);
-      delete image;
+      IFactory::instance()->deleteImage(image);
     }
   }
 }

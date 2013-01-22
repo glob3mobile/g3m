@@ -22,6 +22,7 @@ import org.glob3.mobile.generated.IMathUtils;
 import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IStringBuilder;
 import org.glob3.mobile.generated.IStringUtils;
+import org.glob3.mobile.generated.ITextUtils;
 import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.PeriodicalTask;
@@ -30,8 +31,8 @@ import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.Touch;
 import org.glob3.mobile.generated.TouchEvent;
 import org.glob3.mobile.generated.TouchEventType;
-import org.glob3.mobile.generated.UserData;
 import org.glob3.mobile.generated.Vector2I;
+import org.glob3.mobile.generated.WidgetUserData;
 
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
@@ -130,8 +131,9 @@ public final class G3MWidget_Android
       final IStringBuilder stringBuilder = new StringBuilder_Android();
       final IMathUtils mathUtils = new MathUtils_Android();
       final IJSONParser jsonParser = new JSONParser_Android();
+      final ITextUtils textUtils = new TextUtils_Android();
 
-      G3MWidget.initSingletons(logger, factory, stringUtils, stringBuilder, mathUtils, jsonParser);
+      G3MWidget.initSingletons(logger, factory, stringUtils, stringBuilder, mathUtils, jsonParser, textUtils);
    }
 
 
@@ -372,7 +374,7 @@ public final class G3MWidget_Android
                           final GInitializationTask initializationTask,
                           final boolean autoDeleteInitializationTask,
                           final ArrayList<PeriodicalTask> periodicalTasks,
-                          final UserData userData) {
+                          final WidgetUserData userData) {
 
       _g3mWidget = G3MWidget.create(//
                getGL(), //
@@ -434,7 +436,7 @@ public final class G3MWidget_Android
    }
 
 
-   public UserData getUserData() {
+   public WidgetUserData getUserData() {
       return getG3MWidget().getUserData();
    }
 

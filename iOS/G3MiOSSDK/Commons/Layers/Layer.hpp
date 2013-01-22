@@ -16,6 +16,7 @@
 #include "Context.hpp"
 #include "URL.hpp"
 #include "TerrainTouchEventListener.hpp"
+#include "TimeInterval.hpp"
 
 class Petition;
 class Tile;
@@ -30,15 +31,22 @@ private:
   LayerSet* _layerSet;
 
   bool _enable;
-
+  
+  const std::string _name;
+  
 protected:
+  const TimeInterval& _timeToCache;
+
   void notifyChanges() const;
   
 public:
-  
-  Layer(LayerCondition* condition) :
+  Layer(LayerCondition* condition,
+          const std::string& name,
+          const TimeInterval& timeToCache) :
   _condition(condition),
+  _name(name),
   _layerSet(NULL),
+  _timeToCache(timeToCache),
   _enable(true)
   {
     
@@ -96,6 +104,8 @@ public:
   }
 
   void setLayerSet(LayerSet* layerSet);
+  
+  const std::string getName();
   
 };
 

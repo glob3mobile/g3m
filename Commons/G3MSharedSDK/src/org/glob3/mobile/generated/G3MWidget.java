@@ -2,7 +2,7 @@ package org.glob3.mobile.generated;
 public class G3MWidget
 {
 
-  public static void initSingletons(ILogger logger, IFactory factory, IStringUtils stringUtils, IStringBuilder stringBuilder, IMathUtils mathUtils, IJSONParser jsonParser)
+  public static void initSingletons(ILogger logger, IFactory factory, IStringUtils stringUtils, IStringBuilder stringBuilder, IMathUtils mathUtils, IJSONParser jsonParser, ITextUtils textUtils)
   {
 	if (ILogger.instance() == null)
 	{
@@ -12,6 +12,7 @@ public class G3MWidget
 	  IStringBuilder.setInstance(stringBuilder);
 	  IMathUtils.setInstance(mathUtils);
 	  IJSONParser.setInstance(jsonParser);
+	  ITextUtils.setInstance(textUtils);
 	}
 	else
 	{
@@ -30,14 +31,14 @@ public class G3MWidget
 	if (_userData != null)
 		_userData.dispose();
   
-	if (_gl != null)
-		_gl.dispose();
 	if (_cameraRenderer != null)
 		_cameraRenderer.dispose();
 	if (_mainRenderer != null)
 		_mainRenderer.dispose();
 	if (_busyRenderer != null)
 		_busyRenderer.dispose();
+	if (_gl != null)
+		_gl.dispose();
 	if (_effectsScheduler != null)
 		_effectsScheduler.dispose();
 	if (_currentCamera != null)
@@ -328,7 +329,7 @@ public class G3MWidget
 	return _nextCamera;
   }
 
-  public final void setUserData(UserData userData)
+  public final void setUserData(WidgetUserData userData)
   {
 	if (_userData != null)
 		_userData.dispose();
@@ -341,8 +342,8 @@ public class G3MWidget
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: UserData* getUserData() const
-  public final UserData getUserData()
+//ORIGINAL LINE: WidgetUserData* getUserData() const
+  public final WidgetUserData getUserData()
   {
 	return _userData;
   }
@@ -470,15 +471,15 @@ public class G3MWidget
 
   private ITimer _renderStatisticsTimer;
 
-  private UserData _userData;
+  private WidgetUserData _userData;
 
   private GInitializationTask _initializationTask;
   private boolean _autoDeleteInitializationTask;
 
   private java.util.ArrayList<PeriodicalTask> _periodicalTasks = new java.util.ArrayList<PeriodicalTask>();
 
-	private int _width;
-	private int _height;
+  private int _width;
+  private int _height;
 
   private void initializeGL()
   {

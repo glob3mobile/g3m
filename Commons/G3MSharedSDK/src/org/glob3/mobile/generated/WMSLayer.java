@@ -23,9 +23,9 @@ public class WMSLayer extends Layer
 
 
 
-  public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector sector, String format, String srs, String style, boolean isTransparent, LayerCondition condition)
+  public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector sector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache)
   {
-	  super(condition);
+	  super(condition, mapLayer, timeToCache);
 	  _mapLayer = mapLayer;
 	  _mapServerURL = mapServerURL;
 	  _mapServerVersion = mapServerVersion;
@@ -41,9 +41,9 @@ public class WMSLayer extends Layer
 
   }
 
-  public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, Sector sector, String format, String srs, String style, boolean isTransparent, LayerCondition condition)
+  public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, Sector sector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache)
   {
-	  super(condition);
+	  super(condition, mapLayer, timeToCache);
 	  _mapLayer = mapLayer;
 	  _mapServerURL = mapServerURL;
 	  _mapServerVersion = mapServerVersion;
@@ -197,7 +197,7 @@ public class WMSLayer extends Layer
 	  req += _extraParameter;
 	}
   
-	Petition petition = new Petition(sector, new URL(req, false));
+	Petition petition = new Petition(sector, new URL(req, false), _timeToCache);
 	petitions.add(petition);
   
 	  return petitions;

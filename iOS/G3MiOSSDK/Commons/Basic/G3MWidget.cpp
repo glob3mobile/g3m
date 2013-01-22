@@ -30,13 +30,15 @@
 #include "OrderedRenderable.hpp"
 #include <math.h>
 #include "GInitializationTask.hpp"
+#include "ITextUtils.hpp"
 
 void G3MWidget::initSingletons(ILogger*            logger,
                                IFactory*           factory,
                                const IStringUtils* stringUtils,
                                IStringBuilder*     stringBuilder,
                                IMathUtils*         mathUtils,
-                               IJSONParser*        jsonParser) {
+                               IJSONParser*        jsonParser,
+                               ITextUtils*         textUtils) {
   if (ILogger::instance() == NULL) {
     ILogger::setInstance(logger);
     IFactory::setInstance(factory);
@@ -44,6 +46,7 @@ void G3MWidget::initSingletons(ILogger*            logger,
     IStringBuilder::setInstance(stringBuilder);
     IMathUtils::setInstance(mathUtils);
     IJSONParser::setInstance(jsonParser);
+    ITextUtils::setInstance(textUtils);
   }
   else {
     ILogger::instance()->logWarning("Singletons already set");
@@ -183,13 +186,13 @@ void G3MWidget::initializeGL() {
 G3MWidget::~G3MWidget() {
   delete _userData;
 
-  delete _gl;
 #ifdef C_CODE
   delete _planet;
 #endif
   delete _cameraRenderer;
   delete _mainRenderer;
   delete _busyRenderer;
+  delete _gl;
   delete _effectsScheduler;
   delete _currentCamera;
   delete _nextCamera;

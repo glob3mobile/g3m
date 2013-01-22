@@ -14,7 +14,8 @@
 #include "Vector3D.hpp"
 #include "Vector2D.hpp"
 #include "INativeGL.hpp"
-#include "IIntBuffer.hpp"
+//#include "IIntBuffer.hpp"
+#include "IShortBuffer.hpp"
 #include "IFactory.hpp"
 #include "FloatBufferBuilderFromCartesian2D.hpp"
 #include "IGLUniformID.hpp"
@@ -34,7 +35,9 @@ public:
 
   //FOR BILLBOARDING
   IGLUniformID* BillBoard;
-  IGLUniformID* ViewPortRatio;
+  IGLUniformID* ViewPortExtent;
+  IGLUniformID* TextureExtent;
+
 
   //FOR COLOR MIXING
   IGLUniformID* FlatColorIntensity;
@@ -54,7 +57,8 @@ public:
 
     //FOR BILLBOARDING
     BillBoard = NULL;
-    ViewPortRatio = NULL;
+    ViewPortExtent = NULL;
+    TextureExtent = NULL;
 
     //FOR COLOR MIXING
     FlatColorIntensity = NULL;
@@ -76,7 +80,8 @@ public:
 
     //FOR BILLBOARDING
     delete BillBoard;
-    delete ViewPortRatio;
+    delete ViewPortExtent;
+    delete TextureExtent;
 
     //FOR COLOR MIXING
     delete FlatColorIntensity;
@@ -105,7 +110,9 @@ int GL::checkedGetAttribLocation(ShaderProgram* program,
   }
   int l = _nativeGL->getAttribLocation(program, name);
   if (l == -1) {
-    ILogger::instance()->logError("Error fetching Attribute, Program = %d, Variable = %s", program, name.c_str());
+    ILogger::instance()->logError("Error fetching Attribute, Program=%s, Variable=\"%s\"",
+                                  program->description().c_str(),
+                                  name.c_str());
     _errorGettingLocationOcurred = true;
   }
   return l;
@@ -118,7 +125,9 @@ IGLUniformID* GL::checkedGetUniformLocation(ShaderProgram* program,
   }
   IGLUniformID* uID = _nativeGL->getUniformLocation(program, name);
   if (!uID->isValid()) {
-    ILogger::instance()->logError("Error fetching Uniform, Program = %d, Variable = %s", program, name.c_str());
+    ILogger::instance()->logError("Error fetching Uniform, Program=%s, Variable=\"%s\"",
+                                  program->description().c_str(),
+                                  name.c_str());
     _errorGettingLocationOcurred = true;
   }
   return uID;
@@ -129,6 +138,11 @@ bool GL::useProgram(ShaderProgram* program) {
     ILogger::instance()->logInfo("GL::useProgram()");
   }
 
+  if (_program == program) {
+    return true;
+  }
+  _program = program;
+  
   // set shaders
   _nativeGL->useProgram(program);
 
@@ -159,8 +173,10 @@ bool GL::useProgram(ShaderProgram* program) {
   _nativeGL->uniform1f(Uniforms.PointSize, 1);
 
   //BILLBOARDS
-  Uniforms.BillBoard     = checkedGetUniformLocation(program, "BillBoard");
-  Uniforms.ViewPortRatio = checkedGetUniformLocation(program, "ViewPortRatio");
+  Uniforms.BillBoard      = checkedGetUniformLocation(program, "BillBoard");
+  Uniforms.ViewPortExtent = checkedGetUniformLocation(program, "ViewPortExtent");
+  Uniforms.TextureExtent  = checkedGetUniformLocation(program, "TextureExtent");
+  
   _nativeGL->uniform1i(Uniforms.BillBoard, 0); //NOT DRAWING BILLBOARD
 
   //FOR FLAT COLOR MIXING
@@ -321,8 +337,20 @@ void GL::vertexPointer(int size,
   }
 }
 
+//void GL::drawElements(int mode,
+//                      IIntBuffer* indices) {
+//  if (_verbose) {
+//    ILogger::instance()->logInfo("GL::drawElements(%d, %s)",
+//                                 mode,
+//                                 indices->description().c_str());
+//  }
+//
+//  _nativeGL->drawElements(mode,
+//                          indices->size(),
+//                          indices);
+//}
 void GL::drawElements(int mode,
-                      IIntBuffer* indices) {
+                      IShortBuffer* indices) {
   if (_verbose) {
     ILogger::instance()->logInfo("GL::drawElements(%d, %s)",
                                  mode,
@@ -351,7 +379,7 @@ void GL::drawArrays(int mode,
 
 int GL::getError() {
   if (_verbose) {
-    ILogger::instance()->logInfo("GL::getError()()");
+    ILogger::instance()->logInfo("GL::getError()");
   }
 
   return _nativeGL->getError();
@@ -417,7 +445,12 @@ void GL::bindTexture(const IGLTextureId* textureId) {
     ILogger::instance()->logInfo("GL::bindTexture()");
   }
 
-  _nativeGL->bindTexture(GLTextureType::texture2D(), textureId);
+  if (textureId == NULL) {
+    ILogger::instance()->logError("Can't bind a NULL texture");
+  }
+  else {
+    _nativeGL->bindTexture(GLTextureType::texture2D(), textureId);
+  }
 }
 
 IFloatBuffer* GL::getBillboardTexCoord() {
@@ -437,29 +470,38 @@ IFloatBuffer* GL::getBillboardTexCoord() {
   return _billboardTexCoord;
 }
 
+void GL::startBillBoardDrawing(int viewPortWidth,
+                               int viewPortHeight) {
+  _nativeGL->uniform1i(Uniforms.BillBoard, 1);
+  _nativeGL->uniform2f(Uniforms.ViewPortExtent, viewPortWidth, viewPortHeight);
+
+  color(1, 1, 1, 1);
+
+  setTextureCoordinates(2, 0, getBillboardTexCoord());
+}
+
+void GL::stopBillBoardDrawing() {
+  _nativeGL->uniform1i(Uniforms.BillBoard, 0);
+}
+
+
 void GL::drawBillBoard(const IGLTextureId* textureId,
                        IFloatBuffer* vertices,
-                       const float viewPortRatio) {
+                       int textureWidth,
+                       int textureHeight) {
   if (_verbose) {
     ILogger::instance()->logInfo("GL::drawBillBoard()");
   }
 
   int TODO_refactor_billboard;
 
-  _nativeGL->uniform1i(Uniforms.BillBoard, 1);
-
-  _nativeGL->uniform1f(Uniforms.ViewPortRatio, viewPortRatio);
-
-  color(1, 1, 1, 1);
+  _nativeGL->uniform2f(Uniforms.TextureExtent, textureWidth, textureHeight);
 
   bindTexture(textureId);
 
   vertexPointer(3, 0, vertices);
-  setTextureCoordinates(2, 0, getBillboardTexCoord());
 
   _nativeGL->drawArrays(GLPrimitive::triangleStrip(), 0, vertices->size() / 3);
-
-  _nativeGL->uniform1i(Uniforms.BillBoard, 0);
 }
 
 void GL::setBlendFuncSrcAlpha() {
@@ -476,22 +518,31 @@ const IGLTextureId* GL::getGLTextureId() {
   }
 
   if (_texturesIdBag.size() == 0) {
-    const int bugdetSize = 256;
+    //const int bugdetSize = 256;
+    const int bugdetSize = 10240;
 
-    ILogger::instance()->logInfo("= Creating %d texturesIds...", bugdetSize);
+    ILogger::instance()->logInfo("= Creating %d texturesIds...",
+                                 bugdetSize);
 
     const std::vector<IGLTextureId*> ids = _nativeGL->genTextures(bugdetSize);
 
-    for (int i = 0; i < bugdetSize; i++) {
+    for (int i = 0; i < ids.size(); i++) {
       _texturesIdBag.push_front(ids[i]);
     }
 
-    _texturesIdAllocationCounter += bugdetSize;
+    _texturesIdAllocationCounter += ids.size();
 
-    ILogger::instance()->logInfo("= Created %d texturesIds (accumulated %d).", bugdetSize, _texturesIdAllocationCounter);
+    ILogger::instance()->logInfo("= Created %d texturesIds (accumulated %d).",
+                                 bugdetSize,
+                                 _texturesIdAllocationCounter);
   }
 
   //  _texturesIdGetCounter++;
+
+  if (_texturesIdBag.size() == 0) {
+    ILogger::instance()->logError("TextureIds bag exhausted");
+    return NULL;
+  }
 
   const IGLTextureId* result = _texturesIdBag.back();
   _texturesIdBag.pop_back();
@@ -512,9 +563,13 @@ void GL::deleteTexture(const IGLTextureId* texture) {
   }
 
   if (texture != NULL) {
-    if ( _nativeGL->deleteTexture(texture) ) {
-      _texturesIdBag.push_back(texture);
-    }
+    //    if ( _nativeGL->deleteTexture(texture) ) {
+    //      _texturesIdBag.push_back(texture);
+    //    }
+
+    int __TESTING_TEXTUREIDs_DELETION;
+    //_nativeGL->deleteTexture(texture);
+    _texturesIdBag.push_back(texture);
 
     //    _texturesIdTakeCounter++;
   }

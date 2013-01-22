@@ -29,7 +29,9 @@ public abstract class IJSONParser
   {
 	if (_instance != null)
 	{
-	  ILogger.instance().logWarning("Warning, IJSONParser instance set two times\n");
+	  ILogger.instance().logWarning("IJSONParser instance already set!");
+	  if (_instance != null)
+		  _instance.dispose();
 	}
 	_instance = parser;
   }

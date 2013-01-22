@@ -139,7 +139,7 @@ void SceneParser::parserJSONWMSLayer(LayerSet* layerSet, const JSONObject* jsonL
                                       "EPSG:4326",
                                       "",
                                       true,
-                                      NULL);
+                                      NULL, TimeInterval::fromDays(30));
     layerSet->addLayer(wmsLayer);
 }
 

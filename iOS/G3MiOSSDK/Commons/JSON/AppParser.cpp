@@ -66,7 +66,7 @@ void AppParser::parseWorldConfiguration(LayerSet* layerSet, MarksRenderer* marks
                                   "EPSG:4326",
                                   "",
                                   false,
-                                  NULL);
+                                  NULL, TimeInterval::fromDays(30));
     layerSet->addLayer(bing);
   }else{
     WMSLayer* osm = new WMSLayer("osm",
@@ -77,7 +77,7 @@ void AppParser::parseWorldConfiguration(LayerSet* layerSet, MarksRenderer* marks
                                  "EPSG:4326",
                                  "",
                                  false,
-                                 NULL);
+                                 NULL, TimeInterval::fromDays(30));
     layerSet->addLayer(osm);
   }
   parseCustomData(marks, jsonWorld->getAsObject(CUSTOMDATA));

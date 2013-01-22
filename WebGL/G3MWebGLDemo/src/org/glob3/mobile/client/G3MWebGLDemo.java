@@ -40,11 +40,12 @@ import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.SimpleCameraConstrainer;
 import org.glob3.mobile.generated.TileRenderer;
 import org.glob3.mobile.generated.TileRendererBuilder;
+import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
-import org.glob3.mobile.generated.UserData;
 import org.glob3.mobile.generated.Vector3D;
 import org.glob3.mobile.generated.WMSLayer;
 import org.glob3.mobile.generated.WMSServerVersion;
+import org.glob3.mobile.generated.WidgetUserData;
 import org.glob3.mobile.specific.Downloader_WebGL;
 import org.glob3.mobile.specific.G3MBuilder_WebGL;
 import org.glob3.mobile.specific.G3MWidget_WebGL;
@@ -100,6 +101,62 @@ public class G3MWebGLDemo
       meshRenderer.addMesh(createPointsMesh(builder.getPlanet()));
       builder.addRenderer(meshRenderer);
 
+
+      final boolean useMarkers = true;
+      if (useMarkers) {
+         // marks renderer
+         final boolean readyWhenMarksReady = false;
+         final MarksRenderer marksRenderer = new MarksRenderer(readyWhenMarksReady);
+
+         marksRenderer.setMarkTouchListener(new MarkTouchListener() {
+            @Override
+            public boolean touchedMark(final Mark mark) {
+               Window.alert("Touched on mark: " + mark.getLabel());
+               return true;
+            }
+         }, true);
+
+
+         final Mark m1 = new Mark( //
+                  "Label", new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false), //
+                  new Geodetic3D(Angle.fromDegrees(28.05), Angle.fromDegrees(-14.36), 0));
+         //m1->addTouchListener(listener);
+         marksRenderer.addMark(m1);
+
+         final Mark m2 = new Mark( //
+                  "Las Palmas", //
+                  new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false), //
+                  new Geodetic3D(Angle.fromDegrees(28.05), Angle.fromDegrees(-15.36), 0), //
+                  false);
+         //m2->addTouchListener(listener);
+         marksRenderer.addMark(m2);
+
+
+         final Mark m3 = new Mark( //
+                  "Washington, DC", //
+                  new Geodetic3D(Angle.fromDegreesMinutesSeconds(38, 53, 42.24), Angle.fromDegreesMinutesSeconds(-77, 2, 10.92),
+                           100), //
+                  0);
+         marksRenderer.addMark(m3);
+
+
+         final boolean randomMarkers = false;
+         if (randomMarkers) {
+            for (int i = 0; i < 500; i++) {
+               final Angle latitude = Angle.fromDegrees((Random.nextInt() % 180) - 90);
+               final Angle longitude = Angle.fromDegrees((Random.nextInt() % 360) - 180);
+               //NSLog(@"lat=%f, lon=%f", latitude.degrees(), longitude.degrees());
+
+               marksRenderer.addMark(new Mark( //
+                        "Random", //
+                        new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false), //
+                        new Geodetic3D(latitude, longitude, 0)));
+            }
+         }
+         builder.addRenderer(marksRenderer);
+      }
+
+
       final String proxy = "";
       final Downloader_WebGL downloader = new Downloader_WebGL(8, 10, proxy);
       builder.setDownloader(downloader);
@@ -135,8 +192,9 @@ public class G3MWebGLDemo
       }
 
       final float lineWidth = 1;
+      final float pointSize = 2;
       final Color flatColor = null;
-      return new DirectMesh(GLPrimitive.points(), true, vertices.getCenter(), vertices.create(), lineWidth, flatColor,
+      return new DirectMesh(GLPrimitive.points(), true, vertices.getCenter(), vertices.create(), lineWidth, pointSize, flatColor,
                colors.create());
    }
 
@@ -188,7 +246,8 @@ public class G3MWebGLDemo
                      "EPSG:4326", //
                      "", //
                      false, //
-                     null);
+                     null, //
+                     TimeInterval.fromDays(30));
             layerSet.addLayer(bing);
          }
          final boolean useOSMLatLon = true;
@@ -216,7 +275,8 @@ public class G3MWebGLDemo
                      "", //
                      false, //
                      // new LevelTileCondition(3, 100));
-                     null);
+                     null, //
+                     TimeInterval.fromDays(30));
             layerSet.addLayer(osm);
          }
 
@@ -230,7 +290,8 @@ public class G3MWebGLDemo
                      "EPSG:4326", //
                      "", //
                      true, //
-                     null);
+                     null, //
+                     TimeInterval.fromDays(30));
             layerSet.addLayer(pnoa);
          }
 
@@ -244,7 +305,8 @@ public class G3MWebGLDemo
                      "EPSG:4326", //
                      "", //
                      true, //
-                     null);
+                     null, //
+                     TimeInterval.fromDays(30));
             layerSet.addLayer(ayto);
          }
 
@@ -254,50 +316,6 @@ public class G3MWebGLDemo
          final TileRenderer tileRenderer = tlBuilder.create();
          mainRenderer.addRenderer(tileRenderer);
 
-         final boolean useMarkers = true;
-         if (useMarkers) {
-            // marks renderer
-            final boolean readyWhenMarksReady = false;
-            final MarksRenderer marksRenderer = new MarksRenderer(readyWhenMarksReady);
-
-            marksRenderer.setMarkTouchListener(new MarkTouchListener() {
-               @Override
-               public boolean touchedMark(final Mark mark) {
-                  Window.alert("Touched on mark: " + mark.getName());
-                  return true;
-               }
-            }, true);
-
-
-            final Mark m1 = new Mark(//
-                     "Fuerteventura", //
-                     new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false), //
-                     new Geodetic3D(Angle.fromDegrees(28.05), Angle.fromDegrees(-14.36), 0));
-            //m1->addTouchListener(listener);
-            marksRenderer.addMark(m1);
-
-            final Mark m2 = new Mark( //
-                     "Las Palmas", //
-                     new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false), //
-                     new Geodetic3D(Angle.fromDegrees(28.05), Angle.fromDegrees(-15.36), 0));
-            //m2->addTouchListener(listener);
-            marksRenderer.addMark(m2);
-
-            final boolean randomMarkers = false;
-            if (randomMarkers) {
-               for (int i = 0; i < 500; i++) {
-                  final Angle latitude = Angle.fromDegrees((Random.nextInt() % 180) - 90);
-                  final Angle longitude = Angle.fromDegrees((Random.nextInt() % 360) - 180);
-                  //NSLog(@"lat=%f, lon=%f", latitude.degrees(), longitude.degrees());
-
-                  marksRenderer.addMark(new Mark( //
-                           "Random", //
-                           new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false), //
-                           new Geodetic3D(latitude, longitude, 0)));
-               }
-            }
-            mainRenderer.addRenderer(marksRenderer);
-         }
 
          final boolean useQuadShapes = true;
          if (useQuadShapes) {
@@ -360,7 +378,7 @@ public class G3MWebGLDemo
 
          final ArrayList<PeriodicalTask> periodicalTasks = new ArrayList<PeriodicalTask>();
 
-         final UserData userData = null;
+         final WidgetUserData userData = null;
 
 
          _widget.initWidget(//

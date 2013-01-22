@@ -11,20 +11,20 @@ public class TexturesHandler
 //ORIGINAL LINE: void showHolders(const String& message) const
   private void showHolders(String message)
   {
-  //  if (false) {
-  //    std::string holdersString = ">>>> " + message + ", Holders=(";
-  //    for (int i = 0; i < _textureHolders.size(); i++) {
-  //      TextureHolder* holder = _textureHolders[i];
-  //
-  //      if (i > 0) {
-  //        holdersString += ", ";
-  //      }
-  //      holdersString += holder->description();
-  //    }
-  //    holdersString += ")";
-  //
-  //    ILogger::instance()->logInfo("%s\n", holdersString.c_str() );
-  //  }
+	//  if (false) {
+	//    std::string holdersString = ">>>> " + message + ", Holders=(";
+	//    for (int i = 0; i < _textureHolders.size(); i++) {
+	//      TextureHolder* holder = _textureHolders[i];
+	//
+	//      if (i > 0) {
+	//        holdersString += ", ";
+	//      }
+	//      holdersString += holder->description();
+	//    }
+	//    holdersString += ")";
+	//
+	//    ILogger::instance()->logInfo("%s\n", holdersString.c_str() );
+	//  }
   }
 
 

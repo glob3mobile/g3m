@@ -35,6 +35,7 @@ public abstract class AbstractMesh extends Mesh
   protected IFloatBuffer _colors;
   protected final float _colorsIntensity;
   protected final float _lineWidth;
+  protected final float _pointSize;
 
   protected Extent _extent;
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -83,9 +84,7 @@ public abstract class AbstractMesh extends Mesh
 	return new Box(new Vector3D(minx, miny, minz), new Vector3D(maxx, maxy, maxz));
   }
 
-//  GLState*          _glState;
-
-  protected AbstractMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, Color flatColor, IFloatBuffer colors, float colorsIntensity)
+  protected AbstractMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors, float colorsIntensity)
   {
 	  _primitive = primitive;
 	  _owner = owner;
@@ -97,6 +96,7 @@ public abstract class AbstractMesh extends Mesh
 	  _center = new Vector3D(center);
 	  _translationMatrix = (center.isNan() || center.isZero()) ? null : new MutableMatrix44D(MutableMatrix44D.createTranslationMatrix(center));
 	  _lineWidth = lineWidth;
+	  _pointSize = pointSize;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -129,6 +129,7 @@ public abstract class AbstractMesh extends Mesh
 	GLState state = new GLState(parentState);
 	state.enableVerticesPosition();
 	state.setLineWidth(_lineWidth);
+	state.setPointSize(_pointSize);
 	if (_colors != null)
 	{
 	  state.enableVertexColor(_colors, _colorsIntensity);

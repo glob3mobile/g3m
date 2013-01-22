@@ -71,7 +71,9 @@ private:
   float _flatColorIntensity;
   float _lineWidth;
   float _pointSize;
-  
+
+  ShaderProgram* _program;
+
   inline void loadModelView();
 
   const IGLTextureId* getGLTextureId();
@@ -82,10 +84,10 @@ private:
                                const std::string& name);
   IGLUniformID* checkedGetUniformLocation(ShaderProgram* program,
                                           const std::string& name);
-  
+
   IFloatBuffer* _billboardTexCoord;
   IFloatBuffer* getBillboardTexCoord();
-  
+
   const bool _verbose;
 
 public:
@@ -124,7 +126,8 @@ public:
   _flatColorIntensity(0),
   _billboardTexCoord(NULL),
   _lineWidth(1),
-  _pointSize(1)
+  _pointSize(1),
+  _program(NULL)
   {
     //Init Constants
     GLCullFace::init(_nativeGL);
@@ -141,13 +144,13 @@ public:
     GLVariable::init(_nativeGL);
     GLError::init(_nativeGL);
   }
-  
+
   void verticesColors(bool v);
-  
+
   void clearScreen(float r, float g, float b, float a);
 
   void color(float r, float g, float b, float a);
-  
+
   void pushMatrix();
 
   void popMatrix();
@@ -160,28 +163,32 @@ public:
                      int stride,
                      IFloatBuffer* vertices);
 
+//  void drawElements(int mode,
+//                    IIntBuffer* indices);
   void drawElements(int mode,
-                    IIntBuffer* indices);
+                    IShortBuffer* indices);
 
   void drawArrays(int mode,
                   int first,
                   int count);
 
   void setProjection(const MutableMatrix44D &projection);
-  
+
   bool useProgram(ShaderProgram* program);
-  
+
   void enablePolygonOffset(float factor, float units);
 
   void disablePolygonOffset();
 
-//  void lineWidth(float width);
-//
-//  void pointSize(float size);
+  //  void lineWidth(float width);
+  //
+  //  void pointSize(float size);
 
   int getError();
 
-  const IGLTextureId* uploadTexture(const IImage* image, int format, bool generateMipmap);
+  const IGLTextureId* uploadTexture(const IImage* image,
+                                    int format,
+                                    bool generateMipmap);
 
   void setTextureCoordinates(int size,
                              int stride,
@@ -189,12 +196,17 @@ public:
 
   void bindTexture(const IGLTextureId* textureId);
 
+  void startBillBoardDrawing(int viewPortWidth,
+                             int viewPortHeight);
+  void stopBillBoardDrawing();
+
   void drawBillBoard(const IGLTextureId* textureId,
                      IFloatBuffer* vertices,
-                     const float viewPortRatio);
+                     int textureWidth,
+                     int textureHeight);
 
   void deleteTexture(const IGLTextureId* textureId);
-  
+
   void transformTexCoords(float scaleX,
                           float scaleY,
                           float translationX,
@@ -250,12 +262,12 @@ public:
                 col.getBlue(),
                 col.getAlpha());
   }
-  
+
   /*void enableVertexFlatColor(const Color& c, float intensity) {
    if (_verbose) ILogger::instance()->logInfo("GL::enableVertexFlatColor()");
-    enableVertexFlatColor(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha(), intensity);
-  }*/
-  
+   enableVertexFlatColor(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha(), intensity);
+   }*/
+
   void setBlendFuncSrcAlpha();
 
   void getViewport(int v[]) {
@@ -273,19 +285,19 @@ public:
     delete _textureCoordinates;
     delete _colors;
   }
-  
+
   int createProgram() const {
-    return _nativeGL->createProgram();  
+    return _nativeGL->createProgram();
   }
-    
+
   void attachShader(int program, int shader) const {
     _nativeGL->attachShader(program, shader);
   }
-  
+
   int createShader(ShaderType type) const {
     return _nativeGL->createShader(type);
   }
-  
+
   bool compileShader(int shader, const std::string& source) const {
     return _nativeGL->compileShader(shader, source);
   }
@@ -293,19 +305,19 @@ public:
   void deleteShader(int shader) const {
     _nativeGL->deleteShader(shader);
   }
-  
+
   void printShaderInfoLog(int shader) const {
     _nativeGL->printShaderInfoLog(shader);
   }
-  
+
   bool linkProgram(int program) const {
     return _nativeGL->linkProgram(program);
   }
-  
+
   void printProgramInfoLog(int program) const {
     _nativeGL->linkProgram(program);
   }
-  
+
   void deleteProgram(int program) const  {
     _nativeGL->deleteProgram(program);
   }

@@ -23,6 +23,7 @@ public:
              const Vector3D& center,
              IFloatBuffer* vertices,
              float lineWidth,
+             float pointSize,
              Color* flatColor = NULL,
              IFloatBuffer* colors = NULL,
              const float colorsIntensity = 0.0f);

@@ -13,6 +13,30 @@
 #include "ILogger.hpp"
 #include "JSONObject.hpp"
 #include "MarkTouchListener.hpp"
+#include "Mark.hpp"
+
+class PanoMarkUserData : public MarkUserData {
+  std::string _name;
+  const URL* _url;
+public:
+  
+  PanoMarkUserData(std::string name, const URL* url){
+    _name = name;
+    _url = url;
+  }
+  
+  std::string getName(){
+    return _name;
+  }
+  
+  const URL* getUrl(){
+    return _url;
+  }
+  
+  ~PanoMarkUserData() {
+    delete _url;
+  }
+};
 
 class MarksRenderer;
 class PanoDownloadListener : public IBufferDownloadListener {

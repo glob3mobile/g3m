@@ -72,6 +72,8 @@ package org.glob3.mobile.generated;
 //class CameraRenderer;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IStorage;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class ITextUtils;
 
 
 
@@ -80,11 +82,11 @@ package org.glob3.mobile.generated;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class GLState;
 
-public class UserData
+public class WidgetUserData
 {
   private G3MWidget _widget;
 
-  public UserData()
+  public WidgetUserData()
   {
 	  _widget = null;
 

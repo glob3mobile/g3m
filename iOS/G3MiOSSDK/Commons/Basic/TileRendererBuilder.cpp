@@ -104,19 +104,18 @@ LayerSet* TileRendererBuilder::createLayerSet() {
                                 "EPSG:4326",
                                 "",
                                 false,
-                                NULL);
+                                NULL,
+                                TimeInterval::fromDays(30));
   layerSet->addLayer(bing);
 
   return layerSet;
 }
 
 TilesRenderParameters* TileRendererBuilder::createTileRendererParameters() {
-  TilesRenderParameters* parameters = TilesRenderParameters::createDefault(_renderDebug,
-                                                                           _useTilesSplitBudget,
-                                                                           _forceTopLevelTilesRenderOnStart,
-                                                                           _incrementalTileQuality);
-
-  return parameters;
+  return TilesRenderParameters::createDefault(_renderDebug,
+                                              _useTilesSplitBudget,
+                                              _forceTopLevelTilesRenderOnStart,
+                                              _incrementalTileQuality);
 }
 
 TileTessellator* TileRendererBuilder::createTileTessellator() {

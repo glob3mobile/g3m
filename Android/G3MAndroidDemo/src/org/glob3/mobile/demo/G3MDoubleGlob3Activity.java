@@ -7,6 +7,7 @@ package org.glob3.mobile.demo;
 
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.Sector;
+import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.WMSLayer;
 import org.glob3.mobile.generated.WMSServerVersion;
@@ -55,7 +56,8 @@ public class G3MDoubleGlob3Activity
                "EPSG:4326", //
                "", //
                false, //
-               null);
+               null, //
+               TimeInterval.fromDays(30));
       layerSet.addLayer(osm);
 
       g3mBuilderDown.setLayerSet(layerSet);

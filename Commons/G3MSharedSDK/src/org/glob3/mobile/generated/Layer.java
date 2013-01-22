@@ -36,6 +36,10 @@ public abstract class Layer
 
   private boolean _enable;
 
+  private final String _name;
+
+  protected final TimeInterval _timeToCache;
+
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: void notifyChanges() const
   protected final void notifyChanges()
@@ -50,11 +54,12 @@ public abstract class Layer
 	}
   }
 
-
-  public Layer(LayerCondition condition)
+  public Layer(LayerCondition condition, String name, TimeInterval timeToCache)
   {
 	  _condition = condition;
+	  _name = name;
 	  _layerSet = null;
+	  _timeToCache = new TimeInterval(timeToCache);
 	  _enable = true;
 
   }
@@ -156,6 +161,11 @@ public abstract class Layer
 	  ILogger.instance().logError("LayerSet already set.");
 	}
 	_layerSet = layerSet;
+  }
+
+  public final String getName()
+  {
+	return _name;
   }
 
 }

@@ -72,6 +72,8 @@ public class GL
   private float _lineWidth;
   private float _pointSize;
 
+  private ShaderProgram _program;
+
   private void loadModelView()
   {
 	if (_verbose)
@@ -91,23 +93,30 @@ public class GL
   
 	if (_texturesIdBag.size() == 0)
 	{
-	  final int bugdetSize = 256;
+	  //const int bugdetSize = 256;
+	  final int bugdetSize = 10240;
   
 	  ILogger.instance().logInfo("= Creating %d texturesIds...", bugdetSize);
   
 	  final java.util.ArrayList<IGLTextureId> ids = _nativeGL.genTextures(bugdetSize);
   
-	  for (int i = 0; i < bugdetSize; i++)
+	  for (int i = 0; i < ids.size(); i++)
 	  {
 		_texturesIdBag.addFirst(ids.get(i));
 	  }
   
-	  _texturesIdAllocationCounter += bugdetSize;
+	  _texturesIdAllocationCounter += ids.size();
   
 	  ILogger.instance().logInfo("= Created %d texturesIds (accumulated %d).", bugdetSize, _texturesIdAllocationCounter);
 	}
   
 	//  _texturesIdGetCounter++;
+  
+	if (_texturesIdBag.size() == 0)
+	{
+	  ILogger.instance().logError("TextureIds bag exhausted");
+	  return null;
+	}
   
 	final IGLTextureId result = _texturesIdBag.getLast();
 	_texturesIdBag.removeLast();
@@ -133,7 +142,7 @@ public class GL
 	int l = _nativeGL.getAttribLocation(program, name);
 	if (l == -1)
 	{
-	  ILogger.instance().logError("Error fetching Attribute, Program = %d, Variable = %s", program, name);
+	  ILogger.instance().logError("Error fetching Attribute, Program=%s, Variable=\"%s\"", program.description(), name);
 	  _errorGettingLocationOcurred = true;
 	}
 	return l;
@@ -147,7 +156,7 @@ public class GL
 	IGLUniformID uID = _nativeGL.getUniformLocation(program, name);
 	if (!uID.isValid())
 	{
-	  ILogger.instance().logError("Error fetching Uniform, Program = %d, Variable = %s", program, name);
+	  ILogger.instance().logError("Error fetching Uniform, Program=%s, Variable=\"%s\"", program.description(), name);
 	  _errorGettingLocationOcurred = true;
 	}
 	return uID;
@@ -212,6 +221,7 @@ public class GL
 	  _billboardTexCoord = null;
 	  _lineWidth = 1F;
 	  _pointSize = 1F;
+	  _program = null;
 	//Init Constants
 	GLCullFace.init(_nativeGL);
 	GLBufferType.init(_nativeGL);
@@ -322,7 +332,22 @@ public class GL
 	}
   }
 
-  public final void drawElements(int mode, IIntBuffer indices)
+//  void drawElements(int mode,
+//                    IIntBuffer* indices);
+
+  //void GL::drawElements(int mode,
+  //                      IIntBuffer* indices) {
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("GL::drawElements(%d, %s)",
+  //                                 mode,
+  //                                 indices->description().c_str());
+  //  }
+  //
+  //  _nativeGL->drawElements(mode,
+  //                          indices->size(),
+  //                          indices);
+  //}
+  public final void drawElements(int mode, IShortBuffer indices)
   {
 	if (_verbose)
 	{
@@ -359,6 +384,12 @@ public class GL
 	  ILogger.instance().logInfo("GL::useProgram()");
 	}
   
+	if (_program == program)
+	{
+	  return true;
+	}
+	_program = program;
+  
 	// set shaders
 	_nativeGL.useProgram(program);
   
@@ -390,7 +421,9 @@ public class GL
   
 	//BILLBOARDS
 	GlobalMembersGL.Uniforms.BillBoard = checkedGetUniformLocation(program, "BillBoard");
-	GlobalMembersGL.Uniforms.ViewPortRatio = checkedGetUniformLocation(program, "ViewPortRatio");
+	GlobalMembersGL.Uniforms.ViewPortExtent = checkedGetUniformLocation(program, "ViewPortExtent");
+	GlobalMembersGL.Uniforms.TextureExtent = checkedGetUniformLocation(program, "TextureExtent");
+  
 	_nativeGL.uniform1i(GlobalMembersGL.Uniforms.BillBoard, 0); //NOT DRAWING BILLBOARD
   
 	//FOR FLAT COLOR MIXING
@@ -424,15 +457,15 @@ public class GL
 	_nativeGL.disable(GLFeature.polygonOffsetFill());
   }
 
-//  void lineWidth(float width);
-//
-//  void pointSize(float size);
+  //  void lineWidth(float width);
+  //
+  //  void pointSize(float size);
 
   public final int getError()
   {
 	if (_verbose)
 	{
-	  ILogger.instance().logInfo("GL::getError()()");
+	  ILogger.instance().logInfo("GL::getError()");
 	}
   
 	return _nativeGL.getError();
@@ -494,10 +527,31 @@ public class GL
 	  ILogger.instance().logInfo("GL::bindTexture()");
 	}
   
-	_nativeGL.bindTexture(GLTextureType.texture2D(), textureId);
+	if (textureId == null)
+	{
+	  ILogger.instance().logError("Can't bind a NULL texture");
+	}
+	else
+	{
+	  _nativeGL.bindTexture(GLTextureType.texture2D(), textureId);
+	}
   }
 
-  public final void drawBillBoard(IGLTextureId textureId, IFloatBuffer vertices, float viewPortRatio)
+  public final void startBillBoardDrawing(int viewPortWidth, int viewPortHeight)
+  {
+	_nativeGL.uniform1i(GlobalMembersGL.Uniforms.BillBoard, 1);
+	_nativeGL.uniform2f(GlobalMembersGL.Uniforms.ViewPortExtent, viewPortWidth, viewPortHeight);
+  
+	color(1, 1, 1, 1);
+  
+	setTextureCoordinates(2, 0, getBillboardTexCoord());
+  }
+  public final void stopBillBoardDrawing()
+  {
+	_nativeGL.uniform1i(GlobalMembersGL.Uniforms.BillBoard, 0);
+  }
+
+  public final void drawBillBoard(IGLTextureId textureId, IFloatBuffer vertices, int textureWidth, int textureHeight)
   {
 	if (_verbose)
 	{
@@ -506,20 +560,13 @@ public class GL
   
 	int TODO_refactor_billboard;
   
-	_nativeGL.uniform1i(GlobalMembersGL.Uniforms.BillBoard, 1);
-  
-	_nativeGL.uniform1f(GlobalMembersGL.Uniforms.ViewPortRatio, viewPortRatio);
-  
-	color(1, 1, 1, 1);
+	_nativeGL.uniform2f(GlobalMembersGL.Uniforms.TextureExtent, textureWidth, textureHeight);
   
 	bindTexture(textureId);
   
 	vertexPointer(3, 0, vertices);
-	setTextureCoordinates(2, 0, getBillboardTexCoord());
   
 	_nativeGL.drawArrays(GLPrimitive.triangleStrip(), 0, vertices.size() / 3);
-  
-	_nativeGL.uniform1i(GlobalMembersGL.Uniforms.BillBoard, 0);
   }
 
   public final void deleteTexture(IGLTextureId texture)
@@ -531,10 +578,13 @@ public class GL
   
 	if (texture != null)
 	{
-	  if (_nativeGL.deleteTexture(texture))
-	  {
-		_texturesIdBag.addLast(texture);
-	  }
+	  //    if ( _nativeGL->deleteTexture(texture) ) {
+	  //      _texturesIdBag.push_back(texture);
+	  //    }
+  
+	  int __TESTING_TEXTUREIDs_DELETION;
+	  //_nativeGL->deleteTexture(texture);
+	  _texturesIdBag.addLast(texture);
   
 	  //    _texturesIdTakeCounter++;
 	}
@@ -605,8 +655,8 @@ public class GL
 
   /*void enableVertexFlatColor(const Color& c, float intensity) {
    if (_verbose) ILogger::instance()->logInfo("GL::enableVertexFlatColor()");
-	enableVertexFlatColor(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha(), intensity);
-  }*/
+   enableVertexFlatColor(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha(), intensity);
+   }*/
 
   public final void setBlendFuncSrcAlpha()
   {

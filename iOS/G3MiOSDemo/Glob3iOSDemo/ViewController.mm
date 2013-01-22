@@ -53,10 +53,25 @@
 #include "FloatBufferBuilderFromGeodetic.hpp"
 #include "FloatBufferBuilderFromColor.hpp"
 #include "DirectMesh.hpp"
-#include "IJSONParser.hpp"
-#include "JSONGenerator.hpp"
-#include "BSONGenerator.hpp"
+//#include "IJSONParser.hpp"
+//#include "JSONGenerator.hpp"
+//#include "BSONGenerator.hpp"
 #include "BSONParser.hpp"
+//#include "ITextUtils.hpp"
+#include "Mark.hpp"
+#include "MarkTouchListener.hpp"
+#include "JSONBaseObject.hpp"
+#include "VisibleSectorListener.hpp"
+#include "LayerBuilder.hpp"
+
+
+class TestVisibleSectorListener : public VisibleSectorListener {
+public:
+  void onVisibleSectorChange(const Sector* visibleSector) {
+    ILogger::instance()->logInfo("VisibleSector=%s", visibleSector->description().c_str());
+  }
+};
+
 
 #include "Mark.hpp"
 #include "MarkTouchListener.hpp"
@@ -78,7 +93,7 @@
   [super viewDidLoad];
 
   // initialize a customized widget without using a builder
-  [[self G3MWidget] initSingletons];
+  //[[self G3MWidget] initSingletons];
   // [self initWithoutBuilder];
 
   // initizalize a default widget by using a builder
@@ -146,38 +161,54 @@
 
 - (void) initDefaultWithBuilder
 {
-  G3MBuilder_iOS* builder = new G3MBuilder_iOS([self G3MWidget]);
+  G3MBuilder_iOS builder([self G3MWidget]);
 
   // initialization
-  builder->initializeWidget();
+  builder.initializeWidget();
 }
 
 - (void) initCustomizedWithBuilder
 {
-  G3MBuilder_iOS* builder = new G3MBuilder_iOS([self G3MWidget]);
+  G3MBuilder_iOS builder([self G3MWidget]);
 
   SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
-  builder->addCameraConstraint(scc);
+  builder.addCameraConstraint(scc);
 
-  builder->setCameraRenderer([self createCameraRenderer]);
+  builder.setCameraRenderer([self createCameraRenderer]);
 
-  builder->setPlanet(Planet::createEarth());
+  builder.setPlanet(Planet::createEarth());
 
   Color* bgColor = Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1);
-  builder->setBackgroundColor(bgColor);
+  builder.setBackgroundColor(bgColor);
 
   LayerSet* layerSet = [self createLayerSet];
-  builder->setLayerSet(layerSet);
+
+//  layerSet->addLayer(new WMSLayer("precipitation", //
+//                                  URL("http://wms.openweathermap.org/service", false), //
+//                                  WMS_1_1_0, //
+//                                  Sector::fromDegrees(-85.05, -180.0, 85.05, 180.0), //
+//                                  "image/png", //
+//                                  "EPSG:4326", //
+//                                  "", //
+//                                  true, //
+//                                  NULL)
+//                     );
+
+  builder.setLayerSet(layerSet);
 
   TilesRenderParameters* parameters = [self createTileRenderParameters];
-  builder->setTileRendererParameters(parameters);
+  builder.setTileRendererParameters(parameters);
 
   TileRenderer* tileRenderer = [self createTileRenderer: parameters
                                                layerSet: layerSet];
-  builder->setTileRenderer(tileRenderer);
+
+  tileRenderer->addVisibleSectorListener(new TestVisibleSectorListener(),
+                                         TimeInterval::fromSeconds(3));
+
+  builder.setTileRenderer(tileRenderer);
 
   Renderer* busyRenderer = new BusyMeshRenderer();
-  builder->setBusyRenderer(busyRenderer);
+  builder.setBusyRenderer(busyRenderer);
 
   //    DummyRenderer* dum = new DummyRenderer();
   //    builder->addRenderer(dum);
@@ -185,37 +216,37 @@
   //    builder->addRenderer(spr);
 
   MarksRenderer* marksRenderer = [self createMarksRenderer];
-  builder->addRenderer(marksRenderer);
+  builder.addRenderer(marksRenderer);
 
   ShapesRenderer* shapesRenderer = [self createShapesRenderer];
-  builder->addRenderer(shapesRenderer);
+  builder.addRenderer(shapesRenderer);
 
   GEORenderer* geoRenderer = [self createGEORenderer];
-  builder->addRenderer(geoRenderer);
+  builder.addRenderer(geoRenderer);
 
   MeshRenderer* meshRenderer = new MeshRenderer();
-  builder->addRenderer( meshRenderer );
+  builder.addRenderer( meshRenderer );
 
-  meshRenderer->addMesh([self createPointsMesh: builder->getPlanet() ]);
+  meshRenderer->addMesh([self createPointsMesh: builder.getPlanet() ]);
 
   GInitializationTask* initializationTask = [self createSampleInitializationTask: shapesRenderer
                                                                      geoRenderer: geoRenderer];
-  builder->setInitializationTask(initializationTask, true);
+  builder.setInitializationTask(initializationTask, true);
 
-  PeriodicalTask* periodicalTask = [self createSamplePeriodicalTask:(builder)];
-  builder->addPeriodicalTask(periodicalTask);
+  PeriodicalTask* periodicalTask = [self createSamplePeriodicalTask: &builder];
+  builder.addPeriodicalTask(periodicalTask);
 
-  const bool logFPS = true;
-  builder->setLogFPS(logFPS);
+  const bool logFPS = false;
+  builder.setLogFPS(logFPS);
 
   const bool logDownloaderStatistics = false;
-  builder->setLogDownloaderStatistics(logDownloaderStatistics);
+  builder.setLogDownloaderStatistics(logDownloaderStatistics);
 
-  UserData* userData = NULL;
-  builder->setUserData(userData);
+  WidgetUserData* userData = NULL;
+  builder.setUserData(userData);
 
   // initialization
-  builder->initializeWidget();
+  builder.initializeWidget();
 }
 
 - (Mesh*) createPointsMesh: (const Planet*)planet
@@ -246,13 +277,15 @@
     }
   }
 
-  float lineWidth = 1;
+  const float lineWidth = 1;
+  const float pointSize = 2;
   Color* flatColor = NULL;
   return new DirectMesh(GLPrimitive::points(),
                         true,
                         vertices.getCenter(),
                         vertices.create(),
                         lineWidth,
+                        pointSize,
                         flatColor,
                         colors.create());
 }
@@ -294,7 +327,8 @@
                                         "EPSG:4326",
                                         "",
                                         false,
-                                        new LevelTileCondition(0, 6));
+                                        new LevelTileCondition(0, 6),
+                                        TimeInterval::fromDays(30));
     layerSet->addLayer(blueMarble);
 
     WMSLayer* i3Landsat = new WMSLayer("esat",
@@ -305,7 +339,8 @@
                                        "EPSG:4326",
                                        "",
                                        false,
-                                       new LevelTileCondition(7, 100));
+                                       new LevelTileCondition(7, 100),
+                                       TimeInterval::fromDays(30));
     layerSet->addLayer(i3Landsat);
   }
 
@@ -322,16 +357,19 @@
 
   bool useBing = true;
   if (useBing) {
-    WMSLayer* bing = new WMSLayer("ve",
-                                  URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?", false),
-                                  WMS_1_1_0,
-                                  Sector::fullSphere(),
-                                  "image/jpeg",
-                                  "EPSG:4326",
-                                  "",
-                                  false,
-                                  NULL);
-    bing->setEnable(true);
+    bool enabled = true;
+    WMSLayer* bing = LayerBuilder::createBingLayer(enabled);
+//    WMSLayer* bing = new WMSLayer("ve",
+//                                  URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?", false),
+//                                  WMS_1_1_0,
+//                                  Sector::fullSphere(),
+//                                  "image/jpeg",
+//                                  "EPSG:4326",
+//                                  "",
+//                                  false,
+//                                  NULL,
+//                                  TimeInterval::fromDays(30));
+//    bing->setEnable(true);
     layerSet->addLayer(bing);
   }
 
@@ -356,7 +394,8 @@
                                  "EPSG:4326",
                                  "",
                                  false,
-                                 NULL);
+                                 NULL,
+                                 TimeInterval::fromDays(30));
     osm->setEnable(false);
     layerSet->addLayer(osm);
 
@@ -372,7 +411,8 @@
                                   "EPSG:4326",
                                   "",
                                   true,
-                                  NULL);
+                                  NULL,
+                                  TimeInterval::fromDays(30));
     layerSet->addLayer(pnoa);
   }
 
@@ -386,7 +426,8 @@
                                   "EPSG:4326",
                                   "",
                                   true,
-                                  NULL);
+                                  NULL,
+                                  TimeInterval::fromDays(30));
     layerSet->addLayer(ayto);
 
   }
@@ -424,12 +465,12 @@
   const bool renderDebug = false;
   const bool useTilesSplitBudget = true;
   const bool forceTopLevelTilesRenderOnStart = true;
-  const bool incrementalTileQuality = true;
-  TilesRenderParameters* parameters = TilesRenderParameters::createDefault(renderDebug,
-                                                                           useTilesSplitBudget,
-                                                                           forceTopLevelTilesRenderOnStart,
-                                                                           incrementalTileQuality);
-  return parameters;
+  const bool incrementalTileQuality = false;
+
+  return TilesRenderParameters::createDefault(renderDebug,
+                                              useTilesSplitBudget,
+                                              forceTopLevelTilesRenderOnStart,
+                                              incrementalTileQuality);
 }
 
 - (TileRenderer*) createTileRenderer: (TilesRenderParameters*) parameters
@@ -451,7 +492,7 @@
   class TestMarkTouchListener : public MarkTouchListener {
   public:
     bool touchedMark(Mark* mark) {
-      NSString* message = [NSString stringWithFormat: @"Touched on mark \"%s\"", mark->getName().c_str()];
+      NSString* message = [NSString stringWithFormat: @"Touched on mark \"%s\"", mark->getLabel().c_str()];
 
       UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Glob3 Demo"
                                                       message:message
@@ -480,11 +521,19 @@
   Mark* m2 = new Mark("Las Palmas",
                       URL("file:///plane.png", false),
                       Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-15.36), 0), NULL, 0, NULL);
+
   marksRenderer->addMark(m2);
+
+  Mark* m3 = new Mark("Washington, DC",
+                      Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
+                                 Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
+                                 0),
+                      0);
+  marksRenderer->addMark(m3);
 
   if (false) {
     for (int i = 0; i < 2000; i++) {
-      const Angle latitude = Angle::fromDegrees( (int) (arc4random() % 180) - 90 );
+      const Angle latitude  = Angle::fromDegrees( (int) (arc4random() % 180) - 90 );
       const Angle longitude = Angle::fromDegrees( (int) (arc4random() % 360) - 180 );
 
       marksRenderer->addMark(new Mark("Random",
@@ -567,7 +616,33 @@
                                                                 Angle::fromDegreesMinutes(-122, 25),
                                                                 1000000),
                                                      TimeInterval::fromSeconds(5));
+
       /*
+      NSString *bsonFilePath = [[NSBundle mainBundle] pathForResource: @"test"
+                                                               ofType: @"bson"];
+      if (bsonFilePath) {
+
+        NSData* data = [NSData dataWithContentsOfFile: bsonFilePath];
+
+        const int length = [data length];
+        unsigned char* bytes = new unsigned char[ length ]; // will be deleted by IByteBuffer's destructor
+        [data getBytes: bytes
+                length: length];
+        
+
+        IByteBuffer* buffer = new ByteBuffer_iOS(bytes, length);
+
+        JSONBaseObject* bson = BSONParser::parse(buffer);
+
+        printf("%s\n", bson->description().c_str());
+
+        delete bson;
+
+        delete buffer;
+      }
+      */
+
+      /**/
       NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
                                                                 ofType: @"json"];
       //      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"3dmodels/Macba_Google_Earth-1"
@@ -589,7 +664,7 @@
           }
         }
       }
-      */
+      /**/
 
       /**/
 
@@ -630,9 +705,18 @@
 
           IByteBuffer* bson = BSONGenerator::generate(jsonObject);
           printf("%s\n", bson->description().c_str());
+
+          JSONBaseObject* bsonObject = BSONParser::parse(bson);
+          printf("%s\n", bsonObject->description().c_str());
+
+          delete bson;
+
+          delete jsonObject;
+
+          delete bsonObject;
         }
       }
-       */
+      */
 
       /*
       // JSONBaseObject* jsonObject = IJSONParser::instance()->parse("{\"key1\":\"string\", \"key2\": 100, \"key3\": false, \"key4\":123.5}");

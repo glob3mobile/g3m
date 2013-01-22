@@ -29,6 +29,8 @@ package org.glob3.mobile.generated;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IIntBuffer;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IShortBuffer;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IByteBuffer;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class ILogger;
@@ -43,7 +45,9 @@ public abstract class IFactory
   {
 	if (_instance != null)
 	{
-	  ILogger.instance().logWarning("Warning, ILogger instance set two times\n");
+	  ILogger.instance().logWarning("IFactory instance already set!");
+	  if (_instance != null)
+		  _instance.dispose();
 	}
 	_instance = factory;
   }
@@ -57,12 +61,6 @@ public abstract class IFactory
   {
 
   }
-
-//  virtual IImage* createImageFromFileName(const std::string& filename) const = 0;
-//
-//  virtual IImage* createImageFromBuffer(const IByteBuffer* buffer) const = 0;
-//
-//  virtual IImage* createImageFromSize(int width, int height) const = 0;
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual void createImageFromFileName(const String& filename, IImageListener* listener, boolean autodelete) const = 0;
@@ -100,6 +98,10 @@ public abstract class IFactory
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual IIntBuffer* createIntBuffer(int size) const = 0;
   public abstract IIntBuffer createIntBuffer(int size);
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual IShortBuffer* createShortBuffer(int size) const = 0;
+  public abstract IShortBuffer createShortBuffer(int size);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual IByteBuffer* createByteBuffer(int length) const = 0;

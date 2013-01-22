@@ -26,7 +26,7 @@ class CameraRenderer;
 class LayerSet;
 class ICameraConstrainer;
 class Renderer;
-class UserData;
+class WidgetUserData;
 class TileRenderer;
 class TilesRenderParameters;
 class G3MWidget;
@@ -80,19 +80,11 @@ logDownloaderStatistics: (bool) logDownloaderStatistics
 initializationTask: (GInitializationTask*) initializationTask
 autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
    periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
-          userData: (UserData*) userData;
+          userData: (WidgetUserData*) userData;
 
 - (GL*)getGL;
 
 - (void)setWidget: (G3MWidget*) widget;
-
-- (void)initWidgetWithCameraRendererAndSceneJSON: (CameraRenderer*) cameraRenderer
-                   cameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstraints
-                            layerSet: (LayerSet*) layerSet
-               tilesRenderParameters: (TilesRenderParameters*) parameters
-                           renderers: (std::vector<Renderer*>) renderers
-                            userData: (UserData*) userData
-                     periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks;
 
 - (G3MWidget*) widget;
 

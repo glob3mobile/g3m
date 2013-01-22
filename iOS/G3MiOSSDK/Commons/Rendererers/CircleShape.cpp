@@ -30,11 +30,12 @@ Mesh* CircleShape::createMesh(const G3MRenderContext* rc) {
   }
 
   Color* color = (_color == NULL) ? NULL : new Color(*_color);
-  
+
   return new DirectMesh(GLPrimitive::triangleFan(),
-                         true,
-                         Vector3D::zero(),
-                         vertices.create(),
-                         1,
-                         color);
+                        true,
+                        Vector3D::zero(),
+                        vertices.create(),
+                        1,
+                        1,
+                        color);
 }

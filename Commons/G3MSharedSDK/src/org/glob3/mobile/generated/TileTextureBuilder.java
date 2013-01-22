@@ -90,7 +90,7 @@ public class TileTextureBuilder extends RCObject
 	  //                                   : _tile->getLevel());
 	  final long priority = DefineConstants.TILE_DOWNLOAD_PRIORITY + _tile.getLevel();
 
-	  final long requestId = _downloader.requestImage(new URL(petition.getURL()), priority, TimeInterval.fromDays(30), new BuilderDownloadStepDownloadListener(this, i), true);
+	  final long requestId = _downloader.requestImage(new URL(petition.getURL()), priority, petition.getTimeToCache(), new BuilderDownloadStepDownloadListener(this, i), true);
 
 	  _requestsIds.add(requestId);
 	}
@@ -154,30 +154,7 @@ public class TileTextureBuilder extends RCObject
 
 	  if (images.size() > 0)
 	  {
-		//        int __TESTING_mipmapping;
-		//        const bool isMipmap = false;
-
-		//        const IImage* image = _textureBuilder->createTextureFromImages(_gl,
-		//                                                                       _factory,
-		//                                                                       images,
-		//                                                                       rectangles,
-		//                                                                       textureWidth,
-		//                                                                       textureHeight);
 		_textureBuilder.createTextureFromImages(_gl, _factory, images, rectangles, textureWidth, textureHeight, new TextureUploader(this, rectangles, textureId), true);
-
-
-		//        const IGLTextureId* glTextureId = _texturesHandler->getGLTextureId(image,
-		//                                                                           GLFormat::rgba(),
-		//                                                                           textureId,
-		//                                                                           isMipmap);
-		//
-		//        if (glTextureId != NULL) {
-		//          if (!_mesh->setGLTextureIdForLevel(0, glTextureId)) {
-		//            _texturesHandler->releaseGLTextureId(glTextureId);
-		//          }
-		//        }
-		//
-		//        delete image;
 	  }
 
 	  ///#ifdef C_CODE
@@ -210,8 +187,7 @@ public class TileTextureBuilder extends RCObject
 		}
 	  }
 
-	  if (image != null)
-		  image.dispose();
+	  IFactory.instance().deleteImage(image);
 
 
 	}

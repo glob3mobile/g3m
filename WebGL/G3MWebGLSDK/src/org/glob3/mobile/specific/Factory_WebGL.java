@@ -10,6 +10,7 @@ import org.glob3.mobile.generated.IFloatBuffer;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IImageListener;
 import org.glob3.mobile.generated.IIntBuffer;
+import org.glob3.mobile.generated.IShortBuffer;
 import org.glob3.mobile.generated.ITimer;
 
 import com.google.gwt.core.client.JavaScriptObject;
@@ -102,12 +103,6 @@ public final class Factory_WebGL
 
 
    @Override
-   public IIntBuffer createIntBuffer(final int size) {
-      return new IntBuffer_WebGL(size);
-   }
-
-
-   @Override
    public IByteBuffer createByteBuffer(final int length) {
       return new ByteBuffer_WebGL(length);
    }
@@ -138,6 +133,18 @@ public final class Factory_WebGL
                                          final float f14,
                                          final float f15) {
       return new FloatBuffer_WebGL(f0, f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f13, f14, f15);
+   }
+
+
+   @Override
+   public IIntBuffer createIntBuffer(final int size) {
+      return new IntBuffer_WebGL(size);
+   }
+
+
+   @Override
+   public IShortBuffer createShortBuffer(final int size) {
+      return new ShortBuffer_WebGL(size);
    }
 
 }

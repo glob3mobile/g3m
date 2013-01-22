@@ -37,6 +37,7 @@ class IJSONParser;
 class Geodetic3D;
 class CameraRenderer;
 class IStorage;
+class ITextUtils;
 
 #include <vector>
 #include <string>
@@ -47,18 +48,18 @@ class IStorage;
 class G3MContext;
 class GLState;
 
-class UserData {
+class WidgetUserData {
 private:
   G3MWidget* _widget;
 
 public:
-  UserData() :
+  WidgetUserData() :
   _widget(NULL)
   {
 
   }
 
-  virtual ~UserData() {
+  virtual ~WidgetUserData() {
 
   }
 
@@ -75,12 +76,13 @@ public:
 class G3MWidget {
 public:
 
-  static void initSingletons(ILogger*             logger,
-                             IFactory*            factory,
-                             const IStringUtils*  stringUtils,
-                             IStringBuilder*      stringBuilder,
-                             IMathUtils*          mathUtils,
-                             IJSONParser*         jsonParser);
+  static void initSingletons(ILogger*            logger,
+                             IFactory*           factory,
+                             const IStringUtils* stringUtils,
+                             IStringBuilder*     stringBuilder,
+                             IMathUtils*         mathUtils,
+                             IJSONParser*        jsonParser,
+                             ITextUtils*         textUtils);
 
   static G3MWidget* create(GL*                              gl,
                            IStorage*                        storage,
@@ -124,7 +126,7 @@ public:
     return _nextCamera;
   }
 
-  void setUserData(UserData* userData) {
+  void setUserData(WidgetUserData* userData) {
     delete _userData;
 
     _userData = userData;
@@ -133,7 +135,7 @@ public:
     }
   }
 
-  UserData* getUserData() const {
+  WidgetUserData* getUserData() const {
     return _userData;
   }
 
@@ -144,9 +146,9 @@ public:
 
 
   void setCameraPosition(const Geodetic3D& position);
-  
+
   void setCameraHeading(const Angle& angle);
-  
+
   void setCameraPitch(const Angle& angle);
 
   void setAnimatedCameraPosition(const Geodetic3D& position);
@@ -198,22 +200,22 @@ private:
 
   ITimer* _renderStatisticsTimer;
 
-  UserData* _userData;
+  WidgetUserData* _userData;
 
   GInitializationTask* _initializationTask;
   bool                 _autoDeleteInitializationTask;
 
   std::vector<PeriodicalTask*> _periodicalTasks;
-    
-    int _width;
-    int _height;
+
+  int _width;
+  int _height;
 
   void initializeGL();
 
   const G3MContext* _context;
 
   bool _paused;
-  
+
   const GLState* _rootState;
 
   bool _initializationTaskWasRun;

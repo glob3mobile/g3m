@@ -23,63 +23,78 @@ class IGLTextureId;
 class MarkTouchListener;
 class GLState;
 
-class Mark {
-private:
-    
-    const std::string _name;
-    URL               _textureURL;
-    const Geodetic3D  _position;
-    void* _userData;
-    double _minDistanceToCamera;
-    MarkTouchListener* _listener;
-    
-#ifdef C_CODE
-    const IGLTextureId* _textureId;
-#endif
-#ifdef JAVA_CODE
-    private IGLTextureId _textureId;
-#endif
-    
-    Vector3D* _cartesianPosition;
-    Vector3D* getCartesianPosition(const Planet* planet);
-    
-    IFloatBuffer* _vertices;
-    IFloatBuffer* getVertices(const Planet* planet);
-    
-    bool    _textureSolved;
-    IImage* _textureImage;
-    int _textureWidth;
-    int _textureHeight;
-    
-    bool    _renderedMark;
-    
+class MarkUserData {
 public:
-  Mark(const std::string name,
-       const URL         textureURL,
-       const Geodetic3D  position,
-       void* userData=NULL, double minDistanceToCamera=0, MarkTouchListener* listener=NULL) :
-  _name(name),
-  _textureURL(textureURL),
-  _position(position),
-  _userData(userData),
-  _minDistanceToCamera(minDistanceToCamera),
-  _listener(listener),
-  _textureId(NULL),
-  _cartesianPosition(NULL),
-  _vertices(NULL),
-  _textureSolved(false),
-  _textureImage(NULL),
-  _renderedMark(false),
-  _textureWidth(0),
-  _textureHeight(0)
-  {
+  virtual ~MarkUserData() {
     
   }
+};
+
+class Mark {
+private:
+  const std::string _label;
+  const bool        _labelBottom;
+  
+  URL               _iconURL;
+  const Geodetic3D  _position;
+  const double      _minDistanceToCamera;
+  
+  MarkUserData* _userData;
+  const bool    _autoDeleteUserData;
+  
+  MarkTouchListener* _listener;
+  const bool         _autoDeleteListener;
+  
+#ifdef C_CODE
+  const IGLTextureId* _textureId;
+#endif
+#ifdef JAVA_CODE
+  private IGLTextureId _textureId;
+#endif
+  
+  Vector3D* _cartesianPosition;
+  
+  IFloatBuffer* _vertices;
+  IFloatBuffer* getVertices(const Planet* planet);
+  
+  bool    _textureSolved;
+  IImage* _textureImage;
+  int     _textureWidth;
+  int     _textureHeight;
+  
+  bool    _renderedMark;
+  
+public:
+  Mark(const std::string&  label,
+       const URL           iconURL,
+       const Geodetic3D    position,
+       const bool          labelBottom=true,
+       double minDistanceToCamera=4.5e+06,
+       MarkUserData* userData=NULL,
+       bool autoDeleteUserData=true,
+       MarkTouchListener* listener=NULL,
+       bool autoDeleteListener=false);
+  
+  Mark(const std::string& label,
+       const Geodetic3D   position,
+       double minDistanceToCamera=4.5e+06,
+       MarkUserData* userData=NULL,
+       bool autoDeleteUserData=true,
+       MarkTouchListener* listener=NULL,
+       bool autoDeleteListener=false);
+  
+  Mark(const URL          iconURL,
+       const Geodetic3D   position,
+       double minDistanceToCamera=4.5e+06,
+       MarkUserData* userData=NULL,
+       bool autoDeleteUserData=true,
+       MarkTouchListener* listener=NULL,
+       bool autoDeleteListener=false);
   
   ~Mark();
   
-  const std::string getName() const {
-    return _name;
+  const std::string getLabel() const {
+    return _label;
   }
   
   const Geodetic3D getPosition() const {
@@ -88,8 +103,7 @@ public:
   
   void initialize(const G3MContext* context);
   
-  void render(const G3MRenderContext* rc,
-              const GLState& parentState);
+  void render(const G3MRenderContext* rc);
   
   bool isReady() const;
   
@@ -101,20 +115,33 @@ public:
   
   void onTextureDownload(const IImage* image);
   
-  int getTextureWidth() const;
-  int getTextureHeight() const;
-  Vector2I getTextureExtent() const;
+  int getTextureWidth() const {
+    return _textureWidth;
+  }
   
-  const void* getUserData() const {
+  int getTextureHeight() const {
+    return _textureHeight;
+  }
+  
+  Vector2I getTextureExtent() const {
+    return Vector2I(_textureWidth, _textureHeight);
+  }
+  
+  const MarkUserData* getUserData() const {
     return _userData;
   }
-
-  void setUserData(void* userData);
-    
-  MarkTouchListener* getListener() const{
-    return _listener;      
+  
+  void setUserData(MarkUserData* userData) {
+    if (_autoDeleteUserData) {
+      delete _userData;
+    }
+    _userData = userData;
   }
-
+  
+  bool touched();
+  
+  Vector3D* getCartesianPosition(const Planet* planet);
+  
 };
 
 #endif

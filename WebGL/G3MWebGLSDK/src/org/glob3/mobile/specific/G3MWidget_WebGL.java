@@ -23,6 +23,7 @@ import org.glob3.mobile.generated.INativeGL;
 import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IStringBuilder;
 import org.glob3.mobile.generated.IStringUtils;
+import org.glob3.mobile.generated.ITextUtils;
 import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.PeriodicalTask;
@@ -30,7 +31,7 @@ import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.Renderer;
 import org.glob3.mobile.generated.ShaderProgram;
 import org.glob3.mobile.generated.TimeInterval;
-import org.glob3.mobile.generated.UserData;
+import org.glob3.mobile.generated.WidgetUserData;
 
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.core.client.JavaScriptObject;
@@ -89,24 +90,42 @@ public final class G3MWidget_WebGL
                                                   + "    else {" + "      gl_FragColor = FlatColor;" + "    }" + "    " + "  }"
                                                   + "  " + "}";
 
+   //   private final static String  _vertexShader   = "attribute vec4 Position;"
+   //                                                  + "attribute vec2 TextureCoord; "
+   //                                                  + "attribute vec4 Color;"
+   //                                                  + "uniform mat4 Projection;"
+   //                                                  + "uniform mat4 Modelview;"
+   //                                                  + "uniform bool BillBoard;"
+   //                                                  + "uniform float ViewPortRatio;"
+   //                                                  + "uniform float PointSize;"
+   //                                                  + "varying vec4 VertexColor;"
+   //                                                  + "varying vec2 TextureCoordOut;"
+   //                                                  + "void main() {"
+   //                                                  + "  gl_Position = Projection * Modelview * Position;"
+   //                                                  + "  if (BillBoard) {"
+   //                                                  + "    gl_Position.x += (-0.05 + TextureCoord.x * 0.1) * gl_Position.w;"
+   //                                                  + "    gl_Position.y -= (-0.05 + TextureCoord.y * 0.1) * gl_Position.w * ViewPortRatio;"
+   //                                                  + "  }" + "  TextureCoordOut = TextureCoord;" + "  VertexColor = Color;"
+   //                                                  + "  gl_PointSize = PointSize;" + "}";
+
    private final static String  _vertexShader   = "attribute vec4 Position;"
-                                                  + "attribute vec2 TextureCoord; "
+                                                  + "attribute vec2 TextureCoord;"
                                                   + "attribute vec4 Color;"
                                                   + "uniform mat4 Projection;"
                                                   + "uniform mat4 Modelview;"
                                                   + "uniform bool BillBoard;"
-                                                  + "uniform float ViewPortRatio;"
+                                                  + "uniform vec2 TextureExtent;"
+                                                  + "uniform vec2 ViewPortExtent;"
                                                   + "uniform float PointSize;"
                                                   + "varying vec4 VertexColor;"
                                                   + "varying vec2 TextureCoordOut;"
                                                   + "void main() {"
                                                   + "  gl_Position = Projection * Modelview * Position;"
                                                   + "  if (BillBoard) {"
-                                                  + "    gl_Position.x += (-0.05 + TextureCoord.x * 0.1) * gl_Position.w;"
-                                                  + "    gl_Position.y -= (-0.05 + TextureCoord.y * 0.1) * gl_Position.w * ViewPortRatio;"
+                                                  + "    gl_Position.x += ((TextureCoord.x - 0.5) * 2.0 * TextureExtent.x / ViewPortExtent.x) * gl_Position.w;"
+                                                  + "    gl_Position.y -= ((TextureCoord.y - 0.5) * 2.0 * TextureExtent.y / ViewPortExtent.y) * gl_Position.w;"
                                                   + "  }" + "  TextureCoordOut = TextureCoord;" + "  VertexColor = Color;"
                                                   + "  gl_PointSize = PointSize;" + "}";
-
 
    private Canvas               _canvas;
    private JavaScriptObject     _webGLContext;
@@ -171,8 +190,9 @@ public final class G3MWidget_WebGL
       final IStringBuilder stringBuilder = new StringBuilder_WebGL();
       final IMathUtils mathUtils = new MathUtils_WebGL();
       final IJSONParser jsonParser = new JSONParser_WebGL();
+      final ITextUtils textUtils = new TextUtils_WebGL();
 
-      G3MWidget.initSingletons(logger, factory, stringUtils, stringBuilder, mathUtils, jsonParser);
+      G3MWidget.initSingletons(logger, factory, stringUtils, stringBuilder, mathUtils, jsonParser, textUtils);
    }
 
 
@@ -322,7 +342,7 @@ public final class G3MWidget_WebGL
                           final GInitializationTask initializationTask,
                           final boolean autoDeleteInitializationTask,
                           final ArrayList<PeriodicalTask> periodicalTasks,
-                          final UserData userData) {
+                          final WidgetUserData userData) {
 
       _g3mWidget = G3MWidget.create(//
                _gl, //
@@ -410,7 +430,7 @@ public final class G3MWidget_WebGL
    }
 
 
-   public UserData getUserData() {
+   public WidgetUserData getUserData() {
       return getG3MWidget().getUserData();
    }
 

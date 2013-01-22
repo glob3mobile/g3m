@@ -4,8 +4,6 @@ public class ShaderProgram
 
   private int _program;
   private GL _gl;
-  private int _vertexShader;
-  private int _fragmentShader;
 
   private boolean compileShader(int shader, String source)
   {
@@ -48,20 +46,20 @@ public class ShaderProgram
   public final boolean loadShaders(String vertexSource, String fragmentSource)
   {
 	// compile vertex shader
-	_vertexShader = _gl.createShader(ShaderType.VERTEX_SHADER);
-	if (!compileShader(_vertexShader, vertexSource))
+	int vertexShader = _gl.createShader(ShaderType.VERTEX_SHADER);
+	if (!compileShader(vertexShader, vertexSource))
 	{
 	  System.out.print("ERROR compiling vertex shader\n");
-	  _gl.deleteShader(_vertexShader);
+	  _gl.deleteShader(vertexShader);
 	  return false;
 	}
   
 	// compile fragment shader
-	_fragmentShader = _gl.createShader(ShaderType.FRAGMENT_SHADER);
-	if (!compileShader(_fragmentShader, fragmentSource))
+	int fragmentShader = _gl.createShader(ShaderType.FRAGMENT_SHADER);
+	if (!compileShader(fragmentShader, fragmentSource))
 	{
 	  System.out.print("ERROR compiling fragment shader\n");
-	  _gl.deleteShader(_fragmentShader);
+	  _gl.deleteShader(fragmentShader);
 	  return false;
 	}
   
@@ -69,23 +67,39 @@ public class ShaderProgram
 	if (!linkProgram())
 	{
 	  System.out.print("ERROR linking graphic program\n");
-	  _gl.deleteShader(_vertexShader);
-	  _gl.deleteShader(_fragmentShader);
+	  _gl.deleteShader(vertexShader);
+	  _gl.deleteShader(fragmentShader);
 	  _gl.deleteProgram(_program);
 	  return false;
 	}
   
 	// free shaders
-	_gl.deleteShader(_vertexShader);
-	_gl.deleteShader(_fragmentShader);
+	_gl.deleteShader(vertexShader);
+	_gl.deleteShader(fragmentShader);
 	return true;
   }
 
 
   // TEMP
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: int getProgram() const
   public final int getProgram()
   {
-	  return _program;
+	return _program;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const String description() const
+  public final String description()
+  {
+	IStringBuilder isb = IStringBuilder.newStringBuilder();
+	isb.addString("(ShaderProgram ");
+	isb.addInt(_program);
+	isb.addString(")");
+	final String s = isb.getString();
+	if (isb != null)
+		isb.dispose();
+	return s;
   }
 
 }

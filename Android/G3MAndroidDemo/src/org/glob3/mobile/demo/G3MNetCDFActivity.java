@@ -5,10 +5,16 @@ package org.glob3.mobile.demo;
 import java.util.ArrayList;
 
 import org.glob3.mobile.generated.Angle;
+import org.glob3.mobile.generated.BSONParser;
 import org.glob3.mobile.generated.BoxShape;
+import org.glob3.mobile.generated.CenterStrategy;
 import org.glob3.mobile.generated.Color;
+import org.glob3.mobile.generated.DirectMesh;
+import org.glob3.mobile.generated.FloatBufferBuilderFromColor;
+import org.glob3.mobile.generated.FloatBufferBuilderFromGeodetic;
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GInitializationTask;
+import org.glob3.mobile.generated.GLPrimitive;
 import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Geodetic3D;
@@ -19,7 +25,10 @@ import org.glob3.mobile.generated.IJSONParser;
 import org.glob3.mobile.generated.JSONArray;
 import org.glob3.mobile.generated.JSONBaseObject;
 import org.glob3.mobile.generated.JSONObject;
+import org.glob3.mobile.generated.Mesh;
+import org.glob3.mobile.generated.MeshRenderer;
 import org.glob3.mobile.generated.PeriodicalTask;
+import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
@@ -42,7 +51,9 @@ public class G3MNetCDFActivity
    private boolean                                    _isDone         = false;
    private final ShapesRenderer                       _shapesRenderer = new ShapesRenderer();
    private final ArrayList<ArrayList<WindModelCsiro>> _wmsss          = new ArrayList<ArrayList<WindModelCsiro>>();
+   private final ArrayList<Mesh>                      meshes          = new ArrayList<Mesh>();
    private final ArrayList<BoxShape>                  _boxShapes      = new ArrayList<BoxShape>();
+   final MeshRenderer                                 _meshRenderer   = new MeshRenderer();
 
    private int                                        _period         = 0;
 
@@ -56,9 +67,18 @@ public class G3MNetCDFActivity
 
       final G3MBuilder_Android builder = new G3MBuilder_Android(getApplicationContext());
 
-      builder.setInitializationTask(getInitializationTaskPeriods());
-      builder.addPeriodicalTask(PaintGeometriesTask());
-      builder.addRenderer(_shapesRenderer);
+
+      //Some periods with polygons
+      //      builder.setInitializationTask(getInitializationTaskPeriods());
+      //      builder.addPeriodicalTask(PaintGeometriesTask());
+      //        builder.addRenderer(_shapesRenderer);
+      //Some periods with points  
+      //      builder.setInitializationTask(getInitializationTaskCreateMeshes(builder.getPlanet()));
+      //      builder.addPeriodicalTask(PaintMeshesTask());
+      //      builder.addRenderer(_meshRenderer);
+      //Single period with points
+      builder.setInitializationTask(getInitializationTaskSinglePeriodMeshes(builder.getPlanet()));
+      builder.addRenderer(_meshRenderer);
 
       _widgetAndroid = builder.createWidget();
 
@@ -69,6 +89,31 @@ public class G3MNetCDFActivity
    }
 
 
+   private PeriodicalTask PaintMeshesTask() {
+      final PeriodicalTask periodicalTask = new PeriodicalTask(TimeInterval.fromSeconds(0.2), new GTask() {
+
+         @Override
+         public void run(final G3MContext context) {
+
+            if (_isDone) {
+
+               if (_period == 18) {
+                  _period = 0;
+               }
+
+               final Mesh mesh = meshes.get(_period);
+
+               _meshRenderer.clearMeshes();
+               _meshRenderer.addMesh(mesh);
+            }
+         }
+      });
+      return periodicalTask;
+
+   }
+
+
+   @SuppressWarnings("unused")
    private PeriodicalTask PaintGeometriesTask() {
       final PeriodicalTask periodicalTask = new PeriodicalTask(TimeInterval.fromSeconds(0.2), new GTask() {
 
@@ -162,6 +207,127 @@ public class G3MNetCDFActivity
    }
 
 
+   private GInitializationTask getInitializationTaskSinglePeriodMeshes(final Planet planet) {
+      final GInitializationTask initializationTask = new GInitializationTask() {
+
+         @Override
+         public void run(final G3MContext context) {
+
+            final IDownloader downloader = context.getDownloader();
+
+            final IBufferDownloadListener listener = new IBufferDownloadListener() {
+
+               @Override
+               public void onDownload(final URL url,
+                                      final IByteBuffer buffer) {
+
+                  //                  final String response = buffer.getAsString();
+                  //                  final IJSONParser parser = new JSONParser_Android();
+                  //                  final JSONBaseObject jsonObject = parser.parse(response);
+                  //                  final JSONObject object = jsonObject.asObject();
+
+
+                  final JSONBaseObject objectBase = BSONParser.parse(buffer);
+                  final JSONObject object = objectBase.asObject();
+
+                  Log.e(G3MNetCDFActivity.this.toString(), object.description());
+
+
+                  final ArrayList<String> periodKeys = object.keys();
+
+                  for (final String period : periodKeys) {
+
+                     final JSONObject yearObject = object.getAsObject(period);
+
+                     final JSONArray features = yearObject.getAsArray("features");
+
+                     final FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(
+                              CenterStrategy.firstVertex(), planet, Geodetic3D.zero());
+                     final FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
+
+                     for (int i = 0; i < features.size(); i++) {
+
+                        final JSONObject feature = features.getAsObject(i);
+
+                        vertices.add(new Geodetic3D(Angle.fromDegrees(feature.getAsNumber("lat").doubleValue()),
+                                 Angle.fromDegrees(feature.getAsNumber("lon").doubleValue()), 100000));
+
+                        final JSONArray values = feature.getAsArray("values");
+
+
+                        final Color fromColor = Color.fromRGBA(0, 0, 1, 1);
+                        final Color toColor = Color.fromRGBA(1, 0, 0, 1);
+                        for (int a = 0; a < values.size(); a++) {
+                           final JSONObject value = values.getAsObject(a);
+
+                           final Color interpolatedColor = fromColor.mixedWith(toColor,
+                                    normalize(Double.valueOf(value.getAsNumber("mw").doubleValue()).floatValue(), -10, 10, 1, 0));
+
+                           colors.add(interpolatedColor);
+                        }
+
+
+                        _isDone = true;
+                     }
+
+                     final float lineWidth = 1;
+                     final Color flatColor = null;
+
+                     _meshRenderer.addMesh(new DirectMesh(GLPrimitive.points(), true, vertices.getCenter(), vertices.create(),
+                              lineWidth, 12F, flatColor, colors.create()));
+                     Log.e(G3MNetCDFActivity.this.toString(), "Num of registry in netCDF:" + features.size());
+
+
+                  }
+
+               }
+
+
+               @Override
+               public void onError(final URL url) {
+                  // TODO Auto-generated method stub
+
+               }
+
+
+               @Override
+               public void onCancel(final URL url) {
+                  // TODO Auto-generated method stub
+
+               }
+
+
+               @Override
+               public void onCanceledDownload(final URL url,
+                                              final IByteBuffer data) {
+                  // TODO Auto-generated method stub
+
+               }
+
+            };
+            downloader.requestBuffer(new URL("file:///ACCESS-A.2011020104.nc3.slice10.bson", false), 0, TimeInterval.forever(),
+                     listener, false);
+            //
+            //            downloader.requestBuffer(new URL("file:///test.bson", false), 0, TimeInterval.forever(), listener, false);
+            //
+
+         }
+
+
+         @Override
+         public boolean isDone(final G3MContext context) {
+            if (_isDone) {
+               return true;
+            }
+            return false;
+         }
+
+      };
+      return initializationTask;
+   }
+
+
+   @SuppressWarnings("unused")
    private GInitializationTask getInitializationTask() {
 
       final GInitializationTask initializationTask = new GInitializationTask() {
@@ -187,7 +353,10 @@ public class G3MNetCDFActivity
 
                   final String response = buffer.getAsString();
                   final IJSONParser parser = new JSONParser_Android();
+
                   final JSONBaseObject jsonObject = parser.parse(response);
+
+
                   final JSONObject object = jsonObject.asObject();
 
                   final ArrayList<String> periodKeys = object.keys();
@@ -289,6 +458,128 @@ public class G3MNetCDFActivity
    }
 
 
+   private GInitializationTask getInitializationTaskCreateMeshes(final Planet planet) {
+
+      final GInitializationTask initializationTask = new GInitializationTask() {
+
+         @Override
+         public void run(final G3MContext context) {
+            final IDownloader downloader = context.getDownloader();
+
+            final IBufferDownloadListener listener = new IBufferDownloadListener() {
+
+               @Override
+               public void onDownload(final URL url,
+                                      final IByteBuffer buffer) {
+
+
+                  final String response = buffer.getAsString();
+                  final IJSONParser parser = new JSONParser_Android();
+                  final JSONBaseObject jsonObject = parser.parse(response);
+                  final JSONObject object = jsonObject.asObject();
+
+                  final ArrayList<String> periodKeys = object.keys();
+
+
+                  for (final String period : periodKeys) {
+
+
+                     final JSONObject yearObject = object.getAsObject(period);
+
+                     final JSONArray features = yearObject.getAsArray("features");
+
+                     final FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(
+                              CenterStrategy.firstVertex(), planet, Geodetic3D.zero());
+                     final FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
+
+
+                     for (int i = 0; i < features.size(); i++) {
+
+                        //   final WindModelCsiro wms = new WindModelCsiro();
+                        final JSONObject feature = features.getAsObject(i);
+
+                        vertices.add(new Geodetic3D(Angle.fromDegrees(feature.getAsNumber("latitude").doubleValue()),
+                                 Angle.fromDegrees(feature.getAsNumber("longitude").doubleValue()), 100000));
+
+
+                        final JSONArray values = feature.getAsArray("values");
+
+                        //                        final ArrayList<Float> meridWinds = new ArrayList<Float>();
+                        //                        final ArrayList<Float> zonalWinds = new ArrayList<Float>();
+                        //                        final ArrayList<Float> levels = new ArrayList<Float>();
+
+                        final Color fromColor = Color.fromRGBA(0, 0, 1, 1);
+                        final Color toColor = Color.fromRGBA(1, 0, 0, 1);
+
+                        for (int a = 0; a < values.size(); a++) {
+                           final JSONObject value = values.getAsObject(a);
+
+                           final Color interpolatedColor = fromColor.mixedWith(
+                                    toColor,
+                                    normalize(Double.valueOf(value.getAsNumber("merid_wnd").doubleValue()).floatValue(), -10, 10,
+                                             1, 0));
+
+                           colors.add(interpolatedColor);
+                        }
+                     }
+
+                     final float lineWidth = 100;
+                     final Color flatColor = null;
+                     meshes.add(new DirectMesh(GLPrimitive.points(), true, vertices.getCenter(), vertices.create(), lineWidth,
+                              50.0F, flatColor, colors.create()));
+                  }
+
+                  _isDone = true;
+                  _widgetAndroid.setAnimatedCameraPosition(new Geodetic3D(G3MGlob3Constants.EAST_AUSTRALIA_POSITION, 17000000),
+                           TimeInterval.fromSeconds(5));
+               }
+
+
+               @Override
+               public void onError(final URL url) {
+                  // TODO Auto-generated method stub
+
+               }
+
+
+               @Override
+               public void onCancel(final URL url) {
+                  // TODO Auto-generated method stub
+
+               }
+
+
+               @Override
+               public void onCanceledDownload(final URL url,
+                                              final IByteBuffer data) {
+                  // TODO Auto-generated method stub
+
+               }
+
+            };
+
+            downloader.requestBuffer(new URL("http://csiro.glob3mobile.com/21.periods.json", false), 0, TimeInterval.forever(),
+                     listener, false);
+         }
+
+
+         @Override
+         public boolean isDone(final G3MContext context) {
+            if (_isDone) {
+               return true;
+            }
+            return false;
+         }
+
+      };
+
+
+      return initializationTask;
+
+   }
+
+
+   @SuppressWarnings("unused")
    private GInitializationTask getInitializationTaskPeriods() {
 
       final GInitializationTask initializationTask = new GInitializationTask() {

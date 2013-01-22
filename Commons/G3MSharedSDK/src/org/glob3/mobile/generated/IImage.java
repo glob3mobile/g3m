@@ -16,7 +16,6 @@ package org.glob3.mobile.generated;
 
 public abstract class IImage
 {
-  // a virtual destructor is needed for conversion to Java
   public void dispose()
   {
   }
@@ -30,11 +29,6 @@ public abstract class IImage
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual Vector2I getExtent() const = 0;
   public abstract Vector2I getExtent();
-
-//  virtual void combineWith(const IImage& other,
-//                           int width, int height,
-//                           IImageListener* listener,
-//                           bool autodelete) const = 0;
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual void combineWith(const IImage& other, const RectangleI& rect, int width, int height, IImageListener* listener, boolean autodelete) const = 0;

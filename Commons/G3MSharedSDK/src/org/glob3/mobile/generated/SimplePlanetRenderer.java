@@ -22,7 +22,7 @@ package org.glob3.mobile.generated;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IFloatBuffer;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class IIntBuffer;
+//class IShortBuffer;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IGLTextureId;
 
@@ -62,24 +62,24 @@ public class SimplePlanetRenderer extends LeafRenderer
 	return vertices.create();
   }
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: IIntBuffer* createMeshIndex() const
-  private IIntBuffer createMeshIndex()
+//ORIGINAL LINE: IShortBuffer* createMeshIndex() const
+  private IShortBuffer createMeshIndex()
   {
-	IntBufferBuilder indices = new IntBufferBuilder();
+	ShortBufferBuilder indices = new ShortBufferBuilder();
   
 	final int res = _lonRes;
 	for (int j = 0; j < res - 1; j++)
 	{
 	  if (j > 0)
 	  {
-		indices.add((int)(j * res));
+		indices.add((short)(j * res));
 	  }
 	  for (int i = 0; i < res; i++)
 	  {
-		indices.add(j * res + i);
-		indices.add(j * res + i + res);
+		indices.add((short)(j * res + i));
+		indices.add((short)(j * res + i + res));
 	  }
-	  indices.add(j * res + 2 * res - 1);
+	  indices.add((short)(j * res + 2 * res - 1));
 	}
   
 	return indices.create();
@@ -107,7 +107,7 @@ public class SimplePlanetRenderer extends LeafRenderer
 
   private Mesh createMesh(G3MRenderContext rc)
   {
-	IIntBuffer indices = createMeshIndex();
+	IShortBuffer indices = createMeshIndex();
 	IFloatBuffer vertices = createVertices(rc.getPlanet());
   
 	//COLORS PER VERTEX
@@ -133,7 +133,7 @@ public class SimplePlanetRenderer extends LeafRenderer
 	//    flatColor = new Color( Color::fromRGBA(0.0, 1.0, 0.0, 1.0) );
 	//  }
   
-	IndexedMesh indexedMesh = new IndexedMesh(GLPrimitive.triangleStrip(), true, Vector3D.zero(), vertices, indices, 1, flatColor, vertexColors);
+	IndexedMesh indexedMesh = new IndexedMesh(GLPrimitive.triangleStrip(), true, Vector3D.zero(), vertices, indices, 1, 1, flatColor, vertexColors);
   
 	//TEXTURED
 	final IGLTextureId texId = rc.getTexturesHandler().getGLTextureId(_image, GLFormat.rgba(), "SimplePlanetRenderer-Texture", false);
@@ -147,8 +147,7 @@ public class SimplePlanetRenderer extends LeafRenderer
 	}
   
 	// the image is not needed as it's already uploaded to the GPU
-	if (_image != null)
-		_image.dispose();
+	IFactory.instance().deleteImage(_image);
 	_image = null;
   
 	IFloatBuffer texCoords = createTextureCoordinates();
@@ -170,8 +169,7 @@ public class SimplePlanetRenderer extends LeafRenderer
   {
 	if (_mesh != null)
 		_mesh.dispose();
-	if (_image != null)
-		_image.dispose();
+	IFactory.instance().deleteImage(_image);
   }
 
   public final void initialize(G3MContext context)
