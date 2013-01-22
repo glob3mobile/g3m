@@ -117,7 +117,7 @@ public class SceneParser
 			wmsVersion = WMSServerVersion.WMS_1_3_0;
 		}
     
-		WMSLayer wmsLayer = new WMSLayer(URL.escape(layersSecuence), new URL(jsonURL, false), wmsVersion, Sector.fullSphere(), "image/png", "EPSG:4326", "", true, null);
+		WMSLayer wmsLayer = new WMSLayer(URL.escape(layersSecuence), new URL(jsonURL, false), wmsVersion, Sector.fullSphere(), "image/png", "EPSG:4326", "", true, null, TimeInterval.fromDays(30));
 		layerSet.addLayer(wmsLayer);
 	}
 	private void parserJSON3DLayer(LayerSet layerSet, JSONObject jsonLayer)

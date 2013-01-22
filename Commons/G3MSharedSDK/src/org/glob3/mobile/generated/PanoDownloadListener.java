@@ -1,23 +1,4 @@
 package org.glob3.mobile.generated; 
-//
-//  PanoDownloadListener.cpp
-//  G3MiOSSDK
-//
-//  Created by Eduardo de la Montaña on 7/12/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
-//
-
-
-//
-//  PanoDownloadListener.hpp
-//  G3MiOSSDK
-//
-//  Created by Eduardo de la Montaña on 7/12/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
-//
-
-
-
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class MarksRenderer;
 public class PanoDownloadListener implements IBufferDownloadListener
@@ -67,7 +48,7 @@ public class PanoDownloadListener implements IBufferDownloadListener
 		final Angle latitude = Angle.fromDegrees(json.getAsObject(POSITION).getAsNumber(LAT).doubleValue());
 		final Angle longitude = Angle.fromDegrees(json.getAsObject(POSITION).getAsNumber(LON).doubleValue());
     
-		Mark mark = new Mark(json.getAsString(NAME).value(), new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png",false), new Geodetic3D(latitude, longitude, 0), new URL(url, false), 0, _panoTouchListener);
+		Mark mark = new Mark(new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png",false), new Geodetic3D(latitude, longitude, 0), 0, new PanoMarkUserData(json.getAsString(NAME).value(), new URL(url, false)),true, _panoTouchListener,true);
     
 		_marksRenderer.addMark(mark);
 	}

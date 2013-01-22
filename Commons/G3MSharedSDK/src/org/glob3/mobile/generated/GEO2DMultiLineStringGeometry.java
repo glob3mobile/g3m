@@ -59,7 +59,7 @@ public class GEO2DMultiLineStringGeometry extends GEOMultiLineStringGeometry
 	  }
 	}
   
-	return new DirectMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), _lineWidth, _color);
+	return new DirectMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), _lineWidth, 1, _color);
   }
 
 
