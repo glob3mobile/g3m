@@ -37,7 +37,7 @@ void PanoDownloadListener::onDownload(const URL& url,
     std::string string = buffer->getAsString();
     JSONBaseObject* json = IJSONParser::instance()->parse(string);
     ILogger::instance()->logInfo(url.getPath());
-    parseMETADATA(IStringUtils::instance()->substring(url.getPath(), 0, IStringUtils::instance()->indexOf(url.getPath(), "/metadata.json")),json->asObject());
+    parseMETADATA(IStringUtils::instance()->substring(url.getPath(), 0, IStringUtils::instance()->indexOf(url.getPath(), "/info.txt")),json->asObject());
     IJSONParser::instance()->deleteJSONData(json);
 }
 

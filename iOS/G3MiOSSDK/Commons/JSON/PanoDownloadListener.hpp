@@ -14,6 +14,7 @@
 #include "JSONObject.hpp"
 #include "MarkTouchListener.hpp"
 #include "Mark.hpp"
+#include "URL.hpp"
 
 class PanoMarkUserData : public MarkUserData {
   std::string _name;
