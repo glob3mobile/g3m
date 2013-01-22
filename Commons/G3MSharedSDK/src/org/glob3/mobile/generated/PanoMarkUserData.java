@@ -22,7 +22,7 @@ public class PanoMarkUserData extends MarkUserData
 {
   private final String _name;
 
-  private final URL _url;
+  private URL _url;
 
 
   public PanoMarkUserData(String name, URL url)
