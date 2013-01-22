@@ -183,7 +183,8 @@ public:
     glTexParameteri(target, par, v);
   }
 
-  void texImage2D(const IImage* image, int format) const {
+  void texImage2D(const IImage* image,
+                  int format) const {
     const unsigned char* data = ((Image_iOS*) image)->createByteArrayRGBA8888();
 
     glTexImage2D(GL_TEXTURE_2D,
