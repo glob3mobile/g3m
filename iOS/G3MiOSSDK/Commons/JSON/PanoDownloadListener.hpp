@@ -22,7 +22,7 @@ class PanoMarkUserData : public MarkUserData {
   const URL* _url;
 #endif
 #ifdef JAVA_CODE
-  private final URL _url;
+  private URL _url;
 #endif
   
 public:
