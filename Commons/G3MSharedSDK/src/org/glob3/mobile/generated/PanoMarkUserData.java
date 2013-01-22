@@ -21,7 +21,9 @@ package org.glob3.mobile.generated;
 public class PanoMarkUserData extends MarkUserData
 {
   private String _name;
-  private Url _url;
+
+  private final URL _url;
+
 
   public PanoMarkUserData(String name, URL url)
   {
@@ -41,7 +43,6 @@ public class PanoMarkUserData extends MarkUserData
 
   public void dispose()
   {
-	if (_url != null)
-		_url.dispose();
+	_url = null;
   }
 }
