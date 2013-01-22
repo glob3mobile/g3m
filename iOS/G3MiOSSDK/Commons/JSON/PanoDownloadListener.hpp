@@ -14,11 +14,17 @@
 #include "JSONObject.hpp"
 #include "MarkTouchListener.hpp"
 #include "Mark.hpp"
-#include "URL.hpp"
 
 class PanoMarkUserData : public MarkUserData {
   std::string _name;
+  
+#ifdef C_CODE
   const URL* _url;
+#endif
+#ifdef JAVA_CODE
+  private final URL _url;
+#endif
+  
 public:
   
   PanoMarkUserData(std::string name, const URL* url){
