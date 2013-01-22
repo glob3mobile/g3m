@@ -47,16 +47,6 @@ public class MarksRenderer extends LeafRenderer
 
   public final void setMarkTouchListener(MarkTouchListener markTouchListener, boolean autoDelete)
   {
-<<<<<<< HEAD
-	  if (_autoDeleteMarkTouchListener)
-	  {
-		  if (_markTouchListener != null)
-			  _markTouchListener.dispose();
-	  }
-  
-	  _markTouchListener = markTouchListener;
-	  _autoDeleteMarkTouchListener = autoDelete;
-=======
 	if (_autoDeleteMarkTouchListener)
 	{
 	  if (_markTouchListener != null)
@@ -65,7 +55,6 @@ public class MarksRenderer extends LeafRenderer
   
 	_markTouchListener = markTouchListener;
 	_autoDeleteMarkTouchListener = autoDelete;
->>>>>>> webgl-port
   }
 
   public void dispose()
@@ -126,12 +115,7 @@ public class MarksRenderer extends LeafRenderer
   
 	gl.setBlendFuncSrcAlpha();
   
-<<<<<<< HEAD
-  //  const Vector3D radius = rc->getPlanet()->getRadii();
-  //  const double minDistanceToCamera = (radius._x + radius._y + radius._z) / 3 * 0.75;
-=======
 	final Camera camera = rc.getCurrentCamera();
->>>>>>> webgl-port
   
 	gl.startBillBoardDrawing(camera.getWidth(), camera.getHeight());
   
@@ -143,12 +127,7 @@ public class MarksRenderer extends LeafRenderer
   
 	  if (mark.isReady())
 	  {
-<<<<<<< HEAD
-  //      mark->render(rc, state, minDistanceToCamera);
-		  mark.render(rc, state);
-=======
 		mark.render(rc);
->>>>>>> webgl-port
 	  }
 	}
   
@@ -166,29 +145,6 @@ public class MarksRenderer extends LeafRenderer
 
   public final void removeMark(Mark mark)
   {
-<<<<<<< HEAD
-	  for (int i = 0; i < _marks.size(); i++)
-	  {
-		  if (_marks.get(i) == mark)
-		  {
-  			_marks.remove(i);
-			break;
-		  }
-	  }
-  }
-
-  public final void removeAllMarks()
-  {
-	  for (int i = 0; i < _marks.size(); i++)
-	  {
-		  if (_marks.get(i) != null)
-			  _marks.get(i).dispose();
-	  }
-	  _marks.clear();
-  }
-
-  public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
-=======
 	int pos = -1;
 	for (int i = 0; i < _marks.size(); i++)
 	{
@@ -202,7 +158,6 @@ public class MarksRenderer extends LeafRenderer
   }
 
   public final void removeAllMarks()
->>>>>>> webgl-port
   {
 	for (int i = 0; i < _marks.size(); i++)
 	{
@@ -272,15 +227,6 @@ public class MarksRenderer extends LeafRenderer
   
 		if (nearestMark != null)
 		{
-<<<<<<< HEAD
-		  if (nearestMark.getListener() != null)
-		  {
-			  handled = nearestMark.getListener().touchedMark(nearestMark);
-		  }
-		  else
-		  {
-			  handled = _markTouchListener.touchedMark(nearestMark);
-=======
 		  handled = nearestMark.touched();
 		  if (!handled)
 		  {
@@ -288,7 +234,6 @@ public class MarksRenderer extends LeafRenderer
 			{
 			  handled = _markTouchListener.touchedMark(nearestMark);
 			}
->>>>>>> webgl-port
 		  }
 		}
 	  }
