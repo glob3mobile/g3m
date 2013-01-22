@@ -14,7 +14,8 @@
 #include "Vector3D.hpp"
 #include "Vector2D.hpp"
 #include "INativeGL.hpp"
-#include "IIntBuffer.hpp"
+//#include "IIntBuffer.hpp"
+#include "IShortBuffer.hpp"
 #include "IFactory.hpp"
 #include "FloatBufferBuilderFromCartesian2D.hpp"
 #include "IGLUniformID.hpp"
@@ -336,8 +337,20 @@ void GL::vertexPointer(int size,
   }
 }
 
+//void GL::drawElements(int mode,
+//                      IIntBuffer* indices) {
+//  if (_verbose) {
+//    ILogger::instance()->logInfo("GL::drawElements(%d, %s)",
+//                                 mode,
+//                                 indices->description().c_str());
+//  }
+//
+//  _nativeGL->drawElements(mode,
+//                          indices->size(),
+//                          indices);
+//}
 void GL::drawElements(int mode,
-                      IIntBuffer* indices) {
+                      IShortBuffer* indices) {
   if (_verbose) {
     ILogger::instance()->logInfo("GL::drawElements(%d, %s)",
                                  mode,
@@ -366,13 +379,15 @@ void GL::drawArrays(int mode,
 
 int GL::getError() {
   if (_verbose) {
-    ILogger::instance()->logInfo("GL::getError()()");
+    ILogger::instance()->logInfo("GL::getError()");
   }
 
   return _nativeGL->getError();
 }
 
-const IGLTextureId* GL::uploadTexture(const IImage* image, int format, bool generateMipmap){
+const IGLTextureId* GL::uploadTexture(const IImage* image,
+                                      int format,
+                                      bool generateMipmap){
   if (_verbose) {
     ILogger::instance()->logInfo("GL::uploadTexture()");
   }
@@ -432,7 +447,12 @@ void GL::bindTexture(const IGLTextureId* textureId) {
     ILogger::instance()->logInfo("GL::bindTexture()");
   }
 
-  _nativeGL->bindTexture(GLTextureType::texture2D(), textureId);
+  if (textureId == NULL) {
+    ILogger::instance()->logError("Can't bind a NULL texture");
+  }
+  else {
+    _nativeGL->bindTexture(GLTextureType::texture2D(), textureId);
+  }
 }
 
 IFloatBuffer* GL::getBillboardTexCoord() {
@@ -500,22 +520,31 @@ const IGLTextureId* GL::getGLTextureId() {
   }
 
   if (_texturesIdBag.size() == 0) {
-    const int bugdetSize = 256;
+    //const int bugdetSize = 256;
+    const int bugdetSize = 10240;
 
-    ILogger::instance()->logInfo("= Creating %d texturesIds...", bugdetSize);
+    ILogger::instance()->logInfo("= Creating %d texturesIds...",
+                                 bugdetSize);
 
     const std::vector<IGLTextureId*> ids = _nativeGL->genTextures(bugdetSize);
 
-    for (int i = 0; i < bugdetSize; i++) {
+    for (int i = 0; i < ids.size(); i++) {
       _texturesIdBag.push_front(ids[i]);
     }
 
-    _texturesIdAllocationCounter += bugdetSize;
+    _texturesIdAllocationCounter += ids.size();
 
-    ILogger::instance()->logInfo("= Created %d texturesIds (accumulated %d).", bugdetSize, _texturesIdAllocationCounter);
+    ILogger::instance()->logInfo("= Created %d texturesIds (accumulated %d).",
+                                 bugdetSize,
+                                 _texturesIdAllocationCounter);
   }
 
   //  _texturesIdGetCounter++;
+
+  if (_texturesIdBag.size() == 0) {
+    ILogger::instance()->logError("TextureIds bag exhausted");
+    return NULL;
+  }
 
   const IGLTextureId* result = _texturesIdBag.back();
   _texturesIdBag.pop_back();
@@ -536,9 +565,13 @@ void GL::deleteTexture(const IGLTextureId* texture) {
   }
 
   if (texture != NULL) {
-    if ( _nativeGL->deleteTexture(texture) ) {
-      _texturesIdBag.push_back(texture);
-    }
+    //    if ( _nativeGL->deleteTexture(texture) ) {
+    //      _texturesIdBag.push_back(texture);
+    //    }
+
+    int __TESTING_TEXTUREIDs_DELETION;
+    //_nativeGL->deleteTexture(texture);
+    _texturesIdBag.push_back(texture);
 
     //    _texturesIdTakeCounter++;
   }

@@ -21,7 +21,7 @@
 
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "FloatBufferBuilderFromCartesian2D.hpp"
-#include "IntBufferBuilder.hpp"
+#include "ShortBufferBuilder.hpp"
 
 #include "GLConstants.hpp"
 
@@ -64,11 +64,11 @@ bool BusyQuadRenderer::initMesh(const G3MRenderContext* rc) {
   vertices.add(+halfSize, +halfSize, 0);
   vertices.add(+halfSize, -halfSize, 0);
 
-  IntBufferBuilder indices;
-  indices.add(0);
-  indices.add(1);
-  indices.add(2);
-  indices.add(3);
+  ShortBufferBuilder indices;
+  indices.add((short) 0);
+  indices.add((short) 1);
+  indices.add((short) 2);
+  indices.add((short) 3);
 
   FloatBufferBuilderFromCartesian2D texCoords;
   texCoords.add(0, 0);

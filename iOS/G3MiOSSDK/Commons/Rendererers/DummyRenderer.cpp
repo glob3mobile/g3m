@@ -14,8 +14,8 @@
 #include "Vector3D.hpp"
 
 #include "FloatBufferBuilderFromCartesian3D.hpp"
-#include "IntBufferBuilder.hpp"
-#include "IIntBuffer.hpp"
+#include "ShortBufferBuilder.hpp"
+#include "IShortBuffer.hpp"
 
 DummyRenderer::~DummyRenderer() {
   delete _indices;
@@ -26,7 +26,7 @@ void DummyRenderer::initialize(const G3MContext* context) {
   int res = 12;
 
   FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero());
-  IntBufferBuilder index;
+  ShortBufferBuilder index;
 
   // create vertices
 
@@ -48,13 +48,13 @@ void DummyRenderer::initialize(const G3MContext* context) {
 
   for (int j = 0; j < res - 1; j++) {
     if (j > 0){
-      index.add(j * res);
+      index.add((short) (j * res));
     }
     for (int i = 0; i < res; i++) {
-      index.add(j * res + i);
-      index.add(j * res + i + res);
+      index.add((short) (j * res + i));
+      index.add((short) (j * res + i + res));
     }
-    index.add(j * res + 2 * res - 1);
+    index.add((short) (j * res + 2 * res - 1));
   }
 
   _indices = index.create();

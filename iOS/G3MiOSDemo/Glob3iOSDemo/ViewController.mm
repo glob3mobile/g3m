@@ -8,60 +8,33 @@
 
 #import "ViewController.h"
 
-#include "LayerSet.hpp"
-#include "WMSLayer.hpp"
-#include "Factory_iOS.hpp"
-#include "EllipsoidalTileTessellator.hpp"
-#include "TileRenderer.hpp"
-#include "TilesRenderParameters.hpp"
-#include "MarksRenderer.hpp"
-#include "CameraConstraints.hpp"
-//#include "GLErrorRenderer.hpp"
-#include "LevelTileCondition.hpp"
-#include "BingLayer.hpp"
-#include "TrailsRenderer.hpp"
-#include "PeriodicalTask.hpp"
-#include "ShapesRenderer.hpp"
-//#include "QuadShape.hpp"
-#include "CircleShape.hpp"
-#include "BoxShape.hpp"
-//#include "CompositeShape.hpp"
-#include "SceneJSShapesParser.hpp"
-#include "G3MWidget.hpp"
-#include "DummyRenderer.hpp"
-#include "GEOJSONParser.hpp"
-#include "GEORenderer.hpp"
-#include "GInitializationTask.hpp"
+
 
 #include "G3MBuilder_iOS.hpp"
+
+#include "VisibleSectorListener.hpp"
+#include "MarksRenderer.hpp"
+#include "ShapesRenderer.hpp"
+#include "GEORenderer.hpp"
 #include "BusyMeshRenderer.hpp"
-#include "CompositeRenderer.hpp"
-#include "TileRendererBuilder.hpp"
-#include "CameraRenderer.hpp"
-#include "CameraSingleDragHandler.hpp"
-#include "CameraDoubleDragHandler.hpp"
-#include "CameraRotationHandler.hpp"
-#include "CameraDoubleTapHandler.hpp"
-#include "NativeGL2_iOS.hpp"
-#include "SQLiteStorage_iOS.hpp"
-#include "CachedDownloader.hpp"
-#include "Downloader_iOS.hpp"
-#include "ThreadUtils_iOS.hpp"
-#include "Planet.hpp"
 #include "MeshRenderer.hpp"
 #include "FloatBufferBuilderFromGeodetic.hpp"
 #include "FloatBufferBuilderFromColor.hpp"
 #include "DirectMesh.hpp"
-//#include "IJSONParser.hpp"
-//#include "JSONGenerator.hpp"
-//#include "BSONGenerator.hpp"
-#include "BSONParser.hpp"
-//#include "ITextUtils.hpp"
-#include "Mark.hpp"
-#include "MarkTouchListener.hpp"
-#include "JSONBaseObject.hpp"
-#include "VisibleSectorListener.hpp"
+#include "WMSLayer.hpp"
+#include "CameraSingleDragHandler.hpp"
+#include "CameraDoubleDragHandler.hpp"
+#include "CameraRotationHandler.hpp"
+#include "CameraDoubleTapHandler.hpp"
+#include "LevelTileCondition.hpp"
 #include "LayerBuilder.hpp"
+#include "TileRendererBuilder.hpp"
+#include "MarkTouchListener.hpp"
+#include "TrailsRenderer.hpp"
+#include "Mark.hpp"
+#include "CircleShape.hpp"
+#include "BoxShape.hpp"
+#include "SceneJSShapesParser.hpp"
 
 
 class TestVisibleSectorListener : public VisibleSectorListener {
@@ -93,7 +66,7 @@ public:
   // [self initWithoutBuilder];
 
   // initizalize a default widget by using a builder
-  //    [self initDefaultWithBuilder];
+//  [self initDefaultWithBuilder];
 
   // initialize a customized widget by using a buider
   [self initCustomizedWithBuilder];
@@ -101,59 +74,59 @@ public:
   [[self G3MWidget] startAnimation];
 }
 
-- (void) initWithoutBuilder
-{
-  IStorage* storage = new SQLiteStorage_iOS("g3m.cache");
-
-  const bool saveInBackground = true;
-  IDownloader* downloader = new CachedDownloader(new Downloader_iOS(8),
-                                                 storage,
-                                                 saveInBackground);
-
-  IThreadUtils* threadUtils = new ThreadUtils_iOS();
-
-  const Planet* planet = Planet::createEarth();
-
-  CompositeRenderer* mainRenderer = new CompositeRenderer();
-
-  TileRenderer* tileRenderer = [self createTileRenderer: [self createTileRenderParameters]
-                                               layerSet: [self createLayerSet]];
-  mainRenderer->addRenderer(tileRenderer);
-
-  MarksRenderer* marksRenderer = [self createMarksRenderer];
-  mainRenderer->addRenderer(marksRenderer);
-
-  ShapesRenderer* shapesRenderer = [self createShapesRenderer];
-  mainRenderer->addRenderer(shapesRenderer);
-
-  GEORenderer* geoRenderer = [self createGEORenderer];
-  mainRenderer->addRenderer(geoRenderer);
-
-  Renderer* busyRenderer = new BusyMeshRenderer();
-
-  GInitializationTask* initializationTask = [self createSampleInitializationTask: shapesRenderer
-                                                                     geoRenderer: geoRenderer];
-
-  std::vector<PeriodicalTask*> periodicalTasks;
-
-  // initialization
-  [[self G3MWidget] initWidget: storage
-                    downloader: downloader
-                   threadUtils: threadUtils
-                        planet: planet
-             cameraConstraints: [self createCameraConstraints]
-                cameraRenderer: [self createCameraRenderer]
-                  mainRenderer: mainRenderer
-                  busyRenderer: busyRenderer
-               backgroundColor: Color::fromRGBA((float)0, (float)0.1, (float)0.2, (float)1)
-                        logFPS: true
-       logDownloaderStatistics: false
-            initializationTask: initializationTask
-  autoDeleteInitializationTask: true
-               periodicalTasks: periodicalTasks
-                      userData: NULL];
-
-}
+//- (void) initWithoutBuilder
+//{
+//  IStorage* storage = new SQLiteStorage_iOS("g3m.cache");
+//
+//  const bool saveInBackground = true;
+//  IDownloader* downloader = new CachedDownloader(new Downloader_iOS(8),
+//                                                 storage,
+//                                                 saveInBackground);
+//
+//  IThreadUtils* threadUtils = new ThreadUtils_iOS();
+//
+//  const Planet* planet = Planet::createEarth();
+//
+//  CompositeRenderer* mainRenderer = new CompositeRenderer();
+//
+//  TileRenderer* tileRenderer = [self createTileRenderer: [self createTileRenderParameters]
+//                                               layerSet: [self createLayerSet]];
+//  mainRenderer->addRenderer(tileRenderer);
+//
+//  MarksRenderer* marksRenderer = [self createMarksRenderer];
+//  mainRenderer->addRenderer(marksRenderer);
+//
+//  ShapesRenderer* shapesRenderer = [self createShapesRenderer];
+//  mainRenderer->addRenderer(shapesRenderer);
+//
+//  GEORenderer* geoRenderer = [self createGEORenderer];
+//  mainRenderer->addRenderer(geoRenderer);
+//
+//  Renderer* busyRenderer = new BusyMeshRenderer();
+//
+//  GInitializationTask* initializationTask = [self createSampleInitializationTask: shapesRenderer
+//                                                                     geoRenderer: geoRenderer];
+//
+//  std::vector<PeriodicalTask*> periodicalTasks;
+//
+//  // initialization
+//  [[self G3MWidget] initWidget: storage
+//                    downloader: downloader
+//                   threadUtils: threadUtils
+//                        planet: planet
+//             cameraConstraints: [self createCameraConstraints]
+//                cameraRenderer: [self createCameraRenderer]
+//                  mainRenderer: mainRenderer
+//                  busyRenderer: busyRenderer
+//               backgroundColor: Color::fromRGBA((float)0, (float)0.1, (float)0.2, (float)1)
+//                        logFPS: true
+//       logDownloaderStatistics: false
+//            initializationTask: initializationTask
+//  autoDeleteInitializationTask: true
+//               periodicalTasks: periodicalTasks
+//                      userData: NULL];
+//
+//}
 
 - (void) initDefaultWithBuilder
 {
@@ -628,7 +601,7 @@ public:
       }
       */
 
-      /*
+      /**/
       NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
                                                                 ofType: @"json"];
       //      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"3dmodels/Macba_Google_Earth-1"
@@ -650,7 +623,7 @@ public:
           }
         }
       }
-      */
+      /**/
 
       /**/
 

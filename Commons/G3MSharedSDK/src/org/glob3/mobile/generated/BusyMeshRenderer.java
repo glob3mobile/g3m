@@ -40,7 +40,7 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
   
 	FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
 	FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
-	IntBufferBuilder indices = new IntBufferBuilder();
+	ShortBufferBuilder indices = new ShortBufferBuilder();
   
 	int indicesCounter = 0;
 	final float r1 = 12F;
@@ -54,8 +54,8 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
 	  vertices.add((r1 * c), (r1 * s), 0);
 	  vertices.add((r2 * c), (r2 * s), 0);
   
-	  indices.add(indicesCounter++);
-	  indices.add(indicesCounter++);
+	  indices.add((short)(indicesCounter++));
+	  indices.add((short)(indicesCounter++));
   
 	  float col = (float)(1.1 * step / numStrides);
 	  if (col>1)
@@ -71,8 +71,8 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
 	}
   
 	// the two last indices
-	indices.add(0);
-	indices.add(1);
+	indices.add((short) 0);
+	indices.add((short) 1);
   
 	// create mesh
 	_mesh = new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, null, colors.create());

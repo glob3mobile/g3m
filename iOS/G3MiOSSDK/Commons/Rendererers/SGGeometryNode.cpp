@@ -12,7 +12,7 @@
 #include "GL.hpp"
 
 #include "IFloatBuffer.hpp"
-#include "IIntBuffer.hpp"
+#include "IShortBuffer.hpp"
 
 SGGeometryNode::~SGGeometryNode() {
   delete _vertices;

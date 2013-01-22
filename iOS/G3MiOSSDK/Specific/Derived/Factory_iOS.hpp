@@ -16,6 +16,7 @@
 #include "ByteBuffer_iOS.hpp"
 #include "FloatBuffer_iOS.hpp"
 #include "IntBuffer_iOS.hpp"
+#include "ShortBuffer_iOS.hpp"
 #include "IImageListener.hpp"
 
 class Factory_iOS: public IFactory {
@@ -133,7 +134,12 @@ public:
   IIntBuffer* createIntBuffer(int size) const {
     return new IntBuffer_iOS(size);
   }
-  
+
+
+  IShortBuffer* createShortBuffer(int size) const {
+    return new ShortBuffer_iOS(size);
+  }
+
 };
 
 #endif
