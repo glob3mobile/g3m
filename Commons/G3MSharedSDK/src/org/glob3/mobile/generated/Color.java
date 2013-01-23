@@ -72,6 +72,11 @@ public class Color
 	return Color.fromRGBA(1, 0, 1, 1);
   }
 
+  public static Color green()
+  {
+	return Color.fromRGBA(0, 1, 0, 1);
+  }
+
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: float getRed() const
   public final float getRed()
