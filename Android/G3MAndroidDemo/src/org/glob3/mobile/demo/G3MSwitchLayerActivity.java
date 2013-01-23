@@ -42,7 +42,7 @@ public class G3MSwitchLayerActivity
       _OSMLayer.setEnable(false);
       layers.addLayer(_BingLayer);
       layers.addLayer(_OSMLayer);
-      g3mBuilder.setLayerSet(layers);
+      g3mBuilder.getTileRendererBuilder().setLayerSet(layers);
 
       _widgetAndroid = g3mBuilder.createWidget();
       final LinearLayout layout = (LinearLayout) findViewById(R.id.glob3);
