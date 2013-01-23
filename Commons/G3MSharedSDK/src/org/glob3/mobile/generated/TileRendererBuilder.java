@@ -17,6 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 public class TileRendererBuilder
 {
 
@@ -29,12 +30,14 @@ public class TileRendererBuilder
   private boolean _useTilesSplitBudget;
   private boolean _forceTopLevelTilesRenderOnStart;
   private boolean _incrementalTileQuality;
+  private java.util.ArrayList<VisibleSectorListener> _visibleSectorListeners = new java.util.ArrayList<VisibleSectorListener>();
+  private java.util.ArrayList<Long> _stabilizationMilliSeconds = new java.util.ArrayList<Long>();
 
   private LayerSet createLayerSet()
   {
 	LayerSet layerSet = new LayerSet();
   
-	WMSLayer bing = new WMSLayer("ve", new URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?", false), WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/jpeg", "EPSG:4326", "", false, null, TimeInterval.fromDays(30));
+	WMSLayer bing = LayerBuilder.createBingLayer(true);
 	layerSet.addLayer(bing);
   
 	return layerSet;
@@ -75,6 +78,11 @@ public class TileRendererBuilder
   public final TileRenderer create()
   {
 	TileRenderer tileRenderer = new TileRenderer(_tileTessellator, _texturizer, _layerSet, _parameters, _showStatistics);
+  
+	for (int i = 0; i < _visibleSectorListeners.size(); i++)
+	{
+	  tileRenderer.addVisibleSectorListener(_visibleSectorListeners.get(i), TimeInterval.fromMilliseconds(_stabilizationMilliSeconds.get(i)));
+	}
   
 	return tileRenderer;
   }
@@ -131,6 +139,15 @@ public class TileRendererBuilder
   public final void setIncrementalTileQuality(boolean incrementalTileQuality)
   {
 	_incrementalTileQuality = incrementalTileQuality;
+  }
+  public final void addVisibleSectorListener(VisibleSectorListener listener, TimeInterval stabilizationInterval)
+  {
+	_visibleSectorListeners.add(listener);
+	_stabilizationMilliSeconds.add(stabilizationInterval.milliseconds());
+  }
+  public final void addVisibleSectorListener(VisibleSectorListener listener)
+  {
+	addVisibleSectorListener(listener, TimeInterval.zero());
   }
 
 }
