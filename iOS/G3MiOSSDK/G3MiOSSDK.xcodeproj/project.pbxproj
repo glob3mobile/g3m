@@ -347,16 +347,16 @@
 		E745CC7916484A9A00819711 /* IStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E745CC7716484A9900819711 /* IStorage.cpp */; };
 		E77A100A165BEDC500FE5515 /* IG3MBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E77A1008165BEDC500FE5515 /* IG3MBuilder.cpp */; };
 		E77A100B165BEDC500FE5515 /* IG3MBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E77A1009165BEDC500FE5515 /* IG3MBuilder.hpp */; settings = {ATTRIBUTES = (); }; };
+		E7B9964E16A94EC400753FC3 /* LayerBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7B9964C16A94EC400753FC3 /* LayerBuilder.cpp */; };
+		E7B9964F16A94EC400753FC3 /* LayerBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E7B9964D16A94EC400753FC3 /* LayerBuilder.hpp */; };
 		E86A5B8B167211900098449B /* PanoDownloadListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E86A5B891672118F0098449B /* PanoDownloadListener.cpp */; };
 		E86A5B8C167211900098449B /* PanoDownloadListener.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E86A5B8A1672118F0098449B /* PanoDownloadListener.hpp */; settings = {ATTRIBUTES = (); }; };
+		E87424B1169F4B9400C8A227 /* MarkTouchListener.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E87424B0169F4B9400C8A227 /* MarkTouchListener.hpp */; };
 		E8891FB31647DCF500B0E481 /* AppParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8891FB11647DCF500B0E481 /* AppParser.cpp */; };
 		E8891FB41647DCF500B0E481 /* AppParser.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E8891FB21647DCF500B0E481 /* AppParser.hpp */; };
 		E8891FBC1647DD0E00B0E481 /* SceneParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8891FB81647DD0D00B0E481 /* SceneParser.cpp */; };
 		E8891FBD1647DD0E00B0E481 /* SceneParser.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E8891FB91647DD0D00B0E481 /* SceneParser.hpp */; };
 		E8891FC31647DD7400B0E481 /* IG3MJSONBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E8891FC21647DD7400B0E481 /* IG3MJSONBuilder.hpp */; settings = {ATTRIBUTES = (); }; };
-		E7B9964E16A94EC400753FC3 /* LayerBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7B9964C16A94EC400753FC3 /* LayerBuilder.cpp */; };
-		E7B9964F16A94EC400753FC3 /* LayerBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E7B9964D16A94EC400753FC3 /* LayerBuilder.hpp */; };
-		E87424B1169F4B9400C8A227 /* MarkTouchListener.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E87424B0169F4B9400C8A227 /* MarkTouchListener.hpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -702,16 +702,16 @@
 		E745CC7716484A9900819711 /* IStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IStorage.cpp; path = Commons/Interfaces/IStorage.cpp; sourceTree = "<group>"; };
 		E77A1008165BEDC500FE5515 /* IG3MBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IG3MBuilder.cpp; path = Commons/Basic/IG3MBuilder.cpp; sourceTree = "<group>"; };
 		E77A1009165BEDC500FE5515 /* IG3MBuilder.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = IG3MBuilder.hpp; path = Commons/Basic/IG3MBuilder.hpp; sourceTree = "<group>"; };
+		E7B9964C16A94EC400753FC3 /* LayerBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LayerBuilder.cpp; path = Commons/Basic/LayerBuilder.cpp; sourceTree = "<group>"; };
+		E7B9964D16A94EC400753FC3 /* LayerBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = LayerBuilder.hpp; path = Commons/Basic/LayerBuilder.hpp; sourceTree = "<group>"; };
 		E86A5B891672118F0098449B /* PanoDownloadListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PanoDownloadListener.cpp; sourceTree = "<group>"; };
 		E86A5B8A1672118F0098449B /* PanoDownloadListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PanoDownloadListener.hpp; sourceTree = "<group>"; };
+		E87424B0169F4B9400C8A227 /* MarkTouchListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MarkTouchListener.hpp; path = Commons/Rendererers/MarkTouchListener.hpp; sourceTree = "<group>"; };
 		E8891FB11647DCF500B0E481 /* AppParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppParser.cpp; sourceTree = "<group>"; };
 		E8891FB21647DCF500B0E481 /* AppParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AppParser.hpp; sourceTree = "<group>"; };
 		E8891FB81647DD0D00B0E481 /* SceneParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SceneParser.cpp; sourceTree = "<group>"; };
 		E8891FB91647DD0D00B0E481 /* SceneParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SceneParser.hpp; sourceTree = "<group>"; };
 		E8891FC21647DD7400B0E481 /* IG3MJSONBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IG3MJSONBuilder.hpp; path = Commons/Basic/IG3MJSONBuilder.hpp; sourceTree = "<group>"; };
-		E7B9964C16A94EC400753FC3 /* LayerBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LayerBuilder.cpp; path = Commons/Basic/LayerBuilder.cpp; sourceTree = "<group>"; };
-		E7B9964D16A94EC400753FC3 /* LayerBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = LayerBuilder.hpp; path = Commons/Basic/LayerBuilder.hpp; sourceTree = "<group>"; };
-		E87424B0169F4B9400C8A227 /* MarkTouchListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MarkTouchListener.hpp; path = Commons/Rendererers/MarkTouchListener.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -814,7 +814,6 @@
 		383BD3891577EDF40012AC53 /* Basic */ = {
 			isa = PBXGroup;
 			children = (
-				E8891FC21647DD7400B0E481 /* IG3MJSONBuilder.hpp */,
 				CF4FAAC11695C66F009734CA /* ByteBufferBuilder.cpp */,
 				CF4FAAC21695C66F009734CA /* ByteBufferBuilder.hpp */,
 				CF7EDA0316948302002C760A /* ByteBufferIterator.cpp */,
@@ -849,12 +848,16 @@
 				CF6873A415F77F54002EDFD0 /* IFloatBuffer.hpp */,
 				E77A1008165BEDC500FE5515 /* IG3MBuilder.cpp */,
 				E77A1009165BEDC500FE5515 /* IG3MBuilder.hpp */,
+				E8891FC21647DD7400B0E481 /* IG3MJSONBuilder.hpp */,
 				CF6873A815F77FFC002EDFD0 /* IIntBuffer.cpp */,
 				CF6873A915F77FFC002EDFD0 /* IIntBuffer.hpp */,
 				CF7E626415F7DD740086B71D /* IntBufferBuilder.cpp */,
 				CF7E626515F7DD740086B71D /* IntBufferBuilder.hpp */,
+				CFBD42D916AA151100663F21 /* IShortBuffer.cpp */,
+				CFBD42DA16AA151100663F21 /* IShortBuffer.hpp */,
 				CFCE679B15EFB06700B35FE0 /* IThreadUtils.cpp */,
 				CFCE679C15EFB06700B35FE0 /* IThreadUtils.hpp */,
+				CF03683416A499F0006CE160 /* LabelPosition.h */,
 				E7B9964C16A94EC400753FC3 /* LayerBuilder.cpp */,
 				E7B9964D16A94EC400753FC3 /* LayerBuilder.hpp */,
 				CF0C3969157F988100646A2F /* Mark.cpp */,
@@ -868,6 +871,8 @@
 				CFE0844415E27B9A0004EC0E /* Petition.hpp */,
 				CFF8C4BB15DEB6A70034A576 /* RCObject.cpp */,
 				CFF8C4BC15DEB6A70034A576 /* RCObject.hpp */,
+				CF923CA216AB126D00D04301 /* ShortBufferBuilder.cpp */,
+				CF923CA316AB126D00D04301 /* ShortBufferBuilder.hpp */,
 				D8CD74D615F8D3F000B801CC /* SimpleFloatBufferBuilder.hpp */,
 				CFE0844015E27A310004EC0E /* TerrainTouchEventListener.hpp */,
 				D87EC5CD15BEB31000E38C36 /* TextureBuilder.hpp */,
@@ -890,11 +895,6 @@
 				CFFEC12415C2EB96003FA986 /* URL.hpp */,
 				CF8D0BFB15AF0D23005B5433 /* TileTexturizer.hpp */,
 				CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */,
-				CF03683416A499F0006CE160 /* LabelPosition.h */,
-				CFBD42D916AA151100663F21 /* IShortBuffer.cpp */,
-				CFBD42DA16AA151100663F21 /* IShortBuffer.hpp */,
-				CF923CA216AB126D00D04301 /* ShortBufferBuilder.cpp */,
-				CF923CA316AB126D00D04301 /* ShortBufferBuilder.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -1274,7 +1274,6 @@
 				CF022387166836F500024B73 /* GEOJSONParser.hpp in Headers */,
 				CFC54E101669766C00E1CD15 /* GEORenderer.hpp in Headers */,
 				E86A5B8C167211900098449B /* PanoDownloadListener.hpp in Headers */,
-				E86A5B86166FBFC90098449B /* MarkTouchListener.hpp in Headers */,
 				E8891FC31647DD7400B0E481 /* IG3MJSONBuilder.hpp in Headers */,
 				CFDFC05E166AB22A0065BC1F /* AbstractMesh.hpp in Headers */,
 				E7051241165E916000AEADB9 /* G3MBuilder_iOS.hpp in Headers */,

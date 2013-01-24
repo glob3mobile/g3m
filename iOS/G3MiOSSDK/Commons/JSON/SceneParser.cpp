@@ -42,6 +42,8 @@ const std::string SceneParser::URLICON = "urlIcon";
 const std::string SceneParser::MINDISTANCE = "minDistance";
 const std::string SceneParser::COLORLINE = "colorLine";
 const std::string SceneParser::SIZELINE = "sizeLine";
+const std::string SceneParser::WEB = "web";
+
 
 const std::string SceneParser::WMS110 = "1.1.0";
 const std::string SceneParser::WMS111 = "1.1.1";
@@ -69,7 +71,9 @@ void SceneParser::parse(LayerSet* layerSet, std::string namelessParameter){
     
     _mapGeoJSONSources.clear();
     _panoSources.clear();
-    
+    _legend.clear();
+    countGroup=0;
+  
     JSONBaseObject* json = IJSONParser::instance()->parse(namelessParameter);
     parserJSONLayerList(layerSet, json->asObject()->getAsObject(LAYERS));
     IJSONParser::instance()->deleteJSONData(json);
@@ -170,7 +174,9 @@ void SceneParser::parserGEOJSONLayer(LayerSet* layerSet, const JSONObject* jsonL
     cout << "Parsing GEOJSON Layer " << jsonLayer->getAsString(NAME)->value() << "..." << endl;
     
     const std::string geojsonDatasource = jsonLayer->getAsString(DATASOURCE)->value();
-    
+  
+    std::vector<std::map<std::string, std::string>* > legendLayer;
+  
     const JSONArray* jsonItems = jsonLayer->getAsArray(ITEMS);
     for (int i = 0; i<jsonItems->size(); i++) {
     
@@ -179,28 +185,36 @@ void SceneParser::parserGEOJSONLayer(LayerSet* layerSet, const JSONObject* jsonL
         const std::string minDistance = jsonItems->getAsObject(i)->getAsString(MINDISTANCE)->value();
         const std::string colorLine = jsonItems->getAsObject(i)->getAsString(COLORLINE)->value();
         const std::string sizeLine = jsonItems->getAsObject(i)->getAsString(SIZELINE)->value();
-
         
         IStringBuilder *url = IStringBuilder::newStringBuilder();
         url->addString(geojsonDatasource);
         url->addString("/");
         url->addString(namefile);
-        
-        std::map<std::string, std::string> attr;
-        attr[URLICON] = icon;
-        attr[MINDISTANCE] = minDistance;
-        attr[COLORLINE] = colorLine;
-        attr[SIZELINE] = sizeLine;
-        
-        _mapGeoJSONSources[url->getString()] = attr;
+      
+        const IStringUtils* iISU = IStringUtils::instance();
+        std::string namefileTruncated = iISU->capitalize(iISU->replaceSubstring(iISU->substring(namefile, 0, iISU->indexOf(namefile, ".")), "_", " "));
+      
+        std::map<std::string, std::string>* geojsonMetadata = new std::map<std::string, std::string>;
+        geojsonMetadata->insert(std::make_pair(URLICON,icon));
+        geojsonMetadata->insert(std::make_pair(NAME,namefileTruncated));
+        geojsonMetadata->insert(std::make_pair(COLORLINE,colorLine));
+        geojsonMetadata->insert(std::make_pair(WEB,""));
+        geojsonMetadata->insert(std::make_pair(MINDISTANCE,minDistance));
+        geojsonMetadata->insert(std::make_pair(SIZELINE,sizeLine));
+      
+        legendLayer.push_back(geojsonMetadata);
+      
+        _mapGeoJSONSources[url->getString()] = geojsonMetadata;
     }
+    _legend[jsonLayer->getAsString(NAME)->value()] = legendLayer;
+    countGroup++;
 }
 
 void SceneParser::parserJSONSphericalImageLayer(LayerSet* layerSet, const JSONObject* jsonLayer){
     cout << "Parsing GEOJSON Layer not available" << endl;
 }
 
-std::map<std::string, std::map<std::string, std::string> > SceneParser::getMapGeoJSONSources(){
+std::map<std::string, std::map<std::string, std::string>* > SceneParser::getMapGeoJSONSources(){
     return _mapGeoJSONSources;   
 }
 
@@ -208,3 +222,10 @@ std::vector<std::string> SceneParser::getPanoSources(){
     return _panoSources;   
 }
 
+std::map<std::string, std::vector <std::map<std::string, std::string>* > > SceneParser::getLegend(){
+    return _legend;
+}
+
+void SceneParser::updateMapGeoJSONSourcesValue(std::string fileUrl, std::string key, std::string value){
+  (*(_mapGeoJSONSources[fileUrl]))[key] = value;
+}

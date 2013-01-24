@@ -34,23 +34,29 @@ class SceneParser{
     static const std::string MINDISTANCE;
     static const std::string COLORLINE;
     static const std::string SIZELINE;
-    
+    static const std::string WEB;
+  
     static const std::string WMS110;
     static const std::string WMS111;
     static const std::string WMS130;
     
     static SceneParser* _instance;
     std::map<std::string, layer_type> _mapLayerType;
-    std::map<std::string, std::map<std::string, std::string> > _mapGeoJSONSources;
+    std::map<std::string, std::map<std::string, std::string>* > _mapGeoJSONSources;
     std::vector<std::string> _panoSources;
-    
+    std::map<std::string, std::vector <std::map<std::string, std::string>* > > _legend;
+    int countGroup;
+  
 public:
     
     static SceneParser* instance();
     void parse(LayerSet* layerSet, std::string namelessParameter);
-    std::map<std::string, std::map<std::string, std::string> > getMapGeoJSONSources();
+    std::map<std::string, std::map<std::string, std::string>* > getMapGeoJSONSources();
     std::vector<std::string> getPanoSources();
-    
+    std::map<std::string, std::vector <std::map<std::string, std::string>* > > getLegend();
+    void updateMapGeoJSONSourcesValue(std::string fileUrl, std::string key, std::string value);
+
+  
 private:
     void parserJSONLayerList(LayerSet* layerSet, const JSONObject* jsonLayers);
     void parserJSONWMSLayer(LayerSet* layerSet, const JSONObject* jsonLayer);
