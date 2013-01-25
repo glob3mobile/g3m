@@ -60,7 +60,8 @@ public class SceneParser
 	}
 	public final void updateMapGeoJSONSourcesValue(String fileUrl, String key, String value)
 	{
-	  (*(_mapGeoJSONSources.get(fileUrl)))[key] = value;
+	//  (*(_mapGeoJSONSources[fileUrl]))[key] = value;
+	  _mapGeoJSONSources.get(fileUrl).get(key) = value;
 	}
 
 
