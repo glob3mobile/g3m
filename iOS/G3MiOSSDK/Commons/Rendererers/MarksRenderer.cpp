@@ -66,19 +66,17 @@ void MarksRenderer::addMark(Mark* mark) {
 }
 
 void MarksRenderer::removeMark(Mark* mark){
-  int pos = -1;
   for (int i = 0; i < _marks.size(); i++) {
     if (_marks[i] == mark) {
-      pos = i;
-    }
+    #ifdef C_CODE
+      _marks.erase(_marks.begin()+i);
+    #endif
+    #ifdef JAVA_CODE
+      _marks.remove(i);
+    #endif
     break;
+    }
   }
-#ifdef C_CODE
-  _marks.erase(_marks.begin()+pos);
-#endif
-#ifdef JAVA_CODE
-  _marks.remove(pos);
-#endif
 }
 
 void MarksRenderer::removeAllMarks(){
