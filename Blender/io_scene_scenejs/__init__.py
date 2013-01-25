@@ -74,7 +74,7 @@ class ExportSceneJS(bpy.types.Operator, ExportHelper):
     use_normals = BoolProperty(
             name="Include Normals",
             description="",
-            default=False,
+            default=True,
             )
     use_uvs = BoolProperty(
             name="Include UVs",
@@ -86,11 +86,11 @@ class ExportSceneJS(bpy.types.Operator, ExportHelper):
             description="Write out the MTL file",
             default=True,
             )
-    use_triangles = BoolProperty(
-            name="Triangulate Faces",
-            description="Convert all faces to triangles",
-            default=False,
-            )
+    #use_triangles = BoolProperty(
+    #        name="Triangulate Faces",
+    #        description="Convert all faces to triangles",
+    #        default=True,
+    #        )
     use_nurbs = BoolProperty(
             name="Write Nurbs",
             description="Write nurbs curves as OBJ nurbs rather than "
