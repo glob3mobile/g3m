@@ -12,6 +12,7 @@ public class SceneParser
 	private static final String MINDISTANCE = "minDistance";
 	private static final String COLORLINE = "colorLine";
 	private static final String SIZELINE = "sizeLine";
+	private static final String WEB = "web";
 
 	private static final String WMS110 = "1.1.0";
 	private static final String WMS111 = "1.1.1";
@@ -21,6 +22,8 @@ public class SceneParser
 	private java.util.HashMap<String, layer_type> _mapLayerType = new java.util.HashMap<String, layer_type>();
 	private java.util.HashMap<String, java.util.HashMap<String, String> > _mapGeoJSONSources = new java.util.HashMap<String, java.util.HashMap<String, String> >();
 	private java.util.ArrayList<String> _panoSources = new java.util.ArrayList<String>();
+	private java.util.HashMap<String, java.util.ArrayList<java.util.HashMap<String, String> > > _legend = new java.util.HashMap<String, java.util.ArrayList<java.util.HashMap<String, String> > >();
+	private int countGroup;
 
 
 	public static SceneParser instance()
@@ -36,6 +39,8 @@ public class SceneParser
     
 		_mapGeoJSONSources.clear();
 		_panoSources.clear();
+		_legend.clear();
+		countGroup = 0;
     
 		JSONBaseObject json = IJSONParser.instance().parse(namelessParameter);
 		parserJSONLayerList(layerSet, json.asObject().getAsObject(LAYERS));
@@ -49,6 +54,15 @@ public class SceneParser
 	{
 		return _panoSources;
 	}
+	public final java.util.HashMap<String, java.util.ArrayList<java.util.HashMap<String, String> > > getLegend()
+	{
+		return _legend;
+	}
+	public final void updateMapGeoJSONSourcesValue(String fileUrl, String key, String value)
+	{
+	  (*(_mapGeoJSONSources.get(fileUrl)))[key] = value;
+	}
+
 
 	private void parserJSONLayerList(LayerSet layerSet, JSONObject jsonLayers)
 	{
@@ -164,6 +178,8 @@ public class SceneParser
     
 		final String geojsonDatasource = jsonLayer.getAsString(DATASOURCE).value();
     
+		java.util.ArrayList<java.util.HashMap<String, String> > legendLayer = new java.util.ArrayList<java.util.HashMap<String, String> >();
+    
 		final JSONArray jsonItems = jsonLayer.getAsArray(ITEMS);
 		for (int i = 0; i<jsonItems.size(); i++)
 		{
@@ -174,20 +190,28 @@ public class SceneParser
 			final String colorLine = jsonItems.getAsObject(i).getAsString(COLORLINE).value();
 			final String sizeLine = jsonItems.getAsObject(i).getAsString(SIZELINE).value();
     
-    
 			IStringBuilder url = IStringBuilder.newStringBuilder();
 			url.addString(geojsonDatasource);
 			url.addString("/");
 			url.addString(namefile);
     
-			java.util.HashMap<String, String> attr = new java.util.HashMap<String, String>();
-			attr.put(URLICON, icon);
-			attr.put(MINDISTANCE, minDistance);
-			attr.put(COLORLINE, colorLine);
-			attr.put(SIZELINE, sizeLine);
+			final IStringUtils iISU = IStringUtils.instance();
+			String namefileTruncated = iISU.capitalize(iISU.replaceSubstring(iISU.substring(namefile, 0, iISU.indexOf(namefile, ".")), "_", " "));
     
-			_mapGeoJSONSources.put(url.getString(), attr);
+			java.util.HashMap<String, String> geojsonMetadata = new java.util.HashMap<String, String>();
+			geojsonMetadata.insert(std.make_pair(URLICON,icon));
+			geojsonMetadata.insert(std.make_pair(NAME,namefileTruncated));
+			geojsonMetadata.insert(std.make_pair(COLORLINE,colorLine));
+			geojsonMetadata.insert(std.make_pair(WEB,""));
+			geojsonMetadata.insert(std.make_pair(MINDISTANCE,minDistance));
+			geojsonMetadata.insert(std.make_pair(SIZELINE,sizeLine));
+    
+			legendLayer.add(geojsonMetadata);
+    
+			_mapGeoJSONSources.put(url.getString(), geojsonMetadata);
 		}
+		_legend.put(jsonLayer.getAsString(NAME).value(), legendLayer);
+		countGroup++;
 	}
 
 	protected SceneParser()
