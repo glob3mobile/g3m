@@ -60,8 +60,7 @@ public class SceneParser
 	}
 	public final void updateMapGeoJSONSourcesValue(String fileUrl, String key, String value)
 	{
-	  java.util.HashMap<String, String> mapGeo = _mapGeoJSONSources.get(fileUrl);
-	  mapGeo.get(key) = value;
+		_mapGeoJSONSources.get(fileUrl).put(key, value);
 	}
 
 
@@ -200,12 +199,13 @@ public class SceneParser
 			String namefileTruncated = iISU.capitalize(iISU.replaceSubstring(iISU.substring(namefile, 0, iISU.indexOf(namefile, ".")), "_", " "));
     
 			java.util.HashMap<String, String> geojsonMetadata = new java.util.HashMap<String, String>();
-			geojsonMetadata.insert(std.make_pair(URLICON,icon));
-			geojsonMetadata.insert(std.make_pair(NAME,namefileTruncated));
-			geojsonMetadata.insert(std.make_pair(COLORLINE,colorLine));
-			geojsonMetadata.insert(std.make_pair(WEB,""));
-			geojsonMetadata.insert(std.make_pair(MINDISTANCE,minDistance));
-			geojsonMetadata.insert(std.make_pair(SIZELINE,sizeLine));
+    
+			geojsonMetadata.put(URLICON,icon);
+			geojsonMetadata.put(NAME,namefileTruncated);
+			geojsonMetadata.put(COLORLINE,colorLine);
+			geojsonMetadata.put(WEB,"");
+			geojsonMetadata.put(MINDISTANCE,minDistance);
+			geojsonMetadata.put(SIZELINE,sizeLine);
     
 			legendLayer.add(geojsonMetadata);
     
