@@ -195,12 +195,23 @@ void SceneParser::parserGEOJSONLayer(LayerSet* layerSet, const JSONObject* jsonL
         std::string namefileTruncated = iISU->capitalize(iISU->replaceSubstring(iISU->substring(namefile, 0, iISU->indexOf(namefile, ".")), "_", " "));
       
         std::map<std::string, std::string>* geojsonMetadata = new std::map<std::string, std::string>;
+      
+        #ifdef C_CODE
         geojsonMetadata->insert(std::make_pair(URLICON,icon));
         geojsonMetadata->insert(std::make_pair(NAME,namefileTruncated));
         geojsonMetadata->insert(std::make_pair(COLORLINE,colorLine));
         geojsonMetadata->insert(std::make_pair(WEB,""));
         geojsonMetadata->insert(std::make_pair(MINDISTANCE,minDistance));
         geojsonMetadata->insert(std::make_pair(SIZELINE,sizeLine));
+        #endif
+        #ifdef JAVA_CODE
+        geojsonMetadata.put(URLICON,icon);
+        geojsonMetadata.put(NAME,namefileTruncated);
+        geojsonMetadata.put(COLORLINE,colorLine);
+        geojsonMetadata.put(WEB,"");
+        geojsonMetadata.put(MINDISTANCE,minDistance);
+        geojsonMetadata.put(SIZELINE,sizeLine);
+        #endif
       
         legendLayer.push_back(geojsonMetadata);
       
@@ -227,6 +238,10 @@ std::map<std::string, std::vector <std::map<std::string, std::string>* > > Scene
 }
 
 void SceneParser::updateMapGeoJSONSourcesValue(std::string fileUrl, std::string key, std::string value){
-  std::map<std::string, std::string>* mapGeo = _mapGeoJSONSources[fileUrl];
-  mapGeo->at(key) = value;
+    #ifdef C_CODE
+    _mapGeoJSONSources[fileUrl]->at(key) = value;
+    #endif
+    #ifdef JAVA_CODE
+    _mapGeoJSONSources.get(fileUrl).put(key, value);
+    #endif
 }
