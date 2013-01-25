@@ -227,6 +227,6 @@ std::map<std::string, std::vector <std::map<std::string, std::string>* > > Scene
 }
 
 void SceneParser::updateMapGeoJSONSourcesValue(std::string fileUrl, std::string key, std::string value){
-//  (*(_mapGeoJSONSources[fileUrl]))[key] = value;
-  _mapGeoJSONSources[fileUrl]->at(key) = value;
+  std::map<std::string, std::string>* mapGeo = _mapGeoJSONSources[fileUrl];
+  mapGeo->at(key) = value;
 }
