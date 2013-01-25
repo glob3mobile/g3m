@@ -60,8 +60,8 @@ public class SceneParser
 	}
 	public final void updateMapGeoJSONSourcesValue(String fileUrl, String key, String value)
 	{
-	//  (*(_mapGeoJSONSources[fileUrl]))[key] = value;
-	  _mapGeoJSONSources.get(fileUrl).get(key) = value;
+	  java.util.HashMap<String, String> mapGeo = _mapGeoJSONSources.get(fileUrl);
+	  mapGeo.get(key) = value;
 	}
 
 
