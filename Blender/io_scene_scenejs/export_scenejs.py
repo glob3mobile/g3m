@@ -200,10 +200,8 @@ def write_file(filepath, objects, scene,
                EXPORT_NORMALS=False,
                EXPORT_UV=True,
                EXPORT_MTL=True,
-               EXPORT_APPLY_MODIFIERS=True,
                EXPORT_BLEN_OBS=True,
                EXPORT_GROUP_BY_OB=False,
-               EXPORT_GROUP_BY_MAT=False,
                EXPORT_KEEP_VERT_ORDER=False,
                EXPORT_POLYGROUPS=False,
                EXPORT_CURVE_AS_NURBS=True,
@@ -317,7 +315,7 @@ def write_file(filepath, objects, scene,
                 continue
 
             try:
-                me = ob.to_mesh(scene, EXPORT_APPLY_MODIFIERS, 'PREVIEW')
+                me = ob.to_mesh(scene, True, 'PREVIEW')
             except RuntimeError:
                 me = None
 
@@ -521,9 +519,6 @@ def write_file(filepath, objects, scene,
                 else:
                     if key[0] is None and key[1] is None:
                         # Write a null material, since we know the context has changed.
-                        if EXPORT_GROUP_BY_MAT:
-                            # can be mat_image or (null)
-                            fw("g %s_%s\n" % (name_compat(ob.name), name_compat(ob.data.name)))  # can be mat_image or (null)
                         if EXPORT_MTL:
                             fw("usemtl (null)\n")  # mat, image
 
@@ -553,8 +548,6 @@ def write_file(filepath, objects, scene,
                             mat_data = mtl_dict[key] = mtl_name, materials[f_mat], f_image
                             mtl_rev_dict[mtl_name] = key
 
-                        if EXPORT_GROUP_BY_MAT:
-                            fw("g %s_%s_%s\n" % (name_compat(ob.name), name_compat(ob.data.name), mat_data[0]))  # can be mat_image or (null)
                         if EXPORT_MTL:
                             fw("usemtl %s\n" % mat_data[0])  # can be mat_image or (null)
 
@@ -595,20 +588,22 @@ def write_file(filepath, objects, scene,
                             uv = None
 
                         vertexData = (vertex, normal, uv)
-                        #print(vertexData)
                         if ( vertexData in indicesDict ):
                             index = indicesDict[ vertexData ]
                             #print ("** Recycling vertex data **")
+                            recycled = True
                         else:
                             index = len( indicesDict ) + 1
                             indicesDict[ vertexData ] = index
+                            recycled = False
                         indicesList.append( index )
 
-                        verticesList.append( vertex )
-                        if (normal):
-                            normalsList.append( normal )
-                        if (uv):
-                            uvList.append( uv )
+                        if (not recycled):
+                            verticesList.append( vertex )
+                            if (normal):
+                                normalsList.append( normal )
+                            if (uv):
+                                uvList.append( uv )
 
                         #fw('\n')
 
@@ -672,10 +667,8 @@ def _write(context, filepath,
               EXPORT_NORMALS,  # not yet
               EXPORT_UV,  # ok
               EXPORT_MTL,
-              EXPORT_APPLY_MODIFIERS,  # ok
               EXPORT_BLEN_OBS,
               EXPORT_GROUP_BY_OB,
-              EXPORT_GROUP_BY_MAT,
               EXPORT_KEEP_VERT_ORDER,
               EXPORT_POLYGROUPS,
               EXPORT_CURVE_AS_NURBS,
@@ -722,10 +715,8 @@ def _write(context, filepath,
                    EXPORT_NORMALS,
                    EXPORT_UV,
                    EXPORT_MTL,
-                   EXPORT_APPLY_MODIFIERS,
                    EXPORT_BLEN_OBS,
                    EXPORT_GROUP_BY_OB,
-                   EXPORT_GROUP_BY_MAT,
                    EXPORT_KEEP_VERT_ORDER,
                    EXPORT_POLYGROUPS,
                    EXPORT_CURVE_AS_NURBS,
@@ -752,10 +743,8 @@ def save(operator, context, filepath="",
          use_normals=False,
          use_uvs=True,
          use_materials=True,
-         use_apply_modifiers=True,
          use_blen_objects=True,
          group_by_object=False,
-         group_by_material=False,
          keep_vertex_order=False,
          use_vertex_groups=False,
          use_nurbs=True,
@@ -770,10 +759,8 @@ def save(operator, context, filepath="",
            EXPORT_NORMALS=use_normals,
            EXPORT_UV=use_uvs,
            EXPORT_MTL=use_materials,
-           EXPORT_APPLY_MODIFIERS=use_apply_modifiers,
            EXPORT_BLEN_OBS=use_blen_objects,
            EXPORT_GROUP_BY_OB=group_by_object,
-           EXPORT_GROUP_BY_MAT=group_by_material,
            EXPORT_KEEP_VERT_ORDER=keep_vertex_order,
            EXPORT_POLYGROUPS=use_vertex_groups,
            EXPORT_CURVE_AS_NURBS=use_nurbs,

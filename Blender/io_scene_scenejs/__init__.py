@@ -59,11 +59,11 @@ class ExportSceneJS(bpy.types.Operator, ExportHelper):
             )
 
     # object group
-    use_apply_modifiers = BoolProperty(
-            name="Apply Modifiers",
-            description="Apply modifiers (preview resolution)",
-            default=True,
-            )
+    #use_apply_modifiers = BoolProperty(
+    #        name="Apply Modifiers",
+    #        description="Apply modifiers (preview resolution)",
+    #        default=True,
+    #        )
 
     # extra data group
     use_edges = BoolProperty(
@@ -114,11 +114,11 @@ class ExportSceneJS(bpy.types.Operator, ExportHelper):
             description="",
             default=False,
             )
-    group_by_material = BoolProperty(
-            name="Material Groups",
-            description="",
-            default=False,
-            )
+    # group_by_material = BoolProperty(
+    #         name="Material Groups",
+    #         description="",
+    #         default=False,
+    #         )
     keep_vertex_order = BoolProperty(
             name="Keep Vertex Order",
             description="",
