@@ -1,6 +1,6 @@
 # <pep8-80 compliant>
 
-print("LOADING SceneJS format")
+print("LOADING SceneJS exporter")
 
 bl_info = {
     "name": "SceneJS format",
@@ -58,23 +58,11 @@ class ExportSceneJS(bpy.types.Operator, ExportHelper):
             default=False,
             )
 
-    # object group
-    #use_apply_modifiers = BoolProperty(
-    #        name="Apply Modifiers",
-    #        description="Apply modifiers (preview resolution)",
-    #        default=True,
-    #        )
-
     # extra data group
-    use_edges = BoolProperty(
-            name="Include Edges",
-            description="",
-            default=True,
-            )
     use_normals = BoolProperty(
             name="Include Normals",
             description="",
-            default=True,
+            default=False,
             )
     use_uvs = BoolProperty(
             name="Include UVs",
@@ -86,39 +74,8 @@ class ExportSceneJS(bpy.types.Operator, ExportHelper):
             description="Write out the MTL file",
             default=True,
             )
-    #use_triangles = BoolProperty(
-    #        name="Triangulate Faces",
-    #        description="Convert all faces to triangles",
-    #        default=True,
-    #        )
-    use_nurbs = BoolProperty(
-            name="Write Nurbs",
-            description="Write nurbs curves as OBJ nurbs rather than "
-                        "converting to geometry",
-            default=False,
-            )
-    use_vertex_groups = BoolProperty(
-            name="Polygroups",
-            description="",
-            default=False,
-            )
 
     # grouping group
-    use_blen_objects = BoolProperty(
-            name="Objects as OBJ Objects",
-            description="",
-            default=True,
-            )
-    group_by_object = BoolProperty(
-            name="Objects as OBJ Groups ",
-            description="",
-            default=False,
-            )
-    # group_by_material = BoolProperty(
-    #         name="Material Groups",
-    #         description="",
-    #         default=False,
-    #         )
     keep_vertex_order = BoolProperty(
             name="Keep Vertex Order",
             description="",
