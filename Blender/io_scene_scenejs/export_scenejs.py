@@ -558,8 +558,10 @@ def write_file(filepath, objects, scene,
                 f_v_orig = [(vi, me_verts[v_idx]) for vi, v_idx in enumerate(f.vertices)]
 
                 if len(f_v_orig) == 3:
+                    print ("found triangle\n")
                     f_v_iter = (f_v_orig, )
                 else:
+                    print ("found quad\n")
                     f_v_iter = (f_v_orig[0], f_v_orig[1], f_v_orig[2]), (f_v_orig[0], f_v_orig[2], f_v_orig[3])
 
                 # support for triangulation
@@ -591,42 +593,38 @@ def write_file(filepath, objects, scene,
                         if ( vertexData in indicesDict ):
                             index = indicesDict[ vertexData ]
                             #print ("** Recycling vertex data **")
-                            recycled = True
                         else:
                             index = len( indicesDict ) + 1
                             indicesDict[ vertexData ] = index
-                            recycled = False
-                        indicesList.append( index )
-
-                        if (not recycled):
                             verticesList.append( vertex )
-                            if (normal):
+                            if ( normal ):
                                 normalsList.append( normal )
-                            if (uv):
+                            if ( uv ):
                                 uvList.append( uv )
+                        indicesList.append( index )
 
                         #fw('\n')
 
-            fw(', "positions":[\n')
+            fw(',"positions":[\n')
             for vertex in verticesList:
                 fw('%.10g,%.10g,%.10g,\n' %  vertex)
             fw(']\n')
 
             if (normalsList):
-                fw(', "normals":[\n')
+                fw(',"normals":[\n')
                 for normal in normalsList:
                     fw('%.10g,%.10g,%.10g,\n' %  normal)
                 fw(']\n')
 
             if (uvList):
-                fw(', "uv":[\n')
+                fw(',"uv":[\n')
                 for uv in uvList:
                     fw('%.10g,%.10g,\n' %  uv)
                 fw(']\n')
 
-            fw(', "indices":[\n')
+            fw(',"indices":[')
             for index in indicesList:
-                fw('%g,\n' %  index)
+                fw('%g,' %  (index - 1))
             fw(']\n')
 
             # Write edges.
