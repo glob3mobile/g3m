@@ -129,82 +129,11 @@ def test_nurbs_compat(ob):
     return False
 
 
-# def write_nurb(fw, ob, ob_mat):
-#     tot_verts = 0
-#     cu = ob.data
-#
-#     # use negative indices
-#     for nu in cu.splines:
-#         if nu.type == 'POLY':
-#             DEG_ORDER_U = 1
-#         else:
-#             DEG_ORDER_U = nu.order_u - 1  # odd but tested to be correct
-#
-#         if nu.type == 'BEZIER':
-#             print("\tWarning, bezier curve:", ob.name, "only poly and nurbs curves supported")
-#             continue
-#
-#         if nu.point_count_v > 1:
-#             print("\tWarning, surface:", ob.name, "only poly and nurbs curves supported")
-#             continue
-#
-#         if len(nu.points) <= DEG_ORDER_U:
-#             print("\tWarning, order_u is lower then vert count, skipping:", ob.name)
-#             continue
-#
-#         pt_num = 0
-#         do_closed = nu.use_cyclic_u
-#         do_endpoints = (do_closed == 0) and nu.use_endpoint_u
-#
-#         for pt in nu.points:
-#             fw('v %.6f %.6f %.6f\n' % (ob_mat * pt.co.to_3d())[:])
-#             pt_num += 1
-#         tot_verts += pt_num
-#
-#         fw('g %s\n' % (name_compat(ob.name)))  # name_compat(ob.getData(1)) could use the data name too
-#         fw('cstype bspline\n')  # not ideal, hard coded
-#         fw('deg %d\n' % DEG_ORDER_U)  # not used for curves but most files have it still
-#
-#         curve_ls = [-(i + 1) for i in range(pt_num)]
-#
-#         # 'curv' keyword
-#         if do_closed:
-#             if DEG_ORDER_U == 1:
-#                 pt_num += 1
-#                 curve_ls.append(-1)
-#             else:
-#                 pt_num += DEG_ORDER_U
-#                 curve_ls = curve_ls + curve_ls[0:DEG_ORDER_U]
-#
-#         fw('curv 0.0 1.0 %s\n' % (" ".join([str(i) for i in curve_ls])))  # Blender has no U and V values for the curve
-#
-#         # 'parm' keyword
-#         tot_parm = (DEG_ORDER_U + 1) + pt_num
-#         tot_parm_div = float(tot_parm - 1)
-#         parm_ls = [(i / tot_parm_div) for i in range(tot_parm)]
-#
-#         if do_endpoints:  # end points, force param
-#             for i in range(DEG_ORDER_U + 1):
-#                 parm_ls[i] = 0.0
-#                 parm_ls[-(1 + i)] = 1.0
-#
-#         fw("parm u %s\n" % " ".join(["%.6f" % i for i in parm_ls]))
-#
-#         fw('end\n')
-#
-#     return tot_verts
-
-
 def write_file(filepath, objects, scene,
-               EXPORT_EDGES=False,
                EXPORT_NORMALS=False,
                EXPORT_UV=True,
                EXPORT_MTL=True,
-               EXPORT_BLEN_OBS=True,
-               EXPORT_GROUP_BY_OB=False,
                EXPORT_KEEP_VERT_ORDER=False,
-               EXPORT_POLYGROUPS=False,
-               EXPORT_CURVE_AS_NURBS=True,
                EXPORT_GLOBAL_MATRIX=None,
                EXPORT_PATH_MODE='AUTO',
                ):
@@ -264,7 +193,6 @@ def write_file(filepath, objects, scene,
     #    fw('mtllib %s\n' % repr(os.path.basename(mtlfilepath))[1:-1])  # filepath can contain non utf8 chars, use repr
 
     # Initialize totals, these are updated each object
-    totverts = totuvco = totno = 1
 
     face_vert_index = 1
 
@@ -304,12 +232,6 @@ def write_file(filepath, objects, scene,
 
         for ob, ob_mat in obs:
 
-            ## Nurbs curve support
-            #if EXPORT_CURVE_AS_NURBS and test_nurbs_compat(ob):
-            #    ob_mat = EXPORT_GLOBAL_MATRIX * ob_mat
-            #    totverts += write_nurb(fw, ob, ob_mat)
-            #    continue
-            ## END NURBS
             if test_nurbs_compat(ob):
                 print("Exporting of NURBS not supported, skipping")
                 continue
@@ -337,12 +259,10 @@ def write_file(filepath, objects, scene,
             face_index_pairs = [(face, index) for index, face in enumerate(me.tessfaces)]
             # faces = [ f for f in me.tessfaces ]
 
-            if EXPORT_EDGES:
-                edges = me.edges
-            else:
-                edges = []
+            #edges = []
 
-            if not (len(face_index_pairs) + len(edges) + len(me.vertices)):  # Make sure there is something to write
+            #if not (len(face_index_pairs) + len(edges) + len(me.vertices)):  # Make sure there is something to write
+            if not (len(face_index_pairs) + len(me.vertices)):  # Make sure there is something to write
 
                 # clean up
                 bpy.data.meshes.remove(me)
@@ -376,114 +296,34 @@ def write_file(filepath, objects, scene,
             contextMat = 0, 0  # Can never be this, so we will label a new material the first chance we get.
             #contextSmooth = None  # Will either be true or false,  set bad to force initialization switch.
 
-            if EXPORT_BLEN_OBS or EXPORT_GROUP_BY_OB:
-                name1 = ob.name
-                name2 = ob.data.name
-                if name1 == name2:
-                    obnamestring = name_compat(name1)
-                else:
-                    obnamestring = '%s_%s' % (name_compat(name1), name_compat(name2))
+            name1 = ob.name
+            name2 = ob.data.name
+            if name1 == name2:
+                obnamestring = name_compat(name1)
+            else:
+                obnamestring = '%s_%s' % (name_compat(name1), name_compat(name2))
 
-                #if EXPORT_BLEN_OBS:
-                #    fw('o %s\n' % obnamestring)  # Write Object name
-                #else:  # if EXPORT_GROUP_BY_OB:
-                #    fw('g %s\n' % obnamestring)
-                #fw('{"type":"geometry","id":"%s","positions":[\n' % obnamestring)
-                fw('{"type":"geometry","primitive":"triangles","id":"%s"\n' % obnamestring)
+            fw('{"type":"geometry","primitive":"triangles","id":"%s"\n' % obnamestring)
 
-            # Vert
-            #for v in me_verts:
-            #    #fw('v %.6f %.6f %.6f\n' % v.co[:])
-            #    #fw('%.6f,%.6f,%.6f,\n' % v.co[:])
-            #    fw('%f,%f,%f,\n' % v.co[:])
-            
-            #fw(']\n')
 
             # UV
             uv_textures = None
             if faceuv:
-                #fw(',"uv":[\n')
-
                 # in case removing some of these dont get defined.
-                uv = uvkey = uv_dict = f_index = uv_index = None
-
-                uv_face_mapping = [[0, 0, 0, 0] for i in range(len(face_index_pairs))]  # a bit of a waste for tri's :/
+                uv = uvkey = f_index = uv_index = None
 
                 uv_textures = {}
-
-                uv_dict = {}  # could use a set() here
                 uv_layer = me.tessface_uv_textures.active.data
                 for f, f_index in face_index_pairs:
                     for uv_index, uv in enumerate(uv_layer[f_index].uv):
-                        #uvkey = veckey2d(uv)
-                        #try:
-                        #    uv_face_mapping[f_index][uv_index] = uv_dict[uvkey]
-                        #except:
-                        #    uv_face_mapping[f_index][uv_index] = uv_dict[uvkey] = len(uv_dict)
-                        #    #fw('vt %.6f %.6f\n' % uv[:])
-                        #    fw('%f,%f,\n' % uv[:])
-                        #fw('%f,%f,\n' % uv[:])
                         uv_textures[ (f_index, uv_index) ] = veckey2d(uv)
 
-                uv_unique_count = len(uv_dict)
-
-                #fw(']\n')
-
-                del uv, uvkey, uv_dict, f_index, uv_index
-                # Only need uv_unique_count and uv_face_mapping
-
-            # NORMAL, Smooth/Non smoothed.
-            if EXPORT_NORMALS and face_index_pairs:
-                #fw(',"normals":[\n')
-
-                for f, f_index in face_index_pairs:
-                    # if f.use_smooth:
-                    #     for v_idx in f.vertices:
-                    #         v = me_verts[v_idx]
-                    #         noKey = veckey3d(v.normal)
-                    #         #if noKey not in globalNormals:
-                    #         #    globalNormals[noKey] = totno
-                    #         #    totno += 1
-                    #         #    #fw('vn %.6f %.6f %.6f\n' % noKey)
-                    #         #    fw('%f,%f,%f,\n' % noKey)
-                    #         totno += 1
-                    #         #    #fw('vn %.6f %.6f %.6f\n' % noKey)
-                    #         fw('%f,%f,%f,\n' % v.normal)
-                    #
-                    # else:
-                    #     # Hard, 1 normal from the face.
-                    #     #noKey = veckey3d(f.normal)
-                    #     #if noKey not in globalNormals:
-                    #     #    globalNormals[noKey] = totno
-                    #     totno += 1
-                    #     #    #fw('vn %.6f %.6f %.6f\n' % noKey)
-                    #     fw('%f,%f,%f,\n' % f.normal)
-                    #
-                    for v_idx in f.vertices:
-                        v = me_verts[v_idx]
-                        totno += 1
-                        #if f.use_smooth:
-                        #    fw('%f,%f,%f,\n' % veckey3d(v.normal))
-                        #else:  # No smoothing, face normals
-                        #    fw('%f,%f,%f,\n' % veckey3d(f.normal))
-                
-                #fw(']\n')
-
+                del uv, uvkey, f_index, uv_index
+            
             if not faceuv:
                 f_image = None
 
             # XXX
-            if EXPORT_POLYGROUPS:
-                # Retrieve the list of vertex groups
-                vertGroupNames = ob.vertex_groups.keys()
-
-                currentVGroup = ''
-                # Create a dictionary keyed by face id and listing, for each vertex, the vertex groups it belongs to
-                vgroupsMap = [[] for _i in range(len(me_verts))]
-                for v_idx, v_ls in enumerate(vgroupsMap):
-                    v_ls[:] = [(vertGroupNames[g.group], g.weight) for g in me_verts[v_idx].groups]
-
-
             verticesList = []
             normalsList = []
             uvList = []
@@ -504,19 +344,11 @@ def write_file(filepath, objects, scene,
                 else:
                     key = material_names[f_mat], None  # No image, use None instead.
 
-                # Write the vertex group
-                if EXPORT_POLYGROUPS:
-                    if ob.vertex_groups:
-                        # find what vertext group the face belongs to
-                        vgroup_of_face = findVertexGroupName(f, vgroupsMap)
-                        if vgroup_of_face != currentVGroup:
-                            currentVGroup = vgroup_of_face
-                            fw('g %s\n' % vgroup_of_face)
-
                 # CHECK FOR CONTEXT SWITCH
                 if key == contextMat:
                     pass  # Context already switched, dont do anything
                 else:
+                    print('- Switching material from "' + str(contextMat) + '" to "' + str(key) + '"')
                     if key[0] is None and key[1] is None:
                         # Write a null material, since we know the context has changed.
                         if EXPORT_MTL:
@@ -558,34 +390,25 @@ def write_file(filepath, objects, scene,
                 f_v_orig = [(vi, me_verts[v_idx]) for vi, v_idx in enumerate(f.vertices)]
 
                 if len(f_v_orig) == 3:
-                    print ("found triangle\n")
                     f_v_iter = (f_v_orig, )
                 else:
-                    print ("found quad\n")
                     f_v_iter = (f_v_orig[0], f_v_orig[1], f_v_orig[2]), (f_v_orig[0], f_v_orig[2], f_v_orig[3])
 
                 # support for triangulation
                 for f_v in f_v_iter:
-                    #fw('-------------\n')
                     for vi, v in f_v:
-                        #fw('index=%d' % vi)
-
-                        #fw(', vertexIndex=%d' % v.index)
                         vertex = v.co[:]
-                        #fw('vertex=%.10g,%.10g,%.10g' %  vertex )
 
                         if EXPORT_NORMALS:
                             if f.use_smooth:
                                 normal = veckey3d(v.normal)
                             else:  # No smoothing, face normals
                                 normal = veckey3d(f.normal)
-                            #fw(', normal=%.10g,%.10g,%.10g' % normal)
                         else:
                             normal = None
 
                         if (uv_textures):
                             uv = uv_textures[ (f_index, vi) ]
-                            #fw(', uv=%.10g,%.10g' % uv)
                         else:
                             uv = None
 
@@ -603,7 +426,6 @@ def write_file(filepath, objects, scene,
                                 uvList.append( uv )
                         indicesList.append( index )
 
-                        #fw('\n')
 
             fw(',"positions":[\n')
             for vertex in verticesList:
@@ -628,17 +450,17 @@ def write_file(filepath, objects, scene,
             fw(']\n')
 
             # Write edges.
-            if EXPORT_EDGES:
-                for ed in edges:
-                    if ed.is_loose:
-                        fw('f %d %d\n' % (ed.vertices[0] + totverts, ed.vertices[1] + totverts))
+            #if EXPORT_EDGES:
+            #    for ed in edges:
+            #        if ed.is_loose:
+            #            fw('f %d %d\n' % (ed.vertices[0] + totverts, ed.vertices[1] + totverts))
 
             fw('},\n')
 
             # Make the indices global rather then per mesh
-            totverts += len(me_verts)
-            if faceuv:
-                totuvco += uv_unique_count
+            #totverts += len(me_verts)
+            #if faceuv:
+            #    totuvco += uv_unique_count
 
             # clean up
             bpy.data.meshes.remove(me)
@@ -661,15 +483,10 @@ def write_file(filepath, objects, scene,
 
 
 def _write(context, filepath,
-              EXPORT_EDGES,
               EXPORT_NORMALS,  # not yet
               EXPORT_UV,  # ok
               EXPORT_MTL,
-              EXPORT_BLEN_OBS,
-              EXPORT_GROUP_BY_OB,
               EXPORT_KEEP_VERT_ORDER,
-              EXPORT_POLYGROUPS,
-              EXPORT_CURVE_AS_NURBS,
               EXPORT_SEL_ONLY,  # ok
               EXPORT_ANIMATION,
               EXPORT_GLOBAL_MATRIX,
@@ -709,15 +526,10 @@ def _write(context, filepath,
         # erm... bit of a problem here, this can overwrite files when exporting frames. not too bad.
         # EXPORT THE FILE.
         write_file(full_path, objects, scene,
-                   EXPORT_EDGES,
                    EXPORT_NORMALS,
                    EXPORT_UV,
                    EXPORT_MTL,
-                   EXPORT_BLEN_OBS,
-                   EXPORT_GROUP_BY_OB,
                    EXPORT_KEEP_VERT_ORDER,
-                   EXPORT_POLYGROUPS,
-                   EXPORT_CURVE_AS_NURBS,
                    EXPORT_GLOBAL_MATRIX,
                    EXPORT_PATH_MODE,
                    )
@@ -737,15 +549,10 @@ Currently the exporter lacks these features:
 
 
 def save(operator, context, filepath="",
-         use_edges=True,
          use_normals=False,
          use_uvs=True,
          use_materials=True,
-         use_blen_objects=True,
-         group_by_object=False,
          keep_vertex_order=False,
-         use_vertex_groups=False,
-         use_nurbs=True,
          use_selection=True,
          use_animation=False,
          global_matrix=None,
@@ -753,15 +560,10 @@ def save(operator, context, filepath="",
          ):
 
     _write(context, filepath,
-           EXPORT_EDGES=use_edges,
            EXPORT_NORMALS=use_normals,
            EXPORT_UV=use_uvs,
            EXPORT_MTL=use_materials,
-           EXPORT_BLEN_OBS=use_blen_objects,
-           EXPORT_GROUP_BY_OB=group_by_object,
            EXPORT_KEEP_VERT_ORDER=keep_vertex_order,
-           EXPORT_POLYGROUPS=use_vertex_groups,
-           EXPORT_CURVE_AS_NURBS=use_nurbs,
            EXPORT_SEL_ONLY=use_selection,
            EXPORT_ANIMATION=use_animation,
            EXPORT_GLOBAL_MATRIX=global_matrix,
