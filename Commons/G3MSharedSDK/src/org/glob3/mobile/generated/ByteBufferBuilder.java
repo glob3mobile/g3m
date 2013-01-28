@@ -65,15 +65,30 @@ public class ByteBufferBuilder
 
   public final void setInt32(int i, int value)
   {
-	final byte b1 = (byte)((value) & 0xFF);
-	final byte b2 = (byte)((value >> 8) & 0xFF);
-	final byte b3 = (byte)((value >> 16) & 0xFF);
-	final byte b4 = (byte)((value >> 24) & 0xFF);
+//    const unsigned char b1 = (unsigned char) ((value      ) & 0xFF);
+//    const unsigned char b2 = (unsigned char) ((value >>  8) & 0xFF);
+//    const unsigned char b3 = (unsigned char) ((value >> 16) & 0xFF);
+//    const unsigned char b4 = (unsigned char) ((value >> 24) & 0xFF);
+//
+//        ILogger::instance()->logInfo("setInt32: b1=%u b2=%u b3=%u b4=%u", b1, b2, b3, b4);
+//
+//    _values[i    ] = b1;
+//    _values[i + 1] = b2;
+//    _values[i + 2] = b3;
+//    _values[i + 3] = b4;
+//    
 
-	_values.set(i, b1);
-	_values.set(i + 1, b2);
-	_values.set(i + 2, b3);
-	_values.set(i + 3, b4);
+
+	final int b1 = ((value) & 0xFF);
+	final int b2 = ((value >> 8) & 0xFF);
+	final int b3 = ((value >> 16) & 0xFF);
+	final int b4 = ((value >> 24) & 0xFF);
+		ILogger.instance().logInfo("setInt32: b1=%d b2=%d b3=%d b4=%d", b1, b2, b3, b4);
+	_values.set(i, (byte) b1);
+	_values.set(i + 1, (byte) b2);
+	_values.set(i + 2, (byte) b3);
+	_values.set(i + 3, (byte) b4);
+
   }
 
   public final void addStringZeroTerminated(String str)

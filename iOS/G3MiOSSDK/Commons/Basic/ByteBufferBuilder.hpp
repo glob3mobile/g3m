@@ -10,6 +10,7 @@
 #define __G3MiOSSDK__ByteBufferBuilder__
 
 #include <vector>
+#include "ILogger.hpp"
 class IByteBuffer;
 
 class ByteBufferBuilder {
@@ -45,7 +46,7 @@ public:
     const unsigned char b2 = (unsigned char) ((value >>  8) & 0xFF);
     const unsigned char b3 = (unsigned char) ((value >> 16) & 0xFF);
     const unsigned char b4 = (unsigned char) ((value >> 24) & 0xFF);
-
+    
     _values.push_back(b1);
     _values.push_back(b2);
     _values.push_back(b3);
@@ -53,16 +54,6 @@ public:
   }
 
   void setInt32(int i, int value) {
-//    const unsigned char b1 = (unsigned char) ((value      ) & 0xFF);
-//    const unsigned char b2 = (unsigned char) ((value >>  8) & 0xFF);
-//    const unsigned char b3 = (unsigned char) ((value >> 16) & 0xFF);
-//    const unsigned char b4 = (unsigned char) ((value >> 24) & 0xFF);
-//
-//    _values[i    ] = b1;
-//    _values[i + 1] = b2;
-//    _values[i + 2] = b3;
-//    _values[i + 3] = b4;
-
     const int b1 = ((value      ) & 0xFF);
     const int b2 = ((value >>  8) & 0xFF);
     const int b3 = ((value >> 16) & 0xFF);
