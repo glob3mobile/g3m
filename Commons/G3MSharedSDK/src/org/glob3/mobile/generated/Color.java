@@ -110,10 +110,10 @@ public class Color
   public final Color mixedWith(Color that, float factor)
   {
 	float frac1 = factor;
-	if (factor < 0)
-		factor = 0F;
-	if (factor > 1)
-		factor = 1F;
+	if (frac1 < 0)
+		frac1 = 0F;
+	if (frac1 > 1)
+		frac1 = 1F;
 
 	final float frac2 = 1 - frac1;
 

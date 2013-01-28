@@ -110,7 +110,7 @@ public class LazyTextureMapping extends TextureMapping
 
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const const IGLTextureId* getGLTextureId() const
+//ORIGINAL LINE: const IGLTextureId* getGLTextureId() const
   public final IGLTextureId getGLTextureId()
   {
 	return _glTextureId;
