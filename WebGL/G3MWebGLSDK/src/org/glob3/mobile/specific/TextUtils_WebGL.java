@@ -9,14 +9,12 @@ import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.ITextUtils;
 import org.glob3.mobile.generated.LabelPosition;
 
-import com.google.gwt.core.client.JavaScriptObject;
-
 
 public class TextUtils_WebGL
          extends
             ITextUtils {
 
-   public native JavaScriptObject toJSColor(final Color color) /*-{
+   public native String toJSColor(final Color color) /*-{
 		if (color) {
 			var r = Math
 					.round(255 * color.@org.glob3.mobile.generated.Color::getRed()());
