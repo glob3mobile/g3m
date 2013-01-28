@@ -461,6 +461,7 @@ SGGeometryNode* SceneJSShapesParser::createGeometryNode(const JSONObject* jsonOb
     else if (strPrimitive.compare("triangle-fan") == 0) {
       primitive = GLPrimitive::triangleFan();
     }
+    processedKeys++;
   }
 
   const JSONArray* jsPositions = jsonObject->getAsArray("positions");

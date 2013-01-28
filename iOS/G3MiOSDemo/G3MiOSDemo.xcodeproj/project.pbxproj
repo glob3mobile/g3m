@@ -13,6 +13,7 @@
 		CCD7885415D9A3FA0065A7E1 /* ProgressWheel.png in Resources */ = {isa = PBXBuildFile; fileRef = CCD7885315D9A3FA0065A7E1 /* ProgressWheel.png */; };
 		CF0223831668318600024B73 /* geojson in Resources */ = {isa = PBXBuildFile; fileRef = CF0223821668318600024B73 /* geojson */; };
 		CF09A94E16A0A0F500E72811 /* test.bson in Resources */ = {isa = PBXBuildFile; fileRef = CF09A94D16A09F7000E72811 /* test.bson */; };
+		CF6C74EE16B434E400231312 /* untitled.json in Resources */ = {isa = PBXBuildFile; fileRef = CF6C74ED16B434E400231312 /* untitled.json */; };
 		CF7A708815CFD0A50086FDE6 /* g3m-marker.png in Resources */ = {isa = PBXBuildFile; fileRef = CF7A708715CFD0A50086FDE6 /* g3m-marker.png */; };
 		CF883B841591053100AEE39C /* mark.png in Resources */ = {isa = PBXBuildFile; fileRef = CF883B831591053100AEE39C /* mark.png */; };
 		CFE3DBB1164B0E7D00910037 /* seymour-plane.json in Resources */ = {isa = PBXBuildFile; fileRef = CFE3DBB0164B0E7D00910037 /* seymour-plane.json */; };
@@ -251,6 +252,7 @@
 		CF62A0A9168008E900649BBC /* FloatBuffer_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = FloatBuffer_iOS.hpp; path = ../G3MiOSSDK/Specific/Derived/FloatBuffer_iOS.hpp; sourceTree = "<group>"; };
 		CF62A0AA168008E900649BBC /* JSONParser_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = JSONParser_iOS.hpp; path = ../G3MiOSSDK/Specific/Derived/JSONParser_iOS.hpp; sourceTree = "<group>"; };
 		CF62A0AB168008E900649BBC /* IntBuffer_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IntBuffer_iOS.hpp; path = ../G3MiOSSDK/Specific/Derived/IntBuffer_iOS.hpp; sourceTree = "<group>"; };
+		CF6C74ED16B434E400231312 /* untitled.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = untitled.json; sourceTree = "<group>"; };
 		CF7A708715CFD0A50086FDE6 /* g3m-marker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "g3m-marker.png"; sourceTree = "<group>"; };
 		CF883B831591053100AEE39C /* mark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mark.png; sourceTree = "<group>"; };
 		CF923CA716AB159800D04301 /* ShortBuffer_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ShortBuffer_iOS.hpp; path = ../G3MiOSSDK/Specific/Derived/ShortBuffer_iOS.hpp; sourceTree = "<group>"; };
@@ -584,6 +586,7 @@
 		D8EEF4271577B0D6003FEB5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CF6C74ED16B434E400231312 /* untitled.json */,
 				CF09A94D16A09F7000E72811 /* test.bson */,
 				CF0223821668318600024B73 /* geojson */,
 				CFEA76671666DCB000E89BC7 /* images */,
@@ -704,6 +707,7 @@
 				CFE3DBB1164B0E7D00910037 /* seymour-plane.json in Resources */,
 				CFEA76681666DCB000E89BC7 /* images in Resources */,
 				CF0223831668318600024B73 /* geojson in Resources */,
+				CF6C74EE16B434E400231312 /* untitled.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
