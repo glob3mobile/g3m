@@ -54,7 +54,7 @@ public abstract class ITextUtils
   {
 	final float fontSize = 20F;
   
-	final Color color = Color.yellow();
+	final Color color = Color.white();
 	final Color shadowColor = Color.black();
   
 	createLabelImage(label, fontSize, color, shadowColor, listener, autodelete);
@@ -67,7 +67,7 @@ public abstract class ITextUtils
   {
 	final float fontSize = 20F;
   
-	final Color color = Color.yellow();
+	final Color color = Color.white();
 	final Color shadowColor = Color.black();
   
 	final int separation = 2;
