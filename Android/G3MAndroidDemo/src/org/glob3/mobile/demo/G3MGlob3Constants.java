@@ -5,6 +5,7 @@ package org.glob3.mobile.demo;
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Sector;
+import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.WMSLayer;
 import org.glob3.mobile.generated.WMSServerVersion;
@@ -22,7 +23,7 @@ public class G3MGlob3Constants {
                                                                                "http://worldwind27.arc.nasa.gov/wms/virtualearth?",
                                                                                false), WMSServerVersion.WMS_1_1_0,
                                                                       Sector.fullSphere(), "image/png", "EPSG:4326", "", false,
-                                                                      null);
+                                                                      null, TimeInterval.fromDays(30));
 
 
    public static WMSLayer         OSM_LAYER                  = new WMSLayer( //
@@ -34,7 +35,8 @@ public class G3MGlob3Constants {
                                                                       "EPSG:4326", //
                                                                       "", //
                                                                       false, //
-                                                                      null);
+                                                                      null, //
+                                                                      TimeInterval.fromDays(30));
 
 
    public static final Geodetic2D FRANKFURT_POSITION         = new Geodetic2D( //

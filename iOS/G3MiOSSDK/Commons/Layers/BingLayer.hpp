@@ -62,8 +62,9 @@ public:
             const Sector& sector,
             const MapType mapType,
             Language locale,
-            const std::string key):
-  Layer(layerName, condition),
+            const std::string& key,
+            const TimeInterval& timeToCache):
+  Layer(condition, layerName, timeToCache),
   _sector(sector),
   _mapServerURL(mapServerURL),
   _mapType(mapType),

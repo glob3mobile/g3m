@@ -17,17 +17,11 @@ class IImageListener;
 
 class IImage {
 public:
-  // a virtual destructor is needed for conversion to Java
   virtual ~IImage() {}
 
   virtual int getWidth() const = 0;
   virtual int getHeight() const = 0;
   virtual Vector2I getExtent() const = 0;
-
-//  virtual void combineWith(const IImage& other,
-//                           int width, int height,
-//                           IImageListener* listener,
-//                           bool autodelete) const = 0;
 
   virtual void combineWith(const IImage& other,
                            const RectangleI& rect,
@@ -52,7 +46,7 @@ public:
   virtual const std::string description() const = 0;
 
   virtual IImage* shallowCopy() const = 0;
-
+  
 };
 
 #endif

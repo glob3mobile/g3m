@@ -146,9 +146,9 @@ public:
 
 
   void setCameraPosition(const Geodetic3D& position);
-  
+
   void setCameraHeading(const Angle& angle);
-  
+
   void setCameraPitch(const Angle& angle);
 
   void setAnimatedCameraPosition(const Geodetic3D& position);
@@ -206,16 +206,16 @@ private:
   bool                 _autoDeleteInitializationTask;
 
   std::vector<PeriodicalTask*> _periodicalTasks;
-    
-    int _width;
-    int _height;
+
+  int _width;
+  int _height;
 
   void initializeGL();
 
   const G3MContext* _context;
 
   bool _paused;
-  
+
   const GLState* _rootState;
 
   bool _initializationTaskWasRun;

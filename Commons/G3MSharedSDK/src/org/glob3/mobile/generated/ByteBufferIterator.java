@@ -75,6 +75,7 @@ public class ByteBufferIterator
 	int b2 = nextUInt8() & 0xFF;
 	int b3 = nextUInt8() & 0xFF;
 	int b4 = nextUInt8() & 0xFF;
+
 	return ((int) b1) | ((int) b2 << 8) | ((int) b3 << 16) | ((int) b4 << 24);
   }
   public final long nextInt64()

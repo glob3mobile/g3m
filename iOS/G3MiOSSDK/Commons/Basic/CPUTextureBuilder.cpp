@@ -74,7 +74,7 @@ private:
   const int _height;
 
   IImageListener* _listener;
-  const bool            _autodelete;
+  const bool      _autodelete;
 
 public:
   SubImageImageLister(int width, int height,
@@ -91,7 +91,7 @@ public:
   void imageCreated(IImage* image) {
     image->scale(_width, _height,
                  _listener, _autodelete);
-    delete image;
+    IFactory::instance()->deleteImage(image);
   }
 };
 

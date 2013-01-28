@@ -14,6 +14,7 @@
 #include "IImageListener.hpp"
 
 #include <math.h>
+#include "IFactory.hpp"
 
 CGColorRef TextUtils_iOS::toCGColor(const Color* color) {
   if (color == NULL) {
@@ -25,6 +26,7 @@ CGColorRef TextUtils_iOS::toCGColor(const Color* color) {
                            blue: color->getBlue()
                           alpha: color->getAlpha()] CGColor];
 }
+
 
 void TextUtils_iOS::createLabelImage(const std::string& label,
                                      float fontSize,
@@ -63,6 +65,7 @@ void TextUtils_iOS::createLabelImage(const std::string& label,
   if (autodelete) {
     delete listener;
   }
+  IFactory::instance()->deleteImage(result);
 }
 
 
@@ -94,15 +97,15 @@ void TextUtils_iOS::labelImage(const IImage* image,
     CGSize labelSize = (shadowColor == NULL) ? textSize : CGSizeMake(textSize.width + 2,
                                                                      textSize.height + 2);
 
-    float imageWidth;
-    float imageHeight;
+    float resultWidth;
+    float resultHeight;
     if (labelPosition == Bottom) {
-      imageWidth = fmaxf(labelSize.width, image->getWidth());
-      imageHeight = labelSize.height + separation + image->getHeight();
+      resultWidth = fmaxf(labelSize.width, image->getWidth());
+      resultHeight = labelSize.height + separation + image->getHeight();
     }
     else if (labelPosition == Right) {
-      imageWidth = labelSize.width + separation + image->getWidth();
-      imageHeight = fmaxf(labelSize.height, image->getHeight());
+      resultWidth = labelSize.width + separation + image->getWidth();
+      resultHeight = fmaxf(labelSize.height, image->getHeight());
     }
     else {
       ILogger::instance()->logError("Unsupported LabelPosition");
@@ -114,18 +117,18 @@ void TextUtils_iOS::labelImage(const IImage* image,
     }
 
 
-    UIGraphicsBeginImageContextWithOptions(CGSizeMake(imageWidth, imageHeight), NO, 0.0);
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(resultWidth, resultHeight), NO, 0.0);
 
     CGContextRef ctx = UIGraphicsGetCurrentContext();
 
     UIImage* uiImage = ((const Image_iOS*) image)->getUIImage();
     if (labelPosition == Bottom) {
-      [uiImage drawAtPoint: CGPointMake((imageWidth - image->getWidth()) / 2,
+      [uiImage drawAtPoint: CGPointMake((resultWidth - image->getWidth()) / 2,
                                         0.0) ];
     }
     else if (labelPosition == Right) {
       [uiImage drawAtPoint: CGPointMake(0.0,
-                                        (imageHeight - image->getHeight()) / 2) ];
+                                        (resultHeight - image->getHeight()) / 2) ];
     }
 
     CGContextSetFillColorWithColor(ctx, toCGColor(color));
@@ -135,13 +138,13 @@ void TextUtils_iOS::labelImage(const IImage* image,
     }
 
     if (labelPosition == Bottom) {
-      [text drawAtPoint: CGPointMake((imageWidth - labelSize.width) / 2,
+      [text drawAtPoint: CGPointMake((resultWidth - labelSize.width) / 2,
                                      image->getHeight() + separation)
                withFont: font];
     }
     else if (labelPosition == Right) {
       [text drawAtPoint: CGPointMake(image->getWidth() + separation,
-                                     (imageHeight - textSize.height) / 2)
+                                     (resultHeight - textSize.height) / 2)
                withFont: font];
     }
 
@@ -153,6 +156,6 @@ void TextUtils_iOS::labelImage(const IImage* image,
     if (autodelete) {
       delete listener;
     }
-    
+    IFactory::instance()->deleteImage(result);
   }
 }

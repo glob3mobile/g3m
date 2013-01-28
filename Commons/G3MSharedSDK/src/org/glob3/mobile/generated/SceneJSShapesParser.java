@@ -561,10 +561,10 @@ public class SceneJSShapesParser
 	  return null;
 	}
 	int indicesCount = jsIndices.size();
-	IIntBuffer indices = IFactory.instance().createIntBuffer(indicesCount);
+	IShortBuffer indices = IFactory.instance().createShortBuffer(indicesCount);
 	for (int i = 0; i < indicesCount; i++)
 	{
-	  indices.put(i, (int) jsIndices.getAsNumber(i).value());
+	  indices.rawPut(i, (short) jsIndices.getAsNumber(i).value());
 	}
 	processedKeys++;
   

@@ -9,6 +9,7 @@
 #include "Petition.hpp"
 
 #include "IStringBuilder.hpp"
+#include "IFactory.hpp"
 
 const std::string Petition::description() const {
   IStringBuilder *isb = IStringBuilder::newStringBuilder();
@@ -27,4 +28,9 @@ const std::string Petition::description() const {
   const std::string s = isb->getString();
   delete isb;
   return s;
+}
+
+void Petition::releaseImage() {
+  IFactory::instance()->deleteImage(_image);
+  _image = NULL;
 }

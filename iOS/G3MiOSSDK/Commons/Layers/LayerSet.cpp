@@ -99,6 +99,6 @@ Layer* LayerSet::getLayer(const std::string &name) {
       return _layers[i];
     }
   }
-
+  
   return NULL;
 }

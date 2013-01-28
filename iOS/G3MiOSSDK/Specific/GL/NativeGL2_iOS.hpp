@@ -17,7 +17,8 @@
 #include "GLUniformID_iOS.hpp"
 #include "GLTextureId_iOS.hpp"
 #include "FloatBuffer_iOS.hpp"
-#include "IntBuffer_iOS.hpp"
+//#include "IntBuffer_iOS.hpp"
+#include "ShortBuffer_iOS.hpp"
 #include "Image_iOS.hpp"
 
 class NativeGL2_iOS: public INativeGL {
@@ -104,12 +105,18 @@ public:
     glVertexAttribPointer(index, size, GL_FLOAT, normalized, stride, pointer);
   }
 
+//  void drawElements(int mode,
+//                    int count,
+//                    IIntBuffer* buffer) const {
+//    int has_to_set_GL_UNSIGNED_INT; //???????
+//    const int* pointer = ((IntBuffer_iOS*) buffer)->getPointer();
+//    glDrawElements(mode, count, GL_UNSIGNED_INT, pointer);
+//  }
   void drawElements(int mode,
                     int count,
-                    IIntBuffer* buffer) const {
-    int has_to_set_GL_UNSIGNED_INT; //???????
-    const int* pointer = ((IntBuffer_iOS*) buffer)->getPointer();
-    glDrawElements(mode, count, GL_UNSIGNED_INT, pointer);
+                    IShortBuffer* buffer) const {
+    const short* pointer = ((ShortBuffer_iOS*) buffer)->getPointer();
+    glDrawElements(mode, count, GL_UNSIGNED_SHORT, pointer);
   }
 
   void lineWidth(float width) const {
@@ -125,7 +132,7 @@ public:
   }
 
   void bindTexture(int target, const IGLTextureId* texture) const {
-    const int id = ((GLTextureId_iOS*)texture)->getGLTextureId();
+    const int id = ((GLTextureId_iOS*) texture)->getGLTextureId();
     if (id < 0) {
       ILogger::instance()->logError("Trying to bind invalid IGLTextureId");
     }
@@ -134,14 +141,12 @@ public:
     }
   }
 
-  bool deleteTexture(const IGLTextureId* texture) const {
+  void deleteTexture(const IGLTextureId* texture) const {
     const unsigned int textures[] = {
       ((GLTextureId_iOS*) texture)->getGLTextureId()
     };
 
     glDeleteTextures(1, textures);
-
-    return true;
   }
 
   void enableVertexAttribArray(int location) const {
@@ -157,11 +162,17 @@ public:
   }
 
   std::vector<IGLTextureId*> genTextures(int n) const {
-    GLuint textures[n];
-    glGenTextures(n, textures);
+    GLuint textureIds[n];
+    glGenTextures(n, textureIds);
     std::vector<IGLTextureId*> ts;
     for(int i = 0; i < n; i++) {
-      ts.push_back( new GLTextureId_iOS(textures[i]) );
+      GLuint textureId = textureIds[i];
+      if (textureId == 0) {
+        ILogger::instance()->logError("Can't create a textureId");
+      }
+      else {
+        ts.push_back( new GLTextureId_iOS(textureId) );
+      }
     }
     return ts;
   }
@@ -172,7 +183,8 @@ public:
     glTexParameteri(target, par, v);
   }
 
-  void texImage2D(const IImage* image, int format) const {
+  void texImage2D(const IImage* image,
+                  int format) const {
     const unsigned char* data = ((Image_iOS*) image)->createByteArrayRGBA8888();
 
     glTexImage2D(GL_TEXTURE_2D,

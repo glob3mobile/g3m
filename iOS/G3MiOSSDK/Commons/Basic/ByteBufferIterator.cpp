@@ -58,6 +58,7 @@ int ByteBufferIterator::nextInt32() {
   int b3 = nextUInt8() & 0xFF;
   int b4 = nextUInt8() & 0xFF;
 #endif
+
   return
   ((int) b1) |
   ((int) b2 << 8) |

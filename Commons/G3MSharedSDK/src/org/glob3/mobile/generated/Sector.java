@@ -132,10 +132,38 @@ public class Sector
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const Angle lowerLatitude() const
+  public final Angle lowerLatitude()
+  {
+	return _lower.latitude();
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const Angle lowerLongitude() const
+  public final Angle lowerLongitude()
+  {
+	return _lower.longitude();
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: const Geodetic2D upper() const
   public final Geodetic2D upper()
   {
 	return _upper;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const Angle upperLatitude() const
+  public final Angle upperLatitude()
+  {
+	return _upper.latitude();
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const Angle upperLongitude() const
+  public final Angle upperLongitude()
+  {
+	return _upper.longitude();
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -151,7 +179,6 @@ public class Sector
   {
 	return contains(position.asGeodetic2D());
   }
-
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: boolean touchesWith(const Sector &that) const
@@ -363,7 +390,13 @@ public class Sector
 	Geodetic2D delta = new Geodetic2D(deltaLatitude, deltaLongitude);
 
 	return new Sector(_lower.add(delta), _upper.sub(delta));
+  }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isEqualsTo(const Sector& that) const
+  public final boolean isEqualsTo(Sector that)
+  {
+	return _lower.isEqualsTo(that._lower) && _upper.isEqualsTo(that._upper);
   }
 
 }

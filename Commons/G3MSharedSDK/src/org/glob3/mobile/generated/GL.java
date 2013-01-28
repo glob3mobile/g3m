@@ -93,23 +93,30 @@ public class GL
   
 	if (_texturesIdBag.size() == 0)
 	{
-	  final int bugdetSize = 256;
+	  //const int bugdetSize = 256;
+	  final int bugdetSize = 10240;
   
 	  ILogger.instance().logInfo("= Creating %d texturesIds...", bugdetSize);
   
 	  final java.util.ArrayList<IGLTextureId> ids = _nativeGL.genTextures(bugdetSize);
   
-	  for (int i = 0; i < bugdetSize; i++)
+	  for (int i = 0; i < ids.size(); i++)
 	  {
 		_texturesIdBag.addFirst(ids.get(i));
 	  }
   
-	  _texturesIdAllocationCounter += bugdetSize;
+	  _texturesIdAllocationCounter += ids.size();
   
 	  ILogger.instance().logInfo("= Created %d texturesIds (accumulated %d).", bugdetSize, _texturesIdAllocationCounter);
 	}
   
 	//  _texturesIdGetCounter++;
+  
+	if (_texturesIdBag.size() == 0)
+	{
+	  ILogger.instance().logError("TextureIds bag exhausted");
+	  return null;
+	}
   
 	final IGLTextureId result = _texturesIdBag.getLast();
 	_texturesIdBag.removeLast();
@@ -325,7 +332,22 @@ public class GL
 	}
   }
 
-  public final void drawElements(int mode, IIntBuffer indices)
+//  void drawElements(int mode,
+//                    IIntBuffer* indices);
+
+  //void GL::drawElements(int mode,
+  //                      IIntBuffer* indices) {
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("GL::drawElements(%d, %s)",
+  //                                 mode,
+  //                                 indices->description().c_str());
+  //  }
+  //
+  //  _nativeGL->drawElements(mode,
+  //                          indices->size(),
+  //                          indices);
+  //}
+  public final void drawElements(int mode, IShortBuffer indices)
   {
 	if (_verbose)
 	{
@@ -443,7 +465,7 @@ public class GL
   {
 	if (_verbose)
 	{
-	  ILogger.instance().logInfo("GL::getError()()");
+	  ILogger.instance().logInfo("GL::getError()");
 	}
   
 	return _nativeGL.getError();
@@ -505,7 +527,14 @@ public class GL
 	  ILogger.instance().logInfo("GL::bindTexture()");
 	}
   
-	_nativeGL.bindTexture(GLTextureType.texture2D(), textureId);
+	if (textureId == null)
+	{
+	  ILogger.instance().logError("Can't bind a NULL texture");
+	}
+	else
+	{
+	  _nativeGL.bindTexture(GLTextureType.texture2D(), textureId);
+	}
   }
 
   public final void startBillBoardDrawing(int viewPortWidth, int viewPortHeight)
@@ -549,10 +578,13 @@ public class GL
   
 	if (texture != null)
 	{
-	  if (_nativeGL.deleteTexture(texture))
-	  {
-		_texturesIdBag.addLast(texture);
-	  }
+	  //    if ( _nativeGL->deleteTexture(texture) ) {
+	  //      _texturesIdBag.push_back(texture);
+	  //    }
+  
+	  int __TESTING_TEXTUREIDs_DELETION;
+	  //_nativeGL->deleteTexture(texture);
+	  _texturesIdBag.addLast(texture);
   
 	  //    _texturesIdTakeCounter++;
 	}

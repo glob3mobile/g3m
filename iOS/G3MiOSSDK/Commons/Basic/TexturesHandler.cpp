@@ -41,36 +41,36 @@ public:
   public final TextureSpec _textureSpec;
   public IGLTextureId _glTextureId;
 #endif
-  
+
   long _referenceCounter;
-  
+
   TextureHolder(const TextureSpec& textureSpec) :
   _referenceCounter(1),
   _textureSpec(textureSpec),
   _glTextureId(NULL)
   {
-    
+
   }
-  
+
   ~TextureHolder() {
   }
-  
+
   void retain() {
     _referenceCounter++;
   }
-  
+
   void release() {
     _referenceCounter--;
   }
-  
+
   bool isRetained() {
     return _referenceCounter > 0;
   }
-  
+
   bool hasSpec(const TextureSpec& textureSpec) {
     return _textureSpec.equalsTo(textureSpec);
   }
-  
+
   const std::string description() const {
     IStringBuilder *isb = IStringBuilder::newStringBuilder();
     isb->addString("(#");
@@ -85,20 +85,20 @@ public:
 };
 
 void TexturesHandler::showHolders(const std::string& message) const {
-//  if (false) {
-//    std::string holdersString = ">>>> " + message + ", Holders=(";
-//    for (int i = 0; i < _textureHolders.size(); i++) {
-//      TextureHolder* holder = _textureHolders[i];
-//      
-//      if (i > 0) {
-//        holdersString += ", ";
-//      }
-//      holdersString += holder->description();
-//    }
-//    holdersString += ")";
-//    
-//    ILogger::instance()->logInfo("%s\n", holdersString.c_str() );
-//  }
+  //  if (false) {
+  //    std::string holdersString = ">>>> " + message + ", Holders=(";
+  //    for (int i = 0; i < _textureHolders.size(); i++) {
+  //      TextureHolder* holder = _textureHolders[i];
+  //
+  //      if (i > 0) {
+  //        holdersString += ", ";
+  //      }
+  //      holdersString += holder->description();
+  //    }
+  //    holdersString += ")";
+  //
+  //    ILogger::instance()->logInfo("%s\n", holdersString.c_str() );
+  //  }
 }
 
 const IGLTextureId* TexturesHandler::getGLTextureIdIfAvailable(const TextureSpec& textureSpec) {
@@ -106,13 +106,13 @@ const IGLTextureId* TexturesHandler::getGLTextureIdIfAvailable(const TextureSpec
     TextureHolder* holder = _textureHolders[i];
     if (holder->hasSpec(textureSpec)) {
       holder->retain();
-      
+
       showHolders("getGLTextureIdIfAvailable(): retained " + holder->description());
-      
+
       return holder->_glTextureId;
     }
   }
-  
+
   return NULL;
 }
 
@@ -121,31 +121,31 @@ const IGLTextureId* TexturesHandler::getGLTextureId(const IImage* image,
                                                     int format,
                                                     const std::string& name,
                                                     bool hasMipMap) {
-  
+
   TextureSpec textureSpec(name,
                           image->getWidth(),
                           image->getHeight(),
                           hasMipMap);
-  
+
   const IGLTextureId* previousId = getGLTextureIdIfAvailable(textureSpec);
   if (previousId != NULL) {
     return previousId;
   }
-  
+
   TextureHolder* holder = new TextureHolder(textureSpec);
   holder->_glTextureId= _gl->uploadTexture(image, format, textureSpec.isMipmap());
-  
-  
+
+
   if (_verbose) {
     ILogger::instance()->logInfo("Uploaded texture \"%s\" to GPU with texId=%s" ,
                                  textureSpec.description().c_str(),
                                  holder->_glTextureId->description().c_str() );
   }
-  
+
   _textureHolders.push_back(holder);
-  
+
   showHolders("getGLTextureId(): created holder " + holder->description());
-  
+
   return holder->_glTextureId;
 }
 
@@ -153,19 +153,19 @@ void TexturesHandler::retainGLTextureId(const IGLTextureId* glTextureId) {
   if (glTextureId == NULL) {
     return;
   }
-  
+
   for (int i = 0; i < _textureHolders.size(); i++) {
     TextureHolder* holder = _textureHolders[i];
-    
+
     if (holder->_glTextureId->isEqualsTo(glTextureId)) {
       holder->retain();
-      
+
       showHolders("retainGLTextureId(): retained holder " + holder->description());
-      
+
       return;
     }
   }
-  
+
   ILogger::instance()->logInfo("break (point) on me 6\n");
 }
 
@@ -173,28 +173,28 @@ void TexturesHandler::releaseGLTextureId(const IGLTextureId* glTextureId) {
   if (glTextureId == NULL) {
     return;
   }
-  
+
   for (int i = 0; i < _textureHolders.size(); i++) {
     TextureHolder* holder = _textureHolders[i];
-    
+
     if (holder->_glTextureId->isEqualsTo(glTextureId)) {
       holder->release();
-      
+
       showHolders("releaseGLTextureId(  ): released holder " + holder->description());
-      
+
       if (!holder->isRetained()) {
         _gl->deleteTexture(holder->_glTextureId);
-        
+
 #ifdef C_CODE
         _textureHolders.erase(_textureHolders.begin() + i);
 #endif
 #ifdef JAVA_CODE
         _textureHolders.remove(i);
 #endif
-        
+
         delete holder;
       }
-      
+
       return;
     }
   }

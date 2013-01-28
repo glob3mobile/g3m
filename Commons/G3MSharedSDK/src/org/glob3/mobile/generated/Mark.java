@@ -330,8 +330,8 @@ public class Mark
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const Object* getUserData() const
-  public final Object getUserData()
+//ORIGINAL LINE: const MarkUserData* getUserData() const
+  public final MarkUserData getUserData()
   {
 	return _userData;
   }

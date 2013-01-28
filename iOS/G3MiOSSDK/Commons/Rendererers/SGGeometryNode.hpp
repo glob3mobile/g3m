@@ -12,7 +12,7 @@
 #include "SGNode.hpp"
 
 class IFloatBuffer;
-class IIntBuffer;
+class IShortBuffer;
 
 class SGGeometryNode : public SGNode {
 private:
@@ -21,7 +21,7 @@ private:
   IFloatBuffer* _colors;
   IFloatBuffer* _uv;
   IFloatBuffer* _normals;
-  IIntBuffer*   _indices;
+  IShortBuffer*   _indices;
 
 public:
 
@@ -32,7 +32,7 @@ public:
                  IFloatBuffer*      colors,
                  IFloatBuffer*      uv,
                  IFloatBuffer*      normals,
-                 IIntBuffer*        indices) :
+                 IShortBuffer*        indices) :
   SGNode(id, sId),
   _primitive(primitive),
   _vertices(vertices),

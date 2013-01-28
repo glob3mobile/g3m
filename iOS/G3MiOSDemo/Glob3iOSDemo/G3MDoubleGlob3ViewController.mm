@@ -46,8 +46,8 @@
   lowerLayerSet->addLayer(LayerBuilder::createOSMLayer(true));
 
   // Set the layer sets to be used by the widgets
-  upperBuilder.setLayerSet(upperLayerSet);
-  lowerBuilder.setLayerSet(lowerLayerSet);
+  upperBuilder.getTileRendererBuilder()->setLayerSet(upperLayerSet);
+  lowerBuilder.getTileRendererBuilder()->setLayerSet(lowerLayerSet);
   
   // Initialize the glob3 widgets
   upperBuilder.initializeWidget();

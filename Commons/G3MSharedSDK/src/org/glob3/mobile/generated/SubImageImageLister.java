@@ -51,7 +51,6 @@ public class SubImageImageLister implements IImageListener
   public final void imageCreated(IImage image)
   {
 	image.scale(_width, _height, _listener, _autodelete);
-	if (image != null)
-		image.dispose();
+	IFactory.instance().deleteImage(image);
   }
 }

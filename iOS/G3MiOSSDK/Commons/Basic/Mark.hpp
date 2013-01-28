@@ -127,7 +127,7 @@ public:
     return Vector2I(_textureWidth, _textureHeight);
   }
 
-  const void* getUserData() const {
+  const MarkUserData* getUserData() const {
     return _userData;
   }
 

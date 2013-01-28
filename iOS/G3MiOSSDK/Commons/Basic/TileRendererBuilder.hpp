@@ -13,6 +13,7 @@
 #include "TilesRenderParameters.hpp"
 #include "TileRenderer.hpp"
 
+
 class TileRendererBuilder {
 
 private:
@@ -25,6 +26,8 @@ private:
   bool _useTilesSplitBudget;
   bool _forceTopLevelTilesRenderOnStart;
   bool _incrementalTileQuality;
+  std::vector<VisibleSectorListener*> _visibleSectorListeners;
+  std::vector<long long> _stabilizationMilliSeconds;
 
   LayerSet* createLayerSet();
   TilesRenderParameters* createTileRendererParameters();
@@ -43,6 +46,11 @@ public:
   void setUseTilesSplitBuget(const bool useTilesSplitBudget);
   void setForceTopLevelTilesRenderOnStart(const bool forceTopLevelTilesRenderOnStart);
   void setIncrementalTileQuality(const bool incrementalTileQuality);
+  void addVisibleSectorListener(VisibleSectorListener* listener,
+                                const TimeInterval& stabilizationInterval);
+  void addVisibleSectorListener(VisibleSectorListener* listener) {
+    addVisibleSectorListener(listener, TimeInterval::zero());
+  }
 
 };
 

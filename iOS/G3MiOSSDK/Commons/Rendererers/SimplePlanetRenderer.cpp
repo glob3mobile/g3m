@@ -15,7 +15,7 @@
 #include "TextureBuilder.hpp"
 
 #include "FloatBufferBuilderFromGeodetic.hpp"
-#include "IntBufferBuilder.hpp"
+#include "ShortBufferBuilder.hpp"
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "FloatBufferBuilderFromCartesian2D.hpp"
 #include "FloatBufferBuilderFromColor.hpp"
@@ -31,7 +31,7 @@ _mesh(NULL)
 
 SimplePlanetRenderer::~SimplePlanetRenderer() {
   delete _mesh;
-  delete _image;
+  IFactory::instance()->deleteImage(_image);
 }
 
 void SimplePlanetRenderer::initialize(const G3MContext* context) {
@@ -56,19 +56,19 @@ IFloatBuffer* SimplePlanetRenderer::createVertices(const Planet* planet) const {
   return vertices.create();
 }
 
-IIntBuffer* SimplePlanetRenderer::createMeshIndex() const {
-  IntBufferBuilder indices;
+IShortBuffer* SimplePlanetRenderer::createMeshIndex() const {
+  ShortBufferBuilder indices;
 
   const int res = _lonRes;
   for (int j = 0; j < res - 1; j++) {
     if (j > 0) {
-      indices.add((int) (j * res));
+      indices.add((short) (j * res));
     }
     for (int i = 0; i < res; i++) {
-      indices.add(j * res + i);
-      indices.add(j * res + i + res);
+      indices.add((short) (j * res + i));
+      indices.add((short) (j * res + i + res));
     }
-    indices.add(j * res + 2 * res - 1);
+    indices.add((short) (j * res + 2 * res - 1));
   }
 
   return indices.create();
@@ -91,7 +91,7 @@ IFloatBuffer* SimplePlanetRenderer::createTextureCoordinates() const {
 }
 
 Mesh* SimplePlanetRenderer::createMesh(const G3MRenderContext* rc) {
-  IIntBuffer* indices = createMeshIndex();
+  IShortBuffer* indices = createMeshIndex();
   IFloatBuffer* vertices = createVertices( rc->getPlanet() );
 
   //COLORS PER VERTEX
@@ -138,7 +138,7 @@ Mesh* SimplePlanetRenderer::createMesh(const G3MRenderContext* rc) {
   }
 
   // the image is not needed as it's already uploaded to the GPU
-  delete _image;
+  IFactory::instance()->deleteImage(_image);
   _image = NULL;
 
   IFloatBuffer* texCoords = createTextureCoordinates();

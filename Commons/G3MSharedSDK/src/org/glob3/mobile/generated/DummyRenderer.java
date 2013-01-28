@@ -20,14 +20,14 @@ package org.glob3.mobile.generated;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IFloatBuffer;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class IIntBuffer;
+//class IShortBuffer;
 
 public class DummyRenderer extends LeafRenderer
 {
 
   private double _halfSize;
 
-  private IIntBuffer _indices;
+  private IShortBuffer _indices;
   private IFloatBuffer _vertices;
 
   public void dispose()
@@ -43,7 +43,7 @@ public class DummyRenderer extends LeafRenderer
 	int res = 12;
   
 	FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
-	IntBufferBuilder index = new IntBufferBuilder();
+	ShortBufferBuilder index = new ShortBufferBuilder();
   
 	// create vertices
   
@@ -69,14 +69,14 @@ public class DummyRenderer extends LeafRenderer
 	{
 	  if (j > 0)
 	  {
-		index.add(j * res);
+		index.add((short)(j * res));
 	  }
 	  for (int i = 0; i < res; i++)
 	  {
-		index.add(j * res + i);
-		index.add(j * res + i + res);
+		index.add((short)(j * res + i));
+		index.add((short)(j * res + i + res));
 	  }
-	  index.add(j * res + 2 * res - 1);
+	  index.add((short)(j * res + 2 * res - 1));
 	}
   
 	_indices = index.create();

@@ -284,7 +284,7 @@ public final class Image_Android
       super.dispose();
 
       _bitmapHolder._release();
-      //      _bitmap.recycle();
+      //_bitmap.recycle();
    }
 
 

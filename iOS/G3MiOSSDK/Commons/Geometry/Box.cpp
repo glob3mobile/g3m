@@ -10,7 +10,7 @@
 #include "Vector2D.hpp"
 #include "Camera.hpp"
 #include "FloatBufferBuilderFromCartesian3D.hpp"
-#include "IntBufferBuilder.hpp"
+#include "ShortBufferBuilder.hpp"
 
 #include "GLConstants.hpp"
 #include "Color.hpp"
@@ -158,7 +158,7 @@ void Box::createMesh(Color* color) {
     (float) _upper._x, (float) _lower._y, (float) _upper._z
   };
   
-  int i[] = { 
+  short i[] = {
     0, 1, 1, 2, 2, 3, 3, 0,
     1, 5, 5, 6, 6, 2, 2, 1,
     5, 4, 4, 7, 7, 6, 6, 5,
@@ -168,7 +168,7 @@ void Box::createMesh(Color* color) {
   };
   
   FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero());
-  IntBufferBuilder indices;
+  ShortBufferBuilder indices;
   
   const unsigned int numVertices = 8;
   for (unsigned int n=0; n<numVertices; n++) {

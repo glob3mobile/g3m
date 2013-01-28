@@ -29,6 +29,8 @@ package org.glob3.mobile.generated;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IIntBuffer;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IShortBuffer;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IByteBuffer;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class ILogger;
@@ -96,6 +98,10 @@ public abstract class IFactory
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual IIntBuffer* createIntBuffer(int size) const = 0;
   public abstract IIntBuffer createIntBuffer(int size);
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual IShortBuffer* createShortBuffer(int size) const = 0;
+  public abstract IShortBuffer createShortBuffer(int size);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual IByteBuffer* createByteBuffer(int length) const = 0;

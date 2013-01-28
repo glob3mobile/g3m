@@ -10,8 +10,7 @@
 #include "LevelTileCondition.hpp"
 
 WMSLayer* LayerBuilder::createBingLayer(bool enabled) {
-  WMSLayer* bing = new WMSLayer("Bing Virtual Earth",
-                                "ve",
+  WMSLayer* bing = new WMSLayer("ve",
                                 URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?", false),
                                 WMS_1_1_0,
                                 Sector::fullSphere(),
@@ -19,15 +18,15 @@ WMSLayer* LayerBuilder::createBingLayer(bool enabled) {
                                 "EPSG:4326",
                                 "",
                                 false,
-                                NULL);
+                                NULL,
+                                TimeInterval::fromDays(30));
   bing->setEnable(enabled);
   
   return bing;
 }
 
 WMSLayer* LayerBuilder::createOSMLayer(bool enabled) {
-  WMSLayer* osm = new WMSLayer("Open Street Map",
-                               "osm_auto:all",
+  WMSLayer* osm = new WMSLayer("osm_auto:all",
                                URL("http://129.206.228.72/cached/osm", false),
                                WMS_1_1_0,
                                // Sector::fromDegrees(-85.05, -180.0, 85.05, 180.0),
@@ -36,7 +35,8 @@ WMSLayer* LayerBuilder::createOSMLayer(bool enabled) {
                                "EPSG:4326",
                                "",
                                false,
-                               NULL);
+                               NULL,
+                               TimeInterval::fromDays(30));
   osm->setEnable(enabled);
   
   return osm;  
@@ -44,7 +44,6 @@ WMSLayer* LayerBuilder::createOSMLayer(bool enabled) {
 
 WMSLayer* LayerBuilder::createPNOALayer(bool enabled) {
   WMSLayer *pnoa = new WMSLayer("PNOA",
-                                "PNOA",
                                 URL("http://www.idee.es/wms/PNOA/PNOA", false),
                                 WMS_1_1_0,
                                 Sector::fromDegrees(21, -18, 45, 6),
@@ -52,15 +51,15 @@ WMSLayer* LayerBuilder::createPNOALayer(bool enabled) {
                                 "EPSG:4326",
                                 "",
                                 true,
-                                NULL);
+                                NULL,
+                                TimeInterval::fromDays(30));
   pnoa->setEnable(enabled);
   
   return pnoa;
 }
 
 WMSLayer* LayerBuilder::createBlueMarbleLayer(bool enabled) {
-  WMSLayer* blueMarble = new WMSLayer("Blue Marble",
-                                      "bmng200405",
+  WMSLayer* blueMarble = new WMSLayer("bmng200405",
                                       URL("http://www.nasa.network.com/wms?", false),
                                       WMS_1_1_0,
                                       Sector::fullSphere(),
@@ -68,15 +67,15 @@ WMSLayer* LayerBuilder::createBlueMarbleLayer(bool enabled) {
                                       "EPSG:4326",
                                       "",
                                       false,
-                                      new LevelTileCondition(0, 6));
+                                      new LevelTileCondition(0, 6),
+                                      TimeInterval::fromDays(30));
   blueMarble->setEnable(enabled);
   
   return blueMarble;
 }
 
 WMSLayer* LayerBuilder::createI3LandSatLayer(bool enabled) {
-  WMSLayer* i3Landsat = new WMSLayer("i3Landsat",
-                                     "esat",
+  WMSLayer* i3Landsat = new WMSLayer("esat",
                                      URL("http://data.worldwind.arc.nasa.gov/wms?", false),
                                      WMS_1_1_0,
                                      Sector::fullSphere(),
@@ -84,15 +83,15 @@ WMSLayer* LayerBuilder::createI3LandSatLayer(bool enabled) {
                                      "EPSG:4326",
                                      "",
                                      false,
-                                     new LevelTileCondition(7, 100));
+                                     new LevelTileCondition(7, 100),
+                                     TimeInterval::fromDays(30));
   i3Landsat->setEnable(enabled);
   
   return i3Landsat;
 }
 
 WMSLayer* LayerBuilder::createPoliticalLayer(bool enabled) {
-  WMSLayer* political = new WMSLayer("Political Boundaries",
-                                     "topp:cia",
+  WMSLayer* political = new WMSLayer("topp:cia",
                                      URL("http://worldwind22.arc.nasa.gov/geoserver/wms?", false),
                                      WMS_1_1_0,
                                      Sector::fullSphere(),
@@ -100,15 +99,15 @@ WMSLayer* LayerBuilder::createPoliticalLayer(bool enabled) {
                                      "EPSG:4326",
                                      "countryboundaries",
                                      true,
-                                     NULL);
+                                     NULL,
+                                     TimeInterval::fromDays(30));
   political->setEnable(enabled);
   
   return political;
 }
 
 WMSLayer* LayerBuilder::createCaceresStreetMapLayer(bool enabled) {
-  WMSLayer* ccStreetMap = new WMSLayer("Callejero Cáceres",
-                                       URL::escape("Ejes de via"),
+  WMSLayer* ccStreetMap = new WMSLayer(URL::escape("Ejes de via"),
                                        URL("http://sig.caceres.es/wms_callejero.mapdef?", false),
                                        WMS_1_1_0,
                                        Sector::fullSphere(),
@@ -116,15 +115,15 @@ WMSLayer* LayerBuilder::createCaceresStreetMapLayer(bool enabled) {
                                        "EPSG:4326",
                                        "",
                                        true,
-                                       NULL);
+                                       NULL,
+                                       TimeInterval::fromDays(30));
   ccStreetMap->setEnable(enabled);
   
   return ccStreetMap;
 }
 
 WMSLayer* LayerBuilder::createCanaryIslandStreetMapLayer(bool enabled) {
-  WMSLayer* canaryStreetMap = new WMSLayer("Callejero Islas Canarias",
-                                           "VIAS",
+  WMSLayer* canaryStreetMap = new WMSLayer("VIAS",
                                            URL("http://idecan2.grafcan.es/ServicioWMS/Callejero", false),
                                            WMS_1_1_0,
                                            Sector::fromDegrees(22.5,-22.5, 33.75, -11.25),
@@ -132,7 +131,8 @@ WMSLayer* LayerBuilder::createCanaryIslandStreetMapLayer(bool enabled) {
                                            "EPSG:4326",
                                            "",
                                            true,
-                                           NULL);
+                                           NULL,
+                                           TimeInterval::fromDays(30));
   canaryStreetMap->setEnable(enabled);
   
   return canaryStreetMap;

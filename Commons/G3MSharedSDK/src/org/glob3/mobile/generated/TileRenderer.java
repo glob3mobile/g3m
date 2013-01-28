@@ -8,7 +8,8 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   private final boolean _showStatistics;
   private boolean _topTilesJustCreated;
 
-  private Camera               _lastCamera;
+  private Camera     _lastCamera;
+  private G3MContext _context;
 
   private java.util.ArrayList<Tile> _topLevelTiles = new java.util.ArrayList<Tile>();
 
@@ -60,12 +61,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 	_topTilesJustCreated = true;
   }
 
-  private TilesStatistics _lastStatistics = new TilesStatistics();
-
   private boolean _firstRender;
-
-//  const InitializationContext* _initializationContext;
-  private G3MContext _context;
 
   private void pruneTopLevelTiles()
   {
@@ -76,6 +72,10 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 	}
   }
 
+  private Sector _lastVisibleSector;
+
+  private java.util.ArrayList<VisibleSectorListenerEntry> _visibleSectorListeners = new java.util.ArrayList<VisibleSectorListenerEntry>();
+
   public TileRenderer(TileTessellator tessellator, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters parameters, boolean showStatistics)
   {
 	  _tessellator = tessellator;
@@ -83,12 +83,12 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 	  _layerSet = layerSet;
 	  _parameters = parameters;
 	  _showStatistics = showStatistics;
-	  _lastStatistics = new TilesStatistics();
 	  _topTilesJustCreated = false;
 	  _lastSplitTimer = null;
 	  _lastCamera = null;
 	  _firstRender = false;
 	  _context = null;
+	  _lastVisibleSector = null;
 	_layerSet.setChangeListener(this);
   }
 
@@ -103,6 +103,17 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   
 	if (_lastSplitTimer != null)
 		_lastSplitTimer.dispose();
+  
+	if (_lastVisibleSector != null)
+		_lastVisibleSector.dispose();
+  
+	final int visibleSectorListenersCount = _visibleSectorListeners.size();
+	for (int i = 0; i < visibleSectorListenersCount; i++)
+	{
+	  VisibleSectorListenerEntry entry = _visibleSectorListeners.get(i);
+	  if (entry != null)
+		  entry.dispose();
+	}
   }
 
   public final void initialize(G3MContext context)
@@ -168,10 +179,28 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   
 	if (_showStatistics)
 	{
-	  if (!_lastStatistics.equalsTo(statistics))
+	  statistics.log(rc.getLogger());
+	}
+  
+  
+	final Sector renderedSector = statistics.getRenderedSector();
+	if (renderedSector != null)
+	{
+	  if ((_lastVisibleSector == null) || !renderedSector.isEqualsTo(_lastVisibleSector))
 	  {
-		_lastStatistics = statistics;
-		statistics.log(rc.getLogger());
+		if (_lastVisibleSector != null)
+			_lastVisibleSector.dispose();
+		_lastVisibleSector = new Sector(renderedSector);
+	  }
+	}
+  
+	if (_lastVisibleSector != null)
+	{
+	  final int visibleSectorListenersCount = _visibleSectorListeners.size();
+	  for (int i = 0; i < visibleSectorListenersCount; i++)
+	  {
+		VisibleSectorListenerEntry entry = _visibleSectorListeners.get(i);
+		entry.tryToNotifyListener(_lastVisibleSector);
 	  }
 	}
   
@@ -331,6 +360,36 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 	clearTopLevelTiles();
 	_firstRender = true;
 	createTopLevelTiles(_context);
+  }
+
+  /**
+   Answer the visible-sector, it can be null if globe was not yet rendered.
+   */
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const Sector* getVisibleSector() const
+  public final Sector getVisibleSector()
+  {
+	return _lastVisibleSector;
+  }
+
+  /**
+   Add a listener for notification of visible-sector changes.
+
+   @param stabilizationInterval How many time the visible-sector has to be settled (without changes) before triggering the event.  Useful for avoid process while the camera is being moved (as in animations).  If stabilizationInterval is zero, the event is triggered inmediatly. 
+   */
+  public final void addVisibleSectorListener(VisibleSectorListener listener, TimeInterval stabilizationInterval)
+  {
+	_visibleSectorListeners.add(new VisibleSectorListenerEntry(listener, stabilizationInterval));
+  }
+
+  /**
+   Add a listener for notification of visible-sector changes.
+
+   The event is triggered immediately without waiting for the visible-sector get settled.
+   */
+  public final void addVisibleSectorListener(VisibleSectorListener listener)
+  {
+	addVisibleSectorListener(listener, TimeInterval.zero());
   }
 
 }

@@ -31,6 +31,7 @@ class TilesRenderParameters;
 class G3MWidget;
 class PeriodicalTask;
 class GInitializationTask;
+class TimeInterval;
 
 // opengl versions value
 enum GL_version {
@@ -88,5 +89,20 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
 - (G3MWidget*) widget;
 
 - (void)initSingletons;
+
+- (CameraRenderer*)getCameraRenderer;
+
+- (void)setAnimatedCameraPosition: (const Geodetic3D&) position
+                     timeInterval: (const TimeInterval&)interval;
+
+- (void)setAnimatedCameraPosition: (const Geodetic3D&) position;
+
+- (void)setCameraPosition: (const Geodetic3D&) position;
+
+- (void)setCameraHeading: (const Angle&) angle;
+
+- (void)setCameraPitch: (const Angle&) angle;
+
+- (void)resetCameraPosition;
 
 @end

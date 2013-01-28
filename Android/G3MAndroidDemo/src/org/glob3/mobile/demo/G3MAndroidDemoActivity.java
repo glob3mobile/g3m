@@ -18,6 +18,7 @@ import org.glob3.mobile.generated.Renderer;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.SimpleCameraConstrainer;
+import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.WMSLayer;
 import org.glob3.mobile.generated.WMSServerVersion;
@@ -38,14 +39,16 @@ public class G3MAndroidDemoActivity
       final boolean useBing = false;
       if (useBing) {
          final WMSLayer bing = new WMSLayer("ve", new URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?", false),
-                  WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/png", "EPSG:4326", "", false, null);
+                  WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/png", "EPSG:4326", "", false, null,
+                  TimeInterval.fromDays(30));
          layerSet.addLayer(bing);
       }
 
       final boolean usePnoa = false;
       if (usePnoa) {
          final WMSLayer pnoa = new WMSLayer("PNOA", new URL("http://www.idee.es/wms/PNOA/PNOA", false),
-                  WMSServerVersion.WMS_1_1_0, Sector.fromDegrees(21, -18, 45, 6), "image/png", "EPSG:4326", "", true, null);
+                  WMSServerVersion.WMS_1_1_0, Sector.fromDegrees(21, -18, 45, 6), "image/png", "EPSG:4326", "", true, null,
+                  TimeInterval.fromDays(30));
          layerSet.addLayer(pnoa);
       }
 
@@ -72,7 +75,8 @@ public class G3MAndroidDemoActivity
                   "EPSG:4326", //
                   "", //
                   false, //
-                  null);
+                  null, //
+                  TimeInterval.fromDays(30));
          layerSet.addLayer(osm);
       }
 
@@ -111,7 +115,8 @@ public class G3MAndroidDemoActivity
                   "EPSG:4326", //
                   "", //
                   true, //
-                  null);
+                  null, //
+                  TimeInterval.fromDays(30));
          layerSet.addLayer(ayto);
       }
 

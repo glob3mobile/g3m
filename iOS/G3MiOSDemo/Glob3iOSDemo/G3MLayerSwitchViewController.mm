@@ -55,7 +55,7 @@
   layerSet->addLayer(self.osmLayer);
   
   // Set the layer set to be used by the glob3
-  builder.setLayerSet(layerSet);
+  builder.getTileRendererBuilder()->setLayerSet(layerSet);
   
   // Initialize the glob3
   builder.initializeWidget();

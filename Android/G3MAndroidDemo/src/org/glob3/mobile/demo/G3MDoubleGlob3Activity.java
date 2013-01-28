@@ -7,6 +7,11 @@ package org.glob3.mobile.demo;
 
 import org.glob3.mobile.generated.LayerBuilder;
 import org.glob3.mobile.generated.LayerSet;
+import org.glob3.mobile.generated.Sector;
+import org.glob3.mobile.generated.TimeInterval;
+import org.glob3.mobile.generated.URL;
+import org.glob3.mobile.generated.WMSLayer;
+import org.glob3.mobile.generated.WMSServerVersion;
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
 
@@ -45,7 +50,7 @@ public class G3MDoubleGlob3Activity
       final LayerSet layerSet = new LayerSet();
       layerSet.addLayer(LayerBuilder.createOSMLayer(true));
 
-      g3mBuilderDown.setLayerSet(layerSet);
+      g3mBuilderDown.getTileRendererBuilder().setLayerSet(layerSet);
       _widgetAndroidDown = g3mBuilderDown.createWidget();
 
       final FrameLayout layoutDown = (FrameLayout) findViewById(R.id.glob3down);

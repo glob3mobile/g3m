@@ -10,7 +10,8 @@
 #define G3MiOSSDK_INativeGL_hpp
 
 class IFloatBuffer;
-class IIntBuffer;
+//class IIntBuffer;
+class IShortBuffer;
 class IImage;
 class IGLUniformID;
 class IGLTextureId;
@@ -85,9 +86,12 @@ public:
                                    int stride,
                                    IFloatBuffer* buffer) const = 0;
 
+//  virtual void drawElements(int mode,
+//                            int count,
+//                            IIntBuffer* indices) const = 0;
   virtual void drawElements(int mode,
                             int count,
-                            IIntBuffer* indices) const = 0;
+                            IShortBuffer* indices) const = 0;
 
   virtual void lineWidth(float width) const = 0;
 
@@ -99,8 +103,7 @@ public:
   virtual void bindTexture(int target,
                            const IGLTextureId* texture) const = 0;
 
-  /* delete texture and answer if the textureId can be recycled */
-  virtual bool deleteTexture(const IGLTextureId* texture) const = 0;
+  virtual void deleteTexture(const IGLTextureId* texture) const = 0;
 
   virtual void enableVertexAttribArray(int location) const = 0;
 
