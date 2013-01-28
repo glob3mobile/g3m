@@ -14,7 +14,6 @@ def name_compat(name):
     else:
         return name.replace(' ', '_')
 
-
 def write_mtl(scene, filepath, path_mode, copy_set, mtl_dict):
     from mathutils import Color
 
@@ -209,6 +208,8 @@ def write_file(filepath, objects, scene,
     copy_set = set()
 
     # Get all meshes
+    #contextMat = 0, 0  # Can never be this, so we will label a new material the first chance we get.
+
     for ob_main in objects:
 
         # ignore dupli children
@@ -263,10 +264,8 @@ def write_file(filepath, objects, scene,
 
             #if not (len(face_index_pairs) + len(edges) + len(me.vertices)):  # Make sure there is something to write
             if not (len(face_index_pairs) + len(me.vertices)):  # Make sure there is something to write
-
                 # clean up
                 bpy.data.meshes.remove(me)
-
                 continue  # dont bother with this mesh.
 
             if EXPORT_NORMALS and face_index_pairs:
@@ -294,7 +293,6 @@ def write_file(filepath, objects, scene,
 
             # Set the default mat to no material and no image.
             contextMat = 0, 0  # Can never be this, so we will label a new material the first chance we get.
-            #contextSmooth = None  # Will either be true or false,  set bad to force initialization switch.
 
             name1 = ob.name
             name2 = ob.data.name
@@ -303,8 +301,7 @@ def write_file(filepath, objects, scene,
             else:
                 obnamestring = '%s_%s' % (name_compat(name1), name_compat(name2))
 
-            fw('{"type":"geometry","primitive":"triangles","id":"%s"\n' % obnamestring)
-
+            #fw('{"type":"geometry","primitive":"triangles","id":"%s"\n' % obnamestring)
 
             # UV
             uv_textures = None
@@ -331,7 +328,6 @@ def write_file(filepath, objects, scene,
             indicesDict = {}
 
             for f, f_index in face_index_pairs:
-                #f_smooth = f.use_smooth
                 f_mat = min(f.material_index, len(materials) - 1)
 
                 if faceuv:
@@ -384,8 +380,6 @@ def write_file(filepath, objects, scene,
                             fw("usemtl %s\n" % mat_data[0])  # can be mat_image or (null)
 
                 contextMat = key
-                #if f_smooth != contextSmooth:
-                #    contextSmooth = f_smooth
 
                 f_v_orig = [(vi, me_verts[v_idx]) for vi, v_idx in enumerate(f.vertices)]
 
@@ -426,6 +420,7 @@ def write_file(filepath, objects, scene,
                                 uvList.append( uv )
                         indicesList.append( index )
 
+            fw('{"type":"geometry","primitive":"triangles","id":"%s"\n' % obnamestring)
 
             fw(',"positions":[\n')
             for vertex in verticesList:
@@ -449,18 +444,7 @@ def write_file(filepath, objects, scene,
                 fw('%g,' %  (index - 1))
             fw(']\n')
 
-            # Write edges.
-            #if EXPORT_EDGES:
-            #    for ed in edges:
-            #        if ed.is_loose:
-            #            fw('f %d %d\n' % (ed.vertices[0] + totverts, ed.vertices[1] + totverts))
-
             fw('},\n')
-
-            # Make the indices global rather then per mesh
-            #totverts += len(me_verts)
-            #if faceuv:
-            #    totuvco += uv_unique_count
 
             # clean up
             bpy.data.meshes.remove(me)
