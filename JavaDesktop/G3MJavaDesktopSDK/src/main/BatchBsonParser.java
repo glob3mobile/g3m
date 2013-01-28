@@ -8,13 +8,13 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import org.glob3.mobile.generated.BSONGenerator;
 import org.glob3.mobile.generated.BSONParser;
 import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IMathUtils;
 import org.glob3.mobile.generated.IStringBuilder;
 import org.glob3.mobile.generated.JSONBaseObject;
+import org.glob3.mobile.generated.JSONGenerator;
 import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.specific.ByteBuffer_Desktop;
 import org.glob3.mobile.specific.Factory_Desktop;
@@ -47,12 +47,18 @@ public class BatchBsonParser {
         && fBson.getName().toLowerCase().endsWith(".bson")) {
       final JSONBaseObject jbase = readBsonFile(fBson);
       if (jbase != null) {
-        if (fJson.exists() || fJson.mkdirs()) {
-          writeJsonFile(jbase, fJson);
+        try {
+          if (fJson.exists() || fJson.createNewFile()) {
+            writeJsonFile(jbase, fJson);
+          }
+          else {
+            System.out.println("El fichero de salida no existe o no se ha podido crear");
+            System.exit(1);
+          }
         }
-        else {
-          System.out.println("El fichero de salida no existe o no se ha podido crear");
-          System.exit(1);
+        catch (final IOException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
         }
       }
       else {
@@ -112,10 +118,7 @@ public class BatchBsonParser {
     if (fJson.exists() && (jbase != null)) {
       try {
         final FileOutputStream fout = new FileOutputStream(fJson);
-
-        final ByteBuffer_Desktop bb = (ByteBuffer_Desktop) BSONGenerator.generate(jbase);
-
-        fout.write(bb.getAsString().getBytes());
+        fout.write(JSONGenerator.generate(jbase).getBytes());
         fout.flush();
         fout.close();
       }

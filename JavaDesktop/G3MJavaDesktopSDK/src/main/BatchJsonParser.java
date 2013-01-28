@@ -48,12 +48,18 @@ public class BatchJsonParser {
         && fJson.getName().toLowerCase().endsWith(".json")) {
       final JSONBaseObject jbase = readJsonFile(fJson);
       if (jbase != null) {
-        if (fBson.exists() || fBson.mkdirs()) {
-          writeBsonFile(jbase, fBson);
+        try {
+          if (fBson.exists() || fBson.createNewFile()) {
+            writeBsonFile(jbase, fBson);
+          }
+          else {
+            System.out.println("El fichero de salida no existe o no se ha podido crear");
+            System.exit(1);
+          }
         }
-        else {
-          System.out.println("El fichero de salida no existe o no se ha podido crear");
-          System.exit(1);
+        catch (final IOException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
         }
       }
       else {
