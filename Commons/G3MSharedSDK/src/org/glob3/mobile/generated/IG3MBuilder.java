@@ -29,9 +29,7 @@ public abstract class IG3MBuilder
   private java.util.ArrayList<ICameraConstrainer> _cameraConstraints = new java.util.ArrayList<ICameraConstrainer>();
   private CameraRenderer _cameraRenderer;
   private Color _backgroundColor;
-  private LayerSet _layerSet;
-  private TilesRenderParameters _parameters;
-  private TileRenderer _tileRenderer;
+  private TileRendererBuilder _tileRendererBuilder;
   private Renderer _busyRenderer;
   private java.util.ArrayList<Renderer> _renderers = new java.util.ArrayList<Renderer>();
   private GInitializationTask _initializationTask;
@@ -111,37 +109,12 @@ public abstract class IG3MBuilder
 	  _cameraRenderer = createCameraRenderer();
 	}
   
-  
-	if (_tileRenderer == null)
-	{
-	  TileRendererBuilder tileRendererBuilder = new TileRendererBuilder();
-	  if (_layerSet != null)
-	  {
-		tileRendererBuilder.setLayerSet(_layerSet);
-	  }
-	  if (_parameters != null)
-	  {
-		tileRendererBuilder.setTileRendererParameters(_parameters);
-	  }
-	  _tileRenderer = tileRendererBuilder.create();
-	}
-	else
-	{
-	  if (_layerSet != null)
-	  {
-		ILogger.instance().logWarning("LayerSet will be ignored because TileRenderer was also set");
-	  }
-	  if (_parameters != null)
-	  {
-		ILogger.instance().logWarning("TilesRendererParameters will be ignored because TileRenderer was also set");
-	  }
-	}
-  
 	Renderer mainRenderer = null;
+	TileRenderer tileRenderer = _tileRendererBuilder.create();
 	if (_renderers.size() > 0)
 	{
 	  mainRenderer = new CompositeRenderer();
-	  ((CompositeRenderer) mainRenderer).addRenderer(_tileRenderer);
+	  ((CompositeRenderer) mainRenderer).addRenderer(tileRenderer);
   
 	  for (int i = 0; i < _renderers.size(); i++)
 	  {
@@ -150,7 +123,7 @@ public abstract class IG3MBuilder
 	}
 	else
 	{
-	  mainRenderer = _tileRenderer;
+	  mainRenderer = tileRenderer;
 	}
   
 	if (_busyRenderer == null)
@@ -181,9 +154,7 @@ public abstract class IG3MBuilder
 	  _planet = null;
 	  _cameraRenderer = null;
 	  _backgroundColor = Color.newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1);
-	  _layerSet = null;
-	  _parameters = null;
-	  _tileRenderer = null;
+	  _tileRendererBuilder = new TileRendererBuilder();
 	  _busyRenderer = null;
 	  _initializationTask = null;
 	  _autoDeleteInitializationTask = true;
@@ -302,44 +273,9 @@ public abstract class IG3MBuilder
 	  _backgroundColor = backgroundColor;
 	}
   }
-  public final void setLayerSet(LayerSet layerSet)
+  public final TileRendererBuilder getTileRendererBuilder()
   {
-	if (_tileRenderer == null)
-	{
-	  if (_layerSet != layerSet)
-	  {
-		if (_layerSet != null)
-			_layerSet.dispose();
-		_layerSet = layerSet;
-	  }
-	}
-	else
-	{
-	  ILogger.instance().logWarning("LayerSet will be ignored because TileRenderer was previously set");
-	}
-  }
-  public final void setTileRendererParameters(TilesRenderParameters parameters)
-  {
-	if (_tileRenderer == null)
-	{
-	  if (_parameters != parameters)
-	  {
-		_parameters = parameters;
-	  }
-	}
-	else
-	{
-	  ILogger.instance().logWarning("TilesRendererParameters will be ignored because TileRenderer was previously set");
-	}
-  }
-  public final void setTileRenderer(TileRenderer tileRenderer)
-  {
-	if (_tileRenderer != tileRenderer)
-	{
-	  if (_tileRenderer != null)
-		  _tileRenderer.dispose();
-	  _tileRenderer = tileRenderer;
-	}
+	return _tileRendererBuilder;
   }
   public final void setBusyRenderer(Renderer busyRenderer)
   {

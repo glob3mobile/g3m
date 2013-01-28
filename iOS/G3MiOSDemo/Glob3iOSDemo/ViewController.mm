@@ -163,19 +163,11 @@ public:
 //                                  NULL)
 //                     );
 
-  builder.setLayerSet(layerSet);
-
-  TilesRenderParameters* parameters = [self createTileRenderParameters];
-  builder.setTileRendererParameters(parameters);
-
-  TileRenderer* tileRenderer = [self createTileRenderer: parameters
-                                               layerSet: layerSet];
-
-  tileRenderer->addVisibleSectorListener(new TestVisibleSectorListener(),
-                                         TimeInterval::fromSeconds(3));
-
-  builder.setTileRenderer(tileRenderer);
-
+  builder.getTileRendererBuilder()->setLayerSet(layerSet);
+  builder.getTileRendererBuilder()->setTileRendererParameters([self createTileRenderParameters]);
+  builder.getTileRendererBuilder()->addVisibleSectorListener(new TestVisibleSectorListener(),
+                                                            TimeInterval::fromSeconds(3));
+  
   Renderer* busyRenderer = new BusyMeshRenderer();
   builder.setBusyRenderer(busyRenderer);
 
@@ -610,10 +602,10 @@ public:
       */
 
       /**/
-      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
+//      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
+//                                                                ofType: @"json"];
+      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"untitled"
                                                                 ofType: @"json"];
-      //      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"3dmodels/Macba_Google_Earth-1"
-      //                                                                ofType: @"json"];
       if (planeFilePath) {
         NSString *nsPlaneJSON = [NSString stringWithContentsOfFile: planeFilePath
                                                           encoding: NSUTF8StringEncoding

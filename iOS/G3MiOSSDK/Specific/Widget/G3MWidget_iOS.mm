@@ -378,4 +378,33 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
                             textUtils);
 }
 
+- (CameraRenderer*)getCameraRenderer {
+  return [self widget]->getCameraRenderer();
+}
+
+- (void)setAnimatedCameraPosition: (const Geodetic3D&) position
+                     timeInterval: (const TimeInterval&)interval {
+  [self widget]->setAnimatedCameraPosition(position, interval);
+}
+
+- (void)setAnimatedCameraPosition: (const Geodetic3D&) position {
+  [self widget]->setAnimatedCameraPosition(position);
+}
+
+- (void)setCameraPosition: (const Geodetic3D&) position {
+  [self widget]->setCameraPosition(position);
+}
+
+- (void)setCameraHeading: (const Angle&) angle {
+  [self widget]->setCameraHeading(angle);
+}
+
+- (void)setCameraPitch: (const Angle&) angle {
+  [self widget]->setCameraPitch(angle);
+}
+
+- (void)resetCameraPosition {
+  [self widget]->resetCameraPosition();
+}
+
 @end

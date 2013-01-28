@@ -17,12 +17,10 @@
 #include "CameraRenderer.hpp"
 #include "CameraConstraints.hpp"
 #include "Color.hpp"
-#include "LayerSet.hpp"
-#include "TilesRenderParameters.hpp"
-#include "TileRenderer.hpp"
 #include "GInitializationTask.hpp"
 #include "PeriodicalTask.hpp"
 #include "G3MWidget.hpp"
+#include "TileRendererBuilder.hpp"
 
 
 
@@ -36,9 +34,7 @@ private:
   std::vector<ICameraConstrainer*> _cameraConstraints;
   CameraRenderer* _cameraRenderer;
   Color* _backgroundColor;
-  LayerSet* _layerSet;
-  TilesRenderParameters* _parameters;
-  TileRenderer* _tileRenderer;
+  TileRendererBuilder* _tileRendererBuilder;
   Renderer* _busyRenderer;
   std::vector<Renderer*> _renderers;
   GInitializationTask* _initializationTask;
@@ -76,9 +72,7 @@ public:
   void addCameraConstraint(ICameraConstrainer* cameraConstraint);
   void setCameraRenderer(CameraRenderer* cameraRenderer);
   void setBackgroundColor(Color* backgroundColor);
-  void setLayerSet(LayerSet* layerSet);
-  void setTileRendererParameters(TilesRenderParameters* parameters);
-  void setTileRenderer(TileRenderer * tileRenderer);
+  TileRendererBuilder* getTileRendererBuilder();
   void setBusyRenderer(Renderer* busyRenderer);
   void addRenderer(Renderer* renderer);
   void addPeriodicalTask(PeriodicalTask* periodicalTask);

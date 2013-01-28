@@ -47,9 +47,9 @@ public final class ByteBuffer_WebGL
 
 
    @Override
-   public int size() {
-      return jsSize();
-   }
+   public native int size() /*-{
+		return this.@org.glob3.mobile.specific.ByteBuffer_WebGL::_buffer.length;
+   }-*/;
 
 
    @Override
@@ -59,23 +59,27 @@ public final class ByteBuffer_WebGL
 
 
    @Override
-   public byte get(final int i) {
-      return jsGet(i);
-   }
+   public native byte get(final int i) /*-{
+		return this.@org.glob3.mobile.specific.ByteBuffer_WebGL::_buffer[i];
+   }-*/;
 
 
    @Override
-   public void put(final int i,
-                   final byte value) {
-      jsPut(i, value);
-   }
+   public native void put(final int i,
+                          final byte value) /*-{
+		var buffer = this.@org.glob3.mobile.specific.ByteBuffer_WebGL::_buffer;
+		if (buffer[i] != value) {
+			buffer[i] = value;
+			this.@org.glob3.mobile.specific.ByteBuffer_WebGL::incTimestamp()();
+		}
+   }-*/;
 
 
    @Override
-   public void rawPut(final int i,
-                      final byte value) {
-      jsRawPut(i, value);
-   }
+   public native void rawPut(final int i,
+                             final byte value) /*-{
+		this.@org.glob3.mobile.specific.ByteBuffer_WebGL::_buffer[i] = value;
+   }-*/;
 
 
    @Override
@@ -85,9 +89,14 @@ public final class ByteBuffer_WebGL
 
 
    @Override
-   public String getAsString() {
-      return jsGetAsString();
-   }
+   public native String getAsString() /*-{
+		var result = "";
+		var buffer = this.@org.glob3.mobile.specific.ByteBuffer_WebGL::_buffer;
+		for ( var i = 0; i < buffer.byteLength; i++) {
+			result += String.fromCharCode(buffer[i]);
+		}
+		return result;
+   }-*/;
 
 
    public JavaScriptObject getBuffer() {
@@ -107,42 +116,6 @@ public final class ByteBuffer_WebGL
 
    private native JavaScriptObject jsCreateBuffer(final int size) /*-{
 		return new Uint8Array(size);
-   }-*/;
-
-
-   private native int jsSize() /*-{
-		return this.@org.glob3.mobile.specific.ByteBuffer_WebGL::_buffer.length;
-   }-*/;
-
-
-   private native byte jsGet(int i) /*-{
-		this.@org.glob3.mobile.specific.ByteBuffer_WebGL::_buffer.get(i);
-   }-*/;
-
-
-   private native void jsPut(int i,
-                             byte value) /*-{
-		if (this.@org.glob3.mobile.specific.ByteBuffer_WebGL::_buffer.get(i) != value) {
-			this.@org.glob3.mobile.specific.ByteBuffer_WebGL::_buffer.set(i,
-					value);
-			this.@org.glob3.mobile.specific.ByteBuffer_WebGL::incTimestamp()();
-		}
-   }-*/;
-
-
-   private native void jsRawPut(int i,
-                                byte value) /*-{
-		this.@org.glob3.mobile.specific.ByteBuffer_WebGL::_buffer.set(i, value);
-   }-*/;
-
-
-   private native String jsGetAsString() /*-{
-		var result = "";
-		var buffer = this.@org.glob3.mobile.specific.ByteBuffer_WebGL::_buffer;
-		for ( var i = 0; i < buffer.byteLength; i++) {
-			result += String.fromCharCode(buffer[i]);
-		}
-		return result;
    }-*/;
 
 }

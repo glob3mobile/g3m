@@ -23,9 +23,7 @@ _threadUtils(NULL),
 _planet(NULL), //Planet::createEarth();
 _cameraRenderer(NULL), //createCameraRenderer();
 _backgroundColor(Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1)),
-_layerSet(NULL),
-_parameters(NULL),
-_tileRenderer(NULL),
+_tileRendererBuilder(new TileRendererBuilder()),
 _busyRenderer(NULL), // new BusyMeshRenderer()),
 _initializationTask(NULL),
 _autoDeleteInitializationTask(true),
@@ -106,38 +104,19 @@ G3MWidget* IG3MBuilder::create() {
   if (!_cameraRenderer) {
     _cameraRenderer = createCameraRenderer();
   }
-
-
-  if (!_tileRenderer) {
-    TileRendererBuilder tileRendererBuilder;
-    if (_layerSet) {
-      tileRendererBuilder.setLayerSet(_layerSet);
-    }
-    if (_parameters) {
-      tileRendererBuilder.setTileRendererParameters(_parameters);
-    }
-    _tileRenderer = tileRendererBuilder.create();
-  }
-  else {
-    if (_layerSet) {
-      ILogger::instance()->logWarning("LayerSet will be ignored because TileRenderer was also set");
-    }
-    if (_parameters) {
-      ILogger::instance()->logWarning("TilesRendererParameters will be ignored because TileRenderer was also set");
-    }
-  }
-
+  
   Renderer* mainRenderer = NULL;
+  TileRenderer* tileRenderer = _tileRendererBuilder->create();
   if (_renderers.size() > 0) {
     mainRenderer = new CompositeRenderer();
-    ((CompositeRenderer *) mainRenderer)->addRenderer(_tileRenderer);
+    ((CompositeRenderer *) mainRenderer)->addRenderer(tileRenderer);
 
     for (int i = 0; i < _renderers.size(); i++) {
       ((CompositeRenderer *) mainRenderer)->addRenderer(_renderers[i]);
     }
   }
   else {
-    mainRenderer = _tileRenderer;
+    mainRenderer = tileRenderer;
   }
 
   if (!_busyRenderer) {
@@ -248,37 +227,8 @@ void IG3MBuilder::setBackgroundColor(Color* backgroundColor) {
   }
 }
 
-void IG3MBuilder::setLayerSet(LayerSet *layerSet) {
-  if (!_tileRenderer) {
-    if (_layerSet != layerSet) {
-      delete _layerSet;
-      _layerSet = layerSet;
-    }
-  }
-  else {
-    ILogger::instance()->logWarning("LayerSet will be ignored because TileRenderer was previously set");
-  }
-}
-
-void IG3MBuilder::setTileRendererParameters(TilesRenderParameters *parameters) {
-  if (!_tileRenderer) {
-    if (_parameters != parameters) {
-#ifdef C_CODE
-      delete _parameters;
-#endif
-      _parameters = parameters;
-    }
-  }
-  else {
-    ILogger::instance()->logWarning("TilesRendererParameters will be ignored because TileRenderer was previously set");
-  }
-}
-
-void IG3MBuilder::setTileRenderer(TileRenderer *tileRenderer) {
-  if (_tileRenderer != tileRenderer) {
-    delete _tileRenderer;
-    _tileRenderer = tileRenderer;
-  }
+TileRendererBuilder* IG3MBuilder::getTileRendererBuilder() {
+  return _tileRendererBuilder;
 }
 
 void IG3MBuilder::setBusyRenderer(Renderer *busyRenderer) {
