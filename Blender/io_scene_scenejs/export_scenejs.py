@@ -329,7 +329,7 @@ def write_file(filepath, objects, scene,
 
             for f, f_index in face_index_pairs:
                 f_mat = min(f.material_index, len(materials) - 1)
-
+                
                 if faceuv:
                     tface = uv_layer[f_index]
                     f_image = tface.image
@@ -339,6 +339,8 @@ def write_file(filepath, objects, scene,
                     key = material_names[f_mat], f_image.name
                 else:
                     key = material_names[f_mat], None  # No image, use None instead.
+
+                print ( "  f.material_index=" + str(f.material_index) + ", f_mat=" + str(f_mat) + ", key=" + str(key) )
 
                 # CHECK FOR CONTEXT SWITCH
                 if key == contextMat:
@@ -375,6 +377,8 @@ def write_file(filepath, objects, scene,
                                 mtl_name += tmp_ext
                             mat_data = mtl_dict[key] = mtl_name, materials[f_mat], f_image
                             mtl_rev_dict[mtl_name] = key
+
+                        print ( "    mat_data=" + str(mat_data)  )
 
                         if EXPORT_MTL:
                             fw("usemtl %s\n" % mat_data[0])  # can be mat_image or (null)
