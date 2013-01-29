@@ -36,6 +36,10 @@
 #include "BoxShape.hpp"
 #include "SceneJSShapesParser.hpp"
 
+#include "IJSONParser.hpp"
+#include "JSONGenerator.hpp"
+#include "BSONParser.hpp"
+#include "BSONGenerator.hpp"
 
 class TestVisibleSectorListener : public VisibleSectorListener {
 public:
@@ -602,11 +606,12 @@ public:
       */
 
       /**/
-      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
-                                                                ofType: @"json"];
-//      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"untitled"
+//      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
 //                                                                ofType: @"json"];
-//      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"cessna"
+
+      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"A320Merged"
+                                                                ofType: @"json"];
+//      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"citation"
 //                                                                ofType: @"json"];
       if (planeFilePath) {
         NSString *nsPlaneJSON = [NSString stringWithContentsOfFile: planeFilePath
@@ -614,11 +619,17 @@ public:
                                                              error: nil];
         if (nsPlaneJSON) {
           std::string planeJSON = [nsPlaneJSON UTF8String];
-          Shape* plane = SceneJSShapesParser::parse(planeJSON, "file:///");
+          Shape* plane = SceneJSShapesParser::parse(planeJSON, "file:///textures-A320/");
+          //Shape* plane = SceneJSShapesParser::parse(planeJSON, "file:///textures-citation/");
           if (plane) {
-            plane->setPosition( new Geodetic3D(Angle::fromDegrees(37.78333333),
-                                               Angle::fromDegrees(-122.41666666666667),
-                                               500) );
+//            // San Francisco
+//            plane->setPosition( new Geodetic3D(Angle::fromDegrees(37.78333333),
+//                                               Angle::fromDegrees(-122.41666666666667),
+//                                               500) );
+            // Washington, DC
+            plane->setPosition(new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
+                                              Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
+                                              1000) );
             plane->setScale(100, 100, 100);
             plane->setPitch(Angle::fromDegrees(90));
             _shapesRenderer->addShape(plane);
@@ -681,8 +692,8 @@ public:
 
       /*
       // JSONBaseObject* jsonObject = IJSONParser::instance()->parse("{\"key1\":\"string\", \"key2\": 100, \"key3\": false, \"key4\":123.5}");
-      //JSONBaseObject* jsonObject = IJSONParser::instance()->parse("{\"hello\":\"world\"}");
-      JSONBaseObject* jsonObject = IJSONParser::instance()->parse("{\"BSON\": [\"awesome\", 5.05, 1986, true, false], \"X\": {\"foo\": 100}}");
+      JSONBaseObject* jsonObject = IJSONParser::instance()->parse("{\"hello\":\"world\"}");
+//      JSONBaseObject* jsonObject = IJSONParser::instance()->parse("{\"BSON\": [\"awesome\", 5.05, 1986, true, false], \"X\": {\"foo\": 100}}");
       printf("%s\n", jsonObject->description().c_str());
 
       std::string jsonString = JSONGenerator::generate(jsonObject);
