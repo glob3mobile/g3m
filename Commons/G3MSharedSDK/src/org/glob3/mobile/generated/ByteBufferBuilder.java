@@ -82,7 +82,7 @@ public class ByteBufferBuilder
 //#if JAVA_CODE
 	try
 	{
-	  byte[] bytesArray = str.getBytes("UTF8");
+	  byte[] bytesArray = str.getBytes("UTF-8");
   
 	  final int size = bytesArray.length;
 	  for (int i = 0; i < size; i++)
@@ -94,6 +94,10 @@ public class ByteBufferBuilder
 	}
 	catch (final java.io.UnsupportedEncodingException e)
 	{
+	  if (ILogger.instance() != null)
+	  {
+		ILogger.instance().logError("ByteBufferBuilder: " + e.getMessage());
+	  }
 	  e.printStackTrace();
 	}
 //#endif
