@@ -179,17 +179,16 @@ public class G3MWebGLDemo
       //                        @Override
       //                        public void onDownload(final URL url,
       //                                               final IByteBuffer buffer) {
-      //                           ILogger.instance().logInfo("BSON downloaded: " + buffer.description());
-      //                           ILogger.instance().logInfo("BSON downloaded: " + buffer.getAsString());
+      //                           ILogger.instance().logInfo("Downloaded buffer: " + buffer.description() + "--" + buffer.getAsString());
       //                           final JSONBaseObject jsonObj = BSONParser.parse(buffer);
-      //                           ILogger.instance().logInfo(jsonObj.description());
+      //                           ILogger.instance().logInfo("BSON parser: " + jsonObj.description());
       //
       //                           final IByteBuffer byteBuffer = BSONGenerator.generate(jsonObj);
-      //                           ILogger.instance().logInfo("BSON generated: " + byteBuffer.description());
-      //                           ILogger.instance().logInfo("BSON generated: " + byteBuffer.getAsString());
+      //                           ILogger.instance().logInfo(
+      //                                    "BSON generator: " + byteBuffer.description() + "--" + byteBuffer.getAsString());
       //
-      //                           final JSONBaseObject jsonObjFromBSON = JSONParser_WebGL.instance().parse(byteBuffer);
-      //                           ILogger.instance().logInfo(jsonObjFromBSON.description());
+      //                           final JSONBaseObject jsonObjFromBSON = BSONParser.parse(byteBuffer);
+      //                           ILogger.instance().logInfo("BSON parser: " + jsonObjFromBSON.description());
       //                        }
       //
       //

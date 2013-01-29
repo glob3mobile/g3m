@@ -603,8 +603,10 @@ public:
       /**/
       NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
                                                                 ofType: @"json"];
-      //      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"3dmodels/Macba_Google_Earth-1"
-      //                                                                ofType: @"json"];
+//      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"untitled"
+//                                                                ofType: @"json"];
+//      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"cessna"
+//                                                                ofType: @"json"];
       if (planeFilePath) {
         NSString *nsPlaneJSON = [NSString stringWithContentsOfFile: planeFilePath
                                                           encoding: NSUTF8StringEncoding

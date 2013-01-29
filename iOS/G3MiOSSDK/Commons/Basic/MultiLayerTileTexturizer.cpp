@@ -395,7 +395,9 @@ public:
         composeAndUploadTexture();
       }
 
-      _tile->setTextureSolved(true);
+      if (_tile != NULL) {
+        _tile->setTextureSolved(true);
+      }
     }
   }
 
@@ -504,8 +506,10 @@ public:
         }
       }
       else {
-        if ( mapping->getGLTextureId() != NULL ) {
-          ILogger::instance()->logInfo("break (point) on me 3\n");
+        if (mapping != NULL) {
+          if ( mapping->getGLTextureId() != NULL ) {
+            ILogger::instance()->logInfo("break (point) on me 3\n");
+          }
         }
       }
 
@@ -513,8 +517,10 @@ public:
       ancestor = ancestor->getParent();
     }
 
-    if (mappings->size() != _tile->getLevel() + 1) {
-      ILogger::instance()->logInfo("pleae break (point) me\n");
+    if ((mappings != NULL) && (_tile != NULL)) {
+      if (mappings->size() != _tile->getLevel() + 1) {
+        ILogger::instance()->logInfo("pleae break (point) me\n");
+      }
     }
 
     return new LeveledTexturedMesh(_tessellatorMesh,
@@ -728,7 +734,7 @@ void MultiLayerTileTexturizer::tileMeshToBeDeleted(Tile* tile,
   }
 }
 
-const const IGLTextureId* MultiLayerTileTexturizer::getTopLevelGLTextureIdForTile(Tile* tile) {
+const IGLTextureId* MultiLayerTileTexturizer::getTopLevelGLTextureIdForTile(Tile* tile) {
   LeveledTexturedMesh* mesh = (LeveledTexturedMesh*) tile->getTexturizedMesh();
 
   return (mesh == NULL) ? NULL : mesh->getTopLevelGLTextureId();
