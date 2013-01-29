@@ -35,7 +35,7 @@ void ByteBufferBuilder::addStringZeroTerminated(const std::string& str) {
 #endif
 #if JAVA_CODE
   try {
-    byte[] bytesArray = str.getBytes("UTF8");
+    byte[] bytesArray = str.getBytes("UTF-8");
 
     final int size = bytesArray.length;
     for (int i = 0; i < size; i++) {
@@ -45,6 +45,9 @@ void ByteBufferBuilder::addStringZeroTerminated(const std::string& str) {
     _values.add((byte) 0);
   }
   catch (final java.io.UnsupportedEncodingException e) {
+    if (ILogger.instance() != null) {
+      ILogger.instance().logError("ByteBufferBuilder: " + e.getMessage());
+    }
     e.printStackTrace();
   }
 #endif
