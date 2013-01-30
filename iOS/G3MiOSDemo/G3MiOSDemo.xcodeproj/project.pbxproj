@@ -65,6 +65,7 @@
 		E770CAD9169C425600F892BE /* g3m-marker.png in Resources */ = {isa = PBXBuildFile; fileRef = E770CAD8169C425600F892BE /* g3m-marker.png */; };
 		E770CAE4169C808700F892BE /* G3MWebViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E770CAE3169C808700F892BE /* G3MWebViewController.mm */; };
 		E770CAE7169D988C00F892BE /* marker-wikipedia-72x72.png in Resources */ = {isa = PBXBuildFile; fileRef = E770CAE6169D988C00F892BE /* marker-wikipedia-72x72.png */; };
+		E7A4734916B855B300D07077 /* DemosViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7A4734816B855B300D07077 /* DemosViewController.mm */; };
 		E7B776A5167B56900005ED14 /* G3MDoubleGlob3ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7B776A4167B56900005ED14 /* G3MDoubleGlob3ViewController.mm */; };
 		E7B776A8167F68730005ED14 /* G3MLayerSwitchViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7B776A7167F68730005ED14 /* G3MLayerSwitchViewController.mm */; };
 		E7CDA66F16837CB0006DA377 /* G3M3DModelViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7CDA66E16837CB0006DA377 /* G3M3DModelViewController.mm */; };
@@ -344,6 +345,8 @@
 		E770CAE2169C808700F892BE /* G3MWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = G3MWebViewController.h; sourceTree = "<group>"; };
 		E770CAE3169C808700F892BE /* G3MWebViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MWebViewController.mm; sourceTree = "<group>"; };
 		E770CAE6169D988C00F892BE /* marker-wikipedia-72x72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "marker-wikipedia-72x72.png"; sourceTree = "<group>"; };
+		E7A4734716B855B300D07077 /* DemosViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemosViewController.h; sourceTree = "<group>"; };
+		E7A4734816B855B300D07077 /* DemosViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DemosViewController.mm; sourceTree = "<group>"; };
 		E7A91B26168DA7A800DC5EE4 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = Resources/Default.png; sourceTree = "<group>"; };
 		E7A91B27168DA7A800DC5EE4 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "Resources/Default@2x.png"; sourceTree = "<group>"; };
 		E7A91B28168DA7A800DC5EE4 /* iTunesArtwork.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = iTunesArtwork.png; path = Resources/iTunesArtwork.png; sourceTree = "<group>"; };
@@ -615,6 +618,8 @@
 				D8EEF39F1577920B003FEB5E /* MainStoryboard_iPad.storyboard */,
 				D8EEF3A21577920B003FEB5E /* ViewController.h */,
 				D8EEF3A31577920B003FEB5E /* ViewController.mm */,
+				E7A4734716B855B300D07077 /* DemosViewController.h */,
+				E7A4734816B855B300D07077 /* DemosViewController.mm */,
 				D8EEF3911577920B003FEB5E /* Supporting Files */,
 				D8EEF4091577A93D003FEB5E /* G3W.h */,
 				D8EEF40A1577A93D003FEB5E /* G3W.mm */,
@@ -838,6 +843,7 @@
 				E74C0927168B6CA9009E0D2F /* G3MNetCDFViewController.mm in Sources */,
 				E70F3ED7168B7886006E9289 /* G3MUITableViewController.mm in Sources */,
 				E770CAE4169C808700F892BE /* G3MWebViewController.mm in Sources */,
+				E7A4734916B855B300D07077 /* DemosViewController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
