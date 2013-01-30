@@ -9,10 +9,10 @@
 #ifndef __G3MiOSSDK__BoxShape__
 #define __G3MiOSSDK__BoxShape__
 
-#include "MeshShape.hpp"
+#include "AbstractMeshShape.hpp"
 #include "Color.hpp"
 
-class BoxShape : public MeshShape {
+class BoxShape : public AbstractMeshShape {
 private:
   double _extentX;
   double _extentY;
@@ -35,7 +35,7 @@ public:
            float borderWidth,
            Color* surfaceColor = NULL,
            Color* borderColor = NULL) :
-  MeshShape(position),
+  AbstractMeshShape(position),
   _extentX(extent._x),
   _extentY(extent._y),
   _extentZ(extent._z),

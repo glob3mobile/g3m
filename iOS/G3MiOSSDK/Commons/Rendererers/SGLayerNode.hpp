@@ -28,6 +28,8 @@ private:
   const std::string _wrapS;
   const std::string _wrapT;
 
+  bool _initialized;
+
   const IGLTextureId* getTextureId(const G3MRenderContext* rc);
 
   IImage* _downloadedImage;
@@ -65,7 +67,8 @@ public:
   _wrapT(wrapT),
 //  _textureBound(false),
   _downloadedImage(NULL),
-  _textureId(NULL)
+  _textureId(NULL),
+  _initialized(false)
   {
 
   }

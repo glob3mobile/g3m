@@ -103,8 +103,8 @@
 		CF3E07E91649B65000B5CA51 /* CompositeShape.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF3E07E71649B65000B5CA51 /* CompositeShape.hpp */; settings = {ATTRIBUTES = (); }; };
 		CF3F3FF01620FB2A00A92CC8 /* Vector4D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF3F3FEE1620FB2A00A92CC8 /* Vector4D.cpp */; };
 		CF3F3FF11620FB2A00A92CC8 /* Vector4D.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF3F3FEF1620FB2A00A92CC8 /* Vector4D.hpp */; settings = {ATTRIBUTES = (); }; };
-		CF45E025164851C5004746BB /* MeshShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF45E023164851C5004746BB /* MeshShape.cpp */; };
-		CF45E026164851C5004746BB /* MeshShape.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF45E024164851C5004746BB /* MeshShape.hpp */; settings = {ATTRIBUTES = (); }; };
+		CF45E025164851C5004746BB /* AbstractMeshShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF45E023164851C5004746BB /* AbstractMeshShape.cpp */; };
+		CF45E026164851C5004746BB /* AbstractMeshShape.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF45E024164851C5004746BB /* AbstractMeshShape.hpp */; settings = {ATTRIBUTES = (); }; };
 		CF47030B15EFB4C000426B8B /* ThreadUtils_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF47030915EFB4C000426B8B /* ThreadUtils_iOS.mm */; };
 		CF47030C15EFB4C000426B8B /* ThreadUtils_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF47030A15EFB4C000426B8B /* ThreadUtils_iOS.hpp */; settings = {ATTRIBUTES = (); }; };
 		CF4CA477164C669D009BB7EB /* SGNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF4CA475164C669D009BB7EB /* SGNode.cpp */; };
@@ -144,7 +144,6 @@
 		CF73BFDB15E114E3001CE412 /* FrameTasksExecutor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF73BFD915E114E3001CE412 /* FrameTasksExecutor.cpp */; };
 		CF75436315E5161500A0ABC7 /* CameraSingleDragHandler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CC596F2815C46DAB008FC230 /* CameraSingleDragHandler.hpp */; settings = {ATTRIBUTES = (); }; };
 		CF75436415E5165500A0ABC7 /* CameraEventHandler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CC94D7FA15D0FDF70074B12A /* CameraEventHandler.hpp */; settings = {ATTRIBUTES = (); }; };
-		CF75436515E516F400A0ABC7 /* CameraConstraints.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CC9FFE4B15D3D21C00C3AE83 /* CameraConstraints.hpp */; settings = {ATTRIBUTES = (); }; };
 		CF75436615E5172800A0ABC7 /* MultiLayerTileTexturizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFA71BE115D2E84300F8C78D /* MultiLayerTileTexturizer.hpp */; settings = {ATTRIBUTES = (); }; };
 		CF75436815E5172800A0ABC7 /* URL.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFFEC12415C2EB96003FA986 /* URL.hpp */; settings = {ATTRIBUTES = (); }; };
 		CF75436A15E5172800A0ABC7 /* CameraDoubleTapHandler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CC55C47C15D11D4000923D7B /* CameraDoubleTapHandler.hpp */; settings = {ATTRIBUTES = (); }; };
@@ -221,6 +220,12 @@
 		CFB72A6A15E6808900A5BAF4 /* IStringUtils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFB72A6815E6808900A5BAF4 /* IStringUtils.hpp */; settings = {ATTRIBUTES = (); }; };
 		CFB72A6E15E682B400A5BAF4 /* StringUtils_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFB72A6C15E682B400A5BAF4 /* StringUtils_iOS.mm */; };
 		CFB73CDE15EFC51B00261631 /* MathUtils_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8FEDAC815E7C219007633A0 /* MathUtils_iOS.hpp */; settings = {ATTRIBUTES = (); }; };
+		CFBA526C16B9886B00256453 /* MeshShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBA526A16B9886B00256453 /* MeshShape.cpp */; };
+		CFBA526D16B9886B00256453 /* MeshShape.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFBA526B16B9886B00256453 /* MeshShape.hpp */; };
+		CFBA53EE16B9B76500256453 /* ICameraConstrainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBA53EC16B9B76500256453 /* ICameraConstrainer.cpp */; };
+		CFBA53EF16B9B76500256453 /* ICameraConstrainer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFBA53ED16B9B76500256453 /* ICameraConstrainer.hpp */; };
+		CFBA53F216B9B7CD00256453 /* SimpleCameraConstrainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBA53F016B9B7CC00256453 /* SimpleCameraConstrainer.cpp */; };
+		CFBA53F316B9B7CD00256453 /* SimpleCameraConstrainer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFBA53F116B9B7CC00256453 /* SimpleCameraConstrainer.hpp */; };
 		CFBD42DB16AA151100663F21 /* IShortBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBD42D916AA151100663F21 /* IShortBuffer.cpp */; };
 		CFBD42DC16AA151100663F21 /* IShortBuffer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFBD42DA16AA151100663F21 /* IShortBuffer.hpp */; };
 		CFBD42E016AA1A8900663F21 /* ShortBuffer_iOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBD42DE16AA1A8900663F21 /* ShortBuffer_iOS.cpp */; };
@@ -415,7 +420,7 @@
 		CC55C47C15D11D4000923D7B /* CameraDoubleTapHandler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = CameraDoubleTapHandler.hpp; path = Commons/Cameras/CameraDoubleTapHandler.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CC55C47E15D11D8500923D7B /* CameraDoubleTapHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CameraDoubleTapHandler.cpp; path = Commons/Cameras/CameraDoubleTapHandler.cpp; sourceTree = "<group>"; };
 		CC596F1C15C46D4F008FC230 /* Camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = Camera.cpp; path = Commons/Cameras/Camera.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		CC596F1D15C46D4F008FC230 /* Camera.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = Camera.hpp; path = Commons/Cameras/Camera.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		CC596F1D15C46D4F008FC230 /* Camera.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = Camera.hpp; path = Commons/Cameras/Camera.hpp; sourceTree = "<group>"; };
 		CC596F1E15C46D4F008FC230 /* CameraDoubleDragHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = CameraDoubleDragHandler.cpp; path = Commons/Cameras/CameraDoubleDragHandler.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CC596F1F15C46D4F008FC230 /* CameraDoubleDragHandler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = CameraDoubleDragHandler.hpp; path = Commons/Cameras/CameraDoubleDragHandler.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CC596F2815C46DAB008FC230 /* CameraSingleDragHandler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = CameraSingleDragHandler.hpp; path = Commons/Cameras/CameraSingleDragHandler.hpp; sourceTree = "<group>"; };
@@ -427,7 +432,6 @@
 		CC8EFFFC163BE8A0006586B0 /* GLState.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLState.hpp; sourceTree = "<group>"; };
 		CC94D7FA15D0FDF70074B12A /* CameraEventHandler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = CameraEventHandler.hpp; path = Commons/Cameras/CameraEventHandler.hpp; sourceTree = "<group>"; };
 		CC96079115AF23F600D438D4 /* TextureMapping.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TextureMapping.cpp; path = Commons/Mesh/TextureMapping.cpp; sourceTree = "<group>"; };
-		CC9FFE4B15D3D21C00C3AE83 /* CameraConstraints.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = CameraConstraints.hpp; path = Commons/Cameras/CameraConstraints.hpp; sourceTree = "<group>"; };
 		CCB2564D15B5A30900079B96 /* TextureMapping.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TextureMapping.hpp; path = Commons/Mesh/TextureMapping.hpp; sourceTree = "<group>"; };
 		CCB2564F15B5A33A00079B96 /* TexturedMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TexturedMesh.cpp; path = Commons/Mesh/TexturedMesh.cpp; sourceTree = "<group>"; };
 		CCB2566315B5F58500079B96 /* Box.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = Box.cpp; path = Commons/Geometry/Box.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -470,8 +474,8 @@
 		CF3E07E71649B65000B5CA51 /* CompositeShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = CompositeShape.hpp; path = Commons/Rendererers/CompositeShape.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF3F3FEE1620FB2A00A92CC8 /* Vector4D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Vector4D.cpp; path = Commons/Geometry/Vector4D.cpp; sourceTree = "<group>"; };
 		CF3F3FEF1620FB2A00A92CC8 /* Vector4D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Vector4D.hpp; path = Commons/Geometry/Vector4D.hpp; sourceTree = "<group>"; };
-		CF45E023164851C5004746BB /* MeshShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MeshShape.cpp; path = Commons/Rendererers/MeshShape.cpp; sourceTree = "<group>"; };
-		CF45E024164851C5004746BB /* MeshShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MeshShape.hpp; path = Commons/Rendererers/MeshShape.hpp; sourceTree = "<group>"; };
+		CF45E023164851C5004746BB /* AbstractMeshShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AbstractMeshShape.cpp; path = Commons/Rendererers/AbstractMeshShape.cpp; sourceTree = "<group>"; };
+		CF45E024164851C5004746BB /* AbstractMeshShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = AbstractMeshShape.hpp; path = Commons/Rendererers/AbstractMeshShape.hpp; sourceTree = "<group>"; };
 		CF47030915EFB4C000426B8B /* ThreadUtils_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ThreadUtils_iOS.mm; path = Specific/Derived/ThreadUtils_iOS.mm; sourceTree = "<group>"; };
 		CF47030A15EFB4C000426B8B /* ThreadUtils_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ThreadUtils_iOS.hpp; path = Specific/Derived/ThreadUtils_iOS.hpp; sourceTree = "<group>"; };
 		CF4CA475164C669D009BB7EB /* SGNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGNode.cpp; path = Commons/Rendererers/SGNode.cpp; sourceTree = "<group>"; };
@@ -573,6 +577,12 @@
 		CFB72A6815E6808900A5BAF4 /* IStringUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = IStringUtils.hpp; path = Commons/Interfaces/IStringUtils.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFB72A6C15E682B400A5BAF4 /* StringUtils_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = StringUtils_iOS.mm; path = Specific/Derived/StringUtils_iOS.mm; sourceTree = "<group>"; };
 		CFB72A6D15E682B400A5BAF4 /* StringUtils_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = StringUtils_iOS.hpp; path = Specific/Derived/StringUtils_iOS.hpp; sourceTree = "<group>"; };
+		CFBA526A16B9886B00256453 /* MeshShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MeshShape.cpp; sourceTree = "<group>"; };
+		CFBA526B16B9886B00256453 /* MeshShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MeshShape.hpp; sourceTree = "<group>"; };
+		CFBA53EC16B9B76500256453 /* ICameraConstrainer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ICameraConstrainer.cpp; path = Commons/Cameras/ICameraConstrainer.cpp; sourceTree = "<group>"; };
+		CFBA53ED16B9B76500256453 /* ICameraConstrainer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ICameraConstrainer.hpp; path = Commons/Cameras/ICameraConstrainer.hpp; sourceTree = "<group>"; };
+		CFBA53F016B9B7CC00256453 /* SimpleCameraConstrainer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SimpleCameraConstrainer.cpp; path = Commons/Cameras/SimpleCameraConstrainer.cpp; sourceTree = "<group>"; };
+		CFBA53F116B9B7CC00256453 /* SimpleCameraConstrainer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SimpleCameraConstrainer.hpp; path = Commons/Cameras/SimpleCameraConstrainer.hpp; sourceTree = "<group>"; };
 		CFBD42D916AA151100663F21 /* IShortBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IShortBuffer.cpp; path = Commons/Basic/IShortBuffer.cpp; sourceTree = "<group>"; };
 		CFBD42DA16AA151100663F21 /* IShortBuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IShortBuffer.hpp; path = Commons/Basic/IShortBuffer.hpp; sourceTree = "<group>"; };
 		CFBD42DE16AA1A8900663F21 /* ShortBuffer_iOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ShortBuffer_iOS.cpp; path = Specific/Derived/ShortBuffer_iOS.cpp; sourceTree = "<group>"; };
@@ -838,8 +848,11 @@
 				CF6873A915F77FFC002EDFD0 /* IIntBuffer.hpp */,
 				CF7E626415F7DD740086B71D /* IntBufferBuilder.cpp */,
 				CF7E626515F7DD740086B71D /* IntBufferBuilder.hpp */,
+				CFBD42D916AA151100663F21 /* IShortBuffer.cpp */,
+				CFBD42DA16AA151100663F21 /* IShortBuffer.hpp */,
 				CFCE679B15EFB06700B35FE0 /* IThreadUtils.cpp */,
 				CFCE679C15EFB06700B35FE0 /* IThreadUtils.hpp */,
+				CF03683416A499F0006CE160 /* LabelPosition.h */,
 				E7B9964C16A94EC400753FC3 /* LayerBuilder.cpp */,
 				E7B9964D16A94EC400753FC3 /* LayerBuilder.hpp */,
 				CF0C3969157F988100646A2F /* Mark.cpp */,
@@ -853,6 +866,8 @@
 				CFE0844415E27B9A0004EC0E /* Petition.hpp */,
 				CFF8C4BB15DEB6A70034A576 /* RCObject.cpp */,
 				CFF8C4BC15DEB6A70034A576 /* RCObject.hpp */,
+				CF923CA216AB126D00D04301 /* ShortBufferBuilder.cpp */,
+				CF923CA316AB126D00D04301 /* ShortBufferBuilder.hpp */,
 				D8CD74D615F8D3F000B801CC /* SimpleFloatBufferBuilder.hpp */,
 				CFE0844015E27A310004EC0E /* TerrainTouchEventListener.hpp */,
 				D87EC5CD15BEB31000E38C36 /* TextureBuilder.hpp */,
@@ -875,11 +890,6 @@
 				CFFEC12415C2EB96003FA986 /* URL.hpp */,
 				CF8D0BFB15AF0D23005B5433 /* TileTexturizer.hpp */,
 				CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */,
-				CF03683416A499F0006CE160 /* LabelPosition.h */,
-				CFBD42D916AA151100663F21 /* IShortBuffer.cpp */,
-				CFBD42DA16AA151100663F21 /* IShortBuffer.hpp */,
-				CF923CA216AB126D00D04301 /* ShortBufferBuilder.cpp */,
-				CF923CA316AB126D00D04301 /* ShortBufferBuilder.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -1007,7 +1017,6 @@
 			children = (
 				CC596F1C15C46D4F008FC230 /* Camera.cpp */,
 				CC596F1D15C46D4F008FC230 /* Camera.hpp */,
-				CC9FFE4B15D3D21C00C3AE83 /* CameraConstraints.hpp */,
 				CC596F1E15C46D4F008FC230 /* CameraDoubleDragHandler.cpp */,
 				CC596F1F15C46D4F008FC230 /* CameraDoubleDragHandler.hpp */,
 				CC596F1F15C46D4F008FC230 /* CameraDoubleDragHandler.hpp */,
@@ -1020,6 +1029,10 @@
 				CC596F2B15C472BA008FC230 /* CameraRotationHandler.hpp */,
 				CC596F2915C46DE2008FC230 /* CameraSingleDragHandler.cpp */,
 				CC596F2815C46DAB008FC230 /* CameraSingleDragHandler.hpp */,
+				CFBA53EC16B9B76500256453 /* ICameraConstrainer.cpp */,
+				CFBA53ED16B9B76500256453 /* ICameraConstrainer.hpp */,
+				CFBA53F016B9B7CC00256453 /* SimpleCameraConstrainer.cpp */,
+				CFBA53F116B9B7CC00256453 /* SimpleCameraConstrainer.hpp */,
 			);
 			name = Cameras;
 			sourceTree = "<group>";
@@ -1095,8 +1108,8 @@
 				CFEEE4BC164867B600F45F59 /* CircleShape.hpp */,
 				CF3E07E61649B65000B5CA51 /* CompositeShape.cpp */,
 				CF3E07E71649B65000B5CA51 /* CompositeShape.hpp */,
-				CF45E023164851C5004746BB /* MeshShape.cpp */,
-				CF45E024164851C5004746BB /* MeshShape.hpp */,
+				CF45E023164851C5004746BB /* AbstractMeshShape.cpp */,
+				CF45E024164851C5004746BB /* AbstractMeshShape.hpp */,
 				CF5EA5D6163DDCB900D8F797 /* QuadShape.cpp */,
 				CF5EA5D7163DDCB900D8F797 /* QuadShape.hpp */,
 				CFE3B577164AE32E009975A5 /* SceneJSShapesParser.cpp */,
@@ -1123,6 +1136,8 @@
 				CFD1A47416602B050039EFA9 /* ShapeScaleEffect.hpp */,
 				CFA0BB60163DCFF6009185FE /* ShapesRenderer.cpp */,
 				CFA0BB61163DCFF6009185FE /* ShapesRenderer.hpp */,
+				CFBA526A16B9886B00256453 /* MeshShape.cpp */,
+				CFBA526B16B9886B00256453 /* MeshShape.hpp */,
 			);
 			name = Shapes;
 			sourceTree = "<group>";
@@ -1283,7 +1298,7 @@
 				CFE3B57A164AE32E009975A5 /* SceneJSShapesParser.hpp in Headers */,
 				CF3E07E91649B65000B5CA51 /* CompositeShape.hpp in Headers */,
 				CFEEE4BE164867B600F45F59 /* CircleShape.hpp in Headers */,
-				CF45E026164851C5004746BB /* MeshShape.hpp in Headers */,
+				CF45E026164851C5004746BB /* AbstractMeshShape.hpp in Headers */,
 				CF5EA5D5163DDC7900D8F797 /* Shape.hpp in Headers */,
 				CF5EA5D9163DDCB900D8F797 /* QuadShape.hpp in Headers */,
 				CFA0BB63163DCFF6009185FE /* ShapesRenderer.hpp in Headers */,
@@ -1322,7 +1337,6 @@
 				CF75436D15E5172800A0ABC7 /* IDownloader.hpp in Headers */,
 				CF75436F15E5172800A0ABC7 /* BusyQuadRenderer.hpp in Headers */,
 				CF75437015E5172800A0ABC7 /* TilesRenderParameters.hpp in Headers */,
-				CF75436515E516F400A0ABC7 /* CameraConstraints.hpp in Headers */,
 				CF75436415E5165500A0ABC7 /* CameraEventHandler.hpp in Headers */,
 				CF75436315E5161500A0ABC7 /* CameraSingleDragHandler.hpp in Headers */,
 				CC596F2515C46D4F008FC230 /* CameraDoubleDragHandler.hpp in Headers */,
@@ -1435,6 +1449,9 @@
 				CFBD42DC16AA151100663F21 /* IShortBuffer.hpp in Headers */,
 				CFBD42E116AA1A8900663F21 /* ShortBuffer_iOS.hpp in Headers */,
 				CF923CA516AB126D00D04301 /* ShortBufferBuilder.hpp in Headers */,
+				CFBA526D16B9886B00256453 /* MeshShape.hpp in Headers */,
+				CFBA53EF16B9B76500256453 /* ICameraConstrainer.hpp in Headers */,
+				CFBA53F316B9B7CD00256453 /* SimpleCameraConstrainer.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1593,7 +1610,7 @@
 				CF5EA5D4163DDC7900D8F797 /* Shape.cpp in Sources */,
 				CF5EA5D8163DDCB900D8F797 /* QuadShape.cpp in Sources */,
 				E745CC7916484A9A00819711 /* IStorage.cpp in Sources */,
-				CF45E025164851C5004746BB /* MeshShape.cpp in Sources */,
+				CF45E025164851C5004746BB /* AbstractMeshShape.cpp in Sources */,
 				CFEEE4BD164867B600F45F59 /* CircleShape.cpp in Sources */,
 				CF3E07E81649B65000B5CA51 /* CompositeShape.cpp in Sources */,
 				CFE3B579164AE32E009975A5 /* SceneJSShapesParser.cpp in Sources */,
@@ -1641,6 +1658,9 @@
 				CFBD42DB16AA151100663F21 /* IShortBuffer.cpp in Sources */,
 				CFBD42E016AA1A8900663F21 /* ShortBuffer_iOS.cpp in Sources */,
 				CF923CA416AB126D00D04301 /* ShortBufferBuilder.cpp in Sources */,
+				CFBA526C16B9886B00256453 /* MeshShape.cpp in Sources */,
+				CFBA53EE16B9B76500256453 /* ICameraConstrainer.cpp in Sources */,
+				CFBA53F216B9B7CD00256453 /* SimpleCameraConstrainer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
