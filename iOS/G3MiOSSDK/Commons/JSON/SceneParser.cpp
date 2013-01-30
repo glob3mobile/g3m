@@ -43,6 +43,7 @@ const std::string SceneParser::MINDISTANCE = "minDistance";
 const std::string SceneParser::COLORLINE = "colorLine";
 const std::string SceneParser::SIZELINE = "sizeLine";
 const std::string SceneParser::WEB = "web";
+const std::string SceneParser::SHOWLABEL = "showLabel";
 
 
 const std::string SceneParser::WMS110 = "1.1.0";
@@ -185,7 +186,8 @@ void SceneParser::parserGEOJSONLayer(LayerSet* layerSet, const JSONObject* jsonL
         const std::string minDistance = jsonItems->getAsObject(i)->getAsString(MINDISTANCE)->value();
         const std::string colorLine = jsonItems->getAsObject(i)->getAsString(COLORLINE)->value();
         const std::string sizeLine = jsonItems->getAsObject(i)->getAsString(SIZELINE)->value();
-        
+        const std::string showLabel = jsonItems->getAsObject(i)->getAsString(SHOWLABEL)->value();
+      
         IStringBuilder *url = IStringBuilder::newStringBuilder();
         url->addString(geojsonDatasource);
         url->addString("/");
@@ -203,6 +205,7 @@ void SceneParser::parserGEOJSONLayer(LayerSet* layerSet, const JSONObject* jsonL
         geojsonMetadata->insert(std::make_pair(WEB,""));
         geojsonMetadata->insert(std::make_pair(MINDISTANCE,minDistance));
         geojsonMetadata->insert(std::make_pair(SIZELINE,sizeLine));
+        geojsonMetadata->insert(std::make_pair(SHOWLABEL,showLabel));
         #endif
         #ifdef JAVA_CODE
         geojsonMetadata.put(URLICON,icon);
@@ -211,6 +214,7 @@ void SceneParser::parserGEOJSONLayer(LayerSet* layerSet, const JSONObject* jsonL
         geojsonMetadata.put(WEB,"");
         geojsonMetadata.put(MINDISTANCE,minDistance);
         geojsonMetadata.put(SIZELINE,sizeLine);
+        geojsonMetadata.put(SHOWLABEL,showLabel);
         #endif
       
         legendLayer.push_back(geojsonMetadata);
