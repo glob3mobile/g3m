@@ -609,7 +609,7 @@ public:
 //      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
 //                                                                ofType: @"json"];
 
-      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"A320Merged"
+      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"A320"
                                                                 ofType: @"json"];
 //      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"citation"
 //                                                                ofType: @"json"];

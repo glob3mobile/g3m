@@ -13,7 +13,7 @@
 		CCD7885415D9A3FA0065A7E1 /* ProgressWheel.png in Resources */ = {isa = PBXBuildFile; fileRef = CCD7885315D9A3FA0065A7E1 /* ProgressWheel.png */; };
 		CF0223831668318600024B73 /* geojson in Resources */ = {isa = PBXBuildFile; fileRef = CF0223821668318600024B73 /* geojson */; };
 		CF09A94E16A0A0F500E72811 /* test.bson in Resources */ = {isa = PBXBuildFile; fileRef = CF09A94D16A09F7000E72811 /* test.bson */; };
-		CF186B0416B8572400A39478 /* A320Merged.json in Resources */ = {isa = PBXBuildFile; fileRef = CF186B0316B8572400A39478 /* A320Merged.json */; };
+		CF186B0416B8572400A39478 /* A320.json in Resources */ = {isa = PBXBuildFile; fileRef = CF186B0316B8572400A39478 /* A320.json */; };
 		CF186B0616B857DE00A39478 /* textures-A320 in Resources */ = {isa = PBXBuildFile; fileRef = CF186B0516B857DE00A39478 /* textures-A320 */; };
 		CF186B0816B85A3600A39478 /* citation.json in Resources */ = {isa = PBXBuildFile; fileRef = CF186B0716B85A3600A39478 /* citation.json */; };
 		CF186B0A16B85A5F00A39478 /* textures-citation in Resources */ = {isa = PBXBuildFile; fileRef = CF186B0916B85A5F00A39478 /* textures-citation */; };
@@ -76,7 +76,7 @@
 		CF0223821668318600024B73 /* geojson */ = {isa = PBXFileReference; lastKnownFileType = folder; path = geojson; sourceTree = "<group>"; };
 		CF024DCA16A863380051255C /* VisibleSectorListener.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = VisibleSectorListener.hpp; path = ../G3MiOSSDK/Commons/Rendererers/VisibleSectorListener.hpp; sourceTree = "<group>"; };
 		CF09A94D16A09F7000E72811 /* test.bson */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.bson; sourceTree = "<group>"; };
-		CF186B0316B8572400A39478 /* A320Merged.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = A320Merged.json; sourceTree = "<group>"; };
+		CF186B0316B8572400A39478 /* A320.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = A320.json; sourceTree = "<group>"; };
 		CF186B0516B857DE00A39478 /* textures-A320 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "textures-A320"; sourceTree = "<group>"; };
 		CF186B0716B85A3600A39478 /* citation.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = citation.json; sourceTree = "<group>"; };
 		CF186B0916B85A5F00A39478 /* textures-citation */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "textures-citation"; sourceTree = "<group>"; };
@@ -595,7 +595,7 @@
 				CF186B0916B85A5F00A39478 /* textures-citation */,
 				CF186B0716B85A3600A39478 /* citation.json */,
 				CF186B0516B857DE00A39478 /* textures-A320 */,
-				CF186B0316B8572400A39478 /* A320Merged.json */,
+				CF186B0316B8572400A39478 /* A320.json */,
 				CF09A94D16A09F7000E72811 /* test.bson */,
 				CF0223821668318600024B73 /* geojson */,
 				CFEA76671666DCB000E89BC7 /* images */,
@@ -716,7 +716,7 @@
 				CFE3DBB1164B0E7D00910037 /* seymour-plane.json in Resources */,
 				CFEA76681666DCB000E89BC7 /* images in Resources */,
 				CF0223831668318600024B73 /* geojson in Resources */,
-				CF186B0416B8572400A39478 /* A320Merged.json in Resources */,
+				CF186B0416B8572400A39478 /* A320.json in Resources */,
 				CF186B0616B857DE00A39478 /* textures-A320 in Resources */,
 				CF186B0816B85A3600A39478 /* citation.json in Resources */,
 				CF186B0A16B85A5F00A39478 /* textures-citation in Resources */,
