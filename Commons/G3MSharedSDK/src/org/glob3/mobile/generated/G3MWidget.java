@@ -413,10 +413,15 @@ public class G3MWidget
   
 	final Geodetic3D endPosition = Geodetic3D.fromDegrees(finalLat, finalLon, position.height());
   
+	stopCameraAnimation();
+  
+	_effectsScheduler.startEffect(new GoToPositionEffect(interval, startPosition, endPosition), _nextCamera.getEffectTarget());
+  }
+
+  public final void stopCameraAnimation()
+  {
 	EffectTarget target = _nextCamera.getEffectTarget();
 	_effectsScheduler.cancellAllEffectsFor(target);
-  
-	_effectsScheduler.startEffect(new GoToPositionEffect(interval, startPosition, endPosition), target);
   }
 
   public final void resetCameraPosition()
