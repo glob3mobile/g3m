@@ -430,13 +430,14 @@
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <subviews>
                                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="DMk-sz-ZbR">
-                                                <rect key="frame" x="7" y="10" width="307" height="30"/>
+                                                <rect key="frame" x="5" y="10" width="311" height="30"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <segments>
                                                     <segment title="Simple"/>
                                                     <segment title="Layer"/>
                                                     <segment title="Markers"/>
                                                     <segment title="3D Model"/>
+                                                    <segment title="PointMesh"/>
                                                 </segments>
                                                 <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                 <connections>
@@ -456,7 +457,6 @@
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
                     <connections>
                         <outlet property="G3MWidget" destination="lOt-Xd-eJz" id="GcE-T6-RCe"/>
-                        <outlet property="demoSwitcher" destination="DMk-sz-ZbR" id="OlV-Zo-jfW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xuj-Dk-csY" sceneMemberID="firstResponder"/>
@@ -474,7 +474,6 @@
             <relationships>
                 <relationship kind="action" name="switchDemo:" candidateClass="UISegmentedControl"/>
                 <relationship kind="outlet" name="G3MWidget" candidateClass="G3MWidget_iOS"/>
-                <relationship kind="outlet" name="demoSwitcher" candidateClass="UISegmentedControl"/>
             </relationships>
         </class>
         <class className="G3M3DModelViewController" superclassName="UIViewController">

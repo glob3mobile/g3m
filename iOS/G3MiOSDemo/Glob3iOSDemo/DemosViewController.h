@@ -10,12 +10,13 @@
 
 #import "G3MWidget_iOS.h"
 #import "MarksRenderer.hpp"
+#import "ShapesRenderer.hpp"
+#import "MeshRenderer.hpp"
 
 @interface DemosViewController : UIViewController <UIAlertViewDelegate> {
   NSString* urlMarkString;
   IBOutlet G3MWidget_iOS* G3MWidget;
 }
-@property (weak, nonatomic) IBOutlet UISegmentedControl *demoSwitcher;
 
 - (IBAction)switchDemo:(UISegmentedControl*)sender;
 
@@ -26,5 +27,9 @@
 @property (nonatomic) bool satelliteLayerEnabled;
 
 @property (nonatomic) MarksRenderer* markerRenderer;
+
+@property (nonatomic) ShapesRenderer* shapeRenderer;
+
+@property (nonatomic) MeshRenderer* meshRenderer;
 
 @end

@@ -72,6 +72,7 @@
 		E7B776A5167B56900005ED14 /* G3MDoubleGlob3ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7B776A4167B56900005ED14 /* G3MDoubleGlob3ViewController.mm */; };
 		E7B776A8167F68730005ED14 /* G3MLayerSwitchViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7B776A7167F68730005ED14 /* G3MLayerSwitchViewController.mm */; };
 		E7CDA66F16837CB0006DA377 /* G3M3DModelViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7CDA66E16837CB0006DA377 /* G3M3DModelViewController.mm */; };
+		E7D4EC7D16B98D7200730B14 /* marker-wikipedia-48x48.png in Resources */ = {isa = PBXBuildFile; fileRef = E7D4EC7C16B98D7200730B14 /* marker-wikipedia-48x48.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -364,6 +365,7 @@
 		E7B9965116A9526D00753FC3 /* LayerBuilder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = LayerBuilder.hpp; path = ../G3MiOSSDK/Commons/Basic/LayerBuilder.hpp; sourceTree = "<group>"; };
 		E7CDA66D16837CB0006DA377 /* G3M3DModelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = G3M3DModelViewController.h; sourceTree = "<group>"; };
 		E7CDA66E16837CB0006DA377 /* G3M3DModelViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3M3DModelViewController.mm; sourceTree = "<group>"; };
+		E7D4EC7C16B98D7200730B14 /* marker-wikipedia-48x48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "marker-wikipedia-48x48.png"; sourceTree = "<group>"; };
 		E87424B3169F4E5700C8A227 /* MarkTouchListener.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MarkTouchListener.hpp; path = ../G3MiOSSDK/Commons/Rendererers/MarkTouchListener.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -674,6 +676,7 @@
 		D8EEF4271577B0D6003FEB5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				E7D4EC7C16B98D7200730B14 /* marker-wikipedia-48x48.png */,
 				E770CAE6169D988C00F892BE /* marker-wikipedia-72x72.png */,
 				E770CAD8169C425600F892BE /* g3m-marker.png */,
 				E74C793916944351001CDD1F /* Bg-Pad-Landscape.png */,
@@ -832,6 +835,7 @@
 				CF186B0616B857DE00A39478 /* textures-A320 in Resources */,
 				CF186B0816B85A3600A39478 /* citation.json in Resources */,
 				CF186B0A16B85A5F00A39478 /* textures-citation in Resources */,
+				E7D4EC7D16B98D7200730B14 /* marker-wikipedia-48x48.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
