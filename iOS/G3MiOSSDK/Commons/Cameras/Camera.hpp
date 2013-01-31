@@ -238,6 +238,17 @@ public:
   void orbitTo(const Geodetic3D& g3d) {
     orbitTo(_planet->toCartesian(g3d));
   }
+  
+  void setPointOfView(const Geodetic3D& center, double distance,
+                      const Angle& azimuth, const Angle& altitude);
+  // This method put the camera pointing to given center,
+  // at the given distance, using the given angles.
+  // The situation is like in the figure of this url:
+  // http://en.wikipedia.org/wiki/Azimuth
+  // At the end, camera will be in the 'Star' point,
+  // looking at the 'Observer' point.
+  
+  
     
 private:
   Angle getHeading(const Vector3D& normal) const;

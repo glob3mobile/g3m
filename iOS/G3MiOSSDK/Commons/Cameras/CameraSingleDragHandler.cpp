@@ -48,6 +48,14 @@ void CameraSingleDragHandler::onDown(const G3MEventContext *eventContext,
   _axis = MutableVector3D::nan();
   _lastRadians = _radiansStep = 0.0;
   
+  
+/*
+  // TEMP AGUSTIN TO TEST METHOD CAMERA::SETPOINTOFVIEW
+  Geodetic3D center(Angle::fromDegrees(28.056227), Angle::fromDegrees(-15.666504), 0);
+  camera->setPointOfView(center, 500000, Angle::fromDegrees(0), Angle::fromDegrees(45));
+*/
+  
+  
   // dragging
   const Vector2I pixel = touchEvent.getTouch(0)->getPos();
   //_initialPixel = pixel.asMutableVector2I();
