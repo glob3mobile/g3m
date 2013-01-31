@@ -103,6 +103,8 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
 
 - (void)setCameraPitch: (const Angle&) angle;
 
+- (void)stopCameraAnimation;
+
 - (void)resetCameraPosition;
 
 @end

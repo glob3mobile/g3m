@@ -521,11 +521,15 @@ void G3MWidget::setAnimatedCameraPosition(const Geodetic3D& position,
 
   const Geodetic3D endPosition = Geodetic3D::fromDegrees(finalLat, finalLon, position.height());
 
-  EffectTarget* target = _nextCamera->getEffectTarget();
-  _effectsScheduler->cancellAllEffectsFor(target);
+  stopCameraAnimation();
 
   _effectsScheduler->startEffect(new GoToPositionEffect(interval, startPosition, endPosition),
-                                 target);
+                                 _nextCamera->getEffectTarget());
+}
+
+void G3MWidget::stopCameraAnimation() {
+  EffectTarget* target = _nextCamera->getEffectTarget();
+  _effectsScheduler->cancellAllEffectsFor(target);
 }
 
 void G3MWidget::resetCameraPosition() {
