@@ -70,15 +70,17 @@ void MarksRenderer::removeMark(Mark* mark){
   for (int i = 0; i < _marks.size(); i++) {
     if (_marks[i] == mark) {
       pos = i;
+      break;
     }
-    break;
   }
+  if (pos != -1) {
 #ifdef C_CODE
-  _marks.erase(_marks.begin()+pos);
+    _marks.erase(_marks.begin()+pos);
 #endif
 #ifdef JAVA_CODE
-  _marks.remove(pos);
+    _marks.remove(pos);
 #endif
+  }
 }
 
 void MarksRenderer::removeAllMarks(){
