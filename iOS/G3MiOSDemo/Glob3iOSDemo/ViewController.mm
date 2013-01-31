@@ -47,8 +47,11 @@
 
 class TestVisibleSectorListener : public VisibleSectorListener {
 public:
-  void onVisibleSectorChange(const Sector* visibleSector) {
-    ILogger::instance()->logInfo("VisibleSector=%s", visibleSector->description().c_str());
+  void onVisibleSectorChange(const Sector& visibleSector,
+                             const Geodetic3D& cameraPosition) {
+    ILogger::instance()->logInfo("VisibleSector=%s, CameraPosition=%s",
+                                 visibleSector.description().c_str(),
+                                 cameraPosition.description().c_str());
   }
 };
 
@@ -748,9 +751,7 @@ public:
         const double scale = 500;
         trailShape->setScale(scale * 2 / 3, scale * 1.8, scale);
         _shapesRenderer->addShape(trailShape);
-
       }
-
 
       /**/
       /*

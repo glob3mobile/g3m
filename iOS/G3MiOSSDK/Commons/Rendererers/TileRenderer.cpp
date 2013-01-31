@@ -48,12 +48,21 @@ public:
 
   }
 
-  void tryToNotifyListener(const Sector* visibleSector) {
+  void notifyListener(const Sector* visibleSector,
+                      const G3MRenderContext* rc) const {
+    const Geodetic3D cameraPosition = rc->getPlanet()->toGeodetic3D( rc->getCurrentCamera()->getCartesianPosition() );
+
+    _listener->onVisibleSectorChange(*_lastSector, cameraPosition);
+  }
+
+  void tryToNotifyListener(const Sector* visibleSector,
+                           const G3MRenderContext* rc) {
     if ( _stabilizationIntervalInMS == 0 ) {
       if ( (_lastSector == NULL) || (!_lastSector->isEqualsTo(*visibleSector)) ) {
         delete _lastSector;
         _lastSector = new Sector(*visibleSector);
-        _listener->onVisibleSectorChange(_lastSector);
+
+        notifyListener(visibleSector, rc);
       }
     }
     else {
@@ -67,7 +76,7 @@ public:
 
       if (_whenNotifyInMS != 0) {
         if (now >= _whenNotifyInMS) {
-          _listener->onVisibleSectorChange(_lastSector);
+          notifyListener(visibleSector, rc);
 
           _whenNotifyInMS = 0;
         }
@@ -82,6 +91,8 @@ public:
     if (_timer != NULL) {
       IFactory::instance()->deleteTimer(_timer);
     }
+
+    delete _lastSector;
   }
 };
 
@@ -318,7 +329,8 @@ void TileRenderer::render(const G3MRenderContext* rc,
     const int visibleSectorListenersCount = _visibleSectorListeners.size();
     for (int i = 0; i < visibleSectorListenersCount; i++) {
       VisibleSectorListenerEntry* entry = _visibleSectorListeners[i];
-      entry->tryToNotifyListener(_lastVisibleSector);
+
+      entry->tryToNotifyListener(_lastVisibleSector, rc);
     }
   }
 

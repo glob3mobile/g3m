@@ -16,8 +16,10 @@ Shape::~Shape() {
   delete _pendingEffect;
 
   delete _position;
+
   delete _heading;
   delete _pitch;
+
   delete _transformMatrix;
 }
 
@@ -36,7 +38,6 @@ MutableMatrix44D* Shape::createTransformMatrix(const Planet* planet) {
 
   return new MutableMatrix44D( geodeticTransform.multiply(localTransform) );
 }
-
 
 MutableMatrix44D* Shape::getTransformMatrix(const Planet* planet) {
   if (_transformMatrix == NULL) {

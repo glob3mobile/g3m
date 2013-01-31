@@ -115,15 +115,18 @@ Geodetic2D Ellipsoid::toGeodetic2D(const Vector3D& positionOnEllipsoid) const {
 
 
 Geodetic3D Ellipsoid::toGeodetic3D(const Vector3D& position) const {
-  Vector3D p = scaleToGeodeticSurface(position);
-  Vector3D h = position.sub(p);
+  const Vector3D p = scaleToGeodeticSurface(position);
+  const Vector3D h = position.sub(p);
 
-  double height;
-  if (h.dot(position) < 0) {
-    height = -1 * h.length();
-  } else {
-    height = h.length();
-  }
+//  double height;
+//  if (h.dot(position) < 0) {
+//    height = -1 * h.length();
+//  }
+//  else {
+//    height = h.length();
+//  }
+
+  const double height = (h.dot(position) < 0) ? -1 * h.length() : h.length();
 
   return Geodetic3D(toGeodetic2D(p), height);
 }
