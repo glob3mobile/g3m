@@ -342,6 +342,7 @@
 
 - (void) showMarkers {
   [self markerRenderer]->setEnable(true);
+  [self zoomOut];  
   [[self G3MWidget] widget]->setAnimatedCameraPosition(Geodetic3D(Angle::fromDegrees(37.7658),
                                                                   Angle::fromDegrees(-122.4185),
                                                                   10000),
@@ -350,6 +351,7 @@
 
 - (void) show3DModel {
   [self shapeRenderer]->setEnable(true);
+  [self zoomOut];
   [[self G3MWidget] widget]->setAnimatedCameraPosition(Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
                                                                   Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
                                                                   2500),
@@ -358,6 +360,14 @@
 
 - (void) showPointMesh {
   [self meshRenderer]->setEnable(true);
+  [self zoomOut];
+  [[self G3MWidget] widget]->setAnimatedCameraPosition(Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42),
+                                                                  Angle::fromDegreesMinutesSeconds(-77, 2, 11),
+                                                                  6500000),
+                                                       TimeInterval::fromSeconds(4));
+}
+
+- (void) zoomOut {
   Geodetic3D position = [[self G3MWidget] widget]->getNextCamera()->getGeodeticCenterOfView();
   if (position.height() < 18000000) {
     [[self G3MWidget] widget]->setAnimatedCameraPosition(Geodetic3D(position.latitude(),
@@ -365,10 +375,6 @@
                                                                     18000000),
                                                          TimeInterval::fromSeconds(4));
   }
-  [[self G3MWidget] widget]->setAnimatedCameraPosition(Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42),
-                                                                  Angle::fromDegreesMinutesSeconds(-77, 2, 11),
-                                                                  7000000),
-                                                       TimeInterval::fromSeconds(4));
 }
 
 
