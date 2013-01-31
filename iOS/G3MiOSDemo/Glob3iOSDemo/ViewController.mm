@@ -8,62 +8,38 @@
 
 #import "ViewController.h"
 
-#include "LayerSet.hpp"
-#include "WMSLayer.hpp"
-#include "Factory_iOS.hpp"
-#include "EllipsoidalTileTessellator.hpp"
-#include "TileRenderer.hpp"
-#include "TilesRenderParameters.hpp"
-#include "MarksRenderer.hpp"
-#include "CameraConstraints.hpp"
-//#include "GLErrorRenderer.hpp"
-#include "LevelTileCondition.hpp"
-#include "BingLayer.hpp"
-#include "TrailsRenderer.hpp"
-#include "PeriodicalTask.hpp"
-#include "ShapesRenderer.hpp"
-//#include "QuadShape.hpp"
-#include "CircleShape.hpp"
-#include "BoxShape.hpp"
-//#include "CompositeShape.hpp"
-#include "SceneJSShapesParser.hpp"
-#include "G3MWidget.hpp"
 
-#include "DummyRenderer.hpp"
-#include "GEOJSONParser.hpp"
-#include "GEORenderer.hpp"
-#include "GInitializationTask.hpp"
 
 #include "G3MBuilder_iOS.hpp"
+
+#include "VisibleSectorListener.hpp"
+#include "MarksRenderer.hpp"
+#include "ShapesRenderer.hpp"
+#include "GEORenderer.hpp"
 #include "BusyMeshRenderer.hpp"
-#include "CompositeRenderer.hpp"
-#include "TileRendererBuilder.hpp"
-#include "CameraRenderer.hpp"
-#include "CameraSingleDragHandler.hpp"
-#include "CameraDoubleDragHandler.hpp"
-#include "CameraRotationHandler.hpp"
-#include "CameraDoubleTapHandler.hpp"
-#include "NativeGL2_iOS.hpp"
-#include "SQLiteStorage_iOS.hpp"
-#include "CachedDownloader.hpp"
-#include "Downloader_iOS.hpp"
-#include "ThreadUtils_iOS.hpp"
-#include "Planet.hpp"
 #include "MeshRenderer.hpp"
 #include "FloatBufferBuilderFromGeodetic.hpp"
 #include "FloatBufferBuilderFromColor.hpp"
 #include "DirectMesh.hpp"
-//#include "IJSONParser.hpp"
-//#include "JSONGenerator.hpp"
-//#include "BSONGenerator.hpp"
-#include "BSONParser.hpp"
-//#include "ITextUtils.hpp"
-#include "Mark.hpp"
-#include "MarkTouchListener.hpp"
-#include "JSONBaseObject.hpp"
-#include "VisibleSectorListener.hpp"
+#include "WMSLayer.hpp"
+#include "CameraSingleDragHandler.hpp"
+#include "CameraDoubleDragHandler.hpp"
+#include "CameraRotationHandler.hpp"
+#include "CameraDoubleTapHandler.hpp"
+#include "LevelTileCondition.hpp"
 #include "LayerBuilder.hpp"
+#include "TileRendererBuilder.hpp"
+#include "MarkTouchListener.hpp"
+#include "TrailsRenderer.hpp"
+#include "Mark.hpp"
+#include "CircleShape.hpp"
+#include "BoxShape.hpp"
+#include "SceneJSShapesParser.hpp"
 
+#include "IJSONParser.hpp"
+#include "JSONGenerator.hpp"
+#include "BSONParser.hpp"
+#include "BSONGenerator.hpp"
 
 class TestVisibleSectorListener : public VisibleSectorListener {
 public:
@@ -97,7 +73,7 @@ public:
   // [self initWithoutBuilder];
 
   // initizalize a default widget by using a builder
-  //    [self initDefaultWithBuilder];
+//  [self initDefaultWithBuilder];
 
   // initialize a customized widget by using a buider
   [self initCustomizedWithBuilder];
@@ -105,59 +81,59 @@ public:
   [[self G3MWidget] startAnimation];
 }
 
-- (void) initWithoutBuilder
-{
-  IStorage* storage = new SQLiteStorage_iOS("g3m.cache");
-
-  const bool saveInBackground = true;
-  IDownloader* downloader = new CachedDownloader(new Downloader_iOS(8),
-                                                 storage,
-                                                 saveInBackground);
-
-  IThreadUtils* threadUtils = new ThreadUtils_iOS();
-
-  const Planet* planet = Planet::createEarth();
-
-  CompositeRenderer* mainRenderer = new CompositeRenderer();
-
-  TileRenderer* tileRenderer = [self createTileRenderer: [self createTileRenderParameters]
-                                               layerSet: [self createLayerSet]];
-  mainRenderer->addRenderer(tileRenderer);
-
-  MarksRenderer* marksRenderer = [self createMarksRenderer];
-  mainRenderer->addRenderer(marksRenderer);
-
-  ShapesRenderer* shapesRenderer = [self createShapesRenderer];
-  mainRenderer->addRenderer(shapesRenderer);
-
-  GEORenderer* geoRenderer = [self createGEORenderer];
-  mainRenderer->addRenderer(geoRenderer);
-
-  Renderer* busyRenderer = new BusyMeshRenderer();
-
-  GInitializationTask* initializationTask = [self createSampleInitializationTask: shapesRenderer
-                                                                     geoRenderer: geoRenderer];
-
-  std::vector<PeriodicalTask*> periodicalTasks;
-
-  // initialization
-  [[self G3MWidget] initWidget: storage
-                    downloader: downloader
-                   threadUtils: threadUtils
-                        planet: planet
-             cameraConstraints: [self createCameraConstraints]
-                cameraRenderer: [self createCameraRenderer]
-                  mainRenderer: mainRenderer
-                  busyRenderer: busyRenderer
-               backgroundColor: Color::fromRGBA((float)0, (float)0.1, (float)0.2, (float)1)
-                        logFPS: true
-       logDownloaderStatistics: false
-            initializationTask: initializationTask
-  autoDeleteInitializationTask: true
-               periodicalTasks: periodicalTasks
-                      userData: NULL];
-
-}
+//- (void) initWithoutBuilder
+//{
+//  IStorage* storage = new SQLiteStorage_iOS("g3m.cache");
+//
+//  const bool saveInBackground = true;
+//  IDownloader* downloader = new CachedDownloader(new Downloader_iOS(8),
+//                                                 storage,
+//                                                 saveInBackground);
+//
+//  IThreadUtils* threadUtils = new ThreadUtils_iOS();
+//
+//  const Planet* planet = Planet::createEarth();
+//
+//  CompositeRenderer* mainRenderer = new CompositeRenderer();
+//
+//  TileRenderer* tileRenderer = [self createTileRenderer: [self createTileRenderParameters]
+//                                               layerSet: [self createLayerSet]];
+//  mainRenderer->addRenderer(tileRenderer);
+//
+//  MarksRenderer* marksRenderer = [self createMarksRenderer];
+//  mainRenderer->addRenderer(marksRenderer);
+//
+//  ShapesRenderer* shapesRenderer = [self createShapesRenderer];
+//  mainRenderer->addRenderer(shapesRenderer);
+//
+//  GEORenderer* geoRenderer = [self createGEORenderer];
+//  mainRenderer->addRenderer(geoRenderer);
+//
+//  Renderer* busyRenderer = new BusyMeshRenderer();
+//
+//  GInitializationTask* initializationTask = [self createSampleInitializationTask: shapesRenderer
+//                                                                     geoRenderer: geoRenderer];
+//
+//  std::vector<PeriodicalTask*> periodicalTasks;
+//
+//  // initialization
+//  [[self G3MWidget] initWidget: storage
+//                    downloader: downloader
+//                   threadUtils: threadUtils
+//                        planet: planet
+//             cameraConstraints: [self createCameraConstraints]
+//                cameraRenderer: [self createCameraRenderer]
+//                  mainRenderer: mainRenderer
+//                  busyRenderer: busyRenderer
+//               backgroundColor: Color::fromRGBA((float)0, (float)0.1, (float)0.2, (float)1)
+//                        logFPS: true
+//       logDownloaderStatistics: false
+//            initializationTask: initializationTask
+//  autoDeleteInitializationTask: true
+//               periodicalTasks: periodicalTasks
+//                      userData: NULL];
+//
+//}
 
 - (void) initDefaultWithBuilder
 {
@@ -194,19 +170,11 @@ public:
 //                                  NULL)
 //                     );
 
-  builder.setLayerSet(layerSet);
-
-  TilesRenderParameters* parameters = [self createTileRenderParameters];
-  builder.setTileRendererParameters(parameters);
-
-  TileRenderer* tileRenderer = [self createTileRenderer: parameters
-                                               layerSet: layerSet];
-
-  tileRenderer->addVisibleSectorListener(new TestVisibleSectorListener(),
-                                         TimeInterval::fromSeconds(3));
-
-  builder.setTileRenderer(tileRenderer);
-
+  builder.getTileRendererBuilder()->setLayerSet(layerSet);
+  builder.getTileRendererBuilder()->setTileRendererParameters([self createTileRenderParameters]);
+  builder.getTileRendererBuilder()->addVisibleSectorListener(new TestVisibleSectorListener(),
+                                                            TimeInterval::fromSeconds(3));
+  
   Renderer* busyRenderer = new BusyMeshRenderer();
   builder.setBusyRenderer(busyRenderer);
 
@@ -643,21 +611,30 @@ public:
       */
 
       /**/
-      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
+//      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
+//                                                                ofType: @"json"];
+
+      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"A320"
                                                                 ofType: @"json"];
-      //      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"3dmodels/Macba_Google_Earth-1"
-      //                                                                ofType: @"json"];
+//      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"citation"
+//                                                                ofType: @"json"];
       if (planeFilePath) {
         NSString *nsPlaneJSON = [NSString stringWithContentsOfFile: planeFilePath
                                                           encoding: NSUTF8StringEncoding
                                                              error: nil];
         if (nsPlaneJSON) {
           std::string planeJSON = [nsPlaneJSON UTF8String];
-          Shape* plane = SceneJSShapesParser::parse(planeJSON, "file:///");
+          Shape* plane = SceneJSShapesParser::parse(planeJSON, "file:///textures-A320/");
+          //Shape* plane = SceneJSShapesParser::parse(planeJSON, "file:///textures-citation/");
           if (plane) {
-            plane->setPosition( new Geodetic3D(Angle::fromDegrees(37.78333333),
-                                               Angle::fromDegrees(-122.41666666666667),
-                                               500) );
+//            // San Francisco
+//            plane->setPosition( new Geodetic3D(Angle::fromDegrees(37.78333333),
+//                                               Angle::fromDegrees(-122.41666666666667),
+//                                               500) );
+            // Washington, DC
+            plane->setPosition(new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
+                                              Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
+                                              1000) );
             plane->setScale(100, 100, 100);
             plane->setPitch(Angle::fromDegrees(90));
             _shapesRenderer->addShape(plane);
@@ -720,8 +697,8 @@ public:
 
       /*
       // JSONBaseObject* jsonObject = IJSONParser::instance()->parse("{\"key1\":\"string\", \"key2\": 100, \"key3\": false, \"key4\":123.5}");
-      //JSONBaseObject* jsonObject = IJSONParser::instance()->parse("{\"hello\":\"world\"}");
-      JSONBaseObject* jsonObject = IJSONParser::instance()->parse("{\"BSON\": [\"awesome\", 5.05, 1986, true, false], \"X\": {\"foo\": 100}}");
+      JSONBaseObject* jsonObject = IJSONParser::instance()->parse("{\"hello\":\"world\"}");
+//      JSONBaseObject* jsonObject = IJSONParser::instance()->parse("{\"BSON\": [\"awesome\", 5.05, 1986, true, false], \"X\": {\"foo\": 100}}");
       printf("%s\n", jsonObject->description().c_str());
 
       std::string jsonString = JSONGenerator::generate(jsonObject);

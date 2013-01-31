@@ -60,7 +60,7 @@ public class G3MDoubleGlob3Activity
                TimeInterval.fromDays(30));
       layerSet.addLayer(osm);
 
-      g3mBuilderDown.setLayerSet(layerSet);
+      g3mBuilderDown.getTileRendererBuilder().setLayerSet(layerSet);
       _widgetAndroidDown = g3mBuilderDown.createWidget();
 
       final FrameLayout layoutDown = (FrameLayout) findViewById(R.id.glob3down);

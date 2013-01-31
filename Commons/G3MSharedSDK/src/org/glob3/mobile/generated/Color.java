@@ -121,6 +121,11 @@ public class Color
 	return Color.fromRGBA(1, 0, 1, 1);
   }
 
+  public static Color green()
+  {
+	return Color.fromRGBA(0, 1, 0, 1);
+  }
+
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: float getRed() const
   public final float getRed()
@@ -154,10 +159,10 @@ public class Color
   public final Color mixedWith(Color that, float factor)
   {
 	float frac1 = factor;
-	if (factor < 0)
-		factor = 0F;
-	if (factor > 1)
-		factor = 1F;
+	if (frac1 < 0)
+		frac1 = 0F;
+	if (frac1 > 1)
+		frac1 = 1F;
 
 	final float frac2 = 1 - frac1;
 

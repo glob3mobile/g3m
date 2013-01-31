@@ -496,6 +496,7 @@ public class SceneJSShapesParser
 	  {
 		primitive = GLPrimitive.triangleFan();
 	  }
+	  processedKeys++;
 	}
   
 	final JSONArray jsPositions = jsonObject.getAsArray("positions");

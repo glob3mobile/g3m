@@ -126,7 +126,7 @@ public:
   Vector2I getTextureExtent() const {
     return Vector2I(_textureWidth, _textureHeight);
   }
-  
+
   const MarkUserData* getUserData() const {
     return _userData;
   }

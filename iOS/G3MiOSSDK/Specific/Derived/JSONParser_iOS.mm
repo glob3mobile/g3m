@@ -49,6 +49,11 @@ JSONBaseObject* JSONParser_iOS::parse(const std::string& inputString) {
     return topLevelObject;
   }
 
+  if (e) {
+    ILogger::instance()->logWarning("JSON Parser: Error=%s",
+                                    [[e localizedDescription] UTF8String]);
+  }
+
   ILogger::instance()->logWarning("JSON Parser: Malformed JSON: The top-level object is neither an Object nor an Array");
 
   return NULL;

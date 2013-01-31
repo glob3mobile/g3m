@@ -123,6 +123,10 @@ public:
   static Color magenta() {
     return Color::fromRGBA(1, 0, 1, 1);
   }
+  
+  static Color green() {
+    return Color::fromRGBA(0, 1, 0, 1);
+  }
 
   float getRed() const {
     return _red;
@@ -143,8 +147,8 @@ public:
   Color mixedWith(const Color& that,
                   float factor) const {
     float frac1 = factor;
-    if (factor < 0) factor = 0;
-    if (factor > 1) factor = 1;
+    if (frac1 < 0) frac1 = 0;
+    if (frac1 > 1) frac1 = 1;
 
     const float frac2 = 1 - frac1;
 

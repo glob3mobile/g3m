@@ -303,18 +303,53 @@ public final class MathUtils_WebGL
 
    @Override
    public long doubleToRawLongBits(final double value) {
-      //return Double.doubleToRawLongBits(value);
-      final int ______TODO;
-      throw new RuntimeException("doubleToRawLongBits() not implemented!");
+      final byte[] byteArray = doubleToByteArray(value);
+      // LittleEndian
+
+      final int b1 = byteArray[0] & 0xFF;
+      final int b2 = byteArray[1] & 0xFF;
+      final int b3 = byteArray[2] & 0xFF;
+      final int b4 = byteArray[3] & 0xFF;
+      final int b5 = byteArray[4] & 0xFF;
+      final int b6 = byteArray[5] & 0xFF;
+      final int b7 = byteArray[6] & 0xFF;
+      final int b8 = byteArray[7] & 0xFF;
+
+      return (b1) | ((long) b2 << 8) | ((long) b3 << 16) | ((long) b4 << 24) | ((long) b5 << 32) | ((long) b6 << 40)
+             | ((long) b7 << 48) | ((long) b8 << 56);
    }
+
+
+   private native byte[] doubleToByteArray(final double value) /*-{
+		var buffer = new ArrayBuffer(8);
+		var doubleView = new Float64Array(buffer);
+		doubleView[0] = value;
+
+		return (new Uint8Array(buffer));
+   }-*/;
 
 
    @Override
    public double rawLongBitsToDouble(final long value) {
-      //return Double.longBitsToDouble(value);
-      final int ______TODO;
-      throw new RuntimeException("doubleToRawLongBits() not implemented!");
+      final int[] byteArray = new int[8];
+
+      byteArray[0] = (int) (value & 0xFF);
+      byteArray[1] = (int) ((value >> 8) & 0xFF);
+      byteArray[2] = (int) ((value >> 16) & 0xFF);
+      byteArray[3] = (int) ((value >> 24) & 0xFF);
+      byteArray[4] = (int) ((value >> 32) & 0xFF);
+      byteArray[5] = (int) ((value >> 40) & 0xFF);
+      byteArray[6] = (int) ((value >> 48) & 0xFF);
+      byteArray[7] = (int) ((value >> 56) & 0xFF);
+
+      return byteArrayToDouble(byteArray);
    }
 
 
+   private native double byteArrayToDouble(final int[] byteArray) /*-{
+		var uint8Array = new Uint8Array(byteArray);
+		var doubleView = new Float64Array(uint8Array.buffer);
+
+		return doubleView[0];
+   }-*/;
 }

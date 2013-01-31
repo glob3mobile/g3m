@@ -385,7 +385,9 @@ int GL::getError() {
   return _nativeGL->getError();
 }
 
-const IGLTextureId* GL::uploadTexture(const IImage* image, int format, bool generateMipmap){
+const IGLTextureId* GL::uploadTexture(const IImage* image,
+                                      int format,
+                                      bool generateMipmap){
   if (_verbose) {
     ILogger::instance()->logInfo("GL::uploadTexture()");
   }

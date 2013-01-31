@@ -161,6 +161,56 @@ public class G3MWebGLDemo
       final Downloader_WebGL downloader = new Downloader_WebGL(8, 10, proxy);
       builder.setDownloader(downloader);
 
+
+      // test bson parser&generator
+      //      builder.setInitializationTask(new GInitializationTask() {
+      //
+      //         @Override
+      //         public void run(final G3MContext context) {
+      //            context.getDownloader().requestBuffer(new URL("http://glob3m.glob3mobile.com/test/test.bson", false), 0,
+      //                     TimeInterval.forever(), new IBufferDownloadListener() {
+      //
+      //                        @Override
+      //                        public void onError(final URL url) {
+      //                           ILogger.instance().logError("error downloading test.bson");
+      //                        }
+      //
+      //
+      //                        @Override
+      //                        public void onDownload(final URL url,
+      //                                               final IByteBuffer buffer) {
+      //                           ILogger.instance().logInfo("Downloaded buffer: " + buffer.description() + "--" + buffer.getAsString());
+      //                           final JSONBaseObject jsonObj = BSONParser.parse(buffer);
+      //                           ILogger.instance().logInfo("BSON parser: " + jsonObj.description());
+      //
+      //                           final IByteBuffer byteBuffer = BSONGenerator.generate(jsonObj);
+      //                           ILogger.instance().logInfo(
+      //                                    "BSON generator: " + byteBuffer.description() + "--" + byteBuffer.getAsString());
+      //
+      //                           final JSONBaseObject jsonObjFromBSON = BSONParser.parse(byteBuffer);
+      //                           ILogger.instance().logInfo("BSON parser: " + jsonObjFromBSON.description());
+      //                        }
+      //
+      //
+      //                        @Override
+      //                        public void onCanceledDownload(final URL url,
+      //                                                       final IByteBuffer data) {
+      //                        }
+      //
+      //
+      //                        @Override
+      //                        public void onCancel(final URL url) {
+      //                        }
+      //                     }, false);
+      //         }
+      //
+      //
+      //         @Override
+      //         public boolean isDone(final G3MContext context) {
+      //            return false;
+      //         }
+      //      });
+
       _widget = builder.createWidget();
    }
 

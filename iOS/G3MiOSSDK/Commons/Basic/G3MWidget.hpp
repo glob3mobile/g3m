@@ -155,6 +155,8 @@ public:
 
   void setAnimatedCameraPosition(const Geodetic3D& position,
                                  const TimeInterval& interval);
+  
+  void stopCameraAnimation();
 
   void resetCameraPosition();
 
