@@ -13,7 +13,7 @@
 
 const GLState* SGMaterialNode::createState(const G3MRenderContext* rc,
                                            const GLState& parentState) {
-  if (_specularColor == NULL) {
+  if (_baseColor == NULL) {
     return NULL;
   }
   

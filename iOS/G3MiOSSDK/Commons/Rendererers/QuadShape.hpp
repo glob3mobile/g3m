@@ -9,12 +9,12 @@
 #ifndef __G3MiOSSDK__QuadShape__
 #define __G3MiOSSDK__QuadShape__
 
-#include "MeshShape.hpp"
+#include "AbstractMeshShape.hpp"
 
 class IImage;
 class IGLTextureId;
 
-class QuadShape : public MeshShape {
+class QuadShape : public AbstractMeshShape {
 private:
   const std::string _textureFilename;
   IImage* _textureImage;
@@ -35,7 +35,7 @@ public:
             const std::string textureFilename,
             float width,
             float height) :
-  MeshShape(position),
+  AbstractMeshShape(position),
   _textureFilename(textureFilename),
   _textureImage(textureImage),
   _autoDeleteTextureImage(autoDeleteTextureImage),

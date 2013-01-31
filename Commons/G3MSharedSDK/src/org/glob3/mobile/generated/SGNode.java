@@ -31,14 +31,11 @@ public class SGNode
   protected final String _id;
   protected final String _sId;
 
-  protected SGNode _parent;
+//  SGNode*              _parent;
   protected java.util.ArrayList<SGNode> _children = new java.util.ArrayList<SGNode>();
 
 
-  protected final void setParent(SGNode parent)
-  {
-	_parent = parent;
-  }
+//  void setParent(SGNode* parent);
 
   protected G3MContext _context;
 
@@ -46,12 +43,12 @@ public class SGNode
 
 
   public SGNode(String id, String sId)
+//  _parent(NULL)
   {
 	  _id = id;
 	  _sId = sId;
 	  _context = null;
 	  _shape = null;
-	  _parent = null;
 
   }
 
@@ -81,7 +78,7 @@ public class SGNode
 
   public final void addNode(SGNode child)
   {
-	child.setParent(this);
+  //  child->setParent(this);
 	_children.add(child);
 	if (_context != null)
 	{
@@ -89,6 +86,11 @@ public class SGNode
 	}
   }
 
+
+  //void SGNode::setParent(SGNode* parent) {
+  //  _parent = parent;
+  //}
+  
   public boolean isReadyToRender(G3MRenderContext rc)
   {
 	final int childrenCount = _children.size();
@@ -149,20 +151,15 @@ public class SGNode
 		myState.dispose();
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: SGShape* getShape() const
-  public final SGShape getShape()
-  {
-	if (_shape != null)
-	{
-	  return _shape;
-	}
-	if (_parent != null)
-	{
-	  return _parent.getShape();
-	}
-	return null;
-  }
+//  SGShape* getShape() const {
+//    if (_shape != NULL) {
+//      return _shape;
+//    }
+//    if (_parent != NULL) {
+//      return _parent->getShape();
+//    }
+//    return NULL;
+//  }
 
   public GLState createState(G3MRenderContext rc, GLState parentState)
   {

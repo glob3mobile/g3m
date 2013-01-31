@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class BoxShape extends MeshShape
+public class BoxShape extends AbstractMeshShape
 {
   private double _extentX;
   private double _extentY;
@@ -113,7 +113,7 @@ public class BoxShape extends MeshShape
 	  this(position, extent, borderWidth, null, null);
   }
 //C++ TO JAVA CONVERTER NOTE: Java does not allow default values for parameters. Overloaded methods are inserted above.
-//ORIGINAL LINE: BoxShape(Geodetic3D* position, const Vector3D& extent, float borderWidth, Color* surfaceColor = null, Color* borderColor = null) : MeshShape(position), _extentX(extent._x), _extentY(extent._y), _extentZ(extent._z), _borderWidth(borderWidth), _surfaceColor(surfaceColor), _borderColor(borderColor)
+//ORIGINAL LINE: BoxShape(Geodetic3D* position, const Vector3D& extent, float borderWidth, Color* surfaceColor = null, Color* borderColor = null) : AbstractMeshShape(position), _extentX(extent._x), _extentY(extent._y), _extentZ(extent._z), _borderWidth(borderWidth), _surfaceColor(surfaceColor), _borderColor(borderColor)
   public BoxShape(Geodetic3D position, Vector3D extent, float borderWidth, Color surfaceColor, Color borderColor)
   {
 	  super(position);

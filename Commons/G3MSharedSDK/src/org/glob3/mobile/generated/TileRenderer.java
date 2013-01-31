@@ -200,7 +200,8 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 	  for (int i = 0; i < visibleSectorListenersCount; i++)
 	  {
 		VisibleSectorListenerEntry entry = _visibleSectorListeners.get(i);
-		entry.tryToNotifyListener(_lastVisibleSector);
+  
+		entry.tryToNotifyListener(_lastVisibleSector, rc);
 	  }
 	}
   

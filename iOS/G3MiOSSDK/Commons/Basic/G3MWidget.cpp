@@ -15,7 +15,7 @@
 #include "IDownloader.hpp"
 #include "Effects.hpp"
 #include "Context.hpp"
-#include "CameraConstraints.hpp"
+#include "ICameraConstrainer.hpp"
 #include "FrameTasksExecutor.hpp"
 #include "IStringUtils.hpp"
 #include "IThreadUtils.hpp"

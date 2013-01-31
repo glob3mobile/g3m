@@ -22,11 +22,11 @@ protected:
   const std::string _id;
   const std::string _sId;
 
-  SGNode*              _parent;
+//  SGNode*              _parent;
   std::vector<SGNode*> _children;
 
 
-  void setParent(SGNode* parent);
+//  void setParent(SGNode* parent);
 
 protected:
 #ifdef C_CODE
@@ -45,8 +45,8 @@ public:
   _id(id),
   _sId(sId),
   _context(NULL),
-  _shape(NULL),
-  _parent(NULL)
+  _shape(NULL)
+//  _parent(NULL)
   {
 
   }
@@ -70,15 +70,15 @@ public:
   virtual void render(const G3MRenderContext* rc,
                       const GLState& parentState);
 
-  SGShape* getShape() const {
-    if (_shape != NULL) {
-      return _shape;
-    }
-    if (_parent != NULL) {
-      return _parent->getShape();
-    }
-    return NULL;
-  }
+//  SGShape* getShape() const {
+//    if (_shape != NULL) {
+//      return _shape;
+//    }
+//    if (_parent != NULL) {
+//      return _parent->getShape();
+//    }
+//    return NULL;
+//  }
 
   virtual const GLState* createState(const G3MRenderContext* rc,
                                      const GLState& parentState);

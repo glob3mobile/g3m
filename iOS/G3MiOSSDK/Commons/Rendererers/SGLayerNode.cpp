@@ -89,7 +89,10 @@ void SGLayerNode::initialize(const G3MContext* context,
                              SGShape *shape) {
   SGNode::initialize(context, shape);
 
-  requestImage();
+  if (!_initialized) {
+    _initialized = true;
+    requestImage();
+  }
 }
 
 const IGLTextureId* SGLayerNode::getTextureId(const G3MRenderContext* rc) {

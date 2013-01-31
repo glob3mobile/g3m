@@ -50,7 +50,7 @@ public class SGMaterialNode extends SGNode
 
   public final GLState createState(G3MRenderContext rc, GLState parentState)
   {
-	if (_specularColor == null)
+	if (_baseColor == null)
 	{
 	  return null;
 	}

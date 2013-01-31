@@ -14,6 +14,7 @@
 #include "TileRendererBuilder.hpp"
 #include "BusyMeshRenderer.hpp"
 #include "CompositeRenderer.hpp"
+#include "SimpleCameraConstrainer.hpp"
 
 IG3MBuilder::IG3MBuilder() :
 _gl(NULL),
