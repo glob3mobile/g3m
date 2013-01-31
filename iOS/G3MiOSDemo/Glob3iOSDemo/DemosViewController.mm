@@ -25,6 +25,9 @@
 #include "FloatBufferBuilderFromGeodetic.hpp"
 #include "FloatBufferBuilderFromColor.hpp"
 #include "DirectMesh.hpp"
+#include "ByteBuffer_iOS.hpp"
+#include "BSONParser.hpp"
+#include "JSONGenerator.hpp"
 
 
 @interface DemosViewController () 
@@ -245,24 +248,26 @@
                                 listener,
                                 true);
       // 3D model
-      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"A320"
-                                                                ofType: @"json"];
-      //      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"citation"
-      //                                                                ofType: @"json"];
-      if (planeFilePath) {
-        NSString *nsPlaneJSON = [NSString stringWithContentsOfFile: planeFilePath
-                                                          encoding: NSUTF8StringEncoding
-                                                             error: nil];
-        if (nsPlaneJSON) {
-          std::string planeJSON = [nsPlaneJSON UTF8String];
-          Shape* plane = SceneJSShapesParser::parse(planeJSON, "file:///textures-A320/");
-          //Shape* plane = SceneJSShapesParser::parse(planeJSON, "file:///textures-citation/");
+      NSString *bsonFilePath = [[NSBundle mainBundle] pathForResource: @"A320"
+                                                               ofType: @"bson"];
+      if (bsonFilePath) {
+        NSData* data = [NSData dataWithContentsOfFile: bsonFilePath];
+        const int length = [data length];
+        unsigned char* bytes = new unsigned char[ length ]; // will be deleted by IByteBuffer's destructor
+        [data getBytes: bytes
+                length: length];
+        
+        IByteBuffer* buffer = new ByteBuffer_iOS(bytes, length);
+        JSONBaseObject* jsonBO = BSONParser::parse(buffer);
+        
+        if (buffer) {
+          Shape* plane = SceneJSShapesParser::parse(JSONGenerator::generate(jsonBO), "file:///textures-A320/");
           if (plane) {
             // Washington, DC
             plane->setPosition(new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
                                               Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
                                               1000) );
-            plane->setScale(100, 100, 100);
+            plane->setScale(500, 500, 500);
             plane->setPitch(Angle::fromDegrees(90));
             _shapesRenderer->addShape(plane);
           }
