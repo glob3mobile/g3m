@@ -167,10 +167,9 @@ public class SceneJSShapesParser
 	java.util.ArrayList<String> keys = jsonObject.keys();
 	if (processedKeys != keys.size())
 	{
-	  for (int i = 0; i < keys.size(); i++)
-	  {
-		System.out.printf("%s\n", keys.get(i));
-	  }
+  //    for (int i = 0; i < keys.size(); i++) {
+  //      printf("%s\n", keys.at(i).c_str());
+  //    }
   
 	  ILogger.instance().logWarning("Not all keys processed in node, processed %i of %i", processedKeys, keys.size());
 	}
