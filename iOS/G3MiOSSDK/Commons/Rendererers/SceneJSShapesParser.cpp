@@ -102,9 +102,9 @@ void SceneJSShapesParser::checkProcessedKeys(const JSONObject* jsonObject,
                                              int processedKeys) const {
   std::vector<std::string> keys = jsonObject->keys();
   if (processedKeys != keys.size()) {
-    for (int i = 0; i < keys.size(); i++) {
-      printf("%s\n", keys.at(i).c_str());
-    }
+//    for (int i = 0; i < keys.size(); i++) {
+//      printf("%s\n", keys.at(i).c_str());
+//    }
 
     ILogger::instance()->logWarning("Not all keys processed in node, processed %i of %i",
                                     processedKeys,
