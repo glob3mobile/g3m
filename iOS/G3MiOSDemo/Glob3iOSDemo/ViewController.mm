@@ -584,8 +584,11 @@ public:
     void run(const G3MContext* context) {
       printf("Running initialization Task\n");
 
-//      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D(Angle::fromDegreesMinutes(37, 47),
-//                                                                Angle::fromDegreesMinutes(-122, 25),
+      
+//      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D(//Angle::fromDegreesMinutes(37, 47),
+//                                                                //Angle::fromDegreesMinutes(-122, 25),
+//                                                                Angle::fromDegrees(37.78333333),
+//                                                                Angle::fromDegrees(-122.41666666666667),
 //                                                                1000000),
 //                                                     TimeInterval::fromSeconds(5));
 
@@ -644,13 +647,13 @@ public:
             const double fromDistance = 50000 * 1.5;
             const double toDistance   = 25000 * 1.5 / 2;
 
-//            const Angle fromAzimuth = Angle::fromDegrees(-90);
-//            const Angle toAzimuth   = Angle::fromDegrees(-90 + 360 + 180);
+            // const Angle fromAzimuth = Angle::fromDegrees(-90);
+            // const Angle toAzimuth   = Angle::fromDegrees(-90 + 360 + 180);
             const Angle fromAzimuth = Angle::fromDegrees(-90);
             const Angle toAzimuth   = Angle::fromDegrees(-90 + 360);
 
-//            const Angle fromAltitude = Angle::fromDegrees(65);
-//            const Angle toAltitude   = Angle::fromDegrees(5);
+            // const Angle fromAltitude = Angle::fromDegrees(65);
+            // const Angle toAltitude   = Angle::fromDegrees(5);
             const Angle fromAltitude = Angle::fromDegrees(30);
             const Angle toAltitude   = Angle::fromDegrees(15);
 

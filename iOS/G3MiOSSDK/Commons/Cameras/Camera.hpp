@@ -236,7 +236,7 @@ public:
 
   void orbitTo(const Vector3D& pos);
   void orbitTo(const Geodetic3D& g3d) {
-    orbitTo(_planet->toCartesian(g3d));
+    orbitTo( _planet->toCartesian(g3d) );
   }
 
   /**
