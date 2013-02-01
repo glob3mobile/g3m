@@ -41,6 +41,7 @@ public class SingleDragEffect extends EffectWithForce
 
   public void stop(G3MRenderContext rc, TimeInterval when)
   {
+	rc.getNextCamera().rotateWithAxis(_axis, Angle.fromDegrees(getForce()));
   }
 
   public void cancel(TimeInterval when)

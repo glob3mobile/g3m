@@ -50,7 +50,7 @@ public class ShapeOrbitCameraEffect extends EffectWithDuration
   public final void doStep(G3MRenderContext rc, TimeInterval when)
   {
 	final double alpha = pace(percentDone(when));
-  //  const double alpha = percentDone(when);
+	//  const double alpha = percentDone(when);
   
 	final Geodetic3D center = _shape.getPosition();
   
@@ -64,6 +64,14 @@ public class ShapeOrbitCameraEffect extends EffectWithDuration
   public final void cancel(TimeInterval when)
   {
 	// do nothing
+  }
+
+  public void stop(G3MRenderContext rc, TimeInterval when)
+  {
+	final Geodetic3D center = _shape.getPosition();
+  
+	rc.getNextCamera().setPointOfView(center, _toDistance, Angle.fromRadians(_toAzimuthInRadians), Angle.fromRadians(_toAltitudeInRadians));
+  
   }
 
 }
