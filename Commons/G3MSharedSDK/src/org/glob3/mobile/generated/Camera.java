@@ -264,7 +264,7 @@ public class Camera
 //ORIGINAL LINE: const Frustum* const getFrustumInModelCoordinates() const
   public final Frustum getFrustumInModelCoordinates()
   {
-//    return getFrustumMC();
+	//    return getFrustumMC();
 	if (_dirtyFlags._frustumMC)
 	{
 	  _dirtyFlags._frustumMC = false;
@@ -410,6 +410,14 @@ public class Camera
 	orbitTo(_planet.toCartesian(g3d));
   }
 
+  /**
+   This method put the camera pointing to given center, at the given distance, using the given angles.
+
+   The situation is like in the figure of this url:
+	  http: //en.wikipedia.org/wiki/Azimuth
+
+   At the end, camera will be in the 'Star' point, looking at the 'Observer' point.
+   */
   public final void setPointOfView(Geodetic3D center, double distance, Angle azimuth, Angle altitude)
   {
 	// TODO_deal_with_cases_when_center_in_poles
@@ -426,13 +434,6 @@ public class Camera
 	setUp(finalUp.asMutableVector3D());
 	_dirtyFlags.setAll(true);
   }
-  // This method put the camera pointing to given center,
-  // at the given distance, using the given angles.
-  // The situation is like in the figure of this url:
-  // http://en.wikipedia.org/wiki/Azimuth
-  // At the end, camera will be in the 'Star' point,
-  // looking at the 'Observer' point.
-
 
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -513,7 +514,7 @@ public class Camera
 	}
   }
 
-  // data to compute frustum                 
+  // data to compute frustum
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: FrustumData getFrustumData() const
   private FrustumData getFrustumData()
@@ -526,7 +527,7 @@ public class Camera
 	return _frustumData;
   }
 
-  // opengl projection matrix       
+  // opengl projection matrix
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: MutableMatrix44D getProjectionMatrix() const
   private MutableMatrix44D getProjectionMatrix()
@@ -552,7 +553,7 @@ public class Camera
 	return _modelMatrix;
   }
 
-  // multiplication of model * projection 
+  // multiplication of model * projection
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: MutableMatrix44D getModelViewMatrix() const
   private MutableMatrix44D getModelViewMatrix()
@@ -678,18 +679,18 @@ public class Camera
   //void calculateCachedValues();
 
   /*void cleanCachedValues() {
-	_dirtyCachedValues = true;
-	//    if (_frustum != NULL) {
-	//      delete _frustum;
-	//      _frustum = NULL;
-	//    }
-	if (_frustumInModelCoordinates != NULL) {
-#ifdef C_CODE
-	  delete _frustumInModelCoordinates;
-#endif
-	  _frustumInModelCoordinates = NULL;
-	}
-  }*/
+   _dirtyCachedValues = true;
+   //    if (_frustum != NULL) {
+   //      delete _frustum;
+   //      _frustum = NULL;
+   //    }
+   if (_frustumInModelCoordinates != NULL) {
+   #ifdef C_CODE
+   delete _frustumInModelCoordinates;
+   #endif
+   _frustumInModelCoordinates = NULL;
+   }
+   }*/
 
 
 

@@ -138,7 +138,6 @@ public abstract class Shape implements EffectTarget
 	cleanTransformMatrix();
   }
 
-
   public final void setScale(double scaleX, double scaleY, double scaleZ)
   {
 	_scaleX = scaleX;
@@ -182,6 +181,13 @@ public abstract class Shape implements EffectTarget
 	setAnimatedScale(duration, scale._x, scale._y, scale._z);
   }
 
+  public final void orbitCamera(TimeInterval duration, double fromDistance, double toDistance, Angle fromAzimuth, Angle toAzimuth, Angle fromAltitude, Angle toAltitude)
+  {
+	if (_pendingEffect != null)
+		_pendingEffect.dispose();
+  
+	_pendingEffect = new ShapeOrbitCameraEffect(duration, this, fromDistance, toDistance, fromAzimuth, toAzimuth, fromAltitude, toAltitude);
+  }
 
   public final void render(G3MRenderContext rc, GLState parentState)
   {
