@@ -37,7 +37,9 @@ public:
   }
   
   virtual void stop(const G3MRenderContext *rc,
-                    const TimeInterval& when) { }
+                    const TimeInterval& when) {
+    rc->getNextCamera()->rotateWithAxis(_axis, Angle::fromDegrees(getForce()));
+  }
   
   virtual void cancel(const TimeInterval& when) {
     // do nothing, just leave the effect in the intermediate state

@@ -125,7 +125,7 @@
 		CF527E23162E35BA00E0BDE0 /* IGLUniformID.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D80D3A5D160A0A47004831C5 /* IGLUniformID.hpp */; settings = {ATTRIBUTES = (); }; };
 		CF55B0011677A0CB00BA6221 /* GLState.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CC8EFFFC163BE8A0006586B0 /* GLState.hpp */; settings = {ATTRIBUTES = (); }; };
 		CF55B0021677A0CB00BA6221 /* ShaderProgram.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CC733B461637EF040035C4CC /* ShaderProgram.hpp */; settings = {ATTRIBUTES = (); }; };
-		CF55B0031677A0CB00BA6221 /* GoToPositionEffect.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8EB78831637F6B500C4EB57 /* GoToPositionEffect.hpp */; settings = {ATTRIBUTES = (); }; };
+		CF55B0031677A0CB00BA6221 /* CameraGoToPositionEffect.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8EB78831637F6B500C4EB57 /* CameraGoToPositionEffect.hpp */; settings = {ATTRIBUTES = (); }; };
 		CF59DF8F15C04AFC002173EC /* ILogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF59DF8E15C04AFC002173EC /* ILogger.cpp */; };
 		CF5A8A321656B67F00508C38 /* BoxShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF5A8A301656B67F00508C38 /* BoxShape.cpp */; };
 		CF5A8A331656B67F00508C38 /* BoxShape.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF5A8A311656B67F00508C38 /* BoxShape.hpp */; settings = {ATTRIBUTES = (); }; };
@@ -696,7 +696,7 @@
 		D8E17DD515FE2ABF00C980E6 /* IByteBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IByteBuffer.hpp; path = Commons/Interfaces/IByteBuffer.hpp; sourceTree = "<group>"; };
 		D8E17DDC15FE2B4F00C980E6 /* ByteBuffer_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ByteBuffer_iOS.hpp; path = Specific/Derived/ByteBuffer_iOS.hpp; sourceTree = "<group>"; };
 		D8E76950160742FD008EC7B9 /* GLConstants.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLConstants.hpp; sourceTree = "<group>"; };
-		D8EB78831637F6B500C4EB57 /* GoToPositionEffect.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = GoToPositionEffect.hpp; path = Commons/Basic/GoToPositionEffect.hpp; sourceTree = "<group>"; };
+		D8EB78831637F6B500C4EB57 /* CameraGoToPositionEffect.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = CameraGoToPositionEffect.hpp; path = Commons/Basic/CameraGoToPositionEffect.hpp; sourceTree = "<group>"; };
 		D8EEF3B51577924D003FEB5E /* libG3MiOSSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libG3MiOSSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8EEF3B81577924D003FEB5E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D8EEF3BC1577924D003FEB5E /* G3MiOSSDK-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "G3MiOSSDK-Prefix.pch"; sourceTree = "<group>"; };
@@ -839,7 +839,7 @@
 				D88B5E5115C162AF0083A43F /* G3MWidget.hpp */,
 				CF2CDD971678292E002A78A9 /* GInitializationTask.cpp */,
 				CF2CDD981678292E002A78A9 /* GInitializationTask.hpp */,
-				D8EB78831637F6B500C4EB57 /* GoToPositionEffect.hpp */,
+				D8EB78831637F6B500C4EB57 /* CameraGoToPositionEffect.hpp */,
 				CF527E19162E2B4200E0BDE0 /* GTask.cpp */,
 				CF527E1A162E2B4200E0BDE0 /* GTask.hpp */,
 				CF9D2D8615F7D3C100B5CE2E /* IBuffer.cpp */,
@@ -1275,7 +1275,7 @@
 				CF2CDD9A1678292E002A78A9 /* GInitializationTask.hpp in Headers */,
 				CF55B0011677A0CB00BA6221 /* GLState.hpp in Headers */,
 				CF55B0021677A0CB00BA6221 /* ShaderProgram.hpp in Headers */,
-				CF55B0031677A0CB00BA6221 /* GoToPositionEffect.hpp in Headers */,
+				CF55B0031677A0CB00BA6221 /* CameraGoToPositionEffect.hpp in Headers */,
 				A74072CF161EEEA300182A39 /* BingLayer.hpp in Headers */,
 				CF00E445166FD77E0098CABD /* IImageListener.hpp in Headers */,
 				CFDB7B74166AB99B00756DE8 /* DirectMesh.hpp in Headers */,

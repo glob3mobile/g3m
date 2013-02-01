@@ -1,33 +1,32 @@
 //
-//  GoToPositionEffect.h
+//  CameraGoToPositionEffect.hpp
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 24/10/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_GoToPositionEffect_h
-#define G3MiOSSDK_GoToPositionEffect_h
+#ifndef G3MiOSSDK_CameraGoToPositionEffect
+#define G3MiOSSDK_CameraGoToPositionEffect
 
 #include "Geodetic3D.hpp"
 
 
-class GoToPositionEffect : public EffectWithDuration {
+class CameraGoToPositionEffect : public EffectWithDuration {
+private:
+  const Geodetic3D _initialPos;
+  const Geodetic3D _finalPos;
+
 public:
 
-  GoToPositionEffect(const TimeInterval& duration,
-                     const Geodetic3D& initialPos,
-                     const Geodetic3D& finalPos):
+  CameraGoToPositionEffect(const TimeInterval& duration,
+                           const Geodetic3D& initialPos,
+                           const Geodetic3D& finalPos):
   EffectWithDuration(duration),
   _initialPos(initialPos),
   _finalPos(finalPos)
   {
   }
-
-//  virtual void start(const G3MRenderContext *rc,
-//                     const TimeInterval& when) {
-//    EffectWithDuration::start(rc, when);
-//  }
 
   virtual void doStep(const G3MRenderContext *rc,
                       const TimeInterval& when) {
@@ -37,24 +36,18 @@ public:
 
     const Geodetic3D g = Geodetic3D::interpolation(_initialPos, _finalPos, percent);
 
-    //camera->setPosition(g);
     camera->orbitTo(g);
   }
 
   virtual void stop(const G3MRenderContext *rc,
                     const TimeInterval& when) {
     rc->getNextCamera()->orbitTo(_finalPos);
-    EffectWithDuration::stop(rc, when);
   }
 
   virtual void cancel(const TimeInterval& when) {
     // do nothing, just leave the effect in the intermediate state
   }
-
-private:
-  const Geodetic3D _initialPos;
-  const Geodetic3D _finalPos;
+  
 };
-
 
 #endif

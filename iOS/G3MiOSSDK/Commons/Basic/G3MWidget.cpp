@@ -23,7 +23,7 @@
 #include "IJSONParser.hpp"
 #include "GLConstants.hpp"
 #include "PeriodicalTask.hpp"
-#include "GoToPositionEffect.hpp"
+#include "CameraGoToPositionEffect.hpp"
 #include "CameraRenderer.hpp"
 #include "CPUTextureBuilder.hpp"
 #include "IStorage.hpp"
@@ -523,7 +523,7 @@ void G3MWidget::setAnimatedCameraPosition(const Geodetic3D& position,
 
   stopCameraAnimation();
 
-  _effectsScheduler->startEffect(new GoToPositionEffect(interval, startPosition, endPosition),
+  _effectsScheduler->startEffect(new CameraGoToPositionEffect(interval, startPosition, endPosition),
                                  _nextCamera->getEffectTarget());
 }
 
