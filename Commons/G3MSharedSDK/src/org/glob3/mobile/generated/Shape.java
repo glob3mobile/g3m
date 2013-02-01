@@ -83,10 +83,12 @@ public abstract class Shape implements EffectTarget
   
 	if (_position != null)
 		_position.dispose();
+  
 	if (_heading != null)
 		_heading.dispose();
 	if (_pitch != null)
 		_pitch.dispose();
+  
 	if (_transformMatrix != null)
 		_transformMatrix.dispose();
   }

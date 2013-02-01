@@ -166,18 +166,18 @@ public class Ellipsoid
 //ORIGINAL LINE: Geodetic3D toGeodetic3D(const Vector3D& position) const
   public final Geodetic3D toGeodetic3D(Vector3D position)
   {
-	Vector3D p = scaleToGeodeticSurface(position);
-	Vector3D h = position.sub(p);
+	final Vector3D p = scaleToGeodeticSurface(position);
+	final Vector3D h = position.sub(p);
   
-	double height;
-	if (h.dot(position) < 0)
-	{
-	  height = -1 * h.length();
-	}
-	else
-	{
-	  height = h.length();
-	}
+  //  double height;
+  //  if (h.dot(position) < 0) {
+  //    height = -1 * h.length();
+  //  }
+  //  else {
+  //    height = h.length();
+  //  }
+  
+	final double height = (h.dot(position) < 0) ? -1 * h.length() : h.length();
   
 	return new Geodetic3D(toGeodetic2D(p), height);
   }

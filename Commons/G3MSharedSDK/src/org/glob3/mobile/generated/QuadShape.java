@@ -22,7 +22,7 @@ package org.glob3.mobile.generated;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IGLTextureId;
 
-public class QuadShape extends MeshShape
+public class QuadShape extends AbstractMeshShape
 {
   private final String _textureFilename;
   private IImage _textureImage;
