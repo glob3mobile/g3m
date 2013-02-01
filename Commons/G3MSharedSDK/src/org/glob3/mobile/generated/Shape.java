@@ -203,9 +203,8 @@ public abstract class Shape implements EffectTarget
 	  {
 		EffectsScheduler effectsScheduler = rc.getEffectsScheduler();
   
-		effectsScheduler.cancellAllEffectsFor(this);
-  
 		EffectTarget target = _pendingEffectTargetIsCamera ? rc.getNextCamera().getEffectTarget() : this;
+		effectsScheduler.cancellAllEffectsFor(target);
 		effectsScheduler.startEffect(_pendingEffect, target);
   
 		_pendingEffect = null;

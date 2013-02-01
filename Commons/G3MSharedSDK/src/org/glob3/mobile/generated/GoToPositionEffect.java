@@ -20,27 +20,26 @@ public class GoToPositionEffect extends EffectWithDuration
 	  _finalPos = new Geodetic3D(finalPos);
   }
 
-  public void start(G3MRenderContext rc, TimeInterval when)
-  {
-	super.start(rc, when);
-  }
+//  virtual void start(const G3MRenderContext *rc,
+//                     const TimeInterval& when) {
+//    EffectWithDuration::start(rc, when);
+//  }
 
   public void doStep(G3MRenderContext rc, TimeInterval when)
   {
-	//const double percent = gently(percentDone(when), 0.2, 0.9);
 	//const double percent = pace( percentDone(when) );
 	final double percent = percentDone(when);
 	Camera camera = rc.getNextCamera();
 
-	Geodetic3D g = Geodetic3D.interpolation(_initialPos, _finalPos, percent);
+	final Geodetic3D g = Geodetic3D.interpolation(_initialPos, _finalPos, percent);
 
-	//printf("EFFECT %f - %f, %f, %f\n", percent, g.latitude()._degrees, g.longitude()._degrees, g.height());
 	//camera->setPosition(g);
 	camera.orbitTo(g);
   }
 
   public void stop(G3MRenderContext rc, TimeInterval when)
   {
+	rc.getNextCamera().orbitTo(_finalPos);
 	super.stop(rc, when);
   }
 
@@ -49,6 +48,6 @@ public class GoToPositionEffect extends EffectWithDuration
 	// do nothing, just leave the effect in the intermediate state
   }
 
-  private Geodetic3D _initialPos ;
-  private Geodetic3D _finalPos ;
+  private final Geodetic3D _initialPos ;
+  private final Geodetic3D _finalPos ;
 }
