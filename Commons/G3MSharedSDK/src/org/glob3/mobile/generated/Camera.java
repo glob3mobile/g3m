@@ -432,7 +432,7 @@ public class Camera
 	setCartesianPosition(position.asMutableVector3D());
 	setCenter(cartesianCenter.asMutableVector3D());
 	setUp(finalUp.asMutableVector3D());
-	_dirtyFlags.setAll(true);
+  //  _dirtyFlags.setAll(true);
   }
 
 

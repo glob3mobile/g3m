@@ -49,8 +49,8 @@ public class ShapeOrbitCameraEffect extends EffectWithDuration
 
   public final void doStep(G3MRenderContext rc, TimeInterval when)
   {
-  //  const double alpha = pace( percentDone(when) );
-	final double alpha = percentDone(when);
+	final double alpha = pace(percentDone(when));
+  //  const double alpha = percentDone(when);
   
 	final Geodetic3D center = _shape.getPosition();
   

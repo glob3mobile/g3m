@@ -55,6 +55,7 @@ public abstract class Shape implements EffectTarget
   }
 
   private Effect _pendingEffect;
+  private boolean _pendingEffectTargetIsCamera;
 
   protected void cleanTransformMatrix()
   {
@@ -73,6 +74,7 @@ public abstract class Shape implements EffectTarget
 	  _scaleZ = 1;
 	  _transformMatrix = null;
 	  _pendingEffect = null;
+	  _pendingEffectTargetIsCamera = false;
 
   }
 
@@ -164,6 +166,8 @@ public abstract class Shape implements EffectTarget
 		_pendingEffect.dispose();
   
 	_pendingEffect = new ShapeScaleEffect(duration, this, _scaleX, _scaleY, _scaleZ, scaleX, scaleY, scaleZ);
+  
+	_pendingEffectTargetIsCamera = false;
   }
 
   public final void setAnimatedScale(double scaleX, double scaleY, double scaleZ)
@@ -187,6 +191,8 @@ public abstract class Shape implements EffectTarget
 		_pendingEffect.dispose();
   
 	_pendingEffect = new ShapeOrbitCameraEffect(duration, this, fromDistance, toDistance, fromAzimuth, toAzimuth, fromAltitude, toAltitude);
+  
+	_pendingEffectTargetIsCamera = true;
   }
 
   public final void render(G3MRenderContext rc, GLState parentState)
@@ -198,7 +204,9 @@ public abstract class Shape implements EffectTarget
 		EffectsScheduler effectsScheduler = rc.getEffectsScheduler();
   
 		effectsScheduler.cancellAllEffectsFor(this);
-		effectsScheduler.startEffect(_pendingEffect, this);
+  
+		EffectTarget target = _pendingEffectTargetIsCamera ? rc.getNextCamera().getEffectTarget() : this;
+		effectsScheduler.startEffect(_pendingEffect, target);
   
 		_pendingEffect = null;
 	  }
