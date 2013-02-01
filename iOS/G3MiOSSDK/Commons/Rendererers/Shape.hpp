@@ -83,7 +83,6 @@ public:
     cleanTransformMatrix();
   }
 
-
   void setScale(double scaleX,
                 double scaleY,
                 double scaleZ) {
@@ -131,6 +130,10 @@ public:
                      scale._z);
   }
 
+  void orbitCamera(const TimeInterval& duration,
+                   double fromDistance,       double toDistance,
+                   const Angle& fromAzimuth,  const Angle& toAzimuth,
+                   const Angle& fromAltitude, const Angle& toAltitude);
 
   void render(const G3MRenderContext* rc,
               const GLState& parentState);

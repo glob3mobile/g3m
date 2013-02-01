@@ -45,6 +45,8 @@
 #include "IShortBuffer.hpp"
 #include "SimpleCameraConstrainer.hpp"
 
+#include "G3MWidget.hpp"
+
 class TestVisibleSectorListener : public VisibleSectorListener {
 public:
   void onVisibleSectorChange(const Sector& visibleSector,
@@ -341,7 +343,7 @@ public:
 //                                  false,
 //                                  NULL,
 //                                  TimeInterval::fromDays(30));
-//    bing->setEnable(true);
+    bing->setEnable(true);
     layerSet->addLayer(bing);
   }
 
@@ -437,7 +439,7 @@ public:
   const bool renderDebug = false;
   const bool useTilesSplitBudget = true;
   const bool forceTopLevelTilesRenderOnStart = true;
-  const bool incrementalTileQuality = false;
+  const bool incrementalTileQuality = true;
 
   return TilesRenderParameters::createDefault(renderDebug,
                                               useTilesSplitBudget,
@@ -582,10 +584,10 @@ public:
     void run(const G3MContext* context) {
       printf("Running initialization Task\n");
 
-      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D(Angle::fromDegreesMinutes(37, 47),
-                                                                Angle::fromDegreesMinutes(-122, 25),
-                                                                1000000),
-                                                     TimeInterval::fromSeconds(5));
+//      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D(Angle::fromDegreesMinutes(37, 47),
+//                                                                Angle::fromDegreesMinutes(-122, 25),
+//                                                                1000000),
+//                                                     TimeInterval::fromSeconds(5));
 
       /*
       NSString *bsonFilePath = [[NSBundle mainBundle] pathForResource: @"test"
@@ -641,33 +643,27 @@ public:
             plane->setScale(scale, scale, scale);
             plane->setPitch(Angle::fromDegrees(90));
             _shapesRenderer->addShape(plane);
+
+
+            const double fromDistance = 50000 * 1.5;
+            const double toDistance   = 25000 * 1.5 / 2;
+
+            const Angle fromAzimuth = Angle::fromDegrees(-90);
+            const Angle toAzimuth   = Angle::fromDegrees(-90 + 360 + 180);
+
+            const Angle fromAltitude = Angle::fromDegrees(65);
+            const Angle toAltitude   = Angle::fromDegrees(5);
+
+            plane->orbitCamera(TimeInterval::fromSeconds(20),
+                               fromDistance, toDistance,
+                               fromAzimuth,  toAzimuth,
+                               fromAltitude, toAltitude);
           }
         }
       }
       /**/
 
       /**/
-
-//      ,"positions":[
-//                    -0.9999992251, 0, -0.5000016093,
-//                    0, 0, 0,
-//                    8.026785281e-07, 0, -0.5,
-//                    -0.9999983907, 0, -1.00000155,
-//                    1.000000834, 0, -0.4999983907,
-//                    1.00000155, 0, -0.9999983907,
-//                    ]
-
-      //                    -1, 0, -0.5,
-      //                    0, 0, 0,
-      //                    0, 0, -0.5,
-
-      //                    -1, 0, -1,
-
-      //                    1, 0, -0.5,
-      //                    1, 0, -1,
-
-
-
       IFloatBuffer* vertices = IFactory::instance()->createFloatBuffer(6 * 3);
       int i =0;
       vertices->put(i++, -1);

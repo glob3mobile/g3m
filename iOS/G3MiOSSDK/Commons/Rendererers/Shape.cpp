@@ -11,6 +11,7 @@
 #include "Planet.hpp"
 
 #include "ShapeScaleEffect.hpp"
+#include "ShapeOrbitCameraEffect.hpp"
 
 Shape::~Shape() {
   delete _pendingEffect;
@@ -80,4 +81,17 @@ void Shape::setAnimatedScale(const TimeInterval& duration,
                                         this,
                                         _scaleX, _scaleY, _scaleZ,
                                         scaleX, scaleY, scaleZ);
+}
+
+void Shape::orbitCamera(const TimeInterval& duration,
+                        double fromDistance,       double toDistance,
+                        const Angle& fromAzimuth,  const Angle& toAzimuth,
+                        const Angle& fromAltitude, const Angle& toAltitude) {
+  delete _pendingEffect;
+
+  _pendingEffect = new ShapeOrbitCameraEffect(duration,
+                                              this,
+                                              fromDistance, toDistance,
+                                              fromAzimuth,  toAzimuth,
+                                              fromAltitude, toAltitude);
 }

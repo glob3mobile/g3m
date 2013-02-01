@@ -238,6 +238,8 @@
 		CFC3BCCA164C6C7300A8D37D /* SGShape.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFC3BCC8164C6C7300A8D37D /* SGShape.hpp */; settings = {ATTRIBUTES = (); }; };
 		CFC54E0F1669766C00E1CD15 /* GEORenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFC54E0D1669766B00E1CD15 /* GEORenderer.cpp */; };
 		CFC54E101669766C00E1CD15 /* GEORenderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFC54E0E1669766B00E1CD15 /* GEORenderer.hpp */; settings = {ATTRIBUTES = (); }; };
+		CFCAEC4916BB20D500CDC17D /* ShapeOrbitCameraEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFCAEC4716BB20D500CDC17D /* ShapeOrbitCameraEffect.cpp */; };
+		CFCAEC4A16BB20D500CDC17D /* ShapeOrbitCameraEffect.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFCAEC4816BB20D500CDC17D /* ShapeOrbitCameraEffect.hpp */; };
 		CFCB5EDA16582BCC007D051A /* CompositeMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFCB5ED816582BCC007D051A /* CompositeMesh.cpp */; };
 		CFCB5EDB16582BCC007D051A /* CompositeMesh.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFCB5ED916582BCC007D051A /* CompositeMesh.hpp */; settings = {ATTRIBUTES = (); }; };
 		CFCE679D15EFB06700B35FE0 /* IThreadUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFCE679B15EFB06700B35FE0 /* IThreadUtils.cpp */; };
@@ -595,6 +597,8 @@
 		CFC3BCC8164C6C7300A8D37D /* SGShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SGShape.hpp; path = Commons/Rendererers/SGShape.hpp; sourceTree = "<group>"; };
 		CFC54E0D1669766B00E1CD15 /* GEORenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEORenderer.cpp; path = Commons/GEO/GEORenderer.cpp; sourceTree = "<group>"; };
 		CFC54E0E1669766B00E1CD15 /* GEORenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEORenderer.hpp; path = Commons/GEO/GEORenderer.hpp; sourceTree = "<group>"; };
+		CFCAEC4716BB20D500CDC17D /* ShapeOrbitCameraEffect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ShapeOrbitCameraEffect.cpp; path = Commons/Rendererers/ShapeOrbitCameraEffect.cpp; sourceTree = "<group>"; };
+		CFCAEC4816BB20D500CDC17D /* ShapeOrbitCameraEffect.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ShapeOrbitCameraEffect.hpp; path = Commons/Rendererers/ShapeOrbitCameraEffect.hpp; sourceTree = "<group>"; };
 		CFCB5ED816582BCC007D051A /* CompositeMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CompositeMesh.cpp; path = Commons/Mesh/CompositeMesh.cpp; sourceTree = "<group>"; };
 		CFCB5ED916582BCC007D051A /* CompositeMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = CompositeMesh.hpp; path = Commons/Mesh/CompositeMesh.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFCE679B15EFB06700B35FE0 /* IThreadUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IThreadUtils.cpp; path = Commons/Basic/IThreadUtils.cpp; sourceTree = "<group>"; };
@@ -1138,6 +1142,8 @@
 				CFA0BB61163DCFF6009185FE /* ShapesRenderer.hpp */,
 				CFBA526A16B9886B00256453 /* MeshShape.cpp */,
 				CFBA526B16B9886B00256453 /* MeshShape.hpp */,
+				CFCAEC4716BB20D500CDC17D /* ShapeOrbitCameraEffect.cpp */,
+				CFCAEC4816BB20D500CDC17D /* ShapeOrbitCameraEffect.hpp */,
 			);
 			name = Shapes;
 			sourceTree = "<group>";
@@ -1452,6 +1458,7 @@
 				CFBA526D16B9886B00256453 /* MeshShape.hpp in Headers */,
 				CFBA53EF16B9B76500256453 /* ICameraConstrainer.hpp in Headers */,
 				CFBA53F316B9B7CD00256453 /* SimpleCameraConstrainer.hpp in Headers */,
+				CFCAEC4A16BB20D500CDC17D /* ShapeOrbitCameraEffect.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1661,6 +1668,7 @@
 				CFBA526C16B9886B00256453 /* MeshShape.cpp in Sources */,
 				CFBA53EE16B9B76500256453 /* ICameraConstrainer.cpp in Sources */,
 				CFBA53F216B9B7CD00256453 /* SimpleCameraConstrainer.cpp in Sources */,
+				CFCAEC4916BB20D500CDC17D /* ShapeOrbitCameraEffect.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

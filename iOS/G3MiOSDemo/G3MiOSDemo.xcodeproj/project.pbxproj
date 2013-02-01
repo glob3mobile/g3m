@@ -166,7 +166,7 @@
 		CFBA538116B9B69A00256453 /* Context.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Context.hpp; path = ../G3MiOSSDK/Commons/Basic/Context.hpp; sourceTree = "<group>"; };
 		CFBA538216B9B69A00256453 /* IByteBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IByteBuffer.hpp; path = ../G3MiOSSDK/Commons/Interfaces/IByteBuffer.hpp; sourceTree = "<group>"; };
 		CFBA538316B9B69A00256453 /* TouchEvent.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TouchEvent.hpp; path = ../G3MiOSSDK/Commons/Basic/TouchEvent.hpp; sourceTree = "<group>"; };
-		CFBA538416B9B69A00256453 /* Angle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Angle.hpp; path = ../G3MiOSSDK/Commons/Geometry/Angle.hpp; sourceTree = "<group>"; };
+		CFBA538416B9B69A00256453 /* Angle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Angle.hpp; path = ../G3MiOSSDK/Commons/Geometry/Angle.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFBA538516B9B69A00256453 /* Ellipsoid.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Ellipsoid.hpp; path = ../G3MiOSSDK/Commons/Geometry/Ellipsoid.hpp; sourceTree = "<group>"; };
 		CFBA538616B9B69A00256453 /* Geodetic2D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Geodetic2D.hpp; path = ../G3MiOSSDK/Commons/Geometry/Geodetic2D.hpp; sourceTree = "<group>"; };
 		CFBA538716B9B69A00256453 /* Geodetic3D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Geodetic3D.hpp; path = ../G3MiOSSDK/Commons/Geometry/Geodetic3D.hpp; sourceTree = "<group>"; };
@@ -202,7 +202,7 @@
 		CFBA53A516B9B69A00256453 /* TileTessellator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TileTessellator.hpp; path = ../G3MiOSSDK/Commons/Basic/TileTessellator.hpp; sourceTree = "<group>"; };
 		CFBA53A616B9B69A00256453 /* TimeInterval.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TimeInterval.hpp; path = ../G3MiOSSDK/Commons/Basic/TimeInterval.hpp; sourceTree = "<group>"; };
 		CFBA53A716B9B69A00256453 /* ITimer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ITimer.hpp; path = ../G3MiOSSDK/Commons/Interfaces/ITimer.hpp; sourceTree = "<group>"; };
-		CFBA53A816B9B69A00256453 /* Box.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Box.hpp; path = ../G3MiOSSDK/Commons/Geometry/Box.hpp; sourceTree = "<group>"; };
+		CFBA53A816B9B69A00256453 /* Box.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Box.hpp; path = ../G3MiOSSDK/Commons/Geometry/Box.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFBA53A916B9B69A00256453 /* TileTexturizer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TileTexturizer.hpp; path = ../G3MiOSSDK/Commons/Basic/TileTexturizer.hpp; sourceTree = "<group>"; };
 		CFBA53AA16B9B69A00256453 /* MutableMatrix44D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MutableMatrix44D.hpp; path = ../G3MiOSSDK/Commons/Geometry/MutableMatrix44D.hpp; sourceTree = "<group>"; };
 		CFBA53AB16B9B69A00256453 /* G3MWidget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = G3MWidget.hpp; path = ../G3MiOSSDK/Commons/Basic/G3MWidget.hpp; sourceTree = "<group>"; };
