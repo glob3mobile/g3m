@@ -12,6 +12,7 @@
 
 #include "ShapeScaleEffect.hpp"
 #include "ShapeOrbitCameraEffect.hpp"
+#include "Camera.hpp"
 
 Shape::~Shape() {
   delete _pendingEffect;
@@ -54,7 +55,9 @@ void Shape::render(const G3MRenderContext* rc,
       EffectsScheduler* effectsScheduler = rc->getEffectsScheduler();
 
       effectsScheduler->cancellAllEffectsFor(this);
-      effectsScheduler->startEffect(_pendingEffect, this);
+
+      EffectTarget* target = _pendingEffectTargetIsCamera ? rc->getNextCamera()->getEffectTarget() : this;
+      effectsScheduler->startEffect(_pendingEffect, target);
 
       _pendingEffect = NULL;
     }
@@ -81,6 +84,8 @@ void Shape::setAnimatedScale(const TimeInterval& duration,
                                         this,
                                         _scaleX, _scaleY, _scaleZ,
                                         scaleX, scaleY, scaleZ);
+
+  _pendingEffectTargetIsCamera = false;
 }
 
 void Shape::orbitCamera(const TimeInterval& duration,
@@ -94,4 +99,6 @@ void Shape::orbitCamera(const TimeInterval& duration,
                                               fromDistance, toDistance,
                                               fromAzimuth,  toAzimuth,
                                               fromAltitude, toAltitude);
+
+  _pendingEffectTargetIsCamera = true;
 }

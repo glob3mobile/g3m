@@ -631,10 +631,6 @@ public:
           Shape* plane = SceneJSShapesParser::parseFromJSON(planeJSON, "file:///textures-A320/");
           //Shape* plane = SceneJSShapesParser::parse(planeJSON, "file:///textures-citation/");
           if (plane) {
-//            // San Francisco
-//            plane->setPosition( new Geodetic3D(Angle::fromDegrees(37.78333333),
-//                                               Angle::fromDegrees(-122.41666666666667),
-//                                               500) );
             // Washington, DC
             plane->setPosition(new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
                                               Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
@@ -648,11 +644,15 @@ public:
             const double fromDistance = 50000 * 1.5;
             const double toDistance   = 25000 * 1.5 / 2;
 
+//            const Angle fromAzimuth = Angle::fromDegrees(-90);
+//            const Angle toAzimuth   = Angle::fromDegrees(-90 + 360 + 180);
             const Angle fromAzimuth = Angle::fromDegrees(-90);
-            const Angle toAzimuth   = Angle::fromDegrees(-90 + 360 + 180);
+            const Angle toAzimuth   = Angle::fromDegrees(-90 + 360);
 
-            const Angle fromAltitude = Angle::fromDegrees(65);
-            const Angle toAltitude   = Angle::fromDegrees(5);
+//            const Angle fromAltitude = Angle::fromDegrees(65);
+//            const Angle toAltitude   = Angle::fromDegrees(5);
+            const Angle fromAltitude = Angle::fromDegrees(30);
+            const Angle toAltitude   = Angle::fromDegrees(15);
 
             plane->orbitCamera(TimeInterval::fromSeconds(20),
                                fromDistance, toDistance,

@@ -307,5 +307,5 @@ void Camera::setPointOfView(const Geodetic3D& center,
   setCartesianPosition(position.asMutableVector3D());
   setCenter(cartesianCenter.asMutableVector3D());
   setUp(finalUp.asMutableVector3D());
-  _dirtyFlags.setAll(true);
+//  _dirtyFlags.setAll(true);
 }

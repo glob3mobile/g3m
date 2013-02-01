@@ -40,7 +40,10 @@ protected:
     
 //    return sigmoid(f);
 //    return gently(f, 0.6, 0.85);
-    return gently(f, 0.25, 0.75);
+    const double result = gently(f, 0.25, 0.75);
+    if (result < 0) return 0;
+    if (result > 1) return 1;
+    return result;
   }
   
   double sigmoid(double x) const {

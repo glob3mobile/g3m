@@ -34,6 +34,7 @@ private:
   MutableMatrix44D* getTransformMatrix(const Planet* planet);
 
   Effect* _pendingEffect;
+  bool _pendingEffectTargetIsCamera;
 
 protected:
   virtual void cleanTransformMatrix();
@@ -47,7 +48,9 @@ public:
   _scaleY(1),
   _scaleZ(1),
   _transformMatrix(NULL),
-  _pendingEffect(NULL) {
+  _pendingEffect(NULL),
+  _pendingEffectTargetIsCamera(false)
+  {
 
   }
 
