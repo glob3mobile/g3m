@@ -410,6 +410,31 @@ public class Camera
 	orbitTo(_planet.toCartesian(g3d));
   }
 
+  public final void setPointOfView(Geodetic3D center, double distance, Angle azimuth, Angle altitude)
+  {
+	// TODO_deal_with_cases_when_center_in_poles
+	final Vector3D cartesianCenter = _planet.toCartesian(center);
+	final Vector3D normal = _planet.geodeticSurfaceNormal(center);
+	final Vector3D north2D = Vector3D.upZ().projectionInPlane(normal);
+	final Vector3D orientedVector = north2D.rotateAroundAxis(normal, azimuth.times(-1));
+	final Vector3D axis = orientedVector.cross(normal);
+	final Vector3D finalVector = orientedVector.rotateAroundAxis(axis, altitude);
+	final Vector3D position = cartesianCenter.add(finalVector.normalized().times(distance));
+	final Vector3D finalUp = finalVector.rotateAroundAxis(axis, Angle.fromDegrees(90.0f));
+	setCartesianPosition(position.asMutableVector3D());
+	setCenter(cartesianCenter.asMutableVector3D());
+	setUp(finalUp.asMutableVector3D());
+	_dirtyFlags.setAll(true);
+  }
+  // This method put the camera pointing to given center,
+  // at the given distance, using the given angles.
+  // The situation is like in the figure of this url:
+  // http://en.wikipedia.org/wiki/Azimuth
+  // At the end, camera will be in the 'Star' point,
+  // looking at the 'Observer' point.
+
+
+
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: Angle getHeading(const Vector3D& normal) const
   private Angle getHeading(Vector3D normal)

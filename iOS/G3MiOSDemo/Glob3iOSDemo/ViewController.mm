@@ -628,7 +628,7 @@ public:
                                                              error: nil];
         if (nsPlaneJSON) {
           std::string planeJSON = [nsPlaneJSON UTF8String];
-          Shape* plane = SceneJSShapesParser::parse(planeJSON, "file:///textures-A320/");
+          Shape* plane = SceneJSShapesParser::parseFromJSON(planeJSON, "file:///textures-A320/");
           //Shape* plane = SceneJSShapesParser::parse(planeJSON, "file:///textures-citation/");
           if (plane) {
 //            // San Francisco

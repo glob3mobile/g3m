@@ -48,17 +48,11 @@ public class SceneJSShapesParser
   private Shape _rootShape;
   private final String _uriPrefix;
 
-  private SceneJSShapesParser(String json, String uriPrefix)
+  private SceneJSShapesParser(JSONBaseObject jsonObject, String uriPrefix)
   {
 	  _uriPrefix = uriPrefix;
 	  _rootShape = null;
-	pvtParse(json);
-  }
-  private SceneJSShapesParser(IByteBuffer json, String uriPrefix)
-  {
-	  _uriPrefix = uriPrefix;
-	  _rootShape = null;
-	pvtParse(json.getAsString());
+	pvtParse(jsonObject);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -68,21 +62,19 @@ public class SceneJSShapesParser
 	return _rootShape;
   }
 
-  private void pvtParse(String json)
+  private void pvtParse(JSONBaseObject json)
   {
-	JSONBaseObject jsonRootObject = IJSONParser.instance().parse(json);
-  
 	//  _rootShape = toShape(jsonRootObject);
   
-	SGNode node = toNode(jsonRootObject);
+	SGNode node = toNode(json);
   
 	if (node != null)
 	{
 	  _rootShape = new SGShape(node, _uriPrefix);
 	}
   
-	if (jsonRootObject != null)
-		jsonRootObject.dispose();
+	if (json != null)
+		json.dispose();
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -175,10 +167,9 @@ public class SceneJSShapesParser
 	java.util.ArrayList<String> keys = jsonObject.keys();
 	if (processedKeys != keys.size())
 	{
-	  for (int i = 0; i < keys.size(); i++)
-	  {
-		System.out.printf("%s\n", keys.get(i));
-	  }
+  //    for (int i = 0; i < keys.size(); i++) {
+  //      printf("%s\n", keys.at(i).c_str());
+  //    }
   
 	  ILogger.instance().logWarning("Not all keys processed in node, processed %i of %i", processedKeys, keys.size());
 	}
@@ -668,13 +659,27 @@ public class SceneJSShapesParser
   }
 
 
-  public static Shape parse(String json, String uriPrefix)
+  public static Shape parseFromJSONBaseObject(JSONBaseObject jsonObject, String uriPrefix)
   {
-	return new SceneJSShapesParser(json, uriPrefix).getRootShape();
+	return new SceneJSShapesParser(jsonObject, uriPrefix).getRootShape();
   }
-  public static Shape parse(IByteBuffer json, String uriPrefix)
+  public static Shape parseFromJSON(String json, String uriPrefix)
   {
-	return new SceneJSShapesParser(json, uriPrefix).getRootShape();
+	final JSONBaseObject jsonObject = IJSONParser.instance().parse(json);
+  
+	return new SceneJSShapesParser(jsonObject, uriPrefix).getRootShape();
+  }
+  public static Shape parseFromJSON(IByteBuffer json, String uriPrefix)
+  {
+	final JSONBaseObject jsonObject = IJSONParser.instance().parse(json.getAsString());
+  
+	return new SceneJSShapesParser(jsonObject, uriPrefix).getRootShape();
+  }
+  public static Shape parseFromBSON(IByteBuffer bson, String uriPrefix)
+  {
+	final JSONBaseObject jsonObject = BSONParser.parse(bson);
+  
+	return new SceneJSShapesParser(jsonObject, uriPrefix).getRootShape();
   }
 
 }

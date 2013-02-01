@@ -151,10 +151,13 @@ public class MarksRenderer extends LeafRenderer
 	  if (_marks.get(i) == mark)
 	  {
 		pos = i;
+		break;
 	  }
-	  break;
 	}
-	_marks.remove(pos);
+	if (pos != -1)
+	{
+  	_marks.remove(pos);
+	}
   }
 
   public final void removeAllMarks()

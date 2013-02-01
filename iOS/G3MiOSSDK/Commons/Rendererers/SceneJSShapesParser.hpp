@@ -30,16 +30,14 @@ private:
   Shape* _rootShape;
   const std::string& _uriPrefix;
 
-  SceneJSShapesParser(const std::string& json,
-                      const std::string& uriPrefix);
-  SceneJSShapesParser(const IByteBuffer* json,
+  SceneJSShapesParser(const JSONBaseObject* jsonObject,
                       const std::string& uriPrefix);
 
   Shape* getRootShape() const {
     return _rootShape;
   }
 
-  void pvtParse(const std::string& json);
+  void pvtParse(const JSONBaseObject* json);
 
   SGNode* toNode(const JSONBaseObject* jsonBaseObject) const;
 
@@ -61,10 +59,14 @@ private:
 
 public:
 
-  static Shape* parse(const std::string& json,
-                      const std::string& uriPrefix);
-  static Shape* parse(const IByteBuffer* json,
-                      const std::string& uriPrefix);
+  static Shape* parseFromJSONBaseObject(const JSONBaseObject* jsonObject,
+                                    const std::string& uriPrefix);
+  static Shape* parseFromJSON(const std::string& json,
+                              const std::string& uriPrefix);
+  static Shape* parseFromJSON(const IByteBuffer* json,
+                              const std::string& uriPrefix);
+  static Shape* parseFromBSON(IByteBuffer* bson,
+                              const std::string& uriPrefix);
   
 };
 
