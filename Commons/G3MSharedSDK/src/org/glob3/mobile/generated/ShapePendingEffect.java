@@ -10,4 +10,9 @@ public class ShapePendingEffect
 	  _targetIsCamera = targetIsCamera;
 
   }
+
+  public void dispose()
+  {
+
+  }
 }
