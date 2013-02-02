@@ -22,6 +22,9 @@ package org.glob3.mobile.generated;
 //class MutableMatrix44D;
 
 
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class ShapePendingEffect;
+
 public abstract class Shape implements EffectTarget
 {
   private Geodetic3D _position;
@@ -54,8 +57,7 @@ public abstract class Shape implements EffectTarget
 	return _transformMatrix;
   }
 
-  private Effect _pendingEffect;
-  private boolean _pendingEffectTargetIsCamera;
+  private java.util.ArrayList<ShapePendingEffect> _pendingEffects = new java.util.ArrayList<ShapePendingEffect>();
 
   protected void cleanTransformMatrix()
   {
@@ -73,15 +75,18 @@ public abstract class Shape implements EffectTarget
 	  _scaleY = 1;
 	  _scaleZ = 1;
 	  _transformMatrix = null;
-	  _pendingEffect = null;
-	  _pendingEffectTargetIsCamera = false;
 
   }
 
   public void dispose()
   {
-	if (_pendingEffect != null)
-		_pendingEffect.dispose();
+	final int pendingEffectsCount = _pendingEffects.size();
+	for (int i = 0; i < pendingEffectsCount; i++)
+	{
+	  ShapePendingEffect pendingEffect = _pendingEffects.get(i);
+	  if (pendingEffect != null)
+		  pendingEffect.dispose();
+	}
   
 	if (_position != null)
 		_position.dispose();
@@ -124,6 +129,39 @@ public abstract class Shape implements EffectTarget
 	cleanTransformMatrix();
   }
 
+  public final void setAnimatedPosition(TimeInterval duration, Geodetic3D position)
+  {
+	  setAnimatedPosition(duration, position, false);
+  }
+//C++ TO JAVA CONVERTER NOTE: Java does not allow default values for parameters. Overloaded methods are inserted above.
+//ORIGINAL LINE: void setAnimatedPosition(const TimeInterval& duration, const Geodetic3D& position, boolean linearInterpolation =false)
+  public final void setAnimatedPosition(TimeInterval duration, Geodetic3D position, boolean linearInterpolation)
+  {
+	Effect effect = new ShapePositionEffect(duration, this, _position, position, linearInterpolation);
+	_pendingEffects.add(new ShapePendingEffect(effect, false));
+  
+  //  delete _pendingEffect;
+  //
+  //  _pendingEffect = new ShapePositionEffect(duration,
+  //                                           this,
+  //                                           *_position,
+  //                                           position,
+  //                                           linearInterpolation);
+  //
+  //  _pendingEffectTargetIsCamera = false;
+  }
+
+  public final void setAnimatedPosition(Geodetic3D position)
+  {
+	  setAnimatedPosition(position, false);
+  }
+//C++ TO JAVA CONVERTER NOTE: Java does not allow default values for parameters. Overloaded methods are inserted above.
+//ORIGINAL LINE: void setAnimatedPosition(const Geodetic3D& position, boolean linearInterpolation=false)
+  public final void setAnimatedPosition(Geodetic3D position, boolean linearInterpolation)
+  {
+	setAnimatedPosition(TimeInterval.fromSeconds(3), position, linearInterpolation);
+  }
+
   public final void setHeading(Angle heading)
   {
 	if (_heading != null)
@@ -162,12 +200,17 @@ public abstract class Shape implements EffectTarget
 
   public final void setAnimatedScale(TimeInterval duration, double scaleX, double scaleY, double scaleZ)
   {
-	if (_pendingEffect != null)
-		_pendingEffect.dispose();
+	Effect effect = new ShapeScaleEffect(duration, this, _scaleX, _scaleY, _scaleZ, scaleX, scaleY, scaleZ);
+	_pendingEffects.add(new ShapePendingEffect(effect, false));
   
-	_pendingEffect = new ShapeScaleEffect(duration, this, _scaleX, _scaleY, _scaleZ, scaleX, scaleY, scaleZ);
-  
-	_pendingEffectTargetIsCamera = false;
+  //  delete _pendingEffect;
+  //
+  //  _pendingEffect = new ShapeScaleEffect(duration,
+  //                                        this,
+  //                                        _scaleX, _scaleY, _scaleZ,
+  //                                        scaleX, scaleY, scaleZ);
+  //
+  //  _pendingEffectTargetIsCamera = false;
   }
 
   public final void setAnimatedScale(double scaleX, double scaleY, double scaleZ)
@@ -187,28 +230,53 @@ public abstract class Shape implements EffectTarget
 
   public final void orbitCamera(TimeInterval duration, double fromDistance, double toDistance, Angle fromAzimuth, Angle toAzimuth, Angle fromAltitude, Angle toAltitude)
   {
-	if (_pendingEffect != null)
-		_pendingEffect.dispose();
+	Effect effect = new ShapeOrbitCameraEffect(duration, this, fromDistance, toDistance, fromAzimuth, toAzimuth, fromAltitude, toAltitude);
+	_pendingEffects.add(new ShapePendingEffect(effect, true));
   
-	_pendingEffect = new ShapeOrbitCameraEffect(duration, this, fromDistance, toDistance, fromAzimuth, toAzimuth, fromAltitude, toAltitude);
-  
-	_pendingEffectTargetIsCamera = true;
+  //  delete _pendingEffect;
+  //
+  //  _pendingEffect = new ShapeOrbitCameraEffect(duration,
+  //                                              this,
+  //                                              fromDistance, toDistance,
+  //                                              fromAzimuth,  toAzimuth,
+  //                                              fromAltitude, toAltitude);
+  //
+  //  _pendingEffectTargetIsCamera = true;
   }
 
   public final void render(G3MRenderContext rc, GLState parentState)
   {
 	if (isReadyToRender(rc))
 	{
-	  if (_pendingEffect != null)
+  
+	  final int pendingEffectsCount = _pendingEffects.size();
+	  if (pendingEffectsCount > 0)
 	  {
 		EffectsScheduler effectsScheduler = rc.getEffectsScheduler();
+		for (int i = 0; i < pendingEffectsCount; i++)
+		{
+		  ShapePendingEffect pendingEffect = _pendingEffects.get(i);
+		  if (pendingEffect != null)
+		  {
+			EffectTarget target = pendingEffect._targetIsCamera ? rc.getNextCamera().getEffectTarget() : this;
+			effectsScheduler.cancellAllEffectsFor(target);
+			effectsScheduler.startEffect(pendingEffect._effect, target);
   
-		EffectTarget target = _pendingEffectTargetIsCamera ? rc.getNextCamera().getEffectTarget() : this;
-		effectsScheduler.cancellAllEffectsFor(target);
-		effectsScheduler.startEffect(_pendingEffect, target);
-  
-		_pendingEffect = null;
+			if (pendingEffect != null)
+				pendingEffect.dispose();
+		  }
+		}
+		_pendingEffects.clear();
 	  }
+  
+  //    if (_pendingEffect != NULL) {
+  //
+  //      EffectTarget* target = _pendingEffectTargetIsCamera ? rc->getNextCamera()->getEffectTarget() : this;
+  //      effectsScheduler->cancellAllEffectsFor(target);
+  //      effectsScheduler->startEffect(_pendingEffect, target);
+  //
+  //      _pendingEffect = NULL;
+  //    }
   
 	  GL gl = rc.getGL();
   

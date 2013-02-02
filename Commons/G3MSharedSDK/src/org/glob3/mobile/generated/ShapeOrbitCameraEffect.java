@@ -66,7 +66,7 @@ public class ShapeOrbitCameraEffect extends EffectWithDuration
 	// do nothing
   }
 
-  public void stop(G3MRenderContext rc, TimeInterval when)
+  public final void stop(G3MRenderContext rc, TimeInterval when)
   {
 	final Geodetic3D center = _shape.getPosition();
   
