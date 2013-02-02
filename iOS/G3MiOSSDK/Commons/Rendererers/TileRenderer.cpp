@@ -16,7 +16,7 @@
 #include "TouchEvent.hpp"
 #include "LayerSet.hpp"
 #include "VisibleSectorListener.hpp"
-
+#include "IThreadUtils.hpp"
 
 class VisibleSectorListenerEntry {
 private:
@@ -125,7 +125,24 @@ void TileRenderer::recreateTiles() {
 }
 
 void TileRenderer::changed(const LayerSet* layerSet) {
-  recreateTiles();
+  // recreateTiles();
+
+  // recreateTiles() delete tiles, then meshes, and delete textures from the GPU so it has to be executed in the OpenGL thread
+  class RecreateTilesTask : public GTask {
+  private:
+    TileRenderer* _tileRenderer;
+  public:
+    RecreateTilesTask(TileRenderer* tileRenderer) :
+    _tileRenderer(tileRenderer)
+    {
+    }
+
+    void run(const G3MContext* context) {
+      _tileRenderer->recreateTiles();
+    }
+  };
+  _context->getThreadUtils()->invokeInRendererThread(new RecreateTilesTask(this), true);
+  
 }
 
 TileRenderer::~TileRenderer() {
