@@ -42,10 +42,12 @@ public:
     return Geodetic3D(Angle::fromDegrees(lat), Angle::fromDegrees(lon), height);
   }
   
-  static Geodetic3D interpolation(const Geodetic3D& ini, const Geodetic3D& end, double v){
-    return Geodetic3D(Angle::interpolation(ini.latitude(),  end.latitude(),  v),
-                      Angle::interpolation(ini.longitude(), end.longitude(), v),
-                      (1-v) * ini.height() + v * end.height() );
+  static Geodetic3D interpolation(const Geodetic3D& from,
+                                  const Geodetic3D& to,
+                                  double alpha){
+    return Geodetic3D(Angle::interpolation(from.latitude(),  to.latitude(),  alpha),
+                      Angle::interpolation(from.longitude(), to.longitude(), alpha),
+                      ((1.0 - alpha) * from.height()) + (alpha * to.height()) );
   }
   
   Geodetic3D(const Angle& latitude,

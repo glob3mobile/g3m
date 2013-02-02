@@ -521,21 +521,20 @@ const IGLTextureId* GL::getGLTextureId() {
 
   if (_texturesIdBag.size() == 0) {
     //const int bugdetSize = 256;
-    const int bugdetSize = 10240;
-
-    ILogger::instance()->logInfo("= Creating %d texturesIds...",
-                                 bugdetSize);
+    const int bugdetSize = 1024;
+    //const int bugdetSize = 10240;
 
     const std::vector<IGLTextureId*> ids = _nativeGL->genTextures(bugdetSize);
-
-    for (int i = 0; i < ids.size(); i++) {
+    const int idsCount = ids.size();
+    for (int i = 0; i < idsCount; i++) {
+      // ILogger::instance()->logInfo("  = Created textureId=%s", ids[i]->description().c_str());
       _texturesIdBag.push_front(ids[i]);
     }
 
-    _texturesIdAllocationCounter += ids.size();
+    _texturesIdAllocationCounter += idsCount;
 
     ILogger::instance()->logInfo("= Created %d texturesIds (accumulated %d).",
-                                 bugdetSize,
+                                 idsCount,
                                  _texturesIdAllocationCounter);
   }
 
@@ -565,15 +564,17 @@ void GL::deleteTexture(const IGLTextureId* texture) {
   }
 
   if (texture != NULL) {
-    //    if ( _nativeGL->deleteTexture(texture) ) {
-    //      _texturesIdBag.push_back(texture);
-    //    }
+    if ( _nativeGL->deleteTexture(texture) ) {
+      _texturesIdBag.push_back(texture);
+    }
+
+    //ILogger::instance()->logInfo("  = delete textureId=%s", texture->description().c_str());
 
     int __TESTING_TEXTUREIDs_DELETION;
-    //_nativeGL->deleteTexture(texture);
-    _texturesIdBag.push_back(texture);
-
-    //    _texturesIdTakeCounter++;
+//    //_nativeGL->deleteTexture(texture);
+//    _texturesIdBag.push_back(texture);
+//
+//    //    _texturesIdTakeCounter++;
   }
 }
 

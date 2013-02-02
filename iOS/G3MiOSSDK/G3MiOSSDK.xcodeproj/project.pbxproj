@@ -133,6 +133,8 @@
 		CF5EA5D5163DDC7900D8F797 /* Shape.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF5EA5D3163DDC7900D8F797 /* Shape.hpp */; settings = {ATTRIBUTES = (); }; };
 		CF5EA5D8163DDCB900D8F797 /* QuadShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF5EA5D6163DDCB900D8F797 /* QuadShape.cpp */; };
 		CF5EA5D9163DDCB900D8F797 /* QuadShape.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF5EA5D7163DDCB900D8F797 /* QuadShape.hpp */; settings = {ATTRIBUTES = (); }; };
+		CF65361316BC41B2001F9139 /* ShapePositionEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF65361116BC41B2001F9139 /* ShapePositionEffect.cpp */; };
+		CF65361416BC41B2001F9139 /* ShapePositionEffect.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF65361216BC41B2001F9139 /* ShapePositionEffect.hpp */; };
 		CF6873A515F77F54002EDFD0 /* IFloatBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6873A315F77F54002EDFD0 /* IFloatBuffer.cpp */; };
 		CF6873A615F77F54002EDFD0 /* IFloatBuffer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF6873A415F77F54002EDFD0 /* IFloatBuffer.hpp */; settings = {ATTRIBUTES = (); }; };
 		CF6873AA15F77FFC002EDFD0 /* IIntBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6873A815F77FFC002EDFD0 /* IIntBuffer.cpp */; };
@@ -501,6 +503,8 @@
 		CF5EA5D3163DDC7900D8F797 /* Shape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Shape.hpp; path = Commons/Rendererers/Shape.hpp; sourceTree = "<group>"; };
 		CF5EA5D6163DDCB900D8F797 /* QuadShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = QuadShape.cpp; path = Commons/Rendererers/QuadShape.cpp; sourceTree = "<group>"; };
 		CF5EA5D7163DDCB900D8F797 /* QuadShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = QuadShape.hpp; path = Commons/Rendererers/QuadShape.hpp; sourceTree = "<group>"; };
+		CF65361116BC41B2001F9139 /* ShapePositionEffect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ShapePositionEffect.cpp; path = Commons/Rendererers/ShapePositionEffect.cpp; sourceTree = "<group>"; };
+		CF65361216BC41B2001F9139 /* ShapePositionEffect.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ShapePositionEffect.hpp; path = Commons/Rendererers/ShapePositionEffect.hpp; sourceTree = "<group>"; };
 		CF6873A315F77F54002EDFD0 /* IFloatBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IFloatBuffer.cpp; path = Commons/Basic/IFloatBuffer.cpp; sourceTree = "<group>"; };
 		CF6873A415F77F54002EDFD0 /* IFloatBuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IFloatBuffer.hpp; path = Commons/Basic/IFloatBuffer.hpp; sourceTree = "<group>"; };
 		CF6873A815F77FFC002EDFD0 /* IIntBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IIntBuffer.cpp; path = Commons/Basic/IIntBuffer.cpp; sourceTree = "<group>"; };
@@ -1144,6 +1148,8 @@
 				CFBA526B16B9886B00256453 /* MeshShape.hpp */,
 				CFCAEC4716BB20D500CDC17D /* ShapeOrbitCameraEffect.cpp */,
 				CFCAEC4816BB20D500CDC17D /* ShapeOrbitCameraEffect.hpp */,
+				CF65361116BC41B2001F9139 /* ShapePositionEffect.cpp */,
+				CF65361216BC41B2001F9139 /* ShapePositionEffect.hpp */,
 			);
 			name = Shapes;
 			sourceTree = "<group>";
@@ -1459,6 +1465,7 @@
 				CFBA53EF16B9B76500256453 /* ICameraConstrainer.hpp in Headers */,
 				CFBA53F316B9B7CD00256453 /* SimpleCameraConstrainer.hpp in Headers */,
 				CFCAEC4A16BB20D500CDC17D /* ShapeOrbitCameraEffect.hpp in Headers */,
+				CF65361416BC41B2001F9139 /* ShapePositionEffect.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1669,6 +1676,7 @@
 				CFBA53EE16B9B76500256453 /* ICameraConstrainer.cpp in Sources */,
 				CFBA53F216B9B7CD00256453 /* SimpleCameraConstrainer.cpp in Sources */,
 				CFCAEC4916BB20D500CDC17D /* ShapeOrbitCameraEffect.cpp in Sources */,
+				CF65361316BC41B2001F9139 /* ShapePositionEffect.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

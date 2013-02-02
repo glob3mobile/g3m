@@ -17,6 +17,9 @@
 class MutableMatrix44D;
 
 #include "Effects.hpp"
+#include <vector>
+
+class ShapePendingEffect;
 
 class Shape : public EffectTarget {
 private:
@@ -33,8 +36,7 @@ private:
   MutableMatrix44D* createTransformMatrix(const Planet* planet);
   MutableMatrix44D* getTransformMatrix(const Planet* planet);
 
-  Effect* _pendingEffect;
-  bool _pendingEffectTargetIsCamera;
+  std::vector<ShapePendingEffect*> _pendingEffects;
 
 protected:
   virtual void cleanTransformMatrix();
@@ -47,9 +49,7 @@ public:
   _scaleX(1),
   _scaleY(1),
   _scaleZ(1),
-  _transformMatrix(NULL),
-  _pendingEffect(NULL),
-  _pendingEffectTargetIsCamera(false)
+  _transformMatrix(NULL)
   {
 
   }
@@ -72,6 +72,17 @@ public:
     delete _position;
     _position = position;
     cleanTransformMatrix();
+  }
+
+  void setAnimatedPosition(const TimeInterval& duration,
+                           const Geodetic3D& position,
+                           bool linearInterpolation=false);
+
+  void setAnimatedPosition(const Geodetic3D& position,
+                           bool linearInterpolation=false) {
+    setAnimatedPosition(TimeInterval::fromSeconds(3),
+                        position,
+                        linearInterpolation);
   }
 
   void setHeading(const Angle& heading) {
