@@ -564,17 +564,18 @@ void GL::deleteTexture(const IGLTextureId* texture) {
   }
 
   if (texture != NULL) {
+    int __TESTING_TEXTUREIDs_DELETION;
     if ( _nativeGL->deleteTexture(texture) ) {
       _texturesIdBag.push_back(texture);
     }
 
     //ILogger::instance()->logInfo("  = delete textureId=%s", texture->description().c_str());
 
-    int __TESTING_TEXTUREIDs_DELETION;
 //    //_nativeGL->deleteTexture(texture);
 //    _texturesIdBag.push_back(texture);
 //
-//    //    _texturesIdTakeCounter++;
+
+    //_texturesIdTakeCounter++;
   }
 }
 
