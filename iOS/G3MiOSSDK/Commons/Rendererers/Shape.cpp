@@ -27,6 +27,10 @@ public:
   {
     
   }
+
+  ~ShapePendingEffect() {
+
+  }
 };
 
 
