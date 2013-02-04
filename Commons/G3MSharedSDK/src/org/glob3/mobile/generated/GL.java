@@ -74,7 +74,7 @@ public class GL
 
   private ShaderProgram _program;
 
-  private final IGLTextureId _boundTextureId;
+  private IGLTextureId _boundTextureId;
 
   private void loadModelView()
   {
@@ -595,8 +595,6 @@ public class GL
 	  }
 	  else
 	  {
-		if (textureId != null)
-			textureId.dispose();
 	  }
   
 	  if ((_boundTextureId != null) && _boundTextureId.isEqualsTo(textureId))

@@ -49,8 +49,6 @@ public class CachedDownloader extends IDownloader
 		IFactory.instance().deleteImage(_lastImage);
 	  }
 	  _lastImage = cachedImage.shallowCopy();
-	  if (_lastImageURL != null)
-		  _lastImageURL.dispose();
 	  _lastImageURL = new URL(url);
 	}
   
