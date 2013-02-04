@@ -25,6 +25,11 @@ private:
 
   const bool _saveInBackground;
 
+  const IImage* getCachedImage(const URL& url);
+
+  const IImage* _lastImage;
+  URL*          _lastImageURL;
+
 public:
   CachedDownloader(IDownloader* downloader,
                    IStorage*    storage,
@@ -34,7 +39,9 @@ public:
   _requestsCounter(0),
   _cacheHitsCounter(0),
   _savesCounter(0),
-  _saveInBackground(saveInBackground)
+  _saveInBackground(saveInBackground),
+  _lastImage(NULL),
+  _lastImageURL(NULL)
   {
 
   }

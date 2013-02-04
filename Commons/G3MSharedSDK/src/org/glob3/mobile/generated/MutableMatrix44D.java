@@ -398,7 +398,6 @@ public class MutableMatrix44D
 	return _columnMajorFloatBuffer;
   }
 
-
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: float[] getColumnMajorFloatArray() const
   public final float[] getColumnMajorFloatArray()
@@ -428,7 +427,7 @@ public class MutableMatrix44D
 		_columnMajorFloatArray[15] = (float) _m33;
 	  }
 	  return _columnMajorFloatArray;
-	}
+  }
 
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:

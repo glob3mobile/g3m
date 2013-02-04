@@ -574,6 +574,9 @@ void GL::deleteTexture(const IGLTextureId* textureId) {
     if ( _nativeGL->deleteTexture(textureId) ) {
       _texturesIdBag.push_back(textureId);
     }
+    else {
+      delete textureId;
+    }
 
     if ((_boundTextureId != NULL) && _boundTextureId->isEqualsTo(textureId)) {
       _boundTextureId = NULL;
