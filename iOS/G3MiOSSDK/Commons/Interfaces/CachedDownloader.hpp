@@ -27,7 +27,13 @@ private:
 
   const IImage* getCachedImage(const URL& url);
 
+#ifdef C_CODE
   const IImage* _lastImage;
+#endif
+#ifdef JAVA_CODE
+  private IImage _lastImage;
+#endif
+  
   URL*          _lastImageURL;
 
 public:
