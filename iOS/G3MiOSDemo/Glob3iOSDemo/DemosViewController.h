@@ -8,10 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-#import "G3MWidget_iOS.h"
-#import "MarksRenderer.hpp"
-#import "ShapesRenderer.hpp"
-#import "MeshRenderer.hpp"
+@class G3MWidget_iOS;
+class LayerSet;
+class MarksRenderer;
+class ShapesRenderer;
+class MeshRenderer;
 
 @interface DemosViewController : UIViewController <UIAlertViewDelegate> {
   NSString* urlMarkString;

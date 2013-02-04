@@ -9,25 +9,28 @@
 #import "DemosViewController.h"
 #import "G3MWebViewController.h"
 
-#include "G3MBuilder_iOS.hpp"
-#include "LayerBuilder.hpp"
-#include "Mark.hpp"
-#include "MarkTouchListener.hpp"
-#include "MarksRenderer.hpp"
-#include "Downloader_iOS.hpp"
-#include "JSONBaseObject.hpp"
-#include "IJSONParser.hpp"
-#include "JSONObject.hpp"
-#include "JSONArray.hpp"
-#include "JSONNumber.hpp"
-#include "JSONString.hpp"
-#include "SceneJSShapesParser.hpp"
-#include "FloatBufferBuilderFromGeodetic.hpp"
-#include "FloatBufferBuilderFromColor.hpp"
-#include "DirectMesh.hpp"
-#include "ByteBuffer_iOS.hpp"
-#include "BSONParser.hpp"
-#include "JSONGenerator.hpp"
+#import "G3MWidget_iOS.h"
+#import "G3MBuilder_iOS.hpp"
+#import "LayerBuilder.hpp"
+#import "Mark.hpp"
+#import "MarkTouchListener.hpp"
+#import "MarksRenderer.hpp"
+#import "ShapesRenderer.hpp"
+#import "MeshRenderer.hpp"
+#import "Downloader_iOS.hpp"
+#import "JSONBaseObject.hpp"
+#import "IJSONParser.hpp"
+#import "JSONObject.hpp"
+#import "JSONArray.hpp"
+#import "JSONNumber.hpp"
+#import "JSONString.hpp"
+#import "SceneJSShapesParser.hpp"
+#import "FloatBufferBuilderFromGeodetic.hpp"
+#import "FloatBufferBuilderFromColor.hpp"
+#import "DirectMesh.hpp"
+#import "ByteBuffer_iOS.hpp"
+#import "BSONParser.hpp"
+#import "JSONGenerator.hpp"
 
 
 @interface DemosViewController () 
@@ -37,11 +40,6 @@
 @implementation DemosViewController 
 
 @synthesize G3MWidget;
-@synthesize layerSet;
-@synthesize satelliteLayerEnabled;
-@synthesize markerRenderer;
-@synthesize shapeRenderer;
-@synthesize meshRenderer;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -97,6 +95,10 @@
 - (void)viewDidUnload
 {
   [self setG3MWidget: nil];
+  [self setMarkerRenderer: nil];
+  [self setShapeRenderer: nil];
+  [self setMeshRenderer: nil];
+  [self setLayerSet: nil];
   
   [super viewDidUnload];
 }
@@ -248,20 +250,29 @@
                                 listener,
                                 true);
       // 3D model
-      NSString *bsonFilePath = [[NSBundle mainBundle] pathForResource: @"A320"
-                                                               ofType: @"bson"];
-      if (bsonFilePath) {
-        NSData* data = [NSData dataWithContentsOfFile: bsonFilePath];
-        const int length = [data length];
-        unsigned char* bytes = new unsigned char[ length ]; // will be deleted by IByteBuffer's destructor
-        [data getBytes: bytes
-                length: length];
-        
-        IByteBuffer* buffer = new ByteBuffer_iOS(bytes, length);
-        JSONBaseObject* jsonBO = BSONParser::parse(buffer);
-        
-        if (buffer) {
-          Shape* plane = SceneJSShapesParser::parse(JSONGenerator::generate(jsonBO), "file:///textures-A320/");
+//      NSString *bsonFilePath = [[NSBundle mainBundle] pathForResource: @"A320"
+//                                                               ofType: @"bson"];
+//      if (bsonFilePath) {
+//        NSData* data = [NSData dataWithContentsOfFile: bsonFilePath];
+//        const int length = [data length];
+//        unsigned char* bytes = new unsigned char[ length ]; // will be deleted by IByteBuffer's destructor
+//        [data getBytes: bytes
+//                length: length];
+//        
+//        IByteBuffer* buffer = new ByteBuffer_iOS(bytes, length);
+//        JSONBaseObject* jsonBO = BSONParser::parse(buffer);
+//          if (buffer) {
+//            Shape* plane = SceneJSShapesParser::parse(JSONGenerator::generate(jsonBO), "file:///textures-A320/");
+
+      NSString *jsonFilePath = [[NSBundle mainBundle] pathForResource: @"A320"
+                                                               ofType: @"json"];
+      if (jsonFilePath) {
+        NSString *nsPlaneJSON = [NSString stringWithContentsOfFile: jsonFilePath
+                                                          encoding: NSUTF8StringEncoding
+                                                             error: nil];
+        if (nsPlaneJSON) {
+          std::string planeJSON = [nsPlaneJSON UTF8String];
+          Shape* plane = SceneJSShapesParser::parse(planeJSON, "file:///textures-A320/");
           if (plane) {
             // Washington, DC
             plane->setPosition(new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
