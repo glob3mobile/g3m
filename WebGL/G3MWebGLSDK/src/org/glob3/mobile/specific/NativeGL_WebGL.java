@@ -309,7 +309,6 @@ public final class NativeGL_WebGL
 		for (i = 0; i < n; i++) {
 			var texture = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
 					.createTexture();
-			texture.id = i;
 
 			var textureID = @org.glob3.mobile.specific.GLTextureId_WebGL::new(Lcom/google/gwt/core/client/JavaScriptObject;)(texture);
 			array.@java.util.ArrayList::add(Ljava/lang/Object;)(textureID);
