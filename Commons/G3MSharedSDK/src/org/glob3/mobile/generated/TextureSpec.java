@@ -152,7 +152,7 @@ public class TextureSpec
 		result = prime * result + _width;
 		return result;
 	}
-  
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

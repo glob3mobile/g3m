@@ -35,7 +35,7 @@ public class CachedDownloader extends IDownloader
 	{
 	  if (_lastImageURL.isEqualsTo(url))
 	  {
-  //      ILogger::instance()->logInfo("Used chached image for %s", url.description().c_str());
+		// ILogger::instance()->logInfo("Used chached image for %s", url.description().c_str());
 		return _lastImage.shallowCopy();
 	  }
 	}
@@ -49,6 +49,7 @@ public class CachedDownloader extends IDownloader
 		IFactory.instance().deleteImage(_lastImage);
 	  }
 	  _lastImage = cachedImage.shallowCopy();
+  
 	  _lastImageURL = new URL(url);
 	}
   
@@ -151,6 +152,11 @@ public class CachedDownloader extends IDownloader
   {
 	if (_downloader != null)
 		_downloader.dispose();
+  
+	if (_lastImage != null)
+	{
+	  IFactory.instance().deleteImage(_lastImage);
+	}
   }
 
   public final String statistics()
