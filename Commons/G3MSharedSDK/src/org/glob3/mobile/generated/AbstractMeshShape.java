@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
 //
-//  MeshShape.cpp
+//  AbstractMeshShape.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 11/5/12.
@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  MeshShape.hpp
+//  AbstractMeshShape.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 11/5/12.
@@ -19,7 +19,7 @@ package org.glob3.mobile.generated;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Mesh;
 
-public abstract class MeshShape extends Shape
+public abstract class AbstractMeshShape extends Shape
 {
   private Mesh _mesh;
 
@@ -41,10 +41,17 @@ public abstract class MeshShape extends Shape
 	_mesh = null;
   }
 
-  public MeshShape(Geodetic3D position)
+  public AbstractMeshShape(Geodetic3D position)
   {
 	  super(position);
 	  _mesh = null;
+
+  }
+
+  public AbstractMeshShape(Geodetic3D position, Mesh mesh)
+  {
+	  super(position);
+	  _mesh = mesh;
 
   }
 

@@ -74,6 +74,8 @@ private:
 
   ShaderProgram* _program;
 
+  const IGLTextureId* _boundTextureId;
+
   inline void loadModelView();
 
   const IGLTextureId* getGLTextureId();
@@ -127,7 +129,8 @@ public:
   _billboardTexCoord(NULL),
   _lineWidth(1),
   _pointSize(1),
-  _program(NULL)
+  _program(NULL),
+  _boundTextureId(NULL)
   {
     //Init Constants
     GLCullFace::init(_nativeGL);

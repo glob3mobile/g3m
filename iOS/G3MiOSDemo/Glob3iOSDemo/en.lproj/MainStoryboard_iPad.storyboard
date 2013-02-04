@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="2549" systemVersion="12A269" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" initialViewController="xBF-4S-Uw5">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12C60" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" initialViewController="xBF-4S-Uw5">
     <dependencies>
-        <deployment defaultVersion="1296" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="1498"/>
+        <deployment defaultVersion="1552" identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
     </dependencies>
     <scenes>
         <!--Table View Controller - Glob3 Mobile-->
         <scene sceneID="aZO-fq-3Os">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="IJe-95-YdE" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tableViewController storyboardIdentifier="MainView" title="Glob3 Mobile" id="ijV-D5-MqH" customClass="G3MUITableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="b6f-lg-HKe">
                         <rect key="frame" x="0.0" y="64" width="768" height="960"/>
@@ -134,13 +133,13 @@
                     <navigationItem key="navigationItem" title="glob3 mobile" id="zhY-Dm-b0y"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackTranslucent"/>
                 </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="IJe-95-YdE" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1822" y="-179"/>
         </scene>
         <!--Double Glob3 View Controller - Double glob3-->
         <scene sceneID="wew-XE-pgd">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="U1U-eT-r2z" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController id="zgb-QN-IPj" customClass="G3MDoubleGlob3ViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="oDF-Aj-um5">
                         <rect key="frame" x="0.0" y="20" width="768" height="1004"/>
@@ -166,13 +165,13 @@
                         <outlet property="upperGlob3" destination="6ur-GK-Lak" id="lOq-CH-9he"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="U1U-eT-r2z" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="855" y="-2186"/>
         </scene>
         <!--Layer Switch View Controller - Layer Switch-->
         <scene sceneID="st1-AZ-iNc">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="5i6-1z-CqQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController title="Layer Switch" id="sQh-KX-STp" customClass="G3MLayerSwitchViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="UTe-3T-Ukg">
                         <rect key="frame" x="0.0" y="64" width="768" height="960"/>
@@ -222,13 +221,13 @@
                         <outlet property="layerSwitcher" destination="bwG-u4-EhC" id="k7k-Kj-Ktt"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5i6-1z-CqQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2227" y="-1637"/>
         </scene>
         <!--Markers View Controller - Markers-->
         <scene sceneID="fJi-V2-3rK">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="RIh-lX-GeQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController title="Markers" id="bg6-Ba-gyI" customClass="G3MMarkersViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="LBf-Dj-Bz3" customClass="G3MWidget_iOS">
                         <rect key="frame" x="0.0" y="64" width="768" height="960"/>
@@ -241,13 +240,13 @@
                         <outlet property="glob3" destination="LBf-Dj-Bz3" id="n9O-2B-rmt"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="RIh-lX-GeQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3417" y="-619"/>
         </scene>
         <!--Model View Controller - 3D Model-->
         <scene sceneID="kIX-kU-4Cf">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="qRr-K5-vQt" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController title="3D Model" id="Jmj-ea-pR3" customClass="G3M3DModelViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="pax-iR-DCR" customClass="G3MWidget_iOS">
                         <rect key="frame" x="0.0" y="64" width="768" height="960"/>
@@ -260,13 +259,13 @@
                         <outlet property="glob3" destination="pax-iR-DCR" id="er4-Ho-5Wn"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qRr-K5-vQt" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2289" y="1322"/>
         </scene>
         <!--Drawing Shapes View Controller - Drawing Shapes-->
         <scene sceneID="Hca-3V-NQ6">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="H6n-xC-oZb" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController id="0jI-Ro-kha" customClass="G3MDrawingShapesViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Akl-7q-ItA">
                         <rect key="frame" x="0.0" y="64" width="768" height="960"/>
@@ -317,13 +316,13 @@
                         <outlet property="playButton" destination="s20-Yz-26X" id="To4-df-qtg"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="H6n-xC-oZb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3425" y="633"/>
         </scene>
         <!--Simple Glob3 View Controller - Simple glob3-->
         <scene sceneID="KmW-TK-ceF">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="rAn-pZ-pXS" sceneMemberID="firstResponder"/>
                 <viewController id="OLy-gL-hl3" customClass="G3MSimpleGlob3ViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="07y-mF-1hv">
                         <rect key="frame" x="0.0" y="64" width="768" height="960"/>
@@ -343,13 +342,13 @@
                         <outlet property="G3MWidget" destination="ULQ-CX-vSr" id="h22-J3-yju"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="rAn-pZ-pXS" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-767" y="-2162"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="2zD-H2-4rO">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="6Li-f5-xXf" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <navigationController id="xBF-4S-Uw5" sceneMemberID="viewController">
                     <toolbarItems/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackTranslucent"/>
@@ -362,13 +361,13 @@
                         <segue destination="ijV-D5-MqH" kind="relationship" relationship="rootViewController" id="Bth-6E-1pY"/>
                     </connections>
                 </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6Li-f5-xXf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-2964" y="-179"/>
         </scene>
         <!--Web View Controller-->
         <scene sceneID="8DL-gQ-1IM">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="aUV-oI-2oK" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController storyboardIdentifier="G3MWebViewController" id="c55-U9-MvI" customClass="G3MWebViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="fp9-z7-0iP">
                         <rect key="frame" x="0.0" y="20" width="768" height="1004"/>
@@ -400,6 +399,7 @@
                         <outlet property="webView" destination="Qge-mB-FOM" id="0tG-nb-QOJ"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="aUV-oI-2oK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-2166" y="-1799"/>
         </scene>

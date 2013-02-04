@@ -29,7 +29,16 @@ public class VisibleSectorListenerEntry
 
   }
 
-  public final void tryToNotifyListener(Sector visibleSector)
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: void notifyListener(const Sector* visibleSector, const G3MRenderContext* rc) const
+  public final void notifyListener(Sector visibleSector, G3MRenderContext rc)
+  {
+	final Geodetic3D cameraPosition = rc.getPlanet().toGeodetic3D(rc.getCurrentCamera().getCartesianPosition());
+
+	_listener.onVisibleSectorChange(_lastSector, cameraPosition);
+  }
+
+  public final void tryToNotifyListener(Sector visibleSector, G3MRenderContext rc)
   {
 	if (_stabilizationIntervalInMS == 0)
 	{
@@ -38,7 +47,8 @@ public class VisibleSectorListenerEntry
 		if (_lastSector != null)
 			_lastSector.dispose();
 		_lastSector = new Sector(visibleSector);
-		_listener.onVisibleSectorChange(_lastSector);
+
+		notifyListener(visibleSector, rc);
 	  }
 	}
 	else
@@ -57,7 +67,7 @@ public class VisibleSectorListenerEntry
 	  {
 		if (now >= _whenNotifyInMS)
 		{
-		  _listener.onVisibleSectorChange(_lastSector);
+		  notifyListener(visibleSector, rc);
 
 		  _whenNotifyInMS = 0;
 		}
@@ -75,5 +85,8 @@ public class VisibleSectorListenerEntry
 	{
 	  IFactory.instance().deleteTimer(_timer);
 	}
+
+	if (_lastSector != null)
+		_lastSector.dispose();
   }
 }

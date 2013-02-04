@@ -13,7 +13,12 @@ public abstract class Effect
 
 //    return sigmoid(f);
 //    return gently(f, 0.6, 0.85);
-	return gently(f, 0.25, 0.75);
+	final double result = gently(f, 0.25, 0.75);
+	if (result < 0)
+		return 0;
+	if (result > 1)
+		return 1;
+	return result;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:

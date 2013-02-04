@@ -1,18 +1,18 @@
 //
-//  MeshShape.hpp
+//  AbstractMeshShape.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 11/5/12.
 //
 //
 
-#ifndef __G3MiOSSDK__MeshShape__
-#define __G3MiOSSDK__MeshShape__
+#ifndef __G3MiOSSDK__AbstractMeshShape__
+#define __G3MiOSSDK__AbstractMeshShape__
 
 #include "Shape.hpp"
 class Mesh;
 
-class MeshShape : public Shape {
+class AbstractMeshShape : public Shape {
 private:
   Mesh* _mesh;
 
@@ -24,18 +24,25 @@ protected:
   void cleanMesh();
 
 public:
-  MeshShape(Geodetic3D* position) :
+  AbstractMeshShape(Geodetic3D* position) :
   Shape(position),
   _mesh(NULL) {
 
   }
   
+  AbstractMeshShape(Geodetic3D* position,
+                    Mesh* mesh) :
+  Shape(position),
+  _mesh(mesh) {
+
+  }
+
   bool isReadyToRender(const G3MRenderContext* rc);
 
   void rawRender(const G3MRenderContext* rc,
                  const GLState& parentState);
 
-  virtual ~MeshShape();
+  virtual ~AbstractMeshShape();
 
   bool isTransparent(const G3MRenderContext* rc);
 

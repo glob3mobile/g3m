@@ -66,8 +66,8 @@ public class G3MSimplestGlob3Activity
 
       final IStorage storage = new SQLiteStorage_Android("g3m.cache", this);
 
-      final int connectTimeout = 20000;
-      final int readTimeout = 30000;
+      final TimeInterval connectTimeout = TimeInterval.fromSeconds(20);
+      final TimeInterval readTimeout = TimeInterval.fromSeconds(30);
       final boolean saveInBackground = true;
       final IDownloader downloader = new CachedDownloader( //
                new Downloader_Android(8, connectTimeout, readTimeout, this), //

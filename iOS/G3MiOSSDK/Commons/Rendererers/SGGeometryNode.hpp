@@ -32,7 +32,7 @@ public:
                  IFloatBuffer*      colors,
                  IFloatBuffer*      uv,
                  IFloatBuffer*      normals,
-                 IShortBuffer*        indices) :
+                 IShortBuffer*      indices) :
   SGNode(id, sId),
   _primitive(primitive),
   _vertices(vertices),

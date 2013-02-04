@@ -109,7 +109,7 @@
                                                               error: nil];
          if (nsPlaneJSON) {
            std::string planeJSON = [nsPlaneJSON UTF8String];
-           Shape* plane = SceneJSShapesParser::parse(planeJSON, "file:///");
+           Shape* plane = SceneJSShapesParser::parseFromJSON(planeJSON, "file:///");
            if (plane) {
              plane->setPosition(new Geodetic3D(Angle::fromDegrees(37.78333333),
                                                Angle::fromDegrees(-122.41666666666667),

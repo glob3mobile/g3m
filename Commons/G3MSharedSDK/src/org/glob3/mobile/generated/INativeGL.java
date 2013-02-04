@@ -121,9 +121,10 @@ public abstract class INativeGL
 //ORIGINAL LINE: virtual void bindTexture(int target, const IGLTextureId* texture) const = 0;
   public abstract void bindTexture(int target, IGLTextureId texture);
 
+  /* Delete Texture from GPU, and answer if the TextureId can be reused */
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual void deleteTexture(const IGLTextureId* texture) const = 0;
-  public abstract void deleteTexture(IGLTextureId texture);
+//ORIGINAL LINE: virtual boolean deleteTexture(const IGLTextureId* texture) const = 0;
+  public abstract boolean deleteTexture(IGLTextureId texture);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual void enableVertexAttribArray(int location) const = 0;

@@ -35,6 +35,8 @@ public class SGLayerNode extends SGNode
   private final String _wrapS;
   private final String _wrapT;
 
+  private boolean _initialized;
+
   private IGLTextureId getTextureId(G3MRenderContext rc)
   {
 	if (_textureId == null)
@@ -98,6 +100,7 @@ public class SGLayerNode extends SGNode
 	  _wrapT = wrapT;
 	  _downloadedImage = null;
 	  _textureId = null;
+	  _initialized = false;
 
   }
 
@@ -114,7 +117,11 @@ public class SGLayerNode extends SGNode
   {
 	super.initialize(context, shape);
   
-	requestImage();
+	if (!_initialized)
+	{
+	  _initialized = true;
+	  requestImage();
+	}
   }
 
   public final GLState createState(G3MRenderContext rc, GLState parentState)

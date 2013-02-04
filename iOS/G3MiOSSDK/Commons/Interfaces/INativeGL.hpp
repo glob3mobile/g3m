@@ -103,7 +103,8 @@ public:
   virtual void bindTexture(int target,
                            const IGLTextureId* texture) const = 0;
 
-  virtual void deleteTexture(const IGLTextureId* texture) const = 0;
+  /* Delete Texture from GPU, and answer if the TextureId can be reused */
+  virtual bool deleteTexture(const IGLTextureId* texture) const = 0;
 
   virtual void enableVertexAttribArray(int location) const = 0;
 

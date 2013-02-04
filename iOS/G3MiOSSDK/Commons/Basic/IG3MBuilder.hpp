@@ -15,7 +15,7 @@
 #include "IDownloader.hpp"
 #include "IThreadUtils.hpp"
 #include "CameraRenderer.hpp"
-#include "CameraConstraints.hpp"
+#include "ICameraConstrainer.hpp"
 #include "Color.hpp"
 #include "GInitializationTask.hpp"
 #include "PeriodicalTask.hpp"

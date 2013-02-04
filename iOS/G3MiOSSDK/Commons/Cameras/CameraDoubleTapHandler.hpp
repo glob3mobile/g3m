@@ -43,13 +43,17 @@ public:
     Camera *camera = rc->getNextCamera();
     const double step = percent - _lastPercent;
     camera->rotateWithAxis(_axis, _angle.times(step));
-    camera->moveForward(_distance*step);
+    camera->moveForward(_distance * step);
     _lastPercent = percent;
   }
   
   virtual void stop(const G3MRenderContext *rc,
                     const TimeInterval& when) {
-    EffectWithDuration::stop(rc, when);
+    Camera *camera = rc->getNextCamera();
+
+    const double step = 1.0 - _lastPercent;
+    camera->rotateWithAxis(_axis, _angle.times(step));
+    camera->moveForward(_distance * step);
   }
   
   virtual void cancel(const TimeInterval& when) {

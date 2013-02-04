@@ -415,7 +415,7 @@ public class G3MWidget
   
 	stopCameraAnimation();
   
-	_effectsScheduler.startEffect(new GoToPositionEffect(interval, startPosition, endPosition), _nextCamera.getEffectTarget());
+	_effectsScheduler.startEffect(new CameraGoToPositionEffect(interval, startPosition, endPosition), _nextCamera.getEffectTarget());
   }
 
   public final void stopCameraAnimation()

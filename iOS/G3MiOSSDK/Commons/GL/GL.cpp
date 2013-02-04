@@ -451,7 +451,13 @@ void GL::bindTexture(const IGLTextureId* textureId) {
     ILogger::instance()->logError("Can't bind a NULL texture");
   }
   else {
-    _nativeGL->bindTexture(GLTextureType::texture2D(), textureId);
+    if ((_boundTextureId == NULL) || !_boundTextureId->isEqualsTo(textureId)) {
+      _nativeGL->bindTexture(GLTextureType::texture2D(), textureId);
+      _boundTextureId = textureId;
+    }
+//    else {
+//      ILogger::instance()->logInfo("TextureId %s already bound", textureId->description().c_str());
+//    }
   }
 }
 
@@ -521,21 +527,20 @@ const IGLTextureId* GL::getGLTextureId() {
 
   if (_texturesIdBag.size() == 0) {
     //const int bugdetSize = 256;
-    const int bugdetSize = 10240;
-
-    ILogger::instance()->logInfo("= Creating %d texturesIds...",
-                                 bugdetSize);
+    const int bugdetSize = 1024;
+    //const int bugdetSize = 10240;
 
     const std::vector<IGLTextureId*> ids = _nativeGL->genTextures(bugdetSize);
-
-    for (int i = 0; i < ids.size(); i++) {
+    const int idsCount = ids.size();
+    for (int i = 0; i < idsCount; i++) {
+      // ILogger::instance()->logInfo("  = Created textureId=%s", ids[i]->description().c_str());
       _texturesIdBag.push_front(ids[i]);
     }
 
-    _texturesIdAllocationCounter += ids.size();
+    _texturesIdAllocationCounter += idsCount;
 
     ILogger::instance()->logInfo("= Created %d texturesIds (accumulated %d).",
-                                 bugdetSize,
+                                 idsCount,
                                  _texturesIdAllocationCounter);
   }
 
@@ -559,21 +564,28 @@ const IGLTextureId* GL::getGLTextureId() {
   return result;
 }
 
-void GL::deleteTexture(const IGLTextureId* texture) {
+void GL::deleteTexture(const IGLTextureId* textureId) {
   if (_verbose) {
     ILogger::instance()->logInfo("GL::deleteTexture()");
   }
 
-  if (texture != NULL) {
-    //    if ( _nativeGL->deleteTexture(texture) ) {
-    //      _texturesIdBag.push_back(texture);
-    //    }
-
+  if (textureId != NULL) {
     int __TESTING_TEXTUREIDs_DELETION;
-    //_nativeGL->deleteTexture(texture);
-    _texturesIdBag.push_back(texture);
+    if ( _nativeGL->deleteTexture(textureId) ) {
+      _texturesIdBag.push_back(textureId);
+    }
 
-    //    _texturesIdTakeCounter++;
+    if ((_boundTextureId != NULL) && _boundTextureId->isEqualsTo(textureId)) {
+      _boundTextureId = NULL;
+    }
+
+    //ILogger::instance()->logInfo("  = delete textureId=%s", texture->description().c_str());
+
+//    //_nativeGL->deleteTexture(texture);
+//    _texturesIdBag.push_back(texture);
+//
+
+    //_texturesIdTakeCounter++;
   }
 }
 

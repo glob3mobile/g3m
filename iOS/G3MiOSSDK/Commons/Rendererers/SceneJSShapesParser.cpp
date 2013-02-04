@@ -28,48 +28,52 @@
 #include "IFactory.hpp"
 #include "IFloatBuffer.hpp"
 #include "IShortBuffer.hpp"
+#include "BSONParser.hpp"
 
-
-Shape* SceneJSShapesParser::parse(const std::string& json,
-                                  const std::string& uriPrefix) {
-  return SceneJSShapesParser(json, uriPrefix).getRootShape();
+Shape* SceneJSShapesParser::parseFromJSONBaseObject(const JSONBaseObject *jsonObject,
+                                                const std::string &uriPrefix) {
+  return SceneJSShapesParser(jsonObject, uriPrefix).getRootShape();
 }
 
-Shape* SceneJSShapesParser::parse(const IByteBuffer* json,
-                                  const std::string& uriPrefix) {
-  return SceneJSShapesParser(json, uriPrefix).getRootShape();
+Shape* SceneJSShapesParser::parseFromJSON(const std::string &json,
+                                          const std::string &uriPrefix) {
+  const JSONBaseObject* jsonObject = IJSONParser::instance()->parse(json);
+  
+  return SceneJSShapesParser(jsonObject, uriPrefix).getRootShape();
 }
 
-
-SceneJSShapesParser::SceneJSShapesParser(const IByteBuffer* json,
-                                         const std::string& uriPrefix) :
-_uriPrefix(uriPrefix),
-_rootShape(NULL)
-{
-  pvtParse(json->getAsString());
+Shape* SceneJSShapesParser::parseFromJSON(const IByteBuffer* json,
+                                          const std::string& uriPrefix) {
+  const JSONBaseObject* jsonObject = IJSONParser::instance()->parse(json->getAsString());
+  
+  return SceneJSShapesParser(jsonObject, uriPrefix).getRootShape();
 }
 
-SceneJSShapesParser::SceneJSShapesParser(const std::string& json,
-                                         const std::string& uriPrefix):
-_uriPrefix(uriPrefix),
-_rootShape(NULL)
-{
-  pvtParse(json);
+Shape* SceneJSShapesParser::parseFromBSON(IByteBuffer *bson,
+                                          const std::string &uriPrefix) {
+  const JSONBaseObject* jsonObject = BSONParser::parse(bson);
+  
+  return SceneJSShapesParser(jsonObject, uriPrefix).getRootShape();
 }
 
-
-void SceneJSShapesParser::pvtParse(const std::string& json) {
-  JSONBaseObject* jsonRootObject = IJSONParser::instance()->parse(json);
-
+void SceneJSShapesParser::pvtParse(const JSONBaseObject* json) {
   //  _rootShape = toShape(jsonRootObject);
-
-  SGNode* node = toNode(jsonRootObject);
-
+  
+  SGNode* node = toNode(json);
+  
   if (node != NULL) {
     _rootShape = new SGShape(node, _uriPrefix);
   }
+  
+  delete json;
+}
 
-  delete jsonRootObject;
+SceneJSShapesParser::SceneJSShapesParser(const JSONBaseObject* jsonObject,
+                    const std::string& uriPrefix) :
+_uriPrefix(uriPrefix),
+_rootShape(NULL)
+{
+  pvtParse(jsonObject);
 }
 
 int SceneJSShapesParser::parseChildren(const JSONObject* jsonObject,
@@ -98,9 +102,9 @@ void SceneJSShapesParser::checkProcessedKeys(const JSONObject* jsonObject,
                                              int processedKeys) const {
   std::vector<std::string> keys = jsonObject->keys();
   if (processedKeys != keys.size()) {
-    for (int i = 0; i < keys.size(); i++) {
-      printf("%s\n", keys.at(i).c_str());
-    }
+//    for (int i = 0; i < keys.size(); i++) {
+//      printf("%s\n", keys.at(i).c_str());
+//    }
 
     ILogger::instance()->logWarning("Not all keys processed in node, processed %i of %i",
                                     processedKeys,
