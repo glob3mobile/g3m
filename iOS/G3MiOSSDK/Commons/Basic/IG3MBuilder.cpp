@@ -32,43 +32,12 @@ _logFPS(false),
 _logDownloaderStatistics(false),
 _userData(NULL)
 {
-  /*
-   _gl = NULL;
-   _storage = NULL;
-   _downloader = NULL;
-   _threadUtils = NULL;
-   _planet = NULL;
-   _cameraRenderer = NULL;
-   _backgroundColor = Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1);
-   _layerSet = NULL;
-   _parameters = NULL;
-   _tileRenderer = NULL;
-   _busyRenderer = new BusyMeshRenderer();
-   _initializationTask = NULL;
-   _logFPS = false;
-   _logDownloaderStatistics = false;
-   _autoDeleteInitializationTask = true;
-   _userData = NULL;
-   */
 }
 
 IG3MBuilder::~IG3MBuilder() {
   delete _backgroundColor;
 
-  //#ifdef C_CODE
-  //  delete _planet;
-  //  delete _parameters;
-  //#endif
-  //  delete _gl;
-  //  delete _storage;
-  //  delete _downloader;
-  //  delete _threadUtils;
-  //  delete _cameraRenderer;
-  //  delete _layerSet;
-  //  delete _tileRenderer;
-  //  delete _busyRenderer;
-  //  delete _initializationTask;
-  //  delete _userData;
+  delete _tileRendererBuilder;
 }
 
 const Planet* IG3MBuilder::getPlanet() {

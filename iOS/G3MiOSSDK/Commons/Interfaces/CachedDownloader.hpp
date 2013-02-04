@@ -33,7 +33,7 @@ private:
 #ifdef JAVA_CODE
   private IImage _lastImage;
 #endif
-  
+
   URL*          _lastImageURL;
 
 public:
@@ -74,10 +74,8 @@ public:
 
   void cancelRequest(long long requestId);
 
-  virtual ~CachedDownloader() {
-    delete _downloader;
-  }
-
+  virtual ~CachedDownloader();
+  
   const std::string statistics();
 
   void countSave() {
