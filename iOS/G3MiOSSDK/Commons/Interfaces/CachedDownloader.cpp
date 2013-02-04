@@ -212,7 +212,9 @@ const IImage* CachedDownloader::getCachedImage(const URL& url) {
       IFactory::instance()->deleteImage(_lastImage);
     }
     _lastImage = cachedImage->shallowCopy();
+#ifdef C_CODE
     delete _lastImageURL;
+#endif
     _lastImageURL = new URL(url);
   }
 
