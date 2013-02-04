@@ -673,91 +673,92 @@ public:
       }
       /**/
 
-//      /**/
-//      IFloatBuffer* vertices = IFactory::instance()->createFloatBuffer(6 * 3);
-//      int i =0;
-//      vertices->put(i++, -1);
-//      vertices->put(i++, -0.5);
-//      vertices->put(i++, 0);
-//
-//      vertices->put(i++, 0);
-//      vertices->put(i++, 0);
-//      vertices->put(i++, 0);
-//
-//      vertices->put(i++, 0);
-//      vertices->put(i++, -0.5);
-//      vertices->put(i++, 0);
-//
-//      vertices->put(i++, -1);
-//      vertices->put(i++, -1);
-//      vertices->put(i++, 0);
-//
-//      vertices->put(i++, 1);
-//      vertices->put(i++, -0.5);
-//      vertices->put(i++, 0);
-//
-//      vertices->put(i++, 1);
-//      vertices->put(i++, -1);
-//      vertices->put(i++, 0);
-//
-//      IShortBuffer* indices = IFactory::instance()->createShortBuffer(12);
-//      i = 0;
-//      indices->put(i++, 0);
-//      indices->put(i++, 1);
-//      indices->put(i++, 2);
-//      indices->put(i++, 0);
-//      indices->put(i++, 2);
-//      indices->put(i++, 3);
-//      indices->put(i++, 2);
-//      indices->put(i++, 1);
-//      indices->put(i++, 4);
-//      indices->put(i++, 2);
-//      indices->put(i++, 4);
-//      indices->put(i++, 5);
-//
-//      IndexedMesh* travelledMesh = new IndexedMesh(GLPrimitive::triangleStrip(),
-//                                                   true,
-//                                                   Vector3D::zero(),
-//                                                   vertices,
-//                                                   indices,
-//                                                   1,
-//                                                   2,
-//                                                   Color::newFromRGBA(1, 1, 0, 1));
-//
-//      IndexedMesh* toTravelMesh = new IndexedMesh(GLPrimitive::triangleStrip(),
-//                                                   true,
-//                                                   Vector3D::zero(),
-//                                                   vertices,
-//                                                   indices,
-//                                                   1,
-//                                                   2,
-//                                                   Color::newFromRGBA(0.5, 0.5, 0.5, 1));
-//
-////      Geodetic3D* buenosAiresPosition = new Geodetic3D(Angle::fromDegreesMinutesSeconds(-34, 36, 13.44),
-////                                                       Angle::fromDegreesMinutesSeconds(-58, 22, 53.74),
-////                                                       1000);
-//      
-////      Geodetic3D* dcPosition = new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
-////                                              Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
-////                                              600);
-////      Shape* trailShape = new MeshShape(dcPosition, mesh);
-////      // Washington, DC
-////      trailShape->setHeading(Angle::fromDegrees(270));
-////      trailShape->setScale(500, 500, 500);
-////      _shapesRenderer->addShape(trailShape);
-//      /**/
-//
-//      for (double lon = -70; lon >= -80; lon -= 0.008) {
-//        Mesh* mesh = (lon >= -76.96) ? travelledMesh : toTravelMesh;
-//        Shape* trailShape = new MeshShape(new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
-//                                                         Angle::fromDegrees(lon),
-//                                                         9400),
-//                                          mesh);
-//        trailShape->setHeading(Angle::fromDegrees(270));
-//        const double scale = 500;
-//        trailShape->setScale(scale * 2 / 3, scale * 1.8, scale);
-//        _shapesRenderer->addShape(trailShape);
-//      }
+
+      /*
+      IFloatBuffer* vertices = IFactory::instance()->createFloatBuffer(6 * 3);
+      int i =0;
+      vertices->put(i++, -1);
+      vertices->put(i++, -0.5);
+      vertices->put(i++, 0);
+
+      vertices->put(i++, 0);
+      vertices->put(i++, 0);
+      vertices->put(i++, 0);
+
+      vertices->put(i++, 0);
+      vertices->put(i++, -0.5);
+      vertices->put(i++, 0);
+
+      vertices->put(i++, -1);
+      vertices->put(i++, -1);
+      vertices->put(i++, 0);
+
+      vertices->put(i++, 1);
+      vertices->put(i++, -0.5);
+      vertices->put(i++, 0);
+
+      vertices->put(i++, 1);
+      vertices->put(i++, -1);
+      vertices->put(i++, 0);
+
+      IShortBuffer* indices = IFactory::instance()->createShortBuffer(12);
+      i = 0;
+      indices->put(i++, 0);
+      indices->put(i++, 1);
+      indices->put(i++, 2);
+      indices->put(i++, 0);
+      indices->put(i++, 2);
+      indices->put(i++, 3);
+      indices->put(i++, 2);
+      indices->put(i++, 1);
+      indices->put(i++, 4);
+      indices->put(i++, 2);
+      indices->put(i++, 4);
+      indices->put(i++, 5);
+
+      IndexedMesh* travelledMesh = new IndexedMesh(GLPrimitive::triangleStrip(),
+                                                   true,
+                                                   Vector3D::zero(),
+                                                   vertices,
+                                                   indices,
+                                                   1,
+                                                   2,
+                                                   Color::newFromRGBA(1, 1, 0, 1));
+
+      IndexedMesh* toTravelMesh = new IndexedMesh(GLPrimitive::triangleStrip(),
+                                                   true,
+                                                   Vector3D::zero(),
+                                                   vertices,
+                                                   indices,
+                                                   1,
+                                                   2,
+                                                   Color::newFromRGBA(0.5, 0.5, 0.5, 1));
+
+//      Geodetic3D* buenosAiresPosition = new Geodetic3D(Angle::fromDegreesMinutesSeconds(-34, 36, 13.44),
+//                                                       Angle::fromDegreesMinutesSeconds(-58, 22, 53.74),
+//                                                       1000);
+      
+//      Geodetic3D* dcPosition = new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
+//                                              Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
+//                                              600);
+//      Shape* trailShape = new MeshShape(dcPosition, mesh);
+//      // Washington, DC
+//      trailShape->setHeading(Angle::fromDegrees(270));
+//      trailShape->setScale(500, 500, 500);
+//      _shapesRenderer->addShape(trailShape);
+
+      for (double lon = -70; lon >= -80; lon -= 0.008) {
+        Mesh* mesh = (lon >= -76.96) ? travelledMesh : toTravelMesh;
+        Shape* trailShape = new MeshShape(new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
+                                                         Angle::fromDegrees(lon),
+                                                         9400),
+                                          mesh);
+        trailShape->setHeading(Angle::fromDegrees(270));
+        const double scale = 500;
+        trailShape->setScale(scale * 2 / 3, scale * 1.8, scale);
+        _shapesRenderer->addShape(trailShape);
+      }
+      */
 
       /**/
       /*

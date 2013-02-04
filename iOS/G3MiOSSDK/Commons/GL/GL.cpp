@@ -451,7 +451,13 @@ void GL::bindTexture(const IGLTextureId* textureId) {
     ILogger::instance()->logError("Can't bind a NULL texture");
   }
   else {
-    _nativeGL->bindTexture(GLTextureType::texture2D(), textureId);
+    if ((_boundTextureId == NULL) || !_boundTextureId->isEqualsTo(textureId)) {
+      _nativeGL->bindTexture(GLTextureType::texture2D(), textureId);
+      _boundTextureId = textureId;
+    }
+//    else {
+//      ILogger::instance()->logInfo("TextureId %s already bound", textureId->description().c_str());
+//    }
   }
 }
 
@@ -558,15 +564,19 @@ const IGLTextureId* GL::getGLTextureId() {
   return result;
 }
 
-void GL::deleteTexture(const IGLTextureId* texture) {
+void GL::deleteTexture(const IGLTextureId* textureId) {
   if (_verbose) {
     ILogger::instance()->logInfo("GL::deleteTexture()");
   }
 
-  if (texture != NULL) {
+  if (textureId != NULL) {
     int __TESTING_TEXTUREIDs_DELETION;
-    if ( _nativeGL->deleteTexture(texture) ) {
-      _texturesIdBag.push_back(texture);
+    if ( _nativeGL->deleteTexture(textureId) ) {
+      _texturesIdBag.push_back(textureId);
+    }
+
+    if ((_boundTextureId != NULL) && _boundTextureId->isEqualsTo(textureId)) {
+      _boundTextureId = NULL;
     }
 
     //ILogger::instance()->logInfo("  = delete textureId=%s", texture->description().c_str());

@@ -222,7 +222,6 @@ public:
 
   const IFloatBuffer* getColumnMajorFloatBuffer() const;
 
-
 #ifdef C_CODE
   float* getColumnMajorFloatArray() const {
 #else
@@ -252,7 +251,7 @@ public:
         _columnMajorFloatArray[15] = (float) _m33;
       }
       return _columnMajorFloatArray;
-    }
+  }
     
 
     void print(const std::string& name, const ILogger* log) const;
