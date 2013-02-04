@@ -55,7 +55,8 @@ public class CachedDownloader extends IDownloader
 	return cachedImage;
   }
 
-  private final IImage _lastImage;
+  private IImage _lastImage;
+
   private URL _lastImageURL;
 
   public CachedDownloader(IDownloader downloader, IStorage storage, boolean saveInBackground)
