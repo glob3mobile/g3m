@@ -133,6 +133,21 @@ public class G3MSimplestGlob3Activity
 
       final boolean logDownloaderStatistics = false;
 
+      //      final GInitializationTask initializationTask = new GInitializationTask() {
+      //         @Override
+      //         public void run(final G3MContext context) {
+      //            final String jsonString = "{\"s\": \"world\", \"d\": 3.1415927, \"i\": 1, \"n\": null, \"a\":[1,\"2\",true]}";
+      //            final JSONBaseObject jsonObject = context.getJSONParser().parse(jsonString);
+      //
+      //            System.out.println(jsonObject.description());
+      //         }
+      //
+      //
+      //         @Override
+      //         public boolean isDone(final G3MContext context) {
+      //            return true;
+      //         }
+      //      };
       final GInitializationTask initializationTask = null;
 
       final boolean autoDeleteInitializationTask = true;
