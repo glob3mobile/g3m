@@ -48,13 +48,26 @@ public class JSONParser_Android
          return new org.glob3.mobile.generated.JSONBoolean(((Boolean) jsonObject).booleanValue());
       }
       else if (jsonObject instanceof Integer) {
-         return new org.glob3.mobile.generated.JSONNumber(((Integer) jsonObject).intValue());
+         return new org.glob3.mobile.generated.JSONInteger(((Integer) jsonObject).intValue());
       }
       else if (jsonObject instanceof Long) {
-         return new org.glob3.mobile.generated.JSONNumber(((Long) jsonObject).intValue());
+         final long longValue = ((Long) jsonObject).longValue();
+         final int intValue = (int) longValue;
+         if (longValue == intValue) {
+            return new org.glob3.mobile.generated.JSONInteger(intValue);
+         }
+         return new org.glob3.mobile.generated.JSONLong(longValue);
       }
       else if (jsonObject instanceof Double) {
-         return new org.glob3.mobile.generated.JSONNumber(((Double) jsonObject).doubleValue());
+         final double doubleValue = ((Double) jsonObject).doubleValue();
+         final float floatValue = (float) doubleValue;
+         if (doubleValue == floatValue) {
+            return new org.glob3.mobile.generated.JSONFloat(floatValue);
+         }
+         return new org.glob3.mobile.generated.JSONDouble(doubleValue);
+      }
+      else if (jsonObject instanceof Float) {
+         return new org.glob3.mobile.generated.JSONFloat(((Float) jsonObject).floatValue());
       }
       else if (jsonObject instanceof org.json.JSONArray) {
          final org.json.JSONArray jsonArray = (org.json.JSONArray) jsonObject;
@@ -93,5 +106,4 @@ public class JSONParser_Android
          return null;
       }
    }
-
 }

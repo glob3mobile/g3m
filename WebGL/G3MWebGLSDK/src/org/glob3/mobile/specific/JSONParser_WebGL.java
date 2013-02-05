@@ -8,7 +8,7 @@ import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.JSONArray;
 import org.glob3.mobile.generated.JSONBaseObject;
 import org.glob3.mobile.generated.JSONBoolean;
-import org.glob3.mobile.generated.JSONNumber;
+import org.glob3.mobile.generated.JSONDouble;
 import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.JSONString;
 
@@ -45,7 +45,7 @@ public class JSONParser_WebGL
 
       final com.google.gwt.json.client.JSONNumber jsonNumber = value.isNumber();
       if (jsonNumber != null) {
-         return new JSONNumber(jsonNumber.doubleValue());
+         return new JSONDouble(jsonNumber.doubleValue());
       }
 
       final com.google.gwt.json.client.JSONString jsonString = value.isString();
