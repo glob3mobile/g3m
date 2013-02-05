@@ -24,6 +24,9 @@ private:
   Image_iOS(const Image_iOS& that);
   void operator=(const Image_iOS& that);
 
+//  unsigned char* rgba8888_to_rgba4444(unsigned char* src, // IN, pointer to source buffer
+//                                      int sizeInBytes) const;    // IN size of source buffer, in bytes
+
 public:
 
   virtual ~Image_iOS() {
@@ -87,6 +90,8 @@ public:
                 bool autodelete) const;
 
   unsigned char* createByteArrayRGBA8888() const;
+
+  //unsigned char* createByteArrayRGBA4444() const;
 
   void scale(int width, int height,
              IImageListener* listener,

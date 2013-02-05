@@ -121,16 +121,6 @@ public:
 
   virtual void texImage2D(const IImage* image, int format) const = 0;
 
-  //  virtual void texImage2D(GLTextureType target,
-  //                          int         level,
-  //                          GLFormat    internalFormat,
-  //                          int         width,
-  //                          int         height,
-  //                          int         border,
-  //                          GLFormat    format,
-  //                          GLType      type,
-  //                          const void* data) const = 0;
-
   virtual void generateMipmap(int target) const = 0;
 
   virtual void drawArrays(int mode,

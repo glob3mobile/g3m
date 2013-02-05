@@ -185,6 +185,17 @@ public:
 
 };
 
+CachedDownloader::~CachedDownloader() {
+  delete _downloader;
+
+  if (_lastImage != NULL) {
+    IFactory::instance()->deleteImage(_lastImage);
+  }
+#ifdef C_CODE
+  delete _lastImageURL;
+#endif
+}
+
 void CachedDownloader::start() {
   _downloader->start();
 }
@@ -200,7 +211,7 @@ void CachedDownloader::cancelRequest(long long requestId) {
 const IImage* CachedDownloader::getCachedImage(const URL& url) {
   if ( (_lastImage != NULL) && (_lastImageURL != NULL) ) {
     if (_lastImageURL->isEqualsTo(url)) {
-//      ILogger::instance()->logInfo("Used chached image for %s", url.description().c_str());
+      // ILogger::instance()->logInfo("Used chached image for %s", url.description().c_str());
       return _lastImage->shallowCopy();
     }
   }
@@ -212,7 +223,10 @@ const IImage* CachedDownloader::getCachedImage(const URL& url) {
       IFactory::instance()->deleteImage(_lastImage);
     }
     _lastImage = cachedImage->shallowCopy();
+
+#ifdef C_CODE
     delete _lastImageURL;
+#endif
     _lastImageURL = new URL(url);
   }
 

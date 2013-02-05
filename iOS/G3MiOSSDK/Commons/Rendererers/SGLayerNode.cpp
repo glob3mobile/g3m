@@ -69,30 +69,16 @@ URL SGLayerNode::getURL() const {
   return URL(path, false);
 }
 
-void SGLayerNode::requestImage() {
+void SGLayerNode::requestImage(const G3MRenderContext* rc) {
   if (_uri.compare("") == 0) {
     return;
   }
 
-  if (_context == NULL) {
-    return;
-  }
-
-  _context->getDownloader()->requestImage(getURL(),
-                                          TEXTURES_DOWNLOAD_PRIORITY,
-                                          TimeInterval::fromDays(30),
-                                          new ImageDownloadListener(this),
-                                          true);
-}
-
-void SGLayerNode::initialize(const G3MContext* context,
-                             SGShape *shape) {
-  SGNode::initialize(context, shape);
-
-  if (!_initialized) {
-    _initialized = true;
-    requestImage();
-  }
+  rc->getDownloader()->requestImage(getURL(),
+                                    TEXTURES_DOWNLOAD_PRIORITY,
+                                    TimeInterval::fromDays(30),
+                                    new ImageDownloadListener(this),
+                                    true);
 }
 
 const IGLTextureId* SGLayerNode::getTextureId(const G3MRenderContext* rc) {
@@ -113,6 +99,11 @@ const IGLTextureId* SGLayerNode::getTextureId(const G3MRenderContext* rc) {
 
 const GLState* SGLayerNode::createState(const G3MRenderContext* rc,
                                         const GLState& parentState) {
+  if (!_initialized) {
+    _initialized = true;
+    requestImage(rc);
+  }
+
   const IGLTextureId* texId = getTextureId(rc);
   if (texId == NULL) {
     return NULL;
