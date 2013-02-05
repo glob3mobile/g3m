@@ -582,7 +582,7 @@ public:
         
     }
     
-    void visitTile(Tile* tile){
+    void visitTile(Tile* tile) const{
         
         TileTextureBuilder* ttb = new TileTextureBuilder(_texturizer, _rc, _layerSet, _parameters, _rc->getDownloader(), tile, NULL, NULL);
         
