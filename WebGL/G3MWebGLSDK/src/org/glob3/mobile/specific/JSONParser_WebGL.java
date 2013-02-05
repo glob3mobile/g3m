@@ -9,6 +9,9 @@ import org.glob3.mobile.generated.JSONArray;
 import org.glob3.mobile.generated.JSONBaseObject;
 import org.glob3.mobile.generated.JSONBoolean;
 import org.glob3.mobile.generated.JSONDouble;
+import org.glob3.mobile.generated.JSONFloat;
+import org.glob3.mobile.generated.JSONInteger;
+import org.glob3.mobile.generated.JSONLong;
 import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.JSONString;
 
@@ -45,7 +48,20 @@ public class JSONParser_WebGL
 
       final com.google.gwt.json.client.JSONNumber jsonNumber = value.isNumber();
       if (jsonNumber != null) {
-         return new JSONDouble(jsonNumber.doubleValue());
+         final double doubleValue = jsonNumber.doubleValue();
+         final int intValue = (int) doubleValue;
+         if (doubleValue == intValue) {
+            return new JSONInteger(intValue);
+         }
+         final float floatValue = (float) doubleValue;
+         if (doubleValue == floatValue) {
+            return new JSONFloat(floatValue);
+         }
+         final long longValue = (long) doubleValue;
+         if (doubleValue == longValue) {
+            return new JSONLong(longValue);
+         }
+         return new JSONDouble(doubleValue);
       }
 
       final com.google.gwt.json.client.JSONString jsonString = value.isString();
