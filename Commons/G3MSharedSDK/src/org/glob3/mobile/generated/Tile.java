@@ -188,15 +188,6 @@ public class Tile
   }
 
 
-  private java.util.ArrayList<Tile> getSubTiles()
-  {
-	if (_subtiles == null)
-	{
-	  _subtiles = createSubTiles();
-	  _justCreatedSubtiles = true;
-	}
-	return _subtiles;
-  }
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  Tile(Tile that);
@@ -304,6 +295,17 @@ public class Tile
   
 	if (_texturizedMesh != null)
 		_texturizedMesh.dispose();
+  }
+
+  //Change to public for TileCache
+  public final java.util.ArrayList<Tile> getSubTiles()
+  {
+	if (_subtiles == null)
+	{
+	  _subtiles = createSubTiles();
+	  _justCreatedSubtiles = true;
+	}
+	return _subtiles;
   }
 
 
