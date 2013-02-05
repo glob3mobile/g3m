@@ -12,14 +12,10 @@
 #include "Tile.hpp"
 
 class ITileVisitor{
-private:
-    
 public:
-    virtual ~ITileVisitor() {
-        
-    }
+    virtual ~ITileVisitor() { }
     
-    virtual void visitTile(Tile* tile);
+    virtual void visitTile(Tile* tile) const = 0;
 };
 
 
