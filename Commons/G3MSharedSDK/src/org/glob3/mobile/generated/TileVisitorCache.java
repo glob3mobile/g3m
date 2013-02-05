@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class TileVisitorCache implements ITileVisitor
+public class TileVisitorCache extends ITileVisitor
 {
 
 	private MultiLayerTileTexturizer _texturizer;
