@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
 import org.glob3.mobile.generated.IByteBuffer;
 
 
-public class ByteBuffer_Desktop
+public class ByteBuffer_JavaDesktop
     extends
       IByteBuffer {
 
@@ -15,7 +15,7 @@ public class ByteBuffer_Desktop
   private int _timestamp = 0;
 
 
-  public ByteBuffer_Desktop(final byte[] data) {
+  public ByteBuffer_JavaDesktop(final byte[] data) {
     _buffer = ByteBuffer.wrap(data);
 
     // _buffer = ByteBuffer.allocateDirect(data.length);
@@ -24,7 +24,7 @@ public class ByteBuffer_Desktop
   }
 
 
-  public ByteBuffer_Desktop(final int size) {
+  public ByteBuffer_JavaDesktop(final int size) {
     // _buffer = ByteBuffer.allocate(size);
     _buffer = ByteBuffer.wrap(new byte[size]);
   }

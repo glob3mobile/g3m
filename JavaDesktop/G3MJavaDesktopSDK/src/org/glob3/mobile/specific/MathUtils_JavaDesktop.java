@@ -5,7 +5,7 @@ package org.glob3.mobile.specific;
 import org.glob3.mobile.generated.IMathUtils;
 
 
-public class MathUtils_Desktop
+public class MathUtils_JavaDesktop
     extends
       IMathUtils {
 

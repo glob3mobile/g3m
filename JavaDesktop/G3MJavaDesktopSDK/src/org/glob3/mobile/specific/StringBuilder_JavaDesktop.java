@@ -5,7 +5,7 @@ package org.glob3.mobile.specific;
 import org.glob3.mobile.generated.IStringBuilder;
 
 
-public final class StringBuilder_Desktop
+public final class StringBuilder_JavaDesktop
          extends
             IStringBuilder {
 
@@ -14,7 +14,7 @@ public final class StringBuilder_Desktop
 
    @Override
    protected IStringBuilder getNewInstance() {
-      return new StringBuilder_Desktop();
+      return new StringBuilder_JavaDesktop();
    }
 
 

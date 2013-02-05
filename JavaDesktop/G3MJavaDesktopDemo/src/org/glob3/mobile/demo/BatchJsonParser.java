@@ -1,6 +1,6 @@
 
 
-package main;
+package org.glob3.mobile.demo;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,16 +15,41 @@ import org.glob3.mobile.generated.IMathUtils;
 import org.glob3.mobile.generated.IStringBuilder;
 import org.glob3.mobile.generated.JSONBaseObject;
 import org.glob3.mobile.generated.LogLevel;
-import org.glob3.mobile.specific.ByteBuffer_Desktop;
-import org.glob3.mobile.specific.Factory_Desktop;
-import org.glob3.mobile.specific.JSONParser_Desktop;
-import org.glob3.mobile.specific.Logger_Desktop;
-import org.glob3.mobile.specific.MathUtils_Desktop;
-import org.glob3.mobile.specific.StringBuilder_Desktop;
+import org.glob3.mobile.specific.ByteBuffer_JavaDesktop;
+import org.glob3.mobile.specific.Factory_JavaDesktop;
+import org.glob3.mobile.specific.JSONParser_JavaDesktop;
+import org.glob3.mobile.specific.Logger_JavaDesktop;
+import org.glob3.mobile.specific.MathUtils_JavaDesktop;
+import org.glob3.mobile.specific.StringBuilder_JavaDesktop;
 
 
 public class BatchJsonParser {
   public static void main(final String[] args) {
+    IStringBuilder.setInstance(new StringBuilder_JavaDesktop());
+    IMathUtils.setInstance(new MathUtils_JavaDesktop());
+    IFactory.setInstance(new Factory_JavaDesktop());
+    ILogger.setInstance(new Logger_JavaDesktop(LogLevel.ErrorLevel));
+
+    // checkJsonParser(new String("{\"i0\":0}"), new File(
+    // "/home/vidalete/bson1.bson"));
+    // checkJsonParser(new String("{\"i0\":0,\"i1\":1,\"i100\":100}"), new
+    // File(
+    // "/home/vidalete/bson2.bson"));
+    // checkJsonParser(new String("{\"d0\":0,\"d1\":1,\"d100\":100}"), new
+    // File(
+    // "/home/vidalete/bson3.bson"));
+    // checkJsonParser(new String("{\"f\":false,\"t\":true}"), new File(
+    // "/home/vidalete/bson4.bson"));
+    // checkJsonParser(new String("{\"hello\":\"world\"}"), new File(
+    // "/home/vidalete/bson5.bson"));
+
+    checkJsonParser(new String("{\"array\":[3,null,4]}"), new File(
+        "/home/vidalete/array.bson"));
+
+  }
+
+
+  public static void main2(final String[] args) {
 
     System.out.println("Batch JSON Parser Desktop 0.1");
     System.out.println("-----------------------------\n");
@@ -38,10 +63,10 @@ public class BatchJsonParser {
     final File fJson = new File(args[0]);
     final File fBson = new File(args[1]);
 
-    IStringBuilder.setInstance(new StringBuilder_Desktop());
-    IMathUtils.setInstance(new MathUtils_Desktop());
-    IFactory.setInstance(new Factory_Desktop());
-    ILogger.setInstance(new Logger_Desktop(LogLevel.ErrorLevel));
+    IStringBuilder.setInstance(new StringBuilder_JavaDesktop());
+    IMathUtils.setInstance(new MathUtils_JavaDesktop());
+    IFactory.setInstance(new Factory_JavaDesktop());
+    ILogger.setInstance(new Logger_JavaDesktop(LogLevel.ErrorLevel));
 
 
     if (fJson.exists() && fJson.isFile()
@@ -83,7 +108,7 @@ public class BatchJsonParser {
       try {
         final FileOutputStream fout = new FileOutputStream(fBson);
 
-        final ByteBuffer_Desktop bb = (ByteBuffer_Desktop) BSONGenerator.generate(jbase);
+        final ByteBuffer_JavaDesktop bb = (ByteBuffer_JavaDesktop) BSONGenerator.generate(jbase);
         fout.write(bb.getBuffer().array());
         fout.flush();
         fout.close();
@@ -120,8 +145,8 @@ public class BatchJsonParser {
         finJson.read(fileContent);
         finJson.close();
 
-        final JSONParser_Desktop jp = new JSONParser_Desktop();
-        jbase = jp.parse(new ByteBuffer_Desktop(fileContent));
+        final JSONParser_JavaDesktop jp = new JSONParser_JavaDesktop();
+        jbase = jp.parse(new ByteBuffer_JavaDesktop(fileContent));
         System.out.println(jbase.description());
       }
       catch (final FileNotFoundException e) {
@@ -136,39 +161,21 @@ public class BatchJsonParser {
   }
 
 
-  // private static void checkJsonParser() {
-  // final Gson gson = new Gson();
-  // final Collection<Serializable> collection = new
-  // ArrayList<Serializable>();
-  // // collection.add("hello");
-  // // collection.add(5);
-  // // collection.add(new Double(5.234234));
-  // // collection.add(new Long((long) 999999999 * (long) 10));
-  // // collection.add(new Event("GREETINGS", 4, "guest"));
-  //
-  // collection.add(false);
-  // collection.add(0.0);
-  // // final String json = new String(
-  // //
-  // "{\"f\":false, \"d0\":0.0, \"i0\":0, \"d100\":100.0, \"d1\":1.0, \"t\":true, \"s\":\"hello world\", \"i100\":100, \"i1\":1}");
-  // String json = gson.toJson(collection);
-  //
-  // json = new String("{\"array\":[{\"f\":false}, {\"d00\":0.0}]}");
-  //
-  // System.out.println("Using Gson.toJson() on a raw collection: " + json);
-  //
-  //
-  // final JSONParser_Desktop jp = new JSONParser_Desktop();
-  //
-  // final JSONBaseObject jbase = jp.parse(json);
-  //
-  // System.out.println(jbase.description());
-  //
-  // final ByteBuffer_Desktop bb = (ByteBuffer_Desktop)
-  // BSONGenerator.generate(jbase);
-  //
-  // final JSONBaseObject jbaseParsed = BSONParser.parse(bb);
-  //
-  // System.out.println(jbaseParsed.description());
-  // }
+  private static void checkJsonParser(final String json,
+                                      final File fOut) {
+    System.out.println("Using Gson.toJson() on a raw collection: " + json);
+    final JSONParser_JavaDesktop jp = new JSONParser_JavaDesktop();
+    final JSONBaseObject jbase = jp.parse(json);
+    System.out.println("JSONBaseObject description: " + jbase.description());
+    try {
+      if (fOut.exists() || fOut.createNewFile()) {
+        writeBsonFile(jbase, fOut);
+      }
+    }
+    catch (final IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+
+  }
 }

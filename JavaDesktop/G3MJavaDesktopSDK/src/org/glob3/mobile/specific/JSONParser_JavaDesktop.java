@@ -16,25 +16,26 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 
 
-public class JSONParser_Desktop
+public class JSONParser_JavaDesktop
     extends
       IJSONParser {
 
   @Override
-  public org.glob3.mobile.generated.JSONBaseObject parse(final String string) {
+  public JSONBaseObject parse(final String string) {
 
 
     final JsonParser parser = new JsonParser();
     final JsonElement je = parser.parse(string);
 
-    org.glob3.mobile.generated.JSONBaseObject g3mJSONBaseObject = null;
+    JSONBaseObject g3mJSONBaseObject = null;
 
     if (je.isJsonArray()) {
       final JsonArray jsonArray = je.getAsJsonArray();
       g3mJSONBaseObject = new org.glob3.mobile.generated.JSONArray();
 
       for (int i = 0; i < jsonArray.size(); i++) {
-        g3mJSONBaseObject.asArray().add(parse(jsonArray.get(i).toString()));
+        final JSONBaseObject aux = parse(jsonArray.get(i).toString());
+        g3mJSONBaseObject.asArray().add(aux);
       }
     }
     else if (je.isJsonObject()) {
@@ -46,18 +47,18 @@ public class JSONParser_Desktop
       g3mJSONBaseObject = new org.glob3.mobile.generated.JSONObject();
 
       for (final Entry<String, JsonElement> entry : set) {
-        g3mJSONBaseObject.asObject().put(entry.getKey(),
-            parse(entry.getValue().toString()));
+        final JSONBaseObject aux = parse(entry.getValue().toString());
+        g3mJSONBaseObject.asObject().put(entry.getKey(), aux);
       }
     }
+    else if (je.isJsonNull()) {
 
+      // TODO:
+      // g3mJSONBaseObject = new org.glob3.mobile.generated.JSONNull();
+    }
     else if (je.isJsonPrimitive()) {
       final JsonPrimitive jp = je.getAsJsonPrimitive();
-
       if (jp.isString()) {
-        // g3mJSONBaseObject = new
-        // org.glob3.mobile.generated.JSONString((String) rawJson);
-
         // TODO Hack to return the full string if it contain ":"
         g3mJSONBaseObject = new org.glob3.mobile.generated.JSONString(
             jp.getAsString());
@@ -93,8 +94,8 @@ public class JSONParser_Desktop
       }
     }
 
-
     return g3mJSONBaseObject;
+
   }
 
 

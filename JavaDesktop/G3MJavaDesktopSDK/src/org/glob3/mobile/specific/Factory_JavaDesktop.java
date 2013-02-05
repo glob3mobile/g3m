@@ -12,7 +12,7 @@ import org.glob3.mobile.generated.IShortBuffer;
 import org.glob3.mobile.generated.ITimer;
 
 
-public class Factory_Desktop
+public class Factory_JavaDesktop
     extends
       IFactory {
 
@@ -67,7 +67,7 @@ public class Factory_Desktop
 
   @Override
   public IFloatBuffer createFloatBuffer(final int size) {
-    return new FloatBuffer_Desktop(size);
+    return new FloatBuffer_JavaDesktop(size);
   }
 
 
@@ -108,14 +108,14 @@ public class Factory_Desktop
 
   @Override
   public IByteBuffer createByteBuffer(final int length) {
-    return new ByteBuffer_Desktop(length);
+    return new ByteBuffer_JavaDesktop(length);
   }
 
 
   @Override
   public IByteBuffer createByteBuffer(final byte[] data,
                                       final int length) {
-    return new ByteBuffer_Desktop(data);
+    return new ByteBuffer_JavaDesktop(data);
   }
 
 }

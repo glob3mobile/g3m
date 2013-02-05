@@ -1,6 +1,6 @@
 
 
-package main;
+package org.glob3.mobile.demo;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,11 +16,11 @@ import org.glob3.mobile.generated.IStringBuilder;
 import org.glob3.mobile.generated.JSONBaseObject;
 import org.glob3.mobile.generated.JSONGenerator;
 import org.glob3.mobile.generated.LogLevel;
-import org.glob3.mobile.specific.ByteBuffer_Desktop;
-import org.glob3.mobile.specific.Factory_Desktop;
-import org.glob3.mobile.specific.Logger_Desktop;
-import org.glob3.mobile.specific.MathUtils_Desktop;
-import org.glob3.mobile.specific.StringBuilder_Desktop;
+import org.glob3.mobile.specific.ByteBuffer_JavaDesktop;
+import org.glob3.mobile.specific.Factory_JavaDesktop;
+import org.glob3.mobile.specific.Logger_JavaDesktop;
+import org.glob3.mobile.specific.MathUtils_JavaDesktop;
+import org.glob3.mobile.specific.StringBuilder_JavaDesktop;
 
 
 public class BatchBsonParser {
@@ -38,10 +38,10 @@ public class BatchBsonParser {
     final File fBson = new File(args[0]);
     final File fJson = new File(args[1]);
 
-    IStringBuilder.setInstance(new StringBuilder_Desktop());
-    IMathUtils.setInstance(new MathUtils_Desktop());
-    IFactory.setInstance(new Factory_Desktop());
-    ILogger.setInstance(new Logger_Desktop(LogLevel.ErrorLevel));
+    IStringBuilder.setInstance(new StringBuilder_JavaDesktop());
+    IMathUtils.setInstance(new MathUtils_JavaDesktop());
+    IFactory.setInstance(new Factory_JavaDesktop());
+    ILogger.setInstance(new Logger_JavaDesktop(LogLevel.ErrorLevel));
 
     if (fBson.exists() && fBson.isFile()
         && fBson.getName().toLowerCase().endsWith(".bson")) {
@@ -94,7 +94,7 @@ public class BatchBsonParser {
          */
         finBson.read(fileContent);
         finBson.close();
-        final ByteBuffer_Desktop bb = new ByteBuffer_Desktop(fileContent);
+        final ByteBuffer_JavaDesktop bb = new ByteBuffer_JavaDesktop(fileContent);
         jbase = BSONParser.parse(bb);
         System.out.println(jbase.description());
       }

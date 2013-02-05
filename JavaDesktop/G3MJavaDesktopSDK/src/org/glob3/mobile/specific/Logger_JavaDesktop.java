@@ -12,14 +12,14 @@ import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.LogLevel;
 
 
-public class Logger_Desktop
+public class Logger_JavaDesktop
     extends
       ILogger {
 
   private final Locale _locale = new Locale("myLocale");
 
 
-  public Logger_Desktop(final LogLevel level) {
+  public Logger_JavaDesktop(final LogLevel level) {
     super(level);
   }
 

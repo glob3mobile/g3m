@@ -9,7 +9,7 @@ import java.nio.FloatBuffer;
 import org.glob3.mobile.generated.IFloatBuffer;
 
 
-public class FloatBuffer_Desktop
+public class FloatBuffer_JavaDesktop
     extends
       IFloatBuffer {
 
@@ -17,13 +17,13 @@ public class FloatBuffer_Desktop
   private int _timestamp;
 
 
-  public FloatBuffer_Desktop(final int size) {
+  public FloatBuffer_JavaDesktop(final int size) {
     _buffer = ByteBuffer.allocateDirect(size * 4).order(
         ByteOrder.nativeOrder()).asFloatBuffer();
   }
 
 
-  public FloatBuffer_Desktop(final float f0,
+  public FloatBuffer_JavaDesktop(final float f0,
                              final float f1,
                              final float f2,
                              final float f3,
