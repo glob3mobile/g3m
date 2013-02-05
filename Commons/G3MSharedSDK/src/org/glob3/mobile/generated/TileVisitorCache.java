@@ -20,6 +20,8 @@ public class TileVisitorCache implements ITileVisitor
 
 	}
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: void visitTile(Tile* tile) const
 	public final void visitTile(Tile tile)
 	{
 
