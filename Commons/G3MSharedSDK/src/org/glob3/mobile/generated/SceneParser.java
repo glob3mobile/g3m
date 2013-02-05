@@ -13,6 +13,7 @@ public class SceneParser
 	private static final String COLORLINE = "colorLine";
 	private static final String SIZELINE = "sizeLine";
 	private static final String WEB = "web";
+	private static final String SHOWLABEL = "showLabel";
 
 	private static final String WMS110 = "1.1.0";
 	private static final String WMS111 = "1.1.1";
@@ -189,6 +190,7 @@ public class SceneParser
 			final String minDistance = jsonItems.getAsObject(i).getAsString(MINDISTANCE).value();
 			final String colorLine = jsonItems.getAsObject(i).getAsString(COLORLINE).value();
 			final String sizeLine = jsonItems.getAsObject(i).getAsString(SIZELINE).value();
+			final String showLabel = jsonItems.getAsObject(i).getAsString(SHOWLABEL).value();
     
 			IStringBuilder url = IStringBuilder.newStringBuilder();
 			url.addString(geojsonDatasource);
@@ -206,6 +208,7 @@ public class SceneParser
 			geojsonMetadata.put(WEB,"");
 			geojsonMetadata.put(MINDISTANCE,minDistance);
 			geojsonMetadata.put(SIZELINE,sizeLine);
+			geojsonMetadata.put(SHOWLABEL,showLabel);
     
 			legendLayer.add(geojsonMetadata);
     
