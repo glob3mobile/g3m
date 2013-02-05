@@ -249,8 +249,8 @@ public class G3MNetCDFActivity
 
                         final JSONObject feature = features.getAsObject(i);
 
-                        vertices.add(new Geodetic3D(Angle.fromDegrees(feature.getAsNumber("lat").doubleValue()),
-                                 Angle.fromDegrees(feature.getAsNumber("lon").doubleValue()), 100000));
+                        vertices.add(new Geodetic3D(Angle.fromDegrees(feature.getAsNumber("lat").value()),
+                                 Angle.fromDegrees(feature.getAsNumber("lon").value()), 100000));
 
                         final JSONArray values = feature.getAsArray("values");
 
@@ -261,7 +261,7 @@ public class G3MNetCDFActivity
                            final JSONObject value = values.getAsObject(a);
 
                            final Color interpolatedColor = fromColor.mixedWith(toColor,
-                                    normalize(Double.valueOf(value.getAsNumber("mw").doubleValue()).floatValue(), -10, 10, 1, 0));
+                                    normalize(Double.valueOf(value.getAsNumber("mw").value()).floatValue(), -10, 10, 1, 0));
 
                            colors.add(interpolatedColor);
                         }
@@ -370,9 +370,8 @@ public class G3MNetCDFActivity
                         final JSONObject feature = features.getAsObject(i);
 
 
-                        final Geodetic2D position = new Geodetic2D(
-                                 Angle.fromDegrees(feature.getAsNumber("latitude").doubleValue()),
-                                 Angle.fromDegrees(feature.getAsNumber("longitude").doubleValue()));
+                        final Geodetic2D position = new Geodetic2D(Angle.fromDegrees(feature.getAsNumber("latitude").value()),
+                                 Angle.fromDegrees(feature.getAsNumber("longitude").value()));
 
                         final JSONArray values = feature.getAsArray("values");
 
@@ -389,21 +388,18 @@ public class G3MNetCDFActivity
                            final Color fromColor = Color.fromRGBA(0, 0, 1, 1);
                            final Color toColor = Color.fromRGBA(1, 0, 0, 1);
 
-                           final Color interpolatedColor = fromColor.mixedWith(
-                                    toColor,
-                                    normalize(Double.valueOf(value.getAsNumber("merid_wnd").doubleValue()).floatValue(), -10, 10,
-                                             1, 0));
+                           final Color interpolatedColor = fromColor.mixedWith(toColor,
+                                    normalize(Double.valueOf(value.getAsNumber("merid_wnd").value()).floatValue(), -10, 10, 1, 0));
 
-                           final Geodetic3D position3D = new Geodetic3D(position,
-                                    (value.getAsNumber("level").doubleValue() * 10000));
+                           final Geodetic3D position3D = new Geodetic3D(position, (value.getAsNumber("level").value() * 10000));
 
                            _shapesRenderer.addShape(new BoxShape(position3D, extent, borderWidth, interpolatedColor,
                                     interpolatedColor));
                         }
 
 
-                        Log.d(G3MNetCDFActivity.this.toString(), "longitude:" + feature.getAsNumber("longitude").doubleValue());
-                        Log.d(G3MNetCDFActivity.this.toString(), "latitude:" + feature.getAsNumber("latitude").doubleValue());
+                        Log.d(G3MNetCDFActivity.this.toString(), "longitude:" + feature.getAsNumber("longitude").value());
+                        Log.d(G3MNetCDFActivity.this.toString(), "latitude:" + feature.getAsNumber("latitude").value());
 
                         _isDone = true;
                      }
@@ -496,8 +492,8 @@ public class G3MNetCDFActivity
                         //   final WindModelCsiro wms = new WindModelCsiro();
                         final JSONObject feature = features.getAsObject(i);
 
-                        vertices.add(new Geodetic3D(Angle.fromDegrees(feature.getAsNumber("latitude").doubleValue()),
-                                 Angle.fromDegrees(feature.getAsNumber("longitude").doubleValue()), 100000));
+                        vertices.add(new Geodetic3D(Angle.fromDegrees(feature.getAsNumber("latitude").value()),
+                                 Angle.fromDegrees(feature.getAsNumber("longitude").value()), 100000));
 
 
                         final JSONArray values = feature.getAsArray("values");
@@ -512,10 +508,8 @@ public class G3MNetCDFActivity
                         for (int a = 0; a < values.size(); a++) {
                            final JSONObject value = values.getAsObject(a);
 
-                           final Color interpolatedColor = fromColor.mixedWith(
-                                    toColor,
-                                    normalize(Double.valueOf(value.getAsNumber("merid_wnd").doubleValue()).floatValue(), -10, 10,
-                                             1, 0));
+                           final Color interpolatedColor = fromColor.mixedWith(toColor,
+                                    normalize(Double.valueOf(value.getAsNumber("merid_wnd").value()).floatValue(), -10, 10, 1, 0));
 
                            colors.add(interpolatedColor);
                         }
@@ -612,8 +606,8 @@ public class G3MNetCDFActivity
 
                         final WindModelCsiro wms = new WindModelCsiro();
                         final JSONObject feature = features.getAsObject(i);
-                        wms.setLatitude(Double.valueOf(feature.getAsNumber("latitude").doubleValue()).floatValue());
-                        wms.setLongitude(Double.valueOf(feature.getAsNumber("longitude").doubleValue()).floatValue());
+                        wms.setLatitude(Double.valueOf(feature.getAsNumber("latitude").value()).floatValue());
+                        wms.setLongitude(Double.valueOf(feature.getAsNumber("longitude").value()).floatValue());
                         final JSONArray values = feature.getAsArray("values");
 
                         final ArrayList<Float> meridWinds = new ArrayList<Float>();
@@ -622,9 +616,9 @@ public class G3MNetCDFActivity
 
                         for (int a = 0; a < values.size(); a++) {
                            final JSONObject value = values.getAsObject(a);
-                           meridWinds.add(Double.valueOf(value.getAsNumber("merid_wnd").doubleValue()).floatValue());
-                           zonalWinds.add(Double.valueOf(value.getAsNumber("zonal_wnd").doubleValue()).floatValue());
-                           levels.add(Double.valueOf(value.getAsNumber("level").doubleValue()).floatValue());
+                           meridWinds.add(Double.valueOf(value.getAsNumber("merid_wnd").value()).floatValue());
+                           zonalWinds.add(Double.valueOf(value.getAsNumber("zonal_wnd").value()).floatValue());
+                           levels.add(Double.valueOf(value.getAsNumber("level").value()).floatValue());
                         }
                         wms.setMeridWind(meridWinds);
                         wms.setZonalWind(zonalWinds);

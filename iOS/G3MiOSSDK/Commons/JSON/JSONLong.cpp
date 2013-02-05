@@ -19,7 +19,7 @@ const std::string JSONLong::description() const {
   IStringBuilder *isb = IStringBuilder::newStringBuilder();
 
   isb->addString("long/");
-  isb->addInt(_value);
+  isb->addLong(_value);
 
   const std::string s = isb->getString();
   delete isb;
