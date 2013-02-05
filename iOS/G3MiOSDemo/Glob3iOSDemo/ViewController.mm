@@ -40,6 +40,7 @@
 #include "JSONGenerator.hpp"
 #include "BSONParser.hpp"
 #include "BSONGenerator.hpp"
+#include "GEOJSONParser.hpp"
 
 class TestVisibleSectorListener : public VisibleSectorListener {
 public:
