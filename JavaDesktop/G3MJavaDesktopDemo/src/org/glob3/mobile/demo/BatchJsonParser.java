@@ -43,8 +43,10 @@ public class BatchJsonParser {
     // checkJsonParser(new String("{\"hello\":\"world\"}"), new File(
     // "/home/vidalete/bson5.bson"));
 
-    checkJsonParser(new String("{\"array\":[3,null,4]}"), new File(
-        "/home/vidalete/array.bson"));
+    checkJsonParser(
+        new String(
+            "{\"array\":[3,null,4],\"formatted_address\" : \"10440 Aldeanueva, Cáceres, España\"}"),
+        new File("/home/vidalete/array.bson"));
 
   }
 
