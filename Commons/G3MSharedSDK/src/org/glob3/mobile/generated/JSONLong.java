@@ -61,7 +61,7 @@ public class JSONLong extends JSONNumber
 	IStringBuilder isb = IStringBuilder.newStringBuilder();
   
 	isb.addString("long/");
-	isb.addInt(_value);
+	isb.addLong(_value);
   
 	final String s = isb.getString();
 	if (isb != null)
