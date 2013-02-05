@@ -26,8 +26,13 @@ public:
 
   static std::string generate(const JSONBaseObject* value);
 
+  //  void visitNumber(const JSONNumber* value);
+  void visitDouble (const JSONDouble*  value);
+  void visitFloat  (const JSONFloat*   value);
+  void visitInteger(const JSONInteger* value);
+  void visitLong   (const JSONLong*    value);
+
   void visitBoolean(const JSONBoolean* value);
-  void visitNumber(const JSONNumber* value);
   void visitString(const JSONString* value);
 
   void visitArrayBeforeChildren(const JSONArray* value);
@@ -41,7 +46,7 @@ public:
   void visitObjectBeforeChild(const JSONObject* value,
                               const std::string& key);
   void visitObjectAfterChildren(const JSONObject* value);
-
+  
 };
 
 #endif

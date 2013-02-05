@@ -15,6 +15,9 @@ class JSONBaseObject;
 class JSONString;
 class JSONArray;
 class JSONNumber;
+class JSONDouble;
+class JSONInteger;
+class JSONLong;
 class JSONBoolean;
 class JSONObject;
 
@@ -32,7 +35,8 @@ private:
   static JSONArray*   parseArray(ByteBufferIterator* iterator);
   static JSONArray*   parseCustomizedArray(ByteBufferIterator* iterator);
   static JSONNumber*  parseDouble(ByteBufferIterator* iterator);
-  static JSONNumber*  parseInt(ByteBufferIterator* iterator);
+  static JSONInteger* parseInt32(ByteBufferIterator* iterator);
+  static JSONLong*    parseInt64(ByteBufferIterator* iterator);
   static JSONBoolean* parseBool(ByteBufferIterator* iterator);
   static JSONObject*  parseObject(ByteBufferIterator* iterator);
 
