@@ -9,14 +9,13 @@ package org.glob3.mobile.generated;
 
 
 
-public class ITileVisitor
+public abstract class ITileVisitor
 {
-
 	public void dispose()
 	{
-
 	}
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//	virtual void visitTile(Tile tile);
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual void visitTile(Tile* tile) const = 0;
+	public abstract void visitTile(Tile tile);
 }
