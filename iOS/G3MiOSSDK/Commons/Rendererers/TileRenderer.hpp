@@ -23,6 +23,7 @@ class VisibleSectorListener;
 #include "TileKey.hpp"
 #include "Camera.hpp"
 #include "LayerSet.hpp"
+#include "ITileVisitor.hpp"
 
 
 class TileRenderContext {
@@ -241,6 +242,7 @@ private:
   const TilesRenderParameters* _parameters;
   const bool                   _showStatistics;
   bool                         _topTilesJustCreated;
+  ITileVisitor*                _tileVisitor = NULL;
 
 #ifdef C_CODE
   const Camera*     _lastCamera;
@@ -265,6 +267,12 @@ private:
   Sector* _lastVisibleSector;
 
   std::vector<VisibleSectorListenerEntry*> _visibleSectorListeners;
+    
+  void visitSubTilesTouchesWith(const G3MRenderContext* rc,
+                                Tile* tile,
+                                const Sector sectorToVisit,
+                                const int topLevel,
+                                const int maxLevel);
 
 public:
   TileRenderer(const TileTessellator* tessellator,
@@ -290,6 +298,14 @@ public:
 
   bool isReadyToRender(const G3MRenderContext* rc);
 
+  void acceptTileVisitor(ITileVisitor* tileVisitor) {
+    _tileVisitor = tileVisitor;
+  }
+    
+  void visitTilesTouchesWith(const G3MRenderContext* rc,
+                             const Sector sector,
+                             const int topLevel,
+                             const int maxLevel);
 
   void start() {
     _firstRender = true;

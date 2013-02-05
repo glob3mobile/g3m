@@ -275,6 +275,55 @@ bool TileRenderer::isReadyToRender(const G3MRenderContext *rc) {
   return true;
 }
 
+void TileRenderer::visitTilesTouchesWith(const G3MRenderContext* rc,
+                                         const Sector sector,
+                                         const int topLevel,
+                                         const int maxLevel){
+
+    if (_tileVisitor != NULL) {
+        const int topLevelCache = (topLevel < _parameters->_topLevel)
+        ? _parameters->_topLevel
+        : topLevel;
+        
+        const int maxLevelCache = (maxLevel > _parameters->_maxLevel)
+        ? _parameters->_maxLevel
+        : maxLevel;
+        // Get Tiles to Cache
+        const int topLevelTilesCount = _topLevelTiles.size();
+        for (int i = 0; i < topLevelTilesCount; i++) {
+            Tile* tile = _topLevelTiles[i];
+            if (tile->getSector().touchesWith(sector)) {
+                _tileVisitor->visitTile(tile);
+                visitSubTilesTouchesWith(rc, tile, sector, topLevelCache,
+                                         maxLevelCache);
+            }
+        }
+    }
+}
+
+void TileRenderer::visitSubTilesTouchesWith(const G3MRenderContext* rc,
+                                            Tile* tile,
+                                            const Sector sectorToVisit,
+                                            const int topLevel,
+                                            const int maxLevel) {
+    if (tile->getLevel() < maxLevel) {
+        const int subTilesCount = tile->getSubTiles()->size();
+        for (int i = 0; i < subTilesCount; i++) {
+            Tile* tl = tile->getSubTiles()->at(i);
+            if (tl->getSector().touchesWith(sectorToVisit)) {
+                if ((tile->getLevel() >= topLevel)) {
+                    rc->getLogger()->logInfo("Level: %s. Col: %s; Row: %s",
+                                             tl->getLevel(),
+                                             tl->getColumn(),
+                                             tl->getRow());
+                    _tileVisitor->visitTile(tl);
+                }
+                visitSubTilesTouchesWith(rc, tl, sectorToVisit, topLevel, maxLevel);
+            }
+        }
+    }
+}
+
 void TileRenderer::render(const G3MRenderContext* rc,
                           const GLState& parentState) {
   // Saving camera for use in onTouchEvent

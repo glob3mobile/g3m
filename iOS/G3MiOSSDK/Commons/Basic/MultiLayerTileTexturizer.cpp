@@ -27,6 +27,8 @@
 #include "GLConstants.hpp"
 #include "IImageListener.hpp"
 
+#include "ITileVisitor.hpp"
+
 #define TILE_DOWNLOAD_PRIORITY 1000000000
 
 enum PetitionStatus {
@@ -134,6 +136,9 @@ public:
     return true;
   }
 };
+
+
+
 
 
 class TextureUploader : public IImageListener {
@@ -552,6 +557,37 @@ public:
     }
   }
 
+};
+
+
+class TileVisitorCache : public ITileVisitor{
+    
+private:
+    MultiLayerTileTexturizer* _texturizer;
+    const TilesRenderParameters* _parameters;
+    const G3MRenderContext* _rc;
+    const LayerSet* _layerSet;
+public:
+    
+    TileVisitorCache(MultiLayerTileTexturizer* texturizer,
+                     const TilesRenderParameters* parameters,
+                     const G3MRenderContext*         rc,
+                     const LayerSet* layerSet) :
+    _texturizer(texturizer),
+    _parameters(parameters),
+    _rc(rc),
+    _layerSet(layerSet){}
+    
+    virtual ~TileVisitorCache() {
+        
+    }
+    
+    void visitTile(Tile* tile){
+        
+        TileTextureBuilder* ttb = new TileTextureBuilder(_texturizer, _rc, _layerSet, _parameters, _rc->getDownloader(), tile, NULL, NULL);
+        
+        ttb->start();
+    }
 };
 
 void TextureUploader::imageCreated(IImage* image) {
