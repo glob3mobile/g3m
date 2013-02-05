@@ -35,6 +35,8 @@ public class SGLayerNode extends SGNode
   private final String _wrapS;
   private final String _wrapT;
 
+  private boolean _initialized;
+
   private IGLTextureId getTextureId(G3MRenderContext rc)
   {
 	if (_textureId == null)
@@ -52,19 +54,14 @@ public class SGLayerNode extends SGNode
   }
 
   private IImage _downloadedImage;
-  private void requestImage()
+  private void requestImage(G3MRenderContext rc)
   {
 	if (_uri.compareTo("") == 0)
 	{
 	  return;
 	}
   
-	if (_context == null)
-	{
-	  return;
-	}
-  
-	_context.getDownloader().requestImage(getURL(), DefineConstants.TEXTURES_DOWNLOAD_PRIORITY, TimeInterval.fromDays(30), new ImageDownloadListener(this), true);
+	rc.getDownloader().requestImage(getURL(), DefineConstants.TEXTURES_DOWNLOAD_PRIORITY, TimeInterval.fromDays(30), new ImageDownloadListener(this), true);
   }
 
   private IGLTextureId _textureId;
@@ -85,7 +82,6 @@ public class SGLayerNode extends SGNode
 
 
   public SGLayerNode(String id, String sId, String uri, String applyTo, String blendMode, boolean flipY, String magFilter, String minFilter, String wrapS, String wrapT)
-//  _textureBound(false),
   {
 	  super(id, sId);
 	  _uri = uri;
@@ -98,6 +94,7 @@ public class SGLayerNode extends SGNode
 	  _wrapT = wrapT;
 	  _downloadedImage = null;
 	  _textureId = null;
+	  _initialized = false;
 
   }
 
@@ -110,15 +107,14 @@ public class SGLayerNode extends SGNode
 	_downloadedImage = image.shallowCopy();
   }
 
-  public final void initialize(G3MContext context, SGShape shape)
-  {
-	super.initialize(context, shape);
-  
-	requestImage();
-  }
-
   public final GLState createState(G3MRenderContext rc, GLState parentState)
   {
+	if (!_initialized)
+	{
+	  _initialized = true;
+	  requestImage(rc);
+	}
+  
 	final IGLTextureId texId = getTextureId(rc);
 	if (texId == null)
 	{

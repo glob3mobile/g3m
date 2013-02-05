@@ -30,6 +30,8 @@ public final class ES2Renderer
    private final GL                _gl;
    private ShaderProgram           _shaderProgram;
 
+   private final NativeGL2_Android _nativeGL;
+
 
    // private ShaderProgram		   _shaderProgram2;
 
@@ -38,8 +40,13 @@ public final class ES2Renderer
       _widgetAndroid = widget;
       _width = 1;
       _height = 1;
-      final NativeGL2_Android nativeGL = new NativeGL2_Android();
-      _gl = new GL(nativeGL, false);
+      _nativeGL = new NativeGL2_Android();
+      _gl = new GL(_nativeGL, false);
+   }
+
+
+   void setOpenGLThread(final Thread openglThread) {
+      _nativeGL.setOpenGLThread(openglThread);
    }
 
 

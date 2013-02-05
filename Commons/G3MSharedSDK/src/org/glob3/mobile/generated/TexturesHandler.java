@@ -7,25 +7,7 @@ public class TexturesHandler
 
   private final boolean _verbose;
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void showHolders(const String& message) const
-  private void showHolders(String message)
-  {
-	//  if (false) {
-	//    std::string holdersString = ">>>> " + message + ", Holders=(";
-	//    for (int i = 0; i < _textureHolders.size(); i++) {
-	//      TextureHolder* holder = _textureHolders[i];
-	//
-	//      if (i > 0) {
-	//        holdersString += ", ";
-	//      }
-	//      holdersString += holder->description();
-	//    }
-	//    holdersString += ")";
-	//
-	//    ILogger::instance()->logInfo("%s\n", holdersString.c_str() );
-	//  }
-  }
+  //void showHolders(const std::string& message) const;
 
 
   public TexturesHandler(GL gl, boolean verbose)
@@ -54,7 +36,7 @@ public class TexturesHandler
 	}
   
 	TextureHolder holder = new TextureHolder(textureSpec);
-	holder._glTextureId= _gl.uploadTexture(image, format, textureSpec.isMipmap());
+	holder._glTextureId = _gl.uploadTexture(image, format, textureSpec.isMipmap());
   
   
 	if (_verbose)
@@ -64,21 +46,40 @@ public class TexturesHandler
   
 	_textureHolders.add(holder);
   
-	showHolders("getGLTextureId(): created holder " + holder.description());
+	//showHolders("getGLTextureId(): created holder " + holder->description());
   
 	return holder._glTextureId;
   }
 
+
+  //void TexturesHandler::showHolders(const std::string& message) const {
+  //  if (false) {
+  //    std::string holdersString = ">>>> " + message + ", Holders=(";
+  //    for (int i = 0; i < _textureHolders.size(); i++) {
+  //      TextureHolder* holder = _textureHolders[i];
+  //
+  //      if (i > 0) {
+  //        holdersString += ", ";
+  //      }
+  //      holdersString += holder->description();
+  //    }
+  //    holdersString += ")";
+  //
+  //    ILogger::instance()->logInfo("%s\n", holdersString.c_str() );
+  //  }
+  //}
+  
   public final IGLTextureId getGLTextureIdIfAvailable(TextureSpec textureSpec)
   {
-	for (int i = 0; i < _textureHolders.size(); i++)
+	final int _textureHoldersSize = _textureHolders.size();
+	for (int i = 0; i < _textureHoldersSize; i++)
 	{
 	  TextureHolder holder = _textureHolders.get(i);
 	  if (holder.hasSpec(textureSpec))
 	  {
 		holder.retain();
   
-		showHolders("getGLTextureIdIfAvailable(): retained " + holder.description());
+		//showHolders("getGLTextureIdIfAvailable(): retained " + holder->description());
   
 		return holder._glTextureId;
 	  }
@@ -102,7 +103,7 @@ public class TexturesHandler
 	  {
 		holder.release();
   
-		showHolders("releaseGLTextureId(  ): released holder " + holder.description());
+		//showHolders("releaseGLTextureId(  ): released holder " + holder->description());
   
 		if (!holder.isRetained())
 		{
@@ -134,7 +135,7 @@ public class TexturesHandler
 	  {
 		holder.retain();
   
-		showHolders("retainGLTextureId(): retained holder " + holder.description());
+		//showHolders("retainGLTextureId(): retained holder " + holder->description());
   
 		return;
 	  }

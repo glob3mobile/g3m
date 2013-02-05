@@ -17,6 +17,9 @@
 class MutableMatrix44D;
 
 #include "Effects.hpp"
+#include <vector>
+
+class ShapePendingEffect;
 
 class Shape : public EffectTarget {
 private:
@@ -33,7 +36,7 @@ private:
   MutableMatrix44D* createTransformMatrix(const Planet* planet);
   MutableMatrix44D* getTransformMatrix(const Planet* planet);
 
-  Effect* _pendingEffect;
+  std::vector<ShapePendingEffect*> _pendingEffects;
 
 protected:
   virtual void cleanTransformMatrix();
@@ -46,8 +49,8 @@ public:
   _scaleX(1),
   _scaleY(1),
   _scaleZ(1),
-  _transformMatrix(NULL),
-  _pendingEffect(NULL) {
+  _transformMatrix(NULL)
+  {
 
   }
 
@@ -71,6 +74,17 @@ public:
     cleanTransformMatrix();
   }
 
+  void setAnimatedPosition(const TimeInterval& duration,
+                           const Geodetic3D& position,
+                           bool linearInterpolation=false);
+
+  void setAnimatedPosition(const Geodetic3D& position,
+                           bool linearInterpolation=false) {
+    setAnimatedPosition(TimeInterval::fromSeconds(3),
+                        position,
+                        linearInterpolation);
+  }
+
   void setHeading(const Angle& heading) {
     delete _heading;
     _heading = new Angle(heading);
@@ -82,7 +96,6 @@ public:
     _pitch = new Angle(pitch);
     cleanTransformMatrix();
   }
-
 
   void setScale(double scaleX,
                 double scaleY,
@@ -131,6 +144,10 @@ public:
                      scale._z);
   }
 
+  void orbitCamera(const TimeInterval& duration,
+                   double fromDistance,       double toDistance,
+                   const Angle& fromAzimuth,  const Angle& toAzimuth,
+                   const Angle& fromAltitude, const Angle& toAltitude);
 
   void render(const G3MRenderContext* rc,
               const GLState& parentState);

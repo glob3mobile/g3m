@@ -1,38 +1,38 @@
 //
-//  MeshShape.cpp
+//  AbstractMeshShape.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 11/5/12.
 //
 //
 
-#include "MeshShape.hpp"
+#include "AbstractMeshShape.hpp"
 #include "Mesh.hpp"
 //#include "GL.hpp"
 
-MeshShape::~MeshShape() {
+AbstractMeshShape::~AbstractMeshShape() {
   delete _mesh;
 }
 
-void MeshShape::cleanMesh() {
+void AbstractMeshShape::cleanMesh() {
   delete _mesh;
   _mesh = NULL;
 }
 
 
-Mesh* MeshShape::getMesh(const G3MRenderContext* rc) {
+Mesh* AbstractMeshShape::getMesh(const G3MRenderContext* rc) {
   if (_mesh == NULL) {
     _mesh = createMesh(rc);
   }
   return _mesh;
 }
 
-bool MeshShape::isReadyToRender(const G3MRenderContext* rc) {
+bool AbstractMeshShape::isReadyToRender(const G3MRenderContext* rc) {
   const Mesh* mesh = getMesh(rc);
   return (mesh != NULL);
 }
 
-void MeshShape::rawRender(const G3MRenderContext* rc,
+void AbstractMeshShape::rawRender(const G3MRenderContext* rc,
                           const GLState& parentState) {
   const Mesh* mesh = getMesh(rc);
   if (mesh != NULL) {
@@ -40,7 +40,7 @@ void MeshShape::rawRender(const G3MRenderContext* rc,
   }
 }
 
-bool MeshShape::isTransparent(const G3MRenderContext* rc) {
+bool AbstractMeshShape::isTransparent(const G3MRenderContext* rc) {
   const Mesh* mesh = getMesh(rc);
   if (mesh == NULL) {
     return false;

@@ -16,6 +16,6 @@ public abstract class VisibleSectorListener
 
   }
 
-  public abstract void onVisibleSectorChange(Sector visibleSector);
+  public abstract void onVisibleSectorChange(Sector visibleSector, Geodetic3D cameraPosition);
 
 }

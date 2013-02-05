@@ -9,10 +9,10 @@
 #ifndef __G3MiOSSDK__CircleShape__
 #define __G3MiOSSDK__CircleShape__
 
-#include "MeshShape.hpp"
+#include "AbstractMeshShape.hpp"
 #include "Color.hpp"
 
-class CircleShape : public MeshShape {
+class CircleShape : public AbstractMeshShape {
 private:
   float  _radius;
   int    _steps;
@@ -26,7 +26,7 @@ public:
               float radius,
               Color* color = NULL,
               int steps = 64) :
-  MeshShape(position),
+  AbstractMeshShape(position),
   _radius(radius),
   _color(color),
   _steps(steps)

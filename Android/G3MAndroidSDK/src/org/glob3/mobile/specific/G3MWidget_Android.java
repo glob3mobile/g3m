@@ -77,6 +77,15 @@ public final class G3MWidget_Android
       _es2renderer = new ES2Renderer(this);
       setRenderer(_es2renderer);
 
+      queueEvent(new Runnable() {
+         @Override
+         public void run() {
+            final Thread openglThread = Thread.currentThread();
+            ILogger.instance().logInfo("== OpenGL-Thread=%s", openglThread.toString());
+            _es2renderer.setOpenGLThread(openglThread);
+         }
+      });
+
       setLongClickable(true);
 
       // setDebugFlags(DEBUG_CHECK_GL_ERROR | DEBUG_LOG_GL_CALLS);

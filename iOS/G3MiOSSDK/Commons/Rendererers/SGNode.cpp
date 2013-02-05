@@ -32,16 +32,16 @@ void SGNode::initialize(const G3MContext* context,
 }
 
 void SGNode::addNode(SGNode* child) {
-  child->setParent(this);
+//  child->setParent(this);
   _children.push_back(child);
   if (_context != NULL) {
     child->initialize(_context, _shape);
   }
 }
 
-void SGNode::setParent(SGNode* parent) {
-  _parent = parent;
-}
+//void SGNode::setParent(SGNode* parent) {
+//  _parent = parent;
+//}
 
 bool SGNode::isReadyToRender(const G3MRenderContext* rc) {
   const int childrenCount = _children.size();

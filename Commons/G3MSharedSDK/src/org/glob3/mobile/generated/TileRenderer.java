@@ -200,7 +200,8 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 	  for (int i = 0; i < visibleSectorListenersCount; i++)
 	  {
 		VisibleSectorListenerEntry entry = _visibleSectorListeners.get(i);
-		entry.tryToNotifyListener(_lastVisibleSector);
+  
+		entry.tryToNotifyListener(_lastVisibleSector, rc);
 	  }
 	}
   
@@ -351,7 +352,10 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 
   public final void changed(LayerSet layerSet)
   {
-	recreateTiles();
+	// recreateTiles();
+  
+	// recreateTiles() delete tiles, then meshes, and delete textures from the GPU so it has to be executed in the OpenGL thread
+	_context.getThreadUtils().invokeInRendererThread(new RecreateTilesTask(this), true);
   }
 
   public final void recreateTiles()

@@ -25,6 +25,17 @@ private:
 
   const bool _saveInBackground;
 
+  const IImage* getCachedImage(const URL& url);
+
+#ifdef C_CODE
+  const IImage* _lastImage;
+#endif
+#ifdef JAVA_CODE
+  private IImage _lastImage;
+#endif
+
+  URL*          _lastImageURL;
+
 public:
   CachedDownloader(IDownloader* downloader,
                    IStorage*    storage,
@@ -34,7 +45,9 @@ public:
   _requestsCounter(0),
   _cacheHitsCounter(0),
   _savesCounter(0),
-  _saveInBackground(saveInBackground)
+  _saveInBackground(saveInBackground),
+  _lastImage(NULL),
+  _lastImageURL(NULL)
   {
 
   }
@@ -61,10 +74,8 @@ public:
 
   void cancelRequest(long long requestId);
 
-  virtual ~CachedDownloader() {
-    delete _downloader;
-  }
-
+  virtual ~CachedDownloader();
+  
   const std::string statistics();
 
   void countSave() {

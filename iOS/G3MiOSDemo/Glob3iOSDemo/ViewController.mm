@@ -42,10 +42,19 @@
 #include "BSONGenerator.hpp"
 #include "GEOJSONParser.hpp"
 
+#include "MeshShape.hpp"
+#include "IShortBuffer.hpp"
+#include "SimpleCameraConstrainer.hpp"
+
+#include "G3MWidget.hpp"
+
 class TestVisibleSectorListener : public VisibleSectorListener {
 public:
-  void onVisibleSectorChange(const Sector* visibleSector) {
-    ILogger::instance()->logInfo("VisibleSector=%s", visibleSector->description().c_str());
+  void onVisibleSectorChange(const Sector& visibleSector,
+                             const Geodetic3D& cameraPosition) {
+    ILogger::instance()->logInfo("VisibleSector=%s, CameraPosition=%s",
+                                 visibleSector.description().c_str(),
+                                 cameraPosition.description().c_str());
   }
 };
 
@@ -196,7 +205,7 @@ public:
   MeshRenderer* meshRenderer = new MeshRenderer();
   builder.addRenderer( meshRenderer );
 
-  meshRenderer->addMesh([self createPointsMesh: builder.getPlanet() ]);
+//  meshRenderer->addMesh([self createPointsMesh: builder.getPlanet() ]);
 
   GInitializationTask* initializationTask = [self createSampleInitializationTask: shapesRenderer
                                                                      geoRenderer: geoRenderer];
@@ -338,7 +347,7 @@ public:
 //                                  false,
 //                                  NULL,
 //                                  TimeInterval::fromDays(30));
-//    bing->setEnable(true);
+    bing->setEnable(true);
     layerSet->addLayer(bing);
   }
 
@@ -434,7 +443,7 @@ public:
   const bool renderDebug = false;
   const bool useTilesSplitBudget = true;
   const bool forceTopLevelTilesRenderOnStart = true;
-  const bool incrementalTileQuality = false;
+  const bool incrementalTileQuality = true;
 
   return TilesRenderParameters::createDefault(renderDebug,
                                               useTilesSplitBudget,
@@ -581,10 +590,13 @@ public:
     void run(const G3MContext* context) {
       printf("Running initialization Task\n");
 
-      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D(Angle::fromDegreesMinutes(37, 47),
-                                                                Angle::fromDegreesMinutes(-122, 25),
-                                                                1000000),
-                                                     TimeInterval::fromSeconds(5));
+      
+//      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D(//Angle::fromDegreesMinutes(37, 47),
+//                                                                //Angle::fromDegreesMinutes(-122, 25),
+//                                                                Angle::fromDegrees(37.78333333),
+//                                                                Angle::fromDegrees(-122.41666666666667),
+//                                                                1000000),
+//                                                     TimeInterval::fromSeconds(5));
 
       /*
       NSString *bsonFilePath = [[NSBundle mainBundle] pathForResource: @"test"
@@ -625,29 +637,139 @@ public:
                                                              error: nil];
         if (nsPlaneJSON) {
           std::string planeJSON = [nsPlaneJSON UTF8String];
-          Shape* plane = SceneJSShapesParser::parse(planeJSON, "file:///textures-A320/");
+          Shape* plane = SceneJSShapesParser::parseFromJSON(planeJSON, "file:///textures-A320/");
           //Shape* plane = SceneJSShapesParser::parse(planeJSON, "file:///textures-citation/");
           if (plane) {
-//            // San Francisco
-//            plane->setPosition( new Geodetic3D(Angle::fromDegrees(37.78333333),
-//                                               Angle::fromDegrees(-122.41666666666667),
-//                                               500) );
             // Washington, DC
             plane->setPosition(new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
                                               Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
-                                              1000) );
-            plane->setScale(100, 100, 100);
+                                              10000) );
+            const double scale = 200;
+            plane->setScale(scale, scale, scale);
             plane->setPitch(Angle::fromDegrees(90));
             _shapesRenderer->addShape(plane);
+
+            plane->setAnimatedPosition(TimeInterval::fromSeconds(26),
+                                       Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
+                                                  Angle::fromDegreesMinutesSeconds(-78, 2, 10.92),
+                                                  10000),
+                                       true);
+
+            const double fromDistance = 50000 * 1.5;
+            const double toDistance   = 25000 * 1.5 / 2;
+
+            // const Angle fromAzimuth = Angle::fromDegrees(-90);
+            // const Angle toAzimuth   = Angle::fromDegrees(-90 + 360 + 180);
+            const Angle fromAzimuth = Angle::fromDegrees(-90);
+            const Angle toAzimuth   = Angle::fromDegrees(-90 + 360);
+
+            // const Angle fromAltitude = Angle::fromDegrees(65);
+            // const Angle toAltitude   = Angle::fromDegrees(5);
+            // const Angle fromAltitude = Angle::fromDegrees(30);
+            // const Angle toAltitude   = Angle::fromDegrees(15);
+            const Angle fromAltitude = Angle::fromDegrees(90);
+            const Angle toAltitude   = Angle::fromDegrees(15);
+
+            plane->orbitCamera(TimeInterval::fromSeconds(20),
+                               fromDistance, toDistance,
+                               fromAzimuth,  toAzimuth,
+                               fromAltitude, toAltitude);
           }
         }
       }
       /**/
 
-      /**/
 
+      /*
+      IFloatBuffer* vertices = IFactory::instance()->createFloatBuffer(6 * 3);
+      int i =0;
+      vertices->put(i++, -1);
+      vertices->put(i++, -0.5);
+      vertices->put(i++, 0);
+
+      vertices->put(i++, 0);
+      vertices->put(i++, 0);
+      vertices->put(i++, 0);
+
+      vertices->put(i++, 0);
+      vertices->put(i++, -0.5);
+      vertices->put(i++, 0);
+
+      vertices->put(i++, -1);
+      vertices->put(i++, -1);
+      vertices->put(i++, 0);
+
+      vertices->put(i++, 1);
+      vertices->put(i++, -0.5);
+      vertices->put(i++, 0);
+
+      vertices->put(i++, 1);
+      vertices->put(i++, -1);
+      vertices->put(i++, 0);
+
+      IShortBuffer* indices = IFactory::instance()->createShortBuffer(12);
+      i = 0;
+      indices->put(i++, 0);
+      indices->put(i++, 1);
+      indices->put(i++, 2);
+      indices->put(i++, 0);
+      indices->put(i++, 2);
+      indices->put(i++, 3);
+      indices->put(i++, 2);
+      indices->put(i++, 1);
+      indices->put(i++, 4);
+      indices->put(i++, 2);
+      indices->put(i++, 4);
+      indices->put(i++, 5);
+
+      IndexedMesh* travelledMesh = new IndexedMesh(GLPrimitive::triangleStrip(),
+                                                   true,
+                                                   Vector3D::zero(),
+                                                   vertices,
+                                                   indices,
+                                                   1,
+                                                   2,
+                                                   Color::newFromRGBA(1, 1, 0, 1));
+
+      IndexedMesh* toTravelMesh = new IndexedMesh(GLPrimitive::triangleStrip(),
+                                                   true,
+                                                   Vector3D::zero(),
+                                                   vertices,
+                                                   indices,
+                                                   1,
+                                                   2,
+                                                   Color::newFromRGBA(0.5, 0.5, 0.5, 1));
+
+//      Geodetic3D* buenosAiresPosition = new Geodetic3D(Angle::fromDegreesMinutesSeconds(-34, 36, 13.44),
+//                                                       Angle::fromDegreesMinutesSeconds(-58, 22, 53.74),
+//                                                       1000);
       
-      //      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/coastline"
+//      Geodetic3D* dcPosition = new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
+//                                              Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
+//                                              600);
+//      Shape* trailShape = new MeshShape(dcPosition, mesh);
+//      // Washington, DC
+//      trailShape->setHeading(Angle::fromDegrees(270));
+//      trailShape->setScale(500, 500, 500);
+//      _shapesRenderer->addShape(trailShape);
+
+      for (double lon = -70; lon >= -80; lon -= 0.008) {
+        Mesh* mesh = (lon >= -76.96) ? travelledMesh : toTravelMesh;
+        Shape* trailShape = new MeshShape(new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
+                                                         Angle::fromDegrees(lon),
+                                                         9400),
+                                          mesh);
+        trailShape->setHeading(Angle::fromDegrees(270));
+        const double scale = 500;
+        trailShape->setScale(scale * 2 / 3, scale * 1.8, scale);
+        _shapesRenderer->addShape(trailShape);
+      }
+      */
+
+      /**/
+      /*
+
+       //      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/coastline"
       //                                                                  ofType: @"geojson"];
 
       NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/boundary_lines_land"
