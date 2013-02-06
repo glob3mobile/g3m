@@ -165,6 +165,8 @@ void Camera::setPitch(const Angle& angle) {
 }
 
 void Camera::orbitTo(const Vector3D& pos) {
+  const Angle heading = getHeading();
+
   const MutableVector3D finalPos = pos.asMutableVector3D();
   const Vector3D        axis     = _position.cross(finalPos).asVector3D();
   if (axis.length()<1e-3) {
@@ -175,6 +177,8 @@ void Camera::orbitTo(const Vector3D& pos) {
 
   const double dist = _position.length() - pos.length();
   moveForward(dist);
+
+  setHeading(heading);
 }
 
 void Camera::render(const G3MRenderContext* rc,
@@ -289,4 +293,23 @@ Angle Camera::compute3DAngularDistance(const Vector2I& pixel0,
   }
   
   return point0.angleBetween(point1);
+}
+
+void Camera::setPointOfView(const Geodetic3D& center,
+                            double distance,
+                            const Angle& azimuth,
+                            const Angle& altitude) {
+  // TODO_deal_with_cases_when_center_in_poles
+  const Vector3D cartesianCenter = _planet->toCartesian(center);
+  const Vector3D normal          = _planet->geodeticSurfaceNormal(center);
+  const Vector3D north2D         = Vector3D::upZ().projectionInPlane(normal);
+  const Vector3D orientedVector  = north2D.rotateAroundAxis(normal, azimuth.times(-1));
+  const Vector3D axis            = orientedVector.cross(normal);
+  const Vector3D finalVector     = orientedVector.rotateAroundAxis(axis, altitude);
+  const Vector3D position        = cartesianCenter.add(finalVector.normalized().times(distance));
+  const Vector3D finalUp         = finalVector.rotateAroundAxis(axis, Angle::fromDegrees(90.0f));
+  setCartesianPosition(position.asMutableVector3D());
+  setCenter(cartesianCenter.asMutableVector3D());
+  setUp(finalUp.asMutableVector3D());
+//  _dirtyFlags.setAll(true);
 }

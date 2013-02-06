@@ -161,44 +161,14 @@ public abstract class IG3MBuilder
 	  _logFPS = false;
 	  _logDownloaderStatistics = false;
 	  _userData = null;
-	/*
-	 _gl = NULL;
-	 _storage = NULL;
-	 _downloader = NULL;
-	 _threadUtils = NULL;
-	 _planet = NULL;
-	 _cameraRenderer = NULL;
-	 _backgroundColor = Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1);
-	 _layerSet = NULL;
-	 _parameters = NULL;
-	 _tileRenderer = NULL;
-	 _busyRenderer = new BusyMeshRenderer();
-	 _initializationTask = NULL;
-	 _logFPS = false;
-	 _logDownloaderStatistics = false;
-	 _autoDeleteInitializationTask = true;
-	 _userData = NULL;
-	 */
   }
   public void dispose()
   {
 	if (_backgroundColor != null)
 		_backgroundColor.dispose();
   
-	///#ifdef C_CODE
-	//  delete _planet;
-	//  delete _parameters;
-	///#endif
-	//  delete _gl;
-	//  delete _storage;
-	//  delete _downloader;
-	//  delete _threadUtils;
-	//  delete _cameraRenderer;
-	//  delete _layerSet;
-	//  delete _tileRenderer;
-	//  delete _busyRenderer;
-	//  delete _initializationTask;
-	//  delete _userData;
+	if (_tileRendererBuilder != null)
+		_tileRendererBuilder.dispose();
   }
   public final void setGL(GL gl)
   {

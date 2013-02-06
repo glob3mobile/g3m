@@ -19,11 +19,15 @@ import org.glob3.mobile.generated.CompositeRenderer;
 import org.glob3.mobile.generated.DirectMesh;
 import org.glob3.mobile.generated.FloatBufferBuilderFromColor;
 import org.glob3.mobile.generated.FloatBufferBuilderFromGeodetic;
+import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.GLPrimitive;
 import org.glob3.mobile.generated.Geodetic3D;
+import org.glob3.mobile.generated.IBufferDownloadListener;
+import org.glob3.mobile.generated.IByteBuffer;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
+import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.LayerSet;
@@ -34,6 +38,7 @@ import org.glob3.mobile.generated.Mesh;
 import org.glob3.mobile.generated.MeshRenderer;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
+import org.glob3.mobile.generated.SceneJSShapesParser;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.Shape;
 import org.glob3.mobile.generated.ShapesRenderer;
@@ -162,55 +167,64 @@ public class G3MWebGLDemo
       builder.setDownloader(downloader);
 
 
-      // test bson parser&generator
-      //      builder.setInitializationTask(new GInitializationTask() {
-      //
-      //         @Override
-      //         public void run(final G3MContext context) {
-      //            context.getDownloader().requestBuffer(new URL("http://glob3m.glob3mobile.com/test/test.bson", false), 0,
-      //                     TimeInterval.forever(), new IBufferDownloadListener() {
-      //
-      //                        @Override
-      //                        public void onError(final URL url) {
-      //                           ILogger.instance().logError("error downloading test.bson");
-      //                        }
-      //
-      //
-      //                        @Override
-      //                        public void onDownload(final URL url,
-      //                                               final IByteBuffer buffer) {
-      //                           ILogger.instance().logInfo("BSON downloaded: " + buffer.description());
-      //                           ILogger.instance().logInfo("BSON downloaded: " + buffer.getAsString());
-      //                           final JSONBaseObject jsonObj = BSONParser.parse(buffer);
-      //                           ILogger.instance().logInfo(jsonObj.description());
-      //
-      //                           final IByteBuffer byteBuffer = BSONGenerator.generate(jsonObj);
-      //                           ILogger.instance().logInfo("BSON generated: " + byteBuffer.description());
-      //                           ILogger.instance().logInfo("BSON generated: " + byteBuffer.getAsString());
-      //
-      //                           final JSONBaseObject jsonObjFromBSON = JSONParser_WebGL.instance().parse(byteBuffer);
-      //                           ILogger.instance().logInfo(jsonObjFromBSON.description());
-      //                        }
-      //
-      //
-      //                        @Override
-      //                        public void onCanceledDownload(final URL url,
-      //                                                       final IByteBuffer data) {
-      //                        }
-      //
-      //
-      //                        @Override
-      //                        public void onCancel(final URL url) {
-      //                        }
-      //                     }, false);
-      //         }
-      //
-      //
-      //         @Override
-      //         public boolean isDone(final G3MContext context) {
-      //            return false;
-      //         }
-      //      });
+      // test bson parser and 3D model
+      final ShapesRenderer shapeRenderer = new ShapesRenderer();
+      builder.addRenderer(shapeRenderer);
+
+      builder.setInitializationTask(new GInitializationTask() {
+
+         private boolean done = false;
+
+
+         @Override
+         public void run(final G3MContext context) {
+            context.getDownloader().requestBuffer(new URL("http://glob3m.glob3mobile.com/test/aircraft-A320/A320.bson", false),
+                     0, TimeInterval.forever(), new IBufferDownloadListener() {
+
+                        @Override
+                        public void onError(final URL url) {
+                           ILogger.instance().logError("error downloading A320.bson");
+                        }
+
+
+                        @Override
+                        public void onDownload(final URL url,
+                                               final IByteBuffer buffer) {
+                           final Shape aircraft = SceneJSShapesParser.parseFromBSON(buffer,
+                                    "http://glob3m.glob3mobile.com/test/aircraft-A320/textures-A320/");
+
+                           if (aircraft != null) {
+                              // Washington, DC
+                              aircraft.setPosition(new Geodetic3D(Angle.fromDegreesMinutesSeconds(38, 53, 42.24), //
+                                       Angle.fromDegreesMinutesSeconds(-77, 2, 10.92), //
+                                       10000));
+                              final double scale = 200;
+                              aircraft.setScale(scale, scale, scale);
+                              aircraft.setPitch(Angle.fromDegrees(90));
+                              shapeRenderer.addShape(aircraft);
+                           }
+                           done = true;
+                        }
+
+
+                        @Override
+                        public void onCanceledDownload(final URL url,
+                                                       final IByteBuffer data) {
+                        }
+
+
+                        @Override
+                        public void onCancel(final URL url) {
+                        }
+                     }, false);
+         }
+
+
+         @Override
+         public boolean isDone(final G3MContext context) {
+            return done;
+         }
+      });
 
       _widget = builder.createWidget();
    }

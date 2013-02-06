@@ -62,4 +62,10 @@ public class ShapeScaleEffect extends EffectWithDuration
 	_shape.setScale(_toScaleX, _toScaleY, _toScaleZ);
   }
 
+  public void stop(G3MRenderContext rc, TimeInterval when)
+  {
+	_shape.setScale(_toScaleX, _toScaleY, _toScaleZ);
+  }
+
+
 }

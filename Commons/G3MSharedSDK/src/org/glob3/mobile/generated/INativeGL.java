@@ -121,9 +121,10 @@ public abstract class INativeGL
 //ORIGINAL LINE: virtual void bindTexture(int target, const IGLTextureId* texture) const = 0;
   public abstract void bindTexture(int target, IGLTextureId texture);
 
+  /* Delete Texture from GPU, and answer if the TextureId can be reused */
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual void deleteTexture(const IGLTextureId* texture) const = 0;
-  public abstract void deleteTexture(IGLTextureId texture);
+//ORIGINAL LINE: virtual boolean deleteTexture(const IGLTextureId* texture) const = 0;
+  public abstract boolean deleteTexture(IGLTextureId texture);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual void enableVertexAttribArray(int location) const = 0;
@@ -148,16 +149,6 @@ public abstract class INativeGL
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual void texImage2D(const IImage* image, int format) const = 0;
   public abstract void texImage2D(IImage image, int format);
-
-  //  virtual void texImage2D(GLTextureType target,
-  //                          int         level,
-  //                          GLFormat    internalFormat,
-  //                          int         width,
-  //                          int         height,
-  //                          int         border,
-  //                          GLFormat    format,
-  //                          GLType      type,
-  //                          const void* data) const = 0;
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual void generateMipmap(int target) const = 0;

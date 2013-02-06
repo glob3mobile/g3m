@@ -66,8 +66,8 @@ public class G3MSimplestGlob3Activity
 
       final IStorage storage = new SQLiteStorage_Android("g3m.cache", this);
 
-      final int connectTimeout = 20000;
-      final int readTimeout = 30000;
+      final TimeInterval connectTimeout = TimeInterval.fromSeconds(20);
+      final TimeInterval readTimeout = TimeInterval.fromSeconds(30);
       final boolean saveInBackground = true;
       final IDownloader downloader = new CachedDownloader( //
                new Downloader_Android(8, connectTimeout, readTimeout, this), //
@@ -133,6 +133,21 @@ public class G3MSimplestGlob3Activity
 
       final boolean logDownloaderStatistics = false;
 
+      //      final GInitializationTask initializationTask = new GInitializationTask() {
+      //         @Override
+      //         public void run(final G3MContext context) {
+      //            final String jsonString = "{\"s\": \"world\", \"d\": 3.1415927, \"i\": 1, \"n\": null, \"a\":[1,\"2\",true]}";
+      //            final JSONBaseObject jsonObject = context.getJSONParser().parse(jsonString);
+      //
+      //            System.out.println(jsonObject.description());
+      //         }
+      //
+      //
+      //         @Override
+      //         public boolean isDone(final G3MContext context) {
+      //            return true;
+      //         }
+      //      };
       final GInitializationTask initializationTask = null;
 
       final boolean autoDeleteInitializationTask = true;

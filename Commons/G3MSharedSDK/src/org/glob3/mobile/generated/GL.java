@@ -74,6 +74,13 @@ public class GL
 
   private ShaderProgram _program;
 
+///#ifdef C_CODE
+//  const IGLTextureId* _boundTextureId;
+///#endif
+///#ifdef JAVA_CODE
+//  private IGLTextureId _boundTextureId;
+///#endif
+
   private void loadModelView()
   {
 	if (_verbose)
@@ -94,20 +101,20 @@ public class GL
 	if (_texturesIdBag.size() == 0)
 	{
 	  //const int bugdetSize = 256;
-	  final int bugdetSize = 10240;
-  
-	  ILogger.instance().logInfo("= Creating %d texturesIds...", bugdetSize);
+	  final int bugdetSize = 1024;
+	  //const int bugdetSize = 10240;
   
 	  final java.util.ArrayList<IGLTextureId> ids = _nativeGL.genTextures(bugdetSize);
-  
-	  for (int i = 0; i < ids.size(); i++)
+	  final int idsCount = ids.size();
+	  for (int i = 0; i < idsCount; i++)
 	  {
+		// ILogger::instance()->logInfo("  = Created textureId=%s", ids[i]->description().c_str());
 		_texturesIdBag.addFirst(ids.get(i));
 	  }
   
-	  _texturesIdAllocationCounter += ids.size();
+	  _texturesIdAllocationCounter += idsCount;
   
-	  ILogger.instance().logInfo("= Created %d texturesIds (accumulated %d).", bugdetSize, _texturesIdAllocationCounter);
+	  ILogger.instance().logInfo("= Created %d texturesIds (accumulated %d).", idsCount, _texturesIdAllocationCounter);
 	}
   
 	//  _texturesIdGetCounter++;
@@ -191,6 +198,7 @@ public class GL
   //  _enableFlatColor(false),
   //  _texturesIdGetCounter(0),
   //  _texturesIdTakeCounter(0),
+  //_boundTextureId(NULL)
   {
 	  _nativeGL = nativeGL;
 	  _verbose = verbose;
@@ -533,7 +541,13 @@ public class GL
 	}
 	else
 	{
-	  _nativeGL.bindTexture(GLTextureType.texture2D(), textureId);
+	  //if ((_boundTextureId == NULL) || !_boundTextureId->isEqualsTo(textureId)) {
+		_nativeGL.bindTexture(GLTextureType.texture2D(), textureId);
+	  //  _boundTextureId = textureId;
+	  //}
+  //    else {
+  //      ILogger::instance()->logInfo("TextureId %s already bound", textureId->description().c_str());
+  //    }
 	}
   }
 
@@ -569,24 +583,37 @@ public class GL
 	_nativeGL.drawArrays(GLPrimitive.triangleStrip(), 0, vertices.size() / 3);
   }
 
-  public final void deleteTexture(IGLTextureId texture)
+  public final void deleteTexture(IGLTextureId textureId)
   {
 	if (_verbose)
 	{
 	  ILogger.instance().logInfo("GL::deleteTexture()");
 	}
   
-	if (texture != null)
+	if (textureId != null)
 	{
-	  //    if ( _nativeGL->deleteTexture(texture) ) {
-	  //      _texturesIdBag.push_back(texture);
-	  //    }
-  
 	  int __TESTING_TEXTUREIDs_DELETION;
-	  //_nativeGL->deleteTexture(texture);
-	  _texturesIdBag.addLast(texture);
+	  if (_nativeGL.deleteTexture(textureId))
+	  {
+		_texturesIdBag.addLast(textureId);
+	  }
+	  else
+	  {
+	  }
   
-	  //    _texturesIdTakeCounter++;
+  //    if (_boundTextureId != NULL) {
+  //      if (_boundTextureId->isEqualsTo(textureId)) {
+  //        _boundTextureId = NULL;
+  //      }
+  //    }
+  
+	  //ILogger::instance()->logInfo("  = delete textureId=%s", texture->description().c_str());
+  
+  //    //_nativeGL->deleteTexture(texture);
+  //    _texturesIdBag.push_back(texture);
+  //
+  
+	  //_texturesIdTakeCounter++;
 	}
   }
 

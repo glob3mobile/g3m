@@ -40,7 +40,10 @@ protected:
     
 //    return sigmoid(f);
 //    return gently(f, 0.6, 0.85);
-    return gently(f, 0.25, 0.75);
+    const double result = gently(f, 0.25, 0.75);
+    if (result < 0) return 0;
+    if (result > 1) return 1;
+    return result;
   }
   
   double sigmoid(double x) const {
@@ -117,11 +120,11 @@ protected:
   
   
 public:
-  virtual void stop(const G3MRenderContext *rc,
-                    const TimeInterval& when) {
-    
-  }
-  
+//  virtual void stop(const G3MRenderContext *rc,
+//                    const TimeInterval& when) {
+//    
+//  }
+
   virtual void start(const G3MRenderContext *rc,
                      const TimeInterval& when) {
     _started = when.milliseconds();
@@ -237,42 +240,6 @@ public:
 
   }
 
-
 };
-
-
-
-//class SampleEffect : public EffectWithDuration {
-//public:
-//  
-//  SampleEffect(TimeInterval duration) : EffectWithDuration(duration) {
-//  }
-//  
-//  virtual void start(const G3MRenderContext *rc,
-//                     const TimeInterval& when) {
-//    EffectWithDuration::start(rc, now);
-//    _lastPercent = 0;
-//  }
-//  
-//  virtual void doStep(const G3MRenderContext *rc,
-//                      const TimeInterval& when) {
-//    const double percent = pace( percentDone(now) );
-//    rc->getNextCamera()->moveForward((percent-_lastPercent)*1e7);
-//    _lastPercent = percent;
-//  }
-//  
-//  virtual void stop(const G3MRenderContext *rc,
-//                    const TimeInterval& when) {
-//    EffectWithDuration::stop(rc, now);
-//  }
-//  
-//  virtual void cancel(const TimeInterval& when) {
-//    // do nothing, just leave the effect in the intermediate state
-//  }
-//
-//private:
-//  double _lastPercent;
-//};
-
 
 #endif

@@ -141,12 +141,14 @@ public:
     }
   }
 
-  void deleteTexture(const IGLTextureId* texture) const {
+  bool deleteTexture(const IGLTextureId* texture) const {
     const unsigned int textures[] = {
       ((GLTextureId_iOS*) texture)->getGLTextureId()
     };
 
     glDeleteTextures(1, textures);
+
+    return false;
   }
 
   void enableVertexAttribArray(int location) const {

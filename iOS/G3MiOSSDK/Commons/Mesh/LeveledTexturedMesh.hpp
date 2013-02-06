@@ -101,7 +101,7 @@ public:
   }
   
 
-  const const IGLTextureId* getGLTextureId() const {
+  const IGLTextureId* getGLTextureId() const {
     return _glTextureId;
   }
 

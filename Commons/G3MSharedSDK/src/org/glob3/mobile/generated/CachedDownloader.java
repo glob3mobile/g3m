@@ -29,6 +29,37 @@ public class CachedDownloader extends IDownloader
 
   private final boolean _saveInBackground;
 
+  private IImage getCachedImage(URL url)
+  {
+	if ((_lastImage != null) && (_lastImageURL != null))
+	{
+	  if (_lastImageURL.isEqualsTo(url))
+	  {
+		// ILogger::instance()->logInfo("Used chached image for %s", url.description().c_str());
+		return _lastImage.shallowCopy();
+	  }
+	}
+  
+	final IImage cachedImage = _storage.isAvailable() ? _storage.readImage(url) : null;
+  
+	if (cachedImage != null)
+	{
+	  if (_lastImage != null)
+	  {
+		IFactory.instance().deleteImage(_lastImage);
+	  }
+	  _lastImage = cachedImage.shallowCopy();
+  
+	  _lastImageURL = new URL(url);
+	}
+  
+	return cachedImage;
+  }
+
+  private IImage _lastImage;
+
+  private URL _lastImageURL;
+
   public CachedDownloader(IDownloader downloader, IStorage storage, boolean saveInBackground)
   {
 	  _downloader = downloader;
@@ -37,6 +68,8 @@ public class CachedDownloader extends IDownloader
 	  _cacheHitsCounter = 0;
 	  _savesCounter = 0;
 	  _saveInBackground = saveInBackground;
+	  _lastImage = null;
+	  _lastImageURL = null;
 
   }
 
@@ -87,25 +120,27 @@ public class CachedDownloader extends IDownloader
   {
 	_requestsCounter++;
   
-	final IImage cachedImage = _storage.isAvailable() ? _storage.readImage(url) : null;
-	if (cachedImage == null)
+  //  const IImage* cachedImage = _storage->isAvailable() ? _storage->readImage(url) : NULL;
+	final IImage cachedImage = getCachedImage(url);
+	if (cachedImage != null)
 	{
-	  // cache miss
-	  return _downloader.requestImage(url, priority, TimeInterval.zero(), new ImageSaverDownloadListener(this, listener, deleteListener, _storage, timeToCache), true);
+	  // cache hit
+	  _cacheHitsCounter++;
+  
+	  listener.onDownload(url, cachedImage);
+  
+	  if (deleteListener)
+	  {
+	  }
+  
+	  IFactory.instance().deleteImage(cachedImage);
+  
+	  return -1;
 	}
   
-	// cache hit
-	_cacheHitsCounter++;
   
-	listener.onDownload(url, cachedImage);
-  
-	if (deleteListener)
-	{
-	  listener = null;
-	}
-  
-	IFactory.instance().deleteImage(cachedImage);
-	return -1;
+	// cache miss
+	return _downloader.requestImage(url, priority, TimeInterval.zero(), new ImageSaverDownloadListener(this, listener, deleteListener, _storage, timeToCache), true);
   }
 
   public final void cancelRequest(long requestId)
@@ -117,6 +152,11 @@ public class CachedDownloader extends IDownloader
   {
 	if (_downloader != null)
 		_downloader.dispose();
+  
+	if (_lastImage != null)
+	{
+	  IFactory.instance().deleteImage(_lastImage);
+	}
   }
 
   public final String statistics()

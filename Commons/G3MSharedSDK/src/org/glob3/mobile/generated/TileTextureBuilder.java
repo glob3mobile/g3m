@@ -204,7 +204,10 @@ public class TileTextureBuilder extends RCObject
 		composeAndUploadTexture();
 	  }
 
-	  _tile.setTextureSolved(true);
+	  if (_tile != null)
+	  {
+		_tile.setTextureSolved(true);
+	  }
 	}
   }
 
@@ -336,9 +339,12 @@ public class TileTextureBuilder extends RCObject
 	  }
 	  else
 	  {
-		if (mapping.getGLTextureId() != null)
+		if (mapping != null)
 		{
-		  ILogger.instance().logInfo("break (point) on me 3\n");
+		  if (mapping.getGLTextureId() != null)
+		  {
+			ILogger.instance().logInfo("break (point) on me 3\n");
+		  }
 		}
 	  }
 
@@ -346,9 +352,12 @@ public class TileTextureBuilder extends RCObject
 	  ancestor = ancestor.getParent();
 	}
 
-	if (mappings.size() != _tile.getLevel() + 1)
+	if ((mappings != null) && (_tile != null))
 	{
-	  ILogger.instance().logInfo("pleae break (point) me\n");
+	  if (mappings.size() != _tile.getLevel() + 1)
+	  {
+		ILogger.instance().logInfo("pleae break (point) me\n");
+	  }
 	}
 
 	return new LeveledTexturedMesh(_tessellatorMesh, false, mappings);

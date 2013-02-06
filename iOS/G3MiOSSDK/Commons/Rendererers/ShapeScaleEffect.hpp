@@ -48,6 +48,10 @@ public:
 
   void cancel(const TimeInterval& when);
 
+  virtual void stop(const G3MRenderContext *rc,
+                    const TimeInterval& when);
+  
+  
 };
 
 #endif

@@ -15,7 +15,7 @@
 #include "IDownloader.hpp"
 #include "Effects.hpp"
 #include "Context.hpp"
-#include "CameraConstraints.hpp"
+#include "ICameraConstrainer.hpp"
 #include "FrameTasksExecutor.hpp"
 #include "IStringUtils.hpp"
 #include "IThreadUtils.hpp"
@@ -23,7 +23,7 @@
 #include "IJSONParser.hpp"
 #include "GLConstants.hpp"
 #include "PeriodicalTask.hpp"
-#include "GoToPositionEffect.hpp"
+#include "CameraGoToPositionEffect.hpp"
 #include "CameraRenderer.hpp"
 #include "CPUTextureBuilder.hpp"
 #include "IStorage.hpp"
@@ -521,11 +521,15 @@ void G3MWidget::setAnimatedCameraPosition(const Geodetic3D& position,
 
   const Geodetic3D endPosition = Geodetic3D::fromDegrees(finalLat, finalLon, position.height());
 
+  stopCameraAnimation();
+
+  _effectsScheduler->startEffect(new CameraGoToPositionEffect(interval, startPosition, endPosition),
+                                 _nextCamera->getEffectTarget());
+}
+
+void G3MWidget::stopCameraAnimation() {
   EffectTarget* target = _nextCamera->getEffectTarget();
   _effectsScheduler->cancellAllEffectsFor(target);
-
-  _effectsScheduler->startEffect(new GoToPositionEffect(interval, startPosition, endPosition),
-                                 target);
 }
 
 void G3MWidget::resetCameraPosition() {

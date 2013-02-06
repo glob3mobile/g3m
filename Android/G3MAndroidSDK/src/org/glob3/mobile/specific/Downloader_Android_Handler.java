@@ -180,8 +180,8 @@ public final class Downloader_Android_Handler {
          }
          else {
             connection = (HttpURLConnection) _URL.openConnection();
-            connection.setConnectTimeout(downloader.getConnectTimeout());
-            connection.setReadTimeout(downloader.getReadTimeout());
+            connection.setConnectTimeout((int) downloader.getConnectTimeout().milliseconds());
+            connection.setReadTimeout((int) downloader.getReadTimeout().milliseconds());
             connection.setUseCaches(false);
             connection.connect();
             statusCode = connection.getResponseCode();

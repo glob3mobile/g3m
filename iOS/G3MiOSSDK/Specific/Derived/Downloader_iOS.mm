@@ -198,6 +198,11 @@ long long Downloader_iOS::request(const URL &url,
   //printf("URL=%s\n", url.getPath().c_str());
   
   NSURL* nsURL = [NSURL URLWithString: toNSString(url.getPath())];
+
+  if (!nsURL) {
+    [iosListener onErrorURL:url];
+    return -1;
+  }
   
   //NSLog(@"Downloading %@", [nsURL absoluteString]);
   

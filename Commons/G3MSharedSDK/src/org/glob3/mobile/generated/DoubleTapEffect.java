@@ -46,13 +46,17 @@ public class DoubleTapEffect extends EffectWithDuration
 	Camera camera = rc.getNextCamera();
 	final double step = percent - _lastPercent;
 	camera.rotateWithAxis(_axis, _angle.times(step));
-	camera.moveForward(_distance *step);
+	camera.moveForward(_distance * step);
 	_lastPercent = percent;
   }
 
   public void stop(G3MRenderContext rc, TimeInterval when)
   {
-	super.stop(rc, when);
+	Camera camera = rc.getNextCamera();
+
+	final double step = 1.0 - _lastPercent;
+	camera.rotateWithAxis(_axis, _angle.times(step));
+	camera.moveForward(_distance * step);
   }
 
   public void cancel(TimeInterval when)

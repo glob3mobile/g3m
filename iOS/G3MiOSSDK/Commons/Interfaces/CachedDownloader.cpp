@@ -185,6 +185,17 @@ public:
 
 };
 
+CachedDownloader::~CachedDownloader() {
+  delete _downloader;
+
+  if (_lastImage != NULL) {
+    IFactory::instance()->deleteImage(_lastImage);
+  }
+#ifdef C_CODE
+  delete _lastImageURL;
+#endif
+}
+
 void CachedDownloader::start() {
   _downloader->start();
 }
@@ -197,6 +208,31 @@ void CachedDownloader::cancelRequest(long long requestId) {
   _downloader->cancelRequest(requestId);
 }
 
+const IImage* CachedDownloader::getCachedImage(const URL& url) {
+  if ( (_lastImage != NULL) && (_lastImageURL != NULL) ) {
+    if (_lastImageURL->isEqualsTo(url)) {
+      // ILogger::instance()->logInfo("Used chached image for %s", url.description().c_str());
+      return _lastImage->shallowCopy();
+    }
+  }
+
+  const IImage* cachedImage = _storage->isAvailable() ? _storage->readImage(url) : NULL;
+
+  if (cachedImage != NULL) {
+    if (_lastImage != NULL) {
+      IFactory::instance()->deleteImage(_lastImage);
+    }
+    _lastImage = cachedImage->shallowCopy();
+
+#ifdef C_CODE
+    delete _lastImageURL;
+#endif
+    _lastImageURL = new URL(url);
+  }
+
+  return cachedImage;
+}
+
 long long CachedDownloader::requestImage(const URL& url,
                                          long long priority,
                                          const TimeInterval& timeToCache,
@@ -204,35 +240,36 @@ long long CachedDownloader::requestImage(const URL& url,
                                          bool deleteListener) {
   _requestsCounter++;
 
-  const IImage* cachedImage = _storage->isAvailable() ? _storage->readImage(url) : NULL;
-  if (cachedImage == NULL) {
-    // cache miss
-    return _downloader->requestImage(url,
-                                     priority,
-                                     TimeInterval::zero(),
-                                     new ImageSaverDownloadListener(this,
-                                                                    listener,
-                                                                    deleteListener,
-                                                                    _storage,
-                                                                    timeToCache),
-                                     true);
-  }
+//  const IImage* cachedImage = _storage->isAvailable() ? _storage->readImage(url) : NULL;
+  const IImage* cachedImage = getCachedImage(url);
+  if (cachedImage != NULL) {
+    // cache hit
+    _cacheHitsCounter++;
 
-  // cache hit
-  _cacheHitsCounter++;
+    listener->onDownload(url, cachedImage);
 
-  listener->onDownload(url, cachedImage);
-
-  if (deleteListener) {
+    if (deleteListener) {
 #ifdef C_CODE
-    delete listener;
-#else
-    listener = NULL;
+      delete listener;
 #endif
+    }
+
+    IFactory::instance()->deleteImage(cachedImage);
+
+    return -1;
   }
 
-  IFactory::instance()->deleteImage(cachedImage);
-  return -1;
+
+  // cache miss
+  return _downloader->requestImage(url,
+                                   priority,
+                                   TimeInterval::zero(),
+                                   new ImageSaverDownloadListener(this,
+                                                                  listener,
+                                                                  deleteListener,
+                                                                  _storage,
+                                                                  timeToCache),
+                                   true);
 }
 
 long long CachedDownloader::requestBuffer(const URL& url,

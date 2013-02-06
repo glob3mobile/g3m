@@ -78,8 +78,8 @@ public class G3MShowMarkersActivity
                      final JSONObject city = list.getAsObject(i);
 
                      final JSONObject coords = city.getAsObject("coord");
-                     final Geodetic2D position = new Geodetic2D(Angle.fromDegrees(coords.getAsNumber("lat").doubleValue()),
-                              Angle.fromDegrees(coords.getAsNumber("lon").doubleValue()));
+                     final Geodetic2D position = new Geodetic2D(Angle.fromDegrees(coords.getAsNumber("lat").value()),
+                              Angle.fromDegrees(coords.getAsNumber("lon").value()));
                      final JSONArray weather = city.getAsArray("weather");
                      final JSONObject weatherObject = weather.getAsObject(0);
 

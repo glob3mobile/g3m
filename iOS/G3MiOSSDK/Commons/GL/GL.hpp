@@ -74,6 +74,13 @@ private:
 
   ShaderProgram* _program;
 
+//#ifdef C_CODE
+//  const IGLTextureId* _boundTextureId;
+//#endif
+//#ifdef JAVA_CODE
+//  private IGLTextureId _boundTextureId;
+//#endif
+
   inline void loadModelView();
 
   const IGLTextureId* getGLTextureId();
@@ -128,6 +135,7 @@ public:
   _lineWidth(1),
   _pointSize(1),
   _program(NULL)
+  //_boundTextureId(NULL)
   {
     //Init Constants
     GLCullFace::init(_nativeGL);

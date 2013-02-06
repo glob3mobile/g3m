@@ -17,7 +17,8 @@ public:
 
   }
 
-  virtual void onVisibleSectorChange(const Sector* visibleSector) = 0;
+  virtual void onVisibleSectorChange(const Sector& visibleSector,
+                                     const Geodetic3D& cameraPosition) = 0;
 
 };
 

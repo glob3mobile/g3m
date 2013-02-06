@@ -65,15 +65,15 @@ public class ByteBufferBuilder
 
   public final void setInt32(int i, int value)
   {
-	final byte b1 = (byte)((value) & 0xFF);
-	final byte b2 = (byte)((value >> 8) & 0xFF);
-	final byte b3 = (byte)((value >> 16) & 0xFF);
-	final byte b4 = (byte)((value >> 24) & 0xFF);
+	final int b1 = ((value) & 0xFF);
+	final int b2 = ((value >> 8) & 0xFF);
+	final int b3 = ((value >> 16) & 0xFF);
+	final int b4 = ((value >> 24) & 0xFF);
 
-	_values.set(i, b1);
-	_values.set(i + 1, b2);
-	_values.set(i + 2, b3);
-	_values.set(i + 3, b4);
+	_values.set(i, (byte) b1);
+	_values.set(i + 1, (byte) b2);
+	_values.set(i + 2, (byte) b3);
+	_values.set(i + 3, (byte) b4);
   }
 
   public final void addStringZeroTerminated(String str)
@@ -82,7 +82,7 @@ public class ByteBufferBuilder
 //#if JAVA_CODE
 	try
 	{
-	  byte[] bytesArray = str.getBytes("UTF8");
+	  byte[] bytesArray = str.getBytes("UTF-8");
   
 	  final int size = bytesArray.length;
 	  for (int i = 0; i < size; i++)
@@ -94,6 +94,10 @@ public class ByteBufferBuilder
 	}
 	catch (final java.io.UnsupportedEncodingException e)
 	{
+	  if (ILogger.instance() != null)
+	  {
+		ILogger.instance().logError("ByteBufferBuilder: " + e.getMessage());
+	  }
 	  e.printStackTrace();
 	}
 //#endif

@@ -7,6 +7,7 @@ import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IG3MBuilder;
 import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IThreadUtils;
+import org.glob3.mobile.generated.TimeInterval;
 
 import android.content.Context;
 
@@ -36,30 +37,25 @@ public class G3MBuilder_Android
 
    @Override
    protected IThreadUtils createThreadUtils() {
-      final ThreadUtils_Android threadUtils = new ThreadUtils_Android(_nativeWidget);
-
-      return threadUtils;
+      return new ThreadUtils_Android(_nativeWidget);
    }
 
 
    @Override
    protected IStorage createStorage() {
-      final SQLiteStorage_Android storage = new SQLiteStorage_Android("g3m.cache", _nativeWidget.getContext());
-
-      return storage;
+      return new SQLiteStorage_Android("g3m.cache", _nativeWidget.getContext());
    }
 
 
    @Override
    protected IDownloader createDownloader() {
-      final int connectTimeout = 20000;
-      final int readTimeout = 30000;
+      final TimeInterval connectTimeout = TimeInterval.fromSeconds(10);
+      final TimeInterval readTimeout = TimeInterval.fromSeconds(15);
       final boolean saveInBackground = true;
-      final IDownloader downloader = new CachedDownloader( //
+      return new CachedDownloader( //
                new Downloader_Android(8, connectTimeout, readTimeout, _nativeWidget.getContext()), //
                (_storage != null) ? _storage : createStorage(), //
                saveInBackground);
-
-      return downloader;
    }
+
 }
