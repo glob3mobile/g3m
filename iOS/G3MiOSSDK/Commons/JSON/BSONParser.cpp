@@ -14,7 +14,10 @@
 #include "JSONObject.hpp"
 #include "JSONString.hpp"
 #include "JSONArray.hpp"
-#include "JSONNumber.hpp"
+#include "JSONInteger.hpp"
+#include "JSONLong.hpp"
+#include "JSONDouble.hpp"
+#include "JSONFloat.hpp"
 #include "JSONBoolean.hpp"
 
 JSONBaseObject* BSONParser::parse(IByteBuffer* buffer) {
@@ -59,7 +62,10 @@ JSONBaseObject* BSONParser::parseValue(const unsigned char type,
       return parseDouble(iterator);
     }
     case 0x10: {
-      return parseInt(iterator);
+      return parseInt32(iterator);
+    }
+    case 0x12: {
+      return parseInt64(iterator);
     }
     case 0x08: {
       return parseBool(iterator);
@@ -136,11 +142,20 @@ JSONArray* BSONParser::parseCustomizedArray(ByteBufferIterator* iterator) {
 
 
 JSONNumber* BSONParser::parseDouble(ByteBufferIterator* iterator) {
-  return new JSONNumber( iterator->nextDouble() );
+  const double doubleValue = iterator->nextDouble();
+  const float floatValue = (float) doubleValue;
+  if (doubleValue == floatValue) {
+    return new JSONFloat( floatValue );
+  }
+  return new JSONDouble( doubleValue );
 }
 
-JSONNumber* BSONParser::parseInt(ByteBufferIterator* iterator) {
-  return new JSONNumber( iterator->nextInt32() );
+JSONInteger* BSONParser::parseInt32(ByteBufferIterator* iterator) {
+  return new JSONInteger( iterator->nextInt32() );
+}
+
+JSONLong* BSONParser::parseInt64(ByteBufferIterator* iterator) {
+  return new JSONLong( iterator->nextInt64() );
 }
 
 JSONBoolean* BSONParser::parseBool(ByteBufferIterator* iterator) {

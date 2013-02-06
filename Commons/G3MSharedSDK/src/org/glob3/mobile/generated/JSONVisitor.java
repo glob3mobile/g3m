@@ -18,7 +18,6 @@ package org.glob3.mobile.generated;
 
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class JSONBoolean;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class JSONNumber;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class JSONString;
@@ -26,6 +25,14 @@ package org.glob3.mobile.generated;
 //class JSONArray;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class JSONObject;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class JSONDouble;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class JSONFloat;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class JSONInteger;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class JSONLong;
 
 
 public abstract class JSONVisitor
@@ -35,8 +42,13 @@ public abstract class JSONVisitor
 
   }
 
+//  virtual void visitNumber (const JSONNumber*  value) = 0;
+  public abstract void visitDouble (JSONDouble value);
+  public abstract void visitFloat (JSONFloat value);
+  public abstract void visitInteger(JSONInteger value);
+  public abstract void visitLong (JSONLong value);
+
   public abstract void visitBoolean(JSONBoolean value);
-  public abstract void visitNumber(JSONNumber value);
   public abstract void visitString(JSONString value);
 
   public abstract void visitArrayBeforeChildren(JSONArray value);

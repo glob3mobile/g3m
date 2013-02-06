@@ -9,62 +9,51 @@
 #import "JSONParser_iOS.hpp"
 #import "JSONArray.hpp"
 #import "JSONObject.hpp"
-#import "JSONNumber.hpp"
+#import "JSONDouble.hpp"
+#import "JSONFloat.hpp"
+#import "JSONInteger.hpp"
+#import "JSONLong.hpp"
 #import "JSONBoolean.hpp"
 #import "JSONString.hpp"
+#import "ByteBuffer_iOS.hpp"
 
-
-JSONBaseObject* JSONParser_iOS::parse(IByteBuffer* buffer) {
-  return parse(buffer->getAsString());
-}
-
-JSONBaseObject* JSONParser_iOS::parse(const std::string& inputString) {
-
-  NSString *string = [[NSString alloc] initWithUTF8String:inputString.c_str()];
-  _jsonData = [string dataUsingEncoding:NSUTF8StringEncoding];
-
+JSONBaseObject* JSONParser_iOS::parse(NSData* jsonData) {
   NSError *e = nil;
-  id nsJsonObject = [NSJSONSerialization JSONObjectWithData:_jsonData
-                                                    options:kNilOptions
-                                                      error:&e];
-
-  if ([nsJsonObject isKindOfClass:[NSArray class]]) {
-    NSArray *jsonArray = (NSArray *)nsJsonObject;
-    JSONArray* topLevelArray = new JSONArray();
-    for (NSObject *element in jsonArray) {
-      topLevelArray->add(makeJSONElement(element));
-    }
-    return topLevelArray;
-  }
-  else if ([nsJsonObject isKindOfClass:[NSDictionary class]]) {
-    NSDictionary *jsonDictionary = (NSDictionary *)nsJsonObject;
-    JSONObject* topLevelObject = new JSONObject();
-    NSArray *keys = [jsonDictionary allKeys];
-    const int count = [keys count];
-    for (int i = 0; i<count; i++) {
-      const std::string key = std::string( [[keys objectAtIndex:i] UTF8String] );
-      topLevelObject->put(key,
-                          makeJSONElement([jsonDictionary objectForKey:[keys objectAtIndex:i]]));
-    }
-    return topLevelObject;
-  }
+  id nsJsonObject = [NSJSONSerialization JSONObjectWithData: jsonData
+                                                    options: NSJSONReadingAllowFragments
+                                                      error: &e];
 
   if (e) {
     ILogger::instance()->logWarning("JSON Parser: Error=%s",
                                     [[e localizedDescription] UTF8String]);
+    return NULL;
   }
 
-  ILogger::instance()->logWarning("JSON Parser: Malformed JSON: The top-level object is neither an Object nor an Array");
-
-  return NULL;
+  return convert(nsJsonObject);
 }
 
-JSONBaseObject* JSONParser_iOS::makeJSONElement(NSObject* object) {
+JSONBaseObject* JSONParser_iOS::parse(IByteBuffer* buffer) {
+  ByteBuffer_iOS* buffer_iOS = (ByteBuffer_iOS*) buffer;
+
+  NSData* data = [NSData dataWithBytes: buffer_iOS->getPointer()
+                                length: buffer_iOS->size()];
+
+  return parse(data);
+}
+
+JSONBaseObject* JSONParser_iOS::parse(const std::string& inputString) {
+  NSString *string = [[NSString alloc] initWithUTF8String: inputString.c_str()];
+  NSData* data = [string dataUsingEncoding: NSUTF8StringEncoding];
+
+  return parse(data);
+}
+
+JSONBaseObject* JSONParser_iOS::convert(NSObject* object) {
   if ([object isKindOfClass:[NSArray class]]) {
     NSArray *jsonArray = (NSArray *)object;
     JSONArray* array = new JSONArray();
     for (NSObject *element in jsonArray) {
-      array->add(makeJSONElement(element));
+      array->add(convert(element));
     }
     return array;
   }
@@ -77,7 +66,7 @@ JSONBaseObject* JSONParser_iOS::makeJSONElement(NSObject* object) {
       NSUInteger objI = i;
       const std::string key = std::string( [[keys objectAtIndex:objI] UTF8String] );
       dictionary->put(key,
-                      makeJSONElement([jsonDict objectForKey:[keys objectAtIndex:objI]]));
+                      convert([jsonDict objectForKey:[keys objectAtIndex:objI]]));
     }
     return dictionary;
   }
@@ -89,19 +78,33 @@ JSONBaseObject* JSONParser_iOS::makeJSONElement(NSObject* object) {
       return new JSONBoolean([jsonNumber boolValue]);
     }
     else if (strcmp([jsonNumber objCType], @encode(int))==0) {
-      return new JSONNumber([jsonNumber intValue]);
+      return new JSONInteger([jsonNumber intValue]);
     }
     else if (strcmp([jsonNumber objCType], @encode(long long))==0) {
-      return new JSONNumber([jsonNumber intValue]);
+      const long long longLongValue = [jsonNumber longLongValue];
+      const int intValue = (int) longLongValue;
+      if (longLongValue == intValue) {
+        return new JSONInteger(intValue);
+      }
+      else {
+        return new JSONLong(longLongValue);
+      }
     }
     else if (strcmp([jsonNumber objCType], @encode(float))==0) {
-      return new JSONNumber([jsonNumber floatValue]);
+      return new JSONFloat([jsonNumber floatValue]);
     }
     else if (strcmp([jsonNumber objCType], @encode(double))==0) {
-      return new JSONNumber([jsonNumber doubleValue]);
+      const double doubleValue = [jsonNumber doubleValue];
+      const float floatValue = (float) doubleValue;
+      if (doubleValue == floatValue) {
+        return new JSONFloat(floatValue);
+      }
+      else {
+        return new JSONDouble(doubleValue);
+      }
     }
     else {
-      JSONNumber* numberObj = new JSONNumber([jsonNumber doubleValue]);
+      JSONNumber* numberObj = new JSONDouble([jsonNumber doubleValue]);
       return numberObj;
     }
   }

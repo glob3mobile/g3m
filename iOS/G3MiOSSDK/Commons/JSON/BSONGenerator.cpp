@@ -11,8 +11,11 @@
 #include "JSONBaseObject.hpp"
 #include "ByteBufferBuilder.hpp"
 #include "JSONString.hpp"
-//#include "IStringBuilder.hpp"
-#include "JSONNumber.hpp"
+//#include "JSONNumber.hpp"
+#include "JSONInteger.hpp"
+#include "JSONLong.hpp"
+#include "JSONDouble.hpp"
+#include "JSONFloat.hpp"
 #include "JSONBoolean.hpp"
 
 BSONGenerator::BSONGenerator() {
@@ -57,28 +60,51 @@ void BSONGenerator::visitBoolean(const JSONBoolean* value) {
   }
 }
 
-void BSONGenerator::visitNumber(const JSONNumber* value) {
-  switch ( value->getType() ) {
-    case int_type:
-      _builder->add((unsigned char) 0x10);
-      addCurrentKey();
-      _builder->addInt32( value->intValue() );
-      break;
-    case float_type:
-      _builder->add((unsigned char) 0x01);
-      addCurrentKey();
-      _builder->addDouble( value->floatValue() );
-      break;
-    case double_type:
-      _builder->add((unsigned char) 0x01);
-      addCurrentKey();
-      _builder->addDouble( value->doubleValue() );
-      break;
+//void BSONGenerator::visitNumber(const JSONNumber* value) {
+//  switch ( value->getType() ) {
+//    case int_type:
+//      _builder->add((unsigned char) 0x10);
+//      addCurrentKey();
+//      _builder->addInt32( value->intValue() );
+//      break;
+//    case float_type:
+//      _builder->add((unsigned char) 0x01);
+//      addCurrentKey();
+//      _builder->addDouble( value->floatValue() );
+//      break;
+//    case double_type:
+//      _builder->add((unsigned char) 0x01);
+//      addCurrentKey();
+//      _builder->addDouble( value->doubleValue() );
+//      break;
+//
+//    default:
+//      break;
+//  }
+//}
 
-    default:
-      break;
-  }
+void BSONGenerator::visitDouble(const JSONDouble* value) {
+  _builder->add((unsigned char) 0x01);
+  addCurrentKey();
+  _builder->addDouble( value->doubleValue() );
+}
 
+void BSONGenerator::visitFloat(const JSONFloat* value) {
+  _builder->add((unsigned char) 0x01);
+  addCurrentKey();
+  _builder->addDouble( value->floatValue() );
+}
+
+void BSONGenerator::visitInteger(const JSONInteger* value) {
+  _builder->add((unsigned char) 0x10);
+  addCurrentKey();
+  _builder->addInt32( value->intValue() );
+}
+
+void BSONGenerator::visitLong(const JSONLong* value) {
+  _builder->add((unsigned char) 0x12);
+  addCurrentKey();
+  _builder->addInt64( value->longValue() );
 }
 
 void BSONGenerator::visitString(const JSONString* value) {

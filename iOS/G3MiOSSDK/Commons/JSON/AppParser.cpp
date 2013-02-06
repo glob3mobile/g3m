@@ -18,6 +18,7 @@
 #include "JSONArray.hpp"
 #include "JSONString.hpp"
 #include "JSONBoolean.hpp"
+#include "JSONDouble.hpp"
 
 #include "LayerSet.hpp"
 #include "WMSLayer.hpp"
@@ -61,7 +62,7 @@ void AppParser::parseWorldConfiguration(LayerSet* layerSet, MarksRenderer* marks
     WMSLayer* bing = new WMSLayer("ve",
                                   URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?",true),
                                   WMS_1_1_0,
-                                  Sector::fromDegrees(jsonBbox->getAsNumber(1)->doubleValue(), jsonBbox->getAsNumber(0)->doubleValue(), jsonBbox->getAsNumber(3)->doubleValue(), jsonBbox->getAsNumber(2)->doubleValue()),
+                                  Sector::fromDegrees(jsonBbox->getAsNumber(1)->value(), jsonBbox->getAsNumber(0)->value(), jsonBbox->getAsNumber(3)->value(), jsonBbox->getAsNumber(2)->value()),
                                   "image/jpeg",
                                   "EPSG:4326",
                                   "",
@@ -72,7 +73,7 @@ void AppParser::parseWorldConfiguration(LayerSet* layerSet, MarksRenderer* marks
     WMSLayer* osm = new WMSLayer("osm",
                                  URL("http://wms.latlon.org/",true),
                                  WMS_1_1_0,
-                                 Sector::fromDegrees(jsonBbox->getAsNumber(1)->doubleValue(), jsonBbox->getAsNumber(0)->doubleValue(), jsonBbox->getAsNumber(3)->doubleValue(), jsonBbox->getAsNumber(2)->doubleValue()),                                 
+                                 Sector::fromDegrees(jsonBbox->getAsNumber(1)->value(), jsonBbox->getAsNumber(0)->value(),jsonBbox->getAsNumber(3)->value(), jsonBbox->getAsNumber(2)->value()),
                                  "image/jpeg",
                                  "EPSG:4326",
                                  "",
@@ -102,7 +103,7 @@ void AppParser::parseGEOJSONPointObject(MarksRenderer* marks, const JSONObject* 
     
     Mark* mark = new Mark(jsonProperties->getAsString(NAME)->value(),
                         URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png",false),
-                          Geodetic3D(Angle::fromDegrees(jsonCoordinates->getAsNumber(1)->doubleValue()), Angle::fromDegrees(jsonCoordinates->getAsNumber(0)->doubleValue()), 0));
+                          Geodetic3D(Angle::fromDegrees(jsonCoordinates->getAsNumber(1)->value()), Angle::fromDegrees(jsonCoordinates->getAsNumber(0)->value()), 0));
     
     marks->addMark(mark);
 }
