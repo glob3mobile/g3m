@@ -79,6 +79,7 @@
   
   // Initialize widget
   builder.initializeWidget();
+  [self resetWidget];
   
   [self initDropDownMenu];
   [self initToolbar];
