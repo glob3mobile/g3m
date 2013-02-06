@@ -179,7 +179,6 @@ public class G3MSimplestGlob3Activity
         autoDeleteInitializationTask, //
         periodicalTasks, //
         userData);
-
     setContentView(_widgetAndroid);
 
     // final G3MBuilder glob3Builder = new G3MBuilder();
