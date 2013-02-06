@@ -18,13 +18,13 @@
 
 class JSONParser_iOS : public IJSONParser{
 private:
-  NSData* _jsonData;
-  
+  JSONBaseObject* convert(NSObject *object);
+
+  JSONBaseObject* parse(NSData* jsonData);
+
 public:
   JSONBaseObject* parse(const std::string& string);
   JSONBaseObject* parse(IByteBuffer* buffer);
-  
-  JSONBaseObject* makeJSONElement(NSObject *object);
   
 };
 

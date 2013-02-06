@@ -12,7 +12,11 @@
 #include "IStringBuilder.hpp"
 #include "JSONBoolean.hpp"
 #include "JSONString.hpp"
-#include "JSONNumber.hpp"
+//#include "JSONNumber.hpp"
+#include "JSONDouble.hpp"
+#include "JSONFloat.hpp"
+#include "JSONInteger.hpp"
+#include "JSONLong.hpp"
 
 std::string JSONGenerator::generate(const JSONBaseObject* value) {
   JSONGenerator* generator = new JSONGenerator();
@@ -45,21 +49,37 @@ void JSONGenerator::visitBoolean(const JSONBoolean* value) {
   }
 }
 
-void JSONGenerator::visitNumber(const JSONNumber* value) {
-  switch ( value->getType() ) {
-    case int_type:
-      _isb->addInt(value->intValue());
-      break;
-    case float_type:
-      _isb->addFloat(value->floatValue());
-      break;
-    case double_type:
-      _isb->addDouble(value->doubleValue());
-      break;
+//void JSONGenerator::visitNumber(const JSONNumber* value) {
+//  switch ( value->getType() ) {
+//    case int_type:
+//      _isb->addInt(value->intValue());
+//      break;
+//    case float_type:
+//      _isb->addFloat(value->floatValue());
+//      break;
+//    case double_type:
+//      _isb->addDouble(value->doubleValue());
+//      break;
+//
+//    default:
+//      break;
+//  }
+//}
 
-    default:
-      break;
-  }
+void JSONGenerator::visitDouble(const JSONDouble* value) {
+  _isb->addDouble(value->doubleValue());
+}
+
+void JSONGenerator::visitFloat(const JSONFloat*   value) {
+  _isb->addFloat(value->floatValue());
+}
+
+void JSONGenerator::visitInteger(const JSONInteger* value) {
+  _isb->addInt(value->intValue());
+}
+
+void JSONGenerator::visitLong(const JSONLong*    value) {
+  _isb->addLong(value->longValue());
 }
 
 void JSONGenerator::visitString(const JSONString* value) {
@@ -84,7 +104,6 @@ void JSONGenerator::visitArrayBeforeChild(const JSONArray* value,
 void JSONGenerator::visitArrayAfterChildren(const JSONArray* value) {
   _isb->addString("]");
 }
-
 
 void JSONGenerator::visitObjectBeforeChildren(const JSONObject* value) {
   _isb->addString("{");

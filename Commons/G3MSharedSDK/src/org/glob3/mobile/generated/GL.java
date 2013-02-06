@@ -74,7 +74,12 @@ public class GL
 
   private ShaderProgram _program;
 
-  private IGLTextureId _boundTextureId;
+///#ifdef C_CODE
+//  const IGLTextureId* _boundTextureId;
+///#endif
+///#ifdef JAVA_CODE
+//  private IGLTextureId _boundTextureId;
+///#endif
 
   private void loadModelView()
   {
@@ -193,6 +198,7 @@ public class GL
   //  _enableFlatColor(false),
   //  _texturesIdGetCounter(0),
   //  _texturesIdTakeCounter(0),
+  //_boundTextureId(NULL)
   {
 	  _nativeGL = nativeGL;
 	  _verbose = verbose;
@@ -224,7 +230,6 @@ public class GL
 	  _lineWidth = 1F;
 	  _pointSize = 1F;
 	  _program = null;
-	  _boundTextureId = null;
 	//Init Constants
 	GLCullFace.init(_nativeGL);
 	GLBufferType.init(_nativeGL);
@@ -536,11 +541,10 @@ public class GL
 	}
 	else
 	{
-	  if ((_boundTextureId == null) || !_boundTextureId.isEqualsTo(textureId))
-	  {
+	  //if ((_boundTextureId == NULL) || !_boundTextureId->isEqualsTo(textureId)) {
 		_nativeGL.bindTexture(GLTextureType.texture2D(), textureId);
-		_boundTextureId = textureId;
-	  }
+	  //  _boundTextureId = textureId;
+	  //}
   //    else {
   //      ILogger::instance()->logInfo("TextureId %s already bound", textureId->description().c_str());
   //    }
@@ -597,10 +601,11 @@ public class GL
 	  {
 	  }
   
-	  if ((_boundTextureId != null) && _boundTextureId.isEqualsTo(textureId))
-	  {
-		_boundTextureId = null;
-	  }
+  //    if (_boundTextureId != NULL) {
+  //      if (_boundTextureId->isEqualsTo(textureId)) {
+  //        _boundTextureId = NULL;
+  //      }
+  //    }
   
 	  //ILogger::instance()->logInfo("  = delete textureId=%s", texture->description().c_str());
   

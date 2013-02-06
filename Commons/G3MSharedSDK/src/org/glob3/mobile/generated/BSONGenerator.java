@@ -28,7 +28,7 @@ public class BSONGenerator extends JSONVisitor
   private ByteBufferBuilder _builder;
 
 
-  ///#include "IStringBuilder.hpp"
+  ///#include "JSONNumber.hpp"
   
   private BSONGenerator()
   {
@@ -82,31 +82,56 @@ public class BSONGenerator extends JSONVisitor
 	  _builder.add((byte) 0x00);
 	}
   }
-  public final void visitNumber(JSONNumber value)
+//  void visitNumber(const JSONNumber* value);
+
+  //void BSONGenerator::visitNumber(const JSONNumber* value) {
+  //  switch ( value->getType() ) {
+  //    case int_type:
+  //      _builder->add((unsigned char) 0x10);
+  //      addCurrentKey();
+  //      _builder->addInt32( value->intValue() );
+  //      break;
+  //    case float_type:
+  //      _builder->add((unsigned char) 0x01);
+  //      addCurrentKey();
+  //      _builder->addDouble( value->floatValue() );
+  //      break;
+  //    case double_type:
+  //      _builder->add((unsigned char) 0x01);
+  //      addCurrentKey();
+  //      _builder->addDouble( value->doubleValue() );
+  //      break;
+  //
+  //    default:
+  //      break;
+  //  }
+  //}
+  
+  public final void visitDouble(JSONDouble value)
   {
-	switch (value.getType())
-	{
-	  case int_type:
-		_builder.add((byte) 0x10);
-		addCurrentKey();
-		_builder.addInt32(value.intValue());
-		break;
-	  case float_type:
-		_builder.add((byte) 0x01);
-		addCurrentKey();
-		_builder.addDouble(value.floatValue());
-		break;
-	  case double_type:
-		_builder.add((byte) 0x01);
-		addCurrentKey();
-		_builder.addDouble(value.doubleValue());
-		break;
-  
-	  default:
-		break;
-	}
-  
+	_builder.add((byte) 0x01);
+	addCurrentKey();
+	_builder.addDouble(value.doubleValue());
   }
+  public final void visitFloat(JSONFloat value)
+  {
+	_builder.add((byte) 0x01);
+	addCurrentKey();
+	_builder.addDouble(value.floatValue());
+  }
+  public final void visitInteger(JSONInteger value)
+  {
+	_builder.add((byte) 0x10);
+	addCurrentKey();
+	_builder.addInt32(value.intValue());
+  }
+  public final void visitLong(JSONLong value)
+  {
+	_builder.add((byte) 0x12);
+	addCurrentKey();
+	_builder.addInt64(value.longValue());
+  }
+
   public final void visitString(JSONString value)
   {
 	_builder.add((byte) 0x02); // type string

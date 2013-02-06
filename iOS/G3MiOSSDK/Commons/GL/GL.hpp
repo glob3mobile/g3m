@@ -74,12 +74,12 @@ private:
 
   ShaderProgram* _program;
 
-#ifdef C_CODE
-  const IGLTextureId* _boundTextureId;
-#endif
-#ifdef JAVA_CODE
-  private IGLTextureId _boundTextureId;
-#endif
+//#ifdef C_CODE
+//  const IGLTextureId* _boundTextureId;
+//#endif
+//#ifdef JAVA_CODE
+//  private IGLTextureId _boundTextureId;
+//#endif
 
   inline void loadModelView();
 
@@ -134,8 +134,8 @@ public:
   _billboardTexCoord(NULL),
   _lineWidth(1),
   _pointSize(1),
-  _program(NULL),
-  _boundTextureId(NULL)
+  _program(NULL)
+  //_boundTextureId(NULL)
   {
     //Init Constants
     GLCullFace::init(_nativeGL);

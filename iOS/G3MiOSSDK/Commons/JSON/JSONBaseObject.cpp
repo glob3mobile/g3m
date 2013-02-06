@@ -10,6 +10,7 @@
 #include "JSONObject.hpp"
 #include "JSONArray.hpp"
 #include "JSONNumber.hpp"
+#include "ILogger.hpp"
 
 const JSONObject* JSONBaseObject::asObject()  const {
   ILogger::instance()->logError("The requested Object is not of type JSONObject!");
