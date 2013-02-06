@@ -389,6 +389,8 @@
                      fromDistance, toDistance,
                      fromAzimuth,  toAzimuth,
                      fromAltitude, toAltitude);
+  
+  [[self toolbar] setVisible: FALSE];
 }
 
 - (void) gotoMeshDemo {
@@ -417,6 +419,8 @@
   // left align button text
   [[self demoSelector] setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
   [[self demoSelector] setContentEdgeInsets: UIEdgeInsetsMake(0, 10, 0, 0)];
+  [[[self demoSelector] layer] setBorderWidth: 0];
+  [[self demoSelector] setBackgroundColor: [UIColor clearColor]];
   
   [self setDemoMenu: [[UIDropDownMenu alloc] initWithIdentifier:@"demoMenu"]];
   

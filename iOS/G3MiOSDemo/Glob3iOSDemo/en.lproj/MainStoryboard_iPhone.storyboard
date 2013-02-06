@@ -104,25 +104,6 @@
         <image name="g3m-48.png" width="48" height="48"/>
         <image name="selector-background.png" width="200" height="48"/>
     </resources>
-    <classes>
-        <class className="DemosViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/DemosViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="G3MWidget" candidateClass="G3MWidget_iOS"/>
-                <relationship kind="outlet" name="demoSelector" candidateClass="UIButton"/>
-            </relationships>
-        </class>
-        <class className="G3MWebViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/G3MWebViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="pushBackButton:"/>
-                <relationship kind="outlet" name="webView" candidateClass="UIWebView"/>
-            </relationships>
-        </class>
-        <class className="G3MWidget_iOS" superclassName="UIView">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/G3MWidget_iOS.h"/>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
