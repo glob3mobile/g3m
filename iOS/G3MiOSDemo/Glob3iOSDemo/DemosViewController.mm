@@ -287,7 +287,7 @@
           std::string planeJSON = [nsPlaneJSON UTF8String];
           Shape* plane = SceneJSShapesParser::parseFromJSON(planeJSON, "file:///textures-A320/");
           if (plane) {
-            ((DemoUserData*) context->getUserData())->setPlane(plane);
+            ((DemoUserData*) [_widget widget]->getUserData())->setPlane(plane);
             plane->setPosition(new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
                                               Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
                                               10000) );
@@ -470,7 +470,7 @@
   // playModelDemo
   [self setPlayModelDemo: [UIButton buttonWithType: UIButtonTypeCustom]];
   [[self playModelDemo] addTarget: self
-                           action: @selector(showModelDemo)
+                           action: @selector(gotoModelDemo)
                  forControlEvents: UIControlEventTouchUpInside];
   [[self playModelDemo] setTitle: @""
                         forState: nil];
