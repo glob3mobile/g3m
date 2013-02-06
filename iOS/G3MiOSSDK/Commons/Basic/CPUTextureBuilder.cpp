@@ -62,7 +62,9 @@ public:
     if (_listener != NULL) {
       _listener->imageCreated(image);
       if (_autodelete) {
+#ifdef C_CODE
         delete _listener;
+#endif
         _listener = NULL;
       }
     }
