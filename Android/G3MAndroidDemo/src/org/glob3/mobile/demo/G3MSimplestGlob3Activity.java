@@ -74,6 +74,7 @@ public class G3MSimplestGlob3Activity
 
 
     // initialize a customized widget without using any builder
+    // initialize a customized widget without using any builder
     _widgetAndroid = new G3MWidget_Android(this);
 
     final IStorage storage = new SQLiteStorage_Android("g3m.cache", this);
@@ -120,7 +121,6 @@ public class G3MSimplestGlob3Activity
     final TileRendererBuilder tlBuilder = new TileRendererBuilder();
     tlBuilder.setLayerSet(layerSet);
     final TileRenderer tileRenderer = tlBuilder.create();
-
     mainRenderer.addRenderer(tileRenderer);
 
 
@@ -149,6 +149,24 @@ public class G3MSimplestGlob3Activity
 
     final boolean logDownloaderStatistics = false;
 
+    // final GInitializationTask initializationTask = new
+    // GInitializationTask() {
+    // @Override
+    // public void run(final G3MContext context) {
+    // final String jsonString =
+    // "{\"s\": \"world\", \"d\": 3.1415927, \"i\": 1, \"n\": null, \"a\":[1,\"2\",true]}";
+    // final JSONBaseObject jsonObject =
+    // context.getJSONParser().parse(jsonString);
+    //
+    // System.out.println(jsonObject.description());
+    // }
+    //
+    //
+    // @Override
+    // public boolean isDone(final G3MContext context) {
+    // return true;
+    // }
+    // };
     final GInitializationTask initializationTask = null;
 
     final boolean autoDeleteInitializationTask = true;

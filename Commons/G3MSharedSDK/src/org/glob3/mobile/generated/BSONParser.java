@@ -29,6 +29,12 @@ package org.glob3.mobile.generated;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class JSONNumber;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class JSONDouble;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class JSONInteger;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class JSONLong;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class JSONBoolean;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class JSONObject;
@@ -58,7 +64,11 @@ public class BSONParser
 	  }
 	  case 0x10:
 	  {
-		return parseInt(iterator);
+		return parseInt32(iterator);
+	  }
+	  case 0x12:
+	  {
+		return parseInt64(iterator);
 	  }
 	  case 0x08:
 	  {
@@ -145,11 +155,21 @@ public class BSONParser
   }
   private static JSONNumber parseDouble(ByteBufferIterator iterator)
   {
-	return new JSONNumber(iterator.nextDouble());
+	final double doubleValue = iterator.nextDouble();
+	final float floatValue = (float) doubleValue;
+	if (doubleValue == floatValue)
+	{
+	  return new JSONFloat(floatValue);
+	}
+	return new JSONDouble(doubleValue);
   }
-  private static JSONNumber parseInt(ByteBufferIterator iterator)
+  private static JSONInteger parseInt32(ByteBufferIterator iterator)
   {
-	return new JSONNumber(iterator.nextInt32());
+	return new JSONInteger(iterator.nextInt32());
+  }
+  private static JSONLong parseInt64(ByteBufferIterator iterator)
+  {
+	return new JSONLong(iterator.nextInt64());
   }
   private static JSONBoolean parseBool(ByteBufferIterator iterator)
   {

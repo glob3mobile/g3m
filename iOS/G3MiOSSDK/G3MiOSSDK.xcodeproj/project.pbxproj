@@ -140,6 +140,14 @@
 		CF6873A615F77F54002EDFD0 /* IFloatBuffer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF6873A415F77F54002EDFD0 /* IFloatBuffer.hpp */; settings = {ATTRIBUTES = (); }; };
 		CF6873AA15F77FFC002EDFD0 /* IIntBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6873A815F77FFC002EDFD0 /* IIntBuffer.cpp */; };
 		CF6873AB15F77FFC002EDFD0 /* IIntBuffer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF6873A915F77FFC002EDFD0 /* IIntBuffer.hpp */; settings = {ATTRIBUTES = (); }; };
+		CF6B5F5D16C1910500C590C1 /* JSONDouble.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6B5F5B16C1910500C590C1 /* JSONDouble.cpp */; };
+		CF6B5F5E16C1910500C590C1 /* JSONDouble.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF6B5F5C16C1910500C590C1 /* JSONDouble.hpp */; };
+		CF6B5F6116C1938D00C590C1 /* JSONFloat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6B5F5F16C1938D00C590C1 /* JSONFloat.cpp */; };
+		CF6B5F6216C1938D00C590C1 /* JSONFloat.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF6B5F6016C1938D00C590C1 /* JSONFloat.hpp */; };
+		CF6B5F6516C194D200C590C1 /* JSONInteger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6B5F6316C194D200C590C1 /* JSONInteger.cpp */; };
+		CF6B5F6616C194D200C590C1 /* JSONInteger.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF6B5F6416C194D200C590C1 /* JSONInteger.hpp */; };
+		CF6B5F6916C1956B00C590C1 /* JSONLong.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6B5F6716C1956B00C590C1 /* JSONLong.cpp */; };
+		CF6B5F6A16C1956B00C590C1 /* JSONLong.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF6B5F6816C1956B00C590C1 /* JSONLong.hpp */; };
 		CF6D404715C8278C008D8D78 /* Downloader_iOS_WorkerThread.h in Headers */ = {isa = PBXBuildFile; fileRef = CF6D404515C8278C008D8D78 /* Downloader_iOS_WorkerThread.h */; settings = {ATTRIBUTES = (); }; };
 		CF6D404815C8278C008D8D78 /* Downloader_iOS_WorkerThread.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF6D404615C8278C008D8D78 /* Downloader_iOS_WorkerThread.mm */; };
 		CF6DD7851637488300685212 /* PeriodicalTask.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D81FB47C1636A5AE00CC2CA7 /* PeriodicalTask.hpp */; settings = {ATTRIBUTES = (); }; };
@@ -511,6 +519,14 @@
 		CF6873A415F77F54002EDFD0 /* IFloatBuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IFloatBuffer.hpp; path = Commons/Basic/IFloatBuffer.hpp; sourceTree = "<group>"; };
 		CF6873A815F77FFC002EDFD0 /* IIntBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IIntBuffer.cpp; path = Commons/Basic/IIntBuffer.cpp; sourceTree = "<group>"; };
 		CF6873A915F77FFC002EDFD0 /* IIntBuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IIntBuffer.hpp; path = Commons/Basic/IIntBuffer.hpp; sourceTree = "<group>"; };
+		CF6B5F5B16C1910500C590C1 /* JSONDouble.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JSONDouble.cpp; sourceTree = "<group>"; };
+		CF6B5F5C16C1910500C590C1 /* JSONDouble.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JSONDouble.hpp; sourceTree = "<group>"; };
+		CF6B5F5F16C1938D00C590C1 /* JSONFloat.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JSONFloat.cpp; sourceTree = "<group>"; };
+		CF6B5F6016C1938D00C590C1 /* JSONFloat.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JSONFloat.hpp; sourceTree = "<group>"; };
+		CF6B5F6316C194D200C590C1 /* JSONInteger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JSONInteger.cpp; sourceTree = "<group>"; };
+		CF6B5F6416C194D200C590C1 /* JSONInteger.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JSONInteger.hpp; sourceTree = "<group>"; };
+		CF6B5F6716C1956B00C590C1 /* JSONLong.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JSONLong.cpp; sourceTree = "<group>"; };
+		CF6B5F6816C1956B00C590C1 /* JSONLong.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JSONLong.hpp; sourceTree = "<group>"; };
 		CF6D404515C8278C008D8D78 /* Downloader_iOS_WorkerThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Downloader_iOS_WorkerThread.h; path = Specific/Derived/Downloader_iOS_WorkerThread.h; sourceTree = "<group>"; };
 		CF6D404615C8278C008D8D78 /* Downloader_iOS_WorkerThread.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Downloader_iOS_WorkerThread.mm; path = Specific/Derived/Downloader_iOS_WorkerThread.mm; sourceTree = "<group>"; };
 		CF73BFD915E114E3001CE412 /* FrameTasksExecutor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FrameTasksExecutor.cpp; path = Commons/Basic/FrameTasksExecutor.cpp; sourceTree = "<group>"; };
@@ -986,6 +1002,8 @@
 		A7BF53831607643400662135 /* JSON */ = {
 			isa = PBXGroup;
 			children = (
+				CF4FAAD31695F344009734CA /* BSONGenerator.cpp */,
+				CF4FAAD41695F344009734CA /* BSONGenerator.hpp */,
 				CF7EDA081694914A002C760A /* BSONParser.cpp */,
 				CF7EDA091694914A002C760A /* BSONParser.hpp */,
 				A70F5607161B54A400340256 /* IJSONParser.cpp */,
@@ -996,8 +1014,16 @@
 				A7BF53841607643400662135 /* JSONBaseObject.hpp */,
 				CFE3DBA5164AFC4100910037 /* JSONBoolean.cpp */,
 				A70F5615161C8F9A00340256 /* JSONBoolean.hpp */,
+				CF6B5F5B16C1910500C590C1 /* JSONDouble.cpp */,
+				CF6B5F5C16C1910500C590C1 /* JSONDouble.hpp */,
+				CF6B5F5F16C1938D00C590C1 /* JSONFloat.cpp */,
+				CF6B5F6016C1938D00C590C1 /* JSONFloat.hpp */,
 				CF4FAACA1695E4A8009734CA /* JSONGenerator.cpp */,
 				CF4FAACB1695E4A8009734CA /* JSONGenerator.hpp */,
+				CF6B5F6316C194D200C590C1 /* JSONInteger.cpp */,
+				CF6B5F6416C194D200C590C1 /* JSONInteger.hpp */,
+				CF6B5F6716C1956B00C590C1 /* JSONLong.cpp */,
+				CF6B5F6816C1956B00C590C1 /* JSONLong.hpp */,
 				A70F5611161C4F8F00340256 /* JSONNumber.cpp */,
 				A70F5613161C4FD000340256 /* JSONNumber.hpp */,
 				A7EE00191619D01900C77604 /* JSONObject.cpp */,
@@ -1006,8 +1032,6 @@
 				A70F5617161C94A100340256 /* JSONString.hpp */,
 				CF4FAAC61695D010009734CA /* JSONVisitor.cpp */,
 				CF4FAAC71695D010009734CA /* JSONVisitor.hpp */,
-				CF4FAAD31695F344009734CA /* BSONGenerator.cpp */,
-				CF4FAAD41695F344009734CA /* BSONGenerator.hpp */,
 			);
 			name = JSON;
 			path = Commons/JSON;
@@ -1470,6 +1494,10 @@
 				CFCAEC4A16BB20D500CDC17D /* ShapeOrbitCameraEffect.hpp in Headers */,
 				CF65361416BC41B2001F9139 /* ShapePositionEffect.hpp in Headers */,
 				44846F8216C111E800D067BB /* ITileVisitor.hpp in Headers */,
+				CF6B5F5E16C1910500C590C1 /* JSONDouble.hpp in Headers */,
+				CF6B5F6216C1938D00C590C1 /* JSONFloat.hpp in Headers */,
+				CF6B5F6616C194D200C590C1 /* JSONInteger.hpp in Headers */,
+				CF6B5F6A16C1956B00C590C1 /* JSONLong.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1681,6 +1709,10 @@
 				CFBA53F216B9B7CD00256453 /* SimpleCameraConstrainer.cpp in Sources */,
 				CFCAEC4916BB20D500CDC17D /* ShapeOrbitCameraEffect.cpp in Sources */,
 				CF65361316BC41B2001F9139 /* ShapePositionEffect.cpp in Sources */,
+				CF6B5F5D16C1910500C590C1 /* JSONDouble.cpp in Sources */,
+				CF6B5F6116C1938D00C590C1 /* JSONFloat.cpp in Sources */,
+				CF6B5F6516C194D200C590C1 /* JSONInteger.cpp in Sources */,
+				CF6B5F6916C1956B00C590C1 /* JSONLong.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
