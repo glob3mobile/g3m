@@ -31,6 +31,7 @@
 #import "ByteBuffer_iOS.hpp"
 #import "BSONParser.hpp"
 #import "JSONGenerator.hpp"
+#import "G3MToolbar.h"
 
 
 @interface DemosViewController () 
@@ -39,7 +40,9 @@
 
 @implementation DemosViewController 
 
-@synthesize G3MWidget;
+@synthesize demoSelector, demoMenu, toolbar, layerSwitcher, playMarkersDemo, playModelDemo, playMeshDemo;
+@synthesize G3MWidget, layerSet, satelliteLayerEnabled, markerRenderer, shapeRenderer, meshRenderer;
+
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -73,7 +76,10 @@
   builder.addRenderer([self meshRenderer]);
   builder.setInitializationTask([self createInitializationTask], true);
   // Initialize widget
-  builder.initializeWidget();  
+  builder.initializeWidget();
+  
+  [self initDropDownMenu];
+  [self initToolbar];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -95,6 +101,11 @@
 - (void)viewDidUnload
 {
   [self setG3MWidget: nil];
+  [self setToolbar: nil];
+  [self setLayerSwitcher: nil];
+  [self setDemoSelector:nil];
+  [self setDemoMenu: nil];
+  
   [self setMarkerRenderer: nil];
   [self setShapeRenderer: nil];
   [self setMeshRenderer: nil];
@@ -117,17 +128,6 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-  NSString *title = [alertView buttonTitleAtIndex:buttonIndex];
-  
-  if([title isEqualToString:@"Learn more..."]) {
-    G3MWebViewController *webView = [self.storyboard instantiateViewControllerWithIdentifier:@"G3MWebViewController"];
-    [self presentModalViewController: webView
-                            animated: YES];
-    [webView loadUrl: [NSURL URLWithString:urlMarkString]];
-  }
 }
 
 - (LayerSet*) createLayerSet {
@@ -260,9 +260,20 @@
 //                length: length];
 //        
 //        IByteBuffer* buffer = new ByteBuffer_iOS(bytes, length);
-//        JSONBaseObject* jsonBO = BSONParser::parse(buffer);
-//          if (buffer) {
-//            Shape* plane = SceneJSShapesParser::parse(JSONGenerator::generate(jsonBO), "file:///textures-A320/");
+//        if (buffer) {
+//          Shape* plane = SceneJSShapesParser::parseFromBSON(buffer, "file://textures-A320/");
+//          if (plane) {
+//            // Washington, DC
+//            plane->setPosition(new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
+//                                              Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
+//                                              1000) );
+//            plane->setScale(500, 500, 500);
+//            plane->setPitch(Angle::fromDegrees(90));
+//            _shapesRenderer->addShape(plane);
+//          }
+//          delete buffer;
+//        }
+//      }
 
       NSString *jsonFilePath = [[NSBundle mainBundle] pathForResource: @"A320"
                                                                ofType: @"json"];
@@ -278,7 +289,7 @@
             plane->setPosition(new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
                                               Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
                                               1000) );
-            plane->setScale(500, 500, 500);
+            plane->setScale(100, 100, 100);
             plane->setPitch(Angle::fromDegrees(90));
             _shapesRenderer->addShape(plane);
           }
@@ -300,40 +311,21 @@
   return initializationTask;
 }
 
-- (IBAction)switchDemo:(UISegmentedControl*)sender {
-  [self resetWidget];
-  
-  switch ([sender selectedSegmentIndex]) {
-    case 0:
-      [self showSimpleGlob3];
-      break;
-    case 1:
-      [self switchLayer];
-      break;
-    case 2:
-      [self showMarkers];
-      break;
-    case 3:
-      [self show3DModel];
-      break;
-    case 4:
-      [self showPointMesh];
-      break;
-    default:
-      break;
-  }
-}
-
 - (void) resetWidget {
   [self markerRenderer]->setEnable(false);
   [self shapeRenderer]->setEnable(false);
   [self meshRenderer]->setEnable(false);
   
   [[self G3MWidget] widget]->stopCameraAnimation();
-  [[self G3MWidget] widget]->resetCameraPosition();
-  [[self G3MWidget] widget]->setCameraPosition(Geodetic3D(Angle::fromDegrees(0),
-                                                          Angle::fromDegrees(0),
-                                                          25000000));
+//  [[self G3MWidget] widget]->resetCameraPosition();
+//  [[self G3MWidget] widget]->setCameraPosition(Geodetic3D(Angle::fromDegrees(0),
+//                                                          Angle::fromDegrees(0),
+//                                                          25000000));
+  
+  [[self G3MWidget] widget]->setAnimatedCameraPosition(Geodetic3D(Angle::fromDegrees(0),
+                                                                  Angle::fromDegrees(0),
+                                                                  25000000),
+                                                       TimeInterval::fromSeconds(2));
 }
 
 - (void) showSimpleGlob3 {
@@ -345,49 +337,190 @@
 - (void) switchLayer {
   [self setSatelliteLayerEnabled: ![self satelliteLayerEnabled]];
   
+  if ([self satelliteLayerEnabled]) {
+    [[self layerSwitcher] setImage:[UIImage imageNamed:@"satellite-on-96x48.png"] forState:UIControlStateNormal];
+  }
+  else {
+    [[self layerSwitcher] setImage:[UIImage imageNamed:@"map-on-96x48.png"] forState:UIControlStateNormal];    
+  }
+  
   // bing
   [self layerSet]->getLayer("ve")->setEnable([self satelliteLayerEnabled]);
   // osm
   [self layerSet]->getLayer("osm_auto:all")->setEnable(![self satelliteLayerEnabled]);
 }
 
-- (void) showMarkers {
+- (void) showMarkersDemo {
   [self markerRenderer]->setEnable(true);
-  [self zoomOut];  
   [[self G3MWidget] widget]->setAnimatedCameraPosition(Geodetic3D(Angle::fromDegrees(37.7658),
                                                                   Angle::fromDegrees(-122.4185),
-                                                                  10000),
-                                                       TimeInterval::fromSeconds(7));
+                                                                  12000),
+                                                       TimeInterval::fromSeconds(5));
 }
 
 - (void) show3DModel {
   [self shapeRenderer]->setEnable(true);
-  [self zoomOut];
   [[self G3MWidget] widget]->setAnimatedCameraPosition(Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
                                                                   Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
-                                                                  2500),
-                                                       TimeInterval::fromSeconds(7));
+                                                                  6000),
+                                                       TimeInterval::fromSeconds(5));
 }
 
 - (void) showPointMesh {
   [self meshRenderer]->setEnable(true);
-  [self zoomOut];
   [[self G3MWidget] widget]->setAnimatedCameraPosition(Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42),
                                                                   Angle::fromDegreesMinutesSeconds(-77, 2, 11),
-                                                                  6500000),
-                                                       TimeInterval::fromSeconds(4));
+                                                                  6700000),
+                                                       TimeInterval::fromSeconds(5));
 }
 
-- (void) zoomOut {
-  Geodetic3D position = [[self G3MWidget] widget]->getNextCamera()->getGeodeticCenterOfView();
-  if (position.height() < 18000000) {
-    [[self G3MWidget] widget]->setAnimatedCameraPosition(Geodetic3D(position.latitude(),
-                                                                    position.longitude(),
-                                                                    18000000),
-                                                         TimeInterval::fromSeconds(4));
+
+// UI
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+  NSString *title = [alertView buttonTitleAtIndex:buttonIndex];
+  
+  if([title isEqualToString:@"Learn more..."]) {
+    G3MWebViewController *webView = [self.storyboard instantiateViewControllerWithIdentifier:@"G3MWebViewController"];
+    [self presentModalViewController: webView
+                            animated: YES];
+    [webView loadUrl: [NSURL URLWithString:urlMarkString]];
   }
 }
 
+- (void) initDropDownMenu
+{
+  // left align button text
+  [[self demoSelector] setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
+  [[self demoSelector] setContentEdgeInsets: UIEdgeInsetsMake(0, 10, 0, 0)];
+  
+  [self setDemoMenu: [[UIDropDownMenu alloc] initWithIdentifier:@"demoMenu"]];
+  
+  NSMutableArray *demoNames = [[NSMutableArray alloc] initWithObjects:
+                               @"Simple glob3",
+                               @"Switch layer",
+                               @"Markers",
+                               @"3D Model",
+                               @"Point Mesh",
+                               nil];
+  
+  [[self demoMenu] setDelegate: self];
+  [[self demoMenu] setMenuWidth: 200];
+  [[self demoMenu] setBackgroundColor: [UIColor darkGrayColor]];
+  [[self demoMenu] setBorderColor: [UIColor blackColor]];
+  [[self demoMenu] setTextColor: [UIColor lightGrayColor]];
+  [[self demoMenu] setTitleArray: demoNames];
+  [[self demoMenu] setValueArray: demoNames];
+  [[self demoMenu] makeMenu: [self demoSelector]
+                 targetView: [self view]];
+}
+
+- (void) initToolbar
+{
+  [self setToolbar: [[G3MToolbar alloc] init]];
+  [[self view] addSubview: toolbar];
+  
+  // layerSwitcher
+  [self setLayerSwitcher: [UIButton buttonWithType: UIButtonTypeCustom]];
+  [[self layerSwitcher] addTarget: self
+                           action: @selector(switchLayer)
+                 forControlEvents: UIControlEventTouchUpInside];
+  [[self layerSwitcher] setTitle: @""
+                        forState: nil];
+  [[[self layerSwitcher] layer] setBorderWidth: 0];
+  [[self layerSwitcher] setImage: [UIImage imageNamed:@"satellite-on-96x48.png"]
+                        forState: UIControlStateNormal];
+  [[self layerSwitcher] setFrame: CGRectMake(10.0, 10.0, 96.0, 48.0)];
+  
+  // playMarkersDemo
+  [self setPlayMarkersDemo: [UIButton buttonWithType: UIButtonTypeCustom]];
+  [[self playMarkersDemo] addTarget: self
+                           action: @selector(showMarkersDemo)
+                 forControlEvents: UIControlEventTouchUpInside];
+  [[self playMarkersDemo] setTitle: @""
+                        forState: nil];
+  [[[self playMarkersDemo] layer] setBorderWidth: 0];
+  [[self playMarkersDemo] setImage: [UIImage imageNamed:@"play.png"]
+                        forState: UIControlStateNormal];
+  [[self playMarkersDemo] setFrame: CGRectMake(10.0, 10.0, 48.0, 48.0)];
+  
+  // playModelDemo
+  [self setPlayModelDemo: [UIButton buttonWithType: UIButtonTypeCustom]];
+  [[self playModelDemo] addTarget: self
+                           action: @selector(showModelDemo)
+                 forControlEvents: UIControlEventTouchUpInside];
+  [[self playModelDemo] setTitle: @""
+                        forState: nil];
+  [[[self playModelDemo] layer] setBorderWidth: 0];
+  [[self playModelDemo] setImage: [UIImage imageNamed:@"play.png"]
+                        forState: UIControlStateNormal];
+  [[self playModelDemo] setFrame: CGRectMake(10.0, 10.0, 48.0, 48.0)];
+  
+  // playMeshDemo
+  [self setPlayMeshDemo: [UIButton buttonWithType: UIButtonTypeCustom]];
+  [[self playMeshDemo] addTarget: self
+                           action: @selector(showMeshDemo)
+                 forControlEvents: UIControlEventTouchUpInside];
+  [[self playMeshDemo] setTitle: @""
+                        forState: nil];
+  [[[self playMeshDemo] layer] setBorderWidth: 0];
+  [[self playMeshDemo] setImage: [UIImage imageNamed:@"play.png"]
+                        forState: UIControlStateNormal];
+  [[self playMeshDemo] setFrame: CGRectMake(10.0, 10.0, 48.0, 48.0)];
+}
+
+- (void) updateToolbar: (NSString*) option
+{
+  [[self toolbar] clear];
+  if ([option isEqual: @"Simple glob3"]) {
+    [[self toolbar] setVisible: FALSE];
+  }
+  else if ([option isEqual: @"Switch layer"]) {
+    [[self toolbar] addSubview: [self layerSwitcher]];
+    [[self toolbar] setVisible: TRUE];
+  }
+  else if ([option isEqual: @"Markers"]) {
+    [[self toolbar] addSubview: [self playMarkersDemo]];
+    [[self toolbar] setVisible: TRUE];
+  }
+  else if ([option isEqual: @"3D Model"]) {
+    [self show3DModel];
+    [[self toolbar] setVisible: FALSE];
+  }
+  else if ([option isEqual: @"Point Mesh"]) {
+    [self showPointMesh];
+    [[self toolbar] setVisible: FALSE];
+  }
+}
+
+- (void) DropDownMenuDidChange:(NSString *)identifier :(NSString *)returnValue
+{
+  if ([identifier isEqual: @"demoMenu"]) {
+    [self resetWidget];
+    [self updateToolbar: returnValue];
+    [[self demoSelector] setTitle: returnValue
+                         forState: nil];
+    
+    if ([returnValue isEqual: @"Simple glob3"]) {
+      [self showSimpleGlob3];
+    }
+    else if ([returnValue isEqual: @"Switch layer"]) {
+      [self switchLayer];
+    }
+    else if ([returnValue isEqual: @"Markers"]) {
+//      [self showMarkers];
+    }
+    else if ([returnValue isEqual: @"3D Model"]) {
+      [self show3DModel];
+    }
+    else if ([returnValue isEqual: @"Point Mesh"]) {
+      [self showPointMesh];
+    }
+  }
+}
+
+// end UI
+
+// Aux classes
 
 class MarkerUserData : public MarkUserData {
   

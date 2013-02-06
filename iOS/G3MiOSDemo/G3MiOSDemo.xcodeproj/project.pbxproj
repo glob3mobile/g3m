@@ -37,7 +37,6 @@
 		D8EEF4221577AEE0003FEB5E /* libG3MiOSSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF41E1577AEC8003FEB5E /* libG3MiOSSDK.a */; };
 		D8EEF4281577B0FD003FEB5E /* Shader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = D8EEF4241577B0D3003FEB5E /* Shader.vsh */; };
 		D8EEF4291577B0FD003FEB5E /* Shader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = D8EEF4231577B0D3003FEB5E /* Shader.fsh */; };
-		E70F3ED7168B7886006E9289 /* G3MUITableViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E70F3ED6168B7886006E9289 /* G3MUITableViewController.mm */; };
 		E71B15371626D27F003D1013 /* Default-Landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B152C1626D27F003D1013 /* Default-Landscape.png */; };
 		E71B15381626D27F003D1013 /* Default-Landscape@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B152D1626D27F003D1013 /* Default-Landscape@2x.png */; };
 		E71B15391626D27F003D1013 /* Default-Portrait.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B152E1626D27F003D1013 /* Default-Portrait.png */; };
@@ -50,29 +49,19 @@
 		E71B15401626D27F003D1013 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B15351626D27F003D1013 /* Icon.png */; };
 		E71B15411626D27F003D1013 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B15361626D27F003D1013 /* Icon@2x.png */; };
 		E73C8EA716BAC04100FA1493 /* A320.bson in Resources */ = {isa = PBXBuildFile; fileRef = E73C8EA616BA9CEE00FA1493 /* A320.bson */; };
-		E74C0927168B6CA9009E0D2F /* G3MNetCDFViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E74C0926168B6CA9009E0D2F /* G3MNetCDFViewController.mm */; };
-		E74C794116944351001CDD1F /* Bg-Pad-Landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = E74C793916944351001CDD1F /* Bg-Pad-Landscape.png */; };
-		E74C794216944351001CDD1F /* Bg-Pad-Landscape@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E74C793A16944351001CDD1F /* Bg-Pad-Landscape@2x.png */; };
-		E74C794316944351001CDD1F /* Bg-Pad-Portrait.png in Resources */ = {isa = PBXBuildFile; fileRef = E74C793B16944351001CDD1F /* Bg-Pad-Portrait.png */; };
-		E74C794416944351001CDD1F /* Bg-Pad-Portrait@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E74C793C16944351001CDD1F /* Bg-Pad-Portrait@2x.png */; };
-		E74C794516944351001CDD1F /* Bg-Phone-Landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = E74C793D16944351001CDD1F /* Bg-Phone-Landscape.png */; };
-		E74C794616944351001CDD1F /* Bg-Phone-Landscape@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E74C793E16944351001CDD1F /* Bg-Phone-Landscape@2x.png */; };
-		E74C794716944351001CDD1F /* Bg-Phone-Portrait.png in Resources */ = {isa = PBXBuildFile; fileRef = E74C793F16944351001CDD1F /* Bg-Phone-Portrait.png */; };
-		E74C794816944351001CDD1F /* Bg-Phone-Portrait@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E74C794016944351001CDD1F /* Bg-Phone-Portrait@2x.png */; };
-		E751B7661680E2D90032413F /* satellite_on_96x48.png in Resources */ = {isa = PBXBuildFile; fileRef = E751B7651680E2D90032413F /* satellite_on_96x48.png */; };
-		E751B7681680E5850032413F /* map_on_96x48.png in Resources */ = {isa = PBXBuildFile; fileRef = E751B7671680E5850032413F /* map_on_96x48.png */; };
-		E751B76B1680EEE50032413F /* G3MSimpleGlob3ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E751B76A1680EEE50032413F /* G3MSimpleGlob3ViewController.mm */; };
-		E751B76E1681DB460032413F /* G3MMarkersViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E751B76D1681DB460032413F /* G3MMarkersViewController.mm */; };
+		E751B7661680E2D90032413F /* satellite-on-96x48.png in Resources */ = {isa = PBXBuildFile; fileRef = E751B7651680E2D90032413F /* satellite-on-96x48.png */; };
+		E751B7681680E5850032413F /* map-on-96x48.png in Resources */ = {isa = PBXBuildFile; fileRef = E751B7671680E5850032413F /* map-on-96x48.png */; };
 		E751B78316823D7C0032413F /* G3MDrawingShapesViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E751B78216823D7C0032413F /* G3MDrawingShapesViewController.mm */; };
 		E751B7A1168247830032413F /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = E751B79F168247830032413F /* play.png */; };
 		E751B7A2168247830032413F /* stop.png in Resources */ = {isa = PBXBuildFile; fileRef = E751B7A0168247830032413F /* stop.png */; };
-		E770CAD9169C425600F892BE /* g3m-marker.png in Resources */ = {isa = PBXBuildFile; fileRef = E770CAD8169C425600F892BE /* g3m-marker.png */; };
+		E770CAD9169C425600F892BE /* (null) in Resources */ = {isa = PBXBuildFile; };
 		E770CAE4169C808700F892BE /* G3MWebViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E770CAE3169C808700F892BE /* G3MWebViewController.mm */; };
 		E770CAE7169D988C00F892BE /* marker-wikipedia-72x72.png in Resources */ = {isa = PBXBuildFile; fileRef = E770CAE6169D988C00F892BE /* marker-wikipedia-72x72.png */; };
+		E791CF6F16C15A49000FDE8A /* UIDropDownMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = E791CF6E16C15A49000FDE8A /* UIDropDownMenu.m */; };
 		E7A4734916B855B300D07077 /* DemosViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7A4734816B855B300D07077 /* DemosViewController.mm */; };
-		E7B776A5167B56900005ED14 /* G3MDoubleGlob3ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7B776A4167B56900005ED14 /* G3MDoubleGlob3ViewController.mm */; };
-		E7B776A8167F68730005ED14 /* G3MLayerSwitchViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7B776A7167F68730005ED14 /* G3MLayerSwitchViewController.mm */; };
-		E7CDA66F16837CB0006DA377 /* G3M3DModelViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7CDA66E16837CB0006DA377 /* G3M3DModelViewController.mm */; };
+		E7CD9BC616C1994900F69E41 /* g3m-48.png in Resources */ = {isa = PBXBuildFile; fileRef = E7CD9BC516C1994900F69E41 /* g3m-48.png */; };
+		E7CD9BC816C1A34400F69E41 /* selector-background.png in Resources */ = {isa = PBXBuildFile; fileRef = E7CD9BC716C1A34400F69E41 /* selector-background.png */; };
+		E7CD9BCB16C24E9F00F69E41 /* G3MToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = E7CD9BCA16C24E9F00F69E41 /* G3MToolbar.m */; };
 		E7D4EC7D16B98D7200730B14 /* marker-wikipedia-48x48.png in Resources */ = {isa = PBXBuildFile; fileRef = E7D4EC7C16B98D7200730B14 /* marker-wikipedia-48x48.png */; };
 /* End PBXBuildFile section */
 
@@ -104,7 +93,6 @@
 		CF186B0516B857DE00A39478 /* textures-A320 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "textures-A320"; sourceTree = "<group>"; };
 		CF186B0716B85A3600A39478 /* citation.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = citation.json; sourceTree = "<group>"; };
 		CF186B0916B85A5F00A39478 /* textures-citation */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "textures-citation"; sourceTree = "<group>"; };
-		CF7A708715CFD0A50086FDE6 /* g3m-marker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "g3m-marker.png"; sourceTree = "<group>"; };
 		CF883B831591053100AEE39C /* mark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mark.png; sourceTree = "<group>"; };
 		CFBA532E16B9B69A00256453 /* G3MWidget_iOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = G3MWidget_iOS.h; path = ../G3MiOSSDK/Specific/Widget/G3MWidget_iOS.h; sourceTree = "<group>"; };
 		CFBA532F16B9B69A00256453 /* AbstractMesh.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = AbstractMesh.hpp; path = ../G3MiOSSDK/Commons/Mesh/AbstractMesh.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -321,8 +309,6 @@
 		D8EEF4161577AEC8003FEB5E /* G3MiOSSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = G3MiOSSDK.xcodeproj; path = ../G3MiOSSDK/G3MiOSSDK.xcodeproj; sourceTree = "<group>"; };
 		D8EEF4231577B0D3003FEB5E /* Shader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Shader.fsh; sourceTree = "<group>"; };
 		D8EEF4241577B0D3003FEB5E /* Shader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Shader.vsh; sourceTree = "<group>"; };
-		E70F3ED5168B7886006E9289 /* G3MUITableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = G3MUITableViewController.h; sourceTree = "<group>"; };
-		E70F3ED6168B7886006E9289 /* G3MUITableViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MUITableViewController.mm; sourceTree = "<group>"; };
 		E71B152C1626D27F003D1013 /* Default-Landscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Landscape.png"; path = "Resources/Default-Landscape.png"; sourceTree = "<group>"; };
 		E71B152D1626D27F003D1013 /* Default-Landscape@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Landscape@2x.png"; path = "Resources/Default-Landscape@2x.png"; sourceTree = "<group>"; };
 		E71B152E1626D27F003D1013 /* Default-Portrait.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Portrait.png"; path = "Resources/Default-Portrait.png"; sourceTree = "<group>"; };
@@ -335,22 +321,8 @@
 		E71B15351626D27F003D1013 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = Resources/Icon.png; sourceTree = "<group>"; };
 		E71B15361626D27F003D1013 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "Resources/Icon@2x.png"; sourceTree = "<group>"; };
 		E73C8EA616BA9CEE00FA1493 /* A320.bson */ = {isa = PBXFileReference; lastKnownFileType = file; path = A320.bson; sourceTree = "<group>"; };
-		E74C0925168B6CA9009E0D2F /* G3MNetCDFViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = G3MNetCDFViewController.h; sourceTree = "<group>"; };
-		E74C0926168B6CA9009E0D2F /* G3MNetCDFViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MNetCDFViewController.mm; sourceTree = "<group>"; };
-		E74C793916944351001CDD1F /* Bg-Pad-Landscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Bg-Pad-Landscape.png"; sourceTree = "<group>"; };
-		E74C793A16944351001CDD1F /* Bg-Pad-Landscape@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Bg-Pad-Landscape@2x.png"; sourceTree = "<group>"; };
-		E74C793B16944351001CDD1F /* Bg-Pad-Portrait.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Bg-Pad-Portrait.png"; sourceTree = "<group>"; };
-		E74C793C16944351001CDD1F /* Bg-Pad-Portrait@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Bg-Pad-Portrait@2x.png"; sourceTree = "<group>"; };
-		E74C793D16944351001CDD1F /* Bg-Phone-Landscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Bg-Phone-Landscape.png"; sourceTree = "<group>"; };
-		E74C793E16944351001CDD1F /* Bg-Phone-Landscape@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Bg-Phone-Landscape@2x.png"; sourceTree = "<group>"; };
-		E74C793F16944351001CDD1F /* Bg-Phone-Portrait.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Bg-Phone-Portrait.png"; sourceTree = "<group>"; };
-		E74C794016944351001CDD1F /* Bg-Phone-Portrait@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Bg-Phone-Portrait@2x.png"; sourceTree = "<group>"; };
-		E751B7651680E2D90032413F /* satellite_on_96x48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = satellite_on_96x48.png; sourceTree = "<group>"; };
-		E751B7671680E5850032413F /* map_on_96x48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = map_on_96x48.png; sourceTree = "<group>"; };
-		E751B7691680EEE50032413F /* G3MSimpleGlob3ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = G3MSimpleGlob3ViewController.h; sourceTree = "<group>"; };
-		E751B76A1680EEE50032413F /* G3MSimpleGlob3ViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MSimpleGlob3ViewController.mm; sourceTree = "<group>"; };
-		E751B76C1681DB460032413F /* G3MMarkersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = G3MMarkersViewController.h; sourceTree = "<group>"; };
-		E751B76D1681DB460032413F /* G3MMarkersViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MMarkersViewController.mm; sourceTree = "<group>"; };
+		E751B7651680E2D90032413F /* satellite-on-96x48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "satellite-on-96x48.png"; sourceTree = "<group>"; };
+		E751B7671680E5850032413F /* map-on-96x48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map-on-96x48.png"; sourceTree = "<group>"; };
 		E751B78116823D7C0032413F /* G3MDrawingShapesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = G3MDrawingShapesViewController.h; sourceTree = "<group>"; };
 		E751B78216823D7C0032413F /* G3MDrawingShapesViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MDrawingShapesViewController.mm; sourceTree = "<group>"; };
 		E751B79F168247830032413F /* play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play.png; sourceTree = "<group>"; };
@@ -358,18 +330,18 @@
 		E770CAE2169C808700F892BE /* G3MWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = G3MWebViewController.h; sourceTree = "<group>"; };
 		E770CAE3169C808700F892BE /* G3MWebViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MWebViewController.mm; sourceTree = "<group>"; };
 		E770CAE6169D988C00F892BE /* marker-wikipedia-72x72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "marker-wikipedia-72x72.png"; sourceTree = "<group>"; };
+		E791CF6D16C15A49000FDE8A /* UIDropDownMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIDropDownMenu.h; sourceTree = "<group>"; };
+		E791CF6E16C15A49000FDE8A /* UIDropDownMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIDropDownMenu.m; sourceTree = "<group>"; };
 		E7A4734716B855B300D07077 /* DemosViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemosViewController.h; sourceTree = "<group>"; };
 		E7A4734816B855B300D07077 /* DemosViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DemosViewController.mm; sourceTree = "<group>"; };
 		E7A91B26168DA7A800DC5EE4 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = Resources/Default.png; sourceTree = "<group>"; };
 		E7A91B27168DA7A800DC5EE4 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "Resources/Default@2x.png"; sourceTree = "<group>"; };
-		E7A91B28168DA7A800DC5EE4 /* iTunesArtwork.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = iTunesArtwork.png; path = Resources/iTunesArtwork.png; sourceTree = "<group>"; };
+		E7A91B28168DA7A800DC5EE4 /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; name = iTunesArtwork; path = Resources/iTunesArtwork; sourceTree = "<group>"; };
 		E7A91B29168DA7A800DC5EE4 /* iTunesArtwork@2x */ = {isa = PBXFileReference; lastKnownFileType = file; name = "iTunesArtwork@2x"; path = "Resources/iTunesArtwork@2x"; sourceTree = "<group>"; };
-		E7B776A3167B56900005ED14 /* G3MDoubleGlob3ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = G3MDoubleGlob3ViewController.h; sourceTree = "<group>"; };
-		E7B776A4167B56900005ED14 /* G3MDoubleGlob3ViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MDoubleGlob3ViewController.mm; sourceTree = "<group>"; };
-		E7B776A6167F68730005ED14 /* G3MLayerSwitchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = G3MLayerSwitchViewController.h; sourceTree = "<group>"; };
-		E7B776A7167F68730005ED14 /* G3MLayerSwitchViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MLayerSwitchViewController.mm; sourceTree = "<group>"; };
-		E7CDA66D16837CB0006DA377 /* G3M3DModelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = G3M3DModelViewController.h; sourceTree = "<group>"; };
-		E7CDA66E16837CB0006DA377 /* G3M3DModelViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3M3DModelViewController.mm; sourceTree = "<group>"; };
+		E7CD9BC516C1994900F69E41 /* g3m-48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "g3m-48.png"; sourceTree = "<group>"; };
+		E7CD9BC716C1A34400F69E41 /* selector-background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "selector-background.png"; sourceTree = "<group>"; };
+		E7CD9BC916C24E9F00F69E41 /* G3MToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = G3MToolbar.h; sourceTree = "<group>"; };
+		E7CD9BCA16C24E9F00F69E41 /* G3MToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = G3MToolbar.m; sourceTree = "<group>"; };
 		E7D4EC7C16B98D7200730B14 /* marker-wikipedia-48x48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "marker-wikipedia-48x48.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -637,24 +609,14 @@
 				D8EEF3911577920B003FEB5E /* Supporting Files */,
 				D8EEF4091577A93D003FEB5E /* G3W.h */,
 				D8EEF40A1577A93D003FEB5E /* G3W.mm */,
-				E70F3ED5168B7886006E9289 /* G3MUITableViewController.h */,
-				E70F3ED6168B7886006E9289 /* G3MUITableViewController.mm */,
+				E7CD9BC916C24E9F00F69E41 /* G3MToolbar.h */,
+				E7CD9BCA16C24E9F00F69E41 /* G3MToolbar.m */,
+				E791CF6D16C15A49000FDE8A /* UIDropDownMenu.h */,
+				E791CF6E16C15A49000FDE8A /* UIDropDownMenu.m */,
 				E770CAE2169C808700F892BE /* G3MWebViewController.h */,
 				E770CAE3169C808700F892BE /* G3MWebViewController.mm */,
-				E751B7691680EEE50032413F /* G3MSimpleGlob3ViewController.h */,
-				E751B76A1680EEE50032413F /* G3MSimpleGlob3ViewController.mm */,
-				E7B776A3167B56900005ED14 /* G3MDoubleGlob3ViewController.h */,
-				E7B776A4167B56900005ED14 /* G3MDoubleGlob3ViewController.mm */,
-				E7B776A6167F68730005ED14 /* G3MLayerSwitchViewController.h */,
-				E7B776A7167F68730005ED14 /* G3MLayerSwitchViewController.mm */,
-				E751B76C1681DB460032413F /* G3MMarkersViewController.h */,
-				E751B76D1681DB460032413F /* G3MMarkersViewController.mm */,
 				E751B78116823D7C0032413F /* G3MDrawingShapesViewController.h */,
 				E751B78216823D7C0032413F /* G3MDrawingShapesViewController.mm */,
-				E7CDA66D16837CB0006DA377 /* G3M3DModelViewController.h */,
-				E7CDA66E16837CB0006DA377 /* G3M3DModelViewController.mm */,
-				E74C0925168B6CA9009E0D2F /* G3MNetCDFViewController.h */,
-				E74C0926168B6CA9009E0D2F /* G3MNetCDFViewController.mm */,
 			);
 			name = G3MiOSDemo;
 			path = Glob3iOSDemo;
@@ -682,21 +644,14 @@
 		D8EEF4271577B0D6003FEB5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				E7CD9BC716C1A34400F69E41 /* selector-background.png */,
+				E7CD9BC516C1994900F69E41 /* g3m-48.png */,
 				E7D4EC7C16B98D7200730B14 /* marker-wikipedia-48x48.png */,
 				E770CAE6169D988C00F892BE /* marker-wikipedia-72x72.png */,
-				E770CAD8169C425600F892BE /* g3m-marker.png */,
-				E74C793916944351001CDD1F /* Bg-Pad-Landscape.png */,
-				E74C793A16944351001CDD1F /* Bg-Pad-Landscape@2x.png */,
-				E74C793B16944351001CDD1F /* Bg-Pad-Portrait.png */,
-				E74C793C16944351001CDD1F /* Bg-Pad-Portrait@2x.png */,
-				E74C793D16944351001CDD1F /* Bg-Phone-Landscape.png */,
-				E74C793E16944351001CDD1F /* Bg-Phone-Landscape@2x.png */,
-				E74C793F16944351001CDD1F /* Bg-Phone-Portrait.png */,
-				E74C794016944351001CDD1F /* Bg-Phone-Portrait@2x.png */,
 				E751B79F168247830032413F /* play.png */,
 				E751B7A0168247830032413F /* stop.png */,
-				E751B7671680E5850032413F /* map_on_96x48.png */,
-				E751B7651680E2D90032413F /* satellite_on_96x48.png */,
+				E751B7671680E5850032413F /* map-on-96x48.png */,
+				E751B7651680E2D90032413F /* satellite-on-96x48.png */,
 				CF186B0916B85A5F00A39478 /* textures-citation */,
 				CF186B0716B85A3600A39478 /* citation.json */,
 				CF186B0516B857DE00A39478 /* textures-A320 */,
@@ -708,7 +663,7 @@
 				CFE3DBB0164B0E7D00910037 /* seymour-plane.json */,
 				E7A91B27168DA7A800DC5EE4 /* Default@2x.png */,
 				E7A91B26168DA7A800DC5EE4 /* Default.png */,
-				E7A91B28168DA7A800DC5EE4 /* iTunesArtwork.png */,
+				E7A91B28168DA7A800DC5EE4 /* iTunesArtwork */,
 				E7A91B29168DA7A800DC5EE4 /* iTunesArtwork@2x */,
 				E71B152C1626D27F003D1013 /* Default-Landscape.png */,
 				E71B152D1626D27F003D1013 /* Default-Landscape@2x.png */,
@@ -824,19 +779,11 @@
 				CFE3DBB1164B0E7D00910037 /* seymour-plane.json in Resources */,
 				CFEA76681666DCB000E89BC7 /* images in Resources */,
 				CF0223831668318600024B73 /* geojson in Resources */,
-				E751B7661680E2D90032413F /* satellite_on_96x48.png in Resources */,
-				E751B7681680E5850032413F /* map_on_96x48.png in Resources */,
+				E751B7661680E2D90032413F /* satellite-on-96x48.png in Resources */,
+				E751B7681680E5850032413F /* map-on-96x48.png in Resources */,
 				E751B7A1168247830032413F /* play.png in Resources */,
 				E751B7A2168247830032413F /* stop.png in Resources */,
-				E74C794116944351001CDD1F /* Bg-Pad-Landscape.png in Resources */,
-				E74C794216944351001CDD1F /* Bg-Pad-Landscape@2x.png in Resources */,
-				E74C794316944351001CDD1F /* Bg-Pad-Portrait.png in Resources */,
-				E74C794416944351001CDD1F /* Bg-Pad-Portrait@2x.png in Resources */,
-				E74C794516944351001CDD1F /* Bg-Phone-Landscape.png in Resources */,
-				E74C794616944351001CDD1F /* Bg-Phone-Landscape@2x.png in Resources */,
-				E74C794716944351001CDD1F /* Bg-Phone-Portrait.png in Resources */,
-				E74C794816944351001CDD1F /* Bg-Phone-Portrait@2x.png in Resources */,
-				E770CAD9169C425600F892BE /* g3m-marker.png in Resources */,
+				E770CAD9169C425600F892BE /* (null) in Resources */,
 				E770CAE7169D988C00F892BE /* marker-wikipedia-72x72.png in Resources */,
 				CF186B0416B8572400A39478 /* A320.json in Resources */,
 				CF186B0616B857DE00A39478 /* textures-A320 in Resources */,
@@ -844,6 +791,8 @@
 				CF186B0A16B85A5F00A39478 /* textures-citation in Resources */,
 				E7D4EC7D16B98D7200730B14 /* marker-wikipedia-48x48.png in Resources */,
 				E73C8EA716BAC04100FA1493 /* A320.bson in Resources */,
+				E7CD9BC616C1994900F69E41 /* g3m-48.png in Resources */,
+				E7CD9BC816C1A34400F69E41 /* selector-background.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -858,16 +807,11 @@
 				D8EEF39B1577920B003FEB5E /* AppDelegate.m in Sources */,
 				D8EEF3A41577920B003FEB5E /* ViewController.mm in Sources */,
 				D8EEF40B1577A93D003FEB5E /* G3W.mm in Sources */,
-				E7B776A5167B56900005ED14 /* G3MDoubleGlob3ViewController.mm in Sources */,
-				E7B776A8167F68730005ED14 /* G3MLayerSwitchViewController.mm in Sources */,
-				E751B76B1680EEE50032413F /* G3MSimpleGlob3ViewController.mm in Sources */,
-				E751B76E1681DB460032413F /* G3MMarkersViewController.mm in Sources */,
 				E751B78316823D7C0032413F /* G3MDrawingShapesViewController.mm in Sources */,
-				E7CDA66F16837CB0006DA377 /* G3M3DModelViewController.mm in Sources */,
-				E74C0927168B6CA9009E0D2F /* G3MNetCDFViewController.mm in Sources */,
-				E70F3ED7168B7886006E9289 /* G3MUITableViewController.mm in Sources */,
 				E770CAE4169C808700F892BE /* G3MWebViewController.mm in Sources */,
 				E7A4734916B855B300D07077 /* DemosViewController.mm in Sources */,
+				E791CF6F16C15A49000FDE8A /* UIDropDownMenu.m in Sources */,
+				E7CD9BCB16C24E9F00F69E41 /* G3MToolbar.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
