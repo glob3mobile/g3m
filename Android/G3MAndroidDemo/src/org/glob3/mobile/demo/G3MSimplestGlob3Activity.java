@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.BusyMeshRenderer;
-import org.glob3.mobile.generated.CPUTextureBuilder;
 import org.glob3.mobile.generated.CachedDownloader;
 import org.glob3.mobile.generated.CameraDoubleDragHandler;
 import org.glob3.mobile.generated.CameraDoubleTapHandler;
@@ -15,20 +14,13 @@ import org.glob3.mobile.generated.CameraRotationHandler;
 import org.glob3.mobile.generated.CameraSingleDragHandler;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.CompositeRenderer;
-import org.glob3.mobile.generated.FrameTasksExecutor;
 import org.glob3.mobile.generated.G3MContext;
-import org.glob3.mobile.generated.G3MRenderContext;
 import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
-import org.glob3.mobile.generated.IFactory;
-import org.glob3.mobile.generated.IJSONParser;
-import org.glob3.mobile.generated.ILogger;
-import org.glob3.mobile.generated.IMathUtils;
 import org.glob3.mobile.generated.IStorage;
-import org.glob3.mobile.generated.IStringUtils;
 import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.Mark;
@@ -37,7 +29,6 @@ import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.SimpleCameraConstrainer;
-import org.glob3.mobile.generated.TexturesHandler;
 import org.glob3.mobile.generated.TileRenderer;
 import org.glob3.mobile.generated.TileRendererBuilder;
 import org.glob3.mobile.generated.TimeInterval;
@@ -167,9 +158,8 @@ public class G3MSimplestGlob3Activity
             new Sector(new Geodetic2D(Angle.fromDegrees(39.31),
                 Angle.fromDegrees(-6.72)), new Geodetic2D(
                 Angle.fromDegrees(39.38), Angle.fromDegrees(-6.64))), 0, 14);
-
         ctx.getLogger().logInfo(
-            "SE HA TERMINADO DE CACHEAR LOS SECTORES ESPECIFICADOS");
+            "SE HA TERMINADO DE CACHEAR LOS SECTORES ESPECIFICADOS.");
       }
 
 
@@ -201,27 +191,7 @@ public class G3MSimplestGlob3Activity
         autoDeleteInitializationTask, //
         periodicalTasks, //
         userData);
-
     setContentView(_widgetAndroid);
-
-    final G3MRenderContext rc = new G3MRenderContext(new FrameTasksExecutor(),
-        IFactory.instance(), IStringUtils.instance(),
-        _widgetAndroid.getG3MWidget().getG3MContext().getThreadUtils(),
-        ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(),
-        planet, _widgetAndroid.getG3MWidget().getGL(),
-        _widgetAndroid.getG3MWidget().getNextCamera(),
-        _widgetAndroid.getG3MWidget().getNextCamera(), new TexturesHandler(
-            _widgetAndroid.getG3MWidget().getGL(), false),
-        new CPUTextureBuilder(),
-        _widgetAndroid.getG3MWidget().getG3MContext().getDownloader(),
-        _widgetAndroid.getG3MWidget().getG3MContext().getEffectsScheduler(),
-        IFactory.instance().createTimer(),
-        _widgetAndroid.getG3MWidget().getG3MContext().getStorage());
-
-    // final G3MBuilder glob3Builder = new G3MBuilder();
-    // _widgetAndroid =
-    // glob3Builder.getSimpleBingGlob3(getApplicationContext());
-    // setContentView(_widgetAndroid);
   }
 
 

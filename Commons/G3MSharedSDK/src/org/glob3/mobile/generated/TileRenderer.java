@@ -77,7 +77,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 
   private java.util.ArrayList<VisibleSectorListenerEntry> _visibleSectorListeners = new java.util.ArrayList<VisibleSectorListenerEntry>();
 
-  private void visitSubTilesTouchesWith(G3MRenderContext rc, Tile tile, Sector sectorToVisit, int topLevel, int maxLevel)
+  private void visitSubTilesTouchesWith(Tile tile, Sector sectorToVisit, int topLevel, int maxLevel)
   {
 	  if (tile.getLevel() < maxLevel)
 	  {
@@ -89,10 +89,9 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 			  {
 				  if ((tile.getLevel() >= topLevel))
 				  {
-					  rc.getLogger().logInfo("Level: %s. Col: %s; Row: %s", tl.getLevel(), tl.getColumn(), tl.getRow());
 					  _tileVisitor.visitTile(tl);
 				  }
-				  visitSubTilesTouchesWith(rc, tl, sectorToVisit, topLevel, maxLevel);
+				  visitSubTilesTouchesWith(tl, sectorToVisit, topLevel, maxLevel);
 			  }
 		  }
 	  }
@@ -341,9 +340,8 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 	_tileVisitor = tileVisitor;
   }
 
-  public final void visitTilesTouchesWith(G3MRenderContext rc, Sector sector, int topLevel, int maxLevel)
+  public final void visitTilesTouchesWith(Sector sector, int topLevel, int maxLevel)
   {
-  
 	  if (_tileVisitor != null)
 	  {
 		  final int topLevelCache = (topLevel < _parameters._topLevel) ? _parameters._topLevel : topLevel;
@@ -357,7 +355,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 			  if (tile.getSector().touchesWith(sector))
 			  {
 				  _tileVisitor.visitTile(tile);
-				  visitSubTilesTouchesWith(rc, tile, sector, topLevelCache, maxLevelCache);
+				  visitSubTilesTouchesWith(tile, sector, topLevelCache, maxLevelCache);
 			  }
 		  }
 	  }

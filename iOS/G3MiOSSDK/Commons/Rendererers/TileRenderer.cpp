@@ -275,11 +275,9 @@ bool TileRenderer::isReadyToRender(const G3MRenderContext *rc) {
   return true;
 }
 
-void TileRenderer::visitTilesTouchesWith(const G3MRenderContext* rc,
-                                         const Sector sector,
+void TileRenderer::visitTilesTouchesWith(const Sector sector,
                                          const int topLevel,
                                          const int maxLevel){
-
     if (_tileVisitor != NULL) {
         const int topLevelCache = (topLevel < _parameters->_topLevel)
         ? _parameters->_topLevel
@@ -294,15 +292,14 @@ void TileRenderer::visitTilesTouchesWith(const G3MRenderContext* rc,
             Tile* tile = _topLevelTiles[i];
             if (tile->getSector().touchesWith(sector)) {
                 _tileVisitor->visitTile(tile);
-                visitSubTilesTouchesWith(rc, tile, sector, topLevelCache,
+                visitSubTilesTouchesWith(tile, sector, topLevelCache,
                                          maxLevelCache);
             }
         }
     }
 }
 
-void TileRenderer::visitSubTilesTouchesWith(const G3MRenderContext* rc,
-                                            Tile* tile,
+void TileRenderer::visitSubTilesTouchesWith(Tile* tile,
                                             const Sector sectorToVisit,
                                             const int topLevel,
                                             const int maxLevel) {
@@ -312,13 +309,9 @@ void TileRenderer::visitSubTilesTouchesWith(const G3MRenderContext* rc,
             Tile* tl = tile->getSubTiles()->at(i);
             if (tl->getSector().touchesWith(sectorToVisit)) {
                 if ((tile->getLevel() >= topLevel)) {
-                    rc->getLogger()->logInfo("Level: %s. Col: %s; Row: %s",
-                                             tl->getLevel(),
-                                             tl->getColumn(),
-                                             tl->getRow());
                     _tileVisitor->visitTile(tl);
                 }
-                visitSubTilesTouchesWith(rc, tl, sectorToVisit, topLevel, maxLevel);
+                visitSubTilesTouchesWith(tl, sectorToVisit, topLevel, maxLevel);
             }
         }
     }

@@ -54,11 +54,8 @@ public class TileVisitorCache_Android
       for (int j = 0; j < pet.size(); j++) {
         final Petition petition = pet.get(j);
         _context.getLogger().logInfo(pet.get(j).getURL().description());
-
-        final long priority = org.glob3.mobile.generated.DefineConstants.TILE_DOWNLOAD_PRIORITY
-                              + tile.getLevel();
-        _context.getDownloader().requestImage(new URL(petition.getURL()),
-            priority, petition.getTimeToCache(),
+        _context.getDownloader().requestImage(new URL(petition.getURL()), 1,
+            petition.getTimeToCache(),
             new IImageDownloadListenerTileCache(_debugCounter), true);
         _debugCounter++;
       }
