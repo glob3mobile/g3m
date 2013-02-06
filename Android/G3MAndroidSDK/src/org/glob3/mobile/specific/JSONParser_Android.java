@@ -4,11 +4,7 @@ package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.IByteBuffer;
 import org.glob3.mobile.generated.IJSONParser;
-import org.glob3.mobile.generated.JSONBaseObject;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.JSONTokener;
+import org.glob3.mobile.generated.ILogger;
 
 
 public class JSONParser_Android
@@ -16,90 +12,84 @@ public class JSONParser_Android
             IJSONParser {
 
    @Override
-   public JSONBaseObject parse(final String string) {
-      org.glob3.mobile.generated.JSONBaseObject g3mJSONBaseObject = new org.glob3.mobile.generated.JSONObject();
-
-      Object rawJson;
-      try {
-         rawJson = new JSONTokener(string).nextValue();
-
-         if (rawJson instanceof JSONArray) {
-
-            final JSONArray jsonArray = (JSONArray) rawJson;
-            g3mJSONBaseObject = new org.glob3.mobile.generated.JSONArray();
-
-            for (int i = 0; i < jsonArray.length(); i++) {
-               g3mJSONBaseObject.asArray().add(makeJSONElement(jsonArray.get(i)));
-            }
-         }
-         else if (rawJson instanceof JSONObject) {
-
-            final JSONObject jsonObj = (JSONObject) rawJson;
-            final JSONArray attributes = jsonObj.names();
-
-            g3mJSONBaseObject = new org.glob3.mobile.generated.JSONObject();
-
-            for (int i = 0; i < attributes.length(); i++) {
-               g3mJSONBaseObject.asObject().put(attributes.getString(i), makeJSONElement(jsonObj.get(attributes.getString(i))));
-            }
-         }
-      }
-      catch (final JSONException e) {
-         // TODO Auto-generated catch block
-         e.printStackTrace();
-      }
-      return g3mJSONBaseObject;
-
-   }
-
-
-   @Override
-   public JSONBaseObject parse(final IByteBuffer buffer) {
+   public org.glob3.mobile.generated.JSONBaseObject parse(final IByteBuffer buffer) {
       return parse(buffer.getAsString());
    }
 
 
-   private JSONBaseObject makeJSONElement(final Object jsonObject) throws JSONException {
-
-      if (jsonObject instanceof JSONArray) {
-
-         final JSONArray jsonArray = (JSONArray) jsonObject;
-         final org.glob3.mobile.generated.JSONBaseObject g3mJSONBaseObject = new org.glob3.mobile.generated.JSONArray();
-
-         for (int i = 0; i < jsonArray.length(); i++) {
-            g3mJSONBaseObject.asArray().add(makeJSONElement(jsonArray.get(i)));
-         }
-
-         return g3mJSONBaseObject;
+   @Override
+   public org.glob3.mobile.generated.JSONBaseObject parse(final String jsonString) {
+      if (jsonString == null) {
+         ILogger.instance().logError("Can't parse a null string");
+         return null;
       }
-      else if (jsonObject instanceof JSONObject) {
 
-         final JSONObject jsonObj = (JSONObject) jsonObject;
-         final JSONArray attributes = jsonObj.names();
+      try {
+         final Object jsonObject = new org.json.JSONTokener(jsonString).nextValue();
+         return convert(jsonObject);
+      }
+      catch (final org.json.JSONException e) {
+         e.printStackTrace();
+         return null;
+      }
+   }
 
-         final org.glob3.mobile.generated.JSONBaseObject g3mJSONBaseObject = new org.glob3.mobile.generated.JSONObject();
 
-         for (int i = 0; i < attributes.length(); i++) {
-            g3mJSONBaseObject.asObject().put(attributes.getString(i), makeJSONElement(jsonObj.get(attributes.getString(i))));
-         }
-         return g3mJSONBaseObject;
+   private static org.glob3.mobile.generated.JSONBaseObject convert(final Object jsonObject) {
+      // JSONObject, JSONArray, String, Boolean, Integer, Long, Double or NULL.
+
+      if (jsonObject == null) {
+         return null;
       }
       else if (jsonObject instanceof String) {
          return new org.glob3.mobile.generated.JSONString((String) jsonObject);
       }
       else if (jsonObject instanceof Boolean) {
-         return new org.glob3.mobile.generated.JSONBoolean((Boolean) jsonObject);
-      }
-      else if (jsonObject instanceof Long) {
-         return new org.glob3.mobile.generated.JSONNumber((Integer) jsonObject);
-      }
-      else if (jsonObject instanceof Double) {
-         return new org.glob3.mobile.generated.JSONNumber((Double) jsonObject);
+         return new org.glob3.mobile.generated.JSONBoolean(((Boolean) jsonObject).booleanValue());
       }
       else if (jsonObject instanceof Integer) {
-         return new org.glob3.mobile.generated.JSONNumber((Integer) jsonObject);
+         return new org.glob3.mobile.generated.JSONNumber(((Integer) jsonObject).intValue());
+      }
+      else if (jsonObject instanceof Long) {
+         return new org.glob3.mobile.generated.JSONNumber(((Long) jsonObject).intValue());
+      }
+      else if (jsonObject instanceof Double) {
+         return new org.glob3.mobile.generated.JSONNumber(((Double) jsonObject).doubleValue());
+      }
+      else if (jsonObject instanceof org.json.JSONArray) {
+         final org.json.JSONArray jsonArray = (org.json.JSONArray) jsonObject;
+         final org.glob3.mobile.generated.JSONArray result = new org.glob3.mobile.generated.JSONArray();
+         final int length = jsonArray.length();
+         for (int i = 0; i < length; i++) {
+            try {
+               final Object child = jsonArray.isNull(i) ? null : jsonArray.get(i);
+               result.add(convert(child));
+            }
+            catch (final org.json.JSONException e) {
+               e.printStackTrace();
+            }
+         }
+         return result;
+      }
+      else if (jsonObject instanceof org.json.JSONObject) {
+         final org.json.JSONObject jsonObj = (org.json.JSONObject) jsonObject;
+         final org.json.JSONArray attributes = jsonObj.names();
+         final org.glob3.mobile.generated.JSONObject result = new org.glob3.mobile.generated.JSONObject();
+         final int length = attributes.length();
+         for (int i = 0; i < length; i++) {
+            try {
+               final String key = attributes.getString(i);
+               final Object value = jsonObj.isNull(key) ? null : jsonObj.get(key);
+               result.put(key, convert(value));
+            }
+            catch (final org.json.JSONException e) {
+               e.printStackTrace();
+            }
+         }
+         return result;
       }
       else {
+         ILogger.instance().logError("Unsupported JSON type: " + jsonObject.getClass());
          return null;
       }
    }
