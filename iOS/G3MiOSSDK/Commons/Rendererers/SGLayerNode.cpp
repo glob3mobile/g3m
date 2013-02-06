@@ -32,7 +32,7 @@ public:
   }
 
   void onDownload(const URL& url,
-                  const IImage* image) {
+                  IImage* image) {
     _layerNode->onImageDownload(image);
   }
 
@@ -46,17 +46,17 @@ public:
   }
 
   void onCanceledDownload(const URL& url,
-                          const IImage* image) {
+                          IImage* image) {
 
   }
 };
 
 
-void SGLayerNode::onImageDownload(const IImage* image) {
+void SGLayerNode::onImageDownload(IImage* image) {
   if (_downloadedImage != NULL) {
     IFactory::instance()->deleteImage(_downloadedImage);
   }
-  _downloadedImage = image->shallowCopy();
+  _downloadedImage = image;
 }
 
 URL SGLayerNode::getURL() const {

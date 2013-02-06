@@ -50,7 +50,7 @@ public:
                           const TimeInterval& timeToExpires,
                           bool saveInBackground) = 0;
 
-  virtual const IByteBuffer* readBuffer(const URL& url) = 0;
+  virtual IByteBuffer* readBuffer(const URL& url) = 0;
 
 
 
@@ -61,7 +61,7 @@ public:
                          const TimeInterval& timeToExpires,
                          bool saveInBackground) = 0;
 
-  virtual const IImage* readImage(const URL& url) = 0;
+  virtual IImage* readImage(const URL& url) = 0;
 
 
 

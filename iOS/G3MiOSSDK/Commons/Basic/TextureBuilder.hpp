@@ -30,13 +30,6 @@ public:
                                             IImageListener* listener,
                                             bool autodelete) const = 0;
 
-//  virtual const void createTextureFromImages(GL* gl,
-//                                             const IFactory* factory,
-//                                             const std::vector<const IImage*>& images,
-//                                             int width, int height,
-//                                             IImageListener* listener,
-//                                             bool autodelete) const = 0;
-
   virtual const void createTextureFromImages(GL* gl,
                                              const IFactory* factory,
                                              const std::vector<const IImage*>& images,

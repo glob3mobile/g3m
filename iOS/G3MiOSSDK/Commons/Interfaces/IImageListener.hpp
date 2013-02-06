@@ -13,6 +13,10 @@ class IImage;
 
 class IImageListener {
 public:
+
+  /**
+   Callback method for image-creation.  The image has to be deleted in C++ / and disposed() en Java
+   */
   virtual void imageCreated(IImage* image) = 0;
 
 #ifdef C_CODE

@@ -17,18 +17,31 @@ public:
 #ifdef C_CODE
   virtual ~IBufferDownloadListener() {  }
 #endif
-  
+
+  /**
+   Callback method invoked on a successful download.  The buffer has to be deleted in C++ / .disposed() in Java
+   */
   virtual void onDownload(const URL& url,
-                          const IByteBuffer* buffer) = 0;
-  
+                          IByteBuffer* buffer) = 0;
+
+  /**
+   Callback method invoke after an error trying to download url
+   */
   virtual void onError(const URL& url) = 0;
-  
+
+  /**
+   Callback method invoke after canceled request
+   */
   virtual void onCancel(const URL& url) = 0;
-  
-  /* this method will be call, before onCancel, when the data arrived before the cancelation */
+
+  /**
+   This method will be call, before onCancel, when the data arrived before the cancelation.
+
+   The buffer WILL be deleted/disposed after the method finishs.  If you need to keep the buffer, use shallowCopy() to store a copy of the buffer.
+   */
   virtual void onCanceledDownload(const URL& url,
-                                  const IByteBuffer* data) = 0;
-  
+                                  IByteBuffer* data) = 0;
+
 };
 
 #endif

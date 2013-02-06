@@ -68,11 +68,6 @@ public:
     return Vector2I(getWidth(), getHeight());
   }
 
-  //  void combineWith(const IImage& other,
-  //                   int width, int height,
-  //                   IImageListener* listener,
-  //                   bool autodelete) const;
-
   void combineWith(const IImage& other,
                    const RectangleI& rect,
                    int width, int height,
@@ -90,8 +85,6 @@ public:
                 bool autodelete) const;
 
   unsigned char* createByteArrayRGBA8888() const;
-
-  //unsigned char* createByteArrayRGBA4444() const;
 
   void scale(int width, int height,
              IImageListener* listener,

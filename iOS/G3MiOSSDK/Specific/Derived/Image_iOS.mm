@@ -33,42 +33,6 @@ Image_iOS::Image_iOS(int width, int height) {
   delete[] imageData;
 }
 
-//void Image_iOS::combineWith(const IImage& other,
-//                            int width, int height,
-//                            IImageListener* listener,
-//                            bool autodelete) const {
-//  UIImage* transIm = ((Image_iOS&)other).getUIImage();
-//
-//  CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-//  unsigned char* imageData = new unsigned char[height * width * 4];
-//
-//  CGContextRef context = CGBitmapContextCreate(imageData,
-//                                               width, height,
-//                                               8, 4 * width,
-//                                               colorSpace,
-//                                               kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big );
-//  CGColorSpaceRelease( colorSpace );
-//  CGRect bounds = CGRectMake( 0, 0, width, height );
-//  CGContextClearRect( context, bounds );
-//
-//  //We draw the images one over the other
-//  CGContextDrawImage( context, bounds, _image.CGImage );
-//  CGContextDrawImage( context, bounds, transIm.CGImage );
-//
-//  CGImageRef imgRef = CGBitmapContextCreateImage(context);
-//  UIImage* img = [UIImage imageWithCGImage:imgRef];
-//  CGImageRelease(imgRef);
-//  CGContextRelease(context);
-//
-//  delete[] imageData;
-//
-//  //  return new Image_iOS(img, NULL);
-//  listener->imageCreated( new Image_iOS(img, NULL) );
-//  if (autodelete) {
-//    delete listener;
-//  }
-//}
-
 void Image_iOS::combineWith(const IImage& other,
                             const RectangleI& rect,
                             int width, int height,
@@ -176,7 +140,6 @@ void Image_iOS::combineWith(const std::vector<const IImage*>& images,
 
     delete[] imageData;
 
-    //return new Image_iOS(img, NULL);
     listener->imageCreated( new Image_iOS(img, NULL) );
     if (autodelete) {
       delete listener;
@@ -213,47 +176,6 @@ void Image_iOS::subImage(const RectangleI& rect,
     delete listener;
   }
 }
-
-//unsigned char* Image_iOS::rgba8888_to_rgba4444(unsigned char* src,
-//                                               int sizeInBytes) const {
-//  // compute the actual number of pixel elements in the buffer.
-//  int pixelsCount = sizeInBytes / 4;
-//  unsigned int* pixelsSrc = (unsigned int*) src;
-//  // create the RGBA4444 buffer
-//  unsigned short* pixelDst = (unsigned short*) new unsigned char[pixelsCount * 2]; // malloc(pixelsCount * 2);
-//  // convert every pixel
-//  for(int i = 0; i < pixelsCount; i++) {
-//    // read a source pixel
-//    unsigned int pixel = pixelsSrc[i];
-//    // unpack the source data as 8 bit values
-//    unsigned int r = pixel & 0xFF;
-//    unsigned int g = (pixel >> 8) & 0xFF;
-//    unsigned int b = (pixel >> 16) & 0xFF;
-//    unsigned int a = (pixel >> 24) & 0xFF;
-//    //convert to 4 bit vales
-//    r >>= 4;
-//    g >>= 4;
-//    b >>= 4;
-//    a >>= 4;
-//    // and store
-//    pixelDst[i] = (ushort) (r | g << 4  | b << 8 | a << 12);
-//  }
-//  return (unsigned char*) pixelDst;
-//}
-
-//unsigned char* Image_iOS::createByteArrayRGBA4444() const {
-//  const int width  = getWidth();
-//  const int height = getHeight();
-//
-//  unsigned char* rgba8888 = createByteArrayRGBA8888();
-//
-//  unsigned char* result = rgba8888_to_rgba4444(rgba8888, 4 * width * height);
-//
-//  delete [] rgba8888;
-//
-//  return result;
-//}
-
 
 unsigned char* Image_iOS::createByteArrayRGBA8888() const {
   const int width  = getWidth();

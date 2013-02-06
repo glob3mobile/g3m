@@ -21,13 +21,6 @@ public:
                                     IImageListener* listener,
                                     bool autodelete) const;
 
-//  const void createTextureFromImages(GL* gl,
-//                                     const IFactory* factory,
-//                                     const std::vector<const IImage*>& images,
-//                                     int width, int height,
-//                                     IImageListener* listener,
-//                                     bool autodelete) const;
-
   const void createTextureFromImages(GL* gl,
                                      const IFactory* factory,
                                      const std::vector<const IImage*>& images,

@@ -69,7 +69,7 @@ public:
   }
 
   void onDownload(const URL& url,
-                  const IByteBuffer* data) {
+                  IByteBuffer* data) {
     saveBuffer(url, data);
 
     _listener->onDownload(url, data);
@@ -84,7 +84,7 @@ public:
   }
 
   void onCanceledDownload(const URL& url,
-                          const IByteBuffer* buffer) {
+                          IByteBuffer* buffer) {
     saveBuffer(url, buffer);
 
     _listener->onCanceledDownload(url, buffer);
@@ -154,7 +154,7 @@ public:
   }
 
   void onDownload(const URL& url,
-                  const IImage* image) {
+                  IImage* image) {
     saveImage(url, image);
 
     _listener->onDownload(url, image);
@@ -169,7 +169,7 @@ public:
   }
 
   void onCanceledDownload(const URL& url,
-                          const IImage* image) {
+                          IImage* image) {
     saveImage(url, image);
 
     _listener->onCanceledDownload(url, image);
@@ -208,7 +208,7 @@ void CachedDownloader::cancelRequest(long long requestId) {
   _downloader->cancelRequest(requestId);
 }
 
-const IImage* CachedDownloader::getCachedImage(const URL& url) {
+IImage* CachedDownloader::getCachedImage(const URL& url) {
   if ( (_lastImage != NULL) && (_lastImageURL != NULL) ) {
     if (_lastImageURL->isEqualsTo(url)) {
       // ILogger::instance()->logInfo("Used chached image for %s", url.description().c_str());
@@ -216,7 +216,7 @@ const IImage* CachedDownloader::getCachedImage(const URL& url) {
     }
   }
 
-  const IImage* cachedImage = _storage->isAvailable() ? _storage->readImage(url) : NULL;
+  IImage* cachedImage = _storage->isAvailable() ? _storage->readImage(url) : NULL;
 
   if (cachedImage != NULL) {
     if (_lastImage != NULL) {
@@ -241,7 +241,7 @@ long long CachedDownloader::requestImage(const URL& url,
   _requestsCounter++;
 
 //  const IImage* cachedImage = _storage->isAvailable() ? _storage->readImage(url) : NULL;
-  const IImage* cachedImage = getCachedImage(url);
+  IImage* cachedImage = getCachedImage(url);
   if (cachedImage != NULL) {
     // cache hit
     _cacheHitsCounter++;
@@ -253,8 +253,6 @@ long long CachedDownloader::requestImage(const URL& url,
       delete listener;
 #endif
     }
-
-    IFactory::instance()->deleteImage(cachedImage);
 
     return -1;
   }
@@ -279,7 +277,7 @@ long long CachedDownloader::requestBuffer(const URL& url,
                                           bool deleteListener) {
   _requestsCounter++;
 
-  const IByteBuffer* cachedBuffer = _storage->isAvailable() ? _storage->readBuffer(url) : NULL;
+  IByteBuffer* cachedBuffer = _storage->isAvailable() ? _storage->readBuffer(url) : NULL;
   if (cachedBuffer == NULL) {
     // cache miss
     return _downloader->requestBuffer(url,
@@ -306,7 +304,6 @@ long long CachedDownloader::requestBuffer(const URL& url,
 #endif
   }
 
-  delete cachedBuffer;
   return -1;
 }
 

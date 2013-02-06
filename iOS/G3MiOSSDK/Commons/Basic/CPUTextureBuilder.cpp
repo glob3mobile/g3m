@@ -36,39 +36,40 @@ const void CPUTextureBuilder::createTextureFromImage(GL* gl,
   }
 }
 
-//const void CPUTextureBuilder::createTextureFromImages(GL* gl,
-//                                                      const IFactory* factory,
-//                                                      const std::vector<const IImage*>& images,
-//                                                      int width, int height,
-//                                                      IImageListener* listener,
-//                                                      bool autodelete) const{
-//
-//  const int imagesSize = images.size();
-//
-//  if (imagesSize == 0) {
-//    ILogger::instance()->logWarning("Creating blank Image");
-//    // return factory->createImageFromSize(width, height);
-//    factory->createImageFromSize(width, height, listener, autodelete);
-//  }
-//  else {
-//    IImage* im = images[0]->shallowCopy();
-//    IImage* im2 = NULL;
-//    for (int i = 1; i < imagesSize; i++) {
-//      const IImage* imTrans = images[i];
-//      im2 = im->combineWith(*imTrans, width, height);
-//      delete im;
-//      im = im2;
-//    }
-//    // return im;
-//    listener->imageCreated( im );
-//    if (autodelete) {
-//      delete listener;
-//    }
-//  }
-//}
+class ImageDeleterImageLister : public IImageListener {
+private:
+  IImage*         _imageToDelete;
+  IImageListener* _listener;
+  const bool      _autodelete;
 
+public:
+  ImageDeleterImageLister(IImage* imageToDelete,
+                          IImageListener* listener,
+                          bool autodelete) :
+  _imageToDelete(imageToDelete),
+  _listener(listener),
+  _autodelete(autodelete)
+  {
 
-class SubImageImageLister : public IImageListener {
+  }
+
+  void imageCreated(IImage* image) {
+    if (_imageToDelete != NULL) {
+      IFactory::instance()->deleteImage(_imageToDelete);
+      _imageToDelete = NULL;
+    }
+
+    if (_listener != NULL) {
+      _listener->imageCreated(image);
+      if (_autodelete) {
+        delete _listener;
+        _listener = NULL;
+      }
+    }
+  }
+};
+
+class CPUTextureBuilderSubImageImageLister : public IImageListener {
 private:
   const int _width;
   const int _height;
@@ -77,9 +78,9 @@ private:
   const bool      _autodelete;
 
 public:
-  SubImageImageLister(int width, int height,
-                      IImageListener* listener,
-                      bool autodelete) :
+  CPUTextureBuilderSubImageImageLister(int width, int height,
+                                       IImageListener* listener,
+                                       bool autodelete) :
   _width(width),
   _height(height),
   _listener(listener),
@@ -89,9 +90,12 @@ public:
   }
 
   void imageCreated(IImage* image) {
+//    image->scale(_width, _height,
+//                 _listener, _autodelete);
     image->scale(_width, _height,
-                 _listener, _autodelete);
-    IFactory::instance()->deleteImage(image);
+                 new ImageDeleterImageLister(image, _listener, _autodelete), true);
+
+//    IFactory::instance()->deleteImage(image);
   }
 };
 
@@ -115,8 +119,8 @@ const void CPUTextureBuilder::createTextureFromImages(GL* gl,
   else if (imagesSize == 1) {
     RectangleI* rectangle = rectangles[0];
     images[0]->subImage(*rectangle,
-                        new SubImageImageLister(width, height,
-                                                listener, autodelete),
+                        new CPUTextureBuilderSubImageImageLister(width, height,
+                                                                 listener, autodelete),
                         true);
   }
   else {

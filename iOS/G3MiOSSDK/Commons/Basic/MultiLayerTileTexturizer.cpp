@@ -45,12 +45,12 @@ public:
                                       int position);
 
   void onDownload(const URL& url,
-                  const IImage* image);
+                  IImage* image);
 
   void onError(const URL& url);
 
   void onCanceledDownload(const URL& url,
-                          const IImage* image) {
+                          IImage* image) {
   }
 
   void onCancel(const URL& url);
@@ -358,6 +358,7 @@ public:
 #endif
 
       if (_mesh == NULL) {
+        IFactory::instance()->deleteImage(image);
         return;
       }
 
@@ -458,7 +459,7 @@ public:
     checkIsPending(position);
 
     _status[position]  = STATUS_DOWNLOADED;
-    _petitions[position]->setImage( image->shallowCopy() );
+    _petitions[position]->setImage( image );
 
     stepDone();
   }
@@ -588,7 +589,7 @@ TileTextureBuilderHolder::~TileTextureBuilderHolder() {
 
 
 void BuilderDownloadStepDownloadListener::onDownload(const URL& url,
-                                                     const IImage* image) {
+                                                     IImage* image) {
   //  _onDownload++;
   _builder->stepDownloaded(_position, image);
 }

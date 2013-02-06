@@ -113,7 +113,7 @@ public:
 
   void onTextureDownloadError();
 
-  void onTextureDownload(const IImage* image);
+  void onTextureDownload(IImage* image);
 
   int getTextureWidth() const {
     return _textureWidth;
