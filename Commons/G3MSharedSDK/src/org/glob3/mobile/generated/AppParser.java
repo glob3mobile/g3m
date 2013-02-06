@@ -43,12 +43,12 @@ public class AppParser
   
 	if (jsonBaseLayer.equals("BING"))
 	{
-	  WMSLayer bing = new WMSLayer("ve", new URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?",true), WMSServerVersion.WMS_1_1_0, Sector.fromDegrees(jsonBbox.getAsNumber(1).doubleValue(), jsonBbox.getAsNumber(0).doubleValue(), jsonBbox.getAsNumber(3).doubleValue(), jsonBbox.getAsNumber(2).doubleValue()), "image/jpeg", "EPSG:4326", "", false, null, TimeInterval.fromDays(30));
+	  WMSLayer bing = new WMSLayer("ve", new URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?",true), WMSServerVersion.WMS_1_1_0, Sector.fromDegrees(jsonBbox.getAsNumber(1).value(), jsonBbox.getAsNumber(0).value(), jsonBbox.getAsNumber(3).value(), jsonBbox.getAsNumber(2).value()), "image/jpeg", "EPSG:4326", "", false, null, TimeInterval.fromDays(30));
 	  layerSet.addLayer(bing);
 	}
 	else
 	{
-	  WMSLayer osm = new WMSLayer("osm", new URL("http://wms.latlon.org/",true), WMSServerVersion.WMS_1_1_0, Sector.fromDegrees(jsonBbox.getAsNumber(1).doubleValue(), jsonBbox.getAsNumber(0).doubleValue(), jsonBbox.getAsNumber(3).doubleValue(), jsonBbox.getAsNumber(2).doubleValue()), "image/jpeg", "EPSG:4326", "", false, null, TimeInterval.fromDays(30));
+	  WMSLayer osm = new WMSLayer("osm", new URL("http://wms.latlon.org/",true), WMSServerVersion.WMS_1_1_0, Sector.fromDegrees(jsonBbox.getAsNumber(1).value(), jsonBbox.getAsNumber(0).value(), jsonBbox.getAsNumber(3).value(), jsonBbox.getAsNumber(2).value()), "image/jpeg", "EPSG:4326", "", false, null, TimeInterval.fromDays(30));
 	  layerSet.addLayer(osm);
 	}
 	parseCustomData(marks, jsonWorld.getAsObject(CUSTOMDATA));
@@ -59,7 +59,7 @@ public class AppParser
 	  final JSONObject jsonGeometry = point.getAsObject(GEOMETRY);
 	  final JSONArray jsonCoordinates = jsonGeometry.getAsArray(COORDINATES);
   
-	  Mark mark = new Mark(jsonProperties.getAsString(NAME).value(), new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png",false), new Geodetic3D(Angle.fromDegrees(jsonCoordinates.getAsNumber(1).doubleValue()), Angle.fromDegrees(jsonCoordinates.getAsNumber(0).doubleValue()), 0));
+	  Mark mark = new Mark(jsonProperties.getAsString(NAME).value(), new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png",false), new Geodetic3D(Angle.fromDegrees(jsonCoordinates.getAsNumber(1).value()), Angle.fromDegrees(jsonCoordinates.getAsNumber(0).value()), 0));
   
 	  marks.addMark(mark);
   }
