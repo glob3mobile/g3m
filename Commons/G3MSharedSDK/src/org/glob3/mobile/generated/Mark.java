@@ -195,6 +195,10 @@ public class Mark
 	  if (_userData != null)
 		  _userData.dispose();
 	}
+	if (_textureImage != null)
+	{
+	  IFactory.instance().deleteImage(_textureImage);
+	}
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -228,7 +232,7 @@ public class Mark
 	  {
 		if (hasLabel)
 		{
-		  ITextUtils.instance().createLabelImage(_label, new MarkLabelImageListener(this), true);
+		  ITextUtils.instance().createLabelImage(_label, new MarkLabelImageListener(null, this), true);
 		}
 		else
 		{
@@ -303,9 +307,11 @@ public class Mark
   public final void onTextureDownload(IImage image)
   {
 	_textureSolved = true;
-	_textureImage = image.shallowCopy();
+  //  _textureImage = image->shallowCopy();
+	_textureImage = image;
 	_textureWidth = _textureImage.getWidth();
 	_textureHeight = _textureImage.getHeight();
+  //  IFactory::instance()->deleteImage(image);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:

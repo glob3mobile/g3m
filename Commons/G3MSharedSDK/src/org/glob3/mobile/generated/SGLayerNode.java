@@ -104,7 +104,7 @@ public class SGLayerNode extends SGNode
 	{
 	  IFactory.instance().deleteImage(_downloadedImage);
 	}
-	_downloadedImage = image.shallowCopy();
+	_downloadedImage = image;
   }
 
   public final GLState createState(G3MRenderContext rc, GLState parentState)
