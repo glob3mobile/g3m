@@ -15,6 +15,7 @@ class LayerSet;
 class MarksRenderer;
 class ShapesRenderer;
 class MeshRenderer;
+class Shape;
 
 @interface DemosViewController : UIViewController <UIAlertViewDelegate, UIDropDownMenuDelegate> {
   NSString* urlMarkString;

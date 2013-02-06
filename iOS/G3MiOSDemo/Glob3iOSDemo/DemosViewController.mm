@@ -75,6 +75,8 @@
   builder.addRenderer([self shapeRenderer]);
   builder.addRenderer([self meshRenderer]);
   builder.setInitializationTask([self createInitializationTask], true);
+  builder.setUserData(new DemoUserData());
+  
   // Initialize widget
   builder.initializeWidget();
   
@@ -228,14 +230,14 @@
     bool _done;
     G3MWidget_iOS*  _widget;
     MarksRenderer* _marksRenderer;
-    ShapesRenderer* _shapesRenderer;
+    ShapesRenderer* _shapeRenderer;
     
   public:
-    SampleInitializationTask(G3MWidget_iOS*  widget, MarksRenderer* mRenderer, ShapesRenderer* shapesRenderer) :
+    SampleInitializationTask(G3MWidget_iOS*  widget, MarksRenderer* mRenderer, ShapesRenderer* shapeRenderer) :
     _done(false),
     _widget(widget),
     _marksRenderer(mRenderer),
-    _shapesRenderer(shapesRenderer)
+    _shapeRenderer(shapeRenderer)
     {
       
     }
@@ -285,13 +287,15 @@
           std::string planeJSON = [nsPlaneJSON UTF8String];
           Shape* plane = SceneJSShapesParser::parseFromJSON(planeJSON, "file:///textures-A320/");
           if (plane) {
-            // Washington, DC
+            ((DemoUserData*) context->getUserData())->setPlane(plane);
             plane->setPosition(new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
                                               Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
-                                              1000) );
-            plane->setScale(100, 100, 100);
+                                              10000) );
+            const double scale = 200;
+            plane->setScale(scale, scale, scale);
             plane->setPitch(Angle::fromDegrees(90));
-            _shapesRenderer->addShape(plane);
+            
+            _shapeRenderer->addShape(plane);
           }
         }
       }
@@ -317,15 +321,15 @@
   [self meshRenderer]->setEnable(false);
   
   [[self G3MWidget] widget]->stopCameraAnimation();
-//  [[self G3MWidget] widget]->resetCameraPosition();
-//  [[self G3MWidget] widget]->setCameraPosition(Geodetic3D(Angle::fromDegrees(0),
-//                                                          Angle::fromDegrees(0),
-//                                                          25000000));
+  [[self G3MWidget] widget]->resetCameraPosition();
+  [[self G3MWidget] widget]->setCameraPosition(Geodetic3D(Angle::fromDegrees(0),
+                                                          Angle::fromDegrees(0),
+                                                          25000000));
   
   [[self G3MWidget] widget]->setAnimatedCameraPosition(Geodetic3D(Angle::fromDegrees(0),
                                                                   Angle::fromDegrees(0),
                                                                   25000000),
-                                                       TimeInterval::fromSeconds(2));
+                                                       TimeInterval::fromSeconds(3));
 }
 
 - (void) showSimpleGlob3 {
@@ -350,28 +354,48 @@
   [self layerSet]->getLayer("osm_auto:all")->setEnable(![self satelliteLayerEnabled]);
 }
 
-- (void) showMarkersDemo {
-  [self markerRenderer]->setEnable(true);
+- (void) gotoMarkersDemo {
   [[self G3MWidget] widget]->setAnimatedCameraPosition(Geodetic3D(Angle::fromDegrees(37.7658),
                                                                   Angle::fromDegrees(-122.4185),
                                                                   12000),
                                                        TimeInterval::fromSeconds(5));
+  [[self toolbar] setVisible: FALSE];
 }
 
-- (void) show3DModel {
-  [self shapeRenderer]->setEnable(true);
+- (void) gotoModelDemo {
   [[self G3MWidget] widget]->setAnimatedCameraPosition(Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
                                                                   Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
                                                                   6000),
                                                        TimeInterval::fromSeconds(5));
+
+  Shape* plane = ((DemoUserData*) [[self G3MWidget] widget]->getUserData())->getPlane();
+  plane->setAnimatedPosition(TimeInterval::fromSeconds(26),
+                             Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
+                                        Angle::fromDegreesMinutesSeconds(-78, 2, 10.92),
+                                        10000),
+                             true);
+  
+  const double fromDistance = 50000 * 1.5;
+  const double toDistance   = 25000 * 1.5 / 2;
+  
+  const Angle fromAzimuth = Angle::fromDegrees(-90);
+  const Angle toAzimuth   = Angle::fromDegrees(-90 + 360);
+  
+  const Angle fromAltitude = Angle::fromDegrees(90);
+  const Angle toAltitude   = Angle::fromDegrees(15);
+  
+  plane->orbitCamera(TimeInterval::fromSeconds(20),
+                     fromDistance, toDistance,
+                     fromAzimuth,  toAzimuth,
+                     fromAltitude, toAltitude);
 }
 
-- (void) showPointMesh {
-  [self meshRenderer]->setEnable(true);
+- (void) gotoMeshDemo {
   [[self G3MWidget] widget]->setAnimatedCameraPosition(Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42),
                                                                   Angle::fromDegreesMinutesSeconds(-77, 2, 11),
                                                                   6700000),
                                                        TimeInterval::fromSeconds(5));
+  [[self toolbar] setVisible: FALSE];
 }
 
 
@@ -434,7 +458,7 @@
   // playMarkersDemo
   [self setPlayMarkersDemo: [UIButton buttonWithType: UIButtonTypeCustom]];
   [[self playMarkersDemo] addTarget: self
-                           action: @selector(showMarkersDemo)
+                           action: @selector(gotoMarkersDemo)
                  forControlEvents: UIControlEventTouchUpInside];
   [[self playMarkersDemo] setTitle: @""
                         forState: nil];
@@ -458,7 +482,7 @@
   // playMeshDemo
   [self setPlayMeshDemo: [UIButton buttonWithType: UIButtonTypeCustom]];
   [[self playMeshDemo] addTarget: self
-                           action: @selector(showMeshDemo)
+                           action: @selector(gotoMeshDemo)
                  forControlEvents: UIControlEventTouchUpInside];
   [[self playMeshDemo] setTitle: @""
                         forState: nil];
@@ -483,12 +507,12 @@
     [[self toolbar] setVisible: TRUE];
   }
   else if ([option isEqual: @"3D Model"]) {
-    [self show3DModel];
-    [[self toolbar] setVisible: FALSE];
+    [[self toolbar] addSubview: [self playModelDemo]];
+    [[self toolbar] setVisible: TRUE];
   }
   else if ([option isEqual: @"Point Mesh"]) {
-    [self showPointMesh];
-    [[self toolbar] setVisible: FALSE];
+    [[self toolbar] addSubview: [self playMeshDemo]];
+    [[self toolbar] setVisible: TRUE];
   }
 }
 
@@ -507,13 +531,13 @@
       [self switchLayer];
     }
     else if ([returnValue isEqual: @"Markers"]) {
-//      [self showMarkers];
+      [self markerRenderer]->setEnable(true);
     }
     else if ([returnValue isEqual: @"3D Model"]) {
-      [self show3DModel];
+      [self shapeRenderer]->setEnable(true);
     }
     else if ([returnValue isEqual: @"Point Mesh"]) {
-      [self showPointMesh];
+      [self meshRenderer]->setEnable(true);
     }
   }
 }
@@ -521,6 +545,23 @@
 // end UI
 
 // Aux classes
+
+class DemoUserData : public WidgetUserData {
+private:
+  Shape* _plane;
+public:
+  DemoUserData() {
+    
+  }
+  
+  void setPlane(Shape* plane) {
+    _plane = plane;
+  }
+  
+  Shape* getPlane() {
+    return _plane;
+  }
+};
 
 class MarkerUserData : public MarkUserData {
   
@@ -578,8 +619,8 @@ public:
       }
       
       Mark* marker = new Mark(URL(markerIcon, false),
-                              Geodetic3D(Angle::fromDegrees(coordinates->getAsNumber(1)->doubleValue()),
-                                         Angle::fromDegrees(coordinates->getAsNumber(0)->doubleValue()),
+                              Geodetic3D(Angle::fromDegrees(coordinates->getAsNumber(1)->value()),
+                                         Angle::fromDegrees(coordinates->getAsNumber(0)->value()),
                                          0));
       
       MarkUserData* mud = new MarkerUserData(title, URL(urlStr, false));
