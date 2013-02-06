@@ -80,8 +80,7 @@ private:
                              const int row, const int column);
   
   
-  inline std::vector<Tile*>* getSubTiles();
-  
+    
   Tile(const Tile& that);
   
   void ancestorTexturedSolvedChanged(Tile* ancestor,
@@ -105,6 +104,9 @@ public:
   
   ~Tile();
   
+  //Change to public for TileCache
+  inline std::vector<Tile*>* getSubTiles();
+
   
   const Sector getSector() const {
     return _sector;

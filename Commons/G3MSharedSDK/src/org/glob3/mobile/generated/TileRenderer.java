@@ -7,6 +7,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   private final TilesRenderParameters _parameters;
   private final boolean _showStatistics;
   private boolean _topTilesJustCreated;
+  private ITileVisitor _tileVisitor = null;
 
   private Camera     _lastCamera;
   private G3MContext _context;
@@ -75,6 +76,27 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   private Sector _lastVisibleSector;
 
   private java.util.ArrayList<VisibleSectorListenerEntry> _visibleSectorListeners = new java.util.ArrayList<VisibleSectorListenerEntry>();
+
+  private void visitSubTilesTouchesWith(G3MRenderContext rc, Tile tile, Sector sectorToVisit, int topLevel, int maxLevel)
+  {
+	  if (tile.getLevel() < maxLevel)
+	  {
+		  final int subTilesCount = tile.getSubTiles().size();
+		  for (int i = 0; i < subTilesCount; i++)
+		  {
+			  Tile tl = tile.getSubTiles().get(i);
+			  if (tl.getSector().touchesWith(sectorToVisit))
+			  {
+				  if ((tile.getLevel() >= topLevel))
+				  {
+					  rc.getLogger().logInfo("Level: %s. Col: %s; Row: %s", tl.getLevel(), tl.getColumn(), tl.getRow());
+					  _tileVisitor.visitTile(tl);
+				  }
+				  visitSubTilesTouchesWith(rc, tl, sectorToVisit, topLevel, maxLevel);
+			  }
+		  }
+	  }
+  }
 
   public TileRenderer(TileTessellator tessellator, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters parameters, boolean showStatistics)
   {
@@ -314,6 +336,32 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 	return true;
   }
 
+  public final void acceptTileVisitor(ITileVisitor tileVisitor)
+  {
+	_tileVisitor = tileVisitor;
+  }
+
+  public final void visitTilesTouchesWith(G3MRenderContext rc, Sector sector, int topLevel, int maxLevel)
+  {
+  
+	  if (_tileVisitor != null)
+	  {
+		  final int topLevelCache = (topLevel < _parameters._topLevel) ? _parameters._topLevel : topLevel;
+  
+		  final int maxLevelCache = (maxLevel > _parameters._maxLevel) ? _parameters._maxLevel : maxLevel;
+		  // Get Tiles to Cache
+		  final int topLevelTilesCount = _topLevelTiles.size();
+		  for (int i = 0; i < topLevelTilesCount; i++)
+		  {
+			  Tile tile = _topLevelTiles.get(i);
+			  if (tile.getSector().touchesWith(sector))
+			  {
+				  _tileVisitor.visitTile(tile);
+				  visitSubTilesTouchesWith(rc, tile, sector, topLevelCache, maxLevelCache);
+			  }
+		  }
+	  }
+  }
 
   public final void start()
   {
