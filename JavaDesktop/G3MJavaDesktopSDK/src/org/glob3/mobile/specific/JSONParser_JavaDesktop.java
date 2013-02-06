@@ -72,23 +72,21 @@ public class JSONParser_JavaDesktop
         try {
           final long l = number.longValue();
           if ((l <= Integer.MAX_VALUE) && (l >= Integer.MIN_VALUE)) {
-            g3mJSONBaseObject = new org.glob3.mobile.generated.JSONNumber(
+            g3mJSONBaseObject = new org.glob3.mobile.generated.JSONInteger(
                 number.intValue());
           }
           else {
-            // TODO: No hay constructor con long en JsonNumber
-            g3mJSONBaseObject = new org.glob3.mobile.generated.JSONNumber(
-                number.doubleValue());
+            g3mJSONBaseObject = new org.glob3.mobile.generated.JSONLong(l);
           }
         }
         catch (final NumberFormatException e) {
           final double d = number.doubleValue();
           if ((d <= Float.MAX_VALUE) && (d >= Float.MIN_VALUE)) {
-            g3mJSONBaseObject = new org.glob3.mobile.generated.JSONNumber(
+            g3mJSONBaseObject = new org.glob3.mobile.generated.JSONFloat(
                 number.floatValue());
           }
           else {
-            g3mJSONBaseObject = new org.glob3.mobile.generated.JSONNumber(d);
+            g3mJSONBaseObject = new org.glob3.mobile.generated.JSONDouble(d);
           }
         }
       }
