@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class BufferSaverDownloadListener implements IBufferDownloadListener
+public class BufferSaverDownloadListener extends IBufferDownloadListener
 {
   private CachedDownloader _downloader;
   private IBufferDownloadListener _listener;

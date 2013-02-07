@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class CPUTextureBuilderSubImageImageLister implements IImageListener
+public class CPUTextureBuilderSubImageImageLister extends IImageListener
 {
   private final int _width;
   private final int _height;

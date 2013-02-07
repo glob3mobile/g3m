@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class MarkLabelImageListener implements IImageListener
+public class MarkLabelImageListener extends IImageListener
 {
   private IImage _iconImage;
   private Mark _mark;

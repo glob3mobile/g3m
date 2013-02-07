@@ -459,8 +459,12 @@ public class Camera
   private Frustum _halfFrustumInModelCoordinates; // ONLY FOR DEBUG
 
   //The Camera Effect Target
-  private static class CameraEffectTarget extends EffectTarget
+  private static class CameraEffectTarget implements EffectTarget
   {
+    public void dispose()
+    {
+
+    }
   }
 
   private CameraEffectTarget _camEffectTarget;

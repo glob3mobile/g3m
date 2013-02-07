@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class TextureUploader implements IImageListener
+public class TextureUploader extends IImageListener
 {
   private TileTextureBuilder _builder;
 

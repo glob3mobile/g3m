@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class ImageSaverDownloadListener implements IImageDownloadListener
+public class ImageSaverDownloadListener extends IImageDownloadListener
 {
   private CachedDownloader _downloader;
   private IImageDownloadListener _listener;

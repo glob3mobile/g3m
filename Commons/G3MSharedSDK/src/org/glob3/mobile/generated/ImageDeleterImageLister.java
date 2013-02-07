@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class ImageDeleterImageLister implements IImageListener
+public class ImageDeleterImageLister extends IImageListener
 {
   private IImage _imageToDelete;
   private IImageListener _listener;

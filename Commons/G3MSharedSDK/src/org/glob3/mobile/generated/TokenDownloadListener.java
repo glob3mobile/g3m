@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class TokenDownloadListener implements IBufferDownloadListener
+public class TokenDownloadListener extends IBufferDownloadListener
 {
   private BingLayer _bingLayer;
 

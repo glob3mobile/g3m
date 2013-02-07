@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class IconDownloadListener implements IImageDownloadListener
+public class IconDownloadListener extends IImageDownloadListener
 {
   private Mark _mark;
   private final String _label;

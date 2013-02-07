@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class BuilderDownloadStepDownloadListener implements IImageDownloadListener
+public class BuilderDownloadStepDownloadListener extends IImageDownloadListener
 {
   private TileTextureBuilder _builder;
   private final int _position;

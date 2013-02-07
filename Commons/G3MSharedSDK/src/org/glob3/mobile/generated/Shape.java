@@ -23,7 +23,7 @@ package org.glob3.mobile.generated;
 
 //class ShapePendingEffect;
 
-public abstract class Shape extends EffectTarget
+public abstract class Shape implements EffectTarget
 {
   private Geodetic3D _position;
 
