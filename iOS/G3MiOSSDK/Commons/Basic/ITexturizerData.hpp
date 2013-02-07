@@ -9,7 +9,7 @@
 #ifndef __G3MiOSSDK__ITexturizerData__
 #define __G3MiOSSDK__ITexturizerData__
 
-class ITexturizerData {
+/*JAVA:interface*/class ITexturizerData {
 public:
 #ifdef C_CODE
   virtual ~ITexturizerData() { }
@@ -18,18 +18,5 @@ public:
   public void dispose();
 #endif
 };
-
-//#ifdef C_CODE
-//class ITexturizerData {
-//public:
-//  virtual ~ITexturizerData() { }
-//};
-//#endif
-//
-//#ifdef JAVA_CODE
-//public interface ITexturizerData {
-//  public void dispose();
-//}
-//#endif
 
 #endif
