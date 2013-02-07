@@ -202,10 +202,16 @@ public final class Image_Android
    public void subImage(final RectangleI rect,
                         final IImageListener listener,
                         final boolean autodelete) {
-      final Bitmap bm = Bitmap.createBitmap(_bitmapHolder._bitmap, rect._x, rect._y, rect._width, rect._height);
+      if ((rect._x == 0) && (rect._y == 0) && (_bitmapHolder._bitmap.getWidth() == rect._width)
+          && (_bitmapHolder._bitmap.getHeight() == rect._height)) {
+         listener.imageCreated(this.shallowCopy());
+      }
+      else {
+         final Bitmap bm = Bitmap.createBitmap(_bitmapHolder._bitmap, rect._x, rect._y, rect._width, rect._height);
 
-      final Image_Android result = new Image_Android(bm, null);
-      listener.imageCreated(result);
+         final Image_Android result = new Image_Android(bm, null);
+         listener.imageCreated(result);
+      }
    }
 
 
@@ -244,16 +250,21 @@ public final class Image_Android
                      final int height,
                      final IImageListener listener,
                      final boolean autodelete) {
-      final Bitmap bitmap = Bitmap.createScaledBitmap(_bitmapHolder._bitmap, width, height, false);
-      final Image_Android result;
-      if (bitmap == null) {
-         ILogger.instance().logError("Can't scale Image");
-         result = null;
+      if ((_bitmapHolder._bitmap.getWidth() == width) && (_bitmapHolder._bitmap.getHeight() == height)) {
+         listener.imageCreated(this.shallowCopy());
       }
       else {
-         result = new Image_Android(bitmap, null);
+         final Bitmap bitmap = Bitmap.createScaledBitmap(_bitmapHolder._bitmap, width, height, false);
+         final Image_Android result;
+         if (bitmap == null) {
+            ILogger.instance().logError("Can't scale Image");
+            result = null;
+         }
+         else {
+            result = new Image_Android(bitmap, null);
+         }
+         listener.imageCreated(result);
       }
-      listener.imageCreated(result);
    }
 
 
