@@ -45,7 +45,6 @@ _databaseName(databaseName)
     //    SQResultSet *imagesTable = [_writeDB executeQuery:@""];
 
     //    xxx = [_writeDB executeQuery:@"SELECT name FROM sqlite_master WHERE type='table' AND name='buffer';"];
-
     if (![_writeDB executeNonQuery:@"DROP TABLE IF EXISTS buffer;"]) {
       printf("Can't drop table \"buffer\" from database \"%s\"\n",
              databaseName.c_str());
@@ -57,26 +56,38 @@ _databaseName(databaseName)
              databaseName.c_str());
       return;
     }
+      
+      if (![_writeDB executeNonQuery:@"DROP TABLE IF EXISTS buffer2;"]) {
+          printf("Can't drop table \"buffer\" from database \"%s\"\n",
+                 databaseName.c_str());
+          return;
+      }
+      
+      if (![_writeDB executeNonQuery:@"DROP TABLE IF EXISTS image2;"]) {
+          printf("Can't drop table \"image\" from database \"%s\"\n",
+                 databaseName.c_str());
+          return;
+      }
 
-    if (![_writeDB executeNonQuery:@"CREATE TABLE IF NOT EXISTS buffer2 (name TEXT, contents TEXT, expiration TEXT);"]) {
+    if (![_writeDB executeNonQuery:@"CREATE TABLE IF NOT EXISTS buffer3 (name TEXT, contents TEXT, expiration_ms TEXT);"]) {
       printf("Can't create table \"buffer\" on database \"%s\"\n",
              databaseName.c_str());
       return;
     }
 
-    if (![_writeDB executeNonQuery:@"CREATE UNIQUE INDEX IF NOT EXISTS buffer_name ON buffer2(name);"]) {
+    if (![_writeDB executeNonQuery:@"CREATE UNIQUE INDEX IF NOT EXISTS buffer_name ON buffer3(name);"]) {
       printf("Can't create index \"buffer_name\" on database \"%s\"\n",
              databaseName.c_str());
       return;
     }
 
-    if (![_writeDB executeNonQuery:@"CREATE TABLE IF NOT EXISTS image2 (name TEXT, contents TEXT, expiration TEXT);"]) {
+    if (![_writeDB executeNonQuery:@"CREATE TABLE IF NOT EXISTS image3 (name TEXT, contents TEXT, expiration_ms TEXT);"]) {
       printf("Can't create table \"image\" on database \"%s\"\n",
              databaseName.c_str());
       return;
     }
 
-    if (![_writeDB executeNonQuery:@"CREATE UNIQUE INDEX IF NOT EXISTS image_name ON image2(name);"]) {
+    if (![_writeDB executeNonQuery:@"CREATE UNIQUE INDEX IF NOT EXISTS image_name ON image3(name);"]) {
       printf("Can't create index \"image_name\" on database \"%s\"\n",
              databaseName.c_str());
       return;
@@ -97,7 +108,7 @@ _databaseName(databaseName)
 }
 
 void SQLiteStorage_iOS::showStatistics() const {
-  SQResultSet* rs1 = [_readDB executeQuery:@"SELECT COUNT(*), SUM(LENGTH(contents)) FROM buffer2"];
+  SQResultSet* rs1 = [_readDB executeQuery:@"SELECT COUNT(*), SUM(LENGTH(contents)) FROM buffer3"];
   if ([rs1 next]) {
     NSInteger count     = [rs1 integerColumnByIndex: 0];
     NSInteger usedSpace = [rs1 integerColumnByIndex: 1];
@@ -111,7 +122,7 @@ void SQLiteStorage_iOS::showStatistics() const {
   [rs1 close];
 
 
-  SQResultSet* rs2 = [_readDB executeQuery:@"SELECT COUNT(*), SUM(LENGTH(contents)) FROM image2"];
+  SQResultSet* rs2 = [_readDB executeQuery:@"SELECT COUNT(*), SUM(LENGTH(contents)) FROM image3"];
   if ([rs2 next]) {
     NSInteger count     = [rs2 integerColumnByIndex: 0];
     NSInteger usedSpace = [rs2 integerColumnByIndex: 1];
@@ -129,7 +140,7 @@ void SQLiteStorage_iOS::showStatistics() const {
 //bool SQLiteStorage_iOS::containsBuffer(const URL& url) {
 //  NSString* name = toNSString(url.getPath());
 //
-//  SQResultSet* rs = [_readDB executeQuery:@"SELECT 1 FROM buffer2 WHERE (name = ?)", name];
+//  SQResultSet* rs = [_readDB executeQuery:@"SELECT 1 FROM buffer3 WHERE (name = ?)", name];
 //
 //  BOOL hasAny = [rs next];
 //
@@ -144,11 +155,15 @@ void SQLiteStorage_iOS::rawSave(NSString* table,
                                 const TimeInterval& timeToExpires) {
   [_lock lock];
 
-  NSString* statement = [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@ (name, contents, expiration) VALUES (?, ?, ?)", table ];
+  NSString* statement = [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@ (name, contents, expiration_ms) VALUES (?, ?, ?)", table ];
+    
+//NSDate* expirationSeg = [NSDate dateWithTimeIntervalSinceNow:timeToExpires.seconds()];
+//const double currentTime = [timeIntervalSince1970];
+    
+  const long expirationTimeInMills = (long)((timeToExpires.seconds() +CACurrentMediaTime())*1000);
+  NSString* expirationS = [NSString stringWithFormat:@"%ld", expirationTimeInMills];
 
-  NSDate* expiration = [NSDate dateWithTimeIntervalSinceNow:timeToExpires.seconds()];
-
-  NSString* expirationS = [NSString stringWithFormat:@"%f", [expiration timeIntervalSince1970]];
+  //NSString* expirationS = [NSString stringWithFormat:@"%f", [expirationSeg timeIntervalSince1970]];
 
   if (![_writeDB executeNonQuery:statement, name, contents, expirationS]) {
     printf("Can't save \"%s\"\n",  [name cStringUsingEncoding:NSUTF8StringEncoding ] );
@@ -206,11 +221,11 @@ void SQLiteStorage_iOS::saveBuffer(const URL& url,
                                     length: buffer_iOS->size()];
 
   if (saveInBackground) {
-    _context->getThreadUtils()->invokeInBackground(new SaverTask(this, @"buffer2", name, contents, timeToExpires),
+    _context->getThreadUtils()->invokeInBackground(new SaverTask(this, @"buffer3", name, contents, timeToExpires),
                                                    true);
   }
   else {
-    rawSave(@"buffer2", name, contents, timeToExpires);
+    rawSave(@"buffer3", name, contents, timeToExpires);
   }
 }
 
@@ -218,13 +233,13 @@ const IByteBuffer* SQLiteStorage_iOS::readBuffer(const URL& url) {
   IByteBuffer* result = NULL;
 
   NSString* name = toNSString(url.getPath());
-  SQResultSet* rs = [_readDB executeQuery:@"SELECT contents, expiration FROM buffer2 WHERE (name = ?)", name];
+  SQResultSet* rs = [_readDB executeQuery:@"SELECT contents, expiration_ms FROM buffer3 WHERE (name = ?)", name];
   if ([rs next]) {
     NSData* nsData = [rs dataColumnByIndex: 0];
-    const double expirationInterval = [[rs stringColumnByIndex:1] doubleValue];
-    NSDate* expiration = [NSDate dateWithTimeIntervalSince1970:expirationInterval];
+    const double expirationIntervalMill = [[rs stringColumnByIndex:1] doubleValue];
+    NSDate* expirationSeg = [NSDate dateWithTimeIntervalSince1970:(expirationIntervalMill/1000)];
 
-    if ([expiration compare:[NSDate date]] == NSOrderedDescending) {
+    if ([expirationSeg compare:[NSDate date]] == NSOrderedDescending) {
       NSUInteger length = [nsData length];
       unsigned char* bytes = new unsigned char[length];
       [nsData getBytes: bytes
@@ -242,7 +257,7 @@ const IByteBuffer* SQLiteStorage_iOS::readBuffer(const URL& url) {
 //bool SQLiteStorage_iOS::containsImage(const URL& url) {
 //  NSString* name = toNSString(url.getPath());
 //
-//  SQResultSet* rs = [_readDB executeQuery:@"SELECT 1 FROM image2 WHERE (name = ?)", name];
+//  SQResultSet* rs = [_readDB executeQuery:@"SELECT 1 FROM image3 WHERE (name = ?)", name];
 //
 //  BOOL hasAny = [rs next];
 //
@@ -273,11 +288,11 @@ void SQLiteStorage_iOS::saveImage(const URL& url,
   //  }
 
   if (saveInBackground) {
-    _context->getThreadUtils()->invokeInBackground(new SaverTask(this, @"image2", name, contents, timeToExpires),
+    _context->getThreadUtils()->invokeInBackground(new SaverTask(this, @"image3", name, contents, timeToExpires),
                                                    true);
   }
   else {
-    rawSave(@"image2", name, contents, timeToExpires);
+    rawSave(@"image3", name, contents, timeToExpires);
   }
 }
 
@@ -285,13 +300,13 @@ const IImage* SQLiteStorage_iOS::readImage(const URL& url) {
   IImage* result = NULL;
 
   NSString* name = toNSString(url.getPath());
-  SQResultSet* rs = [_readDB executeQuery:@"SELECT contents, expiration FROM image2 WHERE (name = ?)", name];
+  SQResultSet* rs = [_readDB executeQuery:@"SELECT contents, expiration_ms FROM image3 WHERE (name = ?)", name];
   if ([rs next]) {
     NSData* data = [rs dataColumnByIndex: 0];
-    const double expirationInterval = [[rs stringColumnByIndex:1] doubleValue];
-    NSDate* expiration = [NSDate dateWithTimeIntervalSince1970:expirationInterval];
+    const double expirationIntervalMill = [[rs stringColumnByIndex:1] doubleValue];
+    NSDate* expirationSeg = [NSDate dateWithTimeIntervalSince1970:(expirationIntervalMill/1000)];
 
-    if ([expiration compare:[NSDate date]] == NSOrderedDescending) {
+    if ([expirationSeg compare:[NSDate date]] == NSOrderedDescending) {
       UIImage* uiImage = [UIImage imageWithData:data];
       if (uiImage) {
         result = new Image_iOS(uiImage,

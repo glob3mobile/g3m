@@ -70,18 +70,18 @@ const std::string JSONArray::description() const {
   if (size > 0) {
     //isb->addString(" ");
 
-    isb->addString(this->get(0)->description());
+      isb->addString((this->get(0) == NULL) ? "null" : this->get(0)->description());
 
     if (size <= 10) {
       for (int i = 1; i < size; i++) {
         isb->addString(", ");
-        isb->addString(this->get(i)->description());
+        isb->addString((this->get(i) == NULL) ? "null" : this->get(i)->description());
       }
     }
     else {
       for (int i = 1; i < 10; i++) {
         isb->addString(", ");
-        isb->addString(this->get(i)->description());
+        isb->addString((this->get(i) == NULL) ? "null" : this->get(i)->description());
       }
       isb->addString(", ...");
       isb->addString(" size=");
@@ -135,7 +135,9 @@ void JSONArray::acceptVisitor(JSONVisitor* visitor) const {
       visitor->visitArrayInBetweenChildren(this);
     }
     visitor->visitArrayBeforeChild(this, i);
-    get(i)->acceptVisitor(visitor);
+    if(get(i)!= NULL){
+        get(i)->acceptVisitor(visitor);
+    }
   }
 
   visitor->visitArrayAfterChildren(this);
