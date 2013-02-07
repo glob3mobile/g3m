@@ -13,9 +13,9 @@ class ITexturizerData {
 public:
 #ifdef C_CODE
   virtual ~ITexturizerData() { }
-#else
-  virtual ~ITexturizerData() = 0;
-  ;
+#endif
+#ifdef JAVA_CODE
+  public void dispose();
 #endif
 };
 
