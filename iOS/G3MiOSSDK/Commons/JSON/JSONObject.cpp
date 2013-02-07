@@ -15,10 +15,12 @@
 #include "JSONNumber.hpp"
 #include "JSONVisitor.hpp"
 
-JSONObject::~JSONObject(){
+JSONObject::~JSONObject() {
+#ifdef C_CODE
   for (std::map<std::string, JSONBaseObject*>::iterator it=_entries.begin(); it!=_entries.end(); it++){
     delete it->second;
   }
+#endif
   _entries.clear();
 }
 
