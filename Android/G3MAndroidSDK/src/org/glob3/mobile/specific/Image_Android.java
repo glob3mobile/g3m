@@ -71,33 +71,33 @@ public final class Image_Android
       }
 
 
-      @Override
-      protected void finalize() throws Throwable {
-         if (_referencesCount != 0) {
-            synchronized (ILogger.instance()) {
-               ILogger.instance().logError("=======");
-               ILogger.instance().logError("***** BitmapHolder deleted with invalid _referencesCount=" + _referencesCount);
-
-               final StringBuffer msg = new StringBuffer();
-               msg.append("Created At:\n");
-               msg.append(_createdAt);
-               msg.append("Retained At:\n");
-               for (final String e : _retainedAt) {
-                  msg.append(e);
-                  msg.append("---\n");
-               }
-               msg.append("Released At:\n");
-               for (final String e : _releasedAt) {
-                  msg.append(e);
-                  msg.append("---\n");
-               }
-               msg.append("=======\n");
-
-               ILogger.instance().logError(msg.toString());
-            }
-         }
-         super.finalize();
-      }
+      //      @Override
+      //      protected void finalize() throws Throwable {
+      //         if (_referencesCount != 0) {
+      //            synchronized (ILogger.instance()) {
+      //               ILogger.instance().logError("=======");
+      //               ILogger.instance().logError("***** BitmapHolder deleted with invalid _referencesCount=" + _referencesCount);
+      //
+      //               final StringBuffer msg = new StringBuffer();
+      //               msg.append("Created At:\n");
+      //               msg.append(_createdAt);
+      //               msg.append("Retained At:\n");
+      //               for (final String e : _retainedAt) {
+      //                  msg.append(e);
+      //                  msg.append("---\n");
+      //               }
+      //               msg.append("Released At:\n");
+      //               for (final String e : _releasedAt) {
+      //                  msg.append(e);
+      //                  msg.append("---\n");
+      //               }
+      //               msg.append("=======\n");
+      //
+      //               ILogger.instance().logError(msg.toString());
+      //            }
+      //         }
+      //         super.finalize();
+      //      }
    }
 
 
@@ -295,9 +295,11 @@ public final class Image_Android
 
    @Override
    public void dispose() {
-      _bitmapHolderReleased = true;
-      _bitmapHolder._release();
-      //_bitmap.recycle();
+      synchronized (this) {
+         _bitmapHolderReleased = true;
+         _bitmapHolder._release();
+         //_bitmap.recycle();
+      }
 
       super.dispose();
    }

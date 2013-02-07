@@ -209,28 +209,30 @@ void CachedDownloader::cancelRequest(long long requestId) {
 }
 
 IImage* CachedDownloader::getCachedImage(const URL& url) {
-  if ( (_lastImage != NULL) && (_lastImageURL != NULL) ) {
-    if (_lastImageURL->isEqualsTo(url)) {
-      // ILogger::instance()->logInfo("Used chached image for %s", url.description().c_str());
-      return _lastImage->shallowCopy();
-    }
-  }
+//  if ( (_lastImage != NULL) && (_lastImageURL != NULL) ) {
+//    if (_lastImageURL->isEqualsTo(url)) {
+//      // ILogger::instance()->logInfo("Used chached image for %s", url.description().c_str());
+//      return _lastImage->shallowCopy();
+//    }
+//  }
+//
+//  IImage* cachedImage = _storage->isAvailable() ? _storage->readImage(url) : NULL;
+//
+//  if (cachedImage != NULL) {
+//    if (_lastImage != NULL) {
+//      IFactory::instance()->deleteImage(_lastImage);
+//    }
+//    _lastImage = cachedImage->shallowCopy();
+//
+//#ifdef C_CODE
+//    delete _lastImageURL;
+//#endif
+//    _lastImageURL = new URL(url);
+//  }
+//
+//  return cachedImage;
 
-  IImage* cachedImage = _storage->isAvailable() ? _storage->readImage(url) : NULL;
-
-  if (cachedImage != NULL) {
-    if (_lastImage != NULL) {
-      IFactory::instance()->deleteImage(_lastImage);
-    }
-    _lastImage = cachedImage->shallowCopy();
-
-#ifdef C_CODE
-    delete _lastImageURL;
-#endif
-    _lastImageURL = new URL(url);
-  }
-
-  return cachedImage;
+  return _storage->isAvailable() ? _storage->readImage(url) : NULL;
 }
 
 long long CachedDownloader::requestImage(const URL& url,
