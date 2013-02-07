@@ -359,7 +359,7 @@ public class Frustum
 
   public void dispose()
   {
-     _extent = null;
+    _extent = null;
   }
 
   public final Extent getExtent()

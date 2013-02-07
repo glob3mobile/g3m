@@ -30,6 +30,11 @@ public class CPUTextureBuilder extends TextureBuilder
     else if (image.getHeight() == height && image.getWidth() == width)
     {
       listener.imageCreated(image.shallowCopy());
+      if (autodelete)
+      {
+        if (listener != null)
+           listener.dispose();
+      }
     }
     else
     {

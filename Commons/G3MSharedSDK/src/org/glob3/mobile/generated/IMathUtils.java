@@ -17,13 +17,6 @@ package org.glob3.mobile.generated;
 
 
 
-//This declaration creates an converter issue
-///#ifdef GMath
-//  TODO_GMATH_PREDEFINED!!!!
-///#endif
-
-//#define GMath IMathUtils.instance()
-
 public abstract class IMathUtils
 {
 

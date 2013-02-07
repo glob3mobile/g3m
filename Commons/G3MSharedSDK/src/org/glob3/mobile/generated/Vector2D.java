@@ -131,7 +131,7 @@ public class Vector2D
 
   public final boolean isNan()
   {
-//    return GMath.isNan(_x) || GMath.isNan(_y);
+//    return IMathUtils::instance()->isNan(_x) || IMathUtils::instance()->isNan(_y);
 
     if (_x != _x)
     {

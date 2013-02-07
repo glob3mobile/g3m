@@ -21,6 +21,8 @@ public class BufferSaverDownloadListener implements IBufferDownloadListener
   {
     if (_deleteListener)
     {
+      if (_listener != null)
+         _listener.dispose();
       _listener = null;
     }
   }

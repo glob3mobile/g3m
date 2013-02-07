@@ -17,8 +17,6 @@ package org.glob3.mobile.generated;
 
 
 
-//#define GFactory IFactory.instance()
-
 //class ITimer;
 //class IImage;
 //class IFloatBuffer;

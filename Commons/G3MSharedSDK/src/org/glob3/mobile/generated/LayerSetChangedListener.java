@@ -22,6 +22,7 @@ package org.glob3.mobile.generated;
 
 public interface LayerSetChangedListener
 {
+  public void dispose();
 
   void changed(LayerSet layerSet);
 }

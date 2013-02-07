@@ -31,6 +31,8 @@ public class G3MWidget
     if (_userData != null)
        _userData.dispose();
   
+    if (_planet != null)
+       _planet.dispose();
     if (_cameraRenderer != null)
        _cameraRenderer.dispose();
     if (_mainRenderer != null)
@@ -62,9 +64,22 @@ public class G3MWidget
     if (_threadUtils != null)
        _threadUtils.dispose();
   
+    for (int n = 0; n < _cameraConstrainers.size(); n++)
+    {
+      if (_cameraConstrainers.get(n) != null)
+         _cameraConstrainers.get(n).dispose();
+    }
     if (_frameTasksExecutor != null)
        _frameTasksExecutor.dispose();
   
+    for (int i = 0; i < _periodicalTasks.size(); i++)
+    {
+      //    _periodicalTasks[i].releaseTask();
+  
+      PeriodicalTask periodicalTask = _periodicalTasks.get(i);
+      if (periodicalTask != null)
+         periodicalTask.dispose();
+    }
   
     if (_context != null)
        _context.dispose();

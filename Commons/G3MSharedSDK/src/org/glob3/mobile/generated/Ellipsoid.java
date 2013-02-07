@@ -37,6 +37,11 @@ public class Ellipsoid
   
   }
 
+  public void dispose()
+  {
+
+  }
+
   public final Vector3D getRadii()
   {
     return _radii;

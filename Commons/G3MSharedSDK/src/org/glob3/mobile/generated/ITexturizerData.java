@@ -18,6 +18,5 @@ package org.glob3.mobile.generated;
 
 public interface ITexturizerData
 {
-  public void dispose()
-//  ;
+  public void dispose();
 }

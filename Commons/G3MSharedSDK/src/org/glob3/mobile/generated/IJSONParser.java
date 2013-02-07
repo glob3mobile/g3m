@@ -17,8 +17,6 @@ package org.glob3.mobile.generated;
 
 
 
-//#define JSONParser IJSONParser.instance()
-
 public abstract class IJSONParser
 {
   private static IJSONParser _instance = null;

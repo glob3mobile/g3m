@@ -26,6 +26,8 @@ public class ImageDeleterImageLister implements IImageListener
       _listener.imageCreated(image);
       if (_autodelete)
       {
+        if (_listener != null)
+           _listener.dispose();
         _listener = null;
       }
     }

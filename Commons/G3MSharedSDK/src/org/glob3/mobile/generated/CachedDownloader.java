@@ -53,6 +53,8 @@ public class CachedDownloader extends IDownloader
       }
       _lastImage = cachedImage.shallowCopy();
   
+      if (_lastImageURL != null)
+         _lastImageURL.dispose();
       _lastImageURL = new URL(url);
     }
   
@@ -109,7 +111,8 @@ public class CachedDownloader extends IDownloader
   
     if (deleteListener)
     {
-      listener = null;
+      if (listener != null)
+         listener.dispose();
     }
   
     return -1;
@@ -130,6 +133,8 @@ public class CachedDownloader extends IDownloader
   
       if (deleteListener)
       {
+        if (listener != null)
+           listener.dispose();
       }
   
       return -1;
@@ -154,6 +159,8 @@ public class CachedDownloader extends IDownloader
     {
       IFactory.instance().deleteImage(_lastImage);
     }
+    if (_lastImageURL != null)
+       _lastImageURL.dispose();
   }
 
   public final String statistics()

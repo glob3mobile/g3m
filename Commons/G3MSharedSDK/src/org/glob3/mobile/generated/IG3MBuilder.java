@@ -210,6 +210,8 @@ public abstract class IG3MBuilder
   {
     if (_planet != planet)
     {
+      if (_planet != null)
+         _planet.dispose();
       _planet = planet;
     }
   }

@@ -19,10 +19,7 @@ package org.glob3.mobile.generated;
 
 
 
-public interface EffectTarget
+public class EffectTarget
 {
-  // added this method only to force the java-translator to consider EffectTarget as an interface (dgd)
-  void unusedMethod();
-
-
+  public void dispose();
 }

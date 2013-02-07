@@ -26,4 +26,6 @@ public interface IImageListener
    */
   void imageCreated(IImage image);
 
+  public void dispose();
+
 }

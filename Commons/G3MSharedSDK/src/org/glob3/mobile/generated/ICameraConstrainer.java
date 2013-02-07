@@ -21,7 +21,7 @@ package org.glob3.mobile.generated;
 
 public interface ICameraConstrainer
 {
-  //NO DESTRUCTOR FOR INTERFACE
+  public void dispose();
 
   void onCameraChange(Planet planet, Camera previousCamera, Camera nextCamera);
 }

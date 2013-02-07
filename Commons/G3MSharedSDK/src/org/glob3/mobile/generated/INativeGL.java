@@ -38,17 +38,7 @@ public abstract class INativeGL
 
   public abstract void uniform1i(IGLUniformID loc, int v);
 
-  //  virtual void uniformMatrix4fv(IGLUniformID* location,
-  //                                bool transpose,
-  //                                const IFloatBuffer* buffer) const = 0;
-
   public abstract void uniformMatrix4fv(IGLUniformID location, boolean transpose, MutableMatrix44D matrix);
-
-
-  //  virtual void uniformMatrix4fv(IGLUniformID* location,
-  //                                int count,
-  //                                bool transpose,
-  //                                const float value[]) const = 0;
 
   public abstract void clearColor(float red, float green, float blue, float alpha);
 
@@ -64,9 +54,6 @@ public abstract class INativeGL
 
   public abstract void vertexAttribPointer(int index, int size, boolean normalized, int stride, IFloatBuffer buffer);
 
-//  virtual void drawElements(int mode,
-//                            int count,
-//                            IIntBuffer* indices) const = 0;
   public abstract void drawElements(int mode, int count, IShortBuffer indices);
 
   public abstract void lineWidth(float width);

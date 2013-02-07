@@ -49,6 +49,11 @@ public class URL
      _path = parent.getPath() + "/" + path;
   }
 
+  public void dispose()
+  {
+
+  }
+
   public final String getPath()
   {
     return _path;

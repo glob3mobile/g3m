@@ -34,8 +34,11 @@ public class JSONObject extends JSONBaseObject
 
   public void dispose()
   {
+    for (java.util.Iterator<String, JSONBaseObject> it = _entries.iterator(); it.hasNext();)
+    {
+      it.next().getValue() = null;
+    }
     _entries.clear();
-  
   }
 
   public final JSONObject asObject()

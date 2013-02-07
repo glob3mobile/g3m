@@ -23,7 +23,7 @@ package org.glob3.mobile.generated;
 
 //class ShapePendingEffect;
 
-public abstract class Shape implements EffectTarget
+public abstract class Shape extends EffectTarget
 {
   private Geodetic3D _position;
 
@@ -286,9 +286,5 @@ public abstract class Shape implements EffectTarget
   public abstract void rawRender(G3MRenderContext rc, GLState parentState);
 
   public abstract boolean isTransparent(G3MRenderContext rc);
-
-  public final void unusedMethod()
-  {
-  }
 
 }

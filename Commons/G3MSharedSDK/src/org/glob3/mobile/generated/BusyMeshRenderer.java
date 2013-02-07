@@ -24,7 +24,8 @@ package org.glob3.mobile.generated;
 //***************************************************************
 
 
-public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
+//C++ TO JAVA CONVERTER TODO TASK: Multiple inheritance is not available in Java:
+public class BusyMeshRenderer extends LeafRenderer, EffectTarget
 {
   private Mesh _mesh;
   private double _degrees;
@@ -171,10 +172,4 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
   {
 
   }
-
-  public final void unusedMethod()
-  {
-
-  }
-
 }

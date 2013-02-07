@@ -100,6 +100,8 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
        _tessellator.dispose();
     if (_texturizer != null)
        _texturizer.dispose();
+    if (_parameters != null)
+       _parameters.dispose();
   
     if (_lastSplitTimer != null)
        _lastSplitTimer.dispose();

@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class GInitializationTask extends GTask
+public abstract class GInitializationTask implements GTask
 {
   public abstract void run(G3MContext context);
 

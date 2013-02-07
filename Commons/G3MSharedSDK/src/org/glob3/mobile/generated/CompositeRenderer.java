@@ -21,7 +21,7 @@ public class CompositeRenderer extends Renderer
 {
   private java.util.ArrayList<Renderer> _renderers = new java.util.ArrayList<Renderer>();
 
-  protected G3MContext _context;
+  private G3MContext _context;
 
   private boolean _enable;
 

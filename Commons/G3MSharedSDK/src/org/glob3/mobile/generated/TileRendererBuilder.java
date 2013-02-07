@@ -68,12 +68,6 @@ public class TileRendererBuilder
   }
   public void dispose()
   {
-    //    delete _tileTessellator;
-    //    delete _texturizer;
-    //    delete _layerSet;
-    ///#ifdef C_CODE
-    //    delete _parameters;
-    ///#endif
   }
   public final TileRenderer create()
   {
@@ -117,6 +111,8 @@ public class TileRendererBuilder
   {
     if (_parameters != parameters)
     {
+      if (_parameters != null)
+         _parameters.dispose();
       _parameters = parameters;
     }
   }

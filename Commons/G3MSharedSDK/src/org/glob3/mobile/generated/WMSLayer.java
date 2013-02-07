@@ -2,8 +2,6 @@ package org.glob3.mobile.generated;
 public class WMSLayer extends Layer
 {
 
-
-
   private final URL _mapServerURL;
   private final URL _queryServerURL;
 

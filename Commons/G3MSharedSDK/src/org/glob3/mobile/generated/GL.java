@@ -597,6 +597,8 @@ public class GL
       }
       else
       {
+        if (textureId != null)
+           textureId.dispose();
       }
   
   //    if (_boundTextureId != NULL) {
@@ -703,7 +705,7 @@ public class GL
 
   public void dispose()
   {
-
+    _nativeGL = null;
     if (_vertices != null)
        _vertices.dispose();
     if (_textureCoordinates != null)

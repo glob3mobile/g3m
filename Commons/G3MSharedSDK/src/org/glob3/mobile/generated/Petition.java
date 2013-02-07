@@ -51,6 +51,8 @@ public class Petition
 
   public void dispose()
   {
+    if (_sector != null)
+       _sector.dispose();
     releaseImage();
   }
 

@@ -182,6 +182,11 @@ public class TileTextureBuilder extends RCObject
 
       IFactory.instance().deleteImage(image);
 
+      for (int i = 0; i < rectangles.size(); i++)
+      {
+        if (rectangles.get(i) != null)
+           rectangles.get(i).dispose();
+      }
 
     }
   }

@@ -23,6 +23,11 @@ public class ByteBufferBuilder
   private java.util.ArrayList<Byte> _values = new java.util.ArrayList<Byte>();
 
 
+  public void dispose()
+  {
+
+  }
+
   public final void addInt64(long value)
   {
     final byte b1 = (byte)((value) & 0xFF);

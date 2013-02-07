@@ -51,6 +51,18 @@ public class Camera
 
   public void dispose()
   {
+    if (_camEffectTarget != null)
+       _camEffectTarget.dispose();
+    if (_frustum != null)
+       _frustum.dispose();
+    if (_frustumInModelCoordinates != null)
+       _frustumInModelCoordinates.dispose();
+    if (_halfFrustum != null)
+       _halfFrustum.dispose();
+    if (_halfFrustumInModelCoordinates != null)
+       _halfFrustumInModelCoordinates.dispose();
+    if (_geodeticCenterOfView != null)
+       _geodeticCenterOfView.dispose();
   }
 
   public final void copyFrom(Camera that)
@@ -76,6 +88,16 @@ public class Camera
   
     _geodeticCenterOfView = (that._geodeticCenterOfView == null) ? null : new Geodetic3D(that._geodeticCenterOfView);
   
+    if (_frustum != null)
+       _frustum.dispose();
+    if (_frustumInModelCoordinates != null)
+       _frustumInModelCoordinates.dispose();
+    if (_halfFrustum != null)
+       _halfFrustum.dispose();
+    if (_halfFrustumInModelCoordinates != null)
+       _halfFrustumInModelCoordinates.dispose();
+    if (_camEffectTarget != null)
+       _camEffectTarget.dispose();
   
     _camEffectTarget = new CameraEffectTarget();
   
@@ -239,6 +261,8 @@ public class Camera
     if (_dirtyFlags._frustumMC)
     {
       _dirtyFlags._frustumMC = false;
+      if (_frustumInModelCoordinates != null)
+         _frustumInModelCoordinates.dispose();
       _frustumInModelCoordinates = getFrustum().transformedBy_P(getModelMatrix());
     }
     return _frustumInModelCoordinates;
@@ -383,7 +407,7 @@ public class Camera
    This method put the camera pointing to given center, at the given distance, using the given angles.
 
    The situation is like in the figure of this url:
-      http: //en.wikipedia.org/wiki/Azimuth
+   http: //en.wikipedia.org/wiki/Azimuth
 
    At the end, camera will be in the 'Star' point, looking at the 'Observer' point.
    */
@@ -435,12 +459,10 @@ public class Camera
   private Frustum _halfFrustumInModelCoordinates; // ONLY FOR DEBUG
 
   //The Camera Effect Target
-  private static class CameraEffectTarget implements EffectTarget
+  private static class CameraEffectTarget extends EffectTarget
   {
-    public final void unusedMethod()
-    {
-    }
   }
+
   private CameraEffectTarget _camEffectTarget;
 
   private void applyTransform(MutableMatrix44D M)
@@ -538,6 +560,8 @@ public class Camera
     if (_dirtyFlags._geodeticCenterOfView)
     {
       _dirtyFlags._geodeticCenterOfView = false;
+      if (_geodeticCenterOfView != null)
+         _geodeticCenterOfView.dispose();
       _geodeticCenterOfView = new Geodetic3D(_planet.toGeodetic3D(getXYZCenterOfView()));
     }
     return _geodeticCenterOfView;
@@ -549,6 +573,8 @@ public class Camera
     if (_dirtyFlags._frustum)
     {
       _dirtyFlags._frustum = false;
+      if (_frustum != null)
+         _frustum.dispose();
       _frustum = new Frustum(getFrustumData());
     }
     return _frustum;
@@ -560,6 +586,8 @@ public class Camera
     if (_dirtyFlags._halfFrustum)
     {
       _dirtyFlags._halfFrustum = false;
+      if (_halfFrustum != null)
+         _halfFrustum.dispose();
       FrustumData data = getFrustumData();
       _halfFrustum = new Frustum(data._left/4, data._right/4, data._bottom/4, data._top/4, data._znear, data._zfar);
     }
@@ -571,6 +599,8 @@ public class Camera
     if (_dirtyFlags._halfFrustumMC)
     {
       _dirtyFlags._halfFrustumMC = false;
+      if (_halfFrustumInModelCoordinates != null)
+         _halfFrustumInModelCoordinates.dispose();
       _halfFrustumInModelCoordinates = getHalfFrustum().transformedBy_P(getModelMatrix());
     }
     return _halfFrustumInModelCoordinates;
@@ -617,25 +647,6 @@ public class Camera
 
     return new FrustumData(left, right, bottom, top, znear, zfar);
   }
-
-
-  //void calculateCachedValues();
-
-  /*void cleanCachedValues() {
-   _dirtyCachedValues = true;
-   //    if (_frustum != NULL) {
-   //      delete _frustum;
-   //      _frustum = NULL;
-   //    }
-   if (_frustumInModelCoordinates != NULL) {
-   #ifdef C_CODE
-   delete _frustumInModelCoordinates;
-   #endif
-   _frustumInModelCoordinates = NULL;
-   }
-   }*/
-
-
 
 
 }

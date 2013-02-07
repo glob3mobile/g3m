@@ -39,6 +39,11 @@ public class RectangleI
      _height = that._height;
   }
 
+  public void dispose()
+  {
+
+  }
+
   public final boolean equalTo(RectangleI that)
   {
     return (_x == that._x) && (_y == that._y) && (_width == that._width) && (_height == that._height);

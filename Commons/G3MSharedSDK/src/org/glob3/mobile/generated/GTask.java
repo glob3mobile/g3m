@@ -18,13 +18,10 @@ package org.glob3.mobile.generated;
 
 //class G3MContext;
 
-public abstract class GTask
+public interface GTask
 {
-  public void dispose()
-  {
+  public void dispose();
 
-  }
-
-  public abstract void run(G3MContext context);
+  void run(G3MContext context);
 
 }

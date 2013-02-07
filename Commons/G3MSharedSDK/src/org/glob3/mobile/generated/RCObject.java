@@ -16,8 +16,6 @@ package org.glob3.mobile.generated;
 //
 
 
-///#include <string>
-
 public class RCObject
 {
   private int _referenceCounter;
@@ -50,7 +48,5 @@ public class RCObject
       _suicide();
     }
   }
-
-  //virtual const std::string description() const = 0;
 
 }

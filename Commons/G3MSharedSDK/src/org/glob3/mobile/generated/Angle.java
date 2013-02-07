@@ -24,7 +24,7 @@ package org.glob3.mobile.generated;
 
 public class Angle
 {
-  private Angle(double degrees) //GMath.pi()
+  private Angle(double degrees)
   {
      _degrees = degrees;
      _radians = degrees / 180.0 * 3.14159265358979323846264338327950288;

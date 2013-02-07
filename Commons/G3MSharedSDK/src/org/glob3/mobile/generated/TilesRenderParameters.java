@@ -49,6 +49,10 @@ public class TilesRenderParameters
 
   }
 
+  public void dispose()
+  {
+  }
+
   public static TilesRenderParameters createDefault(boolean renderDebug, boolean useTilesSplitBudget, boolean forceTopLevelTilesRenderOnStart, boolean incrementalTileQuality)
   {
     final int K = 1;
