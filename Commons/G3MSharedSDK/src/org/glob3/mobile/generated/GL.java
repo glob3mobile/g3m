@@ -705,7 +705,7 @@ public class GL
 
   public void dispose()
   {
-    _nativeGL = null;
+    _nativeGL.dispose();
     if (_vertices != null)
        _vertices.dispose();
     if (_textureCoordinates != null)
