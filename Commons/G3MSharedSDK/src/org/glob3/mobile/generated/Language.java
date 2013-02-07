@@ -1,6 +1,5 @@
 package org.glob3.mobile.generated; 
-public enum Language
-{
+public enum Language {
   English,
   Spanish,
   German,
@@ -8,13 +7,11 @@ public enum Language
   Italian,
   Dutch;
 
-	public int getValue()
-	{
-		return this.ordinal();
-	}
+   public int getValue() {
+      return this.ordinal();
+   }
 
-	public static Language forValue(int value)
-	{
-		return values()[value];
-	}
+   public static Language forValue(int value) {
+      return values()[value];
+   }
 }

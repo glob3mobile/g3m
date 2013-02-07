@@ -9,10 +9,8 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class VisibleSectorListener
-{
-  public void dispose()
-  {
+public abstract class VisibleSectorListener {
+  public void dispose() {
 
   }
 

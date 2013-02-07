@@ -2,12 +2,10 @@ package org.glob3.mobile.generated;
 //************************************************************
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class FrameTasksExecutor;
 
 
-public class G3MRenderContext extends G3MContext
-{
+public class G3MRenderContext extends G3MContext {
   private FrameTasksExecutor _frameTasksExecutor;
   private GL _gl;
   private final Camera _currentCamera;
@@ -18,109 +16,78 @@ public class G3MRenderContext extends G3MContext
 
   private java.util.ArrayList<OrderedRenderable> _orderedRenderables;
 
-  public G3MRenderContext(FrameTasksExecutor frameTasksExecutor, IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, IMathUtils mathUtils, IJSONParser jsonParser, Planet planet, GL gl, Camera currentCamera, Camera nextCamera, TexturesHandler texturesHandler, TextureBuilder textureBuilder, IDownloader downloader, EffectsScheduler scheduler, ITimer frameStartTimer, IStorage storage)
-  {
-	  super(factory, stringUtils, threadUtils, logger, mathUtils, jsonParser, planet, downloader, scheduler, storage);
-	  _frameTasksExecutor = frameTasksExecutor;
-	  _gl = gl;
-	  _currentCamera = currentCamera;
-	  _nextCamera = nextCamera;
-	  _texturesHandler = texturesHandler;
-	  _textureBuilder = textureBuilder;
-	  _frameStartTimer = frameStartTimer;
-	  _orderedRenderables = null;
+  public G3MRenderContext(FrameTasksExecutor frameTasksExecutor, IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, IMathUtils mathUtils, IJSONParser jsonParser, Planet planet, GL gl, Camera currentCamera, Camera nextCamera, TexturesHandler texturesHandler, TextureBuilder textureBuilder, IDownloader downloader, EffectsScheduler scheduler, ITimer frameStartTimer, IStorage storage) {
+     super(factory, stringUtils, threadUtils, logger, mathUtils, jsonParser, planet, downloader, scheduler, storage);
+     _frameTasksExecutor = frameTasksExecutor;
+     _gl = gl;
+     _currentCamera = currentCamera;
+     _nextCamera = nextCamera;
+     _texturesHandler = texturesHandler;
+     _textureBuilder = textureBuilder;
+     _frameStartTimer = frameStartTimer;
+     _orderedRenderables = null;
 
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: GL* getGL() const
-  public final GL getGL()
-  {
-	return _gl;
+  public final GL getGL() {
+    return _gl;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const Camera* getCurrentCamera() const
-  public final Camera getCurrentCamera()
-  {
-	return _currentCamera;
+  public final Camera getCurrentCamera() {
+    return _currentCamera;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Camera* getNextCamera() const
-  public final Camera getNextCamera()
-  {
-	return _nextCamera;
+  public final Camera getNextCamera() {
+    return _nextCamera;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: TexturesHandler* getTexturesHandler() const
-  public final TexturesHandler getTexturesHandler()
-  {
-	return _texturesHandler;
+  public final TexturesHandler getTexturesHandler() {
+    return _texturesHandler;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: TextureBuilder* getTextureBuilder() const
-  public final TextureBuilder getTextureBuilder()
-  {
-	return _textureBuilder;
+  public final TextureBuilder getTextureBuilder() {
+    return _textureBuilder;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const ITimer* getFrameStartTimer() const
-  public final ITimer getFrameStartTimer()
-  {
-	return _frameStartTimer;
+  public final ITimer getFrameStartTimer() {
+    return _frameStartTimer;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: FrameTasksExecutor* getFrameTasksExecutor() const
-  public final FrameTasksExecutor getFrameTasksExecutor()
-  {
-	return _frameTasksExecutor;
+  public final FrameTasksExecutor getFrameTasksExecutor() {
+    return _frameTasksExecutor;
   }
 
-  public void dispose()
-  {
-	//  delete _frameStartTimer;
-	IFactory.instance().deleteTimer(_frameStartTimer);
-	_orderedRenderables = null;
+  public void dispose() {
+    //  delete _frameStartTimer;
+    IFactory.instance().deleteTimer(_frameStartTimer);
+    _orderedRenderables = null;
   }
 
   /*
    Get the OrderedRenderables, sorted by distanceFromEye()
    */
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: java.util.ArrayList<OrderedRenderable*>* getSortedOrderedRenderables() const
-  public final java.util.ArrayList<OrderedRenderable> getSortedOrderedRenderables()
-  {
-	if (_orderedRenderables != null)
-	{
-  	java.util.Collections.sort(
-  							   _orderedRenderables,
-  							   new java.util.Comparator<OrderedRenderable>() {
-  								 @Override
-  								 public int compare(final OrderedRenderable or1,
-  													final OrderedRenderable or2) {
-  								   return Double.compare(or2.squaredDistanceFromEye(),
-  														 or1.squaredDistanceFromEye());
-  								 }
-  							   });
-	}
+  public final java.util.ArrayList<OrderedRenderable> getSortedOrderedRenderables() {
+    if (_orderedRenderables != null) {
+      java.util.Collections.sort(
+                                 _orderedRenderables,
+                                 new java.util.Comparator<OrderedRenderable>() {
+                                   @Override
+                                   public int compare(final OrderedRenderable or1,
+                                                      final OrderedRenderable or2) {
+                                     return Double.compare(or2.squaredDistanceFromEye(),
+                                                           or1.squaredDistanceFromEye());
+                                   }
+                                 });
+    }
   
-	return _orderedRenderables;
+    return _orderedRenderables;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void addOrderedRenderable(OrderedRenderable* orderedRenderable) const
-  public final void addOrderedRenderable(OrderedRenderable orderedRenderable)
-  {
-	if (_orderedRenderables == null)
-	{
-	  _orderedRenderables = new java.util.ArrayList<OrderedRenderable>();
-	}
-	_orderedRenderables.add(orderedRenderable);
+  public final void addOrderedRenderable(OrderedRenderable orderedRenderable) {
+    if (_orderedRenderables == null) {
+      _orderedRenderables = new java.util.ArrayList<OrderedRenderable>();
+    }
+    _orderedRenderables.add(orderedRenderable);
   }
 
 }

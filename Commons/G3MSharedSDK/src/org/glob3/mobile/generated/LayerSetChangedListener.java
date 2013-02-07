@@ -17,12 +17,10 @@ package org.glob3.mobile.generated;
 
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Petition;
 
 
-public interface LayerSetChangedListener
-{
+public interface LayerSetChangedListener {
 
   void changed(LayerSet layerSet);
 }

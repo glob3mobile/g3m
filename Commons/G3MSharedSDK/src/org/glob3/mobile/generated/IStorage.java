@@ -19,36 +19,27 @@ package org.glob3.mobile.generated;
 ///#include "URL.hpp"
 ///#include "IByteBuffer.hpp"
 ///#include "IImage.hpp"
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class URL;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IByteBuffer;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IImage;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class G3MContext;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class TimeInterval;
 
 
-public abstract class IStorage
-{
+public abstract class IStorage {
   protected G3MContext _context;
 
-  public IStorage()
-  {
-	  _context = null;
+  public IStorage() {
+     _context = null;
 
   }
 
-  public void dispose()
-  {
+  public void dispose() {
 
   }
 
-  public void initialize(G3MContext context)
-  {
-	_context = context;
+  public void initialize(G3MContext context) {
+    _context = context;
   }
 
 

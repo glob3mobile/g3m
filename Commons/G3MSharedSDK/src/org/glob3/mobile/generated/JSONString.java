@@ -17,61 +17,43 @@ package org.glob3.mobile.generated;
 
 
 
-public class JSONString extends JSONBaseObject
-{
+public class JSONString extends JSONBaseObject {
   private final String _value;
 
-  public void dispose()
-  {
+  public void dispose() {
   }
 
-  public JSONString(String value)
-  {
-	  _value = value;
+  public JSONString(String value) {
+     _value = value;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const String value() const
-  public final String value()
-  {
-	return _value;
+  public final String value() {
+    return _value;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const JSONString* asString() const
-  public final JSONString asString()
-  {
-	return this;
+  public final JSONString asString() {
+    return this;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const String description() const
-  public final String description()
-  {
-	IStringBuilder isb = IStringBuilder.newStringBuilder();
+  public final String description() {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
   
-	isb.addString("\"");
-	isb.addString(_value);
-	isb.addString("\"");
+    isb.addString("\"");
+    isb.addString(_value);
+    isb.addString("\"");
   
-	final String s = isb.getString();
-	if (isb != null)
-		isb.dispose();
-	return s;
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: JSONString* deepCopy() const
-  public final JSONString deepCopy()
-  {
-	return new JSONString(_value);
+  public final JSONString deepCopy() {
+    return new JSONString(_value);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void acceptVisitor(JSONVisitor* visitor) const
-  public final void acceptVisitor(JSONVisitor visitor)
-  {
-	visitor.visitString(this);
+  public final void acceptVisitor(JSONVisitor visitor) {
+    visitor.visitString(this);
   }
 
 }

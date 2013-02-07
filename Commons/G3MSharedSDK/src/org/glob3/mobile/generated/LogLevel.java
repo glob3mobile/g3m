@@ -18,20 +18,17 @@ package org.glob3.mobile.generated;
 
 
 
-public enum LogLevel
-{
+public enum LogLevel {
   SilenceLevel,
   InfoLevel,
   WarningLevel,
   ErrorLevel;
 
-	public int getValue()
-	{
-		return this.ordinal();
-	}
+   public int getValue() {
+      return this.ordinal();
+   }
 
-	public static LogLevel forValue(int value)
-	{
-		return values()[value];
-	}
+   public static LogLevel forValue(int value) {
+      return values()[value];
+   }
 }

@@ -1,8 +1,7 @@
 package org.glob3.mobile.generated; 
 ///#include "IIntBuffer.hpp"
 
-public class UniformsStruct
-{
+public class UniformsStruct {
 
   public IGLUniformID Projection;
   public IGLUniformID Modelview;
@@ -25,35 +24,32 @@ public class UniformsStruct
   public IGLUniformID EnableFlatColor;
   public IGLUniformID ColorPerVertexIntensity;
 
-  public UniformsStruct()
-  {
-	Projection = null;
-	Modelview = null;
-	Sampler = null;
-	EnableTexture = null;
-	FlatColor = null;
-	TranslationTexCoord = null;
-	ScaleTexCoord = null;
-	PointSize = null;
+  public UniformsStruct() {
+    Projection = null;
+    Modelview = null;
+    Sampler = null;
+    EnableTexture = null;
+    FlatColor = null;
+    TranslationTexCoord = null;
+    ScaleTexCoord = null;
+    PointSize = null;
 
-	//FOR BILLBOARDING
-	BillBoard = null;
-	ViewPortExtent = null;
-	TextureExtent = null;
+    //FOR BILLBOARDING
+    BillBoard = null;
+    ViewPortExtent = null;
+    TextureExtent = null;
 
-	//FOR COLOR MIXING
-	FlatColorIntensity = null;
-	EnableColorPerVertex = null;
-	EnableFlatColor = null;
-	ColorPerVertexIntensity = null;
+    //FOR COLOR MIXING
+    FlatColorIntensity = null;
+    EnableColorPerVertex = null;
+    EnableFlatColor = null;
+    ColorPerVertexIntensity = null;
   }
 
-  public final void deleteUniformsIDs()
-  {
+  public final void deleteUniformsIDs() {
   }
 
-  public void dispose()
-  {
-	deleteUniformsIDs();
+  public void dispose() {
+    deleteUniformsIDs();
   }
 }

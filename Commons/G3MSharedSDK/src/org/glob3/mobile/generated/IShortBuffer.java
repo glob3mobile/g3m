@@ -17,15 +17,11 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class IShortBuffer implements IBuffer
-{
+public abstract class IShortBuffer implements IBuffer {
 
-  public void dispose()
-  {
+  public void dispose() {
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual short get(int i) const = 0;
   public abstract short get(int i);
 
   public abstract void put(int i, short value);

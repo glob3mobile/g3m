@@ -17,68 +17,55 @@ package org.glob3.mobile.generated;
 
 
 
-public class GLErrorRenderer extends LeafRenderer
-{
+public class GLErrorRenderer extends LeafRenderer {
 
-  public final void initialize(G3MContext context)
-  {
+  public final void initialize(G3MContext context) {
   
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
-  {
-	GL gl = rc.getGL();
-	final ILogger logger = rc.getLogger();
+  public final void render(G3MRenderContext rc, GLState parentState) {
+    GL gl = rc.getGL();
+    final ILogger logger = rc.getLogger();
   
-	int error = gl.getError();
-	while (error != GLError.noError())
-	{
-	  logger.logError("GL Error: %d", error);
-	  error = gl.getError();
-	}
+    int error = gl.getError();
+    while (error != GLError.noError()) {
+      logger.logError("GL Error: %d", error);
+      error = gl.getError();
+    }
   
   }
 
-  public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
-  {
-	return false;
+  public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent) {
+    return false;
   }
 
-  public void dispose()
-  {
+  public void dispose() {
   }
 
-  public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
-  {
+  public final void onResizeViewportEvent(G3MEventContext ec, int width, int height) {
   }
 
-  public final boolean isReadyToRender(G3MRenderContext rc)
-  {
-	return true;
+  public final boolean isReadyToRender(G3MRenderContext rc) {
+    return true;
   }
 
-  public final void start()
-  {
+  public final void start() {
 
   }
 
-  public final void stop()
-  {
+  public final void stop() {
 
   }
 
-  public final void onResume(G3MContext context)
-  {
+  public final void onResume(G3MContext context) {
 
   }
 
-  public final void onPause(G3MContext context)
-  {
+  public final void onPause(G3MContext context) {
 
   }
 
-  public final void onDestroy(G3MContext context)
-  {
+  public final void onDestroy(G3MContext context) {
 
   }
 

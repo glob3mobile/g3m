@@ -17,56 +17,39 @@ package org.glob3.mobile.generated;
 
 
 
-public class JSONLong extends JSONNumber
-{
+public class JSONLong extends JSONNumber {
   private final long _value;
 
-  public JSONLong(long value)
-  {
-	  _value = value;
+  public JSONLong(long value) {
+     _value = value;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: JSONLong* deepCopy() const
-  public final JSONLong deepCopy()
-  {
-	return new JSONLong(_value);
+  public final JSONLong deepCopy() {
+    return new JSONLong(_value);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: double value() const
-  public final double value()
-  {
-	return _value;
+  public final double value() {
+    return _value;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: long longValue() const
-  public final long longValue()
-  {
-	return _value;
+  public final long longValue() {
+    return _value;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void acceptVisitor(JSONVisitor* visitor) const
-  public final void acceptVisitor(JSONVisitor visitor)
-  {
-	visitor.visitLong(this);
+  public final void acceptVisitor(JSONVisitor visitor) {
+    visitor.visitLong(this);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const String description() const
-  public final String description()
-  {
-	IStringBuilder isb = IStringBuilder.newStringBuilder();
+  public final String description() {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
   
-	isb.addString("long/");
-	isb.addLong(_value);
+    isb.addString("long/");
+    isb.addLong(_value);
   
-	final String s = isb.getString();
-	if (isb != null)
-		isb.dispose();
-	return s;
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
   }
 
 }

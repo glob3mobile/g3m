@@ -9,8 +9,7 @@ package org.glob3.mobile.generated;
 
 
 
-public interface IImageDownloadListener
-{
+public interface IImageDownloadListener {
 
   /**
    Callback method invoked on a successful download.  The image has to be deleted in C++ / .disposed() in Java

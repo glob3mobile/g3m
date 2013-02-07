@@ -16,8 +16,7 @@ package org.glob3.mobile.generated;
 //
 
 
-public class ITexturizerData
-{
+public interface ITexturizerData {
   public void dispose();
 }
 ///#ifdef C_CODE

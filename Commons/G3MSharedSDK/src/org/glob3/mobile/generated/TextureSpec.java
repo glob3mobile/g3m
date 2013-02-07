@@ -18,24 +18,16 @@ package org.glob3.mobile.generated;
 
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class TextureBuilder;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IImage;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class G3MRenderContext;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class TextureHolder;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class GL;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IFactory;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IGLTextureId;
 
 
-public class TextureSpec
-{
+public class TextureSpec {
   private final String _id;
 
   private final int _width;
@@ -45,101 +37,76 @@ public class TextureSpec
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  TextureSpec operator =(TextureSpec that);
 
-  public TextureSpec(String id, int width, int height, boolean isMipmap)
-  {
-	  _id = id;
-	  _width = width;
-	  _height = height;
-	  _isMipmap = isMipmap;
+  public TextureSpec(String id, int width, int height, boolean isMipmap) {
+     _id = id;
+     _width = width;
+     _height = height;
+     _isMipmap = isMipmap;
 
   }
 
-  public TextureSpec()
-  {
-	  _id = "";
-	  _width = 0;
-	  _height = 0;
-	  _isMipmap = false;
+  public TextureSpec() {
+     _id = "";
+     _width = 0;
+     _height = 0;
+     _isMipmap = false;
   }
 
-  public TextureSpec(TextureSpec that)
-  {
-	  _id = that._id;
-	  _width = that._width;
-	  _height = that._height;
-	  _isMipmap = that._isMipmap;
+  public TextureSpec(TextureSpec that) {
+     _id = that._id;
+     _width = that._width;
+     _height = that._height;
+     _isMipmap = that._isMipmap;
 
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isMipmap() const
-  public final boolean isMipmap()
-  {
-	return _isMipmap;
+  public final boolean isMipmap() {
+    return _isMipmap;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: int getWidth() const
-  public final int getWidth()
-  {
-	return _width;
+  public final int getWidth() {
+    return _width;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: int getHeight() const
-  public final int getHeight()
-  {
-	return _height;
+  public final int getHeight() {
+    return _height;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean equalsTo(const TextureSpec& that) const
-  public final boolean equalsTo(TextureSpec that)
-  {
-	return ((_id.compareTo(that._id) == 0) && (_width == that._width) && (_height == that._height));
+  public final boolean equalsTo(TextureSpec that) {
+    return ((_id.compareTo(that._id) == 0) && (_width == that._width) && (_height == that._height));
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean lowerThan(const TextureSpec& that) const
-  public final boolean lowerThan(TextureSpec that)
-  {
-	if (_id.compareTo(that._id) < 0)
-	{
-	  return true;
-	}
-	else if (_id.compareTo(that._id) > 0)
-	{
-	  return false;
-	}
+  public final boolean lowerThan(TextureSpec that) {
+    if (_id.compareTo(that._id) < 0) {
+      return true;
+    }
+    else if (_id.compareTo(that._id) > 0) {
+      return false;
+    }
 
-	if (_width < that._width)
-	{
-	  return true;
-	}
-	else if (_width > that._width)
-	{
-	  return false;
-	}
+    if (_width < that._width) {
+      return true;
+    }
+    else if (_width > that._width) {
+      return false;
+    }
 
-	return (_height < that._height);
+    return (_height < that._height);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const String description() const
-  public final String description()
-  {
-	IStringBuilder isb = IStringBuilder.newStringBuilder();
-	isb.addString("(");
-	isb.addString(_id);
-	isb.addString(" ");
-	isb.addInt(_width);
-	isb.addString("x");
-	isb.addInt(_height);
-	isb.addString(")");
-	final String s = isb.getString();
-	if (isb != null)
-		isb.dispose();
-	return s;
+  public final String description() {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addString("(");
+    isb.addString(_id);
+    isb.addString(" ");
+    isb.addInt(_width);
+    isb.addString("x");
+    isb.addInt(_height);
+    isb.addString(")");
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
   }
 
 

@@ -18,42 +18,29 @@ package org.glob3.mobile.generated;
 
 ///#include <string>
 
-public class RCObject
-{
+public class RCObject {
   private int _referenceCounter;
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void _suicide() const
-  private void _suicide()
-  {
+  private void _suicide() {
   }
 
-  protected RCObject() // the object starts retained
-  {
-	  _referenceCounter = 1;
+  protected RCObject() { // the object starts retained
+     _referenceCounter = 1;
 
   }
 
-  public void dispose()
-  {
+  public void dispose() {
 
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void _retain() const
-  public final void _retain()
-  {
-	_referenceCounter++;
+  public final void _retain() {
+    _referenceCounter++;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void _release() const
-  public final void _release()
-  {
-	if (--_referenceCounter == 0)
-	{
-	  _suicide();
-	}
+  public final void _release() {
+    if (--_referenceCounter == 0) {
+      _suicide();
+    }
   }
 
 //  virtual const std::string description() const = 0;

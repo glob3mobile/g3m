@@ -1,30 +1,23 @@
 package org.glob3.mobile.generated; 
-public abstract class EffectWithForce extends Effect
-{
+public abstract class EffectWithForce extends Effect {
   private double _force;
   private final double _friction;
 
-  protected EffectWithForce(double force, double friction)
-  {
-	  _force = force;
-	  _friction = friction;
+  protected EffectWithForce(double force, double friction) {
+     _force = force;
+     _friction = friction;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: double getForce() const
-  protected final double getForce()
-  {
-	return _force;
+  protected final double getForce() {
+    return _force;
   }
 
-  public void doStep(G3MRenderContext rc, TimeInterval when)
-  {
-	_force *= _friction;
+  public void doStep(G3MRenderContext rc, TimeInterval when) {
+    _force *= _friction;
   }
 
-  public boolean isDone(G3MRenderContext rc, TimeInterval when)
-  {
-	return (IMathUtils.instance().abs(_force) < 1e-6);
+  public boolean isDone(G3MRenderContext rc, TimeInterval when) {
+    return (IMathUtils.instance().abs(_force) < 1e-6);
   }
 
 }

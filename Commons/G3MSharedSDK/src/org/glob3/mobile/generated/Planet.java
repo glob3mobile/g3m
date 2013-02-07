@@ -11,27 +11,21 @@ package org.glob3.mobile.generated;
 
 
 
-public class Planet extends Ellipsoid
-{
+public class Planet extends Ellipsoid {
   private final String _name;
 
 
-  public Planet(String name, Vector3D radii)
-  {
-	  super(radii);
-	  _name = name;
+  public Planet(String name, Vector3D radii) {
+     super(radii);
+     _name = name;
   }
 
-  public static Planet createEarth()
-  {
-	return new Planet("Earth", new Vector3D(6378137.0, 6378137.0, 6356752.314245));
+  public static Planet createEarth() {
+    return new Planet("Earth", new Vector3D(6378137.0, 6378137.0, 6356752.314245));
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: String getName() const
-  public final String getName()
-  {
-	return _name;
+  public final String getName() {
+    return _name;
   }
 
 }

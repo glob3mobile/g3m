@@ -17,36 +17,29 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class LeafRenderer extends Renderer
-{
+public abstract class LeafRenderer extends Renderer {
   private boolean _enable;
 
-  public LeafRenderer()
-  {
-	  _enable = true;
+  public LeafRenderer() {
+     _enable = true;
 
   }
 
-  public LeafRenderer(boolean enable)
-  {
-	  _enable = enable;
+  public LeafRenderer(boolean enable) {
+     _enable = enable;
 
   }
 
-  public void dispose()
-  {
+  public void dispose() {
 
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isEnable() const
-  public final boolean isEnable()
-  {
-	return _enable;
+  public final boolean isEnable() {
+    return _enable;
   }
 
   public void setEnable(final boolean enable) {
-	_enable = enable;
+    _enable = enable;
   }
 
   public abstract void onResume(G3MContext context);

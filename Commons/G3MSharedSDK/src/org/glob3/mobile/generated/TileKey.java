@@ -18,60 +18,48 @@ package org.glob3.mobile.generated;
 
 
 
-public class TileKey
-{
+public class TileKey {
   private final int _level;
   private final int _row;
   private final int _column;
 
 
-  public TileKey(int level, int row, int column)
-  {
-	  _level = level;
-	  _row = row;
-	  _column = column;
+  public TileKey(int level, int row, int column) {
+     _level = level;
+     _row = row;
+     _column = column;
 
   }
 
-  public TileKey(TileKey that)
-  {
-	  _level = that._level;
-	  _row = that._row;
-	  _column = that._column;
+  public TileKey(TileKey that) {
+     _level = that._level;
+     _row = that._row;
+     _column = that._column;
 
   }
 
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: int getLevel() const
-  public final int getLevel()
-  {
-	return _level;
+  public final int getLevel() {
+    return _level;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: int getRow() const
-  public final int getRow()
-  {
-	return _row;
+  public final int getRow() {
+    return _row;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: int getColumn() const
-  public final int getColumn()
-  {
-	return _column;
+  public final int getColumn() {
+    return _column;
   }
 
 
   @Override
   public int hashCode() {
-	final int prime = 31;
-	int result = 1;
-	result = prime * result + _column;
-	result = prime * result + _level;
-	result = prime * result + _row;
-	return result;
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + _column;
+    result = prime * result + _level;
+    result = prime * result + _row;
+    return result;
   }
   
 	@Override
@@ -92,38 +80,32 @@ public class TileKey
 		return true;
 	}
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const String description() const
-  public final String description()
-  {
-	IStringBuilder isb = IStringBuilder.newStringBuilder();
-	isb.addString("(level=");
-	isb.addInt(_level);
-	isb.addString(", row=");
-	isb.addInt(_row);
-	isb.addString(", col=");
-	isb.addInt(_column);
-	isb.addString(")");
-	String s = isb.getString();
-	if (isb != null)
-		isb.dispose();
-	return s;
+  public final String description() {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addString("(level=");
+    isb.addInt(_level);
+    isb.addString(", row=");
+    isb.addInt(_row);
+    isb.addString(", col=");
+    isb.addInt(_column);
+    isb.addString(")");
+    String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const String tinyDescription() const
-  public final String tinyDescription()
-  {
-	IStringBuilder isb = IStringBuilder.newStringBuilder();
-	isb.addInt(_level);
-	isb.addString("-");
-	isb.addInt(_row);
-	isb.addString("/");
-	isb.addInt(_column);
-	String s = isb.getString();
-	if (isb != null)
-		isb.dispose();
-	return s;
+  public final String tinyDescription() {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addInt(_level);
+    isb.addString("-");
+    isb.addInt(_row);
+    isb.addString("/");
+    isb.addInt(_column);
+    String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
   }
 
 }

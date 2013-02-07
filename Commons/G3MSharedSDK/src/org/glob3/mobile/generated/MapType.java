@@ -17,19 +17,16 @@ package org.glob3.mobile.generated;
 
 
 
-public enum MapType
-{
+public enum MapType {
   Road,
   Aerial,
   Hybrid;
 
-	public int getValue()
-	{
-		return this.ordinal();
-	}
+   public int getValue() {
+      return this.ordinal();
+   }
 
-	public static MapType forValue(int value)
-	{
-		return values()[value];
-	}
+   public static MapType forValue(int value) {
+      return values()[value];
+   }
 }

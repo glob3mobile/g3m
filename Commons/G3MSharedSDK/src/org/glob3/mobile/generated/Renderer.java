@@ -8,21 +8,13 @@ package org.glob3.mobile.generated;
 //
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class TouchEvent;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class G3MContext;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class G3MRenderContext;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class G3MEventContext;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class GLState;
 
-public abstract class Renderer
-{
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual boolean isEnable() const = 0;
+public abstract class Renderer {
   public abstract boolean isEnable();
 
   public abstract void setEnable(boolean enable);
@@ -47,8 +39,7 @@ public abstract class Renderer
 
   public abstract void stop();
 
-  public void dispose()
-  {
+  public void dispose() {
   }
 
   // Android activity lifecyle

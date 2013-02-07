@@ -8,12 +8,10 @@ package org.glob3.mobile.generated;
 //
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IFloatBuffer;
 
 
-public class GLState
-{
+public class GLState {
   private boolean _depthTest;
   private boolean _blend;
   private boolean _textures;
@@ -35,231 +33,167 @@ public class GLState
   private float _pointSize;
 
 
-  private GLState()
-  {
-	  _depthTest = true;
-	  _blend = false;
-	  _textures = false;
-	  _texture2D = false;
-	  _vertexColor = false;
-	  _verticesPosition = false;
-	  _flatColor = false;
-	  _cullFace = true;
-	  _culledFace = GLCullFace.back();
-	  _colors = null;
-	  _intensity = 0F;
-	  _flatColorR = 0F;
-	  _flatColorG = 0F;
-	  _flatColorB = 0F;
-	  _flatColorA = 0F;
-	  _lineWidth = 1F;
-	  _pointSize = 1F;
+  private GLState() {
+     _depthTest = true;
+     _blend = false;
+     _textures = false;
+     _texture2D = false;
+     _vertexColor = false;
+     _verticesPosition = false;
+     _flatColor = false;
+     _cullFace = true;
+     _culledFace = GLCullFace.back();
+     _colors = null;
+     _intensity = 0F;
+     _flatColorR = 0F;
+     _flatColorG = 0F;
+     _flatColorB = 0F;
+     _flatColorA = 0F;
+     _lineWidth = 1F;
+     _pointSize = 1F;
   }
 
 
 
-  public static GLState newDefault()
-  {
-	return new GLState();
+  public static GLState newDefault() {
+    return new GLState();
   }
 
-  public GLState(GLState parentState)
-  {
-	  _depthTest = parentState._depthTest;
-	  _blend = parentState._blend;
-	  _textures = parentState._textures;
-	  _texture2D = parentState._texture2D;
-	  _vertexColor = parentState._vertexColor;
-	  _verticesPosition = parentState._verticesPosition;
-	  _flatColor = parentState._flatColor;
-	  _cullFace = parentState._cullFace;
-	  _culledFace = parentState._culledFace;
-	  _colors = parentState._colors;
-	  _intensity = parentState._intensity;
-	  _flatColorR = parentState._flatColorR;
-	  _flatColorG = parentState._flatColorG;
-	  _flatColorB = parentState._flatColorB;
-	  _flatColorA = parentState._flatColorA;
-	  _lineWidth = parentState._lineWidth;
-	  _pointSize = parentState._pointSize;
+  public GLState(GLState parentState) {
+     _depthTest = parentState._depthTest;
+     _blend = parentState._blend;
+     _textures = parentState._textures;
+     _texture2D = parentState._texture2D;
+     _vertexColor = parentState._vertexColor;
+     _verticesPosition = parentState._verticesPosition;
+     _flatColor = parentState._flatColor;
+     _cullFace = parentState._cullFace;
+     _culledFace = parentState._culledFace;
+     _colors = parentState._colors;
+     _intensity = parentState._intensity;
+     _flatColorR = parentState._flatColorR;
+     _flatColorG = parentState._flatColorG;
+     _flatColorB = parentState._flatColorB;
+     _flatColorA = parentState._flatColorA;
+     _lineWidth = parentState._lineWidth;
+     _pointSize = parentState._pointSize;
   }
 
-  public void dispose()
-  {
+  public void dispose() {
   }
 
-  public final void enableDepthTest()
-  {
-	  _depthTest = true;
+  public final void enableDepthTest() {
+     _depthTest = true;
   }
-  public final void disableDepthTest()
-  {
-	  _depthTest = false;
+  public final void disableDepthTest() {
+     _depthTest = false;
   }
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isEnabledDepthTest() const
-  public final boolean isEnabledDepthTest()
-  {
-	  return _depthTest;
+  public final boolean isEnabledDepthTest() {
+     return _depthTest;
   }
 
-  public final void enableBlend()
-  {
-	  _blend = true;
+  public final void enableBlend() {
+     _blend = true;
   }
-  public final void disableBlend()
-  {
-	  _blend = false;
+  public final void disableBlend() {
+     _blend = false;
   }
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isEnabledBlend() const
-  public final boolean isEnabledBlend()
-  {
-	  return _blend;
+  public final boolean isEnabledBlend() {
+     return _blend;
   }
 
-  public final void enableTextures()
-  {
-	  _textures = true;
+  public final void enableTextures() {
+     _textures = true;
   }
-  public final void disableTextures()
-  {
-	  _textures = false;
+  public final void disableTextures() {
+     _textures = false;
   }
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isEnabledTextures() const
-  public final boolean isEnabledTextures()
-  {
-	  return _textures;
+  public final boolean isEnabledTextures() {
+     return _textures;
   }
 
-  public final void enableTexture2D()
-  {
-	  _texture2D = true;
+  public final void enableTexture2D() {
+     _texture2D = true;
   }
-  public final void disableTexture2D()
-  {
-	  _texture2D = false;
+  public final void disableTexture2D() {
+     _texture2D = false;
   }
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isEnabledTexture2D() const
-  public final boolean isEnabledTexture2D()
-  {
-	  return _texture2D;
+  public final boolean isEnabledTexture2D() {
+     return _texture2D;
   }
 
-  public final void enableVertexColor(IFloatBuffer colors, float intensity)
-  {
-	_vertexColor = true;
-	_colors = colors;
-	_intensity = intensity;
+  public final void enableVertexColor(IFloatBuffer colors, float intensity) {
+    _vertexColor = true;
+    _colors = colors;
+    _intensity = intensity;
   }
-  public final void disableVertexColor()
-  {
-	  _vertexColor = false;
+  public final void disableVertexColor() {
+     _vertexColor = false;
   }
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isEnabledVertexColor() const
-  public final boolean isEnabledVertexColor()
-  {
-	  return _vertexColor;
+  public final boolean isEnabledVertexColor() {
+     return _vertexColor;
   }
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: IFloatBuffer* getColors() const
-  public final IFloatBuffer getColors()
-  {
-	  return _colors;
+  public final IFloatBuffer getColors() {
+     return _colors;
   }
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: float getIntensity() const
-  public final float getIntensity()
-  {
-	  return _intensity;
+  public final float getIntensity() {
+     return _intensity;
   }
 
-  public final void enableVerticesPosition()
-  {
-	  _verticesPosition = true;
+  public final void enableVerticesPosition() {
+     _verticesPosition = true;
   }
-  public final void disableVerticesPosition()
-  {
-	  _verticesPosition = false;
+  public final void disableVerticesPosition() {
+     _verticesPosition = false;
   }
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isEnabledVerticesPosition() const
-  public final boolean isEnabledVerticesPosition()
-  {
-	  return _verticesPosition;
+  public final boolean isEnabledVerticesPosition() {
+     return _verticesPosition;
   }
 
-  public final void enableFlatColor(Color color, float intensity)
-  {
-	_flatColor = true;
-	_flatColorR = color.getRed();
-	_flatColorG = color.getGreen();
-	_flatColorB = color.getBlue();
-	_flatColorA = color.getAlpha();
-	_intensity = intensity;
+  public final void enableFlatColor(Color color, float intensity) {
+    _flatColor = true;
+    _flatColorR = color.getRed();
+    _flatColorG = color.getGreen();
+    _flatColorB = color.getBlue();
+    _flatColorA = color.getAlpha();
+    _intensity = intensity;
   }
-  public final void disableFlatColor()
-  {
-	  _flatColor = false;
+  public final void disableFlatColor() {
+     _flatColor = false;
   }
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isEnabledFlatColor() const
-  public final boolean isEnabledFlatColor()
-  {
-	  return _flatColor;
+  public final boolean isEnabledFlatColor() {
+     return _flatColor;
   }
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Color getFlatColor() const
-  public final Color getFlatColor()
-  {
-	return Color.fromRGBA(_flatColorR, _flatColorG, _flatColorB, _flatColorA);
+  public final Color getFlatColor() {
+    return Color.fromRGBA(_flatColorR, _flatColorG, _flatColorB, _flatColorA);
   }
 
-  public final void enableCullFace(int face)
-  {
-	_cullFace = true;
-	_culledFace = face;
+  public final void enableCullFace(int face) {
+    _cullFace = true;
+    _culledFace = face;
   }
-  public final void disableCullFace()
-  {
-	  _cullFace = false;
+  public final void disableCullFace() {
+     _cullFace = false;
   }
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isEnabledCullFace() const
-  public final boolean isEnabledCullFace()
-  {
-	  return _cullFace;
+  public final boolean isEnabledCullFace() {
+     return _cullFace;
   }
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: int getCulledFace() const
-  public final int getCulledFace()
-  {
-	  return _culledFace;
+  public final int getCulledFace() {
+     return _culledFace;
   }
 
-  public final void setLineWidth(float lineWidth)
-  {
-	  _lineWidth = lineWidth;
+  public final void setLineWidth(float lineWidth) {
+     _lineWidth = lineWidth;
   }
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: float lineWidth() const
-  public final float lineWidth()
-  {
-	  return _lineWidth;
+  public final float lineWidth() {
+     return _lineWidth;
   }
 
-  public final void setPointSize(float pointSize)
-  {
-	  _pointSize = pointSize;
+  public final void setPointSize(float pointSize) {
+     _pointSize = pointSize;
   }
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: float pointSize() const
-  public final float pointSize()
-  {
-	  return _pointSize;
+  public final float pointSize() {
+     return _pointSize;
   }
 
 }

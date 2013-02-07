@@ -9,22 +9,19 @@ package org.glob3.mobile.generated;
 
 
 
-public class FloatBufferBuilderFromColor extends FloatBufferBuilder
-{
-  public final void add(float r, float g, float b, float a) //RGBA
-  {
-	_values.add(r);
-	_values.add(g);
-	_values.add(b);
-	_values.add(a);
+public class FloatBufferBuilderFromColor extends FloatBufferBuilder {
+  public final void add(float r, float g, float b, float a) { //RGBA
+    _values.add(r);
+    _values.add(g);
+    _values.add(b);
+    _values.add(a);
   }
 
-  public final void add(Color c) //RGBA
-  {
-	_values.add(c.getRed());
-	_values.add(c.getGreen());
-	_values.add(c.getBlue());
-	_values.add(c.getAlpha());
+  public final void add(Color c) { //RGBA
+    _values.add(c.getRed());
+    _values.add(c.getGreen());
+    _values.add(c.getBlue());
+    _values.add(c.getAlpha());
   }
 
 }

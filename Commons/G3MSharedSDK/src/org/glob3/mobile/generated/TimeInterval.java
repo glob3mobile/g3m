@@ -10,19 +10,16 @@ package org.glob3.mobile.generated;
 
 
 
-public class TimeInterval
-{
+public class TimeInterval {
   private final long _milliseconds;
 
-  private TimeInterval(long milliseconds)
-  {
-	  _milliseconds = milliseconds;
+  private TimeInterval(long milliseconds) {
+     _milliseconds = milliseconds;
 
   }
 
-  public TimeInterval(TimeInterval other)
-  {
-	  _milliseconds = other._milliseconds;
+  public TimeInterval(TimeInterval other) {
+     _milliseconds = other._milliseconds;
 
   }
 
@@ -31,67 +28,48 @@ public class TimeInterval
   //  {
   //  }
 
-  public static TimeInterval fromMilliseconds(long milliseconds)
-  {
-	return new TimeInterval(milliseconds);
+  public static TimeInterval fromMilliseconds(long milliseconds) {
+    return new TimeInterval(milliseconds);
   }
 
-  public static TimeInterval fromSeconds(double seconds)
-  {
-	return TimeInterval.fromMilliseconds((long)(seconds * 1000.0));
+  public static TimeInterval fromSeconds(double seconds) {
+    return TimeInterval.fromMilliseconds((long)(seconds * 1000.0));
   }
 
-  public static TimeInterval fromMinutes(double minutes)
-  {
-	return TimeInterval.fromSeconds(minutes * 60.0);
+  public static TimeInterval fromMinutes(double minutes) {
+    return TimeInterval.fromSeconds(minutes * 60.0);
   }
 
-  public static TimeInterval fromHours(double hours)
-  {
-	return TimeInterval.fromMinutes(hours * 60.0);
+  public static TimeInterval fromHours(double hours) {
+    return TimeInterval.fromMinutes(hours * 60.0);
   }
 
-  public static TimeInterval fromDays(double days)
-  {
-	return TimeInterval.fromHours(days * 24.0);
+  public static TimeInterval fromDays(double days) {
+    return TimeInterval.fromHours(days * 24.0);
   }
 
-  public static TimeInterval forever()
-  {
-	return new TimeInterval(IMathUtils.instance().maxInt64());
+  public static TimeInterval forever() {
+    return new TimeInterval(IMathUtils.instance().maxInt64());
   }
 
-  public static TimeInterval zero()
-  {
-	return new TimeInterval(0);
+  public static TimeInterval zero() {
+    return new TimeInterval(0);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: long milliseconds() const
-  public final long milliseconds()
-  {
-	return _milliseconds;
+  public final long milliseconds() {
+    return _milliseconds;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: double seconds() const
-  public final double seconds()
-  {
-	return (double) _milliseconds / 1000.0;
+  public final double seconds() {
+    return (double) _milliseconds / 1000.0;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean lowerThan(const TimeInterval& that) const
-  public final boolean lowerThan(TimeInterval that)
-  {
-	return _milliseconds < that._milliseconds;
+  public final boolean lowerThan(TimeInterval that) {
+    return _milliseconds < that._milliseconds;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isZero() const
-  public final boolean isZero()
-  {
-	return _milliseconds == 0;
+  public final boolean isZero() {
+    return _milliseconds == 0;
   }
 
 }

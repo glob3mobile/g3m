@@ -17,16 +17,12 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class IFloatBuffer implements IBuffer
-{
+public abstract class IFloatBuffer implements IBuffer {
 
-  public void dispose()
-  {
+  public void dispose() {
 
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual float get(int i) const = 0;
   public abstract float get(int i);
 
   public abstract void put(int i, float value);

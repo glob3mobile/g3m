@@ -18,62 +18,51 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class CompositeShape extends Shape
-{
+public abstract class CompositeShape extends Shape {
   private java.util.ArrayList<Shape> _children = new java.util.ArrayList<Shape>();
 
-  public CompositeShape()
-  {
-	  super(null);
+  public CompositeShape() {
+     super(null);
 
   }
 
-  public CompositeShape(Geodetic3D position)
-  {
-	  super(position);
+  public CompositeShape(Geodetic3D position) {
+     super(position);
 
   }
 
 
-  public void dispose()
-  {
-	int childrenCount = _children.size();
-	for (int i = 0; i < childrenCount; i++)
-	{
-	  Shape child = _children.get(i);
-	  if (child != null)
-		  child.dispose();
-	}
+  public void dispose() {
+    int childrenCount = _children.size();
+    for (int i = 0; i < childrenCount; i++) {
+      Shape child = _children.get(i);
+      if (child != null)
+         child.dispose();
+    }
   }
 
-  public final void addShape(Shape shape)
-  {
-	_children.add(shape);
+  public final void addShape(Shape shape) {
+    _children.add(shape);
   }
 
-  public final boolean isReadyToRender(G3MRenderContext rc)
-  {
-	int childrenCount = _children.size();
-	for (int i = 0; i < childrenCount; i++)
-	{
-	  Shape child = _children.get(i);
-	  if (child.isReadyToRender(rc))
-	  {
-		return true;
-	  }
-	}
+  public final boolean isReadyToRender(G3MRenderContext rc) {
+    int childrenCount = _children.size();
+    for (int i = 0; i < childrenCount; i++) {
+      Shape child = _children.get(i);
+      if (child.isReadyToRender(rc)) {
+        return true;
+      }
+    }
   
-	return false;
+    return false;
   }
 
-  public final void rawRender(G3MRenderContext rc, GLState parentState)
-  {
-	int childrenCount = _children.size();
-	for (int i = 0; i < childrenCount; i++)
-	{
-	  Shape child = _children.get(i);
-	  child.render(rc, parentState);
-	}
+  public final void rawRender(G3MRenderContext rc, GLState parentState) {
+    int childrenCount = _children.size();
+    for (int i = 0; i < childrenCount; i++) {
+      Shape child = _children.get(i);
+      child.render(rc, parentState);
+    }
   }
 
 }

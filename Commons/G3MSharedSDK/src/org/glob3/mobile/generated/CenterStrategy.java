@@ -9,27 +9,22 @@ package org.glob3.mobile.generated;
 
 
 
-public class CenterStrategy
-{
+public class CenterStrategy {
   private static final int _noCenter = 0;
   private static final int _firstVertex = 1;
   private static final int _givenCenter = 2;
 
-  private CenterStrategy()
-  {
+  private CenterStrategy() {
   }
 
 
-  public static int noCenter()
-  {
-	  return _noCenter;
+  public static int noCenter() {
+     return _noCenter;
   }
-  public static int firstVertex()
-  {
-	  return _firstVertex;
+  public static int firstVertex() {
+     return _firstVertex;
   }
-  public static int givenCenter()
-  {
-	  return _givenCenter;
+  public static int givenCenter() {
+     return _givenCenter;
   }
 }

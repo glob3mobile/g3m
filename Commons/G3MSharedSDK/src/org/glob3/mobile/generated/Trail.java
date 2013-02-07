@@ -17,13 +17,10 @@ package org.glob3.mobile.generated;
 
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Mesh;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Planet;
 
-public class Trail
-{
+public class Trail {
   private boolean _visible;
   private final int _maxSteps;
   private boolean _positionsDirty;
@@ -33,90 +30,74 @@ public class Trail
 
   private java.util.ArrayList<Geodetic3D> _positions = new java.util.ArrayList<Geodetic3D>();
 
-  private Mesh createMesh(Planet planet)
-  {
-	FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.firstVertex(), planet, Geodetic3D.fromDegrees(0, 0, 0));
+  private Mesh createMesh(Planet planet) {
+    FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.firstVertex(), planet, Geodetic3D.fromDegrees(0, 0, 0));
   
-	for (int i = 0; i < _positions.size(); i++)
-	{
+    for (int i = 0; i < _positions.size(); i++) {
   	  vertices.add( _positions.get(i) );
-	}
+    }
   
-	return new DirectMesh(GLPrimitive.lineStrip(), true, vertices.getCenter(), vertices.create(), _lineWidth, 1, new Color(_color));
+    return new DirectMesh(GLPrimitive.lineStrip(), true, vertices.getCenter(), vertices.create(), _lineWidth, 1, new Color(_color));
   }
 
   private Mesh _mesh;
-  private Mesh getMesh(Planet planet)
-  {
-	if (_positionsDirty || (_mesh == null))
-	{
-	  if (_mesh != null)
-		  _mesh.dispose();
+  private Mesh getMesh(Planet planet) {
+    if (_positionsDirty || (_mesh == null)) {
+      if (_mesh != null)
+         _mesh.dispose();
   
-	  _mesh = createMesh(planet);
-	}
-	return _mesh;
+      _mesh = createMesh(planet);
+    }
+    return _mesh;
   }
 
-  public Trail(int maxSteps, Color color, float lineWidth)
-  {
-	  _maxSteps = maxSteps;
-	  _visible = true;
-	  _positionsDirty = true;
-	  _mesh = null;
-	  _color = new Color(color);
-	  _lineWidth = lineWidth;
+  public Trail(int maxSteps, Color color, float lineWidth) {
+     _maxSteps = maxSteps;
+     _visible = true;
+     _positionsDirty = true;
+     _mesh = null;
+     _color = new Color(color);
+     _lineWidth = lineWidth;
   }
 
-  public void dispose()
-  {
-	if (_mesh != null)
-		_mesh.dispose();
+  public void dispose() {
+    if (_mesh != null)
+       _mesh.dispose();
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
-  {
-	if (_visible)
-	{
-	  Mesh mesh = getMesh(rc.getPlanet());
-	  if (mesh != null)
-	  {
-		mesh.render(rc, parentState);
-	  }
-	}
+  public final void render(G3MRenderContext rc, GLState parentState) {
+    if (_visible) {
+      Mesh mesh = getMesh(rc.getPlanet());
+      if (mesh != null) {
+        mesh.render(rc, parentState);
+      }
+    }
   }
 
-  public final void setVisible(boolean visible)
-  {
-	_visible = visible;
+  public final void setVisible(boolean visible) {
+    _visible = visible;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isVisible() const
-  public final boolean isVisible()
-  {
-	return _visible;
+  public final boolean isVisible() {
+    return _visible;
   }
 
-  public final void addPosition(Geodetic3D position)
-  {
-	_positionsDirty = true;
+  public final void addPosition(Geodetic3D position) {
+    _positionsDirty = true;
 
-	if (_maxSteps > 0)
-	{
-	  while (_positions.size() >= _maxSteps)
-	  {
-		// const int lastIndex = _positions.size() - 1;
-		final int index = 0;
+    if (_maxSteps > 0) {
+      while (_positions.size() >= _maxSteps) {
+        // const int lastIndex = _positions.size() - 1;
+        final int index = 0;
 
-		if (_positions.get(index) != null)
-			_positions.get(index).dispose();
+        if (_positions.get(index) != null)
+           _positions.get(index).dispose();
 
-		_positions.remove( index );
-	  }
-	}
+        _positions.remove( index );
+      }
+    }
 
-	_positions.add(new Geodetic3D(position));
+    _positions.add(new Geodetic3D(position));
   }
 
 }
