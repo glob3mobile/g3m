@@ -261,21 +261,22 @@ public class TileTextureBuilder extends RCObject
     return _canceled;
   }
 
-  public final void checkIsPending(int position)
-  {
-    if (_status.get(position) != PetitionStatus.STATUS_PENDING)
-    {
-      ILogger.instance().logError("Logic error: Expected STATUS_PENDING at position #%d but found status: %d\n", position, _status.get(position));
-    }
-  }
+//  void checkIsPending(int position) const {
+//    if (_status[position] != STATUS_PENDING) {
+//      ILogger::instance()->logError("Logic error: Expected STATUS_PENDING at position #%d but found status: %d\n",
+//                                    position,
+//                                    _status[position]);
+//    }
+//  }
 
   public final void stepDownloaded(int position, IImage image)
   {
     if (_canceled)
     {
+      IFactory.instance().deleteImage(image);
       return;
     }
-    checkIsPending(position);
+    //checkIsPending(position);
 
     _status.set(position, PetitionStatus.STATUS_DOWNLOADED);
     _petitions.get(position).setImage(image);
@@ -289,7 +290,7 @@ public class TileTextureBuilder extends RCObject
     {
       return;
     }
-    checkIsPending(position);
+    //checkIsPending(position);
 
     _anyCanceled = true;
 
