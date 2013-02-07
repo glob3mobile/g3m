@@ -15,6 +15,7 @@ public:
   virtual ~ITexturizerData() { }
 #else
   virtual ~ITexturizerData() = 0;
+  ;
 #endif
 };
 
