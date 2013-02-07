@@ -16,7 +16,7 @@ package org.glob3.mobile.generated;
 //
 
 
-/*JAVA:interface*/public class ITexturizerData
+public interface ITexturizerData
 {
-  public void dispose();
+  public void dispose()
 }
