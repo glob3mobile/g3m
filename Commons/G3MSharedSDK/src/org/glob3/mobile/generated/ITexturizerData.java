@@ -43,5 +43,5 @@ package org.glob3.mobile.generated;
 public class ITexturizerData
 {
 //  virtual bool isTexturizerData() const = 0; //Java needs to know that this is an interface
-  virtual ~ITexturizerData() = 0;
+  public void dispose();
 }
