@@ -24,15 +24,18 @@ package org.glob3.mobile.generated;
 //***************************************************************
 
 
-public class BusyMeshRenderer extends LeafRenderer implements EffectTarget {
+public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
+{
   private Mesh _mesh;
   private double _degrees;
 
-  public BusyMeshRenderer() {
+  public BusyMeshRenderer()
+  {
      _degrees = 0;
   }
 
-  public final void initialize(G3MContext context) {
+  public final void initialize(G3MContext context)
+  {
     int numStrides = 60;
   
     FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
@@ -42,7 +45,8 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget {
     int indicesCounter = 0;
     final float r1 = 12F;
     final float r2 = 18F;
-    for (int step = 0; step<=numStrides; step++) {
+    for (int step = 0; step<=numStrides; step++)
+    {
       final double angle = (double) step * 2 * IMathUtils.instance().pi() / numStrides;
       final double c = IMathUtils.instance().cos(angle);
       final double s = IMathUtils.instance().sin(angle);
@@ -54,11 +58,13 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget {
       indices.add((short)(indicesCounter++));
   
       float col = (float)(1.1 * step / numStrides);
-      if (col>1) {
+      if (col>1)
+      {
         colors.add(255, 255, 255, 0);
         colors.add(255, 255, 255, 0);
       }
-      else {
+      else
+      {
         colors.add(255, 255, 255, 1 - col);
         colors.add(255, 255, 255, 1 - col);
       }
@@ -73,12 +79,14 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget {
   
   }
 
-  public final boolean isReadyToRender(G3MRenderContext rc) {
+  public final boolean isReadyToRender(G3MRenderContext rc)
+  {
     return true;
   }
 
   private boolean render_firstTime = true;
-  public final void render(G3MRenderContext rc, GLState parentState) {
+  public final void render(G3MRenderContext rc, GLState parentState)
+  {
     GL gl = rc.getGL();
   
     // set mesh glstate
@@ -88,7 +96,8 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget {
   
     // init effect in the first render
 //    static boolean firstTime = true;
-    if (render_firstTime) {
+    if (render_firstTime)
+    {
       render_firstTime = false;
       Effect effect = new BusyMeshEffect(this);
       rc.getEffectsScheduler().startEffect(effect, this);
@@ -117,44 +126,54 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget {
     gl.popMatrix();
   }
 
-  public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent) {
+  public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
+  {
     return false;
   }
 
-  public final void onResizeViewportEvent(G3MEventContext ec, int width, int height) {
+  public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
+  {
 
   }
 
-  public void dispose() {
+  public void dispose()
+  {
   }
 
-  public final void incDegrees(double value) {
+  public final void incDegrees(double value)
+  {
     _degrees += value;
     if (_degrees>360)
        _degrees -= 360;
   }
 
-  public final void start() {
+  public final void start()
+  {
     //int _TODO_start_effects;
   }
 
-  public final void stop() {
+  public final void stop()
+  {
     //int _TODO_stop_effects;
   }
 
-  public final void onResume(G3MContext context) {
+  public final void onResume(G3MContext context)
+  {
 
   }
 
-  public final void onPause(G3MContext context) {
+  public final void onPause(G3MContext context)
+  {
 
   }
 
-  public final void onDestroy(G3MContext context) {
+  public final void onDestroy(G3MContext context)
+  {
 
   }
 
-  public final void unusedMethod() {
+  public final void unusedMethod()
+  {
 
   }
 

@@ -8,15 +8,18 @@ package org.glob3.mobile.generated;
 //
 
 
-public enum LabelPosition {
+public enum LabelPosition
+{
   Bottom,
   Right;
 
-   public int getValue() {
+   public int getValue()
+   {
       return this.ordinal();
    }
 
-   public static LabelPosition forValue(int value) {
+   public static LabelPosition forValue(int value)
+   {
       return values()[value];
    }
 }

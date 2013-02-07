@@ -14,7 +14,8 @@ package org.glob3.mobile.generated;
 //class G3MEventContext;
 //class GLState;
 
-public abstract class Renderer {
+public abstract class Renderer
+{
   public abstract boolean isEnable();
 
   public abstract void setEnable(boolean enable);
@@ -39,7 +40,8 @@ public abstract class Renderer {
 
   public abstract void stop();
 
-  public void dispose() {
+  public void dispose()
+  {
   }
 
   // Android activity lifecyle

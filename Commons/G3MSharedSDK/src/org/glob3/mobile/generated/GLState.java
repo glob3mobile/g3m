@@ -11,7 +11,8 @@ package org.glob3.mobile.generated;
 //class IFloatBuffer;
 
 
-public class GLState {
+public class GLState
+{
   private boolean _depthTest;
   private boolean _blend;
   private boolean _textures;
@@ -33,7 +34,8 @@ public class GLState {
   private float _pointSize;
 
 
-  private GLState() {
+  private GLState()
+  {
      _depthTest = true;
      _blend = false;
      _textures = false;
@@ -55,11 +57,13 @@ public class GLState {
 
 
 
-  public static GLState newDefault() {
+  public static GLState newDefault()
+  {
     return new GLState();
   }
 
-  public GLState(GLState parentState) {
+  public GLState(GLState parentState)
+  {
      _depthTest = parentState._depthTest;
      _blend = parentState._blend;
      _textures = parentState._textures;
@@ -79,78 +83,100 @@ public class GLState {
      _pointSize = parentState._pointSize;
   }
 
-  public void dispose() {
+  public void dispose()
+  {
   }
 
-  public final void enableDepthTest() {
+  public final void enableDepthTest()
+  {
      _depthTest = true;
   }
-  public final void disableDepthTest() {
+  public final void disableDepthTest()
+  {
      _depthTest = false;
   }
-  public final boolean isEnabledDepthTest() {
+  public final boolean isEnabledDepthTest()
+  {
      return _depthTest;
   }
 
-  public final void enableBlend() {
+  public final void enableBlend()
+  {
      _blend = true;
   }
-  public final void disableBlend() {
+  public final void disableBlend()
+  {
      _blend = false;
   }
-  public final boolean isEnabledBlend() {
+  public final boolean isEnabledBlend()
+  {
      return _blend;
   }
 
-  public final void enableTextures() {
+  public final void enableTextures()
+  {
      _textures = true;
   }
-  public final void disableTextures() {
+  public final void disableTextures()
+  {
      _textures = false;
   }
-  public final boolean isEnabledTextures() {
+  public final boolean isEnabledTextures()
+  {
      return _textures;
   }
 
-  public final void enableTexture2D() {
+  public final void enableTexture2D()
+  {
      _texture2D = true;
   }
-  public final void disableTexture2D() {
+  public final void disableTexture2D()
+  {
      _texture2D = false;
   }
-  public final boolean isEnabledTexture2D() {
+  public final boolean isEnabledTexture2D()
+  {
      return _texture2D;
   }
 
-  public final void enableVertexColor(IFloatBuffer colors, float intensity) {
+  public final void enableVertexColor(IFloatBuffer colors, float intensity)
+  {
     _vertexColor = true;
     _colors = colors;
     _intensity = intensity;
   }
-  public final void disableVertexColor() {
+  public final void disableVertexColor()
+  {
      _vertexColor = false;
   }
-  public final boolean isEnabledVertexColor() {
+  public final boolean isEnabledVertexColor()
+  {
      return _vertexColor;
   }
-  public final IFloatBuffer getColors() {
+  public final IFloatBuffer getColors()
+  {
      return _colors;
   }
-  public final float getIntensity() {
+  public final float getIntensity()
+  {
      return _intensity;
   }
 
-  public final void enableVerticesPosition() {
+  public final void enableVerticesPosition()
+  {
      _verticesPosition = true;
   }
-  public final void disableVerticesPosition() {
+  public final void disableVerticesPosition()
+  {
      _verticesPosition = false;
   }
-  public final boolean isEnabledVerticesPosition() {
+  public final boolean isEnabledVerticesPosition()
+  {
      return _verticesPosition;
   }
 
-  public final void enableFlatColor(Color color, float intensity) {
+  public final void enableFlatColor(Color color, float intensity)
+  {
     _flatColor = true;
     _flatColorR = color.getRed();
     _flatColorG = color.getGreen();
@@ -158,41 +184,52 @@ public class GLState {
     _flatColorA = color.getAlpha();
     _intensity = intensity;
   }
-  public final void disableFlatColor() {
+  public final void disableFlatColor()
+  {
      _flatColor = false;
   }
-  public final boolean isEnabledFlatColor() {
+  public final boolean isEnabledFlatColor()
+  {
      return _flatColor;
   }
-  public final Color getFlatColor() {
+  public final Color getFlatColor()
+  {
     return Color.fromRGBA(_flatColorR, _flatColorG, _flatColorB, _flatColorA);
   }
 
-  public final void enableCullFace(int face) {
+  public final void enableCullFace(int face)
+  {
     _cullFace = true;
     _culledFace = face;
   }
-  public final void disableCullFace() {
+  public final void disableCullFace()
+  {
      _cullFace = false;
   }
-  public final boolean isEnabledCullFace() {
+  public final boolean isEnabledCullFace()
+  {
      return _cullFace;
   }
-  public final int getCulledFace() {
+  public final int getCulledFace()
+  {
      return _culledFace;
   }
 
-  public final void setLineWidth(float lineWidth) {
+  public final void setLineWidth(float lineWidth)
+  {
      _lineWidth = lineWidth;
   }
-  public final float lineWidth() {
+  public final float lineWidth()
+  {
      return _lineWidth;
   }
 
-  public final void setPointSize(float pointSize) {
+  public final void setPointSize(float pointSize)
+  {
      _pointSize = pointSize;
   }
-  public final float pointSize() {
+  public final float pointSize()
+  {
      return _pointSize;
   }
 

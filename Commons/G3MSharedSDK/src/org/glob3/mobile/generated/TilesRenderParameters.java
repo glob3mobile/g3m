@@ -17,7 +17,8 @@ package org.glob3.mobile.generated;
 
 
 
-public class TilesRenderParameters {
+public class TilesRenderParameters
+{
   public final Sector _topSector ;
   public final int _splitsByLatitude;
   public final int _splitsByLongitude;
@@ -31,7 +32,8 @@ public class TilesRenderParameters {
   public final boolean _forceTopLevelTilesRenderOnStart;
   public final boolean _incrementalTileQuality;
 
-  public TilesRenderParameters(Sector topSector, int splitsByLatitude, int splitsByLongitude, int topLevel, int maxLevel, int tileTextureHeight, int tileTextureWidth, int tileResolution, boolean renderDebug, boolean useTilesSplitBudget, boolean forceTopLevelTilesRenderOnStart, boolean incrementalTileQuality) {
+  public TilesRenderParameters(Sector topSector, int splitsByLatitude, int splitsByLongitude, int topLevel, int maxLevel, int tileTextureHeight, int tileTextureWidth, int tileResolution, boolean renderDebug, boolean useTilesSplitBudget, boolean forceTopLevelTilesRenderOnStart, boolean incrementalTileQuality)
+  {
      _topSector = new Sector(topSector);
      _splitsByLatitude = splitsByLatitude;
      _splitsByLongitude = splitsByLongitude;
@@ -47,7 +49,8 @@ public class TilesRenderParameters {
 
   }
 
-  public static TilesRenderParameters createDefault(boolean renderDebug, boolean useTilesSplitBudget, boolean forceTopLevelTilesRenderOnStart, boolean incrementalTileQuality) {
+  public static TilesRenderParameters createDefault(boolean renderDebug, boolean useTilesSplitBudget, boolean forceTopLevelTilesRenderOnStart, boolean incrementalTileQuality)
+  {
     final int K = 1;
     //const int _TODO_RESET_K_TO_1 = 0;
     final int splitsByLatitude = 2 * K;
@@ -64,7 +67,8 @@ public class TilesRenderParameters {
   }
 
 
-  public static TilesRenderParameters createSingleSector(boolean renderDebug, boolean useTilesSplitBudget, boolean forceTopLevelTilesRenderOnStart, boolean incrementalQuality) {
+  public static TilesRenderParameters createSingleSector(boolean renderDebug, boolean useTilesSplitBudget, boolean forceTopLevelTilesRenderOnStart, boolean incrementalQuality)
+  {
     final int splitsByLatitude = 1;
     final int splitsByLongitude = 1;
     final int topLevel = 0;

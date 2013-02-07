@@ -20,7 +20,8 @@ package org.glob3.mobile.generated;
 //class IFloatBuffer;
 //class IShortBuffer;
 
-public class SGGeometryNode extends SGNode {
+public class SGGeometryNode extends SGNode
+{
   private final int _primitive;
   private IFloatBuffer _vertices;
   private IFloatBuffer _colors;
@@ -29,7 +30,8 @@ public class SGGeometryNode extends SGNode {
   private IShortBuffer _indices;
 
 
-  public SGGeometryNode(String id, String sId, int primitive, IFloatBuffer vertices, IFloatBuffer colors, IFloatBuffer uv, IFloatBuffer normals, IShortBuffer indices) {
+  public SGGeometryNode(String id, String sId, int primitive, IFloatBuffer vertices, IFloatBuffer colors, IFloatBuffer uv, IFloatBuffer normals, IShortBuffer indices)
+  {
      super(id, sId);
      _primitive = primitive;
      _vertices = vertices;
@@ -40,7 +42,8 @@ public class SGGeometryNode extends SGNode {
 
   }
 
-  public void dispose() {
+  public void dispose()
+  {
     if (_vertices != null)
        _vertices.dispose();
     if (_colors != null)
@@ -53,20 +56,24 @@ public class SGGeometryNode extends SGNode {
        _indices.dispose();
   }
 
-  public final void rawRender(G3MRenderContext rc, GLState parentState) {
+  public final void rawRender(G3MRenderContext rc, GLState parentState)
+  {
     GL gl = rc.getGL();
   
     GLState state = new GLState(parentState);
     state.enableVerticesPosition();
-    if (_colors == null) {
+    if (_colors == null)
+    {
       state.disableVertexColor();
     }
-    else {
+    else
+    {
       final float colorsIntensity = 1F;
       state.enableVertexColor(_colors, colorsIntensity);
     }
   
-    if (_uv != null) {
+    if (_uv != null)
+    {
       gl.transformTexCoords(1.0f, 1.0f, 0.0f, 0.0f);
       gl.setTextureCoordinates(2, 0, _uv);
     }
@@ -78,7 +85,8 @@ public class SGGeometryNode extends SGNode {
     gl.drawElements(_primitive, _indices);
   }
 
-  public final GLState createState(G3MRenderContext rc, GLState parentState) {
+  public final GLState createState(G3MRenderContext rc, GLState parentState)
+  {
     return null;
   }
 

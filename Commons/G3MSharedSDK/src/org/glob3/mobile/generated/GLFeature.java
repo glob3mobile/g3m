@@ -1,27 +1,33 @@
 package org.glob3.mobile.generated; 
-public class GLFeature {
+public class GLFeature
+{
   private static int _polygonOffsetFill = 0;
   private static int _depthTest = 0;
   private static int _blend = 0;
   private static int _cullFace = 0;
 
-  public static int polygonOffsetFill() {
+  public static int polygonOffsetFill()
+  {
     return _polygonOffsetFill;
   }
 
-  public static int depthTest() {
+  public static int depthTest()
+  {
     return _depthTest;
   }
 
-  public static int blend() {
+  public static int blend()
+  {
     return _blend;
   }
 
-  public static int cullFace() {
+  public static int cullFace()
+  {
     return _cullFace;
   }
 
-  public static void init(INativeGL ngl) {
+  public static void init(INativeGL ngl)
+  {
     _polygonOffsetFill = ngl.Feature_PolygonOffsetFill();
     _depthTest = ngl.Feature_DepthTest();
     _blend = ngl.Feature_Blend();

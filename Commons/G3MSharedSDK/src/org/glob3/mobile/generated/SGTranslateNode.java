@@ -17,13 +17,15 @@ package org.glob3.mobile.generated;
 
 
 
-public class SGTranslateNode extends SGNode {
+public class SGTranslateNode extends SGNode
+{
   private final double _x;
   private final double _y;
   private final double _z;
 
 
-  public SGTranslateNode(String id, String sId, double x, double y, double z) {
+  public SGTranslateNode(String id, String sId, double x, double y, double z)
+  {
      super(id, sId);
      _x = x;
      _y = y;
@@ -31,7 +33,8 @@ public class SGTranslateNode extends SGNode {
 
   }
 
-  public final void prepareRender(G3MRenderContext rc) {
+  public final void prepareRender(G3MRenderContext rc)
+  {
     GL gl = rc.getGL();
   
     gl.pushMatrix();
@@ -40,14 +43,16 @@ public class SGTranslateNode extends SGNode {
     super.prepareRender(rc);
   }
 
-  public final void cleanUpRender(G3MRenderContext rc) {
+  public final void cleanUpRender(G3MRenderContext rc)
+  {
     GL gl = rc.getGL();
     gl.popMatrix();
   
     super.cleanUpRender(rc);
   }
 
-  public final GLState createState(G3MRenderContext rc, GLState parentState) {
+  public final GLState createState(G3MRenderContext rc, GLState parentState)
+  {
     return null;
   }
 

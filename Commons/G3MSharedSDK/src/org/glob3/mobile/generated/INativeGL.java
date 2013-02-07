@@ -19,9 +19,11 @@ package org.glob3.mobile.generated;
 
 //class MutableMatrix44D;
 
-public abstract class INativeGL {
+public abstract class INativeGL
+{
 
-  public void dispose() {
+  public void dispose()
+  {
   }
 
   public abstract void useProgram(ShaderProgram program);

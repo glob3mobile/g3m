@@ -9,14 +9,16 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class ITimer {
+public abstract class ITimer
+{
   public abstract TimeInterval now();
 
   public abstract void start();
 
   public abstract TimeInterval elapsedTime();
 
-  public void dispose() {
+  public void dispose()
+  {
   }
 
 }

@@ -19,7 +19,8 @@ package org.glob3.mobile.generated;
 
 
 
-public class Ellipsoid {
+public class Ellipsoid
+{
   private final Vector3D _radii ;
   private final Vector3D _radiiSquared ;
   private final Vector3D _radiiToTheFourth ;
@@ -27,7 +28,8 @@ public class Ellipsoid {
 
 
 
-  public Ellipsoid(Vector3D radii) {
+  public Ellipsoid(Vector3D radii)
+  {
      _radii = new Vector3D(radii);
      _radiiSquared = new Vector3D(new Vector3D(radii._x * radii._x, radii._y * radii._y, radii._z * radii._z));
      _radiiToTheFourth = new Vector3D(new Vector3D(_radiiSquared._x * _radiiSquared._x, _radiiSquared._y * _radiiSquared._y, _radiiSquared._z * _radiiSquared._z));
@@ -35,35 +37,42 @@ public class Ellipsoid {
   
   }
 
-  public final Vector3D getRadii() {
+  public final Vector3D getRadii()
+  {
     return _radii;
   }
 
-  public final Vector3D centricSurfaceNormal(Vector3D positionOnEllipsoid) {
+  public final Vector3D centricSurfaceNormal(Vector3D positionOnEllipsoid)
+  {
     return positionOnEllipsoid.normalized();
   }
 
-  public final Vector3D geodeticSurfaceNormal(Vector3D positionOnEllipsoid) {
+  public final Vector3D geodeticSurfaceNormal(Vector3D positionOnEllipsoid)
+  {
     return positionOnEllipsoid.times(_oneOverRadiiSquared).normalized();
   }
 
-  public final Vector3D geodeticSurfaceNormal(MutableVector3D positionOnEllipsoid) {
+  public final Vector3D geodeticSurfaceNormal(MutableVector3D positionOnEllipsoid)
+  {
     return positionOnEllipsoid.times(_oneOverRadiiSquared).normalized().asVector3D();
   }
 
-  public final Vector3D geodeticSurfaceNormal(Geodetic3D geodetic) {
+  public final Vector3D geodeticSurfaceNormal(Geodetic3D geodetic)
+  {
     final double cosLatitude = geodetic.latitude().cosinus();
   
     return new Vector3D(cosLatitude * geodetic.longitude().cosinus(), cosLatitude * geodetic.longitude().sinus(), geodetic.latitude().sinus());
   }
 
-  public final Vector3D geodeticSurfaceNormal(Geodetic2D geodetic) {
+  public final Vector3D geodeticSurfaceNormal(Geodetic2D geodetic)
+  {
     final double cosLatitude = geodetic.latitude().cosinus();
   
     return new Vector3D(cosLatitude * geodetic.longitude().cosinus(), cosLatitude * geodetic.longitude().sinus(), geodetic.latitude().sinus());
   }
 
-  public final java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction) {
+  public final java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction)
+  {
     java.util.ArrayList<Double> intersections = new java.util.ArrayList<Double>();
   
     int __ASK_Normalized_or_not;
@@ -80,11 +89,13 @@ public class Ellipsoid {
     // Algorithm is from Wikipedia's "Quadratic equation" topic, and Wikipedia credits
     // Numerical Recipes in C, section 5.6: "Quadratic and Cubic Equations"
     final double discriminant = b * b - 4 * a * c;
-    if (discriminant < 0.0) {
+    if (discriminant < 0.0)
+    {
       // no intersections
       return intersections;
     }
-    else if (discriminant == 0.0) {
+    else if (discriminant == 0.0)
+    {
       // one intersection at a tangent point
       //return new double[1] { -0.5 * b / a };
       intersections.add(-0.5 * b / a);
@@ -96,18 +107,21 @@ public class Ellipsoid {
     final double root2 = c / t;
   
     // Two intersections - return the smallest first.
-    if (root1 < root2) {
+    if (root1 < root2)
+    {
       intersections.add(root1);
       intersections.add(root2);
     }
-    else {
+    else
+    {
       intersections.add(root2);
       intersections.add(root1);
     }
     return intersections;
   }
 
-  public final Vector3D toCartesian(Geodetic3D geodetic) {
+  public final Vector3D toCartesian(Geodetic3D geodetic)
+  {
     final Vector3D n = geodeticSurfaceNormal(geodetic);
     final Vector3D k = _radiiSquared.times(n);
     final double gamma = IMathUtils.instance().sqrt((k._x * n._x) + (k._y * n._y) + (k._z * n._z));
@@ -116,17 +130,20 @@ public class Ellipsoid {
     return rSurface.add(n.times(geodetic.height()));
   }
 
-  public final Vector3D toCartesian(Geodetic2D geodetic) {
+  public final Vector3D toCartesian(Geodetic2D geodetic)
+  {
     return toCartesian(new Geodetic3D(geodetic, 0.0));
   }
 
-  public final Geodetic2D toGeodetic2D(Vector3D positionOnEllipsoid) {
+  public final Geodetic2D toGeodetic2D(Vector3D positionOnEllipsoid)
+  {
     final Vector3D n = geodeticSurfaceNormal(positionOnEllipsoid);
   
     return new Geodetic2D(Angle.fromRadians(IMathUtils.instance().asin(n._z)), Angle.fromRadians(IMathUtils.instance().atan2(n._y, n._x)));
   }
 
-  public final Geodetic3D toGeodetic3D(Vector3D position) {
+  public final Geodetic3D toGeodetic3D(Vector3D position)
+  {
     final Vector3D p = scaleToGeodeticSurface(position);
     final Vector3D h = position.sub(p);
   
@@ -143,7 +160,8 @@ public class Ellipsoid {
     return new Geodetic3D(toGeodetic2D(p), height);
   }
 
-  public final Vector3D scaleToGeodeticSurface(Vector3D position) {
+  public final Vector3D scaleToGeodeticSurface(Vector3D position)
+  {
     double beta = 1.0 / IMathUtils.instance().sqrt((position._x * position._x) * _oneOverRadiiSquared._x + (position._y * position._y) * _oneOverRadiiSquared._y + (position._z * position._z) * _oneOverRadiiSquared._z);
   
     double n = new Vector3D(beta * position._x * _oneOverRadiiSquared._x, beta * position._y * _oneOverRadiiSquared._y, beta * position._z * _oneOverRadiiSquared._z).length();
@@ -161,7 +179,8 @@ public class Ellipsoid {
     double s = 0.0;
     double dSdA = 1.0;
   
-    do {
+    do
+    {
       alpha -= (s / dSdA);
   
       da = 1.0 + (alpha * _oneOverRadiiSquared._x);
@@ -185,14 +204,17 @@ public class Ellipsoid {
     return new Vector3D(position._x / da, position._y / db, position._z / dc);
   }
 
-  public final Vector3D scaleToGeocentricSurface(Vector3D position) {
+  public final Vector3D scaleToGeocentricSurface(Vector3D position)
+  {
     double beta = 1.0 / IMathUtils.instance().sqrt((position._x * position._x) * _oneOverRadiiSquared._x + (position._y * position._y) * _oneOverRadiiSquared._y + (position._z * position._z) * _oneOverRadiiSquared._z);
   
     return position.times(beta);
   }
 
-  public final java.util.LinkedList<Vector3D> computeCurve(Vector3D start, Vector3D stop, double granularity) {
-    if (granularity <= 0.0) {
+  public final java.util.LinkedList<Vector3D> computeCurve(Vector3D start, Vector3D stop, double granularity)
+  {
+    if (granularity <= 0.0)
+    {
       //throw new ArgumentOutOfRangeException("granularity", "Granularity must be greater than zero.");
       return new java.util.LinkedList<Vector3D>();
     }
@@ -207,7 +229,8 @@ public class Ellipsoid {
   
     positions.addLast(start);
   
-    for (int i = 1; i <= n; ++i) {
+    for (int i = 1; i <= n; ++i)
+    {
       double phi = (i * granularity);
   
       positions.addLast(scaleToGeocentricSurface(start.rotateAroundAxis(normal, Angle.fromRadians(phi))));
@@ -218,7 +241,8 @@ public class Ellipsoid {
     return positions;
   }
 
-  public final Geodetic2D getMidPoint (Geodetic2D P0, Geodetic2D P1) {
+  public final Geodetic2D getMidPoint (Geodetic2D P0, Geodetic2D P1)
+  {
     final Vector3D v0 = toCartesian(P0);
     final Vector3D v1 = toCartesian(P1);
     final Vector3D normal = v0.cross(v1).normalized();
@@ -230,7 +254,8 @@ public class Ellipsoid {
 
 
   // compute distance from two points
-  public final double computePreciseLatLonDistance(Geodetic2D g1, Geodetic2D g2) {
+  public final double computePreciseLatLonDistance(Geodetic2D g1, Geodetic2D g2)
+  {
     final Vector3D radius = _radii;
     double R = (radius._x + radius._y + radius._z) / 3;
     double medLat = g1.latitude()._degrees;
@@ -257,7 +282,8 @@ public class Ellipsoid {
 
 
   // compute distance from two points
-  public final double computeFastLatLonDistance(Geodetic2D g1, Geodetic2D g2) {
+  public final double computeFastLatLonDistance(Geodetic2D g1, Geodetic2D g2)
+  {
     final Vector3D radius = _radii;
     double R = (radius._x + radius._y + radius._z) / 3;
   
@@ -276,7 +302,8 @@ public class Ellipsoid {
     return dist * IMathUtils.instance().pi() / 180 * R;
   }
 
-  public final Vector3D closestPointToSphere(Vector3D pos, Vector3D ray) {
+  public final Vector3D closestPointToSphere(Vector3D pos, Vector3D ray)
+  {
     double t = 0;
   
     // compute radius for the rotation
@@ -292,7 +319,8 @@ public class Ellipsoid {
     double rad = b * b - 4 * a * c;
   
     // if there is solution, the ray intersects the sphere
-    if (rad > 0) {
+    if (rad > 0)
+    {
       // compute the final point (the smaller positive t value)
       t = (-b - IMathUtils.instance().sqrt(rad)) / (2 * a);
       if (t < 1)
@@ -303,7 +331,8 @@ public class Ellipsoid {
     }
   
     // if no solution found, find a point in the contour line
-    if (rad < 0) {
+    if (rad < 0)
+    {
       double D = IMathUtils.instance().sqrt(O2);
       double co2 = R0 * R0 / (D * D);
       double a_ = OU * OU - co2 * O2 * U2;
@@ -318,16 +347,19 @@ public class Ellipsoid {
     return p;
   }
 
-  public final Vector3D closestIntersection(Vector3D pos, Vector3D ray) {
+  public final Vector3D closestIntersection(Vector3D pos, Vector3D ray)
+  {
     java.util.ArrayList<Double> distances = intersectionsDistances(pos, ray);
-    if (distances.isEmpty()) {
+    if (distances.isEmpty())
+    {
       return Vector3D.nan();
     }
     return pos.add(ray.times(distances.get(0)));
   }
 
 
-  public final MutableMatrix44D createGeodeticTransformMatrix(Geodetic3D position) {
+  public final MutableMatrix44D createGeodeticTransformMatrix(Geodetic3D position)
+  {
     final MutableMatrix44D translation = MutableMatrix44D.createTranslationMatrix(toCartesian(position));
     final MutableMatrix44D rotation = MutableMatrix44D.createGeodeticRotationMatrix(position);
   

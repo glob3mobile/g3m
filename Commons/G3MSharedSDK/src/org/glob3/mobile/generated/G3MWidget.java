@@ -1,8 +1,11 @@
 package org.glob3.mobile.generated; 
-public class G3MWidget {
+public class G3MWidget
+{
 
-  public static void initSingletons(ILogger logger, IFactory factory, IStringUtils stringUtils, IStringBuilder stringBuilder, IMathUtils mathUtils, IJSONParser jsonParser, ITextUtils textUtils) {
-    if (ILogger.instance() == null) {
+  public static void initSingletons(ILogger logger, IFactory factory, IStringUtils stringUtils, IStringBuilder stringBuilder, IMathUtils mathUtils, IJSONParser jsonParser, ITextUtils textUtils)
+  {
+    if (ILogger.instance() == null)
+    {
       ILogger.setInstance(logger);
       IFactory.setInstance(factory);
       IStringUtils.setInstance(stringUtils);
@@ -11,17 +14,20 @@ public class G3MWidget {
       IJSONParser.setInstance(jsonParser);
       ITextUtils.setInstance(textUtils);
     }
-    else {
+    else
+    {
       ILogger.instance().logWarning("Singletons already set");
     }
   }
 
-  public static G3MWidget create(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks) {
+  public static G3MWidget create(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks)
+  {
   
     return new G3MWidget(gl, storage, downloader, threadUtils, planet, cameraConstrainers, cameraRenderer, mainRenderer, busyRenderer, backgroundColor, logFPS, logDownloaderStatistics, initializationTask, autoDeleteInitializationTask, periodicalTasks);
   }
 
-  public void dispose() {
+  public void dispose()
+  {
     if (_userData != null)
        _userData.dispose();
   
@@ -44,7 +50,8 @@ public class G3MWidget {
     if (_timer != null)
        _timer.dispose();
   
-    if (_downloader != null) {
+    if (_downloader != null)
+    {
       _downloader.stop();
       if (_downloader != null)
          _downloader.dispose();
@@ -66,12 +73,15 @@ public class G3MWidget {
        _rootState.dispose();
   }
 
-  public final void render(int width, int height) {
-      if (_paused) {
+  public final void render(int width, int height)
+  {
+      if (_paused)
+      {
           return;
       }
   
-      if ((_width != width || _height != height) && _mainRendererReady) {
+      if ((_width != width || _height != height) && _mainRendererReady)
+      {
           _width = width;
           _height = height;
   
@@ -83,14 +93,16 @@ public class G3MWidget {
   
     //Start periodical task
     final int periodicalTasksCount = _periodicalTasks.size();
-    for (int i = 0; i < periodicalTasksCount; i++) {
+    for (int i = 0; i < periodicalTasksCount; i++)
+    {
       PeriodicalTask pt = _periodicalTasks.get(i);
       pt.executeIfNecessary(_context);
     }
   
     // give to the CameraContrainers the opportunity to change the nextCamera
     final int cameraConstrainersCount = _cameraConstrainers.size();
-    for (int i = 0; i< cameraConstrainersCount; i++) {
+    for (int i = 0; i< cameraConstrainersCount; i++)
+    {
       ICameraConstrainer constrainer = _cameraConstrainers.get(i);
       constrainer.onCameraChange(_planet, _currentCamera, _nextCamera);
     }
@@ -100,21 +112,27 @@ public class G3MWidget {
   
     _mainRendererReady = _mainRenderer.isReadyToRender(rc);
   
-    if (_mainRendererReady) {
-      if (_initializationTask != null) {
-        if (!_initializationTaskWasRun) {
+    if (_mainRendererReady)
+    {
+      if (_initializationTask != null)
+      {
+        if (!_initializationTaskWasRun)
+        {
           _initializationTask.run(_context);
           _initializationTaskWasRun = true;
         }
   
-        if (_initializationTask.isDone(_context)) {
-          if (_autoDeleteInitializationTask) {
+        if (_initializationTask.isDone(_context))
+        {
+          if (_autoDeleteInitializationTask)
+          {
             if (_initializationTask != null)
                _initializationTask.dispose();
           }
           _initializationTask = null;
         }
-        else {
+        else
+        {
           _mainRendererReady = false;
         }
       }
@@ -126,8 +144,10 @@ public class G3MWidget {
   
   
     Renderer selectedRenderer = _mainRendererReady ? _mainRenderer : _busyRenderer;
-    if (selectedRenderer != _selectedRenderer) {
-      if (_selectedRenderer != null) {
+    if (selectedRenderer != _selectedRenderer)
+    {
+      if (_selectedRenderer != null)
+      {
         _selectedRenderer.stop();
       }
       _selectedRenderer = selectedRenderer;
@@ -136,18 +156,22 @@ public class G3MWidget {
   
     _gl.clearScreen(_backgroundColor);
   
-    if (_mainRendererReady) {
+    if (_mainRendererReady)
+    {
       _cameraRenderer.render(rc, _rootState);
     }
   
-    if (_selectedRenderer.isEnable()) {
+    if (_selectedRenderer.isEnable())
+    {
       _selectedRenderer.render(rc, _rootState);
     }
   
     java.util.ArrayList<OrderedRenderable> orderedRenderables = rc.getSortedOrderedRenderables();
-    if (orderedRenderables != null) {
+    if (orderedRenderables != null)
+    {
       final int orderedRenderablesCount = orderedRenderables.size();
-      for (int i = 0; i < orderedRenderablesCount; i++) {
+      for (int i = 0; i < orderedRenderablesCount; i++)
+      {
         OrderedRenderable orderedRenderable = orderedRenderables.get(i);
         orderedRenderable.render(rc, _rootState);
         if (orderedRenderable != null)
@@ -158,14 +182,17 @@ public class G3MWidget {
     //  _frameTasksExecutor->doPostRenderCycle(&rc);
   
     final TimeInterval elapsedTime = _timer.elapsedTime();
-    if (elapsedTime.milliseconds() > 100) {
+    if (elapsedTime.milliseconds() > 100)
+    {
       ILogger.instance().logWarning("Frame took too much time: %dms", elapsedTime.milliseconds());
     }
   
-    if (_logFPS) {
+    if (_logFPS)
+    {
       _totalRenderTime += elapsedTime.milliseconds();
   
-      if ((_renderStatisticsTimer == null) || (_renderStatisticsTimer.elapsedTime().seconds() > 2)) {
+      if ((_renderStatisticsTimer == null) || (_renderStatisticsTimer.elapsedTime().seconds() > 2))
+      {
         final double averageTimePerRender = (double) _totalRenderTime / _renderCounter;
         final double fps = 1000.0 / averageTimePerRender;
         ILogger.instance().logInfo("FPS=%f", fps);
@@ -173,23 +200,28 @@ public class G3MWidget {
         _renderCounter = 0;
         _totalRenderTime = 0;
   
-        if (_renderStatisticsTimer == null) {
+        if (_renderStatisticsTimer == null)
+        {
           _renderStatisticsTimer = IFactory.instance().createTimer();
         }
-        else {
+        else
+        {
           _renderStatisticsTimer.start();
         }
       }
     }
   
-    if (_logDownloaderStatistics) {
+    if (_logDownloaderStatistics)
+    {
       String cacheStatistics = "";
   
-      if (_downloader != null) {
+      if (_downloader != null)
+      {
         cacheStatistics = _downloader.statistics();
       }
   
-      if (!_lastCacheStatistics.equals(cacheStatistics)) {
+      if (!_lastCacheStatistics.equals(cacheStatistics))
+      {
         ILogger.instance().logInfo("%s", cacheStatistics);
         _lastCacheStatistics = cacheStatistics;
       }
@@ -197,23 +229,29 @@ public class G3MWidget {
   
   }
 
-  public final void onTouchEvent(TouchEvent touchEvent) {
-    if (_mainRendererReady) {
+  public final void onTouchEvent(TouchEvent touchEvent)
+  {
+    if (_mainRendererReady)
+    {
       G3MEventContext ec = new G3MEventContext(IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _downloader, _effectsScheduler, _storage);
   
       boolean handled = false;
-      if (_mainRenderer.isEnable()) {
+      if (_mainRenderer.isEnable())
+      {
         handled = _mainRenderer.onTouchEvent(ec, touchEvent);
       }
   
-      if (!handled) {
+      if (!handled)
+      {
         _cameraRenderer.onTouchEvent(ec, touchEvent);
       }
     }
   }
 
-  public final void onResizeViewportEvent(int width, int height) {
-    if (_mainRendererReady) {
+  public final void onResizeViewportEvent(int width, int height)
+  {
+    if (_mainRendererReady)
+    {
       G3MEventContext ec = new G3MEventContext(IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _downloader, _effectsScheduler, _storage);
   
       _nextCamera.resizeViewport(width, height);
@@ -222,13 +260,15 @@ public class G3MWidget {
   
       _cameraRenderer.onResizeViewportEvent(ec, width, height);
   
-      if (_mainRenderer.isEnable()) {
+      if (_mainRenderer.isEnable())
+      {
         _mainRenderer.onResizeViewportEvent(ec, width, height);
       }
     }
   }
 
-  public final void onPause() {
+  public final void onPause()
+  {
     _paused = true;
   
     _threadUtils.onPause(_context);
@@ -242,7 +282,8 @@ public class G3MWidget {
     _storage.onPause(_context);
   }
 
-  public final void onResume() {
+  public final void onResume()
+  {
     _paused = false;
   
     _storage.onResume(_context);
@@ -257,7 +298,8 @@ public class G3MWidget {
     _threadUtils.onResume(_context);
   }
 
-  public final void onDestroy() {
+  public final void onDestroy()
+  {
     _threadUtils.onDestroy(_context);
   
     _effectsScheduler.onDestroy(_context);
@@ -269,7 +311,8 @@ public class G3MWidget {
     _storage.onDestroy(_context);
   }
 
-  public final GL getGL() {
+  public final GL getGL()
+  {
     return _gl;
   }
 
@@ -277,50 +320,61 @@ public class G3MWidget {
   //    return _currentCamera;
   //  }
 
-  public final Camera getNextCamera() {
+  public final Camera getNextCamera()
+  {
     return _nextCamera;
   }
 
-  public final void setUserData(WidgetUserData userData) {
+  public final void setUserData(WidgetUserData userData)
+  {
     if (_userData != null)
        _userData.dispose();
 
     _userData = userData;
-    if (_userData != null) {
+    if (_userData != null)
+    {
       _userData.setWidget(this);
     }
   }
 
-  public final WidgetUserData getUserData() {
+  public final WidgetUserData getUserData()
+  {
     return _userData;
   }
 
-  public final void addPeriodicalTask(PeriodicalTask periodicalTask) {
+  public final void addPeriodicalTask(PeriodicalTask periodicalTask)
+  {
     _periodicalTasks.add(periodicalTask);
   }
 
-  public final void addPeriodicalTask(TimeInterval interval, GTask task) {
+  public final void addPeriodicalTask(TimeInterval interval, GTask task)
+  {
     addPeriodicalTask(new PeriodicalTask(interval, task));
   }
 
 
-  public final void setCameraPosition(Geodetic3D position) {
+  public final void setCameraPosition(Geodetic3D position)
+  {
     getNextCamera().setPosition(position);
   }
 
-  public final void setCameraHeading(Angle angle) {
+  public final void setCameraHeading(Angle angle)
+  {
     getNextCamera().setHeading(angle);
   }
 
-  public final void setCameraPitch(Angle angle) {
+  public final void setCameraPitch(Angle angle)
+  {
     getNextCamera().setPitch(angle);
   }
 
-  public final void setAnimatedCameraPosition(Geodetic3D position) {
+  public final void setAnimatedCameraPosition(Geodetic3D position)
+  {
     setAnimatedCameraPosition(position, TimeInterval.fromSeconds(3));
   }
 
-  public final void setAnimatedCameraPosition(Geodetic3D position, TimeInterval interval) {
+  public final void setAnimatedCameraPosition(Geodetic3D position, TimeInterval interval)
+  {
   
     final Geodetic3D startPosition = _planet.toGeodetic3D(_currentCamera.getCartesianPosition());
   
@@ -328,21 +382,26 @@ public class G3MWidget {
     double finalLon = position.longitude()._degrees;
   
     //Fixing final latitude
-    while (finalLat > 90) {
+    while (finalLat > 90)
+    {
       finalLat -= 360;
     }
-    while (finalLat < -90) {
+    while (finalLat < -90)
+    {
       finalLat += 360;
     }
   
     //Fixing final longitude
-    while (finalLon > 360) {
+    while (finalLon > 360)
+    {
       finalLon -= 360;
     }
-    while (finalLon < 0) {
+    while (finalLon < 0)
+    {
       finalLon += 360;
     }
-    if (Math.abs(finalLon - startPosition.longitude()._degrees) > 180) {
+    if (Math.abs(finalLon - startPosition.longitude()._degrees) > 180)
+    {
       finalLon -= 360;
     }
   
@@ -353,20 +412,24 @@ public class G3MWidget {
     _effectsScheduler.startEffect(new CameraGoToPositionEffect(interval, startPosition, endPosition), _nextCamera.getEffectTarget());
   }
 
-  public final void stopCameraAnimation() {
+  public final void stopCameraAnimation()
+  {
     EffectTarget target = _nextCamera.getEffectTarget();
     _effectsScheduler.cancellAllEffectsFor(target);
   }
 
-  public final void resetCameraPosition() {
+  public final void resetCameraPosition()
+  {
     getNextCamera().resetPosition();
   }
 
-  public final CameraRenderer getCameraRenderer() {
+  public final CameraRenderer getCameraRenderer()
+  {
     return _cameraRenderer;
   }
 
-  public final G3MContext getG3MContext() {
+  public final G3MContext getG3MContext()
+  {
     return _context;
   }
 
@@ -413,7 +476,8 @@ public class G3MWidget {
   private int _width;
   private int _height;
 
-  private void initializeGL() {
+  private void initializeGL()
+  {
     //_gl->enableDepthTest();
   
     //_gl->enableCullFace(GLCullFace::back());
@@ -432,7 +496,8 @@ public class G3MWidget {
    =======
   _gl( new GL(nativeGL, false) ),
   >>>>>>> origin/webgl-port
-   */ {
+   */
+  {
      _rootState = GLState.newDefault();
      _frameTasksExecutor = new FrameTasksExecutor();
      _effectsScheduler = new EffectsScheduler();
@@ -475,20 +540,24 @@ public class G3MWidget {
     _currentCamera.initialize(_context);
     _nextCamera.initialize(_context);
   
-    if (_threadUtils != null) {
+    if (_threadUtils != null)
+    {
       _threadUtils.initialize(_context);
     }
   
-    if (_storage != null) {
+    if (_storage != null)
+    {
       _storage.initialize(_context);
     }
   
-    if (_downloader != null) {
+    if (_downloader != null)
+    {
       _downloader.initialize(_context);
       _downloader.start();
     }
   
-    for (int i = 0; i < periodicalTasks.size(); i++) {
+    for (int i = 0; i < periodicalTasks.size(); i++)
+    {
       addPeriodicalTask(periodicalTasks.get(i));
     }
   }

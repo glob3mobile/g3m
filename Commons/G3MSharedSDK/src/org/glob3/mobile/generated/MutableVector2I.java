@@ -16,43 +16,51 @@ package org.glob3.mobile.generated;
 //
 
 
-public class MutableVector2I {
+public class MutableVector2I
+{
   private int _x;
   private int _y;
 
-  public MutableVector2I() {
+  public MutableVector2I()
+  {
      _x = 0;
      _y = 0;
 
   }
 
-  public MutableVector2I(int x, int y) {
+  public MutableVector2I(int x, int y)
+  {
      _x = x;
      _y = y;
 
   }
 
-  public MutableVector2I(MutableVector2I that) {
+  public MutableVector2I(MutableVector2I that)
+  {
      _x = that._x;
      _y = that._y;
 
   }
 
-  public final MutableVector2I copyFrom(MutableVector2I that) {
+  public final MutableVector2I copyFrom(MutableVector2I that)
+  {
     _x = that._x;
     _y = that._y;
     return this;
   }
 
-  public static MutableVector2I zero() {
+  public static MutableVector2I zero()
+  {
     return new MutableVector2I(0, 0);
   }
 
-  public final int x() {
+  public final int x()
+  {
     return _x;
   }
 
-  public final int y() {
+  public final int y()
+  {
     return _y;
   }
 

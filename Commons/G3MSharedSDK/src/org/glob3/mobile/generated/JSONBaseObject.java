@@ -25,33 +25,41 @@ package org.glob3.mobile.generated;
 
 //class JSONVisitor;
 
-public abstract class JSONBaseObject {
+public abstract class JSONBaseObject
+{
 
 
-  public static JSONBaseObject deepCopy(JSONBaseObject object) {
+  public static JSONBaseObject deepCopy(JSONBaseObject object)
+  {
     return (object == null) ? null : object.deepCopy();
   }
 
-  public void dispose() {
+  public void dispose()
+  {
   }
 
-  public JSONObject asObject() {
+  public JSONObject asObject()
+  {
     ILogger.instance().logError("The requested Object is not of type JSONObject!");
     return null;
   }
-  public JSONArray asArray() {
+  public JSONArray asArray()
+  {
     ILogger.instance().logError("The requested Object is not of type JSONArray!");
     return null;
   }
-  public JSONBoolean asBoolean() {
+  public JSONBoolean asBoolean()
+  {
     ILogger.instance().logError("The requested Object is not of type JSONBoolean!");
     return null;
   }
-  public JSONNumber asNumber() {
+  public JSONNumber asNumber()
+  {
     ILogger.instance().logError("The requested Object is not of type JSONNumber!");
     return null;
   }
-  public JSONString asString() {
+  public JSONString asString()
+  {
     ILogger.instance().logError("The requested Object is not of type JSONString!");
     return null;
   }

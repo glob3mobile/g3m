@@ -23,7 +23,8 @@ package org.glob3.mobile.generated;
 //class LayerCondition;
 //class LayerSet;
 
-public abstract class Layer {
+public abstract class Layer
+{
   private LayerCondition _condition;
   private java.util.ArrayList<TerrainTouchEventListener> _listeners = new java.util.ArrayList<TerrainTouchEventListener>();
 
@@ -35,16 +36,20 @@ public abstract class Layer {
 
   protected final TimeInterval _timeToCache;
 
-  protected final void notifyChanges() {
-    if (_layerSet == null) {
+  protected final void notifyChanges()
+  {
+    if (_layerSet == null)
+    {
   //    ILogger::instance()->logError("Can't notify changes, _layerSet was not set");
     }
-    else {
+    else
+    {
       _layerSet.layerChanged(this);
     }
   }
 
-  public Layer(LayerCondition condition, String name, TimeInterval timeToCache) {
+  public Layer(LayerCondition condition, String name, TimeInterval timeToCache)
+  {
      _condition = condition;
      _name = name;
      _layerSet = null;
@@ -53,37 +58,47 @@ public abstract class Layer {
 
   }
 
-  public void setEnable(boolean enable) {
-    if (enable != _enable) {
+  public void setEnable(boolean enable)
+  {
+    if (enable != _enable)
+    {
       _enable = enable;
       notifyChanges();
     }
   }
 
-  public boolean isEnable() {
+  public boolean isEnable()
+  {
     return _enable;
   }
 
-  public void dispose() {
+  public void dispose()
+  {
   }
 
   public abstract java.util.ArrayList<Petition> getMapPetitions(G3MRenderContext rc, Tile tile, int width, int height);
 
-  public boolean isAvailable(G3MRenderContext rc, Tile tile) {
-    if (!isEnable()) {
+  public boolean isAvailable(G3MRenderContext rc, Tile tile)
+  {
+    if (!isEnable())
+    {
       return false;
     }
-    if (_condition == null) {
+    if (_condition == null)
+    {
       return true;
     }
     return _condition.isAvailable(rc, tile);
   }
 
-  public boolean isAvailable(G3MEventContext ec, Tile tile) {
-    if (!isEnable()) {
+  public boolean isAvailable(G3MEventContext ec, Tile tile)
+  {
+    if (!isEnable())
+    {
       return false;
     }
-    if (_condition == null) {
+    if (_condition == null)
+    {
       return true;
     }
     return _condition.isAvailable(ec, tile);
@@ -93,34 +108,43 @@ public abstract class Layer {
 
   public abstract URL getFeatureInfoURL(Geodetic2D g, IFactory factory, Sector sector, int width, int height);
 
-  public boolean isReady() {
+  public boolean isReady()
+  {
     return true;
   }
 
-  public void initialize(G3MContext context) {
+  public void initialize(G3MContext context)
+  {
   }
 
-  public final void addTerrainTouchEventListener(TerrainTouchEventListener listener) {
+  public final void addTerrainTouchEventListener(TerrainTouchEventListener listener)
+  {
     _listeners.add(listener);
   }
 
-  public final void onTerrainTouchEventListener(G3MEventContext ec, TerrainTouchEvent tte) {
-    for (int i = 0; i < _listeners.size(); i++) {
+  public final void onTerrainTouchEventListener(G3MEventContext ec, TerrainTouchEvent tte)
+  {
+    for (int i = 0; i < _listeners.size(); i++)
+    {
       TerrainTouchEventListener listener = _listeners.get(i);
-      if (listener != null) {
+      if (listener != null)
+      {
         listener.onTerrainTouchEvent(ec, tte);
       }
     }
   }
 
-  public final void setLayerSet(LayerSet layerSet) {
-    if (_layerSet != null) {
+  public final void setLayerSet(LayerSet layerSet)
+  {
+    if (_layerSet != null)
+    {
       ILogger.instance().logError("LayerSet already set.");
     }
     _layerSet = layerSet;
   }
 
-  public final String getName() {
+  public final String getName()
+  {
     return _name;
   }
 

@@ -1,5 +1,6 @@
 package org.glob3.mobile.generated; 
-public class GlobalMembersIStringUtils {
+public class GlobalMembersIStringUtils
+{
 
 
 

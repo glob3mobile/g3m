@@ -18,7 +18,8 @@ package org.glob3.mobile.generated;
 
 //class IImage;
 
-public interface IImageListener {
+public interface IImageListener
+{
 
   /**
    Callback method for image-creation.  The image has to be deleted in C++ / and disposed() en Java

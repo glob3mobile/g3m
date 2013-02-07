@@ -19,11 +19,13 @@ package org.glob3.mobile.generated;
 
 
 
-public class CameraDoubleDragHandler extends CameraEventHandler {
+public class CameraDoubleDragHandler extends CameraEventHandler
+{
   private final boolean _processRotation;
   private final boolean _processZoom;
 
-  public CameraDoubleDragHandler(boolean processRotation, boolean processZoom) {
+  public CameraDoubleDragHandler(boolean processRotation, boolean processZoom)
+  {
      _camera0 = new Camera(new Camera(0, 0));
      _initialPoint = new MutableVector3D(0,0,0);
      _initialPixel = new MutableVector3D(0,0,0);
@@ -31,16 +33,19 @@ public class CameraDoubleDragHandler extends CameraEventHandler {
      _processZoom = processZoom;
   }
 
-  public void dispose() {
+  public void dispose()
+  {
   }
 
 
-  public final boolean onTouchEvent(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext) {
+  public final boolean onTouchEvent(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  {
     // only one finger needed
     if (touchEvent.getTouchCount()!=2)
        return false;
   
-    switch (touchEvent.getType()) {
+    switch (touchEvent.getType())
+    {
       case Down:
         onDown(eventContext, touchEvent, cameraContext);
         break;
@@ -56,7 +61,8 @@ public class CameraDoubleDragHandler extends CameraEventHandler {
     return true;
   }
 
-  public final void render(G3MRenderContext rc, CameraContext cameraContext) {
+  public final void render(G3MRenderContext rc, CameraContext cameraContext)
+  {
   //  // TEMP TO DRAW A POINT WHERE USER PRESS
   //  if (false) {
   //    if (cameraContext->getCurrentGesture() == DoubleDrag) {
@@ -96,7 +102,8 @@ public class CameraDoubleDragHandler extends CameraEventHandler {
   
   }
 
-  public final void onDown(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext) {
+  public final void onDown(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  {
     Camera camera = cameraContext.getNextCamera();
     _camera0.copyFrom(camera);
     cameraContext.setCurrentGesture(Gesture.DoubleDrag);
@@ -108,7 +115,8 @@ public class CameraDoubleDragHandler extends CameraEventHandler {
     _initialPoint1 = _camera0.pixel2PlanetPoint(pixel1).asMutableVector3D();
   
     // both pixels must intersect globe
-    if (_initialPoint0.isNan() || _initialPoint1.isNan()) {
+    if (_initialPoint0.isNan() || _initialPoint1.isNan())
+    {
       cameraContext.setCurrentGesture(Gesture.None);
       return;
     }
@@ -127,7 +135,8 @@ public class CameraDoubleDragHandler extends CameraEventHandler {
   
     //printf ("down 2 finger\n");
   }
-  public final void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext) {
+  public final void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  {
     if (cameraContext.getCurrentGesture() != Gesture.DoubleDrag)
        return;
     if (_initialPoint.isNan())
@@ -140,7 +149,8 @@ public class CameraDoubleDragHandler extends CameraEventHandler {
     double factor = finalFingerSeparation/_initialFingerSeparation;
   
     // compute camera translation using numerical iterations until convergence
-    double dAccum = 0; {
+    double dAccum = 0;
+    {
       Camera tempCamera = new Camera(_camera0);
       Angle originalAngle = _initialPoint0.angleBetween(_initialPoint1);
       double angle = originalAngle._degrees;
@@ -171,7 +181,8 @@ public class CameraDoubleDragHandler extends CameraEventHandler {
       // iterations
   //    int iter=0;
       double precision = IMathUtils.instance().pow(10, IMathUtils.instance().log10(distance)-8.5);
-      while (IMathUtils.instance().abs(angle_n-angle) > precision) {
+      while (IMathUtils.instance().abs(angle_n-angle) > precision)
+      {
   //      iter++;
         if ((angle_n1-angle_n)/(angle_n-angle) < 0)
            d*=-0.5;
@@ -190,7 +201,8 @@ public class CameraDoubleDragHandler extends CameraEventHandler {
     // computer center view point
     Vector3D centerPoint = tempCamera.getXYZCenterOfView();
   
-    // drag from initialPoint to centerPoint {
+    // drag from initialPoint to centerPoint
+    {
       Vector3D initialPoint = _initialPoint.asVector3D();
       final Vector3D rotationAxis = initialPoint.cross(centerPoint);
       final Angle rotationDelta = Angle.fromRadians(- IMathUtils.instance().acos(initialPoint.normalized().dot(centerPoint.normalized())));
@@ -200,7 +212,8 @@ public class CameraDoubleDragHandler extends CameraEventHandler {
     }
   
     // move the camera
-    if (_processZoom) {
+    if (_processZoom)
+    {
       tempCamera.moveForward(dAccum);
     }
   
@@ -218,7 +231,8 @@ public class CameraDoubleDragHandler extends CameraEventHandler {
     // drag globe from centerPoint to finalPoint
     final Vector3D rotationAxis = centerPoint2.cross(finalPoint);
     final Angle rotationDelta = Angle.fromRadians(- IMathUtils.instance().acos(centerPoint2.normalized().dot(finalPoint.normalized())));
-    if (rotationDelta.isNan()) {
+    if (rotationDelta.isNan())
+    {
       return;
     }
     tempCamera.rotateWithAxis(rotationAxis, rotationDelta);
@@ -227,7 +241,8 @@ public class CameraDoubleDragHandler extends CameraEventHandler {
     //tempCamera.updateModelMatrix();
   
     // camera rotation
-    if (_processRotation) {
+    if (_processRotation)
+    {
       Vector3D normal = planet.geodeticSurfaceNormal(centerPoint2);
       Vector3D v0 = _initialPoint0.asVector3D().sub(centerPoint2).projectionInPlane(normal);
       Vector3D v1 = tempCamera.pixel2PlanetPoint(pixel0).sub(centerPoint2).projectionInPlane(normal);
@@ -244,7 +259,8 @@ public class CameraDoubleDragHandler extends CameraEventHandler {
   
     //printf ("moving 2 fingers\n");
   }
-  public final void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext) {
+  public final void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  {
     cameraContext.setCurrentGesture(Gesture.None);
     _initialPixel = Vector3D.nan().asMutableVector3D();
   

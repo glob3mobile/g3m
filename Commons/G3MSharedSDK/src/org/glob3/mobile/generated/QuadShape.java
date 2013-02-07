@@ -20,7 +20,8 @@ package org.glob3.mobile.generated;
 //class IImage;
 //class IGLTextureId;
 
-public class QuadShape extends AbstractMeshShape {
+public class QuadShape extends AbstractMeshShape
+{
   private final String _textureFilename;
   private IImage _textureImage;
   private final boolean _autoDeleteTextureImage;
@@ -28,26 +29,31 @@ public class QuadShape extends AbstractMeshShape {
   private final float _width;
   private final float _height;
 
-  private IGLTextureId getTextureId(G3MRenderContext rc) {
-    if (_textureImage == null) {
+  private IGLTextureId getTextureId(G3MRenderContext rc)
+  {
+    if (_textureImage == null)
+    {
       return null;
     }
   
     final IGLTextureId texId = rc.getTexturesHandler().getGLTextureId(_textureImage, GLFormat.rgba(), _textureFilename, false);
   
-    if (_autoDeleteTextureImage) {
+    if (_autoDeleteTextureImage)
+    {
       rc.getFactory().deleteImage(_textureImage);
       _textureImage = null;
     }
   
-    if (texId == null) {
+    if (texId == null)
+    {
       rc.getLogger().logError("Can't load file %s", _textureFilename);
     }
   
     return texId;
   }
 
-  protected final Mesh createMesh(G3MRenderContext rc) {
+  protected final Mesh createMesh(G3MRenderContext rc)
+  {
   
     final float halfWidth = _width / 2.0f;
     final float halfHeight = _height / 2.0f;
@@ -75,7 +81,8 @@ public class QuadShape extends AbstractMeshShape {
     IndexedMesh im = new IndexedMesh(GLPrimitive.triangleStrip(), true, center, vertices.create(), indices.create(), 1);
   
     final IGLTextureId texId = getTextureId(rc);
-    if (texId == null) {
+    if (texId == null)
+    {
       return im;
     }
   
@@ -90,7 +97,8 @@ public class QuadShape extends AbstractMeshShape {
     return new TexturedMesh(im, true, texMap, true, true);
   }
 
-  public QuadShape(Geodetic3D position, IImage textureImage, boolean autoDeleteTextureImage, String textureFilename, float width, float height) {
+  public QuadShape(Geodetic3D position, IImage textureImage, boolean autoDeleteTextureImage, String textureFilename, float width, float height)
+  {
      super(position);
      _textureFilename = textureFilename;
      _textureImage = textureImage;
@@ -100,7 +108,8 @@ public class QuadShape extends AbstractMeshShape {
 
   }
 
-  public void dispose() {
+  public void dispose()
+  {
 
   }
 

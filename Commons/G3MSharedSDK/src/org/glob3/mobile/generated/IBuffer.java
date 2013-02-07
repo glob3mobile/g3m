@@ -17,7 +17,8 @@ package org.glob3.mobile.generated;
 
 
 
-public interface IBuffer {
+public interface IBuffer
+{
 
 
   /**

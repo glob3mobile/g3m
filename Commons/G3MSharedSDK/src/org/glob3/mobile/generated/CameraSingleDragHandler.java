@@ -1,25 +1,30 @@
 package org.glob3.mobile.generated; 
-public class CameraSingleDragHandler extends CameraEventHandler {
+public class CameraSingleDragHandler extends CameraEventHandler
+{
 
   public CameraSingleDragHandler(boolean useInertia)
-//  _initialPixel(0,0), {
+//  _initialPixel(0,0),
+  {
      _camera0 = new Camera(new Camera(0, 0));
      _initialPoint = new MutableVector3D(0,0,0);
      _useInertia = useInertia;
   }
 
-  public void dispose() {
+  public void dispose()
+  {
   }
 
 
-  public final boolean onTouchEvent(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext) {
+  public final boolean onTouchEvent(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  {
     // only one finger needed
     if (touchEvent.getTouchCount()!=1)
        return false;
     if (touchEvent.getTapCount()>1)
        return false;
   
-    switch (touchEvent.getType()) {
+    switch (touchEvent.getType())
+    {
       case Down:
         onDown(eventContext, touchEvent, cameraContext);
         break;
@@ -35,7 +40,8 @@ public class CameraSingleDragHandler extends CameraEventHandler {
     return true;
   }
 
-  public final void render(G3MRenderContext rc, CameraContext cameraContext) {
+  public final void render(G3MRenderContext rc, CameraContext cameraContext)
+  {
   //  // TEMP TO DRAW A POINT WHERE USER PRESS
   //  if (false) {
   //    if (cameraContext->getCurrentGesture() == Drag) {
@@ -61,7 +67,8 @@ public class CameraSingleDragHandler extends CameraEventHandler {
   }
 
   public final boolean _useInertia;
-  public final void onDown(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext) {
+  public final void onDown(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  {
     Camera camera = cameraContext.getNextCamera();
     _camera0.copyFrom(camera);
     cameraContext.setCurrentGesture(Gesture.Drag);
@@ -83,13 +90,16 @@ public class CameraSingleDragHandler extends CameraEventHandler {
   
     //printf ("down 1 finger. Initial point = %f %f %f\n", _initialPoint.x(), _initialPoint.y(), _initialPoint.z());
   }
-  public final void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext) {
+  public final void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  {
   
-    if (cameraContext.getCurrentGesture()!=Gesture.Drag) {
+    if (cameraContext.getCurrentGesture()!=Gesture.Drag)
+    {
       return;
     }
   
-    if (_initialPoint.isNan()) {
+    if (_initialPoint.isNan())
+    {
       return;
     }
   
@@ -98,7 +108,8 @@ public class CameraSingleDragHandler extends CameraEventHandler {
   //  const Vector2D pixel = Vector2D(touchEvent.getTouch(0)->getPos().x(), _initialPixel.y());
   
     MutableVector3D finalPoint = _camera0.pixel2PlanetPoint(pixel).asMutableVector3D();
-    if (finalPoint.isNan()) {
+    if (finalPoint.isNan())
+    {
       //INVALID FINAL POINT
       //printf ("--invalid final point in drag!!\n");
       Vector3D ray = _camera0.pixel2Ray(pixel);
@@ -119,15 +130,18 @@ public class CameraSingleDragHandler extends CameraEventHandler {
     _radiansStep = radians - _lastRadians;
     _lastRadians = radians;
   }
-  public final void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext) {
-    if (_useInertia) {
+  public final void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  {
+    if (_useInertia)
+    {
       // test if animation is needed
       final Touch touch = touchEvent.getTouch(0);
       Vector2I currPixel = touch.getPos();
       Vector2I prevPixel = touch.getPrevPos();
       double desp = currPixel.sub(prevPixel).length();
   
-      if (cameraContext.getCurrentGesture() == Gesture.Drag && !_axis.isNan() && desp>2) {
+      if (cameraContext.getCurrentGesture() == Gesture.Drag && !_axis.isNan() && desp>2)
+      {
         // start inertial effect
         Effect effect = new SingleDragEffect(_axis.asVector3D(), Angle.fromRadians(_radiansStep));
   

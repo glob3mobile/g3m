@@ -20,32 +20,41 @@ package org.glob3.mobile.generated;
 
 //class IShortBuffer;
 
-public class IndexedMesh extends AbstractMesh {
+public class IndexedMesh extends AbstractMesh
+{
   private IShortBuffer _indices;
-  protected final void rawRender(G3MRenderContext rc, GLState parentState) {
+  protected final void rawRender(G3MRenderContext rc, GLState parentState)
+  {
     GL gl = rc.getGL();
     gl.drawElements(_primitive, _indices);
   }
 
-  public IndexedMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, IShortBuffer indices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors) {
+  public IndexedMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, IShortBuffer indices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors)
+  {
      this(primitive, owner, center, vertices, indices, lineWidth, pointSize, flatColor, colors, 0.0f);
   }
-  public IndexedMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, IShortBuffer indices, float lineWidth, float pointSize, Color flatColor) {
+  public IndexedMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, IShortBuffer indices, float lineWidth, float pointSize, Color flatColor)
+  {
      this(primitive, owner, center, vertices, indices, lineWidth, pointSize, flatColor, null, 0.0f);
   }
-  public IndexedMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, IShortBuffer indices, float lineWidth, float pointSize) {
+  public IndexedMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, IShortBuffer indices, float lineWidth, float pointSize)
+  {
      this(primitive, owner, center, vertices, indices, lineWidth, pointSize, null, null, 0.0f);
   }
-  public IndexedMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, IShortBuffer indices, float lineWidth) {
+  public IndexedMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, IShortBuffer indices, float lineWidth)
+  {
      this(primitive, owner, center, vertices, indices, lineWidth, 1, null, null, 0.0f);
   }
-  public IndexedMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, IShortBuffer indices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors, float colorsIntensity) {
+  public IndexedMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, IShortBuffer indices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors, float colorsIntensity)
+  {
      super(primitive, owner, center, vertices, lineWidth, pointSize, flatColor, colors, colorsIntensity);
      _indices = indices;
   }
 
-  public void dispose() {
-    if (_owner) {
+  public void dispose()
+  {
+    if (_owner)
+    {
       if (_indices != null)
          _indices.dispose();
     }

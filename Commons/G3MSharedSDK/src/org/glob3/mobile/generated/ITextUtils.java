@@ -21,11 +21,14 @@ package org.glob3.mobile.generated;
 //class IImageListener;
 
 
-public abstract class ITextUtils {
+public abstract class ITextUtils
+{
   private static ITextUtils _instance = null;
 
-  public static void setInstance(ITextUtils factory) {
-    if (_instance != null) {
+  public static void setInstance(ITextUtils factory)
+  {
+    if (_instance != null)
+    {
       ILogger.instance().logWarning("ITextUtils instance already set!");
       if (_instance != null)
          _instance.dispose();
@@ -33,16 +36,19 @@ public abstract class ITextUtils {
     _instance = factory;
   }
 
-  public static ITextUtils instance() {
+  public static ITextUtils instance()
+  {
     return _instance;
   }
 
-  public void dispose() {
+  public void dispose()
+  {
 
   }
 
 
-  public void createLabelImage(String label, IImageListener listener, boolean autodelete) {
+  public void createLabelImage(String label, IImageListener listener, boolean autodelete)
+  {
     final float fontSize = 20F;
   
     final Color color = Color.white();
@@ -54,7 +60,8 @@ public abstract class ITextUtils {
   public abstract void createLabelImage(String label, float fontSize, Color color, Color shadowColor, IImageListener listener, boolean autodelete);
 
 
-  public void labelImage(IImage image, String label, LabelPosition labelPosition, IImageListener listener, boolean autodelete) {
+  public void labelImage(IImage image, String label, LabelPosition labelPosition, IImageListener listener, boolean autodelete)
+  {
     final float fontSize = 20F;
   
     final Color color = Color.white();

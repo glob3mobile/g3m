@@ -20,7 +20,8 @@ package org.glob3.mobile.generated;
 //class IGLTextureId;
 //class IImage;
 
-public class SGLayerNode extends SGNode {
+public class SGLayerNode extends SGNode
+{
   private final String _uri;
 
   private final String _applyTo;
@@ -34,9 +35,12 @@ public class SGLayerNode extends SGNode {
 
   private boolean _initialized;
 
-  private IGLTextureId getTextureId(G3MRenderContext rc) {
-    if (_textureId == null) {
-      if (_downloadedImage != null) {
+  private IGLTextureId getTextureId(G3MRenderContext rc)
+  {
+    if (_textureId == null)
+    {
+      if (_downloadedImage != null)
+      {
         final boolean hasMipMap = false;
         _textureId = rc.getTexturesHandler().getGLTextureId(_downloadedImage, GLFormat.rgba(), getURL().getPath(), hasMipMap);
   
@@ -48,8 +52,10 @@ public class SGLayerNode extends SGNode {
   }
 
   private IImage _downloadedImage;
-  private void requestImage(G3MRenderContext rc) {
-    if (_uri.compareTo("") == 0) {
+  private void requestImage(G3MRenderContext rc)
+  {
+    if (_uri.compareTo("") == 0)
+    {
       return;
     }
   
@@ -58,7 +64,8 @@ public class SGLayerNode extends SGNode {
 
   private IGLTextureId _textureId;
 
-  private URL getURL() {
+  private URL getURL()
+  {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     isb.addString(_shape.getURIPrefix());
     isb.addString(_uri);
@@ -70,7 +77,8 @@ public class SGLayerNode extends SGNode {
   }
 
 
-  public SGLayerNode(String id, String sId, String uri, String applyTo, String blendMode, boolean flipY, String magFilter, String minFilter, String wrapS, String wrapT) {
+  public SGLayerNode(String id, String sId, String uri, String applyTo, String blendMode, boolean flipY, String magFilter, String minFilter, String wrapS, String wrapT)
+  {
      super(id, sId);
      _uri = uri;
      _applyTo = applyTo;
@@ -86,21 +94,26 @@ public class SGLayerNode extends SGNode {
 
   }
 
-  public final void onImageDownload(IImage image) {
-    if (_downloadedImage != null) {
+  public final void onImageDownload(IImage image)
+  {
+    if (_downloadedImage != null)
+    {
       IFactory.instance().deleteImage(_downloadedImage);
     }
     _downloadedImage = image;
   }
 
-  public final GLState createState(G3MRenderContext rc, GLState parentState) {
-    if (!_initialized) {
+  public final GLState createState(G3MRenderContext rc, GLState parentState)
+  {
+    if (!_initialized)
+    {
       _initialized = true;
       requestImage(rc);
     }
   
     final IGLTextureId texId = getTextureId(rc);
-    if (texId == null) {
+    if (texId == null)
+    {
       return null;
     }
   

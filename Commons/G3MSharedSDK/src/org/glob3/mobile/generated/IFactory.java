@@ -28,11 +28,14 @@ package org.glob3.mobile.generated;
 //class ILogger;
 //class IImageListener;
 
-public abstract class IFactory {
+public abstract class IFactory
+{
   private static IFactory _instance = null;
 
-  public static void setInstance(IFactory factory) {
-    if (_instance != null) {
+  public static void setInstance(IFactory factory)
+  {
+    if (_instance != null)
+    {
       ILogger.instance().logWarning("IFactory instance already set!");
       if (_instance != null)
          _instance.dispose();
@@ -40,11 +43,13 @@ public abstract class IFactory {
     _instance = factory;
   }
 
-  public static IFactory instance() {
+  public static IFactory instance()
+  {
     return _instance;
   }
 
-  public void dispose() {
+  public void dispose()
+  {
 
   }
 

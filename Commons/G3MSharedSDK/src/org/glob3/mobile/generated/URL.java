@@ -17,17 +17,20 @@ package org.glob3.mobile.generated;
 
 
 
-public class URL {
+public class URL
+{
   private final String _path;
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  URL operator =(URL that);
 
 
-  public URL(URL that) {
+  public URL(URL that)
+  {
      _path = that._path;
   }
 
-  public URL() {
+  public URL()
+  {
      _path = "";
   }
 
@@ -36,31 +39,38 @@ public class URL {
    
    @param escapePath Escape the given path (true) or take it as it is given (false)
    */
-  public URL(String path, boolean escapePath) {
+  public URL(String path, boolean escapePath)
+  {
      _path = escapePath ? escape(path) : path;
   }
 
-  public URL(URL parent, String path) {
+  public URL(URL parent, String path)
+  {
      _path = parent.getPath() + "/" + path;
   }
 
-  public final String getPath() {
+  public final String getPath()
+  {
     return _path;
   }
 
-  public static URL nullURL() {
+  public static URL nullURL()
+  {
     return new URL("__NULL__", false);
   }
 
-  public final boolean isNull() {
+  public final boolean isNull()
+  {
     return (_path.equals("__NULL__"));
   }
 
-  public final boolean isEqualsTo(URL that) {
+  public final boolean isEqualsTo(URL that)
+  {
     return (_path.equals(that._path));
   }
 
-  public final String description() {
+  public final String description()
+  {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     isb.addString("URL(");
     isb.addString(getPath());
@@ -71,7 +81,8 @@ public class URL {
     return s;
   }
 
-  public static String escape(String path) {
+  public static String escape(String path)
+  {
   //    std::string escapedURL = IStringUtils::instance()->replaceSubstring(path, "%", "%25");
       String escapedURL = IStringUtils.instance().replaceSubstring(path, "\n", "%0A");
       escapedURL = IStringUtils.instance().replaceSubstring(escapedURL, " ", "%20");

@@ -17,10 +17,12 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class JSONNumber extends JSONBaseObject {
+public abstract class JSONNumber extends JSONBaseObject
+{
   public abstract double value();
 
-  public final JSONNumber asNumber() {
+  public final JSONNumber asNumber()
+  {
     return this;
   }
 

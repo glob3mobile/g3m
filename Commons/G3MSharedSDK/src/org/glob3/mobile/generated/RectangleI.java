@@ -16,31 +16,36 @@ package org.glob3.mobile.generated;
 //
 
 
-public class RectangleI {
+public class RectangleI
+{
   public final int _x;
   public final int _y;
   public final int _width;
   public final int _height;
 
-  public RectangleI(int x, int y, int width, int height) {
+  public RectangleI(int x, int y, int width, int height)
+  {
      _x = x;
      _y = y;
      _width = width;
      _height = height;
   }
 
-  public RectangleI(RectangleI that) {
+  public RectangleI(RectangleI that)
+  {
      _x = that._x;
      _y = that._y;
      _width = that._width;
      _height = that._height;
   }
 
-  public final boolean equalTo(RectangleI that) {
+  public final boolean equalTo(RectangleI that)
+  {
     return (_x == that._x) && (_y == that._y) && (_width == that._width) && (_height == that._height);
   }
 
-  public final boolean contains(int x, int y) {
+  public final boolean contains(int x, int y)
+  {
     return (x >= _x) && (y >= _y) && (x <= (_x + _width)) && (y <= (_y + _height));
   }
 

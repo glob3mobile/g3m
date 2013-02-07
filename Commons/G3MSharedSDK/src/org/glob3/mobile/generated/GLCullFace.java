@@ -17,22 +17,27 @@ package org.glob3.mobile.generated;
 
 
 
-public class GLCullFace {
+public class GLCullFace
+{
   private static int _front = 0;
   private static int _back = 0;
   private static int _frontAndBack = 0;
 
-  public static int front() {
+  public static int front()
+  {
      return _front;
   }
-  public static int back() {
+  public static int back()
+  {
      return _back;
   }
-  public static int frontAndBack() {
+  public static int frontAndBack()
+  {
      return _frontAndBack;
   }
 
-  public static void init(INativeGL ngl) {
+  public static void init(INativeGL ngl)
+  {
     _front = ngl.CullFace_Front();
     _back = ngl.CullFace_Back();
     _frontAndBack = ngl.CullFace_FrontAndBack();

@@ -21,65 +21,80 @@ package org.glob3.mobile.generated;
 /**
  * Class to represent a position in the globe by latitude, longitud and altitude.
  */
-public class Geodetic2D {
+public class Geodetic2D
+{
   private final Angle _latitude ;
   private final Angle _longitude ;
 
 
-  public static Geodetic2D zero() {
+  public static Geodetic2D zero()
+  {
     return new Geodetic2D(Angle.zero(), Angle.zero());
   }
-  public static Geodetic2D fromDegrees(double lat, double lon) {
+  public static Geodetic2D fromDegrees(double lat, double lon)
+  {
     return new Geodetic2D(Angle.fromDegrees(lat), Angle.fromDegrees(lon));
   }
 
-  public Geodetic2D(Angle latitude, Angle longitude) {
+  public Geodetic2D(Angle latitude, Angle longitude)
+  {
      _latitude = new Angle(latitude);
      _longitude = new Angle(longitude);
   }
 
-  public Geodetic2D(Geodetic2D g) {
+  public Geodetic2D(Geodetic2D g)
+  {
      _latitude = new Angle(g._latitude);
      _longitude = new Angle(g._longitude);
   }
 
-  public final Angle latitude() {
+  public final Angle latitude()
+  {
     return _latitude;
   }
 
-  public final Angle longitude() {
+  public final Angle longitude()
+  {
     return _longitude;
   }
 
-  public final Geodetic2D add(Geodetic2D that) {
+  public final Geodetic2D add(Geodetic2D that)
+  {
     return new Geodetic2D(_latitude.add(that._latitude), _longitude.add(that._longitude));
   }
 
-  public final Geodetic2D sub(Geodetic2D that) {
+  public final Geodetic2D sub(Geodetic2D that)
+  {
     return new Geodetic2D(_latitude.sub(that._latitude), _longitude.sub(that._longitude));
   }
 
-  public final Geodetic2D times(double magnitude) {
+  public final Geodetic2D times(double magnitude)
+  {
     return new Geodetic2D(_latitude.times(magnitude), _longitude.times(magnitude));
   }
 
-  public final Geodetic2D div(double magnitude) {
+  public final Geodetic2D div(double magnitude)
+  {
     return new Geodetic2D(_latitude.div(magnitude), _longitude.div(magnitude));
   }
 
-  public void dispose() {
+  public void dispose()
+  {
 
   }
 
-  public final boolean closeTo(Geodetic2D other) {
-    if (!_latitude.closeTo(other._latitude)) {
+  public final boolean closeTo(Geodetic2D other)
+  {
+    if (!_latitude.closeTo(other._latitude))
+    {
       return false;
     }
   
     return _longitude.closeTo(other._longitude);
   }
 
-  public final boolean isBetween(Geodetic2D min, Geodetic2D max) {
+  public final boolean isBetween(Geodetic2D min, Geodetic2D max)
+  {
     return _latitude.isBetween(min.latitude(), max.latitude()) && _longitude.isBetween(min.longitude(), max.longitude());
   }
 
@@ -87,7 +102,8 @@ public class Geodetic2D {
    * Returns the (initial) bearing from this point to the supplied point
    *   see http: //williams.best.vwh.net/avform.htm#Crs
    */
-  public final Angle bearingTo(Geodetic2D that) {
+  public final Angle bearingTo(Geodetic2D that)
+  {
     final Angle dLon = that.longitude().sub(longitude());
     final Angle lat1 = latitude();
     final Angle lat2 = that.latitude();
@@ -100,17 +116,21 @@ public class Geodetic2D {
   }
 
 
-  public final boolean lowerThan(Geodetic2D that) {
-    if (_latitude.lowerThan(that._latitude)) {
+  public final boolean lowerThan(Geodetic2D that)
+  {
+    if (_latitude.lowerThan(that._latitude))
+    {
       return true;
     }
-    else if (_latitude.greaterThan(that._latitude)) {
+    else if (_latitude.greaterThan(that._latitude))
+    {
       return false;
     }
     return _longitude.lowerThan(that._longitude);
   }
 
-  public final String description() {
+  public final String description()
+  {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     isb.addString("(lat=");
     isb.addString(_latitude.description());
@@ -123,7 +143,8 @@ public class Geodetic2D {
     return s;
   }
 
-  public final boolean isEqualsTo(Geodetic2D that) {
+  public final boolean isEqualsTo(Geodetic2D that)
+  {
     return _latitude.isEqualsTo(that._latitude) && _longitude.isEqualsTo(that._longitude);
   }
 

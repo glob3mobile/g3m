@@ -1,5 +1,6 @@
 package org.glob3.mobile.generated; 
-public class VisibleSectorListenerEntry {
+public class VisibleSectorListenerEntry
+{
   private VisibleSectorListener _listener;
   private final long _stabilizationIntervalInMS;
 
@@ -8,15 +9,18 @@ public class VisibleSectorListenerEntry {
 
   private ITimer _timer;
 
-  private ITimer getTimer() {
-    if (_timer == null) {
+  private ITimer getTimer()
+  {
+    if (_timer == null)
+    {
       _timer = IFactory.instance().createTimer();
     }
     return _timer;
   }
 
 
-  public VisibleSectorListenerEntry(VisibleSectorListener listener, TimeInterval stabilizationInterval) {
+  public VisibleSectorListenerEntry(VisibleSectorListener listener, TimeInterval stabilizationInterval)
+  {
      _listener = listener;
      _stabilizationIntervalInMS = stabilizationInterval.milliseconds();
      _lastSector = null;
@@ -25,15 +29,19 @@ public class VisibleSectorListenerEntry {
 
   }
 
-  public final void notifyListener(Sector visibleSector, G3MRenderContext rc) {
+  public final void notifyListener(Sector visibleSector, G3MRenderContext rc)
+  {
     final Geodetic3D cameraPosition = rc.getPlanet().toGeodetic3D(rc.getCurrentCamera().getCartesianPosition());
 
     _listener.onVisibleSectorChange(_lastSector, cameraPosition);
   }
 
-  public final void tryToNotifyListener(Sector visibleSector, G3MRenderContext rc) {
-    if (_stabilizationIntervalInMS == 0) {
-      if ((_lastSector == null) || (!_lastSector.isEqualsTo(visibleSector))) {
+  public final void tryToNotifyListener(Sector visibleSector, G3MRenderContext rc)
+  {
+    if (_stabilizationIntervalInMS == 0)
+    {
+      if ((_lastSector == null) || (!_lastSector.isEqualsTo(visibleSector)))
+      {
         if (_lastSector != null)
            _lastSector.dispose();
         _lastSector = new Sector(visibleSector);
@@ -41,18 +49,22 @@ public class VisibleSectorListenerEntry {
         notifyListener(visibleSector, rc);
       }
     }
-    else {
+    else
+    {
       final long now = getTimer().now().milliseconds();
 
-      if ((_lastSector == null) || (!_lastSector.isEqualsTo(visibleSector))) {
+      if ((_lastSector == null) || (!_lastSector.isEqualsTo(visibleSector)))
+      {
         if (_lastSector != null)
            _lastSector.dispose();
         _lastSector = new Sector(visibleSector);
         _whenNotifyInMS = now + _stabilizationIntervalInMS;
       }
 
-      if (_whenNotifyInMS != 0) {
-        if (now >= _whenNotifyInMS) {
+      if (_whenNotifyInMS != 0)
+      {
+        if (now >= _whenNotifyInMS)
+        {
           notifyListener(visibleSector, rc);
 
           _whenNotifyInMS = 0;
@@ -62,11 +74,13 @@ public class VisibleSectorListenerEntry {
 
   }
 
-  public void dispose() {
+  public void dispose()
+  {
     if (_listener != null)
        _listener.dispose();
 
-    if (_timer != null) {
+    if (_timer != null)
+    {
       IFactory.instance().deleteTimer(_timer);
     }
 

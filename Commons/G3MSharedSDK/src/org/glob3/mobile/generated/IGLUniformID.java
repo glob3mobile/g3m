@@ -8,7 +8,8 @@ package org.glob3.mobile.generated;
 //
 
 
-public interface IGLUniformID {
+public interface IGLUniformID
+{
   boolean isValid();
 
 }

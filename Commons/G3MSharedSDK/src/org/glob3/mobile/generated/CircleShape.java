@@ -17,12 +17,14 @@ package org.glob3.mobile.generated;
 
 
 
-public class CircleShape extends AbstractMeshShape {
+public class CircleShape extends AbstractMeshShape
+{
   private float _radius;
   private int _steps;
   private Color _color;
 
-  protected final Mesh createMesh(G3MRenderContext rc) {
+  protected final Mesh createMesh(G3MRenderContext rc)
+  {
   
     FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
   
@@ -31,7 +33,8 @@ public class CircleShape extends AbstractMeshShape {
   
     final double twicePi = IMathUtils.instance().pi() * 2;
   
-    for (int i = 0; i <= _steps; i++) {
+    for (int i = 0; i <= _steps; i++)
+    {
       final double angleInRadians = i * twicePi / _steps;
       final double x = _radius * IMathUtils.instance().cos(angleInRadians);
       final double y = _radius * IMathUtils.instance().sin(angleInRadians);
@@ -43,13 +46,16 @@ public class CircleShape extends AbstractMeshShape {
     return new DirectMesh(GLPrimitive.triangleFan(), true, Vector3D.zero(), vertices.create(), 1, 1, color);
   }
 
-  public CircleShape(Geodetic3D position, float radius, Color color) {
+  public CircleShape(Geodetic3D position, float radius, Color color)
+  {
      this(position, radius, color, 64);
   }
-  public CircleShape(Geodetic3D position, float radius) {
+  public CircleShape(Geodetic3D position, float radius)
+  {
      this(position, radius, null, 64);
   }
-  public CircleShape(Geodetic3D position, float radius, Color color, int steps) {
+  public CircleShape(Geodetic3D position, float radius, Color color, int steps)
+  {
      super(position);
      _radius = radius;
      _color = color;
@@ -57,20 +63,25 @@ public class CircleShape extends AbstractMeshShape {
 
   }
 
-  public void dispose() {
+  public void dispose()
+  {
     if (_color != null)
        _color.dispose();
   }
 
-  public final void setRadius(float radius) {
-    if (_radius != radius) {
+  public final void setRadius(float radius)
+  {
+    if (_radius != radius)
+    {
       _radius = radius;
       cleanMesh();
     }
   }
 
-  public final void setColor(Color color) {
-    if (_color != color) {
+  public final void setColor(Color color)
+  {
+    if (_color != color)
+    {
       if (_color != null)
          _color.dispose();
       _color = color;

@@ -2,13 +2,16 @@ package org.glob3.mobile.generated;
 //***************************************************************
 
 
-public class CameraDoubleTapHandler extends CameraEventHandler {
+public class CameraDoubleTapHandler extends CameraEventHandler
+{
 
 
-  public void dispose() {
+  public void dispose()
+  {
   }
 
-  public final boolean onTouchEvent(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext) {
+  public final boolean onTouchEvent(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  {
     // only one finger needed
     if (touchEvent.getTouchCount()!=1)
        return false;
@@ -21,11 +24,13 @@ public class CameraDoubleTapHandler extends CameraEventHandler {
     return true;
   }
 
-  public final void render(G3MRenderContext rc, CameraContext cameraContext) {
+  public final void render(G3MRenderContext rc, CameraContext cameraContext)
+  {
 
   }
 
-  public final void onDown(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext) {
+  public final void onDown(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  {
     // compute globe point where user tapped
     final Vector2I pixel = touchEvent.getTouch(0).getPos();
     Camera camera = cameraContext.getNextCamera();
@@ -50,9 +55,11 @@ public class CameraDoubleTapHandler extends CameraEventHandler {
     EffectTarget target = cameraContext.getNextCamera().getEffectTarget();
     eventContext.getEffectsScheduler().startEffect(effect, target);
   }
-  public final void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext) {
+  public final void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  {
   }
-  public final void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext) {
+  public final void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  {
   }
 
 }

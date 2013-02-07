@@ -18,13 +18,15 @@ package org.glob3.mobile.generated;
 //class IImageListener;
 
 
-public abstract class TextureBuilder {
+public abstract class TextureBuilder
+{
 
   public abstract void createTextureFromImage(GL gl, IFactory factory, IImage image, int width, int height, IImageListener listener, boolean autodelete);
 
   public abstract void createTextureFromImages(GL gl, IFactory factory, java.util.ArrayList<IImage> images, java.util.ArrayList<RectangleI> rectangles, int width, int height, IImageListener listener, boolean autodelete);
 
-  public void dispose() {
+  public void dispose()
+  {
   }
 
 }

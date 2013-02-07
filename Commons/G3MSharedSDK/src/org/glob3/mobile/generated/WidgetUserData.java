@@ -51,23 +51,28 @@ package org.glob3.mobile.generated;
 //class G3MContext;
 //class GLState;
 
-public class WidgetUserData {
+public class WidgetUserData
+{
   private G3MWidget _widget;
 
-  public WidgetUserData() {
+  public WidgetUserData()
+  {
      _widget = null;
 
   }
 
-  public void dispose() {
+  public void dispose()
+  {
 
   }
 
-  public final void setWidget(G3MWidget widget) {
+  public final void setWidget(G3MWidget widget)
+  {
     _widget = widget;
   }
 
-  public final G3MWidget getWidget() {
+  public final G3MWidget getWidget()
+  {
     return _widget;
   }
 }

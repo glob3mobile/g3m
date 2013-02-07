@@ -18,27 +18,34 @@ package org.glob3.mobile.generated;
 
 ///#include <string>
 
-public class RCObject {
+public class RCObject
+{
   private int _referenceCounter;
 
-  private void _suicide() {
+  private void _suicide()
+  {
   }
 
-  protected RCObject() { // the object starts retained
+  protected RCObject() // the object starts retained
+  {
      _referenceCounter = 1;
 
   }
 
-  public void dispose() {
+  public void dispose()
+  {
 
   }
 
-  public final void _retain() {
+  public final void _retain()
+  {
     _referenceCounter++;
   }
 
-  public final void _release() {
-    if (--_referenceCounter == 0) {
+  public final void _release()
+  {
+    if (--_referenceCounter == 0)
+    {
       _suicide();
     }
   }

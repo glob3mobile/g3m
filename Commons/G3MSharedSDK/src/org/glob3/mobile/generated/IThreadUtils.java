@@ -19,11 +19,13 @@ package org.glob3.mobile.generated;
 
 //class G3MContext;
 
-public abstract class IThreadUtils {
+public abstract class IThreadUtils
+{
   protected G3MContext _context;
 
 
-  public IThreadUtils() {
+  public IThreadUtils()
+  {
      _context = null;
 
   }
@@ -34,11 +36,13 @@ public abstract class IThreadUtils {
 
   public abstract void onDestroy(G3MContext context);
 
-  public void initialize(G3MContext context) {
+  public void initialize(G3MContext context)
+  {
     _context = context;
   }
 
-  public void dispose() {
+  public void dispose()
+  {
 
   }
 

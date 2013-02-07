@@ -21,7 +21,8 @@ package org.glob3.mobile.generated;
 //class IFloatBuffer;
 //class Color;
 
-public abstract class AbstractMesh extends Mesh {
+public abstract class AbstractMesh extends Mesh
+{
   protected final int _primitive;
   protected final boolean _owner;
   protected Vector3D _center ;
@@ -34,11 +35,13 @@ public abstract class AbstractMesh extends Mesh {
   protected final float _pointSize;
 
   protected Extent _extent;
-  protected final Extent computeExtent() {
+  protected final Extent computeExtent()
+  {
   
     final int vertexCount = getVertexCount();
   
-    if (vertexCount <= 0) {
+    if (vertexCount <= 0)
+    {
       return null;
     }
   
@@ -49,7 +52,8 @@ public abstract class AbstractMesh extends Mesh {
     double maxy = -1e10;
     double maxz = -1e10;
   
-    for (int i = 0; i < vertexCount; i++) {
+    for (int i = 0; i < vertexCount; i++)
+    {
       final int p = i * 3;
   
       final double x = _vertices.get(p) + _center._x;
@@ -75,7 +79,8 @@ public abstract class AbstractMesh extends Mesh {
     return new Box(new Vector3D(minx, miny, minz), new Vector3D(maxx, maxy, maxz));
   }
 
-  protected AbstractMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors, float colorsIntensity) {
+  protected AbstractMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors, float colorsIntensity)
+  {
      _primitive = primitive;
      _owner = owner;
      _vertices = vertices;
@@ -91,8 +96,10 @@ public abstract class AbstractMesh extends Mesh {
 
   protected abstract void rawRender(G3MRenderContext rc, GLState parentState);
 
-  public void dispose() {
-    if (_owner) {
+  public void dispose()
+  {
+    if (_owner)
+    {
       if (_vertices != null)
          _vertices.dispose();
       if (_colors != null)
@@ -106,19 +113,23 @@ public abstract class AbstractMesh extends Mesh {
        _translationMatrix.dispose();
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState) {
+  public final void render(G3MRenderContext rc, GLState parentState)
+  {
     GL gl = rc.getGL();
   
     GLState state = new GLState(parentState);
     state.enableVerticesPosition();
     state.setLineWidth(_lineWidth);
     state.setPointSize(_pointSize);
-    if (_colors != null) {
+    if (_colors != null)
+    {
       state.enableVertexColor(_colors, _colorsIntensity);
     }
-    if (_flatColor != null) {
+    if (_flatColor != null)
+    {
       state.enableFlatColor(_flatColor, _colorsIntensity);
-      if (_flatColor.isTransparent()) {
+      if (_flatColor.isTransparent())
+      {
         state.enableBlend();
         gl.setBlendFuncSrcAlpha();
       }
@@ -126,7 +137,8 @@ public abstract class AbstractMesh extends Mesh {
   
     gl.vertexPointer(3, 0, _vertices);
   
-    if (_translationMatrix != null) {
+    if (_translationMatrix != null)
+    {
       gl.pushMatrix();
       gl.multMatrixf(_translationMatrix);
     }
@@ -134,30 +146,37 @@ public abstract class AbstractMesh extends Mesh {
     gl.setState(state);
     rawRender(rc, state);
   
-    if (_translationMatrix != null) {
+    if (_translationMatrix != null)
+    {
       gl.popMatrix();
     }
   
   }
 
-  public final Extent getExtent() {
-    if (_extent == null) {
+  public final Extent getExtent()
+  {
+    if (_extent == null)
+    {
       _extent = computeExtent();
     }
     return _extent;
   }
 
-  public final int getVertexCount() {
+  public final int getVertexCount()
+  {
     return _vertices.size() / 3;
   }
 
-  public final Vector3D getVertex(int i) {
+  public final Vector3D getVertex(int i)
+  {
     final int p = i * 3;
     return new Vector3D(_vertices.get(p) + _center._x, _vertices.get(p+1) + _center._y, _vertices.get(p+2) + _center._z);
   }
 
-  public final boolean isTransparent(G3MRenderContext rc) {
-    if (_flatColor == null) {
+  public final boolean isTransparent(G3MRenderContext rc)
+  {
+    if (_flatColor == null)
+    {
       return false;
     }
     return _flatColor.isTransparent();

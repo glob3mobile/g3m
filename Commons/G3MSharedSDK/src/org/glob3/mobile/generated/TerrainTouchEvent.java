@@ -10,27 +10,32 @@ package org.glob3.mobile.generated;
 
 //class Layer;
 
-public class TerrainTouchEvent {
+public class TerrainTouchEvent
+{
   private final Geodetic3D _position ;
   private final Sector _sector ;
   private final Layer _layer;
 
-  public TerrainTouchEvent(Geodetic3D position, Sector sector, Layer layer) {
+  public TerrainTouchEvent(Geodetic3D position, Sector sector, Layer layer)
+  {
      _position = new Geodetic3D(position);
      _sector = new Sector(sector);
      _layer = layer;
 
   }
 
-  public final Geodetic3D getPosition() {
+  public final Geodetic3D getPosition()
+  {
     return _position;
   }
 
-  public final Sector getSector() {
+  public final Sector getSector()
+  {
     return _sector;
   }
 
-  public final Layer getLayer() {
+  public final Layer getLayer()
+  {
     return _layer;
   }
 

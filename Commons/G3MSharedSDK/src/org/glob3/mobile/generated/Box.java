@@ -21,31 +21,38 @@ package org.glob3.mobile.generated;
 //class Vector2D;
 
 
-public class Box extends Extent {
+public class Box extends Extent
+{
 
-  public Box(Vector3D lower, Vector3D upper) {
+  public Box(Vector3D lower, Vector3D upper)
+  {
      _lower = new Vector3D(lower);
      _upper = new Vector3D(upper);
      _mesh = null;
   }
 
-  public void dispose() {
+  public void dispose()
+  {
     if (_mesh != null)
        _mesh.dispose();
   }
 
-  public final boolean touches(Frustum frustum) {
+  public final boolean touches(Frustum frustum)
+  {
     return frustum.touchesWithBox(this);
   }
 
-  public final Vector3D getLower() {
+  public final Vector3D getLower()
+  {
      return _lower;
   }
-  public final Vector3D getUpper() {
+  public final Vector3D getUpper()
+  {
      return _upper;
   }
 
-  public final java.util.ArrayList<Vector3D> getCorners() {
+  public final java.util.ArrayList<Vector3D> getCorners()
+  {
     if (_corners == null) {
       _corners = new java.util.ArrayList<Vector3D>(8);
   
@@ -61,11 +68,13 @@ public class Box extends Extent {
     return _corners;
   }
 
-  public final double squaredProjectedArea(G3MRenderContext rc) {
+  public final double squaredProjectedArea(G3MRenderContext rc)
+  {
     final Vector2I extent = projectedExtent(rc);
     return extent._x * extent._y;
   }
-  public final Vector2I projectedExtent(G3MRenderContext rc) {
+  public final Vector2I projectedExtent(G3MRenderContext rc)
+  {
     final java.util.ArrayList<Vector3D> corners = getCorners();
   
     final Camera currentCamera = rc.getCurrentCamera();
@@ -78,23 +87,28 @@ public class Box extends Extent {
     int upperY = pixel0._y;
   
     final int cornersSize = corners.size();
-    for (int i = 1; i < cornersSize; i++) {
+    for (int i = 1; i < cornersSize; i++)
+    {
       final Vector2I pixel = currentCamera.point2Pixel(corners.get(i));
   
       final int x = pixel._x;
       final int y = pixel._y;
   
-      if (x < lowerX) {
+      if (x < lowerX)
+      {
          lowerX = x;
       }
-      if (y < lowerY) {
+      if (y < lowerY)
+      {
          lowerY = y;
       }
   
-      if (x > upperX) {
+      if (x > upperX)
+      {
          upperX = x;
       }
-      if (y > upperY) {
+      if (y > upperY)
+      {
          upperY = y;
       }
     }
@@ -105,7 +119,8 @@ public class Box extends Extent {
     return new Vector2I(width, height);
   }
 
-  public final boolean contains(Vector3D p) {
+  public final boolean contains(Vector3D p)
+  {
     final double margin = 1e-3;
     if (p._x < _lower._x - margin)
        return false;
@@ -125,43 +140,50 @@ public class Box extends Extent {
     return true;
   }
 
-  public final Vector3D intersectionWithRay(Vector3D origin, Vector3D direction) {
-    //MIN X {
+  public final Vector3D intersectionWithRay(Vector3D origin, Vector3D direction)
+  {
+    //MIN X
+    {
       Plane p = new Plane(new Vector3D(1.0, 0.0, 0.0), _lower._x);
       Vector3D inter = p.intersectionWithRay(origin, direction);
       if (!inter.isNan() && contains(inter))
          return inter;
     }
   
-    //MAX X {
+    //MAX X
+    {
       Plane p = new Plane(new Vector3D(1.0, 0.0, 0.0), _upper._x);
       Vector3D inter = p.intersectionWithRay(origin, direction);
       if (!inter.isNan() && contains(inter))
          return inter;
     }
   
-    //MIN Y {
+    //MIN Y
+    {
       Plane p = new Plane(new Vector3D(0.0, 1.0, 0.0), _lower._y);
       Vector3D inter = p.intersectionWithRay(origin, direction);
       if (!inter.isNan() && contains(inter))
          return inter;
     }
   
-    //MAX Y {
+    //MAX Y
+    {
       Plane p = new Plane(new Vector3D(0.0, 1.0, 0.0), _upper._y);
       Vector3D inter = p.intersectionWithRay(origin, direction);
       if (!inter.isNan() && contains(inter))
          return inter;
     }
   
-    //MIN Z {
+    //MIN Z
+    {
       Plane p = new Plane(new Vector3D(0.0, 0.0, 1.0), _lower._z);
       Vector3D inter = p.intersectionWithRay(origin, direction);
       if (!inter.isNan() && contains(inter))
          return inter;
     }
   
-    //MAX Z {
+    //MAX Z
+    {
       Plane p = new Plane(new Vector3D(0.0, 0.0, 1.0), _upper._z);
       Vector3D inter = p.intersectionWithRay(origin, direction);
       if (!inter.isNan() && contains(inter))
@@ -171,14 +193,17 @@ public class Box extends Extent {
     return Vector3D.nan();
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState) {
-    if (_mesh == null) {
+  public final void render(G3MRenderContext rc, GLState parentState)
+  {
+    if (_mesh == null)
+    {
       createMesh(Color.newFromRGBA((float)1.0, (float)1.0, (float)0.0, (float)1.0));
     }
     _mesh.render(rc, parentState);
   }
 
-  public final boolean touchesBox(Box box) {
+  public final boolean touchesBox(Box box)
+  {
     if (_lower._x > box._upper._x)
        return false;
     if (_upper._x < box._lower._x)
@@ -194,14 +219,17 @@ public class Box extends Extent {
     return true;
   }
 
-  public final Extent mergedWith(Extent that) {
-    if (that == null) {
+  public final Extent mergedWith(Extent that)
+  {
+    if (that == null)
+    {
       return null;
     }
     return that.mergedWithBox(this);
   }
 
-  public final Extent mergedWithBox(Box that) {
+  public final Extent mergedWithBox(Box that)
+  {
     final double lowerX = IMathUtils.instance().min(_lower._x, that._lower._x);
     final double lowerY = IMathUtils.instance().min(_lower._y, that._lower._y);
     final double lowerZ = IMathUtils.instance().min(_lower._z, that._lower._z);
@@ -220,7 +248,8 @@ public class Box extends Extent {
   private java.util.ArrayList<Vector3D> _corners = null; // cache for getCorners() method
 
   private Mesh _mesh;
-  private void createMesh(Color color) {
+  private void createMesh(Color color)
+  {
   
     float[] v = { (float) _lower._x, (float) _lower._y, (float) _lower._z, (float) _lower._x, (float) _upper._y, (float) _lower._z, (float) _lower._x, (float) _upper._y, (float) _upper._z, (float) _lower._x, (float) _lower._y, (float) _upper._z, (float) _upper._x, (float) _lower._y, (float) _lower._z, (float) _upper._x, (float) _upper._y, (float) _lower._z, (float) _upper._x, (float) _upper._y, (float) _upper._z, (float) _upper._x, (float) _lower._y, (float) _upper._z };
   
@@ -230,12 +259,14 @@ public class Box extends Extent {
     ShortBufferBuilder indices = new ShortBufferBuilder();
   
     final int numVertices = 8;
-    for (int n = 0; n<numVertices; n++) {
+    for (int n = 0; n<numVertices; n++)
+    {
       vertices.add(v[n *3], v[n *3+1], v[n *3+2]);
     }
   
     final int numIndices = 48;
-    for (int n = 0; n<numIndices; n++) {
+    for (int n = 0; n<numIndices; n++)
+    {
       indices.add(i[n]);
     }
   

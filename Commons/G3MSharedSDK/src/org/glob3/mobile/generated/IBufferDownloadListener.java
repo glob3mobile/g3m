@@ -9,7 +9,8 @@ package org.glob3.mobile.generated;
 
 
 
-public interface IBufferDownloadListener {
+public interface IBufferDownloadListener
+{
 
   /**
    Callback method invoked on a successful download.  The buffer has to be deleted in C++ / .disposed() in Java

@@ -21,7 +21,8 @@ package org.glob3.mobile.generated;
 //class Camera;
 //class MarkTouchListener;
 
-public class MarksRenderer extends LeafRenderer {
+public class MarksRenderer extends LeafRenderer
+{
   private final boolean _readyWhenMarksReady;
   private java.util.ArrayList<Mark> _marks = new java.util.ArrayList<Mark>();
 
@@ -32,7 +33,8 @@ public class MarksRenderer extends LeafRenderer {
   private boolean _autoDeleteMarkTouchListener;
 
 
-  public MarksRenderer(boolean readyWhenMarksReady) {
+  public MarksRenderer(boolean readyWhenMarksReady)
+  {
      _readyWhenMarksReady = readyWhenMarksReady;
      _context = null;
      _lastCamera = null;
@@ -40,8 +42,10 @@ public class MarksRenderer extends LeafRenderer {
      _autoDeleteMarkTouchListener = false;
   }
 
-  public final void setMarkTouchListener(MarkTouchListener markTouchListener, boolean autoDelete) {
-    if (_autoDeleteMarkTouchListener) {
+  public final void setMarkTouchListener(MarkTouchListener markTouchListener, boolean autoDelete)
+  {
+    if (_autoDeleteMarkTouchListener)
+    {
       if (_markTouchListener != null)
          _markTouchListener.dispose();
     }
@@ -50,32 +54,38 @@ public class MarksRenderer extends LeafRenderer {
     _autoDeleteMarkTouchListener = autoDelete;
   }
 
-  public void dispose() {
+  public void dispose()
+  {
     int marksSize = _marks.size();
-    for (int i = 0; i < marksSize; i++) {
+    for (int i = 0; i < marksSize; i++)
+    {
       if (_marks.get(i) != null)
          _marks.get(i).dispose();
     }
   
-    if (_autoDeleteMarkTouchListener) {
+    if (_autoDeleteMarkTouchListener)
+    {
       if (_markTouchListener != null)
          _markTouchListener.dispose();
     }
     _markTouchListener = null;
   }
 
-  public void initialize(G3MContext context) {
+  public void initialize(G3MContext context)
+  {
     _context = context;
   
     int marksSize = _marks.size();
-    for (int i = 0; i < marksSize; i++) {
+    for (int i = 0; i < marksSize; i++)
+    {
       Mark mark = _marks.get(i);
       mark.initialize(context);
     }
   }
 
   private Vector2D render_textureTranslation = new Vector2D(0.0, 0.0);
-  public void render(G3MRenderContext rc, GLState parentState) {
+  public void render(G3MRenderContext rc, GLState parentState)
+  {
     //  rc.getLogger()->logInfo("MarksRenderer::render()");
   
     // Saving camera for use in onTouchEvent
@@ -102,11 +112,13 @@ public class MarksRenderer extends LeafRenderer {
     gl.startBillBoardDrawing(camera.getWidth(), camera.getHeight());
   
     final int marksSize = _marks.size();
-    for (int i = 0; i < marksSize; i++) {
+    for (int i = 0; i < marksSize; i++)
+    {
       Mark mark = _marks.get(i);
       //rc->getLogger()->logInfo("Rendering Mark: \"%s\"", mark->getName().c_str());
   
-      if (mark.isReady()) {
+      if (mark.isReady())
+      {
         mark.render(rc);
       }
     }
@@ -114,41 +126,52 @@ public class MarksRenderer extends LeafRenderer {
     gl.stopBillBoardDrawing();
   }
 
-  public final void addMark(Mark mark) {
+  public final void addMark(Mark mark)
+  {
     _marks.add(mark);
-    if (_context != null) {
+    if (_context != null)
+    {
       mark.initialize(_context);
     }
   }
 
-  public final void removeMark(Mark mark) {
+  public final void removeMark(Mark mark)
+  {
     int pos = -1;
-    for (int i = 0; i < _marks.size(); i++) {
-      if (_marks.get(i) == mark) {
+    for (int i = 0; i < _marks.size(); i++)
+    {
+      if (_marks.get(i) == mark)
+      {
         pos = i;
         break;
       }
     }
-    if (pos != -1) {
+    if (pos != -1)
+    {
       _marks.remove(pos);
     }
   }
 
-  public final void removeAllMarks() {
-    for (int i = 0; i < _marks.size(); i++) {
+  public final void removeAllMarks()
+  {
+    for (int i = 0; i < _marks.size(); i++)
+    {
       if (_marks.get(i) != null)
          _marks.get(i).dispose();
     }
     _marks.clear();
   }
 
-  public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent) {
+  public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
+  {
   
     boolean handled = false;
   
-    if ((touchEvent.getType() == TouchEventType.Down) && (touchEvent.getTouchCount() == 1)) {
+    if ((touchEvent.getType() == TouchEventType.Down) && (touchEvent.getTouchCount() == 1))
+    {
   
-      if (_lastCamera != null) {
+      if (_lastCamera != null)
+      {
         final Vector2I touchedPixel = touchEvent.getTouch(0).getPos();
         final Planet planet = ec.getPlanet();
   
@@ -156,23 +179,28 @@ public class MarksRenderer extends LeafRenderer {
         Mark nearestMark = null;
   
         final int marksSize = _marks.size();
-        for (int i = 0; i < marksSize; i++) {
+        for (int i = 0; i < marksSize; i++)
+        {
           Mark mark = _marks.get(i);
   
-          if (!mark.isReady()) {
+          if (!mark.isReady())
+          {
             continue;
           }
-          if (!mark.isRendered()) {
+          if (!mark.isRendered())
+          {
             continue;
           }
   
           final int textureWidth = mark.getTextureWidth();
-          if (textureWidth <= 0) {
+          if (textureWidth <= 0)
+          {
             continue;
           }
   
           final int textureHeight = mark.getTextureHeight();
-          if (textureHeight <= 0) {
+          if (textureHeight <= 0)
+          {
             continue;
           }
   
@@ -181,19 +209,24 @@ public class MarksRenderer extends LeafRenderer {
   
           final RectangleI markPixelBounds = new RectangleI(markPixel._x - (textureWidth / 2), markPixel._y - (textureHeight / 2), textureWidth, textureHeight);
   
-          if (markPixelBounds.contains(touchedPixel._x, touchedPixel._y)) {
+          if (markPixelBounds.contains(touchedPixel._x, touchedPixel._y))
+          {
             final double distance = markPixel.sub(touchedPixel).squaredLength();
-            if (distance < minSqDistance) {
+            if (distance < minSqDistance)
+            {
               nearestMark = mark;
               minSqDistance = distance;
             }
           }
         }
   
-        if (nearestMark != null) {
+        if (nearestMark != null)
+        {
           handled = nearestMark.touched();
-          if (!handled) {
-            if (_markTouchListener != null) {
+          if (!handled)
+          {
+            if (_markTouchListener != null)
+            {
               handled = _markTouchListener.touchedMark(nearestMark);
             }
           }
@@ -204,14 +237,19 @@ public class MarksRenderer extends LeafRenderer {
     return handled;
   }
 
-  public final void onResizeViewportEvent(G3MEventContext ec, int width, int height) {
+  public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
+  {
   }
 
-  public final boolean isReadyToRender(G3MRenderContext rc) {
-    if (_readyWhenMarksReady) {
+  public final boolean isReadyToRender(G3MRenderContext rc)
+  {
+    if (_readyWhenMarksReady)
+    {
       int marksSize = _marks.size();
-      for (int i = 0; i < marksSize; i++) {
-        if (!_marks.get(i).isReady()) {
+      for (int i = 0; i < marksSize; i++)
+      {
+        if (!_marks.get(i).isReady())
+        {
           return false;
         }
       }
@@ -220,20 +258,25 @@ public class MarksRenderer extends LeafRenderer {
     return true;
   }
 
-  public final void start() {
+  public final void start()
+  {
   }
 
-  public final void stop() {
+  public final void stop()
+  {
   }
 
-  public final void onResume(G3MContext context) {
+  public final void onResume(G3MContext context)
+  {
     _context = context;
   }
 
-  public final void onPause(G3MContext context) {
+  public final void onPause(G3MContext context)
+  {
   }
 
-  public final void onDestroy(G3MContext context) {
+  public final void onDestroy(G3MContext context)
+  {
   }
 
 }

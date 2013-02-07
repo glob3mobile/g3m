@@ -17,22 +17,27 @@ package org.glob3.mobile.generated;
 
 
 
-public class JSONBoolean extends JSONBaseObject {
+public class JSONBoolean extends JSONBaseObject
+{
   private final boolean _value;
 
-  public JSONBoolean(boolean value) {
+  public JSONBoolean(boolean value)
+  {
      _value = value;
   }
 
-  public final boolean value() {
+  public final boolean value()
+  {
     return _value;
   }
 
-  public final JSONBoolean asBoolean() {
+  public final JSONBoolean asBoolean()
+  {
     return this;
   }
 
-  public final String description() {
+  public final String description()
+  {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     isb.addBool(_value);
     final String s = isb.getString();
@@ -41,11 +46,13 @@ public class JSONBoolean extends JSONBaseObject {
     return s;
   }
 
-  public final JSONBoolean deepCopy() {
+  public final JSONBoolean deepCopy()
+  {
     return new JSONBoolean(_value);
   }
 
-  public final void acceptVisitor(JSONVisitor visitor) {
+  public final void acceptVisitor(JSONVisitor visitor)
+  {
     visitor.visitBoolean(this);
   }
 

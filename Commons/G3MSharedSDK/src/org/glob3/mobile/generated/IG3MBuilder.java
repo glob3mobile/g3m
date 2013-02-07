@@ -19,7 +19,8 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class IG3MBuilder {
+public abstract class IG3MBuilder
+{
 
   private GL _gl;
   private IDownloader _downloader;
@@ -38,14 +39,16 @@ public abstract class IG3MBuilder {
   private boolean _logDownloaderStatistics;
   private WidgetUserData _userData;
 
-  private java.util.ArrayList<ICameraConstrainer> createCameraConstraints() {
+  private java.util.ArrayList<ICameraConstrainer> createCameraConstraints()
+  {
     java.util.ArrayList<ICameraConstrainer> cameraConstraints = new java.util.ArrayList<ICameraConstrainer>();
     SimpleCameraConstrainer scc = new SimpleCameraConstrainer();
     cameraConstraints.add(scc);
   
     return cameraConstraints;
   }
-  private CameraRenderer createCameraRenderer() {
+  private CameraRenderer createCameraRenderer()
+  {
     CameraRenderer cameraRenderer = new CameraRenderer();
     final boolean useInertia = true;
     cameraRenderer.addHandler(new CameraSingleDragHandler(useInertia));
@@ -58,8 +61,10 @@ public abstract class IG3MBuilder {
     return cameraRenderer;
   }
 
-  private void pvtSetInitializationTask(GInitializationTask initializationTask, boolean autoDeleteInitializationTask) {
-    if (_initializationTask != initializationTask) {
+  private void pvtSetInitializationTask(GInitializationTask initializationTask, boolean autoDeleteInitializationTask)
+  {
+    if (_initializationTask != initializationTask)
+    {
       if (_initializationTask != null)
          _initializationTask.dispose();
       _initializationTask = initializationTask;
@@ -70,48 +75,59 @@ public abstract class IG3MBuilder {
 
   protected IStorage _storage;
 
-  protected final G3MWidget create() {
+  protected final G3MWidget create()
+  {
   
-    if (_gl == null) {
+    if (_gl == null)
+    {
       ILogger.instance().logError("Logic Error: _gl not initialized");
       return null;
     }
   
-    if (_storage == null) {
+    if (_storage == null)
+    {
       _storage = createStorage();
     }
   
-    if (_downloader == null) {
+    if (_downloader == null)
+    {
       _downloader = createDownloader();
     }
   
-    if (_threadUtils == null) {
+    if (_threadUtils == null)
+    {
       _threadUtils = createThreadUtils();
     }
   
-    if (_cameraConstraints.size() == 0) {
+    if (_cameraConstraints.size() == 0)
+    {
       _cameraConstraints = createCameraConstraints();
     }
   
-    if (_cameraRenderer == null) {
+    if (_cameraRenderer == null)
+    {
       _cameraRenderer = createCameraRenderer();
     }
   
     Renderer mainRenderer = null;
     TileRenderer tileRenderer = _tileRendererBuilder.create();
-    if (_renderers.size() > 0) {
+    if (_renderers.size() > 0)
+    {
       mainRenderer = new CompositeRenderer();
       ((CompositeRenderer) mainRenderer).addRenderer(tileRenderer);
   
-      for (int i = 0; i < _renderers.size(); i++) {
+      for (int i = 0; i < _renderers.size(); i++)
+      {
         ((CompositeRenderer) mainRenderer).addRenderer(_renderers.get(i));
       }
     }
-    else {
+    else
+    {
       mainRenderer = tileRenderer;
     }
   
-    if (_busyRenderer == null) {
+    if (_busyRenderer == null)
+    {
       _busyRenderer = new BusyMeshRenderer();
     }
   
@@ -129,7 +145,8 @@ public abstract class IG3MBuilder {
   protected abstract IStorage createStorage();
   protected abstract IDownloader createDownloader();
 
-  public IG3MBuilder() {
+  public IG3MBuilder()
+  {
      _gl = null;
      _storage = null;
      _downloader = null;
@@ -145,93 +162,120 @@ public abstract class IG3MBuilder {
      _logDownloaderStatistics = false;
      _userData = null;
   }
-  public void dispose() {
+  public void dispose()
+  {
     if (_backgroundColor != null)
        _backgroundColor.dispose();
   
     if (_tileRendererBuilder != null)
        _tileRendererBuilder.dispose();
   }
-  public final void setGL(GL gl) {
-    if (_gl != gl) {
+  public final void setGL(GL gl)
+  {
+    if (_gl != gl)
+    {
       if (_gl != null)
          _gl.dispose();
       _gl = gl;
     }
   }
-  public final void setStorage(IStorage storage) {
-    if (_storage != storage) {
+  public final void setStorage(IStorage storage)
+  {
+    if (_storage != storage)
+    {
       if (_storage != null)
          _storage.dispose();
       _storage = storage;
     }
   }
-  public final void setDownloader(IDownloader downloader) {
-    if (_downloader != downloader) {
+  public final void setDownloader(IDownloader downloader)
+  {
+    if (_downloader != downloader)
+    {
       if (_downloader != null)
          _downloader.dispose();
       _downloader = downloader;
     }
   }
-  public final void setThreadUtils(IThreadUtils threadUtils) {
-    if (_threadUtils != threadUtils) {
+  public final void setThreadUtils(IThreadUtils threadUtils)
+  {
+    if (_threadUtils != threadUtils)
+    {
       if (_threadUtils != null)
          _threadUtils.dispose();
       _threadUtils = threadUtils;
     }
   }
-  public final void setPlanet(Planet planet) {
-    if (_planet != planet) {
+  public final void setPlanet(Planet planet)
+  {
+    if (_planet != planet)
+    {
       _planet = planet;
     }
   }
-  public final Planet getPlanet() {
-    if (_planet == null) {
+  public final Planet getPlanet()
+  {
+    if (_planet == null)
+    {
       _planet = Planet.createEarth();
     }
     return _planet;
   }
-  public final void addCameraConstraint(ICameraConstrainer cameraConstraint) {
+  public final void addCameraConstraint(ICameraConstrainer cameraConstraint)
+  {
     _cameraConstraints.add(cameraConstraint);
   }
-  public final void setCameraRenderer(CameraRenderer cameraRenderer) {
-    if (_cameraRenderer != cameraRenderer) {
+  public final void setCameraRenderer(CameraRenderer cameraRenderer)
+  {
+    if (_cameraRenderer != cameraRenderer)
+    {
       if (_cameraRenderer != null)
          _cameraRenderer.dispose();
       _cameraRenderer = cameraRenderer;
     }
   }
-  public final void setBackgroundColor(Color backgroundColor) {
-    if (_backgroundColor != backgroundColor) {
+  public final void setBackgroundColor(Color backgroundColor)
+  {
+    if (_backgroundColor != backgroundColor)
+    {
       if (_backgroundColor != null)
          _backgroundColor.dispose();
       _backgroundColor = backgroundColor;
     }
   }
-  public final TileRendererBuilder getTileRendererBuilder() {
+  public final TileRendererBuilder getTileRendererBuilder()
+  {
     return _tileRendererBuilder;
   }
-  public final void setBusyRenderer(Renderer busyRenderer) {
-    if (_busyRenderer != busyRenderer) {
+  public final void setBusyRenderer(Renderer busyRenderer)
+  {
+    if (_busyRenderer != busyRenderer)
+    {
       if (_busyRenderer != null)
          _busyRenderer.dispose();
       _busyRenderer = busyRenderer;
     }
   }
-  public final void addRenderer(Renderer renderer) {
+  public final void addRenderer(Renderer renderer)
+  {
     _renderers.add(renderer);
   }
-  public final void addPeriodicalTask(PeriodicalTask periodicalTask) {
+  public final void addPeriodicalTask(PeriodicalTask periodicalTask)
+  {
     _periodicalTasks.add(periodicalTask);
   }
-  public final void setLogFPS(boolean logFPS) {
+  public final void setLogFPS(boolean logFPS)
+  {
     _logFPS = logFPS;
   }
-  public final void setLogDownloaderStatistics(boolean logDownloaderStatistics) {
+  public final void setLogDownloaderStatistics(boolean logDownloaderStatistics)
+  {
     _logDownloaderStatistics = logDownloaderStatistics;
   }
-  public final void setUserData(WidgetUserData userData) {
-    if (_userData != userData) {
+  public final void setUserData(WidgetUserData userData)
+  {
+    if (_userData != userData)
+    {
       if (_userData != null)
          _userData.dispose();
       _userData = userData;

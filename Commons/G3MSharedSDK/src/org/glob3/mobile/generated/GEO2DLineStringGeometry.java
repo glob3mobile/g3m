@@ -20,10 +20,12 @@ package org.glob3.mobile.generated;
 
 //class Geodetic2D;
 
-public class GEO2DLineStringGeometry extends GEOLineStringGeometry {
+public class GEO2DLineStringGeometry extends GEOLineStringGeometry
+{
   private java.util.ArrayList<Geodetic2D> _coordinates;
 
-  protected final Mesh createMesh(G3MRenderContext rc) {
+  protected final Mesh createMesh(G3MRenderContext rc)
+  {
     Color color = Color.newFromRGBA(1, 1, 0, 1);
     final float lineWidth = 2F;
   
@@ -31,14 +33,17 @@ public class GEO2DLineStringGeometry extends GEOLineStringGeometry {
   }
 
 
-  public GEO2DLineStringGeometry(java.util.ArrayList<Geodetic2D> coordinates) {
+  public GEO2DLineStringGeometry(java.util.ArrayList<Geodetic2D> coordinates)
+  {
      _coordinates = coordinates;
 
   }
 
-  public void dispose() {
+  public void dispose()
+  {
     final int coordinatesCount = _coordinates.size();
-    for (int i = 0; i < coordinatesCount; i++) {
+    for (int i = 0; i < coordinatesCount; i++)
+    {
       Geodetic2D coordinate = _coordinates.get(i);
       if (coordinate != null)
          coordinate.dispose();

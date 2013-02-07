@@ -16,14 +16,17 @@ package org.glob3.mobile.generated;
 //class Box;
 //class GLState;
 
-public abstract class Extent {
-  public void dispose() {
+public abstract class Extent
+{
+  public void dispose()
+  {
   }
 
   public abstract boolean touches(Frustum frustum);
 
 
-  public double projectedArea(G3MRenderContext rc) {
+  public double projectedArea(G3MRenderContext rc)
+  {
     return IMathUtils.instance().sqrt(squaredProjectedArea(rc));
   }
 

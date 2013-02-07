@@ -19,9 +19,11 @@ package org.glob3.mobile.generated;
 
 //class Vector3D;
 
-public abstract class Mesh {
+public abstract class Mesh
+{
 
-  public void dispose() {
+  public void dispose()
+  {
   }
 
   public abstract int getVertexCount();

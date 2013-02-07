@@ -19,36 +19,45 @@ package org.glob3.mobile.generated;
 
 //class SGLayerNode;
 
-public class SGTextureNode extends SGNode {
+public class SGTextureNode extends SGNode
+{
   private java.util.ArrayList<SGLayerNode> _layers = new java.util.ArrayList<SGLayerNode>();
 
-  public SGTextureNode(String id, String sId) {
+  public SGTextureNode(String id, String sId)
+  {
      super(id, sId);
 
   }
 
-  public void dispose() {
+  public void dispose()
+  {
     final int layersCount = _layers.size();
-    for (int i = 0; i < layersCount; i++) {
+    for (int i = 0; i < layersCount; i++)
+    {
       SGLayerNode layer = _layers.get(i);
       if (layer != null)
          layer.dispose();
     }
   }
 
-  public final void addLayer(SGLayerNode layer) {
+  public final void addLayer(SGLayerNode layer)
+  {
     _layers.add(layer);
   
-    if (_context != null) {
+    if (_context != null)
+    {
       layer.initialize(_context, _shape);
     }
   }
 
-  public final boolean isReadyToRender(G3MRenderContext rc) {
+  public final boolean isReadyToRender(G3MRenderContext rc)
+  {
     final int layersCount = _layers.size();
-    for (int i = 0; i < layersCount; i++) {
+    for (int i = 0; i < layersCount; i++)
+    {
       SGLayerNode layer = _layers.get(i);
-      if (!layer.isReadyToRender(rc)) {
+      if (!layer.isReadyToRender(rc))
+      {
         return false;
       }
     }
@@ -78,11 +87,13 @@ public class SGTextureNode extends SGNode {
   //  }
   //}
   
-  public final void initialize(G3MContext context, SGShape shape) {
+  public final void initialize(G3MContext context, SGShape shape)
+  {
     super.initialize(context, shape);
   
     final int layersCount = _layers.size();
-    for (int i = 0; i < layersCount; i++) {
+    for (int i = 0; i < layersCount; i++)
+    {
       SGLayerNode child = _layers.get(i);
       child.initialize(context, shape);
     }
@@ -91,33 +102,41 @@ public class SGTextureNode extends SGNode {
 //  void rawRender(const G3MRenderContext* rc,
 //                 const GLState& parentState);
 
-  public final void prepareRender(G3MRenderContext rc) {
+  public final void prepareRender(G3MRenderContext rc)
+  {
     final int layersCount = _layers.size();
-    for (int i = 0; i < layersCount; i++) {
+    for (int i = 0; i < layersCount; i++)
+    {
       SGLayerNode layer = _layers.get(i);
       layer.prepareRender(rc);
     }
   }
 
-  public final void cleanUpRender(G3MRenderContext rc) {
+  public final void cleanUpRender(G3MRenderContext rc)
+  {
     final int layersCount = _layers.size();
-    for (int i = 0; i < layersCount; i++) {
+    for (int i = 0; i < layersCount; i++)
+    {
       SGLayerNode layer = _layers.get(i);
       layer.cleanUpRender(rc);
     }
   }
 
-  public final GLState createState(G3MRenderContext rc, GLState parentState) {
+  public final GLState createState(G3MRenderContext rc, GLState parentState)
+  {
     return null;
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState) {
+  public final void render(G3MRenderContext rc, GLState parentState)
+  {
     final GLState myState = createState(rc, parentState);
     final GLState state2;
-    if (myState == null) {
+    if (myState == null)
+    {
       state2 = parentState;
     }
-    else {
+    else
+    {
       state2 = myState;
     }
   
@@ -126,22 +145,26 @@ public class SGTextureNode extends SGNode {
     //  rawRender(rc, *state);
   
     final int layersCount = _layers.size();
-    for (int i = 0; i < layersCount; i++) {
+    for (int i = 0; i < layersCount; i++)
+    {
       SGLayerNode layer = _layers.get(i);
   
       final GLState layerState = layer.createState(rc, state2);
       final GLState state;
-      if (layerState == null) {
+      if (layerState == null)
+      {
         state = state2;
       }
-      else {
+      else
+      {
         state = layerState;
       }
   
       layer.rawRender(rc, state);
   
       final int childrenCount = _children.size();
-      for (int j = 0; j < childrenCount; j++) {
+      for (int j = 0; j < childrenCount; j++)
+      {
         SGNode child = _children.get(j);
         child.render(rc, state);
       }

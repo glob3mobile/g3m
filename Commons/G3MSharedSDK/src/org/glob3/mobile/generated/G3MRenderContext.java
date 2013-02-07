@@ -5,7 +5,8 @@ package org.glob3.mobile.generated;
 //class FrameTasksExecutor;
 
 
-public class G3MRenderContext extends G3MContext {
+public class G3MRenderContext extends G3MContext
+{
   private FrameTasksExecutor _frameTasksExecutor;
   private GL _gl;
   private final Camera _currentCamera;
@@ -16,7 +17,8 @@ public class G3MRenderContext extends G3MContext {
 
   private java.util.ArrayList<OrderedRenderable> _orderedRenderables;
 
-  public G3MRenderContext(FrameTasksExecutor frameTasksExecutor, IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, IMathUtils mathUtils, IJSONParser jsonParser, Planet planet, GL gl, Camera currentCamera, Camera nextCamera, TexturesHandler texturesHandler, TextureBuilder textureBuilder, IDownloader downloader, EffectsScheduler scheduler, ITimer frameStartTimer, IStorage storage) {
+  public G3MRenderContext(FrameTasksExecutor frameTasksExecutor, IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, IMathUtils mathUtils, IJSONParser jsonParser, Planet planet, GL gl, Camera currentCamera, Camera nextCamera, TexturesHandler texturesHandler, TextureBuilder textureBuilder, IDownloader downloader, EffectsScheduler scheduler, ITimer frameStartTimer, IStorage storage)
+  {
      super(factory, stringUtils, threadUtils, logger, mathUtils, jsonParser, planet, downloader, scheduler, storage);
      _frameTasksExecutor = frameTasksExecutor;
      _gl = gl;
@@ -29,35 +31,43 @@ public class G3MRenderContext extends G3MContext {
 
   }
 
-  public final GL getGL() {
+  public final GL getGL()
+  {
     return _gl;
   }
 
-  public final Camera getCurrentCamera() {
+  public final Camera getCurrentCamera()
+  {
     return _currentCamera;
   }
 
-  public final Camera getNextCamera() {
+  public final Camera getNextCamera()
+  {
     return _nextCamera;
   }
 
-  public final TexturesHandler getTexturesHandler() {
+  public final TexturesHandler getTexturesHandler()
+  {
     return _texturesHandler;
   }
 
-  public final TextureBuilder getTextureBuilder() {
+  public final TextureBuilder getTextureBuilder()
+  {
     return _textureBuilder;
   }
 
-  public final ITimer getFrameStartTimer() {
+  public final ITimer getFrameStartTimer()
+  {
     return _frameStartTimer;
   }
 
-  public final FrameTasksExecutor getFrameTasksExecutor() {
+  public final FrameTasksExecutor getFrameTasksExecutor()
+  {
     return _frameTasksExecutor;
   }
 
-  public void dispose() {
+  public void dispose()
+  {
     //  delete _frameStartTimer;
     IFactory.instance().deleteTimer(_frameStartTimer);
     _orderedRenderables = null;
@@ -66,8 +76,10 @@ public class G3MRenderContext extends G3MContext {
   /*
    Get the OrderedRenderables, sorted by distanceFromEye()
    */
-  public final java.util.ArrayList<OrderedRenderable> getSortedOrderedRenderables() {
-    if (_orderedRenderables != null) {
+  public final java.util.ArrayList<OrderedRenderable> getSortedOrderedRenderables()
+  {
+    if (_orderedRenderables != null)
+    {
       java.util.Collections.sort(
                                  _orderedRenderables,
                                  new java.util.Comparator<OrderedRenderable>() {
@@ -83,8 +95,10 @@ public class G3MRenderContext extends G3MContext {
     return _orderedRenderables;
   }
 
-  public final void addOrderedRenderable(OrderedRenderable orderedRenderable) {
-    if (_orderedRenderables == null) {
+  public final void addOrderedRenderable(OrderedRenderable orderedRenderable)
+  {
+    if (_orderedRenderables == null)
+    {
       _orderedRenderables = new java.util.ArrayList<OrderedRenderable>();
     }
     _orderedRenderables.add(orderedRenderable);

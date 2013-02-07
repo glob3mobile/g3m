@@ -8,13 +8,15 @@ package org.glob3.mobile.generated;
 //
 
 
-public class Color {
+public class Color
+{
   private final float _red;
   private final float _green;
   private final float _blue;
   private final float _alpha;
 
-  private Color(float red, float green, float blue, float alpha) {
+  private Color(float red, float green, float blue, float alpha)
+  {
      _red = red;
      _green = green;
      _blue = blue;
@@ -22,66 +24,81 @@ public class Color {
 
   }
 
-  public Color(Color that) {
+  public Color(Color that)
+  {
      _red = that._red;
      _green = that._green;
      _blue = that._blue;
      _alpha = that._alpha;
   }
 
-  public void dispose() {
+  public void dispose()
+  {
 
   }
 
-  public static Color fromRGBA(float red, float green, float blue, float alpha) {
+  public static Color fromRGBA(float red, float green, float blue, float alpha)
+  {
     return new Color(red, green, blue, alpha);
   }
 
-  public static Color newFromRGBA(float red, float green, float blue, float alpha) {
+  public static Color newFromRGBA(float red, float green, float blue, float alpha)
+  {
     return new Color(red, green, blue, alpha);
   }
 
-  public static Color black() {
+  public static Color black()
+  {
     return Color.fromRGBA(0, 0, 0, 1);
   }
 
-  public static Color white() {
+  public static Color white()
+  {
     return Color.fromRGBA(1, 1, 1, 1);
   }
 
-  public static Color yellow() {
+  public static Color yellow()
+  {
     return Color.fromRGBA(1, 1, 0, 1);
   }
 
-  public static Color cyan() {
+  public static Color cyan()
+  {
     return Color.fromRGBA(0, 1, 1, 1);
   }
 
-  public static Color magenta() {
+  public static Color magenta()
+  {
     return Color.fromRGBA(1, 0, 1, 1);
   }
 
-  public static Color green() {
+  public static Color green()
+  {
     return Color.fromRGBA(0, 1, 0, 1);
   }
 
-  public final float getRed() {
+  public final float getRed()
+  {
     return _red;
   }
 
-  public final float getGreen() {
+  public final float getGreen()
+  {
     return _green;
   }
 
-  public final float getBlue() {
+  public final float getBlue()
+  {
     return _blue;
   }
 
-  public final float getAlpha() {
+  public final float getAlpha()
+  {
     return _alpha;
   }
 
-  public final Color mixedWith(Color that, float factor) {
+  public final Color mixedWith(Color that, float factor)
+  {
     float frac1 = factor;
     if (frac1 < 0)
        frac1 = 0F;
@@ -98,7 +115,8 @@ public class Color {
     return Color.fromRGBA(newRed, newGreen, newBlue, newAlpha);
   }
 
-  public final boolean isTransparent() {
+  public final boolean isTransparent()
+  {
     return (_alpha < 1);
   }
 

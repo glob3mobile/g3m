@@ -1,5 +1,6 @@
 package org.glob3.mobile.generated; 
-public class Mark {
+public class Mark
+{
   private final String _label;
   private final boolean _labelBottom;
 
@@ -18,8 +19,10 @@ public class Mark {
   private Vector3D _cartesianPosition;
 
   private IFloatBuffer _vertices;
-  private IFloatBuffer getVertices(Planet planet) {
-    if (_vertices == null) {
+  private IFloatBuffer getVertices(Planet planet)
+  {
+    if (_vertices == null)
+    {
       final Vector3D pos = getCartesianPosition(planet);
   
       FloatBufferBuilderFromCartesian3D vertex = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
@@ -40,25 +43,32 @@ public class Mark {
 
   private boolean _renderedMark;
 
-  public Mark(String label, URL iconURL, Geodetic3D position, boolean labelBottom, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener) {
+  public Mark(String label, URL iconURL, Geodetic3D position, boolean labelBottom, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener)
+  {
      this(label, iconURL, position, labelBottom, minDistanceToCamera, userData, autoDeleteUserData, listener, false);
   }
-  public Mark(String label, URL iconURL, Geodetic3D position, boolean labelBottom, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData) {
+  public Mark(String label, URL iconURL, Geodetic3D position, boolean labelBottom, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData)
+  {
      this(label, iconURL, position, labelBottom, minDistanceToCamera, userData, autoDeleteUserData, null, false);
   }
-  public Mark(String label, URL iconURL, Geodetic3D position, boolean labelBottom, double minDistanceToCamera, MarkUserData userData) {
+  public Mark(String label, URL iconURL, Geodetic3D position, boolean labelBottom, double minDistanceToCamera, MarkUserData userData)
+  {
      this(label, iconURL, position, labelBottom, minDistanceToCamera, userData, true, null, false);
   }
-  public Mark(String label, URL iconURL, Geodetic3D position, boolean labelBottom, double minDistanceToCamera) {
+  public Mark(String label, URL iconURL, Geodetic3D position, boolean labelBottom, double minDistanceToCamera)
+  {
      this(label, iconURL, position, labelBottom, minDistanceToCamera, null, true, null, false);
   }
-  public Mark(String label, URL iconURL, Geodetic3D position, boolean labelBottom) {
+  public Mark(String label, URL iconURL, Geodetic3D position, boolean labelBottom)
+  {
      this(label, iconURL, position, labelBottom, 4.5e+06, null, true, null, false);
   }
-  public Mark(String label, URL iconURL, Geodetic3D position) {
+  public Mark(String label, URL iconURL, Geodetic3D position)
+  {
      this(label, iconURL, position, true, 4.5e+06, null, true, null, false);
   }
-  public Mark(String label, URL iconURL, Geodetic3D position, boolean labelBottom, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener, boolean autoDeleteListener) {
+  public Mark(String label, URL iconURL, Geodetic3D position, boolean labelBottom, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener, boolean autoDeleteListener)
+  {
      _label = label;
      _iconURL = new URL(iconURL);
      _position = new Geodetic3D(position);
@@ -79,22 +89,28 @@ public class Mark {
   
   }
 
-  public Mark(String label, Geodetic3D position, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener) {
+  public Mark(String label, Geodetic3D position, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener)
+  {
      this(label, position, minDistanceToCamera, userData, autoDeleteUserData, listener, false);
   }
-  public Mark(String label, Geodetic3D position, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData) {
+  public Mark(String label, Geodetic3D position, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData)
+  {
      this(label, position, minDistanceToCamera, userData, autoDeleteUserData, null, false);
   }
-  public Mark(String label, Geodetic3D position, double minDistanceToCamera, MarkUserData userData) {
+  public Mark(String label, Geodetic3D position, double minDistanceToCamera, MarkUserData userData)
+  {
      this(label, position, minDistanceToCamera, userData, true, null, false);
   }
-  public Mark(String label, Geodetic3D position, double minDistanceToCamera) {
+  public Mark(String label, Geodetic3D position, double minDistanceToCamera)
+  {
      this(label, position, minDistanceToCamera, null, true, null, false);
   }
-  public Mark(String label, Geodetic3D position) {
+  public Mark(String label, Geodetic3D position)
+  {
      this(label, position, 4.5e+06, null, true, null, false);
   }
-  public Mark(String label, Geodetic3D position, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener, boolean autoDeleteListener) {
+  public Mark(String label, Geodetic3D position, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener, boolean autoDeleteListener)
+  {
      _label = label;
      _labelBottom = true;
      _iconURL = new URL("", false);
@@ -115,22 +131,28 @@ public class Mark {
   
   }
 
-  public Mark(URL iconURL, Geodetic3D position, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener) {
+  public Mark(URL iconURL, Geodetic3D position, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener)
+  {
      this(iconURL, position, minDistanceToCamera, userData, autoDeleteUserData, listener, false);
   }
-  public Mark(URL iconURL, Geodetic3D position, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData) {
+  public Mark(URL iconURL, Geodetic3D position, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData)
+  {
      this(iconURL, position, minDistanceToCamera, userData, autoDeleteUserData, null, false);
   }
-  public Mark(URL iconURL, Geodetic3D position, double minDistanceToCamera, MarkUserData userData) {
+  public Mark(URL iconURL, Geodetic3D position, double minDistanceToCamera, MarkUserData userData)
+  {
      this(iconURL, position, minDistanceToCamera, userData, true, null, false);
   }
-  public Mark(URL iconURL, Geodetic3D position, double minDistanceToCamera) {
+  public Mark(URL iconURL, Geodetic3D position, double minDistanceToCamera)
+  {
      this(iconURL, position, minDistanceToCamera, null, true, null, false);
   }
-  public Mark(URL iconURL, Geodetic3D position) {
+  public Mark(URL iconURL, Geodetic3D position)
+  {
      this(iconURL, position, 4.5e+06, null, true, null, false);
   }
-  public Mark(URL iconURL, Geodetic3D position, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener, boolean autoDeleteListener) {
+  public Mark(URL iconURL, Geodetic3D position, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener, boolean autoDeleteListener)
+  {
      _label = "";
      _labelBottom = true;
      _iconURL = new URL(iconURL);
@@ -151,54 +173,67 @@ public class Mark {
   
   }
 
-  public void dispose() {
+  public void dispose()
+  {
     if (_cartesianPosition != null)
        _cartesianPosition.dispose();
     if (_vertices != null)
        _vertices.dispose();
-    if (_autoDeleteListener) {
+    if (_autoDeleteListener)
+    {
       if (_listener != null)
          _listener.dispose();
     }
-    if (_autoDeleteUserData) {
+    if (_autoDeleteUserData)
+    {
       if (_userData != null)
          _userData.dispose();
     }
-    if (_textureImage != null) {
+    if (_textureImage != null)
+    {
       IFactory.instance().deleteImage(_textureImage);
     }
   }
 
-  public final String getLabel() {
+  public final String getLabel()
+  {
     return _label;
   }
 
-  public final Geodetic3D getPosition() {
+  public final Geodetic3D getPosition()
+  {
     return _position;
   }
 
-  public final void initialize(G3MContext context) {
-    if (!_textureSolved) {
+  public final void initialize(G3MContext context)
+  {
+    if (!_textureSolved)
+    {
       final boolean hasLabel = (_label.length() != 0);
       final boolean hasIconURL = (_iconURL.getPath().length() != 0);
   
-      if (hasIconURL) {
+      if (hasIconURL)
+      {
         IDownloader downloader = context.getDownloader();
   
         downloader.requestImage(_iconURL, 1000000, TimeInterval.fromDays(30), new IconDownloadListener(this, _label, _labelBottom), true);
       }
-      else {
-        if (hasLabel) {
+      else
+      {
+        if (hasLabel)
+        {
           ITextUtils.instance().createLabelImage(_label, new MarkLabelImageListener(null, this), true);
         }
-        else {
+        else
+        {
           ILogger.instance().logWarning("Marker created without label nor icon");
         }
       }
     }
   }
 
-  public final void render(G3MRenderContext rc) {
+  public final void render(G3MRenderContext rc)
+  {
     final Camera camera = rc.getCurrentCamera();
     final Planet planet = rc.getPlanet();
   
@@ -210,13 +245,17 @@ public class Mark {
   
     _renderedMark = (_minDistanceToCamera == 0) || (distanceToCamera <= _minDistanceToCamera);
   
-    if (_renderedMark) {
+    if (_renderedMark)
+    {
       final Vector3D normalAtMarkPosition = planet.geodeticSurfaceNormal(markPosition);
   
-      if (normalAtMarkPosition.angleBetween(markCameraVector)._radians > IMathUtils.instance().halfPi()) {
+      if (normalAtMarkPosition.angleBetween(markCameraVector)._radians > IMathUtils.instance().halfPi())
+      {
   
-        if (_textureId == null) {
-          if (_textureImage != null) {
+        if (_textureId == null)
+        {
+          if (_textureImage != null)
+          {
             _textureId = rc.getTexturesHandler().getGLTextureId(_textureImage, GLFormat.rgba(), _iconURL.getPath() + "_" + _label, false);
   
             rc.getFactory().deleteImage(_textureImage);
@@ -224,7 +263,8 @@ public class Mark {
           }
         }
   
-        if (_textureId != null) {
+        if (_textureId != null)
+        {
           GL gl = rc.getGL();
   
           gl.drawBillBoard(_textureId, getVertices(planet), _textureWidth, _textureHeight);
@@ -233,21 +273,25 @@ public class Mark {
     }
   }
 
-  public final boolean isReady() {
+  public final boolean isReady()
+  {
     return _textureSolved;
   }
 
-  public final boolean isRendered() {
+  public final boolean isRendered()
+  {
     return _renderedMark;
   }
 
-  public final void onTextureDownloadError() {
+  public final void onTextureDownloadError()
+  {
     _textureSolved = true;
   
     ILogger.instance().logError("Can't create texture for Mark (iconURL=\"%s\", label=\"%s\")", _iconURL.getPath(), _label);
   }
 
-  public final void onTextureDownload(IImage image) {
+  public final void onTextureDownload(IImage image)
+  {
     _textureSolved = true;
   //  _textureImage = image->shallowCopy();
     _textureImage = image;
@@ -256,39 +300,49 @@ public class Mark {
   //  IFactory::instance()->deleteImage(image);
   }
 
-  public final int getTextureWidth() {
+  public final int getTextureWidth()
+  {
     return _textureWidth;
   }
 
-  public final int getTextureHeight() {
+  public final int getTextureHeight()
+  {
     return _textureHeight;
   }
 
-  public final Vector2I getTextureExtent() {
+  public final Vector2I getTextureExtent()
+  {
     return new Vector2I(_textureWidth, _textureHeight);
   }
 
-  public final MarkUserData getUserData() {
+  public final MarkUserData getUserData()
+  {
     return _userData;
   }
 
-  public final void setUserData(MarkUserData userData) {
-    if (_autoDeleteUserData) {
+  public final void setUserData(MarkUserData userData)
+  {
+    if (_autoDeleteUserData)
+    {
       if (_userData != null)
          _userData.dispose();
     }
     _userData = userData;
   }
 
-  public final boolean touched() {
-    if (_listener == null) {
+  public final boolean touched()
+  {
+    if (_listener == null)
+    {
       return false;
     }
     return _listener.touchedMark(this);
   }
 
-  public final Vector3D getCartesianPosition(Planet planet) {
-    if (_cartesianPosition == null) {
+  public final Vector3D getCartesianPosition(Planet planet)
+  {
+    if (_cartesianPosition == null)
+    {
       _cartesianPosition = new Vector3D(planet.toCartesian(_position));
     }
     return _cartesianPosition;

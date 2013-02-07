@@ -17,13 +17,15 @@ package org.glob3.mobile.generated;
 
 
 
-public class SGRotateNode extends SGNode {
+public class SGRotateNode extends SGNode
+{
   private final double _x;
   private final double _y;
   private final double _z;
   private final double _angle;
 
-  public SGRotateNode(String id, String sId, double x, double y, double z, double angle) {
+  public SGRotateNode(String id, String sId, double x, double y, double z, double angle)
+  {
      super(id, sId);
      _x = x;
      _y = y;
@@ -32,7 +34,8 @@ public class SGRotateNode extends SGNode {
 
   }
 
-  public final void prepareRender(G3MRenderContext rc) {
+  public final void prepareRender(G3MRenderContext rc)
+  {
     GL gl = rc.getGL();
   
     gl.pushMatrix();
@@ -41,14 +44,16 @@ public class SGRotateNode extends SGNode {
     super.prepareRender(rc);
   }
 
-  public final void cleanUpRender(G3MRenderContext rc) {
+  public final void cleanUpRender(G3MRenderContext rc)
+  {
     GL gl = rc.getGL();
     gl.popMatrix();
   
     super.prepareRender(rc);
   }
 
-  public final GLState createState(G3MRenderContext rc, GLState parentState) {
+  public final GLState createState(G3MRenderContext rc, GLState parentState)
+  {
     return null;
   }
 

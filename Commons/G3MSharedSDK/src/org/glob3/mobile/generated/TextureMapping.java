@@ -23,9 +23,11 @@ package org.glob3.mobile.generated;
 //class G3MRenderContext;
 //class IFloatBuffer;
 
-public abstract class TextureMapping {
+public abstract class TextureMapping
+{
 
-  public void dispose() {
+  public void dispose()
+  {
   }
 
   public abstract void bind(G3MRenderContext rc);

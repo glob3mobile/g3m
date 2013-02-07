@@ -25,13 +25,16 @@ package org.glob3.mobile.generated;
 //class IFloatBuffer;
 
 
-public class MultiLayerTileTexturizer extends TileTexturizer {
+public class MultiLayerTileTexturizer extends TileTexturizer
+{
   private TilesRenderParameters _parameters;
 
   private IFloatBuffer _texCoordsCache;
 
-  private IFloatBuffer getTextureCoordinates(TileRenderContext trc) {
-    if (_texCoordsCache == null) {
+  private IFloatBuffer getTextureCoordinates(TileRenderContext trc)
+  {
+    if (_texCoordsCache == null)
+    {
       _texCoordsCache = trc.getTessellator().createUnitTextCoords();
     }
     return _texCoordsCache;
@@ -41,13 +44,15 @@ public class MultiLayerTileTexturizer extends TileTexturizer {
 
   private TexturesHandler _texturesHandler;
 
-  private LeveledTexturedMesh getMesh(Tile tile) {
+  private LeveledTexturedMesh getMesh(Tile tile)
+  {
     TileTextureBuilderHolder tileBuilderHolder = (TileTextureBuilderHolder) tile.getTexturizerData();
     return (tileBuilderHolder == null) ? null : tileBuilderHolder.get().getMesh();
   }
 
   public MultiLayerTileTexturizer()
-  //_pendingTopTileRequests(0), {
+  //_pendingTopTileRequests(0),
+  {
      _parameters = null;
      _texCoordsCache = null;
      _texturesHandler = null;
@@ -58,39 +63,47 @@ public class MultiLayerTileTexturizer extends TileTexturizer {
 //    _pendingTopTileRequests--;
 //  }
 
-  public void dispose() {
+  public void dispose()
+  {
     if (_texCoordsCache != null)
        _texCoordsCache.dispose();
     _texCoordsCache = null;
   }
 
-  public final boolean isReady(G3MRenderContext rc, LayerSet layerSet) {
-    if (layerSet != null) {
+  public final boolean isReady(G3MRenderContext rc, LayerSet layerSet)
+  {
+    if (layerSet != null)
+    {
       return layerSet.isReady();
     }
     return true;
   }
 
-  public final void initialize(G3MContext context, TilesRenderParameters parameters) {
+  public final void initialize(G3MContext context, TilesRenderParameters parameters)
+  {
     _parameters = parameters;
     //  _layerSet->initialize(ic);
   }
 
-  public final Mesh texturize(G3MRenderContext rc, TileRenderContext trc, Tile tile, Mesh tessellatorMesh, Mesh previousMesh) {
+  public final Mesh texturize(G3MRenderContext rc, TileRenderContext trc, Tile tile, Mesh tessellatorMesh, Mesh previousMesh)
+  {
     _texturesHandler = rc.getTexturesHandler();
   
   
     TileTextureBuilderHolder builderHolder = (TileTextureBuilderHolder) tile.getTexturizerData();
   
-    if (builderHolder == null) {
+    if (builderHolder == null)
+    {
       builderHolder = new TileTextureBuilderHolder(new TileTextureBuilder(this, rc, trc.getLayerSet(), _parameters, rc.getDownloader(), tile, tessellatorMesh, getTextureCoordinates(trc)));
       tile.setTexturizerData(builderHolder);
     }
   
-    if (trc.isForcedFullRender()) {
+    if (trc.isForcedFullRender())
+    {
       builderHolder.get().start();
     }
-    else {
+    else
+    {
 //C++ TO JAVA CONVERTER TODO TASK: Java does not allow declaring types within methods:
 //      class BuilderStartTask : public FrameTask
 //      {
@@ -125,80 +138,100 @@ public class MultiLayerTileTexturizer extends TileTexturizer {
     return builderHolder.get().getMesh();
   }
 
-  public final void tileToBeDeleted(Tile tile, Mesh mesh) {
+  public final void tileToBeDeleted(Tile tile, Mesh mesh)
+  {
   
     TileTextureBuilderHolder builderHolder = (TileTextureBuilderHolder) tile.getTexturizerData();
   
-    if (builderHolder != null) {
+    if (builderHolder != null)
+    {
       builderHolder.get().cancel();
       builderHolder.get().cleanTile();
       builderHolder.get().cleanMesh();
     }
-    else {
-      if (mesh != null) {
+    else
+    {
+      if (mesh != null)
+      {
         ILogger.instance().logInfo("break (point) on me 4\n");
       }
     }
   }
 
-  public final boolean tileMeetsRenderCriteria(Tile tile) {
+  public final boolean tileMeetsRenderCriteria(Tile tile)
+  {
     return false;
   }
 
-  public final void justCreatedTopTile(G3MRenderContext rc, Tile tile, LayerSet layerSet) {
+  public final void justCreatedTopTile(G3MRenderContext rc, Tile tile, LayerSet layerSet)
+  {
   }
 
-  public final void ancestorTexturedSolvedChanged(Tile tile, Tile ancestorTile, boolean textureSolved) {
-    if (!textureSolved) {
+  public final void ancestorTexturedSolvedChanged(Tile tile, Tile ancestorTile, boolean textureSolved)
+  {
+    if (!textureSolved)
+    {
       return;
     }
   
-    if (tile.isTextureSolved()) {
+    if (tile.isTextureSolved())
+    {
       return;
     }
   
     LeveledTexturedMesh ancestorMesh = getMesh(ancestorTile);
-    if (ancestorMesh == null) {
+    if (ancestorMesh == null)
+    {
       return;
     }
   
     final IGLTextureId glTextureId = ancestorMesh.getTopLevelGLTextureId();
-    if (glTextureId == null) {
+    if (glTextureId == null)
+    {
       return;
     }
   
     LeveledTexturedMesh tileMesh = getMesh(tile);
-    if (tileMesh == null) {
+    if (tileMesh == null)
+    {
       return;
     }
   
     final int level = tile.getLevel() - ancestorTile.getLevel() - _parameters._topLevel;
     _texturesHandler.retainGLTextureId(glTextureId);
-    if (!tileMesh.setGLTextureIdForLevel(level, glTextureId)) {
+    if (!tileMesh.setGLTextureIdForLevel(level, glTextureId))
+    {
       _texturesHandler.releaseGLTextureId(glTextureId);
     }
   }
 
-  public final IGLTextureId getTopLevelGLTextureIdForTile(Tile tile) {
+  public final IGLTextureId getTopLevelGLTextureIdForTile(Tile tile)
+  {
     LeveledTexturedMesh mesh = (LeveledTexturedMesh) tile.getTexturizedMesh();
   
     return (mesh == null) ? null : mesh.getTopLevelGLTextureId();
   }
 
-  public final void onTerrainTouchEvent(G3MEventContext ec, Geodetic3D position, Tile tile, LayerSet layerSet) {
-    if (layerSet != null) {
+  public final void onTerrainTouchEvent(G3MEventContext ec, Geodetic3D position, Tile tile, LayerSet layerSet)
+  {
+    if (layerSet != null)
+    {
       layerSet.onTerrainTouchEvent(ec, position, tile);
     }
   }
 
-  public final void tileMeshToBeDeleted(Tile tile, Mesh mesh) {
+  public final void tileMeshToBeDeleted(Tile tile, Mesh mesh)
+  {
     TileTextureBuilderHolder builderHolder = (TileTextureBuilderHolder) tile.getTexturizerData();
-    if (builderHolder != null) {
+    if (builderHolder != null)
+    {
       builderHolder.get().cancel();
       builderHolder.get().cleanMesh();
     }
-    else {
-      if (mesh != null) {
+    else
+    {
+      if (mesh != null)
+      {
         ILogger.instance().logInfo("break (point) on me 5\n");
       }
     }

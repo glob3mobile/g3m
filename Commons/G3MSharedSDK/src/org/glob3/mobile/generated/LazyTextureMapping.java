@@ -1,5 +1,6 @@
 package org.glob3.mobile.generated; 
-public class LazyTextureMapping extends TextureMapping {
+public class LazyTextureMapping extends TextureMapping
+{
   private LazyTextureMappingInitializer _initializer;
 
   private IGLTextureId _glTextureId;
@@ -18,9 +19,12 @@ public class LazyTextureMapping extends TextureMapping {
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  LazyTextureMapping(LazyTextureMapping that);
-  private void releaseGLTextureId() {
-    if (_texturesHandler != null) {
-      if (_glTextureId != null) {
+  private void releaseGLTextureId()
+  {
+    if (_texturesHandler != null)
+    {
+      if (_glTextureId != null)
+      {
         _texturesHandler.releaseGLTextureId(_glTextureId);
         _glTextureId = null;
       }
@@ -29,7 +33,8 @@ public class LazyTextureMapping extends TextureMapping {
 
   private final boolean _transparent;
 
-  public LazyTextureMapping(LazyTextureMappingInitializer initializer, TexturesHandler texturesHandler, boolean ownedTexCoords, boolean transparent) {
+  public LazyTextureMapping(LazyTextureMappingInitializer initializer, TexturesHandler texturesHandler, boolean ownedTexCoords, boolean transparent)
+  {
      _initializer = initializer;
      _glTextureId = null;
      _initialized = false;
@@ -41,12 +46,14 @@ public class LazyTextureMapping extends TextureMapping {
      _transparent = transparent;
   }
 
-  public void dispose() {
+  public void dispose()
+  {
     if (_initializer != null)
        _initializer.dispose();
     _initializer = null;
 
-    if (_ownedTexCoords) {
+    if (_ownedTexCoords)
+    {
         if (_texCoords != null)
            _texCoords.dispose();
     }
@@ -55,8 +62,10 @@ public class LazyTextureMapping extends TextureMapping {
     releaseGLTextureId();
   }
 
-  public final void bind(G3MRenderContext rc) {
-    if (!_initialized) {
+  public final void bind(G3MRenderContext rc)
+  {
+    if (!_initialized)
+    {
       _initializer.initialize();
   
       _scale = _initializer.getScale();
@@ -70,33 +79,39 @@ public class LazyTextureMapping extends TextureMapping {
       _initialized = true;
     }
   
-    if (_texCoords != null) {
+    if (_texCoords != null)
+    {
       GL gl = rc.getGL();
   
       gl.transformTexCoords(_scale, _translation);
       gl.bindTexture(_glTextureId);
       gl.setTextureCoordinates(2, 0, _texCoords);
     }
-    else {
+    else
+    {
       ILogger.instance().logError("LazyTextureMapping::bind() with _texCoords == NULL");
     }
   }
 
-  public final boolean isValid() {
+  public final boolean isValid()
+  {
     return _glTextureId != null;
   }
 
-  public final void setGLTextureId(IGLTextureId glTextureId) {
+  public final void setGLTextureId(IGLTextureId glTextureId)
+  {
     releaseGLTextureId();
     _glTextureId = glTextureId;
   }
 
 
-  public final IGLTextureId getGLTextureId() {
+  public final IGLTextureId getGLTextureId()
+  {
     return _glTextureId;
   }
 
-  public final boolean isTransparent(G3MRenderContext rc) {
+  public final boolean isTransparent(G3MRenderContext rc)
+  {
     return _transparent;
   }
 

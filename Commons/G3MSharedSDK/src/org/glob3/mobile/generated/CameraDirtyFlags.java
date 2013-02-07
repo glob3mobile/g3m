@@ -25,7 +25,8 @@ package org.glob3.mobile.generated;
 //class ILogger;
 
 
-public class CameraDirtyFlags {
+public class CameraDirtyFlags
+{
 
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
@@ -43,11 +44,13 @@ public class CameraDirtyFlags {
   public boolean _halfFrustumMC;
 
 
-  public CameraDirtyFlags() {
+  public CameraDirtyFlags()
+  {
     setAll(true);
   }
 
-  public final void copyFrom(CameraDirtyFlags other) {
+  public final void copyFrom(CameraDirtyFlags other)
+  {
     _frustumData = other._frustumData;
     _projectionMatrix = other._projectionMatrix;
     _modelMatrix = other._modelMatrix;
@@ -61,7 +64,8 @@ public class CameraDirtyFlags {
   }
 
 
-  public CameraDirtyFlags(CameraDirtyFlags other) {
+  public CameraDirtyFlags(CameraDirtyFlags other)
+  {
     _frustumData = other._frustumData;
     _projectionMatrix = other._projectionMatrix;
     _modelMatrix = other._modelMatrix;
@@ -75,7 +79,8 @@ public class CameraDirtyFlags {
 
   }
 
-  public final String description() {
+  public final String description()
+  {
     String d = "";
 
     if (_frustumData)
@@ -103,7 +108,8 @@ public class CameraDirtyFlags {
     return d;
   }
 
-  public final void setAll(boolean value) {
+  public final void setAll(boolean value)
+  {
     _frustumData = value;
     _projectionMatrix = value;
     _modelMatrix = value;

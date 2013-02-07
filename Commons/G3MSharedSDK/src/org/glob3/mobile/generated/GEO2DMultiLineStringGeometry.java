@@ -19,10 +19,12 @@ package org.glob3.mobile.generated;
 
 //class Geodetic2D;
 
-public class GEO2DMultiLineStringGeometry extends GEOMultiLineStringGeometry {
+public class GEO2DMultiLineStringGeometry extends GEOMultiLineStringGeometry
+{
   private java.util.ArrayList<java.util.ArrayList<Geodetic2D>> _coordinatesArray;
 
-  protected final Mesh createMesh(G3MRenderContext rc) {
+  protected final Mesh createMesh(G3MRenderContext rc)
+  {
   //  CompositeMesh* composite = new CompositeMesh();
   //  const int coordinatesArrayCount = _coordinatesArray->size();
   //  for (int i = 0; i < coordinatesArrayCount; i++) {
@@ -38,13 +40,16 @@ public class GEO2DMultiLineStringGeometry extends GEOMultiLineStringGeometry {
     FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.firstVertex(), rc.getPlanet(), Geodetic2D.zero());
   
     final int coordinatesArrayCount = _coordinatesArray.size();
-    for (int i = 0; i < coordinatesArrayCount; i++) {
+    for (int i = 0; i < coordinatesArrayCount; i++)
+    {
       java.util.ArrayList<Geodetic2D> coordinates = _coordinatesArray.get(i);
       final int coordinatesCount = coordinates.size();
-      for (int j = 0; j < coordinatesCount; j++) {
+      for (int j = 0; j < coordinatesCount; j++)
+      {
         Geodetic2D coordinate = coordinates.get(j);
         vertices.add(coordinate);
-        if ((j > 0) && (j < (coordinatesCount-1))) {
+        if ((j > 0) && (j < (coordinatesCount-1)))
+        {
           vertices.add(coordinate);
         }
       }
@@ -57,7 +62,8 @@ public class GEO2DMultiLineStringGeometry extends GEOMultiLineStringGeometry {
   }
 
 
-  public GEO2DMultiLineStringGeometry(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray) {
+  public GEO2DMultiLineStringGeometry(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray)
+  {
      _coordinatesArray = coordinatesArray;
 
   }
@@ -67,12 +73,15 @@ public class GEO2DMultiLineStringGeometry extends GEOMultiLineStringGeometry {
   
   
   
-  public void dispose() {
+  public void dispose()
+  {
     final int coordinatesArrayCount = _coordinatesArray.size();
-    for (int i = 0; i < coordinatesArrayCount; i++) {
+    for (int i = 0; i < coordinatesArrayCount; i++)
+    {
       java.util.ArrayList<Geodetic2D> coordinates = _coordinatesArray.get(i);
       final int coordinatesCount = coordinates.size();
-      for (int j = 0; j < coordinatesCount; j++) {
+      for (int j = 0; j < coordinatesCount; j++)
+      {
         Geodetic2D coordinate = coordinates.get(j);
         if (coordinate != null)
            coordinate.dispose();

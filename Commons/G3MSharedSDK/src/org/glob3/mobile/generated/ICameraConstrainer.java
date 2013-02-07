@@ -19,7 +19,8 @@ package org.glob3.mobile.generated;
 //class Planet;
 //class Camera;
 
-public interface ICameraConstrainer {
+public interface ICameraConstrainer
+{
   //NO DESTRUCTOR FOR INTERFACE
 
   void onCameraChange(Planet planet, Camera previousCamera, Camera nextCamera);

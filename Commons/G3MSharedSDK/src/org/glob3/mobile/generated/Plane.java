@@ -17,36 +17,43 @@ package org.glob3.mobile.generated;
 
 
 
-public class Plane {
+public class Plane
+{
 
 
-  public Plane() { //Empty constructor
+  public Plane() //Empty constructor
+  {
      _normal = new Vector3D(0.0,0.0,0.0);
      _d = 0.0;
   }
 
-  public Plane(Vector3D point0, Vector3D point1, Vector3D point2) {
+  public Plane(Vector3D point0, Vector3D point1, Vector3D point2)
+  {
      _normal = new Vector3D(point1.sub(point0).cross(point2.sub(point0)).normalized());
      _d = -_normal.dot(point0);
   }
 
-  public Plane(Vector3D normal, double d) {
+  public Plane(Vector3D normal, double d)
+  {
      _normal = new Vector3D(normal.normalized());
      _d = d;
   }
 
-  public Plane(double a, double b, double c, double d) {
+  public Plane(double a, double b, double c, double d)
+  {
      _normal = new Vector3D(new Vector3D(a,b,c).normalized());
      _d = d;
   }
 
-  public Plane(Plane that) {
+  public Plane(Plane that)
+  {
      _normal = new Vector3D(that._normal);
      _d = that._d;
 
   }
 
-  public final Plane transformedByTranspose(MutableMatrix44D M) {
+  public final Plane transformedByTranspose(MutableMatrix44D M)
+  {
     int TODO_Multiplication_with_Matrix;
   
     final double a = _normal._x *M.get(0) + _normal._y *M.get(1) + _normal._z *M.get(2) + _d *M.get(3);
@@ -57,11 +64,13 @@ public class Plane {
     return new Plane(a, b, c, d);
   }
 
-  public final double signedDistance(Vector3D point) {
+  public final double signedDistance(Vector3D point)
+  {
     return point.dot(_normal) + _d;
   }
 
-  public final Vector3D intersectionWithRay(Vector3D origin, Vector3D direction) {
+  public final Vector3D intersectionWithRay(Vector3D origin, Vector3D direction)
+  {
     //P = P1 + u (P2 - P1)
   
     final double x1 = origin._x;
@@ -77,7 +86,8 @@ public class Plane {
   
     final double den = A * (x1 -x2) + B * (y1 - y2) + C * (z1 - z2);
   
-    if (den == 0) {
+    if (den == 0)
+    {
       return Vector3D.nan();
     }
   

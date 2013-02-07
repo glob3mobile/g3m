@@ -17,7 +17,8 @@ package org.glob3.mobile.generated;
 
 
 
-public class SGMaterialNode extends SGNode {
+public class SGMaterialNode extends SGNode
+{
   private final Color _baseColor;
   private final Color _specularColor;
 
@@ -27,7 +28,8 @@ public class SGMaterialNode extends SGNode {
   private final double _emit;
 
 
-  public SGMaterialNode(String id, String sId, Color baseColor, Color specularColor, double specular, double shine, double alpha, double emit) {
+  public SGMaterialNode(String id, String sId, Color baseColor, Color specularColor, double specular, double shine, double alpha, double emit)
+  {
      super(id, sId);
      _baseColor = baseColor;
      _specularColor = specularColor;
@@ -38,15 +40,18 @@ public class SGMaterialNode extends SGNode {
 
   }
 
-  public void dispose() {
+  public void dispose()
+  {
     if (_baseColor != null)
        _baseColor.dispose();
     if (_specularColor != null)
        _specularColor.dispose();
   }
 
-  public final GLState createState(G3MRenderContext rc, GLState parentState) {
-    if (_baseColor == null) {
+  public final GLState createState(G3MRenderContext rc, GLState parentState)
+  {
+    if (_baseColor == null)
+    {
       return null;
     }
   

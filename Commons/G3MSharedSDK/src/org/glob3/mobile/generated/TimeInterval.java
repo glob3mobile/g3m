@@ -10,15 +10,18 @@ package org.glob3.mobile.generated;
 
 
 
-public class TimeInterval {
+public class TimeInterval
+{
   private final long _milliseconds;
 
-  private TimeInterval(long milliseconds) {
+  private TimeInterval(long milliseconds)
+  {
      _milliseconds = milliseconds;
 
   }
 
-  public TimeInterval(TimeInterval other) {
+  public TimeInterval(TimeInterval other)
+  {
      _milliseconds = other._milliseconds;
 
   }
@@ -28,47 +31,58 @@ public class TimeInterval {
   //  {
   //  }
 
-  public static TimeInterval fromMilliseconds(long milliseconds) {
+  public static TimeInterval fromMilliseconds(long milliseconds)
+  {
     return new TimeInterval(milliseconds);
   }
 
-  public static TimeInterval fromSeconds(double seconds) {
+  public static TimeInterval fromSeconds(double seconds)
+  {
     return TimeInterval.fromMilliseconds((long)(seconds * 1000.0));
   }
 
-  public static TimeInterval fromMinutes(double minutes) {
+  public static TimeInterval fromMinutes(double minutes)
+  {
     return TimeInterval.fromSeconds(minutes * 60.0);
   }
 
-  public static TimeInterval fromHours(double hours) {
+  public static TimeInterval fromHours(double hours)
+  {
     return TimeInterval.fromMinutes(hours * 60.0);
   }
 
-  public static TimeInterval fromDays(double days) {
+  public static TimeInterval fromDays(double days)
+  {
     return TimeInterval.fromHours(days * 24.0);
   }
 
-  public static TimeInterval forever() {
+  public static TimeInterval forever()
+  {
     return new TimeInterval(IMathUtils.instance().maxInt64());
   }
 
-  public static TimeInterval zero() {
+  public static TimeInterval zero()
+  {
     return new TimeInterval(0);
   }
 
-  public final long milliseconds() {
+  public final long milliseconds()
+  {
     return _milliseconds;
   }
 
-  public final double seconds() {
+  public final double seconds()
+  {
     return (double) _milliseconds / 1000.0;
   }
 
-  public final boolean lowerThan(TimeInterval that) {
+  public final boolean lowerThan(TimeInterval that)
+  {
     return _milliseconds < that._milliseconds;
   }
 
-  public final boolean isZero() {
+  public final boolean isZero()
+  {
     return _milliseconds == 0;
   }
 

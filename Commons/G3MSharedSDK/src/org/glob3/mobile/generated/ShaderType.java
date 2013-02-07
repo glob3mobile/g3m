@@ -20,15 +20,18 @@ package org.glob3.mobile.generated;
 
 //class GL;
 
-public enum ShaderType {
+public enum ShaderType
+{
   VERTEX_SHADER,
   FRAGMENT_SHADER;
 
-   public int getValue() {
+   public int getValue()
+   {
       return this.ordinal();
    }
 
-   public static ShaderType forValue(int value) {
+   public static ShaderType forValue(int value)
+   {
       return values()[value];
    }
 }

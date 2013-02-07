@@ -19,83 +19,100 @@ package org.glob3.mobile.generated;
 
 //class IStringBuilder;
 
-public class JSONObject extends JSONBaseObject {
+public class JSONObject extends JSONBaseObject
+{
   private java.util.HashMap<String, JSONBaseObject> _entries = new java.util.HashMap<String, JSONBaseObject>();
 
 
-  private void putKeyAndValueDescription(String key, IStringBuilder isb) {
+  private void putKeyAndValueDescription(String key, IStringBuilder isb)
+  {
     isb.addString("\"");
     isb.addString(key);
     isb.addString("\":");
     isb.addString(get(key).description());
   }
 
-  public void dispose() {
+  public void dispose()
+  {
     _entries.clear();
   
   }
 
-  public final JSONObject asObject() {
+  public final JSONObject asObject()
+  {
     return this;
   }
 
-  public final JSONBaseObject get(String key) {
+  public final JSONBaseObject get(String key)
+  {
   
     return _entries.get(key);
   }
 
-  public final JSONObject getAsObject(String key) {
+  public final JSONObject getAsObject(String key)
+  {
     final JSONBaseObject object = get(key);
     return (object == null) ? null : object.asObject();
   }
-  public final JSONArray getAsArray(String key) {
+  public final JSONArray getAsArray(String key)
+  {
     final JSONBaseObject object = get(key);
     return (object == null) ? null : object.asArray();
   }
-  public final JSONBoolean getAsBoolean(String key) {
+  public final JSONBoolean getAsBoolean(String key)
+  {
     final JSONBaseObject object = get(key);
     return (object == null) ? null : object.asBoolean();
   }
-  public final JSONNumber getAsNumber(String key) {
+  public final JSONNumber getAsNumber(String key)
+  {
     final JSONBaseObject object = get(key);
     return (object == null) ? null : object.asNumber();
   }
-  public final JSONString getAsString(String key) {
+  public final JSONString getAsString(String key)
+  {
     final JSONBaseObject object = get(key);
     return (object == null) ? null : object.asString();
   }
 
-  public final boolean getAsBoolean(String key, boolean defaultValue) {
+  public final boolean getAsBoolean(String key, boolean defaultValue)
+  {
     final JSONBoolean jsBool = getAsBoolean(key);
     return (jsBool == null) ? defaultValue : jsBool.value();
   }
 
-  public final double getAsNumber(String key, double defaultValue) {
+  public final double getAsNumber(String key, double defaultValue)
+  {
     final JSONNumber jsNumber = getAsNumber(key);
     return (jsNumber == null) ? defaultValue : jsNumber.value();
   }
 
-  public final String getAsString(String key, String defaultValue) {
+  public final String getAsString(String key, String defaultValue)
+  {
     final JSONString jsString = getAsString(key);
     return (jsString == null) ? defaultValue : jsString.value();
   }
 
-  public final void put(String key, JSONBaseObject object) {
+  public final void put(String key, JSONBaseObject object)
+  {
     _entries.put(key, object);
   }
 
-  public final int size() {
+  public final int size()
+  {
     return _entries.size();
   }
 
-  public final java.util.ArrayList<String> keys() {
+  public final java.util.ArrayList<String> keys()
+  {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#if JAVA_CODE
     return new java.util.ArrayList<String>(_entries.keySet());
 //#endif
   }
 
-  public final String description() {
+  public final String description()
+  {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
   
     isb.addString("{");
@@ -103,9 +120,11 @@ public class JSONObject extends JSONBaseObject {
     java.util.ArrayList<String> keys = this.keys();
   
     int keysCount = keys.size();
-    if (keysCount > 0) {
+    if (keysCount > 0)
+    {
       putKeyAndValueDescription(keys.get(0), isb);
-      for (int i = 1; i < keysCount; i++) {
+      for (int i = 1; i < keysCount; i++)
+      {
         isb.addString(", ");
         putKeyAndValueDescription(keys.get(i), isb);
       }
@@ -119,13 +138,15 @@ public class JSONObject extends JSONBaseObject {
     return s;
   }
 
-  public final JSONObject deepCopy() {
+  public final JSONObject deepCopy()
+  {
     JSONObject result = new JSONObject();
   
     java.util.ArrayList<String> keys = this.keys();
   
     int keysCount = keys.size();
-    for (int i = 0; i < keysCount; i++) {
+    for (int i = 0; i < keysCount; i++)
+    {
       String key = keys.get(i);
       result.put(key, JSONBaseObject.deepCopy(get(key)));
     }
@@ -133,14 +154,17 @@ public class JSONObject extends JSONBaseObject {
     return result;
   }
 
-  public final void acceptVisitor(JSONVisitor visitor) {
+  public final void acceptVisitor(JSONVisitor visitor)
+  {
     visitor.visitObjectBeforeChildren(this);
   
     java.util.ArrayList<String> keys = this.keys();
   
     int keysCount = keys.size();
-    for (int i = 0; i < keysCount; i++) {
-      if (i != 0) {
+    for (int i = 0; i < keysCount; i++)
+    {
+      if (i != 0)
+      {
         visitor.visitObjectInBetweenChildren(this);
       }
       String key = keys.get(i);

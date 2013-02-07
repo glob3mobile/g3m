@@ -24,13 +24,16 @@ package org.glob3.mobile.generated;
 
 //#define GMath IMathUtils.instance()
 
-public abstract class IMathUtils {
+public abstract class IMathUtils
+{
 
 
   private static IMathUtils _instance = null;
 
-  public static void setInstance(IMathUtils math) {
-    if (_instance != null) {
+  public static void setInstance(IMathUtils math)
+  {
+    if (_instance != null)
+    {
       ILogger.instance().logWarning("IMathUtils instance already set!");
       if (_instance != null)
          _instance.dispose();
@@ -38,11 +41,13 @@ public abstract class IMathUtils {
     _instance = math;
   }
 
-  public static IMathUtils instance() {
+  public static IMathUtils instance()
+  {
     return _instance;
   }
 
-  public void dispose() {
+  public void dispose()
+  {
   }
 
   public abstract double pi();
@@ -115,11 +120,13 @@ public abstract class IMathUtils {
   public abstract double min(double d1, double d2);
   public abstract double max(double d1, double d2);
 
-  public double lerp(double from, double to, double alpha) {
+  public double lerp(double from, double to, double alpha)
+  {
     return from + ((to - from) * alpha);
   }
 
-  public float lerp(float from, float to, float alpha) {
+  public float lerp(float from, float to, float alpha)
+  {
     return from + ((to - from) * alpha);
   }
 

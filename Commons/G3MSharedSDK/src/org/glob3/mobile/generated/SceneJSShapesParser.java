@@ -31,26 +31,31 @@ package org.glob3.mobile.generated;
 //class SGLayerNode;
 //class Color;
 
-public class SceneJSShapesParser {
+public class SceneJSShapesParser
+{
   private Shape _rootShape;
   private final String _uriPrefix;
 
-  private SceneJSShapesParser(JSONBaseObject jsonObject, String uriPrefix) {
+  private SceneJSShapesParser(JSONBaseObject jsonObject, String uriPrefix)
+  {
      _uriPrefix = uriPrefix;
      _rootShape = null;
     pvtParse(jsonObject);
   }
 
-  private Shape getRootShape() {
+  private Shape getRootShape()
+  {
     return _rootShape;
   }
 
-  private void pvtParse(JSONBaseObject json) {
+  private void pvtParse(JSONBaseObject json)
+  {
     //  _rootShape = toShape(jsonRootObject);
   
     SGNode node = toNode(json);
   
-    if (node != null) {
+    if (node != null)
+    {
       _rootShape = new SGShape(node, _uriPrefix);
     }
   
@@ -58,9 +63,11 @@ public class SceneJSShapesParser {
        json.dispose();
   }
 
-  private SGNode toNode(JSONBaseObject jsonBaseObject) {
+  private SGNode toNode(JSONBaseObject jsonBaseObject)
+  {
   
-    if (jsonBaseObject == null) {
+    if (jsonBaseObject == null)
+    {
       return null;
     }
   
@@ -69,29 +76,38 @@ public class SceneJSShapesParser {
   
     SGNode result = null;
   
-    if (jsonObject != null) {
+    if (jsonObject != null)
+    {
       final JSONString jsType = jsonObject.getAsString("type");
-      if (jsType != null) {
+      if (jsType != null)
+      {
         final String type = jsType.value();
-        if (type.compareTo("node") == 0) {
+        if (type.compareTo("node") == 0)
+        {
           result = createNode(jsonObject);
         }
-        else if (type.compareTo("rotate") == 0) {
+        else if (type.compareTo("rotate") == 0)
+        {
           result = createRotateNode(jsonObject);
         }
-        else if (type.compareTo("translate") == 0) {
+        else if (type.compareTo("translate") == 0)
+        {
           result = createTranslateNode(jsonObject);
         }
-        else if (type.compareTo("material") == 0) {
+        else if (type.compareTo("material") == 0)
+        {
           result = createMaterialNode(jsonObject);
         }
-        else if (type.compareTo("texture") == 0) {
+        else if (type.compareTo("texture") == 0)
+        {
           result = createTextureNode(jsonObject);
         }
-        else if (type.compareTo("geometry") == 0) {
+        else if (type.compareTo("geometry") == 0)
+        {
           result = createGeometryNode(jsonObject);
         }
-        else {
+        else
+        {
           ILogger.instance().logWarning("SceneJS: Unknown type \"%s\"", type);
         }
       }
@@ -100,17 +116,22 @@ public class SceneJSShapesParser {
     return result;
   }
 
-  private int parseChildren(JSONObject jsonObject, SGNode node) {
+  private int parseChildren(JSONObject jsonObject, SGNode node)
+  {
     int processedKeys = 0;
   
     final JSONArray jsNodes = jsonObject.getAsArray("nodes");
-    if (jsNodes != null) {
+    if (jsNodes != null)
+    {
       final int nodesCount = jsNodes.size();
-      for (int i = 0; i < nodesCount; i++) {
+      for (int i = 0; i < nodesCount; i++)
+      {
         final JSONObject child = jsNodes.getAsObject(i);
-        if (child != null) {
+        if (child != null)
+        {
           SGNode childNode = toNode(child);
-          if (childNode != null) {
+          if (childNode != null)
+          {
             node.addNode(childNode);
           }
         }
@@ -121,9 +142,11 @@ public class SceneJSShapesParser {
     return processedKeys;
   }
 
-  private void checkProcessedKeys(JSONObject jsonObject, int processedKeys) {
+  private void checkProcessedKeys(JSONObject jsonObject, int processedKeys)
+  {
     java.util.ArrayList<String> keys = jsonObject.keys();
-    if (processedKeys != keys.size()) {
+    if (processedKeys != keys.size())
+    {
   //    for (int i = 0; i < keys.size(); i++) {
   //      printf("%s\n", keys.at(i).c_str());
   //    }
@@ -132,17 +155,20 @@ public class SceneJSShapesParser {
     }
   }
 
-  private SGNode createNode(JSONObject jsonObject) {
+  private SGNode createNode(JSONObject jsonObject)
+  {
   
     int processedKeys = 1; // "type" is already processed
   
     final String id = jsonObject.getAsString("id", "");
-    if (id.compareTo("") != 0) {
+    if (id.compareTo("") != 0)
+    {
       processedKeys++;
     }
   
     final String sId = jsonObject.getAsString("sid", "");
-    if (sId.compareTo("") != 0) {
+    if (sId.compareTo("") != 0)
+    {
       processedKeys++;
     }
   
@@ -154,43 +180,50 @@ public class SceneJSShapesParser {
   
     return node;
   }
-  private SGRotateNode createRotateNode(JSONObject jsonObject) {
+  private SGRotateNode createRotateNode(JSONObject jsonObject)
+  {
     int processedKeys = 1; // "type" is already processed
   
     final String id = jsonObject.getAsString("id", "");
-    if (id.compareTo("") != 0) {
+    if (id.compareTo("") != 0)
+    {
       processedKeys++;
     }
   
     final String sId = jsonObject.getAsString("sid", "");
-    if (sId.compareTo("") != 0) {
+    if (sId.compareTo("") != 0)
+    {
       processedKeys++;
     }
   
     final JSONNumber jsX = jsonObject.getAsNumber("x");
     double x = 0.0;
-    if (jsX != null) {
+    if (jsX != null)
+    {
       x = jsX.value();
       processedKeys++;
     }
   
     final JSONNumber jsY = jsonObject.getAsNumber("y");
     double y = 0.0;
-    if (jsY != null) {
+    if (jsY != null)
+    {
       y = jsY.value();
       processedKeys++;
     }
   
     final JSONNumber jsZ = jsonObject.getAsNumber("z");
     double z = 0.0;
-    if (jsZ != null) {
+    if (jsZ != null)
+    {
       z = jsZ.value();
       processedKeys++;
     }
   
     final JSONNumber jsAngle = jsonObject.getAsNumber("angle");
     double angle = 0;
-    if (jsAngle != null) {
+    if (jsAngle != null)
+    {
       angle = jsAngle.value();
       processedKeys++;
     }
@@ -203,36 +236,42 @@ public class SceneJSShapesParser {
   
     return node;
   }
-  private SGTranslateNode createTranslateNode(JSONObject jsonObject) {
+  private SGTranslateNode createTranslateNode(JSONObject jsonObject)
+  {
     int processedKeys = 1; // "type" is already processed
   
     final String id = jsonObject.getAsString("id", "");
-    if (id.compareTo("") != 0) {
+    if (id.compareTo("") != 0)
+    {
       processedKeys++;
     }
   
     final String sId = jsonObject.getAsString("sid", "");
-    if (sId.compareTo("") != 0) {
+    if (sId.compareTo("") != 0)
+    {
       processedKeys++;
     }
   
     final JSONNumber jsX = jsonObject.getAsNumber("x");
     double x = 0.0;
-    if (jsX != null) {
+    if (jsX != null)
+    {
       x = jsX.value();
       processedKeys++;
     }
   
     final JSONNumber jsY = jsonObject.getAsNumber("y");
     double y = 0.0;
-    if (jsY != null) {
+    if (jsY != null)
+    {
       y = jsY.value();
       processedKeys++;
     }
   
     final JSONNumber jsZ = jsonObject.getAsNumber("z");
     double z = 0.0;
-    if (jsZ != null) {
+    if (jsZ != null)
+    {
       z = jsZ.value();
       processedKeys++;
     }
@@ -245,63 +284,74 @@ public class SceneJSShapesParser {
   
     return node;
   }
-  private SGMaterialNode createMaterialNode(JSONObject jsonObject) {
+  private SGMaterialNode createMaterialNode(JSONObject jsonObject)
+  {
     int processedKeys = 1; // "type" is already processed
   
     final String id = jsonObject.getAsString("id", "");
-    if (id.compareTo("") != 0) {
+    if (id.compareTo("") != 0)
+    {
       processedKeys++;
     }
   
     final String sId = jsonObject.getAsString("sid", "");
-    if (sId.compareTo("") != 0) {
+    if (sId.compareTo("") != 0)
+    {
       processedKeys++;
     }
   
     final JSONObject jsBaseColor = jsonObject.getAsObject("baseColor");
     Color baseColor;
-    if (jsBaseColor == null) {
+    if (jsBaseColor == null)
+    {
       baseColor = Color.newFromRGBA(0, 0, 0, 1);
     }
-    else {
+    else
+    {
       baseColor = parseColor(jsBaseColor);
       processedKeys++;
     }
   
     final JSONObject jsSpecularColor = jsonObject.getAsObject("specularColor");
     Color specularColor;
-    if (jsSpecularColor == null) {
+    if (jsSpecularColor == null)
+    {
       specularColor = Color.newFromRGBA(0, 0, 0, 1);
     }
-    else {
+    else
+    {
       specularColor = parseColor(jsSpecularColor);
       processedKeys++;
     }
   
     final JSONNumber jsShine = jsonObject.getAsNumber("shine");
     double shine = 10;
-    if (jsShine != null) {
+    if (jsShine != null)
+    {
       shine = jsShine.value();
       processedKeys++;
     }
   
     final JSONNumber jsSpecular = jsonObject.getAsNumber("specular");
     double specular = 1.0;
-    if (jsSpecular != null) {
+    if (jsSpecular != null)
+    {
       specular = jsSpecular.value();
       processedKeys++;
     }
   
     final JSONNumber jsAlpha = jsonObject.getAsNumber("alpha");
     double alpha = 1.0;
-    if (jsAlpha != null) {
+    if (jsAlpha != null)
+    {
       alpha = jsAlpha.value();
       processedKeys++;
     }
   
     final JSONNumber jsEmit = jsonObject.getAsNumber("emit");
     double emit = 0.0;
-    if (jsEmit != null) {
+    if (jsEmit != null)
+    {
       emit = jsEmit.value();
       processedKeys++;
     }
@@ -314,16 +364,19 @@ public class SceneJSShapesParser {
   
     return node;
   }
-  private SGTextureNode createTextureNode(JSONObject jsonObject) {
+  private SGTextureNode createTextureNode(JSONObject jsonObject)
+  {
     int processedKeys = 1; // "type" is already processed
   
     final String id = jsonObject.getAsString("id", "");
-    if (id.compareTo("") != 0) {
+    if (id.compareTo("") != 0)
+    {
       processedKeys++;
     }
   
     final String sId = jsonObject.getAsString("sid", "");
-    if (sId.compareTo("") != 0) {
+    if (sId.compareTo("") != 0)
+    {
       processedKeys++;
     }
   
@@ -332,11 +385,14 @@ public class SceneJSShapesParser {
     processedKeys += parseChildren(jsonObject, node);
   
     final JSONArray jsLayers = jsonObject.getAsArray("layers");
-    if (jsLayers != null) {
+    if (jsLayers != null)
+    {
       int layersCount = jsLayers.size();
-      for (int i = 0; i < layersCount; i++) {
+      for (int i = 0; i < layersCount; i++)
+      {
         final JSONObject jsLayer = jsLayers.getAsObject(i);
-        if (jsLayer != null) {
+        if (jsLayer != null)
+        {
           node.addLayer(createLayerNode(jsLayer));
         }
       }
@@ -348,67 +404,82 @@ public class SceneJSShapesParser {
   
     return node;
   }
-  private SGGeometryNode createGeometryNode(JSONObject jsonObject) {
+  private SGGeometryNode createGeometryNode(JSONObject jsonObject)
+  {
     int processedKeys = 1; // "type" is already processed
   
     final String id = jsonObject.getAsString("id", "");
-    if (id.compareTo("") != 0) {
+    if (id.compareTo("") != 0)
+    {
       processedKeys++;
     }
   
     final String sId = jsonObject.getAsString("sid", "");
-    if (sId.compareTo("") != 0) {
+    if (sId.compareTo("") != 0)
+    {
       processedKeys++;
     }
   
   
     final JSONString jsPrimitive = jsonObject.getAsString("primitive");
     int primitive = GLPrimitive.triangles(); // triangles is the default
-    if (jsPrimitive != null) {
+    if (jsPrimitive != null)
+    {
       final String strPrimitive = jsPrimitive.value();
   
-      if (strPrimitive.compareTo("points") == 0) {
+      if (strPrimitive.compareTo("points") == 0)
+      {
         primitive = GLPrimitive.points();
       }
-      else if (strPrimitive.compareTo("lines") == 0) {
+      else if (strPrimitive.compareTo("lines") == 0)
+      {
         primitive = GLPrimitive.lines();
       }
-      else if (strPrimitive.compareTo("line-loop") == 0) {
+      else if (strPrimitive.compareTo("line-loop") == 0)
+      {
         primitive = GLPrimitive.lineLoop();
       }
-      else if (strPrimitive.compareTo("line-strip") == 0) {
+      else if (strPrimitive.compareTo("line-strip") == 0)
+      {
         primitive = GLPrimitive.lineStrip();
       }
-      else if (strPrimitive.compareTo("triangles") == 0) {
+      else if (strPrimitive.compareTo("triangles") == 0)
+      {
         primitive = GLPrimitive.triangles();
       }
-      else if (strPrimitive.compareTo("triangle-strip") == 0) {
+      else if (strPrimitive.compareTo("triangle-strip") == 0)
+      {
         primitive = GLPrimitive.triangleStrip();
       }
-      else if (strPrimitive.compareTo("triangle-fan") == 0) {
+      else if (strPrimitive.compareTo("triangle-fan") == 0)
+      {
         primitive = GLPrimitive.triangleFan();
       }
       processedKeys++;
     }
   
     final JSONArray jsPositions = jsonObject.getAsArray("positions");
-    if (jsPositions == null) {
+    if (jsPositions == null)
+    {
       ILogger.instance().logError("Mandatory positions are not present");
       return null;
     }
     processedKeys++;
     int verticesCount = jsPositions.size();
     IFloatBuffer vertices = IFactory.instance().createFloatBuffer(verticesCount);
-    for (int i = 0; i < verticesCount; i++) {
+    for (int i = 0; i < verticesCount; i++)
+    {
       vertices.put(i, (float) jsPositions.getAsNumber(i).value());
     }
   
     final JSONArray jsColors = jsonObject.getAsArray("colors");
     IFloatBuffer colors = null;
-    if (jsColors != null) {
+    if (jsColors != null)
+    {
       final int colorsCount = jsColors.size();
       colors = IFactory.instance().createFloatBuffer(colorsCount);
-      for (int i = 0; i < colorsCount; i++) {
+      for (int i = 0; i < colorsCount; i++)
+      {
         colors.put(i, (float) jsColors.getAsNumber(i).value());
       }
       processedKeys++;
@@ -416,13 +487,16 @@ public class SceneJSShapesParser {
   
     final JSONArray jsUV = jsonObject.getAsArray("uv");
     IFloatBuffer uv = null;
-    if (jsUV != null) {
+    if (jsUV != null)
+    {
       final int uvCount = jsUV.size();
       uv = IFactory.instance().createFloatBuffer(uvCount);
       boolean isY = false;
-      for (int i = 0; i < uvCount; i++) {
+      for (int i = 0; i < uvCount; i++)
+      {
         float value = (float) jsUV.getAsNumber(i).value();
-        if (isY) {
+        if (isY)
+        {
           value = 1 - value;
         }
         isY = !isY;
@@ -435,18 +509,21 @@ public class SceneJSShapesParser {
   
     final JSONArray jsNormals = jsonObject.getAsArray("normals");
     IFloatBuffer normals = null;
-    if (jsNormals != null) {
+    if (jsNormals != null)
+    {
       processedKeys++;
     }
   
     final JSONArray jsIndices = jsonObject.getAsArray("indices");
-    if (jsIndices == null) {
+    if (jsIndices == null)
+    {
       ILogger.instance().logError("Non indexed geometries not supported");
       return null;
     }
     int indicesCount = jsIndices.size();
     IShortBuffer indices = IFactory.instance().createShortBuffer(indicesCount);
-    for (int i = 0; i < indicesCount; i++) {
+    for (int i = 0; i < indicesCount; i++)
+    {
       indices.rawPut(i, (short) jsIndices.getAsNumber(i).value());
     }
     processedKeys++;
@@ -459,59 +536,70 @@ public class SceneJSShapesParser {
   
     return node;
   }
-  private SGLayerNode createLayerNode(JSONObject jsonObject) {
+  private SGLayerNode createLayerNode(JSONObject jsonObject)
+  {
     int processedKeys = 0; // Layer has not "type"
   
   
     final String id = jsonObject.getAsString("id", "");
-    if (id.compareTo("") != 0) {
+    if (id.compareTo("") != 0)
+    {
       processedKeys++;
     }
   
     final String sId = jsonObject.getAsString("sid", "");
-    if (sId.compareTo("") != 0) {
+    if (sId.compareTo("") != 0)
+    {
       processedKeys++;
     }
   
     final String uri = jsonObject.getAsString("uri", "");
-    if (uri.compareTo("") != 0) {
+    if (uri.compareTo("") != 0)
+    {
       processedKeys++;
     }
   
     final String applyTo = jsonObject.getAsString("applyTo", "");
-    if (applyTo.compareTo("") != 0) {
+    if (applyTo.compareTo("") != 0)
+    {
       processedKeys++;
     }
   
     final String blendMode = jsonObject.getAsString("blendMode", "");
-    if (blendMode.compareTo("") != 0) {
+    if (blendMode.compareTo("") != 0)
+    {
       processedKeys++;
     }
   
     final JSONBoolean jsFlipY = jsonObject.getAsBoolean("flipY");
     boolean flipY = true;
-    if (jsFlipY != null) {
+    if (jsFlipY != null)
+    {
       flipY = jsFlipY.value();
       processedKeys++;
     }
   
     final String magFilter = jsonObject.getAsString("magFilter", "");
-    if (magFilter.compareTo("") != 0) {
+    if (magFilter.compareTo("") != 0)
+    {
       processedKeys++;
     }
   
     final String minFilter = jsonObject.getAsString("minFilter", "");
-    if (minFilter.compareTo("") != 0) {
+    if (minFilter.compareTo("") != 0)
+    {
       processedKeys++;
     }
   
     final String wrapS = jsonObject.getAsString("wrapS", "");
-    if (wrapS.compareTo("") != 0) {
+    if (wrapS.compareTo("") != 0)
+    {
       processedKeys++;
     }
   
     final String wrapT = jsonObject.getAsString("wrapT", "");
-    if (wrapT.compareTo("") != 0) {
+    if (wrapT.compareTo("") != 0)
+    {
       processedKeys++;
     }
   
@@ -524,7 +612,8 @@ public class SceneJSShapesParser {
     return node;
   }
 
-  private Color parseColor(JSONObject jsColor) {
+  private Color parseColor(JSONObject jsColor)
+  {
     final float r = (float) jsColor.getAsNumber("r", 0.0);
     final float g = (float) jsColor.getAsNumber("g", 0.0);
     final float b = (float) jsColor.getAsNumber("b", 0.0);
@@ -534,20 +623,24 @@ public class SceneJSShapesParser {
   }
 
 
-  public static Shape parseFromJSONBaseObject(JSONBaseObject jsonObject, String uriPrefix) {
+  public static Shape parseFromJSONBaseObject(JSONBaseObject jsonObject, String uriPrefix)
+  {
     return new SceneJSShapesParser(jsonObject, uriPrefix).getRootShape();
   }
-  public static Shape parseFromJSON(String json, String uriPrefix) {
+  public static Shape parseFromJSON(String json, String uriPrefix)
+  {
     final JSONBaseObject jsonObject = IJSONParser.instance().parse(json);
   
     return new SceneJSShapesParser(jsonObject, uriPrefix).getRootShape();
   }
-  public static Shape parseFromJSON(IByteBuffer json, String uriPrefix) {
+  public static Shape parseFromJSON(IByteBuffer json, String uriPrefix)
+  {
     final JSONBaseObject jsonObject = IJSONParser.instance().parse(json.getAsString());
   
     return new SceneJSShapesParser(jsonObject, uriPrefix).getRootShape();
   }
-  public static Shape parseFromBSON(IByteBuffer bson, String uriPrefix) {
+  public static Shape parseFromBSON(IByteBuffer bson, String uriPrefix)
+  {
     final JSONBaseObject jsonObject = BSONParser.parse(bson);
   
     return new SceneJSShapesParser(jsonObject, uriPrefix).getRootShape();

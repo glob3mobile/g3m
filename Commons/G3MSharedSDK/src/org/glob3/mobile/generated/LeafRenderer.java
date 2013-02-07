@@ -17,24 +17,29 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class LeafRenderer extends Renderer {
+public abstract class LeafRenderer extends Renderer
+{
   private boolean _enable;
 
-  public LeafRenderer() {
+  public LeafRenderer()
+  {
      _enable = true;
 
   }
 
-  public LeafRenderer(boolean enable) {
+  public LeafRenderer(boolean enable)
+  {
      _enable = enable;
 
   }
 
-  public void dispose() {
+  public void dispose()
+  {
 
   }
 
-  public final boolean isEnable() {
+  public final boolean isEnable()
+  {
     return _enable;
   }
 

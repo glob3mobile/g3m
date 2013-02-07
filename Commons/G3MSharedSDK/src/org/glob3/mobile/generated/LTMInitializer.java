@@ -1,5 +1,6 @@
 package org.glob3.mobile.generated; 
-public class LTMInitializer extends LazyTextureMappingInitializer {
+public class LTMInitializer extends LazyTextureMappingInitializer
+{
   private final Tile _tile;
   private final Tile _ancestor;
 
@@ -8,7 +9,8 @@ public class LTMInitializer extends LazyTextureMappingInitializer {
 
   private IFloatBuffer _texCoords;
 
-  public LTMInitializer(Tile tile, Tile ancestor, IFloatBuffer texCoords) {
+  public LTMInitializer(Tile tile, Tile ancestor, IFloatBuffer texCoords)
+  {
      _tile = tile;
      _ancestor = ancestor;
      _texCoords = texCoords;
@@ -17,13 +19,16 @@ public class LTMInitializer extends LazyTextureMappingInitializer {
 
   }
 
-  public void dispose() {
+  public void dispose()
+  {
 
   }
 
-  public final void initialize() {
+  public final void initialize()
+  {
     // The default scale and translation are ok when (tile == _ancestor)
-    if (_tile != _ancestor) {
+    if (_tile != _ancestor)
+    {
       final Sector tileSector = _tile.getSector();
       final Sector ancestorSector = _ancestor.getSector();
 
@@ -32,15 +37,18 @@ public class LTMInitializer extends LazyTextureMappingInitializer {
     }
   }
 
-  public final MutableVector2D getScale() {
+  public final MutableVector2D getScale()
+  {
     return _scale;
   }
 
-  public final MutableVector2D getTranslation() {
+  public final MutableVector2D getTranslation()
+  {
     return _translation;
   }
 
-  public final IFloatBuffer getTexCoords() {
+  public final IFloatBuffer getTexCoords()
+  {
     return _texCoords;
   }
 

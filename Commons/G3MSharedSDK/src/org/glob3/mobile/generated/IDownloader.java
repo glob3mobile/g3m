@@ -24,8 +24,10 @@ package org.glob3.mobile.generated;
 //class TimeInterval;
 
 
-public abstract class IDownloader {
-  public void dispose() {
+public abstract class IDownloader
+{
+  public void dispose()
+  {
   }
 
   public abstract void initialize(G3MContext context);

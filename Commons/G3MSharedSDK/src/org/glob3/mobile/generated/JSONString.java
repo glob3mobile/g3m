@@ -17,25 +17,31 @@ package org.glob3.mobile.generated;
 
 
 
-public class JSONString extends JSONBaseObject {
+public class JSONString extends JSONBaseObject
+{
   private final String _value;
 
-  public void dispose() {
+  public void dispose()
+  {
   }
 
-  public JSONString(String value) {
+  public JSONString(String value)
+  {
      _value = value;
   }
 
-  public final String value() {
+  public final String value()
+  {
     return _value;
   }
 
-  public final JSONString asString() {
+  public final JSONString asString()
+  {
     return this;
   }
 
-  public final String description() {
+  public final String description()
+  {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
   
     isb.addString("\"");
@@ -48,11 +54,13 @@ public class JSONString extends JSONBaseObject {
     return s;
   }
 
-  public final JSONString deepCopy() {
+  public final JSONString deepCopy()
+  {
     return new JSONString(_value);
   }
 
-  public final void acceptVisitor(JSONVisitor visitor) {
+  public final void acceptVisitor(JSONVisitor visitor)
+  {
     visitor.visitString(this);
   }
 

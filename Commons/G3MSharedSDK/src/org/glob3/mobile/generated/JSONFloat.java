@@ -17,30 +17,37 @@ package org.glob3.mobile.generated;
 
 
 
-public class JSONFloat extends JSONNumber {
+public class JSONFloat extends JSONNumber
+{
   private final float _value;
 
-  public JSONFloat(float value) {
+  public JSONFloat(float value)
+  {
      _value = value;
   }
 
-  public final JSONFloat deepCopy() {
+  public final JSONFloat deepCopy()
+  {
     return new JSONFloat(_value);
   }
 
-  public final double value() {
+  public final double value()
+  {
     return _value;
   }
 
-  public final float floatValue() {
+  public final float floatValue()
+  {
     return _value;
   }
 
-  public final void acceptVisitor(JSONVisitor visitor) {
+  public final void acceptVisitor(JSONVisitor visitor)
+  {
     visitor.visitFloat(this);
   }
 
-  public final String description() {
+  public final String description()
+  {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
   
     isb.addString("float/");

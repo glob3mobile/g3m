@@ -8,27 +8,31 @@ package org.glob3.mobile.generated;
 //
 
 
-public class RectangleD {
+public class RectangleD
+{
   public final double _x;
   public final double _y;
   public final double _width;
   public final double _height;
 
-  public RectangleD(double x, double y, double width, double height) {
+  public RectangleD(double x, double y, double width, double height)
+  {
      _x = x;
      _y = y;
      _width = width;
      _height = height;
   }
 
-  public RectangleD(RectangleD that) {
+  public RectangleD(RectangleD that)
+  {
      _x = that._x;
      _y = that._y;
      _width = that._width;
      _height = that._height;
   }
 
-  public final boolean equalTo(RectangleD that) {
+  public final boolean equalTo(RectangleD that)
+  {
     return (_x == that._x) && (_y == that._y) && (_width == that._width) && (_height == that._height);
   }
 

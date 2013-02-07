@@ -9,13 +9,16 @@ package org.glob3.mobile.generated;
 
 
 
-public class FloatBufferBuilderFromCartesian2D extends FloatBufferBuilder {
-  public final void add(Vector2D vector) {
+public class FloatBufferBuilderFromCartesian2D extends FloatBufferBuilder
+{
+  public final void add(Vector2D vector)
+  {
     _values.add((float) vector._x);
     _values.add((float) vector._y);
   }
 
-  public final void add(float x, float y) {
+  public final void add(float x, float y)
+  {
     _values.add(x);
     _values.add(y);
   }

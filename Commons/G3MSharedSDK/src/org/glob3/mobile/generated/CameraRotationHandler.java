@@ -21,28 +21,33 @@ package org.glob3.mobile.generated;
 //#define G3MiOSSDK_CameraRotationHandler_h
 
 
-public class CameraRotationHandler extends CameraEventHandler {
+public class CameraRotationHandler extends CameraEventHandler
+{
   private MutableVector3D _initialPoint = new MutableVector3D(); //Initial point at dragging
   private MutableVector2I _initialPixel = new MutableVector2I(); //Initial pixel at start of gesture
 
 //  int _lastYValid;
   private Camera _camera0 ; //Initial Camera saved on Down event
 
-  public CameraRotationHandler() {
+  public CameraRotationHandler()
+  {
      _camera0 = new Camera(new Camera(0, 0));
      _initialPoint = new MutableVector3D(0, 0, 0);
      _initialPixel = new MutableVector2I(0, 0);
   }
 
-  public void dispose() {
+  public void dispose()
+  {
   }
 
-  public final boolean onTouchEvent(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext) {
+  public final boolean onTouchEvent(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  {
     // three finger needed
     if (touchEvent.getTouchCount()!=3)
        return false;
   
-    switch (touchEvent.getType()) {
+    switch (touchEvent.getType())
+    {
       case Down:
         onDown(eventContext, touchEvent, cameraContext);
         break;
@@ -58,7 +63,8 @@ public class CameraRotationHandler extends CameraEventHandler {
     return true;
   }
 
-  public final void render(G3MRenderContext rc, CameraContext cameraContext) {
+  public final void render(G3MRenderContext rc, CameraContext cameraContext)
+  {
   //  // TEMP TO DRAW A POINT WHERE USER PRESS
   //  if (false) {
   //    if (cameraContext->getCurrentGesture() == Rotate) {
@@ -82,7 +88,8 @@ public class CameraRotationHandler extends CameraEventHandler {
   //  }
   }
 
-  public final void onDown(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext) {
+  public final void onDown(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  {
     Camera camera = cameraContext.getNextCamera();
     _camera0.copyFrom(camera);
     cameraContext.setCurrentGesture(Gesture.Rotate);
@@ -97,7 +104,8 @@ public class CameraRotationHandler extends CameraEventHandler {
   
     // compute center of view
     _initialPoint = camera.getXYZCenterOfView().asMutableVector3D();
-    if (_initialPoint.isNan()) {
+    if (_initialPoint.isNan())
+    {
       ILogger.instance().logError("CAMERA ERROR: center point does not intersect globe!!\n");
       cameraContext.setCurrentGesture(Gesture.None);
     }
@@ -105,7 +113,8 @@ public class CameraRotationHandler extends CameraEventHandler {
     //printf ("down 3 fingers\n");
   }
 
-  public final void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext) {
+  public final void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  {
     //_currentGesture = getGesture(touchEvent);
     if (cameraContext.getCurrentGesture() != Gesture.Rotate)
        return;
@@ -147,12 +156,14 @@ public class CameraRotationHandler extends CameraEventHandler {
   
     // update camera only if new view intersects globe
     //tempCamera.updateModelMatrix();
-    if (!tempCamera.getXYZCenterOfView().isNan()) {
+    if (!tempCamera.getXYZCenterOfView().isNan())
+    {
       camera.copyFrom(tempCamera);
     }
   }
 
-  public final void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext) {
+  public final void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  {
     cameraContext.setCurrentGesture(Gesture.None);
     _initialPixel = MutableVector2I.zero();
   }

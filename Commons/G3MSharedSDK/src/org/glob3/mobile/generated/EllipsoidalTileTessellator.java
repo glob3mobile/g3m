@@ -20,12 +20,14 @@ package org.glob3.mobile.generated;
 ///#include "MutableVector3D.hpp"
 ///#include "Planet.hpp"
 
-public class EllipsoidalTileTessellator extends TileTessellator {
+public class EllipsoidalTileTessellator extends TileTessellator
+{
 
   private final int _resolution;
   private final boolean _skirted;
 
-  public final Mesh createDebugMesh(G3MRenderContext rc, Tile tile) {
+  public final Mesh createDebugMesh(G3MRenderContext rc, Tile tile)
+  {
     final Sector sector = tile.getSector();
     final Planet planet = rc.getPlanet();
   
@@ -43,7 +45,8 @@ public class EllipsoidalTileTessellator extends TileTessellator {
     ShortBufferBuilder indices = new ShortBufferBuilder();
   
     // west side
-    for (int j = 0; j < resolutionMinus1; j++) {
+    for (int j = 0; j < resolutionMinus1; j++)
+    {
       final Geodetic3D g = new Geodetic3D(sector.getInnerPoint(0, (double)j/resolutionMinus1), offset);
   
       vertices.add(g);
@@ -51,7 +54,8 @@ public class EllipsoidalTileTessellator extends TileTessellator {
     }
   
     // south side
-    for (int i = 0; i < resolutionMinus1; i++) {
+    for (int i = 0; i < resolutionMinus1; i++)
+    {
       final Geodetic3D g = new Geodetic3D(sector.getInnerPoint((double)i/resolutionMinus1, 1), offset);
   
       vertices.add(g);
@@ -59,7 +63,8 @@ public class EllipsoidalTileTessellator extends TileTessellator {
     }
   
     // east side
-    for (int j = resolutionMinus1; j > 0; j--) {
+    for (int j = resolutionMinus1; j > 0; j--)
+    {
       final Geodetic3D g = new Geodetic3D(sector.getInnerPoint(1, (double)j/resolutionMinus1), offset);
   
       vertices.add(g);
@@ -67,7 +72,8 @@ public class EllipsoidalTileTessellator extends TileTessellator {
     }
   
     // north side
-    for (int i = resolutionMinus1; i > 0; i--) {
+    for (int i = resolutionMinus1; i > 0; i--)
+    {
       final Geodetic3D g = new Geodetic3D(sector.getInnerPoint((double)i/resolutionMinus1, 0), offset);
   
       vertices.add(g);
@@ -80,16 +86,19 @@ public class EllipsoidalTileTessellator extends TileTessellator {
     return new IndexedMesh(GLPrimitive.lineLoop(), true, center, vertices.create(), indices.create(), 1, 1, color);
   }
 
-  public EllipsoidalTileTessellator(int resolution, boolean skirted) {
+  public EllipsoidalTileTessellator(int resolution, boolean skirted)
+  {
      _resolution = resolution;
      _skirted = skirted;
 //    int __TODO_width_and_height_resolutions;
   }
 
-  public void dispose() {
+  public void dispose()
+  {
   }
 
-  public final Mesh createMesh(G3MRenderContext rc, Tile tile) {
+  public final Mesh createMesh(G3MRenderContext rc, Tile tile)
+  {
   
     final Sector sector = tile.getSector();
     final Planet planet = rc.getPlanet();
@@ -99,8 +108,10 @@ public class EllipsoidalTileTessellator extends TileTessellator {
   
     // create vertices coordinates
     FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.givenCenter(), planet, sector.getCenter());
-    for (int j = 0; j < resolution; j++) {
-      for (int i = 0; i < resolution; i++) {
+    for (int j = 0; j < resolution; j++)
+    {
+      for (int i = 0; i < resolution; i++)
+      {
         Geodetic2D innerPoint = sector.getInnerPoint((double) i / resolutionMinus1, (double) j / resolutionMinus1);
   
         vertices.add(innerPoint);
@@ -109,11 +120,14 @@ public class EllipsoidalTileTessellator extends TileTessellator {
   
     // create indices
     ShortBufferBuilder indices = new ShortBufferBuilder();
-    for (int j = 0; j < resolutionMinus1; j++) {
-      if (j > 0) {
+    for (int j = 0; j < resolutionMinus1; j++)
+    {
+      if (j > 0)
+      {
         indices.add((short)(j *resolution));
       }
-      for (int i = 0; i < resolution; i++) {
+      for (int i = 0; i < resolution; i++)
+      {
         indices.add((short)(j *resolution + i));
         indices.add((short)(j *resolution + i + resolution));
       }
@@ -121,7 +135,8 @@ public class EllipsoidalTileTessellator extends TileTessellator {
     }
   
     // create skirts
-    if (_skirted) {
+    if (_skirted)
+    {
   
       // compute skirt height
       final Vector3D sw = planet.toCartesian(sector.getSW());
@@ -132,7 +147,8 @@ public class EllipsoidalTileTessellator extends TileTessellator {
       int posS = resolution * resolution;
   
       // west side
-      for (int j = 0; j < resolutionMinus1; j++) {
+      for (int j = 0; j < resolutionMinus1; j++)
+      {
         final Geodetic3D g = new Geodetic3D(sector.getInnerPoint(0, (double)j/resolutionMinus1), -skirtHeight);
         vertices.add(g);
   
@@ -141,7 +157,8 @@ public class EllipsoidalTileTessellator extends TileTessellator {
       }
   
       // south side
-      for (int i = 0; i < resolutionMinus1; i++) {
+      for (int i = 0; i < resolutionMinus1; i++)
+      {
         final Geodetic3D g = new Geodetic3D(sector.getInnerPoint((double)i/resolutionMinus1, 1), -skirtHeight);
         vertices.add(g);
   
@@ -150,7 +167,8 @@ public class EllipsoidalTileTessellator extends TileTessellator {
       }
   
       // east side
-      for (int j = resolutionMinus1; j > 0; j--) {
+      for (int j = resolutionMinus1; j > 0; j--)
+      {
         final Geodetic3D g = new Geodetic3D(sector.getInnerPoint(1, (double)j/resolutionMinus1), -skirtHeight);
         vertices.add(g);
   
@@ -159,7 +177,8 @@ public class EllipsoidalTileTessellator extends TileTessellator {
       }
   
       // north side
-      for (int i = resolutionMinus1; i > 0; i--) {
+      for (int i = resolutionMinus1; i > 0; i--)
+      {
         final Geodetic3D g = new Geodetic3D(sector.getInnerPoint((double)i/resolutionMinus1, 0), -skirtHeight);
         vertices.add(g);
   
@@ -177,11 +196,13 @@ public class EllipsoidalTileTessellator extends TileTessellator {
     return new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, color);
   }
 
-  public final boolean isReady(G3MRenderContext rc) {
+  public final boolean isReady(G3MRenderContext rc)
+  {
     return true;
   }
 
-  public final IFloatBuffer createUnitTextCoords() {
+  public final IFloatBuffer createUnitTextCoords()
+  {
   
     FloatBufferBuilderFromCartesian2D textCoords = new FloatBufferBuilderFromCartesian2D();
   
@@ -191,43 +212,52 @@ public class EllipsoidalTileTessellator extends TileTessellator {
     float[] u = new float[resolution * resolution];
     float[] v = new float[resolution * resolution];
   
-    for (int j = 0; j < resolution; j++) {
-      for (int i = 0; i < resolution; i++) {
+    for (int j = 0; j < resolution; j++)
+    {
+      for (int i = 0; i < resolution; i++)
+      {
         final int pos = j *resolution + i;
         u[pos] = (float) i / resolutionMinus1;
         v[pos] = (float) j / resolutionMinus1;
       }
     }
   
-    for (int j = 0; j < resolution; j++) {
-      for (int i = 0; i < resolution; i++) {
+    for (int j = 0; j < resolution; j++)
+    {
+      for (int i = 0; i < resolution; i++)
+      {
         final int pos = j *resolution + i;
         textCoords.add(u[pos], v[pos]);
       }
     }
   
     // create skirts
-    if (_skirted) {
+    if (_skirted)
+    {
       // west side
-      for (int j = 0; j < resolutionMinus1; j++) {
+      for (int j = 0; j < resolutionMinus1; j++)
+      {
         final int pos = j *resolution;
         textCoords.add(u[pos], v[pos]);
       }
   
       // south side
-      for (int i = 0; i < resolutionMinus1; i++) {
+      for (int i = 0; i < resolutionMinus1; i++)
+      {
         final int pos = resolutionMinus1 * resolution + i;
         textCoords.add(u[pos], v[pos]);
       }
   
       // east side
-      for (int j = resolutionMinus1; j > 0; j--) {
+      for (int j = resolutionMinus1; j > 0; j--)
+      {
         final int pos = j *resolution + resolutionMinus1;
         textCoords.add(u[pos], v[pos]);
       }
   
       // north side
-      for (int i = resolutionMinus1; i > 0; i--) {
+      for (int i = resolutionMinus1; i > 0; i--)
+      {
         final int pos = i;
         textCoords.add(u[pos], v[pos]);
       }

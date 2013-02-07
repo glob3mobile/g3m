@@ -20,7 +20,8 @@ package org.glob3.mobile.generated;
 //class Mesh;
 //class Planet;
 
-public class Trail {
+public class Trail
+{
   private boolean _visible;
   private final int _maxSteps;
   private boolean _positionsDirty;
@@ -30,10 +31,12 @@ public class Trail {
 
   private java.util.ArrayList<Geodetic3D> _positions = new java.util.ArrayList<Geodetic3D>();
 
-  private Mesh createMesh(Planet planet) {
+  private Mesh createMesh(Planet planet)
+  {
     FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.firstVertex(), planet, Geodetic3D.fromDegrees(0, 0, 0));
   
-    for (int i = 0; i < _positions.size(); i++) {
+    for (int i = 0; i < _positions.size(); i++)
+    {
   	  vertices.add( _positions.get(i) );
     }
   
@@ -41,8 +44,10 @@ public class Trail {
   }
 
   private Mesh _mesh;
-  private Mesh getMesh(Planet planet) {
-    if (_positionsDirty || (_mesh == null)) {
+  private Mesh getMesh(Planet planet)
+  {
+    if (_positionsDirty || (_mesh == null))
+    {
       if (_mesh != null)
          _mesh.dispose();
   
@@ -51,7 +56,8 @@ public class Trail {
     return _mesh;
   }
 
-  public Trail(int maxSteps, Color color, float lineWidth) {
+  public Trail(int maxSteps, Color color, float lineWidth)
+  {
      _maxSteps = maxSteps;
      _visible = true;
      _positionsDirty = true;
@@ -60,33 +66,42 @@ public class Trail {
      _lineWidth = lineWidth;
   }
 
-  public void dispose() {
+  public void dispose()
+  {
     if (_mesh != null)
        _mesh.dispose();
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState) {
-    if (_visible) {
+  public final void render(G3MRenderContext rc, GLState parentState)
+  {
+    if (_visible)
+    {
       Mesh mesh = getMesh(rc.getPlanet());
-      if (mesh != null) {
+      if (mesh != null)
+      {
         mesh.render(rc, parentState);
       }
     }
   }
 
-  public final void setVisible(boolean visible) {
+  public final void setVisible(boolean visible)
+  {
     _visible = visible;
   }
 
-  public final boolean isVisible() {
+  public final boolean isVisible()
+  {
     return _visible;
   }
 
-  public final void addPosition(Geodetic3D position) {
+  public final void addPosition(Geodetic3D position)
+  {
     _positionsDirty = true;
 
-    if (_maxSteps > 0) {
-      while (_positions.size() >= _maxSteps) {
+    if (_maxSteps > 0)
+    {
+      while (_positions.size() >= _maxSteps)
+      {
         // const int lastIndex = _positions.size() - 1;
         final int index = 0;
 

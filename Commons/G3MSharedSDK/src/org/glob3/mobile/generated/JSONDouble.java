@@ -17,30 +17,37 @@ package org.glob3.mobile.generated;
 
 
 
-public class JSONDouble extends JSONNumber {
+public class JSONDouble extends JSONNumber
+{
   private final double _value;
 
-  public JSONDouble(double value) {
+  public JSONDouble(double value)
+  {
      _value = value;
   }
 
-  public final JSONDouble deepCopy() {
+  public final JSONDouble deepCopy()
+  {
     return new JSONDouble(_value);
   }
 
-  public final double value() {
+  public final double value()
+  {
     return _value;
   }
 
-  public final double doubleValue() {
+  public final double doubleValue()
+  {
     return _value;
   }
 
-  public final void acceptVisitor(JSONVisitor visitor) {
+  public final void acceptVisitor(JSONVisitor visitor)
+  {
     visitor.visitDouble(this);
   }
 
-  public final String description() {
+  public final String description()
+  {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
   
     isb.addString("double/");

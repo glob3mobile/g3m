@@ -24,8 +24,10 @@ package org.glob3.mobile.generated;
 //class MarkTouchListener;
 //class GLState;
 
-public class MarkUserData {
-  public void dispose() {
+public class MarkUserData
+{
+  public void dispose()
+  {
 
   }
 }

@@ -18,11 +18,14 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class IStringUtils {
+public abstract class IStringUtils
+{
   private static IStringUtils _instance;
 
-  public static void setInstance(IStringUtils instance) {
-    if (_instance != null) {
+  public static void setInstance(IStringUtils instance)
+  {
+    if (_instance != null)
+    {
       ILogger.instance().logWarning("IStringUtils instance already set!");
       if (_instance != null)
          _instance.dispose();
@@ -30,11 +33,13 @@ public abstract class IStringUtils {
     _instance = instance;
   }
 
-  public static IStringUtils instance() {
+  public static IStringUtils instance()
+  {
     return _instance;
   }
 
-  public void dispose() {
+  public void dispose()
+  {
 
   }
 
@@ -53,15 +58,18 @@ public abstract class IStringUtils {
    */
   public abstract String substring(String String, int beginIndex, int endIndex);
 
-  public String substring(String String, int beginIndex) {
+  public String substring(String String, int beginIndex)
+  {
     //    return substring(string, beginIndex, string.size() + 1);
     return substring(String, beginIndex, String.length());
   }
 
-  public String replaceSubstring(String originalString, String toReplace, String replaceWith) {
+  public String replaceSubstring(String originalString, String toReplace, String replaceWith)
+  {
     int startIndex = indexOf(originalString, toReplace);
     //The part to replace was not found. Return original String
-    if (startIndex == -1) {
+    if (startIndex == -1)
+    {
       return originalString;
     }
     final int endIndex = startIndex+toReplace.length();
@@ -69,7 +77,8 @@ public abstract class IStringUtils {
     final String right = substring(originalString, endIndex);
     final String result = left+replaceWith+right;
     startIndex = indexOf(result, toReplace);
-    if (startIndex != -1) {
+    if (startIndex != -1)
+    {
       //recursive call to replace other ocurrences
       return replaceSubstring(result, toReplace, replaceWith);
     }
@@ -77,7 +86,8 @@ public abstract class IStringUtils {
     return result;
   }
 
-  public String left(String String, int endIndex) {
+  public String left(String String, int endIndex)
+  {
     return substring(String, 0, endIndex);
   }
 
@@ -85,7 +95,8 @@ public abstract class IStringUtils {
 
   public abstract String ltrim(String String);
 
-  public String trim(String String) {
+  public String trim(String String)
+  {
     return rtrim(ltrim(String));
   }
 

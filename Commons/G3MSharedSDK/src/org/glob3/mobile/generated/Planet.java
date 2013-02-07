@@ -11,20 +11,24 @@ package org.glob3.mobile.generated;
 
 
 
-public class Planet extends Ellipsoid {
+public class Planet extends Ellipsoid
+{
   private final String _name;
 
 
-  public Planet(String name, Vector3D radii) {
+  public Planet(String name, Vector3D radii)
+  {
      super(radii);
      _name = name;
   }
 
-  public static Planet createEarth() {
+  public static Planet createEarth()
+  {
     return new Planet("Earth", new Vector3D(6378137.0, 6378137.0, 6356752.314245));
   }
 
-  public final String getName() {
+  public final String getName()
+  {
     return _name;
   }
 

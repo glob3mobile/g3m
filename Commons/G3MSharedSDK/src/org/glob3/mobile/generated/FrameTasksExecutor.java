@@ -1,5 +1,6 @@
 package org.glob3.mobile.generated; 
-public class FrameTasksExecutor {
+public class FrameTasksExecutor
+{
   private final int _minimumExecutionsPerFrame;
   private final int _maximumExecutionsPerFrame;
   private final int _maximumQueuedTasks;
@@ -8,21 +9,26 @@ public class FrameTasksExecutor {
 
   private java.util.LinkedList<FrameTask> _preRenderTasks = new java.util.LinkedList<FrameTask>();
 
-  private boolean canExecutePreRenderStep(G3MRenderContext rc, int executedCounter) {
+  private boolean canExecutePreRenderStep(G3MRenderContext rc, int executedCounter)
+  {
     final int tasksCount = _preRenderTasks.size();
-    if (tasksCount == 0) {
-      if (_stressed) {
+    if (tasksCount == 0)
+    {
+      if (_stressed)
+      {
         //      rc->getLogger()->logWarning("Abandon STRESSED mode");
         _stressed = false;
       }
       return false;
     }
   
-    if (executedCounter < _minimumExecutionsPerFrame) {
+    if (executedCounter < _minimumExecutionsPerFrame)
+    {
       return true;
     }
   
-    if (tasksCount > _maximumQueuedTasks) {
+    if (tasksCount > _maximumQueuedTasks)
+    {
       //    if (!_stressed) {
       //      rc->getLogger()->logWarning("Too many queued tasks (%d). Goes to STRESSED mode",
       //                                  _preRenderTasks.size());
@@ -31,11 +37,13 @@ public class FrameTasksExecutor {
       _stressed = true;
     }
   
-    if (_stressed) {
+    if (_stressed)
+    {
       return rc.getFrameStartTimer().elapsedTime().lowerThan(_maxTimePerFrameStressed);
     }
   
-    if (executedCounter >= _maximumExecutionsPerFrame) {
+    if (executedCounter >= _maximumExecutionsPerFrame)
+    {
       return false;
     }
     return rc.getFrameStartTimer().elapsedTime().lowerThan(_maxTimePerFrame);
@@ -59,7 +67,8 @@ public class FrameTasksExecutor {
 
   private boolean _stressed;
 
-  public FrameTasksExecutor() {
+  public FrameTasksExecutor()
+  {
      _minimumExecutionsPerFrame = 1;
      _maximumExecutionsPerFrame = 8;
      _maximumQueuedTasks = 64;
@@ -69,19 +78,23 @@ public class FrameTasksExecutor {
 
   }
 
-  public final void addPreRenderTask(FrameTask preRenderTask) {
+  public final void addPreRenderTask(FrameTask preRenderTask)
+  {
     _preRenderTasks.addLast(preRenderTask);
   }
 
-  public final void doPreRenderCycle(G3MRenderContext rc) {
+  public final void doPreRenderCycle(G3MRenderContext rc)
+  {
   
   //  int canceledCounter = 0;
     java.util.Iterator<FrameTask> i = _preRenderTasks.iterator();
-    while (i.hasNext()) {
+    while (i.hasNext())
+    {
       FrameTask task = i.next();
   
       boolean isCanceled = task.isCanceled(rc);
-      if (isCanceled) {
+      if (isCanceled)
+      {
         if (task != null)
            task.dispose();
         i.remove();
@@ -96,7 +109,8 @@ public class FrameTasksExecutor {
     //  }
   
     int executedCounter = 0;
-    while (canExecutePreRenderStep(rc, executedCounter)) {
+    while (canExecutePreRenderStep(rc, executedCounter))
+    {
       FrameTask task = _preRenderTasks.getFirst();
       _preRenderTasks.removeFirst();
   
@@ -134,7 +148,8 @@ public class FrameTasksExecutor {
   
   }
 
-  public void dispose() {
+  public void dispose()
+  {
   }
 
 }

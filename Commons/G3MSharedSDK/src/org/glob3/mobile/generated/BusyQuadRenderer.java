@@ -24,13 +24,15 @@ package org.glob3.mobile.generated;
 //***************************************************************
 
 
-public class BusyQuadRenderer extends LeafRenderer implements EffectTarget {
+public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
+{
   private double _degrees;
 //  const std::string _textureFilename;
   private IImage _image;
   private Mesh _quadMesh;
 
-  private boolean initMesh(G3MRenderContext rc) {
+  private boolean initMesh(G3MRenderContext rc)
+  {
     //TEXTURED
     IGLTextureId texId = null;
   //  IImage* image = rc->getFactory()->createImageFromFileName(_textureFilename);
@@ -40,7 +42,8 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget {
     rc.getFactory().deleteImage(_image);
     _image = null;
   
-    if (texId == null) {
+    if (texId == null)
+    {
       rc.getLogger().logError("Can't upload texture to GPU");
       return false;
     }
@@ -75,28 +78,34 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget {
 
 
 
-  public BusyQuadRenderer(IImage image) {
+  public BusyQuadRenderer(IImage image)
+  {
      _degrees = 0;
      _quadMesh = null;
      _image = image;
   }
 
-  public final void initialize(G3MContext context) {
+  public final void initialize(G3MContext context)
+  {
   }
 
-  public final boolean isReadyToRender(G3MRenderContext rc) {
+  public final boolean isReadyToRender(G3MRenderContext rc)
+  {
     return true;
   }
 
   private boolean render_firstTime = true;
-  public final void render(G3MRenderContext rc, GLState parentState) {
+  public final void render(G3MRenderContext rc, GLState parentState)
+  {
     GL gl = rc.getGL();
   
     GLState state = new GLState(parentState);
     state.enableBlend();
   
-    if (_quadMesh == null) {
-      if (!initMesh(rc)) {
+    if (_quadMesh == null)
+    {
+      if (!initMesh(rc))
+      {
         return;
       }
     }
@@ -104,7 +113,8 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget {
   
     // init effect in the first render
 //    static boolean firstTime = true;
-    if (render_firstTime) {
+    if (render_firstTime)
+    {
       render_firstTime = false;
       Effect effect = new BusyEffect(this);
       rc.getEffectsScheduler().startEffect(effect, this);
@@ -137,44 +147,54 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget {
     gl.popMatrix();
   }
 
-  public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent) {
+  public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
+  {
     return false;
   }
 
-  public final void onResizeViewportEvent(G3MEventContext ec, int width, int height) {
+  public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
+  {
 
   }
 
-  public void dispose() {
+  public void dispose()
+  {
   }
 
-  public final void incDegrees(double value) {
+  public final void incDegrees(double value)
+  {
     _degrees += value;
     if (_degrees>360)
        _degrees -= 360;
   }
 
-  public final void start() {
+  public final void start()
+  {
     //int _TODO_start_effects;
   }
 
-  public final void stop() {
+  public final void stop()
+  {
     //int _TODO_stop_effects;
   }
 
-  public final void onResume(G3MContext context) {
+  public final void onResume(G3MContext context)
+  {
 
   }
 
-  public final void onPause(G3MContext context) {
+  public final void onPause(G3MContext context)
+  {
 
   }
 
-  public final void onDestroy(G3MContext context) {
+  public final void onDestroy(G3MContext context)
+  {
 
   }
 
-  public final void unusedMethod() {
+  public final void unusedMethod()
+  {
 
   }
 

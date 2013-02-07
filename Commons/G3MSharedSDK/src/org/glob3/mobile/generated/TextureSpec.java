@@ -27,7 +27,8 @@ package org.glob3.mobile.generated;
 //class IGLTextureId;
 
 
-public class TextureSpec {
+public class TextureSpec
+{
   private final String _id;
 
   private final int _width;
@@ -37,7 +38,8 @@ public class TextureSpec {
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  TextureSpec operator =(TextureSpec that);
 
-  public TextureSpec(String id, int width, int height, boolean isMipmap) {
+  public TextureSpec(String id, int width, int height, boolean isMipmap)
+  {
      _id = id;
      _width = width;
      _height = height;
@@ -45,14 +47,16 @@ public class TextureSpec {
 
   }
 
-  public TextureSpec() {
+  public TextureSpec()
+  {
      _id = "";
      _width = 0;
      _height = 0;
      _isMipmap = false;
   }
 
-  public TextureSpec(TextureSpec that) {
+  public TextureSpec(TextureSpec that)
+  {
      _id = that._id;
      _width = that._width;
      _height = that._height;
@@ -60,41 +64,51 @@ public class TextureSpec {
 
   }
 
-  public final boolean isMipmap() {
+  public final boolean isMipmap()
+  {
     return _isMipmap;
   }
 
-  public final int getWidth() {
+  public final int getWidth()
+  {
     return _width;
   }
 
-  public final int getHeight() {
+  public final int getHeight()
+  {
     return _height;
   }
 
-  public final boolean equalsTo(TextureSpec that) {
+  public final boolean equalsTo(TextureSpec that)
+  {
     return ((_id.compareTo(that._id) == 0) && (_width == that._width) && (_height == that._height));
   }
 
-  public final boolean lowerThan(TextureSpec that) {
-    if (_id.compareTo(that._id) < 0) {
+  public final boolean lowerThan(TextureSpec that)
+  {
+    if (_id.compareTo(that._id) < 0)
+    {
       return true;
     }
-    else if (_id.compareTo(that._id) > 0) {
+    else if (_id.compareTo(that._id) > 0)
+    {
       return false;
     }
 
-    if (_width < that._width) {
+    if (_width < that._width)
+    {
       return true;
     }
-    else if (_width > that._width) {
+    else if (_width > that._width)
+    {
       return false;
     }
 
     return (_height < that._height);
   }
 
-  public final String description() {
+  public final String description()
+  {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     isb.addString("(");
     isb.addString(_id);

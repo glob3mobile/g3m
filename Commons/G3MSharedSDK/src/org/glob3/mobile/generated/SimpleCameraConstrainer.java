@@ -18,16 +18,19 @@ package org.glob3.mobile.generated;
 
 
 
-public class SimpleCameraConstrainer implements ICameraConstrainer {
+public class SimpleCameraConstrainer implements ICameraConstrainer
+{
 
-  public void onCameraChange(Planet planet, Camera previousCamera, Camera nextCamera) {
+  public void onCameraChange(Planet planet, Camera previousCamera, Camera nextCamera)
+  {
   
     final double radii = planet.getRadii().maxAxis();
   
     final Geodetic3D cameraPosition3D = planet.toGeodetic3D(nextCamera.getCartesianPosition());
     final double cameraHeight = cameraPosition3D.height();
   
-    if (cameraHeight > radii *9) {
+    if (cameraHeight > radii *9)
+    {
       nextCamera.resetPosition();
       nextCamera.setPosition(planet.toGeodetic3D(previousCamera.getCartesianPosition()));
     }

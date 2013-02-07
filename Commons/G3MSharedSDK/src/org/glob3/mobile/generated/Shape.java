@@ -23,7 +23,8 @@ package org.glob3.mobile.generated;
 
 //class ShapePendingEffect;
 
-public abstract class Shape implements EffectTarget {
+public abstract class Shape implements EffectTarget
+{
   private Geodetic3D _position;
 
   private Angle _heading;
@@ -34,7 +35,8 @@ public abstract class Shape implements EffectTarget {
   private double _scaleZ;
 
   private MutableMatrix44D _transformMatrix;
-  private MutableMatrix44D createTransformMatrix(Planet planet) {
+  private MutableMatrix44D createTransformMatrix(Planet planet)
+  {
     final MutableMatrix44D geodeticTransform = (_position == null) ? MutableMatrix44D.identity() : planet.createGeodeticTransformMatrix(_position);
   
     final MutableMatrix44D headingRotation = MutableMatrix44D.createRotationMatrix(_heading, Vector3D.downZ());
@@ -44,8 +46,10 @@ public abstract class Shape implements EffectTarget {
   
     return new MutableMatrix44D(geodeticTransform.multiply(localTransform));
   }
-  private MutableMatrix44D getTransformMatrix(Planet planet) {
-    if (_transformMatrix == null) {
+  private MutableMatrix44D getTransformMatrix(Planet planet)
+  {
+    if (_transformMatrix == null)
+    {
       _transformMatrix = createTransformMatrix(planet);
     }
     return _transformMatrix;
@@ -53,13 +57,15 @@ public abstract class Shape implements EffectTarget {
 
   private java.util.ArrayList<ShapePendingEffect> _pendingEffects = new java.util.ArrayList<ShapePendingEffect>();
 
-  protected void cleanTransformMatrix() {
+  protected void cleanTransformMatrix()
+  {
     if (_transformMatrix != null)
        _transformMatrix.dispose();
     _transformMatrix = null;
   }
 
-  public Shape(Geodetic3D position) {
+  public Shape(Geodetic3D position)
+  {
      _position = position;
      _heading = new Angle(Angle.zero());
      _pitch = new Angle(Angle.zero());
@@ -70,9 +76,11 @@ public abstract class Shape implements EffectTarget {
 
   }
 
-  public void dispose() {
+  public void dispose()
+  {
     final int pendingEffectsCount = _pendingEffects.size();
-    for (int i = 0; i < pendingEffectsCount; i++) {
+    for (int i = 0; i < pendingEffectsCount; i++)
+    {
       ShapePendingEffect pendingEffect = _pendingEffects.get(i);
       if (pendingEffect != null)
          pendingEffect.dispose();
@@ -90,29 +98,35 @@ public abstract class Shape implements EffectTarget {
        _transformMatrix.dispose();
   }
 
-  public final Geodetic3D getPosition() {
+  public final Geodetic3D getPosition()
+  {
     return _position;
   }
 
-  public final Angle getHeading() {
+  public final Angle getHeading()
+  {
     return _heading;
   }
 
-  public final Angle getPitch() {
+  public final Angle getPitch()
+  {
     return _pitch;
   }
 
-  public final void setPosition(Geodetic3D position) {
+  public final void setPosition(Geodetic3D position)
+  {
     if (_position != null)
        _position.dispose();
     _position = position;
     cleanTransformMatrix();
   }
 
-  public final void setAnimatedPosition(TimeInterval duration, Geodetic3D position) {
+  public final void setAnimatedPosition(TimeInterval duration, Geodetic3D position)
+  {
      setAnimatedPosition(duration, position, false);
   }
-  public final void setAnimatedPosition(TimeInterval duration, Geodetic3D position, boolean linearInterpolation) {
+  public final void setAnimatedPosition(TimeInterval duration, Geodetic3D position, boolean linearInterpolation)
+  {
     Effect effect = new ShapePositionEffect(duration, this, _position, position, linearInterpolation);
     _pendingEffects.add(new ShapePendingEffect(effect, false));
   
@@ -127,43 +141,51 @@ public abstract class Shape implements EffectTarget {
   //  _pendingEffectTargetIsCamera = false;
   }
 
-  public final void setAnimatedPosition(Geodetic3D position) {
+  public final void setAnimatedPosition(Geodetic3D position)
+  {
      setAnimatedPosition(position, false);
   }
-  public final void setAnimatedPosition(Geodetic3D position, boolean linearInterpolation) {
+  public final void setAnimatedPosition(Geodetic3D position, boolean linearInterpolation)
+  {
     setAnimatedPosition(TimeInterval.fromSeconds(3), position, linearInterpolation);
   }
 
-  public final void setHeading(Angle heading) {
+  public final void setHeading(Angle heading)
+  {
     if (_heading != null)
        _heading.dispose();
     _heading = new Angle(heading);
     cleanTransformMatrix();
   }
 
-  public final void setPitch(Angle pitch) {
+  public final void setPitch(Angle pitch)
+  {
     if (_pitch != null)
        _pitch.dispose();
     _pitch = new Angle(pitch);
     cleanTransformMatrix();
   }
 
-  public final void setScale(double scaleX, double scaleY, double scaleZ) {
+  public final void setScale(double scaleX, double scaleY, double scaleZ)
+  {
     _scaleX = scaleX;
     _scaleY = scaleY;
     _scaleZ = scaleZ;
     cleanTransformMatrix();
   }
 
-  public final void setScale(Vector3D scale) {
+  public final void setScale(Vector3D scale)
+  {
     setScale(scale._x, scale._y, scale._z);
   }
 
-  public final Vector3D getScale() {
+  public final Vector3D getScale()
+  {
     return new Vector3D(_scaleX, _scaleY, _scaleZ);
   }
 
-  public final void setAnimatedScale(TimeInterval duration, double scaleX, double scaleY, double scaleZ) {
+  public final void setAnimatedScale(TimeInterval duration, double scaleX, double scaleY, double scaleZ)
+  {
     Effect effect = new ShapeScaleEffect(duration, this, _scaleX, _scaleY, _scaleZ, scaleX, scaleY, scaleZ);
     _pendingEffects.add(new ShapePendingEffect(effect, false));
   
@@ -177,19 +199,23 @@ public abstract class Shape implements EffectTarget {
   //  _pendingEffectTargetIsCamera = false;
   }
 
-  public final void setAnimatedScale(double scaleX, double scaleY, double scaleZ) {
+  public final void setAnimatedScale(double scaleX, double scaleY, double scaleZ)
+  {
     setAnimatedScale(TimeInterval.fromSeconds(1), scaleX, scaleY, scaleZ);
   }
 
-  public final void setAnimatedScale(Vector3D scale) {
+  public final void setAnimatedScale(Vector3D scale)
+  {
     setAnimatedScale(scale._x, scale._y, scale._z);
   }
 
-  public final void setAnimatedScale(TimeInterval duration, Vector3D scale) {
+  public final void setAnimatedScale(TimeInterval duration, Vector3D scale)
+  {
     setAnimatedScale(duration, scale._x, scale._y, scale._z);
   }
 
-  public final void orbitCamera(TimeInterval duration, double fromDistance, double toDistance, Angle fromAzimuth, Angle toAzimuth, Angle fromAltitude, Angle toAltitude) {
+  public final void orbitCamera(TimeInterval duration, double fromDistance, double toDistance, Angle fromAzimuth, Angle toAzimuth, Angle fromAltitude, Angle toAltitude)
+  {
     Effect effect = new ShapeOrbitCameraEffect(duration, this, fromDistance, toDistance, fromAzimuth, toAzimuth, fromAltitude, toAltitude);
     _pendingEffects.add(new ShapePendingEffect(effect, true));
   
@@ -204,15 +230,20 @@ public abstract class Shape implements EffectTarget {
   //  _pendingEffectTargetIsCamera = true;
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState) {
-    if (isReadyToRender(rc)) {
+  public final void render(G3MRenderContext rc, GLState parentState)
+  {
+    if (isReadyToRender(rc))
+    {
   
       final int pendingEffectsCount = _pendingEffects.size();
-      if (pendingEffectsCount > 0) {
+      if (pendingEffectsCount > 0)
+      {
         EffectsScheduler effectsScheduler = rc.getEffectsScheduler();
-        for (int i = 0; i < pendingEffectsCount; i++) {
+        for (int i = 0; i < pendingEffectsCount; i++)
+        {
           ShapePendingEffect pendingEffect = _pendingEffects.get(i);
-          if (pendingEffect != null) {
+          if (pendingEffect != null)
+          {
             EffectTarget target = pendingEffect._targetIsCamera ? rc.getNextCamera().getEffectTarget() : this;
             effectsScheduler.cancellAllEffectsFor(target);
             effectsScheduler.startEffect(pendingEffect._effect, target);
@@ -245,7 +276,8 @@ public abstract class Shape implements EffectTarget {
     }
   }
 
-  public void initialize(G3MContext context) {
+  public void initialize(G3MContext context)
+  {
 
   }
 
@@ -255,7 +287,8 @@ public abstract class Shape implements EffectTarget {
 
   public abstract boolean isTransparent(G3MRenderContext rc);
 
-  public final void unusedMethod() {
+  public final void unusedMethod()
+  {
   }
 
 }

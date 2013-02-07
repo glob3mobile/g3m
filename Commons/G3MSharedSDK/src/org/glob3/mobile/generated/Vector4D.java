@@ -17,7 +17,8 @@ package org.glob3.mobile.generated;
 
 
 
-public class Vector4D {
+public class Vector4D
+{
   private final double _x;
   private final double _y;
   private final double _z;
@@ -27,7 +28,8 @@ public class Vector4D {
 //  Vector4D operator =(Vector4D that);
 
 
-  public Vector4D(double x, double y, double z, double w) {
+  public Vector4D(double x, double y, double z, double w)
+  {
      _x = x;
      _y = y;
      _z = z;
@@ -35,10 +37,12 @@ public class Vector4D {
 
   }
 
-  public void dispose() {
+  public void dispose()
+  {
   }
 
-  public Vector4D(Vector4D v) {
+  public Vector4D(Vector4D v)
+  {
      _x = v._x;
      _y = v._y;
      _z = v._z;
@@ -46,19 +50,23 @@ public class Vector4D {
 
   }
 
-  public static Vector4D nan() {
+  public static Vector4D nan()
+  {
     return new Vector4D(IMathUtils.instance().NanD(), IMathUtils.instance().NanD(), IMathUtils.instance().NanD(), IMathUtils.instance().NanD());
   }
 
-  public static Vector4D zero() {
+  public static Vector4D zero()
+  {
     return new Vector4D(0.0, 0.0, 0.0, 0.0);
   }
 
-  public final boolean isNan() {
+  public final boolean isNan()
+  {
     return (IMathUtils.instance().isNan(_x) || IMathUtils.instance().isNan(_y) || IMathUtils.instance().isNan(_z) || IMathUtils.instance().isNan(_w));
   }
 
-  public final boolean isZero() {
+  public final boolean isZero()
+  {
     return (_x == 0) && (_y == 0) && (_z == 0) && (_w == 0);
   }
 
@@ -78,7 +86,8 @@ public class Vector4D {
 //    return _w;
 //  }
 
-  public final String description() {
+  public final String description()
+  {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     isb.addString("(V4D ");
     isb.addDouble(_x);

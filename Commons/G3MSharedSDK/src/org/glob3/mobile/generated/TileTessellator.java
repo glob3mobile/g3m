@@ -22,8 +22,10 @@ package org.glob3.mobile.generated;
 //class MutableVector2D;
 //class IFloatBuffer;
 
-public abstract class TileTessellator {
-  public void dispose() {
+public abstract class TileTessellator
+{
+  public void dispose()
+  {
   }
 
   public abstract boolean isReady(G3MRenderContext rc);

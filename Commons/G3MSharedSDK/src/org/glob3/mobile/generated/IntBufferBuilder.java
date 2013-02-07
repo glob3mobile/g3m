@@ -19,20 +19,24 @@ package org.glob3.mobile.generated;
 
 //class IIntBuffer;
 
-public class IntBufferBuilder {
+public class IntBufferBuilder
+{
   private java.util.ArrayList<Integer> _values = new java.util.ArrayList<Integer>();
 
 
-  public final void add(int value) {
+  public final void add(int value)
+  {
     _values.add(value);
   }
 
-  public final IIntBuffer create() {
+  public final IIntBuffer create()
+  {
     final int size = _values.size();
   
     IIntBuffer result = IFactory.instance().createIntBuffer(size);
   
-    for (int i = 0; i < size; i++) {
+    for (int i = 0; i < size; i++)
+    {
       result.rawPut(i, _values.get(i));
     }
   

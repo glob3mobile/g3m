@@ -19,7 +19,8 @@ package org.glob3.mobile.generated;
 
 //class Shape;
 
-public class ShapeOrbitCameraEffect extends EffectWithDuration {
+public class ShapeOrbitCameraEffect extends EffectWithDuration
+{
   private Shape _shape;
 
   private final double _fromDistance;
@@ -32,7 +33,8 @@ public class ShapeOrbitCameraEffect extends EffectWithDuration {
   private final double _toAltitudeInRadians;
 
 
-  public ShapeOrbitCameraEffect(TimeInterval duration, Shape shape, double fromDistance, double toDistance, Angle fromAzimuth, Angle toAzimuth, Angle fromAltitude, Angle toAltitude) {
+  public ShapeOrbitCameraEffect(TimeInterval duration, Shape shape, double fromDistance, double toDistance, Angle fromAzimuth, Angle toAzimuth, Angle fromAltitude, Angle toAltitude)
+  {
      super(duration);
      _shape = shape;
      _fromDistance = fromDistance;
@@ -44,7 +46,8 @@ public class ShapeOrbitCameraEffect extends EffectWithDuration {
 
   }
 
-  public final void doStep(G3MRenderContext rc, TimeInterval when) {
+  public final void doStep(G3MRenderContext rc, TimeInterval when)
+  {
     final double alpha = pace(percentDone(when));
     //  const double alpha = percentDone(when);
   
@@ -57,11 +60,13 @@ public class ShapeOrbitCameraEffect extends EffectWithDuration {
     rc.getNextCamera().setPointOfView(center, distance, Angle.fromRadians(azimuthInRadians), Angle.fromRadians(altitudeInRadians));
   }
 
-  public final void cancel(TimeInterval when) {
+  public final void cancel(TimeInterval when)
+  {
     // do nothing
   }
 
-  public final void stop(G3MRenderContext rc, TimeInterval when) {
+  public final void stop(G3MRenderContext rc, TimeInterval when)
+  {
     final Geodetic3D center = _shape.getPosition();
   
     rc.getNextCamera().setPointOfView(center, _toDistance, Angle.fromRadians(_toAzimuthInRadians), Angle.fromRadians(_toAltitudeInRadians));

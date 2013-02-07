@@ -1,5 +1,6 @@
 package org.glob3.mobile.generated; 
-public class GLPrimitive {
+public class GLPrimitive
+{
   private static int _triangles = 0;
   private static int _triangleStrip = 0;
   private static int _triangleFan = 0;
@@ -10,35 +11,43 @@ public class GLPrimitive {
 
   private static int _points = 0;
 
-  public static int triangles() {
+  public static int triangles()
+  {
     return _triangles;
   }
 
-  public static int triangleStrip() {
+  public static int triangleStrip()
+  {
     return _triangleStrip;
   }
 
-  public static int triangleFan() {
+  public static int triangleFan()
+  {
     return _triangleFan;
   }
 
-  public static int lines() {
+  public static int lines()
+  {
     return _lines;
   }
 
-  public static int lineStrip() {
+  public static int lineStrip()
+  {
     return _lineStrip;
   }
 
-  public static int lineLoop() {
+  public static int lineLoop()
+  {
     return _lineLoop;
   }
 
-  public static int points() {
+  public static int points()
+  {
     return _points;
   }
 
-  public static void init(INativeGL ngl) {
+  public static void init(INativeGL ngl)
+  {
     _triangles = ngl.Primitive_Triangles();
     _triangleStrip = ngl.Primitive_TriangleStrip();
     _triangleFan = ngl.Primitive_TriangleFan();

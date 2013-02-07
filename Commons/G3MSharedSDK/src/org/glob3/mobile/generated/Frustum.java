@@ -1,5 +1,6 @@
 package org.glob3.mobile.generated; 
-public class Frustum {
+public class Frustum
+{
   private Plane _leftPlane = new Plane();
   private Plane _rightPlane = new Plane();
   private Plane _bottomPlane = new Plane();
@@ -30,11 +31,13 @@ public class Frustum {
    _bottomPlane(bottomPlane),
    _topPlane(topPlane),
    _nearPlane(nearPlane),
-   _farPlane(farPlane) {
+   _farPlane(farPlane)
+   {
    
    }*/
 
-  private Frustum(Frustum that, MutableMatrix44D matrix, MutableMatrix44D inverse) {
+  private Frustum(Frustum that, MutableMatrix44D matrix, MutableMatrix44D inverse)
+  {
      _ltn = new Vector3D(that._ltn.transformedBy(inverse, 1));
      _rtn = new Vector3D(that._rtn.transformedBy(inverse, 1));
      _lbn = new Vector3D(that._lbn.transformedBy(inverse, 1));
@@ -52,7 +55,8 @@ public class Frustum {
     _extent = computeExtent();
   }
 
-  private Extent computeExtent() {
+  private Extent computeExtent()
+  {
     double minx = 1e10;
     double miny = 1e10;
     double minz = 1e10;
@@ -168,7 +172,8 @@ public class Frustum {
   }
 
 
-  public Frustum(Frustum that) {
+  public Frustum(Frustum that)
+  {
      _leftPlane = new Plane(that._leftPlane);
      _rightPlane = new Plane(that._rightPlane);
      _bottomPlane = new Plane(that._bottomPlane);
@@ -187,7 +192,8 @@ public class Frustum {
 
   }
 
-  public Frustum(double left, double right, double bottom, double top, double znear, double zfar) {
+  public Frustum(double left, double right, double bottom, double top, double znear, double zfar)
+  {
      _ltn = new Vector3D(new Vector3D(left, top, -znear));
      _rtn = new Vector3D(new Vector3D(right, top, -znear));
      _lbn = new Vector3D(new Vector3D(left, bottom, -znear));
@@ -205,7 +211,8 @@ public class Frustum {
      _extent = null;
   }
 
-  public Frustum (FrustumData data) {
+  public Frustum (FrustumData data)
+  {
      _ltn = new Vector3D(new Vector3D(data._left, data._top, -data._znear));
      _rtn = new Vector3D(new Vector3D(data._right, data._top, -data._znear));
      _lbn = new Vector3D(new Vector3D(data._left, data._bottom, -data._znear));
@@ -223,7 +230,8 @@ public class Frustum {
      _extent = null;
   }
 
-  public final boolean contains(Vector3D point) {
+  public final boolean contains(Vector3D point)
+  {
     if (_leftPlane.signedDistance(point) > 0)
        return false;
     if (_rightPlane.signedDistance(point) > 0)
@@ -239,7 +247,8 @@ public class Frustum {
     return true;
   }
 
-  public final boolean touchesWithBox(Box box) {
+  public final boolean touchesWithBox(Box box)
+  {
     boolean outside;
   
     // test first if frustum extent intersect with box
@@ -256,7 +265,8 @@ public class Frustum {
     // test with left plane
     outside = true;
     for (int i = 0; i<8; i++)
-      if (_leftPlane.signedDistance(corners[i])<0) {
+      if (_leftPlane.signedDistance(corners[i])<0)
+      {
         outside = false;
         break;
       }
@@ -266,7 +276,8 @@ public class Frustum {
     // test with bottom plane
     outside = true;
     for (int i = 0; i<8; i++)
-      if (_bottomPlane.signedDistance(corners[i])<0) {
+      if (_bottomPlane.signedDistance(corners[i])<0)
+      {
         outside = false;
         break;
       }
@@ -276,7 +287,8 @@ public class Frustum {
     // test with right plane
     outside = true;
     for (int i = 0; i<8; i++)
-      if (_rightPlane.signedDistance(corners[i])<0) {
+      if (_rightPlane.signedDistance(corners[i])<0)
+      {
         outside = false;
         break;
       }
@@ -286,7 +298,8 @@ public class Frustum {
     // test with top plane
     outside = true;
     for (int i = 0; i<8; i++)
-      if (_topPlane.signedDistance(corners[i])<0) {
+      if (_topPlane.signedDistance(corners[i])<0)
+      {
         outside = false;
         break;
       }
@@ -296,7 +309,8 @@ public class Frustum {
     // test with near plane
     outside = true;
     for (int i = 0; i<8; i++)
-      if (_nearPlane.signedDistance(corners[i])<0) {
+      if (_nearPlane.signedDistance(corners[i])<0)
+      {
         outside = false;
         break;
       }
@@ -306,7 +320,8 @@ public class Frustum {
     // test with far plane
     outside = true;
     for (int i = 0; i<8; i++)
-      if (_farPlane.signedDistance(corners[i])<0) {
+      if (_farPlane.signedDistance(corners[i])<0)
+      {
         outside = false;
         break;
       }
@@ -337,15 +352,18 @@ public class Frustum {
    }*/
 
 
-  public final Frustum transformedBy_P(MutableMatrix44D matrix) {
+  public final Frustum transformedBy_P(MutableMatrix44D matrix)
+  {
     return new Frustum(this, matrix, matrix.inversed());
   }
 
-  public void dispose() {
+  public void dispose()
+  {
      _extent = null;
   }
 
-  public final Extent getExtent() {
+  public final Extent getExtent()
+  {
      return _extent;
   }
 }

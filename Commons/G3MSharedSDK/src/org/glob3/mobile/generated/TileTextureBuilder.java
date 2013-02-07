@@ -1,5 +1,6 @@
 package org.glob3.mobile.generated; 
-public class TileTextureBuilder extends RCObject {
+public class TileTextureBuilder extends RCObject
+{
   private MultiLayerTileTexturizer _texturizer;
   private Tile _tile;
 
@@ -33,7 +34,8 @@ public class TileTextureBuilder extends RCObject {
   public LeveledTexturedMesh _mesh;
 
   public TileTextureBuilder(MultiLayerTileTexturizer texturizer, G3MRenderContext rc, LayerSet layerSet, TilesRenderParameters parameters, IDownloader downloader, Tile tile, Mesh tessellatorMesh, IFloatBuffer texCoords)
-  //_tileKey(tile->getKey()), {
+  //_tileKey(tile->getKey()),
+  {
      _texturizer = texturizer;
      _factory = rc.getFactory();
      _texturesHandler = rc.getTexturesHandler();
@@ -54,27 +56,33 @@ public class TileTextureBuilder extends RCObject {
 
     _petitionsCount = _petitions.size();
 
-    for (int i = 0; i < _petitionsCount; i++) {
+    for (int i = 0; i < _petitionsCount; i++)
+    {
       _status.add(PetitionStatus.STATUS_PENDING);
     }
 
     _mesh = createMesh();
   }
 
-  public final void start() {
-    if (_canceled) {
+  public final void start()
+  {
+    if (_canceled)
+    {
       return;
     }
-    if (_alreadyStarted) {
+    if (_alreadyStarted)
+    {
       return;
     }
     _alreadyStarted = true;
 
-    if (_tile == null) {
+    if (_tile == null)
+    {
       return;
     }
 
-    for (int i = 0; i < _petitionsCount; i++) {
+    for (int i = 0; i < _petitionsCount; i++)
+    {
       final Petition petition = _petitions.get(i);
 
       //      const long long priority =  (_parameters->_incrementalTileQuality
@@ -88,15 +96,18 @@ public class TileTextureBuilder extends RCObject {
     }
   }
 
-  public void dispose() {
-    if (!_finalized && !_canceled) {
+  public void dispose()
+  {
+    if (!_finalized && !_canceled)
+    {
       cancel();
     }
 
     deletePetitions();
   }
 
-  public final RectangleI getImageRectangleInTexture(Sector wholeSector, Sector imageSector, int textureWidth, int textureHeight) {
+  public final RectangleI getImageRectangleInTexture(Sector wholeSector, Sector imageSector, int textureWidth, int textureHeight)
+  {
     final Vector2D lowerFactor = wholeSector.getUVCoordinates(imageSector.lower());
 
     final double widthFactor = imageSector.getDeltaLongitude().div(wholeSector.getDeltaLongitude());
@@ -105,10 +116,12 @@ public class TileTextureBuilder extends RCObject {
     return new RectangleI((int) IMathUtils.instance().round(lowerFactor._x * textureWidth), (int) IMathUtils.instance().round((1.0 - lowerFactor._y) * textureHeight), (int) IMathUtils.instance().round(widthFactor * textureWidth), (int) IMathUtils.instance().round(heightFactor * textureHeight));
   }
 
-  public final void composeAndUploadTexture() {
+  public final void composeAndUploadTexture()
+  {
     synchronized (this) {
 
-      if (_mesh == null) {
+      if (_mesh == null)
+      {
         return;
       }
 
@@ -121,11 +134,13 @@ public class TileTextureBuilder extends RCObject {
 
       final Sector tileSector = _tile.getSector();
 
-      for (int i = 0; i < _petitionsCount; i++) {
+      for (int i = 0; i < _petitionsCount; i++)
+      {
         final Petition petition = _petitions.get(i);
         IImage image = petition.getImage();
 
-        if (image != null) {
+        if (image != null)
+        {
           images.add(image);
 
           rectangles.add(getImageRectangleInTexture(tileSector, petition.getSector(), textureWidth, textureHeight));
@@ -135,17 +150,20 @@ public class TileTextureBuilder extends RCObject {
         }
       }
 
-      if (images.size() > 0) {
+      if (images.size() > 0)
+      {
         _textureBuilder.createTextureFromImages(_gl, _factory, images, rectangles, textureWidth, textureHeight, new TextureUploader(this, rectangles, textureId), true);
       }
 
     }
   }
 
-  public final void imageCreated(IImage image, java.util.ArrayList<RectangleI> rectangles, String textureId) {
+  public final void imageCreated(IImage image, java.util.ArrayList<RectangleI> rectangles, String textureId)
+  {
     synchronized (this) {
 
-      if (_mesh == null) {
+      if (_mesh == null)
+      {
         IFactory.instance().deleteImage(image);
         return;
       }
@@ -154,8 +172,10 @@ public class TileTextureBuilder extends RCObject {
 
       final IGLTextureId glTextureId = _texturesHandler.getGLTextureId(image, GLFormat.rgba(), textureId, isMipmap);
 
-      if (glTextureId != null) {
-        if (!_mesh.setGLTextureIdForLevel(0, glTextureId)) {
+      if (glTextureId != null)
+      {
+        if (!_mesh.setGLTextureIdForLevel(0, glTextureId))
+        {
           _texturesHandler.releaseGLTextureId(glTextureId);
         }
       }
@@ -166,22 +186,28 @@ public class TileTextureBuilder extends RCObject {
     }
   }
 
-  public final void done() {
-    if (!_finalized) {
+  public final void done()
+  {
+    if (!_finalized)
+    {
       _finalized = true;
 
-      if (!_canceled && (_tile != null) && (_mesh != null)) {
+      if (!_canceled && (_tile != null) && (_mesh != null))
+      {
         composeAndUploadTexture();
       }
 
-      if (_tile != null) {
+      if (_tile != null)
+      {
         _tile.setTextureSolved(true);
       }
     }
   }
 
-  public final void deletePetitions() {
-    for (int i = 0; i < _petitionsCount; i++) {
+  public final void deletePetitions()
+  {
+    for (int i = 0; i < _petitionsCount; i++)
+    {
       Petition petition = _petitions.get(i);
       if (petition != null)
          petition.dispose();
@@ -190,11 +216,14 @@ public class TileTextureBuilder extends RCObject {
     _petitionsCount = 0;
   }
 
-  public final void stepDone() {
+  public final void stepDone()
+  {
     _stepsDone++;
 
-    if (_stepsDone == _petitionsCount) {
-      if (_anyCanceled) {
+    if (_stepsDone == _petitionsCount)
+    {
+      if (_anyCanceled)
+      {
         ILogger.instance().logInfo("Completed with cancelation\n");
       }
 
@@ -202,15 +231,19 @@ public class TileTextureBuilder extends RCObject {
     }
   }
 
-  public final void cancel() {
-    if (_canceled) {
+  public final void cancel()
+  {
+    if (_canceled)
+    {
       return;
     }
 
     _canceled = true;
 
-    if (!_finalized) {
-      for (int i = 0; i < _requestsIds.size(); i++) {
+    if (!_finalized)
+    {
+      for (int i = 0; i < _requestsIds.size(); i++)
+      {
         final long requestId = _requestsIds.get(i);
         _downloader.cancelRequest(requestId);
       }
@@ -218,18 +251,23 @@ public class TileTextureBuilder extends RCObject {
     _requestsIds.clear();
   }
 
-  public final boolean isCanceled() {
+  public final boolean isCanceled()
+  {
     return _canceled;
   }
 
-  public final void checkIsPending(int position) {
-    if (_status.get(position) != PetitionStatus.STATUS_PENDING) {
+  public final void checkIsPending(int position)
+  {
+    if (_status.get(position) != PetitionStatus.STATUS_PENDING)
+    {
       ILogger.instance().logError("Logic error: Expected STATUS_PENDING at position #%d but found status: %d\n", position, _status.get(position));
     }
   }
 
-  public final void stepDownloaded(int position, IImage image) {
-    if (_canceled) {
+  public final void stepDownloaded(int position, IImage image)
+  {
+    if (_canceled)
+    {
       return;
     }
     checkIsPending(position);
@@ -240,8 +278,10 @@ public class TileTextureBuilder extends RCObject {
     stepDone();
   }
 
-  public final void stepCanceled(int position) {
-    if (_canceled) {
+  public final void stepCanceled(int position)
+  {
+    if (_canceled)
+    {
       return;
     }
     checkIsPending(position);
@@ -253,33 +293,43 @@ public class TileTextureBuilder extends RCObject {
     stepDone();
   }
 
-  public final LeveledTexturedMesh createMesh() {
+  public final LeveledTexturedMesh createMesh()
+  {
     java.util.ArrayList<LazyTextureMapping> mappings = new java.util.ArrayList<LazyTextureMapping>();
 
     Tile ancestor = _tile;
     boolean fallbackSolved = false;
-    while (ancestor != null) {
+    while (ancestor != null)
+    {
       LazyTextureMapping mapping;
-      if (fallbackSolved) {
+      if (fallbackSolved)
+      {
         mapping = null;
       }
-      else {
+      else
+      {
         mapping = new LazyTextureMapping(new LTMInitializer(_tile, ancestor, _texCoords), _texturesHandler, false, false);
       }
 
-      if (ancestor != _tile) {
-        if (!fallbackSolved) {
+      if (ancestor != _tile)
+      {
+        if (!fallbackSolved)
+        {
           final IGLTextureId glTextureId = _texturizer.getTopLevelGLTextureIdForTile(ancestor);
-          if (glTextureId != null) {
+          if (glTextureId != null)
+          {
             _texturesHandler.retainGLTextureId(glTextureId);
             mapping.setGLTextureId(glTextureId);
             fallbackSolved = true;
           }
         }
       }
-      else {
-        if (mapping != null) {
-          if (mapping.getGLTextureId() != null) {
+      else
+      {
+        if (mapping != null)
+        {
+          if (mapping.getGLTextureId() != null)
+          {
             ILogger.instance().logInfo("break (point) on me 3\n");
           }
         }
@@ -289,8 +339,10 @@ public class TileTextureBuilder extends RCObject {
       ancestor = ancestor.getParent();
     }
 
-    if ((mappings != null) && (_tile != null)) {
-      if (mappings.size() != _tile.getLevel() + 1) {
+    if ((mappings != null) && (_tile != null))
+    {
+      if (mappings.size() != _tile.getLevel() + 1)
+      {
         ILogger.instance().logInfo("pleae break (point) me\n");
       }
     }
@@ -298,22 +350,27 @@ public class TileTextureBuilder extends RCObject {
     return new LeveledTexturedMesh(_tessellatorMesh, false, mappings);
   }
 
-  public final LeveledTexturedMesh getMesh() {
+  public final LeveledTexturedMesh getMesh()
+  {
     return _mesh;
   }
 
-  public final void cleanMesh() {
+  public final void cleanMesh()
+  {
     synchronized (this) {
 
-      if (_mesh != null) {
+      if (_mesh != null)
+      {
         _mesh = null;
       }
 
     }
   }
 
-  public final void cleanTile() {
-    if (_tile != null) {
+  public final void cleanTile()
+  {
+    if (_tile != null)
+    {
       _tile = null;
     }
   }

@@ -28,38 +28,51 @@ package org.glob3.mobile.generated;
 //class JSONBoolean;
 //class JSONObject;
 
-public class BSONParser {
-  private BSONParser() {
+public class BSONParser
+{
+  private BSONParser()
+  {
 
   }
 
-  private static JSONBaseObject parseValue(byte type, ByteBufferIterator iterator) {
-    switch (type) {
-      case 0x02: {
+  private static JSONBaseObject parseValue(byte type, ByteBufferIterator iterator)
+  {
+    switch (type)
+    {
+      case 0x02:
+      {
         return parseString(iterator);
       }
-      case 0x04: {
+      case 0x04:
+      {
         return parseArray(iterator);
       }
-      case 0x01: {
+      case 0x01:
+      {
         return parseDouble(iterator);
       }
-      case 0x10: {
+      case 0x10:
+      {
         return parseInt32(iterator);
       }
-      case 0x12: {
+      case 0x12:
+      {
         return parseInt64(iterator);
       }
-      case 0x08: {
+      case 0x08:
+      {
         return parseBool(iterator);
       }
-      case 0x03: {
+      case 0x03:
+      {
         return parseObject(iterator);
       }
-      case 0x44: {
+      case 0x44:
+      {
         return parseCustomizedArray(iterator);
       }
-      default: {
+      default:
+      {
         ILogger.instance().logError("Unknown type %d", type);
         return null;
       }
@@ -67,93 +80,113 @@ public class BSONParser {
   }
 
 
-  private static JSONString parseString(ByteBufferIterator iterator) {
+  private static JSONString parseString(ByteBufferIterator iterator)
+  {
     final int stringSize = iterator.nextInt32();
     final String str = iterator.nextZeroTerminatedString();
   
-    if ((stringSize - 1) == str.length()) {
+    if ((stringSize - 1) == str.length())
+    {
       return new JSONString(str);
     }
   
     ILogger.instance().logError("Invalid stringSize, expected %d but got %d", stringSize, str.length());
     return null;
   }
-  private static JSONArray parseArray(ByteBufferIterator iterator) {
+  private static JSONArray parseArray(ByteBufferIterator iterator)
+  {
     //const int arraySize = iterator->nextInt32();
     iterator.nextInt32(); // consumes the size
   
     JSONArray result = new JSONArray();
-    while (iterator.hasNext()) {
+    while (iterator.hasNext())
+    {
       final byte type = iterator.nextUInt8();
-      if (type == 0) {
+      if (type == 0)
+      {
         break;
       }
   
       // const std::string key = iterator->nextZeroTerminatedString();
       iterator.nextZeroTerminatedString(); // consumes the key
       JSONBaseObject value = parseValue(type, iterator);
-      if (value != null) {
+      if (value != null)
+      {
         result.add(value);
       }
     }
   
     return result;
   }
-  private static JSONArray parseCustomizedArray(ByteBufferIterator iterator) {
+  private static JSONArray parseCustomizedArray(ByteBufferIterator iterator)
+  {
     //const int arraySize = iterator->nextInt32();
     iterator.nextInt32(); // consumes the size
   
     JSONArray result = new JSONArray();
-    while (iterator.hasNext()) {
+    while (iterator.hasNext())
+    {
       final byte type = iterator.nextUInt8();
-      if (type == 0) {
+      if (type == 0)
+      {
         break;
       }
   
       //const std::string key = iterator->nextZeroTerminatedString();
       JSONBaseObject value = parseValue(type, iterator);
-      if (value != null) {
+      if (value != null)
+      {
         result.add(value);
       }
     }
   
     return result;
   }
-  private static JSONNumber parseDouble(ByteBufferIterator iterator) {
+  private static JSONNumber parseDouble(ByteBufferIterator iterator)
+  {
     final double doubleValue = iterator.nextDouble();
     final float floatValue = (float) doubleValue;
-    if (doubleValue == floatValue) {
+    if (doubleValue == floatValue)
+    {
       return new JSONFloat(floatValue);
     }
     return new JSONDouble(doubleValue);
   }
-  private static JSONInteger parseInt32(ByteBufferIterator iterator) {
+  private static JSONInteger parseInt32(ByteBufferIterator iterator)
+  {
     return new JSONInteger(iterator.nextInt32());
   }
-  private static JSONLong parseInt64(ByteBufferIterator iterator) {
+  private static JSONLong parseInt64(ByteBufferIterator iterator)
+  {
     return new JSONLong(iterator.nextInt64());
   }
-  private static JSONBoolean parseBool(ByteBufferIterator iterator) {
+  private static JSONBoolean parseBool(ByteBufferIterator iterator)
+  {
     byte b = iterator.nextUInt8();
-    if (b == 0x01) {
+    if (b == 0x01)
+    {
       return new JSONBoolean(true);
     }
     return new JSONBoolean(false);
   }
-  private static JSONObject parseObject(ByteBufferIterator iterator) {
+  private static JSONObject parseObject(ByteBufferIterator iterator)
+  {
     //const int objectSize = iterator->nextInt32();
     iterator.nextInt32(); // consumes the size
   
     JSONObject result = new JSONObject();
-    while (iterator.hasNext()) {
+    while (iterator.hasNext())
+    {
       final byte type = iterator.nextUInt8();
-      if (type == 0) {
+      if (type == 0)
+      {
         break;
       }
   
       final String key = iterator.nextZeroTerminatedString();
       JSONBaseObject value = parseValue(type, iterator);
-      if (value != null) {
+      if (value != null)
+      {
         result.put(key, value);
       }
     }
@@ -162,26 +195,31 @@ public class BSONParser {
   }
 
 
-  public static JSONBaseObject parse(IByteBuffer buffer) {
+  public static JSONBaseObject parse(IByteBuffer buffer)
+  {
   
     ByteBufferIterator iterator = new ByteBufferIterator(buffer);
     final int bufferSize = iterator.nextInt32();
   
-    if (buffer.size() != bufferSize) {
+    if (buffer.size() != bufferSize)
+    {
       ILogger.instance().logError("Invalid bufferSize, expected %d but got %d", bufferSize, buffer.size());
     }
   
     JSONObject result = new JSONObject();
   
-    while (iterator.hasNext()) {
+    while (iterator.hasNext())
+    {
       final byte type = iterator.nextUInt8();
-      if (type == 0) {
+      if (type == 0)
+      {
         break;
       }
   
       final String key = iterator.nextZeroTerminatedString();
       JSONBaseObject value = parseValue(type, iterator);
-      if (value != null) {
+      if (value != null)
+      {
         result.put(key, value);
       }
     }

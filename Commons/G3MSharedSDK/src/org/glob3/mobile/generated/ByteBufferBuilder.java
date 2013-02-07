@@ -18,11 +18,13 @@ package org.glob3.mobile.generated;
 
 //class IByteBuffer;
 
-public class ByteBufferBuilder {
+public class ByteBufferBuilder
+{
   private java.util.ArrayList<Byte> _values = new java.util.ArrayList<Byte>();
 
 
-  public final void addInt64(long value) {
+  public final void addInt64(long value)
+  {
     final byte b1 = (byte)((value) & 0xFF);
     final byte b2 = (byte)((value >> 8) & 0xFF);
     final byte b3 = (byte)((value >> 16) & 0xFF);
@@ -42,11 +44,13 @@ public class ByteBufferBuilder {
     _values.add(b8);
   }
 
-  public final void addDouble(double value) {
+  public final void addDouble(double value)
+  {
     addInt64(IMathUtils.instance().doubleToRawLongBits(value));
   }
 
-  public final void addInt32(int value) {
+  public final void addInt32(int value)
+  {
     final byte b1 = (byte)((value) & 0xFF);
     final byte b2 = (byte)((value >> 8) & 0xFF);
     final byte b3 = (byte)((value >> 16) & 0xFF);
@@ -58,7 +62,8 @@ public class ByteBufferBuilder {
     _values.add(b4);
   }
 
-  public final void setInt32(int i, int value) {
+  public final void setInt32(int i, int value)
+  {
     final int b1 = ((value) & 0xFF);
     final int b2 = ((value >> 8) & 0xFF);
     final int b3 = ((value >> 16) & 0xFF);
@@ -70,21 +75,26 @@ public class ByteBufferBuilder {
     _values.set(i + 3, (byte) b4);
   }
 
-  public final void addStringZeroTerminated(String str) {
+  public final void addStringZeroTerminated(String str)
+  {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#if JAVA_CODE
-    try {
+    try
+    {
       byte[] bytesArray = str.getBytes("UTF-8");
   
       final int size = bytesArray.length;
-      for (int i = 0; i < size; i++) {
+      for (int i = 0; i < size; i++)
+      {
         final byte c = bytesArray[i];
         _values.add(c);
       }
       _values.add((byte) 0);
     }
-    catch (final java.io.UnsupportedEncodingException e) {
-      if (ILogger.instance() != null) {
+    catch (final java.io.UnsupportedEncodingException e)
+    {
+      if (ILogger.instance() != null)
+      {
         ILogger.instance().logError("ByteBufferBuilder: " + e.getMessage());
       }
       e.printStackTrace();
@@ -92,20 +102,24 @@ public class ByteBufferBuilder {
 //#endif
   }
 
-  public final void add(byte value) {
+  public final void add(byte value)
+  {
     _values.add(value);
   }
 
-  public final int size() {
+  public final int size()
+  {
     return _values.size();
   }
 
-  public final IByteBuffer create() {
+  public final IByteBuffer create()
+  {
     final int size = _values.size();
   
     IByteBuffer result = IFactory.instance().createByteBuffer(size);
   
-    for (int i = 0; i < size; i++) {
+    for (int i = 0; i < size; i++)
+    {
       result.rawPut(i, _values.get(i));
     }
   

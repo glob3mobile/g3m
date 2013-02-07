@@ -12,8 +12,10 @@ package org.glob3.mobile.generated;
 //class RectangleI;
 //class IImageListener;
 
-public abstract class IImage {
-  public void dispose() {
+public abstract class IImage
+{
+  public void dispose()
+  {
   }
 
   public abstract int getWidth();

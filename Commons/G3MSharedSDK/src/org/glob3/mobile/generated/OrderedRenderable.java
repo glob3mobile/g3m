@@ -18,12 +18,14 @@ package org.glob3.mobile.generated;
 
 //class GLState;
 
-public abstract class OrderedRenderable {
+public abstract class OrderedRenderable
+{
   public abstract double squaredDistanceFromEye();
 
   public abstract void render(G3MRenderContext rc, GLState parentState);
 
-  public void dispose() {
+  public void dispose()
+  {
 
   }
 }

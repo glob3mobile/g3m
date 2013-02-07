@@ -17,7 +17,8 @@ package org.glob3.mobile.generated;
 
 
 
-public class BoxShape extends AbstractMeshShape {
+public class BoxShape extends AbstractMeshShape
+{
   private double _extentX;
   private double _extentY;
   private double _extentZ;
@@ -27,7 +28,8 @@ public class BoxShape extends AbstractMeshShape {
   private Color _surfaceColor;
   private Color _borderColor;
 
-  private Mesh createBorderMesh(G3MRenderContext rc) {
+  private Mesh createBorderMesh(G3MRenderContext rc)
+  {
     final float lowerX = (float) -(_extentX / 2);
     final float upperX = (float) +(_extentX / 2);
     final float lowerY = (float) -(_extentY / 2);
@@ -44,11 +46,13 @@ public class BoxShape extends AbstractMeshShape {
     ShortBufferBuilder indices = new ShortBufferBuilder();
   
     final int numVertices = 8;
-    for (int n = 0; n<numVertices; n++) {
+    for (int n = 0; n<numVertices; n++)
+    {
       vertices.add(v[n *3], v[n *3+1], v[n *3+2]);
     }
   
-    for (int n = 0; n<numIndices; n++) {
+    for (int n = 0; n<numIndices; n++)
+    {
       indices.add(i[n]);
     }
   
@@ -56,7 +60,8 @@ public class BoxShape extends AbstractMeshShape {
   
     return new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), _borderWidth, 1, borderColor);
   }
-  private Mesh createSurfaceMesh(G3MRenderContext rc) {
+  private Mesh createSurfaceMesh(G3MRenderContext rc)
+  {
     final float lowerX = (float) -(_extentX / 2);
     final float upperX = (float) +(_extentX / 2);
     final float lowerY = (float) -(_extentY / 2);
@@ -73,19 +78,23 @@ public class BoxShape extends AbstractMeshShape {
     ShortBufferBuilder indices = new ShortBufferBuilder();
   
     final int numVertices = 8;
-    for (int n = 0; n<numVertices; n++) {
+    for (int n = 0; n<numVertices; n++)
+    {
       vertices.add(v[n *3], v[n *3+1], v[n *3+2]);
     }
   
-    for (int n = 0; n<numIndices; n++) {
+    for (int n = 0; n<numIndices; n++)
+    {
       indices.add(i[n]);
     }
   
     return new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), _borderWidth, 1, _surfaceColor);
   }
 
-  protected final Mesh createMesh(G3MRenderContext rc) {
-    if (_borderWidth > 0) {
+  protected final Mesh createMesh(G3MRenderContext rc)
+  {
+    if (_borderWidth > 0)
+    {
       CompositeMesh compositeMesh = new CompositeMesh();
       compositeMesh.addMesh(createSurfaceMesh(rc));
       compositeMesh.addMesh(createBorderMesh(rc));
@@ -95,13 +104,16 @@ public class BoxShape extends AbstractMeshShape {
     return createSurfaceMesh(rc);
   }
 
-  public BoxShape(Geodetic3D position, Vector3D extent, float borderWidth, Color surfaceColor) {
+  public BoxShape(Geodetic3D position, Vector3D extent, float borderWidth, Color surfaceColor)
+  {
      this(position, extent, borderWidth, surfaceColor, null);
   }
-  public BoxShape(Geodetic3D position, Vector3D extent, float borderWidth) {
+  public BoxShape(Geodetic3D position, Vector3D extent, float borderWidth)
+  {
      this(position, extent, borderWidth, null, null);
   }
-  public BoxShape(Geodetic3D position, Vector3D extent, float borderWidth, Color surfaceColor, Color borderColor) {
+  public BoxShape(Geodetic3D position, Vector3D extent, float borderWidth, Color surfaceColor, Color borderColor)
+  {
      super(position);
      _extentX = extent._x;
      _extentY = extent._y;
@@ -112,15 +124,18 @@ public class BoxShape extends AbstractMeshShape {
 
   }
 
-  public void dispose() {
+  public void dispose()
+  {
     if (_surfaceColor != null)
        _surfaceColor.dispose();
     if (_borderColor != null)
        _borderColor.dispose();
   }
 
-  public final void setExtent(Vector3D extent) {
-    if ((_extentX != extent._x) || (_extentY != extent._y) || (_extentZ != extent._z)) {
+  public final void setExtent(Vector3D extent)
+  {
+    if ((_extentX != extent._x) || (_extentY != extent._y) || (_extentZ != extent._z))
+    {
       _extentX = extent._x;
       _extentY = extent._y;
       _extentZ = extent._z;
@@ -128,26 +143,31 @@ public class BoxShape extends AbstractMeshShape {
     }
   }
 
-  public final Vector3D getExtent() {
+  public final Vector3D getExtent()
+  {
     return new Vector3D(_extentX, _extentY, _extentZ);
   }
 
-  public final void setSurfaceColor(Color color) {
+  public final void setSurfaceColor(Color color)
+  {
     if (_surfaceColor != null)
        _surfaceColor.dispose();
     _surfaceColor = color;
     cleanMesh();
   }
 
-  public final void setBorderColor(Color color) {
+  public final void setBorderColor(Color color)
+  {
     if (_borderColor != null)
        _borderColor.dispose();
     _borderColor = color;
     cleanMesh();
   }
 
-  public final void setBorderWidth(float borderWidth) {
-    if (_borderWidth != borderWidth) {
+  public final void setBorderWidth(float borderWidth)
+  {
+    if (_borderWidth != borderWidth)
+    {
       _borderWidth = borderWidth;
       cleanMesh();
     }

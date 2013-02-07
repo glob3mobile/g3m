@@ -1,21 +1,26 @@
 package org.glob3.mobile.generated; 
-public class BuilderStartTask extends FrameTask {
+public class BuilderStartTask extends FrameTask
+{
   private TileTextureBuilder _builder;
 
-  public BuilderStartTask(TileTextureBuilder builder) {
+  public BuilderStartTask(TileTextureBuilder builder)
+  {
      _builder = builder;
     _builder._retain();
   }
 
-  public void dispose() {
+  public void dispose()
+  {
     _builder._release();
   }
 
-  public final void execute(G3MRenderContext rc) {
+  public final void execute(G3MRenderContext rc)
+  {
     _builder.start();
   }
 
-  public final boolean isCanceled(G3MRenderContext rc) {
+  public final boolean isCanceled(G3MRenderContext rc)
+  {
     return false;
   }
 }

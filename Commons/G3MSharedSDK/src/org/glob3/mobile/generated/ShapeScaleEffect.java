@@ -19,7 +19,8 @@ package org.glob3.mobile.generated;
 
 //class Shape;
 
-public class ShapeScaleEffect extends EffectWithDuration {
+public class ShapeScaleEffect extends EffectWithDuration
+{
   private Shape _shape;
 
   private double _fromScaleX;
@@ -30,7 +31,8 @@ public class ShapeScaleEffect extends EffectWithDuration {
   private double _toScaleY;
   private double _toScaleZ;
 
-  public ShapeScaleEffect(TimeInterval duration, Shape shape, double fromScaleX, double fromScaleY, double fromScaleZ, double toScaleX, double toScaleY, double toScaleZ) {
+  public ShapeScaleEffect(TimeInterval duration, Shape shape, double fromScaleX, double fromScaleY, double fromScaleZ, double toScaleX, double toScaleY, double toScaleZ)
+  {
      super(duration);
      _shape = shape;
      _fromScaleX = fromScaleX;
@@ -43,7 +45,8 @@ public class ShapeScaleEffect extends EffectWithDuration {
   }
 
 
-  public final void doStep(G3MRenderContext rc, TimeInterval when) {
+  public final void doStep(G3MRenderContext rc, TimeInterval when)
+  {
     final double alpha = pace(percentDone(when));
   
     final double scaleX = IMathUtils.instance().lerp(_fromScaleX, _toScaleX, alpha);
@@ -53,11 +56,13 @@ public class ShapeScaleEffect extends EffectWithDuration {
     _shape.setScale(scaleX, scaleY, scaleZ);
   }
 
-  public final void cancel(TimeInterval when) {
+  public final void cancel(TimeInterval when)
+  {
     _shape.setScale(_toScaleX, _toScaleY, _toScaleZ);
   }
 
-  public void stop(G3MRenderContext rc, TimeInterval when) {
+  public void stop(G3MRenderContext rc, TimeInterval when)
+  {
     _shape.setScale(_toScaleX, _toScaleY, _toScaleZ);
   }
 

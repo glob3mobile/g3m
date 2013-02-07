@@ -35,7 +35,8 @@ package org.glob3.mobile.generated;
 //class OrderedRenderable;
 
 
-public class G3MContext {
+public class G3MContext
+{
   protected final IFactory _factory;
   protected final IStringUtils _stringUtils;
   protected final IThreadUtils _threadUtils;
@@ -47,7 +48,8 @@ public class G3MContext {
   protected EffectsScheduler _effectsScheduler;
   protected IStorage _storage;
 
-  public G3MContext(IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, IMathUtils mathUtils, IJSONParser jsonParser, Planet planet, IDownloader downloader, EffectsScheduler effectsScheduler, IStorage storage) {
+  public G3MContext(IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, IMathUtils mathUtils, IJSONParser jsonParser, Planet planet, IDownloader downloader, EffectsScheduler effectsScheduler, IStorage storage)
+  {
      _factory = factory;
      _stringUtils = stringUtils;
      _threadUtils = threadUtils;
@@ -60,47 +62,58 @@ public class G3MContext {
      _storage = storage;
   }
 
-  public void dispose() {
+  public void dispose()
+  {
 
   }
 
-  public final IFactory getFactory() {
+  public final IFactory getFactory()
+  {
     return _factory;
   }
 
-  public final IStringUtils getStringUtils() {
+  public final IStringUtils getStringUtils()
+  {
     return _stringUtils;
   }
 
-  public final ILogger getLogger() {
+  public final ILogger getLogger()
+  {
     return _logger;
   }
 
-  public final IMathUtils getMathUtils() {
+  public final IMathUtils getMathUtils()
+  {
     return _mathUtils;
   }
 
-  public final IJSONParser getJSONParser() {
+  public final IJSONParser getJSONParser()
+  {
     return _jsonParser;
   }
 
-  public final Planet getPlanet() {
+  public final Planet getPlanet()
+  {
     return _planet;
   }
 
-  public final IDownloader getDownloader() {
+  public final IDownloader getDownloader()
+  {
     return _downloader;
   }
 
-  public final IStorage getStorage() {
+  public final IStorage getStorage()
+  {
     return _storage;
   }
 
-  public final EffectsScheduler getEffectsScheduler() {
+  public final EffectsScheduler getEffectsScheduler()
+  {
     return _effectsScheduler;
   }
 
-  public final IThreadUtils getThreadUtils() {
+  public final IThreadUtils getThreadUtils()
+  {
     return _threadUtils;
   }
 }

@@ -27,8 +27,10 @@ package org.glob3.mobile.generated;
 //class LayerSet;
 
 
-public abstract class TileTexturizer {
-  public void dispose() {
+public abstract class TileTexturizer
+{
+  public void dispose()
+  {
   }
 
   public abstract boolean isReady(G3MRenderContext rc, LayerSet layerSet);

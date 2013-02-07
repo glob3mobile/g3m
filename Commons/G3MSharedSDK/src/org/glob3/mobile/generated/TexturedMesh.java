@@ -18,7 +18,8 @@ package org.glob3.mobile.generated;
 
 
 
-public class TexturedMesh extends Mesh {
+public class TexturedMesh extends Mesh
+{
   private final Mesh _mesh;
   private final TextureMapping _textureMapping;
   private final boolean _ownedMesh;
@@ -27,7 +28,9 @@ public class TexturedMesh extends Mesh {
 
 
 
-  public TexturedMesh(Mesh mesh, boolean ownedMesh, TextureMapping textureMapping, boolean ownedTexMapping, boolean transparent) {
+  public TexturedMesh(Mesh mesh, boolean ownedMesh, TextureMapping textureMapping, boolean ownedTexMapping, boolean transparent)
+
+  {
      _mesh = mesh;
      _ownedMesh = ownedMesh;
      _textureMapping = textureMapping;
@@ -41,24 +44,29 @@ public class TexturedMesh extends Mesh {
 //    }
   }
 
-  public void dispose() {
-    if (_ownedMesh) {
+  public void dispose()
+  {
+    if (_ownedMesh)
+    {
       if (_mesh != null)
          _mesh.dispose();
     }
-    if (_ownedTexMapping) {
+    if (_ownedTexMapping)
+    {
       if (_textureMapping != null)
          _textureMapping.dispose();
     }
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState) {
+  public final void render(G3MRenderContext rc, GLState parentState)
+  {
     GL gl = rc.getGL();
   
     GLState state = new GLState(parentState);
     state.enableTextures();
     state.enableTexture2D();
-    if (_transparent) {
+    if (_transparent)
+    {
       state.enableBlend();
       gl.setBlendFuncSrcAlpha();
     }
@@ -68,23 +76,28 @@ public class TexturedMesh extends Mesh {
     _mesh.render(rc, state);
   }
 
-  public final Extent getExtent() {
+  public final Extent getExtent()
+  {
     return (_mesh == null) ? null : _mesh.getExtent();
   }
 
-  public final int getVertexCount() {
+  public final int getVertexCount()
+  {
     return _mesh.getVertexCount();
   }
 
-  public final Vector3D getVertex(int i) {
+  public final Vector3D getVertex(int i)
+  {
     return _mesh.getVertex(i);
   }
 
-  public final TextureMapping getTextureMapping() {
+  public final TextureMapping getTextureMapping()
+  {
     return _textureMapping;
   }
 
-  public final boolean isTransparent(G3MRenderContext rc) {
+  public final boolean isTransparent(G3MRenderContext rc)
+  {
     return _transparent;
   }
 }

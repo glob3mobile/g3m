@@ -19,7 +19,8 @@ package org.glob3.mobile.generated;
 
 //class Shape;
 
-public class ShapePositionEffect extends EffectWithDuration {
+public class ShapePositionEffect extends EffectWithDuration
+{
   private Shape _shape;
 
   private final Geodetic3D _fromPosition ;
@@ -27,7 +28,8 @@ public class ShapePositionEffect extends EffectWithDuration {
 
   private final boolean _linearInterpolation;
 
-  public ShapePositionEffect(TimeInterval duration, Shape shape, Geodetic3D fromPosition, Geodetic3D toPosition, boolean linearInterpolation) {
+  public ShapePositionEffect(TimeInterval duration, Shape shape, Geodetic3D fromPosition, Geodetic3D toPosition, boolean linearInterpolation)
+  {
      super(duration);
      _shape = shape;
      _fromPosition = new Geodetic3D(fromPosition);
@@ -36,7 +38,8 @@ public class ShapePositionEffect extends EffectWithDuration {
 
   }
 
-  public final void doStep(G3MRenderContext rc, TimeInterval when) {
+  public final void doStep(G3MRenderContext rc, TimeInterval when)
+  {
     final double percent = percentDone(when);
     final double alpha = _linearInterpolation ? percent : pace(percent);
   
@@ -44,11 +47,13 @@ public class ShapePositionEffect extends EffectWithDuration {
     _shape.setPosition(new Geodetic3D(pos));
   }
 
-  public final void cancel(TimeInterval when) {
+  public final void cancel(TimeInterval when)
+  {
     _shape.setPosition(new Geodetic3D(_toPosition));
   }
 
-  public final void stop(G3MRenderContext rc, TimeInterval when) {
+  public final void stop(G3MRenderContext rc, TimeInterval when)
+  {
     _shape.setPosition(new Geodetic3D(_toPosition));
   }
 

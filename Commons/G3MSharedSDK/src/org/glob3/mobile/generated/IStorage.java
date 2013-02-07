@@ -26,19 +26,23 @@ package org.glob3.mobile.generated;
 //class TimeInterval;
 
 
-public abstract class IStorage {
+public abstract class IStorage
+{
   protected G3MContext _context;
 
-  public IStorage() {
+  public IStorage()
+  {
      _context = null;
 
   }
 
-  public void dispose() {
+  public void dispose()
+  {
 
   }
 
-  public void initialize(G3MContext context) {
+  public void initialize(G3MContext context)
+  {
     _context = context;
   }
 

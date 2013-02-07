@@ -1,5 +1,6 @@
 package org.glob3.mobile.generated; 
-public class WMSLayer extends Layer {
+public class WMSLayer extends Layer
+{
 
 
 
@@ -22,7 +23,8 @@ public class WMSLayer extends Layer {
 
 
 
-  public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector sector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache) {
+  public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector sector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache)
+  {
      super(condition, mapLayer, timeToCache);
      _mapLayer = mapLayer;
      _mapServerURL = mapServerURL;
@@ -39,7 +41,8 @@ public class WMSLayer extends Layer {
 
   }
 
-  public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, Sector sector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache) {
+  public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, Sector sector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache)
+  {
      super(condition, mapLayer, timeToCache);
      _mapLayer = mapLayer;
      _mapServerURL = mapServerURL;
@@ -56,28 +59,33 @@ public class WMSLayer extends Layer {
 
   }
 
-  public final java.util.ArrayList<Petition> getMapPetitions(G3MRenderContext rc, Tile tile, int width, int height) {
+  public final java.util.ArrayList<Petition> getMapPetitions(G3MRenderContext rc, Tile tile, int width, int height)
+  {
     java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
   
     final Sector tileSector = tile.getSector();
-    if (!_sector.touchesWith(tileSector)) {
+    if (!_sector.touchesWith(tileSector))
+    {
       return petitions;
     }
   
     final Sector sector = tileSector.intersection(_sector);
-    if (sector.getDeltaLatitude().isZero() || sector.getDeltaLongitude().isZero()) {
+    if (sector.getDeltaLatitude().isZero() || sector.getDeltaLongitude().isZero())
+    {
       return petitions;
     }
   
      //Server name
     String req = _mapServerURL.getPath();
-     if (req.charAt(req.length()-1) != '?') {
+     if (req.charAt(req.length()-1) != '?')
+     {
         req += '?';
      }
   
     //If the server refer to itself as localhost...
     int pos = req.indexOf("localhost");
-    if (pos != -1) {
+    if (pos != -1)
+    {
       req = req.substring(pos+9);
   
       int pos2 = req.indexOf("/", 8);
@@ -89,8 +97,10 @@ public class WMSLayer extends Layer {
     req += "REQUEST=GetMap&SERVICE=WMS";
   
   
-    switch (_mapServerVersion) {
-      case WMS_1_3_0: {
+    switch (_mapServerVersion)
+    {
+      case WMS_1_3_0:
+      {
         req += "&VERSION=1.3.0";
   
         IStringBuilder isb = IStringBuilder.newStringBuilder();
@@ -118,7 +128,8 @@ public class WMSLayer extends Layer {
         break;
       }
       case WMS_1_1_0:
-      default: {
+      default:
+      {
         // default is 1.1.1
         req += "&VERSION=1.1.1";
   
@@ -149,30 +160,37 @@ public class WMSLayer extends Layer {
   
      req += "&FORMAT=" + _format;
   
-    if (!_srs.equals("")) {
+    if (!_srs.equals(""))
+    {
       req += "&SRS=" + _srs;
     }
-     else {
+     else
+     {
       req += "&SRS=EPSG:4326";
     }
   
     //Style
-    if (!_style.equals("")) {
+    if (!_style.equals(""))
+    {
       req += "&STYLES=" + _style;
     }
-     else {
+     else
+     {
       req += "&STYLES=";
     }
   
     //ASKING TRANSPARENCY
-    if (_isTransparent) {
+    if (_isTransparent)
+    {
       req += "&TRANSPARENT=TRUE";
     }
-    else {
+    else
+    {
       req += "&TRANSPARENT=FALSE";
     }
   
-    if (_extraParameter.compareTo("") != 0) {
+    if (_extraParameter.compareTo("") != 0)
+    {
       req += "&";
       req += _extraParameter;
     }
@@ -187,8 +205,10 @@ public class WMSLayer extends Layer {
 //    return _isTransparent;
 //  }
 
-  public final URL getFeatureInfoURL(Geodetic2D g, IFactory factory, Sector tileSector, int width, int height) {
-    if (!_sector.touchesWith(tileSector)) {
+  public final URL getFeatureInfoURL(Geodetic2D g, IFactory factory, Sector tileSector, int width, int height)
+  {
+    if (!_sector.touchesWith(tileSector))
+    {
       return URL.nullURL();
     }
   
@@ -196,13 +216,15 @@ public class WMSLayer extends Layer {
   
      //Server name
     String req = _queryServerURL.getPath();
-     if (req.charAt(req.length()-1) != '?') {
+     if (req.charAt(req.length()-1) != '?')
+     {
         req += '?';
      }
   
     //If the server refer to itself as localhost...
     int pos = req.indexOf("localhost");
-    if (pos != -1) {
+    if (pos != -1)
+    {
       req = req.substring(pos+9);
   
       int pos2 = req.indexOf("/", 8);
@@ -214,15 +236,19 @@ public class WMSLayer extends Layer {
     req += "REQUEST=GetFeatureInfo&SERVICE=WMS";
   
     //SRS
-    if (!_srs.equals("")) {
+    if (!_srs.equals(""))
+    {
       req += "&SRS=" + _srs;
     }
-     else {
+     else
+     {
       req += "&SRS=EPSG:4326";
     }
   
-    switch (_queryServerVersion) {
-      case WMS_1_3_0: {
+    switch (_queryServerVersion)
+    {
+      case WMS_1_3_0:
+      {
         req += "&VERSION=1.3.0";
   
         IStringBuilder isb = IStringBuilder.newStringBuilder();
@@ -251,7 +277,8 @@ public class WMSLayer extends Layer {
         break;
       }
       case WMS_1_1_0:
-      default: {
+      default:
+      {
         // default is 1.1.1
         req += "&VERSION=1.1.1";
   
@@ -303,7 +330,8 @@ public class WMSLayer extends Layer {
   }
 
 
-  public final void setExtraParameter(String extraParameter) {
+  public final void setExtraParameter(String extraParameter)
+  {
     _extraParameter = extraParameter;
     notifyChanges();
   }

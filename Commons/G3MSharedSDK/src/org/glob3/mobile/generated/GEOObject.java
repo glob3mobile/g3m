@@ -20,16 +20,20 @@ package org.glob3.mobile.generated;
 //class G3MRenderContext;
 //class GLState;
 
-public abstract class GEOObject {
-  public void dispose() {
+public abstract class GEOObject
+{
+  public void dispose()
+  {
 
   }
 
-  public void initialize(G3MContext context) {
+  public void initialize(G3MContext context)
+  {
 
   }
 
-  public boolean isReadyToRender(G3MRenderContext rc) {
+  public boolean isReadyToRender(G3MRenderContext rc)
+  {
     return true;
   }
 

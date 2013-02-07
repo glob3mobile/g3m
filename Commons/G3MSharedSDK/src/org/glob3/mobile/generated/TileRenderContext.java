@@ -25,7 +25,8 @@ package org.glob3.mobile.generated;
 
 
 
-public class TileRenderContext {
+public class TileRenderContext
+{
   private final TileTessellator _tessellator;
   private TileTexturizer _texturizer;
   private final TilesRenderParameters _parameters;
@@ -37,7 +38,8 @@ public class TileRenderContext {
 
   private ITimer _lastSplitTimer; // timer to start every time a tile get splitted into subtiles
 
-  public TileRenderContext(TileTessellator tessellator, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters parameters, TilesStatistics statistics, ITimer lastSplitTimer, boolean isForcedFullRender) {
+  public TileRenderContext(TileTessellator tessellator, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters parameters, TilesStatistics statistics, ITimer lastSplitTimer, boolean isForcedFullRender)
+  {
      _tessellator = tessellator;
      _texturizer = texturizer;
      _layerSet = layerSet;
@@ -48,31 +50,38 @@ public class TileRenderContext {
 
   }
 
-  public final LayerSet getLayerSet() {
+  public final LayerSet getLayerSet()
+  {
     return _layerSet;
   }
 
-  public final TileTessellator getTessellator() {
+  public final TileTessellator getTessellator()
+  {
     return _tessellator;
   }
 
-  public final TileTexturizer getTexturizer() {
+  public final TileTexturizer getTexturizer()
+  {
     return _texturizer;
   }
 
-  public final TilesRenderParameters getParameters() {
+  public final TilesRenderParameters getParameters()
+  {
     return _parameters;
   }
 
-  public final TilesStatistics getStatistics() {
+  public final TilesStatistics getStatistics()
+  {
     return _statistics;
   }
 
-  public final ITimer getLastSplitTimer() {
+  public final ITimer getLastSplitTimer()
+  {
     return _lastSplitTimer;
   }
 
-  public final boolean isForcedFullRender() {
+  public final boolean isForcedFullRender()
+  {
     return _isForcedFullRender;
   }
 

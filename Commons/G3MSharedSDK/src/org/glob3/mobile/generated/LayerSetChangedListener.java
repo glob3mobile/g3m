@@ -20,7 +20,8 @@ package org.glob3.mobile.generated;
 //class Petition;
 
 
-public interface LayerSetChangedListener {
+public interface LayerSetChangedListener
+{
 
   void changed(LayerSet layerSet);
 }

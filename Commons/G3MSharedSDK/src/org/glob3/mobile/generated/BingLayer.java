@@ -1,5 +1,6 @@
 package org.glob3.mobile.generated; 
-public class BingLayer extends Layer {
+public class BingLayer extends Layer
+{
 
   private final Sector _sector ;
   private URL _mapServerURL = new URL();
@@ -15,7 +16,8 @@ public class BingLayer extends Layer {
 
 
 
-  public BingLayer(String layerName, URL mapServerURL, LayerCondition condition, Sector sector, MapType mapType, Language locale, String key, TimeInterval timeToCache) {
+  public BingLayer(String layerName, URL mapServerURL, LayerCondition condition, Sector sector, MapType mapType, Language locale, String key, TimeInterval timeToCache)
+  {
      super(condition, layerName, timeToCache);
      _sector = new Sector(sector);
      _mapServerURL = new URL(mapServerURL);
@@ -27,56 +29,71 @@ public class BingLayer extends Layer {
 
   }
 
-  public final boolean isReady() {
+  public final boolean isReady()
+  {
     return _isReady;
   }
 
-  public final void setTilePetitionString(String tilePetitionString) {
+  public final void setTilePetitionString(String tilePetitionString)
+  {
     _tilePetitionString = tilePetitionString;
     _isReady = true;
   }
 
-  public final void setSubDomains(java.util.ArrayList<String> subDomains) {
+  public final void setSubDomains(java.util.ArrayList<String> subDomains)
+  {
     _subDomains = subDomains;
   }
 
 
-  public final String getLocale() {
-    if (_locale == Language.English) {
+  public final String getLocale()
+  {
+    if (_locale == Language.English)
+    {
       return "en-US";
     }
-    if (_locale == Language.Spanish) {
+    if (_locale == Language.Spanish)
+    {
       return "es-ES";
     }
-    if (_locale == Language.German) {
+    if (_locale == Language.German)
+    {
       return "de-DE";
     }
-    if (_locale == Language.French) {
+    if (_locale == Language.French)
+    {
       return "fr-FR";
     }
-    if (_locale == Language.Dutch) {
+    if (_locale == Language.Dutch)
+    {
       return "nl-BE";
     }
-    if (_locale == Language.Italian) {
+    if (_locale == Language.Italian)
+    {
       return "it-IT";
     }
     return "en-US";
   }
 
-  public final String getMapTypeString() {
-    if (_mapType == MapType.Road) {
+  public final String getMapTypeString()
+  {
+    if (_mapType == MapType.Road)
+    {
       return "Road";
     }
-    if (_mapType == MapType.Aerial) {
+    if (_mapType == MapType.Aerial)
+    {
       return "Aerial";
     }
-    if (_mapType == MapType.Hybrid) {
+    if (_mapType == MapType.Hybrid)
+    {
       return "AerialWithLabels";
     }
     return "Aerial";
   }
 
-  public final void initialize(G3MContext context) {
+  public final void initialize(G3MContext context)
+  {
   
     String tileURL = "";
     tileURL+=_mapServerURL.getPath();
@@ -90,12 +107,14 @@ public class BingLayer extends Layer {
   
   }
 
-  public final java.util.ArrayList<Petition> getMapPetitions(G3MRenderContext rc, Tile tile, int width, int height) {
+  public final java.util.ArrayList<Petition> getMapPetitions(G3MRenderContext rc, Tile tile, int width, int height)
+  {
   
     java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
     final Sector tileSector = tile.getSector();
   
-    if (!_sector.touchesWith(tileSector)) {
+    if (!_sector.touchesWith(tileSector))
+    {
       return petitions;
     }
   
@@ -107,7 +126,8 @@ public class BingLayer extends Layer {
   
     //If the server refer to itself as localhost...
     int pos = req.indexOf("localhost");
-    if (pos != -1) {
+    if (pos != -1)
+    {
       req = req.substring(pos+9);
   
       int pos2 = req.indexOf("/", 8);
@@ -132,14 +152,17 @@ public class BingLayer extends Layer {
     int currentSubDomain = 0;
     int numSubDomains = _subDomains.size();
   
-    for(int x = lowerTileXY.x; x<= lowerTileXY.x+deltaX; x++) {
-      for(int y = upperTileXY.y; y<=upperTileXY.y+deltaY; y++) {
+    for(int x = lowerTileXY.x; x<= lowerTileXY.x+deltaX; x++)
+    {
+      for(int y = upperTileXY.y; y<=upperTileXY.y+deltaY; y++)
+      {
         int[] tileXY = new int[2];
         tileXY[0] = x;
         tileXY[1] = y;
         Sector bingSector = getBingTileAsSector(tileXY, level);
   
-        if (!bingSector.touchesWith(tileSector)) {
+        if (!bingSector.touchesWith(tileSector))
+        {
           continue;
         }
   
@@ -161,18 +184,22 @@ public class BingLayer extends Layer {
     return petitions;
   }
 
-  public final String getQuadKey(int[] tileXY, int level) {
+  public final String getQuadKey(int[] tileXY, int level)
+  {
   
     int tileX = tileXY[0];
     int tileY = tileXY[1];
     String quadKey = "";
-    for (int i = level; i>0; i--) {
+    for (int i = level; i>0; i--)
+    {
       byte digit = (byte)'0';
       int mask = 1 << (i-1);
-      if ((tileX & mask) != 0) {
+      if ((tileX & mask) != 0)
+      {
         digit++;
       }
-      if ((tileY & mask) != 0) {
+      if ((tileY & mask) != 0)
+      {
         digit++;
         digit++;
       }
@@ -182,16 +209,19 @@ public class BingLayer extends Layer {
     return quadKey;
   }
 
-  public final xyTuple getTileXY(Geodetic2D latLon, int level) {
+  public final xyTuple getTileXY(Geodetic2D latLon, int level)
+  {
   
     //LatLon to Pixels XY
     int mapSize = 256 << level;
     double lonDeg = latLon.longitude()._degrees;
     double latDeg = latLon.latitude()._degrees;
-    if (latDeg < -85.05112878) {
+    if (latDeg < -85.05112878)
+    {
       latDeg = -85.05112878;
     }
-    if (latDeg > 85.05112878) {
+    if (latDeg > 85.05112878)
+    {
       latDeg = 85.05112878;
     }
   
@@ -227,7 +257,8 @@ public class BingLayer extends Layer {
     return tileXY;
   }
 
-  public final Sector getBingTileAsSector(int[] tileXY, int level) {
+  public final Sector getBingTileAsSector(int[] tileXY, int level)
+  {
   
   
     Geodetic2D topLeft = getLatLon(tileXY, level);
@@ -239,10 +270,12 @@ public class BingLayer extends Layer {
     int[] tileBelow = new int[2];
     tileBelow[0] = tileXY[0];
     double lowerLatDeg;
-    if (tileXY[1]+1 > maxTile) {
+    if (tileXY[1]+1 > maxTile)
+    {
       lowerLatDeg = -85.05112878;
     }
-    else {
+    else
+    {
       tileBelow[1] = tileXY[1]+1;
       lowerLatDeg = getLatLon(tileBelow, level).latitude()._degrees;
     }
@@ -251,10 +284,12 @@ public class BingLayer extends Layer {
     int[] tileRight = new int[2];
     double upperLonDeg;
     tileRight[1] = tileXY[1];
-    if (tileXY[0]+1 > maxTile) {
+    if (tileXY[0]+1 > maxTile)
+    {
       upperLonDeg = 180.0;
     }
-    else {
+    else
+    {
       tileRight[0] = tileXY[0]+1;
       upperLonDeg = getLatLon(tileRight, level).longitude()._degrees;
     }
@@ -263,7 +298,8 @@ public class BingLayer extends Layer {
   
   }
 
-  public final Geodetic2D getLatLon(int[] tileXY, int level) {
+  public final Geodetic2D getLatLon(int[] tileXY, int level)
+  {
   
   
     int pixelX = tileXY[0]*256;
@@ -289,7 +325,8 @@ public class BingLayer extends Layer {
   
   }
 
-  public final URL getFeatureInfoURL(Geodetic2D g, IFactory factory, Sector tileSector, int width, int height) {
+  public final URL getFeatureInfoURL(Geodetic2D g, IFactory factory, Sector tileSector, int width, int height)
+  {
     return URL.nullURL();
   
   }
@@ -297,7 +334,8 @@ public class BingLayer extends Layer {
 
 
 
-  public final boolean isTransparent() {
+  public final boolean isTransparent()
+  {
     return false;
   }
 }

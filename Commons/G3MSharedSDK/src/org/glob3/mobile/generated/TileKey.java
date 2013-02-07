@@ -18,20 +18,23 @@ package org.glob3.mobile.generated;
 
 
 
-public class TileKey {
+public class TileKey
+{
   private final int _level;
   private final int _row;
   private final int _column;
 
 
-  public TileKey(int level, int row, int column) {
+  public TileKey(int level, int row, int column)
+  {
      _level = level;
      _row = row;
      _column = column;
 
   }
 
-  public TileKey(TileKey that) {
+  public TileKey(TileKey that)
+  {
      _level = that._level;
      _row = that._row;
      _column = that._column;
@@ -39,15 +42,18 @@ public class TileKey {
   }
 
 
-  public final int getLevel() {
+  public final int getLevel()
+  {
     return _level;
   }
 
-  public final int getRow() {
+  public final int getRow()
+  {
     return _row;
   }
 
-  public final int getColumn() {
+  public final int getColumn()
+  {
     return _column;
   }
 
@@ -80,7 +86,8 @@ public class TileKey {
 		return true;
 	}
 
-  public final String description() {
+  public final String description()
+  {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     isb.addString("(level=");
     isb.addInt(_level);
@@ -95,7 +102,8 @@ public class TileKey {
     return s;
   }
 
-  public final String tinyDescription() {
+  public final String tinyDescription()
+  {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     isb.addInt(_level);
     isb.addString("-");

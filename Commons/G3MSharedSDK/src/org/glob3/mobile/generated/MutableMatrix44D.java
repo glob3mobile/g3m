@@ -28,7 +28,8 @@ package org.glob3.mobile.generated;
 ///#include "MutableMatrix44D.hpp"
 
 
-public class MutableMatrix44D {
+public class MutableMatrix44D
+{
 
 
   //_m23 -> row 2, column 3
@@ -55,7 +56,8 @@ public class MutableMatrix44D {
   private boolean _isValid;
 
 
-  private MutableMatrix44D(boolean isValid) {
+  private MutableMatrix44D(boolean isValid)
+  {
      _isValid = isValid;
     _columnMajorFloatBuffer = null;
     _columnMajorFloatArray = null;
@@ -64,7 +66,8 @@ public class MutableMatrix44D {
 
   //CONTRUCTORS
   //Contructor parameters in column major order
-  public MutableMatrix44D(double m00, double m10, double m20, double m30, double m01, double m11, double m21, double m31, double m02, double m12, double m22, double m32, double m03, double m13, double m23, double m33) {
+  public MutableMatrix44D(double m00, double m10, double m20, double m30, double m01, double m11, double m21, double m31, double m02, double m12, double m22, double m32, double m03, double m13, double m23, double m33)
+  {
      _isValid = true;
     _m00 = m00;
     _m01 = m01;
@@ -90,7 +93,8 @@ public class MutableMatrix44D {
     _columnMajorFloatArray = null;
   }
 
-  public MutableMatrix44D() {
+  public MutableMatrix44D()
+  {
      _isValid = true;
     _m00 = 0.0;
     _m01 = 0.0;
@@ -116,7 +120,8 @@ public class MutableMatrix44D {
     _columnMajorFloatArray = null;
   }
 
-  public MutableMatrix44D(MutableMatrix44D m) {
+  public MutableMatrix44D(MutableMatrix44D m)
+  {
      _isValid = m._isValid;
     _m00 = m._m00;
     _m01 = m._m01;
@@ -142,8 +147,10 @@ public class MutableMatrix44D {
     _columnMajorFloatArray = null;
   }
 
-  public final MutableMatrix44D copyFrom(MutableMatrix44D that) {
-    if (this != that) {
+  public final MutableMatrix44D copyFrom(MutableMatrix44D that)
+  {
+    if (this != that)
+    {
       _m00 = that._m00;
       _m01 = that._m01;
       _m02 = that._m02;
@@ -177,28 +184,33 @@ public class MutableMatrix44D {
     return this;
   }
 
-  public void dispose() {
+  public void dispose()
+  {
     if (_columnMajorFloatBuffer != null)
        _columnMajorFloatBuffer.dispose();
     _columnMajorFloatArray = null;
   }
 
-  public static MutableMatrix44D identity() {
+  public static MutableMatrix44D identity()
+  {
     return new MutableMatrix44D(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
   }
 
-  public static MutableMatrix44D invalid() {
+  public static MutableMatrix44D invalid()
+  {
     return new MutableMatrix44D(false);
   }
 
-  public final boolean isValid() {
+  public final boolean isValid()
+  {
     return _isValid;
   }
 
   //
   //OPERATIONS
 
-  public final MutableMatrix44D multiply(MutableMatrix44D that) {
+  public final MutableMatrix44D multiply(MutableMatrix44D that)
+  {
     final double that00 = that._m00;
     final double that10 = that._m10;
     final double that20 = that._m20;
@@ -243,7 +255,8 @@ public class MutableMatrix44D {
     return new MutableMatrix44D(m00, m10, m20, m30, m01, m11, m21, m31, m02, m12, m22, m32, m03, m13, m23, m33);
   }
 
-  public final MutableMatrix44D inversed() {
+  public final MutableMatrix44D inversed()
+  {
     final double a0 = (_m00 * _m11) - (_m01 * _m10);
     final double a1 = (_m00 * _m12) - (_m02 * _m10);
     final double a2 = (_m00 * _m13) - (_m03 * _m10);
@@ -260,7 +273,8 @@ public class MutableMatrix44D {
   
     final double determinant = ((((a0 * b5) - (a1 * b4)) + (a2 * b3) + (a3 * b2)) - (a4 * b1)) + (a5 * b0);
   
-    if (determinant == 0.0) {
+    if (determinant == 0.0)
+    {
       return MutableMatrix44D.invalid();
     }
   
@@ -284,15 +298,18 @@ public class MutableMatrix44D {
     return new MutableMatrix44D(m00, m10, m20, m30, m01, m11, m21, m31, m02, m12, m22, m32, m03, m13, m23, m33);
   }
 
-  public final MutableMatrix44D transposed() {
+  public final MutableMatrix44D transposed()
+  {
     return new MutableMatrix44D(_m00, _m01, _m02, _m03, _m10, _m11, _m12, _m13, _m20, _m21, _m22, _m23, _m30, _m31, _m32, _m33);
   }
 
   //METHODS TO EXTRACT VALUES FROM THE MATRIX
 
   //Returns values from 0..15 in column mayor order
-  public final double get(int i) {
-    switch (i) {
+  public final double get(int i)
+  {
+    switch (i)
+    {
       case 0:
         return _m00;
       case 1:
@@ -331,8 +348,10 @@ public class MutableMatrix44D {
     }
   }
 
-  public final IFloatBuffer getColumnMajorFloatBuffer() {
-    if (_columnMajorFloatBuffer == null) {
+  public final IFloatBuffer getColumnMajorFloatBuffer()
+  {
+    if (_columnMajorFloatBuffer == null)
+    {
       //    _columnMajorFloatBuffer = IFactory::instance()->createFloatBuffer(16);
       //
       //    _columnMajorFloatBuffer->rawPut( 0, (float) _m00);
@@ -360,8 +379,10 @@ public class MutableMatrix44D {
     return _columnMajorFloatBuffer;
   }
 
-  public final float[] getColumnMajorFloatArray() {
-      if (_columnMajorFloatArray == null) {
+  public final float[] getColumnMajorFloatArray()
+  {
+      if (_columnMajorFloatArray == null)
+      {
         _columnMajorFloatArray = new float[16];
 
         _columnMajorFloatArray[0] = (float) _m00;
@@ -388,7 +409,8 @@ public class MutableMatrix44D {
   }
 
 
-    public final void print(String name, ILogger log) {
+    public final void print(String name, ILogger log)
+    {
       log.logInfo("MutableMatrix44D %s:\n", name);
       log.logInfo("%.2f  %.2f %.2f %.2f\n", _m00, _m01,_m02, _m03);
       log.logInfo("%.2f  %.2f %.2f %.2f\n", _m10, _m11,_m12, _m13);
@@ -401,7 +423,8 @@ public class MutableMatrix44D {
     /*
      This function is intended to be used on a ModelView MutableMatrix44D. ModelView = Projection * Model
      */
-    public final Vector3D unproject(Vector3D pixel3D, int vpLeft, int vpTop, int vpWidth, int vpHeight) {
+    public final Vector3D unproject(Vector3D pixel3D, int vpLeft, int vpTop, int vpWidth, int vpHeight)
+    {
     
       int TODO_Remove_UNPROJECT; //!!!!
     
@@ -425,7 +448,8 @@ public class MutableMatrix44D {
       final double out2 = m._m20 * in0 + m._m21 * in1 + m._m22 * in2 + m._m23 * in3;
       final double out3 = m._m30 * in0 + m._m31 * in1 + m._m32 * in2 + m._m33 * in3;
     
-      if (out3 == 0.0) {
+      if (out3 == 0.0)
+      {
         return Vector3D.nan();
       }
     
@@ -436,7 +460,8 @@ public class MutableMatrix44D {
       return new Vector3D(objx, objy, objz);
     }
 
-    public final Vector2D project(Vector3D point, int vpLeft, int vpTop, int vpWidth, int vpHeight) {
+    public final Vector2D project(Vector3D point, int vpLeft, int vpTop, int vpWidth, int vpHeight)
+    {
       final double in0 = point._x;
       final double in1 = point._y;
       final double in2 = point._z;
@@ -448,7 +473,8 @@ public class MutableMatrix44D {
       //double out2 = _m20 * in0 + _m21 * in1 + _m22 * in2 + _m23 * in3;
       final double out3 = _m30 * in0 + _m31 * in1 + _m32 * in2 + _m33 * in3;
     
-      if (out3 == 0.0) {
+      if (out3 == 0.0)
+      {
         return Vector2D.nan();
       }
     
@@ -462,15 +488,18 @@ public class MutableMatrix44D {
       return new Vector2D(winx, winy);
     }
 
-    public static MutableMatrix44D createTranslationMatrix(Vector3D t) {
+    public static MutableMatrix44D createTranslationMatrix(Vector3D t)
+    {
       return new MutableMatrix44D(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, t._x, t._y, t._z, 1);
     }
 
-    public static MutableMatrix44D createTranslationMatrix(double x, double y, double z) {
+    public static MutableMatrix44D createTranslationMatrix(double x, double y, double z)
+    {
       return new MutableMatrix44D(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, x, y, z, 1);
     }
 
-    public static MutableMatrix44D createRotationMatrix(Angle angle, Vector3D axis) {
+    public static MutableMatrix44D createRotationMatrix(Angle angle, Vector3D axis)
+    {
       final Vector3D a = axis.normalized();
     
       final double c = angle.cosinus();
@@ -479,14 +508,16 @@ public class MutableMatrix44D {
       return new MutableMatrix44D(a._x * a._x * (1 - c) + c, a._x * a._y * (1 - c) + a._z * s, a._x * a._z * (1 - c) - a._y * s, 0, a._y * a._x * (1 - c) - a._z * s, a._y * a._y * (1 - c) + c, a._y * a._z * (1 - c) + a._x * s, 0, a._x * a._z * (1 - c) + a._y * s, a._y * a._z * (1 - c) - a._x * s, a._z * a._z * (1 - c) + c, 0, 0, 0, 0, 1);
     }
 
-    public static MutableMatrix44D createGeneralRotationMatrix(Angle angle, Vector3D axis, Vector3D point) {
+    public static MutableMatrix44D createGeneralRotationMatrix(Angle angle, Vector3D axis, Vector3D point)
+    {
       final MutableMatrix44D T1 = MutableMatrix44D.createTranslationMatrix(point.times(-1.0));
       final MutableMatrix44D R = MutableMatrix44D.createRotationMatrix(angle, axis);
       final MutableMatrix44D T2 = MutableMatrix44D.createTranslationMatrix(point);
       return T2.multiply(R).multiply(T1);
     }
 
-    public static MutableMatrix44D createModelMatrix(MutableVector3D pos, MutableVector3D center, MutableVector3D up) {
+    public static MutableMatrix44D createModelMatrix(MutableVector3D pos, MutableVector3D center, MutableVector3D up)
+    {
       final MutableVector3D w = center.sub(pos).normalized();
       final double pe = w.dot(up);
       final MutableVector3D v = up.sub(w.times(pe)).normalized();
@@ -495,7 +526,8 @@ public class MutableMatrix44D {
     
     }
 
-    public static MutableMatrix44D createProjectionMatrix(double left, double right, double bottom, double top, double znear, double zfar) {
+    public static MutableMatrix44D createProjectionMatrix(double left, double right, double bottom, double top, double znear, double zfar)
+    {
       // set frustum MutableMatrix44D in double
       final double rl = right - left;
       final double tb = top - bottom;
@@ -505,11 +537,13 @@ public class MutableMatrix44D {
     
     }
 
-    public static MutableMatrix44D createProjectionMatrix(FrustumData data) {
+    public static MutableMatrix44D createProjectionMatrix(FrustumData data)
+    {
       return createProjectionMatrix(data._left, data._right, data._bottom, data._top, data._znear, data._zfar);
     }
 
-    public static MutableMatrix44D createOrthographicProjectionMatrix(double left, double right, double bottom, double top, double znear, double zfar) {
+    public static MutableMatrix44D createOrthographicProjectionMatrix(double left, double right, double bottom, double top, double znear, double zfar)
+    {
       // set frustum MutableMatrix44D in double
       final double rl = right - left;
       final double tb = top - bottom;
@@ -519,17 +553,20 @@ public class MutableMatrix44D {
     }
 
 
-    public static MutableMatrix44D createScaleMatrix(double scaleX, double scaleY, double scaleZ) {
+    public static MutableMatrix44D createScaleMatrix(double scaleX, double scaleY, double scaleZ)
+    {
       return new MutableMatrix44D(scaleX, 0, 0, 0, 0, scaleY, 0, 0, 0, 0, scaleZ, 0, 0, 0, 0, 1);
 
     }
 
-    public static MutableMatrix44D createScaleMatrix(Vector3D scale) {
+    public static MutableMatrix44D createScaleMatrix(Vector3D scale)
+    {
       return new MutableMatrix44D(scale._x, 0, 0, 0, 0, scale._y, 0, 0, 0, 0, scale._z, 0, 0, 0, 0, 1);
     
     }
 
-    public static MutableMatrix44D createGeodeticRotationMatrix(Angle latitude, Angle longitude) {
+    public static MutableMatrix44D createGeodeticRotationMatrix(Angle latitude, Angle longitude)
+    {
       // change the reference coordinates system from x-front/y-left/z-up to x-right/y-up/z-back
       final MutableMatrix44D changeReferenceCoordinatesSystem = new MutableMatrix44D(0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1);
     
@@ -540,11 +577,13 @@ public class MutableMatrix44D {
       return changeReferenceCoordinatesSystem.multiply(longitudeRotation).multiply(latitudeRotation);
     }
 
-    public static MutableMatrix44D createGeodeticRotationMatrix(Geodetic2D position) {
+    public static MutableMatrix44D createGeodeticRotationMatrix(Geodetic2D position)
+    {
       return MutableMatrix44D.createGeodeticRotationMatrix(position.latitude(), position.longitude());
     }
 
-    public static MutableMatrix44D createGeodeticRotationMatrix(Geodetic3D position) {
+    public static MutableMatrix44D createGeodeticRotationMatrix(Geodetic3D position)
+    {
       return MutableMatrix44D.createGeodeticRotationMatrix(position.latitude(), position.longitude());
     }
 

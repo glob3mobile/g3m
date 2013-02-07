@@ -29,18 +29,21 @@ package org.glob3.mobile.generated;
 //class TouchEvent;
 
 
-public enum Gesture {
+public enum Gesture
+{
   None,
   Drag,
   Zoom,
   Rotate,
   DoubleDrag;
 
-   public int getValue() {
+   public int getValue()
+   {
       return this.ordinal();
    }
 
-   public static Gesture forValue(int value) {
+   public static Gesture forValue(int value)
+   {
       return values()[value];
    }
 }

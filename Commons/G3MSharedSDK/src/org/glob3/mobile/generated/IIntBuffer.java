@@ -17,9 +17,11 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class IIntBuffer implements IBuffer {
+public abstract class IIntBuffer implements IBuffer
+{
 
-  public void dispose() {
+  public void dispose()
+  {
   }
 
   public abstract int get(int i);

@@ -1,7 +1,9 @@
 package org.glob3.mobile.generated; 
-public abstract class Effect {
+public abstract class Effect
+{
 
-  protected final double pace(double f) {
+  protected final double pace(double f)
+  {
     if (f < 0)
        return 0;
     if (f > 1)
@@ -17,21 +19,25 @@ public abstract class Effect {
     return result;
   }
 
-  protected final double sigmoid(double x) {
+  protected final double sigmoid(double x)
+  {
     x = 12.0 *x - 6.0;
     return (1.0 / (1.0 + IMathUtils.instance().exp(-1.0 * x)));
   }
 
-  protected final double gently(double x, double lower, double upper) {
+  protected final double gently(double x, double lower, double upper)
+  {
     final double uperSquared = upper * upper;
     final double lowerPerUper = lower * upper;
     final double tmp = uperSquared - lowerPerUper + lower - 1;
 
-    if (x < lower) {
+    if (x < lower)
+    {
       return ((upper - 1) / (lower * tmp)) * x * x;
     }
 
-    if (x > upper) {
+    if (x > upper)
+    {
       final double a3 = 1 / tmp;
       final double b3 = -2 * a3;
       final double c3 = 1 + a3;
@@ -53,6 +59,7 @@ public abstract class Effect {
 
   public abstract void cancel(TimeInterval when);
 
-  public void dispose() {
+  public void dispose()
+  {
   }
 }

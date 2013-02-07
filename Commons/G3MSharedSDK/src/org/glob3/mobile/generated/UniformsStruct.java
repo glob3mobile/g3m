@@ -1,7 +1,8 @@
 package org.glob3.mobile.generated; 
 ///#include "IIntBuffer.hpp"
 
-public class UniformsStruct {
+public class UniformsStruct
+{
 
   public IGLUniformID Projection;
   public IGLUniformID Modelview;
@@ -24,7 +25,8 @@ public class UniformsStruct {
   public IGLUniformID EnableFlatColor;
   public IGLUniformID ColorPerVertexIntensity;
 
-  public UniformsStruct() {
+  public UniformsStruct()
+  {
     Projection = null;
     Modelview = null;
     Sampler = null;
@@ -46,10 +48,12 @@ public class UniformsStruct {
     ColorPerVertexIntensity = null;
   }
 
-  public final void deleteUniformsIDs() {
+  public final void deleteUniformsIDs()
+  {
   }
 
-  public void dispose() {
+  public void dispose()
+  {
     deleteUniformsIDs();
   }
 }

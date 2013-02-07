@@ -20,7 +20,8 @@ package org.glob3.mobile.generated;
 
 //class MutableVector2D;
 
-public class Vector2D {
+public class Vector2D
+{
 
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
@@ -30,13 +31,15 @@ public class Vector2D {
   public final double _y;
 
 
-  public Vector2D(double x, double y) {
+  public Vector2D(double x, double y)
+  {
      _x = x;
      _y = y;
 
   }
 
-  public Vector2D(Vector2D v) {
+  public Vector2D(Vector2D v)
+  {
      _x = v._x;
      _y = v._y;
 
@@ -45,84 +48,104 @@ public class Vector2D {
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  Vector2D normalized();
 
-  public final double length() {
+  public final double length()
+  {
     return IMathUtils.instance().sqrt(squaredLength());
   }
 
-  public final Angle orientation() {
+  public final Angle orientation()
+  {
      return Angle.fromRadians(IMathUtils.instance().atan2(_y, _x));
   }
 
-  public final double squaredLength() {
+  public final double squaredLength()
+  {
     return _x * _x + _y * _y;
   }
 
-  public final Vector2D add(Vector2D v) {
+  public final Vector2D add(Vector2D v)
+  {
     return new Vector2D(_x + v._x, _y + v._y);
   }
 
-  public final Vector2D sub(Vector2D v) {
+  public final Vector2D sub(Vector2D v)
+  {
     return new Vector2D(_x - v._x, _y - v._y);
   }
 
-  public final Vector2D times(Vector2D v) {
+  public final Vector2D times(Vector2D v)
+  {
     return new Vector2D(_x * v._x, _y * v._y);
   }
 
-  public final Vector2D times(double magnitude) {
+  public final Vector2D times(double magnitude)
+  {
     return new Vector2D(_x * magnitude, _y * magnitude);
   }
 
-  public final Vector2D div(Vector2D v) {
+  public final Vector2D div(Vector2D v)
+  {
     return new Vector2D(_x / v._x, _y / v._y);
   }
 
-  public final Vector2D div(double v) {
+  public final Vector2D div(double v)
+  {
     return new Vector2D(_x / v, _y / v);
   }
 
-  public final Angle angle() {
+  public final Angle angle()
+  {
     double a = IMathUtils.instance().atan2(_y, _x);
     return Angle.fromRadians(a);
   }
 
-  public final double x() {
+  public final double x()
+  {
     return _x;
   }
 
-  public final double y() {
+  public final double y()
+  {
     return _y;
   }
 
-  public static Vector2D nan() {
+  public static Vector2D nan()
+  {
     return new Vector2D(IMathUtils.instance().NanD(), IMathUtils.instance().NanD());
   }
 
-  public final double maxAxis() {
+  public final double maxAxis()
+  {
     return (_x >= _y) ? _x : _y;
   }
 
-  public final double minAxis() {
+  public final double minAxis()
+  {
     return (_x <= _y) ? _x : _y;
   }
 
-  public final MutableVector2D asMutableVector2D() {
+  public final MutableVector2D asMutableVector2D()
+  {
     return new MutableVector2D(_x, _y);
   }
 
-  public final boolean isNan() {
+  public final boolean isNan()
+  {
 //    return GMath.isNan(_x) || GMath.isNan(_y);
 
-    if (_x != _x) {
+    if (_x != _x)
+    {
       return true;
     }
-    if (_y != _y) {
+    if (_y != _y)
+    {
       return true;
     }
     return false;
   }
 
-  public final String description() {
+  public final String description()
+  {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     isb.addString("(V2D ");
     isb.addDouble(_x);

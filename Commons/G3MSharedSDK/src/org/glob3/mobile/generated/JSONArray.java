@@ -18,70 +18,86 @@ package org.glob3.mobile.generated;
 
 
 
-public class JSONArray extends JSONBaseObject {
+public class JSONArray extends JSONBaseObject
+{
   private java.util.ArrayList<JSONBaseObject> _entries = new java.util.ArrayList<JSONBaseObject>();
 
-  public final JSONArray asArray() {
+  public final JSONArray asArray()
+  {
     return this;
   }
 
-  public void dispose() {
-    for (int i = 0; i < _entries.size(); i++) {
+  public void dispose()
+  {
+    for (int i = 0; i < _entries.size(); i++)
+    {
       if (_entries.get(i) != null)
          _entries.get(i).dispose();
     }
     _entries.clear();
   }
 
-  public final JSONBaseObject get(int index) {
+  public final JSONBaseObject get(int index)
+  {
     return _entries.get(index);
   }
 
-  public final JSONObject getAsObject(int index) {
+  public final JSONObject getAsObject(int index)
+  {
     final JSONBaseObject object = get(index);
     return (object == null) ? null : object.asObject();
   }
-  public final JSONArray getAsArray(int index) {
+  public final JSONArray getAsArray(int index)
+  {
     final JSONBaseObject object = get(index);
     return (object == null) ? null : object.asArray();
   }
-  public final JSONBoolean getAsBoolean(int index) {
+  public final JSONBoolean getAsBoolean(int index)
+  {
     final JSONBaseObject object = get(index);
     return (object == null) ? null : object.asBoolean();
   }
-  public final JSONNumber getAsNumber(int index) {
+  public final JSONNumber getAsNumber(int index)
+  {
     final JSONBaseObject object = get(index);
     return (object == null) ? null : object.asNumber();
   }
-  public final JSONString getAsString(int index) {
+  public final JSONString getAsString(int index)
+  {
     final JSONBaseObject object = get(index);
     return (object == null) ? null : object.asString();
   }
 
-  public final boolean getAsBoolean(int index, boolean defaultValue) {
+  public final boolean getAsBoolean(int index, boolean defaultValue)
+  {
     final JSONBoolean jsBool = getAsBoolean(index);
     return (jsBool == null) ? defaultValue : jsBool.value();
   }
 
-  public final double getAsNumber(int index, double defaultValue) {
+  public final double getAsNumber(int index, double defaultValue)
+  {
     final JSONNumber jsNumber = getAsNumber(index);
     return (jsNumber == null) ? defaultValue : jsNumber.value();
   }
 
-  public final String getAsString(int index, String defaultValue) {
+  public final String getAsString(int index, String defaultValue)
+  {
     final JSONString jsString = getAsString(index);
     return (jsString == null) ? defaultValue : jsString.value();
   }
 
-  public final int size() {
+  public final int size()
+  {
     return _entries.size();
   }
 
-  public final void add(JSONBaseObject object) {
+  public final void add(JSONBaseObject object)
+  {
     _entries.add(object);
   }
 
-  public final String description() {
+  public final String description()
+  {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
   
     int size = this.size();
@@ -90,19 +106,24 @@ public class JSONArray extends JSONBaseObject {
     //  isb->addString("[size=");
     //  isb->addInt(size);
   
-    if (size > 0) {
+    if (size > 0)
+    {
       //isb->addString(" ");
   
       isb.addString(this.get(0).description());
   
-      if (size <= 10) {
-        for (int i = 1; i < size; i++) {
+      if (size <= 10)
+      {
+        for (int i = 1; i < size; i++)
+        {
           isb.addString(", ");
           isb.addString(this.get(i).description());
         }
       }
-      else {
-        for (int i = 1; i < 10; i++) {
+      else
+      {
+        for (int i = 1; i < 10; i++)
+        {
           isb.addString(", ");
           isb.addString(this.get(i).description());
         }
@@ -121,23 +142,28 @@ public class JSONArray extends JSONBaseObject {
     return s;
   }
 
-  public final JSONArray deepCopy() {
+  public final JSONArray deepCopy()
+  {
     JSONArray result = new JSONArray();
   
     final int size = this.size();
-    for (int i = 0; i < size; i++) {
+    for (int i = 0; i < size; i++)
+    {
       result.add(JSONBaseObject.deepCopy(get(i)));
     }
   
     return result;
   }
 
-  public final void acceptVisitor(JSONVisitor visitor) {
+  public final void acceptVisitor(JSONVisitor visitor)
+  {
     visitor.visitArrayBeforeChildren(this);
   
     final int size = this.size();
-    for (int i = 0; i < size; i++) {
-      if (i != 0) {
+    for (int i = 0; i < size; i++)
+    {
+      if (i != 0)
+      {
         visitor.visitArrayInBetweenChildren(this);
       }
       visitor.visitArrayBeforeChild(this, i);

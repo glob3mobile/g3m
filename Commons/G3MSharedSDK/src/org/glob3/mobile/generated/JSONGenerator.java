@@ -19,18 +19,22 @@ package org.glob3.mobile.generated;
 //class JSONBaseObject;
 //class IStringBuilder;
 
-public class JSONGenerator extends JSONVisitor {
+public class JSONGenerator extends JSONVisitor
+{
   private IStringBuilder _isb;
 
-  private JSONGenerator() {
+  private JSONGenerator()
+  {
     _isb = IStringBuilder.newStringBuilder();
   }
 
-  private String getString() {
+  private String getString()
+  {
     return _isb.getString();
   }
 
-  public void dispose() {
+  public void dispose()
+  {
     if (_isb != null)
        _isb.dispose();
   }
@@ -38,7 +42,8 @@ public class JSONGenerator extends JSONVisitor {
 
   ///#include "JSONNumber.hpp"
   
-  public static String generate(JSONBaseObject value) {
+  public static String generate(JSONBaseObject value)
+  {
     JSONGenerator generator = new JSONGenerator();
     value.acceptVisitor(generator);
   
@@ -68,58 +73,74 @@ public class JSONGenerator extends JSONVisitor {
   //  }
   //}
   
-  public final void visitDouble(JSONDouble value) {
+  public final void visitDouble(JSONDouble value)
+  {
     _isb.addDouble(value.doubleValue());
   }
-  public final void visitFloat(JSONFloat value) {
+  public final void visitFloat(JSONFloat value)
+  {
     _isb.addFloat(value.floatValue());
   }
-  public final void visitInteger(JSONInteger value) {
+  public final void visitInteger(JSONInteger value)
+  {
     _isb.addInt(value.intValue());
   }
-  public final void visitLong(JSONLong value) {
+  public final void visitLong(JSONLong value)
+  {
     _isb.addLong(value.longValue());
   }
 
-  public final void visitBoolean(JSONBoolean value) {
-    if (value.value()) {
+  public final void visitBoolean(JSONBoolean value)
+  {
+    if (value.value())
+    {
       _isb.addString("true");
     }
-    else {
+    else
+    {
       _isb.addString("false");
     }
   }
-  public final void visitString(JSONString value) {
+  public final void visitString(JSONString value)
+  {
     _isb.addString("\"");
     _isb.addString(value.value());
     _isb.addString("\"");
   }
 
-  public final void visitArrayBeforeChildren(JSONArray value) {
+  public final void visitArrayBeforeChildren(JSONArray value)
+  {
     _isb.addString("[");
   }
-  public final void visitArrayInBetweenChildren(JSONArray value) {
+  public final void visitArrayInBetweenChildren(JSONArray value)
+  {
     _isb.addString(",");
   }
-  public final void visitArrayBeforeChild(JSONArray value, int i) {
+  public final void visitArrayBeforeChild(JSONArray value, int i)
+  {
   
   }
-  public final void visitArrayAfterChildren(JSONArray value) {
+  public final void visitArrayAfterChildren(JSONArray value)
+  {
     _isb.addString("]");
   }
 
-  public final void visitObjectBeforeChildren(JSONObject value) {
+  public final void visitObjectBeforeChildren(JSONObject value)
+  {
     _isb.addString("{");
   }
-  public final void visitObjectInBetweenChildren(JSONObject value) {
+  public final void visitObjectInBetweenChildren(JSONObject value)
+  {
     _isb.addString(",");
   }
-  public final void visitObjectBeforeChild(JSONObject value, String key) {
+  public final void visitObjectBeforeChild(JSONObject value, String key)
+  {
     _isb.addString("\"");
     _isb.addString(key);
     _isb.addString("\":");
   }
-  public final void visitObjectAfterChildren(JSONObject value) {
+  public final void visitObjectAfterChildren(JSONObject value)
+  {
     _isb.addString("}");
   }
 

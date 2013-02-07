@@ -23,7 +23,8 @@ package org.glob3.mobile.generated;
 //class IShortBuffer;
 //class IGLTextureId;
 
-public class SimplePlanetRenderer extends LeafRenderer {
+public class SimplePlanetRenderer extends LeafRenderer
+{
 
 //  const std::string _textureFilename;
 //  const int _texWidth, _texHeight;
@@ -35,14 +36,17 @@ public class SimplePlanetRenderer extends LeafRenderer {
   private Mesh _mesh;
 
 
-  private IFloatBuffer createVertices(Planet planet) {
+  private IFloatBuffer createVertices(Planet planet)
+  {
     //Vertices with Center in zero
     FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.givenCenter(), planet, Vector3D.zero());
     final double lonRes1 = (double)(_lonRes-1);
     final double latRes1 = (double)(_latRes-1);
-    for(double i = 0.0; i < _lonRes; i++) {
+    for(double i = 0.0; i < _lonRes; i++)
+    {
       final Angle lon = Angle.fromDegrees((i * 360 / lonRes1) -180);
-      for (double j = 0.0; j < _latRes; j++) {
+      for (double j = 0.0; j < _latRes; j++)
+      {
         final Angle lat = Angle.fromDegrees((j * 180.0 / latRes1) -90.0);
         final Geodetic2D g = new Geodetic2D(lat, lon);
   
@@ -52,15 +56,19 @@ public class SimplePlanetRenderer extends LeafRenderer {
   
     return vertices.create();
   }
-  private IShortBuffer createMeshIndex() {
+  private IShortBuffer createMeshIndex()
+  {
     ShortBufferBuilder indices = new ShortBufferBuilder();
   
     final int res = _lonRes;
-    for (int j = 0; j < res - 1; j++) {
-      if (j > 0) {
+    for (int j = 0; j < res - 1; j++)
+    {
+      if (j > 0)
+      {
         indices.add((short)(j * res));
       }
-      for (int i = 0; i < res; i++) {
+      for (int i = 0; i < res; i++)
+      {
         indices.add((short)(j * res + i));
         indices.add((short)(j * res + i + res));
       }
@@ -69,14 +77,17 @@ public class SimplePlanetRenderer extends LeafRenderer {
   
     return indices.create();
   }
-  private IFloatBuffer createTextureCoordinates() {
+  private IFloatBuffer createTextureCoordinates()
+  {
     FloatBufferBuilderFromCartesian2D texCoords = new FloatBufferBuilderFromCartesian2D();
     final double lonRes1 = (double)(_lonRes-1);
     final double latRes1 = (double)(_latRes-1);
     //int p = 0;
-    for(double i = 0.0; i < _lonRes; i++) {
+    for(double i = 0.0; i < _lonRes; i++)
+    {
       final double u = (i / lonRes1);
-      for (double j = 0.0; j < _latRes; j++) {
+      for (double j = 0.0; j < _latRes; j++)
+      {
         final double v = 1.0 - (j / latRes1);
         texCoords.add((float)u, (float)v);
       }
@@ -85,18 +96,21 @@ public class SimplePlanetRenderer extends LeafRenderer {
     return texCoords.create();
   }
 
-  private Mesh createMesh(G3MRenderContext rc) {
+  private Mesh createMesh(G3MRenderContext rc)
+  {
     IShortBuffer indices = createMeshIndex();
     IFloatBuffer vertices = createVertices(rc.getPlanet());
   
     //COLORS PER VERTEX
     IFloatBuffer vertexColors = null;
     final boolean colorPerVertex = false;
-    if (colorPerVertex) {
+    if (colorPerVertex)
+    {
       FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
   
       final int numVertices = _lonRes * _lonRes * 4;
-      for (int i = 0; i < numVertices; i++) {
+      for (int i = 0; i < numVertices; i++)
+      {
         final float val = (float)(0.5 + IMathUtils.instance().sin((float)(2.0 * IMathUtils.instance().pi() * ((float) i) / numVertices)) / 2.0);
   
         colors.add(val, (float)0.0, (float)(1.0 - val), (float)1.0);
@@ -115,7 +129,8 @@ public class SimplePlanetRenderer extends LeafRenderer {
     //TEXTURED
     final IGLTextureId texId = rc.getTexturesHandler().getGLTextureId(_image, GLFormat.rgba(), "SimplePlanetRenderer-Texture", false);
   
-    if (texId == null) {
+    if (texId == null)
+    {
       rc.getLogger().logError("Can't load texture to GPU");
       if (indexedMesh != null)
          indexedMesh.dispose();
@@ -133,61 +148,75 @@ public class SimplePlanetRenderer extends LeafRenderer {
     return new TexturedMesh(indexedMesh, true, textureMapping, true, false);
   }
 
-  public SimplePlanetRenderer(IImage image) {
+  public SimplePlanetRenderer(IImage image)
+  {
      _image = image;
      _latRes = 30;
      _lonRes = 30;
      _mesh = null;
   }
 
-  public void dispose() {
+  public void dispose()
+  {
     if (_mesh != null)
        _mesh.dispose();
     IFactory.instance().deleteImage(_image);
   }
 
-  public final void initialize(G3MContext context) {
+  public final void initialize(G3MContext context)
+  {
   
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState) {
-    if (_mesh == null) {
+  public final void render(G3MRenderContext rc, GLState parentState)
+  {
+    if (_mesh == null)
+    {
       _mesh = createMesh(rc);
     }
-    if (_mesh != null) {
+    if (_mesh != null)
+    {
       _mesh.render(rc, parentState);
     }
   }
 
-  public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent) {
+  public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
+  {
     return false;
   }
 
-  public final void onResizeViewportEvent(G3MEventContext ec, int width, int height) {
+  public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
+  {
 
   }
 
-  public final boolean isReadyToRender(G3MRenderContext rc) {
+  public final boolean isReadyToRender(G3MRenderContext rc)
+  {
     return true;
   }
 
-  public final void start() {
+  public final void start()
+  {
 
   }
 
-  public final void stop() {
+  public final void stop()
+  {
 
   }
 
-  public final void onResume(G3MContext context) {
+  public final void onResume(G3MContext context)
+  {
 
   }
 
-  public final void onPause(G3MContext context) {
+  public final void onPause(G3MContext context)
+  {
 
   }
 
-  public final void onDestroy(G3MContext context) {
+  public final void onDestroy(G3MContext context)
+  {
 
   }
 

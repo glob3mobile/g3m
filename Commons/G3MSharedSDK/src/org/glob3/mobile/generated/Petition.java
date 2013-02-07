@@ -25,7 +25,8 @@ package org.glob3.mobile.generated;
 //class IFactory;
 //class MutableVector2D;
 
-public class Petition {
+public class Petition
+{
   private final Sector _sector;
   private IImage _image;
 
@@ -40,58 +41,70 @@ public class Petition {
 //  void operator =(Petition that);
 
 
-  public Petition(Sector sector, URL url, TimeInterval timeToCache) {
+  public Petition(Sector sector, URL url, TimeInterval timeToCache)
+  {
      _sector = new Sector(sector);
      _url = url;
      _timeToCacheInMS = timeToCache.milliseconds();
      _image = null;
   }
 
-  public void dispose() {
+  public void dispose()
+  {
     releaseImage();
   }
 
-  public final void releaseImage() {
+  public final void releaseImage()
+  {
     IFactory.instance().deleteImage(_image);
     _image = null;
   }
 
-  public final boolean hasImage() {
+  public final boolean hasImage()
+  {
     return (_image != null);
   }
 
-  public final URL getURL() {
+  public final URL getURL()
+  {
     return _url;
   }
 
-  public final Sector getSector() {
+  public final Sector getSector()
+  {
     return _sector;
   }
 
-  public final void setImage(IImage image) {
+  public final void setImage(IImage image)
+  {
     releaseImage();
     _image = image;
   }
 
-  public final IImage getImage() {
+  public final IImage getImage()
+  {
     return _image;
   }
 
-  public final TimeInterval getTimeToCache() {
+  public final TimeInterval getTimeToCache()
+  {
     return TimeInterval.fromMilliseconds(_timeToCacheInMS);
   }
 
-  public final String description() {
+  public final String description()
+  {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     isb.addString("Petition(url=");
     isb.addString(_url.description());
     isb.addString(", sector=");
     isb.addString(_sector.description());
     isb.addString(", buffer=");
-    if (_image == null) {
+    if (_image == null)
+    {
       isb.addString("NULL");
     }
-    else {
+    else
+    {
       isb.addString(_image.description());
     }
   

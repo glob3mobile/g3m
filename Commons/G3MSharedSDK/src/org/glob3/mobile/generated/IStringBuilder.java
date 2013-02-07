@@ -17,7 +17,8 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class IStringBuilder {
+public abstract class IStringBuilder
+{
 
   private static IStringBuilder _instance = null;
 
@@ -25,14 +26,17 @@ public abstract class IStringBuilder {
 
   protected abstract IStringBuilder getNewInstance();
 
-  public static void setInstance(IStringBuilder isb) {
-    if (_instance != null) {
+  public static void setInstance(IStringBuilder isb)
+  {
+    if (_instance != null)
+    {
       ILogger.instance().logWarning("IStringBuilder set two times");
     }
     _instance = isb;
   }
 
-  public static IStringBuilder newStringBuilder() {
+  public static IStringBuilder newStringBuilder()
+  {
     return _instance.getNewInstance();
   }
 
@@ -48,7 +52,8 @@ public abstract class IStringBuilder {
   public abstract String getString();
 
   // a virtual destructor is needed for conversion to Java
-  public void dispose() {
+  public void dispose()
+  {
   }
 
 }

@@ -17,17 +17,21 @@ package org.glob3.mobile.generated;
 
 
 
-public class CompositeMesh extends Mesh {
+public class CompositeMesh extends Mesh
+{
   private java.util.ArrayList<Mesh> _children = new java.util.ArrayList<Mesh>();
 
-  private Extent calculateExtent() {
+  private Extent calculateExtent()
+  {
     final int childrenCount = _children.size();
-    if (childrenCount == 0) {
+    if (childrenCount == 0)
+    {
       return null;
     }
   
     Extent result = _children.get(0).getExtent();
-    for (int i = 1; i < childrenCount; i++) {
+    for (int i = 1; i < childrenCount; i++)
+    {
       Mesh child = _children.get(i);
       result = result.mergedWith(child.getExtent());
     }
@@ -38,9 +42,11 @@ public class CompositeMesh extends Mesh {
   private Extent _extent;
 
 
-  public void dispose() {
+  public void dispose()
+  {
     final int childrenCount = _children.size();
-    for (int i = 0; i < childrenCount; i++) {
+    for (int i = 0; i < childrenCount; i++)
+    {
       Mesh child = _children.get(i);
       if (child != null)
          child.dispose();
@@ -49,24 +55,29 @@ public class CompositeMesh extends Mesh {
     _extent = null;
   }
 
-  public final int getVertexCount() {
+  public final int getVertexCount()
+  {
     int result = 0;
     final int childrenCount = _children.size();
-    for (int i = 0; i < childrenCount; i++) {
+    for (int i = 0; i < childrenCount; i++)
+    {
       Mesh child = _children.get(i);
       result += child.getVertexCount();
     }
     return result;
   }
 
-  public final Vector3D getVertex(int index) {
+  public final Vector3D getVertex(int index)
+  {
     int acumIndex = 0;
     final int childrenCount = _children.size();
-    for (int i = 0; i < childrenCount; i++) {
+    for (int i = 0; i < childrenCount; i++)
+    {
       Mesh child = _children.get(i);
       final int childIndex = index - acumIndex;
       final int childSize = child.getVertexCount();
-      if (childIndex < childSize) {
+      if (childIndex < childSize)
+      {
         return child.getVertex(childIndex);
       }
       acumIndex += childSize;
@@ -74,33 +85,41 @@ public class CompositeMesh extends Mesh {
     return Vector3D.nan();
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState) {
+  public final void render(G3MRenderContext rc, GLState parentState)
+  {
     final int childrenCount = _children.size();
-    for (int i = 0; i < childrenCount; i++) {
+    for (int i = 0; i < childrenCount; i++)
+    {
       Mesh child = _children.get(i);
       child.render(rc, parentState);
     }
   }
 
-  public final Extent getExtent() {
-    if (_extent == null) {
+  public final Extent getExtent()
+  {
+    if (_extent == null)
+    {
       _extent = calculateExtent();
     }
     return _extent;
   }
 
-  public final boolean isTransparent(G3MRenderContext rc) {
+  public final boolean isTransparent(G3MRenderContext rc)
+  {
     final int childrenCount = _children.size();
-    for (int i = 0; i < childrenCount; i++) {
+    for (int i = 0; i < childrenCount; i++)
+    {
       Mesh child = _children.get(i);
-      if (child.isTransparent(rc)) {
+      if (child.isTransparent(rc))
+      {
         return true;
       }
     }
     return false;
   }
 
-  public final void addMesh(Mesh mesh) {
+  public final void addMesh(Mesh mesh)
+  {
     _extent = null;
     _extent = null;
   
