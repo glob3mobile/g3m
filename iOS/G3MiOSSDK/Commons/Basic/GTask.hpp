@@ -13,12 +13,12 @@ class G3MContext;
 
 class GTask {
 public:
-#ifdef C_CODE
+//#ifdef C_CODE
   virtual ~GTask() { }
-#endif
-#ifdef JAVA_CODE
-  public void dispose();
-#endif
+//#endif
+//#ifdef JAVA_CODE
+//  public void dispose();
+//#endif
 
   virtual void run(const G3MContext* context) = 0;
 
