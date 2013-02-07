@@ -24,17 +24,29 @@ class TileKey;
 class Vector3D;
 class GLState;
 
+//class ITexturizerData {
+//public:
+////  virtual bool isTexturizerData() const = 0; //Java needs to know that this is an interface
+//#ifdef C_CODE
+//  virtual ~ITexturizerData() { }
+//#endif
+//#ifdef JAVA_CODE
+//  public void dispose();
+//#endif
+//};
+
+#ifdef C_CODE
 class ITexturizerData {
 public:
-//  virtual bool isTexturizerData() const = 0; //Java needs to know that this is an interface
-#ifdef C_CODE
   virtual ~ITexturizerData() { }
-#endif
-#ifdef JAVA_CODE
-  public void dispose();
-#endif
 };
+#endif
 
+#ifdef JAVA_CODE
+public interface ITexturizerData {
+  public void dispose();
+}
+#endif
 
 class Tile {
 private:
