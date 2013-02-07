@@ -285,7 +285,12 @@ public:
   }
 
   ~GL() {
+#ifdef C_CODE
     delete _nativeGL;
+#endif
+#ifdef JAVA_CODE
+    _nativeGL.dispose();
+#endif
     delete _vertices;
     delete _textureCoordinates;
     delete _colors;
