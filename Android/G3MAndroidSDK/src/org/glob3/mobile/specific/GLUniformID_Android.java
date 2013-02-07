@@ -27,4 +27,10 @@ public final class GLUniformID_Android
       return (_id > -1);
    }
 
+
+   @Override
+   public void dispose() {
+
+   }
+
 }
