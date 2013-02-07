@@ -4,6 +4,7 @@ package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.IBufferDownloadListener;
 import org.glob3.mobile.generated.IByteBuffer;
+import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IImageDownloadListener;
 import org.glob3.mobile.generated.ILogger;
@@ -102,6 +103,7 @@ public final class ListenerEntry {
          else {
             final IImage image = new Image_Android(bitmap, data);
             _imageListener.onDownload(url, image);
+            //IFactory.instance().deleteImage(image);
          }
       }
    }
@@ -121,6 +123,7 @@ public final class ListenerEntry {
          else {
             final IImage image = new Image_Android(bitmap, data);
             _imageListener.onCanceledDownload(url, image);
+            IFactory.instance().deleteImage(image);
          }
       }
    }

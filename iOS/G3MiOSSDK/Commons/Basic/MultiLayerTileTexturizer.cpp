@@ -435,20 +435,21 @@ public:
     return _canceled;
   }
 
-  void checkIsPending(int position) const {
-    if (_status[position] != STATUS_PENDING) {
-      ILogger::instance()->logError("Logic error: Expected STATUS_PENDING at position #%d but found status: %d\n",
-                                    position,
-                                    _status[position]);
-    }
-  }
+//  void checkIsPending(int position) const {
+//    if (_status[position] != STATUS_PENDING) {
+//      ILogger::instance()->logError("Logic error: Expected STATUS_PENDING at position #%d but found status: %d\n",
+//                                    position,
+//                                    _status[position]);
+//    }
+//  }
 
   void stepDownloaded(int position,
                       IImage* image) {
     if (_canceled) {
+      IFactory::instance()->deleteImage(image);
       return;
     }
-    checkIsPending(position);
+    //checkIsPending(position);
 
     _status[position]  = STATUS_DOWNLOADED;
     _petitions[position]->setImage( image );
@@ -460,7 +461,7 @@ public:
     if (_canceled) {
       return;
     }
-    checkIsPending(position);
+    //checkIsPending(position);
 
     _anyCanceled = true;
 

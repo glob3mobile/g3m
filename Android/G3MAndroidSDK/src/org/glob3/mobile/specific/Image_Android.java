@@ -31,7 +31,11 @@ public final class Image_Android
       return wr.toString() //
       .replace("org.glob3.mobile.specific.", "") //
       .replace("org.glob3.mobile.generated.", "") //
-      .replace("android.opengl.", "");
+      .replace("android.opengl.", "") //
+      .replace("  at Image_Android.createCallStackString(Image_Android.java:26)\n", "") //
+      .replace("  at Image_Android.access$1(Image_Android.java:25)\n", "") //
+      .replace(" at ", "") //
+      .replace(" java.lang.Exception\n", "");
    }
 
 
@@ -98,6 +102,7 @@ public final class Image_Android
       //         }
       //         super.finalize();
       //      }
+
    }
 
 
@@ -319,6 +324,5 @@ public final class Image_Android
       }
       super.finalize();
    }
-
 
 }
