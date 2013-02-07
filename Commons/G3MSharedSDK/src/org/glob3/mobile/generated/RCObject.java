@@ -24,6 +24,7 @@ public class RCObject
 
   private void _suicide()
   {
+    this.dispose();
   }
 
   protected RCObject() // the object starts retained
@@ -50,6 +51,6 @@ public class RCObject
     }
   }
 
-//  virtual const std::string description() const = 0;
+  //virtual const std::string description() const = 0;
 
 }
