@@ -26,7 +26,6 @@
 #include "Petition.hpp"
 #include "GLConstants.hpp"
 #include "IImageListener.hpp"
-#include "ITexturizerData.hpp"
 
 #define TILE_DOWNLOAD_PRIORITY 1000000000
 
