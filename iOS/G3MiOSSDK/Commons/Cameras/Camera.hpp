@@ -275,6 +275,10 @@ private:
 
   //The Camera Effect Target
   class CameraEffectTarget: public EffectTarget {
+  public:
+    ~CameraEffectTarget() {
+
+    }
   };
   
   CameraEffectTarget* _camEffectTarget;

@@ -35,4 +35,10 @@ public final class GLTextureId_WebGL
       return "GLTextureId_WebGL " + _webGLTexture.hashCode();
    }
 
+
+   @Override
+   public void dispose() {
+
+   }
+
 }
