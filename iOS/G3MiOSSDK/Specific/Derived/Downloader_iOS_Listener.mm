@@ -46,7 +46,7 @@
     [data getBytes: bytes
             length: length];
 
-    IByteBuffer* buffer = GFactory.createByteBuffer(bytes, length);
+    IByteBuffer* buffer = IFactory::instance()->createByteBuffer(bytes, length);
 
     _cppBufferListener->onDownload(url, buffer);
   }
@@ -94,7 +94,7 @@
     [data getBytes: bytes
             length: length];
     
-    IByteBuffer* buffer = GFactory.createByteBuffer(bytes, length);
+    IByteBuffer* buffer = IFactory::instance()->createByteBuffer(bytes, length);
     _cppBufferListener->onCanceledDownload(url, buffer);
     delete buffer;
   }

@@ -25,11 +25,9 @@ const void CPUTextureBuilder::createTextureFromImage(GL* gl,
   }
   else if (image->getHeight() == height && image->getWidth() == width) {
     listener->imageCreated( image->shallowCopy() );
-#ifdef C_CODE
     if (autodelete) {
       delete listener;
     }
-#endif
   }
   else {
     image->scale(width, height, listener, autodelete);
@@ -62,9 +60,7 @@ public:
     if (_listener != NULL) {
       _listener->imageCreated(image);
       if (_autodelete) {
-#ifdef C_CODE
         delete _listener;
-#endif
         _listener = NULL;
       }
     }

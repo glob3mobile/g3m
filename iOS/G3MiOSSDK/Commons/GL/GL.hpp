@@ -285,10 +285,7 @@ public:
   }
 
   ~GL() {
-#ifdef C_CODE
     delete _nativeGL;
-#endif
-
     delete _vertices;
     delete _textureCoordinates;
     delete _colors;

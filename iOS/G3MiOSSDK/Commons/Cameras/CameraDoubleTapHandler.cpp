@@ -38,7 +38,7 @@ void CameraDoubleTapHandler::onDown(const G3MEventContext *eventContext,
   
   // compute drag parameters
   const Vector3D axis = initialPoint.cross(centerPoint);
-  const Angle angle   = Angle::fromRadians(- GMath.asin(axis.length()/initialPoint.length()/centerPoint.length()));
+  const Angle angle   = Angle::fromRadians(- IMathUtils::instance()->asin(axis.length()/initialPoint.length()/centerPoint.length()));
   
   // compute zoom factor
   const double height   = eventContext->getPlanet()->toGeodetic3D(camera->getCartesianPosition()).height();

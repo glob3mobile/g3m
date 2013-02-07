@@ -45,9 +45,7 @@ public:
 
   void deleteListener() {
     if (_deleteListener) {
-#ifdef C_CODE
       delete _listener;
-#endif
       _listener = NULL;
     }
   }
@@ -130,9 +128,7 @@ public:
 
   void deleteListener() {
     if (_deleteListener) {
-#ifdef C_CODE
       delete _listener;
-#endif
       _listener = NULL;
     }
   }
@@ -191,9 +187,7 @@ CachedDownloader::~CachedDownloader() {
   if (_lastImage != NULL) {
     IFactory::instance()->deleteImage(_lastImage);
   }
-#ifdef C_CODE
   delete _lastImageURL;
-#endif
 }
 
 void CachedDownloader::start() {
@@ -227,9 +221,7 @@ IImage* CachedDownloader::getCachedImage(const URL& url) {
     }
     _lastImage = cachedImage->shallowCopy();
 
-#ifdef C_CODE
     delete _lastImageURL;
-#endif
     _lastImageURL = new URL(url);
   }
 
@@ -252,9 +244,7 @@ long long CachedDownloader::requestImage(const URL& url,
     listener->onDownload(url, cachedImage);
 
     if (deleteListener) {
-#ifdef C_CODE
       delete listener;
-#endif
     }
 
     return -1;
@@ -300,11 +290,7 @@ long long CachedDownloader::requestBuffer(const URL& url,
   listener->onDownload(url, cachedBuffer);
 
   if (deleteListener) {
-#ifdef C_CODE
     delete listener;
-#else
-    listener = NULL;
-#endif
   }
 
   return -1;

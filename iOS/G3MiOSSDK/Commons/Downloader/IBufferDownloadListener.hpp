@@ -15,7 +15,10 @@
 class IBufferDownloadListener {
 public:
 #ifdef C_CODE
-  virtual ~IBufferDownloadListener() {  }
+  virtual ~IBufferDownloadListener() { }
+#endif
+#ifdef JAVA_CODE
+  public void dispose();
 #endif
 
   /**

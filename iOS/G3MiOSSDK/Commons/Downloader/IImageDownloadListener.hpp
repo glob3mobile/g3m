@@ -14,7 +14,10 @@
 class IImageDownloadListener {
 public:
 #ifdef C_CODE
-  virtual ~IImageDownloadListener() {  }
+  virtual ~IImageDownloadListener() { }
+#endif
+#ifdef JAVA_CODE
+  public void dispose();
 #endif
 
   /**

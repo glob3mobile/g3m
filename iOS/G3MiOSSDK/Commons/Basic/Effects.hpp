@@ -20,15 +20,13 @@
 
 class EffectTarget {
 public:
-  // added this method only to force the java-translator to consider EffectTarget as an interface (dgd)
-  virtual void unusedMethod() const = 0;
-
 #ifdef C_CODE
-  virtual ~EffectTarget(){}
+  virtual ~EffectTarget() { }
 #endif
-
+#ifdef JAVA_CODE
+  public void dispose();
+#endif
 };
-
 
 class Effect {
 protected:
@@ -47,7 +45,7 @@ protected:
 
   double sigmoid(double x) const {
     x = 12.0*x - 6.0;
-    return (1.0 / (1.0 + GMath.exp(-1.0 * x)));
+    return (1.0 / (1.0 + IMathUtils::instance()->exp(-1.0 * x)));
   }
 
   double gently(const double x,
@@ -164,7 +162,7 @@ public:
 
   virtual bool isDone(const G3MRenderContext *rc,
                       const TimeInterval& when) {
-    return (GMath.abs(_force) < 1e-6);
+    return (IMathUtils::instance()->abs(_force) < 1e-6);
   }
 
 };

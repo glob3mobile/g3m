@@ -31,7 +31,7 @@ private:
 
 public:
 
-  ~Sector(){}
+  ~Sector() { }
 
   Sector(const Geodetic2D& lower,
          const Geodetic2D& upper) :

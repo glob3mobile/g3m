@@ -102,7 +102,7 @@ Mesh* SimplePlanetRenderer::createMesh(const G3MRenderContext* rc) {
 
     const int numVertices = _lonRes * _lonRes * 4;
     for (int i = 0; i < numVertices; i++) {
-      const float val = (float) (0.5 + GMath.sin( (float) (2.0 * GMath.pi() * ((float) i) / numVertices) ) / 2.0);
+      const float val = (float) (0.5 + IMathUtils::instance()->sin( (float) (2.0 * IMathUtils::instance()->pi() * ((float) i) / numVertices) ) / 2.0);
 
       colors.add(val, (float)0.0, (float)(1.0 - val), (float)1.0);
     }

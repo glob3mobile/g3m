@@ -150,9 +150,7 @@ TileRenderer::~TileRenderer() {
 
   delete _tessellator;
   delete _texturizer;
-#ifdef C_CODE
   delete _parameters;
-#endif
 
   delete _lastSplitTimer;
 

@@ -9,8 +9,6 @@
 #ifndef __G3MiOSSDK__RCObject__
 #define __G3MiOSSDK__RCObject__
 
-//#include <string>
-
 class RCObject {
 private:
   mutable long _referenceCounter;
@@ -45,8 +43,6 @@ public:
       _suicide();
     }
   }
-
-  //virtual const std::string description() const = 0;
   
 };
 

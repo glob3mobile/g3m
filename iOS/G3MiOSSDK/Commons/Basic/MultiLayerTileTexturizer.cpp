@@ -287,10 +287,10 @@ public:
     const double widthFactor  = imageSector.getDeltaLongitude().div(wholeSector.getDeltaLongitude());
     const double heightFactor = imageSector.getDeltaLatitude().div(wholeSector.getDeltaLatitude());
 
-    return new RectangleI((int) GMath.round( lowerFactor._x         * textureWidth ),
-                          (int) GMath.round( (1.0 - lowerFactor._y) * textureHeight ),
-                          (int) GMath.round( widthFactor            * textureWidth ),
-                          (int) GMath.round( heightFactor           * textureHeight ));
+    return new RectangleI((int) IMathUtils::instance()->round( lowerFactor._x         * textureWidth ),
+                          (int) IMathUtils::instance()->round( (1.0 - lowerFactor._y) * textureHeight ),
+                          (int) IMathUtils::instance()->round( widthFactor            * textureWidth ),
+                          (int) IMathUtils::instance()->round( heightFactor           * textureHeight ));
   }
 
   void composeAndUploadTexture() {
@@ -371,11 +371,9 @@ public:
 
       IFactory::instance()->deleteImage(image);
 
-#ifdef C_CODE
       for (int i = 0; i < rectangles.size(); i++) {
         delete rectangles[i];
       }
-#endif
 
 #ifdef JAVA_CODE
     }

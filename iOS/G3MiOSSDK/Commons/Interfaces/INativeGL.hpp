@@ -46,19 +46,9 @@ public:
   virtual void uniform1i(IGLUniformID* loc,
                          int v) const = 0;
 
-  //  virtual void uniformMatrix4fv(IGLUniformID* location,
-  //                                bool transpose,
-  //                                const IFloatBuffer* buffer) const = 0;
-
   virtual void uniformMatrix4fv(IGLUniformID* location,
                                 bool transpose,
                                 const MutableMatrix44D* matrix) const = 0;
-
-
-  //  virtual void uniformMatrix4fv(IGLUniformID* location,
-  //                                int count,
-  //                                bool transpose,
-  //                                const float value[]) const = 0;
 
   virtual void clearColor(float red,
                           float green,
@@ -86,9 +76,6 @@ public:
                                    int stride,
                                    IFloatBuffer* buffer) const = 0;
 
-//  virtual void drawElements(int mode,
-//                            int count,
-//                            IIntBuffer* indices) const = 0;
   virtual void drawElements(int mode,
                             int count,
                             IShortBuffer* indices) const = 0;

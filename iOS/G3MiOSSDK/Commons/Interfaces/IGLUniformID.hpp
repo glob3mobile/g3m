@@ -9,12 +9,15 @@
 #ifndef G3MiOSSDK_IGLUniformID_hpp
 #define G3MiOSSDK_IGLUniformID_hpp
 
-class IGLUniformID{
+class IGLUniformID {
 public:
   virtual bool isValid() const = 0;
   
 #ifdef C_CODE
-  virtual ~IGLUniformID(){ }
+  virtual ~IGLUniformID() { }
+#endif
+#ifdef JAVA_CODE
+  public void dispose();
 #endif
 };
 

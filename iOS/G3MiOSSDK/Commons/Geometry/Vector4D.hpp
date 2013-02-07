@@ -47,7 +47,7 @@ public:
   }
   
   static Vector4D nan() {
-    return Vector4D(GMath.NanD(), GMath.NanD(), GMath.NanD(), GMath.NanD());
+    return Vector4D(IMathUtils::instance()->NanD(), IMathUtils::instance()->NanD(), IMathUtils::instance()->NanD(), IMathUtils::instance()->NanD());
   }
   
   static Vector4D zero() {
@@ -55,7 +55,7 @@ public:
   }
   
   bool isNan() const {
-    return (GMath.isNan(_x) || GMath.isNan(_y) || GMath.isNan(_z) || GMath.isNan(_w));
+    return (IMathUtils::instance()->isNan(_x) || IMathUtils::instance()->isNan(_y) || IMathUtils::instance()->isNan(_z) || IMathUtils::instance()->isNan(_w));
   }
   
   bool isZero() const {

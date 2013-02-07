@@ -15,7 +15,7 @@
 IByteBuffer* ByteBufferBuilder::create() const {
   const int size = _values.size();
 
-  IByteBuffer* result = GFactory.createByteBuffer(size);
+  IByteBuffer* result = IFactory::instance()->createByteBuffer(size);
 
   for (int i = 0; i < size; i++) {
     result->rawPut(i, _values[i]);

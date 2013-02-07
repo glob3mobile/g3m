@@ -20,10 +20,12 @@ public:
   virtual void imageCreated(IImage* image) = 0;
 
 #ifdef C_CODE
-  virtual ~IImageListener() {
-
-  }
+  virtual ~IImageListener() { }
 #endif
+#ifdef JAVA_CODE
+  public void dispose();
+#endif
+
 };
 
 #endif

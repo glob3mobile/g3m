@@ -9,7 +9,7 @@
 #ifndef __G3MiOSSDK__ITexturizerData__
 #define __G3MiOSSDK__ITexturizerData__
 
-/*JAVA:interface*/class ITexturizerData {
+class ITexturizerData {
 public:
 #ifdef C_CODE
   virtual ~ITexturizerData() { }

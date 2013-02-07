@@ -55,9 +55,7 @@ public:
   }
   
   ~Petition(){
-#ifdef C_CODE
     delete _sector;
-#endif
     releaseImage();
   }
   

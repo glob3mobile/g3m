@@ -193,10 +193,11 @@ public:
     return new Frustum(this, matrix, matrix.inversed());
   }
   
-  ~Frustum(){ delete _extent; }
+  ~Frustum(){
+    delete _extent;
+  }
   
   Extent *getExtent() const { return _extent; }
 };
-
 
 #endif
