@@ -192,6 +192,8 @@
 		CF8B21C015DD345D0068601A /* SQDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = CF8B21BE15DD345D0068601A /* SQDatabase.m */; };
 		CF8D0BFE15AF0D32005B5433 /* TileTexturizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */; };
 		CF8FF98B15D5539F000F79D1 /* LeveledTexturedMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8FF98915D5539F000F79D1 /* LeveledTexturedMesh.cpp */; };
+		CF90F6C116C4069D00B309C2 /* ITexturizerData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF90F6BF16C4069C00B309C2 /* ITexturizerData.cpp */; };
+		CF90F6C216C4069D00B309C2 /* ITexturizerData.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF90F6C016C4069C00B309C2 /* ITexturizerData.hpp */; };
 		CF923CA416AB126D00D04301 /* ShortBufferBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF923CA216AB126D00D04301 /* ShortBufferBuilder.cpp */; };
 		CF923CA516AB126D00D04301 /* ShortBufferBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF923CA316AB126D00D04301 /* ShortBufferBuilder.hpp */; };
 		CF94EB8F1669225600F2283C /* GEOLineStringGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF94EB8D1669225600F2283C /* GEOLineStringGeometry.cpp */; };
@@ -564,6 +566,8 @@
 		CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileTexturizer.cpp; path = Commons/Basic/TileTexturizer.cpp; sourceTree = "<group>"; };
 		CF8FF98915D5539F000F79D1 /* LeveledTexturedMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LeveledTexturedMesh.cpp; path = Commons/Mesh/LeveledTexturedMesh.cpp; sourceTree = "<group>"; };
 		CF8FF98A15D5539F000F79D1 /* LeveledTexturedMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = LeveledTexturedMesh.hpp; path = Commons/Mesh/LeveledTexturedMesh.hpp; sourceTree = "<group>"; };
+		CF90F6BF16C4069C00B309C2 /* ITexturizerData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ITexturizerData.cpp; path = Commons/Basic/ITexturizerData.cpp; sourceTree = "<group>"; };
+		CF90F6C016C4069C00B309C2 /* ITexturizerData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ITexturizerData.hpp; path = Commons/Basic/ITexturizerData.hpp; sourceTree = "<group>"; };
 		CF923CA216AB126D00D04301 /* ShortBufferBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ShortBufferBuilder.cpp; path = Commons/Basic/ShortBufferBuilder.cpp; sourceTree = "<group>"; };
 		CF923CA316AB126D00D04301 /* ShortBufferBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ShortBufferBuilder.hpp; path = Commons/Basic/ShortBufferBuilder.hpp; sourceTree = "<group>"; };
 		CF94EB8D1669225600F2283C /* GEOLineStringGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEOLineStringGeometry.cpp; path = Commons/GEO/GEOLineStringGeometry.cpp; sourceTree = "<group>"; };
@@ -914,6 +918,8 @@
 				CFFEC12415C2EB96003FA986 /* URL.hpp */,
 				CF8D0BFB15AF0D23005B5433 /* TileTexturizer.hpp */,
 				CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */,
+				CF90F6BF16C4069C00B309C2 /* ITexturizerData.cpp */,
+				CF90F6C016C4069C00B309C2 /* ITexturizerData.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -1494,6 +1500,7 @@
 				CF6B5F6216C1938D00C590C1 /* JSONFloat.hpp in Headers */,
 				CF6B5F6616C194D200C590C1 /* JSONInteger.hpp in Headers */,
 				CF6B5F6A16C1956B00C590C1 /* JSONLong.hpp in Headers */,
+				CF90F6C216C4069D00B309C2 /* ITexturizerData.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1709,6 +1716,7 @@
 				CF6B5F6116C1938D00C590C1 /* JSONFloat.cpp in Sources */,
 				CF6B5F6516C194D200C590C1 /* JSONInteger.cpp in Sources */,
 				CF6B5F6916C1956B00C590C1 /* JSONLong.cpp in Sources */,
+				CF90F6C116C4069D00B309C2 /* ITexturizerData.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
