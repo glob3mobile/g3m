@@ -172,6 +172,7 @@ public class TileTextureBuilder extends RCObject
 
 	  if (_mesh == null)
 	  {
+		IFactory.instance().deleteImage(image);
 		return;
 	  }
 
@@ -284,7 +285,7 @@ public class TileTextureBuilder extends RCObject
 	checkIsPending(position);
 
 	_status.set(position, PetitionStatus.STATUS_DOWNLOADED);
-	_petitions.get(position).setImage(image.shallowCopy());
+	_petitions.get(position).setImage(image);
 
 	stepDone();
   }

@@ -372,8 +372,20 @@ public:
                                  TimeInterval::fromDays(30));
     osm->setEnable(false);
     layerSet->addLayer(osm);
-
   }
+
+  
+  WMSLayer* pressure = new WMSLayer("pressure_cntr", //
+                                    URL("http://wms.openweathermap.org/service", false), //
+                                    WMS_1_1_0, //
+                                    Sector::fromDegrees(-85.05, -180.0, 85.05, 180.0), //
+                                    "image/png", //
+                                    "EPSG:4326", //
+                                    "", //
+                                    true, //
+                                    NULL,
+                                    TimeInterval::zero());
+  layerSet->addLayer(pressure);
 
   const bool usePnoaLayer = false;
   if (usePnoaLayer) {

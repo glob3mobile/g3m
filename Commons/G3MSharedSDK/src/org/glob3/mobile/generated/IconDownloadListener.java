@@ -21,7 +21,7 @@ public class IconDownloadListener implements IImageDownloadListener
 	{
 	  LabelPosition labelPosition = _labelBottom ? LabelPosition.Bottom : LabelPosition.Right;
 
-	  ITextUtils.instance().labelImage(image, _label, labelPosition, new MarkLabelImageListener(_mark), true);
+	  ITextUtils.instance().labelImage(image, _label, labelPosition, new MarkLabelImageListener(image, _mark), true);
 	}
 	else
 	{

@@ -40,7 +40,7 @@ public class CachedDownloader extends IDownloader
 	  }
 	}
   
-	final IImage cachedImage = _storage.isAvailable() ? _storage.readImage(url) : null;
+	IImage cachedImage = _storage.isAvailable() ? _storage.readImage(url) : null;
   
 	if (cachedImage != null)
 	{
@@ -94,7 +94,7 @@ public class CachedDownloader extends IDownloader
   {
 	_requestsCounter++;
   
-	final IByteBuffer cachedBuffer = _storage.isAvailable() ? _storage.readBuffer(url) : null;
+	IByteBuffer cachedBuffer = _storage.isAvailable() ? _storage.readBuffer(url) : null;
 	if (cachedBuffer == null)
 	{
 	  // cache miss
@@ -111,8 +111,6 @@ public class CachedDownloader extends IDownloader
 	  listener = null;
 	}
   
-	if (cachedBuffer != null)
-		cachedBuffer.dispose();
 	return -1;
   }
 
@@ -121,7 +119,7 @@ public class CachedDownloader extends IDownloader
 	_requestsCounter++;
   
   //  const IImage* cachedImage = _storage->isAvailable() ? _storage->readImage(url) : NULL;
-	final IImage cachedImage = getCachedImage(url);
+	IImage cachedImage = getCachedImage(url);
 	if (cachedImage != null)
 	{
 	  // cache hit
@@ -132,8 +130,6 @@ public class CachedDownloader extends IDownloader
 	  if (deleteListener)
 	  {
 	  }
-  
-	  IFactory.instance().deleteImage(cachedImage);
   
 	  return -1;
 	}

@@ -22,16 +22,24 @@
 
 class MarkLabelImageListener : public IImageListener {
 private:
-  Mark* _mark;
+  IImage* _iconImage;
+  Mark*   _mark;
 
 public:
-  MarkLabelImageListener(Mark* mark) :
+  MarkLabelImageListener(IImage* iconImage,
+                         Mark* mark) :
+  _iconImage(iconImage),
   _mark(mark)
   {
 
   }
 
   void imageCreated(IImage* image) {
+    if (_iconImage != NULL) {
+      IFactory::instance()->deleteImage(_iconImage);
+      _iconImage = NULL;
+    }
+
     if (image == NULL) {
       _mark->onTextureDownloadError();
     }
@@ -61,7 +69,7 @@ public:
   }
 
   void onDownload(const URL& url,
-                  const IImage* image) {
+                  IImage* image) {
     const bool hasLabel = ( _label.length() != 0 );
 
     if (hasLabel) {
@@ -75,7 +83,7 @@ public:
       ITextUtils::instance()->labelImage(image,
                                          _label,
                                          labelPosition,
-                                         new MarkLabelImageListener(_mark),
+                                         new MarkLabelImageListener(image, _mark),
                                          true);
     }
     else {
@@ -94,7 +102,7 @@ public:
   }
 
   void onCanceledDownload(const URL& url,
-                          const IImage* image) {
+                          IImage* image) {
     // do nothing
   }
 };
@@ -206,7 +214,7 @@ void Mark::initialize(const G3MContext* context) {
     else {
       if (hasLabel) {
         ITextUtils::instance()->createLabelImage(_label,
-                                                 new MarkLabelImageListener(this),
+                                                 new MarkLabelImageListener(NULL, this),
                                                  true);
       }
       else {
@@ -224,11 +232,13 @@ void Mark::onTextureDownloadError() {
                                 _label.c_str());
 }
 
-void Mark::onTextureDownload(const IImage* image) {
+void Mark::onTextureDownload(IImage* image) {
   _textureSolved = true;
-  _textureImage = image->shallowCopy();
+//  _textureImage = image->shallowCopy();
+  _textureImage = image;
   _textureWidth = _textureImage->getWidth();
   _textureHeight = _textureImage->getHeight();
+//  IFactory::instance()->deleteImage(image);
 }
 
 bool Mark::isReady() const {
@@ -243,6 +253,9 @@ Mark::~Mark() {
   }
   if (_autoDeleteUserData) {
     delete _userData;
+  }
+  if (_textureImage != NULL) {
+    IFactory::instance()->deleteImage(_textureImage);
   }
 }
 

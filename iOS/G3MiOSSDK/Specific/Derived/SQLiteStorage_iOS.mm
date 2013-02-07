@@ -229,7 +229,7 @@ void SQLiteStorage_iOS::saveBuffer(const URL& url,
   }
 }
 
-const IByteBuffer* SQLiteStorage_iOS::readBuffer(const URL& url) {
+IByteBuffer* SQLiteStorage_iOS::readBuffer(const URL& url) {
   IByteBuffer* result = NULL;
 
   NSString* name = toNSString(url.getPath());
@@ -296,7 +296,7 @@ void SQLiteStorage_iOS::saveImage(const URL& url,
   }
 }
 
-const IImage* SQLiteStorage_iOS::readImage(const URL& url) {
+IImage* SQLiteStorage_iOS::readImage(const URL& url) {
   IImage* result = NULL;
 
   NSString* name = toNSString(url.getPath());

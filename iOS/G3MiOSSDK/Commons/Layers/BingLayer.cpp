@@ -34,14 +34,14 @@ public:
   TokenDownloadListener(BingLayer* bingLayer);
   
   void onDownload(const URL& url,
-                  const IByteBuffer* buffer);
+                  IByteBuffer* buffer);
   
   void onError(const URL& url){}
   
   void onCancel(const URL& url){}
   
   void onCanceledDownload(const URL& url,
-                          const IByteBuffer* data) {
+                          IByteBuffer* data) {
   }
   
   ~TokenDownloadListener(){}
@@ -52,7 +52,7 @@ TokenDownloadListener::TokenDownloadListener(BingLayer* bingLayer):
 _bingLayer(bingLayer){}
 
 void TokenDownloadListener::onDownload(const URL& url,
-                                       const IByteBuffer* buffer){
+                                       IByteBuffer* buffer){
   
   
   std::string string = buffer->getAsString();
@@ -82,6 +82,8 @@ void TokenDownloadListener::onDownload(const URL& url,
     _bingLayer->setTilePetitionString(tileURL);
     
     IJSONParser::instance()->deleteJSONData(json);
+
+    delete buffer;
   }
 }
 

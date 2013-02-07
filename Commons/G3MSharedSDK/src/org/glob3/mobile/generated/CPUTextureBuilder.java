@@ -39,13 +39,6 @@ public class CPUTextureBuilder extends TextureBuilder
 	}
   }
 
-//  const void createTextureFromImages(GL* gl,
-//                                     const IFactory* factory,
-//                                     const std::vector<const IImage*>& images,
-//                                     int width, int height,
-//                                     IImageListener* listener,
-//                                     bool autodelete) const;
-
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: const void createTextureFromImages(GL* gl, const IFactory* factory, const java.util.ArrayList<const IImage*>& images, const java.util.ArrayList<RectangleI*>& rectangles, int width, int height, IImageListener* listener, boolean autodelete) const
   public final void createTextureFromImages(GL gl, IFactory factory, java.util.ArrayList<IImage> images, java.util.ArrayList<RectangleI> rectangles, int width, int height, IImageListener listener, boolean autodelete)
@@ -62,7 +55,7 @@ public class CPUTextureBuilder extends TextureBuilder
 	else if (imagesSize == 1)
 	{
 	  RectangleI rectangle = rectangles.get(0);
-	  images.get(0).subImage(rectangle, new SubImageImageLister(width, height, listener, autodelete), true);
+	  images.get(0).subImage(rectangle, new CPUTextureBuilderSubImageImageLister(width, height, listener, autodelete), true);
 	}
 	else
 	{

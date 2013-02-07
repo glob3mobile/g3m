@@ -42,6 +42,9 @@ public class TokenDownloadListener implements IBufferDownloadListener
 	  _bingLayer.setTilePetitionString(tileURL);
   
 	  IJSONParser.instance().deleteJSONData(json);
+  
+	  if (buffer != null)
+		  buffer.dispose();
 	}
   }
 
