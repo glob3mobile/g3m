@@ -19,7 +19,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class EffectTarget
+public interface EffectTarget
 {
   public void dispose();
 }
