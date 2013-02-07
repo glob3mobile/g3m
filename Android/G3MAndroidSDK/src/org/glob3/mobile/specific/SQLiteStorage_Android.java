@@ -57,12 +57,12 @@ public final class SQLiteStorage_Android
       db.execSQL("DROP TABLE IF EXISTS image2;");
 
       db.execSQL("CREATE TABLE IF NOT EXISTS " + tableBufferName
-                 + " (name TEXT, contents TEXT, expiration TEXT);");
+                 + " (name TEXT, contents TEXT, expiration_ms TEXT);");
       db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS buffer_name ON "
                  + tableBufferName + "(name);");
 
       db.execSQL("CREATE TABLE IF NOT EXISTS " + tableImageName
-                 + " (name TEXT, contents TEXT, expiration TEXT);");
+                 + " (name TEXT, contents TEXT, expiration_ms TEXT);");
       db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS image_name ON "
                  + tableImageName + "(name);");
     }
@@ -190,9 +190,9 @@ public final class SQLiteStorage_Android
     final ContentValues values = new ContentValues();
     values.put("name", name);
     values.put("contents", contents);
-    final long expiration = System.currentTimeMillis()
-                            + timeToExpires.milliseconds();
-    values.put("expiration", Long.toString(expiration));
+    final long expirationMill = System.currentTimeMillis()
+                                + timeToExpires.milliseconds();
+    values.put("expiration_ms", Long.toString(expirationMill));
 
     if (_writeDB != null) {
       final long r = _writeDB.insertWithOnConflict(table, null, values,
@@ -218,7 +218,7 @@ public final class SQLiteStorage_Android
 
     final Cursor cursor = _readDB.query( //
         tableBufferName, //
-        new String[] { "contents", "expiration" }, //
+        new String[] { "contents", "expiration_ms" }, //
         "name = ?", //
         new String[] { name }, //
         null, //
@@ -312,7 +312,7 @@ public final class SQLiteStorage_Android
 
     final Cursor cursor = _readDB.query( //
         tableImageName, //
-        new String[] { "contents", "expiration" }, //
+        new String[] { "contents", "expiration_ms" }, //
         "name = ?", //
         new String[] { name }, //
         null, //
