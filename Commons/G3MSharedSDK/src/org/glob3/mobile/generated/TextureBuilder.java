@@ -27,11 +27,11 @@ public abstract class TextureBuilder
 {
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual const void createTextureFromImage(GL* gl, const IFactory* factory, const IImage* image, int width, int height, IImageListener* listener, boolean autodelete) const = 0;
+//ORIGINAL LINE: virtual const void createTextureFromImage(GL* gl, const IFactory* factory, IImage* image, int width, int height, IImageListener* listener, boolean autodelete) const = 0;
   public abstract void createTextureFromImage(GL gl, IFactory factory, IImage image, int width, int height, IImageListener listener, boolean autodelete);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual const void createTextureFromImages(GL* gl, const IFactory* factory, const java.util.ArrayList<const IImage*>& images, const java.util.ArrayList<RectangleI*>& rectangles, int width, int height, IImageListener* listener, boolean autodelete) const = 0;
+//ORIGINAL LINE: virtual const void createTextureFromImages(GL* gl, const IFactory* factory, const java.util.ArrayList<IImage*>& images, const java.util.ArrayList<RectangleI*>& rectangles, int width, int height, IImageListener* listener, boolean autodelete) const = 0;
   public abstract void createTextureFromImages(GL gl, IFactory factory, java.util.ArrayList<IImage> images, java.util.ArrayList<RectangleI> rectangles, int width, int height, IImageListener listener, boolean autodelete);
 
   public void dispose()

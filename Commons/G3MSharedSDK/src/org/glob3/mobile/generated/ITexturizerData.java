@@ -40,9 +40,8 @@ package org.glob3.mobile.generated;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class GLState;
 
-public interface ITexturizerData
+public class ITexturizerData
 {
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual boolean isTexturizerData() const = 0;
-  boolean isTexturizerData(); //Java needs to know that this is an interface
+//  virtual bool isTexturizerData() const = 0; //Java needs to know that this is an interface
+  virtual ~ITexturizerData() = 0;
 }

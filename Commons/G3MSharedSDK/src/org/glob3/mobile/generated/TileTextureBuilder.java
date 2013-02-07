@@ -127,7 +127,7 @@ public class TileTextureBuilder extends RCObject
 		return;
 	  }
 
-	  final java.util.ArrayList<IImage> images = new java.util.ArrayList<IImage>();
+	  java.util.ArrayList<IImage> images = new java.util.ArrayList<IImage>();
 	  java.util.ArrayList<RectangleI> rectangles = new java.util.ArrayList<RectangleI>();
 	  String textureId = _tile.getKey().tinyDescription();
 
@@ -156,12 +156,6 @@ public class TileTextureBuilder extends RCObject
 	  {
 		_textureBuilder.createTextureFromImages(_gl, _factory, images, rectangles, textureWidth, textureHeight, new TextureUploader(this, rectangles, textureId), true);
 	  }
-
-	  ///#ifdef C_CODE
-	  //      for (int i = 0; i < rectangles.size(); i++) {
-	  //        delete rectangles[i];
-	  //      }
-	  ///#endif
 
 	}
   }
@@ -194,7 +188,7 @@ public class TileTextureBuilder extends RCObject
 	}
   }
 
-  public final void finalize()
+  public final void done()
   {
 	if (!_finalized)
 	{
@@ -235,7 +229,7 @@ public class TileTextureBuilder extends RCObject
 		ILogger.instance().logInfo("Completed with cancelation\n");
 	  }
 
-	  finalize();
+	  done();
 	}
   }
 

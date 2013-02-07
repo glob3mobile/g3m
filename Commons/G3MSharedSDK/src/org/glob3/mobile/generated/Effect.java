@@ -11,8 +11,8 @@ public abstract class Effect
 	if (f > 1)
 		return 1;
 
-//    return sigmoid(f);
-//    return gently(f, 0.6, 0.85);
+	//    return sigmoid(f);
+	//    return gently(f, 0.6, 0.85);
 	final double result = gently(f, 0.25, 0.75);
 	if (result < 0)
 		return 0;

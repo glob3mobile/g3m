@@ -33,8 +33,9 @@ package org.glob3.mobile.generated;
 public class Petition
 {
   private final Sector _sector;
-  final private URL _url; //Conversor creates class "Url"
   private IImage _image;
+
+  final private URL _url; //Conversor creates class "Url"
 
   private final long _timeToCacheInMS;
 
@@ -92,7 +93,7 @@ public class Petition
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const IImage* getImage() const
+//ORIGINAL LINE: IImage* getImage() const
   public final IImage getImage()
   {
 	return _image;

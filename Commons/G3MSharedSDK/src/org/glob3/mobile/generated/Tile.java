@@ -252,6 +252,8 @@ public class Tile
 		  _texturizedMesh.dispose();
 	  _texturizedMesh = null;
   
+	  if (_texturizerData != null)
+		  _texturizerData.dispose();
 	  _texturizerData = null;
   
 	  setTexturizerDirty(true);
@@ -300,6 +302,8 @@ public class Tile
 	if (_tessellatorMesh != null)
 		_tessellatorMesh.dispose();
   
+	if (_texturizerData != null)
+		_texturizerData.dispose();
 	_texturizerData = null;
   
 	if (_texturizedMesh != null)

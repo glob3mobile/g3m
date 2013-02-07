@@ -24,10 +24,7 @@ public class TileTextureBuilderHolder implements ITexturizerData
 	}
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isTexturizerData() const
-  public final boolean isTexturizerData()
-  {
-	return true;
-  }
+//  bool isTexturizerData() const{
+//    return true;
+//  }
 }

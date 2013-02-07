@@ -21,7 +21,7 @@ public class CPUTextureBuilder extends TextureBuilder
 {
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const void createTextureFromImage(GL* gl, const IFactory* factory, const IImage* image, int width, int height, IImageListener* listener, boolean autodelete) const
+//ORIGINAL LINE: const void createTextureFromImage(GL* gl, const IFactory* factory, IImage* image, int width, int height, IImageListener* listener, boolean autodelete) const
   public final void createTextureFromImage(GL gl, IFactory factory, IImage image, int width, int height, IImageListener listener, boolean autodelete)
   {
 	if (image == null)
@@ -40,7 +40,7 @@ public class CPUTextureBuilder extends TextureBuilder
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const void createTextureFromImages(GL* gl, const IFactory* factory, const java.util.ArrayList<const IImage*>& images, const java.util.ArrayList<RectangleI*>& rectangles, int width, int height, IImageListener* listener, boolean autodelete) const
+//ORIGINAL LINE: const void createTextureFromImages(GL* gl, const IFactory* factory, const java.util.ArrayList<IImage*>& images, const java.util.ArrayList<RectangleI*>& rectangles, int width, int height, IImageListener* listener, boolean autodelete) const
   public final void createTextureFromImages(GL gl, IFactory factory, java.util.ArrayList<IImage> images, java.util.ArrayList<RectangleI> rectangles, int width, int height, IImageListener listener, boolean autodelete)
   {
   

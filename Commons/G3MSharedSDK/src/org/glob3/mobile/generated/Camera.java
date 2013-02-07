@@ -51,7 +51,6 @@ public class Camera
 
   public void dispose()
   {
-
   }
 
   public final void copyFrom(Camera that)
