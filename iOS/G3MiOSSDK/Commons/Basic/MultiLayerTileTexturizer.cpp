@@ -130,9 +130,9 @@ public:
 
   virtual ~TileTextureBuilderHolder();
 
-  bool isTexturizerData() const{
-    return true;
-  }
+//  bool isTexturizerData() const{
+//    return true;
+//  }
 };
 
 
@@ -302,8 +302,8 @@ public:
         return;
       }
 
-      std::vector<const IImage*> images;
-      std::vector<RectangleI*>   rectangles;
+      std::vector<IImage*>     images;
+      std::vector<RectangleI*> rectangles;
       std::string textureId = _tile->getKey().tinyDescription();
 
       const int textureWidth  = _parameters->_tileTextureWidth;
@@ -313,7 +313,7 @@ public:
 
       for (int i = 0; i < _petitionsCount; i++) {
         const Petition* petition = _petitions[i];
-        const IImage* image = petition->getImage();
+        IImage* image = petition->getImage();
 
         if (image != NULL) {
           images.push_back(image);
@@ -338,12 +338,6 @@ public:
                                                  new TextureUploader(this, rectangles, textureId),
                                                  true);
       }
-
-      //#ifdef C_CODE
-      //      for (int i = 0; i < rectangles.size(); i++) {
-      //        delete rectangles[i];
-      //      }
-      //#endif
 
 #ifdef JAVA_CODE
     }
@@ -388,7 +382,7 @@ public:
 #endif
   }
 
-  void finalize() {
+  void done() {
     if (!_finalized) {
       _finalized = true;
 
@@ -419,7 +413,7 @@ public:
         ILogger::instance()->logInfo("Completed with cancelation\n");
       }
 
-      finalize();
+      done();
     }
   }
 
@@ -452,7 +446,7 @@ public:
   }
 
   void stepDownloaded(int position,
-                      const IImage* image) {
+                      IImage* image) {
     if (_canceled) {
       return;
     }

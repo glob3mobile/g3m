@@ -58,9 +58,7 @@ Tile::~Tile() {
 
   delete _tessellatorMesh;
 
-#ifdef C_CODE
   delete _texturizerData;
-#endif
   _texturizerData = NULL;
 
   delete _texturizedMesh;
@@ -305,9 +303,7 @@ void Tile::deleteTexturizedMesh(TileTexturizer* texturizer) {
     delete _texturizedMesh;
     _texturizedMesh = NULL;
 
-#ifdef C_CODE
     delete _texturizerData;
-#endif
     _texturizerData = NULL;
 
     setTexturizerDirty(true);

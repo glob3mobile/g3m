@@ -25,14 +25,14 @@ public:
 
   virtual const void createTextureFromImage(GL* gl,
                                             const IFactory* factory,
-                                            const IImage* image,
+                                            IImage* image,
                                             int width, int height,
                                             IImageListener* listener,
                                             bool autodelete) const = 0;
 
   virtual const void createTextureFromImages(GL* gl,
                                              const IFactory* factory,
-                                             const std::vector<const IImage*>& images,
+                                             const std::vector<IImage*>& images,
                                              const std::vector<RectangleI*>& rectangles,
                                              int width, int height,
                                              IImageListener* listener,

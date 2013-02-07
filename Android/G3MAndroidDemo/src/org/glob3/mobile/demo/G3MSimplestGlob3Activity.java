@@ -4,7 +4,6 @@ package org.glob3.mobile.demo;
 
 import java.util.ArrayList;
 
-import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.BusyMeshRenderer;
 import org.glob3.mobile.generated.CachedDownloader;
 import org.glob3.mobile.generated.CameraDoubleDragHandler;
@@ -15,14 +14,11 @@ import org.glob3.mobile.generated.CameraSingleDragHandler;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.CompositeRenderer;
 import org.glob3.mobile.generated.GInitializationTask;
-import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.LayerSet;
-import org.glob3.mobile.generated.Mark;
-import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.Sector;
@@ -110,19 +106,19 @@ public class G3MSimplestGlob3Activity
       mainRenderer.addRenderer(tileRenderer);
 
 
-      final MarksRenderer marksRenderer = new MarksRenderer(false);
-      final Mark m1 = new Mark("Fuerteventura", //
-               new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false), //
-               new Geodetic3D(Angle.fromDegrees(28.05), Angle.fromDegrees(-14.36), 0), //
-               false);
-      marksRenderer.addMark(m1);
-
-      final Mark m3 = new Mark(
-               "Washington, DC", //
-               new Geodetic3D(Angle.fromDegreesMinutesSeconds(38, 53, 42.24), Angle.fromDegreesMinutesSeconds(-77, 2, 10.92), 100), //
-               0);
-      marksRenderer.addMark(m3);
-      mainRenderer.addRenderer(marksRenderer);
+      //      final MarksRenderer marksRenderer = new MarksRenderer(false);
+      //      final Mark m1 = new Mark("Fuerteventura", //
+      //               new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false), //
+      //               new Geodetic3D(Angle.fromDegrees(28.05), Angle.fromDegrees(-14.36), 0), //
+      //               false);
+      //      marksRenderer.addMark(m1);
+      //
+      //      final Mark m3 = new Mark(
+      //               "Washington, DC", //
+      //               new Geodetic3D(Angle.fromDegreesMinutesSeconds(38, 53, 42.24), Angle.fromDegreesMinutesSeconds(-77, 2, 10.92), 100), //
+      //               0);
+      //      marksRenderer.addMark(m3);
+      //      mainRenderer.addRenderer(marksRenderer);
 
 
       final org.glob3.mobile.generated.Renderer busyRenderer = new BusyMeshRenderer();
