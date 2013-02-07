@@ -27,25 +27,25 @@ public class UniformsStruct
 
   public UniformsStruct()
   {
-	Projection = null;
-	Modelview = null;
-	Sampler = null;
-	EnableTexture = null;
-	FlatColor = null;
-	TranslationTexCoord = null;
-	ScaleTexCoord = null;
-	PointSize = null;
+    Projection = null;
+    Modelview = null;
+    Sampler = null;
+    EnableTexture = null;
+    FlatColor = null;
+    TranslationTexCoord = null;
+    ScaleTexCoord = null;
+    PointSize = null;
 
-	//FOR BILLBOARDING
-	BillBoard = null;
-	ViewPortExtent = null;
-	TextureExtent = null;
+    //FOR BILLBOARDING
+    BillBoard = null;
+    ViewPortExtent = null;
+    TextureExtent = null;
 
-	//FOR COLOR MIXING
-	FlatColorIntensity = null;
-	EnableColorPerVertex = null;
-	EnableFlatColor = null;
-	ColorPerVertexIntensity = null;
+    //FOR COLOR MIXING
+    FlatColorIntensity = null;
+    EnableColorPerVertex = null;
+    EnableFlatColor = null;
+    ColorPerVertexIntensity = null;
   }
 
   public final void deleteUniformsIDs()
@@ -54,6 +54,6 @@ public class UniformsStruct
 
   public void dispose()
   {
-	deleteUniformsIDs();
+    deleteUniformsIDs();
   }
 }

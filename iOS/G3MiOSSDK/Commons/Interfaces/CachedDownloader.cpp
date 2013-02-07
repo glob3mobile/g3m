@@ -209,6 +209,9 @@ void CachedDownloader::cancelRequest(long long requestId) {
 }
 
 IImage* CachedDownloader::getCachedImage(const URL& url) {
+  //return _storage->isAvailable() ? _storage->readImage(url) : NULL;
+
+
   if ( (_lastImage != NULL) && (_lastImageURL != NULL) ) {
     if (_lastImageURL->isEqualsTo(url)) {
       // ILogger::instance()->logInfo("Used chached image for %s", url.description().c_str());

@@ -17,7 +17,6 @@ package org.glob3.mobile.generated;
 
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Geodetic2D;
 
 public class GEO2DMultiLineStringGeometry extends GEOMultiLineStringGeometry
@@ -38,34 +37,34 @@ public class GEO2DMultiLineStringGeometry extends GEOMultiLineStringGeometry
   //  }
   //  return composite;
   
-	FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.firstVertex(), rc.getPlanet(), Geodetic2D.zero());
+    FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.firstVertex(), rc.getPlanet(), Geodetic2D.zero());
   
-	final int coordinatesArrayCount = _coordinatesArray.size();
-	for (int i = 0; i < coordinatesArrayCount; i++)
-	{
-	  java.util.ArrayList<Geodetic2D> coordinates = _coordinatesArray.get(i);
-	  final int coordinatesCount = coordinates.size();
-	  for (int j = 0; j < coordinatesCount; j++)
-	  {
-		Geodetic2D coordinate = coordinates.get(j);
-		vertices.add(coordinate);
-		if ((j > 0) && (j < (coordinatesCount-1)))
-		{
-		  vertices.add(coordinate);
-		}
-	  }
-	}
+    final int coordinatesArrayCount = _coordinatesArray.size();
+    for (int i = 0; i < coordinatesArrayCount; i++)
+    {
+      java.util.ArrayList<Geodetic2D> coordinates = _coordinatesArray.get(i);
+      final int coordinatesCount = coordinates.size();
+      for (int j = 0; j < coordinatesCount; j++)
+      {
+        Geodetic2D coordinate = coordinates.get(j);
+        vertices.add(coordinate);
+        if ((j > 0) && (j < (coordinatesCount-1)))
+        {
+          vertices.add(coordinate);
+        }
+      }
+    }
   
-	Color color = Color.newFromRGBA(1, 1, 1, 1);
-	final float lineWidth = 2F;
+    Color color = Color.newFromRGBA(1, 1, 1, 1);
+    final float lineWidth = 2F;
   
-	return new DirectMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), lineWidth, 1, color);
+    return new DirectMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), lineWidth, 1, color);
   }
 
 
   public GEO2DMultiLineStringGeometry(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray)
   {
-	  _coordinatesArray = coordinatesArray;
+     _coordinatesArray = coordinatesArray;
 
   }
 
@@ -76,21 +75,21 @@ public class GEO2DMultiLineStringGeometry extends GEOMultiLineStringGeometry
   
   public void dispose()
   {
-	final int coordinatesArrayCount = _coordinatesArray.size();
-	for (int i = 0; i < coordinatesArrayCount; i++)
-	{
-	  java.util.ArrayList<Geodetic2D> coordinates = _coordinatesArray.get(i);
-	  final int coordinatesCount = coordinates.size();
-	  for (int j = 0; j < coordinatesCount; j++)
-	  {
-		Geodetic2D coordinate = coordinates.get(j);
-		if (coordinate != null)
-			coordinate.dispose();
-	  }
-	  coordinates = null;
-	}
+    final int coordinatesArrayCount = _coordinatesArray.size();
+    for (int i = 0; i < coordinatesArrayCount; i++)
+    {
+      java.util.ArrayList<Geodetic2D> coordinates = _coordinatesArray.get(i);
+      final int coordinatesCount = coordinates.size();
+      for (int j = 0; j < coordinatesCount; j++)
+      {
+        Geodetic2D coordinate = coordinates.get(j);
+        if (coordinate != null)
+           coordinate.dispose();
+      }
+      coordinates = null;
+    }
   
-	_coordinatesArray = null;
+    _coordinatesArray = null;
   }
 
 }

@@ -18,7 +18,6 @@ package org.glob3.mobile.generated;
 
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class GEOFeature;
 
 public class GEOFeatureCollection extends GEOObject
@@ -27,28 +26,28 @@ public class GEOFeatureCollection extends GEOObject
 
   public final void addFeature(GEOFeature feature)
   {
-	_features.add(feature);
+    _features.add(feature);
   }
 
   public void dispose()
   {
-	final int featuresCount = _features.size();
-	for (int i = 0; i < featuresCount; i++)
-	{
-	  GEOFeature feature = _features.get(i);
-	  if (feature != null)
-		  feature.dispose();
-	}
+    final int featuresCount = _features.size();
+    for (int i = 0; i < featuresCount; i++)
+    {
+      GEOFeature feature = _features.get(i);
+      if (feature != null)
+         feature.dispose();
+    }
   }
 
   public final void render(G3MRenderContext rc, GLState parentState)
   {
-	final int featuresCount = _features.size();
-	for (int i = 0; i < featuresCount; i++)
-	{
-	  GEOFeature feature = _features.get(i);
-	  feature.render(rc, parentState);
-	}
+    final int featuresCount = _features.size();
+    for (int i = 0; i < featuresCount; i++)
+    {
+      GEOFeature feature = _features.get(i);
+      feature.render(rc, parentState);
+    }
   }
 
 }

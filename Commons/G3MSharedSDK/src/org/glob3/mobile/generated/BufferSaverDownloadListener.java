@@ -9,71 +9,71 @@ public class BufferSaverDownloadListener implements IBufferDownloadListener
 
   public BufferSaverDownloadListener(CachedDownloader downloader, IBufferDownloadListener listener, boolean deleteListener, IStorage storage, TimeInterval timeToCache)
   {
-	  _downloader = downloader;
-	  _listener = listener;
-	  _deleteListener = deleteListener;
-	  _storage = storage;
-	  _timeToCache = timeToCache;
+     _downloader = downloader;
+     _listener = listener;
+     _deleteListener = deleteListener;
+     _storage = storage;
+     _timeToCache = timeToCache;
 
   }
 
   public final void deleteListener()
   {
-	if (_deleteListener)
-	{
-	  _listener = null;
-	}
+    if (_deleteListener)
+    {
+      _listener = null;
+    }
   }
 
   public final void saveBuffer(URL url, IByteBuffer buffer)
   {
-	if (buffer != null)
-	{
-	  if (_storage.isAvailable())
-	  {
-		//if (!_cacheStorage->containsBuffer(url)) {
-		_downloader.countSave();
+    if (buffer != null)
+    {
+      if (_storage.isAvailable())
+      {
+        //if (!_cacheStorage->containsBuffer(url)) {
+        _downloader.countSave();
 
-		_storage.saveBuffer(url, buffer, _timeToCache, _downloader.saveInBackground());
-		//}
-	  }
-	  else
-	  {
-		ILogger.instance().logWarning("The cacheStorage is not available, skipping buffer save.");
-	  }
-	}
+        _storage.saveBuffer(url, buffer, _timeToCache, _downloader.saveInBackground());
+        //}
+      }
+      else
+      {
+        ILogger.instance().logWarning("The cacheStorage is not available, skipping buffer save.");
+      }
+    }
   }
 
   public final void onDownload(URL url, IByteBuffer data)
   {
-	saveBuffer(url, data);
+    saveBuffer(url, data);
 
-	_listener.onDownload(url, data);
+    _listener.onDownload(url, data);
 
-	deleteListener();
+    deleteListener();
   }
 
   public final void onError(URL url)
   {
-	_listener.onError(url);
+    _listener.onError(url);
 
-	deleteListener();
+    deleteListener();
   }
 
   public final void onCanceledDownload(URL url, IByteBuffer buffer)
   {
-	saveBuffer(url, buffer);
+    saveBuffer(url, buffer);
 
-	_listener.onCanceledDownload(url, buffer);
+    _listener.onCanceledDownload(url, buffer);
 
-	// no deleteListener() call, onCanceledDownload() is always called before onCancel().
+    // no deleteListener() call, onCanceledDownload() is always called before onCancel().
   }
 
   public final void onCancel(URL url)
   {
-	_listener.onCancel(url);
+    _listener.onCancel(url);
 
-	deleteListener();
+    deleteListener();
   }
 
 }

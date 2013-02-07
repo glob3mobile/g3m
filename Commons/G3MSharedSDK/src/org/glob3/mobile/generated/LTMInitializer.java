@@ -11,11 +11,11 @@ public class LTMInitializer extends LazyTextureMappingInitializer
 
   public LTMInitializer(Tile tile, Tile ancestor, IFloatBuffer texCoords)
   {
-	  _tile = tile;
-	  _ancestor = ancestor;
-	  _texCoords = texCoords;
-	  _scale = new MutableVector2D(1,1);
-	  _translation = new MutableVector2D(0,0);
+     _tile = tile;
+     _ancestor = ancestor;
+     _texCoords = texCoords;
+     _scale = new MutableVector2D(1,1);
+     _translation = new MutableVector2D(0,0);
 
   }
 
@@ -26,36 +26,30 @@ public class LTMInitializer extends LazyTextureMappingInitializer
 
   public final void initialize()
   {
-	// The default scale and translation are ok when (tile == _ancestor)
-	if (_tile != _ancestor)
-	{
-	  final Sector tileSector = _tile.getSector();
-	  final Sector ancestorSector = _ancestor.getSector();
+    // The default scale and translation are ok when (tile == _ancestor)
+    if (_tile != _ancestor)
+    {
+      final Sector tileSector = _tile.getSector();
+      final Sector ancestorSector = _ancestor.getSector();
 
-	  _scale = tileSector.getScaleFactor(ancestorSector).asMutableVector2D();
-	  _translation = tileSector.getTranslationFactor(ancestorSector).asMutableVector2D();
-	}
+      _scale = tileSector.getScaleFactor(ancestorSector).asMutableVector2D();
+      _translation = tileSector.getTranslationFactor(ancestorSector).asMutableVector2D();
+    }
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const MutableVector2D getScale() const
   public final MutableVector2D getScale()
   {
-	return _scale;
+    return _scale;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const MutableVector2D getTranslation() const
   public final MutableVector2D getTranslation()
   {
-	return _translation;
+    return _translation;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: IFloatBuffer* getTexCoords() const
   public final IFloatBuffer getTexCoords()
   {
-	return _texCoords;
+    return _texCoords;
   }
 
 }

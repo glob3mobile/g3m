@@ -26,69 +26,67 @@ public class CircleShape extends AbstractMeshShape
   protected final Mesh createMesh(G3MRenderContext rc)
   {
   
-	FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
+    FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
   
-	// first is the center
-	vertices.add(0.0, 0.0, 0.0);
+    // first is the center
+    vertices.add(0.0, 0.0, 0.0);
   
-	final double twicePi = IMathUtils.instance().pi() * 2;
+    final double twicePi = IMathUtils.instance().pi() * 2;
   
-	for (int i = 0; i <= _steps; i++)
-	{
-	  final double angleInRadians = i * twicePi / _steps;
-	  final double x = _radius * IMathUtils.instance().cos(angleInRadians);
-	  final double y = _radius * IMathUtils.instance().sin(angleInRadians);
-	  vertices.add(x, y, 0);
-	}
+    for (int i = 0; i <= _steps; i++)
+    {
+      final double angleInRadians = i * twicePi / _steps;
+      final double x = _radius * IMathUtils.instance().cos(angleInRadians);
+      final double y = _radius * IMathUtils.instance().sin(angleInRadians);
+      vertices.add(x, y, 0);
+    }
   
-	Color color = (_color == null) ? null : new Color(_color);
+    Color color = (_color == null) ? null : new Color(_color);
   
-	return new DirectMesh(GLPrimitive.triangleFan(), true, Vector3D.zero(), vertices.create(), 1, 1, color);
+    return new DirectMesh(GLPrimitive.triangleFan(), true, Vector3D.zero(), vertices.create(), 1, 1, color);
   }
 
   public CircleShape(Geodetic3D position, float radius, Color color)
   {
-	  this(position, radius, color, 64);
+     this(position, radius, color, 64);
   }
   public CircleShape(Geodetic3D position, float radius)
   {
-	  this(position, radius, null, 64);
+     this(position, radius, null, 64);
   }
-//C++ TO JAVA CONVERTER NOTE: Java does not allow default values for parameters. Overloaded methods are inserted above.
-//ORIGINAL LINE: CircleShape(Geodetic3D* position, float radius, Color* color = null, int steps = 64) : AbstractMeshShape(position), _radius(radius), _color(color), _steps(steps)
   public CircleShape(Geodetic3D position, float radius, Color color, int steps)
   {
-	  super(position);
-	  _radius = radius;
-	  _color = color;
-	  _steps = steps;
+     super(position);
+     _radius = radius;
+     _color = color;
+     _steps = steps;
 
   }
 
   public void dispose()
   {
-	if (_color != null)
-		_color.dispose();
+    if (_color != null)
+       _color.dispose();
   }
 
   public final void setRadius(float radius)
   {
-	if (_radius != radius)
-	{
-	  _radius = radius;
-	  cleanMesh();
-	}
+    if (_radius != radius)
+    {
+      _radius = radius;
+      cleanMesh();
+    }
   }
 
   public final void setColor(Color color)
   {
-	if (_color != color)
-	{
-	  if (_color != null)
-		  _color.dispose();
-	  _color = color;
-	  cleanMesh();
-	}
+    if (_color != color)
+    {
+      if (_color != null)
+         _color.dispose();
+      _color = color;
+      cleanMesh();
+    }
   }
 
 

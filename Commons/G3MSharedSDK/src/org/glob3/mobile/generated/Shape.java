@@ -18,11 +18,9 @@ package org.glob3.mobile.generated;
 
 ///#include <string>
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class MutableMatrix44D;
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class ShapePendingEffect;
 
 public abstract class Shape implements EffectTarget
@@ -39,106 +37,98 @@ public abstract class Shape implements EffectTarget
   private MutableMatrix44D _transformMatrix;
   private MutableMatrix44D createTransformMatrix(Planet planet)
   {
-	final MutableMatrix44D geodeticTransform = (_position == null) ? MutableMatrix44D.identity() : planet.createGeodeticTransformMatrix(_position);
+    final MutableMatrix44D geodeticTransform = (_position == null) ? MutableMatrix44D.identity() : planet.createGeodeticTransformMatrix(_position);
   
-	final MutableMatrix44D headingRotation = MutableMatrix44D.createRotationMatrix(_heading, Vector3D.downZ());
-	final MutableMatrix44D pitchRotation = MutableMatrix44D.createRotationMatrix(_pitch, Vector3D.upX());
-	final MutableMatrix44D scale = MutableMatrix44D.createScaleMatrix(_scaleX, _scaleY, _scaleZ);
-	final MutableMatrix44D localTransform = headingRotation.multiply(pitchRotation).multiply(scale);
+    final MutableMatrix44D headingRotation = MutableMatrix44D.createRotationMatrix(_heading, Vector3D.downZ());
+    final MutableMatrix44D pitchRotation = MutableMatrix44D.createRotationMatrix(_pitch, Vector3D.upX());
+    final MutableMatrix44D scale = MutableMatrix44D.createScaleMatrix(_scaleX, _scaleY, _scaleZ);
+    final MutableMatrix44D localTransform = headingRotation.multiply(pitchRotation).multiply(scale);
   
-	return new MutableMatrix44D(geodeticTransform.multiply(localTransform));
+    return new MutableMatrix44D(geodeticTransform.multiply(localTransform));
   }
   private MutableMatrix44D getTransformMatrix(Planet planet)
   {
-	if (_transformMatrix == null)
-	{
-	  _transformMatrix = createTransformMatrix(planet);
-	}
-	return _transformMatrix;
+    if (_transformMatrix == null)
+    {
+      _transformMatrix = createTransformMatrix(planet);
+    }
+    return _transformMatrix;
   }
 
   private java.util.ArrayList<ShapePendingEffect> _pendingEffects = new java.util.ArrayList<ShapePendingEffect>();
 
   protected void cleanTransformMatrix()
   {
-	if (_transformMatrix != null)
-		_transformMatrix.dispose();
-	_transformMatrix = null;
+    if (_transformMatrix != null)
+       _transformMatrix.dispose();
+    _transformMatrix = null;
   }
 
   public Shape(Geodetic3D position)
   {
-	  _position = position;
-	  _heading = new Angle(Angle.zero());
-	  _pitch = new Angle(Angle.zero());
-	  _scaleX = 1;
-	  _scaleY = 1;
-	  _scaleZ = 1;
-	  _transformMatrix = null;
+     _position = position;
+     _heading = new Angle(Angle.zero());
+     _pitch = new Angle(Angle.zero());
+     _scaleX = 1;
+     _scaleY = 1;
+     _scaleZ = 1;
+     _transformMatrix = null;
 
   }
 
   public void dispose()
   {
-	final int pendingEffectsCount = _pendingEffects.size();
-	for (int i = 0; i < pendingEffectsCount; i++)
-	{
-	  ShapePendingEffect pendingEffect = _pendingEffects.get(i);
-	  if (pendingEffect != null)
-		  pendingEffect.dispose();
-	}
+    final int pendingEffectsCount = _pendingEffects.size();
+    for (int i = 0; i < pendingEffectsCount; i++)
+    {
+      ShapePendingEffect pendingEffect = _pendingEffects.get(i);
+      if (pendingEffect != null)
+         pendingEffect.dispose();
+    }
   
-	if (_position != null)
-		_position.dispose();
+    if (_position != null)
+       _position.dispose();
   
-	if (_heading != null)
-		_heading.dispose();
-	if (_pitch != null)
-		_pitch.dispose();
+    if (_heading != null)
+       _heading.dispose();
+    if (_pitch != null)
+       _pitch.dispose();
   
-	if (_transformMatrix != null)
-		_transformMatrix.dispose();
+    if (_transformMatrix != null)
+       _transformMatrix.dispose();
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const Geodetic3D getPosition() const
   public final Geodetic3D getPosition()
   {
-	return _position;
+    return _position;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const Angle getHeading() const
   public final Angle getHeading()
   {
-	return _heading;
+    return _heading;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const Angle getPitch() const
   public final Angle getPitch()
   {
-	return _pitch;
+    return _pitch;
   }
 
   public final void setPosition(Geodetic3D position)
   {
-	if (_position != null)
-		_position.dispose();
-	_position = position;
-	cleanTransformMatrix();
+    if (_position != null)
+       _position.dispose();
+    _position = position;
+    cleanTransformMatrix();
   }
 
   public final void setAnimatedPosition(TimeInterval duration, Geodetic3D position)
   {
-	  setAnimatedPosition(duration, position, false);
+     setAnimatedPosition(duration, position, false);
   }
-//C++ TO JAVA CONVERTER NOTE: Java does not allow default values for parameters. Overloaded methods are inserted above.
-//ORIGINAL LINE: void setAnimatedPosition(const TimeInterval& duration, const Geodetic3D& position, boolean linearInterpolation =false)
   public final void setAnimatedPosition(TimeInterval duration, Geodetic3D position, boolean linearInterpolation)
   {
-	Effect effect = new ShapePositionEffect(duration, this, _position, position, linearInterpolation);
-	_pendingEffects.add(new ShapePendingEffect(effect, false));
+    Effect effect = new ShapePositionEffect(duration, this, _position, position, linearInterpolation);
+    _pendingEffects.add(new ShapePendingEffect(effect, false));
   
   //  delete _pendingEffect;
   //
@@ -153,55 +143,51 @@ public abstract class Shape implements EffectTarget
 
   public final void setAnimatedPosition(Geodetic3D position)
   {
-	  setAnimatedPosition(position, false);
+     setAnimatedPosition(position, false);
   }
-//C++ TO JAVA CONVERTER NOTE: Java does not allow default values for parameters. Overloaded methods are inserted above.
-//ORIGINAL LINE: void setAnimatedPosition(const Geodetic3D& position, boolean linearInterpolation=false)
   public final void setAnimatedPosition(Geodetic3D position, boolean linearInterpolation)
   {
-	setAnimatedPosition(TimeInterval.fromSeconds(3), position, linearInterpolation);
+    setAnimatedPosition(TimeInterval.fromSeconds(3), position, linearInterpolation);
   }
 
   public final void setHeading(Angle heading)
   {
-	if (_heading != null)
-		_heading.dispose();
-	_heading = new Angle(heading);
-	cleanTransformMatrix();
+    if (_heading != null)
+       _heading.dispose();
+    _heading = new Angle(heading);
+    cleanTransformMatrix();
   }
 
   public final void setPitch(Angle pitch)
   {
-	if (_pitch != null)
-		_pitch.dispose();
-	_pitch = new Angle(pitch);
-	cleanTransformMatrix();
+    if (_pitch != null)
+       _pitch.dispose();
+    _pitch = new Angle(pitch);
+    cleanTransformMatrix();
   }
 
   public final void setScale(double scaleX, double scaleY, double scaleZ)
   {
-	_scaleX = scaleX;
-	_scaleY = scaleY;
-	_scaleZ = scaleZ;
-	cleanTransformMatrix();
+    _scaleX = scaleX;
+    _scaleY = scaleY;
+    _scaleZ = scaleZ;
+    cleanTransformMatrix();
   }
 
   public final void setScale(Vector3D scale)
   {
-	setScale(scale._x, scale._y, scale._z);
+    setScale(scale._x, scale._y, scale._z);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Vector3D getScale() const
   public final Vector3D getScale()
   {
-	return new Vector3D(_scaleX, _scaleY, _scaleZ);
+    return new Vector3D(_scaleX, _scaleY, _scaleZ);
   }
 
   public final void setAnimatedScale(TimeInterval duration, double scaleX, double scaleY, double scaleZ)
   {
-	Effect effect = new ShapeScaleEffect(duration, this, _scaleX, _scaleY, _scaleZ, scaleX, scaleY, scaleZ);
-	_pendingEffects.add(new ShapePendingEffect(effect, false));
+    Effect effect = new ShapeScaleEffect(duration, this, _scaleX, _scaleY, _scaleZ, scaleX, scaleY, scaleZ);
+    _pendingEffects.add(new ShapePendingEffect(effect, false));
   
   //  delete _pendingEffect;
   //
@@ -215,23 +201,23 @@ public abstract class Shape implements EffectTarget
 
   public final void setAnimatedScale(double scaleX, double scaleY, double scaleZ)
   {
-	setAnimatedScale(TimeInterval.fromSeconds(1), scaleX, scaleY, scaleZ);
+    setAnimatedScale(TimeInterval.fromSeconds(1), scaleX, scaleY, scaleZ);
   }
 
   public final void setAnimatedScale(Vector3D scale)
   {
-	setAnimatedScale(scale._x, scale._y, scale._z);
+    setAnimatedScale(scale._x, scale._y, scale._z);
   }
 
   public final void setAnimatedScale(TimeInterval duration, Vector3D scale)
   {
-	setAnimatedScale(duration, scale._x, scale._y, scale._z);
+    setAnimatedScale(duration, scale._x, scale._y, scale._z);
   }
 
   public final void orbitCamera(TimeInterval duration, double fromDistance, double toDistance, Angle fromAzimuth, Angle toAzimuth, Angle fromAltitude, Angle toAltitude)
   {
-	Effect effect = new ShapeOrbitCameraEffect(duration, this, fromDistance, toDistance, fromAzimuth, toAzimuth, fromAltitude, toAltitude);
-	_pendingEffects.add(new ShapePendingEffect(effect, true));
+    Effect effect = new ShapeOrbitCameraEffect(duration, this, fromDistance, toDistance, fromAzimuth, toAzimuth, fromAltitude, toAltitude);
+    _pendingEffects.add(new ShapePendingEffect(effect, true));
   
   //  delete _pendingEffect;
   //
@@ -246,28 +232,28 @@ public abstract class Shape implements EffectTarget
 
   public final void render(G3MRenderContext rc, GLState parentState)
   {
-	if (isReadyToRender(rc))
-	{
+    if (isReadyToRender(rc))
+    {
   
-	  final int pendingEffectsCount = _pendingEffects.size();
-	  if (pendingEffectsCount > 0)
-	  {
-		EffectsScheduler effectsScheduler = rc.getEffectsScheduler();
-		for (int i = 0; i < pendingEffectsCount; i++)
-		{
-		  ShapePendingEffect pendingEffect = _pendingEffects.get(i);
-		  if (pendingEffect != null)
-		  {
-			EffectTarget target = pendingEffect._targetIsCamera ? rc.getNextCamera().getEffectTarget() : this;
-			effectsScheduler.cancellAllEffectsFor(target);
-			effectsScheduler.startEffect(pendingEffect._effect, target);
+      final int pendingEffectsCount = _pendingEffects.size();
+      if (pendingEffectsCount > 0)
+      {
+        EffectsScheduler effectsScheduler = rc.getEffectsScheduler();
+        for (int i = 0; i < pendingEffectsCount; i++)
+        {
+          ShapePendingEffect pendingEffect = _pendingEffects.get(i);
+          if (pendingEffect != null)
+          {
+            EffectTarget target = pendingEffect._targetIsCamera ? rc.getNextCamera().getEffectTarget() : this;
+            effectsScheduler.cancellAllEffectsFor(target);
+            effectsScheduler.startEffect(pendingEffect._effect, target);
   
-			if (pendingEffect != null)
-				pendingEffect.dispose();
-		  }
-		}
-		_pendingEffects.clear();
-	  }
+            if (pendingEffect != null)
+               pendingEffect.dispose();
+          }
+        }
+        _pendingEffects.clear();
+      }
   
   //    if (_pendingEffect != NULL) {
   //
@@ -278,16 +264,16 @@ public abstract class Shape implements EffectTarget
   //      _pendingEffect = NULL;
   //    }
   
-	  GL gl = rc.getGL();
+      GL gl = rc.getGL();
   
-	  gl.pushMatrix();
+      gl.pushMatrix();
   
-	  gl.multMatrixf(getTransformMatrix(rc.getPlanet()));
+      gl.multMatrixf(getTransformMatrix(rc.getPlanet()));
   
-	  rawRender(rc, parentState);
+      rawRender(rc, parentState);
   
-	  gl.popMatrix();
-	}
+      gl.popMatrix();
+    }
   }
 
   public void initialize(G3MContext context)
@@ -301,8 +287,6 @@ public abstract class Shape implements EffectTarget
 
   public abstract boolean isTransparent(G3MRenderContext rc);
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void unusedMethod() const
   public final void unusedMethod()
   {
   }

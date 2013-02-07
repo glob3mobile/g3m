@@ -7,13 +7,13 @@ public enum TouchEventType
   LongPress,
   Scroll;
 
-	public int getValue()
-	{
-		return this.ordinal();
-	}
+   public int getValue()
+   {
+      return this.ordinal();
+   }
 
-	public static TouchEventType forValue(int value)
-	{
-		return values()[value];
-	}
+   public static TouchEventType forValue(int value)
+   {
+      return values()[value];
+   }
 }

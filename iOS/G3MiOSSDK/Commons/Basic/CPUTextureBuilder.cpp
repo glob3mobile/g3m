@@ -15,7 +15,7 @@
 
 const void CPUTextureBuilder::createTextureFromImage(GL* gl,
                                                      const IFactory* factory,
-                                                     const IImage* image,
+                                                     IImage* image,
                                                      int width, int height,
                                                      IImageListener* listener,
                                                      bool autodelete) const{
@@ -78,7 +78,7 @@ private:
 
   IImageListener* _listener;
   const bool      _autodelete;
-
+  
 public:
   CPUTextureBuilderSubImageImageLister(int width, int height,
                                        IImageListener* listener,
@@ -104,7 +104,7 @@ public:
 
 const void CPUTextureBuilder::createTextureFromImages(GL* gl,
                                                       const IFactory* factory,
-                                                      const std::vector<const IImage*>& images,
+                                                      const std::vector<IImage*>& images,
                                                       const std::vector<RectangleI*>& rectangles,
                                                       int width, int height,
                                                       IImageListener* listener,

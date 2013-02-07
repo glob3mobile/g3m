@@ -22,15 +22,14 @@ public class RCObject
 {
   private int _referenceCounter;
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void _suicide() const
   private void _suicide()
   {
+    this.dispose();
   }
 
   protected RCObject() // the object starts retained
   {
-	  _referenceCounter = 1;
+     _referenceCounter = 1;
 
   }
 
@@ -39,23 +38,19 @@ public class RCObject
 
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void _retain() const
   public final void _retain()
   {
-	_referenceCounter++;
+    _referenceCounter++;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void _release() const
   public final void _release()
   {
-	if (--_referenceCounter == 0)
-	{
-	  _suicide();
-	}
+    if (--_referenceCounter == 0)
+    {
+      _suicide();
+    }
   }
 
-//  virtual const std::string description() const = 0;
+  //virtual const std::string description() const = 0;
 
 }

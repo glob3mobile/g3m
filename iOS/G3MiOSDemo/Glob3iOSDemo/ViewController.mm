@@ -343,7 +343,7 @@ public:
 //                                  false,
 //                                  NULL,
 //                                  TimeInterval::fromDays(30));
-    bing->setEnable(true);
+    bing->setEnable(false);
     layerSet->addLayer(bing);
   }
 
@@ -362,7 +362,7 @@ public:
     WMSLayer *osm = new WMSLayer("osm_auto:all",
                                  URL("http://129.206.228.72/cached/osm", false),
                                  WMS_1_1_0,
-                                 // Sector::fromDegrees(-85.05, -180.0, 85.05, 180.0),
+                                 //Sector::fromDegrees(-85.05, -180.0, 85.05, 180.0),
                                  Sector::fullSphere(),
                                  "image/jpeg",
                                  "EPSG:4326",
@@ -370,22 +370,22 @@ public:
                                  false,
                                  NULL,
                                  TimeInterval::fromDays(30));
-    osm->setEnable(false);
+    osm->setEnable(true);
     layerSet->addLayer(osm);
   }
 
   
-  WMSLayer* pressure = new WMSLayer("pressure_cntr", //
-                                    URL("http://wms.openweathermap.org/service", false), //
-                                    WMS_1_1_0, //
-                                    Sector::fromDegrees(-85.05, -180.0, 85.05, 180.0), //
-                                    "image/png", //
-                                    "EPSG:4326", //
-                                    "", //
-                                    true, //
-                                    NULL,
-                                    TimeInterval::zero());
-  layerSet->addLayer(pressure);
+//  WMSLayer* pressure = new WMSLayer("pressure_cntr", //
+//                                    URL("http://wms.openweathermap.org/service", false), //
+//                                    WMS_1_1_0, //
+//                                    Sector::fromDegrees(-85.05, -180.0, 85.05, 180.0), //
+//                                    "image/png", //
+//                                    "EPSG:4326", //
+//                                    "", //
+//                                    true, //
+//                                    NULL,
+//                                    TimeInterval::zero());
+//  layerSet->addLayer(pressure);
 
   const bool usePnoaLayer = false;
   if (usePnoaLayer) {

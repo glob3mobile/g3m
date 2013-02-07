@@ -18,30 +18,30 @@ public class CameraGoToPositionEffect extends EffectWithDuration
 
   public CameraGoToPositionEffect(TimeInterval duration, Geodetic3D initialPos, Geodetic3D finalPos)
   {
-	  super(duration);
-	  _initialPos = new Geodetic3D(initialPos);
-	  _finalPos = new Geodetic3D(finalPos);
+     super(duration);
+     _initialPos = new Geodetic3D(initialPos);
+     _finalPos = new Geodetic3D(finalPos);
   }
 
   public void doStep(G3MRenderContext rc, TimeInterval when)
   {
-	//const double percent = pace( percentDone(when) );
-	final double percent = percentDone(when);
-	Camera camera = rc.getNextCamera();
+    //const double percent = pace( percentDone(when) );
+    final double percent = percentDone(when);
+    Camera camera = rc.getNextCamera();
 
-	final Geodetic3D g = Geodetic3D.interpolation(_initialPos, _finalPos, percent);
+    final Geodetic3D g = Geodetic3D.interpolation(_initialPos, _finalPos, percent);
 
-	camera.orbitTo(g);
+    camera.orbitTo(g);
   }
 
   public void stop(G3MRenderContext rc, TimeInterval when)
   {
-	rc.getNextCamera().orbitTo(_finalPos);
+    rc.getNextCamera().orbitTo(_finalPos);
   }
 
   public void cancel(TimeInterval when)
   {
-	// do nothing, just leave the effect in the intermediate state
+    // do nothing, just leave the effect in the intermediate state
   }
 
 }

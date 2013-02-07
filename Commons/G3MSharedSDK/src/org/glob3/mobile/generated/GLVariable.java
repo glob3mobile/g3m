@@ -5,11 +5,11 @@ public class GLVariable
 
   public static int viewport()
   {
-	  return _viewport;
+     return _viewport;
   }
 
   public static void init(INativeGL ngl)
   {
-	_viewport = ngl.Variable_Viewport();
+    _viewport = ngl.Variable_Viewport();
   }
 }

@@ -5,11 +5,11 @@ public class GLError
 
   public static int noError()
   {
-	  return _noError;
+     return _noError;
   }
 
   public static void init(INativeGL ngl)
   {
-	_noError = ngl.Error_NoError();
+    _noError = ngl.Error_NoError();
   }
 }

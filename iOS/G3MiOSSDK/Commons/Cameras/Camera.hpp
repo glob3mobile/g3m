@@ -147,7 +147,6 @@ public:
     delete _halfFrustumInModelCoordinates;
     delete _geodeticCenterOfView;
 #endif
-
   }
 
   void copyFrom(const Camera &c);

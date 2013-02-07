@@ -24,8 +24,6 @@ public abstract class IIntBuffer implements IBuffer
   {
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual int get(int i) const = 0;
   public abstract int get(int i);
 
   public abstract void put(int i, int value);
