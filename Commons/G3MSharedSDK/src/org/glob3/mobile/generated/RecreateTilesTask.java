@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class RecreateTilesTask implements GTask
+public class RecreateTilesTask extends GTask
 {
   private TileRenderer _tileRenderer;
   public RecreateTilesTask(TileRenderer tileRenderer)
