@@ -83,7 +83,6 @@ public class MarksRenderer extends LeafRenderer
     }
   }
 
-  private Vector2D render_textureTranslation = new Vector2D(0.0, 0.0);
   public void render(G3MRenderContext rc, GLState parentState)
   {
     //  rc.getLogger()->logInfo("MarksRenderer::render()");
@@ -101,9 +100,9 @@ public class MarksRenderer extends LeafRenderer
     state.enableVerticesPosition();
     gl.setState(state);
   
-//    static Vector2D textureTranslation(0.0, 0.0);
-    static Vector2D = new static(1.0, 1.0);
-    gl.transformTexCoords(textureScale, render_textureTranslation);
+    Vector2D textureTranslation = new Vector2D(0.0, 0.0);
+    Vector2D textureScale = new Vector2D(1.0, 1.0);
+    gl.transformTexCoords(textureScale, textureTranslation);
   
     gl.setBlendFuncSrcAlpha();
   
