@@ -55,13 +55,6 @@ public class G3MSimplestGlob3Activity
 
   @Override
   public void onCreate(final Bundle savedInstanceState) {
-    final long mill = TimeInterval.fromDays(30).milliseconds();
-    System.out.println("TimeInterval.fromDays(30): " + mill);
-
-    final long expiration = System.currentTimeMillis() + mill;
-    System.out.println("Expiration: " + expiration);
-
-
     super.onCreate(savedInstanceState);
 
     // initialize a default widget by using a builder
@@ -147,7 +140,7 @@ public class G3MSimplestGlob3Activity
 
     final boolean logDownloaderStatistics = false;
 
-
+    // PRECACHING
     final GInitializationTask initializationTask = new GInitializationTask() {
       @Override
       public void run(final G3MContext ctx) {

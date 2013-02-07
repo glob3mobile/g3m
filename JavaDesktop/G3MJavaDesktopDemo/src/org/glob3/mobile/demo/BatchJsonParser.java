@@ -24,7 +24,7 @@ import org.glob3.mobile.specific.StringBuilder_JavaDesktop;
 
 
 public class BatchJsonParser {
-  public static void main(final String[] args) {
+  public static void main2(final String[] args) {
     IStringBuilder.setInstance(new StringBuilder_JavaDesktop());
     IMathUtils.setInstance(new MathUtils_JavaDesktop());
     IFactory.setInstance(new Factory_JavaDesktop());
@@ -47,11 +47,14 @@ public class BatchJsonParser {
         new String(
             "{\"array\":[3,null,4],\"formatted_address\" : \"10440 Aldeanueva, Cáceres, España\"}"),
         new File("/home/vidalete/array.bson"));
-
+    checkJsonParser(
+        new String(
+            "{\"J\":5,\"0\":\"N\", \"objectNull\" : null, \"arrayWithNulls\" : [\"hola\", 1, 0.5, null, \"adios\"]}"),
+        new File("/home/vidalete/nulles.bson"));
   }
 
 
-  public static void main2(final String[] args) {
+  public static void main(final String[] args) {
 
     System.out.println("Batch JSON Parser Desktop 0.1");
     System.out.println("-----------------------------\n");

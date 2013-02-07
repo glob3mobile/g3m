@@ -24,325 +24,362 @@ import android.util.Log;
 
 
 public final class SQLiteStorage_Android
-         extends
-            IStorage {
+    extends
+      IStorage {
 
-   private final String                  _databaseName;
-   private final android.content.Context _androidContext;
-
-
-   private final MySQLiteOpenHelper      _dbHelper;
-   private SQLiteDatabase                _writeDB;
-   private SQLiteDatabase                _readDB;
+  private final String _databaseName;
+  private final android.content.Context _androidContext;
 
 
-   private class MySQLiteOpenHelper
-            extends
-               SQLiteOpenHelper {
+  private final MySQLiteOpenHelper _dbHelper;
+  private SQLiteDatabase _writeDB;
+  private SQLiteDatabase _readDB;
 
-      public MySQLiteOpenHelper(final android.content.Context context,
-                                final String name) {
-         super(context, name, null, 1);
-      }
+  private final String tableBufferName = "buffer3";
+  private final String tableImageName = "image3";
 
 
-      private void createTables(final SQLiteDatabase db) {
-         db.execSQL("DROP TABLE IF EXISTS buffer;");
-         db.execSQL("DROP TABLE IF EXISTS image;");
+  private class MySQLiteOpenHelper
+      extends
+        SQLiteOpenHelper {
 
-         db.execSQL("CREATE TABLE IF NOT EXISTS buffer2 (name TEXT, contents TEXT, expiration TEXT);");
-         db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS buffer_name ON buffer2(name);");
-
-         db.execSQL("CREATE TABLE IF NOT EXISTS image2 (name TEXT, contents TEXT, expiration TEXT);");
-         db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS image_name ON image2(name);");
-      }
+    public MySQLiteOpenHelper(final android.content.Context context,
+                              final String name) {
+      super(context, name, null, 1);
+    }
 
 
-      @Override
-      public void onCreate(final SQLiteDatabase db) {
-         createTables(db);
-      }
+    private void createTables(final SQLiteDatabase db) {
+      db.execSQL("DROP TABLE IF EXISTS buffer;");
+      db.execSQL("DROP TABLE IF EXISTS image;");
+
+      db.execSQL("DROP TABLE IF EXISTS buffer2;");
+      db.execSQL("DROP TABLE IF EXISTS image2;");
+
+      db.execSQL("CREATE TABLE IF NOT EXISTS " + tableBufferName
+                 + " (name TEXT, contents TEXT, expiration TEXT);");
+      db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS buffer_name ON "
+                 + tableBufferName + "(name);");
+
+      db.execSQL("CREATE TABLE IF NOT EXISTS " + tableImageName
+                 + " (name TEXT, contents TEXT, expiration TEXT);");
+      db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS image_name ON "
+                 + tableImageName + "(name);");
+    }
 
 
-      @Override
-      public void onUpgrade(final SQLiteDatabase db,
-                            final int oldVersion,
-                            final int newVersion) {
-         createTables(db);
-      }
-
-   }
+    @Override
+    public void onCreate(final SQLiteDatabase db) {
+      createTables(db);
+    }
 
 
-   private String getPath() {
-      File f = _androidContext.getExternalCacheDir();
-      if ((f == null) || !f.exists()) {
-         f = _androidContext.getCacheDir();
-      }
-      final String documentsDirectory = f.getAbsolutePath();
+    @Override
+    public void onUpgrade(final SQLiteDatabase db,
+                          final int oldVersion,
+                          final int newVersion) {
+      createTables(db);
+    }
 
-      final File f2 = new File(new File(documentsDirectory), _databaseName);
-
-      final String path = f2.getAbsolutePath();
-      Log.d("SQLiteStorage_Android", "Creating DB in " + path);
-
-      return path;
-   }
+  }
 
 
-   public SQLiteStorage_Android(final String path,
-                                final android.content.Context context) {
-      _databaseName = path;
-      _androidContext = context;
+  private String getPath() {
+    File f = _androidContext.getExternalCacheDir();
+    if ((f == null) || !f.exists()) {
+      f = _androidContext.getCacheDir();
+    }
+    final String documentsDirectory = f.getAbsolutePath();
+
+    final File fileDataBase = new File(new File(documentsDirectory),
+        _databaseName);
+
+    final String path = fileDataBase.getAbsolutePath();
+    Log.d("SQLiteStorage_Android", "Creating DB in " + path);
+
+    return path;
+  }
 
 
-      _dbHelper = new MySQLiteOpenHelper(context, getPath());
-      _writeDB = _dbHelper.getWritableDatabase();
-      _readDB = _dbHelper.getReadableDatabase();
+  private void createDataBaseFile() {
+    File f = _androidContext.getExternalCacheDir();
+    if ((f == null) || !f.exists()) {
+      f = _androidContext.getCacheDir();
+    }
+    final String documentsDirectory = f.getAbsolutePath();
 
-      //      _db = SQLiteDatabase.openOrCreateDatabase(getPath(), null);
-      //
-      //
-      //      if (_db == null) {
-      //         ILogger.instance().logError("SQL: Can't open database \"%s\"\n", _databaseName);
-      //      }
-      //      else {
-      //         try {
-      //            _db.execSQL("CREATE TABLE IF NOT EXISTS buffer (name TEXT, contents TEXT);");
-      //            _db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS buffer_name ON buffer(name);");
-      //
-      //            _db.execSQL("CREATE TABLE IF NOT EXISTS image (name TEXT, contents TEXT);");
-      //            _db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS image_name ON image(name);");
-      //         }
-      //         catch (final SQLException e) {
-      //            e.printStackTrace();
-      //         }
-      //      }
-   }
+    final File fileDataBase = new File(new File(documentsDirectory),
+        _databaseName);
+    if (!fileDataBase.exists()) {
+
+    }
+  }
 
 
-   //   @Override
-   //   public boolean containsBuffer(final URL url) {
-   //      final String name = url.getPath();
-   //      final Cursor cursor = _readDB.query("buffer2", new String[] { "1" }, "name = ?", new String[] { name }, null, null, null);
-   //      final boolean hasAny = (cursor.getCount() > 0);
-   //      cursor.close();
-   //      return hasAny;
-   //   }
+  public SQLiteStorage_Android(final String path,
+                               final android.content.Context context) {
+    _databaseName = path;
+    _androidContext = context;
 
 
-   @Override
-   public void saveBuffer(final URL url,
-                          final IByteBuffer buffer,
-                          final TimeInterval timeToExpires,
-                          final boolean saveInBackground) {
-      final String table = "buffer2";
+    _dbHelper = new MySQLiteOpenHelper(context, getPath());
+    _writeDB = _dbHelper.getWritableDatabase();
+    _readDB = _dbHelper.getReadableDatabase();
 
-      final byte[] contents = ((ByteBuffer_Android) buffer).getBuffer().array();
-      final String name = url.getPath();
-
-      if (saveInBackground) {
-         _context.getThreadUtils().invokeInBackground( //
-                  new GTask() {
-                     @Override
-                     public void run(final G3MContext context) {
-                        rawSave(table, name, contents, timeToExpires);
-                     }
-                  }, //
-                  true);
-      }
-      else {
-         rawSave(table, name, contents, timeToExpires);
-      }
-   }
-
-
-   private synchronized void rawSave(final String table,
-                                     final String name,
-                                     final byte[] contents,
-                                     final TimeInterval timeToExpires) {
-      final ContentValues values = new ContentValues();
-      values.put("name", name);
-      values.put("contents", contents);
-      final long expiration = System.currentTimeMillis() + timeToExpires.milliseconds();
-      values.put("expiration", Long.toString(expiration));
-
-      if (_writeDB != null) {
-         final long r = _writeDB.insertWithOnConflict(table, null, values, SQLiteDatabase.CONFLICT_REPLACE);
-         if (r == -1) {
-            ILogger.instance().logError("SQL: Can't write " + table + " in database \"%s\"\n", _databaseName);
-         }
-      }
-      else {
-         ILogger.instance().logError("SQL: Can't write " + table + " in database \"%s\". _writeDB not available\n", _databaseName);
-      }
-   }
+    // _db = SQLiteDatabase.openOrCreateDatabase(getPath(), null);
+    //
+    //
+    // if (_db == null) {
+    // ILogger.instance().logError("SQL: Can't open database \"%s\"\n",
+    // _databaseName);
+    // }
+    // else {
+    // try {
+    // _db.execSQL("CREATE TABLE IF NOT EXISTS buffer (name TEXT, contents TEXT);");
+    // _db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS buffer_name ON buffer(name);");
+    //
+    // _db.execSQL("CREATE TABLE IF NOT EXISTS image (name TEXT, contents TEXT);");
+    // _db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS image_name ON image(name);");
+    // }
+    // catch (final SQLException e) {
+    // e.printStackTrace();
+    // }
+    // }
+  }
 
 
-   @Override
-   public synchronized IByteBuffer readBuffer(final URL url) {
-      ByteBuffer_Android result = null;
-      final String name = url.getPath();
-
-      final Cursor cursor = _readDB.query( // 
-               "buffer2", //
-               new String[] { "contents", "expiration" }, //
-               "name = ?", //
-               new String[] { name }, //
-               null, //
-               null, //
-               null);
-      if (cursor.moveToFirst()) {
-         final byte[] data = cursor.getBlob(0);
-         final String expirationS = cursor.getString(1);
-         final long expirationInterval = Long.parseLong(expirationS);
-
-         if (expirationInterval > System.currentTimeMillis()) {
-            result = new ByteBuffer_Android(data);
-         }
-      }
-      cursor.close();
-
-      return result;
-   }
+  // @Override
+  // public boolean containsBuffer(final URL url) {
+  // final String name = url.getPath();
+  // final Cursor cursor = _readDB.query("buffer2", new String[] { "1" },
+  // "name = ?", new String[] { name }, null, null, null);
+  // final boolean hasAny = (cursor.getCount() > 0);
+  // cursor.close();
+  // return hasAny;
+  // }
 
 
-   //   @Override
-   //   public boolean containsImage(final URL url) {
-   //      final String name = url.getPath();
-   //      final Cursor cursor = _readDB.query("image2", new String[] { "1" }, "name = ?", new String[] { name }, null, null, null);
-   //      final boolean hasAny = (cursor.getCount() > 0);
-   //      cursor.close();
-   //      return hasAny;
-   //   }
-
-
-   @Override
-   public void saveImage(final URL url,
-                         final IImage image,
+  @Override
+  public void saveBuffer(final URL url,
+                         final IByteBuffer buffer,
                          final TimeInterval timeToExpires,
                          final boolean saveInBackground) {
-      //final ITimer timer = IFactory.instance().createTimer();
+    final byte[] contents = ((ByteBuffer_Android) buffer).getBuffer().array();
+    final String name = url.getPath();
 
-      final Image_Android image_android = (Image_Android) image;
-      final Bitmap bitmap = image_android.getBitmap();
-
-      byte[] contents = image_android.getSourceBuffer();
-      if (contents == null) {
-         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-         bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-         contents = baos.toByteArray();
-      }
-      else {
-         image_android.releaseSourceBuffer();
-      }
-
-      final String table = "image2";
-      final String name = url.getPath();
-
-      final byte[] contentsF = contents;
-      if (saveInBackground) {
-         _context.getThreadUtils().invokeInBackground( //
-                  new GTask() {
-                     @Override
-                     public void run(final G3MContext context) {
-                        rawSave(table, name, contentsF, timeToExpires);
-                     }
-                  }, //
-                  true);
-      }
-      else {
-         rawSave(table, name, contents, timeToExpires);
-      }
-
-      //      final ContentValues values = new ContentValues();
-      //      values.put("name", name);
-      //      values.put("contents", contents);
-      //
-      //      final long r = _db.insertWithOnConflict(table, null, values, SQLiteDatabase.CONFLICT_REPLACE);
-      //      if (r == -1) {
-      //         ILogger.instance().logError("SQL: Can't write " + table + " in database \"%s\"\n", _databaseName);
-      //      }
-
-      //final TimeInterval elapsedTime = timer.elapsedTime();
-      //System.out.println("** Saved image in " + elapsedTime.milliseconds() + "ms");
-      //IFactory.instance().deleteTimer(timer);
-   }
-
-
-   @Override
-   public synchronized IImage readImage(final URL url) {
-      IImage result = null;
-      final String name = url.getPath();
-
-      final Cursor cursor = _readDB.query( //
-               "image2", //
-               new String[] { "contents", "expiration" }, //
-               "name = ?", //
-               new String[] { name }, //
-               null, //
-               null, //
-               null);
-      if (cursor.moveToFirst()) {
-         final byte[] data = cursor.getBlob(0);
-         final String expirationS = cursor.getString(1);
-         final long expirationInterval = Long.parseLong(expirationS);
-
-         if (expirationInterval > System.currentTimeMillis()) {
-            final Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-            if (bitmap == null) {
-               ILogger.instance().logError("Can't create bitmap from content of storage");
+    if (saveInBackground) {
+      _context.getThreadUtils().invokeInBackground( //
+          new GTask() {
+            @Override
+            public void run(final G3MContext context) {
+              rawSave(tableBufferName, name, contents, timeToExpires);
             }
-            else {
-               result = new Image_Android(bitmap, null);
+          }, //
+          true);
+    }
+    else {
+      rawSave(tableBufferName, name, contents, timeToExpires);
+    }
+  }
+
+
+  private synchronized void rawSave(final String table,
+                                    final String name,
+                                    final byte[] contents,
+                                    final TimeInterval timeToExpires) {
+    final ContentValues values = new ContentValues();
+    values.put("name", name);
+    values.put("contents", contents);
+    final long expiration = System.currentTimeMillis()
+                            + timeToExpires.milliseconds();
+    values.put("expiration", Long.toString(expiration));
+
+    if (_writeDB != null) {
+      final long r = _writeDB.insertWithOnConflict(table, null, values,
+          SQLiteDatabase.CONFLICT_REPLACE);
+      if (r == -1) {
+        ILogger.instance().logError(
+            "SQL: Can't write " + table + " in database \"%s\"\n",
+            _databaseName);
+      }
+    }
+    else {
+      ILogger.instance().logError(
+          "SQL: Can't write " + table
+              + " in database \"%s\". _writeDB not available\n", _databaseName);
+    }
+  }
+
+
+  @Override
+  public synchronized IByteBuffer readBuffer(final URL url) {
+    ByteBuffer_Android result = null;
+    final String name = url.getPath();
+
+    final Cursor cursor = _readDB.query( //
+        tableBufferName, //
+        new String[] { "contents", "expiration" }, //
+        "name = ?", //
+        new String[] { name }, //
+        null, //
+        null, //
+        null);
+    if (cursor.moveToFirst()) {
+      final byte[] data = cursor.getBlob(0);
+      final String expirationS = cursor.getString(1);
+      final long expirationInterval = Long.parseLong(expirationS);
+
+      if (expirationInterval > System.currentTimeMillis()) {
+        result = new ByteBuffer_Android(data);
+      }
+    }
+    cursor.close();
+
+    return result;
+  }
+
+
+  // @Override
+  // public boolean containsImage(final URL url) {
+  // final String name = url.getPath();
+  // final Cursor cursor = _readDB.query("image2", new String[] { "1" },
+  // "name = ?", new String[] { name }, null, null, null);
+  // final boolean hasAny = (cursor.getCount() > 0);
+  // cursor.close();
+  // return hasAny;
+  // }
+
+
+  @Override
+  public void saveImage(final URL url,
+                        final IImage image,
+                        final TimeInterval timeToExpires,
+                        final boolean saveInBackground) {
+    // final ITimer timer = IFactory.instance().createTimer();
+
+    final Image_Android image_android = (Image_Android) image;
+    final Bitmap bitmap = image_android.getBitmap();
+
+    byte[] contents = image_android.getSourceBuffer();
+    if (contents == null) {
+      final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+      contents = baos.toByteArray();
+    }
+    else {
+      image_android.releaseSourceBuffer();
+    }
+
+    final String name = url.getPath();
+
+    final byte[] contentsF = contents;
+    if (saveInBackground) {
+      _context.getThreadUtils().invokeInBackground( //
+          new GTask() {
+            @Override
+            public void run(final G3MContext context) {
+              rawSave(tableImageName, name, contentsF, timeToExpires);
             }
-         }
+          }, //
+          true);
+    }
+    else {
+      rawSave(tableImageName, name, contents, timeToExpires);
+    }
+
+    // final ContentValues values = new ContentValues();
+    // values.put("name", name);
+    // values.put("contents", contents);
+    //
+    // final long r = _db.insertWithOnConflict(table, null, values,
+    // SQLiteDatabase.CONFLICT_REPLACE);
+    // if (r == -1) {
+    // ILogger.instance().logError("SQL: Can't write " + table +
+    // " in database \"%s\"\n", _databaseName);
+    // }
+
+    // final TimeInterval elapsedTime = timer.elapsedTime();
+    // System.out.println("** Saved image in " + elapsedTime.milliseconds()
+    // + "ms");
+    // IFactory.instance().deleteTimer(timer);
+  }
+
+
+  @Override
+  public synchronized IImage readImage(final URL url) {
+    IImage result = null;
+    final String name = url.getPath();
+
+    final Cursor cursor = _readDB.query( //
+        tableImageName, //
+        new String[] { "contents", "expiration" }, //
+        "name = ?", //
+        new String[] { name }, //
+        null, //
+        null, //
+        null);
+    if (cursor.moveToFirst()) {
+      final byte[] data = cursor.getBlob(0);
+      final String expirationS = cursor.getString(1);
+      final long expirationInterval = Long.parseLong(expirationS);
+
+      if (expirationInterval > System.currentTimeMillis()) {
+        final Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0,
+            data.length);
+        if (bitmap == null) {
+          ILogger.instance().logError(
+              "Can't create bitmap from content of storage");
+        }
+        else {
+          result = new Image_Android(bitmap, null);
+        }
       }
-      cursor.close();
+    }
+    cursor.close();
 
-      return result;
-   }
-
-
-   public synchronized void close() {
-      if (_readDB != null) {
-         _readDB.close();
-         _readDB = null;
-      }
-      if (_writeDB != null) {
-         _writeDB.close();
-         _writeDB = null;
-      }
-   }
+    return result;
+  }
 
 
-   @Override
-   public synchronized void onResume(final G3MContext context) {
-      if (_writeDB == null) {
-         _writeDB = _dbHelper.getWritableDatabase();
-      }
-      if (_readDB == null) {
-         _readDB = _dbHelper.getReadableDatabase();
-      }
-   }
+  public synchronized void close() {
+    if (_readDB != null) {
+      _readDB.close();
+      _readDB = null;
+    }
+    if (_writeDB != null) {
+      _writeDB.close();
+      _writeDB = null;
+    }
+  }
 
 
-   @Override
-   public synchronized void onPause(final G3MContext context) {
-      close();
-   }
+  @Override
+  public synchronized void onResume(final G3MContext context) {
+    if (_writeDB == null) {
+      _writeDB = _dbHelper.getWritableDatabase();
+    }
+    if (_readDB == null) {
+      _readDB = _dbHelper.getReadableDatabase();
+    }
+  }
 
 
-   @Override
-   public synchronized void onDestroy(final G3MContext context) {
-      close();
-   }
+  @Override
+  public synchronized void onPause(final G3MContext context) {
+    close();
+  }
 
 
-   @Override
-   public synchronized boolean isAvailable() {
-      return (_readDB != null) && (_writeDB != null);
-   }
+  @Override
+  public synchronized void onDestroy(final G3MContext context) {
+    close();
+  }
+
+
+  @Override
+  public synchronized boolean isAvailable() {
+    return (_readDB != null) && (_writeDB != null);
+  }
 
 
 }
