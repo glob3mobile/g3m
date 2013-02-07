@@ -2,10 +2,7 @@
 
 package org.glob3.mobile.specific;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IImageListener;
@@ -22,43 +19,45 @@ public final class Image_Android
          extends
             IImage {
 
-   private static String createCallStackString() {
-      final Exception e = new Exception();
-      final StringWriter wr = new StringWriter();
-      final PrintWriter err = new PrintWriter(wr);
-      e.printStackTrace(err);
-      err.flush();
-      return wr.toString() //
-      .replace("org.glob3.mobile.specific.", "") //
-      .replace("org.glob3.mobile.generated.", "") //
-      .replace("android.opengl.", "") //
-      .replace("  at Image_Android.createCallStackString(Image_Android.java:26)\n", "") //
-      .replace("  at Image_Android.access$1(Image_Android.java:25)\n", "") //
-      .replace(" at ", "") //
-      .replace(" java.lang.Exception\n", "");
-   }
+
+   //   private static String createCallStackString() {
+   //      final Exception e = new Exception();
+   //      final StringWriter wr = new StringWriter();
+   //      final PrintWriter err = new PrintWriter(wr);
+   //      e.printStackTrace(err);
+   //      err.flush();
+   //      return wr.toString() //
+   //      .replace("org.glob3.mobile.specific.", "") //
+   //      .replace("org.glob3.mobile.generated.", "") //
+   //      .replace("android.opengl.", "") //
+   //      .replace("  at Image_Android.createCallStackString(Image_Android.java:26)\n", "") //
+   //      .replace("  at Image_Android.access$1(Image_Android.java:25)\n", "") //
+   //      .replace(" at ", "") //
+   //      .replace(" java.lang.Exception\n", "");
+   //   }
 
 
    private static class BitmapHolder {
-      private Bitmap             _bitmap;
-      private int                _referencesCount;
+      private Bitmap _bitmap;
+      private int    _referencesCount;
 
-      private final String       _createdAt;
-      private final List<String> _retainedAt = new ArrayList<String>();
-      private final List<String> _releasedAt = new ArrayList<String>();
+
+      //      private final String       _createdAt;
+      //      private final List<String> _retainedAt = new ArrayList<String>();
+      //      private final List<String> _releasedAt = new ArrayList<String>();
 
 
       private BitmapHolder(final Bitmap bitmap) {
          _bitmap = bitmap;
          _referencesCount = 1;
-         _createdAt = createCallStackString();
+         //         _createdAt = createCallStackString();
       }
 
 
       private void _retain() {
          synchronized (this) {
             _referencesCount++;
-            _retainedAt.add(createCallStackString());
+            //            _retainedAt.add(createCallStackString());
          }
       }
 
@@ -70,7 +69,7 @@ public final class Image_Android
                _bitmap.recycle();
                _bitmap = null;
             }
-            _releasedAt.add(createCallStackString());
+            //            _releasedAt.add(createCallStackString());
          }
       }
 
@@ -109,13 +108,15 @@ public final class Image_Android
    //   final private Bitmap _bitmap;
    final private BitmapHolder _bitmapHolder;
    private byte[]             _source;
-   private boolean            _bitmapHolderReleased = false;
-   private final String       _createdAt;
+
+
+   //   private boolean            _bitmapHolderReleased = false;
+   //   private final String       _createdAt;
 
 
    public Image_Android(final Bitmap bitmap,
                         final byte[] source) {
-      _createdAt = createCallStackString();
+      //      _createdAt = createCallStackString();
 
       if (bitmap == null) {
          throw new RuntimeException("Can't create an Image_Android with a null bitmap");
@@ -128,7 +129,7 @@ public final class Image_Android
 
    private Image_Android(final BitmapHolder bitmapHolder,
                          final byte[] source) {
-      _createdAt = createCallStackString();
+      //      _createdAt = createCallStackString();
 
       if (bitmapHolder == null) {
          throw new RuntimeException("Can't create an Image_Android with a null bitmap");
@@ -301,7 +302,7 @@ public final class Image_Android
    @Override
    public void dispose() {
       synchronized (this) {
-         _bitmapHolderReleased = true;
+         //         _bitmapHolderReleased = true;
          _bitmapHolder._release();
          //_bitmap.recycle();
       }
@@ -310,19 +311,19 @@ public final class Image_Android
    }
 
 
-   @Override
-   protected void finalize() throws Throwable {
-      if (!_bitmapHolderReleased) {
-         synchronized (ILogger.instance()) {
-            final StringBuffer msg = new StringBuffer();
-            msg.append("************\n");
-            msg.append("Image_Android finalized without releasing the _bitmapHolder created at: \n");
-            msg.append(_createdAt);
-            msg.append("************\n");
-            ILogger.instance().logError(msg.toString());
-         }
-      }
-      super.finalize();
-   }
+   //   @Override
+   //   protected void finalize() throws Throwable {
+   //      if (!_bitmapHolderReleased) {
+   //         synchronized (ILogger.instance()) {
+   //            final StringBuffer msg = new StringBuffer();
+   //            msg.append("************\n");
+   //            msg.append("Image_Android finalized without releasing the _bitmapHolder created at: \n");
+   //            msg.append(_createdAt);
+   //            msg.append("************\n");
+   //            ILogger.instance().logError(msg.toString());
+   //         }
+   //      }
+   //      super.finalize();
+   //   }
 
 }
