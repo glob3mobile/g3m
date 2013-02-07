@@ -39,22 +39,8 @@ package org.glob3.mobile.generated;
 //class Vector3D;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class GLState;
-
-//class ITexturizerData {
-//public:
-////  virtual bool isTexturizerData() const = 0; //Java needs to know that this is an interface
-///#ifdef C_CODE
-//  virtual ~ITexturizerData() { }
-///#endif
-///#ifdef JAVA_CODE
-//  public void dispose();
-///#endif
-//};
-
-
-public interface ITexturizerData {
-  public void dispose();
-}
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class ITexturizerData;
 
 public class Tile
 {
@@ -309,7 +295,8 @@ public class Tile
 		  _texturizedMesh.dispose();
 	  _texturizedMesh = null;
   
-	  _texturizerData = null;
+	  if (_texturizerData != null)
+		  _texturizerData.dispose();
 	  _texturizerData = null;
   
 	  setTexturizerDirty(true);
@@ -358,7 +345,8 @@ public class Tile
 	if (_tessellatorMesh != null)
 		_tessellatorMesh.dispose();
   
-	_texturizerData = null;
+	if (_texturizerData != null)
+		_texturizerData.dispose();
 	_texturizerData = null;
   
 	if (_texturizedMesh != null)
