@@ -31,7 +31,7 @@ public:
   virtual ~ITexturizerData() { }
 #endif
 #ifdef JAVA_CODE
-  virtual ~ITexturizerData() = 0;
+  public void dispose();
 #endif
 };
 
