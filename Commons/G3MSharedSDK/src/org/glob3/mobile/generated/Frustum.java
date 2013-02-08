@@ -253,19 +253,16 @@ public class Frustum
   
     // test first if frustum extent intersect with box
     if (!getExtent().touchesBox(box))
-       return false;
+    {
+      return false;
+    }
   
-    // create an array with the 8 corners of the box
-    final Vector3D min = box.getLower();
-    final Vector3D max = box.getUpper();
-    Vector3D[] corners = { new Vector3D(min._x, min._y, min._z), new Vector3D(min._x, min._y, max._z), new Vector3D(min._x, max._y, min._z), new Vector3D(min._x, max._y, max._z), new Vector3D(max._x, min._y, min._z), new Vector3D(max._x, min._y, max._z), new Vector3D(max._x, max._y, min._z), new Vector3D(max._x, max._y, max._z) };
-  
-  //  std::vector<Vector3D> corners = box->getCorners();
+    final java.util.ArrayList<Vector3D> corners = box.getCorners();
   
     // test with left plane
     outside = true;
     for (int i = 0; i<8; i++)
-      if (_leftPlane.signedDistance(corners[i])<0)
+      if (_leftPlane.signedDistance(corners.get(i))<0)
       {
         outside = false;
         break;
@@ -276,7 +273,7 @@ public class Frustum
     // test with bottom plane
     outside = true;
     for (int i = 0; i<8; i++)
-      if (_bottomPlane.signedDistance(corners[i])<0)
+      if (_bottomPlane.signedDistance(corners.get(i))<0)
       {
         outside = false;
         break;
@@ -287,7 +284,7 @@ public class Frustum
     // test with right plane
     outside = true;
     for (int i = 0; i<8; i++)
-      if (_rightPlane.signedDistance(corners[i])<0)
+      if (_rightPlane.signedDistance(corners.get(i))<0)
       {
         outside = false;
         break;
@@ -298,7 +295,7 @@ public class Frustum
     // test with top plane
     outside = true;
     for (int i = 0; i<8; i++)
-      if (_topPlane.signedDistance(corners[i])<0)
+      if (_topPlane.signedDistance(corners.get(i))<0)
       {
         outside = false;
         break;
@@ -309,7 +306,7 @@ public class Frustum
     // test with near plane
     outside = true;
     for (int i = 0; i<8; i++)
-      if (_nearPlane.signedDistance(corners[i])<0)
+      if (_nearPlane.signedDistance(corners.get(i))<0)
       {
         outside = false;
         break;
@@ -320,7 +317,7 @@ public class Frustum
     // test with far plane
     outside = true;
     for (int i = 0; i<8; i++)
-      if (_farPlane.signedDistance(corners[i])<0)
+      if (_farPlane.signedDistance(corners.get(i))<0)
       {
         outside = false;
         break;
