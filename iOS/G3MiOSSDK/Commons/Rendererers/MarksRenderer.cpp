@@ -54,14 +54,14 @@ void MarksRenderer::initialize(const G3MContext* context) {
   int marksSize = _marks.size();
   for (int i = 0; i < marksSize; i++) {
     Mark* mark = _marks[i];
-    mark->initialize(context);
+    mark->initialize(context, _downloadPriority);
   }
 }
 
 void MarksRenderer::addMark(Mark* mark) {
   _marks.push_back(mark);
   if (_context != NULL) {
-    mark->initialize(_context);
+    mark->initialize(_context, _downloadPriority);
   }
 }
 
