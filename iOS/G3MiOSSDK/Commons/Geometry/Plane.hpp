@@ -12,46 +12,46 @@
 #include "Vector3D.hpp"
 
 class Plane {
-  
-public:  
-  
+
+public:
+
   Plane(): _normal(0.0,0.0,0.0), _d(0.0){} //Empty constructor
-  
+
   Plane(const Vector3D& point0,
         const Vector3D& point1,
         const Vector3D& point2):
   _normal(point1.sub(point0).cross(point2.sub(point0)).normalized()),
-  _d(-_normal.dot(point0)) 
+  _d(-_normal.dot(point0))
   {}
-  
-  Plane(const Vector3D& normal, double d): 
+
+  Plane(const Vector3D& normal, double d):
   _normal(normal.normalized()), _d(d)
   {}
-  
+
   Plane(double a, double b, double c, double d):
   _normal(Vector3D(a,b,c).normalized()),
   _d(d)
   {}
-  
+
   Plane(const Plane& that) :
-  _normal(that._normal), 
+  _normal(that._normal),
   _d(that._d)
   {
-    
+
   }
-  
+
   Plane transformedByTranspose(const MutableMatrix44D& M) const;
-  
+
   double signedDistance(const Vector3D& point) const {
     return point.dot(_normal) + _d;
   }
-  
+
   Vector3D intersectionWithRay(const Vector3D& origin, const Vector3D& direction) const;
-  
+
 private:
   const Vector3D _normal;
   const double   _d;
-  
+
 };
 
 
