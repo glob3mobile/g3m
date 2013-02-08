@@ -465,13 +465,13 @@ public class MutableMatrix44D
       final double in0 = point._x;
       final double in1 = point._y;
       final double in2 = point._z;
-      final double in3 = 1.0;
+      //  const double in3 = 1.0;
     
       //Transformating point
-      double out0 = _m00 * in0 + _m01 * in1 + _m02 * in2 + _m03 * in3;
-      double out1 = _m10 * in0 + _m11 * in1 + _m12 * in2 + _m13 * in3;
+      double out0 = _m00 * in0 + _m01 * in1 + _m02 * in2 + _m03; // * in3
+      double out1 = _m10 * in0 + _m11 * in1 + _m12 * in2 + _m13; // * in3
       //double out2 = _m20 * in0 + _m21 * in1 + _m22 * in2 + _m23 * in3;
-      final double out3 = _m30 * in0 + _m31 * in1 + _m32 * in2 + _m33 * in3;
+      final double out3 = _m30 * in0 + _m31 * in1 + _m32 * in2 + _m33; // * in3
     
       if (out3 == 0.0)
       {
