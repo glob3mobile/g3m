@@ -88,14 +88,16 @@ public class TilesStatistics
     final Sector sector = tile.getSector();
     if (_renderedSector == null)
     {
-      _renderedSector = new Sector(sector);
+      _renderedSector = sector;
     }
     else
     {
       if (!_renderedSector.fullContains(sector))
       {
         Sector previous = _renderedSector;
-        _renderedSector = new Sector(_renderedSector.mergedWith(sector));
+
+        _renderedSector = _renderedSector->mergedWith(sector);
+
         if (previous != null)
            previous.dispose();
       }
