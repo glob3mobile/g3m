@@ -182,7 +182,7 @@ public:
         _renderedSector = new Sector( _renderedSector->mergedWith(sector) );
 #endif
 #ifdef JAVA_CODE
-        _renderedSector = _renderedSector->mergedWith(sector);
+        _renderedSector = _renderedSector.mergedWith(sector);
 #endif
 
         delete previous;
