@@ -172,9 +172,7 @@ void IG3MBuilder::setThreadUtils(IThreadUtils *threadUtils) {
 
 void IG3MBuilder::setPlanet(const Planet *planet) {
   if (_planet != planet) {
-#ifdef C_CODE
     delete _planet;
-#endif
     _planet = planet;
   }
 }

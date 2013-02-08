@@ -15,7 +15,7 @@ public:
   const int _y;
   const int _width;
   const int _height;
-  
+
   RectangleI(int x, int y,
              int width, int height):
   _x(x),
@@ -24,7 +24,7 @@ public:
   _height(height)
   {
   }
-  
+
   RectangleI(const RectangleI& that):
   _x(that._x),
   _y(that._y),
@@ -32,15 +32,19 @@ public:
   _height(that._height)
   {
   }
-  
+
+  ~RectangleI() {
+
+  }
+
   bool equalTo(const RectangleI& that) const{
     return (_x == that._x) && (_y == that._y) && (_width == that._width) && (_height == that._height);
   }
-  
+
   bool contains(int x, int y) const {
     return (x >= _x) && (y >= _y) && (x <= (_x + _width)) && (y <= (_y + _height));
   }
-  
+
 };
 
 #endif

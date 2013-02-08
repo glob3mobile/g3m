@@ -26,7 +26,7 @@ Angle Vector3D::angleBetween(const Vector3D& other) const {
   if (c > 1.0) c = 1.0;
   else if (c < -1.0) c = -1.0;
   
-  return Angle::fromRadians(GMath.acos(c));
+  return Angle::fromRadians(IMathUtils::instance()->acos(c));
 }
 
 
@@ -51,7 +51,7 @@ Vector3D Vector3D::rotateAroundAxis(const Vector3D& axis,
   const double sinTheta = theta.sinus();
   
   const double ms = axis.squaredLength();
-  const double m = GMath.sqrt(ms);
+  const double m = IMathUtils::instance()->sqrt(ms);
   
   return Vector3D(
                   ((u * (u * _x + v * _y + w * _z)) +

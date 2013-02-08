@@ -98,7 +98,7 @@ void CameraSingleDragHandler::onMove(const G3MEventContext *eventContext,
   // save drag parameters
   _axis = _initialPoint.cross(finalPoint);
   
-  const double radians = - GMath.asin(_axis.length()/_initialPoint.length()/finalPoint.length());
+  const double radians = - IMathUtils::instance()->asin(_axis.length()/_initialPoint.length()/finalPoint.length());
   _radiansStep = radians - _lastRadians;
   _lastRadians = radians;
 }

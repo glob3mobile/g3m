@@ -72,7 +72,7 @@ public:
 
   }
 
-  void onImageDownload(const IImage* image);
+  void onImageDownload(IImage* image);
 
   const GLState* createState(const G3MRenderContext* rc,
                              const GLState& parentState);

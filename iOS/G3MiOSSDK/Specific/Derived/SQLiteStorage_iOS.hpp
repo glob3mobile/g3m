@@ -44,24 +44,19 @@ public:
   virtual ~SQLiteStorage_iOS() {
   }
   
-//  bool containsBuffer(const URL& url);
-
   void saveBuffer(const URL& url,
                   const IByteBuffer* buffer,
                   const TimeInterval& timeToExpires,
                   bool saveInBackground);
-  
-  const IByteBuffer* readBuffer(const URL& url);
-  
-  
-//  bool containsImage(const URL& url);
+
+  IByteBuffer* readBuffer(const URL& url);
 
   void saveImage(const URL& url,
                  const IImage* buffer,
                  const TimeInterval& timeToExpires,
                  bool saveInBackground);
   
-  const IImage* readImage(const URL& url);
+  IImage* readImage(const URL& url);
   
   void onResume(const G3MContext* context) {
     

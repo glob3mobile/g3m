@@ -23,13 +23,13 @@ public enum MapType
   Aerial,
   Hybrid;
 
-	public int getValue()
-	{
-		return this.ordinal();
-	}
+   public int getValue()
+   {
+      return this.ordinal();
+   }
 
-	public static MapType forValue(int value)
-	{
-		return values()[value];
-	}
+   public static MapType forValue(int value)
+   {
+      return values()[value];
+   }
 }

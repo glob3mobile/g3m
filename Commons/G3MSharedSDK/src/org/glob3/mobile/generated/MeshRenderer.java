@@ -17,7 +17,6 @@ package org.glob3.mobile.generated;
 
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Mesh;
 
 
@@ -27,30 +26,30 @@ public class MeshRenderer extends LeafRenderer
 
   public void dispose()
   {
-	final int meshesCount = _meshes.size();
-	for (int i = 0; i < meshesCount; i++)
-	{
-	  Mesh mesh = _meshes.get(i);
-	  if (mesh != null)
-		  mesh.dispose();
-	}
+    final int meshesCount = _meshes.size();
+    for (int i = 0; i < meshesCount; i++)
+    {
+      Mesh mesh = _meshes.get(i);
+      if (mesh != null)
+         mesh.dispose();
+    }
   }
 
   public final void addMesh(Mesh mesh)
   {
-	_meshes.add(mesh);
+    _meshes.add(mesh);
   }
 
   public final void clearMeshes()
   {
-	final int meshesCount = _meshes.size();
-	for (int i = 0; i < meshesCount; i++)
-	{
-	  Mesh mesh = _meshes.get(i);
-	  if (mesh != null)
-		  mesh.dispose();
-	}
-	_meshes.clear();
+    final int meshesCount = _meshes.size();
+    for (int i = 0; i < meshesCount; i++)
+    {
+      Mesh mesh = _meshes.get(i);
+      if (mesh != null)
+         mesh.dispose();
+    }
+    _meshes.clear();
   }
 
   public final void onResume(G3MContext context)
@@ -75,27 +74,27 @@ public class MeshRenderer extends LeafRenderer
 
   public final boolean isReadyToRender(G3MRenderContext rc)
   {
-	return true;
+    return true;
   }
 
   public final void render(G3MRenderContext rc, GLState parentState)
   {
-	final int meshesCount = _meshes.size();
-	for (int i = 0; i < meshesCount; i++)
-	{
-	  Mesh mesh = _meshes.get(i);
-	  final Extent extent = mesh.getExtent();
+    final int meshesCount = _meshes.size();
+    for (int i = 0; i < meshesCount; i++)
+    {
+      Mesh mesh = _meshes.get(i);
+      final Extent extent = mesh.getExtent();
   
-	  if (extent.touches(rc.getCurrentCamera().getFrustumInModelCoordinates()))
-	  {
-		mesh.render(rc, parentState);
-	  }
-	}
+      if (extent.touches(rc.getCurrentCamera().getFrustumInModelCoordinates()))
+      {
+        mesh.render(rc, parentState);
+      }
+    }
   }
 
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
-	return false;
+    return false;
   }
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)

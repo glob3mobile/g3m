@@ -186,8 +186,8 @@ void MarksRenderer::render(const G3MRenderContext* rc,
   state.enableVerticesPosition();
   gl->setState(state);
 
-  static Vector2D textureTranslation(0.0, 0.0);
-  static Vector2D textureScale(1.0, 1.0);
+  Vector2D textureTranslation(0.0, 0.0);
+  Vector2D textureScale(1.0, 1.0);
   gl->transformTexCoords(textureScale, textureTranslation);
 
   gl->setBlendFuncSrcAlpha();

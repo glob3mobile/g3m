@@ -7,13 +7,13 @@ public enum PetitionStatus
   STATUS_DOWNLOADED,
   STATUS_CANCELED;
 
-	public int getValue()
-	{
-		return this.ordinal();
-	}
+   public int getValue()
+   {
+      return this.ordinal();
+   }
 
-	public static PetitionStatus forValue(int value)
-	{
-		return values()[value];
-	}
+   public static PetitionStatus forValue(int value)
+   {
+      return values()[value];
+   }
 }

@@ -17,7 +17,6 @@ package org.glob3.mobile.generated;
 
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Shape;
 
 public class ShapeOrbitCameraEffect extends EffectWithDuration
@@ -36,41 +35,41 @@ public class ShapeOrbitCameraEffect extends EffectWithDuration
 
   public ShapeOrbitCameraEffect(TimeInterval duration, Shape shape, double fromDistance, double toDistance, Angle fromAzimuth, Angle toAzimuth, Angle fromAltitude, Angle toAltitude)
   {
-	  super(duration);
-	  _shape = shape;
-	  _fromDistance = fromDistance;
-	  _toDistance = toDistance;
-	  _fromAzimuthInRadians = fromAzimuth.radians();
-	  _toAzimuthInRadians = toAzimuth.radians();
-	  _fromAltitudeInRadians = fromAltitude.radians();
-	  _toAltitudeInRadians = toAltitude.radians();
+     super(duration);
+     _shape = shape;
+     _fromDistance = fromDistance;
+     _toDistance = toDistance;
+     _fromAzimuthInRadians = fromAzimuth.radians();
+     _toAzimuthInRadians = toAzimuth.radians();
+     _fromAltitudeInRadians = fromAltitude.radians();
+     _toAltitudeInRadians = toAltitude.radians();
 
   }
 
   public final void doStep(G3MRenderContext rc, TimeInterval when)
   {
-	final double alpha = pace(percentDone(when));
-	//  const double alpha = percentDone(when);
+    final double alpha = pace(percentDone(when));
+    //  const double alpha = percentDone(when);
   
-	final Geodetic3D center = _shape.getPosition();
+    final Geodetic3D center = _shape.getPosition();
   
-	final double distance = IMathUtils.instance().lerp(_fromDistance, _toDistance, alpha);
-	final double azimuthInRadians = IMathUtils.instance().lerp(_fromAzimuthInRadians, _toAzimuthInRadians, alpha);
-	final double altitudeInRadians = IMathUtils.instance().lerp(_fromAltitudeInRadians, _toAltitudeInRadians, alpha);
+    final double distance = IMathUtils.instance().lerp(_fromDistance, _toDistance, alpha);
+    final double azimuthInRadians = IMathUtils.instance().lerp(_fromAzimuthInRadians, _toAzimuthInRadians, alpha);
+    final double altitudeInRadians = IMathUtils.instance().lerp(_fromAltitudeInRadians, _toAltitudeInRadians, alpha);
   
-	rc.getNextCamera().setPointOfView(center, distance, Angle.fromRadians(azimuthInRadians), Angle.fromRadians(altitudeInRadians));
+    rc.getNextCamera().setPointOfView(center, distance, Angle.fromRadians(azimuthInRadians), Angle.fromRadians(altitudeInRadians));
   }
 
   public final void cancel(TimeInterval when)
   {
-	// do nothing
+    // do nothing
   }
 
   public final void stop(G3MRenderContext rc, TimeInterval when)
   {
-	final Geodetic3D center = _shape.getPosition();
+    final Geodetic3D center = _shape.getPosition();
   
-	rc.getNextCamera().setPointOfView(center, _toDistance, Angle.fromRadians(_toAzimuthInRadians), Angle.fromRadians(_toAltitudeInRadians));
+    rc.getNextCamera().setPointOfView(center, _toDistance, Angle.fromRadians(_toAzimuthInRadians), Angle.fromRadians(_toAltitudeInRadians));
   
   }
 

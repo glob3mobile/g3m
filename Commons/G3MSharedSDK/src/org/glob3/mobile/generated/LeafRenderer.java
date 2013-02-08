@@ -23,13 +23,13 @@ public abstract class LeafRenderer extends Renderer
 
   public LeafRenderer()
   {
-	  _enable = true;
+     _enable = true;
 
   }
 
   public LeafRenderer(boolean enable)
   {
-	  _enable = enable;
+     _enable = enable;
 
   }
 
@@ -38,15 +38,13 @@ public abstract class LeafRenderer extends Renderer
 
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isEnable() const
   public final boolean isEnable()
   {
-	return _enable;
+    return _enable;
   }
 
   public void setEnable(final boolean enable) {
-	_enable = enable;
+    _enable = enable;
   }
 
   public abstract void onResume(G3MContext context);

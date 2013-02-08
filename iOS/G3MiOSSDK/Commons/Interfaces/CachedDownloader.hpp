@@ -25,7 +25,7 @@ private:
 
   const bool _saveInBackground;
 
-  const IImage* getCachedImage(const URL& url);
+  IImage* getCachedImage(const URL& url);
 
 #ifdef C_CODE
   const IImage* _lastImage;

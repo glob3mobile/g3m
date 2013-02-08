@@ -30,37 +30,37 @@ public class SGMaterialNode extends SGNode
 
   public SGMaterialNode(String id, String sId, Color baseColor, Color specularColor, double specular, double shine, double alpha, double emit)
   {
-	  super(id, sId);
-	  _baseColor = baseColor;
-	  _specularColor = specularColor;
-	  _specular = specular;
-	  _shine = shine;
-	  _alpha = alpha;
-	  _emit = emit;
+     super(id, sId);
+     _baseColor = baseColor;
+     _specularColor = specularColor;
+     _specular = specular;
+     _shine = shine;
+     _alpha = alpha;
+     _emit = emit;
 
   }
 
   public void dispose()
   {
-	if (_baseColor != null)
-		_baseColor.dispose();
-	if (_specularColor != null)
-		_specularColor.dispose();
+    if (_baseColor != null)
+       _baseColor.dispose();
+    if (_specularColor != null)
+       _specularColor.dispose();
   }
 
   public final GLState createState(G3MRenderContext rc, GLState parentState)
   {
-	if (_baseColor == null)
-	{
-	  return null;
-	}
+    if (_baseColor == null)
+    {
+      return null;
+    }
   
-	GLState state = new GLState(parentState);
-	final float colorsIntensity = 1F;
-	//state->enableFlatColor(*_specularColor, colorsIntensity);
-	state.enableFlatColor(_baseColor, colorsIntensity);
+    GLState state = new GLState(parentState);
+    final float colorsIntensity = 1F;
+    //state->enableFlatColor(*_specularColor, colorsIntensity);
+    state.enableFlatColor(_baseColor, colorsIntensity);
   
-	return state;
+    return state;
   }
 
 }

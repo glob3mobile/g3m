@@ -24,9 +24,7 @@ BSONGenerator::BSONGenerator() {
 }
 
 BSONGenerator::~BSONGenerator() {
-#ifdef C_CODE
   delete _builder;
-#endif
 }
 
 IByteBuffer* BSONGenerator::createBuffer() {

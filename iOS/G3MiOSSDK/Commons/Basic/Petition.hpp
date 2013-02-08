@@ -27,13 +27,13 @@ class MutableVector2D;
 class Petition {
 private:
   const Sector* _sector;
+  IImage* _image;
+
 #ifdef C_CODE
   const URL     _url;
-  const IImage* _image;
 #endif
 #ifdef JAVA_CODE
   final private URL _url; //Conversor creates class "Url"
-  private IImage _image;
 #endif
 
   const long long _timeToCacheInMS;
@@ -55,9 +55,7 @@ public:
   }
   
   ~Petition(){
-#ifdef C_CODE
     delete _sector;
-#endif
     releaseImage();
   }
   
@@ -75,12 +73,12 @@ public:
     return *_sector;
   }
   
-  void setImage(const IImage* image) {
+  void setImage(IImage* image) {
     releaseImage();
     _image = image;
   }
   
-  const IImage* getImage() const {
+  IImage* getImage() const {
     return _image;
   }
 

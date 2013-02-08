@@ -1,48 +1,51 @@
 package org.glob3.mobile.generated; 
-public class TokenDownloadListener implements IBufferDownloadListener
+public class TokenDownloadListener extends IBufferDownloadListener
 {
   private BingLayer _bingLayer;
 
   public TokenDownloadListener(BingLayer bingLayer)
   {
-	  _bingLayer = bingLayer;
+     _bingLayer = bingLayer;
   }
 
   public final void onDownload(URL url, IByteBuffer buffer)
   {
   
   
-	String String = buffer.getAsString();
-	JSONBaseObject json = IJSONParser.instance().parse(String);
+    String String = buffer.getAsString();
+    JSONBaseObject json = IJSONParser.instance().parse(String);
   
-	String authentication = json.asObject().getAsString("authenticationResultCode").value();
-	if (authentication.compareTo("ValidCredentials")!=0)
-	{
-	  ILogger.instance().logError("Could not validate against Bing. Please check your key!");
-	}
-	else
-	{
-	  final JSONObject data = json.asObject().getAsArray("resourceSets").getAsObject(0).getAsArray("resources").getAsObject(0);
+    String authentication = json.asObject().getAsString("authenticationResultCode").value();
+    if (authentication.compareTo("ValidCredentials")!=0)
+    {
+      ILogger.instance().logError("Could not validate against Bing. Please check your key!");
+    }
+    else
+    {
+      final JSONObject data = json.asObject().getAsArray("resourceSets").getAsObject(0).getAsArray("resources").getAsObject(0);
   
-	  final JSONArray subDomArray = data.getAsArray("imageUrlSubdomains");
-	  java.util.ArrayList<String> subdomains = new java.util.ArrayList<String>();
-	  int numSubdomains = subDomArray.size();
-	  for (int i = 0; i<numSubdomains; i++)
-	  {
-		subdomains.add(subDomArray.getAsString(i).value());
-	  }
-	  _bingLayer.setSubDomains(subdomains);
+      final JSONArray subDomArray = data.getAsArray("imageUrlSubdomains");
+      java.util.ArrayList<String> subdomains = new java.util.ArrayList<String>();
+      int numSubdomains = subDomArray.size();
+      for (int i = 0; i<numSubdomains; i++)
+      {
+        subdomains.add(subDomArray.getAsString(i).value());
+      }
+      _bingLayer.setSubDomains(subdomains);
   
   
-	  String tileURL = data.getAsString("imageUrl").value();
+      String tileURL = data.getAsString("imageUrl").value();
   
-	  //set language
-	  tileURL = IStringUtils.instance().replaceSubstring(tileURL, "{culture}", _bingLayer.getLocale());
+      //set language
+      tileURL = IStringUtils.instance().replaceSubstring(tileURL, "{culture}", _bingLayer.getLocale());
   
-	  _bingLayer.setTilePetitionString(tileURL);
+      _bingLayer.setTilePetitionString(tileURL);
   
-	  IJSONParser.instance().deleteJSONData(json);
-	}
+      IJSONParser.instance().deleteJSONData(json);
+  
+      if (buffer != null)
+         buffer.dispose();
+    }
   }
 
   public final void onError(URL url)

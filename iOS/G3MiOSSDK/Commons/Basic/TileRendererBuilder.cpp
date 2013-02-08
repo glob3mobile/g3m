@@ -27,12 +27,6 @@ TileRendererBuilder::TileRendererBuilder() {
 }
 
 TileRendererBuilder::~TileRendererBuilder() {
-  //    delete _tileTessellator;
-  //    delete _texturizer;
-  //    delete _layerSet;
-  //#ifdef C_CODE
-  //    delete _parameters;
-  //#endif
 }
 
 TileRenderer* TileRendererBuilder::create() {
@@ -73,9 +67,7 @@ void TileRendererBuilder::setLayerSet(LayerSet *layerSet) {
 
 void TileRendererBuilder::setTileRendererParameters(TilesRenderParameters *parameters) {
   if (_parameters != parameters) {
-#ifdef C_CODE
     delete _parameters;
-#endif
     _parameters = parameters;
   }
 }

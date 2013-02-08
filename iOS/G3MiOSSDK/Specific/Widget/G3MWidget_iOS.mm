@@ -156,7 +156,7 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
     CGPoint tapPoint = [sender locationInView:sender.view.superview];
 
     std::vector<const Touch*> pointers = std::vector<const Touch*>();
-    Touch *touch = new Touch(Vector2I( GMath.toInt(tapPoint.x), GMath.toInt(tapPoint.y)),
+    Touch *touch = new Touch(Vector2I( IMathUtils::instance()->toInt(tapPoint.x), IMathUtils::instance()->toInt(tapPoint.y)),
                              Vector2I(0, 0),
                              1);
     pointers.push_back(touch);
@@ -260,8 +260,8 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
     CGPoint previous        = [touch previousLocationInView:self];
     unsigned char tapCount  = (unsigned char) [touch tapCount];
 
-    Touch *touch = new Touch(Vector2I( GMath.toInt(current.x), GMath.toInt(current.y) ),
-                             Vector2I( GMath.toInt(previous.x), GMath.toInt(previous.y) ),
+    Touch *touch = new Touch(Vector2I( IMathUtils::instance()->toInt(current.x), IMathUtils::instance()->toInt(current.y) ),
+                             Vector2I( IMathUtils::instance()->toInt(previous.x), IMathUtils::instance()->toInt(previous.y) ),
                              tapCount);
 
     pointers.push_back(touch);
@@ -287,8 +287,8 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
     CGPoint current  = [touch locationInView:self];
     CGPoint previous = [touch previousLocationInView:self];
 
-    Touch *touch = new Touch(Vector2I( GMath.toInt(current.x), GMath.toInt(current.y) ),
-                             Vector2I( GMath.toInt(previous.x), GMath.toInt(previous.y) ));
+    Touch *touch = new Touch(Vector2I( IMathUtils::instance()->toInt(current.x), IMathUtils::instance()->toInt(current.y) ),
+                             Vector2I( IMathUtils::instance()->toInt(previous.x), IMathUtils::instance()->toInt(previous.y) ));
 
     pointers.push_back(touch);
   }
@@ -340,8 +340,8 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
 
     [touch timestamp];
 
-    Touch *touch = new Touch(Vector2I( GMath.toInt(current.x), GMath.toInt(current.y) ),
-                             Vector2I( GMath.toInt(previous.x), GMath.toInt(previous.y) ) );
+    Touch *touch = new Touch(Vector2I( IMathUtils::instance()->toInt(current.x), IMathUtils::instance()->toInt(current.y) ),
+                             Vector2I( IMathUtils::instance()->toInt(previous.x), IMathUtils::instance()->toInt(previous.y) ) );
 
     pointers.push_back(touch);
   }

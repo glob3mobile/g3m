@@ -25,8 +25,8 @@ public class SingleDragEffect extends EffectWithForce
 
   public SingleDragEffect(Vector3D axis, Angle angle)
   {
-	  super(angle._degrees, 0.975);
-	  _axis = new Vector3D(axis);
+     super(angle._degrees, 0.975);
+     _axis = new Vector3D(axis);
   }
 
   public void start(G3MRenderContext rc, TimeInterval when)
@@ -35,18 +35,18 @@ public class SingleDragEffect extends EffectWithForce
 
   public void doStep(G3MRenderContext rc, TimeInterval when)
   {
-	super.doStep(rc, when);
-	rc.getNextCamera().rotateWithAxis(_axis, Angle.fromDegrees(getForce()));
+    super.doStep(rc, when);
+    rc.getNextCamera().rotateWithAxis(_axis, Angle.fromDegrees(getForce()));
   }
 
   public void stop(G3MRenderContext rc, TimeInterval when)
   {
-	rc.getNextCamera().rotateWithAxis(_axis, Angle.fromDegrees(getForce()));
+    rc.getNextCamera().rotateWithAxis(_axis, Angle.fromDegrees(getForce()));
   }
 
   public void cancel(TimeInterval when)
   {
-	// do nothing, just leave the effect in the intermediate state
+    // do nothing, just leave the effect in the intermediate state
   }
 
   private Vector3D _axis ;

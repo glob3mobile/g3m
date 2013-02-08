@@ -288,11 +288,16 @@ public:
 #ifdef C_CODE
     delete _nativeGL;
 #endif
-
-    // There's no need to delete these attributes because this class is not the owner
+#ifdef JAVA_CODE
+    _nativeGL.dispose();
+#endif
+// There's no need to delete these attributes because this class is not the owner
 //    delete _vertices;
 //    delete _textureCoordinates;
 //    delete _colors;
+    delete _vertices;
+    delete _textureCoordinates;
+    delete _colors;
   }
 
   int createProgram() const {

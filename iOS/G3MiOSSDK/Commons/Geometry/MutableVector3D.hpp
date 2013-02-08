@@ -40,7 +40,7 @@ public:
   MutableVector3D normalized() const;
   
   static MutableVector3D nan() {
-    return MutableVector3D(GMath.NanD(), GMath.NanD(), GMath.NanD());
+    return MutableVector3D(IMathUtils::instance()->NanD(), IMathUtils::instance()->NanD(), IMathUtils::instance()->NanD());
   }
   
   bool equalTo(const MutableVector3D& v) const{
@@ -48,7 +48,7 @@ public:
   }
   
   bool isNan() const {
-    return (GMath.isNan(_x) || GMath.isNan(_y) || GMath.isNan(_z));
+    return (IMathUtils::instance()->isNan(_x) || IMathUtils::instance()->isNan(_y) || IMathUtils::instance()->isNan(_z));
   }
   
   bool isZero() const {
@@ -56,7 +56,7 @@ public:
   }
   
   double length() const {
-    return GMath.sqrt(squaredLength());
+    return IMathUtils::instance()->sqrt(squaredLength());
   }
   
   double squaredLength() const {

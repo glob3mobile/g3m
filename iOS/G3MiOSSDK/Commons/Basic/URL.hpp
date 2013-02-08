@@ -43,6 +43,10 @@ public:
   {
   }
 
+  ~URL() {
+    
+  }
+
   std::string getPath() const {
     return _path;
   }

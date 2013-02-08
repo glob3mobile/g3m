@@ -8,8 +8,8 @@ public class BusyEffect extends EffectWithForce
 
   public BusyEffect(BusyQuadRenderer renderer)
   {
-	  super(1, 1);
-	  _renderer = renderer;
+     super(1, 1);
+     _renderer = renderer;
   }
 
   public void start(G3MRenderContext rc, TimeInterval when)
@@ -18,8 +18,8 @@ public class BusyEffect extends EffectWithForce
 
   public void doStep(G3MRenderContext rc, TimeInterval when)
   {
-	super.doStep(rc, when);
-	_renderer.incDegrees(3);
+    super.doStep(rc, when);
+    _renderer.incDegrees(3);
   }
 
   public void stop(G3MRenderContext rc, TimeInterval when)
@@ -28,7 +28,7 @@ public class BusyEffect extends EffectWithForce
 
   public void cancel(TimeInterval when)
   {
-	// do nothing, just leave the effect in the intermediate state
+    // do nothing, just leave the effect in the intermediate state
   }
 
 }

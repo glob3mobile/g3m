@@ -18,9 +18,10 @@ class Petition;
 class LayerSetChangedListener {
 public:
 #ifdef C_CODE
-  virtual ~LayerSetChangedListener() {
-
-  }
+  virtual ~LayerSetChangedListener() { }
+#endif
+#ifdef JAVA_CODE
+  public void dispose();
 #endif
 
   virtual void changed(const LayerSet* layerSet) = 0;

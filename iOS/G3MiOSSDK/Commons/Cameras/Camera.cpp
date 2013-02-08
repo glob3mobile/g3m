@@ -45,13 +45,11 @@ void Camera::copyFrom(const Camera &that) {
 
   _geodeticCenterOfView = (that._geodeticCenterOfView == NULL) ? NULL : new Geodetic3D(*that._geodeticCenterOfView);
 
-#ifdef C_CODE
   delete _frustum;
   delete _frustumInModelCoordinates;
   delete _halfFrustum;
   delete _halfFrustumInModelCoordinates;
   delete _camEffectTarget;
-#endif
 
   _camEffectTarget = new CameraEffectTarget();
 
@@ -236,7 +234,7 @@ void Camera::dragCamera(const Vector3D& p0, const Vector3D& p1) {
 
   // compute the angle
   //const Angle rotationDelta = Angle::fromRadians( - acos(p0.normalized().dot(p1.normalized())) );
-  const Angle rotationDelta = Angle::fromRadians(-GMath.asin(rotationAxis.length()/p0.length()/p1.length()));
+  const Angle rotationDelta = Angle::fromRadians(-IMathUtils::instance()->asin(rotationAxis.length()/p0.length()/p1.length()));
 
   if (rotationDelta.isNan()) {
     return;

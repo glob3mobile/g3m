@@ -4,11 +4,11 @@ public class RecreateTilesTask extends GTask
   private TileRenderer _tileRenderer;
   public RecreateTilesTask(TileRenderer tileRenderer)
   {
-	  _tileRenderer = tileRenderer;
+     _tileRenderer = tileRenderer;
   }
 
   public final void run(G3MContext context)
   {
-	_tileRenderer.recreateTiles();
+    _tileRenderer.recreateTiles();
   }
 }

@@ -38,10 +38,10 @@ public:
   Vector2D normalized() const;
   
   double length() const {
-    return GMath.sqrt(squaredLength());
+    return IMathUtils::instance()->sqrt(squaredLength());
   }
   
-  Angle orientation() const { return Angle::fromRadians(GMath.atan2(_y, _x)); }
+  Angle orientation() const { return Angle::fromRadians(IMathUtils::instance()->atan2(_y, _x)); }
   
   double squaredLength() const {
     return _x * _x + _y * _y ;
@@ -78,7 +78,7 @@ public:
   }
   
   Angle angle() const {
-    double a = GMath.atan2(_y, _x);
+    double a = IMathUtils::instance()->atan2(_y, _x);
     return Angle::fromRadians(a);
   }
 
@@ -91,7 +91,7 @@ public:
   }
 
   static Vector2D nan() {
-    return Vector2D(GMath.NanD(), GMath.NanD());
+    return Vector2D(IMathUtils::instance()->NanD(), IMathUtils::instance()->NanD());
   }
   
   double maxAxis() const {
@@ -105,7 +105,7 @@ public:
   MutableVector2D asMutableVector2D() const;
   
   bool isNan() const {
-//    return GMath.isNan(_x) || GMath.isNan(_y);
+//    return IMathUtils::instance()->isNan(_x) || IMathUtils::instance()->isNan(_y);
     
     if (_x != _x) {
       return true;

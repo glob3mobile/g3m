@@ -67,12 +67,7 @@ public:
 
   void onDestroy(const G3MContext* context) {
 
-  }
-
-  void unusedMethod() const {
-    
-  }
-  
+  }  
 };
 
 //***************************************************************

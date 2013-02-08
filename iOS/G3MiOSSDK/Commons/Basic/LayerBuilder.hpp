@@ -25,4 +25,4 @@ public:
   static WMSLayer* createCanaryIslandStreetMapLayer(bool enabled);
 };
 
-#endif /* defined(__G3MiOSSDK__LayerBuilder__) */
+#endif
