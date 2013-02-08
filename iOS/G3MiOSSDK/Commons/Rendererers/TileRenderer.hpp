@@ -167,12 +167,24 @@ public:
 
     const Sector sector = tile->getSector();
     if (_renderedSector == NULL) {
-      _renderedSector = new Sector(sector);
+#ifdef C_CODE
+      _renderedSector = new Sector( sector );
+#endif
+#ifdef JAVA_CODE
+      _renderedSector = sector;
+#endif
     }
     else {
       if (!_renderedSector->fullContains(sector)) {
         Sector* previous = _renderedSector;
-        _renderedSector  = new Sector( _renderedSector->mergedWith(sector) );
+
+#ifdef C_CODE
+        _renderedSector = new Sector( _renderedSector->mergedWith(sector) );
+#endif
+#ifdef JAVA_CODE
+        _renderedSector = _renderedSector->mergedWith(sector);
+#endif
+
         delete previous;
       }
     }
