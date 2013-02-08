@@ -96,7 +96,7 @@ public class TilesStatistics
       {
         Sector previous = _renderedSector;
 
-        _renderedSector = _renderedSector->mergedWith(sector);
+        _renderedSector = _renderedSector.mergedWith(sector);
 
         if (previous != null)
            previous.dispose();
