@@ -32,6 +32,7 @@ private:
 
   MarkTouchListener* _markTouchListener;
   bool               _autoDeleteMarkTouchListener;
+  long long    _downloadPriority;
 
 public:
 
@@ -39,6 +40,8 @@ public:
 
   void setMarkTouchListener(MarkTouchListener* markTouchListener,
                             bool autoDelete);
+  
+  void setDownloadPriority(long long downloadPriority);
 
   virtual ~MarksRenderer();
 

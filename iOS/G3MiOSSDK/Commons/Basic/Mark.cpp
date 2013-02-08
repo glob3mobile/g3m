@@ -197,7 +197,7 @@ _autoDeleteListener(autoDeleteListener)
 
 }
 
-void Mark::initialize(const G3MContext* context) {
+void Mark::initialize(const G3MContext* context, const long long priority) {
   if (!_textureSolved) {
     const bool hasLabel   = ( _label.length()             != 0 );
     const bool hasIconURL = ( _iconURL.getPath().length() != 0 );
@@ -206,7 +206,7 @@ void Mark::initialize(const G3MContext* context) {
       IDownloader* downloader = context->getDownloader();
 
       downloader->requestImage(_iconURL,
-                               1000000,
+                               priority,
                                TimeInterval::fromDays(30),
                                new IconDownloadListener(this, _label, _labelBottom),
                                true);

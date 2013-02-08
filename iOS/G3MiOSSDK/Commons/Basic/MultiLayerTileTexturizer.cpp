@@ -27,7 +27,7 @@
 #include "GLConstants.hpp"
 #include "IImageListener.hpp"
 
-#define TILE_DOWNLOAD_PRIORITY 1000000000
+//#define TILE_DOWNLOAD_PRIORITY 1000000000
 
 enum PetitionStatus {
   STATUS_PENDING,
@@ -258,7 +258,7 @@ public:
       //      const long long priority =  (_parameters->_incrementalTileQuality
       //                                   ? 1000 - _tile->getLevel()
       //                                   : _tile->getLevel());
-      const long long priority = TILE_DOWNLOAD_PRIORITY + _tile->getLevel();
+      const long long priority = 1000 + _tile->getLevel();
 
       const long long requestId = _downloader->requestImage(URL(petition->getURL()),
                                                             priority,

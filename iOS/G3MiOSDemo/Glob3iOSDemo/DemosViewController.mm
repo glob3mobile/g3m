@@ -40,7 +40,7 @@
 
 @implementation DemosViewController 
 
-@synthesize demoSelector, demoMenu, toolbar, layerSwitcher, playMarkersDemo, playModelDemo, playMeshDemo;
+@synthesize demoSelector, demoMenu, toolbar, layerSwitcher, playButton;
 @synthesize G3MWidget, layerSet, satelliteLayerEnabled, markerRenderer, shapeRenderer, meshRenderer;
 
 
@@ -108,6 +108,8 @@
   [self setLayerSwitcher: nil];
   [self setDemoSelector:nil];
   [self setDemoMenu: nil];
+  [self setLayerSwitcher: nil];
+  [self setPlayButton: nil];
   
   [self setMarkerRenderer: nil];
   [self setShapeRenderer: nil];
@@ -246,60 +248,15 @@
     void run(const G3MContext* context) {
       // Markers
       Downloader_iOS* downloader = (Downloader_iOS*) context->getDownloader();
-      WikiMarkerBufferDownloadListener* listener = new WikiMarkerBufferDownloadListener(this, _marksRenderer);
+      
       downloader->requestBuffer(URL("http://poiproxy.mapps.es/browseByLonLat?service=wikilocation&lon=-122.415985&lat=37.766372&dist=50000", false),
                                 200000,
                                 TimeInterval::forever(),
-                                listener,
+                                new WikiMarkerBufferDownloadListener(this, _marksRenderer),
                                 true);
-      // 3D model
-//      NSString *bsonFilePath = [[NSBundle mainBundle] pathForResource: @"A320"
-//                                                               ofType: @"bson"];
-//      if (bsonFilePath) {
-//        NSData* data = [NSData dataWithContentsOfFile: bsonFilePath];
-//        const int length = [data length];
-//        unsigned char* bytes = new unsigned char[ length ]; // will be deleted by IByteBuffer's destructor
-//        [data getBytes: bytes
-//                length: length];
-//        
-//        IByteBuffer* buffer = new ByteBuffer_iOS(bytes, length);
-//        if (buffer) {
-//          Shape* plane = SceneJSShapesParser::parseFromBSON(buffer, "file://textures-A320/");
-//          if (plane) {
-//            // Washington, DC
-//            plane->setPosition(new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
-//                                              Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
-//                                              1000) );
-//            plane->setScale(500, 500, 500);
-//            plane->setPitch(Angle::fromDegrees(90));
-//            _shapesRenderer->addShape(plane);
-//          }
-//          delete buffer;
-//        }
-//      }
 
-      NSString *jsonFilePath = [[NSBundle mainBundle] pathForResource: @"A320"
-                                                               ofType: @"json"];
-      if (jsonFilePath) {
-        NSString *nsPlaneJSON = [NSString stringWithContentsOfFile: jsonFilePath
-                                                          encoding: NSUTF8StringEncoding
-                                                             error: nil];
-        if (nsPlaneJSON) {
-          std::string planeJSON = [nsPlaneJSON UTF8String];
-          Shape* plane = SceneJSShapesParser::parseFromJSON(planeJSON, "file:///textures-A320/");
-          if (plane) {
-            ((DemoUserData*) [_widget widget]->getUserData())->setPlane(plane);
-            plane->setPosition(new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
-                                              Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
-                                              10000) );
-            const double scale = 200;
-            plane->setScale(scale, scale, scale);
-            plane->setPitch(Angle::fromDegrees(90));
-            
-            _shapeRenderer->addShape(plane);
-          }
-        }
-      }
+      // 3D model
+      context->getThreadUtils()->invokeInBackground(new PlaneParseTask(_widget, _shapeRenderer), true);
       
       _done = true;
     }
@@ -443,58 +400,35 @@
                  targetView: [self view]];
 }
 
+- (UIButton*) createToolbarButton: (NSString*) imageName
+                            frame: (CGRect) frame
+{
+  UIButton* button = [UIButton buttonWithType: UIButtonTypeCustom];
+  [button setTitle: @""
+          forState: nil];
+  [[button layer] setBorderWidth: 0];
+  [button setImage: [UIImage imageNamed: imageName]
+                        forState: UIControlStateNormal];
+  [button setFrame: frame];
+
+  return button;
+}
+
 - (void) initToolbar
 {
   [self setToolbar: [[G3MToolbar alloc] init]];
   [[self view] addSubview: toolbar];
   
   // layerSwitcher
-  [self setLayerSwitcher: [UIButton buttonWithType: UIButtonTypeCustom]];
+  [self setLayerSwitcher: [self createToolbarButton: @"satellite-on-96x48.png"
+                                         frame: CGRectMake(10.0, 10.0, 96.0, 48.0)]];
   [[self layerSwitcher] addTarget: self
                            action: @selector(switchLayer)
                  forControlEvents: UIControlEventTouchUpInside];
-  [[self layerSwitcher] setTitle: @""
-                        forState: nil];
-  [[[self layerSwitcher] layer] setBorderWidth: 0];
-  [[self layerSwitcher] setImage: [UIImage imageNamed:@"satellite-on-96x48.png"]
-                        forState: UIControlStateNormal];
-  [[self layerSwitcher] setFrame: CGRectMake(10.0, 10.0, 96.0, 48.0)];
   
-  // playMarkersDemo
-  [self setPlayMarkersDemo: [UIButton buttonWithType: UIButtonTypeCustom]];
-  [[self playMarkersDemo] addTarget: self
-                           action: @selector(gotoMarkersDemo)
-                 forControlEvents: UIControlEventTouchUpInside];
-  [[self playMarkersDemo] setTitle: @""
-                        forState: nil];
-  [[[self playMarkersDemo] layer] setBorderWidth: 0];
-  [[self playMarkersDemo] setImage: [UIImage imageNamed:@"play.png"]
-                        forState: UIControlStateNormal];
-  [[self playMarkersDemo] setFrame: CGRectMake(10.0, 10.0, 48.0, 48.0)];
-  
-  // playModelDemo
-  [self setPlayModelDemo: [UIButton buttonWithType: UIButtonTypeCustom]];
-  [[self playModelDemo] addTarget: self
-                           action: @selector(gotoModelDemo)
-                 forControlEvents: UIControlEventTouchUpInside];
-  [[self playModelDemo] setTitle: @""
-                        forState: nil];
-  [[[self playModelDemo] layer] setBorderWidth: 0];
-  [[self playModelDemo] setImage: [UIImage imageNamed:@"play.png"]
-                        forState: UIControlStateNormal];
-  [[self playModelDemo] setFrame: CGRectMake(10.0, 10.0, 48.0, 48.0)];
-  
-  // playMeshDemo
-  [self setPlayMeshDemo: [UIButton buttonWithType: UIButtonTypeCustom]];
-  [[self playMeshDemo] addTarget: self
-                           action: @selector(gotoMeshDemo)
-                 forControlEvents: UIControlEventTouchUpInside];
-  [[self playMeshDemo] setTitle: @""
-                        forState: nil];
-  [[[self playMeshDemo] layer] setBorderWidth: 0];
-  [[self playMeshDemo] setImage: [UIImage imageNamed:@"play.png"]
-                        forState: UIControlStateNormal];
-  [[self playMeshDemo] setFrame: CGRectMake(10.0, 10.0, 48.0, 48.0)];
+  // playButton
+  [self setPlayButton: [self createToolbarButton: @"play.png"
+                                           frame: CGRectMake(10.0, 10.0, 48.0, 48.0)]];
 }
 
 - (void) updateToolbar: (NSString*) option
@@ -508,15 +442,24 @@
     [[self toolbar] setVisible: TRUE];
   }
   else if ([option isEqual: @"Markers"]) {
-    [[self toolbar] addSubview: [self playMarkersDemo]];
+    [[self toolbar] addSubview: [self playButton]];
+    [[self playButton] addTarget: self
+                          action: @selector(gotoMarkersDemo)
+                forControlEvents: UIControlEventTouchUpInside];
     [[self toolbar] setVisible: TRUE];
   }
   else if ([option isEqual: @"3D Model"]) {
-    [[self toolbar] addSubview: [self playModelDemo]];
+    [[self toolbar] addSubview: [self playButton]];
+    [[self playButton] addTarget: self
+                          action: @selector(gotoModelDemo)
+                forControlEvents: UIControlEventTouchUpInside];
     [[self toolbar] setVisible: TRUE];
   }
   else if ([option isEqual: @"Point Mesh"]) {
-    [[self toolbar] addSubview: [self playMeshDemo]];
+    [[self toolbar] addSubview: [self playButton]];
+    [[self playButton] addTarget: self
+                          action: @selector(gotoMeshDemo)
+                forControlEvents: UIControlEventTouchUpInside];
     [[self toolbar] setVisible: TRUE];
   }
 }
@@ -602,7 +545,7 @@ public:
     _markRenderer = markRenderer;
   }
   void onDownload(const URL& url,
-                  const IByteBuffer* buffer) {
+                  IByteBuffer* buffer) {
     JSONBaseObject* json = IJSONParser::instance()->parse(buffer->getAsString());
     const JSONArray* features = json->asObject()->getAsArray("features");
     
@@ -633,6 +576,7 @@ public:
       
       _markRenderer->addMark(marker);
     }
+    delete buffer;
     IJSONParser::instance()->deleteJSONData(json);
   }
   
@@ -652,10 +596,87 @@ public:
   }
   
   void onCanceledDownload(const URL& url,
-                          const IByteBuffer* data) {
+                          IByteBuffer* data) {
     
   }
   
+};
+
+class AddPlaneTask : public GTask {
+private:
+  ShapesRenderer* _shapeRenderer;
+  Shape* _plane;
+public:
+  AddPlaneTask(ShapesRenderer* shapeRenderer, Shape* plane) {
+    _shapeRenderer = shapeRenderer;
+    _plane = plane;
+  }
+  
+  void run(const G3MContext* context) {
+    _shapeRenderer->addShape(_plane);
+  }
+};
+
+class PlaneParseTask : public GTask {
+private:
+  G3MWidget_iOS* _widget;
+  ShapesRenderer* _shapeRenderer;
+public:
+  PlaneParseTask(G3MWidget_iOS* widget, ShapesRenderer* shapeRenderer){
+    _widget = widget;
+    _shapeRenderer = shapeRenderer;
+  }
+  
+  void run(const G3MContext* context) {
+    //      NSString *bsonFilePath = [[NSBundle mainBundle] pathForResource: @"A320"
+    //                                                               ofType: @"bson"];
+    //      if (bsonFilePath) {
+    //        NSData* data = [NSData dataWithContentsOfFile: bsonFilePath];
+    //        const int length = [data length];
+    //        unsigned char* bytes = new unsigned char[ length ]; // will be deleted by IByteBuffer's destructor
+    //        [data getBytes: bytes
+    //                length: length];
+    //
+    //        IByteBuffer* buffer = new ByteBuffer_iOS(bytes, length);
+    //        if (buffer) {
+    //          Shape* plane = SceneJSShapesParser::parseFromBSON(buffer, "file://textures-A320/");
+    //          if (plane) {
+    //            // Washington, DC
+    //            plane->setPosition(new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
+    //                                              Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
+    //                                              1000) );
+    //            plane->setScale(500, 500, 500);
+    //            plane->setPitch(Angle::fromDegrees(90));
+    //            _shapesRenderer->addShape(plane);
+    //          }
+    //          delete buffer;
+    //        }
+    //      }
+
+    NSString *jsonFilePath = [[NSBundle mainBundle] pathForResource: @"A320"
+                                                             ofType: @"json"];
+    if (jsonFilePath) {
+      NSString *nsPlaneJSON = [NSString stringWithContentsOfFile: jsonFilePath
+                                                        encoding: NSUTF8StringEncoding
+                                                           error: nil];
+      if (nsPlaneJSON) {
+        std::string planeJSON = [nsPlaneJSON UTF8String];
+        Shape* plane = SceneJSShapesParser::parseFromJSON(planeJSON, "file:///textures-A320/");
+        if (plane) {
+          ((DemoUserData*) [_widget widget]->getUserData())->setPlane(plane);
+          plane->setPosition(new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
+                                            Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
+                                            10000) );
+          const double scale = 200;
+          plane->setScale(scale, scale, scale);
+          plane->setPitch(Angle::fromDegrees(90));
+          
+          context->getThreadUtils()->invokeInRendererThread(new AddPlaneTask(_shapeRenderer, plane), true);
+        }
+      }
+    }
+
+  }
 };
 
 @end

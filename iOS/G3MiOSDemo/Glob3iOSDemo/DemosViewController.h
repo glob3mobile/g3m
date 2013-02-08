@@ -27,9 +27,7 @@ class Shape;
 
 @property (strong, nonatomic) G3MToolbar* toolbar;
 @property (strong, nonatomic) UIButton* layerSwitcher;
-@property (strong, nonatomic) UIButton* playMarkersDemo;
-@property (strong, nonatomic) UIButton* playModelDemo;
-@property (strong, nonatomic) UIButton* playMeshDemo;
+@property (strong, nonatomic) UIButton* playButton;
 
 @property (retain, nonatomic) G3MWidget_iOS* G3MWidget;
 

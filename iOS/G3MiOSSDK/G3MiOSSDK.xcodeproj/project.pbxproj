@@ -368,6 +368,8 @@
 		E77A100B165BEDC500FE5515 /* IG3MBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E77A1009165BEDC500FE5515 /* IG3MBuilder.hpp */; settings = {ATTRIBUTES = (); }; };
 		E7B9964E16A94EC400753FC3 /* LayerBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7B9964C16A94EC400753FC3 /* LayerBuilder.cpp */; };
 		E7B9964F16A94EC400753FC3 /* LayerBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E7B9964D16A94EC400753FC3 /* LayerBuilder.hpp */; };
+		E7EC944516C4F43300B32D9F /* DownloadPriority.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7EC944316C4F43300B32D9F /* DownloadPriority.cpp */; };
+		E7EC944616C4F43300B32D9F /* DownloadPriority.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E7EC944416C4F43300B32D9F /* DownloadPriority.hpp */; };
 		E87424B1169F4B9400C8A227 /* MarkTouchListener.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E87424B0169F4B9400C8A227 /* MarkTouchListener.hpp */; };
 /* End PBXBuildFile section */
 
@@ -666,7 +668,7 @@
 		CFF95F741588DF0A00B56E11 /* TimeInterval.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = TimeInterval.hpp; path = Commons/Basic/TimeInterval.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFF95F761588E82200B56E11 /* Color.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Color.hpp; path = Commons/Basic/Color.hpp; sourceTree = "<group>"; };
 		CFFAFD6D169F2C1500BCE129 /* ITextUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = ITextUtils.cpp; path = Commons/Interfaces/ITextUtils.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		CFFAFD6E169F2C1500BCE129 /* ITextUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = ITextUtils.hpp; path = Commons/Interfaces/ITextUtils.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		CFFAFD6E169F2C1500BCE129 /* ITextUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = ITextUtils.hpp; path = Commons/Interfaces/ITextUtils.hpp; sourceTree = "<group>"; };
 		CFFAFD71169F2E3000BCE129 /* TextUtils_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = TextUtils_iOS.mm; path = Specific/Derived/TextUtils_iOS.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		CFFAFD72169F2E3000BCE129 /* TextUtils_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = TextUtils_iOS.hpp; path = Specific/Derived/TextUtils_iOS.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFFEC11B15C2E636003FA986 /* IDownloader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IDownloader.hpp; path = Commons/Interfaces/IDownloader.hpp; sourceTree = "<group>"; };
@@ -735,6 +737,8 @@
 		E77A1009165BEDC500FE5515 /* IG3MBuilder.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = IG3MBuilder.hpp; path = Commons/Basic/IG3MBuilder.hpp; sourceTree = "<group>"; };
 		E7B9964C16A94EC400753FC3 /* LayerBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LayerBuilder.cpp; path = Commons/Basic/LayerBuilder.cpp; sourceTree = "<group>"; };
 		E7B9964D16A94EC400753FC3 /* LayerBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = LayerBuilder.hpp; path = Commons/Basic/LayerBuilder.hpp; sourceTree = "<group>"; };
+		E7EC944316C4F43300B32D9F /* DownloadPriority.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DownloadPriority.cpp; path = Commons/Basic/DownloadPriority.cpp; sourceTree = "<group>"; };
+		E7EC944416C4F43300B32D9F /* DownloadPriority.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DownloadPriority.hpp; path = Commons/Basic/DownloadPriority.hpp; sourceTree = "<group>"; };
 		E87424B0169F4B9400C8A227 /* MarkTouchListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MarkTouchListener.hpp; path = Commons/Rendererers/MarkTouchListener.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -842,11 +846,14 @@
 				CF4FAAC21695C66F009734CA /* ByteBufferBuilder.hpp */,
 				CF7EDA0316948302002C760A /* ByteBufferIterator.cpp */,
 				CF7EDA0416948302002C760A /* ByteBufferIterator.hpp */,
+				D8EB78831637F6B500C4EB57 /* CameraGoToPositionEffect.hpp */,
 				CFF95F761588E82200B56E11 /* Color.hpp */,
 				383BD38E1577EE500012AC53 /* Context.cpp */,
 				383BD38F1577EE500012AC53 /* Context.hpp */,
 				D87EC5CB15BEB31000E38C36 /* CPUTextureBuilder.cpp */,
 				D87EC5CC15BEB31000E38C36 /* CPUTextureBuilder.hpp */,
+				E7EC944316C4F43300B32D9F /* DownloadPriority.cpp */,
+				E7EC944416C4F43300B32D9F /* DownloadPriority.hpp */,
 				CF31CBF0158776120085E8F1 /* Effects.cpp */,
 				CF31CBEE158776020085E8F1 /* Effects.hpp */,
 				CF9AEBC1159B3FEA004C3558 /* EllipsoidalTileTessellator.cpp */,
@@ -863,7 +870,6 @@
 				D88B5E5115C162AF0083A43F /* G3MWidget.hpp */,
 				CF2CDD971678292E002A78A9 /* GInitializationTask.cpp */,
 				CF2CDD981678292E002A78A9 /* GInitializationTask.hpp */,
-				D8EB78831637F6B500C4EB57 /* CameraGoToPositionEffect.hpp */,
 				CF527E19162E2B4200E0BDE0 /* GTask.cpp */,
 				CF527E1A162E2B4200E0BDE0 /* GTask.hpp */,
 				CF9D2D8615F7D3C100B5CE2E /* IBuffer.cpp */,
@@ -878,6 +884,8 @@
 				CF7E626515F7DD740086B71D /* IntBufferBuilder.hpp */,
 				CFBD42D916AA151100663F21 /* IShortBuffer.cpp */,
 				CFBD42DA16AA151100663F21 /* IShortBuffer.hpp */,
+				CF90F6BF16C4069C00B309C2 /* ITexturizerData.cpp */,
+				CF90F6C016C4069C00B309C2 /* ITexturizerData.hpp */,
 				CFCE679B15EFB06700B35FE0 /* IThreadUtils.cpp */,
 				CFCE679C15EFB06700B35FE0 /* IThreadUtils.hpp */,
 				CF03683416A499F0006CE160 /* LabelPosition.h */,
@@ -918,8 +926,6 @@
 				CFFEC12415C2EB96003FA986 /* URL.hpp */,
 				CF8D0BFB15AF0D23005B5433 /* TileTexturizer.hpp */,
 				CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */,
-				CF90F6BF16C4069C00B309C2 /* ITexturizerData.cpp */,
-				CF90F6C016C4069C00B309C2 /* ITexturizerData.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -1303,7 +1309,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E7AF21831684516500C421F0 /* LayerBuilder.hpp in Headers */,
 				383BD3861577EDDB0012AC53 /* G3MWidget_iOS.h in Headers */,
 				CFDFC05E166AB22A0065BC1F /* AbstractMesh.hpp in Headers */,
 				E7051241165E916000AEADB9 /* G3MBuilder_iOS.hpp in Headers */,
@@ -1502,6 +1507,7 @@
 				CF6B5F6616C194D200C590C1 /* JSONInteger.hpp in Headers */,
 				CF6B5F6A16C1956B00C590C1 /* JSONLong.hpp in Headers */,
 				CF90F6C216C4069D00B309C2 /* ITexturizerData.hpp in Headers */,
+				E7EC944616C4F43300B32D9F /* DownloadPriority.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1695,7 +1701,6 @@
 				CFDB7B73166AB99B00756DE8 /* DirectMesh.cpp in Sources */,
 				CF00E444166FD77E0098CABD /* IImageListener.cpp in Sources */,
 				CF2CDD991678292E002A78A9 /* GInitializationTask.cpp in Sources */,
-				E7AF21821684516500C421F0 /* LayerBuilder.cpp in Sources */,
 				CFF76BE5168614AD00F658CC /* MeshRenderer.cpp in Sources */,
 				CF7EDA0516948302002C760A /* ByteBufferIterator.cpp in Sources */,
 				CF7EDA0A1694914A002C760A /* BSONParser.cpp in Sources */,
@@ -1719,6 +1724,7 @@
 				CF6B5F6516C194D200C590C1 /* JSONInteger.cpp in Sources */,
 				CF6B5F6916C1956B00C590C1 /* JSONLong.cpp in Sources */,
 				CF90F6C116C4069D00B309C2 /* ITexturizerData.cpp in Sources */,
+				E7EC944516C4F43300B32D9F /* DownloadPriority.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

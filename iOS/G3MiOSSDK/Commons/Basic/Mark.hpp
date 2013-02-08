@@ -101,7 +101,7 @@ public:
     return _position;
   }
 
-  void initialize(const G3MContext* context);
+  void initialize(const G3MContext* context, const long long priority);
 
   void render(const G3MRenderContext* rc);
 
