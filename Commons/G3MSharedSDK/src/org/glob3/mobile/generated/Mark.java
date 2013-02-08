@@ -205,7 +205,7 @@ public class Mark
     return _position;
   }
 
-  public final void initialize(G3MContext context)
+  public final void initialize(G3MContext context, long downloadPriority)
   {
     if (!_textureSolved)
     {
@@ -216,7 +216,7 @@ public class Mark
       {
         IDownloader downloader = context.getDownloader();
   
-        downloader.requestImage(_iconURL, 1000000, TimeInterval.fromDays(30), new IconDownloadListener(this, _label, _labelBottom), true);
+        downloader.requestImage(_iconURL, downloadPriority, TimeInterval.fromDays(30), new IconDownloadListener(this, _label, _labelBottom), true);
       }
       else
       {

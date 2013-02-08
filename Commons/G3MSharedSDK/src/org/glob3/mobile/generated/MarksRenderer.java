@@ -32,6 +32,8 @@ public class MarksRenderer extends LeafRenderer
   private MarkTouchListener _markTouchListener;
   private boolean _autoDeleteMarkTouchListener;
 
+  private long _downloadPriority = 1000000;
+
 
   public MarksRenderer(boolean readyWhenMarksReady)
   {
@@ -79,7 +81,7 @@ public class MarksRenderer extends LeafRenderer
     for (int i = 0; i < marksSize; i++)
     {
       Mark mark = _marks.get(i);
-      mark.initialize(context);
+      mark.initialize(context, _downloadPriority);
     }
   }
 
@@ -130,7 +132,7 @@ public class MarksRenderer extends LeafRenderer
     _marks.add(mark);
     if (_context != null)
     {
-      mark.initialize(_context);
+      mark.initialize(_context, _downloadPriority);
     }
   }
 
@@ -276,6 +278,21 @@ public class MarksRenderer extends LeafRenderer
 
   public final void onDestroy(G3MContext context)
   {
+  }
+
+  /**
+   Change the download-priority used by Marks (for downloading textures).
+
+   Default value is 1000000
+   */
+  public final void setDownloadPriority(long downloadPriority)
+  {
+    _downloadPriority = downloadPriority;
+  }
+
+  public final long getDownloadPriority()
+  {
+    return _downloadPriority;
   }
 
 }
