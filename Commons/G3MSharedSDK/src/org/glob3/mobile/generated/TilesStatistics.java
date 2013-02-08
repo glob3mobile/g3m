@@ -76,15 +76,8 @@ public class TilesStatistics
     _tilesVisibleByLevel[level] = _tilesVisibleByLevel[level] + 1;
   }
 
-  public final void computeTileRendered(Tile tile)
+  public final void computeRenderedSector(Tile tile)
   {
-    _tilesRendered++;
-
-    final int level = tile.getLevel();
-    _tilesRenderedByLevel[level] = _tilesRenderedByLevel[level] + 1;
-
-
-
     final Sector sector = tile.getSector();
     if (_renderedSector == null)
     {
@@ -102,6 +95,17 @@ public class TilesStatistics
            previous.dispose();
       }
     }
+  }
+
+  public final void computeTileRendered(Tile tile)
+  {
+    _tilesRendered++;
+
+    final int level = tile.getLevel();
+    _tilesRenderedByLevel[level] = _tilesRenderedByLevel[level] + 1;
+
+
+    computeRenderedSector(tile);
   }
 
   public final Sector getRenderedSector()
