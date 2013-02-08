@@ -170,9 +170,11 @@ public:
       _renderedSector = new Sector(sector);
     }
     else {
-      Sector* previous = _renderedSector;
-      _renderedSector  = new Sector( _renderedSector->mergedWith(sector) );
-      delete previous;
+      if (!_renderedSector->fullContains(sector)) {
+        Sector* previous = _renderedSector;
+        _renderedSector  = new Sector( _renderedSector->mergedWith(sector) );
+        delete previous;
+      }
     }
   }
 

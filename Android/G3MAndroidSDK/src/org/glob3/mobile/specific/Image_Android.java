@@ -30,10 +30,8 @@ public final class Image_Android
    //      .replace("org.glob3.mobile.specific.", "") //
    //      .replace("org.glob3.mobile.generated.", "") //
    //      .replace("android.opengl.", "") //
-   //      .replace("  at Image_Android.createCallStackString(Image_Android.java:26)\n", "") //
-   //      .replace("  at Image_Android.access$1(Image_Android.java:25)\n", "") //
-   //      .replace(" at ", "") //
-   //      .replace(" java.lang.Exception\n", "");
+   //      .replace("at", "") //
+   //      .replace("java.lang.Exception\n", "");
    //   }
 
 
@@ -105,7 +103,6 @@ public final class Image_Android
    }
 
 
-   //   final private Bitmap _bitmap;
    final private BitmapHolder _bitmapHolder;
    private byte[]             _source;
 
@@ -304,7 +301,6 @@ public final class Image_Android
       synchronized (this) {
          //         _bitmapHolderReleased = true;
          _bitmapHolder._release();
-         //_bitmap.recycle();
       }
 
       super.dispose();
