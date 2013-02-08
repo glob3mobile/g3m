@@ -139,7 +139,8 @@ public class MarksRenderer extends LeafRenderer
   public final void removeMark(Mark mark)
   {
     int pos = -1;
-    for (int i = 0; i < _marks.size(); i++)
+    final int marksSize = _marks.size();
+    for (int i = 0; i < marksSize; i++)
     {
       if (_marks.get(i) == mark)
       {
@@ -155,7 +156,8 @@ public class MarksRenderer extends LeafRenderer
 
   public final void removeAllMarks()
   {
-    for (int i = 0; i < _marks.size(); i++)
+    final int marksSize = _marks.size();
+    for (int i = 0; i < marksSize; i++)
     {
       if (_marks.get(i) != null)
          _marks.get(i).dispose();
