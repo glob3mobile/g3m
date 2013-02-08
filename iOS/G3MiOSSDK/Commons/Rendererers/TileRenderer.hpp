@@ -157,14 +157,7 @@ public:
     _tilesVisibleByLevel[level] = _tilesVisibleByLevel[level] + 1;
   }
 
-  void computeTileRendered(Tile* tile) {
-    _tilesRendered++;
-
-    const int level = tile->getLevel();
-    _tilesRenderedByLevel[level] = _tilesRenderedByLevel[level] + 1;
-
-
-
+  void computeRenderedSector(Tile* tile) {
     const Sector sector = tile->getSector();
     if (_renderedSector == NULL) {
 #ifdef C_CODE
@@ -188,6 +181,16 @@ public:
         delete previous;
       }
     }
+  }
+
+  void computeTileRendered(Tile* tile) {
+    _tilesRendered++;
+
+    const int level = tile->getLevel();
+    _tilesRenderedByLevel[level] = _tilesRenderedByLevel[level] + 1;
+
+    
+    computeRenderedSector(tile);
   }
 
   const Sector* getRenderedSector() const {
