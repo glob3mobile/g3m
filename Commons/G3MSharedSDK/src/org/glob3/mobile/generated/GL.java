@@ -706,12 +706,11 @@ public class GL
   public void dispose()
   {
     _nativeGL.dispose();
-    if (_vertices != null)
-       _vertices.dispose();
-    if (_textureCoordinates != null)
-       _textureCoordinates.dispose();
-    if (_colors != null)
-       _colors.dispose();
+
+    // GL is not owner of those buffers, it keep a reference only for state-change-testing. NO DELETE THEM.
+    // delete _vertices;
+    // delete _textureCoordinates;
+    // delete _colors;
   }
 
   public final int createProgram()
