@@ -71,7 +71,8 @@ private:
   const Vector3D _upper;
   
 #ifdef JAVA_CODE
-  private java.util.ArrayList<Vector3D> _corners = null; // cache for getCorners() method
+  private java.util.ArrayList<Vector3D> _cornersD = null; // cache for getCorners() method
+  private java.util.ArrayList<Vector3D> _cornersF = null; // cache for getCorners() method
 #endif
   
   Mesh *_mesh;  
