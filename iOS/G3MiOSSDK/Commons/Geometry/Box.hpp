@@ -72,7 +72,7 @@ private:
   
 #ifdef JAVA_CODE
   private java.util.ArrayList<Vector3D> _cornersD = null; // cache for getCorners() method
-  private java.util.ArrayList<Vector3D> _cornersF = null; // cache for getCorners() method
+  private java.util.ArrayList<Vector3F> _cornersF = null; // cache for getCornersF() method
 #endif
   
   Mesh *_mesh;  
