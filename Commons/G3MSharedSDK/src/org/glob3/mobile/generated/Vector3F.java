@@ -16,6 +16,7 @@ package org.glob3.mobile.generated;
 //
 
 
+
 public class Vector3F
 {
 
@@ -44,6 +45,32 @@ public class Vector3F
      _y = v._y;
      _z = v._z;
 
+  }
+
+  public final float dot(Vector3D v)
+  {
+    return _x * (float) v._x + _y * (float) v._y + _z * (float) v._z;
+  }
+
+  public final float dot(Vector3F v)
+  {
+    return _x * v._x + _y * v._y + _z * v._z;
+  }
+
+  public final Vector3F normalized()
+  {
+    final double d = length();
+    return new Vector3F((float)(_x / d), (float)(_y / d), (float)(_z / d));
+  }
+
+  public final double length()
+  {
+    return IMathUtils.instance().sqrt(squaredLength());
+  }
+
+  public final double squaredLength()
+  {
+    return _x * _x + _y * _y + _z * _z;
   }
 
 }
