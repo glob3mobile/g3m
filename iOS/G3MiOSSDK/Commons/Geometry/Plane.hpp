@@ -17,11 +17,7 @@ private:
   const Vector3D _normal;
   const double   _d;
 
-#ifdef C_CODE
   const Vector3F _normalF;
-#else
-  Vector3F _normalF;
-#endif
   const float    _dF;
 
 public:
@@ -43,7 +39,8 @@ public:
     return Plane(normal, d);
   }
 
-  Plane(const Vector3D& normal, double d):
+  Plane(const Vector3D& normal,
+        double d):
   _normal(normal.normalized()),
   _d(d),
   _normalF( Vector3F((float) normal._x, (float) normal._y, (float) normal._z).normalized() ),
