@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  Plane.h
+//  Plane.hpp
 //  G3MiOSSDK
 //
 //  Created by Agustín Trujillo Pino on 14/07/12.
@@ -22,7 +22,7 @@ public class Plane
   private final Vector3D _normal ;
   private final double _d;
 
-  private final Vector3F _normalF = new Vector3F();
+  private Vector3F _normalF = new Vector3F();
   private final float _dF;
 
 
