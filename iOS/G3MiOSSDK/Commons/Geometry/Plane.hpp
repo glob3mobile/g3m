@@ -1,5 +1,5 @@
 //
-//  Plane.h
+//  Plane.hpp
 //  G3MiOSSDK
 //
 //  Created by Agustín Trujillo Pino on 14/07/12.
@@ -17,7 +17,11 @@ private:
   const Vector3D _normal;
   const double   _d;
 
+#ifdef C_CODE
   const Vector3F _normalF;
+#else
+  Vector3F _normalF;
+#endif
   const float    _dF;
 
 public:
