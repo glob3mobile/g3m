@@ -7,3 +7,11 @@
 //
 
 #include "Vector3F.hpp"
+
+
+Vector3F Vector3F::normalized() const {
+  const double d = length();
+  return Vector3F((float) (_x / d),
+                  (float) (_y / d),
+                  (float) (_z / d));
+}

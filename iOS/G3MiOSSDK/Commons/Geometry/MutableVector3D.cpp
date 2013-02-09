@@ -9,9 +9,8 @@
 #include "MutableVector3D.hpp"
 
 
-MutableVector3D MutableVector3D::normalized() const
-{
-  double d = length();
+MutableVector3D MutableVector3D::normalized() const {
+  const double d = length();
   return MutableVector3D(_x / d, _y /d, _z / d);
 }
 

@@ -19,18 +19,18 @@ _ltf(Vector3D(data._zfar/data._znear*data._left,  data._zfar/data._znear*data._t
 _rtf(Vector3D(data._zfar/data._znear*data._right, data._zfar/data._znear*data._top,     -data._zfar)),
 _lbf(Vector3D(data._zfar/data._znear*data._left,  data._zfar/data._znear*data._bottom,  -data._zfar)),
 _rbf(Vector3D(data._zfar/data._znear*data._right, data._zfar/data._znear*data._bottom,  -data._zfar)),
-_leftPlane(Plane(Vector3D::zero(),
-                 Vector3D(data._left, data._top, -data._znear),
-                 Vector3D(data._left, data._bottom, -data._znear))),
-_bottomPlane(Plane(Vector3D::zero(),
-                   Vector3D(data._left, data._bottom, -data._znear),
-                   Vector3D(data._right, data._bottom, -data._znear))),
-_rightPlane(Plane(Vector3D::zero(),
-                  Vector3D(data._right, data._bottom, -data._znear),
-                  Vector3D(data._right, data._top, -data._znear))),
-_topPlane(Plane(Vector3D::zero(),
-                Vector3D(data._right, data._top, -data._znear),
-                Vector3D(data._left, data._top, -data._znear))),
+_leftPlane(Plane::fromPoints(Vector3D::zero(),
+                             Vector3D(data._left, data._top, -data._znear),
+                             Vector3D(data._left, data._bottom, -data._znear))),
+_bottomPlane(Plane::fromPoints(Vector3D::zero(),
+                               Vector3D(data._left, data._bottom, -data._znear),
+                               Vector3D(data._right, data._bottom, -data._znear))),
+_rightPlane(Plane::fromPoints(Vector3D::zero(),
+                              Vector3D(data._right, data._bottom, -data._znear),
+                              Vector3D(data._right, data._top, -data._znear))),
+_topPlane(Plane::fromPoints(Vector3D::zero(),
+                            Vector3D(data._right, data._top, -data._znear),
+                            Vector3D(data._left, data._top, -data._znear))),
 _nearPlane(Plane(Vector3D(0, 0, 1), data._znear)),
 _farPlane(Plane(Vector3D(0, 0, -1), -data._zfar)),
 _extent(NULL)
@@ -62,20 +62,18 @@ bool Frustum::touchesWithBox(const Box *box) const {
   const Vector3D min = box->getLower();
   const Vector3D max = box->getUpper();
 
-  Vector3D corners[8] = {
-    //Vector3D(min._x, min._y, min._z),
-    min,
-    Vector3D(min._x, min._y, max._z),
-    Vector3D(min._x, max._y, min._z),
-    Vector3D(min._x, max._y, max._z),
-    Vector3D(max._x, min._y, min._z),
-    Vector3D(max._x, min._y, max._z),
-    Vector3D(max._x, max._y, min._z),
-    //Vector3D(max._x, max._y, max._z)
-    max
+  Vector3F corners[8] = {
+    Vector3F((float) min._x, (float) min._y, (float) min._z),
+    Vector3F((float) min._x, (float) min._y, (float) max._z),
+    Vector3F((float) min._x, (float) max._y, (float) min._z),
+    Vector3F((float) min._x, (float) max._y, (float) max._z),
+    Vector3F((float) max._x, (float) min._y, (float) min._z),
+    Vector3F((float) max._x, (float) min._y, (float) max._z),
+    Vector3F((float) max._x, (float) max._y, (float) min._z),
+    Vector3F((float) max._x, (float) max._y, (float) max._z)
   };
 #else
-  const std::vector<Vector3D> corners = box->getCorners();
+  const std::vector<Vector3F> corners = box->getCornersF();
 #endif
 
   // test with left plane
