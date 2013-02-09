@@ -22,17 +22,16 @@ public class Plane
   private final Vector3D _normal ;
   private final double _d;
 
-  private final Vector3F _normalF = new Vector3F();
-  private final float _dF;
+//  const Vector3F _normalF;
+//  const float    _dF;
 
 
   public Plane()
+//  _normalF(0, 0, 0),
+//  _dF(0)
   {
      _normal = new Vector3D(0, 0, 0);
      _d = 0;
-     _normalF = new Vector3F(0, 0, 0);
-     _dF = 0F;
-
   }
 
   public static Plane fromPoints(Vector3D point0, Vector3D point1, Vector3D point2)
@@ -43,28 +42,27 @@ public class Plane
   }
 
   public Plane(Vector3D normal, double d)
+//  _normalF( Vector3F((float) normal._x, (float) normal._y, (float) normal._z).normalized() ),
+//  _dF((float) d)
   {
      _normal = new Vector3D(normal.normalized());
      _d = d;
-     _normalF = new Vector3F(new Vector3F((float) normal._x, (float) normal._y, (float) normal._z).normalized());
-     _dF = (float) d;
   }
 
   public Plane(double a, double b, double c, double d)
+//  _normalF(Vector3F((float) a, (float) b, (float) c).normalized()),
+//  _dF((float) d)
   {
      _normal = new Vector3D(new Vector3D(a,b,c).normalized());
      _d = d;
-     _normalF = new Vector3F(new Vector3F((float) a, (float) b, (float) c).normalized());
-     _dF = (float) d;
   }
 
   public Plane(Plane that)
+//  _normalF(that._normalF),
+//  _dF(that._dF)
   {
      _normal = new Vector3D(that._normal);
      _d = that._d;
-     _normalF = new Vector3F(that._normalF);
-     _dF = that._dF;
-
   }
 
   public final Plane transformedByTranspose(MutableMatrix44D M)
@@ -86,7 +84,7 @@ public class Plane
 
   public final float signedDistance(Vector3F point)
   {
-    return point.dot(_normalF) + _dF;
+    return point.dot(_normal) + (float) _d;
   }
 
   public final Vector3D intersectionWithRay(Vector3D origin, Vector3D direction)
@@ -117,6 +115,5 @@ public class Plane
     final Vector3D intersection = origin.add(direction.times(t));
     return intersection;
   }
-
 
 }
