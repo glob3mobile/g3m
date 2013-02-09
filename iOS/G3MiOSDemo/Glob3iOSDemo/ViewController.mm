@@ -318,33 +318,49 @@ public:
     layerSet->addLayer(i3Landsat);
   }
 
-  //  WMSLayer* political = new WMSLayer("topp:cia",
-  //                                     URL("http://worldwind22.arc.nasa.gov/geoserver/wms?"),
-  //                                     WMS_1_1_0,
-  //                                     Sector::fullSphere(),
-  //                                     "image/png",
-  //                                     "EPSG:4326",
-  //                                     "countryboundaries",
-  //                                     true,
-  //                                     NULL);
-  //  layerSet->addLayer(political);
 
   bool useBing = true;
   if (useBing) {
-    bool enabled = true;
-    WMSLayer* bing = LayerBuilder::createBingLayer(enabled);
-//    WMSLayer* bing = new WMSLayer("ve",
-//                                  URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?", false),
-//                                  WMS_1_1_0,
-//                                  Sector::fullSphere(),
-//                                  "image/jpeg",
-//                                  "EPSG:4326",
-//                                  "",
-//                                  false,
-//                                  NULL,
-//                                  TimeInterval::fromDays(30));
-    bing->setEnable(false);
+    WMSLayer* blueMarble = new WMSLayer("bmng200405",
+                                        URL("http://www.nasa.network.com/wms?", false),
+                                        WMS_1_1_0,
+                                        Sector::fullSphere(),
+                                        "image/jpeg",
+                                        "EPSG:4326",
+                                        "",
+                                        false,
+                                        new LevelTileCondition(0, 5),
+                                        TimeInterval::fromDays(30));
+    layerSet->addLayer(blueMarble);
+
+
+//    bool enabled = true;
+//    WMSLayer* bing = LayerBuilder::createBingLayer(enabled);
+    WMSLayer* bing = new WMSLayer("ve",
+                                  URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?", false),
+                                  WMS_1_1_0,
+                                  Sector::fullSphere(),
+                                  "image/jpeg",
+                                  "EPSG:4326",
+                                  "",
+                                  false,
+                                  new LevelTileCondition(6, 500),
+                                  TimeInterval::fromDays(30));
     layerSet->addLayer(bing);
+  }
+
+  if (true) {
+    WMSLayer* political = new WMSLayer("topp:cia",
+                                       URL("http://worldwind22.arc.nasa.gov/geoserver/wms?", false),
+                                       WMS_1_1_0,
+                                       Sector::fullSphere(),
+                                       "image/png",
+                                       "EPSG:4326",
+                                       "countryboundaries",
+                                       true,
+                                       NULL,
+                                       TimeInterval::fromDays(30));
+    layerSet->addLayer(political);
   }
 
   bool useOSM = true;
@@ -370,7 +386,7 @@ public:
                                  false,
                                  NULL,
                                  TimeInterval::fromDays(30));
-    osm->setEnable(true);
+    osm->setEnable(false);
     layerSet->addLayer(osm);
   }
 
@@ -543,8 +559,8 @@ public:
   //                               textureImage, true, textureFileName,
   //                               50000, 50000);
 
-  Shape* circle = new CircleShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
-                                                 Angle::fromDegrees(-122.76666666666667),
+  Shape* circle = new CircleShape(new Geodetic3D(Angle::fromDegrees(38.78333333),
+                                                 Angle::fromDegrees(-123),
                                                  8000),
                                   50000,
                                   Color::newFromRGBA(1, 1, 0, 0.5));
@@ -553,8 +569,8 @@ public:
   //  circle->setScale(2.0, 0.5, 1);
   shapesRenderer->addShape(circle);
 
-  Shape* box = new BoxShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
-                                           Angle::fromDegrees(-122.41666666666667),
+  Shape* box = new BoxShape(new Geodetic3D(Angle::fromDegrees(39.78333333),
+                                           Angle::fromDegrees(-122),
                                            45000),
                             Vector3D(20000, 30000, 50000),
                             2,
