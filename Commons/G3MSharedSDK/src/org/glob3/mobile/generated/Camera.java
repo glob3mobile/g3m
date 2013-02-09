@@ -151,8 +151,11 @@ public class Camera
   {
     final Vector2D p = getModelViewMatrix().project(point, 0, 0, _width, _height);
   
-    // IMathUtils* math = IMathUtils::instance();
-    // return Vector2I( math->toInt(p._x), math->toInt(_height-p._y) );
+    return new Vector2I((int) p._x, (int)(_height - p._y));
+  }
+  public final Vector2I point2Pixel(Vector3F point)
+  {
+    final Vector2F p = getModelViewMatrix().project(point, 0, 0, _width, _height);
   
     return new Vector2I((int) p._x, (int)(_height - p._y));
   }

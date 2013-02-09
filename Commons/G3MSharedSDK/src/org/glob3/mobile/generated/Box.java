@@ -67,6 +67,22 @@ public class Box extends Extent
     }
     return _corners;
   }
+  public final java.util.ArrayList<Vector3F> getCornersF()
+  {
+    if (_corners == null) {
+      _corners = new java.util.ArrayList<Vector3F>(8);
+  
+      _corners.add(new Vector3F((float) _lower._x, (float) _lower._y, (float) _lower._z));
+      _corners.add(new Vector3F((float) _lower._x, (float) _lower._y, (float) _upper._z));
+      _corners.add(new Vector3F((float) _lower._x, (float) _upper._y, (float) _lower._z));
+      _corners.add(new Vector3F((float) _lower._x, (float) _upper._y, (float) _upper._z));
+      _corners.add(new Vector3F((float) _upper._x, (float) _lower._y, (float) _lower._z));
+      _corners.add(new Vector3F((float) _upper._x, (float) _lower._y, (float) _upper._z));
+      _corners.add(new Vector3F((float) _upper._x, (float) _upper._y, (float) _lower._z));
+      _corners.add(new Vector3F((float) _upper._x, (float) _upper._y, (float) _upper._z));
+    }
+    return _corners;
+  }
 
   public final double squaredProjectedArea(G3MRenderContext rc)
   {
@@ -75,7 +91,7 @@ public class Box extends Extent
   }
   public final Vector2I projectedExtent(G3MRenderContext rc)
   {
-    final java.util.ArrayList<Vector3D> corners = getCorners();
+    final java.util.ArrayList<Vector3F> corners = getCornersF();
   
     final Camera currentCamera = rc.getCurrentCamera();
   
