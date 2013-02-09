@@ -262,7 +262,7 @@ public class Box extends Extent
   private final Vector3D _upper ;
 
   private java.util.ArrayList<Vector3D> _cornersD = null; // cache for getCorners() method
-  private java.util.ArrayList<Vector3D> _cornersF = null; // cache for getCorners() method
+  private java.util.ArrayList<Vector3F> _cornersF = null; // cache for getCornersF() method
 
   private Mesh _mesh;
   private void createMesh(Color color)
