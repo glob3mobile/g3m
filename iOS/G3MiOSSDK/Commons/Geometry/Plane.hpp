@@ -17,7 +17,12 @@ private:
   const Vector3D _normal;
   const double   _d;
 
+#ifdef C_CODE
   Vector3F _normalF;
+#endif
+#ifdef JAVA_CODE
+  private Vector3F _normalF;
+#endif
   float    _dF;
 
 public:
@@ -29,16 +34,6 @@ public:
   _dF(0)
   {
   }
-
-//  Plane(const Vector3D& point0,
-//        const Vector3D& point1,
-//        const Vector3D& point2):
-//  _normal(point1.sub(point0).cross(point2.sub(point0)).normalized()),
-//  _d(-_normal.dot(point0))
-//  {
-//    _normalF(_normal._x, _normal._y, _normal._z);
-//    _dF = (float) _d;
-//  }
 
   static Plane fromPoints(const Vector3D& point0,
                           const Vector3D& point1,
