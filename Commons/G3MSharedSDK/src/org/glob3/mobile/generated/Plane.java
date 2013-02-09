@@ -22,7 +22,7 @@ public class Plane
   private final Vector3D _normal ;
   private final double _d;
 
-  private Vector3F _normalF = new Vector3F();
+  private final Vector3F _normalF = new Vector3F();
   private final float _dF;
 
 
