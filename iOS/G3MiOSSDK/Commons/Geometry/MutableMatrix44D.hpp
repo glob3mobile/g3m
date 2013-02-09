@@ -12,6 +12,8 @@
 class FrustumData;
 class Vector3D;
 class Vector2D;
+class Vector3F;
+class Vector2F;
 class MutableVector3D;
 class IFloatBuffer;
 
@@ -263,6 +265,12 @@ public:
                        const int vpHeight) const;
 
     Vector2D project(const Vector3D& point,
+                     const int vpLeft,
+                     const int vpTop,
+                     const int vpWidth,
+                     const int vpHeight) const;
+    
+    Vector2F project(const Vector3F& point,
                      const int vpLeft,
                      const int vpTop,
                      const int vpWidth,

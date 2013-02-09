@@ -9,8 +9,6 @@
 #ifndef __G3MiOSSDK__LayerBuilder__
 #define __G3MiOSSDK__LayerBuilder__
 
-#include <iostream>
-
 #include "WMSLayer.hpp"
 
 class LayerBuilder {

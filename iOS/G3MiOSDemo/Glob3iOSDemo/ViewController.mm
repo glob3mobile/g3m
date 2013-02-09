@@ -349,7 +349,7 @@ public:
     layerSet->addLayer(bing);
   }
 
-  if (true) {
+  if (false) {
     WMSLayer* political = new WMSLayer("topp:cia",
                                        URL("http://worldwind22.arc.nasa.gov/geoserver/wms?", false),
                                        WMS_1_1_0,

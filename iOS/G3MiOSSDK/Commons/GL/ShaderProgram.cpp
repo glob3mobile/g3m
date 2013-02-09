@@ -6,8 +6,6 @@
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
-#include <iostream>
-
 #include "ShaderProgram.hpp"
 #include "GL.hpp"
 #include "IStringBuilder.hpp"
