@@ -39,6 +39,7 @@ import org.glob3.mobile.specific.G3MBaseActivity;
 import org.glob3.mobile.specific.G3MWidget_Android;
 import org.glob3.mobile.specific.SQLiteStorage_Android;
 import org.glob3.mobile.specific.ThreadUtils_Android;
+import org.glob3.mobile.specific.TileMillLayer;
 
 import android.os.Bundle;
 
@@ -94,6 +95,11 @@ public class G3MSimplestGlob3Activity
 
     final CompositeRenderer mainRenderer = new CompositeRenderer();
     final LayerSet layerSet = new LayerSet();
+    final TileMillLayer tml = new TileMillLayer("TileMill Layer", new URL(
+        "http://projects.bryanmcbride.com/php-mbtiles-server/mbtiles.php?",
+        false), "geography-class.mbtiles", Sector.fromDegrees(-85.05, -180.0,
+        85.05, 180.0), "image/jpeg", "EPSG:4326", "", false, null,
+        TimeInterval.fromDays(30));
     final WMSLayer osm = new WMSLayer( //
         "osm_auto:all", //
         new URL("http://129.206.228.72/cached/osm", false), //
@@ -105,7 +111,7 @@ public class G3MSimplestGlob3Activity
         false, //
         null, //
         TimeInterval.fromDays(30));
-    layerSet.addLayer(osm);
+    layerSet.addLayer(tml);
     final TileRendererBuilder tlBuilder = new TileRendererBuilder();
     tlBuilder.setLayerSet(layerSet);
     final TileRenderer tileRenderer = tlBuilder.create();
