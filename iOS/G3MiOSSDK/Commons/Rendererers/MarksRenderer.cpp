@@ -31,7 +31,7 @@ _context(NULL),
 _lastCamera(NULL),
 _markTouchListener(NULL),
 _autoDeleteMarkTouchListener(false),
-_downloadPriority(DownloadPriority::getMarkDownloadPriority())
+_downloadPriority(DownloadPriority::MEDIUM)
 {
 }
 

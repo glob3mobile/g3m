@@ -11,6 +11,7 @@
 #include "MultiLayerTileTexturizer.hpp"
 #include "EllipsoidalTileTessellator.hpp"
 #include "LayerBuilder.hpp"
+#include "DownloadPriority.hpp"
 
 
 TileRendererBuilder::TileRendererBuilder() {
@@ -24,6 +25,7 @@ TileRendererBuilder::TileRendererBuilder() {
   _layerSet = createLayerSet();
   _texturizer = new MultiLayerTileTexturizer();
   _tileTessellator = createTileTessellator();
+  _texturePriority = DownloadPriority::HIGHER;
 }
 
 TileRendererBuilder::~TileRendererBuilder() {
@@ -34,7 +36,8 @@ TileRenderer* TileRendererBuilder::create() {
                                                 _texturizer,
                                                 _layerSet,
                                                 _parameters,
-                                                _showStatistics);
+                                                _showStatistics,
+                                                _texturePriority);
   
   for (int i = 0; i < _visibleSectorListeners.size(); i++) {
     tileRenderer->addVisibleSectorListener(_visibleSectorListeners[i],
@@ -118,4 +121,8 @@ void TileRendererBuilder::addVisibleSectorListener(VisibleSectorListener* listen
                                                    const TimeInterval& stabilizationInterval) {
   _visibleSectorListeners.push_back(listener);
   _stabilizationMilliSeconds.push_back(stabilizationInterval.milliseconds());
+}
+
+void TileRendererBuilder::setTexturePriority(long long texturePriority) {
+  _texturePriority = texturePriority;
 }

@@ -37,6 +37,8 @@ private:
   const bool _isForcedFullRender;
 
   ITimer* _lastSplitTimer; // timer to start every time a tile get splitted into subtiles
+  
+  long long _texturePriority;
 
 public:
   TileRenderContext(const TileTessellator*       tessellator,
@@ -45,14 +47,16 @@ public:
                     const TilesRenderParameters* parameters,
                     TilesStatistics*             statistics,
                     ITimer*                      lastSplitTimer,
-                    bool                         isForcedFullRender) :
+                    bool                         isForcedFullRender,
+                    long long                    texturePriority) :
   _tessellator(tessellator),
   _texturizer(texturizer),
   _layerSet(layerSet),
   _parameters(parameters),
   _statistics(statistics),
   _lastSplitTimer(lastSplitTimer),
-  _isForcedFullRender(isForcedFullRender)
+  _isForcedFullRender(isForcedFullRender),
+  _texturePriority(texturePriority)
   {
 
   }
@@ -83,6 +87,10 @@ public:
 
   bool isForcedFullRender() const {
     return _isForcedFullRender;
+  }
+  
+  long long getTexturePriority() const {
+    return _texturePriority;
   }
 
 };
@@ -282,13 +290,16 @@ private:
   Sector* _lastVisibleSector;
 
   std::vector<VisibleSectorListenerEntry*> _visibleSectorListeners;
+  
+  long long _texturePriority;
 
 public:
   TileRenderer(const TileTessellator* tessellator,
                TileTexturizer*  texturizer,
                LayerSet* layerSet,
                const TilesRenderParameters* parameters,
-               bool showStatistics);
+               bool showStatistics,
+               long long texturePriority);
 
   ~TileRenderer();
 
@@ -367,6 +378,17 @@ public:
    */
   void addVisibleSectorListener(VisibleSectorListener* listener) {
     addVisibleSectorListener(listener, TimeInterval::zero());
+  }
+  
+  /**
+   Change the download-priority used by Tiles (for downloading textures).
+   */
+  void setTexturePriority(long long texturePriority) {
+    _texturePriority = texturePriority;
+  }
+  
+  long long getTexturePriority() const {
+    return _texturePriority;
   }
 
 };

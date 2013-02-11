@@ -28,6 +28,7 @@ private:
   bool _incrementalTileQuality;
   std::vector<VisibleSectorListener*> _visibleSectorListeners;
   std::vector<long long> _stabilizationMilliSeconds;
+  long long _texturePriority;
 
   LayerSet* createLayerSet();
   TilesRenderParameters* createTileRendererParameters();
@@ -51,6 +52,7 @@ public:
   void addVisibleSectorListener(VisibleSectorListener* listener) {
     addVisibleSectorListener(listener, TimeInterval::zero());
   }
+  void setTexturePriority(long long texturePriority);
 
 };
 

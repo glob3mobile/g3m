@@ -16,10 +16,6 @@ public:
   static const long long MEDIUM;
   static const long long HIGHER;
   static const long long HIGHEST;
-  
-  static const long long getMarkDownloadPriority();
-  static const long long getTileDownloadPriority();
-  static const long long getTextureDownloadPriority();
 };
 
 
