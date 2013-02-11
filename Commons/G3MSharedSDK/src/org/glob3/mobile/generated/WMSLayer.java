@@ -39,7 +39,6 @@ public class WMSLayer extends Layer
 
   }
 
-
   public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, Sector sector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache)
   {
      super(condition, mapLayer, timeToCache);

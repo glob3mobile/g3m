@@ -38,7 +38,9 @@ public class TileRenderContext
 
   private ITimer _lastSplitTimer; // timer to start every time a tile get splitted into subtiles
 
-  public TileRenderContext(TileTessellator tessellator, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters parameters, TilesStatistics statistics, ITimer lastSplitTimer, boolean isForcedFullRender)
+  private long _texturePriority;
+
+  public TileRenderContext(TileTessellator tessellator, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters parameters, TilesStatistics statistics, ITimer lastSplitTimer, boolean isForcedFullRender, long texturePriority)
   {
      _tessellator = tessellator;
      _texturizer = texturizer;
@@ -47,6 +49,7 @@ public class TileRenderContext
      _statistics = statistics;
      _lastSplitTimer = lastSplitTimer;
      _isForcedFullRender = isForcedFullRender;
+     _texturePriority = texturePriority;
 
   }
 
@@ -83,6 +86,11 @@ public class TileRenderContext
   public final boolean isForcedFullRender()
   {
     return _isForcedFullRender;
+  }
+
+  public final long getTexturePriority()
+  {
+    return _texturePriority;
   }
 
 }

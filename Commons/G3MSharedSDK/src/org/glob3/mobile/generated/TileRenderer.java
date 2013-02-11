@@ -76,7 +76,9 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 
   private java.util.ArrayList<VisibleSectorListenerEntry> _visibleSectorListeners = new java.util.ArrayList<VisibleSectorListenerEntry>();
 
-  public TileRenderer(TileTessellator tessellator, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters parameters, boolean showStatistics)
+  private long _texturePriority;
+
+  public TileRenderer(TileTessellator tessellator, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters parameters, boolean showStatistics, long texturePriority)
   {
      _tessellator = tessellator;
      _texturizer = texturizer;
@@ -89,6 +91,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
      _firstRender = false;
      _context = null;
      _lastVisibleSector = null;
+     _texturePriority = texturePriority;
     _layerSet.setChangeListener(this);
   }
 
@@ -140,7 +143,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   
     TilesStatistics statistics = new TilesStatistics();
   
-    TileRenderContext trc = new TileRenderContext(_tessellator, _texturizer, _layerSet, _parameters, statistics, _lastSplitTimer, _firstRender); // if first render, force full render
+    TileRenderContext trc = new TileRenderContext(_tessellator, _texturizer, _layerSet, _parameters, statistics, _lastSplitTimer, _firstRender, _texturePriority); // if first render, force full render
   
     final int topLevelTilesCount = _topLevelTiles.size();
   
@@ -265,7 +268,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
       {
         TilesStatistics statistics = new TilesStatistics();
   
-        TileRenderContext trc = new TileRenderContext(_tessellator, _texturizer, _layerSet, _parameters, statistics, _lastSplitTimer, true);
+        TileRenderContext trc = new TileRenderContext(_tessellator, _texturizer, _layerSet, _parameters, statistics, _lastSplitTimer, true, _texturePriority);
   
         for (int i = 0; i < topLevelTilesCount; i++)
         {
@@ -394,6 +397,19 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   public final void addVisibleSectorListener(VisibleSectorListener listener)
   {
     addVisibleSectorListener(listener, TimeInterval.zero());
+  }
+
+  /**
+   Change the download-priority used by Tiles (for downloading textures).
+   */
+  public final void setTexturePriority(long texturePriority)
+  {
+    _texturePriority = texturePriority;
+  }
+
+  public final long getTexturePriority()
+  {
+    return _texturePriority;
   }
 
 }

@@ -32,6 +32,7 @@ public class TileRendererBuilder
   private boolean _incrementalTileQuality;
   private java.util.ArrayList<VisibleSectorListener> _visibleSectorListeners = new java.util.ArrayList<VisibleSectorListener>();
   private java.util.ArrayList<Long> _stabilizationMilliSeconds = new java.util.ArrayList<Long>();
+  private long _texturePriority;
 
   private LayerSet createLayerSet()
   {
@@ -65,13 +66,14 @@ public class TileRendererBuilder
     _layerSet = createLayerSet();
     _texturizer = new MultiLayerTileTexturizer();
     _tileTessellator = createTileTessellator();
+    _texturePriority = DownloadPriority.HIGHER;
   }
   public void dispose()
   {
   }
   public final TileRenderer create()
   {
-    TileRenderer tileRenderer = new TileRenderer(_tileTessellator, _texturizer, _layerSet, _parameters, _showStatistics);
+    TileRenderer tileRenderer = new TileRenderer(_tileTessellator, _texturizer, _layerSet, _parameters, _showStatistics, _texturePriority);
   
     for (int i = 0; i < _visibleSectorListeners.size(); i++)
     {
@@ -144,6 +146,10 @@ public class TileRendererBuilder
   public final void addVisibleSectorListener(VisibleSectorListener listener)
   {
     addVisibleSectorListener(listener, TimeInterval.zero());
+  }
+  public final void setTexturePriority(long texturePriority)
+  {
+    _texturePriority = texturePriority;
   }
 
 }
