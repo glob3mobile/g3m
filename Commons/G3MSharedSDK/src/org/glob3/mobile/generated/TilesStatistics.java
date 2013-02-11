@@ -76,6 +76,27 @@ public class TilesStatistics
     _tilesVisibleByLevel[level] = _tilesVisibleByLevel[level] + 1;
   }
 
+  public final void computeRenderedSector(Tile tile)
+  {
+    final Sector sector = tile.getSector();
+    if (_renderedSector == null)
+    {
+      _renderedSector = sector;
+    }
+    else
+    {
+      if (!_renderedSector.fullContains(sector))
+      {
+        Sector previous = _renderedSector;
+
+        _renderedSector = _renderedSector.mergedWith(sector);
+
+        if (previous != null)
+           previous.dispose();
+      }
+    }
+  }
+
   public final void computeTileRendered(Tile tile)
   {
     _tilesRendered++;
@@ -84,19 +105,7 @@ public class TilesStatistics
     _tilesRenderedByLevel[level] = _tilesRenderedByLevel[level] + 1;
 
 
-
-    final Sector sector = tile.getSector();
-    if (_renderedSector == null)
-    {
-      _renderedSector = new Sector(sector);
-    }
-    else
-    {
-      Sector previous = _renderedSector;
-      _renderedSector = new Sector(_renderedSector.mergedWith(sector));
-      if (previous != null)
-         previous.dispose();
-    }
+    computeRenderedSector(tile);
   }
 
   public final Sector getRenderedSector()

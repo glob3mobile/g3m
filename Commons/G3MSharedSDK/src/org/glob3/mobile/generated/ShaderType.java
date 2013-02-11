@@ -7,7 +7,6 @@ package org.glob3.mobile.generated;
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
-
 //
 //  ShaderProgram.hpp
 //  G3MiOSSDK

@@ -134,7 +134,7 @@ _initializationTaskWasRun(false)
   }
 
   if (_downloader != NULL){
-    _downloader->initialize(_context);
+    _downloader->initialize(_context, _frameTasksExecutor);
     _downloader->start();
   }
 

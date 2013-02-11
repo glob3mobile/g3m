@@ -19,6 +19,8 @@ package org.glob3.mobile.generated;
 //class FrustumData;
 //class Vector3D;
 //class Vector2D;
+//class Vector3F;
+//class Vector2F;
 //class MutableVector3D;
 //class IFloatBuffer;
 
@@ -462,16 +464,16 @@ public class MutableMatrix44D
 
     public final Vector2D project(Vector3D point, int vpLeft, int vpTop, int vpWidth, int vpHeight)
     {
-      final double in0 = point._x;
-      final double in1 = point._y;
-      final double in2 = point._z;
-      final double in3 = 1.0;
+      final double x = point._x;
+      final double y = point._y;
+      final double z = point._z;
+      //  const double w = 1.0;
     
       //Transformating point
-      double out0 = _m00 * in0 + _m01 * in1 + _m02 * in2 + _m03 * in3;
-      double out1 = _m10 * in0 + _m11 * in1 + _m12 * in2 + _m13 * in3;
-      //double out2 = _m20 * in0 + _m21 * in1 + _m22 * in2 + _m23 * in3;
-      final double out3 = _m30 * in0 + _m31 * in1 + _m32 * in2 + _m33 * in3;
+      double out0 = _m00 * x + _m01 * y + _m02 * z + _m03; // * w
+      double out1 = _m10 * x + _m11 * y + _m12 * z + _m13; // * w
+      //double out2 = _m20 * x + _m21 * y + _m22 * z + _m23 * w;
+      final double out3 = _m30 * x + _m31 * y + _m32 * z + _m33; // * w
     
       if (out3 == 0.0)
       {
@@ -486,6 +488,34 @@ public class MutableMatrix44D
       final double winy = vpTop + (1.0 + out1) * vpHeight / 2.0;
       //double winz = (1.0 + in2) / 2.0;
       return new Vector2D(winx, winy);
+    }
+
+    public final Vector2F project(Vector3F point, int vpLeft, int vpTop, int vpWidth, int vpHeight)
+    {
+      final float x = point._x;
+      final float y = point._y;
+      final float z = point._z;
+      //  const float w = 1.0;
+    
+      //Transformating point
+      float out0 = (float) _m00 * x + (float) _m01 * y + (float) _m02 * z + (float) _m03; // * w
+      float out1 = (float) _m10 * x + (float) _m11 * y + (float) _m12 * z + (float) _m13; // * w
+      //float out2 = _m20 * x + _m21 * y + _m22 * z + _m23 * w;
+      final float out3 = (float) _m30 * x + (float) _m31 * y + (float) _m32 * z + (float) _m33; // * w
+    
+      if (out3 == 0.0)
+      {
+        return Vector2F.nan();
+      }
+    
+      out0 /= out3;
+      out1 /= out3;
+      //out2 /= out3;
+    
+      final float winx = vpLeft + (1.0f + out0) * vpWidth / 2.0f;
+      final float winy = vpTop + (1.0f + out1) * vpHeight / 2.0f;
+      //float winz = (1.0 + in2) / 2.0;
+      return new Vector2F(winx, winy);
     }
 
     public static MutableMatrix44D createTranslationMatrix(Vector3D t)

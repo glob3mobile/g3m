@@ -17,7 +17,6 @@ package org.glob3.mobile.generated;
 
 
 
-
 public class LayerBuilder
 {
   public static WMSLayer createBingLayer(boolean enabled)

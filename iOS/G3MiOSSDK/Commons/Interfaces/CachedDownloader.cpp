@@ -15,6 +15,11 @@
 #include "TimeInterval.hpp"
 #include "IFactory.hpp"
 
+//#include "Context.hpp"
+//#include "GTask.hpp"
+//#include "IThreadUtils.hpp"
+//#include "FrameTasksExecutor.hpp"
+
 class BufferSaverDownloadListener : public IBufferDownloadListener {
 private:
   CachedDownloader*        _downloader;
@@ -228,6 +233,41 @@ IImage* CachedDownloader::getCachedImage(const URL& url) {
   return cachedImage;
 }
 
+
+//class CachedDownloader_InvokeRenderer : public FrameTask {
+//private:
+//  const URL               _url;
+//  IImage*                 _image;
+//  IImageDownloadListener* _listener;
+//  const bool              _deleteListener;
+//
+//public:
+//  CachedDownloader_InvokeRenderer(const URL               url,
+//                                  IImage*                 image,
+//                                  IImageDownloadListener* listener,
+//                                  const bool              deleteListener) :
+//  _url(url),
+//  _image(image),
+//  _listener(listener),
+//  _deleteListener(deleteListener)
+//  {
+//
+//  }
+//
+//  bool isCanceled(const G3MRenderContext *rc) {
+//    return false;
+//  }
+//
+//  void execute(const G3MRenderContext* rc) {
+//    _listener->onDownload(_url, _image);
+//
+//    if (_deleteListener) {
+//      delete _listener;
+//    }
+//  }
+//};
+
+
 long long CachedDownloader::requestImage(const URL& url,
                                          long long priority,
                                          const TimeInterval& timeToCache,
@@ -235,21 +275,34 @@ long long CachedDownloader::requestImage(const URL& url,
                                          bool deleteListener) {
   _requestsCounter++;
 
-//  const IImage* cachedImage = _storage->isAvailable() ? _storage->readImage(url) : NULL;
   IImage* cachedImage = getCachedImage(url);
   if (cachedImage != NULL) {
     // cache hit
     _cacheHitsCounter++;
 
+    //    if (_context != NULL) {
+    //      _context->getThreadUtils()->invokeInRendererThread(new CachedDownloader_InvokeRenderer(url,
+    //                                                                                             cachedImage,
+    //                                                                                             listener, deleteListener),
+    //                                                         true);
+    //    }
+    //    else {
+
+    //    if (_frameTasksExecutor != NULL) {
+    //      _frameTasksExecutor->addPreRenderTask(new CachedDownloader_InvokeRenderer(url,
+    //                                                                                cachedImage,
+    //                                                                                listener, deleteListener));
+    //    }
+    //    else {
     listener->onDownload(url, cachedImage);
 
     if (deleteListener) {
       delete listener;
     }
+    //    }
 
     return -1;
   }
-
 
   // cache miss
   return _downloader->requestImage(url,
@@ -324,6 +377,9 @@ void CachedDownloader::onDestroy(const G3MContext* context) {
   _downloader->onDestroy(context);
 }
 
-void CachedDownloader::initialize(const G3MContext* context) {
-  _downloader->initialize(context);
+void CachedDownloader::initialize(const G3MContext* context,
+                                  FrameTasksExecutor* frameTasksExecutor) {
+  _context = context;
+  _frameTasksExecutor = frameTasksExecutor;
+  _downloader->initialize(context, frameTasksExecutor);
 }

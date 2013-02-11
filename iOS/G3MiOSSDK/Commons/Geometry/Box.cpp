@@ -31,24 +31,56 @@ const std::vector<Vector3D> Box::getCorners() const {
   return std::vector<Vector3D>(c, c+8);
 #endif
 #ifdef JAVA_CODE
-  if (_corners == null) {
-    _corners = new java.util.ArrayList<Vector3D>(8);
+  if (_cornersD == null) {
+    _cornersD = new java.util.ArrayList<Vector3D>(8);
     
-    _corners.add(_lower);
-    _corners.add(new Vector3D(_lower._x, _lower._y, _upper._z));
-    _corners.add(new Vector3D(_lower._x, _upper._y, _lower._z));
-    _corners.add(new Vector3D(_lower._x, _upper._y, _upper._z));
-    _corners.add(new Vector3D(_upper._x, _lower._y, _lower._z));
-    _corners.add(new Vector3D(_upper._x, _lower._y, _upper._z));
-    _corners.add(new Vector3D(_upper._x, _upper._y, _lower._z));
-    _corners.add(_upper);
+    _cornersD.add(_lower);
+    _cornersD.add(new Vector3D(_lower._x, _lower._y, _upper._z));
+    _cornersD.add(new Vector3D(_lower._x, _upper._y, _lower._z));
+    _cornersD.add(new Vector3D(_lower._x, _upper._y, _upper._z));
+    _cornersD.add(new Vector3D(_upper._x, _lower._y, _lower._z));
+    _cornersD.add(new Vector3D(_upper._x, _lower._y, _upper._z));
+    _cornersD.add(new Vector3D(_upper._x, _upper._y, _lower._z));
+    _cornersD.add(_upper);
   }
-  return _corners;
+  return _cornersD;
+#endif
+}
+
+const std::vector<Vector3F> Box::getCornersF() const {
+#ifdef C_CODE
+  const Vector3F c[8] = {
+    Vector3F((float) _lower._x, (float) _lower._y, (float) _lower._z),
+    Vector3F((float) _lower._x, (float) _lower._y, (float) _upper._z),
+    Vector3F((float) _lower._x, (float) _upper._y, (float) _lower._z),
+    Vector3F((float) _lower._x, (float) _upper._y, (float) _upper._z),
+    Vector3F((float) _upper._x, (float) _lower._y, (float) _lower._z),
+    Vector3F((float) _upper._x, (float) _lower._y, (float) _upper._z),
+    Vector3F((float) _upper._x, (float) _upper._y, (float) _lower._z),
+    Vector3F((float) _upper._x, (float) _upper._y, (float) _upper._z)
+  };
+
+  return std::vector<Vector3F>(c, c+8);
+#endif
+#ifdef JAVA_CODE
+  if (_cornersF == null) {
+    _cornersF = new java.util.ArrayList<Vector3F>(8);
+
+    _cornersF.add(new Vector3F((float) _lower._x, (float) _lower._y, (float) _lower._z));
+    _cornersF.add(new Vector3F((float) _lower._x, (float) _lower._y, (float) _upper._z));
+    _cornersF.add(new Vector3F((float) _lower._x, (float) _upper._y, (float) _lower._z));
+    _cornersF.add(new Vector3F((float) _lower._x, (float) _upper._y, (float) _upper._z));
+    _cornersF.add(new Vector3F((float) _upper._x, (float) _lower._y, (float) _lower._z));
+    _cornersF.add(new Vector3F((float) _upper._x, (float) _lower._y, (float) _upper._z));
+    _cornersF.add(new Vector3F((float) _upper._x, (float) _upper._y, (float) _lower._z));
+    _cornersF.add(new Vector3F((float) _upper._x, (float) _upper._y, (float) _upper._z));
+  }
+  return _cornersF;
 #endif
 }
 
 Vector2I Box::projectedExtent(const G3MRenderContext *rc) const {
-  const std::vector<Vector3D> corners = getCorners();
+  const std::vector<Vector3F> corners = getCornersF();
 
   const Camera* currentCamera = rc->getCurrentCamera();
   

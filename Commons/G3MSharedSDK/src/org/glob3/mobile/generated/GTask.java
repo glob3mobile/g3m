@@ -20,15 +20,9 @@ package org.glob3.mobile.generated;
 
 public abstract class GTask
 {
-///#ifdef C_CODE
   public void dispose()
   {
   }
-///#endif
-///#ifdef JAVA_CODE
-//  public void dispose();
-///#endif
 
   public abstract void run(G3MContext context);
-
 }

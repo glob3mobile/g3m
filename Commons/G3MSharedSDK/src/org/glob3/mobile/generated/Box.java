@@ -53,19 +53,35 @@ public class Box extends Extent
 
   public final java.util.ArrayList<Vector3D> getCorners()
   {
-    if (_corners == null) {
-      _corners = new java.util.ArrayList<Vector3D>(8);
+    if (_cornersD == null) {
+      _cornersD = new java.util.ArrayList<Vector3D>(8);
   
-      _corners.add(_lower);
-      _corners.add(new Vector3D(_lower._x, _lower._y, _upper._z));
-      _corners.add(new Vector3D(_lower._x, _upper._y, _lower._z));
-      _corners.add(new Vector3D(_lower._x, _upper._y, _upper._z));
-      _corners.add(new Vector3D(_upper._x, _lower._y, _lower._z));
-      _corners.add(new Vector3D(_upper._x, _lower._y, _upper._z));
-      _corners.add(new Vector3D(_upper._x, _upper._y, _lower._z));
-      _corners.add(_upper);
+      _cornersD.add(_lower);
+      _cornersD.add(new Vector3D(_lower._x, _lower._y, _upper._z));
+      _cornersD.add(new Vector3D(_lower._x, _upper._y, _lower._z));
+      _cornersD.add(new Vector3D(_lower._x, _upper._y, _upper._z));
+      _cornersD.add(new Vector3D(_upper._x, _lower._y, _lower._z));
+      _cornersD.add(new Vector3D(_upper._x, _lower._y, _upper._z));
+      _cornersD.add(new Vector3D(_upper._x, _upper._y, _lower._z));
+      _cornersD.add(_upper);
     }
-    return _corners;
+    return _cornersD;
+  }
+  public final java.util.ArrayList<Vector3F> getCornersF()
+  {
+    if (_cornersF == null) {
+      _cornersF = new java.util.ArrayList<Vector3F>(8);
+  
+      _cornersF.add(new Vector3F((float) _lower._x, (float) _lower._y, (float) _lower._z));
+      _cornersF.add(new Vector3F((float) _lower._x, (float) _lower._y, (float) _upper._z));
+      _cornersF.add(new Vector3F((float) _lower._x, (float) _upper._y, (float) _lower._z));
+      _cornersF.add(new Vector3F((float) _lower._x, (float) _upper._y, (float) _upper._z));
+      _cornersF.add(new Vector3F((float) _upper._x, (float) _lower._y, (float) _lower._z));
+      _cornersF.add(new Vector3F((float) _upper._x, (float) _lower._y, (float) _upper._z));
+      _cornersF.add(new Vector3F((float) _upper._x, (float) _upper._y, (float) _lower._z));
+      _cornersF.add(new Vector3F((float) _upper._x, (float) _upper._y, (float) _upper._z));
+    }
+    return _cornersF;
   }
 
   public final double squaredProjectedArea(G3MRenderContext rc)
@@ -75,7 +91,7 @@ public class Box extends Extent
   }
   public final Vector2I projectedExtent(G3MRenderContext rc)
   {
-    final java.util.ArrayList<Vector3D> corners = getCorners();
+    final java.util.ArrayList<Vector3F> corners = getCornersF();
   
     final Camera currentCamera = rc.getCurrentCamera();
   
@@ -245,7 +261,8 @@ public class Box extends Extent
   private final Vector3D _lower ;
   private final Vector3D _upper ;
 
-  private java.util.ArrayList<Vector3D> _corners = null; // cache for getCorners() method
+  private java.util.ArrayList<Vector3D> _cornersD = null; // cache for getCorners() method
+  private java.util.ArrayList<Vector3F> _cornersF = null; // cache for getCornersF() method
 
   private Mesh _mesh;
   private void createMesh(Color color)

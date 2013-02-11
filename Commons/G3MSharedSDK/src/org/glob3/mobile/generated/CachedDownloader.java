@@ -65,6 +65,10 @@ public class CachedDownloader extends IDownloader
 
   private URL _lastImageURL;
 
+  private G3MContext _context;
+
+  private FrameTasksExecutor _frameTasksExecutor;
+
   public CachedDownloader(IDownloader downloader, IStorage storage, boolean saveInBackground)
   {
      _downloader = downloader;
@@ -75,6 +79,8 @@ public class CachedDownloader extends IDownloader
      _saveInBackground = saveInBackground;
      _lastImage = null;
      _lastImageURL = null;
+     _context = null;
+     _frameTasksExecutor = null;
 
   }
 
@@ -118,17 +124,65 @@ public class CachedDownloader extends IDownloader
     return -1;
   }
 
+
+  //class CachedDownloader_InvokeRenderer : public FrameTask {
+  //private:
+  //  const URL               _url;
+  //  IImage*                 _image;
+  //  IImageDownloadListener* _listener;
+  //  const bool              _deleteListener;
+  //
+  //public:
+  //  CachedDownloader_InvokeRenderer(const URL               url,
+  //                                  IImage*                 image,
+  //                                  IImageDownloadListener* listener,
+  //                                  const bool              deleteListener) :
+  //  _url(url),
+  //  _image(image),
+  //  _listener(listener),
+  //  _deleteListener(deleteListener)
+  //  {
+  //
+  //  }
+  //
+  //  bool isCanceled(const G3MRenderContext *rc) {
+  //    return false;
+  //  }
+  //
+  //  void execute(const G3MRenderContext* rc) {
+  //    _listener->onDownload(_url, _image);
+  //
+  //    if (_deleteListener) {
+  //      delete _listener;
+  //    }
+  //  }
+  //};
+  
+  
   public final long requestImage(URL url, long priority, TimeInterval timeToCache, IImageDownloadListener listener, boolean deleteListener)
   {
     _requestsCounter++;
   
-  //  const IImage* cachedImage = _storage->isAvailable() ? _storage->readImage(url) : NULL;
     IImage cachedImage = getCachedImage(url);
     if (cachedImage != null)
     {
       // cache hit
       _cacheHitsCounter++;
   
+      //    if (_context != NULL) {
+      //      _context->getThreadUtils()->invokeInRendererThread(new CachedDownloader_InvokeRenderer(url,
+      //                                                                                             cachedImage,
+      //                                                                                             listener, deleteListener),
+      //                                                         true);
+      //    }
+      //    else {
+  
+      //    if (_frameTasksExecutor != NULL) {
+      //      _frameTasksExecutor->addPreRenderTask(new CachedDownloader_InvokeRenderer(url,
+      //                                                                                cachedImage,
+      //                                                                                listener, deleteListener));
+      //    }
+      //    else {
       listener.onDownload(url, cachedImage);
   
       if (deleteListener)
@@ -136,10 +190,10 @@ public class CachedDownloader extends IDownloader
         if (listener != null)
            listener.dispose();
       }
+      //    }
   
       return -1;
     }
-  
   
     // cache miss
     return _downloader.requestImage(url, priority, TimeInterval.zero(), new ImageSaverDownloadListener(this, listener, deleteListener, _storage, timeToCache), true);
@@ -201,9 +255,11 @@ public class CachedDownloader extends IDownloader
     _downloader.onDestroy(context);
   }
 
-  public final void initialize(G3MContext context)
+  public final void initialize(G3MContext context, FrameTasksExecutor frameTasksExecutor)
   {
-    _downloader.initialize(context);
+    _context = context;
+    _frameTasksExecutor = frameTasksExecutor;
+    _downloader.initialize(context, frameTasksExecutor);
   }
 
 }

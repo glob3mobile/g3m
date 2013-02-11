@@ -1,4 +1,9 @@
 package org.glob3.mobile.generated; 
+///#include "Context.hpp"
+///#include "GTask.hpp"
+///#include "IThreadUtils.hpp"
+///#include "FrameTasksExecutor.hpp"
+
 public class BufferSaverDownloadListener extends IBufferDownloadListener
 {
   private CachedDownloader _downloader;

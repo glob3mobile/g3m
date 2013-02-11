@@ -14,7 +14,7 @@
 
 
 Vector3D Vector3D::normalized() const {
-  double d = length();
+  const double d = length();
   return Vector3D(_x / d, _y /d, _z / d);
 }
 

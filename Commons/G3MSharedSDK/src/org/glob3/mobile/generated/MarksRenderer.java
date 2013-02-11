@@ -32,6 +32,8 @@ public class MarksRenderer extends LeafRenderer
   private MarkTouchListener _markTouchListener;
   private boolean _autoDeleteMarkTouchListener;
 
+  private long _downloadPriority = 1000000;
+
 
   public MarksRenderer(boolean readyWhenMarksReady)
   {
@@ -79,7 +81,7 @@ public class MarksRenderer extends LeafRenderer
     for (int i = 0; i < marksSize; i++)
     {
       Mark mark = _marks.get(i);
-      mark.initialize(context);
+      mark.initialize(context, _downloadPriority);
     }
   }
 
@@ -130,14 +132,15 @@ public class MarksRenderer extends LeafRenderer
     _marks.add(mark);
     if (_context != null)
     {
-      mark.initialize(_context);
+      mark.initialize(_context, _downloadPriority);
     }
   }
 
   public final void removeMark(Mark mark)
   {
     int pos = -1;
-    for (int i = 0; i < _marks.size(); i++)
+    final int marksSize = _marks.size();
+    for (int i = 0; i < marksSize; i++)
     {
       if (_marks.get(i) == mark)
       {
@@ -153,7 +156,8 @@ public class MarksRenderer extends LeafRenderer
 
   public final void removeAllMarks()
   {
-    for (int i = 0; i < _marks.size(); i++)
+    final int marksSize = _marks.size();
+    for (int i = 0; i < marksSize; i++)
     {
       if (_marks.get(i) != null)
          _marks.get(i).dispose();
@@ -276,6 +280,21 @@ public class MarksRenderer extends LeafRenderer
 
   public final void onDestroy(G3MContext context)
   {
+  }
+
+  /**
+   Change the download-priority used by Marks (for downloading textures).
+
+   Default value is 1000000
+   */
+  public final void setDownloadPriority(long downloadPriority)
+  {
+    _downloadPriority = downloadPriority;
+  }
+
+  public final long getDownloadPriority()
+  {
+    return _downloadPriority;
   }
 
 }

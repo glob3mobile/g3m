@@ -52,7 +52,7 @@ public class MutableVector3D
 
   public final MutableVector3D normalized()
   {
-    double d = length();
+    final double d = length();
     return new MutableVector3D(_x / d, _y /d, _z / d);
   }
 

@@ -151,14 +151,13 @@ public class Camera
   {
     final Vector2D p = getModelViewMatrix().project(point, 0, 0, _width, _height);
   
-    //  int __TODO_check_isNan_is_needed;
-    //  if (p.isNan()) {
-    //    return p;
-    //  }
+    return new Vector2I((int) p._x, (int)(_height - p._y));
+  }
+  public final Vector2I point2Pixel(Vector3F point)
+  {
+    final Vector2F p = getModelViewMatrix().project(point, 0, 0, _width, _height);
   
-    IMathUtils math = IMathUtils.instance();
-  
-    return new Vector2I(math.toInt(p._x), math.toInt(_height-p._y));
+    return new Vector2I((int) p._x, (int)(_height - p._y));
   }
 
   public final int getWidth()

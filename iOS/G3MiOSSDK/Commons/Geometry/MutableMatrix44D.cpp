@@ -14,6 +14,8 @@
 #include "Vector2D.hpp"
 #include "IFloatBuffer.hpp"
 #include "IFactory.hpp"
+#include "Vector3F.hpp"
+#include "Vector2F.hpp"
 
 MutableMatrix44D& MutableMatrix44D::operator=(const MutableMatrix44D &that) {
   if (this != &that){
@@ -279,16 +281,16 @@ Vector2D MutableMatrix44D::project(const Vector3D& point,
                                    const int vpTop,
                                    const int vpWidth,
                                    const int vpHeight) const {
-  const double in0 = point._x;
-  const double in1 = point._y;
-  const double in2 = point._z;
-  const double in3 = 1.0;
+  const double x = point._x;
+  const double y = point._y;
+  const double z = point._z;
+  //  const double w = 1.0;
 
   //Transformating point
-  double out0 = _m00 * in0 + _m01 * in1 + _m02 * in2 + _m03 * in3;
-  double out1 = _m10 * in0 + _m11 * in1 + _m12 * in2 + _m13 * in3;
-  //double out2 = _m20 * in0 + _m21 * in1 + _m22 * in2 + _m23 * in3;
-  const double out3 = _m30 * in0 + _m31 * in1 + _m32 * in2 + _m33 * in3;
+  double out0 = _m00 * x + _m01 * y + _m02 * z + _m03 /* * w */;
+  double out1 = _m10 * x + _m11 * y + _m12 * z + _m13 /* * w */;
+  //double out2 = _m20 * x + _m21 * y + _m22 * z + _m23 * w;
+  const double out3 = _m30 * x + _m31 * y + _m32 * z + _m33 /* * w */;
 
   if (out3 == 0.0) {
     return Vector2D::nan();
@@ -303,6 +305,37 @@ Vector2D MutableMatrix44D::project(const Vector3D& point,
   //double winz = (1.0 + in2) / 2.0;
   return Vector2D(winx, winy);
 }
+
+Vector2F MutableMatrix44D::project(const Vector3F& point,
+                                   const int vpLeft,
+                                   const int vpTop,
+                                   const int vpWidth,
+                                   const int vpHeight) const {
+  const float x = point._x;
+  const float y = point._y;
+  const float z = point._z;
+  //  const float w = 1.0;
+
+  //Transformating point
+  float out0 = (float) _m00 * x + (float) _m01 * y + (float) _m02 * z + (float) _m03 /* * w */;
+  float out1 = (float) _m10 * x + (float) _m11 * y + (float) _m12 * z + (float) _m13 /* * w */;
+  //float out2 = _m20 * x + _m21 * y + _m22 * z + _m23 * w;
+  const float out3 = (float) _m30 * x + (float) _m31 * y + (float) _m32 * z + (float) _m33 /* * w */;
+
+  if (out3 == 0.0) {
+    return Vector2F::nan();
+  }
+
+  out0 /= out3;
+  out1 /= out3;
+  //out2 /= out3;
+
+  const float winx = vpLeft + (1.0f + out0) * vpWidth / 2.0f;
+  const float winy = vpTop  + (1.0f + out1) * vpHeight / 2.0f;
+  //float winz = (1.0 + in2) / 2.0;
+  return Vector2F(winx, winy);
+}
+
 
 MutableMatrix44D MutableMatrix44D::createTranslationMatrix(const Vector3D& t) {
   return MutableMatrix44D(1, 0, 0, 0,

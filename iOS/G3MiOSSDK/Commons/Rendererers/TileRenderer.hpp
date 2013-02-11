@@ -157,23 +157,40 @@ public:
     _tilesVisibleByLevel[level] = _tilesVisibleByLevel[level] + 1;
   }
 
+  void computeRenderedSector(Tile* tile) {
+    const Sector sector = tile->getSector();
+    if (_renderedSector == NULL) {
+#ifdef C_CODE
+      _renderedSector = new Sector( sector );
+#endif
+#ifdef JAVA_CODE
+      _renderedSector = sector;
+#endif
+    }
+    else {
+      if (!_renderedSector->fullContains(sector)) {
+        Sector* previous = _renderedSector;
+
+#ifdef C_CODE
+        _renderedSector = new Sector( _renderedSector->mergedWith(sector) );
+#endif
+#ifdef JAVA_CODE
+        _renderedSector = _renderedSector.mergedWith(sector);
+#endif
+
+        delete previous;
+      }
+    }
+  }
+
   void computeTileRendered(Tile* tile) {
     _tilesRendered++;
 
     const int level = tile->getLevel();
     _tilesRenderedByLevel[level] = _tilesRenderedByLevel[level] + 1;
 
-
-
-    const Sector sector = tile->getSector();
-    if (_renderedSector == NULL) {
-      _renderedSector = new Sector(sector);
-    }
-    else {
-      Sector* previous = _renderedSector;
-      _renderedSector  = new Sector( _renderedSector->mergedWith(sector) );
-      delete previous;
-    }
+    
+    computeRenderedSector(tile);
   }
 
   const Sector* getRenderedSector() const {

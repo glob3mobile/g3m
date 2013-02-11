@@ -15,6 +15,7 @@ const long long DownloadPriority::HIGHER  = 1000000000;
 const long long DownloadPriority::HIGHEST = 100000000000;
 
 const long long DownloadPriority::getMarkDownloadPriority() {
+  // default 1000000
   return HIGHEST;
 }
 
