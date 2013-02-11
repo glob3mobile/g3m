@@ -55,7 +55,7 @@ public:
   }
 
   static TimeInterval forever() {
-    return TimeInterval(GMath.maxInt64());
+    return TimeInterval(IMathUtils::instance()->maxInt64());
   }
 
   static TimeInterval zero() {

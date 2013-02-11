@@ -20,54 +20,55 @@ package org.glob3.mobile.generated;
 public class CPUTextureBuilder extends TextureBuilder
 {
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const void createTextureFromImage(GL* gl, const IFactory* factory, const IImage* image, int width, int height, IImageListener* listener, boolean autodelete) const
   public final void createTextureFromImage(GL gl, IFactory factory, IImage image, int width, int height, IImageListener listener, boolean autodelete)
   {
-	if (image == null)
-	{
-	  ILogger.instance().logWarning("Creating blank Image");
-	  factory.createImageFromSize(width, height, listener, autodelete);
-	}
-	else if (image.getHeight() == height && image.getWidth() == width)
-	{
-	  listener.imageCreated(image.shallowCopy());
-	}
-	else
-	{
-	  image.scale(width, height, listener, autodelete);
-	}
+    if (image == null)
+    {
+      ILogger.instance().logWarning("Creating blank Image");
+      factory.createImageFromSize(width, height, listener, autodelete);
+    }
+    else if (image.getHeight() == height && image.getWidth() == width)
+    {
+      listener.imageCreated(image.shallowCopy());
+      if (autodelete)
+      {
+        if (listener != null)
+           listener.dispose();
+      }
+    }
+    else
+    {
+      image.scale(width, height, listener, autodelete);
+    }
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const void createTextureFromImages(GL* gl, const IFactory* factory, const java.util.ArrayList<const IImage*>& images, const java.util.ArrayList<RectangleI*>& rectangles, int width, int height, IImageListener* listener, boolean autodelete) const
   public final void createTextureFromImages(GL gl, IFactory factory, java.util.ArrayList<IImage> images, java.util.ArrayList<RectangleI> rectangles, int width, int height, IImageListener listener, boolean autodelete)
   {
   
-	final int imagesSize = images.size();
+    final int imagesSize = images.size();
   
-	if (imagesSize == 0 || imagesSize != rectangles.size())
-	{
-	  ILogger.instance().logWarning("Creating blank Image");
-	  //return factory->createImageFromSize(width, height);
-	  factory.createImageFromSize(width, height, listener, autodelete);
-	}
-	else if (imagesSize == 1)
-	{
-	  RectangleI rectangle = rectangles.get(0);
-	  images.get(0).subImage(rectangle, new CPUTextureBuilderSubImageImageLister(width, height, listener, autodelete), true);
-	}
-	else
-	{
-	  final java.util.ArrayList<IImage> tailImages = new java.util.ArrayList<IImage>();
-	  java.util.ArrayList<RectangleI> tailRectangles = new java.util.ArrayList<RectangleI>();
-	  for (int i = 1; i < imagesSize; i++)
-	  {
-		tailImages.add(images.get(i));
-		tailRectangles.add(rectangles.get(i));
-	  }
+    if (imagesSize == 0 || imagesSize != rectangles.size())
+    {
+      ILogger.instance().logWarning("Creating blank Image");
+      //return factory->createImageFromSize(width, height);
+      factory.createImageFromSize(width, height, listener, autodelete);
+    }
+    else if (imagesSize == 1)
+    {
+      RectangleI rectangle = rectangles.get(0);
+      images.get(0).subImage(rectangle, new CPUTextureBuilderSubImageImageLister(width, height, listener, autodelete), true);
+    }
+    else
+    {
+      final java.util.ArrayList<IImage> tailImages = new java.util.ArrayList<IImage>();
+      java.util.ArrayList<RectangleI> tailRectangles = new java.util.ArrayList<RectangleI>();
+      for (int i = 1; i < imagesSize; i++)
+      {
+        tailImages.add(images.get(i));
+        tailRectangles.add(rectangles.get(i));
+      }
   
-	  images.get(0).combineWith(tailImages, tailRectangles, width, height, listener, autodelete);
+      images.get(0).combineWith(tailImages, tailRectangles, width, height, listener, autodelete);
   
   //    const IImage* base;
   //    int i;
@@ -93,7 +94,7 @@ public class CPUTextureBuilder extends TextureBuilder
   //      base = im2;
   //    }
   //    return base;
-	}
+    }
   }
 
 }

@@ -14,7 +14,7 @@
 IShortBuffer* ShortBufferBuilder::create() const {
   const int size = _values.size();
 
-  IShortBuffer* result = GFactory.createShortBuffer(size);
+  IShortBuffer* result = IFactory::instance()->createShortBuffer(size);
 
   for (int i = 0; i < size; i++) {
     result->rawPut(i, _values[i]);

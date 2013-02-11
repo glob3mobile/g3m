@@ -23,50 +23,40 @@ public class JSONDouble extends JSONNumber
 
   public JSONDouble(double value)
   {
-	  _value = value;
+     _value = value;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: JSONDouble* deepCopy() const
   public final JSONDouble deepCopy()
   {
-	return new JSONDouble(_value);
+    return new JSONDouble(_value);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: double value() const
   public final double value()
   {
-	return _value;
+    return _value;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: double doubleValue() const
   public final double doubleValue()
   {
-	return _value;
+    return _value;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void acceptVisitor(JSONVisitor* visitor) const
   public final void acceptVisitor(JSONVisitor visitor)
   {
-	visitor.visitDouble(this);
+    visitor.visitDouble(this);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const String description() const
   public final String description()
   {
-	IStringBuilder isb = IStringBuilder.newStringBuilder();
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
   
-	isb.addString("double/");
-	isb.addDouble(_value);
+    isb.addString("double/");
+    isb.addDouble(_value);
   
-	final String s = isb.getString();
-	if (isb != null)
-		isb.dispose();
-	return s;
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
   }
 
 }

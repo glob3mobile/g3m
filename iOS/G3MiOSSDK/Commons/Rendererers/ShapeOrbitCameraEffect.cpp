@@ -18,9 +18,9 @@ void ShapeOrbitCameraEffect::doStep(const G3MRenderContext *rc,
 
   const Geodetic3D center = _shape->getPosition();
 
-  const double distance          = GMath.lerp(_fromDistance,          _toDistance,          alpha);
-  const double azimuthInRadians  = GMath.lerp(_fromAzimuthInRadians,  _toAzimuthInRadians,  alpha);
-  const double altitudeInRadians = GMath.lerp(_fromAltitudeInRadians, _toAltitudeInRadians, alpha);
+  const double distance          = IMathUtils::instance()->lerp(_fromDistance,          _toDistance,          alpha);
+  const double azimuthInRadians  = IMathUtils::instance()->lerp(_fromAzimuthInRadians,  _toAzimuthInRadians,  alpha);
+  const double altitudeInRadians = IMathUtils::instance()->lerp(_fromAltitudeInRadians, _toAltitudeInRadians, alpha);
 
   rc->getNextCamera()->setPointOfView(center,
                                       distance,

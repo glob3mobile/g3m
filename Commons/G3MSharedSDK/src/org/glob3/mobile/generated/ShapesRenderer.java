@@ -26,33 +26,33 @@ public class ShapesRenderer extends LeafRenderer
 
   public ShapesRenderer()
   {
-	  _context = null;
+     _context = null;
 
   }
 
   public void dispose()
   {
-	final int shapesCount = _shapes.size();
-	for (int i = 0; i < shapesCount; i++)
-	{
-	  Shape shape = _shapes.get(i);
-	  if (shape != null)
-		  shape.dispose();
-	}
+    final int shapesCount = _shapes.size();
+    for (int i = 0; i < shapesCount; i++)
+    {
+      Shape shape = _shapes.get(i);
+      if (shape != null)
+         shape.dispose();
+    }
   }
 
   public final void addShape(Shape shape)
   {
-	_shapes.add(shape);
-	if (_context != null)
-	{
-	  shape.initialize(_context);
-	}
+    _shapes.add(shape);
+    if (_context != null)
+    {
+      shape.initialize(_context);
+    }
   }
 
   public final void onResume(G3MContext context)
   {
-	_context = context;
+    _context = context;
   }
 
   public final void onPause(G3MContext context)
@@ -67,24 +67,24 @@ public class ShapesRenderer extends LeafRenderer
 
   public final void initialize(G3MContext context)
   {
-	_context = context;
+    _context = context;
 
-	final int shapesCount = _shapes.size();
-	for (int i = 0; i < shapesCount; i++)
-	{
-	  Shape shape = _shapes.get(i);
-	  shape.initialize(context);
-	}
+    final int shapesCount = _shapes.size();
+    for (int i = 0; i < shapesCount; i++)
+    {
+      Shape shape = _shapes.get(i);
+      shape.initialize(context);
+    }
   }
 
   public final boolean isReadyToRender(G3MRenderContext rc)
   {
-	return true;
+    return true;
   }
 
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
-	return false;
+    return false;
   }
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
@@ -101,25 +101,25 @@ public class ShapesRenderer extends LeafRenderer
 
   public final void render(G3MRenderContext rc, GLState parentState)
   {
-	final Vector3D cameraPosition = rc.getCurrentCamera().getCartesianPosition();
+    final Vector3D cameraPosition = rc.getCurrentCamera().getCartesianPosition();
   
-	final int shapesCount = _shapes.size();
-	for (int i = 0; i < shapesCount; i++)
-	{
-	  Shape shape = _shapes.get(i);
-	  if (shape.isTransparent(rc))
-	  {
-		final Planet planet = rc.getPlanet();
-		final Vector3D shapePosition = planet.toCartesian(shape.getPosition());
-		final double squaredDistanceFromEye = shapePosition.sub(cameraPosition).squaredLength();
+    final int shapesCount = _shapes.size();
+    for (int i = 0; i < shapesCount; i++)
+    {
+      Shape shape = _shapes.get(i);
+      if (shape.isTransparent(rc))
+      {
+        final Planet planet = rc.getPlanet();
+        final Vector3D shapePosition = planet.toCartesian(shape.getPosition());
+        final double squaredDistanceFromEye = shapePosition.sub(cameraPosition).squaredLength();
   
-		rc.addOrderedRenderable(new TransparentShapeWrapper(shape, squaredDistanceFromEye));
-	  }
-	  else
-	  {
-		shape.render(rc, parentState);
-	  }
-	}
+        rc.addOrderedRenderable(new TransparentShapeWrapper(shape, squaredDistanceFromEye));
+      }
+      else
+      {
+        shape.render(rc, parentState);
+      }
+    }
   }
 
 }

@@ -23,47 +23,37 @@ public class JSONBoolean extends JSONBaseObject
 
   public JSONBoolean(boolean value)
   {
-	  _value = value;
+     _value = value;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const boolean value() const
   public final boolean value()
   {
-	return _value;
+    return _value;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const JSONBoolean* asBoolean() const
   public final JSONBoolean asBoolean()
   {
-	return this;
+    return this;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const String description() const
   public final String description()
   {
-	IStringBuilder isb = IStringBuilder.newStringBuilder();
-	isb.addBool(_value);
-	final String s = isb.getString();
-	if (isb != null)
-		isb.dispose();
-	return s;
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addBool(_value);
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: JSONBoolean* deepCopy() const
   public final JSONBoolean deepCopy()
   {
-	return new JSONBoolean(_value);
+    return new JSONBoolean(_value);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void acceptVisitor(JSONVisitor* visitor) const
   public final void acceptVisitor(JSONVisitor visitor)
   {
-	visitor.visitBoolean(this);
+    visitor.visitBoolean(this);
   }
 
 }

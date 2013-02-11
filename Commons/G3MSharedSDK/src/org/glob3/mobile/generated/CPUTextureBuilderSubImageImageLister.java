@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class CPUTextureBuilderSubImageImageLister implements IImageListener
+public class CPUTextureBuilderSubImageImageLister extends IImageListener
 {
   private final int _width;
   private final int _height;
@@ -9,10 +9,10 @@ public class CPUTextureBuilderSubImageImageLister implements IImageListener
 
   public CPUTextureBuilderSubImageImageLister(int width, int height, IImageListener listener, boolean autodelete)
   {
-	  _width = width;
-	  _height = height;
-	  _listener = listener;
-	  _autodelete = autodelete;
+     _width = width;
+     _height = height;
+     _listener = listener;
+     _autodelete = autodelete;
 
   }
 
@@ -20,7 +20,7 @@ public class CPUTextureBuilderSubImageImageLister implements IImageListener
   {
 //    image->scale(_width, _height,
 //                 _listener, _autodelete);
-	image.scale(_width, _height, new ImageDeleterImageLister(image, _listener, _autodelete), true);
+    image.scale(_width, _height, new ImageDeleterImageLister(image, _listener, _autodelete), true);
 
 //    IFactory::instance()->deleteImage(image);
   }

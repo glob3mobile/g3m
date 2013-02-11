@@ -4,7 +4,6 @@ package org.glob3.mobile.demo;
 
 import java.util.ArrayList;
 
-import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.BusyMeshRenderer;
 import org.glob3.mobile.generated.CachedDownloader;
 import org.glob3.mobile.generated.CameraDoubleDragHandler;
@@ -15,14 +14,11 @@ import org.glob3.mobile.generated.CameraSingleDragHandler;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.CompositeRenderer;
 import org.glob3.mobile.generated.GInitializationTask;
-import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.LayerSet;
-import org.glob3.mobile.generated.Mark;
-import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.Sector;
@@ -39,7 +35,6 @@ import org.glob3.mobile.specific.G3MBaseActivity;
 import org.glob3.mobile.specific.G3MWidget_Android;
 import org.glob3.mobile.specific.SQLiteStorage_Android;
 import org.glob3.mobile.specific.ThreadUtils_Android;
-import org.glob3.mobile.specific.TileMillLayer;
 
 import android.os.Bundle;
 
@@ -62,7 +57,6 @@ public class G3MSimplestGlob3Activity
     // setContentView(_widgetAndroid);
 
 
-    // initialize a customized widget without using any builder
     // initialize a customized widget without using any builder
     _widgetAndroid = new G3MWidget_Android(this);
 
@@ -95,45 +89,42 @@ public class G3MSimplestGlob3Activity
 
     final CompositeRenderer mainRenderer = new CompositeRenderer();
     final LayerSet layerSet = new LayerSet();
-    final TileMillLayer tml = new TileMillLayer("TileMill Layer", new URL(
-        "http://projects.bryanmcbride.com/php-mbtiles-server/mbtiles.php?",
-        false), "geography-class.mbtiles", Sector.fromDegrees(-85.05, -180.0,
-        85.05, 180.0), "image/jpeg", "EPSG:4326", "", false, null,
-        TimeInterval.fromDays(30));
     final WMSLayer osm = new WMSLayer( //
         "osm_auto:all", //
         new URL("http://129.206.228.72/cached/osm", false), //
         WMSServerVersion.WMS_1_1_0, //
-        Sector.fromDegrees(-85.05, -180.0, 85.05, 180.0), //
+        // Sector.fromDegrees(-85.05, -180.0, 85.05, 180.0), //
+        Sector.fullSphere(), //
         "image/jpeg", //
         "EPSG:4326", //
         "", //
         false, //
         null, //
         TimeInterval.fromDays(30));
-    layerSet.addLayer(tml);
+    layerSet.addLayer(osm);
     final TileRendererBuilder tlBuilder = new TileRendererBuilder();
     tlBuilder.setLayerSet(layerSet);
     final TileRenderer tileRenderer = tlBuilder.create();
     mainRenderer.addRenderer(tileRenderer);
 
 
-    final MarksRenderer marksRenderer = new MarksRenderer(false);
-    final Mark m1 = new Mark(
-        "Fuerteventura", //
-        new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false), //
-        new Geodetic3D(Angle.fromDegrees(28.05), Angle.fromDegrees(-14.36), 0), //
-        false);
-    marksRenderer.addMark(m1);
+    // final MarksRenderer marksRenderer = new MarksRenderer(false);
+    // final Mark m1 = new Mark("Fuerteventura", //
+    // new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png",
+    // false), //
+    // new Geodetic3D(Angle.fromDegrees(28.05), Angle.fromDegrees(-14.36),
+    // 0), //
+    // false);
+    // marksRenderer.addMark(m1);
+    //
+    // final Mark m3 = new Mark(
+    // "Washington, DC", //
+    // new Geodetic3D(Angle.fromDegreesMinutesSeconds(38, 53, 42.24),
+    // Angle.fromDegreesMinutesSeconds(-77, 2, 10.92), 100), //
+    // 0);
+    // marksRenderer.addMark(m3);
+    // mainRenderer.addRenderer(marksRenderer);
 
-    final Mark m3 = new Mark("Washington, DC", //
-        new Geodetic3D(Angle.fromDegreesMinutesSeconds(38, 53, 42.24),
-            Angle.fromDegreesMinutesSeconds(-77, 2, 10.92), 100), //
-        0);
-    marksRenderer.addMark(m3);
-    mainRenderer.addRenderer(marksRenderer);
-
-    final GInitializationTask initializationTask = null;
 
     final org.glob3.mobile.generated.Renderer busyRenderer = new BusyMeshRenderer();
 
@@ -143,6 +134,26 @@ public class G3MSimplestGlob3Activity
     final boolean logFPS = true;
 
     final boolean logDownloaderStatistics = false;
+
+    // final GInitializationTask initializationTask = new
+    // GInitializationTask() {
+    // @Override
+    // public void run(final G3MContext context) {
+    // final String jsonString =
+    // "{\"s\": \"world\", \"d\": 3.1415927, \"i\": 1, \"n\": null, \"a\":[1,\"2\",true]}";
+    // final JSONBaseObject jsonObject =
+    // context.getJSONParser().parse(jsonString);
+    //
+    // System.out.println(jsonObject.description());
+    // }
+    //
+    //
+    // @Override
+    // public boolean isDone(final G3MContext context) {
+    // return true;
+    // }
+    // };
+    final GInitializationTask initializationTask = null;
 
     final boolean autoDeleteInitializationTask = true;
 
@@ -166,7 +177,14 @@ public class G3MSimplestGlob3Activity
         autoDeleteInitializationTask, //
         periodicalTasks, //
         userData);
+
     setContentView(_widgetAndroid);
+
+
+    // final G3MBuilder glob3Builder = new G3MBuilder();
+    // _widgetAndroid =
+    // glob3Builder.getSimpleBingGlob3(getApplicationContext());
+    // setContentView(_widgetAndroid);
   }
 
 

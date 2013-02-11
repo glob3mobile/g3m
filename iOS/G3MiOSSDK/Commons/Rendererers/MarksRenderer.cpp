@@ -54,20 +54,21 @@ void MarksRenderer::initialize(const G3MContext* context) {
   int marksSize = _marks.size();
   for (int i = 0; i < marksSize; i++) {
     Mark* mark = _marks[i];
-    mark->initialize(context);
+    mark->initialize(context, _downloadPriority);
   }
 }
 
 void MarksRenderer::addMark(Mark* mark) {
   _marks.push_back(mark);
   if (_context != NULL) {
-    mark->initialize(_context);
+    mark->initialize(_context, _downloadPriority);
   }
 }
 
 void MarksRenderer::removeMark(Mark* mark){
   int pos = -1;
-  for (int i = 0; i < _marks.size(); i++) {
+  const int marksSize = _marks.size();
+  for (int i = 0; i < marksSize; i++) {
     if (_marks[i] == mark) {
       pos = i;
       break;
@@ -75,7 +76,7 @@ void MarksRenderer::removeMark(Mark* mark){
   }
   if (pos != -1) {
 #ifdef C_CODE
-    _marks.erase(_marks.begin()+pos);
+    _marks.erase(_marks.begin() + pos);
 #endif
 #ifdef JAVA_CODE
     _marks.remove(pos);
@@ -83,8 +84,9 @@ void MarksRenderer::removeMark(Mark* mark){
   }
 }
 
-void MarksRenderer::removeAllMarks(){
-  for (int i = 0; i < _marks.size(); i++) {
+void MarksRenderer::removeAllMarks() {
+  const int marksSize = _marks.size();
+  for (int i = 0; i < marksSize; i++) {
     delete _marks[i];
   }
   _marks.clear();
@@ -186,8 +188,8 @@ void MarksRenderer::render(const G3MRenderContext* rc,
   state.enableVerticesPosition();
   gl->setState(state);
 
-  static Vector2D textureTranslation(0.0, 0.0);
-  static Vector2D textureScale(1.0, 1.0);
+  Vector2D textureTranslation(0.0, 0.0);
+  Vector2D textureScale(1.0, 1.0);
   gl->transformTexCoords(textureScale, textureTranslation);
 
   gl->setBlendFuncSrcAlpha();

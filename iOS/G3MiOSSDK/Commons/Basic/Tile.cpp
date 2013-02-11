@@ -48,22 +48,16 @@ _texturizerData(NULL)
 }
 
 Tile::~Tile() {
-  //  if (_isVisible) {
-  //    deleteTexturizedMesh();
-  //  }
-
   prune(NULL);
 
   delete _debugMesh;
-
+  _debugMesh = NULL;
   delete _tessellatorMesh;
-
-#ifdef C_CODE
+  _tessellatorMesh = NULL;
   delete _texturizerData;
-#endif
   _texturizerData = NULL;
-
   delete _texturizedMesh;
+  _texturizedMesh = NULL;
 }
 
 void Tile::ancestorTexturedSolvedChanged(Tile* ancestor,
@@ -305,9 +299,7 @@ void Tile::deleteTexturizedMesh(TileTexturizer* texturizer) {
     delete _texturizedMesh;
     _texturizedMesh = NULL;
 
-#ifdef C_CODE
     delete _texturizerData;
-#endif
     _texturizerData = NULL;
 
     setTexturizerDirty(true);

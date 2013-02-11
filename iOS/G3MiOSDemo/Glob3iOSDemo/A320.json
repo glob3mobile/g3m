@@ -1,6 +1,6 @@
 {"type":"node","id":"root","nodes":[
 {"type":"node","id":"Core.001_REVERSE.L1_2_-_Defaul.003","nodes":[
-  {"type":"material","sid":"DefaultWhite.019","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.019","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"geometry","primitive":"triangles","id":"Core.001_REVERSE.L1_2_-_Defaul.003_DefaultWhite.019"
     ,"positions":[
       6.895578861,-1.25025773,6.137487411,
@@ -164,8 +164,8 @@
   ]},
 ]},
 {"type":"node","id":"Intake.001_FANCOWL.L2_8_-_De.011","nodes":[
-  {"type":"material","sid":"DefaultWhite.020","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
-    {"type":"texture","layers":[{"uri":"NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"Intake.001_FANCOWL.L2_8_-_De.011_DefaultWhite.020"
+  {"type":"material","sid":"DefaultWhite.020","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+    {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"Intake.001_FANCOWL.L2_8_-_De.011_DefaultWhite.020"
     ,"positions":[
       5.057015896,-2.232115746,5.233525276,
       4.662017822,-2.232115746,5.294006348,
@@ -762,8 +762,8 @@
   ]},
 ]},
 {"type":"node","id":"Nacelle.001_FANCOWL.L2_8_-_Defaul.003","nodes":[
-  {"type":"material","sid":"DefaultWhite.020","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
-    {"type":"texture","layers":[{"uri":"NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"Nacelle.001_FANCOWL.L2_8_-_Defaul.003_DefaultWhite.020"
+  {"type":"material","sid":"DefaultWhite.020","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+    {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"Nacelle.001_FANCOWL.L2_8_-_Defaul.003_DefaultWhite.020"
     ,"positions":[
       6.178015709,-1.734621644,6.311715126,
       6.178015709,-1.785840631,6.487188339,
@@ -937,7 +937,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"Nozzle.001_NOZZLE.EXT_1_-_Defaul.003","nodes":[
-  {"type":"material","sid":"Nozzle.003","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"Nozzle.003","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"geometry","primitive":"triangles","id":"Nozzle.001_NOZZLE.EXT_1_-_Defaul.003_Nozzle.003"
     ,"positions":[
       7.879220963,-1.942498684,6.261715412,
@@ -1140,8 +1140,8 @@
   ]},
 ]},
 {"type":"node","id":"Reverser.001_FANCOWL.L2_8_-_De.009","nodes":[
-  {"type":"material","sid":"DefaultWhite.020","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
-    {"type":"texture","layers":[{"uri":"NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"Reverser.001_FANCOWL.L2_8_-_De.009_DefaultWhite.020"
+  {"type":"material","sid":"DefaultWhite.020","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+    {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"Reverser.001_FANCOWL.L2_8_-_De.009_DefaultWhite.020"
     ,"positions":[
       6.364015579,-2.232115746,5.300770283,
       6.364015579,-2.232115746,5.225905418,
@@ -1766,7 +1766,7 @@
   ]},
 ]},
 {"type":"node","id":"cone.000_cone.003","nodes":[
-  {"type":"material","sid":"ac3dmat1.001","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0,"g":0,"b":0},"nodes":[
+  {"type":"material","sid":"ac3dmat1.001","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0,"g":0,"b":0},"nodes":[
     {"type":"geometry","primitive":"triangles","id":"cone.000_cone.003_ac3dmat1.001"
     ,"positions":[
       4.84107542,-2.28891778,6.238234043,
@@ -2748,7 +2748,7 @@
   ]},
 ]},
 {"type":"node","id":"cone.001_cone.002","nodes":[
-  {"type":"material","sid":"ac3dmat1.001","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0,"g":0,"b":0},"nodes":[
+  {"type":"material","sid":"ac3dmat1.001","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0,"g":0,"b":0},"nodes":[
     {"type":"geometry","primitive":"triangles","id":"cone.001_cone.002_ac3dmat1.001"
     ,"positions":[
       4.89330101,-2.261718512,-6.287142277,
@@ -3187,8 +3187,8 @@
   ]},
 ]},
 {"type":"node","id":"Reverser_FANCOWL.L2_8_-_De.008","nodes":[
-  {"type":"material","sid":"DefaultWhite.020","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
-    {"type":"texture","layers":[{"uri":"NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"Reverser_FANCOWL.L2_8_-_De.008_DefaultWhite.020"
+  {"type":"material","sid":"DefaultWhite.020","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+    {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"Reverser_FANCOWL.L2_8_-_De.008_DefaultWhite.020"
     ,"positions":[
       6.416241646,-2.204916477,-7.224606037,
       6.416241646,-2.204916477,-7.299470901,
@@ -3554,7 +3554,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"Nozzle_NOZZLE.EXT_1_-_Defaul.002","nodes":[
-  {"type":"material","sid":"Nozzle.003","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"Nozzle.003","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"geometry","primitive":"triangles","id":"Nozzle_NOZZLE.EXT_1_-_Defaul.002_Nozzle.003"
     ,"positions":[
       7.931446552,-1.915299416,-6.263660908,
@@ -3757,8 +3757,8 @@
   ]},
 ]},
 {"type":"node","id":"Nacelle_FANCOWL.L2_8_-_Defaul.002","nodes":[
-  {"type":"material","sid":"DefaultWhite.020","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
-    {"type":"texture","layers":[{"uri":"NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"Nacelle_FANCOWL.L2_8_-_Defaul.002_DefaultWhite.020"
+  {"type":"material","sid":"DefaultWhite.020","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+    {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"Nacelle_FANCOWL.L2_8_-_Defaul.002_DefaultWhite.020"
     ,"positions":[
       6.230241299,-1.707422376,-6.213661194,
       6.230241299,-1.758641362,-6.038187981,
@@ -4023,8 +4023,8 @@
   ]},
 ]},
 {"type":"node","id":"Intake_FANCOWL.L2_8_-_De.006","nodes":[
-  {"type":"material","sid":"DefaultWhite.020","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
-    {"type":"texture","layers":[{"uri":"NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"Intake_FANCOWL.L2_8_-_De.006_DefaultWhite.020"
+  {"type":"material","sid":"DefaultWhite.020","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+    {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"Intake_FANCOWL.L2_8_-_De.006_DefaultWhite.020"
     ,"positions":[
       5.109241486,-2.204916477,-7.291851044,
       4.714243412,-2.204916477,-7.231369972,
@@ -4530,7 +4530,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"Core_REVERSE.L1_2_-_Defaul.002","nodes":[
-  {"type":"material","sid":"DefaultWhite.019","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.019","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"geometry","primitive":"triangles","id":"Core_REVERSE.L1_2_-_Defaul.002_DefaultWhite.019"
     ,"positions":[
       6.947804451,-1.223058462,-6.387888908,
@@ -4694,7 +4694,7 @@
   ]},
 ]},
 {"type":"node","id":"Wingtips_WINGS.TOP_1_-_Def.011","nodes":[
-  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"Wingtips_WINGS.TOP_1_-_Def.011_DefaultWhite.008"
     ,"positions":[
       14.17036724,0.3300008774,16.32510185,
@@ -4945,7 +4945,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"SpoilerR5_WINGS.TOP_1_-_Def.036","nodes":[
-  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"SpoilerR5_WINGS.TOP_1_-_Def.036_DefaultWhite.008"
     ,"positions":[
       13.2573719,-0.1364881992,-11.96839142,
@@ -4980,7 +4980,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"SpoilerR4_WINGS.TOP_1_-_Def.035","nodes":[
-  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"SpoilerR4_WINGS.TOP_1_-_Def.035_DefaultWhite.008"
     ,"positions":[
       11.92174149,-0.1759451628,-10.16128159,
@@ -5011,7 +5011,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"SpoilerR3_WINGS.TOP_1_-_Def.034","nodes":[
-  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"SpoilerR3_WINGS.TOP_1_-_Def.034_DefaultWhite.008"
     ,"positions":[
       11.35349846,-0.3058261871,-8.579242706,
@@ -5042,7 +5042,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"SpoilerR2_WINGS.TOP_1_-_Def.033","nodes":[
-  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"SpoilerR2_WINGS.TOP_1_-_Def.033_DefaultWhite.008"
     ,"positions":[
       10.75164318,-0.4424281716,-6.903258801,
@@ -5073,7 +5073,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"SpoilerR1_WINGS.TOP_1_-_Def.032","nodes":[
-  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"SpoilerR1_WINGS.TOP_1_-_Def.032_DefaultWhite.008"
     ,"positions":[
       11.19483376,-0.5933821797,-6.206789017,
@@ -5130,7 +5130,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"SpoilerL5_WINGS.TOP_1_-_Def.027","nodes":[
-  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"SpoilerL5_WINGS.TOP_1_-_Def.027_DefaultWhite.008"
     ,"positions":[
       12.44527531,-0.05504018068,11.61457729,
@@ -5165,7 +5165,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"SpoilerL4_WINGS.TOP_1_-_Def.028","nodes":[
-  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"SpoilerL4_WINGS.TOP_1_-_Def.028_DefaultWhite.008"
     ,"positions":[
       11.92174149,-0.1759451628,10.15748024,
@@ -5196,7 +5196,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"SpoilerL3_WINGS.TOP_1_-_Def.029","nodes":[
-  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"SpoilerL3_WINGS.TOP_1_-_Def.029_DefaultWhite.008"
     ,"positions":[
       11.91499901,-0.1774941683,10.13871479,
@@ -5227,7 +5227,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"SpoilerL2_WINGS.TOP_1_-_Def.030","nodes":[
-  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"SpoilerL2_WINGS.TOP_1_-_Def.030_DefaultWhite.008"
     ,"positions":[
       10.75164318,-0.4424291849,6.899459839,
@@ -5258,7 +5258,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"SpoilerL1_WINGS.TOP_1_-_Def.031","nodes":[
-  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"SpoilerL1_WINGS.TOP_1_-_Def.031_DefaultWhite.008"
     ,"positions":[
       10.54707146,-0.5056751966,6.193387985,
@@ -5293,7 +5293,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"SlatR5_WINGS.TOP_1_-_Def.005","nodes":[
-  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"SlatR5_WINGS.TOP_1_-_Def.005_DefaultWhite.008"
     ,"positions":[
       13.13868618,0.2607718706,-16.32188034,
@@ -5382,7 +5382,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"SlatR4_WINGS.TOP_1_-_Def.004","nodes":[
-  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"SlatR4_WINGS.TOP_1_-_Def.004_DefaultWhite.008"
     ,"positions":[
       10.68648148,-0.1675761938,-11.58702374,
@@ -5479,7 +5479,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"SlatR3_WINGS.TOP_1_-_Def.003","nodes":[
-  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"SlatR3_WINGS.TOP_1_-_Def.003_DefaultWhite.008"
     ,"positions":[
       10.96186066,-0.06531620026,-11.41311169,
@@ -5574,7 +5574,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"SlatR2_WINGS.TOP_1_-_Def.002","nodes":[
-  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"SlatR2_WINGS.TOP_1_-_Def.002_DefaultWhite.008"
     ,"positions":[
       7.98546505,-0.6533311605,-6.336900234,
@@ -5703,7 +5703,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"SlatR1_WINGS.TOP_1_-_Def.001","nodes":[
-  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"SlatR1_WINGS.TOP_1_-_Def.001_DefaultWhite.008"
     ,"positions":[
       5.890967369,-0.9937191606,-2.307017088,
@@ -5774,7 +5774,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"SlatL5_WINGS.TOP_1_-_Def.010","nodes":[
-  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"SlatL5_WINGS.TOP_1_-_Def.010_DefaultWhite.008"
     ,"positions":[
       13.13868618,0.2607718706,16.31808472,
@@ -5863,7 +5863,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"SlatL4_WINGS.TOP_1_-_Def.009","nodes":[
-  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"SlatL4_WINGS.TOP_1_-_Def.009_DefaultWhite.008"
     ,"positions":[
       10.68789101,-0.1729441881,11.58296776,
@@ -5960,7 +5960,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"SlatL3_WINGS.TOP_1_-_Def.008","nodes":[
-  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"SlatL3_WINGS.TOP_1_-_Def.008_DefaultWhite.008"
     ,"positions":[
       10.96186066,-0.06531620026,11.40931034,
@@ -6055,7 +6055,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"SlatL2_WINGS.TOP_1_-_Def.007","nodes":[
-  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"SlatL2_WINGS.TOP_1_-_Def.007_DefaultWhite.008"
     ,"positions":[
       7.976784229,-0.6424961686,6.333100796,
@@ -6184,7 +6184,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"SlatL1_WINGS.TOP_1_-_Def.006","nodes":[
-  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"SlatL1_WINGS.TOP_1_-_Def.006_DefaultWhite.008"
     ,"positions":[
       5.891280174,-1.002226233,2.303821087,
@@ -6255,7 +6255,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"Flaps1_WINGS.TOP_1_-_Def.018","nodes":[
-  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"Flaps1_WINGS.TOP_1_-_Def.018_DefaultWhite.008"
     ,"positions":[
       10.58691216,-0.8131291866,-4.447552204,
@@ -6306,7 +6306,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"FlapR2_WINGS.TOP_1_-_Def.014","nodes":[
-  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"FlapR2_WINGS.TOP_1_-_Def.014_DefaultWhite.008"
     ,"positions":[
       11.23287773,-0.584433198,-6.326495171,
@@ -6377,7 +6377,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"FlapR1_WINGS.TOP_1_-_Def.015","nodes":[
-  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"FlapR1_WINGS.TOP_1_-_Def.015_DefaultWhite.008"
     ,"positions":[
       11.74598408,-0.7124011517,-6.239359856,
@@ -6472,7 +6472,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"FlapL2_WINGS.TOP_1_-_Def.016","nodes":[
-  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"FlapL2_WINGS.TOP_1_-_Def.016_DefaultWhite.008"
     ,"positions":[
       11.23287773,-0.584433198,6.322696209,
@@ -6543,7 +6543,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"FlapL1_WINGS.TOP_1_-_Def.017","nodes":[
-  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"FlapL1_WINGS.TOP_1_-_Def.017_DefaultWhite.008"
     ,"positions":[
       11.74598408,-0.7124011517,6.23555994,
@@ -6638,7 +6638,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"FairingR3_WINGS.TOP_1_-_Def.021","nodes":[
-  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"FairingR3_WINGS.TOP_1_-_Def.021_DefaultWhite.008"
     ,"positions":[
       14.05514336,-0.3183111548,-11.87115765,
@@ -6803,7 +6803,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"FairingR2_WINGS.TOP_1_-_Def.022","nodes":[
-  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"FairingR2_WINGS.TOP_1_-_Def.022_DefaultWhite.008"
     ,"positions":[
       12.97537136,-0.6623162031,-8.2544384,
@@ -6976,7 +6976,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"FairingR1_WINGS.TOP_1_-_Def.023","nodes":[
-  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"FairingR1_WINGS.TOP_1_-_Def.023_DefaultWhite.008"
     ,"positions":[
       12.37905884,-1.071495175,-4.843113899,
@@ -7133,7 +7133,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"FairingL3_WINGS.TOP_1_-_Def.026","nodes":[
-  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"FairingL3_WINGS.TOP_1_-_Def.026_DefaultWhite.008"
     ,"positions":[
       13.47894478,-0.1735791564,12.02307415,
@@ -7298,7 +7298,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"FairingL2_WINGS.TOP_1_-_Def.025","nodes":[
-  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"FairingL2_WINGS.TOP_1_-_Def.025_DefaultWhite.008"
     ,"positions":[
       12.38153076,-0.5051471591,8.419841766,
@@ -7471,7 +7471,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"FairingL1_WINGS.TOP_1_-_Def.024","nodes":[
-  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"FairingL1_WINGS.TOP_1_-_Def.024_DefaultWhite.008"
     ,"positions":[
       12.37905884,-1.071495175,4.839314938,
@@ -7628,7 +7628,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"AileronR_WINGS.TOP_1_-_Def.013","nodes":[
-  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"AileronR_WINGS.TOP_1_-_Def.013_DefaultWhite.008"
     ,"positions":[
       13.34778976,0.05566585064,-13.39665699,
@@ -7659,7 +7659,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"AileronL_WINGS.TOP_1_-_Def.012","nodes":[
-  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"AileronL_WINGS.TOP_1_-_Def.012_DefaultWhite.008"
     ,"positions":[
       14.39788151,0.2970098257,16.31900024,
@@ -7690,7 +7690,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"Wings.001_WINGS.TOP_1_-_Default","nodes":[
-  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"Wings.001_WINGS.TOP_1_-_Default_DefaultWhite.008"
     ,"positions":[
       13.33957291,0.05546784401,-13.3966732,
@@ -9001,7 +9001,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"Wingbox_WINGBOX_4_-_Default","nodes":[
-  {"type":"material","sid":"DefaultWhite.009","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.009","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"geometry","primitive":"triangles","id":"Wingbox_WINGBOX_4_-_Default_DefaultWhite.009"
     ,"positions":[
       9.079084396,-1.542259216,-1.869899988,
@@ -9036,7 +9036,7 @@
   ]},
 ]},
 {"type":"node","id":"FairingPylons_WINGS.TOP_1_-_Def.020","nodes":[
-  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.008","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"FairingPylons_WINGS.TOP_1_-_Def.020_DefaultWhite.008"
     ,"positions":[
       12.11471748,-0.5571111441,11.93509674,
@@ -9583,7 +9583,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"WingletR_Mesh","nodes":[
-  {"type":"material","sid":"DefaultWhite.007","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.007","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"WingletR_Mesh_DefaultWhite.007"
     ,"positions":[
       14.82796383,-0.1182152033,-16.94979858,
@@ -9658,7 +9658,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"WingletL_Mesh.1300","nodes":[
-  {"type":"material","sid":"DefaultWhite.007","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.007","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"WingletL_Mesh.1300_DefaultWhite.007"
     ,"positions":[
       14.82796383,-0.1182171702,16.94979858,
@@ -9733,7 +9733,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"Rudder_1_LEADING_3_-_Defau.003","nodes":[
-  {"type":"material","sid":"DefaultWhite.005","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.005","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"Rudder_1_LEADING_3_-_Defau.003_DefaultWhite.005"
     ,"positions":[
       27.86300468,4.99477911,-0.1377499998,
@@ -9864,7 +9864,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"Rudder_0_LEADING_3_-_Defau.002","nodes":[
-  {"type":"material","sid":"DefaultWhite.006","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.006","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"geometry","primitive":"triangles","id":"Rudder_0_LEADING_3_-_Defau.002_DefaultWhite.006"
     ,"positions":[
       26.32893372,1.989451051,0,
@@ -9926,7 +9926,7 @@
   ]},
 ]},
 {"type":"node","id":"Vstab.001_LEADING_3_-_Default.001","nodes":[
-  {"type":"material","sid":"DefaultWhite.005","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.005","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"Vstab.001_LEADING_3_-_Default.001_DefaultWhite.005"
     ,"positions":[
       28.02703857,7.700131893,0.08573900163,
@@ -10429,7 +10429,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"HstabFlapR_HSTAB_1_-_Default.004","nodes":[
-  {"type":"material","sid":"DefaultWhite.002","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.002","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"HstabFlapR_HSTAB_1_-_Default.004_DefaultWhite.002"
     ,"positions":[
       28.15257645,1.16512537,-5.498101234,
@@ -10484,7 +10484,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"HstabFlapL_HSTAB_1_-_Default.001","nodes":[
-  {"type":"material","sid":"DefaultWhite.002","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.002","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"HstabFlapL_HSTAB_1_-_Default.001_DefaultWhite.002"
     ,"positions":[
       28.15257645,1.16512537,5.498099804,
@@ -10539,7 +10539,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"ElevatorR_HSTAB_1_-_Default.003","nodes":[
-  {"type":"material","sid":"DefaultWhite.002","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.002","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"ElevatorR_HSTAB_1_-_Default.003_DefaultWhite.002"
     ,"positions":[
       29.39170456,1.227488399,-6.212400913,
@@ -10666,7 +10666,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"ElevatorL_HSTAB_1_-_Default.002","nodes":[
-  {"type":"material","sid":"DefaultWhite.002","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.002","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"ElevatorL_HSTAB_1_-_Default.002_DefaultWhite.002"
     ,"positions":[
       29.39170456,1.227488399,6.212400913,
@@ -10793,7 +10793,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"Hstabs.001_HSTAB_1_-_Default","nodes":[
-  {"type":"material","sid":"DefaultWhite.002","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.002","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"Hstabs.001_HSTAB_1_-_Default_DefaultWhite.002"
     ,"positions":[
       26.173172,0.8516213894,1.498100042,
@@ -14831,7 +14831,7 @@
   ]},
 ]},
 {"type":"node","id":"GearNWell_NG_BAY_2_-_Default","nodes":[
-  {"type":"material","sid":"DefaultWhite.001","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite.001","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"geometry","primitive":"triangles","id":"GearNWell_NG_BAY_2_-_Default_DefaultWhite.001"
     ,"positions":[
       -4.101226807,-1.075600028,0.4981000125,
@@ -14882,7 +14882,7 @@
   ]},
 ]},
 {"type":"node","id":"Ports_FUSELAGE_1_-_Defa.002","nodes":[
-  {"type":"material","sid":"DefaultWhite","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"Ports_FUSELAGE_1_-_Defa.002_DefaultWhite"
     ,"positions":[
       -0.351225853,-1.656316996,-1.294252038,
@@ -14989,7 +14989,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"Nose_FUSELAGE_1_-_Defa.001","nodes":[
-  {"type":"material","sid":"DefaultWhite","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"Nose_FUSELAGE_1_-_Defa.001_DefaultWhite"
     ,"positions":[
       -5.99522686,-1.585234046,-0.1786170006,
@@ -15284,7 +15284,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"GearRDoor_FUSELAGE_1_-_Defa.020","nodes":[
-  {"type":"material","sid":"DefaultWhite","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"GearRDoor_FUSELAGE_1_-_Defa.020_DefaultWhite"
     ,"positions":[
       10.79977131,-1.47173202,-1.964347959,
@@ -15333,7 +15333,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"GearNFwdDoorR_FUSELAGE_1_-_Defa.003","nodes":[
-  {"type":"material","sid":"DefaultWhite","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"GearNFwdDoorR_FUSELAGE_1_-_Defa.003_DefaultWhite"
     ,"positions":[
       -2.17722559,-2.116511106,-0.1269000024,
@@ -15394,7 +15394,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"GearNFwdDoorL_FUSELAGE_1_-_Defa.004","nodes":[
-  {"type":"material","sid":"DefaultWhite","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"GearNFwdDoorL_FUSELAGE_1_-_Defa.004_DefaultWhite"
     ,"positions":[
       -2.667225361,-2.10710001,-0.001900000032,
@@ -15474,7 +15474,7 @@
   ]},
 ]},
 {"type":"node","id":"GearNAftDoorR_FUSELAGE_1_-_Defa.006","nodes":[
-  {"type":"material","sid":"DefaultWhite","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"GearNAftDoorR_FUSELAGE_1_-_Defa.006_DefaultWhite"
     ,"positions":[
       -1.896225452,-2.139100075,-0.001900000032,
@@ -15505,7 +15505,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"GearNAftDoorL_FUSELAGE_1_-_Defa.005","nodes":[
-  {"type":"material","sid":"DefaultWhite","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"GearNAftDoorL_FUSELAGE_1_-_Defa.005_DefaultWhite"
     ,"positions":[
       -1.896225452,-2.10018301,0.3799380064,
@@ -15536,7 +15536,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"GearLDoor_FUSELAGE_1_-_Defa.019","nodes":[
-  {"type":"material","sid":"DefaultWhite","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"GearLDoor_FUSELAGE_1_-_Defa.019_DefaultWhite"
     ,"positions":[
       10.79977131,-1.47173202,1.960548043,
@@ -15585,7 +15585,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"DoorR4_FUSELAGE_1_-_Defa.018","nodes":[
-  {"type":"material","sid":"DefaultWhite","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"DoorR4_FUSELAGE_1_-_Defa.018_DefaultWhite"
     ,"positions":[
       23.03248978,-0.538383007,-1.478569031,
@@ -15678,7 +15678,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"DoorR3_FUSELAGE_1_-_Defa.013","nodes":[
-  {"type":"material","sid":"DefaultWhite","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"DoorR3_FUSELAGE_1_-_Defa.013_DefaultWhite"
     ,"positions":[
       8.558876991,0.8451510072,-1.779137015,
@@ -15781,7 +15781,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"DoorR2_FUSELAGE_1_-_Defa.014","nodes":[
-  {"type":"material","sid":"DefaultWhite","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"DoorR2_FUSELAGE_1_-_Defa.014_DefaultWhite"
     ,"positions":[
       7.605910301,0.38894701,-1.937026024,
@@ -15884,7 +15884,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"DoorR1_FUSELAGE_1_-_Defa.010","nodes":[
-  {"type":"material","sid":"DefaultWhite","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"DoorR1_FUSELAGE_1_-_Defa.010_DefaultWhite"
     ,"positions":[
       -1.405722618,-0.3978779912,-1.93552804,
@@ -15959,7 +15959,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"DoorL4_FUSELAGE_1_-_Defa.017","nodes":[
-  {"type":"material","sid":"DefaultWhite","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"DoorL4_FUSELAGE_1_-_Defa.017_DefaultWhite"
     ,"positions":[
       23.12031174,1.455952048,1.170866966,
@@ -16052,7 +16052,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"DoorL3_FUSELAGE_1_-_Defa.016","nodes":[
-  {"type":"material","sid":"DefaultWhite","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"DoorL3_FUSELAGE_1_-_Defa.016_DefaultWhite"
     ,"positions":[
       8.558876991,0.8451510072,1.775336027,
@@ -16155,7 +16155,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"DoorL2_FUSELAGE_1_-_Defa.015","nodes":[
-  {"type":"material","sid":"DefaultWhite","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"DoorL2_FUSELAGE_1_-_Defa.015_DefaultWhite"
     ,"positions":[
       7.605910301,0.38894701,1.933225989,
@@ -16258,7 +16258,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"DoorL1_FUSELAGE_1_-_Defa.011","nodes":[
-  {"type":"material","sid":"DefaultWhite","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"DoorL1_FUSELAGE_1_-_Defa.011_DefaultWhite"
     ,"positions":[
       -1.405722618,-0.3978779912,1.931727052,
@@ -16399,7 +16399,7 @@
   ]},
 ]},
 {"type":"node","id":"Cargo3_FUSELAGE_1_-_Defa.007","nodes":[
-  {"type":"material","sid":"DefaultWhite","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"Cargo3_FUSELAGE_1_-_Defa.007_DefaultWhite"
     ,"positions":[
       19.71034241,-1.805150032,-0.7367079854,
@@ -16539,7 +16539,7 @@
   ]},
 ]},
 {"type":"node","id":"Cargo2_FUSELAGE_1_-_Defa.008","nodes":[
-  {"type":"material","sid":"DefaultWhite","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"Cargo2_FUSELAGE_1_-_Defa.008_DefaultWhite"
     ,"positions":[
       15.0455904,-1.798648,-1.130789042,
@@ -16691,7 +16691,7 @@
   ]},
 ]},
 {"type":"node","id":"Cargo1_FUSELAGE_1_-_Defa.009","nodes":[
-  {"type":"material","sid":"DefaultWhite","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"Cargo1_FUSELAGE_1_-_Defa.009_DefaultWhite"
     ,"positions":[
       2.098648071,-2.025969982,-0.6927779913,
@@ -16754,7 +16754,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"Belly_FUSELAGE_1_-_Defa.012","nodes":[
-  {"type":"material","sid":"DefaultWhite","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"Belly_FUSELAGE_1_-_Defa.012_DefaultWhite"
     ,"positions":[
       6.294341087,-0.8277950287,-2.186306953,
@@ -17421,7 +17421,7 @@
     ]}  ]},
 ]},
 {"type":"node","id":"Fuselage.001_FUSELAGE_1_-_Default","nodes":[
-  {"type":"material","sid":"DefaultWhite","baseColor":{"r":0.8,"g":0.8,"b":0.8},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
+  {"type":"material","sid":"DefaultWhite","baseColor":{"r":1.0,"g":1.0,"b":1.0},"specularColor":{"r":0.32,"g":0.32,"b":0.32},"nodes":[
     {"type":"texture","layers":[{"uri":"A320-NWA.png"}],"nodes":[    {"type":"geometry","primitive":"triangles","id":"Fuselage.001_FUSELAGE_1_-_Default_DefaultWhite"
     ,"positions":[
       20.93377304,1.163429022,1.541560054,

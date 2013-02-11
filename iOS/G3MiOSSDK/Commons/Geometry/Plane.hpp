@@ -1,5 +1,5 @@
 //
-//  Plane.h
+//  Plane.hpp
 //  G3MiOSSDK
 //
 //  Created by Agustín Trujillo Pino on 14/07/12.
@@ -10,47 +10,71 @@
 #define G3MiOSSDK_Plane_h
 
 #include "Vector3D.hpp"
+#include "Vector3F.hpp"
 
 class Plane {
-  
-public:  
-  
-  Plane(): _normal(0.0,0.0,0.0), _d(0.0){} //Empty constructor
-  
-  Plane(const Vector3D& point0,
-        const Vector3D& point1,
-        const Vector3D& point2):
-  _normal(point1.sub(point0).cross(point2.sub(point0)).normalized()),
-  _d(-_normal.dot(point0)) 
-  {}
-  
-  Plane(const Vector3D& normal, double d): 
-  _normal(normal.normalized()), _d(d)
-  {}
-  
-  Plane(double a, double b, double c, double d):
-  _normal(Vector3D(a,b,c).normalized()),
-  _d(d)
-  {}
-  
-  Plane(const Plane& that) :
-  _normal(that._normal), 
-  _d(that._d)
-  {
-    
-  }
-  
-  Plane transformedByTranspose(const MutableMatrix44D& M) const;
-  
-  double signedDistance(const Vector3D& point) const {
-    return point.dot(_normal) + _d;
-  }
-  
-  Vector3D intersectionWithRay(const Vector3D& origin, const Vector3D& direction) const;
-  
 private:
   const Vector3D _normal;
   const double   _d;
+
+//  const Vector3F _normalF;
+//  const float    _dF;
+
+public:
+
+  Plane() :
+  _normal(0, 0, 0),
+  _d(0)
+//  _normalF(0, 0, 0),
+//  _dF(0)
+  {
+  }
+
+  static Plane fromPoints(const Vector3D& point0,
+                          const Vector3D& point1,
+                          const Vector3D& point2) {
+    const Vector3D normal = point1.sub(point0).cross(point2.sub(point0)).normalized();
+    const double d = -normal.dot(point0);
+    return Plane(normal, d);
+  }
+
+  Plane(const Vector3D& normal,
+        double d):
+  _normal(normal.normalized()),
+  _d(d)
+//  _normalF( Vector3F((float) normal._x, (float) normal._y, (float) normal._z).normalized() ),
+//  _dF((float) d)
+  {
+  }
+
+  Plane(double a, double b, double c, double d):
+  _normal(Vector3D(a,b,c).normalized()),
+  _d(d)
+//  _normalF(Vector3F((float) a, (float) b, (float) c).normalized()),
+//  _dF((float) d)
+  {
+  }
+
+  Plane(const Plane& that) :
+  _normal(that._normal),
+  _d(that._d)
+//  _normalF(that._normalF),
+//  _dF(that._dF)
+  {
+  }
+
+  Plane transformedByTranspose(const MutableMatrix44D& M) const;
+
+  double signedDistance(const Vector3D& point) const {
+    return point.dot(_normal) + _d;
+  }
+
+  float signedDistance(const Vector3F& point) const {
+    return point.dot(_normal) + (float) _d;
+  }
+
+  Vector3D intersectionWithRay(const Vector3D& origin,
+                               const Vector3D& direction) const;
   
 };
 

@@ -43,4 +43,10 @@ public final class GLTextureId_Android
       return _glTextureId;
    }
 
+
+   @Override
+   public void dispose() {
+
+   }
+
 }

@@ -243,8 +243,8 @@ xyTuple* BingLayer::getTileXY(const Geodetic2D latLon, const int level)const{
   }
   
   double x = (lonDeg +180.0)/360;
-  double sinLat = GMath.sin(latDeg*GMath.pi()/180.0);
-  double y = 0.5-GMath.log((1+sinLat)/(1-sinLat))/(4.0*GMath.pi());
+  double sinLat = IMathUtils::instance()->sin(latDeg*IMathUtils::instance()->pi()/180.0);
+  double y = 0.5-IMathUtils::instance()->log((1+sinLat)/(1-sinLat))/(4.0*IMathUtils::instance()->pi());
   
   x = x * mapSize +0.5;
   y = y * mapSize +0.5;
@@ -296,7 +296,7 @@ Sector BingLayer::getBingTileAsSector(const int tileXY[], const int level)const{
   
   
   Geodetic2D topLeft = getLatLon(tileXY, level);
-  int maxTile = ((int)GMath.pow((double)2, (double)level))-1;
+  int maxTile = ((int)IMathUtils::instance()->pow((double)2, (double)level))-1;
   
   Angle lowerLon = topLeft.longitude();
   Angle upperLat = topLeft.latitude();
@@ -343,7 +343,7 @@ Geodetic2D BingLayer::getLatLon(const int tileXY[], const int level)const{
   double x = (((double)pixelX)/((double)mapSize)) - 0.5;
   double y = 0.5 - (((double)pixelY)/((double)mapSize));
   
-  double latDeg = 90.0 - 360.0 * GMath.atan(GMath.exp(-y*2.0*GMath.pi())) / GMath.pi();
+  double latDeg = 90.0 - 360.0 * IMathUtils::instance()->atan(IMathUtils::instance()->exp(-y*2.0*IMathUtils::instance()->pi())) / IMathUtils::instance()->pi();
   double lonDeg = 360.0 * x;
   
   return Geodetic2D(Angle::fromDegrees(latDeg), Angle::fromDegrees(lonDeg));

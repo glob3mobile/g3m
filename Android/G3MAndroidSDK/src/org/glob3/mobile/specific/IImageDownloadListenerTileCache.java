@@ -9,7 +9,7 @@ import org.glob3.mobile.generated.URL;
 
 
 public class IImageDownloadListenerTileCache
-    implements
+    extends
       IImageDownloadListener {
 
   private final long _requestId;
@@ -20,23 +20,27 @@ public class IImageDownloadListenerTileCache
   }
 
 
+  @Override
   public void onDownload(final URL pUrl,
                          final IImage pImage) {
     ILogger.instance().logInfo("Downloaded id: " + _requestId);
   }
 
 
+  @Override
   public void onError(final URL pUrl) {
     ILogger.instance().logError("Fail Downloaded id: " + _requestId);
   }
 
 
+  @Override
   public void onCancel(final URL pUrl) {
     // TODO Auto-generated method stub
 
   }
 
 
+  @Override
   public void onCanceledDownload(final URL pUrl,
                                  final IImage pImage) {
     // TODO Auto-generated method stub

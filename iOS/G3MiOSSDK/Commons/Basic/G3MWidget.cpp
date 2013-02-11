@@ -134,7 +134,7 @@ _initializationTaskWasRun(false)
   }
 
   if (_downloader != NULL){
-    _downloader->initialize(_context);
+    _downloader->initialize(_context, _frameTasksExecutor);
     _downloader->start();
   }
 
@@ -186,9 +186,7 @@ void G3MWidget::initializeGL() {
 G3MWidget::~G3MWidget() {
   delete _userData;
 
-#ifdef C_CODE
   delete _planet;
-#endif
   delete _cameraRenderer;
   delete _mainRenderer;
   delete _busyRenderer;
@@ -207,20 +205,17 @@ G3MWidget::~G3MWidget() {
   delete _storage;
   delete _threadUtils;
 
-#ifdef C_CODE
-  for (unsigned int n=0; n<_cameraConstrainers.size(); n++)
+  for (unsigned int n=0; n < _cameraConstrainers.size(); n++) {
     delete _cameraConstrainers[n];
-#endif
+  }
   delete _frameTasksExecutor;
 
-#ifdef C_CODE
   for (int i = 0; i < _periodicalTasks.size(); i++){
     //    _periodicalTasks[i].releaseTask();
 
     PeriodicalTask* periodicalTask =  _periodicalTasks[i];
     delete periodicalTask;
   }
-#endif
 
   delete _context;
 

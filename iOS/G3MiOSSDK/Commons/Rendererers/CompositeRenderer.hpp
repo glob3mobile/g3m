@@ -21,7 +21,7 @@ private:
   const G3MContext* _context;
 #endif
 #ifdef JAVA_CODE
-  protected G3MContext _context;
+  private G3MContext _context;
 #endif
 
   bool _enable;

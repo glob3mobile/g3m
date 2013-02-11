@@ -245,7 +245,7 @@ IByteBuffer* SQLiteStorage_iOS::readBuffer(const URL& url) {
       [nsData getBytes: bytes
                 length: length];
 
-      result = GFactory.createByteBuffer(bytes, length);
+      result = IFactory::instance()->createByteBuffer(bytes, length);
     }
   }
 

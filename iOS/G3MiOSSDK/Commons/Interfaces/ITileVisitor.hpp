@@ -13,9 +13,14 @@
 
 class ITileVisitor{
 public:
-    virtual ~ITileVisitor() { }
+#ifdef C_CODE
+  virtual ~ITileVisitor() { }
+#endif
+#ifdef JAVA_CODE
+  public void dispose();
+#endif
     
-    virtual void visitTile(Tile* tile) const = 0;
+  virtual void visitTile(Tile* tile) const = 0;
 };
 
 

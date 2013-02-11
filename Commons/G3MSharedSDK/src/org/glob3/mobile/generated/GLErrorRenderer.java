@@ -27,21 +27,21 @@ public class GLErrorRenderer extends LeafRenderer
 
   public final void render(G3MRenderContext rc, GLState parentState)
   {
-	GL gl = rc.getGL();
-	final ILogger logger = rc.getLogger();
+    GL gl = rc.getGL();
+    final ILogger logger = rc.getLogger();
   
-	int error = gl.getError();
-	while (error != GLError.noError())
-	{
-	  logger.logError("GL Error: %d", error);
-	  error = gl.getError();
-	}
+    int error = gl.getError();
+    while (error != GLError.noError())
+    {
+      logger.logError("GL Error: %d", error);
+      error = gl.getError();
+    }
   
   }
 
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
-	return false;
+    return false;
   }
 
   public void dispose()
@@ -54,7 +54,7 @@ public class GLErrorRenderer extends LeafRenderer
 
   public final boolean isReadyToRender(G3MRenderContext rc)
   {
-	return true;
+    return true;
   }
 
   public final void start()

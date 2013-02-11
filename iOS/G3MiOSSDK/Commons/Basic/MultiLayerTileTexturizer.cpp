@@ -132,9 +132,9 @@ public:
 
   virtual ~TileTextureBuilderHolder();
 
-  bool isTexturizerData() const{
-    return true;
-  }
+//  bool isTexturizerData() const{
+//    return true;
+//  }
 };
 
 
@@ -292,10 +292,10 @@ public:
     const double widthFactor  = imageSector.getDeltaLongitude().div(wholeSector.getDeltaLongitude());
     const double heightFactor = imageSector.getDeltaLatitude().div(wholeSector.getDeltaLatitude());
 
-    return new RectangleI((int) GMath.round( lowerFactor._x         * textureWidth ),
-                          (int) GMath.round( (1.0 - lowerFactor._y) * textureHeight ),
-                          (int) GMath.round( widthFactor            * textureWidth ),
-                          (int) GMath.round( heightFactor           * textureHeight ));
+    return new RectangleI((int) IMathUtils::instance()->round( lowerFactor._x         * textureWidth ),
+                          (int) IMathUtils::instance()->round( (1.0 - lowerFactor._y) * textureHeight ),
+                          (int) IMathUtils::instance()->round( widthFactor            * textureWidth ),
+                          (int) IMathUtils::instance()->round( heightFactor           * textureHeight ));
   }
 
   void composeAndUploadTexture() {
@@ -307,8 +307,8 @@ public:
         return;
       }
 
-      std::vector<const IImage*> images;
-      std::vector<RectangleI*>   rectangles;
+      std::vector<IImage*>     images;
+      std::vector<RectangleI*> rectangles;
       std::string textureId = _tile->getKey().tinyDescription();
 
       const int textureWidth  = _parameters->_tileTextureWidth;
@@ -318,7 +318,7 @@ public:
 
       for (int i = 0; i < _petitionsCount; i++) {
         const Petition* petition = _petitions[i];
-        const IImage* image = petition->getImage();
+        IImage* image = petition->getImage();
 
         if (image != NULL) {
           images.push_back(image);
@@ -343,12 +343,6 @@ public:
                                                  new TextureUploader(this, rectangles, textureId),
                                                  true);
       }
-
-      //#ifdef C_CODE
-      //      for (int i = 0; i < rectangles.size(); i++) {
-      //        delete rectangles[i];
-      //      }
-      //#endif
 
 #ifdef JAVA_CODE
     }
@@ -382,18 +376,16 @@ public:
 
       IFactory::instance()->deleteImage(image);
 
-#ifdef C_CODE
       for (int i = 0; i < rectangles.size(); i++) {
         delete rectangles[i];
       }
-#endif
 
 #ifdef JAVA_CODE
     }
 #endif
   }
 
-  void finalize() {
+  void done() {
     if (!_finalized) {
       _finalized = true;
 
@@ -424,7 +416,7 @@ public:
         ILogger::instance()->logInfo("Completed with cancelation\n");
       }
 
-      finalize();
+      done();
     }
   }
 
@@ -448,20 +440,21 @@ public:
     return _canceled;
   }
 
-  void checkIsPending(int position) const {
-    if (_status[position] != STATUS_PENDING) {
-      ILogger::instance()->logError("Logic error: Expected STATUS_PENDING at position #%d but found status: %d\n",
-                                    position,
-                                    _status[position]);
-    }
-  }
+//  void checkIsPending(int position) const {
+//    if (_status[position] != STATUS_PENDING) {
+//      ILogger::instance()->logError("Logic error: Expected STATUS_PENDING at position #%d but found status: %d\n",
+//                                    position,
+//                                    _status[position]);
+//    }
+//  }
 
   void stepDownloaded(int position,
-                      const IImage* image) {
+                      IImage* image) {
     if (_canceled) {
+      IFactory::instance()->deleteImage(image);
       return;
     }
-    checkIsPending(position);
+    //checkIsPending(position);
 
     _status[position]  = STATUS_DOWNLOADED;
     _petitions[position]->setImage( image );
@@ -473,7 +466,7 @@ public:
     if (_canceled) {
       return;
     }
-    checkIsPending(position);
+    //checkIsPending(position);
 
     _anyCanceled = true;
 

@@ -13,9 +13,7 @@
 
 class IImageDownloadListener {
 public:
-#ifdef C_CODE
-  virtual ~IImageDownloadListener() {  }
-#endif
+  virtual ~IImageDownloadListener() { }
 
   /**
    Callback method invoked on a successful download.  The image has to be deleted in C++ / .disposed() in Java

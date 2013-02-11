@@ -18,7 +18,6 @@ package org.glob3.mobile.generated;
 
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class SGNode;
 
 public class SGShape extends Shape
@@ -29,39 +28,37 @@ public class SGShape extends Shape
 
   public SGShape(SGNode node, String uriPrefix)
   {
-	  super(null);
-	  _node = node;
-	  _uriPrefix = uriPrefix;
+     super(null);
+     _node = node;
+     _uriPrefix = uriPrefix;
 
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const String getURIPrefix() const
   public final String getURIPrefix()
   {
-	return _uriPrefix;
+    return _uriPrefix;
   }
 
   public final void initialize(G3MContext context)
   {
-	_node.initialize(context, this);
+    _node.initialize(context, this);
   }
 
   public final boolean isReadyToRender(G3MRenderContext rc)
   {
-	return _node.isReadyToRender(rc);
+    return _node.isReadyToRender(rc);
   }
 
   public final void rawRender(G3MRenderContext rc, GLState parentState)
   {
-	_node.render(rc, parentState);
+    _node.render(rc, parentState);
   }
 
   public final boolean isTransparent(G3MRenderContext rc)
   {
-	int ____DIEGO_AT_WORK;
+    int ____DIEGO_AT_WORK;
   //  return _node->isTransparent(rc);
-	return false;
+    return false;
   }
 
 }

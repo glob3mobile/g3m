@@ -18,7 +18,7 @@
 #include "Vector2I.hpp"
 #include "MutableMatrix44D.hpp"
 #include "Frustum.hpp"
-
+#include "Vector3F.hpp"
 #include "Effects.hpp"
 
 class ILogger;
@@ -139,15 +139,12 @@ public:
   Camera(int width, int height);
 
   ~Camera() {
-#ifdef C_CODE
     delete _camEffectTarget;
     delete _frustum;
     delete _frustumInModelCoordinates;
     delete _halfFrustum;
     delete _halfFrustumInModelCoordinates;
     delete _geodeticCenterOfView;
-#endif
-
   }
 
   void copyFrom(const Camera &c);
@@ -162,6 +159,7 @@ public:
   Vector3D pixel2PlanetPoint(const Vector2I& pixel) const;
 
   Vector2I point2Pixel(const Vector3D& point) const;
+  Vector2I point2Pixel(const Vector3F& point) const;
 
   int getWidth() const { return _width; }
   int getHeight() const { return _height; }
@@ -199,9 +197,7 @@ public:
     //    return getFrustumMC();
     if (_dirtyFlags._frustumMC) {
       _dirtyFlags._frustumMC = false;
-#ifdef C_CODE
       delete _frustumInModelCoordinates;
-#endif
       _frustumInModelCoordinates = getFrustum()->transformedBy_P(getModelMatrix());
     }
     return _frustumInModelCoordinates;
@@ -243,7 +239,7 @@ public:
    This method put the camera pointing to given center, at the given distance, using the given angles.
 
    The situation is like in the figure of this url:
-      http://en.wikipedia.org/wiki/Azimuth
+   http://en.wikipedia.org/wiki/Azimuth
 
    At the end, camera will be in the 'Star' point, looking at the 'Observer' point.
    */
@@ -279,10 +275,13 @@ private:
   mutable Frustum* _halfFrustumInModelCoordinates;  // ONLY FOR DEBUG
 
   //The Camera Effect Target
-  class CameraEffectTarget: public EffectTarget{
+  class CameraEffectTarget: public EffectTarget {
   public:
-    void unusedMethod() const {}
+    ~CameraEffectTarget() {
+
+    }
   };
+  
   CameraEffectTarget* _camEffectTarget;
 
   void applyTransform(const MutableMatrix44D& mat);
@@ -352,9 +351,7 @@ private:
   Geodetic3D*     _getGeodeticCenterOfView() const {
     if (_dirtyFlags._geodeticCenterOfView) {
       _dirtyFlags._geodeticCenterOfView = false;
-#ifdef C_CODE
       delete _geodeticCenterOfView;
-#endif
       _geodeticCenterOfView = new Geodetic3D(_planet->toGeodetic3D(getXYZCenterOfView()));
     }
     return _geodeticCenterOfView;
@@ -364,9 +361,7 @@ private:
   Frustum*  getFrustum() const {
     if (_dirtyFlags._frustum) {
       _dirtyFlags._frustum = false;
-#ifdef C_CODE
       delete _frustum;
-#endif
       _frustum = new Frustum(getFrustumData());
     }
     return _frustum;
@@ -376,9 +371,7 @@ private:
     // __temporal_test_for_clipping;
     if (_dirtyFlags._halfFrustum) {
       _dirtyFlags._halfFrustum = false;
-#ifdef C_CODE
       delete _halfFrustum;
-#endif
       FrustumData data = getFrustumData();
       _halfFrustum = new Frustum(data._left/4, data._right/4,
                                  data._bottom/4, data._top/4,
@@ -390,9 +383,7 @@ private:
   Frustum* getHalfFrustumMC() const {
     if (_dirtyFlags._halfFrustumMC) {
       _dirtyFlags._halfFrustumMC = false;
-#ifdef C_CODE
       delete _halfFrustumInModelCoordinates;
-#endif
       _halfFrustumInModelCoordinates = getHalfFrustum()->transformedBy_P(getModelMatrix());
     }
     return _halfFrustumInModelCoordinates;
@@ -430,30 +421,11 @@ private:
     const double left = -right;
     const double top = 0.3 * znear;
     const double bottom = -top;
-
+    
     return FrustumData(left, right,
                        bottom, top,
                        znear, zfar);
   }
-
-
-  //void calculateCachedValues();
-
-  /*void cleanCachedValues() {
-   _dirtyCachedValues = true;
-   //    if (_frustum != NULL) {
-   //      delete _frustum;
-   //      _frustum = NULL;
-   //    }
-   if (_frustumInModelCoordinates != NULL) {
-   #ifdef C_CODE
-   delete _frustumInModelCoordinates;
-   #endif
-   _frustumInModelCoordinates = NULL;
-   }
-   }*/
-  
-  
   
   
 };

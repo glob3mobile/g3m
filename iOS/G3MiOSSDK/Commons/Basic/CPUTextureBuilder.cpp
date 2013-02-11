@@ -15,7 +15,7 @@
 
 const void CPUTextureBuilder::createTextureFromImage(GL* gl,
                                                      const IFactory* factory,
-                                                     const IImage* image,
+                                                     IImage* image,
                                                      int width, int height,
                                                      IImageListener* listener,
                                                      bool autodelete) const{
@@ -25,11 +25,9 @@ const void CPUTextureBuilder::createTextureFromImage(GL* gl,
   }
   else if (image->getHeight() == height && image->getWidth() == width) {
     listener->imageCreated( image->shallowCopy() );
-#ifdef C_CODE
     if (autodelete) {
       delete listener;
     }
-#endif
   }
   else {
     image->scale(width, height, listener, autodelete);
@@ -62,9 +60,7 @@ public:
     if (_listener != NULL) {
       _listener->imageCreated(image);
       if (_autodelete) {
-#ifdef C_CODE
         delete _listener;
-#endif
         _listener = NULL;
       }
     }
@@ -78,7 +74,7 @@ private:
 
   IImageListener* _listener;
   const bool      _autodelete;
-
+  
 public:
   CPUTextureBuilderSubImageImageLister(int width, int height,
                                        IImageListener* listener,
@@ -104,7 +100,7 @@ public:
 
 const void CPUTextureBuilder::createTextureFromImages(GL* gl,
                                                       const IFactory* factory,
-                                                      const std::vector<const IImage*>& images,
+                                                      const std::vector<IImage*>& images,
                                                       const std::vector<RectangleI*>& rectangles,
                                                       int width, int height,
                                                       IImageListener* listener,

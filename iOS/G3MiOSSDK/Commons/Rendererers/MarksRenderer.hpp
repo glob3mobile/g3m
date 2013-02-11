@@ -33,6 +33,8 @@ private:
   MarkTouchListener* _markTouchListener;
   bool               _autoDeleteMarkTouchListener;
 
+  long long _downloadPriority = 1000000;
+
 public:
 
   MarksRenderer(bool readyWhenMarksReady);
@@ -78,6 +80,19 @@ public:
   void onDestroy(const G3MContext* context) {
   }
 
+  /**
+   Change the download-priority used by Marks (for downloading textures).
+
+   Default value is 1000000
+   */
+  void setDownloadPriority(long long downloadPriority) {
+    _downloadPriority = downloadPriority;
+  }
+
+  long long getDownloadPriority() const {
+    return _downloadPriority;
+  }
+  
 };
 
 #endif

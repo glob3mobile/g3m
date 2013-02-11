@@ -6,8 +6,8 @@ public class ShapePendingEffect
 
   public ShapePendingEffect(Effect effect, boolean targetIsCamera)
   {
-	  _effect = effect;
-	  _targetIsCamera = targetIsCamera;
+     _effect = effect;
+     _targetIsCamera = targetIsCamera;
 
   }
 

@@ -9,8 +9,6 @@
 #ifndef __G3MiOSSDK__LayerBuilder__
 #define __G3MiOSSDK__LayerBuilder__
 
-#include <iostream>
-
 #include "WMSLayer.hpp"
 
 class LayerBuilder {
@@ -25,4 +23,4 @@ public:
   static WMSLayer* createCanaryIslandStreetMapLayer(bool enabled);
 };
 
-#endif /* defined(__G3MiOSSDK__LayerBuilder__) */
+#endif
