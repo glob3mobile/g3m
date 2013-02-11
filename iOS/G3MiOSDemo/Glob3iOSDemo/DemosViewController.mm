@@ -373,13 +373,14 @@
 
 - (void) initDropDownMenu
 {
-  // left align button text
-  [[self demoSelector] setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
+  // demoSelector: left align button text and style
+  [[self demoSelector] setContentHorizontalAlignment: UIControlContentHorizontalAlignmentLeft];
   [[self demoSelector] setContentEdgeInsets: UIEdgeInsetsMake(0, 10, 0, 0)];
-  [[[self demoSelector] layer] setBorderWidth: 0];
-  [[self demoSelector] setBackgroundColor: [UIColor clearColor]];
+  UIImage *demoSelectorBg = [UIImage imageNamed: @"selector-background.png"];
+  [[self demoSelector] setBackgroundImage: demoSelectorBg forState: UIControlStateNormal];
+  [[self demoSelector] setBackgroundImage: demoSelectorBg forState: UIControlStateHighlighted];
   
-  [self setDemoMenu: [[UIDropDownMenu alloc] initWithIdentifier:@"demoMenu"]];
+  [self setDemoMenu: [[UIDropDownMenu alloc] initWithIdentifier: @"demoMenu"]];
   
   NSMutableArray *demoNames = [[NSMutableArray alloc] initWithObjects:
                                @"Simple glob3",

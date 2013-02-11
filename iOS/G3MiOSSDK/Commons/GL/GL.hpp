@@ -291,13 +291,11 @@ public:
 #ifdef JAVA_CODE
     _nativeGL.dispose();
 #endif
-// There's no need to delete these attributes because this class is not the owner
-//    delete _vertices;
-//    delete _textureCoordinates;
-//    delete _colors;
-    delete _vertices;
-    delete _textureCoordinates;
-    delete _colors;
+    
+    // GL is not owner of these buffers, it keeps a reference only for state-change-testing. NO DELETE THEM.
+    // delete _vertices;
+    // delete _textureCoordinates;
+    // delete _colors;
   }
 
   int createProgram() const {
