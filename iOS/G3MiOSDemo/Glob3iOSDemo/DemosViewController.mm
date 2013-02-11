@@ -567,7 +567,8 @@ public:
         markerIcon = "file:///marker-wikipedia-72x72.png"; // iPad
       }
       
-      Mark* marker = new Mark(URL(markerIcon, false),
+      Mark* marker = new Mark(title,
+                              URL(markerIcon, false),
                               Geodetic3D(Angle::fromDegrees(coordinates->getAsNumber(1)->value()),
                                          Angle::fromDegrees(coordinates->getAsNumber(0)->value()),
                                          0));
