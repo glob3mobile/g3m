@@ -26,17 +26,10 @@ public class JSONObject extends JSONBaseObject
 
   private void putKeyAndValueDescription(String key, IStringBuilder isb)
   {
-<<<<<<< HEAD
-	isb.addString("\"");
-	isb.addString(key);
-	isb.addString("\":");
-	  isb.addString((get(key) == null) ? "null" : get(key).description());
-=======
     isb.addString("\"");
     isb.addString(key);
     isb.addString("\":");
-    isb.addString(get(key).description());
->>>>>>> webgl-port
+      isb.addString((get(key) == null) ? "null" : get(key).description());
   }
 
   public void dispose()
@@ -166,23 +159,6 @@ public class JSONObject extends JSONBaseObject
   
     java.util.ArrayList<String> keys = this.keys();
   
-<<<<<<< HEAD
-	int keysCount = keys.size();
-	for (int i = 0; i < keysCount; i++)
-	{
-	  if (i != 0)
-	  {
-		visitor.visitObjectInBetweenChildren(this);
-	  }
-	  String key = keys.get(i);
-	  visitor.visitObjectBeforeChild(this, key);
-	  final JSONBaseObject child = get(key);
-	  if(child != null)
-	  {
-		  child.acceptVisitor(visitor);
-	  }
-	}
-=======
     int keysCount = keys.size();
     for (int i = 0; i < keysCount; i++)
     {
@@ -193,9 +169,11 @@ public class JSONObject extends JSONBaseObject
       String key = keys.get(i);
       visitor.visitObjectBeforeChild(this, key);
       final JSONBaseObject child = get(key);
-      child.acceptVisitor(visitor);
+      if(child != null)
+      {
+          child.acceptVisitor(visitor);
+      }
     }
->>>>>>> webgl-port
   
     visitor.visitObjectAfterChildren(this);
   }

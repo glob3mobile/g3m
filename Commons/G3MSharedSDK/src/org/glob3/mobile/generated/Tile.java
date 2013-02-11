@@ -216,21 +216,6 @@ public class Tile
   {
     return new Tile(_texturizer, this, new Sector(new Geodetic2D(lowerLat, lowerLon), new Geodetic2D(upperLat, upperLon)), level, row, column);
   }
-
-
-<<<<<<< HEAD
-=======
-  private java.util.ArrayList<Tile> getSubTiles()
-  {
-    if (_subtiles == null)
-    {
-      _subtiles = createSubTiles();
-      _justCreatedSubtiles = true;
-    }
-    return _subtiles;
-  }
->>>>>>> webgl-port
-
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  Tile(Tile that);
 
@@ -342,14 +327,13 @@ public class Tile
   //Change to public for TileCache
   public final java.util.ArrayList<Tile> getSubTiles()
   {
-	if (_subtiles == null)
-	{
-	  _subtiles = createSubTiles();
-	  _justCreatedSubtiles = true;
-	}
-	return _subtiles;
+    if (_subtiles == null)
+    {
+      _subtiles = createSubTiles();
+      _justCreatedSubtiles = true;
+    }
+    return _subtiles;
   }
-
 
   public final Sector getSector()
   {

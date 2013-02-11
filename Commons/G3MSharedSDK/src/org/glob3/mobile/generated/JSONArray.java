@@ -110,36 +110,14 @@ public class JSONArray extends JSONBaseObject
     {
       //isb->addString(" ");
   
-<<<<<<< HEAD
-		isb.addString((this.get(0) == null) ? "null" : this.get(0).description());
-  
-	  if (size <= 10)
-	  {
-		for (int i = 1; i < size; i++)
-		{
-		  isb.addString(", ");
-		  isb.addString((this.get(i) == null) ? "null" : this.get(i).description());
-		}
-	  }
-	  else
-	  {
-		for (int i = 1; i < 10; i++)
-		{
-		  isb.addString(", ");
-		  isb.addString((this.get(i) == null) ? "null" : this.get(i).description());
-		}
-		isb.addString(", ...");
-		isb.addString(" size=");
-		isb.addInt(size);
-=======
-      isb.addString(this.get(0).description());
+        isb.addString((this.get(0) == null) ? "null" : this.get(0).description());
   
       if (size <= 10)
       {
         for (int i = 1; i < size; i++)
         {
           isb.addString(", ");
-          isb.addString(this.get(i).description());
+          isb.addString((this.get(i) == null) ? "null" : this.get(i).description());
         }
       }
       else
@@ -147,12 +125,11 @@ public class JSONArray extends JSONBaseObject
         for (int i = 1; i < 10; i++)
         {
           isb.addString(", ");
-          isb.addString(this.get(i).description());
+          isb.addString((this.get(i) == null) ? "null" : this.get(i).description());
         }
         isb.addString(", ...");
         isb.addString(" size=");
         isb.addInt(size);
->>>>>>> webgl-port
   
       }
     }
@@ -182,21 +159,6 @@ public class JSONArray extends JSONBaseObject
   {
     visitor.visitArrayBeforeChildren(this);
   
-<<<<<<< HEAD
-	final int size = this.size();
-	for (int i = 0; i < size; i++)
-	{
-	  if (i != 0)
-	  {
-		visitor.visitArrayInBetweenChildren(this);
-	  }
-	  visitor.visitArrayBeforeChild(this, i);
-	  if(get(i)!= null)
-	  {
-		  get(i).acceptVisitor(visitor);
-	  }
-	}
-=======
     final int size = this.size();
     for (int i = 0; i < size; i++)
     {
@@ -205,9 +167,11 @@ public class JSONArray extends JSONBaseObject
         visitor.visitArrayInBetweenChildren(this);
       }
       visitor.visitArrayBeforeChild(this, i);
-      get(i).acceptVisitor(visitor);
+      if(get(i)!= null)
+      {
+          get(i).acceptVisitor(visitor);
+      }
     }
->>>>>>> webgl-port
   
     visitor.visitArrayAfterChildren(this);
   }
