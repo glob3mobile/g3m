@@ -13,7 +13,7 @@ import org.glob3.mobile.generated.URL;
 
 
 public class TileVisitorCache_Android
-    extends
+    implements
       ITileVisitor {
 
   private long _debugCounter = 0;

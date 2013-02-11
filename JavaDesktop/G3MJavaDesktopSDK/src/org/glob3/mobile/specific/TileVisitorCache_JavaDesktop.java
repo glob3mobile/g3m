@@ -11,7 +11,7 @@ import org.glob3.mobile.generated.Tile;
 
 
 public class TileVisitorCache_JavaDesktop
-    extends
+    implements
       ITileVisitor {
 
   private final LayerSet _layerSet;
