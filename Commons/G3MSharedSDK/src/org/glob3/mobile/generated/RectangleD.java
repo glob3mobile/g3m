@@ -17,25 +17,23 @@ public class RectangleD
 
   public RectangleD(double x, double y, double width, double height)
   {
-	  _x = x;
-	  _y = y;
-	  _width = width;
-	  _height = height;
+     _x = x;
+     _y = y;
+     _width = width;
+     _height = height;
   }
 
   public RectangleD(RectangleD that)
   {
-	  _x = that._x;
-	  _y = that._y;
-	  _width = that._width;
-	  _height = that._height;
+     _x = that._x;
+     _y = that._y;
+     _width = that._width;
+     _height = that._height;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean equalTo(const RectangleD& that) const
   public final boolean equalTo(RectangleD that)
   {
-	return (_x == that._x) && (_y == that._y) && (_width == that._width) && (_height == that._height);
+    return (_x == that._x) && (_y == that._y) && (_width == that._width) && (_height == that._height);
   }
 
 }

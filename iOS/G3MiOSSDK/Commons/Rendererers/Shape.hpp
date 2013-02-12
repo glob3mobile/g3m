@@ -162,10 +162,7 @@ public:
                          const GLState& parentState) = 0;
 
   virtual bool isTransparent(const G3MRenderContext* rc) = 0;
-  
-  void unusedMethod() const {
-  }
-  
+    
 };
 
 #endif

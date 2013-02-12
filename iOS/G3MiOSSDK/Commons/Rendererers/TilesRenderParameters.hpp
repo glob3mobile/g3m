@@ -53,6 +53,9 @@ public:
   {
     
   }
+
+  ~TilesRenderParameters() {
+  }
   
   static TilesRenderParameters* createDefault(const bool renderDebug,
                                               const bool useTilesSplitBudget,

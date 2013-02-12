@@ -17,7 +17,6 @@ package org.glob3.mobile.generated;
 
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class GEOObject;
 
 public class GEORenderer extends LeafRenderer
@@ -28,11 +27,11 @@ public class GEORenderer extends LeafRenderer
 
   public final void addGEOObject(GEOObject geoObject)
   {
-	_children.add(geoObject);
-	if (_context != null)
-	{
-	  geoObject.initialize(_context);
-	}
+    _children.add(geoObject);
+    if (_context != null)
+    {
+      geoObject.initialize(_context);
+    }
   }
 
   public final void onResume(G3MContext context)
@@ -52,43 +51,43 @@ public class GEORenderer extends LeafRenderer
 
   public final void initialize(G3MContext context)
   {
-	_context = context;
-	final int childrenCount = _children.size();
-	for (int i = 0; i < childrenCount; i++)
-	{
-	  GEOObject geoObject = _children.get(i);
-	  geoObject.initialize(_context);
-	}
+    _context = context;
+    final int childrenCount = _children.size();
+    for (int i = 0; i < childrenCount; i++)
+    {
+      GEOObject geoObject = _children.get(i);
+      geoObject.initialize(_context);
+    }
   }
 
   public final boolean isReadyToRender(G3MRenderContext rc)
   {
-	final int childrenCount = _children.size();
-	for (int i = 0; i < childrenCount; i++)
-	{
-	  GEOObject geoObject = _children.get(i);
-	  if (!geoObject.isReadyToRender(rc))
-	  {
-		return false;
-	  }
-	}
+    final int childrenCount = _children.size();
+    for (int i = 0; i < childrenCount; i++)
+    {
+      GEOObject geoObject = _children.get(i);
+      if (!geoObject.isReadyToRender(rc))
+      {
+        return false;
+      }
+    }
   
-	return true;
+    return true;
   }
 
   public final void render(G3MRenderContext rc, GLState parentState)
   {
-	final int childrenCount = _children.size();
-	for (int i = 0; i < childrenCount; i++)
-	{
-	  GEOObject geoObject = _children.get(i);
-	  geoObject.render(rc, parentState);
-	}
+    final int childrenCount = _children.size();
+    for (int i = 0; i < childrenCount; i++)
+    {
+      GEOObject geoObject = _children.get(i);
+      geoObject.render(rc, parentState);
+    }
   }
 
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
-	return false;
+    return false;
   }
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)

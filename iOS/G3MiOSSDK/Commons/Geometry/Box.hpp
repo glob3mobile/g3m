@@ -11,6 +11,7 @@
 
 #include "Extent.hpp"
 #include "Vector3D.hpp"
+#include "Vector3F.hpp"
 #include "Frustum.hpp"
 #include "IndexedMesh.hpp"
 
@@ -41,7 +42,8 @@ public:
   Vector3D getUpper() const { return _upper; }
   
   inline const std::vector<Vector3D> getCorners() const;
-  
+  inline const std::vector<Vector3F> getCornersF() const;
+
   double squaredProjectedArea(const G3MRenderContext* rc) const;
   Vector2I projectedExtent(const G3MRenderContext* rc) const;
   
@@ -69,7 +71,8 @@ private:
   const Vector3D _upper;
   
 #ifdef JAVA_CODE
-  private java.util.ArrayList<Vector3D> _corners = null; // cache for getCorners() method
+  private java.util.ArrayList<Vector3D> _cornersD = null; // cache for getCorners() method
+  private java.util.ArrayList<Vector3F> _cornersF = null; // cache for getCornersF() method
 #endif
   
   Mesh *_mesh;  

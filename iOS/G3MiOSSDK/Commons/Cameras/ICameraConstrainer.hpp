@@ -15,11 +15,11 @@
 
 class ICameraConstrainer {
 public:
-#ifdef JAVA_CODE
-  //NO DESTRUCTOR FOR INTERFACE
-#endif
 #ifdef C_CODE
-  virtual ~ICameraConstrainer() {}
+  virtual ~ICameraConstrainer() { }
+#endif
+#ifdef JAVA_CODE
+  public void dispose();
 #endif
 
   virtual void onCameraChange(const Planet* planet,

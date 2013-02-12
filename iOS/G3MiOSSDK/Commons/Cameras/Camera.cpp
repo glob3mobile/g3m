@@ -14,6 +14,7 @@
 #include "Camera.hpp"
 #include "Plane.hpp"
 #include "GL.hpp"
+#include "Vector2F.hpp"
 
 void Camera::initialize(const G3MContext* context)
 {
@@ -45,13 +46,11 @@ void Camera::copyFrom(const Camera &that) {
 
   _geodeticCenterOfView = (that._geodeticCenterOfView == NULL) ? NULL : new Geodetic3D(*that._geodeticCenterOfView);
 
-#ifdef C_CODE
   delete _frustum;
   delete _frustumInModelCoordinates;
   delete _halfFrustum;
   delete _halfFrustumInModelCoordinates;
   delete _camEffectTarget;
-#endif
 
   _camEffectTarget = new CameraEffectTarget();
 
@@ -211,14 +210,14 @@ Vector2I Camera::point2Pixel(const Vector3D& point) const {
   const Vector2D p = getModelViewMatrix().project(point,
                                                   0, 0, _width, _height);
 
-  //  int __TODO_check_isNan_is_needed;
-  //  if (p.isNan()) {
-  //    return p;
-  //  }
+  return Vector2I( (int) p._x, (int) (_height - p._y) );
+}
 
-  IMathUtils* math = IMathUtils::instance();
+Vector2I Camera::point2Pixel(const Vector3F& point) const {
+  const Vector2F p = getModelViewMatrix().project(point,
+                                                  0, 0, _width, _height);
 
-  return Vector2I( math->toInt(p._x), math->toInt(_height-p._y) );
+  return Vector2I( (int) p._x, (int) (_height - p._y) );
 }
 
 void Camera::applyTransform(const MutableMatrix44D& M) {
@@ -236,7 +235,7 @@ void Camera::dragCamera(const Vector3D& p0, const Vector3D& p1) {
 
   // compute the angle
   //const Angle rotationDelta = Angle::fromRadians( - acos(p0.normalized().dot(p1.normalized())) );
-  const Angle rotationDelta = Angle::fromRadians(-GMath.asin(rotationAxis.length()/p0.length()/p1.length()));
+  const Angle rotationDelta = Angle::fromRadians(-IMathUtils::instance()->asin(rotationAxis.length()/p0.length()/p1.length()));
 
   if (rotationDelta.isNan()) {
     return;

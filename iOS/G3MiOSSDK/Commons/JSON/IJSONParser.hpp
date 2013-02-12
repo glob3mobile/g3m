@@ -13,12 +13,6 @@
 #include "IByteBuffer.hpp"
 #include "ILogger.hpp"
 
-#ifdef C_CODE
-#define JSONParser (*IJSONParser::instance())
-#else
-#define JSONParser IJSONParser.instance() //FOR JAVA CONVERTER
-#endif
-
 class IJSONParser{
 private:
   static IJSONParser* _instance;

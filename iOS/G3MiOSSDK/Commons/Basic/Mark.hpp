@@ -100,9 +100,10 @@ public:
   const Geodetic3D getPosition() const {
     return _position;
   }
-  
-  void initialize(const G3MContext* context);
-  
+
+  void initialize(const G3MContext* context,
+                  long long downloadPriority);
+
   void render(const G3MRenderContext* rc);
   
   bool isReady() const;
@@ -112,9 +113,9 @@ public:
   }
   
   void onTextureDownloadError();
-  
-  void onTextureDownload(const IImage* image);
-  
+
+  void onTextureDownload(IImage* image);
+
   int getTextureWidth() const {
     return _textureWidth;
   }

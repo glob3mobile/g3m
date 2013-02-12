@@ -26,34 +26,34 @@ public class SGTranslateNode extends SGNode
 
   public SGTranslateNode(String id, String sId, double x, double y, double z)
   {
-	  super(id, sId);
-	  _x = x;
-	  _y = y;
-	  _z = z;
+     super(id, sId);
+     _x = x;
+     _y = y;
+     _z = z;
 
   }
 
   public final void prepareRender(G3MRenderContext rc)
   {
-	GL gl = rc.getGL();
+    GL gl = rc.getGL();
   
-	gl.pushMatrix();
-	gl.multMatrixf(MutableMatrix44D.createTranslationMatrix(_x, _y, _z));
+    gl.pushMatrix();
+    gl.multMatrixf(MutableMatrix44D.createTranslationMatrix(_x, _y, _z));
   
-	super.prepareRender(rc);
+    super.prepareRender(rc);
   }
 
   public final void cleanUpRender(G3MRenderContext rc)
   {
-	GL gl = rc.getGL();
-	gl.popMatrix();
+    GL gl = rc.getGL();
+    gl.popMatrix();
   
-	super.cleanUpRender(rc);
+    super.cleanUpRender(rc);
   }
 
   public final GLState createState(G3MRenderContext rc, GLState parentState)
   {
-	return null;
+    return null;
   }
 
 }

@@ -28,7 +28,7 @@ public:
   
   
   virtual double projectedArea(const G3MRenderContext* rc) const {
-    return GMath.sqrt(squaredProjectedArea(rc));
+    return IMathUtils::instance()->sqrt(squaredProjectedArea(rc));
   }
 
   virtual double squaredProjectedArea(const G3MRenderContext* rc) const = 0;

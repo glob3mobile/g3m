@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.glob3.mobile.generated.FrameTasksExecutor;
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.IBufferDownloadListener;
 import org.glob3.mobile.generated.IDownloader;
@@ -282,7 +283,8 @@ public final class Downloader_WebGL
 
 
    @Override
-   public void initialize(final G3MContext context) {
+   public void initialize(final G3MContext context,
+                          final FrameTasksExecutor frameTasksExecutor) {
 
    }
 

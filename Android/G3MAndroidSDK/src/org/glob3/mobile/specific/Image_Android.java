@@ -20,39 +20,101 @@ public final class Image_Android
             IImage {
 
 
+   //   private static String createCallStackString() {
+   //      final Exception e = new Exception();
+   //      final StringWriter wr = new StringWriter();
+   //      final PrintWriter err = new PrintWriter(wr);
+   //      e.printStackTrace(err);
+   //      err.flush();
+   //      return wr.toString() //
+   //      .replace("org.glob3.mobile.specific.", "") //
+   //      .replace("org.glob3.mobile.generated.", "") //
+   //      .replace("android.opengl.", "") //
+   //      .replace("at", "") //
+   //      .replace("java.lang.Exception\n", "");
+   //   }
+
+
    private static class BitmapHolder {
       private Bitmap _bitmap;
       private int    _referencesCount;
 
 
+      //      private final String       _createdAt;
+      //      private final List<String> _retainedAt = new ArrayList<String>();
+      //      private final List<String> _releasedAt = new ArrayList<String>();
+
+
       private BitmapHolder(final Bitmap bitmap) {
          _bitmap = bitmap;
          _referencesCount = 1;
+         //         _createdAt = createCallStackString();
       }
 
 
       private void _retain() {
-         _referencesCount++;
+         synchronized (this) {
+            _referencesCount++;
+            //            _retainedAt.add(createCallStackString());
+         }
       }
 
 
       private void _release() {
-         _referencesCount--;
-         if (_referencesCount == 0) {
-            _bitmap.recycle();
-            _bitmap = null;
+         synchronized (this) {
+            _referencesCount--;
+            if (_referencesCount == 0) {
+               _bitmap.recycle();
+               _bitmap = null;
+            }
+            //            _releasedAt.add(createCallStackString());
          }
       }
+
+
+      //      @Override
+      //      protected void finalize() throws Throwable {
+      //         if (_referencesCount != 0) {
+      //            synchronized (ILogger.instance()) {
+      //               ILogger.instance().logError("=======");
+      //               ILogger.instance().logError("***** BitmapHolder deleted with invalid _referencesCount=" + _referencesCount);
+      //
+      //               final StringBuffer msg = new StringBuffer();
+      //               msg.append("Created At:\n");
+      //               msg.append(_createdAt);
+      //               msg.append("Retained At:\n");
+      //               for (final String e : _retainedAt) {
+      //                  msg.append(e);
+      //                  msg.append("---\n");
+      //               }
+      //               msg.append("Released At:\n");
+      //               for (final String e : _releasedAt) {
+      //                  msg.append(e);
+      //                  msg.append("---\n");
+      //               }
+      //               msg.append("=======\n");
+      //
+      //               ILogger.instance().logError(msg.toString());
+      //            }
+      //         }
+      //         super.finalize();
+      //      }
+
    }
 
 
-   //   final private Bitmap _bitmap;
    final private BitmapHolder _bitmapHolder;
    private byte[]             _source;
 
 
+   //   private boolean            _bitmapHolderReleased = false;
+   //   private final String       _createdAt;
+
+
    public Image_Android(final Bitmap bitmap,
                         final byte[] source) {
+      //      _createdAt = createCallStackString();
+
       if (bitmap == null) {
          throw new RuntimeException("Can't create an Image_Android with a null bitmap");
       }
@@ -64,6 +126,8 @@ public final class Image_Android
 
    private Image_Android(final BitmapHolder bitmapHolder,
                          final byte[] source) {
+      //      _createdAt = createCallStackString();
+
       if (bitmapHolder == null) {
          throw new RuntimeException("Can't create an Image_Android with a null bitmap");
       }
@@ -97,22 +161,6 @@ public final class Image_Android
    }
 
 
-   //   @Override
-   //   public void combineWith(final IImage transparent,
-   //                           final int width,
-   //                           final int height,
-   //                           final IImageListener listener,
-   //                           final boolean autodelete) {
-   //      final Bitmap bm1 = Bitmap.createBitmap(_bitmapHolder._bitmap, 0, 0, width, height);
-   //      final Bitmap bm2 = Bitmap.createBitmap(((Image_Android) transparent).getBitmap(), 0, 0, width, height);
-   //      final Canvas canvas = new Canvas(bm1);
-   //
-   //      canvas.drawBitmap(bm1, 0, 0, null);
-   //      canvas.drawBitmap(bm2, 0, 0, null);
-   //
-   //      return new Image_Android(bm1, null);
-   //   }
-
    @Override
    public void combineWith(final ArrayList<IImage> images,
                            final ArrayList<RectangleI> rectangles,
@@ -120,7 +168,6 @@ public final class Image_Android
                            final int height,
                            final IImageListener listener,
                            final boolean autodelete) {
-
       final int imagesSize = images.size();
       if (imagesSize == 0) {
          scale(width, height, listener, autodelete);
@@ -132,9 +179,8 @@ public final class Image_Android
          combineWith(other, rect, width, height, listener, autodelete);
       }
       else {
-
          final Bitmap bm1;
-         if ((_bitmapHolder._bitmap.getWidth() != width) || (_bitmapHolder._bitmap.getHeight() != height)) {
+         if ((getWidth() != width) || (getHeight() != height)) {
             bm1 = Bitmap.createBitmap(_bitmapHolder._bitmap, 0, 0, width, height);
          }
          else {
@@ -172,15 +218,6 @@ public final class Image_Android
                            final int height,
                            final IImageListener listener,
                            final boolean autodelete) {
-
-      //      final Bitmap bm1;
-      //      if ((_bitmapHolder._bitmap.getWidth() == width) && (_bitmapHolder._bitmap.getHeight() == height)) {
-      //         bm1 = _bitmapHolder._bitmap;
-      //      }
-      //      else {
-      //         // bm1 = Bitmap.createBitmap(_bitmapHolder._bitmap, 0, 0, width, height);
-      //         bm1 = Bitmap.createScaledBitmap(_bitmapHolder._bitmap, width, height, false);
-      //      }
       final Bitmap bm1 = Bitmap.createScaledBitmap(_bitmapHolder._bitmap, width, height, false);
       final Bitmap canvasBitmap = bm1.copy(Bitmap.Config.ARGB_8888, true); //MAKE MUTABLE
       final Canvas canvas = new Canvas(canvasBitmap);
@@ -202,41 +239,16 @@ public final class Image_Android
    public void subImage(final RectangleI rect,
                         final IImageListener listener,
                         final boolean autodelete) {
-      final Bitmap bm = Bitmap.createBitmap(_bitmapHolder._bitmap, rect._x, rect._y, rect._width, rect._height);
-
-      final Image_Android result = new Image_Android(bm, null);
+      final Image_Android result;
+      if ((rect._x == 0) && (rect._y == 0) && (rect._width == getWidth()) && (rect._height == getHeight())) {
+         result = shallowCopy();
+      }
+      else {
+         final Bitmap bitmap = Bitmap.createBitmap(_bitmapHolder._bitmap, rect._x, rect._y, rect._width, rect._height);
+         result = new Image_Android(bitmap, null);
+      }
       listener.imageCreated(result);
    }
-
-
-   //   public IByteBuffer createByteBufferRGBA8888(final int width,
-   //                                               final int height) {
-   //
-   //      //Scaling
-   //      Bitmap scaledImage = null;
-   //      if ((_image.getWidth() != width) || (_image.getHeight() != height)) {
-   //         scaledImage = Bitmap.createScaledBitmap(_image, width, height, true);
-   //      }
-   //      else {
-   //         scaledImage = _image;
-   //      }
-   //
-   //      //Getting pixels in Color format
-   //      final int[] pixels = new int[scaledImage.getWidth() * scaledImage.getHeight()];
-   //      scaledImage.getPixels(pixels, 0, scaledImage.getWidth(), 0, 0, scaledImage.getWidth(), scaledImage.getHeight());
-   //
-   //      //To RGBA
-   //      final byte[] data = new byte[pixels.length * 4];
-   //      int p = 0;
-   //      for (final int color : pixels) {
-   //         data[p++] = (byte) ((color >> 16) & 0xFF); //R
-   //         data[p++] = (byte) ((color >> 8) & 0xFF); //G
-   //         data[p++] = (byte) (color & 0xFF); //B
-   //         data[p++] = (byte) (color >>> 24); //A
-   //      }
-   //
-   //      return new ByteBuffer_Android(data);
-   //   }
 
 
    @Override
@@ -244,14 +256,19 @@ public final class Image_Android
                      final int height,
                      final IImageListener listener,
                      final boolean autodelete) {
-      final Bitmap bitmap = Bitmap.createScaledBitmap(_bitmapHolder._bitmap, width, height, false);
       final Image_Android result;
-      if (bitmap == null) {
-         ILogger.instance().logError("Can't scale Image");
-         result = null;
+      if ((width == getWidth()) && (height == getHeight())) {
+         result = shallowCopy();
       }
       else {
-         result = new Image_Android(bitmap, null);
+         final Bitmap bitmap = Bitmap.createScaledBitmap(_bitmapHolder._bitmap, width, height, false);
+         if (bitmap == null) {
+            ILogger.instance().logError("Can't scale Image");
+            result = null;
+         }
+         else {
+            result = new Image_Android(bitmap, null);
+         }
       }
       listener.imageCreated(result);
    }
@@ -274,18 +291,35 @@ public final class Image_Android
 
 
    @Override
-   public IImage shallowCopy() {
+   public Image_Android shallowCopy() {
       return new Image_Android(_bitmapHolder, _source);
    }
 
 
    @Override
    public void dispose() {
-      super.dispose();
+      synchronized (this) {
+         //         _bitmapHolderReleased = true;
+         _bitmapHolder._release();
+      }
 
-      _bitmapHolder._release();
-      //_bitmap.recycle();
+      super.dispose();
    }
 
+
+   //   @Override
+   //   protected void finalize() throws Throwable {
+   //      if (!_bitmapHolderReleased) {
+   //         synchronized (ILogger.instance()) {
+   //            final StringBuffer msg = new StringBuffer();
+   //            msg.append("************\n");
+   //            msg.append("Image_Android finalized without releasing the _bitmapHolder created at: \n");
+   //            msg.append(_createdAt);
+   //            msg.append("************\n");
+   //            ILogger.instance().logError(msg.toString());
+   //         }
+   //      }
+   //      super.finalize();
+   //   }
 
 }

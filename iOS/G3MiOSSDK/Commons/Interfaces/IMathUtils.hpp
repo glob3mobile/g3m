@@ -13,17 +13,6 @@
 #include <cstdio>
 #include "ILogger.hpp"
 
-//This declaration creates an converter issue
-//#ifdef GMath
-//  TODO_GMATH_PREDEFINED!!!!
-//#endif
-
-#ifdef C_CODE
-#define GMath (*IMathUtils::instance())
-#else
-#define GMath IMathUtils.instance() //FOR JAVA CONVERTER
-#endif
-
 class IMathUtils{
   
   

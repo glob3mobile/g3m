@@ -22,11 +22,9 @@ class WMSLayer: public Layer {
 private:
   
 #ifdef C_CODE
-  const URL              _mapServerURL;
-  const URL              _queryServerURL;
+  const URL _mapServerURL;
+  const URL _queryServerURL;
 #endif
-  
-  
 #ifdef JAVA_CODE
   private final URL _mapServerURL;
   private final URL _queryServerURL;

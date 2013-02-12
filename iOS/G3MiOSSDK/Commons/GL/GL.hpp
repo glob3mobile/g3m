@@ -288,10 +288,14 @@ public:
 #ifdef C_CODE
     delete _nativeGL;
 #endif
+#ifdef JAVA_CODE
+    _nativeGL.dispose();
+#endif
 
-    delete _vertices;
-    delete _textureCoordinates;
-    delete _colors;
+    // GL is not owner of those buffers, it keep a reference only for state-change-testing. NO DELETE THEM.
+    // delete _vertices;
+    // delete _textureCoordinates;
+    // delete _colors;
   }
 
   int createProgram() const {

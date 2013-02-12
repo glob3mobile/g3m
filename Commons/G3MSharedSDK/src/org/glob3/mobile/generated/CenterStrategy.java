@@ -22,14 +22,14 @@ public class CenterStrategy
 
   public static int noCenter()
   {
-	  return _noCenter;
+     return _noCenter;
   }
   public static int firstVertex()
   {
-	  return _firstVertex;
+     return _firstVertex;
   }
   public static int givenCenter()
   {
-	  return _givenCenter;
+     return _givenCenter;
   }
 }

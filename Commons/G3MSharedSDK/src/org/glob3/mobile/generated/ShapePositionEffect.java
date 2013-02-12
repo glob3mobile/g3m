@@ -17,7 +17,6 @@ package org.glob3.mobile.generated;
 
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Shape;
 
 public class ShapePositionEffect extends EffectWithDuration
@@ -31,31 +30,31 @@ public class ShapePositionEffect extends EffectWithDuration
 
   public ShapePositionEffect(TimeInterval duration, Shape shape, Geodetic3D fromPosition, Geodetic3D toPosition, boolean linearInterpolation)
   {
-	  super(duration);
-	  _shape = shape;
-	  _fromPosition = new Geodetic3D(fromPosition);
-	  _toPosition = new Geodetic3D(toPosition);
-	  _linearInterpolation = linearInterpolation;
+     super(duration);
+     _shape = shape;
+     _fromPosition = new Geodetic3D(fromPosition);
+     _toPosition = new Geodetic3D(toPosition);
+     _linearInterpolation = linearInterpolation;
 
   }
 
   public final void doStep(G3MRenderContext rc, TimeInterval when)
   {
-	final double percent = percentDone(when);
-	final double alpha = _linearInterpolation ? percent : pace(percent);
+    final double percent = percentDone(when);
+    final double alpha = _linearInterpolation ? percent : pace(percent);
   
-	Geodetic3D pos = Geodetic3D.interpolation(_fromPosition, _toPosition, alpha);
-	_shape.setPosition(new Geodetic3D(pos));
+    Geodetic3D pos = Geodetic3D.interpolation(_fromPosition, _toPosition, alpha);
+    _shape.setPosition(new Geodetic3D(pos));
   }
 
   public final void cancel(TimeInterval when)
   {
-	_shape.setPosition(new Geodetic3D(_toPosition));
+    _shape.setPosition(new Geodetic3D(_toPosition));
   }
 
   public final void stop(G3MRenderContext rc, TimeInterval when)
   {
-	_shape.setPosition(new Geodetic3D(_toPosition));
+    _shape.setPosition(new Geodetic3D(_toPosition));
   }
 
 }

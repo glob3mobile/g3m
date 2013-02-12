@@ -13,8 +13,8 @@ class URL;
 class G3MContext;
 class IBufferDownloadListener;
 class IImageDownloadListener;
-
 class TimeInterval;
+class FrameTasksExecutor;
 
 #include <string>
 
@@ -23,7 +23,8 @@ public:
   virtual ~IDownloader() {
   }
 
-  virtual void initialize(const G3MContext* context) = 0;
+  virtual void initialize(const G3MContext* context,
+                          FrameTasksExecutor* frameTasksExecutor) = 0;
 
   virtual void onResume(const G3MContext* context) = 0;
 

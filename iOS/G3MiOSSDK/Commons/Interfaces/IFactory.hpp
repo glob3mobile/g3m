@@ -11,12 +11,6 @@
 
 #include "ILogger.hpp"
 
-#ifdef C_CODE
-#define GFactory (*IFactory::instance())
-#else
-#define GFactory IFactory.instance() //FOR JAVA CONVERTER
-#endif
-
 class ITimer;
 class IImage;
 class IFloatBuffer;

@@ -29,4 +29,10 @@ public final class GLUniformID_WebGL
       return _id != null;
    }
 
+
+   @Override
+   public void dispose() {
+
+   }
+
 }

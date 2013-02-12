@@ -84,7 +84,7 @@ public:
 
     const double y = dLon.sinus() * lat2.cosinus();
     const double x = lat1.cosinus()*lat2.sinus() - lat1.sinus()*lat2.cosinus()*dLon.cosinus();
-    const double radians = GMath.atan2(y, x);
+    const double radians = IMathUtils::instance()->atan2(y, x);
 
     return Angle::fromRadians(radians);
   }

@@ -39,7 +39,7 @@ public:
   }
   
   static Vector3D nan() {
-    return Vector3D(GMath.NanD(), GMath.NanD(), GMath.NanD());
+    return Vector3D(IMathUtils::instance()->NanD(), IMathUtils::instance()->NanD(), IMathUtils::instance()->NanD());
   }
   
   static Vector3D zero() {
@@ -71,7 +71,7 @@ public:
   }
 
   bool isNan() const {
-    return (GMath.isNan(_x) || GMath.isNan(_y) || GMath.isNan(_z));
+    return (IMathUtils::instance()->isNan(_x) || IMathUtils::instance()->isNan(_y) || IMathUtils::instance()->isNan(_z));
   }
   
   bool isZero() const {
@@ -81,7 +81,7 @@ public:
   Vector3D normalized() const;
   
   double length() const {
-    return GMath.sqrt(squaredLength());
+    return IMathUtils::instance()->sqrt(squaredLength());
   }
   
   double squaredLength() const {
@@ -139,19 +139,19 @@ public:
   
   Vector3D rotateAroundAxis(const Vector3D& axis,
                             const Angle& theta) const;
-  
-  //  double x() const {
-  //    return _x;
-  //  }
-  //
-  //  double y() const {
-  //    return _y;
-  //  }
-  //
-  //  double z() const {
-  //    return _z;
-  //  }
-  
+
+  double x() const {
+    return _x;
+  }
+
+  double y() const {
+    return _y;
+  }
+
+  double z() const {
+    return _z;
+  }
+
   Vector3D transformedBy(const MutableMatrix44D &m, const double homogeneus) const;
   
   MutableVector3D asMutableVector3D() const;

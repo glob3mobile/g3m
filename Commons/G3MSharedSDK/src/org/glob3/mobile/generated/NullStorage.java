@@ -22,7 +22,7 @@ public abstract class NullStorage extends IStorage
 
   public final IByteBuffer readBuffer(URL url)
   {
-	return null;
+    return null;
   }
 
 //  bool containsImage(const URL& url) {
@@ -36,7 +36,7 @@ public abstract class NullStorage extends IStorage
 
   public final IImage readImage(URL url)
   {
-	return null;
+    return null;
   }
 
 }
