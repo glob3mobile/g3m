@@ -90,7 +90,7 @@
                     </view>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
                     <connections>
-                        <outlet property="G3MWidget" destination="lOt-Xd-eJz" id="GcE-T6-RCe"/>
+                        <outlet property="G3MWidget" destination="lOt-Xd-eJz" id="c8U-QO-hqA"/>
                         <outlet property="demoSelector" destination="dZE-QX-uWN" id="GBZ-gB-Xep"/>
                     </connections>
                 </viewController>
@@ -103,25 +103,6 @@
         <image name="g3m-48.png" width="48" height="48"/>
         <image name="selector-background.png" width="200" height="48"/>
     </resources>
-    <classes>
-        <class className="DemosViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/DemosViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="G3MWidget" candidateClass="G3MWidget_iOS"/>
-                <relationship kind="outlet" name="demoSelector" candidateClass="UIButton"/>
-            </relationships>
-        </class>
-        <class className="G3MWebViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/G3MWebViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="pushBackButton:"/>
-                <relationship kind="outlet" name="webView" candidateClass="UIWebView"/>
-            </relationships>
-        </class>
-        <class className="G3MWidget_iOS" superclassName="UIView">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/G3MWidget_iOS.h"/>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

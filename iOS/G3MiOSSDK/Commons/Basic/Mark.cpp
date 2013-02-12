@@ -56,14 +56,26 @@ private:
   Mark*              _mark;
   const std::string  _label;
   const bool         _labelBottom;
+  const float        _labelFontSize;
+  const Color*       _labelFontColor;
+  const Color*       _labelShadowColor;
+  const int          _labelGapSize;
 
 public:
   IconDownloadListener(Mark* mark,
                        const std::string& label,
-                       bool  labelBottom) :
+                       bool  labelBottom,
+                       const float labelFontSize,
+                       const Color* labelFontColor,
+                       const Color* labelShadowColor,
+                       const int labelGapSize) :
   _mark(mark),
   _label(label),
-  _labelBottom(labelBottom)
+  _labelBottom(labelBottom),
+  _labelFontSize(labelFontSize),
+  _labelFontColor(labelFontColor),
+  _labelShadowColor(labelShadowColor),
+  _labelGapSize(labelGapSize)
   {
 
   }
@@ -83,8 +95,17 @@ public:
       ITextUtils::instance()->labelImage(image,
                                          _label,
                                          labelPosition,
+                                         _labelGapSize,
+                                         _labelFontSize,
+                                         _labelFontColor,
+                                         _labelShadowColor,
                                          new MarkLabelImageListener(image, _mark),
                                          true);
+//      ITextUtils::instance()->labelImage(image,
+//                                         _label,
+//                                         labelPosition,
+//                                         new MarkLabelImageListener(image, _mark),
+//                                         true);
     }
     else {
       _mark->onTextureDownload(image);
@@ -111,19 +132,27 @@ public:
 
 
 
-Mark::Mark(const std::string& label,
-           const URL          iconURL,
-           const Geodetic3D   position,
-           const bool         labelBottom,
-           double minDistanceToCamera,
-           MarkUserData* userData,
-           bool autoDeleteUserData,
-           MarkTouchListener* listener,
-           bool autoDeleteListener) :
+Mark::Mark(const std::string&   label,
+           const URL            iconURL,
+           const Geodetic3D     position,
+           const bool           labelBottom,
+           const float          labelFontSize,
+           const Color*         labelFontColor,
+           const Color*         labelShadowColor,
+           const int            labelGapSize,
+           double               minDistanceToCamera,
+           MarkUserData*        userData,
+           bool                 autoDeleteUserData,
+           MarkTouchListener*   listener,
+           bool                 autoDeleteListener) :
 _label(label),
 _iconURL(iconURL),
 _position(position),
 _labelBottom(labelBottom),
+_labelFontSize(labelFontSize),
+_labelFontColor(labelFontColor),
+_labelShadowColor(labelShadowColor),
+_labelGapSize(labelGapSize),
 _textureId(NULL),
 _cartesianPosition(NULL),
 _vertices(NULL),
@@ -141,17 +170,24 @@ _autoDeleteListener(autoDeleteListener)
 
 }
 
-Mark::Mark(const std::string& label,
-           const Geodetic3D   position,
-           double minDistanceToCamera,
-           MarkUserData* userData,
-           bool autoDeleteUserData,
-           MarkTouchListener* listener,
-           bool autoDeleteListener) :
+Mark::Mark(const std::string&   label,
+           const Geodetic3D     position,
+           const float          labelFontSize,
+           const Color*         labelFontColor,
+           const Color*         labelShadowColor,
+           double               minDistanceToCamera,
+           MarkUserData*        userData,
+           bool                 autoDeleteUserData,
+           MarkTouchListener*   listener,
+           bool                 autoDeleteListener) :
 _label(label),
 _labelBottom(true),
 _iconURL("", false),
 _position(position),
+_labelFontSize(labelFontSize),
+_labelFontColor(labelFontColor),
+_labelShadowColor(labelShadowColor),
+_labelGapSize(2),
 _textureId(NULL),
 _cartesianPosition(NULL),
 _vertices(NULL),
@@ -180,6 +216,10 @@ _label(""),
 _labelBottom(true),
 _iconURL(iconURL),
 _position(position),
+_labelFontSize(20),
+_labelFontColor(Color::newFromRGBA(1, 1, 1, 1)),
+_labelShadowColor(Color::newFromRGBA(0, 0, 0, 1)),
+_labelGapSize(2),
 _textureId(NULL),
 _cartesianPosition(NULL),
 _vertices(NULL),
@@ -209,12 +249,21 @@ void Mark::initialize(const G3MContext* context,
       downloader->requestImage(_iconURL,
                                downloadPriority,
                                TimeInterval::fromDays(30),
-                               new IconDownloadListener(this, _label, _labelBottom),
+                               new IconDownloadListener(this,
+                                                        _label,
+                                                        _labelBottom,
+                                                        _labelFontSize,
+                                                        _labelFontColor,
+                                                        _labelShadowColor,
+                                                        _labelGapSize),
                                true);
     }
     else {
       if (hasLabel) {
         ITextUtils::instance()->createLabelImage(_label,
+                                                 _labelFontSize,
+                                                 _labelFontColor,
+                                                 _labelShadowColor,
                                                  new MarkLabelImageListener(NULL, this),
                                                  true);
       }
@@ -228,6 +277,9 @@ void Mark::initialize(const G3MContext* context,
 void Mark::onTextureDownloadError() {
   _textureSolved = true;
 
+  delete _labelFontColor;
+  delete _labelShadowColor;
+  
   ILogger::instance()->logError("Can't create texture for Mark (iconURL=\"%s\", label=\"%s\")",
                                 _iconURL.getPath().c_str(),
                                 _label.c_str());
@@ -235,6 +287,9 @@ void Mark::onTextureDownloadError() {
 
 void Mark::onTextureDownload(IImage* image) {
   _textureSolved = true;
+  
+  delete _labelFontColor;
+  delete _labelShadowColor;
 //  _textureImage = image->shallowCopy();
   _textureImage = image;
   _textureWidth = _textureImage->getWidth();

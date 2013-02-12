@@ -16,6 +16,7 @@
 #include "Vector3D.hpp"
 #include "URL.hpp"
 #include "Vector2I.hpp"
+#include "Color.hpp"
 
 class IImage;
 class IFloatBuffer;
@@ -30,20 +31,77 @@ public:
   }
 };
 
+
 class Mark {
 private:
+  /**
+   * The text the mark displays.
+   * Useless if the mark does not have label.
+   */
   const std::string _label;
+  /**
+   * Flag to know if the label will be located under the icon (if TRUE) or on its right (if FALSE).
+   * Useless if the mark does not have label or icon.
+   * Default value: TRUE
+   */
   const bool        _labelBottom;
-
+  /**
+   * The font size of the text.
+   * Useless if the mark does not have label.
+   * Default value: 20
+   */
+  const float       _labelFontSize;
+  /**
+   * The color of the text.
+   * Useless if the mark does not have label.
+   * Default value: white
+   */
+  const Color*      _labelFontColor;
+  /**
+   * The color of the text shadow.
+   * Useless if the mark does not have label.
+   * Default value: black
+   */
+  const Color*      _labelShadowColor;
+  /**
+   * The number of pixels between the icon and the text.
+   * Useless if the mark does not have label or icon.
+   * Default value: 2
+   */
+  const int         _labelGapSize;
+  /**
+   * The URL to get the image file.
+   * Useless if the mark does not have icon.
+   */
   URL               _iconURL;
+  /**
+   * The point where the mark will be geo-located.
+   */
   const Geodetic3D  _position;
+  /**
+   * The minimun distance (in meters) to show the mark. If the camera is further than this, the mark will not be displayed.
+   * Default value: 4.5e+06
+   */
   const double      _minDistanceToCamera;
-
-  MarkUserData* _userData;
-  const bool    _autoDeleteUserData;
-
+  /**
+   * The extra data to be stored by the mark.
+   * Usefull to store data such us name, URL...
+   */
+  MarkUserData*     _userData;
+  /**
+   * Flag to know if the mark is the owner of _userData and thus it must delete it on destruction.
+   * Default value: TRUE
+   */
+  const bool        _autoDeleteUserData;
+  /**
+   * Interface for listening to the touch event.
+   */
   MarkTouchListener* _listener;
-  const bool         _autoDeleteListener;
+  /**
+   * Flag to know if the mark is the owner of _listener and thus it must delete it on destruction.
+   * Default value: FALSE
+   */
+  const bool        _autoDeleteListener;
 
 #ifdef C_CODE
   const IGLTextureId* _textureId;
@@ -65,23 +123,30 @@ private:
   bool    _renderedMark;
 
 public:
-  Mark(const std::string&  label,
-       const URL           iconURL,
-       const Geodetic3D    position,
-       const bool          labelBottom=true,
-       double minDistanceToCamera=4.5e+06,
-       MarkUserData* userData=NULL,
-       bool autoDeleteUserData=true,
-       MarkTouchListener* listener=NULL,
-       bool autoDeleteListener=false);
+  Mark(const std::string&   label,
+       const URL            iconURL,
+       const Geodetic3D     position,
+       const bool           labelBottom=true,
+       const float          labelFontSize=20,
+       const Color*         labelFontColor=Color::newFromRGBA(1, 1, 1, 1),
+       const Color*         labelShadowColor=Color::newFromRGBA(0, 0, 0, 1),
+       const int            labelGapSize=2,
+       double               minDistanceToCamera=4.5e+06,
+       MarkUserData*        userData=NULL,
+       bool                 autoDeleteUserData=true,
+       MarkTouchListener*   listener=NULL,
+       bool                 autoDeleteListener=false);
 
-  Mark(const std::string& label,
-       const Geodetic3D   position,
-       double minDistanceToCamera=4.5e+06,
-       MarkUserData* userData=NULL,
-       bool autoDeleteUserData=true,
-       MarkTouchListener* listener=NULL,
-       bool autoDeleteListener=false);
+  Mark(const std::string&   label,
+       const Geodetic3D     position,
+       const float          labelFontSize=20,
+       const Color*         labelFontColor=Color::newFromRGBA(1, 1, 1, 1),
+       const Color*         labelShadowColor=Color::newFromRGBA(0, 0, 0, 1),
+       double               minDistanceToCamera=4.5e+06,
+       MarkUserData*        userData=NULL,
+       bool                 autoDeleteUserData=true,
+       MarkTouchListener*   listener=NULL,
+       bool                 autoDeleteListener=false);
 
   Mark(const URL          iconURL,
        const Geodetic3D   position,
