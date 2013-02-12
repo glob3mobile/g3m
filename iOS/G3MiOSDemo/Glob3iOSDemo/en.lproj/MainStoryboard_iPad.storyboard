@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12C60" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" initialViewController="xBF-4S-Uw5">
     <dependencies>
-        <deployment defaultVersion="1552" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
     </dependencies>
     <scenes>
@@ -408,62 +407,6 @@
         <image name="play.png" width="48" height="48"/>
         <image name="satellite_on_96x48.png" width="96" height="48"/>
     </resources>
-    <classes>
-        <class className="G3M3DModelViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/G3M3DModelViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="glob3" candidateClass="G3MWidget_iOS"/>
-            </relationships>
-        </class>
-        <class className="G3MDoubleGlob3ViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/G3MDoubleGlob3ViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="lowerGlob3" candidateClass="G3MWidget_iOS"/>
-                <relationship kind="outlet" name="upperGlob3" candidateClass="G3MWidget_iOS"/>
-            </relationships>
-        </class>
-        <class className="G3MDrawingShapesViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/G3MDrawingShapesViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="toggleShapesAnimation:"/>
-                <relationship kind="outlet" name="glob3" candidateClass="G3MWidget_iOS"/>
-                <relationship kind="outlet" name="playButton" candidateClass="UIButton"/>
-            </relationships>
-        </class>
-        <class className="G3MLayerSwitchViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/G3MLayerSwitchViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="switchLayer:"/>
-                <relationship kind="outlet" name="glob3" candidateClass="G3MWidget_iOS"/>
-                <relationship kind="outlet" name="layerSwitcher" candidateClass="UIButton"/>
-            </relationships>
-        </class>
-        <class className="G3MMarkersViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/G3MMarkersViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="glob3" candidateClass="G3MWidget_iOS"/>
-            </relationships>
-        </class>
-        <class className="G3MSimpleGlob3ViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/G3MSimpleGlob3ViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="G3MWidget" candidateClass="G3MWidget_iOS"/>
-            </relationships>
-        </class>
-        <class className="G3MUITableViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/G3MUITableViewController.h"/>
-        </class>
-        <class className="G3MWebViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/G3MWebViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="pushBackButton:"/>
-                <relationship kind="outlet" name="webView" candidateClass="UIWebView"/>
-            </relationships>
-        </class>
-        <class className="G3MWidget_iOS" superclassName="UIView">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/G3MWidget_iOS.h"/>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar" statusBarStyle="blackTranslucent"/>
         <simulatedOrientationMetrics key="orientation"/>

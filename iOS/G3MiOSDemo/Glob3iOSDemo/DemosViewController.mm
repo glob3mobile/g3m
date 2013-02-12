@@ -71,6 +71,7 @@
   
   // Setup the builder
   builder.getTileRendererBuilder()->setLayerSet([self layerSet]);
+  builder.getTileRendererBuilder()->setShowStatistics(true);
   builder.addRenderer([self markerRenderer]);
   builder.addRenderer([self shapeRenderer]);
   builder.addRenderer([self meshRenderer]);
@@ -136,9 +137,8 @@
 }
 
 - (LayerSet*) createLayerSet {
-  LayerSet* layers = new LayerSet();
+  LayerSet* layers = LayerBuilder::createDefaultSatelliteImagery();
   
-  layers->addLayer(LayerBuilder::createBingLayer([self satelliteLayerEnabled]));
   layers->addLayer(LayerBuilder::createOSMLayer(![self satelliteLayerEnabled]));
   
   return layers;
@@ -306,7 +306,9 @@
     [[self layerSwitcher] setImage:[UIImage imageNamed:@"map-on-96x48.png"] forState:UIControlStateNormal];    
   }
   
-  // bing
+  // satellite layers
+  [self layerSet]->getLayer("bmng200405")->setEnable([self satelliteLayerEnabled]);
+  [self layerSet]->getLayer("esat")->setEnable([self satelliteLayerEnabled]);
   [self layerSet]->getLayer("ve")->setEnable([self satelliteLayerEnabled]);
   // osm
   [self layerSet]->getLayer("osm_auto:all")->setEnable(![self satelliteLayerEnabled]);
