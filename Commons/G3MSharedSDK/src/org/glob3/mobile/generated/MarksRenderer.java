@@ -31,7 +31,6 @@ public class MarksRenderer extends LeafRenderer
 
   private MarkTouchListener _markTouchListener;
   private boolean _autoDeleteMarkTouchListener;
-
   private long _downloadPriority = 1000000;
 
 
@@ -104,6 +103,7 @@ public class MarksRenderer extends LeafRenderer
   
     Vector2D textureTranslation = new Vector2D(0.0, 0.0);
     Vector2D textureScale = new Vector2D(1.0, 1.0);
+  
     gl.transformTexCoords(textureScale, textureTranslation);
   
     gl.setBlendFuncSrcAlpha();

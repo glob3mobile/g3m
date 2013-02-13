@@ -22,19 +22,19 @@ package org.glob3.mobile.generated;
 
 public enum layer_type
 {
-	WMS,
-	THREED,
-	PLANARIMAGE,
-	GEOJSON,
-	SPHERICALIMAGE;
+    WMS,
+    THREED,
+    PLANARIMAGE,
+    GEOJSON,
+    SPHERICALIMAGE;
 
-	public int getValue()
-	{
-		return this.ordinal();
-	}
+   public int getValue()
+   {
+      return this.ordinal();
+   }
 
-	public static layer_type forValue(int value)
-	{
-		return values()[value];
-	}
+   public static layer_type forValue(int value)
+   {
+      return values()[value];
+   }
 }

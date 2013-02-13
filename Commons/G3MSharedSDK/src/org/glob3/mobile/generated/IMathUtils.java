@@ -110,12 +110,7 @@ public abstract class IMathUtils
   public abstract int toInt(double value);
   public abstract int toInt(float value);
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual int parseIntHex(String hex) const = 0;
   public abstract int parseIntHex(String hex);
-
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual double min(double d1, double d2) const = 0;
 
   public abstract double min(double d1, double d2);
   public abstract double max(double d1, double d2);

@@ -29,43 +29,43 @@ public class Color
 
   private static boolean isValidHex(String hex)
   {
-	  if (hex.charAt(0) == '#')
-	  {
-		  if (hex.length() != 7)
-		  {
-			  return false;
-		  }
-	  }
-	  else
-	  {
-		  if (hex.length() != 6)
-		  {
-			  return false;
-		  }
-	  }
+      if (hex.charAt(0) == '#')
+      {
+          if (hex.length() != 7)
+          {
+              return false;
+          }
+      }
+      else
+      {
+          if (hex.length() != 6)
+          {
+              return false;
+          }
+      }
 
-	  if(!hex.matches("^#?([a-f]|[A-F]|[0-9]){3}(([a-f]|[A-F]|[0-9]){3})?$")){ return false;}
+      if(!hex.matches("^#?([a-f]|[A-F]|[0-9]){3}(([a-f]|[A-F]|[0-9]){3})?$")){ return false;}
 
-	  return true;
+      return true;
   }
 
   private static Color hexToRGB(String hex)
   {
-	  if (!isValidHex(hex))
-	  {
-		  ILogger.instance().logError("The value received is not avalid hex string!");
-	  }
+      if (!isValidHex(hex))
+      {
+          ILogger.instance().logError("The value received is not avalid hex string!");
+      }
 
-	  if (hex.charAt(0) == '#')
-	  {
-		  hex = hex.substring(0, 0) + hex.substring(0 + 1);
-	  }
+      if (hex.charAt(0) == '#')
+      {
+          hex = hex.substring(0, 0) + hex.substring(0 + 1);
+      }
 
-	  String R = hex.substring(0, 2);
-	  String G = hex.substring(2, 4);
-	  String B = hex.substring(4, 6);
+      String R = hex.substring(0, 2);
+      String G = hex.substring(2, 4);
+      String B = hex.substring(4, 6);
 
-	  return new Color((float)IMathUtils.instance().parseIntHex(R)/255, (float)IMathUtils.instance().parseIntHex(G)/255, (float)IMathUtils.instance().parseIntHex(B)/255, 1);
+      return new Color((float)IMathUtils.instance().parseIntHex(R)/255, (float)IMathUtils.instance().parseIntHex(G)/255, (float)IMathUtils.instance().parseIntHex(B)/255, 1);
   }
 
   public Color(Color that)
@@ -93,7 +93,7 @@ public class Color
 
   public static Color newFromHEX(String hex)
   {
-	  return hexToRGB(hex);
+      return hexToRGB(hex);
   }
 
   public static Color black()

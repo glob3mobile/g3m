@@ -18,7 +18,6 @@ package org.glob3.mobile.generated;
 
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Geodetic2D;
 
 public class GEO2DMultiLineStringGeometry extends GEOMultiLineStringGeometry
@@ -59,15 +58,15 @@ public class GEO2DMultiLineStringGeometry extends GEOMultiLineStringGeometry
       }
     }
   
-	return new DirectMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), _lineWidth, 1, _color);
+    return new DirectMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), _lineWidth, 1, _color);
   }
 
 
-	public GEO2DMultiLineStringGeometry(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray, Color color, float lineWidth)
+    public GEO2DMultiLineStringGeometry(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray, Color color, float lineWidth)
   {
-		_coordinatesArray = coordinatesArray;
-		_color = color;
-		_lineWidth = lineWidth;
+       _coordinatesArray = coordinatesArray;
+       _color = color;
+       _lineWidth = lineWidth;
 
   }
 
