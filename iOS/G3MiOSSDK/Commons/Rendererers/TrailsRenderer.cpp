@@ -63,8 +63,8 @@ Mesh* Trail::createMesh(const Planet* planet) {
 
     const MutableMatrix44D rotationMatrix = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(anglesInDegrees[i]),
                                                                                    rotationAxis);
-    const MutableMatrix44D matrix = planet->createGeodeticTransformMatrix(*position).multiply(rotationMatrix);
-
+    const MutableMatrix44D geoMatrix = planet->createGeodeticTransformMatrix(*position);
+    const MutableMatrix44D matrix = geoMatrix.multiply(rotationMatrix);
 
     const int i6 = i * 6;
     const Vector3D offsetNTransformed = offsetN.transformedBy(matrix, 1);
