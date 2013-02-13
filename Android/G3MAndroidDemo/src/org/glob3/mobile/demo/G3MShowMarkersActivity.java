@@ -96,10 +96,12 @@ public class G3MShowMarkersActivity
                      }
 
 
-                     _weatherMarkers.addMark(new Mark(city.getAsString("name", ""), new URL("http://openweathermap.org/img/w/"
-                                                                                            + icon, false), new Geodetic3D(
-                              position, 0), true, 0.d));
-
+                     _weatherMarkers.addMark(new Mark( //
+                              city.getAsString("name", ""), //
+                              new URL("" + icon, false), //
+                              new Geodetic3D(position, 0), //
+                              true, //
+                              14));
                   }
 
 
