@@ -49,9 +49,9 @@ Mesh* Trail::createMesh(const Planet* planet) {
   }
 
 
-  float centerX;
-  float centerY;
-  float centerZ;
+  float centerX = 0;
+  float centerY = 0;
+  float centerZ = 0;
   const Vector3D offsetP(_ribbonWidth/2, 0, 0);
   const Vector3D offsetN(-_ribbonWidth/2, 0, 0);
 
