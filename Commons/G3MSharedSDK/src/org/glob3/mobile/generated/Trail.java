@@ -27,20 +27,122 @@ public class Trail
   private boolean _positionsDirty;
 
   private Color _color ;
-  private final float _lineWidth;
+  private final float _ribbonWidth;
 
   private java.util.ArrayList<Geodetic3D> _positions = new java.util.ArrayList<Geodetic3D>();
 
   private Mesh createMesh(Planet planet)
   {
-    FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.firstVertex(), planet, Geodetic3D.fromDegrees(0, 0, 0));
+    final int positionsSize = _positions.size();
   
-    for (int i = 0; i < _positions.size(); i++)
+    if (positionsSize < 2)
     {
-  	  vertices.add( _positions.get(i) );
+      return null;
     }
   
-    return new DirectMesh(GLPrimitive.lineStrip(), true, vertices.getCenter(), vertices.create(), _lineWidth, 1, new Color(_color));
+  
+    java.util.ArrayList<Double> anglesInDegrees = new java.util.ArrayList<Double>();
+    for (int i = 1; i < positionsSize; i++)
+    {
+      final Geodetic3D current = _positions.get(i);
+      final Geodetic3D previous = _positions.get(i - 1);
+  
+      final Angle angle = Geodetic2D.bearing(previous.latitude(), previous.longitude(), current.latitude(), current.longitude());
+  
+      final double angleInDegrees = angle.degrees();
+      if (i == 1)
+      {
+        anglesInDegrees.add(angleInDegrees);
+        anglesInDegrees.add(angleInDegrees);
+      }
+      else
+      {
+        anglesInDegrees.add(angleInDegrees);
+        final double avr = (angleInDegrees + anglesInDegrees.get(i - 1)) / 2.0;
+        anglesInDegrees.set(i - 1, avr);
+      }
+    }
+  
+  
+    float centerX;
+    float centerY;
+    float centerZ;
+    final Vector3D offsetP = new Vector3D(_ribbonWidth/2, 0, 0);
+    final Vector3D offsetN = new Vector3D(-_ribbonWidth/2, 0, 0);
+  
+    IFloatBuffer vertices = IFactory.instance().createFloatBuffer(positionsSize * 3 * 2);
+  
+    final Vector3D rotationAxis = Vector3D.downZ();
+    for (int i = 0; i < positionsSize; i++)
+    {
+      final Geodetic3D position = _positions.get(i);
+  
+      final MutableMatrix44D rotationMatrix = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(anglesInDegrees.get(i)), rotationAxis);
+      final MutableMatrix44D matrix = planet.createGeodeticTransformMatrixposition.multiply(rotationMatrix);
+  
+  
+      final int i6 = i * 6;
+      final Vector3D offsetNTransformed = offsetN.transformedBy(matrix, 1);
+      if (i == 0)
+      {
+        centerX = (float) offsetNTransformed._x;
+        centerY = (float) offsetNTransformed._y;
+        centerZ = (float) offsetNTransformed._z;
+      }
+      vertices.rawPut(i6, (float) offsetNTransformed._x - centerX);
+      vertices.rawPut(i6 + 1, (float) offsetNTransformed._y - centerY);
+      vertices.rawPut(i6 + 2, (float) offsetNTransformed._z - centerZ);
+  
+  
+      final Vector3D offsetPTransformed = offsetP.transformedBy(matrix, 1);
+      vertices.rawPut(i6 + 3, (float) offsetPTransformed._x - centerX);
+      vertices.rawPut(i6 + 4, (float) offsetPTransformed._y - centerY);
+      vertices.rawPut(i6 + 5, (float) offsetPTransformed._z - centerZ);
+    }
+  
+    final Vector3D center = new Vector3D(centerX, centerY, centerZ);
+    Mesh surfaceMesh = new DirectMesh(GLPrimitive.triangleStrip(), true, center, vertices, 1, 1, new Color(_color));
+  
+    // Debug unions
+    //  Mesh* edgesMesh = new DirectMesh(GLPrimitive::lines(),
+    //                                   false,
+    //                                   center,
+    //                                   vertices,
+    //                                   2,
+    //                                   1,
+    //                                   Color::newFromRGBA(1, 1, 1, 0.7f));
+    //
+    //  CompositeMesh* cm = new CompositeMesh();
+    //
+    //  cm->addMesh(surfaceMesh);
+    //  cm->addMesh(edgesMesh);
+    //
+    //  return cm;
+  
+    return surfaceMesh;
+  
+  
+    //  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
+    //                                          planet,
+    //                                          Geodetic3D::fromDegrees(0, 0, 0));
+    //
+    //  const int positionsSize = _positions.size();
+    //  for (int i = 0; i < positionsSize; i++) {
+    ///#ifdef C_CODE
+    //    vertices.add( *(_positions[i]) );
+    ///#endif
+    ///#ifdef JAVA_CODE
+    //	  vertices.add( _positions.get(i) );
+    ///#endif
+    //  }
+    //
+    //  return new DirectMesh(GLPrimitive::lineStrip(),
+    //                        true,
+    //                        vertices.getCenter(),
+    //                        vertices.create(),
+    //                        _lineWidth,
+    //                        1,
+    //                        new Color(_color));
   }
 
   private Mesh _mesh;
@@ -50,20 +152,20 @@ public class Trail
     {
       if (_mesh != null)
          _mesh.dispose();
-  
       _mesh = createMesh(planet);
+      _positionsDirty = false;
     }
     return _mesh;
   }
 
-  public Trail(int maxSteps, Color color, float lineWidth)
+  public Trail(int maxSteps, Color color, float ribbonWidth)
   {
      _maxSteps = maxSteps;
      _visible = true;
      _positionsDirty = true;
      _mesh = null;
      _color = new Color(color);
-     _lineWidth = lineWidth;
+     _ribbonWidth = ribbonWidth;
   }
 
   public void dispose()
@@ -102,9 +204,7 @@ public class Trail
     {
       while (_positions.size() >= _maxSteps)
       {
-        // const int lastIndex = _positions.size() - 1;
         final int index = 0;
-
         if (_positions.get(index) != null)
            _positions.get(index).dispose();
 

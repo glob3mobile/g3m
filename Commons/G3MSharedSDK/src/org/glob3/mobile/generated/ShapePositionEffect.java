@@ -43,7 +43,7 @@ public class ShapePositionEffect extends EffectWithDuration
     final double percent = percentDone(when);
     final double alpha = _linearInterpolation ? percent : pace(percent);
   
-    Geodetic3D pos = Geodetic3D.interpolation(_fromPosition, _toPosition, alpha);
+    final Geodetic3D pos = Geodetic3D.interpolation(_fromPosition, _toPosition, alpha);
     _shape.setPosition(new Geodetic3D(pos));
   }
 
