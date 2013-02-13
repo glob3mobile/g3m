@@ -49,11 +49,11 @@ void CameraSingleDragHandler::onDown(const G3MEventContext *eventContext,
   _lastRadians = _radiansStep = 0.0;
   
   
-/*
-  // TEMP AGUSTIN TO TEST METHOD CAMERA::SETPOINTOFVIEW
-  Geodetic3D center(Angle::fromDegrees(28.056227), Angle::fromDegrees(-15.666504), 0);
-  camera->setPointOfView(center, 500000, Angle::fromDegrees(180), Angle::fromDegrees(45));
-*/
+
+  // TEMP AGUSTIN TO TEST OBJECT ELLIPSOIDSHAPE
+  Geodetic3D center(Angle::fromDegrees(39.78), Angle::fromDegrees(-122), 0);
+  camera->setPointOfView(center, 1e6, Angle::fromDegrees(180), Angle::fromDegrees(90));
+
   
   
   // dragging

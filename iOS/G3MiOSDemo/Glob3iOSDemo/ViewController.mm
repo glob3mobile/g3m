@@ -33,6 +33,7 @@
 #include "TrailsRenderer.hpp"
 #include "Mark.hpp"
 #include "CircleShape.hpp"
+#include "QuadShape.hpp"
 #include "BoxShape.hpp"
 #include "SceneJSShapesParser.hpp"
 
@@ -550,14 +551,16 @@ public:
 {
   ShapesRenderer* shapesRenderer = new ShapesRenderer();
 
-  //  std::string textureFileName = "g3m-marker.png";
-  //  IImage* textureImage = IFactory::instance()->createImageFromFileName(textureFileName);
-  //
-  //  Shape* shape = new QuadShape(Geodetic3D(Angle::fromDegrees(37.78333333),
-  //                                          Angle::fromDegrees(-122.41666666666667),
-  //                                          8000),
-  //                               textureImage, true, textureFileName,
-  //                               50000, 50000);
+    std::string textureFileName = "g3m-marker.png";
+    //IImage* textureImage = IFactory::instance()->createImageFromFileName(textureFileName);
+  IImage* textureImage = NULL;
+  
+    Shape* quad = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
+                                            Angle::fromDegrees(-122.41666666666667),
+                                            8000),
+                                 textureImage, true, textureFileName,
+                                 50000, 50000);
+  shapesRenderer->addShape(quad);
 
   Shape* circle = new CircleShape(new Geodetic3D(Angle::fromDegrees(38.78333333),
                                                  Angle::fromDegrees(-123),
