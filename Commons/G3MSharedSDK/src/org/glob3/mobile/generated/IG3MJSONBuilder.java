@@ -21,7 +21,5 @@ public class IG3MJSONBuilder
        _jsonSource = jsonSource;
     }
 //    virtual void create(LayerSet* layerSet, GInitializationTask* initializationTask, MarkTouchListener* markTouchListener, MarkTouchListener* panoTouchListener)=0;
-    public void dispose()
-    {
-    }
+  public void dispose();
 }
