@@ -373,6 +373,8 @@
 		E7B9964E16A94EC400753FC3 /* LayerBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7B9964C16A94EC400753FC3 /* LayerBuilder.cpp */; };
 		E7B9964F16A94EC400753FC3 /* LayerBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E7B9964D16A94EC400753FC3 /* LayerBuilder.hpp */; };
 		E87424B1169F4B9400C8A227 /* MarkTouchListener.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E87424B0169F4B9400C8A227 /* MarkTouchListener.hpp */; };
+		FB6D00A516CBFF3A009BF93D /* EllipsoidShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB6D00A416CBFF3A009BF93D /* EllipsoidShape.cpp */; };
+		FB6D00A816CBFF4F009BF93D /* EllipsoidShape.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FB6D00A716CBFF4F009BF93D /* EllipsoidShape.hpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -744,6 +746,8 @@
 		E7B9964C16A94EC400753FC3 /* LayerBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LayerBuilder.cpp; path = Commons/Basic/LayerBuilder.cpp; sourceTree = "<group>"; };
 		E7B9964D16A94EC400753FC3 /* LayerBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = LayerBuilder.hpp; path = Commons/Basic/LayerBuilder.hpp; sourceTree = "<group>"; };
 		E87424B0169F4B9400C8A227 /* MarkTouchListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MarkTouchListener.hpp; path = Commons/Rendererers/MarkTouchListener.hpp; sourceTree = "<group>"; };
+		FB6D00A416CBFF3A009BF93D /* EllipsoidShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EllipsoidShape.cpp; path = Commons/Rendererers/EllipsoidShape.cpp; sourceTree = "<group>"; };
+		FB6D00A716CBFF4F009BF93D /* EllipsoidShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = EllipsoidShape.hpp; path = Commons/Rendererers/EllipsoidShape.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1152,6 +1156,8 @@
 		CFEEE4BA1648676800F45F59 /* Shapes */ = {
 			isa = PBXGroup;
 			children = (
+				FB6D00A716CBFF4F009BF93D /* EllipsoidShape.hpp */,
+				FB6D00A416CBFF3A009BF93D /* EllipsoidShape.cpp */,
 				CF5A8A301656B67F00508C38 /* BoxShape.cpp */,
 				CF5A8A311656B67F00508C38 /* BoxShape.hpp */,
 				CFEEE4BB164867B600F45F59 /* CircleShape.cpp */,
@@ -1515,6 +1521,7 @@
 				CF90F6C216C4069D00B309C2 /* ITexturizerData.hpp in Headers */,
 				CF35DD4D16C6995D002EFC96 /* Vector3F.hpp in Headers */,
 				CF35DD5116C69B08002EFC96 /* Vector2F.hpp in Headers */,
+				FB6D00A816CBFF4F009BF93D /* EllipsoidShape.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1733,6 +1740,7 @@
 				CF90F6C116C4069D00B309C2 /* ITexturizerData.cpp in Sources */,
 				CF35DD4C16C6995D002EFC96 /* Vector3F.cpp in Sources */,
 				CF35DD5016C69B08002EFC96 /* Vector2F.cpp in Sources */,
+				FB6D00A516CBFF3A009BF93D /* EllipsoidShape.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
