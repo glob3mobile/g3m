@@ -201,7 +201,7 @@ public:
   MeshRenderer* meshRenderer = new MeshRenderer();
   builder.addRenderer( meshRenderer );
 
-//  meshRenderer->addMesh([self createPointsMesh: builder.getPlanet() ]);
+  //meshRenderer->addMesh([self createPointsMesh: builder.getPlanet() ]);
 
   GInitializationTask* initializationTask = [self createSampleInitializationTask: shapesRenderer
                                                                      geoRenderer: geoRenderer];
@@ -292,7 +292,7 @@ public:
 {
   LayerSet* layerSet = new LayerSet();
 
-  if (false) {
+  if (true) {
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
                                         URL("http://www.nasa.network.com/wms?", false),
                                         WMS_1_1_0,
@@ -319,7 +319,7 @@ public:
   }
 
 
-  bool useBing = true;
+  bool useBing = false;
   if (useBing) {
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
                                         URL("http://www.nasa.network.com/wms?", false),
@@ -874,7 +874,10 @@ public:
 {
   TrailsRenderer* trailsRenderer = new TrailsRenderer();
 
-  Trail* trail = new Trail(50, Color::fromRGBA(1, 1, 1, 1), 2);
+  Trail* trail = new Trail(50,
+                           //Color::yellow(),
+                           Color::fromRGBA(0, 1, 1, 0.6f),
+                           1000);
 
   Geodetic3D position(Angle::fromDegrees(37.78333333),
                       Angle::fromDegrees(-122.41666666666667),
@@ -892,6 +895,7 @@ public:
     double _lastLatitudeDegrees;
     double _lastLongitudeDegrees;
     double _lastHeight;
+    double _odd;
 
   public:
     TestTrailTask(Trail* trail,
@@ -899,15 +903,34 @@ public:
     _trail(trail),
     _lastLatitudeDegrees(lastPosition.latitude()._degrees),
     _lastLongitudeDegrees(lastPosition.longitude()._degrees),
-    _lastHeight(lastPosition.height())
+    _lastHeight(lastPosition.height()),
+    _odd(true)
     {
 
     }
 
     void run(const G3MContext* context) {
-      _lastLatitudeDegrees += 0.025;
-      _lastLongitudeDegrees += 0.025;
-      _lastHeight += 200;
+      // _lastLatitudeDegrees += 0.025;
+      // _lastLongitudeDegrees += 0.025;
+      // _lastHeight += 200;
+
+      const double latStep = 1.0 / ((arc4random() % 100) + 50);
+      const double lonStep = 1.0 / ((arc4random() % 100) + 50);
+
+//      if (_odd) {
+        _lastLatitudeDegrees  += latStep;
+        _lastLongitudeDegrees += lonStep;
+//      }
+//      else {
+//        _lastLatitudeDegrees  -= latStep;
+//        _lastLongitudeDegrees -= lonStep;
+//      }
+      _odd = !_odd;
+
+//      _lastHeight += (arc4random() % 200) - 100;
+
+//      const Angle latitude  = Angle::fromDegrees( (int) (arc4random() % 180) - 90 );
+//      const Angle longitude = Angle::fromDegrees( (int) (arc4random() % 360) - 180 );
 
       _trail->addPosition(Geodetic3D(Angle::fromDegrees(_lastLatitudeDegrees),
                                      Angle::fromDegrees(_lastLongitudeDegrees),

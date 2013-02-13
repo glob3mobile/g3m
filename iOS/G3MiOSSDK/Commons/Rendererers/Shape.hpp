@@ -12,7 +12,6 @@
 #include "Geodetic3D.hpp"
 #include "Context.hpp"
 #include "Vector3D.hpp"
-//#include <string>
 
 class MutableMatrix44D;
 
