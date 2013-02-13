@@ -209,7 +209,7 @@ void SceneParser::parserGEOJSONLayer(LayerSet* layerSet, const JSONObject* jsonL
         geojsonMetadata->insert(std::make_pair(SHOWLABEL,showLabel));
         #endif
         #ifdef JAVA_CODE
-        geojsonMetadata.put(URLICON,icon);
+        geojsonMetadata.put(URLICON,urlIcon);
         geojsonMetadata.put(NAME,namefileTruncated);
         geojsonMetadata.put(COLORLINE,colorLine);
         geojsonMetadata.put(WEB,urlWeb);
