@@ -28,18 +28,16 @@ public class GEO2DLineStringGeometry extends GEOLineStringGeometry
 
   protected final Mesh createMesh(G3MRenderContext rc)
   {
-    Color color = Color.newFromRGBA(1, 1, 0, 1);
-    final float lineWidth = 2F;
   
-    return create2DBoundaryMesh(_coordinates, color, lineWidth, rc);
+    return create2DBoundaryMesh(_coordinates, _color, _lineWidth, rc);
   }
 
 
   public GEO2DLineStringGeometry(java.util.ArrayList<Geodetic2D> coordinates, Color color, float lineWidth)
   {
-	  _coordinates = coordinates;
-	  _color = color;
-	  _lineWidth = lineWidth;
+     _coordinates = coordinates;
+     _color = color;
+     _lineWidth = lineWidth;
 
   }
 

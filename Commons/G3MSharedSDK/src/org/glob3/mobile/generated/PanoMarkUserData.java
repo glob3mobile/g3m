@@ -27,22 +27,22 @@ public class PanoMarkUserData extends MarkUserData
 
   public PanoMarkUserData(String name, URL url)
   {
-	  _name = name;
-	  _url = url;
+     _name = name;
+     _url = url;
   }
 
   public final String getName()
   {
-	return _name;
+    return _name;
   }
 
   public final URL getUrl()
   {
-	return _url;
+    return _url;
   }
 
   public void dispose()
   {
-	_url = null;
+    _url = null;
   }
 }
