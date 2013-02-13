@@ -78,8 +78,8 @@ public class Trail
       final Geodetic3D position = _positions.get(i);
   
       final MutableMatrix44D rotationMatrix = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(anglesInDegrees.get(i)), rotationAxis);
-      final MutableMatrix44D matrix = planet.createGeodeticTransformMatrixposition.multiply(rotationMatrix);
-  
+      final MutableMatrix44D geoMatrix = planet.createGeodeticTransformMatrix(position);
+      final MutableMatrix44D matrix = geoMatrix.multiply(rotationMatrix);
   
       final int i6 = i * 6;
       final Vector3D offsetNTransformed = offsetN.transformedBy(matrix, 1);
