@@ -24,7 +24,12 @@ public:
     
     IG3MJSONBuilder(std::string jsonSource):_jsonSource(jsonSource){};
 //    virtual void create(LayerSet* layerSet, GInitializationTask* initializationTask, MarkTouchListener* markTouchListener, MarkTouchListener* panoTouchListener)=0;
-    virtual ~IG3MJSONBuilder(){};
+#ifdef C_CODE
+  virtual ~IG3MJSONBuilder(){};
+#endif
+#ifdef JAVA_CODE
+  public void dispose();
+#endif
 };
 
 
