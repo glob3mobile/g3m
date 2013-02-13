@@ -35,6 +35,7 @@
 #include "CircleShape.hpp"
 #include "QuadShape.hpp"
 #include "BoxShape.hpp"
+#include "EllipsoidShape.hpp"
 #include "SceneJSShapesParser.hpp"
 
 #include "IJSONParser.hpp"
@@ -581,7 +582,17 @@ public:
                             Color::newFromRGBA(0, 0.75, 0, 0.75));
   box->setAnimatedScale(1, 1, 20);
   shapesRenderer->addShape(box);
-
+  
+/*  Shape* ellipsoid = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(39.78333333),
+                                           Angle::fromDegrees(-122),
+                                           45000),
+                            Vector3D(20000, 30000, 50000),
+                            2,
+                            Color::newFromRGBA(0,    1, 0, 0.5),
+                            Color::newFromRGBA(0, 0.75, 0, 0.75));
+  ellipsoid->setAnimatedScale(1, 1, 20);
+  shapesRenderer->addShape(ellipsoid);*/
+  
   return shapesRenderer;
 }
 
