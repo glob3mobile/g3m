@@ -36,10 +36,7 @@ public class TileRendererBuilder
 
   private LayerSet createLayerSet()
   {
-    LayerSet layerSet = new LayerSet();
-  
-    WMSLayer bing = LayerBuilder.createBingLayer(true);
-    layerSet.addLayer(bing);
+    LayerSet layerSet = LayerBuilder.createDefaultSatelliteImagery();
   
     return layerSet;
   }
