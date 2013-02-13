@@ -204,7 +204,7 @@ public class SceneParser
     
             java.util.HashMap<String, String> geojsonMetadata = new java.util.HashMap<String, String>();
     
-            geojsonMetadata.put(URLICON,icon);
+            geojsonMetadata.put(URLICON,urlIcon);
             geojsonMetadata.put(NAME,namefileTruncated);
             geojsonMetadata.put(COLORLINE,colorLine);
             geojsonMetadata.put(WEB,urlWeb);
