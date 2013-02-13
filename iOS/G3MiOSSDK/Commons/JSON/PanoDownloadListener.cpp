@@ -33,7 +33,7 @@ PanoDownloadListener::PanoDownloadListener(MarksRenderer* marksRenderer, MarkTou
 }
 
 void PanoDownloadListener::onDownload(const URL& url,
-                                         const IByteBuffer* buffer){
+                                         IByteBuffer* buffer){
     std::string string = buffer->getAsString();
     JSONBaseObject* json = IJSONParser::instance()->parse(string);
     ILogger::instance()->logInfo(url.getPath());

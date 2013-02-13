@@ -59,7 +59,7 @@ public:
     PanoDownloadListener(MarksRenderer* _marksRenderer, MarkTouchListener* panoTouchListener);
     
     void onDownload(const URL& url,
-                    const IByteBuffer* buffer);
+                    IByteBuffer* buffer);
     
     void onError(const URL& url){
         ILogger::instance()->logError("The requested pano could not be found!");    
@@ -67,7 +67,7 @@ public:
     
     void onCancel(const URL& url){}
     void onCanceledDownload(const URL& url,
-                            const IByteBuffer* data) {}
+                            IByteBuffer* data) {}
     
     ~PanoDownloadListener(){}
 private:

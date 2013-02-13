@@ -34,8 +34,9 @@ class SceneParser{
     static const std::string MINDISTANCE;
     static const std::string COLORLINE;
     static const std::string SIZELINE;
-    static const std::string WEB;
+    static const std::string URLWEB;
     static const std::string SHOWLABEL;
+    static const std::string WEB;
   
     static const std::string WMS110;
     static const std::string WMS111;
