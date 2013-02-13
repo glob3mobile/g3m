@@ -33,7 +33,7 @@ LayerSet* LayerBuilder::createDefaultSatelliteImagery() {
                                      "EPSG:4326",
                                      "",
                                      false,
-                                     new LevelTileCondition(7, 11),
+                                     new LevelTileCondition(7, 10),
                                      TimeInterval::fromDays(30));
   layerSet->addLayer(i3Landsat);
   
@@ -45,7 +45,7 @@ LayerSet* LayerBuilder::createDefaultSatelliteImagery() {
                                 "EPSG:4326",
                                 "",
                                 false,
-                                new LevelTileCondition(12, 1000),
+                                new LevelTileCondition(11, 1000),
                                 TimeInterval::fromDays(30));
   layerSet->addLayer(bing);
   
