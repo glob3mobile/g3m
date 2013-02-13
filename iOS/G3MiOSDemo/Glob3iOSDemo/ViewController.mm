@@ -583,15 +583,15 @@ public:
   box->setAnimatedScale(1, 1, 20);
   shapesRenderer->addShape(box);
   
-/*  Shape* ellipsoid = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(39.78333333),
-                                           Angle::fromDegrees(-122),
+  Shape* ellipsoid = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(40.78333333),
+                                           Angle::fromDegrees(-121),
                                            45000),
                             Vector3D(20000, 30000, 50000),
                             2,
-                            Color::newFromRGBA(0,    1, 0, 0.5),
+                            Color::newFromRGBA(0,    0.5, 0.8, 0.5),
                             Color::newFromRGBA(0, 0.75, 0, 0.75));
   ellipsoid->setAnimatedScale(1, 1, 20);
-  shapesRenderer->addShape(ellipsoid);*/
+  shapesRenderer->addShape(ellipsoid);
   
   return shapesRenderer;
 }
