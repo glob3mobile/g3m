@@ -64,9 +64,9 @@ public class Trail
     }
   
   
-    float centerX;
-    float centerY;
-    float centerZ;
+    float centerX = 0F;
+    float centerY = 0F;
+    float centerZ = 0F;
     final Vector3D offsetP = new Vector3D(_ribbonWidth/2, 0, 0);
     final Vector3D offsetN = new Vector3D(-_ribbonWidth/2, 0, 0);
   
