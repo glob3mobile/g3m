@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <vector>
 #import "UIDropDownMenu.h"
 
 @class G3MWidget_iOS;
@@ -19,7 +20,7 @@ class Shape;
 
 @interface DemosViewController : UIViewController <UIAlertViewDelegate, UIDropDownMenuDelegate> {
   NSString* urlMarkString;
-  IBOutlet G3MWidget_iOS* G3MWidget;
+  std::vector<std::string> satelliteLayersNames;
 }
 
 @property (strong, nonatomic) IBOutlet UIButton *demoSelector;
@@ -29,7 +30,7 @@ class Shape;
 @property (strong, nonatomic) UIButton* layerSwitcher;
 @property (strong, nonatomic) UIButton* playButton;
 
-@property (retain, nonatomic) G3MWidget_iOS* G3MWidget;
+@property (retain, nonatomic) IBOutlet G3MWidget_iOS* G3MWidget;
 
 @property (nonatomic) LayerSet* layerSet;
 @property (nonatomic) bool satelliteLayerEnabled;

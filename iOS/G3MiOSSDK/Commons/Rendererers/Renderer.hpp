@@ -52,6 +52,15 @@ public:
   virtual void onPause(const G3MContext* context) = 0;
 
   virtual void onDestroy(const G3MContext* context) = 0;
+  
+  /**
+   * Allows us to know if the renderer is a TileRenderer.
+   * It is invoked by IG3MBuilder::addRenderer to avoid adding instances of TileRenderer.
+   * Default value: FALSE
+   */
+  virtual bool isTileRenderer() {
+    return false;
+  }
 
 };
 

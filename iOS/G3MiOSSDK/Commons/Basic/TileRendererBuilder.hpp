@@ -53,6 +53,8 @@ public:
     addVisibleSectorListener(listener, TimeInterval::zero());
   }
   void setTexturePriority(long long texturePriority);
+  
+  std::vector<std::string> getDefaultLayersNames();
 
 };
 

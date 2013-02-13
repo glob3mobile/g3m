@@ -20,8 +20,7 @@
 #include "GInitializationTask.hpp"
 #include "PeriodicalTask.hpp"
 #include "G3MWidget.hpp"
-#include "TileRendererBuilder.hpp"
-
+class TileRendererBuilder;
 
 
 class IG3MBuilder {
@@ -43,6 +42,22 @@ private:
   bool _logFPS;
   bool _logDownloaderStatistics;
   WidgetUserData* _userData;
+  
+  GL* getGL();
+  IDownloader* getDownloader();
+  IThreadUtils* getThreadUtils();
+  std::vector<ICameraConstrainer*> getCameraConstraints();
+  CameraRenderer* getCameraRenderer();
+  Renderer* getBusyRenderer();
+  Color* getBackgroundColor();
+  std::vector<Renderer*> getRenderers();
+  bool getLogFPS();
+  bool getLogDownloaderStatistics();
+  GInitializationTask* getInitializationTask();
+  bool getAutoDeleteInitializationTask();
+  std::vector<PeriodicalTask*> getPeriodicalTasks();
+  WidgetUserData* getUserData();
+
 
   std::vector<ICameraConstrainer*> createCameraConstraints();
   CameraRenderer* createCameraRenderer();
@@ -50,9 +65,10 @@ private:
   void pvtSetInitializationTask(GInitializationTask* initializationTask,
                                 const bool autoDeleteInitializationTask);
 
-
 protected:
   IStorage* _storage;
+  
+  IStorage* getStorage();
 
   G3MWidget* create();
 
@@ -68,18 +84,15 @@ public:
   void setDownloader(IDownloader* downloader);
   void setThreadUtils(IThreadUtils* threadUtils);
   void setPlanet(const Planet* planet);
-  const Planet* getPlanet();
   void addCameraConstraint(ICameraConstrainer* cameraConstraint);
   void setCameraRenderer(CameraRenderer* cameraRenderer);
   void setBackgroundColor(Color* backgroundColor);
-  TileRendererBuilder* getTileRendererBuilder();
   void setBusyRenderer(Renderer* busyRenderer);
   void addRenderer(Renderer* renderer);
   void addPeriodicalTask(PeriodicalTask* periodicalTask);
   void setLogFPS(const bool logFPS);
   void setLogDownloaderStatistics(const bool logDownloaderStatistics);
   void setUserData(WidgetUserData* userData);
-
 #ifdef C_CODE
   void setInitializationTask(GInitializationTask* initializationTask,
                              const bool autoDeleteInitializationTask) {
@@ -94,6 +107,8 @@ public:
   }
 #endif
 
+  const Planet* getPlanet();
+  TileRendererBuilder* getTileRendererBuilder();
 };
 
 #endif /* defined(__G3MiOSSDK__IG3MBuilder__) */

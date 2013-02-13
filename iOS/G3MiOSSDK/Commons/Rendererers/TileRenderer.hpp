@@ -381,14 +381,28 @@ public:
   }
   
   /**
-   Change the download-priority used by Tiles (for downloading textures).
+   * Set the download-priority used by Tiles (for downloading textures).
+   *
+   * @param texturePriority: new value for download priority of textures
    */
   void setTexturePriority(long long texturePriority) {
     _texturePriority = texturePriority;
   }
   
+  /**
+   * Return the current value for the download priority of textures
+   *
+   * @return _texturePriority: long
+   */
   long long getTexturePriority() const {
     return _texturePriority;
+  }
+  
+  /**
+   * @see Renderer#isTileRenderer()
+   */
+  bool isTileRenderer() {
+    return true;
   }
 
 };

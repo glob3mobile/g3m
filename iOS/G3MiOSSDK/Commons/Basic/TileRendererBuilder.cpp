@@ -31,6 +31,17 @@ TileRendererBuilder::TileRendererBuilder() {
 TileRendererBuilder::~TileRendererBuilder() {
 }
 
+std::vector<std::string> TileRendererBuilder::getDefaultLayersNames() {
+  int TODO_getLayerSet;
+  std::vector<std::string> layersNames;
+  
+  for (int i = 0; i < _layerSet->size(); i++) {
+    layersNames.push_back(_layerSet->get(i)->getName());
+  }
+  
+  return layersNames;
+}
+
 TileRenderer* TileRendererBuilder::create() {
   TileRenderer* tileRenderer = new TileRenderer(_tileTessellator,
                                                 _texturizer,
