@@ -82,12 +82,12 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
   const double incAngle = pi/(_resolution-1);
   for (int j=0; j<_resolution; j++) {
     double lat = pi/2 - j*incAngle;
-    double z = _radiusX * sin(lat);
-    double c = _radiusX * cos(lat);
+    double z = _radiusZ * sin(lat);
+    double c = cos(lat);
     for (int i=0; i<2*_resolution-1; i++) {
       double lon = -pi + i*incAngle;
-      double x = c * cos(lon);
-      double y = c * sin(lon);
+      double x = _radiusX * c * cos(lon);
+      double y = _radiusY * c * sin(lon);
       vertices->add(x, y, z);
     }
   }
