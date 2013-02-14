@@ -31,9 +31,36 @@ public class Geodetic2D
   {
     return new Geodetic2D(Angle.zero(), Angle.zero());
   }
+
   public static Geodetic2D fromDegrees(double lat, double lon)
   {
     return new Geodetic2D(Angle.fromDegrees(lat), Angle.fromDegrees(lon));
+  }
+
+  /**
+   * Returns the (initial) bearing from this point to the supplied point
+   *   see http: //williams.best.vwh.net/avform.htm#Crs
+   */
+  public static Angle bearing(Angle fromLatitude, Angle fromLongitude, Angle toLatitude, Angle toLongitude)
+  {
+    final Angle dLon = toLongitude.sub(fromLongitude);
+
+    final double toLatCos = toLatitude.cosinus();
+
+    final double y = dLon.sinus() * toLatCos;
+    final double x = fromLatitude.cosinus()*toLatitude.sinus() - fromLatitude.sinus()*toLatCos *dLon.cosinus();
+    final double radians = IMathUtils.instance().atan2(y, x);
+
+    return Angle.fromRadians(radians);
+  }
+
+  /**
+   * Returns the (initial) bearing from this point to the supplied point
+   *   see http: //williams.best.vwh.net/avform.htm#Crs
+   */
+  public static Angle bearing(Geodetic2D from, Geodetic2D to)
+  {
+    return bearing(from.latitude(), from.longitude(), to.latitude(), to.longitude());
   }
 
   public Geodetic2D(Angle latitude, Angle longitude)
@@ -104,15 +131,17 @@ public class Geodetic2D
    */
   public final Angle bearingTo(Geodetic2D that)
   {
-    final Angle dLon = that.longitude().sub(longitude());
-    final Angle lat1 = latitude();
-    final Angle lat2 = that.latitude();
+//    const Angle dLon = that.longitude().sub(longitude());
+//    const Angle lat1 = latitude();
+//    const Angle lat2 = that.latitude();
+//
+//    const double y = dLon.sinus() * lat2.cosinus();
+//    const double x = lat1.cosinus()*lat2.sinus() - lat1.sinus()*lat2.cosinus()*dLon.cosinus();
+//    const double radians = IMathUtils::instance()->atan2(y, x);
+//
+//    return Angle::fromRadians(radians);
 
-    final double y = dLon.sinus() * lat2.cosinus();
-    final double x = lat1.cosinus()*lat2.sinus() - lat1.sinus()*lat2.cosinus()*dLon.cosinus();
-    final double radians = IMathUtils.instance().atan2(y, x);
-
-    return Angle.fromRadians(radians);
+    return bearing(_latitude, _longitude, that._latitude, that._longitude);
   }
 
 

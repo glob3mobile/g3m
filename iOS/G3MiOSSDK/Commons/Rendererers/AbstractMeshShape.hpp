@@ -18,24 +18,25 @@ private:
 
 protected:
   virtual Mesh* createMesh(const G3MRenderContext* rc) = 0;
-  
+
   Mesh* getMesh(const G3MRenderContext* rc);
 
   void cleanMesh();
 
-public:
   AbstractMeshShape(Geodetic3D* position) :
   Shape(position),
   _mesh(NULL) {
 
   }
-  
+
   AbstractMeshShape(Geodetic3D* position,
                     Mesh* mesh) :
   Shape(position),
   _mesh(mesh) {
 
   }
+
+public:
 
   bool isReadyToRender(const G3MRenderContext* rc);
 
@@ -45,7 +46,7 @@ public:
   virtual ~AbstractMeshShape();
 
   bool isTransparent(const G3MRenderContext* rc);
-
+  
 };
 
 #endif

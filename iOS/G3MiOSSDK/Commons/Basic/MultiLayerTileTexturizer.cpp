@@ -265,6 +265,8 @@ public:
 
       const long long priority = _texturePriority + _tile->getLevel();
 
+//      printf("%s\n", petition->getURL().getPath().c_str());
+
       const long long requestId = _downloader->requestImage(URL(petition->getURL()),
                                                             priority,
                                                             petition->getTimeToCache(),
