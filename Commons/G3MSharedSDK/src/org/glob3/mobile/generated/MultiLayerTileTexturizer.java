@@ -29,18 +29,8 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 {
   private TilesRenderParameters _parameters;
 
-  private IFloatBuffer _texCoordsCache;
-
-  private IFloatBuffer getTextureCoordinates(TileRenderContext trc)
-  {
-    if (_texCoordsCache == null)
-    {
-      _texCoordsCache = trc.getTessellator().createUnitTextCoords();
-    }
-    return _texCoordsCache;
-  }
-
-//  long _pendingTopTileRequests;
+//  mutable IFloatBuffer* _texCoordsCache;
+//  IFloatBuffer* getTextureCoordinates(const TileRenderContext* trc) const;
 
   private TexturesHandler _texturesHandler;
 
@@ -51,10 +41,10 @@ public class MultiLayerTileTexturizer extends TileTexturizer
   }
 
   public MultiLayerTileTexturizer()
+  //_texCoordsCache(NULL),
   //_pendingTopTileRequests(0),
   {
      _parameters = null;
-     _texCoordsCache = null;
      _texturesHandler = null;
   
   }
@@ -65,9 +55,8 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 
   public void dispose()
   {
-    if (_texCoordsCache != null)
-       _texCoordsCache.dispose();
-    _texCoordsCache = null;
+  //  delete _texCoordsCache;
+  //  _texCoordsCache = NULL;
   }
 
   public final boolean isReady(G3MRenderContext rc, LayerSet layerSet)
@@ -94,7 +83,8 @@ public class MultiLayerTileTexturizer extends TileTexturizer
   
     if (builderHolder == null)
     {
-      builderHolder = new TileTextureBuilderHolder(new TileTextureBuilder(this, rc, trc.getLayerSet(), _parameters, rc.getDownloader(), tile, tessellatorMesh, getTextureCoordinates(trc)));
+      builderHolder = new TileTextureBuilderHolder(new TileTextureBuilder(this, rc, trc.getLayerSet(), _parameters, rc.getDownloader(), tile, tessellatorMesh, trc.getTessellator()));
+                                                                          /*getTextureCoordinates(trc)*/
       tile.setTexturizerData(builderHolder);
     }
   
@@ -163,6 +153,16 @@ public class MultiLayerTileTexturizer extends TileTexturizer
     return false;
   }
 
+
+  //IFloatBuffer* MultiLayerTileTexturizer::getTextureCoordinates(const TileRenderContext* trc) const {
+  ////  if (_texCoordsCache == NULL) {
+  ////    _texCoordsCache = trc->getTessellator()->createUnitTextCoords();
+  ////  }
+  ////  return _texCoordsCache;
+  //  int _____XXXXXXX;
+  //  return trc->getTessellator()->createUnitTextCoords();
+  //}
+  
   public final void justCreatedTopTile(G3MRenderContext rc, Tile tile, LayerSet layerSet)
   {
   }
