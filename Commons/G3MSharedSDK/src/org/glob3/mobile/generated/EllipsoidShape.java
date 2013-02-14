@@ -18,56 +18,32 @@ package org.glob3.mobile.generated;
 
 
 
+//class Color;
+//class FloatBufferBuilderFromCartesian3D;
+//class FloatBufferBuilderFromCartesian2D;
+//class IGLTextureId;
+
+
 
 public class EllipsoidShape extends AbstractMeshShape
 {
-  private double _radiusX;
-  private double _radiusY;
-  private double _radiusZ;
+  private final URL _textureURL = new URL();
 
-  private short _resolution;
+  private final double _radiusX;
+  private final double _radiusY;
+  private final double _radiusZ;
 
-  private float _borderWidth;
+  private final short _resolution;
+
+  private final float _borderWidth;
+
+  private final boolean _cozzi;
 
   private Color _surfaceColor;
   private Color _borderColor;
 
-  private Mesh createBorderMesh(G3MRenderContext rc)
+  private Mesh createBorderMesh(G3MRenderContext rc, FloatBufferBuilderFromCartesian3D vertices)
   {
-  
-    // create vertices
-    if (_resolution<3)
-       _resolution = 3;
-    FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
-    final double pi = IMathUtils.instance().pi();
-    final double incAngle = pi/(_resolution-1);
-    for (int j = 0; j<_resolution; j++)
-    {
-      double lat = pi/2 - j *incAngle;
-      double z = _radiusX * Math.sin(lat);
-      double c = _radiusX * Math.cos(lat);
-      for (int i = 0; i<2 *_resolution-1; i++)
-      {
-        double lon = -pi + i *incAngle;
-        double x = c * Math.cos(lon);
-        double y = c * Math.sin(lon);
-        vertices.add(x, y, z);
-      }
-    }
-  
-    /*
-    // create surface indices
-    ShortBufferBuilder indices;
-    short delta = 2*_resolution - 1;
-    for (short j=0; j<_resolution-1; j++) {
-      if (j>0) indices.add(j*delta);
-      for (short i=0; i<2*_resolution-1; i++) {
-        indices.add(i+j*delta);
-        indices.add(i+(j+1)*delta);
-      }
-      indices.add((j+2)*delta-1);
-    }
-     */
   
     // create border indices for horizontal lines
     ShortBufferBuilder indices = new ShortBufferBuilder();
@@ -91,75 +67,167 @@ public class EllipsoidShape extends AbstractMeshShape
       }
     }
   
-  
-    Color borderColor = (_borderColor != null) ? _borderColor : _surfaceColor;
+    Color borderColor;
+    if (_borderColor != null)
+    {
+      borderColor = new Color(_borderColor);
+    }
+    else
+    {
+      if (_surfaceColor != null)
+      {
+        borderColor = new Color(_surfaceColor);
+      }
+      else
+      {
+        borderColor = Color.newFromRGBA(1, 1, 1, 1);
+      }
+    }
   
     return new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), _borderWidth, 1, borderColor);
   }
-  private Mesh createSurfaceMesh(G3MRenderContext rc)
+  private Mesh createSurfaceMesh(G3MRenderContext rc, FloatBufferBuilderFromCartesian3D vertices, FloatBufferBuilderFromCartesian2D texCoords)
   {
-    final float lowerX = (float) -(_radiusX / 2);
-    final float upperX = (float) +(_radiusX / 2);
-    final float lowerY = (float) -(_radiusY / 2);
-    final float upperY = (float) +(_radiusY / 2);
-    final float lowerZ = (float) -(_radiusZ / 2);
-    final float upperZ = (float) +(_radiusZ / 2);
   
-    float[] v = { lowerX, lowerY, lowerZ, lowerX, upperY, lowerZ, lowerX, upperY, upperZ, lowerX, lowerY, upperZ, upperX, lowerY, lowerZ, upperX, upperY, lowerZ, upperX, upperY, upperZ, upperX, lowerY, upperZ };
-  
-    final int numIndices = 23;
-    short[] i = { 3, 0, 7, 4, 6, 5, 2, 1, 3, 0, 0, 2, 2, 3, 6, 7, 7, 5, 5, 4, 1, 0, 0 };
-  
-    FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
+    // create surface indices
     ShortBufferBuilder indices = new ShortBufferBuilder();
-  
-    final int numVertices = 8;
-    for (int n = 0; n<numVertices; n++)
+    short delta = 2 *_resolution - 1;
+    for (short j = 0; j<_resolution-1; j++)
     {
-      vertices.add(v[n *3], v[n *3+1], v[n *3+2]);
+      if (j>0)
+         indices.add(j *delta);
+      for (short i = 0; i<2 *_resolution-1; i++)
+      {
+        indices.add(i+j *delta);
+        indices.add(i+(j+1)*delta);
+      }
+      indices.add((j+2)*delta-1);
     }
   
-    for (int n = 0; n<numIndices; n++)
+    Color surfaceColor = (_surfaceColor == null) ? null : new Color(_surfaceColor);
+  
+    Mesh im = new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), _borderWidth, 1, surfaceColor);
+  
+    final IGLTextureId texId = getTextureId(rc);
+    if (texId == null)
     {
-      indices.add(i[n]);
+      return im;
     }
   
-    return new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), _borderWidth, 1, _surfaceColor);
+    TextureMapping texMap = new SimpleTextureMapping(texId, texCoords.create(), true, true);
+  
+    return new TexturedMesh(im, true, texMap, true, true);
+  
+  }
+
+  private boolean _textureRequested;
+  private IImage _textureImage;
+  private IGLTextureId getTextureId(G3MRenderContext rc)
+  {
+    if (_textureImage == null)
+    {
+      return null;
+    }
+  
+    final IGLTextureId texId = rc.getTexturesHandler().getGLTextureId(_textureImage, GLFormat.rgba(), _textureURL.getPath(), false);
+  
+    rc.getFactory().deleteImage(_textureImage);
+    _textureImage = null;
+  
+    if (texId == null)
+    {
+      rc.getLogger().logError("Can't load texture %s", _textureURL.getPath());
+    }
+  
+    return texId;
   }
 
   protected final Mesh createMesh(G3MRenderContext rc)
   {
+    if (!_textureRequested)
+    {
+      _textureRequested = true;
+      if (_textureURL.getPath().length() != 0)
+      {
+        rc.getDownloader().requestImage(_textureURL, 1000000, TimeInterval.fromDays(30), new EllipsoidShape_IImageDownloadListener(this), true);
+      }
+    }
+  
+    FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
+    FloatBufferBuilderFromCartesian2D texCoords = new FloatBufferBuilderFromCartesian2D();
+  
+    final double pi = IMathUtils.instance().pi();
+    final double incAngle = pi/(_resolution-1);
+    for (int j = 0; j<_resolution; j++)
+    {
+      final double lat = pi/2 - j *incAngle;
+      final double s = Math.sin(lat);
+      final double c = Math.cos(lat);
+      final double z = _radiusZ * s;
+      for (int i = 0; i<2 *_resolution-1; i++)
+      {
+        final double lon = -pi + i *incAngle;
+        final double x = _radiusX * c * Math.cos(lon);
+        final double y = _radiusY * c * Math.sin(lon);
+        vertices.add(x, y, z);
+  
+        final float u = (float) i / (2 *_resolution-2);
+        final float v = (_cozzi)? (float)(1-s)/2 : (float)j/(_resolution-1);
+        texCoords.add(u, v);
+      }
+    }
+  
+    Mesh surfaceMesh = createSurfaceMesh(rc, vertices, texCoords);
+  
     if (_borderWidth > 0)
     {
       CompositeMesh compositeMesh = new CompositeMesh();
-      //compositeMesh->addMesh(createSurfaceMesh(rc));
-      compositeMesh.addMesh(createBorderMesh(rc));
+      compositeMesh.addMesh(surfaceMesh);
+      compositeMesh.addMesh(createBorderMesh(rc, vertices));
       return compositeMesh;
     }
   
-    return createSurfaceMesh(rc);
+    return surfaceMesh;
   }
 
-  public EllipsoidShape(Geodetic3D position, Vector3D radius, short resolution, float borderWidth, Color surfaceColor)
+  public EllipsoidShape(Geodetic3D position, Vector3D radius, short resolution, float borderWidth, boolean cozzi, Color surfaceColor)
   {
-     this(position, radius, resolution, borderWidth, surfaceColor, null);
+     this(position, radius, resolution, borderWidth, cozzi, surfaceColor, null);
   }
-  public EllipsoidShape(Geodetic3D position, Vector3D radius, short resolution, float borderWidth)
-  {
-     this(position, radius, resolution, borderWidth, null, null);
-  }
-  public EllipsoidShape(Geodetic3D position, Vector3D radius, short resolution, float borderWidth, Color surfaceColor, Color borderColor)
+  public EllipsoidShape(Geodetic3D position, Vector3D radius, short resolution, float borderWidth, boolean cozzi, Color surfaceColor, Color borderColor)
   {
      super(position);
+     _textureURL = new URL(new URL("", false));
      _radiusX = radius.x();
      _radiusY = radius.y();
      _radiusZ = radius.z();
-     _resolution = resolution;
+     _resolution = resolution < 3 ? 3 : resolution;
      _borderWidth = borderWidth;
+     _cozzi = cozzi;
      _surfaceColor = surfaceColor;
      _borderColor = borderColor;
+     _textureRequested = false;
+     _textureImage = null;
 
   }
+
+  public EllipsoidShape(Geodetic3D position, URL textureURL, Vector3D radius, short resolution, float borderWidth, boolean cozzi)
+  {
+     super(position);
+     _textureURL = new URL(textureURL);
+     _radiusX = radius.x();
+     _radiusY = radius.y();
+     _radiusZ = radius.z();
+     _resolution = resolution < 3 ? 3 : resolution;
+     _borderWidth = borderWidth;
+     _cozzi = cozzi;
+     _surfaceColor = null;
+     _borderColor = null;
+     _textureRequested = false;
+     _textureImage = null;
+
+  }
+
 
   public void dispose()
   {
@@ -167,6 +235,13 @@ public class EllipsoidShape extends AbstractMeshShape
        _surfaceColor.dispose();
     if (_borderColor != null)
        _borderColor.dispose();
+  }
+
+  public final void imageDownloaded(IImage image)
+  {
+    _textureImage = image;
+  
+    cleanMesh();
   }
 
 }
