@@ -12,6 +12,7 @@
 #include "AbstractMeshShape.hpp"
 #include "Color.hpp"
 #include "FloatBufferBuilderFromCartesian3D.hpp"
+#include "FloatBufferBuilderFromCartesian2D.hpp"
 
 
 
@@ -23,11 +24,16 @@ private:
 
   float _borderWidth;
   
+  bool _cozzi;
+  
   Color* _surfaceColor;
   Color* _borderColor;
 
-  Mesh* createBorderMesh(const G3MRenderContext* rc, FloatBufferBuilderFromCartesian3D *vertices);
-  Mesh* createSurfaceMesh(const G3MRenderContext* rc, FloatBufferBuilderFromCartesian3D *vertices);
+  Mesh* createBorderMesh(const G3MRenderContext* rc,
+                         FloatBufferBuilderFromCartesian3D *vertices);
+  Mesh* createSurfaceMesh(const G3MRenderContext* rc,
+                          FloatBufferBuilderFromCartesian3D* vertices,
+                          FloatBufferBuilderFromCartesian2D* texCoords);
 
 protected:
   Mesh* createMesh(const G3MRenderContext* rc);
@@ -37,6 +43,7 @@ public:
            const Vector3D& radius,
            short resolution,
            float borderWidth,
+           bool Cozzi,
            Color* surfaceColor = NULL,
            Color* borderColor = NULL) :
   AbstractMeshShape(position),
@@ -45,6 +52,7 @@ public:
   _radiusZ(radius.z()),
   _resolution(resolution),
   _borderWidth(borderWidth),
+  _cozzi(Cozzi),
   _surfaceColor(surfaceColor),
   _borderColor(borderColor)
   {
