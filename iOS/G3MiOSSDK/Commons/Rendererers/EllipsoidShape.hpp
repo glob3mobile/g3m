@@ -21,7 +21,7 @@ class IGLTextureId;
 
 class EllipsoidShape : public AbstractMeshShape {
 private:
-  const URL _textureURL;
+  URL _textureURL;
 
   const double _radiusX;
   const double _radiusY;

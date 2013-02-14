@@ -19,7 +19,7 @@ class Color;
 
 class QuadShape : public AbstractMeshShape {
 private:
-  const URL _textureURL;
+  URL _textureURL;
   const float _width;
   const float _height;
   const Color* _color;

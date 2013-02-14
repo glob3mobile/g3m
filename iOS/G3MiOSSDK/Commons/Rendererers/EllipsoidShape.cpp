@@ -98,14 +98,14 @@ Mesh* EllipsoidShape::createSurfaceMesh(const G3MRenderContext* rc,
 
   // create surface indices
   ShortBufferBuilder indices;
-  short delta = 2*_resolution - 1;
+  short delta = (short) (2*_resolution - 1);
   for (short j=0; j<_resolution-1; j++) {
-    if (j>0) indices.add(j*delta);
+    if (j>0) indices.add((short) (j*delta));
     for (short i=0; i<2*_resolution-1; i++) {
-      indices.add(i+j*delta);
-      indices.add(i+(j+1)*delta);
+      indices.add((short) (i+j*delta));
+      indices.add((short) (i+(j+1)*delta));
     }
-    indices.add((j+2)*delta-1);
+    indices.add((short) ((j+2)*delta-1));
   }
 
   Color* surfaceColor = (_surfaceColor == NULL) ? NULL : new Color(*_surfaceColor);
