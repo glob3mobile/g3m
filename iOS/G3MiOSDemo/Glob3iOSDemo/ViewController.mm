@@ -585,7 +585,7 @@ public:
   
   Shape* ellipsoid = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(40.78333333),
                                            Angle::fromDegrees(-121),
-                                           45000),
+                                           300000),
                             Vector3D(20000, 30000, 50000),
                             4, 2,
                             Color::newFromRGBA(0,    0.5, 0.8, 0.5),
