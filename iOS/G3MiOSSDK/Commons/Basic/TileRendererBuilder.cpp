@@ -61,9 +61,7 @@ TilesRenderParameters* TileRendererBuilder::createTileRendererParameters() {
 }
 
 TileTessellator* TileRendererBuilder::createTileTessellator() {
-  TileTessellator* tileTessellator = new EllipsoidalTileTessellator(_parameters->_tileResolution, true);
-  
-  return tileTessellator;
+  return new EllipsoidalTileTessellator(_parameters->_tileResolution, true);
 }
 
 void TileRendererBuilder::setTileTessellator(TileTessellator *tileTessellator) {

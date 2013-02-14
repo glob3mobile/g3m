@@ -21,6 +21,7 @@
 #include "SimpleFloatBufferBuilder.hpp"
 #include "GLConstants.hpp"
 #include "Color.hpp"
+#include "Planet.hpp"
 
 Mesh* EllipsoidalTileTessellator::createMesh(const G3MRenderContext* rc,
                                              const Tile* tile) const {
