@@ -543,17 +543,19 @@ public:
 {
   ShapesRenderer* shapesRenderer = new ShapesRenderer();
 
-//  std::string textureFileName = "g3m-marker.png";
-  //IImage* textureImage = IFactory::instance()->createImageFromFileName(textureFileName);
-//  IImage* textureImage = NULL;
+  Shape* quad1 = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
+                                              Angle::fromDegrees(-122),
+                                              8000),
+                               URL("file:///g3m-marker.png", false),
+                               50000, 50000);
+  shapesRenderer->addShape(quad1);
 
-  Shape* quad = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
-                                             Angle::fromDegrees(-122.41666666666667),
-                                             8000),
-                              URL("file:///g3m-marker.png", false),
-                              50000, 50000);
-  //quad->setPitch(Angle::fromDegrees(90));
-  shapesRenderer->addShape(quad);
+  Shape* quad2 = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
+                                              Angle::fromDegrees(-123),
+                                              8000),
+                               35000, 75000,
+                               Color::newFromRGBA(1, 0, 1, 0.5));
+  shapesRenderer->addShape(quad2);
 
   Shape* circle = new CircleShape(new Geodetic3D(Angle::fromDegrees(38.78333333),
                                                  Angle::fromDegrees(-123),
@@ -574,23 +576,37 @@ public:
                             Color::newFromRGBA(0, 0.75, 0, 0.75));
   box->setAnimatedScale(1, 1, 20);
   shapesRenderer->addShape(box);
-  
-  Shape* ellipsoid1 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(40.78333333),
+
+  const URL textureURL("file:///world.jpg", false);
+
+  //const Vector3D radius(50000, 50000, 50000);
+  const double factor = 80;
+  const Vector3D radius(6378137.0 / factor, 6378137.0 / factor, 6356752.314245 / factor);
+
+  Shape* ellipsoid1 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(41),
                                                         Angle::fromDegrees(-121),
-                                                        40000),
-                                         Vector3D(40000, 40000, 40000),
-                                         10, 2, false,
-                                         Color::newFromRGBA(0,    0.5, 0.8, 0.5),
-                                         Color::newFromRGBA(0, 0.75, 0, 0.75));
+                                                        radius._x * 1.1),
+                                         textureURL,
+                                         radius,
+                                         16,
+                                         1,
+                                         false
+                                         //Color::newFromRGBA(0,    0.5, 0.8, 0.5),
+                                         //Color::newFromRGBA(0, 0.75, 0, 0.75)
+                                         );
   shapesRenderer->addShape(ellipsoid1);
-  
-  Shape* ellipsoid2 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(40.78333333),
-                                                       Angle::fromDegrees(-120),
-                                                       40000),
-                                        Vector3D(40000, 40000, 40000),
-                                        10, 2, true,
-                                        Color::newFromRGBA(0.5,    0.0, 0.8, 0.5),
-                                        Color::newFromRGBA(0, 0.75, 0, 0.75));
+
+  Shape* ellipsoid2 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(41),
+                                                        Angle::fromDegrees(-119),
+                                                        radius._x * 1.1),
+                                         textureURL,
+                                         radius,
+                                         16,
+                                         1,
+                                         true
+                                         //Color::newFromRGBA(0.5,    0.0, 0.8, 0.5),
+                                         //Color::newFromRGBA(0, 0.75, 0, 0.75)
+                                         );
   shapesRenderer->addShape(ellipsoid2);
 
   

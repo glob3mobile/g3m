@@ -14,8 +14,42 @@
 #include "IndexedMesh.hpp"
 #include "GLConstants.hpp"
 #include "CompositeMesh.hpp"
+#include "Color.hpp"
+#include "FloatBufferBuilderFromCartesian3D.hpp"
+#include "FloatBufferBuilderFromCartesian2D.hpp"
+#include "IDownloader.hpp"
+#include "IImageDownloadListener.hpp"
+#include "TexturesHandler.hpp"
+#include "TexturedMesh.hpp"
 
-Mesh* EllipsoidShape::createBorderMesh(const G3MRenderContext* rc, FloatBufferBuilderFromCartesian3D *vertices) {
+EllipsoidShape::~EllipsoidShape() {
+  delete _surfaceColor;
+  delete _borderColor;
+}
+
+const IGLTextureId* EllipsoidShape::getTextureId(const G3MRenderContext* rc) {
+  if (_textureImage == NULL) {
+    return NULL;
+  }
+
+  const IGLTextureId* texId = rc->getTexturesHandler()->getGLTextureId(_textureImage,
+                                                                       GLFormat::rgba(),
+                                                                       _textureURL.getPath(),
+                                                                       false);
+
+  rc->getFactory()->deleteImage(_textureImage);
+  _textureImage = NULL;
+
+  if (texId == NULL) {
+    rc->getLogger()->logError("Can't load texture %s", _textureURL.getPath().c_str());
+  }
+
+  return texId;
+}
+
+
+Mesh* EllipsoidShape::createBorderMesh(const G3MRenderContext* rc,
+                                       FloatBufferBuilderFromCartesian3D *vertices) {
 
   // create border indices for horizontal lines
   ShortBufferBuilder indices;
@@ -35,8 +69,18 @@ Mesh* EllipsoidShape::createBorderMesh(const G3MRenderContext* rc, FloatBufferBu
     }
   }
 
-
-  Color* borderColor = (_borderColor != NULL) ? _borderColor : _surfaceColor;
+  Color* borderColor;
+  if (_borderColor != NULL) {
+    borderColor = new Color(*_borderColor);
+  }
+  else {
+    if (_surfaceColor != NULL) {
+      borderColor = new Color(*_surfaceColor);
+    }
+    else {
+      borderColor = Color::newFromRGBA(1, 1, 1, 1);
+    }
+  }
 
   return new IndexedMesh(GLPrimitive::lines(),
                          true,
@@ -51,7 +95,7 @@ Mesh* EllipsoidShape::createBorderMesh(const G3MRenderContext* rc, FloatBufferBu
 Mesh* EllipsoidShape::createSurfaceMesh(const G3MRenderContext* rc,
                                         FloatBufferBuilderFromCartesian3D* vertices,
                                         FloatBufferBuilderFromCartesian2D* texCoords) {
-  
+
   // create surface indices
   ShortBufferBuilder indices;
   short delta = 2*_resolution - 1;
@@ -64,52 +108,111 @@ Mesh* EllipsoidShape::createSurfaceMesh(const G3MRenderContext* rc,
     indices.add((j+2)*delta-1);
   }
 
-  return new IndexedMesh(GLPrimitive::triangleStrip(),
-                         true,
-                         vertices->getCenter(),
-                         vertices->create(),
-                         indices.create(),
-                         _borderWidth,
-                         1,
-                         _surfaceColor);
+  Color* surfaceColor = (_surfaceColor == NULL) ? NULL : new Color(*_surfaceColor);
+
+  Mesh* im = new IndexedMesh(GLPrimitive::triangleStrip(),
+                             true,
+                             vertices->getCenter(),
+                             vertices->create(),
+                             indices.create(),
+                             _borderWidth,
+                             1,
+                             surfaceColor);
+
+  const IGLTextureId* texId = getTextureId(rc);
+  if (texId == NULL) {
+    return im;
+  }
+
+  TextureMapping* texMap = new SimpleTextureMapping(texId,
+                                                    texCoords->create(),
+                                                    true,
+                                                    true);
+
+  return new TexturedMesh(im, true, texMap, true, true);
+
+}
+
+class EllipsoidShape_IImageDownloadListener : public IImageDownloadListener {
+private:
+  EllipsoidShape* _ellipsoidShape;
+
+public:
+
+  EllipsoidShape_IImageDownloadListener(EllipsoidShape* ellipsoidShape) :
+  _ellipsoidShape(ellipsoidShape)
+  {
+
+  }
+
+  void onDownload(const URL& url,
+                  IImage* image)  {
+    _ellipsoidShape->imageDownloaded(image);
+  }
+
+  void onError(const URL& url) {
+
+  }
+
+  void onCancel(const URL& url) {
+
+  }
+
+  void onCanceledDownload(const URL& url,
+                          IImage* image)  {
+    
+  }
+};
+
+void EllipsoidShape::imageDownloaded(IImage* image) {
+  _textureImage = image;
+
+  cleanMesh();
 }
 
 
 Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
-  
-  // create vertices and texture coords
-  if (_resolution<3) _resolution = 3;
-  FloatBufferBuilderFromCartesian3D* vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy::noCenter(), Vector3D::zero());
-  FloatBufferBuilderFromCartesian2D* texCoords = new FloatBufferBuilderFromCartesian2D;
+  if (!_textureRequested) {
+    _textureRequested = true;
+    if (_textureURL.getPath().length() != 0) {
+      rc->getDownloader()->requestImage(_textureURL,
+                                        1000000,
+                                        TimeInterval::fromDays(30),
+                                        new EllipsoidShape_IImageDownloadListener(this),
+                                        true);
+    }
+  }
+
+  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero());
+  FloatBufferBuilderFromCartesian2D texCoords;
+
   const double pi = IMathUtils::instance()->pi();
   const double incAngle = pi/(_resolution-1);
   for (int j=0; j<_resolution; j++) {
-    double lat = pi/2 - j*incAngle;
-    double s = sin(lat);
-    double c = cos(lat);
-    double z = _radiusZ * s;
+    const double lat = pi/2 - j*incAngle;
+    const double s = sin(lat);
+    const double c = cos(lat);
+    const double z = _radiusZ * s;
     for (int i=0; i<2*_resolution-1; i++) {
-      double lon = -pi + i*incAngle;
-      double x = _radiusX * c * cos(lon);
-      double y = _radiusY * c * sin(lon);
-      vertices->add(x, y, z);
-      float u = (float) i / (2*_resolution-2);
-      float v = (_cozzi)? (float)(1-s)/2 : (float)j/(_resolution-1);
-      texCoords->add(u, v);
+      const double lon = -pi + i*incAngle;
+      const double x = _radiusX * c * cos(lon);
+      const double y = _radiusY * c * sin(lon);
+      vertices.add(x, y, z);
+
+      const float u = (float) i / (2*_resolution-2);
+      const float v = (_cozzi)? (float)(1-s)/2 : (float)j/(_resolution-1);
+      texCoords.add(u, v);
     }
   }
-  
+
+  Mesh* surfaceMesh = createSurfaceMesh(rc, &vertices, &texCoords);
+
   if (_borderWidth > 0) {
     CompositeMesh* compositeMesh = new CompositeMesh();
-    compositeMesh->addMesh(createSurfaceMesh(rc, vertices, texCoords));
-    compositeMesh->addMesh(createBorderMesh(rc, vertices));
-    delete vertices;
-    delete texCoords;
+    compositeMesh->addMesh(surfaceMesh);
+    compositeMesh->addMesh(createBorderMesh(rc, &vertices));
     return compositeMesh;
   }
-
-  Mesh* mesh = createSurfaceMesh(rc, vertices, texCoords);
-  delete vertices;
-  delete texCoords;
-  return mesh;
+  
+  return surfaceMesh;
 }

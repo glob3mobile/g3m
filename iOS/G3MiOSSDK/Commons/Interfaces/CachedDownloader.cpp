@@ -280,26 +280,11 @@ long long CachedDownloader::requestImage(const URL& url,
     // cache hit
     _cacheHitsCounter++;
 
-    //    if (_context != NULL) {
-    //      _context->getThreadUtils()->invokeInRendererThread(new CachedDownloader_InvokeRenderer(url,
-    //                                                                                             cachedImage,
-    //                                                                                             listener, deleteListener),
-    //                                                         true);
-    //    }
-    //    else {
-
-    //    if (_frameTasksExecutor != NULL) {
-    //      _frameTasksExecutor->addPreRenderTask(new CachedDownloader_InvokeRenderer(url,
-    //                                                                                cachedImage,
-    //                                                                                listener, deleteListener));
-    //    }
-    //    else {
     listener->onDownload(url, cachedImage);
 
     if (deleteListener) {
       delete listener;
     }
-    //    }
 
     return -1;
   }

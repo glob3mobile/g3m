@@ -20,7 +20,7 @@
 #include "TexturedMesh.hpp"
 #include "IDownloader.hpp"
 #include "IImageDownloadListener.hpp"
-
+#include "Color.hpp"
 
 const IGLTextureId* QuadShape::getTextureId(const G3MRenderContext* rc) {
   if (_textureImage == NULL) {
@@ -51,7 +51,7 @@ public:
   QuadShape_IImageDownloadListener(QuadShape* quadShape) :
   _quadShape(quadShape)
   {
-    
+
   }
 
   void onDownload(const URL& url,
@@ -74,22 +74,26 @@ public:
 };
 
 void QuadShape::imageDownloaded(IImage* image) {
-  _texturedSolved = true;
   _textureImage = image;
-  
+
   cleanMesh();
 }
 
-Mesh* QuadShape::createMesh(const G3MRenderContext* rc) {
-  if (!_texturedSolved && !_textureRequested) {
-    _textureRequested = true;
-    rc->getDownloader()->requestImage(_textureURL,
-                                      1000000,
-                                      TimeInterval::fromDays(30),
-                                      new QuadShape_IImageDownloadListener(this),
-                                      true);
-  }
+QuadShape::~QuadShape() {
+  delete _color;
+}
 
+Mesh* QuadShape::createMesh(const G3MRenderContext* rc) {
+  if (!_textureRequested) {
+    _textureRequested = true;
+    if (_textureURL.getPath().length() != 0) {
+      rc->getDownloader()->requestImage(_textureURL,
+                                        1000000,
+                                        TimeInterval::fromDays(30),
+                                        new QuadShape_IImageDownloadListener(this),
+                                        true);
+    }
+  }
 
   const float halfWidth  = _width / 2.0f;
   const float halfHeight = _height / 2.0f;
@@ -107,12 +111,15 @@ Mesh* QuadShape::createMesh(const G3MRenderContext* rc) {
 
   const Vector3D center = Vector3D::zero();
 
+  Color* color = (_color == NULL) ? NULL : new Color(*_color);
+
   Mesh* im = new DirectMesh(GLPrimitive::triangleStrip(),
                             true,
                             center,
                             vertices.create(),
                             1,
-                            1);
+                            1,
+                            color);
 
   const IGLTextureId* texId = getTextureId(rc);
   if (texId == NULL) {
