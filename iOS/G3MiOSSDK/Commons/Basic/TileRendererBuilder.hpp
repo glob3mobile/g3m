@@ -29,6 +29,19 @@ private:
   std::vector<VisibleSectorListener*> _visibleSectorListeners;
   std::vector<long long> _stabilizationMilliSeconds;
   long long _texturePriority;
+  
+  TileTessellator* getTileTessellator();
+  TileTexturizer* getTexturizer();
+  LayerSet* getLayerSet();
+  TilesRenderParameters* getParameters();
+  bool getShowStatistics();
+  bool getRenderDebug();
+  bool getUseTilesSplitBudget();
+  bool getForceTopLevelTilesRenderOnStart();
+  bool getIncrementalTileQuality();
+  std::vector<VisibleSectorListener*> getVisibleSectorListeners();
+  std::vector<long long> getStabilizationMilliSeconds();
+  long long getTexturePriority();
 
   LayerSet* createLayerSet();
   TilesRenderParameters* createTileRendererParameters();
