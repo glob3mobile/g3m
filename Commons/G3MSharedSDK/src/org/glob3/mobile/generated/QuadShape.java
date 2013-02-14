@@ -24,7 +24,7 @@ package org.glob3.mobile.generated;
 
 public class QuadShape extends AbstractMeshShape
 {
-  private final URL _textureURL = new URL();
+  private URL _textureURL = new URL();
   private final float _width;
   private final float _height;
   private final Color _color;
