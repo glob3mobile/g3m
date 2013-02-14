@@ -149,4 +149,17 @@ public class TileRendererBuilder
     _texturePriority = texturePriority;
   }
 
+  public final java.util.ArrayList<String> getDefaultLayersNames()
+  {
+    int TODO_getLayerSet;
+    java.util.ArrayList<String> layersNames = new java.util.ArrayList<String>();
+  
+    for (int i = 0; i < _layerSet.size(); i++)
+    {
+      layersNames.add(_layerSet.get(i).getName());
+    }
+  
+    return layersNames;
+  }
+
 }

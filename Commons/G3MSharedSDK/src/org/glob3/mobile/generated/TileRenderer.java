@@ -400,16 +400,31 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   }
 
   /**
-   Change the download-priority used by Tiles (for downloading textures).
+   * Set the download-priority used by Tiles (for downloading textures).
+   *
+   * @param texturePriority: new value for download priority of textures
    */
   public final void setTexturePriority(long texturePriority)
   {
     _texturePriority = texturePriority;
   }
 
+  /**
+   * Return the current value for the download priority of textures
+   *
+   * @return _texturePriority: long
+   */
   public final long getTexturePriority()
   {
     return _texturePriority;
+  }
+
+  /**
+   * @see Renderer#isTileRenderer()
+   */
+  public final boolean isTileRenderer()
+  {
+    return true;
   }
 
 }
