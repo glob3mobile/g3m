@@ -578,7 +578,7 @@ public:
                                            Angle::fromDegrees(-121),
                                            40000),
                             Vector3D(20000, 30000, 40000),
-                            10, 2,
+                            3, 2,
                             Color::newFromRGBA(0,    0.5, 0.8, 0.5),
                             Color::newFromRGBA(0, 0.75, 0, 0.75));
   shapesRenderer->addShape(ellipsoid);

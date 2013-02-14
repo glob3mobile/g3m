@@ -48,7 +48,9 @@ Mesh* EllipsoidShape::createBorderMesh(const G3MRenderContext* rc, FloatBufferBu
                          borderColor);
 }
 
-Mesh* EllipsoidShape::createSurfaceMesh(const G3MRenderContext* rc, FloatBufferBuilderFromCartesian3D *vertices) {
+Mesh* EllipsoidShape::createSurfaceMesh(const G3MRenderContext* rc,
+                                        FloatBufferBuilderFromCartesian3D* vertices,
+                                        FloatBufferBuilderFromCartesian2D* texCoords) {
   
   // create surface indices
   ShortBufferBuilder indices;
@@ -75,9 +77,10 @@ Mesh* EllipsoidShape::createSurfaceMesh(const G3MRenderContext* rc, FloatBufferB
 
 Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
   
-  // create vertices
+  // create vertices and texture coords
   if (_resolution<3) _resolution = 3;
   FloatBufferBuilderFromCartesian3D* vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy::noCenter(), Vector3D::zero());
+  FloatBufferBuilderFromCartesian2D* texCoords = new FloatBufferBuilderFromCartesian2D;
   const double pi = IMathUtils::instance()->pi();
   const double incAngle = pi/(_resolution-1);
   for (int j=0; j<_resolution; j++) {
@@ -89,18 +92,23 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
       double x = _radiusX * c * cos(lon);
       double y = _radiusY * c * sin(lon);
       vertices->add(x, y, z);
+      float u = (float) i / (2*_resolution-2);
+      float v = (float) j / (_resolution-1);
+      texCoords->add(u, v);
     }
   }
   
   if (_borderWidth > 0) {
     CompositeMesh* compositeMesh = new CompositeMesh();
-    compositeMesh->addMesh(createSurfaceMesh(rc, vertices));
+    compositeMesh->addMesh(createSurfaceMesh(rc, vertices, texCoords));
     compositeMesh->addMesh(createBorderMesh(rc, vertices));
     delete vertices;
+    delete texCoords;
     return compositeMesh;
   }
 
-  Mesh* mesh = createSurfaceMesh(rc, vertices);
+  Mesh* mesh = createSurfaceMesh(rc, vertices, texCoords);
   delete vertices;
+  delete texCoords;
   return mesh;
 }
