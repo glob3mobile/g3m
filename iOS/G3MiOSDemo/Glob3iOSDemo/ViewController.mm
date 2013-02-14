@@ -587,7 +587,7 @@ public:
                                            Angle::fromDegrees(-121),
                                            45000),
                             Vector3D(20000, 30000, 50000),
-                            2,
+                            4, 2,
                             Color::newFromRGBA(0,    0.5, 0.8, 0.5),
                             Color::newFromRGBA(0, 0.75, 0, 0.75));
   ellipsoid->setAnimatedScale(1, 1, 20);

@@ -2,7 +2,7 @@
 //  EllipsoidShape.hpp
 //  G3MiOSSDK
 //
-//  Created by Agustin Trujillo on 02/13/13.
+//  Created by Agustin Trujillo Pino on 02/13/13.
 //
 //
 
@@ -12,11 +12,12 @@
 #include "AbstractMeshShape.hpp"
 #include "Color.hpp"
 
+
 class EllipsoidShape : public AbstractMeshShape {
 private:
-  double _extentX;
-  double _extentY;
-  double _extentZ;
+  double _radiusX, _radiusY, _radiusZ;
+  
+  short _resolution;
 
   float _borderWidth;
   
@@ -31,14 +32,16 @@ protected:
 
 public:
   EllipsoidShape(Geodetic3D* position,
-           const Vector3D& extent,
+           const Vector3D& radius,
+           short resolution,
            float borderWidth,
            Color* surfaceColor = NULL,
            Color* borderColor = NULL) :
   AbstractMeshShape(position),
-  _extentX(extent._x),
-  _extentY(extent._y),
-  _extentZ(extent._z),
+  _radiusX(radius.x()),
+  _radiusY(radius.y()),
+  _radiusZ(radius.z()),
+  _resolution(resolution),
   _borderWidth(borderWidth),
   _surfaceColor(surfaceColor),
   _borderColor(borderColor)
