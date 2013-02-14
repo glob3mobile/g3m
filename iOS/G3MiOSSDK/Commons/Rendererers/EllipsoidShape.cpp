@@ -85,15 +85,16 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
   const double incAngle = pi/(_resolution-1);
   for (int j=0; j<_resolution; j++) {
     double lat = pi/2 - j*incAngle;
-    double z = _radiusZ * sin(lat);
+    double s = sin(lat);
     double c = cos(lat);
+    double z = _radiusZ * s;
     for (int i=0; i<2*_resolution-1; i++) {
       double lon = -pi + i*incAngle;
       double x = _radiusX * c * cos(lon);
       double y = _radiusY * c * sin(lon);
       vertices->add(x, y, z);
       float u = (float) i / (2*_resolution-2);
-      float v = (float) j / (_resolution-1);
+      float v = (_cozzi)? (float)(1-s)/2 : (float)j/(_resolution-1);
       texCoords->add(u, v);
     }
   }
