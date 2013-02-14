@@ -71,13 +71,13 @@ public class EllipsoidShape extends AbstractMeshShape
   
     // create border indices for horizontal lines
     ShortBufferBuilder indices = new ShortBufferBuilder();
-    short delta = 2 *_resolution - 1;
+    short delta = (short)(2 *_resolution - 1);
     for (short j = 1; j<_resolution-1; j++)
     {
       for (short i = 0; i<2 *_resolution-2; i++)
       {
-        indices.add(i+j *delta);
-        indices.add(i+1+j *delta);
+        indices.add((short)(i+j *delta));
+        indices.add((short)(i+1+j *delta));
       }
     }
   
@@ -86,8 +86,8 @@ public class EllipsoidShape extends AbstractMeshShape
     {
       for (short j = 0; j<_resolution-1; j++)
       {
-        indices.add(i+j *delta);
-        indices.add(i+(j+1)*delta);
+        indices.add((short)(i+j *delta));
+        indices.add((short)(i+(j+1)*delta));
       }
     }
   
