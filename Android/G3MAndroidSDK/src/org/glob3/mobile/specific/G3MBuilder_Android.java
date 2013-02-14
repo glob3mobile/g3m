@@ -54,7 +54,7 @@ public class G3MBuilder_Android
       final boolean saveInBackground = true;
       return new CachedDownloader( //
                new Downloader_Android(8, connectTimeout, readTimeout, _nativeWidget.getContext()), //
-               (_storage != null) ? _storage : createStorage(), //
+               getStorage(), //
                saveInBackground);
    }
 
