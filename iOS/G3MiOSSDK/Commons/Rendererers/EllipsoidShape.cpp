@@ -52,19 +52,19 @@ Mesh* EllipsoidShape::createBorderMesh(const G3MRenderContext* rc) {
   
   // create border indices for horizontal lines
   ShortBufferBuilder indices;
-  short delta = 2*_resolution - 1;
+  short delta = (short) (2*_resolution - 1);
   for (short j=1; j<_resolution-1; j++) {
     for (short i=0; i<2*_resolution-2; i++) {
-      indices.add(i+j*delta);
-      indices.add(i+1+j*delta);
+      indices.add((short) (i+j*delta));
+      indices.add((short) (i+1+j*delta));
     }
   }
 
   // create border indices for vertical lines
   for (short i=0; i<2*_resolution-2; i++) {
     for (short j=0; j<_resolution-1; j++) {
-      indices.add(i+j*delta);
-      indices.add(i+(j+1)*delta);
+      indices.add((short) (i+j*delta));
+      indices.add((short) (i+(j+1)*delta));
     }
   }
 
