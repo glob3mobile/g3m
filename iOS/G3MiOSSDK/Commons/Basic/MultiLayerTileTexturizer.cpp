@@ -68,15 +68,19 @@ private:
   MutableVector2D _scale;
   MutableVector2D _translation;
 
-  IFloatBuffer* _texCoords;
+//  IFloatBuffer* _texCoords;
+  const TileTessellator* _tessellator;
 
 public:
   LTMInitializer(const Tile* tile,
                  const Tile* ancestor,
-                 IFloatBuffer* texCoords) :
+                 /*IFloatBuffer* texCoords*/
+                 const TileTessellator* tessellator
+                 ) :
   _tile(tile),
   _ancestor(ancestor),
-  _texCoords(texCoords),
+//  _texCoords(texCoords),
+  _tessellator(tessellator),
   _scale(1,1),
   _translation(0,0)
   {
@@ -107,7 +111,8 @@ public:
   }
 
   IFloatBuffer* getTexCoords() const {
-    return _texCoords;
+    //return _texCoords;
+    return _tessellator->createUnitTextCoords();
   }
 
 };
@@ -185,7 +190,8 @@ private:
 
   const Mesh* _tessellatorMesh;
 
-  IFloatBuffer* _texCoords;
+//  IFloatBuffer* _texCoords;
+  const TileTessellator* _tessellator;
 
   std::vector<PetitionStatus>    _status;
   std::vector<long long>         _requestsIds;
@@ -206,7 +212,8 @@ public:
                      IDownloader*                 downloader,
                      Tile* tile,
                      const Mesh* tessellatorMesh,
-                     IFloatBuffer* texCoords) :
+                     /*IFloatBuffer* texCoords*/
+                     const TileTessellator* tessellator) :
   _texturizer(texturizer),
   _factory(rc->getFactory()),
   _texturesHandler(rc->getTexturesHandler()),
@@ -220,7 +227,8 @@ public:
   _stepsDone(0),
   _anyCanceled(false),
   _mesh(NULL),
-  _texCoords(texCoords),
+//  _texCoords(texCoords),
+  _tessellator(tessellator),
   _finalized(false),
   _canceled(false),
   _alreadyStarted(false)
@@ -259,6 +267,8 @@ public:
       //                                   ? 1000 - _tile->getLevel()
       //                                   : _tile->getLevel());
       const long long priority = TILE_DOWNLOAD_PRIORITY + _tile->getLevel();
+
+//      printf("%s\n", petition->getURL().getPath().c_str());
 
       const long long requestId = _downloader->requestImage(URL(petition->getURL()),
                                                             priority,
@@ -481,12 +491,15 @@ public:
         mapping = NULL;
       }
       else {
+        int _____XXXXXXX;
+        const bool ownedTexCoords = true;
+        const bool transparent    = false;
         mapping = new LazyTextureMapping(new LTMInitializer(_tile,
                                                             ancestor,
-                                                            _texCoords),
+                                                            _tessellator),
                                          _texturesHandler,
-                                         false,
-                                         false);
+                                         ownedTexCoords,
+                                         transparent);
       }
 
       if (ancestor != _tile) {
@@ -599,7 +612,7 @@ void BuilderDownloadStepDownloadListener::onCancel(const URL& url) {
 
 MultiLayerTileTexturizer::MultiLayerTileTexturizer() :
 _parameters(NULL),
-_texCoordsCache(NULL),
+//_texCoordsCache(NULL),
 //_pendingTopTileRequests(0),
 _texturesHandler(NULL)
 {
@@ -607,8 +620,8 @@ _texturesHandler(NULL)
 }
 
 MultiLayerTileTexturizer::~MultiLayerTileTexturizer() {
-  delete _texCoordsCache;
-  _texCoordsCache = NULL;
+//  delete _texCoordsCache;
+//  _texCoordsCache = NULL;
 }
 
 void MultiLayerTileTexturizer::initialize(const G3MContext* context,
@@ -659,7 +672,8 @@ Mesh* MultiLayerTileTexturizer::texturize(const G3MRenderContext* rc,
                                                                         rc->getDownloader(),
                                                                         tile,
                                                                         tessellatorMesh,
-                                                                        getTextureCoordinates(trc)));
+                                                                        trc->getTessellator()
+                                                                        /*getTextureCoordinates(trc)*/));
     tile->setTexturizerData(builderHolder);
   }
 
@@ -776,12 +790,14 @@ void MultiLayerTileTexturizer::ancestorTexturedSolvedChanged(Tile* tile,
   }
 }
 
-IFloatBuffer* MultiLayerTileTexturizer::getTextureCoordinates(const TileRenderContext* trc) const {
-  if (_texCoordsCache == NULL) {
-    _texCoordsCache = trc->getTessellator()->createUnitTextCoords();
-  }
-  return _texCoordsCache;
-}
+//IFloatBuffer* MultiLayerTileTexturizer::getTextureCoordinates(const TileRenderContext* trc) const {
+////  if (_texCoordsCache == NULL) {
+////    _texCoordsCache = trc->getTessellator()->createUnitTextCoords();
+////  }
+////  return _texCoordsCache;
+//  int _____XXXXXXX;
+//  return trc->getTessellator()->createUnitTextCoords();
+//}
 
 void MultiLayerTileTexturizer::justCreatedTopTile(const G3MRenderContext* rc,
                                                   Tile* tile,

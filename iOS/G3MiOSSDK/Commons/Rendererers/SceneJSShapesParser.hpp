@@ -60,7 +60,7 @@ private:
 public:
 
   static Shape* parseFromJSONBaseObject(const JSONBaseObject* jsonObject,
-                                    const std::string& uriPrefix);
+                                        const std::string& uriPrefix);
   static Shape* parseFromJSON(const std::string& json,
                               const std::string& uriPrefix);
   static Shape* parseFromJSON(const IByteBuffer* json,

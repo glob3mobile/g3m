@@ -7,13 +7,16 @@ public class LTMInitializer extends LazyTextureMappingInitializer
   private MutableVector2D _scale = new MutableVector2D();
   private MutableVector2D _translation = new MutableVector2D();
 
-  private IFloatBuffer _texCoords;
+//  IFloatBuffer* _texCoords;
+  private final TileTessellator _tessellator;
 
-  public LTMInitializer(Tile tile, Tile ancestor, IFloatBuffer texCoords)
+  public LTMInitializer(Tile tile, Tile ancestor, TileTessellator tessellator)
+                 /*IFloatBuffer* texCoords*/
+//  _texCoords(texCoords),
   {
      _tile = tile;
      _ancestor = ancestor;
-     _texCoords = texCoords;
+     _tessellator = tessellator;
      _scale = new MutableVector2D(1,1);
      _translation = new MutableVector2D(0,0);
 
@@ -49,7 +52,8 @@ public class LTMInitializer extends LazyTextureMappingInitializer
 
   public final IFloatBuffer getTexCoords()
   {
-    return _texCoords;
+    //return _texCoords;
+    return _tessellator.createUnitTextCoords();
   }
 
 }

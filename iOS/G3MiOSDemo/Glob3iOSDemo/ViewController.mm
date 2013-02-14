@@ -365,18 +365,8 @@ public:
     layerSet->addLayer(political);
   }
 
-  bool useOSM = true;
+  bool useOSM = false;
   if (useOSM) {
-    //    WMSLayer *osm = new WMSLayer("osm",
-    //                                 URL("http://wms.latlon.org/"),
-    //                                 WMS_1_1_0,
-    //                                 Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0),
-    //                                 "image/jpeg",
-    //                                 "EPSG:4326",
-    //                                 "",
-    //                                 false,
-    //                                 NULL);
-    //    layerSet->addLayer(osm);
     WMSLayer *osm = new WMSLayer("osm_auto:all",
                                  URL("http://129.206.228.72/cached/osm", false),
                                  WMS_1_1_0,
@@ -388,7 +378,8 @@ public:
                                  false,
                                  NULL,
                                  TimeInterval::fromDays(30));
-    osm->setEnable(false);
+    // osm->setEnable(false);
+
     layerSet->addLayer(osm);
   }
 
@@ -691,6 +682,7 @@ public:
                                                   10000),
                                        true);
 
+            /*
             const double fromDistance = 50000 * 1.5;
             const double toDistance   = 25000 * 1.5 / 2;
 
@@ -710,6 +702,7 @@ public:
                                fromDistance, toDistance,
                                fromAzimuth,  toAzimuth,
                                fromAltitude, toAltitude);
+             */
           }
         }
       }
