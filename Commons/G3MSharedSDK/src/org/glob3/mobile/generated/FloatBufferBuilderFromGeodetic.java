@@ -25,33 +25,33 @@ public class FloatBufferBuilderFromGeodetic extends FloatBufferBuilder
     _cz = (float) center._z;
   }
 
-  private Planet _planet; // REMOVED FINAL WORD BY CONVERSOR RULE
+  private final Ellipsoid _ellipsoid;
 
 
-  public FloatBufferBuilderFromGeodetic(int centerStrategy, Planet planet, Vector3D center)
+  public FloatBufferBuilderFromGeodetic(int centerStrategy, Ellipsoid ellipsoid, Vector3D center)
   {
-     _planet = planet;
+     _ellipsoid = ellipsoid;
      _centerStrategy = centerStrategy;
     setCenter(center);
   }
 
-  public FloatBufferBuilderFromGeodetic(int centerStrategy, Planet planet, Geodetic2D center)
+  public FloatBufferBuilderFromGeodetic(int centerStrategy, Ellipsoid ellipsoid, Geodetic2D center)
   {
-     _planet = planet;
+     _ellipsoid = ellipsoid;
      _centerStrategy = centerStrategy;
-    setCenter(_planet.toCartesian(center));
+    setCenter(_ellipsoid.toCartesian(center));
   }
 
-  public FloatBufferBuilderFromGeodetic(int centerStrategy, Planet planet, Geodetic3D center)
+  public FloatBufferBuilderFromGeodetic(int centerStrategy, Ellipsoid ellipsoid, Geodetic3D center)
   {
-     _planet = planet;
+     _ellipsoid = ellipsoid;
      _centerStrategy = centerStrategy;
-    setCenter(_planet.toCartesian(center));
+    setCenter(_ellipsoid.toCartesian(center));
   }
 
   public final void add(Geodetic3D position)
   {
-    final Vector3D vector = _planet.toCartesian(position);
+    final Vector3D vector = _ellipsoid.toCartesian(position);
 
     if (_centerStrategy == CenterStrategy.firstVertex() && _values.size() == 0)
     {
@@ -75,7 +75,7 @@ public class FloatBufferBuilderFromGeodetic extends FloatBufferBuilder
 
   public final void add(Geodetic2D position)
   {
-    final Vector3D vector = _planet.toCartesian(position);
+    final Vector3D vector = _ellipsoid.toCartesian(position);
 
     if (_centerStrategy == CenterStrategy.firstVertex() && _values.size() == 0)
     {
