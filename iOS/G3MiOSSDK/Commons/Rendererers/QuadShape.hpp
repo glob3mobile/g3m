@@ -13,16 +13,17 @@
 
 class IImage;
 class IGLTextureId;
+#include "URL.hpp"
 
 class QuadShape : public AbstractMeshShape {
 private:
-  const std::string _textureFilename;
-  IImage* _textureImage;
-  const bool _autoDeleteTextureImage;
-
+  const URL _textureURL;
   const float _width;
   const float _height;
 
+  bool _textureRequested;
+  bool _texturedSolved;
+  IImage* _textureImage;
   const IGLTextureId* getTextureId(const G3MRenderContext* rc);
 
 protected:
@@ -30,17 +31,16 @@ protected:
 
 public:
   QuadShape(Geodetic3D* position,
-            IImage* textureImage,
-            bool autoDeleteTextureImage,
-            const std::string textureFilename,
+            URL textureURL,
             float width,
             float height) :
   AbstractMeshShape(position),
-  _textureFilename(textureFilename),
-  _textureImage(textureImage),
-  _autoDeleteTextureImage(autoDeleteTextureImage),
+  _textureURL(textureURL),
   _width(width),
-  _height(height)
+  _height(height),
+  _textureRequested(false),
+  _texturedSolved(false),
+  _textureImage(NULL)
   {
 
   }
@@ -49,6 +49,8 @@ public:
 
   }
 
+  void imageDownloaded(IImage* image);
+  
 };
 
 #endif
