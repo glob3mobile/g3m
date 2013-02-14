@@ -11,6 +11,8 @@
 
 #include "AbstractMeshShape.hpp"
 #include "Color.hpp"
+#include "FloatBufferBuilderFromCartesian3D.hpp"
+
 
 
 class EllipsoidShape : public AbstractMeshShape {
@@ -24,8 +26,8 @@ private:
   Color* _surfaceColor;
   Color* _borderColor;
 
-  Mesh* createBorderMesh(const G3MRenderContext* rc);
-  Mesh* createSurfaceMesh(const G3MRenderContext* rc);
+  Mesh* createBorderMesh(const G3MRenderContext* rc, FloatBufferBuilderFromCartesian3D *vertices);
+  Mesh* createSurfaceMesh(const G3MRenderContext* rc, FloatBufferBuilderFromCartesian3D *vertices);
 
 protected:
   Mesh* createMesh(const G3MRenderContext* rc);

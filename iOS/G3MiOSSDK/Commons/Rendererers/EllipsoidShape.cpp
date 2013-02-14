@@ -10,46 +10,13 @@
 
 #include "EllipsoidShape.hpp"
 
-#include "FloatBufferBuilderFromCartesian3D.hpp"
-#include "FloatBufferBuilderFromGeodetic.hpp"
 #include "ShortBufferBuilder.hpp"
 #include "IndexedMesh.hpp"
 #include "GLConstants.hpp"
 #include "CompositeMesh.hpp"
 
-Mesh* EllipsoidShape::createBorderMesh(const G3MRenderContext* rc) {
+Mesh* EllipsoidShape::createBorderMesh(const G3MRenderContext* rc, FloatBufferBuilderFromCartesian3D *vertices) {
 
-  // create vertices
-  if (_resolution<3) _resolution = 3;
-  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero());
-  const double pi = IMathUtils::instance()->pi();
-  const double incAngle = pi/(_resolution-1);
-  for (int j=0; j<_resolution; j++) {
-    double lat = pi/2 - j*incAngle;
-    double z = _radiusX * sin(lat);
-    double c = _radiusX * cos(lat);
-    for (int i=0; i<2*_resolution-1; i++) {
-      double lon = -pi + i*incAngle;
-      double x = c * cos(lon);
-      double y = c * sin(lon);
-      vertices.add(x, y, z);
-    }
-  }
-
-  /*
-  // create surface indices
-  ShortBufferBuilder indices;
-  short delta = 2*_resolution - 1;
-  for (short j=0; j<_resolution-1; j++) {
-    if (j>0) indices.add(j*delta);
-    for (short i=0; i<2*_resolution-1; i++) {
-      indices.add(i+j*delta);
-      indices.add(i+(j+1)*delta);
-    }
-    indices.add((j+2)*delta-1);
-  }
-   */
-  
   // create border indices for horizontal lines
   ShortBufferBuilder indices;
   short delta = (short) (2*_resolution - 1);
@@ -73,56 +40,32 @@ Mesh* EllipsoidShape::createBorderMesh(const G3MRenderContext* rc) {
 
   return new IndexedMesh(GLPrimitive::lines(),
                          true,
-                         vertices.getCenter(),
-                         vertices.create(),
+                         vertices->getCenter(),
+                         vertices->create(),
                          indices.create(),
                          _borderWidth,
                          1,
                          borderColor);
 }
 
-Mesh* EllipsoidShape::createSurfaceMesh(const G3MRenderContext* rc) {
-  const float lowerX = (float) -(_radiusX / 2);
-  const float upperX = (float) +(_radiusX / 2);
-  const float lowerY = (float) -(_radiusY / 2);
-  const float upperY = (float) +(_radiusY / 2);
-  const float lowerZ = (float) -(_radiusZ / 2);
-  const float upperZ = (float) +(_radiusZ / 2);
-
-  float v[] = {
-    lowerX, lowerY, lowerZ,
-    lowerX, upperY, lowerZ,
-    lowerX, upperY, upperZ,
-    lowerX, lowerY, upperZ,
-    upperX, lowerY, lowerZ,
-    upperX, upperY, lowerZ,
-    upperX, upperY, upperZ,
-    upperX, lowerY, upperZ
-  };
-
-  const int numIndices = 23;
-  short i[] = {
-    3, 0, 7, 4, 6, 5, 2, 1, 3, 0, 0,
-    2, 2, 3, 6, 7, 7,
-    5, 5, 4, 1, 0, 0
-  };
-
-  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero());
+Mesh* EllipsoidShape::createSurfaceMesh(const G3MRenderContext* rc, FloatBufferBuilderFromCartesian3D *vertices) {
+  
+  // create surface indices
   ShortBufferBuilder indices;
-
-  const unsigned int numVertices = 8;
-  for (unsigned int n=0; n<numVertices; n++) {
-    vertices.add(v[n*3], v[n*3+1], v[n*3+2]);
-  }
-
-  for (unsigned int n=0; n<numIndices; n++) {
-    indices.add(i[n]);
+  short delta = 2*_resolution - 1;
+  for (short j=0; j<_resolution-1; j++) {
+    if (j>0) indices.add(j*delta);
+    for (short i=0; i<2*_resolution-1; i++) {
+      indices.add(i+j*delta);
+      indices.add(i+(j+1)*delta);
+    }
+    indices.add((j+2)*delta-1);
   }
 
   return new IndexedMesh(GLPrimitive::triangleStrip(),
                          true,
-                         vertices.getCenter(),
-                         vertices.create(),
+                         vertices->getCenter(),
+                         vertices->create(),
                          indices.create(),
                          _borderWidth,
                          1,
@@ -131,12 +74,33 @@ Mesh* EllipsoidShape::createSurfaceMesh(const G3MRenderContext* rc) {
 
 
 Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
+  
+  // create vertices
+  if (_resolution<3) _resolution = 3;
+  FloatBufferBuilderFromCartesian3D* vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy::noCenter(), Vector3D::zero());
+  const double pi = IMathUtils::instance()->pi();
+  const double incAngle = pi/(_resolution-1);
+  for (int j=0; j<_resolution; j++) {
+    double lat = pi/2 - j*incAngle;
+    double z = _radiusX * sin(lat);
+    double c = _radiusX * cos(lat);
+    for (int i=0; i<2*_resolution-1; i++) {
+      double lon = -pi + i*incAngle;
+      double x = c * cos(lon);
+      double y = c * sin(lon);
+      vertices->add(x, y, z);
+    }
+  }
+  
   if (_borderWidth > 0) {
     CompositeMesh* compositeMesh = new CompositeMesh();
-    //compositeMesh->addMesh(createSurfaceMesh(rc));
-    compositeMesh->addMesh(createBorderMesh(rc));
+    compositeMesh->addMesh(createSurfaceMesh(rc, vertices));
+    compositeMesh->addMesh(createBorderMesh(rc, vertices));
+    delete vertices;
     return compositeMesh;
   }
 
-  return createSurfaceMesh(rc);
+  Mesh* mesh = createSurfaceMesh(rc, vertices);
+  delete vertices;
+  return mesh;
 }
