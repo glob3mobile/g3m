@@ -163,8 +163,8 @@ public class EllipsoidShape extends AbstractMeshShape
   
     final double pi4 = IMathUtils.instance().pi() * 4;
   
-    final short resolution2Minus2 = 2 *_resolution-2;
-    final short resolutionMinus1 = _resolution-1;
+    final short resolution2Minus2 = (short)(2 *_resolution-2);
+    final short resolutionMinus1 = (short)(_resolution-1);
   
     for (int j = 0; j < _resolution; j++)
     {
