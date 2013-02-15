@@ -577,7 +577,7 @@ public:
   box->setAnimatedScale(1, 1, 20);
   shapesRenderer->addShape(box);
 
-  const URL textureURL("file:///world.jpg", false);
+//  const URL textureURL("file:///world.jpg", false);
 
   //const Vector3D radius(50000, 50000, 50000);
   const double factor = 80;
@@ -586,7 +586,7 @@ public:
   Shape* ellipsoid1 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(41),
                                                         Angle::fromDegrees(-121),
                                                         radius._x * 1.1),
-                                         textureURL,
+                                         URL("file:///world.jpg", false),
                                          radius,
                                          16,
                                          1,
@@ -596,20 +596,33 @@ public:
                                          );
   shapesRenderer->addShape(ellipsoid1);
 
-  Shape* ellipsoid2 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(41),
-                                                        Angle::fromDegrees(-119),
-                                                        radius._x * 1.1),
-                                         textureURL,
-                                         radius,
-                                         16,
-                                         1,
-                                         true
-                                         //Color::newFromRGBA(0.5,    0.0, 0.8, 0.5),
-                                         //Color::newFromRGBA(0, 0.75, 0, 0.75)
-                                         );
-  shapesRenderer->addShape(ellipsoid2);
+  Shape* mercator1 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(41),
+                                                       Angle::fromDegrees(-119),
+                                                       radius._x * 1.1),
+                                        URL("file:///mercator_debug.png", false),
+                                        radius,
+                                        16,
+                                        1,
+                                        true
+                                        //Color::newFromRGBA(0.5,    0.0, 0.8, 0.5),
+                                        //Color::newFromRGBA(0, 0.75, 0, 0.75)
+                                        );
+  shapesRenderer->addShape(mercator1);
 
-  
+  Shape* mercator2 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(41),
+                                                       Angle::fromDegrees(-117),
+                                                       radius._x * 1.1),
+                                        URL("file:///mercator.jpg", false),
+                                        radius,
+                                        16,
+                                        1,
+                                        true
+                                        //Color::newFromRGBA(0.5,    0.0, 0.8, 0.5),
+                                        //Color::newFromRGBA(0, 0.75, 0, 0.75)
+                                        );
+  shapesRenderer->addShape(mercator2);
+
+
   return shapesRenderer;
 }
 

@@ -6,7 +6,7 @@
 //
 //
 
-#include <math.h>
+//#include <math.h>
 
 #include "EllipsoidShape.hpp"
 
@@ -15,12 +15,13 @@
 #include "GLConstants.hpp"
 #include "CompositeMesh.hpp"
 #include "Color.hpp"
-#include "FloatBufferBuilderFromCartesian3D.hpp"
+#include "FloatBufferBuilderFromGeodetic.hpp"
 #include "FloatBufferBuilderFromCartesian2D.hpp"
 #include "IDownloader.hpp"
 #include "IImageDownloadListener.hpp"
 #include "TexturesHandler.hpp"
 #include "TexturedMesh.hpp"
+#include "Sector.hpp"
 
 EllipsoidShape::~EllipsoidShape() {
   delete _surfaceColor;
@@ -49,7 +50,7 @@ const IGLTextureId* EllipsoidShape::getTextureId(const G3MRenderContext* rc) {
 
 
 Mesh* EllipsoidShape::createBorderMesh(const G3MRenderContext* rc,
-                                       FloatBufferBuilderFromCartesian3D *vertices) {
+                                       FloatBufferBuilderFromGeodetic* vertices) {
 
   // create border indices for horizontal lines
   ShortBufferBuilder indices;
@@ -78,7 +79,7 @@ Mesh* EllipsoidShape::createBorderMesh(const G3MRenderContext* rc,
       borderColor = new Color(*_surfaceColor);
     }
     else {
-      borderColor = Color::newFromRGBA(1, 1, 1, 1);
+      borderColor = Color::newFromRGBA(1, 0, 0, 1);
     }
   }
 
@@ -93,7 +94,7 @@ Mesh* EllipsoidShape::createBorderMesh(const G3MRenderContext* rc,
 }
 
 Mesh* EllipsoidShape::createSurfaceMesh(const G3MRenderContext* rc,
-                                        FloatBufferBuilderFromCartesian3D* vertices,
+                                        FloatBufferBuilderFromGeodetic* vertices,
                                         FloatBufferBuilderFromCartesian2D* texCoords) {
 
   // create surface indices
@@ -160,7 +161,7 @@ public:
 
   void onCanceledDownload(const URL& url,
                           IImage* image)  {
-    
+
   }
 };
 
@@ -183,27 +184,49 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
     }
   }
 
-  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero());
+  const Ellipsoid ellipsoid( Vector3D(_radiusX, _radiusY, _radiusZ) );
+  const Sector sector(Sector::fullSphere());
+
+  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(), &ellipsoid, Vector3D::zero());
   FloatBufferBuilderFromCartesian2D texCoords;
 
-  const double pi = IMathUtils::instance()->pi();
-  const double incAngle = pi/(_resolution-1);
-  for (int j=0; j<_resolution; j++) {
-    const double lat = pi/2 - j*incAngle;
-    const double s = sin(lat);
-    const double c = cos(lat);
-    const double z = _radiusZ * s;
-    for (int i=0; i<2*_resolution-1; i++) {
-      const double lon = -pi + i*incAngle;
-      const double x = _radiusX * c * cos(lon);
-      const double y = _radiusY * c * sin(lon);
-      vertices.add(x, y, z);
 
-      const float u = (float) i / (2*_resolution-2);
-      const float v = (_cozzi)? (float)(1-s)/2 : (float)j/(_resolution-1);
-      texCoords.add(u, v);
+  const double pi4 = IMathUtils::instance()->pi() * 4;
+
+  const short resolution2Minus2 = 2*_resolution-2;
+  const short resolutionMinus1 = _resolution-1;
+
+  for (int j = 0; j < _resolution; j++) {
+    for (int i = 0; i < 2*_resolution-1; i++) {
+      const double u = (double) i / resolution2Minus2;
+      const double v = (double) j / resolutionMinus1;
+
+      const Geodetic2D innerPoint = sector.getInnerPoint(u, v);
+
+      vertices.add(innerPoint);
+
+
+      double vv;
+      if (_mercator) {
+        double latitudeInDegrees = innerPoint.latitude().degrees();
+        if (latitudeInDegrees > 85) {
+          latitudeInDegrees = 85;
+        }
+        else if (latitudeInDegrees < -85) {
+          latitudeInDegrees = -85;
+        }
+
+        const double latSin = Angle::fromDegrees(latitudeInDegrees).sinus();
+        vv = 1.0 - ( ( IMathUtils::instance()->log( (1.0 + latSin) / (1.0 - latSin) ) / pi4 ) + 0.5 );
+      }
+      else {
+        vv = v;
+      }
+
+      texCoords.add((float) u, (float) vv);
     }
   }
+
 
   Mesh* surfaceMesh = createSurfaceMesh(rc, &vertices, &texCoords);
 

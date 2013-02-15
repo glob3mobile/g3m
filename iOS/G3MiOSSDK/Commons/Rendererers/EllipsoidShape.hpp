@@ -12,7 +12,7 @@
 #include "AbstractMeshShape.hpp"
 
 class Color;
-class FloatBufferBuilderFromCartesian3D;
+class FloatBufferBuilderFromGeodetic;
 class FloatBufferBuilderFromCartesian2D;
 class IGLTextureId;
 
@@ -31,15 +31,15 @@ private:
 
   const float _borderWidth;
 
-  const bool _cozzi;
+  const bool _mercator;
 
   Color* _surfaceColor;
   Color* _borderColor;
 
   Mesh* createBorderMesh(const G3MRenderContext* rc,
-                         FloatBufferBuilderFromCartesian3D *vertices);
+                         FloatBufferBuilderFromGeodetic *vertices);
   Mesh* createSurfaceMesh(const G3MRenderContext* rc,
-                          FloatBufferBuilderFromCartesian3D* vertices,
+                          FloatBufferBuilderFromGeodetic* vertices,
                           FloatBufferBuilderFromCartesian2D* texCoords);
 
   bool _textureRequested;
@@ -54,7 +54,7 @@ public:
                  const Vector3D& radius,
                  short resolution,
                  float borderWidth,
-                 bool cozzi,
+                 bool mercator,
                  Color* surfaceColor,
                  Color* borderColor = NULL) :
   AbstractMeshShape(position),
@@ -64,7 +64,7 @@ public:
   _radiusZ(radius.z()),
   _resolution(resolution < 3 ? 3 : resolution),
   _borderWidth(borderWidth),
-  _cozzi(cozzi),
+  _mercator(mercator),
   _surfaceColor(surfaceColor),
   _borderColor(borderColor),
   _textureRequested(false),
@@ -78,7 +78,7 @@ public:
                  const Vector3D& radius,
                  short resolution,
                  float borderWidth,
-                 bool cozzi) :
+                 bool mercator) :
   AbstractMeshShape(position),
   _textureURL(textureURL),
   _radiusX(radius.x()),
@@ -86,7 +86,7 @@ public:
   _radiusZ(radius.z()),
   _resolution(resolution < 3 ? 3 : resolution),
   _borderWidth(borderWidth),
-  _cozzi(cozzi),
+  _mercator(mercator),
   _surfaceColor(NULL),
   _borderColor(NULL),
   _textureRequested(false),
