@@ -622,6 +622,18 @@ public:
                                         );
   shapesRenderer->addShape(mercator2);
 
+//  Shape* colored = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(41),
+//                                                     Angle::fromDegrees(-115),
+//                                                     radius._x * 1.1),
+//                                      radius,
+//                                      16,
+//                                      1,
+//                                      true,
+//                                      Color::newFromRGBA(1, 1, 0, 0.75),
+//                                      Color::newFromRGBA(0, 0, 0, 1)
+//                                      );
+//  shapesRenderer->addShape(colored);
+
 
   return shapesRenderer;
 }
