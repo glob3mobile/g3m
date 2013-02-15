@@ -7,6 +7,7 @@ package org.glob3.mobile.generated;
 //
 //
 
+///#include <math.h>
 
 //
 //  EllipsoidShape.hpp
@@ -19,7 +20,7 @@ package org.glob3.mobile.generated;
 
 
 //class Color;
-//class FloatBufferBuilderFromCartesian3D;
+//class FloatBufferBuilderFromGeodetic;
 //class FloatBufferBuilderFromCartesian2D;
 //class IGLTextureId;
 
@@ -37,12 +38,12 @@ public class EllipsoidShape extends AbstractMeshShape
 
   private final float _borderWidth;
 
-  private final boolean _cozzi;
+  private final boolean _mercator;
 
   private Color _surfaceColor;
   private Color _borderColor;
 
-  private Mesh createBorderMesh(G3MRenderContext rc, FloatBufferBuilderFromCartesian3D vertices)
+  private Mesh createBorderMesh(G3MRenderContext rc, FloatBufferBuilderFromGeodetic vertices)
   {
   
     // create border indices for horizontal lines
@@ -80,13 +81,13 @@ public class EllipsoidShape extends AbstractMeshShape
       }
       else
       {
-        borderColor = Color.newFromRGBA(1, 1, 1, 1);
+        borderColor = Color.newFromRGBA(1, 0, 0, 1);
       }
     }
   
     return new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), _borderWidth, 1, borderColor);
   }
-  private Mesh createSurfaceMesh(G3MRenderContext rc, FloatBufferBuilderFromCartesian3D vertices, FloatBufferBuilderFromCartesian2D texCoords)
+  private Mesh createSurfaceMesh(G3MRenderContext rc, FloatBufferBuilderFromGeodetic vertices, FloatBufferBuilderFromCartesian2D texCoords)
   {
   
     // create surface indices
@@ -153,29 +154,55 @@ public class EllipsoidShape extends AbstractMeshShape
       }
     }
   
-    FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
+    final Ellipsoid ellipsoid = new Ellipsoid(new Vector3D(_radiusX, _radiusY, _radiusZ));
+    final Sector sector = new Sector(Sector.fullSphere());
+  
+    FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.givenCenter(), ellipsoid, Vector3D.zero());
     FloatBufferBuilderFromCartesian2D texCoords = new FloatBufferBuilderFromCartesian2D();
   
-    final double pi = IMathUtils.instance().pi();
-    final double incAngle = pi/(_resolution-1);
-    for (int j = 0; j<_resolution; j++)
-    {
-      final double lat = pi/2 - j *incAngle;
-      final double s = Math.sin(lat);
-      final double c = Math.cos(lat);
-      final double z = _radiusZ * s;
-      for (int i = 0; i<2 *_resolution-1; i++)
-      {
-        final double lon = -pi + i *incAngle;
-        final double x = _radiusX * c * Math.cos(lon);
-        final double y = _radiusY * c * Math.sin(lon);
-        vertices.add(x, y, z);
   
-        final float u = (float) i / (2 *_resolution-2);
-        final float v = (_cozzi)? (float)(1-s)/2 : (float)j/(_resolution-1);
-        texCoords.add(u, v);
+    final double pi4 = IMathUtils.instance().pi() * 4;
+  
+    final short resolution2Minus2 = 2 *_resolution-2;
+    final short resolutionMinus1 = _resolution-1;
+  
+    for (int j = 0; j < _resolution; j++)
+    {
+      for (int i = 0; i < 2 *_resolution-1; i++)
+      {
+        final double u = (double) i / resolution2Minus2;
+        final double v = (double) j / resolutionMinus1;
+  
+        final Geodetic2D innerPoint = sector.getInnerPoint(u, v);
+  
+        vertices.add(innerPoint);
+  
+  
+        double vv;
+        if (_mercator)
+        {
+          double latitudeInDegrees = innerPoint.latitude().degrees();
+          if (latitudeInDegrees > 85)
+          {
+            latitudeInDegrees = 85;
+          }
+          else if (latitudeInDegrees < -85)
+          {
+            latitudeInDegrees = -85;
+          }
+  
+          final double latSin = Angle.fromDegrees(latitudeInDegrees).sinus();
+          vv = 1.0 - ((IMathUtils.instance().log((1.0 + latSin) / (1.0 - latSin)) / pi4) + 0.5);
+        }
+        else
+        {
+          vv = v;
+        }
+  
+        texCoords.add((float) u, (float) vv);
       }
     }
+  
   
     Mesh surfaceMesh = createSurfaceMesh(rc, vertices, texCoords);
   
@@ -190,11 +217,11 @@ public class EllipsoidShape extends AbstractMeshShape
     return surfaceMesh;
   }
 
-  public EllipsoidShape(Geodetic3D position, Vector3D radius, short resolution, float borderWidth, boolean cozzi, Color surfaceColor)
+  public EllipsoidShape(Geodetic3D position, Vector3D radius, short resolution, float borderWidth, boolean mercator, Color surfaceColor)
   {
-     this(position, radius, resolution, borderWidth, cozzi, surfaceColor, null);
+     this(position, radius, resolution, borderWidth, mercator, surfaceColor, null);
   }
-  public EllipsoidShape(Geodetic3D position, Vector3D radius, short resolution, float borderWidth, boolean cozzi, Color surfaceColor, Color borderColor)
+  public EllipsoidShape(Geodetic3D position, Vector3D radius, short resolution, float borderWidth, boolean mercator, Color surfaceColor, Color borderColor)
   {
      super(position);
      _textureURL = new URL(new URL("", false));
@@ -203,7 +230,7 @@ public class EllipsoidShape extends AbstractMeshShape
      _radiusZ = radius.z();
      _resolution = resolution < 3 ? 3 : resolution;
      _borderWidth = borderWidth;
-     _cozzi = cozzi;
+     _mercator = mercator;
      _surfaceColor = surfaceColor;
      _borderColor = borderColor;
      _textureRequested = false;
@@ -211,7 +238,7 @@ public class EllipsoidShape extends AbstractMeshShape
 
   }
 
-  public EllipsoidShape(Geodetic3D position, URL textureURL, Vector3D radius, short resolution, float borderWidth, boolean cozzi)
+  public EllipsoidShape(Geodetic3D position, URL textureURL, Vector3D radius, short resolution, float borderWidth, boolean mercator)
   {
      super(position);
      _textureURL = new URL(textureURL);
@@ -220,7 +247,7 @@ public class EllipsoidShape extends AbstractMeshShape
      _radiusZ = radius.z();
      _resolution = resolution < 3 ? 3 : resolution;
      _borderWidth = borderWidth;
-     _cozzi = cozzi;
+     _mercator = mercator;
      _surfaceColor = null;
      _borderColor = null;
      _textureRequested = false;

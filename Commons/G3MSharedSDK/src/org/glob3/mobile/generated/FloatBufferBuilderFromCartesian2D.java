@@ -22,4 +22,5 @@ public class FloatBufferBuilderFromCartesian2D extends FloatBufferBuilder
     _values.add(x);
     _values.add(y);
   }
+
 }
