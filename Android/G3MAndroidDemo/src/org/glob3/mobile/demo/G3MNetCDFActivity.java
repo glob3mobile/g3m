@@ -89,6 +89,7 @@ public class G3MNetCDFActivity
    }
 
 
+   @SuppressWarnings("unused")
    private PeriodicalTask PaintMeshesTask() {
       final PeriodicalTask periodicalTask = new PeriodicalTask(TimeInterval.fromSeconds(0.2), new GTask() {
 
@@ -452,6 +453,7 @@ public class G3MNetCDFActivity
    }
 
 
+   @SuppressWarnings("unused")
    private GInitializationTask getInitializationTaskCreateMeshes(final Planet planet) {
 
       final GInitializationTask initializationTask = new GInitializationTask() {
