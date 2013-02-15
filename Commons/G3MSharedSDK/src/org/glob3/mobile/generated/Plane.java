@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  Plane.h
+//  Plane.hpp
 //  G3MiOSSDK
 //
 //  Created by Agustín Trujillo Pino on 14/07/12.
@@ -19,37 +19,50 @@ package org.glob3.mobile.generated;
 
 public class Plane
 {
+  private final Vector3D _normal ;
+  private final double _d;
+
+//  const Vector3F _normalF;
+//  const float    _dF;
 
 
-  public Plane() //Empty constructor
+  public Plane()
+//  _normalF(0, 0, 0),
+//  _dF(0)
   {
-     _normal = new Vector3D(0.0,0.0,0.0);
-     _d = 0.0;
+     _normal = new Vector3D(0, 0, 0);
+     _d = 0;
   }
 
-  public Plane(Vector3D point0, Vector3D point1, Vector3D point2)
+  public static Plane fromPoints(Vector3D point0, Vector3D point1, Vector3D point2)
   {
-     _normal = new Vector3D(point1.sub(point0).cross(point2.sub(point0)).normalized());
-     _d = -_normal.dot(point0);
+    final Vector3D normal = point1.sub(point0).cross(point2.sub(point0)).normalized();
+    final double d = -normal.dot(point0);
+    return new Plane(normal, d);
   }
 
   public Plane(Vector3D normal, double d)
+//  _normalF( Vector3F((float) normal._x, (float) normal._y, (float) normal._z).normalized() ),
+//  _dF((float) d)
   {
      _normal = new Vector3D(normal.normalized());
      _d = d;
   }
 
   public Plane(double a, double b, double c, double d)
+//  _normalF(Vector3F((float) a, (float) b, (float) c).normalized()),
+//  _dF((float) d)
   {
      _normal = new Vector3D(new Vector3D(a,b,c).normalized());
      _d = d;
   }
 
   public Plane(Plane that)
+//  _normalF(that._normalF),
+//  _dF(that._dF)
   {
      _normal = new Vector3D(that._normal);
      _d = that._d;
-
   }
 
   public final Plane transformedByTranspose(MutableMatrix44D M)
@@ -67,6 +80,11 @@ public class Plane
   public final double signedDistance(Vector3D point)
   {
     return point.dot(_normal) + _d;
+  }
+
+  public final float signedDistance(Vector3F point)
+  {
+    return point.dot(_normal) + (float) _d;
   }
 
   public final Vector3D intersectionWithRay(Vector3D origin, Vector3D direction)
@@ -97,8 +115,5 @@ public class Plane
     final Vector3D intersection = origin.add(direction.times(t));
     return intersection;
   }
-
-  private final Vector3D _normal ;
-  private final double _d;
 
 }

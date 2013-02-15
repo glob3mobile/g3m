@@ -70,7 +70,8 @@ public final class G3MWidget_Android
       initSingletons();
 
       setEGLContextClientVersion(2); // OPENGL ES VERSION MUST BE SPECIFED
-      setEGLConfigChooser(true); // IT GIVES US A RGB DEPTH OF 8 BITS PER
+      setEGLConfigChooser(8, 8, 8, 8, 16, 0);
+      //     setEGLConfigChooser(true); // IT GIVES US A RGB DEPTH OF 8 BITS PER
       // CHANNEL, HAVING TO FORCE PROPER BUFFER
       // ALLOCATION
 

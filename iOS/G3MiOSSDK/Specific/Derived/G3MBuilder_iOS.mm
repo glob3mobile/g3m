@@ -40,7 +40,7 @@ IStorage* G3MBuilder_iOS::createStorage() {
 IDownloader* G3MBuilder_iOS::createDownloader() {
   const bool saveInBackground = true;
   IDownloader* downloader = new CachedDownloader(new Downloader_iOS(8),
-                                                 (_storage) ? _storage : createStorage(),
+                                                 getStorage(),
                                                  saveInBackground);
 
   return downloader;

@@ -18,7 +18,7 @@
 #include "Vector2I.hpp"
 #include "MutableMatrix44D.hpp"
 #include "Frustum.hpp"
-
+#include "Vector3F.hpp"
 #include "Effects.hpp"
 
 class ILogger;
@@ -48,31 +48,31 @@ public:
   }
 
   void copyFrom(const CameraDirtyFlags& other){
-    _frustumData          = other._frustumData;
-    _projectionMatrix     = other._projectionMatrix;
-    _modelMatrix          = other._modelMatrix;
-    _modelViewMatrix      = other._modelViewMatrix;
-    _cartesianCenterOfView      = other._cartesianCenterOfView;
-    _geodeticCenterOfView = other._geodeticCenterOfView;
-    _frustum              = other._frustum;
-    _frustumMC            = other._frustumMC;
-    _halfFrustum          = other._halfFrustum;
-    _halfFrustumMC        = other._halfFrustumMC;
+    _frustumData           = other._frustumData;
+    _projectionMatrix      = other._projectionMatrix;
+    _modelMatrix           = other._modelMatrix;
+    _modelViewMatrix       = other._modelViewMatrix;
+    _cartesianCenterOfView = other._cartesianCenterOfView;
+    _geodeticCenterOfView  = other._geodeticCenterOfView;
+    _frustum               = other._frustum;
+    _frustumMC             = other._frustumMC;
+    _halfFrustum           = other._halfFrustum;
+    _halfFrustumMC         = other._halfFrustumMC;
   }
 
 
   CameraDirtyFlags(const CameraDirtyFlags& other)
   {
-    _frustumData          = other._frustumData;
-    _projectionMatrix     = other._projectionMatrix;
-    _modelMatrix          = other._modelMatrix;
-    _modelViewMatrix      = other._modelViewMatrix;
-    _cartesianCenterOfView      = other._cartesianCenterOfView;
-    _geodeticCenterOfView = other._geodeticCenterOfView;
-    _frustum              = other._frustum;
-    _frustumMC            = other._frustumMC;
-    _halfFrustum          = other._halfFrustum;
-    _halfFrustumMC        = other._halfFrustumMC;
+    _frustumData           = other._frustumData;
+    _projectionMatrix      = other._projectionMatrix;
+    _modelMatrix           = other._modelMatrix;
+    _modelViewMatrix       = other._modelViewMatrix;
+    _cartesianCenterOfView = other._cartesianCenterOfView;
+    _geodeticCenterOfView  = other._geodeticCenterOfView;
+    _frustum               = other._frustum;
+    _frustumMC             = other._frustumMC;
+    _halfFrustum           = other._halfFrustum;
+    _halfFrustumMC         = other._halfFrustumMC;
 
   }
 
@@ -95,16 +95,16 @@ public:
   }
 
   void setAll(bool value) {
-    _frustumData          = value;
-    _projectionMatrix     = value;
-    _modelMatrix          = value;
-    _modelViewMatrix      = value;
-    _cartesianCenterOfView      = value;
-    _geodeticCenterOfView = value;
-    _frustum              = value;
-    _frustumMC            = value;
-    _halfFrustum          = value;
-    _halfFrustumMC        = value;
+    _frustumData           = value;
+    _projectionMatrix      = value;
+    _modelMatrix           = value;
+    _modelViewMatrix       = value;
+    _cartesianCenterOfView = value;
+    _geodeticCenterOfView  = value;
+    _frustum               = value;
+    _frustumMC             = value;
+    _halfFrustum           = value;
+    _halfFrustumMC         = value;
   }
 };
 
@@ -159,6 +159,7 @@ public:
   Vector3D pixel2PlanetPoint(const Vector2I& pixel) const;
 
   Vector2I point2Pixel(const Vector3D& point) const;
+  Vector2I point2Pixel(const Vector3F& point) const;
 
   int getWidth() const { return _width; }
   int getHeight() const { return _height; }

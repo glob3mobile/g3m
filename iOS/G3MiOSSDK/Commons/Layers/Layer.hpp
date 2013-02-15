@@ -63,8 +63,7 @@ public:
     return _enable;
   }
 
-  virtual ~Layer() {
-  }
+  virtual ~Layer();
   
   virtual std::vector<Petition*> getMapPetitions(const G3MRenderContext* rc,
                                                  const Tile* tile,

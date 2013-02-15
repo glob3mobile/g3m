@@ -74,6 +74,8 @@ public abstract class Layer
 
   public void dispose()
   {
+    if (_condition != null)
+       _condition.dispose();
   }
 
   public abstract java.util.ArrayList<Petition> getMapPetitions(G3MRenderContext rc, Tile tile, int width, int height);

@@ -567,7 +567,7 @@ public class G3MWidget
   
     if (_downloader != null)
     {
-      _downloader.initialize(_context);
+      _downloader.initialize(_context, _frameTasksExecutor);
       _downloader.start();
     }
   

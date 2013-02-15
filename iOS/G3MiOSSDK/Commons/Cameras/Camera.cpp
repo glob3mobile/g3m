@@ -14,6 +14,7 @@
 #include "Camera.hpp"
 #include "Plane.hpp"
 #include "GL.hpp"
+#include "Vector2F.hpp"
 
 void Camera::initialize(const G3MContext* context)
 {
@@ -209,14 +210,14 @@ Vector2I Camera::point2Pixel(const Vector3D& point) const {
   const Vector2D p = getModelViewMatrix().project(point,
                                                   0, 0, _width, _height);
 
-  //  int __TODO_check_isNan_is_needed;
-  //  if (p.isNan()) {
-  //    return p;
-  //  }
+  return Vector2I( (int) p._x, (int) (_height - p._y) );
+}
 
-  IMathUtils* math = IMathUtils::instance();
+Vector2I Camera::point2Pixel(const Vector3F& point) const {
+  const Vector2F p = getModelViewMatrix().project(point,
+                                                  0, 0, _width, _height);
 
-  return Vector2I( math->toInt(p._x), math->toInt(_height-p._y) );
+  return Vector2I( (int) p._x, (int) (_height - p._y) );
 }
 
 void Camera::applyTransform(const MutableMatrix44D& M) {

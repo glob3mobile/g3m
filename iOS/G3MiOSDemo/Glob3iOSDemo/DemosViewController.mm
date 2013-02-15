@@ -11,6 +11,7 @@
 
 #import "G3MWidget_iOS.h"
 #import "G3MBuilder_iOS.hpp"
+#import "TileRendererBuilder.hpp"
 #import "LayerBuilder.hpp"
 #import "Mark.hpp"
 #import "MarkTouchListener.hpp"
@@ -71,6 +72,9 @@
   
   // Setup the builder
   builder.getTileRendererBuilder()->setLayerSet([self layerSet]);
+  // store satellite layers names
+  satelliteLayersNames = builder.getTileRendererBuilder()->getDefaultLayersNames();
+//  builder.getTileRendererBuilder()->setShowStatistics(true);
   builder.addRenderer([self markerRenderer]);
   builder.addRenderer([self shapeRenderer]);
   builder.addRenderer([self meshRenderer]);
@@ -136,9 +140,8 @@
 }
 
 - (LayerSet*) createLayerSet {
-  LayerSet* layers = new LayerSet();
+  LayerSet* layers = LayerBuilder::createDefaultSatelliteImagery();
   
-  layers->addLayer(LayerBuilder::createBingLayer([self satelliteLayerEnabled]));
   layers->addLayer(LayerBuilder::createOSMLayer(![self satelliteLayerEnabled]));
   
   return layers;
@@ -306,8 +309,13 @@
     [[self layerSwitcher] setImage:[UIImage imageNamed:@"map-on-96x48.png"] forState:UIControlStateNormal];    
   }
   
-  // bing
-  [self layerSet]->getLayer("ve")->setEnable([self satelliteLayerEnabled]);
+  // satellite layers
+  for (int i = 0; i < satelliteLayersNames.size(); i++) {
+    [self layerSet]->getLayer(satelliteLayersNames[i])->setEnable([self satelliteLayerEnabled]);
+  }
+//  [self layerSet]->getLayer("bmng200405")->setEnable([self satelliteLayerEnabled]);
+//  [self layerSet]->getLayer("esat")->setEnable([self satelliteLayerEnabled]);
+//  [self layerSet]->getLayer("ve")->setEnable([self satelliteLayerEnabled]);
   // osm
   [self layerSet]->getLayer("osm_auto:all")->setEnable(![self satelliteLayerEnabled]);
 }
@@ -373,13 +381,14 @@
 
 - (void) initDropDownMenu
 {
-  // left align button text
-  [[self demoSelector] setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
+  // demoSelector: left align button text and style
+  [[self demoSelector] setContentHorizontalAlignment: UIControlContentHorizontalAlignmentLeft];
   [[self demoSelector] setContentEdgeInsets: UIEdgeInsetsMake(0, 10, 0, 0)];
-  [[[self demoSelector] layer] setBorderWidth: 0];
-  [[self demoSelector] setBackgroundColor: [UIColor clearColor]];
+  UIImage *demoSelectorBg = [UIImage imageNamed: @"selector-background.png"];
+  [[self demoSelector] setBackgroundImage: demoSelectorBg forState: UIControlStateNormal];
+  [[self demoSelector] setBackgroundImage: demoSelectorBg forState: UIControlStateHighlighted];
   
-  [self setDemoMenu: [[UIDropDownMenu alloc] initWithIdentifier:@"demoMenu"]];
+  [self setDemoMenu: [[UIDropDownMenu alloc] initWithIdentifier: @"demoMenu"]];
   
   NSMutableArray *demoNames = [[NSMutableArray alloc] initWithObjects:
                                @"Simple glob3",
@@ -566,8 +575,7 @@ public:
         markerIcon = "file:///marker-wikipedia-72x72.png"; // iPad
       }
       
-      Mark* marker = new Mark(title,
-                              URL(markerIcon, false),
+      Mark* marker = new Mark(URL(markerIcon, false),
                               Geodetic3D(Angle::fromDegrees(coordinates->getAsNumber(1)->value()),
                                          Angle::fromDegrees(coordinates->getAsNumber(0)->value()),
                                          0));

@@ -31,9 +31,11 @@ public class TileTextureBuilder extends RCObject
   private boolean _anyCanceled;
   private boolean _alreadyStarted;
 
+  private long _texturePriority;
+
   public LeveledTexturedMesh _mesh;
 
-  public TileTextureBuilder(MultiLayerTileTexturizer texturizer, G3MRenderContext rc, LayerSet layerSet, TilesRenderParameters parameters, IDownloader downloader, Tile tile, Mesh tessellatorMesh, IFloatBuffer texCoords)
+  public TileTextureBuilder(MultiLayerTileTexturizer texturizer, G3MRenderContext rc, LayerSet layerSet, TilesRenderParameters parameters, IDownloader downloader, Tile tile, Mesh tessellatorMesh, IFloatBuffer texCoords, long texturePriority)
   //_tileKey(tile->getKey()),
   {
      _texturizer = texturizer;
@@ -52,6 +54,7 @@ public class TileTextureBuilder extends RCObject
      _finalized = false;
      _canceled = false;
      _alreadyStarted = false;
+     _texturePriority = texturePriority;
     _petitions = layerSet.createTileMapPetitions(rc, tile, parameters._tileTextureWidth, parameters._tileTextureHeight);
 
     _petitionsCount = _petitions.size();
@@ -88,7 +91,8 @@ public class TileTextureBuilder extends RCObject
       //      const long long priority =  (_parameters->_incrementalTileQuality
       //                                   ? 1000 - _tile->getLevel()
       //                                   : _tile->getLevel());
-      final long priority = DefineConstants.TILE_DOWNLOAD_PRIORITY + _tile.getLevel();
+
+      final long priority = _texturePriority + _tile.getLevel();
 
       final long requestId = _downloader.requestImage(new URL(petition.getURL()), priority, petition.getTimeToCache(), new BuilderDownloadStepDownloadListener(this, i), true);
 

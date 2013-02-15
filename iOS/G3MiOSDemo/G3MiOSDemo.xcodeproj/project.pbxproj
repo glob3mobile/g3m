@@ -93,6 +93,8 @@
 		CF186B0516B857DE00A39478 /* textures-A320 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "textures-A320"; sourceTree = "<group>"; };
 		CF186B0716B85A3600A39478 /* citation.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = citation.json; sourceTree = "<group>"; };
 		CF186B0916B85A5F00A39478 /* textures-citation */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "textures-citation"; sourceTree = "<group>"; };
+		CF35DD5216C69B6F002EFC96 /* Vector3F.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Vector3F.hpp; path = ../G3MiOSSDK/Commons/Geometry/Vector3F.hpp; sourceTree = "<group>"; };
+		CF35DD5316C69B6F002EFC96 /* Vector2F.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Vector2F.hpp; path = ../G3MiOSSDK/Commons/Geometry/Vector2F.hpp; sourceTree = "<group>"; };
 		CF883B831591053100AEE39C /* mark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mark.png; sourceTree = "<group>"; };
 		CFBA532E16B9B69A00256453 /* G3MWidget_iOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = G3MWidget_iOS.h; path = ../G3MiOSSDK/Specific/Widget/G3MWidget_iOS.h; sourceTree = "<group>"; };
 		CFBA532F16B9B69A00256453 /* AbstractMesh.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = AbstractMesh.hpp; path = ../G3MiOSSDK/Commons/Mesh/AbstractMesh.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -186,7 +188,7 @@
 		CFBA538916B9B69A00256453 /* Vector2D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = Vector2D.hpp; path = ../G3MiOSSDK/Commons/Geometry/Vector2D.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFBA538A16B9B69A00256453 /* Vector3D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Vector3D.hpp; path = ../G3MiOSSDK/Commons/Geometry/Vector3D.hpp; sourceTree = "<group>"; };
 		CFBA538B16B9B69A00256453 /* IFactory.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IFactory.hpp; path = ../G3MiOSSDK/Commons/Interfaces/IFactory.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		CFBA538C16B9B69A00256453 /* ILogger.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ILogger.hpp; path = ../G3MiOSSDK/Commons/Interfaces/ILogger.hpp; sourceTree = "<group>"; };
+		CFBA538C16B9B69A00256453 /* ILogger.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ILogger.hpp; path = ../G3MiOSSDK/Commons/Interfaces/ILogger.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFBA538D16B9B69A00256453 /* IImage.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IImage.hpp; path = ../G3MiOSSDK/Commons/Interfaces/IImage.hpp; sourceTree = "<group>"; };
 		CFBA538E16B9B69A00256453 /* MutableVector3D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = MutableVector3D.hpp; path = ../G3MiOSSDK/Commons/Geometry/MutableVector3D.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFBA538F16B9B69A00256453 /* MutableVector2D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = MutableVector2D.hpp; path = ../G3MiOSSDK/Commons/Geometry/MutableVector2D.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -272,7 +274,7 @@
 		CFBA53DF16B9B69A00256453 /* JSONVisitor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = JSONVisitor.hpp; path = ../G3MiOSSDK/Commons/JSON/JSONVisitor.hpp; sourceTree = "<group>"; };
 		CFBA53E016B9B69A00256453 /* JSONGenerator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = JSONGenerator.hpp; path = ../G3MiOSSDK/Commons/JSON/JSONGenerator.hpp; sourceTree = "<group>"; };
 		CFBA53E116B9B69A00256453 /* BSONGenerator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = BSONGenerator.hpp; path = ../G3MiOSSDK/Commons/JSON/BSONGenerator.hpp; sourceTree = "<group>"; };
-		CFBA53E216B9B69A00256453 /* ITextUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ITextUtils.hpp; path = ../G3MiOSSDK/Commons/Interfaces/ITextUtils.hpp; sourceTree = "<group>"; };
+		CFBA53E216B9B69A00256453 /* ITextUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ITextUtils.hpp; path = ../G3MiOSSDK/Commons/Interfaces/ITextUtils.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		CFBA53E316B9B69A00256453 /* TextUtils_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TextUtils_iOS.hpp; path = ../G3MiOSSDK/Specific/Derived/TextUtils_iOS.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFBA53E416B9B69A00256453 /* MarkTouchListener.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MarkTouchListener.hpp; path = ../G3MiOSSDK/Commons/Rendererers/MarkTouchListener.hpp; sourceTree = "<group>"; };
 		CFBA53E516B9B69A00256453 /* LabelPosition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = LabelPosition.h; path = ../G3MiOSSDK/Commons/Basic/LabelPosition.h; sourceTree = "<group>"; };
@@ -367,6 +369,8 @@
 		CF629FFE168008D200649BBC /* Public Headers G3M */ = {
 			isa = PBXGroup;
 			children = (
+				CF35DD5216C69B6F002EFC96 /* Vector3F.hpp */,
+				CF35DD5316C69B6F002EFC96 /* Vector2F.hpp */,
 				CFBA532F16B9B69A00256453 /* AbstractMesh.hpp */,
 				CFBA535316B9B69A00256453 /* AbstractMeshShape.hpp */,
 				CFBA538416B9B69A00256453 /* Angle.hpp */,
@@ -863,8 +867,8 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: igo software sl";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: igo software sl";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -882,8 +886,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/**";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
-				PROVISIONING_PROFILE = "E5C308F9-DD6E-4904-ABCA-44FE0E72A9B5";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "E5C308F9-DD6E-4904-ABCA-44FE0E72A9B5";
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -900,8 +904,8 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: igo software sl";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: igo software sl";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -913,8 +917,8 @@
 				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/**";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PROVISIONING_PROFILE = "E5C308F9-DD6E-4904-ABCA-44FE0E72A9B5";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "E5C308F9-DD6E-4904-ABCA-44FE0E72A9B5";
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -926,6 +930,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Glob3iOSDemo/G3MiOSDemo-Prefix.pch";

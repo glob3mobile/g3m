@@ -37,6 +37,8 @@ private:
   const bool _isForcedFullRender;
 
   ITimer* _lastSplitTimer; // timer to start every time a tile get splitted into subtiles
+  
+  long long _texturePriority;
 
 public:
   TileRenderContext(const TileTessellator*       tessellator,
@@ -45,14 +47,16 @@ public:
                     const TilesRenderParameters* parameters,
                     TilesStatistics*             statistics,
                     ITimer*                      lastSplitTimer,
-                    bool                         isForcedFullRender) :
+                    bool                         isForcedFullRender,
+                    long long                    texturePriority) :
   _tessellator(tessellator),
   _texturizer(texturizer),
   _layerSet(layerSet),
   _parameters(parameters),
   _statistics(statistics),
   _lastSplitTimer(lastSplitTimer),
-  _isForcedFullRender(isForcedFullRender)
+  _isForcedFullRender(isForcedFullRender),
+  _texturePriority(texturePriority)
   {
 
   }
@@ -83,6 +87,10 @@ public:
 
   bool isForcedFullRender() const {
     return _isForcedFullRender;
+  }
+  
+  long long getTexturePriority() const {
+    return _texturePriority;
   }
 
 };
@@ -157,23 +165,40 @@ public:
     _tilesVisibleByLevel[level] = _tilesVisibleByLevel[level] + 1;
   }
 
+  void computeRenderedSector(Tile* tile) {
+    const Sector sector = tile->getSector();
+    if (_renderedSector == NULL) {
+#ifdef C_CODE
+      _renderedSector = new Sector( sector );
+#endif
+#ifdef JAVA_CODE
+      _renderedSector = sector;
+#endif
+    }
+    else {
+      if (!_renderedSector->fullContains(sector)) {
+        Sector* previous = _renderedSector;
+
+#ifdef C_CODE
+        _renderedSector = new Sector( _renderedSector->mergedWith(sector) );
+#endif
+#ifdef JAVA_CODE
+        _renderedSector = _renderedSector.mergedWith(sector);
+#endif
+
+        delete previous;
+      }
+    }
+  }
+
   void computeTileRendered(Tile* tile) {
     _tilesRendered++;
 
     const int level = tile->getLevel();
     _tilesRenderedByLevel[level] = _tilesRenderedByLevel[level] + 1;
 
-
-
-    const Sector sector = tile->getSector();
-    if (_renderedSector == NULL) {
-      _renderedSector = new Sector(sector);
-    }
-    else {
-      Sector* previous = _renderedSector;
-      _renderedSector  = new Sector( _renderedSector->mergedWith(sector) );
-      delete previous;
-    }
+    
+    computeRenderedSector(tile);
   }
 
   const Sector* getRenderedSector() const {
@@ -265,13 +290,16 @@ private:
   Sector* _lastVisibleSector;
 
   std::vector<VisibleSectorListenerEntry*> _visibleSectorListeners;
+  
+  long long _texturePriority;
 
 public:
   TileRenderer(const TileTessellator* tessellator,
                TileTexturizer*  texturizer,
                LayerSet* layerSet,
                const TilesRenderParameters* parameters,
-               bool showStatistics);
+               bool showStatistics,
+               long long texturePriority);
 
   ~TileRenderer();
 
@@ -350,6 +378,31 @@ public:
    */
   void addVisibleSectorListener(VisibleSectorListener* listener) {
     addVisibleSectorListener(listener, TimeInterval::zero());
+  }
+  
+  /**
+   * Set the download-priority used by Tiles (for downloading textures).
+   *
+   * @param texturePriority: new value for download priority of textures
+   */
+  void setTexturePriority(long long texturePriority) {
+    _texturePriority = texturePriority;
+  }
+  
+  /**
+   * Return the current value for the download priority of textures
+   *
+   * @return _texturePriority: long
+   */
+  long long getTexturePriority() const {
+    return _texturePriority;
+  }
+  
+  /**
+   * @see Renderer#isTileRenderer()
+   */
+  bool isTileRenderer() {
+    return true;
   }
 
 };

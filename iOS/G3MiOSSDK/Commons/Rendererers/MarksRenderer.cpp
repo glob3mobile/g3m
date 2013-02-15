@@ -25,17 +25,13 @@ void MarksRenderer::setMarkTouchListener(MarkTouchListener* markTouchListener,
   _autoDeleteMarkTouchListener = autoDelete;
 }
 
-void MarksRenderer::setDownloadPriority(long long downloadPriority) {
-  _downloadPriority = downloadPriority;
-}
-
 MarksRenderer::MarksRenderer(bool readyWhenMarksReady) :
 _readyWhenMarksReady(readyWhenMarksReady),
 _context(NULL),
 _lastCamera(NULL),
 _markTouchListener(NULL),
 _autoDeleteMarkTouchListener(false),
-_downloadPriority(DownloadPriority::getMarkDownloadPriority())
+_downloadPriority(DownloadPriority::MEDIUM)
 {
 }
 
@@ -72,7 +68,8 @@ void MarksRenderer::addMark(Mark* mark) {
 
 void MarksRenderer::removeMark(Mark* mark){
   int pos = -1;
-  for (int i = 0; i < _marks.size(); i++) {
+  const int marksSize = _marks.size();
+  for (int i = 0; i < marksSize; i++) {
     if (_marks[i] == mark) {
       pos = i;
       break;
@@ -80,7 +77,7 @@ void MarksRenderer::removeMark(Mark* mark){
   }
   if (pos != -1) {
 #ifdef C_CODE
-    _marks.erase(_marks.begin()+pos);
+    _marks.erase(_marks.begin() + pos);
 #endif
 #ifdef JAVA_CODE
     _marks.remove(pos);
@@ -88,8 +85,9 @@ void MarksRenderer::removeMark(Mark* mark){
   }
 }
 
-void MarksRenderer::removeAllMarks(){
-  for (int i = 0; i < _marks.size(); i++) {
+void MarksRenderer::removeAllMarks() {
+  const int marksSize = _marks.size();
+  for (int i = 0; i < marksSize; i++) {
     delete _marks[i];
   }
   _marks.clear();

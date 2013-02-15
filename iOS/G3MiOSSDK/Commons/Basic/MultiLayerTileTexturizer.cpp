@@ -195,6 +195,8 @@ private:
   bool _canceled;
   bool _anyCanceled;
   bool _alreadyStarted;
+  
+  long long _texturePriority;
 
 public:
   LeveledTexturedMesh* _mesh;
@@ -206,7 +208,8 @@ public:
                      IDownloader*                 downloader,
                      Tile* tile,
                      const Mesh* tessellatorMesh,
-                     IFloatBuffer* texCoords) :
+                     IFloatBuffer* texCoords,
+                     long long texturePriority) :
   _texturizer(texturizer),
   _factory(rc->getFactory()),
   _texturesHandler(rc->getTexturesHandler()),
@@ -223,7 +226,8 @@ public:
   _texCoords(texCoords),
   _finalized(false),
   _canceled(false),
-  _alreadyStarted(false)
+  _alreadyStarted(false),
+  _texturePriority(texturePriority)
   {
     _petitions = layerSet->createTileMapPetitions(rc,
                                                   tile,
@@ -258,7 +262,8 @@ public:
       //      const long long priority =  (_parameters->_incrementalTileQuality
       //                                   ? 1000 - _tile->getLevel()
       //                                   : _tile->getLevel());
-      const long long priority = 1000 + _tile->getLevel();
+
+      const long long priority = _texturePriority + _tile->getLevel();
 
       const long long requestId = _downloader->requestImage(URL(petition->getURL()),
                                                             priority,
@@ -659,7 +664,8 @@ Mesh* MultiLayerTileTexturizer::texturize(const G3MRenderContext* rc,
                                                                         rc->getDownloader(),
                                                                         tile,
                                                                         tessellatorMesh,
-                                                                        getTextureCoordinates(trc)));
+                                                                        getTextureCoordinates(trc),
+                                                                        trc->getTexturePriority()));
     tile->setTexturizerData(builderHolder);
   }
 

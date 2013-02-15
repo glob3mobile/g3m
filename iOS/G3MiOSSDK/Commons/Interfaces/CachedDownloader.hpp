@@ -36,6 +36,15 @@ private:
 
   URL*          _lastImageURL;
 
+#ifdef C_CODE
+  const G3MContext* _context;
+#endif
+#ifdef JAVA_CODE
+  private G3MContext _context;
+#endif
+
+  FrameTasksExecutor* _frameTasksExecutor;
+
 public:
   CachedDownloader(IDownloader* downloader,
                    IStorage*    storage,
@@ -47,7 +56,9 @@ public:
   _savesCounter(0),
   _saveInBackground(saveInBackground),
   _lastImage(NULL),
-  _lastImageURL(NULL)
+  _lastImageURL(NULL),
+  _context(NULL),
+  _frameTasksExecutor(NULL)
   {
 
   }
@@ -88,7 +99,8 @@ public:
 
   void onDestroy(const G3MContext* context);
 
-  void initialize(const G3MContext* context);
+  void initialize(const G3MContext* context,
+                  FrameTasksExecutor* frameTasksExecutor);
 
 };
 

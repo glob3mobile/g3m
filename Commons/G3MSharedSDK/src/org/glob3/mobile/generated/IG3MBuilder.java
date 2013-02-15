@@ -16,7 +16,7 @@ package org.glob3.mobile.generated;
 //
 
 
-
+//class TileRendererBuilder;
 
 
 public abstract class IG3MBuilder
@@ -38,6 +38,197 @@ public abstract class IG3MBuilder
   private boolean _logFPS;
   private boolean _logDownloaderStatistics;
   private WidgetUserData _userData;
+
+
+  /**
+   * Returns the _gl.
+   * Lazy initialization.
+   *
+   * @return _gl: GL*
+   */
+  private GL getGL()
+  {
+    if (_gl == null)
+    {
+      ILogger.instance().logError("Logic Error: _gl not initialized");
+    }
+  
+    return _gl;
+  }
+
+  /**
+   * Returns the _downloader.
+   * Lazy initialization.
+   *
+   * @return _downloader: IDownloader*
+   */
+  private IDownloader getDownloader()
+  {
+    if (_downloader == null)
+    {
+      _downloader = createDownloader();
+    }
+  
+    return _downloader;
+  }
+
+  /**
+   * Returns the _threadUtils.
+   * Lazy initialization.
+   *
+   * @return _threadUtils: IThreadUtils*
+   */
+  private IThreadUtils getThreadUtils()
+  {
+    if (_threadUtils == null)
+    {
+      _threadUtils = createThreadUtils();
+    }
+  
+    return _threadUtils;
+  }
+
+  /**
+   * Returns the _cameraConstraints.
+   * Lazy initialization.
+   *
+   * @return _cameraConstraints: std::vector<ICameraConstrainer*>
+   */
+  private java.util.ArrayList<ICameraConstrainer> getCameraConstraints()
+  {
+    if (_cameraConstraints.size() == 0)
+    {
+      _cameraConstraints = createCameraConstraints();
+    }
+  
+    return _cameraConstraints;
+  }
+
+  /**
+   * Returns the _cameraRenderer.
+   * Lazy initialization.
+   *
+   * @return _cameraRenderer: CameraRenderer*
+   */
+  private CameraRenderer getCameraRenderer()
+  {
+    if (_cameraRenderer == null)
+    {
+      _cameraRenderer = createCameraRenderer();
+    }
+  
+    return _cameraRenderer;
+  }
+
+  /**
+   * Returns the _busyRenderer.
+   * Lazy initialization.
+   *
+   * @return _busyRenderer: Renderer*
+   */
+  private Renderer getBusyRenderer()
+  {
+    if (_busyRenderer == null)
+    {
+      _busyRenderer = new BusyMeshRenderer();
+    }
+  
+    return _busyRenderer;
+  }
+
+  /**
+   * Returns the _backgroundColor.
+   * Lazy initialization.
+   *
+   * @return _backgroundColor: Color*
+   */
+  private Color getBackgroundColor()
+  {
+    if (_backgroundColor == null)
+    {
+      _backgroundColor = Color.newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1);
+    }
+  
+    return _backgroundColor;
+  }
+
+  /**
+   * Returns the array of renderers.
+   * Method created to keep convention. It is not needed as it does not have to create a default value.
+   *
+   * @return _renderers: std::vector<Renderer*>
+   */
+  private java.util.ArrayList<Renderer> getRenderers()
+  {
+    return _renderers;
+  }
+
+  /**
+   * Returns the value of _logFPS flag.
+   * Method created to keep convention. It is not needed as it does not have to create a default value.
+   *
+   * @return _logFPS: bool
+   */
+  private boolean getLogFPS()
+  {
+    return _logFPS;
+  }
+
+  /**
+   * Returns the value of _logDownloaderStatistics flag.
+   * Method created to keep convention. It is not needed as it does not have to create a default value.
+   *
+   * @return _logDownloaderStatistics: bool
+   */
+  private boolean getLogDownloaderStatistics()
+  {
+    return _logDownloaderStatistics;
+  }
+
+  /**
+   * Returns the initialization task.
+   * Method created to keep convention. It is not needed as it does not have to create a default value.
+   *
+   * @return _logDownloaderStatistics: GInitializationTask*
+   */
+  private GInitializationTask getInitializationTask()
+  {
+    return _initializationTask;
+  }
+
+  /**
+   * Returns the value of _autoDeleteInitializationTask flag.
+   * Method created to keep convention. It is not needed as it does not have to create a default value.
+   *
+   * @return _autoDeleteInitializationTask: bool
+   */
+  private boolean getAutoDeleteInitializationTask()
+  {
+    return _autoDeleteInitializationTask;
+  }
+
+  /**
+   * Returns the array of periodical tasks.
+   * Method created to keep convention. It is not needed as it does not have to create a default value.
+   *
+   * @return _periodicalTasks: std::vector<PeriodicalTask*>
+   */
+  private java.util.ArrayList<PeriodicalTask> getPeriodicalTasks()
+  {
+    return _periodicalTasks;
+  }
+
+  /**
+   * Returns the user data.
+   * Method created to keep convention. It is not needed as it does not have to create a default value.
+   *
+   * @return _userData: WidgetUserData*
+   */
+  private WidgetUserData getUserData()
+  {
+    return _userData;
+  }
+
 
   private java.util.ArrayList<ICameraConstrainer> createCameraConstraints()
   {
@@ -63,62 +254,46 @@ public abstract class IG3MBuilder
 
   private void pvtSetInitializationTask(GInitializationTask initializationTask, boolean autoDeleteInitializationTask)
   {
-    if (_initializationTask != initializationTask)
+    if (_initializationTask != null)
     {
-      if (_initializationTask != null)
-         _initializationTask.dispose();
-      _initializationTask = initializationTask;
+      ILogger.instance().logError("LOGIC ERROR: _initializationTask already initialized");
+      return;
     }
+    _initializationTask = initializationTask;
     _autoDeleteInitializationTask = autoDeleteInitializationTask;
   }
 
-
   protected IStorage _storage;
 
-  protected final G3MWidget create()
+
+  /**
+   * Returns the _storage.
+   * Lazy initialization.
+   *
+   * @return _storage: IStorage*
+   */
+  protected final IStorage getStorage()
   {
-  
-    if (_gl == null)
-    {
-      ILogger.instance().logError("Logic Error: _gl not initialized");
-      return null;
-    }
-  
     if (_storage == null)
     {
       _storage = createStorage();
     }
   
-    if (_downloader == null)
-    {
-      _downloader = createDownloader();
-    }
-  
-    if (_threadUtils == null)
-    {
-      _threadUtils = createThreadUtils();
-    }
-  
-    if (_cameraConstraints.size() == 0)
-    {
-      _cameraConstraints = createCameraConstraints();
-    }
-  
-    if (_cameraRenderer == null)
-    {
-      _cameraRenderer = createCameraRenderer();
-    }
-  
+    return _storage;
+  }
+
+  protected final G3MWidget create()
+  {
     Renderer mainRenderer = null;
-    TileRenderer tileRenderer = _tileRendererBuilder.create();
-    if (_renderers.size() > 0)
+    TileRenderer tileRenderer = getTileRendererBuilder().create();
+    if (getRenderers().size() > 0)
     {
       mainRenderer = new CompositeRenderer();
       ((CompositeRenderer) mainRenderer).addRenderer(tileRenderer);
   
-      for (int i = 0; i < _renderers.size(); i++)
+      for (int i = 0; i < getRenderers().size(); i++)
       {
-        ((CompositeRenderer) mainRenderer).addRenderer(_renderers.get(i));
+        ((CompositeRenderer) mainRenderer).addRenderer(getRenderers().get(i));
       }
     }
     else
@@ -126,19 +301,37 @@ public abstract class IG3MBuilder
       mainRenderer = tileRenderer;
     }
   
-    if (_busyRenderer == null)
+    Color backgroundColor = Color.fromRGBA(getBackgroundColor().getRed(), getBackgroundColor().getGreen(), getBackgroundColor().getBlue(), getBackgroundColor().getAlpha());
+  
+    G3MWidget g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), getPlanet(), getCameraConstraints(), getCameraRenderer(), mainRenderer, getBusyRenderer(), backgroundColor, getLogFPS(), getLogDownloaderStatistics(), getInitializationTask(), getAutoDeleteInitializationTask(), getPeriodicalTasks());
+  
+    g3mWidget.setUserData(getUserData());
+  
+    _gl = null;
+    _storage = null;
+    _downloader = null;
+    _threadUtils = null;
+    _planet = null;
+    for (int i = 0; i < _cameraConstraints.size(); i++)
     {
-      _busyRenderer = new BusyMeshRenderer();
+      _cameraConstraints.set(i, null);
     }
-  
-    Color backgroundColor = Color.fromRGBA(_backgroundColor.getRed(), _backgroundColor.getGreen(), _backgroundColor.getBlue(), _backgroundColor.getAlpha());
-  
-    G3MWidget g3mWidget = G3MWidget.create(_gl, _storage, _downloader, _threadUtils, getPlanet(), _cameraConstraints, _cameraRenderer, mainRenderer, _busyRenderer, backgroundColor, _logFPS, _logDownloaderStatistics, _initializationTask, _autoDeleteInitializationTask, _periodicalTasks);
-  
-    g3mWidget.setUserData(_userData);
+    _cameraRenderer = null;
+    for (int i = 0; i < _renderers.size(); i++)
+    {
+      _renderers.set(i, null);
+    }
+    _busyRenderer = null;
+    _backgroundColor = null;
+    _initializationTask = null;
+    for (int i = 0; i < _periodicalTasks.size(); i++)
+    {
+      _periodicalTasks.set(i, null);
+    }
+    _userData = null;
+    _tileRendererBuilder = null;
   
     return g3mWidget;
-  
   }
 
   protected abstract IThreadUtils createThreadUtils();
@@ -153,8 +346,8 @@ public abstract class IG3MBuilder
      _threadUtils = null;
      _planet = null;
      _cameraRenderer = null;
-     _backgroundColor = Color.newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1);
-     _tileRendererBuilder = new TileRendererBuilder();
+     _backgroundColor = null;
+     _tileRendererBuilder = null;
      _busyRenderer = null;
      _initializationTask = null;
      _autoDeleteInitializationTask = true;
@@ -164,64 +357,88 @@ public abstract class IG3MBuilder
   }
   public void dispose()
   {
+    if (_gl != null)
+       _gl.dispose();
+    if (_storage != null)
+       _storage.dispose();
+    if (_downloader != null)
+       _downloader.dispose();
+    if (_threadUtils != null)
+       _threadUtils.dispose();
+    if (_planet != null)
+       _planet.dispose();
+    for (int i = 0; i < _cameraConstraints.size(); i++)
+    {
+      if (_cameraConstraints.get(i) != null)
+         _cameraConstraints.get(i).dispose();
+    }
+    if (_cameraRenderer != null)
+       _cameraRenderer.dispose();
+    for (int i = 0; i < _renderers.size(); i++)
+    {
+      if (_renderers.get(i) != null)
+         _renderers.get(i).dispose();
+    }
+    if (_busyRenderer != null)
+       _busyRenderer.dispose();
     if (_backgroundColor != null)
        _backgroundColor.dispose();
-  
+    if (_initializationTask != null)
+       _initializationTask.dispose();
+    for (int i = 0; i < _periodicalTasks.size(); i++)
+    {
+      if (_periodicalTasks.get(i) != null)
+         _periodicalTasks.get(i).dispose();
+    }
+    if (_userData != null)
+       _userData.dispose();
     if (_tileRendererBuilder != null)
        _tileRendererBuilder.dispose();
   }
   public final void setGL(GL gl)
   {
-    if (_gl != gl)
+    if (_gl != null)
     {
-      if (_gl != null)
-         _gl.dispose();
-      _gl = gl;
+      ILogger.instance().logError("LOGIC ERROR: _gl already initialized");
+      return;
     }
+    _gl = gl;
   }
   public final void setStorage(IStorage storage)
   {
-    if (_storage != storage)
+    if (_storage != null)
     {
-      if (_storage != null)
-         _storage.dispose();
-      _storage = storage;
+      ILogger.instance().logError("LOGIC ERROR: _storage already initialized");
+      return;
     }
+    _storage = storage;
   }
   public final void setDownloader(IDownloader downloader)
   {
-    if (_downloader != downloader)
+    if (_downloader != null)
     {
-      if (_downloader != null)
-         _downloader.dispose();
-      _downloader = downloader;
+      ILogger.instance().logError("LOGIC ERROR: _downloader already initialized");
+      return;
     }
+    _downloader = downloader;
   }
   public final void setThreadUtils(IThreadUtils threadUtils)
   {
-    if (_threadUtils != threadUtils)
+    if (_threadUtils != null)
     {
-      if (_threadUtils != null)
-         _threadUtils.dispose();
-      _threadUtils = threadUtils;
+      ILogger.instance().logError("LOGIC ERROR: _threadUtils already initialized");
+      return;
     }
+    _threadUtils = threadUtils;
   }
   public final void setPlanet(Planet planet)
   {
-    if (_planet != planet)
+    if (_planet != null)
     {
-      if (_planet != null)
-         _planet.dispose();
-      _planet = planet;
+      ILogger.instance().logError("LOGIC ERROR: _planet already initialized");
+      return;
     }
-  }
-  public final Planet getPlanet()
-  {
-    if (_planet == null)
-    {
-      _planet = Planet.createEarth();
-    }
-    return _planet;
+    _planet = planet;
   }
   public final void addCameraConstraint(ICameraConstrainer cameraConstraint)
   {
@@ -229,38 +446,41 @@ public abstract class IG3MBuilder
   }
   public final void setCameraRenderer(CameraRenderer cameraRenderer)
   {
-    if (_cameraRenderer != cameraRenderer)
+    if (_cameraRenderer != null)
     {
-      if (_cameraRenderer != null)
-         _cameraRenderer.dispose();
-      _cameraRenderer = cameraRenderer;
+      ILogger.instance().logError("LOGIC ERROR: _cameraRenderer already initialized");
+      return;
     }
+    _cameraRenderer = cameraRenderer;
   }
   public final void setBackgroundColor(Color backgroundColor)
   {
-    if (_backgroundColor != backgroundColor)
+    if (_backgroundColor != null)
     {
-      if (_backgroundColor != null)
-         _backgroundColor.dispose();
-      _backgroundColor = backgroundColor;
+      ILogger.instance().logError("LOGIC ERROR: _backgroundColor already initialized");
+      return;
     }
-  }
-  public final TileRendererBuilder getTileRendererBuilder()
-  {
-    return _tileRendererBuilder;
+    _backgroundColor = backgroundColor;
   }
   public final void setBusyRenderer(Renderer busyRenderer)
   {
-    if (_busyRenderer != busyRenderer)
+    if (_busyRenderer != null)
     {
-      if (_busyRenderer != null)
-         _busyRenderer.dispose();
-      _busyRenderer = busyRenderer;
+      ILogger.instance().logError("LOGIC ERROR: _busyRenderer already initialized");
+      return;
     }
+    _busyRenderer = busyRenderer;
   }
   public final void addRenderer(Renderer renderer)
   {
-    _renderers.add(renderer);
+    if (!renderer.isTileRenderer())
+    {
+      _renderers.add(renderer);
+    }
+    else
+    {
+      ILogger.instance().logError("LOGIC ERROR: a new TileRenderer is not expected to be added");
+    }
   }
   public final void addPeriodicalTask(PeriodicalTask periodicalTask)
   {
@@ -276,18 +496,48 @@ public abstract class IG3MBuilder
   }
   public final void setUserData(WidgetUserData userData)
   {
-    if (_userData != userData)
+    if (_userData != null)
     {
-      if (_userData != null)
-         _userData.dispose();
-      _userData = userData;
+      ILogger.instance().logError("LOGIC ERROR: _userData already initialized");
+      return;
     }
+    _userData = userData;
   }
-
   public final void setInitializationTask(GInitializationTask initializationTask) {
     pvtSetInitializationTask(initializationTask,
                              true // parameter ignored in Java code 
 );
   }
 
+
+  /**
+   * Returns the _planet.
+   * Lazy initialization.
+   *
+   * @return _planet: const Planet*
+   */
+  public final Planet getPlanet()
+  {
+    if (_planet == null)
+    {
+      _planet = Planet.createEarth();
+    }
+    return _planet;
+  }
+
+  /**
+   * Returns the _tileRendererBuilder.
+   * Lazy initialization.
+   *
+   * @return _tileRendererBuilder: TileRendererBuilder*
+   */
+  public final TileRendererBuilder getTileRendererBuilder()
+  {
+    if (_tileRendererBuilder == null)
+    {
+      _tileRendererBuilder = new TileRendererBuilder();
+    }
+  
+    return _tileRendererBuilder;
+  }
 }

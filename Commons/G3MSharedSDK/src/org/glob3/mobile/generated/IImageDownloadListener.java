@@ -11,14 +11,9 @@ package org.glob3.mobile.generated;
 
 public abstract class IImageDownloadListener
 {
-///#ifdef C_CODE
   public void dispose()
   {
   }
-///#endif
-///#ifdef JAVA_CODE
-//  public void dispose();
-///#endif
 
   /**
    Callback method invoked on a successful download.  The image has to be deleted in C++ / .disposed() in Java

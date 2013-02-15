@@ -92,7 +92,8 @@ public class G3MSimplestGlob3Activity
                "osm_auto:all", //
                new URL("http://129.206.228.72/cached/osm", false), //
                WMSServerVersion.WMS_1_1_0, //
-               Sector.fromDegrees(-85.05, -180.0, 85.05, 180.0), //
+               //Sector.fromDegrees(-85.05, -180.0, 85.05, 180.0), //
+               Sector.fullSphere(), //
                "image/jpeg", //
                "EPSG:4326", //
                "", //

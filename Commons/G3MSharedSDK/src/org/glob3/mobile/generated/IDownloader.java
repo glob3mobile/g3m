@@ -20,8 +20,8 @@ package org.glob3.mobile.generated;
 //class G3MContext;
 //class IBufferDownloadListener;
 //class IImageDownloadListener;
-
 //class TimeInterval;
+//class FrameTasksExecutor;
 
 
 public abstract class IDownloader
@@ -30,7 +30,7 @@ public abstract class IDownloader
   {
   }
 
-  public abstract void initialize(G3MContext context);
+  public abstract void initialize(G3MContext context, FrameTasksExecutor frameTasksExecutor);
 
   public abstract void onResume(G3MContext context);
 

@@ -202,10 +202,10 @@ public class Frustum
      _rtf = new Vector3D(new Vector3D(zfar/znear *right, zfar/znear *top, -zfar));
      _lbf = new Vector3D(new Vector3D(zfar/znear *left, zfar/znear *bottom, -zfar));
      _rbf = new Vector3D(new Vector3D(zfar/znear *right, zfar/znear *bottom, -zfar));
-     _leftPlane = new Plane(new Plane(Vector3D.zero(), new Vector3D(left, top, -znear), new Vector3D(left, bottom, -znear)));
-     _bottomPlane = new Plane(new Plane(Vector3D.zero(), new Vector3D(left, bottom, -znear), new Vector3D(right, bottom, -znear)));
-     _rightPlane = new Plane(new Plane(Vector3D.zero(), new Vector3D(right, bottom, -znear), new Vector3D(right, top, -znear)));
-     _topPlane = new Plane(new Plane(Vector3D.zero(), new Vector3D(right, top, -znear), new Vector3D(left, top, -znear)));
+     _leftPlane = new Plane(Plane.fromPoints(Vector3D.zero(), new Vector3D(left, top, -znear), new Vector3D(left, bottom, -znear)));
+     _bottomPlane = new Plane(Plane.fromPoints(Vector3D.zero(), new Vector3D(left, bottom, -znear), new Vector3D(right, bottom, -znear)));
+     _rightPlane = new Plane(Plane.fromPoints(Vector3D.zero(), new Vector3D(right, bottom, -znear), new Vector3D(right, top, -znear)));
+     _topPlane = new Plane(Plane.fromPoints(Vector3D.zero(), new Vector3D(right, top, -znear), new Vector3D(left, top, -znear)));
      _nearPlane = new Plane(new Plane(new Vector3D(0, 0, 1), znear));
      _farPlane = new Plane(new Plane(new Vector3D(0, 0, -1), -zfar));
      _extent = null;
@@ -221,10 +221,10 @@ public class Frustum
      _rtf = new Vector3D(new Vector3D(data._zfar/data._znear *data._right, data._zfar/data._znear *data._top, -data._zfar));
      _lbf = new Vector3D(new Vector3D(data._zfar/data._znear *data._left, data._zfar/data._znear *data._bottom, -data._zfar));
      _rbf = new Vector3D(new Vector3D(data._zfar/data._znear *data._right, data._zfar/data._znear *data._bottom, -data._zfar));
-     _leftPlane = new Plane(new Plane(Vector3D.zero(), new Vector3D(data._left, data._top, -data._znear), new Vector3D(data._left, data._bottom, -data._znear)));
-     _bottomPlane = new Plane(new Plane(Vector3D.zero(), new Vector3D(data._left, data._bottom, -data._znear), new Vector3D(data._right, data._bottom, -data._znear)));
-     _rightPlane = new Plane(new Plane(Vector3D.zero(), new Vector3D(data._right, data._bottom, -data._znear), new Vector3D(data._right, data._top, -data._znear)));
-     _topPlane = new Plane(new Plane(Vector3D.zero(), new Vector3D(data._right, data._top, -data._znear), new Vector3D(data._left, data._top, -data._znear)));
+     _leftPlane = new Plane(Plane.fromPoints(Vector3D.zero(), new Vector3D(data._left, data._top, -data._znear), new Vector3D(data._left, data._bottom, -data._znear)));
+     _bottomPlane = new Plane(Plane.fromPoints(Vector3D.zero(), new Vector3D(data._left, data._bottom, -data._znear), new Vector3D(data._right, data._bottom, -data._znear)));
+     _rightPlane = new Plane(Plane.fromPoints(Vector3D.zero(), new Vector3D(data._right, data._bottom, -data._znear), new Vector3D(data._right, data._top, -data._znear)));
+     _topPlane = new Plane(Plane.fromPoints(Vector3D.zero(), new Vector3D(data._right, data._top, -data._znear), new Vector3D(data._left, data._top, -data._znear)));
      _nearPlane = new Plane(new Plane(new Vector3D(0, 0, 1), data._znear));
      _farPlane = new Plane(new Plane(new Vector3D(0, 0, -1), -data._zfar));
      _extent = null;
@@ -253,19 +253,16 @@ public class Frustum
   
     // test first if frustum extent intersect with box
     if (!getExtent().touchesBox(box))
-       return false;
+    {
+      return false;
+    }
   
-    // create an array with the 8 corners of the box
-    final Vector3D min = box.getLower();
-    final Vector3D max = box.getUpper();
-    Vector3D[] corners = { new Vector3D(min._x, min._y, min._z), new Vector3D(min._x, min._y, max._z), new Vector3D(min._x, max._y, min._z), new Vector3D(min._x, max._y, max._z), new Vector3D(max._x, min._y, min._z), new Vector3D(max._x, min._y, max._z), new Vector3D(max._x, max._y, min._z), new Vector3D(max._x, max._y, max._z) };
-  
-  //  std::vector<Vector3D> corners = box->getCorners();
+    final java.util.ArrayList<Vector3F> corners = box.getCornersF();
   
     // test with left plane
     outside = true;
     for (int i = 0; i<8; i++)
-      if (_leftPlane.signedDistance(corners[i])<0)
+      if (_leftPlane.signedDistance(corners.get(i))<0)
       {
         outside = false;
         break;
@@ -276,7 +273,7 @@ public class Frustum
     // test with bottom plane
     outside = true;
     for (int i = 0; i<8; i++)
-      if (_bottomPlane.signedDistance(corners[i])<0)
+      if (_bottomPlane.signedDistance(corners.get(i))<0)
       {
         outside = false;
         break;
@@ -287,7 +284,7 @@ public class Frustum
     // test with right plane
     outside = true;
     for (int i = 0; i<8; i++)
-      if (_rightPlane.signedDistance(corners[i])<0)
+      if (_rightPlane.signedDistance(corners.get(i))<0)
       {
         outside = false;
         break;
@@ -298,7 +295,7 @@ public class Frustum
     // test with top plane
     outside = true;
     for (int i = 0; i<8; i++)
-      if (_topPlane.signedDistance(corners[i])<0)
+      if (_topPlane.signedDistance(corners.get(i))<0)
       {
         outside = false;
         break;
@@ -309,7 +306,7 @@ public class Frustum
     // test with near plane
     outside = true;
     for (int i = 0; i<8; i++)
-      if (_nearPlane.signedDistance(corners[i])<0)
+      if (_nearPlane.signedDistance(corners.get(i))<0)
       {
         outside = false;
         break;
@@ -320,7 +317,7 @@ public class Frustum
     // test with far plane
     outside = true;
     for (int i = 0; i<8; i++)
-      if (_farPlane.signedDistance(corners[i])<0)
+      if (_farPlane.signedDistance(corners.get(i))<0)
       {
         outside = false;
         break;

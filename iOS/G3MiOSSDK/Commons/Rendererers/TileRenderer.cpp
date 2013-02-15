@@ -17,6 +17,7 @@
 #include "LayerSet.hpp"
 #include "VisibleSectorListener.hpp"
 #include "IThreadUtils.hpp"
+#include "DownloadPriority.hpp"
 
 class VisibleSectorListenerEntry {
 private:
@@ -101,7 +102,8 @@ TileRenderer::TileRenderer(const TileTessellator* tessellator,
                            TileTexturizer*  texturizer,
                            LayerSet* layerSet,
                            const TilesRenderParameters* parameters,
-                           bool showStatistics) :
+                           bool showStatistics,
+                           long long texturePriority) :
 _tessellator(tessellator),
 _texturizer(texturizer),
 _layerSet(layerSet),
@@ -112,7 +114,8 @@ _lastSplitTimer(NULL),
 _lastCamera(NULL),
 _firstRender(false),
 _context(NULL),
-_lastVisibleSector(NULL)
+_lastVisibleSector(NULL),
+_texturePriority(texturePriority)
 {
   _layerSet->setChangeListener(this);
 }
@@ -232,7 +235,8 @@ bool TileRenderer::isReadyToRender(const G3MRenderContext *rc) {
                             _parameters,
                             &statistics,
                             _lastSplitTimer,
-                            true);
+                            true,
+                            _texturePriority);
 
       for (int i = 0; i < topLevelTilesCount; i++) {
         Tile* tile = _topLevelTiles[i];
@@ -286,7 +290,8 @@ void TileRenderer::render(const G3MRenderContext* rc,
                         _parameters,
                         &statistics,
                         _lastSplitTimer,
-                        _firstRender /* if first render, force full render */);
+                        _firstRender /* if first render, force full render */,
+                        _texturePriority);
 
   const int topLevelTilesCount = _topLevelTiles.size();
 

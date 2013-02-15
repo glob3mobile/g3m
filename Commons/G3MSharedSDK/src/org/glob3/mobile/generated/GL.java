@@ -706,17 +706,11 @@ public class GL
   public void dispose()
   {
     _nativeGL.dispose();
-    // There's no need to delete these attributes because this class is not the owner
-    //    delete _vertices;
-    //    delete _textureCoordinates;
-    //    delete _colors;
 
-    if (_vertices != null)
-       _vertices.dispose();
-    if (_textureCoordinates != null)
-       _textureCoordinates.dispose();
-    if (_colors != null)
-       _colors.dispose();
+    // GL is not owner of these buffers, it keeps a reference only for state-change-testing. NO DELETE THEM.
+    // delete _vertices;
+    // delete _textureCoordinates;
+    // delete _colors;
   }
 
   public final int createProgram()

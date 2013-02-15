@@ -103,7 +103,7 @@ public class Vector3D
 
   public final Vector3D normalized()
   {
-    double d = length();
+    final double d = length();
     return new Vector3D(_x / d, _y /d, _z / d);
   }
 
@@ -196,17 +196,20 @@ public class Vector3D
     return new Vector3D(((u * (u * _x + v * _y + w * _z)) + (((_x * (v * v + w * w)) - (u * (v * _y + w * _z))) * cosTheta) + (m * ((-w * _y) + (v * _z)) * sinTheta)) / ms, ((v * (u * _x + v * _y + w * _z)) + (((_y * (u * u + w * w)) - (v * (u * _x + w * _z))) * cosTheta) + (m * ((w * _x) - (u * _z)) * sinTheta)) / ms, ((w * (u * _x + v * _y + w * _z)) + (((_z * (u * u + v * v)) - (w * (u * _x + v * _y))) * cosTheta) + (m * (-(v * _x) + (u * _y)) * sinTheta)) / ms);
   }
 
-  //  double x() const {
-  //    return _x;
-  //  }
-  //
-  //  double y() const {
-  //    return _y;
-  //  }
-  //
-  //  double z() const {
-  //    return _z;
-  //  }
+  public final double x()
+  {
+    return _x;
+  }
+
+  public final double y()
+  {
+    return _y;
+  }
+
+  public final double z()
+  {
+    return _z;
+  }
 
   public final Vector3D transformedBy(MutableMatrix44D m, double homogeneus)
   {

@@ -14,12 +14,7 @@
 
 class IBufferDownloadListener {
 public:
-//#ifdef C_CODE
   virtual ~IBufferDownloadListener() { }
-//#endif
-//#ifdef JAVA_CODE
-//  public void dispose();
-//#endif
 
   /**
    Callback method invoked on a successful download.  The buffer has to be deleted in C++ / .disposed() in Java
