@@ -193,8 +193,8 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
 
   const double pi4 = IMathUtils::instance()->pi() * 4;
 
-  const short resolution2Minus2 = 2*_resolution-2;
-  const short resolutionMinus1 = _resolution-1;
+  const short resolution2Minus2 = (short) (2*_resolution-2);
+  const short resolutionMinus1  = (short) (_resolution-1);
 
   for (int j = 0; j < _resolution; j++) {
     for (int i = 0; i < 2*_resolution-1; i++) {
