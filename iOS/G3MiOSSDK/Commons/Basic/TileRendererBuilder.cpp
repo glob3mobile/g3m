@@ -195,7 +195,7 @@ void TileRendererBuilder::setTileTessellator(TileTessellator *tileTessellator) {
 }
 
 void TileRendererBuilder::setTileTexturizer(TileTexturizer *tileTexturizer) {
-  if (_texturizer != tileTexturizer) {
+  if (_texturizer) {
     ILogger::instance()->logError("LOGIC ERROR: _texturizer already initialized");
     return;
   }
