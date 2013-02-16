@@ -203,7 +203,7 @@ Mesh* EllipsoidalTileTessellator::createDebugMesh(const G3MRenderContext* rc,
   const Planet* planet = rc->getPlanet();
   
   const int resolutionMinus1 = _resolution - 1;
-  int posS = 0;
+  short posS = 0;
   
   // compute offset for vertices
   const Vector3D sw = planet->toCartesian(sector.getSW());
@@ -220,28 +220,28 @@ Mesh* EllipsoidalTileTessellator::createDebugMesh(const G3MRenderContext* rc,
   for (int j = 0; j < resolutionMinus1; j++) {
     vertices.add(sector.getInnerPoint(0, (double)j/resolutionMinus1),
                  offset);
-    indices.add((short) posS++);
+    indices.add(posS++);
   }
   
   // south side
   for (int i = 0; i < resolutionMinus1; i++) {
     vertices.add(sector.getInnerPoint((double)i/resolutionMinus1, 1),
                  offset);
-    indices.add((short) posS++);
+    indices.add(posS++);
   }
   
   // east side
   for (int j = resolutionMinus1; j > 0; j--) {
     vertices.add(sector.getInnerPoint(1, (double)j/resolutionMinus1),
                  offset);
-    indices.add((short) posS++);
+    indices.add(posS++);
   }
   
   // north side
   for (int i = resolutionMinus1; i > 0; i--) {
     vertices.add(sector.getInnerPoint((double)i/resolutionMinus1, 0),
                  offset);
-    indices.add((short) posS++);
+    indices.add(posS++);
   }
   
   Color *color = Color::newFromRGBA((float) 1.0, (float) 0, (float) 0, (float) 1.0);
