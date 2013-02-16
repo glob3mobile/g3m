@@ -52,7 +52,7 @@ public class Tile
   {
     if (_tessellatorMesh == null)
     {
-      _tessellatorMesh = trc.getTessellator().createMesh(rc, this);
+      _tessellatorMesh = trc.getTessellator().createMesh(rc, this, trc.getParameters()._renderDebug);
     }
     return _tessellatorMesh;
   }

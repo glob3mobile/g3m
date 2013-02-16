@@ -62,18 +62,22 @@ public class Ellipsoid
     return positionOnEllipsoid.times(_oneOverRadiiSquared).normalized().asVector3D();
   }
 
+
+  public final Vector3D geodeticSurfaceNormal(Angle latitude, Angle longitude)
+  {
+    final double cosLatitude = latitude.cosinus();
+  
+    return new Vector3D(cosLatitude * longitude.cosinus(), cosLatitude * longitude.sinus(), latitude.sinus());
+  }
+
   public final Vector3D geodeticSurfaceNormal(Geodetic3D geodetic)
   {
-    final double cosLatitude = geodetic.latitude().cosinus();
-  
-    return new Vector3D(cosLatitude * geodetic.longitude().cosinus(), cosLatitude * geodetic.longitude().sinus(), geodetic.latitude().sinus());
+    return geodeticSurfaceNormal(geodetic.latitude(), geodetic.longitude());
   }
 
   public final Vector3D geodeticSurfaceNormal(Geodetic2D geodetic)
   {
-    final double cosLatitude = geodetic.latitude().cosinus();
-  
-    return new Vector3D(cosLatitude * geodetic.longitude().cosinus(), cosLatitude * geodetic.longitude().sinus(), geodetic.latitude().sinus());
+    return geodeticSurfaceNormal(geodetic.latitude(), geodetic.longitude());
   }
 
   public final java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction)
@@ -125,19 +129,24 @@ public class Ellipsoid
     return intersections;
   }
 
-  public final Vector3D toCartesian(Geodetic3D geodetic)
+  public final Vector3D toCartesian(Angle latitude, Angle longitude, double height)
   {
-    final Vector3D n = geodeticSurfaceNormal(geodetic);
+    final Vector3D n = geodeticSurfaceNormal(latitude, longitude);
     final Vector3D k = _radiiSquared.times(n);
     final double gamma = IMathUtils.instance().sqrt((k._x * n._x) + (k._y * n._y) + (k._z * n._z));
   
     final Vector3D rSurface = k.div(gamma);
-    return rSurface.add(n.times(geodetic.height()));
+    return rSurface.add(n.times(height));
+  }
+
+  public final Vector3D toCartesian(Geodetic3D geodetic)
+  {
+    return toCartesian(geodetic.latitude(), geodetic.longitude(), geodetic.height());
   }
 
   public final Vector3D toCartesian(Geodetic2D geodetic)
   {
-    return toCartesian(new Geodetic3D(geodetic, 0.0));
+    return toCartesian(geodetic.latitude(), geodetic.longitude(), 0.0);
   }
 
   public final Geodetic2D toGeodetic2D(Vector3D positionOnEllipsoid)

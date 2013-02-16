@@ -1,5 +1,10 @@
 package org.glob3.mobile.generated; 
 //
+//  FloatBufferBuilderFromGeodetic.cpp
+//  G3MiOSSDK
+
+
+//
 //  FloatBufferBuilderFromGeodetic.hpp
 //  G3MiOSSDK
 //
@@ -49,15 +54,15 @@ public class FloatBufferBuilderFromGeodetic extends FloatBufferBuilder
     setCenter(_ellipsoid.toCartesian(center));
   }
 
-  public final void add(Geodetic3D position)
+  public final void add(Angle latitude, Angle longitude, double height)
   {
-    final Vector3D vector = _ellipsoid.toCartesian(position);
-
+    final Vector3D vector = _ellipsoid.toCartesian(latitude, longitude, height);
+  
     if (_centerStrategy == CenterStrategy.firstVertex() && _values.size() == 0)
     {
       setCenter(vector);
     }
-
+  
     float x = (float) vector._x;
     float y = (float) vector._y;
     float z = (float) vector._z;
@@ -67,34 +72,25 @@ public class FloatBufferBuilderFromGeodetic extends FloatBufferBuilder
       y -= _cy;
       z -= _cz;
     }
-
+  
     _values.add(x);
     _values.add(y);
     _values.add(z);
   }
 
+  public final void add(Geodetic3D position)
+  {
+    add(position.latitude(), position.longitude(), position.height());
+  }
+
   public final void add(Geodetic2D position)
   {
-    final Vector3D vector = _ellipsoid.toCartesian(position);
+    add(position.latitude(), position.longitude(), 0.0);
+  }
 
-    if (_centerStrategy == CenterStrategy.firstVertex() && _values.size() == 0)
-    {
-      setCenter(vector);
-    }
-
-    float x = (float) vector._x;
-    float y = (float) vector._y;
-    float z = (float) vector._z;
-    if (_centerStrategy != CenterStrategy.noCenter())
-    {
-      x -= _cx;
-      y -= _cy;
-      z -= _cz;
-    }
-
-    _values.add(x);
-    _values.add(y);
-    _values.add(z);
+  public final void add(Geodetic2D position, double height)
+  {
+    add(position.latitude(), position.longitude(), height);
   }
 
   public final Vector3D getCenter()

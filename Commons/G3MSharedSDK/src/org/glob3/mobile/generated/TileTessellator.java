@@ -30,7 +30,7 @@ public abstract class TileTessellator
 
   public abstract boolean isReady(G3MRenderContext rc);
 
-  public abstract Mesh createMesh(G3MRenderContext rc, Tile tile);
+  public abstract Mesh createMesh(G3MRenderContext rc, Tile tile, boolean debug);
 
   public abstract Mesh createDebugMesh(G3MRenderContext rc, Tile tile);
 
