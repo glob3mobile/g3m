@@ -19,14 +19,14 @@ class SGLayerNode : public SGNode {
 private:
   const std::string _uri;
 
-  const std::string _applyTo;
-  const std::string _blendMode;
-  const bool        _flipY;
-
-  const std::string _magFilter;
-  const std::string _minFilter;
-  const std::string _wrapS;
-  const std::string _wrapT;
+//  const std::string _applyTo;
+//  const std::string _blendMode;
+//  const bool        _flipY;
+//
+//  const std::string _magFilter;
+//  const std::string _minFilter;
+//  const std::string _wrapS;
+//  const std::string _wrapT;
 
   bool _initialized;
 
@@ -58,13 +58,13 @@ public:
               const std::string& wrapT) :
   SGNode(id, sId),
   _uri(uri),
-  _applyTo(applyTo),
-  _blendMode(blendMode),
-  _flipY(flipY),
-  _magFilter(magFilter),
-  _minFilter(minFilter),
-  _wrapS(wrapS),
-  _wrapT(wrapT),
+//  _applyTo(applyTo),
+//  _blendMode(blendMode),
+//  _flipY(flipY),
+//  _magFilter(magFilter),
+//  _minFilter(minFilter),
+//  _wrapS(wrapS),
+//  _wrapT(wrapT),
   _downloadedImage(NULL),
   _textureId(NULL),
   _initialized(false)
