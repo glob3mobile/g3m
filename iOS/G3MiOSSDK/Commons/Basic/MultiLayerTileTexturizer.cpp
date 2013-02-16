@@ -491,7 +491,6 @@ public:
         mapping = NULL;
       }
       else {
-        int _____XXXXXXX;
         const bool ownedTexCoords = true;
         const bool transparent    = false;
         mapping = new LazyTextureMapping(new LTMInitializer(_tile,

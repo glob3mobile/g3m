@@ -504,8 +504,6 @@ SGGeometryNode* SceneJSShapesParser::createGeometryNode(const JSONObject* jsonOb
       }
       isY = !isY;
       uv->put(i, value);
-
-      int __TEXTURES_AT_WORK;
     }
     processedKeys++;
   }
@@ -549,7 +547,6 @@ SGNode* SceneJSShapesParser::toNode(const JSONBaseObject* jsonBaseObject) const 
     return NULL;
   }
 
-  int ____DIEGO_AT_WORK;
   const JSONObject* jsonObject = jsonBaseObject->asObject();
 
   SGNode* result = NULL;

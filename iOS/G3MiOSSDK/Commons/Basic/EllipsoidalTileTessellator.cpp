@@ -34,11 +34,12 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const G3MRenderContext* rc,
   const Planet* planet = rc->getPlanet();
 
   const short resolution = (short) _resolution;
+  //  /* testing for dynamic latitude-resolution */
   //  double cos = sector.getCenter().latitude().cosinus();
   //  if (cos < 0) {
   //    cos *= -1;
   //  }
-  //  int resolution = (int) (_resolution * cos);
+  //  int resolution = (int) (_resolution * 2 * cos);
   //  if (resolution % 2 == 1) {
   //    resolution += 1;
   //  }

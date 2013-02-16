@@ -39,7 +39,7 @@ std::vector<double> Ellipsoid::intersectionsDistances(const Vector3D& origin,
   std::vector<double> intersections;
 
   int __ASK_Normalized_or_not;
-  //direction.Normalize();
+  //const Vector3D direction = rawDirection.normalized();
 
   // By laborious algebraic manipulation....
   const double a = (direction._x * direction._x * _oneOverRadiiSquared._x +
