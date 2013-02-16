@@ -245,7 +245,7 @@ public:
     for (int j = -halfSteps; j < halfSteps; j++) {
       Angle lon = centerLon.add( deltaLon.times(j) );
 
-      vertices.add( Geodetic3D(lat, lon, 100000) );
+      vertices.add( lat, lon, 100000 );
 
       const float red   = (float) (i + halfSteps + 1) / steps;
       const float green = (float) (j + halfSteps + 1) / steps;
@@ -457,10 +457,10 @@ public:
 
 - (TilesRenderParameters*) createTileRenderParameters
 {
-  const bool renderDebug = false;
+  const bool renderDebug = true;
   const bool useTilesSplitBudget = true;
   const bool forceTopLevelTilesRenderOnStart = true;
-  const bool incrementalTileQuality = true;
+  const bool incrementalTileQuality = false;
 
   return TilesRenderParameters::createDefault(renderDebug,
                                               useTilesSplitBudget,

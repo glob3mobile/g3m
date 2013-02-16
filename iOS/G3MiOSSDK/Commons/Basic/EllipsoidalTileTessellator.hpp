@@ -35,7 +35,8 @@ public:
   virtual ~EllipsoidalTileTessellator() { }
   
   Mesh* createMesh(const G3MRenderContext* rc,
-                   const Tile* tile) const;
+                   const Tile* tile,
+                   bool debug) const;
   
   bool isReady(const G3MRenderContext *rc) const {
     return true;

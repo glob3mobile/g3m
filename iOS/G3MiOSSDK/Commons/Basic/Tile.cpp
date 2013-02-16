@@ -96,7 +96,9 @@ void Tile::setTextureSolved(bool textureSolved) {
 Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
                                const TileRenderContext* trc) {
   if (_tessellatorMesh == NULL) {
-    _tessellatorMesh = trc->getTessellator()->createMesh(rc, this);
+    _tessellatorMesh = trc->getTessellator()->createMesh(rc,
+                                                         this,
+                                                         trc->getParameters()->_renderDebug);
   }
   return _tessellatorMesh;
 }

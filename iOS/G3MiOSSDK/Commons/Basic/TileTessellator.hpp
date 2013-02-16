@@ -22,7 +22,8 @@ public:
   virtual bool isReady(const G3MRenderContext *rc) const = 0;
   
   virtual Mesh* createMesh(const G3MRenderContext* rc,
-                           const Tile* tile) const = 0;
+                           const Tile* tile,
+                           bool debug) const = 0;
   
   virtual Mesh* createDebugMesh(const G3MRenderContext* rc,
                                 const Tile* tile) const = 0;
