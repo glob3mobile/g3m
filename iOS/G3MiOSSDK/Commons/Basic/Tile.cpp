@@ -52,10 +52,13 @@ Tile::~Tile() {
 
   delete _debugMesh;
   _debugMesh = NULL;
+
   delete _tessellatorMesh;
   _tessellatorMesh = NULL;
+
   delete _texturizerData;
   _texturizerData = NULL;
+
   delete _texturizedMesh;
   _texturizedMesh = NULL;
 }
@@ -96,9 +99,9 @@ void Tile::setTextureSolved(bool textureSolved) {
 Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
                                const TileRenderContext* trc) {
   if (_tessellatorMesh == NULL) {
-    _tessellatorMesh = trc->getTessellator()->createMesh(rc,
-                                                         this,
-                                                         trc->getParameters()->_renderDebug);
+    _tessellatorMesh = trc->getTessellator()->createTileMesh(rc,
+                                                             this,
+                                                             trc->getParameters()->_renderDebug);
   }
   return _tessellatorMesh;
 }
@@ -106,7 +109,7 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
 Mesh* Tile::getDebugMesh(const G3MRenderContext* rc,
                          const TileRenderContext* trc) {
   if (_debugMesh == NULL) {
-    _debugMesh = trc->getTessellator()->createDebugMesh(rc, this);
+    _debugMesh = trc->getTessellator()->createTileDebugMesh(rc, this);
   }
   return _debugMesh;
 }

@@ -16,32 +16,33 @@
 
 class EllipsoidalTileTessellator : public TileTessellator {
 private:
-  
+
   const unsigned int _resolution;
   const bool         _skirted;
-  
+
 public:
-  Mesh* createDebugMesh(const G3MRenderContext* rc,
-                        const Tile* tile) const;
-  
+
   EllipsoidalTileTessellator(const unsigned int resolution,
                              const bool skirted) :
   _resolution(resolution),
   _skirted(skirted)
   {
-//    int __TODO_width_and_height_resolutions;
+    //    int __TODO_width_and_height_resolutions;
   }
-  
+
   virtual ~EllipsoidalTileTessellator() { }
-  
-  Mesh* createMesh(const G3MRenderContext* rc,
-                   const Tile* tile,
-                   bool debug) const;
-  
+
+  Mesh* createTileMesh(const G3MRenderContext* rc,
+                       const Tile* tile,
+                       bool debug) const;
+
+  Mesh* createTileDebugMesh(const G3MRenderContext* rc,
+                            const Tile* tile) const;
+
   bool isReady(const G3MRenderContext *rc) const {
     return true;
   }
-  
+
   IFloatBuffer* createUnitTextCoords() const;
   
 };
