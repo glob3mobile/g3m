@@ -87,6 +87,10 @@ public class EllipsoidalTileTessellator extends TileTessellator
   {
   }
 
+
+  ///#include "FloatBufferBuilderFromCartesian2D.hpp"
+  
+  
   public final Mesh createMesh(G3MRenderContext rc, Tile tile, boolean debug)
   {
   
@@ -203,7 +207,6 @@ public class EllipsoidalTileTessellator extends TileTessellator
   public final IFloatBuffer createUnitTextCoords()
   {
   
-    FloatBufferBuilderFromCartesian2D textCoords = new FloatBufferBuilderFromCartesian2D();
   
     final int resolution = _resolution;
     final int resolutionMinus1 = resolution - 1;
@@ -221,12 +224,23 @@ public class EllipsoidalTileTessellator extends TileTessellator
       }
     }
   
+    //FloatBufferBuilderFromCartesian2D textCoords;
+    int textCoordsSize = (resolution * resolution) * 2;
+    if (_skirted)
+    {
+      textCoordsSize += (resolutionMinus1 * 4) * 2;
+    }
+    IFloatBuffer textCoords = IFactory.instance().createFloatBuffer(textCoordsSize);
+    int textCoordsIndex = 0;
+  
     for (int j = 0; j < resolution; j++)
     {
       for (int i = 0; i < resolution; i++)
       {
         final int pos = j *resolution + i;
-        textCoords.add(u[pos], v[pos]);
+        //textCoords.add( u[pos], v[pos] );
+        textCoords.rawPut(textCoordsIndex++, u[pos]);
+        textCoords.rawPut(textCoordsIndex++, v[pos]);
       }
     }
   
@@ -237,28 +251,36 @@ public class EllipsoidalTileTessellator extends TileTessellator
       for (int j = 0; j < resolutionMinus1; j++)
       {
         final int pos = j *resolution;
-        textCoords.add(u[pos], v[pos]);
+        //textCoords.add( u[pos], v[pos] );
+        textCoords.rawPut(textCoordsIndex++, u[pos]);
+        textCoords.rawPut(textCoordsIndex++, v[pos]);
       }
   
       // south side
       for (int i = 0; i < resolutionMinus1; i++)
       {
         final int pos = resolutionMinus1 * resolution + i;
-        textCoords.add(u[pos], v[pos]);
+        //textCoords.add( u[pos], v[pos] );
+        textCoords.rawPut(textCoordsIndex++, u[pos]);
+        textCoords.rawPut(textCoordsIndex++, v[pos]);
       }
   
       // east side
       for (int j = resolutionMinus1; j > 0; j--)
       {
         final int pos = j *resolution + resolutionMinus1;
-        textCoords.add(u[pos], v[pos]);
+        //textCoords.add( u[pos], v[pos] );
+        textCoords.rawPut(textCoordsIndex++, u[pos]);
+        textCoords.rawPut(textCoordsIndex++, v[pos]);
       }
   
       // north side
       for (int i = resolutionMinus1; i > 0; i--)
       {
         final int pos = i;
-        textCoords.add(u[pos], v[pos]);
+        //textCoords.add( u[pos], v[pos] );
+        textCoords.rawPut(textCoordsIndex++, u[pos]);
+        textCoords.rawPut(textCoordsIndex++, v[pos]);
       }
     }
   
@@ -266,7 +288,8 @@ public class EllipsoidalTileTessellator extends TileTessellator
     u = null;
     v = null;
   
-    return textCoords.create();
+  //  return textCoords.create();
+    return textCoords;
   }
 
 }
