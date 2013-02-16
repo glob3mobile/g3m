@@ -15,6 +15,9 @@
 class IGLTextureId;
 class IImage;
 
+#if JAVA_CODE
+@SuppressWarnings("unused")
+#endif
 class SGLayerNode : public SGNode {
 private:
   const std::string _uri;
