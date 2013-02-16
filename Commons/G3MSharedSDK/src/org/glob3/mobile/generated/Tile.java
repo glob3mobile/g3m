@@ -52,7 +52,7 @@ public class Tile
   {
     if (_tessellatorMesh == null)
     {
-      _tessellatorMesh = trc.getTessellator().createMesh(rc, this, trc.getParameters()._renderDebug);
+      _tessellatorMesh = trc.getTessellator().createTileMesh(rc, this, trc.getParameters()._renderDebug);
     }
     return _tessellatorMesh;
   }
@@ -61,7 +61,7 @@ public class Tile
   {
     if (_debugMesh == null)
     {
-      _debugMesh = trc.getTessellator().createDebugMesh(rc, this);
+      _debugMesh = trc.getTessellator().createTileDebugMesh(rc, this);
     }
     return _debugMesh;
   }
@@ -325,12 +325,15 @@ public class Tile
     if (_debugMesh != null)
        _debugMesh.dispose();
     _debugMesh = null;
+  
     if (_tessellatorMesh != null)
        _tessellatorMesh.dispose();
     _tessellatorMesh = null;
+  
     if (_texturizerData != null)
        _texturizerData.dispose();
     _texturizerData = null;
+  
     if (_texturizedMesh != null)
        _texturizedMesh.dispose();
     _texturizedMesh = null;
