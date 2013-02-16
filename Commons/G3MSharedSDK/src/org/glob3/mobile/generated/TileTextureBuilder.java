@@ -319,7 +319,6 @@ public class TileTextureBuilder extends RCObject
       }
       else
       {
-        int _____XXXXXXX;
         final boolean ownedTexCoords = true;
         final boolean transparent = false;
         mapping = new LazyTextureMapping(new LTMInitializer(_tile, ancestor, _tessellator), _texturesHandler, ownedTexCoords, transparent);

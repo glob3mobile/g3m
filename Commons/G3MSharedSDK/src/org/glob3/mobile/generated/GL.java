@@ -590,7 +590,6 @@ public class GL
   
     if (textureId != null)
     {
-      int __TESTING_TEXTUREIDs_DELETION;
       if (_nativeGL.deleteTexture(textureId))
       {
         _texturesIdBag.addLast(textureId);

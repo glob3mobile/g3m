@@ -85,7 +85,7 @@ public class Ellipsoid
     java.util.ArrayList<Double> intersections = new java.util.ArrayList<Double>();
   
     int __ASK_Normalized_or_not;
-    //direction.Normalize();
+    //const Vector3D direction = rawDirection.normalized();
   
     // By laborious algebraic manipulation....
     final double a = (direction._x * direction._x * _oneOverRadiiSquared._x + direction._y * direction._y * _oneOverRadiiSquared._y + direction._z * direction._z * _oneOverRadiiSquared._z);
