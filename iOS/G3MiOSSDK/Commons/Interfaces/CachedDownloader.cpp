@@ -364,7 +364,7 @@ void CachedDownloader::onDestroy(const G3MContext* context) {
 
 void CachedDownloader::initialize(const G3MContext* context,
                                   FrameTasksExecutor* frameTasksExecutor) {
-  _context = context;
-  _frameTasksExecutor = frameTasksExecutor;
+//  _context = context;
+//  _frameTasksExecutor = frameTasksExecutor;
   _downloader->initialize(context, frameTasksExecutor);
 }
