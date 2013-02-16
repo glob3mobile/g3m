@@ -17,10 +17,10 @@ private:
   const Color* _baseColor;
   const Color* _specularColor;
 
-  const double _specular;
-  const double _shine;
-  const double _alpha;
-  const double _emit;
+//  const double _specular;
+//  const double _shine;
+//  const double _alpha;
+//  const double _emit;
 
 public:
 
@@ -34,11 +34,11 @@ public:
                  double emit) :
   SGNode(id, sId),
   _baseColor(baseColor),
-  _specularColor(specularColor),
-  _specular(specular),
-  _shine(shine),
-  _alpha(alpha),
-  _emit(emit)
+  _specularColor(specularColor)
+//  _specular(specular),
+//  _shine(shine),
+//  _alpha(alpha),
+//  _emit(emit)
   {
 
   }
