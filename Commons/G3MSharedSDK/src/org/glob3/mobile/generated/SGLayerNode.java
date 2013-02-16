@@ -1,4 +1,13 @@
 package org.glob3.mobile.generated; 
+public class GlobalMembersSGLayerNode
+{
+
+
+
+
+      public static final int TEXTURES_DOWNLOAD_PRIORITY = 1000000;
+}
+
 //
 //  SGLayerNode.cpp
 //  G3MiOSSDK
@@ -20,8 +29,14 @@ package org.glob3.mobile.generated;
 //class IGLTextureId;
 //class IImage;
 
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if JAVA_CODE
+public SuppressWarnings("unused") class SGLayerNode extends SGNode
+{
+//#else
 public class SGLayerNode extends SGNode
 {
+//#endif
   private final String _uri;
 
   private final String _applyTo;
@@ -59,10 +74,10 @@ public class SGLayerNode extends SGNode
       return;
     }
   
-    rc.getDownloader().requestImage(getURL(), DefineConstants.TEXTURES_DOWNLOAD_PRIORITY, TimeInterval.fromDays(30), new ImageDownloadListener(this), true);
+    rc.getDownloader().requestImage(getURL(), TEXTURES_DOWNLOAD_PRIORITY, TimeInterval.fromDays(30), new ImageDownloadListener(this), true);
   }
 
-  private IGLTextureId _textureId;
+//TangibleCopyWithoutConversion  private IGLTextureId _textureId;
 
   private URL getURL()
   {
@@ -127,4 +142,36 @@ public class SGLayerNode extends SGNode
     return state;
   }
 
+}
+
+
+public class ImageDownloadListener extends IImageDownloadListener
+{
+  private SGLayerNode _layerNode;
+
+  public ImageDownloadListener(SGLayerNode layerNode)
+  {
+     _layerNode = layerNode;
+
+  }
+
+  public final void onDownload(URL url, IImage image)
+  {
+    _layerNode.onImageDownload(image);
+  }
+
+  public final void onError(URL url)
+  {
+    ILogger.instance().logWarning("Can't download texture \"%s\"", url.getPath());
+  }
+
+  public final void onCancel(URL url)
+  {
+
+  }
+
+  public final void onCanceledDownload(URL url, IImage image)
+  {
+
+  }
 }
