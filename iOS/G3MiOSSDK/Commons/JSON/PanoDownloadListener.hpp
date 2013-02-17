@@ -54,9 +54,10 @@ class PanoDownloadListener : public IBufferDownloadListener {
     
     MarksRenderer* _marksRenderer;
     MarkTouchListener* _panoTouchListener;
-    
+    std::string _urlIcon;
+  
 public:
-    PanoDownloadListener(MarksRenderer* _marksRenderer, MarkTouchListener* panoTouchListener);
+    PanoDownloadListener(MarksRenderer* _marksRenderer, MarkTouchListener* panoTouchListener, std::string urlIcon);
     
     void onDownload(const URL& url,
                     IByteBuffer* buffer);

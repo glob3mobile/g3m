@@ -27,9 +27,10 @@ const std::string PanoDownloadListener::POSITION = "position";
 const std::string PanoDownloadListener::LAT = "lat";
 const std::string PanoDownloadListener::LON = "lon";
 
-PanoDownloadListener::PanoDownloadListener(MarksRenderer* marksRenderer, MarkTouchListener* panoTouchListener){
+PanoDownloadListener::PanoDownloadListener(MarksRenderer* marksRenderer, MarkTouchListener* panoTouchListener, std::string urlIcon){
     _marksRenderer = marksRenderer;
     _panoTouchListener = panoTouchListener;
+    _urlIcon = urlIcon;
 }
 
 void PanoDownloadListener::onDownload(const URL& url,
@@ -47,7 +48,7 @@ void PanoDownloadListener::parseMETADATA(std::string url, const JSONObject* json
     const Angle latitude = Angle::fromDegrees(json->getAsObject(POSITION)->getAsNumber(LAT)->value());
     const Angle longitude = Angle::fromDegrees(json->getAsObject(POSITION)->getAsNumber(LON)->value());
   
-    Mark* mark = new Mark(URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png",false),
+    Mark* mark = new Mark(URL(_urlIcon,false),
                         Geodetic3D(latitude, longitude, 0), 0, new PanoMarkUserData(json->getAsString(NAME)->value(), new URL(url, false)),true, _panoTouchListener,true);
     
     _marksRenderer->addMark(mark);
