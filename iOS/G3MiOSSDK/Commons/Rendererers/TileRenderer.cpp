@@ -17,6 +17,7 @@
 #include "LayerSet.hpp"
 #include "VisibleSectorListener.hpp"
 #include "IThreadUtils.hpp"
+#include "ElevationDataProvider.hpp"
 
 class VisibleSectorListenerEntry {
 private:
@@ -98,11 +99,13 @@ public:
 
 
 TileRenderer::TileRenderer(const TileTessellator* tessellator,
+                           ElevationDataProvider* elevationDataProvider,
                            TileTexturizer*  texturizer,
                            LayerSet* layerSet,
                            const TilesRenderParameters* parameters,
                            bool showStatistics) :
 _tessellator(tessellator),
+_elevationDataProvider(elevationDataProvider),
 _texturizer(texturizer),
 _layerSet(layerSet),
 _parameters(parameters),
@@ -115,6 +118,8 @@ _context(NULL),
 _lastVisibleSector(NULL)
 {
   _layerSet->setChangeListener(this);
+
+  _verticalExaggeration = 20;
 }
 
 void TileRenderer::recreateTiles() {
@@ -149,6 +154,7 @@ TileRenderer::~TileRenderer() {
   clearTopLevelTiles();
 
   delete _tessellator;
+  delete _elevationDataProvider;
   delete _texturizer;
   delete _parameters;
 
@@ -215,6 +221,9 @@ void TileRenderer::initialize(const G3MContext* context) {
 
   _layerSet->initialize(context);
   _texturizer->initialize(context, _parameters);
+  if (_elevationDataProvider != NULL) {
+    _elevationDataProvider->initialize(context);
+  }
 }
 
 bool TileRenderer::isReadyToRender(const G3MRenderContext *rc) {
@@ -227,12 +236,14 @@ bool TileRenderer::isReadyToRender(const G3MRenderContext *rc) {
       TilesStatistics statistics;
 
       TileRenderContext trc(_tessellator,
+                            _elevationDataProvider,
                             _texturizer,
                             _layerSet,
                             _parameters,
                             &statistics,
                             _lastSplitTimer,
-                            true);
+                            true,
+                            _verticalExaggeration);
 
       for (int i = 0; i < topLevelTilesCount; i++) {
         Tile* tile = _topLevelTiles[i];
@@ -281,12 +292,14 @@ void TileRenderer::render(const G3MRenderContext* rc,
   TilesStatistics statistics;
 
   TileRenderContext trc(_tessellator,
+                        _elevationDataProvider,
                         _texturizer,
                         _layerSet,
                         _parameters,
                         &statistics,
                         _lastSplitTimer,
-                        _firstRender /* if first render, force full render */);
+                        _firstRender /* if first render, force full render */,
+                        _verticalExaggeration);
 
   const int topLevelTilesCount = _topLevelTiles.size();
 
@@ -390,7 +403,7 @@ bool TileRenderer::onTouchEvent(const G3MEventContext* ec,
 void TileRenderer::pruneTopLevelTiles() {
   for (int i = 0; i < _topLevelTiles.size(); i++) {
     Tile* tile = _topLevelTiles[i];
-    tile->prune(_texturizer);
+    tile->prune(_texturizer, _elevationDataProvider);
   }
 }
 

@@ -29,6 +29,7 @@ public:
   bool hasNext() const;
 
   unsigned char nextUInt8();
+  short         nextInt16();
   int           nextInt32();
   long long     nextInt64();
 

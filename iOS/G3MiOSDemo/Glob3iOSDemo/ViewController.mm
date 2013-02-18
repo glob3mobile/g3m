@@ -294,7 +294,7 @@ public:
 {
   LayerSet* layerSet = new LayerSet();
 
-  if (false) {
+  if (true) {
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
                                         URL("http://www.nasa.network.com/wms?", false),
                                         WMS_1_1_0,
@@ -365,7 +365,7 @@ public:
     layerSet->addLayer(political);
   }
 
-  bool useOSM = true;
+  bool useOSM = false;
   if (useOSM) {
     WMSLayer *osm = new WMSLayer("osm_auto:all",
                                  URL("http://129.206.228.72/cached/osm", false),

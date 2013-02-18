@@ -32,11 +32,18 @@ public:
 
   virtual ~EllipsoidalTileTessellator() { }
 
-  Mesh* createTileMesh(const G3MRenderContext* rc,
+  Vector2I getTileMeshResolution(const Planet* planet,
+                                 const Tile* tile,
+                                 bool debug) const;
+
+
+  Mesh* createTileMesh(const Planet* planet,
                        const Tile* tile,
+                       const ElevationData* elevationData,
+                       float verticalExaggeration,
                        bool debug) const;
 
-  Mesh* createTileDebugMesh(const G3MRenderContext* rc,
+  Mesh* createTileDebugMesh(const Planet* planet,
                             const Tile* tile) const;
 
   bool isReady(const G3MRenderContext *rc) const {

@@ -66,6 +66,22 @@ int ByteBufferIterator::nextInt32() {
   ((int) b4 << 24);
 }
 
+short ByteBufferIterator::nextInt16() {
+  // LittleEndian
+#ifdef C_CODE
+  unsigned char b1 = nextUInt8();
+  unsigned char b2 = nextUInt8();
+#endif
+#ifdef JAVA_CODE
+  short b1 = nextUInt8() & 0xFF;
+  short b2 = nextUInt8() & 0xFF;
+#endif
+
+  return
+  ((short) b1) |
+  ((short) (b2 << 8));
+}
+
 long long ByteBufferIterator::nextInt64() {
   // LittleEndian
 #ifdef C_CODE

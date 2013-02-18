@@ -25,13 +25,26 @@
 
 #include "IFactory.hpp"
 #include "IFloatBuffer.hpp"
+#include "ElevationData.hpp"
 
-Mesh* EllipsoidalTileTessellator::createTileMesh(const G3MRenderContext* rc,
+Vector2I EllipsoidalTileTessellator::getTileMeshResolution(const Planet* planet,
+                                                           const Tile* tile,
+                                                           bool debug) const {
+  return Vector2I(_resolution, _resolution);
+}
+
+Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
                                                  const Tile* tile,
+                                                 const ElevationData* elevationData,
+                                                 float verticalExaggeration,
                                                  bool debug) const {
 
   const Sector sector = tile->getSector();
-  const Planet* planet = rc->getPlanet();
+
+  if (elevationData != NULL) {
+    ILogger::instance()->logInfo("Elevation data for sector=%s", sector.description().c_str());
+    ILogger::instance()->logInfo("%s", elevationData->description().c_str());
+  }
 
   const short resolution = (short) _resolution;
   //  /* testing for dynamic latitude-resolution */
@@ -50,6 +63,7 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const G3MRenderContext* rc,
   const short resolutionMinus1 = (short) (resolution - 1);
 
 
+  double minHeight = 0;
   FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(),
                                           planet,
                                           sector.getCenter());
@@ -57,7 +71,19 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const G3MRenderContext* rc,
     const double v = (double) j / resolutionMinus1;
     for (int i = 0; i < resolution; i++) {
       const double u = (double) i / resolutionMinus1;
-      vertices.add( sector.getInnerPoint(u, v) );
+
+      float height;
+      if (elevationData == NULL) {
+        height = 0;
+      }
+      else {
+        height = elevationData->getElevationAt(i, j) * verticalExaggeration;
+        if (height < minHeight) {
+          minHeight = height;
+        }
+      }
+
+      vertices.add( sector.getInnerPoint(u, v), height );
     }
   }
 
@@ -75,13 +101,13 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const G3MRenderContext* rc,
     indices.add((short) (jTimesResolution + 2*resolution - 1));
   }
 
+
   // create skirts
   if (_skirted) {
-
     // compute skirt height
     const Vector3D sw = planet->toCartesian(sector.getSW());
     const Vector3D nw = planet->toCartesian(sector.getNW());
-    const double skirtHeight = nw.sub(sw).length() * 0.05;
+    const double skirtHeight = (nw.sub(sw).length() * 0.05 * -1) + minHeight;
 
     indices.add((short) 0);
     int posS = resolution * resolution;
@@ -89,7 +115,7 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const G3MRenderContext* rc,
     // west side
     for (int j = 0; j < resolutionMinus1; j++) {
       vertices.add(sector.getInnerPoint(0, (double)j/resolutionMinus1),
-                   -skirtHeight);
+                   skirtHeight);
 
       indices.add((short) (j*resolution));
       indices.add((short) posS++);
@@ -98,7 +124,7 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const G3MRenderContext* rc,
     // south side
     for (int i = 0; i < resolutionMinus1; i++) {
       vertices.add(sector.getInnerPoint((double)i/resolutionMinus1, 1),
-                   -skirtHeight);
+                   skirtHeight);
 
       indices.add((short) (resolutionMinus1*resolution + i));
       indices.add((short) posS++);
@@ -107,7 +133,7 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const G3MRenderContext* rc,
     // east side
     for (int j = resolutionMinus1; j > 0; j--) {
       vertices.add(sector.getInnerPoint(1, (double)j/resolutionMinus1),
-                   -skirtHeight);
+                   skirtHeight);
 
       indices.add((short) (j*resolution + resolutionMinus1));
       indices.add((short) posS++);
@@ -116,7 +142,7 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const G3MRenderContext* rc,
     // north side
     for (int i = resolutionMinus1; i > 0; i--) {
       vertices.add(sector.getInnerPoint((double)i/resolutionMinus1, 0),
-                   -skirtHeight);
+                   skirtHeight);
 
       indices.add((short) i);
       indices.add((short) posS++);
@@ -218,10 +244,9 @@ IFloatBuffer* EllipsoidalTileTessellator::createUnitTextCoords() const {
 }
 
 
-Mesh* EllipsoidalTileTessellator::createTileDebugMesh(const G3MRenderContext* rc,
+Mesh* EllipsoidalTileTessellator::createTileDebugMesh(const Planet* planet,
                                                       const Tile* tile) const {
   const Sector sector = tile->getSector();
-  const Planet* planet = rc->getPlanet();
 
   const int resolutionMinus1 = _resolution - 1;
   short posS = 0;

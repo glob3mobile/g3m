@@ -11,7 +11,7 @@
 #include "MultiLayerTileTexturizer.hpp"
 #include "EllipsoidalTileTessellator.hpp"
 #include "LayerBuilder.hpp"
-
+#include "WMSBillElevationDataProvider.hpp"
 
 TileRendererBuilder::TileRendererBuilder() {
   _showStatistics = false;
@@ -30,7 +30,10 @@ TileRendererBuilder::~TileRendererBuilder() {
 }
 
 TileRenderer* TileRendererBuilder::create() {
+  int __TODO_make_inflator_configurable;
+  ElevationDataProvider* elevationDataProvider = new WMSBillElevationDataProvider();
   TileRenderer* tileRenderer = new TileRenderer(_tileTessellator,
+                                                elevationDataProvider,
                                                 _texturizer,
                                                 _layerSet,
                                                 _parameters,

@@ -89,6 +89,7 @@ Vector3D Ellipsoid::toCartesian(const Angle& latitude,
                                 const Angle& longitude,
                                 const double height) const {
   const Vector3D n = geodeticSurfaceNormal(latitude, longitude);
+
   const Vector3D k = _radiiSquared.times(n);
   const double gamma = IMathUtils::instance()->sqrt(
                                                     (k._x * n._x) +

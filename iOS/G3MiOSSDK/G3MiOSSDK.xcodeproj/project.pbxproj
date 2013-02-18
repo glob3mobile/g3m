@@ -270,6 +270,14 @@
 		CFD314531631FFAD00B54ED3 /* Vector2I.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD314511631FFAD00B54ED3 /* Vector2I.cpp */; };
 		CFD314541631FFAD00B54ED3 /* Vector2I.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFD314521631FFAD00B54ED3 /* Vector2I.hpp */; settings = {ATTRIBUTES = (); }; };
 		CFD3D8A116CFDD0000CE9242 /* FloatBufferBuilderFromGeodetic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD3D8A016CFDD0000CE9242 /* FloatBufferBuilderFromGeodetic.cpp */; };
+		CFD3D8A516D15BC900CE9242 /* MeshHolder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD3D8A316D15BC800CE9242 /* MeshHolder.cpp */; };
+		CFD3D8A616D15BC900CE9242 /* MeshHolder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFD3D8A416D15BC900CE9242 /* MeshHolder.hpp */; };
+		CFD3D8A916D15ED000CE9242 /* ElevationDataProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD3D8A716D15ECF00CE9242 /* ElevationDataProvider.cpp */; };
+		CFD3D8AA16D15ED000CE9242 /* ElevationDataProvider.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFD3D8A816D15ED000CE9242 /* ElevationDataProvider.hpp */; };
+		CFD3D8AD16D1686900CE9242 /* ElevationData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD3D8AB16D1686700CE9242 /* ElevationData.cpp */; };
+		CFD3D8AE16D1686900CE9242 /* ElevationData.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFD3D8AC16D1686800CE9242 /* ElevationData.hpp */; };
+		CFD3D8B116D1729A00CE9242 /* WMSBillElevationDataProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD3D8AF16D1729900CE9242 /* WMSBillElevationDataProvider.cpp */; };
+		CFD3D8B216D1729A00CE9242 /* WMSBillElevationDataProvider.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFD3D8B016D1729A00CE9242 /* WMSBillElevationDataProvider.hpp */; };
 		CFDAE7A4166841C2006F6A00 /* GEOObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFDAE7A2166841C2006F6A00 /* GEOObject.cpp */; };
 		CFDAE7A5166841C2006F6A00 /* GEOObject.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFDAE7A3166841C2006F6A00 /* GEOObject.hpp */; settings = {ATTRIBUTES = (); }; };
 		CFDAE7A816684208006F6A00 /* GEOFeatureCollection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFDAE7A616684208006F6A00 /* GEOFeatureCollection.cpp */; };
@@ -649,6 +657,14 @@
 		CFD314511631FFAD00B54ED3 /* Vector2I.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Vector2I.cpp; path = Commons/Geometry/Vector2I.cpp; sourceTree = "<group>"; };
 		CFD314521631FFAD00B54ED3 /* Vector2I.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Vector2I.hpp; path = Commons/Geometry/Vector2I.hpp; sourceTree = "<group>"; };
 		CFD3D8A016CFDD0000CE9242 /* FloatBufferBuilderFromGeodetic.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FloatBufferBuilderFromGeodetic.cpp; path = Commons/Basic/FloatBufferBuilderFromGeodetic.cpp; sourceTree = "<group>"; };
+		CFD3D8A316D15BC800CE9242 /* MeshHolder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MeshHolder.cpp; path = Commons/Mesh/MeshHolder.cpp; sourceTree = "<group>"; };
+		CFD3D8A416D15BC900CE9242 /* MeshHolder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MeshHolder.hpp; path = Commons/Mesh/MeshHolder.hpp; sourceTree = "<group>"; };
+		CFD3D8A716D15ECF00CE9242 /* ElevationDataProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ElevationDataProvider.cpp; path = Commons/Basic/ElevationDataProvider.cpp; sourceTree = "<group>"; };
+		CFD3D8A816D15ED000CE9242 /* ElevationDataProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ElevationDataProvider.hpp; path = Commons/Basic/ElevationDataProvider.hpp; sourceTree = "<group>"; };
+		CFD3D8AB16D1686700CE9242 /* ElevationData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ElevationData.cpp; path = Commons/Basic/ElevationData.cpp; sourceTree = "<group>"; };
+		CFD3D8AC16D1686800CE9242 /* ElevationData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ElevationData.hpp; path = Commons/Basic/ElevationData.hpp; sourceTree = "<group>"; };
+		CFD3D8AF16D1729900CE9242 /* WMSBillElevationDataProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = WMSBillElevationDataProvider.cpp; path = Commons/Basic/WMSBillElevationDataProvider.cpp; sourceTree = "<group>"; };
+		CFD3D8B016D1729A00CE9242 /* WMSBillElevationDataProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = WMSBillElevationDataProvider.hpp; path = Commons/Basic/WMSBillElevationDataProvider.hpp; sourceTree = "<group>"; };
 		CFDAE7A2166841C2006F6A00 /* GEOObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEOObject.cpp; path = Commons/GEO/GEOObject.cpp; sourceTree = "<group>"; };
 		CFDAE7A3166841C2006F6A00 /* GEOObject.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEOObject.hpp; path = Commons/GEO/GEOObject.hpp; sourceTree = "<group>"; };
 		CFDAE7A616684208006F6A00 /* GEOFeatureCollection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEOFeatureCollection.cpp; path = Commons/GEO/GEOFeatureCollection.cpp; sourceTree = "<group>"; };
@@ -935,6 +951,12 @@
 				CFFEC12415C2EB96003FA986 /* URL.hpp */,
 				CF8D0BFB15AF0D23005B5433 /* TileTexturizer.hpp */,
 				CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */,
+				CFD3D8A716D15ECF00CE9242 /* ElevationDataProvider.cpp */,
+				CFD3D8A816D15ED000CE9242 /* ElevationDataProvider.hpp */,
+				CFD3D8AB16D1686700CE9242 /* ElevationData.cpp */,
+				CFD3D8AC16D1686800CE9242 /* ElevationData.hpp */,
+				CFD3D8AF16D1729900CE9242 /* WMSBillElevationDataProvider.cpp */,
+				CFD3D8B016D1729A00CE9242 /* WMSBillElevationDataProvider.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -1259,6 +1281,8 @@
 				D8A5602315AEF69200035086 /* TexturedMesh.hpp */,
 				CC96079115AF23F600D438D4 /* TextureMapping.cpp */,
 				CCB2564D15B5A30900079B96 /* TextureMapping.hpp */,
+				CFD3D8A316D15BC800CE9242 /* MeshHolder.cpp */,
+				CFD3D8A416D15BC900CE9242 /* MeshHolder.hpp */,
 			);
 			name = Mesh;
 			sourceTree = "<group>";
@@ -1525,6 +1549,10 @@
 				CF35DD4D16C6995D002EFC96 /* Vector3F.hpp in Headers */,
 				CF35DD5116C69B08002EFC96 /* Vector2F.hpp in Headers */,
 				FB6D00A816CBFF4F009BF93D /* EllipsoidShape.hpp in Headers */,
+				CFD3D8A616D15BC900CE9242 /* MeshHolder.hpp in Headers */,
+				CFD3D8AA16D15ED000CE9242 /* ElevationDataProvider.hpp in Headers */,
+				CFD3D8AE16D1686900CE9242 /* ElevationData.hpp in Headers */,
+				CFD3D8B216D1729A00CE9242 /* WMSBillElevationDataProvider.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1745,6 +1773,10 @@
 				CF35DD5016C69B08002EFC96 /* Vector2F.cpp in Sources */,
 				FB6D00A516CBFF3A009BF93D /* EllipsoidShape.cpp in Sources */,
 				CFD3D8A116CFDD0000CE9242 /* FloatBufferBuilderFromGeodetic.cpp in Sources */,
+				CFD3D8A516D15BC900CE9242 /* MeshHolder.cpp in Sources */,
+				CFD3D8A916D15ED000CE9242 /* ElevationDataProvider.cpp in Sources */,
+				CFD3D8AD16D1686900CE9242 /* ElevationData.cpp in Sources */,
+				CFD3D8B116D1729A00CE9242 /* WMSBillElevationDataProvider.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
