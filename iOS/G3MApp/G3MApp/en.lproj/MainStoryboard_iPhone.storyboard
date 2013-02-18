@@ -1,30 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12C60" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="90h-7u-REb">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12C60" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="pAS-cz-Wce">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
     </dependencies>
     <scenes>
         <!--Web View Controller-->
-        <scene sceneID="B9z-oU-C2N">
+        <scene sceneID="9Xt-ck-V7C">
             <objects>
-                <viewController storyboardIdentifier="G3MWebViewController" id="aZh-YZ-z3M" customClass="G3MWebViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="P0R-3V-nrd">
-                        <rect key="frame" x="0.0" y="20" width="320" height="460"/>
+                <viewController storyboardIdentifier="G3MWebViewController" id="xuR-iq-Zg7" customClass="G3MWebViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="9kg-uh-0Yn">
+                        <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" id="ATV-Yx-xlQ" customClass="UIWebView">
-                                <rect key="frame" x="0.0" y="44" width="320" height="416"/>
+                            <view contentMode="scaleToFill" id="6b5-9U-BYT" customClass="UIWebView">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="548"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             </view>
-                            <navigationBar contentMode="scaleToFill" barStyle="blackTranslucent" id="rXR-fy-3nC">
+                            <navigationBar contentMode="scaleToFill" barStyle="blackTranslucent" id="IgR-me-TkY">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <items>
-                                    <navigationItem title="glob3 mobile" id="o28-6b-4ym">
-                                        <barButtonItem key="rightBarButtonItem" title="Close" id="O2N-Ef-uaZ">
+                                    <navigationItem title="glob3 mobile" id="SA4-ec-e4V">
+                                        <barButtonItem key="rightBarButtonItem" title="Close" id="tSS-Ln-bpF">
                                             <connections>
-                                                <action selector="pushBackButton:" destination="aZh-YZ-z3M" id="8Y8-fy-TdW"/>
+                                                <action selector="pushBackButton:" destination="xuR-iq-Zg7" id="qgA-DK-SrP"/>
                                             </connections>
                                         </barButtonItem>
                                     </navigationItem>
@@ -34,30 +33,30 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <connections>
-                        <outlet property="webView" destination="ATV-Yx-xlQ" id="PH8-Ss-xQC"/>
+                        <outlet property="webView" destination="6b5-9U-BYT" id="PYe-kI-eiC"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="sSV-O0-0Ff" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1Ip-xz-7A2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="110" y="183"/>
         </scene>
-        <!--Demos View Controller-->
-        <scene sceneID="8cZ-vN-Dx2">
+        <!--View Controller-->
+        <scene sceneID="54j-pm-Wpo">
             <objects>
-                <viewController id="90h-7u-REb" customClass="DemosViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="alZ-1c-GDj">
-                        <rect key="frame" x="0.0" y="20" width="320" height="460"/>
+                <viewController id="pAS-cz-Wce" customClass="G3MViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="xj3-Dg-sf9">
+                        <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" id="lOt-Xd-eJz" customClass="G3MWidget_iOS">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="460"/>
+                            <view contentMode="scaleToFill" id="je4-7d-jQJ" customClass="G3MWidget_iOS">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="548"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
-                                    <view opaque="NO" contentMode="scaleToFill" id="kg8-AE-xwg">
+                                    <view opaque="NO" contentMode="scaleToFill" id="0yj-OG-0eM">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="58"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="dZE-QX-uWN">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="IiL-Go-BqT">
                                                 <rect key="frame" x="112" y="5" width="200" height="48"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -67,8 +66,8 @@
                                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="sx9-hP-S7t">
-                                                <rect key="frame" x="4" y="4" width="50" height="50"/>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="OP8-zv-p8A">
+                                                <rect key="frame" x="-4" y="5" width="65" height="48"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                                 <state key="normal" title="Button" image="g3m-48.png">
@@ -90,11 +89,11 @@
                     </view>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
                     <connections>
-                        <outlet property="G3MWidget" destination="lOt-Xd-eJz" id="c8U-QO-hqA"/>
-                        <outlet property="demoSelector" destination="dZE-QX-uWN" id="GBZ-gB-Xep"/>
+                        <outlet property="demoSelector" destination="IiL-Go-BqT" id="5jE-2B-NIA"/>
+                        <outlet property="g3mWidget" destination="je4-7d-jQJ" id="LLv-sG-RPR"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="xuj-Dk-csY" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Z4Y-5P-zNw" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-318" y="183"/>
         </scene>
@@ -104,11 +103,11 @@
         <image name="selector-background.png" width="200" height="48"/>
     </resources>
     <classes>
-        <class className="DemosViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/DemosViewController.h"/>
+        <class className="G3MViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/G3MViewController.h"/>
             <relationships>
-                <relationship kind="outlet" name="G3MWidget" candidateClass="G3MWidget_iOS"/>
                 <relationship kind="outlet" name="demoSelector" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="g3mWidget" candidateClass="G3MWidget_iOS"/>
             </relationships>
         </class>
         <class className="G3MWebViewController" superclassName="UIViewController">
@@ -125,6 +124,6 @@
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
 </document>
