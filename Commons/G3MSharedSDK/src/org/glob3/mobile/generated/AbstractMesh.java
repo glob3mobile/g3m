@@ -37,7 +37,6 @@ public abstract class AbstractMesh extends Mesh
   protected Extent _extent;
   protected final Extent computeExtent()
   {
-  
     final int vertexCount = getVertexCount();
   
     if (vertexCount <= 0)
@@ -45,38 +44,39 @@ public abstract class AbstractMesh extends Mesh
       return null;
     }
   
-    double minx = 1e10;
-    double miny = 1e10;
-    double minz = 1e10;
-    double maxx = -1e10;
-    double maxy = -1e10;
-    double maxz = -1e10;
+    double minX = 1e12;
+    double minY = 1e12;
+    double minZ = 1e12;
+  
+    double maxX = -1e12;
+    double maxY = -1e12;
+    double maxZ = -1e12;
   
     for (int i = 0; i < vertexCount; i++)
     {
-      final int p = i * 3;
+      final int i3 = i * 3;
   
-      final double x = _vertices.get(p) + _center._x;
-      final double y = _vertices.get(p+1) + _center._y;
-      final double z = _vertices.get(p+2) + _center._z;
+      final double x = _vertices.get(i3) + _center._x;
+      final double y = _vertices.get(i3 + 1) + _center._y;
+      final double z = _vertices.get(i3 + 2) + _center._z;
   
-      if (x < minx)
-         minx = x;
-      if (x > maxx)
-         maxx = x;
+      if (x < minX)
+         minX = x;
+      if (x > maxX)
+         maxX = x;
   
-      if (y < miny)
-         miny = y;
-      if (y > maxy)
-         maxy = y;
+      if (y < minY)
+         minY = y;
+      if (y > maxY)
+         maxY = y;
   
-      if (z < minz)
-         minz = z;
-      if (z > maxz)
-         maxz = z;
+      if (z < minZ)
+         minZ = z;
+      if (z > maxZ)
+         maxZ = z;
     }
   
-    return new Box(new Vector3D(minx, miny, minz), new Vector3D(maxx, maxy, maxz));
+    return new Box(new Vector3D(minX, minY, minZ), new Vector3D(maxX, maxY, maxZ));
   }
 
   protected AbstractMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors, float colorsIntensity)
@@ -108,7 +108,8 @@ public abstract class AbstractMesh extends Mesh
          _flatColor.dispose();
     }
   
-    _extent = null;
+    if (_extent != null)
+       _extent.dispose();
     if (_translationMatrix != null)
        _translationMatrix.dispose();
   }

@@ -13,7 +13,7 @@
 #include "ByteBufferBuilder.hpp"
 #include "IMathUtils.hpp"
 
-ByteBufferIterator::ByteBufferIterator(IByteBuffer* buffer) :
+ByteBufferIterator::ByteBufferIterator(const IByteBuffer* buffer) :
 _buffer(buffer),
 _cursor(0),
 _timestamp(buffer->timestamp())
@@ -44,19 +44,35 @@ unsigned char ByteBufferIterator::nextUInt8() {
   return _buffer->get(_cursor++);
 }
 
+short ByteBufferIterator::nextInt16() {
+  // LittleEndian
+#ifdef C_CODE
+  const unsigned char b1 = nextUInt8();
+  const unsigned char b2 = nextUInt8();
+#endif
+#ifdef JAVA_CODE
+  final short b1 = (short) (nextUInt8() & 0xFF);
+  final short b2 = (short) (nextUInt8() & 0xFF);
+#endif
+
+  const int iResult = ((int) b1) | ((int) (b2 << 8));
+  const short result = (short) iResult;
+  return result;
+}
+
 int ByteBufferIterator::nextInt32() {
   // LittleEndian
 #ifdef C_CODE
-  unsigned char b1 = nextUInt8();
-  unsigned char b2 = nextUInt8();
-  unsigned char b3 = nextUInt8();
-  unsigned char b4 = nextUInt8();
+  const unsigned char b1 = nextUInt8();
+  const unsigned char b2 = nextUInt8();
+  const unsigned char b3 = nextUInt8();
+  const unsigned char b4 = nextUInt8();
 #endif
 #ifdef JAVA_CODE
-  int b1 = nextUInt8() & 0xFF;
-  int b2 = nextUInt8() & 0xFF;
-  int b3 = nextUInt8() & 0xFF;
-  int b4 = nextUInt8() & 0xFF;
+  final int b1 = nextUInt8() & 0xFF;
+  final int b2 = nextUInt8() & 0xFF;
+  final int b3 = nextUInt8() & 0xFF;
+  final int b4 = nextUInt8() & 0xFF;
 #endif
   
   return
@@ -69,24 +85,24 @@ int ByteBufferIterator::nextInt32() {
 long long ByteBufferIterator::nextInt64() {
   // LittleEndian
 #ifdef C_CODE
-  unsigned char b1 = nextUInt8();
-  unsigned char b2 = nextUInt8();
-  unsigned char b3 = nextUInt8();
-  unsigned char b4 = nextUInt8();
-  unsigned char b5 = nextUInt8();
-  unsigned char b6 = nextUInt8();
-  unsigned char b7 = nextUInt8();
-  unsigned char b8 = nextUInt8();
+  const unsigned char b1 = nextUInt8();
+  const unsigned char b2 = nextUInt8();
+  const unsigned char b3 = nextUInt8();
+  const unsigned char b4 = nextUInt8();
+  const unsigned char b5 = nextUInt8();
+  const unsigned char b6 = nextUInt8();
+  const unsigned char b7 = nextUInt8();
+  const unsigned char b8 = nextUInt8();
 #endif
 #ifdef JAVA_CODE
-  int b1 = nextUInt8() & 0xFF;
-  int b2 = nextUInt8() & 0xFF;
-  int b3 = nextUInt8() & 0xFF;
-  int b4 = nextUInt8() & 0xFF;
-  int b5 = nextUInt8() & 0xFF;
-  int b6 = nextUInt8() & 0xFF;
-  int b7 = nextUInt8() & 0xFF;
-  int b8 = nextUInt8() & 0xFF;
+  final int b1 = nextUInt8() & 0xFF;
+  final int b2 = nextUInt8() & 0xFF;
+  final int b3 = nextUInt8() & 0xFF;
+  final int b4 = nextUInt8() & 0xFF;
+  final int b5 = nextUInt8() & 0xFF;
+  final int b6 = nextUInt8() & 0xFF;
+  final int b7 = nextUInt8() & 0xFF;
+  final int b8 = nextUInt8() & 0xFF;
 #endif
 
   return

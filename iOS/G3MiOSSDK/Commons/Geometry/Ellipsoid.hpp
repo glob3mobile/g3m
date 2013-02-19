@@ -48,18 +48,32 @@ public:
   Vector3D geodeticSurfaceNormal(const MutableVector3D& positionOnEllipsoid) const {
     return positionOnEllipsoid.times(_oneOverRadiiSquared).normalized().asVector3D();
   }
+  
 
-  Vector3D geodeticSurfaceNormal(const Geodetic3D& geodetic) const;
+  Vector3D geodeticSurfaceNormal(const Angle& latitude,
+                                 const Angle& longitude) const;
+  
+  Vector3D geodeticSurfaceNormal(const Geodetic3D& geodetic) const {
+    return geodeticSurfaceNormal(geodetic.latitude(), geodetic.longitude());
+  }
 
-  Vector3D geodeticSurfaceNormal(const Geodetic2D& geodetic) const;
+  Vector3D geodeticSurfaceNormal(const Geodetic2D& geodetic) const {
+    return geodeticSurfaceNormal(geodetic.latitude(), geodetic.longitude());
+  }
 
   std::vector<double> intersectionsDistances(const Vector3D& origin,
                                              const Vector3D& direction) const;
 
-  Vector3D toCartesian(const Geodetic3D& geodetic) const;
+  Vector3D toCartesian(const Angle& latitude,
+                       const Angle& longitude,
+                       const double height) const;
+
+  Vector3D toCartesian(const Geodetic3D& geodetic) const {
+    return toCartesian(geodetic.latitude(), geodetic.longitude(), geodetic.height());
+  }
 
   Vector3D toCartesian(const Geodetic2D& geodetic) const {
-    return toCartesian(Geodetic3D(geodetic, 0.0));
+    return toCartesian(geodetic.latitude(), geodetic.longitude(), 0.0);
   }
 
   Geodetic2D toGeodetic2D(const Vector3D& positionOnEllipsoid) const;

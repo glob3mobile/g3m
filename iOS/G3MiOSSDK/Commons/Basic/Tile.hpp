@@ -23,6 +23,11 @@ class TileRenderContext;
 class TileKey;
 class Vector3D;
 class GLState;
+class Extent;
+class ElevationDataProvider;
+class ElevationData;
+class MeshHolder;
+
 #include "ITexturizerData.hpp"
 
 class Tile {
@@ -35,6 +40,8 @@ private:
   const int       _column;
 
   Mesh* _tessellatorMesh;
+  ElevationData* _elevationData;
+  long long      _elevationRequestId;
   Mesh* _debugMesh;
   Mesh* _texturizedMesh;
 
@@ -82,6 +89,11 @@ private:
   void deleteTexturizedMesh(TileTexturizer* texturizer);
 
   ITexturizerData* _texturizerData;
+
+  Extent* _tileExtent;
+  Extent* getTileExtent(const G3MRenderContext *rc);
+
+  void cancelElevationDataRequest(ElevationDataProvider* elevationDataProvider);
 
 public:
   Tile(TileTexturizer* texturizer,
@@ -153,13 +165,23 @@ public:
   }
 
   void setTexturizerData(ITexturizerData* texturizerData) {
-    delete _texturizerData;
-    _texturizerData = texturizerData;
+    if (texturizerData != _texturizerData) {
+      delete _texturizerData;
+      _texturizerData = texturizerData;
+    }
   }
 
   const Tile* getDeepestTileContaining(const Geodetic3D& position) const;
 
-  inline void prune(TileTexturizer* texturizer);
+  inline void prune(TileTexturizer*        texturizer,
+                    ElevationDataProvider* elevationDataProvider);
+
+  void onElevationData(ElevationData* elevationData,
+                       float verticalExaggeration,
+                       MeshHolder* meshHolder,
+                       const TileTessellator* tessellator,
+                       const Planet* planet,
+                       bool renderDebug);
   
 };
 
