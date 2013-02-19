@@ -72,7 +72,6 @@ public class GEO2DMultiLineStringGeometry extends GEOMultiLineStringGeometry
   ///#include "CompositeMesh.hpp"
   
   
-  
   public void dispose()
   {
     final int coordinatesArrayCount = _coordinatesArray.size();

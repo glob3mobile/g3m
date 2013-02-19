@@ -70,15 +70,19 @@ private:
   MutableVector2D _scale;
   MutableVector2D _translation;
 
-  IFloatBuffer* _texCoords;
+//  IFloatBuffer* _texCoords;
+  const TileTessellator* _tessellator;
 
 public:
   LTMInitializer(const Tile* tile,
                  const Tile* ancestor,
-                 IFloatBuffer* texCoords) :
+                 /*IFloatBuffer* texCoords*/
+                 const TileTessellator* tessellator
+                 ) :
   _tile(tile),
   _ancestor(ancestor),
-  _texCoords(texCoords),
+//  _texCoords(texCoords),
+  _tessellator(tessellator),
   _scale(1,1),
   _translation(0,0)
   {
@@ -109,7 +113,8 @@ public:
   }
 
   IFloatBuffer* getTexCoords() const {
-    return _texCoords;
+    //return _texCoords;
+    return _tessellator->createUnitTextCoords(_tile);
   }
 
 };
@@ -132,9 +137,6 @@ public:
 
   virtual ~TileTextureBuilderHolder();
 
-//  bool isTexturizerData() const{
-//    return true;
-//  }
 };
 
 
@@ -174,8 +176,6 @@ private:
   MultiLayerTileTexturizer* _texturizer;
   Tile*                     _tile;
 
-  //  const TileKey             _tileKey;
-
   std::vector<Petition*>    _petitions;
   int                       _petitionsCount;
   int                       _stepsDone;
@@ -190,7 +190,7 @@ private:
 
   const Mesh* _tessellatorMesh;
 
-  IFloatBuffer* _texCoords;
+  const TileTessellator* _tessellator;
 
   std::vector<PetitionStatus>    _status;
   std::vector<long long>         _requestsIds;
@@ -205,13 +205,13 @@ public:
   LeveledTexturedMesh* _mesh;
 
   TileTextureBuilder(MultiLayerTileTexturizer*    texturizer,
-                     const G3MRenderContext*         rc,
+                     const G3MRenderContext*      rc,
                      const LayerSet*              layerSet,
                      const TilesRenderParameters* parameters,
                      IDownloader*                 downloader,
-                     Tile* tile,
-                     const Mesh* tessellatorMesh,
-                     IFloatBuffer* texCoords) :
+                     Tile*                        tile,
+                     const Mesh*                  tessellatorMesh,
+                     const TileTessellator*       tessellator) :
   _texturizer(texturizer),
   _factory(rc->getFactory()),
   _texturesHandler(rc->getTexturesHandler()),
@@ -220,12 +220,11 @@ public:
   _parameters(parameters),
   _downloader(downloader),
   _tile(tile),
-  //_tileKey(tile->getKey()),
   _tessellatorMesh(tessellatorMesh),
   _stepsDone(0),
   _anyCanceled(false),
   _mesh(NULL),
-  _texCoords(texCoords),
+  _tessellator(tessellator),
   _finalized(false),
   _canceled(false),
   _alreadyStarted(false)
@@ -264,6 +263,8 @@ public:
       //                                   ? 1000 - _tile->getLevel()
       //                                   : _tile->getLevel());
       const long long priority = TILE_DOWNLOAD_PRIORITY + _tile->getLevel();
+
+//      printf("%s\n", petition->getURL().getPath().c_str());
 
       const long long requestId = _downloader->requestImage(URL(petition->getURL()),
                                                             priority,
@@ -486,12 +487,14 @@ public:
         mapping = NULL;
       }
       else {
+        const bool ownedTexCoords = true;
+        const bool transparent    = false;
         mapping = new LazyTextureMapping(new LTMInitializer(_tile,
                                                             ancestor,
-                                                            _texCoords),
+                                                            _tessellator),
                                          _texturesHandler,
-                                         false,
-                                         false);
+                                         ownedTexCoords,
+                                         transparent);
       }
 
       if (ancestor != _tile) {
@@ -635,7 +638,7 @@ void BuilderDownloadStepDownloadListener::onCancel(const URL& url) {
 
 MultiLayerTileTexturizer::MultiLayerTileTexturizer() :
 _parameters(NULL),
-_texCoordsCache(NULL),
+//_texCoordsCache(NULL),
 //_pendingTopTileRequests(0),
 _texturesHandler(NULL)
 {
@@ -643,8 +646,8 @@ _texturesHandler(NULL)
 }
 
 MultiLayerTileTexturizer::~MultiLayerTileTexturizer() {
-  delete _texCoordsCache;
-  _texCoordsCache = NULL;
+//  delete _texCoordsCache;
+//  _texCoordsCache = NULL;
 }
 
 void MultiLayerTileTexturizer::initialize(const G3MContext* context,
@@ -652,6 +655,30 @@ void MultiLayerTileTexturizer::initialize(const G3MContext* context,
   _parameters = parameters;
   //  _layerSet->initialize(ic);
 }
+
+//class BuilderStartTask : public FrameTask {
+//private:
+//  TileTextureBuilder* _builder;
+//
+//public:
+//  BuilderStartTask(TileTextureBuilder* builder) :
+//  _builder(builder)
+//  {
+//    _builder->_retain();
+//  }
+//
+//  virtual ~BuilderStartTask() {
+//    _builder->_release();
+//  }
+//
+//  void execute(const G3MRenderContext* rc) {
+//    _builder->start();
+//  }
+//
+//  bool isCanceled(const G3MRenderContext *rc){
+//    return false;
+//  }
+//};
 
 class BuilderStartTask : public FrameTask {
 private:
@@ -672,8 +699,8 @@ public:
     _builder->start();
   }
 
-  bool isCanceled(const G3MRenderContext *rc){
-    return false;
+  bool isCanceled(const G3MRenderContext *rc) {
+    return _builder->isCanceled();
   }
 };
 
@@ -695,42 +722,22 @@ Mesh* MultiLayerTileTexturizer::texturize(const G3MRenderContext* rc,
                                                                         rc->getDownloader(),
                                                                         tile,
                                                                         tessellatorMesh,
-                                                                        getTextureCoordinates(trc)));
+                                                                        trc->getTessellator()
+                                                                        )
+                                                 );
     tile->setTexturizerData(builderHolder);
   }
 
+  TileTextureBuilder* builder = builderHolder->get();
   if (trc->isForcedFullRender()) {
-    builderHolder->get()->start();
+    builder->start();
   }
   else {
-    class BuilderStartTask : public FrameTask {
-    private:
-      TileTextureBuilder* _builder;
-
-    public:
-      BuilderStartTask(TileTextureBuilder* builder) :
-      _builder(builder)
-      {
-        _builder->_retain();
-      }
-
-      virtual ~BuilderStartTask() {
-        _builder->_release();
-      }
-
-      void execute(const G3MRenderContext* rc) {
-        _builder->start();
-      }
-
-      bool isCanceled(const G3MRenderContext *rc) {
-        return _builder->isCanceled();
-      }
-    };
-    rc->getFrameTasksExecutor()->addPreRenderTask(new BuilderStartTask(builderHolder->get()));
+    rc->getFrameTasksExecutor()->addPreRenderTask(new BuilderStartTask(builder));
   }
 
   tile->setTexturizerDirty(false);
-  return builderHolder->get()->getMesh();
+  return builder->getMesh();
 }
 
 void MultiLayerTileTexturizer::tileToBeDeleted(Tile* tile,
@@ -739,9 +746,10 @@ void MultiLayerTileTexturizer::tileToBeDeleted(Tile* tile,
   TileTextureBuilderHolder* builderHolder = (TileTextureBuilderHolder*) tile->getTexturizerData();
 
   if (builderHolder != NULL) {
-    builderHolder->get()->cancel();
-    builderHolder->get()->cleanTile();
-    builderHolder->get()->cleanMesh();
+    TileTextureBuilder* builder = builderHolder->get();
+    builder->cancel();
+    builder->cleanTile();
+    builder->cleanMesh();
   }
   else {
     if (mesh != NULL) {
@@ -754,8 +762,9 @@ void MultiLayerTileTexturizer::tileMeshToBeDeleted(Tile* tile,
                                                    Mesh* mesh) {
   TileTextureBuilderHolder* builderHolder = (TileTextureBuilderHolder*) tile->getTexturizerData();
   if (builderHolder != NULL) {
-    builderHolder->get()->cancel();
-    builderHolder->get()->cleanMesh();
+    TileTextureBuilder* builder = builderHolder->get();
+    builder->cancel();
+    builder->cleanMesh();
   }
   else {
     if (mesh != NULL) {
@@ -812,12 +821,14 @@ void MultiLayerTileTexturizer::ancestorTexturedSolvedChanged(Tile* tile,
   }
 }
 
-IFloatBuffer* MultiLayerTileTexturizer::getTextureCoordinates(const TileRenderContext* trc) const {
-  if (_texCoordsCache == NULL) {
-    _texCoordsCache = trc->getTessellator()->createUnitTextCoords();
-  }
-  return _texCoordsCache;
-}
+//IFloatBuffer* MultiLayerTileTexturizer::getTextureCoordinates(const TileRenderContext* trc) const {
+////  if (_texCoordsCache == NULL) {
+////    _texCoordsCache = trc->getTessellator()->createUnitTextCoords();
+////  }
+////  return _texCoordsCache;
+//  int _____XXXXXXX;
+//  return trc->getTessellator()->createUnitTextCoords();
+//}
 
 void MultiLayerTileTexturizer::justCreatedTopTile(const G3MRenderContext* rc,
                                                   Tile* tile,

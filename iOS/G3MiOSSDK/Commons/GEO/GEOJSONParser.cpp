@@ -257,8 +257,6 @@ GEOFeatureCollection* GEOJSONParser::createFeaturesCollection(const JSONObject* 
 }
 
 GEOObject* GEOJSONParser::toGEO(const JSONObject* jsonObject) const {
-  int __GEO_AT_WORK;
-
   const std::string type = jsonObject->getAsString("type", "");
   if (type.compare("FeatureCollection") == 0) {
     return createFeaturesCollection(jsonObject);

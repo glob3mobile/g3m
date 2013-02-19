@@ -25,20 +25,13 @@ _oneOverRadiiSquared(Vector3D(1.0 / (radii._x * radii._x ),
 }
 
 
-Vector3D Ellipsoid::geodeticSurfaceNormal(const Geodetic3D& geodetic) const {
-  const double cosLatitude = geodetic.latitude().cosinus();
+Vector3D Ellipsoid::geodeticSurfaceNormal(const Angle& latitude,
+                                          const Angle& longitude) const {
+  const double cosLatitude = latitude.cosinus();
 
-  return Vector3D(cosLatitude * geodetic.longitude().cosinus(),
-                  cosLatitude * geodetic.longitude().sinus(),
-                  geodetic.latitude().sinus());
-}
-
-Vector3D Ellipsoid::geodeticSurfaceNormal(const Geodetic2D& geodetic) const {
-  const double cosLatitude = geodetic.latitude().cosinus();
-
-  return Vector3D(cosLatitude * geodetic.longitude().cosinus(),
-                  cosLatitude * geodetic.longitude().sinus(),
-                  geodetic.latitude().sinus());
+  return Vector3D(cosLatitude * longitude.cosinus(),
+                  cosLatitude * longitude.sinus(),
+                  latitude.sinus());
 }
 
 std::vector<double> Ellipsoid::intersectionsDistances(const Vector3D& origin,
@@ -46,7 +39,7 @@ std::vector<double> Ellipsoid::intersectionsDistances(const Vector3D& origin,
   std::vector<double> intersections;
 
   int __ASK_Normalized_or_not;
-  //direction.Normalize();
+  //const Vector3D direction = rawDirection.normalized();
 
   // By laborious algebraic manipulation....
   const double a = (direction._x * direction._x * _oneOverRadiiSquared._x +
@@ -92,19 +85,21 @@ std::vector<double> Ellipsoid::intersectionsDistances(const Vector3D& origin,
   return intersections;
 }
 
-Vector3D Ellipsoid::toCartesian(const Geodetic3D& geodetic) const {
-  const Vector3D n = geodeticSurfaceNormal(geodetic);
+Vector3D Ellipsoid::toCartesian(const Angle& latitude,
+                                const Angle& longitude,
+                                const double height) const {
+  const Vector3D n = geodeticSurfaceNormal(latitude, longitude);
+
   const Vector3D k = _radiiSquared.times(n);
   const double gamma = IMathUtils::instance()->sqrt(
-                                  (k._x * n._x) +
-                                  (k._y * n._y) +
-                                  (k._z * n._z)
-                                  );
+                                                    (k._x * n._x) +
+                                                    (k._y * n._y) +
+                                                    (k._z * n._z)
+                                                    );
 
   const Vector3D rSurface = k.div(gamma);
-  return rSurface.add(n.times(geodetic.height()));
+  return rSurface.add(n.times(height));
 }
-
 
 Geodetic2D Ellipsoid::toGeodetic2D(const Vector3D& positionOnEllipsoid) const {
   const Vector3D n = geodeticSurfaceNormal(positionOnEllipsoid);

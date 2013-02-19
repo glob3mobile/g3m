@@ -92,14 +92,6 @@ void Shape::render(const G3MRenderContext* rc,
       _pendingEffects.clear();
     }
 
-//    if (_pendingEffect != NULL) {
-//
-//      EffectTarget* target = _pendingEffectTargetIsCamera ? rc->getNextCamera()->getEffectTarget() : this;
-//      effectsScheduler->cancellAllEffectsFor(target);
-//      effectsScheduler->startEffect(_pendingEffect, target);
-//
-//      _pendingEffect = NULL;
-//    }
 
     GL* gl = rc->getGL();
 
@@ -122,15 +114,6 @@ void Shape::setAnimatedScale(const TimeInterval& duration,
                                         _scaleX, _scaleY, _scaleZ,
                                         scaleX, scaleY, scaleZ);
   _pendingEffects.push_back( new ShapePendingEffect(effect, false) );
-
-//  delete _pendingEffect;
-//
-//  _pendingEffect = new ShapeScaleEffect(duration,
-//                                        this,
-//                                        _scaleX, _scaleY, _scaleZ,
-//                                        scaleX, scaleY, scaleZ);
-//
-//  _pendingEffectTargetIsCamera = false;
 }
 
 void Shape::orbitCamera(const TimeInterval& duration,
@@ -143,16 +126,6 @@ void Shape::orbitCamera(const TimeInterval& duration,
                                               fromAzimuth,  toAzimuth,
                                               fromAltitude, toAltitude);
   _pendingEffects.push_back( new ShapePendingEffect(effect, true) );
-
-//  delete _pendingEffect;
-//
-//  _pendingEffect = new ShapeOrbitCameraEffect(duration,
-//                                              this,
-//                                              fromDistance, toDistance,
-//                                              fromAzimuth,  toAzimuth,
-//                                              fromAltitude, toAltitude);
-//
-//  _pendingEffectTargetIsCamera = true;
 }
 
 void Shape::setAnimatedPosition(const TimeInterval& duration,
@@ -164,14 +137,4 @@ void Shape::setAnimatedPosition(const TimeInterval& duration,
                                            position,
                                            linearInterpolation);
   _pendingEffects.push_back( new ShapePendingEffect(effect, false) );
-
-//  delete _pendingEffect;
-//
-//  _pendingEffect = new ShapePositionEffect(duration,
-//                                           this,
-//                                           *_position,
-//                                           position,
-//                                           linearInterpolation);
-//
-//  _pendingEffectTargetIsCamera = false;
 }

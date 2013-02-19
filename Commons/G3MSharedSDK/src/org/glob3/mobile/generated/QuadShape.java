@@ -19,16 +19,18 @@ package org.glob3.mobile.generated;
 
 //class IImage;
 //class IGLTextureId;
+//class Color;
+
 
 public class QuadShape extends AbstractMeshShape
 {
-  private final String _textureFilename;
-  private IImage _textureImage;
-  private final boolean _autoDeleteTextureImage;
-
+  private URL _textureURL = new URL();
   private final float _width;
   private final float _height;
+  private final Color _color;
 
+  private boolean _textureRequested;
+  private IImage _textureImage;
   private IGLTextureId getTextureId(G3MRenderContext rc)
   {
     if (_textureImage == null)
@@ -36,17 +38,14 @@ public class QuadShape extends AbstractMeshShape
       return null;
     }
   
-    final IGLTextureId texId = rc.getTexturesHandler().getGLTextureId(_textureImage, GLFormat.rgba(), _textureFilename, false);
+    final IGLTextureId texId = rc.getTexturesHandler().getGLTextureId(_textureImage, GLFormat.rgba(), _textureURL.getPath(), false);
   
-    if (_autoDeleteTextureImage)
-    {
-      rc.getFactory().deleteImage(_textureImage);
-      _textureImage = null;
-    }
+    rc.getFactory().deleteImage(_textureImage);
+    _textureImage = null;
   
     if (texId == null)
     {
-      rc.getLogger().logError("Can't load file %s", _textureFilename);
+      rc.getLogger().logError("Can't load texture %s", _textureURL.getPath());
     }
   
     return texId;
@@ -54,6 +53,14 @@ public class QuadShape extends AbstractMeshShape
 
   protected final Mesh createMesh(G3MRenderContext rc)
   {
+    if (!_textureRequested)
+    {
+      _textureRequested = true;
+      if (_textureURL.getPath().length() != 0)
+      {
+        rc.getDownloader().requestImage(_textureURL, 1000000, TimeInterval.fromDays(30), new QuadShape_IImageDownloadListener(this), true);
+      }
+    }
   
     final float halfWidth = _width / 2.0f;
     final float halfHeight = _height / 2.0f;
@@ -69,16 +76,11 @@ public class QuadShape extends AbstractMeshShape
     vertices.add(left, top, 0);
     vertices.add(right, top, 0);
   
-    ShortBufferBuilder indices = new ShortBufferBuilder();
-    indices.add((short) 0);
-    indices.add((short) 1);
-    indices.add((short) 2);
-    indices.add((short) 3);
-  
-  
     final Vector3D center = Vector3D.zero();
   
-    IndexedMesh im = new IndexedMesh(GLPrimitive.triangleStrip(), true, center, vertices.create(), indices.create(), 1);
+    Color color = (_color == null) ? null : new Color(_color);
+  
+    Mesh im = new DirectMesh(GLPrimitive.triangleStrip(), true, center, vertices.create(), 1, 1, color);
   
     final IGLTextureId texId = getTextureId(rc);
     if (texId == null)
@@ -97,20 +99,41 @@ public class QuadShape extends AbstractMeshShape
     return new TexturedMesh(im, true, texMap, true, true);
   }
 
-  public QuadShape(Geodetic3D position, IImage textureImage, boolean autoDeleteTextureImage, String textureFilename, float width, float height)
+  public QuadShape(Geodetic3D position, URL textureURL, float width, float height)
   {
      super(position);
-     _textureFilename = textureFilename;
-     _textureImage = textureImage;
-     _autoDeleteTextureImage = autoDeleteTextureImage;
+     _textureURL = new URL(textureURL);
      _width = width;
      _height = height;
+     _textureRequested = false;
+     _textureImage = null;
+     _color = null;
+
+  }
+
+  public QuadShape(Geodetic3D position, float width, float height, Color color)
+  {
+     super(position);
+     _textureURL = new URL(new URL("", false));
+     _width = width;
+     _height = height;
+     _textureRequested = false;
+     _textureImage = null;
+     _color = color;
 
   }
 
   public void dispose()
   {
+    if (_color != null)
+       _color.dispose();
+  }
 
+  public final void imageDownloaded(IImage image)
+  {
+    _textureImage = image;
+  
+    cleanMesh();
   }
 
 }
