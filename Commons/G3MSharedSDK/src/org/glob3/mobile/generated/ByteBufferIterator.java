@@ -66,8 +66,8 @@ public class ByteBufferIterator
   public final short nextInt16()
   {
     // LittleEndian
-    final short b1 = nextUInt8() & 0xFF;
-    final short b2 = nextUInt8() & 0xFF;
+    final short b1 = (short) (nextUInt8() & 0xFF);
+    final short b2 = (short) (nextUInt8() & 0xFF);
   
     final int iResult = ((int) b1) | ((int)(b2 << 8));
     final short result = (short) iResult;

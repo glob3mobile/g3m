@@ -27,6 +27,7 @@ public class ElevationData
   private final int _height;
 
 
+
   public ElevationData(Vector2I extent, IFloatBuffer buffer)
   {
      _width = extent._x;
@@ -36,6 +37,11 @@ public class ElevationData
     {
       ILogger.instance().logError("Invalid buffer size");
     }
+  }
+
+  public void dispose()
+  {
+
   }
 
 
