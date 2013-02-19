@@ -21,14 +21,12 @@ package org.glob3.mobile.generated;
 //class ElevationData;
 //class G3MContext;
 
-public abstract class IElevationDataListener
+public interface IElevationDataListener
 {
-  public void dispose()
-  {
-  }
+  public void dispose();
 
-  public abstract void onData(Sector sector, Vector2I resolution, ElevationData elevationData);
+  void onData(Sector sector, Vector2I resolution, ElevationData elevationData);
 
-  public abstract void onError(Sector sector, Vector2I resolution);
+  void onError(Sector sector, Vector2I resolution);
 
 }
