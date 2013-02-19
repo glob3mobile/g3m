@@ -39,6 +39,8 @@
 		385827FE15C6FACE00B3E68B /* CameraRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 385827FD15C6FACD00B3E68B /* CameraRenderer.cpp */; };
 		38D786E61587B446003BBC75 /* Tile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 38D786E51587B446003BBC75 /* Tile.cpp */; };
 		44846F8216C111E800D067BB /* ITileVisitor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 44846F7B16C0FF6700D067BB /* ITileVisitor.hpp */; };
+		4486C19A16D2F5DA009BC7E2 /* TileMillLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4486C19816D2F5DA009BC7E2 /* TileMillLayer.cpp */; };
+		4486C19E16D2F62A009BC7E2 /* TileMillLayer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4486C19D16D2F62A009BC7E2 /* TileMillLayer.hpp */; };
 		A70F5605161B53D000340256 /* IJSONParser.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A70F5604161B53D000340256 /* IJSONParser.hpp */; settings = {ATTRIBUTES = (); }; };
 		A70F5608161B54A400340256 /* IJSONParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A70F5607161B54A400340256 /* IJSONParser.cpp */; };
 		A70F560A161B5C6000340256 /* JSONParser_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A70F5609161B5C6000340256 /* JSONParser_iOS.hpp */; settings = {ATTRIBUTES = (); }; };
@@ -412,6 +414,8 @@
 		38D786E51587B446003BBC75 /* Tile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = Tile.cpp; path = Commons/Basic/Tile.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		38D786E71587B52F003BBC75 /* Sector.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Sector.hpp; path = Commons/Geometry/Sector.hpp; sourceTree = "<group>"; };
 		44846F7B16C0FF6700D067BB /* ITileVisitor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ITileVisitor.hpp; path = Commons/Interfaces/ITileVisitor.hpp; sourceTree = "<group>"; };
+		4486C19816D2F5DA009BC7E2 /* TileMillLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TileMillLayer.cpp; sourceTree = "<group>"; };
+		4486C19D16D2F62A009BC7E2 /* TileMillLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TileMillLayer.hpp; sourceTree = "<group>"; };
 		A70F5604161B53D000340256 /* IJSONParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = IJSONParser.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		A70F5607161B54A400340256 /* IJSONParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IJSONParser.cpp; sourceTree = "<group>"; };
 		A70F5609161B5C6000340256 /* JSONParser_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = JSONParser_iOS.hpp; path = Specific/Derived/JSONParser_iOS.hpp; sourceTree = "<group>"; };
@@ -1214,6 +1218,8 @@
 				CFB72A3C15E65DBC00A5BAF4 /* LevelTileCondition.hpp */,
 				D87EC5C415BEB12F00E38C36 /* WMSLayer.cpp */,
 				D87EC5C515BEB12F00E38C36 /* WMSLayer.hpp */,
+				4486C19816D2F5DA009BC7E2 /* TileMillLayer.cpp */,
+				4486C19D16D2F62A009BC7E2 /* TileMillLayer.hpp */,
 			);
 			name = Layers;
 			path = Commons/Layers;
@@ -1318,6 +1324,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4486C19E16D2F62A009BC7E2 /* TileMillLayer.hpp in Headers */,
+				D87EC5CA15BEB12F00E38C36 /* WMSLayer.hpp in Headers */,
 				383BD3861577EDDB0012AC53 /* G3MWidget_iOS.h in Headers */,
 				CFDFC05E166AB22A0065BC1F /* AbstractMesh.hpp in Headers */,
 				E7051241165E916000AEADB9 /* G3MBuilder_iOS.hpp in Headers */,
@@ -1424,7 +1432,6 @@
 				D87EC5C615BEB12F00E38C36 /* Layer.hpp in Headers */,
 				D87EC5C815BEB12F00E38C36 /* LayerSet.hpp in Headers */,
 				D88B5E0D15C15BFC0083A43F /* Sector.hpp in Headers */,
-				D87EC5CA15BEB12F00E38C36 /* WMSLayer.hpp in Headers */,
 				D8F42FD415EB7B95000D1822 /* IStringBuilder.hpp in Headers */,
 				D87EC5CF15BEB31000E38C36 /* CPUTextureBuilder.hpp in Headers */,
 				D87EC5D015BEB31000E38C36 /* TextureBuilder.hpp in Headers */,
@@ -1737,6 +1744,7 @@
 				CF90F6C116C4069D00B309C2 /* ITexturizerData.cpp in Sources */,
 				CF35DD4C16C6995D002EFC96 /* Vector3F.cpp in Sources */,
 				CF35DD5016C69B08002EFC96 /* Vector2F.cpp in Sources */,
+				4486C19A16D2F5DA009BC7E2 /* TileMillLayer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
