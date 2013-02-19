@@ -16,7 +16,6 @@ package org.glob3.mobile.generated;
 //
 
 
-///#include <string>
 
 //class MutableMatrix44D;
 
@@ -129,16 +128,6 @@ public abstract class Shape implements EffectTarget
   {
     Effect effect = new ShapePositionEffect(duration, this, _position, position, linearInterpolation);
     _pendingEffects.add(new ShapePendingEffect(effect, false));
-  
-  //  delete _pendingEffect;
-  //
-  //  _pendingEffect = new ShapePositionEffect(duration,
-  //                                           this,
-  //                                           *_position,
-  //                                           position,
-  //                                           linearInterpolation);
-  //
-  //  _pendingEffectTargetIsCamera = false;
   }
 
   public final void setAnimatedPosition(Geodetic3D position)
@@ -188,15 +177,6 @@ public abstract class Shape implements EffectTarget
   {
     Effect effect = new ShapeScaleEffect(duration, this, _scaleX, _scaleY, _scaleZ, scaleX, scaleY, scaleZ);
     _pendingEffects.add(new ShapePendingEffect(effect, false));
-  
-  //  delete _pendingEffect;
-  //
-  //  _pendingEffect = new ShapeScaleEffect(duration,
-  //                                        this,
-  //                                        _scaleX, _scaleY, _scaleZ,
-  //                                        scaleX, scaleY, scaleZ);
-  //
-  //  _pendingEffectTargetIsCamera = false;
   }
 
   public final void setAnimatedScale(double scaleX, double scaleY, double scaleZ)
@@ -218,16 +198,6 @@ public abstract class Shape implements EffectTarget
   {
     Effect effect = new ShapeOrbitCameraEffect(duration, this, fromDistance, toDistance, fromAzimuth, toAzimuth, fromAltitude, toAltitude);
     _pendingEffects.add(new ShapePendingEffect(effect, true));
-  
-  //  delete _pendingEffect;
-  //
-  //  _pendingEffect = new ShapeOrbitCameraEffect(duration,
-  //                                              this,
-  //                                              fromDistance, toDistance,
-  //                                              fromAzimuth,  toAzimuth,
-  //                                              fromAltitude, toAltitude);
-  //
-  //  _pendingEffectTargetIsCamera = true;
   }
 
   public final void render(G3MRenderContext rc, GLState parentState)
@@ -255,14 +225,6 @@ public abstract class Shape implements EffectTarget
         _pendingEffects.clear();
       }
   
-  //    if (_pendingEffect != NULL) {
-  //
-  //      EffectTarget* target = _pendingEffectTargetIsCamera ? rc->getNextCamera()->getEffectTarget() : this;
-  //      effectsScheduler->cancellAllEffectsFor(target);
-  //      effectsScheduler->startEffect(_pendingEffect, target);
-  //
-  //      _pendingEffect = NULL;
-  //    }
   
       GL gl = rc.getGL();
   

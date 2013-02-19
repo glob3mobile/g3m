@@ -24,12 +24,47 @@ private:
 public:
   
   static Geodetic2D zero() {
-    return Geodetic2D(Angle::zero(), Angle::zero());
-  }
-  static Geodetic2D fromDegrees(double lat, double lon) {
-    return Geodetic2D(Angle::fromDegrees(lat), Angle::fromDegrees(lon));
+    return Geodetic2D(Angle::zero(),
+                      Angle::zero());
   }
   
+  static Geodetic2D fromDegrees(double lat,
+                                double lon) {
+    return Geodetic2D(Angle::fromDegrees(lat),
+                      Angle::fromDegrees(lon));
+  }
+
+  /**
+   * Returns the (initial) bearing from this point to the supplied point
+   *   see http://williams.best.vwh.net/avform.htm#Crs
+   */
+  static Angle bearing(const Angle& fromLatitude,
+                       const Angle& fromLongitude,
+                       const Angle& toLatitude,
+                       const Angle& toLongitude) {
+    const Angle dLon = toLongitude.sub(fromLongitude);
+
+    const double toLatCos = toLatitude.cosinus();
+
+    const double y = dLon.sinus() * toLatCos;
+    const double x = fromLatitude.cosinus()*toLatitude.sinus() - fromLatitude.sinus()*toLatCos*dLon.cosinus();
+    const double radians = IMathUtils::instance()->atan2(y, x);
+
+    return Angle::fromRadians(radians);
+  }
+
+  /**
+   * Returns the (initial) bearing from this point to the supplied point
+   *   see http://williams.best.vwh.net/avform.htm#Crs
+   */
+  static Angle bearing(const Geodetic2D& from,
+                       const Geodetic2D& to) {
+    return bearing(from.latitude(),
+                   from.longitude(),
+                   to.latitude(),
+                   to.longitude());
+  }
+
   Geodetic2D(const Angle& latitude,
              const Angle& longitude): _latitude(latitude), _longitude(longitude) {
   }
@@ -78,15 +113,18 @@ public:
    *   see http://williams.best.vwh.net/avform.htm#Crs
    */
   Angle bearingTo(const Geodetic2D& that) const {
-    const Angle dLon = that.longitude().sub(longitude());
-    const Angle lat1 = latitude();
-    const Angle lat2 = that.latitude();
+//    const Angle dLon = that.longitude().sub(longitude());
+//    const Angle lat1 = latitude();
+//    const Angle lat2 = that.latitude();
+//
+//    const double y = dLon.sinus() * lat2.cosinus();
+//    const double x = lat1.cosinus()*lat2.sinus() - lat1.sinus()*lat2.cosinus()*dLon.cosinus();
+//    const double radians = IMathUtils::instance()->atan2(y, x);
+//
+//    return Angle::fromRadians(radians);
 
-    const double y = dLon.sinus() * lat2.cosinus();
-    const double x = lat1.cosinus()*lat2.sinus() - lat1.sinus()*lat2.cosinus()*dLon.cosinus();
-    const double radians = IMathUtils::instance()->atan2(y, x);
-
-    return Angle::fromRadians(radians);
+    return bearing(_latitude, _longitude,
+                   that._latitude, that._longitude);
   }
 
 #ifdef C_CODE
