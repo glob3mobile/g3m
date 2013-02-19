@@ -25,6 +25,7 @@ import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.SimpleCameraConstrainer;
 import org.glob3.mobile.generated.TileRenderer;
 import org.glob3.mobile.generated.TileRendererBuilder;
+import org.glob3.mobile.generated.TilesRenderParameters;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.WMSLayer;
@@ -35,6 +36,7 @@ import org.glob3.mobile.specific.G3MBaseActivity;
 import org.glob3.mobile.specific.G3MWidget_Android;
 import org.glob3.mobile.specific.SQLiteStorage_Android;
 import org.glob3.mobile.specific.ThreadUtils_Android;
+import org.glob3.mobile.specific.TileMillLayer;
 
 import android.os.Bundle;
 
@@ -101,8 +103,19 @@ public class G3MSimplestGlob3Activity
         false, //
         null, //
         TimeInterval.fromDays(30));
-    layerSet.addLayer(osm);
+
+
+    final TileMillLayer tml = new TileMillLayer("TileMill", new URL(
+        "http://projects.bryanmcbride.com/php-mbtiles-server/mbtiles.php",
+        false), "geography-class.mbtiles", Sector.fromDegrees(-85.05, -180.0,
+        85.05, 180.0), "image/jpeg", "EPSG:4326", "", false, null,
+        TimeInterval.fromDays(30));
+
+    layerSet.addLayer(tml);
     final TileRendererBuilder tlBuilder = new TileRendererBuilder();
+
+    tlBuilder.setTileRendererParameters(TilesRenderParameters.createTileMillSector(
+        false, true, true, false));
     tlBuilder.setLayerSet(layerSet);
     final TileRenderer tileRenderer = tlBuilder.create();
     mainRenderer.addRenderer(tileRenderer);

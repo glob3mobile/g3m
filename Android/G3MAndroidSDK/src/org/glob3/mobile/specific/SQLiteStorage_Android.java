@@ -50,6 +50,12 @@ public final class SQLiteStorage_Android
 
 
     private void createTables(final SQLiteDatabase db) {
+      ILogger.instance().logInfo("Creating tables structure...");
+      ILogger.instance().logInfo("Version: " + db.getVersion());
+      ILogger.instance().logInfo("Maximun Size: " + db.getMaximumSize());
+      ILogger.instance().logInfo("Page Size: " + db.getPageSize());
+
+
       db.execSQL("DROP TABLE IF EXISTS buffer;");
       db.execSQL("DROP TABLE IF EXISTS image;");
 
