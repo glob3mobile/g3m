@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <vector>
-#import "G3MWidget_iOS.h"
+
 #import "G3MUIDropDownMenu.h"
 
 @class G3MWidget_iOS;

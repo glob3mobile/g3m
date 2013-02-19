@@ -19,6 +19,7 @@
                             </view>
                             <navigationBar contentMode="scaleToFill" barStyle="blackTranslucent" id="IgR-me-TkY">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <items>
                                     <navigationItem title="glob3 mobile" id="SA4-ec-e4V">
                                         <barButtonItem key="rightBarButtonItem" title="Close" id="tSS-Ln-bpF">

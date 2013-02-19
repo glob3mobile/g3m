@@ -9,29 +9,29 @@
 #import "G3MViewController.h"
 #import "G3MWebViewController.h"
 
-#import "G3MWidget_iOS.h"
-#import "G3MBuilder_iOS.hpp"
-#import "TileRendererBuilder.hpp"
-#import "LayerBuilder.hpp"
-#import "Mark.hpp"
-#import "MarkTouchListener.hpp"
-#import "MarksRenderer.hpp"
-#import "ShapesRenderer.hpp"
-#import "MeshRenderer.hpp"
-#import "Downloader_iOS.hpp"
-#import "JSONBaseObject.hpp"
-#import "IJSONParser.hpp"
-#import "JSONObject.hpp"
-#import "JSONArray.hpp"
-#import "JSONNumber.hpp"
-#import "JSONString.hpp"
-#import "SceneJSShapesParser.hpp"
-#import "FloatBufferBuilderFromGeodetic.hpp"
-#import "FloatBufferBuilderFromColor.hpp"
-#import "DirectMesh.hpp"
-#import "ByteBuffer_iOS.hpp"
-#import "BSONParser.hpp"
-#import "JSONGenerator.hpp"
+#import <G3MiOSSDK/G3MWidget_iOS.h>
+#import <G3MiOSSDK/G3MBuilder_iOS.hpp>
+#import <G3MiOSSDK/TileRendererBuilder.hpp>
+#import <G3MiOSSDK/LayerBuilder.hpp>
+#import <G3MiOSSDK/Mark.hpp>
+#import <G3MiOSSDK/MarkTouchListener.hpp>
+#import <G3MiOSSDK/MarksRenderer.hpp>
+#import <G3MiOSSDK/ShapesRenderer.hpp>
+#import <G3MiOSSDK/MeshRenderer.hpp>
+#import <G3MiOSSDK/Downloader_iOS.hpp>
+#import <G3MiOSSDK/JSONBaseObject.hpp>
+#import <G3MiOSSDK/IJSONParser.hpp>
+#import <G3MiOSSDK/JSONObject.hpp>
+#import <G3MiOSSDK/JSONArray.hpp>
+#import <G3MiOSSDK/JSONNumber.hpp>
+#import <G3MiOSSDK/JSONString.hpp>
+#import <G3MiOSSDK/SceneJSShapesParser.hpp>
+#import <G3MiOSSDK/FloatBufferBuilderFromGeodetic.hpp>
+#import <G3MiOSSDK/FloatBufferBuilderFromColor.hpp>
+#import <G3MiOSSDK/DirectMesh.hpp>
+#import <G3MiOSSDK/ByteBuffer_iOS.hpp>
+#import <G3MiOSSDK/BSONParser.hpp>
+#import <G3MiOSSDK/JSONGenerator.hpp>
 #import "G3MToolbar.h"
 
 @interface G3MViewController ()
@@ -138,7 +138,8 @@
   // Dispose of any resources that can be recreated.
 }
 
-- (LayerSet*) createLayerSet {
+- (LayerSet*) createLayerSet
+{
   LayerSet* layers = LayerBuilder::createDefaultSatelliteImagery();
   
   layers->addLayer(LayerBuilder::createOSMLayer(![self satelliteLayerEnabled]));
@@ -146,8 +147,8 @@
   return layers;
 }
 
-- (MarksRenderer*) createMarkerRenderer {
-  
+- (MarksRenderer*) createMarkerRenderer
+{  
   class TestMarkTouchListener : public MarkTouchListener {
   private:
     G3MViewController* _vc;
@@ -182,7 +183,8 @@
   return marksRenderer;
 }
 
-- (MeshRenderer*) createMeshRenderer: (const Planet*)planet  {
+- (MeshRenderer*) createMeshRenderer: (const Planet*) planet
+{
   MeshRenderer* mr = new MeshRenderer();
   
   FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
@@ -229,7 +231,8 @@
   return mr;
 }
 
-- (GInitializationTask*) createInitializationTask {
+- (GInitializationTask*) createInitializationTask
+{
   class SampleInitializationTask : public GInitializationTask {
   private:
     bool _done;
@@ -275,7 +278,8 @@
   return initializationTask;
 }
 
-- (void) resetWidget {
+- (void) resetWidget
+{
   [self markerRenderer]->setEnable(false);
   [self shapeRenderer]->setEnable(false);
   [self meshRenderer]->setEnable(false);
@@ -292,13 +296,15 @@
                                                        TimeInterval::fromSeconds(3));
 }
 
-- (void) showSimpleGlob3 {
+- (void) showSimpleGlob3
+{
   if (![self satelliteLayerEnabled]) {
     [self switchLayer];
   }
 }
 
-- (void) switchLayer {
+- (void) switchLayer
+{
   [self setSatelliteLayerEnabled: ![self satelliteLayerEnabled]];
   
   if ([self satelliteLayerEnabled]) {
@@ -312,14 +318,12 @@
   for (int i = 0; i < satelliteLayersNames.size(); i++) {
     [self layerSet]->getLayer(satelliteLayersNames[i])->setEnable([self satelliteLayerEnabled]);
   }
-  //  [self layerSet]->getLayer("bmng200405")->setEnable([self satelliteLayerEnabled]);
-  //  [self layerSet]->getLayer("esat")->setEnable([self satelliteLayerEnabled]);
-  //  [self layerSet]->getLayer("ve")->setEnable([self satelliteLayerEnabled]);
   // osm
   [self layerSet]->getLayer("osm_auto:all")->setEnable(![self satelliteLayerEnabled]);
 }
 
-- (void) gotoMarkersDemo {
+- (void) gotoMarkersDemo
+{
   [[self g3mWidget] widget]->setAnimatedCameraPosition(Geodetic3D(Angle::fromDegrees(37.7658),
                                                                   Angle::fromDegrees(-122.4185),
                                                                   12000),
@@ -327,13 +331,13 @@
   [[self toolbar] setVisible: FALSE];
 }
 
-- (void) gotoModelDemo {
+- (void) gotoModelDemo
+{
   [[self g3mWidget] widget]->setAnimatedCameraPosition(Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
                                                                   Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
                                                                   6000),
                                                        TimeInterval::fromSeconds(5));
   
-  int here;
   Shape* plane = ((DemoUserData*) [[self g3mWidget] widget]->getUserData())->getPlane();
   plane->setAnimatedPosition(TimeInterval::fromSeconds(26),
                              Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
@@ -358,7 +362,8 @@
   [[self toolbar] setVisible: FALSE];
 }
 
-- (void) gotoMeshDemo {
+- (void) gotoMeshDemo
+{
   [[self g3mWidget] widget]->setAnimatedCameraPosition(Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42),
                                                                   Angle::fromDegreesMinutesSeconds(-77, 2, 11),
                                                                   6700000),
@@ -473,7 +478,8 @@
   }
 }
 
-- (void) DropDownMenuDidChange:(NSString *)identifier :(NSString *)returnValue
+- (void) DropDownMenuDidChange: (NSString *) identifier
+                              : (NSString *) returnValue
 {
   if ([identifier isEqual: @"demoMenu"]) {
     [self resetWidget];
