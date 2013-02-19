@@ -4,8 +4,6 @@ public class TileTextureBuilder extends RCObject
   private MultiLayerTileTexturizer _texturizer;
   private Tile _tile;
 
-  //  const TileKey             _tileKey;
-
   private java.util.ArrayList<Petition> _petitions = new java.util.ArrayList<Petition>();
   private int _petitionsCount;
   private int _stepsDone;
@@ -20,7 +18,7 @@ public class TileTextureBuilder extends RCObject
 
   private final Mesh _tessellatorMesh;
 
-  private IFloatBuffer _texCoords;
+  private final TileTessellator _tessellator;
 
   private java.util.ArrayList<PetitionStatus> _status = new java.util.ArrayList<PetitionStatus>();
   private java.util.ArrayList<Long> _requestsIds = new java.util.ArrayList<Long>();
@@ -35,8 +33,7 @@ public class TileTextureBuilder extends RCObject
 
   public LeveledTexturedMesh _mesh;
 
-  public TileTextureBuilder(MultiLayerTileTexturizer texturizer, G3MRenderContext rc, LayerSet layerSet, TilesRenderParameters parameters, IDownloader downloader, Tile tile, Mesh tessellatorMesh, IFloatBuffer texCoords, long texturePriority)
-  //_tileKey(tile->getKey()),
+  public TileTextureBuilder(MultiLayerTileTexturizer texturizer, G3MRenderContext rc, LayerSet layerSet, TilesRenderParameters parameters, IDownloader downloader, Tile tile, Mesh tessellatorMesh, TileTessellator tessellator, long texturePriority)
   {
      _texturizer = texturizer;
      _factory = rc.getFactory();
@@ -50,7 +47,7 @@ public class TileTextureBuilder extends RCObject
      _stepsDone = 0;
      _anyCanceled = false;
      _mesh = null;
-     _texCoords = texCoords;
+     _tessellator = tessellator;
      _finalized = false;
      _canceled = false;
      _alreadyStarted = false;
@@ -320,7 +317,9 @@ public class TileTextureBuilder extends RCObject
       }
       else
       {
-        mapping = new LazyTextureMapping(new LTMInitializer(_tile, ancestor, _texCoords), _texturesHandler, false, false);
+        final boolean ownedTexCoords = true;
+        final boolean transparent = false;
+        mapping = new LazyTextureMapping(new LTMInitializer(_tile, ancestor, _tessellator), _texturesHandler, ownedTexCoords, transparent);
       }
 
       if (ancestor != _tile)

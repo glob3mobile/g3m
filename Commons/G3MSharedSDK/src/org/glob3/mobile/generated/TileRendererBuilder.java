@@ -199,9 +199,7 @@ public class TileRendererBuilder
   }
   private TileTessellator createTileTessellator()
   {
-    TileTessellator tileTessellator = new EllipsoidalTileTessellator(getParameters()._tileResolution, true);
-  
-    return tileTessellator;
+    return new EllipsoidalTileTessellator(_parameters._tileResolution, true);
   }
 
   public TileRendererBuilder()
@@ -232,6 +230,10 @@ public class TileRendererBuilder
   public final TileRenderer create()
   {
     TileRenderer tileRenderer = new TileRenderer(getTileTessellator(), getTexturizer(), getLayerSet(), getParameters(), getShowStatistics(), getTexturePriority());
+    int __TODO_make_inflator_configurable;
+  //  ElevationDataProvider* elevationDataProvider = new WMSBillElevationDataProvider();
+    ElevationDataProvider elevationDataProvider = null;
+    TileRenderer tileRenderer = new TileRenderer(_tileTessellator, elevationDataProvider, _texturizer, _layerSet, _parameters, _showStatistics);
   
     for (int i = 0; i < getVisibleSectorListeners().size(); i++)
     {

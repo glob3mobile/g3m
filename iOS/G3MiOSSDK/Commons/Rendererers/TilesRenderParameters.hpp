@@ -98,7 +98,7 @@ public:
     const int maxLevel = 2;
     const int tileTextureHeight = 256;
     const int tileTextureWidth = 256;
-    const int tRes = 10;
+    const int tileResolution = 10;
 
     //    Sector sector = Sector(Geodetic2D(Angle::fromDegrees(-90), Angle::fromDegrees(-180)),
     //                           Geodetic2D(Angle::fromDegrees(90), Angle::fromDegrees(180)));
@@ -112,7 +112,7 @@ public:
                                      maxLevel,
                                      tileTextureHeight,
                                      tileTextureWidth,
-                                     tRes,
+                                     tileResolution,
                                      renderDebug,
                                      useTilesSplitBudget,
                                      forceTopLevelTilesRenderOnStart,

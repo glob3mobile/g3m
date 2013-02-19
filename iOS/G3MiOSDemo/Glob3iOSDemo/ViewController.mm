@@ -33,7 +33,9 @@
 #include "TrailsRenderer.hpp"
 #include "Mark.hpp"
 #include "CircleShape.hpp"
+#include "QuadShape.hpp"
 #include "BoxShape.hpp"
+#include "EllipsoidShape.hpp"
 #include "SceneJSShapesParser.hpp"
 
 #include "IJSONParser.hpp"
@@ -44,6 +46,11 @@
 #include "MeshShape.hpp"
 #include "IShortBuffer.hpp"
 #include "SimpleCameraConstrainer.hpp"
+#include "WMSBillElevationDataProvider.hpp"
+#include "ElevationData.hpp"
+#include "IBufferDownloadListener.hpp"
+#include "BilParser.hpp"
+#include "ShortBufferBuilder.hpp"
 
 #include "G3MWidget.hpp"
 
@@ -204,7 +211,8 @@ public:
   //meshRenderer->addMesh([self createPointsMesh: builder.getPlanet() ]);
 
   GInitializationTask* initializationTask = [self createSampleInitializationTask: shapesRenderer
-                                                                     geoRenderer: geoRenderer];
+                                                                     geoRenderer: geoRenderer
+                                                                    meshRenderer: meshRenderer];
   builder.setInitializationTask(initializationTask, true);
 
   PeriodicalTask* periodicalTask = [self createSamplePeriodicalTask: &builder];
@@ -243,7 +251,7 @@ public:
     for (int j = -halfSteps; j < halfSteps; j++) {
       Angle lon = centerLon.add( deltaLon.times(j) );
 
-      vertices.add( Geodetic3D(lat, lon, 100000) );
+      vertices.add( lat, lon, 100000 );
 
       const float red   = (float) (i + halfSteps + 1) / steps;
       const float green = (float) (j + halfSteps + 1) / steps;
@@ -292,7 +300,8 @@ public:
 {
   LayerSet* layerSet = new LayerSet();
 
-  if (true) {
+  const bool blueMarble = true;
+  if (blueMarble) {
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
                                         URL("http://www.nasa.network.com/wms?", false),
                                         WMS_1_1_0,
@@ -457,7 +466,7 @@ public:
   const bool renderDebug = false;
   const bool useTilesSplitBudget = true;
   const bool forceTopLevelTilesRenderOnStart = true;
-  const bool incrementalTileQuality = true;
+  const bool incrementalTileQuality = false;
 
   return TilesRenderParameters::createDefault(renderDebug,
                                               useTilesSplitBudget,
@@ -540,14 +549,19 @@ public:
 {
   ShapesRenderer* shapesRenderer = new ShapesRenderer();
 
-  //  std::string textureFileName = "g3m-marker.png";
-  //  IImage* textureImage = IFactory::instance()->createImageFromFileName(textureFileName);
-  //
-  //  Shape* shape = new QuadShape(Geodetic3D(Angle::fromDegrees(37.78333333),
-  //                                          Angle::fromDegrees(-122.41666666666667),
-  //                                          8000),
-  //                               textureImage, true, textureFileName,
-  //                               50000, 50000);
+  Shape* quad1 = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
+                                              Angle::fromDegrees(-122),
+                                              8000),
+                               URL("file:///g3m-marker.png", false),
+                               50000, 50000);
+  shapesRenderer->addShape(quad1);
+
+  Shape* quad2 = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
+                                              Angle::fromDegrees(-123),
+                                              8000),
+                               35000, 75000,
+                               Color::newFromRGBA(1, 0, 1, 0.5));
+  shapesRenderer->addShape(quad2);
 
   Shape* circle = new CircleShape(new Geodetic3D(Angle::fromDegrees(38.78333333),
                                                  Angle::fromDegrees(-123),
@@ -569,6 +583,64 @@ public:
   box->setAnimatedScale(1, 1, 20);
   shapesRenderer->addShape(box);
 
+//  const URL textureURL("file:///world.jpg", false);
+
+  //const Vector3D radius(50000, 50000, 50000);
+  const double factor = 80;
+  const Vector3D radius(6378137.0 / factor, 6378137.0 / factor, 6356752.314245 / factor);
+
+  Shape* ellipsoid1 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(41),
+                                                        Angle::fromDegrees(-121),
+                                                        radius._x * 1.1),
+                                         URL("file:///world.jpg", false),
+                                         radius,
+                                         16,
+                                         1,
+                                         false
+                                         //Color::newFromRGBA(0,    0.5, 0.8, 0.5),
+                                         //Color::newFromRGBA(0, 0.75, 0, 0.75)
+                                         );
+  shapesRenderer->addShape(ellipsoid1);
+
+  Shape* mercator1 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(41),
+                                                       Angle::fromDegrees(-119),
+                                                       radius._x * 1.1),
+                                        URL("file:///mercator_debug.png", false),
+                                        radius,
+                                        16,
+                                        1,
+                                        true
+                                        //Color::newFromRGBA(0.5,    0.0, 0.8, 0.5),
+                                        //Color::newFromRGBA(0, 0.75, 0, 0.75)
+                                        );
+  shapesRenderer->addShape(mercator1);
+
+  Shape* mercator2 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(41),
+                                                       Angle::fromDegrees(-117),
+                                                       radius._x * 1.1),
+                                        URL("file:///mercator.jpg", false),
+                                        radius,
+                                        16,
+                                        1,
+                                        true
+                                        //Color::newFromRGBA(0.5,    0.0, 0.8, 0.5),
+                                        //Color::newFromRGBA(0, 0.75, 0, 0.75)
+                                        );
+  shapesRenderer->addShape(mercator2);
+
+//  Shape* colored = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(41),
+//                                                     Angle::fromDegrees(-115),
+//                                                     radius._x * 1.1),
+//                                      radius,
+//                                      16,
+//                                      1,
+//                                      true,
+//                                      Color::newFromRGBA(1, 1, 0, 0.75),
+//                                      Color::newFromRGBA(0, 0, 0, 1)
+//                                      );
+//  shapesRenderer->addShape(colored);
+
+
   return shapesRenderer;
 }
 
@@ -579,22 +651,162 @@ public:
   return geoRenderer;
 }
 
+
+//class TestElevationDataListener : public IElevationDataListener {
+//public:
+//  void onData(const Sector& sector,
+//              const Vector2I& resolution,
+//              ElevationData* elevationData) {
+//    if (elevationData != NULL) {
+//      ILogger::instance()->logInfo("Elevation data for sector=%s", sector.description().c_str());
+//      ILogger::instance()->logInfo("%s", elevationData->description().c_str());
+//    }
+//
+//  }
+//
+//  void onError(const Sector& sector,
+//               const Vector2I& resolution) {
+//
+//  }
+//};
+
+
+class Bil16Parser_IBufferDownloadListener : public IBufferDownloadListener {
+private:
+  ShapesRenderer* _shapesRenderer;
+  
+public:
+  Bil16Parser_IBufferDownloadListener(ShapesRenderer* shapesRenderer) :
+  _shapesRenderer(shapesRenderer)
+  {
+
+  }
+  
+  void onDownload(const URL& url,
+                  IByteBuffer* buffer) {
+    const Vector2I extent(150, 150);
+    ElevationData* elevationData = BilParser::parseBil16(buffer, extent);
+
+    if (elevationData == NULL) {
+      return;
+    }
+
+
+    ILogger::instance()->logInfo("Elevation data");
+    //ILogger::instance()->logInfo("%s", elevationData->description().c_str());
+
+    double minHeight = elevationData->getElevationAt(0, 0);
+    double maxHeight = minHeight;
+
+    for (int x = 0; x < extent._x; x++) {
+      for (int y = 0; y < extent._y; y++) {
+        const double height = elevationData->getElevationAt(x, y);
+
+        if (height < minHeight) { minHeight = height; }
+        if (height > maxHeight) { maxHeight = height; }
+      }
+    }
+
+    const double deltaHeight = maxHeight - minHeight;
+
+    ILogger::instance()->logInfo("minHeight=%f maxHeight=%f", minHeight, maxHeight);
+
+
+    FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::firstVertex(),
+                                               Vector3D::zero());
+    FloatBufferBuilderFromColor colors;
+
+    for (int x = 0; x < extent._x; x++) {
+      for (int y = 0; y < extent._y; y++) {
+        const double height = elevationData->getElevationAt(x, y);
+        const float alpha = (float) ((height - minHeight) / deltaHeight);
+
+        //vertices.add(x * 200.0, y * 200.0, 7500.0 * alpha);
+        vertices.add(x * 250.0, y * 250.0, 5000.0 * alpha);
+
+        colors.add(alpha, alpha, alpha, 1);
+      }
+    }
+    
+    ShortBufferBuilder indices;
+    for (short j = 0; j < extent._y-1; j++) {
+      const short jTimesResolution = (short) (j*extent._y);
+      if (j > 0) {
+        indices.add(jTimesResolution);
+      }
+      for (short i = 0; i < extent._x; i++) {
+        indices.add((short) (jTimesResolution + i));
+        indices.add((short) (jTimesResolution + i + extent._x));
+      }
+      indices.add((short) (jTimesResolution + 2*extent._x - 1));
+    }
+
+    const float lineWidth = 1;
+    const float pointSize = 5;
+    Color* flatColor = NULL;
+//    Mesh* bilMesh = new DirectMesh(GLPrimitive::points(),
+//                                   //GLPrimitive::lineStrip(),
+//                                   true,
+//                                   vertices.getCenter(),
+//                                   vertices.create(),
+//                                   lineWidth,
+//                                   pointSize,
+//                                   flatColor,
+//                                   colors.create());
+    Mesh* bilMesh = new IndexedMesh(GLPrimitive::triangleStrip(),
+                                    //GLPrimitive::lineStrip(),
+                                    true,
+                                    vertices.getCenter(),
+                                    vertices.create(),
+                                    indices.create(),
+                                    lineWidth,
+                                    pointSize,
+                                    flatColor,
+                                    colors.create());
+
+    Geodetic3D* buenosAiresPosition = new Geodetic3D(Angle::fromDegreesMinutesSeconds(-34, 36, 13.44),
+                                                     Angle::fromDegreesMinutesSeconds(-58, 22, 53.74),
+                                                     1000);
+
+    _shapesRenderer->addShape( new MeshShape(buenosAiresPosition, bilMesh) );
+  }
+
+  void onError(const URL& url) {
+
+  }
+
+  void onCancel(const URL& url) {
+
+  }
+
+  void onCanceledDownload(const URL& url,
+                          IByteBuffer* data) {
+
+  }
+
+};
+
+
 - (GInitializationTask*) createSampleInitializationTask: (ShapesRenderer*) shapesRenderer
                                             geoRenderer: (GEORenderer*) geoRenderer
+                                           meshRenderer: (MeshRenderer*) meshRenderer
 {
   class SampleInitializationTask : public GInitializationTask {
   private:
     G3MWidget_iOS*  _iosWidget;
     ShapesRenderer* _shapesRenderer;
     GEORenderer*    _geoRenderer;
+    MeshRenderer*   _meshRenderer;
 
   public:
     SampleInitializationTask(G3MWidget_iOS*  iosWidget,
                              ShapesRenderer* shapesRenderer,
-                             GEORenderer*    geoRenderer) :
+                             GEORenderer*    geoRenderer,
+                             MeshRenderer*   meshRenderer) :
     _iosWidget(iosWidget),
     _shapesRenderer(shapesRenderer),
-    _geoRenderer(geoRenderer)
+    _geoRenderer(geoRenderer),
+    _meshRenderer(meshRenderer)
     {
 
     }
@@ -603,6 +815,29 @@ public:
       printf("Running initialization Task\n");
 
       
+//      WMSBillElevationDataProvider* dp = new WMSBillElevationDataProvider(); // no delete, will leak
+//
+//      dp->initialize(context);
+//      /*
+//
+//       http://128.102.22.115/elev?REQUEST=GetMap&SERVICE=WMS&VERSION=1.3.0&LAYERS=srtm3&STYLES=&FORMAT=image/bil&BGCOLOR=0x
+//       FFFFFF&TRANSPARENT=TRUE&CRS=EPSG:4326&BBOX=-17.0232177085356,27.967811065876,-16.0019401695656,28.6103464294992&WIDT
+//       H=19&HEIGHT=37
+//       
+//       */
+//      
+//      dp->requestElevationData(Sector::fromDegrees(-17.0232177085356, 27.967811065876, -16.0019401695656, 28.6103464294992),
+//                               Vector2I(19, 37),
+//                               new TestElevationDataListener(),
+//                               true);
+
+      context->getDownloader()->requestBuffer(//URL("file:///sample_bil16_150x150.bil", false),
+                                              URL("file:///409_554.bil", false),
+                                              1000000,
+                                              TimeInterval::fromDays(30),
+                                              new Bil16Parser_IBufferDownloadListener(_shapesRenderer),
+                                              true);
+
 //      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D(//Angle::fromDegreesMinutes(37, 47),
 //                                                                //Angle::fromDegreesMinutes(-122, 25),
 //                                                                Angle::fromDegrees(37.78333333),
@@ -857,7 +1092,10 @@ public:
     }
   };
 
-  GInitializationTask* initializationTask = new SampleInitializationTask([self G3MWidget], shapesRenderer, geoRenderer);
+  GInitializationTask* initializationTask = new SampleInitializationTask([self G3MWidget],
+                                                                         shapesRenderer,
+                                                                         geoRenderer,
+                                                                         meshRenderer);
 
   return initializationTask;
 }

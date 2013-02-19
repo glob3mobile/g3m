@@ -15,6 +15,7 @@ class TileTexturizer;
 class LayerSet;
 class VisibleSectorListenerEntry;
 class VisibleSectorListener;
+class ElevationDataProvider;
 
 #include "IStringBuilder.hpp"
 #include "LeafRenderer.hpp"
@@ -28,13 +29,17 @@ class VisibleSectorListener;
 class TileRenderContext {
 private:
   const TileTessellator*       _tessellator;
+  ElevationDataProvider*       _elevationDataProvider;
   TileTexturizer*              _texturizer;
+
   const TilesRenderParameters* _parameters;
   TilesStatistics*             _statistics;
-
   const LayerSet*              _layerSet;
 
   const bool _isForcedFullRender;
+
+  const float _verticalExaggeration;
+
 
   ITimer* _lastSplitTimer; // timer to start every time a tile get splitted into subtiles
   
@@ -42,23 +47,31 @@ private:
 
 public:
   TileRenderContext(const TileTessellator*       tessellator,
+                    ElevationDataProvider*       elevationDataProvider,
                     TileTexturizer*              texturizer,
                     const LayerSet*              layerSet,
                     const TilesRenderParameters* parameters,
                     TilesStatistics*             statistics,
                     ITimer*                      lastSplitTimer,
                     bool                         isForcedFullRender,
-                    long long                    texturePriority) :
+                    long long                    texturePriority,
+                    const float                  verticalExaggeration) :
   _tessellator(tessellator),
+  _elevationDataProvider(elevationDataProvider),
   _texturizer(texturizer),
   _layerSet(layerSet),
   _parameters(parameters),
   _statistics(statistics),
   _lastSplitTimer(lastSplitTimer),
   _isForcedFullRender(isForcedFullRender),
-  _texturePriority(texturePriority)
+  _texturePriority(texturePriority),
+  _verticalExaggeration(verticalExaggeration)
   {
 
+  }
+
+  const float getVerticalExaggeration() const {
+    return _verticalExaggeration;
   }
 
   const LayerSet* getLayerSet() const {
@@ -67,6 +80,10 @@ public:
 
   const TileTessellator* getTessellator() const {
     return _tessellator;
+  }
+
+  ElevationDataProvider* getElevationDataProvider() const {
+    return _elevationDataProvider;
   }
 
   TileTexturizer* getTexturizer() const {
@@ -197,7 +214,7 @@ public:
     const int level = tile->getLevel();
     _tilesRenderedByLevel[level] = _tilesRenderedByLevel[level] + 1;
 
-    
+
     computeRenderedSector(tile);
   }
 
@@ -261,6 +278,7 @@ public:
 class TileRenderer: public LeafRenderer, LayerSetChangedListener {
 private:
   const TileTessellator*       _tessellator;
+  ElevationDataProvider*       _elevationDataProvider;
   TileTexturizer*              _texturizer;
   LayerSet*                    _layerSet;
   const TilesRenderParameters* _parameters;
@@ -293,8 +311,11 @@ private:
   
   long long _texturePriority;
 
+  float _verticalExaggeration;
+
 public:
   TileRenderer(const TileTessellator* tessellator,
+               ElevationDataProvider* elevationDataProvider,
                TileTexturizer*  texturizer,
                LayerSet* layerSet,
                const TilesRenderParameters* parameters,
@@ -346,7 +367,7 @@ public:
 #ifdef JAVA_CODE
     super.setEnable(enable);
 #endif
-    
+
     if (!enable) {
       pruneTopLevelTiles();
     }
@@ -366,7 +387,7 @@ public:
   /**
    Add a listener for notification of visible-sector changes.
 
-   @param stabilizationInterval How many time the visible-sector has to be settled (without changes) before triggering the event.  Useful for avoid process while the camera is being moved (as in animations).  If stabilizationInterval is zero, the event is triggered inmediatly. 
+   @param stabilizationInterval How many time the visible-sector has to be settled (without changes) before triggering the event.  Useful for avoid process while the camera is being moved (as in animations).  If stabilizationInterval is zero, the event is triggered inmediatly.
    */
   void addVisibleSectorListener(VisibleSectorListener* listener,
                                 const TimeInterval& stabilizationInterval);

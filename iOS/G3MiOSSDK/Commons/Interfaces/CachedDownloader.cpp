@@ -280,26 +280,11 @@ long long CachedDownloader::requestImage(const URL& url,
     // cache hit
     _cacheHitsCounter++;
 
-    //    if (_context != NULL) {
-    //      _context->getThreadUtils()->invokeInRendererThread(new CachedDownloader_InvokeRenderer(url,
-    //                                                                                             cachedImage,
-    //                                                                                             listener, deleteListener),
-    //                                                         true);
-    //    }
-    //    else {
-
-    //    if (_frameTasksExecutor != NULL) {
-    //      _frameTasksExecutor->addPreRenderTask(new CachedDownloader_InvokeRenderer(url,
-    //                                                                                cachedImage,
-    //                                                                                listener, deleteListener));
-    //    }
-    //    else {
     listener->onDownload(url, cachedImage);
 
     if (deleteListener) {
       delete listener;
     }
-    //    }
 
     return -1;
   }
@@ -379,7 +364,7 @@ void CachedDownloader::onDestroy(const G3MContext* context) {
 
 void CachedDownloader::initialize(const G3MContext* context,
                                   FrameTasksExecutor* frameTasksExecutor) {
-  _context = context;
-  _frameTasksExecutor = frameTasksExecutor;
+//  _context = context;
+//  _frameTasksExecutor = frameTasksExecutor;
   _downloader->initialize(context, frameTasksExecutor);
 }

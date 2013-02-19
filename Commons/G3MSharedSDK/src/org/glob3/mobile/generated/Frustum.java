@@ -356,7 +356,8 @@ public class Frustum
 
   public void dispose()
   {
-    _extent = null;
+    if (_extent != null)
+       _extent.dispose();
   }
 
   public final Extent getExtent()
