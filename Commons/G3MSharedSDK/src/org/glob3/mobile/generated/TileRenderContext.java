@@ -22,32 +22,44 @@ package org.glob3.mobile.generated;
 //class LayerSet;
 //class VisibleSectorListenerEntry;
 //class VisibleSectorListener;
+//class ElevationDataProvider;
 
 
 
 public class TileRenderContext
 {
   private final TileTessellator _tessellator;
+  private ElevationDataProvider _elevationDataProvider;
   private TileTexturizer _texturizer;
+
   private final TilesRenderParameters _parameters;
   private TilesStatistics _statistics;
-
   private final LayerSet _layerSet;
 
   private final boolean _isForcedFullRender;
 
+  private final float _verticalExaggeration;
+
+
   private ITimer _lastSplitTimer; // timer to start every time a tile get splitted into subtiles
 
-  public TileRenderContext(TileTessellator tessellator, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters parameters, TilesStatistics statistics, ITimer lastSplitTimer, boolean isForcedFullRender)
+  public TileRenderContext(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters parameters, TilesStatistics statistics, ITimer lastSplitTimer, boolean isForcedFullRender, float verticalExaggeration)
   {
      _tessellator = tessellator;
+     _elevationDataProvider = elevationDataProvider;
      _texturizer = texturizer;
      _layerSet = layerSet;
      _parameters = parameters;
      _statistics = statistics;
      _lastSplitTimer = lastSplitTimer;
      _isForcedFullRender = isForcedFullRender;
+     _verticalExaggeration = verticalExaggeration;
 
+  }
+
+  public final float getVerticalExaggeration()
+  {
+    return _verticalExaggeration;
   }
 
   public final LayerSet getLayerSet()
@@ -58,6 +70,11 @@ public class TileRenderContext
   public final TileTessellator getTessellator()
   {
     return _tessellator;
+  }
+
+  public final ElevationDataProvider getElevationDataProvider()
+  {
+    return _elevationDataProvider;
   }
 
   public final TileTexturizer getTexturizer()

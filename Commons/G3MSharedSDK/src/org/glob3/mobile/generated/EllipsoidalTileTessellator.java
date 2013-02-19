@@ -16,6 +16,7 @@ package org.glob3.mobile.generated;
 //
 
 
+//class Sector;
 
 ///#include "MutableVector3D.hpp"
 ///#include "Planet.hpp"
@@ -25,6 +26,26 @@ public class EllipsoidalTileTessellator extends TileTessellator
 
   private final int _resolution;
   private final boolean _skirted;
+
+  private short calculateResolution(Sector sector)
+  {
+    final short resolution = (short) _resolution;
+  
+  //  /* testing for dynamic latitude-resolution */
+  //  double cos = sector.getCenter().latitude().cosinus();
+  //  if (cos < 0) {
+  //    cos *= -1;
+  //  }
+  //  short resolution = (short) (_resolution * cos);
+  //  if (resolution % 2 == 1) {
+  //    resolution += 1;
+  //  }
+  //  if (resolution < 6) {
+  //    resolution = 6;
+  //  }
+  
+    return resolution;
+  }
 
 
   public EllipsoidalTileTessellator(int resolution, boolean skirted)
@@ -42,29 +63,30 @@ public class EllipsoidalTileTessellator extends TileTessellator
   ///#include "FloatBufferBuilderFromCartesian2D.hpp"
   
   
-  public final Mesh createTileMesh(G3MRenderContext rc, Tile tile, boolean debug)
+  public final Vector2I getTileMeshResolution(Planet planet, Tile tile, boolean debug)
+  {
+    final short resolution = calculateResolution(tile.getSector());
+    return new Vector2I(resolution, resolution);
+  }
+
+
+  public final Mesh createTileMesh(Planet planet, Tile tile, ElevationData elevationData, float verticalExaggeration, boolean debug)
   {
   
     final Sector sector = tile.getSector();
-    final Planet planet = rc.getPlanet();
   
-    final short resolution = (short) _resolution;
-    //  /* testing for dynamic latitude-resolution */
-    //  double cos = sector.getCenter().latitude().cosinus();
-    //  if (cos < 0) {
-    //    cos *= -1;
-    //  }
-    //  int resolution = (int) (_resolution * 2 * cos);
-    //  if (resolution % 2 == 1) {
-    //    resolution += 1;
-    //  }
-    //  if (resolution < 4) {
-    //    resolution = 4;
-    //  }
+  //  if (elevationData != NULL) {
+  //    ILogger::instance()->logInfo("Elevation data for sector=%s", sector.description().c_str());
+  //    ILogger::instance()->logInfo("%s", elevationData->description().c_str());
+  //  }
+  
+    //const short resolution = (short) _resolution;
+    final short resolution = calculateResolution(sector);
   
     final short resolutionMinus1 = (short)(resolution - 1);
   
   
+    double minHeight = 0;
     FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.givenCenter(), planet, sector.getCenter());
     for (int j = 0; j < resolution; j++)
     {
@@ -72,7 +94,18 @@ public class EllipsoidalTileTessellator extends TileTessellator
       for (int i = 0; i < resolution; i++)
       {
         final double u = (double) i / resolutionMinus1;
-        vertices.add(sector.getInnerPoint(u, v));
+  
+        float height = 0F;
+        if (elevationData != null)
+        {
+          height = elevationData.getElevationAt(i, j) * verticalExaggeration;
+          if (height < minHeight)
+          {
+            minHeight = height;
+          }
+        }
+  
+        vertices.add(sector.getInnerPoint(u, v), height);
       }
     }
   
@@ -93,14 +126,14 @@ public class EllipsoidalTileTessellator extends TileTessellator
       indices.add((short)(jTimesResolution + 2 *resolution - 1));
     }
   
+  
     // create skirts
     if (_skirted)
     {
-  
       // compute skirt height
       final Vector3D sw = planet.toCartesian(sector.getSW());
       final Vector3D nw = planet.toCartesian(sector.getNW());
-      final double skirtHeight = nw.sub(sw).length() * 0.05;
+      final double skirtHeight = (nw.sub(sw).length() * 0.05 * -1) + minHeight;
   
       indices.add((short) 0);
       int posS = resolution * resolution;
@@ -108,7 +141,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
       // west side
       for (int j = 0; j < resolutionMinus1; j++)
       {
-        vertices.add(sector.getInnerPoint(0, (double)j/resolutionMinus1), -skirtHeight);
+        vertices.add(sector.getInnerPoint(0, (double)j/resolutionMinus1), skirtHeight);
   
         indices.add((short)(j *resolution));
         indices.add((short) posS++);
@@ -117,7 +150,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
       // south side
       for (int i = 0; i < resolutionMinus1; i++)
       {
-        vertices.add(sector.getInnerPoint((double)i/resolutionMinus1, 1), -skirtHeight);
+        vertices.add(sector.getInnerPoint((double)i/resolutionMinus1, 1), skirtHeight);
   
         indices.add((short)(resolutionMinus1 *resolution + i));
         indices.add((short) posS++);
@@ -126,7 +159,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
       // east side
       for (int j = resolutionMinus1; j > 0; j--)
       {
-        vertices.add(sector.getInnerPoint(1, (double)j/resolutionMinus1), -skirtHeight);
+        vertices.add(sector.getInnerPoint(1, (double)j/resolutionMinus1), skirtHeight);
   
         indices.add((short)(j *resolution + resolutionMinus1));
         indices.add((short) posS++);
@@ -135,7 +168,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
       // north side
       for (int i = resolutionMinus1; i > 0; i--)
       {
-        vertices.add(sector.getInnerPoint((double)i/resolutionMinus1, 0), -skirtHeight);
+        vertices.add(sector.getInnerPoint((double)i/resolutionMinus1, 0), skirtHeight);
   
         indices.add((short) i);
         indices.add((short) posS++);
@@ -151,10 +184,9 @@ public class EllipsoidalTileTessellator extends TileTessellator
     return new IndexedMesh(debug ? GLPrimitive.lineStrip() : GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, color);
   }
 
-  public final Mesh createTileDebugMesh(G3MRenderContext rc, Tile tile)
+  public final Mesh createTileDebugMesh(Planet planet, Tile tile)
   {
     final Sector sector = tile.getSector();
-    final Planet planet = rc.getPlanet();
   
     final int resolutionMinus1 = _resolution - 1;
     short posS = 0;
@@ -206,11 +238,11 @@ public class EllipsoidalTileTessellator extends TileTessellator
     return true;
   }
 
-  public final IFloatBuffer createUnitTextCoords()
+  public final IFloatBuffer createUnitTextCoords(Tile tile)
   {
   
-  
-    final int resolution = _resolution;
+  //  const int resolution       = _resolution;
+    final short resolution = calculateResolution(tile.getSector());
     final int resolutionMinus1 = resolution - 1;
   
     float[] u = new float[resolution * resolution];

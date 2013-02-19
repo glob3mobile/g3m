@@ -21,7 +21,7 @@ package org.glob3.mobile.generated;
 
 public class ByteBufferIterator
 {
-  private IByteBuffer _buffer;
+  private final IByteBuffer _buffer;
   private int _cursor;
   private int _timestamp;
 
@@ -63,27 +63,37 @@ public class ByteBufferIterator
   
     return _buffer.get(_cursor++);
   }
+  public final short nextInt16()
+  {
+    // LittleEndian
+    final short b1 = nextUInt8() & 0xFF;
+    final short b2 = nextUInt8() & 0xFF;
+  
+    final int iResult = ((int) b1) | ((int)(b2 << 8));
+    final short result = (short) iResult;
+    return result;
+  }
   public final int nextInt32()
   {
     // LittleEndian
-    int b1 = nextUInt8() & 0xFF;
-    int b2 = nextUInt8() & 0xFF;
-    int b3 = nextUInt8() & 0xFF;
-    int b4 = nextUInt8() & 0xFF;
+    final int b1 = nextUInt8() & 0xFF;
+    final int b2 = nextUInt8() & 0xFF;
+    final int b3 = nextUInt8() & 0xFF;
+    final int b4 = nextUInt8() & 0xFF;
   
     return ((int) b1) | ((int) b2 << 8) | ((int) b3 << 16) | ((int) b4 << 24);
   }
   public final long nextInt64()
   {
     // LittleEndian
-    int b1 = nextUInt8() & 0xFF;
-    int b2 = nextUInt8() & 0xFF;
-    int b3 = nextUInt8() & 0xFF;
-    int b4 = nextUInt8() & 0xFF;
-    int b5 = nextUInt8() & 0xFF;
-    int b6 = nextUInt8() & 0xFF;
-    int b7 = nextUInt8() & 0xFF;
-    int b8 = nextUInt8() & 0xFF;
+    final int b1 = nextUInt8() & 0xFF;
+    final int b2 = nextUInt8() & 0xFF;
+    final int b3 = nextUInt8() & 0xFF;
+    final int b4 = nextUInt8() & 0xFF;
+    final int b5 = nextUInt8() & 0xFF;
+    final int b6 = nextUInt8() & 0xFF;
+    final int b7 = nextUInt8() & 0xFF;
+    final int b8 = nextUInt8() & 0xFF;
   
     return ((long) b1) | ((long) b2 << 8) | ((long) b3 << 16) | ((long) b4 << 24) | ((long) b5 << 32) | ((long) b6 << 40) | ((long) b7 << 48) | ((long) b8 << 56);
   }

@@ -28,6 +28,11 @@ package org.glob3.mobile.generated;
 //class TileKey;
 //class Vector3D;
 //class GLState;
+//class Extent;
+//class ElevationDataProvider;
+//class ElevationData;
+//class MeshHolder;
+
 
 public class Tile
 {
@@ -39,6 +44,8 @@ public class Tile
   private final int _column;
 
   private Mesh _tessellatorMesh;
+  private ElevationData _elevationData;
+  private long _elevationRequestId;
   private Mesh _debugMesh;
   private Mesh _texturizedMesh;
 
@@ -52,7 +59,50 @@ public class Tile
   {
     if (_tessellatorMesh == null)
     {
-      _tessellatorMesh = trc.getTessellator().createTileMesh(rc, this, trc.getParameters()._renderDebug);
+      final TileTessellator tessellator = trc.getTessellator();
+      final boolean renderDebug = trc.getParameters()._renderDebug;
+      ElevationDataProvider elevationDataProvider = trc.getElevationDataProvider();
+      final Planet planet = rc.getPlanet();
+  
+      final float verticalExaggeration = trc.getVerticalExaggeration();
+  
+      if (elevationDataProvider == null)
+      {
+        // no elevation data provider, just create a simple mesh without elevation
+        _tessellatorMesh = tessellator.createTileMesh(planet, this, null, verticalExaggeration, renderDebug);
+      }
+      else
+      {
+        if (_elevationData == null)
+        {
+          MeshHolder meshHolder = new MeshHolder(tessellator.createTileMesh(planet, this, null, verticalExaggeration, renderDebug));
+          _tessellatorMesh = meshHolder;
+  
+          TileElevationDataListener listener = new TileElevationDataListener(this, meshHolder, tessellator, planet, verticalExaggeration, renderDebug);
+  
+          _elevationRequestId = elevationDataProvider.requestElevationData(_sector, tessellator.getTileMeshResolution(planet, this, renderDebug), listener, true);
+        }
+        else
+        {
+          // the elevation data is already available, create a simple "inflated" mesh with
+          _tessellatorMesh = tessellator.createTileMesh(planet, this, _elevationData, verticalExaggeration, renderDebug);
+        }
+      }
+  
+  //    Mesh* tessellatorMesh = tessellator->createTileMesh(rc, this, renderDebug);
+  //
+  //    if (elevationDataProvider == NULL) {
+  //      _tessellatorMesh = tessellatorMesh;
+  //    }
+  //    else {
+  //      _tessellatorMesh = elevationDataProvider;
+  //
+  //      const long long elevationRequestId = elevationDataProvider->requestElevationData(_sector,
+  //                                                                                       tessellator->getTileMeshResolution(rc, this, renderDebug),
+  //                                                                                       new TileElevationDataListener(this),
+  //                                                                                       true);
+  //    }
+  
     }
     return _tessellatorMesh;
   }
@@ -61,23 +111,24 @@ public class Tile
   {
     if (_debugMesh == null)
     {
-      _debugMesh = trc.getTessellator().createTileDebugMesh(rc, this);
+      _debugMesh = trc.getTessellator().createTileDebugMesh(rc.getPlanet(), this);
     }
     return _debugMesh;
   }
 
   private boolean isVisible(G3MRenderContext rc, TileRenderContext trc)
   {
-    // test if sector is back oriented with respect to the camera
-    //  if (_sector.isBackOriented(rc)) {
-    //    return false;
-    //  }
+  //  // test if sector is back oriented with respect to the camera
+  //    if (_sector.isBackOriented(rc)) {
+  //      return false;
+  //    }
   
-    Extent extent = getTessellatorMesh(rc, trc).getExtent();
-    if (extent == null)
-    {
-      return false;
-    }
+  //  const Extent* extent = getTessellatorMesh(rc, trc)->getExtent();
+  //  if (extent == NULL) {
+  //    return false;
+  //  }
+  
+    final Extent extent = getTileExtent(rc);
     return extent.touches(rc.getCurrentCamera().getFrustumInModelCoordinates());
     //return extent->touches( rc->getCurrentCamera()->getHalfFrustuminModelCoordinates() );
   }
@@ -91,12 +142,6 @@ public class Tile
       return true;
     }
   
-    //  if (timer != NULL) {
-    //    if ( timer->elapsedTime().milliseconds() > 50 ) {
-    //      return true;
-    //    }
-    //  }
-  
     TileTexturizer texturizer = trc.getTexturizer();
     if (texturizer != null)
     {
@@ -106,11 +151,13 @@ public class Tile
       }
     }
   
-    Extent extent = getTessellatorMesh(rc, trc).getExtent();
+    //Extent* extent = getTessellatorMesh(rc, trc)->getExtent();
+    final Extent extent = getTileExtent(rc);
     if (extent == null)
     {
       return true;
     }
+  
     //  const double projectedSize = extent->squaredProjectedArea(rc);
     //  if (projectedSize <= (parameters->_tileTextureWidth * parameters->_tileTextureHeight * 2)) {
     //    return true;
@@ -176,6 +223,8 @@ public class Tile
       return;
     }
   
+    //getTileExtent(rc)->render(rc, parentState);
+  
     TileTexturizer texturizer = trc.getTexturizer();
     if (texturizer == null)
     {
@@ -183,7 +232,6 @@ public class Tile
     }
     else
     {
-      // const bool needsToCallTexturizer = (!isTextureSolved() || (_texturizedMesh == NULL)) && isTexturizerDirty();
       final boolean needsToCallTexturizer = (_texturizedMesh == null) || isTexturizerDirty();
   
       if (needsToCallTexturizer)
@@ -293,6 +341,144 @@ public class Tile
 
   private ITexturizerData _texturizerData;
 
+  private Extent _tileExtent;
+  private Extent getTileExtent(G3MRenderContext rc)
+  {
+    if (_tileExtent == null)
+    {
+      final Planet planet = rc.getPlanet();
+  
+      final Vector3D v0 = planet.toCartesian(_sector.getCenter());
+      final Vector3D v1 = planet.toCartesian(_sector.getNE());
+      final Vector3D v2 = planet.toCartesian(_sector.getNW());
+      final Vector3D v3 = planet.toCartesian(_sector.getSE());
+      final Vector3D v4 = planet.toCartesian(_sector.getSW());
+  
+      double lowerX = v0._x;
+      if (v1._x < lowerX)
+      {
+         lowerX = v1._x;
+      }
+      if (v2._x < lowerX)
+      {
+         lowerX = v2._x;
+      }
+      if (v3._x < lowerX)
+      {
+         lowerX = v3._x;
+      }
+      if (v4._x < lowerX)
+      {
+         lowerX = v4._x;
+      }
+  
+      double upperX = v0._x;
+      if (v1._x > upperX)
+      {
+         upperX = v1._x;
+      }
+      if (v2._x > upperX)
+      {
+         upperX = v2._x;
+      }
+      if (v3._x > upperX)
+      {
+         upperX = v3._x;
+      }
+      if (v4._x > upperX)
+      {
+         upperX = v4._x;
+      }
+  
+  
+      double lowerY = v0._y;
+      if (v1._y < lowerY)
+      {
+         lowerY = v1._y;
+      }
+      if (v2._y < lowerY)
+      {
+         lowerY = v2._y;
+      }
+      if (v3._y < lowerY)
+      {
+         lowerY = v3._y;
+      }
+      if (v4._y < lowerY)
+      {
+         lowerY = v4._y;
+      }
+  
+      double upperY = v0._y;
+      if (v1._y > upperY)
+      {
+         upperY = v1._y;
+      }
+      if (v2._y > upperY)
+      {
+         upperY = v2._y;
+      }
+      if (v3._y > upperY)
+      {
+         upperY = v3._y;
+      }
+      if (v4._y > upperY)
+      {
+         upperY = v4._y;
+      }
+  
+  
+      double lowerZ = v0._z;
+      if (v1._z < lowerZ)
+      {
+         lowerZ = v1._z;
+      }
+      if (v2._z < lowerZ)
+      {
+         lowerZ = v2._z;
+      }
+      if (v3._z < lowerZ)
+      {
+         lowerZ = v3._z;
+      }
+      if (v4._z < lowerZ)
+      {
+         lowerZ = v4._z;
+      }
+  
+      double upperZ = v0._z;
+      if (v1._z > upperZ)
+      {
+         upperZ = v1._z;
+      }
+      if (v2._z > upperZ)
+      {
+         upperZ = v2._z;
+      }
+      if (v3._z > upperZ)
+      {
+         upperZ = v3._z;
+      }
+      if (v4._z > upperZ)
+      {
+         upperZ = v4._z;
+      }
+  
+  
+      _tileExtent = new Box(new Vector3D(lowerX, lowerY, lowerZ), new Vector3D(upperX, upperY, upperZ));
+    }
+    return _tileExtent;
+  }
+
+  private void cancelElevationDataRequest(ElevationDataProvider elevationDataProvider)
+  {
+    if (_elevationRequestId > 0)
+    {
+      elevationDataProvider.cancelRequest(_elevationRequestId);
+      _elevationRequestId = -1000;
+    }
+  }
+
   public Tile(TileTexturizer texturizer, Tile parent, Sector sector, int level, int row, int column)
   {
      _texturizer = texturizer;
@@ -310,6 +496,9 @@ public class Tile
      _justCreatedSubtiles = false;
      _isVisible = false;
      _texturizerData = null;
+     _tileExtent = null;
+     _elevationData = null;
+     _elevationRequestId = -1000;
     //  int __remove_tile_print;
     //  printf("Created tile=%s\n deltaLat=%s deltaLon=%s\n",
     //         getKey().description().c_str(),
@@ -320,7 +509,7 @@ public class Tile
 
   public void dispose()
   {
-    prune(null);
+    prune(null, null);
   
     if (_debugMesh != null)
        _debugMesh.dispose();
@@ -337,6 +526,14 @@ public class Tile
     if (_texturizedMesh != null)
        _texturizedMesh.dispose();
     _texturizedMesh = null;
+  
+    if (_tileExtent != null)
+       _tileExtent.dispose();
+    _tileExtent = null;
+  
+    if (_elevationData != null)
+       _elevationData.dispose();
+    _elevationData = null;
   }
 
 
@@ -381,7 +578,6 @@ public class Tile
     TileTexturizer texturizer = trc.getTexturizer();
     if (texturizer != null)
     {
-      // const bool needsToCallTexturizer = (!isTextureSolved() || (_texturizedMesh == NULL)) && isTexturizerDirty();
       final boolean needsToCallTexturizer = (_texturizedMesh == null) || isTexturizerDirty();
   
       if (needsToCallTexturizer)
@@ -414,7 +610,7 @@ public class Tile
   
         statistics.computeTileRendered(this);
   
-        prune(trc.getTexturizer());
+        prune(trc.getTexturizer(), trc.getElevationDataProvider());
       }
       else
       {
@@ -438,7 +634,7 @@ public class Tile
     {
       setIsVisible(false, trc.getTexturizer());
   
-      prune(trc.getTexturizer());
+      prune(trc.getTexturizer(), trc.getElevationDataProvider());
     }
   }
 
@@ -492,9 +688,12 @@ public class Tile
 
   public final void setTexturizerData(ITexturizerData texturizerData)
   {
-    if (_texturizerData != null)
-       _texturizerData.dispose();
-    _texturizerData = texturizerData;
+    if (texturizerData != _texturizerData)
+    {
+      if (_texturizerData != null)
+         _texturizerData.dispose();
+      _texturizerData = texturizerData;
+    }
   }
 
   public final Tile getDeepestTileContaining(Geodetic3D position)
@@ -520,7 +719,7 @@ public class Tile
     return null;
   }
 
-  public final void prune(TileTexturizer texturizer)
+  public final void prune(TileTexturizer texturizer, ElevationDataProvider elevationDataProvider)
   {
     if (_subtiles != null)
     {
@@ -536,11 +735,17 @@ public class Tile
   
         subtile.setIsVisible(false, texturizer);
   
-        subtile.prune(texturizer);
+        subtile.prune(texturizer, elevationDataProvider);
         if (texturizer != null)
         {
           texturizer.tileToBeDeleted(subtile, subtile._texturizedMesh);
         }
+  
+        if (elevationDataProvider != null)
+        {
+          subtile.cancelElevationDataRequest(elevationDataProvider);
+        }
+  
         if (subtile != null)
            subtile.dispose();
       }
@@ -549,6 +754,13 @@ public class Tile
       _subtiles = null;
   
     }
+  }
+
+  public final void onElevationData(ElevationData elevationData, float verticalExaggeration, MeshHolder meshHolder, TileTessellator tessellator, Planet planet, boolean renderDebug)
+  {
+    _elevationRequestId = -1000;
+    _elevationData = elevationData;
+    meshHolder.setMesh(tessellator.createTileMesh(planet, this, _elevationData, verticalExaggeration, renderDebug));
   }
 
 }

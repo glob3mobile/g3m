@@ -132,6 +132,7 @@ public class Ellipsoid
   public final Vector3D toCartesian(Angle latitude, Angle longitude, double height)
   {
     final Vector3D n = geodeticSurfaceNormal(latitude, longitude);
+  
     final Vector3D k = _radiiSquared.times(n);
     final double gamma = IMathUtils.instance().sqrt((k._x * n._x) + (k._y * n._y) + (k._z * n._z));
   

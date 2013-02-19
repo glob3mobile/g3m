@@ -84,48 +84,21 @@ public class MultiLayerTileTexturizer extends TileTexturizer
     if (builderHolder == null)
     {
       builderHolder = new TileTextureBuilderHolder(new TileTextureBuilder(this, rc, trc.getLayerSet(), _parameters, rc.getDownloader(), tile, tessellatorMesh, trc.getTessellator()));
-                                                                          /*getTextureCoordinates(trc)*/
       tile.setTexturizerData(builderHolder);
     }
   
+    TileTextureBuilder builder = builderHolder.get();
     if (trc.isForcedFullRender())
     {
-      builderHolder.get().start();
+      builder.start();
     }
     else
     {
-//C++ TO JAVA CONVERTER TODO TASK: Java does not allow declaring types within methods:
-//      class BuilderStartTask : public FrameTask
-//      {
-//      private:
-//        TileTextureBuilder* _builder;
-//  
-//      public:
-//        BuilderStartTask(TileTextureBuilder* builder) : _builder(builder)
-//        {
-//          _builder->_retain();
-//        }
-//  
-//        virtual ~BuilderStartTask()
-//        {
-//          _builder->_release();
-//        }
-//  
-//        void execute(const G3MRenderContext* rc)
-//        {
-//          _builder->start();
-//        }
-//  
-//        boolean isCanceled(const G3MRenderContext *rc)
-//        {
-//          return _builder->isCanceled();
-//        }
-//      };
-      rc.getFrameTasksExecutor().addPreRenderTask(new BuilderStartTask(builderHolder.get()));
+      rc.getFrameTasksExecutor().addPreRenderTask(new BuilderStartTask(builder));
     }
   
     tile.setTexturizerDirty(false);
-    return builderHolder.get().getMesh();
+    return builder.getMesh();
   }
 
   public final void tileToBeDeleted(Tile tile, Mesh mesh)
@@ -135,9 +108,10 @@ public class MultiLayerTileTexturizer extends TileTexturizer
   
     if (builderHolder != null)
     {
-      builderHolder.get().cancel();
-      builderHolder.get().cleanTile();
-      builderHolder.get().cleanMesh();
+      TileTextureBuilder builder = builderHolder.get();
+      builder.cancel();
+      builder.cleanTile();
+      builder.cleanMesh();
     }
     else
     {
@@ -225,8 +199,9 @@ public class MultiLayerTileTexturizer extends TileTexturizer
     TileTextureBuilderHolder builderHolder = (TileTextureBuilderHolder) tile.getTexturizerData();
     if (builderHolder != null)
     {
-      builderHolder.get().cancel();
-      builderHolder.get().cleanMesh();
+      TileTextureBuilder builder = builderHolder.get();
+      builder.cancel();
+      builder.cleanMesh();
     }
     else
     {

@@ -53,7 +53,7 @@ public class LTMInitializer extends LazyTextureMappingInitializer
   public final IFloatBuffer getTexCoords()
   {
     //return _texCoords;
-    return _tessellator.createUnitTextCoords();
+    return _tessellator.createUnitTextCoords(_tile);
   }
 
 }

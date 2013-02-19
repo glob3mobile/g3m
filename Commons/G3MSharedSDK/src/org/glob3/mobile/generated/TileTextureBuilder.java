@@ -4,8 +4,6 @@ public class TileTextureBuilder extends RCObject
   private MultiLayerTileTexturizer _texturizer;
   private Tile _tile;
 
-  //  const TileKey             _tileKey;
-
   private java.util.ArrayList<Petition> _petitions = new java.util.ArrayList<Petition>();
   private int _petitionsCount;
   private int _stepsDone;
@@ -20,7 +18,6 @@ public class TileTextureBuilder extends RCObject
 
   private final Mesh _tessellatorMesh;
 
-//  IFloatBuffer* _texCoords;
   private final TileTessellator _tessellator;
 
   private java.util.ArrayList<PetitionStatus> _status = new java.util.ArrayList<PetitionStatus>();
@@ -35,9 +32,6 @@ public class TileTextureBuilder extends RCObject
   public LeveledTexturedMesh _mesh;
 
   public TileTextureBuilder(MultiLayerTileTexturizer texturizer, G3MRenderContext rc, LayerSet layerSet, TilesRenderParameters parameters, IDownloader downloader, Tile tile, Mesh tessellatorMesh, TileTessellator tessellator)
-                     /*IFloatBuffer* texCoords*/
-  //_tileKey(tile->getKey()),
-//  _texCoords(texCoords),
   {
      _texturizer = texturizer;
      _factory = rc.getFactory();

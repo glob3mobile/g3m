@@ -2,6 +2,7 @@ package org.glob3.mobile.generated;
 public class TileRenderer extends LeafRenderer implements LayerSetChangedListener
 {
   private final TileTessellator _tessellator;
+  private ElevationDataProvider _elevationDataProvider;
   private TileTexturizer _texturizer;
   private LayerSet _layerSet;
   private final TilesRenderParameters _parameters;
@@ -68,7 +69,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
     for (int i = 0; i < _topLevelTiles.size(); i++)
     {
       Tile tile = _topLevelTiles.get(i);
-      tile.prune(_texturizer);
+      tile.prune(_texturizer, _elevationDataProvider);
     }
   }
 
@@ -76,9 +77,12 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 
   private java.util.ArrayList<VisibleSectorListenerEntry> _visibleSectorListeners = new java.util.ArrayList<VisibleSectorListenerEntry>();
 
-  public TileRenderer(TileTessellator tessellator, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters parameters, boolean showStatistics)
+  private float _verticalExaggeration;
+
+  public TileRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters parameters, boolean showStatistics)
   {
      _tessellator = tessellator;
+     _elevationDataProvider = elevationDataProvider;
      _texturizer = texturizer;
      _layerSet = layerSet;
      _parameters = parameters;
@@ -90,6 +94,8 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
      _context = null;
      _lastVisibleSector = null;
     _layerSet.setChangeListener(this);
+  
+    _verticalExaggeration = 20F;
   }
 
   public void dispose()
@@ -98,6 +104,8 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   
     if (_tessellator != null)
        _tessellator.dispose();
+    if (_elevationDataProvider != null)
+       _elevationDataProvider.dispose();
     if (_texturizer != null)
        _texturizer.dispose();
     if (_parameters != null)
@@ -131,6 +139,10 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   
     _layerSet.initialize(context);
     _texturizer.initialize(context, _parameters);
+    if (_elevationDataProvider != null)
+    {
+      _elevationDataProvider.initialize(context);
+    }
   }
 
   public final void render(G3MRenderContext rc, GLState parentState)
@@ -140,7 +152,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   
     TilesStatistics statistics = new TilesStatistics();
   
-    TileRenderContext trc = new TileRenderContext(_tessellator, _texturizer, _layerSet, _parameters, statistics, _lastSplitTimer, _firstRender); // if first render, force full render
+    TileRenderContext trc = new TileRenderContext(_tessellator, _elevationDataProvider, _texturizer, _layerSet, _parameters, statistics, _lastSplitTimer, _firstRender, _verticalExaggeration); // if first render, force full render
   
     final int topLevelTilesCount = _topLevelTiles.size();
   
@@ -265,7 +277,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
       {
         TilesStatistics statistics = new TilesStatistics();
   
-        TileRenderContext trc = new TileRenderContext(_tessellator, _texturizer, _layerSet, _parameters, statistics, _lastSplitTimer, true);
+        TileRenderContext trc = new TileRenderContext(_tessellator, _elevationDataProvider, _texturizer, _layerSet, _parameters, statistics, _lastSplitTimer, true, _verticalExaggeration);
   
         for (int i = 0; i < topLevelTilesCount; i++)
         {
@@ -379,7 +391,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   /**
    Add a listener for notification of visible-sector changes.
 
-   @param stabilizationInterval How many time the visible-sector has to be settled (without changes) before triggering the event.  Useful for avoid process while the camera is being moved (as in animations).  If stabilizationInterval is zero, the event is triggered inmediatly. 
+   @param stabilizationInterval How many time the visible-sector has to be settled (without changes) before triggering the event.  Useful for avoid process while the camera is being moved (as in animations).  If stabilizationInterval is zero, the event is triggered inmediatly.
    */
   public final void addVisibleSectorListener(VisibleSectorListener listener, TimeInterval stabilizationInterval)
   {

@@ -52,7 +52,8 @@ public class CompositeMesh extends Mesh
          child.dispose();
     }
   
-    _extent = null;
+    if (_extent != null)
+       _extent.dispose();
   }
 
   public final int getVertexCount()
@@ -120,7 +121,8 @@ public class CompositeMesh extends Mesh
 
   public final void addMesh(Mesh mesh)
   {
-    _extent = null;
+    if (_extent != null)
+       _extent.dispose();
     _extent = null;
   
     _children.add(mesh);
