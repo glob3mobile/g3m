@@ -155,7 +155,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   
     TilesStatistics statistics = new TilesStatistics();
   
-    TileRenderContext trc = new TileRenderContext(_tessellator, _elevationDataProvider, _texturizer, _layerSet, _parameters, statistics, _lastSplitTimer, _firstRender, _verticalExaggeration, _texturePriority); // if first render, force full render
+    TileRenderContext trc = new TileRenderContext(_tessellator, _elevationDataProvider, _texturizer, _layerSet, _parameters, statistics, _lastSplitTimer, _firstRender, _texturePriority, _verticalExaggeration); // if first render, force full render
   
     final int topLevelTilesCount = _topLevelTiles.size();
   
@@ -280,7 +280,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
       {
         TilesStatistics statistics = new TilesStatistics();
   
-        TileRenderContext trc = new TileRenderContext(_tessellator, _elevationDataProvider, _texturizer, _layerSet, _parameters, statistics, _lastSplitTimer, true, _verticalExaggeration, _texturePriority);
+        TileRenderContext trc = new TileRenderContext(_tessellator, _elevationDataProvider, _texturizer, _layerSet, _parameters, statistics, _lastSplitTimer, true, _texturePriority, _verticalExaggeration);
   
         for (int i = 0; i < topLevelTilesCount; i++)
         {

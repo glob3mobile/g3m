@@ -199,7 +199,9 @@ public class TileRendererBuilder
   }
   private TileTessellator createTileTessellator()
   {
-    return new EllipsoidalTileTessellator(_parameters._tileResolution, true);
+    TileTessellator tileTessellator = new EllipsoidalTileTessellator(getParameters()._tileResolution, true);
+  
+    return tileTessellator;
   }
 
   public TileRendererBuilder()
@@ -229,11 +231,10 @@ public class TileRendererBuilder
   }
   public final TileRenderer create()
   {
-    TileRenderer tileRenderer = new TileRenderer(getTileTessellator(), getTexturizer(), getLayerSet(), getParameters(), getShowStatistics(), getTexturePriority());
     int __TODO_make_inflator_configurable;
-  //  ElevationDataProvider* elevationDataProvider = new WMSBillElevationDataProvider();
+    //  ElevationDataProvider* elevationDataProvider = new WMSBillElevationDataProvider();
     ElevationDataProvider elevationDataProvider = null;
-    TileRenderer tileRenderer = new TileRenderer(_tileTessellator, elevationDataProvider, _texturizer, _layerSet, _parameters, _showStatistics);
+    TileRenderer tileRenderer = new TileRenderer(getTileTessellator(), elevationDataProvider, getTexturizer(), getLayerSet(), getParameters(), getShowStatistics(), getTexturePriority());
   
     for (int i = 0; i < getVisibleSectorListeners().size(); i++)
     {
@@ -258,7 +259,7 @@ public class TileRendererBuilder
   }
   public final void setTileTexturizer(TileTexturizer tileTexturizer)
   {
-    if (_texturizer != tileTexturizer)
+    if (_texturizer != null)
     {
       ILogger.instance().logError("LOGIC ERROR: _texturizer already initialized");
       return;
