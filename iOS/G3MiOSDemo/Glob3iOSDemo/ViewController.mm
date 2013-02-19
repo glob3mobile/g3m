@@ -21,6 +21,7 @@
 #include "FloatBufferBuilderFromGeodetic.hpp"
 #include "FloatBufferBuilderFromColor.hpp"
 #include "DirectMesh.hpp"
+#include "TileMillLayer.hpp"
 #include "WMSLayer.hpp"
 #include "CameraSingleDragHandler.hpp"
 #include "CameraDoubleDragHandler.hpp"
@@ -389,6 +390,17 @@ public:
 
     layerSet->addLayer(osm);
   }
+    if(true){
+        //http://projects.bryanmcbride.com/php-mbtiles-server/mbtiles.php?db=geography-class.mbtiles&z=1&x=1&y=0
+        TileMillLayer *tml = new TileMillLayer("TileMill Layer",
+                                               URL("http://projects.bryanmcbride.com/php-mbtiles-server/mbtiles.php?", false),
+                                               NULL,
+                                               Sector::fullSphere(),
+                                               "geography-class.mbtiles",
+                                                     TimeInterval::fromDays(30));
+        //tml->setEnable(false);
+        layerSet->addLayer(tml);
+    }
 
   
 //  WMSLayer* pressure = new WMSLayer("pressure_cntr", //

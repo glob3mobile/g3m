@@ -74,6 +74,7 @@
 /* Begin PBXFileReference section */
 		443BBC8215A5C21F00EAE280 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		44846F8316C111FF00D067BB /* ITileVisitor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ITileVisitor.hpp; path = ../G3MiOSSDK/Commons/Interfaces/ITileVisitor.hpp; sourceTree = "<group>"; };
+		4486C1A216D36ED0009BC7E2 /* TileMillLayer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TileMillLayer.hpp; path = ../G3MiOSSDK/Commons/Layers/TileMillLayer.hpp; sourceTree = "<group>"; };
 		44EEB5DF159B2B8B0086F243 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		A717C99515EBA71D00EEC830 /* mercator.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = mercator.jpg; sourceTree = "<group>"; };
 		CCD7885315D9A3FA0065A7E1 /* ProgressWheel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ProgressWheel.png; sourceTree = "<group>"; };
@@ -529,6 +530,7 @@
 				CFBA53CE16B9B69A00256453 /* ThreadUtils_iOS.hpp */,
 				CFBA53A416B9B69A00256453 /* Tile.hpp */,
 				CFBA53B316B9B69A00256453 /* TileKey.hpp */,
+				4486C1A216D36ED0009BC7E2 /* TileMillLayer.hpp */,
 				CFBA537E16B9B69A00256453 /* TileRenderer.hpp */,
 				CFBA533116B9B69A00256453 /* TileRendererBuilder.hpp */,
 				CFBA537916B9B69A00256453 /* TilesRenderParameters.hpp */,
@@ -540,8 +542,10 @@
 				CFBA535816B9B69A00256453 /* TrailsRenderer.hpp */,
 				CFBA537316B9B69A00256453 /* URL.hpp */,
 				CFBA538916B9B69A00256453 /* Vector2D.hpp */,
+				CF35DD5316C69B6F002EFC96 /* Vector2F.hpp */,
 				CFBA535B16B9B69A00256453 /* Vector2I.hpp */,
 				CFBA538A16B9B69A00256453 /* Vector3D.hpp */,
+				CF35DD5216C69B6F002EFC96 /* Vector3F.hpp */,
 				CFBA536016B9B69A00256453 /* Vector4D.hpp */,
 				CFBA53E616B9B69A00256453 /* VisibleSectorListener.hpp */,
 				CFBA539916B9B69A00256453 /* WMSLayer.hpp */,
