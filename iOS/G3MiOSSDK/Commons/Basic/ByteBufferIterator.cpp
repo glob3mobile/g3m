@@ -51,8 +51,8 @@ short ByteBufferIterator::nextInt16() {
   const unsigned char b2 = nextUInt8();
 #endif
 #ifdef JAVA_CODE
-  final short b1 = nextUInt8() & 0xFF;
-  final short b2 = nextUInt8() & 0xFF;
+  final short b1 = (short) (nextUInt8() & 0xFF);
+  final short b2 = (short) (nextUInt8() & 0xFF);
 #endif
 
   const int iResult = ((int) b1) | ((int) (b2 << 8));

@@ -22,7 +22,8 @@
 class WMSBillElevationDataProvider_BufferDownloadListener : public IBufferDownloadListener {
 private:
   const Sector            _sector;
-  const Vector2I          _resolution;
+  const int               _width;
+  const int               _height;
   IElevationDataListener* _listener;
   const bool              _autodeleteListener;
 
@@ -35,7 +36,8 @@ public:
                                                       IElevationDataListener* listener,
                                                       bool autodeleteListener) :
   _sector(sector),
-  _resolution(resolution),
+  _width(resolution._x),
+  _height(resolution._y),
   _listener(listener),
   _autodeleteListener(autodeleteListener)
   {
@@ -44,14 +46,15 @@ public:
 
   void onDownload(const URL& url,
                   IByteBuffer* buffer) {
-    ElevationData* elevationData = BilParser::parseBil16(buffer, _resolution);
+    const Vector2I resolution(_width, _height);
+    ElevationData* elevationData = BilParser::parseBil16(buffer, resolution);
     delete buffer;
 
     if (elevationData == NULL) {
-      _listener->onError(_sector, _resolution);
+      _listener->onError(_sector, resolution);
     }
     else {
-      _listener->onData(_sector, _resolution, elevationData);
+      _listener->onData(_sector, resolution, elevationData);
     }
 
     if (_autodeleteListener) {
@@ -61,7 +64,9 @@ public:
   }
 
   void onError(const URL& url) {
-    _listener->onError(_sector, _resolution);
+    const Vector2I resolution(_width, _height);
+
+    _listener->onError(_sector, resolution);
     if (_autodeleteListener) {
       delete _listener;
       _listener = NULL;

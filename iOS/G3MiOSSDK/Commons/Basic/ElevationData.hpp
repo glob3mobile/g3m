@@ -22,8 +22,13 @@ private:
 
 public:
 
+
   ElevationData(const Vector2I& extent,
                 IFloatBuffer* buffer);
+
+  ~ElevationData() {
+
+  }
 
 
   float getElevationAt(int x, int y) const;
@@ -31,7 +36,7 @@ public:
   Vector2I getExtent() const;
 
   const std::string description() const;
-
+  
 };
 
 #endif
