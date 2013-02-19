@@ -16,7 +16,12 @@ class G3MContext;
 
 class IElevationDataListener {
 public:
-  virtual ~IElevationDataListener() {}
+#ifdef C_CODE
+  virtual ~IElevationDataListener() { }
+#endif
+#ifdef JAVA_CODE
+  public void dispose();
+#endif
 
   virtual void onData(const Sector& sector,
                       const Vector2I& resolution,
@@ -43,7 +48,7 @@ public:
                                                bool autodeleteListener) = 0;
 
   virtual void cancelRequest(const long long requestId) = 0;
-
+  
 };
 
 #endif
