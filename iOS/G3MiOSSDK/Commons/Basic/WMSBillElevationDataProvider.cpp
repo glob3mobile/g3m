@@ -16,10 +16,7 @@
 #include "URL.hpp"
 #include "TimeInterval.hpp"
 #include "IBufferDownloadListener.hpp"
-#include "ByteBufferIterator.hpp"
-#include "ElevationData.hpp"
-#include "IFactory.hpp"
-#include "IFloatBuffer.hpp"
+#include "BilParser.hpp"
 
 
 class WMSBillElevationDataProvider_BufferDownloadListener : public IBufferDownloadListener {
@@ -29,32 +26,7 @@ private:
   IElevationDataListener* _listener;
   const bool              _autodeleteListener;
 
-  ElevationData* parseBil(IByteBuffer* buffer) {
 
-    const int size = _resolution._x * _resolution._y;
-
-    const int expectedSizeInBytes = size * 2;
-    if (buffer->size() != expectedSizeInBytes) {
-      ILogger::instance()->logError("Invalid buffer size, expected %d bytes, but got %d",
-                                    expectedSizeInBytes,
-                                    buffer->size());
-      return NULL;
-    }
-
-    ByteBufferIterator iterator(buffer);
-
-    IFloatBuffer* floatBuffer = IFactory::instance()->createFloatBuffer(size);
-    for (int i = 0; i < size; i++) {
-      short height = iterator.nextInt16();
-      if (height == -9999) {
-        height = 0;
-      }
-      floatBuffer->rawPut(i, (float) height);
-    }
-
-    return new ElevationData(_resolution,
-                             floatBuffer);
-  }
 
 public:
 
@@ -72,7 +44,7 @@ public:
 
   void onDownload(const URL& url,
                   IByteBuffer* buffer) {
-    ElevationData* elevationData = parseBil(buffer);
+    ElevationData* elevationData = BilParser::parseBil16(buffer, _resolution);
     delete buffer;
 
     if (elevationData == NULL) {
@@ -116,6 +88,10 @@ const long long WMSBillElevationDataProvider::requestElevationData(const Sector&
                                                                    const Vector2I& resolution,
                                                                    IElevationDataListener* listener,
                                                                    bool autodeleteListener) {
+  if (_downloader == NULL) {
+    ILogger::instance()->logError("WMSBillElevationDataProvider was not initialized.");
+    return -1;
+  }
 
   // http://data.worldwind.arc.nasa.gov/elev?REQUEST=GetMap&SERVICE=WMS&VERSION=1.3.0&LAYERS=srtm30&STYLES=&FORMAT=image/bil&CRS=EPSG:4326&BBOX=-180.0,-90.0,180.0,90.0&WIDTH=10&HEIGHT=10
 

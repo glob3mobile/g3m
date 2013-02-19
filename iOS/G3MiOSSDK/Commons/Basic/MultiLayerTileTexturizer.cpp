@@ -112,7 +112,7 @@ public:
 
   IFloatBuffer* getTexCoords() const {
     //return _texCoords;
-    return _tessellator->createUnitTextCoords();
+    return _tessellator->createUnitTextCoords(_tile);
   }
 
 };

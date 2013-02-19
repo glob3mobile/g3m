@@ -24,8 +24,9 @@ _buffer(buffer)
 }
 
 float ElevationData::getElevationAt(int x, int y) const {
-  return _buffer->get( (x * _width) + y );
-//  return _buffer->get( (y * _height) + x );
+  //return _buffer->get( (x * _width) + y );
+  return _buffer->get( (y * _height) + x );
+  //return _buffer->get( (x * _height) + y );
 }
 
 Vector2I ElevationData::getExtent() const {
@@ -40,10 +41,10 @@ const std::string ElevationData::description() const {
   isb->addInt(_height);
   isb->addString("\n");
   for (int row = 0; row < _width; row++) {
-    isb->addString("   ");
+    //isb->addString("   ");
     for (int col = 0; col < _height; col++) {
       isb->addFloat( getElevationAt(col, row) );
-      isb->addString(" ");
+      isb->addString(",");
     }
     isb->addString("\n");
   }

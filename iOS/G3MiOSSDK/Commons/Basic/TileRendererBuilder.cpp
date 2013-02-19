@@ -31,7 +31,8 @@ TileRendererBuilder::~TileRendererBuilder() {
 
 TileRenderer* TileRendererBuilder::create() {
   int __TODO_make_inflator_configurable;
-  ElevationDataProvider* elevationDataProvider = new WMSBillElevationDataProvider();
+//  ElevationDataProvider* elevationDataProvider = new WMSBillElevationDataProvider();
+  ElevationDataProvider* elevationDataProvider = NULL;
   TileRenderer* tileRenderer = new TileRenderer(_tileTessellator,
                                                 elevationDataProvider,
                                                 _texturizer,

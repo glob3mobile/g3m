@@ -38,7 +38,7 @@ public:
   virtual Mesh* createTileDebugMesh(const Planet* planet,
                                     const Tile* tile) const = 0;
 
-  virtual IFloatBuffer* createUnitTextCoords() const = 0;
+  virtual IFloatBuffer* createUnitTextCoords(const Tile* tile) const = 0;
   
 };
 

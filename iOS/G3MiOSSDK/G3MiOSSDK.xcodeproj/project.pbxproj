@@ -99,6 +99,8 @@
 		CF2CDD991678292E002A78A9 /* GInitializationTask.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF2CDD971678292E002A78A9 /* GInitializationTask.cpp */; };
 		CF2CDD9A1678292E002A78A9 /* GInitializationTask.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF2CDD981678292E002A78A9 /* GInitializationTask.hpp */; settings = {ATTRIBUTES = (); }; };
 		CF31CBF1158776130085E8F1 /* Effects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF31CBF0158776120085E8F1 /* Effects.cpp */; };
+		CF35A20716D3D44E00D795D8 /* BilParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF35A20516D3D44E00D795D8 /* BilParser.cpp */; };
+		CF35A20816D3D44E00D795D8 /* BilParser.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF35A20616D3D44E00D795D8 /* BilParser.hpp */; };
 		CF35DD4C16C6995D002EFC96 /* Vector3F.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF35DD4A16C6995C002EFC96 /* Vector3F.cpp */; };
 		CF35DD4D16C6995D002EFC96 /* Vector3F.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF35DD4B16C6995C002EFC96 /* Vector3F.hpp */; };
 		CF35DD5016C69B08002EFC96 /* Vector2F.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF35DD4E16C69B08002EFC96 /* Vector2F.cpp */; };
@@ -499,6 +501,8 @@
 		CF31CBF0158776120085E8F1 /* Effects.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Effects.cpp; path = Commons/Basic/Effects.cpp; sourceTree = "<group>"; };
 		CF31CBF215878AF90085E8F1 /* ITimer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ITimer.hpp; path = Commons/Interfaces/ITimer.hpp; sourceTree = "<group>"; };
 		CF31CBF315878BE40085E8F1 /* Timer_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Timer_iOS.hpp; path = Specific/Derived/Timer_iOS.hpp; sourceTree = "<group>"; };
+		CF35A20516D3D44E00D795D8 /* BilParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BilParser.cpp; path = Commons/Basic/BilParser.cpp; sourceTree = "<group>"; };
+		CF35A20616D3D44E00D795D8 /* BilParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = BilParser.hpp; path = Commons/Basic/BilParser.hpp; sourceTree = "<group>"; };
 		CF35DD4A16C6995C002EFC96 /* Vector3F.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Vector3F.cpp; path = Commons/Geometry/Vector3F.cpp; sourceTree = "<group>"; };
 		CF35DD4B16C6995C002EFC96 /* Vector3F.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Vector3F.hpp; path = Commons/Geometry/Vector3F.hpp; sourceTree = "<group>"; };
 		CF35DD4E16C69B08002EFC96 /* Vector2F.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Vector2F.cpp; path = Commons/Geometry/Vector2F.cpp; sourceTree = "<group>"; };
@@ -957,6 +961,8 @@
 				CFD3D8AC16D1686800CE9242 /* ElevationData.hpp */,
 				CFD3D8AF16D1729900CE9242 /* WMSBillElevationDataProvider.cpp */,
 				CFD3D8B016D1729A00CE9242 /* WMSBillElevationDataProvider.hpp */,
+				CF35A20516D3D44E00D795D8 /* BilParser.cpp */,
+				CF35A20616D3D44E00D795D8 /* BilParser.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -1553,6 +1559,7 @@
 				CFD3D8AA16D15ED000CE9242 /* ElevationDataProvider.hpp in Headers */,
 				CFD3D8AE16D1686900CE9242 /* ElevationData.hpp in Headers */,
 				CFD3D8B216D1729A00CE9242 /* WMSBillElevationDataProvider.hpp in Headers */,
+				CF35A20816D3D44E00D795D8 /* BilParser.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1777,6 +1784,7 @@
 				CFD3D8A916D15ED000CE9242 /* ElevationDataProvider.cpp in Sources */,
 				CFD3D8AD16D1686900CE9242 /* ElevationData.cpp in Sources */,
 				CFD3D8B116D1729A00CE9242 /* WMSBillElevationDataProvider.cpp in Sources */,
+				CF35A20716D3D44E00D795D8 /* BilParser.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

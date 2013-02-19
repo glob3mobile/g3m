@@ -10,6 +10,7 @@
 #define G3MiOSSDK_EllipsoidalTileTessellator_hpp
 
 #include "TileTessellator.hpp"
+class Sector;
 
 //#include "MutableVector3D.hpp"
 //#include "Planet.hpp"
@@ -19,6 +20,8 @@ private:
 
   const unsigned int _resolution;
   const bool         _skirted;
+
+  short calculateResolution(const Sector& sector) const;
 
 public:
 
@@ -50,7 +53,7 @@ public:
     return true;
   }
 
-  IFloatBuffer* createUnitTextCoords() const;
+  IFloatBuffer* createUnitTextCoords(const Tile* tile) const;
   
 };
 

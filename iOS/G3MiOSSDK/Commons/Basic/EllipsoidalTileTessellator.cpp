@@ -30,7 +30,27 @@
 Vector2I EllipsoidalTileTessellator::getTileMeshResolution(const Planet* planet,
                                                            const Tile* tile,
                                                            bool debug) const {
-  return Vector2I(_resolution, _resolution);
+  const short resolution = calculateResolution(tile->getSector());
+  return Vector2I(resolution, resolution);
+}
+
+short EllipsoidalTileTessellator::calculateResolution(const Sector& sector) const {
+  const short resolution = (short) _resolution;
+
+//  /* testing for dynamic latitude-resolution */
+//  double cos = sector.getCenter().latitude().cosinus();
+//  if (cos < 0) {
+//    cos *= -1;
+//  }
+//  short resolution = (short) (_resolution * cos);
+//  if (resolution % 2 == 1) {
+//    resolution += 1;
+//  }
+//  if (resolution < 6) {
+//    resolution = 6;
+//  }
+
+  return resolution;
 }
 
 Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
@@ -41,24 +61,13 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
 
   const Sector sector = tile->getSector();
 
-  if (elevationData != NULL) {
-    ILogger::instance()->logInfo("Elevation data for sector=%s", sector.description().c_str());
-    ILogger::instance()->logInfo("%s", elevationData->description().c_str());
-  }
+//  if (elevationData != NULL) {
+//    ILogger::instance()->logInfo("Elevation data for sector=%s", sector.description().c_str());
+//    ILogger::instance()->logInfo("%s", elevationData->description().c_str());
+//  }
 
-  const short resolution = (short) _resolution;
-  //  /* testing for dynamic latitude-resolution */
-  //  double cos = sector.getCenter().latitude().cosinus();
-  //  if (cos < 0) {
-  //    cos *= -1;
-  //  }
-  //  int resolution = (int) (_resolution * 2 * cos);
-  //  if (resolution % 2 == 1) {
-  //    resolution += 1;
-  //  }
-  //  if (resolution < 4) {
-  //    resolution = 4;
-  //  }
+  //const short resolution = (short) _resolution;
+  const short resolution = calculateResolution(sector);
 
   const short resolutionMinus1 = (short) (resolution - 1);
 
@@ -72,11 +81,8 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
     for (int i = 0; i < resolution; i++) {
       const double u = (double) i / resolutionMinus1;
 
-      float height;
-      if (elevationData == NULL) {
-        height = 0;
-      }
-      else {
+      float height = 0;
+      if (elevationData != NULL) {
         height = elevationData->getElevationAt(i, j) * verticalExaggeration;
         if (height < minHeight) {
           minHeight = height;
@@ -166,10 +172,10 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
 }
 
 
-IFloatBuffer* EllipsoidalTileTessellator::createUnitTextCoords() const {
+IFloatBuffer* EllipsoidalTileTessellator::createUnitTextCoords(const Tile* tile) const {
 
-
-  const int resolution       = _resolution;
+//  const int resolution       = _resolution;
+  const short resolution = calculateResolution(tile->getSector());
   const int resolutionMinus1 = resolution - 1;
 
   float* u = new float[resolution * resolution];
