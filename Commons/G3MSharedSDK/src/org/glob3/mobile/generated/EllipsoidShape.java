@@ -38,6 +38,8 @@ public class EllipsoidShape extends AbstractMeshShape
 
   private final float _borderWidth;
 
+  private final boolean _texturedInside;
+
   private final boolean _mercator;
 
   private Color _surfaceColor;
@@ -93,20 +95,39 @@ public class EllipsoidShape extends AbstractMeshShape
     // create surface indices
     ShortBufferBuilder indices = new ShortBufferBuilder();
     short delta = (short)(2 *_resolution - 1);
-    for (short j = 0; j<_resolution-1; j++)
+  
+    // create indices for textupe mapping depending on the flag _texturedInside
+    if (!_texturedInside)
     {
-      if (j>0)
-         indices.add((short)(j *delta));
-      for (short i = 0; i<2 *_resolution-1; i++)
+      for (short j = 0; j<_resolution-1; j++)
       {
-        indices.add((short)(i+j *delta));
-        indices.add((short)(i+(j+1)*delta));
+        if (j>0)
+           indices.add((short)(j *delta));
+        for (short i = 0; i<2 *_resolution-1; i++)
+        {
+          indices.add((short)(i+j *delta));
+          indices.add((short)(i+(j+1)*delta));
+        }
+        indices.add((short)((2 *_resolution-2)+(j+1)*delta));
       }
-      indices.add((short)((j+2)*delta-1));
+    }
+    else
+    {
+      for (short j = 0; j<_resolution-1; j++)
+      {
+        if (j>0)
+           indices.add((short)((j+1)*delta));
+        for (short i = 0; i<2 *_resolution-1; i++)
+        {
+          indices.add((short)(i+(j+1)*delta));
+          indices.add((short)(i+j *delta));
+        }
+        indices.add((short)((2 *_resolution-2)+j *delta));
+      }
     }
   
+    // create mesh
     Color surfaceColor = (_surfaceColor == null) ? null : new Color(_surfaceColor);
-  
     Mesh im = new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), _borderWidth, 1, surfaceColor);
   
     final IGLTextureId texId = getTextureId(rc);
@@ -217,11 +238,11 @@ public class EllipsoidShape extends AbstractMeshShape
     return surfaceMesh;
   }
 
-  public EllipsoidShape(Geodetic3D position, Vector3D radius, short resolution, float borderWidth, boolean mercator, Color surfaceColor)
+  public EllipsoidShape(Geodetic3D position, Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator, Color surfaceColor)
   {
-     this(position, radius, resolution, borderWidth, mercator, surfaceColor, null);
+     this(position, radius, resolution, borderWidth, texturedInside, mercator, surfaceColor, null);
   }
-  public EllipsoidShape(Geodetic3D position, Vector3D radius, short resolution, float borderWidth, boolean mercator, Color surfaceColor, Color borderColor)
+  public EllipsoidShape(Geodetic3D position, Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator, Color surfaceColor, Color borderColor)
   {
      super(position);
      _textureURL = new URL(new URL("", false));
@@ -230,6 +251,7 @@ public class EllipsoidShape extends AbstractMeshShape
      _radiusZ = radius.z();
      _resolution = resolution < 3 ? 3 : resolution;
      _borderWidth = borderWidth;
+     _texturedInside = texturedInside;
      _mercator = mercator;
      _surfaceColor = surfaceColor;
      _borderColor = borderColor;
@@ -238,7 +260,7 @@ public class EllipsoidShape extends AbstractMeshShape
 
   }
 
-  public EllipsoidShape(Geodetic3D position, URL textureURL, Vector3D radius, short resolution, float borderWidth, boolean mercator)
+  public EllipsoidShape(Geodetic3D position, URL textureURL, Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator)
   {
      super(position);
      _textureURL = new URL(textureURL);
@@ -247,6 +269,7 @@ public class EllipsoidShape extends AbstractMeshShape
      _radiusZ = radius.z();
      _resolution = resolution < 3 ? 3 : resolution;
      _borderWidth = borderWidth;
+     _texturedInside = texturedInside;
      _mercator = mercator;
      _surfaceColor = null;
      _borderColor = null;

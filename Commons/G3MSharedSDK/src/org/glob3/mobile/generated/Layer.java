@@ -22,6 +22,7 @@ package org.glob3.mobile.generated;
 //class Tile;
 //class LayerCondition;
 //class LayerSet;
+//class Vector2I;
 
 public abstract class Layer
 {
@@ -76,7 +77,7 @@ public abstract class Layer
   {
   }
 
-  public abstract java.util.ArrayList<Petition> getMapPetitions(G3MRenderContext rc, Tile tile, int width, int height);
+  public abstract java.util.ArrayList<Petition> getMapPetitions(G3MRenderContext rc, Tile tile, Vector2I tileTextureResolution);
 
   public boolean isAvailable(G3MRenderContext rc, Tile tile)
   {

@@ -49,7 +49,7 @@ public class TileTextureBuilder extends RCObject
      _finalized = false;
      _canceled = false;
      _alreadyStarted = false;
-    _petitions = layerSet.createTileMapPetitions(rc, tile, parameters._tileTextureWidth, parameters._tileTextureHeight);
+    _petitions = layerSet.createTileMapPetitions(rc, tile, parameters._tileTextureResolution);
 
     _petitionsCount = _petitions.size();
 
@@ -105,12 +105,15 @@ public class TileTextureBuilder extends RCObject
     deletePetitions();
   }
 
-  public final RectangleI getImageRectangleInTexture(Sector wholeSector, Sector imageSector, int textureWidth, int textureHeight)
+  public final RectangleI getImageRectangleInTexture(Sector wholeSector, Sector imageSector, Vector2I textureResolution)
   {
     final Vector2D lowerFactor = wholeSector.getUVCoordinates(imageSector.lower());
 
     final double widthFactor = imageSector.getDeltaLongitude().div(wholeSector.getDeltaLongitude());
     final double heightFactor = imageSector.getDeltaLatitude().div(wholeSector.getDeltaLatitude());
+
+    final int textureWidth = textureResolution._x;
+    final int textureHeight = textureResolution._y;
 
     return new RectangleI((int) IMathUtils.instance().round(lowerFactor._x * textureWidth), (int) IMathUtils.instance().round((1.0 - lowerFactor._y) * textureHeight), (int) IMathUtils.instance().round(widthFactor * textureWidth), (int) IMathUtils.instance().round(heightFactor * textureHeight));
   }
@@ -128,8 +131,7 @@ public class TileTextureBuilder extends RCObject
       java.util.ArrayList<RectangleI> rectangles = new java.util.ArrayList<RectangleI>();
       String textureId = _tile.getKey().tinyDescription();
 
-      final int textureWidth = _parameters._tileTextureWidth;
-      final int textureHeight = _parameters._tileTextureHeight;
+      final Vector2I textureResolution = new Vector2I(_parameters._tileTextureResolution);
 
       final Sector tileSector = _tile.getSector();
 
@@ -142,7 +144,7 @@ public class TileTextureBuilder extends RCObject
         {
           images.add(image);
 
-          rectangles.add(getImageRectangleInTexture(tileSector, petition.getSector(), textureWidth, textureHeight));
+          rectangles.add(getImageRectangleInTexture(tileSector, petition.getSector(), textureResolution));
 
           textureId += petition.getURL().getPath();
           textureId += "_";
@@ -151,7 +153,7 @@ public class TileTextureBuilder extends RCObject
 
       if (images.size() > 0)
       {
-        _textureBuilder.createTextureFromImages(_gl, _factory, images, rectangles, textureWidth, textureHeight, new TextureUploader(this, rectangles, textureId), true);
+        _textureBuilder.createTextureFromImages(_gl, _factory, images, rectangles, textureResolution, new TextureUploader(this, rectangles, textureId), true);
       }
 
     }

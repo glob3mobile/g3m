@@ -165,8 +165,9 @@ public class Tile
     final Vector2I ex = extent.projectedExtent(rc);
     //const double t = extent.maxAxis() * 2;
     final int t = (ex._x + ex._y);
-    if (t <= ((parameters._tileTextureWidth + parameters._tileTextureHeight) * 1.75))
+    if (t <= ((parameters._tileTextureResolution._x + parameters._tileTextureResolution._y) * 1.75))
     {
+  //  if ( t <= ((parameters->_tileTextureWidth + parameters->_tileTextureHeight) * 3) ) {
       return true;
     }
   

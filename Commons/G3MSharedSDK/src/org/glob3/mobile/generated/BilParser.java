@@ -29,6 +29,7 @@ public class BilParser
   {
   
     final int size = extent._x * extent._y;
+  //  const int size = (extent._x + margin) * (extent._y + margin);
   
     final int expectedSizeInBytes = size * 2;
     if (buffer.size() != expectedSizeInBytes)
@@ -44,6 +45,14 @@ public class BilParser
     {
       short height = iterator.nextInt16();
       if (height == -9999)
+      {
+        height = 0;
+      }
+      if (height == -32767)
+      {
+        height = 0;
+      }
+      if (height == -32768)
       {
         height = 0;
       }

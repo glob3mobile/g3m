@@ -20,8 +20,10 @@ package org.glob3.mobile.generated;
 public class CPUTextureBuilder extends TextureBuilder
 {
 
-  public final void createTextureFromImage(GL gl, IFactory factory, IImage image, int width, int height, IImageListener listener, boolean autodelete)
+  public final void createTextureFromImage(GL gl, IFactory factory, IImage image, Vector2I textureResolution, IImageListener listener, boolean autodelete)
   {
+    final int width = textureResolution._x;
+    final int height = textureResolution._y;
     if (image == null)
     {
       ILogger.instance().logWarning("Creating blank Image");
@@ -42,8 +44,10 @@ public class CPUTextureBuilder extends TextureBuilder
     }
   }
 
-  public final void createTextureFromImages(GL gl, IFactory factory, java.util.ArrayList<IImage> images, java.util.ArrayList<RectangleI> rectangles, int width, int height, IImageListener listener, boolean autodelete)
+  public final void createTextureFromImages(GL gl, IFactory factory, java.util.ArrayList<IImage> images, java.util.ArrayList<RectangleI> rectangles, Vector2I textureResolution, IImageListener listener, boolean autodelete)
   {
+    final int width = textureResolution._x;
+    final int height = textureResolution._y;
   
     final int imagesSize = images.size();
   
