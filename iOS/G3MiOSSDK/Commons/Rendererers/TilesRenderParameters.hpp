@@ -72,7 +72,7 @@ public:
     const int topLevel = 0;
     const int maxLevel = 17;
     const Vector2I tileTextureResolution(256, 256);
-    const Vector2I tileMeshResolution(20, 20);
+    const Vector2I tileMeshResolution(10, 10);
 
     return new TilesRenderParameters(Sector::fullSphere(),
                                      splitsByLatitude,
@@ -97,12 +97,14 @@ public:
     const int topLevel = 0;
     const int maxLevel = 2;
     const Vector2I tileTextureResolution(256, 256);
-    const Vector2I tileMeshResolution(20, 20);
+    const Vector2I tileMeshResolution(10, 10);
 
     //    Sector sector = Sector(Geodetic2D(Angle::fromDegrees(-90), Angle::fromDegrees(-180)),
     //                           Geodetic2D(Angle::fromDegrees(90), Angle::fromDegrees(180)));
+//    Sector sector = Sector(Geodetic2D(Angle::zero(), Angle::zero()),
+//                           Geodetic2D(Angle::fromDegrees(90), Angle::fromDegrees(90)));
     Sector sector = Sector(Geodetic2D(Angle::zero(), Angle::zero()),
-                           Geodetic2D(Angle::fromDegrees(90), Angle::fromDegrees(90)));
+                           Geodetic2D(Angle::fromDegrees(45), Angle::fromDegrees(45)));
 
     return new TilesRenderParameters(sector,
                                      splitsByLatitude,

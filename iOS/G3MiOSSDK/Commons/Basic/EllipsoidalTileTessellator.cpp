@@ -114,7 +114,8 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
     // compute skirt height
     const Vector3D sw = planet->toCartesian(sector.getSW());
     const Vector3D nw = planet->toCartesian(sector.getNW());
-    const double skirtHeight = (nw.sub(sw).length() * 0.05 * -1) + minHeight;
+//    const double skirtHeight = (nw.sub(sw).length() * 0.05 * -1) + minHeight;
+    const double skirtHeight = (nw.sub(sw).length() * 0.1 * -1) + minHeight;
 
     indices.add((short) 0);
     int posS = resolution._x * resolution._y;

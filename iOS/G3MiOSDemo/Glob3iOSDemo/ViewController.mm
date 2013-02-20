@@ -473,6 +473,10 @@ public:
                                               useTilesSplitBudget,
                                               forceTopLevelTilesRenderOnStart,
                                               incrementalTileQuality);
+//  return TilesRenderParameters::createSingleSector(renderDebug,
+//                                                   useTilesSplitBudget,
+//                                                   forceTopLevelTilesRenderOnStart,
+//                                                   incrementalTileQuality);
 }
 
 - (TileRenderer*) createTileRenderer: (TilesRenderParameters*) parameters
