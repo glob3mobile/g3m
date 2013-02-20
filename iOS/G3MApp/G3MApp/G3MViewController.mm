@@ -10,7 +10,11 @@
 #import "G3MWebViewController.h"
 
 #import <G3MiOSSDK/G3MWidget_iOS.h>
+#import <G3MiOSSDK/G3MWidget.hpp>
 #import <G3MiOSSDK/G3MBuilder_iOS.hpp>
+#import <G3MiOSSDK/GInitializationTask.hpp>
+#import <G3MiOSSDK/PeriodicalTask.hpp>
+#import <G3MiOSSDK/IThreadUtils.hpp>
 #import <G3MiOSSDK/TileRendererBuilder.hpp>
 #import <G3MiOSSDK/LayerBuilder.hpp>
 #import <G3MiOSSDK/Mark.hpp>

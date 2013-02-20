@@ -7,6 +7,13 @@
 //
 
 #include "IG3MBuilder.hpp"
+#include "G3MWidget.hpp"
+#include "GL.hpp"
+#include "IStorage.hpp"
+#include "IDownloader.hpp"
+#include "IThreadUtils.hpp"
+#include "GInitializationTask.hpp"
+#include "PeriodicalTask.hpp"
 #include "CameraSingleDragHandler.hpp"
 #include "CameraDoubleDragHandler.hpp"
 #include "CameraRotationHandler.hpp"
@@ -21,13 +28,16 @@ _gl(NULL),
 _storage(NULL),
 _downloader(NULL),
 _threadUtils(NULL),
-_planet(NULL), 
+_planet(NULL),
+_cameraConstraints(NULL),
 _cameraRenderer(NULL), 
 _backgroundColor(NULL),
 _tileRendererBuilder(NULL),
 _busyRenderer(NULL),
+_renderers(NULL),
 _initializationTask(NULL),
 _autoDeleteInitializationTask(true),
+_periodicalTasks(NULL),
 _logFPS(false),
 _logDownloaderStatistics(false),
 _userData(NULL)
@@ -40,18 +50,27 @@ IG3MBuilder::~IG3MBuilder() {
   delete _downloader;
   delete _threadUtils;
   delete _planet;
-  for (int i = 0; i < _cameraConstraints.size(); i++) {
-    delete _cameraConstraints[i];
+  if (_cameraConstraints) {
+    for (int i = 0; i < _cameraConstraints->size(); i++) {
+      delete _cameraConstraints->at(i);
+    }
+    delete _cameraConstraints;
   }
   delete _cameraRenderer;
-  for (int i = 0; i < _renderers.size(); i++) {
-    delete _renderers[i];
+  if (_renderers) {
+    for (int i = 0; i < _renderers->size(); i++) {
+      delete _renderers->at(i);
+    }
+    delete _renderers;
   }
   delete _busyRenderer;
   delete _backgroundColor;
   delete _initializationTask;
-  for (int i = 0; i < _periodicalTasks.size(); i++) {
-    delete _periodicalTasks[i];
+  if (_periodicalTasks) {
+    for (int i = 0; i < _periodicalTasks->size(); i++) {
+      delete _periodicalTasks->at(i);
+    }
+    delete _periodicalTasks;
   }
   delete _userData;
   delete _tileRendererBuilder;
@@ -59,7 +78,6 @@ IG3MBuilder::~IG3MBuilder() {
 
 /**
  * Returns the _gl.
- * Lazy initialization.
  *
  * @return _gl: GL*
  */
@@ -73,13 +91,12 @@ GL* IG3MBuilder::getGL() {
 
 /**
  * Returns the _storage.
- * Lazy initialization.
  *
  * @return _storage: IStorage*
  */
 IStorage* IG3MBuilder::getStorage() {
   if (!_storage) {
-    _storage = createStorage();
+    _storage = createDefaultStorage();
   }
   
   return _storage;
@@ -87,13 +104,12 @@ IStorage* IG3MBuilder::getStorage() {
 
 /**
  * Returns the _downloader.
- * Lazy initialization.
  *
  * @return _downloader: IDownloader*
  */
 IDownloader* IG3MBuilder::getDownloader() {
   if (!_downloader) {
-    _downloader = createDownloader();
+    _downloader = createDefaultDownloader();
   }
   
   return _downloader;
@@ -101,13 +117,12 @@ IDownloader* IG3MBuilder::getDownloader() {
 
 /**
  * Returns the _threadUtils.
- * Lazy initialization.
  *
  * @return _threadUtils: IThreadUtils*
  */
 IThreadUtils* IG3MBuilder::getThreadUtils() {
   if (!_threadUtils) {
-    _threadUtils = createThreadUtils();
+    _threadUtils = createDefaultThreadUtils();
   }
   
   return _threadUtils;
@@ -115,7 +130,6 @@ IThreadUtils* IG3MBuilder::getThreadUtils() {
 
 /**
  * Returns the _planet.
- * Lazy initialization.
  *
  * @return _planet: const Planet*
  */
@@ -127,14 +141,13 @@ const Planet* IG3MBuilder::getPlanet() {
 }
 
 /**
- * Returns the _cameraConstraints.
- * Lazy initialization.
+ * Returns the _cameraConstraints list.
  *
  * @return _cameraConstraints: std::vector<ICameraConstrainer*>
  */
-std::vector<ICameraConstrainer*> IG3MBuilder::getCameraConstraints() {
-  if (_cameraConstraints.size() == 0) {
-    _cameraConstraints = createCameraConstraints();
+std::vector<ICameraConstrainer*>* IG3MBuilder::getCameraConstraints() {
+  if (!_cameraConstraints) {
+    _cameraConstraints = createDefaultCameraConstraints();
   }
   
   return _cameraConstraints;
@@ -142,13 +155,12 @@ std::vector<ICameraConstrainer*> IG3MBuilder::getCameraConstraints() {
 
 /**
  * Returns the _cameraRenderer.
- * Lazy initialization.
  *
  * @return _cameraRenderer: CameraRenderer*
  */
 CameraRenderer* IG3MBuilder::getCameraRenderer() {
   if (!_cameraRenderer) {
-    _cameraRenderer = createCameraRenderer();
+    _cameraRenderer = createDefaultCameraRenderer();
   }
   
   return _cameraRenderer;
@@ -156,7 +168,6 @@ CameraRenderer* IG3MBuilder::getCameraRenderer() {
 
 /**
  * Returns the _busyRenderer.
- * Lazy initialization.
  *
  * @return _busyRenderer: Renderer*
  */
@@ -170,7 +181,6 @@ Renderer* IG3MBuilder::getBusyRenderer() {
 
 /**
  * Returns the _backgroundColor.
- * Lazy initialization.
  *
  * @return _backgroundColor: Color*
  */
@@ -184,7 +194,6 @@ Color* IG3MBuilder::getBackgroundColor() {
 
 /**
  * Returns the _tileRendererBuilder.
- * Lazy initialization.
  *
  * @return _tileRendererBuilder: TileRendererBuilder*
  */
@@ -197,18 +206,19 @@ TileRendererBuilder* IG3MBuilder::getTileRendererBuilder() {
 }
 
 /**
- * Returns the array of renderers.
- * Method created to keep convention. It is not needed as it does not have to create a default value.
+ * Returns the renderers list.
  *
  * @return _renderers: std::vector<Renderer*>
  */
-std::vector<Renderer*> IG3MBuilder::getRenderers() {
+std::vector<Renderer*>* IG3MBuilder::getRenderers() {
+  if (!_renderers) {
+    _renderers = new std::vector<Renderer*>();
+  }
   return _renderers;
 }
 
 /**
  * Returns the value of _logFPS flag.
- * Method created to keep convention. It is not needed as it does not have to create a default value.
  *
  * @return _logFPS: bool
  */
@@ -218,7 +228,6 @@ bool IG3MBuilder::getLogFPS() {
 
 /**
  * Returns the value of _logDownloaderStatistics flag.
- * Method created to keep convention. It is not needed as it does not have to create a default value.
  *
  * @return _logDownloaderStatistics: bool
  */
@@ -228,7 +237,6 @@ bool IG3MBuilder::getLogDownloaderStatistics() {
 
 /**
  * Returns the initialization task.
- * Method created to keep convention. It is not needed as it does not have to create a default value.
  *
  * @return _logDownloaderStatistics: GInitializationTask*
  */
@@ -238,7 +246,6 @@ GInitializationTask* IG3MBuilder::getInitializationTask() {
 
 /**
  * Returns the value of _autoDeleteInitializationTask flag.
- * Method created to keep convention. It is not needed as it does not have to create a default value.
  *
  * @return _autoDeleteInitializationTask: bool
  */
@@ -248,17 +255,18 @@ bool IG3MBuilder::getAutoDeleteInitializationTask() {
 
 /**
  * Returns the array of periodical tasks.
- * Method created to keep convention. It is not needed as it does not have to create a default value.
  *
  * @return _periodicalTasks: std::vector<PeriodicalTask*>
  */
-std::vector<PeriodicalTask*> IG3MBuilder::getPeriodicalTasks() {
+std::vector<PeriodicalTask*>* IG3MBuilder::getPeriodicalTasks() {
+  if (!_periodicalTasks) {
+    _periodicalTasks = new std::vector<PeriodicalTask*> ();
+  }
   return _periodicalTasks;
 }
 
 /**
  * Returns the user data.
- * Method created to keep convention. It is not needed as it does not have to create a default value.
  *
  * @return _userData: WidgetUserData*
  */
@@ -266,14 +274,28 @@ WidgetUserData* IG3MBuilder::getUserData() {
   return _userData;
 }
 
+/**
+ * Sets the _gl.
+ *
+ * @param gl: cannot be NULL.
+ */
 void IG3MBuilder::setGL(GL *gl) {
   if (_gl) {
     ILogger::instance()->logError("LOGIC ERROR: _gl already initialized");
     return;
   }
+  if (!gl) {
+    ILogger::instance()->logError("LOGIC ERROR: _gl cannot be NULL");
+    return;
+  }
   _gl = gl;
 }
 
+/**
+ * Sets the _storage.
+ *
+ * @param gl
+ */
 void IG3MBuilder::setStorage(IStorage *storage) {
   if (_storage) {
     ILogger::instance()->logError("LOGIC ERROR: _storage already initialized");
@@ -282,64 +304,180 @@ void IG3MBuilder::setStorage(IStorage *storage) {
   _storage = storage;
 }
 
+/**
+ * Sets the _downloader
+ *
+ * @param downloader: cannot be NULL.
+ */
 void IG3MBuilder::setDownloader(IDownloader *downloader) {
   if (_downloader) {
     ILogger::instance()->logError("LOGIC ERROR: _downloader already initialized");
     return;
   }
+  if (!downloader) {
+    ILogger::instance()->logError("LOGIC ERROR: _downloader cannot be NULL");
+    return;
+  }
   _downloader = downloader;
 }
 
+/**
+ * Sets the _threadUtils
+ *
+ * @param threadUtils: cannot be NULL.
+ */
 void IG3MBuilder::setThreadUtils(IThreadUtils *threadUtils) {
   if (_threadUtils) {
     ILogger::instance()->logError("LOGIC ERROR: _threadUtils already initialized");
     return;
   }
+  if (!threadUtils) {
+    ILogger::instance()->logError("LOGIC ERROR: _threadUtils cannot be NULL");
+    return;
+  }
   _threadUtils = threadUtils;
 }
 
+/**
+ * Sets the _planet
+ *
+ * @param planet: cannot be NULL.
+ */
 void IG3MBuilder::setPlanet(const Planet *planet) {
   if (_planet) {
     ILogger::instance()->logError("LOGIC ERROR: _planet already initialized");
     return;
   }
+  if (!planet) {
+    ILogger::instance()->logError("LOGIC ERROR: _planet cannot be NULL");
+    return;
+  }
   _planet = planet;
 }
 
+/**
+ * Adds a new camera constraint to the constraints list.
+ * The camera constraint list will be initializated with a default constraints set.
+ * @see IG3MBuilder#createDefaultCameraConstraints()
+ *
+ * @param cameraConstraint: cannot be NULL.
+ */
 void IG3MBuilder::addCameraConstraint(ICameraConstrainer* cameraConstraint) {
-  _cameraConstraints.push_back(cameraConstraint);
+  if (!cameraConstraint) {
+    ILogger::instance()->logError("LOGIC ERROR: trying to add a NULL cameraConstraint object");
+    return;
+  }
+  getCameraConstraints()->push_back(cameraConstraint);
 }
 
+/**
+ * Sets the camera constraints list, ignoring the default camera constraints list 
+ * and the camera constraints previously added, if added.
+ *
+ * @param cameraConstraints: std::vector<ICameraConstrainer*>
+ */
+void IG3MBuilder::setCameraConstrainsts(std::vector<ICameraConstrainer*> cameraConstraints) {
+  if (_cameraConstraints) {
+    for (unsigned int i = 0; i < _cameraConstraints->size(); i++) {
+      delete _cameraConstraints->at(i);
+    }
+    _cameraConstraints->clear();
+  }
+  else {
+    _cameraConstraints = new std::vector<ICameraConstrainer*> ();
+  }
+  for (unsigned int i = 0; i < cameraConstraints.size(); i++) {
+    _cameraConstraints->push_back(cameraConstraints[i]);
+  }
+}
+
+/**
+ * Sets the _cameraRenderer
+ *
+ * @param planet: cannot be NULL.
+ */
 void IG3MBuilder::setCameraRenderer(CameraRenderer *cameraRenderer) {
   if (_cameraRenderer) {
     ILogger::instance()->logError("LOGIC ERROR: _cameraRenderer already initialized");
     return;
   }
+  if (!cameraRenderer) {
+    ILogger::instance()->logError("LOGIC ERROR: _cameraRenderer cannot be NULL");
+    return;
+  }
   _cameraRenderer = cameraRenderer;
 }
 
+/**
+ * Sets the _backgroundColor
+ *
+ * @param backgroundColor: cannot be NULL.
+ */
 void IG3MBuilder::setBackgroundColor(Color* backgroundColor) {
   if (_backgroundColor) {
     ILogger::instance()->logError("LOGIC ERROR: _backgroundColor already initialized");
     return;
   }
+  if (!backgroundColor) {
+    ILogger::instance()->logError("LOGIC ERROR: _backgroundColor cannot be NULL");
+    return;
+  }
   _backgroundColor = backgroundColor;
 }
 
+/**
+ * Sets the _busyRenderer
+ *
+ * @param busyRenderer: cannot be NULL.
+ */
 void IG3MBuilder::setBusyRenderer(Renderer *busyRenderer) {
   if (_busyRenderer) {
     ILogger::instance()->logError("LOGIC ERROR: _busyRenderer already initialized");
     return;
   }
+  if (!busyRenderer) {
+    ILogger::instance()->logError("LOGIC ERROR: _busyRenderer cannot be NULL");
+    return;
+  }
   _busyRenderer = busyRenderer;
 }
 
+/**
+ * Adds a new renderer to the renderers list.
+ * The renderers list will be initializated with a default renderers set (empty set at the moment).
+ *
+ * @param renderer: cannot be either NULL or an instance of TileRenderer
+ */
 void IG3MBuilder::addRenderer(Renderer *renderer) {
-  if (!renderer->isTileRenderer()) {
-    _renderers.push_back(renderer);
+  if (!renderer) {
+    ILogger::instance()->logError("LOGIC ERROR: trying to add a NULL renderer object");
+    return;
+  }
+  if (renderer->isTileRenderer()) {
+    ILogger::instance()->logError("LOGIC ERROR: a new TileRenderer is not expected to be added");
+    return;
+  }
+  getRenderers()->push_back(renderer);
+}
+
+/**
+ * Sets the renderers list, ignoring the default renderers list and the renderers
+ * previously added, if added.
+ *
+ * @param renderers: std::vector<Renderer*>
+ */
+void IG3MBuilder::setRenderers(std::vector<Renderer*> renderers) {
+  if (_renderers) {
+    for (unsigned int i = 0; i < _renderers->size(); i++) {
+      delete _renderers->at(i);
+    }
+    _renderers->clear();
   }
   else {
-    ILogger::instance()->logError("LOGIC ERROR: a new TileRenderer is not expected to be added");
+    _renderers = new std::vector<Renderer*> ();
+  }
+  for (unsigned int i = 0; i < renderers.size(); i++) {
+    _renderers->push_back(renderers[i]);
   }
 }
 
@@ -349,39 +487,102 @@ void IG3MBuilder::pvtSetInitializationTask(GInitializationTask *initializationTa
     ILogger::instance()->logError("LOGIC ERROR: _initializationTask already initialized");
     return;
   }
+  if (!initializationTask) {
+    ILogger::instance()->logError("LOGIC ERROR: initializationTask cannot be NULL");
+    return;
+  }
   _initializationTask = initializationTask;
   _autoDeleteInitializationTask = autoDeleteInitializationTask;
 }
 
+/**
+ * Adds a new periodical task to the periodical tasks list.
+ * The periodical tasks list will be initializated with a default periodical task set (empty set at the moment).
+ *
+ * @param renderer: cannot be either NULL or an instance of TileRenderer
+ */
 void IG3MBuilder::addPeriodicalTask(PeriodicalTask* periodicalTask) {
-  _periodicalTasks.push_back(periodicalTask);
+  if (!periodicalTask) {
+    ILogger::instance()->logError("LOGIC ERROR: trying to add a NULL periodicalTask object");
+    return;
+  }
+  if (!periodicalTask) {
+    ILogger::instance()->logError("LOGIC ERROR: periodicalTask cannot be NULL");
+    return;
+  }
+  getPeriodicalTasks()->push_back(periodicalTask);
 }
 
+/**
+ * Sets the periodical tasks list, ignoring the default periodical tasks list and the
+ * periodical tasks previously added, if added.
+ *
+ * @param periodicalTasks: std::vector<PeriodicalTask*>
+ */
+void IG3MBuilder::setPeriodicalTasks(std::vector<PeriodicalTask*> periodicalTasks) {
+  if (_periodicalTasks) {
+    for (unsigned int i = 0; i < _periodicalTasks->size(); i++) {
+      delete _periodicalTasks->at(i);
+    }
+    _periodicalTasks->clear();
+  }
+  else {
+    _periodicalTasks = new std::vector<PeriodicalTask*> ();
+  }
+  for (unsigned int i = 0; i < periodicalTasks.size(); i++) {
+    _periodicalTasks->push_back(periodicalTasks[i]);
+  }
+}
+
+/**
+ * Sets the _logFPS
+ *
+ * @param logFPS
+ */
 void IG3MBuilder::setLogFPS(const bool logFPS) {
   _logFPS = logFPS;
 }
 
+/**
+ * Sets the _logDownloaderStatistics
+ *
+ * @param logDownloaderStatistics
+ */
 void IG3MBuilder::setLogDownloaderStatistics(const bool logDownloaderStatistics) {
   _logDownloaderStatistics = logDownloaderStatistics;
 }
 
+/**
+ * Sets the _userData
+ *
+ * @param userData: cannot be NULL.
+ */
 void IG3MBuilder::setUserData(WidgetUserData *userData) {
   if (_userData) {
     ILogger::instance()->logError("LOGIC ERROR: _userData already initialized");
     return;
   }
+  if (!userData) {
+    ILogger::instance()->logError("LOGIC ERROR: userData cannot be NULL");
+    return;
+  }
   _userData = userData;
 }
 
+/**
+ * Creates the generic widget using all the parameters previously set.
+ *
+ * @return G3MWidget*
+ */
 G3MWidget* IG3MBuilder::create() {
   Renderer* mainRenderer = NULL;
   TileRenderer* tileRenderer = getTileRendererBuilder()->create();
-  if (getRenderers().size() > 0) {
+  if (getRenderers()->size() > 0) {
     mainRenderer = new CompositeRenderer();
     ((CompositeRenderer *) mainRenderer)->addRenderer(tileRenderer);
     
-    for (int i = 0; i < getRenderers().size(); i++) {
-      ((CompositeRenderer *) mainRenderer)->addRenderer(getRenderers()[i]);
+    for (int i = 0; i < getRenderers()->size(); i++) {
+      ((CompositeRenderer *) mainRenderer)->addRenderer(getRenderers()->at(i));
     }
   }
   else {
@@ -398,7 +599,7 @@ G3MWidget* IG3MBuilder::create() {
                                             getDownloader(),
                                             getThreadUtils(),
                                             getPlanet(),
-                                            getCameraConstraints(),
+                                            *getCameraConstraints(),
                                             getCameraRenderer(),
                                             mainRenderer,
                                             getBusyRenderer(),
@@ -407,7 +608,7 @@ G3MWidget* IG3MBuilder::create() {
                                             getLogDownloaderStatistics(),
                                             getInitializationTask(),
                                             getAutoDeleteInitializationTask(),
-                                            getPeriodicalTasks());
+                                            *getPeriodicalTasks());
   
   g3mWidget->setUserData(getUserData());
   
@@ -416,34 +617,26 @@ G3MWidget* IG3MBuilder::create() {
   _downloader = NULL;
   _threadUtils = NULL;
   _planet = NULL;
-  for (int i = 0; i < _cameraConstraints.size(); i++) {
-    _cameraConstraints[i] = NULL;
-  }
+  _cameraConstraints = NULL;
   _cameraRenderer = NULL;
-  for (int i = 0; i < _renderers.size(); i++) {
-    _renderers[i] = NULL;
-  }
+  _renderers = NULL;
   _busyRenderer = NULL;
-  _backgroundColor = NULL;
   _initializationTask = NULL;
-  for (int i = 0; i < _periodicalTasks.size(); i++) {
-    _periodicalTasks[i] = NULL;
-  }
+  _periodicalTasks = NULL;
   _userData = NULL;
-  _tileRendererBuilder = NULL;
   
   return g3mWidget;
 }
 
-std::vector<ICameraConstrainer*> IG3MBuilder::createCameraConstraints() {
-  std::vector<ICameraConstrainer*> cameraConstraints;
+std::vector<ICameraConstrainer*>* IG3MBuilder::createDefaultCameraConstraints() {
+  std::vector<ICameraConstrainer*>* cameraConstraints = new std::vector<ICameraConstrainer*>();
   SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
-  cameraConstraints.push_back(scc);
+  cameraConstraints->push_back(scc);
   
   return cameraConstraints;
 }
 
-CameraRenderer* IG3MBuilder::createCameraRenderer() {
+CameraRenderer* IG3MBuilder::createDefaultCameraRenderer() {
   CameraRenderer* cameraRenderer = new CameraRenderer();
   const bool useInertia = true;
   cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
