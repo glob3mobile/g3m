@@ -597,6 +597,7 @@ public:
                                          radius,
                                          16,
                                          1,
+                                         false,
                                          false
                                          //Color::newFromRGBA(0,    0.5, 0.8, 0.5),
                                          //Color::newFromRGBA(0, 0.75, 0, 0.75)
@@ -610,6 +611,7 @@ public:
                                         radius,
                                         16,
                                         1,
+                                        false,
                                         true
                                         //Color::newFromRGBA(0.5,    0.0, 0.8, 0.5),
                                         //Color::newFromRGBA(0, 0.75, 0, 0.75)
@@ -623,6 +625,7 @@ public:
                                         radius,
                                         16,
                                         1,
+                                        true,
                                         true
                                         //Color::newFromRGBA(0.5,    0.0, 0.8, 0.5),
                                         //Color::newFromRGBA(0, 0.75, 0, 0.75)
