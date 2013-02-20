@@ -136,7 +136,8 @@ public class EllipsoidalTileTessellator extends TileTessellator
       // compute skirt height
       final Vector3D sw = planet.toCartesian(sector.getSW());
       final Vector3D nw = planet.toCartesian(sector.getNW());
-      final double skirtHeight = (nw.sub(sw).length() * 0.05 * -1) + minHeight;
+  //    const double skirtHeight = (nw.sub(sw).length() * 0.05 * -1) + minHeight;
+      final double skirtHeight = (nw.sub(sw).length() * 0.1 * -1) + minHeight;
   
       indices.add((short) 0);
       int posS = resolution._x * resolution._y;

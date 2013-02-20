@@ -60,7 +60,7 @@ public class TilesRenderParameters
     final int topLevel = 0;
     final int maxLevel = 17;
     final Vector2I tileTextureResolution = new Vector2I(256, 256);
-    final Vector2I tileMeshResolution = new Vector2I(20, 20);
+    final Vector2I tileMeshResolution = new Vector2I(10, 10);
 
     return new TilesRenderParameters(Sector.fullSphere(), splitsByLatitude, splitsByLongitude, topLevel, maxLevel, tileTextureResolution, tileMeshResolution, renderDebug, useTilesSplitBudget, forceTopLevelTilesRenderOnStart, incrementalTileQuality);
   }
@@ -73,11 +73,13 @@ public class TilesRenderParameters
     final int topLevel = 0;
     final int maxLevel = 2;
     final Vector2I tileTextureResolution = new Vector2I(256, 256);
-    final Vector2I tileMeshResolution = new Vector2I(20, 20);
+    final Vector2I tileMeshResolution = new Vector2I(10, 10);
 
     //    Sector sector = Sector(Geodetic2D(Angle::fromDegrees(-90), Angle::fromDegrees(-180)),
     //                           Geodetic2D(Angle::fromDegrees(90), Angle::fromDegrees(180)));
-    Sector sector = new Sector(new Geodetic2D(Angle.zero(), Angle.zero()), new Geodetic2D(Angle.fromDegrees(90), Angle.fromDegrees(90)));
+//    Sector sector = Sector(Geodetic2D(Angle::zero(), Angle::zero()),
+//                           Geodetic2D(Angle::fromDegrees(90), Angle::fromDegrees(90)));
+    Sector sector = new Sector(new Geodetic2D(Angle.zero(), Angle.zero()), new Geodetic2D(Angle.fromDegrees(45), Angle.fromDegrees(45)));
 
     return new TilesRenderParameters(sector, splitsByLatitude, splitsByLongitude, topLevel, maxLevel, tileTextureResolution, tileMeshResolution, renderDebug, useTilesSplitBudget, forceTopLevelTilesRenderOnStart, incrementalQuality);
   }
