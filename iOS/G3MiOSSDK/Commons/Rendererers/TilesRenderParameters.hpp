@@ -19,8 +19,14 @@ public:
   const int       _splitsByLongitude;
   const int       _topLevel;
   const int       _maxLevel;
+#ifdef C_CODE
   const Vector2I  _tileTextureResolution;
   const Vector2I  _tileMeshResolution;
+#endif
+#ifdef JAVA_CODE
+  public final Vector2I _tileTextureResolution;
+  public final Vector2I _tileMeshResolution;
+#endif
   const bool      _renderDebug;
   const bool      _useTilesSplitBudget;
   const bool      _forceTopLevelTilesRenderOnStart;
