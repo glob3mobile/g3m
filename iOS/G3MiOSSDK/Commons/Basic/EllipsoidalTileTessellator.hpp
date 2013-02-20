@@ -26,11 +26,10 @@ private:
 
 public:
 
-  EllipsoidalTileTessellator(const unsigned int resolutionX,
-                             const unsigned int resolutionY,
+  EllipsoidalTileTessellator(const Vector2I& resolution,
                              const bool skirted) :
-  _resolutionX(resolutionX),
-  _resolutionY(resolutionY),
+  _resolutionX(resolution._x),
+  _resolutionY(resolution._y),
   _skirted(skirted)
   {
     //    int __TODO_width_and_height_resolutions;

@@ -323,7 +323,7 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
   const Vector2I ex = extent->projectedExtent(rc);
   //const double t = extent.maxAxis() * 2;
   const int t = (ex._x + ex._y);
-  if ( t <= ((parameters->_tileTextureWidth + parameters->_tileTextureHeight) * 1.75) ) {
+  if ( t <= ((parameters->_tileTextureResolution._x + parameters->_tileTextureResolution._y) * 1.75) ) {
 //  if ( t <= ((parameters->_tileTextureWidth + parameters->_tileTextureHeight) * 3) ) {
     return true;
   }

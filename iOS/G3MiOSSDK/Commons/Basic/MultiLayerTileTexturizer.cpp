@@ -226,8 +226,7 @@ public:
   {
     _petitions = layerSet->createTileMapPetitions(rc,
                                                   tile,
-                                                  parameters->_tileTextureWidth,
-                                                  parameters->_tileTextureHeight);
+                                                  parameters->_tileTextureResolution);
 
     _petitionsCount = _petitions.size();
 
@@ -281,12 +280,14 @@ public:
 
   RectangleI* getImageRectangleInTexture(const Sector& wholeSector,
                                          const Sector& imageSector,
-                                         int textureWidth,
-                                         int textureHeight) const {
+                                         const Vector2I& textureResolution) const {
     const Vector2D lowerFactor = wholeSector.getUVCoordinates(imageSector.lower());
 
     const double widthFactor  = imageSector.getDeltaLongitude().div(wholeSector.getDeltaLongitude());
     const double heightFactor = imageSector.getDeltaLatitude().div(wholeSector.getDeltaLatitude());
+
+    const int textureWidth  = textureResolution._x;
+    const int textureHeight = textureResolution._y;
 
     return new RectangleI((int) IMathUtils::instance()->round( lowerFactor._x         * textureWidth ),
                           (int) IMathUtils::instance()->round( (1.0 - lowerFactor._y) * textureHeight ),
@@ -307,8 +308,7 @@ public:
       std::vector<RectangleI*> rectangles;
       std::string textureId = _tile->getKey().tinyDescription();
 
-      const int textureWidth  = _parameters->_tileTextureWidth;
-      const int textureHeight = _parameters->_tileTextureHeight;
+      const Vector2I textureResolution(_parameters->_tileTextureResolution);
 
       const Sector tileSector = _tile->getSector();
 
@@ -321,8 +321,7 @@ public:
 
           rectangles.push_back(getImageRectangleInTexture(tileSector,
                                                           petition->getSector(),
-                                                          textureWidth,
-                                                          textureHeight));
+                                                          textureResolution));
 
           textureId += petition->getURL().getPath();
           textureId += "_";
@@ -334,8 +333,7 @@ public:
                                                  _factory,
                                                  images,
                                                  rectangles,
-                                                 textureWidth,
-                                                 textureHeight,
+                                                 textureResolution,
                                                  new TextureUploader(this, rectangles, textureId),
                                                  true);
       }

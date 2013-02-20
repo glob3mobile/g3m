@@ -10,53 +10,51 @@
 #define G3MiOSSDK_TilesRenderParameters_hpp
 
 #include "Sector.hpp"
+#include "Vector2I.hpp"
 
 class TilesRenderParameters {
 public:
-  const Sector _topSector;
-  const int    _splitsByLatitude;
-  const int    _splitsByLongitude;
-  const int    _topLevel;
-  const int    _maxLevel;
-  const int    _tileTextureHeight;
-  const int    _tileTextureWidth;
-  const int    _tileResolution;
-  const bool   _renderDebug;
-  const bool   _useTilesSplitBudget;
-  const bool   _forceTopLevelTilesRenderOnStart;
-  const bool   _incrementalTileQuality;
+  const Sector    _topSector;
+  const int       _splitsByLatitude;
+  const int       _splitsByLongitude;
+  const int       _topLevel;
+  const int       _maxLevel;
+  const Vector2I  _tileTextureResolution;
+  const Vector2I  _tileMeshResolution;
+  const bool      _renderDebug;
+  const bool      _useTilesSplitBudget;
+  const bool      _forceTopLevelTilesRenderOnStart;
+  const bool      _incrementalTileQuality;
 
-  TilesRenderParameters(const Sector topSector,
-                        const int    splitsByLatitude,
-                        const int    splitsByLongitude,
-                        const int    topLevel,
-                        const int    maxLevel,
-                        const int    tileTextureHeight,
-                        const int    tileTextureWidth,
-                        const int    tileResolution,
-                        const bool   renderDebug,
-                        const bool   useTilesSplitBudget,
-                        const bool   forceTopLevelTilesRenderOnStart,
-                        const bool   incrementalTileQuality) :
+  TilesRenderParameters(const Sector    topSector,
+                        const int       splitsByLatitude,
+                        const int       splitsByLongitude,
+                        const int       topLevel,
+                        const int       maxLevel,
+                        const Vector2I& tileTextureResolution,
+                        const Vector2I& tileMeshResolution,
+                        const bool      renderDebug,
+                        const bool      useTilesSplitBudget,
+                        const bool      forceTopLevelTilesRenderOnStart,
+                        const bool      incrementalTileQuality) :
   _topSector(topSector),
   _splitsByLatitude(splitsByLatitude),
   _splitsByLongitude(splitsByLongitude),
   _topLevel(topLevel),
   _maxLevel(maxLevel),
-  _tileTextureHeight(tileTextureHeight),
-  _tileTextureWidth(tileTextureWidth),
-  _tileResolution(tileResolution),
+  _tileTextureResolution(tileTextureResolution),
+  _tileMeshResolution(tileMeshResolution),
   _renderDebug(renderDebug),
   _useTilesSplitBudget(useTilesSplitBudget),
   _forceTopLevelTilesRenderOnStart(forceTopLevelTilesRenderOnStart),
   _incrementalTileQuality(incrementalTileQuality)
   {
-    
+
   }
 
   ~TilesRenderParameters() {
   }
-  
+
   static TilesRenderParameters* createDefault(const bool renderDebug,
                                               const bool useTilesSplitBudget,
                                               const bool forceTopLevelTilesRenderOnStart,
@@ -67,27 +65,23 @@ public:
     const int splitsByLongitude = 2 * K;
     const int topLevel = 0;
     const int maxLevel = 17;
-    const int tileTextureHeight = 256;
-    const int tileTextureWidth = 256;
-//    const int tileTextureHeight = 128;
-//    const int tileTextureWidth = 128;
-    const int tileResolution = 20;
-    
+    const Vector2I tileTextureResolution(256, 256);
+    const Vector2I tileMeshResolution(20, 20);
+
     return new TilesRenderParameters(Sector::fullSphere(),
                                      splitsByLatitude,
                                      splitsByLongitude,
                                      topLevel,
                                      maxLevel,
-                                     tileTextureHeight,
-                                     tileTextureWidth,
-                                     tileResolution,
+                                     tileTextureResolution,
+                                     tileMeshResolution,
                                      renderDebug,
                                      useTilesSplitBudget,
                                      forceTopLevelTilesRenderOnStart,
                                      incrementalTileQuality);
   }
-  
-  
+
+
   static TilesRenderParameters* createSingleSector(const bool renderDebug,
                                                    const bool useTilesSplitBudget,
                                                    const bool forceTopLevelTilesRenderOnStart,
@@ -96,28 +90,27 @@ public:
     const int splitsByLongitude = 1;
     const int topLevel = 0;
     const int maxLevel = 2;
-    const int tileTextureHeight = 256;
-    const int tileTextureWidth = 256;
-    const int tileResolution = 10;
+    const Vector2I tileTextureResolution(256, 256);
+    const Vector2I tileMeshResolution(20, 20);
 
     //    Sector sector = Sector(Geodetic2D(Angle::fromDegrees(-90), Angle::fromDegrees(-180)),
     //                           Geodetic2D(Angle::fromDegrees(90), Angle::fromDegrees(180)));
     Sector sector = Sector(Geodetic2D(Angle::zero(), Angle::zero()),
                            Geodetic2D(Angle::fromDegrees(90), Angle::fromDegrees(90)));
-    
+
     return new TilesRenderParameters(sector,
                                      splitsByLatitude,
                                      splitsByLongitude,
                                      topLevel,
                                      maxLevel,
-                                     tileTextureHeight,
-                                     tileTextureWidth,
-                                     tileResolution,
+                                     tileTextureResolution,
+                                     tileMeshResolution,
                                      renderDebug,
                                      useTilesSplitBudget,
                                      forceTopLevelTilesRenderOnStart,
                                      incrementalQuality);
   }
+
 };
 
 #endif

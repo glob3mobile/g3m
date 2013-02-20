@@ -13,7 +13,7 @@
 #include "Layer.hpp"
 
 class Petition;
-
+class Vector2I;
 
 class LayerSetChangedListener {
 public:
@@ -51,7 +51,7 @@ public:
   
   std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
                                                 const Tile* tile,
-                                                int width, int height) const;
+                                                const Vector2I& tileTextureResolution) const;
   
   void onTerrainTouchEvent(const G3MEventContext* ec,
                            const Geodetic3D& g3d,

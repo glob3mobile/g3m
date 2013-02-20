@@ -106,7 +106,7 @@ public:
   
   std::vector<Petition*> getMapPetitions(const G3MRenderContext* rc,
                                          const Tile* tile,
-                                         int width, int height) const;
+                                         const Vector2I& tileTextureResolution) const;
   
 //  bool isTransparent() const{
 //    return _isTransparent;

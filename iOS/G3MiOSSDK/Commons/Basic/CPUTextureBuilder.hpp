@@ -17,7 +17,7 @@ public:
   const void createTextureFromImage(GL* gl,
                                     const IFactory* factory,
                                     IImage* image,
-                                    int width, int height,
+                                    const Vector2I& textureResolution,
                                     IImageListener* listener,
                                     bool autodelete) const;
 
@@ -25,7 +25,7 @@ public:
                                      const IFactory* factory,
                                      const std::vector<IImage*>& images,
                                      const std::vector<RectangleI*>& rectangles,
-                                     int width, int height,
+                                     const Vector2I& textureResolution,
                                      IImageListener* listener,
                                      bool autodelete) const;
 

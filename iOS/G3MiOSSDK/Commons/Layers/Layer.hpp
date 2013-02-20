@@ -22,6 +22,7 @@ class Petition;
 class Tile;
 class LayerCondition;
 class LayerSet;
+class Vector2I;
 
 class Layer {
 private:
@@ -68,7 +69,7 @@ public:
   
   virtual std::vector<Petition*> getMapPetitions(const G3MRenderContext* rc,
                                                  const Tile* tile,
-                                                 int width, int height) const = 0;
+                                                 const Vector2I& tileTextureResolution) const = 0;
   
   virtual bool isAvailable(const G3MRenderContext* rc,
                            const Tile* tile) const;
