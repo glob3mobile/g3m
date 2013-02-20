@@ -692,7 +692,8 @@ public:
   
   void onDownload(const URL& url,
                   IByteBuffer* buffer) {
-    const Vector2I extent(150, 150);
+//    const Vector2I extent(150, 150);
+    const Vector2I extent(512, 512);
     const ElevationData* elevationData = BilParser::parseBil16(buffer, extent);
 
     if (elevationData == NULL) {
@@ -731,47 +732,47 @@ public:
         const float alpha = (float) ((height - minHeight) / deltaHeight);
 
         //vertices.add(x * 200.0, y * 200.0, 7500.0 * alpha);
-        vertices.add(x * 250.0, y * 250.0, 5000.0 * alpha);
+        vertices.add(x * 500.0, y * 250.0, 7500.0 * alpha);
 
         colors.add(alpha, alpha, alpha, 1);
       }
     }
     
-    ShortBufferBuilder indices;
-    for (short j = 0; j < extent._y-1; j++) {
-      const short jTimesResolution = (short) (j*extent._y);
-      if (j > 0) {
-        indices.add(jTimesResolution);
-      }
-      for (short i = 0; i < extent._x; i++) {
-        indices.add((short) (jTimesResolution + i));
-        indices.add((short) (jTimesResolution + i + extent._x));
-      }
-      indices.add((short) (jTimesResolution + 2*extent._x - 1));
-    }
+//    ShortBufferBuilder indices;
+//    for (short j = 0; j < extent._y-1; j++) {
+//      const short jTimesResolution = (short) (j*extent._y);
+//      if (j > 0) {
+//        indices.add(jTimesResolution);
+//      }
+//      for (short i = 0; i < extent._x; i++) {
+//        indices.add((short) (jTimesResolution + i));
+//        indices.add((short) (jTimesResolution + i + extent._x));
+//      }
+//      indices.add((short) (jTimesResolution + 2*extent._x - 1));
+//    }
 
     const float lineWidth = 1;
-    const float pointSize = 5;
+    const float pointSize = 2;
     Color* flatColor = NULL;
-//    Mesh* bilMesh = new DirectMesh(GLPrimitive::points(),
-//                                   //GLPrimitive::lineStrip(),
-//                                   true,
-//                                   vertices.getCenter(),
-//                                   vertices.create(),
-//                                   lineWidth,
-//                                   pointSize,
-//                                   flatColor,
-//                                   colors.create());
-    Mesh* bilMesh = new IndexedMesh(GLPrimitive::triangleStrip(),
-                                    //GLPrimitive::lineStrip(),
-                                    true,
-                                    vertices.getCenter(),
-                                    vertices.create(),
-                                    indices.create(),
-                                    lineWidth,
-                                    pointSize,
-                                    flatColor,
-                                    colors.create());
+    Mesh* bilMesh = new DirectMesh(GLPrimitive::points(),
+                                   //GLPrimitive::lineStrip(),
+                                   true,
+                                   vertices.getCenter(),
+                                   vertices.create(),
+                                   lineWidth,
+                                   pointSize,
+                                   flatColor,
+                                   colors.create());
+//    Mesh* bilMesh = new IndexedMesh(GLPrimitive::triangleStrip(),
+//                                    //GLPrimitive::lineStrip(),
+//                                    true,
+//                                    vertices.getCenter(),
+//                                    vertices.create(),
+//                                    indices.create(),
+//                                    lineWidth,
+//                                    pointSize,
+//                                    flatColor,
+//                                    colors.create());
 
     Geodetic3D* buenosAiresPosition = new Geodetic3D(Angle::fromDegreesMinutesSeconds(-34, 36, 13.44),
                                                      Angle::fromDegreesMinutesSeconds(-58, 22, 53.74),
@@ -841,7 +842,8 @@ public:
 //                               true);
 
       context->getDownloader()->requestBuffer(//URL("file:///sample_bil16_150x150.bil", false),
-                                              URL("file:///409_554.bil", false),
+                                              //URL("file:///409_554.bil", false),
+                                              URL("file:///full-earth.bil", false),
                                               1000000,
                                               TimeInterval::fromDays(30),
                                               new Bil16Parser_IBufferDownloadListener(_shapesRenderer),
