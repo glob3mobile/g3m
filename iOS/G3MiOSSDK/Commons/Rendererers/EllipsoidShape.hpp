@@ -30,6 +30,8 @@ private:
   const short _resolution;
 
   const float _borderWidth;
+  
+  const bool _texturedInside;
 
   const bool _mercator;
 
@@ -54,6 +56,7 @@ public:
                  const Vector3D& radius,
                  short resolution,
                  float borderWidth,
+                 bool texturedInside,
                  bool mercator,
                  Color* surfaceColor,
                  Color* borderColor = NULL) :
@@ -64,6 +67,7 @@ public:
   _radiusZ(radius.z()),
   _resolution(resolution < 3 ? 3 : resolution),
   _borderWidth(borderWidth),
+  _texturedInside(texturedInside),
   _mercator(mercator),
   _surfaceColor(surfaceColor),
   _borderColor(borderColor),
@@ -78,6 +82,7 @@ public:
                  const Vector3D& radius,
                  short resolution,
                  float borderWidth,
+                 bool texturedInside,
                  bool mercator) :
   AbstractMeshShape(position),
   _textureURL(textureURL),
@@ -86,6 +91,7 @@ public:
   _radiusZ(radius.z()),
   _resolution(resolution < 3 ? 3 : resolution),
   _borderWidth(borderWidth),
+  _texturedInside(texturedInside),
   _mercator(mercator),
   _surfaceColor(NULL),
   _borderColor(NULL),
