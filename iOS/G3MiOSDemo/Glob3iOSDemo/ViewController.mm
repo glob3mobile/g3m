@@ -693,7 +693,8 @@ public:
   void onDownload(const URL& url,
                   IByteBuffer* buffer) {
 //    const Vector2I extent(150, 150);
-    const Vector2I extent(512, 512);
+//    const Vector2I extent(512, 512);
+    const Vector2I extent(2048, 1024);
     const ElevationData* elevationData = BilParser::parseBil16(Sector::fullSphere(),
                                                                extent,
                                                                buffer);
@@ -730,12 +731,11 @@ public:
 
     for (int x = 0; x < extent._x; x++) {
       for (int y = 0; y < extent._y; y++) {
-//        const double height = elevationData->getElevationAt(x, extent._y-1-y);
         const double height = elevationData->getElevationAt(x, y);
         const float alpha = (float) ((height - minHeight) / deltaHeight);
 
         //vertices.add(x * 200.0, y * 200.0, 7500.0 * alpha);
-        vertices.add(x * 500.0, y * 250.0, 7500.0 * alpha);
+        vertices.add(x * 250.0, y * 250.0, 15000.0 * alpha);
 
         colors.add(alpha, alpha, alpha, 1);
       }
@@ -848,7 +848,8 @@ public:
 
       context->getDownloader()->requestBuffer(//URL("file:///sample_bil16_150x150.bil", false),
                                               //URL("file:///409_554.bil", false),
-                                              URL("file:///full-earth.bil", false),
+                                              //URL("file:///full-earth-512x512.bil", false),
+                                              URL("file:///full-earth-2048x1024.bil", false),
                                               1000000,
                                               TimeInterval::fromDays(30),
                                               new Bil16Parser_IBufferDownloadListener(_shapesRenderer),
