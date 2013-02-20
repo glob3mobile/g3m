@@ -12,16 +12,23 @@
 #include "Vector2I.hpp"
 #include "IStringBuilder.hpp"
 
-ElevationData::ElevationData(const Vector2I& extent,
+ElevationData::ElevationData(const Sector& sector,
+                             const Vector2I& resolution,
                              IFloatBuffer* buffer):
-_width(extent._x),
-_height(extent._y),
+_sector(sector),
+_width(resolution._x),
+_height(resolution._y),
 _buffer(buffer)
 {
   if (_buffer->size() != (_width * _height) ) {
     ILogger::instance()->logError("Invalid buffer size");
   }
 }
+
+ElevationData::~ElevationData() {
+  delete _buffer;
+}
+
 
 float ElevationData::getElevationAt(int x, int y) const {
   //return _buffer->get( (x * _width) + y );

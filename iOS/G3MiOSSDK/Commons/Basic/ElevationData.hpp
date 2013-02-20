@@ -11,6 +11,7 @@
 
 class IFloatBuffer;
 class Vector2I;
+#include "Sector.hpp"
 
 #include <string>
 
@@ -19,23 +20,20 @@ private:
   IFloatBuffer* _buffer;
   const int _width;
   const int _height;
+  const Sector _sector;
 
 public:
-
-
-  ElevationData(const Vector2I& extent,
+  ElevationData(const Sector& sector,
+                const Vector2I& resolution,
                 IFloatBuffer* buffer);
 
-  ~ElevationData() {
+  virtual ~ElevationData();
 
-  }
+  virtual float getElevationAt(int x, int y) const;
 
+  virtual Vector2I getExtent() const;
 
-  float getElevationAt(int x, int y) const;
-
-  Vector2I getExtent() const;
-
-  const std::string description() const;
+  virtual const std::string description() const;
   
 };
 

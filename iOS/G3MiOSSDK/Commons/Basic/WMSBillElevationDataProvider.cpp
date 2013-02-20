@@ -47,7 +47,7 @@ public:
   void onDownload(const URL& url,
                   IByteBuffer* buffer) {
     const Vector2I resolution(_width, _height);
-    ElevationData* elevationData = BilParser::parseBil16(buffer, resolution);
+    ElevationData* elevationData = BilParser::parseBil16(_sector, resolution, buffer);
     delete buffer;
 
     if (elevationData == NULL) {

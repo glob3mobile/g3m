@@ -694,7 +694,10 @@ public:
                   IByteBuffer* buffer) {
 //    const Vector2I extent(150, 150);
     const Vector2I extent(512, 512);
-    const ElevationData* elevationData = BilParser::parseBil16(buffer, extent);
+    const ElevationData* elevationData = BilParser::parseBil16(Sector::fullSphere(),
+                                                               extent,
+                                                               buffer);
+    delete buffer;
 
     if (elevationData == NULL) {
       return;
@@ -779,6 +782,8 @@ public:
                                                      1000);
 
     _shapesRenderer->addShape( new MeshShape(buenosAiresPosition, bilMesh) );
+
+    delete elevationData;
   }
 
   void onError(const URL& url) {
@@ -882,61 +887,61 @@ public:
       */
 
       /**/
-//      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
+////      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
+////                                                                ofType: @"json"];
+//
+//      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"A320"
 //                                                                ofType: @"json"];
-
-      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"A320"
-                                                                ofType: @"json"];
-//      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"citation"
-//                                                                ofType: @"json"];
-      if (planeFilePath) {
-        NSString *nsPlaneJSON = [NSString stringWithContentsOfFile: planeFilePath
-                                                          encoding: NSUTF8StringEncoding
-                                                             error: nil];
-        if (nsPlaneJSON) {
-          std::string planeJSON = [nsPlaneJSON UTF8String];
-          Shape* plane = SceneJSShapesParser::parseFromJSON(planeJSON, "file:///textures-A320/");
-          //Shape* plane = SceneJSShapesParser::parse(planeJSON, "file:///textures-citation/");
-          if (plane) {
-            // Washington, DC
-            plane->setPosition(new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
-                                              Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
-                                              10000) );
-            const double scale = 200;
-            plane->setScale(scale, scale, scale);
-            plane->setPitch(Angle::fromDegrees(90));
-            _shapesRenderer->addShape(plane);
-
-            plane->setAnimatedPosition(TimeInterval::fromSeconds(26),
-                                       Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
-                                                  Angle::fromDegreesMinutesSeconds(-78, 2, 10.92),
-                                                  10000),
-                                       true);
-
-            /*
-            const double fromDistance = 50000 * 1.5;
-            const double toDistance   = 25000 * 1.5 / 2;
-
-            // const Angle fromAzimuth = Angle::fromDegrees(-90);
-            // const Angle toAzimuth   = Angle::fromDegrees(-90 + 360 + 180);
-            const Angle fromAzimuth = Angle::fromDegrees(-90);
-            const Angle toAzimuth   = Angle::fromDegrees(-90 + 360);
-
-            // const Angle fromAltitude = Angle::fromDegrees(65);
-            // const Angle toAltitude   = Angle::fromDegrees(5);
-            // const Angle fromAltitude = Angle::fromDegrees(30);
-            // const Angle toAltitude   = Angle::fromDegrees(15);
-            const Angle fromAltitude = Angle::fromDegrees(90);
-            const Angle toAltitude   = Angle::fromDegrees(15);
-
-            plane->orbitCamera(TimeInterval::fromSeconds(20),
-                               fromDistance, toDistance,
-                               fromAzimuth,  toAzimuth,
-                               fromAltitude, toAltitude);
-             */
-          }
-        }
-      }
+////      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"citation"
+////                                                                ofType: @"json"];
+//      if (planeFilePath) {
+//        NSString *nsPlaneJSON = [NSString stringWithContentsOfFile: planeFilePath
+//                                                          encoding: NSUTF8StringEncoding
+//                                                             error: nil];
+//        if (nsPlaneJSON) {
+//          std::string planeJSON = [nsPlaneJSON UTF8String];
+//          Shape* plane = SceneJSShapesParser::parseFromJSON(planeJSON, "file:///textures-A320/");
+//          //Shape* plane = SceneJSShapesParser::parse(planeJSON, "file:///textures-citation/");
+//          if (plane) {
+//            // Washington, DC
+//            plane->setPosition(new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
+//                                              Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
+//                                              10000) );
+//            const double scale = 200;
+//            plane->setScale(scale, scale, scale);
+//            plane->setPitch(Angle::fromDegrees(90));
+//            _shapesRenderer->addShape(plane);
+//
+//            plane->setAnimatedPosition(TimeInterval::fromSeconds(26),
+//                                       Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
+//                                                  Angle::fromDegreesMinutesSeconds(-78, 2, 10.92),
+//                                                  10000),
+//                                       true);
+//
+//            /*
+//            const double fromDistance = 50000 * 1.5;
+//            const double toDistance   = 25000 * 1.5 / 2;
+//
+//            // const Angle fromAzimuth = Angle::fromDegrees(-90);
+//            // const Angle toAzimuth   = Angle::fromDegrees(-90 + 360 + 180);
+//            const Angle fromAzimuth = Angle::fromDegrees(-90);
+//            const Angle toAzimuth   = Angle::fromDegrees(-90 + 360);
+//
+//            // const Angle fromAltitude = Angle::fromDegrees(65);
+//            // const Angle toAltitude   = Angle::fromDegrees(5);
+//            // const Angle fromAltitude = Angle::fromDegrees(30);
+//            // const Angle toAltitude   = Angle::fromDegrees(15);
+//            const Angle fromAltitude = Angle::fromDegrees(90);
+//            const Angle toAltitude   = Angle::fromDegrees(15);
+//
+//            plane->orbitCamera(TimeInterval::fromSeconds(20),
+//                               fromDistance, toDistance,
+//                               fromAzimuth,  toAzimuth,
+//                               fromAltitude, toAltitude);
+//             */
+//          }
+//        }
+//      }
       /**/
 
 

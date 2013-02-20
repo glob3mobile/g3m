@@ -15,8 +15,9 @@
 #include "ElevationData.hpp"
 
 
-ElevationData* BilParser::parseBil16(const IByteBuffer* buffer,
-                                     const Vector2I& extent) {
+ElevationData* BilParser::parseBil16(const Sector& sector,
+                                     const Vector2I& extent,
+                                     const IByteBuffer* buffer) {
 
   const int size = extent._x * extent._y;
 //  const int size = (extent._x + margin) * (extent._y + margin);
@@ -49,6 +50,7 @@ ElevationData* BilParser::parseBil16(const IByteBuffer* buffer,
     floatBuffer->rawPut(i, (float) height);
   }
 
-  return new ElevationData(extent,
+  return new ElevationData(sector,
+                           extent,
                            floatBuffer);
 }
