@@ -142,7 +142,7 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
       vertices.add(sector.getInnerPoint(1, (double)j/(resolution._y-1)),
                    skirtHeight);
 
-      indices.add((short) (j*resolution._x + (resolution._y-1)));
+      indices.add((short) (j*resolution._x + (resolution._x-1)));
       indices.add((short) posS++);
     }
 
