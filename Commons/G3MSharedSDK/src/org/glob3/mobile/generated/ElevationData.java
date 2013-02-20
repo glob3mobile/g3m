@@ -25,13 +25,13 @@ public class ElevationData
   private IFloatBuffer _buffer;
   private final int _width;
   private final int _height;
+  private final Sector _sector ;
 
-
-
-  public ElevationData(Vector2I extent, IFloatBuffer buffer)
+  public ElevationData(Sector sector, Vector2I resolution, IFloatBuffer buffer)
   {
-     _width = extent._x;
-     _height = extent._y;
+     _sector = new Sector(sector);
+     _width = resolution._x;
+     _height = resolution._y;
      _buffer = buffer;
     if (_buffer.size() != (_width * _height))
     {
@@ -41,11 +41,11 @@ public class ElevationData
 
   public void dispose()
   {
-
+    if (_buffer != null)
+       _buffer.dispose();
   }
 
-
-  public final float getElevationAt(int x, int y)
+  public float getElevationAt(int x, int y)
   {
     //return _buffer->get( (x * _width) + y );
     //return _buffer->get( (x * _height) + y );
@@ -64,12 +64,12 @@ public class ElevationData
     return _buffer.get(index);
   }
 
-  public final Vector2I getExtent()
+  public Vector2I getExtent()
   {
     return new Vector2I(_width, _height);
   }
 
-  public final String description()
+  public String description()
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     isb.addString("(ElevationData extent=");

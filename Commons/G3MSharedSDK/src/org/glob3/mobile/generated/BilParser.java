@@ -18,6 +18,9 @@ package org.glob3.mobile.generated;
 
 //class ElevationData;
 //class IByteBuffer;
+//class Sector;
+
+
 
 public class BilParser
 {
@@ -25,7 +28,7 @@ public class BilParser
 //  BilParser();
 
 
-  public static ElevationData parseBil16(IByteBuffer buffer, Vector2I extent)
+  public static ElevationData parseBil16(Sector sector, Vector2I extent, IByteBuffer buffer)
   {
   
     final int size = extent._x * extent._y;
@@ -62,7 +65,7 @@ public class BilParser
       floatBuffer.rawPut(i, (float) height);
     }
   
-    return new ElevationData(extent, floatBuffer);
+    return new ElevationData(sector, extent, floatBuffer);
   }
 
 }
