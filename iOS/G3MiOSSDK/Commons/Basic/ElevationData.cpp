@@ -25,8 +25,20 @@ _buffer(buffer)
 
 float ElevationData::getElevationAt(int x, int y) const {
   //return _buffer->get( (x * _width) + y );
-  return _buffer->get( (y * _height) + x );
   //return _buffer->get( (x * _height) + y );
+
+  //        const double height = elevationData->getElevationAt(x, extent._y-1-y);
+
+//  const int a = (_height-1-(y+_margin)) * _width;
+//  const int a1 = _height-1-(y+_margin);
+
+//  const int index = ((_height-1-(y+_margin)) * _width) + (x+_margin);
+  const int index = ((_height-1-y) * _width) + x;
+  if ((index < 0) ||
+      (index >= _buffer->size())) {
+    printf("break point on me\n");
+  }
+  return _buffer->get( index );
 }
 
 Vector2I ElevationData::getExtent() const {

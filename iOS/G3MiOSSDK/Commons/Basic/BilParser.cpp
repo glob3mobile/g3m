@@ -19,6 +19,7 @@ ElevationData* BilParser::parseBil16(const IByteBuffer* buffer,
                                      const Vector2I& extent) {
 
   const int size = extent._x * extent._y;
+//  const int size = (extent._x + margin) * (extent._y + margin);
 
   const int expectedSizeInBytes = size * 2;
   if (buffer->size() != expectedSizeInBytes) {
@@ -34,6 +35,12 @@ ElevationData* BilParser::parseBil16(const IByteBuffer* buffer,
   for (int i = 0; i < size; i++) {
     short height = iterator.nextInt16();
     if (height == -9999) {
+      height = 0;
+    }
+    if (height == -32767) {
+      height = 0;
+    }
+    if (height == -32768) {
       height = 0;
     }
     //    if (height < 0) {

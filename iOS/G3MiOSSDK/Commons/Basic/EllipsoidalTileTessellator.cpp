@@ -83,7 +83,7 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
 
       float height = 0;
       if (elevationData != NULL) {
-        height = elevationData->getElevationAt(i, j) * verticalExaggeration;
+        height = elevationData->getElevationAt(j, i) * verticalExaggeration;
         if (height < minHeight) {
           minHeight = height;
         }
@@ -161,7 +161,8 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
 
   Color* color = Color::newFromRGBA((float) 1.0, (float) 1.0, (float) 1.0, (float) 1.0);
 
-  return new IndexedMesh(debug ? GLPrimitive::lineStrip() : GLPrimitive::triangleStrip(),
+  return new IndexedMesh(//debug ? GLPrimitive::lineStrip() : GLPrimitive::triangleStrip(),
+                         GLPrimitive::triangleStrip(),
                          true,
                          vertices.getCenter(),
                          vertices.create(),

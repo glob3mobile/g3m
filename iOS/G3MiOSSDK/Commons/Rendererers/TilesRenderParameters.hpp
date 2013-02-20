@@ -63,15 +63,15 @@ public:
                                               const bool incrementalTileQuality) {
     const int K = 1;
     //const int _TODO_RESET_K_TO_1 = 0;
-    const int splitsByLatitude = 2 * K;
-    const int splitsByLongitude = 4 * K;
+    const int splitsByLatitude = 1 * K;
+    const int splitsByLongitude = 2 * K;
     const int topLevel = 0;
     const int maxLevel = 17;
     const int tileTextureHeight = 256;
     const int tileTextureWidth = 256;
 //    const int tileTextureHeight = 128;
 //    const int tileTextureWidth = 128;
-    const int tileResolution = 10;
+    const int tileResolution = 20;
     
     return new TilesRenderParameters(Sector::fullSphere(),
                                      splitsByLatitude,

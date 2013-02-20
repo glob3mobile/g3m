@@ -464,7 +464,7 @@ public:
 
 - (TilesRenderParameters*) createTileRenderParameters
 {
-  const bool renderDebug = false;
+  const bool renderDebug = true;
   const bool useTilesSplitBudget = true;
   const bool forceTopLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
@@ -686,7 +686,7 @@ public:
   void onDownload(const URL& url,
                   IByteBuffer* buffer) {
     const Vector2I extent(150, 150);
-    ElevationData* elevationData = BilParser::parseBil16(buffer, extent);
+    const ElevationData* elevationData = BilParser::parseBil16(buffer, extent);
 
     if (elevationData == NULL) {
       return;
@@ -719,6 +719,7 @@ public:
 
     for (int x = 0; x < extent._x; x++) {
       for (int y = 0; y < extent._y; y++) {
+//        const double height = elevationData->getElevationAt(x, extent._y-1-y);
         const double height = elevationData->getElevationAt(x, y);
         const float alpha = (float) ((height - minHeight) / deltaHeight);
 

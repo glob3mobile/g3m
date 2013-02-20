@@ -130,7 +130,7 @@ const long long WMSBillElevationDataProvider::requestElevationData(const Sector&
 
 
   return _downloader->requestBuffer(URL(path, false),
-                                    10000,
+                                    10000000000,
                                     TimeInterval::fromDays(30),
                                     new WMSBillElevationDataProvider_BufferDownloadListener(sector, resolution, listener, autodeleteListener),
                                     true);
