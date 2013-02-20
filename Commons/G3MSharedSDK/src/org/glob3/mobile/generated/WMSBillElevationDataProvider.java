@@ -74,7 +74,7 @@ public class WMSBillElevationDataProvider extends ElevationDataProvider
        isb.dispose();
   
   
-    return _downloader.requestBuffer(new URL(path, false), 10000000000, TimeInterval.fromDays(30), new WMSBillElevationDataProvider_BufferDownloadListener(sector, resolution, listener, autodeleteListener), true);
+    return _downloader.requestBuffer(new URL(path, false), 2000000000, TimeInterval.fromDays(30), new WMSBillElevationDataProvider_BufferDownloadListener(sector, resolution, listener, autodeleteListener), true);
   }
 
   public final void cancelRequest(long requestId)

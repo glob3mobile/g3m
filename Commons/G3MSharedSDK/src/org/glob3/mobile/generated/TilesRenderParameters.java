@@ -24,8 +24,8 @@ public class TilesRenderParameters
   public final int _splitsByLongitude;
   public final int _topLevel;
   public final int _maxLevel;
-  public final Vector2I _tileTextureResolution = new Vector2I();
-  public final Vector2I _tileMeshResolution = new Vector2I();
+  public final Vector2I _tileTextureResolution;
+  public final Vector2I _tileMeshResolution;
   public final boolean _renderDebug;
   public final boolean _useTilesSplitBudget;
   public final boolean _forceTopLevelTilesRenderOnStart;
@@ -38,8 +38,8 @@ public class TilesRenderParameters
      _splitsByLongitude = splitsByLongitude;
      _topLevel = topLevel;
      _maxLevel = maxLevel;
-     _tileTextureResolution = new Vector2I(tileTextureResolution);
-     _tileMeshResolution = new Vector2I(tileMeshResolution);
+     _tileTextureResolution = tileTextureResolution;
+     _tileMeshResolution = tileMeshResolution;
      _renderDebug = renderDebug;
      _useTilesSplitBudget = useTilesSplitBudget;
      _forceTopLevelTilesRenderOnStart = forceTopLevelTilesRenderOnStart;
