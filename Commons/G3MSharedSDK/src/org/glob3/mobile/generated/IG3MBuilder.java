@@ -676,11 +676,6 @@ public abstract class IG3MBuilder
       ILogger.instance().logError("LOGIC ERROR: trying to add a NULL periodicalTask object");
       return;
     }
-    if (periodicalTask == null)
-    {
-      ILogger.instance().logError("LOGIC ERROR: periodicalTask cannot be NULL");
-      return;
-    }
     getPeriodicalTasks().add(periodicalTask);
   }
 
