@@ -17,24 +17,24 @@ private:
   Interpolator();
 
 public:
-  static double interpolateHeight(const Geodetic2D& lower,
-                                  const Geodetic2D& upper,
-                                  double valueSW,
-                                  double valueSE,
-                                  double valueNE,
-                                  double valueNW,
-                                  const Angle& latitude,
-                                  const Angle& longitude);
+  static double interpolate(const Geodetic2D& sw,
+                            const Geodetic2D& ne,
+                            double valueSW,
+                            double valueSE,
+                            double valueNE,
+                            double valueNW,
+                            const Angle& latitude,
+                            const Angle& longitude);
 
 
-  static double interpolateHeight(const Geodetic2D& lower,
-                                  const Geodetic2D& upper,
-                                  double valueSW,
-                                  double valueSE,
-                                  double valueNE,
-                                  double valueNW,
-                                  const Geodetic2D& position);
-  
+  static double interpolate(const Geodetic2D& sw,
+                            const Geodetic2D& ne,
+                            double valueSW,
+                            double valueSE,
+                            double valueNE,
+                            double valueNW,
+                            const Geodetic2D& position);
+
 };
 
 #endif

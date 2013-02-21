@@ -1,5 +1,5 @@
 //
-//  Sector.h
+//  Sector.hpp
 //  G3MiOSSDK
 //
 //  Created by Agustín Trujillo Pino on 12/06/12.

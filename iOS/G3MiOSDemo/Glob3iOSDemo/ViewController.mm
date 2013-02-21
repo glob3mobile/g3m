@@ -210,7 +210,7 @@ public:
   MeshRenderer* meshRenderer = new MeshRenderer();
   builder.addRenderer( meshRenderer );
 
-//  [self createInterpolationTest: meshRenderer];
+  [self createInterpolationTest: meshRenderer];
 
   //meshRenderer->addMesh([self createPointsMesh: builder.getPlanet() ]);
 
@@ -258,19 +258,19 @@ public:
 //  const double valueSE = 45000 * a;
 //  const double valueNE = 45000 * a;
 //  const double valueNW = 45000 * a;
-  const double valueSW = 10000 * a;
-  const double valueSE = 20000 * a;
-  const double valueNE = 5000 * a;
-  const double valueNW = 45000 * a;
-  const double minHeight = valueNE;
-  const double maxHeight = valueNW;
+  const double heightSW = 10000 * a;
+  const double heightSE = 20000 * a;
+  const double heightNE = 5000 * a;
+  const double heightNW = 45000 * a;
+  const double minHeight = heightNE;
+  const double maxHeight = heightNW;
   const double deltaHeight = maxHeight - minHeight;
 
 
-  vertices.add(sector.getSW(), valueSW);  colors.add(1, 0, 0, 1);
-  vertices.add(sector.getSE(), valueSE);  colors.add(1, 0, 0, 1);
-  vertices.add(sector.getNE(), valueNE);  colors.add(1, 0, 0, 1);
-  vertices.add(sector.getNW(), valueNW);  colors.add(1, 0, 0, 1);
+  vertices.add(sector.getSW(), heightSW);  colors.add(1, 0, 0, 1);
+  vertices.add(sector.getSE(), heightSE);  colors.add(1, 0, 0, 1);
+  vertices.add(sector.getNE(), heightNE);  colors.add(1, 0, 0, 1);
+  vertices.add(sector.getNW(), heightNW);  colors.add(1, 0, 0, 1);
 
   for (double lat = sector.lower().latitude().degrees();
        lat <= sector.upper().latitude().degrees();
@@ -282,13 +282,13 @@ public:
       const Geodetic2D position(Angle::fromDegrees(lat),
                                 Angle::fromDegrees(lon));
 
-      const double height = Interpolator::interpolateHeight(sector.lower(),
-                                                            sector.upper(),
-                                                            valueSW,
-                                                            valueSE,
-                                                            valueNE,
-                                                            valueNW,
-                                                            position);
+      const double height = Interpolator::interpolate(sector.lower(),
+                                                      sector.upper(),
+                                                      heightSW,
+                                                      heightSE,
+                                                      heightNE,
+                                                      heightNW,
+                                                      position);
 
       const float alpha = (deltaHeight == 0) ? 1 : (float) ((height - minHeight) / deltaHeight);
 
