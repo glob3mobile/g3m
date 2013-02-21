@@ -231,7 +231,10 @@ public class TileRendererBuilder
   }
   public final TileRenderer create()
   {
-    TileRenderer tileRenderer = new TileRenderer(getTileTessellator(), getTexturizer(), getLayerSet(), getParameters(), getShowStatistics(), getTexturePriority());
+    int __TODO_make_inflator_configurable;
+    //  ElevationDataProvider* elevationDataProvider = new WMSBillElevationDataProvider();
+    ElevationDataProvider elevationDataProvider = null;
+    TileRenderer tileRenderer = new TileRenderer(getTileTessellator(), elevationDataProvider, getTexturizer(), getLayerSet(), getParameters(), getShowStatistics(), getTexturePriority());
   
     for (int i = 0; i < getVisibleSectorListeners().size(); i++)
     {
@@ -256,7 +259,7 @@ public class TileRendererBuilder
   }
   public final void setTileTexturizer(TileTexturizer tileTexturizer)
   {
-    if (_texturizer != tileTexturizer)
+    if (_texturizer != null)
     {
       ILogger.instance().logError("LOGIC ERROR: _texturizer already initialized");
       return;

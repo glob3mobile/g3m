@@ -17,10 +17,13 @@ package org.glob3.mobile.generated;
 
 
 //class G3MRenderContext;
+//class Planet;
 //class Mesh;
 //class Tile;
 //class MutableVector2D;
 //class IFloatBuffer;
+//class ElevationData;
+
 
 public abstract class TileTessellator
 {
@@ -30,10 +33,12 @@ public abstract class TileTessellator
 
   public abstract boolean isReady(G3MRenderContext rc);
 
-  public abstract Mesh createMesh(G3MRenderContext rc, Tile tile);
+  public abstract Mesh createTileMesh(Planet planet, Tile tile, ElevationData elevationData, float verticalExaggeration, boolean debug);
 
-  public abstract Mesh createDebugMesh(G3MRenderContext rc, Tile tile);
+  public abstract Vector2I getTileMeshResolution(Planet planet, Tile tile, boolean debug);
 
-  public abstract IFloatBuffer createUnitTextCoords();
+  public abstract Mesh createTileDebugMesh(Planet planet, Tile tile);
+
+  public abstract IFloatBuffer createUnitTextCoords(Tile tile);
 
 }

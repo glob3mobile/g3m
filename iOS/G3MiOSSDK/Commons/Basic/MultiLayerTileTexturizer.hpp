@@ -29,11 +29,8 @@ private:
   TilesRenderParameters* _parameters;
 #endif
 
-  mutable IFloatBuffer* _texCoordsCache;
-  
-  IFloatBuffer* getTextureCoordinates(const TileRenderContext* trc) const;
-  
-//  long _pendingTopTileRequests;
+//  mutable IFloatBuffer* _texCoordsCache;
+//  IFloatBuffer* getTextureCoordinates(const TileRenderContext* trc) const;
 
   TexturesHandler* _texturesHandler;
   

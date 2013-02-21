@@ -82,8 +82,6 @@ public class GEOJSONParser
 
   private GEOObject toGEO(JSONObject jsonObject)
   {
-    int __GEO_AT_WORK;
-  
     final String type = jsonObject.getAsString("type", "");
     if (type.compareTo("FeatureCollection") == 0)
     {

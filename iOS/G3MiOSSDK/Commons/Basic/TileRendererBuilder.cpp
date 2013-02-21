@@ -12,7 +12,7 @@
 #include "EllipsoidalTileTessellator.hpp"
 #include "LayerBuilder.hpp"
 #include "DownloadPriority.hpp"
-
+#include "WMSBillElevationDataProvider.hpp"
 
 TileRendererBuilder::TileRendererBuilder() {  
   _showStatistics = false;
@@ -249,7 +249,11 @@ void TileRendererBuilder::setTexturePriority(long long texturePriority) {
 }
 
 TileRenderer* TileRendererBuilder::create() {
+  int __TODO_make_inflator_configurable;
+  //  ElevationDataProvider* elevationDataProvider = new WMSBillElevationDataProvider();
+  ElevationDataProvider* elevationDataProvider = NULL;
   TileRenderer* tileRenderer = new TileRenderer(getTileTessellator(),
+                                                elevationDataProvider,
                                                 getTexturizer(),
                                                 getLayerSet(),
                                                 getParameters(),

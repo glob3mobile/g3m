@@ -22,7 +22,4 @@ public class TileTextureBuilderHolder implements ITexturizerData
     }
   }
 
-//  bool isTexturizerData() const{
-//    return true;
-//  }
 }

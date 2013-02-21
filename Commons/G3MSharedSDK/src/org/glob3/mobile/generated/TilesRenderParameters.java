@@ -79,12 +79,12 @@ public class TilesRenderParameters
     final int maxLevel = 2;
     final int tileTextureHeight = 256;
     final int tileTextureWidth = 256;
-    final int tRes = 10;
+    final int tileResolution = 10;
 
     //    Sector sector = Sector(Geodetic2D(Angle::fromDegrees(-90), Angle::fromDegrees(-180)),
     //                           Geodetic2D(Angle::fromDegrees(90), Angle::fromDegrees(180)));
     Sector sector = new Sector(new Geodetic2D(Angle.zero(), Angle.zero()), new Geodetic2D(Angle.fromDegrees(90), Angle.fromDegrees(90)));
 
-    return new TilesRenderParameters(sector, splitsByLatitude, splitsByLongitude, topLevel, maxLevel, tileTextureHeight, tileTextureWidth, tRes, renderDebug, useTilesSplitBudget, forceTopLevelTilesRenderOnStart, incrementalQuality);
+    return new TilesRenderParameters(sector, splitsByLatitude, splitsByLongitude, topLevel, maxLevel, tileTextureHeight, tileTextureWidth, tileResolution, renderDebug, useTilesSplitBudget, forceTopLevelTilesRenderOnStart, incrementalQuality);
   }
 }

@@ -71,7 +71,6 @@ public class SceneJSShapesParser
       return null;
     }
   
-    int ____DIEGO_AT_WORK;
     final JSONObject jsonObject = jsonBaseObject.asObject();
   
     SGNode result = null;
@@ -501,8 +500,6 @@ public class SceneJSShapesParser
         }
         isY = !isY;
         uv.put(i, value);
-  
-        int __TEXTURES_AT_WORK;
       }
       processedKeys++;
     }

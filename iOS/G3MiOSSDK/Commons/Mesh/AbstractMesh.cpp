@@ -50,34 +50,39 @@ _pointSize(pointSize)
 }
 
 Extent* AbstractMesh::computeExtent() const {
-
   const int vertexCount = getVertexCount();
 
   if (vertexCount <= 0) {
     return NULL;
   }
 
-  double minx=1e10, miny=1e10, minz=1e10;
-  double maxx=-1e10, maxy=-1e10, maxz=-1e10;
+  double minX = 1e12;
+  double minY = 1e12;
+  double minZ = 1e12;
+
+  double maxX = -1e12;
+  double maxY = -1e12;
+  double maxZ = -1e12;
 
   for (int i=0; i < vertexCount; i++) {
-    const int p = i * 3;
+    const int i3 = i * 3;
 
-    const double x = _vertices->get(p  ) + _center._x;
-    const double y = _vertices->get(p+1) + _center._y;
-    const double z = _vertices->get(p+2) + _center._z;
+    const double x = _vertices->get(i3    ) + _center._x;
+    const double y = _vertices->get(i3 + 1) + _center._y;
+    const double z = _vertices->get(i3 + 2) + _center._z;
 
-    if (x < minx) minx = x;
-    if (x > maxx) maxx = x;
+    if (x < minX) minX = x;
+    if (x > maxX) maxX = x;
 
-    if (y < miny) miny = y;
-    if (y > maxy) maxy = y;
+    if (y < minY) minY = y;
+    if (y > maxY) maxY = y;
 
-    if (z < minz) minz = z;
-    if (z > maxz) maxz = z;
+    if (z < minZ) minZ = z;
+    if (z > maxZ) maxZ = z;
   }
 
-  return new Box(Vector3D(minx, miny, minz), Vector3D(maxx, maxy, maxz));
+  return new Box(Vector3D(minX, minY, minZ),
+                 Vector3D(maxX, maxY, maxZ));
 }
 
 Extent* AbstractMesh::getExtent() const {

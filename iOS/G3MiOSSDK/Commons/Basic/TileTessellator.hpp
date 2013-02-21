@@ -10,25 +10,36 @@
 #define G3MiOSSDK_TileTessellator_hpp
 
 class G3MRenderContext;
+class Planet;
 class Mesh;
 class Tile;
 class MutableVector2D;
 class IFloatBuffer;
+class ElevationData;
+
+#include "Vector2I.hpp"
 
 class TileTessellator {
 public:
   virtual ~TileTessellator() { };
-  
+
   virtual bool isReady(const G3MRenderContext *rc) const = 0;
-  
-  virtual Mesh* createMesh(const G3MRenderContext* rc,
-                           const Tile* tile) const = 0;
-  
-  virtual Mesh* createDebugMesh(const G3MRenderContext* rc,
-                                const Tile* tile) const = 0;
 
-  virtual IFloatBuffer* createUnitTextCoords() const = 0;
+  virtual Mesh* createTileMesh(const Planet* planet,
+                               const Tile* tile,
+                               const ElevationData* elevationData,
+                               float verticalExaggeration,
+                               bool debug) const = 0;
 
+  virtual Vector2I getTileMeshResolution(const Planet* planet,
+                                         const Tile* tile,
+                                         bool debug) const = 0;
+
+  virtual Mesh* createTileDebugMesh(const Planet* planet,
+                                    const Tile* tile) const = 0;
+
+  virtual IFloatBuffer* createUnitTextCoords(const Tile* tile) const = 0;
+  
 };
 
 
