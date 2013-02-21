@@ -274,6 +274,25 @@ public abstract class IG3MBuilder
     _autoDeleteInitializationTask = autoDeleteInitializationTask;
   }
 
+
+  /**
+   * Returns TRUE if the given renderer list contains, at least, an instance of 
+   * the TileRenderer class. Returns FALSE if not.
+   *
+   * @return trContained: bool
+   */
+  private boolean containsTileRenderer(java.util.ArrayList<Renderer> renderers)
+  {
+    for (int i = 0; i < renderers.size(); i++)
+    {
+      if (renderers.get(i).isTileRenderer())
+      {
+        return true;
+      }
+    }
+    return false;
+  }
+
   protected IStorage _storage;
 
 
@@ -300,13 +319,20 @@ public abstract class IG3MBuilder
    */
   protected final G3MWidget create()
   {
+    /**
+     * If any renderers were set or added, the main renderer will be a composite renderer.
+     *    If the renderers list does not contain a tileRenderer, it will be created and added.
+     *    The renderers contained in the list, will be added to the main renderer.
+     * If not, the main renderer will be made up of an only renderer (tileRenderer).
+     */
     Renderer mainRenderer = null;
-    TileRenderer tileRenderer = getTileRendererBuilder().create();
     if (getRenderers().size() > 0)
     {
       mainRenderer = new CompositeRenderer();
-      ((CompositeRenderer) mainRenderer).addRenderer(tileRenderer);
-  
+      if (!containsTileRenderer(getRenderers()))
+      {
+        ((CompositeRenderer) mainRenderer).addRenderer(getTileRendererBuilder().create());
+      }
       for (int i = 0; i < getRenderers().size(); i++)
       {
         ((CompositeRenderer) mainRenderer).addRenderer(getRenderers().get(i));
@@ -314,7 +340,7 @@ public abstract class IG3MBuilder
     }
     else
     {
-      mainRenderer = tileRenderer;
+      mainRenderer = getTileRendererBuilder().create();
     }
   
     Color backgroundColor = Color.fromRGBA(getBackgroundColor().getRed(), getBackgroundColor().getGreen(), getBackgroundColor().getBlue(), getBackgroundColor().getAlpha());
@@ -639,11 +665,17 @@ public abstract class IG3MBuilder
   /**
    * Sets the renderers list, ignoring the default renderers list and the renderers
    * previously added, if added.
+   * The renderers list must contain at least an instance of the TileRenderer class.
    *
    * @param renderers: std::vector<Renderer*>
    */
   public final void setRenderers(java.util.ArrayList<Renderer> renderers)
   {
+    if (!containsTileRenderer(renderers))
+    {
+      ILogger.instance().logError("LOGIC ERROR: renderers list must contain at least an instance of the TileRenderer class");
+      return;
+    }
     if (_renderers != null)
     {
       for (int i = 0; i < _renderers.size(); i++)
