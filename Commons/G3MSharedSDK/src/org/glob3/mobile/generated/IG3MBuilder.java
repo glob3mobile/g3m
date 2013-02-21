@@ -16,8 +16,20 @@ package org.glob3.mobile.generated;
 //
 
 
+//class GL;
+//class IStorage;
+//class IDownloader;
+//class IThreadUtils;
+//class CameraRenderer;
+//class ICameraConstrainer;
+//class Color;
+//class GInitializationTask;
+//class PeriodicalTask;
+//class G3MWidget;
 //class TileRendererBuilder;
-
+//class Planet;
+//class Renderer;
+//class WidgetUserData;
 
 public abstract class IG3MBuilder
 {
@@ -26,15 +38,15 @@ public abstract class IG3MBuilder
   private IDownloader _downloader;
   private IThreadUtils _threadUtils;
   private Planet _planet; // REMOVED FINAL WORD BY CONVERSOR RULE
-  private java.util.ArrayList<ICameraConstrainer> _cameraConstraints = new java.util.ArrayList<ICameraConstrainer>();
+  private java.util.ArrayList<ICameraConstrainer> _cameraConstraints;
   private CameraRenderer _cameraRenderer;
   private Color _backgroundColor;
   private TileRendererBuilder _tileRendererBuilder;
   private Renderer _busyRenderer;
-  private java.util.ArrayList<Renderer> _renderers = new java.util.ArrayList<Renderer>();
+  private java.util.ArrayList<Renderer> _renderers;
   private GInitializationTask _initializationTask;
   private boolean _autoDeleteInitializationTask;
-  private java.util.ArrayList<PeriodicalTask> _periodicalTasks = new java.util.ArrayList<PeriodicalTask>();
+  private java.util.ArrayList<PeriodicalTask> _periodicalTasks;
   private boolean _logFPS;
   private boolean _logDownloaderStatistics;
   private WidgetUserData _userData;
@@ -42,7 +54,6 @@ public abstract class IG3MBuilder
 
   /**
    * Returns the _gl.
-   * Lazy initialization.
    *
    * @return _gl: GL*
    */
@@ -58,7 +69,6 @@ public abstract class IG3MBuilder
 
   /**
    * Returns the _downloader.
-   * Lazy initialization.
    *
    * @return _downloader: IDownloader*
    */
@@ -66,7 +76,7 @@ public abstract class IG3MBuilder
   {
     if (_downloader == null)
     {
-      _downloader = createDownloader();
+      _downloader = createDefaultDownloader();
     }
   
     return _downloader;
@@ -74,7 +84,6 @@ public abstract class IG3MBuilder
 
   /**
    * Returns the _threadUtils.
-   * Lazy initialization.
    *
    * @return _threadUtils: IThreadUtils*
    */
@@ -82,23 +91,22 @@ public abstract class IG3MBuilder
   {
     if (_threadUtils == null)
     {
-      _threadUtils = createThreadUtils();
+      _threadUtils = createDefaultThreadUtils();
     }
   
     return _threadUtils;
   }
 
   /**
-   * Returns the _cameraConstraints.
-   * Lazy initialization.
+   * Returns the _cameraConstraints list.
    *
    * @return _cameraConstraints: std::vector<ICameraConstrainer*>
    */
   private java.util.ArrayList<ICameraConstrainer> getCameraConstraints()
   {
-    if (_cameraConstraints.size() == 0)
+    if (_cameraConstraints == null)
     {
-      _cameraConstraints = createCameraConstraints();
+      _cameraConstraints = createDefaultCameraConstraints();
     }
   
     return _cameraConstraints;
@@ -106,7 +114,6 @@ public abstract class IG3MBuilder
 
   /**
    * Returns the _cameraRenderer.
-   * Lazy initialization.
    *
    * @return _cameraRenderer: CameraRenderer*
    */
@@ -114,7 +121,7 @@ public abstract class IG3MBuilder
   {
     if (_cameraRenderer == null)
     {
-      _cameraRenderer = createCameraRenderer();
+      _cameraRenderer = createDefaultCameraRenderer();
     }
   
     return _cameraRenderer;
@@ -122,7 +129,6 @@ public abstract class IG3MBuilder
 
   /**
    * Returns the _busyRenderer.
-   * Lazy initialization.
    *
    * @return _busyRenderer: Renderer*
    */
@@ -138,7 +144,6 @@ public abstract class IG3MBuilder
 
   /**
    * Returns the _backgroundColor.
-   * Lazy initialization.
    *
    * @return _backgroundColor: Color*
    */
@@ -153,19 +158,21 @@ public abstract class IG3MBuilder
   }
 
   /**
-   * Returns the array of renderers.
-   * Method created to keep convention. It is not needed as it does not have to create a default value.
+   * Returns the renderers list.
    *
    * @return _renderers: std::vector<Renderer*>
    */
   private java.util.ArrayList<Renderer> getRenderers()
   {
+    if (_renderers == null)
+    {
+      _renderers = new java.util.ArrayList<Renderer>();
+    }
     return _renderers;
   }
 
   /**
    * Returns the value of _logFPS flag.
-   * Method created to keep convention. It is not needed as it does not have to create a default value.
    *
    * @return _logFPS: bool
    */
@@ -176,7 +183,6 @@ public abstract class IG3MBuilder
 
   /**
    * Returns the value of _logDownloaderStatistics flag.
-   * Method created to keep convention. It is not needed as it does not have to create a default value.
    *
    * @return _logDownloaderStatistics: bool
    */
@@ -187,7 +193,6 @@ public abstract class IG3MBuilder
 
   /**
    * Returns the initialization task.
-   * Method created to keep convention. It is not needed as it does not have to create a default value.
    *
    * @return _logDownloaderStatistics: GInitializationTask*
    */
@@ -198,7 +203,6 @@ public abstract class IG3MBuilder
 
   /**
    * Returns the value of _autoDeleteInitializationTask flag.
-   * Method created to keep convention. It is not needed as it does not have to create a default value.
    *
    * @return _autoDeleteInitializationTask: bool
    */
@@ -209,18 +213,20 @@ public abstract class IG3MBuilder
 
   /**
    * Returns the array of periodical tasks.
-   * Method created to keep convention. It is not needed as it does not have to create a default value.
    *
    * @return _periodicalTasks: std::vector<PeriodicalTask*>
    */
   private java.util.ArrayList<PeriodicalTask> getPeriodicalTasks()
   {
+    if (_periodicalTasks == null)
+    {
+      _periodicalTasks = new java.util.ArrayList<PeriodicalTask> ();
+    }
     return _periodicalTasks;
   }
 
   /**
    * Returns the user data.
-   * Method created to keep convention. It is not needed as it does not have to create a default value.
    *
    * @return _userData: WidgetUserData*
    */
@@ -230,7 +236,7 @@ public abstract class IG3MBuilder
   }
 
 
-  private java.util.ArrayList<ICameraConstrainer> createCameraConstraints()
+  private java.util.ArrayList<ICameraConstrainer> createDefaultCameraConstraints()
   {
     java.util.ArrayList<ICameraConstrainer> cameraConstraints = new java.util.ArrayList<ICameraConstrainer>();
     SimpleCameraConstrainer scc = new SimpleCameraConstrainer();
@@ -238,7 +244,7 @@ public abstract class IG3MBuilder
   
     return cameraConstraints;
   }
-  private CameraRenderer createCameraRenderer()
+  private CameraRenderer createDefaultCameraRenderer()
   {
     CameraRenderer cameraRenderer = new CameraRenderer();
     final boolean useInertia = true;
@@ -259,6 +265,11 @@ public abstract class IG3MBuilder
       ILogger.instance().logError("LOGIC ERROR: _initializationTask already initialized");
       return;
     }
+    if (initializationTask == null)
+    {
+      ILogger.instance().logError("LOGIC ERROR: initializationTask cannot be NULL");
+      return;
+    }
     _initializationTask = initializationTask;
     _autoDeleteInitializationTask = autoDeleteInitializationTask;
   }
@@ -268,7 +279,6 @@ public abstract class IG3MBuilder
 
   /**
    * Returns the _storage.
-   * Lazy initialization.
    *
    * @return _storage: IStorage*
    */
@@ -276,12 +286,18 @@ public abstract class IG3MBuilder
   {
     if (_storage == null)
     {
-      _storage = createStorage();
+      _storage = createDefaultStorage();
     }
   
     return _storage;
   }
 
+
+  /**
+   * Creates the generic widget using all the parameters previously set.
+   *
+   * @return G3MWidget*
+   */
   protected final G3MWidget create()
   {
     Renderer mainRenderer = null;
@@ -312,31 +328,20 @@ public abstract class IG3MBuilder
     _downloader = null;
     _threadUtils = null;
     _planet = null;
-    for (int i = 0; i < _cameraConstraints.size(); i++)
-    {
-      _cameraConstraints.set(i, null);
-    }
+    _cameraConstraints = null;
     _cameraRenderer = null;
-    for (int i = 0; i < _renderers.size(); i++)
-    {
-      _renderers.set(i, null);
-    }
+    _renderers = null;
     _busyRenderer = null;
-    _backgroundColor = null;
     _initializationTask = null;
-    for (int i = 0; i < _periodicalTasks.size(); i++)
-    {
-      _periodicalTasks.set(i, null);
-    }
+    _periodicalTasks = null;
     _userData = null;
-    _tileRendererBuilder = null;
   
     return g3mWidget;
   }
 
-  protected abstract IThreadUtils createThreadUtils();
-  protected abstract IStorage createStorage();
-  protected abstract IDownloader createDownloader();
+  protected abstract IThreadUtils createDefaultThreadUtils();
+  protected abstract IStorage createDefaultStorage();
+  protected abstract IDownloader createDefaultDownloader();
 
   public IG3MBuilder()
   {
@@ -345,12 +350,15 @@ public abstract class IG3MBuilder
      _downloader = null;
      _threadUtils = null;
      _planet = null;
+     _cameraConstraints = null;
      _cameraRenderer = null;
      _backgroundColor = null;
      _tileRendererBuilder = null;
      _busyRenderer = null;
+     _renderers = null;
      _initializationTask = null;
      _autoDeleteInitializationTask = true;
+     _periodicalTasks = null;
      _logFPS = false;
      _logDownloaderStatistics = false;
      _userData = null;
@@ -367,17 +375,25 @@ public abstract class IG3MBuilder
        _threadUtils.dispose();
     if (_planet != null)
        _planet.dispose();
-    for (int i = 0; i < _cameraConstraints.size(); i++)
+    if (_cameraConstraints != null)
     {
-      if (_cameraConstraints.get(i) != null)
-         _cameraConstraints.get(i).dispose();
+      for (int i = 0; i < _cameraConstraints.size(); i++)
+      {
+        if (_cameraConstraints.get(i) != null)
+           _cameraConstraints.get(i).dispose();
+      }
+      _cameraConstraints = null;
     }
     if (_cameraRenderer != null)
        _cameraRenderer.dispose();
-    for (int i = 0; i < _renderers.size(); i++)
+    if (_renderers != null)
     {
-      if (_renderers.get(i) != null)
-         _renderers.get(i).dispose();
+      for (int i = 0; i < _renderers.size(); i++)
+      {
+        if (_renderers.get(i) != null)
+           _renderers.get(i).dispose();
+      }
+      _renderers = null;
     }
     if (_busyRenderer != null)
        _busyRenderer.dispose();
@@ -385,16 +401,26 @@ public abstract class IG3MBuilder
        _backgroundColor.dispose();
     if (_initializationTask != null)
        _initializationTask.dispose();
-    for (int i = 0; i < _periodicalTasks.size(); i++)
+    if (_periodicalTasks != null)
     {
-      if (_periodicalTasks.get(i) != null)
-         _periodicalTasks.get(i).dispose();
+      for (int i = 0; i < _periodicalTasks.size(); i++)
+      {
+        if (_periodicalTasks.get(i) != null)
+           _periodicalTasks.get(i).dispose();
+      }
+      _periodicalTasks = null;
     }
     if (_userData != null)
        _userData.dispose();
     if (_tileRendererBuilder != null)
        _tileRendererBuilder.dispose();
   }
+
+  /**
+   * Sets the _gl.
+   *
+   * @param gl: cannot be NULL.
+   */
   public final void setGL(GL gl)
   {
     if (_gl != null)
@@ -402,8 +428,19 @@ public abstract class IG3MBuilder
       ILogger.instance().logError("LOGIC ERROR: _gl already initialized");
       return;
     }
+    if (gl == null)
+    {
+      ILogger.instance().logError("LOGIC ERROR: _gl cannot be NULL");
+      return;
+    }
     _gl = gl;
   }
+
+  /**
+   * Sets the _storage.
+   *
+   * @param gl
+   */
   public final void setStorage(IStorage storage)
   {
     if (_storage != null)
@@ -413,6 +450,12 @@ public abstract class IG3MBuilder
     }
     _storage = storage;
   }
+
+  /**
+   * Sets the _downloader
+   *
+   * @param downloader: cannot be NULL.
+   */
   public final void setDownloader(IDownloader downloader)
   {
     if (_downloader != null)
@@ -420,8 +463,19 @@ public abstract class IG3MBuilder
       ILogger.instance().logError("LOGIC ERROR: _downloader already initialized");
       return;
     }
+    if (downloader == null)
+    {
+      ILogger.instance().logError("LOGIC ERROR: _downloader cannot be NULL");
+      return;
+    }
     _downloader = downloader;
   }
+
+  /**
+   * Sets the _threadUtils
+   *
+   * @param threadUtils: cannot be NULL.
+   */
   public final void setThreadUtils(IThreadUtils threadUtils)
   {
     if (_threadUtils != null)
@@ -429,8 +483,19 @@ public abstract class IG3MBuilder
       ILogger.instance().logError("LOGIC ERROR: _threadUtils already initialized");
       return;
     }
+    if (threadUtils == null)
+    {
+      ILogger.instance().logError("LOGIC ERROR: _threadUtils cannot be NULL");
+      return;
+    }
     _threadUtils = threadUtils;
   }
+
+  /**
+   * Sets the _planet
+   *
+   * @param planet: cannot be NULL.
+   */
   public final void setPlanet(Planet planet)
   {
     if (_planet != null)
@@ -438,12 +503,63 @@ public abstract class IG3MBuilder
       ILogger.instance().logError("LOGIC ERROR: _planet already initialized");
       return;
     }
+    if (planet == null)
+    {
+      ILogger.instance().logError("LOGIC ERROR: _planet cannot be NULL");
+      return;
+    }
     _planet = planet;
   }
+
+  /**
+   * Adds a new camera constraint to the constraints list.
+   * The camera constraint list will be initializated with a default constraints set.
+   * @see IG3MBuilder#createDefaultCameraConstraints()
+   *
+   * @param cameraConstraint: cannot be NULL.
+   */
   public final void addCameraConstraint(ICameraConstrainer cameraConstraint)
   {
-    _cameraConstraints.add(cameraConstraint);
+    if (cameraConstraint == null)
+    {
+      ILogger.instance().logError("LOGIC ERROR: trying to add a NULL cameraConstraint object");
+      return;
+    }
+    getCameraConstraints().add(cameraConstraint);
   }
+
+  /**
+   * Sets the camera constraints list, ignoring the default camera constraints list 
+   * and the camera constraints previously added, if added.
+   *
+   * @param cameraConstraints: std::vector<ICameraConstrainer*>
+   */
+  public final void setCameraConstrainsts(java.util.ArrayList<ICameraConstrainer> cameraConstraints)
+  {
+    if (_cameraConstraints != null)
+    {
+      for (int i = 0; i < _cameraConstraints.size(); i++)
+      {
+        if (_cameraConstraints.get(i) != null)
+           _cameraConstraints.get(i).dispose();
+      }
+      _cameraConstraints.clear();
+    }
+    else
+    {
+      _cameraConstraints = new java.util.ArrayList<ICameraConstrainer> ();
+    }
+    for (int i = 0; i < cameraConstraints.size(); i++)
+    {
+      _cameraConstraints.add(cameraConstraints.get(i));
+    }
+  }
+
+  /**
+   * Sets the _cameraRenderer
+   *
+   * @param planet: cannot be NULL.
+   */
   public final void setCameraRenderer(CameraRenderer cameraRenderer)
   {
     if (_cameraRenderer != null)
@@ -451,8 +567,19 @@ public abstract class IG3MBuilder
       ILogger.instance().logError("LOGIC ERROR: _cameraRenderer already initialized");
       return;
     }
+    if (cameraRenderer == null)
+    {
+      ILogger.instance().logError("LOGIC ERROR: _cameraRenderer cannot be NULL");
+      return;
+    }
     _cameraRenderer = cameraRenderer;
   }
+
+  /**
+   * Sets the _backgroundColor
+   *
+   * @param backgroundColor: cannot be NULL.
+   */
   public final void setBackgroundColor(Color backgroundColor)
   {
     if (_backgroundColor != null)
@@ -460,8 +587,19 @@ public abstract class IG3MBuilder
       ILogger.instance().logError("LOGIC ERROR: _backgroundColor already initialized");
       return;
     }
+    if (backgroundColor == null)
+    {
+      ILogger.instance().logError("LOGIC ERROR: _backgroundColor cannot be NULL");
+      return;
+    }
     _backgroundColor = backgroundColor;
   }
+
+  /**
+   * Sets the _busyRenderer
+   *
+   * @param busyRenderer: cannot be NULL.
+   */
   public final void setBusyRenderer(Renderer busyRenderer)
   {
     if (_busyRenderer != null)
@@ -469,36 +607,145 @@ public abstract class IG3MBuilder
       ILogger.instance().logError("LOGIC ERROR: _busyRenderer already initialized");
       return;
     }
+    if (busyRenderer == null)
+    {
+      ILogger.instance().logError("LOGIC ERROR: _busyRenderer cannot be NULL");
+      return;
+    }
     _busyRenderer = busyRenderer;
   }
+
+  /**
+   * Adds a new renderer to the renderers list.
+   * The renderers list will be initializated with a default renderers set (empty set at the moment).
+   *
+   * @param renderer: cannot be either NULL or an instance of TileRenderer
+   */
   public final void addRenderer(Renderer renderer)
   {
-    if (!renderer.isTileRenderer())
+    if (renderer == null)
     {
-      _renderers.add(renderer);
+      ILogger.instance().logError("LOGIC ERROR: trying to add a NULL renderer object");
+      return;
+    }
+    if (renderer.isTileRenderer())
+    {
+      ILogger.instance().logError("LOGIC ERROR: a new TileRenderer is not expected to be added");
+      return;
+    }
+    getRenderers().add(renderer);
+  }
+
+  /**
+   * Sets the renderers list, ignoring the default renderers list and the renderers
+   * previously added, if added.
+   *
+   * @param renderers: std::vector<Renderer*>
+   */
+  public final void setRenderers(java.util.ArrayList<Renderer> renderers)
+  {
+    if (_renderers != null)
+    {
+      for (int i = 0; i < _renderers.size(); i++)
+      {
+        if (_renderers.get(i) != null)
+           _renderers.get(i).dispose();
+      }
+      _renderers.clear();
     }
     else
     {
-      ILogger.instance().logError("LOGIC ERROR: a new TileRenderer is not expected to be added");
+      _renderers = new java.util.ArrayList<Renderer> ();
+    }
+    for (int i = 0; i < renderers.size(); i++)
+    {
+      _renderers.add(renderers.get(i));
     }
   }
+
+  /**
+   * Adds a new periodical task to the periodical tasks list.
+   * The periodical tasks list will be initializated with a default periodical task set (empty set at the moment).
+   *
+   * @param renderer: cannot be either NULL or an instance of TileRenderer
+   */
   public final void addPeriodicalTask(PeriodicalTask periodicalTask)
   {
-    _periodicalTasks.add(periodicalTask);
+    if (periodicalTask == null)
+    {
+      ILogger.instance().logError("LOGIC ERROR: trying to add a NULL periodicalTask object");
+      return;
+    }
+    if (periodicalTask == null)
+    {
+      ILogger.instance().logError("LOGIC ERROR: periodicalTask cannot be NULL");
+      return;
+    }
+    getPeriodicalTasks().add(periodicalTask);
   }
+
+  /**
+   * Sets the periodical tasks list, ignoring the default periodical tasks list and the
+   * periodical tasks previously added, if added.
+   *
+   * @param periodicalTasks: std::vector<PeriodicalTask*>
+   */
+  public final void setPeriodicalTasks(java.util.ArrayList<PeriodicalTask> periodicalTasks)
+  {
+    if (_periodicalTasks != null)
+    {
+      for (int i = 0; i < _periodicalTasks.size(); i++)
+      {
+        if (_periodicalTasks.get(i) != null)
+           _periodicalTasks.get(i).dispose();
+      }
+      _periodicalTasks.clear();
+    }
+    else
+    {
+      _periodicalTasks = new java.util.ArrayList<PeriodicalTask> ();
+    }
+    for (int i = 0; i < periodicalTasks.size(); i++)
+    {
+      _periodicalTasks.add(periodicalTasks.get(i));
+    }
+  }
+
+  /**
+   * Sets the _logFPS
+   *
+   * @param logFPS
+   */
   public final void setLogFPS(boolean logFPS)
   {
     _logFPS = logFPS;
   }
+
+  /**
+   * Sets the _logDownloaderStatistics
+   *
+   * @param logDownloaderStatistics
+   */
   public final void setLogDownloaderStatistics(boolean logDownloaderStatistics)
   {
     _logDownloaderStatistics = logDownloaderStatistics;
   }
+
+  /**
+   * Sets the _userData
+   *
+   * @param userData: cannot be NULL.
+   */
   public final void setUserData(WidgetUserData userData)
   {
     if (_userData != null)
     {
       ILogger.instance().logError("LOGIC ERROR: _userData already initialized");
+      return;
+    }
+    if (userData == null)
+    {
+      ILogger.instance().logError("LOGIC ERROR: userData cannot be NULL");
       return;
     }
     _userData = userData;
@@ -512,7 +759,6 @@ public abstract class IG3MBuilder
 
   /**
    * Returns the _planet.
-   * Lazy initialization.
    *
    * @return _planet: const Planet*
    */
@@ -527,7 +773,6 @@ public abstract class IG3MBuilder
 
   /**
    * Returns the _tileRendererBuilder.
-   * Lazy initialization.
    *
    * @return _tileRendererBuilder: TileRendererBuilder*
    */
