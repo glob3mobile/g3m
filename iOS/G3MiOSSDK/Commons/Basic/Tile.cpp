@@ -285,12 +285,13 @@ bool Tile::isVisible(const G3MRenderContext *rc,
 //      return false;
 //    }
 
-//  const Extent* extent = getTessellatorMesh(rc, trc)->getExtent();
-//  if (extent == NULL) {
-//    return false;
-//  }
+  const Extent* extent = getTessellatorMesh(rc, trc)->getExtent();
+  if (extent == NULL) {
+    return false;
+  }
 
-  const Extent* extent = getTileExtent(rc);
+//  const Extent* extent = getTileExtent(rc);
+
   return extent->touches( rc->getCurrentCamera()->getFrustumInModelCoordinates() );
   //return extent->touches( rc->getCurrentCamera()->getHalfFrustuminModelCoordinates() );
 }

@@ -51,6 +51,7 @@
 #include "IBufferDownloadListener.hpp"
 #include "BilParser.hpp"
 #include "ShortBufferBuilder.hpp"
+#include "Interpolator.hpp"
 
 #include "G3MWidget.hpp"
 
@@ -202,11 +203,14 @@ public:
   ShapesRenderer* shapesRenderer = [self createShapesRenderer];
   builder.addRenderer(shapesRenderer);
 
+
   GEORenderer* geoRenderer = [self createGEORenderer];
   builder.addRenderer(geoRenderer);
 
   MeshRenderer* meshRenderer = new MeshRenderer();
   builder.addRenderer( meshRenderer );
+
+//  [self createInterpolationTest: meshRenderer];
 
   //meshRenderer->addMesh([self createPointsMesh: builder.getPlanet() ]);
 
@@ -230,6 +234,90 @@ public:
   // initialization
   builder.initializeWidget();
 }
+
+- (void)createInterpolationTest: (MeshRenderer*) meshRenderer
+{
+
+  const Planet* planet = Planet::createEarth();
+
+  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
+                                          planet,
+                                          Geodetic2D::zero());
+  FloatBufferBuilderFromColor colors;
+
+
+//  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::firstVertex(),
+//                                             Vector3D::zero());
+//  FloatBufferBuilderFromColor colors;
+
+  const Sector sector = Sector::fromDegrees(-34, -58,
+                                            -32, -57);
+
+  const double a = 2;
+//  const double valueSW = 45000 * a;
+//  const double valueSE = 45000 * a;
+//  const double valueNE = 45000 * a;
+//  const double valueNW = 45000 * a;
+  const double valueSW = 10000 * a;
+  const double valueSE = 20000 * a;
+  const double valueNE = 5000 * a;
+  const double valueNW = 45000 * a;
+  const double minHeight = valueNE;
+  const double maxHeight = valueNW;
+  const double deltaHeight = maxHeight - minHeight;
+
+
+  vertices.add(sector.getSW(), valueSW);  colors.add(1, 0, 0, 1);
+  vertices.add(sector.getSE(), valueSE);  colors.add(1, 0, 0, 1);
+  vertices.add(sector.getNE(), valueNE);  colors.add(1, 0, 0, 1);
+  vertices.add(sector.getNW(), valueNW);  colors.add(1, 0, 0, 1);
+
+  for (double lat = sector.lower().latitude().degrees();
+       lat <= sector.upper().latitude().degrees();
+       lat += 0.025) {
+    for (double lon = sector.lower().longitude().degrees();
+         lon <= sector.upper().longitude().degrees();
+         lon += 0.025) {
+
+      const Geodetic2D position(Angle::fromDegrees(lat),
+                                Angle::fromDegrees(lon));
+
+      const double height = Interpolator::interpolateHeight(sector.lower(),
+                                                            sector.upper(),
+                                                            valueSW,
+                                                            valueSE,
+                                                            valueNE,
+                                                            valueNW,
+                                                            position);
+
+      const float alpha = (deltaHeight == 0) ? 1 : (float) ((height - minHeight) / deltaHeight);
+
+      vertices.add(position, height);
+
+      colors.add(alpha, alpha, alpha, 1);
+    }
+  }
+
+
+  const float lineWidth = 2;
+  const float pointSize = 3;
+  Color* flatColor = NULL;
+  Mesh* mesh = new DirectMesh(GLPrimitive::points(),
+                              //GLPrimitive::lineStrip(),
+                              true,
+                              vertices.getCenter(),
+                              vertices.create(),
+                              lineWidth,
+                              pointSize,
+                              flatColor,
+                              colors.create());
+
+  meshRenderer->addMesh( mesh );
+
+
+  delete planet;
+}
+
 
 - (Mesh*) createPointsMesh: (const Planet*)planet
 {
@@ -464,7 +552,7 @@ public:
 
 - (TilesRenderParameters*) createTileRenderParameters
 {
-  const bool renderDebug = true;
+  const bool renderDebug = false;
   const bool useTilesSplitBudget = true;
   const bool forceTopLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
@@ -846,6 +934,7 @@ public:
 //                               new TestElevationDataListener(),
 //                               true);
 
+      /*
       context->getDownloader()->requestBuffer(//URL("file:///sample_bil16_150x150.bil", false),
                                               //URL("file:///409_554.bil", false),
                                               //URL("file:///full-earth-512x512.bil", false),
@@ -854,6 +943,7 @@ public:
                                               TimeInterval::fromDays(30),
                                               new Bil16Parser_IBufferDownloadListener(_shapesRenderer),
                                               true);
+       */
 
 //      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D(//Angle::fromDegreesMinutes(37, 47),
 //                                                                //Angle::fromDegreesMinutes(-122, 25),
