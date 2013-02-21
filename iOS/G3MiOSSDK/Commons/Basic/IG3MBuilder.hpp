@@ -66,6 +66,8 @@ private:
 
   void pvtSetInitializationTask(GInitializationTask* initializationTask,
                                 const bool autoDeleteInitializationTask);
+  
+  bool containsTileRenderer(std::vector<Renderer*> renderers);
 
 protected:
   IStorage* _storage;

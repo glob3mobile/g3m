@@ -36,7 +36,7 @@ public class G3MBuilder_WebGL
 
 
    @Override
-   protected IThreadUtils createThreadUtils() {
+   protected IThreadUtils createDefaultThreadUtils() {
       final int delayMillis = 10;
       final IThreadUtils threadUtils = new ThreadUtils_WebGL(delayMillis);
 
@@ -45,14 +45,14 @@ public class G3MBuilder_WebGL
 
 
    @Override
-   protected IStorage createStorage() {
+   protected IStorage createDefaultStorage() {
       // TODO To be implemented when Storage_WebGL is implemented.
       return null;
    }
 
 
    @Override
-   protected IDownloader createDownloader() {
+   protected IDownloader createDefaultDownloader() {
       final int delayMillis = 10;
       final IDownloader downloader = new Downloader_WebGL(8, delayMillis, "");
 
