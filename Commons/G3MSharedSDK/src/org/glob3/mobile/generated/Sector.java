@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  Sector.h
+//  Sector.hpp
 //  G3MiOSSDK
 //
 //  Created by Agustín Trujillo Pino on 12/06/12.
