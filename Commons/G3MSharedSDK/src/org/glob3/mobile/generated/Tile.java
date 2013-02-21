@@ -123,12 +123,14 @@ public class Tile
   //      return false;
   //    }
   
-  //  const Extent* extent = getTessellatorMesh(rc, trc)->getExtent();
-  //  if (extent == NULL) {
-  //    return false;
-  //  }
+    final Extent extent = getTessellatorMesh(rc, trc).getExtent();
+    if (extent == null)
+    {
+      return false;
+    }
   
-    final Extent extent = getTileExtent(rc);
+  //  const Extent* extent = getTileExtent(rc);
+  
     return extent.touches(rc.getCurrentCamera().getFrustumInModelCoordinates());
     //return extent->touches( rc->getCurrentCamera()->getHalfFrustuminModelCoordinates() );
   }
