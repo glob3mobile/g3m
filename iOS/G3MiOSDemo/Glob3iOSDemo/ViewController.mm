@@ -557,14 +557,14 @@ public:
   const bool forceTopLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
 
-  /*return TilesRenderParameters::createDefault(renderDebug,
+  return TilesRenderParameters::createDefault(renderDebug,
                                               useTilesSplitBudget,
                                               forceTopLevelTilesRenderOnStart,
-                                              incrementalTileQuality);*/
-  return TilesRenderParameters::createSingleSector(renderDebug,
-                                                   useTilesSplitBudget,
-                                                   forceTopLevelTilesRenderOnStart,
-                                                   incrementalTileQuality);
+                                              incrementalTileQuality);
+//  return TilesRenderParameters::createSingleSector(renderDebug,
+//                                                   useTilesSplitBudget,
+//                                                   forceTopLevelTilesRenderOnStart,
+//                                                   incrementalTileQuality);
 }
 
 - (TileRenderer*) createTileRenderer: (TilesRenderParameters*) parameters
