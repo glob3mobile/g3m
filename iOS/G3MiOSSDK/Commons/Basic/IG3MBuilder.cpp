@@ -277,7 +277,7 @@ WidgetUserData* IG3MBuilder::getUserData() {
 /**
  * Sets the _gl.
  *
- * @param gl: cannot be NULL.
+ * @param gl - cannot be NULL.
  */
 void IG3MBuilder::setGL(GL *gl) {
   if (_gl) {
@@ -294,7 +294,7 @@ void IG3MBuilder::setGL(GL *gl) {
 /**
  * Sets the _storage.
  *
- * @param gl
+ * @param storage
  */
 void IG3MBuilder::setStorage(IStorage *storage) {
   if (_storage) {
@@ -307,7 +307,7 @@ void IG3MBuilder::setStorage(IStorage *storage) {
 /**
  * Sets the _downloader
  *
- * @param downloader: cannot be NULL.
+ * @param downloader - cannot be NULL.
  */
 void IG3MBuilder::setDownloader(IDownloader *downloader) {
   if (_downloader) {
@@ -324,7 +324,7 @@ void IG3MBuilder::setDownloader(IDownloader *downloader) {
 /**
  * Sets the _threadUtils
  *
- * @param threadUtils: cannot be NULL.
+ * @param threadUtils - cannot be NULL.
  */
 void IG3MBuilder::setThreadUtils(IThreadUtils *threadUtils) {
   if (_threadUtils) {
@@ -341,7 +341,7 @@ void IG3MBuilder::setThreadUtils(IThreadUtils *threadUtils) {
 /**
  * Sets the _planet
  *
- * @param planet: cannot be NULL.
+ * @param planet - cannot be NULL.
  */
 void IG3MBuilder::setPlanet(const Planet *planet) {
   if (_planet) {
@@ -360,7 +360,7 @@ void IG3MBuilder::setPlanet(const Planet *planet) {
  * The camera constraint list will be initializated with a default constraints set.
  * @see IG3MBuilder#createDefaultCameraConstraints()
  *
- * @param cameraConstraint: cannot be NULL.
+ * @param cameraConstraint - cannot be NULL.
  */
 void IG3MBuilder::addCameraConstraint(ICameraConstrainer* cameraConstraint) {
   if (!cameraConstraint) {
@@ -374,7 +374,7 @@ void IG3MBuilder::addCameraConstraint(ICameraConstrainer* cameraConstraint) {
  * Sets the camera constraints list, ignoring the default camera constraints list 
  * and the camera constraints previously added, if added.
  *
- * @param cameraConstraints: std::vector<ICameraConstrainer*>
+ * @param cameraConstraints - std::vector<ICameraConstrainer*>
  */
 void IG3MBuilder::setCameraConstrainsts(std::vector<ICameraConstrainer*> cameraConstraints) {
   if (_cameraConstraints) {
@@ -394,7 +394,7 @@ void IG3MBuilder::setCameraConstrainsts(std::vector<ICameraConstrainer*> cameraC
 /**
  * Sets the _cameraRenderer
  *
- * @param planet: cannot be NULL.
+ * @param cameraRenderer - cannot be NULL.
  */
 void IG3MBuilder::setCameraRenderer(CameraRenderer *cameraRenderer) {
   if (_cameraRenderer) {
@@ -411,7 +411,7 @@ void IG3MBuilder::setCameraRenderer(CameraRenderer *cameraRenderer) {
 /**
  * Sets the _backgroundColor
  *
- * @param backgroundColor: cannot be NULL.
+ * @param backgroundColor - cannot be NULL.
  */
 void IG3MBuilder::setBackgroundColor(Color* backgroundColor) {
   if (_backgroundColor) {
@@ -428,7 +428,7 @@ void IG3MBuilder::setBackgroundColor(Color* backgroundColor) {
 /**
  * Sets the _busyRenderer
  *
- * @param busyRenderer: cannot be NULL.
+ * @param busyRenderer - cannot be NULL.
  */
 void IG3MBuilder::setBusyRenderer(Renderer *busyRenderer) {
   if (_busyRenderer) {
@@ -446,7 +446,7 @@ void IG3MBuilder::setBusyRenderer(Renderer *busyRenderer) {
  * Adds a new renderer to the renderers list.
  * The renderers list will be initializated with a default renderers set (empty set at the moment).
  *
- * @param renderer: cannot be either NULL or an instance of TileRenderer
+ * @param renderer - cannot be either NULL or an instance of TileRenderer
  */
 void IG3MBuilder::addRenderer(Renderer *renderer) {
   if (!renderer) {
@@ -465,7 +465,7 @@ void IG3MBuilder::addRenderer(Renderer *renderer) {
  * previously added, if added.
  * The renderers list must contain at least an instance of the TileRenderer class.
  *
- * @param renderers: std::vector<Renderer*>
+ * @param renderers - std::vector<Renderer*>
  */
 void IG3MBuilder::setRenderers(std::vector<Renderer*> renderers) {
   if (!containsTileRenderer(renderers)) {
@@ -504,7 +504,7 @@ void IG3MBuilder::pvtSetInitializationTask(GInitializationTask *initializationTa
  * Adds a new periodical task to the periodical tasks list.
  * The periodical tasks list will be initializated with a default periodical task set (empty set at the moment).
  *
- * @param renderer: cannot be either NULL or an instance of TileRenderer
+ * @param periodicalTasks - cannot be NULL
  */
 void IG3MBuilder::addPeriodicalTask(PeriodicalTask* periodicalTask) {
   if (!periodicalTask) {
@@ -518,7 +518,7 @@ void IG3MBuilder::addPeriodicalTask(PeriodicalTask* periodicalTask) {
  * Sets the periodical tasks list, ignoring the default periodical tasks list and the
  * periodical tasks previously added, if added.
  *
- * @param periodicalTasks: std::vector<PeriodicalTask*>
+ * @param periodicalTasks - std::vector<PeriodicalTask*>
  */
 void IG3MBuilder::setPeriodicalTasks(std::vector<PeriodicalTask*> periodicalTasks) {
   if (_periodicalTasks) {
@@ -556,7 +556,7 @@ void IG3MBuilder::setLogDownloaderStatistics(const bool logDownloaderStatistics)
 /**
  * Sets the _userData
  *
- * @param userData: cannot be NULL.
+ * @param userData - cannot be NULL.
  */
 void IG3MBuilder::setUserData(WidgetUserData *userData) {
   if (_userData) {
@@ -661,7 +661,7 @@ CameraRenderer* IG3MBuilder::createDefaultCameraRenderer() {
  * Returns TRUE if the given renderer list contains, at least, an instance of 
  * the TileRenderer class. Returns FALSE if not.
  *
- * @return trContained: bool
+ * @return bool
  */
 bool IG3MBuilder::containsTileRenderer(std::vector<Renderer*> renderers) {
   for (unsigned int i = 0; i < renderers.size(); i++) {
