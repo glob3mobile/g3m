@@ -23,9 +23,7 @@ public:
                             double valueSE,
                             double valueNE,
                             double valueNW,
-                            const Angle& latitude,
-                            const Angle& longitude);
-
+                            const Geodetic2D& position);
 
   static double interpolate(const Geodetic2D& sw,
                             const Geodetic2D& ne,
@@ -33,7 +31,17 @@ public:
                             double valueSE,
                             double valueNE,
                             double valueNW,
-                            const Geodetic2D& position);
+                            const Angle& latitude,
+                            const Angle& longitude);
+
+  static double interpolate(const Geodetic2D& sw,
+                            const Geodetic2D& ne,
+                            double valueSW,
+                            double valueSE,
+                            double valueNE,
+                            double valueNW,
+                            double u,
+                            double v);
 
 };
 
