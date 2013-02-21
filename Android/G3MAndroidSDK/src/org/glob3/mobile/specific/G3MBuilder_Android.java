@@ -36,19 +36,19 @@ public class G3MBuilder_Android
 
 
    @Override
-   protected IThreadUtils createThreadUtils() {
+   protected IThreadUtils createDefaultThreadUtils() {
       return new ThreadUtils_Android(_nativeWidget);
    }
 
 
    @Override
-   protected IStorage createStorage() {
+   protected IStorage createDefaultStorage() {
       return new SQLiteStorage_Android("g3m.cache", _nativeWidget.getContext());
    }
 
 
    @Override
-   protected IDownloader createDownloader() {
+   protected IDownloader createDefaultDownloader() {
       final TimeInterval connectTimeout = TimeInterval.fromSeconds(10);
       final TimeInterval readTimeout = TimeInterval.fromSeconds(15);
       final boolean saveInBackground = true;

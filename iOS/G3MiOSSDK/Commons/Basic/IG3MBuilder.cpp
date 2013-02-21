@@ -506,10 +506,6 @@ void IG3MBuilder::addPeriodicalTask(PeriodicalTask* periodicalTask) {
     ILogger::instance()->logError("LOGIC ERROR: trying to add a NULL periodicalTask object");
     return;
   }
-  if (!periodicalTask) {
-    ILogger::instance()->logError("LOGIC ERROR: periodicalTask cannot be NULL");
-    return;
-  }
   getPeriodicalTasks()->push_back(periodicalTask);
 }
 
