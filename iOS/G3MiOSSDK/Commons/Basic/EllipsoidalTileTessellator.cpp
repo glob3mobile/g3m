@@ -221,7 +221,7 @@ IFloatBuffer* EllipsoidalTileTessellator::createUnitTextCoords(const Tile* tile)
     }
 
     // south side
-    for (int i = 0; i < resolution._x; i++) {
+    for (int i = 0; i < resolution._x-1; i++) {
       const int pos = (resolution._y-1) * resolution._x + i;
       //textCoords.add( u[pos], v[pos] );
       textCoords->rawPut(textCoordsIndex++, u[pos]);
@@ -230,7 +230,7 @@ IFloatBuffer* EllipsoidalTileTessellator::createUnitTextCoords(const Tile* tile)
 
     // east side
     for (int j = resolution._y-1; j > 0; j--) {
-      const int pos = j*resolution._x + resolution._y-1;
+      const int pos = j*resolution._x + resolution._x-1;
       //textCoords.add( u[pos], v[pos] );
       textCoords->rawPut(textCoordsIndex++, u[pos]);
       textCoords->rawPut(textCoordsIndex++, v[pos]);
