@@ -51,6 +51,9 @@ public class TileRendererBuilder
     return new EllipsoidalTileTessellator(_parameters._tileMeshResolution, true);
   }
 
+
+  ///#include "WMSBillElevationDataProvider.hpp"
+  
   public TileRendererBuilder()
   {
     _showStatistics = false;
@@ -70,8 +73,15 @@ public class TileRendererBuilder
   public final TileRenderer create()
   {
     int __TODO_make_inflator_configurable;
-  //  ElevationDataProvider* elevationDataProvider = new WMSBillElevationDataProvider();
     ElevationDataProvider elevationDataProvider = null;
+  
+  //  ElevationDataProvider* elevationDataProvider = new WMSBillElevationDataProvider();
+  
+  //  ElevationDataProvider* elevationDataProvider;
+  //  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
+  //                                                              Sector::fullSphere(),
+  //                                                              Vector2I(2048, 1024));
+  
     TileRenderer tileRenderer = new TileRenderer(_tileTessellator, elevationDataProvider, _texturizer, _layerSet, _parameters, _showStatistics);
   
     for (int i = 0; i < _visibleSectorListeners.size(); i++)

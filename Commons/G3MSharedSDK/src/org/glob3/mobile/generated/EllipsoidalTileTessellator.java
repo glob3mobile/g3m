@@ -98,7 +98,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
       {
         final double u = (double) i / (resolution._x-1);
   
-        float height = 0F;
+        double height = 0;
         if (elevationData != null)
         {
           height = elevationData.getElevationAt(j, i) * verticalExaggeration;

@@ -267,6 +267,14 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 
   public final boolean isReadyToRender(G3MRenderContext rc)
   {
+    if (_elevationDataProvider != null)
+    {
+      if (!_elevationDataProvider.isReadyToRender(rc))
+      {
+        return false;
+      }
+    }
+  
     if (_topTilesJustCreated)
     {
       _topTilesJustCreated = false;

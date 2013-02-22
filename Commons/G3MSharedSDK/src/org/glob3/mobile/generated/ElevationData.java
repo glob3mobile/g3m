@@ -16,82 +16,67 @@ package org.glob3.mobile.generated;
 //
 
 
-//class IFloatBuffer;
 //class Vector2I;
 
 
-public class ElevationData
+public abstract class ElevationData
 {
-  private IFloatBuffer _buffer;
-  private final int _width;
-  private final int _height;
-  private final Sector _sector ;
+  protected final Sector _sector ;
+  protected final int _width;
+  protected final int _height;
 
-  public ElevationData(Sector sector, Vector2I resolution, IFloatBuffer buffer)
+  protected final double _stepInLongitudeRadians;
+  protected final double _stepInLatitudeRadians;
+
+  public ElevationData(Sector sector, Vector2I resolution)
+  
   {
      _sector = new Sector(sector);
      _width = resolution._x;
      _height = resolution._y;
-     _buffer = buffer;
-    if (_buffer.size() != (_width * _height))
-    {
-      ILogger.instance().logError("Invalid buffer size");
-    }
+     _stepInLongitudeRadians = sector.getDeltaLongitude().radians() / resolution._x;
+     _stepInLatitudeRadians = sector.getDeltaLatitude().radians() / resolution._y;
   }
 
   public void dispose()
   {
-    if (_buffer != null)
-       _buffer.dispose();
   }
 
-  public float getElevationAt(int x, int y)
-  {
-    //return _buffer->get( (x * _width) + y );
-    //return _buffer->get( (x * _height) + y );
-  
-    //        const double height = elevationData->getElevationAt(x, extent._y-1-y);
-  
-  //  const int a = (_height-1-(y+_margin)) * _width;
-  //  const int a1 = _height-1-(y+_margin);
-  
-  //  const int index = ((_height-1-(y+_margin)) * _width) + (x+_margin);
-    final int index = ((_height-1-y) * _width) + x;
-    if ((index < 0) || (index >= _buffer.size()))
-    {
-      System.out.print("break point on me\n");
-    }
-    return _buffer.get(index);
-  }
 
+  //double ElevationData::getElevationAt(int x, int y) const {
+  //  //return _buffer->get( (x * _width) + y );
+  //  //return _buffer->get( (x * _height) + y );
+  //
+  //  //        const double height = elevationData->getElevationAt(x, extent._y-1-y);
+  //
+  ////  const int a = (_height-1-(y+_margin)) * _width;
+  ////  const int a1 = _height-1-(y+_margin);
+  //
+  ////  const int index = ((_height-1-(y+_margin)) * _width) + (x+_margin);
+  //  const int index = ((_height-1-y) * _width) + x;
+  //  if ((index < 0) ||
+  //      (index >= _buffer->size())) {
+  //    printf("break point on me\n");
+  //  }
+  //  return _buffer->get( index );
+  //}
+  
   public Vector2I getExtent()
   {
     return new Vector2I(_width, _height);
   }
 
-  public String description()
+  public abstract double getElevationAt(int x, int y);
+
+
+  public abstract double getElevationAt(Angle latitude, Angle longitude, int type);
+
+  public double getElevationAt(Geodetic2D position)
   {
-    IStringBuilder isb = IStringBuilder.newStringBuilder();
-    isb.addString("(ElevationData extent=");
-    isb.addInt(_width);
-    isb.addString("x");
-    isb.addInt(_height);
-    isb.addString("\n");
-    for (int row = 0; row < _width; row++)
-    {
-      //isb->addString("   ");
-      for (int col = 0; col < _height; col++)
-      {
-        isb.addFloat(getElevationAt(col, row));
-        isb.addString(",");
-      }
-      isb.addString("\n");
-    }
-    isb.addString(")");
-    final String s = isb.getString();
-    if (isb != null)
-       isb.dispose();
-    return s;
+    int type;
+    return getElevationAt(position.latitude(), position.longitude(), type);
   }
+
+  public abstract String description(boolean detailed);
 
 }

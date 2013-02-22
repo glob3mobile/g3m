@@ -29,6 +29,11 @@ public class WMSBillElevationDataProvider extends ElevationDataProvider
 
   }
 
+  public final boolean isReadyToRender(G3MRenderContext rc)
+  {
+    return true;
+  }
+
   public final void initialize(G3MContext context)
   {
     _downloader = context.getDownloader();

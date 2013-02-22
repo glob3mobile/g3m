@@ -32,7 +32,7 @@ public class BilParser
   {
   
     final int size = extent._x * extent._y;
-  //  const int size = (extent._x + margin) * (extent._y + margin);
+    //  const int size = (extent._x + margin) * (extent._y + margin);
   
     final int expectedSizeInBytes = size * 2;
     if (buffer.size() != expectedSizeInBytes)
@@ -65,7 +65,7 @@ public class BilParser
       floatBuffer.rawPut(i, (float) height);
     }
   
-    return new ElevationData(sector, extent, floatBuffer);
+    return new FloatBufferElevationData(sector, extent, floatBuffer);
   }
 
 }
