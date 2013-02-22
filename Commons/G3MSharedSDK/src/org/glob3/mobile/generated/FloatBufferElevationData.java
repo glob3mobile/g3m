@@ -85,15 +85,16 @@ public class FloatBufferElevationData extends ElevationData
       return -5000;
     }
   
-  //  const double dX = (longitude.radians() - _sector.lower().longitude().radians()) / _stepInLongitudeRadians;
-  //  const double dY = (latitude.radians()  - _sector.lower().latitude().radians()) / _stepInLatitudeRadians;
-  
     final Vector2D uv = _sector.getUVCoordinates(latitude, longitude);
     final double dX = uv._x * _width;
     final double dY = (1.0 - uv._y) * _height;
   
     final int x = (int) dX;
     final int y = (int) dY;
+    final int nextX = (int)(dX + 1.0);
+    final int nextY = (int)(dY + 1.0);
+    final double alphaY = dY - y;
+    final double alphaX = dX - x;
   
     double result;
     if (x == dX)
@@ -107,11 +108,8 @@ public class FloatBufferElevationData extends ElevationData
       else
       {
         // linear on Y
-        final int nextY = (int)(dY + 1.0);
-  
         final double heightY = getElevationAt(x, y);
         final double heightNextY = getElevationAt(x, nextY);
-        final double alphaY = dY - y;
         type = 2;
         result = mu.lerp(heightY, heightNextY, alphaY);
       }
@@ -121,31 +119,21 @@ public class FloatBufferElevationData extends ElevationData
       if (y == dY)
       {
         // linear on X
-        final int nextX = (int)(dX + 1.0);
         final double heightX = getElevationAt(x, y);
         final double heightNextX = getElevationAt(nextX, y);
-        final double alphaX = dX - x;
         type = 3;
         result = mu.lerp(heightX, heightNextX, alphaX);
       }
       else
       {
         // bilinear
-        int _WORKING;
-        final int nextX = (int)(dX + 1.0);
-        final int nextY = (int)(dY + 1.0);
-  
         final double valueSW = getElevationAt(x, y);
         final double valueSE = getElevationAt(nextX, y);
         final double valueNE = getElevationAt(nextX, nextY);
         final double valueNW = getElevationAt(x, nextY);
   
-        final double alphaY = dY - y;
-        final double alphaX = dX - x;
-  
         type = 4;
         result = getInterpolator().interpolate(valueSW, valueSE, valueNE, valueNW, alphaY, alphaX);
-  //      return 0;
       }
     }
   
