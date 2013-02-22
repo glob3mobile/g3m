@@ -23,7 +23,6 @@ _bilUrl(bilUrl),
 _sector(sector),
 _resolutionWidth(resolution._x),
 _resolutionHeight(resolution._y),
-_downloader(NULL),
 _elevationData(NULL),
 _elevationDataResolved(false)
 {

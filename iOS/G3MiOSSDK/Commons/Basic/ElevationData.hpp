@@ -40,7 +40,7 @@ public:
                                 int* type) const = 0;
 
   virtual double getElevationAt(const Geodetic2D& position) const {
-    int type;
+    int type = 0;
     return getElevationAt(position.latitude(), position.longitude(), &type);
   }
 

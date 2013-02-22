@@ -14,16 +14,18 @@
 #include "URL.hpp"
 #include "Sector.hpp"
 #include <stddef.h>
-class IDownloader;
 class Vector2I;
 
 class SingleBillElevationDataProvider : public ElevationDataProvider {
 private:
-  IDownloader* _downloader;
-
   ElevationData* _elevationData;
   bool _elevationDataResolved;
+#ifdef C_CODE
   const URL _bilUrl;
+#endif
+#ifdef JAVA_CODE
+  private final URL _bilUrl;
+#endif
   const Sector _sector;
   const int _resolutionWidth;
   const int _resolutionHeight;

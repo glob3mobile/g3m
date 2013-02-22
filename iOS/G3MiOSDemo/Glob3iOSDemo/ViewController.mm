@@ -845,7 +845,7 @@ public:
            lon += lonStep) {
         const Angle longitude(Angle::fromDegrees(lon));
 //        const double height = elevationData->getElevationAt(x, y);
-        int type;
+        int type = 0;
         const double height = rawElevationData->getElevationAt(latitude, longitude, &type);
 
         if (height < minHeight) { minHeight = height; }
