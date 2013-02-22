@@ -119,6 +119,7 @@ _lastVisibleSector(NULL)
 {
   _layerSet->setChangeListener(this);
 
+  int ___TODO_make_configurable;
   _verticalExaggeration = 20;
 }
 

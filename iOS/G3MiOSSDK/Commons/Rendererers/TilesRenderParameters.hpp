@@ -72,7 +72,7 @@ public:
     const int topLevel = 0;
     const int maxLevel = 17;
     const Vector2I tileTextureResolution(256, 256);
-    const Vector2I tileMeshResolution(10, 10);
+    const Vector2I tileMeshResolution(16, 16);
 
     return new TilesRenderParameters(Sector::fullSphere(),
                                      splitsByLatitude,

@@ -170,6 +170,7 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
 
   return new IndexedMesh(//debug ? GLPrimitive::lineStrip() : GLPrimitive::triangleStrip(),
                          GLPrimitive::triangleStrip(),
+                         //GLPrimitive::lineStrip(),
                          true,
                          vertices.getCenter(),
                          vertices.create(),

@@ -394,7 +394,7 @@ public:
 {
   LayerSet* layerSet = new LayerSet();
 
-  const bool blueMarble = false;
+  const bool blueMarble = true;
   if (blueMarble) {
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
                                         URL("http://www.nasa.network.com/wms?", false),
@@ -404,25 +404,26 @@ public:
                                         "EPSG:4326",
                                         "",
                                         false,
-                                        new LevelTileCondition(0, 6),
+                                        //new LevelTileCondition(0, 6),
+                                        NULL,
                                         TimeInterval::fromDays(30));
     layerSet->addLayer(blueMarble);
 
-    WMSLayer* i3Landsat = new WMSLayer("esat",
-                                       URL("http://data.worldwind.arc.nasa.gov/wms?", false),
-                                       WMS_1_1_0,
-                                       Sector::fullSphere(),
-                                       "image/jpeg",
-                                       "EPSG:4326",
-                                       "",
-                                       false,
-                                       new LevelTileCondition(7, 100),
-                                       TimeInterval::fromDays(30));
-    layerSet->addLayer(i3Landsat);
+//    WMSLayer* i3Landsat = new WMSLayer("esat",
+//                                       URL("http://data.worldwind.arc.nasa.gov/wms?", false),
+//                                       WMS_1_1_0,
+//                                       Sector::fullSphere(),
+//                                       "image/jpeg",
+//                                       "EPSG:4326",
+//                                       "",
+//                                       false,
+//                                       new LevelTileCondition(7, 100),
+//                                       TimeInterval::fromDays(30));
+//    layerSet->addLayer(i3Landsat);
   }
 
 
-  bool useBing = true;
+  bool useBing = false;
   if (useBing) {
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
                                         URL("http://www.nasa.network.com/wms?", false),

@@ -22,6 +22,7 @@
 		CF7A708815CFD0A50086FDE6 /* g3m-marker.png in Resources */ = {isa = PBXBuildFile; fileRef = CF7A708715CFD0A50086FDE6 /* g3m-marker.png */; };
 		CF883B841591053100AEE39C /* mark.png in Resources */ = {isa = PBXBuildFile; fileRef = CF883B831591053100AEE39C /* mark.png */; };
 		CF8EE55B16CE94E40033AB7A /* mercator_debug.png in Resources */ = {isa = PBXBuildFile; fileRef = CF8EE55A16CE94E40033AB7A /* mercator_debug.png */; };
+		CF91C53016D7C03C00E25C24 /* full-earth-4096x2048.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF91C52F16D7C03B00E25C24 /* full-earth-4096x2048.bil */; };
 		CFB5274B16D53906008374C2 /* full-earth-2048x1024.bil in Resources */ = {isa = PBXBuildFile; fileRef = CFB5274A16D53906008374C2 /* full-earth-2048x1024.bil */; };
 		CFCC53F316D50D8900671DC4 /* full-earth-512x512.bil in Resources */ = {isa = PBXBuildFile; fileRef = CFCC53F216D50D8900671DC4 /* full-earth-512x512.bil */; };
 		CFE3DBB1164B0E7D00910037 /* seymour-plane.json in Resources */ = {isa = PBXBuildFile; fileRef = CFE3DBB0164B0E7D00910037 /* seymour-plane.json */; };
@@ -96,6 +97,7 @@
 		CF7A708715CFD0A50086FDE6 /* g3m-marker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "g3m-marker.png"; sourceTree = "<group>"; };
 		CF883B831591053100AEE39C /* mark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mark.png; sourceTree = "<group>"; };
 		CF8EE55A16CE94E40033AB7A /* mercator_debug.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mercator_debug.png; sourceTree = "<group>"; };
+		CF91C52F16D7C03B00E25C24 /* full-earth-4096x2048.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "full-earth-4096x2048.bil"; sourceTree = "<group>"; };
 		CFB5274A16D53906008374C2 /* full-earth-2048x1024.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "full-earth-2048x1024.bil"; sourceTree = "<group>"; };
 		CFB5275216D579B7008374C2 /* Interpolator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Interpolator.hpp; path = ../G3MiOSSDK/Commons/Math/Interpolator.hpp; sourceTree = "<group>"; };
 		CFBA532E16B9B69A00256453 /* G3MWidget_iOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = G3MWidget_iOS.h; path = ../G3MiOSSDK/Specific/Widget/G3MWidget_iOS.h; sourceTree = "<group>"; };
@@ -630,6 +632,7 @@
 		D8EEF4271577B0D6003FEB5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CF91C52F16D7C03B00E25C24 /* full-earth-4096x2048.bil */,
 				CFB5274A16D53906008374C2 /* full-earth-2048x1024.bil */,
 				CFCC53F216D50D8900671DC4 /* full-earth-512x512.bil */,
 				CF04CCF916D3E4D5004DFACF /* 409_554.bil */,
@@ -768,6 +771,7 @@
 				CF04CCFA16D3E4D5004DFACF /* 409_554.bil in Resources */,
 				CFCC53F316D50D8900671DC4 /* full-earth-512x512.bil in Resources */,
 				CFB5274B16D53906008374C2 /* full-earth-2048x1024.bil in Resources */,
+				CF91C53016D7C03C00E25C24 /* full-earth-4096x2048.bil in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
