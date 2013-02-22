@@ -227,6 +227,12 @@ void TileRenderer::initialize(const G3MContext* context) {
 }
 
 bool TileRenderer::isReadyToRender(const G3MRenderContext *rc) {
+  if (_elevationDataProvider != NULL) {
+    if (!_elevationDataProvider->isReadyToRender(rc)) {
+      return false;
+    }
+  }
+
   if (_topTilesJustCreated) {
     _topTilesJustCreated = false;
 

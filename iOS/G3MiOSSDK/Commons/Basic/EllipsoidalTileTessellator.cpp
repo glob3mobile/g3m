@@ -82,7 +82,7 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
     for (int i = 0; i < resolution._x; i++) {
       const double u = (double) i / (resolution._x-1);
 
-      float height = 0;
+      double height = 0;
       if (elevationData != NULL) {
         height = elevationData->getElevationAt(j, i) * verticalExaggeration;
         if (height < minHeight) {

@@ -11,7 +11,8 @@
 #include "MultiLayerTileTexturizer.hpp"
 #include "EllipsoidalTileTessellator.hpp"
 #include "LayerBuilder.hpp"
-#include "WMSBillElevationDataProvider.hpp"
+//#include "WMSBillElevationDataProvider.hpp"
+#include "SingleBillElevationDataProvider.hpp"
 
 TileRendererBuilder::TileRendererBuilder() {
   _showStatistics = false;
@@ -31,8 +32,15 @@ TileRendererBuilder::~TileRendererBuilder() {
 
 TileRenderer* TileRendererBuilder::create() {
   int __TODO_make_inflator_configurable;
-//  ElevationDataProvider* elevationDataProvider = new WMSBillElevationDataProvider();
   ElevationDataProvider* elevationDataProvider = NULL;
+
+//  ElevationDataProvider* elevationDataProvider = new WMSBillElevationDataProvider();
+
+//  ElevationDataProvider* elevationDataProvider;
+//  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
+//                                                              Sector::fullSphere(),
+//                                                              Vector2I(2048, 1024));
+
   TileRenderer* tileRenderer = new TileRenderer(_tileTessellator,
                                                 elevationDataProvider,
                                                 _texturizer,

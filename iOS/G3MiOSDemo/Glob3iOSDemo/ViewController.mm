@@ -51,7 +51,8 @@
 #include "IBufferDownloadListener.hpp"
 #include "BilParser.hpp"
 #include "ShortBufferBuilder.hpp"
-#include "Interpolator.hpp"
+#include "BilinearInterpolator.hpp"
+#include "SubviewElevationData.hpp"
 
 #include "G3MWidget.hpp"
 
@@ -210,7 +211,7 @@ public:
   MeshRenderer* meshRenderer = new MeshRenderer();
   builder.addRenderer( meshRenderer );
 
-  [self createInterpolationTest: meshRenderer];
+//  [self createInterpolationTest: meshRenderer];
 
   //meshRenderer->addMesh([self createPointsMesh: builder.getPlanet() ]);
 
@@ -239,6 +240,8 @@ public:
 {
 
   const Planet* planet = Planet::createEarth();
+
+  Interpolator* interpolator = new BilinearInterpolator();
 
   FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
                                           planet,
@@ -275,24 +278,27 @@ public:
   for (double lat = sector.lower().latitude().degrees();
        lat <= sector.upper().latitude().degrees();
        lat += 0.025) {
+    const Angle latitude(Angle::fromDegrees(lat));
     for (double lon = sector.lower().longitude().degrees();
          lon <= sector.upper().longitude().degrees();
          lon += 0.025) {
 
-      const Geodetic2D position(Angle::fromDegrees(lat),
-                                Angle::fromDegrees(lon));
+      const Angle longitude(Angle::fromDegrees(lon));
+//      const Geodetic2D position(latitude,
+//                                longitude);
 
-      const double height = Interpolator::interpolate(sector.lower(),
+      const double height = interpolator->interpolate(sector.lower(),
                                                       sector.upper(),
                                                       heightSW,
                                                       heightSE,
                                                       heightNE,
                                                       heightNW,
-                                                      position);
+                                                      latitude,
+                                                      longitude);
 
       const float alpha = (deltaHeight == 0) ? 1 : (float) ((height - minHeight) / deltaHeight);
 
-      vertices.add(position, height);
+      vertices.add(latitude, longitude, height);
 
       colors.add(alpha, alpha, alpha, 1);
     }
@@ -782,31 +788,71 @@ public:
                   IByteBuffer* buffer) {
 //    const Vector2I extent(150, 150);
 //    const Vector2I extent(512, 512);
-    const Vector2I extent(2048, 1024);
-    const ElevationData* elevationData = BilParser::parseBil16(Sector::fullSphere(),
-                                                               extent,
+    const Vector2I rawExtent(2048, 1024);
+    const ElevationData* rawElevationData = BilParser::parseBil16(Sector::fullSphere(),
+                                                               rawExtent,
                                                                buffer);
     delete buffer;
 
-    if (elevationData == NULL) {
+    if (rawElevationData == NULL) {
       return;
     }
 
+    //Sector (lat=28.125°, lon=-16.875°) - (lat=50.625°, lon=11.25°)
+//    const Sector targetSector(Sector::fromDegrees(28.125, -16.875, 50.625, 11.25));
+//    const Sector targetSector(Sector::fromDegrees(-45, -90, 45, 90));
+//    const Sector targetSector(Sector::fromDegrees(-90, -90, 0, 0));
+    const Sector targetSector(Sector::fromDegrees(-45, -90, 0, -45));
+
+//    const Vector2I extent(1024, 512);
+//    const ElevationData* elevationData = new SubviewElevationData(rawElevationData,
+//                                                                  true,
+//                                                                  targetSector,
+//                                                                  extent);
 
     ILogger::instance()->logInfo("Elevation data");
     //ILogger::instance()->logInfo("%s", elevationData->description().c_str());
 
-    double minHeight = elevationData->getElevationAt(0, 0);
+//    double minHeight = elevationData->getElevationAt(0, 0);
+//    double maxHeight = minHeight;
+//
+//    for (int x = 0; x < extent._x; x++) {
+//      for (int y = 0; y < extent._y; y++) {
+//        const double height = elevationData->getElevationAt(x, y);
+//
+//        if (height < minHeight) { minHeight = height; }
+//        if (height > maxHeight) { maxHeight = height; }
+//      }
+//    }
+
+    double minHeight = rawElevationData->getElevationAt(targetSector.lower());
     double maxHeight = minHeight;
 
-    for (int x = 0; x < extent._x; x++) {
-      for (int y = 0; y < extent._y; y++) {
-        const double height = elevationData->getElevationAt(x, y);
+//    const double latStep = 0.25;
+//    const double lonStep = 0.25;
+    const double latStep = (180.0 / 1024.0) / 4 * 3;
+    const double lonStep = (360.0 / 2048.0) / 4 * 3;
+
+    const Geodetic2D targetLower(targetSector.lower());
+    const Geodetic2D targetUpper(targetSector.upper());
+
+    for (double lat = targetLower.latitude().degrees();
+         lat < targetUpper.latitude().degrees();
+         lat += latStep) {
+      const Angle latitude(Angle::fromDegrees(lat));
+      for (double lon = targetLower.longitude().degrees();
+           lon < targetUpper.longitude().degrees();
+           lon += lonStep) {
+        const Angle longitude(Angle::fromDegrees(lon));
+//        const double height = elevationData->getElevationAt(x, y);
+        int type;
+        const double height = rawElevationData->getElevationAt(latitude, longitude, &type);
 
         if (height < minHeight) { minHeight = height; }
         if (height > maxHeight) { maxHeight = height; }
       }
     }
+
 
     const double deltaHeight = maxHeight - minHeight;
 
@@ -817,33 +863,70 @@ public:
                                                Vector3D::zero());
     FloatBufferBuilderFromColor colors;
 
-    for (int x = 0; x < extent._x; x++) {
-      for (int y = 0; y < extent._y; y++) {
-        const double height = elevationData->getElevationAt(x, y);
+//    for (int x = 0; x < extent._x; x++) {
+//      for (int y = 0; y < extent._y; y++) {
+//        const double height = elevationData->getElevationAt(x, y);
+//        const float alpha = (float) ((height - minHeight) / deltaHeight);
+//
+//        //vertices.add(x * 200.0, y * 200.0, 7500.0 * alpha);
+//        vertices.add(x * 250.0, y * 250.0, 15000.0 * height);
+//
+//        colors.add(alpha, alpha, alpha, 1);
+//      }
+//    }
+
+    for (double lat = targetLower.latitude().degrees();
+         lat < targetUpper.latitude().degrees();
+         lat += latStep) {
+      const Angle latitude(Angle::fromDegrees(lat));
+      for (double lon = targetLower.longitude().degrees();
+           lon < targetUpper.longitude().degrees();
+           lon += lonStep) {
+        const Angle longitude(Angle::fromDegrees(lon));
+        //        const double height = elevationData->getElevationAt(x, y);
+        int type = -1;
+        const double height = rawElevationData->getElevationAt(latitude, longitude, &type);
+
         const float alpha = (float) ((height - minHeight) / deltaHeight);
 
-        //vertices.add(x * 200.0, y * 200.0, 7500.0 * alpha);
-        vertices.add(x * 250.0, y * 250.0, 15000.0 * alpha);
+        float r = alpha;
+        float g = alpha;
+        float b = alpha;
+        if (type != 1) {
+          r = 1;
+        }
+        else {
+          g = 1;
+        }
+//        switch ( type ) {
+//          case 1:
+//            r = 1;
+//            break;
+//          case 2:
+//            g = 1;
+//            break;
+//          case 3:
+//            b = 1;
+//            break;
+//          case 4:
+//            r = 1;
+//            g = 1;
+//            break;
+//          default:
+//            break;
+//        }
 
-        colors.add(alpha, alpha, alpha, 1);
+
+
+        //vertices.add(x * 200.0, y * 200.0, 7500.0 * height);
+        vertices.add(lon * 2000.0, lat * 2000.0, height * 1.5);
+
+        colors.add(r, g, b, 1);
       }
     }
     
-//    ShortBufferBuilder indices;
-//    for (short j = 0; j < extent._y-1; j++) {
-//      const short jTimesResolution = (short) (j*extent._y);
-//      if (j > 0) {
-//        indices.add(jTimesResolution);
-//      }
-//      for (short i = 0; i < extent._x; i++) {
-//        indices.add((short) (jTimesResolution + i));
-//        indices.add((short) (jTimesResolution + i + extent._x));
-//      }
-//      indices.add((short) (jTimesResolution + 2*extent._x - 1));
-//    }
-
     const float lineWidth = 1;
-    const float pointSize = 2;
+    const float pointSize = 3;
     Color* flatColor = NULL;
     Mesh* bilMesh = new DirectMesh(GLPrimitive::points(),
                                    //GLPrimitive::lineStrip(),
@@ -854,24 +937,15 @@ public:
                                    pointSize,
                                    flatColor,
                                    colors.create());
-//    Mesh* bilMesh = new IndexedMesh(GLPrimitive::triangleStrip(),
-//                                    //GLPrimitive::lineStrip(),
-//                                    true,
-//                                    vertices.getCenter(),
-//                                    vertices.create(),
-//                                    indices.create(),
-//                                    lineWidth,
-//                                    pointSize,
-//                                    flatColor,
-//                                    colors.create());
 
     Geodetic3D* buenosAiresPosition = new Geodetic3D(Angle::fromDegreesMinutesSeconds(-34, 36, 13.44),
                                                      Angle::fromDegreesMinutesSeconds(-58, 22, 53.74),
-                                                     1000);
+                                                     1000 - minHeight);
 
     _shapesRenderer->addShape( new MeshShape(buenosAiresPosition, bilMesh) );
 
-    delete elevationData;
+    delete rawElevationData;
+//    delete elevationData;
   }
 
   void onError(const URL& url) {
@@ -934,7 +1008,7 @@ public:
 //                               new TestElevationDataListener(),
 //                               true);
 
-      /*
+      /**/
       context->getDownloader()->requestBuffer(//URL("file:///sample_bil16_150x150.bil", false),
                                               //URL("file:///409_554.bil", false),
                                               //URL("file:///full-earth-512x512.bil", false),
@@ -943,7 +1017,7 @@ public:
                                               TimeInterval::fromDays(30),
                                               new Bil16Parser_IBufferDownloadListener(_shapesRenderer),
                                               true);
-       */
+      /**/
 
 //      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D(//Angle::fromDegreesMinutes(37, 47),
 //                                                                //Angle::fromDegreesMinutes(-122, 25),

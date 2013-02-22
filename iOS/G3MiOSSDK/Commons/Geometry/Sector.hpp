@@ -109,10 +109,16 @@ public:
     return _upper.longitude();
   }
 
-  bool contains(const Geodetic2D& position) const;
+  
+  bool contains(const Angle& latitude,
+                const Angle& longitude) const;
+  
+  bool contains(const Geodetic2D& position) const {
+    return contains(position.latitude(), position.longitude());
+  }
 
   bool contains(const Geodetic3D& position) const {
-    return contains(position.asGeodetic2D());
+    return contains(position.latitude(), position.longitude());
   }
 
   bool touchesWith(const Sector& that) const;

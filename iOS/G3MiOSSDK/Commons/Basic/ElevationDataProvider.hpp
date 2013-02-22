@@ -13,6 +13,7 @@ class Sector;
 class Vector2I;
 class ElevationData;
 class G3MContext;
+class G3MRenderContext;
 
 class IElevationDataListener {
 public:
@@ -39,6 +40,8 @@ public:
   virtual ~ElevationDataProvider() {
 
   }
+
+  virtual bool isReadyToRender(const G3MRenderContext* rc) = 0;
 
   virtual void initialize(const G3MContext* context) = 0;
 

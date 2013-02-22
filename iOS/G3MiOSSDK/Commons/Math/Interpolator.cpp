@@ -48,28 +48,10 @@ double Interpolator::interpolate(const Geodetic2D& sw,
   const double u = (longitude.radians() - swLonRadians) / deltaLonRadians;
   const double v = (neLatRadians -  latitude.radians()) / deltaLatRadians;
 
-  return interpolate(sw,
-                     ne,
-                     valueSW,
+  return interpolate(valueSW,
                      valueSE,
                      valueNE,
                      valueNW,
                      u,
                      v);
-}
-
-double Interpolator::interpolate(const Geodetic2D& sw,
-                                 const Geodetic2D& ne,
-                                 double valueSW,
-                                 double valueSE,
-                                 double valueNE,
-                                 double valueNW,
-                                 double u,
-                                 double v) {
-  const double alphaSW = (1.0 - u) * v;
-  const double alphaSE = u         * v;
-  const double alphaNE = u         * (1.0 - v);
-  const double alphaNW = (1.0 - u) * (1.0 - v);
-
-  return (alphaSW * valueSW) + (alphaSE * valueSE) + (alphaNE * valueNE) + (alphaNW * valueNW);
 }

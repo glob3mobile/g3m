@@ -12,7 +12,7 @@
 #include "ByteBufferIterator.hpp"
 #include "IFloatBuffer.hpp"
 #include "IFactory.hpp"
-#include "ElevationData.hpp"
+#include "FloatBufferElevationData.hpp"
 
 
 ElevationData* BilParser::parseBil16(const Sector& sector,
@@ -20,7 +20,7 @@ ElevationData* BilParser::parseBil16(const Sector& sector,
                                      const IByteBuffer* buffer) {
 
   const int size = extent._x * extent._y;
-//  const int size = (extent._x + margin) * (extent._y + margin);
+  //  const int size = (extent._x + margin) * (extent._y + margin);
 
   const int expectedSizeInBytes = size * 2;
   if (buffer->size() != expectedSizeInBytes) {
@@ -50,7 +50,7 @@ ElevationData* BilParser::parseBil16(const Sector& sector,
     floatBuffer->rawPut(i, (float) height);
   }
 
-  return new ElevationData(sector,
-                           extent,
-                           floatBuffer);
+  return new FloatBufferElevationData(sector,
+                                      extent,
+                                      floatBuffer);
 }
