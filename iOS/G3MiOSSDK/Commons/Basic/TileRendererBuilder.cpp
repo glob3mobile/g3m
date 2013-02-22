@@ -32,14 +32,16 @@ TileRendererBuilder::~TileRendererBuilder() {
 
 TileRenderer* TileRendererBuilder::create() {
   int __TODO_make_inflator_configurable;
-  ElevationDataProvider* elevationDataProvider = NULL;
+  
+//  ElevationDataProvider* elevationDataProvider = NULL;
 
 //  ElevationDataProvider* elevationDataProvider = new WMSBillElevationDataProvider();
 
-//  ElevationDataProvider* elevationDataProvider;
-//  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
-//                                                              Sector::fullSphere(),
-//                                                              Vector2I(2048, 1024));
+  ElevationDataProvider* elevationDataProvider;
+  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
+                                                              Sector::fullSphere(),
+                                                              Vector2I(2048, 1024),
+                                                              0);
 
   TileRenderer* tileRenderer = new TileRenderer(_tileTessellator,
                                                 elevationDataProvider,

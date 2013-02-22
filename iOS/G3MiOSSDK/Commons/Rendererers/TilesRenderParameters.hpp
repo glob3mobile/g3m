@@ -67,8 +67,8 @@ public:
                                               const bool incrementalTileQuality) {
     const int K = 1;
     //const int _TODO_RESET_K_TO_1 = 0;
-    const int splitsByLatitude = 1 * K;
-    const int splitsByLongitude = 2 * K;
+    const int splitsByLatitude = 2 * K;
+    const int splitsByLongitude = 4 * K;
     const int topLevel = 0;
     const int maxLevel = 17;
     const Vector2I tileTextureResolution(256, 256);

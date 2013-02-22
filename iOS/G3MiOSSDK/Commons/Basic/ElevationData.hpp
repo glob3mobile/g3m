@@ -19,20 +19,23 @@ protected:
   const Sector _sector;
   const int _width;
   const int _height;
+  const double _noDataValue;
 
   const double _stepInLongitudeRadians;
   const double _stepInLatitudeRadians;
 
 public:
   ElevationData(const Sector& sector,
-                const Vector2I& resolution);
+                const Vector2I& resolution,
+                double noDataValue);
 
   virtual ~ElevationData() {
   }
 
   virtual Vector2I getExtent() const;
 
-  virtual double getElevationAt(int x, int y) const = 0;
+  virtual double getElevationAt(int x, int y,
+                                int* type) const = 0;
 
 
   virtual double getElevationAt(const Angle& latitude,

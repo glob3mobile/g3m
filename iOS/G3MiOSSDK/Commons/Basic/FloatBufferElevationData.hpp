@@ -23,11 +23,13 @@ private:
 public:
   FloatBufferElevationData(const Sector& sector,
                            const Vector2I& resolution,
+                           double noDataValue,
                            IFloatBuffer* buffer);
 
   virtual ~FloatBufferElevationData();
 
-  double getElevationAt(int x, int y) const;
+  double getElevationAt(int x, int y,
+                        int* type) const;
 
   double getElevationAt(const Angle& latitude,
                         const Angle& longitude,

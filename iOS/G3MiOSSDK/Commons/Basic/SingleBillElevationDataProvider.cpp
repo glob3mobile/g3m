@@ -18,11 +18,13 @@
 
 SingleBillElevationDataProvider::SingleBillElevationDataProvider(const URL& bilUrl,
                                                                  const Sector& sector,
-                                                                 const Vector2I& resolution) :
+                                                                 const Vector2I& resolution,
+                                                                 const double noDataValue) :
 _bilUrl(bilUrl),
 _sector(sector),
 _resolutionWidth(resolution._x),
 _resolutionHeight(resolution._y),
+_noDataValue(noDataValue),
 _elevationData(NULL),
 _elevationDataResolved(false)
 {
@@ -35,16 +37,19 @@ private:
   const Sector _sector;
   const int _resolutionWidth;
   const int _resolutionHeight;
+  const double _noDataValue;
 
 public:
   SingleBillElevationDataProvider_BufferDownloadListener(SingleBillElevationDataProvider* singleBillElevationDataProvider,
                                                          const Sector& sector,
                                                          int resolutionWidth,
-                                                         int resolutionHeight) :
+                                                         int resolutionHeight,
+                                                         double noDataValue) :
   _singleBillElevationDataProvider(singleBillElevationDataProvider),
   _sector(sector),
   _resolutionWidth(resolutionWidth),
-  _resolutionHeight(resolutionHeight)
+  _resolutionHeight(resolutionHeight),
+  _noDataValue(noDataValue)
   {
 
   }
@@ -52,7 +57,7 @@ public:
   void onDownload(const URL& url,
                   IByteBuffer* buffer) {
     const Vector2I resolution(_resolutionWidth, _resolutionHeight);
-    ElevationData* elevationData = BilParser::parseBil16(_sector, resolution, buffer);
+    ElevationData* elevationData = BilParser::parseBil16(_sector, resolution, _noDataValue, buffer);
     delete buffer;
 
     _singleBillElevationDataProvider->onElevationData(elevationData);
@@ -91,7 +96,8 @@ void SingleBillElevationDataProvider::initialize(const G3MContext* context) {
                                             new SingleBillElevationDataProvider_BufferDownloadListener(this,
                                                                                                        _sector,
                                                                                                        _resolutionWidth,
-                                                                                                       _resolutionHeight),
+                                                                                                       _resolutionHeight,
+                                                                                                       _noDataValue),
                                             true);
   }
 }
@@ -114,7 +120,8 @@ const long long SingleBillElevationDataProvider::requestElevationData(const Sect
     ElevationData *elevationData = new SubviewElevationData(_elevationData,
                                                             false,
                                                             sector,
-                                                            resolution);
+                                                            resolution,
+                                                            _noDataValue);
     listener->onData(sector,
                      resolution,
                      elevationData);

@@ -29,6 +29,7 @@ private:
   const Sector _sector;
   const int _resolutionWidth;
   const int _resolutionHeight;
+  const double _noDataValue;
 
   
   void drainQueue() {
@@ -51,7 +52,8 @@ private:
 public:
   SingleBillElevationDataProvider(const URL& bilUrl,
                                   const Sector& sector,
-                                  const Vector2I& resolution);
+                                  const Vector2I& resolution,
+                                  const double noDataValue);
   
   bool isReadyToRender(const G3MRenderContext* rc) {
     return (_elevationDataResolved);

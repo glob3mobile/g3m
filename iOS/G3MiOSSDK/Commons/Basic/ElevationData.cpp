@@ -11,10 +11,12 @@
 #include "Vector2I.hpp"
 
 ElevationData::ElevationData(const Sector& sector,
-                             const Vector2I& resolution) :
+                             const Vector2I& resolution,
+                             double noDataValue) :
 _sector(sector),
 _width(resolution._x),
 _height(resolution._y),
+_noDataValue(noDataValue),
 _stepInLongitudeRadians( sector.getDeltaLongitude().radians() / resolution._x ),
 _stepInLatitudeRadians( sector.getDeltaLatitude().radians() / resolution._y )
 

@@ -21,8 +21,9 @@ Interpolator* FloatBufferElevationData::getInterpolator() const {
 
 FloatBufferElevationData::FloatBufferElevationData(const Sector& sector,
                                                    const Vector2I& resolution,
+                                                   double noDataValue,
                                                    IFloatBuffer* buffer) :
-ElevationData(sector, resolution),
+ElevationData(sector, resolution, noDataValue),
 _buffer(buffer),
 _interpolator(NULL)
 {
@@ -37,7 +38,8 @@ FloatBufferElevationData::~FloatBufferElevationData() {
   delete _interpolator;
 }
 
-double FloatBufferElevationData::getElevationAt(int x, int y) const {
+double FloatBufferElevationData::getElevationAt(int x, int y,
+                                                int* type) const {
   //return _buffer->get( (x * _width) + y );
   //return _buffer->get( (x * _height) + y );
 
@@ -52,6 +54,7 @@ double FloatBufferElevationData::getElevationAt(int x, int y) const {
       (index >= _buffer->size())) {
     printf("break point on me\n");
   }
+  *type = 1;
   return _buffer->get( index );
 }
 
@@ -68,12 +71,12 @@ double FloatBufferElevationData::getElevationAt(const Angle& latitude,
                                   longitude.description().c_str());
 
 //    return mu->NanD();
-    return -5000;
+    return _noDataValue;
   }
 
   const Vector2D uv = _sector.getUVCoordinates(latitude, longitude);
-  const double dX = uv._x * _width;
-  const double dY = (1.0 - uv._y) * _height;
+  const double dX = uv._x * (_width - 1);
+  const double dY = (1.0 - uv._y) * (_height - 1);
 
   const int x = (int) dX;
   const int y = (int) dY;
@@ -82,17 +85,18 @@ double FloatBufferElevationData::getElevationAt(const Angle& latitude,
   const double alphaY = dY - y;
   const double alphaX = dX - x;
 
+  int unusedType = 0;
   double result;
   if (x == dX) {
     if (y == dY) {
       // exact on grid point
       *type = 1;
-      result = getElevationAt(x, y);
+      result = getElevationAt(x, y, &unusedType);
     }
     else {
       // linear on Y
-      const double heightY     = getElevationAt(x, y);
-      const double heightNextY = getElevationAt(x, nextY);
+      const double heightY     = getElevationAt(x, y, &unusedType);
+      const double heightNextY = getElevationAt(x, nextY, &unusedType);
       *type = 2;
       result = mu->lerp(heightY, heightNextY, alphaY);
     }
@@ -100,17 +104,17 @@ double FloatBufferElevationData::getElevationAt(const Angle& latitude,
   else {
     if (y == dY) {
       // linear on X
-      const double heightX     = getElevationAt(x,     y);
-      const double heightNextX = getElevationAt(nextX, y);
+      const double heightX     = getElevationAt(x,     y, &unusedType);
+      const double heightNextX = getElevationAt(nextX, y, &unusedType);
       *type = 3;
       result = mu->lerp(heightX, heightNextX, alphaX);
     }
     else {
       // bilinear
-      const double valueSW = getElevationAt(x,     y);
-      const double valueSE = getElevationAt(nextX, y);
-      const double valueNE = getElevationAt(nextX, nextY);
-      const double valueNW = getElevationAt(x,     nextY);
+      const double valueSW = getElevationAt(x,     y, &unusedType);
+      const double valueSE = getElevationAt(nextX, y, &unusedType);
+      const double valueNE = getElevationAt(nextX, nextY, &unusedType);
+      const double valueNW = getElevationAt(x,     nextY, &unusedType);
 
       *type = 4;
       result = getInterpolator()->interpolate(valueSW,
@@ -136,11 +140,12 @@ const std::string FloatBufferElevationData::description(bool detailed) const {
   isb->addString(" sector=");
   isb->addString( _sector.description() );
   if (detailed) {
+    int unusedType = 0;
     isb->addString("\n");
     for (int row = 0; row < _width; row++) {
       //isb->addString("   ");
       for (int col = 0; col < _height; col++) {
-        isb->addDouble( getElevationAt(col, row) );
+        isb->addDouble( getElevationAt(col, row, &unusedType) );
         isb->addString(",");
       }
       isb->addString("\n");

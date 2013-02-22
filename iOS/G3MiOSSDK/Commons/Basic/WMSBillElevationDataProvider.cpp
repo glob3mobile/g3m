@@ -24,20 +24,23 @@ private:
   const Sector            _sector;
   const int               _width;
   const int               _height;
+  const double            _noDataValue;
+
   IElevationDataListener* _listener;
   const bool              _autodeleteListener;
-
 
 
 public:
 
   WMSBillElevationDataProvider_BufferDownloadListener(const Sector& sector,
                                                       const Vector2I& resolution,
+                                                      double noDataValue,
                                                       IElevationDataListener* listener,
                                                       bool autodeleteListener) :
   _sector(sector),
   _width(resolution._x),
   _height(resolution._y),
+  _noDataValue(noDataValue),
   _listener(listener),
   _autodeleteListener(autodeleteListener)
   {
@@ -47,7 +50,7 @@ public:
   void onDownload(const URL& url,
                   IByteBuffer* buffer) {
     const Vector2I resolution(_width, _height);
-    ElevationData* elevationData = BilParser::parseBil16(_sector, resolution, buffer);
+    ElevationData* elevationData = BilParser::parseBil16(_sector, resolution, _noDataValue, buffer);
     delete buffer;
 
     if (elevationData == NULL) {
@@ -129,10 +132,16 @@ const long long WMSBillElevationDataProvider::requestElevationData(const Sector&
   delete isb;
 
 
+  const double noDataValue = 0;
+
   return _downloader->requestBuffer(URL(path, false),
                                     2000000000,
                                     TimeInterval::fromDays(30),
-                                    new WMSBillElevationDataProvider_BufferDownloadListener(sector, resolution, listener, autodeleteListener),
+                                    new WMSBillElevationDataProvider_BufferDownloadListener(sector,
+                                                                                            resolution,
+                                                                                            noDataValue,
+                                                                                            listener,
+                                                                                            autodeleteListener),
                                     true);
 }
 

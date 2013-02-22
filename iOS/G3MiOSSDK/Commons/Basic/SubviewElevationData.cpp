@@ -13,8 +13,9 @@
 SubviewElevationData::SubviewElevationData(const ElevationData *elevationData,
                                            bool ownsElevationData,
                                            const Sector& sector,
-                                           const Vector2I& resolution) :
-ElevationData(sector, resolution),
+                                           const Vector2I& resolution,
+                                           double noDataValue) :
+ElevationData(sector, resolution, noDataValue),
 _elevationData(elevationData),
 _ownsElevationData(ownsElevationData)
 {
@@ -26,12 +27,17 @@ SubviewElevationData::~SubviewElevationData() {
   }
 }
 
-double SubviewElevationData::getElevationAt(int x, int y) const {
-  const Angle latitude  = Angle::fromRadians( _stepInLatitudeRadians  * y );
-  const Angle longitude = Angle::fromRadians( _stepInLongitudeRadians * x );
+double SubviewElevationData::getElevationAt(int x, int y,
+                                            int* type) const {
+//  const Angle latitude  = Angle::fromRadians( _stepInLatitudeRadians  * y );
+//  const Angle longitude = Angle::fromRadians( _stepInLongitudeRadians * x );
 
-  int type = 0;
-  return getElevationAt(latitude, longitude, &type);
+  const Geodetic2D position = _sector.getInnerPoint((double) x / _width,
+                                                    1.0 - ((double) y / _height));
+
+  return getElevationAt(position.latitude(),
+                        position.longitude(),
+                        type);
 }
 
 double SubviewElevationData::getElevationAt(const Angle& latitude,
@@ -44,7 +50,7 @@ double SubviewElevationData::getElevationAt(const Angle& latitude,
                                   longitude.description().c_str());
 
 //    return IMathUtils::instance()->NanD();
-    return -5000;
+    return _noDataValue;
   }
   return _elevationData->getElevationAt(latitude, longitude, type);
 }

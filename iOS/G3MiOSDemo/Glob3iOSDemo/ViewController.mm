@@ -394,7 +394,7 @@ public:
 {
   LayerSet* layerSet = new LayerSet();
 
-  const bool blueMarble = true;
+  const bool blueMarble = false;
   if (blueMarble) {
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
                                         URL("http://www.nasa.network.com/wms?", false),
@@ -422,7 +422,7 @@ public:
   }
 
 
-  bool useBing = false;
+  bool useBing = true;
   if (useBing) {
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
                                         URL("http://www.nasa.network.com/wms?", false),
@@ -790,21 +790,20 @@ public:
 //    const Vector2I extent(512, 512);
     const Vector2I rawExtent(2048, 1024);
     const ElevationData* rawElevationData = BilParser::parseBil16(Sector::fullSphere(),
-                                                               rawExtent,
-                                                               buffer);
+                                                                  rawExtent,
+                                                                  0,
+                                                                  buffer);
     delete buffer;
 
     if (rawElevationData == NULL) {
       return;
     }
 
-    //Sector (lat=28.125°, lon=-16.875°) - (lat=50.625°, lon=11.25°)
-//    const Sector targetSector(Sector::fromDegrees(28.125, -16.875, 50.625, 11.25));
 //    const Sector targetSector(Sector::fromDegrees(-45, -90, 45, 90));
 //    const Sector targetSector(Sector::fromDegrees(-90, -90, 0, 0));
     const Sector targetSector(Sector::fromDegrees(-45, -90, 0, -45));
 
-//    const Vector2I extent(1024, 512);
+//    const Vector2I extent(512, 256);
 //    const ElevationData* elevationData = new SubviewElevationData(rawElevationData,
 //                                                                  true,
 //                                                                  targetSector,
@@ -813,12 +812,13 @@ public:
     ILogger::instance()->logInfo("Elevation data");
     //ILogger::instance()->logInfo("%s", elevationData->description().c_str());
 
-//    double minHeight = elevationData->getElevationAt(0, 0);
+//    int type = -1;
+//    double minHeight = elevationData->getElevationAt(0, 0, &type);
 //    double maxHeight = minHeight;
 //
 //    for (int x = 0; x < extent._x; x++) {
 //      for (int y = 0; y < extent._y; y++) {
-//        const double height = elevationData->getElevationAt(x, y);
+//        const double height = elevationData->getElevationAt(x, y, &type);
 //
 //        if (height < minHeight) { minHeight = height; }
 //        if (height > maxHeight) { maxHeight = height; }
@@ -828,8 +828,6 @@ public:
     double minHeight = rawElevationData->getElevationAt(targetSector.lower());
     double maxHeight = minHeight;
 
-//    const double latStep = 0.25;
-//    const double lonStep = 0.25;
     const double latStep = (180.0 / 1024.0) / 4 * 3;
     const double lonStep = (360.0 / 2048.0) / 4 * 3;
 
@@ -844,7 +842,6 @@ public:
            lon < targetUpper.longitude().degrees();
            lon += lonStep) {
         const Angle longitude(Angle::fromDegrees(lon));
-//        const double height = elevationData->getElevationAt(x, y);
         int type = 0;
         const double height = rawElevationData->getElevationAt(latitude, longitude, &type);
 
@@ -865,13 +862,23 @@ public:
 
 //    for (int x = 0; x < extent._x; x++) {
 //      for (int y = 0; y < extent._y; y++) {
-//        const double height = elevationData->getElevationAt(x, y);
+//        const double height = elevationData->getElevationAt(x, y, &type);
 //        const float alpha = (float) ((height - minHeight) / deltaHeight);
 //
 //        //vertices.add(x * 200.0, y * 200.0, 7500.0 * alpha);
-//        vertices.add(x * 250.0, y * 250.0, 15000.0 * height);
+//        vertices.add(x * 250.0, y * 250.0, height * 1.5);
 //
-//        colors.add(alpha, alpha, alpha, 1);
+//        float r = alpha;
+//        float g = alpha;
+//        float b = alpha;
+//        if (type != 1) {
+//          r = 1;
+//        }
+//        else {
+//          g = 1;
+//        }
+//
+//        colors.add(r, g, b, 1);
 //      }
 //    }
 
@@ -898,25 +905,6 @@ public:
         else {
           g = 1;
         }
-//        switch ( type ) {
-//          case 1:
-//            r = 1;
-//            break;
-//          case 2:
-//            g = 1;
-//            break;
-//          case 3:
-//            b = 1;
-//            break;
-//          case 4:
-//            r = 1;
-//            g = 1;
-//            break;
-//          default:
-//            break;
-//        }
-
-
 
         //vertices.add(x * 200.0, y * 200.0, 7500.0 * height);
         vertices.add(lon * 2000.0, lat * 2000.0, height * 1.5);
@@ -924,7 +912,7 @@ public:
         colors.add(r, g, b, 1);
       }
     }
-    
+
     const float lineWidth = 1;
     const float pointSize = 3;
     Color* flatColor = NULL;
@@ -1008,7 +996,7 @@ public:
 //                               new TestElevationDataListener(),
 //                               true);
 
-      /**/
+      /*
       context->getDownloader()->requestBuffer(//URL("file:///sample_bil16_150x150.bil", false),
                                               //URL("file:///409_554.bil", false),
                                               //URL("file:///full-earth-512x512.bil", false),
@@ -1017,7 +1005,7 @@ public:
                                               TimeInterval::fromDays(30),
                                               new Bil16Parser_IBufferDownloadListener(_shapesRenderer),
                                               true);
-      /**/
+      */
 
 //      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D(//Angle::fromDegreesMinutes(37, 47),
 //                                                                //Angle::fromDegreesMinutes(-122, 25),
