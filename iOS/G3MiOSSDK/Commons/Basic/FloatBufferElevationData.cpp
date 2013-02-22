@@ -81,11 +81,12 @@ double FloatBufferElevationData::getElevationAt(const Angle& latitude,
   const int x = (int) dX;
   const int y = (int) dY;
 
+  double result;
   if (x == dX) {
     if (y == dY) {
       // exact on grid point
       *type = 1;
-      return getElevationAt(x, y);
+      result = getElevationAt(x, y);
     }
     else {
       // linear on Y
@@ -95,7 +96,7 @@ double FloatBufferElevationData::getElevationAt(const Angle& latitude,
       const double heightNextY = getElevationAt(x, nextY);
       const double alphaY = dY - y;
       *type = 2;
-      return mu->lerp(heightY, heightNextY, alphaY);
+      result = mu->lerp(heightY, heightNextY, alphaY);
     }
   }
   else {
@@ -106,7 +107,7 @@ double FloatBufferElevationData::getElevationAt(const Angle& latitude,
       const double heightNextX = getElevationAt(nextX, y);
       const double alphaX = dX - x;
       *type = 3;
-      return mu->lerp(heightX, heightNextX, alphaX);
+      result = mu->lerp(heightX, heightNextX, alphaX);
     }
     else {
       // bilinear
@@ -123,7 +124,7 @@ double FloatBufferElevationData::getElevationAt(const Angle& latitude,
       const double alphaX = dX - x;
 
       *type = 4;
-      return getInterpolator()->interpolate(valueSW,
+      result = getInterpolator()->interpolate(valueSW,
                                             valueSE,
                                             valueNE,
                                             valueNW,
@@ -132,6 +133,8 @@ double FloatBufferElevationData::getElevationAt(const Angle& latitude,
 //      return 0;
     }
   }
+
+  return result;
   
   //  return IMathUtils::instance()->NanD();
 }
