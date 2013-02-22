@@ -95,13 +95,14 @@ public class FloatBufferElevationData extends ElevationData
     final int x = (int) dX;
     final int y = (int) dY;
   
+    double result;
     if (x == dX)
     {
       if (y == dY)
       {
         // exact on grid point
         type = 1;
-        return getElevationAt(x, y);
+        result = getElevationAt(x, y);
       }
       else
       {
@@ -112,7 +113,7 @@ public class FloatBufferElevationData extends ElevationData
         final double heightNextY = getElevationAt(x, nextY);
         final double alphaY = dY - y;
         type = 2;
-        return mu.lerp(heightY, heightNextY, alphaY);
+        result = mu.lerp(heightY, heightNextY, alphaY);
       }
     }
     else
@@ -125,7 +126,7 @@ public class FloatBufferElevationData extends ElevationData
         final double heightNextX = getElevationAt(nextX, y);
         final double alphaX = dX - x;
         type = 3;
-        return mu.lerp(heightX, heightNextX, alphaX);
+        result = mu.lerp(heightX, heightNextX, alphaX);
       }
       else
       {
@@ -143,10 +144,12 @@ public class FloatBufferElevationData extends ElevationData
         final double alphaX = dX - x;
   
         type = 4;
-        return getInterpolator().interpolate(valueSW, valueSE, valueNE, valueNW, alphaY, alphaX);
+        result = getInterpolator().interpolate(valueSW, valueSE, valueNE, valueNW, alphaY, alphaX);
   //      return 0;
       }
     }
+  
+    return result;
   
     //  return IMathUtils::instance()->NanD();
   }
