@@ -49,7 +49,7 @@ public class Mark
    * The minimun distance (in meters) to show the mark. If the camera is further than this, the mark will not be displayed.
    * Default value: 4.5e+06
    */
-  private final double _minDistanceToCamera;
+  private double _minDistanceToCamera;
   /**
    * The extra data to be stored by the mark.
    * Usefull to store data such us name, URL...
@@ -99,47 +99,47 @@ public class Mark
 
   private boolean _renderedMark;
 
-  public Mark(String label, URL iconURL, Geodetic3D position, boolean labelBottom, float labelFontSize, Color labelFontColor, Color labelShadowColor, int labelGapSize, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener)
+  public Mark(String label, URL iconURL, Geodetic3D position, double minDistanceToCamera, boolean labelBottom, float labelFontSize, Color labelFontColor, Color labelShadowColor, int labelGapSize, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener)
   {
-     this(label, iconURL, position, labelBottom, labelFontSize, labelFontColor, labelShadowColor, labelGapSize, minDistanceToCamera, userData, autoDeleteUserData, listener, false);
+     this(label, iconURL, position, minDistanceToCamera, labelBottom, labelFontSize, labelFontColor, labelShadowColor, labelGapSize, userData, autoDeleteUserData, listener, false);
   }
-  public Mark(String label, URL iconURL, Geodetic3D position, boolean labelBottom, float labelFontSize, Color labelFontColor, Color labelShadowColor, int labelGapSize, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData)
+  public Mark(String label, URL iconURL, Geodetic3D position, double minDistanceToCamera, boolean labelBottom, float labelFontSize, Color labelFontColor, Color labelShadowColor, int labelGapSize, MarkUserData userData, boolean autoDeleteUserData)
   {
-     this(label, iconURL, position, labelBottom, labelFontSize, labelFontColor, labelShadowColor, labelGapSize, minDistanceToCamera, userData, autoDeleteUserData, null, false);
+     this(label, iconURL, position, minDistanceToCamera, labelBottom, labelFontSize, labelFontColor, labelShadowColor, labelGapSize, userData, autoDeleteUserData, null, false);
   }
-  public Mark(String label, URL iconURL, Geodetic3D position, boolean labelBottom, float labelFontSize, Color labelFontColor, Color labelShadowColor, int labelGapSize, double minDistanceToCamera, MarkUserData userData)
+  public Mark(String label, URL iconURL, Geodetic3D position, double minDistanceToCamera, boolean labelBottom, float labelFontSize, Color labelFontColor, Color labelShadowColor, int labelGapSize, MarkUserData userData)
   {
-     this(label, iconURL, position, labelBottom, labelFontSize, labelFontColor, labelShadowColor, labelGapSize, minDistanceToCamera, userData, true, null, false);
+     this(label, iconURL, position, minDistanceToCamera, labelBottom, labelFontSize, labelFontColor, labelShadowColor, labelGapSize, userData, true, null, false);
   }
-  public Mark(String label, URL iconURL, Geodetic3D position, boolean labelBottom, float labelFontSize, Color labelFontColor, Color labelShadowColor, int labelGapSize, double minDistanceToCamera)
+  public Mark(String label, URL iconURL, Geodetic3D position, double minDistanceToCamera, boolean labelBottom, float labelFontSize, Color labelFontColor, Color labelShadowColor, int labelGapSize)
   {
-     this(label, iconURL, position, labelBottom, labelFontSize, labelFontColor, labelShadowColor, labelGapSize, minDistanceToCamera, null, true, null, false);
+     this(label, iconURL, position, minDistanceToCamera, labelBottom, labelFontSize, labelFontColor, labelShadowColor, labelGapSize, null, true, null, false);
   }
-  public Mark(String label, URL iconURL, Geodetic3D position, boolean labelBottom, float labelFontSize, Color labelFontColor, Color labelShadowColor, int labelGapSize)
+  public Mark(String label, URL iconURL, Geodetic3D position, double minDistanceToCamera, boolean labelBottom, float labelFontSize, Color labelFontColor, Color labelShadowColor)
   {
-     this(label, iconURL, position, labelBottom, labelFontSize, labelFontColor, labelShadowColor, labelGapSize, 4.5e+06, null, true, null, false);
+     this(label, iconURL, position, minDistanceToCamera, labelBottom, labelFontSize, labelFontColor, labelShadowColor, 2, null, true, null, false);
   }
-  public Mark(String label, URL iconURL, Geodetic3D position, boolean labelBottom, float labelFontSize, Color labelFontColor, Color labelShadowColor)
+  public Mark(String label, URL iconURL, Geodetic3D position, double minDistanceToCamera, boolean labelBottom, float labelFontSize, Color labelFontColor)
   {
-     this(label, iconURL, position, labelBottom, labelFontSize, labelFontColor, labelShadowColor, 2, 4.5e+06, null, true, null, false);
+     this(label, iconURL, position, minDistanceToCamera, labelBottom, labelFontSize, labelFontColor, Color.newFromRGBA(0, 0, 0, 1), 2, null, true, null, false);
   }
-  public Mark(String label, URL iconURL, Geodetic3D position, boolean labelBottom, float labelFontSize, Color labelFontColor)
+  public Mark(String label, URL iconURL, Geodetic3D position, double minDistanceToCamera, boolean labelBottom, float labelFontSize)
   {
-     this(label, iconURL, position, labelBottom, labelFontSize, labelFontColor, Color.newFromRGBA(0, 0, 0, 1), 2, 4.5e+06, null, true, null, false);
+     this(label, iconURL, position, minDistanceToCamera, labelBottom, labelFontSize, Color.newFromRGBA(1, 1, 1, 1), Color.newFromRGBA(0, 0, 0, 1), 2, null, true, null, false);
   }
-  public Mark(String label, URL iconURL, Geodetic3D position, boolean labelBottom, float labelFontSize)
+  public Mark(String label, URL iconURL, Geodetic3D position, double minDistanceToCamera, boolean labelBottom)
   {
-     this(label, iconURL, position, labelBottom, labelFontSize, Color.newFromRGBA(1, 1, 1, 1), Color.newFromRGBA(0, 0, 0, 1), 2, 4.5e+06, null, true, null, false);
+     this(label, iconURL, position, minDistanceToCamera, labelBottom, 20, Color.newFromRGBA(1, 1, 1, 1), Color.newFromRGBA(0, 0, 0, 1), 2, null, true, null, false);
   }
-  public Mark(String label, URL iconURL, Geodetic3D position, boolean labelBottom)
+  public Mark(String label, URL iconURL, Geodetic3D position, double minDistanceToCamera)
   {
-     this(label, iconURL, position, labelBottom, 20, Color.newFromRGBA(1, 1, 1, 1), Color.newFromRGBA(0, 0, 0, 1), 2, 4.5e+06, null, true, null, false);
+     this(label, iconURL, position, minDistanceToCamera, true, 20, Color.newFromRGBA(1, 1, 1, 1), Color.newFromRGBA(0, 0, 0, 1), 2, null, true, null, false);
   }
   public Mark(String label, URL iconURL, Geodetic3D position)
   {
-     this(label, iconURL, position, true, 20, Color.newFromRGBA(1, 1, 1, 1), Color.newFromRGBA(0, 0, 0, 1), 2, 4.5e+06, null, true, null, false);
+     this(label, iconURL, position, 4.5e+06, true, 20, Color.newFromRGBA(1, 1, 1, 1), Color.newFromRGBA(0, 0, 0, 1), 2, null, true, null, false);
   }
-  public Mark(String label, URL iconURL, Geodetic3D position, boolean labelBottom, float labelFontSize, Color labelFontColor, Color labelShadowColor, int labelGapSize, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener, boolean autoDeleteListener)
+  public Mark(String label, URL iconURL, Geodetic3D position, double minDistanceToCamera, boolean labelBottom, float labelFontSize, Color labelFontColor, Color labelShadowColor, int labelGapSize, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener, boolean autoDeleteListener)
   {
      _label = label;
      _iconURL = new URL(iconURL);
@@ -165,39 +165,39 @@ public class Mark
   
   }
 
-  public Mark(String label, Geodetic3D position, float labelFontSize, Color labelFontColor, Color labelShadowColor, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener)
+  public Mark(String label, Geodetic3D position, double minDistanceToCamera, float labelFontSize, Color labelFontColor, Color labelShadowColor, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener)
   {
-     this(label, position, labelFontSize, labelFontColor, labelShadowColor, minDistanceToCamera, userData, autoDeleteUserData, listener, false);
+     this(label, position, minDistanceToCamera, labelFontSize, labelFontColor, labelShadowColor, userData, autoDeleteUserData, listener, false);
   }
-  public Mark(String label, Geodetic3D position, float labelFontSize, Color labelFontColor, Color labelShadowColor, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData)
+  public Mark(String label, Geodetic3D position, double minDistanceToCamera, float labelFontSize, Color labelFontColor, Color labelShadowColor, MarkUserData userData, boolean autoDeleteUserData)
   {
-     this(label, position, labelFontSize, labelFontColor, labelShadowColor, minDistanceToCamera, userData, autoDeleteUserData, null, false);
+     this(label, position, minDistanceToCamera, labelFontSize, labelFontColor, labelShadowColor, userData, autoDeleteUserData, null, false);
   }
-  public Mark(String label, Geodetic3D position, float labelFontSize, Color labelFontColor, Color labelShadowColor, double minDistanceToCamera, MarkUserData userData)
+  public Mark(String label, Geodetic3D position, double minDistanceToCamera, float labelFontSize, Color labelFontColor, Color labelShadowColor, MarkUserData userData)
   {
-     this(label, position, labelFontSize, labelFontColor, labelShadowColor, minDistanceToCamera, userData, true, null, false);
+     this(label, position, minDistanceToCamera, labelFontSize, labelFontColor, labelShadowColor, userData, true, null, false);
   }
-  public Mark(String label, Geodetic3D position, float labelFontSize, Color labelFontColor, Color labelShadowColor, double minDistanceToCamera)
+  public Mark(String label, Geodetic3D position, double minDistanceToCamera, float labelFontSize, Color labelFontColor, Color labelShadowColor)
   {
-     this(label, position, labelFontSize, labelFontColor, labelShadowColor, minDistanceToCamera, null, true, null, false);
+     this(label, position, minDistanceToCamera, labelFontSize, labelFontColor, labelShadowColor, null, true, null, false);
   }
-  public Mark(String label, Geodetic3D position, float labelFontSize, Color labelFontColor, Color labelShadowColor)
+  public Mark(String label, Geodetic3D position, double minDistanceToCamera, float labelFontSize, Color labelFontColor)
   {
-     this(label, position, labelFontSize, labelFontColor, labelShadowColor, 4.5e+06, null, true, null, false);
+     this(label, position, minDistanceToCamera, labelFontSize, labelFontColor, Color.newFromRGBA(0, 0, 0, 1), null, true, null, false);
   }
-  public Mark(String label, Geodetic3D position, float labelFontSize, Color labelFontColor)
+  public Mark(String label, Geodetic3D position, double minDistanceToCamera, float labelFontSize)
   {
-     this(label, position, labelFontSize, labelFontColor, Color.newFromRGBA(0, 0, 0, 1), 4.5e+06, null, true, null, false);
+     this(label, position, minDistanceToCamera, labelFontSize, Color.newFromRGBA(1, 1, 1, 1), Color.newFromRGBA(0, 0, 0, 1), null, true, null, false);
   }
-  public Mark(String label, Geodetic3D position, float labelFontSize)
+  public Mark(String label, Geodetic3D position, double minDistanceToCamera)
   {
-     this(label, position, labelFontSize, Color.newFromRGBA(1, 1, 1, 1), Color.newFromRGBA(0, 0, 0, 1), 4.5e+06, null, true, null, false);
+     this(label, position, minDistanceToCamera, 20, Color.newFromRGBA(1, 1, 1, 1), Color.newFromRGBA(0, 0, 0, 1), null, true, null, false);
   }
   public Mark(String label, Geodetic3D position)
   {
-     this(label, position, 20, Color.newFromRGBA(1, 1, 1, 1), Color.newFromRGBA(0, 0, 0, 1), 4.5e+06, null, true, null, false);
+     this(label, position, 4.5e+06, 20, Color.newFromRGBA(1, 1, 1, 1), Color.newFromRGBA(0, 0, 0, 1), null, true, null, false);
   }
-  public Mark(String label, Geodetic3D position, float labelFontSize, Color labelFontColor, Color labelShadowColor, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener, boolean autoDeleteListener)
+  public Mark(String label, Geodetic3D position, double minDistanceToCamera, float labelFontSize, Color labelFontColor, Color labelShadowColor, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener, boolean autoDeleteListener)
   {
      _label = label;
      _labelBottom = true;
@@ -339,9 +339,9 @@ public class Mark
     final Vector3D markCameraVector = markPosition.sub(cameraPosition);
     final double distanceToCamera = markCameraVector.length();
   
-    _renderedMark = (_minDistanceToCamera == 0) || (distanceToCamera <= _minDistanceToCamera);
+    final boolean renderableByDistance = (_minDistanceToCamera == 0) || (distanceToCamera <= _minDistanceToCamera);
   
-    if (_renderedMark)
+    if (renderableByDistance)
     {
       final Vector3D normalAtMarkPosition = planet.geodeticSurfaceNormal(markPosition);
   
@@ -365,6 +365,8 @@ public class Mark
   
           gl.drawBillBoard(_textureId, getVertices(planet), _textureWidth, _textureHeight);
         }
+  
+        _renderedMark = true;
       }
     }
   }
@@ -452,6 +454,11 @@ public class Mark
       _cartesianPosition = new Vector3D(planet.toCartesian(_position));
     }
     return _cartesianPosition;
+  }
+
+  public final void setMinDistanceToCamera(double minDistanceToCamera)
+  {
+    _minDistanceToCamera = minDistanceToCamera;
   }
 
 }

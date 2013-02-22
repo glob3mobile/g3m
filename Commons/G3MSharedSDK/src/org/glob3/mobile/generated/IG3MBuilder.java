@@ -68,7 +68,7 @@ public abstract class IG3MBuilder
   }
 
   /**
-   * Returns the _downloader.
+   * Returns the _downloader. If it does not exist, it will be default initializated.
    *
    * @return _downloader: IDownloader*
    */
@@ -83,7 +83,7 @@ public abstract class IG3MBuilder
   }
 
   /**
-   * Returns the _threadUtils.
+   * Returns the _threadUtils. If it does not exist, it will be default initializated.
    *
    * @return _threadUtils: IThreadUtils*
    */
@@ -98,7 +98,8 @@ public abstract class IG3MBuilder
   }
 
   /**
-   * Returns the _cameraConstraints list.
+   * Returns the _cameraConstraints list. If it does not exist, it will be default initializated.
+   * @see IG3MBuilder#createDefaultCameraConstraints() 
    *
    * @return _cameraConstraints: std::vector<ICameraConstrainer*>
    */
@@ -113,7 +114,8 @@ public abstract class IG3MBuilder
   }
 
   /**
-   * Returns the _cameraRenderer.
+   * Returns the _cameraRenderer. If it does not exist, it will be default initializated.
+   * @see IG3MBuilder#createDefaultCameraRenderer()
    *
    * @return _cameraRenderer: CameraRenderer*
    */
@@ -128,7 +130,7 @@ public abstract class IG3MBuilder
   }
 
   /**
-   * Returns the _busyRenderer.
+   * Returns the _busyRenderer. If it does not exist, it will be default initializated.
    *
    * @return _busyRenderer: Renderer*
    */
@@ -143,7 +145,7 @@ public abstract class IG3MBuilder
   }
 
   /**
-   * Returns the _backgroundColor.
+   * Returns the _backgroundColor. If it does not exist, it will be default initializated.
    *
    * @return _backgroundColor: Color*
    */
@@ -158,7 +160,8 @@ public abstract class IG3MBuilder
   }
 
   /**
-   * Returns the renderers list.
+   * Returns the renderers list. If it does not exist, it will be default initializated.
+   * @see IG3MBuilder#createDefaultRenderers()
    *
    * @return _renderers: std::vector<Renderer*>
    */
@@ -166,7 +169,7 @@ public abstract class IG3MBuilder
   {
     if (_renderers == null)
     {
-      _renderers = new java.util.ArrayList<Renderer>();
+      _renderers = createDefaultRenderers();
     }
     return _renderers;
   }
@@ -212,7 +215,8 @@ public abstract class IG3MBuilder
   }
 
   /**
-   * Returns the array of periodical tasks.
+   * Returns the array of periodical tasks. If it does not exist, it will be default initializated.
+   * @see IG3MBuilder#createDefaultPeriodicalTasks()
    *
    * @return _periodicalTasks: std::vector<PeriodicalTask*>
    */
@@ -220,7 +224,7 @@ public abstract class IG3MBuilder
   {
     if (_periodicalTasks == null)
     {
-      _periodicalTasks = new java.util.ArrayList<PeriodicalTask> ();
+      _periodicalTasks = createDefaultPeriodicalTasks();
     }
     return _periodicalTasks;
   }
@@ -257,6 +261,18 @@ public abstract class IG3MBuilder
   
     return cameraRenderer;
   }
+  private java.util.ArrayList<Renderer> createDefaultRenderers()
+  {
+    java.util.ArrayList<Renderer> renderers = new java.util.ArrayList<Renderer>();
+  
+    return renderers;
+  }
+  private java.util.ArrayList<PeriodicalTask> createDefaultPeriodicalTasks()
+  {
+    java.util.ArrayList<PeriodicalTask> periodicalTasks = new java.util.ArrayList<PeriodicalTask>();
+  
+    return periodicalTasks;
+  }
 
   private void pvtSetInitializationTask(GInitializationTask initializationTask, boolean autoDeleteInitializationTask)
   {
@@ -279,7 +295,7 @@ public abstract class IG3MBuilder
    * Returns TRUE if the given renderer list contains, at least, an instance of 
    * the TileRenderer class. Returns FALSE if not.
    *
-   * @return trContained: bool
+   * @return bool
    */
   private boolean containsTileRenderer(java.util.ArrayList<Renderer> renderers)
   {
@@ -297,7 +313,7 @@ public abstract class IG3MBuilder
 
 
   /**
-   * Returns the _storage.
+   * Returns the _storage. If it does not exist, it will be default initializated.
    *
    * @return _storage: IStorage*
    */
@@ -343,9 +359,25 @@ public abstract class IG3MBuilder
       mainRenderer = getTileRendererBuilder().create();
     }
   
-    Color backgroundColor = Color.fromRGBA(getBackgroundColor().getRed(), getBackgroundColor().getGreen(), getBackgroundColor().getBlue(), getBackgroundColor().getAlpha());
+  //  Color backgroundColor = Color::fromRGBA(getBackgroundColor()->getRed(),
+  //                                          getBackgroundColor()->getGreen(),
+  //                                          getBackgroundColor()->getBlue(),
+  //                                          getBackgroundColor()->getAlpha());
   
-    G3MWidget g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), getPlanet(), getCameraConstraints(), getCameraRenderer(), mainRenderer, getBusyRenderer(), backgroundColor, getLogFPS(), getLogDownloaderStatistics(), getInitializationTask(), getAutoDeleteInitializationTask(), getPeriodicalTasks());
+  
+    java.util.ArrayList<ICameraConstrainer> cameraConstrainst = new java.util.ArrayList<ICameraConstrainer>();
+    for (int i = 0; i < getCameraConstraints().size(); i++)
+    {
+      cameraConstrainst.add(getCameraConstraints().get(i));
+    }
+  
+    java.util.ArrayList<PeriodicalTask> periodicalTasks = new java.util.ArrayList<PeriodicalTask>();
+    for (int i = 0; i < getPeriodicalTasks().size(); i++)
+    {
+      periodicalTasks.add(getPeriodicalTasks().get(i));
+    }
+  
+    G3MWidget g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), getPlanet(), cameraConstrainst, getCameraRenderer(), mainRenderer, getBusyRenderer(), getBackgroundColor(), getLogFPS(), getLogDownloaderStatistics(), getInitializationTask(), getAutoDeleteInitializationTask(), periodicalTasks);
   
     g3mWidget.setUserData(getUserData());
   
@@ -445,7 +477,7 @@ public abstract class IG3MBuilder
   /**
    * Sets the _gl.
    *
-   * @param gl: cannot be NULL.
+   * @param gl - cannot be NULL.
    */
   public final void setGL(GL gl)
   {
@@ -465,7 +497,7 @@ public abstract class IG3MBuilder
   /**
    * Sets the _storage.
    *
-   * @param gl
+   * @param storage
    */
   public final void setStorage(IStorage storage)
   {
@@ -480,7 +512,7 @@ public abstract class IG3MBuilder
   /**
    * Sets the _downloader
    *
-   * @param downloader: cannot be NULL.
+   * @param downloader - cannot be NULL.
    */
   public final void setDownloader(IDownloader downloader)
   {
@@ -500,7 +532,7 @@ public abstract class IG3MBuilder
   /**
    * Sets the _threadUtils
    *
-   * @param threadUtils: cannot be NULL.
+   * @param threadUtils - cannot be NULL.
    */
   public final void setThreadUtils(IThreadUtils threadUtils)
   {
@@ -520,7 +552,7 @@ public abstract class IG3MBuilder
   /**
    * Sets the _planet
    *
-   * @param planet: cannot be NULL.
+   * @param planet - cannot be NULL.
    */
   public final void setPlanet(Planet planet)
   {
@@ -542,7 +574,7 @@ public abstract class IG3MBuilder
    * The camera constraint list will be initializated with a default constraints set.
    * @see IG3MBuilder#createDefaultCameraConstraints()
    *
-   * @param cameraConstraint: cannot be NULL.
+   * @param cameraConstraint - cannot be NULL.
    */
   public final void addCameraConstraint(ICameraConstrainer cameraConstraint)
   {
@@ -558,12 +590,13 @@ public abstract class IG3MBuilder
    * Sets the camera constraints list, ignoring the default camera constraints list 
    * and the camera constraints previously added, if added.
    *
-   * @param cameraConstraints: std::vector<ICameraConstrainer*>
+   * @param cameraConstraints - std::vector<ICameraConstrainer*>
    */
   public final void setCameraConstrainsts(java.util.ArrayList<ICameraConstrainer> cameraConstraints)
   {
     if (_cameraConstraints != null)
     {
+      ILogger.instance().logWarning("LOGIC WARNING: camera contraints previously set will be ignored and deleted");
       for (int i = 0; i < _cameraConstraints.size(); i++)
       {
         if (_cameraConstraints.get(i) != null)
@@ -573,7 +606,7 @@ public abstract class IG3MBuilder
     }
     else
     {
-      _cameraConstraints = new java.util.ArrayList<ICameraConstrainer> ();
+      _cameraConstraints = new java.util.ArrayList<ICameraConstrainer>();
     }
     for (int i = 0; i < cameraConstraints.size(); i++)
     {
@@ -584,7 +617,7 @@ public abstract class IG3MBuilder
   /**
    * Sets the _cameraRenderer
    *
-   * @param planet: cannot be NULL.
+   * @param cameraRenderer - cannot be NULL.
    */
   public final void setCameraRenderer(CameraRenderer cameraRenderer)
   {
@@ -604,7 +637,7 @@ public abstract class IG3MBuilder
   /**
    * Sets the _backgroundColor
    *
-   * @param backgroundColor: cannot be NULL.
+   * @param backgroundColor - cannot be NULL.
    */
   public final void setBackgroundColor(Color backgroundColor)
   {
@@ -624,7 +657,7 @@ public abstract class IG3MBuilder
   /**
    * Sets the _busyRenderer
    *
-   * @param busyRenderer: cannot be NULL.
+   * @param busyRenderer - cannot be NULL.
    */
   public final void setBusyRenderer(Renderer busyRenderer)
   {
@@ -645,7 +678,7 @@ public abstract class IG3MBuilder
    * Adds a new renderer to the renderers list.
    * The renderers list will be initializated with a default renderers set (empty set at the moment).
    *
-   * @param renderer: cannot be either NULL or an instance of TileRenderer
+   * @param renderer - cannot be either NULL or an instance of TileRenderer
    */
   public final void addRenderer(Renderer renderer)
   {
@@ -667,7 +700,7 @@ public abstract class IG3MBuilder
    * previously added, if added.
    * The renderers list must contain at least an instance of the TileRenderer class.
    *
-   * @param renderers: std::vector<Renderer*>
+   * @param renderers - std::vector<Renderer*>
    */
   public final void setRenderers(java.util.ArrayList<Renderer> renderers)
   {
@@ -678,6 +711,7 @@ public abstract class IG3MBuilder
     }
     if (_renderers != null)
     {
+      ILogger.instance().logWarning("LOGIC WARNING: renderers previously set will be ignored and deleted");
       for (int i = 0; i < _renderers.size(); i++)
       {
         if (_renderers.get(i) != null)
@@ -687,7 +721,7 @@ public abstract class IG3MBuilder
     }
     else
     {
-      _renderers = new java.util.ArrayList<Renderer> ();
+      _renderers = new java.util.ArrayList<Renderer>();
     }
     for (int i = 0; i < renderers.size(); i++)
     {
@@ -699,7 +733,7 @@ public abstract class IG3MBuilder
    * Adds a new periodical task to the periodical tasks list.
    * The periodical tasks list will be initializated with a default periodical task set (empty set at the moment).
    *
-   * @param renderer: cannot be either NULL or an instance of TileRenderer
+   * @param periodicalTasks - cannot be NULL
    */
   public final void addPeriodicalTask(PeriodicalTask periodicalTask)
   {
@@ -715,12 +749,13 @@ public abstract class IG3MBuilder
    * Sets the periodical tasks list, ignoring the default periodical tasks list and the
    * periodical tasks previously added, if added.
    *
-   * @param periodicalTasks: std::vector<PeriodicalTask*>
+   * @param periodicalTasks - std::vector<PeriodicalTask*>
    */
   public final void setPeriodicalTasks(java.util.ArrayList<PeriodicalTask> periodicalTasks)
   {
     if (_periodicalTasks != null)
     {
+      ILogger.instance().logWarning("LOGIC WARNING: periodical tasks previously set will be ignored and deleted");
       for (int i = 0; i < _periodicalTasks.size(); i++)
       {
         if (_periodicalTasks.get(i) != null)
@@ -730,7 +765,7 @@ public abstract class IG3MBuilder
     }
     else
     {
-      _periodicalTasks = new java.util.ArrayList<PeriodicalTask> ();
+      _periodicalTasks = new java.util.ArrayList<PeriodicalTask>();
     }
     for (int i = 0; i < periodicalTasks.size(); i++)
     {
@@ -761,7 +796,7 @@ public abstract class IG3MBuilder
   /**
    * Sets the _userData
    *
-   * @param userData: cannot be NULL.
+   * @param userData - cannot be NULL.
    */
   public final void setUserData(WidgetUserData userData)
   {
@@ -785,7 +820,7 @@ public abstract class IG3MBuilder
 
 
   /**
-   * Returns the _planet.
+   * Returns the _planet. If it does not exist, it will be default initializated.
    *
    * @return _planet: const Planet*
    */
@@ -799,7 +834,7 @@ public abstract class IG3MBuilder
   }
 
   /**
-   * Returns the _tileRendererBuilder.
+   * Returns the _tileRendererBuilder. If it does not exist, it will be default initializated. 
    *
    * @return _tileRendererBuilder: TileRendererBuilder*
    */
