@@ -63,6 +63,8 @@ private:
 
   std::vector<ICameraConstrainer*>* createDefaultCameraConstraints();
   CameraRenderer* createDefaultCameraRenderer();
+  std::vector<Renderer*>* createDefaultRenderers();
+  std::vector<PeriodicalTask*>* createDefaultPeriodicalTasks();
 
   void pvtSetInitializationTask(GInitializationTask* initializationTask,
                                 const bool autoDeleteInitializationTask);

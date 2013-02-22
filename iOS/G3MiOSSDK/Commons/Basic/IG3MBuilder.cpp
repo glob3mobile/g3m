@@ -90,7 +90,7 @@ GL* IG3MBuilder::getGL() {
 }
 
 /**
- * Returns the _storage.
+ * Returns the _storage. If it does not exist, it will be default initializated.
  *
  * @return _storage: IStorage*
  */
@@ -103,7 +103,7 @@ IStorage* IG3MBuilder::getStorage() {
 }
 
 /**
- * Returns the _downloader.
+ * Returns the _downloader. If it does not exist, it will be default initializated.
  *
  * @return _downloader: IDownloader*
  */
@@ -116,7 +116,7 @@ IDownloader* IG3MBuilder::getDownloader() {
 }
 
 /**
- * Returns the _threadUtils.
+ * Returns the _threadUtils. If it does not exist, it will be default initializated.
  *
  * @return _threadUtils: IThreadUtils*
  */
@@ -129,7 +129,7 @@ IThreadUtils* IG3MBuilder::getThreadUtils() {
 }
 
 /**
- * Returns the _planet.
+ * Returns the _planet. If it does not exist, it will be default initializated.
  *
  * @return _planet: const Planet*
  */
@@ -141,7 +141,8 @@ const Planet* IG3MBuilder::getPlanet() {
 }
 
 /**
- * Returns the _cameraConstraints list.
+ * Returns the _cameraConstraints list. If it does not exist, it will be default initializated.
+ * @see IG3MBuilder#createDefaultCameraConstraints() 
  *
  * @return _cameraConstraints: std::vector<ICameraConstrainer*>
  */
@@ -154,7 +155,8 @@ std::vector<ICameraConstrainer*>* IG3MBuilder::getCameraConstraints() {
 }
 
 /**
- * Returns the _cameraRenderer.
+ * Returns the _cameraRenderer. If it does not exist, it will be default initializated.
+ * @see IG3MBuilder#createDefaultCameraRenderer()
  *
  * @return _cameraRenderer: CameraRenderer*
  */
@@ -167,7 +169,7 @@ CameraRenderer* IG3MBuilder::getCameraRenderer() {
 }
 
 /**
- * Returns the _busyRenderer.
+ * Returns the _busyRenderer. If it does not exist, it will be default initializated.
  *
  * @return _busyRenderer: Renderer*
  */
@@ -180,7 +182,7 @@ Renderer* IG3MBuilder::getBusyRenderer() {
 }
 
 /**
- * Returns the _backgroundColor.
+ * Returns the _backgroundColor. If it does not exist, it will be default initializated.
  *
  * @return _backgroundColor: Color*
  */
@@ -193,7 +195,7 @@ Color* IG3MBuilder::getBackgroundColor() {
 }
 
 /**
- * Returns the _tileRendererBuilder.
+ * Returns the _tileRendererBuilder. If it does not exist, it will be default initializated. 
  *
  * @return _tileRendererBuilder: TileRendererBuilder*
  */
@@ -206,13 +208,14 @@ TileRendererBuilder* IG3MBuilder::getTileRendererBuilder() {
 }
 
 /**
- * Returns the renderers list.
+ * Returns the renderers list. If it does not exist, it will be default initializated.
+ * @see IG3MBuilder#createDefaultRenderers()
  *
  * @return _renderers: std::vector<Renderer*>
  */
 std::vector<Renderer*>* IG3MBuilder::getRenderers() {
   if (!_renderers) {
-    _renderers = new std::vector<Renderer*>();
+    _renderers = createDefaultRenderers();
   }
   return _renderers;
 }
@@ -254,13 +257,14 @@ bool IG3MBuilder::getAutoDeleteInitializationTask() {
 }
 
 /**
- * Returns the array of periodical tasks.
+ * Returns the array of periodical tasks. If it does not exist, it will be default initializated.
+ * @see IG3MBuilder#createDefaultPeriodicalTasks()
  *
  * @return _periodicalTasks: std::vector<PeriodicalTask*>
  */
 std::vector<PeriodicalTask*>* IG3MBuilder::getPeriodicalTasks() {
   if (!_periodicalTasks) {
-    _periodicalTasks = new std::vector<PeriodicalTask*> ();
+    _periodicalTasks = createDefaultPeriodicalTasks();
   }
   return _periodicalTasks;
 }
@@ -378,13 +382,14 @@ void IG3MBuilder::addCameraConstraint(ICameraConstrainer* cameraConstraint) {
  */
 void IG3MBuilder::setCameraConstrainsts(std::vector<ICameraConstrainer*> cameraConstraints) {
   if (_cameraConstraints) {
+    ILogger::instance()->logWarning("LOGIC WARNING: camera contraints previously set will be ignored and deleted");
     for (unsigned int i = 0; i < _cameraConstraints->size(); i++) {
       delete _cameraConstraints->at(i);
     }
     _cameraConstraints->clear();
   }
   else {
-    _cameraConstraints = new std::vector<ICameraConstrainer*> ();
+    _cameraConstraints = new std::vector<ICameraConstrainer*>;
   }
   for (unsigned int i = 0; i < cameraConstraints.size(); i++) {
     _cameraConstraints->push_back(cameraConstraints[i]);
@@ -473,13 +478,14 @@ void IG3MBuilder::setRenderers(std::vector<Renderer*> renderers) {
     return;
   }
   if (_renderers) {
+    ILogger::instance()->logWarning("LOGIC WARNING: renderers previously set will be ignored and deleted");
     for (unsigned int i = 0; i < _renderers->size(); i++) {
       delete _renderers->at(i);
     }
     _renderers->clear();
   }
   else {
-    _renderers = new std::vector<Renderer*> ();
+    _renderers = new std::vector<Renderer*>;
   }
   for (unsigned int i = 0; i < renderers.size(); i++) {
     _renderers->push_back(renderers[i]);
@@ -522,13 +528,14 @@ void IG3MBuilder::addPeriodicalTask(PeriodicalTask* periodicalTask) {
  */
 void IG3MBuilder::setPeriodicalTasks(std::vector<PeriodicalTask*> periodicalTasks) {
   if (_periodicalTasks) {
+    ILogger::instance()->logWarning("LOGIC WARNING: periodical tasks previously set will be ignored and deleted");
     for (unsigned int i = 0; i < _periodicalTasks->size(); i++) {
       delete _periodicalTasks->at(i);
     }
     _periodicalTasks->clear();
   }
   else {
-    _periodicalTasks = new std::vector<PeriodicalTask*> ();
+    _periodicalTasks = new std::vector<PeriodicalTask*>;
   }
   for (unsigned int i = 0; i < periodicalTasks.size(); i++) {
     _periodicalTasks->push_back(periodicalTasks[i]);
@@ -596,26 +603,37 @@ G3MWidget* IG3MBuilder::create() {
     mainRenderer = getTileRendererBuilder()->create();
   }
   
-  Color backgroundColor = Color::fromRGBA(getBackgroundColor()->getRed(),
-                                          getBackgroundColor()->getGreen(),
-                                          getBackgroundColor()->getBlue(),
-                                          getBackgroundColor()->getAlpha());
+//  Color backgroundColor = Color::fromRGBA(getBackgroundColor()->getRed(),
+//                                          getBackgroundColor()->getGreen(),
+//                                          getBackgroundColor()->getBlue(),
+//                                          getBackgroundColor()->getAlpha());
   
-  G3MWidget * g3mWidget = G3MWidget::create(getGL(),
-                                            getStorage(),
-                                            getDownloader(),
-                                            getThreadUtils(),
-                                            getPlanet(),
-                                            *getCameraConstraints(),
-                                            getCameraRenderer(),
-                                            mainRenderer,
-                                            getBusyRenderer(),
-                                            backgroundColor,
-                                            getLogFPS(),
-                                            getLogDownloaderStatistics(),
-                                            getInitializationTask(),
-                                            getAutoDeleteInitializationTask(),
-                                            *getPeriodicalTasks());
+  
+  std::vector<ICameraConstrainer*> cameraConstrainst;
+  for (unsigned int i = 0; i < getCameraConstraints()->size(); i++) {
+    cameraConstrainst.push_back(getCameraConstraints()->at(i));
+  }
+  
+  std::vector<PeriodicalTask*> periodicalTasks;
+  for (unsigned int i = 0; i < getPeriodicalTasks()->size(); i++) {
+    periodicalTasks.push_back(getPeriodicalTasks()->at(i));
+  }
+  
+  G3MWidget * g3mWidget = G3MWidget::create(getGL(), //
+                                            getStorage(), //
+                                            getDownloader(), //
+                                            getThreadUtils(), //
+                                            getPlanet(), //
+                                            cameraConstrainst, //
+                                            getCameraRenderer(), //
+                                            mainRenderer, //
+                                            getBusyRenderer(), //
+                                            *getBackgroundColor(), //
+                                            getLogFPS(), //
+                                            getLogDownloaderStatistics(), //
+                                            getInitializationTask(), //
+                                            getAutoDeleteInitializationTask(), //
+                                            periodicalTasks);
   
   g3mWidget->setUserData(getUserData());
   
@@ -636,7 +654,7 @@ G3MWidget* IG3MBuilder::create() {
 }
 
 std::vector<ICameraConstrainer*>* IG3MBuilder::createDefaultCameraConstraints() {
-  std::vector<ICameraConstrainer*>* cameraConstraints = new std::vector<ICameraConstrainer*>();
+  std::vector<ICameraConstrainer*>* cameraConstraints = new std::vector<ICameraConstrainer*>;
   SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
   cameraConstraints->push_back(scc);
   
@@ -655,6 +673,18 @@ CameraRenderer* IG3MBuilder::createDefaultCameraRenderer() {
   cameraRenderer->addHandler(new CameraDoubleTapHandler());
   
   return cameraRenderer;
+}
+
+std::vector<PeriodicalTask*>* IG3MBuilder::createDefaultPeriodicalTasks() {
+  std::vector<PeriodicalTask*>* periodicalTasks = new std::vector<PeriodicalTask*>;
+  
+  return periodicalTasks;
+}
+
+std::vector<Renderer*>* IG3MBuilder::createDefaultRenderers() {
+  std::vector<Renderer*>* renderers = new std::vector<Renderer*>;
+  
+  return renderers;
 }
 
 /**
