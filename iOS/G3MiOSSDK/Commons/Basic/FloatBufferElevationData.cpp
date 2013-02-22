@@ -71,15 +71,16 @@ double FloatBufferElevationData::getElevationAt(const Angle& latitude,
     return -5000;
   }
 
-//  const double dX = (longitude.radians() - _sector.lower().longitude().radians()) / _stepInLongitudeRadians;
-//  const double dY = (latitude.radians()  - _sector.lower().latitude().radians()) / _stepInLatitudeRadians;
-
   const Vector2D uv = _sector.getUVCoordinates(latitude, longitude);
   const double dX = uv._x * _width;
   const double dY = (1.0 - uv._y) * _height;
 
   const int x = (int) dX;
   const int y = (int) dY;
+  const int nextX = (int) (dX + 1.0);
+  const int nextY = (int) (dY + 1.0);
+  const double alphaY = dY - y;
+  const double alphaX = dX - x;
 
   double result;
   if (x == dX) {
@@ -90,11 +91,8 @@ double FloatBufferElevationData::getElevationAt(const Angle& latitude,
     }
     else {
       // linear on Y
-      const int nextY = (int) (dY + 1.0);
-
       const double heightY     = getElevationAt(x, y);
       const double heightNextY = getElevationAt(x, nextY);
-      const double alphaY = dY - y;
       *type = 2;
       result = mu->lerp(heightY, heightNextY, alphaY);
     }
@@ -102,38 +100,28 @@ double FloatBufferElevationData::getElevationAt(const Angle& latitude,
   else {
     if (y == dY) {
       // linear on X
-      const int nextX = (int) (dX + 1.0);
       const double heightX     = getElevationAt(x,     y);
       const double heightNextX = getElevationAt(nextX, y);
-      const double alphaX = dX - x;
       *type = 3;
       result = mu->lerp(heightX, heightNextX, alphaX);
     }
     else {
       // bilinear
-      int _WORKING;
-      const int nextX = (int) (dX + 1.0);
-      const int nextY = (int) (dY + 1.0);
-
       const double valueSW = getElevationAt(x,     y);
       const double valueSE = getElevationAt(nextX, y);
       const double valueNE = getElevationAt(nextX, nextY);
       const double valueNW = getElevationAt(x,     nextY);
 
-      const double alphaY = dY - y;
-      const double alphaX = dX - x;
-
       *type = 4;
       result = getInterpolator()->interpolate(valueSW,
-                                            valueSE,
-                                            valueNE,
-                                            valueNW,
-                                            alphaY,
-                                            alphaX);
-//      return 0;
+                                              valueSE,
+                                              valueNE,
+                                              valueNW,
+                                              alphaY,
+                                              alphaX);
     }
   }
-
+  
   return result;
   
   //  return IMathUtils::instance()->NanD();
