@@ -17,16 +17,13 @@ package org.glob3.mobile.generated;
 
 
 
-//class IDownloader;
 //class Vector2I;
 
 public class SingleBillElevationDataProvider extends ElevationDataProvider
 {
-  private IDownloader _downloader;
-
   private ElevationData _elevationData;
   private boolean _elevationDataResolved;
-  private final URL _bilUrl = new URL();
+  private final URL _bilUrl;
   private final Sector _sector ;
   private final int _resolutionWidth;
   private final int _resolutionHeight;
@@ -51,11 +48,10 @@ public class SingleBillElevationDataProvider extends ElevationDataProvider
 
   public SingleBillElevationDataProvider(URL bilUrl, Sector sector, Vector2I resolution)
   {
-     _bilUrl = new URL(bilUrl);
+     _bilUrl = bilUrl;
      _sector = new Sector(sector);
      _resolutionWidth = resolution._x;
      _resolutionHeight = resolution._y;
-     _downloader = null;
      _elevationData = null;
      _elevationDataResolved = false;
   

@@ -73,7 +73,7 @@ public abstract class ElevationData
 
   public double getElevationAt(Geodetic2D position)
   {
-    int type;
+    int type = 0;
     return getElevationAt(position.latitude(), position.longitude(), type);
   }
 
