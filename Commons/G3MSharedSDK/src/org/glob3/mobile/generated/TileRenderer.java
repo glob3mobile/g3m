@@ -95,6 +95,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
      _lastVisibleSector = null;
     _layerSet.setChangeListener(this);
   
+    int ___TODO_make_configurable;
     _verticalExaggeration = 20F;
   }
 

@@ -55,12 +55,12 @@ public class TilesRenderParameters
   {
     final int K = 1;
     //const int _TODO_RESET_K_TO_1 = 0;
-    final int splitsByLatitude = 1 * K;
-    final int splitsByLongitude = 2 * K;
+    final int splitsByLatitude = 2 * K;
+    final int splitsByLongitude = 4 * K;
     final int topLevel = 0;
     final int maxLevel = 17;
     final Vector2I tileTextureResolution = new Vector2I(256, 256);
-    final Vector2I tileMeshResolution = new Vector2I(10, 10);
+    final Vector2I tileMeshResolution = new Vector2I(16, 16);
 
     return new TilesRenderParameters(Sector.fullSphere(), splitsByLatitude, splitsByLongitude, topLevel, maxLevel, tileTextureResolution, tileMeshResolution, renderDebug, useTilesSplitBudget, forceTopLevelTilesRenderOnStart, incrementalTileQuality);
   }

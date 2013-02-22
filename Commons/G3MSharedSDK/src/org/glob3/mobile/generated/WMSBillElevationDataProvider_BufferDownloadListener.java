@@ -4,17 +4,19 @@ public class WMSBillElevationDataProvider_BufferDownloadListener extends IBuffer
   private final Sector _sector ;
   private final int _width;
   private final int _height;
+  private final double _noDataValue;
+
   private IElevationDataListener _listener;
   private final boolean _autodeleteListener;
 
 
 
-
-  public WMSBillElevationDataProvider_BufferDownloadListener(Sector sector, Vector2I resolution, IElevationDataListener listener, boolean autodeleteListener)
+  public WMSBillElevationDataProvider_BufferDownloadListener(Sector sector, Vector2I resolution, double noDataValue, IElevationDataListener listener, boolean autodeleteListener)
   {
      _sector = new Sector(sector);
      _width = resolution._x;
      _height = resolution._y;
+     _noDataValue = noDataValue;
      _listener = listener;
      _autodeleteListener = autodeleteListener;
 
@@ -23,7 +25,7 @@ public class WMSBillElevationDataProvider_BufferDownloadListener extends IBuffer
   public final void onDownload(URL url, IByteBuffer buffer)
   {
     final Vector2I resolution = new Vector2I(_width, _height);
-    ElevationData elevationData = BilParser.parseBil16(_sector, resolution, buffer);
+    ElevationData elevationData = BilParser.parseBil16(_sector, resolution, _noDataValue, buffer);
     if (buffer != null)
        buffer.dispose();
 

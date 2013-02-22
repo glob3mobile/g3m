@@ -89,6 +89,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
     //const short resolutionMinus1 = (short) (resolution - 1);
   
   
+    int unusedType = 0;
     double minHeight = 0;
     FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.givenCenter(), planet, sector.getCenter());
     for (int j = 0; j < resolution._y; j++)
@@ -98,17 +99,19 @@ public class EllipsoidalTileTessellator extends TileTessellator
       {
         final double u = (double) i / (resolution._x-1);
   
+        final Geodetic2D position = sector.getInnerPoint(u, v);
         double height = 0;
         if (elevationData != null)
         {
-          height = elevationData.getElevationAt(j, i) * verticalExaggeration;
+  //        height = elevationData->getElevationAt(i, j, &unusedType) * verticalExaggeration;
+          height = elevationData.getElevationAt(position.latitude(), position.longitude(), unusedType) * verticalExaggeration;
           if (height < minHeight)
           {
             minHeight = height;
           }
         }
   
-        vertices.add(sector.getInnerPoint(u, v), height);
+        vertices.add(position, height);
       }
     }
   
@@ -186,6 +189,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
     Color color = Color.newFromRGBA((float) 1.0, (float) 1.0, (float) 1.0, (float) 1.0);
   
     return new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, color); //debug ? GLPrimitive::lineStrip() : GLPrimitive::triangleStrip(),
+                           //GLPrimitive::lineStrip(),
   }
 
   public final Mesh createTileDebugMesh(Planet planet, Tile tile)

@@ -73,14 +73,17 @@ public class TileRendererBuilder
   public final TileRenderer create()
   {
     int __TODO_make_inflator_configurable;
-    ElevationDataProvider elevationDataProvider = null;
+  
+  //  ElevationDataProvider* elevationDataProvider = NULL;
   
   //  ElevationDataProvider* elevationDataProvider = new WMSBillElevationDataProvider();
   
-  //  ElevationDataProvider* elevationDataProvider;
-  //  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
+    ElevationDataProvider elevationDataProvider;
+    elevationDataProvider = new SingleBillElevationDataProvider(new URL("file:///full-earth-2048x1024.bil", false), Sector.fullSphere(), new Vector2I(2048, 1024), 0);
+  //  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-4096x2048.bil", false),
   //                                                              Sector::fullSphere(),
-  //                                                              Vector2I(2048, 1024));
+  //                                                              Vector2I(4096, 2048),
+  //                                                              0);
   
     TileRenderer tileRenderer = new TileRenderer(_tileTessellator, elevationDataProvider, _texturizer, _layerSet, _parameters, _showStatistics);
   

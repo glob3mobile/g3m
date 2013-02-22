@@ -27,6 +27,7 @@ public class SingleBillElevationDataProvider extends ElevationDataProvider
   private final Sector _sector ;
   private final int _resolutionWidth;
   private final int _resolutionHeight;
+  private final double _noDataValue;
 
 
   private void drainQueue()
@@ -46,12 +47,13 @@ public class SingleBillElevationDataProvider extends ElevationDataProvider
   }
 
 
-  public SingleBillElevationDataProvider(URL bilUrl, Sector sector, Vector2I resolution)
+  public SingleBillElevationDataProvider(URL bilUrl, Sector sector, Vector2I resolution, double noDataValue)
   {
      _bilUrl = bilUrl;
      _sector = new Sector(sector);
      _resolutionWidth = resolution._x;
      _resolutionHeight = resolution._y;
+     _noDataValue = noDataValue;
      _elevationData = null;
      _elevationDataResolved = false;
   
@@ -66,7 +68,7 @@ public class SingleBillElevationDataProvider extends ElevationDataProvider
   {
     if (!_elevationDataResolved)
     {
-      context.getDownloader().requestBuffer(_bilUrl, 2000000000, TimeInterval.fromDays(30), new SingleBillElevationDataProvider_BufferDownloadListener(this, _sector, _resolutionWidth, _resolutionHeight), true);
+      context.getDownloader().requestBuffer(_bilUrl, 2000000000, TimeInterval.fromDays(30), new SingleBillElevationDataProvider_BufferDownloadListener(this, _sector, _resolutionWidth, _resolutionHeight, _noDataValue), true);
     }
   }
 
@@ -83,7 +85,7 @@ public class SingleBillElevationDataProvider extends ElevationDataProvider
     }
     else
     {
-      ElevationData elevationData = new SubviewElevationData(_elevationData, false, sector, resolution);
+      ElevationData elevationData = new SubviewElevationData(_elevationData, false, sector, resolution, _noDataValue);
       listener.onData(sector, resolution, elevationData);
     }
   

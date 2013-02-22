@@ -33,9 +33,9 @@ public class FloatBufferElevationData extends ElevationData
     return _interpolator;
   }
 
-  public FloatBufferElevationData(Sector sector, Vector2I resolution, IFloatBuffer buffer)
+  public FloatBufferElevationData(Sector sector, Vector2I resolution, double noDataValue, IFloatBuffer buffer)
   {
-     super(sector, resolution);
+     super(sector, resolution, noDataValue);
      _buffer = buffer;
      _interpolator = null;
     if (_buffer.size() != (_width * _height))
@@ -53,7 +53,7 @@ public class FloatBufferElevationData extends ElevationData
        _interpolator.dispose();
   }
 
-  public final double getElevationAt(int x, int y)
+  public final double getElevationAt(int x, int y, int type)
   {
     //return _buffer->get( (x * _width) + y );
     //return _buffer->get( (x * _height) + y );
@@ -69,6 +69,7 @@ public class FloatBufferElevationData extends ElevationData
     {
       System.out.print("break point on me\n");
     }
+    type = 1;
     return _buffer.get(index);
   }
 
@@ -82,12 +83,12 @@ public class FloatBufferElevationData extends ElevationData
       ILogger.instance().logError("Sector %s doesn't contain lat=%s lon=%s", _sector.description(), latitude.description(), longitude.description());
   
   //    return mu->NanD();
-      return -5000;
+      return _noDataValue;
     }
   
     final Vector2D uv = _sector.getUVCoordinates(latitude, longitude);
-    final double dX = uv._x * _width;
-    final double dY = (1.0 - uv._y) * _height;
+    final double dX = uv._x * (_width - 1);
+    final double dY = (1.0 - uv._y) * (_height - 1);
   
     final int x = (int) dX;
     final int y = (int) dY;
@@ -96,6 +97,7 @@ public class FloatBufferElevationData extends ElevationData
     final double alphaY = dY - y;
     final double alphaX = dX - x;
   
+    int unusedType = 0;
     double result;
     if (x == dX)
     {
@@ -103,13 +105,13 @@ public class FloatBufferElevationData extends ElevationData
       {
         // exact on grid point
         type = 1;
-        result = getElevationAt(x, y);
+        result = getElevationAt(x, y, unusedType);
       }
       else
       {
         // linear on Y
-        final double heightY = getElevationAt(x, y);
-        final double heightNextY = getElevationAt(x, nextY);
+        final double heightY = getElevationAt(x, y, unusedType);
+        final double heightNextY = getElevationAt(x, nextY, unusedType);
         type = 2;
         result = mu.lerp(heightY, heightNextY, alphaY);
       }
@@ -119,18 +121,18 @@ public class FloatBufferElevationData extends ElevationData
       if (y == dY)
       {
         // linear on X
-        final double heightX = getElevationAt(x, y);
-        final double heightNextX = getElevationAt(nextX, y);
+        final double heightX = getElevationAt(x, y, unusedType);
+        final double heightNextX = getElevationAt(nextX, y, unusedType);
         type = 3;
         result = mu.lerp(heightX, heightNextX, alphaX);
       }
       else
       {
         // bilinear
-        final double valueSW = getElevationAt(x, y);
-        final double valueSE = getElevationAt(nextX, y);
-        final double valueNE = getElevationAt(nextX, nextY);
-        final double valueNW = getElevationAt(x, nextY);
+        final double valueSW = getElevationAt(x, y, unusedType);
+        final double valueSE = getElevationAt(nextX, y, unusedType);
+        final double valueNE = getElevationAt(nextX, nextY, unusedType);
+        final double valueNW = getElevationAt(x, nextY, unusedType);
   
         type = 4;
         result = getInterpolator().interpolate(valueSW, valueSE, valueNE, valueNW, alphaY, alphaX);
@@ -153,13 +155,14 @@ public class FloatBufferElevationData extends ElevationData
     isb.addString(_sector.description());
     if (detailed)
     {
+      int unusedType = 0;
       isb.addString("\n");
       for (int row = 0; row < _width; row++)
       {
         //isb->addString("   ");
         for (int col = 0; col < _height; col++)
         {
-          isb.addDouble(getElevationAt(col, row));
+          isb.addDouble(getElevationAt(col, row, unusedType));
           isb.addString(",");
         }
         isb.addString("\n");

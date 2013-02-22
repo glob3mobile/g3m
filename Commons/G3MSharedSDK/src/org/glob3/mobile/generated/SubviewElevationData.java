@@ -22,9 +22,9 @@ public class SubviewElevationData extends ElevationData
   private final ElevationData _elevationData;
   private final boolean _ownsElevationData;
 
-  public SubviewElevationData(ElevationData elevationData, boolean ownsElevationData, Sector sector, Vector2I resolution)
+  public SubviewElevationData(ElevationData elevationData, boolean ownsElevationData, Sector sector, Vector2I resolution, double noDataValue)
   {
-     super(sector, resolution);
+     super(sector, resolution, noDataValue);
      _elevationData = elevationData;
      _ownsElevationData = ownsElevationData;
   }
@@ -38,13 +38,14 @@ public class SubviewElevationData extends ElevationData
     }
   }
 
-  public final double getElevationAt(int x, int y)
+  public final double getElevationAt(int x, int y, int type)
   {
-    final Angle latitude = Angle.fromRadians(_stepInLatitudeRadians * y);
-    final Angle longitude = Angle.fromRadians(_stepInLongitudeRadians * x);
+  //  const Angle latitude  = Angle::fromRadians( _stepInLatitudeRadians  * y );
+  //  const Angle longitude = Angle::fromRadians( _stepInLongitudeRadians * x );
   
-    int type = 0;
-    return getElevationAt(latitude, longitude, type);
+    final Geodetic2D position = _sector.getInnerPoint((double) x / _width, 1.0 - ((double) y / _height));
+  
+    return getElevationAt(position.latitude(), position.longitude(), type);
   }
 
   public final double getElevationAt(Angle latitude, Angle longitude, int type)
@@ -54,7 +55,7 @@ public class SubviewElevationData extends ElevationData
       ILogger.instance().logError("Sector %s doesn't contain lat=%s lon=%s", _sector.description(), latitude.description(), longitude.description());
   
   //    return IMathUtils::instance()->NanD();
-      return -5000;
+      return _noDataValue;
     }
     return _elevationData.getElevationAt(latitude, longitude, type);
   }

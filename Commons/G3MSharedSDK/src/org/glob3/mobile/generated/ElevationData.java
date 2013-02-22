@@ -24,16 +24,18 @@ public abstract class ElevationData
   protected final Sector _sector ;
   protected final int _width;
   protected final int _height;
+  protected final double _noDataValue;
 
   protected final double _stepInLongitudeRadians;
   protected final double _stepInLatitudeRadians;
 
-  public ElevationData(Sector sector, Vector2I resolution)
+  public ElevationData(Sector sector, Vector2I resolution, double noDataValue)
   
   {
      _sector = new Sector(sector);
      _width = resolution._x;
      _height = resolution._y;
+     _noDataValue = noDataValue;
      _stepInLongitudeRadians = sector.getDeltaLongitude().radians() / resolution._x;
      _stepInLatitudeRadians = sector.getDeltaLatitude().radians() / resolution._y;
   }
@@ -66,7 +68,7 @@ public abstract class ElevationData
     return new Vector2I(_width, _height);
   }
 
-  public abstract double getElevationAt(int x, int y);
+  public abstract double getElevationAt(int x, int y, int type);
 
 
   public abstract double getElevationAt(Angle latitude, Angle longitude, int type);

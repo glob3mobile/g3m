@@ -28,7 +28,7 @@ public class BilParser
 //  BilParser();
 
 
-  public static ElevationData parseBil16(Sector sector, Vector2I extent, IByteBuffer buffer)
+  public static ElevationData parseBil16(Sector sector, Vector2I extent, double noDataValue, IByteBuffer buffer)
   {
   
     final int size = extent._x * extent._y;
@@ -65,7 +65,7 @@ public class BilParser
       floatBuffer.rawPut(i, (float) height);
     }
   
-    return new FloatBufferElevationData(sector, extent, floatBuffer);
+    return new FloatBufferElevationData(sector, extent, noDataValue, floatBuffer);
   }
 
 }
