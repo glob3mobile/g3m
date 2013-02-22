@@ -82,7 +82,7 @@ private:
    * The minimun distance (in meters) to show the mark. If the camera is further than this, the mark will not be displayed.
    * Default value: 4.5e+06
    */
-  const double      _minDistanceToCamera;
+  double      _minDistanceToCamera;
   /**
    * The extra data to be stored by the mark.
    * Usefull to store data such us name, URL...
@@ -126,12 +126,12 @@ public:
   Mark(const std::string&   label,
        const URL            iconURL,
        const Geodetic3D     position,
+       double               minDistanceToCamera=4.5e+06,
        const bool           labelBottom=true,
        const float          labelFontSize=20,
        const Color*         labelFontColor=Color::newFromRGBA(1, 1, 1, 1),
        const Color*         labelShadowColor=Color::newFromRGBA(0, 0, 0, 1),
        const int            labelGapSize=2,
-       double               minDistanceToCamera=4.5e+06,
        MarkUserData*        userData=NULL,
        bool                 autoDeleteUserData=true,
        MarkTouchListener*   listener=NULL,
@@ -139,10 +139,10 @@ public:
 
   Mark(const std::string&   label,
        const Geodetic3D     position,
+       double               minDistanceToCamera=4.5e+06,
        const float          labelFontSize=20,
        const Color*         labelFontColor=Color::newFromRGBA(1, 1, 1, 1),
        const Color*         labelShadowColor=Color::newFromRGBA(0, 0, 0, 1),
-       double               minDistanceToCamera=4.5e+06,
        MarkUserData*        userData=NULL,
        bool                 autoDeleteUserData=true,
        MarkTouchListener*   listener=NULL,
@@ -207,6 +207,8 @@ public:
   bool touched();
 
   Vector3D* getCartesianPosition(const Planet* planet);
+  
+  void setMinDistanceToCamera(double minDistanceToCamera);
   
 };
 

@@ -135,12 +135,12 @@ public:
 Mark::Mark(const std::string&   label,
            const URL            iconURL,
            const Geodetic3D     position,
+           double               minDistanceToCamera,
            const bool           labelBottom,
            const float          labelFontSize,
            const Color*         labelFontColor,
            const Color*         labelShadowColor,
            const int            labelGapSize,
-           double               minDistanceToCamera,
            MarkUserData*        userData,
            bool                 autoDeleteUserData,
            MarkTouchListener*   listener,
@@ -172,10 +172,10 @@ _autoDeleteListener(autoDeleteListener)
 
 Mark::Mark(const std::string&   label,
            const Geodetic3D     position,
+           double               minDistanceToCamera,           
            const float          labelFontSize,
            const Color*         labelFontColor,
            const Color*         labelShadowColor,
-           double               minDistanceToCamera,
            MarkUserData*        userData,
            bool                 autoDeleteUserData,
            MarkTouchListener*   listener,
@@ -347,9 +347,9 @@ void Mark::render(const G3MRenderContext* rc) {
   const Vector3D markCameraVector = markPosition->sub(cameraPosition);
   const double distanceToCamera = markCameraVector.length();
 
-  _renderedMark = (_minDistanceToCamera == 0) || (distanceToCamera <= _minDistanceToCamera);
+  const bool renderableByDistance = (_minDistanceToCamera == 0) || (distanceToCamera <= _minDistanceToCamera);
 
-  if (_renderedMark) {
+  if (renderableByDistance) {
     const Vector3D normalAtMarkPosition = planet->geodeticSurfaceNormal(*markPosition);
 
     if (normalAtMarkPosition.angleBetween(markCameraVector)._radians > IMathUtils::instance()->halfPi()) {
@@ -374,6 +374,8 @@ void Mark::render(const G3MRenderContext* rc) {
                           _textureWidth,
                           _textureHeight);
       }
+      
+      _renderedMark = true;
     }
   }
 }
@@ -383,4 +385,8 @@ bool Mark::touched() {
     return false;
   }
   return _listener->touchedMark(this);
+}
+
+void Mark::setMinDistanceToCamera(double minDistanceToCamera) {
+  _minDistanceToCamera = minDistanceToCamera;
 }
