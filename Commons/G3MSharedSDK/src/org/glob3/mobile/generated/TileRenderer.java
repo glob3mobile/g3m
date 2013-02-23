@@ -79,10 +79,11 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 
   private float _verticalExaggeration;
 
-  public TileRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters parameters, boolean showStatistics)
+  public TileRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters parameters, boolean showStatistics)
   {
      _tessellator = tessellator;
      _elevationDataProvider = elevationDataProvider;
+     _verticalExaggeration = verticalExaggeration;
      _texturizer = texturizer;
      _layerSet = layerSet;
      _parameters = parameters;
@@ -94,9 +95,6 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
      _context = null;
      _lastVisibleSector = null;
     _layerSet.setChangeListener(this);
-  
-    int ___TODO_make_configurable;
-    _verticalExaggeration = 20F;
   }
 
   public void dispose()

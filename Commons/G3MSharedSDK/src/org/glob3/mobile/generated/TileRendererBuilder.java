@@ -72,7 +72,7 @@ public class TileRendererBuilder
   }
   public final TileRenderer create()
   {
-    int __TODO_make_inflator_configurable;
+    int __TODO_make_configurable;
   
   //  ElevationDataProvider* elevationDataProvider = NULL;
   
@@ -85,7 +85,10 @@ public class TileRendererBuilder
   //                                                              Vector2I(4096, 2048),
   //                                                              0);
   
-    TileRenderer tileRenderer = new TileRenderer(_tileTessellator, elevationDataProvider, _texturizer, _layerSet, _parameters, _showStatistics);
+    int ___TODO_make_configurable;
+    float verticalExaggeration = 10F;
+  
+    TileRenderer tileRenderer = new TileRenderer(_tileTessellator, elevationDataProvider, verticalExaggeration, _texturizer, _layerSet, _parameters, _showStatistics);
   
     for (int i = 0; i < _visibleSectorListeners.size(); i++)
     {

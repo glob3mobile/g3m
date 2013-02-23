@@ -28,6 +28,10 @@ public class BilParser
 //  BilParser();
 
 
+
+  ///#include "IFloatBuffer.hpp"
+  
+  
   public static ElevationData parseBil16(Sector sector, Vector2I extent, double noDataValue, IByteBuffer buffer)
   {
   
@@ -43,7 +47,7 @@ public class BilParser
   
     ByteBufferIterator iterator = new ByteBufferIterator(buffer);
   
-    IFloatBuffer floatBuffer = IFactory.instance().createFloatBuffer(size);
+    IShortBuffer shortBuffer = IFactory.instance().createShortBuffer(size);
     for (int i = 0; i < size; i++)
     {
       short height = iterator.nextInt16();
@@ -62,10 +66,10 @@ public class BilParser
       //    if (height < 0) {
       //      height = 0;
       //    }
-      floatBuffer.rawPut(i, (float) height);
+      shortBuffer.rawPut(i, height);
     }
   
-    return new FloatBufferElevationData(sector, extent, noDataValue, floatBuffer);
+    return new ShortBufferElevationData(sector, extent, noDataValue, shortBuffer);
   }
 
 }
