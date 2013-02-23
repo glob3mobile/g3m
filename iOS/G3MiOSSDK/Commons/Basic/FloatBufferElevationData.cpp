@@ -15,7 +15,7 @@ FloatBufferElevationData::FloatBufferElevationData(const Sector& sector,
                                                    const Vector2I& resolution,
                                                    double noDataValue,
                                                    IFloatBuffer* buffer) :
-BufferElevationData(sector, resolution, noDataValue),
+BufferElevationData(sector, resolution, noDataValue, buffer->size()),
 _buffer(buffer)
 {
   if (_buffer->size() != (_width * _height) ) {
@@ -27,13 +27,8 @@ FloatBufferElevationData::~FloatBufferElevationData() {
   delete _buffer;
 }
 
-double FloatBufferElevationData::getElevationAt(int x, int y) const {
-  const int index = ((_height-1-y) * _width) + x;
-  if ((index < 0) ||
-      (index >= _buffer->size())) {
-    printf("break point on me\n");
-  }
-  return _buffer->get( index );
+double FloatBufferElevationData::getValueInBufferAt(int index) const {
+  return _buffer->get(index);
 }
 
 const std::string FloatBufferElevationData::description(bool detailed) const {

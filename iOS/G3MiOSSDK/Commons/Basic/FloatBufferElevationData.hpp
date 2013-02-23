@@ -15,7 +15,10 @@ class IFloatBuffer;
 class FloatBufferElevationData : public BufferElevationData {
 private:
   IFloatBuffer*  _buffer;
-  
+
+protected:
+  double getValueInBufferAt(int index) const;
+
 public:
   FloatBufferElevationData(const Sector& sector,
                            const Vector2I& resolution,
@@ -23,8 +26,6 @@ public:
                            IFloatBuffer* buffer);
 
   virtual ~FloatBufferElevationData();
-
-  double getElevationAt(int x, int y) const;
 
   const std::string description(bool detailed) const;
 

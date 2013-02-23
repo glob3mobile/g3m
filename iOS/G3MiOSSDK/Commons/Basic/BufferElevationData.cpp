@@ -29,8 +29,10 @@ Interpolator* BufferElevationData::getInterpolator() const {
 
 BufferElevationData::BufferElevationData(const Sector& sector,
                                          const Vector2I& resolution,
-                                         double noDataValue) :
+                                         double noDataValue,
+                                         int bufferSize) :
 ElevationData(sector, resolution, noDataValue),
+_bufferSize(bufferSize),
 _interpolator(NULL)
 {
 
@@ -39,6 +41,16 @@ _interpolator(NULL)
 BufferElevationData::~BufferElevationData() {
   delete _interpolator;
 }
+
+double BufferElevationData::getElevationAt(int x, int y) const {
+  const int index = ((_height-1-y) * _width) + x;
+  if ( (index < 0) || (index >= _bufferSize) ) {
+    printf("break point on me\n");
+    return _noDataValue;
+  }
+  return getValueInBufferAt( index );
+}
+
 
 double BufferElevationData::getElevationAt(const Angle& latitude,
                                            const Angle& longitude) const {

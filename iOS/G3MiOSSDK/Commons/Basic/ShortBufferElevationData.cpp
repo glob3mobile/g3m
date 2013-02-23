@@ -15,7 +15,7 @@ ShortBufferElevationData::ShortBufferElevationData(const Sector& sector,
                                                    const Vector2I& resolution,
                                                    double noDataValue,
                                                    IShortBuffer* buffer) :
-BufferElevationData(sector, resolution, noDataValue),
+BufferElevationData(sector, resolution, noDataValue, buffer->size()),
 _buffer(buffer)
 {
   if (_buffer->size() != (_width * _height) ) {
@@ -27,13 +27,8 @@ ShortBufferElevationData::~ShortBufferElevationData() {
   delete _buffer;
 }
 
-double ShortBufferElevationData::getElevationAt(int x, int y) const {
-  const int index = ((_height-1-y) * _width) + x;
-  if ((index < 0) ||
-      (index >= _buffer->size())) {
-    printf("break point on me\n");
-  }
-  return _buffer->get( index );
+double ShortBufferElevationData::getValueInBufferAt(int index) const {
+  return _buffer->get(index);
 }
 
 const std::string ShortBufferElevationData::description(bool detailed) const {
