@@ -31,7 +31,7 @@ TileRendererBuilder::~TileRendererBuilder() {
 }
 
 TileRenderer* TileRendererBuilder::create() {
-  int __TODO_make_inflator_configurable;
+  int __TODO_make_configurable;
   
 //  ElevationDataProvider* elevationDataProvider = NULL;
 
@@ -47,8 +47,12 @@ TileRenderer* TileRendererBuilder::create() {
 //                                                              Vector2I(4096, 2048),
 //                                                              0);
 
+  int ___TODO_make_configurable;
+  float verticalExaggeration = 10;
+
   TileRenderer* tileRenderer = new TileRenderer(_tileTessellator,
                                                 elevationDataProvider,
+                                                verticalExaggeration,
                                                 _texturizer,
                                                 _layerSet,
                                                 _parameters,

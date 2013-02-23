@@ -12,9 +12,6 @@
 #include "TileTessellator.hpp"
 class Sector;
 
-//#include "MutableVector3D.hpp"
-//#include "Planet.hpp"
-
 class EllipsoidalTileTessellator : public TileTessellator {
 private:
 

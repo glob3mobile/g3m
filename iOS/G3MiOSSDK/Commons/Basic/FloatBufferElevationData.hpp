@@ -9,16 +9,12 @@
 #ifndef __G3MiOSSDK__FloatBufferElevationData__
 #define __G3MiOSSDK__FloatBufferElevationData__
 
-#include "ElevationData.hpp"
-class Interpolator;
+#include "BufferElevationData.hpp"
 class IFloatBuffer;
 
-class FloatBufferElevationData : public ElevationData {
+class FloatBufferElevationData : public BufferElevationData {
 private:
   IFloatBuffer*  _buffer;
-
-  mutable Interpolator*  _interpolator;
-  Interpolator*  getInterpolator() const;
   
 public:
   FloatBufferElevationData(const Sector& sector,
@@ -28,12 +24,7 @@ public:
 
   virtual ~FloatBufferElevationData();
 
-  double getElevationAt(int x, int y,
-                        int* type) const;
-
-  double getElevationAt(const Angle& latitude,
-                        const Angle& longitude,
-                        int* type) const;
+  double getElevationAt(int x, int y) const;
 
   const std::string description(bool detailed) const;
 

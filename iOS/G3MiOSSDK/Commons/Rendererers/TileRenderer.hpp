@@ -306,6 +306,7 @@ private:
 public:
   TileRenderer(const TileTessellator* tessellator,
                ElevationDataProvider* elevationDataProvider,
+               float verticalExaggeration,
                TileTexturizer*  texturizer,
                LayerSet* layerSet,
                const TilesRenderParameters* parameters,

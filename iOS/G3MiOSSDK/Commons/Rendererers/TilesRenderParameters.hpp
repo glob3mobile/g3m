@@ -65,14 +65,14 @@ public:
                                               const bool useTilesSplitBudget,
                                               const bool forceTopLevelTilesRenderOnStart,
                                               const bool incrementalTileQuality) {
-    const int K = 1;
+    const int K = 2;
     //const int _TODO_RESET_K_TO_1 = 0;
     const int splitsByLatitude = 2 * K;
     const int splitsByLongitude = 4 * K;
     const int topLevel = 0;
     const int maxLevel = 17;
     const Vector2I tileTextureResolution(256, 256);
-    const Vector2I tileMeshResolution(16, 16);
+    const Vector2I tileMeshResolution(20, 20);
 
     return new TilesRenderParameters(Sector::fullSphere(),
                                      splitsByLatitude,

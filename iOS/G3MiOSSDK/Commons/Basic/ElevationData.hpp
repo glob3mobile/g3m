@@ -21,9 +21,6 @@ protected:
   const int _height;
   const double _noDataValue;
 
-  const double _stepInLongitudeRadians;
-  const double _stepInLatitudeRadians;
-
 public:
   ElevationData(const Sector& sector,
                 const Vector2I& resolution,
@@ -34,17 +31,13 @@ public:
 
   virtual Vector2I getExtent() const;
 
-  virtual double getElevationAt(int x, int y,
-                                int* type) const = 0;
-
+  virtual double getElevationAt(int x, int y) const = 0;
 
   virtual double getElevationAt(const Angle& latitude,
-                                const Angle& longitude,
-                                int* type) const = 0;
+                                const Angle& longitude) const = 0;
 
   virtual double getElevationAt(const Geodetic2D& position) const {
-    int type = 0;
-    return getElevationAt(position.latitude(), position.longitude(), &type);
+    return getElevationAt(position.latitude(), position.longitude());
   }
 
   virtual const std::string description(bool detailed) const = 0;

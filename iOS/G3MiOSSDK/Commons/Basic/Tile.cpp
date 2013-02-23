@@ -281,9 +281,9 @@ Extent* Tile::getTileExtent(const G3MRenderContext *rc) {
 bool Tile::isVisible(const G3MRenderContext *rc,
                      const TileRenderContext* trc) {
 //  // test if sector is back oriented with respect to the camera
-//    if (_sector.isBackOriented(rc)) {
-//      return false;
-//    }
+//  if (_sector.isBackOriented(rc)) {
+//    return false;
+//  }
 
   const Extent* extent = getTessellatorMesh(rc, trc)->getExtent();
   if (extent == NULL) {
@@ -311,7 +311,7 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
     }
   }
 
-  //Extent* extent = getTessellatorMesh(rc, trc)->getExtent();
+  //const Extent* extent = getTessellatorMesh(rc, trc)->getExtent();
   const Extent* extent = getTileExtent(rc);
   if (extent == NULL) {
     return true;

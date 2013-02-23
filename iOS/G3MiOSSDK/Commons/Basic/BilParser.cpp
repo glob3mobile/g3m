@@ -10,9 +10,10 @@
 
 #include "IByteBuffer.hpp"
 #include "ByteBufferIterator.hpp"
-#include "IFloatBuffer.hpp"
+//#include "IFloatBuffer.hpp"
+#include "IShortBuffer.hpp"
 #include "IFactory.hpp"
-#include "FloatBufferElevationData.hpp"
+#include "ShortBufferElevationData.hpp"
 
 
 ElevationData* BilParser::parseBil16(const Sector& sector,
@@ -33,7 +34,7 @@ ElevationData* BilParser::parseBil16(const Sector& sector,
 
   ByteBufferIterator iterator(buffer);
 
-  IFloatBuffer* floatBuffer = IFactory::instance()->createFloatBuffer(size);
+  IShortBuffer* shortBuffer = IFactory::instance()->createShortBuffer(size);
   for (int i = 0; i < size; i++) {
     short height = iterator.nextInt16();
     if (height == -9999) {
@@ -48,11 +49,11 @@ ElevationData* BilParser::parseBil16(const Sector& sector,
     //    if (height < 0) {
     //      height = 0;
     //    }
-    floatBuffer->rawPut(i, (float) height);
+    shortBuffer->rawPut(i, height);
   }
 
-  return new FloatBufferElevationData(sector,
+  return new ShortBufferElevationData(sector,
                                       extent,
                                       noDataValue,
-                                      floatBuffer);
+                                      shortBuffer);
 }

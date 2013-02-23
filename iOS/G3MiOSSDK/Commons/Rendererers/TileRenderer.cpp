@@ -100,12 +100,14 @@ public:
 
 TileRenderer::TileRenderer(const TileTessellator* tessellator,
                            ElevationDataProvider* elevationDataProvider,
+                           float verticalExaggeration,
                            TileTexturizer*  texturizer,
                            LayerSet* layerSet,
                            const TilesRenderParameters* parameters,
                            bool showStatistics) :
 _tessellator(tessellator),
 _elevationDataProvider(elevationDataProvider),
+_verticalExaggeration(verticalExaggeration),
 _texturizer(texturizer),
 _layerSet(layerSet),
 _parameters(parameters),
@@ -118,9 +120,6 @@ _context(NULL),
 _lastVisibleSector(NULL)
 {
   _layerSet->setChangeListener(this);
-
-  int ___TODO_make_configurable;
-  _verticalExaggeration = 20;
 }
 
 void TileRenderer::recreateTiles() {

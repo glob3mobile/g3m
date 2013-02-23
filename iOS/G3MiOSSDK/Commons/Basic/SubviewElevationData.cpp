@@ -27,32 +27,25 @@ SubviewElevationData::~SubviewElevationData() {
   }
 }
 
-double SubviewElevationData::getElevationAt(int x, int y,
-                                            int* type) const {
-//  const Angle latitude  = Angle::fromRadians( _stepInLatitudeRadians  * y );
-//  const Angle longitude = Angle::fromRadians( _stepInLongitudeRadians * x );
-
-  const Geodetic2D position = _sector.getInnerPoint((double) x / _width,
-                                                    1.0 - ((double) y / _height));
+double SubviewElevationData::getElevationAt(int x, int y) const {
+  const double u = (double) x / (_width - 1);
+  const double v = (double) y / (_height - 1);
+  const Geodetic2D position = _sector.getInnerPoint(u, v);
 
   return getElevationAt(position.latitude(),
-                        position.longitude(),
-                        type);
+                        position.longitude());
 }
 
 double SubviewElevationData::getElevationAt(const Angle& latitude,
-                                            const Angle& longitude,
-                                            int* type) const {
+                                            const Angle& longitude) const {
   if (!_sector.contains(latitude, longitude)) {
-    ILogger::instance()->logError("Sector %s doesn't contain lat=%s lon=%s",
-                                  _sector.description().c_str(),
-                                  latitude.description().c_str(),
-                                  longitude.description().c_str());
-
-//    return IMathUtils::instance()->NanD();
+    //    ILogger::instance()->logError("Sector %s doesn't contain lat=%s lon=%s",
+    //                                  _sector.description().c_str(),
+    //                                  latitude.description().c_str(),
+    //                                  longitude.description().c_str());
     return _noDataValue;
   }
-  return _elevationData->getElevationAt(latitude, longitude, type);
+  return _elevationData->getElevationAt(latitude, longitude);
 }
 
 const std::string SubviewElevationData::description(bool detailed) const {

@@ -394,7 +394,7 @@ public:
 {
   LayerSet* layerSet = new LayerSet();
 
-  const bool blueMarble = true;
+  const bool blueMarble = false;
   if (blueMarble) {
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
                                         URL("http://www.nasa.network.com/wms?", false),
@@ -423,7 +423,7 @@ public:
   }
 
 
-  bool useBing = false;
+  bool useBing = true;
   if (useBing) {
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
                                         URL("http://www.nasa.network.com/wms?", false),
@@ -802,7 +802,8 @@ public:
 
 //    const Sector targetSector(Sector::fromDegrees(-45, -90, 45, 90));
 //    const Sector targetSector(Sector::fromDegrees(-90, -90, 0, 0));
-    const Sector targetSector(Sector::fromDegrees(-45, -90, 0, -45));
+//    const Sector targetSector(Sector::fromDegrees(-45, -90, 0, -45));
+    const Sector targetSector(Sector::fullSphere());
 
 //    const Vector2I extent(512, 256);
 //    const ElevationData* elevationData = new SubviewElevationData(rawElevationData,
@@ -813,43 +814,41 @@ public:
     ILogger::instance()->logInfo("Elevation data");
     //ILogger::instance()->logInfo("%s", elevationData->description().c_str());
 
-//    int type = -1;
-//    double minHeight = elevationData->getElevationAt(0, 0, &type);
-//    double maxHeight = minHeight;
-//
-//    for (int x = 0; x < extent._x; x++) {
-//      for (int y = 0; y < extent._y; y++) {
-//        const double height = elevationData->getElevationAt(x, y, &type);
-//
-//        if (height < minHeight) { minHeight = height; }
-//        if (height > maxHeight) { maxHeight = height; }
-//      }
-//    }
-
-    double minHeight = rawElevationData->getElevationAt(targetSector.lower());
+    double minHeight = rawElevationData->getElevationAt(0, 0);
     double maxHeight = minHeight;
 
-    const double latStep = (180.0 / 1024.0) / 4 * 3;
-    const double lonStep = (360.0 / 2048.0) / 4 * 3;
-
-    const Geodetic2D targetLower(targetSector.lower());
-    const Geodetic2D targetUpper(targetSector.upper());
-
-    for (double lat = targetLower.latitude().degrees();
-         lat < targetUpper.latitude().degrees();
-         lat += latStep) {
-      const Angle latitude(Angle::fromDegrees(lat));
-      for (double lon = targetLower.longitude().degrees();
-           lon < targetUpper.longitude().degrees();
-           lon += lonStep) {
-        const Angle longitude(Angle::fromDegrees(lon));
-        int type = 0;
-        const double height = rawElevationData->getElevationAt(latitude, longitude, &type);
+    for (int x = 0; x < rawExtent._x; x++) {
+      for (int y = 0; y < rawExtent._y; y++) {
+        const double height = rawElevationData->getElevationAt(x, y);
 
         if (height < minHeight) { minHeight = height; }
         if (height > maxHeight) { maxHeight = height; }
       }
     }
+
+//    double minHeight = rawElevationData->getElevationAt(targetSector.lower());
+//    double maxHeight = minHeight;
+//
+//    const double latStep = (180.0 / 1024.0) / 4 * 3;
+//    const double lonStep = (360.0 / 2048.0) / 4 * 3;
+//
+//    const Geodetic2D targetLower(targetSector.lower());
+//    const Geodetic2D targetUpper(targetSector.upper());
+//
+//    for (double lat = targetLower.latitude().degrees();
+//         lat < targetUpper.latitude().degrees();
+//         lat += latStep) {
+//      const Angle latitude(Angle::fromDegrees(lat));
+//      for (double lon = targetLower.longitude().degrees();
+//           lon < targetUpper.longitude().degrees();
+//           lon += lonStep) {
+//        const Angle longitude(Angle::fromDegrees(lon));
+//        const double height = rawElevationData->getElevationAt(latitude, longitude);
+//
+//        if (height < minHeight) { minHeight = height; }
+//        if (height > maxHeight) { maxHeight = height; }
+//      }
+//    }
 
 
     const double deltaHeight = maxHeight - minHeight;
@@ -861,58 +860,58 @@ public:
                                                Vector3D::zero());
     FloatBufferBuilderFromColor colors;
 
-//    for (int x = 0; x < extent._x; x++) {
-//      for (int y = 0; y < extent._y; y++) {
-//        const double height = elevationData->getElevationAt(x, y, &type);
-//        const float alpha = (float) ((height - minHeight) / deltaHeight);
-//
-//        //vertices.add(x * 200.0, y * 200.0, 7500.0 * alpha);
-//        vertices.add(x * 250.0, y * 250.0, height * 1.5);
-//
-//        float r = alpha;
-//        float g = alpha;
-//        float b = alpha;
+    for (int x = 0; x < rawExtent._x; x++) {
+      for (int y = 0; y < rawExtent._y; y++) {
+        const double height = rawElevationData->getElevationAt(x, y);
+        const float alpha = (float) ((height - minHeight) / deltaHeight);
+
+        //vertices.add(x * 200.0, y * 200.0, 7500.0 * alpha);
+        vertices.add(x * 250.0, y * 250.0, height * 1.5);
+
+        float r = alpha;
+        float g = alpha;
+        float b = alpha;
 //        if (type != 1) {
 //          r = 1;
 //        }
 //        else {
 //          g = 1;
 //        }
-//
-//        colors.add(r, g, b, 1);
-//      }
-//    }
-
-    for (double lat = targetLower.latitude().degrees();
-         lat < targetUpper.latitude().degrees();
-         lat += latStep) {
-      const Angle latitude(Angle::fromDegrees(lat));
-      for (double lon = targetLower.longitude().degrees();
-           lon < targetUpper.longitude().degrees();
-           lon += lonStep) {
-        const Angle longitude(Angle::fromDegrees(lon));
-        //        const double height = elevationData->getElevationAt(x, y);
-        int type = -1;
-        const double height = rawElevationData->getElevationAt(latitude, longitude, &type);
-
-        const float alpha = (float) ((height - minHeight) / deltaHeight);
-
-        float r = alpha;
-        float g = alpha;
-        float b = alpha;
-        if (type != 1) {
-          r = 1;
-        }
-        else {
-          g = 1;
-        }
-
-        //vertices.add(x * 200.0, y * 200.0, 7500.0 * height);
-        vertices.add(lon * 2000.0, lat * 2000.0, height * 1.5);
 
         colors.add(r, g, b, 1);
       }
     }
+
+//    for (double lat = targetLower.latitude().degrees();
+//         lat < targetUpper.latitude().degrees();
+//         lat += latStep) {
+//      const Angle latitude(Angle::fromDegrees(lat));
+//      for (double lon = targetLower.longitude().degrees();
+//           lon < targetUpper.longitude().degrees();
+//           lon += lonStep) {
+//        const Angle longitude(Angle::fromDegrees(lon));
+//        //        const double height = elevationData->getElevationAt(x, y);
+////        int type = -1;
+//        const double height = rawElevationData->getElevationAt(latitude, longitude);
+//
+//        const float alpha = (float) ((height - minHeight) / deltaHeight);
+//
+//        float r = alpha;
+//        float g = alpha;
+//        float b = alpha;
+////        if (type != 1) {
+////          r = 1;
+////        }
+////        else {
+////          g = 1;
+////        }
+//
+//        //vertices.add(x * 200.0, y * 200.0, 7500.0 * height);
+//        vertices.add(lon * 2000.0, lat * 2000.0, height * 1.5);
+//
+//        colors.add(r, g, b, 1);
+//      }
+//    }
 
     const float lineWidth = 1;
     const float pointSize = 3;
@@ -980,23 +979,6 @@ public:
     void run(const G3MContext* context) {
       printf("Running initialization Task\n");
 
-      
-//      WMSBillElevationDataProvider* dp = new WMSBillElevationDataProvider(); // no delete, will leak
-//
-//      dp->initialize(context);
-//      /*
-//
-//       http://128.102.22.115/elev?REQUEST=GetMap&SERVICE=WMS&VERSION=1.3.0&LAYERS=srtm3&STYLES=&FORMAT=image/bil&BGCOLOR=0x
-//       FFFFFF&TRANSPARENT=TRUE&CRS=EPSG:4326&BBOX=-17.0232177085356,27.967811065876,-16.0019401695656,28.6103464294992&WIDT
-//       H=19&HEIGHT=37
-//       
-//       */
-//      
-//      dp->requestElevationData(Sector::fromDegrees(-17.0232177085356, 27.967811065876, -16.0019401695656, 28.6103464294992),
-//                               Vector2I(19, 37),
-//                               new TestElevationDataListener(),
-//                               true);
-
       /*
       context->getDownloader()->requestBuffer(//URL("file:///sample_bil16_150x150.bil", false),
                                               //URL("file:///409_554.bil", false),
@@ -1041,61 +1023,61 @@ public:
       */
 
       /**/
-////      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
-////                                                                ofType: @"json"];
-//
-//      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"A320"
-//                                                                ofType: @"json"];
-////      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"citation"
-////                                                                ofType: @"json"];
-//      if (planeFilePath) {
-//        NSString *nsPlaneJSON = [NSString stringWithContentsOfFile: planeFilePath
-//                                                          encoding: NSUTF8StringEncoding
-//                                                             error: nil];
-//        if (nsPlaneJSON) {
-//          std::string planeJSON = [nsPlaneJSON UTF8String];
-//          Shape* plane = SceneJSShapesParser::parseFromJSON(planeJSON, "file:///textures-A320/");
-//          //Shape* plane = SceneJSShapesParser::parse(planeJSON, "file:///textures-citation/");
-//          if (plane) {
-//            // Washington, DC
-//            plane->setPosition(new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
-//                                              Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
-//                                              10000) );
-//            const double scale = 200;
-//            plane->setScale(scale, scale, scale);
-//            plane->setPitch(Angle::fromDegrees(90));
-//            _shapesRenderer->addShape(plane);
-//
-//            plane->setAnimatedPosition(TimeInterval::fromSeconds(26),
-//                                       Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
-//                                                  Angle::fromDegreesMinutesSeconds(-78, 2, 10.92),
-//                                                  10000),
-//                                       true);
-//
-//            /*
-//            const double fromDistance = 50000 * 1.5;
-//            const double toDistance   = 25000 * 1.5 / 2;
-//
-//            // const Angle fromAzimuth = Angle::fromDegrees(-90);
-//            // const Angle toAzimuth   = Angle::fromDegrees(-90 + 360 + 180);
-//            const Angle fromAzimuth = Angle::fromDegrees(-90);
-//            const Angle toAzimuth   = Angle::fromDegrees(-90 + 360);
-//
-//            // const Angle fromAltitude = Angle::fromDegrees(65);
-//            // const Angle toAltitude   = Angle::fromDegrees(5);
-//            // const Angle fromAltitude = Angle::fromDegrees(30);
-//            // const Angle toAltitude   = Angle::fromDegrees(15);
-//            const Angle fromAltitude = Angle::fromDegrees(90);
-//            const Angle toAltitude   = Angle::fromDegrees(15);
-//
-//            plane->orbitCamera(TimeInterval::fromSeconds(20),
-//                               fromDistance, toDistance,
-//                               fromAzimuth,  toAzimuth,
-//                               fromAltitude, toAltitude);
-//             */
-//          }
-//        }
-//      }
+      if (false) {
+        //      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
+        //                                                                ofType: @"json"];
+
+        NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"A320"
+                                                                  ofType: @"json"];
+        if (planeFilePath) {
+          NSString *nsPlaneJSON = [NSString stringWithContentsOfFile: planeFilePath
+                                                            encoding: NSUTF8StringEncoding
+                                                               error: nil];
+          if (nsPlaneJSON) {
+            std::string planeJSON = [nsPlaneJSON UTF8String];
+            Shape* plane = SceneJSShapesParser::parseFromJSON(planeJSON, "file:///textures-A320/");
+            //Shape* plane = SceneJSShapesParser::parse(planeJSON, "file:///textures-citation/");
+            if (plane) {
+              // Washington, DC
+              plane->setPosition(new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
+                                                Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
+                                                10000) );
+              const double scale = 200;
+              plane->setScale(scale, scale, scale);
+              plane->setPitch(Angle::fromDegrees(90));
+              _shapesRenderer->addShape(plane);
+
+              plane->setAnimatedPosition(TimeInterval::fromSeconds(26),
+                                         Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
+                                                    Angle::fromDegreesMinutesSeconds(-78, 2, 10.92),
+                                                    10000),
+                                         true);
+
+              /**/
+              const double fromDistance = 50000 * 1.5;
+              const double toDistance   = 25000 * 1.5 / 2;
+
+              // const Angle fromAzimuth = Angle::fromDegrees(-90);
+              // const Angle toAzimuth   = Angle::fromDegrees(-90 + 360 + 180);
+              const Angle fromAzimuth = Angle::fromDegrees(-90);
+              const Angle toAzimuth   = Angle::fromDegrees(-90 + 360);
+
+              // const Angle fromAltitude = Angle::fromDegrees(65);
+              // const Angle toAltitude   = Angle::fromDegrees(5);
+              // const Angle fromAltitude = Angle::fromDegrees(30);
+              // const Angle toAltitude   = Angle::fromDegrees(15);
+              const Angle fromAltitude = Angle::fromDegrees(90);
+              const Angle toAltitude   = Angle::fromDegrees(15);
+
+              plane->orbitCamera(TimeInterval::fromSeconds(20),
+                                 fromDistance, toDistance,
+                                 fromAzimuth,  toAzimuth,
+                                 fromAltitude, toAltitude);
+              /* */
+            }
+          }
+        }
+      }
       /**/
 
 

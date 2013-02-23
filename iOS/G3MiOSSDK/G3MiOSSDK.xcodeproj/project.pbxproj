@@ -96,6 +96,10 @@
 		CF0D9BB41601F46B00F28B7D /* ByteBuffer_iOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF0D9BB31601F46A00F28B7D /* ByteBuffer_iOS.cpp */; };
 		CF11E8C6164D653000935052 /* SGLayerNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF11E8C4164D653000935052 /* SGLayerNode.cpp */; };
 		CF11E8C7164D653000935052 /* SGLayerNode.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF11E8C5164D653000935052 /* SGLayerNode.hpp */; settings = {ATTRIBUTES = (); }; };
+		CF27B16016D93DCA0000A415 /* BufferElevationData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF27B15E16D93DC90000A415 /* BufferElevationData.cpp */; };
+		CF27B16116D93DCA0000A415 /* BufferElevationData.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF27B15F16D93DC90000A415 /* BufferElevationData.hpp */; };
+		CF27B16416D93F2C0000A415 /* ShortBufferElevationData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF27B16216D93F2B0000A415 /* ShortBufferElevationData.cpp */; };
+		CF27B16516D93F2C0000A415 /* ShortBufferElevationData.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF27B16316D93F2C0000A415 /* ShortBufferElevationData.hpp */; };
 		CF2CDD991678292E002A78A9 /* GInitializationTask.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF2CDD971678292E002A78A9 /* GInitializationTask.cpp */; };
 		CF2CDD9A1678292E002A78A9 /* GInitializationTask.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF2CDD981678292E002A78A9 /* GInitializationTask.hpp */; settings = {ATTRIBUTES = (); }; };
 		CF31CBF1158776130085E8F1 /* Effects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF31CBF0158776120085E8F1 /* Effects.cpp */; };
@@ -505,6 +509,10 @@
 		CF0D9BB31601F46A00F28B7D /* ByteBuffer_iOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ByteBuffer_iOS.cpp; path = Specific/Derived/ByteBuffer_iOS.cpp; sourceTree = "<group>"; };
 		CF11E8C4164D653000935052 /* SGLayerNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGLayerNode.cpp; path = Commons/Rendererers/SGLayerNode.cpp; sourceTree = "<group>"; };
 		CF11E8C5164D653000935052 /* SGLayerNode.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SGLayerNode.hpp; path = Commons/Rendererers/SGLayerNode.hpp; sourceTree = "<group>"; };
+		CF27B15E16D93DC90000A415 /* BufferElevationData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BufferElevationData.cpp; path = Commons/Basic/BufferElevationData.cpp; sourceTree = "<group>"; };
+		CF27B15F16D93DC90000A415 /* BufferElevationData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = BufferElevationData.hpp; path = Commons/Basic/BufferElevationData.hpp; sourceTree = "<group>"; };
+		CF27B16216D93F2B0000A415 /* ShortBufferElevationData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ShortBufferElevationData.cpp; path = Commons/Basic/ShortBufferElevationData.cpp; sourceTree = "<group>"; };
+		CF27B16316D93F2C0000A415 /* ShortBufferElevationData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ShortBufferElevationData.hpp; path = Commons/Basic/ShortBufferElevationData.hpp; sourceTree = "<group>"; };
 		CF2CDD971678292E002A78A9 /* GInitializationTask.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GInitializationTask.cpp; path = Commons/Basic/GInitializationTask.cpp; sourceTree = "<group>"; };
 		CF2CDD981678292E002A78A9 /* GInitializationTask.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GInitializationTask.hpp; path = Commons/Basic/GInitializationTask.hpp; sourceTree = "<group>"; };
 		CF31CBEE158776020085E8F1 /* Effects.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Effects.hpp; path = Commons/Basic/Effects.hpp; sourceTree = "<group>"; };
@@ -990,6 +998,10 @@
 				CFDA835816D6698700295F96 /* FloatBufferElevationData.hpp */,
 				CFDA836016D6776B00295F96 /* SubviewElevationData.cpp */,
 				CFDA836116D6776B00295F96 /* SubviewElevationData.hpp */,
+				CF27B15E16D93DC90000A415 /* BufferElevationData.cpp */,
+				CF27B15F16D93DC90000A415 /* BufferElevationData.hpp */,
+				CF27B16216D93F2B0000A415 /* ShortBufferElevationData.cpp */,
+				CF27B16316D93F2C0000A415 /* ShortBufferElevationData.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -1603,6 +1615,8 @@
 				CFDA835A16D6698700295F96 /* FloatBufferElevationData.hpp in Headers */,
 				CFDA835E16D6758200295F96 /* BilinearInterpolator.hpp in Headers */,
 				CFDA836316D6776B00295F96 /* SubviewElevationData.hpp in Headers */,
+				CF27B16116D93DCA0000A415 /* BufferElevationData.hpp in Headers */,
+				CF27B16516D93F2C0000A415 /* ShortBufferElevationData.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1833,6 +1847,8 @@
 				CFDA835916D6698700295F96 /* FloatBufferElevationData.cpp in Sources */,
 				CFDA835D16D6758200295F96 /* BilinearInterpolator.cpp in Sources */,
 				CFDA836216D6776B00295F96 /* SubviewElevationData.cpp in Sources */,
+				CF27B16016D93DCA0000A415 /* BufferElevationData.cpp in Sources */,
+				CF27B16416D93F2C0000A415 /* ShortBufferElevationData.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

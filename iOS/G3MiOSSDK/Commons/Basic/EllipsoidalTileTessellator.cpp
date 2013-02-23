@@ -30,28 +30,27 @@
 Vector2I EllipsoidalTileTessellator::getTileMeshResolution(const Planet* planet,
                                                            const Tile* tile,
                                                            bool debug) const {
-  //const short resolution = calculateResolution(tile->getSector());
-  //return Vector2I(resolution, resolution);
   return calculateResolution(tile->getSector());
 }
 
 Vector2I EllipsoidalTileTessellator::calculateResolution(const Sector& sector) const {
-  //const short resolution = (short) _resolutionX;
+//  return Vector2I(_resolutionX, _resolutionY);
 
-//  /* testing for dynamic latitude-resolution */
-//  double cos = sector.getCenter().latitude().cosinus();
-//  if (cos < 0) {
-//    cos *= -1;
-//  }
-//  short resolution = (short) (_resolution * cos);
-//  if (resolution % 2 == 1) {
-//    resolution += 1;
-//  }
-//  if (resolution < 6) {
-//    resolution = 6;
-//  }
 
-  return Vector2I(_resolutionX, _resolutionY);
+  /* testing for dynamic latitude-resolution */
+  const double cos = sector.getCenter().latitude().cosinus();
+
+  int resolutionY = (int) (_resolutionY * cos);
+  if (resolutionY < 6) {
+    resolutionY = 6;
+  }
+
+  int resolutionX = (int) (_resolutionX * cos);
+  if (resolutionX < 6) {
+    resolutionX = 6;
+  }
+
+  return Vector2I(resolutionX, resolutionY);
 }
 
 Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
@@ -61,19 +60,8 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
                                                  bool debug) const {
 
   const Sector sector = tile->getSector();
-
-//  if (elevationData != NULL) {
-//    ILogger::instance()->logInfo("Elevation data for sector=%s", sector.description().c_str());
-//    ILogger::instance()->logInfo("%s", elevationData->description().c_str());
-//  }
-
-  //const short resolution = (short) _resolution;
   const Vector2I resolution = calculateResolution(sector);
 
-  //const short resolutionMinus1 = (short) (resolution - 1);
-
-
-  int unusedType = 0;
   double minHeight = 0;
   FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(),
                                           planet,
@@ -84,12 +72,12 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
       const double u = (double) i / (resolution._x-1);
 
       const Geodetic2D position = sector.getInnerPoint(u, v);
+      
       double height = 0;
       if (elevationData != NULL) {
-//        height = elevationData->getElevationAt(i, j, &unusedType) * verticalExaggeration;
+//        height = elevationData->getElevationAt(i, j) * verticalExaggeration;
         height = elevationData->getElevationAt(position.latitude(),
-                                               position.longitude(),
-                                               &unusedType) * verticalExaggeration;
+                                               position.longitude()) * verticalExaggeration;
         if (height < minHeight) {
           minHeight = height;
         }
@@ -119,8 +107,7 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
     // compute skirt height
     const Vector3D sw = planet->toCartesian(sector.getSW());
     const Vector3D nw = planet->toCartesian(sector.getNW());
-//    const double skirtHeight = (nw.sub(sw).length() * 0.05 * -1) + minHeight;
-    const double skirtHeight = (nw.sub(sw).length() * 0.1 * -1) + minHeight;
+    const double skirtHeight = (nw.sub(sw).length() * 0.05 * -1) + minHeight;
 
     indices.add((short) 0);
     int posS = resolution._x * resolution._y;
@@ -183,9 +170,7 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
 
 IFloatBuffer* EllipsoidalTileTessellator::createUnitTextCoords(const Tile* tile) const {
 
-//  const int resolution       = _resolution;
-  Vector2I resolution = calculateResolution(tile->getSector());
-  //const int resolutionMinus1 = resolution - 1;
+  const Vector2I resolution = calculateResolution(tile->getSector());
 
   float* u = new float[resolution._x * resolution._y];
   float* v = new float[resolution._x * resolution._y];
@@ -198,19 +183,18 @@ IFloatBuffer* EllipsoidalTileTessellator::createUnitTextCoords(const Tile* tile)
     }
   }
 
-  //FloatBufferBuilderFromCartesian2D textCoords;
   int textCoordsSize = (resolution._x * resolution._y) * 2;
   if (_skirted) {
-    //textCoordsSize += (resolutionMinus1 * 4) * 2;
-    textCoordsSize += ((resolution._x-1)*(resolution._y-1) * 4) * 2;
+    textCoordsSize += ((resolution._x-1) * (resolution._y-1) * 4) * 2;
   }
+
   IFloatBuffer* textCoords = IFactory::instance()->createFloatBuffer(textCoordsSize);
+
   int textCoordsIndex = 0;
 
   for (int j = 0; j < resolution._y; j++) {
     for (int i = 0; i < resolution._x; i++) {
       const int pos = j*resolution._x + i;
-      //textCoords.add( u[pos], v[pos] );
       textCoords->rawPut(textCoordsIndex++, u[pos]);
       textCoords->rawPut(textCoordsIndex++, v[pos]);
     }
@@ -221,7 +205,6 @@ IFloatBuffer* EllipsoidalTileTessellator::createUnitTextCoords(const Tile* tile)
     // west side
     for (int j = 0; j < resolution._y-1; j++) {
       const int pos = j*resolution._x;
-      //textCoords.add( u[pos], v[pos] );
       textCoords->rawPut(textCoordsIndex++, u[pos]);
       textCoords->rawPut(textCoordsIndex++, v[pos]);
     }
@@ -229,7 +212,6 @@ IFloatBuffer* EllipsoidalTileTessellator::createUnitTextCoords(const Tile* tile)
     // south side
     for (int i = 0; i < resolution._x-1; i++) {
       const int pos = (resolution._y-1) * resolution._x + i;
-      //textCoords.add( u[pos], v[pos] );
       textCoords->rawPut(textCoordsIndex++, u[pos]);
       textCoords->rawPut(textCoordsIndex++, v[pos]);
     }
@@ -237,7 +219,6 @@ IFloatBuffer* EllipsoidalTileTessellator::createUnitTextCoords(const Tile* tile)
     // east side
     for (int j = resolution._y-1; j > 0; j--) {
       const int pos = j*resolution._x + resolution._x-1;
-      //textCoords.add( u[pos], v[pos] );
       textCoords->rawPut(textCoordsIndex++, u[pos]);
       textCoords->rawPut(textCoordsIndex++, v[pos]);
     }
@@ -245,7 +226,6 @@ IFloatBuffer* EllipsoidalTileTessellator::createUnitTextCoords(const Tile* tile)
     // north side
     for (int i = resolution._x-1; i > 0; i--) {
       const int pos = i;
-      //textCoords.add( u[pos], v[pos] );
       textCoords->rawPut(textCoordsIndex++, u[pos]);
       textCoords->rawPut(textCoordsIndex++, v[pos]);
     }

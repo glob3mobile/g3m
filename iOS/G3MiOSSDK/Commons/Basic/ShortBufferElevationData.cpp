@@ -1,20 +1,20 @@
 //
-//  FloatBufferElevationData.cpp
+//  ShortBufferElevationData.cpp
 //  G3MiOSSDK
 //
-//  Created by Diego Gomez Deck on 2/21/13.
+//  Created by Diego Gomez Deck on 2/23/13.
 //
 //
 
-#include "FloatBufferElevationData.hpp"
+#include "ShortBufferElevationData.hpp"
 
-#include "IFloatBuffer.hpp"
+#include "IShortBuffer.hpp"
 #include "IStringBuilder.hpp"
 
-FloatBufferElevationData::FloatBufferElevationData(const Sector& sector,
+ShortBufferElevationData::ShortBufferElevationData(const Sector& sector,
                                                    const Vector2I& resolution,
                                                    double noDataValue,
-                                                   IFloatBuffer* buffer) :
+                                                   IShortBuffer* buffer) :
 BufferElevationData(sector, resolution, noDataValue),
 _buffer(buffer)
 {
@@ -23,11 +23,11 @@ _buffer(buffer)
   }
 }
 
-FloatBufferElevationData::~FloatBufferElevationData() {
+ShortBufferElevationData::~ShortBufferElevationData() {
   delete _buffer;
 }
 
-double FloatBufferElevationData::getElevationAt(int x, int y) const {
+double ShortBufferElevationData::getElevationAt(int x, int y) const {
   const int index = ((_height-1-y) * _width) + x;
   if ((index < 0) ||
       (index >= _buffer->size())) {
@@ -36,9 +36,9 @@ double FloatBufferElevationData::getElevationAt(int x, int y) const {
   return _buffer->get( index );
 }
 
-const std::string FloatBufferElevationData::description(bool detailed) const {
+const std::string ShortBufferElevationData::description(bool detailed) const {
   IStringBuilder *isb = IStringBuilder::newStringBuilder();
-  isb->addString("(FloatBufferElevationData extent=");
+  isb->addString("(ShortBufferElevationData extent=");
   isb->addInt(_width);
   isb->addString("x");
   isb->addInt(_height);
