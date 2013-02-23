@@ -1,28 +1,28 @@
 package org.glob3.mobile.generated; 
 //
-//  FloatBufferElevationData.cpp
+//  ShortBufferElevationData.cpp
 //  G3MiOSSDK
 //
-//  Created by Diego Gomez Deck on 2/21/13.
+//  Created by Diego Gomez Deck on 2/23/13.
 //
 //
 
 //
-//  FloatBufferElevationData.hpp
+//  ShortBufferElevationData.hpp
 //  G3MiOSSDK
 //
-//  Created by Diego Gomez Deck on 2/21/13.
+//  Created by Diego Gomez Deck on 2/23/13.
 //
 //
 
 
-//class IFloatBuffer;
+//class IShortBuffer;
 
-public class FloatBufferElevationData extends BufferElevationData
+public class ShortBufferElevationData extends BufferElevationData
 {
-  private IFloatBuffer _buffer;
+  private IShortBuffer _buffer;
 
-  public FloatBufferElevationData(Sector sector, Vector2I resolution, double noDataValue, IFloatBuffer buffer)
+  public ShortBufferElevationData(Sector sector, Vector2I resolution, double noDataValue, IShortBuffer buffer)
   {
      super(sector, resolution, noDataValue);
      _buffer = buffer;
@@ -51,7 +51,7 @@ public class FloatBufferElevationData extends BufferElevationData
   public final String description(boolean detailed)
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
-    isb.addString("(FloatBufferElevationData extent=");
+    isb.addString("(ShortBufferElevationData extent=");
     isb.addInt(_width);
     isb.addString("x");
     isb.addInt(_height);
