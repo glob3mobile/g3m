@@ -20,8 +20,9 @@ package org.glob3.mobile.generated;
 
 public abstract class BufferElevationData extends ElevationData
 {
-
   private Interpolator _interpolator;
+
+  private final int _bufferSize;
 
   //
   //  FloatBufferElevationData.cpp
@@ -42,9 +43,12 @@ public abstract class BufferElevationData extends ElevationData
     return _interpolator;
   }
 
-  public BufferElevationData(Sector sector, Vector2I resolution, double noDataValue)
+  protected abstract double getValueInBufferAt(int index);
+
+  public BufferElevationData(Sector sector, Vector2I resolution, double noDataValue, int bufferSize)
   {
      super(sector, resolution, noDataValue);
+     _bufferSize = bufferSize;
      _interpolator = null;
   
   }
@@ -121,6 +125,15 @@ public abstract class BufferElevationData extends ElevationData
     return result;
   }
 
-  public abstract double getElevationAt(int x, int y);
+  public double getElevationAt(int x, int y)
+  {
+    final int index = ((_height-1-y) * _width) + x;
+    if ((index < 0) || (index >= _bufferSize))
+    {
+      System.out.print("break point on me\n");
+      return _noDataValue;
+    }
+    return getValueInBufferAt(index);
+  }
 
 }

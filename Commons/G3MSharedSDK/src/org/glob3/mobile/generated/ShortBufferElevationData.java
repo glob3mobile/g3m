@@ -22,9 +22,14 @@ public class ShortBufferElevationData extends BufferElevationData
 {
   private IShortBuffer _buffer;
 
+  protected final double getValueInBufferAt(int index)
+  {
+    return _buffer.get(index);
+  }
+
   public ShortBufferElevationData(Sector sector, Vector2I resolution, double noDataValue, IShortBuffer buffer)
   {
-     super(sector, resolution, noDataValue);
+     super(sector, resolution, noDataValue, buffer.size());
      _buffer = buffer;
     if (_buffer.size() != (_width * _height))
     {
@@ -36,16 +41,6 @@ public class ShortBufferElevationData extends BufferElevationData
   {
     if (_buffer != null)
        _buffer.dispose();
-  }
-
-  public final double getElevationAt(int x, int y)
-  {
-    final int index = ((_height-1-y) * _width) + x;
-    if ((index < 0) || (index >= _buffer.size()))
-    {
-      System.out.print("break point on me\n");
-    }
-    return _buffer.get(index);
   }
 
   public final String description(boolean detailed)
