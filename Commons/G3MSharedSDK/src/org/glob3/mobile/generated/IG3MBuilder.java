@@ -359,25 +359,7 @@ public abstract class IG3MBuilder
       mainRenderer = getTileRendererBuilder().create();
     }
   
-  //  Color backgroundColor = Color::fromRGBA(getBackgroundColor()->getRed(),
-  //                                          getBackgroundColor()->getGreen(),
-  //                                          getBackgroundColor()->getBlue(),
-  //                                          getBackgroundColor()->getAlpha());
-  
-  
-    java.util.ArrayList<ICameraConstrainer> cameraConstrainst = new java.util.ArrayList<ICameraConstrainer>();
-    for (int i = 0; i < getCameraConstraints().size(); i++)
-    {
-      cameraConstrainst.add(getCameraConstraints().get(i));
-    }
-  
-    java.util.ArrayList<PeriodicalTask> periodicalTasks = new java.util.ArrayList<PeriodicalTask>();
-    for (int i = 0; i < getPeriodicalTasks().size(); i++)
-    {
-      periodicalTasks.add(getPeriodicalTasks().get(i));
-    }
-  
-    G3MWidget g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), getPlanet(), cameraConstrainst, getCameraRenderer(), mainRenderer, getBusyRenderer(), getBackgroundColor(), getLogFPS(), getLogDownloaderStatistics(), getInitializationTask(), getAutoDeleteInitializationTask(), periodicalTasks);
+    G3MWidget g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), getPlanet(), getCameraConstraints(), getCameraRenderer(), mainRenderer, getBusyRenderer(), getBackgroundColor(), getLogFPS(), getLogDownloaderStatistics(), getInitializationTask(), getAutoDeleteInitializationTask(), getPeriodicalTasks());
   
     g3mWidget.setUserData(getUserData());
   
@@ -387,10 +369,13 @@ public abstract class IG3MBuilder
     _threadUtils = null;
     _planet = null;
     _cameraConstraints = null;
+    _cameraConstraints = null;
     _cameraRenderer = null;
+    _renderers = null;
     _renderers = null;
     _busyRenderer = null;
     _initializationTask = null;
+    _periodicalTasks = null;
     _periodicalTasks = null;
     _userData = null;
   

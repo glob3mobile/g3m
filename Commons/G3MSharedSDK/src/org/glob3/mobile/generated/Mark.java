@@ -339,7 +339,9 @@ public class Mark
     final Vector3D markCameraVector = markPosition.sub(cameraPosition);
     final double distanceToCamera = markCameraVector.length();
   
+    // mark will be renderered only if is renderable by distance and placed on a visible globe area
     final boolean renderableByDistance = (_minDistanceToCamera == 0) || (distanceToCamera <= _minDistanceToCamera);
+    _renderedMark = false;
   
     if (renderableByDistance)
     {
@@ -364,9 +366,9 @@ public class Mark
           GL gl = rc.getGL();
   
           gl.drawBillBoard(_textureId, getVertices(planet), _textureWidth, _textureHeight);
-        }
   
-        _renderedMark = true;
+          _renderedMark = true;
+        }
       }
     }
   }
@@ -459,6 +461,10 @@ public class Mark
   public final void setMinDistanceToCamera(double minDistanceToCamera)
   {
     _minDistanceToCamera = minDistanceToCamera;
+  }
+  public final double getMinDistanceToCamera()
+  {
+    return _minDistanceToCamera;
   }
 
 }
