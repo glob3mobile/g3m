@@ -25,6 +25,7 @@
 		CF91C53016D7C03C00E25C24 /* full-earth-4096x2048.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF91C52F16D7C03B00E25C24 /* full-earth-4096x2048.bil */; };
 		CFB5274B16D53906008374C2 /* full-earth-2048x1024.bil in Resources */ = {isa = PBXBuildFile; fileRef = CFB5274A16D53906008374C2 /* full-earth-2048x1024.bil */; };
 		CFCC53F316D50D8900671DC4 /* full-earth-512x512.bil in Resources */ = {isa = PBXBuildFile; fileRef = CFCC53F216D50D8900671DC4 /* full-earth-512x512.bil */; };
+		CFD42AB816DBAEFD00B03961 /* elev-35.0_-6.0_38.0_-2.0_4096x2048.bil in Resources */ = {isa = PBXBuildFile; fileRef = CFD42AB716DBAEFD00B03961 /* elev-35.0_-6.0_38.0_-2.0_4096x2048.bil */; };
 		CFE3DBB1164B0E7D00910037 /* seymour-plane.json in Resources */ = {isa = PBXBuildFile; fileRef = CFE3DBB0164B0E7D00910037 /* seymour-plane.json */; };
 		CFEA76681666DCB000E89BC7 /* images in Resources */ = {isa = PBXBuildFile; fileRef = CFEA76671666DCB000E89BC7 /* images */; };
 		CFF95F7D158A748F00B56E11 /* plane.png in Resources */ = {isa = PBXBuildFile; fileRef = CFF95F7C158A748F00B56E11 /* plane.png */; };
@@ -291,6 +292,7 @@
 		CFBA53F416B9B88500256453 /* ICameraConstrainer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ICameraConstrainer.hpp; path = ../G3MiOSSDK/Commons/Cameras/ICameraConstrainer.hpp; sourceTree = "<group>"; };
 		CFBA53F516B9B88500256453 /* SimpleCameraConstrainer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = SimpleCameraConstrainer.hpp; path = ../G3MiOSSDK/Commons/Cameras/SimpleCameraConstrainer.hpp; sourceTree = "<group>"; };
 		CFCC53F216D50D8900671DC4 /* full-earth-512x512.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "full-earth-512x512.bil"; sourceTree = "<group>"; };
+		CFD42AB716DBAEFD00B03961 /* elev-35.0_-6.0_38.0_-2.0_4096x2048.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = "elev-35.0_-6.0_38.0_-2.0_4096x2048.bil"; sourceTree = "<group>"; };
 		CFDA835F16D675EB00295F96 /* BilinearInterpolator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = BilinearInterpolator.hpp; path = ../G3MiOSSDK/Commons/Math/BilinearInterpolator.hpp; sourceTree = "<group>"; };
 		CFDFAE7D16D6AAB800E3D172 /* SubviewElevationData.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = SubviewElevationData.hpp; path = ../G3MiOSSDK/Commons/Basic/SubviewElevationData.hpp; sourceTree = "<group>"; };
 		CFE3DBB0164B0E7D00910037 /* seymour-plane.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "seymour-plane.json"; sourceTree = "<group>"; };
@@ -632,6 +634,7 @@
 		D8EEF4271577B0D6003FEB5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CFD42AB716DBAEFD00B03961 /* elev-35.0_-6.0_38.0_-2.0_4096x2048.bil */,
 				CF91C52F16D7C03B00E25C24 /* full-earth-4096x2048.bil */,
 				CFB5274A16D53906008374C2 /* full-earth-2048x1024.bil */,
 				CFCC53F216D50D8900671DC4 /* full-earth-512x512.bil */,
@@ -772,6 +775,7 @@
 				CFCC53F316D50D8900671DC4 /* full-earth-512x512.bil in Resources */,
 				CFB5274B16D53906008374C2 /* full-earth-2048x1024.bil in Resources */,
 				CF91C53016D7C03C00E25C24 /* full-earth-4096x2048.bil in Resources */,
+				CFD42AB816DBAEFD00B03961 /* elev-35.0_-6.0_38.0_-2.0_4096x2048.bil in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -43,13 +43,19 @@ TileRenderer* TileRendererBuilder::create() {
 //                                                              Vector2I(2048, 1024),
 //                                                              0);
 
+//  ElevationDataProvider* elevationDataProvider;
+//  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///elev-35.0_-6.0_38.0_-2.0_4096x2048.bil", false),
+//                                                              Sector::fromDegrees(35, -6, 38, -2),
+//                                                              Vector2I(4096, 2048),
+//                                                              0);
+
 //  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-4096x2048.bil", false),
 //                                                              Sector::fullSphere(),
 //                                                              Vector2I(4096, 2048),
 //                                                              0);
 
   int ___TODO_make_configurable;
-  float verticalExaggeration = 10;
+  float verticalExaggeration = 2;
 
   TileRenderer* tileRenderer = new TileRenderer(_tileTessellator,
                                                 elevationDataProvider,

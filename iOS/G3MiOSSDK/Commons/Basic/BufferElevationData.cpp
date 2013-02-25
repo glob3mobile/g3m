@@ -67,8 +67,10 @@ double BufferElevationData::getElevationAt(const Angle& latitude,
   IMathUtils* mu = IMathUtils::instance();
 
   const Vector2D uv = _sector.getUVCoordinates(latitude, longitude);
-  const double dX = uv._x * (_width - 1);
-  const double dY = (1.0 - uv._y) * (_height - 1);
+  const double u = mu->clamp(uv._x, 0, 1);
+  const double v = mu->clamp(uv._y, 0, 1);
+  const double dX = u * (_width - 1);
+  const double dY = (1.0 - v) * (_height - 1);
 
   const int x = (int) dX;
   const int y = (int) dY;

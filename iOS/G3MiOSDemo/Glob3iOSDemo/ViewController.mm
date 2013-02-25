@@ -976,8 +976,87 @@ public:
 
     }
 
+    Mesh* createSectorMesh(const Planet* planet,
+                           const int resolution,
+                           const Sector& sector,
+                           const Color& color,
+                           const int lineWidth) {
+      // create vectors
+      FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(),
+                                              planet,
+                                              sector.getCenter());
+
+      // create indices
+      ShortBufferBuilder indices;
+
+      const int resolutionMinus1 = resolution - 1;
+      int indicesCounter = 0;
+
+      // compute offset for vertices
+      //    const Vector3D sw = planet->toVector3D(sector->getSW());
+      //    const Vector3D nw = planet->toVector3D(sector->getNW());
+      //    const double offset = nw.sub(sw).length(); // * 1e-3;
+      const double offset = 5000;
+
+      // west side
+      for (int j = 0; j < resolutionMinus1; j++) {
+        const Geodetic3D g(sector.getInnerPoint(0, (double)j/resolutionMinus1),
+                           offset);
+        vertices.add(g);
+
+        indices.add(indicesCounter++);
+      }
+
+      // south side
+      for (int i = 0; i < resolutionMinus1; i++) {
+        const Geodetic3D g(sector.getInnerPoint((double)i/resolutionMinus1, 1),
+                           offset);
+        vertices.add(g);
+
+        indices.add(indicesCounter++);
+      }
+
+      // east side
+      for (int j = resolutionMinus1; j > 0; j--) {
+        const Geodetic3D g(sector.getInnerPoint(1, (double)j/resolutionMinus1),
+                           offset);
+        vertices.add(g);
+
+        indices.add(indicesCounter++);
+      }
+
+      // north side
+      for (int i = resolutionMinus1; i > 0; i--) {
+        const Geodetic3D g(sector.getInnerPoint((double)i/resolutionMinus1, 0),
+                           offset);
+        vertices.add(g);
+
+        indices.add(indicesCounter++);
+      }
+
+      return new IndexedMesh(GLPrimitive::lineLoop(),
+                             true,
+                             vertices.getCenter(),
+                             vertices.create(),
+                             indices.create(),
+                             lineWidth,
+                             1,
+                             new Color(color));
+
+    }
+
     void run(const G3MContext* context) {
       printf("Running initialization Task\n");
+
+      const Sector targetSector(Sector::fromDegrees(35, -6, 38, -2));
+
+      _meshRenderer->addMesh( createSectorMesh(context->getPlanet(),
+                                               20,
+                                               targetSector,
+                                               Color::yellow(),
+                                               2) );
+
+      //      targetSector.c
 
       /*
       context->getDownloader()->requestBuffer(//URL("file:///sample_bil16_150x150.bil", false),

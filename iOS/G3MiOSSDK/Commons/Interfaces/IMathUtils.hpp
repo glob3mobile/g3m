@@ -118,7 +118,22 @@ public:
   virtual long long doubleToRawLongBits(double value) const = 0;
   virtual double rawLongBitsToDouble(long long value) const = 0;
 
-};
+  virtual double clamp(double value,
+                       double min,
+                       double max) {
+    if (value < min) return min;
+    if (value > max) return max;
+    return value;
+  }
 
+  virtual float clamp(float value,
+                      float min,
+                      float max) {
+    if (value < min) return min;
+    if (value > max) return max;
+    return value;
+  }
+
+};
 
 #endif
