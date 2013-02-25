@@ -100,6 +100,7 @@ public class G3MShowMarkersActivity
                               city.getAsString("name", ""), //
                               new URL("http://openweathermap.org/img/w/" + icon, false), //
                               new Geodetic3D(position, 0), //
+                              0, //
                               true, //
                               14));
                   }
