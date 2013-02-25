@@ -603,28 +603,12 @@ G3MWidget* IG3MBuilder::create() {
     mainRenderer = getTileRendererBuilder()->create();
   }
   
-//  Color backgroundColor = Color::fromRGBA(getBackgroundColor()->getRed(),
-//                                          getBackgroundColor()->getGreen(),
-//                                          getBackgroundColor()->getBlue(),
-//                                          getBackgroundColor()->getAlpha());
-  
-  
-  std::vector<ICameraConstrainer*> cameraConstrainst;
-  for (unsigned int i = 0; i < getCameraConstraints()->size(); i++) {
-    cameraConstrainst.push_back(getCameraConstraints()->at(i));
-  }
-  
-  std::vector<PeriodicalTask*> periodicalTasks;
-  for (unsigned int i = 0; i < getPeriodicalTasks()->size(); i++) {
-    periodicalTasks.push_back(getPeriodicalTasks()->at(i));
-  }
-  
   G3MWidget * g3mWidget = G3MWidget::create(getGL(), //
                                             getStorage(), //
                                             getDownloader(), //
                                             getThreadUtils(), //
                                             getPlanet(), //
-                                            cameraConstrainst, //
+                                            *getCameraConstraints(), //
                                             getCameraRenderer(), //
                                             mainRenderer, //
                                             getBusyRenderer(), //
@@ -633,7 +617,7 @@ G3MWidget* IG3MBuilder::create() {
                                             getLogDownloaderStatistics(), //
                                             getInitializationTask(), //
                                             getAutoDeleteInitializationTask(), //
-                                            periodicalTasks);
+                                            *getPeriodicalTasks());
   
   g3mWidget->setUserData(getUserData());
   
@@ -642,11 +626,14 @@ G3MWidget* IG3MBuilder::create() {
   _downloader = NULL;
   _threadUtils = NULL;
   _planet = NULL;
+  delete _cameraConstraints;
   _cameraConstraints = NULL;
   _cameraRenderer = NULL;
+  delete _renderers;
   _renderers = NULL;
   _busyRenderer = NULL;
   _initializationTask = NULL;
+  delete _periodicalTasks;
   _periodicalTasks = NULL;
   _userData = NULL;
   

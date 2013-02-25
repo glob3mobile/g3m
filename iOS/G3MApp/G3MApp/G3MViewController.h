@@ -13,11 +13,6 @@
 
 @class G3MWidget_iOS;
 @class G3MToolbar;
-class LayerSet;
-class MarksRenderer;
-class ShapesRenderer;
-class MeshRenderer;
-class Shape;
 
 @interface G3MViewController : UIViewController <UIAlertViewDelegate, G3MUIDropDownMenuDelegate> {
   NSString* urlMarkString;
@@ -28,15 +23,8 @@ class Shape;
 
 @property (strong, nonatomic) IBOutlet UIButton *demoSelector;
 @property (strong, nonatomic) G3MUIDropDownMenu* demoMenu;
-
 @property (strong, nonatomic) G3MToolbar* toolbar;
 @property (strong, nonatomic) UIButton* layerSwitcher;
 @property (strong, nonatomic) UIButton* playButton;
-
-@property (nonatomic) LayerSet* layerSet;
-@property (nonatomic) bool satelliteLayerEnabled;
-@property (nonatomic) MarksRenderer* markerRenderer;
-@property (nonatomic) ShapesRenderer* shapeRenderer;
-@property (nonatomic) MeshRenderer* meshRenderer;
 
 @end

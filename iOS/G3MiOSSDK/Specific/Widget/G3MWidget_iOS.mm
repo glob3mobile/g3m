@@ -413,4 +413,9 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
   [self widget]->resetCameraPosition();
 }
 
+- (WidgetUserData*) userData
+{
+  return [self widget]->getUserData();
+}
+
 @end

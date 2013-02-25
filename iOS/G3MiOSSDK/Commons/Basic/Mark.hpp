@@ -209,6 +209,7 @@ public:
   Vector3D* getCartesianPosition(const Planet* planet);
   
   void setMinDistanceToCamera(double minDistanceToCamera);
+  double getMinDistanceToCamera();
   
 };
 
