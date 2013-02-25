@@ -129,8 +129,10 @@ void SceneParser::parserJSONWMSLayer(LayerSet* layerSet, const JSONObject* jsonL
     if (layersName->getString().length() > 0) {
         layersSecuence = IStringUtils::instance()->substring(layersSecuence, 0, layersSecuence.length()-1);
     }
-    
-    //TODO check if wms 1.1.1 is neccessary to have it in account
+  
+    delete layersName;
+  
+    //TODO check if wms 1.1.1 is neccessary to have it into account
     WMSServerVersion wmsVersion = WMS_1_1_0;
     if (jsonVersion.compare(WMS130)==0) {
         wmsVersion = WMS_1_3_0;
@@ -168,6 +170,8 @@ void SceneParser::parserJSONPlanarImageLayer(LayerSet* layerSet, const JSONObjec
         url->addString(namefile);
         
         _panoSources.push_back(url->getString());
+      
+        delete url;
     }
 }
 
@@ -221,6 +225,8 @@ void SceneParser::parserGEOJSONLayer(LayerSet* layerSet, const JSONObject* jsonL
         legendLayer.push_back(geojsonMetadata);
       
         _mapGeoJSONSources[url->getString()] = geojsonMetadata;
+      
+        delete url;
     }
     _legend[jsonLayer->getAsString(NAME)->value()] = legendLayer;
     countGroup++;

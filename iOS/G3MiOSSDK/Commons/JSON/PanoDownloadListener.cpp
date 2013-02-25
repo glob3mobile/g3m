@@ -40,6 +40,7 @@ void PanoDownloadListener::onDownload(const URL& url,
     ILogger::instance()->logInfo(url.getPath());
     parseMETADATA(IStringUtils::instance()->substring(url.getPath(), 0, IStringUtils::instance()->indexOf(url.getPath(), "/info.txt")),json->asObject());
     IJSONParser::instance()->deleteJSONData(json);
+    delete buffer;
 }
 
 
