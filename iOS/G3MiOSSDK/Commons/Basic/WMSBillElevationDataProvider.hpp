@@ -24,6 +24,10 @@ public:
 
   }
 
+  bool isReadyToRender(const G3MRenderContext* rc) {
+    return true;
+  }
+
   void initialize(const G3MContext* context);
 
   const long long requestElevationData(const Sector& sector,

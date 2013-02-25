@@ -12,7 +12,8 @@
 #include "EllipsoidalTileTessellator.hpp"
 #include "LayerBuilder.hpp"
 #include "DownloadPriority.hpp"
-#include "WMSBillElevationDataProvider.hpp"
+//#include "WMSBillElevationDataProvider.hpp"
+#include "SingleBillElevationDataProvider.hpp"
 
 TileRendererBuilder::TileRendererBuilder() {  
   _showStatistics = false;
@@ -37,7 +38,6 @@ TileRendererBuilder::~TileRendererBuilder() {
 
 /**
  * Returns the _tileTessellator.
- * Lazy initialization.
  *
  * @return _tileTessellator: TileTessellator*
  */
@@ -51,7 +51,6 @@ TileTessellator* TileRendererBuilder::getTileTessellator() {
 
 /**
  * Returns the _texturizer.
- * Lazy initialization.
  *
  * @return _texturizer: TileTexturizer*
  */
@@ -65,7 +64,6 @@ TileTexturizer* TileRendererBuilder::getTexturizer() {
 
 /**
  * Returns the _layerSet.
- * Lazy initialization.
  *
  * @return _layerSet: LayerSet*
  */
@@ -79,7 +77,6 @@ LayerSet* TileRendererBuilder::getLayerSet() {
 
 /**
  * Returns the _parameters.
- * Lazy initialization.
  *
  * @return _parameters: TilesRenderParameters*
  */
@@ -93,7 +90,6 @@ TilesRenderParameters* TileRendererBuilder::getParameters() {
 
 /**
  * Returns the showStatistics flag.
- * Method created to keep convention. It is not needed as it does not have to create a default value.
  *
  * @return _showStatistics: bool
  */
@@ -103,7 +99,6 @@ bool TileRendererBuilder::getShowStatistics() {
 
 /**
  * Returns the renderDebug flag.
- * Method created to keep convention. It is not needed as it does not have to create a default value.
  *
  * @return _renderDebug: bool
  */
@@ -113,7 +108,6 @@ bool TileRendererBuilder::getRenderDebug() {
 
 /**
  * Returns the useTilesSplitBudget flag.
- * Method created to keep convention. It is not needed as it does not have to create a default value.
  *
  * @return _useTilesSplitBudget: bool
  */
@@ -123,7 +117,6 @@ bool TileRendererBuilder::getUseTilesSplitBudget() {
 
 /**
  * Returns the forceTopLevelTilesRenderOnStart flag.
- * Method created to keep convention. It is not needed as it does not have to create a default value.
  *
  * @return _forceTopLevelTilesRenderOnStart: bool
  */
@@ -133,7 +126,6 @@ bool TileRendererBuilder::getForceTopLevelTilesRenderOnStart() {
 
 /**
  * Returns the incrementalTileQuality flag.
- * Method created to keep convention. It is not needed as it does not have to create a default value.
  *
  * @return _incrementalTileQuality: bool
  */
@@ -143,7 +135,6 @@ bool TileRendererBuilder::getIncrementalTileQuality() {
 
 /**
  * Returns the array of visibleSectorListeners.
- * Method created to keep convention. It is not needed as it does not have to create a default value.
  *
  * @return _forceTopLevelTilesRenderOnStart: std::vector<VisibleSectorListener*>
  */
@@ -153,7 +144,6 @@ std::vector<VisibleSectorListener*> TileRendererBuilder::getVisibleSectorListene
 
 /**
   * Returns the array of stabilization milliseconds related to visible-sector listeners.
-  * Method created to keep convention. It is not needed as it does not have to create a default value.
   *
   * @return _stabilizationMilliSeconds: std::vector<long long>
   */
@@ -162,8 +152,7 @@ std::vector<long long> TileRendererBuilder::getStabilizationMilliSeconds() {
 }
 
 /**
- * Returns the _texturePriority
- * Method created to keep convention. It is not needed as it does not have to create a default value.
+ * Returns the _texturePriority.
  *
  * @return _texturePriority: long long
  */
@@ -249,11 +238,35 @@ void TileRendererBuilder::setTexturePriority(long long texturePriority) {
 }
 
 TileRenderer* TileRendererBuilder::create() {
-  int __TODO_make_inflator_configurable;
-  //  ElevationDataProvider* elevationDataProvider = new WMSBillElevationDataProvider();
+  int __TODO_make_configurable;
+  
   ElevationDataProvider* elevationDataProvider = NULL;
+  
+  //  ElevationDataProvider* elevationDataProvider = new WMSBillElevationDataProvider();
+  
+  //  ElevationDataProvider* elevationDataProvider;
+  //  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
+  //                                                              Sector::fullSphere(),
+  //                                                              Vector2I(2048, 1024),
+  //                                                              0);
+  
+  //  ElevationDataProvider* elevationDataProvider;
+  //  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///elev-35.0_-6.0_38.0_-2.0_4096x2048.bil", false),
+  //                                                              Sector::fromDegrees(35, -6, 38, -2),
+  //                                                              Vector2I(4096, 2048),
+  //                                                              0);
+  
+  //  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-4096x2048.bil", false),
+  //                                                              Sector::fullSphere(),
+  //                                                              Vector2I(4096, 2048),
+  //                                                              0);
+  
+  int ___TODO_make_configurable;
+  float verticalExaggeration = 2;
+  
   TileRenderer* tileRenderer = new TileRenderer(getTileTessellator(),
                                                 elevationDataProvider,
+                                                verticalExaggeration,
                                                 getTexturizer(),
                                                 getLayerSet(),
                                                 getParameters(),
@@ -281,13 +294,9 @@ TilesRenderParameters* TileRendererBuilder::createTileRendererParameters() {
 }
 
 TileTessellator* TileRendererBuilder::createTileTessellator() {
-  TileTessellator* tileTessellator = new EllipsoidalTileTessellator(getParameters()->_tileResolution, true);
-
-  return tileTessellator;
+  return new EllipsoidalTileTessellator(getParameters()->_tileMeshResolution, true);
 }
 
 LayerSet* TileRendererBuilder::createLayerSet() {
-  LayerSet* layerSet = LayerBuilder::createDefaultSatelliteImagery();
-  
-  return layerSet;
+  return LayerBuilder::createDefaultSatelliteImagery();
 }

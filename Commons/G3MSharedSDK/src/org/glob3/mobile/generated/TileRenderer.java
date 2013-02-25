@@ -81,10 +81,11 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 
   private float _verticalExaggeration;
 
-  public TileRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters parameters, boolean showStatistics, long texturePriority)
+  public TileRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters parameters, boolean showStatistics, long texturePriority)
   {
      _tessellator = tessellator;
      _elevationDataProvider = elevationDataProvider;
+     _verticalExaggeration = verticalExaggeration;
      _texturizer = texturizer;
      _layerSet = layerSet;
      _parameters = parameters;
@@ -97,8 +98,6 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
      _lastVisibleSector = null;
      _texturePriority = texturePriority;
     _layerSet.setChangeListener(this);
-  
-    _verticalExaggeration = 20F;
   }
 
   public void dispose()
@@ -270,6 +269,14 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 
   public final boolean isReadyToRender(G3MRenderContext rc)
   {
+    if (_elevationDataProvider != null)
+    {
+      if (!_elevationDataProvider.isReadyToRender(rc))
+      {
+        return false;
+      }
+    }
+  
     if (_topTilesJustCreated)
     {
       _topTilesJustCreated = false;

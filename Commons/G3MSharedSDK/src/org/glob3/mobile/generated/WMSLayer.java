@@ -57,7 +57,7 @@ public class WMSLayer extends Layer
 
   }
 
-  public final java.util.ArrayList<Petition> getMapPetitions(G3MRenderContext rc, Tile tile, int width, int height)
+  public final java.util.ArrayList<Petition> getMapPetitions(G3MRenderContext rc, Tile tile, Vector2I tileTextureResolution)
   {
     java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
   
@@ -104,9 +104,9 @@ public class WMSLayer extends Layer
         IStringBuilder isb = IStringBuilder.newStringBuilder();
   
         isb.addString("&WIDTH=");
-        isb.addInt(width);
+        isb.addInt(tileTextureResolution._x);
         isb.addString("&HEIGHT=");
-        isb.addInt(height);
+        isb.addInt(tileTextureResolution._y);
   
         isb.addString("&BBOX=");
         isb.addDouble(sector.lower().latitude()._degrees);
@@ -134,9 +134,9 @@ public class WMSLayer extends Layer
         IStringBuilder isb = IStringBuilder.newStringBuilder();
   
         isb.addString("&WIDTH=");
-        isb.addInt(width);
+        isb.addInt(tileTextureResolution._x);
         isb.addString("&HEIGHT=");
-        isb.addInt(height);
+        isb.addInt(tileTextureResolution._y);
   
         isb.addString("&BBOX=");
         isb.addDouble(sector.lower().longitude()._degrees);

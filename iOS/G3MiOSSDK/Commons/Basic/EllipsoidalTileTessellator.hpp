@@ -12,22 +12,21 @@
 #include "TileTessellator.hpp"
 class Sector;
 
-//#include "MutableVector3D.hpp"
-//#include "Planet.hpp"
-
 class EllipsoidalTileTessellator : public TileTessellator {
 private:
 
-  const unsigned int _resolution;
+  const unsigned int _resolutionX;
+  const unsigned int _resolutionY;
   const bool         _skirted;
 
-  short calculateResolution(const Sector& sector) const;
+  Vector2I calculateResolution(const Sector& sector) const;
 
 public:
 
-  EllipsoidalTileTessellator(const unsigned int resolution,
+  EllipsoidalTileTessellator(const Vector2I& resolution,
                              const bool skirted) :
-  _resolution(resolution),
+  _resolutionX(resolution._x),
+  _resolutionY(resolution._y),
   _skirted(skirted)
   {
     //    int __TODO_width_and_height_resolutions;

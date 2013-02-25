@@ -20,6 +20,7 @@ package org.glob3.mobile.generated;
 //class Vector2I;
 //class ElevationData;
 //class G3MContext;
+//class G3MRenderContext;
 
 public interface IElevationDataListener
 {

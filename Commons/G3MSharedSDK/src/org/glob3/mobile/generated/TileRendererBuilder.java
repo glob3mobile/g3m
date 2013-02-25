@@ -199,11 +199,12 @@ public class TileRendererBuilder
   }
   private TileTessellator createTileTessellator()
   {
-    TileTessellator tileTessellator = new EllipsoidalTileTessellator(getParameters()._tileResolution, true);
-  
-    return tileTessellator;
+    return new EllipsoidalTileTessellator(getParameters()._tileMeshResolution, true);
   }
 
+
+  ///#include "WMSBillElevationDataProvider.hpp"
+  
   public TileRendererBuilder()
   {
     _showStatistics = false;
@@ -235,6 +236,27 @@ public class TileRendererBuilder
     //  ElevationDataProvider* elevationDataProvider = new WMSBillElevationDataProvider();
     ElevationDataProvider elevationDataProvider = null;
     TileRenderer tileRenderer = new TileRenderer(getTileTessellator(), elevationDataProvider, getTexturizer(), getLayerSet(), getParameters(), getShowStatistics(), getTexturePriority());
+    int __TODO_make_configurable;
+  
+    ElevationDataProvider elevationDataProvider = null;
+  
+  //  ElevationDataProvider* elevationDataProvider = new WMSBillElevationDataProvider();
+  
+  //  ElevationDataProvider* elevationDataProvider;
+  //  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
+  //                                                              Sector::fullSphere(),
+  //                                                              Vector2I(2048, 1024),
+  //                                                              0);
+  
+  //  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-4096x2048.bil", false),
+  //                                                              Sector::fullSphere(),
+  //                                                              Vector2I(4096, 2048),
+  //                                                              0);
+  
+    int ___TODO_make_configurable;
+    float verticalExaggeration = 10F;
+  
+    TileRenderer tileRenderer = new TileRenderer(_tileTessellator, elevationDataProvider, verticalExaggeration, _texturizer, _layerSet, _parameters, _showStatistics);
   
     for (int i = 0; i < getVisibleSectorListeners().size(); i++)
     {

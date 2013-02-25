@@ -12,42 +12,42 @@
 
 std::vector<Petition*> LayerSet::createTileMapPetitions(const G3MRenderContext* rc,
                                                         const Tile* tile,
-                                                        int width, int height) const {
+                                                        const Vector2I& tileTextureResolution) const {
   std::vector<Petition*> petitions;
-  
+
   for (int i = 0; i < _layers.size(); i++) {
     Layer* layer = _layers[i];
     if (layer->isAvailable(rc, tile)) {
-      std::vector<Petition*> pet = layer->getMapPetitions(rc, tile, width, height);
-      
+      std::vector<Petition*> pet = layer->getMapPetitions(rc, tile, tileTextureResolution);
+
       //Storing petitions
       for (int j = 0; j < pet.size(); j++) {
         petitions.push_back(pet[j]);
       }
     }
   }
-  
+
   if (petitions.empty()) {
     rc->getLogger()->logWarning("Can't create map petitions for tile %s",
                                 tile->getKey().description().c_str());
   }
-  
+
   return petitions;
 }
 
 void LayerSet::onTerrainTouchEvent(const G3MEventContext* ec,
                                    const Geodetic3D& position,
                                    const Tile* tile) const {
-  
+
   for (int i = 0; i < _layers.size(); i++) {
     Layer* layer = _layers[i];
     if (layer->isAvailable(ec, tile)) {
       TerrainTouchEvent tte(position, tile->getSector(), layer);
-      
+
       layer->onTerrainTouchEventListener(ec, tte);
     }
   }
-  
+
 }
 
 void LayerSet::initialize(const G3MContext* context)const{
@@ -69,7 +69,7 @@ void LayerSet::addLayer(Layer* layer) {
   layer->setLayerSet(this);
   _layers.push_back(layer);
   if (_listener == NULL) {
-//    ILogger::instance()->logError("Can't notify, _listener not set");
+    //    ILogger::instance()->logError("Can't notify, _listener not set");
   }
   else {
     _listener->changed(this);
@@ -78,7 +78,7 @@ void LayerSet::addLayer(Layer* layer) {
 
 void LayerSet::layerChanged(const Layer* layer) const {
   if (_listener == NULL) {
-//    ILogger::instance()->logError("Can't notify, _listener not set");
+    //    ILogger::instance()->logError("Can't notify, _listener not set");
   }
   else {
     _listener->changed(this);
@@ -89,7 +89,7 @@ Layer* LayerSet::get(int index) {
   if (index < _layers.size()) {
     return _layers[index];
   }
-  
+
   return NULL;
 }
 
@@ -99,6 +99,6 @@ Layer* LayerSet::getLayer(const std::string &name) {
       return _layers[i];
     }
   }
-  
+
   return NULL;
 }

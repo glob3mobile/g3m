@@ -11,7 +11,10 @@
 
 class ElevationData;
 class IByteBuffer;
+class Sector;
+
 #include "Vector2I.hpp"
+
 
 class BilParser {
 private:
@@ -19,8 +22,10 @@ private:
   
 public:
 
-  static ElevationData* parseBil16(const IByteBuffer* buffer,
-                                   const Vector2I& extent);
+  static ElevationData* parseBil16(const Sector& sector,
+                                   const Vector2I& extent,
+                                   double noDataValue,
+                                   const IByteBuffer* buffer);
 
 };
 

@@ -119,16 +119,18 @@ public class Tile
   private boolean isVisible(G3MRenderContext rc, TileRenderContext trc)
   {
   //  // test if sector is back oriented with respect to the camera
-  //    if (_sector.isBackOriented(rc)) {
-  //      return false;
-  //    }
-  
-  //  const Extent* extent = getTessellatorMesh(rc, trc)->getExtent();
-  //  if (extent == NULL) {
+  //  if (_sector.isBackOriented(rc)) {
   //    return false;
   //  }
   
-    final Extent extent = getTileExtent(rc);
+    final Extent extent = getTessellatorMesh(rc, trc).getExtent();
+    if (extent == null)
+    {
+      return false;
+    }
+  
+  //  const Extent* extent = getTileExtent(rc);
+  
     return extent.touches(rc.getCurrentCamera().getFrustumInModelCoordinates());
     //return extent->touches( rc->getCurrentCamera()->getHalfFrustuminModelCoordinates() );
   }
@@ -151,7 +153,7 @@ public class Tile
       }
     }
   
-    //Extent* extent = getTessellatorMesh(rc, trc)->getExtent();
+    //const Extent* extent = getTessellatorMesh(rc, trc)->getExtent();
     final Extent extent = getTileExtent(rc);
     if (extent == null)
     {
@@ -165,8 +167,9 @@ public class Tile
     final Vector2I ex = extent.projectedExtent(rc);
     //const double t = extent.maxAxis() * 2;
     final int t = (ex._x + ex._y);
-    if (t <= ((parameters._tileTextureWidth + parameters._tileTextureHeight) * 1.75))
+    if (t <= ((parameters._tileTextureResolution._x + parameters._tileTextureResolution._y) * 1.75))
     {
+  //  if ( t <= ((parameters->_tileTextureWidth + parameters->_tileTextureHeight) * 3) ) {
       return true;
     }
   

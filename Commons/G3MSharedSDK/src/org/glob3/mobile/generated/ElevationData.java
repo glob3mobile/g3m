@@ -16,70 +16,42 @@ package org.glob3.mobile.generated;
 //
 
 
-//class IFloatBuffer;
 //class Vector2I;
 
 
-public class ElevationData
+public abstract class ElevationData
 {
-  private IFloatBuffer _buffer;
-  private final int _width;
-  private final int _height;
+  protected final Sector _sector ;
+  protected final int _width;
+  protected final int _height;
+  protected final double _noDataValue;
 
-
-
-  public ElevationData(Vector2I extent, IFloatBuffer buffer)
+  public ElevationData(Sector sector, Vector2I resolution, double noDataValue)
   {
-     _width = extent._x;
-     _height = extent._y;
-     _buffer = buffer;
-    if (_buffer.size() != (_width * _height))
-    {
-      ILogger.instance().logError("Invalid buffer size");
-    }
+     _sector = new Sector(sector);
+     _width = resolution._x;
+     _height = resolution._y;
+     _noDataValue = noDataValue;
   }
 
   public void dispose()
   {
-
   }
 
-
-  public final float getElevationAt(int x, int y)
-  {
-    //return _buffer->get( (x * _width) + y );
-    return _buffer.get((y * _height) + x);
-    //return _buffer->get( (x * _height) + y );
-  }
-
-  public final Vector2I getExtent()
+  public Vector2I getExtent()
   {
     return new Vector2I(_width, _height);
   }
 
-  public final String description()
+  public abstract double getElevationAt(int x, int y);
+
+  public abstract double getElevationAt(Angle latitude, Angle longitude);
+
+  public double getElevationAt(Geodetic2D position)
   {
-    IStringBuilder isb = IStringBuilder.newStringBuilder();
-    isb.addString("(ElevationData extent=");
-    isb.addInt(_width);
-    isb.addString("x");
-    isb.addInt(_height);
-    isb.addString("\n");
-    for (int row = 0; row < _width; row++)
-    {
-      //isb->addString("   ");
-      for (int col = 0; col < _height; col++)
-      {
-        isb.addFloat(getElevationAt(col, row));
-        isb.addString(",");
-      }
-      isb.addString("\n");
-    }
-    isb.addString(")");
-    final String s = isb.getString();
-    if (isb != null)
-       isb.dispose();
-    return s;
+    return getElevationAt(position.latitude(), position.longitude());
   }
+
+  public abstract String description(boolean detailed);
 
 }

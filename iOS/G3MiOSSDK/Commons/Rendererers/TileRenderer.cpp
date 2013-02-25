@@ -101,6 +101,7 @@ public:
 
 TileRenderer::TileRenderer(const TileTessellator* tessellator,
                            ElevationDataProvider* elevationDataProvider,
+                           float verticalExaggeration,
                            TileTexturizer*  texturizer,
                            LayerSet* layerSet,
                            const TilesRenderParameters* parameters,
@@ -108,6 +109,7 @@ TileRenderer::TileRenderer(const TileTessellator* tessellator,
                            long long texturePriority) :
 _tessellator(tessellator),
 _elevationDataProvider(elevationDataProvider),
+_verticalExaggeration(verticalExaggeration),
 _texturizer(texturizer),
 _layerSet(layerSet),
 _parameters(parameters),
@@ -121,8 +123,6 @@ _lastVisibleSector(NULL),
 _texturePriority(texturePriority)
 {
   _layerSet->setChangeListener(this);
-
-  _verticalExaggeration = 20;
 }
 
 void TileRenderer::recreateTiles() {
@@ -230,6 +230,12 @@ void TileRenderer::initialize(const G3MContext* context) {
 }
 
 bool TileRenderer::isReadyToRender(const G3MRenderContext *rc) {
+  if (_elevationDataProvider != NULL) {
+    if (!_elevationDataProvider->isReadyToRender(rc)) {
+      return false;
+    }
+  }
+
   if (_topTilesJustCreated) {
     _topTilesJustCreated = false;
 
