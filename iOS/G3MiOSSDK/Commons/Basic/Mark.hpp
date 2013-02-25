@@ -125,7 +125,7 @@ private:
 public:
   Mark(const std::string&   label,
        const URL            iconURL,
-       const Geodetic3D     position,
+       const Geodetic3D&     position,
        double               minDistanceToCamera=4.5e+06,
        const bool           labelBottom=true,
        const float          labelFontSize=20,
@@ -138,7 +138,7 @@ public:
        bool                 autoDeleteListener=false);
 
   Mark(const std::string&   label,
-       const Geodetic3D     position,
+       const Geodetic3D&     position,
        double               minDistanceToCamera=4.5e+06,
        const float          labelFontSize=20,
        const Color*         labelFontColor=Color::newFromRGBA(1, 1, 1, 1),
@@ -149,7 +149,7 @@ public:
        bool                 autoDeleteListener=false);
 
   Mark(const URL          iconURL,
-       const Geodetic3D   position,
+       const Geodetic3D&   position,
        double minDistanceToCamera=4.5e+06,
        MarkUserData* userData=NULL,
        bool autoDeleteUserData=true,
