@@ -75,8 +75,10 @@ public abstract class BufferElevationData extends ElevationData
     IMathUtils mu = IMathUtils.instance();
   
     final Vector2D uv = _sector.getUVCoordinates(latitude, longitude);
-    final double dX = uv._x * (_width - 1);
-    final double dY = (1.0 - uv._y) * (_height - 1);
+    final double u = mu.clamp(uv._x, 0, 1);
+    final double v = mu.clamp(uv._y, 0, 1);
+    final double dX = u * (_width - 1);
+    final double dY = (1.0 - v) * (_height - 1);
   
     final int x = (int) dX;
     final int y = (int) dY;

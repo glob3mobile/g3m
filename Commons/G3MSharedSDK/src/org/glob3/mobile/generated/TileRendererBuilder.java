@@ -37,7 +37,6 @@ public class TileRendererBuilder
 
   /**
    * Returns the _tileTessellator.
-   * Lazy initialization.
    *
    * @return _tileTessellator: TileTessellator*
    */
@@ -53,7 +52,6 @@ public class TileRendererBuilder
 
   /**
    * Returns the _texturizer.
-   * Lazy initialization.
    *
    * @return _texturizer: TileTexturizer*
    */
@@ -69,7 +67,6 @@ public class TileRendererBuilder
 
   /**
    * Returns the _layerSet.
-   * Lazy initialization.
    *
    * @return _layerSet: LayerSet*
    */
@@ -85,7 +82,6 @@ public class TileRendererBuilder
 
   /**
    * Returns the _parameters.
-   * Lazy initialization.
    *
    * @return _parameters: TilesRenderParameters*
    */
@@ -101,7 +97,6 @@ public class TileRendererBuilder
 
   /**
    * Returns the showStatistics flag.
-   * Method created to keep convention. It is not needed as it does not have to create a default value.
    *
    * @return _showStatistics: bool
    */
@@ -112,7 +107,6 @@ public class TileRendererBuilder
 
   /**
    * Returns the renderDebug flag.
-   * Method created to keep convention. It is not needed as it does not have to create a default value.
    *
    * @return _renderDebug: bool
    */
@@ -123,7 +117,6 @@ public class TileRendererBuilder
 
   /**
    * Returns the useTilesSplitBudget flag.
-   * Method created to keep convention. It is not needed as it does not have to create a default value.
    *
    * @return _useTilesSplitBudget: bool
    */
@@ -134,7 +127,6 @@ public class TileRendererBuilder
 
   /**
    * Returns the forceTopLevelTilesRenderOnStart flag.
-   * Method created to keep convention. It is not needed as it does not have to create a default value.
    *
    * @return _forceTopLevelTilesRenderOnStart: bool
    */
@@ -145,7 +137,6 @@ public class TileRendererBuilder
 
   /**
    * Returns the incrementalTileQuality flag.
-   * Method created to keep convention. It is not needed as it does not have to create a default value.
    *
    * @return _incrementalTileQuality: bool
    */
@@ -156,7 +147,6 @@ public class TileRendererBuilder
 
   /**
    * Returns the array of visibleSectorListeners.
-   * Method created to keep convention. It is not needed as it does not have to create a default value.
    *
    * @return _forceTopLevelTilesRenderOnStart: std::vector<VisibleSectorListener*>
    */
@@ -167,7 +157,6 @@ public class TileRendererBuilder
 
   /**
     * Returns the array of stabilization milliseconds related to visible-sector listeners.
-    * Method created to keep convention. It is not needed as it does not have to create a default value.
     *
     * @return _stabilizationMilliSeconds: std::vector<long long>
     */
@@ -177,8 +166,7 @@ public class TileRendererBuilder
   }
 
   /**
-   * Returns the _texturePriority
-   * Method created to keep convention. It is not needed as it does not have to create a default value.
+   * Returns the _texturePriority.
    *
    * @return _texturePriority: long long
    */
@@ -189,9 +177,7 @@ public class TileRendererBuilder
 
   private LayerSet createLayerSet()
   {
-    LayerSet layerSet = LayerBuilder.createDefaultSatelliteImagery();
-  
-    return layerSet;
+    return LayerBuilder.createDefaultSatelliteImagery();
   }
   private TilesRenderParameters createTileRendererParameters()
   {
@@ -232,31 +218,33 @@ public class TileRendererBuilder
   }
   public final TileRenderer create()
   {
-    int __TODO_make_inflator_configurable;
-    //  ElevationDataProvider* elevationDataProvider = new WMSBillElevationDataProvider();
-    ElevationDataProvider elevationDataProvider = null;
-    TileRenderer tileRenderer = new TileRenderer(getTileTessellator(), elevationDataProvider, getTexturizer(), getLayerSet(), getParameters(), getShowStatistics(), getTexturePriority());
     int __TODO_make_configurable;
   
     ElevationDataProvider elevationDataProvider = null;
   
-  //  ElevationDataProvider* elevationDataProvider = new WMSBillElevationDataProvider();
+    //  ElevationDataProvider* elevationDataProvider = new WMSBillElevationDataProvider();
   
-  //  ElevationDataProvider* elevationDataProvider;
-  //  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
-  //                                                              Sector::fullSphere(),
-  //                                                              Vector2I(2048, 1024),
-  //                                                              0);
+    //  ElevationDataProvider* elevationDataProvider;
+    //  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
+    //                                                              Sector::fullSphere(),
+    //                                                              Vector2I(2048, 1024),
+    //                                                              0);
   
-  //  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-4096x2048.bil", false),
-  //                                                              Sector::fullSphere(),
-  //                                                              Vector2I(4096, 2048),
-  //                                                              0);
+    //  ElevationDataProvider* elevationDataProvider;
+    //  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///elev-35.0_-6.0_38.0_-2.0_4096x2048.bil", false),
+    //                                                              Sector::fromDegrees(35, -6, 38, -2),
+    //                                                              Vector2I(4096, 2048),
+    //                                                              0);
+  
+    //  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-4096x2048.bil", false),
+    //                                                              Sector::fullSphere(),
+    //                                                              Vector2I(4096, 2048),
+    //                                                              0);
   
     int ___TODO_make_configurable;
-    float verticalExaggeration = 10F;
+    float verticalExaggeration = 2F;
   
-    TileRenderer tileRenderer = new TileRenderer(_tileTessellator, elevationDataProvider, verticalExaggeration, _texturizer, _layerSet, _parameters, _showStatistics);
+    TileRenderer tileRenderer = new TileRenderer(getTileTessellator(), elevationDataProvider, verticalExaggeration, getTexturizer(), getLayerSet(), getParameters(), getShowStatistics(), getTexturePriority());
   
     for (int i = 0; i < getVisibleSectorListeners().size(); i++)
     {
