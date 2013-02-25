@@ -53,6 +53,8 @@
 #include "ShortBufferBuilder.hpp"
 #include "BilinearInterpolator.hpp"
 #include "SubviewElevationData.hpp"
+#include "GInitializationTask.hpp"
+#include "PeriodicalTask.hpp"
 
 #include "G3MWidget.hpp"
 
