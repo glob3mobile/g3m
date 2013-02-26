@@ -51,7 +51,7 @@ public:
     const int splitsByLongitude = 8;
     const int maxLevel = 17;
     const Vector2I tileTextureResolution(256, 256);
-    const Vector2I tileMeshResolution(20, 20);
+    const Vector2I tileMeshResolution(16, 16);
     const bool mercator = false;
 
     return new LayerTilesRenderParameters(topSector,

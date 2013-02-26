@@ -122,7 +122,7 @@ const LayerTilesRenderParameters* LayerSet::getLayerTilesRenderParameters() cons
 }
 
 LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters() const {
-  Sector* topSector = NULL;
+  Sector* mergedSector = NULL;
   int     splitsByLatitude;
   int     splitsByLongitude;
   int     maxLevel;
@@ -143,7 +143,7 @@ LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters() const {
       if (first) {
         first = false;
 
-        topSector         = new Sector( layerParam->_topSector );
+        mergedSector      = new Sector( layerParam->_topSector );
         splitsByLatitude  = layerParam->_splitsByLatitude;
         splitsByLongitude = layerParam->_splitsByLongitude;
         maxLevel          = layerParam->_maxLevel;
@@ -155,9 +155,9 @@ LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters() const {
         mercator          = layerParam->_mercator;
       }
       else {
-        if (!topSector->fullContains( layerParam->_topSector )) {
-          Sector* oldSector = topSector;
-          topSector = new Sector( oldSector->mergedWith( layerParam->_topSector ) );
+        if (!mergedSector->fullContains( layerParam->_topSector )) {
+          Sector* oldSector = mergedSector;
+          mergedSector = new Sector( oldSector->mergedWith( layerParam->_topSector ) );
           delete oldSector;
         }
 
@@ -205,7 +205,11 @@ LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters() const {
     return NULL;
   }
 
-  return new LayerTilesRenderParameters(*topSector,
+  const Sector topSector(*mergedSector);
+  delete mergedSector;
+  mergedSector = NULL;
+
+  return new LayerTilesRenderParameters(topSector,
                                         splitsByLatitude,
                                         splitsByLongitude,
                                         maxLevel,

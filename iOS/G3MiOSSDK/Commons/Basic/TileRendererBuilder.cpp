@@ -287,10 +287,10 @@ TileRenderer* TileRendererBuilder::create() {
 }
 
 TilesRenderParameters* TileRendererBuilder::createTileRendererParameters() {
-  return TilesRenderParameters::createDefault(getRenderDebug(),
-                                              getUseTilesSplitBudget(),
-                                              getForceTopLevelTilesRenderOnStart(),
-                                              getIncrementalTileQuality());
+  return new TilesRenderParameters(getRenderDebug(),
+                                   getUseTilesSplitBudget(),
+                                   getForceTopLevelTilesRenderOnStart(),
+                                   getIncrementalTileQuality());
 }
 
 TileTessellator* TileRendererBuilder::createTileTessellator() {
