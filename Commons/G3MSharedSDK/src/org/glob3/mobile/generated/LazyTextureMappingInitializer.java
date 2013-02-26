@@ -32,5 +32,5 @@ public abstract class LazyTextureMappingInitializer
 
   public abstract MutableVector2D getTranslation();
 
-  public abstract IFloatBuffer getTexCoords();
+  public abstract IFloatBuffer createTextCoords();
 }

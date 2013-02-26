@@ -19,6 +19,7 @@ package org.glob3.mobile.generated;
 
 //class Petition;
 //class Vector2I;
+//class LayerTilesRenderParameters;
 
 public interface LayerSetChangedListener
 {

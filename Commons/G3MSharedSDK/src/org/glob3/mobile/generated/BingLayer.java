@@ -18,7 +18,7 @@ public abstract class BingLayer extends Layer
 
   public BingLayer(String layerName, URL mapServerURL, LayerCondition condition, Sector sector, MapType mapType, Language locale, String key, TimeInterval timeToCache)
   {
-     super(condition, layerName, timeToCache);
+     super(condition, layerName, timeToCache, null);
      _sector = new Sector(sector);
      _mapServerURL = new URL(mapServerURL);
      _mapType = mapType;
@@ -26,7 +26,7 @@ public abstract class BingLayer extends Layer
      _key = key;
      _tilePetitionString = new String();
      _isReady = false;
-
+    int ___TODO_create_bing_parameters;
   }
 
   public final boolean isReady()

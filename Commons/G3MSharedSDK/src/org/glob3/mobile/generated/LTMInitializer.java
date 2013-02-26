@@ -7,18 +7,19 @@ public class LTMInitializer extends LazyTextureMappingInitializer
   private MutableVector2D _scale = new MutableVector2D();
   private MutableVector2D _translation = new MutableVector2D();
 
-//  IFloatBuffer* _texCoords;
   private final TileTessellator _tessellator;
+  private final Vector2I _resolution = new Vector2I();
+  private final boolean _mercator;
 
-  public LTMInitializer(Tile tile, Tile ancestor, TileTessellator tessellator)
-                 /*IFloatBuffer* texCoords*/
-//  _texCoords(texCoords),
+  public LTMInitializer(Vector2I resolution, Tile tile, Tile ancestor, TileTessellator tessellator, boolean mercator)
   {
+     _resolution = new Vector2I(resolution);
      _tile = tile;
      _ancestor = ancestor;
      _tessellator = tessellator;
      _scale = new MutableVector2D(1,1);
      _translation = new MutableVector2D(0,0);
+     _mercator = mercator;
 
   }
 
@@ -50,10 +51,9 @@ public class LTMInitializer extends LazyTextureMappingInitializer
     return _translation;
   }
 
-  public final IFloatBuffer getTexCoords()
+  public final IFloatBuffer createTextCoords()
   {
-    //return _texCoords;
-    return _tessellator.createUnitTextCoords(_tile);
+    return _tessellator.createTextCoords(_resolution, _tile, _mercator);
   }
 
 }

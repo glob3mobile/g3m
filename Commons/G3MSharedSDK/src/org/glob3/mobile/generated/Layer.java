@@ -23,6 +23,7 @@ package org.glob3.mobile.generated;
 //class LayerCondition;
 //class LayerSet;
 //class Vector2I;
+//class LayerTilesRenderParameters;
 
 public abstract class Layer
 {
@@ -34,6 +35,7 @@ public abstract class Layer
   private boolean _enable;
 
   private final String _name;
+  private final LayerTilesRenderParameters _parameters;
 
   protected final TimeInterval _timeToCache;
 
@@ -49,13 +51,14 @@ public abstract class Layer
     }
   }
 
-  public Layer(LayerCondition condition, String name, TimeInterval timeToCache)
+  public Layer(LayerCondition condition, String name, TimeInterval timeToCache, LayerTilesRenderParameters parameters)
   {
      _condition = condition;
      _name = name;
      _layerSet = null;
      _timeToCache = new TimeInterval(timeToCache);
      _enable = true;
+     _parameters = parameters;
 
   }
 
@@ -77,6 +80,8 @@ public abstract class Layer
   {
     if (_condition != null)
        _condition.dispose();
+    if (_parameters != null)
+       _parameters.dispose();
   }
 
   public abstract java.util.ArrayList<Petition> getMapPetitions(G3MRenderContext rc, Tile tile, Vector2I tileTextureResolution);
@@ -107,7 +112,7 @@ public abstract class Layer
     return _condition.isAvailable(ec, tile);
   }
 
-//  virtual bool isTransparent() const = 0;
+  //  virtual bool isTransparent() const = 0;
 
   public abstract URL getFeatureInfoURL(Geodetic2D g, IFactory factory, Sector sector, int width, int height);
 
@@ -149,6 +154,11 @@ public abstract class Layer
   public final String getName()
   {
     return _name;
+  }
+
+  public final LayerTilesRenderParameters getLayerTilesRenderParameters()
+  {
+    return _parameters;
   }
 
 }

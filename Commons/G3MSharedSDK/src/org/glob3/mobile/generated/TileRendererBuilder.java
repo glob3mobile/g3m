@@ -181,11 +181,12 @@ public class TileRendererBuilder
   }
   private TilesRenderParameters createTileRendererParameters()
   {
-    return TilesRenderParameters.createDefault(getRenderDebug(), getUseTilesSplitBudget(), getForceTopLevelTilesRenderOnStart(), getIncrementalTileQuality());
+    return new TilesRenderParameters(getRenderDebug(), getUseTilesSplitBudget(), getForceTopLevelTilesRenderOnStart(), getIncrementalTileQuality());
   }
   private TileTessellator createTileTessellator()
   {
-    return new EllipsoidalTileTessellator(getParameters()._tileMeshResolution, true);
+    //return new EllipsoidalTileTessellator(getParameters()->_tileMeshResolution, true);
+    return new EllipsoidalTileTessellator(true);
   }
 
 

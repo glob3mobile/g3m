@@ -23,6 +23,7 @@ package org.glob3.mobile.generated;
 //class VisibleSectorListenerEntry;
 //class VisibleSectorListener;
 //class ElevationDataProvider;
+//class LayerTilesRenderParameters;
 
 
 
@@ -108,6 +109,11 @@ public class TileRenderContext
   public final long getTexturePriority()
   {
     return _texturePriority;
+  }
+
+  public final LayerTilesRenderParameters getLayerTilesRenderParameters()
+  {
+    return _layerSet.getLayerTilesRenderParameters();
   }
 
 }
