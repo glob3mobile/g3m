@@ -52,21 +52,41 @@ const Geodetic2D Sector::getInnerPoint(double u, double v) const {
                     Angle::lerp( _lower.longitude(), _upper.longitude(), (float)      u  ) );
 }
 
+/*
 bool Sector::isBackOriented(const G3MRenderContext *rc) const {
   const Camera* camera = rc->getCurrentCamera();
   const Planet* planet = rc->getPlanet();
-
+  
   // compute sector point nearest to centerPoint
   const Geodetic2D center = camera->getGeodeticCenterOfView().asGeodetic2D();
   const Geodetic2D point = getClosestPoint(center);
-
+  
   // compute angle between normals
   const Vector3D normal = planet->geodeticSurfaceNormal(point);
   const Vector3D view   = camera->getViewDirection().times(-1);
   const double dot = normal.dot(view);
-
+  
   return (dot < 0) ? true : false;
+}*/
+
+
+bool Sector::isBackOriented(const G3MRenderContext *rc) const {
+  const Camera* camera = rc->getCurrentCamera();
+  const Planet* planet = rc->getPlanet();
+  const Vector3D view   = camera->getViewDirection().times(-1);
+  
+  // if all the normals are back oriented, sector is back oriented
+  if (planet->geodeticSurfaceNormal(getNE()).dot(view)>0)
+    return false;
+  if (planet->geodeticSurfaceNormal(getNW()).dot(view)>0)
+    return false;
+  if (planet->geodeticSurfaceNormal(getSE()).dot(view)>0)
+    return false;
+  if (planet->geodeticSurfaceNormal(getSW()).dot(view)>0)
+    return false;
+  return true;
 }
+
 
 Sector Sector::intersection(const Sector& that) const {
   const Angle lowLat = Angle::max(lower().latitude(),  that.lower().latitude());
