@@ -109,26 +109,8 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
     const Vector3D nw = planet->toCartesian(sector.getNW());
     const double skirtHeight = (nw.sub(sw).length() * 0.05 * -1) + minHeight;
 
-    indices.add((short) 0);
     int posS = resolution._x * resolution._y;
-
-    // west side
-    for (int j = 0; j < resolution._y-1; j++) {
-      vertices.add(sector.getInnerPoint(0, (double)j/(resolution._y-1)),
-                   skirtHeight);
-
-      indices.add((short) (j*resolution._x));
-      indices.add((short) posS++);
-    }
-
-    // south side
-    for (int i = 0; i < resolution._x-1; i++) {
-      vertices.add(sector.getInnerPoint((double)i/(resolution._x-1), 1),
-                   skirtHeight);
-
-      indices.add((short) ((resolution._y-1)*resolution._x + i));
-      indices.add((short) posS++);
-    }
+    indices.add((short)posS-1);
 
     // east side
     for (int j = resolution._y-1; j > 0; j--) {
@@ -147,9 +129,27 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
       indices.add((short) i);
       indices.add((short) posS++);
     }
+    
+    // west side
+    for (int j = 0; j < resolution._y-1; j++) {
+      vertices.add(sector.getInnerPoint(0, (double)j/(resolution._y-1)),
+                   skirtHeight);
+      
+      indices.add((short) (j*resolution._x));
+      indices.add((short) posS++);
+    }
+    
+    // south side
+    for (int i = 0; i < resolution._x-1; i++) {
+      vertices.add(sector.getInnerPoint((double)i/(resolution._x-1), 1),
+                   skirtHeight);
+      
+      indices.add((short) ((resolution._y-1)*resolution._x + i));
+      indices.add((short) posS++);
+    }
 
     // last triangle
-    indices.add((short) 0);
+    indices.add((short) (resolution._x*resolution._y)-1);
     indices.add((short) (resolution._x*resolution._y));
   }
 
@@ -202,6 +202,20 @@ IFloatBuffer* EllipsoidalTileTessellator::createUnitTextCoords(const Tile* tile)
 
   // create skirts
   if (_skirted) {
+    // east side
+    for (int j = resolution._y-1; j > 0; j--) {
+      const int pos = j*resolution._x + resolution._x-1;
+      textCoords->rawPut(textCoordsIndex++, u[pos]);
+      textCoords->rawPut(textCoordsIndex++, v[pos]);
+    }
+    
+    // north side
+    for (int i = resolution._x-1; i > 0; i--) {
+      const int pos = i;
+      textCoords->rawPut(textCoordsIndex++, u[pos]);
+      textCoords->rawPut(textCoordsIndex++, v[pos]);
+    }
+
     // west side
     for (int j = 0; j < resolution._y-1; j++) {
       const int pos = j*resolution._x;
@@ -212,20 +226,6 @@ IFloatBuffer* EllipsoidalTileTessellator::createUnitTextCoords(const Tile* tile)
     // south side
     for (int i = 0; i < resolution._x-1; i++) {
       const int pos = (resolution._y-1) * resolution._x + i;
-      textCoords->rawPut(textCoordsIndex++, u[pos]);
-      textCoords->rawPut(textCoordsIndex++, v[pos]);
-    }
-
-    // east side
-    for (int j = resolution._y-1; j > 0; j--) {
-      const int pos = j*resolution._x + resolution._x-1;
-      textCoords->rawPut(textCoordsIndex++, u[pos]);
-      textCoords->rawPut(textCoordsIndex++, v[pos]);
-    }
-
-    // north side
-    for (int i = resolution._x-1; i > 0; i--) {
-      const int pos = i;
       textCoords->rawPut(textCoordsIndex++, u[pos]);
       textCoords->rawPut(textCoordsIndex++, v[pos]);
     }
