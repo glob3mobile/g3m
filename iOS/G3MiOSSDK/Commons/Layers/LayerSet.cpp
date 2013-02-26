@@ -122,15 +122,15 @@ const LayerTilesRenderParameters* LayerSet::getLayerTilesRenderParameters() cons
 }
 
 LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters() const {
-  Sector* mergedSector = NULL;
-  int     splitsByLatitude;
-  int     splitsByLongitude;
-  int     maxLevel;
-  int     tileTextureWidth;
-  int     tileTextureHeight;
-  int     tileMeshWidth;
-  int     tileMeshHeight;
-  bool    mercator;
+  Sector* mergedSector      = NULL;
+  int     splitsByLatitude  = 0;
+  int     splitsByLongitude = 0;
+  int     maxLevel          = 0;
+  int     tileTextureWidth  = 0;
+  int     tileTextureHeight = 0;
+  int     tileMeshWidth     = 0;
+  int     tileMeshHeight    = 0;
+  bool    mercator          = false;
 
   bool first = true;
   const int layersCount = _layers.size();

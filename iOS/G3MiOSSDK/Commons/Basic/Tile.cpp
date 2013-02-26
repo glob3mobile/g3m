@@ -116,7 +116,12 @@ private:
   MeshHolder*            _meshHolder;
   const TileTessellator* _tessellator;
   const Planet*          _planet;
+#ifdef C_CODE
   const Vector2I         _tileMeshResolution;
+#endif
+#ifdef JAVA_CODE
+  private final Vector2I _tileMeshResolution;
+#endif
   const bool             _renderDebug;
   const float            _verticalExaggeration;
 public:

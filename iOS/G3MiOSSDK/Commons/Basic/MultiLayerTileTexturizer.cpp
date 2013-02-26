@@ -70,7 +70,13 @@ private:
   MutableVector2D _translation;
 
   const TileTessellator* _tessellator;
+#ifdef C_CODE
   const Vector2I _resolution;
+#endif
+#if JAVA_CODE
+  private final Vector2I _resolution;
+#endif
+
   const bool _mercator;
 
 public:
@@ -182,8 +188,14 @@ private:
   TextureBuilder*  _textureBuilder;
   GL*              _gl;
 
+#ifdef C_CODE
   const Vector2I   _tileTextureResolution;
   const Vector2I   _tileMeshResolution;
+#endif
+#ifdef JAVA_CODE
+  private final Vector2I _tileTextureResolution;
+  private final Vector2I _tileMeshResolution;
+#endif
   const bool       _mercator;
 
   IDownloader*     _downloader;
