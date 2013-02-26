@@ -29,19 +29,22 @@ public class ImageSaverDownloadListener extends IImageDownloadListener
 
   public final void saveImage(URL url, IImage image)
   {
-    if (image != null)
+    if (!url.isFileProtocol())
     {
-      if (_storage.isAvailable())
+      if (image != null)
       {
-        //if (!_cacheStorage->containsImage(url)) {
-        _downloader.countSave();
+        if (_storage.isAvailable())
+        {
+          //if (!_cacheStorage->containsImage(url)) {
+          _downloader.countSave();
 
-        _storage.saveImage(url, image, _timeToCache, _downloader.saveInBackground());
-        //}
-      }
-      else
-      {
-        ILogger.instance().logWarning("The cacheStorage is not available, skipping image save.");
+          _storage.saveImage(url, image, _timeToCache, _downloader.saveInBackground());
+          //}
+        }
+        else
+        {
+          ILogger.instance().logWarning("The cacheStorage is not available, skipping image save.");
+        }
       }
     }
   }

@@ -74,6 +74,11 @@ public class URL
     return (_path.equals(that._path));
   }
 
+  public final boolean isFileProtocol()
+  {
+    return (IStringUtils.instance().beginsWith(_path, "file:///"));
+  }
+
   public final String description()
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();

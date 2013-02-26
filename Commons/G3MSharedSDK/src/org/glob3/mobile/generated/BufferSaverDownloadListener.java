@@ -34,19 +34,22 @@ public class BufferSaverDownloadListener extends IBufferDownloadListener
 
   public final void saveBuffer(URL url, IByteBuffer buffer)
   {
-    if (buffer != null)
+    if (!url.isFileProtocol())
     {
-      if (_storage.isAvailable())
+      if (buffer != null)
       {
-        //if (!_cacheStorage->containsBuffer(url)) {
-        _downloader.countSave();
+        if (_storage.isAvailable())
+        {
+          //if (!_cacheStorage->containsBuffer(url)) {
+          _downloader.countSave();
 
-        _storage.saveBuffer(url, buffer, _timeToCache, _downloader.saveInBackground());
-        //}
-      }
-      else
-      {
-        ILogger.instance().logWarning("The cacheStorage is not available, skipping buffer save.");
+          _storage.saveBuffer(url, buffer, _timeToCache, _downloader.saveInBackground());
+          //}
+        }
+        else
+        {
+          ILogger.instance().logWarning("The cacheStorage is not available, skipping buffer save.");
+        }
       }
     }
   }
