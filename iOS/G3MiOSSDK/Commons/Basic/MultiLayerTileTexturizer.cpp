@@ -73,7 +73,7 @@ private:
 #ifdef C_CODE
   const Vector2I _resolution;
 #endif
-#if JAVA_CODE
+#ifdef JAVA_CODE
   private final Vector2I _resolution;
 #endif
 
