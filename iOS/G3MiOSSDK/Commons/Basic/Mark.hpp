@@ -123,9 +123,12 @@ private:
   bool    _renderedMark;
 
 public:
+  /**
+   * Creates a marker with icon and label
+   */
   Mark(const std::string&   label,
        const URL            iconURL,
-       const Geodetic3D&     position,
+       const Geodetic3D&    position,
        double               minDistanceToCamera=4.5e+06,
        const bool           labelBottom=true,
        const float          labelFontSize=20,
@@ -137,8 +140,11 @@ public:
        MarkTouchListener*   listener=NULL,
        bool                 autoDeleteListener=false);
 
+  /**
+   * Creates a marker just with label, without icon
+   */
   Mark(const std::string&   label,
-       const Geodetic3D&     position,
+       const Geodetic3D&    position,
        double               minDistanceToCamera=4.5e+06,
        const float          labelFontSize=20,
        const Color*         labelFontColor=Color::newFromRGBA(1, 1, 1, 1),
@@ -148,13 +154,16 @@ public:
        MarkTouchListener*   listener=NULL,
        bool                 autoDeleteListener=false);
 
-  Mark(const URL          iconURL,
-       const Geodetic3D&   position,
-       double minDistanceToCamera=4.5e+06,
-       MarkUserData* userData=NULL,
-       bool autoDeleteUserData=true,
-       MarkTouchListener* listener=NULL,
-       bool autoDeleteListener=false);
+  /**
+   * Creates a marker just with icon, without label
+   */
+  Mark(const URL            iconURL,
+       const Geodetic3D&    position,
+       double               minDistanceToCamera=4.5e+06,
+       MarkUserData*        userData=NULL,
+       bool                 autoDeleteUserData=true,
+       MarkTouchListener*   listener=NULL,
+       bool                 autoDeleteListener=false);
 
   ~Mark();
 

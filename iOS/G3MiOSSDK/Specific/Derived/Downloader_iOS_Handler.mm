@@ -177,8 +177,8 @@
 
   const IStringUtils* su = IStringUtils::instance();
 
-  if (su->beginsWith(_url->getPath(), "file:///")) {
-    const std::string fileFullName = su->replaceSubstring(_url->getPath(), "file:///", "");
+  if (_url->isFileProtocol()) {
+    const std::string fileFullName = IStringUtils::instance()->replaceSubstring(_url->getPath(), "file:///", "");
     const int dotPos = su->indexOf(fileFullName, ".");
 
     NSString* fileName = [ NSString stringWithCString: su->left(fileFullName, dotPos).c_str()
