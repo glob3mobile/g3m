@@ -21,8 +21,10 @@ const std::string URL::description() const {
   return s; 
 }
 
+const std::string URL::FILE_PROTOCOL = "file:///";
+
 bool URL::isFileProtocol() const {
-  return (IStringUtils::instance()->beginsWith(_path, "file:///"));
+  return (IStringUtils::instance()->beginsWith(_path, FILE_PROTOCOL));
 }
 
 
