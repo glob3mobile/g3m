@@ -16,104 +16,148 @@
 #include "FloatBufferBuilder.hpp"
 #include "ShortBufferBuilder.hpp"
 #include "FloatBufferBuilderFromCartesian3D.hpp"
-#include "FloatBufferBuilderFromCartesian2D.hpp"
+//#include "FloatBufferBuilderFromCartesian2D.hpp"
 #include "FloatBufferBuilderFromGeodetic.hpp"
 #include "SimpleFloatBufferBuilder.hpp"
 #include "GLConstants.hpp"
 #include "Color.hpp"
+#include "Planet.hpp"
 
-Mesh* EllipsoidalTileTessellator::createMesh(const G3MRenderContext* rc,
-                                             const Tile* tile) const {
-  
+#include "IFactory.hpp"
+#include "IFloatBuffer.hpp"
+#include "ElevationData.hpp"
+
+Vector2I EllipsoidalTileTessellator::getTileMeshResolution(const Planet* planet,
+                                                           const Tile* tile,
+                                                           bool debug) const {
+  return calculateResolution(tile->getSector());
+}
+
+Vector2I EllipsoidalTileTessellator::calculateResolution(const Sector& sector) const {
+//  return Vector2I(_resolutionX, _resolutionY);
+
+
+  /* testing for dynamic latitude-resolution */
+  const double cos = sector.getCenter().latitude().cosinus();
+
+  int resolutionY = (int) (_resolutionY * cos);
+  if (resolutionY < 6) {
+    resolutionY = 6;
+  }
+
+  int resolutionX = (int) (_resolutionX * cos);
+  if (resolutionX < 6) {
+    resolutionX = 6;
+  }
+
+  return Vector2I(resolutionX, resolutionY);
+}
+
+Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
+                                                 const Tile* tile,
+                                                 const ElevationData* elevationData,
+                                                 float verticalExaggeration,
+                                                 bool debug) const {
+
   const Sector sector = tile->getSector();
-  const Planet* planet = rc->getPlanet();
-  
-  const int resolution = _resolution;
-  const int resolutionMinus1 = resolution - 1;
-  
-  // create vertices coordinates
-  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(), planet, sector.getCenter());
-  for (int j = 0; j < resolution; j++) {
-    for (int i = 0; i < resolution; i++) {
-      Geodetic2D innerPoint = sector.getInnerPoint((double) i / resolutionMinus1,
-                                                   (double) j / resolutionMinus1);
+  const Vector2I resolution = calculateResolution(sector);
+
+  double minHeight = 0;
+  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(),
+                                          planet,
+                                          sector.getCenter());
+  for (int j = 0; j < resolution._y; j++) {
+    const double v = (double) j / (resolution._y-1);
+    for (int i = 0; i < resolution._x; i++) {
+      const double u = (double) i / (resolution._x-1);
+
+      const Geodetic2D position = sector.getInnerPoint(u, v);
       
-      vertices.add(innerPoint);
+      double height = 0;
+      if (elevationData != NULL) {
+//        height = elevationData->getElevationAt(i, j) * verticalExaggeration;
+        height = elevationData->getElevationAt(position.latitude(),
+                                               position.longitude()) * verticalExaggeration;
+        if (height < minHeight) {
+          minHeight = height;
+        }
+      }
+
+      vertices.add( position, height );
     }
   }
-  
-  // create indices
+
+
   ShortBufferBuilder indices;
-  for (int j = 0; j < resolutionMinus1; j++) {
+  for (short j = 0; j < (resolution._y-1); j++) {
+    const short jTimesResolution = (short) (j*resolution._x);
     if (j > 0) {
-      indices.add((short) (j*resolution));
+      indices.add(jTimesResolution);
     }
-    for (int i = 0; i < resolution; i++) {
-      indices.add((short) (j*resolution + i));
-      indices.add((short) (j*resolution + i + resolution));
+    for (short i = 0; i < resolution._x; i++) {
+      indices.add((short) (jTimesResolution + i));
+      indices.add((short) (jTimesResolution + i + resolution._x));
     }
-    indices.add((short) (j*resolution + 2*resolution - 1));
+    indices.add((short) (jTimesResolution + 2*resolution._x - 1));
   }
-  
+
+
   // create skirts
   if (_skirted) {
-    
     // compute skirt height
     const Vector3D sw = planet->toCartesian(sector.getSW());
     const Vector3D nw = planet->toCartesian(sector.getNW());
-    const double skirtHeight = nw.sub(sw).length() * 0.05;
-    
+    const double skirtHeight = (nw.sub(sw).length() * 0.05 * -1) + minHeight;
+
     indices.add((short) 0);
-    int posS = resolution * resolution;
-    
+    int posS = resolution._x * resolution._y;
+
     // west side
-    for (int j = 0; j < resolutionMinus1; j++) {
-      const Geodetic3D g(sector.getInnerPoint(0, (double)j/resolutionMinus1),
-                         -skirtHeight);
-      vertices.add(g);
-      
-      indices.add((short) (j*resolution));
+    for (int j = 0; j < resolution._y-1; j++) {
+      vertices.add(sector.getInnerPoint(0, (double)j/(resolution._y-1)),
+                   skirtHeight);
+
+      indices.add((short) (j*resolution._x));
       indices.add((short) posS++);
     }
-    
+
     // south side
-    for (int i = 0; i < resolutionMinus1; i++) {
-      const Geodetic3D g(sector.getInnerPoint((double)i/resolutionMinus1, 1),
-                         -skirtHeight);
-      vertices.add(g);
-      
-      indices.add((short) (resolutionMinus1*resolution + i));
+    for (int i = 0; i < resolution._x-1; i++) {
+      vertices.add(sector.getInnerPoint((double)i/(resolution._x-1), 1),
+                   skirtHeight);
+
+      indices.add((short) ((resolution._y-1)*resolution._x + i));
       indices.add((short) posS++);
     }
-    
+
     // east side
-    for (int j = resolutionMinus1; j > 0; j--) {
-      const Geodetic3D g(sector.getInnerPoint(1, (double)j/resolutionMinus1),
-                         -skirtHeight);
-      vertices.add(g);
-      
-      indices.add((short) (j*resolution + resolutionMinus1));
+    for (int j = resolution._y-1; j > 0; j--) {
+      vertices.add(sector.getInnerPoint(1, (double)j/(resolution._y-1)),
+                   skirtHeight);
+
+      indices.add((short) (j*resolution._x + (resolution._x-1)));
       indices.add((short) posS++);
     }
-    
+
     // north side
-    for (int i = resolutionMinus1; i > 0; i--) {
-      const Geodetic3D g(sector.getInnerPoint((double)i/resolutionMinus1, 0),
-                         -skirtHeight);
-      vertices.add(g);
-      
+    for (int i = resolution._x-1; i > 0; i--) {
+      vertices.add(sector.getInnerPoint((double)i/(resolution._x-1), 0),
+                   skirtHeight);
+
       indices.add((short) i);
       indices.add((short) posS++);
     }
-    
+
     // last triangle
     indices.add((short) 0);
-    indices.add((short) (resolution*resolution));
+    indices.add((short) (resolution._x*resolution._y));
   }
-  
-  Color* color = new Color( Color::fromRGBA((float) 0.1, (float) 0.1, (float) 0.1, (float) 1.0) );
-  
-  return new IndexedMesh(GLPrimitive::triangleStrip(),
+
+  Color* color = Color::newFromRGBA((float) 1.0, (float) 1.0, (float) 1.0, (float) 1.0);
+
+  return new IndexedMesh(//debug ? GLPrimitive::lineStrip() : GLPrimitive::triangleStrip(),
+                         GLPrimitive::triangleStrip(),
+                         //GLPrimitive::lineStrip(),
                          true,
                          vertices.getCenter(),
                          vertices.create(),
@@ -124,123 +168,130 @@ Mesh* EllipsoidalTileTessellator::createMesh(const G3MRenderContext* rc,
 }
 
 
-IFloatBuffer* EllipsoidalTileTessellator::createUnitTextCoords() const {
-  
-  FloatBufferBuilderFromCartesian2D textCoords;
-  
-  const int resolution       = _resolution;
-  const int resolutionMinus1 = resolution - 1;
-  
-  float* u = new float[resolution * resolution];
-  float* v = new float[resolution * resolution];
-  
-  for (int j = 0; j < resolution; j++) {
-    for (int i = 0; i < resolution; i++) {
-      const int pos = j*resolution + i;
-      u[pos] = (float) i / resolutionMinus1;
-      v[pos] = (float) j / resolutionMinus1;
+IFloatBuffer* EllipsoidalTileTessellator::createUnitTextCoords(const Tile* tile) const {
+
+  const Vector2I resolution = calculateResolution(tile->getSector());
+
+  float* u = new float[resolution._x * resolution._y];
+  float* v = new float[resolution._x * resolution._y];
+
+  for (int j = 0; j < resolution._y; j++) {
+    for (int i = 0; i < resolution._x; i++) {
+      const int pos = j*resolution._x + i;
+      u[pos] = (float) i / (resolution._x-1);
+      v[pos] = (float) j / (resolution._y-1);
     }
   }
-  
-  for (int j = 0; j < resolution; j++) {
-    for (int i = 0; i < resolution; i++) {
-      const int pos = j*resolution + i;
-      textCoords.add( u[pos], v[pos] );
+
+  int textCoordsSize = (resolution._x * resolution._y) * 2;
+  if (_skirted) {
+    textCoordsSize += ((resolution._x-1) * (resolution._y-1) * 4) * 2;
+  }
+
+  IFloatBuffer* textCoords = IFactory::instance()->createFloatBuffer(textCoordsSize);
+
+  int textCoordsIndex = 0;
+
+  for (int j = 0; j < resolution._y; j++) {
+    for (int i = 0; i < resolution._x; i++) {
+      const int pos = j*resolution._x + i;
+      textCoords->rawPut(textCoordsIndex++, u[pos]);
+      textCoords->rawPut(textCoordsIndex++, v[pos]);
     }
   }
-  
+
   // create skirts
   if (_skirted) {
     // west side
-    for (int j = 0; j < resolutionMinus1; j++) {
-      const int pos = j*resolution;
-      textCoords.add( u[pos], v[pos] );
+    for (int j = 0; j < resolution._y-1; j++) {
+      const int pos = j*resolution._x;
+      textCoords->rawPut(textCoordsIndex++, u[pos]);
+      textCoords->rawPut(textCoordsIndex++, v[pos]);
     }
-    
+
     // south side
-    for (int i = 0; i < resolutionMinus1; i++) {
-      const int pos = resolutionMinus1 * resolution + i;
-      textCoords.add( u[pos], v[pos] );
+    for (int i = 0; i < resolution._x-1; i++) {
+      const int pos = (resolution._y-1) * resolution._x + i;
+      textCoords->rawPut(textCoordsIndex++, u[pos]);
+      textCoords->rawPut(textCoordsIndex++, v[pos]);
     }
-    
+
     // east side
-    for (int j = resolutionMinus1; j > 0; j--) {
-      const int pos = j*resolution + resolutionMinus1;
-      textCoords.add( u[pos], v[pos] );
+    for (int j = resolution._y-1; j > 0; j--) {
+      const int pos = j*resolution._x + resolution._x-1;
+      textCoords->rawPut(textCoordsIndex++, u[pos]);
+      textCoords->rawPut(textCoordsIndex++, v[pos]);
     }
-    
+
     // north side
-    for (int i = resolutionMinus1; i > 0; i--) {
+    for (int i = resolution._x-1; i > 0; i--) {
       const int pos = i;
-      textCoords.add( u[pos], v[pos] );
+      textCoords->rawPut(textCoordsIndex++, u[pos]);
+      textCoords->rawPut(textCoordsIndex++, v[pos]);
     }
   }
-  
+
   // free temp memory
   delete[] u;
   delete[] v;
-  
-  return textCoords.create();
+
+  //  return textCoords.create();
+  return textCoords;
 }
 
 
-Mesh* EllipsoidalTileTessellator::createDebugMesh(const G3MRenderContext* rc,
-                                                  const Tile* tile) const
-{
+Mesh* EllipsoidalTileTessellator::createTileDebugMesh(const Planet* planet,
+                                                      const Tile* tile) const {
   const Sector sector = tile->getSector();
-  const Planet* planet = rc->getPlanet();
-  
-  const int resolutionMinus1 = _resolution - 1;
-  int posS = 0;
-  
+
+  const int resolutionXMinus1 = _resolutionX - 1;
+  const int resolutionYMinus1 = _resolutionY - 1;
+  short posS = 0;
+
   // compute offset for vertices
   const Vector3D sw = planet->toCartesian(sector.getSW());
   const Vector3D nw = planet->toCartesian(sector.getNW());
   const double offset = nw.sub(sw).length() * 1e-3;
-  
-  // create vectors
-  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(), planet, sector.getCenter());
-  // create indices
+
+  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(),
+                                          planet,
+                                          sector.getCenter());
+
   ShortBufferBuilder indices;
-  
+
   // west side
-  for (int j = 0; j < resolutionMinus1; j++) {
-    const Geodetic3D g(sector.getInnerPoint(0, (double)j/resolutionMinus1), offset);
-    
-    vertices.add(g);
-    indices.add((short) posS++);
+  for (int j = 0; j < resolutionYMinus1; j++) {
+    vertices.add(sector.getInnerPoint(0, (double)j/resolutionYMinus1),
+                 offset);
+    indices.add(posS++);
   }
-  
+
   // south side
-  for (int i = 0; i < resolutionMinus1; i++) {
-    const Geodetic3D g(sector.getInnerPoint((double)i/resolutionMinus1, 1), offset);
-    
-    vertices.add(g);
-    indices.add((short) posS++);
+  for (int i = 0; i < resolutionXMinus1; i++) {
+    vertices.add(sector.getInnerPoint((double)i/resolutionXMinus1, 1),
+                 offset);
+    indices.add(posS++);
   }
-  
+
   // east side
-  for (int j = resolutionMinus1; j > 0; j--) {
-    const Geodetic3D g(sector.getInnerPoint(1, (double)j/resolutionMinus1), offset);
-    
-    vertices.add(g);
-    indices.add((short) posS++);
+  for (int j = resolutionYMinus1; j > 0; j--) {
+    vertices.add(sector.getInnerPoint(1, (double)j/resolutionYMinus1),
+                 offset);
+    indices.add(posS++);
   }
-  
+
   // north side
-  for (int i = resolutionMinus1; i > 0; i--) {
-    const Geodetic3D g(sector.getInnerPoint((double)i/resolutionMinus1, 0), offset);
-    
-    vertices.add(g);
-    indices.add((short) posS++);
+  for (int i = resolutionXMinus1; i > 0; i--) {
+    vertices.add(sector.getInnerPoint((double)i/resolutionXMinus1, 0),
+                 offset);
+    indices.add(posS++);
   }
-  
-  Color *color = new Color(Color::fromRGBA((float) 1.0, (float) 0, (float) 0, (float) 1.0));
-  const Vector3D center = planet->toCartesian(sector.getCenter());
-  
+
+  Color *color = Color::newFromRGBA((float) 1.0, (float) 0, (float) 0, (float) 1.0);
+
   return new IndexedMesh(GLPrimitive::lineLoop(),
                          true,
-                         center,
+                         vertices.getCenter(),
                          vertices.create(),
                          indices.create(),
                          1,

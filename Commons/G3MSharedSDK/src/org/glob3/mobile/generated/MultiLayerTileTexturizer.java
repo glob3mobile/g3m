@@ -29,18 +29,8 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 {
   private TilesRenderParameters _parameters;
 
-  private IFloatBuffer _texCoordsCache;
-
-  private IFloatBuffer getTextureCoordinates(TileRenderContext trc)
-  {
-    if (_texCoordsCache == null)
-    {
-      _texCoordsCache = trc.getTessellator().createUnitTextCoords();
-    }
-    return _texCoordsCache;
-  }
-
-//  long _pendingTopTileRequests;
+//  mutable IFloatBuffer* _texCoordsCache;
+//  IFloatBuffer* getTextureCoordinates(const TileRenderContext* trc) const;
 
   private TexturesHandler _texturesHandler;
 
@@ -51,10 +41,10 @@ public class MultiLayerTileTexturizer extends TileTexturizer
   }
 
   public MultiLayerTileTexturizer()
+  //_texCoordsCache(NULL),
   //_pendingTopTileRequests(0),
   {
      _parameters = null;
-     _texCoordsCache = null;
      _texturesHandler = null;
   
   }
@@ -65,9 +55,8 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 
   public void dispose()
   {
-    if (_texCoordsCache != null)
-       _texCoordsCache.dispose();
-    _texCoordsCache = null;
+  //  delete _texCoordsCache;
+  //  _texCoordsCache = NULL;
   }
 
   public final boolean isReady(G3MRenderContext rc, LayerSet layerSet)
@@ -94,48 +83,22 @@ public class MultiLayerTileTexturizer extends TileTexturizer
   
     if (builderHolder == null)
     {
-      builderHolder = new TileTextureBuilderHolder(new TileTextureBuilder(this, rc, trc.getLayerSet(), _parameters, rc.getDownloader(), tile, tessellatorMesh, getTextureCoordinates(trc)));
+      builderHolder = new TileTextureBuilderHolder(new TileTextureBuilder(this, rc, trc.getLayerSet(), _parameters, rc.getDownloader(), tile, tessellatorMesh, trc.getTessellator(), trc.getTexturePriority()));
       tile.setTexturizerData(builderHolder);
     }
   
+    TileTextureBuilder builder = builderHolder.get();
     if (trc.isForcedFullRender())
     {
-      builderHolder.get().start();
+      builder.start();
     }
     else
     {
-//C++ TO JAVA CONVERTER TODO TASK: Java does not allow declaring types within methods:
-//      class BuilderStartTask : public FrameTask
-//      {
-//      private:
-//        TileTextureBuilder* _builder;
-//  
-//      public:
-//        BuilderStartTask(TileTextureBuilder* builder) : _builder(builder)
-//        {
-//          _builder->_retain();
-//        }
-//  
-//        virtual ~BuilderStartTask()
-//        {
-//          _builder->_release();
-//        }
-//  
-//        void execute(const G3MRenderContext* rc)
-//        {
-//          _builder->start();
-//        }
-//  
-//        boolean isCanceled(const G3MRenderContext *rc)
-//        {
-//          return _builder->isCanceled();
-//        }
-//      };
-      rc.getFrameTasksExecutor().addPreRenderTask(new BuilderStartTask(builderHolder.get()));
+      rc.getFrameTasksExecutor().addPreRenderTask(new BuilderStartTask(builder));
     }
   
     tile.setTexturizerDirty(false);
-    return builderHolder.get().getMesh();
+    return builder.getMesh();
   }
 
   public final void tileToBeDeleted(Tile tile, Mesh mesh)
@@ -145,9 +108,10 @@ public class MultiLayerTileTexturizer extends TileTexturizer
   
     if (builderHolder != null)
     {
-      builderHolder.get().cancel();
-      builderHolder.get().cleanTile();
-      builderHolder.get().cleanMesh();
+      TileTextureBuilder builder = builderHolder.get();
+      builder.cancel();
+      builder.cleanTile();
+      builder.cleanMesh();
     }
     else
     {
@@ -163,6 +127,16 @@ public class MultiLayerTileTexturizer extends TileTexturizer
     return false;
   }
 
+
+  //IFloatBuffer* MultiLayerTileTexturizer::getTextureCoordinates(const TileRenderContext* trc) const {
+  ////  if (_texCoordsCache == NULL) {
+  ////    _texCoordsCache = trc->getTessellator()->createUnitTextCoords();
+  ////  }
+  ////  return _texCoordsCache;
+  //  int _____XXXXXXX;
+  //  return trc->getTessellator()->createUnitTextCoords();
+  //}
+  
   public final void justCreatedTopTile(G3MRenderContext rc, Tile tile, LayerSet layerSet)
   {
   }
@@ -225,8 +199,9 @@ public class MultiLayerTileTexturizer extends TileTexturizer
     TileTextureBuilderHolder builderHolder = (TileTextureBuilderHolder) tile.getTexturizerData();
     if (builderHolder != null)
     {
-      builderHolder.get().cancel();
-      builderHolder.get().cleanMesh();
+      TileTextureBuilder builder = builderHolder.get();
+      builder.cancel();
+      builder.cleanMesh();
     }
     else
     {

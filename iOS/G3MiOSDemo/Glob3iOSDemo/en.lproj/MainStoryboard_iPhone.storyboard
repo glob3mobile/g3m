@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="1.1" toolsVersion="2182" systemVersion="11E53" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="PPz-AV-qzl">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12C60" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="90h-7u-REb">
     <dependencies>
-        <deployment defaultVersion="1296" identifier="iOS"/>
-        <development defaultVersion="4200" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="1181"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
-        <scene sceneID="L0K-S4-ViS">
+        <scene sceneID="8cZ-vN-Dx2">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="eoy-xD-D1z" sceneMemberID="firstResponder"/>
-                <viewController id="PPz-AV-qzl" customClass="ViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="eeF-v6-C69">
+                <viewController id="90h-7u-REb" customClass="ViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="alZ-1c-GDj">
                         <rect key="frame" x="0.0" y="20" width="320" height="460"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" id="Zho-NO-SYn" customClass="G3MWidget_iOS">
+                            <view contentMode="scaleToFill" id="lOt-Xd-eJz" customClass="G3MWidget_iOS">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="460"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -25,10 +22,12 @@
                     </view>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
                     <connections>
-                        <outlet property="G3MWidget" destination="Zho-NO-SYn" id="njm-hw-Nwf"/>
+                        <outlet property="G3MWidget" destination="lOt-Xd-eJz" id="c8U-QO-hqA"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="xuj-Dk-csY" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="-318" y="183"/>
         </scene>
     </scenes>
     <classes>

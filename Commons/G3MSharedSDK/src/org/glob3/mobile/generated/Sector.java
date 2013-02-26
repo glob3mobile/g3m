@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  Sector.h
+//  Sector.hpp
 //  G3MiOSSDK
 //
 //  Created by Agustín Trujillo Pino on 12/06/12.
@@ -78,6 +78,11 @@ public class Sector
     return new Vector2D(uv._x, uv._y - diff);
   }
 
+
+  //bool Sector::contains(const Geodetic2D &position) const {
+  //  return position.isBetween(_lower, _upper);
+  //}
+  
   public final boolean fullContains(Sector s)
   {
     return contains(s.upper()) && contains(s.lower());
@@ -144,14 +149,20 @@ public class Sector
     return _upper.longitude();
   }
 
+
+  public final boolean contains(Angle latitude, Angle longitude)
+  {
+    return latitude.isBetween(_lower.latitude(), _upper.latitude()) && longitude.isBetween(_lower.longitude(), _upper.longitude());
+  }
+
   public final boolean contains(Geodetic2D position)
   {
-    return position.isBetween(_lower, _upper);
+    return contains(position.latitude(), position.longitude());
   }
 
   public final boolean contains(Geodetic3D position)
   {
-    return contains(position.asGeodetic2D());
+    return contains(position.latitude(), position.longitude());
   }
 
   public final boolean touchesWith(Sector that)
@@ -301,10 +312,10 @@ public class Sector
   
   
   
-  /*
-    const Angle lat = pos.latitude().nearestAngleInInterval(_lower.latitude(), _upper.latitude());
-    const Angle lon = pos.longitude().nearestAngleInInterval(_lower.longitude(), _upper.longitude());
-    return Geodetic2D(lat, lon);*/
+    /*
+     const Angle lat = pos.latitude().nearestAngleInInterval(_lower.latitude(), _upper.latitude());
+     const Angle lon = pos.longitude().nearestAngleInInterval(_lower.longitude(), _upper.longitude());
+     return Geodetic2D(lat, lon);*/
   }
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:

@@ -32,7 +32,7 @@ private:
   
   MarkTouchListener* _markTouchListener;
   bool               _autoDeleteMarkTouchListener;
-  long long _downloadPriority = 1000000;
+  long long _downloadPriority;
 
 public:
   

@@ -12,13 +12,20 @@
 		A717C99615EBA71D00EEC830 /* mercator.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A717C99515EBA71D00EEC830 /* mercator.jpg */; };
 		CCD7885415D9A3FA0065A7E1 /* ProgressWheel.png in Resources */ = {isa = PBXBuildFile; fileRef = CCD7885315D9A3FA0065A7E1 /* ProgressWheel.png */; };
 		CF0223831668318600024B73 /* geojson in Resources */ = {isa = PBXBuildFile; fileRef = CF0223821668318600024B73 /* geojson */; };
+		CF04CCFA16D3E4D5004DFACF /* 409_554.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF04CCF916D3E4D5004DFACF /* 409_554.bil */; };
 		CF09A94E16A0A0F500E72811 /* test.bson in Resources */ = {isa = PBXBuildFile; fileRef = CF09A94D16A09F7000E72811 /* test.bson */; };
 		CF186B0416B8572400A39478 /* A320.json in Resources */ = {isa = PBXBuildFile; fileRef = CF186B0316B8572400A39478 /* A320.json */; };
 		CF186B0616B857DE00A39478 /* textures-A320 in Resources */ = {isa = PBXBuildFile; fileRef = CF186B0516B857DE00A39478 /* textures-A320 */; };
 		CF186B0816B85A3600A39478 /* citation.json in Resources */ = {isa = PBXBuildFile; fileRef = CF186B0716B85A3600A39478 /* citation.json */; };
 		CF186B0A16B85A5F00A39478 /* textures-citation in Resources */ = {isa = PBXBuildFile; fileRef = CF186B0916B85A5F00A39478 /* textures-citation */; };
+		CF35A20B16D3D70100D795D8 /* sample_bil16_150x150.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF35A20A16D3D70100D795D8 /* sample_bil16_150x150.bil */; };
 		CF7A708815CFD0A50086FDE6 /* g3m-marker.png in Resources */ = {isa = PBXBuildFile; fileRef = CF7A708715CFD0A50086FDE6 /* g3m-marker.png */; };
 		CF883B841591053100AEE39C /* mark.png in Resources */ = {isa = PBXBuildFile; fileRef = CF883B831591053100AEE39C /* mark.png */; };
+		CF8EE55B16CE94E40033AB7A /* mercator_debug.png in Resources */ = {isa = PBXBuildFile; fileRef = CF8EE55A16CE94E40033AB7A /* mercator_debug.png */; };
+		CF91C53016D7C03C00E25C24 /* full-earth-4096x2048.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF91C52F16D7C03B00E25C24 /* full-earth-4096x2048.bil */; };
+		CFB5274B16D53906008374C2 /* full-earth-2048x1024.bil in Resources */ = {isa = PBXBuildFile; fileRef = CFB5274A16D53906008374C2 /* full-earth-2048x1024.bil */; };
+		CFCC53F316D50D8900671DC4 /* full-earth-512x512.bil in Resources */ = {isa = PBXBuildFile; fileRef = CFCC53F216D50D8900671DC4 /* full-earth-512x512.bil */; };
+		CFD42AB816DBAEFD00B03961 /* elev-35.0_-6.0_38.0_-2.0_4096x2048.bil in Resources */ = {isa = PBXBuildFile; fileRef = CFD42AB716DBAEFD00B03961 /* elev-35.0_-6.0_38.0_-2.0_4096x2048.bil */; };
 		CFE3DBB1164B0E7D00910037 /* seymour-plane.json in Resources */ = {isa = PBXBuildFile; fileRef = CFE3DBB0164B0E7D00910037 /* seymour-plane.json */; };
 		CFEA76681666DCB000E89BC7 /* images in Resources */ = {isa = PBXBuildFile; fileRef = CFEA76671666DCB000E89BC7 /* images */; };
 		CFF95F7D158A748F00B56E11 /* plane.png in Resources */ = {isa = PBXBuildFile; fileRef = CFF95F7C158A748F00B56E11 /* plane.png */; };
@@ -49,11 +56,21 @@
 		E71B153F1626D27F003D1013 /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B15341626D27F003D1013 /* Icon-Small@2x.png */; };
 		E71B15401626D27F003D1013 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B15351626D27F003D1013 /* Icon.png */; };
 		E71B15411626D27F003D1013 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B15361626D27F003D1013 /* Icon@2x.png */; };
-		E82A6C80163AEAFA00DA5352 /* fullscene.scn in Resources */ = {isa = PBXBuildFile; fileRef = E82A6C7F163AEAFA00DA5352 /* fullscene.scn */; };
-		E82A6C82163AEB9E00DA5352 /* wmsScene.scn in Resources */ = {isa = PBXBuildFile; fileRef = E82A6C81163AEB9E00DA5352 /* wmsScene.scn */; };
-		E82A6C84163AEFBC00DA5352 /* testScene.scn in Resources */ = {isa = PBXBuildFile; fileRef = E82A6C83163AEFBC00DA5352 /* testScene.scn */; };
-		E8B1940216384DCE006D9193 /* scene.scn in Resources */ = {isa = PBXBuildFile; fileRef = E8B1940116384DCE006D9193 /* scene.scn */; };
-		E8C76114164BC68C009DB131 /* turismo.scn in Resources */ = {isa = PBXBuildFile; fileRef = E8C76113164BC68C009DB131 /* turismo.scn */; };
+		E73C8EA716BAC04100FA1493 /* A320.bson in Resources */ = {isa = PBXBuildFile; fileRef = E73C8EA616BA9CEE00FA1493 /* A320.bson */; };
+		E751B7661680E2D90032413F /* satellite-on-96x48.png in Resources */ = {isa = PBXBuildFile; fileRef = E751B7651680E2D90032413F /* satellite-on-96x48.png */; };
+		E751B7681680E5850032413F /* map-on-96x48.png in Resources */ = {isa = PBXBuildFile; fileRef = E751B7671680E5850032413F /* map-on-96x48.png */; };
+		E751B78316823D7C0032413F /* G3MDrawingShapesViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E751B78216823D7C0032413F /* G3MDrawingShapesViewController.mm */; };
+		E751B7A1168247830032413F /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = E751B79F168247830032413F /* play.png */; };
+		E751B7A2168247830032413F /* stop.png in Resources */ = {isa = PBXBuildFile; fileRef = E751B7A0168247830032413F /* stop.png */; };
+		E770CAD9169C425600F892BE /* (null) in Resources */ = {isa = PBXBuildFile; };
+		E770CAE4169C808700F892BE /* G3MWebViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E770CAE3169C808700F892BE /* G3MWebViewController.mm */; };
+		E770CAE7169D988C00F892BE /* marker-wikipedia-72x72.png in Resources */ = {isa = PBXBuildFile; fileRef = E770CAE6169D988C00F892BE /* marker-wikipedia-72x72.png */; };
+		E791CF6F16C15A49000FDE8A /* UIDropDownMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = E791CF6E16C15A49000FDE8A /* UIDropDownMenu.m */; };
+		E7A4734916B855B300D07077 /* DemosViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7A4734816B855B300D07077 /* DemosViewController.mm */; };
+		E7CD9BC616C1994900F69E41 /* g3m-48.png in Resources */ = {isa = PBXBuildFile; fileRef = E7CD9BC516C1994900F69E41 /* g3m-48.png */; };
+		E7CD9BC816C1A34400F69E41 /* selector-background.png in Resources */ = {isa = PBXBuildFile; fileRef = E7CD9BC716C1A34400F69E41 /* selector-background.png */; };
+		E7CD9BCB16C24E9F00F69E41 /* G3MToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = E7CD9BCA16C24E9F00F69E41 /* G3MToolbar.m */; };
+		E7D4EC7D16B98D7200730B14 /* marker-wikipedia-48x48.png in Resources */ = {isa = PBXBuildFile; fileRef = E7D4EC7C16B98D7200730B14 /* marker-wikipedia-48x48.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,15 +96,25 @@
 		A717C99515EBA71D00EEC830 /* mercator.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = mercator.jpg; sourceTree = "<group>"; };
 		CCD7885315D9A3FA0065A7E1 /* ProgressWheel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ProgressWheel.png; sourceTree = "<group>"; };
 		CF0223821668318600024B73 /* geojson */ = {isa = PBXFileReference; lastKnownFileType = folder; path = geojson; sourceTree = "<group>"; };
+		CF04CCF916D3E4D5004DFACF /* 409_554.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = 409_554.bil; sourceTree = "<group>"; };
 		CF09A94D16A09F7000E72811 /* test.bson */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.bson; sourceTree = "<group>"; };
 		CF186B0316B8572400A39478 /* A320.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = A320.json; sourceTree = "<group>"; };
 		CF186B0516B857DE00A39478 /* textures-A320 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "textures-A320"; sourceTree = "<group>"; };
 		CF186B0716B85A3600A39478 /* citation.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = citation.json; sourceTree = "<group>"; };
 		CF186B0916B85A5F00A39478 /* textures-citation */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "textures-citation"; sourceTree = "<group>"; };
+		CF35A20016D3B3E600D795D8 /* MeshHolder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MeshHolder.hpp; path = ../G3MiOSSDK/Commons/Mesh/MeshHolder.hpp; sourceTree = "<group>"; };
+		CF35A20116D3B3E600D795D8 /* ElevationDataProvider.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ElevationDataProvider.hpp; path = ../G3MiOSSDK/Commons/Basic/ElevationDataProvider.hpp; sourceTree = "<group>"; };
+		CF35A20216D3B3E600D795D8 /* ElevationData.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ElevationData.hpp; path = ../G3MiOSSDK/Commons/Basic/ElevationData.hpp; sourceTree = "<group>"; };
+		CF35A20316D3B3E600D795D8 /* WMSBillElevationDataProvider.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = WMSBillElevationDataProvider.hpp; path = ../G3MiOSSDK/Commons/Basic/WMSBillElevationDataProvider.hpp; sourceTree = "<group>"; };
+		CF35A20916D3D67C00D795D8 /* BilParser.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = BilParser.hpp; path = ../G3MiOSSDK/Commons/Basic/BilParser.hpp; sourceTree = "<group>"; };
+		CF35A20A16D3D70100D795D8 /* sample_bil16_150x150.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = sample_bil16_150x150.bil; sourceTree = "<group>"; };
 		CF35DD5216C69B6F002EFC96 /* Vector3F.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Vector3F.hpp; path = ../G3MiOSSDK/Commons/Geometry/Vector3F.hpp; sourceTree = "<group>"; };
 		CF35DD5316C69B6F002EFC96 /* Vector2F.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Vector2F.hpp; path = ../G3MiOSSDK/Commons/Geometry/Vector2F.hpp; sourceTree = "<group>"; };
-		CF7A708715CFD0A50086FDE6 /* g3m-marker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "g3m-marker.png"; sourceTree = "<group>"; };
 		CF883B831591053100AEE39C /* mark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mark.png; sourceTree = "<group>"; };
+		CF8EE55A16CE94E40033AB7A /* mercator_debug.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mercator_debug.png; sourceTree = "<group>"; };
+		CF91C52F16D7C03B00E25C24 /* full-earth-4096x2048.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "full-earth-4096x2048.bil"; sourceTree = "<group>"; };
+		CFB5274A16D53906008374C2 /* full-earth-2048x1024.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "full-earth-2048x1024.bil"; sourceTree = "<group>"; };
+		CFB5275216D579B7008374C2 /* Interpolator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Interpolator.hpp; path = ../G3MiOSSDK/Commons/Math/Interpolator.hpp; sourceTree = "<group>"; };
 		CFBA532E16B9B69A00256453 /* G3MWidget_iOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = G3MWidget_iOS.h; path = ../G3MiOSSDK/Specific/Widget/G3MWidget_iOS.h; sourceTree = "<group>"; };
 		CFBA532F16B9B69A00256453 /* AbstractMesh.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = AbstractMesh.hpp; path = ../G3MiOSSDK/Commons/Mesh/AbstractMesh.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFBA533016B9B69A00256453 /* G3MBuilder_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = G3MBuilder_iOS.hpp; path = ../G3MiOSSDK/Specific/Derived/G3MBuilder_iOS.hpp; sourceTree = "<group>"; };
@@ -180,7 +207,7 @@
 		CFBA538916B9B69A00256453 /* Vector2D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = Vector2D.hpp; path = ../G3MiOSSDK/Commons/Geometry/Vector2D.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFBA538A16B9B69A00256453 /* Vector3D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Vector3D.hpp; path = ../G3MiOSSDK/Commons/Geometry/Vector3D.hpp; sourceTree = "<group>"; };
 		CFBA538B16B9B69A00256453 /* IFactory.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IFactory.hpp; path = ../G3MiOSSDK/Commons/Interfaces/IFactory.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		CFBA538C16B9B69A00256453 /* ILogger.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ILogger.hpp; path = ../G3MiOSSDK/Commons/Interfaces/ILogger.hpp; sourceTree = "<group>"; };
+		CFBA538C16B9B69A00256453 /* ILogger.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ILogger.hpp; path = ../G3MiOSSDK/Commons/Interfaces/ILogger.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFBA538D16B9B69A00256453 /* IImage.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IImage.hpp; path = ../G3MiOSSDK/Commons/Interfaces/IImage.hpp; sourceTree = "<group>"; };
 		CFBA538E16B9B69A00256453 /* MutableVector3D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = MutableVector3D.hpp; path = ../G3MiOSSDK/Commons/Geometry/MutableVector3D.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFBA538F16B9B69A00256453 /* MutableVector2D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = MutableVector2D.hpp; path = ../G3MiOSSDK/Commons/Geometry/MutableVector2D.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -278,6 +305,10 @@
 		CFBA53EB16B9B69A00256453 /* MeshShape.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MeshShape.hpp; path = ../G3MiOSSDK/MeshShape.hpp; sourceTree = "<group>"; };
 		CFBA53F416B9B88500256453 /* ICameraConstrainer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ICameraConstrainer.hpp; path = ../G3MiOSSDK/Commons/Cameras/ICameraConstrainer.hpp; sourceTree = "<group>"; };
 		CFBA53F516B9B88500256453 /* SimpleCameraConstrainer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = SimpleCameraConstrainer.hpp; path = ../G3MiOSSDK/Commons/Cameras/SimpleCameraConstrainer.hpp; sourceTree = "<group>"; };
+		CFCC53F216D50D8900671DC4 /* full-earth-512x512.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "full-earth-512x512.bil"; sourceTree = "<group>"; };
+		CFD42AB716DBAEFD00B03961 /* elev-35.0_-6.0_38.0_-2.0_4096x2048.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = "elev-35.0_-6.0_38.0_-2.0_4096x2048.bil"; sourceTree = "<group>"; };
+		CFDA835F16D675EB00295F96 /* BilinearInterpolator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = BilinearInterpolator.hpp; path = ../G3MiOSSDK/Commons/Math/BilinearInterpolator.hpp; sourceTree = "<group>"; };
+		CFDFAE7D16D6AAB800E3D172 /* SubviewElevationData.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = SubviewElevationData.hpp; path = ../G3MiOSSDK/Commons/Basic/SubviewElevationData.hpp; sourceTree = "<group>"; };
 		CFE3DBB0164B0E7D00910037 /* seymour-plane.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "seymour-plane.json"; sourceTree = "<group>"; };
 		CFEA76671666DCB000E89BC7 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
 		CFF95F7C158A748F00B56E11 /* plane.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plane.png; sourceTree = "<group>"; };
@@ -315,17 +346,13 @@
 		E71B15351626D27F003D1013 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = Resources/Icon.png; sourceTree = "<group>"; };
 		E71B15361626D27F003D1013 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "Resources/Icon@2x.png"; sourceTree = "<group>"; };
 		E7B9965116A9526D00753FC3 /* LayerBuilder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = LayerBuilder.hpp; path = ../G3MiOSSDK/Commons/Basic/LayerBuilder.hpp; sourceTree = "<group>"; };
-		E82A6C7F163AEAFA00DA5352 /* fullscene.scn */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = fullscene.scn; sourceTree = "<group>"; };
-		E82A6C81163AEB9E00DA5352 /* wmsScene.scn */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = wmsScene.scn; sourceTree = "<group>"; };
-		E82A6C83163AEFBC00DA5352 /* testScene.scn */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = testScene.scn; sourceTree = "<group>"; };
 		E87424B3169F4E5700C8A227 /* MarkTouchListener.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MarkTouchListener.hpp; path = ../G3MiOSSDK/Commons/Rendererers/MarkTouchListener.hpp; sourceTree = "<group>"; };
-		E8B1940116384DCE006D9193 /* scene.scn */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = scene.scn; sourceTree = "<group>"; };
-		E8C76113164BC68C009DB131 /* turismo.scn */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = turismo.scn; sourceTree = "<group>"; };
 		E8CF70ED169DCB8500712809 /* GEOJSONParser.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = GEOJSONParser.hpp; path = ../G3MiOSSDK/Commons/GEO/GEOJSONParser.hpp; sourceTree = "<group>"; };
 		E8CF70EE169DCB9400712809 /* GEORenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = GEORenderer.hpp; path = ../G3MiOSSDK/Commons/GEO/GEORenderer.hpp; sourceTree = "<group>"; };
 		E8CF70EF169DCBA200712809 /* PanoDownloadListener.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PanoDownloadListener.hpp; path = ../G3MiOSSDK/Commons/JSON/PanoDownloadListener.hpp; sourceTree = "<group>"; };
 		E8CF70F1169DCBC300712809 /* IG3MJSONBuilder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IG3MJSONBuilder.hpp; path = ../G3MiOSSDK/Commons/Basic/IG3MJSONBuilder.hpp; sourceTree = "<group>"; };
 		E8CF70F2169DCBDA00712809 /* G3MJSONBuilder_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = G3MJSONBuilder_iOS.hpp; path = ../G3MiOSSDK/Specific/Derived/G3MJSONBuilder_iOS.hpp; sourceTree = "<group>"; };
+		FB6D00A916CC0458009BF93D /* EllipsoidShape.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = EllipsoidShape.hpp; path = ../G3MiOSSDK/Commons/Rendererers/EllipsoidShape.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -350,6 +377,15 @@
 		CF629FFE168008D200649BBC /* Public Headers G3M */ = {
 			isa = PBXGroup;
 			children = (
+				CFDFAE7D16D6AAB800E3D172 /* SubviewElevationData.hpp */,
+				CFDA835F16D675EB00295F96 /* BilinearInterpolator.hpp */,
+				CFB5275216D579B7008374C2 /* Interpolator.hpp */,
+				CF35A20916D3D67C00D795D8 /* BilParser.hpp */,
+				CF35A20016D3B3E600D795D8 /* MeshHolder.hpp */,
+				CF35A20116D3B3E600D795D8 /* ElevationDataProvider.hpp */,
+				CF35A20216D3B3E600D795D8 /* ElevationData.hpp */,
+				CF35A20316D3B3E600D795D8 /* WMSBillElevationDataProvider.hpp */,
+				FB6D00A916CC0458009BF93D /* EllipsoidShape.hpp */,
 				CF35DD5216C69B6F002EFC96 /* Vector3F.hpp */,
 				CF35DD5316C69B6F002EFC96 /* Vector2F.hpp */,
 				CFBA532F16B9B69A00256453 /* AbstractMesh.hpp */,
@@ -591,9 +627,19 @@
 				D8EEF39F1577920B003FEB5E /* MainStoryboard_iPad.storyboard */,
 				D8EEF3A21577920B003FEB5E /* ViewController.h */,
 				D8EEF3A31577920B003FEB5E /* ViewController.mm */,
+				E7A4734716B855B300D07077 /* DemosViewController.h */,
+				E7A4734816B855B300D07077 /* DemosViewController.mm */,
 				D8EEF3911577920B003FEB5E /* Supporting Files */,
 				D8EEF4091577A93D003FEB5E /* G3W.h */,
 				D8EEF40A1577A93D003FEB5E /* G3W.mm */,
+				E7CD9BC916C24E9F00F69E41 /* G3MToolbar.h */,
+				E7CD9BCA16C24E9F00F69E41 /* G3MToolbar.m */,
+				E791CF6D16C15A49000FDE8A /* UIDropDownMenu.h */,
+				E791CF6E16C15A49000FDE8A /* UIDropDownMenu.m */,
+				E770CAE2169C808700F892BE /* G3MWebViewController.h */,
+				E770CAE3169C808700F892BE /* G3MWebViewController.mm */,
+				E751B78116823D7C0032413F /* G3MDrawingShapesViewController.h */,
+				E751B78216823D7C0032413F /* G3MDrawingShapesViewController.mm */,
 			);
 			name = G3MiOSDemo;
 			path = Glob3iOSDemo;
@@ -621,14 +667,26 @@
 		D8EEF4271577B0D6003FEB5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CFD42AB716DBAEFD00B03961 /* elev-35.0_-6.0_38.0_-2.0_4096x2048.bil */,
+				CF91C52F16D7C03B00E25C24 /* full-earth-4096x2048.bil */,
+				CFB5274A16D53906008374C2 /* full-earth-2048x1024.bil */,
+				CFCC53F216D50D8900671DC4 /* full-earth-512x512.bil */,
+				CF04CCF916D3E4D5004DFACF /* 409_554.bil */,
+				CF35A20A16D3D70100D795D8 /* sample_bil16_150x150.bil */,
+				CF8EE55A16CE94E40033AB7A /* mercator_debug.png */,
 				CF186B0916B85A5F00A39478 /* textures-citation */,
 				CF186B0716B85A3600A39478 /* citation.json */,
 				CF186B0516B857DE00A39478 /* textures-A320 */,
 				CF186B0316B8572400A39478 /* A320.json */,
+				E73C8EA616BA9CEE00FA1493 /* A320.bson */,
 				CF09A94D16A09F7000E72811 /* test.bson */,
 				CF0223821668318600024B73 /* geojson */,
 				CFEA76671666DCB000E89BC7 /* images */,
 				CFE3DBB0164B0E7D00910037 /* seymour-plane.json */,
+				E7A91B27168DA7A800DC5EE4 /* Default@2x.png */,
+				E7A91B26168DA7A800DC5EE4 /* Default.png */,
+				E7A91B28168DA7A800DC5EE4 /* iTunesArtwork */,
+				E7A91B29168DA7A800DC5EE4 /* iTunesArtwork@2x */,
 				E71B152C1626D27F003D1013 /* Default-Landscape.png */,
 				E71B152D1626D27F003D1013 /* Default-Landscape@2x.png */,
 				E71B152E1626D27F003D1013 /* Default-Portrait.png */,
@@ -642,7 +700,6 @@
 				E71B15361626D27F003D1013 /* Icon@2x.png */,
 				A717C99515EBA71D00EEC830 /* mercator.jpg */,
 				CCD7885315D9A3FA0065A7E1 /* ProgressWheel.png */,
-				CF7A708715CFD0A50086FDE6 /* g3m-marker.png */,
 				CF883B831591053100AEE39C /* mark.png */,
 				CFF95F7C158A748F00B56E11 /* plane.png */,
 				D8E93BDF1588A171009D497C /* world.jpg */,
@@ -733,7 +790,6 @@
 				D8E93BE01588A171009D497C /* world.jpg in Resources */,
 				CFF95F7D158A748F00B56E11 /* plane.png in Resources */,
 				CF883B841591053100AEE39C /* mark.png in Resources */,
-				CF7A708815CFD0A50086FDE6 /* g3m-marker.png in Resources */,
 				CCD7885415D9A3FA0065A7E1 /* ProgressWheel.png in Resources */,
 				A717C99615EBA71D00EEC830 /* mercator.jpg in Resources */,
 				E71B15371626D27F003D1013 /* Default-Landscape.png in Resources */,
@@ -755,10 +811,23 @@
 				CFE3DBB1164B0E7D00910037 /* seymour-plane.json in Resources */,
 				CFEA76681666DCB000E89BC7 /* images in Resources */,
 				CF0223831668318600024B73 /* geojson in Resources */,
+				E751B7661680E2D90032413F /* satellite-on-96x48.png in Resources */,
+				E751B7681680E5850032413F /* map-on-96x48.png in Resources */,
+				E751B7A1168247830032413F /* play.png in Resources */,
+				E751B7A2168247830032413F /* stop.png in Resources */,
+				E770CAD9169C425600F892BE /* (null) in Resources */,
+				E770CAE7169D988C00F892BE /* marker-wikipedia-72x72.png in Resources */,
 				CF186B0416B8572400A39478 /* A320.json in Resources */,
 				CF186B0616B857DE00A39478 /* textures-A320 in Resources */,
 				CF186B0816B85A3600A39478 /* citation.json in Resources */,
 				CF186B0A16B85A5F00A39478 /* textures-citation in Resources */,
+				CF8EE55B16CE94E40033AB7A /* mercator_debug.png in Resources */,
+				CF35A20B16D3D70100D795D8 /* sample_bil16_150x150.bil in Resources */,
+				CF04CCFA16D3E4D5004DFACF /* 409_554.bil in Resources */,
+				CFCC53F316D50D8900671DC4 /* full-earth-512x512.bil in Resources */,
+				CFB5274B16D53906008374C2 /* full-earth-2048x1024.bil in Resources */,
+				CF91C53016D7C03C00E25C24 /* full-earth-4096x2048.bil in Resources */,
+				CFD42AB816DBAEFD00B03961 /* elev-35.0_-6.0_38.0_-2.0_4096x2048.bil in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -773,6 +842,11 @@
 				D8EEF39B1577920B003FEB5E /* AppDelegate.m in Sources */,
 				D8EEF3A41577920B003FEB5E /* ViewController.mm in Sources */,
 				D8EEF40B1577A93D003FEB5E /* G3W.mm in Sources */,
+				E751B78316823D7C0032413F /* G3MDrawingShapesViewController.mm in Sources */,
+				E770CAE4169C808700F892BE /* G3MWebViewController.mm in Sources */,
+				E7A4734916B855B300D07077 /* DemosViewController.mm in Sources */,
+				E791CF6F16C15A49000FDE8A /* UIDropDownMenu.m in Sources */,
+				E7CD9BCB16C24E9F00F69E41 /* G3MToolbar.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -824,6 +898,7 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -842,6 +917,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/**";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -858,6 +935,7 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -870,6 +948,8 @@
 				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/**";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -881,6 +961,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Glob3iOSDemo/G3MiOSDemo-Prefix.pch";
@@ -897,6 +978,7 @@
 				PRODUCT_NAME = G3MiOSDemo;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -915,6 +997,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = G3MiOSDemo;
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

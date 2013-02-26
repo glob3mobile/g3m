@@ -26,7 +26,7 @@ public class LayerSet
     _layers.add(layer);
     if (_listener == null)
     {
-  //    ILogger::instance()->logError("Can't notify, _listener not set");
+      //    ILogger::instance()->logError("Can't notify, _listener not set");
     }
     else
     {
@@ -34,7 +34,7 @@ public class LayerSet
     }
   }
 
-  public final java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, Tile tile, int width, int height)
+  public final java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, Tile tile, Vector2I tileTextureResolution)
   {
     java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
   
@@ -43,7 +43,7 @@ public class LayerSet
       Layer layer = _layers.get(i);
       if (layer.isAvailable(rc, tile))
       {
-        java.util.ArrayList<Petition> pet = layer.getMapPetitions(rc, tile, width, height);
+        java.util.ArrayList<Petition> pet = layer.getMapPetitions(rc, tile, tileTextureResolution);
   
         //Storing petitions
         for (int j = 0; j < pet.size(); j++)
@@ -106,7 +106,7 @@ public class LayerSet
   {
     if (_listener == null)
     {
-  //    ILogger::instance()->logError("Can't notify, _listener not set");
+      //    ILogger::instance()->logError("Can't notify, _listener not set");
     }
     else
     {

@@ -14,7 +14,7 @@
 
 std::vector<Petition*> WMSLayer::getMapPetitions(const G3MRenderContext* rc,
                                                  const Tile* tile,
-                                                 int width, int height) const {
+                                                 const Vector2I& tileTextureResolution) const {
   std::vector<Petition*> petitions;
   
   const Sector tileSector = tile->getSector();
@@ -56,9 +56,9 @@ std::vector<Petition*> WMSLayer::getMapPetitions(const G3MRenderContext* rc,
       IStringBuilder* isb = IStringBuilder::newStringBuilder();
       
       isb->addString("&WIDTH=");
-      isb->addInt(width);
+      isb->addInt(tileTextureResolution._x);
       isb->addString("&HEIGHT=");
-      isb->addInt(height);
+      isb->addInt(tileTextureResolution._y);
       
       isb->addString("&BBOX=");
       isb->addDouble(sector.lower().latitude()._degrees);
@@ -85,9 +85,9 @@ std::vector<Petition*> WMSLayer::getMapPetitions(const G3MRenderContext* rc,
       IStringBuilder* isb = IStringBuilder::newStringBuilder();
       
       isb->addString("&WIDTH=");
-      isb->addInt(width);
+      isb->addInt(tileTextureResolution._x);
       isb->addString("&HEIGHT=");
-      isb->addInt(height);
+      isb->addInt(tileTextureResolution._y);
       
       isb->addString("&BBOX=");
       isb->addDouble(sector.lower().longitude()._degrees);

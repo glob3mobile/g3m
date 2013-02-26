@@ -22,6 +22,7 @@ class Petition;
 class Tile;
 class LayerCondition;
 class LayerSet;
+class Vector2I;
 
 class Layer {
 private:
@@ -33,7 +34,7 @@ private:
   bool _enable;
   
   const std::string _name;
-  
+
 protected:
   const TimeInterval& _timeToCache;
 
@@ -63,12 +64,11 @@ public:
     return _enable;
   }
 
-  virtual ~Layer() {
-  }
+  virtual ~Layer();
   
   virtual std::vector<Petition*> getMapPetitions(const G3MRenderContext* rc,
                                                  const Tile* tile,
-                                                 int width, int height) const = 0;
+                                                 const Vector2I& tileTextureResolution) const = 0;
   
   virtual bool isAvailable(const G3MRenderContext* rc,
                            const Tile* tile) const;

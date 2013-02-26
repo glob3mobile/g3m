@@ -22,21 +22,21 @@ public class SGMaterialNode extends SGNode
   private final Color _baseColor;
   private final Color _specularColor;
 
-  private final double _specular;
-  private final double _shine;
-  private final double _alpha;
-  private final double _emit;
+//  const double _specular;
+//  const double _shine;
+//  const double _alpha;
+//  const double _emit;
 
 
   public SGMaterialNode(String id, String sId, Color baseColor, Color specularColor, double specular, double shine, double alpha, double emit)
+//  _specular(specular),
+//  _shine(shine),
+//  _alpha(alpha),
+//  _emit(emit)
   {
      super(id, sId);
      _baseColor = baseColor;
      _specularColor = specularColor;
-     _specular = specular;
-     _shine = shine;
-     _alpha = alpha;
-     _emit = emit;
 
   }
 

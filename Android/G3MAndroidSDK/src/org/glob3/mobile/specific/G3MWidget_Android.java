@@ -94,7 +94,7 @@ public final class G3MWidget_Android
 
       if (!isInEditMode()) { // needed to allow visual edition of this widget
          //Double Tap Listener
-         _gestureDetector = new GestureDetector(this);
+         _gestureDetector = new GestureDetector(context, this);
          _doubleTapListener = new OnDoubleTapListener() {
 
             @Override

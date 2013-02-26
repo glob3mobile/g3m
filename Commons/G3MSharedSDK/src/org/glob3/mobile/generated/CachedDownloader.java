@@ -65,11 +65,17 @@ public class CachedDownloader extends IDownloader
 
   private URL _lastImageURL;
 
-  private G3MContext _context;
-
-  private FrameTasksExecutor _frameTasksExecutor;
+///#ifdef C_CODE
+//  const G3MContext* _context;
+///#endif
+///#ifdef JAVA_CODE
+//  private G3MContext _context;
+///#endif
+//  FrameTasksExecutor* _frameTasksExecutor;
 
   public CachedDownloader(IDownloader downloader, IStorage storage, boolean saveInBackground)
+//  _context(NULL),
+//  _frameTasksExecutor(NULL)
   {
      _downloader = downloader;
      _storage = storage;
@@ -79,8 +85,6 @@ public class CachedDownloader extends IDownloader
      _saveInBackground = saveInBackground;
      _lastImage = null;
      _lastImageURL = null;
-     _context = null;
-     _frameTasksExecutor = null;
 
   }
 
@@ -169,20 +173,6 @@ public class CachedDownloader extends IDownloader
       // cache hit
       _cacheHitsCounter++;
   
-      //    if (_context != NULL) {
-      //      _context->getThreadUtils()->invokeInRendererThread(new CachedDownloader_InvokeRenderer(url,
-      //                                                                                             cachedImage,
-      //                                                                                             listener, deleteListener),
-      //                                                         true);
-      //    }
-      //    else {
-  
-      //    if (_frameTasksExecutor != NULL) {
-      //      _frameTasksExecutor->addPreRenderTask(new CachedDownloader_InvokeRenderer(url,
-      //                                                                                cachedImage,
-      //                                                                                listener, deleteListener));
-      //    }
-      //    else {
       listener.onDownload(url, cachedImage);
   
       if (deleteListener)
@@ -190,7 +180,6 @@ public class CachedDownloader extends IDownloader
         if (listener != null)
            listener.dispose();
       }
-      //    }
   
       return -1;
     }
@@ -257,8 +246,8 @@ public class CachedDownloader extends IDownloader
 
   public final void initialize(G3MContext context, FrameTasksExecutor frameTasksExecutor)
   {
-    _context = context;
-    _frameTasksExecutor = frameTasksExecutor;
+  //  _context = context;
+  //  _frameTasksExecutor = frameTasksExecutor;
     _downloader.initialize(context, frameTasksExecutor);
   }
 

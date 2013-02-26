@@ -263,16 +263,16 @@ private:
   MutableVector3D _up;                  // vertical vector
 
   mutable CameraDirtyFlags _dirtyFlags;
-  mutable FrustumData _frustumData;
+  mutable FrustumData      _frustumData;
   mutable MutableMatrix44D _projectionMatrix;
   mutable MutableMatrix44D _modelMatrix;
   mutable MutableMatrix44D _modelViewMatrix;
-  mutable MutableVector3D   _cartesianCenterOfView;
-  mutable Geodetic3D*     _geodeticCenterOfView;
-  mutable Frustum* _frustum;
-  mutable Frustum* _frustumInModelCoordinates;
-  mutable Frustum* _halfFrustum;                    // ONLY FOR DEBUG
-  mutable Frustum* _halfFrustumInModelCoordinates;  // ONLY FOR DEBUG
+  mutable MutableVector3D  _cartesianCenterOfView;
+  mutable Geodetic3D*      _geodeticCenterOfView;
+  mutable Frustum*         _frustum;
+  mutable Frustum*         _frustumInModelCoordinates;
+  mutable Frustum*         _halfFrustum;                    // ONLY FOR DEBUG
+  mutable Frustum*         _halfFrustumInModelCoordinates;  // ONLY FOR DEBUG
 
   //The Camera Effect Target
   class CameraEffectTarget: public EffectTarget {

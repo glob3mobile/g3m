@@ -24,7 +24,7 @@ private:
   bool _positionsDirty;
 
   Color _color;
-  const float _lineWidth;
+  const float _ribbonWidth;
 
   std::vector<Geodetic3D*> _positions;
 
@@ -36,13 +36,13 @@ private:
 public:
   Trail(int maxSteps,
         Color color,
-        float lineWidth):
+        float ribbonWidth):
   _maxSteps(maxSteps),
   _visible(true),
   _positionsDirty(true),
   _mesh(NULL),
   _color(color),
-  _lineWidth(lineWidth)
+  _ribbonWidth(ribbonWidth)
   {
   }
 
@@ -64,9 +64,7 @@ public:
 
     if (_maxSteps > 0) {
       while (_positions.size() >= _maxSteps) {
-        // const int lastIndex = _positions.size() - 1;
         const int index = 0;
-
         delete _positions[index];
 
 #ifdef C_CODE

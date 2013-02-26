@@ -355,6 +355,8 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
 
 - (void)dealloc {
   delete lastTouchEvent;
+  [self setRenderer: nil];
+  delete (G3MWidget*) _widgetVP;
 }
 
 - (G3MWidget*) widget {
@@ -410,6 +412,11 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
 
 - (void)resetCameraPosition {
   [self widget]->resetCameraPosition();
+}
+
+- (WidgetUserData*) userData
+{
+  return [self widget]->getUserData();
 }
 
 @end

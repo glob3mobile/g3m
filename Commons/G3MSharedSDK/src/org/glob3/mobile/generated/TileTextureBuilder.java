@@ -4,8 +4,6 @@ public class TileTextureBuilder extends RCObject
   private MultiLayerTileTexturizer _texturizer;
   private Tile _tile;
 
-  //  const TileKey             _tileKey;
-
   private java.util.ArrayList<Petition> _petitions = new java.util.ArrayList<Petition>();
   private int _petitionsCount;
   private int _stepsDone;
@@ -20,7 +18,7 @@ public class TileTextureBuilder extends RCObject
 
   private final Mesh _tessellatorMesh;
 
-  private IFloatBuffer _texCoords;
+  private final TileTessellator _tessellator;
 
   private java.util.ArrayList<PetitionStatus> _status = new java.util.ArrayList<PetitionStatus>();
   private java.util.ArrayList<Long> _requestsIds = new java.util.ArrayList<Long>();
@@ -31,10 +29,11 @@ public class TileTextureBuilder extends RCObject
   private boolean _anyCanceled;
   private boolean _alreadyStarted;
 
+  private long _texturePriority;
+
   public LeveledTexturedMesh _mesh;
 
-  public TileTextureBuilder(MultiLayerTileTexturizer texturizer, G3MRenderContext rc, LayerSet layerSet, TilesRenderParameters parameters, IDownloader downloader, Tile tile, Mesh tessellatorMesh, IFloatBuffer texCoords)
-  //_tileKey(tile->getKey()),
+  public TileTextureBuilder(MultiLayerTileTexturizer texturizer, G3MRenderContext rc, LayerSet layerSet, TilesRenderParameters parameters, IDownloader downloader, Tile tile, Mesh tessellatorMesh, TileTessellator tessellator, long texturePriority)
   {
      _texturizer = texturizer;
      _factory = rc.getFactory();
@@ -48,11 +47,12 @@ public class TileTextureBuilder extends RCObject
      _stepsDone = 0;
      _anyCanceled = false;
      _mesh = null;
-     _texCoords = texCoords;
+     _tessellator = tessellator;
      _finalized = false;
      _canceled = false;
      _alreadyStarted = false;
-    _petitions = layerSet.createTileMapPetitions(rc, tile, parameters._tileTextureWidth, parameters._tileTextureHeight);
+     _texturePriority = texturePriority;
+    _petitions = layerSet.createTileMapPetitions(rc, tile, parameters._tileTextureResolution);
 
     _petitionsCount = _petitions.size();
 
@@ -88,7 +88,10 @@ public class TileTextureBuilder extends RCObject
       //      const long long priority =  (_parameters->_incrementalTileQuality
       //                                   ? 1000 - _tile->getLevel()
       //                                   : _tile->getLevel());
-      final long priority = DefineConstants.TILE_DOWNLOAD_PRIORITY + _tile.getLevel();
+
+      final long priority = _texturePriority + _tile.getLevel();
+
+//      printf("%s\n", petition->getURL().getPath().c_str());
 
       final long requestId = _downloader.requestImage(new URL(petition.getURL()), priority, petition.getTimeToCache(), new BuilderDownloadStepDownloadListener(this, i), true);
 
@@ -106,12 +109,15 @@ public class TileTextureBuilder extends RCObject
     deletePetitions();
   }
 
-  public final RectangleI getImageRectangleInTexture(Sector wholeSector, Sector imageSector, int textureWidth, int textureHeight)
+  public final RectangleI getImageRectangleInTexture(Sector wholeSector, Sector imageSector, Vector2I textureResolution)
   {
     final Vector2D lowerFactor = wholeSector.getUVCoordinates(imageSector.lower());
 
     final double widthFactor = imageSector.getDeltaLongitude().div(wholeSector.getDeltaLongitude());
     final double heightFactor = imageSector.getDeltaLatitude().div(wholeSector.getDeltaLatitude());
+
+    final int textureWidth = textureResolution._x;
+    final int textureHeight = textureResolution._y;
 
     return new RectangleI((int) IMathUtils.instance().round(lowerFactor._x * textureWidth), (int) IMathUtils.instance().round((1.0 - lowerFactor._y) * textureHeight), (int) IMathUtils.instance().round(widthFactor * textureWidth), (int) IMathUtils.instance().round(heightFactor * textureHeight));
   }
@@ -129,8 +135,7 @@ public class TileTextureBuilder extends RCObject
       java.util.ArrayList<RectangleI> rectangles = new java.util.ArrayList<RectangleI>();
       String textureId = _tile.getKey().tinyDescription();
 
-      final int textureWidth = _parameters._tileTextureWidth;
-      final int textureHeight = _parameters._tileTextureHeight;
+      final Vector2I textureResolution = new Vector2I(_parameters._tileTextureResolution);
 
       final Sector tileSector = _tile.getSector();
 
@@ -143,7 +148,7 @@ public class TileTextureBuilder extends RCObject
         {
           images.add(image);
 
-          rectangles.add(getImageRectangleInTexture(tileSector, petition.getSector(), textureWidth, textureHeight));
+          rectangles.add(getImageRectangleInTexture(tileSector, petition.getSector(), textureResolution));
 
           textureId += petition.getURL().getPath();
           textureId += "_";
@@ -152,7 +157,7 @@ public class TileTextureBuilder extends RCObject
 
       if (images.size() > 0)
       {
-        _textureBuilder.createTextureFromImages(_gl, _factory, images, rectangles, textureWidth, textureHeight, new TextureUploader(this, rectangles, textureId), true);
+        _textureBuilder.createTextureFromImages(_gl, _factory, images, rectangles, textureResolution, new TextureUploader(this, rectangles, textureId), true);
       }
 
     }
@@ -314,7 +319,9 @@ public class TileTextureBuilder extends RCObject
       }
       else
       {
-        mapping = new LazyTextureMapping(new LTMInitializer(_tile, ancestor, _texCoords), _texturesHandler, false, false);
+        final boolean ownedTexCoords = true;
+        final boolean transparent = false;
+        mapping = new LazyTextureMapping(new LTMInitializer(_tile, ancestor, _tessellator), _texturesHandler, ownedTexCoords, transparent);
       }
 
       if (ancestor != _tile)

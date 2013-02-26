@@ -139,6 +139,8 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
 
   public void dispose()
   {
+    if (_mesh != null)
+       _mesh.dispose();
   }
 
   public final void incDegrees(double value)

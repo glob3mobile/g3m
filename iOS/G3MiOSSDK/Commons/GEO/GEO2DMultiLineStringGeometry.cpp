@@ -15,7 +15,7 @@
 #include "FloatBufferBuilderFromGeodetic.hpp"
 #include "DirectMesh.hpp"
 #include "GLConstants.hpp"
-
+#include "Planet.hpp"
 
 GEO2DMultiLineStringGeometry::~GEO2DMultiLineStringGeometry() {
   const int coordinatesArrayCount = _coordinatesArray->size();

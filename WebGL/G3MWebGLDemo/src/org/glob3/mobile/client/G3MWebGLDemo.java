@@ -22,14 +22,19 @@ import org.glob3.mobile.generated.FloatBufferBuilderFromGeodetic;
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.GLPrimitive;
+import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.IBufferDownloadListener;
 import org.glob3.mobile.generated.IByteBuffer;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
+import org.glob3.mobile.generated.IJSONParser;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IThreadUtils;
+import org.glob3.mobile.generated.JSONArray;
+import org.glob3.mobile.generated.JSONBaseObject;
+import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarkTouchListener;
@@ -72,6 +77,9 @@ public class G3MWebGLDemo
 
    private G3MWidget_WebGL _widget            = null;
 
+   private boolean         _markersParsed     = false;
+   private MarksRenderer   _markersRenderer;
+
 
    @Override
    public void onModuleLoad() {
@@ -81,10 +89,10 @@ public class G3MWebGLDemo
          //         initWithoutBuilder();
 
          // initialize a default widget by using a builder
-         // initDefaultWithBuilder();
+         initDefaultWithBuilder();
 
          // initialize a customized widget by using a builder
-         initCustomizedWithBuilder();
+         //         initCustomizedWithBuilder();
 
          final Panel g3mWidgetHolder = RootPanel.get(_g3mWidgetHolderId);
          g3mWidgetHolder.add(_widget);
@@ -94,6 +102,20 @@ public class G3MWebGLDemo
 
    public void initDefaultWithBuilder() {
       final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
+
+      _markersRenderer = new MarksRenderer(true);
+      _markersRenderer.setMarkTouchListener(new MarkTouchListener() {
+
+         @Override
+         public boolean touchedMark(final Mark mark) {
+            Window.alert(mark.getLabel());
+            return false;
+         }
+      }, true);
+
+      builder.addRenderer(_markersRenderer);
+
+      builder.setInitializationTask(createMarkersInitializationTask());
 
       _widget = builder.createWidget();
    }
@@ -132,6 +154,7 @@ public class G3MWebGLDemo
                   "Las Palmas", //
                   new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false), //
                   new Geodetic3D(Angle.fromDegrees(28.05), Angle.fromDegrees(-15.36), 0), //
+                  0, //
                   false);
          //m2->addTouchListener(listener);
          marksRenderer.addMark(m2);
@@ -463,5 +486,102 @@ public class G3MWebGLDemo
                   periodicalTasks, //
                   userData);
       }
+   }
+
+
+   GInitializationTask createMarkersInitializationTask() {
+      final GInitializationTask initializationTask = new GInitializationTask() {
+
+         @Override
+         public void run(final G3MContext context) {
+
+            final IDownloader downloader = context.getDownloader();
+
+            final IBufferDownloadListener listener = new IBufferDownloadListener() {
+
+
+               @Override
+               public void onDownload(final URL url,
+                                      final IByteBuffer buffer) {
+
+                  final String response = buffer.getAsString();
+                  final IJSONParser parser = context.getJSONParser();
+                  final JSONBaseObject jsonObject = parser.parse(response);
+                  final JSONObject object = jsonObject.asObject();
+                  final JSONArray list = object.getAsArray("list");
+                  for (int i = 0; i < list.size(); i++) {
+
+                     final JSONObject city = list.getAsObject(i);
+
+                     final JSONObject coords = city.getAsObject("coord");
+                     final Geodetic2D position = new Geodetic2D(Angle.fromDegrees(coords.getAsNumber("lat").value()),
+                              Angle.fromDegrees(coords.getAsNumber("lon").value()));
+                     final JSONArray weather = city.getAsArray("weather");
+                     final JSONObject weatherObject = weather.getAsObject(0);
+
+
+                     String icon = "";
+                     if (weatherObject.getAsString("icon", "DOUBLE").equals("DOUBLE")) {
+                        icon = "" + (int) weatherObject.getAsNumber("icon").value() + "d.png";
+                        if (icon.length() < 7) {
+                           icon = "0" + icon;
+                        }
+                     }
+                     else {
+                        icon = weatherObject.getAsString("icon", "DOUBLE") + ".png";
+                     }
+
+                     _markersRenderer.addMark(new Mark(//
+                              city.getAsString("name", ""), //
+                              new URL("http://openweathermap.org/img/w/" + icon, false), //
+                              new Geodetic3D(position, 0), //
+                              0, //
+                              true, //
+                              14, //
+                              Color.white(), //
+                              Color.black(), //
+                              2));
+                  }
+
+
+                  _markersParsed = true;
+               }
+
+
+               @Override
+               public void onError(final URL url) {
+                  Window.alert("Error retrieving weather data");
+               }
+
+
+               @Override
+               public void onCancel(final URL url) {
+                  //DO Nothing
+               }
+
+
+               @Override
+               public void onCanceledDownload(final URL url,
+                                              final IByteBuffer data) {
+                  //Do Nothing
+               }
+            };
+
+            downloader.requestBuffer(new URL("http://openweathermap.org/data/2.1/find/city?bbox=-80,-180,80,180,4&cluster=yes",
+                     false), 0, TimeInterval.fromHours(1.0), listener, false);
+         }
+
+
+         @Override
+         public boolean isDone(final G3MContext context) {
+            if (_markersParsed) {
+               _widget.setAnimatedCameraPosition(new Geodetic3D(Angle.fromDegrees(45d), Angle.fromDegrees(0.d), 3000000),
+                        TimeInterval.fromSeconds(3));
+               return true;
+            }
+            return false;
+         }
+      };
+      return initializationTask;
    }
 }

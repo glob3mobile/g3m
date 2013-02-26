@@ -40,19 +40,20 @@ public abstract class AbstractMeshShape extends Shape
     _mesh = null;
   }
 
-  public AbstractMeshShape(Geodetic3D position)
+  protected AbstractMeshShape(Geodetic3D position)
   {
      super(position);
      _mesh = null;
 
   }
 
-  public AbstractMeshShape(Geodetic3D position, Mesh mesh)
+  protected AbstractMeshShape(Geodetic3D position, Mesh mesh)
   {
      super(position);
      _mesh = mesh;
 
   }
+
 
   public final boolean isReadyToRender(G3MRenderContext rc)
   {

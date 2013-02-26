@@ -10,38 +10,49 @@
 #define G3MiOSSDK_EllipsoidalTileTessellator_hpp
 
 #include "TileTessellator.hpp"
-
-//#include "MutableVector3D.hpp"
-//#include "Planet.hpp"
+class Sector;
 
 class EllipsoidalTileTessellator : public TileTessellator {
 private:
-  
-  const unsigned int _resolution;
+
+  const unsigned int _resolutionX;
+  const unsigned int _resolutionY;
   const bool         _skirted;
-  
+
+  Vector2I calculateResolution(const Sector& sector) const;
+
 public:
-  Mesh* createDebugMesh(const G3MRenderContext* rc,
-                        const Tile* tile) const;
-  
-  EllipsoidalTileTessellator(const unsigned int resolution,
+
+  EllipsoidalTileTessellator(const Vector2I& resolution,
                              const bool skirted) :
-  _resolution(resolution),
+  _resolutionX(resolution._x),
+  _resolutionY(resolution._y),
   _skirted(skirted)
   {
-//    int __TODO_width_and_height_resolutions;
+    //    int __TODO_width_and_height_resolutions;
   }
-  
+
   virtual ~EllipsoidalTileTessellator() { }
-  
-  Mesh* createMesh(const G3MRenderContext* rc,
-                   const Tile* tile) const;
-  
+
+  Vector2I getTileMeshResolution(const Planet* planet,
+                                 const Tile* tile,
+                                 bool debug) const;
+
+
+  Mesh* createTileMesh(const Planet* planet,
+                       const Tile* tile,
+                       const ElevationData* elevationData,
+                       float verticalExaggeration,
+                       bool debug) const;
+
+  Mesh* createTileDebugMesh(const Planet* planet,
+                            const Tile* tile) const;
+
   bool isReady(const G3MRenderContext *rc) const {
     return true;
   }
-  
-  IFloatBuffer* createUnitTextCoords() const;
+
+  IFloatBuffer* createUnitTextCoords(const Tile* tile) const;
   
 };
 

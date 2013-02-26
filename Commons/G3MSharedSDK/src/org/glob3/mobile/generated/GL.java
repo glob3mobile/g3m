@@ -539,13 +539,13 @@ public class GL
     }
     else
     {
-      //if ((_boundTextureId == NULL) || !_boundTextureId->isEqualsTo(textureId)) {
-        _nativeGL.bindTexture(GLTextureType.texture2D(), textureId);
-      //  _boundTextureId = textureId;
-      //}
-  //    else {
-  //      ILogger::instance()->logInfo("TextureId %s already bound", textureId->description().c_str());
-  //    }
+      //    if ((_boundTextureId == NULL) || !_boundTextureId->isEqualsTo(textureId)) {
+      _nativeGL.bindTexture(GLTextureType.texture2D(), textureId);
+      //      _boundTextureId = textureId;
+      //    }
+      //    else {
+      //      ILogger::instance()->logInfo("TextureId %s already bound", textureId->description().c_str());
+      //    }
     }
   }
 
@@ -590,7 +590,6 @@ public class GL
   
     if (textureId != null)
     {
-      int __TESTING_TEXTUREIDs_DELETION;
       if (_nativeGL.deleteTexture(textureId))
       {
         _texturesIdBag.addLast(textureId);
@@ -707,7 +706,7 @@ public class GL
   {
     _nativeGL.dispose();
 
-    // GL is not owner of those buffers, it keep a reference only for state-change-testing. NO DELETE THEM.
+    // GL is not owner of these buffers, it keeps a reference only for state-change-testing. NO DELETE THEM.
     // delete _vertices;
     // delete _textureCoordinates;
     // delete _colors;

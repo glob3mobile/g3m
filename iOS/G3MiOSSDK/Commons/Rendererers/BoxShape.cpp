@@ -55,7 +55,7 @@ Mesh* BoxShape::createBorderMesh(const G3MRenderContext* rc) {
     indices.add(i[n]);
   }
 
-  Color* borderColor = (_borderColor != NULL) ? _borderColor : _surfaceColor;
+  Color* borderColor = (_borderColor != NULL) ? new Color(*_borderColor) : new Color(*_surfaceColor);
 
   return new IndexedMesh(GLPrimitive::lines(),
                          true,
@@ -104,6 +104,8 @@ Mesh* BoxShape::createSurfaceMesh(const G3MRenderContext* rc) {
   for (unsigned int n=0; n<numIndices; n++) {
     indices.add(i[n]);
   }
+  
+  Color* surfaceColor = (_surfaceColor == NULL) ? NULL : new Color(*_surfaceColor);
 
   return new IndexedMesh(GLPrimitive::triangleStrip(),
                          true,
@@ -112,7 +114,7 @@ Mesh* BoxShape::createSurfaceMesh(const G3MRenderContext* rc) {
                          indices.create(),
                          _borderWidth,
                          1,
-                         _surfaceColor);
+                         surfaceColor);
 }
 
 

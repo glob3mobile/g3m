@@ -16,9 +16,11 @@
 const void CPUTextureBuilder::createTextureFromImage(GL* gl,
                                                      const IFactory* factory,
                                                      IImage* image,
-                                                     int width, int height,
+                                                     const Vector2I& textureResolution,
                                                      IImageListener* listener,
-                                                     bool autodelete) const{
+                                                     bool autodelete) const {
+  const int width  = textureResolution._x;
+  const int height = textureResolution._y;
   if (image == NULL) {
     ILogger::instance()->logWarning("Creating blank Image");
     factory->createImageFromSize(width, height, listener, autodelete);
@@ -102,9 +104,11 @@ const void CPUTextureBuilder::createTextureFromImages(GL* gl,
                                                       const IFactory* factory,
                                                       const std::vector<IImage*>& images,
                                                       const std::vector<RectangleI*>& rectangles,
-                                                      int width, int height,
+                                                      const Vector2I& textureResolution,
                                                       IImageListener* listener,
                                                       bool autodelete) const{
+  const int width  = textureResolution._x;
+  const int height = textureResolution._y;
 
   const int imagesSize = images.size();
 

@@ -44,7 +44,9 @@ public:
     
   }
   
-  virtual ~BusyMeshRenderer() {}
+  virtual ~BusyMeshRenderer() {
+    delete _mesh;
+  }
   
   void incDegrees(double value) { 
     _degrees += value; 

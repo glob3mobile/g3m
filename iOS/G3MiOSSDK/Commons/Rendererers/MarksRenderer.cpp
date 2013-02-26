@@ -13,6 +13,7 @@
 #include "RectangleI.hpp"
 #include "Mark.hpp"
 #include "MarkTouchListener.hpp"
+#include "DownloadPriority.hpp"
 
 void MarksRenderer::setMarkTouchListener(MarkTouchListener* markTouchListener,
                                          bool autoDelete) {
@@ -24,13 +25,13 @@ void MarksRenderer::setMarkTouchListener(MarkTouchListener* markTouchListener,
   _autoDeleteMarkTouchListener = autoDelete;
 }
 
-
 MarksRenderer::MarksRenderer(bool readyWhenMarksReady) :
 _readyWhenMarksReady(readyWhenMarksReady),
 _context(NULL),
 _lastCamera(NULL),
 _markTouchListener(NULL),
-_autoDeleteMarkTouchListener(false)
+_autoDeleteMarkTouchListener(false),
+_downloadPriority(DownloadPriority::MEDIUM)
 {
 }
 

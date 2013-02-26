@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class BingLayer extends Layer
+public abstract class BingLayer extends Layer
 {
 
   private final Sector _sector ;

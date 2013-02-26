@@ -31,7 +31,7 @@ public class MarksRenderer extends LeafRenderer
 
   private MarkTouchListener _markTouchListener;
   private boolean _autoDeleteMarkTouchListener;
-  private long _downloadPriority = 1000000;
+  private long _downloadPriority;
 
 
   public MarksRenderer(boolean readyWhenMarksReady)
@@ -41,6 +41,7 @@ public class MarksRenderer extends LeafRenderer
      _lastCamera = null;
      _markTouchListener = null;
      _autoDeleteMarkTouchListener = false;
+     _downloadPriority = DownloadPriority.MEDIUM;
   }
 
   public final void setMarkTouchListener(MarkTouchListener markTouchListener, boolean autoDelete)

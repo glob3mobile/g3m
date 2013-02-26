@@ -10,6 +10,10 @@
 #include "LayerCondition.hpp"
 #include "LayerSet.hpp"
 
+Layer::~Layer() {
+  delete _condition;
+}
+
 bool Layer::isAvailable(const G3MRenderContext* rc,
                         const Tile* tile) const {
   if (!isEnable()) {

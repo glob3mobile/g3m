@@ -128,4 +128,22 @@ public abstract class IMathUtils
   public abstract long doubleToRawLongBits(double value);
   public abstract double rawLongBitsToDouble(long value);
 
+  public double clamp(double value, double min, double max)
+  {
+    if (value < min)
+       return min;
+    if (value > max)
+       return max;
+    return value;
+  }
+
+  public float clamp(float value, float min, float max)
+  {
+    if (value < min)
+       return min;
+    if (value > max)
+       return max;
+    return value;
+  }
+
 }
