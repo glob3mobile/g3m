@@ -126,7 +126,10 @@ public class SceneParser
             layersSecuence = IStringUtils.instance().substring(layersSecuence, 0, layersSecuence.length()-1);
         }
     
-        //TODO check if wms 1.1.1 is neccessary to have it in account
+        if (layersName != null)
+           layersName.dispose();
+    
+        //TODO check if wms 1.1.1 is neccessary to have it into account
         WMSServerVersion wmsVersion = WMSServerVersion.WMS_1_1_0;
         if (jsonVersion.compareTo(WMS130)==0)
         {
@@ -164,6 +167,9 @@ public class SceneParser
             url.addString(namefile);
     
             _panoSources.add(url.getString());
+    
+            if (url != null)
+               url.dispose();
         }
     }
     private void parserJSONSphericalImageLayer(LayerSet layerSet, JSONObject jsonLayer)
@@ -215,6 +221,9 @@ public class SceneParser
             legendLayer.add(geojsonMetadata);
     
             _mapGeoJSONSources.put(url.getString(), geojsonMetadata);
+    
+            if (url != null)
+               url.dispose();
         }
         _legend.put(jsonLayer.getAsString(NAME).value(), legendLayer);
         countGroup++;
