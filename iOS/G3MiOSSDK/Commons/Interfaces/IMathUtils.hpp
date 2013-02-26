@@ -103,15 +103,15 @@ public:
   virtual double min(double d1, double d2) const = 0;
   virtual double max(double d1, double d2) const = 0;
 
-  virtual double lerp(double from,
-                      double to,
-                      double alpha) {
+  virtual double interpolation(double from,
+                               double to,
+                               double alpha) {
     return from + ((to - from) * alpha);
   }
 
-  virtual float lerp(float from,
-                     float to,
-                     float alpha) {
+  virtual float interpolation(float from,
+                              float to,
+                              float alpha) {
     return from + ((to - from) * alpha);
   }
 

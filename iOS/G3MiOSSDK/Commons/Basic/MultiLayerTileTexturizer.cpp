@@ -26,6 +26,7 @@
 #include "Petition.hpp"
 #include "GLConstants.hpp"
 #include "IImageListener.hpp"
+#include "LayerTilesRenderParameters.hpp"
 
 //#define TILE_DOWNLOAD_PRIORITY 1000000000
 
@@ -68,21 +69,23 @@ private:
   MutableVector2D _scale;
   MutableVector2D _translation;
 
-//  IFloatBuffer* _texCoords;
   const TileTessellator* _tessellator;
+  const Vector2I _resolution;
+  const bool _mercator;
 
 public:
-  LTMInitializer(const Tile* tile,
+  LTMInitializer(const Vector2I& resolution,
+                 const Tile* tile,
                  const Tile* ancestor,
-                 /*IFloatBuffer* texCoords*/
-                 const TileTessellator* tessellator
-                 ) :
+                 const TileTessellator* tessellator,
+                 bool mercator) :
+  _resolution(resolution),
   _tile(tile),
   _ancestor(ancestor),
-//  _texCoords(texCoords),
   _tessellator(tessellator),
   _scale(1,1),
-  _translation(0,0)
+  _translation(0,0),
+  _mercator(mercator)
   {
 
   }
@@ -110,9 +113,8 @@ public:
     return _translation;
   }
 
-  IFloatBuffer* getTexCoords() const {
-    //return _texCoords;
-    return _tessellator->createUnitTextCoords(_tile);
+  IFloatBuffer* createTextCoords() const {
+    return _tessellator->createTextCoords(_resolution, _tile, _mercator);
   }
 
 };
@@ -180,8 +182,11 @@ private:
   TextureBuilder*  _textureBuilder;
   GL*              _gl;
 
-  const TilesRenderParameters* _parameters;
-  IDownloader*                 _downloader;
+  const Vector2I   _tileTextureResolution;
+  const Vector2I   _tileMeshResolution;
+  const bool       _mercator;
+
+  IDownloader*     _downloader;
 
   const Mesh* _tessellatorMesh;
 
@@ -201,21 +206,22 @@ private:
 public:
   LeveledTexturedMesh* _mesh;
 
-  TileTextureBuilder(MultiLayerTileTexturizer*    texturizer,
-                     const G3MRenderContext*      rc,
-                     const LayerSet*              layerSet,
-                     const TilesRenderParameters* parameters,
-                     IDownloader*                 downloader,
-                     Tile*                        tile,
-                     const Mesh*                  tessellatorMesh,
-                     const TileTessellator*       tessellator,
-                     long long                    texturePriority) :
+  TileTextureBuilder(MultiLayerTileTexturizer* texturizer,
+                     const G3MRenderContext*   rc,
+                     const LayerSet*           layerSet,
+                     IDownloader*              downloader,
+                     Tile*                     tile,
+                     const Mesh*               tessellatorMesh,
+                     const TileTessellator*    tessellator,
+                     long long                 texturePriority) :
   _texturizer(texturizer),
   _factory(rc->getFactory()),
   _texturesHandler(rc->getTexturesHandler()),
   _textureBuilder(rc->getTextureBuilder()),
   _gl(rc->getGL()),
-  _parameters(parameters),
+  _tileTextureResolution( layerSet->getLayerTilesRenderParameters()->_tileTextureResolution ),
+  _tileMeshResolution( layerSet->getLayerTilesRenderParameters()->_tileMeshResolution ),
+  _mercator( layerSet->getLayerTilesRenderParameters()->_mercator ),
   _downloader(downloader),
   _tile(tile),
   _tessellatorMesh(tessellatorMesh),
@@ -230,7 +236,7 @@ public:
   {
     _petitions = layerSet->createTileMapPetitions(rc,
                                                   tile,
-                                                  parameters->_tileTextureResolution);
+                                                  _tileTextureResolution);
 
     _petitionsCount = _petitions.size();
 
@@ -284,15 +290,15 @@ public:
   }
 
   RectangleI* getImageRectangleInTexture(const Sector& wholeSector,
-                                         const Sector& imageSector,
-                                         const Vector2I& textureResolution) const {
+                                         const Sector& imageSector) const {
+    
     const Vector2D lowerFactor = wholeSector.getUVCoordinates(imageSector.lower());
 
     const double widthFactor  = imageSector.getDeltaLongitude().div(wholeSector.getDeltaLongitude());
     const double heightFactor = imageSector.getDeltaLatitude().div(wholeSector.getDeltaLatitude());
 
-    const int textureWidth  = textureResolution._x;
-    const int textureHeight = textureResolution._y;
+    const int textureWidth  = _tileTextureResolution._x;
+    const int textureHeight = _tileTextureResolution._y;
 
     return new RectangleI((int) IMathUtils::instance()->round( lowerFactor._x         * textureWidth ),
                           (int) IMathUtils::instance()->round( (1.0 - lowerFactor._y) * textureHeight ),
@@ -313,8 +319,6 @@ public:
       std::vector<RectangleI*> rectangles;
       std::string textureId = _tile->getKey().tinyDescription();
 
-      const Vector2I textureResolution(_parameters->_tileTextureResolution);
-
       const Sector tileSector = _tile->getSector();
 
       for (int i = 0; i < _petitionsCount; i++) {
@@ -325,8 +329,7 @@ public:
           images.push_back(image);
 
           rectangles.push_back(getImageRectangleInTexture(tileSector,
-                                                          petition->getSector(),
-                                                          textureResolution));
+                                                          petition->getSector()));
 
           textureId += petition->getURL().getPath();
           textureId += "_";
@@ -338,7 +341,7 @@ public:
                                                  _factory,
                                                  images,
                                                  rectangles,
-                                                 textureResolution,
+                                                 _tileTextureResolution,
                                                  new TextureUploader(this, rectangles, textureId),
                                                  true);
       }
@@ -487,9 +490,11 @@ public:
       else {
         const bool ownedTexCoords = true;
         const bool transparent    = false;
-        mapping = new LazyTextureMapping(new LTMInitializer(_tile,
+        mapping = new LazyTextureMapping(new LTMInitializer(_tileMeshResolution,
+                                                            _tile,
                                                             ancestor,
-                                                            _tessellator),
+                                                            _tessellator,
+                                                            _mercator),
                                          _texturesHandler,
                                          ownedTexCoords,
                                          transparent);
@@ -605,16 +610,13 @@ void BuilderDownloadStepDownloadListener::onCancel(const URL& url) {
 
 MultiLayerTileTexturizer::MultiLayerTileTexturizer() :
 _parameters(NULL),
-//_texCoordsCache(NULL),
-//_pendingTopTileRequests(0),
 _texturesHandler(NULL)
 {
 
 }
 
 MultiLayerTileTexturizer::~MultiLayerTileTexturizer() {
-//  delete _texCoordsCache;
-//  _texCoordsCache = NULL;
+
 }
 
 void MultiLayerTileTexturizer::initialize(const G3MContext* context,
@@ -623,29 +625,6 @@ void MultiLayerTileTexturizer::initialize(const G3MContext* context,
   //  _layerSet->initialize(ic);
 }
 
-//class BuilderStartTask : public FrameTask {
-//private:
-//  TileTextureBuilder* _builder;
-//
-//public:
-//  BuilderStartTask(TileTextureBuilder* builder) :
-//  _builder(builder)
-//  {
-//    _builder->_retain();
-//  }
-//
-//  virtual ~BuilderStartTask() {
-//    _builder->_release();
-//  }
-//
-//  void execute(const G3MRenderContext* rc) {
-//    _builder->start();
-//  }
-//
-//  bool isCanceled(const G3MRenderContext *rc){
-//    return false;
-//  }
-//};
 
 class BuilderStartTask : public FrameTask {
 private:
@@ -671,6 +650,7 @@ public:
   }
 };
 
+
 Mesh* MultiLayerTileTexturizer::texturize(const G3MRenderContext* rc,
                                           const TileRenderContext* trc,
                                           Tile* tile,
@@ -685,7 +665,6 @@ Mesh* MultiLayerTileTexturizer::texturize(const G3MRenderContext* rc,
     builderHolder = new TileTextureBuilderHolder(new TileTextureBuilder(this,
                                                                         rc,
                                                                         trc->getLayerSet(),
-                                                                        _parameters,
                                                                         rc->getDownloader(),
                                                                         tile,
                                                                         tessellatorMesh,
@@ -782,21 +761,12 @@ void MultiLayerTileTexturizer::ancestorTexturedSolvedChanged(Tile* tile,
     return;
   }
 
-  const int level = tile->getLevel() - ancestorTile->getLevel() - _parameters->_topLevel;
+  const int level = tile->getLevel() - ancestorTile->getLevel();
   _texturesHandler->retainGLTextureId(glTextureId);
   if (!tileMesh->setGLTextureIdForLevel(level, glTextureId)) {
     _texturesHandler->releaseGLTextureId(glTextureId);
   }
 }
-
-//IFloatBuffer* MultiLayerTileTexturizer::getTextureCoordinates(const TileRenderContext* trc) const {
-////  if (_texCoordsCache == NULL) {
-////    _texCoordsCache = trc->getTessellator()->createUnitTextCoords();
-////  }
-////  return _texCoordsCache;
-//  int _____XXXXXXX;
-//  return trc->getTessellator()->createUnitTextCoords();
-//}
 
 void MultiLayerTileTexturizer::justCreatedTopTile(const G3MRenderContext* rc,
                                                   Tile* tile,

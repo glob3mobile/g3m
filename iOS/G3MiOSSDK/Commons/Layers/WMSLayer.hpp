@@ -45,8 +45,7 @@ private:
   std::string         _extraParameter;
     
 public:
-  
-  
+
   WMSLayer(const std::string& mapLayer,
            const URL& mapServerURL,
            const WMSServerVersion mapServerVersion,
@@ -59,23 +58,8 @@ public:
            const std::string& style,
            const bool isTransparent,
            LayerCondition* condition,
-           const TimeInterval& timeToCache):
-  Layer(condition, mapLayer, timeToCache),
-  _mapLayer(mapLayer),
-  _mapServerURL(mapServerURL),
-  _mapServerVersion(mapServerVersion),
-  _queryLayer(queryLayer),
-  _queryServerURL(queryServerURL),
-  _queryServerVersion(queryServerVersion),
-  _sector(sector),
-  _format(format),
-  _srs(srs),
-  _style(style),
-  _isTransparent(isTransparent),
-  _extraParameter("")
-  {
-    
-  }
+           const TimeInterval& timeToCache,
+           const LayerTilesRenderParameters* parameters = NULL);
   
   WMSLayer(const std::string& mapLayer,
            const URL& mapServerURL,
@@ -86,23 +70,8 @@ public:
            const std::string& style,
            const bool isTransparent,
            LayerCondition* condition,
-           const TimeInterval& timeToCache):
-  Layer(condition, mapLayer, timeToCache),
-  _mapLayer(mapLayer),
-  _mapServerURL(mapServerURL),
-  _mapServerVersion(mapServerVersion),
-  _queryLayer(mapLayer),
-  _queryServerURL(mapServerURL),
-  _queryServerVersion(mapServerVersion),
-  _sector(sector),
-  _format(format),
-  _srs(srs),
-  _style(style),
-  _isTransparent(isTransparent),
-  _extraParameter("")
-  {
-    
-  }
+           const TimeInterval& timeToCache,
+           const LayerTilesRenderParameters* parameters = NULL);
   
   std::vector<Petition*> getMapPetitions(const G3MRenderContext* rc,
                                          const Tile* tile,

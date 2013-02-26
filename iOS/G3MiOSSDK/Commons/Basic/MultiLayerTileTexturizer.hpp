@@ -29,9 +29,6 @@ private:
   TilesRenderParameters* _parameters;
 #endif
 
-//  mutable IFloatBuffer* _texCoordsCache;
-//  IFloatBuffer* getTextureCoordinates(const TileRenderContext* trc) const;
-
   TexturesHandler* _texturesHandler;
   
   inline LeveledTexturedMesh* getMesh(Tile* tile) const;
@@ -39,10 +36,6 @@ private:
 public:
   MultiLayerTileTexturizer() ;
   
-//  void countTopTileRequest() {
-//    _pendingTopTileRequests--;
-//  }
-
   virtual ~MultiLayerTileTexturizer();
   
   bool isReady(const G3MRenderContext *rc,

@@ -23,6 +23,7 @@ class Tile;
 class LayerCondition;
 class LayerSet;
 class Vector2I;
+class LayerTilesRenderParameters;
 
 class Layer {
 private:
@@ -32,25 +33,28 @@ private:
   LayerSet* _layerSet;
 
   bool _enable;
-  
+
   const std::string _name;
+  const LayerTilesRenderParameters* _parameters;
 
 protected:
   const TimeInterval& _timeToCache;
 
   void notifyChanges() const;
-  
+
 public:
   Layer(LayerCondition* condition,
-          const std::string& name,
-          const TimeInterval& timeToCache) :
+        const std::string& name,
+        const TimeInterval& timeToCache,
+        const LayerTilesRenderParameters* parameters) :
   _condition(condition),
   _name(name),
   _layerSet(NULL),
   _timeToCache(timeToCache),
-  _enable(true)
+  _enable(true),
+  _parameters(parameters)
   {
-    
+
   }
 
   virtual void setEnable(bool enable) {
@@ -65,34 +69,34 @@ public:
   }
 
   virtual ~Layer();
-  
+
   virtual std::vector<Petition*> getMapPetitions(const G3MRenderContext* rc,
                                                  const Tile* tile,
                                                  const Vector2I& tileTextureResolution) const = 0;
-  
+
   virtual bool isAvailable(const G3MRenderContext* rc,
                            const Tile* tile) const;
-  
+
   virtual bool isAvailable(const G3MEventContext* ec,
                            const Tile* tile) const;
-  
-//  virtual bool isTransparent() const = 0;
-  
+
+  //  virtual bool isTransparent() const = 0;
+
   virtual URL getFeatureInfoURL(const Geodetic2D& g,
                                 const IFactory* factory,
                                 const Sector& sector,
                                 int width, int height) const = 0;
-  
-  virtual bool isReady() const { 
+
+  virtual bool isReady() const {
     return true;
   }
-  
+
   virtual void initialize(const G3MContext* context) {}
-  
+
   void addTerrainTouchEventListener(TerrainTouchEventListener* listener) {
     _listeners.push_back(listener);
   }
-  
+
   void onTerrainTouchEventListener(const G3MEventContext* ec,
                                    TerrainTouchEvent& tte) const {
     for (unsigned int i = 0; i < _listeners.size(); i++) {
@@ -104,8 +108,12 @@ public:
   }
 
   void setLayerSet(LayerSet* layerSet);
-  
+
   const std::string getName();
+
+  const LayerTilesRenderParameters* getLayerTilesRenderParameters() const {
+    return _parameters;
+  }
   
 };
 

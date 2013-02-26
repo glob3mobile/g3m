@@ -231,8 +231,8 @@ public:
   const bool logDownloaderStatistics = false;
   builder.setLogDownloaderStatistics(logDownloaderStatistics);
 
-  WidgetUserData* userData = NULL;
-  builder.setUserData(userData);
+//  WidgetUserData* userData = NULL;
+//  builder.setUserData(userData);
 
   // initialization
   builder.initializeWidget();
@@ -560,7 +560,7 @@ public:
 
 - (TilesRenderParameters*) createTileRenderParameters
 {
-  const bool renderDebug = false;
+  const bool renderDebug = true;
   const bool useTilesSplitBudget = true;
   const bool forceTopLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;

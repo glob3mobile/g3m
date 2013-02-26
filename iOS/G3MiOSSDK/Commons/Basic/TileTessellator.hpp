@@ -26,20 +26,25 @@ public:
   virtual bool isReady(const G3MRenderContext *rc) const = 0;
 
   virtual Mesh* createTileMesh(const Planet* planet,
+                               const Vector2I& resolution,
                                const Tile* tile,
                                const ElevationData* elevationData,
                                float verticalExaggeration,
                                bool debug) const = 0;
 
   virtual Vector2I getTileMeshResolution(const Planet* planet,
+                                         const Vector2I& resolution,
                                          const Tile* tile,
                                          bool debug) const = 0;
 
   virtual Mesh* createTileDebugMesh(const Planet* planet,
+                                    const Vector2I& resolution,
                                     const Tile* tile) const = 0;
 
-  virtual IFloatBuffer* createUnitTextCoords(const Tile* tile) const = 0;
-  
+  virtual IFloatBuffer* createTextCoords(const Vector2I& resolution,
+                                         const Tile* tile,
+                                         bool mercator) const = 0;
+
 };
 
 

@@ -64,7 +64,7 @@ public:
             Language locale,
             const std::string& key,
             const TimeInterval& timeToCache):
-  Layer(condition, layerName, timeToCache),
+  Layer(condition, layerName, timeToCache, NULL),
   _sector(sector),
   _mapServerURL(mapServerURL),
   _mapType(mapType),
@@ -73,7 +73,7 @@ public:
   _tilePetitionString(),
   _isReady(false)
   {
-    
+    int ___TODO_create_bing_parameters;
   }
   
   bool isReady() const;

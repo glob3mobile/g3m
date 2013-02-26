@@ -14,6 +14,7 @@
 
 class Petition;
 class Vector2I;
+class LayerTilesRenderParameters;
 
 class LayerSetChangedListener {
 public:
@@ -33,19 +34,22 @@ private:
   std::vector<Layer*> _layers;
 
   LayerSetChangedListener* _listener;
-  
+
+  mutable LayerTilesRenderParameters* _layerTilesRenderParameters;
+
+
+  LayerTilesRenderParameters* createLayerTilesRenderParameters() const;
+  void layersChanged() const;
+
 public:
   LayerSet() :
-  _listener(NULL)
+  _listener(NULL),
+  _layerTilesRenderParameters(NULL)
   {
 
   }
 
-  ~LayerSet() {
-    for (unsigned int i = 0; i < _layers.size(); i++) {
-      delete _layers[i];
-    }
-  }
+  ~LayerSet();
   
   void addLayer(Layer* layer);
   
@@ -77,6 +81,9 @@ public:
   Layer* get(int index);
   
   Layer* getLayer(const std::string& name);
+
+  const LayerTilesRenderParameters* getLayerTilesRenderParameters() const;
+
 };
 
 #endif
