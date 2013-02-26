@@ -13,8 +13,8 @@ public class TileTextureBuilder extends RCObject
   private TextureBuilder _textureBuilder;
   private GL _gl;
 
-  private final Vector2I _tileTextureResolution = new Vector2I();
-  private final Vector2I _tileMeshResolution = new Vector2I();
+  private final Vector2I _tileTextureResolution;
+  private final Vector2I _tileMeshResolution;
   private final boolean _mercator;
 
   private IDownloader _downloader;
@@ -43,8 +43,8 @@ public class TileTextureBuilder extends RCObject
      _texturesHandler = rc.getTexturesHandler();
      _textureBuilder = rc.getTextureBuilder();
      _gl = rc.getGL();
-     _tileTextureResolution = new Vector2I(layerSet.getLayerTilesRenderParameters()._tileTextureResolution);
-     _tileMeshResolution = new Vector2I(layerSet.getLayerTilesRenderParameters()._tileMeshResolution);
+     _tileTextureResolution = layerSet.getLayerTilesRenderParameters()._tileTextureResolution;
+     _tileMeshResolution = layerSet.getLayerTilesRenderParameters()._tileMeshResolution;
      _mercator = layerSet.getLayerTilesRenderParameters()._mercator;
      _downloader = downloader;
      _tile = tile;

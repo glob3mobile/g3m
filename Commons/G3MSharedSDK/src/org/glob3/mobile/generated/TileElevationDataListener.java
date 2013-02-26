@@ -5,7 +5,7 @@ public class TileElevationDataListener implements IElevationDataListener
   private MeshHolder _meshHolder;
   private final TileTessellator _tessellator;
   private Planet _planet; // REMOVED FINAL WORD BY CONVERSOR RULE
-  private final Vector2I _tileMeshResolution = new Vector2I();
+  private final Vector2I _tileMeshResolution;
   private final boolean _renderDebug;
   private final float _verticalExaggeration;
   public TileElevationDataListener(Tile tile, MeshHolder meshHolder, TileTessellator tessellator, Planet planet, Vector2I tileMeshResolution, float verticalExaggeration, boolean renderDebug)
@@ -14,7 +14,7 @@ public class TileElevationDataListener implements IElevationDataListener
      _meshHolder = meshHolder;
      _tessellator = tessellator;
      _planet = planet;
-     _tileMeshResolution = new Vector2I(tileMeshResolution);
+     _tileMeshResolution = tileMeshResolution;
      _verticalExaggeration = verticalExaggeration;
      _renderDebug = renderDebug;
 

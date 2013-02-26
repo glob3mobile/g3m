@@ -11,14 +11,14 @@ public class LayerSet
   private LayerTilesRenderParameters createLayerTilesRenderParameters()
   {
     Sector mergedSector = null;
-    int splitsByLatitude;
-    int splitsByLongitude;
-    int maxLevel;
-    int tileTextureWidth;
-    int tileTextureHeight;
-    int tileMeshWidth;
-    int tileMeshHeight;
-    boolean mercator;
+    int splitsByLatitude = 0;
+    int splitsByLongitude = 0;
+    int maxLevel = 0;
+    int tileTextureWidth = 0;
+    int tileTextureHeight = 0;
+    int tileMeshWidth = 0;
+    int tileMeshHeight = 0;
+    boolean mercator = false;
   
     boolean first = true;
     final int layersCount = _layers.size();

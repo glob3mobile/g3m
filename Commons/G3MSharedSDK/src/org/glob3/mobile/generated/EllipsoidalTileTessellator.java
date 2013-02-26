@@ -130,7 +130,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
       final double skirtHeight = (nw.sub(sw).length() * 0.05 * -1) + minHeight;
   
       int posS = tileResolution._x * tileResolution._y;
-      indices.add((short)posS-1);
+      indices.add((short)(posS-1));
   
       // east side
       for (int j = tileResolution._y-1; j > 0; j--)
@@ -169,7 +169,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
       }
   
       // last triangle
-      indices.add((short)(tileResolution._x *tileResolution._y)-1);
+      indices.add((short)((tileResolution._x *tileResolution._y)-1));
       indices.add((short)(tileResolution._x *tileResolution._y));
     }
   

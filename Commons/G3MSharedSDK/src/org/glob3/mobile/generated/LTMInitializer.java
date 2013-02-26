@@ -8,12 +8,16 @@ public class LTMInitializer extends LazyTextureMappingInitializer
   private MutableVector2D _translation = new MutableVector2D();
 
   private final TileTessellator _tessellator;
-  private final Vector2I _resolution = new Vector2I();
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if JAVA_CODE
+  public final Vector2I _resolution = new internal();
+//#endif
+
   private final boolean _mercator;
 
   public LTMInitializer(Vector2I resolution, Tile tile, Tile ancestor, TileTessellator tessellator, boolean mercator)
   {
-     _resolution = new Vector2I(resolution);
+     _resolution = resolution;
      _tile = tile;
      _ancestor = ancestor;
      _tessellator = tessellator;
