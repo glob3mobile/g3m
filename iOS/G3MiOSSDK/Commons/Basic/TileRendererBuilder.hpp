@@ -26,8 +26,8 @@ private:
   bool _useTilesSplitBudget;
   bool _forceTopLevelTilesRenderOnStart;
   bool _incrementalTileQuality;
-  std::vector<VisibleSectorListener*> _visibleSectorListeners;
-  std::vector<long long> _stabilizationMilliSeconds;
+  std::vector<VisibleSectorListener*>* _visibleSectorListeners;
+  std::vector<long long>* _stabilizationMilliSeconds;
   long long _texturePriority;
   
   TileTessellator* getTileTessellator();
@@ -39,8 +39,8 @@ private:
   bool getUseTilesSplitBudget();
   bool getForceTopLevelTilesRenderOnStart();
   bool getIncrementalTileQuality();
-  std::vector<VisibleSectorListener*> getVisibleSectorListeners();
-  std::vector<long long> getStabilizationMilliSeconds();
+  std::vector<VisibleSectorListener*>* getVisibleSectorListeners();
+  std::vector<long long>* getStabilizationMilliSeconds();
   long long getTexturePriority();
 
   LayerSet* createLayerSet();
