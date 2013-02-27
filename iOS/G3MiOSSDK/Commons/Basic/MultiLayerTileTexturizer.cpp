@@ -621,7 +621,6 @@ void BuilderDownloadStepDownloadListener::onCancel(const URL& url) {
 }
 
 MultiLayerTileTexturizer::MultiLayerTileTexturizer() :
-//_parameters(NULL),
 _texturesHandler(NULL)
 {
 
@@ -633,7 +632,6 @@ MultiLayerTileTexturizer::~MultiLayerTileTexturizer() {
 
 void MultiLayerTileTexturizer::initialize(const G3MContext* context,
                                           const TilesRenderParameters* parameters) {
-//  _parameters = parameters;
   //  _layerSet->initialize(ic);
 }
 

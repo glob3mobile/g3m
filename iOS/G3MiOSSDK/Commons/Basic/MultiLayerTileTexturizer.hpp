@@ -23,12 +23,6 @@ class IFloatBuffer;
 
 class MultiLayerTileTexturizer : public TileTexturizer {
 private:
-//#ifdef C_CODE
-//  const TilesRenderParameters* _parameters;
-//#else
-//  TilesRenderParameters* _parameters;
-//#endif
-
   TexturesHandler* _texturesHandler;
   
   inline LeveledTexturedMesh* getMesh(Tile* tile) const;
