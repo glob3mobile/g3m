@@ -30,8 +30,8 @@ public class TileRendererBuilder
   private boolean _useTilesSplitBudget;
   private boolean _forceTopLevelTilesRenderOnStart;
   private boolean _incrementalTileQuality;
-  private java.util.ArrayList<VisibleSectorListener> _visibleSectorListeners = new java.util.ArrayList<VisibleSectorListener>();
-  private java.util.ArrayList<Long> _stabilizationMilliSeconds = new java.util.ArrayList<Long>();
+  private java.util.ArrayList<VisibleSectorListener> _visibleSectorListeners;
+  private java.util.ArrayList<Long> _stabilizationMilliSeconds;
   private long _texturePriority;
 
 
@@ -152,6 +152,10 @@ public class TileRendererBuilder
    */
   private java.util.ArrayList<VisibleSectorListener> getVisibleSectorListeners()
   {
+    if (_visibleSectorListeners == null)
+    {
+      _visibleSectorListeners = new java.util.ArrayList<VisibleSectorListener>();
+    }
     return _visibleSectorListeners;
   }
 
@@ -162,6 +166,10 @@ public class TileRendererBuilder
     */
   private java.util.ArrayList<Long> getStabilizationMilliSeconds()
   {
+    if (_stabilizationMilliSeconds == null)
+    {
+      _stabilizationMilliSeconds = new java.util.ArrayList<Long>();
+    }
     return _stabilizationMilliSeconds;
   }
 
@@ -204,6 +212,8 @@ public class TileRendererBuilder
     _layerSet = null;
     _texturizer = null;
     _tileTessellator = null;
+    _visibleSectorListeners = null;
+    _stabilizationMilliSeconds = null;
     _texturePriority = DownloadPriority.HIGHER;
   }
   public void dispose()
@@ -256,6 +266,10 @@ public class TileRendererBuilder
     _layerSet = null;
     _texturizer = null;
     _tileTessellator = null;
+    _visibleSectorListeners = null;
+    _visibleSectorListeners = null;
+    _stabilizationMilliSeconds = null;
+    _stabilizationMilliSeconds = null;
   
     return tileRenderer;
   }

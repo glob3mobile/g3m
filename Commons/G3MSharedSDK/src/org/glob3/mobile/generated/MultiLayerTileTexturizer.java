@@ -27,12 +27,6 @@ package org.glob3.mobile.generated;
 
 public class MultiLayerTileTexturizer extends TileTexturizer
 {
-///#ifdef C_CODE
-//  const TilesRenderParameters* _parameters;
-///#else
-//  TilesRenderParameters* _parameters;
-///#endif
-
   private TexturesHandler _texturesHandler;
 
   private LeveledTexturedMesh getMesh(Tile tile)
@@ -42,7 +36,6 @@ public class MultiLayerTileTexturizer extends TileTexturizer
   }
 
   public MultiLayerTileTexturizer()
-  //_parameters(NULL),
   {
      _texturesHandler = null;
   
@@ -64,7 +57,6 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 
   public final void initialize(G3MContext context, TilesRenderParameters parameters)
   {
-  //  _parameters = parameters;
     //  _layerSet->initialize(ic);
   }
 
