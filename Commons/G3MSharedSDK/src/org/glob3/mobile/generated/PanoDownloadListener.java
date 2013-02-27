@@ -26,6 +26,8 @@ public class PanoDownloadListener extends IBufferDownloadListener
         ILogger.instance().logInfo(url.getPath());
         parseMETADATA(IStringUtils.instance().substring(url.getPath(), 0, IStringUtils.instance().indexOf(url.getPath(), "/info.txt")), json.asObject());
         IJSONParser.instance().deleteJSONData(json);
+        if (buffer != null)
+           buffer.dispose();
     }
 
     public final void onError(URL url)
