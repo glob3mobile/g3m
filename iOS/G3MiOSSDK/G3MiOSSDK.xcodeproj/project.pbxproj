@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		383BD37D1577EDC00012AC53 /* Logger_iOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 383BD37A1577EDC00012AC53 /* Logger_iOS.cpp */; };
+		383BD37D1577EDC00012AC53 /* Logger_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 383BD37A1577EDC00012AC53 /* Logger_iOS.mm */; };
 		383BD3851577EDDB0012AC53 /* ES2Renderer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 383BD3811577EDDB0012AC53 /* ES2Renderer.mm */; };
 		383BD3871577EDDB0012AC53 /* G3MWidget_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 383BD3831577EDDB0012AC53 /* G3MWidget_iOS.mm */; };
 		383BD3971577EE500012AC53 /* Context.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 383BD38E1577EE500012AC53 /* Context.cpp */; };
@@ -609,7 +609,7 @@
 		382D4B92159DC26000FE9296 /* NullStorage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NullStorage.hpp; path = Commons/Downloader/NullStorage.hpp; sourceTree = "<group>"; };
 		382D4B95159DC26B00FE9296 /* IStorage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IStorage.hpp; path = Commons/Interfaces/IStorage.hpp; sourceTree = "<group>"; };
 		383BD3791577EDC00012AC53 /* Factory_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Factory_iOS.hpp; path = Specific/Derived/Factory_iOS.hpp; sourceTree = "<group>"; };
-		383BD37A1577EDC00012AC53 /* Logger_iOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Logger_iOS.cpp; path = Specific/Derived/Logger_iOS.cpp; sourceTree = "<group>"; };
+		383BD37A1577EDC00012AC53 /* Logger_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Logger_iOS.mm; path = Specific/Derived/Logger_iOS.mm; sourceTree = "<group>"; };
 		383BD37B1577EDC00012AC53 /* Logger_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Logger_iOS.hpp; path = Specific/Derived/Logger_iOS.hpp; sourceTree = "<group>"; };
 		383BD3801577EDDB0012AC53 /* ES2Renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ES2Renderer.h; path = Specific/Widget/ES2Renderer.h; sourceTree = "<group>"; };
 		383BD3811577EDDB0012AC53 /* ES2Renderer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ES2Renderer.mm; path = Specific/Widget/ES2Renderer.mm; sourceTree = "<group>"; };
@@ -1057,7 +1057,7 @@
 				CFA1899E15F8D9F80048BF46 /* IntBuffer_iOS.hpp */,
 				A70F5609161B5C6000340256 /* JSONParser_iOS.hpp */,
 				A70F560C161B5CD800340256 /* JSONParser_iOS.mm */,
-				383BD37A1577EDC00012AC53 /* Logger_iOS.cpp */,
+				383BD37A1577EDC00012AC53 /* Logger_iOS.mm */,
 				383BD37B1577EDC00012AC53 /* Logger_iOS.hpp */,
 				D8FEDAC815E7C219007633A0 /* MathUtils_iOS.hpp */,
 				CF8B21B115DD32820068601A /* SQLiteStorage_iOS.hpp */,
@@ -1678,7 +1678,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				383BD37D1577EDC00012AC53 /* Logger_iOS.cpp in Sources */,
+				383BD37D1577EDC00012AC53 /* Logger_iOS.mm in Sources */,
 				383BD3851577EDDB0012AC53 /* ES2Renderer.mm in Sources */,
 				383BD3871577EDDB0012AC53 /* G3MWidget_iOS.mm in Sources */,
 				383BD3971577EE500012AC53 /* Context.cpp in Sources */,
