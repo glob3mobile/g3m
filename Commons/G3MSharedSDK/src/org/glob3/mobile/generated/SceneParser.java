@@ -206,7 +206,18 @@ public class SceneParser
             url.addString(namefile);
     
             final IStringUtils iISU = IStringUtils.instance();
-            String namefileTruncated = iISU.capitalize(iISU.replaceSubstring(iISU.substring(namefile, 0, iISU.indexOf(namefile, ".")), "_", " "));
+            final String namefileTruncated = iISU.capitalize(iISU.replaceSubstring(iISU.substring(namefile, 0, iISU.indexOf(namefile, ".")), "_", " "));
+    
+            String nameFileFormatted;
+            int pos = IStringUtils.instance().indexOf(namefileTruncated, "-");
+            if (pos != 0)
+            {
+              nameFileFormatted = iISU.substring(namefileTruncated, 0, pos) + " - " + iISU.substring(namefileTruncated, pos+1, namefileTruncated.length());
+            }
+            else
+            {
+              nameFileFormatted = namefileTruncated;
+            }
     
             java.util.HashMap<String, String> geojsonMetadata = new java.util.HashMap<String, String>();
     
@@ -225,6 +236,7 @@ public class SceneParser
             if (url != null)
                url.dispose();
         }
+    
         _legend.put(jsonLayer.getAsString(NAME).value(), legendLayer);
         countGroup++;
     }
