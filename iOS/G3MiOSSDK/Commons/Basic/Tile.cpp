@@ -459,9 +459,9 @@ void Tile::debugRender(const G3MRenderContext* rc,
   }
 }
 
-std::vector<Tile*>* Tile::getSubTiles() {
+std::vector<Tile*>* Tile::getSubTiles(double u, double v) {
   if (_subtiles == NULL) {
-    _subtiles = createSubTiles();
+    _subtiles = createSubTiles(u, v);
     _justCreatedSubtiles = true;
   }
   return _subtiles;
@@ -565,7 +565,13 @@ void Tile::render(const G3MRenderContext* rc,
             trc->getElevationDataProvider());
     }
     else {
-      std::vector<Tile*>* subTiles = getSubTiles();
+      double u = 0.5;
+      double v = 0.5;
+      if (trc->getLayerTilesRenderParameters()->_mercator) {
+        int TODO_change_V_conforming_to_mercator;
+      }
+
+      std::vector<Tile*>* subTiles = getSubTiles(u, v);
       if (_justCreatedSubtiles) {
         trc->getLastSplitTimer()->start();
         statistics->computeSplitInFrame();
@@ -598,12 +604,14 @@ Tile* Tile::createSubTile(const Angle& lowerLat, const Angle& lowerLon,
                   row, column);
 }
 
-std::vector<Tile*>* Tile::createSubTiles() {
+std::vector<Tile*>* Tile::createSubTiles(double u, double v) {
   const Geodetic2D lower = _sector.lower();
   const Geodetic2D upper = _sector.upper();
 
-  const Angle midLat = Angle::midAngle(lower.latitude(), upper.latitude());
-  const Angle midLon = Angle::midAngle(lower.longitude(), upper.longitude());
+//  const Angle midLat = Angle::midAngle(lower.latitude(), upper.latitude());
+//  const Angle midLon = Angle::midAngle(lower.longitude(), upper.longitude());
+  const Angle midLat = Angle::interpolation(lower.latitude(),  upper.latitude(),  v);
+  const Angle midLon = Angle::interpolation(lower.longitude(), upper.longitude(), u);
 
   const int nextLevel = _level + 1;
 

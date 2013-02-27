@@ -210,10 +210,9 @@ LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters() const {
   mergedSector = NULL;
 
   return new LayerTilesRenderParameters(topSector,
-                                        splitsByLatitude,
-                                        splitsByLongitude,
+                                        splitsByLatitude, splitsByLongitude,
                                         maxLevel,
                                         Vector2I(tileTextureWidth, tileTextureHeight),
-                                        Vector2I(tileMeshWidth, tileMeshHeight),
+                                        Vector2I(tileMeshWidth,    tileMeshHeight),
                                         mercator);
 }
