@@ -21,11 +21,11 @@ package org.glob3.mobile.generated;
 public class EllipsoidalTileTessellator extends TileTessellator
 {
 
-  private final int _resolutionX;
-  private final int _resolutionY;
+//  const unsigned int _resolutionX;
+//  const unsigned int _resolutionY;
   private final boolean _skirted;
 
-  private Vector2I calculateResolution(Sector sector)
+  private Vector2I calculateResolution(Vector2I rawResolution, Sector sector)
   {
   //  return Vector2I(_resolutionX, _resolutionY);
   
@@ -33,13 +33,13 @@ public class EllipsoidalTileTessellator extends TileTessellator
     /* testing for dynamic latitude-resolution */
     final double cos = sector.getCenter().latitude().cosinus();
   
-    int resolutionY = (int)(_resolutionY * cos);
+    int resolutionY = (int)(rawResolution._y * cos);
     if (resolutionY < 6)
     {
       resolutionY = 6;
     }
   
-    int resolutionX = (int)(_resolutionX * cos);
+    int resolutionX = (int)(rawResolution._x * cos);
     if (resolutionX < 6)
     {
       resolutionX = 6;
@@ -49,10 +49,10 @@ public class EllipsoidalTileTessellator extends TileTessellator
   }
 
 
-  public EllipsoidalTileTessellator(Vector2I resolution, boolean skirted)
+  public EllipsoidalTileTessellator(boolean skirted) //const Vector2I& resolution,
+//  _resolutionX(resolution._x),
+//  _resolutionY(resolution._y),
   {
-     _resolutionX = resolution._x;
-     _resolutionY = resolution._y;
      _skirted = skirted;
     //    int __TODO_width_and_height_resolutions;
   }
@@ -65,26 +65,26 @@ public class EllipsoidalTileTessellator extends TileTessellator
   ///#include "FloatBufferBuilderFromCartesian2D.hpp"
   
   
-  public final Vector2I getTileMeshResolution(Planet planet, Tile tile, boolean debug)
+  public final Vector2I getTileMeshResolution(Planet planet, Vector2I rawResolution, Tile tile, boolean debug)
   {
-    return calculateResolution(tile.getSector());
+    return calculateResolution(rawResolution, tile.getSector());
   }
 
 
-  public final Mesh createTileMesh(Planet planet, Tile tile, ElevationData elevationData, float verticalExaggeration, boolean debug)
+  public final Mesh createTileMesh(Planet planet, Vector2I rawResolution, Tile tile, ElevationData elevationData, float verticalExaggeration, boolean debug)
   {
   
     final Sector sector = tile.getSector();
-    final Vector2I resolution = calculateResolution(sector);
+    final Vector2I tileResolution = calculateResolution(rawResolution, sector);
   
     double minHeight = 0;
     FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.givenCenter(), planet, sector.getCenter());
-    for (int j = 0; j < resolution._y; j++)
+    for (int j = 0; j < tileResolution._y; j++)
     {
-      final double v = (double) j / (resolution._y-1);
-      for (int i = 0; i < resolution._x; i++)
+      final double v = (double) j / (tileResolution._y-1);
+      for (int i = 0; i < tileResolution._x; i++)
       {
-        final double u = (double) i / (resolution._x-1);
+        final double u = (double) i / (tileResolution._x-1);
   
         final Geodetic2D position = sector.getInnerPoint(u, v);
   
@@ -105,19 +105,19 @@ public class EllipsoidalTileTessellator extends TileTessellator
   
   
     ShortBufferBuilder indices = new ShortBufferBuilder();
-    for (short j = 0; j < (resolution._y-1); j++)
+    for (short j = 0; j < (tileResolution._y-1); j++)
     {
-      final short jTimesResolution = (short)(j *resolution._x);
+      final short jTimesResolution = (short)(j *tileResolution._x);
       if (j > 0)
       {
         indices.add(jTimesResolution);
       }
-      for (short i = 0; i < resolution._x; i++)
+      for (short i = 0; i < tileResolution._x; i++)
       {
         indices.add((short)(jTimesResolution + i));
-        indices.add((short)(jTimesResolution + i + resolution._x));
+        indices.add((short)(jTimesResolution + i + tileResolution._x));
       }
-      indices.add((short)(jTimesResolution + 2 *resolution._x - 1));
+      indices.add((short)(jTimesResolution + 2 *tileResolution._x - 1));
     }
   
   
@@ -129,62 +129,63 @@ public class EllipsoidalTileTessellator extends TileTessellator
       final Vector3D nw = planet.toCartesian(sector.getNW());
       final double skirtHeight = (nw.sub(sw).length() * 0.05 * -1) + minHeight;
   
-      indices.add((short) 0);
-      int posS = resolution._x * resolution._y;
-  
-      // west side
-      for (int j = 0; j < resolution._y-1; j++)
-      {
-        vertices.add(sector.getInnerPoint(0, (double)j/(resolution._y-1)), skirtHeight);
-  
-        indices.add((short)(j *resolution._x));
-        indices.add((short) posS++);
-      }
-  
-      // south side
-      for (int i = 0; i < resolution._x-1; i++)
-      {
-        vertices.add(sector.getInnerPoint((double)i/(resolution._x-1), 1), skirtHeight);
-  
-        indices.add((short)((resolution._y-1)*resolution._x + i));
-        indices.add((short) posS++);
-      }
+      int posS = tileResolution._x * tileResolution._y;
+      indices.add((short)(posS-1));
   
       // east side
-      for (int j = resolution._y-1; j > 0; j--)
+      for (int j = tileResolution._y-1; j > 0; j--)
       {
-        vertices.add(sector.getInnerPoint(1, (double)j/(resolution._y-1)), skirtHeight);
+        vertices.add(sector.getInnerPoint(1, (double)j/(tileResolution._y-1)), skirtHeight);
   
-        indices.add((short)(j *resolution._x + (resolution._x-1)));
+        indices.add((short)(j *tileResolution._x + (tileResolution._x-1)));
         indices.add((short) posS++);
       }
   
       // north side
-      for (int i = resolution._x-1; i > 0; i--)
+      for (int i = tileResolution._x-1; i > 0; i--)
       {
-        vertices.add(sector.getInnerPoint((double)i/(resolution._x-1), 0), skirtHeight);
+        vertices.add(sector.getInnerPoint((double)i/(tileResolution._x-1), 0), skirtHeight);
   
         indices.add((short) i);
         indices.add((short) posS++);
       }
   
+      // west side
+      for (int j = 0; j < tileResolution._y-1; j++)
+      {
+        vertices.add(sector.getInnerPoint(0, (double)j/(tileResolution._y-1)), skirtHeight);
+  
+        indices.add((short)(j *tileResolution._x));
+        indices.add((short) posS++);
+      }
+  
+      // south side
+      for (int i = 0; i < tileResolution._x-1; i++)
+      {
+        vertices.add(sector.getInnerPoint((double)i/(tileResolution._x-1), 1), skirtHeight);
+  
+        indices.add((short)((tileResolution._y-1)*tileResolution._x + i));
+        indices.add((short) posS++);
+      }
+  
       // last triangle
-      indices.add((short) 0);
-      indices.add((short)(resolution._x *resolution._y));
+      indices.add((short)((tileResolution._x *tileResolution._y)-1));
+      indices.add((short)(tileResolution._x *tileResolution._y));
     }
   
     Color color = Color.newFromRGBA((float) 1.0, (float) 1.0, (float) 1.0, (float) 1.0);
   
-    return new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, color); //debug ? GLPrimitive::lineStrip() : GLPrimitive::triangleStrip(),
+    return new IndexedMesh(debug ? GLPrimitive.lineStrip() : GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, color);
+                           //GLPrimitive::triangleStrip(),
                            //GLPrimitive::lineStrip(),
   }
 
-  public final Mesh createTileDebugMesh(Planet planet, Tile tile)
+  public final Mesh createTileDebugMesh(Planet planet, Vector2I rawResolution, Tile tile)
   {
     final Sector sector = tile.getSector();
   
-    final int resolutionXMinus1 = _resolutionX - 1;
-    final int resolutionYMinus1 = _resolutionY - 1;
+    final int resolutionXMinus1 = rawResolution._x - 1;
+    final int resolutionYMinus1 = rawResolution._y - 1;
     short posS = 0;
   
     // compute offset for vertices
@@ -234,39 +235,39 @@ public class EllipsoidalTileTessellator extends TileTessellator
     return true;
   }
 
-  public final IFloatBuffer createUnitTextCoords(Tile tile)
+  public final IFloatBuffer createTextCoords(Vector2I rawResolution, Tile tile, boolean mercator)
   {
   
-    final Vector2I resolution = calculateResolution(tile.getSector());
+    final Vector2I tileResolution = calculateResolution(rawResolution, tile.getSector());
   
-    float[] u = new float[resolution._x * resolution._y];
-    float[] v = new float[resolution._x * resolution._y];
+    float[] u = new float[tileResolution._x * tileResolution._y];
+    float[] v = new float[tileResolution._x * tileResolution._y];
   
-    for (int j = 0; j < resolution._y; j++)
+    for (int j = 0; j < tileResolution._y; j++)
     {
-      for (int i = 0; i < resolution._x; i++)
+      for (int i = 0; i < tileResolution._x; i++)
       {
-        final int pos = j *resolution._x + i;
-        u[pos] = (float) i / (resolution._x-1);
-        v[pos] = (float) j / (resolution._y-1);
+        final int pos = j *tileResolution._x + i;
+        u[pos] = (float) i / (tileResolution._x-1);
+        v[pos] = (float) j / (tileResolution._y-1);
       }
     }
   
-    int textCoordsSize = (resolution._x * resolution._y) * 2;
+    int textCoordsSize = (tileResolution._x * tileResolution._y) * 2;
     if (_skirted)
     {
-      textCoordsSize += ((resolution._x-1) * (resolution._y-1) * 4) * 2;
+      textCoordsSize += ((tileResolution._x-1) * (tileResolution._y-1) * 4) * 2;
     }
   
     IFloatBuffer textCoords = IFactory.instance().createFloatBuffer(textCoordsSize);
   
     int textCoordsIndex = 0;
   
-    for (int j = 0; j < resolution._y; j++)
+    for (int j = 0; j < tileResolution._y; j++)
     {
-      for (int i = 0; i < resolution._x; i++)
+      for (int i = 0; i < tileResolution._x; i++)
       {
-        final int pos = j *resolution._x + i;
+        final int pos = j *tileResolution._x + i;
         textCoords.rawPut(textCoordsIndex++, u[pos]);
         textCoords.rawPut(textCoordsIndex++, v[pos]);
       }
@@ -275,34 +276,34 @@ public class EllipsoidalTileTessellator extends TileTessellator
     // create skirts
     if (_skirted)
     {
-      // west side
-      for (int j = 0; j < resolution._y-1; j++)
-      {
-        final int pos = j *resolution._x;
-        textCoords.rawPut(textCoordsIndex++, u[pos]);
-        textCoords.rawPut(textCoordsIndex++, v[pos]);
-      }
-  
-      // south side
-      for (int i = 0; i < resolution._x-1; i++)
-      {
-        final int pos = (resolution._y-1) * resolution._x + i;
-        textCoords.rawPut(textCoordsIndex++, u[pos]);
-        textCoords.rawPut(textCoordsIndex++, v[pos]);
-      }
-  
       // east side
-      for (int j = resolution._y-1; j > 0; j--)
+      for (int j = tileResolution._y-1; j > 0; j--)
       {
-        final int pos = j *resolution._x + resolution._x-1;
+        final int pos = j *tileResolution._x + tileResolution._x-1;
         textCoords.rawPut(textCoordsIndex++, u[pos]);
         textCoords.rawPut(textCoordsIndex++, v[pos]);
       }
   
       // north side
-      for (int i = resolution._x-1; i > 0; i--)
+      for (int i = tileResolution._x-1; i > 0; i--)
       {
         final int pos = i;
+        textCoords.rawPut(textCoordsIndex++, u[pos]);
+        textCoords.rawPut(textCoordsIndex++, v[pos]);
+      }
+  
+      // west side
+      for (int j = 0; j < tileResolution._y-1; j++)
+      {
+        final int pos = j *tileResolution._x;
+        textCoords.rawPut(textCoordsIndex++, u[pos]);
+        textCoords.rawPut(textCoordsIndex++, v[pos]);
+      }
+  
+      // south side
+      for (int i = 0; i < tileResolution._x-1; i++)
+      {
+        final int pos = (tileResolution._y-1) * tileResolution._x + i;
         textCoords.rawPut(textCoordsIndex++, u[pos]);
         textCoords.rawPut(textCoordsIndex++, v[pos]);
       }

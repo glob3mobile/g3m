@@ -104,10 +104,7 @@ public class JSONObject extends JSONBaseObject
 
   public final java.util.ArrayList<String> keys()
   {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if JAVA_CODE
     return new java.util.ArrayList<String>(_entries.keySet());
-//#endif
   }
 
   public final String description()

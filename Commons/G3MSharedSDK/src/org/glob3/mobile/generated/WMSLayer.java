@@ -20,10 +20,13 @@ public class WMSLayer extends Layer
   private String _extraParameter;
 
 
-
   public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector sector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache)
   {
-     super(condition, mapLayer, timeToCache);
+     this(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, sector, format, srs, style, isTransparent, condition, timeToCache, null);
+  }
+  public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector sector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, LayerTilesRenderParameters parameters)
+  {
+     super(condition, mapLayer, timeToCache, (parameters == null) ? LayerTilesRenderParameters.createDefaultNonMercator(sector) : parameters);
      _mapLayer = mapLayer;
      _mapServerURL = mapServerURL;
      _mapServerVersion = mapServerVersion;
@@ -36,12 +39,16 @@ public class WMSLayer extends Layer
      _style = style;
      _isTransparent = isTransparent;
      _extraParameter = "";
-
+  
   }
 
   public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, Sector sector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache)
   {
-     super(condition, mapLayer, timeToCache);
+     this(mapLayer, mapServerURL, mapServerVersion, sector, format, srs, style, isTransparent, condition, timeToCache, null);
+  }
+  public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, Sector sector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, LayerTilesRenderParameters parameters)
+  {
+     super(condition, mapLayer, timeToCache, (parameters == null) ? LayerTilesRenderParameters.createDefaultNonMercator(sector) : parameters);
      _mapLayer = mapLayer;
      _mapServerURL = mapServerURL;
      _mapServerVersion = mapServerVersion;
@@ -54,7 +61,7 @@ public class WMSLayer extends Layer
      _style = style;
      _isTransparent = isTransparent;
      _extraParameter = "";
-
+  
   }
 
   public final java.util.ArrayList<Petition> getMapPetitions(G3MRenderContext rc, Tile tile, Vector2I tileTextureResolution)

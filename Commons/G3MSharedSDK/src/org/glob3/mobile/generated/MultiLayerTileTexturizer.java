@@ -27,11 +27,6 @@ package org.glob3.mobile.generated;
 
 public class MultiLayerTileTexturizer extends TileTexturizer
 {
-  private TilesRenderParameters _parameters;
-
-//  mutable IFloatBuffer* _texCoordsCache;
-//  IFloatBuffer* getTextureCoordinates(const TileRenderContext* trc) const;
-
   private TexturesHandler _texturesHandler;
 
   private LeveledTexturedMesh getMesh(Tile tile)
@@ -41,22 +36,14 @@ public class MultiLayerTileTexturizer extends TileTexturizer
   }
 
   public MultiLayerTileTexturizer()
-  //_texCoordsCache(NULL),
-  //_pendingTopTileRequests(0),
   {
-     _parameters = null;
      _texturesHandler = null;
   
   }
 
-//  void countTopTileRequest() {
-//    _pendingTopTileRequests--;
-//  }
-
   public void dispose()
   {
-  //  delete _texCoordsCache;
-  //  _texCoordsCache = NULL;
+  
   }
 
   public final boolean isReady(G3MRenderContext rc, LayerSet layerSet)
@@ -70,7 +57,6 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 
   public final void initialize(G3MContext context, TilesRenderParameters parameters)
   {
-    _parameters = parameters;
     //  _layerSet->initialize(ic);
   }
 
@@ -83,7 +69,7 @@ public class MultiLayerTileTexturizer extends TileTexturizer
   
     if (builderHolder == null)
     {
-      builderHolder = new TileTextureBuilderHolder(new TileTextureBuilder(this, rc, trc.getLayerSet(), _parameters, rc.getDownloader(), tile, tessellatorMesh, trc.getTessellator(), trc.getTexturePriority()));
+      builderHolder = new TileTextureBuilderHolder(new TileTextureBuilder(this, rc, trc.getLayerSet(), rc.getDownloader(), tile, tessellatorMesh, trc.getTessellator(), trc.getTexturePriority()));
       tile.setTexturizerData(builderHolder);
     }
   
@@ -127,16 +113,6 @@ public class MultiLayerTileTexturizer extends TileTexturizer
     return false;
   }
 
-
-  //IFloatBuffer* MultiLayerTileTexturizer::getTextureCoordinates(const TileRenderContext* trc) const {
-  ////  if (_texCoordsCache == NULL) {
-  ////    _texCoordsCache = trc->getTessellator()->createUnitTextCoords();
-  ////  }
-  ////  return _texCoordsCache;
-  //  int _____XXXXXXX;
-  //  return trc->getTessellator()->createUnitTextCoords();
-  //}
-  
   public final void justCreatedTopTile(G3MRenderContext rc, Tile tile, LayerSet layerSet)
   {
   }
@@ -171,7 +147,7 @@ public class MultiLayerTileTexturizer extends TileTexturizer
       return;
     }
   
-    final int level = tile.getLevel() - ancestorTile.getLevel() - _parameters._topLevel;
+    final int level = tile.getLevel() - ancestorTile.getLevel();
     _texturesHandler.retainGLTextureId(glTextureId);
     if (!tileMesh.setGLTextureIdForLevel(level, glTextureId))
     {

@@ -144,6 +144,7 @@
 		CFD3D8A916D15ED000CE9242 /* ElevationDataProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD3D8A716D15ECF00CE9242 /* ElevationDataProvider.cpp */; };
 		CFD3D8AD16D1686900CE9242 /* ElevationData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD3D8AB16D1686700CE9242 /* ElevationData.cpp */; };
 		CFD3D8B116D1729A00CE9242 /* WMSBillElevationDataProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD3D8AF16D1729900CE9242 /* WMSBillElevationDataProvider.cpp */; };
+		CFD42ABC16DBFE8600B03961 /* LayerTilesRenderParameters.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD42ABA16DBFE8600B03961 /* LayerTilesRenderParameters.cpp */; };
 		CFDA835516D6602500295F96 /* SingleBillElevationDataProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFDA835316D6602500295F96 /* SingleBillElevationDataProvider.cpp */; };
 		CFDA835916D6698700295F96 /* FloatBufferElevationData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFDA835716D6698700295F96 /* FloatBufferElevationData.cpp */; };
 		CFDA835D16D6758200295F96 /* BilinearInterpolator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFDA835B16D6758200295F96 /* BilinearInterpolator.cpp */; };
@@ -900,6 +901,8 @@
 		CFD3D8AC16D1686800CE9242 /* ElevationData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ElevationData.hpp; path = Commons/Basic/ElevationData.hpp; sourceTree = "<group>"; };
 		CFD3D8AF16D1729900CE9242 /* WMSBillElevationDataProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = WMSBillElevationDataProvider.cpp; path = Commons/Basic/WMSBillElevationDataProvider.cpp; sourceTree = "<group>"; };
 		CFD3D8B016D1729A00CE9242 /* WMSBillElevationDataProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = WMSBillElevationDataProvider.hpp; path = Commons/Basic/WMSBillElevationDataProvider.hpp; sourceTree = "<group>"; };
+		CFD42ABA16DBFE8600B03961 /* LayerTilesRenderParameters.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LayerTilesRenderParameters.cpp; path = Commons/Rendererers/LayerTilesRenderParameters.cpp; sourceTree = "<group>"; };
+		CFD42ABB16DBFE8600B03961 /* LayerTilesRenderParameters.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = LayerTilesRenderParameters.hpp; path = Commons/Rendererers/LayerTilesRenderParameters.hpp; sourceTree = "<group>"; };
 		CFDA835316D6602500295F96 /* SingleBillElevationDataProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SingleBillElevationDataProvider.cpp; path = Commons/Basic/SingleBillElevationDataProvider.cpp; sourceTree = "<group>"; };
 		CFDA835416D6602500295F96 /* SingleBillElevationDataProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SingleBillElevationDataProvider.hpp; path = Commons/Basic/SingleBillElevationDataProvider.hpp; sourceTree = "<group>"; };
 		CFDA835716D6698700295F96 /* FloatBufferElevationData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FloatBufferElevationData.cpp; path = Commons/Basic/FloatBufferElevationData.cpp; sourceTree = "<group>"; };
@@ -1423,6 +1426,8 @@
 				CFCEFF4B163721EA00FC4AB0 /* TrailsRenderer.cpp */,
 				CFCEFF4C163721EA00FC4AB0 /* TrailsRenderer.hpp */,
 				CF024DC616A84F330051255C /* VisibleSectorListener.hpp */,
+				CFD42ABA16DBFE8600B03961 /* LayerTilesRenderParameters.cpp */,
+				CFD42ABB16DBFE8600B03961 /* LayerTilesRenderParameters.hpp */,
 			);
 			name = Renderers;
 			sourceTree = "<group>";
@@ -1879,6 +1884,7 @@
 				CFDA836216D6776B00295F96 /* SubviewElevationData.cpp in Sources */,
 				CF27B16016D93DCA0000A415 /* BufferElevationData.cpp in Sources */,
 				CF27B16416D93F2C0000A415 /* ShortBufferElevationData.cpp in Sources */,
+				CFD42ABC16DBFE8600B03961 /* LayerTilesRenderParameters.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -16,6 +16,7 @@ class LayerSet;
 class VisibleSectorListenerEntry;
 class VisibleSectorListener;
 class ElevationDataProvider;
+class LayerTilesRenderParameters;
 
 #include "IStringBuilder.hpp"
 #include "LeafRenderer.hpp"
@@ -108,6 +109,10 @@ public:
   
   long long getTexturePriority() const {
     return _texturePriority;
+  }
+
+  const LayerTilesRenderParameters* getLayerTilesRenderParameters() const {
+    return _layerSet->getLayerTilesRenderParameters();
   }
 
 };
@@ -296,7 +301,7 @@ private:
 
   std::vector<Tile*>     _topLevelTiles;
 
-  ITimer* _lastSplitTimer;      // timer to start every time a tile get splitted into subtiles
+  ITimer* _lastSplitTimer; // timer to start every time a tile get splitted into subtiles
 
   void clearTopLevelTiles();
   void createTopLevelTiles(const G3MContext* context);

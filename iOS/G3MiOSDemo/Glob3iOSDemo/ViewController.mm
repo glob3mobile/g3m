@@ -235,8 +235,8 @@ public:
   const bool logDownloaderStatistics = false;
   builder.setLogDownloaderStatistics(logDownloaderStatistics);
 
-  WidgetUserData* userData = NULL;
-  builder.setUserData(userData);
+//  WidgetUserData* userData = NULL;
+//  builder.setUserData(userData);
 
   // initialization
   builder.initializeWidget();
@@ -569,10 +569,10 @@ public:
   const bool forceTopLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
 
-  return TilesRenderParameters::createDefault(renderDebug,
-                                              useTilesSplitBudget,
-                                              forceTopLevelTilesRenderOnStart,
-                                              incrementalTileQuality);
+  return new TilesRenderParameters(renderDebug,
+                                   useTilesSplitBudget,
+                                   forceTopLevelTilesRenderOnStart,
+                                   incrementalTileQuality);
 //  return TilesRenderParameters::createSingleSector(renderDebug,
 //                                                   useTilesSplitBudget,
 //                                                   forceTopLevelTilesRenderOnStart,
@@ -1279,7 +1279,7 @@ public:
       }
       
 
-      /*
+      
       NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
                                                                 ofType: @"json"];
       if (planeFilePath) {

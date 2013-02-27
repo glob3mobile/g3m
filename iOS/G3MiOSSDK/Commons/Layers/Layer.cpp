@@ -9,9 +9,11 @@
 #include "Layer.hpp"
 #include "LayerCondition.hpp"
 #include "LayerSet.hpp"
+#include "LayerTilesRenderParameters.hpp"
 
 Layer::~Layer() {
   delete _condition;
+  delete _parameters;
 }
 
 bool Layer::isAvailable(const G3MRenderContext* rc,

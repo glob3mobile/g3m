@@ -30,7 +30,7 @@ public:
   
   virtual const MutableVector2D getTranslation() const = 0;
   
-  virtual IFloatBuffer* getTexCoords() const = 0;
+  virtual IFloatBuffer* createTextCoords() const = 0;
 };
 
 class LazyTextureMapping : public TextureMapping {

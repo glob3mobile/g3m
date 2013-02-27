@@ -10,7 +10,6 @@
 
 #include "Vector3D.hpp"
 #include "GL.hpp"
-
 #include "TexturesHandler.hpp"
 
 
@@ -20,7 +19,7 @@ void LazyTextureMapping::bind(const G3MRenderContext* rc) const {
 
     _scale       = _initializer->getScale();
     _translation = _initializer->getTranslation();
-    _texCoords   = _initializer->getTexCoords();
+    _texCoords   = _initializer->createTextCoords();
 
     delete _initializer;
     _initializer = NULL;
@@ -40,7 +39,6 @@ void LazyTextureMapping::bind(const G3MRenderContext* rc) const {
   }
 }
 
-
 void LazyTextureMapping::releaseGLTextureId() {
   if (_texturesHandler) {
     if (_glTextureId != NULL) {
@@ -49,8 +47,6 @@ void LazyTextureMapping::releaseGLTextureId() {
     }
   }
 }
-
-
 
 LeveledTexturedMesh::~LeveledTexturedMesh() {
 #ifdef JAVA_CODE

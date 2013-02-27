@@ -226,7 +226,7 @@ public class Sector
   // (u,v)=(0,0) in NW point, and (1,1) in SE point
   public final Geodetic2D getInnerPoint(double u, double v)
   {
-    return new Geodetic2D(Angle.lerp(_lower.latitude(), _upper.latitude(), (float)(1.0-v)), Angle.lerp(_lower.longitude(), _upper.longitude(), (float) u));
+    return new Geodetic2D(Angle.interpolation(_lower.latitude(), _upper.latitude(), (float)(1.0-v)), Angle.interpolation(_lower.longitude(), _upper.longitude(), (float) u));
   }
 
   public final Vector2D getUVCoordinates(Geodetic2D point)
@@ -241,21 +241,48 @@ public class Sector
     return new Vector2D(u, v);
   }
 
+
+  /*
+  bool isBackOriented(const G3MRenderContext *rc) const {
+    const Camera* camera = rc->getCurrentCamera();
+    const Planet* planet = rc->getPlanet();
+  
+    // compute sector point nearest to centerPoint
+    const Geodetic2D center = camera->getGeodeticCenterOfView().asGeodetic2D();
+    const Geodetic2D point = getClosestPoint(center);
+  
+    // compute angle between normals
+    const Vector3D normal = planet->geodeticSurfaceNormal(point);
+    const Vector3D view   = camera->getViewDirection().times(-1);
+    const double dot = normal.dot(view);
+  
+    return (dot < 0) ? true : false;
+  }*/
+  
   public final boolean isBackOriented(G3MRenderContext rc)
   {
     final Camera camera = rc.getCurrentCamera();
     final Planet planet = rc.getPlanet();
-  
-    // compute sector point nearest to centerPoint
-    final Geodetic2D center = camera.getGeodeticCenterOfView().asGeodetic2D();
-    final Geodetic2D point = getClosestPoint(center);
-  
-    // compute angle between normals
-    final Vector3D normal = planet.geodeticSurfaceNormal(point);
     final Vector3D view = camera.getViewDirection().times(-1);
-    final double dot = normal.dot(view);
   
-    return (dot < 0) ? true : false;
+    // if all the corners normals are back oriented, sector is back oriented
+    if (planet.geodeticSurfaceNormal(getNE()).dot(view) > 0)
+    {
+       return false;
+    }
+    if (planet.geodeticSurfaceNormal(getNW()).dot(view) > 0)
+    {
+       return false;
+    }
+    if (planet.geodeticSurfaceNormal(getSE()).dot(view) > 0)
+    {
+       return false;
+    }
+    if (planet.geodeticSurfaceNormal(getSW()).dot(view) > 0)
+    {
+       return false;
+    }
+    return true;
   }
 
   public final Geodetic2D getClosestPoint(Geodetic2D pos)

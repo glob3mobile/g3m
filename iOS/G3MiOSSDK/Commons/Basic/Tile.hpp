@@ -27,6 +27,7 @@ class Extent;
 class ElevationDataProvider;
 class ElevationData;
 class MeshHolder;
+class Vector2I;
 
 #include "ITexturizerData.hpp"
 
@@ -183,6 +184,7 @@ public:
                        MeshHolder* meshHolder,
                        const TileTessellator* tessellator,
                        const Planet* planet,
+                       const Vector2I& tileMeshResolution,
                        bool renderDebug);
   
 };

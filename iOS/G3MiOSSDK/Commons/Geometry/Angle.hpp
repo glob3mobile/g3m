@@ -29,12 +29,6 @@ public:
   const double _degrees;
   const double _radians;
 
-  static Angle lerp(const Angle& start,
-                    const Angle& end,
-                    float percent) {
-    return start.add(end.sub(start).times(percent));
-  }
-
   static Angle fromDegrees(double degrees) {
     return Angle(degrees);
   }
