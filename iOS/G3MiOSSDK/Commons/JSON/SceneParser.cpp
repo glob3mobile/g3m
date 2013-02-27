@@ -28,6 +28,7 @@
 #include <string.h>
 
 #include "MarksRenderer.hpp"
+#include "IStringUtils.hpp"
 
 using namespace std;
 
@@ -199,13 +200,21 @@ void SceneParser::parserGEOJSONLayer(LayerSet* layerSet, const JSONObject* jsonL
         url->addString(namefile);
       
         const IStringUtils* iISU = IStringUtils::instance();
-        std::string namefileTruncated = iISU->capitalize(iISU->replaceSubstring(iISU->substring(namefile, 0, iISU->indexOf(namefile, ".")), "_", " "));
+        const std::string namefileTruncated = iISU->capitalize(iISU->replaceSubstring(iISU->substring(namefile, 0, iISU->indexOf(namefile, ".")), "_", " "));
+      
+        std::string nameFileFormatted;
+        int pos = IStringUtils::instance()->indexOf(namefileTruncated, "-");
+        if (pos != 0){
+          nameFileFormatted = iISU->substring(namefileTruncated, 0, pos) + " - " + iISU->substring(namefileTruncated, pos+1, namefileTruncated.length());
+        } else {
+          nameFileFormatted = namefileTruncated;
+        }
       
         std::map<std::string, std::string>* geojsonMetadata = new std::map<std::string, std::string>;
       
         #ifdef C_CODE
         geojsonMetadata->insert(std::make_pair(URLICON,urlIcon));
-        geojsonMetadata->insert(std::make_pair(NAME,namefileTruncated));
+        geojsonMetadata->insert(std::make_pair(NAME,nameFileFormatted));
         geojsonMetadata->insert(std::make_pair(COLORLINE,colorLine));
         geojsonMetadata->insert(std::make_pair(WEB,urlWeb));
         geojsonMetadata->insert(std::make_pair(MINDISTANCE,minDistance));
@@ -228,6 +237,7 @@ void SceneParser::parserGEOJSONLayer(LayerSet* layerSet, const JSONObject* jsonL
       
         delete url;
     }
+
     _legend[jsonLayer->getAsString(NAME)->value()] = legendLayer;
     countGroup++;
 }
