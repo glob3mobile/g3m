@@ -54,9 +54,9 @@ public class ShapeOrbitCameraEffect extends EffectWithDuration
     final Geodetic3D center = _shape.getPosition();
   
     IMathUtils mu = IMathUtils.instance();
-    final double distance = mu.interpolation(_fromDistance, _toDistance, alpha);
-    final double azimuthInRadians = mu.interpolation(_fromAzimuthInRadians, _toAzimuthInRadians, alpha);
-    final double altitudeInRadians = mu.interpolation(_fromAltitudeInRadians, _toAltitudeInRadians, alpha);
+    final double distance = mu.linearInterpolation(_fromDistance, _toDistance, alpha);
+    final double azimuthInRadians = mu.linearInterpolation(_fromAzimuthInRadians, _toAzimuthInRadians, alpha);
+    final double altitudeInRadians = mu.linearInterpolation(_fromAltitudeInRadians, _toAltitudeInRadians, alpha);
   
     rc.getNextCamera().setPointOfView(center, distance, Angle.fromRadians(azimuthInRadians), Angle.fromRadians(altitudeInRadians));
   }

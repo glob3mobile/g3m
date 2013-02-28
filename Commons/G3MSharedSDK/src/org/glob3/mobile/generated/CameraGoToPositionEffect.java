@@ -29,7 +29,7 @@ public class CameraGoToPositionEffect extends EffectWithDuration
     final double percent = percentDone(when);
     Camera camera = rc.getNextCamera();
 
-    final Geodetic3D g = Geodetic3D.interpolation(_initialPos, _finalPos, percent);
+    final Geodetic3D g = Geodetic3D.linearInterpolation(_initialPos, _finalPos, percent);
 
     camera.orbitTo(g);
   }

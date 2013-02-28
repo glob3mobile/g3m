@@ -560,7 +560,7 @@ public:
 
 - (TilesRenderParameters*) createTileRenderParameters
 {
-  const bool renderDebug = true;
+  const bool renderDebug = false;
   const bool useTilesSplitBudget = true;
   const bool forceTopLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
@@ -1056,6 +1056,45 @@ public:
                                                targetSector,
                                                Color::yellow(),
                                                2) );
+
+
+      Angle latFrom(Angle::fromDegreesMinutesSeconds(38, 53, 42.24));
+      Angle lonFrom(Angle::fromDegreesMinutesSeconds(-77, 2, 10.92));
+
+      Geodetic2D posFrom(latFrom,
+                         lonFrom);
+
+      Geodetic2D posTo(latFrom.add(Angle::fromDegrees(0.75)),
+                       lonFrom.add(Angle::fromDegrees(-0.75)));
+
+      Geodetic2D posMiddle(Geodetic2D::linearInterpolation(posFrom, posTo, 0.5));
+
+      double fromHeight = 30000;
+      double toHeight   = 2000;
+      double middleHeight = 60000;
+
+      FloatBufferBuilderFromGeodetic vertices(CenterStrategy::noCenter(),
+                                              context->getPlanet(),
+                                              Vector3D::zero());
+
+      for (double t = 0; t <= 1; t += 0.1) {
+        Geodetic2D position( Geodetic2D::linearInterpolation(posFrom, posTo, t) );
+
+        const double height = IMathUtils::instance()->quadraticBezierInterpolation(fromHeight, middleHeight, toHeight, t);
+        vertices.add(position, height);
+      }
+
+      Mesh* mesh = new DirectMesh(GLPrimitive::lineStrip(),
+                                  true,
+                                  vertices.getCenter(),
+                                  vertices.create(),
+                                  2,
+                                  1,
+                                  Color::newFromRGBA(1, 1, 0, 1));
+
+      _meshRenderer->addMesh( mesh );
+
+//      Geodetic3D 
 
       //      targetSector.c
 

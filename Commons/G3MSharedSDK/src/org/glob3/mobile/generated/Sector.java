@@ -88,6 +88,29 @@ public class Sector
     return contains(s.upper()) && contains(s.lower());
   }
 
+
+  /*
+  bool Sector::isBackOriented(const G3MRenderContext *rc, double height) const {
+    const Planet*   planet = rc->getPlanet();
+    const Vector3D  eye = rc->getCurrentCamera()->getCartesianPosition();
+    
+    // if all the corners normals are back oriented, sector is back oriented
+    const Vector3D cartesianNE = planet->toCartesian(Geodetic3D(getNE(), height));
+    if (planet->geodeticSurfaceNormal(cartesianNE).dot(eye.sub(cartesianNE)) > 0)
+      return false;
+    const Vector3D cartesianNW = planet->toCartesian(Geodetic3D(getNW(), height));
+    if (planet->geodeticSurfaceNormal(cartesianNW).dot(eye.sub(cartesianNW)) > 0)
+      return false;
+    const Vector3D cartesianSE = planet->toCartesian(Geodetic3D(getSE(), height));
+    if (planet->geodeticSurfaceNormal(cartesianSE).dot(eye.sub(cartesianSE)) > 0)
+      return false;
+    const Vector3D cartesianSW = planet->toCartesian(Geodetic3D(getSW(), height));
+    if (planet->geodeticSurfaceNormal(cartesianSW).dot(eye.sub(cartesianSW)) > 0)
+      return false;
+    return true;
+  }
+  */
+  
   public final Sector intersection(Sector that)
   {
     final Angle lowLat = Angle.max(lower().latitude(), that.lower().latitude());
@@ -226,7 +249,7 @@ public class Sector
   // (u,v)=(0,0) in NW point, and (1,1) in SE point
   public final Geodetic2D getInnerPoint(double u, double v)
   {
-    return new Geodetic2D(Angle.interpolation(_lower.latitude(), _upper.latitude(), (float)(1.0-v)), Angle.interpolation(_lower.longitude(), _upper.longitude(), (float) u));
+    return new Geodetic2D(Angle.linearInterpolation(_lower.latitude(), _upper.latitude(), (float)(1.0-v)), Angle.linearInterpolation(_lower.longitude(), _upper.longitude(), (float) u));
   }
 
   public final Vector2D getUVCoordinates(Geodetic2D point)
@@ -243,23 +266,24 @@ public class Sector
 
 
   /*
-  bool isBackOriented(const G3MRenderContext *rc) const {
+  bool Sector::isBackOriented_v1(const G3MRenderContext *rc) const {
     const Camera* camera = rc->getCurrentCamera();
     const Planet* planet = rc->getPlanet();
-  
+    
     // compute sector point nearest to centerPoint
     const Geodetic2D center = camera->getGeodeticCenterOfView().asGeodetic2D();
     const Geodetic2D point = getClosestPoint(center);
-  
+    
     // compute angle between normals
     const Vector3D normal = planet->geodeticSurfaceNormal(point);
     const Vector3D view   = camera->getViewDirection().times(-1);
     const double dot = normal.dot(view);
-  
+    
     return (dot < 0) ? true : false;
-  }*/
+  }
+   */
   
-  public final boolean isBackOriented(G3MRenderContext rc)
+  public final boolean isBackOriented(G3MRenderContext rc, double height)
   {
     final Camera camera = rc.getCurrentCamera();
     final Planet planet = rc.getPlanet();
