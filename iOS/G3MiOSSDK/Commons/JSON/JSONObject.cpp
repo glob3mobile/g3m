@@ -104,7 +104,7 @@ std::vector<std::string> JSONObject::keys() const {
 
   return result;
 #endif
-#if JAVA_CODE
+#ifdef JAVA_CODE
   return new java.util.ArrayList<String>(_entries.keySet());
 #endif
 }

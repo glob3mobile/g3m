@@ -20,6 +20,7 @@
 #include "ElevationDataProvider.hpp"
 #include "MeshHolder.hpp"
 #include "ElevationData.hpp"
+#include "LayerTilesRenderParameters.hpp"
 
 Tile::Tile(TileTexturizer* texturizer,
            Tile* parent,
@@ -115,20 +116,27 @@ private:
   MeshHolder*            _meshHolder;
   const TileTessellator* _tessellator;
   const Planet*          _planet;
+#ifdef C_CODE
+  const Vector2I         _tileMeshResolution;
+#endif
+#ifdef JAVA_CODE
+  private final Vector2I _tileMeshResolution;
+#endif
   const bool             _renderDebug;
   const float            _verticalExaggeration;
-
 public:
   TileElevationDataListener(Tile* tile,
                             MeshHolder* meshHolder,
                             const TileTessellator* tessellator,
                             const Planet* planet,
+                            const Vector2I& tileMeshResolution,
                             float verticalExaggeration,
                             bool renderDebug) :
   _tile(tile),
   _meshHolder(meshHolder),
   _tessellator(tessellator),
   _planet(planet),
+  _tileMeshResolution(tileMeshResolution),
   _verticalExaggeration(verticalExaggeration),
   _renderDebug(renderDebug)
   {
@@ -140,7 +148,13 @@ public:
   void onData(const Sector& sector,
               const Vector2I& resolution,
               ElevationData* elevationData) {
-    _tile->onElevationData(elevationData, _verticalExaggeration, _meshHolder, _tessellator, _planet, _renderDebug);
+    _tile->onElevationData(elevationData,
+                           _verticalExaggeration,
+                           _meshHolder,
+                           _tessellator,
+                           _planet,
+                           _tileMeshResolution,
+                           _renderDebug);
   }
 
   void onError(const Sector& sector,
@@ -154,10 +168,16 @@ void Tile::onElevationData(ElevationData* elevationData,
                            MeshHolder* meshHolder,
                            const TileTessellator* tessellator,
                            const Planet* planet,
+                           const Vector2I& tileMeshResolution,
                            bool renderDebug) {
   _elevationRequestId = -1000;
   _elevationData = elevationData;
-  meshHolder->setMesh( tessellator->createTileMesh(planet, this, _elevationData, verticalExaggeration, renderDebug) );
+  meshHolder->setMesh( tessellator->createTileMesh(planet,
+                                                   tileMeshResolution,
+                                                   this,
+                                                   _elevationData,
+                                                   verticalExaggeration,
+                                                   renderDebug) );
 }
 
 Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
@@ -170,30 +190,52 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
 
     const float verticalExaggeration = trc->getVerticalExaggeration();
 
+    const LayerTilesRenderParameters* layerTilesRenderParameters = trc->getLayerTilesRenderParameters();
+    const Vector2I tileMeshResolution(layerTilesRenderParameters->_tileMeshResolution);
+
     if (elevationDataProvider == NULL) {
       // no elevation data provider, just create a simple mesh without elevation
-      _tessellatorMesh = tessellator->createTileMesh(planet, this, NULL, verticalExaggeration, renderDebug);
+      _tessellatorMesh = tessellator->createTileMesh(planet,
+                                                     tileMeshResolution,
+                                                     this,
+                                                     NULL,
+                                                     verticalExaggeration,
+                                                     renderDebug);
     }
     else {
       if (_elevationData == NULL) {
-        MeshHolder* meshHolder = new MeshHolder( tessellator->createTileMesh(planet, this, NULL, verticalExaggeration, renderDebug) );
+        MeshHolder* meshHolder = new MeshHolder( tessellator->createTileMesh(planet,
+                                                                             tileMeshResolution,
+                                                                             this,
+                                                                             NULL,
+                                                                             verticalExaggeration,
+                                                                             renderDebug) );
         _tessellatorMesh = meshHolder;
 
         TileElevationDataListener* listener = new TileElevationDataListener(this,
                                                                             meshHolder,
                                                                             tessellator,
                                                                             planet,
+                                                                            tileMeshResolution,
                                                                             verticalExaggeration,
                                                                             renderDebug);
 
         _elevationRequestId = elevationDataProvider->requestElevationData(_sector,
-                                                                          tessellator->getTileMeshResolution(planet, this, renderDebug),
+                                                                          tessellator->getTileMeshResolution(planet,
+                                                                                                             tileMeshResolution,
+                                                                                                             this,
+                                                                                                             renderDebug),
                                                                           listener,
                                                                           true);
       }
       else {
         // the elevation data is already available, create a simple "inflated" mesh with
-        _tessellatorMesh = tessellator->createTileMesh(planet, this, _elevationData, verticalExaggeration, renderDebug);
+        _tessellatorMesh = tessellator->createTileMesh(planet,
+                                                       tileMeshResolution,
+                                                       this,
+                                                       _elevationData,
+                                                       verticalExaggeration,
+                                                       renderDebug);
       }
     }
 
@@ -218,7 +260,10 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
 Mesh* Tile::getDebugMesh(const G3MRenderContext* rc,
                          const TileRenderContext* trc) {
   if (_debugMesh == NULL) {
-    _debugMesh = trc->getTessellator()->createTileDebugMesh(rc->getPlanet(), this);
+    const LayerTilesRenderParameters* layerTilesRenderParameters = trc->getLayerTilesRenderParameters();
+    const Vector2I tileMeshResolution(layerTilesRenderParameters->_tileMeshResolution);
+
+    _debugMesh = trc->getTessellator()->createTileDebugMesh(rc->getPlanet(), tileMeshResolution, this);
   }
   return _debugMesh;
 }
@@ -280,10 +325,10 @@ Extent* Tile::getTileExtent(const G3MRenderContext *rc) {
 
 bool Tile::isVisible(const G3MRenderContext *rc,
                      const TileRenderContext* trc) {
-//  // test if sector is back oriented with respect to the camera
-//  if (_sector.isBackOriented(rc)) {
-//    return false;
-//  }
+  // test if sector is back oriented with respect to the camera
+  if (_sector.isBackOriented(rc, getMinHeight())) {
+    return false;
+  }
 
   const Extent* extent = getTessellatorMesh(rc, trc)->getExtent();
   if (extent == NULL) {
@@ -298,7 +343,9 @@ bool Tile::isVisible(const G3MRenderContext *rc,
 
 bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
                                const TileRenderContext* trc) {
-  const TilesRenderParameters* parameters = trc->getParameters();
+//  const TilesRenderParameters* parameters = trc->getParameters();
+
+  const LayerTilesRenderParameters* parameters = trc->getLayerTilesRenderParameters();
 
   if (_level >= parameters->_maxLevel) {
     return true;
@@ -325,7 +372,6 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
   //const double t = extent.maxAxis() * 2;
   const int t = (ex._x + ex._y);
   if ( t <= ((parameters->_tileTextureResolution._x + parameters->_tileTextureResolution._y) * 1.75) ) {
-//  if ( t <= ((parameters->_tileTextureWidth + parameters->_tileTextureHeight) * 3) ) {
     return true;
   }
 
@@ -413,9 +459,9 @@ void Tile::debugRender(const G3MRenderContext* rc,
   }
 }
 
-std::vector<Tile*>* Tile::getSubTiles() {
+std::vector<Tile*>* Tile::getSubTiles(double u, double v) {
   if (_subtiles == NULL) {
-    _subtiles = createSubTiles();
+    _subtiles = createSubTiles(u, v);
     _justCreatedSubtiles = true;
   }
   return _subtiles;
@@ -519,7 +565,13 @@ void Tile::render(const G3MRenderContext* rc,
             trc->getElevationDataProvider());
     }
     else {
-      std::vector<Tile*>* subTiles = getSubTiles();
+      double u = 0.5;
+      double v = 0.5;
+      if (trc->getLayerTilesRenderParameters()->_mercator) {
+        int TODO_change_V_conforming_to_mercator;
+      }
+
+      std::vector<Tile*>* subTiles = getSubTiles(u, v);
       if (_justCreatedSubtiles) {
         trc->getLastSplitTimer()->start();
         statistics->computeSplitInFrame();
@@ -552,12 +604,14 @@ Tile* Tile::createSubTile(const Angle& lowerLat, const Angle& lowerLon,
                   row, column);
 }
 
-std::vector<Tile*>* Tile::createSubTiles() {
+std::vector<Tile*>* Tile::createSubTiles(double u, double v) {
   const Geodetic2D lower = _sector.lower();
   const Geodetic2D upper = _sector.upper();
 
-  const Angle midLat = Angle::midAngle(lower.latitude(), upper.latitude());
-  const Angle midLon = Angle::midAngle(lower.longitude(), upper.longitude());
+//  const Angle midLat = Angle::midAngle(lower.latitude(), upper.latitude());
+//  const Angle midLon = Angle::midAngle(lower.longitude(), upper.longitude());
+  const Angle midLat = Angle::linearInterpolation(lower.latitude(),  upper.latitude(),  v);
+  const Angle midLon = Angle::linearInterpolation(lower.longitude(), upper.longitude(), u);
 
   const int nextLevel = _level + 1;
 

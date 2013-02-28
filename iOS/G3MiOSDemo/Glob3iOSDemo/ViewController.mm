@@ -53,6 +53,8 @@
 #include "ShortBufferBuilder.hpp"
 #include "BilinearInterpolator.hpp"
 #include "SubviewElevationData.hpp"
+#include "GInitializationTask.hpp"
+#include "PeriodicalTask.hpp"
 
 #include "G3MWidget.hpp"
 
@@ -229,8 +231,8 @@ public:
   const bool logDownloaderStatistics = false;
   builder.setLogDownloaderStatistics(logDownloaderStatistics);
 
-  WidgetUserData* userData = NULL;
-  builder.setUserData(userData);
+//  WidgetUserData* userData = NULL;
+//  builder.setUserData(userData);
 
   // initialization
   builder.initializeWidget();
@@ -287,14 +289,14 @@ public:
 //      const Geodetic2D position(latitude,
 //                                longitude);
 
-      const double height = interpolator->interpolate(sector.lower(),
-                                                      sector.upper(),
-                                                      heightSW,
-                                                      heightSE,
-                                                      heightNE,
-                                                      heightNW,
-                                                      latitude,
-                                                      longitude);
+      const double height = interpolator->interpolation(sector.lower(),
+                                                        sector.upper(),
+                                                        heightSW,
+                                                        heightSE,
+                                                        heightNE,
+                                                        heightNW,
+                                                        latitude,
+                                                        longitude);
 
       const float alpha = (deltaHeight == 0) ? 1 : (float) ((height - minHeight) / deltaHeight);
 
@@ -558,15 +560,15 @@ public:
 
 - (TilesRenderParameters*) createTileRenderParameters
 {
-  const bool renderDebug = false;
+  const bool renderDebug = true;
   const bool useTilesSplitBudget = true;
   const bool forceTopLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
 
-  return TilesRenderParameters::createDefault(renderDebug,
-                                              useTilesSplitBudget,
-                                              forceTopLevelTilesRenderOnStart,
-                                              incrementalTileQuality);
+  return new TilesRenderParameters(renderDebug,
+                                   useTilesSplitBudget,
+                                   forceTopLevelTilesRenderOnStart,
+                                   incrementalTileQuality);
 //  return TilesRenderParameters::createSingleSector(renderDebug,
 //                                                   useTilesSplitBudget,
 //                                                   forceTopLevelTilesRenderOnStart,

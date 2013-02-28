@@ -26,6 +26,8 @@ TileRendererBuilder::TileRendererBuilder() {
   _layerSet = NULL;
   _texturizer = NULL;
   _tileTessellator = NULL;
+  _visibleSectorListeners = NULL;
+  _stabilizationMilliSeconds = NULL;
   _texturePriority = DownloadPriority::HIGHER;
 }
 
@@ -138,7 +140,10 @@ bool TileRendererBuilder::getIncrementalTileQuality() {
  *
  * @return _forceTopLevelTilesRenderOnStart: std::vector<VisibleSectorListener*>
  */
-std::vector<VisibleSectorListener*> TileRendererBuilder::getVisibleSectorListeners() {
+std::vector<VisibleSectorListener*>* TileRendererBuilder::getVisibleSectorListeners() {
+  if (!_visibleSectorListeners) {
+    _visibleSectorListeners = new std::vector<VisibleSectorListener*>;
+  }
   return _visibleSectorListeners;
 }
 
@@ -147,7 +152,10 @@ std::vector<VisibleSectorListener*> TileRendererBuilder::getVisibleSectorListene
   *
   * @return _stabilizationMilliSeconds: std::vector<long long>
   */
-std::vector<long long> TileRendererBuilder::getStabilizationMilliSeconds() {
+std::vector<long long>* TileRendererBuilder::getStabilizationMilliSeconds() {
+  if (!_stabilizationMilliSeconds) {
+    _stabilizationMilliSeconds = new std::vector<long long>;
+  }
   return _stabilizationMilliSeconds;
 }
 
@@ -229,8 +237,8 @@ void TileRendererBuilder::setIncrementalTileQuality(const bool incrementalTileQu
 
 void TileRendererBuilder::addVisibleSectorListener(VisibleSectorListener* listener,
                                                    const TimeInterval& stabilizationInterval) {
-  getVisibleSectorListeners().push_back(listener);
-  getStabilizationMilliSeconds().push_back(stabilizationInterval.milliseconds());
+  getVisibleSectorListeners()->push_back(listener);
+  getStabilizationMilliSeconds()->push_back(stabilizationInterval.milliseconds());
 }
 
 void TileRendererBuilder::setTexturePriority(long long texturePriority) {
@@ -273,28 +281,33 @@ TileRenderer* TileRendererBuilder::create() {
                                                 getShowStatistics(),
                                                 getTexturePriority());
   
-  for (int i = 0; i < getVisibleSectorListeners().size(); i++) {
-    tileRenderer->addVisibleSectorListener(getVisibleSectorListeners()[i],
-                                           TimeInterval::fromMilliseconds(getStabilizationMilliSeconds()[i]));
+  for (int i = 0; i < getVisibleSectorListeners()->size(); i++) {
+    tileRenderer->addVisibleSectorListener(getVisibleSectorListeners()->at(i),
+                                           TimeInterval::fromMilliseconds(getStabilizationMilliSeconds()->at(i)));
   }
   
   _parameters = NULL;
   _layerSet = NULL;
   _texturizer = NULL;
   _tileTessellator = NULL;
+  delete _visibleSectorListeners;
+  _visibleSectorListeners = NULL;
+  delete _stabilizationMilliSeconds;
+  _stabilizationMilliSeconds = NULL;
   
   return tileRenderer;
 }
 
 TilesRenderParameters* TileRendererBuilder::createTileRendererParameters() {
-  return TilesRenderParameters::createDefault(getRenderDebug(),
-                                              getUseTilesSplitBudget(),
-                                              getForceTopLevelTilesRenderOnStart(),
-                                              getIncrementalTileQuality());
+  return new TilesRenderParameters(getRenderDebug(),
+                                   getUseTilesSplitBudget(),
+                                   getForceTopLevelTilesRenderOnStart(),
+                                   getIncrementalTileQuality());
 }
 
 TileTessellator* TileRendererBuilder::createTileTessellator() {
-  return new EllipsoidalTileTessellator(getParameters()->_tileMeshResolution, true);
+  //return new EllipsoidalTileTessellator(getParameters()->_tileMeshResolution, true);
+  return new EllipsoidalTileTessellator(true);
 }
 
 LayerSet* TileRendererBuilder::createLayerSet() {

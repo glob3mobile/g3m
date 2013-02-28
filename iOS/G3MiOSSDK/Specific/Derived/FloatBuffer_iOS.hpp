@@ -16,11 +16,16 @@ private:
   const int _size;
   float*    _values;
   int       _timestamp;
-  
+
+//  bool         _glBufferBound;
+//  unsigned int _glBuffer;
+
 public:
   FloatBuffer_iOS(int size) :
   _size(size),
   _timestamp(0)
+//  _glBufferBound(false),
+//  _glBuffer(0)
   {
     _values = new float[size];
   }
@@ -43,6 +48,8 @@ public:
                   float f15) :
   _size(16),
   _timestamp(0)
+//  _glBufferBound(false),
+//  _glBuffer(0)
   {
     _values = new float[16];
     _values[ 0] = f0;
@@ -63,9 +70,7 @@ public:
     _values[15] = f15;
   }
   
-  virtual ~FloatBuffer_iOS() {
-    delete [] _values;
-  }
+  virtual ~FloatBuffer_iOS();
   
   int size() const {
     return _size;
@@ -95,6 +100,8 @@ public:
   float* getPointer() const {
     return _values;
   }
+
+//  unsigned int getGLBuffer(int size);
 
   const std::string description() const;
   

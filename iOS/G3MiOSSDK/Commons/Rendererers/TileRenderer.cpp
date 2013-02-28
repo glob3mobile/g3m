@@ -19,6 +19,7 @@
 #include "IThreadUtils.hpp"
 #include "DownloadPriority.hpp"
 #include "ElevationDataProvider.hpp"
+#include "LayerTilesRenderParameters.hpp"
 
 class VisibleSectorListenerEntry {
 private:
@@ -182,20 +183,27 @@ void TileRenderer::clearTopLevelTiles() {
 }
 
 void TileRenderer::createTopLevelTiles(const G3MContext* context) {
-  const Angle fromLatitude  = _parameters->_topSector.lower().latitude();
-  const Angle fromLongitude = _parameters->_topSector.lower().longitude();
 
-  const Angle deltaLan = _parameters->_topSector.getDeltaLatitude();
-  const Angle deltaLon = _parameters->_topSector.getDeltaLongitude();
+  const LayerTilesRenderParameters* layerParameters = _layerSet->getLayerTilesRenderParameters();
+  if (layerParameters == NULL) {
+    ILogger::instance()->logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't create topTiles");
+    return;
+  }
 
-  const Angle tileHeight = deltaLan.div(_parameters->_splitsByLatitude);
-  const Angle tileWidth = deltaLon.div(_parameters->_splitsByLongitude);
+  const Angle fromLatitude  = layerParameters->_topSector.lower().latitude();
+  const Angle fromLongitude = layerParameters->_topSector.lower().longitude();
 
-  for (int row = 0; row < _parameters->_splitsByLatitude; row++) {
+  const Angle deltaLan = layerParameters->_topSector.getDeltaLatitude();
+  const Angle deltaLon = layerParameters->_topSector.getDeltaLongitude();
+
+  const Angle tileHeight = deltaLan.div(layerParameters->_splitsByLatitude);
+  const Angle tileWidth = deltaLon.div(layerParameters->_splitsByLongitude);
+
+  for (int row = 0; row < layerParameters->_splitsByLatitude; row++) {
     const Angle tileLatFrom = tileHeight.times(row).add(fromLatitude);
     const Angle tileLatTo = tileLatFrom.add(tileHeight);
 
-    for (int col = 0; col < _parameters->_splitsByLongitude; col++) {
+    for (int col = 0; col < layerParameters->_splitsByLongitude; col++) {
       const Angle tileLonFrom = tileWidth.times(col).add(fromLongitude);
       const Angle tileLonTo = tileLonFrom.add(tileWidth);
 
@@ -203,7 +211,8 @@ void TileRenderer::createTopLevelTiles(const G3MContext* context) {
       const Geodetic2D tileUpper(tileLatTo, tileLonTo);
       const Sector sector(tileLower, tileUpper);
 
-      Tile* tile = new Tile(_texturizer, NULL, sector, _parameters->_topLevel, row, col);
+//      Tile* tile = new Tile(_texturizer, NULL, sector, _parameters->_topLevel, row, col);
+      Tile* tile = new Tile(_texturizer, NULL, sector, 0, row, col);
       _topLevelTiles.push_back(tile);
     }
   }

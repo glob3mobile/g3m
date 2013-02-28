@@ -27,6 +27,7 @@ class Extent;
 class ElevationDataProvider;
 class ElevationData;
 class MeshHolder;
+class Vector2I;
 
 #include "ITexturizerData.hpp"
 
@@ -63,7 +64,7 @@ private:
   inline bool meetsRenderCriteria(const G3MRenderContext* rc,
                                   const TileRenderContext* trc);
 
-  inline std::vector<Tile*>* createSubTiles();
+  inline std::vector<Tile*>* createSubTiles(double u, double v);
 
   inline void rawRender(const G3MRenderContext* rc,
                         const TileRenderContext* trc,
@@ -79,7 +80,7 @@ private:
                              const int row, const int column);
 
 
-  inline std::vector<Tile*>* getSubTiles();
+  inline std::vector<Tile*>* getSubTiles(double u, double v);
 
   Tile(const Tile& that);
 
@@ -183,8 +184,10 @@ public:
                        MeshHolder* meshHolder,
                        const TileTessellator* tessellator,
                        const Planet* planet,
+                       const Vector2I& tileMeshResolution,
                        bool renderDebug);
   
+  double getMinHeight() { return 0.0; }
 };
 
 #endif

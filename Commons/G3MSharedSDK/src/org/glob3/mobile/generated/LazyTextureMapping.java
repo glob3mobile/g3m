@@ -70,7 +70,7 @@ public class LazyTextureMapping extends TextureMapping
   
       _scale = _initializer.getScale();
       _translation = _initializer.getTranslation();
-      _texCoords = _initializer.getTexCoords();
+      _texCoords = _initializer.createTextCoords();
   
       if (_initializer != null)
          _initializer.dispose();

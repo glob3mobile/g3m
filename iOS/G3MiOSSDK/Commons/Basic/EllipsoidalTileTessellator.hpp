@@ -15,18 +15,19 @@ class Sector;
 class EllipsoidalTileTessellator : public TileTessellator {
 private:
 
-  const unsigned int _resolutionX;
-  const unsigned int _resolutionY;
+//  const unsigned int _resolutionX;
+//  const unsigned int _resolutionY;
   const bool         _skirted;
 
-  Vector2I calculateResolution(const Sector& sector) const;
+  Vector2I calculateResolution(const Vector2I& resolution,
+                               const Sector& sector) const;
 
 public:
 
-  EllipsoidalTileTessellator(const Vector2I& resolution,
+  EllipsoidalTileTessellator(//const Vector2I& resolution,
                              const bool skirted) :
-  _resolutionX(resolution._x),
-  _resolutionY(resolution._y),
+//  _resolutionX(resolution._x),
+//  _resolutionY(resolution._y),
   _skirted(skirted)
   {
     //    int __TODO_width_and_height_resolutions;
@@ -35,25 +36,30 @@ public:
   virtual ~EllipsoidalTileTessellator() { }
 
   Vector2I getTileMeshResolution(const Planet* planet,
+                                 const Vector2I& resolution,
                                  const Tile* tile,
                                  bool debug) const;
 
 
   Mesh* createTileMesh(const Planet* planet,
+                       const Vector2I& resolution,
                        const Tile* tile,
                        const ElevationData* elevationData,
                        float verticalExaggeration,
                        bool debug) const;
 
   Mesh* createTileDebugMesh(const Planet* planet,
+                            const Vector2I& resolution,
                             const Tile* tile) const;
 
   bool isReady(const G3MRenderContext *rc) const {
     return true;
   }
 
-  IFloatBuffer* createUnitTextCoords(const Tile* tile) const;
-  
+  IFloatBuffer* createTextCoords(const Vector2I& resolution,
+                                 const Tile* tile,
+                                 bool mercator) const;
+
 };
 
 #endif

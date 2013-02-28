@@ -89,7 +89,7 @@ double BufferElevationData::getElevationAt(const Angle& latitude,
       // linear on Y
       const double heightY     = getElevationAt(x, y);
       const double heightNextY = getElevationAt(x, nextY);
-      result = mu->lerp(heightY, heightNextY, alphaY);
+      result = mu->linearInterpolation(heightY, heightNextY, alphaY);
     }
   }
   else {
@@ -97,7 +97,7 @@ double BufferElevationData::getElevationAt(const Angle& latitude,
       // linear on X
       const double heightX     = getElevationAt(x,     y);
       const double heightNextX = getElevationAt(nextX, y);
-      result = mu->lerp(heightX, heightNextX, alphaX);
+      result = mu->linearInterpolation(heightX, heightNextX, alphaX);
     }
     else {
       // bilinear
@@ -106,12 +106,12 @@ double BufferElevationData::getElevationAt(const Angle& latitude,
       const double valueNE = getElevationAt(nextX, nextY);
       const double valueNW = getElevationAt(x,     nextY);
 
-      result = getInterpolator()->interpolate(valueSW,
-                                              valueSE,
-                                              valueNE,
-                                              valueNW,
-                                              alphaY,
-                                              alphaX);
+      result = getInterpolator()->interpolation(valueSW,
+                                                valueSE,
+                                                valueNE,
+                                                valueNW,
+                                                alphaY,
+                                                alphaX);
     }
   }
   

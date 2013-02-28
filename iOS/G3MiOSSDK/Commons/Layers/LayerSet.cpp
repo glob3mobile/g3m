@@ -9,6 +9,14 @@
 #include "LayerSet.hpp"
 #include "Tile.hpp"
 #include "TileKey.hpp"
+#include "LayerTilesRenderParameters.hpp"
+
+LayerSet::~LayerSet() {
+  delete _layerTilesRenderParameters;
+  for (unsigned int i = 0; i < _layers.size(); i++) {
+    delete _layers[i];
+  }
+}
 
 std::vector<Petition*> LayerSet::createTileMapPetitions(const G3MRenderContext* rc,
                                                         const Tile* tile,
@@ -56,33 +64,15 @@ void LayerSet::initialize(const G3MContext* context)const{
   }
 }
 
-bool LayerSet::isReady()const{
-  for (int i = 0; i<_layers.size(); i++){
+bool LayerSet::isReady() const {
+  const int layersCount = _layers.size();
+
+  for (int i = 0; i < layersCount; i++){
     if (!(_layers[i]->isReady())) {
       return false;
     }
   }
   return true;
-}
-
-void LayerSet::addLayer(Layer* layer) {
-  layer->setLayerSet(this);
-  _layers.push_back(layer);
-  if (_listener == NULL) {
-    //    ILogger::instance()->logError("Can't notify, _listener not set");
-  }
-  else {
-    _listener->changed(this);
-  }
-}
-
-void LayerSet::layerChanged(const Layer* layer) const {
-  if (_listener == NULL) {
-    //    ILogger::instance()->logError("Can't notify, _listener not set");
-  }
-  else {
-    _listener->changed(this);
-  }
 }
 
 Layer* LayerSet::get(int index) {
@@ -94,11 +84,135 @@ Layer* LayerSet::get(int index) {
 }
 
 Layer* LayerSet::getLayer(const std::string &name) {
-  for (int i = 0; i < _layers.size(); i++) {
+  const int layersCount = _layers.size();
+  for (int i = 0; i < layersCount; i++) {
     if (_layers[i]->getName() == name) {
       return _layers[i];
     }
   }
 
   return NULL;
+}
+
+void LayerSet::addLayer(Layer* layer) {
+  layer->setLayerSet(this);
+  _layers.push_back(layer);
+
+  layersChanged();
+}
+
+void LayerSet::layerChanged(const Layer* layer) const {
+  layersChanged();
+}
+
+void LayerSet::layersChanged() const {
+  delete _layerTilesRenderParameters;
+  _layerTilesRenderParameters = NULL;
+
+  if (_listener != NULL) {
+    _listener->changed(this);
+  }
+}
+
+const LayerTilesRenderParameters* LayerSet::getLayerTilesRenderParameters() const {
+  if (_layerTilesRenderParameters == NULL) {
+    _layerTilesRenderParameters = createLayerTilesRenderParameters();
+  }
+  return _layerTilesRenderParameters;
+}
+
+LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters() const {
+  Sector* mergedSector      = NULL;
+  int     splitsByLatitude  = 0;
+  int     splitsByLongitude = 0;
+  int     maxLevel          = 0;
+  int     tileTextureWidth  = 0;
+  int     tileTextureHeight = 0;
+  int     tileMeshWidth     = 0;
+  int     tileMeshHeight    = 0;
+  bool    mercator          = false;
+
+  bool first = true;
+  const int layersCount = _layers.size();
+  for (int i = 0; i < layersCount; i++) {
+    Layer* layer = _layers[i];
+
+    if (layer->isEnable()) {
+      const LayerTilesRenderParameters* layerParam = layer->getLayerTilesRenderParameters();
+
+      if (first) {
+        first = false;
+
+        mergedSector      = new Sector( layerParam->_topSector );
+        splitsByLatitude  = layerParam->_splitsByLatitude;
+        splitsByLongitude = layerParam->_splitsByLongitude;
+        maxLevel          = layerParam->_maxLevel;
+
+        tileTextureWidth  = layerParam->_tileTextureResolution._x;
+        tileTextureHeight = layerParam->_tileTextureResolution._y;
+        tileMeshWidth     = layerParam->_tileMeshResolution._x;
+        tileMeshHeight    = layerParam->_tileMeshResolution._y;
+        mercator          = layerParam->_mercator;
+      }
+      else {
+        if (!mergedSector->fullContains( layerParam->_topSector )) {
+          Sector* oldSector = mergedSector;
+          mergedSector = new Sector( oldSector->mergedWith( layerParam->_topSector ) );
+          delete oldSector;
+        }
+
+        if ( splitsByLatitude != layerParam->_splitsByLatitude ) {
+          ILogger::instance()->logError("Inconsistency in Layer's Parameters: splitsByLatitude");
+          return NULL;
+        }
+
+        if ( splitsByLongitude != layerParam->_splitsByLongitude ) {
+          ILogger::instance()->logError("Inconsistency in Layer's Parameters: splitsByLongitude");
+          return NULL;
+        }
+
+        //if (layerParam->_maxLevel > maxLevel) {
+        //  maxLevel = layerParam->_maxLevel;
+        //}
+        if ( maxLevel != layerParam->_maxLevel ) {
+          ILogger::instance()->logError("Inconsistency in Layer's Parameters: maxLevel");
+          return NULL;
+        }
+
+        if (( tileTextureWidth  != layerParam->_tileTextureResolution._x ) ||
+            ( tileTextureHeight != layerParam->_tileTextureResolution._y ) ) {
+          ILogger::instance()->logError("Inconsistency in Layer's Parameters: tileTextureResolution");
+          return NULL;
+        }
+
+        if (( tileMeshWidth  != layerParam->_tileMeshResolution._x ) ||
+            ( tileMeshHeight != layerParam->_tileMeshResolution._y ) ) {
+          ILogger::instance()->logError("Inconsistency in Layer's Parameters: tileMeshResolution");
+          return NULL;
+        }
+
+        if ( mercator != layerParam->_mercator ) {
+          ILogger::instance()->logError("Inconsistency in Layer's Parameters: mercator");
+          return NULL;
+        }
+        
+      }
+    }
+  }
+
+  if (first) {
+    ILogger::instance()->logError("Can't create LayerSet's LayerTilesRenderParameters, not found any enable Layer");
+    return NULL;
+  }
+
+  const Sector topSector(*mergedSector);
+  delete mergedSector;
+  mergedSector = NULL;
+
+  return new LayerTilesRenderParameters(topSector,
+                                        splitsByLatitude, splitsByLongitude,
+                                        maxLevel,
+                                        Vector2I(tileTextureWidth, tileTextureHeight),
+                                        Vector2I(tileMeshWidth,    tileMeshHeight),
+                                        mercator);
 }

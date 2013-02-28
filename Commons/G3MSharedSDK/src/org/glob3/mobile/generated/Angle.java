@@ -33,11 +33,6 @@ public class Angle
   public final double _degrees;
   public final double _radians;
 
-  public static Angle lerp(Angle start, Angle end, float percent)
-  {
-    return start.add(end.sub(start).times(percent));
-  }
-
   public static Angle fromDegrees(double degrees)
   {
     return new Angle(degrees);
@@ -258,7 +253,8 @@ public class Angle
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     isb.addDouble(_degrees);
-    isb.addString("°");
+  //  isb->addString("°");
+    isb.addString("d");
     final String s = isb.getString();
     if (isb != null)
        isb.dispose();

@@ -166,7 +166,7 @@ public:
     return Vector2D(u, v);
   }
 
-  bool isBackOriented(const G3MRenderContext *rc) const;
+  bool isBackOriented(const G3MRenderContext *rc, double height) const;
 
   const Geodetic2D getClosestPoint(const Geodetic2D& pos) const;
 

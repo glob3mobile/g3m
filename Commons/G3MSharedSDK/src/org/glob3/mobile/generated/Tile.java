@@ -32,6 +32,7 @@ package org.glob3.mobile.generated;
 //class ElevationDataProvider;
 //class ElevationData;
 //class MeshHolder;
+//class Vector2I;
 
 
 public class Tile
@@ -66,26 +67,29 @@ public class Tile
   
       final float verticalExaggeration = trc.getVerticalExaggeration();
   
+      final LayerTilesRenderParameters layerTilesRenderParameters = trc.getLayerTilesRenderParameters();
+      final Vector2I tileMeshResolution = new Vector2I(layerTilesRenderParameters._tileMeshResolution);
+  
       if (elevationDataProvider == null)
       {
         // no elevation data provider, just create a simple mesh without elevation
-        _tessellatorMesh = tessellator.createTileMesh(planet, this, null, verticalExaggeration, renderDebug);
+        _tessellatorMesh = tessellator.createTileMesh(planet, tileMeshResolution, this, null, verticalExaggeration, renderDebug);
       }
       else
       {
         if (_elevationData == null)
         {
-          MeshHolder meshHolder = new MeshHolder(tessellator.createTileMesh(planet, this, null, verticalExaggeration, renderDebug));
+          MeshHolder meshHolder = new MeshHolder(tessellator.createTileMesh(planet, tileMeshResolution, this, null, verticalExaggeration, renderDebug));
           _tessellatorMesh = meshHolder;
   
-          TileElevationDataListener listener = new TileElevationDataListener(this, meshHolder, tessellator, planet, verticalExaggeration, renderDebug);
+          TileElevationDataListener listener = new TileElevationDataListener(this, meshHolder, tessellator, planet, tileMeshResolution, verticalExaggeration, renderDebug);
   
-          _elevationRequestId = elevationDataProvider.requestElevationData(_sector, tessellator.getTileMeshResolution(planet, this, renderDebug), listener, true);
+          _elevationRequestId = elevationDataProvider.requestElevationData(_sector, tessellator.getTileMeshResolution(planet, tileMeshResolution, this, renderDebug), listener, true);
         }
         else
         {
           // the elevation data is already available, create a simple "inflated" mesh with
-          _tessellatorMesh = tessellator.createTileMesh(planet, this, _elevationData, verticalExaggeration, renderDebug);
+          _tessellatorMesh = tessellator.createTileMesh(planet, tileMeshResolution, this, _elevationData, verticalExaggeration, renderDebug);
         }
       }
   
@@ -111,17 +115,21 @@ public class Tile
   {
     if (_debugMesh == null)
     {
-      _debugMesh = trc.getTessellator().createTileDebugMesh(rc.getPlanet(), this);
+      final LayerTilesRenderParameters layerTilesRenderParameters = trc.getLayerTilesRenderParameters();
+      final Vector2I tileMeshResolution = new Vector2I(layerTilesRenderParameters._tileMeshResolution);
+  
+      _debugMesh = trc.getTessellator().createTileDebugMesh(rc.getPlanet(), tileMeshResolution, this);
     }
     return _debugMesh;
   }
 
   private boolean isVisible(G3MRenderContext rc, TileRenderContext trc)
   {
-  //  // test if sector is back oriented with respect to the camera
-  //  if (_sector.isBackOriented(rc)) {
-  //    return false;
-  //  }
+    // test if sector is back oriented with respect to the camera
+    if (_sector.isBackOriented(rc))
+    {
+      return false;
+    }
   
     final Extent extent = getTessellatorMesh(rc, trc).getExtent();
     if (extent == null)
@@ -137,7 +145,9 @@ public class Tile
 
   private boolean meetsRenderCriteria(G3MRenderContext rc, TileRenderContext trc)
   {
-    final TilesRenderParameters parameters = trc.getParameters();
+  //  const TilesRenderParameters* parameters = trc->getParameters();
+  
+    final LayerTilesRenderParameters parameters = trc.getLayerTilesRenderParameters();
   
     if (_level >= parameters._maxLevel)
     {
@@ -169,7 +179,6 @@ public class Tile
     final int t = (ex._x + ex._y);
     if (t <= ((parameters._tileTextureResolution._x + parameters._tileTextureResolution._y) * 1.75))
     {
-  //  if ( t <= ((parameters->_tileTextureWidth + parameters->_tileTextureHeight) * 3) ) {
       return true;
     }
   
@@ -195,13 +204,15 @@ public class Tile
     return false;
   }
 
-  private java.util.ArrayList<Tile> createSubTiles()
+  private java.util.ArrayList<Tile> createSubTiles(double u, double v)
   {
     final Geodetic2D lower = _sector.lower();
     final Geodetic2D upper = _sector.upper();
   
-    final Angle midLat = Angle.midAngle(lower.latitude(), upper.latitude());
-    final Angle midLon = Angle.midAngle(lower.longitude(), upper.longitude());
+  //  const Angle midLat = Angle::midAngle(lower.latitude(), upper.latitude());
+  //  const Angle midLon = Angle::midAngle(lower.longitude(), upper.longitude());
+    final Angle midLat = Angle.interpolation(lower.latitude(), upper.latitude(), v);
+    final Angle midLon = Angle.interpolation(lower.longitude(), upper.longitude(), u);
   
     final int nextLevel = _level + 1;
   
@@ -269,11 +280,11 @@ public class Tile
   }
 
 
-  private java.util.ArrayList<Tile> getSubTiles()
+  private java.util.ArrayList<Tile> getSubTiles(double u, double v)
   {
     if (_subtiles == null)
     {
-      _subtiles = createSubTiles();
+      _subtiles = createSubTiles(u, v);
       _justCreatedSubtiles = true;
     }
     return _subtiles;
@@ -617,7 +628,14 @@ public class Tile
       }
       else
       {
-        java.util.ArrayList<Tile> subTiles = getSubTiles();
+        double u = 0.5;
+        double v = 0.5;
+        if (trc.getLayerTilesRenderParameters()._mercator)
+        {
+          int TODO_change_V_conforming_to_mercator;
+        }
+  
+        java.util.ArrayList<Tile> subTiles = getSubTiles(u, v);
         if (_justCreatedSubtiles)
         {
           trc.getLastSplitTimer().start();
@@ -759,11 +777,11 @@ public class Tile
     }
   }
 
-  public final void onElevationData(ElevationData elevationData, float verticalExaggeration, MeshHolder meshHolder, TileTessellator tessellator, Planet planet, boolean renderDebug)
+  public final void onElevationData(ElevationData elevationData, float verticalExaggeration, MeshHolder meshHolder, TileTessellator tessellator, Planet planet, Vector2I tileMeshResolution, boolean renderDebug)
   {
     _elevationRequestId = -1000;
     _elevationData = elevationData;
-    meshHolder.setMesh(tessellator.createTileMesh(planet, this, _elevationData, verticalExaggeration, renderDebug));
+    meshHolder.setMesh(tessellator.createTileMesh(planet, tileMeshResolution, this, _elevationData, verticalExaggeration, renderDebug));
   }
 
 }
