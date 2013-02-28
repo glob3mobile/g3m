@@ -70,21 +70,20 @@ bool Sector::isBackOriented_v1(const G3MRenderContext *rc) const {
 }
  */
 
-/*
- bool Sector::isBackOriented_v2(const G3MRenderContext *rc) const {
- const Camera* camera = rc->getCurrentCamera();
- const Planet* planet = rc->getPlanet();
- const Vector3D view = camera->getViewDirection().times(-1);
- 
- // if all the corners normals are back oriented, sector is back oriented
- if (planet->geodeticSurfaceNormal(getNE()).dot(view) > 0) { return false; }
- if (planet->geodeticSurfaceNormal(getNW()).dot(view) > 0) { return false; }
- if (planet->geodeticSurfaceNormal(getSE()).dot(view) > 0) { return false; }
- if (planet->geodeticSurfaceNormal(getSW()).dot(view) > 0) { return false; }
- return true;
- }
- */
+bool Sector::isBackOriented(const G3MRenderContext *rc, double height) const {
+  const Camera* camera = rc->getCurrentCamera();
+  const Planet* planet = rc->getPlanet();
+  const Vector3D view = camera->getViewDirection().times(-1);
 
+  // if all the corners normals are back oriented, sector is back oriented
+  if (planet->geodeticSurfaceNormal(getNE()).dot(view) > 0) { return false; }
+  if (planet->geodeticSurfaceNormal(getNW()).dot(view) > 0) { return false; }
+  if (planet->geodeticSurfaceNormal(getSE()).dot(view) > 0) { return false; }
+  if (planet->geodeticSurfaceNormal(getSW()).dot(view) > 0) { return false; }
+  return true;
+}
+
+/*
 bool Sector::isBackOriented(const G3MRenderContext *rc, double height) const {
   const Planet*   planet = rc->getPlanet();
   const Vector3D  eye = rc->getCurrentCamera()->getCartesianPosition();
@@ -104,6 +103,7 @@ bool Sector::isBackOriented(const G3MRenderContext *rc, double height) const {
     return false;
   return true;
 }
+*/
 
 Sector Sector::intersection(const Sector& that) const {
   const Angle lowLat = Angle::max(lower().latitude(),  that.lower().latitude());
