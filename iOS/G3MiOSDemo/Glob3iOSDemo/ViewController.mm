@@ -392,6 +392,9 @@ public:
   return cameraConstraints;
 }
 
+
+
+
 - (LayerSet*) createLayerSet
 {
   LayerSet* layerSet = new LayerSet();
@@ -425,7 +428,7 @@ public:
   }
 
 
-  bool useBing = true;
+  bool useBing = false;
   if (useBing) {
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
                                         URL("http://www.nasa.network.com/wms?", false),
@@ -469,7 +472,7 @@ public:
     layerSet->addLayer(political);
   }
 
-  bool useOSM = false;
+  bool useOSM = true;
   if (useOSM) {
     WMSLayer *osm = new WMSLayer("osm_auto:all",
                                  URL("http://129.206.228.72/cached/osm", false),
@@ -554,6 +557,32 @@ public:
   //                               Angle::nan(),
   //                               Angle::nan());
   //  layerSet->addLayer(osm);
+
+  if (true) {
+    WMSLayer* catastro = new WMSLayer("catastro", //
+                                      URL("http://ovc.catastro.meh.es/Cartografia/WMS/ServidorWMS.aspx", false), //
+                                      WMS_1_1_0, //
+                                      Sector::fromDegrees(26.275479, -18.409639, 44.85536, 5.225974),
+                                      "image/png", //
+                                      "EPSG:4326", //
+                                      "", //
+                                      true, //
+                                      NULL, //
+                                      TimeInterval::fromDays(30));
+
+    class CatastroTerrainTouchEventListener : public TerrainTouchEventListener {
+    public:
+      void onTerrainTouchEvent(const G3MEventContext* context,
+                               const TerrainTouchEvent& event) {
+        URL url = event.getLayer()->getFeatureInfoURL(event.getPosition().asGeodetic2D(), event.getSector());
+        
+      }
+    };
+
+    catastro->addTerrainTouchEventListener(new CatastroTerrainTouchEventListener());
+
+    layerSet->addLayer(catastro);
+  }
 
   return layerSet;
 }

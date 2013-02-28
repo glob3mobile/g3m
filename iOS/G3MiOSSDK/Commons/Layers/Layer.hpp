@@ -35,9 +35,10 @@ private:
   bool _enable;
 
   const std::string _name;
-  const LayerTilesRenderParameters* _parameters;
 
 protected:
+  const LayerTilesRenderParameters* _parameters;
+
   const TimeInterval& _timeToCache;
 
   void notifyChanges() const;
@@ -82,10 +83,8 @@ public:
 
   //  virtual bool isTransparent() const = 0;
 
-  virtual URL getFeatureInfoURL(const Geodetic2D& g,
-                                const IFactory* factory,
-                                const Sector& sector,
-                                int width, int height) const = 0;
+  virtual URL getFeatureInfoURL(const Geodetic2D& position,
+                                const Sector& sector) const = 0;
 
   virtual bool isReady() const {
     return true;
@@ -98,7 +97,7 @@ public:
   }
 
   void onTerrainTouchEventListener(const G3MEventContext* ec,
-                                   TerrainTouchEvent& tte) const {
+                                   const TerrainTouchEvent& tte) const {
     for (unsigned int i = 0; i < _listeners.size(); i++) {
       TerrainTouchEventListener* listener = _listeners[i];
       if (listener != NULL) {
