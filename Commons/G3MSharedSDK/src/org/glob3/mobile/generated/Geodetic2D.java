@@ -37,6 +37,12 @@ public class Geodetic2D
     return new Geodetic2D(Angle.fromDegrees(lat), Angle.fromDegrees(lon));
   }
 
+  public static Geodetic2D linearInterpolation(Geodetic2D from, Geodetic2D to, double alpha)
+  {
+    return new Geodetic2D(Angle.linearInterpolation(from.latitude(), to.latitude(), alpha), Angle.linearInterpolation(from.longitude(), to.longitude(), alpha));
+  }
+
+
   /**
    * Returns the (initial) bearing from this point to the supplied point
    *   see http: //williams.best.vwh.net/avform.htm#Crs

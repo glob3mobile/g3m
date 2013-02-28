@@ -50,9 +50,9 @@ public class ShapeScaleEffect extends EffectWithDuration
     final double alpha = pace(percentDone(when));
   
     IMathUtils mu = IMathUtils.instance();
-    final double scaleX = mu.interpolation(_fromScaleX, _toScaleX, alpha);
-    final double scaleY = mu.interpolation(_fromScaleY, _toScaleY, alpha);
-    final double scaleZ = mu.interpolation(_fromScaleZ, _toScaleZ, alpha);
+    final double scaleX = mu.linearInterpolation(_fromScaleX, _toScaleX, alpha);
+    final double scaleY = mu.linearInterpolation(_fromScaleY, _toScaleY, alpha);
+    final double scaleZ = mu.linearInterpolation(_fromScaleZ, _toScaleZ, alpha);
   
     _shape.setScale(scaleX, scaleY, scaleZ);
   }
