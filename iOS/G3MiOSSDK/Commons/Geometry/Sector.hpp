@@ -189,17 +189,11 @@ public:
   }
   
   bool touchesNorthPole() const {
-    if (_upper.latitude().greaterThan(Angle::fromDegrees(89.9)))
-      return true;
-    else
-      return false;
+    return (_upper.latitude().greaterThan(Angle::fromDegrees(89.9)));
   }
   
   bool touchesSouthPole() const {
-    if (_lower.latitude().lowerThan(Angle::fromDegrees(-89.9)))
-      return true;
-    else
-      return false;
+    return (_lower.latitude().lowerThan(Angle::fromDegrees(-89.9)));
   }
   
 };
