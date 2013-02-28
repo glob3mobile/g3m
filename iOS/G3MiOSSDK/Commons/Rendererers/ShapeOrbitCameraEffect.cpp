@@ -19,9 +19,9 @@ void ShapeOrbitCameraEffect::doStep(const G3MRenderContext *rc,
   const Geodetic3D center = _shape->getPosition();
 
   IMathUtils* mu = IMathUtils::instance();
-  const double distance          = mu->interpolation(_fromDistance,          _toDistance,          alpha);
-  const double azimuthInRadians  = mu->interpolation(_fromAzimuthInRadians,  _toAzimuthInRadians,  alpha);
-  const double altitudeInRadians = mu->interpolation(_fromAltitudeInRadians, _toAltitudeInRadians, alpha);
+  const double distance          = mu->linearInterpolation(_fromDistance,          _toDistance,          alpha);
+  const double azimuthInRadians  = mu->linearInterpolation(_fromAzimuthInRadians,  _toAzimuthInRadians,  alpha);
+  const double altitudeInRadians = mu->linearInterpolation(_fromAltitudeInRadians, _toAltitudeInRadians, alpha);
 
   rc->getNextCamera()->setPointOfView(center,
                                       distance,

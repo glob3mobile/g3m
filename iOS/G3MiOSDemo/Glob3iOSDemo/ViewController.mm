@@ -289,14 +289,14 @@ public:
 //      const Geodetic2D position(latitude,
 //                                longitude);
 
-      const double height = interpolator->interpolate(sector.lower(),
-                                                      sector.upper(),
-                                                      heightSW,
-                                                      heightSE,
-                                                      heightNE,
-                                                      heightNW,
-                                                      latitude,
-                                                      longitude);
+      const double height = interpolator->interpolation(sector.lower(),
+                                                        sector.upper(),
+                                                        heightSW,
+                                                        heightSE,
+                                                        heightNE,
+                                                        heightNW,
+                                                        latitude,
+                                                        longitude);
 
       const float alpha = (deltaHeight == 0) ? 1 : (float) ((height - minHeight) / deltaHeight);
 

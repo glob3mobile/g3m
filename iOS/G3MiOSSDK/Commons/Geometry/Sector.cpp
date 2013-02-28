@@ -48,8 +48,8 @@ bool Sector::touchesWith(const Sector &that) const {
 // (u,v) are similar to texture coordinates inside the Sector
 // (u,v)=(0,0) in NW point, and (1,1) in SE point
 const Geodetic2D Sector::getInnerPoint(double u, double v) const {
-  return Geodetic2D(Angle::interpolation( _lower.latitude(),  _upper.latitude(),  (float) (1.0-v) ),
-                    Angle::interpolation( _lower.longitude(), _upper.longitude(), (float)      u  ) );
+  return Geodetic2D(Angle::linearInterpolation( _lower.latitude(),  _upper.latitude(),  (float) (1.0-v) ),
+                    Angle::linearInterpolation( _lower.longitude(), _upper.longitude(), (float)      u  ) );
 }
 
 /*

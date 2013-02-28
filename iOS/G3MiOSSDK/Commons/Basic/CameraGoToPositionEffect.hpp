@@ -34,7 +34,7 @@ public:
     const double percent = percentDone(when);
     Camera *camera = rc->getNextCamera();
 
-    const Geodetic3D g = Geodetic3D::interpolation(_initialPos, _finalPos, percent);
+    const Geodetic3D g = Geodetic3D::linearInterpolation(_initialPos, _finalPos, percent);
 
     camera->orbitTo(g);
   }

@@ -610,8 +610,8 @@ std::vector<Tile*>* Tile::createSubTiles(double u, double v) {
 
 //  const Angle midLat = Angle::midAngle(lower.latitude(), upper.latitude());
 //  const Angle midLon = Angle::midAngle(lower.longitude(), upper.longitude());
-  const Angle midLat = Angle::interpolation(lower.latitude(),  upper.latitude(),  v);
-  const Angle midLon = Angle::interpolation(lower.longitude(), upper.longitude(), u);
+  const Angle midLat = Angle::linearInterpolation(lower.latitude(),  upper.latitude(),  v);
+  const Angle midLon = Angle::linearInterpolation(lower.longitude(), upper.longitude(), u);
 
   const int nextLevel = _level + 1;
 

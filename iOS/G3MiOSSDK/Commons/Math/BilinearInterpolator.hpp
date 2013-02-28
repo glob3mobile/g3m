@@ -13,12 +13,12 @@
 
 class BilinearInterpolator : public Interpolator {
 public:
-  double interpolate(double valueSW,
-                     double valueSE,
-                     double valueNE,
-                     double valueNW,
-                     double u,
-                     double v);
+  double interpolation(double valueSW,
+                       double valueSE,
+                       double valueNE,
+                       double valueNW,
+                       double u,
+                       double v);
 };
 
 #endif

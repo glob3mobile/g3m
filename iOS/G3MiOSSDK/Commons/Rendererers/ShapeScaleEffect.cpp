@@ -16,9 +16,9 @@ void ShapeScaleEffect::doStep(const G3MRenderContext *rc,
   const double alpha = pace( percentDone(when) );
 
   IMathUtils* mu = IMathUtils::instance();
-  const double scaleX = mu->interpolation(_fromScaleX, _toScaleX, alpha);
-  const double scaleY = mu->interpolation(_fromScaleY, _toScaleY, alpha);
-  const double scaleZ = mu->interpolation(_fromScaleZ, _toScaleZ, alpha);
+  const double scaleX = mu->linearInterpolation(_fromScaleX, _toScaleX, alpha);
+  const double scaleY = mu->linearInterpolation(_fromScaleY, _toScaleY, alpha);
+  const double scaleZ = mu->linearInterpolation(_fromScaleZ, _toScaleZ, alpha);
 
   _shape->setScale(scaleX, scaleY, scaleZ);
 }
