@@ -558,7 +558,7 @@ public:
   //                               Angle::nan());
   //  layerSet->addLayer(osm);
 
-  if (true) {
+  if (false) {
     WMSLayer* catastro = new WMSLayer("catastro", //
                                       URL("http://ovc.catastro.meh.es/Cartografia/WMS/ServidorWMS.aspx", false), //
                                       WMS_1_1_0, //
