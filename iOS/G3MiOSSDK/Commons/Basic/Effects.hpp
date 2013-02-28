@@ -94,14 +94,17 @@ public:
 
 class EffectWithDuration : public Effect {
 private:
-  long long _started;
+  long long       _started;
   const long long _duration;
+  const bool      _linearTiming;
 
 protected:
 
-  EffectWithDuration(const TimeInterval& duration) :
+  EffectWithDuration(const TimeInterval& duration,
+                     const bool linearTiming) :
   _started(0),
-  _duration(duration.milliseconds())
+  _duration(duration.milliseconds()),
+  _linearTiming(linearTiming)
   {
 
   }
@@ -113,6 +116,13 @@ protected:
     if (percent > 1) return 1;
     if (percent < 0) return 0;
     return percent;
+  }
+  
+  double getAlpha(const TimeInterval& when) const {
+    if (_linearTiming) {
+      return percentDone(when);
+    }
+    return pace( percentDone(when) );
   }
 
 
@@ -129,7 +139,7 @@ public:
 
   virtual bool isDone(const G3MRenderContext *rc,
                       const TimeInterval& when) {
-    const double percent = percentDone(when);
+    const double percent = getAlpha(when);
     return percent >= 1;
   }
 
