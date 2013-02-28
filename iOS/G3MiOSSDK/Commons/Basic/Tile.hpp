@@ -187,6 +187,7 @@ public:
                        const Vector2I& tileMeshResolution,
                        bool renderDebug);
   
+  double getMinHeight() { return 0.0; }
 };
 
 #endif

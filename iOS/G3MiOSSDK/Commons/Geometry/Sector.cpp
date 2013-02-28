@@ -53,7 +53,7 @@ const Geodetic2D Sector::getInnerPoint(double u, double v) const {
 }
 
 /*
-bool Sector::isBackOriented(const G3MRenderContext *rc) const {
+bool Sector::isBackOriented_v1(const G3MRenderContext *rc) const {
   const Camera* camera = rc->getCurrentCamera();
   const Planet* planet = rc->getPlanet();
   
@@ -67,18 +67,41 @@ bool Sector::isBackOriented(const G3MRenderContext *rc) const {
   const double dot = normal.dot(view);
   
   return (dot < 0) ? true : false;
-}*/
+}
+ */
 
-bool Sector::isBackOriented(const G3MRenderContext *rc) const {
-  const Camera* camera = rc->getCurrentCamera();
-  const Planet* planet = rc->getPlanet();
-  const Vector3D view = camera->getViewDirection().times(-1);
+/*
+ bool Sector::isBackOriented_v2(const G3MRenderContext *rc) const {
+ const Camera* camera = rc->getCurrentCamera();
+ const Planet* planet = rc->getPlanet();
+ const Vector3D view = camera->getViewDirection().times(-1);
+ 
+ // if all the corners normals are back oriented, sector is back oriented
+ if (planet->geodeticSurfaceNormal(getNE()).dot(view) > 0) { return false; }
+ if (planet->geodeticSurfaceNormal(getNW()).dot(view) > 0) { return false; }
+ if (planet->geodeticSurfaceNormal(getSE()).dot(view) > 0) { return false; }
+ if (planet->geodeticSurfaceNormal(getSW()).dot(view) > 0) { return false; }
+ return true;
+ }
+ */
+
+bool Sector::isBackOriented(const G3MRenderContext *rc, double height) const {
+  const Planet*   planet = rc->getPlanet();
+  const Vector3D  eye = rc->getCurrentCamera()->getCartesianPosition();
   
   // if all the corners normals are back oriented, sector is back oriented
-  if (planet->geodeticSurfaceNormal(getNE()).dot(view) > 0) { return false; }
-  if (planet->geodeticSurfaceNormal(getNW()).dot(view) > 0) { return false; }
-  if (planet->geodeticSurfaceNormal(getSE()).dot(view) > 0) { return false; }
-  if (planet->geodeticSurfaceNormal(getSW()).dot(view) > 0) { return false; }
+  const Vector3D cartesianNE = planet->toCartesian(Geodetic3D(getNE(), height));
+  if (planet->geodeticSurfaceNormal(cartesianNE).dot(eye.sub(cartesianNE)) > 0)
+    return false;
+  const Vector3D cartesianNW = planet->toCartesian(Geodetic3D(getNW(), height));
+  if (planet->geodeticSurfaceNormal(cartesianNW).dot(eye.sub(cartesianNW)) > 0)
+    return false;
+  const Vector3D cartesianSE = planet->toCartesian(Geodetic3D(getSE(), height));
+  if (planet->geodeticSurfaceNormal(cartesianSE).dot(eye.sub(cartesianSE)) > 0)
+    return false;
+  const Vector3D cartesianSW = planet->toCartesian(Geodetic3D(getSW(), height));
+  if (planet->geodeticSurfaceNormal(cartesianSW).dot(eye.sub(cartesianSW)) > 0)
+    return false;
   return true;
 }
 

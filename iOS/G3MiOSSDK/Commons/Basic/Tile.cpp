@@ -326,7 +326,7 @@ Extent* Tile::getTileExtent(const G3MRenderContext *rc) {
 bool Tile::isVisible(const G3MRenderContext *rc,
                      const TileRenderContext* trc) {
   // test if sector is back oriented with respect to the camera
-  if (_sector.isBackOriented(rc)) {
+  if (_sector.isBackOriented(rc, getMinHeight())) {
     return false;
   }
 
