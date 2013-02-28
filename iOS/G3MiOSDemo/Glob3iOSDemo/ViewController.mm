@@ -1058,6 +1058,8 @@ public:
                                                2) );
 
 
+
+      
       Angle latFrom(Angle::fromDegreesMinutesSeconds(38, 53, 42.24));
       Angle lonFrom(Angle::fromDegreesMinutesSeconds(-77, 2, 10.92));
 
@@ -1066,8 +1068,6 @@ public:
 
       Geodetic2D posTo(latFrom.add(Angle::fromDegrees(0.75)),
                        lonFrom.add(Angle::fromDegrees(-0.75)));
-
-      Geodetic2D posMiddle(Geodetic2D::linearInterpolation(posFrom, posTo, 0.5));
 
       double fromHeight = 30000;
       double toHeight   = 2000;
@@ -1093,6 +1093,11 @@ public:
                                   Color::newFromRGBA(1, 1, 0, 1));
 
       _meshRenderer->addMesh( mesh );
+
+
+
+
+      
 
 //      Geodetic3D 
 
