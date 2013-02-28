@@ -126,7 +126,7 @@ public class Tile
   private boolean isVisible(G3MRenderContext rc, TileRenderContext trc)
   {
     // test if sector is back oriented with respect to the camera
-    if (_sector.isBackOriented(rc))
+    if (_sector.isBackOriented(rc, getMinHeight()))
     {
       return false;
     }
@@ -211,8 +211,8 @@ public class Tile
   
   //  const Angle midLat = Angle::midAngle(lower.latitude(), upper.latitude());
   //  const Angle midLon = Angle::midAngle(lower.longitude(), upper.longitude());
-    final Angle midLat = Angle.interpolation(lower.latitude(), upper.latitude(), v);
-    final Angle midLon = Angle.interpolation(lower.longitude(), upper.longitude(), u);
+    final Angle midLat = Angle.linearInterpolation(lower.latitude(), upper.latitude(), v);
+    final Angle midLon = Angle.linearInterpolation(lower.longitude(), upper.longitude(), u);
   
     final int nextLevel = _level + 1;
   
@@ -784,4 +784,8 @@ public class Tile
     meshHolder.setMesh(tessellator.createTileMesh(planet, tileMeshResolution, this, _elevationData, verticalExaggeration, renderDebug));
   }
 
+  public final double getMinHeight()
+  {
+     return 0.0;
+  }
 }

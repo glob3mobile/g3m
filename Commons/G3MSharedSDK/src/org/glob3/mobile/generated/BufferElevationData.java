@@ -100,7 +100,7 @@ public abstract class BufferElevationData extends ElevationData
         // linear on Y
         final double heightY = getElevationAt(x, y);
         final double heightNextY = getElevationAt(x, nextY);
-        result = mu.interpolation(heightY, heightNextY, alphaY);
+        result = mu.linearInterpolation(heightY, heightNextY, alphaY);
       }
     }
     else
@@ -110,7 +110,7 @@ public abstract class BufferElevationData extends ElevationData
         // linear on X
         final double heightX = getElevationAt(x, y);
         final double heightNextX = getElevationAt(nextX, y);
-        result = mu.interpolation(heightX, heightNextX, alphaX);
+        result = mu.linearInterpolation(heightX, heightNextX, alphaX);
       }
       else
       {
@@ -120,7 +120,7 @@ public abstract class BufferElevationData extends ElevationData
         final double valueNE = getElevationAt(nextX, nextY);
         final double valueNW = getElevationAt(x, nextY);
   
-        result = getInterpolator().interpolate(valueSW, valueSE, valueNE, valueNW, alphaY, alphaX);
+        result = getInterpolator().interpolation(valueSW, valueSE, valueNE, valueNW, alphaY, alphaX);
       }
     }
   

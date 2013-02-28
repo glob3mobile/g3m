@@ -187,7 +187,15 @@ public:
   bool isEqualsTo(const Sector& that) const {
     return _lower.isEqualsTo(that._lower) && _upper.isEqualsTo(that._upper);
   }
-
+  
+  bool touchesNorthPole() const {
+    return (_upper.latitude().greaterThan(Angle::fromDegrees(89.9)));
+  }
+  
+  bool touchesSouthPole() const {
+    return (_lower.latitude().lowerThan(Angle::fromDegrees(-89.9)));
+  }
+  
 };
 
 
