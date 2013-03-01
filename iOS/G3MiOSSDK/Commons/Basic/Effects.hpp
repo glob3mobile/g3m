@@ -119,10 +119,8 @@ protected:
   }
   
   double getAlpha(const TimeInterval& when) const {
-    if (_linearTiming) {
-      return percentDone(when);
-    }
-    return pace( percentDone(when) );
+    const double percent = percentDone(when);
+    return _linearTiming ? percent : pace(percent);
   }
 
 
@@ -139,10 +137,9 @@ public:
 
   virtual bool isDone(const G3MRenderContext *rc,
                       const TimeInterval& when) {
-    const double percent = getAlpha(when);
-    return percent >= 1;
+    const double percent = percentDone(when);
+    return (percent >= 1);
   }
-
 };
 
 
