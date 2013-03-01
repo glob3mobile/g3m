@@ -589,7 +589,7 @@ public:
 
 - (TilesRenderParameters*) createTileRenderParameters
 {
-  const bool renderDebug = false;
+  const bool renderDebug = true;
   const bool useTilesSplitBudget = true;
   const bool forceTopLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
@@ -1075,54 +1075,58 @@ public:
 
     }
     
-    Mesh* createMesh(const G3MContext* context, Geodetic2D from2D, double fromH, Geodetic2D to2D, double toH, Color* color) {
-      
-      double deltaLat = Angle::fromDegrees(from2D.latitude()._degrees).sub(Angle::fromDegrees(to2D.latitude()._degrees))._degrees;
-      double deltaLon = Angle::fromDegrees(from2D.longitude()._degrees).sub(Angle::fromDegrees(to2D.longitude()._degrees))._degrees;
-      
-      const double distanceInDegrees = IMathUtils::instance()->sqrt((deltaLat * deltaLat) + (deltaLon * deltaLon));
-      
-//      double averageHeight = (fromH + toH) / 2;
-//      double middleHeight = (averageHeight + (averageHeight * distanceInDegrees / 10));
-      
-//      double middleHeight = (((fromH + toH) / 2) * distanceInDegrees / 10);
-      
-      const double distanceMaxHeight = IMathUtils::instance()->sqrt((90.0 * 90) + (180 * 180));
-      
-      double averageHeight = (fromH + toH) / 2;
-      const double maxHeight = context->getPlanet()->getRadii().axisAverage() * 3;
+    Mesh* createCameraPathMesh(const G3MContext* context,
+                               const Geodetic2D& fromPosition,
+                               double fromHeight,
+                               const Geodetic2D& toPosition,
+                               double toHeight,
+                               Color* color) {
 
-      double middleHeight = ((averageHeight * distanceInDegrees) > maxHeight) ? maxHeight : (averageHeight * distanceInDegrees);
-      if (distanceInDegrees >= distanceMaxHeight) {
+      IMathUtils* mu = IMathUtils::instance();
+
+      const double deltaLatInDegrees = fromPosition.latitude()._degrees  - toPosition.latitude()._degrees;
+      const double deltaLonInDegrees = fromPosition.longitude()._degrees - toPosition.longitude()._degrees;
+
+      const double distanceInDegrees = mu->sqrt((deltaLatInDegrees * deltaLatInDegrees) +
+                                                (deltaLonInDegrees * deltaLonInDegrees)  );
+
+      // const double distanceMaxHeight = mu->sqrt((90.0 * 90) + (180 * 180));
+      const double distanceInDegreesMaxHeight = 180;
+
+      const double maxHeight = context->getPlanet()->getRadii().axisAverage();
+
+      double middleHeight;
+      if (distanceInDegrees >= distanceInDegreesMaxHeight) {
         middleHeight = maxHeight;
       }
       else {
-        const double height = (distanceInDegrees / distanceMaxHeight) * maxHeight;
-        if (height < middleHeight) {
-          middleHeight = height;
+        middleHeight = (distanceInDegrees / distanceInDegreesMaxHeight) * maxHeight;
+        const double averageHeight = (fromHeight + toHeight) / 2;
+        if (middleHeight < averageHeight) {
+          middleHeight = averageHeight;
         }
       }
-//      const double middleHeight = ((averageHeight * distanceInDegrees) > maxHeight) ? maxHeight : (averageHeight * distanceInDegrees);
-      
+      // const double middleHeight = ((averageHeight * distanceInDegrees) > maxHeight) ? maxHeight : (averageHeight * distanceInDegrees);
+
       FloatBufferBuilderFromGeodetic vertices(CenterStrategy::noCenter(),
                                               context->getPlanet(),
                                               Vector3D::zero());
-      
-      for (double t = 0; t <= 1; t += 0.1) {
-        Geodetic2D position( Geodetic2D::linearInterpolation(from2D, to2D, t) );
-        
-        const double height = IMathUtils::instance()->quadraticBezierInterpolation(fromH, middleHeight, toH, t);
-        vertices.add(position, height);
+
+      for (double alpha = 0; alpha <= 1; alpha += 0.025) {
+        const double height = mu->quadraticBezierInterpolation(fromHeight, middleHeight, toHeight, alpha);
+
+        vertices.add(Geodetic2D::linearInterpolation(fromPosition, toPosition, alpha),
+                     height);
       }
-      
-      Mesh* mesh = new DirectMesh(GLPrimitive::lineStrip(),
-                                  true,
-                                  vertices.getCenter(),
-                                  vertices.create(),
-                                  2,
-                                  1,
-                                  color);
-      return mesh;
+
+
+      return new DirectMesh(GLPrimitive::lineStrip(),
+                            true,
+                            vertices.getCenter(),
+                            vertices.create(),
+                            2,
+                            1,
+                            color);
     }
 
     void run(const G3MContext* context) {
@@ -1152,43 +1156,44 @@ public:
       double toHeight   = 2000;
 //      double middleHeight = 60000;
       
-      _meshRenderer->addMesh(createMesh(context, posFrom, fromHeight, posTo, toHeight, Color::newFromRGBA(1, 1, 0, 1)));
+      _meshRenderer->addMesh(createCameraPathMesh(context, posFrom, fromHeight, posTo, toHeight, Color::newFromRGBA(1, 1, 0, 1)));
       
       // mesh2
       Geodetic2D posFrom2(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
                           Angle::fromDegreesMinutesSeconds(-77, 2, 10.92));
       Geodetic2D posTo2(latFrom.add(Angle::fromDegrees(0.75)), lonFrom.add(Angle::fromDegrees(+0.75)));
-      _meshRenderer->addMesh(createMesh(context, posFrom2, 100000, posTo2, toHeight, Color::newFromRGBA(1, 0, 0, 1)));
+      _meshRenderer->addMesh(createCameraPathMesh(context, posFrom2, 100000, posTo2, toHeight, Color::newFromRGBA(1, 0, 0, 1)));
       
       // mesh3
       Geodetic2D posTo3(Angle::fromDegrees(37.7658),
                         Angle::fromDegrees(-122.4185));
-      _meshRenderer->addMesh(createMesh(context, posFrom2, 1000000, posTo3, toHeight, Color::newFromRGBA(0, 1, 0, 1)));
+      _meshRenderer->addMesh(createCameraPathMesh(context, posFrom2, 1000000, posTo3, toHeight, Color::newFromRGBA(0, 1, 0, 1)));
       
       // mesh3a
-      _meshRenderer->addMesh(createMesh(context, posFrom2, fromHeight, posTo3, toHeight, Color::newFromRGBA(0, 1, 0, 1)));
+      _meshRenderer->addMesh(createCameraPathMesh(context, posFrom2, fromHeight, posTo3, toHeight, Color::newFromRGBA(0, 1, 0, 1)));
       
       // mesh4
       Geodetic2D posFrom4(Angle::fromDegrees(-79.687184),
                           Angle::fromDegrees(-81.914062));
       Geodetic2D posTo4(Angle::fromDegrees(73.124945),
                         Angle::fromDegrees(-47.460937));
-      _meshRenderer->addMesh(createMesh(context, posFrom4, fromHeight, posTo4, toHeight, Color::newFromRGBA(0, 0, 1, 1)));
+      _meshRenderer->addMesh(createCameraPathMesh(context, posFrom4, fromHeight, posTo4, toHeight, Color::newFromRGBA(0, 0, 1, 1)));
       
       // mesh5
       Geodetic2D posFrom5(Angle::fromDegrees(39.909736),
                           Angle::fromDegrees(-3.515625));
       Geodetic2D posTo5(Angle::fromDegrees(39.909736),
                         Angle::fromDegrees(-178.945312));
-      _meshRenderer->addMesh(createMesh(context, posFrom5, fromHeight, posTo5, 1000000, Color::newFromRGBA(0, 1, 1, 1)));
+      _meshRenderer->addMesh(createCameraPathMesh(context, posFrom5, fromHeight, posTo5, 1000000, Color::newFromRGBA(0, 1, 1, 1)));
       
       // mesh5a
-      _meshRenderer->addMesh(createMesh(context, posFrom5, fromHeight, posTo5, toHeight, Color::newFromRGBA(0, 1, 1, 1)));
+      _meshRenderer->addMesh(createCameraPathMesh(context, posFrom5, fromHeight, posTo5, toHeight, Color::newFromRGBA(0, 1, 1, 1)));
 
       
       
-      [_iosWidget setCameraPosition: Geodetic3D(posFrom, 60000)];
-      [_iosWidget setCameraPitch: Angle::fromDegrees(95)];
+//      [_iosWidget setCameraPosition: Geodetic3D(posFrom, 60000)];
+//      [_iosWidget setCameraPitch: Angle::fromDegrees(95)];
+
 
 //      FloatBufferBuilderFromGeodetic vertices(CenterStrategy::noCenter(),
 //                                              context->getPlanet(),
@@ -1231,12 +1236,12 @@ public:
                                               true);
       */
 
-//      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D(//Angle::fromDegreesMinutes(37, 47),
-//                                                                //Angle::fromDegreesMinutes(-122, 25),
-//                                                                Angle::fromDegrees(37.78333333),
-//                                                                Angle::fromDegrees(-122.41666666666667),
-//                                                                1000000),
-//                                                     TimeInterval::fromSeconds(5));
+      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D(//Angle::fromDegreesMinutes(37, 47),
+                                                                //Angle::fromDegreesMinutes(-122, 25),
+                                                                Angle::fromDegrees(37.78333333),
+                                                                Angle::fromDegrees(-122.41666666666667),
+                                                                1000000),
+                                                     TimeInterval::fromSeconds(5));
 
       /*
       NSString *bsonFilePath = [[NSBundle mainBundle] pathForResource: @"test"
