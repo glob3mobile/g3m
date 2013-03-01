@@ -307,10 +307,12 @@ public class Sector
   
     // compute angle between normals
     final Vector3D eye = camera.getCartesianPosition();
-    if (planet.geodeticSurfaceNormal(point).dot(eye.sub(point)) > 0)
-      return false;
-    else
-      return true;
+  //  if (planet->geodeticSurfaceNormal(point).dot(eye.sub(point)) > 0)
+  //    return false;
+  //  else
+  //    return true;
+  
+    return (planet.geodeticSurfaceNormal(point).dot(eye.sub(point)) <= 0);
   }
 
   public final Geodetic2D getClosestPoint(Geodetic2D pos)
