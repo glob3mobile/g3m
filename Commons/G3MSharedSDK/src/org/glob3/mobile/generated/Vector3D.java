@@ -238,6 +238,11 @@ public class Vector3D
     }
   }
 
+  public final double axisAverage()
+  {
+    return ((_x + _y + _z) / 3);
+  }
+
   public final Vector3D projectionInPlane(Vector3D normal)
   {
     Vector3D axis = normal.cross(this);

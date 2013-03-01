@@ -35,7 +35,11 @@ public class ShapeOrbitCameraEffect extends EffectWithDuration
 
   public ShapeOrbitCameraEffect(TimeInterval duration, Shape shape, double fromDistance, double toDistance, Angle fromAzimuth, Angle toAzimuth, Angle fromAltitude, Angle toAltitude)
   {
-     super(duration);
+     this(duration, shape, fromDistance, toDistance, fromAzimuth, toAzimuth, fromAltitude, toAltitude, false);
+  }
+  public ShapeOrbitCameraEffect(TimeInterval duration, Shape shape, double fromDistance, double toDistance, Angle fromAzimuth, Angle toAzimuth, Angle fromAltitude, Angle toAltitude, boolean linearTiming)
+  {
+     super(duration, linearTiming);
      _shape = shape;
      _fromDistance = fromDistance;
      _toDistance = toDistance;
@@ -48,8 +52,7 @@ public class ShapeOrbitCameraEffect extends EffectWithDuration
 
   public final void doStep(G3MRenderContext rc, TimeInterval when)
   {
-    final double alpha = pace(percentDone(when));
-    //  const double alpha = percentDone(when);
+    final double alpha = getAlpha(when);
   
     final Geodetic3D center = _shape.getPosition();
   

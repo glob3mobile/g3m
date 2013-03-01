@@ -3,12 +3,14 @@ public abstract class EffectWithDuration extends Effect
 {
   private long _started;
   private final long _duration;
+  private final boolean _linearTiming;
 
 
-  protected EffectWithDuration(TimeInterval duration)
+  protected EffectWithDuration(TimeInterval duration, boolean linearTiming)
   {
      _started = 0;
      _duration = duration.milliseconds();
+     _linearTiming = linearTiming;
 
   }
 
@@ -24,6 +26,15 @@ public abstract class EffectWithDuration extends Effect
     return percent;
   }
 
+  protected final double getAlpha(TimeInterval when)
+  {
+    if (_linearTiming)
+    {
+      return percentDone(when);
+    }
+    return pace(percentDone(when));
+  }
+
 
   //  virtual void stop(const G3MRenderContext *rc,
   //                    const TimeInterval& when) {
@@ -37,7 +48,7 @@ public abstract class EffectWithDuration extends Effect
 
   public boolean isDone(G3MRenderContext rc, TimeInterval when)
   {
-    final double percent = percentDone(when);
+    final double percent = getAlpha(when);
     return percent >= 1;
   }
 

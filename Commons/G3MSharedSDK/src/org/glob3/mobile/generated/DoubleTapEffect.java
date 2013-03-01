@@ -26,7 +26,11 @@ public class DoubleTapEffect extends EffectWithDuration
 
   public DoubleTapEffect(TimeInterval duration, Vector3D axis, Angle angle, double distance)
   {
-     super(duration);
+     this(duration, axis, angle, distance, false);
+  }
+  public DoubleTapEffect(TimeInterval duration, Vector3D axis, Angle angle, double distance, boolean linearTiming)
+  {
+     super(duration, linearTiming);
      _axis = new Vector3D(axis);
      _angle = new Angle(angle);
      _distance = distance;
@@ -35,26 +39,26 @@ public class DoubleTapEffect extends EffectWithDuration
   public void start(G3MRenderContext rc, TimeInterval when)
   {
     super.start(rc, when);
-    _lastPercent = 0;
+    _lastAlpha = 0;
   }
 
   public void doStep(G3MRenderContext rc, TimeInterval when)
   {
     //const double percent = gently(percentDone(when), 0.2, 0.9);
     //const double percent = pace( percentDone(when) );
-    final double percent = percentDone(when);
+    final double alpha = getAlpha(when);
     Camera camera = rc.getNextCamera();
-    final double step = percent - _lastPercent;
+    final double step = alpha - _lastAlpha;
     camera.rotateWithAxis(_axis, _angle.times(step));
     camera.moveForward(_distance * step);
-    _lastPercent = percent;
+    _lastAlpha = alpha;
   }
 
   public void stop(G3MRenderContext rc, TimeInterval when)
   {
     Camera camera = rc.getNextCamera();
 
-    final double step = 1.0 - _lastPercent;
+    final double step = 1.0 - _lastAlpha;
     camera.rotateWithAxis(_axis, _angle.times(step));
     camera.moveForward(_distance * step);
   }
@@ -67,5 +71,5 @@ public class DoubleTapEffect extends EffectWithDuration
   private Vector3D _axis ;
   private Angle _angle ;
   private double _distance;
-  private double _lastPercent;
+  private double _lastAlpha;
 }

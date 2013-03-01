@@ -401,6 +401,14 @@ public class Camera
   {
     orbitTo(_planet.toCartesian(g3d));
   }
+  public final void orbitTo(Angle latitude, Angle longitude, double height)
+  {
+    orbitTo(_planet.toCartesian(latitude, longitude, height));
+  }
+  public final void orbitTo(Geodetic2D g2d, double height)
+  {
+    orbitTo(_planet.toCartesian(g2d.latitude(), g2d.longitude(), height));
+  }
 
   /**
    This method put the camera pointing to given center, at the given distance, using the given angles.
