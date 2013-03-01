@@ -1,8 +1,9 @@
 package org.glob3.mobile.generated; 
-public abstract class TerrainTouchEventListener
+public class TerrainTouchEventListener
 {
 
-  public abstract void onTerrainTouchEvent(G3MEventContext ec, TerrainTouchEvent ev);
+//C++ TO JAVA CONVERTER TODO TASK: There are no simple equivalents to events in Java:
+//  virtual void onTerrainTouchEvent(const G3MEventContext* context, const TerrainTouchEvent& event) = 0;
 
   public void dispose()
   {

@@ -131,6 +131,17 @@ public class Geodetic2D
     return _latitude.isBetween(min.latitude(), max.latitude()) && _longitude.isBetween(min.longitude(), max.longitude());
   }
 
+  public final Angle angleTo(Geodetic2D other)
+  {
+    final double cos1 = _latitude.cosinus();
+    final Vector3D normal1 = new Vector3D(cos1 * _longitude.cosinus(), cos1 * _longitude.sinus(), _latitude.sinus());
+    final double cos2 = other._latitude.cosinus();
+    final Vector3D normal2 = new Vector3D(cos2 * other._longitude.cosinus(), cos2 * other._longitude.sinus(), other._latitude.sinus());
+    return Angle.fromRadians(Math.asin(normal1.cross(normal2).squaredLength()));
+  
+  }
+
+
   /**
    * Returns the (initial) bearing from this point to the supplied point
    *   see http: //williams.best.vwh.net/avform.htm#Crs
@@ -148,6 +159,7 @@ public class Geodetic2D
 //    return Angle::fromRadians(radians);
 
     return bearing(_latitude, _longitude, that._latitude, that._longitude);
+
   }
 
 

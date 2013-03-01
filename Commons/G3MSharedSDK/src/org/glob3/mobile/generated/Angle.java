@@ -16,9 +16,7 @@ package org.glob3.mobile.generated;
 //
 
 
-
 //#define THRESHOLD 1e-5
-//#define ISBETWEEN_THRESHOLD 1e-2
 
 
 
@@ -157,12 +155,12 @@ public class Angle
 
   public final Angle clampedTo(Angle min, Angle max)
   {
-    if (_degrees < min._degrees)
+    if (_radians < min._radians)
     {
       return min;
     }
   
-    if (_degrees > max._degrees)
+    if (_radians > max._radians)
     {
       return max;
     }
@@ -172,7 +170,7 @@ public class Angle
 
   public final boolean isBetween(Angle min, Angle max)
   {
-    return (_degrees + DefineConstants.ISBETWEEN_THRESHOLD >= min._degrees) && (_degrees - DefineConstants.ISBETWEEN_THRESHOLD <= max._degrees);
+    return (_radians >= min._radians) && (_radians <= max._radians);
   }
 
   public final Angle nearestAngleInInterval(Angle min, Angle max)
