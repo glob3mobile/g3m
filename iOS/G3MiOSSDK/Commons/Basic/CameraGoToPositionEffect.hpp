@@ -85,7 +85,7 @@ public:
   virtual void start(const G3MRenderContext *rc,
                      const TimeInterval& when) {
     EffectWithDuration::start(rc, when);
-
+    
     calculateMaxHeight();
   }
 };
