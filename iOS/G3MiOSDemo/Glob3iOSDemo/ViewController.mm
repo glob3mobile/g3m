@@ -572,10 +572,10 @@ public:
 
     class CatastroTerrainTouchEventListener : public TerrainTouchEventListener {
     public:
-      void onTerrainTouchEvent(const G3MEventContext* context,
-                               const TerrainTouchEvent& event) {
+      void onTerrainTouch(const G3MEventContext* context,
+                          const TerrainTouchEvent& event) {
         URL url = event.getLayer()->getFeatureInfoURL(event.getPosition().asGeodetic2D(), event.getSector());
-        
+
       }
     };
 
