@@ -94,16 +94,16 @@ public:
 class EffectWithDuration : public Effect {
 private:
   long long       _started;
-  const long long _duration;
+  const long long _durationMS;
   const bool      _linearTiming;
 
 protected:
 
   EffectWithDuration(const TimeInterval& duration,
                      const bool linearTiming) :
-  _started(0),
-  _duration(duration.milliseconds()),
-  _linearTiming(linearTiming)
+  _durationMS(duration.milliseconds()),
+  _linearTiming(linearTiming),
+  _started(0)
   {
 
   }
@@ -111,7 +111,7 @@ protected:
   double percentDone(const TimeInterval& when) const {
     const long long elapsed = when.milliseconds() - _started;
 
-    const double percent = (double) elapsed / _duration;
+    const double percent = (double) elapsed / _durationMS;
     if (percent > 1) return 1;
     if (percent < 0) return 0;
     return percent;

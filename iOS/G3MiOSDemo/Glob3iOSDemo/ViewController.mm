@@ -1236,12 +1236,13 @@ public:
                                               true);
       */
 
-      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D(//Angle::fromDegreesMinutes(37, 47),
-                                                                //Angle::fromDegreesMinutes(-122, 25),
-                                                                Angle::fromDegrees(37.78333333),
+      [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
+                                                     Geodetic3D(Angle::fromDegrees(37.78333333),
                                                                 Angle::fromDegrees(-122.41666666666667),
                                                                 1000000),
-                                                     TimeInterval::fromSeconds(5));
+                                                     Angle::fromDegrees(45),
+                                                     Angle::fromDegrees(30)
+                                                     );
 
       /*
       NSString *bsonFilePath = [[NSBundle mainBundle] pathForResource: @"test"

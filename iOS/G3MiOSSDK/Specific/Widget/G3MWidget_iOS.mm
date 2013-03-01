@@ -386,7 +386,7 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
 
 - (void)setAnimatedCameraPosition: (const Geodetic3D&) position
                      timeInterval: (const TimeInterval&)interval {
-  [self widget]->setAnimatedCameraPosition(position, interval);
+  [self widget]->setAnimatedCameraPosition(interval, position);
 }
 
 - (void)setAnimatedCameraPosition: (const Geodetic3D&) position {

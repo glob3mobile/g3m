@@ -483,14 +483,18 @@ void G3MWidget::setCameraPosition(const Geodetic3D& position) {
   getNextCamera()->setPosition(position);
 }
 
-void G3MWidget::setAnimatedCameraPosition(const Geodetic3D& position) {
-  setAnimatedCameraPosition(position, TimeInterval::fromSeconds(3));
+void G3MWidget::setAnimatedCameraPosition(const Geodetic3D& position,
+                                          const Angle& heading,
+                                          const Angle& pitch) {
+  setAnimatedCameraPosition(TimeInterval::fromSeconds(3), position, heading, pitch);
 }
 
-void G3MWidget::setAnimatedCameraPosition(const Geodetic3D& position,
-                                          const TimeInterval& interval) {
+void G3MWidget::setAnimatedCameraPosition(const TimeInterval& interval,
+                                          const Geodetic3D& position,
+                                          const Angle& heading,
+                                          const Angle& pitch) {
 
-  const Geodetic3D startPosition = _planet->toGeodetic3D( _currentCamera->getCartesianPosition() );
+  const Geodetic3D fromPosition = _planet->toGeodetic3D( _currentCamera->getCartesianPosition() );
 
   double finalLat = position.latitude()._degrees;
   double finalLon = position.longitude()._degrees;
@@ -510,15 +514,27 @@ void G3MWidget::setAnimatedCameraPosition(const Geodetic3D& position,
   while (finalLon < 0) {
     finalLon += 360;
   }
-  if (fabs(finalLon - startPosition.longitude()._degrees) > 180) {
+  if (fabs(finalLon - fromPosition.longitude()._degrees) > 180) {
     finalLon -= 360;
   }
 
-  const Geodetic3D endPosition = Geodetic3D::fromDegrees(finalLat, finalLon, position.height());
+  const Geodetic3D toPosition = Geodetic3D::fromDegrees(finalLat, finalLon, position.height());
+
+  const Angle fromHeading = _currentCamera->getHeading();
+  const Angle toHeading = heading;
+  const Angle fromPitch = _currentCamera->getPitch();
+  const Angle toPitch = pitch;
 
   stopCameraAnimation();
   int TODO_make_linearHeight_configurable;
-  _effectsScheduler->startEffect(new CameraGoToPositionEffect(interval, startPosition, endPosition, false, false),
+  const bool linearTiming=false;
+  const bool linearHeight=false;
+  _effectsScheduler->startEffect(new CameraGoToPositionEffect(interval,
+                                                              fromPosition, toPosition,
+                                                              fromHeading,  toHeading,
+                                                              fromPitch,    toPitch,
+                                                              linearTiming,
+                                                              linearHeight),
                                  _nextCamera->getEffectTarget());
 }
 

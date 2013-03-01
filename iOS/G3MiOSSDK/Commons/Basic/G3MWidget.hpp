@@ -151,10 +151,14 @@ public:
 
   void setCameraPitch(const Angle& angle);
 
-  void setAnimatedCameraPosition(const Geodetic3D& position);
-
   void setAnimatedCameraPosition(const Geodetic3D& position,
-                                 const TimeInterval& interval);
+                                 const Angle& heading=Angle::zero(),
+                                 const Angle& pitch=Angle::zero());
+
+  void setAnimatedCameraPosition(const TimeInterval& interval,
+                                 const Geodetic3D& position,
+                                 const Angle& heading=Angle::zero(),
+                                 const Angle& pitch=Angle::zero());
   
   void stopCameraAnimation();
 
