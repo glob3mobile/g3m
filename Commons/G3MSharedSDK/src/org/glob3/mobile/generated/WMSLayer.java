@@ -320,7 +320,8 @@ public class WMSLayer extends Layer
     //X and Y
     final Vector2D uv = sector.getUVCoordinates(position);
     final int x = (int) IMathUtils.instance().round((uv._x * _parameters._tileTextureResolution._x));
-    final int y = (int) IMathUtils.instance().round(((1.0 - uv._y) * _parameters._tileTextureResolution._y));
+    final int y = (int) IMathUtils.instance().round((uv._y * _parameters._tileTextureResolution._y));
+    // const int y = (int) IMathUtils::instance()->round( ((1.0 - uv._y) * _parameters->_tileTextureResolution._y) );
   
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     isb.addString("&X=");
