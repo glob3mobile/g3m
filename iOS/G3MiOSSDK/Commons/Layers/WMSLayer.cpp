@@ -213,10 +213,8 @@ std::vector<Petition*> WMSLayer::getMapPetitions(const G3MRenderContext* rc,
 	return petitions;
 }
 
-URL WMSLayer::getFeatureInfoURL(const Geodetic2D& g,
-                                const IFactory* factory,
-                                const Sector& tileSector,
-                                int width, int height) const {
+URL WMSLayer::getFeatureInfoURL(const Geodetic2D& position,
+                                const Sector& tileSector) const {
   if (!_sector.touchesWith(tileSector)) {
     return URL::nullURL();
   }
@@ -258,9 +256,9 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& g,
       IStringBuilder* isb = IStringBuilder::newStringBuilder();
 
       isb->addString("&WIDTH=");
-      isb->addInt(width);
+      isb->addInt(_parameters->_tileTextureResolution._x);
       isb->addString("&HEIGHT=");
-      isb->addInt(height);
+      isb->addInt(_parameters->_tileTextureResolution._y);
 
       isb->addString("&BBOX=");
       isb->addDouble(sector.lower().latitude()._degrees);
@@ -288,9 +286,9 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& g,
       IStringBuilder* isb = IStringBuilder::newStringBuilder();
 
       isb->addString("&WIDTH=");
-      isb->addInt(width);
+      isb->addInt(_parameters->_tileTextureResolution._x);
       isb->addString("&HEIGHT=");
-      isb->addInt(height);
+      isb->addInt(_parameters->_tileTextureResolution._y);
 
       isb->addString("&BBOX=");
       isb->addDouble(sector.lower().longitude()._degrees);
@@ -315,9 +313,9 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& g,
   req += "&INFO_FORMAT=text/plain";
 
   //X and Y
-  Vector2D pixel = tileSector.getUVCoordinates(g);
-  int x = (int) IMathUtils::instance()->round( (pixel._x * width) );
-  int y = (int) IMathUtils::instance()->round ( ((1.0 - pixel._y) * height) );
+  const Vector2D uv = sector.getUVCoordinates(position);
+  const int x = (int) IMathUtils::instance()->round( (uv._x * _parameters->_tileTextureResolution._x) );
+  const int y = (int) IMathUtils::instance()->round( ((1.0 - uv._y) * _parameters->_tileTextureResolution._y) );
 
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("&X=");
@@ -326,6 +324,6 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& g,
   isb->addInt(y);
   req += isb->getString();
   delete isb;
-  
+
 	return URL(req, false);
 }

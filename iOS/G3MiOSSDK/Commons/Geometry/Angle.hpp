@@ -9,11 +9,9 @@
 #ifndef G3MiOSSDK_Angle_hpp
 #define G3MiOSSDK_Angle_hpp
 
-#include "IMathUtils.hpp"
-
 #define THRESHOLD               1e-5
-#define ISBETWEEN_THRESHOLD     1e-2
 
+#include "IMathUtils.hpp"
 #include <string>
 
 

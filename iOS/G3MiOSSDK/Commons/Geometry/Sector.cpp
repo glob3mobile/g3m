@@ -12,16 +12,12 @@
 
 #include "IStringBuilder.hpp"
 
-bool  Sector::contains(const Angle& latitude,
-                       const Angle& longitude) const {
+bool Sector::contains(const Angle& latitude,
+                      const Angle& longitude) const {
   return
   latitude.isBetween(_lower.latitude(), _upper.latitude()) &&
   longitude.isBetween(_lower.longitude(), _upper.longitude());
 }
-
-//bool Sector::contains(const Geodetic2D &position) const {
-//  return position.isBetween(_lower, _upper);
-//}
 
 bool Sector::fullContains(const Sector &s) const {
   return contains(s.upper()) && contains(s.lower());
@@ -62,10 +58,12 @@ bool Sector::isBackOriented(const G3MRenderContext *rc, double height) const {
   
   // compute angle between normals
   const Vector3D eye = camera->getCartesianPosition();
-  if (planet->geodeticSurfaceNormal(point).dot(eye.sub(point)) > 0)
-    return false;
-  else
-    return true;
+//  if (planet->geodeticSurfaceNormal(point).dot(eye.sub(point)) > 0)
+//    return false;
+//  else
+//    return true;
+
+  return (planet->geodeticSurfaceNormal(point).dot(eye.sub(point)) <= 0);
 }
 
 /*

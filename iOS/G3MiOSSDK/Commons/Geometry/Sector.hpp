@@ -161,8 +161,12 @@ public:
 
   Vector2D getUVCoordinates(const Angle& latitude,
                             const Angle& longitude) const {
-    const double u = longitude.sub(_lower.longitude()).div(getDeltaLongitude());
-    const double v = _upper.latitude().sub(latitude).div(getDeltaLatitude());
+    const double u = (longitude._radians - _lower.longitude()._radians) / _deltaLongitude._radians;
+    const double v = (_upper.latitude()._radians - latitude._radians)   / _deltaLatitude._radians;
+
+//    const double u = longitude.sub(_lower.longitude()).div(getDeltaLongitude());
+//    const double v = _upper.latitude().sub(latitude).div(getDeltaLatitude());
+
     return Vector2D(u, v);
   }
 

@@ -35,7 +35,8 @@ public abstract class Layer
   private boolean _enable;
 
   private final String _name;
-  private final LayerTilesRenderParameters _parameters;
+
+  protected final LayerTilesRenderParameters _parameters;
 
   protected final TimeInterval _timeToCache;
 
@@ -114,7 +115,7 @@ public abstract class Layer
 
   //  virtual bool isTransparent() const = 0;
 
-  public abstract URL getFeatureInfoURL(Geodetic2D g, IFactory factory, Sector sector, int width, int height);
+  public abstract URL getFeatureInfoURL(Geodetic2D position, Sector sector);
 
   public boolean isReady()
   {
@@ -137,7 +138,7 @@ public abstract class Layer
       TerrainTouchEventListener listener = _listeners.get(i);
       if (listener != null)
       {
-        listener.onTerrainTouchEvent(ec, tte);
+        listener.onTerrainTouch(ec, tte);
       }
     }
   }
