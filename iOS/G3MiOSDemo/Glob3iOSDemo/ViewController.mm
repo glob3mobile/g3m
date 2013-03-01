@@ -558,7 +558,7 @@ public:
   //                               Angle::nan());
   //  layerSet->addLayer(osm);
 
-  if (false) {
+  if (true) {
     WMSLayer* catastro = new WMSLayer("catastro", //
                                       URL("http://ovc.catastro.meh.es/Cartografia/WMS/ServidorWMS.aspx", false), //
                                       WMS_1_1_0, //
@@ -574,7 +574,10 @@ public:
     public:
       void onTerrainTouch(const G3MEventContext* context,
                           const TerrainTouchEvent& event) {
-        URL url = event.getLayer()->getFeatureInfoURL(event.getPosition().asGeodetic2D(), event.getSector());
+        const URL url = event.getLayer()->getFeatureInfoURL(event.getPosition().asGeodetic2D(),
+                                                            event.getSector());
+
+        ILogger::instance()->logInfo("%s", url.getPath().c_str());
 
       }
     };

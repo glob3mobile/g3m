@@ -315,7 +315,8 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& position,
   //X and Y
   const Vector2D uv = sector.getUVCoordinates(position);
   const int x = (int) IMathUtils::instance()->round( (uv._x * _parameters->_tileTextureResolution._x) );
-  const int y = (int) IMathUtils::instance()->round( ((1.0 - uv._y) * _parameters->_tileTextureResolution._y) );
+  const int y = (int) IMathUtils::instance()->round( (uv._y * _parameters->_tileTextureResolution._y) );
+  // const int y = (int) IMathUtils::instance()->round( ((1.0 - uv._y) * _parameters->_tileTextureResolution._y) );
 
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("&X=");
