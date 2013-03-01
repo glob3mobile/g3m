@@ -383,15 +383,31 @@ public class G3MWidget
     getNextCamera().setPitch(angle);
   }
 
+  public final void setAnimatedCameraPosition(Geodetic3D position, Angle heading)
+  {
+     setAnimatedCameraPosition(position, heading, Angle.zero());
+  }
   public final void setAnimatedCameraPosition(Geodetic3D position)
   {
-    setAnimatedCameraPosition(position, TimeInterval.fromSeconds(3));
+     setAnimatedCameraPosition(position, Angle.zero(), Angle.zero());
+  }
+  public final void setAnimatedCameraPosition(Geodetic3D position, Angle heading, Angle pitch)
+  {
+    setAnimatedCameraPosition(TimeInterval.fromSeconds(3), position, heading, pitch);
   }
 
-  public final void setAnimatedCameraPosition(Geodetic3D position, TimeInterval interval)
+  public final void setAnimatedCameraPosition(TimeInterval interval, Geodetic3D position, Angle heading)
+  {
+     setAnimatedCameraPosition(interval, position, heading, Angle.zero());
+  }
+  public final void setAnimatedCameraPosition(TimeInterval interval, Geodetic3D position)
+  {
+     setAnimatedCameraPosition(interval, position, Angle.zero(), Angle.zero());
+  }
+  public final void setAnimatedCameraPosition(TimeInterval interval, Geodetic3D position, Angle heading, Angle pitch)
   {
   
-    final Geodetic3D startPosition = _planet.toGeodetic3D(_currentCamera.getCartesianPosition());
+    final Geodetic3D fromPosition = _planet.toGeodetic3D(_currentCamera.getCartesianPosition());
   
     double finalLat = position.latitude()._degrees;
     double finalLon = position.longitude()._degrees;
@@ -415,16 +431,23 @@ public class G3MWidget
     {
       finalLon += 360;
     }
-    if (Math.abs(finalLon - startPosition.longitude()._degrees) > 180)
+    if (Math.abs(finalLon - fromPosition.longitude()._degrees) > 180)
     {
       finalLon -= 360;
     }
   
-    final Geodetic3D endPosition = Geodetic3D.fromDegrees(finalLat, finalLon, position.height());
+    final Geodetic3D toPosition = Geodetic3D.fromDegrees(finalLat, finalLon, position.height());
+  
+    final Angle fromHeading = _currentCamera.getHeading();
+    final Angle toHeading = heading;
+    final Angle fromPitch = _currentCamera.getPitch();
+    final Angle toPitch = pitch;
   
     stopCameraAnimation();
     int TODO_make_linearHeight_configurable;
-    _effectsScheduler.startEffect(new CameraGoToPositionEffect(interval, startPosition, endPosition, false, false), _nextCamera.getEffectTarget());
+    final boolean linearTiming = false;
+    final boolean linearHeight = false;
+    _effectsScheduler.startEffect(new CameraGoToPositionEffect(interval, fromPosition, toPosition, fromHeading, toHeading, fromPitch, toPitch, linearTiming, linearHeight), _nextCamera.getEffectTarget());
   }
 
   public final void stopCameraAnimation()

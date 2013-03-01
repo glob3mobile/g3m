@@ -382,6 +382,9 @@ public class Camera
   public final void orbitTo(Vector3D pos)
   {
     final Angle heading = getHeading();
+    final Angle pitch = getPitch();
+  
+    setPitch(Angle.zero());
   
     final MutableVector3D finalPos = pos.asMutableVector3D();
     final Vector3D axis = _position.cross(finalPos).asVector3D();
@@ -396,6 +399,7 @@ public class Camera
     moveForward(dist);
   
     setHeading(heading);
+    setPitch(pitch);
   }
   public final void orbitTo(Geodetic3D g3d)
   {
