@@ -31,6 +31,7 @@
 #include <math.h>
 #include "GInitializationTask.hpp"
 #include "ITextUtils.hpp"
+#include "TouchEvent.hpp"
 
 void G3MWidget::initSingletons(ILogger*            logger,
                                IFactory*           factory,
@@ -114,7 +115,8 @@ _context(new G3MContext(IFactory::instance(),
                         _effectsScheduler,
                         storage)),
 _paused(false),
-_initializationTaskWasRun(false)
+_initializationTaskWasRun(false),
+_clickOnProcess(false)
 {
   initializeGL();
 
@@ -222,6 +224,18 @@ G3MWidget::~G3MWidget() {
   delete _rootState;
 }
 
+void G3MWidget::notifyTouchEvent(const G3MEventContext &ec,
+                                 const TouchEvent* touchEvent) const {
+  bool handled = false;
+  if (_mainRenderer->isEnable()) {
+    handled = _mainRenderer->onTouchEvent(&ec, touchEvent);
+  }
+
+  if (!handled) {
+    _cameraRenderer->onTouchEvent(&ec, touchEvent);
+  }
+}
+
 void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
   if (_mainRendererReady) {
     G3MEventContext ec(IFactory::instance(),
@@ -235,14 +249,40 @@ void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
                        _effectsScheduler,
                        _storage);
 
-    bool handled = false;
-    if (_mainRenderer->isEnable()) {
-      handled = _mainRenderer->onTouchEvent(&ec, touchEvent);
+
+    // notify the original event
+    notifyTouchEvent(ec, touchEvent);
+
+
+    // creates DownUp event when a Down is immediately followed by an Up
+    if (touchEvent->getTouchCount() == 1) {
+      const TouchEventType eventType = touchEvent->getType();
+      if (eventType == Down) {
+        _clickOnProcess = true;
+      }
+      else {
+        if (eventType == Up) {
+          if (_clickOnProcess) {
+            const Vector2I pos = touchEvent->getTouch(0)->getPos();
+            printf("DownUp on %dx%d\n", pos._x, pos._y);
+
+            const Touch* touch = touchEvent->getTouch(0);
+            const TouchEvent* downUpEvent = TouchEvent::create(DownUp,
+                                                               new Touch(*touch));
+
+            notifyTouchEvent(ec, downUpEvent);
+
+            delete downUpEvent;
+          }
+        }
+        _clickOnProcess = false;
+      }
+    }
+    else {
+      _clickOnProcess = false;
     }
 
-    if (!handled) {
-      _cameraRenderer->onTouchEvent(&ec, touchEvent);
-    }
+    
   }
 }
 

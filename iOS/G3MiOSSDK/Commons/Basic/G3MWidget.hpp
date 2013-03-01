@@ -38,6 +38,7 @@ class Geodetic3D;
 class CameraRenderer;
 class IStorage;
 class ITextUtils;
+class G3MEventContext;
 
 #include <vector>
 #include <string>
@@ -226,6 +227,8 @@ private:
 
   bool _initializationTaskWasRun;
 
+  bool _clickOnProcess;
+
   G3MWidget(GL*                              gl,
             IStorage*                        storage,
             IDownloader*                     downloader,
@@ -241,7 +244,10 @@ private:
             GInitializationTask*             initializationTask,
             bool                             autoDeleteInitializationTask,
             std::vector<PeriodicalTask*>     periodicalTasks);
-  
+
+  void notifyTouchEvent(const G3MEventContext &ec,
+                        const TouchEvent* touchEvent) const;
+
 };
 
 #endif

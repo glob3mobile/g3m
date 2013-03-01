@@ -116,7 +116,7 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
     NSLog(@"----------------------------------------------------------------------------");
 
 
-    lastTouchEvent = NULL;
+    _lastTouchEvent = NULL;
 
     // rest of initialization
     _animating = FALSE;
@@ -156,12 +156,13 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
     CGPoint tapPoint = [sender locationInView:sender.view.superview];
 
     std::vector<const Touch*> pointers = std::vector<const Touch*>();
-    Touch *touch = new Touch(Vector2I( IMathUtils::instance()->toInt(tapPoint.x), IMathUtils::instance()->toInt(tapPoint.y)),
+    Touch *touch = new Touch(Vector2I((int) tapPoint.x,
+                                      (int) tapPoint.y),
                              Vector2I(0, 0),
                              1);
     pointers.push_back(touch);
-    lastTouchEvent = TouchEvent::create(LongPress, pointers);
-    [self widget]->onTouchEvent(lastTouchEvent);
+    _lastTouchEvent = TouchEvent::create(LongPress, pointers);
+    [self widget]->onTouchEvent(_lastTouchEvent);
   }
 
 }
@@ -260,17 +261,19 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
     CGPoint previous        = [touch previousLocationInView:self];
     unsigned char tapCount  = (unsigned char) [touch tapCount];
 
-    Touch *touch = new Touch(Vector2I( IMathUtils::instance()->toInt(current.x), IMathUtils::instance()->toInt(current.y) ),
-                             Vector2I( IMathUtils::instance()->toInt(previous.x), IMathUtils::instance()->toInt(previous.y) ),
+    Touch *touch = new Touch(Vector2I((int) current.x,
+                                      (int) current.y),
+                             Vector2I((int) previous.x,
+                                      (int) previous.y),
                              tapCount);
 
     pointers.push_back(touch);
   }
 
-  delete lastTouchEvent;
+  delete _lastTouchEvent;
 
-  lastTouchEvent = TouchEvent::create(Down, pointers);
-  [self widget]->onTouchEvent(lastTouchEvent);
+  _lastTouchEvent = TouchEvent::create(Down, pointers);
+  [self widget]->onTouchEvent(_lastTouchEvent);
 }
 
 
@@ -287,19 +290,21 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
     CGPoint current  = [touch locationInView:self];
     CGPoint previous = [touch previousLocationInView:self];
 
-    Touch *touch = new Touch(Vector2I( IMathUtils::instance()->toInt(current.x), IMathUtils::instance()->toInt(current.y) ),
-                             Vector2I( IMathUtils::instance()->toInt(previous.x), IMathUtils::instance()->toInt(previous.y) ));
+    Touch *touch = new Touch(Vector2I((int) current.x,
+                                      (int) current.y),
+                             Vector2I((int) previous.x,
+                                      (int) previous.y));
 
     pointers.push_back(touch);
   }
 
   // test if finger orders are the same that in the previous gesture
-  if (lastTouchEvent!=NULL) {
-    if (pointers.size()==2 && lastTouchEvent->getTouchCount()==2) {
+  if (_lastTouchEvent!=NULL) {
+    if (pointers.size()==2 && _lastTouchEvent->getTouchCount()==2) {
       Vector2I current0 = pointers[0]->getPrevPos();
-      Vector2I last0 = lastTouchEvent->getTouch(0)->getPos();
-      Vector2I last1 = lastTouchEvent->getTouch(1)->getPos();
-      delete lastTouchEvent;
+      Vector2I last0 = _lastTouchEvent->getTouch(0)->getPos();
+      Vector2I last1 = _lastTouchEvent->getTouch(1)->getPos();
+      delete _lastTouchEvent;
       double dist0 = current0.sub(last0).squaredLength();
       double dist1 = current0.sub(last1).squaredLength();
 
@@ -308,19 +313,19 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
         std::vector<const Touch*> swappedPointers = std::vector<const Touch*>();
         swappedPointers.push_back(pointers[1]);
         swappedPointers.push_back(pointers[0]);
-        lastTouchEvent = TouchEvent::create(Move, swappedPointers);
+        _lastTouchEvent = TouchEvent::create(Move, swappedPointers);
       } else {
-        lastTouchEvent = TouchEvent::create(Move, pointers);
+        _lastTouchEvent = TouchEvent::create(Move, pointers);
       }
     } else {
-      delete lastTouchEvent;
-      lastTouchEvent = TouchEvent::create(Move, pointers);
+      delete _lastTouchEvent;
+      _lastTouchEvent = TouchEvent::create(Move, pointers);
     }
   } else {
-    lastTouchEvent = TouchEvent::create(Move, pointers);
+    _lastTouchEvent = TouchEvent::create(Move, pointers);
   }
 
-  [self widget]->onTouchEvent(lastTouchEvent);
+  [self widget]->onTouchEvent(_lastTouchEvent);
 }
 
 
@@ -340,20 +345,22 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
 
     [touch timestamp];
 
-    Touch *touch = new Touch(Vector2I( IMathUtils::instance()->toInt(current.x), IMathUtils::instance()->toInt(current.y) ),
-                             Vector2I( IMathUtils::instance()->toInt(previous.x), IMathUtils::instance()->toInt(previous.y) ) );
+    Touch *touch = new Touch(Vector2I((int) current.x,
+                                      (int) current.y),
+                             Vector2I((int) previous.x,
+                                      (int) previous.y));
 
     pointers.push_back(touch);
   }
 
-  delete lastTouchEvent;
+  delete _lastTouchEvent;
 
-  lastTouchEvent = TouchEvent::create(Up, pointers);
-  [self widget]->onTouchEvent(lastTouchEvent);
+  _lastTouchEvent = TouchEvent::create(Up, pointers);
+  [self widget]->onTouchEvent(_lastTouchEvent);
 }
 
 - (void)dealloc {
-  delete lastTouchEvent;
+  delete _lastTouchEvent;
   [self setRenderer: nil];
   delete (G3MWidget*) _widgetVP;
 }
