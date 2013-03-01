@@ -138,7 +138,7 @@ public abstract class Layer
       TerrainTouchEventListener listener = _listeners.get(i);
       if (listener != null)
       {
-        listener.onTerrainTouchEvent(ec, tte);
+        listener.onTerrainTouch(ec, tte);
       }
     }
   }
