@@ -44,8 +44,6 @@ public class DoubleTapEffect extends EffectWithDuration
 
   public void doStep(G3MRenderContext rc, TimeInterval when)
   {
-    //const double percent = gently(percentDone(when), 0.2, 0.9);
-    //const double percent = pace( percentDone(when) );
     final double alpha = getAlpha(when);
     Camera camera = rc.getNextCamera();
     final double step = alpha - _lastAlpha;

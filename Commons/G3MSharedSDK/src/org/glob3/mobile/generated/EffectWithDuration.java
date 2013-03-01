@@ -28,11 +28,8 @@ public abstract class EffectWithDuration extends Effect
 
   protected final double getAlpha(TimeInterval when)
   {
-    if (_linearTiming)
-    {
-      return percentDone(when);
-    }
-    return pace(percentDone(when));
+    final double percent = percentDone(when);
+    return _linearTiming ? percent : pace(percent);
   }
 
 
@@ -48,8 +45,7 @@ public abstract class EffectWithDuration extends Effect
 
   public boolean isDone(G3MRenderContext rc, TimeInterval when)
   {
-    final double percent = getAlpha(when);
-    return percent >= 1;
+    final double percent = percentDone(when);
+    return (percent >= 1);
   }
-
 }
