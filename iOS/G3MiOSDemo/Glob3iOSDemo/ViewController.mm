@@ -1101,10 +1101,10 @@ public:
       }
       else {
         middleHeight = (distanceInDegrees / distanceInDegreesMaxHeight) * maxHeight;
-        const double averageHeight = (fromHeight + toHeight) / 2;
-        if (middleHeight < averageHeight) {
-          middleHeight = averageHeight;
-        }
+//        const double averageHeight = (fromHeight + toHeight) / 2;
+//        if (middleHeight < averageHeight) {
+//          middleHeight = averageHeight;
+//        }
       }
       // const double middleHeight = ((averageHeight * distanceInDegrees) > maxHeight) ? maxHeight : (averageHeight * distanceInDegrees);
 

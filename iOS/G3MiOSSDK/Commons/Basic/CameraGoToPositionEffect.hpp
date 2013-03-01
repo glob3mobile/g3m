@@ -39,9 +39,15 @@ private:
 
     const double middleHeight = (distanceInDeg / distanceInDegreesMaxHeight) * maxHeight;
 
+    /*
     const double averageHeight = (_initialPos.height() + _finalPos.height()) / 2;
     if (middleHeight < averageHeight) {
       return averageHeight;
+    }
+    */
+    const double averageHeight = (_initialPos.height() + _finalPos.height()) / 2;
+    if (middleHeight < averageHeight) {
+      return (averageHeight + middleHeight) / 2.0;
     }
 
     return middleHeight;
