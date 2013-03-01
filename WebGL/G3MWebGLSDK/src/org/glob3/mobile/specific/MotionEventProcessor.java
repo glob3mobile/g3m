@@ -66,6 +66,7 @@ public final class MotionEventProcessor {
             break;
          case Event.ONCONTEXTMENU:
             event.preventDefault();
+            touchEvent = contextMenuHandler(pos);
             break;
          case Event.ONMOUSEWHEEL:
             event.preventDefault();
@@ -171,6 +172,26 @@ public final class MotionEventProcessor {
       final Touch touch = new Touch(pos, pos, (byte) 2);
 
       return TouchEvent.create(TouchEventType.Down, touch);
+   }
+
+
+   private TouchEvent contextMenuHandler(final Vector2I pos) {
+      //      log(LogLevel.InfoLevel, " onContextMenu");
+
+      final ArrayList<Touch> touches = new ArrayList<Touch>();
+
+      _mouseDown = false;
+      //      if (_keyDown) {
+      //         touches.add(new Touch(new Vector2I(pos._x - 10, pos._y), _prevPos));
+      //         touches.add(new Touch(pos, _prevPos));
+      //         touches.add(new Touch(new Vector2I(pos._x + 10, pos._y), _prevPos));
+      //      }
+      //      else {
+      touches.add(new Touch(pos, _prevPos));
+      //      }
+      _prevPos = pos;
+
+      return TouchEvent.create(TouchEventType.LongPress, touches);
    }
 
 
