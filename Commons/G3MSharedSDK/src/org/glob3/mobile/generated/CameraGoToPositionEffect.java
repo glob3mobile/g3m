@@ -38,10 +38,16 @@ public class CameraGoToPositionEffect extends EffectWithDuration
 
     final double middleHeight = (distanceInDeg / distanceInDegreesMaxHeight) * maxHeight;
 
+    /*
+    const double averageHeight = (_initialPos.height() + _finalPos.height()) / 2;
+    if (middleHeight < averageHeight) {
+      return averageHeight;
+    }
+    */
     final double averageHeight = (_initialPos.height() + _finalPos.height()) / 2;
     if (middleHeight < averageHeight)
     {
-      return averageHeight;
+      return (averageHeight + middleHeight) / 2.0;
     }
 
     return middleHeight;
