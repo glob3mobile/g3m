@@ -99,6 +99,9 @@ public class Mark
 
   private boolean _renderedMark;
 
+  /**
+   * Creates a marker with icon and label
+   */
   public Mark(String label, URL iconURL, Geodetic3D position, double minDistanceToCamera, boolean labelBottom, float labelFontSize, Color labelFontColor, Color labelShadowColor, int labelGapSize, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener)
   {
      this(label, iconURL, position, minDistanceToCamera, labelBottom, labelFontSize, labelFontColor, labelShadowColor, labelGapSize, userData, autoDeleteUserData, listener, false);
@@ -165,6 +168,9 @@ public class Mark
   
   }
 
+  /**
+   * Creates a marker just with label, without icon
+   */
   public Mark(String label, Geodetic3D position, double minDistanceToCamera, float labelFontSize, Color labelFontColor, Color labelShadowColor, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener)
   {
      this(label, position, minDistanceToCamera, labelFontSize, labelFontColor, labelShadowColor, userData, autoDeleteUserData, listener, false);
@@ -223,6 +229,9 @@ public class Mark
   
   }
 
+  /**
+   * Creates a marker just with icon, without label
+   */
   public Mark(URL iconURL, Geodetic3D position, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener)
   {
      this(iconURL, position, minDistanceToCamera, userData, autoDeleteUserData, listener, false);

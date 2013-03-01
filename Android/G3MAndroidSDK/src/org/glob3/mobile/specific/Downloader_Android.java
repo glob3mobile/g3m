@@ -24,7 +24,6 @@ public final class Downloader_Android
          extends
             IDownloader {
 
-   public final static String                               ASSET_URL       = "file:///";
    final static String                                      TAG             = "Downloader_Android";
 
    private final int                                        _maxConcurrentOperationCount;

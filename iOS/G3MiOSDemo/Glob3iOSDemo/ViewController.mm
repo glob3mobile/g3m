@@ -1074,6 +1074,56 @@ public:
                              new Color(color));
 
     }
+    
+    Mesh* createMesh(const G3MContext* context, Geodetic2D from2D, double fromH, Geodetic2D to2D, double toH, Color* color) {
+      
+      double deltaLat = Angle::fromDegrees(from2D.latitude()._degrees).sub(Angle::fromDegrees(to2D.latitude()._degrees))._degrees;
+      double deltaLon = Angle::fromDegrees(from2D.longitude()._degrees).sub(Angle::fromDegrees(to2D.longitude()._degrees))._degrees;
+      
+      const double distanceInDegrees = IMathUtils::instance()->sqrt((deltaLat * deltaLat) + (deltaLon * deltaLon));
+      
+//      double averageHeight = (fromH + toH) / 2;
+//      double middleHeight = (averageHeight + (averageHeight * distanceInDegrees / 10));
+      
+//      double middleHeight = (((fromH + toH) / 2) * distanceInDegrees / 10);
+      
+      const double distanceMaxHeight = IMathUtils::instance()->sqrt((90.0 * 90) + (180 * 180));
+      
+      double averageHeight = (fromH + toH) / 2;
+      const double maxHeight = context->getPlanet()->getRadii().axisAverage() * 3;
+
+      double middleHeight = ((averageHeight * distanceInDegrees) > maxHeight) ? maxHeight : (averageHeight * distanceInDegrees);
+      if (distanceInDegrees >= distanceMaxHeight) {
+        middleHeight = maxHeight;
+      }
+      else {
+        const double height = (distanceInDegrees / distanceMaxHeight) * maxHeight;
+        if (height < middleHeight) {
+          middleHeight = height;
+        }
+      }
+//      const double middleHeight = ((averageHeight * distanceInDegrees) > maxHeight) ? maxHeight : (averageHeight * distanceInDegrees);
+      
+      FloatBufferBuilderFromGeodetic vertices(CenterStrategy::noCenter(),
+                                              context->getPlanet(),
+                                              Vector3D::zero());
+      
+      for (double t = 0; t <= 1; t += 0.1) {
+        Geodetic2D position( Geodetic2D::linearInterpolation(from2D, to2D, t) );
+        
+        const double height = IMathUtils::instance()->quadraticBezierInterpolation(fromH, middleHeight, toH, t);
+        vertices.add(position, height);
+      }
+      
+      Mesh* mesh = new DirectMesh(GLPrimitive::lineStrip(),
+                                  true,
+                                  vertices.getCenter(),
+                                  vertices.create(),
+                                  2,
+                                  1,
+                                  color);
+      return mesh;
+    }
 
     void run(const G3MContext* context) {
       printf("Running initialization Task\n");
@@ -1088,7 +1138,7 @@ public:
 
 
 
-      
+      // mesh1
       Angle latFrom(Angle::fromDegreesMinutesSeconds(38, 53, 42.24));
       Angle lonFrom(Angle::fromDegreesMinutesSeconds(-77, 2, 10.92));
 
@@ -1100,28 +1150,66 @@ public:
 
       double fromHeight = 30000;
       double toHeight   = 2000;
-      double middleHeight = 60000;
+//      double middleHeight = 60000;
+      
+      _meshRenderer->addMesh(createMesh(context, posFrom, fromHeight, posTo, toHeight, Color::newFromRGBA(1, 1, 0, 1)));
+      
+      // mesh2
+      Geodetic2D posFrom2(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
+                          Angle::fromDegreesMinutesSeconds(-77, 2, 10.92));
+      Geodetic2D posTo2(latFrom.add(Angle::fromDegrees(0.75)), lonFrom.add(Angle::fromDegrees(+0.75)));
+      _meshRenderer->addMesh(createMesh(context, posFrom2, 100000, posTo2, toHeight, Color::newFromRGBA(1, 0, 0, 1)));
+      
+      // mesh3
+      Geodetic2D posTo3(Angle::fromDegrees(37.7658),
+                        Angle::fromDegrees(-122.4185));
+      _meshRenderer->addMesh(createMesh(context, posFrom2, 1000000, posTo3, toHeight, Color::newFromRGBA(0, 1, 0, 1)));
+      
+      // mesh3a
+      _meshRenderer->addMesh(createMesh(context, posFrom2, fromHeight, posTo3, toHeight, Color::newFromRGBA(0, 1, 0, 1)));
+      
+      // mesh4
+      Geodetic2D posFrom4(Angle::fromDegrees(-79.687184),
+                          Angle::fromDegrees(-81.914062));
+      Geodetic2D posTo4(Angle::fromDegrees(73.124945),
+                        Angle::fromDegrees(-47.460937));
+      _meshRenderer->addMesh(createMesh(context, posFrom4, fromHeight, posTo4, toHeight, Color::newFromRGBA(0, 0, 1, 1)));
+      
+      // mesh5
+      Geodetic2D posFrom5(Angle::fromDegrees(39.909736),
+                          Angle::fromDegrees(-3.515625));
+      Geodetic2D posTo5(Angle::fromDegrees(39.909736),
+                        Angle::fromDegrees(-178.945312));
+      _meshRenderer->addMesh(createMesh(context, posFrom5, fromHeight, posTo5, 1000000, Color::newFromRGBA(0, 1, 1, 1)));
+      
+      // mesh5a
+      _meshRenderer->addMesh(createMesh(context, posFrom5, fromHeight, posTo5, toHeight, Color::newFromRGBA(0, 1, 1, 1)));
 
-      FloatBufferBuilderFromGeodetic vertices(CenterStrategy::noCenter(),
-                                              context->getPlanet(),
-                                              Vector3D::zero());
+      
+      
+      [_iosWidget setCameraPosition: Geodetic3D(posFrom, 60000)];
+      [_iosWidget setCameraPitch: Angle::fromDegrees(95)];
 
-      for (double t = 0; t <= 1; t += 0.1) {
-        Geodetic2D position( Geodetic2D::linearInterpolation(posFrom, posTo, t) );
-
-        const double height = IMathUtils::instance()->quadraticBezierInterpolation(fromHeight, middleHeight, toHeight, t);
-        vertices.add(position, height);
-      }
-
-      Mesh* mesh = new DirectMesh(GLPrimitive::lineStrip(),
-                                  true,
-                                  vertices.getCenter(),
-                                  vertices.create(),
-                                  2,
-                                  1,
-                                  Color::newFromRGBA(1, 1, 0, 1));
-
-      _meshRenderer->addMesh( mesh );
+//      FloatBufferBuilderFromGeodetic vertices(CenterStrategy::noCenter(),
+//                                              context->getPlanet(),
+//                                              Vector3D::zero());
+//
+//      for (double t = 0; t <= 1; t += 0.1) {
+//        Geodetic2D position( Geodetic2D::linearInterpolation(posFrom, posTo, t) );
+//
+//        const double height = IMathUtils::instance()->quadraticBezierInterpolation(fromHeight, middleHeight, toHeight, t);
+//        vertices.add(position, height);
+//      }
+//
+//      Mesh* mesh = new DirectMesh(GLPrimitive::lineStrip(),
+//                                  true,
+//                                  vertices.getCenter(),
+//                                  vertices.create(),
+//                                  2,
+//                                  1,
+//                                  Color::newFromRGBA(1, 1, 0, 1));
+//
+//      _meshRenderer->addMesh( mesh );
 
 
 

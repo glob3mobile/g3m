@@ -171,9 +171,8 @@ public final class Downloader_Android_Handler {
       HttpURLConnection connection = null;
 
       try {
-         if (_url.getPath().startsWith(Downloader_Android.ASSET_URL)) {
-            data = getData(downloader.getAppContext().getAssets().open(
-                     _url.getPath().replaceFirst(Downloader_Android.ASSET_URL, "")));
+         if (_url.isFileProtocol()) {
+            data = getData(downloader.getAppContext().getAssets().open(_url.getPath().replaceFirst(URL.FILE_PROTOCOL, "")));
             if (data != null) {
                statusCode = 200;
             }

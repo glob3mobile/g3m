@@ -13,8 +13,7 @@
 
 void ShapeOrbitCameraEffect::doStep(const G3MRenderContext *rc,
                                     const TimeInterval& when) {
-  const double alpha = pace( percentDone(when) );
-  //  const double alpha = percentDone(when);
+  const double alpha = getAlpha(when);
 
   const Geodetic3D center = _shape->getPosition();
 

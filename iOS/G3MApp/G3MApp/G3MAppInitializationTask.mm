@@ -35,7 +35,7 @@ void G3MAppInitializationTask::run(const G3MContext* context) {
                             new G3MWikiDownloadListener(this, _widget),
                             true);
   // weatherMarkers data
-  downloader->requestBuffer(URL("http://openweathermap.org/data/2.1/find/city?bbox=-80,-180,80,180,4&cluster=yes", false),
+  downloader->requestBuffer(URL("http://openweathermap.org/data/2.1/find/city?bbox=-180,-90,180,90,2&cluster=yes", false),
                             200000,
                             TimeInterval::fromHours(1.0),
                             new G3MWeatherDownloadListener(this, _widget),

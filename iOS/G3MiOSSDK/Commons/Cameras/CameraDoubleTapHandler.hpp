@@ -22,8 +22,9 @@ public:
   DoubleTapEffect(const TimeInterval& duration,
                   const Vector3D& axis,
                   const Angle& angle,
-                  double distance):
-  EffectWithDuration(duration),
+                  double distance,
+                  const bool linearTiming=false):
+  EffectWithDuration(duration, linearTiming),
   _axis(axis),
   _angle(angle),
   _distance(distance)
@@ -32,26 +33,26 @@ public:
   virtual void start(const G3MRenderContext *rc,
                      const TimeInterval& when) {
     EffectWithDuration::start(rc, when);
-    _lastPercent = 0;
+    _lastAlpha = 0;
   }
   
   virtual void doStep(const G3MRenderContext *rc,
                       const TimeInterval& when) {
     //const double percent = gently(percentDone(when), 0.2, 0.9);
     //const double percent = pace( percentDone(when) );
-    const double percent = percentDone(when);
+    const double alpha = getAlpha(when);
     Camera *camera = rc->getNextCamera();
-    const double step = percent - _lastPercent;
+    const double step = alpha - _lastAlpha;
     camera->rotateWithAxis(_axis, _angle.times(step));
     camera->moveForward(_distance * step);
-    _lastPercent = percent;
+    _lastAlpha = alpha;
   }
   
   virtual void stop(const G3MRenderContext *rc,
                     const TimeInterval& when) {
     Camera *camera = rc->getNextCamera();
 
-    const double step = 1.0 - _lastPercent;
+    const double step = 1.0 - _lastAlpha;
     camera->rotateWithAxis(_axis, _angle.times(step));
     camera->moveForward(_distance * step);
   }
@@ -64,7 +65,7 @@ private:
   Vector3D _axis;
   Angle    _angle;
   double   _distance;
-  double   _lastPercent;
+  double   _lastAlpha;
 };
 
 //***************************************************************

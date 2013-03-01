@@ -141,16 +141,15 @@
   ((G3MAppUserData*) [[self g3mWidget] userData])->getShapeRenderer()->setEnable(false);
   ((G3MAppUserData*) [[self g3mWidget] userData])->getMeshRenderer()->setEnable(false);
   
-  [[self g3mWidget] widget]->stopCameraAnimation();
-  [[self g3mWidget] widget]->resetCameraPosition();
-  [[self g3mWidget] widget]->setCameraPosition(Geodetic3D(Angle::fromDegrees(0),
-                                                          Angle::fromDegrees(0),
-                                                          25000000));
-  
-  [[self g3mWidget] widget]->setAnimatedCameraPosition(Geodetic3D(Angle::fromDegrees(0),
-                                                                  Angle::fromDegrees(0),
-                                                                  25000000),
-                                                       TimeInterval::fromSeconds(3));
+  [[self g3mWidget] stopCameraAnimation];
+  [[self g3mWidget] resetCameraPosition];
+  [[self g3mWidget] setCameraPosition: Geodetic3D(Angle::fromDegrees(0),
+                                                  Angle::fromDegrees(0),
+                                                  25000000)];
+//  [[self g3mWidget] setAnimatedCameraPosition: Geodetic3D(Angle::fromDegrees(0),
+//                                                          Angle::fromDegrees(0),
+//                                                          25000000)];
+
 }
 
 - (void) showSimpleGlob3
@@ -159,6 +158,11 @@
   if (!satelliteLayerEnabled) {
     [self switchLayer];
   }
+  
+  [[self g3mWidget] widget]->setAnimatedCameraPosition(Geodetic3D(Angle::fromDegrees(0),
+                                                                  Angle::fromDegrees(0),
+                                                                  25000000),
+                                                       TimeInterval::fromSeconds(5));
 }
 
 - (void) switchLayer
@@ -188,7 +192,7 @@
                                                                   Angle::fromDegrees(-122.4185),
                                                                   12000),
                                                        TimeInterval::fromSeconds(5));
-  [[self toolbar] setVisible: FALSE];
+//  [[self toolbar] setVisible: FALSE];
 }
 
 - (void) gotoModelDemo
@@ -223,7 +227,7 @@
                      fromAzimuth,  toAzimuth,
                      fromAltitude, toAltitude);
   
-  [[self toolbar] setVisible: FALSE];
+//  [[self toolbar] setVisible: FALSE];
 }
 
 - (void) gotoMeshDemo
@@ -232,7 +236,7 @@
                                                                   Angle::fromDegreesMinutesSeconds(-77, 2, 11),
                                                                   6700000),
                                                        TimeInterval::fromSeconds(5));
-  [[self toolbar] setVisible: FALSE];
+//  [[self toolbar] setVisible: FALSE];
 }
 
 
@@ -311,34 +315,41 @@
 - (void) updateToolbar: (NSString*) option
 {
   [[self toolbar] clear];
-  if ([option isEqual: @"Simple glob3"]) {
-    [[self toolbar] setVisible: FALSE];
-  }
-  else if ([option isEqual: @"Switch layer"]) {
+  if ([option isEqual: @"Switch layer"]) {
     [[self toolbar] addSubview: [self layerSwitcher]];
     [[self toolbar] setVisible: TRUE];
   }
-  else if ([option isEqual: @"Markers"]) {
-    [[self toolbar] addSubview: [self playButton]];
-    [[self playButton] addTarget: self
-                          action: @selector(gotoMarkersDemo)
-                forControlEvents: UIControlEventTouchUpInside];
-    [[self toolbar] setVisible: TRUE];
+  else {
+    [[self toolbar] setVisible: FALSE];
   }
-  else if ([option isEqual: @"3D Model"]) {
-    [[self toolbar] addSubview: [self playButton]];
-    [[self playButton] addTarget: self
-                          action: @selector(gotoModelDemo)
-                forControlEvents: UIControlEventTouchUpInside];
-    [[self toolbar] setVisible: TRUE];
-  }
-  else if ([option isEqual: @"Point Mesh"]) {
-    [[self toolbar] addSubview: [self playButton]];
-    [[self playButton] addTarget: self
-                          action: @selector(gotoMeshDemo)
-                forControlEvents: UIControlEventTouchUpInside];
-    [[self toolbar] setVisible: TRUE];
-  }
+//  if ([option isEqual: @"Simple glob3"]) {
+//    [[self toolbar] setVisible: FALSE];
+//  }
+//  else if ([option isEqual: @"Switch layer"]) {
+//    [[self toolbar] addSubview: [self layerSwitcher]];
+//    [[self toolbar] setVisible: TRUE];
+//  }
+//  else if ([option isEqual: @"Markers"]) {
+//    [[self toolbar] addSubview: [self playButton]];
+//    [[self playButton] addTarget: self
+//                          action: @selector(gotoMarkersDemo)
+//                forControlEvents: UIControlEventTouchUpInside];
+//    [[self toolbar] setVisible: TRUE];
+//  }
+//  else if ([option isEqual: @"3D Model"]) {
+//    [[self toolbar] addSubview: [self playButton]];
+//    [[self playButton] addTarget: self
+//                          action: @selector(gotoModelDemo)
+//                forControlEvents: UIControlEventTouchUpInside];
+//    [[self toolbar] setVisible: TRUE];
+//  }
+//  else if ([option isEqual: @"Point Mesh"]) {
+//    [[self toolbar] addSubview: [self playButton]];
+//    [[self playButton] addTarget: self
+//                          action: @selector(gotoMeshDemo)
+//                forControlEvents: UIControlEventTouchUpInside];
+//    [[self toolbar] setVisible: TRUE];
+//  }
 }
 
 - (void) DropDownMenuDidChange: (NSString *) identifier
@@ -358,12 +369,15 @@
     }
     else if ([returnValue isEqual: @"Markers"]) {
       ((G3MAppUserData*) [[self g3mWidget] userData])->getMarkerRenderer()->setEnable(true);
+      [self gotoMarkersDemo];
     }
     else if ([returnValue isEqual: @"3D Model"]) {
       ((G3MAppUserData*) [[self g3mWidget] userData])->getShapeRenderer()->setEnable(true);
+      [self gotoModelDemo];
     }
     else if ([returnValue isEqual: @"Point Mesh"]) {
       ((G3MAppUserData*) [[self g3mWidget] userData])->getMeshRenderer()->setEnable(true);
+      [self gotoMeshDemo];
     }
   }
 }

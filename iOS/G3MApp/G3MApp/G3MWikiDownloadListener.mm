@@ -44,10 +44,10 @@ void G3MWikiDownloadListener::onDownload(const URL& url,
     
     std::string markerIcon = "";
     if ([[UIScreen mainScreen] bounds].size.width < 768) {
-      markerIcon = "file:///marker-wikipedia-48x48.png"; // iPhone
+      markerIcon = URL::FILE_PROTOCOL + "marker-wikipedia-48x48.png"; // iPhone
     }
     else {
-      markerIcon = "file:///marker-wikipedia-72x72.png"; // iPad
+      markerIcon = URL::FILE_PROTOCOL + "marker-wikipedia-72x72.png"; // iPad
     }
     
     Mark* marker = new Mark(URL(markerIcon, false),
