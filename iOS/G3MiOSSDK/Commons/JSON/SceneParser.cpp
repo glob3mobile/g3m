@@ -204,7 +204,7 @@ void SceneParser::parserGEOJSONLayer(LayerSet* layerSet, const JSONObject* jsonL
       
         std::string nameFileFormatted;
         int pos = IStringUtils::instance()->indexOf(namefileTruncated, "-");
-        if (pos != 0){
+        if (pos != -1){
           nameFileFormatted = iISU->substring(namefileTruncated, 0, pos) + " - " + iISU->substring(namefileTruncated, pos+1, namefileTruncated.length());
         } else {
           nameFileFormatted = namefileTruncated;
