@@ -78,7 +78,7 @@ public abstract class BufferElevationData extends ElevationData
     final double alphaY = dY - y;
     final double alphaX = dX - x;
   
-    int unsedType;
+    int unsedType = -1;
     double result;
     if (x == dX)
     {

@@ -80,7 +80,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
     double minHeight = 0;
     FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.givenCenter(), planet, sector.getCenter());
   
-    int unusedType;
+    int unusedType = -1;
     for (int j = 0; j < tileResolution._y; j++)
     {
       final double v = (double) j / (tileResolution._y-1);

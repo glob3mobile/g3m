@@ -52,7 +52,7 @@ public class ShortBufferElevationData extends BufferElevationData
     isb.addInt(_height);
     isb.addString(" sector=");
     isb.addString(_sector.description());
-    int unusedType;
+    int unusedType = -1;
     if (detailed)
     {
       isb.addString("\n");
