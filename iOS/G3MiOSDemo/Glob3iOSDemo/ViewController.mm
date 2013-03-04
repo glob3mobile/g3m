@@ -504,16 +504,16 @@ public:
 //                                    TimeInterval::zero());
 //  layerSet->addLayer(pressure);
 
-  const bool usePnoaLayer = false;
+  const bool usePnoaLayer = true;
   if (usePnoaLayer) {
     WMSLayer *pnoa = new WMSLayer("PNOA",
                                   URL("http://www.idee.es/wms/PNOA/PNOA", false),
                                   WMS_1_1_0,
                                   Sector::fromDegrees(21, -18, 45, 6),
-                                  "image/png",
+                                  "image/jpeg", //"image/png",
                                   "EPSG:4326",
                                   "",
-                                  true,
+                                  false, //true,
                                   NULL,
                                   TimeInterval::fromDays(30));
     layerSet->addLayer(pnoa);

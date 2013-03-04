@@ -209,7 +209,7 @@ std::vector<Petition*> BingLayer::getMapPetitions(const G3MRenderContext* rc,
       //set the subDomain (round-robbin)
       url = IStringUtils::instance()->replaceSubstring(url, "{subdomain}",_subDomains[currentSubDomain % numSubDomains]);
       currentSubDomain++;
-      petitions.push_back(new Petition(bingSector, URL(url, false), _timeToCache));
+      petitions.push_back(new Petition(bingSector, URL(url, false), _timeToCache, false));
       
     }
     
