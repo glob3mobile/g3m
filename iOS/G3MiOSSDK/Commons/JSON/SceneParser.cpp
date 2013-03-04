@@ -30,6 +30,9 @@
 #include "MarksRenderer.hpp"
 #include "IStringUtils.hpp"
 
+#include "LayerTilesRenderParameters.hpp"
+#include "Vector2I.hpp"
+
 using namespace std;
 
 const std::string SceneParser::LAYERS = "layers";
@@ -69,8 +72,9 @@ SceneParser::SceneParser(){
 
 }
 
-void SceneParser::parse(LayerSet* layerSet, std::string namelessParameter){
-    
+void SceneParser::parse(LayerSet* layerSet,  LayerTilesRenderParameters* layerTileRenderParameters, std::string namelessParameter){
+  
+    _layerTileRenderParameters = layerTileRenderParameters;
     _mapGeoJSONSources.clear();
     _panoSources.clear();
     _legend.clear();
@@ -147,7 +151,7 @@ void SceneParser::parserJSONWMSLayer(LayerSet* layerSet, const JSONObject* jsonL
                                       "EPSG:4326",
                                       "",
                                       true,
-                                      NULL, TimeInterval::fromDays(30));
+                                      NULL, TimeInterval::fromDays(30), _layerTileRenderParameters);
     layerSet->addLayer(wmsLayer);
 }
 

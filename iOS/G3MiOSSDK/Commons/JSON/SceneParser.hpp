@@ -17,6 +17,7 @@
 #include "Renderer.hpp"
 #include "IDownloader.hpp"
 #include "MarksRenderer.hpp"
+#include "LayerTilesRenderParameters.hpp"
 
 enum layer_type {
     WMS,THREED,PLANARIMAGE,GEOJSON,SPHERICALIMAGE
@@ -48,11 +49,12 @@ class SceneParser{
     std::vector<std::string> _panoSources;
     std::map<std::string, std::vector <std::map<std::string, std::string>* > > _legend;
     int countGroup;
+    LayerTilesRenderParameters* _layerTileRenderParameters;
   
 public:
     
     static SceneParser* instance();
-    void parse(LayerSet* layerSet, std::string namelessParameter);
+    void parse(LayerSet* layerSet, LayerTilesRenderParameters* layerTileRenderParameters, std::string namelessParameter);
     std::map<std::string, std::map<std::string, std::string>* > getMapGeoJSONSources();
     std::vector<std::string> getPanoSources();
     std::map<std::string, std::vector <std::map<std::string, std::string>* > > getLegend();

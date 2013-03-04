@@ -389,6 +389,7 @@
 		E780A5C816D3AEDA000F0395 /* G3MWidget_iOS.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 383BD3821577EDDB0012AC53 /* G3MWidget_iOS.h */; };
 		E7B9964E16A94EC400753FC3 /* LayerBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7B9964C16A94EC400753FC3 /* LayerBuilder.cpp */; };
 		E7EC944516C4F43300B32D9F /* DownloadPriority.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7EC944316C4F43300B32D9F /* DownloadPriority.cpp */; };
+		E8071A4916E4A70000EF2618 /* LayerTilesRenderParameters.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFD42ABB16DBFE8600B03961 /* LayerTilesRenderParameters.hpp */; };
 		E86A5B8B167211900098449B /* PanoDownloadListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E86A5B891672118F0098449B /* PanoDownloadListener.cpp */; };
 		E8891FB31647DCF500B0E481 /* AppParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8891FB11647DCF500B0E481 /* AppParser.cpp */; };
 		E8891FBC1647DD0E00B0E481 /* SceneParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8891FB81647DD0D00B0E481 /* SceneParser.cpp */; };
@@ -405,6 +406,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				E8071A4916E4A70000EF2618 /* LayerTilesRenderParameters.hpp in CopyFiles */,
 				E8B610F716DD27F8003F653B /* IG3MJSONBuilder.hpp in CopyFiles */,
 				E8B610F416DD2619003F653B /* PanoDownloadListener.hpp in CopyFiles */,
 				E8B610F516DD2619003F653B /* SceneParser.hpp in CopyFiles */,
