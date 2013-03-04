@@ -250,16 +250,46 @@ public class G3MWidget
     {
       G3MEventContext ec = new G3MEventContext(IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _downloader, _effectsScheduler, _storage);
   
-      boolean handled = false;
-      if (_mainRenderer.isEnable())
+  
+      // notify the original event
+      notifyTouchEvent(ec, touchEvent);
+  
+  
+      // creates DownUp event when a Down is immediately followed by an Up
+      if (touchEvent.getTouchCount() == 1)
       {
-        handled = _mainRenderer.onTouchEvent(ec, touchEvent);
+        final TouchEventType eventType = touchEvent.getType();
+        if (eventType == TouchEventType.Down)
+        {
+          _clickOnProcess = true;
+        }
+        else
+        {
+          if (eventType == TouchEventType.Up)
+          {
+            if (_clickOnProcess)
+            {
+              final Vector2I pos = touchEvent.getTouch(0).getPos();
+              System.out.printf("DownUp on %dx%d\n", pos._x, pos._y);
+  
+              final Touch touch = touchEvent.getTouch(0);
+              final TouchEvent downUpEvent = TouchEvent.create(TouchEventType.DownUp, new Touch(touch));
+  
+              notifyTouchEvent(ec, downUpEvent);
+  
+              if (downUpEvent != null)
+                 downUpEvent.dispose();
+            }
+          }
+          _clickOnProcess = false;
+        }
+      }
+      else
+      {
+        _clickOnProcess = false;
       }
   
-      if (!handled)
-      {
-        _cameraRenderer.onTouchEvent(ec, touchEvent);
-      }
+  
     }
   }
 
@@ -383,15 +413,31 @@ public class G3MWidget
     getNextCamera().setPitch(angle);
   }
 
+  public final void setAnimatedCameraPosition(Geodetic3D position, Angle heading)
+  {
+     setAnimatedCameraPosition(position, heading, Angle.zero());
+  }
   public final void setAnimatedCameraPosition(Geodetic3D position)
   {
-    setAnimatedCameraPosition(position, TimeInterval.fromSeconds(3));
+     setAnimatedCameraPosition(position, Angle.zero(), Angle.zero());
+  }
+  public final void setAnimatedCameraPosition(Geodetic3D position, Angle heading, Angle pitch)
+  {
+    setAnimatedCameraPosition(TimeInterval.fromSeconds(3), position, heading, pitch);
   }
 
-  public final void setAnimatedCameraPosition(Geodetic3D position, TimeInterval interval)
+  public final void setAnimatedCameraPosition(TimeInterval interval, Geodetic3D position, Angle heading)
+  {
+     setAnimatedCameraPosition(interval, position, heading, Angle.zero());
+  }
+  public final void setAnimatedCameraPosition(TimeInterval interval, Geodetic3D position)
+  {
+     setAnimatedCameraPosition(interval, position, Angle.zero(), Angle.zero());
+  }
+  public final void setAnimatedCameraPosition(TimeInterval interval, Geodetic3D position, Angle heading, Angle pitch)
   {
   
-    final Geodetic3D startPosition = _planet.toGeodetic3D(_currentCamera.getCartesianPosition());
+    final Geodetic3D fromPosition = _planet.toGeodetic3D(_currentCamera.getCartesianPosition());
   
     double finalLat = position.latitude()._degrees;
     double finalLon = position.longitude()._degrees;
@@ -415,16 +461,23 @@ public class G3MWidget
     {
       finalLon += 360;
     }
-    if (Math.abs(finalLon - startPosition.longitude()._degrees) > 180)
+    if (Math.abs(finalLon - fromPosition.longitude()._degrees) > 180)
     {
       finalLon -= 360;
     }
   
-    final Geodetic3D endPosition = Geodetic3D.fromDegrees(finalLat, finalLon, position.height());
+    final Geodetic3D toPosition = Geodetic3D.fromDegrees(finalLat, finalLon, position.height());
+  
+    final Angle fromHeading = _currentCamera.getHeading();
+    final Angle toHeading = heading;
+    final Angle fromPitch = _currentCamera.getPitch();
+    final Angle toPitch = pitch;
   
     stopCameraAnimation();
-  
-    _effectsScheduler.startEffect(new CameraGoToPositionEffect(interval, startPosition, endPosition), _nextCamera.getEffectTarget());
+    int TODO_make_linearHeight_configurable;
+    final boolean linearTiming = false;
+    final boolean linearHeight = false;
+    _effectsScheduler.startEffect(new CameraGoToPositionEffect(interval, fromPosition, toPosition, fromHeading, toHeading, fromPitch, toPitch, linearTiming, linearHeight), _nextCamera.getEffectTarget());
   }
 
   public final void stopCameraAnimation()
@@ -506,6 +559,8 @@ public class G3MWidget
 
   private boolean _initializationTaskWasRun;
 
+  private boolean _clickOnProcess;
+
   private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks)
   /*
    =======
@@ -546,6 +601,7 @@ public class G3MWidget
      _context = new G3MContext(IFactory.instance(), IStringUtils.instance(), threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, downloader, _effectsScheduler, storage);
      _paused = false;
      _initializationTaskWasRun = false;
+     _clickOnProcess = false;
     initializeGL();
   
     _effectsScheduler.initialize(_context);
@@ -574,6 +630,20 @@ public class G3MWidget
     for (int i = 0; i < periodicalTasks.size(); i++)
     {
       addPeriodicalTask(periodicalTasks.get(i));
+    }
+  }
+
+  private void notifyTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
+  {
+    boolean handled = false;
+    if (_mainRenderer.isEnable())
+    {
+      handled = _mainRenderer.onTouchEvent(ec, touchEvent);
+    }
+  
+    if (!handled)
+    {
+      _cameraRenderer.onTouchEvent(ec, touchEvent);
     }
   }
 

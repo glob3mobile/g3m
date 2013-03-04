@@ -165,7 +165,10 @@ void Camera::setPitch(const Angle& angle) {
 
 void Camera::orbitTo(const Vector3D& pos) {
   const Angle heading = getHeading();
+  const Angle pitch = getPitch();
 
+  setPitch(Angle::zero());
+  
   const MutableVector3D finalPos = pos.asMutableVector3D();
   const Vector3D        axis     = _position.cross(finalPos).asVector3D();
   if (axis.length()<1e-3) {
@@ -178,6 +181,7 @@ void Camera::orbitTo(const Vector3D& pos) {
   moveForward(dist);
 
   setHeading(heading);
+  setPitch(pitch);
 }
 
 void Camera::render(const G3MRenderContext* rc,

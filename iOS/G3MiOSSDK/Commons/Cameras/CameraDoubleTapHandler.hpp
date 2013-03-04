@@ -38,8 +38,6 @@ public:
   
   virtual void doStep(const G3MRenderContext *rc,
                       const TimeInterval& when) {
-    //const double percent = gently(percentDone(when), 0.2, 0.9);
-    //const double percent = pace( percentDone(when) );
     const double alpha = getAlpha(when);
     Camera *camera = rc->getNextCamera();
     const double step = alpha - _lastAlpha;

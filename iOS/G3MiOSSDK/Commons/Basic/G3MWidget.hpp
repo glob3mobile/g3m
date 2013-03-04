@@ -38,6 +38,7 @@ class Geodetic3D;
 class CameraRenderer;
 class IStorage;
 class ITextUtils;
+class G3MEventContext;
 
 #include <vector>
 #include <string>
@@ -151,10 +152,14 @@ public:
 
   void setCameraPitch(const Angle& angle);
 
-  void setAnimatedCameraPosition(const Geodetic3D& position);
-
   void setAnimatedCameraPosition(const Geodetic3D& position,
-                                 const TimeInterval& interval);
+                                 const Angle& heading=Angle::zero(),
+                                 const Angle& pitch=Angle::zero());
+
+  void setAnimatedCameraPosition(const TimeInterval& interval,
+                                 const Geodetic3D& position,
+                                 const Angle& heading=Angle::zero(),
+                                 const Angle& pitch=Angle::zero());
   
   void stopCameraAnimation();
 
@@ -222,6 +227,8 @@ private:
 
   bool _initializationTaskWasRun;
 
+  bool _clickOnProcess;
+
   G3MWidget(GL*                              gl,
             IStorage*                        storage,
             IDownloader*                     downloader,
@@ -237,7 +244,10 @@ private:
             GInitializationTask*             initializationTask,
             bool                             autoDeleteInitializationTask,
             std::vector<PeriodicalTask*>     periodicalTasks);
-  
+
+  void notifyTouchEvent(const G3MEventContext &ec,
+                        const TouchEvent* touchEvent) const;
+
 };
 
 #endif

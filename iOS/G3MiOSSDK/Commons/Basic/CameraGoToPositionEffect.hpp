@@ -14,32 +14,70 @@
 
 class CameraGoToPositionEffect : public EffectWithDuration {
 private:
-  const Geodetic3D  _initialPos;
-  const Geodetic3D  _finalPos;
-  
-  const bool        _linearHeight;
-  double            _maxHeight;
-      
-  void calculateMaxHeight() {
-    Angle deltaLat = Angle::fromDegrees(_initialPos.latitude()._degrees).sub(Angle::fromDegrees(_finalPos.latitude()._degrees));
-    Angle deltaLon = Angle::fromDegrees(_initialPos.longitude()._degrees).sub(Angle::fromDegrees(_finalPos.longitude()._degrees));
-    
-    const double distance2D = IMathUtils::instance()->sqrt(IMathUtils::instance()->pow(deltaLat._degrees, 2) +
-                                                           IMathUtils::instance()->pow(deltaLon._degrees, 2));
-    
-    _maxHeight = (((_initialPos.height() + _finalPos.height()) / 2) * distance2D);
+  const Geodetic3D _fromPosition;
+  const Geodetic3D _toPosition;
+
+  const Angle _fromHeading;
+  const Angle _toHeading;
+
+  const Angle _fromPitch;
+  const Angle _toPitch;
+
+  const bool       _linearHeight;
+  double           _middleHeight;
+
+
+  double calculateMaxHeight(const Planet* planet) {
+    // curve parameters
+    const double distanceInDegreesMaxHeight = 180;
+    const double maxHeight = planet->getRadii().axisAverage();
+
+
+    // rough estimation of distance using lat/lon degrees
+    const double deltaLatInDeg = _fromPosition.latitude()._degrees  - _toPosition.latitude()._degrees;
+    const double deltaLonInDeg = _fromPosition.longitude()._degrees - _toPosition.longitude()._degrees;
+    const double distanceInDeg = IMathUtils::instance()->sqrt((deltaLatInDeg * deltaLatInDeg) +
+                                                              (deltaLonInDeg * deltaLonInDeg)  );
+
+    if (distanceInDeg >= distanceInDegreesMaxHeight) {
+      return maxHeight;
+    }
+
+    const double middleHeight = (distanceInDeg / distanceInDegreesMaxHeight) * maxHeight;
+
+    /*
+     const double averageHeight = (_fromPosition.height() + _toPosition.height()) / 2;
+     if (middleHeight < averageHeight) {
+     return averageHeight;
+     }
+     */
+    const double averageHeight = (_fromPosition.height() + _toPosition.height()) / 2;
+    if (middleHeight < averageHeight) {
+      return (averageHeight + middleHeight) / 2.0;
+    }
+
+    return middleHeight;
   }
+
 
 public:
 
   CameraGoToPositionEffect(const TimeInterval& duration,
-                           const Geodetic3D& initialPos,
-                           const Geodetic3D& finalPos,
-                           const bool linearTiming=false,
-                           const bool linearHeight=false):
+                           const Geodetic3D& fromPosition,
+                           const Geodetic3D& toPosition,
+                           const Angle& fromHeading,
+                           const Angle& toHeading,
+                           const Angle& fromPitch,
+                           const Angle& toPitch,
+                           const bool linearTiming,
+                           const bool linearHeight):
   EffectWithDuration(duration, linearTiming),
-  _initialPos(initialPos),
-  _finalPos(finalPos),
+  _fromPosition(fromPosition),
+  _toPosition(toPosition),
+  _fromHeading(fromHeading),
+  _toHeading(toHeading),
+  _fromPitch(fromPitch),
+  _toPitch(toPitch),
   _linearHeight(linearHeight)
   {
   }
@@ -47,46 +85,60 @@ public:
   virtual void doStep(const G3MRenderContext *rc,
                       const TimeInterval& when) {
     const double alpha = getAlpha(when);
-    Camera *camera = rc->getNextCamera();
 
     double height;
     if (_linearHeight) {
-      height = IMathUtils::instance()->linearInterpolation(_initialPos.height(),
-                                                           _finalPos.height(),
+      height = IMathUtils::instance()->linearInterpolation(_fromPosition.height(),
+                                                           _toPosition.height(),
                                                            alpha);
     }
     else {
-      height = IMathUtils::instance()->quadraticBezierInterpolation(_initialPos.height(),
-                                                                    _maxHeight,
-                                                                    _finalPos.height(),
+      height = IMathUtils::instance()->quadraticBezierInterpolation(_fromPosition.height(),
+                                                                    _middleHeight,
+                                                                    _toPosition.height(),
                                                                     alpha);
     }
 
-    const Geodetic3D g = Geodetic3D(Angle::linearInterpolation(_initialPos.latitude(),
-                                                               _finalPos.latitude(),
-                                                               alpha),
-                                    Angle::linearInterpolation(_initialPos.longitude(),
-                                                               _finalPos.longitude(),
-                                                               alpha),
-                                    height);
-    
-    camera->orbitTo(g);
+    Camera *camera = rc->getNextCamera();
+    camera->orbitTo(Angle::linearInterpolation(_fromPosition.latitude(),  _toPosition.latitude(),  alpha),
+                    Angle::linearInterpolation(_fromPosition.longitude(), _toPosition.longitude(), alpha),
+                    height);
+
+
+    const Angle heading = Angle::linearInterpolation(_fromHeading, _toHeading, alpha);
+    camera->setHeading(heading);
+
+    const Angle middlePitch = Angle::fromDegrees(0);
+//    const Angle pitch =  (alpha < 0.5)
+//    ? Angle::linearInterpolation(_fromPitch, middlePitch, alpha*2)
+//    : Angle::linearInterpolation(middlePitch, _toPitch, (alpha-0.5)*2);
+
+    if (alpha <= 0.1) {
+      camera->setPitch( Angle::linearInterpolation(_fromPitch, middlePitch, alpha*10) );
+    }
+    else if (alpha >= 0.9) {
+      camera->setPitch( Angle::linearInterpolation(middlePitch, _toPitch, (alpha-0.9)*10) );
+    }
+    else {
+      camera->setPitch(middlePitch);
+    }
+
   }
 
   virtual void stop(const G3MRenderContext *rc,
                     const TimeInterval& when) {
-    rc->getNextCamera()->orbitTo(_finalPos);
+    rc->getNextCamera()->orbitTo(_toPosition);
   }
 
   virtual void cancel(const TimeInterval& when) {
     // do nothing, just leave the effect in the intermediate state
   }
-  
+
   virtual void start(const G3MRenderContext *rc,
                      const TimeInterval& when) {
     EffectWithDuration::start(rc, when);
-    
-    calculateMaxHeight();
+
+    _middleHeight = calculateMaxHeight(rc->getPlanet());
   }
 };
 

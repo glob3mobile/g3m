@@ -98,7 +98,8 @@ bool MarksRenderer::onTouchEvent(const G3MEventContext* ec,
 
   bool handled = false;
 
-  if ( (touchEvent->getType() == Down) && (touchEvent->getTouchCount() == 1) ) {
+//  if ( (touchEvent->getType() == Down) && (touchEvent->getTouchCount() == 1) ) {
+  if ( touchEvent->getType() == DownUp ) {
 
     if (_lastCamera != NULL) {
       const Vector2I touchedPixel = touchEvent->getTouch(0)->getPos();

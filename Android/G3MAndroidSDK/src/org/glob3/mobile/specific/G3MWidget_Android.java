@@ -453,7 +453,7 @@ public final class G3MWidget_Android
 
    public void setAnimatedCameraPosition(final Geodetic3D position,
                                          final TimeInterval interval) {
-      getG3MWidget().setAnimatedCameraPosition(position, interval);
+      getG3MWidget().setAnimatedCameraPosition(interval, position);
    }
 
 

@@ -45,6 +45,7 @@ package org.glob3.mobile.generated;
 //class CameraRenderer;
 //class IStorage;
 //class ITextUtils;
+//class G3MEventContext;
 
 
 

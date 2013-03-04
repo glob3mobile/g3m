@@ -31,6 +31,7 @@
 #include <math.h>
 #include "GInitializationTask.hpp"
 #include "ITextUtils.hpp"
+#include "TouchEvent.hpp"
 
 void G3MWidget::initSingletons(ILogger*            logger,
                                IFactory*           factory,
@@ -114,7 +115,8 @@ _context(new G3MContext(IFactory::instance(),
                         _effectsScheduler,
                         storage)),
 _paused(false),
-_initializationTaskWasRun(false)
+_initializationTaskWasRun(false),
+_clickOnProcess(false)
 {
   initializeGL();
 
@@ -222,6 +224,18 @@ G3MWidget::~G3MWidget() {
   delete _rootState;
 }
 
+void G3MWidget::notifyTouchEvent(const G3MEventContext &ec,
+                                 const TouchEvent* touchEvent) const {
+  bool handled = false;
+  if (_mainRenderer->isEnable()) {
+    handled = _mainRenderer->onTouchEvent(&ec, touchEvent);
+  }
+
+  if (!handled) {
+    _cameraRenderer->onTouchEvent(&ec, touchEvent);
+  }
+}
+
 void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
   if (_mainRendererReady) {
     G3MEventContext ec(IFactory::instance(),
@@ -235,14 +249,40 @@ void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
                        _effectsScheduler,
                        _storage);
 
-    bool handled = false;
-    if (_mainRenderer->isEnable()) {
-      handled = _mainRenderer->onTouchEvent(&ec, touchEvent);
+
+    // notify the original event
+    notifyTouchEvent(ec, touchEvent);
+
+
+    // creates DownUp event when a Down is immediately followed by an Up
+    if (touchEvent->getTouchCount() == 1) {
+      const TouchEventType eventType = touchEvent->getType();
+      if (eventType == Down) {
+        _clickOnProcess = true;
+      }
+      else {
+        if (eventType == Up) {
+          if (_clickOnProcess) {
+            const Vector2I pos = touchEvent->getTouch(0)->getPos();
+            printf("DownUp on %dx%d\n", pos._x, pos._y);
+
+            const Touch* touch = touchEvent->getTouch(0);
+            const TouchEvent* downUpEvent = TouchEvent::create(DownUp,
+                                                               new Touch(*touch));
+
+            notifyTouchEvent(ec, downUpEvent);
+
+            delete downUpEvent;
+          }
+        }
+        _clickOnProcess = false;
+      }
+    }
+    else {
+      _clickOnProcess = false;
     }
 
-    if (!handled) {
-      _cameraRenderer->onTouchEvent(&ec, touchEvent);
-    }
+    
   }
 }
 
@@ -483,14 +523,18 @@ void G3MWidget::setCameraPosition(const Geodetic3D& position) {
   getNextCamera()->setPosition(position);
 }
 
-void G3MWidget::setAnimatedCameraPosition(const Geodetic3D& position) {
-  setAnimatedCameraPosition(position, TimeInterval::fromSeconds(3));
+void G3MWidget::setAnimatedCameraPosition(const Geodetic3D& position,
+                                          const Angle& heading,
+                                          const Angle& pitch) {
+  setAnimatedCameraPosition(TimeInterval::fromSeconds(3), position, heading, pitch);
 }
 
-void G3MWidget::setAnimatedCameraPosition(const Geodetic3D& position,
-                                          const TimeInterval& interval) {
+void G3MWidget::setAnimatedCameraPosition(const TimeInterval& interval,
+                                          const Geodetic3D& position,
+                                          const Angle& heading,
+                                          const Angle& pitch) {
 
-  const Geodetic3D startPosition = _planet->toGeodetic3D( _currentCamera->getCartesianPosition() );
+  const Geodetic3D fromPosition = _planet->toGeodetic3D( _currentCamera->getCartesianPosition() );
 
   double finalLat = position.latitude()._degrees;
   double finalLon = position.longitude()._degrees;
@@ -510,15 +554,27 @@ void G3MWidget::setAnimatedCameraPosition(const Geodetic3D& position,
   while (finalLon < 0) {
     finalLon += 360;
   }
-  if (fabs(finalLon - startPosition.longitude()._degrees) > 180) {
+  if (fabs(finalLon - fromPosition.longitude()._degrees) > 180) {
     finalLon -= 360;
   }
 
-  const Geodetic3D endPosition = Geodetic3D::fromDegrees(finalLat, finalLon, position.height());
+  const Geodetic3D toPosition = Geodetic3D::fromDegrees(finalLat, finalLon, position.height());
+
+  const Angle fromHeading = _currentCamera->getHeading();
+  const Angle toHeading = heading;
+  const Angle fromPitch = _currentCamera->getPitch();
+  const Angle toPitch = pitch;
 
   stopCameraAnimation();
   int TODO_make_linearHeight_configurable;
-  _effectsScheduler->startEffect(new CameraGoToPositionEffect(interval, startPosition, endPosition, false, false),
+  const bool linearTiming=false;
+  const bool linearHeight=false;
+  _effectsScheduler->startEffect(new CameraGoToPositionEffect(interval,
+                                                              fromPosition, toPosition,
+                                                              fromHeading,  toHeading,
+                                                              fromPitch,    toPitch,
+                                                              linearTiming,
+                                                              linearHeight),
                                  _nextCamera->getEffectTarget());
 }
 
