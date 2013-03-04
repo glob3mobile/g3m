@@ -32,7 +32,7 @@
 
 @implementation G3MViewController
 
-@synthesize g3mWidget, demoSelector, demoMenu, toolbar, layerSwitcher, playButton;
+@synthesize g3mWidget, demoSelector, demoMenu, toolbar, layerSwitcher;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -105,7 +105,6 @@
   [self setLayerSwitcher: nil];
   [self setDemoSelector:nil];
   [self setDemoMenu: nil];
-  [self setPlayButton: nil];
   
   [super viewDidUnload];
 }
@@ -142,14 +141,6 @@
   ((G3MAppUserData*) [[self g3mWidget] userData])->getMeshRenderer()->setEnable(false);
   
   [[self g3mWidget] stopCameraAnimation];
-//  [[self g3mWidget] resetCameraPosition];
-//  [[self g3mWidget] setCameraPosition: Geodetic3D(Angle::fromDegrees(0),
-//                                                  Angle::fromDegrees(0),
-//                                                  25000000)];
-//  [[self g3mWidget] setAnimatedCameraPosition: Geodetic3D(Angle::fromDegrees(0),
-//                                                          Angle::fromDegrees(0),
-//                                                          25000000)];
-
 }
 
 - (void) showSimpleGlob3
@@ -186,26 +177,22 @@
   layerSet->getLayer("osm_auto:all")->setEnable(!satelliteLayerEnabled);
 }
 
-- (void) gotoMarkersDemo
+- (void) showMarkersDemo
 {
-  [[self g3mWidget] setAnimatedCameraPosition: Geodetic3D(Angle::fromDegrees(37.7658),
-                                                          Angle::fromDegrees(-122.4185),
-                                                          12000)
-                                 timeInterval: TimeInterval::fromSeconds(5)];
-//  [[self toolbar] setVisible: FALSE];
+  ((G3MAppUserData*) [[self g3mWidget] userData])->getMarkerRenderer()->setEnable(true);
+  [self gotoPosition: Geodetic3D(Angle::fromDegrees(37.7658),
+                                 Angle::fromDegrees(-122.4185),
+                                 12000)];
 }
 
-- (void) gotoModelDemo
+- (void) showModelDemo
 {
+  ((G3MAppUserData*) [[self g3mWidget] userData])->getShapeRenderer()->setEnable(true);
+  
   Shape* plane = ((G3MAppUserData*) [[self g3mWidget] userData])->getPlane();
   plane->setPosition(new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
                                     Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
                                     10000));
-  
-  [[self g3mWidget] setAnimatedCameraPosition: Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
-                                                          Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
-                                                          6000)
-                                 timeInterval: TimeInterval::fromSeconds(5)];
   
   plane->setAnimatedPosition(TimeInterval::fromSeconds(26),
                              Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
@@ -227,16 +214,23 @@
                      fromAzimuth,  toAzimuth,
                      fromAltitude, toAltitude);
   
-//  [[self toolbar] setVisible: FALSE];
+  [self gotoPosition: Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
+                                 Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
+                                 6000)];
 }
 
-- (void) gotoMeshDemo
+- (void) showMeshDemo
 {
-  [[self g3mWidget] setAnimatedCameraPosition: Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
-                                                          Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
-                                                          6700000)
+  ((G3MAppUserData*) [[self g3mWidget] userData])->getMeshRenderer()->setEnable(true);
+  [self gotoPosition: Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
+                                 Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
+                                 6700000)];
+}
+
+- (void) gotoPosition: (Geodetic3D) position
+{
+  [[self g3mWidget] setAnimatedCameraPosition: position
                                  timeInterval: TimeInterval::fromSeconds(5)];
-//  [[self toolbar] setVisible: FALSE];
 }
 
 
@@ -268,6 +262,10 @@
                                @"Markers",
                                @"3D Model",
                                @"Point Mesh",
+                               @"TopRight",
+                               @"TopLeft",
+                               @"BottomRight",
+                               @"BottomLeft",
                                nil];
   
   [[self demoMenu] setDelegate: self];
@@ -306,10 +304,6 @@
   [[self layerSwitcher] addTarget: self
                            action: @selector(switchLayer)
                  forControlEvents: UIControlEventTouchUpInside];
-  
-  // playButton
-  [self setPlayButton: [self createToolbarButton: @"play.png"
-                                           frame: CGRectMake(10.0, 10.0, 48.0, 48.0)]];
 }
 
 - (void) updateToolbar: (NSString*) option
@@ -322,34 +316,6 @@
   else {
     [[self toolbar] setVisible: FALSE];
   }
-//  if ([option isEqual: @"Simple glob3"]) {
-//    [[self toolbar] setVisible: FALSE];
-//  }
-//  else if ([option isEqual: @"Switch layer"]) {
-//    [[self toolbar] addSubview: [self layerSwitcher]];
-//    [[self toolbar] setVisible: TRUE];
-//  }
-//  else if ([option isEqual: @"Markers"]) {
-//    [[self toolbar] addSubview: [self playButton]];
-//    [[self playButton] addTarget: self
-//                          action: @selector(gotoMarkersDemo)
-//                forControlEvents: UIControlEventTouchUpInside];
-//    [[self toolbar] setVisible: TRUE];
-//  }
-//  else if ([option isEqual: @"3D Model"]) {
-//    [[self toolbar] addSubview: [self playButton]];
-//    [[self playButton] addTarget: self
-//                          action: @selector(gotoModelDemo)
-//                forControlEvents: UIControlEventTouchUpInside];
-//    [[self toolbar] setVisible: TRUE];
-//  }
-//  else if ([option isEqual: @"Point Mesh"]) {
-//    [[self toolbar] addSubview: [self playButton]];
-//    [[self playButton] addTarget: self
-//                          action: @selector(gotoMeshDemo)
-//                forControlEvents: UIControlEventTouchUpInside];
-//    [[self toolbar] setVisible: TRUE];
-//  }
 }
 
 - (void) DropDownMenuDidChange: (NSString *) identifier
@@ -368,16 +334,33 @@
       [self switchLayer];
     }
     else if ([returnValue isEqual: @"Markers"]) {
-      ((G3MAppUserData*) [[self g3mWidget] userData])->getMarkerRenderer()->setEnable(true);
-      [self gotoMarkersDemo];
+      [self showMarkersDemo];
     }
     else if ([returnValue isEqual: @"3D Model"]) {
-      ((G3MAppUserData*) [[self g3mWidget] userData])->getShapeRenderer()->setEnable(true);
-      [self gotoModelDemo];
+      [self showModelDemo];
     }
     else if ([returnValue isEqual: @"Point Mesh"]) {
-      ((G3MAppUserData*) [[self g3mWidget] userData])->getMeshRenderer()->setEnable(true);
-      [self gotoMeshDemo];
+      [self showMeshDemo];
+    }
+    else if ([returnValue isEqualToString: @"TopRight"]) {
+      [self gotoPosition: Geodetic3D(Angle::fromDegrees(70),
+                                     Angle::fromDegrees(-160),
+                                     500000)];
+    }
+    else if ([returnValue isEqualToString: @"TopLeft"]) {
+      [self gotoPosition: Geodetic3D(Angle::fromDegrees(70),
+                                     Angle::fromDegrees(160),
+                                     500000)];
+    }
+    else if ([returnValue isEqualToString: @"BottomRight"]) {
+      [self gotoPosition: Geodetic3D(Angle::fromDegrees(-70),
+                                     Angle::fromDegrees(-160),
+                                     500000)];
+    }
+    else if ([returnValue isEqualToString: @"BottomLeft"]) {
+      [self gotoPosition: Geodetic3D(Angle::fromDegrees(-70),
+                                     Angle::fromDegrees(160),
+                                     500000)];
     }
   }
 }
