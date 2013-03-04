@@ -142,10 +142,10 @@
   ((G3MAppUserData*) [[self g3mWidget] userData])->getMeshRenderer()->setEnable(false);
   
   [[self g3mWidget] stopCameraAnimation];
-  [[self g3mWidget] resetCameraPosition];
-  [[self g3mWidget] setCameraPosition: Geodetic3D(Angle::fromDegrees(0),
-                                                  Angle::fromDegrees(0),
-                                                  25000000)];
+//  [[self g3mWidget] resetCameraPosition];
+//  [[self g3mWidget] setCameraPosition: Geodetic3D(Angle::fromDegrees(0),
+//                                                  Angle::fromDegrees(0),
+//                                                  25000000)];
 //  [[self g3mWidget] setAnimatedCameraPosition: Geodetic3D(Angle::fromDegrees(0),
 //                                                          Angle::fromDegrees(0),
 //                                                          25000000)];
@@ -159,10 +159,10 @@
     [self switchLayer];
   }
   
-  [[self g3mWidget] widget]->setAnimatedCameraPosition(Geodetic3D(Angle::fromDegrees(0),
-                                                                  Angle::fromDegrees(0),
-                                                                  25000000),
-                                                       TimeInterval::fromSeconds(5));
+  [[self g3mWidget] setAnimatedCameraPosition: Geodetic3D(Angle::fromDegrees(0),
+                                                          Angle::fromDegrees(0),
+                                                          25000000)
+                                 timeInterval: TimeInterval::fromSeconds(5)];
 }
 
 - (void) switchLayer
@@ -188,10 +188,10 @@
 
 - (void) gotoMarkersDemo
 {
-  [[self g3mWidget] widget]->setAnimatedCameraPosition(Geodetic3D(Angle::fromDegrees(37.7658),
-                                                                  Angle::fromDegrees(-122.4185),
-                                                                  12000),
-                                                       TimeInterval::fromSeconds(5));
+  [[self g3mWidget] setAnimatedCameraPosition: Geodetic3D(Angle::fromDegrees(37.7658),
+                                                          Angle::fromDegrees(-122.4185),
+                                                          12000)
+                                 timeInterval: TimeInterval::fromSeconds(5)];
 //  [[self toolbar] setVisible: FALSE];
 }
 
@@ -202,10 +202,10 @@
                                     Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
                                     10000));
   
-  [[self g3mWidget] widget]->setAnimatedCameraPosition(Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
-                                                                  Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
-                                                                  6000),
-                                                       TimeInterval::fromSeconds(5));
+  [[self g3mWidget] setAnimatedCameraPosition: Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
+                                                          Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
+                                                          6000)
+                                 timeInterval: TimeInterval::fromSeconds(5)];
   
   plane->setAnimatedPosition(TimeInterval::fromSeconds(26),
                              Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
@@ -232,10 +232,10 @@
 
 - (void) gotoMeshDemo
 {
-  [[self g3mWidget] widget]->setAnimatedCameraPosition(Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42),
-                                                                  Angle::fromDegreesMinutesSeconds(-77, 2, 11),
-                                                                  6700000),
-                                                       TimeInterval::fromSeconds(5));
+  [[self g3mWidget] setAnimatedCameraPosition: Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
+                                                          Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
+                                                          6700000)
+                                 timeInterval: TimeInterval::fromSeconds(5)];
 //  [[self toolbar] setVisible: FALSE];
 }
 
