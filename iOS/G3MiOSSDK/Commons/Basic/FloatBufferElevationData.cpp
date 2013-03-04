@@ -39,12 +39,13 @@ const std::string FloatBufferElevationData::description(bool detailed) const {
   isb->addInt(_height);
   isb->addString(" sector=");
   isb->addString( _sector.description() );
+  int type;
   if (detailed) {
     isb->addString("\n");
     for (int row = 0; row < _width; row++) {
       //isb->addString("   ");
       for (int col = 0; col < _height; col++) {
-        isb->addDouble( getElevationAt(col, row) );
+        isb->addDouble( getElevationAt(col, row, &type) );
         isb->addString(",");
       }
       isb->addString("\n");
