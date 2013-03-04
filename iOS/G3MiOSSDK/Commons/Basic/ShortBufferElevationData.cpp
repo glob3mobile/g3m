@@ -39,7 +39,7 @@ const std::string ShortBufferElevationData::description(bool detailed) const {
   isb->addInt(_height);
   isb->addString(" sector=");
   isb->addString( _sector.description() );
-  int unusedType;
+  int unusedType = -1;
   if (detailed) {
     isb->addString("\n");
     for (int row = 0; row < _width; row++) {

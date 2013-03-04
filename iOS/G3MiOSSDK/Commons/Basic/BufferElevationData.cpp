@@ -77,7 +77,7 @@ double BufferElevationData::getElevationAt(const Angle& latitude,
   const double alphaY = dY - y;
   const double alphaX = dX - x;
 
-  int unsedType;
+  int unsedType = -1;
   double result;
   if (x == dX) {
     if (y == dY) {
