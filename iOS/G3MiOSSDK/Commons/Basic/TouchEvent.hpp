@@ -54,8 +54,7 @@ enum TouchEventType {
   Up,
   Move,
   LongPress,
-  DownUp,
-  Scroll
+  DownUp
 };
 
 
