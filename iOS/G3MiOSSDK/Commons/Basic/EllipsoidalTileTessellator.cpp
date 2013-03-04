@@ -158,8 +158,8 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
 
   Color* color = Color::newFromRGBA((float) 1.0, (float) 1.0, (float) 1.0, (float) 1.0);
 
-  return new IndexedMesh(//debug ? GLPrimitive::lineStrip() : GLPrimitive::triangleStrip(),
-                         GLPrimitive::triangleStrip(),
+  return new IndexedMesh(debug ? GLPrimitive::lineStrip() : GLPrimitive::triangleStrip(),
+                         //GLPrimitive::triangleStrip(),
                          //GLPrimitive::lineStrip(),
                          true,
                          vertices.getCenter(),

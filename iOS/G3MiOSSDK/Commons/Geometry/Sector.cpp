@@ -48,7 +48,7 @@ const Geodetic2D Sector::getInnerPoint(double u, double v) const {
                     Angle::linearInterpolation( _lower.longitude(), _upper.longitude(), (float)      u  ) );
 }
 
-/*
+
 bool Sector::isBackOriented(const G3MRenderContext *rc, double height) const {
   const Camera* camera = rc->getCurrentCamera();
   const Planet* planet = rc->getPlanet();
@@ -59,9 +59,40 @@ bool Sector::isBackOriented(const G3MRenderContext *rc, double height) const {
   
   // compute angle between normals
   const Vector3D eye = camera->getCartesianPosition();
-  return (planet->geodeticSurfaceNormal(point).dot(eye.sub(point)) <= 0);
+  if (planet->geodeticSurfaceNormal(point).dot(eye.sub(point)) > 0)
+    return false;
+  
+  // if sector touches north pole, also test if pole is visible
+  if (touchesNorthPole()) {
+    Vector3D pole = planet->toCartesian(Geodetic3D(Angle::fromDegrees(90), Angle::fromDegrees(0), 0));
+    if (planet->geodeticSurfaceNormal(pole).dot(eye.sub(pole)) > 0)
+      return false;
+  }
+  
+  // if sector touches north pole, also test if pole is visible
+  if (touchesSouthPole()) {
+    Vector3D pole = planet->toCartesian(Geodetic3D(Angle::fromDegrees(-90), Angle::fromDegrees(0), 0));
+    if (planet->geodeticSurfaceNormal(pole).dot(eye.sub(pole)) > 0)
+      return false;
+  }
+  
+  return true;
 }
-*/
+
+/*
+bool Sector::isBackOriented_v2(const G3MRenderContext *rc, double height) const {
+  const Camera* camera = rc->getCurrentCamera();
+  const Planet* planet = rc->getPlanet();
+  
+  // compute sector point nearest to camera centerPoint
+  const Geodetic2D center = camera->getGeodeticCenterOfView().asGeodetic2D();
+  const Vector3D point    = planet->toCartesian(Geodetic3D(getClosestPoint(center), height));
+  
+  // compute angle between normals
+  const Vector3D eye = camera->getCartesianPosition();
+  return (planet->geodeticSurfaceNormal(point).dot(eye.sub(point)) <= 0);
+}*/
+
 
 /*
 bool Sector::isBackOriented_v1(const G3MRenderContext *rc) const {
@@ -81,7 +112,7 @@ bool Sector::isBackOriented_v1(const G3MRenderContext *rc) const {
 }
 */
 
-
+/*
 bool Sector::isBackOriented(const G3MRenderContext *rc, double height) const {
   const Camera* camera = rc->getCurrentCamera();
   const Planet* planet = rc->getPlanet();
@@ -93,7 +124,7 @@ bool Sector::isBackOriented(const G3MRenderContext *rc, double height) const {
   if (planet->geodeticSurfaceNormal(getSE()).dot(view) > 0) { return false; }
   if (planet->geodeticSurfaceNormal(getSW()).dot(view) > 0) { return false; }
   return true;
-}
+}*/
 
 
 /*
@@ -183,7 +214,9 @@ const Geodetic2D Sector::getClosestPoint(const Geodetic2D& pos) const
     //insideLat = false;
   }
 
-  // here we have to handle the case where sector is close to the pole,
+  return Geodetic2D(Angle::fromDegrees(lat), Angle::fromDegrees(lon));
+  
+  /*// here we have to handle the case where sector is close to the pole,
   // and the latitude of the other point must be seen from the other side
   Geodetic2D point(Angle::fromDegrees(lat), Angle::fromDegrees(lon));
   if (touchesNorthPole()) {
@@ -200,7 +233,7 @@ const Geodetic2D Sector::getClosestPoint(const Geodetic2D& pos) const
     if (angle1.greaterThan(angle2))
       return pole;
   }
-  return point;
+  return point;*/
 
   /*
    const Angle lat = pos.latitude().nearestAngleInInterval(_lower.latitude(), _upper.latitude());
