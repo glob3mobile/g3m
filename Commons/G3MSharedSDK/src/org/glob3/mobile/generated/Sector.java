@@ -85,6 +85,54 @@ public class Sector
 
 
   /*
+  bool Sector::isBackOriented_v2(const G3MRenderContext *rc, double height) const {
+    const Camera* camera = rc->getCurrentCamera();
+    const Planet* planet = rc->getPlanet();
+    
+    // compute sector point nearest to camera centerPoint
+    const Geodetic2D center = camera->getGeodeticCenterOfView().asGeodetic2D();
+    const Vector3D point    = planet->toCartesian(Geodetic3D(getClosestPoint(center), height));
+    
+    // compute angle between normals
+    const Vector3D eye = camera->getCartesianPosition();
+    return (planet->geodeticSurfaceNormal(point).dot(eye.sub(point)) <= 0);
+  }*/
+  
+  
+  /*
+  bool Sector::isBackOriented_v1(const G3MRenderContext *rc) const {
+    const Camera* camera = rc->getCurrentCamera();
+    const Planet* planet = rc->getPlanet();
+    
+    // compute sector point nearest to centerPoint
+    const Geodetic2D center = camera->getGeodeticCenterOfView().asGeodetic2D();
+    const Geodetic2D point = getClosestPoint(center);
+    
+    // compute angle between normals
+    const Vector3D normal = planet->geodeticSurfaceNormal(point);
+    const Vector3D view   = camera->getViewDirection().times(-1);
+    const double dot = normal.dot(view);
+    
+    return (dot < 0) ? true : false;
+  }
+  */
+  
+  /*
+  bool Sector::isBackOriented(const G3MRenderContext *rc, double height) const {
+    const Camera* camera = rc->getCurrentCamera();
+    const Planet* planet = rc->getPlanet();
+    const Vector3D view = camera->getViewDirection().times(-1);
+  
+    // if all the corners normals are back oriented, sector is back oriented
+    if (planet->geodeticSurfaceNormal(getNE()).dot(view) > 0) { return false; }
+    if (planet->geodeticSurfaceNormal(getNW()).dot(view) > 0) { return false; }
+    if (planet->geodeticSurfaceNormal(getSE()).dot(view) > 0) { return false; }
+    if (planet->geodeticSurfaceNormal(getSW()).dot(view) > 0) { return false; }
+    return true;
+  }*/
+  
+  
+  /*
   bool Sector::isBackOriented(const G3MRenderContext *rc, double height) const {
     const Planet*  planet = rc->getPlanet();
     const Vector3D eye = rc->getCurrentCamera()->getCartesianPosition();
@@ -262,64 +310,36 @@ public class Sector
     return new Vector2D(u, v);
   }
 
-
-  /*
-  bool isBackOriented(const G3MRenderContext *rc, double height) const {
-    const Camera* camera = rc->getCurrentCamera();
-    const Planet* planet = rc->getPlanet();
-  
-    // compute sector point nearest to camera centerPoint
-    const Geodetic2D center = camera->getGeodeticCenterOfView().asGeodetic2D();
-    const Vector3D point    = planet->toCartesian(Geodetic3D(getClosestPoint(center), height));
-  
-    // compute angle between normals
-    const Vector3D eye = camera->getCartesianPosition();
-    return (planet->geodeticSurfaceNormal(point).dot(eye.sub(point)) <= 0);
-  }
-  */
-  
-  /*
-  bool Sector::isBackOriented_v1(const G3MRenderContext *rc) const {
-    const Camera* camera = rc->getCurrentCamera();
-    const Planet* planet = rc->getPlanet();
-  
-    // compute sector point nearest to centerPoint
-    const Geodetic2D center = camera->getGeodeticCenterOfView().asGeodetic2D();
-    const Geodetic2D point = getClosestPoint(center);
-  
-    // compute angle between normals
-    const Vector3D normal = planet->geodeticSurfaceNormal(point);
-    const Vector3D view   = camera->getViewDirection().times(-1);
-    const double dot = normal.dot(view);
-  
-    return (dot < 0) ? true : false;
-  }
-  */
-  
-  
   public final boolean isBackOriented(G3MRenderContext rc, double height)
   {
     final Camera camera = rc.getCurrentCamera();
     final Planet planet = rc.getPlanet();
-    final Vector3D view = camera.getViewDirection().times(-1);
   
-    // if all the corners normals are back oriented, sector is back oriented
-    if (planet.geodeticSurfaceNormal(getNE()).dot(view) > 0)
+    // compute sector point nearest to camera centerPoint
+    final Geodetic2D center = camera.getGeodeticCenterOfView().asGeodetic2D();
+    final Vector3D point = planet.toCartesian(new Geodetic3D(getClosestPoint(center), height));
+  
+    // compute angle between normals
+    final Vector3D eye = camera.getCartesianPosition();
+    if (planet.geodeticSurfaceNormal(point).dot(eye.sub(point)) > 0)
+      return false;
+  
+    // if sector touches north pole, also test if pole is visible
+    if (touchesNorthPole())
     {
-       return false;
+      Vector3D pole = planet.toCartesian(new Geodetic3D(Angle.fromDegrees(90), Angle.fromDegrees(0), 0));
+      if (planet.geodeticSurfaceNormal(pole).dot(eye.sub(pole)) > 0)
+        return false;
     }
-    if (planet.geodeticSurfaceNormal(getNW()).dot(view) > 0)
+  
+    // if sector touches north pole, also test if pole is visible
+    if (touchesSouthPole())
     {
-       return false;
+      Vector3D pole = planet.toCartesian(new Geodetic3D(Angle.fromDegrees(-90), Angle.fromDegrees(0), 0));
+      if (planet.geodeticSurfaceNormal(pole).dot(eye.sub(pole)) > 0)
+        return false;
     }
-    if (planet.geodeticSurfaceNormal(getSE()).dot(view) > 0)
-    {
-       return false;
-    }
-    if (planet.geodeticSurfaceNormal(getSW()).dot(view) > 0)
-    {
-       return false;
-    }
+  
     return true;
   }
 
@@ -369,26 +389,26 @@ public class Sector
       //insideLat = false;
     }
   
-    // here we have to handle the case where sector is close to the pole,
+    return new Geodetic2D(Angle.fromDegrees(lat), Angle.fromDegrees(lon));
+  
+    /* // here we have to handle the case where sector is close to the pole,
     // and the latitude of the other point must be seen from the other side
-    Geodetic2D point = new Geodetic2D(Angle.fromDegrees(lat), Angle.fromDegrees(lon));
-    if (touchesNorthPole())
-    {
-      Geodetic2D pole = new Geodetic2D(Angle.fromDegrees(90), Angle.fromDegrees(0));
+    Geodetic2D point(Angle::fromDegrees(lat), Angle::fromDegrees(lon));
+    if (touchesNorthPole()) {
+      Geodetic2D pole(Angle::fromDegrees(90), Angle::fromDegrees(0));
       Angle angle1 = pos.angleTo(point);
       Angle angle2 = pos.angleTo(pole);
       if (angle1.greaterThan(angle2))
         return pole;
     }
-    if (touchesSouthPole())
-    {
-      Geodetic2D pole = new Geodetic2D(Angle.fromDegrees(-90), Angle.fromDegrees(0));
+    if (touchesSouthPole()) {
+      Geodetic2D pole(Angle::fromDegrees(-90), Angle::fromDegrees(0));
       Angle angle1 = pos.angleTo(point);
       Angle angle2 = pos.angleTo(pole);
       if (angle1.greaterThan(angle2))
         return pole;
     }
-    return point;
+    return point;*/
   
     /*
      const Angle lat = pos.latitude().nearestAngleInInterval(_lower.latitude(), _upper.latitude());
