@@ -235,17 +235,17 @@ public class TileRendererBuilder
   
     //  ElevationDataProvider* elevationDataProvider = new WMSBillElevationDataProvider();
   
-    //  ElevationDataProvider* elevationDataProvider;
-    //  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
-    //                                                              Sector::fullSphere(),
-    //                                                              Vector2I(2048, 1024),
-    //                                                              0);
+  //  ElevationDataProvider* elevationDataProvider;
+  //  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
+  //                                                              Sector::fullSphere(),
+  //                                                              Vector2I(2048, 1024),
+  //                                                              0);
   
-    //  ElevationDataProvider* elevationDataProvider;
-    //  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///elev-35.0_-6.0_38.0_-2.0_4096x2048.bil", false),
-    //                                                              Sector::fromDegrees(35, -6, 38, -2),
-    //                                                              Vector2I(4096, 2048),
-    //                                                              0);
+  //  ElevationDataProvider* elevationDataProvider;
+  //  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///elev-35.0_-6.0_38.0_-2.0_4096x2048.bil", false),
+  //                                                              Sector::fromDegrees(35, -6, 38, -2),
+  //                                                              Vector2I(4096, 2048),
+  //                                                              0);
   
     //  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-4096x2048.bil", false),
     //                                                              Sector::fullSphere(),
@@ -253,7 +253,7 @@ public class TileRendererBuilder
     //                                                              0);
   
     int ___TODO_make_configurable;
-    float verticalExaggeration = 2F;
+    float verticalExaggeration = 1F;
   
     TileRenderer tileRenderer = new TileRenderer(getTileTessellator(), elevationDataProvider, verticalExaggeration, getTexturizer(), getLayerSet(), getParameters(), getShowStatistics(), getTexturePriority());
   

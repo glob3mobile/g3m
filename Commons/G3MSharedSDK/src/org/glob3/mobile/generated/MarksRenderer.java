@@ -171,7 +171,8 @@ public class MarksRenderer extends LeafRenderer
   
     boolean handled = false;
   
-    if ((touchEvent.getType() == TouchEventType.Down) && (touchEvent.getTouchCount() == 1))
+  //  if ( (touchEvent->getType() == Down) && (touchEvent->getTouchCount() == 1) ) {
+    if (touchEvent.getType() == TouchEventType.DownUp)
     {
   
       if (_lastCamera != null)

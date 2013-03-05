@@ -57,16 +57,18 @@ public:
 
   void saveBuffer(const URL& url,
                   const IByteBuffer* buffer) {
-    if (buffer != NULL) {
-      if (_storage->isAvailable()) {
-        //if (!_cacheStorage->containsBuffer(url)) {
-        _downloader->countSave();
+    if (!url.isFileProtocol()) {
+      if (buffer != NULL) {
+        if (_storage->isAvailable()) {
+          //if (!_cacheStorage->containsBuffer(url)) {
+          _downloader->countSave();
 
-        _storage->saveBuffer(url, buffer, _timeToCache, _downloader->saveInBackground());
-        //}
-      }
-      else {
-        ILogger::instance()->logWarning("The cacheStorage is not available, skipping buffer save.");
+          _storage->saveBuffer(url, buffer, _timeToCache, _downloader->saveInBackground());
+          //}
+        }
+        else {
+          ILogger::instance()->logWarning("The cacheStorage is not available, skipping buffer save.");
+        }
       }
     }
   }
@@ -140,16 +142,18 @@ public:
 
   void saveImage(const URL& url,
                  const IImage* image) {
-    if (image != NULL) {
-      if (_storage->isAvailable()) {
-        //if (!_cacheStorage->containsImage(url)) {
-        _downloader->countSave();
+    if (!url.isFileProtocol()) {
+      if (image != NULL) {
+        if (_storage->isAvailable()) {
+          //if (!_cacheStorage->containsImage(url)) {
+          _downloader->countSave();
 
-        _storage->saveImage(url, image, _timeToCache, _downloader->saveInBackground());
-        //}
-      }
-      else {
-        ILogger::instance()->logWarning("The cacheStorage is not available, skipping image save.");
+          _storage->saveImage(url, image, _timeToCache, _downloader->saveInBackground());
+          //}
+        }
+        else {
+          ILogger::instance()->logWarning("The cacheStorage is not available, skipping image save.");
+        }
       }
     }
   }

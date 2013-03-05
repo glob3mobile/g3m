@@ -13,6 +13,7 @@
 #import <G3MiOSSDK/SceneJSShapesParser.hpp>
 #import <G3MiOSSDK/ByteBuffer_iOS.hpp>
 #import <G3MiOSSDK/IThreadUtils.hpp>
+#import <G3MiOSSDK/URL.hpp>
 #import "G3MAppUserData.hpp"
 
 
@@ -49,7 +50,7 @@ void G3MPlaneParseTask::run(const G3MContext* context) {
     
     IByteBuffer* buffer = new ByteBuffer_iOS(bytes, length);
     if (buffer) {
-      Shape* plane = SceneJSShapesParser::parseFromBSON(buffer, "file:///");
+      Shape* plane = SceneJSShapesParser::parseFromBSON(buffer, URL::FILE_PROTOCOL);
       if (plane) {
         ((G3MAppUserData*) [_widget userData])->setPlane(plane);
         plane->setPosition(new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
@@ -74,7 +75,7 @@ void G3MPlaneParseTask::run(const G3MContext* context) {
    error: nil];
    if (nsPlaneJSON) {
    std::string planeJSON = [nsPlaneJSON UTF8String];
-   Shape* plane = SceneJSShapesParser::parseFromJSON(planeJSON, "file:///");
+   Shape* plane = SceneJSShapesParser::parseFromJSON(planeJSON, URL::FILE_PROTOCOL);
    if (plane) {
    ((G3MAppUserData*) [_widget getUserData])->setPlane(plane);
    plane->setPosition(new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),

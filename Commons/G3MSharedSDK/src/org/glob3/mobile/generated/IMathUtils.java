@@ -115,15 +115,30 @@ public abstract class IMathUtils
   public abstract double min(double d1, double d2);
   public abstract double max(double d1, double d2);
 
-  public double interpolation(double from, double to, double alpha)
+
+  public double linearInterpolation(double from, double to, double alpha)
   {
     return from + ((to - from) * alpha);
   }
 
-  public float interpolation(float from, float to, float alpha)
+  public float linearInterpolation(float from, float to, float alpha)
   {
     return from + ((to - from) * alpha);
   }
+
+
+  public double quadraticBezierInterpolation(double from, double middle, double to, double alpha)
+  {
+    final double oneMinusAlpha = 1.0 - alpha;
+    return (oneMinusAlpha *oneMinusAlpha * from) + (2.0 *oneMinusAlpha *alpha * middle) + (alpha *alpha * to);
+  }
+
+  public float quadraticBezierInterpolation(float from, float middle, float to, float alpha)
+  {
+    final float oneMinusAlpha = 1.0f - alpha;
+    return (oneMinusAlpha *oneMinusAlpha * from) + (2.0f *oneMinusAlpha *alpha * middle) + (alpha *alpha * to);
+  }
+
 
   public abstract long doubleToRawLongBits(double value);
   public abstract double rawLongBitsToDouble(long value);

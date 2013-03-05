@@ -52,6 +52,7 @@ public class FloatBufferElevationData extends BufferElevationData
     isb.addInt(_height);
     isb.addString(" sector=");
     isb.addString(_sector.description());
+    int unusedType = -1;
     if (detailed)
     {
       isb.addString("\n");
@@ -60,7 +61,7 @@ public class FloatBufferElevationData extends BufferElevationData
         //isb->addString("   ");
         for (int col = 0; col < _height; col++)
         {
-          isb.addDouble(getElevationAt(col, row));
+          isb.addDouble(getElevationAt(col, row, unusedType));
           isb.addString(",");
         }
         isb.addString("\n");

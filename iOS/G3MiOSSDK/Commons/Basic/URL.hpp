@@ -62,6 +62,10 @@ public:
   bool isEqualsTo(const URL& that) const {
     return (_path == that._path);
   }
+  
+  static const std::string FILE_PROTOCOL;
+  
+  bool isFileProtocol() const;
 
   const std::string description() const;
 

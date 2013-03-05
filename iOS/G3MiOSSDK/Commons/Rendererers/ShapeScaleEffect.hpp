@@ -29,8 +29,9 @@ public:
   ShapeScaleEffect(const TimeInterval& duration,
                    Shape* shape,
                    double fromScaleX, double fromScaleY, double fromScaleZ,
-                   double toScaleX, double toScaleY, double toScaleZ) :
-  EffectWithDuration(duration),
+                   double toScaleX, double toScaleY, double toScaleZ,
+                   const bool linearTiming=false) :
+  EffectWithDuration(duration, linearTiming),
   _shape(shape),
   _fromScaleX(fromScaleX),
   _fromScaleY(fromScaleY),

@@ -158,6 +158,8 @@ public:
   
   double maxAxis() const;
   
+  double axisAverage() const;
+  
   Vector3D projectionInPlane(const Vector3D& normal) const;
   
   const std::string description() const;

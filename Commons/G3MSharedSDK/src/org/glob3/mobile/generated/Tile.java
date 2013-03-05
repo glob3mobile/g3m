@@ -126,7 +126,7 @@ public class Tile
   private boolean isVisible(G3MRenderContext rc, TileRenderContext trc)
   {
     // test if sector is back oriented with respect to the camera
-    if (_sector.isBackOriented(rc))
+    if (_sector.isBackOriented(rc, getMinHeight()))
     {
       return false;
     }
@@ -204,13 +204,15 @@ public class Tile
     return false;
   }
 
-  private java.util.ArrayList<Tile> createSubTiles()
+  private java.util.ArrayList<Tile> createSubTiles(double u, double v)
   {
     final Geodetic2D lower = _sector.lower();
     final Geodetic2D upper = _sector.upper();
   
-    final Angle midLat = Angle.midAngle(lower.latitude(), upper.latitude());
-    final Angle midLon = Angle.midAngle(lower.longitude(), upper.longitude());
+  //  const Angle midLat = Angle::midAngle(lower.latitude(), upper.latitude());
+  //  const Angle midLon = Angle::midAngle(lower.longitude(), upper.longitude());
+    final Angle midLat = Angle.linearInterpolation(lower.latitude(), upper.latitude(), v);
+    final Angle midLon = Angle.linearInterpolation(lower.longitude(), upper.longitude(), u);
   
     final int nextLevel = _level + 1;
   
@@ -278,11 +280,11 @@ public class Tile
   }
 
 
-  private java.util.ArrayList<Tile> getSubTiles()
+  private java.util.ArrayList<Tile> getSubTiles(double u, double v)
   {
     if (_subtiles == null)
     {
-      _subtiles = createSubTiles();
+      _subtiles = createSubTiles(u, v);
       _justCreatedSubtiles = true;
     }
     return _subtiles;
@@ -626,7 +628,14 @@ public class Tile
       }
       else
       {
-        java.util.ArrayList<Tile> subTiles = getSubTiles();
+        double u = 0.5;
+        double v = 0.5;
+        if (trc.getLayerTilesRenderParameters()._mercator)
+        {
+          int TODO_change_V_conforming_to_mercator;
+        }
+  
+        java.util.ArrayList<Tile> subTiles = getSubTiles(u, v);
         if (_justCreatedSubtiles)
         {
           trc.getLastSplitTimer().start();
@@ -775,4 +784,8 @@ public class Tile
     meshHolder.setMesh(tessellator.createTileMesh(planet, tileMeshResolution, this, _elevationData, verticalExaggeration, renderDebug));
   }
 
+  public final double getMinHeight()
+  {
+     return 0.0;
+  }
 }

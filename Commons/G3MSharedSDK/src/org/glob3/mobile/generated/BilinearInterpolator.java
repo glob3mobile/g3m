@@ -19,7 +19,7 @@ package org.glob3.mobile.generated;
 
 public class BilinearInterpolator extends Interpolator
 {
-  public final double interpolate(double valueSW, double valueSE, double valueNE, double valueNW, double u, double v)
+  public final double interpolation(double valueSW, double valueSE, double valueNE, double valueNW, double u, double v)
   {
     final double alphaSW = (1.0 - u) * v;
     final double alphaSE = u * v;

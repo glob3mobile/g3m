@@ -34,6 +34,14 @@ public:
                       Angle::fromDegrees(lon));
   }
 
+  static Geodetic2D linearInterpolation(const Geodetic2D& from,
+                                        const Geodetic2D& to,
+                                        double alpha){
+    return Geodetic2D(Angle::linearInterpolation(from.latitude(),  to.latitude(),  alpha),
+                      Angle::linearInterpolation(from.longitude(), to.longitude(), alpha));
+  }
+
+
   /**
    * Returns the (initial) bearing from this point to the supplied point
    *   see http://williams.best.vwh.net/avform.htm#Crs
@@ -107,6 +115,9 @@ public:
   bool closeTo(const Geodetic2D& other) const;
   
   bool isBetween(const Geodetic2D& min, const Geodetic2D& max) const;
+  
+  Angle angleTo(const Geodetic2D& other) const;
+
 
   /**
    * Returns the (initial) bearing from this point to the supplied point
@@ -125,6 +136,7 @@ public:
 
     return bearing(_latitude, _longitude,
                    that._latitude, that._longitude);
+    
   }
 
 #ifdef C_CODE

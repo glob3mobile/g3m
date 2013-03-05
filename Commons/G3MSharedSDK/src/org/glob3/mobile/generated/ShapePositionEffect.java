@@ -26,24 +26,24 @@ public class ShapePositionEffect extends EffectWithDuration
   private final Geodetic3D _fromPosition ;
   private final Geodetic3D _toPosition ;
 
-  private final boolean _linearInterpolation;
-
-  public ShapePositionEffect(TimeInterval duration, Shape shape, Geodetic3D fromPosition, Geodetic3D toPosition, boolean linearInterpolation)
+  public ShapePositionEffect(TimeInterval duration, Shape shape, Geodetic3D fromPosition, Geodetic3D toPosition)
   {
-     super(duration);
+     this(duration, shape, fromPosition, toPosition, false);
+  }
+  public ShapePositionEffect(TimeInterval duration, Shape shape, Geodetic3D fromPosition, Geodetic3D toPosition, boolean linearTiming)
+  {
+     super(duration, linearTiming);
      _shape = shape;
      _fromPosition = new Geodetic3D(fromPosition);
      _toPosition = new Geodetic3D(toPosition);
-     _linearInterpolation = linearInterpolation;
 
   }
 
   public final void doStep(G3MRenderContext rc, TimeInterval when)
   {
-    final double percent = percentDone(when);
-    final double alpha = _linearInterpolation ? percent : pace(percent);
+    final double alpha = getAlpha(when);
   
-    final Geodetic3D pos = Geodetic3D.interpolation(_fromPosition, _toPosition, alpha);
+    final Geodetic3D pos = Geodetic3D.linearInterpolation(_fromPosition, _toPosition, alpha);
     _shape.setPosition(new Geodetic3D(pos));
   }
 

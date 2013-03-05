@@ -9,11 +9,9 @@
 #ifndef G3MiOSSDK_Angle_hpp
 #define G3MiOSSDK_Angle_hpp
 
-#include "IMathUtils.hpp"
-
 #define THRESHOLD               1e-5
-#define ISBETWEEN_THRESHOLD     1e-2
 
+#include "IMathUtils.hpp"
 #include <string>
 
 
@@ -70,9 +68,9 @@ public:
     return Angle::fromDegrees((angle1._degrees + angle2._degrees) / 2);
   }
 
-  static Angle interpolation(const Angle& from,
-                             const Angle& to,
-                             double alpha) {
+  static Angle linearInterpolation(const Angle& from,
+                                   const Angle& to,
+                                   double alpha) {
     return Angle::fromDegrees( (1.0-alpha) * from._degrees + alpha * to._degrees );
   }
 

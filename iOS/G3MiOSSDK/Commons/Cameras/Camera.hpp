@@ -234,6 +234,12 @@ public:
   void orbitTo(const Geodetic3D& g3d) {
     orbitTo( _planet->toCartesian(g3d) );
   }
+  void orbitTo(const Angle &latitude, const Angle &longitude, const double height) {
+    orbitTo(_planet->toCartesian(latitude, longitude, height));
+  }
+  void orbitTo(const Geodetic2D &g2d, const double height) {
+    orbitTo(_planet->toCartesian(g2d.latitude(), g2d.longitude(), height));
+  }
 
   /**
    This method put the camera pointing to given center, at the given distance, using the given angles.

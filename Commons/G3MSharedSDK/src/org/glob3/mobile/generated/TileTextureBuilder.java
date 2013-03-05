@@ -34,6 +34,52 @@ public class TileTextureBuilder extends RCObject
 
   private long _texturePriority;
 
+
+  private java.util.ArrayList<Petition> cleanUpPetitions(java.util.ArrayList<Petition> petitions)
+  {
+    final int petitionsSize = petitions.size();
+    if (petitionsSize <= 1)
+    {
+      return petitions;
+    }
+
+    java.util.ArrayList<Petition> result = new java.util.ArrayList<Petition>();
+    for (int i = 0; i < petitionsSize; i++)
+    {
+      Petition currentPetition = petitions.get(i);
+      final Sector currentSector = currentPetition.getSector();
+
+      boolean coveredByFollowingPetition = false;
+      for (int j = i+1; j < petitionsSize; j++)
+      {
+        Petition followingPetition = petitions.get(j);
+
+        // only opaque petitions can cover
+        if (!followingPetition.isTransparent())
+        {
+          if (followingPetition.getSector().fullContains(currentSector))
+          {
+            coveredByFollowingPetition = true;
+            break;
+          }
+        }
+      }
+
+      if (coveredByFollowingPetition)
+      {
+        if (currentPetition != null)
+           currentPetition.dispose();
+      }
+      else
+      {
+        result.add(currentPetition);
+      }
+    }
+
+    return result;
+  }
+
+
   public LeveledTexturedMesh _mesh;
 
   public TileTextureBuilder(MultiLayerTileTexturizer texturizer, G3MRenderContext rc, LayerSet layerSet, IDownloader downloader, Tile tile, Mesh tessellatorMesh, TileTessellator tessellator, long texturePriority)
@@ -57,7 +103,7 @@ public class TileTextureBuilder extends RCObject
      _canceled = false;
      _alreadyStarted = false;
      _texturePriority = texturePriority;
-    _petitions = layerSet.createTileMapPetitions(rc, tile, _tileTextureResolution);
+    _petitions = cleanUpPetitions(layerSet.createTileMapPetitions(rc, tile, _tileTextureResolution));
 
     _petitionsCount = _petitions.size();
 

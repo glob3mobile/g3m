@@ -81,6 +81,10 @@ double Vector3D::maxAxis() const {
   }
 }
 
+double Vector3D::axisAverage() const {
+  return ((_x + _y + _z) / 3);
+}
+
 MutableVector3D Vector3D::asMutableVector3D() const {
   return MutableVector3D(_x, _y, _z);
 }

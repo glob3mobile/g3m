@@ -11,31 +11,31 @@
 #include "Angle.hpp"
 #include "Geodetic2D.hpp"
 
-double Interpolator::interpolate(const Geodetic2D& sw,
-                                 const Geodetic2D& ne,
-                                 double valueSW,
-                                 double valueSE,
-                                 double valueNE,
-                                 double valueNW,
-                                 const Geodetic2D& position) {
-  return interpolate(sw,
-                     ne,
-                     valueSW,
-                     valueSE,
-                     valueNE,
-                     valueNW,
-                     position.latitude(),
-                     position.longitude());
+double Interpolator::interpolation(const Geodetic2D& sw,
+                                   const Geodetic2D& ne,
+                                   double valueSW,
+                                   double valueSE,
+                                   double valueNE,
+                                   double valueNW,
+                                   const Geodetic2D& position) {
+  return interpolation(sw,
+                       ne,
+                       valueSW,
+                       valueSE,
+                       valueNE,
+                       valueNW,
+                       position.latitude(),
+                       position.longitude());
 }
 
-double Interpolator::interpolate(const Geodetic2D& sw,
-                                 const Geodetic2D& ne,
-                                 double valueSW,
-                                 double valueSE,
-                                 double valueNE,
-                                 double valueNW,
-                                 const Angle& latitude,
-                                 const Angle& longitude) {
+double Interpolator::interpolation(const Geodetic2D& sw,
+                                   const Geodetic2D& ne,
+                                   double valueSW,
+                                   double valueSE,
+                                   double valueNE,
+                                   double valueNW,
+                                   const Angle& latitude,
+                                   const Angle& longitude) {
 
   const double swLatRadians = sw.latitude().radians();
   const double swLonRadians = sw.longitude().radians();
@@ -48,10 +48,10 @@ double Interpolator::interpolate(const Geodetic2D& sw,
   const double u = (longitude.radians() - swLonRadians) / deltaLonRadians;
   const double v = (neLatRadians -  latitude.radians()) / deltaLatRadians;
 
-  return interpolate(valueSW,
-                     valueSE,
-                     valueNE,
-                     valueNW,
-                     u,
-                     v);
+  return interpolation(valueSW,
+                       valueSE,
+                       valueNE,
+                       valueNW,
+                       u,
+                       v);
 }

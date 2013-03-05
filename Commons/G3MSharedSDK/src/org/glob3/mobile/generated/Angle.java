@@ -16,9 +16,7 @@ package org.glob3.mobile.generated;
 //
 
 
-
 //#define THRESHOLD 1e-5
-//#define ISBETWEEN_THRESHOLD 1e-2
 
 
 
@@ -78,7 +76,7 @@ public class Angle
     return Angle.fromDegrees((angle1._degrees + angle2._degrees) / 2);
   }
 
-  public static Angle interpolation(Angle from, Angle to, double alpha)
+  public static Angle linearInterpolation(Angle from, Angle to, double alpha)
   {
     return Angle.fromDegrees((1.0-alpha) * from._degrees + alpha * to._degrees);
   }
@@ -157,12 +155,12 @@ public class Angle
 
   public final Angle clampedTo(Angle min, Angle max)
   {
-    if (_degrees < min._degrees)
+    if (_radians < min._radians)
     {
       return min;
     }
   
-    if (_degrees > max._degrees)
+    if (_radians > max._radians)
     {
       return max;
     }
@@ -172,7 +170,7 @@ public class Angle
 
   public final boolean isBetween(Angle min, Angle max)
   {
-    return (_degrees + DefineConstants.ISBETWEEN_THRESHOLD >= min._degrees) && (_degrees - DefineConstants.ISBETWEEN_THRESHOLD <= max._degrees);
+    return (_radians >= min._radians) && (_radians <= max._radians);
   }
 
   public final Angle nearestAngleInInterval(Angle min, Angle max)
@@ -253,7 +251,8 @@ public class Angle
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     isb.addDouble(_degrees);
-    isb.addString("°");
+  //  isb->addString("°");
+    isb.addString("d");
     final String s = isb.getString();
     if (isb != null)
        isb.dispose();

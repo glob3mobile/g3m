@@ -49,7 +49,7 @@ enum GL_version {
   
   enum GL_version glver;
   
-  TouchEvent *lastTouchEvent;
+  TouchEvent* _lastTouchEvent;
   
   void* _widgetVP;
 }

@@ -32,12 +32,12 @@ public abstract class Interpolator
 
   }
 
-  public double interpolate(Geodetic2D sw, Geodetic2D ne, double valueSW, double valueSE, double valueNE, double valueNW, Geodetic2D position)
+  public double interpolation(Geodetic2D sw, Geodetic2D ne, double valueSW, double valueSE, double valueNE, double valueNW, Geodetic2D position)
   {
-    return interpolate(sw, ne, valueSW, valueSE, valueNE, valueNW, position.latitude(), position.longitude());
+    return interpolation(sw, ne, valueSW, valueSE, valueNE, valueNW, position.latitude(), position.longitude());
   }
 
-  public double interpolate(Geodetic2D sw, Geodetic2D ne, double valueSW, double valueSE, double valueNE, double valueNW, Angle latitude, Angle longitude)
+  public double interpolation(Geodetic2D sw, Geodetic2D ne, double valueSW, double valueSE, double valueNE, double valueNW, Angle latitude, Angle longitude)
   {
   
     final double swLatRadians = sw.latitude().radians();
@@ -51,9 +51,9 @@ public abstract class Interpolator
     final double u = (longitude.radians() - swLonRadians) / deltaLonRadians;
     final double v = (neLatRadians - latitude.radians()) / deltaLatRadians;
   
-    return interpolate(valueSW, valueSE, valueNE, valueNW, u, v);
+    return interpolation(valueSW, valueSE, valueNE, valueNW, u, v);
   }
 
-  public abstract double interpolate(double valueSW, double valueSE, double valueNE, double valueNW, double u, double v);
+  public abstract double interpolation(double valueSW, double valueSE, double valueNE, double valueNW, double u, double v);
 
 }

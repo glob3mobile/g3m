@@ -161,12 +161,15 @@ public:
 
   Vector2D getUVCoordinates(const Angle& latitude,
                             const Angle& longitude) const {
-    const double u = longitude.sub(_lower.longitude()).div(getDeltaLongitude());
-    const double v = _upper.latitude().sub(latitude).div(getDeltaLatitude());
+    // const double u = longitude.sub(_lower.longitude()).div(getDeltaLongitude());
+    // const double v = _upper.latitude().sub(latitude).div(getDeltaLatitude());
+    const double u = (longitude._radians - _lower.longitude()._radians) / _deltaLongitude._radians;
+    const double v = (_upper.latitude()._radians - latitude._radians)   / _deltaLatitude._radians;
+
     return Vector2D(u, v);
   }
 
-  bool isBackOriented(const G3MRenderContext *rc) const;
+  bool isBackOriented(const G3MRenderContext *rc, double height) const;
 
   const Geodetic2D getClosestPoint(const Geodetic2D& pos) const;
 
@@ -187,7 +190,15 @@ public:
   bool isEqualsTo(const Sector& that) const {
     return _lower.isEqualsTo(that._lower) && _upper.isEqualsTo(that._upper);
   }
-
+  
+  bool touchesNorthPole() const {
+    return (_upper.latitude().greaterThan(Angle::fromDegrees(89.9)));
+  }
+  
+  bool touchesSouthPole() const {
+    return (_lower.latitude().lowerThan(Angle::fromDegrees(-89.9)));
+  }
+  
 };
 
 

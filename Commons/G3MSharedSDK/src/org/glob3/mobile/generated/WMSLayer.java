@@ -200,7 +200,7 @@ public class WMSLayer extends Layer
       req += _extraParameter;
     }
   
-    Petition petition = new Petition(sector, new URL(req, false), _timeToCache);
+    Petition petition = new Petition(sector, new URL(req, false), _timeToCache, _isTransparent);
     petitions.add(petition);
   
      return petitions;
@@ -210,7 +210,7 @@ public class WMSLayer extends Layer
 //    return _isTransparent;
 //  }
 
-  public final URL getFeatureInfoURL(Geodetic2D g, IFactory factory, Sector tileSector, int width, int height)
+  public final URL getFeatureInfoURL(Geodetic2D position, Sector tileSector)
   {
     if (!_sector.touchesWith(tileSector))
     {
@@ -259,9 +259,9 @@ public class WMSLayer extends Layer
         IStringBuilder isb = IStringBuilder.newStringBuilder();
   
         isb.addString("&WIDTH=");
-        isb.addInt(width);
+        isb.addInt(_parameters._tileTextureResolution._x);
         isb.addString("&HEIGHT=");
-        isb.addInt(height);
+        isb.addInt(_parameters._tileTextureResolution._y);
   
         isb.addString("&BBOX=");
         isb.addDouble(sector.lower().latitude()._degrees);
@@ -290,9 +290,9 @@ public class WMSLayer extends Layer
         IStringBuilder isb = IStringBuilder.newStringBuilder();
   
         isb.addString("&WIDTH=");
-        isb.addInt(width);
+        isb.addInt(_parameters._tileTextureResolution._x);
         isb.addString("&HEIGHT=");
-        isb.addInt(height);
+        isb.addInt(_parameters._tileTextureResolution._y);
   
         isb.addString("&BBOX=");
         isb.addDouble(sector.lower().longitude()._degrees);
@@ -318,9 +318,10 @@ public class WMSLayer extends Layer
     req += "&INFO_FORMAT=text/plain";
   
     //X and Y
-    Vector2D pixel = tileSector.getUVCoordinates(g);
-    int x = (int) IMathUtils.instance().round((pixel._x * width));
-    int y = (int) IMathUtils.instance().round(((1.0 - pixel._y) * height));
+    final Vector2D uv = sector.getUVCoordinates(position);
+    final int x = (int) IMathUtils.instance().round((uv._x * _parameters._tileTextureResolution._x));
+    final int y = (int) IMathUtils.instance().round((uv._y * _parameters._tileTextureResolution._y));
+    // const int y = (int) IMathUtils::instance()->round( ((1.0 - uv._y) * _parameters->_tileTextureResolution._y) );
   
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     isb.addString("&X=");

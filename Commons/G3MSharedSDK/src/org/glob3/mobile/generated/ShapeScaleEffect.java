@@ -33,7 +33,11 @@ public class ShapeScaleEffect extends EffectWithDuration
 
   public ShapeScaleEffect(TimeInterval duration, Shape shape, double fromScaleX, double fromScaleY, double fromScaleZ, double toScaleX, double toScaleY, double toScaleZ)
   {
-     super(duration);
+     this(duration, shape, fromScaleX, fromScaleY, fromScaleZ, toScaleX, toScaleY, toScaleZ, false);
+  }
+  public ShapeScaleEffect(TimeInterval duration, Shape shape, double fromScaleX, double fromScaleY, double fromScaleZ, double toScaleX, double toScaleY, double toScaleZ, boolean linearTiming)
+  {
+     super(duration, linearTiming);
      _shape = shape;
      _fromScaleX = fromScaleX;
      _fromScaleY = fromScaleY;
@@ -47,12 +51,12 @@ public class ShapeScaleEffect extends EffectWithDuration
 
   public final void doStep(G3MRenderContext rc, TimeInterval when)
   {
-    final double alpha = pace(percentDone(when));
+    final double alpha = getAlpha(when);
   
     IMathUtils mu = IMathUtils.instance();
-    final double scaleX = mu.interpolation(_fromScaleX, _toScaleX, alpha);
-    final double scaleY = mu.interpolation(_fromScaleY, _toScaleY, alpha);
-    final double scaleZ = mu.interpolation(_fromScaleZ, _toScaleZ, alpha);
+    final double scaleX = mu.linearInterpolation(_fromScaleX, _toScaleX, alpha);
+    final double scaleY = mu.linearInterpolation(_fromScaleY, _toScaleY, alpha);
+    final double scaleZ = mu.linearInterpolation(_fromScaleZ, _toScaleZ, alpha);
   
     _shape.setScale(scaleX, scaleY, scaleZ);
   }

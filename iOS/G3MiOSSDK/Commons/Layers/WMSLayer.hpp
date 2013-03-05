@@ -82,9 +82,7 @@ public:
 //  }
   
   URL getFeatureInfoURL(const Geodetic2D& g,
-                        const IFactory* factory,
-                        const Sector& sector,
-                        int width, int height) const;
+                        const Sector& sector) const;
   
 
   void setExtraParameter(const std::string& extraParameter) {
