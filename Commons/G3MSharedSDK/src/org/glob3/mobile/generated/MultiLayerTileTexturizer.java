@@ -162,12 +162,14 @@ public class MultiLayerTileTexturizer extends TileTexturizer
     return (mesh == null) ? null : mesh.getTopLevelGLTextureId();
   }
 
-  public final void onTerrainTouchEvent(G3MEventContext ec, Geodetic3D position, Tile tile, LayerSet layerSet)
+  public final boolean onTerrainTouchEvent(G3MEventContext ec, Geodetic3D position, Tile tile, LayerSet layerSet)
   {
-    if (layerSet != null)
+    if (layerSet == null)
     {
-      layerSet.onTerrainTouchEvent(ec, position, tile);
+      return false;
     }
+  
+    return layerSet.onTerrainTouchEvent(ec, position, tile);
   }
 
   public final void tileMeshToBeDeleted(Tile tile, Mesh mesh)

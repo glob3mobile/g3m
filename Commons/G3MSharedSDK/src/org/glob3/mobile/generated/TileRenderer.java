@@ -234,42 +234,44 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
-    boolean handled = false;
+    if (_lastCamera == null)
+    {
+      return false;
+    }
   
     if (touchEvent.getType() == TouchEventType.LongPress)
     {
+      final Vector2I pixel = touchEvent.getTouch(0).getPos();
+      final Vector3D ray = _lastCamera.pixel2Ray(pixel);
+      final Vector3D origin = _lastCamera.getCartesianPosition();
   
-      if (_lastCamera != null)
+      final Planet planet = ec.getPlanet();
+  
+      final Vector3D positionCartesian = planet.closestIntersection(origin, ray);
+      if (positionCartesian.isNan())
       {
-        final Vector2I pixel = touchEvent.getTouch(0).getPos();
-        final Vector3D ray = _lastCamera.pixel2Ray(pixel);
-        final Vector3D origin = _lastCamera.getCartesianPosition();
+        return false;
+      }
   
-        final Planet planet = ec.getPlanet();
+      final Geodetic3D position = planet.toGeodetic3D(positionCartesian);
   
-        final Vector3D positionCartesian = planet.closestIntersection(origin, ray);
-        if (positionCartesian.isNan())
+      final int topLevelTilesSize = _topLevelTiles.size();
+      for (int i = 0; i < topLevelTilesSize; i++)
+      {
+        final Tile tile = _topLevelTiles.get(i).getDeepestTileContaining(position);
+        if (tile != null)
         {
-          return false;
-        }
-  
-        final Geodetic3D position = planet.toGeodetic3D(positionCartesian);
-  
-        for (int i = 0; i < _topLevelTiles.size(); i++)
-        {
-          final Tile tile = _topLevelTiles.get(i).getDeepestTileContaining(position);
-          if (tile != null)
+          ILogger.instance().logInfo("Touched on %s", tile.description());
+          if (_texturizer.onTerrainTouchEvent(ec, position, tile, _layerSet))
           {
-            ILogger.instance().logInfo("Touched on %s", tile.description());
-            _texturizer.onTerrainTouchEvent(ec, position, tile, _layerSet);
-            handled = true;
+            return true;
           }
         }
       }
   
     }
   
-    return handled;
+    return false;
   }
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)

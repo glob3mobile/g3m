@@ -176,20 +176,26 @@ public class LayerSet
     return petitions;
   }
 
-  public final void onTerrainTouchEvent(G3MEventContext ec, Geodetic3D position, Tile tile)
+  public final boolean onTerrainTouchEvent(G3MEventContext ec, Geodetic3D position, Tile tile)
   {
   
-    for (int i = 0; i < _layers.size(); i++)
+  
+  
+    for (int i = _layers.size()-1; i >= 0; i--)
     {
       Layer layer = _layers.get(i);
       if (layer.isAvailable(ec, tile))
       {
         TerrainTouchEvent tte = new TerrainTouchEvent(position, tile.getSector(), layer);
   
-        layer.onTerrainTouchEventListener(ec, tte);
+        if (layer.onTerrainTouchEventListener(ec, tte))
+        {
+          return true;
+        }
       }
     }
   
+    return false;
   }
 
   public final boolean isReady()
