@@ -49,6 +49,8 @@ const std::string SceneParser::MINX = "minx";
 const std::string SceneParser::MINY = "miny";
 const std::string SceneParser::MAXX = "maxx";
 const std::string SceneParser::MAXY = "maxy";
+const std::string SceneParser::SPLITSLONGITUDE = "splitsLongitude";
+const std::string SceneParser::SPLITSLATITUDE = "splitsLatitude";
 const std::string SceneParser::ITEMS = "items";
 const std::string SceneParser::STATUS = "status";
 const std::string SceneParser::NAME = "name";
@@ -134,24 +136,7 @@ void SceneParser::parserJSONWMSLayer(LayerSet* layerSet, const JSONObject* jsonL
     const std::string jsonURL = IStringUtils::instance()->substring(jsonDatasource, 0, lastIndex+1);
     const std::string jsonVersion = jsonLayer->getAsString(VERSION)->value();
   
-    const JSONString* jsonMinLevel = jsonLayer->getAsString(MINLEVEL);
-    const JSONString* jsonMaxLevel = jsonLayer->getAsString(MAXLEVEL);
-  
-    LevelTileCondition* levelTileCondition = NULL;
-    if (jsonMinLevel != NULL && jsonMaxLevel != NULL) {
-      int minLevel = atoi(jsonMinLevel->value().c_str());
-      int maxLevel = atoi(jsonMaxLevel->value().c_str());
-      if (minLevel <= 0) {
-        minLevel = 0;
-      }
-      if (maxLevel >= 16){
-        maxLevel = 16;
-      }
-      if (minLevel < maxLevel){
-        levelTileCondition = new LevelTileCondition(minLevel, maxLevel);
-      }
-    }
-  
+    LevelTileCondition* levelTileCondition = getLevelCondition(jsonLayer->getAsString(MINLEVEL),jsonLayer->getAsString(MAXLEVEL));
     Sector sector = getSector(jsonLayer->getAsObject(BBOX));
   
     const JSONArray* jsonItems = jsonLayer->getAsArray(ITEMS);
@@ -191,28 +176,12 @@ void SceneParser::parserJSONWMSLayer(LayerSet* layerSet, const JSONObject* jsonL
 void SceneParser::parserJSONTMSLayer(LayerSet* layerSet, const JSONObject* jsonLayer){
   cout << "Parsing TMS Layer " << jsonLayer->getAsString(NAME)->value() << "..." << endl;
   
-  const std::string jsonDatasource = jsonLayer->getAsString(DATASOURCE)->value();
-  const int lastIndex = IStringUtils::instance()->indexOf(jsonDatasource,"?");
-  const std::string jsonURL = IStringUtils::instance()->substring(jsonDatasource, 0, lastIndex+1);
+  const std::string jsonURL = jsonLayer->getAsString(DATASOURCE)->value();
   
-  const JSONString* jsonMinLevel = jsonLayer->getAsString(MINLEVEL);
-  const JSONString* jsonMaxLevel = jsonLayer->getAsString(MAXLEVEL);
+  const int jsonSplitsLat = atoi(jsonLayer->getAsString(SPLITSLATITUDE)->value().c_str());
+  const int jsonSplitsLon = atoi(jsonLayer->getAsString(SPLITSLONGITUDE)->value().c_str());
   
-  LevelTileCondition* levelTileCondition = NULL;
-  if (jsonMinLevel != NULL && jsonMaxLevel != NULL) {
-    int minLevel = atoi(jsonMinLevel->value().c_str());
-    int maxLevel = atoi(jsonMaxLevel->value().c_str());
-    if (minLevel <= 0) {
-      minLevel = 0;
-    }
-    if (maxLevel >= 16){
-      maxLevel = 16;
-    }
-    if (minLevel < maxLevel){
-      levelTileCondition = new LevelTileCondition(minLevel, maxLevel);
-    }
-  }
-  
+  LevelTileCondition* levelTileCondition = getLevelCondition(jsonLayer->getAsString(MINLEVEL),jsonLayer->getAsString(MAXLEVEL));
   Sector sector = getSector(jsonLayer->getAsObject(BBOX));
   
   const JSONArray* jsonItems = jsonLayer->getAsArray(ITEMS);
@@ -238,9 +207,27 @@ void SceneParser::parserJSONTMSLayer(LayerSet* layerSet, const JSONObject* jsonL
                                 "EPSG:4326",
                                 true,
                                 levelTileCondition,
-                                TimeInterval::fromDays(30));
+                                TimeInterval::fromDays(30), new LayerTilesRenderParameters(sector,jsonSplitsLat,jsonSplitsLon,16,Vector2I(256,256),Vector2I(16,16),false));
 
   layerSet->addLayer(tmsLayer);
+}
+
+LevelTileCondition* SceneParser::getLevelCondition(const JSONString* jsonMinLevel, const JSONString* jsonMaxLevel){
+  LevelTileCondition* levelTileCondition = NULL;
+  if (jsonMinLevel != NULL && jsonMaxLevel != NULL) {
+    int minLevel = atoi(jsonMinLevel->value().c_str());
+    int maxLevel = atoi(jsonMaxLevel->value().c_str());
+    if (minLevel <= 0) {
+      minLevel = 0;
+    }
+    if (maxLevel >= 16){
+      maxLevel = 16;
+    }
+    if (minLevel < maxLevel){
+      levelTileCondition = new LevelTileCondition(minLevel, maxLevel);
+    }
+  }
+  return levelTileCondition;
 }
 
 Sector SceneParser::getSector(const JSONObject* jsonBBOX){

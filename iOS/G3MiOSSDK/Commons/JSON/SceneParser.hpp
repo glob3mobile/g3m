@@ -17,6 +17,7 @@
 #include "Renderer.hpp"
 #include "IDownloader.hpp"
 #include "MarksRenderer.hpp"
+#include "LevelTileCondition.hpp"
 
 enum layer_type {
     WMS,TMS,THREED,PLANARIMAGE,GEOJSON,SPHERICALIMAGE
@@ -32,6 +33,8 @@ class SceneParser{
     static const std::string MINY;
     static const std::string MAXX;
     static const std::string MAXY;
+    static const std::string SPLITSLONGITUDE;
+    static const std::string SPLITSLATITUDE;
     static const std::string ITEMS;
     static const std::string MINLEVEL;
     static const std::string MAXLEVEL;
@@ -76,6 +79,7 @@ private:
     void parserJSONSphericalImageLayer(LayerSet* layerSet, const JSONObject* jsonLayer);
     void parserGEOJSONLayer(LayerSet* layerSet, const JSONObject* jsonLayer);
   
+    LevelTileCondition* getLevelCondition(const JSONString* jsonMinLevel, const JSONString* jsonMaxLevel);
     Sector getSector(const JSONObject* jsonBBOX);
   
 protected:
