@@ -71,6 +71,9 @@ void LayerSet::initialize(const G3MContext* context)const{
 
 bool LayerSet::isReady() const {
   const int layersCount = _layers.size();
+  if (layersCount < 1) {
+    return false;
+  }
 
   for (int i = 0; i < layersCount; i++){
     if (!(_layers[i]->isReady())) {

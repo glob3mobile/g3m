@@ -62,7 +62,7 @@ public:
                            const Tile* tile) const;
   
   bool isReady() const;
-  
+
   void initialize(const G3MContext* context)const;
   
   int size() const {
