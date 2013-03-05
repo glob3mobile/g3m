@@ -188,6 +188,10 @@ public:
                        bool renderDebug);
   
   double getMinHeight() { return 0.0; }
+
+
+  const std::string description() const;
+
 };
 
 #endif

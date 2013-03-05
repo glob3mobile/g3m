@@ -408,6 +408,7 @@ bool TileRenderer::onTouchEvent(const G3MEventContext* ec,
       for (int i = 0; i < _topLevelTiles.size(); i++) {
         const Tile* tile = _topLevelTiles[i]->getDeepestTileContaining(position);
         if (tile != NULL) {
+          ILogger::instance()->logInfo("Touched on %s", tile->description().c_str());
           _texturizer->onTerrainTouchEvent(ec, position, tile, _layerSet);
           handled = true;
         }
