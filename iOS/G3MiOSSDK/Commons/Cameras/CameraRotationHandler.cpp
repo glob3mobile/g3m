@@ -50,12 +50,12 @@ void CameraRotationHandler::onDown(const G3MEventContext *eventContext,
   Vector2I pixel1 = touchEvent.getTouch(1)->getPos();
   Vector2I pixel2 = touchEvent.getTouch(2)->getPos();
   Vector2I averagePixel = pixel0.add(pixel1).add(pixel2).div(3);
-  _initialPixel = MutableVector2I(averagePixel._x, averagePixel._y);
+  _pivotPixel = MutableVector2I(averagePixel._x, averagePixel._y);
   //_lastYValid = _initialPixel.y();
   
   // compute center of view
-  _initialPoint = camera->getXYZCenterOfView().asMutableVector3D();
-  if (_initialPoint.isNan()) {
+  _pivotPoint = camera->getXYZCenterOfView().asMutableVector3D();
+  if (_pivotPoint.isNan()) {
     ILogger::instance()->logError("CAMERA ERROR: center point does not intersect globe!!\n");
     cameraContext->setCurrentGesture(None);
   }
@@ -78,13 +78,13 @@ void CameraRotationHandler::onMove(const G3MEventContext *eventContext,
   const Vector2I cm = c0.add(c1).add(c2).div(3);
   
   // compute normal to Initial point
-  Vector3D normal = eventContext->getPlanet()->geodeticSurfaceNormal(_initialPoint );
+  Vector3D normal = eventContext->getPlanet()->geodeticSurfaceNormal(_pivotPoint );
   
   // vertical rotation around normal vector to globe
   Camera *camera = cameraContext->getNextCamera();
   camera->copyFrom(_camera0);
-  Angle angle_v             = Angle::fromDegrees((_initialPixel.x()-cm._x)*0.25);
-  camera->rotateWithAxisAndPoint(normal, _initialPoint.asVector3D(), angle_v);
+  Angle angle_v             = Angle::fromDegrees((_pivotPixel.x()-cm._x)*0.25);
+  camera->rotateWithAxisAndPoint(normal, _pivotPoint.asVector3D(), angle_v);
   
   // compute angle between normal and view direction
   Vector3D view = camera->getViewDirection();
@@ -92,7 +92,7 @@ void CameraRotationHandler::onMove(const G3MEventContext *eventContext,
   double initialAngle = IMathUtils::instance()->acos(dot) / IMathUtils::instance()->pi() * 180;
   
   // rotate more than 85 degrees or less than 0 degrees is not allowed
-  double delta = (cm._y - _initialPixel.y()) * 0.25;
+  double delta = (cm._y - _pivotPixel.y()) * 0.25;
   double finalAngle = initialAngle + delta;
   if (finalAngle > 85)  delta = 85 - initialAngle;
   if (finalAngle < 0)   delta = -initialAngle;
@@ -102,7 +102,7 @@ void CameraRotationHandler::onMove(const G3MEventContext *eventContext,
   
   // horizontal rotation over the original camera horizontal axix
   Vector3D u = camera->getHorizontalVector();
-  tempCamera.rotateWithAxisAndPoint(u, _initialPoint.asVector3D(), Angle::fromDegrees(delta));
+  tempCamera.rotateWithAxisAndPoint(u, _pivotPoint.asVector3D(), Angle::fromDegrees(delta));
   
   // update camera only if new view intersects globe
   //tempCamera.updateModelMatrix();
@@ -117,7 +117,7 @@ void CameraRotationHandler::onUp(const G3MEventContext *eventContext,
                                  CameraContext *cameraContext) 
 {
   cameraContext->setCurrentGesture(None);
-  _initialPixel = MutableVector2I::zero();
+  _pivotPixel = MutableVector2I::zero();
 }
 
 

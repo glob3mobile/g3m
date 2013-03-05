@@ -59,7 +59,7 @@ public:
   
   const IGLTextureId* getTopLevelGLTextureIdForTile(Tile* tile);
   
-  void onTerrainTouchEvent(const G3MEventContext* ec,
+  bool onTerrainTouchEvent(const G3MEventContext* ec,
                            const Geodetic3D& g3d,
                            const Tile* tile,
                            LayerSet* layerSet);

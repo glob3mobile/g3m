@@ -788,4 +788,25 @@ public class Tile
   {
      return 0.0;
   }
+
+
+  public final String description()
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addString("(Tile");
+    isb.addString(" level=");
+    isb.addInt(_level);
+    isb.addString(", row=");
+    isb.addInt(_row);
+    isb.addString(", column=");
+    isb.addInt(_column);
+    isb.addString(", sector=");
+    isb.addString(_sector.description());
+    isb.addString(")");
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
+  }
+
 }

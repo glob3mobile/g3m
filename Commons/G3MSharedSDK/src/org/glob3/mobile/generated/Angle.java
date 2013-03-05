@@ -20,6 +20,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 public class Angle
 {
   private Angle(double degrees)

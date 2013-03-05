@@ -131,16 +131,21 @@ public abstract class Layer
     _listeners.add(listener);
   }
 
-  public final void onTerrainTouchEventListener(G3MEventContext ec, TerrainTouchEvent tte)
+  public final boolean onTerrainTouchEventListener(G3MEventContext ec, TerrainTouchEvent tte)
   {
-    for (int i = 0; i < _listeners.size(); i++)
+    final int listenersSize = _listeners.size();
+    for (int i = 0; i < listenersSize; i++)
     {
       TerrainTouchEventListener listener = _listeners.get(i);
       if (listener != null)
       {
-        listener.onTerrainTouch(ec, tte);
+        if (listener.onTerrainTouch(ec, tte))
+        {
+          return true;
+        }
       }
     }
+    return false;
   }
 
   public final void setLayerSet(LayerSet layerSet)

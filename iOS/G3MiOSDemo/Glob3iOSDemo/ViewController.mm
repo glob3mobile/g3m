@@ -508,7 +508,7 @@ public:
 //                                    TimeInterval::zero());
 //  layerSet->addLayer(pressure);
 
-  const bool usePnoaLayer = true;
+  const bool usePnoaLayer = false;
   if (usePnoaLayer) {
     WMSLayer *pnoa = new WMSLayer("PNOA",
                                   URL("http://www.idee.es/wms/PNOA/PNOA", false),
@@ -577,13 +577,14 @@ public:
 
     class CatastroTerrainTouchEventListener : public TerrainTouchEventListener {
     public:
-      void onTerrainTouch(const G3MEventContext* context,
+      bool onTerrainTouch(const G3MEventContext* context,
                           const TerrainTouchEvent& event) {
         const URL url = event.getLayer()->getFeatureInfoURL(event.getPosition().asGeodetic2D(),
                                                             event.getSector());
 
         ILogger::instance()->logInfo("%s", url.getPath().c_str());
 
+        return true;
       }
     };
 
@@ -597,7 +598,7 @@ public:
 
 - (TilesRenderParameters*) createTileRenderParameters
 {
-  const bool renderDebug = false;
+  const bool renderDebug = true;
   const bool useTilesSplitBudget = true;
   const bool forceTopLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;

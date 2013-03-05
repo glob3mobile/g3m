@@ -828,11 +828,13 @@ bool MultiLayerTileTexturizer::isReady(const G3MRenderContext *rc,
   return true;
 }
 
-void MultiLayerTileTexturizer::onTerrainTouchEvent(const G3MEventContext* ec,
+bool MultiLayerTileTexturizer::onTerrainTouchEvent(const G3MEventContext* ec,
                                                    const Geodetic3D& position,
                                                    const Tile* tile,
-                                                   LayerSet* layerSet){
-  if (layerSet != NULL) {
-    layerSet->onTerrainTouchEvent(ec, position, tile);
+                                                   LayerSet* layerSet) {
+  if (layerSet == NULL) {
+    return false;
   }
+
+  return layerSet->onTerrainTouchEvent(ec, position, tile);
 }
