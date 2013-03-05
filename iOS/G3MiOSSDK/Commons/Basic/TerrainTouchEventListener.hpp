@@ -48,7 +48,10 @@ public:
 class TerrainTouchEventListener {
 public:
 
-  virtual void onTerrainTouch(const G3MEventContext* context,
+  /**
+   Process terrain touch event, return true if the event was processed.
+   */
+  virtual bool onTerrainTouch(const G3MEventContext* context,
                               const TerrainTouchEvent& ev) = 0;
 
 #ifdef C_CODE

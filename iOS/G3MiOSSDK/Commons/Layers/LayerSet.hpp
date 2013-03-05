@@ -57,7 +57,7 @@ public:
                                                 const Tile* tile,
                                                 const Vector2I& tileTextureResolution) const;
   
-  void onTerrainTouchEvent(const G3MEventContext* ec,
+  bool onTerrainTouchEvent(const G3MEventContext* ec,
                            const Geodetic3D& g3d,
                            const Tile* tile) const;
   

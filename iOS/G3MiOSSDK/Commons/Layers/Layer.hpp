@@ -96,14 +96,18 @@ public:
     _listeners.push_back(listener);
   }
 
-  void onTerrainTouchEventListener(const G3MEventContext* ec,
+  bool onTerrainTouchEventListener(const G3MEventContext* ec,
                                    const TerrainTouchEvent& tte) const {
-    for (unsigned int i = 0; i < _listeners.size(); i++) {
+    const int listenersSize = _listeners.size();
+    for (int i = 0; i < listenersSize; i++) {
       TerrainTouchEventListener* listener = _listeners[i];
       if (listener != NULL) {
-        listener->onTerrainTouch(ec, tte);
+        if (listener->onTerrainTouch(ec, tte)) {
+          return true;
+        }
       }
     }
+    return false;
   }
 
   void setLayerSet(LayerSet* layerSet);

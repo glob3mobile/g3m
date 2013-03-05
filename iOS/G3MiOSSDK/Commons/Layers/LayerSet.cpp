@@ -43,19 +43,24 @@ std::vector<Petition*> LayerSet::createTileMapPetitions(const G3MRenderContext* 
   return petitions;
 }
 
-void LayerSet::onTerrainTouchEvent(const G3MEventContext* ec,
+bool LayerSet::onTerrainTouchEvent(const G3MEventContext* ec,
                                    const Geodetic3D& position,
                                    const Tile* tile) const {
 
-  for (int i = 0; i < _layers.size(); i++) {
+  
+
+  for (int i = _layers.size()-1; i >= 0; i--) {
     Layer* layer = _layers[i];
     if (layer->isAvailable(ec, tile)) {
       TerrainTouchEvent tte(position, tile->getSector(), layer);
 
-      layer->onTerrainTouchEventListener(ec, tte);
+      if (layer->onTerrainTouchEventListener(ec, tte)) {
+        return true;
+      }
     }
   }
 
+  return false;
 }
 
 void LayerSet::initialize(const G3MContext* context)const{

@@ -387,37 +387,38 @@ void TileRenderer::render(const G3MRenderContext* rc,
 
 bool TileRenderer::onTouchEvent(const G3MEventContext* ec,
                                 const TouchEvent* touchEvent) {
-  bool handled = false;
+  if (_lastCamera == NULL) {
+    return false;
+  }
 
   if (touchEvent->getType() == LongPress) {
+    const Vector2I pixel = touchEvent->getTouch(0)->getPos();
+    const Vector3D ray = _lastCamera->pixel2Ray(pixel);
+    const Vector3D origin = _lastCamera->getCartesianPosition();
 
-    if (_lastCamera != NULL) {
-      const Vector2I pixel = touchEvent->getTouch(0)->getPos();
-      const Vector3D ray = _lastCamera->pixel2Ray(pixel);
-      const Vector3D origin = _lastCamera->getCartesianPosition();
+    const Planet* planet = ec->getPlanet();
 
-      const Planet* planet = ec->getPlanet();
+    const Vector3D positionCartesian = planet->closestIntersection(origin, ray);
+    if (positionCartesian.isNan()) {
+      return false;
+    }
 
-      const Vector3D positionCartesian = planet->closestIntersection(origin, ray);
-      if (positionCartesian.isNan()) {
-        return false;
-      }
+    const Geodetic3D position = planet->toGeodetic3D(positionCartesian);
 
-      const Geodetic3D position = planet->toGeodetic3D(positionCartesian);
-
-      for (int i = 0; i < _topLevelTiles.size(); i++) {
-        const Tile* tile = _topLevelTiles[i]->getDeepestTileContaining(position);
-        if (tile != NULL) {
-          ILogger::instance()->logInfo("Touched on %s", tile->description().c_str());
-          _texturizer->onTerrainTouchEvent(ec, position, tile, _layerSet);
-          handled = true;
+    const int topLevelTilesSize = _topLevelTiles.size();
+    for (int i = 0; i < topLevelTilesSize; i++) {
+      const Tile* tile = _topLevelTiles[i]->getDeepestTileContaining(position);
+      if (tile != NULL) {
+        ILogger::instance()->logInfo("Touched on %s", tile->description().c_str());
+        if (_texturizer->onTerrainTouchEvent(ec, position, tile, _layerSet)) {
+          return true;
         }
       }
     }
 
   }
 
-  return handled;
+  return false;
 }
 
 
