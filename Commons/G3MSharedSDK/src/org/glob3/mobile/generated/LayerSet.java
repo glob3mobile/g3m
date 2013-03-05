@@ -201,6 +201,10 @@ public class LayerSet
   public final boolean isReady()
   {
     final int layersCount = _layers.size();
+    if (layersCount < 1)
+    {
+      return false;
+    }
   
     for (int i = 0; i < layersCount; i++)
     {
