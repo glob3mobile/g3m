@@ -554,8 +554,8 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
 				CLANG_CXX_LIBRARY = "compiler-default";
-				CODE_SIGN_IDENTITY = "iPhone Developer: MariLuz Mateo (R52VMZ2HWF)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: MariLuz Mateo (R52VMZ2HWF)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "G3MApp/G3MApp-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -566,8 +566,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "7F492C09-D28D-4B04-9B15-7DD44AE5FFDF";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "7F492C09-D28D-4B04-9B15-7DD44AE5FFDF";
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -577,8 +577,8 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
 				CLANG_CXX_LIBRARY = "compiler-default";
-				CODE_SIGN_IDENTITY = "iPhone Developer: MariLuz Mateo (R52VMZ2HWF)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: MariLuz Mateo (R52VMZ2HWF)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "G3MApp/G3MApp-Prefix.pch";
 				"GCC_PREPROCESSOR_DEFINITIONS[arch=*]" = C_CODE;
@@ -586,8 +586,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "7F492C09-D28D-4B04-9B15-7DD44AE5FFDF";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "7F492C09-D28D-4B04-9B15-7DD44AE5FFDF";
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
