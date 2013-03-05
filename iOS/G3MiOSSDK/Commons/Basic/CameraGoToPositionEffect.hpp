@@ -30,14 +30,14 @@ private:
   double calculateMaxHeight(const Planet* planet) {
     // curve parameters
     const double distanceInDegreesMaxHeight = 180;
-    const double maxHeight = planet->getRadii().axisAverage();
+    const double maxHeight = planet->getRadii().axisAverage() * 5;
 
 
     // rough estimation of distance using lat/lon degrees
     const double deltaLatInDeg = _fromPosition.latitude()._degrees  - _toPosition.latitude()._degrees;
     const double deltaLonInDeg = _fromPosition.longitude()._degrees - _toPosition.longitude()._degrees;
     const double distanceInDeg = IMathUtils::instance()->sqrt((deltaLatInDeg * deltaLatInDeg) +
-                                                              (deltaLonInDeg * deltaLonInDeg)  );
+                                                              (deltaLonInDeg * deltaLonInDeg));
 
     if (distanceInDeg >= distanceInDegreesMaxHeight) {
       return maxHeight;
@@ -45,16 +45,16 @@ private:
 
     const double middleHeight = (distanceInDeg / distanceInDegreesMaxHeight) * maxHeight;
 
+    const double averageHeight = (_fromPosition.height() + _toPosition.height()) / 2;
+    if (middleHeight < averageHeight) {
+      return averageHeight;
+    }
     /*
-     const double averageHeight = (_fromPosition.height() + _toPosition.height()) / 2;
-     if (middleHeight < averageHeight) {
-     return averageHeight;
-     }
-     */
     const double averageHeight = (_fromPosition.height() + _toPosition.height()) / 2;
     if (middleHeight < averageHeight) {
       return (averageHeight + middleHeight) / 2.0;
     }
+     */
 
     return middleHeight;
   }
