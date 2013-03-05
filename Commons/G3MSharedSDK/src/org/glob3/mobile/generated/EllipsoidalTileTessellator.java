@@ -79,6 +79,8 @@ public class EllipsoidalTileTessellator extends TileTessellator
   
     double minHeight = 0;
     FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.givenCenter(), planet, sector.getCenter());
+  
+    int unusedType = -1;
     for (int j = 0; j < tileResolution._y; j++)
     {
       final double v = (double) j / (tileResolution._y-1);
@@ -92,7 +94,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
         if (elevationData != null)
         {
   //        height = elevationData->getElevationAt(i, j) * verticalExaggeration;
-          height = elevationData.getElevationAt(position.latitude(), position.longitude()) * verticalExaggeration;
+          height = elevationData.getElevationAt(position, unusedType) * verticalExaggeration;
           if (height < minHeight)
           {
             minHeight = height;
@@ -175,8 +177,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
   
     Color color = Color.newFromRGBA((float) 1.0, (float) 1.0, (float) 1.0, (float) 1.0);
   
-    return new IndexedMesh(debug ? GLPrimitive.lineStrip() : GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, color);
-                           //GLPrimitive::triangleStrip(),
+    return new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, color); //debug ? GLPrimitive::lineStrip() : GLPrimitive::triangleStrip(),
                            //GLPrimitive::lineStrip(),
   }
 

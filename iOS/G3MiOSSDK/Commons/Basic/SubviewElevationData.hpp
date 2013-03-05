@@ -25,10 +25,12 @@ public:
 
   ~SubviewElevationData();
 
-  double getElevationAt(int x, int y) const;
+  double getElevationAt(int x, int y,
+                        int *type) const;
 
   double getElevationAt(const Angle& latitude,
-                        const Angle& longitude) const;
+                        const Angle& longitude,
+                        int *type) const;
 
   const std::string description(bool detailed) const;
 

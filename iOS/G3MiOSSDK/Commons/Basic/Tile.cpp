@@ -21,6 +21,7 @@
 #include "MeshHolder.hpp"
 #include "ElevationData.hpp"
 #include "LayerTilesRenderParameters.hpp"
+#include "IStringBuilder.hpp"
 
 Tile::Tile(TileTexturizer* texturizer,
            Tile* parent,
@@ -663,4 +664,21 @@ const Tile* Tile::getDeepestTileContaining(const Geodetic3D& position) const {
   }
   
   return NULL;
+}
+
+const std::string Tile::description() const {
+  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  isb->addString("(Tile");
+  isb->addString(" level=");
+  isb->addInt(_level);
+  isb->addString(", row=");
+  isb->addInt(_row);
+  isb->addString(", column=");
+  isb->addInt(_column);
+  isb->addString(", sector=");
+  isb->addString(_sector.description());
+  isb->addString(")");
+  const std::string s = isb->getString();
+  delete isb;
+  return s;
 }

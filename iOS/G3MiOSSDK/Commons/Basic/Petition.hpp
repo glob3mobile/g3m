@@ -37,6 +37,7 @@ private:
 #endif
 
   const long long _timeToCacheInMS;
+  const bool _isTransparent;
   
   Petition(const Petition& that);
   
@@ -46,10 +47,12 @@ public:
   
   Petition(const Sector& sector,
            const URL& url,
-           const TimeInterval& timeToCache):
+           const TimeInterval& timeToCache,
+           bool isTransparent):
   _sector(new Sector(sector)),
   _url(url),
   _timeToCacheInMS(timeToCache.milliseconds()),
+  _isTransparent(isTransparent),
   _image(NULL)
   {
   }
@@ -84,6 +87,10 @@ public:
 
   const TimeInterval getTimeToCache() const {
     return TimeInterval::fromMilliseconds(_timeToCacheInMS);
+  }
+
+  bool isTransparent() const {
+    return _isTransparent;
   }
 
   const std::string description() const;

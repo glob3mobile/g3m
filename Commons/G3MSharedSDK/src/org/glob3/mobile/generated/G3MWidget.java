@@ -153,10 +153,11 @@ public class G3MWidget
       }
     }
   
-    _effectsScheduler.doOneCyle(rc);
-  
+    if (_mainRendererReady)
+    {
+      _effectsScheduler.doOneCyle(rc);
+    }
     _frameTasksExecutor.doPreRenderCycle(rc);
-  
   
     Renderer selectedRenderer = _mainRendererReady ? _mainRenderer : _busyRenderer;
     if (selectedRenderer != _selectedRenderer)
@@ -269,8 +270,6 @@ public class G3MWidget
           {
             if (_clickOnProcess)
             {
-              final Vector2I pos = touchEvent.getTouch(0).getPos();
-              System.out.printf("DownUp on %dx%d\n", pos._x, pos._y);
   
               final Touch touch = touchEvent.getTouch(0);
               final TouchEvent downUpEvent = TouchEvent.create(TouchEventType.DownUp, new Touch(touch));

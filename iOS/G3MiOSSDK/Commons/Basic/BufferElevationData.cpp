@@ -8,16 +8,6 @@
 
 #include "BufferElevationData.hpp"
 
-//
-//  FloatBufferElevationData.cpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 2/21/13.
-//
-//
-
-#include "BufferElevationData.hpp"
-
 #include "BilinearInterpolator.hpp"
 
 Interpolator* BufferElevationData::getInterpolator() const {
@@ -42,18 +32,24 @@ BufferElevationData::~BufferElevationData() {
   delete _interpolator;
 }
 
-double BufferElevationData::getElevationAt(int x, int y) const {
+double BufferElevationData::getElevationAt(int x, int y,
+                                           int *type) const {
   const int index = ((_height-1-y) * _width) + x;
+//  const int index = ((_width-1-x) * _height) + y;
+
   if ( (index < 0) || (index >= _bufferSize) ) {
     printf("break point on me\n");
+    *type = 0;
     return _noDataValue;
   }
+  *type = 1;
   return getValueInBufferAt( index );
 }
 
 
 double BufferElevationData::getElevationAt(const Angle& latitude,
-                                           const Angle& longitude) const {
+                                           const Angle& longitude,
+                                           int *type) const {
 
 
   if (!_sector.contains(latitude, longitude)) {
@@ -76,36 +72,42 @@ double BufferElevationData::getElevationAt(const Angle& latitude,
   const int y = (int) dY;
   const int nextX = (int) (dX + 1.0);
   const int nextY = (int) (dY + 1.0);
+//  const int nextX = x + 1;
+//  const int nextY = y + 1;
   const double alphaY = dY - y;
   const double alphaX = dX - x;
 
+  int unsedType = -1;
   double result;
   if (x == dX) {
     if (y == dY) {
       // exact on grid point
-      result = getElevationAt(x, y);
+      result = getElevationAt(x, y, type);
     }
     else {
       // linear on Y
-      const double heightY     = getElevationAt(x, y);
-      const double heightNextY = getElevationAt(x, nextY);
+      const double heightY     = getElevationAt(x, y,     &unsedType);
+      const double heightNextY = getElevationAt(x, nextY, &unsedType);
+      *type = 2;
       result = mu->linearInterpolation(heightY, heightNextY, alphaY);
     }
   }
   else {
     if (y == dY) {
       // linear on X
-      const double heightX     = getElevationAt(x,     y);
-      const double heightNextX = getElevationAt(nextX, y);
+      const double heightX     = getElevationAt(x,     y, &unsedType);
+      const double heightNextX = getElevationAt(nextX, y, &unsedType);
+      *type = 3;
       result = mu->linearInterpolation(heightX, heightNextX, alphaX);
     }
     else {
       // bilinear
-      const double valueSW = getElevationAt(x,     y);
-      const double valueSE = getElevationAt(nextX, y);
-      const double valueNE = getElevationAt(nextX, nextY);
-      const double valueNW = getElevationAt(x,     nextY);
+      const double valueSW = getElevationAt(x,     y,     &unsedType);
+      const double valueSE = getElevationAt(nextX, y,     &unsedType);
+      const double valueNE = getElevationAt(nextX, nextY, &unsedType);
+      const double valueNW = getElevationAt(x,     nextY, &unsedType);
 
+      *type = 4;
       result = getInterpolator()->interpolation(valueSW,
                                                 valueSE,
                                                 valueNE,

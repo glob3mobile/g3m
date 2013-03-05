@@ -31,13 +31,18 @@ public:
 
   virtual Vector2I getExtent() const;
 
-  virtual double getElevationAt(int x, int y) const = 0;
+  virtual double getElevationAt(int x, int y,
+                                int *type) const = 0;
 
   virtual double getElevationAt(const Angle& latitude,
-                                const Angle& longitude) const = 0;
+                                const Angle& longitude,
+                                int *type) const = 0;
 
-  virtual double getElevationAt(const Geodetic2D& position) const {
-    return getElevationAt(position.latitude(), position.longitude());
+  virtual double getElevationAt(const Geodetic2D& position,
+                                int *type) const {
+    return getElevationAt(position.latitude(),
+                          position.longitude(),
+                          type);
   }
 
   virtual const std::string description(bool detailed) const = 0;

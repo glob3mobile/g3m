@@ -260,6 +260,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
           final Tile tile = _topLevelTiles.get(i).getDeepestTileContaining(position);
           if (tile != null)
           {
+            ILogger.instance().logInfo("Touched on %s", tile.description());
             _texturizer.onTerrainTouchEvent(ec, position, tile, _layerSet);
             handled = true;
           }
