@@ -263,8 +263,6 @@ void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
       else {
         if (eventType == Up) {
           if (_clickOnProcess) {
-            const Vector2I pos = touchEvent->getTouch(0)->getPos();
-            printf("DownUp on %dx%d\n", pos._x, pos._y);
 
             const Touch* touch = touchEvent->getTouch(0);
             const TouchEvent* downUpEvent = TouchEvent::create(DownUp,

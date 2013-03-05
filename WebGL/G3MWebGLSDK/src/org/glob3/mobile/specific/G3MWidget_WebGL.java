@@ -164,7 +164,7 @@ public final class G3MWidget_WebGL
       jsDefineG3MBrowserObjects();
 
       // Events
-      sinkEvents(Event.MOUSEEVENTS | Event.ONCONTEXTMENU | Event.KEYEVENTS | Event.ONDBLCLICK | Event.ONMOUSEWHEEL);
+      sinkEvents(Event.MOUSEEVENTS | Event.ONCONTEXTMENU | Event.ONDBLCLICK | Event.ONMOUSEWHEEL);
    }
 
 
