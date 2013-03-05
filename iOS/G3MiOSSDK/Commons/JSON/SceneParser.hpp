@@ -17,10 +17,9 @@
 #include "Renderer.hpp"
 #include "IDownloader.hpp"
 #include "MarksRenderer.hpp"
-#include "LayerTilesRenderParameters.hpp"
 
 enum layer_type {
-    WMS,THREED,PLANARIMAGE,GEOJSON,SPHERICALIMAGE
+    WMS,TMS,THREED,PLANARIMAGE,GEOJSON,SPHERICALIMAGE
 };
 
 class SceneParser{
@@ -28,7 +27,14 @@ class SceneParser{
     static const std::string TYPE;
     static const std::string DATASOURCE;
     static const std::string VERSION;
+    static const std::string BBOX;
+    static const std::string MINX;
+    static const std::string MINY;
+    static const std::string MAXX;
+    static const std::string MAXY;
     static const std::string ITEMS;
+    static const std::string MINLEVEL;
+    static const std::string MAXLEVEL;
     static const std::string STATUS;
     static const std::string NAME;
     static const std::string URLICON;
@@ -54,7 +60,7 @@ class SceneParser{
 public:
     
     static SceneParser* instance();
-    void parse(LayerSet* layerSet, LayerTilesRenderParameters* layerTileRenderParameters, std::string namelessParameter);
+    void parse(LayerSet* layerSet, std::string namelessParameter);
     std::map<std::string, std::map<std::string, std::string>* > getMapGeoJSONSources();
     std::vector<std::string> getPanoSources();
     std::map<std::string, std::vector <std::map<std::string, std::string>* > > getLegend();
@@ -64,11 +70,14 @@ public:
 private:
     void parserJSONLayerList(LayerSet* layerSet, const JSONObject* jsonLayers);
     void parserJSONWMSLayer(LayerSet* layerSet, const JSONObject* jsonLayer);
+    void parserJSONTMSLayer(LayerSet* layerSet, const JSONObject* jsonLayer);
     void parserJSON3DLayer(LayerSet* layerSet, const JSONObject* jsonLayer);
     void parserJSONPlanarImageLayer(LayerSet* layerSet, const JSONObject* jsonLayer);
     void parserJSONSphericalImageLayer(LayerSet* layerSet, const JSONObject* jsonLayer);
     void parserGEOJSONLayer(LayerSet* layerSet, const JSONObject* jsonLayer);
-    
+  
+    Sector getSector(const JSONObject* jsonBBOX);
+  
 protected:
     SceneParser();
     SceneParser(const SceneParser &);

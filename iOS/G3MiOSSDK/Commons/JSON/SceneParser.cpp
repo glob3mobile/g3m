@@ -22,6 +22,7 @@
 #include "JSONBoolean.hpp"
 
 #include "WMSLayer.hpp"
+#include "TMSLayer.hpp"
 #include "LayerSet.hpp"
 
 #include <stdio.h>
@@ -33,12 +34,21 @@
 #include "LayerTilesRenderParameters.hpp"
 #include "Vector2I.hpp"
 
+#include "LevelTileCondition.hpp"
+
 using namespace std;
 
 const std::string SceneParser::LAYERS = "layers";
 const std::string SceneParser::TYPE = "type";
 const std::string SceneParser::DATASOURCE = "datasource";
 const std::string SceneParser::VERSION = "version";
+const std::string SceneParser::MINLEVEL = "minlevel";
+const std::string SceneParser::MAXLEVEL = "maxlevel";
+const std::string SceneParser::BBOX = "bbox";
+const std::string SceneParser::MINX = "minx";
+const std::string SceneParser::MINY = "miny";
+const std::string SceneParser::MAXX = "maxx";
+const std::string SceneParser::MAXY = "maxy";
 const std::string SceneParser::ITEMS = "items";
 const std::string SceneParser::STATUS = "status";
 const std::string SceneParser::NAME = "name";
@@ -65,6 +75,7 @@ SceneParser* SceneParser::instance(){
 
 SceneParser::SceneParser(){
     _mapLayerType["WMS"] = WMS;
+    _mapLayerType["TMS"] = TMS;
     _mapLayerType["THREED"] = THREED;
     _mapLayerType["PLANARIMAGE"] = PLANARIMAGE;
     _mapLayerType["GEOJSON"] = GEOJSON;  
@@ -72,9 +83,8 @@ SceneParser::SceneParser(){
 
 }
 
-void SceneParser::parse(LayerSet* layerSet,  LayerTilesRenderParameters* layerTileRenderParameters, std::string namelessParameter){
+void SceneParser::parse(LayerSet* layerSet, std::string namelessParameter){
   
-    _layerTileRenderParameters = layerTileRenderParameters;
     _mapGeoJSONSources.clear();
     _panoSources.clear();
     _legend.clear();
@@ -95,6 +105,9 @@ void SceneParser::parserJSONLayerList(LayerSet* layerSet, const JSONObject* json
         switch (layerType) {
             case WMS:
                 parserJSONWMSLayer(layerSet, jsonLayer);
+                break;
+            case TMS:
+                parserJSONTMSLayer(layerSet, jsonLayer);
                 break;
             case THREED:
                 parserJSON3DLayer(layerSet, jsonLayer);
@@ -120,7 +133,27 @@ void SceneParser::parserJSONWMSLayer(LayerSet* layerSet, const JSONObject* jsonL
     const int lastIndex = IStringUtils::instance()->indexOf(jsonDatasource,"?");
     const std::string jsonURL = IStringUtils::instance()->substring(jsonDatasource, 0, lastIndex+1);
     const std::string jsonVersion = jsonLayer->getAsString(VERSION)->value();
-    
+  
+    const JSONString* jsonMinLevel = jsonLayer->getAsString(MINLEVEL);
+    const JSONString* jsonMaxLevel = jsonLayer->getAsString(MAXLEVEL);
+  
+    LevelTileCondition* levelTileCondition = NULL;
+    if (jsonMinLevel != NULL && jsonMaxLevel != NULL) {
+      int minLevel = atoi(jsonMinLevel->value().c_str());
+      int maxLevel = atoi(jsonMaxLevel->value().c_str());
+      if (minLevel <= 0) {
+        minLevel = 0;
+      }
+      if (maxLevel >= 16){
+        maxLevel = 16;
+      }
+      if (minLevel < maxLevel){
+        levelTileCondition = new LevelTileCondition(minLevel, maxLevel);
+      }
+    }
+  
+    Sector sector = getSector(jsonLayer->getAsObject(BBOX));
+  
     const JSONArray* jsonItems = jsonLayer->getAsArray(ITEMS);
     IStringBuilder *layersName = IStringBuilder::newStringBuilder();
     
@@ -146,13 +179,93 @@ void SceneParser::parserJSONWMSLayer(LayerSet* layerSet, const JSONObject* jsonL
     WMSLayer* wmsLayer = new WMSLayer(URL::escape(layersSecuence),
                                       URL(jsonURL, false),
                                       wmsVersion,
-                                      Sector::fullSphere(),
+                                      sector,
                                       "image/png",
                                       "EPSG:4326",
                                       "",
                                       true,
-                                      NULL, TimeInterval::fromDays(30), _layerTileRenderParameters);
+                                      levelTileCondition, TimeInterval::fromDays(30));
     layerSet->addLayer(wmsLayer);
+}
+
+void SceneParser::parserJSONTMSLayer(LayerSet* layerSet, const JSONObject* jsonLayer){
+  cout << "Parsing TMS Layer " << jsonLayer->getAsString(NAME)->value() << "..." << endl;
+  
+  const std::string jsonDatasource = jsonLayer->getAsString(DATASOURCE)->value();
+  const int lastIndex = IStringUtils::instance()->indexOf(jsonDatasource,"?");
+  const std::string jsonURL = IStringUtils::instance()->substring(jsonDatasource, 0, lastIndex+1);
+  
+  const JSONString* jsonMinLevel = jsonLayer->getAsString(MINLEVEL);
+  const JSONString* jsonMaxLevel = jsonLayer->getAsString(MAXLEVEL);
+  
+  LevelTileCondition* levelTileCondition = NULL;
+  if (jsonMinLevel != NULL && jsonMaxLevel != NULL) {
+    int minLevel = atoi(jsonMinLevel->value().c_str());
+    int maxLevel = atoi(jsonMaxLevel->value().c_str());
+    if (minLevel <= 0) {
+      minLevel = 0;
+    }
+    if (maxLevel >= 16){
+      maxLevel = 16;
+    }
+    if (minLevel < maxLevel){
+      levelTileCondition = new LevelTileCondition(minLevel, maxLevel);
+    }
+  }
+  
+  Sector sector = getSector(jsonLayer->getAsObject(BBOX));
+  
+  const JSONArray* jsonItems = jsonLayer->getAsArray(ITEMS);
+  IStringBuilder *layersName = IStringBuilder::newStringBuilder();
+  
+  for (int i = 0; i<jsonItems->size(); i++) {
+    if (jsonItems->getAsObject(i)->getAsBoolean(STATUS)->value()) {
+      layersName->addString(jsonItems->getAsObject(i)->getAsString(NAME)->value());
+      layersName->addString(",");
+    }
+  }
+  std::string layersSecuence = layersName->getString();
+  if (layersName->getString().length() > 0) {
+    layersSecuence = IStringUtils::instance()->substring(layersSecuence, 0, layersSecuence.length()-1);
+  }
+  
+  delete layersName;
+  
+  TMSLayer* tmsLayer = new TMSLayer(URL::escape(layersSecuence),
+                                URL(jsonURL, false),
+                                sector,
+                                "image/jpeg",
+                                "EPSG:4326",
+                                true,
+                                levelTileCondition,
+                                TimeInterval::fromDays(30));
+
+  layerSet->addLayer(tmsLayer);
+}
+
+Sector SceneParser::getSector(const JSONObject* jsonBBOX){
+  if (jsonBBOX != NULL){
+    double minx = jsonBBOX->getAsNumber(MINX)->value();
+    double miny = jsonBBOX->getAsNumber(MINY)->value();
+    double maxx = jsonBBOX->getAsNumber(MAXX)->value();
+    double maxy = jsonBBOX->getAsNumber(MAXY)->value();
+    if (minx < -180) {
+      minx = -180;
+    }
+    if (miny < -90){
+      miny = -90;
+    }
+    if (maxx > 180){
+      maxx = 180;
+    }
+    if (maxy > 90) {
+      maxy = 90;
+    }
+    if (minx < maxx && miny < maxy) {
+      return Sector::fromDegrees(miny, minx, maxy, maxx);
+    }
+  }
+  return Sector::fullSphere();
 }
 
 void SceneParser::parserJSON3DLayer(LayerSet* layerSet, const JSONObject* jsonLayer){
