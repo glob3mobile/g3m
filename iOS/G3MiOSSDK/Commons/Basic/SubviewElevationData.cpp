@@ -27,17 +27,19 @@ SubviewElevationData::~SubviewElevationData() {
   }
 }
 
-double SubviewElevationData::getElevationAt(int x, int y) const {
+double SubviewElevationData::getElevationAt(int x, int y,
+                                            int *type) const {
   const double u = (double) x / (_width - 1);
   const double v = (double) y / (_height - 1);
   const Geodetic2D position = _sector.getInnerPoint(u, v);
 
   return getElevationAt(position.latitude(),
-                        position.longitude());
+                        position.longitude(), type);
 }
 
 double SubviewElevationData::getElevationAt(const Angle& latitude,
-                                            const Angle& longitude) const {
+                                            const Angle& longitude,
+                                            int *type) const {
   if (!_sector.contains(latitude, longitude)) {
     //    ILogger::instance()->logError("Sector %s doesn't contain lat=%s lon=%s",
     //                                  _sector.description().c_str(),
@@ -45,7 +47,7 @@ double SubviewElevationData::getElevationAt(const Angle& latitude,
     //                                  longitude.description().c_str());
     return _noDataValue;
   }
-  return _elevationData->getElevationAt(latitude, longitude);
+  return _elevationData->getElevationAt(latitude, longitude, type);
 }
 
 const std::string SubviewElevationData::description(bool detailed) const {

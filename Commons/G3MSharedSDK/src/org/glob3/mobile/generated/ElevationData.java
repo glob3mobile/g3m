@@ -43,13 +43,13 @@ public abstract class ElevationData
     return new Vector2I(_width, _height);
   }
 
-  public abstract double getElevationAt(int x, int y);
+  public abstract double getElevationAt(int x, int y, int type);
 
-  public abstract double getElevationAt(Angle latitude, Angle longitude);
+  public abstract double getElevationAt(Angle latitude, Angle longitude, int type);
 
-  public double getElevationAt(Geodetic2D position)
+  public double getElevationAt(Geodetic2D position, int type)
   {
-    return getElevationAt(position.latitude(), position.longitude());
+    return getElevationAt(position.latitude(), position.longitude(), type);
   }
 
   public abstract String description(boolean detailed);

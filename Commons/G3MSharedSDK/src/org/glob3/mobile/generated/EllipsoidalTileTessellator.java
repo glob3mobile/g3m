@@ -79,6 +79,8 @@ public class EllipsoidalTileTessellator extends TileTessellator
   
     double minHeight = 0;
     FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.givenCenter(), planet, sector.getCenter());
+  
+    int unusedType = -1;
     for (int j = 0; j < tileResolution._y; j++)
     {
       final double v = (double) j / (tileResolution._y-1);
@@ -92,7 +94,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
         if (elevationData != null)
         {
   //        height = elevationData->getElevationAt(i, j) * verticalExaggeration;
-          height = elevationData.getElevationAt(position.latitude(), position.longitude()) * verticalExaggeration;
+          height = elevationData.getElevationAt(position, unusedType) * verticalExaggeration;
           if (height < minHeight)
           {
             minHeight = height;

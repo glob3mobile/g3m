@@ -381,10 +381,10 @@ void G3MWidget::render(int width, int height) {
     }
   }
 
-  _effectsScheduler->doOneCyle(&rc);
-
+  if (_mainRendererReady) {
+    _effectsScheduler->doOneCyle(&rc);
+  }
   _frameTasksExecutor->doPreRenderCycle(&rc);
-
 
   Renderer* selectedRenderer = _mainRendererReady ? _mainRenderer : _busyRenderer;
   if (selectedRenderer != _selectedRenderer) {

@@ -31,9 +31,11 @@ public:
   virtual ~BufferElevationData();
 
   double getElevationAt(const Angle& latitude,
-                        const Angle& longitude) const;
+                        const Angle& longitude,
+                        int *type) const;
 
-  virtual double getElevationAt(int x, int y) const;
+  virtual double getElevationAt(int x, int y,
+                                int *type) const;
 
 };
 

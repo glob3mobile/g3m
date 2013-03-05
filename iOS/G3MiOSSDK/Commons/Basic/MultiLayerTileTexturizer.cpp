@@ -179,9 +179,9 @@ private:
   MultiLayerTileTexturizer* _texturizer;
   Tile*                     _tile;
 
-  std::vector<Petition*>    _petitions;
-  int                       _petitionsCount;
-  int                       _stepsDone;
+  std::vector<Petition*> _petitions;
+  int                    _petitionsCount;
+  int                    _stepsDone;
 
   const IFactory*  _factory;
   TexturesHandler* _texturesHandler;
@@ -215,6 +215,43 @@ private:
   
   long long _texturePriority;
 
+
+  const std::vector<Petition*> cleanUpPetitions(const std::vector<Petition*>& petitions) const {
+    const int petitionsSize = petitions.size();
+    if (petitionsSize <= 1) {
+      return petitions;
+    }
+
+    std::vector<Petition*> result;
+    for (int i = 0; i < petitionsSize; i++) {
+      Petition* currentPetition = petitions[i];
+      const Sector currentSector = currentPetition->getSector();
+
+      bool coveredByFollowingPetition = false;
+      for (int j = i+1; j < petitionsSize; j++) {
+        Petition* followingPetition = petitions[j];
+
+        // only opaque petitions can cover
+        if (!followingPetition->isTransparent()) {
+          if (followingPetition->getSector().fullContains(currentSector)) {
+            coveredByFollowingPetition = true;
+            break;
+          }
+        }
+      }
+
+      if (coveredByFollowingPetition) {
+        delete currentPetition;
+      }
+      else {
+        result.push_back(currentPetition);
+      }
+    }
+
+    return result;
+  }
+  
+
 public:
   LeveledTexturedMesh* _mesh;
 
@@ -246,9 +283,9 @@ public:
   _alreadyStarted(false),
   _texturePriority(texturePriority)
   {
-    _petitions = layerSet->createTileMapPetitions(rc,
-                                                  tile,
-                                                  _tileTextureResolution);
+    _petitions = cleanUpPetitions(layerSet->createTileMapPetitions(rc,
+                                                                   tile,
+                                                                   _tileTextureResolution));
 
     _petitionsCount = _petitions.size();
 

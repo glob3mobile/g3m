@@ -38,16 +38,16 @@ public class SubviewElevationData extends ElevationData
     }
   }
 
-  public final double getElevationAt(int x, int y)
+  public final double getElevationAt(int x, int y, int type)
   {
     final double u = (double) x / (_width - 1);
     final double v = (double) y / (_height - 1);
     final Geodetic2D position = _sector.getInnerPoint(u, v);
   
-    return getElevationAt(position.latitude(), position.longitude());
+    return getElevationAt(position.latitude(), position.longitude(), type);
   }
 
-  public final double getElevationAt(Angle latitude, Angle longitude)
+  public final double getElevationAt(Angle latitude, Angle longitude, int type)
   {
     if (!_sector.contains(latitude, longitude))
     {
@@ -57,7 +57,7 @@ public class SubviewElevationData extends ElevationData
       //                                  longitude.description().c_str());
       return _noDataValue;
     }
-    return _elevationData.getElevationAt(latitude, longitude);
+    return _elevationData.getElevationAt(latitude, longitude, type);
   }
 
   public final String description(boolean detailed)

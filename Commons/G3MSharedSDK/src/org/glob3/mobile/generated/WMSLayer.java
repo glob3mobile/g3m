@@ -200,7 +200,7 @@ public class WMSLayer extends Layer
       req += _extraParameter;
     }
   
-    Petition petition = new Petition(sector, new URL(req, false), _timeToCache);
+    Petition petition = new Petition(sector, new URL(req, false), _timeToCache, _isTransparent);
     petitions.add(petition);
   
      return petitions;

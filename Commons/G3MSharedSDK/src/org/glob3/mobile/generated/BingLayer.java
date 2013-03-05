@@ -172,7 +172,7 @@ public abstract class BingLayer extends Layer
         //set the subDomain (round-robbin)
         url = IStringUtils.instance().replaceSubstring(url, "{subdomain}", _subDomains.get(currentSubDomain % numSubDomains));
         currentSubDomain++;
-        petitions.add(new Petition(bingSector, new URL(url, false), _timeToCache));
+        petitions.add(new Petition(bingSector, new URL(url, false), _timeToCache, false));
   
       }
   

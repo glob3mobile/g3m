@@ -252,11 +252,11 @@ TileRenderer* TileRendererBuilder::create() {
 
   //  ElevationDataProvider* elevationDataProvider = new WMSBillElevationDataProvider();
   
-  //  ElevationDataProvider* elevationDataProvider;
-  //  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
-  //                                                              Sector::fullSphere(),
-  //                                                              Vector2I(2048, 1024),
-  //                                                              0);
+//  ElevationDataProvider* elevationDataProvider;
+//  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
+//                                                              Sector::fullSphere(),
+//                                                              Vector2I(2048, 1024),
+//                                                              0);
 
 //  ElevationDataProvider* elevationDataProvider;
 //  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///elev-35.0_-6.0_38.0_-2.0_4096x2048.bil", false),
@@ -270,7 +270,7 @@ TileRenderer* TileRendererBuilder::create() {
   //                                                              0);
   
   int ___TODO_make_configurable;
-  float verticalExaggeration = 10;
+  float verticalExaggeration = 1;
   
   TileRenderer* tileRenderer = new TileRenderer(getTileTessellator(),
                                                 elevationDataProvider,
