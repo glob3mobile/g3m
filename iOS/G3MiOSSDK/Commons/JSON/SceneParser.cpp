@@ -134,7 +134,11 @@ void SceneParser::parserJSONWMSLayer(LayerSet* layerSet, const JSONObject* jsonL
     const std::string jsonDatasource = jsonLayer->getAsString(DATASOURCE)->value();
     const int lastIndex = IStringUtils::instance()->indexOf(jsonDatasource,"?");
     const std::string jsonURL = IStringUtils::instance()->substring(jsonDatasource, 0, lastIndex+1);
+  
     const std::string jsonVersion = jsonLayer->getAsString(VERSION)->value();
+  
+    const int jsonSplitsLat = atoi(jsonLayer->getAsString(SPLITSLATITUDE)->value().c_str());
+    const int jsonSplitsLon = atoi(jsonLayer->getAsString(SPLITSLONGITUDE)->value().c_str());
   
     LevelTileCondition* levelTileCondition = getLevelCondition(jsonLayer->getAsString(MINLEVEL),jsonLayer->getAsString(MAXLEVEL));
     Sector sector = getSector(jsonLayer->getAsObject(BBOX));
@@ -169,7 +173,7 @@ void SceneParser::parserJSONWMSLayer(LayerSet* layerSet, const JSONObject* jsonL
                                       "EPSG:4326",
                                       "",
                                       true,
-                                      levelTileCondition, TimeInterval::fromDays(30));
+                                      levelTileCondition, TimeInterval::fromDays(30), new LayerTilesRenderParameters(sector,jsonSplitsLat,jsonSplitsLon,16,Vector2I(256,256),Vector2I(16,16),false));
     layerSet->addLayer(wmsLayer);
 }
 
