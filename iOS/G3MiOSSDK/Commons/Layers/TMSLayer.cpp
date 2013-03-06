@@ -14,6 +14,7 @@
 #include "Petition.hpp"
 #include "Tile.hpp"
 #include "ILogger.hpp"
+#include "IStringUtils.hpp"
 
 
 TMSLayer::TMSLayer(const std::string& mapLayer,
@@ -60,7 +61,8 @@ std::vector<Petition*> TMSLayer::getMapPetitions(const G3MRenderContext* rc,
   isb->addInt(tile->getColumn());
   isb->addString("/");
   isb->addInt(tile->getRow());
-  isb->addString(".png");
+  isb->addString(".");
+  isb->addString(IStringUtils::instance()->replaceSubstring(_format, "image/", ""));
   
   ILogger::instance()->logInfo(isb->getString());
   
