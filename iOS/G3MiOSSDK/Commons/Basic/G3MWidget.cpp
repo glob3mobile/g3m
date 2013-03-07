@@ -324,6 +324,23 @@ void G3MWidget::render(int width, int height) {
 
   _timer->start();
   _renderCounter++;
+  
+  if (_initializationTask != NULL) {
+    if (!_initializationTaskWasRun) {
+      _initializationTask->run(_context);
+      _initializationTaskWasRun = true;
+    }
+    
+    if (_initializationTask->isDone(_context)) {
+      if (_autoDeleteInitializationTask) {
+        delete _initializationTask;
+      }
+      _initializationTask = NULL;
+    }
+    else {
+      _mainRendererReady = false;
+    }
+  }
 
   //Start periodical task
   const int periodicalTasksCount = _periodicalTasks.size();
@@ -362,28 +379,31 @@ void G3MWidget::render(int width, int height) {
 
   _mainRendererReady = _mainRenderer->isReadyToRender(&rc);
 
-  if (_mainRendererReady) {
-    if (_initializationTask != NULL) {
-      if (!_initializationTaskWasRun) {
-        _initializationTask->run(_context);
-        _initializationTaskWasRun = true;
-      }
-
-      if (_initializationTask->isDone(_context)) {
-        if (_autoDeleteInitializationTask) {
-          delete _initializationTask;
-        }
-        _initializationTask = NULL;
-      }
-      else {
-        _mainRendererReady = false;
-      }
-    }
-  }
-
-  if (_mainRendererReady) {
-    _effectsScheduler->doOneCyle(&rc);
-  }
+  int _TESTING_initializationTask;
+//  if (_mainRendererReady) {
+//    if (_initializationTask != NULL) {
+//      if (!_initializationTaskWasRun) {
+//        _initializationTask->run(_context);
+//        _initializationTaskWasRun = true;
+//      }
+//
+//      if (_initializationTask->isDone(_context)) {
+//        if (_autoDeleteInitializationTask) {
+//          delete _initializationTask;
+//        }
+//        _initializationTask = NULL;
+//      }
+//      else {
+//        _mainRendererReady = false;
+//      }
+//    }
+//  }
+//
+//  if (_mainRendererReady) {
+//    _effectsScheduler->doOneCyle(&rc);
+//  }
+  _effectsScheduler->doOneCyle(&rc);
+  
   _frameTasksExecutor->doPreRenderCycle(&rc);
 
   Renderer* selectedRenderer = _mainRendererReady ? _mainRenderer : _busyRenderer;
