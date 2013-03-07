@@ -17,22 +17,24 @@
  Implementation details:
 
  - - from http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames
- - - the G3M level 0 is mapped to OSM level 1
- - - so maxLevel is 17 instead of 18
- - - and splitsByLatitude and splitsByLongitude are 2 and 2
+ - - the G3M level 0 is mapped to OSM level initialOSMLevel
+ - - so maxLevel is 18-initialOSMLevel
+ - - and splitsByLatitude and splitsByLongitude are set to 2^initialOSMLevel
 
  */
 
 
 OSMLayer::OSMLayer(const TimeInterval& timeToCache,
+                   int initialOSMLevel,
                    LayerCondition* condition) :
+_initialOSMLevel(initialOSMLevel),
 Layer(condition,
       "OpenStreetMap",
       timeToCache,
       new LayerTilesRenderParameters(Sector::fullSphere(),
-                                     2,
-                                     2,
-                                     17,
+                                     (int) IMathUtils::instance()->pow(2.0, initialOSMLevel),
+                                     (int) IMathUtils::instance()->pow(2.0, initialOSMLevel),
+                                     18 - initialOSMLevel,
                                      Vector2I(256, 256),
                                      LayerTilesRenderParameters::defaultTileMeshResolution(),
                                      true)),
@@ -83,7 +85,7 @@ std::vector<Petition*> OSMLayer::createTileMapPetitions(const G3MRenderContext* 
   // domain
   isb->addString(".tile.openstreetmap.org/");
 
-  const int osmLevel = tileLevel + 1;
+  const int osmLevel = tileLevel + _initialOSMLevel;
   // zoom
   isb->addInt(osmLevel);
   isb->addString("/");

@@ -403,7 +403,8 @@ public:
 
   const bool useOSM = true;
   if (useOSM) {
-    OSMLayer* osmLayer = new OSMLayer(TimeInterval::fromDays(30));
+    OSMLayer* osmLayer = new OSMLayer(TimeInterval::fromDays(30),
+                                      1);
 
     layerSet->addLayer(osmLayer);
   }

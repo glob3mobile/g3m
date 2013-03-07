@@ -55,6 +55,7 @@
 		E71B153F1626D27F003D1013 /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B15341626D27F003D1013 /* Icon-Small@2x.png */; };
 		E71B15401626D27F003D1013 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B15351626D27F003D1013 /* Icon.png */; };
 		E71B15411626D27F003D1013 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B15361626D27F003D1013 /* Icon@2x.png */; };
+		E728385516E914D80037AA5C /* g3m-marker.png in Resources */ = {isa = PBXBuildFile; fileRef = E728385416E914D80037AA5C /* g3m-marker.png */; };
 		E751B7661680E2D90032413F /* (null) in Resources */ = {isa = PBXBuildFile; };
 		E751B7681680E5850032413F /* (null) in Resources */ = {isa = PBXBuildFile; };
 		E751B78316823D7C0032413F /* (null) in Sources */ = {isa = PBXBuildFile; };
@@ -140,6 +141,8 @@
 		E71B15341626D27F003D1013 /* Icon-Small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-Small@2x.png"; path = "Resources/Icon-Small@2x.png"; sourceTree = "<group>"; };
 		E71B15351626D27F003D1013 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = Resources/Icon.png; sourceTree = "<group>"; };
 		E71B15361626D27F003D1013 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "Resources/Icon@2x.png"; sourceTree = "<group>"; };
+		E728385416E914D80037AA5C /* g3m-marker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "g3m-marker.png"; sourceTree = "<group>"; };
+		FB6D00A916CC0458009BF93D /* EllipsoidShape.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = EllipsoidShape.hpp; path = ../G3MiOSSDK/Commons/Rendererers/EllipsoidShape.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -233,6 +236,7 @@
 		D8EEF4271577B0D6003FEB5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				E728385416E914D80037AA5C /* g3m-marker.png */,
 				CFD42AB716DBAEFD00B03961 /* elev-35.0_-6.0_38.0_-2.0_4096x2048.bil */,
 				CF91C52F16D7C03B00E25C24 /* full-earth-4096x2048.bil */,
 				CFB5274A16D53906008374C2 /* full-earth-2048x1024.bil */,
@@ -379,6 +383,7 @@
 				CFB5274B16D53906008374C2 /* full-earth-2048x1024.bil in Resources */,
 				CF91C53016D7C03C00E25C24 /* full-earth-4096x2048.bil in Resources */,
 				CFD42AB816DBAEFD00B03961 /* elev-35.0_-6.0_38.0_-2.0_4096x2048.bil in Resources */,
+				E728385516E914D80037AA5C /* g3m-marker.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
