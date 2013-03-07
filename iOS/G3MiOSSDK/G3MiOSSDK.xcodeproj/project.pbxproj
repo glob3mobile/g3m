@@ -389,6 +389,8 @@
 		E780A5C816D3AEDA000F0395 /* G3MWidget_iOS.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 383BD3821577EDDB0012AC53 /* G3MWidget_iOS.h */; };
 		E7B9964E16A94EC400753FC3 /* LayerBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7B9964C16A94EC400753FC3 /* LayerBuilder.cpp */; };
 		E7EC944516C4F43300B32D9F /* DownloadPriority.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7EC944316C4F43300B32D9F /* DownloadPriority.cpp */; };
+		E87557C716E915D10031FBB3 /* TMSLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E87557C516E915D10031FBB3 /* TMSLayer.cpp */; };
+		E87557C816E9160F0031FBB3 /* TMSLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = E87557C616E915D10031FBB3 /* TMSLayer.hpp */; };
 		FB6D00A516CBFF3A009BF93D /* EllipsoidShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB6D00A416CBFF3A009BF93D /* EllipsoidShape.cpp */; };
 /* End PBXBuildFile section */
 
@@ -399,6 +401,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				E87557C816E9160F0031FBB3 /* TMSLayer.hpp in CopyFiles */,
 				E780A54016D3AED9000F0395 /* Camera.hpp in CopyFiles */,
 				E780A54116D3AED9000F0395 /* CameraDoubleDragHandler.hpp in CopyFiles */,
 				E780A54316D3AED9000F0395 /* CameraDoubleTapHandler.hpp in CopyFiles */,
@@ -1005,6 +1008,8 @@
 		E7EC944316C4F43300B32D9F /* DownloadPriority.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DownloadPriority.cpp; path = Commons/Basic/DownloadPriority.cpp; sourceTree = "<group>"; };
 		E7EC944416C4F43300B32D9F /* DownloadPriority.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DownloadPriority.hpp; path = Commons/Basic/DownloadPriority.hpp; sourceTree = "<group>"; };
 		E87424B0169F4B9400C8A227 /* MarkTouchListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MarkTouchListener.hpp; path = Commons/Rendererers/MarkTouchListener.hpp; sourceTree = "<group>"; };
+		E87557C516E915D10031FBB3 /* TMSLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TMSLayer.cpp; sourceTree = "<group>"; };
+		E87557C616E915D10031FBB3 /* TMSLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TMSLayer.hpp; sourceTree = "<group>"; };
 		FB6D00A416CBFF3A009BF93D /* EllipsoidShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EllipsoidShape.cpp; path = Commons/Rendererers/EllipsoidShape.cpp; sourceTree = "<group>"; };
 		FB6D00A716CBFF4F009BF93D /* EllipsoidShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = EllipsoidShape.hpp; path = Commons/Rendererers/EllipsoidShape.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1499,6 +1504,8 @@
 		D87EC5C015BEB12F00E38C36 /* Layers */ = {
 			isa = PBXGroup;
 			children = (
+				E87557C516E915D10031FBB3 /* TMSLayer.cpp */,
+				E87557C616E915D10031FBB3 /* TMSLayer.hpp */,
 				A74072D0161EEEB900182A39 /* BingLayer.cpp */,
 				A74072CE161EEEA300182A39 /* BingLayer.hpp */,
 				CFB72A3715E65BAC00A5BAF4 /* Layer.cpp */,
@@ -1859,6 +1866,7 @@
 				CF27B16016D93DCA0000A415 /* BufferElevationData.cpp in Sources */,
 				CF27B16416D93F2C0000A415 /* ShortBufferElevationData.cpp in Sources */,
 				CFD42ABC16DBFE8600B03961 /* LayerTilesRenderParameters.cpp in Sources */,
+				E87557C716E915D10031FBB3 /* TMSLayer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
