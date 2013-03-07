@@ -45,8 +45,8 @@ public class OSMLayer extends Layer
   }
   public OSMLayer(TimeInterval timeToCache, int initialOSMLevel, LayerCondition condition)
   {
-     _initialOSMLevel = initialOSMLevel;
      super(condition, "OpenStreetMap", timeToCache, new LayerTilesRenderParameters(Sector.fullSphere(), (int) IMathUtils.instance().pow(2.0, initialOSMLevel), (int) IMathUtils.instance().pow(2.0, initialOSMLevel), 18 - initialOSMLevel, new Vector2I(256, 256), LayerTilesRenderParameters.defaultTileMeshResolution(), true));
+     _initialOSMLevel = initialOSMLevel;
      _sector = new Sector(Sector.fullSphere());
   
   }
@@ -69,6 +69,7 @@ public class OSMLayer extends Layer
     }
   
     // http://[abc].tile.openstreetmap.org/zoom/x/y.png
+    // http://[abc].tiles.mapbox.com/v3/examples.map-vyofok3q/9/250/193.png
   
     final int tileLevel = tile.getLevel();
   
@@ -93,6 +94,8 @@ public class OSMLayer extends Layer
   
     // domain
     isb.addString(".tile.openstreetmap.org/");
+    // isb->addString(".tiles.mapbox.com/v3/examples.map-vyofok3q/");
+  
   
     final int osmLevel = tileLevel + _initialOSMLevel;
     // zoom
