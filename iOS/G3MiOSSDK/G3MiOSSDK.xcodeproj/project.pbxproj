@@ -84,6 +84,8 @@
 		CF6B5F6916C1956B00C590C1 /* JSONLong.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6B5F6716C1956B00C590C1 /* JSONLong.cpp */; };
 		CF6D404815C8278C008D8D78 /* Downloader_iOS_WorkerThread.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF6D404615C8278C008D8D78 /* Downloader_iOS_WorkerThread.mm */; };
 		CF73BFDB15E114E3001CE412 /* FrameTasksExecutor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF73BFD915E114E3001CE412 /* FrameTasksExecutor.cpp */; };
+		CF75C39516E92CDF00F7EE9F /* HereLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF75C39316E92CDF00F7EE9F /* HereLayer.cpp */; };
+		CF75C39616E92D1300F7EE9F /* HereLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF75C39416E92CDF00F7EE9F /* HereLayer.hpp */; };
 		CF7A78EC159B9BE300074422 /* MutableVector2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7A78EA159B9BE300074422 /* MutableVector2D.cpp */; };
 		CF7E626115F7D6FC0086B71D /* FloatBufferBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7E625F15F7D6FC0086B71D /* FloatBufferBuilder.cpp */; };
 		CF7E626615F7DD740086B71D /* IntBufferBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7E626415F7DD740086B71D /* IntBufferBuilder.cpp */; };
@@ -418,6 +420,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF75C39616E92D1300F7EE9F /* HereLayer.hpp in CopyFiles */,
 				CFD15C4616E793A7004DC360 /* Interpolator.hpp in CopyFiles */,
 				CFD15C4716E793A7004DC360 /* BilinearInterpolator.hpp in CopyFiles */,
 				CFD15C4816E793A7004DC360 /* ElevationDataProvider.hpp in CopyFiles */,
@@ -810,6 +813,8 @@
 		CF6D404615C8278C008D8D78 /* Downloader_iOS_WorkerThread.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Downloader_iOS_WorkerThread.mm; path = Specific/Derived/Downloader_iOS_WorkerThread.mm; sourceTree = "<group>"; };
 		CF73BFD915E114E3001CE412 /* FrameTasksExecutor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FrameTasksExecutor.cpp; path = Commons/Basic/FrameTasksExecutor.cpp; sourceTree = "<group>"; };
 		CF73BFDA15E114E3001CE412 /* FrameTasksExecutor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FrameTasksExecutor.hpp; path = Commons/Basic/FrameTasksExecutor.hpp; sourceTree = "<group>"; };
+		CF75C39316E92CDF00F7EE9F /* HereLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HereLayer.cpp; sourceTree = "<group>"; };
+		CF75C39416E92CDF00F7EE9F /* HereLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = HereLayer.hpp; sourceTree = "<group>"; };
 		CF7A78EA159B9BE300074422 /* MutableVector2D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MutableVector2D.cpp; path = Commons/Geometry/MutableVector2D.cpp; sourceTree = "<group>"; };
 		CF7A78EB159B9BE300074422 /* MutableVector2D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = MutableVector2D.hpp; path = Commons/Geometry/MutableVector2D.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF7E625F15F7D6FC0086B71D /* FloatBufferBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = FloatBufferBuilder.cpp; path = Commons/Basic/FloatBufferBuilder.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -1542,8 +1547,6 @@
 		D87EC5C015BEB12F00E38C36 /* Layers */ = {
 			isa = PBXGroup;
 			children = (
-				E87557C516E915D10031FBB3 /* TMSLayer.cpp */,
-				E87557C616E915D10031FBB3 /* TMSLayer.hpp */,
 				A74072D0161EEEB900182A39 /* BingLayer.cpp */,
 				A74072CE161EEEA300182A39 /* BingLayer.hpp */,
 				CFB72A3715E65BAC00A5BAF4 /* Layer.cpp */,
@@ -1554,10 +1557,14 @@
 				D87EC5C315BEB12F00E38C36 /* LayerSet.hpp */,
 				CFB72A3B15E65DBB00A5BAF4 /* LevelTileCondition.cpp */,
 				CFB72A3C15E65DBC00A5BAF4 /* LevelTileCondition.hpp */,
-				D87EC5C415BEB12F00E38C36 /* WMSLayer.cpp */,
-				D87EC5C515BEB12F00E38C36 /* WMSLayer.hpp */,
 				CFD15C4216E78C7D004DC360 /* OSMLayer.cpp */,
 				CFD15C4316E78C7D004DC360 /* OSMLayer.hpp */,
+				E87557C516E915D10031FBB3 /* TMSLayer.cpp */,
+				E87557C616E915D10031FBB3 /* TMSLayer.hpp */,
+				D87EC5C415BEB12F00E38C36 /* WMSLayer.cpp */,
+				D87EC5C515BEB12F00E38C36 /* WMSLayer.hpp */,
+				CF75C39316E92CDF00F7EE9F /* HereLayer.cpp */,
+				CF75C39416E92CDF00F7EE9F /* HereLayer.hpp */,
 			);
 			name = Layers;
 			path = Commons/Layers;
@@ -1909,6 +1916,7 @@
 				CFD15C4416E78C7D004DC360 /* OSMLayer.cpp in Sources */,
 				CFEBDF1E16E8C9C80063B49F /* MercatorUtils.cpp in Sources */,
 				E87557C716E915D10031FBB3 /* TMSLayer.cpp in Sources */,
+				CF75C39516E92CDF00F7EE9F /* HereLayer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

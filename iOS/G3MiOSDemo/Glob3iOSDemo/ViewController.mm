@@ -57,6 +57,7 @@
 #include "PeriodicalTask.hpp"
 #include "IDownloader.hpp"
 #include "OSMLayer.hpp"
+#include "HereLayer.hpp"
 
 #include "G3MWidget.hpp"
 
@@ -403,10 +404,18 @@ public:
 
   const bool useOSM = true;
   if (useOSM) {
-    OSMLayer* osmLayer = new OSMLayer(TimeInterval::fromDays(30),
-                                      1);
+    OSMLayer* osmLayer = new OSMLayer(TimeInterval::fromDays(30));
 
     layerSet->addLayer(osmLayer);
+  }
+
+  const bool useHere = false;
+  if (useHere) {
+    HereLayer* hereLayer = new HereLayer("zrgCx5FrbnlPZWPHuvMO",
+                                         "cdJ14wN488Oh5DH6KwQ9GA",
+                                         TimeInterval::fromDays(30));
+
+    layerSet->addLayer(hereLayer);
   }
 
   const bool blueMarble = false;
@@ -603,7 +612,7 @@ public:
 
 - (TilesRenderParameters*) createTileRenderParameters
 {
-  const bool renderDebug = true;
+  const bool renderDebug = false;
   const bool useTilesSplitBudget = true;
   const bool forceTopLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
