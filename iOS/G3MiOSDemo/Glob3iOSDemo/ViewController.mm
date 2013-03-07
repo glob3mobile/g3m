@@ -573,13 +573,14 @@ public:
 
     class CatastroTerrainTouchEventListener : public TerrainTouchEventListener {
     public:
-      void onTerrainTouch(const G3MEventContext* context,
+      bool onTerrainTouch(const G3MEventContext* context,
                           const TerrainTouchEvent& event) {
         const URL url = event.getLayer()->getFeatureInfoURL(event.getPosition().asGeodetic2D(),
                                                             event.getSector());
 
         ILogger::instance()->logInfo("%s", url.getPath().c_str());
 
+        return true;
       }
     };
 

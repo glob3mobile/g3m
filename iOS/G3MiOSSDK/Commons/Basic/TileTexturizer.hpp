@@ -54,7 +54,7 @@ public:
                                              Tile* ancestorTile,
                                              bool textureSolved) = 0;
   
-  virtual void onTerrainTouchEvent(const G3MEventContext* ec,
+  virtual bool onTerrainTouchEvent(const G3MEventContext* ec,
                                    const Geodetic3D& position,
                                    const Tile* tile,
                                    LayerSet* layerSet) = 0;
