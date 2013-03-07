@@ -283,9 +283,7 @@ public:
   _alreadyStarted(false),
   _texturePriority(texturePriority)
   {
-    _petitions = cleanUpPetitions(layerSet->createTileMapPetitions(rc,
-                                                                   tile,
-                                                                   _tileTextureResolution));
+    _petitions = cleanUpPetitions(layerSet->createTileMapPetitions(rc, tile));
 
     _petitionsCount = _petitions.size();
 

@@ -124,7 +124,7 @@ private:
   long               _tilesVisible;
   long               _tilesRendered;
 
-  static const int _maxLOD = 30;
+  static const int _maxLOD = 128;
 
   int _tilesProcessedByLevel[_maxLOD];
   int _tilesVisibleByLevel[_maxLOD];

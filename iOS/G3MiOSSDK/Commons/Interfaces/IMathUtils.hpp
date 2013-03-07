@@ -13,9 +13,8 @@
 #include <cstdio>
 #include "ILogger.hpp"
 
-class IMathUtils{
-
-
+class IMathUtils {
+private:
   static IMathUtils* _instance;
 
 public:
@@ -31,7 +30,7 @@ public:
     return _instance;
   }
 
-  virtual ~IMathUtils(){}
+  virtual ~IMathUtils() { }
 
   virtual double pi() const = 0;
   virtual double halfPi() const = 0;
@@ -40,50 +39,53 @@ public:
   virtual bool isNan(float v) const = 0;
 
   virtual double NanD() const = 0;
-  virtual float NanF() const = 0;
+  virtual float  NanF() const = 0;
 
   virtual double sin(double v) const = 0;
-  virtual float sin(float v) const = 0;
+  virtual float  sin(float v) const = 0;
+
+  virtual double sinh(double v) const = 0;
+  virtual float  sinh(float v) const = 0;
 
   virtual double asin(double v) const = 0;
-  virtual float asin(float v) const = 0;
+  virtual float  asin(float v) const = 0;
 
   virtual double cos(double v) const = 0;
-  virtual float cos(float v) const = 0;
+  virtual float  cos(float v) const = 0;
 
   virtual double acos(double v) const = 0;
-  virtual float acos(float v) const = 0;
+  virtual float  acos(float v) const = 0;
 
   virtual double tan(double v) const = 0;
-  virtual float tan(float v) const = 0;
+  virtual float  tan(float v) const = 0;
 
   virtual double atan(double v) const = 0;
-  virtual float atan(float v) const = 0;
+  virtual float  atan(float v) const = 0;
 
   virtual double atan2(double u, double v) const = 0;
-  virtual float atan2(float u, float v) const = 0;
+  virtual float  atan2(float u, float v) const = 0;
 
   virtual double round(double v) const = 0;
-  virtual float round(float v) const = 0;
+  virtual float  round(float v) const = 0;
 
-  virtual int abs(int v) const = 0;
+  virtual int    abs(int v) const = 0;
   virtual double abs(double v) const = 0;
-  virtual float abs(float v) const = 0;
+  virtual float  abs(float v) const = 0;
 
   virtual double sqrt(double v) const = 0;
-  virtual float sqrt(float v) const = 0;
+  virtual float  sqrt(float v) const = 0;
 
   virtual double pow(double v, double u) const = 0;
-  virtual float pow(float v, float u) const = 0;
+  virtual float  pow(float v, float u) const = 0;
 
   virtual double exp(double v) const = 0;
-  virtual float exp(float v) const = 0;
+  virtual float  exp(float v) const = 0;
 
   virtual double log10(double v) const = 0;
-  virtual float log10(float v) const = 0;
+  virtual float  log10(float v) const = 0;
 
   virtual double log(double v) const = 0;
-  virtual float log(float v) const = 0;
+  virtual float  log(float v) const = 0;
 
   virtual int maxInt32() const = 0;
   virtual int minInt32() const = 0;
@@ -103,16 +105,18 @@ public:
   virtual double min(double d1, double d2) const = 0;
   virtual double max(double d1, double d2) const = 0;
 
+  virtual double floor(double d) const = 0;
+  virtual float  floor(float  f) const = 0;
 
   virtual double linearInterpolation(double from,
                                      double to,
-                                     double alpha) {
+                                     double alpha) const {
     return from + ((to - from) * alpha);
   }
 
   virtual float linearInterpolation(float from,
                                     float to,
-                                    float alpha) {
+                                    float alpha) const {
     return from + ((to - from) * alpha);
   }
 
@@ -120,7 +124,7 @@ public:
   virtual double quadraticBezierInterpolation(double from,
                                               double middle,
                                               double to,
-                                              double alpha) {
+                                              double alpha) const {
     const double oneMinusAlpha = 1.0 - alpha;
     return ( oneMinusAlpha*oneMinusAlpha * from ) + ( 2.0*oneMinusAlpha*alpha * middle ) + ( alpha*alpha * to );
   }
@@ -128,7 +132,7 @@ public:
   virtual float quadraticBezierInterpolation(float from,
                                              float middle,
                                              float to,
-                                             float alpha) {
+                                             float alpha) const {
     const float oneMinusAlpha = 1.0f - alpha;
     return ( oneMinusAlpha*oneMinusAlpha * from ) + ( 2.0f*oneMinusAlpha*alpha * middle ) + ( alpha*alpha * to );
   }
@@ -139,7 +143,7 @@ public:
 
   virtual double clamp(double value,
                        double min,
-                       double max) {
+                       double max) const {
     if (value < min) return min;
     if (value > max) return max;
     return value;
@@ -147,7 +151,7 @@ public:
 
   virtual float clamp(float value,
                       float min,
-                      float max) {
+                      float max) const {
     if (value < min) return min;
     if (value > max) return max;
     return value;

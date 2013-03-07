@@ -71,9 +71,8 @@ public:
 
   virtual ~Layer();
 
-  virtual std::vector<Petition*> getMapPetitions(const G3MRenderContext* rc,
-                                                 const Tile* tile,
-                                                 const Vector2I& tileTextureResolution) const = 0;
+  virtual std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
+                                                        const Tile* tile) const = 0;
 
   virtual bool isAvailable(const G3MRenderContext* rc,
                            const Tile* tile) const;

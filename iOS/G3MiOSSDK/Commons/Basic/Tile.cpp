@@ -22,6 +22,7 @@
 #include "ElevationData.hpp"
 #include "LayerTilesRenderParameters.hpp"
 #include "IStringBuilder.hpp"
+#include "MercatorUtils.hpp"
 
 Tile::Tile(TileTexturizer* texturizer,
            Tile* parent,
@@ -460,9 +461,10 @@ void Tile::debugRender(const G3MRenderContext* rc,
   }
 }
 
-std::vector<Tile*>* Tile::getSubTiles(double u, double v) {
+std::vector<Tile*>* Tile::getSubTiles(const Angle& splitLatitude,
+                                      const Angle& splitLongitude) {
   if (_subtiles == NULL) {
-    _subtiles = createSubTiles(u, v);
+    _subtiles = createSubTiles(splitLatitude, splitLongitude);
     _justCreatedSubtiles = true;
   }
   return _subtiles;
@@ -566,13 +568,19 @@ void Tile::render(const G3MRenderContext* rc,
             trc->getElevationDataProvider());
     }
     else {
-      double u = 0.5;
-      double v = 0.5;
-      if (trc->getLayerTilesRenderParameters()->_mercator) {
-        int TODO_change_V_conforming_to_mercator;
-      }
+      const Geodetic2D lower = _sector.lower();
+      const Geodetic2D upper = _sector.upper();
 
-      std::vector<Tile*>* subTiles = getSubTiles(u, v);
+      const Angle splitLongitude = Angle::midAngle(lower.longitude(),
+                                                   upper.longitude());
+
+      const Angle splitLatitude = trc->getLayerTilesRenderParameters()->_mercator
+      /*                               */ ? MercatorUtils::calculateSplitLatitude(lower.latitude(),
+                                                                                  upper.latitude())
+      /*                               */ : Angle::midAngle(lower.latitude(),
+                                                            upper.latitude());
+
+      std::vector<Tile*>* subTiles = getSubTiles(splitLatitude, splitLongitude);
       if (_justCreatedSubtiles) {
         trc->getLastSplitTimer()->start();
         statistics->computeSplitInFrame();
@@ -605,41 +613,41 @@ Tile* Tile::createSubTile(const Angle& lowerLat, const Angle& lowerLon,
                   row, column);
 }
 
-std::vector<Tile*>* Tile::createSubTiles(double u, double v) {
+std::vector<Tile*>* Tile::createSubTiles(const Angle& splitLatitude,
+                                         const Angle& splitLongitude) {
   const Geodetic2D lower = _sector.lower();
   const Geodetic2D upper = _sector.upper();
 
-//  const Angle midLat = Angle::midAngle(lower.latitude(), upper.latitude());
-//  const Angle midLon = Angle::midAngle(lower.longitude(), upper.longitude());
-  const Angle midLat = Angle::linearInterpolation(lower.latitude(),  upper.latitude(),  v);
-  const Angle midLon = Angle::linearInterpolation(lower.longitude(), upper.longitude(), u);
-
   const int nextLevel = _level + 1;
 
+  const int row2    = 2 * _row;
+  const int column2 = 2 * _column;
+
   std::vector<Tile*>* subTiles = new std::vector<Tile*>();
+
   subTiles->push_back( createSubTile(lower.latitude(), lower.longitude(),
-                                     midLat, midLon,
+                                     splitLatitude, splitLongitude,
                                      nextLevel,
-                                     2 * _row,
-                                     2 * _column ) );
+                                     row2,
+                                     column2 ) );
 
-  subTiles->push_back( createSubTile(lower.latitude(), midLon,
-                                     midLat, upper.longitude(),
+  subTiles->push_back( createSubTile(lower.latitude(), splitLongitude,
+                                     splitLatitude, upper.longitude(),
                                      nextLevel,
-                                     2 * _row,
-                                     2 * _column + 1 ) );
+                                     row2,
+                                     column2 + 1 ) );
 
-  subTiles->push_back( createSubTile(midLat, lower.longitude(),
-                                     upper.latitude(), midLon,
+  subTiles->push_back( createSubTile(splitLatitude, lower.longitude(),
+                                     upper.latitude(), splitLongitude,
                                      nextLevel,
-                                     2 * _row + 1,
-                                     2 * _column ) );
+                                     row2 + 1,
+                                     column2 ) );
 
-  subTiles->push_back( createSubTile(midLat, midLon,
+  subTiles->push_back( createSubTile(splitLatitude, splitLongitude,
                                      upper.latitude(), upper.longitude(),
                                      nextLevel,
-                                     2 * _row + 1,
-                                     2 * _column + 1) );
+                                     row2 + 1,
+                                     column2 + 1) );
 
   return subTiles;
 }

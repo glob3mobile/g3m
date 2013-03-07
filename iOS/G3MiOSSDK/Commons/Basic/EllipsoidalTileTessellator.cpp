@@ -16,16 +16,15 @@
 #include "FloatBufferBuilder.hpp"
 #include "ShortBufferBuilder.hpp"
 #include "FloatBufferBuilderFromCartesian3D.hpp"
-//#include "FloatBufferBuilderFromCartesian2D.hpp"
 #include "FloatBufferBuilderFromGeodetic.hpp"
 #include "SimpleFloatBufferBuilder.hpp"
 #include "GLConstants.hpp"
 #include "Color.hpp"
 #include "Planet.hpp"
-
 #include "IFactory.hpp"
 #include "IFloatBuffer.hpp"
 #include "ElevationData.hpp"
+#include "MercatorUtils.hpp"
 
 Vector2I EllipsoidalTileTessellator::getTileMeshResolution(const Planet* planet,
                                                            const Vector2I& rawResolution,
@@ -172,7 +171,6 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
                          color);
 }
 
-
 IFloatBuffer* EllipsoidalTileTessellator::createTextCoords(const Vector2I& rawResolution,
                                                            const Tile* tile,
                                                            bool mercator) const {
@@ -182,11 +180,31 @@ IFloatBuffer* EllipsoidalTileTessellator::createTextCoords(const Vector2I& rawRe
   float* u = new float[tileResolution._x * tileResolution._y];
   float* v = new float[tileResolution._x * tileResolution._y];
 
+  const Sector sector = tile->getSector();
+
+  //const IMathUtils* mu = IMathUtils::instance();
+  
+  const double lowerV = MercatorUtils::getMercatorV(sector.lower().latitude());
+  const double upperV = MercatorUtils::getMercatorV(sector.upper().latitude());
+  const double deltaV = lowerV - upperV;
+
   for (int j = 0; j < tileResolution._y; j++) {
     for (int i = 0; i < tileResolution._x; i++) {
       const int pos = j*tileResolution._x + i;
-      u[pos] = (float) i / (tileResolution._x-1);
-      v[pos] = (float) j / (tileResolution._y-1);
+
+      const double uu = (double) i / (tileResolution._x-1);
+      double vv = (double) j / (tileResolution._y-1);
+
+      int __Mercator_at_work;
+      if (mercator) {
+        const Geodetic2D innerPoint = sector.getInnerPoint(uu, vv);
+        const double vMercatorGlobal = MercatorUtils::getMercatorV(innerPoint.latitude());
+        //vv = mu->clamp( (vMercatorGlobal - upperV) / deltaV, 0, 1);
+        vv = (vMercatorGlobal - upperV) / deltaV;
+      }
+
+      u[pos] = (float) uu;
+      v[pos] = (float) vv;
     }
   }
 

@@ -64,7 +64,8 @@ private:
   inline bool meetsRenderCriteria(const G3MRenderContext* rc,
                                   const TileRenderContext* trc);
 
-  inline std::vector<Tile*>* createSubTiles(double u, double v);
+  inline std::vector<Tile*>* createSubTiles(const Angle& splitLatitude,
+                                            const Angle& splitLongitude);
 
   inline void rawRender(const G3MRenderContext* rc,
                         const TileRenderContext* trc,
@@ -74,13 +75,18 @@ private:
                    const TileRenderContext* trc,
                    const GLState& parentState);
 
+//  const Angle calculateSplitLatitude(const Angle& lowerLatitude,
+//                                     const Angle& upperLatitude,
+//                                     bool mercator) const;
+
   inline Tile* createSubTile(const Angle& lowerLat, const Angle& lowerLon,
                              const Angle& upperLat, const Angle& upperLon,
                              const int level,
                              const int row, const int column);
 
 
-  inline std::vector<Tile*>* getSubTiles(double u, double v);
+  inline std::vector<Tile*>* getSubTiles(const Angle& splitLatitude,
+                                         const Angle& splitLongitude);
 
   Tile(const Tile& that);
 

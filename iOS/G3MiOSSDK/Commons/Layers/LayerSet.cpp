@@ -19,14 +19,13 @@ LayerSet::~LayerSet() {
 }
 
 std::vector<Petition*> LayerSet::createTileMapPetitions(const G3MRenderContext* rc,
-                                                        const Tile* tile,
-                                                        const Vector2I& tileTextureResolution) const {
+                                                        const Tile* tile) const {
   std::vector<Petition*> petitions;
 
   for (int i = 0; i < _layers.size(); i++) {
     Layer* layer = _layers[i];
     if (layer->isAvailable(rc, tile)) {
-      std::vector<Petition*> pet = layer->getMapPetitions(rc, tile, tileTextureResolution);
+      std::vector<Petition*> pet = layer->createTileMapPetitions(rc, tile);
 
       //Storing petitions
       for (int j = 0; j < pet.size(); j++) {
@@ -47,7 +46,7 @@ bool LayerSet::onTerrainTouchEvent(const G3MEventContext* ec,
                                    const Geodetic3D& position,
                                    const Tile* tile) const {
 
-  
+
 
   for (int i = _layers.size()-1; i >= 0; i--) {
     Layer* layer = _layers[i];
@@ -203,7 +202,7 @@ LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters() const {
           ILogger::instance()->logError("Inconsistency in Layer's Parameters: mercator");
           return NULL;
         }
-        
+
       }
     }
   }

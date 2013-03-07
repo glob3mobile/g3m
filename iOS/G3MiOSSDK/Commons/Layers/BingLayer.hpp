@@ -39,7 +39,7 @@ const double _initialResolution = _originShift*256.0;
 
 
 class BingLayer:public Layer{
-  
+
 private:
   const Sector              _sector;
   URL              _mapServerURL;
@@ -49,13 +49,13 @@ private:
   std::string _tilePetitionString;
   std::vector<std::string> _subDomains;
   bool _isReady;
-  
-  
-  
-  
-  
+
+
+
+
+
 public:
-  
+
   BingLayer(const std::string& layerName,
             const URL& mapServerURL,
             LayerCondition* condition,
@@ -75,45 +75,45 @@ public:
   {
     int ___TODO_create_bing_parameters;
   }
-  
+
   bool isReady() const;
-  
+
   void setTilePetitionString(const std::string tilePetitionString){
     _tilePetitionString = tilePetitionString;
     _isReady = true;
   }
-  
+
   void setSubDomains(std::vector<std::string> subDomains){
     _subDomains = subDomains;
   }
 
-  
+
   std::string getLocale()const;
-  
+
   std::string getMapTypeString() const;
-  
+
   void initialize(const G3MContext* context);
-  
-  std::vector<Petition*> getMapPetitions(const G3MRenderContext* rc,
-                                         const Tile* tile,
-                                         int width, int height) const;
-  
+
+  std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
+                                                const Tile* tile,
+                                                int width, int height) const;
+
   std::string getQuadKey(const int tileXY[], const int level)const;
-  
+
   xyTuple* getTileXY(const Geodetic2D latLon, const int level)const;
-  
+
   Sector getBingTileAsSector(const int tileXY[], const int level)const;
-  
+
   Geodetic2D getLatLon(const int tileXY[], const int level)const;
-  
+
   URL getFeatureInfoURL(const Geodetic2D& g,
                         const IFactory* factory,
                         const Sector& sector,
                         int width, int height) const;
-  
-  
-  
-  
+
+
+
+
   bool isTransparent() const{
     return false;
   }

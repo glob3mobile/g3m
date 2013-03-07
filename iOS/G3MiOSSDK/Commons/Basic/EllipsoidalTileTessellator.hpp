@@ -14,9 +14,6 @@ class Sector;
 
 class EllipsoidalTileTessellator : public TileTessellator {
 private:
-
-//  const unsigned int _resolutionX;
-//  const unsigned int _resolutionY;
   const bool         _skirted;
 
   Vector2I calculateResolution(const Vector2I& resolution,
@@ -24,13 +21,10 @@ private:
 
 public:
 
-  EllipsoidalTileTessellator(//const Vector2I& resolution,
-                             const bool skirted) :
-//  _resolutionX(resolution._x),
-//  _resolutionY(resolution._y),
+  EllipsoidalTileTessellator(const bool skirted) :
   _skirted(skirted)
   {
-    //    int __TODO_width_and_height_resolutions;
+    
   }
 
   virtual ~EllipsoidalTileTessellator() { }

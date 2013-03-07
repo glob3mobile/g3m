@@ -211,7 +211,6 @@ void TileRenderer::createTopLevelTiles(const G3MContext* context) {
       const Geodetic2D tileUpper(tileLatTo, tileLonTo);
       const Sector sector(tileLower, tileUpper);
 
-//      Tile* tile = new Tile(_texturizer, NULL, sector, _parameters->_topLevel, row, col);
       Tile* tile = new Tile(_texturizer, NULL, sector, 0, row, col);
       _topLevelTiles.push_back(tile);
     }

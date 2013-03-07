@@ -54,8 +54,7 @@ public:
   void addLayer(Layer* layer);
   
   std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
-                                                const Tile* tile,
-                                                const Vector2I& tileTextureResolution) const;
+                                                const Tile* tile) const;
   
   bool onTerrainTouchEvent(const G3MEventContext* ec,
                            const Geodetic3D& g3d,
@@ -83,6 +82,8 @@ public:
   Layer* getLayer(const std::string& name);
 
   const LayerTilesRenderParameters* getLayerTilesRenderParameters() const;
+
+//  const Angle calculateSplitLatitude(const Tile* tile) const;
 
 };
 

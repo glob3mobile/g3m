@@ -83,9 +83,8 @@ _extraParameter("")
 
 }
 
-std::vector<Petition*> WMSLayer::getMapPetitions(const G3MRenderContext* rc,
-                                                 const Tile* tile,
-                                                 const Vector2I& tileTextureResolution) const {
+std::vector<Petition*> WMSLayer::createTileMapPetitions(const G3MRenderContext* rc,
+                                                        const Tile* tile) const {
   std::vector<Petition*> petitions;
 
   const Sector tileSector = tile->getSector();
@@ -98,6 +97,8 @@ std::vector<Petition*> WMSLayer::getMapPetitions(const G3MRenderContext* rc,
       sector.getDeltaLongitude().isZero() ) {
     return petitions;
   }
+
+  const Vector2I tileTextureResolution = _parameters->_tileTextureResolution;
 
 	//Server name
   std::string req = _mapServerURL.getPath();
@@ -325,6 +326,6 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& position,
   isb->addInt(y);
   req += isb->getString();
   delete isb;
-
+  
 	return URL(req, false);
 }

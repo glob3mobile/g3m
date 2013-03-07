@@ -46,26 +46,33 @@ public:
 
   }
 
+  static const Vector2I defaultTileMeshResolution() {
+    return Vector2I(16, 16);
+  }
+
+  static const Vector2I defaultTileTextureResolution () {
+    return Vector2I(256, 256);
+  }
+
   static LayerTilesRenderParameters* createDefaultNonMercator(const Sector& topSector) {
     const int splitsByLatitude = 4;
     const int splitsByLongitude = 8;
     const int maxLevel = 17;
-    const Vector2I tileTextureResolution(256, 256);
-    const Vector2I tileMeshResolution(16, 16);
     const bool mercator = false;
 
     return new LayerTilesRenderParameters(topSector,
                                           splitsByLatitude,
                                           splitsByLongitude,
                                           maxLevel,
-                                          tileTextureResolution,
-                                          tileMeshResolution,
+                                          LayerTilesRenderParameters::defaultTileTextureResolution(),
+                                          LayerTilesRenderParameters::defaultTileMeshResolution(),
                                           mercator);
   }
 
 
   ~LayerTilesRenderParameters() {
   }
+  
   
 };
 

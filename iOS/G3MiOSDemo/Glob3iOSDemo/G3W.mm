@@ -8,8 +8,6 @@
 
 #import "G3W.h"
 
-//#import "G3MWidget_iOS.h"
-
 @implementation G3W: G3MWidget_iOS
 
 @end

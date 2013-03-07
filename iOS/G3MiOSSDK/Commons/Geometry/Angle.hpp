@@ -93,6 +93,10 @@ public:
   double cosinus() const {
     return IMathUtils::instance()->cos( _radians );
   }
+  
+  double tangent() const {
+    return IMathUtils::instance()->tan( _radians );
+  }
 
   double degrees() const {
     return _degrees;
