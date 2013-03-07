@@ -612,7 +612,7 @@ public:
 
 - (TilesRenderParameters*) createTileRenderParameters
 {
-  const bool renderDebug = false;
+  const bool renderDebug = true;
   const bool useTilesSplitBudget = true;
   const bool forceTopLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
@@ -621,10 +621,6 @@ public:
                                    useTilesSplitBudget,
                                    forceTopLevelTilesRenderOnStart,
                                    incrementalTileQuality);
-  //  return TilesRenderParameters::createSingleSector(renderDebug,
-  //                                                   useTilesSplitBudget,
-  //                                                   forceTopLevelTilesRenderOnStart,
-  //                                                   incrementalTileQuality);
 }
 
 - (TileRenderer*) createTileRenderer: (TilesRenderParameters*) parameters
