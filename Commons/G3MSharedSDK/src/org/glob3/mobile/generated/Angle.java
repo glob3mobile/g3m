@@ -104,6 +104,11 @@ public class Angle
     return IMathUtils.instance().cos(_radians);
   }
 
+  public final double tangent()
+  {
+    return IMathUtils.instance().tan(_radians);
+  }
+
   public final double degrees()
   {
     return _degrees;

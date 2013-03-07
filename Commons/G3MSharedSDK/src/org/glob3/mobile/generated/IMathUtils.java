@@ -19,8 +19,6 @@ package org.glob3.mobile.generated;
 
 public abstract class IMathUtils
 {
-
-
   private static IMathUtils _instance = null;
 
   public static void setInstance(IMathUtils math)
@@ -54,6 +52,9 @@ public abstract class IMathUtils
 
   public abstract double sin(double v);
   public abstract float sin(float v);
+
+  public abstract double sinh(double v);
+  public abstract float sinh(float v);
 
   public abstract double asin(double v);
   public abstract float asin(float v);
@@ -113,6 +114,8 @@ public abstract class IMathUtils
   public abstract double min(double d1, double d2);
   public abstract double max(double d1, double d2);
 
+  public abstract double floor(double d);
+  public abstract float floor(float f);
 
   public double linearInterpolation(double from, double to, double alpha)
   {

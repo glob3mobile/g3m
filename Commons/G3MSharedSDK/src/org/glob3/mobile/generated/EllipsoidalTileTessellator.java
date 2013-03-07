@@ -20,9 +20,6 @@ package org.glob3.mobile.generated;
 
 public class EllipsoidalTileTessellator extends TileTessellator
 {
-
-//  const unsigned int _resolutionX;
-//  const unsigned int _resolutionY;
   private final boolean _skirted;
 
   private Vector2I calculateResolution(Vector2I rawResolution, Sector sector)
@@ -49,22 +46,16 @@ public class EllipsoidalTileTessellator extends TileTessellator
   }
 
 
-  public EllipsoidalTileTessellator(boolean skirted) //const Vector2I& resolution,
-//  _resolutionX(resolution._x),
-//  _resolutionY(resolution._y),
+  public EllipsoidalTileTessellator(boolean skirted)
   {
      _skirted = skirted;
-    //    int __TODO_width_and_height_resolutions;
+
   }
 
   public void dispose()
   {
   }
 
-
-  ///#include "FloatBufferBuilderFromCartesian2D.hpp"
-  
-  
   public final Vector2I getTileMeshResolution(Planet planet, Vector2I rawResolution, Tile tile, boolean debug)
   {
     return calculateResolution(rawResolution, tile.getSector());
@@ -244,13 +235,34 @@ public class EllipsoidalTileTessellator extends TileTessellator
     float[] u = new float[tileResolution._x * tileResolution._y];
     float[] v = new float[tileResolution._x * tileResolution._y];
   
+    final Sector sector = tile.getSector();
+  
+    //const IMathUtils* mu = IMathUtils::instance();
+  
+    final double lowerV = MercatorUtils.getMercatorV(sector.lower().latitude());
+    final double upperV = MercatorUtils.getMercatorV(sector.upper().latitude());
+    final double deltaV = lowerV - upperV;
+  
     for (int j = 0; j < tileResolution._y; j++)
     {
       for (int i = 0; i < tileResolution._x; i++)
       {
         final int pos = j *tileResolution._x + i;
-        u[pos] = (float) i / (tileResolution._x-1);
-        v[pos] = (float) j / (tileResolution._y-1);
+  
+        final double uu = (double) i / (tileResolution._x-1);
+        double vv = (double) j / (tileResolution._y-1);
+  
+        int __Mercator_at_work;
+        if (mercator)
+        {
+          final Geodetic2D innerPoint = sector.getInnerPoint(uu, vv);
+          final double vMercatorGlobal = MercatorUtils.getMercatorV(innerPoint.latitude());
+          //vv = mu->clamp( (vMercatorGlobal - upperV) / deltaV, 0, 1);
+          vv = (vMercatorGlobal - upperV) / deltaV;
+        }
+  
+        u[pos] = (float) uu;
+        v[pos] = (float) vv;
       }
     }
   

@@ -39,21 +39,30 @@ public class LayerTilesRenderParameters
 
   }
 
+  public static Vector2I defaultTileMeshResolution()
+  {
+    return new Vector2I(16, 16);
+  }
+
+  public static Vector2I defaultTileTextureResolution ()
+  {
+    return new Vector2I(256, 256);
+  }
+
   public static LayerTilesRenderParameters createDefaultNonMercator(Sector topSector)
   {
     final int splitsByLatitude = 4;
     final int splitsByLongitude = 8;
     final int maxLevel = 17;
-    final Vector2I tileTextureResolution = new Vector2I(256, 256);
-    final Vector2I tileMeshResolution = new Vector2I(16, 16);
     final boolean mercator = false;
 
-    return new LayerTilesRenderParameters(topSector, splitsByLatitude, splitsByLongitude, maxLevel, tileTextureResolution, tileMeshResolution, mercator);
+    return new LayerTilesRenderParameters(topSector, splitsByLatitude, splitsByLongitude, maxLevel, LayerTilesRenderParameters.defaultTileTextureResolution(), LayerTilesRenderParameters.defaultTileMeshResolution(), mercator);
   }
 
 
   public void dispose()
   {
   }
+
 
 }

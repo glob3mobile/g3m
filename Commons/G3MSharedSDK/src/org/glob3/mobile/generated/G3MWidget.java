@@ -106,6 +106,29 @@ public class G3MWidget
     _timer.start();
     _renderCounter++;
   
+    if (_initializationTask != null)
+    {
+      if (!_initializationTaskWasRun)
+      {
+        _initializationTask.run(_context);
+        _initializationTaskWasRun = true;
+      }
+  
+      if (_initializationTask.isDone(_context))
+      {
+        if (_autoDeleteInitializationTask)
+        {
+          if (_initializationTask != null)
+             _initializationTask.dispose();
+        }
+        _initializationTask = null;
+      }
+      else
+      {
+        _mainRendererReady = false;
+      }
+    }
+  
     //Start periodical task
     final int periodicalTasksCount = _periodicalTasks.size();
     for (int i = 0; i < periodicalTasksCount; i++)
@@ -127,36 +150,31 @@ public class G3MWidget
   
     _mainRendererReady = _mainRenderer.isReadyToRender(rc);
   
-    if (_mainRendererReady)
-    {
-      if (_initializationTask != null)
-      {
-        if (!_initializationTaskWasRun)
-        {
-          _initializationTask.run(_context);
-          _initializationTaskWasRun = true;
-        }
+    int _TESTING_initializationTask;
+  //  if (_mainRendererReady) {
+  //    if (_initializationTask != NULL) {
+  //      if (!_initializationTaskWasRun) {
+  //        _initializationTask->run(_context);
+  //        _initializationTaskWasRun = true;
+  //      }
+  //
+  //      if (_initializationTask->isDone(_context)) {
+  //        if (_autoDeleteInitializationTask) {
+  //          delete _initializationTask;
+  //        }
+  //        _initializationTask = NULL;
+  //      }
+  //      else {
+  //        _mainRendererReady = false;
+  //      }
+  //    }
+  //  }
+  //
+  //  if (_mainRendererReady) {
+  //    _effectsScheduler->doOneCyle(&rc);
+  //  }
+    _effectsScheduler.doOneCyle(rc);
   
-        if (_initializationTask.isDone(_context))
-        {
-          if (_autoDeleteInitializationTask)
-          {
-            if (_initializationTask != null)
-               _initializationTask.dispose();
-          }
-          _initializationTask = null;
-        }
-        else
-        {
-          _mainRendererReady = false;
-        }
-      }
-    }
-  
-    if (_mainRendererReady)
-    {
-      _effectsScheduler.doOneCyle(rc);
-    }
     _frameTasksExecutor.doPreRenderCycle(rc);
   
     Renderer selectedRenderer = _mainRendererReady ? _mainRenderer : _busyRenderer;

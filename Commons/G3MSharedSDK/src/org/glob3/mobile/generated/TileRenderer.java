@@ -60,7 +60,6 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
         final Geodetic2D tileUpper = new Geodetic2D(tileLatTo, tileLonTo);
         final Sector sector = new Sector(tileLower, tileUpper);
   
-  //      Tile* tile = new Tile(_texturizer, NULL, sector, _parameters->_topLevel, row, col);
         Tile tile = new Tile(_texturizer, null, sector, 0, row, col);
         _topLevelTiles.add(tile);
       }

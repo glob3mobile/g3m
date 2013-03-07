@@ -85,7 +85,7 @@ public abstract class Layer
        _parameters.dispose();
   }
 
-  public abstract java.util.ArrayList<Petition> getMapPetitions(G3MRenderContext rc, Tile tile, Vector2I tileTextureResolution);
+  public abstract java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, Tile tile);
 
   public boolean isAvailable(G3MRenderContext rc, Tile tile)
   {

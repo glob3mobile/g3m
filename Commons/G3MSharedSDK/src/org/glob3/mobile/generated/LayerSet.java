@@ -149,7 +149,7 @@ public class LayerSet
     layersChanged();
   }
 
-  public final java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, Tile tile, Vector2I tileTextureResolution)
+  public final java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, Tile tile)
   {
     java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
   
@@ -158,7 +158,7 @@ public class LayerSet
       Layer layer = _layers.get(i);
       if (layer.isAvailable(rc, tile))
       {
-        java.util.ArrayList<Petition> pet = layer.getMapPetitions(rc, tile, tileTextureResolution);
+        java.util.ArrayList<Petition> pet = layer.createTileMapPetitions(rc, tile);
   
         //Storing petitions
         for (int j = 0; j < pet.size(); j++)
@@ -275,5 +275,7 @@ public class LayerSet
     }
     return _layerTilesRenderParameters;
   }
+
+//  const Angle calculateSplitLatitude(const Tile* tile) const;
 
 }

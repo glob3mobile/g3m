@@ -107,7 +107,7 @@ public abstract class BingLayer extends Layer
   
   }
 
-  public final java.util.ArrayList<Petition> getMapPetitions(G3MRenderContext rc, Tile tile, int width, int height)
+  public final java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, Tile tile, int width, int height)
   {
   
     java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
@@ -216,13 +216,13 @@ public abstract class BingLayer extends Layer
     int mapSize = 256 << level;
     double lonDeg = latLon.longitude()._degrees;
     double latDeg = latLon.latitude()._degrees;
-    if (latDeg < -85.05112878)
+    if (latDeg < -85.0511287798)
     {
-      latDeg = -85.05112878;
+      latDeg = -85.0511287798;
     }
-    if (latDeg > 85.05112878)
+    if (latDeg > 85.0511287798)
     {
-      latDeg = 85.05112878;
+      latDeg = 85.0511287798;
     }
   
     double x = (lonDeg +180.0)/360;

@@ -64,7 +64,7 @@ public class WMSLayer extends Layer
   
   }
 
-  public final java.util.ArrayList<Petition> getMapPetitions(G3MRenderContext rc, Tile tile, Vector2I tileTextureResolution)
+  public final java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, Tile tile)
   {
     java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
   
@@ -79,6 +79,8 @@ public class WMSLayer extends Layer
     {
       return petitions;
     }
+  
+    final Vector2I tileTextureResolution = _parameters._tileTextureResolution;
   
      //Server name
     String req = _mapServerURL.getPath();
@@ -206,9 +208,9 @@ public class WMSLayer extends Layer
      return petitions;
   }
 
-//  bool isTransparent() const{
-//    return _isTransparent;
-//  }
+  //  bool isTransparent() const{
+  //    return _isTransparent;
+  //  }
 
   public final URL getFeatureInfoURL(Geodetic2D position, Sector tileSector)
   {

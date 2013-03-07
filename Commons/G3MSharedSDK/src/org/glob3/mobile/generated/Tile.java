@@ -204,26 +204,25 @@ public class Tile
     return false;
   }
 
-  private java.util.ArrayList<Tile> createSubTiles(double u, double v)
+  private java.util.ArrayList<Tile> createSubTiles(Angle splitLatitude, Angle splitLongitude)
   {
     final Geodetic2D lower = _sector.lower();
     final Geodetic2D upper = _sector.upper();
   
-  //  const Angle midLat = Angle::midAngle(lower.latitude(), upper.latitude());
-  //  const Angle midLon = Angle::midAngle(lower.longitude(), upper.longitude());
-    final Angle midLat = Angle.linearInterpolation(lower.latitude(), upper.latitude(), v);
-    final Angle midLon = Angle.linearInterpolation(lower.longitude(), upper.longitude(), u);
-  
     final int nextLevel = _level + 1;
   
+    final int row2 = 2 * _row;
+    final int column2 = 2 * _column;
+  
     java.util.ArrayList<Tile> subTiles = new java.util.ArrayList<Tile>();
-    subTiles.add(createSubTile(lower.latitude(), lower.longitude(), midLat, midLon, nextLevel, 2 * _row, 2 * _column));
   
-    subTiles.add(createSubTile(lower.latitude(), midLon, midLat, upper.longitude(), nextLevel, 2 * _row, 2 * _column + 1));
+    subTiles.add(createSubTile(lower.latitude(), lower.longitude(), splitLatitude, splitLongitude, nextLevel, row2, column2));
   
-    subTiles.add(createSubTile(midLat, lower.longitude(), upper.latitude(), midLon, nextLevel, 2 * _row + 1, 2 * _column));
+    subTiles.add(createSubTile(lower.latitude(), splitLongitude, splitLatitude, upper.longitude(), nextLevel, row2, column2 + 1));
   
-    subTiles.add(createSubTile(midLat, midLon, upper.latitude(), upper.longitude(), nextLevel, 2 * _row + 1, 2 * _column + 1));
+    subTiles.add(createSubTile(splitLatitude, lower.longitude(), upper.latitude(), splitLongitude, nextLevel, row2 + 1, column2));
+  
+    subTiles.add(createSubTile(splitLatitude, splitLongitude, upper.latitude(), upper.longitude(), nextLevel, row2 + 1, column2 + 1));
   
     return subTiles;
   }
@@ -274,17 +273,21 @@ public class Tile
     }
   }
 
+//  const Angle calculateSplitLatitude(const Angle& lowerLatitude,
+//                                     const Angle& upperLatitude,
+//                                     bool mercator) const;
+
   private Tile createSubTile(Angle lowerLat, Angle lowerLon, Angle upperLat, Angle upperLon, int level, int row, int column)
   {
     return new Tile(_texturizer, this, new Sector(new Geodetic2D(lowerLat, lowerLon), new Geodetic2D(upperLat, upperLon)), level, row, column);
   }
 
 
-  private java.util.ArrayList<Tile> getSubTiles(double u, double v)
+  private java.util.ArrayList<Tile> getSubTiles(Angle splitLatitude, Angle splitLongitude)
   {
     if (_subtiles == null)
     {
-      _subtiles = createSubTiles(u, v);
+      _subtiles = createSubTiles(splitLatitude, splitLongitude);
       _justCreatedSubtiles = true;
     }
     return _subtiles;
@@ -628,14 +631,16 @@ public class Tile
       }
       else
       {
-        double u = 0.5;
-        double v = 0.5;
-        if (trc.getLayerTilesRenderParameters()._mercator)
-        {
-          int TODO_change_V_conforming_to_mercator;
-        }
+        final Geodetic2D lower = _sector.lower();
+        final Geodetic2D upper = _sector.upper();
   
-        java.util.ArrayList<Tile> subTiles = getSubTiles(u, v);
+        final Angle splitLongitude = Angle.midAngle(lower.longitude(), upper.longitude());
+  
+        final Angle splitLatitude = trc.getLayerTilesRenderParameters()._mercator ? MercatorUtils.calculateSplitLatitude(lower.latitude(), upper.latitude()) : Angle.midAngle(lower.latitude(), upper.latitude());
+        /*                               */
+        /*                               */
+  
+        java.util.ArrayList<Tile> subTiles = getSubTiles(splitLatitude, splitLongitude);
         if (_justCreatedSubtiles)
         {
           trc.getLastSplitTimer().start();
