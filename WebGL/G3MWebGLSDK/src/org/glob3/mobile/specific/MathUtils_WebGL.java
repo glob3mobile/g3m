@@ -352,4 +352,29 @@ public final class MathUtils_WebGL
 
 		return doubleView[0];
    }-*/;
+
+
+   @Override
+   public double sinh(final double v) {
+      return Math.sinh(v);
+   }
+
+
+   @Override
+   public float sinh(final float v) {
+      return (float) Math.sinh(v);
+   }
+
+
+   @Override
+   public double floor(final double d) {
+      return Math.floor(d);
+   }
+
+
+   @Override
+   public float floor(final float f) {
+      return (float) Math.floor(f);
+   }
+
 }
