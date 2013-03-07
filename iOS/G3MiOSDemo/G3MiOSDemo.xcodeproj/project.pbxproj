@@ -19,7 +19,6 @@
 		CF186B0816B85A3600A39478 /* citation.json in Resources */ = {isa = PBXBuildFile; fileRef = CF186B0716B85A3600A39478 /* citation.json */; };
 		CF186B0A16B85A5F00A39478 /* textures-citation in Resources */ = {isa = PBXBuildFile; fileRef = CF186B0916B85A5F00A39478 /* textures-citation */; };
 		CF35A20B16D3D70100D795D8 /* sample_bil16_150x150.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF35A20A16D3D70100D795D8 /* sample_bil16_150x150.bil */; };
-		CF7A708815CFD0A50086FDE6 /* g3m-marker.png in Resources */ = {isa = PBXBuildFile; fileRef = CF7A708715CFD0A50086FDE6 /* g3m-marker.png */; };
 		CF883B841591053100AEE39C /* mark.png in Resources */ = {isa = PBXBuildFile; fileRef = CF883B831591053100AEE39C /* mark.png */; };
 		CF8EE55B16CE94E40033AB7A /* mercator_debug.png in Resources */ = {isa = PBXBuildFile; fileRef = CF8EE55A16CE94E40033AB7A /* mercator_debug.png */; };
 		CF91C53016D7C03C00E25C24 /* full-earth-4096x2048.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF91C52F16D7C03B00E25C24 /* full-earth-4096x2048.bil */; };
@@ -56,21 +55,18 @@
 		E71B153F1626D27F003D1013 /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B15341626D27F003D1013 /* Icon-Small@2x.png */; };
 		E71B15401626D27F003D1013 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B15351626D27F003D1013 /* Icon.png */; };
 		E71B15411626D27F003D1013 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B15361626D27F003D1013 /* Icon@2x.png */; };
-		E73C8EA716BAC04100FA1493 /* A320.bson in Resources */ = {isa = PBXBuildFile; fileRef = E73C8EA616BA9CEE00FA1493 /* A320.bson */; };
-		E751B7661680E2D90032413F /* satellite-on-96x48.png in Resources */ = {isa = PBXBuildFile; fileRef = E751B7651680E2D90032413F /* satellite-on-96x48.png */; };
-		E751B7681680E5850032413F /* map-on-96x48.png in Resources */ = {isa = PBXBuildFile; fileRef = E751B7671680E5850032413F /* map-on-96x48.png */; };
-		E751B78316823D7C0032413F /* G3MDrawingShapesViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E751B78216823D7C0032413F /* G3MDrawingShapesViewController.mm */; };
-		E751B7A1168247830032413F /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = E751B79F168247830032413F /* play.png */; };
-		E751B7A2168247830032413F /* stop.png in Resources */ = {isa = PBXBuildFile; fileRef = E751B7A0168247830032413F /* stop.png */; };
+		E728385516E914D80037AA5C /* g3m-marker.png in Resources */ = {isa = PBXBuildFile; fileRef = E728385416E914D80037AA5C /* g3m-marker.png */; };
+		E751B7661680E2D90032413F /* (null) in Resources */ = {isa = PBXBuildFile; };
+		E751B7681680E5850032413F /* (null) in Resources */ = {isa = PBXBuildFile; };
+		E751B78316823D7C0032413F /* (null) in Sources */ = {isa = PBXBuildFile; };
+		E751B7A1168247830032413F /* (null) in Resources */ = {isa = PBXBuildFile; };
+		E751B7A2168247830032413F /* (null) in Resources */ = {isa = PBXBuildFile; };
 		E770CAD9169C425600F892BE /* (null) in Resources */ = {isa = PBXBuildFile; };
-		E770CAE4169C808700F892BE /* G3MWebViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E770CAE3169C808700F892BE /* G3MWebViewController.mm */; };
-		E770CAE7169D988C00F892BE /* marker-wikipedia-72x72.png in Resources */ = {isa = PBXBuildFile; fileRef = E770CAE6169D988C00F892BE /* marker-wikipedia-72x72.png */; };
-		E791CF6F16C15A49000FDE8A /* UIDropDownMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = E791CF6E16C15A49000FDE8A /* UIDropDownMenu.m */; };
-		E7A4734916B855B300D07077 /* DemosViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7A4734816B855B300D07077 /* DemosViewController.mm */; };
-		E7CD9BC616C1994900F69E41 /* g3m-48.png in Resources */ = {isa = PBXBuildFile; fileRef = E7CD9BC516C1994900F69E41 /* g3m-48.png */; };
-		E7CD9BC816C1A34400F69E41 /* selector-background.png in Resources */ = {isa = PBXBuildFile; fileRef = E7CD9BC716C1A34400F69E41 /* selector-background.png */; };
-		E7CD9BCB16C24E9F00F69E41 /* G3MToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = E7CD9BCA16C24E9F00F69E41 /* G3MToolbar.m */; };
-		E7D4EC7D16B98D7200730B14 /* marker-wikipedia-48x48.png in Resources */ = {isa = PBXBuildFile; fileRef = E7D4EC7C16B98D7200730B14 /* marker-wikipedia-48x48.png */; };
+		E770CAE4169C808700F892BE /* (null) in Sources */ = {isa = PBXBuildFile; };
+		E770CAE7169D988C00F892BE /* (null) in Resources */ = {isa = PBXBuildFile; };
+		E791CF6F16C15A49000FDE8A /* (null) in Sources */ = {isa = PBXBuildFile; };
+		E7A4734916B855B300D07077 /* (null) in Sources */ = {isa = PBXBuildFile; };
+		E7CD9BCB16C24E9F00F69E41 /* (null) in Sources */ = {isa = PBXBuildFile; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -345,6 +341,7 @@
 		E71B15341626D27F003D1013 /* Icon-Small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-Small@2x.png"; path = "Resources/Icon-Small@2x.png"; sourceTree = "<group>"; };
 		E71B15351626D27F003D1013 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = Resources/Icon.png; sourceTree = "<group>"; };
 		E71B15361626D27F003D1013 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "Resources/Icon@2x.png"; sourceTree = "<group>"; };
+		E728385416E914D80037AA5C /* g3m-marker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "g3m-marker.png"; sourceTree = "<group>"; };
 		FB6D00A916CC0458009BF93D /* EllipsoidShape.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = EllipsoidShape.hpp; path = ../G3MiOSSDK/Commons/Rendererers/EllipsoidShape.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -618,19 +615,9 @@
 				D8EEF39F1577920B003FEB5E /* MainStoryboard_iPad.storyboard */,
 				D8EEF3A21577920B003FEB5E /* ViewController.h */,
 				D8EEF3A31577920B003FEB5E /* ViewController.mm */,
-				E7A4734716B855B300D07077 /* DemosViewController.h */,
-				E7A4734816B855B300D07077 /* DemosViewController.mm */,
 				D8EEF3911577920B003FEB5E /* Supporting Files */,
 				D8EEF4091577A93D003FEB5E /* G3W.h */,
 				D8EEF40A1577A93D003FEB5E /* G3W.mm */,
-				E7CD9BC916C24E9F00F69E41 /* G3MToolbar.h */,
-				E7CD9BCA16C24E9F00F69E41 /* G3MToolbar.m */,
-				E791CF6D16C15A49000FDE8A /* UIDropDownMenu.h */,
-				E791CF6E16C15A49000FDE8A /* UIDropDownMenu.m */,
-				E770CAE2169C808700F892BE /* G3MWebViewController.h */,
-				E770CAE3169C808700F892BE /* G3MWebViewController.mm */,
-				E751B78116823D7C0032413F /* G3MDrawingShapesViewController.h */,
-				E751B78216823D7C0032413F /* G3MDrawingShapesViewController.mm */,
 			);
 			name = G3MiOSDemo;
 			path = Glob3iOSDemo;
@@ -658,6 +645,7 @@
 		D8EEF4271577B0D6003FEB5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				E728385416E914D80037AA5C /* g3m-marker.png */,
 				CFD42AB716DBAEFD00B03961 /* elev-35.0_-6.0_38.0_-2.0_4096x2048.bil */,
 				CF91C52F16D7C03B00E25C24 /* full-earth-4096x2048.bil */,
 				CFB5274A16D53906008374C2 /* full-earth-2048x1024.bil */,
@@ -669,15 +657,10 @@
 				CF186B0716B85A3600A39478 /* citation.json */,
 				CF186B0516B857DE00A39478 /* textures-A320 */,
 				CF186B0316B8572400A39478 /* A320.json */,
-				E73C8EA616BA9CEE00FA1493 /* A320.bson */,
 				CF09A94D16A09F7000E72811 /* test.bson */,
 				CF0223821668318600024B73 /* geojson */,
 				CFEA76671666DCB000E89BC7 /* images */,
 				CFE3DBB0164B0E7D00910037 /* seymour-plane.json */,
-				E7A91B27168DA7A800DC5EE4 /* Default@2x.png */,
-				E7A91B26168DA7A800DC5EE4 /* Default.png */,
-				E7A91B28168DA7A800DC5EE4 /* iTunesArtwork */,
-				E7A91B29168DA7A800DC5EE4 /* iTunesArtwork@2x */,
 				E71B152C1626D27F003D1013 /* Default-Landscape.png */,
 				E71B152D1626D27F003D1013 /* Default-Landscape@2x.png */,
 				E71B152E1626D27F003D1013 /* Default-Portrait.png */,
@@ -792,12 +775,12 @@
 				CFE3DBB1164B0E7D00910037 /* seymour-plane.json in Resources */,
 				CFEA76681666DCB000E89BC7 /* images in Resources */,
 				CF0223831668318600024B73 /* geojson in Resources */,
-				E751B7661680E2D90032413F /* satellite-on-96x48.png in Resources */,
-				E751B7681680E5850032413F /* map-on-96x48.png in Resources */,
-				E751B7A1168247830032413F /* play.png in Resources */,
-				E751B7A2168247830032413F /* stop.png in Resources */,
+				E751B7661680E2D90032413F /* (null) in Resources */,
+				E751B7681680E5850032413F /* (null) in Resources */,
+				E751B7A1168247830032413F /* (null) in Resources */,
+				E751B7A2168247830032413F /* (null) in Resources */,
 				E770CAD9169C425600F892BE /* (null) in Resources */,
-				E770CAE7169D988C00F892BE /* marker-wikipedia-72x72.png in Resources */,
+				E770CAE7169D988C00F892BE /* (null) in Resources */,
 				CF186B0416B8572400A39478 /* A320.json in Resources */,
 				CF186B0616B857DE00A39478 /* textures-A320 in Resources */,
 				CF186B0816B85A3600A39478 /* citation.json in Resources */,
@@ -809,6 +792,7 @@
 				CFB5274B16D53906008374C2 /* full-earth-2048x1024.bil in Resources */,
 				CF91C53016D7C03C00E25C24 /* full-earth-4096x2048.bil in Resources */,
 				CFD42AB816DBAEFD00B03961 /* elev-35.0_-6.0_38.0_-2.0_4096x2048.bil in Resources */,
+				E728385516E914D80037AA5C /* g3m-marker.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -823,11 +807,11 @@
 				D8EEF39B1577920B003FEB5E /* AppDelegate.m in Sources */,
 				D8EEF3A41577920B003FEB5E /* ViewController.mm in Sources */,
 				D8EEF40B1577A93D003FEB5E /* G3W.mm in Sources */,
-				E751B78316823D7C0032413F /* G3MDrawingShapesViewController.mm in Sources */,
-				E770CAE4169C808700F892BE /* G3MWebViewController.mm in Sources */,
-				E7A4734916B855B300D07077 /* DemosViewController.mm in Sources */,
-				E791CF6F16C15A49000FDE8A /* UIDropDownMenu.m in Sources */,
-				E7CD9BCB16C24E9F00F69E41 /* G3MToolbar.m in Sources */,
+				E751B78316823D7C0032413F /* (null) in Sources */,
+				E770CAE4169C808700F892BE /* (null) in Sources */,
+				E7A4734916B855B300D07077 /* (null) in Sources */,
+				E791CF6F16C15A49000FDE8A /* (null) in Sources */,
+				E7CD9BCB16C24E9F00F69E41 /* (null) in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
