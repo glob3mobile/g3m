@@ -87,6 +87,16 @@ public class HereLayer extends Layer
     isb.addString(",");
     isb.addDouble(tileSector.getCenter().longitude().degrees());
   
+  //  isb->addString("&poi=");
+  //  isb->addDouble(tileSector.lower().latitude().degrees());
+  //  isb->addString(",");
+  //  isb->addDouble(tileSector.lower().longitude().degrees());
+  //  isb->addString(",");
+  //  isb->addDouble(tileSector.upper().latitude().degrees());
+  //  isb->addString(",");
+  //  isb->addDouble(tileSector.upper().longitude().degrees());
+  //  isb->addString("&nomrk");
+  
     isb.addString("&z=");
     final int level = tileLevel + _initialHereLevel;
     isb.addInt(level);
