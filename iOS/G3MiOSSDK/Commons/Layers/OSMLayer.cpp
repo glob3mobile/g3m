@@ -27,7 +27,6 @@
 OSMLayer::OSMLayer(const TimeInterval& timeToCache,
                    int initialOSMLevel,
                    LayerCondition* condition) :
-_initialOSMLevel(initialOSMLevel),
 Layer(condition,
       "OpenStreetMap",
       timeToCache,
@@ -38,6 +37,7 @@ Layer(condition,
                                      Vector2I(256, 256),
                                      LayerTilesRenderParameters::defaultTileMeshResolution(),
                                      true)),
+_initialOSMLevel(initialOSMLevel),
 _sector(Sector::fullSphere())
 {
 
@@ -64,6 +64,7 @@ std::vector<Petition*> OSMLayer::createTileMapPetitions(const G3MRenderContext* 
   }
 
   // http://[abc].tile.openstreetmap.org/zoom/x/y.png
+  // http://[abc].tiles.mapbox.com/v3/examples.map-vyofok3q/9/250/193.png
 
   const int tileLevel = tile->getLevel();
 
@@ -84,6 +85,8 @@ std::vector<Petition*> OSMLayer::createTileMapPetitions(const G3MRenderContext* 
 
   // domain
   isb->addString(".tile.openstreetmap.org/");
+  // isb->addString(".tiles.mapbox.com/v3/examples.map-vyofok3q/");
+
 
   const int osmLevel = tileLevel + _initialOSMLevel;
   // zoom
