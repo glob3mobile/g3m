@@ -222,7 +222,8 @@ public class Angle
 
   public final boolean isEqualsTo(Angle that)
   {
-    return (_degrees == that._degrees) || (_radians == that._radians);
+    final IMathUtils mu = IMathUtils.instance();
+    return mu.isEquals(_degrees, that._degrees) || mu.isEquals(_radians, that._radians);
   }
 
   @Override

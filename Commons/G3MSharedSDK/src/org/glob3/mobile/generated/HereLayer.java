@@ -61,7 +61,6 @@ public class HereLayer extends Layer
       return petitions;
     }
   
-    final int tileLevel = tile.getLevel();
   
     IStringBuilder isb = IStringBuilder.newStringBuilder();
   
@@ -98,7 +97,7 @@ public class HereLayer extends Layer
   //  isb->addString("&nomrk");
   
     isb.addString("&z=");
-    final int level = tileLevel + _initialHereLevel;
+    final int level = tile.getLevel() + _initialHereLevel;
     isb.addInt(level);
   
   //  isb->addString("&t=3");

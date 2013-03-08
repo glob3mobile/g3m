@@ -112,7 +112,20 @@ public abstract class IMathUtils
   public abstract int toInt(float value);
 
   public abstract double min(double d1, double d2);
+  public abstract float min(float f1, float f2);
+
   public abstract double max(double d1, double d2);
+  public abstract float max(float f1, float f2);
+
+  public double max(double d1, double d2, double d3)
+  {
+    return max(max(d1, d2), d3);
+  }
+
+  public float max(float f1, float f2, float f3)
+  {
+    return max(max(f1, f2), f3);
+  }
 
   public abstract double floor(double d);
   public abstract float floor(float f);
@@ -160,6 +173,26 @@ public abstract class IMathUtils
     if (value > max)
        return max;
     return value;
+  }
+
+  public boolean isEquals(double x, double y)
+  {
+    if (x == y)
+    {
+      return true;
+    }
+    final double epsilon = 1e-8;
+    return Math.abs(x - y) <= epsilon * max(Math.abs(x), Math.abs(y), 1.0);
+  }
+
+  public boolean isEquals(float x, float y)
+  {
+    if (x == y)
+    {
+      return true;
+    }
+    final float epsilon = 1e-8f;
+    return Math.abs(x - y) <= epsilon * max(Math.abs(x), Math.abs(y), 1.0f);
   }
 
 }
