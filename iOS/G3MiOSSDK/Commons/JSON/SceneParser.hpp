@@ -35,6 +35,7 @@ class SceneParser{
     static const std::string MAXY;
     static const std::string SPLITSLONGITUDE;
     static const std::string SPLITSLATITUDE;
+    static const std::string ISTRANSPARENT;
     static const std::string ITEMS;
     static const std::string MINLEVEL;
     static const std::string MAXLEVEL;
@@ -81,6 +82,7 @@ private:
   
     LevelTileCondition* getLevelCondition(const JSONString* jsonMinLevel, const JSONString* jsonMaxLevel);
     Sector getSector(const JSONObject* jsonBBOX);
+    bool isTransparent(const JSONString* jsonBBOX);
   
 protected:
     SceneParser();

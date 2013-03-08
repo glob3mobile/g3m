@@ -51,6 +51,7 @@ const std::string SceneParser::MAXX = "maxx";
 const std::string SceneParser::MAXY = "maxy";
 const std::string SceneParser::SPLITSLONGITUDE = "splitsLongitude";
 const std::string SceneParser::SPLITSLATITUDE = "splitsLatitude";
+const std::string SceneParser::ISTRANSPARENT = "isTransparent";
 const std::string SceneParser::ITEMS = "items";
 const std::string SceneParser::STATUS = "status";
 const std::string SceneParser::NAME = "name";
@@ -140,6 +141,8 @@ void SceneParser::parserJSONWMSLayer(LayerSet* layerSet, const JSONObject* jsonL
     const int jsonSplitsLat = atoi(jsonLayer->getAsString(SPLITSLATITUDE)->value().c_str());
     const int jsonSplitsLon = atoi(jsonLayer->getAsString(SPLITSLONGITUDE)->value().c_str());
   
+    bool transparent = isTransparent(jsonLayer->getAsString(ISTRANSPARENT));
+  
     LevelTileCondition* levelTileCondition = getLevelCondition(jsonLayer->getAsString(MINLEVEL),jsonLayer->getAsString(MAXLEVEL));
     Sector sector = getSector(jsonLayer->getAsObject(BBOX));
   
@@ -172,7 +175,7 @@ void SceneParser::parserJSONWMSLayer(LayerSet* layerSet, const JSONObject* jsonL
                                       "image/png",
                                       "EPSG:4326",
                                       "",
-                                      true,
+                                      transparent,
                                       levelTileCondition, TimeInterval::fromDays(30), new LayerTilesRenderParameters(sector,jsonSplitsLat,jsonSplitsLon,16,Vector2I(256,256),Vector2I(16,16),false));
     layerSet->addLayer(wmsLayer);
 }
@@ -184,6 +187,8 @@ void SceneParser::parserJSONTMSLayer(LayerSet* layerSet, const JSONObject* jsonL
   
   const int jsonSplitsLat = atoi(jsonLayer->getAsString(SPLITSLATITUDE)->value().c_str());
   const int jsonSplitsLon = atoi(jsonLayer->getAsString(SPLITSLONGITUDE)->value().c_str());
+  
+  bool transparent = isTransparent(jsonLayer->getAsString(ISTRANSPARENT));
   
   LevelTileCondition* levelTileCondition = getLevelCondition(jsonLayer->getAsString(MINLEVEL),jsonLayer->getAsString(MAXLEVEL));
   Sector sector = getSector(jsonLayer->getAsObject(BBOX));
@@ -209,7 +214,7 @@ void SceneParser::parserJSONTMSLayer(LayerSet* layerSet, const JSONObject* jsonL
                                 sector,
                                 "image/jpeg",
                                 "EPSG:4326",
-                                true,
+                                transparent,
                                 levelTileCondition,
                                 TimeInterval::fromDays(30), new LayerTilesRenderParameters(sector,jsonSplitsLat,jsonSplitsLon,16,Vector2I(256,256),Vector2I(16,16),false));
 
@@ -232,6 +237,16 @@ LevelTileCondition* SceneParser::getLevelCondition(const JSONString* jsonMinLeve
     }
   }
   return levelTileCondition;
+}
+
+bool SceneParser::isTransparent(const JSONString* jsonIsTransparent){
+  bool isTransparent = true;
+  if(jsonIsTransparent!=NULL){
+    if(jsonIsTransparent->value() == "false"){
+      isTransparent = false;
+    }
+  }
+  return isTransparent;
 }
 
 Sector SceneParser::getSector(const JSONObject* jsonBBOX){
