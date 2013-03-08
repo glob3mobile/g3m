@@ -163,6 +163,8 @@ public class TileTextureBuilder extends RCObject
   public final RectangleI getImageRectangleInTexture(Sector wholeSector, Sector imageSector)
   {
 
+    final IMathUtils mu = IMathUtils.instance();
+
     final Vector2D lowerFactor = wholeSector.getUVCoordinates(imageSector.lower());
 
     final double widthFactor = imageSector.getDeltaLongitude().div(wholeSector.getDeltaLongitude());
@@ -171,7 +173,7 @@ public class TileTextureBuilder extends RCObject
     final int textureWidth = _tileTextureResolution._x;
     final int textureHeight = _tileTextureResolution._y;
 
-    return new RectangleI((int) IMathUtils.instance().round(lowerFactor._x * textureWidth), (int) IMathUtils.instance().round((1.0 - lowerFactor._y) * textureHeight), (int) IMathUtils.instance().round(widthFactor * textureWidth), (int) IMathUtils.instance().round(heightFactor * textureHeight));
+    return new RectangleI((int) mu.round(lowerFactor._x * textureWidth), (int) mu.round((1.0 - lowerFactor._y) * textureHeight), (int) mu.round(widthFactor * textureWidth), (int) mu.round(heightFactor * textureHeight));
   }
 
   public final void composeAndUploadTexture()

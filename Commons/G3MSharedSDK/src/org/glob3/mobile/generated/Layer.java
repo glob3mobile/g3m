@@ -52,7 +52,7 @@ public abstract class Layer
     }
   }
 
-  public Layer(LayerCondition condition, String name, TimeInterval timeToCache, LayerTilesRenderParameters parameters)
+  protected Layer(LayerCondition condition, String name, TimeInterval timeToCache, LayerTilesRenderParameters parameters)
   {
      _condition = condition;
      _name = name;
@@ -62,6 +62,7 @@ public abstract class Layer
      _parameters = parameters;
 
   }
+
 
   public void setEnable(boolean enable)
   {
