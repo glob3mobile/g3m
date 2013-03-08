@@ -341,4 +341,18 @@ public final class MathUtils_Android
       return (float) Math.floor(f);
    }
 
+
+   @Override
+   public float min(final float f1,
+                    final float f2) {
+      return Math.min(f1, f2);
+   }
+
+
+   @Override
+   public float max(final float f1,
+                    final float f2) {
+      return Math.max(f1, f2);
+   }
+
 }

@@ -14,7 +14,7 @@
 class MercatorTiledLayer : public Layer {
 private:
   const std::string              _domain;
-#if C_CODE
+#ifdef C_CODE
   const std::vector<std::string> _subdomains;
 #endif
 #ifdef JAVA_CODE
