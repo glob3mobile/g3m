@@ -20,7 +20,13 @@ package org.glob3.mobile.generated;
 public class MercatorTiledLayer extends Layer
 {
   private final String _domain;
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if C_CODE
   private final java.util.ArrayList<String> _subdomains = new java.util.ArrayList<String>();
+//#endif
+  private final java.util.ArrayList<String> _subdomains;
+  private final String _imageFormat;
+
   private final Sector _sector ;
   private final int _initialMercatorLevel;
 
@@ -37,11 +43,12 @@ public class MercatorTiledLayer extends Layer
   
    */
   
-  public MercatorTiledLayer(String name, String domain, java.util.ArrayList<String> subdomains, TimeInterval timeToCache, Sector sector, int initialMercatorLevel, int maxMercatorLevel, LayerCondition condition)
+  public MercatorTiledLayer(String name, String domain, java.util.ArrayList<String> subdomains, String imageFormat, TimeInterval timeToCache, Sector sector, int initialMercatorLevel, int maxMercatorLevel, LayerCondition condition)
   {
      super(condition, name, timeToCache, new LayerTilesRenderParameters(Sector.fullSphere(), (int) IMathUtils.instance().pow(2.0, initialMercatorLevel), (int) IMathUtils.instance().pow(2.0, initialMercatorLevel), maxMercatorLevel - initialMercatorLevel, new Vector2I(256, 256), LayerTilesRenderParameters.defaultTileMeshResolution(), true));
      _domain = domain;
      _subdomains = subdomains;
+     _imageFormat = imageFormat;
      _sector = new Sector(sector);
      _initialMercatorLevel = initialMercatorLevel;
   
@@ -98,7 +105,8 @@ public class MercatorTiledLayer extends Layer
     isb.addString("/");
   
     isb.addInt(row);
-    isb.addString(".png");
+    isb.addString(".");
+    isb.addString(_imageFormat);
   
     final String path = isb.getString();
   
