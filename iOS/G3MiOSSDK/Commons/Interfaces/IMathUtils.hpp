@@ -36,56 +36,56 @@ public:
   virtual double halfPi() const = 0;
 
   virtual bool isNan(double v) const = 0;
-  virtual bool isNan(float v) const = 0;
+  virtual bool isNan(float v)  const = 0;
 
   virtual double NanD() const = 0;
   virtual float  NanF() const = 0;
 
   virtual double sin(double v) const = 0;
-  virtual float  sin(float v) const = 0;
+  virtual float  sin(float v)  const = 0;
 
   virtual double sinh(double v) const = 0;
-  virtual float  sinh(float v) const = 0;
+  virtual float  sinh(float v)  const = 0;
 
   virtual double asin(double v) const = 0;
-  virtual float  asin(float v) const = 0;
+  virtual float  asin(float v)  const = 0;
 
   virtual double cos(double v) const = 0;
-  virtual float  cos(float v) const = 0;
+  virtual float  cos(float v)  const = 0;
 
   virtual double acos(double v) const = 0;
-  virtual float  acos(float v) const = 0;
+  virtual float  acos(float v)  const = 0;
 
   virtual double tan(double v) const = 0;
-  virtual float  tan(float v) const = 0;
+  virtual float  tan(float v)  const = 0;
 
   virtual double atan(double v) const = 0;
-  virtual float  atan(float v) const = 0;
+  virtual float  atan(float v)  const = 0;
 
   virtual double atan2(double u, double v) const = 0;
-  virtual float  atan2(float u, float v) const = 0;
+  virtual float  atan2(float u,  float v)  const = 0;
 
   virtual double round(double v) const = 0;
-  virtual float  round(float v) const = 0;
+  virtual float  round(float v)  const = 0;
 
-  virtual int    abs(int v) const = 0;
+  virtual int    abs(int v)    const = 0;
   virtual double abs(double v) const = 0;
-  virtual float  abs(float v) const = 0;
+  virtual float  abs(float v)  const = 0;
 
   virtual double sqrt(double v) const = 0;
-  virtual float  sqrt(float v) const = 0;
+  virtual float  sqrt(float v)  const = 0;
 
   virtual double pow(double v, double u) const = 0;
-  virtual float  pow(float v, float u) const = 0;
+  virtual float  pow(float v, float u)  const = 0;
 
   virtual double exp(double v) const = 0;
-  virtual float  exp(float v) const = 0;
+  virtual float  exp(float v)  const = 0;
 
   virtual double log10(double v) const = 0;
-  virtual float  log10(float v) const = 0;
+  virtual float  log10(float v)  const = 0;
 
   virtual double log(double v) const = 0;
-  virtual float  log(float v) const = 0;
+  virtual float  log(float v)  const = 0;
 
   virtual int maxInt32() const = 0;
   virtual int minInt32() const = 0;
@@ -100,13 +100,24 @@ public:
   virtual float minFloat() const = 0;
 
   virtual int toInt(double value) const = 0;
-  virtual int toInt(float value) const = 0;
+  virtual int toInt(float value)  const = 0;
 
   virtual double min(double d1, double d2) const = 0;
+  virtual float  min(float f1,  float f2)  const = 0;
+
   virtual double max(double d1, double d2) const = 0;
+  virtual float  max(float f1,  float f2)  const = 0;
+
+  virtual double max(double d1, double d2, double d3) const {
+    return max(max(d1, d2), d3);
+  }
+
+  virtual float max(float f1, float f2, float f3)  const {
+    return max(max(f1, f2), f3);
+  }
 
   virtual double floor(double d) const = 0;
-  virtual float  floor(float  f) const = 0;
+  virtual float  floor(float f)  const = 0;
 
   virtual double linearInterpolation(double from,
                                      double to,
@@ -156,7 +167,23 @@ public:
     if (value > max) return max;
     return value;
   }
-  
+
+  virtual bool isEquals(double x, double y) const {
+    if (x == y) {
+      return true;
+    }
+    const double epsilon = 1e-8;
+    return abs(x - y) <= epsilon * max(abs(x), abs(y), 1.0);
+  }
+
+  virtual bool isEquals(float x, float y) const {
+    if (x == y) {
+      return true;
+    }
+    const float epsilon = 1e-8f;
+    return abs(x - y) <= epsilon * max(abs(x), abs(y), 1.0f);
+  }
+
 };
 
 #endif

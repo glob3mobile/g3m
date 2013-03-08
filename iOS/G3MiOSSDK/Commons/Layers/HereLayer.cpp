@@ -57,7 +57,6 @@ std::vector<Petition*> HereLayer::createTileMapPetitions(const G3MRenderContext*
     return petitions;
   }
 
-  const int tileLevel = tile->getLevel();
 
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   
@@ -94,7 +93,7 @@ std::vector<Petition*> HereLayer::createTileMapPetitions(const G3MRenderContext*
 //  isb->addString("&nomrk");
 
   isb->addString("&z=");
-  const int level = tileLevel + _initialHereLevel;
+  const int level = tile->getLevel() + _initialHereLevel;
   isb->addInt(level);
 
 //  isb->addString("&t=3");

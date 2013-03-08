@@ -1,0 +1,40 @@
+//
+//  MercatorTiledLayer.hpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 3/8/13.
+//
+//
+
+#ifndef __G3MiOSSDK__MercatorTiledLayer__
+#define __G3MiOSSDK__MercatorTiledLayer__
+
+#include "Layer.hpp"
+
+class MercatorTiledLayer : public Layer {
+private:
+  const std::string              _domain;
+  const std::vector<std::string> _subdomains;
+  const Sector _sector;
+  const int    _initialMercatorLevel;
+
+
+public:
+  MercatorTiledLayer(const std::string& name,
+                     const std::string& domain,
+                     const std::vector<std::string>& subdomains,
+                     const TimeInterval& timeToCache,
+                     const Sector sector,
+                     int initialMercatorLevel,
+                     int maxMercatorLevel,
+                     LayerCondition* condition);
+
+  URL getFeatureInfoURL(const Geodetic2D& position,
+                        const Sector& sector) const;
+
+  std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
+                                                const Tile* tile) const;
+
+};
+
+#endif
