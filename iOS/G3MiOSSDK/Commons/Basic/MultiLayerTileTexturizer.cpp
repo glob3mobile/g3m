@@ -338,6 +338,8 @@ public:
 
   RectangleI* getImageRectangleInTexture(const Sector& wholeSector,
                                          const Sector& imageSector) const {
+
+    const IMathUtils* mu = IMathUtils::instance();
     
     const Vector2D lowerFactor = wholeSector.getUVCoordinates(imageSector.lower());
 
@@ -347,10 +349,10 @@ public:
     const int textureWidth  = _tileTextureResolution._x;
     const int textureHeight = _tileTextureResolution._y;
 
-    return new RectangleI((int) IMathUtils::instance()->round( lowerFactor._x         * textureWidth ),
-                          (int) IMathUtils::instance()->round( (1.0 - lowerFactor._y) * textureHeight ),
-                          (int) IMathUtils::instance()->round( widthFactor            * textureWidth ),
-                          (int) IMathUtils::instance()->round( heightFactor           * textureHeight ));
+    return new RectangleI((int) mu->round( lowerFactor._x         * textureWidth ),
+                          (int) mu->round( (1.0 - lowerFactor._y) * textureHeight ),
+                          (int) mu->round( widthFactor            * textureWidth ),
+                          (int) mu->round( heightFactor           * textureHeight ));
   }
 
   void composeAndUploadTexture() {

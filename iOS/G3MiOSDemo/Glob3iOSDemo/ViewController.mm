@@ -60,6 +60,7 @@
 #include "HereLayer.hpp"
 #include "MapQuestLayer.hpp"
 #include "MapBoxLayer.hpp"
+#include "GoogleMapsLayer.hpp"
 
 #include "G3MWidget.hpp"
 
@@ -425,13 +426,13 @@ public:
     layerSet->addLayer(mapQuestLayer);
   }
 
-  const bool useMapBox = true;
-  if (useMapBox) {
-    MapBoxLayer* mapBoxLayer = new MapBoxLayer("dgd.map-v93trj8v",
-                                               TimeInterval::fromDays(30));
-
-    layerSet->addLayer(mapBoxLayer);
-  }
+//  const bool useMapBox = false;
+//  if (useMapBox) {
+//    MapBoxLayer* mapBoxLayer = new MapBoxLayer("dgd.map-v93trj8v",
+//                                               TimeInterval::fromDays(30));
+//
+//    layerSet->addLayer(mapBoxLayer);
+//  }
 
   const bool useHere = false;
   if (useHere) {
@@ -440,6 +441,14 @@ public:
                                          TimeInterval::fromDays(30));
 
     layerSet->addLayer(hereLayer);
+  }
+
+  const bool useGoogleMaps = true;
+  if (useGoogleMaps) {
+    GoogleMapsLayer* googleMapsLayer = new GoogleMapsLayer("AIzaSyC9pospBjqsfpb0Y9N3E3uNMD8ELoQVOrc",
+                                                           TimeInterval::fromDays(30));
+
+    layerSet->addLayer(googleMapsLayer);
   }
 
   const bool blueMarble = false;

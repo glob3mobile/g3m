@@ -93,6 +93,8 @@
 		CF75C39F16EA4B0100F7EE9F /* MapQuestLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF75C39D16EA4AB100F7EE9F /* MapQuestLayer.hpp */; };
 		CF75C3A216EA54CC00F7EE9F /* MapBoxLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF75C3A016EA54CC00F7EE9F /* MapBoxLayer.cpp */; };
 		CF75C3A316EA57C700F7EE9F /* MapBoxLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF75C3A116EA54CC00F7EE9F /* MapBoxLayer.hpp */; };
+		CF75C3A616EA621D00F7EE9F /* GoogleMapsLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF75C3A416EA621D00F7EE9F /* GoogleMapsLayer.cpp */; };
+		CF75C3A716EA62B800F7EE9F /* GoogleMapsLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF75C3A516EA621D00F7EE9F /* GoogleMapsLayer.hpp */; };
 		CF7A78EC159B9BE300074422 /* MutableVector2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7A78EA159B9BE300074422 /* MutableVector2D.cpp */; };
 		CF7E626115F7D6FC0086B71D /* FloatBufferBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7E625F15F7D6FC0086B71D /* FloatBufferBuilder.cpp */; };
 		CF7E626615F7DD740086B71D /* IntBufferBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7E626415F7DD740086B71D /* IntBufferBuilder.cpp */; };
@@ -427,6 +429,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF75C3A716EA62B800F7EE9F /* GoogleMapsLayer.hpp in CopyFiles */,
 				CF75C3A316EA57C700F7EE9F /* MapBoxLayer.hpp in CopyFiles */,
 				CF75C39F16EA4B0100F7EE9F /* MapQuestLayer.hpp in CopyFiles */,
 				CF75C39A16EA3BD100F7EE9F /* MercatorUtils.hpp in CopyFiles */,
@@ -832,6 +835,8 @@
 		CF75C39D16EA4AB100F7EE9F /* MapQuestLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MapQuestLayer.hpp; sourceTree = "<group>"; };
 		CF75C3A016EA54CC00F7EE9F /* MapBoxLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MapBoxLayer.cpp; sourceTree = "<group>"; };
 		CF75C3A116EA54CC00F7EE9F /* MapBoxLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MapBoxLayer.hpp; sourceTree = "<group>"; };
+		CF75C3A416EA621D00F7EE9F /* GoogleMapsLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GoogleMapsLayer.cpp; sourceTree = "<group>"; };
+		CF75C3A516EA621D00F7EE9F /* GoogleMapsLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GoogleMapsLayer.hpp; sourceTree = "<group>"; };
 		CF7A78EA159B9BE300074422 /* MutableVector2D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MutableVector2D.cpp; path = Commons/Geometry/MutableVector2D.cpp; sourceTree = "<group>"; };
 		CF7A78EB159B9BE300074422 /* MutableVector2D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = MutableVector2D.hpp; path = Commons/Geometry/MutableVector2D.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF7E625F15F7D6FC0086B71D /* FloatBufferBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = FloatBufferBuilder.cpp; path = Commons/Basic/FloatBufferBuilder.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -1566,6 +1571,8 @@
 			children = (
 				A74072D0161EEEB900182A39 /* BingLayer.cpp */,
 				A74072CE161EEEA300182A39 /* BingLayer.hpp */,
+				CF75C3A416EA621D00F7EE9F /* GoogleMapsLayer.cpp */,
+				CF75C3A516EA621D00F7EE9F /* GoogleMapsLayer.hpp */,
 				CF75C39316E92CDF00F7EE9F /* HereLayer.cpp */,
 				CF75C39416E92CDF00F7EE9F /* HereLayer.hpp */,
 				CFB72A3715E65BAC00A5BAF4 /* Layer.cpp */,
@@ -1943,6 +1950,7 @@
 				CF75C39916EA3B4500F7EE9F /* MercatorTiledLayer.cpp in Sources */,
 				CF75C39E16EA4AB100F7EE9F /* MapQuestLayer.cpp in Sources */,
 				CF75C3A216EA54CC00F7EE9F /* MapBoxLayer.cpp in Sources */,
+				CF75C3A616EA621D00F7EE9F /* GoogleMapsLayer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

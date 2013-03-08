@@ -43,7 +43,6 @@ protected:
 
   void notifyChanges() const;
 
-public:
   Layer(LayerCondition* condition,
         const std::string& name,
         const TimeInterval& timeToCache,
@@ -57,6 +56,8 @@ public:
   {
 
   }
+
+public:
 
   virtual void setEnable(bool enable) {
     if (enable != _enable) {
