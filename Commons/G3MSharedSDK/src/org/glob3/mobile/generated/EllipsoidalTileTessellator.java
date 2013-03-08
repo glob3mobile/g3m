@@ -177,7 +177,8 @@ public class EllipsoidalTileTessellator extends TileTessellator
   
     Color color = Color.newFromRGBA((float) 1.0, (float) 1.0, (float) 1.0, (float) 1.0);
   
-    return new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, color); //debug ? GLPrimitive::lineStrip() : GLPrimitive::triangleStrip(),
+    return new IndexedMesh(debug ? GLPrimitive.lineStrip() : GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, color);
+                           //GLPrimitive::triangleStrip(),
                            //GLPrimitive::lineStrip(),
   }
 

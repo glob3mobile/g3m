@@ -12,6 +12,7 @@ public class SceneParser
     private static final String MAXY = "maxy";
     private static final String SPLITSLONGITUDE = "splitsLongitude";
     private static final String SPLITSLATITUDE = "splitsLatitude";
+    private static final String ISTRANSPARENT = "isTransparent";
     private static final String ITEMS = "items";
     private static final String MINLEVEL = "minlevel";
     private static final String MAXLEVEL = "maxlevel";
@@ -126,6 +127,8 @@ public class SceneParser
         final int jsonSplitsLat = Integer.parseInt(jsonLayer.getAsString(SPLITSLATITUDE).value());
         final int jsonSplitsLon = Integer.parseInt(jsonLayer.getAsString(SPLITSLONGITUDE).value());
     
+        boolean transparent = isTransparent(jsonLayer.getAsString(ISTRANSPARENT));
+    
         LevelTileCondition levelTileCondition = getLevelCondition(jsonLayer.getAsString(MINLEVEL), jsonLayer.getAsString(MAXLEVEL));
         Sector sector = getSector(jsonLayer.getAsObject(BBOX));
     
@@ -156,7 +159,7 @@ public class SceneParser
             wmsVersion = WMSServerVersion.WMS_1_3_0;
         }
     
-        WMSLayer wmsLayer = new WMSLayer(URL.escape(layersSecuence), new URL(jsonURL, false), wmsVersion, sector, "image/png", "EPSG:4326", "", true, levelTileCondition, TimeInterval.fromDays(30), new LayerTilesRenderParameters(sector,jsonSplitsLat,jsonSplitsLon,16,new Vector2I(256,256),new Vector2I(16,16),false));
+        WMSLayer wmsLayer = new WMSLayer(URL.escape(layersSecuence), new URL(jsonURL, false), wmsVersion, sector, "image/png", "EPSG:4326", "", transparent, levelTileCondition, TimeInterval.fromDays(30), new LayerTilesRenderParameters(sector,jsonSplitsLat,jsonSplitsLon,16,new Vector2I(256,256),new Vector2I(16,16),false));
         layerSet.addLayer(wmsLayer);
     }
     private void parserJSONTMSLayer(LayerSet layerSet, JSONObject jsonLayer)
@@ -170,6 +173,8 @@ public class SceneParser
     
       final int jsonSplitsLat = Integer.parseInt(jsonLayer.getAsString(SPLITSLATITUDE).value());
       final int jsonSplitsLon = Integer.parseInt(jsonLayer.getAsString(SPLITSLONGITUDE).value());
+    
+      boolean transparent = isTransparent(jsonLayer.getAsString(ISTRANSPARENT));
     
       LevelTileCondition levelTileCondition = getLevelCondition(jsonLayer.getAsString(MINLEVEL), jsonLayer.getAsString(MAXLEVEL));
       Sector sector = getSector(jsonLayer.getAsObject(BBOX));
@@ -194,7 +199,7 @@ public class SceneParser
       if (layersName != null)
          layersName.dispose();
     
-      TMSLayer tmsLayer = new TMSLayer(URL.escape(layersSecuence), new URL(jsonURL, false), sector, "image/jpeg", "EPSG:4326", true, levelTileCondition, TimeInterval.fromDays(30), new LayerTilesRenderParameters(sector,jsonSplitsLat,jsonSplitsLon,16,new Vector2I(256,256),new Vector2I(16,16),false));
+      TMSLayer tmsLayer = new TMSLayer(URL.escape(layersSecuence), new URL(jsonURL, false), sector, "image/jpeg", "EPSG:4326", transparent, levelTileCondition, TimeInterval.fromDays(30), new LayerTilesRenderParameters(sector,jsonSplitsLat,jsonSplitsLon,16,new Vector2I(256,256),new Vector2I(16,16),false));
     
       layerSet.addLayer(tmsLayer);
     }
@@ -352,6 +357,18 @@ public class SceneParser
         }
       }
       return Sector.fullSphere();
+    }
+    private boolean isTransparent(JSONString jsonIsTransparent)
+    {
+      boolean isTransparent = true;
+      if(jsonIsTransparent!=null)
+      {
+        if(jsonIsTransparent.value().equals("false"))
+        {
+          isTransparent = false;
+        }
+      }
+      return isTransparent;
     }
 
     protected SceneParser()
