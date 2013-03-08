@@ -19,6 +19,7 @@ package org.glob3.mobile.generated;
 
 public class MercatorTiledLayer extends Layer
 {
+  private final String _protocol;
   private final String _domain;
   private final java.util.ArrayList<String> _subdomains;
   private final String _imageFormat;
@@ -39,9 +40,10 @@ public class MercatorTiledLayer extends Layer
   
    */
   
-  public MercatorTiledLayer(String name, String domain, java.util.ArrayList<String> subdomains, String imageFormat, TimeInterval timeToCache, Sector sector, int initialMercatorLevel, int maxMercatorLevel, LayerCondition condition)
+  public MercatorTiledLayer(String name, String protocol, String domain, java.util.ArrayList<String> subdomains, String imageFormat, TimeInterval timeToCache, Sector sector, int initialMercatorLevel, int maxMercatorLevel, LayerCondition condition)
   {
      super(condition, name, timeToCache, new LayerTilesRenderParameters(Sector.fullSphere(), (int) IMathUtils.instance().pow(2.0, initialMercatorLevel), (int) IMathUtils.instance().pow(2.0, initialMercatorLevel), maxMercatorLevel - initialMercatorLevel, new Vector2I(256, 256), LayerTilesRenderParameters.defaultTileMeshResolution(), true));
+     _protocol = protocol;
      _domain = domain;
      _subdomains = subdomains;
      _imageFormat = imageFormat;
@@ -81,7 +83,7 @@ public class MercatorTiledLayer extends Layer
   
     IStringBuilder isb = IStringBuilder.newStringBuilder();
   
-    isb.addString("http://");
+    isb.addString(_protocol);
   
     final int subdomainsSize = _subdomains.size();
     if (subdomainsSize > 0)

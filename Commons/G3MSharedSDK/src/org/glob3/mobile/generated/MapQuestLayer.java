@@ -37,7 +37,7 @@ public class MapQuestLayer extends MercatorTiledLayer
   private MapQuestLayer(String name, String domain, java.util.ArrayList<String> subdomains, int maxMercatorLevel, TimeInterval timeToCache, LayerCondition condition) //initialMapQuestLevel,
                 //int initialMapQuestLevel,
   {
-     super(name, domain, subdomains, "jpg", timeToCache, Sector.fullSphere(), 1, maxMercatorLevel, condition);
+     super(name, "http://", domain, subdomains, "jpg", timeToCache, Sector.fullSphere(), 1, maxMercatorLevel, condition);
 
   }
 
