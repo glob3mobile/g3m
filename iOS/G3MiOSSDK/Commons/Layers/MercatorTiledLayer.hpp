@@ -13,7 +13,8 @@
 
 class MercatorTiledLayer : public Layer {
 private:
-  const std::string              _domain;
+  const std::string _protocol;
+  const std::string _domain;
 #ifdef C_CODE
   const std::vector<std::string> _subdomains;
 #endif
@@ -28,6 +29,7 @@ private:
 
 public:
   MercatorTiledLayer(const std::string& name,
+                     const std::string& protocol,
                      const std::string& domain,
                      const std::vector<std::string>& subdomains,
                      const std::string&              imageFormat,

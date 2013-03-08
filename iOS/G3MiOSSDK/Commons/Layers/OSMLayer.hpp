@@ -27,6 +27,7 @@ public:
            //int initialOSMLevel = 1,
            LayerCondition* condition = NULL) :
   MercatorTiledLayer("OpenStreetMap",
+                     "http://",
                      "tile.openstreetmap.org",
                      getSubdomains(),
                      "png",

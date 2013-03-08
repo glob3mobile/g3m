@@ -35,6 +35,7 @@ private:
                 //int initialMapQuestLevel,
                 LayerCondition* condition) :
   MercatorTiledLayer(name,
+                     "http://",
                      domain,
                      subdomains,
                      "jpg",

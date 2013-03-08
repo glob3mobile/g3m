@@ -26,6 +26,7 @@
  */
 
 MercatorTiledLayer::MercatorTiledLayer(const std::string& name,
+                                       const std::string& protocol,
                                        const std::string& domain,
                                        const std::vector<std::string>& subdomains,
                                        const std::string&              imageFormat,
@@ -44,6 +45,7 @@ Layer(condition,
                                      Vector2I(256, 256),
                                      LayerTilesRenderParameters::defaultTileMeshResolution(),
                                      true)),
+_protocol(protocol),
 _domain(domain),
 _subdomains(subdomains),
 _imageFormat(imageFormat),
@@ -83,7 +85,7 @@ std::vector<Petition*> MercatorTiledLayer::createTileMapPetitions(const G3MRende
 
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
 
-  isb->addString("http://");
+  isb->addString(_protocol);
 
   const int subdomainsSize = _subdomains.size();
   if (subdomainsSize > 0) {

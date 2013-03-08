@@ -59,6 +59,7 @@
 #include "OSMLayer.hpp"
 #include "HereLayer.hpp"
 #include "MapQuestLayer.hpp"
+#include "MapBoxLayer.hpp"
 
 #include "G3MWidget.hpp"
 
@@ -417,11 +418,19 @@ public:
     layerSet->addLayer(mapQuestLayer);
   }
 
-  const bool useMapQuestOpenAerial = true;
+  const bool useMapQuestOpenAerial = false;
   if (useMapQuestOpenAerial) {
     MapQuestLayer* mapQuestLayer = MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30));
 
     layerSet->addLayer(mapQuestLayer);
+  }
+
+  const bool useMapBox = true;
+  if (useMapBox) {
+    MapBoxLayer* mapBoxLayer = new MapBoxLayer("dgd.map-v93trj8v",
+                                               TimeInterval::fromDays(30));
+
+    layerSet->addLayer(mapBoxLayer);
   }
 
   const bool useHere = false;
