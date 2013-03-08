@@ -58,6 +58,7 @@
 #include "IDownloader.hpp"
 #include "OSMLayer.hpp"
 #include "HereLayer.hpp"
+#include "MapQuestLayer.hpp"
 
 #include "G3MWidget.hpp"
 
@@ -402,11 +403,25 @@ public:
 {
   LayerSet* layerSet = new LayerSet();
 
-  const bool useOSM = true;
+  const bool useOSM = false;
   if (useOSM) {
     OSMLayer* osmLayer = new OSMLayer(TimeInterval::fromDays(30));
 
     layerSet->addLayer(osmLayer);
+  }
+
+  const bool useMapQuestOSM = false;
+  if (useMapQuestOSM) {
+    MapQuestLayer* mapQuestLayer = MapQuestLayer::newOSM(TimeInterval::fromDays(30));
+
+    layerSet->addLayer(mapQuestLayer);
+  }
+
+  const bool useMapQuestOpenAerial = true;
+  if (useMapQuestOpenAerial) {
+    MapQuestLayer* mapQuestLayer = MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30));
+
+    layerSet->addLayer(mapQuestLayer);
   }
 
   const bool useHere = false;

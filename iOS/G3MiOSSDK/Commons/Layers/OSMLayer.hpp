@@ -29,6 +29,7 @@ public:
   MercatorTiledLayer("OpenStreetMap",
                      "tile.openstreetmap.org",
                      getSubdomains(),
+                     "png",
                      timeToCache,
                      Sector::fullSphere(),
                      1, //initialOSMLevel,

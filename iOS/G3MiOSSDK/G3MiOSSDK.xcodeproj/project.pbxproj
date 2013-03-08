@@ -89,6 +89,8 @@
 		CF75C39916EA3B4500F7EE9F /* MercatorTiledLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF75C39716EA3B4500F7EE9F /* MercatorTiledLayer.cpp */; };
 		CF75C39A16EA3BD100F7EE9F /* MercatorUtils.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFEBDF1D16E8C9C80063B49F /* MercatorUtils.hpp */; };
 		CF75C39B16EA3BD100F7EE9F /* MercatorTiledLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF75C39816EA3B4500F7EE9F /* MercatorTiledLayer.hpp */; };
+		CF75C39E16EA4AB100F7EE9F /* MapQuestLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF75C39C16EA4AB100F7EE9F /* MapQuestLayer.cpp */; };
+		CF75C39F16EA4B0100F7EE9F /* MapQuestLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF75C39D16EA4AB100F7EE9F /* MapQuestLayer.hpp */; };
 		CF7A78EC159B9BE300074422 /* MutableVector2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7A78EA159B9BE300074422 /* MutableVector2D.cpp */; };
 		CF7E626115F7D6FC0086B71D /* FloatBufferBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7E625F15F7D6FC0086B71D /* FloatBufferBuilder.cpp */; };
 		CF7E626615F7DD740086B71D /* IntBufferBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7E626415F7DD740086B71D /* IntBufferBuilder.cpp */; };
@@ -423,6 +425,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF75C39F16EA4B0100F7EE9F /* MapQuestLayer.hpp in CopyFiles */,
 				CF75C39A16EA3BD100F7EE9F /* MercatorUtils.hpp in CopyFiles */,
 				CF75C39B16EA3BD100F7EE9F /* MercatorTiledLayer.hpp in CopyFiles */,
 				CF75C39616E92D1300F7EE9F /* HereLayer.hpp in CopyFiles */,
@@ -822,6 +825,8 @@
 		CF75C39416E92CDF00F7EE9F /* HereLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = HereLayer.hpp; sourceTree = "<group>"; };
 		CF75C39716EA3B4500F7EE9F /* MercatorTiledLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MercatorTiledLayer.cpp; sourceTree = "<group>"; };
 		CF75C39816EA3B4500F7EE9F /* MercatorTiledLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MercatorTiledLayer.hpp; sourceTree = "<group>"; };
+		CF75C39C16EA4AB100F7EE9F /* MapQuestLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MapQuestLayer.cpp; sourceTree = "<group>"; };
+		CF75C39D16EA4AB100F7EE9F /* MapQuestLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MapQuestLayer.hpp; sourceTree = "<group>"; };
 		CF7A78EA159B9BE300074422 /* MutableVector2D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MutableVector2D.cpp; path = Commons/Geometry/MutableVector2D.cpp; sourceTree = "<group>"; };
 		CF7A78EB159B9BE300074422 /* MutableVector2D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = MutableVector2D.hpp; path = Commons/Geometry/MutableVector2D.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF7E625F15F7D6FC0086B71D /* FloatBufferBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = FloatBufferBuilder.cpp; path = Commons/Basic/FloatBufferBuilder.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -1566,6 +1571,8 @@
 				D87EC5C315BEB12F00E38C36 /* LayerSet.hpp */,
 				CFB72A3B15E65DBB00A5BAF4 /* LevelTileCondition.cpp */,
 				CFB72A3C15E65DBC00A5BAF4 /* LevelTileCondition.hpp */,
+				CF75C39C16EA4AB100F7EE9F /* MapQuestLayer.cpp */,
+				CF75C39D16EA4AB100F7EE9F /* MapQuestLayer.hpp */,
 				CF75C39716EA3B4500F7EE9F /* MercatorTiledLayer.cpp */,
 				CF75C39816EA3B4500F7EE9F /* MercatorTiledLayer.hpp */,
 				CFD15C4216E78C7D004DC360 /* OSMLayer.cpp */,
@@ -1927,6 +1934,7 @@
 				E87557C716E915D10031FBB3 /* TMSLayer.cpp in Sources */,
 				CF75C39516E92CDF00F7EE9F /* HereLayer.cpp in Sources */,
 				CF75C39916EA3B4500F7EE9F /* MercatorTiledLayer.cpp in Sources */,
+				CF75C39E16EA4AB100F7EE9F /* MapQuestLayer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

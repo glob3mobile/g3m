@@ -28,6 +28,7 @@
 MercatorTiledLayer::MercatorTiledLayer(const std::string& name,
                                        const std::string& domain,
                                        const std::vector<std::string>& subdomains,
+                                       const std::string&              imageFormat,
                                        const TimeInterval& timeToCache,
                                        const Sector sector,
                                        int initialMercatorLevel,
@@ -45,6 +46,7 @@ Layer(condition,
                                      true)),
 _domain(domain),
 _subdomains(subdomains),
+_imageFormat(imageFormat),
 _sector(sector),
 _initialMercatorLevel(initialMercatorLevel)
 {
@@ -100,7 +102,8 @@ std::vector<Petition*> MercatorTiledLayer::createTileMapPetitions(const G3MRende
   isb->addString("/");
 
   isb->addInt(row);
-  isb->addString(".png");
+  isb->addString(".");
+  isb->addString(_imageFormat);
 
   const std::string path = isb->getString();
 
