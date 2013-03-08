@@ -20,10 +20,6 @@ package org.glob3.mobile.generated;
 public class MercatorTiledLayer extends Layer
 {
   private final String _domain;
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if C_CODE
-  private final java.util.ArrayList<String> _subdomains = new java.util.ArrayList<String>();
-//#endif
   private final java.util.ArrayList<String> _subdomains;
   private final String _imageFormat;
 
@@ -92,7 +88,7 @@ public class MercatorTiledLayer extends Layer
     {
       // select subdomain based on fixed data (instead of round-robin) to be cache friendly
       final int subdomainsIndex = (level + column + row) % subdomainsSize;
-      isb.addString(_subdomains.get(subdomainsIndex));
+      isb.addString(_subdomains[subdomainsIndex]);
     }
   
     isb.addString(_domain);
