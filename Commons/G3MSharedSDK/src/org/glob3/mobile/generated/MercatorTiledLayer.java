@@ -88,7 +88,7 @@ public class MercatorTiledLayer extends Layer
     {
       // select subdomain based on fixed data (instead of round-robin) to be cache friendly
       final int subdomainsIndex = (level + column + row) % subdomainsSize;
-      isb.addString(_subdomains[subdomainsIndex]);
+      isb.addString(_subdomains.get(subdomainsIndex));
     }
   
     isb.addString(_domain);
