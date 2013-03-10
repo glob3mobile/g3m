@@ -61,6 +61,7 @@
 #include "MapQuestLayer.hpp"
 #include "MapBoxLayer.hpp"
 #include "GoogleMapsLayer.hpp"
+#include "BingMapsLayer.hpp"
 
 #include "G3MWidget.hpp"
 
@@ -443,12 +444,20 @@ public:
     layerSet->addLayer(hereLayer);
   }
 
-  const bool useGoogleMaps = true;
-  if (useGoogleMaps) {
-    GoogleMapsLayer* googleMapsLayer = new GoogleMapsLayer("AIzaSyC9pospBjqsfpb0Y9N3E3uNMD8ELoQVOrc",
-                                                           TimeInterval::fromDays(30));
+//  const bool useGoogleMaps = false;
+//  if (useGoogleMaps) {
+//    GoogleMapsLayer* googleMapsLayer = new GoogleMapsLayer("AIzaSyC9pospBjqsfpb0Y9N3E3uNMD8ELoQVOrc",
+//                                                           TimeInterval::fromDays(30));
+//
+//    layerSet->addLayer(googleMapsLayer);
+//  }
 
-    layerSet->addLayer(googleMapsLayer);
+  const bool useBingMaps = true;
+  if (useBingMaps) {
+    BingMapsLayer* bingMapsLayer = new BingMapsLayer("ArtXu2Z-XSlDVCRVtxtYqtIPVR_0qqLcrfsRyZK_ishjUKvTheYBUH9rDDmAPcnj",
+                                                     TimeInterval::fromDays(30));
+
+    layerSet->addLayer(bingMapsLayer);
   }
 
   const bool blueMarble = false;
@@ -480,8 +489,8 @@ public:
   }
 
 
-  bool useBing = false;
-  if (useBing) {
+  bool useWMSBing = false;
+  if (useWMSBing) {
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
                                         URL("http://www.nasa.network.com/wms?", false),
                                         WMS_1_1_0,
@@ -645,7 +654,7 @@ public:
 
 - (TilesRenderParameters*) createTileRenderParameters
 {
-  const bool renderDebug = true;
+  const bool renderDebug = false;
   const bool useTilesSplitBudget = true;
   const bool forceTopLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;

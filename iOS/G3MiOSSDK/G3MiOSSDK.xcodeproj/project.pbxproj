@@ -24,7 +24,6 @@
 		A70F5608161B54A400340256 /* IJSONParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A70F5607161B54A400340256 /* IJSONParser.cpp */; };
 		A70F560E161B5CD800340256 /* JSONParser_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = A70F560C161B5CD800340256 /* JSONParser_iOS.mm */; };
 		A70F5612161C4F8F00340256 /* JSONNumber.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A70F5611161C4F8F00340256 /* JSONNumber.cpp */; };
-		A74072D1161EEEB900182A39 /* BingLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A74072D0161EEEB900182A39 /* BingLayer.cpp */; };
 		A7EE001A1619D01900C77604 /* JSONObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A7EE00191619D01900C77604 /* JSONObject.cpp */; };
 		A7EE001C161B245600C77604 /* JSONBaseObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A7EE001B161B245600C77604 /* JSONBaseObject.cpp */; };
 		A7EE0020161B274300C77604 /* JSONArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A7EE001F161B274300C77604 /* JSONArray.cpp */; };
@@ -186,6 +185,8 @@
 		CFE3B579164AE32E009975A5 /* SceneJSShapesParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE3B577164AE32E009975A5 /* SceneJSShapesParser.cpp */; };
 		CFE3DBA7164AFC4100910037 /* JSONBoolean.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE3DBA5164AFC4100910037 /* JSONBoolean.cpp */; };
 		CFE3DBAC164AFDB000910037 /* JSONString.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE3DBAA164AFDB000910037 /* JSONString.cpp */; };
+		CFE676B216ECDA7C00CB93B9 /* BingMapsLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE676B016ECDA7C00CB93B9 /* BingMapsLayer.cpp */; };
+		CFE676B316ECDA9100CB93B9 /* BingMapsLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFE676B116ECDA7C00CB93B9 /* BingMapsLayer.hpp */; };
 		CFEBDF1E16E8C9C80063B49F /* MercatorUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFEBDF1C16E8C9C70063B49F /* MercatorUtils.cpp */; };
 		CFEEE4BD164867B600F45F59 /* CircleShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFEEE4BB164867B600F45F59 /* CircleShape.cpp */; };
 		CFF76BE5168614AD00F658CC /* MeshRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFF76BE3168614AD00F658CC /* MeshRenderer.cpp */; };
@@ -330,7 +331,6 @@
 		E780A57016D3AED9000F0395 /* IStringUtils.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFB72A6815E6808900A5BAF4 /* IStringUtils.hpp */; };
 		E780A57116D3AED9000F0395 /* ITimer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF31CBF215878AF90085E8F1 /* ITimer.hpp */; };
 		E780A57316D3AED9000F0395 /* ITextUtils.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFFAFD6E169F2C1500BCE129 /* ITextUtils.hpp */; };
-		E780A57416D3AED9000F0395 /* BingLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = A74072CE161EEEA300182A39 /* BingLayer.hpp */; };
 		E780A57516D3AED9000F0395 /* Layer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D87EC5C115BEB12F00E38C36 /* Layer.hpp */; };
 		E780A57616D3AED9000F0395 /* LayerCondition.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFB72A3415E65B1F00A5BAF4 /* LayerCondition.hpp */; };
 		E780A57716D3AED9000F0395 /* LayerSet.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D87EC5C315BEB12F00E38C36 /* LayerSet.hpp */; };
@@ -429,6 +429,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CFE676B316ECDA9100CB93B9 /* BingMapsLayer.hpp in CopyFiles */,
 				CF75C3A716EA62B800F7EE9F /* GoogleMapsLayer.hpp in CopyFiles */,
 				CF75C3A316EA57C700F7EE9F /* MapBoxLayer.hpp in CopyFiles */,
 				CF75C39F16EA4B0100F7EE9F /* MapQuestLayer.hpp in CopyFiles */,
@@ -501,7 +502,6 @@
 				E780A57016D3AED9000F0395 /* IStringUtils.hpp in CopyFiles */,
 				E780A57116D3AED9000F0395 /* ITimer.hpp in CopyFiles */,
 				E780A57316D3AED9000F0395 /* ITextUtils.hpp in CopyFiles */,
-				E780A57416D3AED9000F0395 /* BingLayer.hpp in CopyFiles */,
 				E780A57516D3AED9000F0395 /* Layer.hpp in CopyFiles */,
 				E780A57616D3AED9000F0395 /* LayerCondition.hpp in CopyFiles */,
 				E780A57716D3AED9000F0395 /* LayerSet.hpp in CopyFiles */,
@@ -700,8 +700,6 @@
 		A70F5613161C4FD000340256 /* JSONNumber.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JSONNumber.hpp; sourceTree = "<group>"; };
 		A70F5615161C8F9A00340256 /* JSONBoolean.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JSONBoolean.hpp; sourceTree = "<group>"; };
 		A70F5617161C94A100340256 /* JSONString.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JSONString.hpp; sourceTree = "<group>"; };
-		A74072CE161EEEA300182A39 /* BingLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = BingLayer.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		A74072D0161EEEB900182A39 /* BingLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = BingLayer.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		A7BF53841607643400662135 /* JSONBaseObject.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JSONBaseObject.hpp; sourceTree = "<group>"; };
 		A7EE00171619CE2B00C77604 /* JSONObject.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JSONObject.hpp; sourceTree = "<group>"; };
 		A7EE00191619D01900C77604 /* JSONObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JSONObject.cpp; sourceTree = "<group>"; };
@@ -986,6 +984,8 @@
 		CFE3B578164AE32E009975A5 /* SceneJSShapesParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SceneJSShapesParser.hpp; path = Commons/Rendererers/SceneJSShapesParser.hpp; sourceTree = "<group>"; };
 		CFE3DBA5164AFC4100910037 /* JSONBoolean.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JSONBoolean.cpp; sourceTree = "<group>"; };
 		CFE3DBAA164AFDB000910037 /* JSONString.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JSONString.cpp; sourceTree = "<group>"; };
+		CFE676B016ECDA7C00CB93B9 /* BingMapsLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BingMapsLayer.cpp; sourceTree = "<group>"; };
+		CFE676B116ECDA7C00CB93B9 /* BingMapsLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BingMapsLayer.hpp; sourceTree = "<group>"; };
 		CFEBDF1C16E8C9C70063B49F /* MercatorUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MercatorUtils.cpp; path = Commons/Basic/MercatorUtils.cpp; sourceTree = "<group>"; };
 		CFEBDF1D16E8C9C80063B49F /* MercatorUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MercatorUtils.hpp; path = Commons/Basic/MercatorUtils.hpp; sourceTree = "<group>"; };
 		CFEEE4BB164867B600F45F59 /* CircleShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CircleShape.cpp; path = Commons/Rendererers/CircleShape.cpp; sourceTree = "<group>"; };
@@ -1569,8 +1569,8 @@
 		D87EC5C015BEB12F00E38C36 /* Layers */ = {
 			isa = PBXGroup;
 			children = (
-				A74072D0161EEEB900182A39 /* BingLayer.cpp */,
-				A74072CE161EEEA300182A39 /* BingLayer.hpp */,
+				CFE676B016ECDA7C00CB93B9 /* BingMapsLayer.cpp */,
+				CFE676B116ECDA7C00CB93B9 /* BingMapsLayer.hpp */,
 				CF75C3A416EA621D00F7EE9F /* GoogleMapsLayer.cpp */,
 				CF75C3A516EA621D00F7EE9F /* GoogleMapsLayer.hpp */,
 				CF75C39316E92CDF00F7EE9F /* HereLayer.cpp */,
@@ -1853,7 +1853,6 @@
 				A70F5608161B54A400340256 /* IJSONParser.cpp in Sources */,
 				A70F560E161B5CD800340256 /* JSONParser_iOS.mm in Sources */,
 				A70F5612161C4F8F00340256 /* JSONNumber.cpp in Sources */,
-				A74072D1161EEEB900182A39 /* BingLayer.cpp in Sources */,
 				D81D2072160748EA009A8BA6 /* GLConstants.cpp in Sources */,
 				CF3F3FF01620FB2A00A92CC8 /* Vector4D.cpp in Sources */,
 				CF527E1B162E2B4200E0BDE0 /* GTask.cpp in Sources */,
@@ -1951,6 +1950,7 @@
 				CF75C39E16EA4AB100F7EE9F /* MapQuestLayer.cpp in Sources */,
 				CF75C3A216EA54CC00F7EE9F /* MapBoxLayer.cpp in Sources */,
 				CF75C3A616EA621D00F7EE9F /* GoogleMapsLayer.cpp in Sources */,
+				CFE676B216ECDA7C00CB93B9 /* BingMapsLayer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
