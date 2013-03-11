@@ -63,6 +63,17 @@ public abstract class Layer
 
   }
 
+  protected final void setParameters(LayerTilesRenderParameters parameters)
+  {
+    if (parameters != _parameters)
+    {
+      if (_parameters != null)
+         _parameters.dispose();
+      _parameters = parameters;
+      notifyChanges();
+    }
+  }
+
 
   public void setEnable(boolean enable)
   {

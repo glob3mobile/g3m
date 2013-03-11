@@ -72,17 +72,16 @@ public abstract class IStringUtils
     {
       return originalString;
     }
-    final int endIndex = startIndex+toReplace.length();
+    final int endIndex = startIndex + toReplace.length();
     final String left = substring(originalString, 0, startIndex);
     final String right = substring(originalString, endIndex);
-    final String result = left+replaceWith+right;
+    final String result = left + replaceWith + right;
     startIndex = indexOf(result, toReplace);
     if (startIndex != -1)
     {
       //recursive call to replace other ocurrences
       return replaceSubstring(result, toReplace, replaceWith);
     }
-
     return result;
   }
 

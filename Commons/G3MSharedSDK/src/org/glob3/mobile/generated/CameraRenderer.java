@@ -66,7 +66,7 @@ public class CameraRenderer extends LeafRenderer
       if (touchEvent.getType() == TouchEventType.Down)
       {
         EffectTarget target = _cameraContext.getNextCamera().getEffectTarget();
-        ec.getEffectsScheduler().cancellAllEffectsFor(target);
+        ec.getEffectsScheduler().cancelAllEffectsFor(target);
       }
   
       // pass the event to all the handlers

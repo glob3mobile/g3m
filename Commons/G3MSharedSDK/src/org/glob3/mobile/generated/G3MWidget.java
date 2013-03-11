@@ -500,7 +500,7 @@ public class G3MWidget
   public final void stopCameraAnimation()
   {
     EffectTarget target = _nextCamera.getEffectTarget();
-    _effectsScheduler.cancellAllEffectsFor(target);
+    _effectsScheduler.cancelAllEffectsFor(target);
   }
 
   public final void resetCameraPosition()

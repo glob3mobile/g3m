@@ -26,9 +26,14 @@ public class LayerSet
     {
       Layer layer = _layers.get(i);
   
-      if (layer.isEnable())
+      if (layer.isEnable() && layer.isReady())
       {
         final LayerTilesRenderParameters layerParam = layer.getLayerTilesRenderParameters();
+  
+        if (layerParam == null)
+        {
+          continue;
+        }
   
         if (first)
         {
