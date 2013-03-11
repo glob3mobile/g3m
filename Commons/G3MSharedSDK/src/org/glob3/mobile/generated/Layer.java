@@ -36,7 +36,7 @@ public abstract class Layer
 
   private final String _name;
 
-  protected final LayerTilesRenderParameters _parameters;
+  protected LayerTilesRenderParameters _parameters;
 
   protected final TimeInterval _timeToCache;
 
@@ -67,8 +67,7 @@ public abstract class Layer
   {
     if (parameters != _parameters)
     {
-      if (_parameters != null)
-         _parameters.dispose();
+      _parameters = null;
       _parameters = parameters;
       notifyChanges();
     }
@@ -93,8 +92,7 @@ public abstract class Layer
   {
     if (_condition != null)
        _condition.dispose();
-    if (_parameters != null)
-       _parameters.dispose();
+    _parameters = null;
   }
 
   public abstract java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, Tile tile);
