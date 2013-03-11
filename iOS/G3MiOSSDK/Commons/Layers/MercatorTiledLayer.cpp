@@ -90,7 +90,7 @@ std::vector<Petition*> MercatorTiledLayer::createTileMapPetitions(const G3MRende
   const int subdomainsSize = _subdomains.size();
   if (subdomainsSize > 0) {
     // select subdomain based on fixed data (instead of round-robin) to be cache friendly
-    const int subdomainsIndex = (level + column + row) % subdomainsSize;
+    const int subdomainsIndex =  IMathUtils::instance()->abs(level + column + row) % subdomainsSize;
 #ifdef C_CODE
     isb->addString(_subdomains[subdomainsIndex]);
 #endif

@@ -15,7 +15,7 @@ void EffectsScheduler::initialize(const G3MContext* context) {
   _timer = _factory->createTimer();
 }
 
-void EffectsScheduler::cancellAllEffectsFor(EffectTarget* target) {
+void EffectsScheduler::cancelAllEffectsFor(EffectTarget* target) {
   std::vector<int> indicesToRemove;
   const TimeInterval now = _timer->now();
 

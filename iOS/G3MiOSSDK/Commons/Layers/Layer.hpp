@@ -57,6 +57,8 @@ protected:
 
   }
 
+  void setParameters(const LayerTilesRenderParameters* parameters);
+
 public:
 
   virtual void setEnable(bool enable) {
@@ -90,7 +92,8 @@ public:
     return true;
   }
 
-  virtual void initialize(const G3MContext* context) {}
+  virtual void initialize(const G3MContext* context) {
+  }
 
   void addTerrainTouchEventListener(TerrainTouchEventListener* listener) {
     _listeners.push_back(listener);

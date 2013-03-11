@@ -144,8 +144,12 @@ LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters() const {
   for (int i = 0; i < layersCount; i++) {
     Layer* layer = _layers[i];
 
-    if (layer->isEnable()) {
+    if (layer->isEnable() && layer->isReady()) {
       const LayerTilesRenderParameters* layerParam = layer->getLayerTilesRenderParameters();
+
+      if (layerParam == NULL) {
+        continue;
+      }
 
       if (first) {
         first = false;

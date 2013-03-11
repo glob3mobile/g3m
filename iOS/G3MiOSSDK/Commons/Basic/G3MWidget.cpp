@@ -598,7 +598,7 @@ void G3MWidget::setAnimatedCameraPosition(const TimeInterval& interval,
 
 void G3MWidget::stopCameraAnimation() {
   EffectTarget* target = _nextCamera->getEffectTarget();
-  _effectsScheduler->cancellAllEffectsFor(target);
+  _effectsScheduler->cancelAllEffectsFor(target);
 }
 
 void G3MWidget::resetCameraPosition() {

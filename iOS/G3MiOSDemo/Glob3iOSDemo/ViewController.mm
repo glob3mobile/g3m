@@ -454,7 +454,8 @@ public:
 
   const bool useBingMaps = true;
   if (useBingMaps) {
-    BingMapsLayer* bingMapsLayer = new BingMapsLayer("ArtXu2Z-XSlDVCRVtxtYqtIPVR_0qqLcrfsRyZK_ishjUKvTheYBUH9rDDmAPcnj",
+    BingMapsLayer* bingMapsLayer = new BingMapsLayer("AerialWithLabels",
+                                                     "ArtXu2Z-XSlDVCRVtxtYqtIPVR_0qqLcrfsRyZK_ishjUKvTheYBUH9rDDmAPcnj",
                                                      TimeInterval::fromDays(30));
 
     layerSet->addLayer(bingMapsLayer);

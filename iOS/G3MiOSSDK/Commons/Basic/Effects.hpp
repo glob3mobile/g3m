@@ -229,7 +229,7 @@ public:
   void startEffect(Effect* effect,
                    EffectTarget* target);
 
-  void cancellAllEffectsFor(EffectTarget* target);
+  void cancelAllEffectsFor(EffectTarget* target);
 
   void onResume(const G3MContext* context) {
 

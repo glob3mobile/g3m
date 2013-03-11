@@ -109,13 +109,13 @@ Mesh* QuadShape::createMesh(const G3MRenderContext* rc) {
   vertices.add(left,  top,    0);
   vertices.add(right, top,    0);
 
-  const Vector3D center = Vector3D::zero();
+//  const Vector3D center = Vector3D::zero();
 
   Color* color = (_color == NULL) ? NULL : new Color(*_color);
 
   Mesh* im = new DirectMesh(GLPrimitive::triangleStrip(),
                             true,
-                            center,
+                            vertices.getCenter(),
                             vertices.create(),
                             1,
                             1,

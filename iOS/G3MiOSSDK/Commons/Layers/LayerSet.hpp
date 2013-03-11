@@ -63,7 +63,7 @@ public:
   bool isReady() const;
 
   void initialize(const G3MContext* context)const;
-  
+
   int size() const {
     return _layers.size();
   }

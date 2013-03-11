@@ -55,7 +55,7 @@ bool CameraRenderer::onTouchEvent(const G3MEventContext* ec,
     // abort all the camera effect currently running
     if (touchEvent->getType() == Down){
       EffectTarget* target = _cameraContext->getNextCamera()->getEffectTarget();
-      ec->getEffectsScheduler()->cancellAllEffectsFor(target);
+      ec->getEffectsScheduler()->cancelAllEffectsFor(target);
     }
 
     // pass the event to all the handlers

@@ -57,3 +57,11 @@ void Layer::notifyChanges() const {
 const std::string Layer::getName() {
   return _name;
 }
+
+void Layer::setParameters(const LayerTilesRenderParameters* parameters) {
+  if (parameters != _parameters) {
+    delete _parameters;
+    _parameters = parameters;
+    notifyChanges();
+  }
+}
