@@ -37,7 +37,12 @@ private:
   const std::string _name;
 
 protected:
+#ifdef C_CODE
   const LayerTilesRenderParameters* _parameters;
+#endif
+#ifdef JAVA_CODE
+  protected LayerTilesRenderParameters _parameters;
+#endif
 
   const TimeInterval& _timeToCache;
 
