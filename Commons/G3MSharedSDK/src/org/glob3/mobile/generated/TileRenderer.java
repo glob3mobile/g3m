@@ -129,9 +129,33 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
     }
   }
 
-  private void sortTiles(java.util.ArrayList<Tile> firstLevelTiles)
+  private void sortTiles(java.util.ArrayList<Tile> tiles)
   {
-    TODO_SORT_TILES;
+    java.util.Collections.sort(tiles,
+                               new java.util.Comparator<Tile>() {
+                                 @Override
+                                 public int compare(final Tile i,
+                                                    final Tile j) {
+                                   final int rowI = i.getRow();
+                                   final int rowJ = j.getRow();
+                                   if (rowI < rowJ) {
+                                     return -1;
+                                   }
+                                   if (rowI > rowJ) {
+                                     return 1;
+                                   }
+  
+                                   final int columnI = i.getColumn();
+                                   final int columnJ = j.getColumn();
+                                   if (columnI < columnJ) {
+                                     return -1;
+                                   }
+                                   if (columnI > columnJ) {
+                                     return 1;
+                                   }
+                                   return 0;
+                                 }
+                               });
   }
 
   private boolean _firstRender;
