@@ -37,8 +37,10 @@ public class LTMInitializer extends LazyTextureMappingInitializer
       final Sector tileSector = _tile.getSector();
       final Sector ancestorSector = _ancestor.getSector();
 
-      _scale = tileSector.getScaleFactor(ancestorSector).asMutableVector2D();
+      final Vector2D scale = tileSector.getScaleFactor(ancestorSector);
+      _scale = scale.asMutableVector2D();
       _translation = tileSector.getTranslationFactor(ancestorSector).asMutableVector2D();
+      //_translation = _tessellator->getTextCoord(_ancestor, tileSector.lower(), _mercator).times(scale).asMutableVector2D();
     }
   }
 

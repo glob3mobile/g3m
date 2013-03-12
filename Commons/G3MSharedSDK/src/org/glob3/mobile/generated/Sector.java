@@ -65,17 +65,16 @@ public class Sector
 
   public final Vector2D getScaleFactor(Sector that)
   {
-    final double u = _deltaLatitude.div(that._deltaLatitude);
-    final double v = _deltaLongitude.div(that._deltaLongitude);
-    return new Vector2D(u, v);
+    final double scaleX = _deltaLongitude.div(that._deltaLongitude);
+    final double scaleY = _deltaLatitude.div(that._deltaLatitude);
+    return new Vector2D(scaleX, scaleY);
   }
 
   public final Vector2D getTranslationFactor(Sector that)
   {
-    final double diff = _deltaLongitude.div(that._deltaLongitude);
     final Vector2D uv = that.getUVCoordinates(_lower);
-
-    return new Vector2D(uv._x, uv._y - diff);
+    final double scaleY = _deltaLatitude.div(that._deltaLatitude);
+    return new Vector2D(uv._x, uv._y - scaleY);
   }
 
   public final boolean fullContains(Sector s)
@@ -326,6 +325,11 @@ public class Sector
     return new Geodetic2D(Angle.linearInterpolation(_lower.latitude(), _upper.latitude(), (float)(1.0-v)), Angle.linearInterpolation(_lower.longitude(), _upper.longitude(), (float) u));
   }
 
+  public final Angle getInnerPointLatitude(double v)
+  {
+    return Angle.linearInterpolation(_lower.latitude(), _upper.latitude(), (float)(1.0-v));
+  }
+
   public final Vector2D getUVCoordinates(Geodetic2D point)
   {
     return getUVCoordinates(point.latitude(), point.longitude());
@@ -478,12 +482,12 @@ public class Sector
 
   public final boolean touchesNorthPole()
   {
-    return (_upper.latitude().greaterThan(Angle.fromDegrees(89.9)));
+    return (_upper.latitude()._degrees >= 89.9);
   }
 
   public final boolean touchesSouthPole()
   {
-    return (_lower.latitude().lowerThan(Angle.fromDegrees(-89.9)));
+    return (_lower.latitude()._degrees <= -89.9);
   }
 
 }

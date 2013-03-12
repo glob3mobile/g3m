@@ -75,13 +75,6 @@ public class BingMapsLayer extends Layer
      this(imagerySet, key, timeToCache, 1, null);
   }
   public BingMapsLayer(String imagerySet, String key, TimeInterval timeToCache, int initialLevel, LayerCondition condition)
-        /* new LayerTilesRenderParameters(Sector::fullSphere(),
-                                       (int) IMathUtils::instance()->pow(2.0, initialLevel),
-                                       (int) IMathUtils::instance()->pow(2.0, initialLevel),
-                                       19 - initialLevel,
-                                       Vector2I(256, 256),
-                                       LayerTilesRenderParameters::defaultTileMeshResolution(),
-                                       true) */
   {
      super(condition, "BingMaps", timeToCache, null);
      _imagerySet = imagerySet;
@@ -136,50 +129,10 @@ public class BingMapsLayer extends Layer
   
     final String quadkey = getQuadkey(level, column, row);
   
-    // http://ecn.{subdomain}.tiles.virtualearth.net/tiles/r{quadkey}.jpeg?g=1180&mkt={culture}&shading=hill
     String path = _imageUrl;
     path = su.replaceSubstring(path, "{subdomain}", subdomain);
     path = su.replaceSubstring(path, "{quadkey}", quadkey);
     path = su.replaceSubstring(path, "{culture}", "en-US");
-  
-    /*
-    IStringBuilder* isb = IStringBuilder::newStringBuilder();
-  
-    isb->addString("http://dev.virtualearth.net/REST/v1/Imagery/Map/");
-  
-    isb->addString(_imagerySet);
-  
-    // mapArea   45.219,-122.325,47.610,-122.107
-    isb->addString("?ma=");
-    isb->addDouble(sector.lower().latitude()._degrees);
-    isb->addString(",");
-    isb->addDouble(sector.lower().longitude()._degrees);
-    isb->addString(",");
-    isb->addDouble(sector.upper().latitude()._degrees);
-    isb->addString(",");
-    isb->addDouble(sector.upper().longitude()._degrees);
-  
-    // format gif png jpeg
-    isb->addString("&format=jpeg");
-  
-    // mapSize width,height
-    isb->addString("&ms=");
-    isb->addInt(_parameters->_tileTextureResolution._x);
-    isb->addString(",");
-    isb->addInt(_parameters->_tileTextureResolution._y);
-  
-    // zoomLevel between 1 and 21.
-    isb->addString("&zoomLevel=");
-    isb->addInt(tile->getLevel() + _initialLevel + 1);
-  
-    isb->addString("&key=");
-    isb->addString(_key);
-  
-  
-    const std::string path = isb->getString();
-  
-    delete isb;
-     */
   
     petitions.add(new Petition(tileSector, new URL(path, false), _timeToCache, true));
   

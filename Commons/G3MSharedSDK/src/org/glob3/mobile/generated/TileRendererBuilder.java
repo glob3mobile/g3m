@@ -28,7 +28,7 @@ public class TileRendererBuilder
   private boolean _showStatistics;
   private boolean _renderDebug;
   private boolean _useTilesSplitBudget;
-  private boolean _forceTopLevelTilesRenderOnStart;
+  private boolean _forceFirstLevelTilesRenderOnStart;
   private boolean _incrementalTileQuality;
   private java.util.ArrayList<VisibleSectorListener> _visibleSectorListeners;
   private java.util.ArrayList<Long> _stabilizationMilliSeconds;
@@ -126,13 +126,13 @@ public class TileRendererBuilder
   }
 
   /**
-   * Returns the forceTopLevelTilesRenderOnStart flag.
+   * Returns the forceFirstLevelTilesRenderOnStart flag.
    *
-   * @return _forceTopLevelTilesRenderOnStart: bool
+   * @return _forceFirstLevelTilesRenderOnStart: bool
    */
-  private boolean getForceTopLevelTilesRenderOnStart()
+  private boolean getForceFirstLevelTilesRenderOnStart()
   {
-    return _forceTopLevelTilesRenderOnStart;
+    return _forceFirstLevelTilesRenderOnStart;
   }
 
   /**
@@ -147,8 +147,6 @@ public class TileRendererBuilder
 
   /**
    * Returns the array of visibleSectorListeners.
-   *
-   * @return _forceTopLevelTilesRenderOnStart: std::vector<VisibleSectorListener*>
    */
   private java.util.ArrayList<VisibleSectorListener> getVisibleSectorListeners()
   {
@@ -189,7 +187,7 @@ public class TileRendererBuilder
   }
   private TilesRenderParameters createTileRendererParameters()
   {
-    return new TilesRenderParameters(getRenderDebug(), getUseTilesSplitBudget(), getForceTopLevelTilesRenderOnStart(), getIncrementalTileQuality());
+    return new TilesRenderParameters(getRenderDebug(), getUseTilesSplitBudget(), getForceFirstLevelTilesRenderOnStart(), getIncrementalTileQuality());
   }
   private TileTessellator createTileTessellator()
   {
@@ -205,7 +203,7 @@ public class TileRendererBuilder
     _showStatistics = false;
     _renderDebug = false;
     _useTilesSplitBudget = true;
-    _forceTopLevelTilesRenderOnStart = true;
+    _forceFirstLevelTilesRenderOnStart = true;
     _incrementalTileQuality = false;
   
     _parameters = null;
@@ -321,9 +319,9 @@ public class TileRendererBuilder
   {
     _useTilesSplitBudget = useTilesSplitBudget;
   }
-  public final void setForceTopLevelTilesRenderOnStart(boolean forceTopLevelTilesRenderOnStart)
+  public final void setForceFirstLevelTilesRenderOnStart(boolean forceFirstLevelTilesRenderOnStart)
   {
-    _forceTopLevelTilesRenderOnStart = forceTopLevelTilesRenderOnStart;
+    _forceFirstLevelTilesRenderOnStart = forceFirstLevelTilesRenderOnStart;
   }
   public final void setIncrementalTileQuality(boolean incrementalTileQuality)
   {

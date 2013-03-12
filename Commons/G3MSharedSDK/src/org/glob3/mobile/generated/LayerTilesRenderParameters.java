@@ -23,6 +23,7 @@ public class LayerTilesRenderParameters
   public final int _splitsByLatitude;
   public final int _splitsByLongitude;
   public final int _maxLevel;
+  public final int _maxLevelForPoles;
   public final Vector2I _tileTextureResolution;
   public final Vector2I _tileMeshResolution;
   public final boolean _mercator;
@@ -33,6 +34,7 @@ public class LayerTilesRenderParameters
      _splitsByLatitude = splitsByLatitude;
      _splitsByLongitude = splitsByLongitude;
      _maxLevel = maxLevel;
+     _maxLevelForPoles = 4;
      _tileTextureResolution = tileTextureResolution;
      _tileMeshResolution = tileMeshResolution;
      _mercator = mercator;

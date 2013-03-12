@@ -12,22 +12,23 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   private Camera     _lastCamera;
   private G3MContext _context;
 
-  private java.util.ArrayList<Tile> _topLevelTiles = new java.util.ArrayList<Tile>();
+  private java.util.ArrayList<Tile> _firstLevelTiles = new java.util.ArrayList<Tile>();
 
   private ITimer _lastSplitTimer; // timer to start every time a tile get splitted into subtiles
 
-  private void clearTopLevelTiles()
+  private void clearFirstLevelTiles()
   {
-    for (int i = 0; i < _topLevelTiles.size(); i++)
+    final int firstLevelTilesCount = _firstLevelTiles.size();
+    for (int i = 0; i < firstLevelTilesCount; i++)
     {
-      Tile tile = _topLevelTiles.get(i);
+      Tile tile = _firstLevelTiles.get(i);
       if (tile != null)
          tile.dispose();
     }
   
-    _topLevelTiles.clear();
+    _firstLevelTiles.clear();
   }
-  private void createTopLevelTiles(G3MContext context)
+  private void createFirstLevelTiles(G3MContext context)
   {
   
     final LayerTilesRenderParameters layerParameters = _layerSet.getLayerTilesRenderParameters();
@@ -61,22 +62,23 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
         final Sector sector = new Sector(tileLower, tileUpper);
   
         Tile tile = new Tile(_texturizer, null, sector, 0, row, col);
-        _topLevelTiles.add(tile);
+        _firstLevelTiles.add(tile);
       }
     }
   
-    context.getLogger().logInfo("Created %d top level tiles", _topLevelTiles.size());
+    context.getLogger().logInfo("Created %d first level tiles", _firstLevelTiles.size());
   
     _topTilesJustCreated = true;
   }
 
   private boolean _firstRender;
 
-  private void pruneTopLevelTiles()
+  private void pruneFirstLevelTiles()
   {
-    for (int i = 0; i < _topLevelTiles.size(); i++)
+    final int firstLevelTilesCount = _firstLevelTiles.size();
+    for (int i = 0; i < firstLevelTilesCount; i++)
     {
-      Tile tile = _topLevelTiles.get(i);
+      Tile tile = _firstLevelTiles.get(i);
       tile.prune(_texturizer, _elevationDataProvider);
     }
   }
@@ -110,7 +112,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 
   public void dispose()
   {
-    clearTopLevelTiles();
+    clearFirstLevelTiles();
   
     if (_tessellator != null)
        _tessellator.dispose();
@@ -140,8 +142,8 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   {
     _context = context;
   
-    clearTopLevelTiles();
-    createTopLevelTiles(context);
+    clearFirstLevelTiles();
+    createFirstLevelTiles(context);
   
     if (_lastSplitTimer != null)
        _lastSplitTimer.dispose();
@@ -164,26 +166,26 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   
     TileRenderContext trc = new TileRenderContext(_tessellator, _elevationDataProvider, _texturizer, _layerSet, _parameters, statistics, _lastSplitTimer, _firstRender, _texturePriority, _verticalExaggeration); // if first render, force full render
   
-    final int topLevelTilesCount = _topLevelTiles.size();
+    final int firstLevelTilesCount = _firstLevelTiles.size();
   
-    if (_firstRender && _parameters._forceTopLevelTilesRenderOnStart)
+    if (_firstRender && _parameters._forceFirstLevelTilesRenderOnStart)
     {
       // force one render pass of the topLevel tiles to make the (toplevel) textures loaded
       // as they will be used as last-chance fallback texture for any tile.
       _firstRender = false;
   
-      for (int i = 0; i < topLevelTilesCount; i++)
+      for (int i = 0; i < firstLevelTilesCount; i++)
       {
-        Tile tile = _topLevelTiles.get(i);
+        Tile tile = _firstLevelTiles.get(i);
         tile.render(rc, trc, parentState, null);
       }
     }
     else
     {
       java.util.LinkedList<Tile> toVisit = new java.util.LinkedList<Tile>();
-      for (int i = 0; i < topLevelTilesCount; i++)
+      for (int i = 0; i < firstLevelTilesCount; i++)
       {
-        toVisit.addLast(_topLevelTiles.get(i));
+        toVisit.addLast(_firstLevelTiles.get(i));
       }
   
       while (toVisit.size() > 0)
@@ -254,10 +256,10 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   
       final Geodetic3D position = planet.toGeodetic3D(positionCartesian);
   
-      final int topLevelTilesSize = _topLevelTiles.size();
-      for (int i = 0; i < topLevelTilesSize; i++)
+      final int firstLevelTilesCount = _firstLevelTiles.size();
+      for (int i = 0; i < firstLevelTilesCount; i++)
       {
-        final Tile tile = _topLevelTiles.get(i).getDeepestTileContaining(position);
+        final Tile tile = _firstLevelTiles.get(i).getDeepestTileContaining(position);
         if (tile != null)
         {
           ILogger.instance().logInfo("Touched on %s", tile.description());
@@ -297,37 +299,37 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
     {
       _topTilesJustCreated = false;
   
-      final int topLevelTilesCount = _topLevelTiles.size();
+      final int firstLevelTilesCount = _firstLevelTiles.size();
   
-      if (_parameters._forceTopLevelTilesRenderOnStart)
+      if (_parameters._forceFirstLevelTilesRenderOnStart)
       {
         TilesStatistics statistics = new TilesStatistics();
   
         TileRenderContext trc = new TileRenderContext(_tessellator, _elevationDataProvider, _texturizer, _layerSet, _parameters, statistics, _lastSplitTimer, true, _texturePriority, _verticalExaggeration);
   
-        for (int i = 0; i < topLevelTilesCount; i++)
+        for (int i = 0; i < firstLevelTilesCount; i++)
         {
-          Tile tile = _topLevelTiles.get(i);
+          Tile tile = _firstLevelTiles.get(i);
           tile.prepareForFullRendering(rc, trc);
         }
       }
   
       if (_texturizer != null)
       {
-        for (int i = 0; i < topLevelTilesCount; i++)
+        for (int i = 0; i < firstLevelTilesCount; i++)
         {
-          Tile tile = _topLevelTiles.get(i);
+          Tile tile = _firstLevelTiles.get(i);
           _texturizer.justCreatedTopTile(rc, tile, _layerSet);
         }
       }
     }
   
-    if (_parameters._forceTopLevelTilesRenderOnStart)
+    if (_parameters._forceFirstLevelTilesRenderOnStart)
     {
-      final int topLevelTilesCount = _topLevelTiles.size();
-      for (int i = 0; i < topLevelTilesCount; i++)
+      final int firstLevelTilesCount = _firstLevelTiles.size();
+      for (int i = 0; i < firstLevelTilesCount; i++)
       {
-        Tile tile = _topLevelTiles.get(i);
+        Tile tile = _firstLevelTiles.get(i);
         if (!tile.isTextureSolved())
         {
           return false;
@@ -386,7 +388,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 
     if (!enable)
     {
-      pruneTopLevelTiles();
+      pruneFirstLevelTiles();
     }
   }
 
@@ -400,10 +402,10 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 
   public final void recreateTiles()
   {
-    pruneTopLevelTiles();
-    clearTopLevelTiles();
+    pruneFirstLevelTiles();
+    clearFirstLevelTiles();
     _firstRender = true;
-    createTopLevelTiles(_context);
+    createFirstLevelTiles(_context);
   }
 
   /**
