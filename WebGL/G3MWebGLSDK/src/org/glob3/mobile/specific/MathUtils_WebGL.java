@@ -391,4 +391,18 @@ public final class MathUtils_WebGL
       return Math.max(f1, f2);
    }
 
+
+   @Override
+   public int max(final int i1,
+                  final int i2) {
+      return Math.max(i1, i2);
+   }
+
+
+   @Override
+   public long max(final long l1,
+                   final long l2) {
+      return Math.max(l1, l2);
+   }
+
 }
