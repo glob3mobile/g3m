@@ -7,12 +7,13 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   private LayerSet _layerSet;
   private final TilesRenderParameters _parameters;
   private final boolean _showStatistics;
-  private boolean _topTilesJustCreated;
 
   private Camera     _lastCamera;
   private G3MContext _context;
 
   private java.util.ArrayList<Tile> _firstLevelTiles = new java.util.ArrayList<Tile>();
+  private boolean _firstLevelTilesJustCreated;
+  private boolean _allFirstLevelTilesAreTextureSolved;
 
   private ITimer _lastSplitTimer; // timer to start every time a tile get splitted into subtiles
 
@@ -31,28 +32,33 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   private void createFirstLevelTiles(G3MContext context)
   {
   
-    final LayerTilesRenderParameters layerParameters = _layerSet.getLayerTilesRenderParameters();
-    if (layerParameters == null)
+    final LayerTilesRenderParameters parameters = _layerSet.getLayerTilesRenderParameters();
+    if (parameters == null)
     {
-      ILogger.instance().logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't create topTiles");
+      ILogger.instance().logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't create first-level tiles");
       return;
     }
   
-    final Angle fromLatitude = layerParameters._topSector.lower().latitude();
-    final Angle fromLongitude = layerParameters._topSector.lower().longitude();
+    java.util.ArrayList<Tile> topLevelTiles = new java.util.ArrayList<Tile>();
   
-    final Angle deltaLan = layerParameters._topSector.getDeltaLatitude();
-    final Angle deltaLon = layerParameters._topSector.getDeltaLongitude();
+    final Angle fromLatitude = parameters._topSector.lower().latitude();
+    final Angle fromLongitude = parameters._topSector.lower().longitude();
   
-    final Angle tileHeight = deltaLan.div(layerParameters._splitsByLatitude);
-    final Angle tileWidth = deltaLon.div(layerParameters._splitsByLongitude);
+    final Angle deltaLan = parameters._topSector.getDeltaLatitude();
+    final Angle deltaLon = parameters._topSector.getDeltaLongitude();
   
-    for (int row = 0; row < layerParameters._splitsByLatitude; row++)
+    final int topSectorSplitsByLatitude = parameters._topSectorSplitsByLatitude;
+    final int topSectorSplitsByLongitude = parameters._topSectorSplitsByLongitude;
+  
+    final Angle tileHeight = deltaLan.div(topSectorSplitsByLatitude);
+    final Angle tileWidth = deltaLon.div(topSectorSplitsByLongitude);
+  
+    for (int row = 0; row < topSectorSplitsByLatitude; row++)
     {
       final Angle tileLatFrom = tileHeight.times(row).add(fromLatitude);
       final Angle tileLatTo = tileLatFrom.add(tileHeight);
   
-      for (int col = 0; col < layerParameters._splitsByLongitude; col++)
+      for (int col = 0; col < topSectorSplitsByLongitude; col++)
       {
         final Angle tileLonFrom = tileWidth.times(col).add(fromLongitude);
         final Angle tileLonTo = tileLonFrom.add(tileWidth);
@@ -62,13 +68,70 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
         final Sector sector = new Sector(tileLower, tileUpper);
   
         Tile tile = new Tile(_texturizer, null, sector, 0, row, col);
-        _firstLevelTiles.add(tile);
+        if (parameters._firstLevel == 0)
+        {
+          _firstLevelTiles.add(tile);
+        }
+        else
+        {
+          topLevelTiles.add(tile);
+        }
       }
     }
   
+    if (parameters._firstLevel > 0)
+    {
+      final int topLevelTilesSize = topLevelTiles.size();
+      for (int i = 0; i < topLevelTilesSize; i++)
+      {
+        Tile tile = topLevelTiles.get(i);
+        createFirstLevelTiles(_firstLevelTiles, tile, parameters._firstLevel, parameters._mercator);
+      }
+    }
+  
+    sortTiles(_firstLevelTiles);
+  
     context.getLogger().logInfo("Created %d first level tiles", _firstLevelTiles.size());
   
-    _topTilesJustCreated = true;
+    _firstLevelTilesJustCreated = true;
+  }
+  private void createFirstLevelTiles(java.util.ArrayList<Tile> firstLevelTiles, Tile tile, int firstLevel, boolean mercator)
+  {
+    if (tile.getLevel() == firstLevel)
+    {
+      firstLevelTiles.add(tile);
+    }
+    else
+    {
+      final Sector sector = tile.getSector();
+      final Geodetic2D lower = sector.lower();
+      final Geodetic2D upper = sector.upper();
+  
+      final Angle splitLongitude = Angle.midAngle(lower.longitude(), upper.longitude());
+  
+      final Angle splitLatitude = mercator ? MercatorUtils.calculateSplitLatitude(lower.latitude(), upper.latitude()) : Angle.midAngle(lower.latitude(), upper.latitude());
+      /*                               */
+      /*                               */
+  
+  
+      java.util.ArrayList<Tile> children = tile.createSubTiles(splitLatitude, splitLongitude, false);
+  
+      final int childrenSize = children.size();
+      for (int i = 0; i < childrenSize; i++)
+      {
+        Tile child = children.get(i);
+        createFirstLevelTiles(firstLevelTiles, child, firstLevel, mercator);
+      }
+  
+      children = null;
+      if (tile != null)
+         tile.dispose();
+    }
+  }
+
+  private void sortTiles(java.util.ArrayList<Tile> firstLevelTiles)
+  {
+    TODO_SORT_TILES;
   }
 
   private boolean _firstRender;
@@ -100,13 +163,14 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
      _layerSet = layerSet;
      _parameters = parameters;
      _showStatistics = showStatistics;
-     _topTilesJustCreated = false;
+     _firstLevelTilesJustCreated = false;
      _lastSplitTimer = null;
      _lastCamera = null;
      _firstRender = false;
      _context = null;
      _lastVisibleSector = null;
      _texturePriority = texturePriority;
+     _allFirstLevelTilesAreTextureSolved = false;
     _layerSet.setChangeListener(this);
   }
 
@@ -170,8 +234,8 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   
     if (_firstRender && _parameters._forceFirstLevelTilesRenderOnStart)
     {
-      // force one render pass of the topLevel tiles to make the (toplevel) textures loaded
-      // as they will be used as last-chance fallback texture for any tile.
+      // force one render pass of the firstLevelTiles tiles to make the (toplevel) textures
+      // loaded as they will be used as last-chance fallback texture for any tile.
       _firstRender = false;
   
       for (int i = 0; i < firstLevelTilesCount; i++)
@@ -295,9 +359,9 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
       }
     }
   
-    if (_topTilesJustCreated)
+    if (_firstLevelTilesJustCreated)
     {
-      _topTilesJustCreated = false;
+      _firstLevelTilesJustCreated = false;
   
       final int firstLevelTilesCount = _firstLevelTiles.size();
   
@@ -326,30 +390,35 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   
     if (_parameters._forceFirstLevelTilesRenderOnStart)
     {
-      final int firstLevelTilesCount = _firstLevelTiles.size();
-      for (int i = 0; i < firstLevelTilesCount; i++)
+      if (!_allFirstLevelTilesAreTextureSolved)
       {
-        Tile tile = _firstLevelTiles.get(i);
-        if (!tile.isTextureSolved())
+        final int firstLevelTilesCount = _firstLevelTiles.size();
+        for (int i = 0; i < firstLevelTilesCount; i++)
         {
-          return false;
+          Tile tile = _firstLevelTiles.get(i);
+          if (!tile.isTextureSolved())
+          {
+            return false;
+          }
         }
-      }
   
-      if (_tessellator != null)
-      {
-        if (!_tessellator.isReady(rc))
+        if (_tessellator != null)
         {
-          return false;
+          if (!_tessellator.isReady(rc))
+          {
+            return false;
+          }
         }
-      }
   
-      if (_texturizer != null)
-      {
-        if (!_texturizer.isReady(rc, _layerSet))
+        if (_texturizer != null)
         {
-          return false;
+          if (!_texturizer.isReady(rc, _layerSet))
+          {
+            return false;
+          }
         }
+  
+        _allFirstLevelTilesAreTextureSolved = true;
       }
     }
   
@@ -405,6 +474,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
     pruneFirstLevelTiles();
     clearFirstLevelTiles();
     _firstRender = true;
+    _allFirstLevelTilesAreTextureSolved = false;
     createFirstLevelTiles(_context);
   }
 

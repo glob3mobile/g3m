@@ -70,12 +70,7 @@ public class Sector
     return new Vector2D(scaleX, scaleY);
   }
 
-  public final Vector2D getTranslationFactor(Sector that)
-  {
-    final Vector2D uv = that.getUVCoordinates(_lower);
-    final double scaleY = _deltaLatitude.div(that._deltaLatitude);
-    return new Vector2D(uv._x, uv._y - scaleY);
-  }
+//  Vector2D getTranslationFactor(const Sector& that) const;
 
   public final boolean fullContains(Sector s)
   {
@@ -491,3 +486,8 @@ public class Sector
   }
 
 }
+//Vector2D Sector::getTranslationFactor(const Sector& that) const {
+//  const Vector2D uv = that.getUVCoordinates(_lower);
+//  const double scaleY = _deltaLatitude.div(that._deltaLatitude);
+//  return Vector2D(uv._x, uv._y - scaleY);
+//}

@@ -24,23 +24,21 @@ public class HereLayer extends Layer
   private final Sector _sector ;
   private final String _appId;
   private final String _appCode;
-  private final int _initialHereLevel;
 
 
-  public HereLayer(String appId, String appCode, TimeInterval timeToCache, int initialHereLevel)
+  public HereLayer(String appId, String appCode, TimeInterval timeToCache, int initialLevel)
   {
-     this(appId, appCode, timeToCache, initialHereLevel, null);
+     this(appId, appCode, timeToCache, initialLevel, null);
   }
   public HereLayer(String appId, String appCode, TimeInterval timeToCache)
   {
-     this(appId, appCode, timeToCache, 1, null);
+     this(appId, appCode, timeToCache, 3, null);
   }
-  public HereLayer(String appId, String appCode, TimeInterval timeToCache, int initialHereLevel, LayerCondition condition)
+  public HereLayer(String appId, String appCode, TimeInterval timeToCache, int initialLevel, LayerCondition condition)
   {
-     super(condition, "here", timeToCache, new LayerTilesRenderParameters(Sector.fullSphere(), (int) IMathUtils.instance().pow(2.0, initialHereLevel), (int) IMathUtils.instance().pow(2.0, initialHereLevel), 20 - initialHereLevel, new Vector2I(256, 256), LayerTilesRenderParameters.defaultTileMeshResolution(), true));
+     super(condition, "here", timeToCache, new LayerTilesRenderParameters(Sector.fullSphere(), 1, 1, initialLevel, 20, new Vector2I(256, 256), LayerTilesRenderParameters.defaultTileMeshResolution(), true));
      _appId = appId;
      _appCode = appCode;
-     _initialHereLevel = initialHereLevel;
      _sector = new Sector(Sector.fullSphere());
   
   }
@@ -97,7 +95,7 @@ public class HereLayer extends Layer
   //  isb->addString("&nomrk");
   
     isb.addString("&z=");
-    final int level = tile.getLevel() + _initialHereLevel;
+    final int level = tile.getLevel();
     isb.addInt(level);
   
   //  isb->addString("&t=3");

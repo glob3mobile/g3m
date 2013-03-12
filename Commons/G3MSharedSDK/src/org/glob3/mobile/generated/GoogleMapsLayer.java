@@ -21,7 +21,6 @@ public class GoogleMapsLayer extends Layer
 {
   private final String _key;
   private final Sector _sector ;
-  private final int _initialLevel;
 
 
 
@@ -31,13 +30,12 @@ public class GoogleMapsLayer extends Layer
   }
   public GoogleMapsLayer(String key, TimeInterval timeToCache)
   {
-     this(key, timeToCache, 1, null);
+     this(key, timeToCache, 3, null);
   }
   public GoogleMapsLayer(String key, TimeInterval timeToCache, int initialLevel, LayerCondition condition)
   {
-     super(condition, "GoogleMaps", timeToCache, new LayerTilesRenderParameters(Sector.fullSphere(), (int) IMathUtils.instance().pow(2.0, initialLevel), (int) IMathUtils.instance().pow(2.0, initialLevel), 20 - initialLevel, new Vector2I(256, 256), LayerTilesRenderParameters.defaultTileMeshResolution(), true));
+     super(condition, "GoogleMaps", timeToCache, new LayerTilesRenderParameters(Sector.fullSphere(), 1, 1, initialLevel, 20, new Vector2I(256, 256), LayerTilesRenderParameters.defaultTileMeshResolution(), true));
      _key = key;
-     _initialLevel = initialLevel;
      _sector = new Sector(Sector.fullSphere());
   
   }
@@ -85,7 +83,7 @@ public class GoogleMapsLayer extends Layer
     isb.addString(",");
     isb.addDouble(tileSector.getCenter().longitude().degrees());
   
-    final int level = tile.getLevel() + _initialLevel;
+    final int level = tile.getLevel();
     isb.addString("&zoom=");
     isb.addInt(level);
   

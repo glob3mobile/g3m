@@ -23,6 +23,8 @@ public class TileTextureBuilder extends RCObject
 
   private final TileTessellator _tessellator;
 
+  private final int _firstLevel;
+
   private java.util.ArrayList<PetitionStatus> _status = new java.util.ArrayList<PetitionStatus>();
   private java.util.ArrayList<Long> _requestsIds = new java.util.ArrayList<Long>();
 
@@ -92,6 +94,7 @@ public class TileTextureBuilder extends RCObject
      _tileTextureResolution = layerSet.getLayerTilesRenderParameters()._tileTextureResolution;
      _tileMeshResolution = layerSet.getLayerTilesRenderParameters()._tileMeshResolution;
      _mercator = layerSet.getLayerTilesRenderParameters()._mercator;
+     _firstLevel = layerSet.getLayerTilesRenderParameters()._firstLevel;
      _downloader = downloader;
      _tile = tile;
      _tessellatorMesh = tessellatorMesh;
@@ -142,11 +145,13 @@ public class TileTextureBuilder extends RCObject
 
       final long priority = _texturePriority + _tile.getLevel();
 
-//      printf("%s\n", petition->getURL().getPath().c_str());
+      //      printf("%s\n", petition->getURL().getPath().c_str());
 
       final long requestId = _downloader.requestImage(new URL(petition.getURL()), priority, petition.getTimeToCache(), new BuilderDownloadStepDownloadListener(this, i), true);
-
-      _requestsIds.add(requestId);
+      if (requestId >= 0)
+      {
+        _requestsIds.add(requestId);
+      }
     }
   }
 
@@ -406,7 +411,7 @@ public class TileTextureBuilder extends RCObject
 
     if ((mappings != null) && (_tile != null))
     {
-      if (mappings.size() != _tile.getLevel() + 1)
+      if (mappings.size() != (_tile.getLevel() - _firstLevel + 1))
       {
         ILogger.instance().logInfo("pleae break (point) me\n");
       }

@@ -11,8 +11,9 @@ public class LayerSet
   private LayerTilesRenderParameters createLayerTilesRenderParameters()
   {
     Sector mergedSector = null;
-    int splitsByLatitude = 0;
-    int splitsByLongitude = 0;
+    int topSectorSplitsByLatitude = 0;
+    int topSectorSplitsByLongitude = 0;
+    int firstLevel = 0;
     int maxLevel = 0;
     int tileTextureWidth = 0;
     int tileTextureHeight = 0;
@@ -40,10 +41,10 @@ public class LayerSet
           first = false;
   
           mergedSector = new Sector(layerParam._topSector);
-          splitsByLatitude = layerParam._splitsByLatitude;
-          splitsByLongitude = layerParam._splitsByLongitude;
+          topSectorSplitsByLatitude = layerParam._topSectorSplitsByLatitude;
+          topSectorSplitsByLongitude = layerParam._topSectorSplitsByLongitude;
+          firstLevel = layerParam._firstLevel;
           maxLevel = layerParam._maxLevel;
-  
           tileTextureWidth = layerParam._tileTextureResolution._x;
           tileTextureHeight = layerParam._tileTextureResolution._y;
           tileMeshWidth = layerParam._tileMeshResolution._x;
@@ -60,25 +61,32 @@ public class LayerSet
                oldSector.dispose();
           }
   
-          if (splitsByLatitude != layerParam._splitsByLatitude)
+          if (topSectorSplitsByLatitude != layerParam._topSectorSplitsByLatitude)
           {
-            ILogger.instance().logError("Inconsistency in Layer's Parameters: splitsByLatitude");
+            ILogger.instance().logError("Inconsistency in Layer's Parameters: topSectorSplitsByLatitude");
             return null;
           }
   
-          if (splitsByLongitude != layerParam._splitsByLongitude)
+          if (topSectorSplitsByLongitude != layerParam._topSectorSplitsByLongitude)
           {
-            ILogger.instance().logError("Inconsistency in Layer's Parameters: splitsByLongitude");
+            ILogger.instance().logError("Inconsistency in Layer's Parameters: topSectorSplitsByLongitude");
             return null;
           }
   
-          //if (layerParam->_maxLevel > maxLevel) {
-          //  maxLevel = layerParam->_maxLevel;
-          //}
-          if (maxLevel != layerParam._maxLevel)
+          // if ( maxLevel != layerParam->_maxLevel ) {
+          //   ILogger::instance()->logError("Inconsistency in Layer's Parameters: maxLevel");
+          //   return NULL;
+          // }
+          if (maxLevel > layerParam._maxLevel)
           {
-            ILogger.instance().logError("Inconsistency in Layer's Parameters: maxLevel");
-            return null;
+            ILogger.instance().logWarning("Inconsistency in Layer's Parameters: maxLevel (downgrading from %d to %d)", maxLevel, layerParam._maxLevel);
+            maxLevel = layerParam._maxLevel;
+          }
+  
+          if (firstLevel < layerParam._firstLevel)
+          {
+            ILogger.instance().logWarning("Inconsistency in Layer's Parameters: firstLevel (upgrading from %d to %d)", firstLevel, layerParam._firstLevel);
+            firstLevel = layerParam._firstLevel;
           }
   
           if ((tileTextureWidth != layerParam._tileTextureResolution._x) || (tileTextureHeight != layerParam._tileTextureResolution._y))
@@ -114,7 +122,7 @@ public class LayerSet
        mergedSector.dispose();
     mergedSector = null;
   
-    return new LayerTilesRenderParameters(topSector, splitsByLatitude, splitsByLongitude, maxLevel, new Vector2I(tileTextureWidth, tileTextureHeight), new Vector2I(tileMeshWidth, tileMeshHeight), mercator);
+    return new LayerTilesRenderParameters(topSector, topSectorSplitsByLatitude, topSectorSplitsByLongitude, firstLevel, maxLevel, new Vector2I(tileTextureWidth, tileTextureHeight), new Vector2I(tileMeshWidth, tileMeshHeight), mercator);
   }
   private void layersChanged()
   {

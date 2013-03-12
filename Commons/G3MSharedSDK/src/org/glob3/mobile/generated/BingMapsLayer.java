@@ -4,6 +4,7 @@ public class BingMapsLayer extends Layer
   private final String _imagerySet;
   private final String _key;
   private final Sector _sector ;
+
   private final int _initialLevel;
 
   private boolean _isInitialized;
@@ -22,7 +23,9 @@ public class BingMapsLayer extends Layer
   
     _isInitialized = true;
   
-    setParameters(new LayerTilesRenderParameters(Sector.fullSphere(), (int) IMathUtils.instance().pow(2.0, _initialLevel), (int) IMathUtils.instance().pow(2.0, _initialLevel), zoomMax - _initialLevel, new Vector2I(imageWidth, imageHeight), LayerTilesRenderParameters.defaultTileMeshResolution(), true));
+    final IMathUtils mu = IMathUtils.instance();
+  
+    setParameters(new LayerTilesRenderParameters(Sector.fullSphere(), 1, 1, mu.max(zoomMin, _initialLevel), zoomMax, new Vector2I(imageWidth, imageHeight), LayerTilesRenderParameters.defaultTileMeshResolution(), true));
   }
 
   private String getQuadkey(int zoom, int column, int row)
@@ -45,7 +48,7 @@ public class BingMapsLayer extends Layer
 
 
   /**
-   imagerySet: "Aerial", "AerialWithLabels", "Road", "OrdnanceSurvey" or "CollinsBart"
+   imagerySet: "Aerial", "AerialWithLabels", "Road", "OrdnanceSurvey" or "CollinsBart". See class BingMapType for constants.
    key: Bing Maps key. See http: //msdn.microsoft.com/en-us/library/gg650598.aspx
    */
   public BingMapsLayer(String imagerySet, String key, TimeInterval timeToCache, int initialLevel)
@@ -54,7 +57,7 @@ public class BingMapsLayer extends Layer
   }
   public BingMapsLayer(String imagerySet, String key, TimeInterval timeToCache)
   {
-     this(imagerySet, key, timeToCache, 1, null);
+     this(imagerySet, key, timeToCache, 3, null);
   }
   public BingMapsLayer(String imagerySet, String key, TimeInterval timeToCache, int initialLevel, LayerCondition condition)
   {
@@ -90,7 +93,7 @@ public class BingMapsLayer extends Layer
   
     final IStringUtils su = IStringUtils.instance();
   
-    final int level = tile.getLevel() + _initialLevel;
+    final int level = tile.getLevel();
     final int column = tile.getColumn();
     final int numRows = (int) IMathUtils.instance().pow(2.0, level);
     final int row = numRows - tile.getRow() - 1;
@@ -200,8 +203,8 @@ public class BingMapsLayer extends Layer
     final int imageWidth = (int) meanfulResource.getAsNumber("imageWidth", 256);
     final int imageHeight = (int) meanfulResource.getAsNumber("imageHeight", 256);
   
-    final int zoomMin = (int) meanfulResource.getAsNumber("zoomMin", _initialLevel+1);
-    final int zoomMax = (int) meanfulResource.getAsNumber("zoomMax", _initialLevel+1);
+    final int zoomMin = (int) meanfulResource.getAsNumber("zoomMin", 1);
+    final int zoomMax = (int) meanfulResource.getAsNumber("zoomMax", 1);
   
     final JSONArray imageUrlSubdomainsJS = meanfulResource.getAsArray("imageUrlSubdomains");
     if (imageUrlSubdomainsJS == null)

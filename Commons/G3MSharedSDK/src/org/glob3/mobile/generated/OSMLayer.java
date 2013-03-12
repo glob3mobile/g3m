@@ -29,14 +29,17 @@ public class OSMLayer extends MercatorTiledLayer
     return result;
   }
 
+  public OSMLayer(TimeInterval timeToCache, int initialLevel)
+  {
+     this(timeToCache, initialLevel, null);
+  }
   public OSMLayer(TimeInterval timeToCache)
   {
-     this(timeToCache, null);
+     this(timeToCache, 3, null);
   }
-  public OSMLayer(TimeInterval timeToCache, LayerCondition condition) //initialOSMLevel,
-           //int initialOSMLevel = 1,
+  public OSMLayer(TimeInterval timeToCache, int initialLevel, LayerCondition condition)
   {
-     super("OpenStreetMap", "http://", "tile.openstreetmap.org", getSubdomains(), "png", timeToCache, Sector.fullSphere(), 1, 18, condition);
+     super("OpenStreetMap", "http://", "tile.openstreetmap.org", getSubdomains(), "png", timeToCache, Sector.fullSphere(), initialLevel, 18, condition);
 
   }
 

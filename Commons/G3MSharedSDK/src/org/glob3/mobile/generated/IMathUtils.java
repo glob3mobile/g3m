@@ -117,6 +117,9 @@ public abstract class IMathUtils
   public abstract double max(double d1, double d2);
   public abstract float max(float f1, float f2);
 
+  public abstract int max(int i1, int i2);
+  public abstract long max(long l1, long l2);
+
   public double max(double d1, double d2, double d3)
   {
     return max(max(d1, d2), d3);

@@ -20,19 +20,21 @@ package org.glob3.mobile.generated;
 public class LayerTilesRenderParameters
 {
   public final Sector _topSector ;
-  public final int _splitsByLatitude;
-  public final int _splitsByLongitude;
+  public final int _topSectorSplitsByLatitude;
+  public final int _topSectorSplitsByLongitude;
+  public final int _firstLevel;
   public final int _maxLevel;
   public final int _maxLevelForPoles;
   public final Vector2I _tileTextureResolution;
   public final Vector2I _tileMeshResolution;
   public final boolean _mercator;
 
-  public LayerTilesRenderParameters(Sector topSector, int splitsByLatitude, int splitsByLongitude, int maxLevel, Vector2I tileTextureResolution, Vector2I tileMeshResolution, boolean mercator)
+  public LayerTilesRenderParameters(Sector topSector, int topSectorSplitsByLatitude, int topSectorSplitsByLongitude, int firstLevel, int maxLevel, Vector2I tileTextureResolution, Vector2I tileMeshResolution, boolean mercator)
   {
      _topSector = new Sector(topSector);
-     _splitsByLatitude = splitsByLatitude;
-     _splitsByLongitude = splitsByLongitude;
+     _topSectorSplitsByLatitude = topSectorSplitsByLatitude;
+     _topSectorSplitsByLongitude = topSectorSplitsByLongitude;
+     _firstLevel = firstLevel;
      _maxLevel = maxLevel;
      _maxLevelForPoles = 4;
      _tileTextureResolution = tileTextureResolution;
@@ -53,12 +55,13 @@ public class LayerTilesRenderParameters
 
   public static LayerTilesRenderParameters createDefaultNonMercator(Sector topSector)
   {
-    final int splitsByLatitude = 4;
-    final int splitsByLongitude = 8;
+    final int topSectorSplitsByLatitude = 4;
+    final int topSectorSplitsByLongitude = 8;
+    final int firstLevel = 0;
     final int maxLevel = 17;
     final boolean mercator = false;
 
-    return new LayerTilesRenderParameters(topSector, splitsByLatitude, splitsByLongitude, maxLevel, LayerTilesRenderParameters.defaultTileTextureResolution(), LayerTilesRenderParameters.defaultTileMeshResolution(), mercator);
+    return new LayerTilesRenderParameters(topSector, topSectorSplitsByLatitude, topSectorSplitsByLongitude, firstLevel, maxLevel, LayerTilesRenderParameters.defaultTileTextureResolution(), LayerTilesRenderParameters.defaultTileMeshResolution(), mercator);
   }
 
 

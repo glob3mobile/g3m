@@ -34,36 +34,39 @@ public class MapQuestLayer extends MercatorTiledLayer
     return result;
   }
 
-  private MapQuestLayer(String name, String domain, java.util.ArrayList<String> subdomains, int maxMercatorLevel, TimeInterval timeToCache, LayerCondition condition) //initialMapQuestLevel,
-                //int initialMapQuestLevel,
+  private MapQuestLayer(String name, String domain, java.util.ArrayList<String> subdomains, int initialLevel, int maxLevel, TimeInterval timeToCache, LayerCondition condition)
   {
-     super(name, "http://", domain, subdomains, "jpg", timeToCache, Sector.fullSphere(), 1, maxMercatorLevel, condition);
+     super(name, "http://", domain, subdomains, "jpg", timeToCache, Sector.fullSphere(), initialLevel, maxLevel, condition);
 
   }
 
 
 
+  public static MapQuestLayer newOSM(TimeInterval timeToCache, int initialLevel)
+  {
+     return newOSM(timeToCache, initialLevel, null);
+  }
   public static MapQuestLayer newOSM(TimeInterval timeToCache)
   {
-     return newOSM(timeToCache, null);
+     return newOSM(timeToCache, 3, null);
   }
-  public static MapQuestLayer newOSM(TimeInterval timeToCache, LayerCondition condition)
-                               //int initialMapQuestLevel = 1,
+  public static MapQuestLayer newOSM(TimeInterval timeToCache, int initialLevel, LayerCondition condition)
   {
-    return new MapQuestLayer("MapQuest-OSM", "mqcdn.com/tiles/1.0.0/map", getSubdomains(), 19, timeToCache, condition);
-                             //initialMapQuestLevel,
+    return new MapQuestLayer("MapQuest-OSM", "mqcdn.com/tiles/1.0.0/map", getSubdomains(), initialLevel, 19, timeToCache, condition);
   }
 
 
+  public static MapQuestLayer newOpenAerial(TimeInterval timeToCache, int initialLevel)
+  {
+     return newOpenAerial(timeToCache, initialLevel, null);
+  }
   public static MapQuestLayer newOpenAerial(TimeInterval timeToCache)
   {
-     return newOpenAerial(timeToCache, null);
+     return newOpenAerial(timeToCache, 3, null);
   }
-  public static MapQuestLayer newOpenAerial(TimeInterval timeToCache, LayerCondition condition)
-                                      //int initialMapQuestLevel = 1,
+  public static MapQuestLayer newOpenAerial(TimeInterval timeToCache, int initialLevel, LayerCondition condition)
   {
-    return new MapQuestLayer("MapQuest-OpenAerial", "mqcdn.com/tiles/1.0.0/sat", getSubdomains(), 11, timeToCache, condition);
-                             //initialMapQuestLevel,
+    return new MapQuestLayer("MapQuest-OpenAerial", "mqcdn.com/tiles/1.0.0/sat", getSubdomains(), initialLevel, 11, timeToCache, condition);
   }
 
 }

@@ -212,29 +212,6 @@ public class Tile
     return false;
   }
 
-  private java.util.ArrayList<Tile> createSubTiles(Angle splitLatitude, Angle splitLongitude)
-  {
-    final Geodetic2D lower = _sector.lower();
-    final Geodetic2D upper = _sector.upper();
-  
-    final int nextLevel = _level + 1;
-  
-    final int row2 = 2 * _row;
-    final int column2 = 2 * _column;
-  
-    java.util.ArrayList<Tile> subTiles = new java.util.ArrayList<Tile>();
-  
-    subTiles.add(createSubTile(lower.latitude(), lower.longitude(), splitLatitude, splitLongitude, nextLevel, row2, column2));
-  
-    subTiles.add(createSubTile(lower.latitude(), splitLongitude, splitLatitude, upper.longitude(), nextLevel, row2, column2 + 1));
-  
-    subTiles.add(createSubTile(splitLatitude, lower.longitude(), upper.latitude(), splitLongitude, nextLevel, row2 + 1, column2));
-  
-    subTiles.add(createSubTile(splitLatitude, splitLongitude, upper.latitude(), upper.longitude(), nextLevel, row2 + 1, column2 + 1));
-  
-    return subTiles;
-  }
-
   private void rawRender(G3MRenderContext rc, TileRenderContext trc, GLState parentState)
   {
   
@@ -285,9 +262,10 @@ public class Tile
 //                                     const Angle& upperLatitude,
 //                                     bool mercator) const;
 
-  private Tile createSubTile(Angle lowerLat, Angle lowerLon, Angle upperLat, Angle upperLon, int level, int row, int column)
+  private Tile createSubTile(Angle lowerLat, Angle lowerLon, Angle upperLat, Angle upperLon, int level, int row, int column, boolean setParent)
   {
-    return new Tile(_texturizer, this, new Sector(new Geodetic2D(lowerLat, lowerLon), new Geodetic2D(upperLat, upperLon)), level, row, column);
+    Tile parent = setParent ? this : null;
+    return new Tile(_texturizer, parent, new Sector(new Geodetic2D(lowerLat, lowerLon), new Geodetic2D(upperLat, upperLon)), level, row, column);
   }
 
 
@@ -295,7 +273,7 @@ public class Tile
   {
     if (_subtiles == null)
     {
-      _subtiles = createSubTiles(splitLatitude, splitLongitude);
+      _subtiles = createSubTiles(splitLatitude, splitLongitude, true);
       _justCreatedSubtiles = true;
     }
     return _subtiles;
@@ -343,7 +321,10 @@ public class Tile
 
   private void deleteTexturizedMesh(TileTexturizer texturizer)
   {
-    if ((_level > 0) && (_texturizedMesh != null))
+    // check for (_parent != NULL) to avoid deleting the firstLevel tiles.
+    // in this case, the mesh is always loaded (as well as its texture) to be the last option
+    // falback texture for any tile
+    if ((_parent != null) && (_texturizedMesh != null))
     {
   
       if (texturizer != null)
@@ -820,6 +801,29 @@ public class Tile
     if (isb != null)
        isb.dispose();
     return s;
+  }
+
+  public final java.util.ArrayList<Tile> createSubTiles(Angle splitLatitude, Angle splitLongitude, boolean setParent)
+  {
+    final Geodetic2D lower = _sector.lower();
+    final Geodetic2D upper = _sector.upper();
+  
+    final int nextLevel = _level + 1;
+  
+    final int row2 = 2 * _row;
+    final int column2 = 2 * _column;
+  
+    java.util.ArrayList<Tile> subTiles = new java.util.ArrayList<Tile>();
+  
+    subTiles.add(createSubTile(lower.latitude(), lower.longitude(), splitLatitude, splitLongitude, nextLevel, row2, column2, setParent));
+  
+    subTiles.add(createSubTile(lower.latitude(), splitLongitude, splitLatitude, upper.longitude(), nextLevel, row2, column2 + 1, setParent));
+  
+    subTiles.add(createSubTile(splitLatitude, lower.longitude(), upper.latitude(), splitLongitude, nextLevel, row2 + 1, column2, setParent));
+  
+    subTiles.add(createSubTile(splitLatitude, splitLongitude, upper.latitude(), upper.longitude(), nextLevel, row2 + 1, column2 + 1, setParent));
+  
+    return subTiles;
   }
 
 }
