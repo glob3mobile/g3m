@@ -68,7 +68,7 @@ private:
 public:
 
   /**
-   imagerySet: "Aerial", "AerialWithLabels", "Road", "OrdnanceSurvey" or "CollinsBart". see class BingMapType for constants
+   imagerySet: "Aerial", "AerialWithLabels", "Road", "OrdnanceSurvey" or "CollinsBart". See class BingMapType for constants.
    key: Bing Maps key. See http://msdn.microsoft.com/en-us/library/gg650598.aspx
    */
   BingMapsLayer(const std::string& imagerySet,
