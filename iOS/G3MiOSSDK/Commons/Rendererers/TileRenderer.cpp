@@ -20,6 +20,9 @@
 #include "DownloadPriority.hpp"
 #include "ElevationDataProvider.hpp"
 #include "LayerTilesRenderParameters.hpp"
+#include "MercatorUtils.hpp"
+
+#include <algorithm>
 
 class VisibleSectorListenerEntry {
 private:
@@ -115,13 +118,14 @@ _texturizer(texturizer),
 _layerSet(layerSet),
 _parameters(parameters),
 _showStatistics(showStatistics),
-_topTilesJustCreated(false),
+_firstLevelTilesJustCreated(false),
 _lastSplitTimer(NULL),
 _lastCamera(NULL),
 _firstRender(false),
 _context(NULL),
 _lastVisibleSector(NULL),
-_texturePriority(texturePriority)
+_texturePriority(texturePriority),
+_allFirstLevelTilesAreTextureSolved(false)
 {
   _layerSet->setChangeListener(this);
 }
@@ -130,6 +134,7 @@ void TileRenderer::recreateTiles() {
   pruneFirstLevelTiles();
   clearFirstLevelTiles();
   _firstRender = true;
+  _allFirstLevelTilesAreTextureSolved = false;
   createFirstLevelTiles(_context);
 }
 
@@ -183,43 +188,130 @@ void TileRenderer::clearFirstLevelTiles() {
   _firstLevelTiles.clear();
 }
 
+#ifdef C_CODE
+class SortTilesClass {
+public:
+  bool operator() (Tile* i, Tile* j) {
+    const int rowI = i->getRow();
+    const int rowJ = j->getRow();
+
+    if (rowI < rowJ) {
+      return true;
+    }
+    if (rowI > rowJ) {
+      return false;
+    }
+
+    return ( i->getColumn() < j->getColumn() );
+  }
+} sortTilesObject;
+#endif
+
+void TileRenderer::sortTiles(std::vector<Tile*>& firstLevelTiles) const {
+#ifdef C_CODE
+  std::sort(firstLevelTiles.begin(),
+            firstLevelTiles.end(),
+            sortTilesObject);
+#endif
+#ifdef JAVA_CODE
+  TODO_SORT_TILES;
+#endif
+}
+
+void TileRenderer::createFirstLevelTiles(std::vector<Tile*>& firstLevelTiles,
+                                         Tile* tile,
+                                         int firstLevel,
+                                         bool mercator) const {
+  if (tile->getLevel() == firstLevel) {
+    firstLevelTiles.push_back(tile);
+  }
+  else {
+    const Sector sector = tile->getSector();
+    const Geodetic2D lower = sector.lower();
+    const Geodetic2D upper = sector.upper();
+
+    const Angle splitLongitude = Angle::midAngle(lower.longitude(),
+                                                 upper.longitude());
+
+    const Angle splitLatitude = mercator
+    /*                               */ ? MercatorUtils::calculateSplitLatitude(lower.latitude(),
+                                                                                upper.latitude())
+    /*                               */ : Angle::midAngle(lower.latitude(),
+                                                          upper.latitude());
+
+
+    std::vector<Tile*>* children = tile->createSubTiles(splitLatitude,
+                                                        splitLongitude,
+                                                        false);
+
+    const int childrenSize = children->size();
+    for (int i = 0; i < childrenSize; i++) {
+      Tile* child = children->at(i);
+      createFirstLevelTiles(firstLevelTiles, child, firstLevel, mercator);
+    }
+
+    delete children;
+    delete tile;
+  }
+}
+
 void TileRenderer::createFirstLevelTiles(const G3MContext* context) {
 
-  const LayerTilesRenderParameters* layerParameters = _layerSet->getLayerTilesRenderParameters();
-  if (layerParameters == NULL) {
-    ILogger::instance()->logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't create topTiles");
+  const LayerTilesRenderParameters* parameters = _layerSet->getLayerTilesRenderParameters();
+  if (parameters == NULL) {
+    ILogger::instance()->logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't create first-level tiles");
     return;
   }
 
-  const Angle fromLatitude  = layerParameters->_topSector.lower().latitude();
-  const Angle fromLongitude = layerParameters->_topSector.lower().longitude();
+  std::vector<Tile*> topLevelTiles;
 
-  const Angle deltaLan = layerParameters->_topSector.getDeltaLatitude();
-  const Angle deltaLon = layerParameters->_topSector.getDeltaLongitude();
+  const Angle fromLatitude  = parameters->_topSector.lower().latitude();
+  const Angle fromLongitude = parameters->_topSector.lower().longitude();
 
-  const Angle tileHeight = deltaLan.div(layerParameters->_splitsByLatitude);
-  const Angle tileWidth = deltaLon.div(layerParameters->_splitsByLongitude);
+  const Angle deltaLan = parameters->_topSector.getDeltaLatitude();
+  const Angle deltaLon = parameters->_topSector.getDeltaLongitude();
 
-  for (int row = 0; row < layerParameters->_splitsByLatitude; row++) {
+  const int topSectorSplitsByLatitude  = parameters->_topSectorSplitsByLatitude;
+  const int topSectorSplitsByLongitude = parameters->_topSectorSplitsByLongitude;
+
+  const Angle tileHeight = deltaLan.div(topSectorSplitsByLatitude);
+  const Angle tileWidth  = deltaLon.div(topSectorSplitsByLongitude);
+
+  for (int row = 0; row < topSectorSplitsByLatitude; row++) {
     const Angle tileLatFrom = tileHeight.times(row).add(fromLatitude);
-    const Angle tileLatTo = tileLatFrom.add(tileHeight);
+    const Angle tileLatTo   = tileLatFrom.add(tileHeight);
 
-    for (int col = 0; col < layerParameters->_splitsByLongitude; col++) {
+    for (int col = 0; col < topSectorSplitsByLongitude; col++) {
       const Angle tileLonFrom = tileWidth.times(col).add(fromLongitude);
-      const Angle tileLonTo = tileLonFrom.add(tileWidth);
+      const Angle tileLonTo   = tileLonFrom.add(tileWidth);
 
       const Geodetic2D tileLower(tileLatFrom, tileLonFrom);
       const Geodetic2D tileUpper(tileLatTo, tileLonTo);
       const Sector sector(tileLower, tileUpper);
 
       Tile* tile = new Tile(_texturizer, NULL, sector, 0, row, col);
-      _firstLevelTiles.push_back(tile);
+      if (parameters->_firstLevel == 0) {
+        _firstLevelTiles.push_back(tile);
+      }
+      else {
+        topLevelTiles.push_back(tile);
+      }
     }
   }
 
+  if (parameters->_firstLevel > 0) {
+    const int topLevelTilesSize = topLevelTiles.size();
+    for (int i = 0; i < topLevelTilesSize; i++) {
+      Tile* tile = topLevelTiles[i];
+      createFirstLevelTiles(_firstLevelTiles, tile, parameters->_firstLevel, parameters->_mercator);
+    }
+  }
+
+  sortTiles(_firstLevelTiles);
+
   context->getLogger()->logInfo("Created %d first level tiles", _firstLevelTiles.size());
 
-  _topTilesJustCreated = true;
+  _firstLevelTilesJustCreated = true;
 }
 
 void TileRenderer::initialize(const G3MContext* context) {
@@ -249,8 +341,8 @@ bool TileRenderer::isReadyToRender(const G3MRenderContext *rc) {
     }
   }
 
-  if (_topTilesJustCreated) {
-    _topTilesJustCreated = false;
+  if (_firstLevelTilesJustCreated) {
+    _firstLevelTilesJustCreated = false;
 
     const int firstLevelTilesCount = _firstLevelTiles.size();
 
@@ -283,24 +375,28 @@ bool TileRenderer::isReadyToRender(const G3MRenderContext *rc) {
   }
 
   if (_parameters->_forceFirstLevelTilesRenderOnStart) {
-    const int firstLevelTilesCount = _firstLevelTiles.size();
-    for (int i = 0; i < firstLevelTilesCount; i++) {
-      Tile* tile = _firstLevelTiles[i];
-      if (!tile->isTextureSolved()) {
-        return false;
+    if (!_allFirstLevelTilesAreTextureSolved) {
+      const int firstLevelTilesCount = _firstLevelTiles.size();
+      for (int i = 0; i < firstLevelTilesCount; i++) {
+        Tile* tile = _firstLevelTiles[i];
+        if (!tile->isTextureSolved()) {
+          return false;
+        }
       }
-    }
 
-    if (_tessellator != NULL) {
-      if (!_tessellator->isReady(rc)) {
-        return false;
+      if (_tessellator != NULL) {
+        if (!_tessellator->isReady(rc)) {
+          return false;
+        }
       }
-    }
 
-    if (_texturizer != NULL) {
-      if (!_texturizer->isReady(rc, _layerSet)) {
-        return false;
+      if (_texturizer != NULL) {
+        if (!_texturizer->isReady(rc, _layerSet)) {
+          return false;
+        }
       }
+
+      _allFirstLevelTilesAreTextureSolved = true;
     }
   }
 
@@ -328,8 +424,8 @@ void TileRenderer::render(const G3MRenderContext* rc,
   const int firstLevelTilesCount = _firstLevelTiles.size();
 
   if (_firstRender && _parameters->_forceFirstLevelTilesRenderOnStart) {
-    // force one render pass of the topLevel tiles to make the (toplevel) textures loaded
-    // as they will be used as last-chance fallback texture for any tile.
+    // force one render pass of the firstLevelTiles tiles to make the (toplevel) textures
+    // loaded as they will be used as last-chance fallback texture for any tile.
     _firstRender = false;
 
     for (int i = 0; i < firstLevelTilesCount; i++) {

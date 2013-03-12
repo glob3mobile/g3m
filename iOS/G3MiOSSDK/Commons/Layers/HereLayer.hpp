@@ -19,14 +19,13 @@ private:
   const Sector      _sector;
   const std::string _appId;
   const std::string _appCode;
-  const int         _initialHereLevel;
 
 public:
 
   HereLayer(const std::string& appId,
             const std::string& appCode,
             const TimeInterval& timeToCache,
-            int initialHereLevel = 1,
+            int initialLevel = 3,
             LayerCondition* condition = NULL);
 
   std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,

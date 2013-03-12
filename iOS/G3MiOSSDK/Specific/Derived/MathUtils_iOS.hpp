@@ -126,6 +126,13 @@ public:
     return (f1 > f2) ? f1 : f2;
   }
 
+  int max(int i1, int i2) const {
+    return (i1 > i2) ? i1 : i2;
+  }
+  
+  long long max(long long l1, long long l2) const {
+    return (l1 > l2) ? l1 : l2;
+  }
 
   long long doubleToRawLongBits(double value) const {
     union DoubleAndLong {

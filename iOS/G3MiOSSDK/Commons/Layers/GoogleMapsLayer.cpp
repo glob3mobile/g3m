@@ -22,14 +22,14 @@ Layer(condition,
       "GoogleMaps",
       timeToCache,
       new LayerTilesRenderParameters(Sector::fullSphere(),
-                                     (int) IMathUtils::instance()->pow(2.0, initialLevel),
-                                     (int) IMathUtils::instance()->pow(2.0, initialLevel),
-                                     20 - initialLevel,
+                                     1,
+                                     1,
+                                     initialLevel,
+                                     20,
                                      Vector2I(256, 256),
                                      LayerTilesRenderParameters::defaultTileMeshResolution(),
                                      true) ),
 _key(key),
-_initialLevel(initialLevel),
 _sector(Sector::fullSphere())
 {
 
@@ -79,7 +79,7 @@ std::vector<Petition*> GoogleMapsLayer::createTileMapPetitions(const G3MRenderCo
   isb->addString(",");
   isb->addDouble(tileSector.getCenter().longitude().degrees());
 
-  const int level = tile->getLevel() + _initialLevel;
+  const int level = tile->getLevel();
   isb->addString("&zoom=");
   isb->addInt(level);
 

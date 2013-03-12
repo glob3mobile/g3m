@@ -15,7 +15,6 @@ class GoogleMapsLayer : public Layer {
 private:
   const std::string _key;
   const Sector      _sector;
-  const int         _initialLevel;
 
 protected:
 
@@ -23,7 +22,7 @@ public:
 
   GoogleMapsLayer(const std::string& key,
                   const TimeInterval& timeToCache,
-                  int initialLevel = 1,
+                  int initialLevel = 3,
                   LayerCondition* condition = NULL);
 
   URL getFeatureInfoURL(const Geodetic2D& position,

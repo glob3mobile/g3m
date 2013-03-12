@@ -145,8 +145,8 @@ void BingMapsLayer::onDowloadMetadata(IByteBuffer* buffer) {
   const int imageWidth  = (int) meanfulResource->getAsNumber("imageWidth",  256);
   const int imageHeight = (int) meanfulResource->getAsNumber("imageHeight", 256);
 
-  const int zoomMin = (int) meanfulResource->getAsNumber("zoomMin", _initialLevel+1);
-  const int zoomMax = (int) meanfulResource->getAsNumber("zoomMax", _initialLevel+1);
+  const int zoomMin = (int) meanfulResource->getAsNumber("zoomMin", 1);
+  const int zoomMax = (int) meanfulResource->getAsNumber("zoomMax", 1);
 
   const JSONArray* imageUrlSubdomainsJS = meanfulResource->getAsArray("imageUrlSubdomains");
   if (imageUrlSubdomainsJS == NULL) {
@@ -198,10 +198,13 @@ void BingMapsLayer::processMetadata(const std::string& brandLogoUri,
 
   _isInitialized = true;
 
+  const IMathUtils* mu = IMathUtils::instance();
+
   setParameters(new LayerTilesRenderParameters(Sector::fullSphere(),
-                                               (int) IMathUtils::instance()->pow(2.0, _initialLevel),
-                                               (int) IMathUtils::instance()->pow(2.0, _initialLevel),
-                                               zoomMax - _initialLevel,
+                                               1,
+                                               1,
+                                               mu->max(zoomMin, _initialLevel),
+                                               zoomMax,
                                                Vector2I(imageWidth, imageHeight),
                                                LayerTilesRenderParameters::defaultTileMeshResolution(),
                                                true));
@@ -256,7 +259,7 @@ std::vector<Petition*> BingMapsLayer::createTileMapPetitions(const G3MRenderCont
 
   const IStringUtils* su = IStringUtils::instance();
   
-  const int level   = tile->getLevel() + _initialLevel;
+  const int level   = tile->getLevel();
   const int column  = tile->getColumn();
   const int numRows = (int) IMathUtils::instance()->pow(2.0, level);
   const int row     = numRows - tile->getRow() - 1;

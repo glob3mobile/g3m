@@ -21,23 +21,22 @@ private:
 #ifdef JAVA_CODE
   private final java.util.ArrayList<String> _subdomains;
 #endif
-  const std::string              _imageFormat;
+  const std::string _imageFormat;
   
   const Sector _sector;
-  const int    _initialMercatorLevel;
 
 
 public:
-  MercatorTiledLayer(const std::string& name,
-                     const std::string& protocol,
-                     const std::string& domain,
+  MercatorTiledLayer(const std::string&              name,
+                     const std::string&              protocol,
+                     const std::string&              domain,
                      const std::vector<std::string>& subdomains,
                      const std::string&              imageFormat,
-                     const TimeInterval& timeToCache,
-                     const Sector sector,
-                     int initialMercatorLevel,
-                     int maxMercatorLevel,
-                     LayerCondition* condition);
+                     const TimeInterval&             timeToCache,
+                     const Sector&                   sector,
+                     int                             initialLevel,
+                     int                             maxLevel,
+                     LayerCondition*                 condition);
 
   URL getFeatureInfoURL(const Geodetic2D& position,
                         const Sector& sector) const;

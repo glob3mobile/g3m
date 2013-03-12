@@ -15,33 +15,27 @@
 #include "Petition.hpp"
 
 /*
-
- Implementation details:
-
- - - from http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames
- - - the G3M level 0 is mapped to initialMercatorLevel
- - - so maxLevel is maxMercatorLevel-initialOSMLevel
- - - and splitsByLatitude and splitsByLongitude are set to 2^initialMercatorLevel
-
+ Implementation details: http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames
  */
 
-MercatorTiledLayer::MercatorTiledLayer(const std::string& name,
-                                       const std::string& protocol,
-                                       const std::string& domain,
+MercatorTiledLayer::MercatorTiledLayer(const std::string&              name,
+                                       const std::string&              protocol,
+                                       const std::string&              domain,
                                        const std::vector<std::string>& subdomains,
                                        const std::string&              imageFormat,
-                                       const TimeInterval& timeToCache,
-                                       const Sector sector,
-                                       int initialMercatorLevel,
-                                       int maxMercatorLevel,
-                                       LayerCondition* condition) :
+                                       const TimeInterval&             timeToCache,
+                                       const Sector&                   sector,
+                                       int                             initialLevel,
+                                       int                             maxLevel,
+                                       LayerCondition*                 condition) :
 Layer(condition,
       name,
       timeToCache,
       new LayerTilesRenderParameters(Sector::fullSphere(),
-                                     (int) IMathUtils::instance()->pow(2.0, initialMercatorLevel),
-                                     (int) IMathUtils::instance()->pow(2.0, initialMercatorLevel),
-                                     maxMercatorLevel - initialMercatorLevel,
+                                     1,
+                                     1,
+                                     initialLevel,
+                                     maxLevel,
                                      Vector2I(256, 256),
                                      LayerTilesRenderParameters::defaultTileMeshResolution(),
                                      true)),
@@ -49,8 +43,7 @@ _protocol(protocol),
 _domain(domain),
 _subdomains(subdomains),
 _imageFormat(imageFormat),
-_sector(sector),
-_initialMercatorLevel(initialMercatorLevel)
+_sector(sector)
 {
 
 }
@@ -78,7 +71,7 @@ std::vector<Petition*> MercatorTiledLayer::createTileMapPetitions(const G3MRende
   // http://[abc].tile.openstreetmap.org/zoom/x/y.png
   // http://[abc].tiles.mapbox.com/v3/examples.map-vyofok3q/9/250/193.png
 
-  const int level   = tile->getLevel() + _initialMercatorLevel;
+  const int level   = tile->getLevel();
   const int column  = tile->getColumn();
   const int numRows = (int) IMathUtils::instance()->pow(2.0, level);
   const int row     = numRows - tile->getRow() - 1;

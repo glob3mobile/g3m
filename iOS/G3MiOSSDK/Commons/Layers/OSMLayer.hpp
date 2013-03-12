@@ -24,7 +24,7 @@ private:
 
 public:
   OSMLayer(const TimeInterval& timeToCache,
-           //int initialOSMLevel = 1,
+           int initialLevel = 3,
            LayerCondition* condition = NULL) :
   MercatorTiledLayer("OpenStreetMap",
                      "http://",
@@ -33,7 +33,7 @@ public:
                      "png",
                      timeToCache,
                      Sector::fullSphere(),
-                     1, //initialOSMLevel,
+                     initialLevel,
                      18,
                      condition)
   {

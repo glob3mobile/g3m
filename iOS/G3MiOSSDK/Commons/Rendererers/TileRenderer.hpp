@@ -288,7 +288,6 @@ private:
   LayerSet*                    _layerSet;
   const TilesRenderParameters* _parameters;
   const bool                   _showStatistics;
-  bool                         _topTilesJustCreated;
 
 #ifdef C_CODE
   const Camera*     _lastCamera;
@@ -299,12 +298,20 @@ private:
   private G3MContext _context;
 #endif
 
-  std::vector<Tile*>     _firstLevelTiles;
+  std::vector<Tile*> _firstLevelTiles;
+  bool               _firstLevelTilesJustCreated;
+  bool               _allFirstLevelTilesAreTextureSolved;
 
   ITimer* _lastSplitTimer; // timer to start every time a tile get splitted into subtiles
 
   void clearFirstLevelTiles();
   void createFirstLevelTiles(const G3MContext* context);
+  void createFirstLevelTiles(std::vector<Tile*>& firstLevelTiles,
+                             Tile* tile,
+                             int firstLevel,
+                             bool mercator) const;
+
+  void sortTiles(std::vector<Tile*>& firstLevelTiles) const;
 
   bool _firstRender;
 

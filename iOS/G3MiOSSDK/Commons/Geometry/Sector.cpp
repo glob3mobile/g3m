@@ -292,8 +292,8 @@ Vector2D Sector::getScaleFactor(const Sector& that) const {
   return Vector2D(scaleX, scaleY);
 }
 
-Vector2D Sector::getTranslationFactor(const Sector& that) const {
-  const Vector2D uv = that.getUVCoordinates(_lower);
-  const double scaleY = _deltaLatitude.div(that._deltaLatitude);
-  return Vector2D(uv._x, uv._y - scaleY);
-}
+//Vector2D Sector::getTranslationFactor(const Sector& that) const {
+//  const Vector2D uv = that.getUVCoordinates(_lower);
+//  const double scaleY = _deltaLatitude.div(that._deltaLatitude);
+//  return Vector2D(uv._x, uv._y - scaleY);
+//}

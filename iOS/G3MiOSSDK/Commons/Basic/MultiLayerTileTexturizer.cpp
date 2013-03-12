@@ -108,7 +108,10 @@ public:
 
       const Vector2D scale = tileSector.getScaleFactor(ancestorSector);
       _scale       = scale.asMutableVector2D();
-      _translation = tileSector.getTranslationFactor(ancestorSector).asMutableVector2D();
+      //_translation = tileSector.getTranslationFactor(ancestorSector).asMutableVector2D();
+
+      _translation = ancestorSector.getUVCoordinates(tileSector.upper().latitude(),
+                                                     tileSector.lower().longitude()).asMutableVector2D();
       //_translation = _tessellator->getTextCoord(_ancestor, tileSector.lower(), _mercator).times(scale).asMutableVector2D();
     }
   }
@@ -206,6 +209,8 @@ private:
 
   const TileTessellator* _tessellator;
 
+  const int    _firstLevel;
+
   std::vector<PetitionStatus>    _status;
   std::vector<long long>         _requestsIds;
 
@@ -273,6 +278,7 @@ public:
   _tileTextureResolution( layerSet->getLayerTilesRenderParameters()->_tileTextureResolution ),
   _tileMeshResolution( layerSet->getLayerTilesRenderParameters()->_tileMeshResolution ),
   _mercator( layerSet->getLayerTilesRenderParameters()->_mercator ),
+  _firstLevel( layerSet->getLayerTilesRenderParameters()->_firstLevel ),
   _downloader(downloader),
   _tile(tile),
   _tessellatorMesh(tessellatorMesh),
@@ -318,15 +324,16 @@ public:
 
       const long long priority = _texturePriority + _tile->getLevel();
 
-//      printf("%s\n", petition->getURL().getPath().c_str());
+      //      printf("%s\n", petition->getURL().getPath().c_str());
 
       const long long requestId = _downloader->requestImage(URL(petition->getURL()),
                                                             priority,
                                                             petition->getTimeToCache(),
                                                             new BuilderDownloadStepDownloadListener(this, i),
                                                             true);
-
-      _requestsIds.push_back(requestId);
+      if (requestId >= 0) {
+        _requestsIds.push_back(requestId);
+      }
     }
   }
 
@@ -574,7 +581,7 @@ public:
     }
 
     if ((mappings != NULL) && (_tile != NULL)) {
-      if (mappings->size() != _tile->getLevel() + 1) {
+      if (mappings->size() != (_tile->getLevel() - _firstLevel + 1) ) {
         ILogger::instance()->logInfo("pleae break (point) me\n");
       }
     }

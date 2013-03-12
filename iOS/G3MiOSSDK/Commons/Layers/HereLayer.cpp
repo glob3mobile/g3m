@@ -17,21 +17,21 @@
 HereLayer::HereLayer(const std::string& appId,
                      const std::string& appCode,
                      const TimeInterval& timeToCache,
-                     int initialHereLevel,
+                     int initialLevel,
                      LayerCondition* condition) :
 Layer(condition,
       "here",
       timeToCache,
       new LayerTilesRenderParameters(Sector::fullSphere(),
-                                     (int) IMathUtils::instance()->pow(2.0, initialHereLevel),
-                                     (int) IMathUtils::instance()->pow(2.0, initialHereLevel),
-                                     20 - initialHereLevel,
+                                     1,
+                                     1,
+                                     initialLevel,
+                                     20,
                                      Vector2I(256, 256),
                                      LayerTilesRenderParameters::defaultTileMeshResolution(),
                                      true)),
 _appId(appId),
 _appCode(appCode),
-_initialHereLevel(initialHereLevel),
 _sector(Sector::fullSphere())
 {
 
@@ -93,7 +93,7 @@ std::vector<Petition*> HereLayer::createTileMapPetitions(const G3MRenderContext*
 //  isb->addString("&nomrk");
 
   isb->addString("&z=");
-  const int level = tile->getLevel() + _initialHereLevel;
+  const int level = tile->getLevel();
   isb->addInt(level);
 
 //  isb->addString("&t=3");

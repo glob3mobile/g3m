@@ -470,7 +470,7 @@ void Tile::debugRender(const G3MRenderContext* rc,
 std::vector<Tile*>* Tile::getSubTiles(const Angle& splitLatitude,
                                       const Angle& splitLongitude) {
   if (_subtiles == NULL) {
-    _subtiles = createSubTiles(splitLatitude, splitLongitude);
+    _subtiles = createSubTiles(splitLatitude, splitLongitude, true);
     _justCreatedSubtiles = true;
   }
   return _subtiles;
@@ -527,7 +527,10 @@ void Tile::setIsVisible(bool isVisible,
 }
 
 void Tile::deleteTexturizedMesh(TileTexturizer* texturizer) {
-  if ((_level > 0) && (_texturizedMesh != NULL)) {
+  // check for (_parent != NULL) to avoid deleting the firstLevel tiles.
+  // in this case, the mesh is always loaded (as well as its texture) to be the last option
+  // falback texture for any tile
+  if ((_parent != NULL) && (_texturizedMesh != NULL)) {
 
     if (texturizer != NULL) {
       texturizer->tileMeshToBeDeleted(this, _texturizedMesh);
@@ -611,16 +614,19 @@ void Tile::render(const G3MRenderContext* rc,
 Tile* Tile::createSubTile(const Angle& lowerLat, const Angle& lowerLon,
                           const Angle& upperLat, const Angle& upperLon,
                           const int level,
-                          const int row, const int column) {
+                          const int row, const int column,
+                          bool setParent) {
+  Tile* parent = setParent ? this : NULL;
   return new Tile(_texturizer,
-                  this,
+                  parent,
                   Sector(Geodetic2D(lowerLat, lowerLon), Geodetic2D(upperLat, upperLon)),
                   level,
                   row, column);
 }
 
 std::vector<Tile*>* Tile::createSubTiles(const Angle& splitLatitude,
-                                         const Angle& splitLongitude) {
+                                         const Angle& splitLongitude,
+                                         bool setParent) {
   const Geodetic2D lower = _sector.lower();
   const Geodetic2D upper = _sector.upper();
 
@@ -635,25 +641,29 @@ std::vector<Tile*>* Tile::createSubTiles(const Angle& splitLatitude,
                                      splitLatitude, splitLongitude,
                                      nextLevel,
                                      row2,
-                                     column2 ) );
+                                     column2,
+                                     setParent) );
 
   subTiles->push_back( createSubTile(lower.latitude(), splitLongitude,
                                      splitLatitude, upper.longitude(),
                                      nextLevel,
                                      row2,
-                                     column2 + 1 ) );
+                                     column2 + 1,
+                                     setParent) );
 
   subTiles->push_back( createSubTile(splitLatitude, lower.longitude(),
                                      upper.latitude(), splitLongitude,
                                      nextLevel,
                                      row2 + 1,
-                                     column2 ) );
+                                     column2,
+                                     setParent) );
 
   subTiles->push_back( createSubTile(splitLatitude, splitLongitude,
                                      upper.latitude(), upper.longitude(),
                                      nextLevel,
                                      row2 + 1,
-                                     column2 + 1) );
+                                     column2 + 1,
+                                     setParent) );
 
   return subTiles;
 }

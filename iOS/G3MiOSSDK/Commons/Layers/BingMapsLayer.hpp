@@ -42,8 +42,9 @@ private:
   const std::string _imagerySet;
   const std::string _key;
   const Sector      _sector;
-  const int         _initialLevel;
 
+  const int _initialLevel;
+  
   bool _isInitialized;
 
   std::string _brandLogoUri;
@@ -67,13 +68,13 @@ private:
 public:
 
   /**
-   imagerySet: "Aerial", "AerialWithLabels", "Road", "OrdnanceSurvey" or "CollinsBart"
+   imagerySet: "Aerial", "AerialWithLabels", "Road", "OrdnanceSurvey" or "CollinsBart". see class BingMapType for constants
    key: Bing Maps key. See http://msdn.microsoft.com/en-us/library/gg650598.aspx
    */
   BingMapsLayer(const std::string& imagerySet,
                 const std::string& key,
                 const TimeInterval& timeToCache,
-                int initialLevel = 1,
+                int initialLevel = 3,
                 LayerCondition* condition = NULL);
 
   URL getFeatureInfoURL(const Geodetic2D& position,

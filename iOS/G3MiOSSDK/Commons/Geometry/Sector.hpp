@@ -63,7 +63,7 @@ public:
 
   Vector2D getScaleFactor(const Sector& that) const;
 
-  Vector2D getTranslationFactor(const Sector& that) const;
+//  Vector2D getTranslationFactor(const Sector& that) const;
 
   bool fullContains(const Sector& that) const;
 

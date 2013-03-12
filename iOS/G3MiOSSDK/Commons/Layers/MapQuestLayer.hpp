@@ -30,9 +30,9 @@ private:
   MapQuestLayer(const std::string& name,
                 const std::string& domain,
                 const std::vector<std::string>& subdomains,
-                int maxMercatorLevel,
+                int initialLevel,
+                int maxLevel,
                 const TimeInterval& timeToCache,
-                //int initialMapQuestLevel,
                 LayerCondition* condition) :
   MercatorTiledLayer(name,
                      "http://",
@@ -41,8 +41,8 @@ private:
                      "jpg",
                      timeToCache,
                      Sector::fullSphere(),
-                     1, //initialMapQuestLevel,
-                     maxMercatorLevel,
+                     initialLevel,
+                     maxLevel,
                      condition)
   {
 
@@ -52,27 +52,27 @@ private:
 public:
 
   static MapQuestLayer* newOSM(const TimeInterval& timeToCache,
-                               //int initialMapQuestLevel = 1,
+                               int initialLevel = 3,
                                LayerCondition* condition = NULL) {
     return new MapQuestLayer("MapQuest-OSM",
                              "mqcdn.com/tiles/1.0.0/map",
                              getSubdomains(),
+                             initialLevel,
                              19,
                              timeToCache,
-                             //initialMapQuestLevel,
                              condition);
   }
 
 
   static MapQuestLayer* newOpenAerial(const TimeInterval& timeToCache,
-                                      //int initialMapQuestLevel = 1,
+                                      int initialLevel = 3,
                                       LayerCondition* condition = NULL) {
     return new MapQuestLayer("MapQuest-OpenAerial",
                              "mqcdn.com/tiles/1.0.0/sat",
                              getSubdomains(),
+                             initialLevel,
                              11,
                              timeToCache,
-                             //initialMapQuestLevel,
                              condition);
   }
   

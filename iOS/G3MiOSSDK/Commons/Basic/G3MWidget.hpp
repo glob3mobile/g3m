@@ -217,8 +217,6 @@ private:
   int _width;
   int _height;
 
-  void initializeGL();
-
   const G3MContext* _context;
 
   bool _paused;

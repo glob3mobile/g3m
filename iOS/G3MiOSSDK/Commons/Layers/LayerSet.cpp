@@ -129,15 +129,16 @@ const LayerTilesRenderParameters* LayerSet::getLayerTilesRenderParameters() cons
 }
 
 LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters() const {
-  Sector* mergedSector      = NULL;
-  int     splitsByLatitude  = 0;
-  int     splitsByLongitude = 0;
-  int     maxLevel          = 0;
-  int     tileTextureWidth  = 0;
-  int     tileTextureHeight = 0;
-  int     tileMeshWidth     = 0;
-  int     tileMeshHeight    = 0;
-  bool    mercator          = false;
+  Sector* mergedSector               = NULL;
+  int     topSectorSplitsByLatitude  = 0;
+  int     topSectorSplitsByLongitude = 0;
+  int     firstLevel                 = 0;
+  int     maxLevel                   = 0;
+  int     tileTextureWidth           = 0;
+  int     tileTextureHeight          = 0;
+  int     tileMeshWidth              = 0;
+  int     tileMeshHeight             = 0;
+  bool    mercator                   = false;
 
   bool first = true;
   const int layersCount = _layers.size();
@@ -154,16 +155,16 @@ LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters() const {
       if (first) {
         first = false;
 
-        mergedSector      = new Sector( layerParam->_topSector );
-        splitsByLatitude  = layerParam->_splitsByLatitude;
-        splitsByLongitude = layerParam->_splitsByLongitude;
-        maxLevel          = layerParam->_maxLevel;
-
-        tileTextureWidth  = layerParam->_tileTextureResolution._x;
-        tileTextureHeight = layerParam->_tileTextureResolution._y;
-        tileMeshWidth     = layerParam->_tileMeshResolution._x;
-        tileMeshHeight    = layerParam->_tileMeshResolution._y;
-        mercator          = layerParam->_mercator;
+        mergedSector               = new Sector( layerParam->_topSector );
+        topSectorSplitsByLatitude  = layerParam->_topSectorSplitsByLatitude;
+        topSectorSplitsByLongitude = layerParam->_topSectorSplitsByLongitude;
+        firstLevel                 = layerParam->_firstLevel;
+        maxLevel                   = layerParam->_maxLevel;
+        tileTextureWidth           = layerParam->_tileTextureResolution._x;
+        tileTextureHeight          = layerParam->_tileTextureResolution._y;
+        tileMeshWidth              = layerParam->_tileMeshResolution._x;
+        tileMeshHeight             = layerParam->_tileMeshResolution._y;
+        mercator                   = layerParam->_mercator;
       }
       else {
         if (!mergedSector->fullContains( layerParam->_topSector )) {
@@ -172,22 +173,32 @@ LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters() const {
           delete oldSector;
         }
 
-        if ( splitsByLatitude != layerParam->_splitsByLatitude ) {
-          ILogger::instance()->logError("Inconsistency in Layer's Parameters: splitsByLatitude");
+        if ( topSectorSplitsByLatitude != layerParam->_topSectorSplitsByLatitude ) {
+          ILogger::instance()->logError("Inconsistency in Layer's Parameters: topSectorSplitsByLatitude");
           return NULL;
         }
 
-        if ( splitsByLongitude != layerParam->_splitsByLongitude ) {
-          ILogger::instance()->logError("Inconsistency in Layer's Parameters: splitsByLongitude");
+        if ( topSectorSplitsByLongitude != layerParam->_topSectorSplitsByLongitude ) {
+          ILogger::instance()->logError("Inconsistency in Layer's Parameters: topSectorSplitsByLongitude");
           return NULL;
         }
 
-        //if (layerParam->_maxLevel > maxLevel) {
-        //  maxLevel = layerParam->_maxLevel;
-        //}
-        if ( maxLevel != layerParam->_maxLevel ) {
-          ILogger::instance()->logError("Inconsistency in Layer's Parameters: maxLevel");
-          return NULL;
+        // if ( maxLevel != layerParam->_maxLevel ) {
+        //   ILogger::instance()->logError("Inconsistency in Layer's Parameters: maxLevel");
+        //   return NULL;
+        // }
+        if ( maxLevel > layerParam->_maxLevel ) {
+          ILogger::instance()->logWarning("Inconsistency in Layer's Parameters: maxLevel (downgrading from %d to %d)",
+                                          maxLevel,
+                                          layerParam->_maxLevel);
+          maxLevel = layerParam->_maxLevel;
+        }
+
+        if ( firstLevel < layerParam->_firstLevel ) {
+          ILogger::instance()->logWarning("Inconsistency in Layer's Parameters: firstLevel (upgrading from %d to %d)",
+                                          firstLevel,
+                                          layerParam->_firstLevel);
+          firstLevel = layerParam->_firstLevel;
         }
 
         if (( tileTextureWidth  != layerParam->_tileTextureResolution._x ) ||
@@ -221,7 +232,9 @@ LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters() const {
   mergedSector = NULL;
 
   return new LayerTilesRenderParameters(topSector,
-                                        splitsByLatitude, splitsByLongitude,
+                                        topSectorSplitsByLatitude,
+                                        topSectorSplitsByLongitude,
+                                        firstLevel,
                                         maxLevel,
                                         Vector2I(tileTextureWidth, tileTextureHeight),
                                         Vector2I(tileMeshWidth,    tileMeshHeight),

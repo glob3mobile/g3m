@@ -107,6 +107,9 @@ public:
 
   virtual double max(double d1, double d2) const = 0;
   virtual float  max(float f1,  float f2)  const = 0;
+  
+  virtual int max(int i1, int i2) const = 0;
+  virtual long long max(long long l1, long long l2) const = 0;
 
   virtual double max(double d1, double d2, double d3) const {
     return max(max(d1, d2), d3);

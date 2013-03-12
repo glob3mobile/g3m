@@ -118,8 +118,6 @@ _paused(false),
 _initializationTaskWasRun(false),
 _clickOnProcess(false)
 {
-  initializeGL();
-
   _effectsScheduler->initialize(_context);
   _cameraRenderer->initialize(_context);
   _mainRenderer->initialize(_context);
@@ -179,12 +177,6 @@ G3MWidget* G3MWidget::create(GL*                              gl,
                        periodicalTasks);
 }
 
-void G3MWidget::initializeGL() {
-  //_gl->enableDepthTest();
-
-  //_gl->enableCullFace(GLCullFace::back());
-}
-
 G3MWidget::~G3MWidget() {
   delete _userData;
 
@@ -213,8 +205,6 @@ G3MWidget::~G3MWidget() {
   delete _frameTasksExecutor;
 
   for (int i = 0; i < _periodicalTasks.size(); i++){
-    //    _periodicalTasks[i].releaseTask();
-
     PeriodicalTask* periodicalTask =  _periodicalTasks[i];
     delete periodicalTask;
   }
@@ -311,26 +301,26 @@ void G3MWidget::onResizeViewportEvent(int width, int height) {
 
 
 void G3MWidget::render(int width, int height) {
-    if (_paused) {
-        return;
-    }
+  if (_paused) {
+    return;
+  }
 
-    if ((_width != width || _height != height) && _mainRendererReady) {
-        _width = width;
-        _height = height;
-        
-        onResizeViewportEvent(_width, _height);
-    }
+  if ((_width != width || _height != height) && _mainRendererReady) {
+    _width = width;
+    _height = height;
+
+    onResizeViewportEvent(_width, _height);
+  }
 
   _timer->start();
   _renderCounter++;
-  
+
   if (_initializationTask != NULL) {
     if (!_initializationTaskWasRun) {
       _initializationTask->run(_context);
       _initializationTaskWasRun = true;
     }
-    
+
     if (_initializationTask->isDone(_context)) {
       if (_autoDeleteInitializationTask) {
         delete _initializationTask;

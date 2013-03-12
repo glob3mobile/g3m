@@ -406,7 +406,7 @@ public:
 {
   LayerSet* layerSet = new LayerSet();
 
-  const bool useOSM = true;
+  const bool useOSM = false;
   if (useOSM) {
     layerSet->addLayer( new OSMLayer(TimeInterval::fromDays(30)) );
   }
@@ -440,7 +440,7 @@ public:
                                             TimeInterval::fromDays(30)) );
   }
 
-  const bool useBingMaps = false;
+  const bool useBingMaps = true;
   if (useBingMaps) {
     layerSet->addLayer( new BingMapsLayer(BingMapType::Road(),
                                           "ArtXu2Z-XSlDVCRVtxtYqtIPVR_0qqLcrfsRyZK_ishjUKvTheYBUH9rDDmAPcnj",
