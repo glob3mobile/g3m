@@ -54,6 +54,10 @@ public:
                                  const Tile* tile,
                                  bool mercator) const;
 
+//  const Vector2D getTextCoord(const Tile* tile,
+//                              const Geodetic2D& position,
+//                              bool mercator) const;
+
 };
 
 #endif

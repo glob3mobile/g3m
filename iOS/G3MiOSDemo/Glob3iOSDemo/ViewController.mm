@@ -406,60 +406,46 @@ public:
 {
   LayerSet* layerSet = new LayerSet();
 
-  const bool useOSM = false;
+  const bool useOSM = true;
   if (useOSM) {
-    OSMLayer* osmLayer = new OSMLayer(TimeInterval::fromDays(30));
-
-    layerSet->addLayer(osmLayer);
+    layerSet->addLayer( new OSMLayer(TimeInterval::fromDays(30)) );
   }
 
   const bool useMapQuestOSM = false;
   if (useMapQuestOSM) {
-    MapQuestLayer* mapQuestLayer = MapQuestLayer::newOSM(TimeInterval::fromDays(30));
-
-    layerSet->addLayer(mapQuestLayer);
+    layerSet->addLayer( MapQuestLayer::newOSM(TimeInterval::fromDays(30)) );
   }
 
   const bool useMapQuestOpenAerial = false;
   if (useMapQuestOpenAerial) {
-    MapQuestLayer* mapQuestLayer = MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30));
-
-    layerSet->addLayer(mapQuestLayer);
+    layerSet->addLayer( MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30)) );
   }
 
-//  const bool useMapBox = false;
-//  if (useMapBox) {
-//    MapBoxLayer* mapBoxLayer = new MapBoxLayer("dgd.map-v93trj8v",
-//                                               TimeInterval::fromDays(30));
-//
-//    layerSet->addLayer(mapBoxLayer);
-//  }
+  const bool useMapBox = false;
+  if (useMapBox) {
+    layerSet->addLayer( new MapBoxLayer("dgd.map-v93trj8v",
+                                        TimeInterval::fromDays(30)) );
+  }
 
   const bool useHere = false;
   if (useHere) {
-    HereLayer* hereLayer = new HereLayer("zrgCx5FrbnlPZWPHuvMO",
-                                         "cdJ14wN488Oh5DH6KwQ9GA",
-                                         TimeInterval::fromDays(30));
-
-    layerSet->addLayer(hereLayer);
+    layerSet->addLayer( new HereLayer("zrgCx5FrbnlPZWPHuvMO",
+                                      "cdJ14wN488Oh5DH6KwQ9GA",
+                                      TimeInterval::fromDays(30)) );
   }
 
-//  const bool useGoogleMaps = false;
-//  if (useGoogleMaps) {
-//    GoogleMapsLayer* googleMapsLayer = new GoogleMapsLayer("AIzaSyC9pospBjqsfpb0Y9N3E3uNMD8ELoQVOrc",
-//                                                           TimeInterval::fromDays(30));
-//
-//    layerSet->addLayer(googleMapsLayer);
-//  }
+  const bool useGoogleMaps = false;
+  if (useGoogleMaps) {
+    layerSet->addLayer( new GoogleMapsLayer("AIzaSyC9pospBjqsfpb0Y9N3E3uNMD8ELoQVOrc",
+                                            TimeInterval::fromDays(30)) );
+  }
 
-  const bool useBingMaps = true;
+  const bool useBingMaps = false;
   if (useBingMaps) {
-    BingMapsLayer* bingMapsLayer = new BingMapsLayer(//"AerialWithLabels",
-                                                     "Road",
-                                                     "ArtXu2Z-XSlDVCRVtxtYqtIPVR_0qqLcrfsRyZK_ishjUKvTheYBUH9rDDmAPcnj",
-                                                     TimeInterval::fromDays(30));
-
-    layerSet->addLayer(bingMapsLayer);
+    layerSet->addLayer( new BingMapsLayer(//"AerialWithLabels",
+                                          "Road",
+                                          "ArtXu2Z-XSlDVCRVtxtYqtIPVR_0qqLcrfsRyZK_ishjUKvTheYBUH9rDDmAPcnj",
+                                          TimeInterval::fromDays(30)) );
   }
 
   const bool blueMarble = false;
@@ -656,14 +642,14 @@ public:
 
 - (TilesRenderParameters*) createTileRenderParameters
 {
-  const bool renderDebug = false;
+  const bool renderDebug = true;
   const bool useTilesSplitBudget = true;
-  const bool forceTopLevelTilesRenderOnStart = true;
+  const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
 
   return new TilesRenderParameters(renderDebug,
                                    useTilesSplitBudget,
-                                   forceTopLevelTilesRenderOnStart,
+                                   forceFirstLevelTilesRenderOnStart,
                                    incrementalTileQuality);
 }
 

@@ -299,16 +299,16 @@ private:
   private G3MContext _context;
 #endif
 
-  std::vector<Tile*>     _topLevelTiles;
+  std::vector<Tile*>     _firstLevelTiles;
 
   ITimer* _lastSplitTimer; // timer to start every time a tile get splitted into subtiles
 
-  void clearTopLevelTiles();
-  void createTopLevelTiles(const G3MContext* context);
+  void clearFirstLevelTiles();
+  void createFirstLevelTiles(const G3MContext* context);
 
   bool _firstRender;
 
-  void pruneTopLevelTiles();
+  void pruneFirstLevelTiles();
 
   Sector* _lastVisibleSector;
 
@@ -375,7 +375,7 @@ public:
 #endif
 
     if (!enable) {
-      pruneTopLevelTiles();
+      pruneFirstLevelTiles();
     }
   }
 

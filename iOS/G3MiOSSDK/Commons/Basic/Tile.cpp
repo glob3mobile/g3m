@@ -349,6 +349,12 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
 
   const LayerTilesRenderParameters* parameters = trc->getLayerTilesRenderParameters();
 
+  if (_level >= parameters->_maxLevelForPoles) {
+    if (_sector.touchesNorthPole() || _sector.touchesSouthPole()) {
+      return true;
+    }
+  }
+
   if (_level >= parameters->_maxLevel) {
     return true;
   }

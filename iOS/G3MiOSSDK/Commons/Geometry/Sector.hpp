@@ -61,18 +61,9 @@ public:
     return Sector(lower, upper);
   }
 
-  Vector2D getScaleFactor(const Sector& that) const {
-    const double u = _deltaLatitude.div(that._deltaLatitude);
-    const double v = _deltaLongitude.div(that._deltaLongitude);
-    return Vector2D(u, v);
-  }
+  Vector2D getScaleFactor(const Sector& that) const;
 
-  Vector2D getTranslationFactor(const Sector& that) const {
-    const double diff = _deltaLongitude.div(that._deltaLongitude);
-    const Vector2D uv = that.getUVCoordinates(_lower);
-
-    return Vector2D(uv._x, uv._y - diff);
-  }
+  Vector2D getTranslationFactor(const Sector& that) const;
 
   bool fullContains(const Sector& that) const;
 
@@ -155,6 +146,8 @@ public:
   // (u,v)=(0,0) in NW point, and (1,1) in SE point
   const Geodetic2D getInnerPoint(double u, double v) const;
 
+  const Angle getInnerPointLatitude(double v) const;
+
   const Vector2D getUVCoordinates(const Geodetic2D& point) const {
     return getUVCoordinates(point.latitude(), point.longitude());
   }
@@ -192,11 +185,11 @@ public:
   }
   
   bool touchesNorthPole() const {
-    return (_upper.latitude().greaterThan(Angle::fromDegrees(89.9)));
+    return (_upper.latitude()._degrees >= 89.9);
   }
   
   bool touchesSouthPole() const {
-    return (_lower.latitude().lowerThan(Angle::fromDegrees(-89.9)));
+    return (_lower.latitude()._degrees <= -89.9);
   }
   
 };

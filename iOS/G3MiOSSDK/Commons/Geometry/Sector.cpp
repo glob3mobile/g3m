@@ -48,6 +48,9 @@ const Geodetic2D Sector::getInnerPoint(double u, double v) const {
                     Angle::linearInterpolation( _lower.longitude(), _upper.longitude(), (float)      u  ) );
 }
 
+const Angle Sector::getInnerPointLatitude(double v) const {
+  return Angle::linearInterpolation( _lower.latitude(), _upper.latitude(),  (float) (1.0-v) );
+}
 
 bool Sector::isBackOriented(const G3MRenderContext *rc, double height) const {
   const Camera* camera = rc->getCurrentCamera();
@@ -281,4 +284,16 @@ const std::string Sector::description() const {
   const std::string s = isb->getString();
   delete isb;
   return s;  
+}
+
+Vector2D Sector::getScaleFactor(const Sector& that) const {
+  const double scaleX = _deltaLongitude.div(that._deltaLongitude);
+  const double scaleY = _deltaLatitude.div(that._deltaLatitude);
+  return Vector2D(scaleX, scaleY);
+}
+
+Vector2D Sector::getTranslationFactor(const Sector& that) const {
+  const Vector2D uv = that.getUVCoordinates(_lower);
+  const double scaleY = _deltaLatitude.div(that._deltaLatitude);
+  return Vector2D(uv._x, uv._y - scaleY);
 }

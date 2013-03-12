@@ -19,7 +19,7 @@ TileRendererBuilder::TileRendererBuilder() {
   _showStatistics = false;
   _renderDebug = false;
   _useTilesSplitBudget = true;
-  _forceTopLevelTilesRenderOnStart = true;
+  _forceFirstLevelTilesRenderOnStart = true;
   _incrementalTileQuality = false;
 
   _parameters = NULL;
@@ -118,12 +118,12 @@ bool TileRendererBuilder::getUseTilesSplitBudget() {
 }
 
 /**
- * Returns the forceTopLevelTilesRenderOnStart flag.
+ * Returns the forceFirstLevelTilesRenderOnStart flag.
  *
- * @return _forceTopLevelTilesRenderOnStart: bool
+ * @return _forceFirstLevelTilesRenderOnStart: bool
  */
-bool TileRendererBuilder::getForceTopLevelTilesRenderOnStart() {
-  return _forceTopLevelTilesRenderOnStart;
+bool TileRendererBuilder::getForceFirstLevelTilesRenderOnStart() {
+  return _forceFirstLevelTilesRenderOnStart;
 }
 
 /**
@@ -137,8 +137,6 @@ bool TileRendererBuilder::getIncrementalTileQuality() {
 
 /**
  * Returns the array of visibleSectorListeners.
- *
- * @return _forceTopLevelTilesRenderOnStart: std::vector<VisibleSectorListener*>
  */
 std::vector<VisibleSectorListener*>* TileRendererBuilder::getVisibleSectorListeners() {
   if (!_visibleSectorListeners) {
@@ -227,8 +225,8 @@ void TileRendererBuilder::setUseTilesSplitBuget(const bool useTilesSplitBudget) 
   _useTilesSplitBudget = useTilesSplitBudget;
 }
 
-void TileRendererBuilder::setForceTopLevelTilesRenderOnStart(const bool forceTopLevelTilesRenderOnStart) {
-  _forceTopLevelTilesRenderOnStart = forceTopLevelTilesRenderOnStart;
+void TileRendererBuilder::setForceFirstLevelTilesRenderOnStart(const bool forceFirstLevelTilesRenderOnStart) {
+  _forceFirstLevelTilesRenderOnStart = forceFirstLevelTilesRenderOnStart;
 }
 
 void TileRendererBuilder::setIncrementalTileQuality(const bool incrementalTileQuality) {
@@ -301,7 +299,7 @@ TileRenderer* TileRendererBuilder::create() {
 TilesRenderParameters* TileRendererBuilder::createTileRendererParameters() {
   return new TilesRenderParameters(getRenderDebug(),
                                    getUseTilesSplitBudget(),
-                                   getForceTopLevelTilesRenderOnStart(),
+                                   getForceFirstLevelTilesRenderOnStart(),
                                    getIncrementalTileQuality());
 }
 

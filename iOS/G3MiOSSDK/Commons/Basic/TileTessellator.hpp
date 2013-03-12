@@ -16,8 +16,11 @@ class Tile;
 class MutableVector2D;
 class IFloatBuffer;
 class ElevationData;
+class Geodetic2D;
 
 #include "Vector2I.hpp"
+//#include "Vector2D.hpp"
+
 
 class TileTessellator {
 public:
@@ -44,6 +47,10 @@ public:
   virtual IFloatBuffer* createTextCoords(const Vector2I& resolution,
                                          const Tile* tile,
                                          bool mercator) const = 0;
+
+//  virtual const Vector2D getTextCoord(const Tile* tile,
+//                                      const Geodetic2D& position,
+//                                      bool mercator) const = 0;
 
 };
 

@@ -18,6 +18,7 @@ public:
   const int       _splitsByLatitude;
   const int       _splitsByLongitude;
   const int       _maxLevel;
+  const int       _maxLevelForPoles;
 #ifdef C_CODE
   const Vector2I  _tileTextureResolution;
   const Vector2I  _tileMeshResolution;
@@ -39,6 +40,7 @@ public:
   _splitsByLatitude(splitsByLatitude),
   _splitsByLongitude(splitsByLongitude),
   _maxLevel(maxLevel),
+  _maxLevelForPoles(4),
   _tileTextureResolution(tileTextureResolution),
   _tileMeshResolution(tileMeshResolution),
   _mercator(mercator)

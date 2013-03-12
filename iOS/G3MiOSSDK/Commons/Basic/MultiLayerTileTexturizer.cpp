@@ -106,8 +106,10 @@ public:
       const Sector tileSector     = _tile->getSector();
       const Sector ancestorSector = _ancestor->getSector();
 
-      _scale       = tileSector.getScaleFactor(ancestorSector).asMutableVector2D();
+      const Vector2D scale = tileSector.getScaleFactor(ancestorSector);
+      _scale       = scale.asMutableVector2D();
       _translation = tileSector.getTranslationFactor(ancestorSector).asMutableVector2D();
+      //_translation = _tessellator->getTextCoord(_ancestor, tileSector.lower(), _mercator).times(scale).asMutableVector2D();
     }
   }
 

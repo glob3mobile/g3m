@@ -127,10 +127,10 @@ _texturePriority(texturePriority)
 }
 
 void TileRenderer::recreateTiles() {
-  pruneTopLevelTiles();
-  clearTopLevelTiles();
+  pruneFirstLevelTiles();
+  clearFirstLevelTiles();
   _firstRender = true;
-  createTopLevelTiles(_context);
+  createFirstLevelTiles(_context);
 }
 
 class RecreateTilesTask : public GTask {
@@ -155,7 +155,7 @@ void TileRenderer::changed(const LayerSet* layerSet) {
 }
 
 TileRenderer::~TileRenderer() {
-  clearTopLevelTiles();
+  clearFirstLevelTiles();
 
   delete _tessellator;
   delete _elevationDataProvider;
@@ -173,16 +173,17 @@ TileRenderer::~TileRenderer() {
   }
 }
 
-void TileRenderer::clearTopLevelTiles() {
-  for (int i = 0; i < _topLevelTiles.size(); i++) {
-    Tile* tile = _topLevelTiles[i];
+void TileRenderer::clearFirstLevelTiles() {
+  const int firstLevelTilesCount = _firstLevelTiles.size();
+  for (int i = 0; i < firstLevelTilesCount; i++) {
+    Tile* tile = _firstLevelTiles[i];
     delete tile;
   }
 
-  _topLevelTiles.clear();
+  _firstLevelTiles.clear();
 }
 
-void TileRenderer::createTopLevelTiles(const G3MContext* context) {
+void TileRenderer::createFirstLevelTiles(const G3MContext* context) {
 
   const LayerTilesRenderParameters* layerParameters = _layerSet->getLayerTilesRenderParameters();
   if (layerParameters == NULL) {
@@ -212,11 +213,11 @@ void TileRenderer::createTopLevelTiles(const G3MContext* context) {
       const Sector sector(tileLower, tileUpper);
 
       Tile* tile = new Tile(_texturizer, NULL, sector, 0, row, col);
-      _topLevelTiles.push_back(tile);
+      _firstLevelTiles.push_back(tile);
     }
   }
 
-  context->getLogger()->logInfo("Created %d top level tiles", _topLevelTiles.size());
+  context->getLogger()->logInfo("Created %d first level tiles", _firstLevelTiles.size());
 
   _topTilesJustCreated = true;
 }
@@ -224,8 +225,8 @@ void TileRenderer::createTopLevelTiles(const G3MContext* context) {
 void TileRenderer::initialize(const G3MContext* context) {
   _context = context;
 
-  clearTopLevelTiles();
-  createTopLevelTiles(context);
+  clearFirstLevelTiles();
+  createFirstLevelTiles(context);
 
   delete _lastSplitTimer;
   _lastSplitTimer = context->getFactory()->createTimer();
@@ -251,9 +252,9 @@ bool TileRenderer::isReadyToRender(const G3MRenderContext *rc) {
   if (_topTilesJustCreated) {
     _topTilesJustCreated = false;
 
-    const int topLevelTilesCount = _topLevelTiles.size();
+    const int firstLevelTilesCount = _firstLevelTiles.size();
 
-    if (_parameters->_forceTopLevelTilesRenderOnStart) {
+    if (_parameters->_forceFirstLevelTilesRenderOnStart) {
       TilesStatistics statistics;
 
       TileRenderContext trc(_tessellator,
@@ -267,24 +268,24 @@ bool TileRenderer::isReadyToRender(const G3MRenderContext *rc) {
                             _texturePriority,
                             _verticalExaggeration);
 
-      for (int i = 0; i < topLevelTilesCount; i++) {
-        Tile* tile = _topLevelTiles[i];
+      for (int i = 0; i < firstLevelTilesCount; i++) {
+        Tile* tile = _firstLevelTiles[i];
         tile->prepareForFullRendering(rc, &trc);
       }
     }
 
     if (_texturizer != NULL) {
-      for (int i = 0; i < topLevelTilesCount; i++) {
-        Tile* tile = _topLevelTiles[i];
+      for (int i = 0; i < firstLevelTilesCount; i++) {
+        Tile* tile = _firstLevelTiles[i];
         _texturizer->justCreatedTopTile(rc, tile, _layerSet);
       }
     }
   }
 
-  if (_parameters->_forceTopLevelTilesRenderOnStart) {
-    const int topLevelTilesCount = _topLevelTiles.size();
-    for (int i = 0; i < topLevelTilesCount; i++) {
-      Tile* tile = _topLevelTiles[i];
+  if (_parameters->_forceFirstLevelTilesRenderOnStart) {
+    const int firstLevelTilesCount = _firstLevelTiles.size();
+    for (int i = 0; i < firstLevelTilesCount; i++) {
+      Tile* tile = _firstLevelTiles[i];
       if (!tile->isTextureSolved()) {
         return false;
       }
@@ -324,15 +325,15 @@ void TileRenderer::render(const G3MRenderContext* rc,
                         _texturePriority,
                         _verticalExaggeration);
 
-  const int topLevelTilesCount = _topLevelTiles.size();
+  const int firstLevelTilesCount = _firstLevelTiles.size();
 
-  if (_firstRender && _parameters->_forceTopLevelTilesRenderOnStart) {
+  if (_firstRender && _parameters->_forceFirstLevelTilesRenderOnStart) {
     // force one render pass of the topLevel tiles to make the (toplevel) textures loaded
     // as they will be used as last-chance fallback texture for any tile.
     _firstRender = false;
 
-    for (int i = 0; i < topLevelTilesCount; i++) {
-      Tile* tile = _topLevelTiles[i];
+    for (int i = 0; i < firstLevelTilesCount; i++) {
+      Tile* tile = _firstLevelTiles[i];
       tile->render(rc,
                    &trc,
                    parentState,
@@ -341,8 +342,8 @@ void TileRenderer::render(const G3MRenderContext* rc,
   }
   else {
     std::list<Tile*> toVisit;
-    for (int i = 0; i < topLevelTilesCount; i++) {
-      toVisit.push_back(_topLevelTiles[i]);
+    for (int i = 0; i < firstLevelTilesCount; i++) {
+      toVisit.push_back(_firstLevelTiles[i]);
     }
 
     while (toVisit.size() > 0) {
@@ -408,9 +409,9 @@ bool TileRenderer::onTouchEvent(const G3MEventContext* ec,
 
     const Geodetic3D position = planet->toGeodetic3D(positionCartesian);
 
-    const int topLevelTilesSize = _topLevelTiles.size();
-    for (int i = 0; i < topLevelTilesSize; i++) {
-      const Tile* tile = _topLevelTiles[i]->getDeepestTileContaining(position);
+    const int firstLevelTilesCount = _firstLevelTiles.size();
+    for (int i = 0; i < firstLevelTilesCount; i++) {
+      const Tile* tile = _firstLevelTiles[i]->getDeepestTileContaining(position);
       if (tile != NULL) {
         ILogger::instance()->logInfo("Touched on %s", tile->description().c_str());
         if (_texturizer->onTerrainTouchEvent(ec, position, tile, _layerSet)) {
@@ -425,9 +426,10 @@ bool TileRenderer::onTouchEvent(const G3MEventContext* ec,
 }
 
 
-void TileRenderer::pruneTopLevelTiles() {
-  for (int i = 0; i < _topLevelTiles.size(); i++) {
-    Tile* tile = _topLevelTiles[i];
+void TileRenderer::pruneFirstLevelTiles() {
+  const int firstLevelTilesCount = _firstLevelTiles.size();
+  for (int i = 0; i < firstLevelTilesCount; i++) {
+    Tile* tile = _firstLevelTiles[i];
     tile->prune(_texturizer, _elevationDataProvider);
   }
 }
