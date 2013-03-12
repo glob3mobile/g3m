@@ -1,22 +1,4 @@
 package org.glob3.mobile.generated; 
-//
-//  BingMapsLayer.cpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 3/10/13.
-//
-//
-
-//
-//  BingMapsLayer.hpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 3/10/13.
-//
-//
-
-
-
 public class BingMapsLayer extends Layer
 {
   private final String _imagerySet;
@@ -119,12 +101,7 @@ public class BingMapsLayer extends Layer
     {
       // select subdomain based on fixed data (instead of round-robin) to be cache friendly
       final int subdomainsIndex = IMathUtils.instance().abs(level + column + row) % subdomainsSize;
-  ///#ifdef C_CODE
       subdomain = _imageUrlSubdomains.get(subdomainsIndex);
-  ///#endif
-  ///#ifdef JAVA_CODE
-  //    subdomain = _imageUrlSubdomains.get(subdomainsIndex);
-  ///#endif
     }
   
     final String quadkey = getQuadkey(level, column, row);
