@@ -266,12 +266,7 @@ std::vector<Petition*> BingMapsLayer::createTileMapPetitions(const G3MRenderCont
   if (subdomainsSize > 0) {
     // select subdomain based on fixed data (instead of round-robin) to be cache friendly
     const int subdomainsIndex =  IMathUtils::instance()->abs(level + column + row) % subdomainsSize;
-//#ifdef C_CODE
     subdomain = _imageUrlSubdomains[subdomainsIndex];
-//#endif
-//#ifdef JAVA_CODE
-//    subdomain = _imageUrlSubdomains.get(subdomainsIndex);
-//#endif
   }
 
   const std::string quadkey = getQuadkey(level, column, row);

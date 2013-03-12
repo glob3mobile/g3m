@@ -442,8 +442,7 @@ public:
 
   const bool useBingMaps = false;
   if (useBingMaps) {
-    layerSet->addLayer( new BingMapsLayer(//"AerialWithLabels",
-                                          "Road",
+    layerSet->addLayer( new BingMapsLayer(BingMapType::Road(),
                                           "ArtXu2Z-XSlDVCRVtxtYqtIPVR_0qqLcrfsRyZK_ishjUKvTheYBUH9rDDmAPcnj",
                                           TimeInterval::fromDays(30)) );
   }

@@ -11,6 +11,32 @@
 
 #include "Layer.hpp"
 
+class BingMapType {
+public:
+
+  static std::string Aerial() {
+    return "Aerial";
+  }
+
+  static std::string AerialWithLabels() {
+    return "AerialWithLabels";
+  }
+
+  static std::string Road() {
+    return "Road";
+  }
+
+  static std::string OrdnanceSurvey() {
+    return "OrdnanceSurvey";
+  }
+
+  static std::string CollinsBart() {
+    return "CollinsBart";
+  }
+  
+};
+
+
 class BingMapsLayer : public Layer {
 private:
   const std::string _imagerySet;
