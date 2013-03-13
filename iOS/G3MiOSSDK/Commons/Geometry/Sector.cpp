@@ -286,7 +286,7 @@ const std::string Sector::description() const {
   return s;  
 }
 
-Vector2D Sector::getScaleFactor(const Sector& that) const {
+const Vector2D Sector::div(const Sector& that) const {
   const double scaleX = _deltaLongitude.div(that._deltaLongitude);
   const double scaleY = _deltaLatitude.div(that._deltaLatitude);
   return Vector2D(scaleX, scaleY);

@@ -28,7 +28,6 @@
 #include "IImageListener.hpp"
 #include "LayerTilesRenderParameters.hpp"
 
-//#define TILE_DOWNLOAD_PRIORITY 1000000000
 
 enum PetitionStatus {
   STATUS_PENDING,
@@ -106,7 +105,7 @@ public:
       const Sector tileSector     = _tile->getSector();
       const Sector ancestorSector = _ancestor->getSector();
 
-      const Vector2D scale = tileSector.getScaleFactor(ancestorSector);
+      const Vector2D scale = tileSector.div(ancestorSector);
       _scale = scale.asMutableVector2D();
 
 //      _translation = tileSector.getTranslationFactor(ancestorSector).asMutableVector2D();

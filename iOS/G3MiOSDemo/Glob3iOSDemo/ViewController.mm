@@ -406,12 +406,12 @@ public:
 {
   LayerSet* layerSet = new LayerSet();
 
-  const bool useOSM = true;
+  const bool useOSM = false;
   if (useOSM) {
     layerSet->addLayer( new OSMLayer(TimeInterval::fromDays(30)) );
   }
 
-  const bool useMapQuestOSM = false;
+  const bool useMapQuestOSM = true;
   if (useMapQuestOSM) {
     layerSet->addLayer( MapQuestLayer::newOSM(TimeInterval::fromDays(30)) );
   }

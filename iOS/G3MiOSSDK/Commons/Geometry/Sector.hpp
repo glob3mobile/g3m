@@ -61,7 +61,7 @@ public:
     return Sector(lower, upper);
   }
 
-  Vector2D getScaleFactor(const Sector& that) const;
+  const Vector2D div(const Sector& that) const;
 
 //  Vector2D getTranslationFactor(const Sector& that) const;
 

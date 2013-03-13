@@ -72,8 +72,6 @@ public:
     const IMathUtils* mu = IMathUtils::instance();
     const double pi4 = mu->pi() * 4;
 
-    // const double latitudeInRadians = clampIntoLimitsInRadians(latitude);
-    // const double latSin = mu->sin(latitudeInRadians);
     const double latSin = latitude.sinus();
     return 1.0 - ( ( mu->log( (1.0 + latSin) / (1.0 - latSin) ) / pi4 ) + 0.5 );
   }
@@ -82,11 +80,8 @@ public:
     const IMathUtils* mu = IMathUtils::instance();
     const double pi = mu->pi() ;
 
-    // PI()/2 - (2*ATAN(EXP(-2*PI()*(y - 0,5))))
     const double exp = mu->exp(-2 * pi * (1.0 - v - 0.5));
-
     const double atan = mu->atan(exp);
-
     return Angle::fromRadians((pi / 2) - 2 * atan);
   }
 

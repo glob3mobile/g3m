@@ -177,20 +177,18 @@ const Vector2D EllipsoidalTileTessellator::getTextCoord(const Tile* tile,
   const Sector sector = tile->getSector();
 
   const Vector2D linearUV = sector.getUVCoordinates(latitude, longitude);
-
-  if (mercator) {
-    const double mercatorLowerV = MercatorUtils::getMercatorV(sector.lower().latitude());
-    const double mercatorUpperV = MercatorUtils::getMercatorV(sector.upper().latitude());
-    const double mercatorDeltaV = mercatorLowerV - mercatorUpperV;
-
-    const double vMercatorGlobal = MercatorUtils::getMercatorV(latitude);
-
-    const double vv = (vMercatorGlobal - mercatorUpperV) / mercatorDeltaV;
-
-    return Vector2D(linearUV._x, vv);
+  if (!mercator) {
+    return linearUV;
   }
 
-  return linearUV;
+  const double lowerGlobalV = MercatorUtils::getMercatorV(sector.lower().latitude());
+  const double upperGlobalV = MercatorUtils::getMercatorV(sector.upper().latitude());
+  const double deltaGlobalV = lowerGlobalV - upperGlobalV;
+
+  const double globalV = MercatorUtils::getMercatorV(latitude);
+  const double localV  = (globalV - upperGlobalV) / deltaGlobalV;
+
+  return Vector2D(linearUV._x, localV);
 }
 
 IFloatBuffer* EllipsoidalTileTessellator::createTextCoords(const Vector2I& rawResolution,
@@ -203,12 +201,10 @@ IFloatBuffer* EllipsoidalTileTessellator::createTextCoords(const Vector2I& rawRe
   float* v = new float[tileResolution._x * tileResolution._y];
 
   const Sector sector = tile->getSector();
-
-  //const IMathUtils* mu = IMathUtils::instance();
   
-  const double mercatorLowerV = MercatorUtils::getMercatorV(sector.lower().latitude());
-  const double mercatorUpperV = MercatorUtils::getMercatorV(sector.upper().latitude());
-  const double mercatorDeltaV = mercatorLowerV - mercatorUpperV;
+  const double mercatorLowerGlobalV = MercatorUtils::getMercatorV(sector.lower().latitude());
+  const double mercatorUpperGlobalV = MercatorUtils::getMercatorV(sector.upper().latitude());
+  const double mercatorDeltaGlobalV = mercatorLowerGlobalV - mercatorUpperGlobalV;
 
   for (int j = 0; j < tileResolution._y; j++) {
     for (int i = 0; i < tileResolution._x; i++) {
@@ -218,11 +214,10 @@ IFloatBuffer* EllipsoidalTileTessellator::createTextCoords(const Vector2I& rawRe
 
       const double linearV = (double) j / (tileResolution._y-1);
       if (mercator) {
-        const Angle innerPointLatitude = sector.getInnerPointLatitude(linearV);
-        const double vMercatorGlobal = MercatorUtils::getMercatorV(innerPointLatitude);
-        //const double vv = mu->clamp((vMercatorGlobal - mercatorUpperV) / mercatorDeltaV, 0, 1);
-        const double vv = (vMercatorGlobal - mercatorUpperV) / mercatorDeltaV;
-        v[pos] = (float) vv;
+        const Angle latitude = sector.getInnerPointLatitude(linearV);
+        const double mercatorGlobalV = MercatorUtils::getMercatorV(latitude);
+        const double mercatorLocalV  = (mercatorGlobalV - mercatorUpperGlobalV) / mercatorDeltaGlobalV;
+        v[pos] = (float) mercatorLocalV;
       }
       else {
         v[pos] = (float) linearV;
