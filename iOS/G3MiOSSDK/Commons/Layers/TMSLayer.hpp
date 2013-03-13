@@ -15,7 +15,7 @@
 
 
 class TMSLayer: public Layer {
-  private:
+private:
   
 #ifdef C_CODE
   const URL _mapServerURL;
@@ -31,7 +31,7 @@ class TMSLayer: public Layer {
   const std::string   _format;
   const std::string   _srs;
   const bool          _isTransparent;
-    
+  
 public:
   
   TMSLayer(const std::string& mapLayer,
@@ -43,7 +43,7 @@ public:
            LayerCondition* condition,
            const TimeInterval& timeToCache,
            const LayerTilesRenderParameters* parameters = NULL);
-
+  
   
   std::vector<Petition*> getMapPetitions(const G3MRenderContext* rc,
                                          const Tile* tile,
@@ -51,7 +51,7 @@ public:
   
   URL getFeatureInfoURL(const Geodetic2D& g,
                         const Sector& sector) const;
-
+  
 };
 
 #endif /* defined(__G3MiOSSDK__TMSLayer__) */

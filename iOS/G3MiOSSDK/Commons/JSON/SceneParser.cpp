@@ -68,114 +68,114 @@ const std::string SceneParser::WMS130 = "1.3.0";
 SceneParser* SceneParser::_instance = NULL;
 
 SceneParser* SceneParser::instance(){
-    if (_instance == NULL){
-        _instance = new SceneParser();
-    }
-    return _instance;
+  if (_instance == NULL){
+    _instance = new SceneParser();
+  }
+  return _instance;
 }
 
 SceneParser::SceneParser(){
-    _mapLayerType["WMS"] = WMS;
-    _mapLayerType["TMS"] = TMS;
-    _mapLayerType["THREED"] = THREED;
-    _mapLayerType["PLANARIMAGE"] = PLANARIMAGE;
-    _mapLayerType["GEOJSON"] = GEOJSON;  
-    _mapLayerType["SPHERICALIMAGE"] = SPHERICALIMAGE;
-
+  _mapLayerType["WMS"] = WMS;
+  _mapLayerType["TMS"] = TMS;
+  _mapLayerType["THREED"] = THREED;
+  _mapLayerType["PLANARIMAGE"] = PLANARIMAGE;
+  _mapLayerType["GEOJSON"] = GEOJSON;
+  _mapLayerType["SPHERICALIMAGE"] = SPHERICALIMAGE;
+  
 }
 
 void SceneParser::parse(LayerSet* layerSet, std::string namelessParameter){
   
-    _mapGeoJSONSources.clear();
-    _panoSources.clear();
-    _legend.clear();
-    countGroup=0;
+  _mapGeoJSONSources.clear();
+  _panoSources.clear();
+  _legend.clear();
+  countGroup=0;
   
-    JSONBaseObject* json = IJSONParser::instance()->parse(namelessParameter);
-    parserJSONLayerList(layerSet, json->asObject()->getAsObject(LAYERS));
-    IJSONParser::instance()->deleteJSONData(json);
+  JSONBaseObject* json = IJSONParser::instance()->parse(namelessParameter);
+  parserJSONLayerList(layerSet, json->asObject()->getAsObject(LAYERS));
+  IJSONParser::instance()->deleteJSONData(json);
 }
 
 void SceneParser::parserJSONLayerList(LayerSet* layerSet, const JSONObject* jsonLayers){
-    for (int i = 0; i < jsonLayers->size(); i++) {
-        IStringBuilder* isb = IStringBuilder::newStringBuilder();
-        isb->addInt(i);
-        const JSONObject* jsonLayer = jsonLayers->getAsObject(isb->getString());
-        const layer_type layerType = _mapLayerType[jsonLayer->getAsString(TYPE)->value()];
-        
-        switch (layerType) {
-            case WMS:
-                parserJSONWMSLayer(layerSet, jsonLayer);
-                break;
-            case TMS:
-                parserJSONTMSLayer(layerSet, jsonLayer);
-                break;
-            case THREED:
-                parserJSON3DLayer(layerSet, jsonLayer);
-                break;
-            case PLANARIMAGE:
-                parserJSONPlanarImageLayer(layerSet, jsonLayer);
-                break;
-            case GEOJSON:
-                parserGEOJSONLayer(layerSet, jsonLayer);
-                break;
-            case SPHERICALIMAGE:
-                parserJSONSphericalImageLayer(layerSet, jsonLayer);
-                break;
-        }
-        delete isb;
+  for (int i = 0; i < jsonLayers->size(); i++) {
+    IStringBuilder* isb = IStringBuilder::newStringBuilder();
+    isb->addInt(i);
+    const JSONObject* jsonLayer = jsonLayers->getAsObject(isb->getString());
+    const layer_type layerType = _mapLayerType[jsonLayer->getAsString(TYPE)->value()];
+    
+    switch (layerType) {
+      case WMS:
+        parserJSONWMSLayer(layerSet, jsonLayer);
+        break;
+      case TMS:
+        parserJSONTMSLayer(layerSet, jsonLayer);
+        break;
+      case THREED:
+        parserJSON3DLayer(layerSet, jsonLayer);
+        break;
+      case PLANARIMAGE:
+        parserJSONPlanarImageLayer(layerSet, jsonLayer);
+        break;
+      case GEOJSON:
+        parserGEOJSONLayer(layerSet, jsonLayer);
+        break;
+      case SPHERICALIMAGE:
+        parserJSONSphericalImageLayer(layerSet, jsonLayer);
+        break;
     }
+    delete isb;
+  }
 }
 
 void SceneParser::parserJSONWMSLayer(LayerSet* layerSet, const JSONObject* jsonLayer){
-    cout << "Parsing WMS Layer " << jsonLayer->getAsString(NAME)->value() << "..." << endl;
-    
-    const std::string jsonDatasource = jsonLayer->getAsString(DATASOURCE)->value();
-    const int lastIndex = IStringUtils::instance()->indexOf(jsonDatasource,"?");
-    const std::string jsonURL = IStringUtils::instance()->substring(jsonDatasource, 0, lastIndex+1);
+  cout << "Parsing WMS Layer " << jsonLayer->getAsString(NAME)->value() << "..." << endl;
   
-    const std::string jsonVersion = jsonLayer->getAsString(VERSION)->value();
+  const std::string jsonDatasource = jsonLayer->getAsString(DATASOURCE)->value();
+  const int lastIndex = IStringUtils::instance()->indexOf(jsonDatasource,"?");
+  const std::string jsonURL = IStringUtils::instance()->substring(jsonDatasource, 0, lastIndex+1);
   
-    const int jsonSplitsLat = atoi(jsonLayer->getAsString(SPLITSLATITUDE)->value().c_str());
-    const int jsonSplitsLon = atoi(jsonLayer->getAsString(SPLITSLONGITUDE)->value().c_str());
+  const std::string jsonVersion = jsonLayer->getAsString(VERSION)->value();
   
-    bool transparent = isTransparent(jsonLayer->getAsString(ISTRANSPARENT));
+  const int jsonSplitsLat = atoi(jsonLayer->getAsString(SPLITSLATITUDE)->value().c_str());
+  const int jsonSplitsLon = atoi(jsonLayer->getAsString(SPLITSLONGITUDE)->value().c_str());
   
-    LevelTileCondition* levelTileCondition = getLevelCondition(jsonLayer->getAsString(MINLEVEL),jsonLayer->getAsString(MAXLEVEL));
-    Sector sector = getSector(jsonLayer->getAsObject(BBOX));
+  bool transparent = isTransparent(jsonLayer->getAsString(ISTRANSPARENT));
   
-    const JSONArray* jsonItems = jsonLayer->getAsArray(ITEMS);
-    IStringBuilder *layersName = IStringBuilder::newStringBuilder();
-    
-    for (int i = 0; i<jsonItems->size(); i++) {
-        if (jsonItems->getAsObject(i)->getAsBoolean(STATUS)->value()) {
-            layersName->addString(jsonItems->getAsObject(i)->getAsString(NAME)->value());
-            layersName->addString(",");
-        }    
+  LevelTileCondition* levelTileCondition = getLevelCondition(jsonLayer->getAsString(MINLEVEL),jsonLayer->getAsString(MAXLEVEL));
+  Sector sector = getSector(jsonLayer->getAsObject(BBOX));
+  
+  const JSONArray* jsonItems = jsonLayer->getAsArray(ITEMS);
+  IStringBuilder *layersName = IStringBuilder::newStringBuilder();
+  
+  for (int i = 0; i<jsonItems->size(); i++) {
+    if (jsonItems->getAsObject(i)->getAsBoolean(STATUS)->value()) {
+      layersName->addString(jsonItems->getAsObject(i)->getAsString(NAME)->value());
+      layersName->addString(",");
     }
-    std::string layersSecuence = layersName->getString();
-    if (layersName->getString().length() > 0) {
-        layersSecuence = IStringUtils::instance()->substring(layersSecuence, 0, layersSecuence.length()-1);
-    }
+  }
+  std::string layersSecuence = layersName->getString();
+  if (layersName->getString().length() > 0) {
+    layersSecuence = IStringUtils::instance()->substring(layersSecuence, 0, layersSecuence.length()-1);
+  }
   
-    delete layersName;
+  delete layersName;
   
-    //TODO check if wms 1.1.1 is neccessary to have it into account
-    WMSServerVersion wmsVersion = WMS_1_1_0;
-    if (jsonVersion.compare(WMS130)==0) {
-        wmsVersion = WMS_1_3_0;
-    }  
-    
-    WMSLayer* wmsLayer = new WMSLayer(URL::escape(layersSecuence),
-                                      URL(jsonURL, false),
-                                      wmsVersion,
-                                      sector,
-                                      "image/png",
-                                      "EPSG:4326",
-                                      "",
-                                      transparent,
-                                      levelTileCondition, TimeInterval::fromDays(30), new LayerTilesRenderParameters(sector,jsonSplitsLat,jsonSplitsLon,16,Vector2I(256,256),Vector2I(16,16),false));
-    layerSet->addLayer(wmsLayer);
+  //TODO check if wms 1.1.1 is neccessary to have it into account
+  WMSServerVersion wmsVersion = WMS_1_1_0;
+  if (jsonVersion.compare(WMS130)==0) {
+    wmsVersion = WMS_1_3_0;
+  }
+  
+  WMSLayer* wmsLayer = new WMSLayer(URL::escape(layersSecuence),
+                                    URL(jsonURL, false),
+                                    wmsVersion,
+                                    sector,
+                                    "image/png",
+                                    "EPSG:4326",
+                                    "",
+                                    transparent,
+                                    levelTileCondition, TimeInterval::fromDays(30), new LayerTilesRenderParameters(sector,jsonSplitsLat,jsonSplitsLon,16,Vector2I(256,256),Vector2I(16,16),false));
+  layerSet->addLayer(wmsLayer);
 }
 
 void SceneParser::parserJSONTMSLayer(LayerSet* layerSet, const JSONObject* jsonLayer){
@@ -208,14 +208,14 @@ void SceneParser::parserJSONTMSLayer(LayerSet* layerSet, const JSONObject* jsonL
   delete layersName;
   
   TMSLayer* tmsLayer = new TMSLayer(URL::escape(layersSecuence),
-                                URL(jsonURL, false),
-                                sector,
-                                "image/jpeg",
-                                "EPSG:4326",
-                                transparent,
-                                levelTileCondition,
-                                TimeInterval::fromDays(30), new LayerTilesRenderParameters(sector,jsonSplitsLat,jsonSplitsLon,16,Vector2I(256,256),Vector2I(16,16),false));
-
+                                    URL(jsonURL, false),
+                                    sector,
+                                    "image/jpeg",
+                                    "EPSG:4326",
+                                    transparent,
+                                    levelTileCondition,
+                                    TimeInterval::fromDays(30), new LayerTilesRenderParameters(sector,jsonSplitsLat,jsonSplitsLon,16,Vector2I(256,256),Vector2I(16,16),false));
+  
   layerSet->addLayer(tmsLayer);
 }
 
@@ -273,117 +273,117 @@ Sector SceneParser::getSector(const JSONObject* jsonBBOX){
 }
 
 void SceneParser::parserJSON3DLayer(LayerSet* layerSet, const JSONObject* jsonLayer){
-    cout << "Parsing 3D Layer " << jsonLayer->getAsString(NAME)->value() << "..." << endl;
+  cout << "Parsing 3D Layer " << jsonLayer->getAsString(NAME)->value() << "..." << endl;
 }
 
 void SceneParser::parserJSONPlanarImageLayer(LayerSet* layerSet, const JSONObject* jsonLayer){
-    cout << "Parsing Pano Layer " << jsonLayer->getAsString(NAME)->value() << "..." << endl;
+  cout << "Parsing Pano Layer " << jsonLayer->getAsString(NAME)->value() << "..." << endl;
+  
+  const std::string geojsonDatasource = jsonLayer->getAsString(DATASOURCE)->value();
+  
+  const JSONArray* jsonItems = jsonLayer->getAsArray(ITEMS);
+  for (int i = 0; i<jsonItems->size(); i++) {
     
-    const std::string geojsonDatasource = jsonLayer->getAsString(DATASOURCE)->value();
+    const std::string namefile = jsonItems->getAsObject(i)->getAsString(NAME)->value();
     
-    const JSONArray* jsonItems = jsonLayer->getAsArray(ITEMS);
-    for (int i = 0; i<jsonItems->size(); i++) {
-        
-        const std::string namefile = jsonItems->getAsObject(i)->getAsString(NAME)->value();
-        
-        IStringBuilder *url = IStringBuilder::newStringBuilder();
-        url->addString(geojsonDatasource);
-        url->addString("/");
-        url->addString(namefile);
-        
-        _panoSources.push_back(url->getString());
-      
-        delete url;
-    }
+    IStringBuilder *url = IStringBuilder::newStringBuilder();
+    url->addString(geojsonDatasource);
+    url->addString("/");
+    url->addString(namefile);
+    
+    _panoSources.push_back(url->getString());
+    
+    delete url;
+  }
 }
 
 void SceneParser::parserGEOJSONLayer(LayerSet* layerSet, const JSONObject* jsonLayer){
-    cout << "Parsing GEOJSON Layer " << jsonLayer->getAsString(NAME)->value() << "..." << endl;
-    
-    const std::string geojsonDatasource = jsonLayer->getAsString(DATASOURCE)->value();
+  cout << "Parsing GEOJSON Layer " << jsonLayer->getAsString(NAME)->value() << "..." << endl;
   
-    std::vector<std::map<std::string, std::string>* > legendLayer;
+  const std::string geojsonDatasource = jsonLayer->getAsString(DATASOURCE)->value();
   
-    const JSONArray* jsonItems = jsonLayer->getAsArray(ITEMS);
-    for (int i = 0; i<jsonItems->size(); i++) {
+  std::vector<std::map<std::string, std::string>* > legendLayer;
+  
+  const JSONArray* jsonItems = jsonLayer->getAsArray(ITEMS);
+  for (int i = 0; i<jsonItems->size(); i++) {
     
-        const std::string namefile = jsonItems->getAsObject(i)->getAsString(NAME)->value();
-        const std::string urlIcon = jsonItems->getAsObject(i)->getAsString(URLICON)->value();
-        const std::string minDistance = jsonItems->getAsObject(i)->getAsString(MINDISTANCE)->value();
-        const std::string colorLine = jsonItems->getAsObject(i)->getAsString(COLORLINE)->value();
-        const std::string sizeLine = jsonItems->getAsObject(i)->getAsString(SIZELINE)->value();
-        const std::string showLabel = jsonItems->getAsObject(i)->getAsString(SHOWLABEL)->value();
-        const std::string urlWeb = jsonItems->getAsObject(i)->getAsString(URLWEB)->value();
-      
-        IStringBuilder *url = IStringBuilder::newStringBuilder();
-        url->addString(geojsonDatasource);
-        url->addString("/");
-        url->addString(namefile);
-      
-        const IStringUtils* iISU = IStringUtils::instance();
-        const std::string namefileTruncated = iISU->capitalize(iISU->replaceSubstring(iISU->substring(namefile, 0, iISU->indexOf(namefile, ".")), "_", " "));
-      
-        std::string nameFileFormatted;
-        int pos = IStringUtils::instance()->indexOf(namefileTruncated, "-");
-        if (pos != -1){
-          nameFileFormatted = iISU->substring(namefileTruncated, 0, pos) + " - " + iISU->substring(namefileTruncated, pos+1, namefileTruncated.length());
-        } else {
-          nameFileFormatted = namefileTruncated;
-        }
-      
-        std::map<std::string, std::string>* geojsonMetadata = new std::map<std::string, std::string>;
-      
-        #ifdef C_CODE
-        geojsonMetadata->insert(std::make_pair(URLICON,urlIcon));
-        geojsonMetadata->insert(std::make_pair(NAME,nameFileFormatted));
-        geojsonMetadata->insert(std::make_pair(COLORLINE,colorLine));
-        geojsonMetadata->insert(std::make_pair(WEB,urlWeb));
-        geojsonMetadata->insert(std::make_pair(MINDISTANCE,minDistance));
-        geojsonMetadata->insert(std::make_pair(SIZELINE,sizeLine));
-        geojsonMetadata->insert(std::make_pair(SHOWLABEL,showLabel));
-        #endif
-        #ifdef JAVA_CODE
-        geojsonMetadata.put(URLICON,urlIcon);
-        geojsonMetadata.put(NAME,namefileTruncated);
-        geojsonMetadata.put(COLORLINE,colorLine);
-        geojsonMetadata.put(WEB,urlWeb);
-        geojsonMetadata.put(MINDISTANCE,minDistance);
-        geojsonMetadata.put(SIZELINE,sizeLine);
-        geojsonMetadata.put(SHOWLABEL,showLabel);
-        #endif
-      
-        legendLayer.push_back(geojsonMetadata);
-      
-        _mapGeoJSONSources[url->getString()] = geojsonMetadata;
-      
-        delete url;
+    const std::string namefile = jsonItems->getAsObject(i)->getAsString(NAME)->value();
+    const std::string urlIcon = jsonItems->getAsObject(i)->getAsString(URLICON)->value();
+    const std::string minDistance = jsonItems->getAsObject(i)->getAsString(MINDISTANCE)->value();
+    const std::string colorLine = jsonItems->getAsObject(i)->getAsString(COLORLINE)->value();
+    const std::string sizeLine = jsonItems->getAsObject(i)->getAsString(SIZELINE)->value();
+    const std::string showLabel = jsonItems->getAsObject(i)->getAsString(SHOWLABEL)->value();
+    const std::string urlWeb = jsonItems->getAsObject(i)->getAsString(URLWEB)->value();
+    
+    IStringBuilder *url = IStringBuilder::newStringBuilder();
+    url->addString(geojsonDatasource);
+    url->addString("/");
+    url->addString(namefile);
+    
+    const IStringUtils* iISU = IStringUtils::instance();
+    const std::string namefileTruncated = iISU->capitalize(iISU->replaceSubstring(iISU->substring(namefile, 0, iISU->indexOf(namefile, ".")), "_", " "));
+    
+    std::string nameFileFormatted;
+    int pos = IStringUtils::instance()->indexOf(namefileTruncated, "-");
+    if (pos != -1){
+      nameFileFormatted = iISU->substring(namefileTruncated, 0, pos) + " - " + iISU->substring(namefileTruncated, pos+1, namefileTruncated.length());
+    } else {
+      nameFileFormatted = namefileTruncated;
     }
-
-    _legend[jsonLayer->getAsString(NAME)->value()] = legendLayer;
-    countGroup++;
+    
+    std::map<std::string, std::string>* geojsonMetadata = new std::map<std::string, std::string>;
+    
+#ifdef C_CODE
+    geojsonMetadata->insert(std::make_pair(URLICON,urlIcon));
+    geojsonMetadata->insert(std::make_pair(NAME,nameFileFormatted));
+    geojsonMetadata->insert(std::make_pair(COLORLINE,colorLine));
+    geojsonMetadata->insert(std::make_pair(WEB,urlWeb));
+    geojsonMetadata->insert(std::make_pair(MINDISTANCE,minDistance));
+    geojsonMetadata->insert(std::make_pair(SIZELINE,sizeLine));
+    geojsonMetadata->insert(std::make_pair(SHOWLABEL,showLabel));
+#endif
+#ifdef JAVA_CODE
+    geojsonMetadata.put(URLICON,urlIcon);
+    geojsonMetadata.put(NAME,namefileTruncated);
+    geojsonMetadata.put(COLORLINE,colorLine);
+    geojsonMetadata.put(WEB,urlWeb);
+    geojsonMetadata.put(MINDISTANCE,minDistance);
+    geojsonMetadata.put(SIZELINE,sizeLine);
+    geojsonMetadata.put(SHOWLABEL,showLabel);
+#endif
+    
+    legendLayer.push_back(geojsonMetadata);
+    
+    _mapGeoJSONSources[url->getString()] = geojsonMetadata;
+    
+    delete url;
+  }
+  
+  _legend[jsonLayer->getAsString(NAME)->value()] = legendLayer;
+  countGroup++;
 }
 
 void SceneParser::parserJSONSphericalImageLayer(LayerSet* layerSet, const JSONObject* jsonLayer){
-    cout << "Parsing GEOJSON Layer not available" << endl;
+  cout << "Parsing GEOJSON Layer not available" << endl;
 }
 
 std::map<std::string, std::map<std::string, std::string>* > SceneParser::getMapGeoJSONSources(){
-    return _mapGeoJSONSources;   
+  return _mapGeoJSONSources;
 }
 
 std::vector<std::string> SceneParser::getPanoSources(){
-    return _panoSources;   
+  return _panoSources;
 }
 
 std::map<std::string, std::vector <std::map<std::string, std::string>* > > SceneParser::getLegend(){
-    return _legend;
+  return _legend;
 }
 
 void SceneParser::updateMapGeoJSONSourcesValue(std::string fileUrl, std::string key, std::string value){
-    #ifdef C_CODE
-    _mapGeoJSONSources[fileUrl]->at(key) = value;
-    #endif
-    #ifdef JAVA_CODE
-    _mapGeoJSONSources.get(fileUrl).put(key, value);
-    #endif
+#ifdef C_CODE
+  _mapGeoJSONSources[fileUrl]->at(key) = value;
+#endif
+#ifdef JAVA_CODE
+  _mapGeoJSONSources.get(fileUrl).put(key, value);
+#endif
 }

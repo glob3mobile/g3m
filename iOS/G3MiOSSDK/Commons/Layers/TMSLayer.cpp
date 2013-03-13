@@ -18,13 +18,13 @@
 
 
 TMSLayer::TMSLayer(const std::string& mapLayer,
-         const URL& mapServerURL,
-         const Sector& sector,
-         const std::string& format,
-         const std::string srs,
-         const bool isTransparent,
-         LayerCondition* condition,
-         const TimeInterval& timeToCache,
+                   const URL& mapServerURL,
+                   const Sector& sector,
+                   const std::string& format,
+                   const std::string srs,
+                   const bool isTransparent,
+                   LayerCondition* condition,
+                   const TimeInterval& timeToCache,
                    const LayerTilesRenderParameters* parameters):
 
 Layer(condition,
@@ -43,7 +43,7 @@ _isTransparent(isTransparent)
 }
 
 std::vector<Petition*> TMSLayer::getMapPetitions(const G3MRenderContext* rc,
-                                       const Tile* tile,
+                                                 const Tile* tile,
                                                  const Vector2I& tileTextureResolution) const {
   std::vector<Petition*> petitions;
   
@@ -52,7 +52,7 @@ std::vector<Petition*> TMSLayer::getMapPetitions(const G3MRenderContext* rc,
     return petitions;
   }
   
-  IStringBuilder* isb = IStringBuilder::newStringBuilder();  
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString(_mapServerURL.getPath());
   isb->addString(_mapLayer);
   isb->addString("/");
