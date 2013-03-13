@@ -224,29 +224,6 @@ public class EllipsoidalTileTessellator extends TileTessellator
     return true;
   }
 
-
-  //const Vector2D EllipsoidalTileTessellator::getTextCoord(const Tile* tile,
-  //                                                        const Geodetic2D& position,
-  //                                                        bool mercator) const {
-  //  const Sector sector = tile->getSector();
-  //
-  //  const Vector2D linearUV = sector.getUVCoordinates(position);
-  //
-  //  if (mercator) {
-  //    const double mercatorLowerV = MercatorUtils::getMercatorV(sector.lower().latitude());
-  //    const double mercatorUpperV = MercatorUtils::getMercatorV(sector.upper().latitude());
-  //    const double mercatorDeltaV = mercatorLowerV - mercatorUpperV;
-  //
-  //    const double vMercatorGlobal = MercatorUtils::getMercatorV(position.latitude());
-  //
-  //    const double vv = (vMercatorGlobal - mercatorUpperV) / mercatorDeltaV;
-  //
-  //    return Vector2D(linearUV._x, vv);
-  //  }
-  //
-  //  return linearUV;
-  //}
-  
   public final IFloatBuffer createTextCoords(Vector2I rawResolution, Tile tile, boolean mercator)
   {
   
@@ -351,8 +328,26 @@ public class EllipsoidalTileTessellator extends TileTessellator
     return textCoords;
   }
 
-//  const Vector2D getTextCoord(const Tile* tile,
-//                              const Geodetic2D& position,
-//                              bool mercator) const;
+  public final Vector2D getTextCoord(Tile tile, Angle latitude, Angle longitude, boolean mercator)
+  {
+    final Sector sector = tile.getSector();
+  
+    final Vector2D linearUV = sector.getUVCoordinates(latitude, longitude);
+  
+    if (mercator)
+    {
+      final double mercatorLowerV = MercatorUtils.getMercatorV(sector.lower().latitude());
+      final double mercatorUpperV = MercatorUtils.getMercatorV(sector.upper().latitude());
+      final double mercatorDeltaV = mercatorLowerV - mercatorUpperV;
+  
+      final double vMercatorGlobal = MercatorUtils.getMercatorV(latitude);
+  
+      final double vv = (vMercatorGlobal - mercatorUpperV) / mercatorDeltaV;
+  
+      return new Vector2D(linearUV._x, vv);
+    }
+  
+    return linearUV;
+  }
 
 }

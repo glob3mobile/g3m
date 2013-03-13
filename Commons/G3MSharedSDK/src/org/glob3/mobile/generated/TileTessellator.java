@@ -25,7 +25,6 @@ package org.glob3.mobile.generated;
 //class ElevationData;
 //class Geodetic2D;
 
-///#include "Vector2D.hpp"
 
 
 public abstract class TileTessellator
@@ -44,8 +43,11 @@ public abstract class TileTessellator
 
   public abstract IFloatBuffer createTextCoords(Vector2I resolution, Tile tile, boolean mercator);
 
-//  virtual const Vector2D getTextCoord(const Tile* tile,
-//                                      const Geodetic2D& position,
-//                                      bool mercator) const = 0;
+  public Vector2D getTextCoord(Tile tile, Geodetic2D position, boolean mercator)
+  {
+    return getTextCoord(tile, position.latitude(), position.longitude(), mercator);
+  }
+
+  public abstract Vector2D getTextCoord(Tile tile, Angle latitude, Angle longitude, boolean mercator);
 
 }

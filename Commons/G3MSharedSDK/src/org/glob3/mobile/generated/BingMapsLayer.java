@@ -57,7 +57,7 @@ public class BingMapsLayer extends Layer
   }
   public BingMapsLayer(String imagerySet, String key, TimeInterval timeToCache)
   {
-     this(imagerySet, key, timeToCache, 3, null);
+     this(imagerySet, key, timeToCache, 2, null);
   }
   public BingMapsLayer(String imagerySet, String key, TimeInterval timeToCache, int initialLevel, LayerCondition condition)
   {

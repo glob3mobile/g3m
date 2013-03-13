@@ -48,7 +48,7 @@ public class MapQuestLayer extends MercatorTiledLayer
   }
   public static MapQuestLayer newOSM(TimeInterval timeToCache)
   {
-     return newOSM(timeToCache, 3, null);
+     return newOSM(timeToCache, 2, null);
   }
   public static MapQuestLayer newOSM(TimeInterval timeToCache, int initialLevel, LayerCondition condition)
   {
@@ -62,7 +62,7 @@ public class MapQuestLayer extends MercatorTiledLayer
   }
   public static MapQuestLayer newOpenAerial(TimeInterval timeToCache)
   {
-     return newOpenAerial(timeToCache, 3, null);
+     return newOpenAerial(timeToCache, 2, null);
   }
   public static MapQuestLayer newOpenAerial(TimeInterval timeToCache, int initialLevel, LayerCondition condition)
   {

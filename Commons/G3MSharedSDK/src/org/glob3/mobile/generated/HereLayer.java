@@ -32,7 +32,7 @@ public class HereLayer extends Layer
   }
   public HereLayer(String appId, String appCode, TimeInterval timeToCache)
   {
-     this(appId, appCode, timeToCache, 3, null);
+     this(appId, appCode, timeToCache, 2, null);
   }
   public HereLayer(String appId, String appCode, TimeInterval timeToCache, int initialLevel, LayerCondition condition)
   {

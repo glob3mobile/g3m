@@ -10,7 +10,7 @@ public class LayerSet
 
   private LayerTilesRenderParameters createLayerTilesRenderParameters()
   {
-    Sector mergedSector = null;
+    Sector topSector = null;
     int topSectorSplitsByLatitude = 0;
     int topSectorSplitsByLongitude = 0;
     int firstLevel = 0;
@@ -40,7 +40,7 @@ public class LayerSet
         {
           first = false;
   
-          mergedSector = new Sector(layerParam._topSector);
+          topSector = new Sector(layerParam._topSector);
           topSectorSplitsByLatitude = layerParam._topSectorSplitsByLatitude;
           topSectorSplitsByLongitude = layerParam._topSectorSplitsByLongitude;
           firstLevel = layerParam._firstLevel;
@@ -53,12 +53,10 @@ public class LayerSet
         }
         else
         {
-          if (!mergedSector.fullContains(layerParam._topSector))
+          if (!topSector.isEqualsTo(layerParam._topSector))
           {
-            Sector oldSector = mergedSector;
-            mergedSector = new Sector(oldSector.mergedWith(layerParam._topSector));
-            if (oldSector != null)
-               oldSector.dispose();
+            ILogger.instance().logError("Inconsistency in Layer's Parameters: topSector");
+            return null;
           }
   
           if (topSectorSplitsByLatitude != layerParam._topSectorSplitsByLatitude)
@@ -117,12 +115,12 @@ public class LayerSet
       return null;
     }
   
-    final Sector topSector = new Sector(mergedSector);
-    if (mergedSector != null)
-       mergedSector.dispose();
-    mergedSector = null;
+    LayerTilesRenderParameters parameters = new LayerTilesRenderParameters(topSector, topSectorSplitsByLatitude, topSectorSplitsByLongitude, firstLevel, maxLevel, new Vector2I(tileTextureWidth, tileTextureHeight), new Vector2I(tileMeshWidth, tileMeshHeight), mercator);
   
-    return new LayerTilesRenderParameters(topSector, topSectorSplitsByLatitude, topSectorSplitsByLongitude, firstLevel, maxLevel, new Vector2I(tileTextureWidth, tileTextureHeight), new Vector2I(tileMeshWidth, tileMeshHeight), mercator);
+    if (topSector != null)
+       topSector.dispose();
+  
+    return parameters;
   }
   private void layersChanged()
   {

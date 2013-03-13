@@ -35,7 +35,7 @@ public class OSMLayer extends MercatorTiledLayer
   }
   public OSMLayer(TimeInterval timeToCache)
   {
-     this(timeToCache, 3, null);
+     this(timeToCache, 2, null);
   }
   public OSMLayer(TimeInterval timeToCache, int initialLevel, LayerCondition condition)
   {

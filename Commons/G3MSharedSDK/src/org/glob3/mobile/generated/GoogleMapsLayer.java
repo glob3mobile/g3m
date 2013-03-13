@@ -30,7 +30,7 @@ public class GoogleMapsLayer extends Layer
   }
   public GoogleMapsLayer(String key, TimeInterval timeToCache)
   {
-     this(key, timeToCache, 3, null);
+     this(key, timeToCache, 2, null);
   }
   public GoogleMapsLayer(String key, TimeInterval timeToCache, int initialLevel, LayerCondition condition)
   {

@@ -332,13 +332,23 @@ public class Sector
 
   public final Vector2D getUVCoordinates(Angle latitude, Angle longitude)
   {
-    // const double u = longitude.sub(_lower.longitude()).div(getDeltaLongitude());
-    // const double v = _upper.latitude().sub(latitude).div(getDeltaLatitude());
-    final double u = (longitude._radians - _lower.longitude()._radians) / _deltaLongitude._radians;
-    final double v = (_upper.latitude()._radians - latitude._radians) / _deltaLatitude._radians;
-
-    return new Vector2D(u, v);
+//    const double u = (longitude._radians - _lower.longitude()._radians) / _deltaLongitude._radians;
+//    const double v = (_upper.latitude()._radians - latitude._radians)   / _deltaLatitude._radians;
+//
+//    return Vector2D(u, v);
+    return new Vector2D(getUCoordinates(longitude), getVCoordinates(latitude));
   }
+
+  public final double getUCoordinates(Angle longitude)
+  {
+    return (longitude._radians - _lower.longitude()._radians) / _deltaLongitude._radians;
+  }
+
+  public final double getVCoordinates(Angle latitude)
+  {
+    return (_upper.latitude()._radians - latitude._radians) / _deltaLatitude._radians;
+  }
+
 
   public final boolean isBackOriented(G3MRenderContext rc, double height)
   {
