@@ -63,8 +63,6 @@ const std::string SceneParser::URLWEB = "urlWeb";
 const std::string SceneParser::SHOWLABEL = "showLabel";
 const std::string SceneParser::WEB = "web";
 
-const std::string SceneParser::WMS110 = "1.1.0";
-const std::string SceneParser::WMS111 = "1.1.1";
 const std::string SceneParser::WMS130 = "1.3.0";
 
 SceneParser* SceneParser::_instance = NULL;

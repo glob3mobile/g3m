@@ -49,8 +49,6 @@ class SceneParser{
     static const std::string SHOWLABEL;
     static const std::string WEB;
   
-    static const std::string WMS110;
-    static const std::string WMS111;
     static const std::string WMS130;
     
     static SceneParser* _instance;
