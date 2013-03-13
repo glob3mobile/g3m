@@ -22,12 +22,12 @@ package org.glob3.mobile.generated;
 
 public enum layer_type
 {
-    WMS,
-    TMS,
-    THREED,
-    PLANARIMAGE,
-    GEOJSON,
-    SPHERICALIMAGE;
+  WMS,
+  TMS,
+  THREED,
+  PLANARIMAGE,
+  GEOJSON,
+  SPHERICALIMAGE;
 
    public int getValue()
    {
