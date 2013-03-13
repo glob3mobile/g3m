@@ -30,6 +30,7 @@ package org.glob3.mobile.generated;
 //class SGTranslateNode;
 //class SGLayerNode;
 //class Color;
+//class SceneJSParserStatistics;
 
 public class SceneJSShapesParser
 {
@@ -40,7 +41,12 @@ public class SceneJSShapesParser
   {
      _uriPrefix = uriPrefix;
      _rootShape = null;
+    _statistics = new SceneJSParserStatistics();
     pvtParse(jsonObject);
+  
+    _statistics.log();
+    if (_statistics != null)
+       _statistics.dispose();
   }
 
   private Shape getRootShape()
@@ -84,6 +90,7 @@ public class SceneJSShapesParser
         if (type.compareTo("node") == 0)
         {
           result = createNode(jsonObject);
+          _statistics.computeNode();
         }
         else if (type.compareTo("rotate") == 0)
         {
@@ -96,6 +103,7 @@ public class SceneJSShapesParser
         else if (type.compareTo("material") == 0)
         {
           result = createMaterialNode(jsonObject);
+          _statistics.computeMaterial();
         }
         else if (type.compareTo("texture") == 0)
         {
@@ -104,6 +112,7 @@ public class SceneJSShapesParser
         else if (type.compareTo("geometry") == 0)
         {
           result = createGeometryNode(jsonObject);
+          _statistics.computeGeometry();
         }
         else
         {
@@ -469,6 +478,7 @@ public class SceneJSShapesParser
     for (int i = 0; i < verticesCount; i++)
     {
       vertices.put(i, (float) jsPositions.getAsNumber(i).value());
+      _statistics.computeVertex();
     }
   
     final JSONArray jsColors = jsonObject.getAsArray("colors");
@@ -618,6 +628,8 @@ public class SceneJSShapesParser
   
     return Color.newFromRGBA(r, g, b, a);
   }
+
+  private SceneJSParserStatistics _statistics;
 
 
   public static Shape parseFromJSONBaseObject(JSONBaseObject jsonObject, String uriPrefix)
