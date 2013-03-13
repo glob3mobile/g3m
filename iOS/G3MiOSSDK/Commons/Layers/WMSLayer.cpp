@@ -32,7 +32,7 @@ Layer(condition,
       mapLayer,
       timeToCache,
       (parameters == NULL)
-      ? LayerTilesRenderParameters::createDefaultNonMercator(sector)
+      ? LayerTilesRenderParameters::createDefaultNonMercator(Sector::fullSphere())
       : parameters),
 _mapLayer(mapLayer),
 _mapServerURL(mapServerURL),
@@ -65,7 +65,7 @@ Layer(condition,
       mapLayer,
       timeToCache,
       (parameters == NULL)
-      ? LayerTilesRenderParameters::createDefaultNonMercator(sector)
+      ? LayerTilesRenderParameters::createDefaultNonMercator(Sector::fullSphere())
       : parameters),
 _mapLayer(mapLayer),
 _mapServerURL(mapServerURL),

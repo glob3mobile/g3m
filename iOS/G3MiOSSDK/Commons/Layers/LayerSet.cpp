@@ -129,7 +129,7 @@ const LayerTilesRenderParameters* LayerSet::getLayerTilesRenderParameters() cons
 }
 
 LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters() const {
-  Sector* mergedSector               = NULL;
+  Sector* topSector                  = NULL;
   int     topSectorSplitsByLatitude  = 0;
   int     topSectorSplitsByLongitude = 0;
   int     firstLevel                 = 0;
@@ -155,7 +155,7 @@ LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters() const {
       if (first) {
         first = false;
 
-        mergedSector               = new Sector( layerParam->_topSector );
+        topSector                  = new Sector( layerParam->_topSector );
         topSectorSplitsByLatitude  = layerParam->_topSectorSplitsByLatitude;
         topSectorSplitsByLongitude = layerParam->_topSectorSplitsByLongitude;
         firstLevel                 = layerParam->_firstLevel;
@@ -167,10 +167,9 @@ LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters() const {
         mercator                   = layerParam->_mercator;
       }
       else {
-        if (!mergedSector->fullContains( layerParam->_topSector )) {
-          Sector* oldSector = mergedSector;
-          mergedSector = new Sector( oldSector->mergedWith( layerParam->_topSector ) );
-          delete oldSector;
+        if (!topSector->isEqualsTo(layerParam->_topSector) ) {
+          ILogger::instance()->logError("Inconsistency in Layer's Parameters: topSector");
+          return NULL;
         }
 
         if ( topSectorSplitsByLatitude != layerParam->_topSectorSplitsByLatitude ) {
@@ -227,16 +226,16 @@ LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters() const {
     return NULL;
   }
 
-  const Sector topSector(*mergedSector);
-  delete mergedSector;
-  mergedSector = NULL;
+  LayerTilesRenderParameters* parameters = new LayerTilesRenderParameters(*topSector,
+                                                                          topSectorSplitsByLatitude,
+                                                                          topSectorSplitsByLongitude,
+                                                                          firstLevel,
+                                                                          maxLevel,
+                                                                          Vector2I(tileTextureWidth, tileTextureHeight),
+                                                                          Vector2I(tileMeshWidth,    tileMeshHeight),
+                                                                          mercator);
 
-  return new LayerTilesRenderParameters(topSector,
-                                        topSectorSplitsByLatitude,
-                                        topSectorSplitsByLongitude,
-                                        firstLevel,
-                                        maxLevel,
-                                        Vector2I(tileTextureWidth, tileTextureHeight),
-                                        Vector2I(tileMeshWidth,    tileMeshHeight),
-                                        mercator);
+  delete topSector;
+
+  return parameters;
 }
