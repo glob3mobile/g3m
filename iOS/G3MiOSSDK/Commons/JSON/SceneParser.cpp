@@ -89,7 +89,6 @@ void SceneParser::parse(LayerSet* layerSet, std::string namelessParameter){
   _mapGeoJSONSources.clear();
   _panoSources.clear();
   _legend.clear();
-  countGroup=0;
   
   JSONBaseObject* json = IJSONParser::instance()->parse(namelessParameter);
   parserJSONLayerList(layerSet, json->asObject()->getAsObject(LAYERS));
@@ -360,7 +359,6 @@ void SceneParser::parserGEOJSONLayer(LayerSet* layerSet, const JSONObject* jsonL
   }
   
   _legend[jsonLayer->getAsString(NAME)->value()] = legendLayer;
-  countGroup++;
 }
 
 void SceneParser::parserJSONSphericalImageLayer(LayerSet* layerSet, const JSONObject* jsonLayer){

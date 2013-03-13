@@ -56,8 +56,6 @@ class SceneParser{
   std::map<std::string, std::map<std::string, std::string>* > _mapGeoJSONSources;
   std::vector<std::string> _panoSources;
   std::map<std::string, std::vector <std::map<std::string, std::string>* > > _legend;
-  int countGroup;
-  LayerTilesRenderParameters* _layerTileRenderParameters;
   
 public:
   
