@@ -52,7 +52,7 @@ private:
 public:
 
   static MapQuestLayer* newOSM(const TimeInterval& timeToCache,
-                               int initialLevel = 3,
+                               int initialLevel = 2,
                                LayerCondition* condition = NULL) {
     return new MapQuestLayer("MapQuest-OSM",
                              "mqcdn.com/tiles/1.0.0/map",
@@ -65,7 +65,7 @@ public:
 
 
   static MapQuestLayer* newOpenAerial(const TimeInterval& timeToCache,
-                                      int initialLevel = 3,
+                                      int initialLevel = 2,
                                       LayerCondition* condition = NULL) {
     return new MapQuestLayer("MapQuest-OpenAerial",
                              "mqcdn.com/tiles/1.0.0/sat",

@@ -25,7 +25,7 @@ public:
   HereLayer(const std::string& appId,
             const std::string& appCode,
             const TimeInterval& timeToCache,
-            int initialLevel = 3,
+            int initialLevel = 2,
             LayerCondition* condition = NULL);
 
   std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,

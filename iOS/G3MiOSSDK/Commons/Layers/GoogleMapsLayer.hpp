@@ -22,7 +22,7 @@ public:
 
   GoogleMapsLayer(const std::string& key,
                   const TimeInterval& timeToCache,
-                  int initialLevel = 3,
+                  int initialLevel = 2,
                   LayerCondition* condition = NULL);
 
   URL getFeatureInfoURL(const Geodetic2D& position,
