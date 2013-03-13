@@ -18,6 +18,10 @@ SceneJSParserStatistics::SceneJSParserStatistics() {
   _verticesCount = 0;
 }
 
+SceneJSParserStatistics::~SceneJSParserStatistics() {
+  
+}
+
 void SceneJSParserStatistics::computeNode() {
   _nodesCount++;
 }

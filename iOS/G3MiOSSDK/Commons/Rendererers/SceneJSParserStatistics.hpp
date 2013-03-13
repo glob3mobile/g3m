@@ -21,6 +21,7 @@ private:
   mutable int _verticesCount;
 public:
   SceneJSParserStatistics();
+  ~SceneJSParserStatistics();
   void computeNode();
   int getNodesCount() const;
   void computeMaterial();
