@@ -24,7 +24,7 @@ public:
   EllipsoidalTileTessellator(const bool skirted) :
   _skirted(skirted)
   {
-    
+
   }
 
   virtual ~EllipsoidalTileTessellator() { }
@@ -54,9 +54,10 @@ public:
                                  const Tile* tile,
                                  bool mercator) const;
 
-//  const Vector2D getTextCoord(const Tile* tile,
-//                              const Geodetic2D& position,
-//                              bool mercator) const;
+  const Vector2D getTextCoord(const Tile* tile,
+                              const Angle& latitude,
+                              const Angle& longitude,
+                              bool mercator) const;
 
 };
 

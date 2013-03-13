@@ -24,7 +24,7 @@ private:
 
 public:
   OSMLayer(const TimeInterval& timeToCache,
-           int initialLevel = 3,
+           int initialLevel = 2,
            LayerCondition* condition = NULL) :
   MercatorTiledLayer("OpenStreetMap",
                      "http://",

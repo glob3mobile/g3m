@@ -154,13 +154,22 @@ public:
 
   Vector2D getUVCoordinates(const Angle& latitude,
                             const Angle& longitude) const {
-    // const double u = longitude.sub(_lower.longitude()).div(getDeltaLongitude());
-    // const double v = _upper.latitude().sub(latitude).div(getDeltaLatitude());
-    const double u = (longitude._radians - _lower.longitude()._radians) / _deltaLongitude._radians;
-    const double v = (_upper.latitude()._radians - latitude._radians)   / _deltaLatitude._radians;
-
-    return Vector2D(u, v);
+//    const double u = (longitude._radians - _lower.longitude()._radians) / _deltaLongitude._radians;
+//    const double v = (_upper.latitude()._radians - latitude._radians)   / _deltaLatitude._radians;
+//
+//    return Vector2D(u, v);
+    return Vector2D(getUCoordinates(longitude),
+                    getVCoordinates(latitude));
   }
+
+  double getUCoordinates(const Angle& longitude) const {
+    return (longitude._radians - _lower.longitude()._radians) / _deltaLongitude._radians;
+  }
+
+  double getVCoordinates(const Angle& latitude) const {
+    return (_upper.latitude()._radians - latitude._radians)   / _deltaLatitude._radians;
+  }
+
 
   bool isBackOriented(const G3MRenderContext *rc, double height) const;
 

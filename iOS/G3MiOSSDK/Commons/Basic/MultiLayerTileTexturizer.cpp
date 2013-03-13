@@ -107,12 +107,19 @@ public:
       const Sector ancestorSector = _ancestor->getSector();
 
       const Vector2D scale = tileSector.getScaleFactor(ancestorSector);
-      _scale       = scale.asMutableVector2D();
-      //_translation = tileSector.getTranslationFactor(ancestorSector).asMutableVector2D();
+      _scale = scale.asMutableVector2D();
 
-      _translation = ancestorSector.getUVCoordinates(tileSector.upper().latitude(),
-                                                     tileSector.lower().longitude()).asMutableVector2D();
-      //_translation = _tessellator->getTextCoord(_ancestor, tileSector.lower(), _mercator).times(scale).asMutableVector2D();
+//      _translation = tileSector.getTranslationFactor(ancestorSector).asMutableVector2D();
+
+      int __DIEGO_AT_WORK;
+      const Vector2D ancestorTextCoord = _tessellator->getTextCoord(_ancestor,
+                                                                    tileSector.upper().latitude(),
+                                                                    tileSector.lower().longitude(),
+                                                                    _mercator);
+      _translation = ancestorTextCoord.asMutableVector2D();
+
+//      _translation = ancestorSector.getUVCoordinates(tileSector.upper().latitude(),
+//                                                     tileSector.lower().longitude()).asMutableVector2D();
     }
   }
 

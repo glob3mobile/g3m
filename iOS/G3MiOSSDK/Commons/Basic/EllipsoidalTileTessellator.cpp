@@ -170,27 +170,28 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
                          color);
 }
 
-//const Vector2D EllipsoidalTileTessellator::getTextCoord(const Tile* tile,
-//                                                        const Geodetic2D& position,
-//                                                        bool mercator) const {
-//  const Sector sector = tile->getSector();
-//
-//  const Vector2D linearUV = sector.getUVCoordinates(position);
-//
-//  if (mercator) {
-//    const double mercatorLowerV = MercatorUtils::getMercatorV(sector.lower().latitude());
-//    const double mercatorUpperV = MercatorUtils::getMercatorV(sector.upper().latitude());
-//    const double mercatorDeltaV = mercatorLowerV - mercatorUpperV;
-//
-//    const double vMercatorGlobal = MercatorUtils::getMercatorV(position.latitude());
-//
-//    const double vv = (vMercatorGlobal - mercatorUpperV) / mercatorDeltaV;
-//
-//    return Vector2D(linearUV._x, vv);
-//  }
-//
-//  return linearUV;
-//}
+const Vector2D EllipsoidalTileTessellator::getTextCoord(const Tile* tile,
+                                                        const Angle& latitude,
+                                                        const Angle& longitude,
+                                                        bool mercator) const {
+  const Sector sector = tile->getSector();
+
+  const Vector2D linearUV = sector.getUVCoordinates(latitude, longitude);
+
+  if (mercator) {
+    const double mercatorLowerV = MercatorUtils::getMercatorV(sector.lower().latitude());
+    const double mercatorUpperV = MercatorUtils::getMercatorV(sector.upper().latitude());
+    const double mercatorDeltaV = mercatorLowerV - mercatorUpperV;
+
+    const double vMercatorGlobal = MercatorUtils::getMercatorV(latitude);
+
+    const double vv = (vMercatorGlobal - mercatorUpperV) / mercatorDeltaV;
+
+    return Vector2D(linearUV._x, vv);
+  }
+
+  return linearUV;
+}
 
 IFloatBuffer* EllipsoidalTileTessellator::createTextCoords(const Vector2I& rawResolution,
                                                            const Tile* tile,
