@@ -32,6 +32,10 @@ public class SceneJSParserStatistics
     _geometriesCount = 0;
     _verticesCount = 0;
   }
+  public void dispose()
+  {
+  
+  }
   public final void computeNode()
   {
     _nodesCount++;
