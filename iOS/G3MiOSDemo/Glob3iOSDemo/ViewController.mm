@@ -9,61 +9,60 @@
 #import "ViewController.h"
 
 
+#import <G3MiOSSDK/G3MBuilder_iOS.hpp>
 
-#include "G3MBuilder_iOS.hpp"
+#import <G3MiOSSDK/VisibleSectorListener.hpp>
+#import <G3MiOSSDK/MarksRenderer.hpp>
+#import <G3MiOSSDK/ShapesRenderer.hpp>
+#import <G3MiOSSDK/GEORenderer.hpp>
+#import <G3MiOSSDK/BusyMeshRenderer.hpp>
+#import <G3MiOSSDK/MeshRenderer.hpp>
+#import <G3MiOSSDK/FloatBufferBuilderFromGeodetic.hpp>
+#import <G3MiOSSDK/FloatBufferBuilderFromColor.hpp>
+#import <G3MiOSSDK/DirectMesh.hpp>
+#import <G3MiOSSDK/WMSLayer.hpp>
+#import <G3MiOSSDK/CameraSingleDragHandler.hpp>
+#import <G3MiOSSDK/CameraDoubleDragHandler.hpp>
+#import <G3MiOSSDK/CameraRotationHandler.hpp>
+#import <G3MiOSSDK/CameraDoubleTapHandler.hpp>
+#import <G3MiOSSDK/LevelTileCondition.hpp>
+#import <G3MiOSSDK/LayerBuilder.hpp>
+#import <G3MiOSSDK/TileRendererBuilder.hpp>
+#import <G3MiOSSDK/MarkTouchListener.hpp>
+#import <G3MiOSSDK/TrailsRenderer.hpp>
+#import <G3MiOSSDK/Mark.hpp>
+#import <G3MiOSSDK/CircleShape.hpp>
+#import <G3MiOSSDK/QuadShape.hpp>
+#import <G3MiOSSDK/BoxShape.hpp>
+#import <G3MiOSSDK/EllipsoidShape.hpp>
+#import <G3MiOSSDK/SceneJSShapesParser.hpp>
 
-#include "VisibleSectorListener.hpp"
-#include "MarksRenderer.hpp"
-#include "ShapesRenderer.hpp"
-#include "GEORenderer.hpp"
-#include "BusyMeshRenderer.hpp"
-#include "MeshRenderer.hpp"
-#include "FloatBufferBuilderFromGeodetic.hpp"
-#include "FloatBufferBuilderFromColor.hpp"
-#include "DirectMesh.hpp"
-#include "WMSLayer.hpp"
-#include "CameraSingleDragHandler.hpp"
-#include "CameraDoubleDragHandler.hpp"
-#include "CameraRotationHandler.hpp"
-#include "CameraDoubleTapHandler.hpp"
-#include "LevelTileCondition.hpp"
-#include "LayerBuilder.hpp"
-#include "TileRendererBuilder.hpp"
-#include "MarkTouchListener.hpp"
-#include "TrailsRenderer.hpp"
-#include "Mark.hpp"
-#include "CircleShape.hpp"
-#include "QuadShape.hpp"
-#include "BoxShape.hpp"
-#include "EllipsoidShape.hpp"
-#include "SceneJSShapesParser.hpp"
+#import <G3MiOSSDK/IJSONParser.hpp>
+#import <G3MiOSSDK/JSONGenerator.hpp>
+#import <G3MiOSSDK/BSONParser.hpp>
+#import <G3MiOSSDK/BSONGenerator.hpp>
 
-#include "IJSONParser.hpp"
-#include "JSONGenerator.hpp"
-#include "BSONParser.hpp"
-#include "BSONGenerator.hpp"
+#import <G3MiOSSDK/MeshShape.hpp>
+#import <G3MiOSSDK/IShortBuffer.hpp>
+#import <G3MiOSSDK/SimpleCameraConstrainer.hpp>
+#import <G3MiOSSDK/WMSBillElevationDataProvider.hpp>
+#import <G3MiOSSDK/ElevationData.hpp>
+#import <G3MiOSSDK/IBufferDownloadListener.hpp>
+#import <G3MiOSSDK/BilParser.hpp>
+#import <G3MiOSSDK/ShortBufferBuilder.hpp>
+#import <G3MiOSSDK/BilinearInterpolator.hpp>
+#import <G3MiOSSDK/SubviewElevationData.hpp>
+#import <G3MiOSSDK/GInitializationTask.hpp>
+#import <G3MiOSSDK/PeriodicalTask.hpp>
+#import <G3MiOSSDK/IDownloader.hpp>
+#import <G3MiOSSDK/OSMLayer.hpp>
+#import <G3MiOSSDK/HereLayer.hpp>
+#import <G3MiOSSDK/MapQuestLayer.hpp>
+#import <G3MiOSSDK/MapBoxLayer.hpp>
+#import <G3MiOSSDK/GoogleMapsLayer.hpp>
+#import <G3MiOSSDK/BingMapsLayer.hpp>
 
-#include "MeshShape.hpp"
-#include "IShortBuffer.hpp"
-#include "SimpleCameraConstrainer.hpp"
-#include "WMSBillElevationDataProvider.hpp"
-#include "ElevationData.hpp"
-#include "IBufferDownloadListener.hpp"
-#include "BilParser.hpp"
-#include "ShortBufferBuilder.hpp"
-#include "BilinearInterpolator.hpp"
-#include "SubviewElevationData.hpp"
-#include "GInitializationTask.hpp"
-#include "PeriodicalTask.hpp"
-#include "IDownloader.hpp"
-#include "OSMLayer.hpp"
-#include "HereLayer.hpp"
-#include "MapQuestLayer.hpp"
-#include "MapBoxLayer.hpp"
-#include "GoogleMapsLayer.hpp"
-#include "BingMapsLayer.hpp"
-
-#include "G3MWidget.hpp"
+#import <G3MiOSSDK/G3MWidget.hpp>
 
 class TestVisibleSectorListener : public VisibleSectorListener {
 public:

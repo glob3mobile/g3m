@@ -38,12 +38,9 @@
 		D8EEF39E1577920B003FEB5E /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8EEF39C1577920B003FEB5E /* MainStoryboard_iPhone.storyboard */; };
 		D8EEF3A11577920B003FEB5E /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8EEF39F1577920B003FEB5E /* MainStoryboard_iPad.storyboard */; };
 		D8EEF3A41577920B003FEB5E /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = D8EEF3A31577920B003FEB5E /* ViewController.mm */; };
-		D8EEF40B1577A93D003FEB5E /* G3W.mm in Sources */ = {isa = PBXBuildFile; fileRef = D8EEF40A1577A93D003FEB5E /* G3W.mm */; };
 		D8EEF40F1577AA61003FEB5E /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF40E1577AA61003FEB5E /* OpenGLES.framework */; };
 		D8EEF4111577AAE2003FEB5E /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF4101577AAE2003FEB5E /* QuartzCore.framework */; };
 		D8EEF4221577AEE0003FEB5E /* libG3MiOSSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF41E1577AEC8003FEB5E /* libG3MiOSSDK.a */; };
-		D8EEF4281577B0FD003FEB5E /* Shader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = D8EEF4241577B0D3003FEB5E /* Shader.vsh */; };
-		D8EEF4291577B0FD003FEB5E /* Shader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = D8EEF4231577B0D3003FEB5E /* Shader.fsh */; };
 		E71B15371626D27F003D1013 /* Default-Landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B152C1626D27F003D1013 /* Default-Landscape.png */; };
 		E71B15381626D27F003D1013 /* Default-Landscape@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B152D1626D27F003D1013 /* Default-Landscape@2x.png */; };
 		E71B15391626D27F003D1013 /* Default-Portrait.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B152E1626D27F003D1013 /* Default-Portrait.png */; };
@@ -56,17 +53,8 @@
 		E71B15401626D27F003D1013 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B15351626D27F003D1013 /* Icon.png */; };
 		E71B15411626D27F003D1013 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B15361626D27F003D1013 /* Icon@2x.png */; };
 		E728385516E914D80037AA5C /* g3m-marker.png in Resources */ = {isa = PBXBuildFile; fileRef = E728385416E914D80037AA5C /* g3m-marker.png */; };
-		E751B7661680E2D90032413F /* (null) in Resources */ = {isa = PBXBuildFile; };
-		E751B7681680E5850032413F /* (null) in Resources */ = {isa = PBXBuildFile; };
-		E751B78316823D7C0032413F /* (null) in Sources */ = {isa = PBXBuildFile; };
-		E751B7A1168247830032413F /* (null) in Resources */ = {isa = PBXBuildFile; };
-		E751B7A2168247830032413F /* (null) in Resources */ = {isa = PBXBuildFile; };
-		E770CAD9169C425600F892BE /* (null) in Resources */ = {isa = PBXBuildFile; };
-		E770CAE4169C808700F892BE /* (null) in Sources */ = {isa = PBXBuildFile; };
-		E770CAE7169D988C00F892BE /* (null) in Resources */ = {isa = PBXBuildFile; };
-		E791CF6F16C15A49000FDE8A /* (null) in Sources */ = {isa = PBXBuildFile; };
-		E7A4734916B855B300D07077 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		E7CD9BCB16C24E9F00F69E41 /* (null) in Sources */ = {isa = PBXBuildFile; };
+		E7A1A99016F0E51A00D138D8 /* Shader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = E7A1A98D16F0E51A00D138D8 /* Shader.fsh */; };
+		E7A1A99116F0E51A00D138D8 /* Shader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = E7A1A98E16F0E51A00D138D8 /* Shader.vsh */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -123,13 +111,9 @@
 		D8EEF3A01577920B003FEB5E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
 		D8EEF3A21577920B003FEB5E /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		D8EEF3A31577920B003FEB5E /* ViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = ViewController.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		D8EEF4091577A93D003FEB5E /* G3W.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = G3W.h; sourceTree = "<group>"; };
-		D8EEF40A1577A93D003FEB5E /* G3W.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3W.mm; sourceTree = "<group>"; };
 		D8EEF40E1577AA61003FEB5E /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		D8EEF4101577AAE2003FEB5E /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		D8EEF4161577AEC8003FEB5E /* G3MiOSSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = G3MiOSSDK.xcodeproj; path = ../G3MiOSSDK/G3MiOSSDK.xcodeproj; sourceTree = "<group>"; };
-		D8EEF4231577B0D3003FEB5E /* Shader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Shader.fsh; sourceTree = "<group>"; };
-		D8EEF4241577B0D3003FEB5E /* Shader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Shader.vsh; sourceTree = "<group>"; };
 		E71B152C1626D27F003D1013 /* Default-Landscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Landscape.png"; path = "Resources/Default-Landscape.png"; sourceTree = "<group>"; };
 		E71B152D1626D27F003D1013 /* Default-Landscape@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Landscape@2x.png"; path = "Resources/Default-Landscape@2x.png"; sourceTree = "<group>"; };
 		E71B152E1626D27F003D1013 /* Default-Portrait.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Portrait.png"; path = "Resources/Default-Portrait.png"; sourceTree = "<group>"; };
@@ -142,7 +126,8 @@
 		E71B15351626D27F003D1013 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = Resources/Icon.png; sourceTree = "<group>"; };
 		E71B15361626D27F003D1013 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "Resources/Icon@2x.png"; sourceTree = "<group>"; };
 		E728385416E914D80037AA5C /* g3m-marker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "g3m-marker.png"; sourceTree = "<group>"; };
-		FB6D00A916CC0458009BF93D /* EllipsoidShape.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = EllipsoidShape.hpp; path = ../G3MiOSSDK/Commons/Rendererers/EllipsoidShape.hpp; sourceTree = "<group>"; };
+		E7A1A98D16F0E51A00D138D8 /* Shader.fsh */ = {isa = PBXFileReference; lastKnownFileType = file; path = Shader.fsh; sourceTree = "<group>"; };
+		E7A1A98E16F0E51A00D138D8 /* Shader.vsh */ = {isa = PBXFileReference; lastKnownFileType = file; path = Shader.vsh; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -207,8 +192,6 @@
 				D8EEF3A21577920B003FEB5E /* ViewController.h */,
 				D8EEF3A31577920B003FEB5E /* ViewController.mm */,
 				D8EEF3911577920B003FEB5E /* Supporting Files */,
-				D8EEF4091577A93D003FEB5E /* G3W.h */,
-				D8EEF40A1577A93D003FEB5E /* G3W.mm */,
 			);
 			name = G3MiOSDemo;
 			path = Glob3iOSDemo;
@@ -236,6 +219,7 @@
 		D8EEF4271577B0D6003FEB5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				E7A1A98F16F0E51A00D138D8 /* Shaders */,
 				E728385416E914D80037AA5C /* g3m-marker.png */,
 				CFD42AB716DBAEFD00B03961 /* elev-35.0_-6.0_38.0_-2.0_4096x2048.bil */,
 				CF91C52F16D7C03B00E25C24 /* full-earth-4096x2048.bil */,
@@ -268,10 +252,18 @@
 				CF883B831591053100AEE39C /* mark.png */,
 				CFF95F7C158A748F00B56E11 /* plane.png */,
 				D8E93BDF1588A171009D497C /* world.jpg */,
-				D8EEF4241577B0D3003FEB5E /* Shader.vsh */,
-				D8EEF4231577B0D3003FEB5E /* Shader.fsh */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		E7A1A98F16F0E51A00D138D8 /* Shaders */ = {
+			isa = PBXGroup;
+			children = (
+				E7A1A98D16F0E51A00D138D8 /* Shader.fsh */,
+				E7A1A98E16F0E51A00D138D8 /* Shader.vsh */,
+			);
+			name = Shaders;
+			path = ../../G3MiOSSDK/Resources/Shaders;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -342,8 +334,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				CF09A94E16A0A0F500E72811 /* test.bson in Resources */,
-				D8EEF4281577B0FD003FEB5E /* Shader.vsh in Resources */,
-				D8EEF4291577B0FD003FEB5E /* Shader.fsh in Resources */,
 				D8EEF3951577920B003FEB5E /* InfoPlist.strings in Resources */,
 				D8EEF39E1577920B003FEB5E /* MainStoryboard_iPhone.storyboard in Resources */,
 				D8EEF3A11577920B003FEB5E /* MainStoryboard_iPad.storyboard in Resources */,
@@ -366,12 +356,6 @@
 				CFE3DBB1164B0E7D00910037 /* seymour-plane.json in Resources */,
 				CFEA76681666DCB000E89BC7 /* images in Resources */,
 				CF0223831668318600024B73 /* geojson in Resources */,
-				E751B7661680E2D90032413F /* (null) in Resources */,
-				E751B7681680E5850032413F /* (null) in Resources */,
-				E751B7A1168247830032413F /* (null) in Resources */,
-				E751B7A2168247830032413F /* (null) in Resources */,
-				E770CAD9169C425600F892BE /* (null) in Resources */,
-				E770CAE7169D988C00F892BE /* (null) in Resources */,
 				CF186B0416B8572400A39478 /* A320.json in Resources */,
 				CF186B0616B857DE00A39478 /* textures-A320 in Resources */,
 				CF186B0816B85A3600A39478 /* citation.json in Resources */,
@@ -384,6 +368,8 @@
 				CF91C53016D7C03C00E25C24 /* full-earth-4096x2048.bil in Resources */,
 				CFD42AB816DBAEFD00B03961 /* elev-35.0_-6.0_38.0_-2.0_4096x2048.bil in Resources */,
 				E728385516E914D80037AA5C /* g3m-marker.png in Resources */,
+				E7A1A99016F0E51A00D138D8 /* Shader.fsh in Resources */,
+				E7A1A99116F0E51A00D138D8 /* Shader.vsh in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -397,12 +383,6 @@
 				D8EEF3971577920B003FEB5E /* main.m in Sources */,
 				D8EEF39B1577920B003FEB5E /* AppDelegate.m in Sources */,
 				D8EEF3A41577920B003FEB5E /* ViewController.mm in Sources */,
-				D8EEF40B1577A93D003FEB5E /* G3W.mm in Sources */,
-				E751B78316823D7C0032413F /* (null) in Sources */,
-				E770CAE4169C808700F892BE /* (null) in Sources */,
-				E7A4734916B855B300D07077 /* (null) in Sources */,
-				E791CF6F16C15A49000FDE8A /* (null) in Sources */,
-				E7CD9BCB16C24E9F00F69E41 /* (null) in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,17 +1,49 @@
+# ##### BEGIN GPL LICENSE BLOCK #####
+#
+#  This program is free software; you can redistribute it and/or
+#  modify it under the terms of the GNU General Public License
+#  as published by the Free Software Foundation; either version 2
+#  of the License, or (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, write to the Free Software Foundation,
+#  Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+#
+# ##### END GPL LICENSE BLOCK #####
+
+# This plugin was based on io_scene_obj plugin
+
 # <pep8 compliant>
 
 import os
 import time
 
 import bpy
+import math
 import mathutils
 import bpy_extras.io_utils
+import re
 
 def create_object(name):
     object = {}
+    
     object["name"] = name
     object["materials"] = {}
-    return object
+    
+    object["vertices"] = []
+    object["normals"]  = []
+    object["uv"]       = []
+    object["indices"]  = []
+        
+    object["indicesDict"] = {}
+
+    return object  
+
 
 def create_material(key, blenderMaterial):
     #AT_WORK
@@ -26,119 +58,20 @@ def create_material(key, blenderMaterial):
     material["normals"]  = []
     material["uv"]       = []
     material["indices"]  = []
-    
+        
     material["indicesDict"] = {}
     
+    material["objects"] = []
+    
     return material
+
 
 def name_compat(name):
     if name is None:
         return 'None'
     else:
         return name.replace(' ', '_')
-
-def write_mtl(scene, filepath, path_mode, copy_set, mtl_dict):
-    from mathutils import Color
-
-    # world = scene.world
-    # if world:
-    #     world_amb = world.ambient_color
-    # else:
-    #     world_amb = Color((0.0, 0.0, 0.0))
-
-    source_dir = os.path.dirname(bpy.data.filepath)
-    dest_dir = os.path.dirname(filepath)
-
-    file = open(filepath, "w", encoding="utf8", newline="\n")
-    fw = file.write
-
-    fw('# Blender MTL File: %r\n' % (os.path.basename(bpy.data.filepath) or "None"))
-    fw('# Material Count: %i\n' % len(mtl_dict))
-
-    mtl_dict_values = list(mtl_dict.values())
-    mtl_dict_values.sort(key=lambda m: m[0])
-
-    # Write material/image combinations we have used.
-    # Using mtl_dict.values() directly gives un-predictable order.
-    for mtl_mat_name, mat, face_img in mtl_dict_values:
-
-        # Get the Blender data for the material and the image.
-        # Having an image named None will make a bug, dont do it :)
-
-        fw('newmtl %s\n' % mtl_mat_name)  # Define a new material: matname_imgname
-
-        if mat:
-            # convert from blenders spec to 0 - 1000 range.
-            if mat.specular_shader == 'WARDISO':
-                tspec = (0.4 - mat.specular_slope) / 0.0004
-            else:
-                tspec = (mat.specular_hardness - 1) * 1.9607843137254901
-            fw('Ns %.6f\n' % tspec)
-            del tspec
-
-            fw('Ka %.6f %.6f %.6f\n' % (mat.ambient * world_amb)[:])  # Ambient, uses mirror color,
-            fw('Kd %.6f %.6f %.6f\n' % (mat.diffuse_intensity * mat.diffuse_color)[:])  # Diffuse
-            fw('Ks %.6f %.6f %.6f\n' % (mat.specular_intensity * mat.specular_color)[:])  # Specular
-            if hasattr(mat, "ior"):
-                fw('Ni %.6f\n' % mat.ior)  # Refraction index
-            else:
-                fw('Ni %.6f\n' % 1.0)
-            fw('d %.6f\n' % mat.alpha)  # Alpha (obj uses 'd' for dissolve)
-
-            # 0 to disable lighting, 1 for ambient & diffuse only (specular color set to black), 2 for full lighting.
-            if mat.use_shadeless:
-                fw('illum 0\n')  # ignore lighting
-            elif mat.specular_intensity == 0:
-                fw('illum 1\n')  # no specular.
-            else:
-                fw('illum 2\n')  # light normaly
-
-        else:
-            #write a dummy material here?
-            fw('Ns 0\n')
-            fw('Ka %.6f %.6f %.6f\n' % world_amb[:])  # Ambient, uses mirror color,
-            fw('Kd 0.8 0.8 0.8\n')
-            fw('Ks 0.8 0.8 0.8\n')
-            fw('d 1\n')  # No alpha
-            fw('illum 2\n')  # light normaly
-
-        # Write images!
-        if face_img:  # We have an image on the face!
-            # write relative image path
-            rel = bpy_extras.io_utils.path_reference(face_img.filepath, source_dir, dest_dir, path_mode, "", copy_set, face_img.library)
-            fw('map_Kd %s\n' % rel)  # Diffuse mapping image
-
-        if mat:  # No face image. if we havea material search for MTex image.
-            image_map = {}
-            # backwards so topmost are highest priority
-            for mtex in reversed(mat.texture_slots):
-                if mtex and mtex.texture.type == 'IMAGE':
-                    image = mtex.texture.image
-                    if image:
-                        # texface overrides others
-                        if mtex.use_map_color_diffuse and face_img is None:
-                            image_map["map_Kd"] = image
-                        if mtex.use_map_ambient:
-                            image_map["map_Ka"] = image
-                        if mtex.use_map_specular:
-                            image_map["map_Ks"] = image
-                        if mtex.use_map_alpha:
-                            image_map["map_d"] = image
-                        if mtex.use_map_translucency:
-                            image_map["map_Tr"] = image
-                        if mtex.use_map_normal:
-                            image_map["map_Bump"] = image
-                        if mtex.use_map_hardness:
-                            image_map["map_Ns"] = image
-
-            for key, image in image_map.items():
-                filepath = bpy_extras.io_utils.path_reference(image.filepath, source_dir, dest_dir, path_mode, "", copy_set, image.library)
-                fw('%s %s\n' % (key, repr(filepath)[1:-1]))
-
-        fw('\n\n')
-
-    file.close()
-
+    
 
 def test_nurbs_compat(ob):
     if ob.type != 'CURVE':
@@ -151,31 +84,334 @@ def test_nurbs_compat(ob):
     return False
 
 
-def write_file(filepath, objects, scene,
+# Write file grouping data by Material-Object-Geometry
+def write_file_grouped_by_MOG(fw,
+                              materialsDict):
+    firstMaterial=True
+    for key, material in materialsDict.items():
+        
+        # start material
+        if firstMaterial:
+            firstMaterial=False
+            fw('{"type":"material"')
+        else:
+            fw(',\n{"type":"material"')
+            
+        if (material["name"]):
+            fw(',"sid":"%s"' % material["name"])
+            
+        if material["blenderMaterial"]:
+            matB = material["blenderMaterial"]
+            fw(',"baseColor":{"r":%.6g,"g":%.6g,"b":%.6g}'     % (matB.diffuse_intensity  * matB.diffuse_color)[:])   # Diffuse
+            fw(',"specularColor":{"r":%.6g,"g":%.6g,"b":%.6g}' % (matB.specular_intensity * matB.specular_color)[:])  # Specular
+        else:
+            fw(',"baseColor":{"r":0.8,"g":0.8,"b":0.8}')
+            fw(',"specularColor":{"r":0.8,"g":0.8,"b":0.8}')
+
+        fw(',"nodes":[\n')
+
+        if (material["texture"]):
+            uri=re.sub(r'\.[0-9]{3}', r'', material["texture"])
+            print ( '*** Found texture "%s"' % uri )
+            fw('  {"type":"texture","layers":[{"uri":"%s"}],"nodes":[\n' % uri)
+        
+        firstOb=True
+        for object in material["objects"]:
+            
+            # start object
+            if firstOb:
+                firstOb=False
+                fw('    {"type":"node","id":"%s","nodes":[\n' % object["name"])
+            else:
+                fw(',\n    {"type":"node","id":"%s","nodes":[\n' % object["name"])
+            
+            # start geometry
+            fw('      {"type":"geometry","primitive":"triangles","id":"%s_%s"\n' % (material["name"], object["name"]) )
+            
+            # start positions (vertices)
+            fw('      ,"positions":[\n')
+            firstVertex=True
+            for vertex in object["vertices"]:
+                if firstVertex:
+                    firstVertex=False
+                    fw('        %.10g,%.10g,%.10g' %  vertex)
+                else:
+                    fw(',\n        %.10g,%.10g,%.10g' %  vertex)
+            # end positions (vertices)
+            fw('\n       ]\n')
+
+            if (object["normals"]):
+                # start normals
+                fw('      ,"normals":[\n')
+                firstNormal=True
+                for normal in object["normals"]:
+                    if firstNormal:
+                        firstNormal=False
+                        fw('        %.10g,%.10g,%.10g\n' %  normal)
+                    else:
+                        fw('        ,%.10g,%.10g,%.10g\n' %  normal)
+                # end normals
+                fw('       ]\n')
+
+            if (object["uv"]):
+                # start uv
+                fw('      ,"uv":[\n')
+                firstUV=True
+                for uv in object["uv"]:
+                    x,y = uv
+                    if firstUV:
+                        firstUV=False
+                        fw('        %.10g,%.10g' %  uv)
+                    else:
+                        fw(',\n        %.10g,%.10g' %  uv)
+                # end uv
+                fw('\n       ]\n')
+
+            # start indices
+            fw('      ,"indices":[')
+            firstIndex=True
+            for index in object["indices"]:
+                if firstIndex:
+                    firstIndex=False
+                    fw('%g' %  (index - 1))
+                else:
+                    fw(',%g' %  (index - 1))
+            # end indices
+            fw(']\n')
+            
+            #end geometry
+            fw('      }\n')
+            
+            # end object
+            fw('    ]}\n')
+        
+        if (material["texture"]):
+            fw('  ]}\n')     
+        
+        #end material
+        fw(']}\n')
+# end def write_file_grouped_by_MOG
+    
+
+# Write file grouping data by Object-Material-Geometry
+def write_file_grouped_by_OMG(fw,
+                              objectsList):
+    firstOb=True        
+    for object in objectsList:
+        # start object
+        if firstOb:
+            firstOb=False
+            fw('  {"type":"node","id":"%s","nodes":[\n' % object["name"])
+        else:
+            fw('  ,{"type":"node","id":"%s","nodes":[\n' % object["name"])
+        
+        firstMaterial=True
+        for matKey, material in object["materials"].items():
+            print ( "  " + str(matKey) + " => "+ str(material) )
+            
+            # start material
+            if firstMaterial:
+                firstMaterial=False
+                fw('    {"type":"material"')
+            else:
+                fw('    ,{"type":"material"')
+            if (material["name"]):
+                fw(',"sid":"%s"' % material["name"])
+                
+            if material["blenderMaterial"]:
+                matB = material["blenderMaterial"]
+                fw(',"baseColor":{"r":%.6g,"g":%.6g,"b":%.6g}'     % (matB.diffuse_intensity  * matB.diffuse_color)[:])   # Diffuse
+                fw(',"specularColor":{"r":%.6g,"g":%.6g,"b":%.6g}' % (matB.specular_intensity * matB.specular_color)[:])  # Specular
+            else:
+                fw(',"baseColor":{"r":0.8,"g":0.8,"b":0.8}')
+                fw(',"specularColor":{"r":0.8,"g":0.8,"b":0.8}')
+
+            fw(',"nodes":[\n')
+
+            if (material["texture"]):
+                uri=re.sub(r'\.[0-9]{3}', r'', material["texture"])
+                print ( '*** Found texture "%s"' % uri )
+                fw('      {"type":"texture","layers":[{"uri":"%s"}],"nodes":[' % uri)
+            
+            # start geometry
+            fw('      {"type":"geometry","primitive":"triangles","id":"%s_%s"\n' % (object["name"], material["name"]) )
+            fw('      ,"positions":[\n')
+
+            firstVertex=True
+            for vertex in material["vertices"]:
+                if firstVertex:
+                    firstVertex=False
+                    fw('        %.10g,%.10g,%.10g\n' %  vertex)
+                else:
+                    fw('        ,%.10g,%.10g,%.10g\n' %  vertex)
+            fw('      ]\n')
+
+            if (material["normals"]):
+                fw('      ,"normals":[\n')
+                firstNormal=True
+                for normal in material["normals"]:
+                    if firstNormal:
+                        firstNormal=False
+                        fw('        %.10g,%.10g,%.10g\n' %  normal)
+                    else:
+                        fw('        ,%.10g,%.10g,%.10g\n' %  normal)
+                fw('      ]\n')
+
+            if (material["uv"]):
+                fw('      ,"uv":[\n')
+                firstUV=True
+                for uv in material["uv"]:
+                    if firstUV:
+                        firstUV=False
+                        fw('        %.10g,%.10g\n' %  uv)
+                    else:
+                        fw('        ,%.10g,%.10g\n' %  uv)
+                fw(']\n')
+
+            fw('      ,"indices":[')
+            firstIndex=True
+            for index in material["indices"]:
+                if not firstIndex:
+                    fw(',%g' %  (index - 1))
+                else:
+                    fw('%g' %  (index - 1))
+                    firstIndex=False                        
+            fw(']\n')
+            
+            #end geometry
+            fw('      }\n') 
+
+            if (material["texture"]):
+                fw('      ]}\n')                    
+            
+            #end material
+            fw('    ]}\n')
+            
+        # end object
+        fw('  ]}\n')
+# end def write_file_grouped_by_OMG
+
+
+# Write file grouping data by Material-Geometry
+def write_file_grouped_by_MG(fw,
+                             materialsDict):
+    firstMaterial=True
+    for key, material in materialsDict.items():
+        
+        # start material
+        if firstMaterial:
+            firstMaterial=False
+            fw('{"type":"material"')
+        else:
+            fw(',\n{"type":"material"')
+            
+        if (material["name"]):
+            fw(',"sid":"%s"' % material["name"])
+            
+        if material["blenderMaterial"]:
+            matB = material["blenderMaterial"]
+            fw(',"baseColor":{"r":%.6g,"g":%.6g,"b":%.6g}'     % (matB.diffuse_intensity  * matB.diffuse_color)[:])   # Diffuse
+            fw(',"specularColor":{"r":%.6g,"g":%.6g,"b":%.6g}' % (matB.specular_intensity * matB.specular_color)[:])  # Specular
+        else:
+            fw(',"baseColor":{"r":0.8,"g":0.8,"b":0.8}')
+            fw(',"specularColor":{"r":0.8,"g":0.8,"b":0.8}')
+
+        fw(',"nodes":[\n')
+
+        if (material["texture"]):
+            uri=re.sub(r'\.[0-9]{3}', r'', material["texture"])
+            print ( '*** Found texture "%s"' % uri )
+            fw('  {"type":"texture","layers":[{"uri":"%s"}],"nodes":[\n' % uri)
+        
+            
+        # start geometry
+        fw('      {"type":"geometry","primitive":"triangles","id":"%s"\n' % material["name"] )
+        
+        # start positions (vertices)
+        fw('      ,"positions":[\n')
+        firstVertex=True
+        for vertex in material["vertices"]:
+            if firstVertex:
+                firstVertex=False
+                fw('        %.10g,%.10g,%.10g' %  vertex)
+            else:
+                fw(',\n        %.10g,%.10g,%.10g' %  vertex)
+        # end positions (vertices)
+        fw('\n       ]\n')
+
+        if (material["normals"]):
+            # start normals
+            fw('      ,"normals":[\n')
+            firstNormal=True
+            for normal in material["normals"]:
+                if firstNormal:
+                    firstNormal=False
+                    fw('        %.10g,%.10g,%.10g\n' %  normal)
+                else:
+                    fw('        ,%.10g,%.10g,%.10g\n' %  normal)
+            # end normals
+            fw('       ]\n')
+
+        if (material["uv"]):
+            # start uv
+            fw('      ,"uv":[\n')
+            firstUV=True
+            for uv in material["uv"]:
+                x,y = uv
+                if firstUV:
+                    firstUV=False
+                    fw('        %.10g,%.10g' %  uv)
+                    ##fw('        %.10g,%.10g' %  (math.fabs(x), math.fabs(y)))
+                else:
+                    ##fw(',\n        %.10g,%.10g' %  (math.fabs(x), math.fabs(y)))
+                    fw(',\n        %.10g,%.10g' %  uv)
+            # end uv
+            fw('\n       ]\n')
+
+        # start indices
+        fw('      ,"indices":[')
+        firstIndex=True
+        for index in material["indices"]:
+            if firstIndex:
+                firstIndex=False
+                fw('%g' %  (index - 1))
+            else:
+                fw(',%g' %  (index - 1))
+        # end indices
+        fw(']\n')
+        
+        #end geometry
+        fw('      }\n')
+        
+        if (material["texture"]):
+            fw('  ]}\n')     
+        
+        #end material
+        fw(']}\n')
+# end def write_file_grouped_by_MG
+
+
+def write_file(filepath,
+               objects,
+               scene,
+               EXPORT_GROUPBY='MG',
                EXPORT_NORMALS=False,
                EXPORT_UV=True,
-               EXPORT_MTL=True,
                EXPORT_KEEP_VERT_ORDER=False,
                EXPORT_GLOBAL_MATRIX=None,
                EXPORT_PATH_MODE='AUTO',
                ):
-    """
-    Basic write function. The context and options must be already set
-    This can be accessed externaly
-    eg.
-    write( 'c:\\test\\foobar.obj', Blender.Object.GetSelected() ) # Using default options.
-    """
+    objectsList = []
+    materialsDict = {}
 
     if EXPORT_GLOBAL_MATRIX is None:
         EXPORT_GLOBAL_MATRIX = mathutils.Matrix()
 
     def veckey3d(v):
         return round(v.x, 6), round(v.y, 6), round(v.z, 6)
-    #return v.x, v.y, v.z
 
     def veckey2d(v):
         return round(v[0], 6), round(v[1], 6)
-    #return v[0], v[1]
 
     def findVertexGroupName(face, vWeightMap):
         """
@@ -201,40 +437,11 @@ def write_file(filepath, objects, scene,
 
     time1 = time.time()
 
-    file = open(filepath, "w", encoding="utf8", newline="\n")
-    fw = file.write
-
-    # Write Header
-    #fw('# Blender v%s SceneJS File: %r\n' % (bpy.app.version_string, os.path.basename(bpy.data.filepath)))
-    #fw('# www.blender.org\n')
-    fw('{"type":"node","id":"root","nodes":[\n')
-
-    # Tell the obj file what material file to use.
-    if EXPORT_MTL:
-        mtlfilepath = os.path.splitext(filepath)[0] + ".mtl"
-    #    fw('mtllib %s\n' % repr(os.path.basename(mtlfilepath))[1:-1])  # filepath can contain non utf8 chars, use repr
-
     # Initialize totals, these are updated each object
-
     face_vert_index = 1
 
-    #globalNormals = {}
-
-    # A Dict of Materials
-    # (material.name, image.name):matname_imagename # matname_imagename has gaps removed.
-    mtl_dict = {}
-    # Used to reduce the usage of matname_texname materials, which can become annoying in case of
-    # repeated exports/imports, yet keeping unique mat names per keys!
-    # mtl_name: (material.name, image.name)
-    mtl_rev_dict = {}
-
-    copy_set = set()
-
-    # Get all meshes
-    #contextMat = 0, 0  # Can never be this, so we will label a new material the first chance we get.
-
     for ob_main in objects:
-
+        
         # ignore dupli children
         if ob_main.parent and ob_main.parent.dupli_type in {'VERTS', 'FACES'}:
             # XXX
@@ -281,9 +488,6 @@ def write_file(filepath, objects, scene,
 
             # Make our own list so it can be sorted to reduce context switching
             face_index_pairs = [(face, index) for index, face in enumerate(me.tessfaces)]
-            # faces = [ f for f in me.tessfaces ]
-
-            #edges = []
 
             #if not (len(face_index_pairs) + len(edges) + len(me.vertices)):  # Make sure there is something to write
             if not (len(face_index_pairs) + len(me.vertices)):  # Make sure there is something to write
@@ -314,17 +518,12 @@ def write_file(filepath, objects, scene,
                 # no materials
                 face_index_pairs.sort(key=lambda a: a[0].use_smooth)
 
-            # Set the default mat to no material and no image.
-            contextMat = 0, 0  # Can never be this, so we will label a new material the first chance we get.
-
             name1 = ob.name
             name2 = ob.data.name
             if name1 == name2:
                 obnamestring = name_compat(name1)
             else:
                 obnamestring = '%s_%s' % (name_compat(name1), name_compat(name2))
-
-            #fw('{"type":"geometry","primitive":"triangles","id":"%s"\n' % obnamestring)
 
             # UV
             uv_textures = None
@@ -352,6 +551,8 @@ def write_file(filepath, objects, scene,
 
             #AT_WORK
             object = create_object(obnamestring)
+            
+            objectsList.append(object)
 
             for f, f_index in face_index_pairs:
                 f_mat = min(f.material_index, len(materials) - 1)
@@ -374,52 +575,11 @@ def write_file(filepath, objects, scene,
                 else:
                     currentMaterial = create_material(key, materials[f_mat])
                     object["materials"][key] = currentMaterial
-
-                # CHECK FOR CONTEXT SWITCH
-                if key == contextMat:
-                    pass  # Context already switched, dont do anything
-                else:
-                    #print('- Switching material from "' + str(contextMat) + '" to "' + str(key) + '"')
-
-                    if key[0] is None and key[1] is None:
-                        # Write a null material, since we know the context has changed.
-                        if EXPORT_MTL:
-                            #fw("usemtl (null)\n")  # mat, image
-                            pass
-
-                    else:
-                        mat_data = mtl_dict.get(key)
-                        if not mat_data:
-                            # First add to global dict so we can export to mtl
-                            # Then write mtl
-
-                            # Make a new names from the mat and image name,
-                            # converting any spaces to underscores with name_compat.
-
-                            # If none image dont bother adding it to the name
-                            # Try to avoid as much as possible adding texname (or other things)
-                            # to the mtl name (see [#32102])...
-                            mtl_name = "%s" % name_compat(key[0])
-                            if mtl_rev_dict.get(mtl_name, None) not in {key, None}:
-                                if key[1] is None:
-                                    tmp_ext = "_NONE"
-                                else:
-                                    tmp_ext = "_%s" % name_compat(key[1])
-                                i = 0
-                                while mtl_rev_dict.get(mtl_name + tmp_ext, None) not in {key, None}:
-                                    i += 1
-                                    tmp_ext = "_%3d" % i
-                                mtl_name += tmp_ext
-                            mat_data = mtl_dict[key] = mtl_name, materials[f_mat], f_image
-                            mtl_rev_dict[mtl_name] = key
-
-                        #print ( "    mat_data=" + str(mat_data)  )
-
-                        if EXPORT_MTL:
-                            #fw("usemtl %s\n" % mat_data[0])  # can be mat_image or (null)
-                            pass
-
-                contextMat = key
+                
+                # store material in materials dictionary if not exists
+                if not (key in materialsDict):
+                    materialsDict[key] = currentMaterial
+                    print ( "stored '" + str(key) + "' => "+ str( currentMaterial) )
 
                 f_v_orig = [(vi, me_verts[v_idx]) for vi, v_idx in enumerate(f.vertices)]
 
@@ -442,23 +602,59 @@ def write_file(filepath, objects, scene,
                             normal = None
 
                         if (uv_textures):
-                            uv = uv_textures[ (f_index, vi) ]
+                            uvX = uv_textures[ (f_index, vi) ][0]
+                            uvY = uv_textures[ (f_index, vi) ][1]
+                            if math.isnan(uvX):
+                                uvX = 0
+                            if math.isnan(uvY):
+                                uvY = 0
+                            uv = (uvX,uvY)
                         else:
                             uv = None
 
                         vertexData = (vertex, normal, uv)
                         #AT_WORK
-                        if (vertexData in currentMaterial["indicesDict"]):
-                            materialIndex = currentMaterial["indicesDict"][ vertexData ]
+                        if (EXPORT_GROUPBY == 'MG'):
+                            storedMtl = materialsDict.get(key)
+                            if (vertexData in storedMtl["indicesDict"]):
+                                objectIndex = storedMtl["indicesDict"][ vertexData ]
+                            else:
+                                objectIndex = len( storedMtl["indicesDict"] ) + 1
+                                storedMtl["indicesDict"][ vertexData ] = objectIndex
+                                storedMtl["vertices"].append( vertex )
+                                if ( normal ):
+                                    storedMtl["normals"].append( normal )
+                                if ( uv ):
+                                    storedMtl["uv"].append( uv )
+                            storedMtl["indices"].append( objectIndex )
+#                            print("STOREDMTL=" + str(storedMtl))
+                            
+                        elif (EXPORT_GROUPBY == 'MOG'):
+                            if (vertexData in object["indicesDict"]):
+                                objectIndex = object["indicesDict"][ vertexData ]
+                            else:
+                                objectIndex = len( object["indicesDict"] ) + 1
+                                object["indicesDict"][ vertexData ] = objectIndex
+                                object["vertices"].append( vertex )
+                                if ( normal ):
+                                    object["normals"].append( normal )
+                                if ( uv ):
+                                    object["uv"].append( uv )
+                            object["indices"].append( objectIndex )
+#                            print ( "OBJECT:  " + str(object) )
+
                         else:
-                            materialIndex = len( currentMaterial["indicesDict"] ) + 1
-                            currentMaterial["indicesDict"][ vertexData ] = materialIndex
-                            currentMaterial["vertices"].append( vertex )
-                            if ( normal ):
-                                currentMaterial["normals"].append( normal )
-                            if ( uv ):
-                                currentMaterial["uv"].append( uv )
-                        currentMaterial["indices"].append( materialIndex )
+                            if (vertexData in currentMaterial["indicesDict"]):
+                                materialIndex = currentMaterial["indicesDict"][ vertexData ]
+                            else:
+                                materialIndex = len( currentMaterial["indicesDict"] ) + 1
+                                currentMaterial["indicesDict"][ vertexData ] = materialIndex
+                                currentMaterial["vertices"].append( vertex )
+                                if ( normal ):
+                                    currentMaterial["normals"].append( normal )
+                                if ( uv ):
+                                    currentMaterial["uv"].append( uv )
+                            currentMaterial["indices"].append( materialIndex )
                         
                         if ( vertexData in indicesDict ):
                             index = indicesDict[ vertexData ]
@@ -475,117 +671,49 @@ def write_file(filepath, objects, scene,
 
             #AT_WORK
             print("object=" + str(object["name"]))
-            fw('{"type":"node","id":"%s","nodes":[\n' % object["name"])
-            for matKey, material in object["materials"].items():
-                print ( "  " + str(matKey) + " => "+ str(material) )
-                
-                fw('  {"type":"material"')
-                if (material["name"]):
-                    fw(',"sid":"%s"' % material["name"])
-
-                if material["blenderMaterial"]:
-                    matB = material["blenderMaterial"]
-                    fw(',"baseColor":{"r":%.6g,"g":%.6g,"b":%.6g}'     % (matB.diffuse_intensity  * matB.diffuse_color)[:])   # Diffuse
-                    fw(',"specularColor":{"r":%.6g,"g":%.6g,"b":%.6g}' % (matB.specular_intensity * matB.specular_color)[:])  # Specular
-                else:
-                    fw(',"baseColor":{"r":0.8,"g":0.8,"b":0.8}')
-                    fw(',"specularColor":{"r":0.8,"g":0.8,"b":0.8}')
-
-                fw(',"nodes":[\n')
-
-                if (material["texture"]):
-                    print ( '*** Found texture "%s"' % material["texture"] )
-                    fw('    {"type":"texture","layers":[{"uri":"%s"}],"nodes":[' % material["texture"])
-                
-                fw('    {"type":"geometry","primitive":"triangles","id":"%s_%s"\n' % (object["name"], material["name"]) )
-                fw('    ,"positions":[\n')
-                for vertex in material["vertices"]:
-                    fw('      %.10g,%.10g,%.10g,\n' %  vertex)
-                fw('    ]\n')
-
-                if (material["normals"]):
-                    fw('    ,"normals":[\n')
-                    for normal in material["normals"]:
-                        fw('      %.10g,%.10g,%.10g,\n' %  normal)
-                    fw('    ]\n')
-
-                if (material["uv"]):
-                    fw('    ,"uv":[\n')
-                    for uv in material["uv"]:
-                        fw('      %.10g,%.10g,\n' %  uv)
-                    fw('    ]\n')
-
-                fw('    ,"indices":[')
-                for index in material["indices"]:
-                    fw('%g,' %  (index - 1))
-                fw(']\n')
-
-                fw('    },\n') # end geometry
-
-                if (material["texture"]):
-                    fw('    ]}')
-                
-                fw('  ]},\n') # end material
-            print()
-            fw(']},\n')
             
-            #fw('{"type":"geometry","primitive":"triangles","id":"%s"\n' % obnamestring)
-            #
-            #fw(',"positions":[\n')
-            #for vertex in verticesList:
-            #    fw('%.10g,%.10g,%.10g,\n' %  vertex)
-            #fw(']\n')
-            #
-            #if (normalsList):
-            #    fw(',"normals":[\n')
-            #    for normal in normalsList:
-            #        fw('%.10g,%.10g,%.10g,\n' %  normal)
-            #    fw(']\n')
-            #
-            #if (uvList):
-            #    fw(',"uv":[\n')
-            #    for uv in uvList:
-            #        fw('%.10g,%.10g,\n' %  uv)
-            #    fw(']\n')
-            #
-            #fw(',"indices":[')
-            #for index in indicesList:
-            #    fw('%g,' %  (index - 1))
-            #fw(']\n')
-            #
-            #fw('},\n')
-
+            # store object in material
+            materialsDict.get(key)["objects"].append(object)
+            
             # clean up
             bpy.data.meshes.remove(me)
 
         if ob_main.dupli_type != 'NONE':
             ob_main.dupli_list_clear()
+    
+      
+    # Write to the file
+    file = open(filepath, "w", encoding="utf8", newline="\n")
+    fw = file.write
 
+    # Write Header    
+    fw('{"type":"node","id":"root","nodes":[\n')
+    
+    if (EXPORT_GROUPBY == 'MG'):
+        write_file_grouped_by_MG(fw, materialsDict)
+    elif (EXPORT_GROUPBY == 'MOG'):
+        write_file_grouped_by_MOG(fw, materialsDict)
+    else:
+        write_file_grouped_by_OMG(fw, objectsList)
+            
+    # end root node
     fw(']}\n')
-
     file.close()
-
-    # Now we have all our materials, save them
-    if EXPORT_MTL:
-        #write_mtl(scene, mtlfilepath, EXPORT_PATH_MODE, copy_set, mtl_dict)
-        pass
-
-    # copy all collected files.
-    bpy_extras.io_utils.path_reference_copy(copy_set)
 
     print("SceneJS Export time: %.2f" % (time.time() - time1))
 
 
-def _write(context, filepath,
-              EXPORT_NORMALS,  # not yet
-              EXPORT_UV,  # ok
-              EXPORT_MTL,
-              EXPORT_KEEP_VERT_ORDER,
-              EXPORT_SEL_ONLY,  # ok
-              EXPORT_ANIMATION,
-              EXPORT_GLOBAL_MATRIX,
-              EXPORT_PATH_MODE,
-              ):  # Not used
+def _write(context,
+           filepath,
+           EXPORT_GROUPBY,
+           EXPORT_NORMALS,  # not yet
+           EXPORT_UV,  # ok
+           EXPORT_KEEP_VERT_ORDER,
+           EXPORT_SEL_ONLY,  # ok
+           EXPORT_ANIMATION,
+           EXPORT_GLOBAL_MATRIX,
+           EXPORT_PATH_MODE,
+           ):  # Not used
 
     base_name, ext = os.path.splitext(filepath)
     context_name = [base_name, '', '', ext]  # Base name, scene name, frame number, extension
@@ -619,10 +747,12 @@ def _write(context, filepath,
 
         # erm... bit of a problem here, this can overwrite files when exporting frames. not too bad.
         # EXPORT THE FILE.
-        write_file(full_path, objects, scene,
+        write_file(full_path,
+                   objects,
+                   scene,
+                   EXPORT_GROUPBY,
                    EXPORT_NORMALS,
                    EXPORT_UV,
-                   EXPORT_MTL,
                    EXPORT_KEEP_VERT_ORDER,
                    EXPORT_GLOBAL_MATRIX,
                    EXPORT_PATH_MODE,
@@ -642,10 +772,12 @@ Currently the exporter lacks these features:
 """
 
 
-def save(operator, context, filepath="",
+def save(operator,
+         context,
+         filepath="",
+         group_by="MG",
          use_normals=False,
          use_uvs=True,
-         use_materials=True,
          keep_vertex_order=False,
          use_selection=True,
          use_animation=False,
@@ -653,10 +785,11 @@ def save(operator, context, filepath="",
          path_mode='AUTO'
          ):
 
-    _write(context, filepath,
+    _write(context,
+           filepath,
+           EXPORT_GROUPBY=group_by,
            EXPORT_NORMALS=use_normals,
            EXPORT_UV=use_uvs,
-           EXPORT_MTL=use_materials,
            EXPORT_KEEP_VERT_ORDER=keep_vertex_order,
            EXPORT_SEL_ONLY=use_selection,
            EXPORT_ANIMATION=use_animation,
