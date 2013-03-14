@@ -213,6 +213,7 @@
 		D8EEF3B91577924D003FEB5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF3B81577924D003FEB5E /* Foundation.framework */; };
 		E705123C165E782C00AEADB9 /* TileRendererBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E705123A165E782C00AEADB9 /* TileRendererBuilder.cpp */; };
 		E7051242165E916000AEADB9 /* G3MBuilder_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7051240165E916000AEADB9 /* G3MBuilder_iOS.mm */; };
+		E720E8C616EE470300103F20 /* SceneJSParserStatistics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E720E8C416EE470300103F20 /* SceneJSParserStatistics.cpp */; };
 		E745CC7916484A9A00819711 /* IStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E745CC7716484A9900819711 /* IStorage.cpp */; };
 		E77A100A165BEDC500FE5515 /* IG3MBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E77A1008165BEDC500FE5515 /* IG3MBuilder.cpp */; };
 		E780A4FD16D3ADF0000F0395 /* BSONGenerator.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF4FAAD41695F344009734CA /* BSONGenerator.hpp */; };
@@ -1063,6 +1064,8 @@
 		E7051240165E916000AEADB9 /* G3MBuilder_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = G3MBuilder_iOS.mm; path = Specific/Derived/G3MBuilder_iOS.mm; sourceTree = "<group>"; };
 		E70B56E116D3CCCD00C5FFFB /* Shader.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = Shader.fsh; sourceTree = "<group>"; };
 		E70B56E216D3CCCD00C5FFFB /* Shader.vsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = Shader.vsh; sourceTree = "<group>"; };
+		E720E8C416EE470300103F20 /* SceneJSParserStatistics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SceneJSParserStatistics.cpp; path = Commons/Rendererers/SceneJSParserStatistics.cpp; sourceTree = "<group>"; };
+		E720E8C516EE470300103F20 /* SceneJSParserStatistics.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SceneJSParserStatistics.hpp; path = Commons/Rendererers/SceneJSParserStatistics.hpp; sourceTree = "<group>"; };
 		E745CC7716484A9900819711 /* IStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IStorage.cpp; path = Commons/Interfaces/IStorage.cpp; sourceTree = "<group>"; };
 		E77A1008165BEDC500FE5515 /* IG3MBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IG3MBuilder.cpp; path = Commons/Basic/IG3MBuilder.cpp; sourceTree = "<group>"; };
 		E77A1009165BEDC500FE5515 /* IG3MBuilder.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = IG3MBuilder.hpp; path = Commons/Basic/IG3MBuilder.hpp; sourceTree = "<group>"; };
@@ -1520,18 +1523,22 @@
 		CFEEE4BA1648676800F45F59 /* Shapes */ = {
 			isa = PBXGroup;
 			children = (
-				FB6D00A716CBFF4F009BF93D /* EllipsoidShape.hpp */,
-				FB6D00A416CBFF3A009BF93D /* EllipsoidShape.cpp */,
+				CF45E023164851C5004746BB /* AbstractMeshShape.cpp */,
+				CF45E024164851C5004746BB /* AbstractMeshShape.hpp */,
 				CF5A8A301656B67F00508C38 /* BoxShape.cpp */,
 				CF5A8A311656B67F00508C38 /* BoxShape.hpp */,
 				CFEEE4BB164867B600F45F59 /* CircleShape.cpp */,
 				CFEEE4BC164867B600F45F59 /* CircleShape.hpp */,
 				CF3E07E61649B65000B5CA51 /* CompositeShape.cpp */,
 				CF3E07E71649B65000B5CA51 /* CompositeShape.hpp */,
-				CF45E023164851C5004746BB /* AbstractMeshShape.cpp */,
-				CF45E024164851C5004746BB /* AbstractMeshShape.hpp */,
+				FB6D00A416CBFF3A009BF93D /* EllipsoidShape.cpp */,
+				FB6D00A716CBFF4F009BF93D /* EllipsoidShape.hpp */,
+				CFBA526A16B9886B00256453 /* MeshShape.cpp */,
+				CFBA526B16B9886B00256453 /* MeshShape.hpp */,
 				CF5EA5D6163DDCB900D8F797 /* QuadShape.cpp */,
 				CF5EA5D7163DDCB900D8F797 /* QuadShape.hpp */,
+				E720E8C416EE470300103F20 /* SceneJSParserStatistics.cpp */,
+				E720E8C516EE470300103F20 /* SceneJSParserStatistics.hpp */,
 				CFE3B577164AE32E009975A5 /* SceneJSShapesParser.cpp */,
 				CFE3B578164AE32E009975A5 /* SceneJSShapesParser.hpp */,
 				CF857B39164C7AFC0089F1DE /* SGGeometryNode.cpp */,
@@ -1552,16 +1559,14 @@
 				CF857B3E164C80DB0089F1DE /* SGTranslateNode.hpp */,
 				CF5EA5D2163DDC7900D8F797 /* Shape.cpp */,
 				CF5EA5D3163DDC7900D8F797 /* Shape.hpp */,
-				CFD1A47316602B050039EFA9 /* ShapeScaleEffect.cpp */,
-				CFD1A47416602B050039EFA9 /* ShapeScaleEffect.hpp */,
-				CFA0BB60163DCFF6009185FE /* ShapesRenderer.cpp */,
-				CFA0BB61163DCFF6009185FE /* ShapesRenderer.hpp */,
-				CFBA526A16B9886B00256453 /* MeshShape.cpp */,
-				CFBA526B16B9886B00256453 /* MeshShape.hpp */,
 				CFCAEC4716BB20D500CDC17D /* ShapeOrbitCameraEffect.cpp */,
 				CFCAEC4816BB20D500CDC17D /* ShapeOrbitCameraEffect.hpp */,
 				CF65361116BC41B2001F9139 /* ShapePositionEffect.cpp */,
 				CF65361216BC41B2001F9139 /* ShapePositionEffect.hpp */,
+				CFD1A47316602B050039EFA9 /* ShapeScaleEffect.cpp */,
+				CFD1A47416602B050039EFA9 /* ShapeScaleEffect.hpp */,
+				CFA0BB60163DCFF6009185FE /* ShapesRenderer.cpp */,
+				CFA0BB61163DCFF6009185FE /* ShapesRenderer.hpp */,
 			);
 			name = Shapes;
 			sourceTree = "<group>";
@@ -1951,6 +1956,7 @@
 				CF75C3A216EA54CC00F7EE9F /* MapBoxLayer.cpp in Sources */,
 				CF75C3A616EA621D00F7EE9F /* GoogleMapsLayer.cpp in Sources */,
 				CFE676B216ECDA7C00CB93B9 /* BingMapsLayer.cpp in Sources */,
+				E720E8C616EE470300103F20 /* SceneJSParserStatistics.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

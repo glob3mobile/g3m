@@ -29,6 +29,7 @@
 #include "IFloatBuffer.hpp"
 #include "IShortBuffer.hpp"
 #include "BSONParser.hpp"
+#include "SceneJSParserStatistics.hpp"
 
 Shape* SceneJSShapesParser::parseFromJSONBaseObject(const JSONBaseObject *jsonObject,
                                                 const std::string &uriPrefix) {
@@ -73,7 +74,11 @@ SceneJSShapesParser::SceneJSShapesParser(const JSONBaseObject* jsonObject,
 _uriPrefix(uriPrefix),
 _rootShape(NULL)
 {
+  _statistics = new SceneJSParserStatistics();
   pvtParse(jsonObject);
+  
+  _statistics->log();
+  delete _statistics;
 }
 
 int SceneJSShapesParser::parseChildren(const JSONObject* jsonObject,
@@ -131,7 +136,7 @@ SGNode* SceneJSShapesParser::createNode(const JSONObject* jsonObject) const {
   processedKeys += parseChildren(jsonObject, node);
 
   checkProcessedKeys(jsonObject, processedKeys);
-
+  
   return node;
 }
 
@@ -478,6 +483,7 @@ SGGeometryNode* SceneJSShapesParser::createGeometryNode(const JSONObject* jsonOb
   IFloatBuffer* vertices = IFactory::instance()->createFloatBuffer(verticesCount);
   for (int i = 0; i < verticesCount; i++) {
     vertices->put(i, (float) jsPositions->getAsNumber(i)->value());
+    _statistics->computeVertex();
   }
 
   const JSONArray* jsColors = jsonObject->getAsArray("colors");
@@ -557,6 +563,7 @@ SGNode* SceneJSShapesParser::toNode(const JSONBaseObject* jsonBaseObject) const 
       const std::string type = jsType->value();
       if (type.compare("node") == 0) {
         result = createNode(jsonObject);
+        _statistics->computeNode();
       }
       else if (type.compare("rotate") == 0) {
         result = createRotateNode(jsonObject);
@@ -566,12 +573,14 @@ SGNode* SceneJSShapesParser::toNode(const JSONBaseObject* jsonBaseObject) const 
       }
       else if (type.compare("material") == 0) {
         result = createMaterialNode(jsonObject);
+        _statistics->computeMaterial();
       }
       else if (type.compare("texture") == 0) {
         result = createTextureNode(jsonObject);
       }
       else if (type.compare("geometry") == 0) {
         result = createGeometryNode(jsonObject);
+        _statistics->computeGeometry();
       }
       else {
         ILogger::instance()->logWarning("SceneJS: Unknown type \"%s\"", type.c_str());

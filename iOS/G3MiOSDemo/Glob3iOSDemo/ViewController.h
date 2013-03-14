@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-#import "G3MWidget_iOS.h"
+#import <G3MiOSSDK/G3MWidget_iOS.h>
 
 @interface ViewController : UIViewController {
   IBOutlet G3MWidget_iOS* G3MWidget;

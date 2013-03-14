@@ -1,3 +1,23 @@
+# ##### BEGIN GPL LICENSE BLOCK #####
+#
+#  This program is free software; you can redistribute it and/or
+#  modify it under the terms of the GNU General Public License
+#  as published by the Free Software Foundation; either version 2
+#  of the License, or (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, write to the Free Software Foundation,
+#  Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+#
+# ##### END GPL LICENSE BLOCK #####
+
+# This plugin was based on io_scene_obj plugin
+
 # <pep8-80 compliant>
 
 print("LOADING SceneJS exporter")
@@ -45,6 +65,16 @@ class ExportSceneJS(bpy.types.Operator, ExportHelper):
             default="*.json",
             options={'HIDDEN'},
             )
+    
+    group_by = EnumProperty(
+        name="Group by",
+        description="Select the option to group by",
+        items=(('OMG', "obj/mat/geom", ""),
+               ('MOG', "mat/obj/geom", ""),
+               ('MG', "mat/geom", ""),
+        ),
+        default='MG',
+    )
 
     # context group
     use_selection = BoolProperty(
@@ -69,13 +99,9 @@ class ExportSceneJS(bpy.types.Operator, ExportHelper):
             description="Write out the active UV coordinates",
             default=True,
             )
-    use_materials = BoolProperty(
-            name="Write Materials",
-            description="Write out the MTL file",
-            default=True,
-            )
 
     # grouping group
+    
     keep_vertex_order = BoolProperty(
             name="Keep Vertex Order",
             description="",
