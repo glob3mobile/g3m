@@ -35,19 +35,14 @@ public class LTMInitializer extends LazyTextureMappingInitializer
     if (_tile != _ancestor)
     {
       final Sector tileSector = _tile.getSector();
-      final Sector ancestorSector = _ancestor.getSector();
 
-      final Vector2D scale = tileSector.getScaleFactor(ancestorSector);
-      _scale = scale.asMutableVector2D();
+      final Vector2D lowerTextCoordUV = _tessellator.getTextCoord(_ancestor, tileSector.lower(), _mercator);
 
-//      _translation = tileSector.getTranslationFactor(ancestorSector).asMutableVector2D();
+      final Vector2D upperTextCoordUV = _tessellator.getTextCoord(_ancestor, tileSector.upper(), _mercator);
 
-      int __DIEGO_AT_WORK;
-      final Vector2D ancestorTextCoord = _tessellator.getTextCoord(_ancestor, tileSector.upper().latitude(), tileSector.lower().longitude(), _mercator);
-      _translation = ancestorTextCoord.asMutableVector2D();
+      _scale = new MutableVector2D(upperTextCoordUV._x - lowerTextCoordUV._x, lowerTextCoordUV._y - upperTextCoordUV._y);
 
-//      _translation = ancestorSector.getUVCoordinates(tileSector.upper().latitude(),
-//                                                     tileSector.lower().longitude()).asMutableVector2D();
+      _translation = new MutableVector2D(lowerTextCoordUV._x, upperTextCoordUV._y);
     }
   }
 

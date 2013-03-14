@@ -91,8 +91,6 @@ public class MercatorUtils
     final IMathUtils mu = IMathUtils.instance();
     final double pi4 = mu.pi() * 4;
 
-    // const double latitudeInRadians = clampIntoLimitsInRadians(latitude);
-    // const double latSin = mu->sin(latitudeInRadians);
     final double latSin = latitude.sinus();
     return 1.0 - ((mu.log((1.0 + latSin) / (1.0 - latSin)) / pi4) + 0.5);
   }
@@ -102,11 +100,8 @@ public class MercatorUtils
     final IMathUtils mu = IMathUtils.instance();
     final double pi = mu.pi();
 
-    // PI()/2 - (2*ATAN(EXP(-2*PI()*(y - 0,5))))
     final double exp = mu.exp(-2 * pi * (1.0 - v - 0.5));
-
     final double atan = mu.atan(exp);
-
     return Angle.fromRadians((pi / 2) - 2 * atan);
   }
 

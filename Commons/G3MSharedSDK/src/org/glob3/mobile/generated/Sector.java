@@ -63,7 +63,7 @@ public class Sector
     return new Sector(lower, upper);
   }
 
-  public final Vector2D getScaleFactor(Sector that)
+  public final Vector2D div(Sector that)
   {
     final double scaleX = _deltaLongitude.div(that._deltaLongitude);
     final double scaleY = _deltaLatitude.div(that._deltaLatitude);

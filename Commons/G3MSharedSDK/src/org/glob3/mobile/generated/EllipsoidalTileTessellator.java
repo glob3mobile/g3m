@@ -234,11 +234,9 @@ public class EllipsoidalTileTessellator extends TileTessellator
   
     final Sector sector = tile.getSector();
   
-    //const IMathUtils* mu = IMathUtils::instance();
-  
-    final double mercatorLowerV = MercatorUtils.getMercatorV(sector.lower().latitude());
-    final double mercatorUpperV = MercatorUtils.getMercatorV(sector.upper().latitude());
-    final double mercatorDeltaV = mercatorLowerV - mercatorUpperV;
+    final double mercatorLowerGlobalV = MercatorUtils.getMercatorV(sector.lower().latitude());
+    final double mercatorUpperGlobalV = MercatorUtils.getMercatorV(sector.upper().latitude());
+    final double mercatorDeltaGlobalV = mercatorLowerGlobalV - mercatorUpperGlobalV;
   
     for (int j = 0; j < tileResolution._y; j++)
     {
@@ -251,11 +249,10 @@ public class EllipsoidalTileTessellator extends TileTessellator
         final double linearV = (double) j / (tileResolution._y-1);
         if (mercator)
         {
-          final Angle innerPointLatitude = sector.getInnerPointLatitude(linearV);
-          final double vMercatorGlobal = MercatorUtils.getMercatorV(innerPointLatitude);
-          //const double vv = mu->clamp((vMercatorGlobal - mercatorUpperV) / mercatorDeltaV, 0, 1);
-          final double vv = (vMercatorGlobal - mercatorUpperV) / mercatorDeltaV;
-          v[pos] = (float) vv;
+          final Angle latitude = sector.getInnerPointLatitude(linearV);
+          final double mercatorGlobalV = MercatorUtils.getMercatorV(latitude);
+          final double mercatorLocalV = (mercatorGlobalV - mercatorUpperGlobalV) / mercatorDeltaGlobalV;
+          v[pos] = (float) mercatorLocalV;
         }
         else
         {
@@ -333,21 +330,19 @@ public class EllipsoidalTileTessellator extends TileTessellator
     final Sector sector = tile.getSector();
   
     final Vector2D linearUV = sector.getUVCoordinates(latitude, longitude);
-  
-    if (mercator)
+    if (!mercator)
     {
-      final double mercatorLowerV = MercatorUtils.getMercatorV(sector.lower().latitude());
-      final double mercatorUpperV = MercatorUtils.getMercatorV(sector.upper().latitude());
-      final double mercatorDeltaV = mercatorLowerV - mercatorUpperV;
-  
-      final double vMercatorGlobal = MercatorUtils.getMercatorV(latitude);
-  
-      final double vv = (vMercatorGlobal - mercatorUpperV) / mercatorDeltaV;
-  
-      return new Vector2D(linearUV._x, vv);
+      return linearUV;
     }
   
-    return linearUV;
+    final double lowerGlobalV = MercatorUtils.getMercatorV(sector.lower().latitude());
+    final double upperGlobalV = MercatorUtils.getMercatorV(sector.upper().latitude());
+    final double deltaGlobalV = lowerGlobalV - upperGlobalV;
+  
+    final double globalV = MercatorUtils.getMercatorV(latitude);
+    final double localV = (globalV - upperGlobalV) / deltaGlobalV;
+  
+    return new Vector2D(linearUV._x, localV);
   }
 
 }
