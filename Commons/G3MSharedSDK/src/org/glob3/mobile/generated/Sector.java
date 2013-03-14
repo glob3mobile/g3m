@@ -332,10 +332,6 @@ public class Sector
 
   public final Vector2D getUVCoordinates(Angle latitude, Angle longitude)
   {
-//    const double u = (longitude._radians - _lower.longitude()._radians) / _deltaLongitude._radians;
-//    const double v = (_upper.latitude()._radians - latitude._radians)   / _deltaLatitude._radians;
-//
-//    return Vector2D(u, v);
     return new Vector2D(getUCoordinates(longitude), getVCoordinates(latitude));
   }
 
@@ -485,10 +481,10 @@ public class Sector
 
   public final Sector shrinkedByPercentP(float percent)
   {
-    Angle deltaLatitude = _deltaLatitude.times(percent).div(2);
-    Angle deltaLongitude = _deltaLongitude.times(percent).div(2);
+    final Angle deltaLatitude = _deltaLatitude.times(percent).div(2);
+    final Angle deltaLongitude = _deltaLongitude.times(percent).div(2);
 
-    Geodetic2D delta = new Geodetic2D(deltaLatitude, deltaLongitude);
+    final Geodetic2D delta = new Geodetic2D(deltaLatitude, deltaLongitude);
 
     return new Sector(_lower.add(delta), _upper.sub(delta));
   }
