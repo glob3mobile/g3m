@@ -405,7 +405,7 @@ public:
 {
   LayerSet* layerSet = new LayerSet();
 
-  const bool useOSM = false;
+  const bool useOSM = true;
   if (useOSM) {
     layerSet->addLayer( new OSMLayer(TimeInterval::fromDays(30)) );
   }
@@ -446,7 +446,7 @@ public:
                                           TimeInterval::fromDays(30)) );
   }
 
-  const bool blueMarble = true;
+  const bool blueMarble = false;
   if (blueMarble) {
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
                                         URL("http://www.nasa.network.com/wms?", false),
@@ -640,7 +640,7 @@ public:
 
 - (TilesRenderParameters*) createTileRenderParameters
 {
-  const bool renderDebug = true;
+  const bool renderDebug = false;
   const bool useTilesSplitBudget = true;
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
