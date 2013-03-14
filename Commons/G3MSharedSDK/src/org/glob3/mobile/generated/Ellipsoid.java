@@ -150,6 +150,11 @@ public class Ellipsoid
     return toCartesian(geodetic.latitude(), geodetic.longitude(), 0.0);
   }
 
+  public final Vector3D toCartesian(Geodetic2D geodetic, double height)
+  {
+    return toCartesian(geodetic.latitude(), geodetic.longitude(), height);
+  }
+
   public final Geodetic2D toGeodetic2D(Vector3D positionOnEllipsoid)
   {
     final Vector3D n = geodeticSurfaceNormal(positionOnEllipsoid);
