@@ -44,6 +44,7 @@ void Camera::copyFrom(const Camera &that) {
 
   _cartesianCenterOfView = MutableVector3D(that._cartesianCenterOfView);
 
+  delete _geodeticCenterOfView;
   _geodeticCenterOfView = (that._geodeticCenterOfView == NULL) ? NULL : new Geodetic3D(*that._geodeticCenterOfView);
 
   delete _frustum;
