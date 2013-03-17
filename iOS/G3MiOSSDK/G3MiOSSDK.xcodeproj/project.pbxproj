@@ -143,6 +143,7 @@
 		CFC54E0F1669766C00E1CD15 /* GEORenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFC54E0D1669766B00E1CD15 /* GEORenderer.cpp */; };
 		CFCAEC4916BB20D500CDC17D /* ShapeOrbitCameraEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFCAEC4716BB20D500CDC17D /* ShapeOrbitCameraEffect.cpp */; };
 		CFCB5EDA16582BCC007D051A /* CompositeMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFCB5ED816582BCC007D051A /* CompositeMesh.cpp */; };
+		CFCCFE0916F504590082F383 /* NativeGL2_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFCCFE0816F504590082F383 /* NativeGL2_iOS.mm */; };
 		CFCE679D15EFB06700B35FE0 /* IThreadUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFCE679B15EFB06700B35FE0 /* IThreadUtils.cpp */; };
 		CFCEFF26163476F100FC4AB0 /* RectangleI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFCEFF24163476F100FC4AB0 /* RectangleI.cpp */; };
 		CFCEFF4D163721EA00FC4AB0 /* TrailsRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFCEFF4B163721EA00FC4AB0 /* TrailsRenderer.cpp */; };
@@ -932,6 +933,8 @@
 		CFCAEC4816BB20D500CDC17D /* ShapeOrbitCameraEffect.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ShapeOrbitCameraEffect.hpp; path = Commons/Rendererers/ShapeOrbitCameraEffect.hpp; sourceTree = "<group>"; };
 		CFCB5ED816582BCC007D051A /* CompositeMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CompositeMesh.cpp; path = Commons/Mesh/CompositeMesh.cpp; sourceTree = "<group>"; };
 		CFCB5ED916582BCC007D051A /* CompositeMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = CompositeMesh.hpp; path = Commons/Mesh/CompositeMesh.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		CFCCFE0816F504590082F383 /* NativeGL2_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = NativeGL2_iOS.mm; path = Specific/GL/NativeGL2_iOS.mm; sourceTree = "<group>"; };
+		CFCCFE0A16F506210082F383 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		CFCE679B15EFB06700B35FE0 /* IThreadUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IThreadUtils.cpp; path = Commons/Basic/IThreadUtils.cpp; sourceTree = "<group>"; };
 		CFCE679C15EFB06700B35FE0 /* IThreadUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IThreadUtils.hpp; path = Commons/Basic/IThreadUtils.hpp; sourceTree = "<group>"; };
 		CFCEFF24163476F100FC4AB0 /* RectangleI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RectangleI.cpp; path = Commons/Geometry/RectangleI.cpp; sourceTree = "<group>"; };
@@ -1413,6 +1416,7 @@
 		CC14B636157D34AB00793C92 /* GL */ = {
 			isa = PBXGroup;
 			children = (
+				CFCCFE0816F504590082F383 /* NativeGL2_iOS.mm */,
 				D8B3A961160B69620085D553 /* GLUniformID_iOS.hpp */,
 				D892FBCB15C930CC00E69254 /* NativeGL2_iOS.hpp */,
 				D8B3A95F160B691C0085D553 /* GLTextureId_iOS.hpp */,
@@ -1658,6 +1662,7 @@
 		D8EEF3AA1577924D003FEB5E = {
 			isa = PBXGroup;
 			children = (
+				CFCCFE0A16F506210082F383 /* GLKit.framework */,
 				E70B56DF16D3CCCD00C5FFFB /* Resources */,
 				383BD3881577EDE30012AC53 /* Commons */,
 				D8EEF3B71577924D003FEB5E /* Frameworks */,
@@ -1957,6 +1962,7 @@
 				CF75C3A616EA621D00F7EE9F /* GoogleMapsLayer.cpp in Sources */,
 				CFE676B216ECDA7C00CB93B9 /* BingMapsLayer.cpp in Sources */,
 				E720E8C616EE470300103F20 /* SceneJSParserStatistics.cpp in Sources */,
+				CFCCFE0916F504590082F383 /* NativeGL2_iOS.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

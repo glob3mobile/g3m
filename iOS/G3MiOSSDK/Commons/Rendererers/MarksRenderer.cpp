@@ -197,6 +197,7 @@ void MarksRenderer::render(const G3MRenderContext* rc,
   gl->setBlendFuncSrcAlpha();
 
   const Camera* camera = rc->getCurrentCamera();
+  const Vector3D cameraPosition = camera->getCartesianPosition();
 
   gl->startBillBoardDrawing(camera->getWidth(),
                             camera->getHeight());
@@ -207,7 +208,7 @@ void MarksRenderer::render(const G3MRenderContext* rc,
     //rc->getLogger()->logInfo("Rendering Mark: \"%s\"", mark->getName().c_str());
     
     if (mark->isReady()) {
-      mark->render(rc);
+      mark->render(rc, cameraPosition);
     }
   }
   

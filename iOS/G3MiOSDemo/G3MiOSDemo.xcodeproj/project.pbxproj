@@ -14,6 +14,7 @@
 		CF0223831668318600024B73 /* geojson in Resources */ = {isa = PBXBuildFile; fileRef = CF0223821668318600024B73 /* geojson */; };
 		CF04CCFA16D3E4D5004DFACF /* 409_554.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF04CCF916D3E4D5004DFACF /* 409_554.bil */; };
 		CF09A94E16A0A0F500E72811 /* test.bson in Resources */ = {isa = PBXBuildFile; fileRef = CF09A94D16A09F7000E72811 /* test.bson */; };
+		CF13F2CC16F3AC4B005704D6 /* caceres-2008x2032.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF13F2CB16F3AC4B005704D6 /* caceres-2008x2032.bil */; };
 		CF186B0416B8572400A39478 /* A320.json in Resources */ = {isa = PBXBuildFile; fileRef = CF186B0316B8572400A39478 /* A320.json */; };
 		CF186B0616B857DE00A39478 /* textures-A320 in Resources */ = {isa = PBXBuildFile; fileRef = CF186B0516B857DE00A39478 /* textures-A320 */; };
 		CF186B0816B85A3600A39478 /* citation.json in Resources */ = {isa = PBXBuildFile; fileRef = CF186B0716B85A3600A39478 /* citation.json */; };
@@ -82,6 +83,7 @@
 		CF0223821668318600024B73 /* geojson */ = {isa = PBXFileReference; lastKnownFileType = folder; path = geojson; sourceTree = "<group>"; };
 		CF04CCF916D3E4D5004DFACF /* 409_554.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = 409_554.bil; sourceTree = "<group>"; };
 		CF09A94D16A09F7000E72811 /* test.bson */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.bson; sourceTree = "<group>"; };
+		CF13F2CB16F3AC4B005704D6 /* caceres-2008x2032.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "caceres-2008x2032.bil"; sourceTree = "<group>"; };
 		CF186B0316B8572400A39478 /* A320.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = A320.json; sourceTree = "<group>"; };
 		CF186B0516B857DE00A39478 /* textures-A320 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "textures-A320"; sourceTree = "<group>"; };
 		CF186B0716B85A3600A39478 /* citation.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = citation.json; sourceTree = "<group>"; };
@@ -92,6 +94,7 @@
 		CF91C52F16D7C03B00E25C24 /* full-earth-4096x2048.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "full-earth-4096x2048.bil"; sourceTree = "<group>"; };
 		CFB5274A16D53906008374C2 /* full-earth-2048x1024.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "full-earth-2048x1024.bil"; sourceTree = "<group>"; };
 		CFCC53F216D50D8900671DC4 /* full-earth-512x512.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "full-earth-512x512.bil"; sourceTree = "<group>"; };
+		CFCCFE0C16F506C20082F383 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		CFD42AB716DBAEFD00B03961 /* elev-35.0_-6.0_38.0_-2.0_4096x2048.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = "elev-35.0_-6.0_38.0_-2.0_4096x2048.bil"; sourceTree = "<group>"; };
 		CFE3DBB0164B0E7D00910037 /* seymour-plane.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "seymour-plane.json"; sourceTree = "<group>"; };
 		CFEA76671666DCB000E89BC7 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
@@ -126,8 +129,8 @@
 		E71B15351626D27F003D1013 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = Resources/Icon.png; sourceTree = "<group>"; };
 		E71B15361626D27F003D1013 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "Resources/Icon@2x.png"; sourceTree = "<group>"; };
 		E728385416E914D80037AA5C /* g3m-marker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "g3m-marker.png"; sourceTree = "<group>"; };
-		E7A1A98D16F0E51A00D138D8 /* Shader.fsh */ = {isa = PBXFileReference; lastKnownFileType = file; path = Shader.fsh; sourceTree = "<group>"; };
-		E7A1A98E16F0E51A00D138D8 /* Shader.vsh */ = {isa = PBXFileReference; lastKnownFileType = file; path = Shader.vsh; sourceTree = "<group>"; };
+		E7A1A98D16F0E51A00D138D8 /* Shader.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = Shader.fsh; sourceTree = "<group>"; };
+		E7A1A98E16F0E51A00D138D8 /* Shader.vsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = Shader.vsh; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -152,6 +155,7 @@
 		D8EEF37B1577920A003FEB5E = {
 			isa = PBXGroup;
 			children = (
+				CFCCFE0C16F506C20082F383 /* GLKit.framework */,
 				D8EEF3891577920B003FEB5E /* Frameworks */,
 				D8EEF3901577920B003FEB5E /* G3MiOSDemo */,
 				D8EEF4161577AEC8003FEB5E /* G3MiOSSDK.xcodeproj */,
@@ -219,6 +223,7 @@
 		D8EEF4271577B0D6003FEB5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CF13F2CB16F3AC4B005704D6 /* caceres-2008x2032.bil */,
 				E7A1A98F16F0E51A00D138D8 /* Shaders */,
 				E728385416E914D80037AA5C /* g3m-marker.png */,
 				CFD42AB716DBAEFD00B03961 /* elev-35.0_-6.0_38.0_-2.0_4096x2048.bil */,
@@ -370,6 +375,7 @@
 				E728385516E914D80037AA5C /* g3m-marker.png in Resources */,
 				E7A1A99016F0E51A00D138D8 /* Shader.fsh in Resources */,
 				E7A1A99116F0E51A00D138D8 /* Shader.vsh in Resources */,
+				CF13F2CC16F3AC4B005704D6 /* caceres-2008x2032.bil in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

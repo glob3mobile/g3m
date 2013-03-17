@@ -55,6 +55,8 @@ URL MercatorTiledLayer::getFeatureInfoURL(const Geodetic2D& position,
 
 std::vector<Petition*> MercatorTiledLayer::createTileMapPetitions(const G3MRenderContext* rc,
                                                                   const Tile* tile) const {
+  const IMathUtils* mu = IMathUtils::instance();
+
   std::vector<Petition*> petitions;
 
   const Sector tileSector = tile->getSector();
@@ -73,7 +75,7 @@ std::vector<Petition*> MercatorTiledLayer::createTileMapPetitions(const G3MRende
 
   const int level   = tile->getLevel();
   const int column  = tile->getColumn();
-  const int numRows = (int) IMathUtils::instance()->pow(2.0, level);
+  const int numRows = (int) mu->pow(2.0, level);
   const int row     = numRows - tile->getRow() - 1;
 
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
@@ -83,7 +85,7 @@ std::vector<Petition*> MercatorTiledLayer::createTileMapPetitions(const G3MRende
   const int subdomainsSize = _subdomains.size();
   if (subdomainsSize > 0) {
     // select subdomain based on fixed data (instead of round-robin) to be cache friendly
-    const int subdomainsIndex =  IMathUtils::instance()->abs(level + column + row) % subdomainsSize;
+    const int subdomainsIndex =  mu->abs(level + column + row) % subdomainsSize;
 #ifdef C_CODE
     isb->addString(_subdomains[subdomainsIndex]);
 #endif

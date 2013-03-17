@@ -29,7 +29,7 @@
 #include "LayerTilesRenderParameters.hpp"
 
 
-enum PetitionStatus {
+enum TileTextureBuilder_PetitionStatus {
   STATUS_PENDING,
   STATUS_DOWNLOADED,
   STATUS_CANCELED
@@ -215,8 +215,8 @@ private:
 
   const int    _firstLevel;
 
-  std::vector<PetitionStatus>    _status;
-  std::vector<long long>         _requestsIds;
+  std::vector<TileTextureBuilder_PetitionStatus> _status;
+  std::vector<long long>                         _requestsIds;
 
 
   bool _finalized;

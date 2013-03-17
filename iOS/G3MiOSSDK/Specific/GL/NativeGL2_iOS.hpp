@@ -13,13 +13,12 @@
 
 #include "INativeGL.hpp"
 
-//#include "GLProgramId_iOS.hpp"
 #include "GLUniformID_iOS.hpp"
 #include "GLTextureId_iOS.hpp"
 #include "FloatBuffer_iOS.hpp"
-//#include "IntBuffer_iOS.hpp"
 #include "ShortBuffer_iOS.hpp"
 #include "Image_iOS.hpp"
+#include "MutableMatrix44D.hpp"
 
 class NativeGL2_iOS: public INativeGL {
 public:
@@ -225,6 +224,9 @@ public:
 
     delete [] data;
   }
+
+//  void texImage2D(const IImage* image,
+//                  int format) const;
 
   void generateMipmap(int target) const {
     glGenerateMipmap(target);

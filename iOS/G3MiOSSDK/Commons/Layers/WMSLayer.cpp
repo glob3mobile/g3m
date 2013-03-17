@@ -307,17 +307,17 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& position,
     }
   }
   req += "&LAYERS=" + _queryLayer;
-
-  //req += "&LAYERS=" + _queryLayers;
   req += "&QUERY_LAYERS=" + _queryLayer;
 
   req += "&INFO_FORMAT=text/plain";
 
+  const IMathUtils* mu = IMathUtils::instance();
+
   //X and Y
   const Vector2D uv = sector.getUVCoordinates(position);
-  const int x = (int) IMathUtils::instance()->round( (uv._x * _parameters->_tileTextureResolution._x) );
-  const int y = (int) IMathUtils::instance()->round( (uv._y * _parameters->_tileTextureResolution._y) );
-  // const int y = (int) IMathUtils::instance()->round( ((1.0 - uv._y) * _parameters->_tileTextureResolution._y) );
+  const int x = (int) mu->round( (uv._x * _parameters->_tileTextureResolution._x) );
+  const int y = (int) mu->round( (uv._y * _parameters->_tileTextureResolution._y) );
+  // const int y = (int) mu->round( ((1.0 - uv._y) * _parameters->_tileTextureResolution._y) );
 
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("&X=");

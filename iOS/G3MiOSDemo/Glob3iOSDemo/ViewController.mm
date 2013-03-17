@@ -405,12 +405,12 @@ public:
 {
   LayerSet* layerSet = new LayerSet();
 
-  const bool useOSM = true;
+  const bool useOSM = false;
   if (useOSM) {
     layerSet->addLayer( new OSMLayer(TimeInterval::fromDays(30)) );
   }
 
-  const bool useMapQuestOSM = false;
+  const bool useMapQuestOSM = true;
   if (useMapQuestOSM) {
     layerSet->addLayer( MapQuestLayer::newOSM(TimeInterval::fromDays(30)) );
   }
@@ -763,50 +763,50 @@ public:
   //  const URL textureURL("file:///world.jpg", false);
 
   //const Vector3D radius(50000, 50000, 50000);
-  const double factor = 80;
-  const Vector3D radius(6378137.0 / factor, 6378137.0 / factor, 6356752.314245 / factor);
-
-  Shape* ellipsoid1 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(41),
-                                                        Angle::fromDegrees(-121),
-                                                        radius._x * 1.1),
-                                         URL("file:///world.jpg", false),
-                                         radius,
-                                         32,
-                                         0,
-                                         false,
-                                         false
-                                         //Color::newFromRGBA(0,    0.5, 0.8, 0.5),
-                                         //Color::newFromRGBA(0, 0.75, 0, 0.75)
-                                         );
-  shapesRenderer->addShape(ellipsoid1);
-
-  Shape* mercator1 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(41),
-                                                       Angle::fromDegrees(-119),
-                                                       radius._x * 1.1),
-                                        URL("file:///mercator_debug.png", false),
-                                        radius,
-                                        32,
-                                        0,
-                                        false,
-                                        true
-                                        //Color::newFromRGBA(0.5,    0.0, 0.8, 0.5),
-                                        //Color::newFromRGBA(0, 0.75, 0, 0.75)
-                                        );
-  shapesRenderer->addShape(mercator1);
-
-  Shape* mercator2 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(41),
-                                                       Angle::fromDegrees(-117),
-                                                       radius._x * 1.1),
-                                        URL("file:///mercator.jpg", false),
-                                        radius,
-                                        32,
-                                        0,
-                                        true,
-                                        true
-                                        //Color::newFromRGBA(0.5,    0.0, 0.8, 0.5),
-                                        //Color::newFromRGBA(0, 0.75, 0, 0.75)
-                                        );
-  shapesRenderer->addShape(mercator2);
+//  const double factor = 80;
+//  const Vector3D radius(6378137.0 / factor, 6378137.0 / factor, 6356752.314245 / factor);
+//
+//  Shape* ellipsoid1 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(41),
+//                                                        Angle::fromDegrees(-121),
+//                                                        radius._x * 1.1),
+//                                         URL("file:///world.jpg", false),
+//                                         radius,
+//                                         32,
+//                                         0,
+//                                         false,
+//                                         false
+//                                         //Color::newFromRGBA(0,    0.5, 0.8, 0.5),
+//                                         //Color::newFromRGBA(0, 0.75, 0, 0.75)
+//                                         );
+//  shapesRenderer->addShape(ellipsoid1);
+//
+//  Shape* mercator1 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(41),
+//                                                       Angle::fromDegrees(-119),
+//                                                       radius._x * 1.1),
+//                                        URL("file:///mercator_debug.png", false),
+//                                        radius,
+//                                        32,
+//                                        0,
+//                                        false,
+//                                        true
+//                                        //Color::newFromRGBA(0.5,    0.0, 0.8, 0.5),
+//                                        //Color::newFromRGBA(0, 0.75, 0, 0.75)
+//                                        );
+//  shapesRenderer->addShape(mercator1);
+//
+//  Shape* mercator2 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(41),
+//                                                       Angle::fromDegrees(-117),
+//                                                       radius._x * 1.1),
+//                                        URL("file:///mercator.jpg", false),
+//                                        radius,
+//                                        32,
+//                                        0,
+//                                        true,
+//                                        true
+//                                        //Color::newFromRGBA(0.5,    0.0, 0.8, 0.5),
+//                                        //Color::newFromRGBA(0, 0.75, 0, 0.75)
+//                                        );
+//  shapesRenderer->addShape(mercator2);
 
   //  Shape* colored = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(41),
   //                                                     Angle::fromDegrees(-115),
@@ -1043,7 +1043,8 @@ public:
       //    const Vector3D sw = planet->toVector3D(sector->getSW());
       //    const Vector3D nw = planet->toVector3D(sector->getNW());
       //    const double offset = nw.sub(sw).length(); // * 1e-3;
-      const double offset = 5000;
+//      const double offset = 5000;
+      const double offset = 100;
 
       // west side
       for (int j = 0; j < resolutionMinus1; j++) {
@@ -1149,14 +1150,24 @@ public:
     void run(const G3MContext* context) {
       printf("Running initialization Task\n");
 
-      const Sector targetSector(Sector::fromDegrees(35, -6, 38, -2));
+//      const Sector targetSector(Sector::fromDegrees(35, -6, 38, -2));
 
       _meshRenderer->addMesh( createSectorMesh(context->getPlanet(),
                                                20,
-                                               targetSector,
+                                               Sector::fromDegrees(35, -6, 38, -2),
                                                Color::white(),
                                                2) );
 
+      _meshRenderer->addMesh( createSectorMesh(context->getPlanet(),
+                                               20,
+                                               Sector::fromDegrees(
+                                                                   39.4642996294239623,
+                                                                   -6.3829977122432933,
+                                                                   39.4829891936013553,
+                                                                   -6.3645288909498845
+                                                                   ),
+                                               Color::magenta(),
+                                               2) );
 
 
       // mesh1
