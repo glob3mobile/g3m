@@ -25,7 +25,7 @@ public class TileTextureBuilder extends RCObject
 
   private final int _firstLevel;
 
-  private java.util.ArrayList<PetitionStatus> _status = new java.util.ArrayList<PetitionStatus>();
+  private java.util.ArrayList<TileTextureBuilder_PetitionStatus> _status = new java.util.ArrayList<TileTextureBuilder_PetitionStatus>();
   private java.util.ArrayList<Long> _requestsIds = new java.util.ArrayList<Long>();
 
 
@@ -112,7 +112,7 @@ public class TileTextureBuilder extends RCObject
 
     for (int i = 0; i < _petitionsCount; i++)
     {
-      _status.add(PetitionStatus.STATUS_PENDING);
+      _status.add(TileTextureBuilder_PetitionStatus.STATUS_PENDING);
     }
 
     _mesh = createMesh();
@@ -340,7 +340,7 @@ public class TileTextureBuilder extends RCObject
     }
     //checkIsPending(position);
 
-    _status.set(position, PetitionStatus.STATUS_DOWNLOADED);
+    _status.set(position, TileTextureBuilder_PetitionStatus.STATUS_DOWNLOADED);
     _petitions.get(position).setImage(image);
 
     stepDone();
@@ -356,7 +356,7 @@ public class TileTextureBuilder extends RCObject
 
     _anyCanceled = true;
 
-    _status.set(position, PetitionStatus.STATUS_CANCELED);
+    _status.set(position, TileTextureBuilder_PetitionStatus.STATUS_CANCELED);
 
     stepDone();
   }

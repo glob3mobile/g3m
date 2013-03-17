@@ -771,6 +771,19 @@ public class Tile
     }
   }
 
+  public final void toBeDeleted(TileTexturizer texturizer, ElevationDataProvider elevationDataProvider)
+  {
+    if (texturizer != null)
+    {
+      texturizer.tileToBeDeleted(this, _texturizedMesh);
+    }
+  
+    if (elevationDataProvider != null)
+    {
+      cancelElevationDataRequest(elevationDataProvider);
+    }
+  }
+
   public final void onElevationData(ElevationData elevationData, float verticalExaggeration, MeshHolder meshHolder, TileTessellator tessellator, Planet planet, Vector2I tileMeshResolution, boolean renderDebug)
   {
     _elevationRequestId = -1000;

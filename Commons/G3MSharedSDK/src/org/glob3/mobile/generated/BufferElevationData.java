@@ -61,7 +61,7 @@ public abstract class BufferElevationData extends ElevationData
       return _noDataValue;
     }
   
-    IMathUtils mu = IMathUtils.instance();
+    final IMathUtils mu = IMathUtils.instance();
   
     final Vector2D uv = _sector.getUVCoordinates(latitude, longitude);
     final double u = mu.clamp(uv._x, 0, 1);

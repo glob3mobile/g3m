@@ -50,6 +50,8 @@ public class MercatorTiledLayer extends Layer
 
   public final java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, Tile tile)
   {
+    final IMathUtils mu = IMathUtils.instance();
+  
     java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
   
     final Sector tileSector = tile.getSector();
@@ -69,7 +71,7 @@ public class MercatorTiledLayer extends Layer
   
     final int level = tile.getLevel();
     final int column = tile.getColumn();
-    final int numRows = (int) IMathUtils.instance().pow(2.0, level);
+    final int numRows = (int) mu.pow(2.0, level);
     final int row = numRows - tile.getRow() - 1;
   
     IStringBuilder isb = IStringBuilder.newStringBuilder();
@@ -80,7 +82,7 @@ public class MercatorTiledLayer extends Layer
     if (subdomainsSize > 0)
     {
       // select subdomain based on fixed data (instead of round-robin) to be cache friendly
-      final int subdomainsIndex = IMathUtils.instance().abs(level + column + row) % subdomainsSize;
+      final int subdomainsIndex = mu.abs(level + column + row) % subdomainsSize;
       isb.addString(_subdomains.get(subdomainsIndex));
     }
   

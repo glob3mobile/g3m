@@ -164,7 +164,8 @@ public class LayerSet
   {
     java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
   
-    for (int i = 0; i < _layers.size(); i++)
+    final int layersSize = _layers.size();
+    for (int i = 0; i < layersSize; i++)
     {
       Layer layer = _layers.get(i);
       if (layer.isAvailable(rc, tile))

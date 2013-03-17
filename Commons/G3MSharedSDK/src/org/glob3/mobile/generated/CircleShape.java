@@ -25,19 +25,20 @@ public class CircleShape extends AbstractMeshShape
 
   protected final Mesh createMesh(G3MRenderContext rc)
   {
+    final IMathUtils mu = IMathUtils.instance();
   
     FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
   
     // first is the center
     vertices.add(0.0, 0.0, 0.0);
   
-    final double twicePi = IMathUtils.instance().pi() * 2;
+    final double twicePi = mu.pi() * 2;
   
     for (int i = 0; i <= _steps; i++)
     {
       final double angleInRadians = i * twicePi / _steps;
-      final double x = _radius * IMathUtils.instance().cos(angleInRadians);
-      final double y = _radius * IMathUtils.instance().sin(angleInRadians);
+      final double x = _radius * mu.cos(angleInRadians);
+      final double y = _radius * mu.sin(angleInRadians);
       vertices.add(x, y, 0);
     }
   

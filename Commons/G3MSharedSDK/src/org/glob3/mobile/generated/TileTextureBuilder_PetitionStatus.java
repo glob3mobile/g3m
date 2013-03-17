@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public enum PetitionStatus
+public enum TileTextureBuilder_PetitionStatus
 {
   STATUS_PENDING,
   STATUS_DOWNLOADED,
@@ -10,7 +10,7 @@ public enum PetitionStatus
       return this.ordinal();
    }
 
-   public static PetitionStatus forValue(int value)
+   public static TileTextureBuilder_PetitionStatus forValue(int value)
    {
       return values()[value];
    }
