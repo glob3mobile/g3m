@@ -244,7 +244,7 @@ void TileRendererBuilder::setTexturePriority(long long texturePriority) {
 }
 
 TileRenderer* TileRendererBuilder::create() {
-  int __TODO_make_configurable;
+  int _TODO_make_configurable_1;
   
   ElevationDataProvider* elevationDataProvider = NULL;
 
@@ -278,8 +278,8 @@ TileRenderer* TileRendererBuilder::create() {
 //                                                              Vector2I(2008, 2032),
 //                                                              0);
 
-  int ___TODO_make_configurable;
-  float verticalExaggeration = 1;
+  int _TODO_make_configurable_2;
+  float verticalExaggeration = 5;
   
   TileRenderer* tileRenderer = new TileRenderer(getTileTessellator(),
                                                 elevationDataProvider,

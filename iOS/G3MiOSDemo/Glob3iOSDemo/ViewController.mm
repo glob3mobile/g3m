@@ -63,6 +63,7 @@
 #import <G3MiOSSDK/BingMapsLayer.hpp>
 
 #import <G3MiOSSDK/G3MWidget.hpp>
+#import <G3MiOSSDK/GEOJSONParser.hpp>
 
 class TestVisibleSectorListener : public VisibleSectorListener {
 public:
@@ -441,7 +442,8 @@ public:
 
   const bool useBingMaps = false;
   if (useBingMaps) {
-    layerSet->addLayer( new BingMapsLayer(BingMapType::Road(),
+    layerSet->addLayer( new BingMapsLayer(//BingMapType::Road(),
+                                          BingMapType::AerialWithLabels(),
                                           "ArtXu2Z-XSlDVCRVtxtYqtIPVR_0qqLcrfsRyZK_ishjUKvTheYBUH9rDDmAPcnj",
                                           TimeInterval::fromDays(30)) );
   }
@@ -640,7 +642,7 @@ public:
 
 - (TilesRenderParameters*) createTileRenderParameters
 {
-  const bool renderDebug = false;
+  const bool renderDebug = true;
   const bool useTilesSplitBudget = true;
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
@@ -1457,28 +1459,28 @@ public:
 
       /**/
       /*
-       //      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/coastline"
-       //                                                                  ofType: @"geojson"];
+      //      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/coastline"
+      //                                                                  ofType: @"geojson"];
 
-       NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/boundary_lines_land"
-       ofType: @"geojson"];
+      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/boundary_lines_land"
+                                                                  ofType: @"geojson"];
 
-       //      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/extremadura-roads"
-       //                                                                  ofType: @"geojson"];
+      //      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/extremadura-roads"
+      //                                                                  ofType: @"geojson"];
 
-       if (geoJSONFilePath) {
-       NSString *nsGEOJSON = [NSString stringWithContentsOfFile: geoJSONFilePath
-       encoding: NSUTF8StringEncoding
-       error: nil];
-       if (nsGEOJSON) {
-       std::string geoJSON = [nsGEOJSON UTF8String];
-
-       GEOObject* geoObject = GEOJSONParser::parse(geoJSON);
-
-       _geoRenderer->addGEOObject(geoObject);
-       }
-       }
-       */
+      if (geoJSONFilePath) {
+        NSString *nsGEOJSON = [NSString stringWithContentsOfFile: geoJSONFilePath
+                                                        encoding: NSUTF8StringEncoding
+                                                           error: nil];
+        if (nsGEOJSON) {
+          std::string geoJSON = [nsGEOJSON UTF8String];
+          
+          GEOObject* geoObject = GEOJSONParser::parse(geoJSON);
+          
+          _geoRenderer->addGEOObject(geoObject);
+        }
+      }
+      */
 
       /*
        NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
