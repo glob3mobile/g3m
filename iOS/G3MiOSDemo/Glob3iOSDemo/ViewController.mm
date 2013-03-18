@@ -820,6 +820,7 @@ public:
   //                                      );
   //  shapesRenderer->addShape(colored);
 
+  // to test layout::splitOverCircle
     Shape* spheres = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(40.426042),
                                                        Angle::fromDegrees(-3.704453),
                                                        0),

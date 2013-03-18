@@ -61,6 +61,10 @@ public:
     return Angle::fromDegrees(0);
   }
 
+  static Angle pi() {
+    return Angle::fromDegrees(180);
+  }
+  
   static Angle nan() {
     return Angle::fromDegrees(IMathUtils::instance()->NanD());
   }
