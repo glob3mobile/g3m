@@ -227,7 +227,7 @@ public class TileRendererBuilder
   }
   public final TileRenderer create()
   {
-    int __TODO_make_configurable;
+    int _TODO_make_configurable_1;
   
     ElevationDataProvider elevationDataProvider = null;
   
@@ -261,8 +261,8 @@ public class TileRendererBuilder
   //                                                              Vector2I(2008, 2032),
   //                                                              0);
   
-    int ___TODO_make_configurable;
-    float verticalExaggeration = 1F;
+    int _TODO_make_configurable_2;
+    float verticalExaggeration = 5F;
   
     TileRenderer tileRenderer = new TileRenderer(getTileTessellator(), elevationDataProvider, verticalExaggeration, getTexturizer(), getLayerSet(), getParameters(), getShowStatistics(), getTexturePriority());
   
