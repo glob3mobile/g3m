@@ -35,13 +35,13 @@ public class LayoutUtils
   public static java.util.ArrayList<Geodetic3D> splitOverCircle(Ellipsoid ellipsoid, Geodetic3D center, double radiusInMeters, int splits, Angle startAngle)
   {
     java.util.ArrayList<Geodetic3D> result = new java.util.ArrayList<Geodetic3D>();
-    final double deltaInRadians = (IMathUtils.instance().pi() * 2.0) / splits;
   
+    final double startAngleInRadians = startAngle._radians;
+    final double deltaInRadians = (IMathUtils.instance().pi() * 2.0) / splits;
     final Vector3D cartesianCenter = ellipsoid.toCartesian(center);
     final Vector3D normal = ellipsoid.geodeticSurfaceNormal(center);
     final Vector3D northInPlane = Vector3D.upZ().projectionInPlane(normal).normalized().times(radiusInMeters);
   
-    final double startAngleInRadians = startAngle._radians;
     for (int i = 0; i < splits; i++)
     {
       final double angleInRadians = startAngleInRadians + (deltaInRadians * i);
