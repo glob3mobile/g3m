@@ -820,6 +820,19 @@ public:
   //                                      );
   //  shapesRenderer->addShape(colored);
 
+    Shape* spheres = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(40.426042),
+                                                       Angle::fromDegrees(-3.704453),
+                                                       0),
+                                        Vector3D(1e5, 1e5, 1e5),
+                                        8,
+                                        1,
+                                        false,
+                                        false,
+                                        Color::newFromRGBA(0.8, 0, 0, 1.0),
+                                        Color::newFromRGBA(0, 0, 0, 1)
+                                        );
+    shapesRenderer->addShape(spheres);
+  
 
   return shapesRenderer;
 }
