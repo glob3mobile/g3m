@@ -155,9 +155,9 @@ public class SceneJSShapesParser
     java.util.ArrayList<String> keys = jsonObject.keys();
     if (processedKeys != keys.size())
     {
-  //    for (int i = 0; i < keys.size(); i++) {
-  //      printf("%s\n", keys.at(i).c_str());
-  //    }
+      //    for (int i = 0; i < keys.size(); i++) {
+      //      printf("%s\n", keys.at(i).c_str());
+      //    }
   
       ILogger.instance().logWarning("Not all keys processed in node, processed %i of %i", processedKeys, keys.size());
     }
@@ -527,13 +527,24 @@ public class SceneJSShapesParser
       ILogger.instance().logError("Non indexed geometries not supported");
       return null;
     }
+    int indicesOutOfRange = 0;
     int indicesCount = jsIndices.size();
     IShortBuffer indices = IFactory.instance().createShortBuffer(indicesCount);
     for (int i = 0; i < indicesCount; i++)
     {
-      indices.rawPut(i, (short) jsIndices.getAsNumber(i).value());
+      final long indice = (long) jsIndices.getAsNumber(i).value();
+      if (indice > 32767)
+      {
+        indicesOutOfRange++;
+      }
+      indices.rawPut(i, (short) indice);
     }
     processedKeys++;
+  
+    if (indicesOutOfRange > 0)
+    {
+      ILogger.instance().logError("SceneJSShapesParser: There are %d (of %d) indices out of range.", indicesOutOfRange, indicesCount);
+    }
   
     SGGeometryNode node = new SGGeometryNode(id, sId, primitive, vertices, colors, uv, normals, indices);
   
