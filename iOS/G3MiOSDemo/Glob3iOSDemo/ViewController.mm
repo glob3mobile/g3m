@@ -839,16 +839,31 @@ public:
                                       Color::newFromRGBA(0, 0, 0, 1)
                                       );
   shapesRenderer->addShape(centralSphere);
-  int splits = 7;
-  std::vector<Geodetic3D*> spheres = LayoutUtils::splitOverCircle(planet, *center, 1e6, splits, Angle::fromDegrees(90));
+  int splits = 5;
+  std::vector<Geodetic3D*> spheres3D = LayoutUtils::splitOverCircle(planet, *center, 1e6, splits);
   for (int i=0; i<splits; i++) {
-    Shape* sphere = new EllipsoidShape(spheres[i],
+    Shape* sphere = new EllipsoidShape(spheres3D[i],
                                        radiusVector,
                                        8,
                                        1,
                                        false,
                                        false,
                                        Color::newFromRGBA(0.0, 0.8, 0, 1.0),
+                                       Color::newFromRGBA(0, 0, 0, 1)
+                                       );
+    shapesRenderer->addShape(sphere);
+  }
+  std::vector<Geodetic2D*> spheres2D = LayoutUtils::splitOverCircle(planet, center->asGeodetic2D(), 1e6, splits, Angle::fromDegrees(36));
+  for (int i=0; i<splits; i++) {
+    Geodetic3D* centerSplit = new Geodetic3D(*spheres2D[i], 0);
+    delete spheres2D[i];
+    Shape* sphere = new EllipsoidShape(centerSplit,
+                                       radiusVector,
+                                       8,
+                                       1,
+                                       false,
+                                       false,
+                                       Color::newFromRGBA(0.8, 0.8, 0, 1.0),
                                        Color::newFromRGBA(0, 0, 0, 1)
                                        );
     shapesRenderer->addShape(sphere);

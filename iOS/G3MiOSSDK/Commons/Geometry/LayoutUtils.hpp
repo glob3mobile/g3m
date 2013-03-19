@@ -14,6 +14,7 @@
 #include "Angle.hpp"
 
 class Geodetic3D;
+class Geodetic2D;
 class Ellipsoid;
 
 
@@ -27,7 +28,11 @@ public:
                                                   double radiusInMeters,
                                                   int splits,
                                                   const Angle& startAngle = Angle::zero());
-
+  static std::vector<Geodetic2D*> splitOverCircle(const Ellipsoid* ellipsoid,
+                                                  const Geodetic2D& center,
+                                                  double radiusInMeters,
+                                                  int splits,
+                                                  const Angle& startAngle = Angle::zero());
 };
 
 
