@@ -67,6 +67,11 @@ public class Angle
     return Angle.fromDegrees(0);
   }
 
+  public static Angle pi()
+  {
+    return Angle.fromDegrees(180);
+  }
+
   public static Angle nan()
   {
     return Angle.fromDegrees(IMathUtils.instance().NanD());

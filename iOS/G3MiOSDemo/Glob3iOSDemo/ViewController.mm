@@ -63,6 +63,7 @@
 #import <G3MiOSSDK/BingMapsLayer.hpp>
 
 #import <G3MiOSSDK/G3MWidget.hpp>
+#import <G3MiOSSDK/GEOJSONParser.hpp>
 
 #import <G3MiOSSDK/GEOJSONParser.hpp>
 
@@ -443,7 +444,8 @@ public:
 
   const bool useBingMaps = false;
   if (useBingMaps) {
-    layerSet->addLayer( new BingMapsLayer(BingMapType::Road(),
+    layerSet->addLayer( new BingMapsLayer(//BingMapType::Road(),
+                                          BingMapType::AerialWithLabels(),
                                           "ArtXu2Z-XSlDVCRVtxtYqtIPVR_0qqLcrfsRyZK_ishjUKvTheYBUH9rDDmAPcnj",
                                           TimeInterval::fromDays(30)) );
   }
@@ -558,10 +560,10 @@ public:
                                   URL("http://www.idee.es/wms/PNOA/PNOA", false),
                                   WMS_1_1_0,
                                   Sector::fromDegrees(21, -18, 45, 6),
-                                  "image/jpeg", //"image/png",
+                                  "image/png",
                                   "EPSG:4326",
                                   "",
-                                  false, //true,
+                                  true,
                                   NULL,
                                   TimeInterval::fromDays(30));
     layerSet->addLayer(pnoa);
@@ -642,7 +644,7 @@ public:
 
 - (TilesRenderParameters*) createTileRenderParameters
 {
-  const bool renderDebug = false;
+  const bool renderDebug = true;
   const bool useTilesSplitBudget = true;
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
@@ -822,6 +824,20 @@ public:
   //                                      );
   //  shapesRenderer->addShape(colored);
 
+  // to test layout::splitOverCircle
+    Shape* spheres = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(40.426042),
+                                                       Angle::fromDegrees(-3.704453),
+                                                       0),
+                                        Vector3D(1e5, 1e5, 1e5),
+                                        8,
+                                        1,
+                                        false,
+                                        false,
+                                        Color::newFromRGBA(0.8, 0, 0, 1.0),
+                                        Color::newFromRGBA(0, 0, 0, 1)
+                                        );
+    shapesRenderer->addShape(spheres);
+  
 
   return shapesRenderer;
 }
@@ -1312,6 +1328,28 @@ public:
        }
        */
 
+      if (false) {
+        NSString *cc3dFilePath = [[NSBundle mainBundle] pathForResource: @"cc3d4326"
+                                                                 ofType: @"json"];
+        if (cc3dFilePath) {
+          NSString *nsCC3dJSON = [NSString stringWithContentsOfFile: cc3dFilePath
+                                                            encoding: NSUTF8StringEncoding
+                                                               error: nil];
+          if (nsCC3dJSON) {
+            std::string cc3dJSON = [nsCC3dJSON UTF8String];
+            Shape* cc3d = SceneJSShapesParser::parseFromJSON(cc3dJSON, "file:///");
+            if (cc3d) {
+              cc3d->setPosition(new Geodetic3D(Angle::fromDegrees(39.473641),
+                                               Angle::fromDegrees(-6.370732),
+                                               500) );
+              cc3d->setPitch(Angle::fromDegrees(-90));
+
+              _shapesRenderer->addShape(cc3d);
+            }
+          }
+        }
+      }
+
       /**/
       if (false) {
         //      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
@@ -1458,7 +1496,6 @@ public:
        */
 
       /**/
-      
        //      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/coastline"
        //                                                                  ofType: @"geojson"];
 
