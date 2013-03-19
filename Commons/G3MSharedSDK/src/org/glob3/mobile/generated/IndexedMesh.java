@@ -49,6 +49,7 @@ public class IndexedMesh extends AbstractMesh
   {
      super(primitive, owner, center, vertices, lineWidth, pointSize, flatColor, colors, colorsIntensity);
      _indices = indices;
+  
   }
 
   public void dispose()

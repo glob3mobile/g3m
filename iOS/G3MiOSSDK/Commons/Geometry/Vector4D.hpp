@@ -47,7 +47,12 @@ public:
   }
   
   static Vector4D nan() {
-    return Vector4D(IMathUtils::instance()->NanD(), IMathUtils::instance()->NanD(), IMathUtils::instance()->NanD(), IMathUtils::instance()->NanD());
+    const IMathUtils* mu = IMathUtils::instance();
+
+    return Vector4D(mu->NanD(),
+                    mu->NanD(),
+                    mu->NanD(),
+                    mu->NanD());
   }
   
   static Vector4D zero() {
@@ -55,7 +60,12 @@ public:
   }
   
   bool isNan() const {
-    return (IMathUtils::instance()->isNan(_x) || IMathUtils::instance()->isNan(_y) || IMathUtils::instance()->isNan(_z) || IMathUtils::instance()->isNan(_w));
+    const IMathUtils* mu = IMathUtils::instance();
+
+    return (mu->isNan(_x) ||
+            mu->isNan(_y) ||
+            mu->isNan(_z) ||
+            mu->isNan(_w));
   }
   
   bool isZero() const {

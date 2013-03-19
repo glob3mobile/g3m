@@ -24,7 +24,7 @@ private:
   bool _showStatistics;
   bool _renderDebug;
   bool _useTilesSplitBudget;
-  bool _forceTopLevelTilesRenderOnStart;
+  bool _forceFirstLevelTilesRenderOnStart;
   bool _incrementalTileQuality;
   std::vector<VisibleSectorListener*>* _visibleSectorListeners;
   std::vector<long long>* _stabilizationMilliSeconds;
@@ -37,7 +37,7 @@ private:
   bool getShowStatistics();
   bool getRenderDebug();
   bool getUseTilesSplitBudget();
-  bool getForceTopLevelTilesRenderOnStart();
+  bool getForceFirstLevelTilesRenderOnStart();
   bool getIncrementalTileQuality();
   std::vector<VisibleSectorListener*>* getVisibleSectorListeners();
   std::vector<long long>* getStabilizationMilliSeconds();
@@ -58,7 +58,7 @@ public:
   void setShowStatistics(const bool showStatistics);
   void setRenderDebug(const bool renderDebug);
   void setUseTilesSplitBuget(const bool useTilesSplitBudget);
-  void setForceTopLevelTilesRenderOnStart(const bool forceTopLevelTilesRenderOnStart);
+  void setForceFirstLevelTilesRenderOnStart(const bool forceFirstLevelTilesRenderOnStart);
   void setIncrementalTileQuality(const bool incrementalTileQuality);
   void addVisibleSectorListener(VisibleSectorListener* listener,
                                 const TimeInterval& stabilizationInterval);

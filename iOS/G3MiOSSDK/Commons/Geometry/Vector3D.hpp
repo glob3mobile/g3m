@@ -39,7 +39,11 @@ public:
   }
   
   static Vector3D nan() {
-    return Vector3D(IMathUtils::instance()->NanD(), IMathUtils::instance()->NanD(), IMathUtils::instance()->NanD());
+    const IMathUtils* mu = IMathUtils::instance();
+
+    return Vector3D(mu->NanD(),
+                    mu->NanD(),
+                    mu->NanD());
   }
   
   static Vector3D zero() {
@@ -71,7 +75,11 @@ public:
   }
 
   bool isNan() const {
-    return (IMathUtils::instance()->isNan(_x) || IMathUtils::instance()->isNan(_y) || IMathUtils::instance()->isNan(_z));
+    const IMathUtils* mu = IMathUtils::instance();
+
+    return (mu->isNan(_x) ||
+            mu->isNan(_y) ||
+            mu->isNan(_z));
   }
   
   bool isZero() const {

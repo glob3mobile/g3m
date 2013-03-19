@@ -20,40 +20,54 @@ package org.glob3.mobile.generated;
 public class LayerTilesRenderParameters
 {
   public final Sector _topSector ;
-  public final int _splitsByLatitude;
-  public final int _splitsByLongitude;
+  public final int _topSectorSplitsByLatitude;
+  public final int _topSectorSplitsByLongitude;
+  public final int _firstLevel;
   public final int _maxLevel;
+  public final int _maxLevelForPoles;
   public final Vector2I _tileTextureResolution;
   public final Vector2I _tileMeshResolution;
   public final boolean _mercator;
 
-  public LayerTilesRenderParameters(Sector topSector, int splitsByLatitude, int splitsByLongitude, int maxLevel, Vector2I tileTextureResolution, Vector2I tileMeshResolution, boolean mercator)
+  public LayerTilesRenderParameters(Sector topSector, int topSectorSplitsByLatitude, int topSectorSplitsByLongitude, int firstLevel, int maxLevel, Vector2I tileTextureResolution, Vector2I tileMeshResolution, boolean mercator)
   {
      _topSector = new Sector(topSector);
-     _splitsByLatitude = splitsByLatitude;
-     _splitsByLongitude = splitsByLongitude;
+     _topSectorSplitsByLatitude = topSectorSplitsByLatitude;
+     _topSectorSplitsByLongitude = topSectorSplitsByLongitude;
+     _firstLevel = firstLevel;
      _maxLevel = maxLevel;
+     _maxLevelForPoles = 4;
      _tileTextureResolution = tileTextureResolution;
      _tileMeshResolution = tileMeshResolution;
      _mercator = mercator;
 
   }
 
+  public static Vector2I defaultTileMeshResolution()
+  {
+    return new Vector2I(16, 16);
+  }
+
+  public static Vector2I defaultTileTextureResolution ()
+  {
+    return new Vector2I(256, 256);
+  }
+
   public static LayerTilesRenderParameters createDefaultNonMercator(Sector topSector)
   {
-    final int splitsByLatitude = 4;
-    final int splitsByLongitude = 8;
+    final int topSectorSplitsByLatitude = 2;
+    final int topSectorSplitsByLongitude = 4;
+    final int firstLevel = 0;
     final int maxLevel = 17;
-    final Vector2I tileTextureResolution = new Vector2I(256, 256);
-    final Vector2I tileMeshResolution = new Vector2I(16, 16);
     final boolean mercator = false;
 
-    return new LayerTilesRenderParameters(topSector, splitsByLatitude, splitsByLongitude, maxLevel, tileTextureResolution, tileMeshResolution, mercator);
+    return new LayerTilesRenderParameters(topSector, topSectorSplitsByLatitude, topSectorSplitsByLongitude, firstLevel, maxLevel, LayerTilesRenderParameters.defaultTileTextureResolution(), LayerTilesRenderParameters.defaultTileMeshResolution(), mercator);
   }
 
 
   public void dispose()
   {
   }
+
 
 }

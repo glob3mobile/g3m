@@ -37,13 +37,17 @@ private:
   const std::string _name;
 
 protected:
+#ifdef C_CODE
   const LayerTilesRenderParameters* _parameters;
+#endif
+#ifdef JAVA_CODE
+  protected LayerTilesRenderParameters _parameters;
+#endif
 
   const TimeInterval& _timeToCache;
 
   void notifyChanges() const;
 
-public:
   Layer(LayerCondition* condition,
         const std::string& name,
         const TimeInterval& timeToCache,
@@ -58,6 +62,10 @@ public:
 
   }
 
+  void setParameters(const LayerTilesRenderParameters* parameters);
+
+public:
+
   virtual void setEnable(bool enable) {
     if (enable != _enable) {
       _enable = enable;
@@ -71,9 +79,8 @@ public:
 
   virtual ~Layer();
 
-  virtual std::vector<Petition*> getMapPetitions(const G3MRenderContext* rc,
-                                                 const Tile* tile,
-                                                 const Vector2I& tileTextureResolution) const = 0;
+  virtual std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
+                                                        const Tile* tile) const = 0;
 
   virtual bool isAvailable(const G3MRenderContext* rc,
                            const Tile* tile) const;
@@ -90,7 +97,8 @@ public:
     return true;
   }
 
-  virtual void initialize(const G3MContext* context) {}
+  virtual void initialize(const G3MContext* context) {
+  }
 
   void addTerrainTouchEventListener(TerrainTouchEventListener* listener) {
     _listeners.push_back(listener);

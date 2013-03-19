@@ -147,6 +147,9 @@ void LeveledTexturedMesh::render(const G3MRenderContext* rc,
 
 bool LeveledTexturedMesh::setGLTextureIdForLevel(int level,
                                                  const IGLTextureId* glTextureId) {
+  if (_mappings->size() <= 0) {
+    return false;
+  }
   if (glTextureId != NULL) {
     if (!_currentLevelIsValid || (level < _currentLevel)) {
       _mappings->at(level)->setGLTextureId(glTextureId);

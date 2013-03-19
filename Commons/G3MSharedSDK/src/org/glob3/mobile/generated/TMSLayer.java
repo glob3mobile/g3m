@@ -19,7 +19,11 @@ package org.glob3.mobile.generated;
 
 
 
+<<<<<<< HEAD
 public class TMSLayer extends Layer
+=======
+public abstract class TMSLayer extends Layer
+>>>>>>> webgl-port
 {
 
   private final URL _mapServerURL;

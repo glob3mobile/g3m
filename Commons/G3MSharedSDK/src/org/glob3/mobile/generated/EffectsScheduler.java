@@ -109,7 +109,7 @@ public class EffectsScheduler
     _effectsRuns.add(new EffectRun(effect, target));
   }
 
-  public final void cancellAllEffectsFor(EffectTarget target)
+  public final void cancelAllEffectsFor(EffectTarget target)
   {
     java.util.ArrayList<Integer> indicesToRemove = new java.util.ArrayList<Integer>();
     final TimeInterval now = _timer.now();

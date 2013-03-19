@@ -64,8 +64,6 @@ private:
   inline bool meetsRenderCriteria(const G3MRenderContext* rc,
                                   const TileRenderContext* trc);
 
-  inline std::vector<Tile*>* createSubTiles(double u, double v);
-
   inline void rawRender(const G3MRenderContext* rc,
                         const TileRenderContext* trc,
                         const GLState& parentState);
@@ -74,13 +72,19 @@ private:
                    const TileRenderContext* trc,
                    const GLState& parentState);
 
+//  const Angle calculateSplitLatitude(const Angle& lowerLatitude,
+//                                     const Angle& upperLatitude,
+//                                     bool mercator) const;
+
   inline Tile* createSubTile(const Angle& lowerLat, const Angle& lowerLon,
                              const Angle& upperLat, const Angle& upperLon,
                              const int level,
-                             const int row, const int column);
+                             const int row, const int column,
+                             bool setParent);
 
 
-  inline std::vector<Tile*>* getSubTiles(double u, double v);
+  inline std::vector<Tile*>* getSubTiles(const Angle& splitLatitude,
+                                         const Angle& splitLongitude);
 
   Tile(const Tile& that);
 
@@ -179,6 +183,9 @@ public:
   inline void prune(TileTexturizer*        texturizer,
                     ElevationDataProvider* elevationDataProvider);
 
+  void toBeDeleted(TileTexturizer*        texturizer,
+                   ElevationDataProvider* elevationDataProvider);
+
   void onElevationData(ElevationData* elevationData,
                        float verticalExaggeration,
                        MeshHolder* meshHolder,
@@ -191,6 +198,10 @@ public:
 
 
   const std::string description() const;
+
+  inline std::vector<Tile*>* createSubTiles(const Angle& splitLatitude,
+                                            const Angle& splitLongitude,
+                                            bool setParent);
 
 };
 

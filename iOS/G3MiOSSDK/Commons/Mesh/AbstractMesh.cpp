@@ -47,6 +47,7 @@ _translationMatrix(( center.isNan() || center.isZero() )
 _lineWidth(lineWidth),
 _pointSize(pointSize)
 {
+
 }
 
 Extent* AbstractMesh::computeExtent() const {

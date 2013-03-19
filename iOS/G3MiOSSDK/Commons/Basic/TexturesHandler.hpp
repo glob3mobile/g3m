@@ -71,7 +71,7 @@ public:
 
   bool equalsTo(const TextureSpec& that) const {
     return ((_id.compare(that._id) == 0) &&
-            (_width == that._width) &&
+            (_width  == that._width) &&
             (_height == that._height));
   }
 

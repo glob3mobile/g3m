@@ -60,7 +60,7 @@ public class GEOJSONParser
 
   private GEOObject pvtParse()
   {
-    JSONBaseObject jsonBaseObject = IJSONParser.instance().parse(_json);
+    final JSONBaseObject jsonBaseObject = IJSONParser.instance().parse(_json);
   
     GEOObject result = null;
   

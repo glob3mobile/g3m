@@ -36,7 +36,7 @@ public abstract class Layer
 
   private final String _name;
 
-  protected final LayerTilesRenderParameters _parameters;
+  protected LayerTilesRenderParameters _parameters;
 
   protected final TimeInterval _timeToCache;
 
@@ -52,7 +52,7 @@ public abstract class Layer
     }
   }
 
-  public Layer(LayerCondition condition, String name, TimeInterval timeToCache, LayerTilesRenderParameters parameters)
+  protected Layer(LayerCondition condition, String name, TimeInterval timeToCache, LayerTilesRenderParameters parameters)
   {
      _condition = condition;
      _name = name;
@@ -62,6 +62,17 @@ public abstract class Layer
      _parameters = parameters;
 
   }
+
+  protected final void setParameters(LayerTilesRenderParameters parameters)
+  {
+    if (parameters != _parameters)
+    {
+      _parameters = null;
+      _parameters = parameters;
+      notifyChanges();
+    }
+  }
+
 
   public void setEnable(boolean enable)
   {
@@ -81,11 +92,10 @@ public abstract class Layer
   {
     if (_condition != null)
        _condition.dispose();
-    if (_parameters != null)
-       _parameters.dispose();
+    _parameters = null;
   }
 
-  public abstract java.util.ArrayList<Petition> getMapPetitions(G3MRenderContext rc, Tile tile, Vector2I tileTextureResolution);
+  public abstract java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, Tile tile);
 
   public boolean isAvailable(G3MRenderContext rc, Tile tile)
   {

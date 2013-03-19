@@ -10,9 +10,10 @@ public class LayerSet
 
   private LayerTilesRenderParameters createLayerTilesRenderParameters()
   {
-    Sector mergedSector = null;
-    int splitsByLatitude = 0;
-    int splitsByLongitude = 0;
+    Sector topSector = null;
+    int topSectorSplitsByLatitude = 0;
+    int topSectorSplitsByLongitude = 0;
+    int firstLevel = 0;
     int maxLevel = 0;
     int tileTextureWidth = 0;
     int tileTextureHeight = 0;
@@ -26,19 +27,24 @@ public class LayerSet
     {
       Layer layer = _layers.get(i);
   
-      if (layer.isEnable())
+      if (layer.isEnable() && layer.isReady())
       {
         final LayerTilesRenderParameters layerParam = layer.getLayerTilesRenderParameters();
+  
+        if (layerParam == null)
+        {
+          continue;
+        }
   
         if (first)
         {
           first = false;
   
-          mergedSector = new Sector(layerParam._topSector);
-          splitsByLatitude = layerParam._splitsByLatitude;
-          splitsByLongitude = layerParam._splitsByLongitude;
+          topSector = new Sector(layerParam._topSector);
+          topSectorSplitsByLatitude = layerParam._topSectorSplitsByLatitude;
+          topSectorSplitsByLongitude = layerParam._topSectorSplitsByLongitude;
+          firstLevel = layerParam._firstLevel;
           maxLevel = layerParam._maxLevel;
-  
           tileTextureWidth = layerParam._tileTextureResolution._x;
           tileTextureHeight = layerParam._tileTextureResolution._y;
           tileMeshWidth = layerParam._tileMeshResolution._x;
@@ -47,33 +53,38 @@ public class LayerSet
         }
         else
         {
-          if (!mergedSector.fullContains(layerParam._topSector))
+          if (!topSector.isEqualsTo(layerParam._topSector))
           {
-            Sector oldSector = mergedSector;
-            mergedSector = new Sector(oldSector.mergedWith(layerParam._topSector));
-            if (oldSector != null)
-               oldSector.dispose();
-          }
-  
-          if (splitsByLatitude != layerParam._splitsByLatitude)
-          {
-            ILogger.instance().logError("Inconsistency in Layer's Parameters: splitsByLatitude");
+            ILogger.instance().logError("Inconsistency in Layer's Parameters: topSector");
             return null;
           }
   
-          if (splitsByLongitude != layerParam._splitsByLongitude)
+          if (topSectorSplitsByLatitude != layerParam._topSectorSplitsByLatitude)
           {
-            ILogger.instance().logError("Inconsistency in Layer's Parameters: splitsByLongitude");
+            ILogger.instance().logError("Inconsistency in Layer's Parameters: topSectorSplitsByLatitude");
             return null;
           }
   
-          //if (layerParam->_maxLevel > maxLevel) {
-          //  maxLevel = layerParam->_maxLevel;
-          //}
-          if (maxLevel != layerParam._maxLevel)
+          if (topSectorSplitsByLongitude != layerParam._topSectorSplitsByLongitude)
           {
-            ILogger.instance().logError("Inconsistency in Layer's Parameters: maxLevel");
+            ILogger.instance().logError("Inconsistency in Layer's Parameters: topSectorSplitsByLongitude");
             return null;
+          }
+  
+          // if ( maxLevel != layerParam->_maxLevel ) {
+          //   ILogger::instance()->logError("Inconsistency in Layer's Parameters: maxLevel");
+          //   return NULL;
+          // }
+          if (maxLevel > layerParam._maxLevel)
+          {
+            ILogger.instance().logWarning("Inconsistency in Layer's Parameters: maxLevel (downgrading from %d to %d)", maxLevel, layerParam._maxLevel);
+            maxLevel = layerParam._maxLevel;
+          }
+  
+          if (firstLevel < layerParam._firstLevel)
+          {
+            ILogger.instance().logWarning("Inconsistency in Layer's Parameters: firstLevel (upgrading from %d to %d)", firstLevel, layerParam._firstLevel);
+            firstLevel = layerParam._firstLevel;
           }
   
           if ((tileTextureWidth != layerParam._tileTextureResolution._x) || (tileTextureHeight != layerParam._tileTextureResolution._y))
@@ -104,12 +115,12 @@ public class LayerSet
       return null;
     }
   
-    final Sector topSector = new Sector(mergedSector);
-    if (mergedSector != null)
-       mergedSector.dispose();
-    mergedSector = null;
+    LayerTilesRenderParameters parameters = new LayerTilesRenderParameters(topSector, topSectorSplitsByLatitude, topSectorSplitsByLongitude, firstLevel, maxLevel, new Vector2I(tileTextureWidth, tileTextureHeight), new Vector2I(tileMeshWidth, tileMeshHeight), mercator);
   
-    return new LayerTilesRenderParameters(topSector, splitsByLatitude, splitsByLongitude, maxLevel, new Vector2I(tileTextureWidth, tileTextureHeight), new Vector2I(tileMeshWidth, tileMeshHeight), mercator);
+    if (topSector != null)
+       topSector.dispose();
+  
+    return parameters;
   }
   private void layersChanged()
   {
@@ -149,16 +160,17 @@ public class LayerSet
     layersChanged();
   }
 
-  public final java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, Tile tile, Vector2I tileTextureResolution)
+  public final java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, Tile tile)
   {
     java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
   
-    for (int i = 0; i < _layers.size(); i++)
+    final int layersSize = _layers.size();
+    for (int i = 0; i < layersSize; i++)
     {
       Layer layer = _layers.get(i);
       if (layer.isAvailable(rc, tile))
       {
-        java.util.ArrayList<Petition> pet = layer.getMapPetitions(rc, tile, tileTextureResolution);
+        java.util.ArrayList<Petition> pet = layer.createTileMapPetitions(rc, tile);
   
         //Storing petitions
         for (int j = 0; j < pet.size(); j++)
@@ -275,5 +287,7 @@ public class LayerSet
     }
     return _layerTilesRenderParameters;
   }
+
+//  const Angle calculateSplitLatitude(const Tile* tile) const;
 
 }

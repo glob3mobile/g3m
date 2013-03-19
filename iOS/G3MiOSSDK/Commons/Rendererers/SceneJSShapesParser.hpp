@@ -24,6 +24,7 @@ class SGGeometryNode;
 class SGTranslateNode;
 class SGLayerNode;
 class Color;
+class SceneJSParserStatistics;
 
 class SceneJSShapesParser {
 private:
@@ -56,6 +57,8 @@ private:
   SGLayerNode*     createLayerNode    (const JSONObject* jsonObject) const;
 
   Color* parseColor(const JSONObject* jsColor) const;
+  
+  SceneJSParserStatistics* _statistics;
 
 public:
 

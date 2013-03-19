@@ -241,13 +241,15 @@ bool Box::touchesBox(const Box* box) const {
 }
 
 Extent* Box::mergedWithBox(const Box* that) const {
-  const double lowerX = IMathUtils::instance()->min(_lower._x, that->_lower._x);
-  const double lowerY = IMathUtils::instance()->min(_lower._y, that->_lower._y);
-  const double lowerZ = IMathUtils::instance()->min(_lower._z, that->_lower._z);
+  const IMathUtils* mu = IMathUtils::instance();
 
-  const double upperX = IMathUtils::instance()->max(_upper._x, that->_upper._x);
-  const double upperY = IMathUtils::instance()->max(_upper._y, that->_upper._y);
-  const double upperZ = IMathUtils::instance()->max(_upper._z, that->_upper._z);
+  const double lowerX = mu->min(_lower._x, that->_lower._x);
+  const double lowerY = mu->min(_lower._y, that->_lower._y);
+  const double lowerZ = mu->min(_lower._z, that->_lower._z);
+
+  const double upperX = mu->max(_upper._x, that->_upper._x);
+  const double upperY = mu->max(_upper._y, that->_upper._y);
+  const double upperZ = mu->max(_upper._z, that->_upper._z);
 
   return new Box(Vector3D(lowerX, lowerY, lowerZ),
                  Vector3D(upperX, upperY, upperZ));

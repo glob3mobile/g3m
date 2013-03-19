@@ -87,7 +87,7 @@ public class EllipsoidShape extends AbstractMeshShape
       }
     }
   
-    return new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), _borderWidth, 1, borderColor);
+    return new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), (_borderWidth < 1) ? 1 : _borderWidth, 1, borderColor);
   }
   private Mesh createSurfaceMesh(G3MRenderContext rc, FloatBufferBuilderFromGeodetic vertices, FloatBufferBuilderFromCartesian2D texCoords)
   {
@@ -128,7 +128,7 @@ public class EllipsoidShape extends AbstractMeshShape
   
     // create mesh
     Color surfaceColor = (_surfaceColor == null) ? null : new Color(_surfaceColor);
-    Mesh im = new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), _borderWidth, 1, surfaceColor);
+    Mesh im = new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), (_borderWidth < 1) ? 1 : _borderWidth, 1, surfaceColor);
   
     final IGLTextureId texId = getTextureId(rc);
     if (texId == null)
@@ -181,9 +181,6 @@ public class EllipsoidShape extends AbstractMeshShape
     FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.givenCenter(), ellipsoid, Vector3D.zero());
     FloatBufferBuilderFromCartesian2D texCoords = new FloatBufferBuilderFromCartesian2D();
   
-  
-    final double pi4 = IMathUtils.instance().pi() * 4;
-  
     final short resolution2Minus2 = (short)(2 *_resolution-2);
     final short resolutionMinus1 = (short)(_resolution-1);
   
@@ -199,26 +196,17 @@ public class EllipsoidShape extends AbstractMeshShape
         vertices.add(innerPoint);
   
   
-        double vv;
-        if (_mercator)
-        {
-          double latitudeInDegrees = innerPoint.latitude().degrees();
-          if (latitudeInDegrees > 85)
-          {
-            latitudeInDegrees = 85;
-          }
-          else if (latitudeInDegrees < -85)
-          {
-            latitudeInDegrees = -85;
-          }
+  //      double vv;
+  //      if (_mercator) {
+  //        vv = MercatorUtils::getMercatorV(innerPoint.latitude());
+  //      }
+  //      else {
+  //        vv = v;
+  //      }
   
-          final double latSin = Angle.fromDegrees(latitudeInDegrees).sinus();
-          vv = 1.0 - ((IMathUtils.instance().log((1.0 + latSin) / (1.0 - latSin)) / pi4) + 0.5);
-        }
-        else
-        {
-          vv = v;
-        }
+        final double vv = _mercator ? MercatorUtils.getMercatorV(innerPoint.latitude()) : v;
+        /*                    */
+        /*                    */
   
         texCoords.add((float) u, (float) vv);
       }

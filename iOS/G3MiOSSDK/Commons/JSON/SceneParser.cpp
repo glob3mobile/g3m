@@ -90,7 +90,7 @@ void SceneParser::parse(LayerSet* layerSet, std::string namelessParameter){
   _panoSources.clear();
   _legend.clear();
   
-  JSONBaseObject* json = IJSONParser::instance()->parse(namelessParameter);
+  const JSONBaseObject* json = IJSONParser::instance()->parse(namelessParameter);
   parserJSONLayerList(layerSet, json->asObject()->getAsObject(LAYERS));
   IJSONParser::instance()->deleteJSONData(json);
 }
@@ -173,7 +173,7 @@ void SceneParser::parserJSONWMSLayer(LayerSet* layerSet, const JSONObject* jsonL
                                     "EPSG:4326",
                                     "",
                                     transparent,
-                                    levelTileCondition, TimeInterval::fromDays(30), new LayerTilesRenderParameters(sector,jsonSplitsLat,jsonSplitsLon,16,Vector2I(256,256),Vector2I(16,16),false));
+                                    levelTileCondition, TimeInterval::fromDays(30), new LayerTilesRenderParameters(Sector::fullSphere(),jsonSplitsLat,jsonSplitsLon,0,16,Vector2I(256,256),Vector2I(16,16),false));
   layerSet->addLayer(wmsLayer);
 }
 
@@ -213,7 +213,7 @@ void SceneParser::parserJSONTMSLayer(LayerSet* layerSet, const JSONObject* jsonL
                                     "EPSG:4326",
                                     transparent,
                                     levelTileCondition,
-                                    TimeInterval::fromDays(30), new LayerTilesRenderParameters(sector,jsonSplitsLat,jsonSplitsLon,16,Vector2I(256,256),Vector2I(16,16),false));
+                                    TimeInterval::fromDays(30), new LayerTilesRenderParameters(Sector::fullSphere(),jsonSplitsLat,jsonSplitsLon,0,16,Vector2I(256,256),Vector2I(16,16),false));
   
   layerSet->addLayer(tmsLayer);
 }

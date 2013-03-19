@@ -19,8 +19,6 @@ package org.glob3.mobile.generated;
 
 public abstract class IMathUtils
 {
-
-
   private static IMathUtils _instance = null;
 
   public static void setInstance(IMathUtils math)
@@ -54,6 +52,9 @@ public abstract class IMathUtils
 
   public abstract double sin(double v);
   public abstract float sin(float v);
+
+  public abstract double sinh(double v);
+  public abstract float sinh(float v);
 
   public abstract double asin(double v);
   public abstract float asin(float v);
@@ -113,8 +114,26 @@ public abstract class IMathUtils
   public abstract int parseIntHex(String hex);
 
   public abstract double min(double d1, double d2);
-  public abstract double max(double d1, double d2);
+  public abstract float min(float f1, float f2);
 
+  public abstract double max(double d1, double d2);
+  public abstract float max(float f1, float f2);
+
+  public abstract int max(int i1, int i2);
+  public abstract long max(long l1, long l2);
+
+  public double max(double d1, double d2, double d3)
+  {
+    return max(max(d1, d2), d3);
+  }
+
+  public float max(float f1, float f2, float f3)
+  {
+    return max(max(f1, f2), f3);
+  }
+
+  public abstract double floor(double d);
+  public abstract float floor(float f);
 
   public double linearInterpolation(double from, double to, double alpha)
   {
@@ -159,6 +178,26 @@ public abstract class IMathUtils
     if (value > max)
        return max;
     return value;
+  }
+
+  public boolean isEquals(double x, double y)
+  {
+    if (x == y)
+    {
+      return true;
+    }
+    final double epsilon = 1e-8;
+    return Math.abs(x - y) <= epsilon * max(Math.abs(x), Math.abs(y), 1.0);
+  }
+
+  public boolean isEquals(float x, float y)
+  {
+    if (x == y)
+    {
+      return true;
+    }
+    final float epsilon = 1e-8f;
+    return Math.abs(x - y) <= epsilon * max(Math.abs(x), Math.abs(y), 1.0f);
   }
 
 }

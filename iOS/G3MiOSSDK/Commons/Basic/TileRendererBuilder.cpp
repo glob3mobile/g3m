@@ -19,7 +19,7 @@ TileRendererBuilder::TileRendererBuilder() {
   _showStatistics = false;
   _renderDebug = false;
   _useTilesSplitBudget = true;
-  _forceTopLevelTilesRenderOnStart = true;
+  _forceFirstLevelTilesRenderOnStart = true;
   _incrementalTileQuality = false;
 
   _parameters = NULL;
@@ -118,12 +118,12 @@ bool TileRendererBuilder::getUseTilesSplitBudget() {
 }
 
 /**
- * Returns the forceTopLevelTilesRenderOnStart flag.
+ * Returns the forceFirstLevelTilesRenderOnStart flag.
  *
- * @return _forceTopLevelTilesRenderOnStart: bool
+ * @return _forceFirstLevelTilesRenderOnStart: bool
  */
-bool TileRendererBuilder::getForceTopLevelTilesRenderOnStart() {
-  return _forceTopLevelTilesRenderOnStart;
+bool TileRendererBuilder::getForceFirstLevelTilesRenderOnStart() {
+  return _forceFirstLevelTilesRenderOnStart;
 }
 
 /**
@@ -137,8 +137,6 @@ bool TileRendererBuilder::getIncrementalTileQuality() {
 
 /**
  * Returns the array of visibleSectorListeners.
- *
- * @return _forceTopLevelTilesRenderOnStart: std::vector<VisibleSectorListener*>
  */
 std::vector<VisibleSectorListener*>* TileRendererBuilder::getVisibleSectorListeners() {
   if (!_visibleSectorListeners) {
@@ -227,8 +225,8 @@ void TileRendererBuilder::setUseTilesSplitBuget(const bool useTilesSplitBudget) 
   _useTilesSplitBudget = useTilesSplitBudget;
 }
 
-void TileRendererBuilder::setForceTopLevelTilesRenderOnStart(const bool forceTopLevelTilesRenderOnStart) {
-  _forceTopLevelTilesRenderOnStart = forceTopLevelTilesRenderOnStart;
+void TileRendererBuilder::setForceFirstLevelTilesRenderOnStart(const bool forceFirstLevelTilesRenderOnStart) {
+  _forceFirstLevelTilesRenderOnStart = forceFirstLevelTilesRenderOnStart;
 }
 
 void TileRendererBuilder::setIncrementalTileQuality(const bool incrementalTileQuality) {
@@ -246,11 +244,11 @@ void TileRendererBuilder::setTexturePriority(long long texturePriority) {
 }
 
 TileRenderer* TileRendererBuilder::create() {
-  int __TODO_make_configurable;
+  int _TODO_make_configurable_1;
   
   ElevationDataProvider* elevationDataProvider = NULL;
 
-  //  ElevationDataProvider* elevationDataProvider = new WMSBillElevationDataProvider();
+//  ElevationDataProvider* elevationDataProvider = new WMSBillElevationDataProvider();
   
 //  ElevationDataProvider* elevationDataProvider;
 //  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
@@ -264,13 +262,24 @@ TileRenderer* TileRendererBuilder::create() {
 //                                                              Vector2I(4096, 2048),
 //                                                              0);
 
-  //  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-4096x2048.bil", false),
-  //                                                              Sector::fullSphere(),
-  //                                                              Vector2I(4096, 2048),
-  //                                                              0);
-  
-  int ___TODO_make_configurable;
-  float verticalExaggeration = 1;
+//  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-4096x2048.bil", false),
+//                                                              Sector::fullSphere(),
+//                                                              Vector2I(4096, 2048),
+//                                                              0);
+
+//  ElevationDataProvider* elevationDataProvider;
+//  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///caceres-2008x2032.bil", false),
+//                                                              Sector::fromDegrees(
+//                                                                                  39.4642996294239623,
+//                                                                                  -6.3829977122432933,
+//                                                                                  39.4829891936013553,
+//                                                                                  -6.3645288909498845
+//                                                                                  ),
+//                                                              Vector2I(2008, 2032),
+//                                                              0);
+
+  int _TODO_make_configurable_2;
+  float verticalExaggeration = 5;
   
   TileRenderer* tileRenderer = new TileRenderer(getTileTessellator(),
                                                 elevationDataProvider,
@@ -301,7 +310,7 @@ TileRenderer* TileRendererBuilder::create() {
 TilesRenderParameters* TileRendererBuilder::createTileRendererParameters() {
   return new TilesRenderParameters(getRenderDebug(),
                                    getUseTilesSplitBudget(),
-                                   getForceTopLevelTilesRenderOnStart(),
+                                   getForceFirstLevelTilesRenderOnStart(),
                                    getIncrementalTileQuality());
 }
 

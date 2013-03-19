@@ -86,6 +86,8 @@ public class Camera
   
     _cartesianCenterOfView = new MutableVector3D(that._cartesianCenterOfView);
   
+    if (_geodeticCenterOfView != null)
+       _geodeticCenterOfView.dispose();
     _geodeticCenterOfView = (that._geodeticCenterOfView == null) ? null : new Geodetic3D(that._geodeticCenterOfView);
   
     if (_frustum != null)

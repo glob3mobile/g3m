@@ -337,21 +337,27 @@ public class Mark
     }
   }
 
-  public final void render(G3MRenderContext rc)
+  public final void render(G3MRenderContext rc, Vector3D cameraPosition)
   {
-    final Camera camera = rc.getCurrentCamera();
     final Planet planet = rc.getPlanet();
   
-    final Vector3D cameraPosition = camera.getCartesianPosition();
     final Vector3D markPosition = getCartesianPosition(planet);
   
     final Vector3D markCameraVector = markPosition.sub(cameraPosition);
-    final double distanceToCamera = markCameraVector.length();
   
     // mark will be renderered only if is renderable by distance and placed on a visible globe area
-    final boolean renderableByDistance = (_minDistanceToCamera == 0) || (distanceToCamera <= _minDistanceToCamera);
-    _renderedMark = false;
+    boolean renderableByDistance;
+    if (_minDistanceToCamera == 0)
+    {
+      renderableByDistance = true;
+    }
+    else
+    {
+      final double squaredDistanceToCamera = markCameraVector.squaredLength();
+      renderableByDistance = (squaredDistanceToCamera <= (_minDistanceToCamera * _minDistanceToCamera));
+    }
   
+    _renderedMark = false;
     if (renderableByDistance)
     {
       final Vector3D normalAtMarkPosition = planet.geodeticSurfaceNormal(markPosition);
@@ -451,11 +457,11 @@ public class Mark
 
   public final boolean touched()
   {
-    if (_listener == null)
-    {
-      return false;
-    }
-    return _listener.touchedMark(this);
+    return (_listener == null) ? false : _listener.touchedMark(this);
+  //  if (_listener == NULL) {
+  //    return false;
+  //  }
+  //  return _listener->touchedMark(this);
   }
 
   public final Vector3D getCartesianPosition(Planet planet)

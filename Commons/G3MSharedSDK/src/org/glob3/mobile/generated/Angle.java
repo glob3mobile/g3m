@@ -67,6 +67,11 @@ public class Angle
     return Angle.fromDegrees(0);
   }
 
+  public static Angle pi()
+  {
+    return Angle.fromDegrees(180);
+  }
+
   public static Angle nan()
   {
     return Angle.fromDegrees(IMathUtils.instance().NanD());
@@ -102,6 +107,11 @@ public class Angle
   public final double cosinus()
   {
     return IMathUtils.instance().cos(_radians);
+  }
+
+  public final double tangent()
+  {
+    return IMathUtils.instance().tan(_radians);
   }
 
   public final double degrees()
@@ -217,7 +227,8 @@ public class Angle
 
   public final boolean isEqualsTo(Angle that)
   {
-    return (_degrees == that._degrees) || (_radians == that._radians);
+    final IMathUtils mu = IMathUtils.instance();
+    return mu.isEquals(_degrees, that._degrees) || mu.isEquals(_radians, that._radians);
   }
 
   @Override

@@ -60,7 +60,7 @@ double BufferElevationData::getElevationAt(const Angle& latitude,
     return _noDataValue;
   }
 
-  IMathUtils* mu = IMathUtils::instance();
+  const IMathUtils* mu = IMathUtils::instance();
 
   const Vector2D uv = _sector.getUVCoordinates(latitude, longitude);
   const double u = mu->clamp(uv._x, 0, 1);

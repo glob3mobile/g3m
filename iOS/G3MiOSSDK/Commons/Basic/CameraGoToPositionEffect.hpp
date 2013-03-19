@@ -45,16 +45,15 @@ private:
 
     const double middleHeight = (distanceInDeg / distanceInDegreesMaxHeight) * maxHeight;
 
-    /*
-     const double averageHeight = (_fromPosition.height() + _toPosition.height()) / 2;
-     if (middleHeight < averageHeight) {
-     return averageHeight;
-     }
-     */
     const double averageHeight = (_fromPosition.height() + _toPosition.height()) / 2;
     if (middleHeight < averageHeight) {
-      return (averageHeight + middleHeight) / 2.0;
+      const double delta = (averageHeight - middleHeight) / 2.0;
+      return averageHeight + delta;
     }
+//    const double averageHeight = (_fromPosition.height() + _toPosition.height()) / 2;
+//    if (middleHeight < averageHeight) {
+//      return (averageHeight + middleHeight) / 2.0;
+//    }
 
     return middleHeight;
   }

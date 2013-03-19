@@ -20,6 +20,9 @@
 #include "DownloadPriority.hpp"
 #include "ElevationDataProvider.hpp"
 #include "LayerTilesRenderParameters.hpp"
+#include "MercatorUtils.hpp"
+
+#include <algorithm>
 
 class VisibleSectorListenerEntry {
 private:
@@ -115,22 +118,24 @@ _texturizer(texturizer),
 _layerSet(layerSet),
 _parameters(parameters),
 _showStatistics(showStatistics),
-_topTilesJustCreated(false),
+_firstLevelTilesJustCreated(false),
 _lastSplitTimer(NULL),
 _lastCamera(NULL),
 _firstRender(false),
 _context(NULL),
 _lastVisibleSector(NULL),
-_texturePriority(texturePriority)
+_texturePriority(texturePriority),
+_allFirstLevelTilesAreTextureSolved(false)
 {
   _layerSet->setChangeListener(this);
 }
 
 void TileRenderer::recreateTiles() {
-  pruneTopLevelTiles();
-  clearTopLevelTiles();
+  pruneFirstLevelTiles();
+  clearFirstLevelTiles();
   _firstRender = true;
-  createTopLevelTiles(_context);
+  _allFirstLevelTilesAreTextureSolved = false;
+  createFirstLevelTiles(_context);
 }
 
 class RecreateTilesTask : public GTask {
@@ -155,7 +160,7 @@ void TileRenderer::changed(const LayerSet* layerSet) {
 }
 
 TileRenderer::~TileRenderer() {
-  clearTopLevelTiles();
+  clearFirstLevelTiles();
 
   delete _tessellator;
   delete _elevationDataProvider;
@@ -173,60 +178,174 @@ TileRenderer::~TileRenderer() {
   }
 }
 
-void TileRenderer::clearTopLevelTiles() {
-  for (int i = 0; i < _topLevelTiles.size(); i++) {
-    Tile* tile = _topLevelTiles[i];
+void TileRenderer::clearFirstLevelTiles() {
+  const int firstLevelTilesCount = _firstLevelTiles.size();
+  for (int i = 0; i < firstLevelTilesCount; i++) {
+    Tile* tile = _firstLevelTiles[i];
+
+    tile->toBeDeleted(_texturizer, _elevationDataProvider);
+
     delete tile;
   }
 
-  _topLevelTiles.clear();
+  _firstLevelTiles.clear();
 }
 
-void TileRenderer::createTopLevelTiles(const G3MContext* context) {
+#ifdef C_CODE
+class SortTilesClass {
+public:
+  bool operator() (Tile* i, Tile* j) {
+    const int rowI = i->getRow();
+    const int rowJ = j->getRow();
 
-  const LayerTilesRenderParameters* layerParameters = _layerSet->getLayerTilesRenderParameters();
-  if (layerParameters == NULL) {
-    ILogger::instance()->logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't create topTiles");
+    if (rowI < rowJ) {
+      return true;
+    }
+    if (rowI > rowJ) {
+      return false;
+    }
+
+    return ( i->getColumn() < j->getColumn() );
+  }
+} sortTilesObject;
+#endif
+
+void TileRenderer::sortTiles(std::vector<Tile*>& tiles) const {
+#ifdef C_CODE
+  std::sort(tiles.begin(),
+            tiles.end(),
+            sortTilesObject);
+#endif
+#ifdef JAVA_CODE
+  java.util.Collections.sort(tiles, //
+                             new java.util.Comparator<Tile>() {
+                               @Override
+                               public int compare(final Tile i,
+                                                  final Tile j) {
+                                 final int rowI = i.getRow();
+                                 final int rowJ = j.getRow();
+                                 if (rowI < rowJ) {
+                                   return -1;
+                                 }
+                                 if (rowI > rowJ) {
+                                   return 1;
+                                 }
+
+                                 final int columnI = i.getColumn();
+                                 final int columnJ = j.getColumn();
+                                 if (columnI < columnJ) {
+                                   return -1;
+                                 }
+                                 if (columnI > columnJ) {
+                                   return 1;
+                                 }
+                                 return 0;
+                               }
+                             });
+#endif
+}
+
+void TileRenderer::createFirstLevelTiles(std::vector<Tile*>& firstLevelTiles,
+                                         Tile* tile,
+                                         int firstLevel,
+                                         bool mercator) const {
+  if (tile->getLevel() == firstLevel) {
+    firstLevelTiles.push_back(tile);
+  }
+  else {
+    const Sector sector = tile->getSector();
+    const Geodetic2D lower = sector.lower();
+    const Geodetic2D upper = sector.upper();
+
+    const Angle splitLongitude = Angle::midAngle(lower.longitude(),
+                                                 upper.longitude());
+
+    const Angle splitLatitude = mercator
+    /*                               */ ? MercatorUtils::calculateSplitLatitude(lower.latitude(),
+                                                                                upper.latitude())
+    /*                               */ : Angle::midAngle(lower.latitude(),
+                                                          upper.latitude());
+
+
+    std::vector<Tile*>* children = tile->createSubTiles(splitLatitude,
+                                                        splitLongitude,
+                                                        false);
+
+    const int childrenSize = children->size();
+    for (int i = 0; i < childrenSize; i++) {
+      Tile* child = children->at(i);
+      createFirstLevelTiles(firstLevelTiles, child, firstLevel, mercator);
+    }
+
+    delete children;
+    delete tile;
+  }
+}
+
+void TileRenderer::createFirstLevelTiles(const G3MContext* context) {
+
+  const LayerTilesRenderParameters* parameters = _layerSet->getLayerTilesRenderParameters();
+  if (parameters == NULL) {
+    ILogger::instance()->logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't create first-level tiles");
     return;
   }
 
-  const Angle fromLatitude  = layerParameters->_topSector.lower().latitude();
-  const Angle fromLongitude = layerParameters->_topSector.lower().longitude();
+  std::vector<Tile*> topLevelTiles;
 
-  const Angle deltaLan = layerParameters->_topSector.getDeltaLatitude();
-  const Angle deltaLon = layerParameters->_topSector.getDeltaLongitude();
+  const Angle fromLatitude  = parameters->_topSector.lower().latitude();
+  const Angle fromLongitude = parameters->_topSector.lower().longitude();
 
-  const Angle tileHeight = deltaLan.div(layerParameters->_splitsByLatitude);
-  const Angle tileWidth = deltaLon.div(layerParameters->_splitsByLongitude);
+  const Angle deltaLan = parameters->_topSector.getDeltaLatitude();
+  const Angle deltaLon = parameters->_topSector.getDeltaLongitude();
 
-  for (int row = 0; row < layerParameters->_splitsByLatitude; row++) {
+  const int topSectorSplitsByLatitude  = parameters->_topSectorSplitsByLatitude;
+  const int topSectorSplitsByLongitude = parameters->_topSectorSplitsByLongitude;
+
+  const Angle tileHeight = deltaLan.div(topSectorSplitsByLatitude);
+  const Angle tileWidth  = deltaLon.div(topSectorSplitsByLongitude);
+
+  for (int row = 0; row < topSectorSplitsByLatitude; row++) {
     const Angle tileLatFrom = tileHeight.times(row).add(fromLatitude);
-    const Angle tileLatTo = tileLatFrom.add(tileHeight);
+    const Angle tileLatTo   = tileLatFrom.add(tileHeight);
 
-    for (int col = 0; col < layerParameters->_splitsByLongitude; col++) {
+    for (int col = 0; col < topSectorSplitsByLongitude; col++) {
       const Angle tileLonFrom = tileWidth.times(col).add(fromLongitude);
-      const Angle tileLonTo = tileLonFrom.add(tileWidth);
+      const Angle tileLonTo   = tileLonFrom.add(tileWidth);
 
       const Geodetic2D tileLower(tileLatFrom, tileLonFrom);
       const Geodetic2D tileUpper(tileLatTo, tileLonTo);
       const Sector sector(tileLower, tileUpper);
 
-//      Tile* tile = new Tile(_texturizer, NULL, sector, _parameters->_topLevel, row, col);
       Tile* tile = new Tile(_texturizer, NULL, sector, 0, row, col);
-      _topLevelTiles.push_back(tile);
+      if (parameters->_firstLevel == 0) {
+        _firstLevelTiles.push_back(tile);
+      }
+      else {
+        topLevelTiles.push_back(tile);
+      }
     }
   }
 
-  context->getLogger()->logInfo("Created %d top level tiles", _topLevelTiles.size());
+  if (parameters->_firstLevel > 0) {
+    const int topLevelTilesSize = topLevelTiles.size();
+    for (int i = 0; i < topLevelTilesSize; i++) {
+      Tile* tile = topLevelTiles[i];
+      createFirstLevelTiles(_firstLevelTiles, tile, parameters->_firstLevel, parameters->_mercator);
+    }
+  }
 
-  _topTilesJustCreated = true;
+  sortTiles(_firstLevelTiles);
+
+  context->getLogger()->logInfo("Created %d first level tiles", _firstLevelTiles.size());
+
+  _firstLevelTilesJustCreated = true;
 }
 
 void TileRenderer::initialize(const G3MContext* context) {
   _context = context;
 
-  clearTopLevelTiles();
-  createTopLevelTiles(context);
+  clearFirstLevelTiles();
+  createFirstLevelTiles(context);
 
   delete _lastSplitTimer;
   _lastSplitTimer = context->getFactory()->createTimer();
@@ -249,12 +368,12 @@ bool TileRenderer::isReadyToRender(const G3MRenderContext *rc) {
     }
   }
 
-  if (_topTilesJustCreated) {
-    _topTilesJustCreated = false;
+  if (_firstLevelTilesJustCreated) {
+    _firstLevelTilesJustCreated = false;
 
-    const int topLevelTilesCount = _topLevelTiles.size();
+    const int firstLevelTilesCount = _firstLevelTiles.size();
 
-    if (_parameters->_forceTopLevelTilesRenderOnStart) {
+    if (_parameters->_forceFirstLevelTilesRenderOnStart) {
       TilesStatistics statistics;
 
       TileRenderContext trc(_tessellator,
@@ -268,39 +387,43 @@ bool TileRenderer::isReadyToRender(const G3MRenderContext *rc) {
                             _texturePriority,
                             _verticalExaggeration);
 
-      for (int i = 0; i < topLevelTilesCount; i++) {
-        Tile* tile = _topLevelTiles[i];
+      for (int i = 0; i < firstLevelTilesCount; i++) {
+        Tile* tile = _firstLevelTiles[i];
         tile->prepareForFullRendering(rc, &trc);
       }
     }
 
     if (_texturizer != NULL) {
-      for (int i = 0; i < topLevelTilesCount; i++) {
-        Tile* tile = _topLevelTiles[i];
+      for (int i = 0; i < firstLevelTilesCount; i++) {
+        Tile* tile = _firstLevelTiles[i];
         _texturizer->justCreatedTopTile(rc, tile, _layerSet);
       }
     }
   }
 
-  if (_parameters->_forceTopLevelTilesRenderOnStart) {
-    const int topLevelTilesCount = _topLevelTiles.size();
-    for (int i = 0; i < topLevelTilesCount; i++) {
-      Tile* tile = _topLevelTiles[i];
-      if (!tile->isTextureSolved()) {
-        return false;
+  if (_parameters->_forceFirstLevelTilesRenderOnStart) {
+    if (!_allFirstLevelTilesAreTextureSolved) {
+      const int firstLevelTilesCount = _firstLevelTiles.size();
+      for (int i = 0; i < firstLevelTilesCount; i++) {
+        Tile* tile = _firstLevelTiles[i];
+        if (!tile->isTextureSolved()) {
+          return false;
+        }
       }
-    }
 
-    if (_tessellator != NULL) {
-      if (!_tessellator->isReady(rc)) {
-        return false;
+      if (_tessellator != NULL) {
+        if (!_tessellator->isReady(rc)) {
+          return false;
+        }
       }
-    }
 
-    if (_texturizer != NULL) {
-      if (!_texturizer->isReady(rc, _layerSet)) {
-        return false;
+      if (_texturizer != NULL) {
+        if (!_texturizer->isReady(rc, _layerSet)) {
+          return false;
+        }
       }
+
+      _allFirstLevelTilesAreTextureSolved = true;
     }
   }
 
@@ -325,15 +448,15 @@ void TileRenderer::render(const G3MRenderContext* rc,
                         _texturePriority,
                         _verticalExaggeration);
 
-  const int topLevelTilesCount = _topLevelTiles.size();
+  const int firstLevelTilesCount = _firstLevelTiles.size();
 
-  if (_firstRender && _parameters->_forceTopLevelTilesRenderOnStart) {
-    // force one render pass of the topLevel tiles to make the (toplevel) textures loaded
-    // as they will be used as last-chance fallback texture for any tile.
+  if (_firstRender && _parameters->_forceFirstLevelTilesRenderOnStart) {
+    // force one render pass of the firstLevelTiles tiles to make the (toplevel) textures
+    // loaded as they will be used as last-chance fallback texture for any tile.
     _firstRender = false;
 
-    for (int i = 0; i < topLevelTilesCount; i++) {
-      Tile* tile = _topLevelTiles[i];
+    for (int i = 0; i < firstLevelTilesCount; i++) {
+      Tile* tile = _firstLevelTiles[i];
       tile->render(rc,
                    &trc,
                    parentState,
@@ -342,8 +465,8 @@ void TileRenderer::render(const G3MRenderContext* rc,
   }
   else {
     std::list<Tile*> toVisit;
-    for (int i = 0; i < topLevelTilesCount; i++) {
-      toVisit.push_back(_topLevelTiles[i]);
+    for (int i = 0; i < firstLevelTilesCount; i++) {
+      toVisit.push_back(_firstLevelTiles[i]);
     }
 
     while (toVisit.size() > 0) {
@@ -409,9 +532,9 @@ bool TileRenderer::onTouchEvent(const G3MEventContext* ec,
 
     const Geodetic3D position = planet->toGeodetic3D(positionCartesian);
 
-    const int topLevelTilesSize = _topLevelTiles.size();
-    for (int i = 0; i < topLevelTilesSize; i++) {
-      const Tile* tile = _topLevelTiles[i]->getDeepestTileContaining(position);
+    const int firstLevelTilesCount = _firstLevelTiles.size();
+    for (int i = 0; i < firstLevelTilesCount; i++) {
+      const Tile* tile = _firstLevelTiles[i]->getDeepestTileContaining(position);
       if (tile != NULL) {
         ILogger::instance()->logInfo("Touched on %s", tile->description().c_str());
         if (_texturizer->onTerrainTouchEvent(ec, position, tile, _layerSet)) {
@@ -426,9 +549,10 @@ bool TileRenderer::onTouchEvent(const G3MEventContext* ec,
 }
 
 
-void TileRenderer::pruneTopLevelTiles() {
-  for (int i = 0; i < _topLevelTiles.size(); i++) {
-    Tile* tile = _topLevelTiles[i];
+void TileRenderer::pruneFirstLevelTiles() {
+  const int firstLevelTilesCount = _firstLevelTiles.size();
+  for (int i = 0; i < firstLevelTilesCount; i++) {
+    Tile* tile = _firstLevelTiles[i];
     tile->prune(_texturizer, _elevationDataProvider);
   }
 }

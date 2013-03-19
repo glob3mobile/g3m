@@ -74,8 +74,6 @@ public class G3MWidget
   
     for (int i = 0; i < _periodicalTasks.size(); i++)
     {
-      //    _periodicalTasks[i].releaseTask();
-  
       PeriodicalTask periodicalTask = _periodicalTasks.get(i);
       if (periodicalTask != null)
          periodicalTask.dispose();
@@ -90,18 +88,18 @@ public class G3MWidget
 
   public final void render(int width, int height)
   {
-      if (_paused)
-      {
-          return;
-      }
+    if (_paused)
+    {
+      return;
+    }
   
-      if ((_width != width || _height != height) && _mainRendererReady)
-      {
-          _width = width;
-          _height = height;
+    if ((_width != width || _height != height) && _mainRendererReady)
+    {
+      _width = width;
+      _height = height;
   
-          onResizeViewportEvent(_width, _height);
-      }
+      onResizeViewportEvent(_width, _height);
+    }
   
     _timer.start();
     _renderCounter++;
@@ -500,7 +498,7 @@ public class G3MWidget
   public final void stopCameraAnimation()
   {
     EffectTarget target = _nextCamera.getEffectTarget();
-    _effectsScheduler.cancellAllEffectsFor(target);
+    _effectsScheduler.cancelAllEffectsFor(target);
   }
 
   public final void resetCameraPosition()
@@ -561,13 +559,6 @@ public class G3MWidget
   private int _width;
   private int _height;
 
-  private void initializeGL()
-  {
-    //_gl->enableDepthTest();
-  
-    //_gl->enableCullFace(GLCullFace::back());
-  }
-
   private final G3MContext _context;
 
   private boolean _paused;
@@ -619,8 +610,6 @@ public class G3MWidget
      _paused = false;
      _initializationTaskWasRun = false;
      _clickOnProcess = false;
-    initializeGL();
-  
     _effectsScheduler.initialize(_context);
     _cameraRenderer.initialize(_context);
     _mainRenderer.initialize(_context);

@@ -178,8 +178,9 @@ public:
   void initialize(const G3MContext* context,
                   long long downloadPriority);
 
-  void render(const G3MRenderContext* rc);
-  
+  void render(const G3MRenderContext* rc,
+              const Vector3D& cameraPosition);
+
   bool isReady() const;
   
   bool isRendered() const {

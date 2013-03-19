@@ -23,6 +23,8 @@ package org.glob3.mobile.generated;
 //class MutableVector2D;
 //class IFloatBuffer;
 //class ElevationData;
+//class Geodetic2D;
+
 
 
 public abstract class TileTessellator
@@ -40,5 +42,12 @@ public abstract class TileTessellator
   public abstract Mesh createTileDebugMesh(Planet planet, Vector2I resolution, Tile tile);
 
   public abstract IFloatBuffer createTextCoords(Vector2I resolution, Tile tile, boolean mercator);
+
+  public Vector2D getTextCoord(Tile tile, Geodetic2D position, boolean mercator)
+  {
+    return getTextCoord(tile, position.latitude(), position.longitude(), mercator);
+  }
+
+  public abstract Vector2D getTextCoord(Tile tile, Angle latitude, Angle longitude, boolean mercator);
 
 }

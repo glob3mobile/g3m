@@ -49,7 +49,7 @@ AppParser::AppParser(){
 }
 
 void AppParser::parse(LayerSet* layerSet, MarksRenderer* marks, std::string namelessParameter){
-  JSONBaseObject* json = IJSONParser::instance()->parse(namelessParameter);
+  const JSONBaseObject* json = IJSONParser::instance()->parse(namelessParameter);
   parseWorldConfiguration(layerSet, marks, json->asObject()->getAsObject(WORLD));
   IJSONParser::instance()->deleteJSONData(json);
 }

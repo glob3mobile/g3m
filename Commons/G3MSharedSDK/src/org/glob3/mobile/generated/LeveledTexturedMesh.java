@@ -130,6 +130,10 @@ public class LeveledTexturedMesh extends Mesh
 
   public final boolean setGLTextureIdForLevel(int level, IGLTextureId glTextureId)
   {
+    if (_mappings.size() <= 0)
+    {
+      return false;
+    }
     if (glTextureId != null)
     {
       if (!_currentLevelIsValid || (level < _currentLevel))

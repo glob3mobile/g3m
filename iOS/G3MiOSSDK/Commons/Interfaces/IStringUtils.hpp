@@ -70,19 +70,18 @@ public:
                                        const std::string& replaceWith) const {
     int startIndex = indexOf(originalString, toReplace);
     //The part to replace was not found. Return original String
-    if (startIndex==-1) {
+    if (startIndex == -1) {
       return originalString;
     }
-    const int endIndex = startIndex+toReplace.size();
+    const int endIndex = startIndex + toReplace.size();
     const std::string left = substring(originalString, 0, startIndex);
     const std::string right = substring(originalString, endIndex);
-    const std::string result = left+replaceWith+right;
+    const std::string result = left + replaceWith + right;
     startIndex = indexOf(result, toReplace);
     if (startIndex != -1){
       //recursive call to replace other ocurrences
       return replaceSubstring(result, toReplace, replaceWith);
     }
-
     return result;
   }
 

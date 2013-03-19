@@ -110,6 +110,7 @@ public class MarksRenderer extends LeafRenderer
     gl.setBlendFuncSrcAlpha();
   
     final Camera camera = rc.getCurrentCamera();
+    final Vector3D cameraPosition = camera.getCartesianPosition();
   
     gl.startBillBoardDrawing(camera.getWidth(), camera.getHeight());
   
@@ -121,7 +122,7 @@ public class MarksRenderer extends LeafRenderer
   
       if (mark.isReady())
       {
-        mark.render(rc);
+        mark.render(rc, cameraPosition);
       }
     }
   

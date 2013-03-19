@@ -53,7 +53,9 @@ public class Vector3D
 
   public static Vector3D nan()
   {
-    return new Vector3D(IMathUtils.instance().NanD(), IMathUtils.instance().NanD(), IMathUtils.instance().NanD());
+    final IMathUtils mu = IMathUtils.instance();
+
+    return new Vector3D(mu.NanD(), mu.NanD(), mu.NanD());
   }
 
   public static Vector3D zero()
@@ -93,7 +95,9 @@ public class Vector3D
 
   public final boolean isNan()
   {
-    return (IMathUtils.instance().isNan(_x) || IMathUtils.instance().isNan(_y) || IMathUtils.instance().isNan(_z));
+    final IMathUtils mu = IMathUtils.instance();
+
+    return (mu.isNan(_x) || mu.isNan(_y) || mu.isNan(_z));
   }
 
   public final boolean isZero()
