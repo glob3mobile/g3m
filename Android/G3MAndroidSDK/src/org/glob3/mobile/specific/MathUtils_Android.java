@@ -369,4 +369,10 @@ public final class MathUtils_Android
       return Math.max(l1, l2);
    }
 
+
+   @Override
+   public int parseIntHex(final String hex) {
+      return Integer.parseInt(hex, 16);
+   }
+
 }
