@@ -558,10 +558,10 @@ public:
                                   URL("http://www.idee.es/wms/PNOA/PNOA", false),
                                   WMS_1_1_0,
                                   Sector::fromDegrees(21, -18, 45, 6),
-                                  "image/jpeg", //"image/png",
+                                  "image/png",
                                   "EPSG:4326",
                                   "",
-                                  false, //true,
+                                  true,
                                   NULL,
                                   TimeInterval::fromDays(30));
     layerSet->addLayer(pnoa);
@@ -1325,6 +1325,28 @@ public:
        delete buffer;
        }
        */
+
+      if (false) {
+        NSString *cc3dFilePath = [[NSBundle mainBundle] pathForResource: @"cc3d4326"
+                                                                 ofType: @"json"];
+        if (cc3dFilePath) {
+          NSString *nsCC3dJSON = [NSString stringWithContentsOfFile: cc3dFilePath
+                                                            encoding: NSUTF8StringEncoding
+                                                               error: nil];
+          if (nsCC3dJSON) {
+            std::string cc3dJSON = [nsCC3dJSON UTF8String];
+            Shape* cc3d = SceneJSShapesParser::parseFromJSON(cc3dJSON, "file:///");
+            if (cc3d) {
+              cc3d->setPosition(new Geodetic3D(Angle::fromDegrees(39.473641),
+                                               Angle::fromDegrees(-6.370732),
+                                               500) );
+              cc3d->setPitch(Angle::fromDegrees(-90));
+
+              _shapesRenderer->addShape(cc3d);
+            }
+          }
+        }
+      }
 
       /**/
       if (false) {
