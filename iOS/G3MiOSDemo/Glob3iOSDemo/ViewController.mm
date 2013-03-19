@@ -36,6 +36,7 @@
 #import <G3MiOSSDK/BoxShape.hpp>
 #import <G3MiOSSDK/EllipsoidShape.hpp>
 #import <G3MiOSSDK/SceneJSShapesParser.hpp>
+#import <G3MiOSSDK/LayoutUtils.hpp>
 
 #import <G3MiOSSDK/IJSONParser.hpp>
 #import <G3MiOSSDK/JSONGenerator.hpp>
@@ -210,7 +211,7 @@ public:
   MarksRenderer* marksRenderer = [self createMarksRenderer];
   builder.addRenderer(marksRenderer);
 
-  ShapesRenderer* shapesRenderer = [self createShapesRenderer];
+  ShapesRenderer* shapesRenderer = [self createShapesRenderer: builder.getPlanet()];
   builder.addRenderer(shapesRenderer);
 
 
@@ -724,7 +725,7 @@ public:
 
 }
 
-- (ShapesRenderer*) createShapesRenderer
+- (ShapesRenderer*) createShapesRenderer: (const Planet*) planet
 {
   ShapesRenderer* shapesRenderer = new ShapesRenderer();
 
@@ -823,18 +824,51 @@ public:
   //  shapesRenderer->addShape(colored);
 
   // to test layout::splitOverCircle
-    Shape* spheres = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(40.426042),
-                                                       Angle::fromDegrees(-3.704453),
-                                                       0),
-                                        Vector3D(1e5, 1e5, 1e5),
-                                        8,
-                                        1,
-                                        false,
-                                        false,
-                                        Color::newFromRGBA(0.8, 0, 0, 1.0),
-                                        Color::newFromRGBA(0, 0, 0, 1)
-                                        );
-    shapesRenderer->addShape(spheres);
+  Geodetic3D* center = new Geodetic3D(Angle::fromDegrees(40.429701),
+                                      Angle::fromDegrees(-3.703766),
+                                      0);
+  double radius = 5e4;
+  Vector3D radiusVector(radius, radius, radius);
+  Shape* centralSphere = new EllipsoidShape(center,
+                                      radiusVector,
+                                      8,
+                                      1,
+                                      false,
+                                      false,
+                                      Color::newFromRGBA(0.8, 0, 0, 1.0),
+                                      Color::newFromRGBA(0, 0, 0, 1)
+                                      );
+  shapesRenderer->addShape(centralSphere);
+  int splits = 5;
+  std::vector<Geodetic3D*> spheres3D = LayoutUtils::splitOverCircle(planet, *center, 1e6, splits);
+  for (int i=0; i<splits; i++) {
+    Shape* sphere = new EllipsoidShape(spheres3D[i],
+                                       radiusVector,
+                                       8,
+                                       1,
+                                       false,
+                                       false,
+                                       Color::newFromRGBA(0.0, 0.8, 0, 1.0),
+                                       Color::newFromRGBA(0, 0, 0, 1)
+                                       );
+    shapesRenderer->addShape(sphere);
+  }
+  std::vector<Geodetic2D*> spheres2D = LayoutUtils::splitOverCircle(planet, center->asGeodetic2D(), 1e6, splits, Angle::fromDegrees(36));
+  for (int i=0; i<splits; i++) {
+    Geodetic3D* centerSplit = new Geodetic3D(*spheres2D[i], 0);
+    delete spheres2D[i];
+    Shape* sphere = new EllipsoidShape(centerSplit,
+                                       radiusVector,
+                                       8,
+                                       1,
+                                       false,
+                                       false,
+                                       Color::newFromRGBA(0.8, 0.8, 0, 1.0),
+                                       Color::newFromRGBA(0, 0, 0, 1)
+                                       );
+    shapesRenderer->addShape(sphere);
+  }
+  
   
 
   return shapesRenderer;
