@@ -422,6 +422,7 @@
 		E87557C716E915D10031FBB3 /* TMSLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E87557C516E915D10031FBB3 /* TMSLayer.cpp */; };
 		E87557C816E9160F0031FBB3 /* TMSLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = E87557C616E915D10031FBB3 /* TMSLayer.hpp */; };
 		FB31AE3616F76B4C00C415FF /* LayoutUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB31AE3516F76B4C00C415FF /* LayoutUtils.cpp */; };
+		FB31AE3916F8A37D00C415FF /* LayoutUtils.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB31AE3416F76AE500C415FF /* LayoutUtils.hpp */; };
 		FB6D00A516CBFF3A009BF93D /* EllipsoidShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB6D00A416CBFF3A009BF93D /* EllipsoidShape.cpp */; };
 /* End PBXBuildFile section */
 
@@ -432,6 +433,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				FB31AE3916F8A37D00C415FF /* LayoutUtils.hpp in CopyFiles */,
 				CFE676B316ECDA9100CB93B9 /* BingMapsLayer.hpp in CopyFiles */,
 				CF75C3A716EA62B800F7EE9F /* GoogleMapsLayer.hpp in CopyFiles */,
 				CF75C3A316EA57C700F7EE9F /* MapBoxLayer.hpp in CopyFiles */,

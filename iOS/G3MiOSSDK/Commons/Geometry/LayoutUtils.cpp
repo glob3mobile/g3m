@@ -28,8 +28,9 @@ std::vector<Geodetic3D*> LayoutUtils::splitOverCircle(const Ellipsoid* ellipsoid
   for (int i = 0; i < splits; i++) {
     const double angleInRadians = startAngleInRadians + (deltaInRadians * i);
 
-    const Vector3D cartesianPosition = northInPlane.rotateAroundAxis(normal,
+    const Vector3D finalVector = northInPlane.rotateAroundAxis(normal,
                                                                      Angle::fromRadians(angleInRadians));
+    const Vector3D cartesianPosition = cartesianCenter.add(finalVector);
 
     result.push_back( new Geodetic3D( ellipsoid->toGeodetic3D(cartesianPosition) ) );
   }
