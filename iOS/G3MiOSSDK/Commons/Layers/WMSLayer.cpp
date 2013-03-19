@@ -323,6 +323,7 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& position,
   const IMathUtils* mu = IMathUtils::instance();
 
   //X and Y
+  int TODO_CONSIDER_MERCATOR;
   const Vector2D uv = sector.getUVCoordinates(position);
   const int x = (int) mu->round( (uv._x * _parameters->_tileTextureResolution._x) );
   const int y = (int) mu->round( (uv._y * _parameters->_tileTextureResolution._y) );
