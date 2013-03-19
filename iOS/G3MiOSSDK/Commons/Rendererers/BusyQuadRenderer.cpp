@@ -132,6 +132,7 @@ void BusyQuadRenderer::render(const G3MRenderContext* rc,
 
   gl->setState(state);
 
+  state.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
   gl->setBlendFuncSrcAlpha();
 
   gl->pushMatrix();

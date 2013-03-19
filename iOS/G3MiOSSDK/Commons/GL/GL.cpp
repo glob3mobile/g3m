@@ -6,6 +6,11 @@
 //  Copyright 2011 Universidad de Las Palmas. All rights reserved.
 //
 
+
+#include <OpenGLES/ES2/gl.h>
+
+#include "GLTextureId_iOS.hpp"
+
 #include <list>
 
 #include "GL.hpp"
@@ -18,88 +23,94 @@
 #include "IShortBuffer.hpp"
 #include "IFactory.hpp"
 #include "FloatBufferBuilderFromCartesian2D.hpp"
-#include "IGLUniformID.hpp"
+//#include "IGLUniformID.hpp"
 #include "IGLTextureId.hpp"
 
-class UniformsStruct {
-public:
+#include "GLShaderAttributes.hpp"
+#include "GLShaderUniforms.hpp"
 
-  IGLUniformID* Projection;
-  IGLUniformID* Modelview;
-  IGLUniformID* Sampler;
-  IGLUniformID* EnableTexture;
-  IGLUniformID* FlatColor;
-  IGLUniformID* TranslationTexCoord;
-  IGLUniformID* ScaleTexCoord;
-  IGLUniformID* PointSize;
+//class UniformsStruct {
+//public:
+//
+//  IGLUniformID* Projection;
+//  IGLUniformID* Modelview;
+//  IGLUniformID* Sampler;
+//  IGLUniformID* EnableTexture;
+//  IGLUniformID* FlatColor;
+//  IGLUniformID* TranslationTexCoord;
+//  IGLUniformID* ScaleTexCoord;
+//  IGLUniformID* PointSize;
+//
+//  //FOR BILLBOARDING
+//  IGLUniformID* BillBoard;
+//  IGLUniformID* ViewPortExtent;
+//  IGLUniformID* TextureExtent;
+//
+//
+//  //FOR COLOR MIXING
+//  IGLUniformID* FlatColorIntensity;
+//  IGLUniformID* EnableColorPerVertex;
+//  IGLUniformID* EnableFlatColor;
+//  IGLUniformID* ColorPerVertexIntensity;
+//
+//  UniformsStruct() {
+//    Projection = NULL;
+//    Modelview = NULL;
+//    Sampler = NULL;
+//    EnableTexture = NULL;
+//    FlatColor = NULL;
+//    TranslationTexCoord = NULL;
+//    ScaleTexCoord = NULL;
+//    PointSize = NULL;
+//
+//    //FOR BILLBOARDING
+//    BillBoard = NULL;
+//    ViewPortExtent = NULL;
+//    TextureExtent = NULL;
+//
+//    //FOR COLOR MIXING
+//    FlatColorIntensity = NULL;
+//    EnableColorPerVertex = NULL;
+//    EnableFlatColor = NULL;
+//    ColorPerVertexIntensity = NULL;
+//  }
+//
+//  void deleteUniformsIDs(){
+//    delete Projection;
+//    delete Modelview;
+//    delete Sampler;
+//    delete EnableTexture;
+//    delete FlatColor;
+//    delete TranslationTexCoord;
+//    delete ScaleTexCoord;
+//    delete PointSize;
+//
+//    //FOR BILLBOARDING
+//    delete BillBoard;
+//    delete ViewPortExtent;
+//    delete TextureExtent;
+//
+//    //FOR COLOR MIXING
+//    delete FlatColorIntensity;
+//    delete EnableColorPerVertex;
+//    delete EnableFlatColor;
+//    delete ColorPerVertexIntensity;
+//  }
+//
+//  ~UniformsStruct(){
+//    deleteUniformsIDs();
+//  }
+//} Uniforms;
+//
+//
+//struct AttributesStruct {
+//  int Position;
+//  int TextureCoord;
+//  int Color;
+//} Attributes;
 
-  //FOR BILLBOARDING
-  IGLUniformID* BillBoard;
-  IGLUniformID* ViewPortExtent;
-  IGLUniformID* TextureExtent;
-
-
-  //FOR COLOR MIXING
-  IGLUniformID* FlatColorIntensity;
-  IGLUniformID* EnableColorPerVertex;
-  IGLUniformID* EnableFlatColor;
-  IGLUniformID* ColorPerVertexIntensity;
-
-  UniformsStruct() {
-    Projection = NULL;
-    Modelview = NULL;
-    Sampler = NULL;
-    EnableTexture = NULL;
-    FlatColor = NULL;
-    TranslationTexCoord = NULL;
-    ScaleTexCoord = NULL;
-    PointSize = NULL;
-
-    //FOR BILLBOARDING
-    BillBoard = NULL;
-    ViewPortExtent = NULL;
-    TextureExtent = NULL;
-
-    //FOR COLOR MIXING
-    FlatColorIntensity = NULL;
-    EnableColorPerVertex = NULL;
-    EnableFlatColor = NULL;
-    ColorPerVertexIntensity = NULL;
-  }
-
-  void deleteUniformsIDs(){
-    delete Projection;
-    delete Modelview;
-    delete Sampler;
-    delete EnableTexture;
-    delete FlatColor;
-    delete TranslationTexCoord;
-    delete ScaleTexCoord;
-    delete PointSize;
-
-    //FOR BILLBOARDING
-    delete BillBoard;
-    delete ViewPortExtent;
-    delete TextureExtent;
-
-    //FOR COLOR MIXING
-    delete FlatColorIntensity;
-    delete EnableColorPerVertex;
-    delete EnableFlatColor;
-    delete ColorPerVertexIntensity;
-  }
-
-  ~UniformsStruct(){
-    deleteUniformsIDs();
-  }
-} Uniforms;
-
-
-struct AttributesStruct {
-  int Position;
-  int TextureCoord;
-  int Color;
-} Attributes;
+struct AttributesStruct Attributes;
+struct UniformsStruct   Uniforms;
 
 int GL::checkedGetAttribLocation(ShaderProgram* program,
                                  const std::string& name) {
@@ -260,19 +271,19 @@ void GL::color(float r, float g, float b, float a) {
     ILogger::instance()->logInfo("GL::color()");
   }
 
-  if (
-      (_flatColorR != r) ||
-      (_flatColorG != g) ||
-      (_flatColorB != b) ||
-      (_flatColorA != a)
-      ) {
+//  if (
+//      (_flatColorR != r) ||
+//      (_flatColorG != g) ||
+//      (_flatColorB != b) ||
+//      (_flatColorA != a)
+//      ) {
     _nativeGL->uniform4f(Uniforms.FlatColor, r, g, b, a);
-
-    _flatColorR = r;
-    _flatColorG = g;
-    _flatColorB = b;
-    _flatColorA = a;
-  }
+//
+//    _flatColorR = r;
+//    _flatColorG = g;
+//    _flatColorB = b;
+//    _flatColorA = a;
+//  }
 }
 
 void GL::transformTexCoords(float scaleX,
@@ -394,24 +405,27 @@ const IGLTextureId* GL::uploadTexture(const IImage* image,
   if (texId != NULL) {
     //_nativeGL->blendFunc(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
     _nativeGL->pixelStorei(GLAlignment::unpack(), 1);
+    
+    int texture2D = GLTextureType::texture2D();
 
-    _nativeGL->bindTexture(GLTextureType::texture2D(), texId);
-    _nativeGL->texParameteri(GLTextureType::texture2D(),
+    bindTexture(texId);  //Do not use _native->bind 
+    
+    _nativeGL->texParameteri(texture2D,
                              GLTextureParameter::minFilter(),
                              GLTextureParameterValue::linear());
-    _nativeGL->texParameteri(GLTextureType::texture2D(),
+    _nativeGL->texParameteri(texture2D,
                              GLTextureParameter::magFilter(),
                              GLTextureParameterValue::linear());
-    _nativeGL->texParameteri(GLTextureType::texture2D(),
+    _nativeGL->texParameteri(texture2D,
                              GLTextureParameter::wrapS(),
                              GLTextureParameterValue::clampToEdge());
-    _nativeGL->texParameteri(GLTextureType::texture2D(),
+    _nativeGL->texParameteri(texture2D,
                              GLTextureParameter::wrapT(),
                              GLTextureParameterValue::clampToEdge());
     _nativeGL->texImage2D(image, format);
 
     if (generateMipmap) {
-      _nativeGL->generateMipmap(GLTextureType::texture2D());
+      _nativeGL->generateMipmap(texture2D);
     }
   }
   else {
@@ -449,13 +463,12 @@ void GL::bindTexture(const IGLTextureId* textureId) {
     ILogger::instance()->logError("Can't bind a NULL texture");
   }
   else {
-    //    if ((_boundTextureId == NULL) || !_boundTextureId->isEqualsTo(textureId)) {
-    _nativeGL->bindTexture(GLTextureType::texture2D(), textureId);
-    //      _boundTextureId = textureId;
-    //    }
-    //    else {
-    //      ILogger::instance()->logInfo("TextureId %s already bound", textureId->description().c_str());
-    //    }
+    if ((_boundTextureId == NULL) || !_boundTextureId->isEqualsTo(textureId)) {
+      _nativeGL->bindTexture(GLTextureType::texture2D(), textureId);
+      _boundTextureId = textureId;
+    } else{
+      //ILogger::instance()->logInfo("Texture %s already bound.", textureId->description().c_str());
+    }
   }
 }
 
@@ -575,144 +588,20 @@ void GL::deleteTexture(const IGLTextureId* textureId) {
       delete textureId;
     }
 
-//    if (_boundTextureId != NULL) {
-//      if (_boundTextureId->isEqualsTo(textureId)) {
-//        _boundTextureId = NULL;
-//      }
-//    }
+    if (_boundTextureId != NULL) {
+      if (_boundTextureId->isEqualsTo(textureId)) {
+        _boundTextureId = NULL;
+      }
+    }
 
     //ILogger::instance()->logInfo("  = delete textureId=%s", texture->description().c_str());
-
-//    //_nativeGL->deleteTexture(texture);
-//    _texturesIdBag.push_back(texture);
-//
-
-    //_texturesIdTakeCounter++;
   }
 }
 
 void GL::setState(const GLState& state) {
-
-  // Depth Testh
-  if (_enableDepthTest != state.isEnabledDepthTest()) {
-    _enableDepthTest = state.isEnabledDepthTest();
-    if (_enableDepthTest) {
-      _nativeGL->enable(GLFeature::depthTest());
-    }
-    else {
-      _nativeGL->disable(GLFeature::depthTest());
-    }
-  }
-
-  // Blending
-  if (_enableBlend != state.isEnabledBlend()) {
-    _enableBlend = state.isEnabledBlend();
-    if (_enableBlend) {
-      _nativeGL->enable(GLFeature::blend());
-    }
-    else {
-      _nativeGL->disable(GLFeature::blend());
-    }
-  }
-
-  // Textures
-  if (_enableTextures != state.isEnabledTextures()) {
-    _enableTextures = state.isEnabledTextures();
-    if (_enableTextures) {
-      _nativeGL->enableVertexAttribArray(Attributes.TextureCoord);
-    }
-    else {
-      _nativeGL->disableVertexAttribArray(Attributes.TextureCoord);
-    }
-  }
-
-  // Texture2D
-  if (_enableTexture2D != state.isEnabledTexture2D()) {
-    _enableTexture2D = state.isEnabledTexture2D();
-    if (_enableTexture2D) {
-      _nativeGL->uniform1i(Uniforms.EnableTexture, 1);
-    }
-    else {
-      _nativeGL->uniform1i(Uniforms.EnableTexture, 0);
-    }
-  }
-
-  // VertexColor
-  if (_enableVertexColor != state.isEnabledVertexColor()) {
-    _enableVertexColor = state.isEnabledVertexColor();
-    if (_enableVertexColor) {
-      _nativeGL->uniform1i(Uniforms.EnableColorPerVertex, 1);
-      _nativeGL->enableVertexAttribArray(Attributes.Color);
-      IFloatBuffer* colors = state.getColors();
-      if ((_colors != colors) ||
-          (_colorsTimestamp != colors->timestamp()) ) {
-        _nativeGL->vertexAttribPointer(Attributes.Color, 4, false, 0, colors);
-        _colors = colors;
-        _colorsTimestamp = _colors->timestamp();
-      }
-    }
-    else {
-      _nativeGL->disableVertexAttribArray(Attributes.Color);
-      _nativeGL->uniform1i(Uniforms.EnableColorPerVertex, 0);
-    }
-  }
-
-  // Vertices Position
-  if (_enableVerticesPosition != state.isEnabledVerticesPosition()) {
-    _enableVerticesPosition = state.isEnabledVerticesPosition();
-    if (_enableVerticesPosition) {
-      _nativeGL->enableVertexAttribArray(Attributes.Position);
-    }
-    else {
-      _nativeGL->disableVertexAttribArray(Attributes.Position);
-    }
-  }
-
-  // Flat Color
-  if (_enableFlatColor != state.isEnabledFlatColor()) {
-    _enableFlatColor = state.isEnabledFlatColor();
-    if (_enableFlatColor) {
-      _nativeGL->uniform1i(Uniforms.EnableFlatColor, 1);
-    }
-    else {
-      _nativeGL->uniform1i(Uniforms.EnableFlatColor, 0);
-    }
-  }
-
-  if (_enableFlatColor) {
-    color(state.getFlatColor());
-    const float intensity = state.getIntensity();
-    if (_flatColorIntensity != intensity) {
-      _nativeGL->uniform1f(Uniforms.FlatColorIntensity, intensity);
-      _flatColorIntensity = intensity;
-    }
-  }
-
-  // Cull Face
-  if (_enableCullFace != state.isEnabledCullFace()) {
-    _enableCullFace = state.isEnabledCullFace();
-    if (_enableCullFace) {
-      _nativeGL->enable(GLFeature::cullFace());
-      const int face = state.getCulledFace();
-      if (_cullFace_face != face) {
-        _nativeGL->cullFace(face);
-        _cullFace_face = face;
-      }
-    }
-    else {
-      _nativeGL->disable(GLFeature::cullFace());
-    }
-  }
-
-  const float lineWidth = state.lineWidth();
-  if (_lineWidth != lineWidth) {
-    _nativeGL->lineWidth(lineWidth);
-    _lineWidth = lineWidth;
-  }
   
-  const float pointSize = state.pointSize();
-  if (_pointSize != pointSize) {
-    _nativeGL->uniform1f(Uniforms.PointSize, pointSize);
-    _pointSize = pointSize;
-  }
+  state.applyChanges(_nativeGL, *_currentState, Attributes, Uniforms);
+  delete _currentState;
+  _currentState = new GLState(state);
+  
 }

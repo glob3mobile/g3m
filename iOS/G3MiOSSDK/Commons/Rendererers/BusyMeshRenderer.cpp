@@ -86,6 +86,8 @@ void BusyMeshRenderer::render(const G3MRenderContext* rc,
   // set mesh glstate
   GLState state(parentState);
   state.enableBlend();
+  
+  state.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
   gl->setBlendFuncSrcAlpha();
 
   // init effect in the first render

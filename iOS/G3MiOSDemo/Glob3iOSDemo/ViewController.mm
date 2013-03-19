@@ -64,6 +64,8 @@
 
 #import <G3MiOSSDK/G3MWidget.hpp>
 
+#import <G3MiOSSDK/GEOJSONParser.hpp>
+
 class TestVisibleSectorListener : public VisibleSectorListener {
 public:
   void onVisibleSectorChange(const Sector& visibleSector,
@@ -410,7 +412,7 @@ public:
     layerSet->addLayer( new OSMLayer(TimeInterval::fromDays(30)) );
   }
 
-  const bool useMapQuestOSM = true;
+  const bool useMapQuestOSM = false;
   if (useMapQuestOSM) {
     layerSet->addLayer( MapQuestLayer::newOSM(TimeInterval::fromDays(30)) );
   }
@@ -446,7 +448,7 @@ public:
                                           TimeInterval::fromDays(30)) );
   }
 
-  const bool blueMarble = false;
+  const bool blueMarble = true;
   if (blueMarble) {
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
                                         URL("http://www.nasa.network.com/wms?", false),
@@ -505,7 +507,7 @@ public:
     layerSet->addLayer(bing);
   }
 
-  if (false) {
+  if (true) {
     WMSLayer* political = new WMSLayer("topp:cia",
                                        URL("http://worldwind22.arc.nasa.gov/geoserver/wms?", false),
                                        WMS_1_1_0,
@@ -1277,13 +1279,13 @@ public:
        true);
        */
 
-      //      [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
-      //                                                     Geodetic3D(Angle::fromDegrees(37.78333333),
-      //                                                                Angle::fromDegrees(-122.41666666666667),
-      //                                                                1000000)
-      //                                                     //Angle::fromDegrees(45),
-      //                                                     //Angle::fromDegrees(30)
-      //                                                     );
+            [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
+                                                           Geodetic3D(Angle::fromDegrees(37.78333333),
+                                                                      Angle::fromDegrees(-122.41666666666667),
+                                                                      1000000),
+                                                           Angle::fromDegrees(45),
+                                                           Angle::fromDegrees(50)
+                                                           );
 
       /*
        NSString *bsonFilePath = [[NSBundle mainBundle] pathForResource: @"test"
@@ -1456,7 +1458,7 @@ public:
        */
 
       /**/
-      /*
+      
        //      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/coastline"
        //                                                                  ofType: @"geojson"];
 
@@ -1478,7 +1480,7 @@ public:
        _geoRenderer->addGEOObject(geoObject);
        }
        }
-       */
+
 
       /*
        NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"

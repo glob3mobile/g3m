@@ -37,20 +37,6 @@ private:
 
   std::list<const IGLTextureId*> _texturesIdBag;
   long                           _texturesIdAllocationCounter;
-  //  long                        _texturesIdGetCounter;
-  //  long                        _texturesIdTakeCounter;
-
-  // state handling
-  bool _enableDepthTest;
-  bool _enableBlend;
-  bool _enableTextures;
-  bool _enableTexture2D;
-  bool _enableVertexColor;
-  bool _enableVerticesPosition;
-  bool _enableFlatColor;
-  bool _enableCullFace;
-
-  int _cullFace_face;
 
   float _scaleX;
   float _scaleY;
@@ -64,22 +50,16 @@ private:
   IFloatBuffer* _colors;
   int           _colorsTimestamp;
 
-  float _flatColorR;
-  float _flatColorG;
-  float _flatColorB;
-  float _flatColorA;
-  float _flatColorIntensity;
-  float _lineWidth;
-  float _pointSize;
+  GLState *_currentState;
 
   ShaderProgram* _program;
 
-//#ifdef C_CODE
-//  const IGLTextureId* _boundTextureId;
-//#endif
-//#ifdef JAVA_CODE
-//  private IGLTextureId _boundTextureId;
-//#endif
+#ifdef C_CODE
+  const IGLTextureId* _boundTextureId;
+#endif
+#ifdef JAVA_CODE
+  private IGLTextureId _boundTextureId;
+#endif
 
   inline void loadModelView();
 
@@ -104,38 +84,21 @@ public:
      bool verbose) :
   _nativeGL(nativeGL),
   _verbose(verbose),
-  _enableTextures(false),
-  _enableTexture2D(false),
-  _enableVertexColor(false),
-  _enableVerticesPosition(false),
-  //  _enableFlatColor(false),
-  _enableBlend(false),
-  _enableDepthTest(false),
-  _enableCullFace(false),
-  _cullFace_face(GLCullFace::back()),
   _texturesIdAllocationCounter(0),
   _scaleX(1),
   _scaleY(1),
   _translationX(0),
   _translationY(0),
-  //  _texturesIdGetCounter(0),
-  //  _texturesIdTakeCounter(0),
   _vertices(NULL),
   _verticesTimestamp(0),
   _textureCoordinates(NULL),
   _textureCoordinatesTimestamp(0),
   _colors(NULL),
   _colorsTimestamp(0),
-  _flatColorR(0),
-  _flatColorG(0),
-  _flatColorB(0),
-  _flatColorA(0),
-  _flatColorIntensity(0),
   _billboardTexCoord(NULL),
-  _lineWidth(1),
-  _pointSize(1),
-  _program(NULL)
-  //_boundTextureId(NULL)
+  _program(NULL),
+  _currentState(NULL),
+  _boundTextureId(NULL)
   {
     //Init Constants
     GLCullFace::init(_nativeGL);
@@ -151,6 +114,8 @@ public:
     GLFormat::init(_nativeGL);
     GLVariable::init(_nativeGL);
     GLError::init(_nativeGL);
+    
+    _currentState = GLState::newDefault(); //Init after constants
   }
 
   void verticesColors(bool v);

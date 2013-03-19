@@ -39,6 +39,8 @@ int GLPrimitive::_points = 0;
 
 int GLBlendFactor::_srcAlpha = 0;
 int GLBlendFactor::_oneMinusSrcAlpha = 0;
+int GLBlendFactor::_one = 0;
+int GLBlendFactor::_zero = 0;
 
 int GLTextureType::_texture2D = 0;
 

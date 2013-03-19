@@ -194,6 +194,7 @@ void MarksRenderer::render(const G3MRenderContext* rc,
   Vector2D textureScale(1.0, 1.0);
   gl->transformTexCoords(textureScale, textureTranslation);
 
+  state.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
   gl->setBlendFuncSrcAlpha();
 
   const Camera* camera = rc->getCurrentCamera();

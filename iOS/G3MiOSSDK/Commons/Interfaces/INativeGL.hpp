@@ -144,6 +144,8 @@ public:
   virtual int Primitive_LineLoop() const = 0;
   virtual int Primitive_Points() const = 0;
 
+  virtual int BlendFactor_One() const = 0;
+  virtual int BlendFactor_Zero() const = 0;
   virtual int BlendFactor_SrcAlpha() const = 0;
   virtual int BlendFactor_OneMinusSrcAlpha() const = 0;
 

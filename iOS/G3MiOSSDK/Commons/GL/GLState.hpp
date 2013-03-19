@@ -14,6 +14,11 @@ class IFloatBuffer;
 #include "Color.hpp"
 #include "GLConstants.hpp"
 
+
+class GL;
+struct AttributesStruct;
+class UniformsStruct;
+
 class GLState {
 private:
   bool _depthTest;
@@ -35,7 +40,14 @@ private:
 
   float _lineWidth;
   float _pointSize;
-
+  
+  //Polygon Offset
+  bool  _polygonOffsetFill;
+  float _polygonOffsetFactor;
+  float _polygonOffsetUnits;
+  
+  int _blendSFactor;
+  int _blendDFactor;
 
   GLState() :
   _depthTest(true),
@@ -54,7 +66,12 @@ private:
   _flatColorB(0),
   _flatColorA(0),
   _lineWidth(1),
-  _pointSize(1)
+  _pointSize(1),
+  _polygonOffsetFactor(0),
+  _polygonOffsetUnits(0),
+  _polygonOffsetFill(false),
+  _blendDFactor(GLBlendFactor::zero()),
+  _blendSFactor(GLBlendFactor::one())
   {
   }
 
@@ -82,7 +99,12 @@ public:
   _flatColorB(parentState._flatColorB),
   _flatColorA(parentState._flatColorA),
   _lineWidth(parentState._lineWidth),
-  _pointSize(parentState._pointSize)
+  _pointSize(parentState._pointSize),
+  _polygonOffsetFactor(parentState._polygonOffsetFactor),
+  _polygonOffsetUnits(parentState._polygonOffsetUnits),
+  _polygonOffsetFill(parentState._polygonOffsetFill),
+  _blendDFactor(parentState._blendDFactor),
+  _blendSFactor(parentState._blendSFactor)
   {
   }
 
@@ -144,9 +166,29 @@ public:
 
   void setLineWidth(float lineWidth) { _lineWidth = lineWidth; }
   float lineWidth() const { return _lineWidth; }
-
-  void setPointSize(float pointSize) { _pointSize = pointSize; }
-  float pointSize() const { return _pointSize; }
+  
+  void setPointSize(float ps) { _pointSize = ps;}
+  float pointSize() const { return _pointSize;}
+  
+  void enablePolygonOffsetFill(float factor, float units){
+    _polygonOffsetFill = true;
+    _polygonOffsetFactor = factor;
+    _polygonOffsetUnits = units;
+  }
+  void disPolygonOffsetFill(){
+    _polygonOffsetFill = false;
+  }
+  
+  bool getPolygonOffsetFill() const { return _polygonOffsetFill;}
+  float getPolygonOffsetUnits() const { return _polygonOffsetUnits;}
+  float getPolygonOffsetFactor() const { return _polygonOffsetFactor;}
+  
+  void setBlendFactors(int sFactor, int dFactor) {
+    _blendSFactor = sFactor;
+    _blendDFactor = dFactor;
+  }
+  
+  void applyChanges(const INativeGL* nativeGL, const GLState& currentState, const AttributesStruct& attributes,const UniformsStruct& uniforms) const;
   
 };
 

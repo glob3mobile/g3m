@@ -149,15 +149,21 @@ public:
 class GLBlendFactor {
   static int _srcAlpha;
   static int _oneMinusSrcAlpha;
+  static int _one;
+  static int _zero;
   
   
 public:
   static int srcAlpha(){ return _srcAlpha;}
   static int oneMinusSrcAlpha(){ return _oneMinusSrcAlpha;}
+  static int one(){ return _one;}
+  static int zero(){ return _zero;}
   
   static void init(const INativeGL* ngl){
     _srcAlpha = ngl->BlendFactor_SrcAlpha();
     _oneMinusSrcAlpha = ngl->BlendFactor_OneMinusSrcAlpha();
+    _one = ngl->BlendFactor_One();
+    _zero = ngl->BlendFactor_Zero();
   }
 };
 

@@ -325,6 +325,14 @@ public:
   int Primitive_Points() const {
     return GL_POINTS;
   }
+  
+  int BlendFactor_One() const {
+    return GL_ONE;
+  }
+  
+  int BlendFactor_Zero() const {
+    return GL_ZERO;
+  }
 
   int BlendFactor_SrcAlpha() const {
     return GL_SRC_ALPHA;

@@ -17,8 +17,10 @@ void TexturedMesh::render(const G3MRenderContext* rc,
   GLState state(parentState);
   state.enableTextures();
   state.enableTexture2D();
+  
   if (_transparent) {
     state.enableBlend();
+    state.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
     gl->setBlendFuncSrcAlpha();
   }
 

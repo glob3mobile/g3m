@@ -60,6 +60,8 @@ void GEOGeometry::render(const G3MRenderContext* rc,
     if ( extent->touches( rc->getCurrentCamera()->getFrustumInModelCoordinates() ) ) {
       GLState state(parentState);
       state.disableDepthTest();
+      //state.setPolygonOffsetFactor(1.0);
+      //state.setPolygonOffsetUnits(1.0);
       mesh->render(rc, state);
     }
   }
