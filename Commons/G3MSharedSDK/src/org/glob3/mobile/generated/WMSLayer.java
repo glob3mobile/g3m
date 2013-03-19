@@ -19,6 +19,15 @@ public class WMSLayer extends Layer
 
   private String _extraParameter;
 
+  private double toBBOXLongitude(Angle longitude)
+  {
+    return (_parameters._mercator) ? MercatorUtils.longitudeToMeters(longitude) : longitude._degrees;
+  }
+  private double toBBOXLatitude(Angle latitude)
+  {
+    return (_parameters._mercator) ? MercatorUtils.latitudeToMeters(latitude) : latitude._degrees;
+  }
+
 
   public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector sector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache)
   {
@@ -118,13 +127,13 @@ public class WMSLayer extends Layer
         isb.addInt(tileTextureResolution._y);
   
         isb.addString("&BBOX=");
-        isb.addDouble(sector.lower().latitude()._degrees);
+        isb.addDouble(toBBOXLatitude(sector.lower().latitude()));
         isb.addString(",");
-        isb.addDouble(sector.lower().longitude()._degrees);
+        isb.addDouble(toBBOXLongitude(sector.lower().longitude()));
         isb.addString(",");
-        isb.addDouble(sector.upper().latitude()._degrees);
+        isb.addDouble(toBBOXLatitude(sector.upper().latitude()));
         isb.addString(",");
-        isb.addDouble(sector.upper().longitude()._degrees);
+        isb.addDouble(toBBOXLongitude(sector.upper().longitude()));
   
         req += isb.getString();
         if (isb != null)
@@ -148,13 +157,13 @@ public class WMSLayer extends Layer
         isb.addInt(tileTextureResolution._y);
   
         isb.addString("&BBOX=");
-        isb.addDouble(sector.lower().longitude()._degrees);
+        isb.addDouble(toBBOXLongitude(sector.lower().longitude()));
         isb.addString(",");
-        isb.addDouble(sector.lower().latitude()._degrees);
+        isb.addDouble(toBBOXLatitude(sector.lower().latitude()));
         isb.addString(",");
-        isb.addDouble(sector.upper().longitude()._degrees);
+        isb.addDouble(toBBOXLongitude(sector.upper().longitude()));
         isb.addString(",");
-        isb.addDouble(sector.upper().latitude()._degrees);
+        isb.addDouble(toBBOXLatitude(sector.upper().latitude()));
   
         req += isb.getString();
         if (isb != null)
@@ -266,13 +275,13 @@ public class WMSLayer extends Layer
         isb.addInt(_parameters._tileTextureResolution._y);
   
         isb.addString("&BBOX=");
-        isb.addDouble(sector.lower().latitude()._degrees);
+        isb.addDouble(toBBOXLatitude(sector.lower().latitude()));
         isb.addString(",");
-        isb.addDouble(sector.lower().longitude()._degrees);
+        isb.addDouble(toBBOXLongitude(sector.lower().longitude()));
         isb.addString(",");
-        isb.addDouble(sector.upper().latitude()._degrees);
+        isb.addDouble(toBBOXLatitude(sector.upper().latitude()));
         isb.addString(",");
-        isb.addDouble(sector.upper().longitude()._degrees);
+        isb.addDouble(toBBOXLongitude(sector.upper().longitude()));
   
         req += isb.getString();
   
@@ -297,13 +306,13 @@ public class WMSLayer extends Layer
         isb.addInt(_parameters._tileTextureResolution._y);
   
         isb.addString("&BBOX=");
-        isb.addDouble(sector.lower().longitude()._degrees);
+        isb.addDouble(toBBOXLongitude(sector.lower().longitude()));
         isb.addString(",");
-        isb.addDouble(sector.lower().latitude()._degrees);
+        isb.addDouble(toBBOXLatitude(sector.lower().latitude()));
         isb.addString(",");
-        isb.addDouble(sector.upper().longitude()._degrees);
+        isb.addDouble(toBBOXLongitude(sector.upper().longitude()));
         isb.addString(",");
-        isb.addDouble(sector.upper().latitude()._degrees);
+        isb.addDouble(toBBOXLatitude(sector.upper().latitude()));
   
         req += isb.getString();
   
