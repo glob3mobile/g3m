@@ -824,11 +824,13 @@ public:
   //  shapesRenderer->addShape(colored);
 
   // to test layout::splitOverCircle
-  Geodetic3D* center = new Geodetic3D(Angle::fromDegrees(0),
-                                      Angle::fromDegrees(0),
+  Geodetic3D* center = new Geodetic3D(Angle::fromDegrees(40.429701),
+                                      Angle::fromDegrees(-3.703766),
                                       0);
+  double radius = 5e4;
+  Vector3D radiusVector(radius, radius, radius);
   Shape* centralSphere = new EllipsoidShape(center,
-                                      Vector3D(1e5, 1e5, 1e5),
+                                      radiusVector,
                                       8,
                                       1,
                                       false,
@@ -838,10 +840,10 @@ public:
                                       );
   shapesRenderer->addShape(centralSphere);
   int splits = 4;
-  std::vector<Geodetic3D*> spheres = LayoutUtils::splitOverCircle(planet, *center, 1e6, splits);
+  std::vector<Geodetic3D*> spheres = LayoutUtils::splitOverCircle(planet, *center, 4e5, splits);
   for (int i=0; i<splits; i++) {
     Shape* sphere = new EllipsoidShape(spheres[i],
-                                       Vector3D(1e5, 1e5, 1e5),
+                                       radiusVector,
                                        8,
                                        1,
                                        false,
