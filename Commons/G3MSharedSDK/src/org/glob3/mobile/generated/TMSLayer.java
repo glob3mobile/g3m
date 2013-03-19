@@ -19,11 +19,7 @@ package org.glob3.mobile.generated;
 
 
 
-<<<<<<< HEAD
 public class TMSLayer extends Layer
-=======
-public abstract class TMSLayer extends Layer
->>>>>>> webgl-port
 {
 
   private final URL _mapServerURL;
@@ -53,7 +49,7 @@ public abstract class TMSLayer extends Layer
   }
 
 
-  public final java.util.ArrayList<Petition> getMapPetitions(G3MRenderContext rc, Tile tile, Vector2I tileTextureResolution)
+  public final java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, Tile tile)
   {
     java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
   

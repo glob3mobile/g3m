@@ -22,7 +22,7 @@ public class PanoDownloadListener extends IBufferDownloadListener
     public final void onDownload(URL url, IByteBuffer buffer)
     {
         String String = buffer.getAsString();
-        JSONBaseObject json = IJSONParser.instance().parse(String);
+        final JSONBaseObject json = IJSONParser.instance().parse(String);
         ILogger.instance().logInfo(url.getPath());
         parseMETADATA(IStringUtils.instance().substring(url.getPath(), 0, IStringUtils.instance().indexOf(url.getPath(), "/info.txt")), json.asObject());
         IJSONParser.instance().deleteJSONData(json);

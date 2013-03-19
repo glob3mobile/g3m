@@ -75,7 +75,7 @@ public class AppParser
   }
   public final void parse(LayerSet layerSet, MarksRenderer marks, String namelessParameter)
   {
-    JSONBaseObject json = IJSONParser.instance().parse(namelessParameter);
+    final JSONBaseObject json = IJSONParser.instance().parse(namelessParameter);
     parseWorldConfiguration(layerSet, marks, json.asObject().getAsObject(WORLD));
     IJSONParser.instance().deleteJSONData(json);
   }
