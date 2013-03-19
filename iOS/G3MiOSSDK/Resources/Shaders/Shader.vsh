@@ -21,23 +21,11 @@ uniform float PointSize;
 varying vec4 VertexColor;
 varying vec2 TextureCoordOut;
 
-/*
- //USEFUL VARIABLES FOR LIGHTING
- varying float DiffuseLighting;
- uniform vec3 LightDirection; // light direction in eye coords
- */
-
 
 void main() {
   gl_Position = Projection * Modelview * Position;
 
   if (BillBoard) {
-    //gl_Position.x += (-0.05 + TextureCoord.x * 0.1) * gl_Position.w;
-    //gl_Position.y -= (-0.05 + TextureCoord.y * 0.1) * gl_Position.w * ViewPortRatio;
-
-    //gl_Position.x += ((TextureCoord.x - 0.5) * 0.1) * gl_Position.w;
-    //gl_Position.y -= ((TextureCoord.y - 0.5) * 0.1) * gl_Position.w * ViewPortRatio;
-
     gl_Position.x += ((TextureCoord.x - 0.5) * 2.0 * TextureExtent.x / ViewPortExtent.x) * gl_Position.w;
     gl_Position.y -= ((TextureCoord.y - 0.5) * 2.0 * TextureExtent.y / ViewPortExtent.y) * gl_Position.w;
   }
