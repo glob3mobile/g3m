@@ -19,6 +19,15 @@ public class WMSLayer extends Layer
 
   private String _extraParameter;
 
+  private double toBBOXLongitude(Angle longitude)
+  {
+    return (_parameters._mercator) ? MercatorUtils.longitudeToMeters(longitude) : longitude._degrees;
+  }
+  private double toBBOXLatitude(Angle latitude)
+  {
+    return (_parameters._mercator) ? MercatorUtils.latitudeToMeters(latitude) : latitude._degrees;
+  }
+
 
   public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector sector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache)
   {
@@ -26,7 +35,7 @@ public class WMSLayer extends Layer
   }
   public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector sector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, LayerTilesRenderParameters parameters)
   {
-     super(condition, mapLayer, timeToCache, (parameters == null) ? LayerTilesRenderParameters.createDefaultNonMercator(sector) : parameters);
+     super(condition, mapLayer, timeToCache, (parameters == null) ? LayerTilesRenderParameters.createDefaultNonMercator(Sector.fullSphere()) : parameters);
      _mapLayer = mapLayer;
      _mapServerURL = mapServerURL;
      _mapServerVersion = mapServerVersion;
@@ -48,7 +57,7 @@ public class WMSLayer extends Layer
   }
   public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, Sector sector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, LayerTilesRenderParameters parameters)
   {
-     super(condition, mapLayer, timeToCache, (parameters == null) ? LayerTilesRenderParameters.createDefaultNonMercator(sector) : parameters);
+     super(condition, mapLayer, timeToCache, (parameters == null) ? LayerTilesRenderParameters.createDefaultNonMercator(Sector.fullSphere()) : parameters);
      _mapLayer = mapLayer;
      _mapServerURL = mapServerURL;
      _mapServerVersion = mapServerVersion;
@@ -64,7 +73,7 @@ public class WMSLayer extends Layer
   
   }
 
-  public final java.util.ArrayList<Petition> getMapPetitions(G3MRenderContext rc, Tile tile, Vector2I tileTextureResolution)
+  public final java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, Tile tile)
   {
     java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
   
@@ -79,6 +88,8 @@ public class WMSLayer extends Layer
     {
       return petitions;
     }
+  
+    final Vector2I tileTextureResolution = _parameters._tileTextureResolution;
   
      //Server name
     String req = _mapServerURL.getPath();
@@ -116,13 +127,13 @@ public class WMSLayer extends Layer
         isb.addInt(tileTextureResolution._y);
   
         isb.addString("&BBOX=");
-        isb.addDouble(sector.lower().latitude()._degrees);
+        isb.addDouble(toBBOXLatitude(sector.lower().latitude()));
         isb.addString(",");
-        isb.addDouble(sector.lower().longitude()._degrees);
+        isb.addDouble(toBBOXLongitude(sector.lower().longitude()));
         isb.addString(",");
-        isb.addDouble(sector.upper().latitude()._degrees);
+        isb.addDouble(toBBOXLatitude(sector.upper().latitude()));
         isb.addString(",");
-        isb.addDouble(sector.upper().longitude()._degrees);
+        isb.addDouble(toBBOXLongitude(sector.upper().longitude()));
   
         req += isb.getString();
         if (isb != null)
@@ -146,13 +157,13 @@ public class WMSLayer extends Layer
         isb.addInt(tileTextureResolution._y);
   
         isb.addString("&BBOX=");
-        isb.addDouble(sector.lower().longitude()._degrees);
+        isb.addDouble(toBBOXLongitude(sector.lower().longitude()));
         isb.addString(",");
-        isb.addDouble(sector.lower().latitude()._degrees);
+        isb.addDouble(toBBOXLatitude(sector.lower().latitude()));
         isb.addString(",");
-        isb.addDouble(sector.upper().longitude()._degrees);
+        isb.addDouble(toBBOXLongitude(sector.upper().longitude()));
         isb.addString(",");
-        isb.addDouble(sector.upper().latitude()._degrees);
+        isb.addDouble(toBBOXLatitude(sector.upper().latitude()));
   
         req += isb.getString();
         if (isb != null)
@@ -206,9 +217,9 @@ public class WMSLayer extends Layer
      return petitions;
   }
 
-//  bool isTransparent() const{
-//    return _isTransparent;
-//  }
+  //  bool isTransparent() const{
+  //    return _isTransparent;
+  //  }
 
   public final URL getFeatureInfoURL(Geodetic2D position, Sector tileSector)
   {
@@ -264,13 +275,13 @@ public class WMSLayer extends Layer
         isb.addInt(_parameters._tileTextureResolution._y);
   
         isb.addString("&BBOX=");
-        isb.addDouble(sector.lower().latitude()._degrees);
+        isb.addDouble(toBBOXLatitude(sector.lower().latitude()));
         isb.addString(",");
-        isb.addDouble(sector.lower().longitude()._degrees);
+        isb.addDouble(toBBOXLongitude(sector.lower().longitude()));
         isb.addString(",");
-        isb.addDouble(sector.upper().latitude()._degrees);
+        isb.addDouble(toBBOXLatitude(sector.upper().latitude()));
         isb.addString(",");
-        isb.addDouble(sector.upper().longitude()._degrees);
+        isb.addDouble(toBBOXLongitude(sector.upper().longitude()));
   
         req += isb.getString();
   
@@ -295,13 +306,13 @@ public class WMSLayer extends Layer
         isb.addInt(_parameters._tileTextureResolution._y);
   
         isb.addString("&BBOX=");
-        isb.addDouble(sector.lower().longitude()._degrees);
+        isb.addDouble(toBBOXLongitude(sector.lower().longitude()));
         isb.addString(",");
-        isb.addDouble(sector.lower().latitude()._degrees);
+        isb.addDouble(toBBOXLatitude(sector.lower().latitude()));
         isb.addString(",");
-        isb.addDouble(sector.upper().longitude()._degrees);
+        isb.addDouble(toBBOXLongitude(sector.upper().longitude()));
         isb.addString(",");
-        isb.addDouble(sector.upper().latitude()._degrees);
+        isb.addDouble(toBBOXLatitude(sector.upper().latitude()));
   
         req += isb.getString();
   
@@ -311,17 +322,18 @@ public class WMSLayer extends Layer
       }
     }
     req += "&LAYERS=" + _queryLayer;
-  
-    //req += "&LAYERS=" + _queryLayers;
     req += "&QUERY_LAYERS=" + _queryLayer;
   
     req += "&INFO_FORMAT=text/plain";
   
+    final IMathUtils mu = IMathUtils.instance();
+  
     //X and Y
+    int TODO_CONSIDER_MERCATOR;
     final Vector2D uv = sector.getUVCoordinates(position);
-    final int x = (int) IMathUtils.instance().round((uv._x * _parameters._tileTextureResolution._x));
-    final int y = (int) IMathUtils.instance().round((uv._y * _parameters._tileTextureResolution._y));
-    // const int y = (int) IMathUtils::instance()->round( ((1.0 - uv._y) * _parameters->_tileTextureResolution._y) );
+    final int x = (int) mu.round((uv._x * _parameters._tileTextureResolution._x));
+    final int y = (int) mu.round((uv._y * _parameters._tileTextureResolution._y));
+    // const int y = (int) mu->round( ((1.0 - uv._y) * _parameters->_tileTextureResolution._y) );
   
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     isb.addString("&X=");

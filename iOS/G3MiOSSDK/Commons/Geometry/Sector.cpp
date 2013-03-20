@@ -48,8 +48,40 @@ const Geodetic2D Sector::getInnerPoint(double u, double v) const {
                     Angle::linearInterpolation( _lower.longitude(), _upper.longitude(), (float)      u  ) );
 }
 
+const Angle Sector::getInnerPointLatitude(double v) const {
+  return Angle::linearInterpolation( _lower.latitude(), _upper.latitude(),  (float) (1.0-v) );
+}
 
 bool Sector::isBackOriented(const G3MRenderContext *rc, double height) const {
+  const Camera* camera = rc->getCurrentCamera();
+  const Planet* planet = rc->getPlanet();
+  
+  // compute angle with normals in the four corners
+  const Vector3D eye = camera->getCartesianPosition();
+
+  const Vector3D pointNW = planet->toCartesian(getNW());
+  if (planet->geodeticSurfaceNormal(pointNW).dot(eye.sub(pointNW)) > 0) { return false; }
+
+  const Vector3D pointNE = planet->toCartesian(getNE());
+  if (planet->geodeticSurfaceNormal(pointNE).dot(eye.sub(pointNE)) > 0) { return false; }
+
+  const Vector3D pointSW = planet->toCartesian(getSW());
+  if (planet->geodeticSurfaceNormal(pointSW).dot(eye.sub(pointSW)) > 0) { return false; }
+
+  const Vector3D pointSE = planet->toCartesian(getSE());
+  if (planet->geodeticSurfaceNormal(pointSE).dot(eye.sub(pointSE)) > 0) { return false; }
+  
+  // compute angle with normal in the closest point to the camera
+  const Geodetic2D center = camera->getGeodeticCenterOfView().asGeodetic2D();
+
+  const Vector3D point = planet->toCartesian(getClosestPoint(center), height);
+
+  // if all the angles are higher than 90, sector is back oriented
+  return (planet->geodeticSurfaceNormal(point).dot(eye.sub(point)) <= 0);
+}
+
+/*
+bool Sector::isBackOriented_v3(const G3MRenderContext *rc, double height) const {
   const Camera* camera = rc->getCurrentCamera();
   const Planet* planet = rc->getPlanet();
   
@@ -78,7 +110,7 @@ bool Sector::isBackOriented(const G3MRenderContext *rc, double height) const {
   
   return true;
 }
-
+*/
 /*
 bool Sector::isBackOriented_v2(const G3MRenderContext *rc, double height) const {
   const Camera* camera = rc->getCurrentCamera();
@@ -173,10 +205,11 @@ Sector Sector::mergedWith(const Sector& that) const {
   return Sector(low, up);
 }
 
-const Geodetic2D Sector::getClosestPoint(const Geodetic2D& pos) const
-{
+const Geodetic2D Sector::getClosestPoint(const Geodetic2D& pos) const {
   // if pos is included, return pos
-  if (contains(pos)) return pos;
+  if (contains(pos)) {
+    return pos;
+  }
 
   // test longitude
   Geodetic2D center = getCenter();
@@ -252,3 +285,15 @@ const std::string Sector::description() const {
   delete isb;
   return s;  
 }
+
+const Vector2D Sector::div(const Sector& that) const {
+  const double scaleX = _deltaLongitude.div(that._deltaLongitude);
+  const double scaleY = _deltaLatitude.div(that._deltaLatitude);
+  return Vector2D(scaleX, scaleY);
+}
+
+//Vector2D Sector::getTranslationFactor(const Sector& that) const {
+//  const Vector2D uv = that.getUVCoordinates(_lower);
+//  const double scaleY = _deltaLatitude.div(that._deltaLatitude);
+//  return Vector2D(uv._x, uv._y - scaleY);
+//}

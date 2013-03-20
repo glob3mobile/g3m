@@ -24,11 +24,14 @@ private:
   bool _showStatistics;
   bool _renderDebug;
   bool _useTilesSplitBudget;
-  bool _forceTopLevelTilesRenderOnStart;
+  bool _forceFirstLevelTilesRenderOnStart;
   bool _incrementalTileQuality;
   std::vector<VisibleSectorListener*>* _visibleSectorListeners;
   std::vector<long long>* _stabilizationMilliSeconds;
   long long _texturePriority;
+
+  ElevationDataProvider* _elevationDataProvider;
+  float _verticalExaggeration;
   
   TileTessellator* getTileTessellator();
   TileTexturizer* getTexturizer();
@@ -37,7 +40,7 @@ private:
   bool getShowStatistics();
   bool getRenderDebug();
   bool getUseTilesSplitBudget();
-  bool getForceTopLevelTilesRenderOnStart();
+  bool getForceFirstLevelTilesRenderOnStart();
   bool getIncrementalTileQuality();
   std::vector<VisibleSectorListener*>* getVisibleSectorListeners();
   std::vector<long long>* getStabilizationMilliSeconds();
@@ -46,6 +49,9 @@ private:
   LayerSet* createLayerSet();
   TilesRenderParameters* createTileRendererParameters();
   TileTessellator* createTileTessellator();
+
+  ElevationDataProvider* getElevationDataProvider();
+  float getVerticalExaggeration();
 
 public:
   TileRendererBuilder();
@@ -58,7 +64,7 @@ public:
   void setShowStatistics(const bool showStatistics);
   void setRenderDebug(const bool renderDebug);
   void setUseTilesSplitBuget(const bool useTilesSplitBudget);
-  void setForceTopLevelTilesRenderOnStart(const bool forceTopLevelTilesRenderOnStart);
+  void setForceFirstLevelTilesRenderOnStart(const bool forceFirstLevelTilesRenderOnStart);
   void setIncrementalTileQuality(const bool incrementalTileQuality);
   void addVisibleSectorListener(VisibleSectorListener* listener,
                                 const TimeInterval& stabilizationInterval);
@@ -68,6 +74,10 @@ public:
   void setTexturePriority(long long texturePriority);
   
   std::vector<std::string> getDefaultLayersNames();
+
+  void setElevationDataProvider(ElevationDataProvider* elevationDataProvider);
+
+  void setVerticalExaggeration(float verticalExaggeration);
 
 };
 

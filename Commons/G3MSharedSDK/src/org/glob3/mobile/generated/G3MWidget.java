@@ -74,8 +74,6 @@ public class G3MWidget
   
     for (int i = 0; i < _periodicalTasks.size(); i++)
     {
-      //    _periodicalTasks[i].releaseTask();
-  
       PeriodicalTask periodicalTask = _periodicalTasks.get(i);
       if (periodicalTask != null)
          periodicalTask.dispose();
@@ -90,21 +88,41 @@ public class G3MWidget
 
   public final void render(int width, int height)
   {
-      if (_paused)
-      {
-          return;
-      }
+    if (_paused)
+    {
+      return;
+    }
   
-      if ((_width != width || _height != height) && _mainRendererReady)
-      {
-          _width = width;
-          _height = height;
+    if ((_width != width || _height != height) && _mainRendererReady)
+    {
+      _width = width;
+      _height = height;
   
-          onResizeViewportEvent(_width, _height);
-      }
+      onResizeViewportEvent(_width, _height);
+    }
   
     _timer.start();
     _renderCounter++;
+  
+    if (_initializationTask != null)
+    {
+      if (!_initializationTaskWasRun)
+      {
+        _initializationTask.run(_context);
+        _initializationTaskWasRun = true;
+      }
+  
+      _initializationTaskReady = _initializationTask.isDone(_context);
+      if (_initializationTaskReady)
+      {
+        if (_autoDeleteInitializationTask)
+        {
+          if (_initializationTask != null)
+             _initializationTask.dispose();
+        }
+        _initializationTask = null;
+      }
+    }
   
     //Start periodical task
     final int periodicalTasksCount = _periodicalTasks.size();
@@ -125,38 +143,33 @@ public class G3MWidget
   
     G3MRenderContext rc = new G3MRenderContext(_frameTasksExecutor, IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _gl, _currentCamera, _nextCamera, _texturesHandler, _textureBuilder, _downloader, _effectsScheduler, IFactory.instance().createTimer(), _storage);
   
-    _mainRendererReady = _mainRenderer.isReadyToRender(rc);
+    _mainRendererReady = _initializationTaskReady && _mainRenderer.isReadyToRender(rc);
   
-    if (_mainRendererReady)
-    {
-      if (_initializationTask != null)
-      {
-        if (!_initializationTaskWasRun)
-        {
-          _initializationTask.run(_context);
-          _initializationTaskWasRun = true;
-        }
+    int _TESTING_initializationTask;
+  //  if (_mainRendererReady) {
+  //    if (_initializationTask != NULL) {
+  //      if (!_initializationTaskWasRun) {
+  //        _initializationTask->run(_context);
+  //        _initializationTaskWasRun = true;
+  //      }
+  //
+  //      if (_initializationTask->isDone(_context)) {
+  //        if (_autoDeleteInitializationTask) {
+  //          delete _initializationTask;
+  //        }
+  //        _initializationTask = NULL;
+  //      }
+  //      else {
+  //        _mainRendererReady = false;
+  //      }
+  //    }
+  //  }
+  //
+  //  if (_mainRendererReady) {
+  //    _effectsScheduler->doOneCyle(&rc);
+  //  }
+    _effectsScheduler.doOneCyle(rc);
   
-        if (_initializationTask.isDone(_context))
-        {
-          if (_autoDeleteInitializationTask)
-          {
-            if (_initializationTask != null)
-               _initializationTask.dispose();
-          }
-          _initializationTask = null;
-        }
-        else
-        {
-          _mainRendererReady = false;
-        }
-      }
-    }
-  
-    if (_mainRendererReady)
-    {
-      _effectsScheduler.doOneCyle(rc);
-    }
     _frameTasksExecutor.doPreRenderCycle(rc);
   
     Renderer selectedRenderer = _mainRendererReady ? _mainRenderer : _busyRenderer;
@@ -164,10 +177,10 @@ public class G3MWidget
     {
       if (_selectedRenderer != null)
       {
-        _selectedRenderer.stop();
+        _selectedRenderer.stop(rc);
       }
       _selectedRenderer = selectedRenderer;
-      _selectedRenderer.start();
+      _selectedRenderer.start(rc);
     }
   
     _gl.clearScreen(_backgroundColor);
@@ -482,7 +495,7 @@ public class G3MWidget
   public final void stopCameraAnimation()
   {
     EffectTarget target = _nextCamera.getEffectTarget();
-    _effectsScheduler.cancellAllEffectsFor(target);
+    _effectsScheduler.cancelAllEffectsFor(target);
   }
 
   public final void resetCameraPosition()
@@ -543,13 +556,6 @@ public class G3MWidget
   private int _width;
   private int _height;
 
-  private void initializeGL()
-  {
-    //_gl->enableDepthTest();
-  
-    //_gl->enableCullFace(GLCullFace::back());
-  }
-
   private final G3MContext _context;
 
   private boolean _paused;
@@ -557,6 +563,7 @@ public class G3MWidget
   private final GLState _rootState;
 
   private boolean _initializationTaskWasRun;
+  private boolean _initializationTaskReady;
 
   private boolean _clickOnProcess;
 
@@ -600,9 +607,8 @@ public class G3MWidget
      _context = new G3MContext(IFactory.instance(), IStringUtils.instance(), threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, downloader, _effectsScheduler, storage);
      _paused = false;
      _initializationTaskWasRun = false;
+     _initializationTaskReady = true;
      _clickOnProcess = false;
-    initializeGL();
-  
     _effectsScheduler.initialize(_context);
     _cameraRenderer.initialize(_context);
     _mainRenderer.initialize(_context);

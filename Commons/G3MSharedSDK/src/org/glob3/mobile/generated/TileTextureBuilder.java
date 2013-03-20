@@ -23,7 +23,9 @@ public class TileTextureBuilder extends RCObject
 
   private final TileTessellator _tessellator;
 
-  private java.util.ArrayList<PetitionStatus> _status = new java.util.ArrayList<PetitionStatus>();
+  private final int _firstLevel;
+
+  private java.util.ArrayList<TileTextureBuilder_PetitionStatus> _status = new java.util.ArrayList<TileTextureBuilder_PetitionStatus>();
   private java.util.ArrayList<Long> _requestsIds = new java.util.ArrayList<Long>();
 
 
@@ -92,6 +94,7 @@ public class TileTextureBuilder extends RCObject
      _tileTextureResolution = layerSet.getLayerTilesRenderParameters()._tileTextureResolution;
      _tileMeshResolution = layerSet.getLayerTilesRenderParameters()._tileMeshResolution;
      _mercator = layerSet.getLayerTilesRenderParameters()._mercator;
+     _firstLevel = layerSet.getLayerTilesRenderParameters()._firstLevel;
      _downloader = downloader;
      _tile = tile;
      _tessellatorMesh = tessellatorMesh;
@@ -103,13 +106,13 @@ public class TileTextureBuilder extends RCObject
      _canceled = false;
      _alreadyStarted = false;
      _texturePriority = texturePriority;
-    _petitions = cleanUpPetitions(layerSet.createTileMapPetitions(rc, tile, _tileTextureResolution));
+    _petitions = cleanUpPetitions(layerSet.createTileMapPetitions(rc, tile));
 
     _petitionsCount = _petitions.size();
 
     for (int i = 0; i < _petitionsCount; i++)
     {
-      _status.add(PetitionStatus.STATUS_PENDING);
+      _status.add(TileTextureBuilder_PetitionStatus.STATUS_PENDING);
     }
 
     _mesh = createMesh();
@@ -142,11 +145,13 @@ public class TileTextureBuilder extends RCObject
 
       final long priority = _texturePriority + _tile.getLevel();
 
-//      printf("%s\n", petition->getURL().getPath().c_str());
+      //      printf("%s\n", petition->getURL().getPath().c_str());
 
       final long requestId = _downloader.requestImage(new URL(petition.getURL()), priority, petition.getTimeToCache(), new BuilderDownloadStepDownloadListener(this, i), true);
-
-      _requestsIds.add(requestId);
+      if (requestId >= 0)
+      {
+        _requestsIds.add(requestId);
+      }
     }
   }
 
@@ -163,6 +168,8 @@ public class TileTextureBuilder extends RCObject
   public final RectangleI getImageRectangleInTexture(Sector wholeSector, Sector imageSector)
   {
 
+    final IMathUtils mu = IMathUtils.instance();
+
     final Vector2D lowerFactor = wholeSector.getUVCoordinates(imageSector.lower());
 
     final double widthFactor = imageSector.getDeltaLongitude().div(wholeSector.getDeltaLongitude());
@@ -171,7 +178,7 @@ public class TileTextureBuilder extends RCObject
     final int textureWidth = _tileTextureResolution._x;
     final int textureHeight = _tileTextureResolution._y;
 
-    return new RectangleI((int) IMathUtils.instance().round(lowerFactor._x * textureWidth), (int) IMathUtils.instance().round((1.0 - lowerFactor._y) * textureHeight), (int) IMathUtils.instance().round(widthFactor * textureWidth), (int) IMathUtils.instance().round(heightFactor * textureHeight));
+    return new RectangleI((int) mu.round(lowerFactor._x * textureWidth), (int) mu.round((1.0 - lowerFactor._y) * textureHeight), (int) mu.round(widthFactor * textureWidth), (int) mu.round(heightFactor * textureHeight));
   }
 
   public final void composeAndUploadTexture()
@@ -333,7 +340,7 @@ public class TileTextureBuilder extends RCObject
     }
     //checkIsPending(position);
 
-    _status.set(position, PetitionStatus.STATUS_DOWNLOADED);
+    _status.set(position, TileTextureBuilder_PetitionStatus.STATUS_DOWNLOADED);
     _petitions.get(position).setImage(image);
 
     stepDone();
@@ -349,7 +356,7 @@ public class TileTextureBuilder extends RCObject
 
     _anyCanceled = true;
 
-    _status.set(position, PetitionStatus.STATUS_CANCELED);
+    _status.set(position, TileTextureBuilder_PetitionStatus.STATUS_CANCELED);
 
     stepDone();
   }
@@ -404,7 +411,7 @@ public class TileTextureBuilder extends RCObject
 
     if ((mappings != null) && (_tile != null))
     {
-      if (mappings.size() != _tile.getLevel() + 1)
+      if (mappings.size() != (_tile.getLevel() - _firstLevel + 1))
       {
         ILogger.instance().logInfo("pleae break (point) me\n");
       }

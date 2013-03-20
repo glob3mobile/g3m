@@ -135,7 +135,7 @@ public:
   _lineWidth(1),
   _pointSize(1),
   _program(NULL)
-  //_boundTextureId(NULL)
+//  _boundTextureId(NULL)
   {
     //Init Constants
     GLCullFace::init(_nativeGL);

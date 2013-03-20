@@ -22,6 +22,7 @@
 #include "TexturesHandler.hpp"
 #include "TexturedMesh.hpp"
 #include "Sector.hpp"
+#include "MercatorUtils.hpp"
 
 EllipsoidShape::~EllipsoidShape() {
   delete _surfaceColor;
@@ -88,7 +89,7 @@ Mesh* EllipsoidShape::createBorderMesh(const G3MRenderContext* rc,
                          vertices->getCenter(),
                          vertices->create(),
                          indices.create(),
-                         _borderWidth,
+                         (_borderWidth < 1) ? 1 : _borderWidth,
                          1,
                          borderColor);
 }
@@ -129,7 +130,7 @@ Mesh* EllipsoidShape::createSurfaceMesh(const G3MRenderContext* rc,
                              vertices->getCenter(),
                              vertices->create(),
                              indices.create(),
-                             _borderWidth,
+                             (_borderWidth < 1) ? 1 : _borderWidth,
                              1,
                              surfaceColor);
 
@@ -203,9 +204,6 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
   FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(), &ellipsoid, Vector3D::zero());
   FloatBufferBuilderFromCartesian2D texCoords;
 
-
-  const double pi4 = IMathUtils::instance()->pi() * 4;
-
   const short resolution2Minus2 = (short) (2*_resolution-2);
   const short resolutionMinus1  = (short) (_resolution-1);
 
@@ -219,22 +217,17 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
       vertices.add(innerPoint);
 
 
-      double vv;
-      if (_mercator) {
-        double latitudeInDegrees = innerPoint.latitude().degrees();
-        if (latitudeInDegrees > 85) {
-          latitudeInDegrees = 85;
-        }
-        else if (latitudeInDegrees < -85) {
-          latitudeInDegrees = -85;
-        }
-
-        const double latSin = Angle::fromDegrees(latitudeInDegrees).sinus();
-        vv = 1.0 - ( ( IMathUtils::instance()->log( (1.0 + latSin) / (1.0 - latSin) ) / pi4 ) + 0.5 );
-      }
-      else {
-        vv = v;
-      }
+//      double vv;
+//      if (_mercator) {
+//        vv = MercatorUtils::getMercatorV(innerPoint.latitude());
+//      }
+//      else {
+//        vv = v;
+//      }
+      
+      const double vv = _mercator
+      /*                    */ ? MercatorUtils::getMercatorV(innerPoint.latitude())
+      /*                    */ : v;
 
       texCoords.add((float) u, (float) vv);
     }

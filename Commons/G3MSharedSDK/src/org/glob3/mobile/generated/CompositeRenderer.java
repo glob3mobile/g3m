@@ -140,21 +140,21 @@ public class CompositeRenderer extends Renderer
     }
   }
 
-  public final void start()
+  public final void start(G3MRenderContext rc)
   {
     final int rendersSize = _renderers.size();
     for (int i = 0; i < rendersSize; i++)
     {
-      _renderers.get(i).start();
+      _renderers.get(i).start(rc);
     }
   }
 
-  public final void stop()
+  public final void stop(G3MRenderContext rc)
   {
     final int rendersSize = _renderers.size();
     for (int i = 0; i < rendersSize; i++)
     {
-      _renderers.get(i).stop();
+      _renderers.get(i).stop(rc);
     }
   }
 

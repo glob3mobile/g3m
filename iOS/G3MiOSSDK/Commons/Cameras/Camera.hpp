@@ -73,7 +73,6 @@ public:
     _frustumMC             = other._frustumMC;
     _halfFrustum           = other._halfFrustum;
     _halfFrustumMC         = other._halfFrustumMC;
-
   }
 
   std::string description(){

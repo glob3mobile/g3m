@@ -39,6 +39,7 @@ AbstractMesh(primitive,
              colorsIntensity),
 _indices(indices)
 {
+
 }
 
 void IndexedMesh::rawRender(const G3MRenderContext* rc,

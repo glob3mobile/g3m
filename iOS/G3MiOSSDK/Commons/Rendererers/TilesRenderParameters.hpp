@@ -16,16 +16,16 @@ class TilesRenderParameters {
 public:
   const bool      _renderDebug;
   const bool      _useTilesSplitBudget;
-  const bool      _forceTopLevelTilesRenderOnStart;
+  const bool      _forceFirstLevelTilesRenderOnStart;
   const bool      _incrementalTileQuality;
 
   TilesRenderParameters(const bool renderDebug,
                         const bool useTilesSplitBudget,
-                        const bool forceTopLevelTilesRenderOnStart,
+                        const bool forceFirstLevelTilesRenderOnStart,
                         const bool incrementalTileQuality) :
   _renderDebug(renderDebug),
   _useTilesSplitBudget(useTilesSplitBudget),
-  _forceTopLevelTilesRenderOnStart(forceTopLevelTilesRenderOnStart),
+  _forceFirstLevelTilesRenderOnStart(forceFirstLevelTilesRenderOnStart),
   _incrementalTileQuality(incrementalTileQuality)
   {
 
@@ -33,16 +33,6 @@ public:
 
   ~TilesRenderParameters() {
   }
-
-//  static TilesRenderParameters* createDefault(const bool renderDebug,
-//                                              const bool useTilesSplitBudget,
-//                                              const bool forceTopLevelTilesRenderOnStart,
-//                                              const bool incrementalTileQuality) {
-//    return new TilesRenderParameters(renderDebug,
-//                                     useTilesSplitBudget,
-//                                     forceTopLevelTilesRenderOnStart,
-//                                     incrementalTileQuality);
-//  }
 
 };
 

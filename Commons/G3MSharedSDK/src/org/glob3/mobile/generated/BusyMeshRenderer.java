@@ -29,10 +29,12 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
 {
   private Mesh _mesh;
   private double _degrees;
+  private Color _backgroundColor;
 
-  public BusyMeshRenderer()
+  public BusyMeshRenderer(Color backgroundColor)
   {
      _degrees = 0;
+     _backgroundColor = backgroundColor;
   }
 
   public final void initialize(G3MContext context)
@@ -85,7 +87,6 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
     return true;
   }
 
-  private boolean render_firstTime = true;
   public final void render(G3MRenderContext rc, GLState parentState)
   {
     GL gl = rc.getGL();
@@ -94,15 +95,6 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
     GLState state = new GLState(parentState);
     state.enableBlend();
     gl.setBlendFuncSrcAlpha();
-  
-    // init effect in the first render
-//    static boolean firstTime = true;
-    if (render_firstTime)
-    {
-      render_firstTime = false;
-      Effect effect = new BusyMeshEffect(this);
-      rc.getEffectsScheduler().startEffect(effect, this);
-    }
   
     // init modelview matrix
     int[] currentViewport = new int[4];
@@ -114,12 +106,11 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
     gl.loadMatrixf(MutableMatrix44D.identity());
   
     // clear screen
-    gl.clearScreen(0.0f, 0.0f, 0.0f, 1.0f);
+    gl.clearScreen(_backgroundColor.getRed(), _backgroundColor.getGreen(), _backgroundColor.getBlue(), _backgroundColor.getAlpha());
   
     gl.pushMatrix();
-    MutableMatrix44D R1 = MutableMatrix44D.createRotationMatrix(Angle.zero(), new Vector3D(-1, 0, 0));
-    MutableMatrix44D R2 = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_degrees), new Vector3D(0, 0, -1));
-    gl.multMatrixf(R1.multiply(R2));
+    MutableMatrix44D R1 = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_degrees), new Vector3D(0, 0, -1));
+    gl.multMatrixf(R1);
   
     // draw mesh
     _mesh.render(rc, state);
@@ -141,6 +132,8 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
   {
     if (_mesh != null)
        _mesh.dispose();
+    if (_backgroundColor != null)
+       _backgroundColor.dispose();
   }
 
   public final void incDegrees(double value)
@@ -150,14 +143,15 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
        _degrees -= 360;
   }
 
-  public final void start()
+  public final void start(G3MRenderContext rc)
   {
-    //int _TODO_start_effects;
+    Effect effect = new BusyMeshEffect(this);
+    rc.getEffectsScheduler().startEffect(effect, this);
   }
 
-  public final void stop()
+  public final void stop(G3MRenderContext rc)
   {
-    //int _TODO_stop_effects;
+    rc.getEffectsScheduler().cancelAllEffectsFor(this);
   }
 
   public final void onResume(G3MContext context)

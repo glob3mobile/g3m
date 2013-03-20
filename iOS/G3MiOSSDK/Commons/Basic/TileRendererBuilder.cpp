@@ -12,14 +12,13 @@
 #include "EllipsoidalTileTessellator.hpp"
 #include "LayerBuilder.hpp"
 #include "DownloadPriority.hpp"
-//#include "WMSBillElevationDataProvider.hpp"
-#include "SingleBillElevationDataProvider.hpp"
+#include "ElevationDataProvider.hpp"
 
 TileRendererBuilder::TileRendererBuilder() {  
   _showStatistics = false;
   _renderDebug = false;
   _useTilesSplitBudget = true;
-  _forceTopLevelTilesRenderOnStart = true;
+  _forceFirstLevelTilesRenderOnStart = true;
   _incrementalTileQuality = false;
 
   _parameters = NULL;
@@ -29,6 +28,9 @@ TileRendererBuilder::TileRendererBuilder() {
   _visibleSectorListeners = NULL;
   _stabilizationMilliSeconds = NULL;
   _texturePriority = DownloadPriority::HIGHER;
+
+  _elevationDataProvider = NULL;
+  _verticalExaggeration = 0.0f;
 }
 
 TileRendererBuilder::~TileRendererBuilder() {
@@ -36,6 +38,7 @@ TileRendererBuilder::~TileRendererBuilder() {
   delete _layerSet;
   delete _texturizer;
   delete _tileTessellator;
+  delete _elevationDataProvider;
 }
 
 /**
@@ -118,12 +121,12 @@ bool TileRendererBuilder::getUseTilesSplitBudget() {
 }
 
 /**
- * Returns the forceTopLevelTilesRenderOnStart flag.
+ * Returns the forceFirstLevelTilesRenderOnStart flag.
  *
- * @return _forceTopLevelTilesRenderOnStart: bool
+ * @return _forceFirstLevelTilesRenderOnStart: bool
  */
-bool TileRendererBuilder::getForceTopLevelTilesRenderOnStart() {
-  return _forceTopLevelTilesRenderOnStart;
+bool TileRendererBuilder::getForceFirstLevelTilesRenderOnStart() {
+  return _forceFirstLevelTilesRenderOnStart;
 }
 
 /**
@@ -137,8 +140,6 @@ bool TileRendererBuilder::getIncrementalTileQuality() {
 
 /**
  * Returns the array of visibleSectorListeners.
- *
- * @return _forceTopLevelTilesRenderOnStart: std::vector<VisibleSectorListener*>
  */
 std::vector<VisibleSectorListener*>* TileRendererBuilder::getVisibleSectorListeners() {
   if (!_visibleSectorListeners) {
@@ -227,8 +228,8 @@ void TileRendererBuilder::setUseTilesSplitBuget(const bool useTilesSplitBudget) 
   _useTilesSplitBudget = useTilesSplitBudget;
 }
 
-void TileRendererBuilder::setForceTopLevelTilesRenderOnStart(const bool forceTopLevelTilesRenderOnStart) {
-  _forceTopLevelTilesRenderOnStart = forceTopLevelTilesRenderOnStart;
+void TileRendererBuilder::setForceFirstLevelTilesRenderOnStart(const bool forceFirstLevelTilesRenderOnStart) {
+  _forceFirstLevelTilesRenderOnStart = forceFirstLevelTilesRenderOnStart;
 }
 
 void TileRendererBuilder::setIncrementalTileQuality(const bool incrementalTileQuality) {
@@ -245,36 +246,38 @@ void TileRendererBuilder::setTexturePriority(long long texturePriority) {
   _texturePriority = texturePriority;
 }
 
+void TileRendererBuilder::setElevationDataProvider(ElevationDataProvider* elevationDataProvider) {
+  if (_elevationDataProvider != NULL) {
+    ILogger::instance()->logError("LOGIC ERROR: _elevationDataProvider already initialized");
+    return;
+  }
+  _elevationDataProvider = elevationDataProvider;
+}
+
+void TileRendererBuilder::setVerticalExaggeration(float verticalExaggeration) {
+  if (_verticalExaggeration > 0.0f) {
+    ILogger::instance()->logError("LOGIC ERROR: _verticalExaggeration already initialized");
+    return;
+  }
+  _verticalExaggeration = verticalExaggeration;
+}
+
+ElevationDataProvider* TileRendererBuilder::getElevationDataProvider() {
+  return _elevationDataProvider;
+}
+
+float TileRendererBuilder::getVerticalExaggeration() {
+  if (_verticalExaggeration <= 0.0f) {
+    _verticalExaggeration = 1.0f;
+  }
+  return _verticalExaggeration;
+}
+
+
 TileRenderer* TileRendererBuilder::create() {
-  int __TODO_make_configurable;
-  
-  ElevationDataProvider* elevationDataProvider = NULL;
-
-  //  ElevationDataProvider* elevationDataProvider = new WMSBillElevationDataProvider();
-  
-//  ElevationDataProvider* elevationDataProvider;
-//  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
-//                                                              Sector::fullSphere(),
-//                                                              Vector2I(2048, 1024),
-//                                                              0);
-
-//  ElevationDataProvider* elevationDataProvider;
-//  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///elev-35.0_-6.0_38.0_-2.0_4096x2048.bil", false),
-//                                                              Sector::fromDegrees(35, -6, 38, -2),
-//                                                              Vector2I(4096, 2048),
-//                                                              0);
-
-  //  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-4096x2048.bil", false),
-  //                                                              Sector::fullSphere(),
-  //                                                              Vector2I(4096, 2048),
-  //                                                              0);
-  
-  int ___TODO_make_configurable;
-  float verticalExaggeration = 1;
-  
   TileRenderer* tileRenderer = new TileRenderer(getTileTessellator(),
-                                                elevationDataProvider,
-                                                verticalExaggeration,
+                                                getElevationDataProvider(),
+                                                getVerticalExaggeration(),
                                                 getTexturizer(),
                                                 getLayerSet(),
                                                 getParameters(),
@@ -294,6 +297,8 @@ TileRenderer* TileRendererBuilder::create() {
   _visibleSectorListeners = NULL;
   delete _stabilizationMilliSeconds;
   _stabilizationMilliSeconds = NULL;
+
+  _elevationDataProvider = NULL;
   
   return tileRenderer;
 }
@@ -301,7 +306,7 @@ TileRenderer* TileRendererBuilder::create() {
 TilesRenderParameters* TileRendererBuilder::createTileRendererParameters() {
   return new TilesRenderParameters(getRenderDebug(),
                                    getUseTilesSplitBudget(),
-                                   getForceTopLevelTilesRenderOnStart(),
+                                   getForceFirstLevelTilesRenderOnStart(),
                                    getIncrementalTileQuality());
 }
 

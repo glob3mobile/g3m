@@ -61,18 +61,9 @@ public:
     return Sector(lower, upper);
   }
 
-  Vector2D getScaleFactor(const Sector& that) const {
-    const double u = _deltaLatitude.div(that._deltaLatitude);
-    const double v = _deltaLongitude.div(that._deltaLongitude);
-    return Vector2D(u, v);
-  }
+  const Vector2D div(const Sector& that) const;
 
-  Vector2D getTranslationFactor(const Sector& that) const {
-    const double diff = _deltaLongitude.div(that._deltaLongitude);
-    const Vector2D uv = that.getUVCoordinates(_lower);
-
-    return Vector2D(uv._x, uv._y - diff);
-  }
+//  Vector2D getTranslationFactor(const Sector& that) const;
 
   bool fullContains(const Sector& that) const;
 
@@ -82,7 +73,7 @@ public:
 
   static Sector fullSphere() {
     return Sector(Geodetic2D(Angle::fromDegrees(-90), Angle::fromDegrees(-180)),
-                  Geodetic2D(Angle::fromDegrees(90), Angle::fromDegrees(180)));
+                  Geodetic2D(Angle::fromDegrees( 90), Angle::fromDegrees( 180)));
   }
 
   const Geodetic2D lower() const {
@@ -114,11 +105,13 @@ public:
                 const Angle& longitude) const;
   
   bool contains(const Geodetic2D& position) const {
-    return contains(position.latitude(), position.longitude());
+    return contains(position.latitude(),
+                    position.longitude());
   }
 
   bool contains(const Geodetic3D& position) const {
-    return contains(position.latitude(), position.longitude());
+    return contains(position.latitude(),
+                    position.longitude());
   }
 
   bool touchesWith(const Sector& that) const;
@@ -140,11 +133,13 @@ public:
   }
 
   const Geodetic2D getNW() const {
-    return Geodetic2D(_upper.latitude(), _lower.longitude());
+    return Geodetic2D(_upper.latitude(),
+                      _lower.longitude());
   }
 
   const Geodetic2D getSE() const {
-    return Geodetic2D(_lower.latitude(), _upper.longitude());
+    return Geodetic2D(_lower.latitude(),
+                      _upper.longitude());
   }
 
   const Geodetic2D getCenter() const {
@@ -155,19 +150,26 @@ public:
   // (u,v)=(0,0) in NW point, and (1,1) in SE point
   const Geodetic2D getInnerPoint(double u, double v) const;
 
+  const Angle getInnerPointLatitude(double v) const;
+
   const Vector2D getUVCoordinates(const Geodetic2D& point) const {
     return getUVCoordinates(point.latitude(), point.longitude());
   }
 
   Vector2D getUVCoordinates(const Angle& latitude,
                             const Angle& longitude) const {
-    // const double u = longitude.sub(_lower.longitude()).div(getDeltaLongitude());
-    // const double v = _upper.latitude().sub(latitude).div(getDeltaLatitude());
-    const double u = (longitude._radians - _lower.longitude()._radians) / _deltaLongitude._radians;
-    const double v = (_upper.latitude()._radians - latitude._radians)   / _deltaLatitude._radians;
-
-    return Vector2D(u, v);
+    return Vector2D(getUCoordinates(longitude),
+                    getVCoordinates(latitude));
   }
+
+  double getUCoordinates(const Angle& longitude) const {
+    return (longitude._radians - _lower.longitude()._radians) / _deltaLongitude._radians;
+  }
+
+  double getVCoordinates(const Angle& latitude) const {
+    return (_upper.latitude()._radians - latitude._radians)   / _deltaLatitude._radians;
+  }
+
 
   bool isBackOriented(const G3MRenderContext *rc, double height) const;
 
@@ -178,10 +180,10 @@ public:
   const std::string description() const;
 
   Sector* shrinkedByPercentP(float percent) const {
-    Angle deltaLatitude  = _deltaLatitude.times(percent).div(2);
-    Angle deltaLongitude = _deltaLongitude.times(percent).div(2);
+    const Angle deltaLatitude  = _deltaLatitude.times(percent).div(2);
+    const Angle deltaLongitude = _deltaLongitude.times(percent).div(2);
 
-    Geodetic2D delta = Geodetic2D(deltaLatitude, deltaLongitude);
+    const Geodetic2D delta(deltaLatitude, deltaLongitude);
 
     return new Sector(_lower.add( delta ),
                       _upper.sub( delta ) );
@@ -192,11 +194,11 @@ public:
   }
   
   bool touchesNorthPole() const {
-    return (_upper.latitude().greaterThan(Angle::fromDegrees(89.9)));
+    return (_upper.latitude()._degrees >= 89.9);
   }
   
   bool touchesSouthPole() const {
-    return (_lower.latitude().lowerThan(Angle::fromDegrees(-89.9)));
+    return (_lower.latitude()._degrees <= -89.9);
   }
   
 };

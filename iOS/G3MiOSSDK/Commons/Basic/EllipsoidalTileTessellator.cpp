@@ -16,16 +16,15 @@
 #include "FloatBufferBuilder.hpp"
 #include "ShortBufferBuilder.hpp"
 #include "FloatBufferBuilderFromCartesian3D.hpp"
-//#include "FloatBufferBuilderFromCartesian2D.hpp"
 #include "FloatBufferBuilderFromGeodetic.hpp"
 #include "SimpleFloatBufferBuilder.hpp"
 #include "GLConstants.hpp"
 #include "Color.hpp"
 #include "Planet.hpp"
-
 #include "IFactory.hpp"
 #include "IFloatBuffer.hpp"
 #include "ElevationData.hpp"
+#include "MercatorUtils.hpp"
 
 Vector2I EllipsoidalTileTessellator::getTileMeshResolution(const Planet* planet,
                                                            const Vector2I& rawResolution,
@@ -36,23 +35,22 @@ Vector2I EllipsoidalTileTessellator::getTileMeshResolution(const Planet* planet,
 
 Vector2I EllipsoidalTileTessellator::calculateResolution(const Vector2I& rawResolution,
                                                          const Sector& sector) const {
-//  return Vector2I(_resolutionX, _resolutionY);
+  return rawResolution;
 
-
-  /* testing for dynamic latitude-resolution */
-  const double cos = sector.getCenter().latitude().cosinus();
-
-  int resolutionY = (int) (rawResolution._y * cos);
-  if (resolutionY < 6) {
-    resolutionY = 6;
-  }
-
-  int resolutionX = (int) (rawResolution._x * cos);
-  if (resolutionX < 6) {
-    resolutionX = 6;
-  }
-
-  return Vector2I(resolutionX, resolutionY);
+//  /* testing for dynamic latitude-resolution */
+//  const double cos = sector.getCenter().latitude().cosinus();
+//
+//  int resolutionY = (int) (rawResolution._y * cos);
+//  if (resolutionY < 8) {
+//    resolutionY = 8;
+//  }
+//
+//  int resolutionX = (int) (rawResolution._x * cos);
+//  if (resolutionX < 8) {
+//    resolutionX = 8;
+//  }
+//
+//  return Vector2I(resolutionX, resolutionY);
 }
 
 Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
@@ -60,7 +58,7 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
                                                  const Tile* tile,
                                                  const ElevationData* elevationData,
                                                  float verticalExaggeration,
-                                                 bool debug) const {
+                                                 bool renderDebug) const {
 
   const Sector sector = tile->getSector();
   const Vector2I tileResolution = calculateResolution(rawResolution, sector);
@@ -160,7 +158,7 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
 
   Color* color = Color::newFromRGBA((float) 1.0, (float) 1.0, (float) 1.0, (float) 1.0);
 
-  return new IndexedMesh(//debug ? GLPrimitive::lineStrip() : GLPrimitive::triangleStrip(),
+  return new IndexedMesh(//renderDebug ? GLPrimitive::lineStrip() : GLPrimitive::triangleStrip(),
                          GLPrimitive::triangleStrip(),
                          //GLPrimitive::lineStrip(),
                          true,
@@ -172,6 +170,26 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
                          color);
 }
 
+const Vector2D EllipsoidalTileTessellator::getTextCoord(const Tile* tile,
+                                                        const Angle& latitude,
+                                                        const Angle& longitude,
+                                                        bool mercator) const {
+  const Sector sector = tile->getSector();
+
+  const Vector2D linearUV = sector.getUVCoordinates(latitude, longitude);
+  if (!mercator) {
+    return linearUV;
+  }
+
+  const double lowerGlobalV = MercatorUtils::getMercatorV(sector.lower().latitude());
+  const double upperGlobalV = MercatorUtils::getMercatorV(sector.upper().latitude());
+  const double deltaGlobalV = lowerGlobalV - upperGlobalV;
+
+  const double globalV = MercatorUtils::getMercatorV(latitude);
+  const double localV  = (globalV - upperGlobalV) / deltaGlobalV;
+
+  return Vector2D(linearUV._x, localV);
+}
 
 IFloatBuffer* EllipsoidalTileTessellator::createTextCoords(const Vector2I& rawResolution,
                                                            const Tile* tile,
@@ -182,11 +200,28 @@ IFloatBuffer* EllipsoidalTileTessellator::createTextCoords(const Vector2I& rawRe
   float* u = new float[tileResolution._x * tileResolution._y];
   float* v = new float[tileResolution._x * tileResolution._y];
 
+  const Sector sector = tile->getSector();
+  
+  const double mercatorLowerGlobalV = MercatorUtils::getMercatorV(sector.lower().latitude());
+  const double mercatorUpperGlobalV = MercatorUtils::getMercatorV(sector.upper().latitude());
+  const double mercatorDeltaGlobalV = mercatorLowerGlobalV - mercatorUpperGlobalV;
+
   for (int j = 0; j < tileResolution._y; j++) {
     for (int i = 0; i < tileResolution._x; i++) {
       const int pos = j*tileResolution._x + i;
+
       u[pos] = (float) i / (tileResolution._x-1);
-      v[pos] = (float) j / (tileResolution._y-1);
+
+      const double linearV = (double) j / (tileResolution._y-1);
+      if (mercator) {
+        const Angle latitude = sector.getInnerPointLatitude(linearV);
+        const double mercatorGlobalV = MercatorUtils::getMercatorV(latitude);
+        const double mercatorLocalV  = (mercatorGlobalV - mercatorUpperGlobalV) / mercatorDeltaGlobalV;
+        v[pos] = (float) mercatorLocalV;
+      }
+      else {
+        v[pos] = (float) linearV;
+      }
     }
   }
 

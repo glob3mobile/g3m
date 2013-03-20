@@ -20,7 +20,7 @@ enum WMSServerVersion {
 
 class WMSLayer: public Layer {
 private:
-  
+
 #ifdef C_CODE
   const URL _mapServerURL;
   const URL _queryServerURL;
@@ -29,21 +29,24 @@ private:
   private final URL _mapServerURL;
   private final URL _queryServerURL;
 #endif
-  
+
   const std::string      _mapLayer;
   const WMSServerVersion _mapServerVersion;
   const std::string      _queryLayer;
   const WMSServerVersion _queryServerVersion;
-  
+
   Sector              _sector;
-  
+
   const std::string   _format;
   const std::string   _srs;
   const std::string   _style;
   const bool          _isTransparent;
 
   std::string         _extraParameter;
-    
+
+  inline double toBBOXLongitude(const Angle& longitude) const;
+  inline double toBBOXLatitude (const Angle& latitude)  const;
+
 public:
 
   WMSLayer(const std::string& mapLayer,
@@ -60,7 +63,7 @@ public:
            LayerCondition* condition,
            const TimeInterval& timeToCache,
            const LayerTilesRenderParameters* parameters = NULL);
-  
+
   WMSLayer(const std::string& mapLayer,
            const URL& mapServerURL,
            const WMSServerVersion mapServerVersion,
@@ -72,24 +75,23 @@ public:
            LayerCondition* condition,
            const TimeInterval& timeToCache,
            const LayerTilesRenderParameters* parameters = NULL);
-  
-  std::vector<Petition*> getMapPetitions(const G3MRenderContext* rc,
-                                         const Tile* tile,
-                                         const Vector2I& tileTextureResolution) const;
-  
-//  bool isTransparent() const{
-//    return _isTransparent;
-//  }
-  
+
+  std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
+                                                const Tile* tile) const;
+
+  //  bool isTransparent() const{
+  //    return _isTransparent;
+  //  }
+
   URL getFeatureInfoURL(const Geodetic2D& g,
                         const Sector& sector) const;
-  
+
 
   void setExtraParameter(const std::string& extraParameter) {
     _extraParameter = extraParameter;
     notifyChanges();
   }
-
+  
 };
 
 #endif

@@ -116,10 +116,9 @@ _context(new G3MContext(IFactory::instance(),
                         storage)),
 _paused(false),
 _initializationTaskWasRun(false),
+_initializationTaskReady(true),
 _clickOnProcess(false)
 {
-  initializeGL();
-
   _effectsScheduler->initialize(_context);
   _cameraRenderer->initialize(_context);
   _mainRenderer->initialize(_context);
@@ -179,12 +178,6 @@ G3MWidget* G3MWidget::create(GL*                              gl,
                        periodicalTasks);
 }
 
-void G3MWidget::initializeGL() {
-  //_gl->enableDepthTest();
-
-  //_gl->enableCullFace(GLCullFace::back());
-}
-
 G3MWidget::~G3MWidget() {
   delete _userData;
 
@@ -213,8 +206,6 @@ G3MWidget::~G3MWidget() {
   delete _frameTasksExecutor;
 
   for (int i = 0; i < _periodicalTasks.size(); i++){
-    //    _periodicalTasks[i].releaseTask();
-
     PeriodicalTask* periodicalTask =  _periodicalTasks[i];
     delete periodicalTask;
   }
@@ -311,19 +302,34 @@ void G3MWidget::onResizeViewportEvent(int width, int height) {
 
 
 void G3MWidget::render(int width, int height) {
-    if (_paused) {
-        return;
-    }
+  if (_paused) {
+    return;
+  }
 
-    if ((_width != width || _height != height) && _mainRendererReady) {
-        _width = width;
-        _height = height;
-        
-        onResizeViewportEvent(_width, _height);
-    }
+  if ((_width != width || _height != height) && _mainRendererReady) {
+    _width = width;
+    _height = height;
+
+    onResizeViewportEvent(_width, _height);
+  }
 
   _timer->start();
   _renderCounter++;
+  
+  if (_initializationTask != NULL) {
+    if (!_initializationTaskWasRun) {
+      _initializationTask->run(_context);
+      _initializationTaskWasRun = true;
+    }
+    
+    _initializationTaskReady = _initializationTask->isDone(_context);
+    if (_initializationTaskReady) {
+      if (_autoDeleteInitializationTask) {
+        delete _initializationTask;
+      }
+      _initializationTask = NULL;
+    }
+  }
 
   //Start periodical task
   const int periodicalTasksCount = _periodicalTasks.size();
@@ -360,39 +366,42 @@ void G3MWidget::render(int width, int height) {
                       IFactory::instance()->createTimer(),
                       _storage);
 
-  _mainRendererReady = _mainRenderer->isReadyToRender(&rc);
+  _mainRendererReady = _initializationTaskReady && _mainRenderer->isReadyToRender(&rc);
 
-  if (_mainRendererReady) {
-    if (_initializationTask != NULL) {
-      if (!_initializationTaskWasRun) {
-        _initializationTask->run(_context);
-        _initializationTaskWasRun = true;
-      }
-
-      if (_initializationTask->isDone(_context)) {
-        if (_autoDeleteInitializationTask) {
-          delete _initializationTask;
-        }
-        _initializationTask = NULL;
-      }
-      else {
-        _mainRendererReady = false;
-      }
-    }
-  }
-
-  if (_mainRendererReady) {
-    _effectsScheduler->doOneCyle(&rc);
-  }
+  int _TESTING_initializationTask;
+//  if (_mainRendererReady) {
+//    if (_initializationTask != NULL) {
+//      if (!_initializationTaskWasRun) {
+//        _initializationTask->run(_context);
+//        _initializationTaskWasRun = true;
+//      }
+//
+//      if (_initializationTask->isDone(_context)) {
+//        if (_autoDeleteInitializationTask) {
+//          delete _initializationTask;
+//        }
+//        _initializationTask = NULL;
+//      }
+//      else {
+//        _mainRendererReady = false;
+//      }
+//    }
+//  }
+//
+//  if (_mainRendererReady) {
+//    _effectsScheduler->doOneCyle(&rc);
+//  }
+  _effectsScheduler->doOneCyle(&rc);
+  
   _frameTasksExecutor->doPreRenderCycle(&rc);
 
   Renderer* selectedRenderer = _mainRendererReady ? _mainRenderer : _busyRenderer;
   if (selectedRenderer != _selectedRenderer) {
     if (_selectedRenderer != NULL) {
-      _selectedRenderer->stop();
+      _selectedRenderer->stop(&rc);
     }
     _selectedRenderer = selectedRenderer;
-    _selectedRenderer->start();
+    _selectedRenderer->start(&rc);
   }
 
   _gl->clearScreen(_backgroundColor);
@@ -578,7 +587,7 @@ void G3MWidget::setAnimatedCameraPosition(const TimeInterval& interval,
 
 void G3MWidget::stopCameraAnimation() {
   EffectTarget* target = _nextCamera->getEffectTarget();
-  _effectsScheduler->cancellAllEffectsFor(target);
+  _effectsScheduler->cancelAllEffectsFor(target);
 }
 
 void G3MWidget::resetCameraPosition() {

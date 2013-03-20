@@ -20,58 +20,46 @@ package org.glob3.mobile.generated;
 
 public class EllipsoidalTileTessellator extends TileTessellator
 {
-
-//  const unsigned int _resolutionX;
-//  const unsigned int _resolutionY;
   private final boolean _skirted;
 
   private Vector2I calculateResolution(Vector2I rawResolution, Sector sector)
   {
-  //  return Vector2I(_resolutionX, _resolutionY);
+    return rawResolution;
   
-  
-    /* testing for dynamic latitude-resolution */
-    final double cos = sector.getCenter().latitude().cosinus();
-  
-    int resolutionY = (int)(rawResolution._y * cos);
-    if (resolutionY < 6)
-    {
-      resolutionY = 6;
-    }
-  
-    int resolutionX = (int)(rawResolution._x * cos);
-    if (resolutionX < 6)
-    {
-      resolutionX = 6;
-    }
-  
-    return new Vector2I(resolutionX, resolutionY);
+  //  /* testing for dynamic latitude-resolution */
+  //  const double cos = sector.getCenter().latitude().cosinus();
+  //
+  //  int resolutionY = (int) (rawResolution._y * cos);
+  //  if (resolutionY < 8) {
+  //    resolutionY = 8;
+  //  }
+  //
+  //  int resolutionX = (int) (rawResolution._x * cos);
+  //  if (resolutionX < 8) {
+  //    resolutionX = 8;
+  //  }
+  //
+  //  return Vector2I(resolutionX, resolutionY);
   }
 
 
-  public EllipsoidalTileTessellator(boolean skirted) //const Vector2I& resolution,
-//  _resolutionX(resolution._x),
-//  _resolutionY(resolution._y),
+  public EllipsoidalTileTessellator(boolean skirted)
   {
      _skirted = skirted;
-    //    int __TODO_width_and_height_resolutions;
+
   }
 
   public void dispose()
   {
   }
 
-
-  ///#include "FloatBufferBuilderFromCartesian2D.hpp"
-  
-  
   public final Vector2I getTileMeshResolution(Planet planet, Vector2I rawResolution, Tile tile, boolean debug)
   {
     return calculateResolution(rawResolution, tile.getSector());
   }
 
 
-  public final Mesh createTileMesh(Planet planet, Vector2I rawResolution, Tile tile, ElevationData elevationData, float verticalExaggeration, boolean debug)
+  public final Mesh createTileMesh(Planet planet, Vector2I rawResolution, Tile tile, ElevationData elevationData, float verticalExaggeration, boolean renderDebug)
   {
   
     final Sector sector = tile.getSector();
@@ -177,7 +165,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
   
     Color color = Color.newFromRGBA((float) 1.0, (float) 1.0, (float) 1.0, (float) 1.0);
   
-    return new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, color); //debug ? GLPrimitive::lineStrip() : GLPrimitive::triangleStrip(),
+    return new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, color); //renderDebug ? GLPrimitive::lineStrip() : GLPrimitive::triangleStrip(),
                            //GLPrimitive::lineStrip(),
   }
 
@@ -244,13 +232,32 @@ public class EllipsoidalTileTessellator extends TileTessellator
     float[] u = new float[tileResolution._x * tileResolution._y];
     float[] v = new float[tileResolution._x * tileResolution._y];
   
+    final Sector sector = tile.getSector();
+  
+    final double mercatorLowerGlobalV = MercatorUtils.getMercatorV(sector.lower().latitude());
+    final double mercatorUpperGlobalV = MercatorUtils.getMercatorV(sector.upper().latitude());
+    final double mercatorDeltaGlobalV = mercatorLowerGlobalV - mercatorUpperGlobalV;
+  
     for (int j = 0; j < tileResolution._y; j++)
     {
       for (int i = 0; i < tileResolution._x; i++)
       {
         final int pos = j *tileResolution._x + i;
+  
         u[pos] = (float) i / (tileResolution._x-1);
-        v[pos] = (float) j / (tileResolution._y-1);
+  
+        final double linearV = (double) j / (tileResolution._y-1);
+        if (mercator)
+        {
+          final Angle latitude = sector.getInnerPointLatitude(linearV);
+          final double mercatorGlobalV = MercatorUtils.getMercatorV(latitude);
+          final double mercatorLocalV = (mercatorGlobalV - mercatorUpperGlobalV) / mercatorDeltaGlobalV;
+          v[pos] = (float) mercatorLocalV;
+        }
+        else
+        {
+          v[pos] = (float) linearV;
+        }
       }
     }
   
@@ -316,6 +323,26 @@ public class EllipsoidalTileTessellator extends TileTessellator
   
     //  return textCoords.create();
     return textCoords;
+  }
+
+  public final Vector2D getTextCoord(Tile tile, Angle latitude, Angle longitude, boolean mercator)
+  {
+    final Sector sector = tile.getSector();
+  
+    final Vector2D linearUV = sector.getUVCoordinates(latitude, longitude);
+    if (!mercator)
+    {
+      return linearUV;
+    }
+  
+    final double lowerGlobalV = MercatorUtils.getMercatorV(sector.lower().latitude());
+    final double upperGlobalV = MercatorUtils.getMercatorV(sector.upper().latitude());
+    final double deltaGlobalV = lowerGlobalV - upperGlobalV;
+  
+    final double globalV = MercatorUtils.getMercatorV(latitude);
+    final double localV = (globalV - upperGlobalV) / deltaGlobalV;
+  
+    return new Vector2D(linearUV._x, localV);
   }
 
 }

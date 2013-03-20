@@ -149,6 +149,14 @@ public class Tile
   
     final LayerTilesRenderParameters parameters = trc.getLayerTilesRenderParameters();
   
+    if (_level >= parameters._maxLevelForPoles)
+    {
+      if (_sector.touchesNorthPole() || _sector.touchesSouthPole())
+      {
+        return true;
+      }
+    }
+  
     if (_level >= parameters._maxLevel)
     {
       return true;
@@ -204,30 +212,6 @@ public class Tile
     return false;
   }
 
-  private java.util.ArrayList<Tile> createSubTiles(double u, double v)
-  {
-    final Geodetic2D lower = _sector.lower();
-    final Geodetic2D upper = _sector.upper();
-  
-  //  const Angle midLat = Angle::midAngle(lower.latitude(), upper.latitude());
-  //  const Angle midLon = Angle::midAngle(lower.longitude(), upper.longitude());
-    final Angle midLat = Angle.linearInterpolation(lower.latitude(), upper.latitude(), v);
-    final Angle midLon = Angle.linearInterpolation(lower.longitude(), upper.longitude(), u);
-  
-    final int nextLevel = _level + 1;
-  
-    java.util.ArrayList<Tile> subTiles = new java.util.ArrayList<Tile>();
-    subTiles.add(createSubTile(lower.latitude(), lower.longitude(), midLat, midLon, nextLevel, 2 * _row, 2 * _column));
-  
-    subTiles.add(createSubTile(lower.latitude(), midLon, midLat, upper.longitude(), nextLevel, 2 * _row, 2 * _column + 1));
-  
-    subTiles.add(createSubTile(midLat, lower.longitude(), upper.latitude(), midLon, nextLevel, 2 * _row + 1, 2 * _column));
-  
-    subTiles.add(createSubTile(midLat, midLon, upper.latitude(), upper.longitude(), nextLevel, 2 * _row + 1, 2 * _column + 1));
-  
-    return subTiles;
-  }
-
   private void rawRender(G3MRenderContext rc, TileRenderContext trc, GLState parentState)
   {
   
@@ -274,17 +258,22 @@ public class Tile
     }
   }
 
-  private Tile createSubTile(Angle lowerLat, Angle lowerLon, Angle upperLat, Angle upperLon, int level, int row, int column)
+//  const Angle calculateSplitLatitude(const Angle& lowerLatitude,
+//                                     const Angle& upperLatitude,
+//                                     bool mercator) const;
+
+  private Tile createSubTile(Angle lowerLat, Angle lowerLon, Angle upperLat, Angle upperLon, int level, int row, int column, boolean setParent)
   {
-    return new Tile(_texturizer, this, new Sector(new Geodetic2D(lowerLat, lowerLon), new Geodetic2D(upperLat, upperLon)), level, row, column);
+    Tile parent = setParent ? this : null;
+    return new Tile(_texturizer, parent, new Sector(new Geodetic2D(lowerLat, lowerLon), new Geodetic2D(upperLat, upperLon)), level, row, column);
   }
 
 
-  private java.util.ArrayList<Tile> getSubTiles(double u, double v)
+  private java.util.ArrayList<Tile> getSubTiles(Angle splitLatitude, Angle splitLongitude)
   {
     if (_subtiles == null)
     {
-      _subtiles = createSubTiles(u, v);
+      _subtiles = createSubTiles(splitLatitude, splitLongitude, true);
       _justCreatedSubtiles = true;
     }
     return _subtiles;
@@ -332,7 +321,10 @@ public class Tile
 
   private void deleteTexturizedMesh(TileTexturizer texturizer)
   {
-    if ((_level > 0) && (_texturizedMesh != null))
+    // check for (_parent != NULL) to avoid deleting the firstLevel tiles.
+    // in this case, the mesh is always loaded (as well as its texture) to be the last option
+    // falback texture for any tile
+    if ((_parent != null) && (_texturizedMesh != null))
     {
   
       if (texturizer != null)
@@ -628,14 +620,16 @@ public class Tile
       }
       else
       {
-        double u = 0.5;
-        double v = 0.5;
-        if (trc.getLayerTilesRenderParameters()._mercator)
-        {
-          int TODO_change_V_conforming_to_mercator;
-        }
+        final Geodetic2D lower = _sector.lower();
+        final Geodetic2D upper = _sector.upper();
   
-        java.util.ArrayList<Tile> subTiles = getSubTiles(u, v);
+        final Angle splitLongitude = Angle.midAngle(lower.longitude(), upper.longitude());
+  
+        final Angle splitLatitude = trc.getLayerTilesRenderParameters()._mercator ? MercatorUtils.calculateSplitLatitude(lower.latitude(), upper.latitude()) : Angle.midAngle(lower.latitude(), upper.latitude());
+        /*                               */
+        /*                               */
+  
+        java.util.ArrayList<Tile> subTiles = getSubTiles(splitLatitude, splitLongitude);
         if (_justCreatedSubtiles)
         {
           trc.getLastSplitTimer().start();
@@ -777,6 +771,19 @@ public class Tile
     }
   }
 
+  public final void toBeDeleted(TileTexturizer texturizer, ElevationDataProvider elevationDataProvider)
+  {
+    if (texturizer != null)
+    {
+      texturizer.tileToBeDeleted(this, _texturizedMesh);
+    }
+  
+    if (elevationDataProvider != null)
+    {
+      cancelElevationDataRequest(elevationDataProvider);
+    }
+  }
+
   public final void onElevationData(ElevationData elevationData, float verticalExaggeration, MeshHolder meshHolder, TileTessellator tessellator, Planet planet, Vector2I tileMeshResolution, boolean renderDebug)
   {
     _elevationRequestId = -1000;
@@ -807,6 +814,29 @@ public class Tile
     if (isb != null)
        isb.dispose();
     return s;
+  }
+
+  public final java.util.ArrayList<Tile> createSubTiles(Angle splitLatitude, Angle splitLongitude, boolean setParent)
+  {
+    final Geodetic2D lower = _sector.lower();
+    final Geodetic2D upper = _sector.upper();
+  
+    final int nextLevel = _level + 1;
+  
+    final int row2 = 2 * _row;
+    final int column2 = 2 * _column;
+  
+    java.util.ArrayList<Tile> subTiles = new java.util.ArrayList<Tile>();
+  
+    subTiles.add(createSubTile(lower.latitude(), lower.longitude(), splitLatitude, splitLongitude, nextLevel, row2, column2, setParent));
+  
+    subTiles.add(createSubTile(lower.latitude(), splitLongitude, splitLatitude, upper.longitude(), nextLevel, row2, column2 + 1, setParent));
+  
+    subTiles.add(createSubTile(splitLatitude, lower.longitude(), upper.latitude(), splitLongitude, nextLevel, row2 + 1, column2, setParent));
+  
+    subTiles.add(createSubTile(splitLatitude, splitLongitude, upper.latitude(), upper.longitude(), nextLevel, row2 + 1, column2 + 1, setParent));
+  
+    return subTiles;
   }
 
 }

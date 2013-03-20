@@ -30,6 +30,7 @@ package org.glob3.mobile.generated;
 //class SGTranslateNode;
 //class SGLayerNode;
 //class Color;
+//class SceneJSParserStatistics;
 
 public class SceneJSShapesParser
 {
@@ -40,7 +41,12 @@ public class SceneJSShapesParser
   {
      _uriPrefix = uriPrefix;
      _rootShape = null;
+    _statistics = new SceneJSParserStatistics();
     pvtParse(jsonObject);
+  
+    _statistics.log();
+    if (_statistics != null)
+       _statistics.dispose();
   }
 
   private Shape getRootShape()
@@ -84,6 +90,7 @@ public class SceneJSShapesParser
         if (type.compareTo("node") == 0)
         {
           result = createNode(jsonObject);
+          _statistics.computeNode();
         }
         else if (type.compareTo("rotate") == 0)
         {
@@ -96,6 +103,7 @@ public class SceneJSShapesParser
         else if (type.compareTo("material") == 0)
         {
           result = createMaterialNode(jsonObject);
+          _statistics.computeMaterial();
         }
         else if (type.compareTo("texture") == 0)
         {
@@ -104,6 +112,7 @@ public class SceneJSShapesParser
         else if (type.compareTo("geometry") == 0)
         {
           result = createGeometryNode(jsonObject);
+          _statistics.computeGeometry();
         }
         else
         {
@@ -146,9 +155,9 @@ public class SceneJSShapesParser
     java.util.ArrayList<String> keys = jsonObject.keys();
     if (processedKeys != keys.size())
     {
-  //    for (int i = 0; i < keys.size(); i++) {
-  //      printf("%s\n", keys.at(i).c_str());
-  //    }
+      //    for (int i = 0; i < keys.size(); i++) {
+      //      printf("%s\n", keys.at(i).c_str());
+      //    }
   
       ILogger.instance().logWarning("Not all keys processed in node, processed %i of %i", processedKeys, keys.size());
     }
@@ -469,6 +478,7 @@ public class SceneJSShapesParser
     for (int i = 0; i < verticesCount; i++)
     {
       vertices.put(i, (float) jsPositions.getAsNumber(i).value());
+      _statistics.computeVertex();
     }
   
     final JSONArray jsColors = jsonObject.getAsArray("colors");
@@ -517,13 +527,24 @@ public class SceneJSShapesParser
       ILogger.instance().logError("Non indexed geometries not supported");
       return null;
     }
+    int indicesOutOfRange = 0;
     int indicesCount = jsIndices.size();
     IShortBuffer indices = IFactory.instance().createShortBuffer(indicesCount);
     for (int i = 0; i < indicesCount; i++)
     {
-      indices.rawPut(i, (short) jsIndices.getAsNumber(i).value());
+      final long indice = (long) jsIndices.getAsNumber(i).value();
+      if (indice > 32767)
+      {
+        indicesOutOfRange++;
+      }
+      indices.rawPut(i, (short) indice);
     }
     processedKeys++;
+  
+    if (indicesOutOfRange > 0)
+    {
+      ILogger.instance().logError("SceneJSShapesParser: There are %d (of %d) indices out of range.", indicesOutOfRange, indicesCount);
+    }
   
     SGGeometryNode node = new SGGeometryNode(id, sId, primitive, vertices, colors, uv, normals, indices);
   
@@ -618,6 +639,8 @@ public class SceneJSShapesParser
   
     return Color.newFromRGBA(r, g, b, a);
   }
+
+  private SceneJSParserStatistics _statistics;
 
 
   public static Shape parseFromJSONBaseObject(JSONBaseObject jsonObject, String uriPrefix)

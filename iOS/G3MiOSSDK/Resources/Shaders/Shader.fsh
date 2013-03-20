@@ -23,7 +23,7 @@ uniform mediump float ColorPerVertexIntensity;
 void main() {
   
   if (EnableTexture) {
-    gl_FragColor = texture2D(Sampler, TextureCoordOut * ScaleTexCoord + TranslationTexCoord);
+    gl_FragColor = texture2D(Sampler, (TextureCoordOut * ScaleTexCoord) + TranslationTexCoord);
 
     if (EnableFlatColor || EnableColorPerVertex){
       lowp vec4 color;

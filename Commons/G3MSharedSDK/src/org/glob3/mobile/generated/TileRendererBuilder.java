@@ -28,11 +28,14 @@ public class TileRendererBuilder
   private boolean _showStatistics;
   private boolean _renderDebug;
   private boolean _useTilesSplitBudget;
-  private boolean _forceTopLevelTilesRenderOnStart;
+  private boolean _forceFirstLevelTilesRenderOnStart;
   private boolean _incrementalTileQuality;
   private java.util.ArrayList<VisibleSectorListener> _visibleSectorListeners;
   private java.util.ArrayList<Long> _stabilizationMilliSeconds;
   private long _texturePriority;
+
+  private ElevationDataProvider _elevationDataProvider;
+  private float _verticalExaggeration;
 
 
   /**
@@ -126,13 +129,13 @@ public class TileRendererBuilder
   }
 
   /**
-   * Returns the forceTopLevelTilesRenderOnStart flag.
+   * Returns the forceFirstLevelTilesRenderOnStart flag.
    *
-   * @return _forceTopLevelTilesRenderOnStart: bool
+   * @return _forceFirstLevelTilesRenderOnStart: bool
    */
-  private boolean getForceTopLevelTilesRenderOnStart()
+  private boolean getForceFirstLevelTilesRenderOnStart()
   {
-    return _forceTopLevelTilesRenderOnStart;
+    return _forceFirstLevelTilesRenderOnStart;
   }
 
   /**
@@ -147,8 +150,6 @@ public class TileRendererBuilder
 
   /**
    * Returns the array of visibleSectorListeners.
-   *
-   * @return _forceTopLevelTilesRenderOnStart: std::vector<VisibleSectorListener*>
    */
   private java.util.ArrayList<VisibleSectorListener> getVisibleSectorListeners()
   {
@@ -189,7 +190,7 @@ public class TileRendererBuilder
   }
   private TilesRenderParameters createTileRendererParameters()
   {
-    return new TilesRenderParameters(getRenderDebug(), getUseTilesSplitBudget(), getForceTopLevelTilesRenderOnStart(), getIncrementalTileQuality());
+    return new TilesRenderParameters(getRenderDebug(), getUseTilesSplitBudget(), getForceFirstLevelTilesRenderOnStart(), getIncrementalTileQuality());
   }
   private TileTessellator createTileTessellator()
   {
@@ -197,15 +198,25 @@ public class TileRendererBuilder
     return new EllipsoidalTileTessellator(true);
   }
 
+  private ElevationDataProvider getElevationDataProvider()
+  {
+    return _elevationDataProvider;
+  }
+  private float getVerticalExaggeration()
+  {
+    if (_verticalExaggeration <= 0.0f)
+    {
+      _verticalExaggeration = 1.0f;
+    }
+    return _verticalExaggeration;
+  }
 
-  ///#include "WMSBillElevationDataProvider.hpp"
-  
   public TileRendererBuilder()
   {
     _showStatistics = false;
     _renderDebug = false;
     _useTilesSplitBudget = true;
-    _forceTopLevelTilesRenderOnStart = true;
+    _forceFirstLevelTilesRenderOnStart = true;
     _incrementalTileQuality = false;
   
     _parameters = null;
@@ -215,6 +226,9 @@ public class TileRendererBuilder
     _visibleSectorListeners = null;
     _stabilizationMilliSeconds = null;
     _texturePriority = DownloadPriority.HIGHER;
+  
+    _elevationDataProvider = null;
+    _verticalExaggeration = 0.0f;
   }
   public void dispose()
   {
@@ -226,36 +240,12 @@ public class TileRendererBuilder
        _texturizer.dispose();
     if (_tileTessellator != null)
        _tileTessellator.dispose();
+    if (_elevationDataProvider != null)
+       _elevationDataProvider.dispose();
   }
   public final TileRenderer create()
   {
-    int __TODO_make_configurable;
-  
-    ElevationDataProvider elevationDataProvider = null;
-  
-    //  ElevationDataProvider* elevationDataProvider = new WMSBillElevationDataProvider();
-  
-  //  ElevationDataProvider* elevationDataProvider;
-  //  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
-  //                                                              Sector::fullSphere(),
-  //                                                              Vector2I(2048, 1024),
-  //                                                              0);
-  
-  //  ElevationDataProvider* elevationDataProvider;
-  //  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///elev-35.0_-6.0_38.0_-2.0_4096x2048.bil", false),
-  //                                                              Sector::fromDegrees(35, -6, 38, -2),
-  //                                                              Vector2I(4096, 2048),
-  //                                                              0);
-  
-    //  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-4096x2048.bil", false),
-    //                                                              Sector::fullSphere(),
-    //                                                              Vector2I(4096, 2048),
-    //                                                              0);
-  
-    int ___TODO_make_configurable;
-    float verticalExaggeration = 1F;
-  
-    TileRenderer tileRenderer = new TileRenderer(getTileTessellator(), elevationDataProvider, verticalExaggeration, getTexturizer(), getLayerSet(), getParameters(), getShowStatistics(), getTexturePriority());
+    TileRenderer tileRenderer = new TileRenderer(getTileTessellator(), getElevationDataProvider(), getVerticalExaggeration(), getTexturizer(), getLayerSet(), getParameters(), getShowStatistics(), getTexturePriority());
   
     for (int i = 0; i < getVisibleSectorListeners().size(); i++)
     {
@@ -270,6 +260,8 @@ public class TileRendererBuilder
     _visibleSectorListeners = null;
     _stabilizationMilliSeconds = null;
     _stabilizationMilliSeconds = null;
+  
+    _elevationDataProvider = null;
   
     return tileRenderer;
   }
@@ -321,9 +313,9 @@ public class TileRendererBuilder
   {
     _useTilesSplitBudget = useTilesSplitBudget;
   }
-  public final void setForceTopLevelTilesRenderOnStart(boolean forceTopLevelTilesRenderOnStart)
+  public final void setForceFirstLevelTilesRenderOnStart(boolean forceFirstLevelTilesRenderOnStart)
   {
-    _forceTopLevelTilesRenderOnStart = forceTopLevelTilesRenderOnStart;
+    _forceFirstLevelTilesRenderOnStart = forceFirstLevelTilesRenderOnStart;
   }
   public final void setIncrementalTileQuality(boolean incrementalTileQuality)
   {
@@ -359,6 +351,26 @@ public class TileRendererBuilder
     }
   
     return layersNames;
+  }
+
+  public final void setElevationDataProvider(ElevationDataProvider elevationDataProvider)
+  {
+    if (_elevationDataProvider != null)
+    {
+      ILogger.instance().logError("LOGIC ERROR: _elevationDataProvider already initialized");
+      return;
+    }
+    _elevationDataProvider = elevationDataProvider;
+  }
+
+  public final void setVerticalExaggeration(float verticalExaggeration)
+  {
+    if (_verticalExaggeration > 0.0f)
+    {
+      ILogger.instance().logError("LOGIC ERROR: _verticalExaggeration already initialized");
+      return;
+    }
+    _verticalExaggeration = verticalExaggeration;
   }
 
 }

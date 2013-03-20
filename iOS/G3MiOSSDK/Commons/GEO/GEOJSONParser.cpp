@@ -43,7 +43,7 @@ void GEOJSONParser::showStatistics() const {
 }
 
 GEOObject* GEOJSONParser::pvtParse() const {
-  JSONBaseObject* jsonBaseObject =  IJSONParser::instance()->parse(_json);
+  const JSONBaseObject* jsonBaseObject =  IJSONParser::instance()->parse(_json);
 
   GEOObject* result = NULL;
 

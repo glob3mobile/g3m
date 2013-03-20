@@ -14,13 +14,15 @@
 
 class LayerTilesRenderParameters {
 public:
-  const Sector    _topSector;
-  const int       _splitsByLatitude;
-  const int       _splitsByLongitude;
-  const int       _maxLevel;
+  const Sector _topSector;
+  const int    _topSectorSplitsByLatitude;
+  const int    _topSectorSplitsByLongitude;
+  const int    _firstLevel;
+  const int    _maxLevel;
+  const int    _maxLevelForPoles;
 #ifdef C_CODE
-  const Vector2I  _tileTextureResolution;
-  const Vector2I  _tileMeshResolution;
+  const Vector2I _tileTextureResolution;
+  const Vector2I _tileMeshResolution;
 #endif
 #ifdef JAVA_CODE
   public final Vector2I _tileTextureResolution;
@@ -29,16 +31,19 @@ public:
   const bool _mercator;
 
   LayerTilesRenderParameters(const Sector&   topSector,
-                             const int       splitsByLatitude,
-                             const int       splitsByLongitude,
+                             const int       topSectorSplitsByLatitude,
+                             const int       topSectorSplitsByLongitude,
+                             const int       firstLevel,
                              const int       maxLevel,
                              const Vector2I& tileTextureResolution,
                              const Vector2I& tileMeshResolution,
-                             const bool mercator) :
+                             const bool      mercator) :
   _topSector(topSector),
-  _splitsByLatitude(splitsByLatitude),
-  _splitsByLongitude(splitsByLongitude),
+  _topSectorSplitsByLatitude(topSectorSplitsByLatitude),
+  _topSectorSplitsByLongitude(topSectorSplitsByLongitude),
+  _firstLevel(firstLevel),
   _maxLevel(maxLevel),
+  _maxLevelForPoles(4),
   _tileTextureResolution(tileTextureResolution),
   _tileMeshResolution(tileMeshResolution),
   _mercator(mercator)
@@ -46,26 +51,35 @@ public:
 
   }
 
+  static const Vector2I defaultTileMeshResolution() {
+    return Vector2I(16, 16);
+  }
+
+  static const Vector2I defaultTileTextureResolution () {
+    return Vector2I(256, 256);
+  }
+
   static LayerTilesRenderParameters* createDefaultNonMercator(const Sector& topSector) {
-    const int splitsByLatitude = 4;
-    const int splitsByLongitude = 8;
-    const int maxLevel = 17;
-    const Vector2I tileTextureResolution(256, 256);
-    const Vector2I tileMeshResolution(16, 16);
+    const int  topSectorSplitsByLatitude  = 2;
+    const int  topSectorSplitsByLongitude = 4;
+    const int  firstLevel = 0;
+    const int  maxLevel = 17;
     const bool mercator = false;
 
     return new LayerTilesRenderParameters(topSector,
-                                          splitsByLatitude,
-                                          splitsByLongitude,
+                                          topSectorSplitsByLatitude,
+                                          topSectorSplitsByLongitude,
+                                          firstLevel,
                                           maxLevel,
-                                          tileTextureResolution,
-                                          tileMeshResolution,
+                                          LayerTilesRenderParameters::defaultTileTextureResolution(),
+                                          LayerTilesRenderParameters::defaultTileMeshResolution(),
                                           mercator);
   }
 
 
   ~LayerTilesRenderParameters() {
   }
+  
   
 };
 

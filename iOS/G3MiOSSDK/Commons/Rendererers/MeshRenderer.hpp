@@ -61,11 +61,11 @@ public:
 
   }
 
-  void start() {
+  void start(const G3MRenderContext* rc) {
 
   }
   
-  void stop() {
+  void stop(const G3MRenderContext* rc) {
     
   }
   

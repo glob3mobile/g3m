@@ -61,6 +61,10 @@ public:
     return Angle::fromDegrees(0);
   }
 
+  static Angle pi() {
+    return Angle::fromDegrees(180);
+  }
+  
   static Angle nan() {
     return Angle::fromDegrees(IMathUtils::instance()->NanD());
   }
@@ -92,6 +96,10 @@ public:
 
   double cosinus() const {
     return IMathUtils::instance()->cos( _radians );
+  }
+  
+  double tangent() const {
+    return IMathUtils::instance()->tan( _radians );
   }
 
   double degrees() const {
@@ -160,7 +168,8 @@ public:
   }
 
   bool isEqualsTo(const Angle& that) const {
-    return (_degrees == that._degrees) || (_radians == that._radians);
+    const IMathUtils* mu = IMathUtils::instance();
+    return mu->isEquals(_degrees, that._degrees) || mu->isEquals(_radians, that._radians);
   }
 
 #ifdef JAVA_CODE

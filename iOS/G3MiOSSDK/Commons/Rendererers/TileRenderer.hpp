@@ -124,7 +124,7 @@ private:
   long               _tilesVisible;
   long               _tilesRendered;
 
-  static const int _maxLOD = 30;
+  static const int _maxLOD = 128;
 
   int _tilesProcessedByLevel[_maxLOD];
   int _tilesVisibleByLevel[_maxLOD];
@@ -288,7 +288,6 @@ private:
   LayerSet*                    _layerSet;
   const TilesRenderParameters* _parameters;
   const bool                   _showStatistics;
-  bool                         _topTilesJustCreated;
 
 #ifdef C_CODE
   const Camera*     _lastCamera;
@@ -299,16 +298,24 @@ private:
   private G3MContext _context;
 #endif
 
-  std::vector<Tile*>     _topLevelTiles;
+  std::vector<Tile*> _firstLevelTiles;
+  bool               _firstLevelTilesJustCreated;
+  bool               _allFirstLevelTilesAreTextureSolved;
 
   ITimer* _lastSplitTimer; // timer to start every time a tile get splitted into subtiles
 
-  void clearTopLevelTiles();
-  void createTopLevelTiles(const G3MContext* context);
+  void clearFirstLevelTiles();
+  void createFirstLevelTiles(const G3MContext* context);
+  void createFirstLevelTiles(std::vector<Tile*>& firstLevelTiles,
+                             Tile* tile,
+                             int firstLevel,
+                             bool mercator) const;
+
+  void sortTiles(std::vector<Tile*>& firstLevelTiles) const;
 
   bool _firstRender;
 
-  void pruneTopLevelTiles();
+  void pruneFirstLevelTiles();
 
   Sector* _lastVisibleSector;
 
@@ -346,11 +353,11 @@ public:
   bool isReadyToRender(const G3MRenderContext* rc);
 
 
-  void start() {
+  void start(const G3MRenderContext* rc) {
     _firstRender = true;
   }
 
-  void stop() {
+  void stop(const G3MRenderContext* rc) {
     _firstRender = false;
   }
 
@@ -375,7 +382,7 @@ public:
 #endif
 
     if (!enable) {
-      pruneTopLevelTiles();
+      pruneFirstLevelTiles();
     }
   }
 

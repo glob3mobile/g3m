@@ -196,7 +196,7 @@ public class GL
   //  _enableFlatColor(false),
   //  _texturesIdGetCounter(0),
   //  _texturesIdTakeCounter(0),
-  //_boundTextureId(NULL)
+//  _boundTextureId(NULL)
   {
      _nativeGL = nativeGL;
      _verbose = verbose;
@@ -539,13 +539,13 @@ public class GL
     }
     else
     {
-      //    if ((_boundTextureId == NULL) || !_boundTextureId->isEqualsTo(textureId)) {
-      _nativeGL.bindTexture(GLTextureType.texture2D(), textureId);
-      //      _boundTextureId = textureId;
-      //    }
-      //    else {
-      //      ILogger::instance()->logInfo("TextureId %s already bound", textureId->description().c_str());
-      //    }
+  //    if ((_boundTextureId == NULL) || !_boundTextureId->isEqualsTo(textureId)) {
+        _nativeGL.bindTexture(GLTextureType.texture2D(), textureId);
+  //      _boundTextureId = textureId;
+  //    }
+  //    else {
+  //      ILogger::instance()->logInfo("TextureId %s already bound", textureId->description().c_str());
+  //    }
     }
   }
 
@@ -607,12 +607,6 @@ public class GL
   //    }
   
       //ILogger::instance()->logInfo("  = delete textureId=%s", texture->description().c_str());
-  
-  //    //_nativeGL->deleteTexture(texture);
-  //    _texturesIdBag.push_back(texture);
-  //
-  
-      //_texturesIdTakeCounter++;
     }
   }
 

@@ -28,9 +28,8 @@
 #include "IImageListener.hpp"
 #include "LayerTilesRenderParameters.hpp"
 
-//#define TILE_DOWNLOAD_PRIORITY 1000000000
 
-enum PetitionStatus {
+enum TileTextureBuilder_PetitionStatus {
   STATUS_PENDING,
   STATUS_DOWNLOADED,
   STATUS_CANCELED
@@ -103,11 +102,21 @@ public:
   void initialize() {
     // The default scale and translation are ok when (tile == _ancestor)
     if (_tile != _ancestor) {
-      const Sector tileSector     = _tile->getSector();
-      const Sector ancestorSector = _ancestor->getSector();
+      const Sector tileSector = _tile->getSector();
 
-      _scale       = tileSector.getScaleFactor(ancestorSector).asMutableVector2D();
-      _translation = tileSector.getTranslationFactor(ancestorSector).asMutableVector2D();
+      const Vector2D lowerTextCoordUV = _tessellator->getTextCoord(_ancestor,
+                                                                   tileSector.lower(),
+                                                                   _mercator);
+
+      const Vector2D upperTextCoordUV = _tessellator->getTextCoord(_ancestor,
+                                                                   tileSector.upper(),
+                                                                   _mercator);
+
+      _scale       = MutableVector2D(upperTextCoordUV._x - lowerTextCoordUV._x,
+                                     lowerTextCoordUV._y - upperTextCoordUV._y);
+
+      _translation = MutableVector2D(lowerTextCoordUV._x,
+                                     upperTextCoordUV._y);
     }
   }
 
@@ -204,8 +213,10 @@ private:
 
   const TileTessellator* _tessellator;
 
-  std::vector<PetitionStatus>    _status;
-  std::vector<long long>         _requestsIds;
+  const int    _firstLevel;
+
+  std::vector<TileTextureBuilder_PetitionStatus> _status;
+  std::vector<long long>                         _requestsIds;
 
 
   bool _finalized;
@@ -271,6 +282,7 @@ public:
   _tileTextureResolution( layerSet->getLayerTilesRenderParameters()->_tileTextureResolution ),
   _tileMeshResolution( layerSet->getLayerTilesRenderParameters()->_tileMeshResolution ),
   _mercator( layerSet->getLayerTilesRenderParameters()->_mercator ),
+  _firstLevel( layerSet->getLayerTilesRenderParameters()->_firstLevel ),
   _downloader(downloader),
   _tile(tile),
   _tessellatorMesh(tessellatorMesh),
@@ -283,9 +295,7 @@ public:
   _alreadyStarted(false),
   _texturePriority(texturePriority)
   {
-    _petitions = cleanUpPetitions(layerSet->createTileMapPetitions(rc,
-                                                                   tile,
-                                                                   _tileTextureResolution));
+    _petitions = cleanUpPetitions(layerSet->createTileMapPetitions(rc, tile));
 
     _petitionsCount = _petitions.size();
 
@@ -318,15 +328,16 @@ public:
 
       const long long priority = _texturePriority + _tile->getLevel();
 
-//      printf("%s\n", petition->getURL().getPath().c_str());
+      //      printf("%s\n", petition->getURL().getPath().c_str());
 
       const long long requestId = _downloader->requestImage(URL(petition->getURL()),
                                                             priority,
                                                             petition->getTimeToCache(),
                                                             new BuilderDownloadStepDownloadListener(this, i),
                                                             true);
-
-      _requestsIds.push_back(requestId);
+      if (requestId >= 0) {
+        _requestsIds.push_back(requestId);
+      }
     }
   }
 
@@ -340,6 +351,8 @@ public:
 
   RectangleI* getImageRectangleInTexture(const Sector& wholeSector,
                                          const Sector& imageSector) const {
+
+    const IMathUtils* mu = IMathUtils::instance();
     
     const Vector2D lowerFactor = wholeSector.getUVCoordinates(imageSector.lower());
 
@@ -349,10 +362,10 @@ public:
     const int textureWidth  = _tileTextureResolution._x;
     const int textureHeight = _tileTextureResolution._y;
 
-    return new RectangleI((int) IMathUtils::instance()->round( lowerFactor._x         * textureWidth ),
-                          (int) IMathUtils::instance()->round( (1.0 - lowerFactor._y) * textureHeight ),
-                          (int) IMathUtils::instance()->round( widthFactor            * textureWidth ),
-                          (int) IMathUtils::instance()->round( heightFactor           * textureHeight ));
+    return new RectangleI((int) mu->round( lowerFactor._x         * textureWidth ),
+                          (int) mu->round( (1.0 - lowerFactor._y) * textureHeight ),
+                          (int) mu->round( widthFactor            * textureWidth ),
+                          (int) mu->round( heightFactor           * textureHeight ));
   }
 
   void composeAndUploadTexture() {
@@ -572,7 +585,7 @@ public:
     }
 
     if ((mappings != NULL) && (_tile != NULL)) {
-      if (mappings->size() != _tile->getLevel() + 1) {
+      if (mappings->size() != (_tile->getLevel() - _firstLevel + 1) ) {
         ILogger::instance()->logInfo("pleae break (point) me\n");
       }
     }

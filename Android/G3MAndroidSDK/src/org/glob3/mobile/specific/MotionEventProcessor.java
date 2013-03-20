@@ -16,20 +16,20 @@ import android.view.MotionEvent.PointerCoords;
 public final class MotionEventProcessor {
 
    //Stores pointer positions, id and event type
-   class EventProcessed {
+   private static class EventProcessed {
       // LAST EVENT PROCESSED
-      public java.util.ArrayList<Integer> _pointersID = new ArrayList<Integer>();
-      public java.util.ArrayList<Touch>   _touchs     = new ArrayList<Touch>();
-      public TouchEventType               _type       = TouchEventType.Down;
+      private ArrayList<Integer> _pointersID = new ArrayList<Integer>();
+      private ArrayList<Touch>   _touchs     = new ArrayList<Touch>();
+      private TouchEventType     _type       = TouchEventType.Down;
 
 
       @SuppressWarnings("unchecked")
       @Override
       protected EventProcessed clone() {
          final EventProcessed e = new EventProcessed();
-         e._pointersID = (ArrayList<Integer>) this._pointersID.clone();
-         e._touchs = (ArrayList<Touch>) this._touchs.clone();
-         e._type = this._type;
+         e._pointersID = (ArrayList<Integer>) _pointersID.clone();
+         e._touchs = (ArrayList<Touch>) _touchs.clone();
+         e._type = _type;
          return e;
       }
 

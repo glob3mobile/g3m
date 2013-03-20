@@ -217,8 +217,6 @@ private:
   int _width;
   int _height;
 
-  void initializeGL();
-
   const G3MContext* _context;
 
   bool _paused;
@@ -226,6 +224,7 @@ private:
   const GLState* _rootState;
 
   bool _initializationTaskWasRun;
+  bool _initializationTaskReady;
 
   bool _clickOnProcess;
 

@@ -66,8 +66,9 @@ void CameraRotationHandler::onDown(const G3MEventContext *eventContext,
 
 void CameraRotationHandler::onMove(const G3MEventContext *eventContext,
                                    const TouchEvent& touchEvent, 
-                                   CameraContext *cameraContext) 
-{
+                                   CameraContext *cameraContext) {
+  const IMathUtils* mu = IMathUtils::instance();
+
   //_currentGesture = getGesture(touchEvent);
   if (cameraContext->getCurrentGesture() != Rotate) return;
   
@@ -89,7 +90,7 @@ void CameraRotationHandler::onMove(const G3MEventContext *eventContext,
   // compute angle between normal and view direction
   Vector3D view = camera->getViewDirection();
   double dot = normal.normalized().dot(view.normalized().times(-1));
-  double initialAngle = IMathUtils::instance()->acos(dot) / IMathUtils::instance()->pi() * 180;
+  double initialAngle = mu->acos(dot) / mu->pi() * 180;
   
   // rotate more than 85 degrees or less than 0 degrees is not allowed
   double delta = (cm._y - _pivotPixel.y()) * 0.25;

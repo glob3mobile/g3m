@@ -91,11 +91,9 @@ Vector3D Ellipsoid::toCartesian(const Angle& latitude,
   const Vector3D n = geodeticSurfaceNormal(latitude, longitude);
 
   const Vector3D k = _radiiSquared.times(n);
-  const double gamma = IMathUtils::instance()->sqrt(
-                                                    (k._x * n._x) +
+  const double gamma = IMathUtils::instance()->sqrt((k._x * n._x) +
                                                     (k._y * n._y) +
-                                                    (k._z * n._z)
-                                                    );
+                                                    (k._z * n._z));
 
   const Vector3D rSurface = k.div(gamma);
   return rSurface.add(n.times(height));
@@ -104,22 +102,15 @@ Vector3D Ellipsoid::toCartesian(const Angle& latitude,
 Geodetic2D Ellipsoid::toGeodetic2D(const Vector3D& positionOnEllipsoid) const {
   const Vector3D n = geodeticSurfaceNormal(positionOnEllipsoid);
 
-  return Geodetic2D(Angle::fromRadians(IMathUtils::instance()->asin(n._z)),
-                    Angle::fromRadians(IMathUtils::instance()->atan2(n._y, n._x)));
+  const IMathUtils* mu = IMathUtils::instance();
+  return Geodetic2D(Angle::fromRadians(mu->asin(n._z)),
+                    Angle::fromRadians(mu->atan2(n._y, n._x)));
 }
 
 
 Geodetic3D Ellipsoid::toGeodetic3D(const Vector3D& position) const {
   const Vector3D p = scaleToGeodeticSurface(position);
   const Vector3D h = position.sub(p);
-
-//  double height;
-//  if (h.dot(position) < 0) {
-//    height = -1 * h.length();
-//  }
-//  else {
-//    height = h.length();
-//  }
 
   const double height = (h.dot(position) < 0) ? -1 * h.length() : h.length();
 
@@ -128,20 +119,21 @@ Geodetic3D Ellipsoid::toGeodetic3D(const Vector3D& position) const {
 
 
 Vector3D Ellipsoid::scaleToGeodeticSurface(const Vector3D& position) const {
-  double beta = 1.0 / IMathUtils::instance()->sqrt(
-                                 (position._x * position._x) * _oneOverRadiiSquared._x +
-                                 (position._y * position._y) * _oneOverRadiiSquared._y +
-                                 (position._z * position._z) * _oneOverRadiiSquared._z);
+  const IMathUtils* mu = IMathUtils::instance();
 
-  double n = Vector3D(beta * position._x * _oneOverRadiiSquared._x,
-                      beta * position._y * _oneOverRadiiSquared._y,
-                      beta * position._z * _oneOverRadiiSquared._z).length();
+  const double beta = 1.0 / mu->sqrt((position._x * position._x) * _oneOverRadiiSquared._x +
+                                     (position._y * position._y) * _oneOverRadiiSquared._y +
+                                     (position._z * position._z) * _oneOverRadiiSquared._z);
+
+  const double n = Vector3D(beta * position._x * _oneOverRadiiSquared._x,
+                            beta * position._y * _oneOverRadiiSquared._y,
+                            beta * position._z * _oneOverRadiiSquared._z).length();
 
   double alpha = (1.0 - beta) * (position.length() / n);
 
-  double x2 = position._x * position._x;
-  double y2 = position._y * position._y;
-  double z2 = position._z * position._z;
+  const double x2 = position._x * position._x;
+  const double y2 = position._y * position._y;
+  const double z2 = position._z * position._z;
 
   double da = 0.0;
   double db = 0.0;
@@ -157,24 +149,24 @@ Vector3D Ellipsoid::scaleToGeodeticSurface(const Vector3D& position) const {
     db = 1.0 + (alpha * _oneOverRadiiSquared._y);
     dc = 1.0 + (alpha * _oneOverRadiiSquared._z);
 
-    double da2 = da * da;
-    double db2 = db * db;
-    double dc2 = dc * dc;
+    const double da2 = da * da;
+    const double db2 = db * db;
+    const double dc2 = dc * dc;
 
-    double da3 = da * da2;
-    double db3 = db * db2;
-    double dc3 = dc * dc2;
+    const double da3 = da * da2;
+    const double db3 = db * db2;
+    const double dc3 = dc * dc2;
 
-    s = x2 / (_radiiSquared._x * da2) +
-    y2 / (_radiiSquared._y * db2) +
-    z2 / (_radiiSquared._z * dc2) - 1.0;
+    s = (x2 / (_radiiSquared._x * da2) +
+         y2 / (_radiiSquared._y * db2) +
+         z2 / (_radiiSquared._z * dc2) - 1.0);
 
-    dSdA = -2.0 *
-    (x2 / (_radiiToTheFourth._x * da3) +
-     y2 / (_radiiToTheFourth._y * db3) +
-     z2 / (_radiiToTheFourth._z * dc3));
+    dSdA = (-2.0 *
+            (x2 / (_radiiToTheFourth._x * da3) +
+             y2 / (_radiiToTheFourth._y * db3) +
+             z2 / (_radiiToTheFourth._z * dc3)));
   }
-  while (IMathUtils::instance()->abs(s) > 1e-10);
+  while (mu->abs(s) > 1e-10);
 
   return Vector3D(position._x / da,
                   position._y / db,
@@ -183,10 +175,10 @@ Vector3D Ellipsoid::scaleToGeodeticSurface(const Vector3D& position) const {
 
 
 Vector3D Ellipsoid::scaleToGeocentricSurface(const Vector3D& position) const {
-  double beta = 1.0 / IMathUtils::instance()->sqrt((position._x * position._x) * _oneOverRadiiSquared._x +
-                                 (position._y * position._y) * _oneOverRadiiSquared._y +
-                                 (position._z * position._z) * _oneOverRadiiSquared._z);
-
+  const double beta = 1.0 / IMathUtils::instance()->sqrt((position._x * position._x) * _oneOverRadiiSquared._x +
+                                                         (position._y * position._y) * _oneOverRadiiSquared._y +
+                                                         (position._z * position._z) * _oneOverRadiiSquared._z);
+  
   return position.times(beta);
 }
 
@@ -210,8 +202,8 @@ std::list<Vector3D> Ellipsoid::computeCurve(const Vector3D& start,
     return std::list<Vector3D>();
   }
 
-  Vector3D normal = start.cross(stop).normalized();
-  double theta = start.angleBetween(stop)._radians;
+  const Vector3D normal = start.cross(stop).normalized();
+  const double theta = start.angleBetween(stop)._radians;
 
   //int n = max((int)(theta / granularity) - 1, 0);
   int n = ((int) (theta / granularity) - 1) > 0 ? (int) (theta / granularity) - 1 : 0;
@@ -235,43 +227,58 @@ std::list<Vector3D> Ellipsoid::computeCurve(const Vector3D& start,
 // compute distance from two points
 double Ellipsoid::computePreciseLatLonDistance(const Geodetic2D& g1,
                                                const Geodetic2D& g2) const {
+  const IMathUtils* mu = IMathUtils::instance();
+
   const Vector3D radius = _radii;
-  double R = (radius._x + radius._y + radius._z) / 3;
-  double medLat = g1.latitude()._degrees;
-  double medLon = g1.longitude()._degrees;
+  const double R = (radius._x + radius._y + radius._z) / 3;
 
   // spheric distance from P to Q
   // this is the right form, but it's the most complex
   // theres is a minimum error considering sphere instead of ellipsoid
-  double latP = g2.latitude()._radians;
-  double lonP = g2.longitude()._radians;
-  double latQ = medLat / 180 * IMathUtils::instance()->pi(), lonQ = medLon / 180 * IMathUtils::instance()->pi();
-  double coslatP = IMathUtils::instance()->cos(latP), sinlatP = IMathUtils::instance()->sin(latP);
-  double coslonP = IMathUtils::instance()->cos(lonP), sinlonP = IMathUtils::instance()->sin(lonP);
-  double coslatQ = IMathUtils::instance()->cos(latQ), sinlatQ = IMathUtils::instance()->sin(latQ);
-  double coslonQ = IMathUtils::instance()->cos(lonQ), sinlonQ = IMathUtils::instance()->sin(lonQ);
-  double pq = coslatP * sinlonP * coslatQ * sinlonQ + sinlatP * sinlatQ + coslatP * coslonP * coslatQ * coslonQ;
-  return IMathUtils::instance()->acos(pq) * R;
+  const double latP = g2.latitude()._radians;
+  const double lonP = g2.longitude()._radians;
+  const double latQ = g1.latitude()._radians;
+  const double lonQ = g1.longitude()._radians;
+  const double coslatP = mu->cos(latP);
+  const double sinlatP = mu->sin(latP);
+  const double coslonP = mu->cos(lonP);
+  const double sinlonP = mu->sin(lonP);
+  const double coslatQ = mu->cos(latQ);
+  const double sinlatQ = mu->sin(latQ);
+  const double coslonQ = mu->cos(lonQ);
+  const double sinlonQ = mu->sin(lonQ);
+  const double pq = (coslatP * sinlonP * coslatQ * sinlonQ +
+                     sinlatP * sinlatQ +
+                     coslatP * coslonP * coslatQ * coslonQ);
+  return mu->acos(pq) * R;
 }
 
 
 // compute distance from two points
 double Ellipsoid::computeFastLatLonDistance(const Geodetic2D& g1,
                                             const Geodetic2D& g2) const {
+  const IMathUtils* mu = IMathUtils::instance();
+  
   const Vector3D radius = _radii;
-  double R = (radius._x + radius._y + radius._z) / 3;
+  const double R = (radius._x + radius._y + radius._z) / 3;
 
-  double medLat = g1.latitude()._degrees;
-  double medLon = g1.longitude()._degrees;
+  const double medLat = g1.latitude()._degrees;
+  const double medLon = g1.longitude()._degrees;
 
   // this way is faster, and works properly further away from the poles
   //double diflat = fabs(g.latitude()-medLat);
-  double diflat = IMathUtils::instance()->abs(g2.latitude()._degrees - medLat);
-  if (diflat > 180) diflat = 360 - diflat;
-  double diflon = IMathUtils::instance()->abs(g2.longitude()._degrees - medLon);
-  if (diflon > 180) diflon = 360 - diflon;
-  double dist = IMathUtils::instance()->sqrt(diflat * diflat + diflon * diflon);
-  return dist * IMathUtils::instance()->pi() / 180 * R;
+  double diflat = mu->abs(g2.latitude()._degrees - medLat);
+  if (diflat > 180) {
+    diflat = 360 - diflat;
+  }
+
+  double diflon = mu->abs(g2.longitude()._degrees - medLon);
+  if (diflon > 180) {
+    diflon = 360 - diflon;
+  }
+
+  double dist = mu->sqrt(diflat * diflat + diflon * diflon);
+  return dist * mu->pi() / 180 * R;
 }
 
 Vector3D Ellipsoid::closestIntersection(const Vector3D& pos,
@@ -283,46 +290,46 @@ Vector3D Ellipsoid::closestIntersection(const Vector3D& pos,
   return pos.add(ray.times(distances[0]));
 }
 
-
-
 Vector3D Ellipsoid::closestPointToSphere(const Vector3D& pos, const Vector3D& ray) const {
+  const IMathUtils* mu = IMathUtils::instance();
+
   double t = 0;
 
   // compute radius for the rotation
-  double R0 = (_radii._x + _radii._y + _radii._y) /3;
+  const double R0 = (_radii._x + _radii._y + _radii._y) /3;
 
   // compute the point in this ray that are to a distance R from the origin.
-  double U2 = ray.squaredLength();
-  double O2 = pos.squaredLength();
-  double OU = pos.dot(ray);
-  double a = U2;
-  double b = 2 * OU;
-  double c = O2 - R0 * R0;
+  const double U2 = ray.squaredLength();
+  const double O2 = pos.squaredLength();
+  const double OU = pos.dot(ray);
+  const double a = U2;
+  const double b = 2 * OU;
+  const double c = O2 - R0 * R0;
   double rad = b * b - 4 * a * c;
 
   // if there is solution, the ray intersects the sphere
   if (rad > 0) {
     // compute the final point (the smaller positive t value)
-    t = (-b - IMathUtils::instance()->sqrt(rad)) / (2 * a);
-    if (t < 1) t = (-b + IMathUtils::instance()->sqrt(rad)) / (2 * a);
+    t = (-b - mu->sqrt(rad)) / (2 * a);
+    if (t < 1) t = (-b + mu->sqrt(rad)) / (2 * a);
     // if the ideal ray intersects, but not the mesh --> case 2
     if (t < 1) rad = -12345;
   }
 
   // if no solution found, find a point in the contour line
   if (rad < 0) {
-    double D = IMathUtils::instance()->sqrt(O2);
-    double co2 = R0 * R0 / (D * D);
-    double a_ = OU * OU - co2 * O2 * U2;
-    double b_ = 2 * OU * O2 - co2 * 2 * OU * O2;
-    double c_ = O2 * O2 - co2 * O2 * O2;
-    double rad_ = b_ * b_ - 4 * a_ * c_;
-    t = (-b_ - IMathUtils::instance()->sqrt(rad_)) / (2 * a_);
+    const double D = mu->sqrt(O2);
+    const double co2 = R0 * R0 / (D * D);
+    const double a_ = OU * OU - co2 * O2 * U2;
+    const double b_ = 2 * OU * O2 - co2 * 2 * OU * O2;
+    const double c_ = O2 * O2 - co2 * O2 * O2;
+    const double rad_ = b_ * b_ - 4 * a_ * c_;
+    t = (-b_ - mu->sqrt(rad_)) / (2 * a_);
   }
 
   // compute the final point
-  Vector3D p = pos.add(ray.times(t));
-  return p;
+  Vector3D result = pos.add(ray.times(t));
+  return result;
 }
 
 MutableMatrix44D Ellipsoid::createGeodeticTransformMatrix(const Geodetic3D& position) const {

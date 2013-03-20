@@ -23,14 +23,14 @@ public class TilesRenderParameters
 {
   public final boolean _renderDebug;
   public final boolean _useTilesSplitBudget;
-  public final boolean _forceTopLevelTilesRenderOnStart;
+  public final boolean _forceFirstLevelTilesRenderOnStart;
   public final boolean _incrementalTileQuality;
 
-  public TilesRenderParameters(boolean renderDebug, boolean useTilesSplitBudget, boolean forceTopLevelTilesRenderOnStart, boolean incrementalTileQuality)
+  public TilesRenderParameters(boolean renderDebug, boolean useTilesSplitBudget, boolean forceFirstLevelTilesRenderOnStart, boolean incrementalTileQuality)
   {
      _renderDebug = renderDebug;
      _useTilesSplitBudget = useTilesSplitBudget;
-     _forceTopLevelTilesRenderOnStart = forceTopLevelTilesRenderOnStart;
+     _forceFirstLevelTilesRenderOnStart = forceFirstLevelTilesRenderOnStart;
      _incrementalTileQuality = incrementalTileQuality;
 
   }
@@ -38,15 +38,5 @@ public class TilesRenderParameters
   public void dispose()
   {
   }
-
-//  static TilesRenderParameters* createDefault(const bool renderDebug,
-//                                              const bool useTilesSplitBudget,
-//                                              const bool forceTopLevelTilesRenderOnStart,
-//                                              const bool incrementalTileQuality) {
-//    return new TilesRenderParameters(renderDebug,
-//                                     useTilesSplitBudget,
-//                                     forceTopLevelTilesRenderOnStart,
-//                                     incrementalTileQuality);
-//  }
 
 }

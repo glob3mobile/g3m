@@ -76,11 +76,11 @@ public class QuadShape extends AbstractMeshShape
     vertices.add(left, top, 0);
     vertices.add(right, top, 0);
   
-    final Vector3D center = Vector3D.zero();
+  //  const Vector3D center = Vector3D::zero();
   
     Color color = (_color == null) ? null : new Color(_color);
   
-    Mesh im = new DirectMesh(GLPrimitive.triangleStrip(), true, center, vertices.create(), 1, 1, color);
+    Mesh im = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1, color);
   
     final IGLTextureId texId = getTextureId(rc);
     if (texId == null)
