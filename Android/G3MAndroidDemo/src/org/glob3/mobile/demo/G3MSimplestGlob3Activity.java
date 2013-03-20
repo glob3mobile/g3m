@@ -122,7 +122,7 @@ public class G3MSimplestGlob3Activity
       //      mainRenderer.addRenderer(marksRenderer);
 
 
-      final org.glob3.mobile.generated.Renderer busyRenderer = new BusyMeshRenderer();
+      final org.glob3.mobile.generated.Renderer busyRenderer = new BusyMeshRenderer(Color.newFromRGBA(0, 0, 0, 1));
 
       final Color backgroundColor = Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1);
 
