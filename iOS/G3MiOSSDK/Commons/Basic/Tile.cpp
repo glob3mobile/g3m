@@ -128,21 +128,19 @@ private:
   private final Vector2I _tileMeshResolution;
 #endif
   const bool             _renderDebug;
-//  const float            _verticalExaggeration;
+
 public:
   TileElevationDataListener(Tile* tile,
                             MeshHolder* meshHolder,
                             const TileTessellator* tessellator,
                             const Planet* planet,
                             const Vector2I& tileMeshResolution,
-//                            float verticalExaggeration,
                             bool renderDebug) :
   _tile(tile),
   _meshHolder(meshHolder),
   _tessellator(tessellator),
   _planet(planet),
   _tileMeshResolution(tileMeshResolution),
-//  _verticalExaggeration(verticalExaggeration),
   _renderDebug(renderDebug)
   {
     
@@ -154,7 +152,6 @@ public:
               const Vector2I& resolution,
               ElevationData* elevationData) {
     _tile->onElevationData(elevationData,
-                           //_verticalExaggeration,
                            _meshHolder,
                            _tessellator,
                            _planet,
@@ -169,7 +166,6 @@ public:
 };
 
 void Tile::onElevationData(ElevationData* elevationData,
-                           //float verticalExaggeration,
                            MeshHolder* meshHolder,
                            const TileTessellator* tessellator,
                            const Planet* planet,
@@ -209,11 +205,6 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
     ElevationDataProvider* elevationDataProvider = trc->getElevationDataProvider();
     const Planet* planet = rc->getPlanet();
 
-//    const float verticalExaggeration = trc->getVerticalExaggeration();
-//    if (_verticalExaggeration != verticalExaggeration) {
-//
-//    }
-
     const LayerTilesRenderParameters* layerTilesRenderParameters = trc->getLayerTilesRenderParameters();
     const Vector2I tileMeshResolution(layerTilesRenderParameters->_tileMeshResolution);
 
@@ -241,7 +232,6 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
                                                                             tessellator,
                                                                             planet,
                                                                             tileMeshResolution,
-                                                                            //verticalExaggeration,
                                                                             renderDebug);
 
         _elevationRequestId = elevationDataProvider->requestElevationData(_sector,
@@ -362,7 +352,11 @@ bool Tile::isVisible(const G3MRenderContext *rc,
     return false;
   }
 
-//  const Extent* extent = getTileExtent(rc);
+////  const Extent* extent = getTileExtent(rc);
+//  const Extent* tileExtent = getTileExtent(rc);
+//  if (!tileExtent->fullContains(extent)) {
+//    printf("break point on me\n");
+//  }
 
   return extent->touches( rc->getCurrentCamera()->getFrustumInModelCoordinates() );
   //return extent->touches( rc->getCurrentCamera()->getHalfFrustuminModelCoordinates() );
@@ -455,11 +449,6 @@ void Tile::rawRender(const G3MRenderContext *rc,
   if (tessellatorMesh == NULL) {
     return;
   }
-
-//  int __remove_render_extent;
-//  if (_minHeight != 0 || _maxHeight != 0) {
-//    getTileExtent(rc)->render(rc, parentState);
-//  }
 
   TileTexturizer* texturizer = trc->getTexturizer();
   if (texturizer == NULL) {
@@ -590,11 +579,17 @@ void Tile::render(const G3MRenderContext* rc,
                   const TileRenderContext* trc,
                   const GLState& parentState,
                   std::list<Tile*>* toVisitInNextIteration) {
+
+  const float verticalExaggeration =  trc->getVerticalExaggeration();
+  if (verticalExaggeration != _verticalExaggeration) {
+    // TODO: verticalExaggeration changed, invalidate tileExtent, Mesh, etc.
+
+    _verticalExaggeration = trc->getVerticalExaggeration();
+  }
+
   TilesStatistics* statistics = trc->getStatistics();
-
-  _verticalExaggeration = trc->getVerticalExaggeration();
-
   statistics->computeTileProcessed(this);
+  
   if (isVisible(rc, trc)) {
     setIsVisible(true, trc->getTexturizer());
 

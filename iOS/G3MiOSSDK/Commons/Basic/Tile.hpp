@@ -76,10 +76,6 @@ private:
                    const TileRenderContext* trc,
                    const GLState& parentState);
 
-//  const Angle calculateSplitLatitude(const Angle& lowerLatitude,
-//                                     const Angle& upperLatitude,
-//                                     bool mercator) const;
-
   inline Tile* createSubTile(const Angle& lowerLat, const Angle& lowerLon,
                              const Angle& upperLat, const Angle& upperLon,
                              const int level,
@@ -191,7 +187,6 @@ public:
                    ElevationDataProvider* elevationDataProvider);
 
   void onElevationData(ElevationData* elevationData,
-                       //float verticalExaggeration,
                        MeshHolder* meshHolder,
                        const TileTessellator* tessellator,
                        const Planet* planet,

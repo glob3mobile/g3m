@@ -11,9 +11,13 @@
 #include "Camera.hpp"
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "ShortBufferBuilder.hpp"
-
+#include "IndexedMesh.hpp"
 #include "GLConstants.hpp"
 #include "Color.hpp"
+
+Box::~Box() {
+  delete _mesh;
+};
 
 const std::vector<Vector3D> Box::getCorners() const {
 #ifdef C_CODE
@@ -232,12 +236,12 @@ void Box::render(const G3MRenderContext* rc,
 }
 
 bool Box::touchesBox(const Box* box) const {
-  if (_lower._x > box->_upper._x) return false;
-  if (_upper._x < box->_lower._x) return false;
-  if (_lower._y > box->_upper._y) return false;
-  if (_upper._y < box->_lower._y) return false;
-  if (_lower._z > box->_upper._z) return false;
-  if (_upper._z < box->_lower._z) return false;
+  if (_lower._x > box->_upper._x) { return false; }
+  if (_upper._x < box->_lower._x) { return false; }
+  if (_lower._y > box->_upper._y) { return false; }
+  if (_upper._y < box->_lower._y) { return false; }
+  if (_lower._z > box->_upper._z) { return false; }
+  if (_upper._z < box->_lower._z) { return false; }
   return true;
 }
 
@@ -254,4 +258,13 @@ Extent* Box::mergedWithBox(const Box* that) const {
 
   return new Box(Vector3D(lowerX, lowerY, lowerZ),
                  Vector3D(upperX, upperY, upperZ));
+}
+
+bool Box::fullContains(const Extent* that) const {
+  return that->fullContainedInBox(this);
+}
+
+bool Box::fullContainedInBox(const Box* box) const {
+//  return contains(box->_upper) && contains(box->_lower);
+  return box->contains(_upper) && box->contains(_lower);
 }
