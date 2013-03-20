@@ -139,3 +139,19 @@ void SingleBillElevationDataProvider::cancelRequest(const long long requestId) {
     removeQueueRequest(requestId);
   }
 }
+
+void SingleBillElevationDataProvider::drainQueue() {
+  int _WORKING;
+}
+
+const long long SingleBillElevationDataProvider::queueRequest(const Sector& sector,
+                                                              const Vector2I& resolution,
+                                                              IElevationDataListener* listener,
+                                                              bool autodeleteListener) {
+  int _WORKING;
+  return -1;
+}
+
+void SingleBillElevationDataProvider::removeQueueRequest(const long long requestId) {
+  int _WORKING;
+}

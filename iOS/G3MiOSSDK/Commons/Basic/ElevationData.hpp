@@ -46,7 +46,9 @@ public:
   }
 
   virtual const std::string description(bool detailed) const = 0;
-  
+
+  virtual Vector2D getMinMaxHeights() const = 0;
+
 };
 
 #endif

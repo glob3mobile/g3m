@@ -94,7 +94,10 @@ public:
   
   double log(double v) const { return MathAux::log_(v); }
   float  log(float v)  const { return log(v); }
-  
+
+  short maxInt16() const { return std::numeric_limits<short>::max(); }
+  short minInt16() const { return std::numeric_limits<short>::min(); }
+
   int maxInt32() const { return std::numeric_limits<int>::max(); }
   int minInt32() const { return std::numeric_limits<int>::min(); }
 

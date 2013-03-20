@@ -65,3 +65,36 @@ const std::string SubviewElevationData::description(bool detailed) const {
   delete isb;
   return s;
 }
+
+Vector2D SubviewElevationData::getMinMaxHeights() const {
+
+  const IMathUtils* mu = IMathUtils::instance();
+
+  double minHeight = mu->maxDouble();
+  double maxHeight = mu->minDouble();
+
+  int unusedType = 0;
+
+  for (int x = 0; x < _width; x++) {
+    for (int y = 0; y < _height; y++) {
+      const double height = getElevationAt(x, y, &unusedType);
+      if (height != _noDataValue) {
+        if (height < minHeight) {
+          minHeight = height;
+        }
+        if (height > maxHeight) {
+          maxHeight = height;
+        }
+      }
+    }
+  }
+  
+  if (minHeight == mu->maxDouble()) {
+    minHeight = 0;
+  }
+  if (maxHeight == mu->minDouble()) {
+    maxHeight = 0;
+  }
+
+  return Vector2D(minHeight, maxHeight);
+}

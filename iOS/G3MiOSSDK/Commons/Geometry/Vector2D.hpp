@@ -25,6 +25,9 @@ public:
   const double _x;
   const double _y;
 
+  static Vector2D zero() {
+    return Vector2D(0, 0);
+  }
   
   Vector2D(const double x,
            const double y): _x(x), _y(y) {
