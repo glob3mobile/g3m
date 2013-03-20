@@ -11,8 +11,10 @@
 
 
 #include "LeafRenderer.hpp"
-#include "IndexedMesh.hpp"
 #include "Effects.hpp"
+#include "Vector2D.hpp"
+#include "Color.hpp"
+#include "DirectMesh.hpp"
 
 
 //***************************************************************
@@ -20,20 +22,29 @@
 
 class BusyQuadRenderer : public LeafRenderer, EffectTarget {
 private:
-  double  _degrees;
-//  const std::string _textureFilename;
-  IImage* _image;
-  Mesh*   _quadMesh;
+  double      _degrees;
+  //  const std::string _textureFilename;
+  IImage*     _image;
+  Mesh*       _quadMesh;
+  
+  const bool      _animated;
+  const Vector2D  _size;
+  Color*          _backgroundColor;
   
   bool initMesh(const G3MRenderContext* rc);
   
   
-  
 public:
-  BusyQuadRenderer(IImage* image):
+  BusyQuadRenderer(IImage* image,
+                   Color* backgroundColor,
+                   const Vector2D& size,
+                   const bool animated):
   _degrees(0),
   _quadMesh(NULL),
-  _image(image)
+  _image(image),
+  _backgroundColor(backgroundColor),
+  _animated(animated),
+  _size(size)
   {
   }
   
@@ -57,16 +68,19 @@ public:
     
   }
   
-  virtual ~BusyQuadRenderer() {}
+  virtual ~BusyQuadRenderer() {
+    delete _quadMesh;
+    delete _backgroundColor;
+  }
   
   void incDegrees(double value) {
     _degrees += value;
     if (_degrees>360) _degrees -= 360;
   }
   
-  void start();
+  void start(const G3MRenderContext* rc);
   
-  void stop();
+  void stop(const G3MRenderContext* rc);
   
   void onResume(const G3MContext* context) {
     

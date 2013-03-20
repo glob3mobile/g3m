@@ -53,8 +53,10 @@
 		E71B15401626D27F003D1013 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B15351626D27F003D1013 /* Icon.png */; };
 		E71B15411626D27F003D1013 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B15361626D27F003D1013 /* Icon@2x.png */; };
 		E728385516E914D80037AA5C /* g3m-marker.png in Resources */ = {isa = PBXBuildFile; fileRef = E728385416E914D80037AA5C /* g3m-marker.png */; };
+		E736067D16F8D7BE000E32AD /* horizontal-gears.png in Resources */ = {isa = PBXBuildFile; fileRef = E736067C16F8D7BE000E32AD /* horizontal-gears.png */; };
 		E7A1A99016F0E51A00D138D8 /* Shader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = E7A1A98D16F0E51A00D138D8 /* Shader.fsh */; };
 		E7A1A99116F0E51A00D138D8 /* Shader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = E7A1A98E16F0E51A00D138D8 /* Shader.vsh */; };
+		E7A1A99416F202B700D138D8 /* sand-clock.png in Resources */ = {isa = PBXBuildFile; fileRef = E7A1A99316F202B700D138D8 /* sand-clock.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -126,8 +128,10 @@
 		E71B15351626D27F003D1013 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = Resources/Icon.png; sourceTree = "<group>"; };
 		E71B15361626D27F003D1013 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "Resources/Icon@2x.png"; sourceTree = "<group>"; };
 		E728385416E914D80037AA5C /* g3m-marker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "g3m-marker.png"; sourceTree = "<group>"; };
-		E7A1A98D16F0E51A00D138D8 /* Shader.fsh */ = {isa = PBXFileReference; lastKnownFileType = file; path = Shader.fsh; sourceTree = "<group>"; };
-		E7A1A98E16F0E51A00D138D8 /* Shader.vsh */ = {isa = PBXFileReference; lastKnownFileType = file; path = Shader.vsh; sourceTree = "<group>"; };
+		E736067C16F8D7BE000E32AD /* horizontal-gears.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "horizontal-gears.png"; sourceTree = "<group>"; };
+		E7A1A98D16F0E51A00D138D8 /* Shader.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = Shader.fsh; sourceTree = "<group>"; };
+		E7A1A98E16F0E51A00D138D8 /* Shader.vsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = Shader.vsh; sourceTree = "<group>"; };
+		E7A1A99316F202B700D138D8 /* sand-clock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sand-clock.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -219,6 +223,8 @@
 		D8EEF4271577B0D6003FEB5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				E736067C16F8D7BE000E32AD /* horizontal-gears.png */,
+				E7A1A99316F202B700D138D8 /* sand-clock.png */,
 				E7A1A98F16F0E51A00D138D8 /* Shaders */,
 				E728385416E914D80037AA5C /* g3m-marker.png */,
 				CFD42AB716DBAEFD00B03961 /* elev-35.0_-6.0_38.0_-2.0_4096x2048.bil */,
@@ -370,6 +376,8 @@
 				E728385516E914D80037AA5C /* g3m-marker.png in Resources */,
 				E7A1A99016F0E51A00D138D8 /* Shader.fsh in Resources */,
 				E7A1A99116F0E51A00D138D8 /* Shader.vsh in Resources */,
+				E7A1A99416F202B700D138D8 /* sand-clock.png in Resources */,
+				E736067D16F8D7BE000E32AD /* horizontal-gears.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
