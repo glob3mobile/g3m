@@ -14,52 +14,55 @@
 #include <sstream>
 
 class StringBuilder_iOS: public IStringBuilder {
-  
+private:
   std::ostringstream _oss;
-  
+
 protected:
-  
-  
-  IStringBuilder* getNewInstance() const{
+
+  IStringBuilder* getNewInstance() const {
     return new StringBuilder_iOS();
   }
-  
+
 public:
   
-  IStringBuilder* addBool(bool b){
+  StringBuilder_iOS() {
+    _oss.precision(20);
+  }
+
+  IStringBuilder* addBool(bool b) {
     _oss << (b ? "true" : "false");
     return this;
   }
-  
-  IStringBuilder* addDouble(double d){
+
+  IStringBuilder* addDouble(double d) {
     _oss << d;
     return this;
   }
-  
-  IStringBuilder* addFloat(float f){
+
+  IStringBuilder* addFloat(float f) {
     _oss << f;
     return this;
   }
-  
-  IStringBuilder* addInt(int i){
+
+  IStringBuilder* addInt(int i) {
     _oss << i;
     return this;
   }
-  
-  IStringBuilder* addLong(long long l){
+
+  IStringBuilder* addLong(long long l) {
     _oss << l;
     return this;
   }
-  
-  IStringBuilder* addString(const std::string& s){
+
+  IStringBuilder* addString(const std::string& s) {
     _oss << s;
     return this;
   }
-  
-  const std::string getString() const{
+
+  const std::string getString() const {
     return _oss.str();
   }
-  
+
 };
 
 #endif

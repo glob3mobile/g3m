@@ -150,25 +150,23 @@ public class Ellipsoid
     return toCartesian(geodetic.latitude(), geodetic.longitude(), 0.0);
   }
 
+  public final Vector3D toCartesian(Geodetic2D geodetic, double height)
+  {
+    return toCartesian(geodetic.latitude(), geodetic.longitude(), height);
+  }
+
   public final Geodetic2D toGeodetic2D(Vector3D positionOnEllipsoid)
   {
     final Vector3D n = geodeticSurfaceNormal(positionOnEllipsoid);
   
-    return new Geodetic2D(Angle.fromRadians(IMathUtils.instance().asin(n._z)), Angle.fromRadians(IMathUtils.instance().atan2(n._y, n._x)));
+    final IMathUtils mu = IMathUtils.instance();
+    return new Geodetic2D(Angle.fromRadians(mu.asin(n._z)), Angle.fromRadians(mu.atan2(n._y, n._x)));
   }
 
   public final Geodetic3D toGeodetic3D(Vector3D position)
   {
     final Vector3D p = scaleToGeodeticSurface(position);
     final Vector3D h = position.sub(p);
-  
-  //  double height;
-  //  if (h.dot(position) < 0) {
-  //    height = -1 * h.length();
-  //  }
-  //  else {
-  //    height = h.length();
-  //  }
   
     final double height = (h.dot(position) < 0) ? -1 * h.length() : h.length();
   
@@ -177,15 +175,17 @@ public class Ellipsoid
 
   public final Vector3D scaleToGeodeticSurface(Vector3D position)
   {
-    double beta = 1.0 / IMathUtils.instance().sqrt((position._x * position._x) * _oneOverRadiiSquared._x + (position._y * position._y) * _oneOverRadiiSquared._y + (position._z * position._z) * _oneOverRadiiSquared._z);
+    final IMathUtils mu = IMathUtils.instance();
   
-    double n = new Vector3D(beta * position._x * _oneOverRadiiSquared._x, beta * position._y * _oneOverRadiiSquared._y, beta * position._z * _oneOverRadiiSquared._z).length();
+    final double beta = 1.0 / mu.sqrt((position._x * position._x) * _oneOverRadiiSquared._x + (position._y * position._y) * _oneOverRadiiSquared._y + (position._z * position._z) * _oneOverRadiiSquared._z);
+  
+    final double n = new Vector3D(beta * position._x * _oneOverRadiiSquared._x, beta * position._y * _oneOverRadiiSquared._y, beta * position._z * _oneOverRadiiSquared._z).length();
   
     double alpha = (1.0 - beta) * (position.length() / n);
   
-    double x2 = position._x * position._x;
-    double y2 = position._y * position._y;
-    double z2 = position._z * position._z;
+    final double x2 = position._x * position._x;
+    final double y2 = position._y * position._y;
+    final double z2 = position._z * position._z;
   
     double da = 0.0;
     double db = 0.0;
@@ -202,26 +202,26 @@ public class Ellipsoid
       db = 1.0 + (alpha * _oneOverRadiiSquared._y);
       dc = 1.0 + (alpha * _oneOverRadiiSquared._z);
   
-      double da2 = da * da;
-      double db2 = db * db;
-      double dc2 = dc * dc;
+      final double da2 = da * da;
+      final double db2 = db * db;
+      final double dc2 = dc * dc;
   
-      double da3 = da * da2;
-      double db3 = db * db2;
-      double dc3 = dc * dc2;
+      final double da3 = da * da2;
+      final double db3 = db * db2;
+      final double dc3 = dc * dc2;
   
-      s = x2 / (_radiiSquared._x * da2) + y2 / (_radiiSquared._y * db2) + z2 / (_radiiSquared._z * dc2) - 1.0;
+      s = (x2 / (_radiiSquared._x * da2) + y2 / (_radiiSquared._y * db2) + z2 / (_radiiSquared._z * dc2) - 1.0);
   
-      dSdA = -2.0 * (x2 / (_radiiToTheFourth._x * da3) + y2 / (_radiiToTheFourth._y * db3) + z2 / (_radiiToTheFourth._z * dc3));
+      dSdA = (-2.0 * (x2 / (_radiiToTheFourth._x * da3) + y2 / (_radiiToTheFourth._y * db3) + z2 / (_radiiToTheFourth._z * dc3)));
     }
-    while (IMathUtils.instance().abs(s) > 1e-10);
+    while (mu.abs(s) > 1e-10);
   
     return new Vector3D(position._x / da, position._y / db, position._z / dc);
   }
 
   public final Vector3D scaleToGeocentricSurface(Vector3D position)
   {
-    double beta = 1.0 / IMathUtils.instance().sqrt((position._x * position._x) * _oneOverRadiiSquared._x + (position._y * position._y) * _oneOverRadiiSquared._y + (position._z * position._z) * _oneOverRadiiSquared._z);
+    final double beta = 1.0 / IMathUtils.instance().sqrt((position._x * position._x) * _oneOverRadiiSquared._x + (position._y * position._y) * _oneOverRadiiSquared._y + (position._z * position._z) * _oneOverRadiiSquared._z);
   
     return position.times(beta);
   }
@@ -234,8 +234,8 @@ public class Ellipsoid
       return new java.util.LinkedList<Vector3D>();
     }
   
-    Vector3D normal = start.cross(stop).normalized();
-    double theta = start.angleBetween(stop)._radians;
+    final Vector3D normal = start.cross(stop).normalized();
+    final double theta = start.angleBetween(stop)._radians;
   
     //int n = max((int)(theta / granularity) - 1, 0);
     int n = ((int)(theta / granularity) - 1) > 0 ? (int)(theta / granularity) - 1 : 0;
@@ -271,75 +271,85 @@ public class Ellipsoid
   // compute distance from two points
   public final double computePreciseLatLonDistance(Geodetic2D g1, Geodetic2D g2)
   {
+    final IMathUtils mu = IMathUtils.instance();
+  
     final Vector3D radius = _radii;
-    double R = (radius._x + radius._y + radius._z) / 3;
-    double medLat = g1.latitude()._degrees;
-    double medLon = g1.longitude()._degrees;
+    final double R = (radius._x + radius._y + radius._z) / 3;
   
     // spheric distance from P to Q
     // this is the right form, but it's the most complex
     // theres is a minimum error considering sphere instead of ellipsoid
-    double latP = g2.latitude()._radians;
-    double lonP = g2.longitude()._radians;
-    double latQ = medLat / 180 * IMathUtils.instance().pi();
-    double lonQ = medLon / 180 * IMathUtils.instance().pi();
-    double coslatP = IMathUtils.instance().cos(latP);
-    double sinlatP = IMathUtils.instance().sin(latP);
-    double coslonP = IMathUtils.instance().cos(lonP);
-    double sinlonP = IMathUtils.instance().sin(lonP);
-    double coslatQ = IMathUtils.instance().cos(latQ);
-    double sinlatQ = IMathUtils.instance().sin(latQ);
-    double coslonQ = IMathUtils.instance().cos(lonQ);
-    double sinlonQ = IMathUtils.instance().sin(lonQ);
-    double pq = coslatP * sinlonP * coslatQ * sinlonQ + sinlatP * sinlatQ + coslatP * coslonP * coslatQ * coslonQ;
-    return IMathUtils.instance().acos(pq) * R;
+    final double latP = g2.latitude()._radians;
+    final double lonP = g2.longitude()._radians;
+    final double latQ = g1.latitude()._radians;
+    final double lonQ = g1.longitude()._radians;
+    final double coslatP = mu.cos(latP);
+    final double sinlatP = mu.sin(latP);
+    final double coslonP = mu.cos(lonP);
+    final double sinlonP = mu.sin(lonP);
+    final double coslatQ = mu.cos(latQ);
+    final double sinlatQ = mu.sin(latQ);
+    final double coslonQ = mu.cos(lonQ);
+    final double sinlonQ = mu.sin(lonQ);
+    final double pq = (coslatP * sinlonP * coslatQ * sinlonQ + sinlatP * sinlatQ + coslatP * coslonP * coslatQ * coslonQ);
+    return mu.acos(pq) * R;
   }
 
 
   // compute distance from two points
   public final double computeFastLatLonDistance(Geodetic2D g1, Geodetic2D g2)
   {
-    final Vector3D radius = _radii;
-    double R = (radius._x + radius._y + radius._z) / 3;
+    final IMathUtils mu = IMathUtils.instance();
   
-    double medLat = g1.latitude()._degrees;
-    double medLon = g1.longitude()._degrees;
+    final Vector3D radius = _radii;
+    final double R = (radius._x + radius._y + radius._z) / 3;
+  
+    final double medLat = g1.latitude()._degrees;
+    final double medLon = g1.longitude()._degrees;
   
     // this way is faster, and works properly further away from the poles
     //double diflat = fabs(g.latitude()-medLat);
-    double diflat = IMathUtils.instance().abs(g2.latitude()._degrees - medLat);
+    double diflat = mu.abs(g2.latitude()._degrees - medLat);
     if (diflat > 180)
-       diflat = 360 - diflat;
-    double diflon = IMathUtils.instance().abs(g2.longitude()._degrees - medLon);
+    {
+      diflat = 360 - diflat;
+    }
+  
+    double diflon = mu.abs(g2.longitude()._degrees - medLon);
     if (diflon > 180)
-       diflon = 360 - diflon;
-    double dist = IMathUtils.instance().sqrt(diflat * diflat + diflon * diflon);
-    return dist * IMathUtils.instance().pi() / 180 * R;
+    {
+      diflon = 360 - diflon;
+    }
+  
+    double dist = mu.sqrt(diflat * diflat + diflon * diflon);
+    return dist * mu.pi() / 180 * R;
   }
 
   public final Vector3D closestPointToSphere(Vector3D pos, Vector3D ray)
   {
+    final IMathUtils mu = IMathUtils.instance();
+  
     double t = 0;
   
     // compute radius for the rotation
-    double R0 = (_radii._x + _radii._y + _radii._y) /3;
+    final double R0 = (_radii._x + _radii._y + _radii._y) /3;
   
     // compute the point in this ray that are to a distance R from the origin.
-    double U2 = ray.squaredLength();
-    double O2 = pos.squaredLength();
-    double OU = pos.dot(ray);
-    double a = U2;
-    double b = 2 * OU;
-    double c = O2 - R0 * R0;
+    final double U2 = ray.squaredLength();
+    final double O2 = pos.squaredLength();
+    final double OU = pos.dot(ray);
+    final double a = U2;
+    final double b = 2 * OU;
+    final double c = O2 - R0 * R0;
     double rad = b * b - 4 * a * c;
   
     // if there is solution, the ray intersects the sphere
     if (rad > 0)
     {
       // compute the final point (the smaller positive t value)
-      t = (-b - IMathUtils.instance().sqrt(rad)) / (2 * a);
+      t = (-b - mu.sqrt(rad)) / (2 * a);
       if (t < 1)
-         t = (-b + IMathUtils.instance().sqrt(rad)) / (2 * a);
+         t = (-b + mu.sqrt(rad)) / (2 * a);
       // if the ideal ray intersects, but not the mesh --> case 2
       if (t < 1)
          rad = -12345;
@@ -348,18 +358,18 @@ public class Ellipsoid
     // if no solution found, find a point in the contour line
     if (rad < 0)
     {
-      double D = IMathUtils.instance().sqrt(O2);
-      double co2 = R0 * R0 / (D * D);
-      double a_ = OU * OU - co2 * O2 * U2;
-      double b_ = 2 * OU * O2 - co2 * 2 * OU * O2;
-      double c_ = O2 * O2 - co2 * O2 * O2;
-      double rad_ = b_ * b_ - 4 * a_ * c_;
-      t = (-b_ - IMathUtils.instance().sqrt(rad_)) / (2 * a_);
+      final double D = mu.sqrt(O2);
+      final double co2 = R0 * R0 / (D * D);
+      final double a_ = OU * OU - co2 * O2 * U2;
+      final double b_ = 2 * OU * O2 - co2 * 2 * OU * O2;
+      final double c_ = O2 * O2 - co2 * O2 * O2;
+      final double rad_ = b_ * b_ - 4 * a_ * c_;
+      t = (-b_ - mu.sqrt(rad_)) / (2 * a_);
     }
   
     // compute the final point
-    Vector3D p = pos.add(ray.times(t));
-    return p;
+    Vector3D result = pos.add(ray.times(t));
+    return result;
   }
 
   public final Vector3D closestIntersection(Vector3D pos, Vector3D ray)

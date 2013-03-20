@@ -337,20 +337,25 @@ IFloatBuffer* Mark::getVertices(const Planet* planet) {
   return _vertices;
 }
 
-void Mark::render(const G3MRenderContext* rc) {
-  const Camera* camera = rc->getCurrentCamera();
+void Mark::render(const G3MRenderContext* rc,
+                  const Vector3D& cameraPosition) {
   const Planet* planet = rc->getPlanet();
 
-  const Vector3D cameraPosition = camera->getCartesianPosition();
   const Vector3D* markPosition = getCartesianPosition(planet);
 
   const Vector3D markCameraVector = markPosition->sub(cameraPosition);
-  const double distanceToCamera = markCameraVector.length();
 
   // mark will be renderered only if is renderable by distance and placed on a visible globe area
-  const bool renderableByDistance = (_minDistanceToCamera == 0) || (distanceToCamera <= _minDistanceToCamera);
-  _renderedMark = false;
+  bool renderableByDistance;
+  if (_minDistanceToCamera == 0) {
+    renderableByDistance = true;
+  }
+  else {
+    const double squaredDistanceToCamera = markCameraVector.squaredLength();
+    renderableByDistance = ( squaredDistanceToCamera <= (_minDistanceToCamera * _minDistanceToCamera) );
+  }
 
+  _renderedMark = false;
   if (renderableByDistance) {
     const Vector3D normalAtMarkPosition = planet->geodeticSurfaceNormal(*markPosition);
 
@@ -375,7 +380,7 @@ void Mark::render(const G3MRenderContext* rc) {
                           getVertices(planet),
                           _textureWidth,
                           _textureHeight);
-        
+
         _renderedMark = true;
       }
     }
@@ -383,10 +388,11 @@ void Mark::render(const G3MRenderContext* rc) {
 }
 
 bool Mark::touched() {
-  if (_listener == NULL) {
-    return false;
-  }
-  return _listener->touchedMark(this);
+  return (_listener == NULL) ? false : _listener->touchedMark(this);
+//  if (_listener == NULL) {
+//    return false;
+//  }
+//  return _listener->touchedMark(this);
 }
 
 void Mark::setMinDistanceToCamera(double minDistanceToCamera) {

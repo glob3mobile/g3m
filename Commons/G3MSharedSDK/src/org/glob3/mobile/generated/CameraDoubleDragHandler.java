@@ -137,6 +137,9 @@ public class CameraDoubleDragHandler extends CameraEventHandler
   }
   public final void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
+  
+    final IMathUtils mu = IMathUtils.instance();
+  
     if (cameraContext.getCurrentGesture() != Gesture.DoubleDrag)
        return;
     if (_initialPoint.isNan())
@@ -163,12 +166,12 @@ public class CameraDoubleDragHandler extends CameraEventHandler
       dAccum += d;
       //tempCamera.updateModelMatrix();
       double angle0 = tempCamera.compute3DAngularDistance(pixel0, pixel1)._degrees;
-      if (IMathUtils.instance().isNan(angle0))
+      if (mu.isNan(angle0))
          return;
       //printf("distancia angular original = %.4f     d=%.1f   angulo step0=%.4f\n", angle, d, angle0);
   
       // step 1
-      d = IMathUtils.instance().abs((distance-d)*0.3);
+      d = mu.abs((distance-d)*0.3);
       if (angle0 < angle)
          d*=-1;
       tempCamera.moveForward(d);
@@ -180,8 +183,8 @@ public class CameraDoubleDragHandler extends CameraEventHandler
   
       // iterations
   //    int iter=0;
-      double precision = IMathUtils.instance().pow(10, IMathUtils.instance().log10(distance)-8.5);
-      while (IMathUtils.instance().abs(angle_n-angle) > precision)
+      double precision = mu.pow(10, mu.log10(distance)-8.5);
+      while (mu.abs(angle_n-angle) > precision)
       {
   //      iter++;
         if ((angle_n1-angle_n)/(angle_n-angle) < 0)
@@ -205,7 +208,7 @@ public class CameraDoubleDragHandler extends CameraEventHandler
     {
       Vector3D initialPoint = _initialPoint.asVector3D();
       final Vector3D rotationAxis = initialPoint.cross(centerPoint);
-      final Angle rotationDelta = Angle.fromRadians(- IMathUtils.instance().acos(initialPoint.normalized().dot(centerPoint.normalized())));
+      final Angle rotationDelta = Angle.fromRadians(- mu.acos(initialPoint.normalized().dot(centerPoint.normalized())));
       if (rotationDelta.isNan())
          return;
       tempCamera.rotateWithAxis(rotationAxis, rotationDelta);
@@ -230,7 +233,7 @@ public class CameraDoubleDragHandler extends CameraEventHandler
   
     // drag globe from centerPoint to finalPoint
     final Vector3D rotationAxis = centerPoint2.cross(finalPoint);
-    final Angle rotationDelta = Angle.fromRadians(- IMathUtils.instance().acos(centerPoint2.normalized().dot(finalPoint.normalized())));
+    final Angle rotationDelta = Angle.fromRadians(- mu.acos(centerPoint2.normalized().dot(finalPoint.normalized())));
     if (rotationDelta.isNan())
     {
       return;

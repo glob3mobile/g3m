@@ -244,11 +244,11 @@ void TileRendererBuilder::setTexturePriority(long long texturePriority) {
 }
 
 TileRenderer* TileRendererBuilder::create() {
-  int __TODO_make_configurable;
+  int _TODO_make_configurable_1;
   
   ElevationDataProvider* elevationDataProvider = NULL;
 
-  //  ElevationDataProvider* elevationDataProvider = new WMSBillElevationDataProvider();
+//  ElevationDataProvider* elevationDataProvider = new WMSBillElevationDataProvider();
   
 //  ElevationDataProvider* elevationDataProvider;
 //  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
@@ -262,13 +262,24 @@ TileRenderer* TileRendererBuilder::create() {
 //                                                              Vector2I(4096, 2048),
 //                                                              0);
 
-  //  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-4096x2048.bil", false),
-  //                                                              Sector::fullSphere(),
-  //                                                              Vector2I(4096, 2048),
-  //                                                              0);
-  
-  int ___TODO_make_configurable;
-  float verticalExaggeration = 1;
+//  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-4096x2048.bil", false),
+//                                                              Sector::fullSphere(),
+//                                                              Vector2I(4096, 2048),
+//                                                              0);
+
+//  ElevationDataProvider* elevationDataProvider;
+//  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///caceres-2008x2032.bil", false),
+//                                                              Sector::fromDegrees(
+//                                                                                  39.4642996294239623,
+//                                                                                  -6.3829977122432933,
+//                                                                                  39.4829891936013553,
+//                                                                                  -6.3645288909498845
+//                                                                                  ),
+//                                                              Vector2I(2008, 2032),
+//                                                              0);
+
+  int _TODO_make_configurable_2;
+  float verticalExaggeration = 5;
   
   TileRenderer* tileRenderer = new TileRenderer(getTileTessellator(),
                                                 elevationDataProvider,

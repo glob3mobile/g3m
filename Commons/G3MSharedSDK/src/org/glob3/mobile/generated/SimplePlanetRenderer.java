@@ -106,12 +106,13 @@ public class SimplePlanetRenderer extends LeafRenderer
     final boolean colorPerVertex = false;
     if (colorPerVertex)
     {
+      final IMathUtils mu = IMathUtils.instance();
       FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
   
       final int numVertices = _lonRes * _lonRes * 4;
       for (int i = 0; i < numVertices; i++)
       {
-        final float val = (float)(0.5 + IMathUtils.instance().sin((float)(2.0 * IMathUtils.instance().pi() * ((float) i) / numVertices)) / 2.0);
+        final float val = (float)(0.5 + mu.sin((float)(2.0 * mu.pi() * ((float) i) / numVertices)) / 2.0);
   
         colors.add(val, (float)0.0, (float)(1.0 - val), (float)1.0);
       }

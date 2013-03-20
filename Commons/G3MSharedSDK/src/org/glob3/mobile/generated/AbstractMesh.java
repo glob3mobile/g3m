@@ -92,6 +92,7 @@ public abstract class AbstractMesh extends Mesh
      _translationMatrix = (center.isNan() || center.isZero()) ? null : new MutableMatrix44D(MutableMatrix44D.createTranslationMatrix(center));
      _lineWidth = lineWidth;
      _pointSize = pointSize;
+  
   }
 
   protected abstract void rawRender(G3MRenderContext rc, GLState parentState);

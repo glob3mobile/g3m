@@ -183,6 +183,9 @@ public:
   inline void prune(TileTexturizer*        texturizer,
                     ElevationDataProvider* elevationDataProvider);
 
+  void toBeDeleted(TileTexturizer*        texturizer,
+                   ElevationDataProvider* elevationDataProvider);
+
   void onElevationData(ElevationData* elevationData,
                        float verticalExaggeration,
                        MeshHolder* meshHolder,

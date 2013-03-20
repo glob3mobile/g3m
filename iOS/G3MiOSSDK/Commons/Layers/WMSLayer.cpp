@@ -12,6 +12,7 @@
 
 #include "IStringBuilder.hpp"
 #include "LayerTilesRenderParameters.hpp"
+#include "MercatorUtils.hpp"
 
 
 WMSLayer::WMSLayer(const std::string& mapLayer,
@@ -83,6 +84,14 @@ _extraParameter("")
 
 }
 
+double WMSLayer::toBBOXLongitude(const Angle& longitude) const {
+  return (_parameters->_mercator) ? MercatorUtils::longitudeToMeters(longitude) : longitude._degrees;
+}
+
+double WMSLayer::toBBOXLatitude(const Angle& latitude) const {
+  return (_parameters->_mercator) ? MercatorUtils::latitudeToMeters(latitude) : latitude._degrees;
+}
+
 std::vector<Petition*> WMSLayer::createTileMapPetitions(const G3MRenderContext* rc,
                                                         const Tile* tile) const {
   std::vector<Petition*> petitions;
@@ -133,13 +142,13 @@ std::vector<Petition*> WMSLayer::createTileMapPetitions(const G3MRenderContext* 
       isb->addInt(tileTextureResolution._y);
 
       isb->addString("&BBOX=");
-      isb->addDouble(sector.lower().latitude()._degrees);
+      isb->addDouble( toBBOXLatitude( sector.lower().latitude() ) );
       isb->addString(",");
-      isb->addDouble(sector.lower().longitude()._degrees);
+      isb->addDouble( toBBOXLongitude( sector.lower().longitude() ) );
       isb->addString(",");
-      isb->addDouble(sector.upper().latitude()._degrees);
+      isb->addDouble( toBBOXLatitude( sector.upper().latitude() ) );
       isb->addString(",");
-      isb->addDouble(sector.upper().longitude()._degrees);
+      isb->addDouble( toBBOXLongitude( sector.upper().longitude() ) );
 
       req += isb->getString();
       delete isb;
@@ -162,13 +171,13 @@ std::vector<Petition*> WMSLayer::createTileMapPetitions(const G3MRenderContext* 
       isb->addInt(tileTextureResolution._y);
 
       isb->addString("&BBOX=");
-      isb->addDouble(sector.lower().longitude()._degrees);
+      isb->addDouble( toBBOXLongitude( sector.lower().longitude() ) );
       isb->addString(",");
-      isb->addDouble(sector.lower().latitude()._degrees);
+      isb->addDouble( toBBOXLatitude( sector.lower().latitude() ) );
       isb->addString(",");
-      isb->addDouble(sector.upper().longitude()._degrees);
+      isb->addDouble( toBBOXLongitude( sector.upper().longitude() ) );
       isb->addString(",");
-      isb->addDouble(sector.upper().latitude()._degrees);
+      isb->addDouble( toBBOXLatitude( sector.upper().latitude() ) );
 
       req += isb->getString();
       delete isb;
@@ -262,13 +271,13 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& position,
       isb->addInt(_parameters->_tileTextureResolution._y);
 
       isb->addString("&BBOX=");
-      isb->addDouble(sector.lower().latitude()._degrees);
+      isb->addDouble( toBBOXLatitude( sector.lower().latitude() ) );
       isb->addString(",");
-      isb->addDouble(sector.lower().longitude()._degrees);
+      isb->addDouble( toBBOXLongitude( sector.lower().longitude() ) );
       isb->addString(",");
-      isb->addDouble(sector.upper().latitude()._degrees);
+      isb->addDouble( toBBOXLatitude( sector.upper().latitude() ) );
       isb->addString(",");
-      isb->addDouble(sector.upper().longitude()._degrees);
+      isb->addDouble( toBBOXLongitude( sector.upper().longitude() ) );
 
       req += isb->getString();
 
@@ -292,13 +301,13 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& position,
       isb->addInt(_parameters->_tileTextureResolution._y);
 
       isb->addString("&BBOX=");
-      isb->addDouble(sector.lower().longitude()._degrees);
+      isb->addDouble( toBBOXLongitude( sector.lower().longitude() ) );
       isb->addString(",");
-      isb->addDouble(sector.lower().latitude()._degrees);
+      isb->addDouble( toBBOXLatitude( sector.lower().latitude() ) );
       isb->addString(",");
-      isb->addDouble(sector.upper().longitude()._degrees);
+      isb->addDouble( toBBOXLongitude( sector.upper().longitude() ) );
       isb->addString(",");
-      isb->addDouble(sector.upper().latitude()._degrees);
+      isb->addDouble( toBBOXLatitude( sector.upper().latitude() ) );
 
       req += isb->getString();
 
@@ -307,17 +316,18 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& position,
     }
   }
   req += "&LAYERS=" + _queryLayer;
-
-  //req += "&LAYERS=" + _queryLayers;
   req += "&QUERY_LAYERS=" + _queryLayer;
 
   req += "&INFO_FORMAT=text/plain";
 
+  const IMathUtils* mu = IMathUtils::instance();
+
   //X and Y
+  int TODO_CONSIDER_MERCATOR;
   const Vector2D uv = sector.getUVCoordinates(position);
-  const int x = (int) IMathUtils::instance()->round( (uv._x * _parameters->_tileTextureResolution._x) );
-  const int y = (int) IMathUtils::instance()->round( (uv._y * _parameters->_tileTextureResolution._y) );
-  // const int y = (int) IMathUtils::instance()->round( ((1.0 - uv._y) * _parameters->_tileTextureResolution._y) );
+  const int x = (int) mu->round( (uv._x * _parameters->_tileTextureResolution._x) );
+  const int y = (int) mu->round( (uv._y * _parameters->_tileTextureResolution._y) );
+  // const int y = (int) mu->round( ((1.0 - uv._y) * _parameters->_tileTextureResolution._y) );
 
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("&X=");

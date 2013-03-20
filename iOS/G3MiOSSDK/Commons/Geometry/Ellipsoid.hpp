@@ -69,11 +69,22 @@ public:
                        const double height) const;
 
   Vector3D toCartesian(const Geodetic3D& geodetic) const {
-    return toCartesian(geodetic.latitude(), geodetic.longitude(), geodetic.height());
+    return toCartesian(geodetic.latitude(),
+                       geodetic.longitude(),
+                       geodetic.height());
   }
 
   Vector3D toCartesian(const Geodetic2D& geodetic) const {
-    return toCartesian(geodetic.latitude(), geodetic.longitude(), 0.0);
+    return toCartesian(geodetic.latitude(),
+                       geodetic.longitude(),
+                       0.0);
+  }
+
+  Vector3D toCartesian(const Geodetic2D& geodetic,
+                       const double height) const {
+    return toCartesian(geodetic.latitude(),
+                       geodetic.longitude(),
+                       height);
   }
 
   Geodetic2D toGeodetic2D(const Vector3D& positionOnEllipsoid) const;

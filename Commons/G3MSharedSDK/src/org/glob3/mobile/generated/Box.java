@@ -246,13 +246,15 @@ public class Box extends Extent
 
   public final Extent mergedWithBox(Box that)
   {
-    final double lowerX = IMathUtils.instance().min(_lower._x, that._lower._x);
-    final double lowerY = IMathUtils.instance().min(_lower._y, that._lower._y);
-    final double lowerZ = IMathUtils.instance().min(_lower._z, that._lower._z);
+    final IMathUtils mu = IMathUtils.instance();
   
-    final double upperX = IMathUtils.instance().max(_upper._x, that._upper._x);
-    final double upperY = IMathUtils.instance().max(_upper._y, that._upper._y);
-    final double upperZ = IMathUtils.instance().max(_upper._z, that._upper._z);
+    final double lowerX = mu.min(_lower._x, that._lower._x);
+    final double lowerY = mu.min(_lower._y, that._lower._y);
+    final double lowerZ = mu.min(_lower._z, that._lower._z);
+  
+    final double upperX = mu.max(_upper._x, that._upper._x);
+    final double upperY = mu.max(_upper._y, that._upper._y);
+    final double upperZ = mu.max(_upper._z, that._upper._z);
   
     return new Box(new Vector3D(lowerX, lowerY, lowerZ), new Vector3D(upperX, upperY, upperZ));
   }

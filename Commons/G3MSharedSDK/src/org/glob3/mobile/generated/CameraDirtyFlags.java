@@ -75,7 +75,6 @@ public class CameraDirtyFlags
     _frustumMC = other._frustumMC;
     _halfFrustum = other._halfFrustum;
     _halfFrustumMC = other._halfFrustumMC;
-
   }
 
   public final String description()

@@ -61,7 +61,7 @@ public:
     return Sector(lower, upper);
   }
 
-  Vector2D getScaleFactor(const Sector& that) const;
+  const Vector2D div(const Sector& that) const;
 
 //  Vector2D getTranslationFactor(const Sector& that) const;
 
@@ -73,7 +73,7 @@ public:
 
   static Sector fullSphere() {
     return Sector(Geodetic2D(Angle::fromDegrees(-90), Angle::fromDegrees(-180)),
-                  Geodetic2D(Angle::fromDegrees(90), Angle::fromDegrees(180)));
+                  Geodetic2D(Angle::fromDegrees( 90), Angle::fromDegrees( 180)));
   }
 
   const Geodetic2D lower() const {
@@ -105,11 +105,13 @@ public:
                 const Angle& longitude) const;
   
   bool contains(const Geodetic2D& position) const {
-    return contains(position.latitude(), position.longitude());
+    return contains(position.latitude(),
+                    position.longitude());
   }
 
   bool contains(const Geodetic3D& position) const {
-    return contains(position.latitude(), position.longitude());
+    return contains(position.latitude(),
+                    position.longitude());
   }
 
   bool touchesWith(const Sector& that) const;
@@ -131,11 +133,13 @@ public:
   }
 
   const Geodetic2D getNW() const {
-    return Geodetic2D(_upper.latitude(), _lower.longitude());
+    return Geodetic2D(_upper.latitude(),
+                      _lower.longitude());
   }
 
   const Geodetic2D getSE() const {
-    return Geodetic2D(_lower.latitude(), _upper.longitude());
+    return Geodetic2D(_lower.latitude(),
+                      _upper.longitude());
   }
 
   const Geodetic2D getCenter() const {
@@ -154,10 +158,6 @@ public:
 
   Vector2D getUVCoordinates(const Angle& latitude,
                             const Angle& longitude) const {
-//    const double u = (longitude._radians - _lower.longitude()._radians) / _deltaLongitude._radians;
-//    const double v = (_upper.latitude()._radians - latitude._radians)   / _deltaLatitude._radians;
-//
-//    return Vector2D(u, v);
     return Vector2D(getUCoordinates(longitude),
                     getVCoordinates(latitude));
   }
@@ -180,10 +180,10 @@ public:
   const std::string description() const;
 
   Sector* shrinkedByPercentP(float percent) const {
-    Angle deltaLatitude  = _deltaLatitude.times(percent).div(2);
-    Angle deltaLongitude = _deltaLongitude.times(percent).div(2);
+    const Angle deltaLatitude  = _deltaLatitude.times(percent).div(2);
+    const Angle deltaLongitude = _deltaLongitude.times(percent).div(2);
 
-    Geodetic2D delta = Geodetic2D(deltaLatitude, deltaLongitude);
+    const Geodetic2D delta(deltaLatitude, deltaLongitude);
 
     return new Sector(_lower.add( delta ),
                       _upper.sub( delta ) );

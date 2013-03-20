@@ -28,9 +28,8 @@
 #include "IImageListener.hpp"
 #include "LayerTilesRenderParameters.hpp"
 
-//#define TILE_DOWNLOAD_PRIORITY 1000000000
 
-enum PetitionStatus {
+enum TileTextureBuilder_PetitionStatus {
   STATUS_PENDING,
   STATUS_DOWNLOADED,
   STATUS_CANCELED
@@ -103,23 +102,21 @@ public:
   void initialize() {
     // The default scale and translation are ok when (tile == _ancestor)
     if (_tile != _ancestor) {
-      const Sector tileSector     = _tile->getSector();
-      const Sector ancestorSector = _ancestor->getSector();
+      const Sector tileSector = _tile->getSector();
 
-      const Vector2D scale = tileSector.getScaleFactor(ancestorSector);
-      _scale = scale.asMutableVector2D();
+      const Vector2D lowerTextCoordUV = _tessellator->getTextCoord(_ancestor,
+                                                                   tileSector.lower(),
+                                                                   _mercator);
 
-//      _translation = tileSector.getTranslationFactor(ancestorSector).asMutableVector2D();
+      const Vector2D upperTextCoordUV = _tessellator->getTextCoord(_ancestor,
+                                                                   tileSector.upper(),
+                                                                   _mercator);
 
-      int __DIEGO_AT_WORK;
-      const Vector2D ancestorTextCoord = _tessellator->getTextCoord(_ancestor,
-                                                                    tileSector.upper().latitude(),
-                                                                    tileSector.lower().longitude(),
-                                                                    _mercator);
-      _translation = ancestorTextCoord.asMutableVector2D();
+      _scale       = MutableVector2D(upperTextCoordUV._x - lowerTextCoordUV._x,
+                                     lowerTextCoordUV._y - upperTextCoordUV._y);
 
-//      _translation = ancestorSector.getUVCoordinates(tileSector.upper().latitude(),
-//                                                     tileSector.lower().longitude()).asMutableVector2D();
+      _translation = MutableVector2D(lowerTextCoordUV._x,
+                                     upperTextCoordUV._y);
     }
   }
 
@@ -218,8 +215,8 @@ private:
 
   const int    _firstLevel;
 
-  std::vector<PetitionStatus>    _status;
-  std::vector<long long>         _requestsIds;
+  std::vector<TileTextureBuilder_PetitionStatus> _status;
+  std::vector<long long>                         _requestsIds;
 
 
   bool _finalized;

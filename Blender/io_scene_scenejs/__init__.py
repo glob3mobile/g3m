@@ -70,8 +70,7 @@ class ExportSceneJS(bpy.types.Operator, ExportHelper):
         name="Group by",
         description="Select the option to group by",
         items=(('OMG', "obj/mat/geom", ""),
-               ('MOG', "mat/obj/geom", ""),
-               ('MG', "mat/geom", ""),
+               ('MG',  "mat/geom",     ""),
         ),
         default='MG',
     )

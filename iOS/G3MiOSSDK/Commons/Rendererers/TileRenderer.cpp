@@ -182,6 +182,9 @@ void TileRenderer::clearFirstLevelTiles() {
   const int firstLevelTilesCount = _firstLevelTiles.size();
   for (int i = 0; i < firstLevelTilesCount; i++) {
     Tile* tile = _firstLevelTiles[i];
+
+    tile->toBeDeleted(_texturizer, _elevationDataProvider);
+
     delete tile;
   }
 

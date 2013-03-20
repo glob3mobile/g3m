@@ -54,7 +54,9 @@ public class Vector2F
 
   public static Vector2F nan()
   {
-    return new Vector2F(IMathUtils.instance().NanF(), IMathUtils.instance().NanF());
+    final IMathUtils mu = IMathUtils.instance();
+
+    return new Vector2F(mu.NanF(), mu.NanF());
   }
 
 }

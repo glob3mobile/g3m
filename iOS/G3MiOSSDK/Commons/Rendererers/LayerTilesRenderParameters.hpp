@@ -60,8 +60,8 @@ public:
   }
 
   static LayerTilesRenderParameters* createDefaultNonMercator(const Sector& topSector) {
-    const int  topSectorSplitsByLatitude  = 4;
-    const int  topSectorSplitsByLongitude = 8;
+    const int  topSectorSplitsByLatitude  = 2;
+    const int  topSectorSplitsByLongitude = 4;
     const int  firstLevel = 0;
     const int  maxLevel = 17;
     const bool mercator = false;

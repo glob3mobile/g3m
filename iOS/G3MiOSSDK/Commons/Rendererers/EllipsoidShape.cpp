@@ -89,7 +89,7 @@ Mesh* EllipsoidShape::createBorderMesh(const G3MRenderContext* rc,
                          vertices->getCenter(),
                          vertices->create(),
                          indices.create(),
-                         _borderWidth,
+                         (_borderWidth < 1) ? 1 : _borderWidth,
                          1,
                          borderColor);
 }
@@ -130,7 +130,7 @@ Mesh* EllipsoidShape::createSurfaceMesh(const G3MRenderContext* rc,
                              vertices->getCenter(),
                              vertices->create(),
                              indices.create(),
-                             _borderWidth,
+                             (_borderWidth < 1) ? 1 : _borderWidth,
                              1,
                              surfaceColor);
 

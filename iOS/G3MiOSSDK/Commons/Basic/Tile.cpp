@@ -483,6 +483,17 @@ void Tile::cancelElevationDataRequest(ElevationDataProvider* elevationDataProvid
   }
 }
 
+void Tile::toBeDeleted(TileTexturizer*        texturizer,
+                       ElevationDataProvider* elevationDataProvider) {
+  if (texturizer != NULL) {
+    texturizer->tileToBeDeleted(this, _texturizedMesh);
+  }
+
+  if (elevationDataProvider != NULL) {
+    cancelElevationDataRequest(elevationDataProvider);
+  }
+}
+
 void Tile::prune(TileTexturizer* texturizer,
                  ElevationDataProvider* elevationDataProvider) {
   if (_subtiles != NULL) {

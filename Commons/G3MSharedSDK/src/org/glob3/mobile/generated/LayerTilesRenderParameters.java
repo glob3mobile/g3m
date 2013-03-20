@@ -55,8 +55,8 @@ public class LayerTilesRenderParameters
 
   public static LayerTilesRenderParameters createDefaultNonMercator(Sector topSector)
   {
-    final int topSectorSplitsByLatitude = 4;
-    final int topSectorSplitsByLongitude = 8;
+    final int topSectorSplitsByLatitude = 2;
+    final int topSectorSplitsByLongitude = 4;
     final int firstLevel = 0;
     final int maxLevel = 17;
     final boolean mercator = false;

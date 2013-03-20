@@ -23,6 +23,9 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
     for (int i = 0; i < firstLevelTilesCount; i++)
     {
       Tile tile = _firstLevelTiles.get(i);
+  
+      tile.toBeDeleted(_texturizer, _elevationDataProvider);
+  
       if (tile != null)
          tile.dispose();
     }

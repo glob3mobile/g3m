@@ -58,7 +58,9 @@ public class MutableVector3D
 
   public static MutableVector3D nan()
   {
-    return new MutableVector3D(IMathUtils.instance().NanD(), IMathUtils.instance().NanD(), IMathUtils.instance().NanD());
+    final IMathUtils mu = IMathUtils.instance();
+
+    return new MutableVector3D(mu.NanD(), mu.NanD(), mu.NanD());
   }
 
   public final boolean equalTo(MutableVector3D v)
@@ -68,7 +70,9 @@ public class MutableVector3D
 
   public final boolean isNan()
   {
-    return (IMathUtils.instance().isNan(_x) || IMathUtils.instance().isNan(_y) || IMathUtils.instance().isNan(_z));
+    final IMathUtils mu = IMathUtils.instance();
+
+    return (mu.isNan(_x) || mu.isNan(_y) || mu.isNan(_z));
   }
 
   public final boolean isZero()

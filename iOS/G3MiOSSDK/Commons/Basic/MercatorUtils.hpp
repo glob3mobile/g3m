@@ -10,6 +10,7 @@
 #define __G3MiOSSDK__MercatorUtils__
 
 #include "Angle.hpp"
+#include "Vector2D.hpp"
 
 class MercatorUtils {
 private:
@@ -23,6 +24,8 @@ private:
 
   static double _upperLimitInDegrees;
   static double _lowerLimitInDegrees;
+
+  static double _originShift;
 
 public:
 
@@ -72,8 +75,6 @@ public:
     const IMathUtils* mu = IMathUtils::instance();
     const double pi4 = mu->pi() * 4;
 
-    // const double latitudeInRadians = clampIntoLimitsInRadians(latitude);
-    // const double latSin = mu->sin(latitudeInRadians);
     const double latSin = latitude.sinus();
     return 1.0 - ( ( mu->log( (1.0 + latSin) / (1.0 - latSin) ) / pi4 ) + 0.5 );
   }
@@ -82,11 +83,8 @@ public:
     const IMathUtils* mu = IMathUtils::instance();
     const double pi = mu->pi() ;
 
-    // PI()/2 - (2*ATAN(EXP(-2*PI()*(y - 0,5))))
     const double exp = mu->exp(-2 * pi * (1.0 - v - 0.5));
-
     const double atan = mu->atan(exp);
-
     return Angle::fromRadians((pi / 2) - 2 * atan);
   }
 
@@ -97,7 +95,45 @@ public:
 
     return toLatitude(middleV);
   }
-  
+
+//  /**
+//   Converts given lat/lon in WGS84 Datum to XY in Spherical Mercator EPSG:900913
+//   */
+//  static Vector2D toMeters(const Angle& latitude,
+//                           const Angle& longitude) {
+//    const IMathUtils* mu = IMathUtils::instance();
+//    const double pi = mu->pi();
+//
+//		const double mx = longitude._degrees * _originShift / 180.0;
+//
+//    double my = mu->log( mu->tan( (90 + latitude._degrees) * pi / 360.0 ) ) / (pi / 180.0);
+//		my = my * _originShift / 180.0;
+//
+//		return Vector2D(mx, my);
+//  }
+
+  static double longitudeToMeters(const Angle& longitude) {
+		const double mx  = longitude._degrees * _originShift / 180.0;
+		return mx;
+  }
+
+  static double latitudeToMeters(const Angle& latitude) {
+    if (latitude._degrees >= _upperLimitInDegrees) {
+      return 20037508.342789244;
+    }
+    if (latitude._degrees <= _lowerLimitInDegrees) {
+      return -20037508.342789244;
+    }
+
+    const IMathUtils* mu = IMathUtils::instance();
+    const double pi = mu->pi();
+
+    double my = mu->log( mu->tan( (90 + latitude._degrees) * pi / 360.0 ) ) / (pi / 180.0);
+		my = my * _originShift / 180.0;
+
+		return my;
+  }
+
 };
 
 #endif

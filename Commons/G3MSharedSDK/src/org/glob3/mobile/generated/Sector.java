@@ -63,7 +63,7 @@ public class Sector
     return new Sector(lower, upper);
   }
 
-  public final Vector2D getScaleFactor(Sector that)
+  public final Vector2D div(Sector that)
   {
     final double scaleX = _deltaLongitude.div(that._deltaLongitude);
     final double scaleY = _deltaLatitude.div(that._deltaLatitude);
@@ -332,10 +332,6 @@ public class Sector
 
   public final Vector2D getUVCoordinates(Angle latitude, Angle longitude)
   {
-//    const double u = (longitude._radians - _lower.longitude()._radians) / _deltaLongitude._radians;
-//    const double v = (_upper.latitude()._radians - latitude._radians)   / _deltaLatitude._radians;
-//
-//    return Vector2D(u, v);
     return new Vector2D(getUCoordinates(longitude), getVCoordinates(latitude));
   }
 
@@ -357,34 +353,47 @@ public class Sector
   
     // compute angle with normals in the four corners
     final Vector3D eye = camera.getCartesianPosition();
+  
     final Vector3D pointNW = planet.toCartesian(getNW());
     if (planet.geodeticSurfaceNormal(pointNW).dot(eye.sub(pointNW)) > 0)
-      return false;
+    {
+       return false;
+    }
+  
     final Vector3D pointNE = planet.toCartesian(getNE());
     if (planet.geodeticSurfaceNormal(pointNE).dot(eye.sub(pointNE)) > 0)
-      return false;
+    {
+       return false;
+    }
+  
     final Vector3D pointSW = planet.toCartesian(getSW());
     if (planet.geodeticSurfaceNormal(pointSW).dot(eye.sub(pointSW)) > 0)
-      return false;
+    {
+       return false;
+    }
+  
     final Vector3D pointSE = planet.toCartesian(getSE());
     if (planet.geodeticSurfaceNormal(pointSE).dot(eye.sub(pointSE)) > 0)
-      return false;
+    {
+       return false;
+    }
   
     // compute angle with normal in the closest point to the camera
     final Geodetic2D center = camera.getGeodeticCenterOfView().asGeodetic2D();
-    final Vector3D point = planet.toCartesian(new Geodetic3D(getClosestPoint(center), height));
-    if (planet.geodeticSurfaceNormal(point).dot(eye.sub(point)) > 0)
-      return false;
+  
+    final Vector3D point = planet.toCartesian(getClosestPoint(center), height);
   
     // if all the angles are higher than 90, sector is back oriented
-    return true;
+    return (planet.geodeticSurfaceNormal(point).dot(eye.sub(point)) <= 0);
   }
 
   public final Geodetic2D getClosestPoint(Geodetic2D pos)
   {
     // if pos is included, return pos
     if (contains(pos))
-       return pos;
+    {
+      return pos;
+    }
   
     // test longitude
     Geodetic2D center = getCenter();
@@ -472,10 +481,10 @@ public class Sector
 
   public final Sector shrinkedByPercentP(float percent)
   {
-    Angle deltaLatitude = _deltaLatitude.times(percent).div(2);
-    Angle deltaLongitude = _deltaLongitude.times(percent).div(2);
+    final Angle deltaLatitude = _deltaLatitude.times(percent).div(2);
+    final Angle deltaLongitude = _deltaLongitude.times(percent).div(2);
 
-    Geodetic2D delta = new Geodetic2D(deltaLatitude, deltaLongitude);
+    final Geodetic2D delta = new Geodetic2D(deltaLatitude, deltaLongitude);
 
     return new Sector(_lower.add(delta), _upper.sub(delta));
   }

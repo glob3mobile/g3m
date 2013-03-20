@@ -40,7 +40,10 @@ public:
   }
 
   static Vector2F nan() {
-    return Vector2F(IMathUtils::instance()->NanF(), IMathUtils::instance()->NanF());
+    const IMathUtils* mu = IMathUtils::instance();
+
+    return Vector2F(mu->NanF(),
+                    mu->NanF());
   }
 
 };

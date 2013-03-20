@@ -22,7 +22,8 @@ std::vector<Petition*> LayerSet::createTileMapPetitions(const G3MRenderContext* 
                                                         const Tile* tile) const {
   std::vector<Petition*> petitions;
 
-  for (int i = 0; i < _layers.size(); i++) {
+  const int layersSize = _layers.size();
+  for (int i = 0; i < layersSize; i++) {
     Layer* layer = _layers[i];
     if (layer->isAvailable(rc, tile)) {
       std::vector<Petition*> pet = layer->createTileMapPetitions(rc, tile);

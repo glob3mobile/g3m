@@ -87,7 +87,7 @@ public class EllipsoidShape extends AbstractMeshShape
       }
     }
   
-    return new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), _borderWidth, 1, borderColor);
+    return new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), (_borderWidth < 1) ? 1 : _borderWidth, 1, borderColor);
   }
   private Mesh createSurfaceMesh(G3MRenderContext rc, FloatBufferBuilderFromGeodetic vertices, FloatBufferBuilderFromCartesian2D texCoords)
   {
@@ -128,7 +128,7 @@ public class EllipsoidShape extends AbstractMeshShape
   
     // create mesh
     Color surfaceColor = (_surfaceColor == null) ? null : new Color(_surfaceColor);
-    Mesh im = new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), _borderWidth, 1, surfaceColor);
+    Mesh im = new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), (_borderWidth < 1) ? 1 : _borderWidth, 1, surfaceColor);
   
     final IGLTextureId texId = getTextureId(rc);
     if (texId == null)

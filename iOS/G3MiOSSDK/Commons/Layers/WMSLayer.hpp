@@ -44,6 +44,9 @@ private:
 
   std::string         _extraParameter;
 
+  inline double toBBOXLongitude(const Angle& longitude) const;
+  inline double toBBOXLatitude (const Angle& latitude)  const;
+
 public:
 
   WMSLayer(const std::string& mapLayer,
