@@ -199,7 +199,8 @@ void Box::createMesh(Color* color) {
     0, 1, 1, 5, 5, 4, 4, 0
   };
   
-  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero());
+  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::firstVertex(),
+                                             Vector3D::zero());
   ShortBufferBuilder indices;
   
   const unsigned int numVertices = 8;
@@ -225,7 +226,7 @@ void Box::createMesh(Color* color) {
 void Box::render(const G3MRenderContext* rc,
                  const GLState& parentState) {
   if (_mesh == NULL) {
-    createMesh(Color::newFromRGBA((float)1.0, (float)1.0, (float)0.0, (float)1.0));
+    createMesh(Color::newFromRGBA(1.0f, 0.0f, 1.0f, 1.0f));
   }
   _mesh->render(rc, parentState);
 }

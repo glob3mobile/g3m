@@ -47,7 +47,10 @@ _isVisible(false),
 _texturizerData(NULL),
 _tileExtent(NULL),
 _elevationData(NULL),
-_elevationRequestId(-1000)
+_elevationRequestId(-1000),
+_minHeight(0),
+_maxHeight(0),
+_verticalExaggeration(0)
 {
   //  int __remove_tile_print;
   //  printf("Created tile=%s\n deltaLat=%s deltaLon=%s\n",
@@ -125,21 +128,21 @@ private:
   private final Vector2I _tileMeshResolution;
 #endif
   const bool             _renderDebug;
-  const float            _verticalExaggeration;
+//  const float            _verticalExaggeration;
 public:
   TileElevationDataListener(Tile* tile,
                             MeshHolder* meshHolder,
                             const TileTessellator* tessellator,
                             const Planet* planet,
                             const Vector2I& tileMeshResolution,
-                            float verticalExaggeration,
+//                            float verticalExaggeration,
                             bool renderDebug) :
   _tile(tile),
   _meshHolder(meshHolder),
   _tessellator(tessellator),
   _planet(planet),
   _tileMeshResolution(tileMeshResolution),
-  _verticalExaggeration(verticalExaggeration),
+//  _verticalExaggeration(verticalExaggeration),
   _renderDebug(renderDebug)
   {
     
@@ -151,7 +154,7 @@ public:
               const Vector2I& resolution,
               ElevationData* elevationData) {
     _tile->onElevationData(elevationData,
-                           _verticalExaggeration,
+                           //_verticalExaggeration,
                            _meshHolder,
                            _tessellator,
                            _planet,
@@ -166,19 +169,35 @@ public:
 };
 
 void Tile::onElevationData(ElevationData* elevationData,
-                           float verticalExaggeration,
+                           //float verticalExaggeration,
                            MeshHolder* meshHolder,
                            const TileTessellator* tessellator,
                            const Planet* planet,
                            const Vector2I& tileMeshResolution,
                            bool renderDebug) {
   _elevationRequestId = -1000;
+  if (_elevationData != NULL) {
+    delete _elevationData;
+  }
   _elevationData = elevationData;
+
+  if (_elevationData != NULL) {
+    const Vector2D minMaxHeights = elevationData->getMinMaxHeights();
+    _minHeight = minMaxHeights._x;
+    _maxHeight = minMaxHeights._y;
+  }
+  else {
+    _minHeight = 0;
+    _maxHeight = 0;
+  }
+  delete _tileExtent;
+  _tileExtent = NULL;
+
   meshHolder->setMesh( tessellator->createTileMesh(planet,
                                                    tileMeshResolution,
                                                    this,
                                                    _elevationData,
-                                                   verticalExaggeration,
+                                                   _verticalExaggeration,
                                                    renderDebug) );
 }
 
@@ -190,7 +209,10 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
     ElevationDataProvider* elevationDataProvider = trc->getElevationDataProvider();
     const Planet* planet = rc->getPlanet();
 
-    const float verticalExaggeration = trc->getVerticalExaggeration();
+//    const float verticalExaggeration = trc->getVerticalExaggeration();
+//    if (_verticalExaggeration != verticalExaggeration) {
+//
+//    }
 
     const LayerTilesRenderParameters* layerTilesRenderParameters = trc->getLayerTilesRenderParameters();
     const Vector2I tileMeshResolution(layerTilesRenderParameters->_tileMeshResolution);
@@ -201,7 +223,7 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
                                                      tileMeshResolution,
                                                      this,
                                                      NULL,
-                                                     verticalExaggeration,
+                                                     _verticalExaggeration,
                                                      renderDebug);
     }
     else {
@@ -210,7 +232,7 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
                                                                              tileMeshResolution,
                                                                              this,
                                                                              NULL,
-                                                                             verticalExaggeration,
+                                                                             _verticalExaggeration,
                                                                              renderDebug) );
         _tessellatorMesh = meshHolder;
 
@@ -219,7 +241,7 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
                                                                             tessellator,
                                                                             planet,
                                                                             tileMeshResolution,
-                                                                            verticalExaggeration,
+                                                                            //verticalExaggeration,
                                                                             renderDebug);
 
         _elevationRequestId = elevationDataProvider->requestElevationData(_sector,
@@ -236,7 +258,7 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
                                                        tileMeshResolution,
                                                        this,
                                                        _elevationData,
-                                                       verticalExaggeration,
+                                                       _verticalExaggeration,
                                                        renderDebug);
       }
     }
@@ -274,11 +296,14 @@ Extent* Tile::getTileExtent(const G3MRenderContext *rc) {
   if (_tileExtent == NULL) {
     const Planet* planet = rc->getPlanet();
 
-    const Vector3D v0 = planet->toCartesian( _sector.getCenter() );
-    const Vector3D v1 = planet->toCartesian( _sector.getNE() );
-    const Vector3D v2 = planet->toCartesian( _sector.getNW() );
-    const Vector3D v3 = planet->toCartesian( _sector.getSE() );
-    const Vector3D v4 = planet->toCartesian( _sector.getSW() );
+    const double minHeight = getMinHeight() * _verticalExaggeration;
+    const double maxHeight = getMaxHeight() * _verticalExaggeration;
+
+    const Vector3D v0 = planet->toCartesian( _sector.getCenter(), maxHeight );
+    const Vector3D v1 = planet->toCartesian( _sector.getNE(),     minHeight );
+    const Vector3D v2 = planet->toCartesian( _sector.getNW(),     minHeight );
+    const Vector3D v3 = planet->toCartesian( _sector.getSE(),     minHeight );
+    const Vector3D v4 = planet->toCartesian( _sector.getSW(),     minHeight );
 
     double lowerX = v0._x;
     if (v1._x < lowerX) { lowerX = v1._x; }
@@ -431,7 +456,10 @@ void Tile::rawRender(const G3MRenderContext *rc,
     return;
   }
 
-  //getTileExtent(rc)->render(rc, parentState);
+//  int __remove_render_extent;
+//  if (_minHeight != 0 || _maxHeight != 0) {
+//    getTileExtent(rc)->render(rc, parentState);
+//  }
 
   TileTexturizer* texturizer = trc->getTexturizer();
   if (texturizer == NULL) {
@@ -563,6 +591,8 @@ void Tile::render(const G3MRenderContext* rc,
                   const GLState& parentState,
                   std::list<Tile*>* toVisitInNextIteration) {
   TilesStatistics* statistics = trc->getStatistics();
+
+  _verticalExaggeration = trc->getVerticalExaggeration();
 
   statistics->computeTileProcessed(this);
   if (isVisible(rc, trc)) {
@@ -716,4 +746,12 @@ const std::string Tile::description() const {
   const std::string s = isb->getString();
   delete isb;
   return s;
+}
+
+double Tile::getMinHeight() const {
+  return _minHeight;
+}
+
+double Tile::getMaxHeight() const {
+  return _maxHeight;
 }

@@ -29,6 +29,8 @@ public:
 
   const std::string description(bool detailed) const;
 
+  Vector2D getMinMaxHeights() const;
+
 };
 
 #endif

@@ -52,6 +52,10 @@ private:
 
   bool _texturizerDirty;
 
+  float _verticalExaggeration;
+  double _minHeight;
+  double _maxHeight;
+
   inline Mesh* getTessellatorMesh(const G3MRenderContext* rc,
                                   const TileRenderContext* trc);
 
@@ -187,15 +191,15 @@ public:
                    ElevationDataProvider* elevationDataProvider);
 
   void onElevationData(ElevationData* elevationData,
-                       float verticalExaggeration,
+                       //float verticalExaggeration,
                        MeshHolder* meshHolder,
                        const TileTessellator* tessellator,
                        const Planet* planet,
                        const Vector2I& tileMeshResolution,
                        bool renderDebug);
   
-  double getMinHeight() { return 0.0; }
-
+  double getMinHeight() const;
+  double getMaxHeight() const;
 
   const std::string description() const;
 
