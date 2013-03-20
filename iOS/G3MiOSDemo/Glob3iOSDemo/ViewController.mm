@@ -69,6 +69,10 @@
 #import <G3MiOSSDK/G3MWidget.hpp>
 #import <G3MiOSSDK/GEOJSONParser.hpp>
 
+//import <G3MiOSSDK/WMSBillElevationDataProvider.hpp>
+#import <G3MiOSSDK/SingleBillElevationDataProvider.hpp>
+
+
 class TestVisibleSectorListener : public VisibleSectorListener {
 public:
   void onVisibleSectorChange(const Sector& visibleSector,
@@ -171,6 +175,48 @@ public:
   builder.initializeWidget();
 }
 
+- (void)  initializeElevationDataProvider: (G3MBuilder_iOS&) builder
+{
+  float verticalExaggeration = 5.0f;
+  builder.getTileRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
+
+  
+//  ElevationDataProvider* elevationDataProvider = NULL;
+
+  //  ElevationDataProvider* elevationDataProvider = new WMSBillElevationDataProvider();
+
+  //  ElevationDataProvider* elevationDataProvider;
+  //  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
+  //                                                              Sector::fullSphere(),
+  //                                                              Vector2I(2048, 1024),
+  //                                                              0);
+
+  //  ElevationDataProvider* elevationDataProvider;
+  //  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///elev-35.0_-6.0_38.0_-2.0_4096x2048.bil", false),
+  //                                                              Sector::fromDegrees(35, -6, 38, -2),
+  //                                                              Vector2I(4096, 2048),
+  //                                                              0);
+
+  //  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-4096x2048.bil", false),
+  //                                                              Sector::fullSphere(),
+  //                                                              Vector2I(4096, 2048),
+  //                                                              0);
+
+  ElevationDataProvider* elevationDataProvider;
+  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///caceres-2008x2032.bil", false),
+                                                              Sector::fromDegrees(
+                                                                                  39.4642996294239623,
+                                                                                  -6.3829977122432933,
+                                                                                  39.4829891936013553,
+                                                                                  -6.3645288909498845
+                                                                                  ),
+                                                              Vector2I(2008, 2032),
+                                                              0);
+
+  builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProvider);
+}
+
+
 - (void) initCustomizedWithBuilder
 {
   G3MBuilder_iOS builder([self G3MWidget]);
@@ -197,6 +243,8 @@ public:
   //                                  true, //
   //                                  NULL)
   //                     );
+
+  [self initializeElevationDataProvider: builder];
 
   builder.getTileRendererBuilder()->setLayerSet(layerSet);
   builder.getTileRendererBuilder()->setTileRendererParameters([self createTileRenderParameters]);
@@ -849,8 +897,8 @@ public:
                                       1,
                                       false,
                                       false,
-                                      Color::newFromRGBA(0.8, 0, 0, 1.0),
-                                      Color::newFromRGBA(0, 0, 0, 1)
+                                      Color::newFromRGBA(0.8, 0, 0, 0.5),
+                                      Color::newFromRGBA(0, 0, 0, 0.5)
                                       );
   shapesRenderer->addShape(centralSphere);
   int splits = 5;
@@ -862,8 +910,8 @@ public:
                                        1,
                                        false,
                                        false,
-                                       Color::newFromRGBA(0.0, 0.8, 0, 1.0),
-                                       Color::newFromRGBA(0, 0, 0, 1)
+                                       Color::newFromRGBA(0.0, 0.8, 0, 0.5),
+                                       Color::newFromRGBA(0, 0, 0, 0.5)
                                        );
     shapesRenderer->addShape(sphere);
   }
@@ -877,8 +925,8 @@ public:
                                        1,
                                        false,
                                        false,
-                                       Color::newFromRGBA(0.8, 0.8, 0, 1.0),
-                                       Color::newFromRGBA(0, 0, 0, 1)
+                                       Color::newFromRGBA(0.8, 0.8, 0, 0.5),
+                                       Color::newFromRGBA(0, 0, 0, 0.5)
                                        );
     shapesRenderer->addShape(sphere);
   }

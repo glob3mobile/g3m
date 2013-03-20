@@ -329,6 +329,7 @@ public class WMSLayer extends Layer
     final IMathUtils mu = IMathUtils.instance();
   
     //X and Y
+    int TODO_CONSIDER_MERCATOR;
     final Vector2D uv = sector.getUVCoordinates(position);
     final int x = (int) mu.round((uv._x * _parameters._tileTextureResolution._x));
     final int y = (int) mu.round((uv._y * _parameters._tileTextureResolution._y));
