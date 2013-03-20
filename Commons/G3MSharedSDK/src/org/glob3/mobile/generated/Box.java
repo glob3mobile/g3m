@@ -17,12 +17,43 @@ package org.glob3.mobile.generated;
 
 
 
-
 //class Vector2D;
-
+//class Mesh;
+//class Color;
 
 public class Box extends Extent
 {
+  private final Vector3D _lower ;
+  private final Vector3D _upper ;
+
+  private java.util.ArrayList<Vector3D> _cornersD = null; // cache for getCorners() method
+  private java.util.ArrayList<Vector3F> _cornersF = null; // cache for getCornersF() method
+
+  private Mesh _mesh;
+  private void createMesh(Color color)
+  {
+  
+    float[] v = { (float) _lower._x, (float) _lower._y, (float) _lower._z, (float) _lower._x, (float) _upper._y, (float) _lower._z, (float) _lower._x, (float) _upper._y, (float) _upper._z, (float) _lower._x, (float) _lower._y, (float) _upper._z, (float) _upper._x, (float) _lower._y, (float) _lower._z, (float) _upper._x, (float) _upper._y, (float) _lower._z, (float) _upper._x, (float) _upper._y, (float) _upper._z, (float) _upper._x, (float) _lower._y, (float) _upper._z };
+  
+    short[] i = { 0, 1, 1, 2, 2, 3, 3, 0, 1, 5, 5, 6, 6, 2, 2, 1, 5, 4, 4, 7, 7, 6, 6, 5, 4, 0, 0, 3, 3, 7, 7, 4, 3, 2, 2, 6, 6, 7, 7, 3, 0, 1, 1, 5, 5, 4, 4, 0 };
+  
+    FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.firstVertex(), Vector3D.zero());
+    ShortBufferBuilder indices = new ShortBufferBuilder();
+  
+    final int numVertices = 8;
+    for (int n = 0; n<numVertices; n++)
+    {
+      vertices.add(v[n *3], v[n *3+1], v[n *3+2]);
+    }
+  
+    final int numIndices = 48;
+    for (int n = 0; n<numIndices; n++)
+    {
+      indices.add(i[n]);
+    }
+  
+    _mesh = new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, color);
+  }
 
   public Box(Vector3D lower, Vector3D upper)
   {
@@ -221,17 +252,29 @@ public class Box extends Extent
   public final boolean touchesBox(Box box)
   {
     if (_lower._x > box._upper._x)
+    {
        return false;
+    }
     if (_upper._x < box._lower._x)
+    {
        return false;
+    }
     if (_lower._y > box._upper._y)
+    {
        return false;
+    }
     if (_upper._y < box._lower._y)
+    {
        return false;
+    }
     if (_lower._z > box._upper._z)
+    {
        return false;
+    }
     if (_upper._z < box._lower._z)
+    {
        return false;
+    }
     return true;
   }
 
@@ -259,37 +302,16 @@ public class Box extends Extent
     return new Box(new Vector3D(lowerX, lowerY, lowerZ), new Vector3D(upperX, upperY, upperZ));
   }
 
-
-  private final Vector3D _lower ;
-  private final Vector3D _upper ;
-
-  private java.util.ArrayList<Vector3D> _cornersD = null; // cache for getCorners() method
-  private java.util.ArrayList<Vector3F> _cornersF = null; // cache for getCornersF() method
-
-  private Mesh _mesh;
-  private void createMesh(Color color)
+  public final boolean fullContains(Extent that)
   {
-  
-    float[] v = { (float) _lower._x, (float) _lower._y, (float) _lower._z, (float) _lower._x, (float) _upper._y, (float) _lower._z, (float) _lower._x, (float) _upper._y, (float) _upper._z, (float) _lower._x, (float) _lower._y, (float) _upper._z, (float) _upper._x, (float) _lower._y, (float) _lower._z, (float) _upper._x, (float) _upper._y, (float) _lower._z, (float) _upper._x, (float) _upper._y, (float) _upper._z, (float) _upper._x, (float) _lower._y, (float) _upper._z };
-  
-    short[] i = { 0, 1, 1, 2, 2, 3, 3, 0, 1, 5, 5, 6, 6, 2, 2, 1, 5, 4, 4, 7, 7, 6, 6, 5, 4, 0, 0, 3, 3, 7, 7, 4, 3, 2, 2, 6, 6, 7, 7, 3, 0, 1, 1, 5, 5, 4, 4, 0 };
-  
-    FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.firstVertex(), Vector3D.zero());
-    ShortBufferBuilder indices = new ShortBufferBuilder();
-  
-    final int numVertices = 8;
-    for (int n = 0; n<numVertices; n++)
-    {
-      vertices.add(v[n *3], v[n *3+1], v[n *3+2]);
-    }
-  
-    final int numIndices = 48;
-    for (int n = 0; n<numIndices; n++)
-    {
-      indices.add(i[n]);
-    }
-  
-    _mesh = new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, color);
+    return that.fullContainedInBox(this);
   }
+
+  public final boolean fullContainedInBox(Box box)
+  {
+  //  return contains(box->_upper) && contains(box->_lower);
+    return box.contains(_upper) && box.contains(_lower);
+  }
+
 
 }
