@@ -405,4 +405,16 @@ public final class MathUtils_WebGL
       return Math.max(l1, l2);
    }
 
+
+   @Override
+   public short maxInt16() {
+      return Short.MAX_VALUE;
+   }
+
+
+   @Override
+   public short minInt16() {
+      return Short.MIN_VALUE;
+   }
+
 }
