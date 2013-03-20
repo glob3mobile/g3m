@@ -78,4 +78,45 @@ public class SubviewElevationData extends ElevationData
     return s;
   }
 
+  public final Vector2D getMinMaxHeights()
+  {
+  
+    final IMathUtils mu = IMathUtils.instance();
+  
+    double minHeight = mu.maxDouble();
+    double maxHeight = mu.minDouble();
+  
+    int unusedType = 0;
+  
+    for (int x = 0; x < _width; x++)
+    {
+      for (int y = 0; y < _height; y++)
+      {
+        final double height = getElevationAt(x, y, unusedType);
+        if (height != _noDataValue)
+        {
+          if (height < minHeight)
+          {
+            minHeight = height;
+          }
+          if (height > maxHeight)
+          {
+            maxHeight = height;
+          }
+        }
+      }
+    }
+  
+    if (minHeight == mu.maxDouble())
+    {
+      minHeight = 0;
+    }
+    if (maxHeight == mu.minDouble())
+    {
+      maxHeight = 0;
+    }
+  
+    return new Vector2D(minHeight, maxHeight);
+  }
+
 }

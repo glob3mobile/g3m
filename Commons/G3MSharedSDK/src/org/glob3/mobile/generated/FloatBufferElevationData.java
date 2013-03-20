@@ -74,4 +74,39 @@ public class FloatBufferElevationData extends BufferElevationData
     return s;
   }
 
+  public final Vector2D getMinMaxHeights()
+  {
+    final IMathUtils mu = IMathUtils.instance();
+    float minHeight = mu.maxFloat();
+    float maxHeight = mu.minFloat();
+  
+    final int bufferSize = _buffer.size();
+    for (int i = 0; i < bufferSize; i++)
+    {
+      final float height = _buffer.get(i);
+      if (height != _noDataValue)
+      {
+        if (height < minHeight)
+        {
+          minHeight = height;
+        }
+        if (height > maxHeight)
+        {
+          maxHeight = height;
+        }
+      }
+    }
+  
+    if (minHeight == mu.maxFloat())
+    {
+      minHeight = 0F;
+    }
+    if (maxHeight == mu.minFloat())
+    {
+      maxHeight = 0F;
+    }
+  
+    return new Vector2D(minHeight, maxHeight);
+  }
+
 }

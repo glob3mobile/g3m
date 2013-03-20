@@ -56,6 +56,10 @@ public class Tile
 
   private boolean _texturizerDirty;
 
+  private float _verticalExaggeration;
+  private double _minHeight;
+  private double _maxHeight;
+
   private Mesh getTessellatorMesh(G3MRenderContext rc, TileRenderContext trc)
   {
     if (_tessellatorMesh == null)
@@ -65,7 +69,10 @@ public class Tile
       ElevationDataProvider elevationDataProvider = trc.getElevationDataProvider();
       final Planet planet = rc.getPlanet();
   
-      final float verticalExaggeration = trc.getVerticalExaggeration();
+  //    const float verticalExaggeration = trc->getVerticalExaggeration();
+  //    if (_verticalExaggeration != verticalExaggeration) {
+  //
+  //    }
   
       final LayerTilesRenderParameters layerTilesRenderParameters = trc.getLayerTilesRenderParameters();
       final Vector2I tileMeshResolution = new Vector2I(layerTilesRenderParameters._tileMeshResolution);
@@ -73,23 +80,24 @@ public class Tile
       if (elevationDataProvider == null)
       {
         // no elevation data provider, just create a simple mesh without elevation
-        _tessellatorMesh = tessellator.createTileMesh(planet, tileMeshResolution, this, null, verticalExaggeration, renderDebug);
+        _tessellatorMesh = tessellator.createTileMesh(planet, tileMeshResolution, this, null, _verticalExaggeration, renderDebug);
       }
       else
       {
         if (_elevationData == null)
         {
-          MeshHolder meshHolder = new MeshHolder(tessellator.createTileMesh(planet, tileMeshResolution, this, null, verticalExaggeration, renderDebug));
+          MeshHolder meshHolder = new MeshHolder(tessellator.createTileMesh(planet, tileMeshResolution, this, null, _verticalExaggeration, renderDebug));
           _tessellatorMesh = meshHolder;
   
-          TileElevationDataListener listener = new TileElevationDataListener(this, meshHolder, tessellator, planet, tileMeshResolution, verticalExaggeration, renderDebug);
+          TileElevationDataListener listener = new TileElevationDataListener(this, meshHolder, tessellator, planet, tileMeshResolution, renderDebug);
+                                                                              //verticalExaggeration,
   
           _elevationRequestId = elevationDataProvider.requestElevationData(_sector, tessellator.getTileMeshResolution(planet, tileMeshResolution, this, renderDebug), listener, true);
         }
         else
         {
           // the elevation data is already available, create a simple "inflated" mesh with
-          _tessellatorMesh = tessellator.createTileMesh(planet, tileMeshResolution, this, _elevationData, verticalExaggeration, renderDebug);
+          _tessellatorMesh = tessellator.createTileMesh(planet, tileMeshResolution, this, _elevationData, _verticalExaggeration, renderDebug);
         }
       }
   
@@ -221,7 +229,10 @@ public class Tile
       return;
     }
   
-    //getTileExtent(rc)->render(rc, parentState);
+  //  int __remove_render_extent;
+  //  if (_minHeight != 0 || _maxHeight != 0) {
+  //    getTileExtent(rc)->render(rc, parentState);
+  //  }
   
     TileTexturizer texturizer = trc.getTexturizer();
     if (texturizer == null)
@@ -354,11 +365,14 @@ public class Tile
     {
       final Planet planet = rc.getPlanet();
   
-      final Vector3D v0 = planet.toCartesian(_sector.getCenter());
-      final Vector3D v1 = planet.toCartesian(_sector.getNE());
-      final Vector3D v2 = planet.toCartesian(_sector.getNW());
-      final Vector3D v3 = planet.toCartesian(_sector.getSE());
-      final Vector3D v4 = planet.toCartesian(_sector.getSW());
+      final double minHeight = getMinHeight() * _verticalExaggeration;
+      final double maxHeight = getMaxHeight() * _verticalExaggeration;
+  
+      final Vector3D v0 = planet.toCartesian(_sector.getCenter(), maxHeight);
+      final Vector3D v1 = planet.toCartesian(_sector.getNE(), minHeight);
+      final Vector3D v2 = planet.toCartesian(_sector.getNW(), minHeight);
+      final Vector3D v3 = planet.toCartesian(_sector.getSE(), minHeight);
+      final Vector3D v4 = planet.toCartesian(_sector.getSW(), minHeight);
   
       double lowerX = v0._x;
       if (v1._x < lowerX)
@@ -505,6 +519,9 @@ public class Tile
      _tileExtent = null;
      _elevationData = null;
      _elevationRequestId = -1000;
+     _minHeight = 0;
+     _maxHeight = 0;
+     _verticalExaggeration = 0F;
     //  int __remove_tile_print;
     //  printf("Created tile=%s\n deltaLat=%s deltaLon=%s\n",
     //         getKey().description().c_str(),
@@ -596,6 +613,8 @@ public class Tile
   public final void render(G3MRenderContext rc, TileRenderContext trc, GLState parentState, java.util.LinkedList<Tile> toVisitInNextIteration)
   {
     TilesStatistics statistics = trc.getStatistics();
+  
+    _verticalExaggeration = trc.getVerticalExaggeration();
   
     statistics.computeTileProcessed(this);
     if (isVisible(rc, trc))
@@ -784,18 +803,44 @@ public class Tile
     }
   }
 
-  public final void onElevationData(ElevationData elevationData, float verticalExaggeration, MeshHolder meshHolder, TileTessellator tessellator, Planet planet, Vector2I tileMeshResolution, boolean renderDebug)
+  public final void onElevationData(ElevationData elevationData, MeshHolder meshHolder, TileTessellator tessellator, Planet planet, Vector2I tileMeshResolution, boolean renderDebug)
+                             //float verticalExaggeration,
   {
     _elevationRequestId = -1000;
+    if (_elevationData != null)
+    {
+      if (_elevationData != null)
+         _elevationData.dispose();
+    }
     _elevationData = elevationData;
-    meshHolder.setMesh(tessellator.createTileMesh(planet, tileMeshResolution, this, _elevationData, verticalExaggeration, renderDebug));
+  
+    if (_elevationData != null)
+    {
+      final Vector2D minMaxHeights = elevationData.getMinMaxHeights();
+      _minHeight = minMaxHeights._x;
+      _maxHeight = minMaxHeights._y;
+    }
+    else
+    {
+      _minHeight = 0;
+      _maxHeight = 0;
+    }
+    if (_tileExtent != null)
+       _tileExtent.dispose();
+    _tileExtent = null;
+  
+    meshHolder.setMesh(tessellator.createTileMesh(planet, tileMeshResolution, this, _elevationData, _verticalExaggeration, renderDebug));
   }
+                       //float verticalExaggeration,
 
   public final double getMinHeight()
   {
-     return 0.0;
+    return _minHeight;
   }
-
+  public final double getMaxHeight()
+  {
+    return _maxHeight;
+  }
 
   public final String description()
   {

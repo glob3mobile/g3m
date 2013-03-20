@@ -54,4 +54,6 @@ public abstract class ElevationData
 
   public abstract String description(boolean detailed);
 
+  public abstract Vector2D getMinMaxHeights();
+
 }
