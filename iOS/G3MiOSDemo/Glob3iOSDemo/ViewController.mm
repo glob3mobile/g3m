@@ -63,6 +63,9 @@
 #import <G3MiOSSDK/GoogleMapsLayer.hpp>
 #import <G3MiOSSDK/BingMapsLayer.hpp>
 
+#import <G3MiOSSDK/BusyQuadRenderer.hpp>
+#import <G3MiOSSDK/Factory_iOS.hpp>
+
 #import <G3MiOSSDK/G3MWidget.hpp>
 #import <G3MiOSSDK/GEOJSONParser.hpp>
 
@@ -248,7 +251,18 @@ public:
   builder.getTileRendererBuilder()->addVisibleSectorListener(new TestVisibleSectorListener(),
                                                              TimeInterval::fromSeconds(3));
 
-  Renderer* busyRenderer = new BusyMeshRenderer();
+  Renderer* busyRenderer = new BusyMeshRenderer(Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1));
+  
+//  // Busy quad renderer
+//  NSString* fn = [NSString stringWithCString: "horizontal-gears.png"
+//                                    encoding: [NSString defaultCStringEncoding]];
+//  UIImage* image = [UIImage imageNamed:fn];
+//  IImage* busyImg =  new Image_iOS(image, NULL);
+//  Renderer* busyRenderer = new BusyQuadRenderer(busyImg,
+//                                                Color::newFromRGBA(0.0, 0.0, 0.0, 1.0),
+//                                                Vector2D(250,194),
+//                                                false);
+
   builder.setBusyRenderer(busyRenderer);
 
   //    DummyRenderer* dum = new DummyRenderer();

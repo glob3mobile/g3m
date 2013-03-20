@@ -23,7 +23,7 @@ package org.glob3.mobile.generated;
 //class IShortBuffer;
 //class IGLTextureId;
 
-public class SimplePlanetRenderer extends LeafRenderer
+public abstract class SimplePlanetRenderer extends LeafRenderer
 {
 
 //  const std::string _textureFilename;

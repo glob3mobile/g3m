@@ -40,9 +40,9 @@ public:
   virtual void onResizeViewportEvent(const G3MEventContext* ec,
                                      int width, int height) = 0;
   
-  virtual void start() = 0;
+  virtual void start(const G3MRenderContext* rc) = 0;
   
-  virtual void stop() = 0;
+  virtual void stop(const G3MRenderContext* rc) = 0;
   
   virtual ~Renderer() { };
 

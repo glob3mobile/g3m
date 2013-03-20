@@ -353,11 +353,11 @@ public:
   bool isReadyToRender(const G3MRenderContext* rc);
 
 
-  void start() {
+  void start(const G3MRenderContext* rc) {
     _firstRender = true;
   }
 
-  void stop() {
+  void stop(const G3MRenderContext* rc) {
     _firstRender = false;
   }
 

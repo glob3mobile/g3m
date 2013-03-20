@@ -64,10 +64,10 @@ public:
 
   bool isReadyToRender(const G3MRenderContext* rc);
 
-  void start() {
+  void start(const G3MRenderContext* rc) {
   }
 
-  void stop() {
+  void stop(const G3MRenderContext* rc) {
   }
 
   void onResume(const G3MContext* context) {

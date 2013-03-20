@@ -112,7 +112,8 @@ public class G3MWidget
         _initializationTaskWasRun = true;
       }
   
-      if (_initializationTask.isDone(_context))
+      _initializationTaskReady = _initializationTask.isDone(_context);
+      if (_initializationTaskReady)
       {
         if (_autoDeleteInitializationTask)
         {
@@ -120,10 +121,6 @@ public class G3MWidget
              _initializationTask.dispose();
         }
         _initializationTask = null;
-      }
-      else
-      {
-        _mainRendererReady = false;
       }
     }
   
@@ -146,7 +143,7 @@ public class G3MWidget
   
     G3MRenderContext rc = new G3MRenderContext(_frameTasksExecutor, IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _gl, _currentCamera, _nextCamera, _texturesHandler, _textureBuilder, _downloader, _effectsScheduler, IFactory.instance().createTimer(), _storage);
   
-    _mainRendererReady = _mainRenderer.isReadyToRender(rc);
+    _mainRendererReady = _initializationTaskReady && _mainRenderer.isReadyToRender(rc);
   
     int _TESTING_initializationTask;
   //  if (_mainRendererReady) {
@@ -180,10 +177,10 @@ public class G3MWidget
     {
       if (_selectedRenderer != null)
       {
-        _selectedRenderer.stop();
+        _selectedRenderer.stop(rc);
       }
       _selectedRenderer = selectedRenderer;
-      _selectedRenderer.start();
+      _selectedRenderer.start(rc);
     }
   
     _gl.clearScreen(_backgroundColor);
@@ -566,6 +563,7 @@ public class G3MWidget
   private final GLState _rootState;
 
   private boolean _initializationTaskWasRun;
+  private boolean _initializationTaskReady;
 
   private boolean _clickOnProcess;
 
@@ -609,6 +607,7 @@ public class G3MWidget
      _context = new G3MContext(IFactory.instance(), IStringUtils.instance(), threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, downloader, _effectsScheduler, storage);
      _paused = false;
      _initializationTaskWasRun = false;
+     _initializationTaskReady = true;
      _clickOnProcess = false;
     _effectsScheduler.initialize(_context);
     _cameraRenderer.initialize(_context);
