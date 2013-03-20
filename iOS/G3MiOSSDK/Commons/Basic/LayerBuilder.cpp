@@ -52,6 +52,20 @@ LayerSet* LayerBuilder::createDefaultSatelliteImagery() {
   return layerSet;
 }
 
+/**
+ * Returns an array with the names of the layers that make up the default layerSet
+ *
+ * @return layersNames: std::vector<std::string>
+ */
+std::vector<std::string> LayerBuilder::getDefaultLayersNames() {
+  std::vector<std::string> layersNames;
+  layersNames.push_back("bmng200405");
+  layersNames.push_back("esat");
+  layersNames.push_back("ve");
+  
+  return layersNames;
+}
+
 WMSLayer* LayerBuilder::createBingLayer(bool enabled) {
   WMSLayer* bing = new WMSLayer("ve",
                                 URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?", false),

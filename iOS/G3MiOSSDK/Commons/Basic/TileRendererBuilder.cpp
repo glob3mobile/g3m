@@ -169,21 +169,6 @@ long long TileRendererBuilder::getTexturePriority() {
   return _texturePriority;
 }
 
-/**
- * Returns an array with the names of the layers that make up the default layerSet
- *
- * @return layersNames: std::vector<std::string>
- */
-std::vector<std::string> TileRendererBuilder::getDefaultLayersNames() {
-  std::vector<std::string> layersNames;
-  
-  for (int i = 0; i < getLayerSet()->size(); i++) {
-    layersNames.push_back(getLayerSet()->get(i)->getName());
-  }
-  
-  return layersNames;
-}
-
 void TileRendererBuilder::setTileTessellator(TileTessellator *tileTessellator) {
   if (_tileTessellator) {
     ILogger::instance()->logError("LOGIC ERROR: _tileTessellator already initialized");
