@@ -29,6 +29,9 @@ private:
   std::vector<VisibleSectorListener*>* _visibleSectorListeners;
   std::vector<long long>* _stabilizationMilliSeconds;
   long long _texturePriority;
+
+  ElevationDataProvider* _elevationDataProvider;
+  float _verticalExaggeration;
   
   TileTessellator* getTileTessellator();
   TileTexturizer* getTexturizer();
@@ -46,6 +49,9 @@ private:
   LayerSet* createLayerSet();
   TilesRenderParameters* createTileRendererParameters();
   TileTessellator* createTileTessellator();
+
+  ElevationDataProvider* getElevationDataProvider();
+  float getVerticalExaggeration();
 
 public:
   TileRendererBuilder();
@@ -68,6 +74,10 @@ public:
   void setTexturePriority(long long texturePriority);
   
   std::vector<std::string> getDefaultLayersNames();
+
+  void setElevationDataProvider(ElevationDataProvider* elevationDataProvider);
+
+  void setVerticalExaggeration(float verticalExaggeration);
 
 };
 

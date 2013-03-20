@@ -620,7 +620,7 @@ G3MWidget* IG3MBuilder::create() {
                                             *getPeriodicalTasks());
   
   g3mWidget->setUserData(getUserData());
-  
+
   _gl = NULL;
   _storage = NULL;
   _downloader = NULL;
