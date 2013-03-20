@@ -69,11 +69,6 @@ public class Tile
       ElevationDataProvider elevationDataProvider = trc.getElevationDataProvider();
       final Planet planet = rc.getPlanet();
   
-  //    const float verticalExaggeration = trc->getVerticalExaggeration();
-  //    if (_verticalExaggeration != verticalExaggeration) {
-  //
-  //    }
-  
       final LayerTilesRenderParameters layerTilesRenderParameters = trc.getLayerTilesRenderParameters();
       final Vector2I tileMeshResolution = new Vector2I(layerTilesRenderParameters._tileMeshResolution);
   
@@ -90,7 +85,6 @@ public class Tile
           _tessellatorMesh = meshHolder;
   
           TileElevationDataListener listener = new TileElevationDataListener(this, meshHolder, tessellator, planet, tileMeshResolution, renderDebug);
-                                                                              //verticalExaggeration,
   
           _elevationRequestId = elevationDataProvider.requestElevationData(_sector, tessellator.getTileMeshResolution(planet, tileMeshResolution, this, renderDebug), listener, true);
         }
@@ -145,7 +139,11 @@ public class Tile
       return false;
     }
   
-  //  const Extent* extent = getTileExtent(rc);
+  ////  const Extent* extent = getTileExtent(rc);
+  //  const Extent* tileExtent = getTileExtent(rc);
+  //  if (!tileExtent->fullContains(extent)) {
+  //    printf("break point on me\n");
+  //  }
   
     return extent.touches(rc.getCurrentCamera().getFrustumInModelCoordinates());
     //return extent->touches( rc->getCurrentCamera()->getHalfFrustuminModelCoordinates() );
@@ -229,11 +227,6 @@ public class Tile
       return;
     }
   
-  //  int __remove_render_extent;
-  //  if (_minHeight != 0 || _maxHeight != 0) {
-  //    getTileExtent(rc)->render(rc, parentState);
-  //  }
-  
     TileTexturizer texturizer = trc.getTexturizer();
     if (texturizer == null)
     {
@@ -268,10 +261,6 @@ public class Tile
       debugMesh.render(rc, parentState);
     }
   }
-
-//  const Angle calculateSplitLatitude(const Angle& lowerLatitude,
-//                                     const Angle& upperLatitude,
-//                                     bool mercator) const;
 
   private Tile createSubTile(Angle lowerLat, Angle lowerLon, Angle upperLat, Angle upperLon, int level, int row, int column, boolean setParent)
   {
@@ -612,11 +601,18 @@ public class Tile
 
   public final void render(G3MRenderContext rc, TileRenderContext trc, GLState parentState, java.util.LinkedList<Tile> toVisitInNextIteration)
   {
+  
+    final float verticalExaggeration = trc.getVerticalExaggeration();
+    if (verticalExaggeration != _verticalExaggeration)
+    {
+      // TODO: verticalExaggeration changed, invalidate tileExtent, Mesh, etc.
+  
+      _verticalExaggeration = trc.getVerticalExaggeration();
+    }
+  
     TilesStatistics statistics = trc.getStatistics();
-  
-    _verticalExaggeration = trc.getVerticalExaggeration();
-  
     statistics.computeTileProcessed(this);
+  
     if (isVisible(rc, trc))
     {
       setIsVisible(true, trc.getTexturizer());
@@ -804,7 +800,6 @@ public class Tile
   }
 
   public final void onElevationData(ElevationData elevationData, MeshHolder meshHolder, TileTessellator tessellator, Planet planet, Vector2I tileMeshResolution, boolean renderDebug)
-                             //float verticalExaggeration,
   {
     _elevationRequestId = -1000;
     if (_elevationData != null)
@@ -831,7 +826,6 @@ public class Tile
   
     meshHolder.setMesh(tessellator.createTileMesh(planet, tileMeshResolution, this, _elevationData, _verticalExaggeration, renderDebug));
   }
-                       //float verticalExaggeration,
 
   public final double getMinHeight()
   {
