@@ -113,11 +113,11 @@ public:
   
   IFloatBuffer* getBillboardTexCoord();
 
-  void verticesColors(bool v);
+//  void verticesColors(bool v);
 
   void clearScreen(float r, float g, float b, float a);
 
-  void color(float r, float g, float b, float a);
+//  void color(float r, float g, float b, float a);
 
   void pushMatrix();
 
@@ -128,19 +128,19 @@ public:
   void multMatrixf(const MutableMatrix44D &m);
 
   void drawElements(int mode,
-                    IShortBuffer* indices);
+                    IShortBuffer* indices, const GLState& state);
 
   void drawArrays(int mode,
                   int first,
-                  int count);
+                  int count, const GLState& state);
 
   void setProjection(const MutableMatrix44D &projection);
 
   bool useProgram(ShaderProgram* program);
 
-  void enablePolygonOffset(float factor, float units);
-
-  void disablePolygonOffset();
+//  void enablePolygonOffset(float factor, float units);
+//
+//  void disablePolygonOffset();
 
   int getError();
 
@@ -195,14 +195,14 @@ public:
   }
 
 
-  void color(const Color& col) {
-    if (_verbose) ILogger::instance()->logInfo("GL::color()");
-
-    color(col.getRed(),
-          col.getGreen(),
-          col.getBlue(),
-          col.getAlpha());
-  }
+//  void color(const Color& col) {
+//    if (_verbose) ILogger::instance()->logInfo("GL::color()");
+//
+//    color(col.getRed(),
+//          col.getGreen(),
+//          col.getBlue(),
+//          col.getAlpha());
+//  }
 
   void clearScreen(const Color& col) {
     if (_verbose) ILogger::instance()->logInfo("GL::clearScreen()");

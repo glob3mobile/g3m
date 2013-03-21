@@ -45,5 +45,5 @@ _indices(indices)
 void IndexedMesh::rawRender(const G3MRenderContext* rc,
                             const GLState& parentState) const {
   GL* gl = rc->getGL();
-  gl->drawElements(_primitive, _indices);
+  gl->drawElements(_primitive, _indices, parentState);
 }

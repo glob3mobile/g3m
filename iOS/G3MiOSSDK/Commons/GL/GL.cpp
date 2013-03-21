@@ -261,25 +261,25 @@ void GL::clearScreen(float r, float g, float b, float a) {
   _nativeGL->clear(GLBufferType::colorBuffer() | GLBufferType::depthBuffer());
 }
 
-void GL::color(float r, float g, float b, float a) {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::color()");
-  }
-
-//  if (
-//      (_flatColorR != r) ||
-//      (_flatColorG != g) ||
-//      (_flatColorB != b) ||
-//      (_flatColorA != a)
-//      ) {
-    _nativeGL->uniform4f(Uniforms.FlatColor, r, g, b, a);
-//
-//    _flatColorR = r;
-//    _flatColorG = g;
-//    _flatColorB = b;
-//    _flatColorA = a;
+//void GL::color(float r, float g, float b, float a) {
+//  if (_verbose) {
+//    ILogger::instance()->logInfo("GL::color()");
 //  }
-}
+//
+////  if (
+////      (_flatColorR != r) ||
+////      (_flatColorG != g) ||
+////      (_flatColorB != b) ||
+////      (_flatColorA != a)
+////      ) {
+//    _nativeGL->uniform4f(Uniforms.FlatColor, r, g, b, a);
+////
+////    _flatColorR = r;
+////    _flatColorG = g;
+////    _flatColorB = b;
+////    _flatColorA = a;
+////  }
+//}
 
 void GL::transformTexCoords(float scaleX,
                             float scaleY,
@@ -307,30 +307,32 @@ void GL::transformTexCoords(float scaleX,
 //  }
 }
 
-void GL::enablePolygonOffset(float factor, float units) {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::enablePolygonOffset()");
-  }
-
-  _nativeGL->enable(GLFeature::polygonOffsetFill());
-  _nativeGL->polygonOffset(factor, units);
-}
-
-void GL::disablePolygonOffset() {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::disablePolygonOffset()");
-  }
-
-  _nativeGL->disable(GLFeature::polygonOffsetFill());
-}
+//void GL::enablePolygonOffset(float factor, float units) {
+//  if (_verbose) {
+//    ILogger::instance()->logInfo("GL::enablePolygonOffset()");
+//  }
+//
+//  _nativeGL->enable(GLFeature::polygonOffsetFill());
+//  _nativeGL->polygonOffset(factor, units);
+//}
+//
+//void GL::disablePolygonOffset() {
+//  if (_verbose) {
+//    ILogger::instance()->logInfo("GL::disablePolygonOffset()");
+//  }
+//
+//  _nativeGL->disable(GLFeature::polygonOffsetFill());
+//}
 
 void GL::drawElements(int mode,
-                      IShortBuffer* indices) {
+                      IShortBuffer* indices, const GLState& state) {
   if (_verbose) {
     ILogger::instance()->logInfo("GL::drawElements(%d, %s)",
                                  mode,
                                  indices->description().c_str());
   }
+  
+  setState(state);
 
   _nativeGL->drawElements(mode,
                           indices->size(),
@@ -339,7 +341,7 @@ void GL::drawElements(int mode,
 
 void GL::drawArrays(int mode,
                     int first,
-                    int count) {
+                    int count, const GLState& state) {
   if (_verbose) {
     ILogger::instance()->logInfo("GL::drawArrays(%d, %d, %d)",
                                  mode,
@@ -347,6 +349,7 @@ void GL::drawArrays(int mode,
                                  count);
   }
 
+  setState(state);
   _nativeGL->drawArrays(mode,
                         first,
                         count);
@@ -448,7 +451,7 @@ void GL::startBillBoardDrawing(int viewPortWidth,
   _nativeGL->uniform1i(Uniforms.BillBoard, 1);
   _nativeGL->uniform2f(Uniforms.ViewPortExtent, viewPortWidth, viewPortHeight);
 
-  color(1, 1, 1, 1);
+  //color(1, 1, 1, 1);
 }
 
 void GL::stopBillBoardDrawing() {

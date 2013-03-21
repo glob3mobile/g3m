@@ -80,72 +80,79 @@ void DummyRenderer::render(const G3MRenderContext* rc,
 
   {
     // draw a red square
-    gl->color((float) 1, (float) 0, (float) 0, 1);
+    state.enableFlatColor(Color::fromRGBA((float) 1,(float)  0, (float) 0, (float) 1), (float) 1);
+    //gl->color((float) 1, (float) 0, (float) 0, 1);
     gl->pushMatrix();
     MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(Vector3D(_halfSize,0,0));
     gl->multMatrixf(T);
     gl->drawElements(GLPrimitive::triangleStrip(),
-                     _indices);
+                     _indices, state);
     gl->popMatrix();
   }
 
   {
     // draw a green square
-    gl->color((float) 0, (float) 1, (float) 0, 1);
+    //gl->color((float) 0, (float) 1, (float) 0, 1);
+    state.enableFlatColor(Color::fromRGBA((float) 0,(float)  1, (float) 0, (float) 1), (float) 1);
     gl->pushMatrix();
     MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(Vector3D(0,_halfSize,0));
     MutableMatrix44D R = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(90), Vector3D(0,0,1));
     gl->multMatrixf(T.multiply(R));
     gl->drawElements(GLPrimitive::triangleStrip(),
-                     _indices);
+                     _indices, state);
     gl->popMatrix();
   }
 
   {
     // draw a blue square
-    gl->color((float) 0, (float) 0, (float) 1, 1);
+    //gl->color((float) 0, (float) 0, (float) 1, 1);
+    state.enableFlatColor(Color::fromRGBA((float) 0,(float)  0, (float) 1, (float) 1), (float) 1);
+    state.enableFlatColor(Color::fromRGBA((float) 0,(float)  0, (float) 1, (float) 1), (float) 1);
     gl->pushMatrix();
     MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(Vector3D(0,-_halfSize,0));
     MutableMatrix44D R = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(-90), Vector3D(0,0,1));
     gl->multMatrixf(T.multiply(R));
     gl->drawElements(GLPrimitive::triangleStrip(),
-                     _indices);
+                     _indices, state);
     gl->popMatrix();
   }
 
   {
     // draw a purple square
-    gl->color((float) 1, (float) 0, (float) 1, 1);
+    //gl->color((float) 1, (float) 0, (float) 1, 1);
+    state.enableFlatColor(Color::fromRGBA((float) 1,(float)  0, (float) 1, (float) 1), (float) 1);
     gl->pushMatrix();
     MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(Vector3D(0,0,-_halfSize));
     MutableMatrix44D R = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(90), Vector3D(0,1,0));
     gl->multMatrixf(T.multiply(R));
     gl->drawElements(GLPrimitive::triangleStrip(),
-                     _indices);
+                     _indices, state);
     gl->popMatrix();
   }
 
   {
     // draw a cian square
-    gl->color((float) 0, (float) 1, (float) 1, 1);
+    //gl->color((float) 0, (float) 1, (float) 1, 1);
+    state.enableFlatColor(Color::fromRGBA((float) 0,(float) 1, (float) 1, (float) 1), (float) 1);
     gl->pushMatrix();
     MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(Vector3D(0,0,_halfSize));
     MutableMatrix44D R = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(-90), Vector3D(0,1,0));
     gl->multMatrixf(T.multiply(R));
     gl->drawElements(GLPrimitive::triangleStrip(),
-                     _indices);
+                     _indices, state);
     gl->popMatrix();
   }
 
   {
     // draw a grey square
-    gl->color((float) 0.5, (float) 0.5, (float) 0.5, 1);
+    state.enableFlatColor(Color::fromRGBA((float) 0.5,(float)  0.5, (float) 0.5, (float) 1), (float) 1);
+    //gl->color((float) 0.5, (float) 0.5, (float) 0.5, 1);
     gl->pushMatrix();
     MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(Vector3D(-_halfSize,0,0));
     MutableMatrix44D R = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(180), Vector3D(0,0,1));
     gl->multMatrixf(T.multiply(R));
     gl->drawElements(GLPrimitive::triangleStrip(),
-                     _indices);
+                     _indices, state);
     gl->popMatrix();
   }
   

@@ -389,7 +389,7 @@ void Mark::render(const G3MRenderContext* rc,
         
         gl->setState(state);
         
-        gl->drawArrays(GLPrimitive::triangleStrip(), 0, vertices->size() / 3);
+        gl->drawArrays(GLPrimitive::triangleStrip(), 0, vertices->size() / 3, state);
         
         _renderedMark = true;
       }

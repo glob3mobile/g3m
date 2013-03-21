@@ -51,5 +51,5 @@ void SGGeometryNode::rawRender(const G3MRenderContext* rc,
 
   gl->setState(state);
 
-  gl->drawElements(_primitive, _indices);
+  gl->drawElements(_primitive, _indices, state);
 }

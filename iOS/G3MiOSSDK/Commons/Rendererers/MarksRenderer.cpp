@@ -190,7 +190,6 @@ void MarksRenderer::render(const G3MRenderContext* rc,
   state.enableTexture2D();
   state.enableVerticesPosition();
   
-
   Vector2D textureTranslation(0.0, 0.0);
   Vector2D textureScale(1.0, 1.0);
   
