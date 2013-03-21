@@ -84,10 +84,10 @@ double SubviewElevationData::getElevationBoxAt(double x0, double y0,
       ysize *= (1.0 - (y-y1));
     }
 
-    for (double x=floorX0; x <= ceilX1; y++) {
+    for (double x=floorX0; x <= ceilX1; x++) {
       double size = ysize;
-      const double height = _elevationData->getElevationAt((int) mu->min( x, maxX ),
-                                                           (int) mu->min( y, maxY ),
+      const double height = _elevationData->getElevationAt((int) mu->min(x, maxX),
+                                                           (int) mu->min(y, maxY),
                                                            &unusedType);
       if (x < x0) {
         size *= (1.0 - (x0-x));
@@ -160,7 +160,8 @@ double SubviewElevationData::getElevationAt(int x, int y,
   const Geodetic2D position = _sector.getInnerPoint(u, v);
 
   return getElevationAt(position.latitude(),
-                        position.longitude(), type);
+                        position.longitude(),
+                        type);
 }
 
 double SubviewElevationData::getElevationAt(const Angle& latitude,
@@ -204,14 +205,14 @@ Vector2D SubviewElevationData::getMinMaxHeights() const {
   for (int x = 0; x < _width; x++) {
     for (int y = 0; y < _height; y++) {
       const double height = getElevationAt(x, y, &unusedType);
-      if (height != _noDataValue) {
-        if (height < minHeight) {
-          minHeight = height;
-        }
-        if (height > maxHeight) {
-          maxHeight = height;
-        }
+//      if (height != _noDataValue) {
+      if (height < minHeight) {
+        minHeight = height;
       }
+      if (height > maxHeight) {
+        maxHeight = height;
+      }
+//      }
     }
   }
   

@@ -65,14 +65,14 @@ Vector2D ShortBufferElevationData::getMinMaxHeights() const {
   const int bufferSize = _buffer->size();
   for (int i = 0; i < bufferSize; i++) {
     const short height = _buffer->get(i);
-    if (height != _noDataValue) {
-      if (height < minHeight) {
-        minHeight = height;
-      }
-      if (height > maxHeight) {
-        maxHeight = height;
-      }
+//    if (height != _noDataValue) {
+    if (height < minHeight) {
+      minHeight = height;
     }
+    if (height > maxHeight) {
+      maxHeight = height;
+    }
+//    }
   }
 
   if (minHeight == mu->maxInt16()) {

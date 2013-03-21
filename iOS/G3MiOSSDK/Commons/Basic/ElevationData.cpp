@@ -31,25 +31,16 @@ Vector2I ElevationData::getExtent() const {
 
 Mesh* ElevationData::createMesh(const Ellipsoid* ellipsoid,
                                 float verticalExaggeration,
-                                const Geodetic3D& positionOffset) const {
+                                const Geodetic3D& positionOffset,
+                                float pointSize) const {
 
   const Vector2D minMaxHeights = getMinMaxHeights();
   const double minHeight = minMaxHeights._x;
   const double maxHeight = minMaxHeights._y;
   const double deltaHeight = maxHeight - minHeight;
 
-  ILogger::instance()->logInfo("minHeight=%f maxHeight=%f delta=%f",
-                               minHeight, maxHeight, deltaHeight);
-
-////  const double latStepInDegrees = (_sector.getDeltaLatitude()._degrees  / _height) / 3 * 2;
-////  const double lonStepInDegrees = (_sector.getDeltaLongitude()._degrees / _width ) / 3 * 2;
-//  const double latStepInDegrees = (_sector.getDeltaLatitude()._degrees  / _height);
-//  const double lonStepInDegrees = (_sector.getDeltaLongitude()._degrees / _width);
-//
-//  const Geodetic2D targetLower(_sector.lower());
-//  const Geodetic2D targetUpper(_sector.upper());
-
-
+//  ILogger::instance()->logInfo("minHeight=%f maxHeight=%f delta=%f",
+//                               minHeight, maxHeight, deltaHeight);
 
   FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
                                           ellipsoid,
@@ -97,7 +88,7 @@ Mesh* ElevationData::createMesh(const Ellipsoid* ellipsoid,
   }
 
   const float lineWidth = 1;
-  const float pointSize = 1;
+//  const float pointSize = 1;
   Color* flatColor = NULL;
 
   return new DirectMesh(GLPrimitive::points(),
