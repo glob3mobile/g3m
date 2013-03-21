@@ -59,6 +59,7 @@ private:
   void releaseGLTextureId();
 
   const bool _transparent;
+  
 
 public:
   LazyTextureMapping(LazyTextureMappingInitializer* initializer,
@@ -89,7 +90,7 @@ public:
     releaseGLTextureId();
   }
   
-  void bind(const G3MRenderContext* rc, const GLState& parentState) const;
+  //void bind(const G3MRenderContext* rc, const GLState& parentState) const;
 
   bool isValid() const {
     return _glTextureId != NULL;
@@ -99,6 +100,8 @@ public:
     releaseGLTextureId();
     _glTextureId = glTextureId;
   }
+
+  GLState* bind(const G3MRenderContext* rc, const GLState& parentState) const;
   
 
   const IGLTextureId* getGLTextureId() const {

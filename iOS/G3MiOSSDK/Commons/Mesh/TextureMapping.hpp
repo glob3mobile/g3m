@@ -24,7 +24,7 @@ public:
   virtual ~TextureMapping() {
   }
   
-  virtual void bind(const G3MRenderContext* rc, const GLState& parentState) const = 0;
+  virtual GLState* bind(const G3MRenderContext* rc, const GLState& parentState) const = 0;
 
   virtual bool isTransparent(const G3MRenderContext* rc) const = 0;
 
@@ -76,7 +76,7 @@ public:
     return _texCoords;
   }
   
-  void bind(const G3MRenderContext* rc, const GLState& parentState) const;
+  GLState* bind(const G3MRenderContext* rc, const GLState& parentState) const;
 
   bool isTransparent(const G3MRenderContext* rc) const {
     return _isTransparent;

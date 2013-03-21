@@ -13,7 +13,7 @@
 #include "TexturesHandler.hpp"
 
 
-void LazyTextureMapping::bind(const G3MRenderContext* rc, const GLState& parentState) const {
+GLState* LazyTextureMapping::bind(const G3MRenderContext* rc, const GLState& parentState) const {
   if (!_initialized) {
     _initializer->initialize();
 
@@ -26,26 +26,23 @@ void LazyTextureMapping::bind(const G3MRenderContext* rc, const GLState& parentS
 
     _initialized = true;
   }
+  
+  GLState *state = new GLState(parentState);
+  state->enableTextures();
+  state->enableTexture2D();
 
   if (_texCoords != NULL) {
     GL* gl = rc->getGL();
-    GLState state(parentState);
-    
-//    state.scaleTextureCoordinates(_scale);
-//    state.translateTextureCoordinates(_translation);
-
     gl->transformTexCoords(_scale, _translation);
-    
-    state.bindTexture(_glTextureId);
-    //gl->bindTexture(_glTextureId);
-    
-    
-    state.setTextureCoordinates(_texCoords, 2, 0);
-    gl->setState(state);
+    state->bindTexture(_glTextureId);
+    state->setTextureCoordinates(_texCoords, 2, 0);
   }
   else {
     ILogger::instance()->logError("LazyTextureMapping::bind() with _texCoords == NULL");
   }
+  
+  
+  return state;
 }
 
 void LazyTextureMapping::releaseGLTextureId() {
@@ -144,13 +141,11 @@ void LeveledTexturedMesh::render(const G3MRenderContext* rc,
     _mesh->render(rc, parentState);
   }
   else {
-    GLState state(parentState);
-    state.enableTextures();
-    state.enableTexture2D();
-    
-    mapping->bind(rc, state);
+    GLState *state = mapping->bind(rc, parentState);
 
-    _mesh->render(rc, state);
+    _mesh->render(rc, *state);
+    
+    delete state;
   }
 }
 

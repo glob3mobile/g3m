@@ -75,9 +75,6 @@ void DummyRenderer::render(const G3MRenderContext* rc,
   state.setVertices(_vertices, 3, 0);
 
   GL* gl = rc->getGL();
-
-  gl->setState(state);
-
   {
     // draw a red square
     state.enableFlatColor(Color::fromRGBA((float) 1,(float)  0, (float) 0, (float) 1), (float) 1);

@@ -14,16 +14,14 @@ void TexturedMesh::render(const G3MRenderContext* rc,
                           const GLState& parentState) const {
   GL* gl = rc->getGL();
 
-  GLState state(parentState);
-  state.enableTextures();
-  state.enableTexture2D();
+  GLState* state = _textureMapping->bind(rc, parentState);
   
   if (_transparent) {
-    state.enableBlend();
-    state.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
+    state->enableBlend();
+    state->setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
   }
 
-  _textureMapping->bind(rc, state);
-
-  _mesh->render(rc, state);
+  _mesh->render(rc, *state);
+  
+  delete state;
 }

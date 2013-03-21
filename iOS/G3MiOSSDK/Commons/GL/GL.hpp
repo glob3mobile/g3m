@@ -67,6 +67,8 @@ private:
 
   IFloatBuffer* _billboardTexCoord;
 
+  
+  void setState(const GLState& state);
 
   const bool _verbose;
 
@@ -268,8 +270,6 @@ public:
   void deleteProgram(int program) const  {
     _nativeGL->deleteProgram(program);
   }
-
-  void setState(const GLState& state);
   
   void setTexExtent(float w, float h);
 

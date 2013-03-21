@@ -384,11 +384,6 @@ void Mark::render(const G3MRenderContext* rc,
         gl->setTexExtent(_textureWidth, _textureHeight);
 
         state.bindTexture(_textureId);
-        //gl->bindTexture(_textureId);
-        
-        
-        gl->setState(state);
-        
         gl->drawArrays(GLPrimitive::triangleStrip(), 0, vertices->size() / 3, state);
         
         _renderedMark = true;

@@ -48,8 +48,5 @@ void SGGeometryNode::rawRender(const G3MRenderContext* rc,
   }
   
   state.setVertices(_vertices, 3, 0);
-
-  gl->setState(state);
-
   gl->drawElements(_primitive, _indices, state);
 }

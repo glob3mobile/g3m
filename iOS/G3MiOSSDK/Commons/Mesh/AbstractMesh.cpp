@@ -139,7 +139,6 @@ void AbstractMesh::render(const G3MRenderContext *rc,
     gl->multMatrixf(*_translationMatrix);
   }
 
-  gl->setState(state);
   rawRender(rc, state);
 
   if (_translationMatrix != NULL) {
