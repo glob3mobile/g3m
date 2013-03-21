@@ -133,7 +133,7 @@ void AbstractMesh::render(const G3MRenderContext *rc,
     }
   }
 
-  gl->vertexPointer(3, 0, _vertices);
+  state.setVertices(_vertices, 3, 0);
 
   if (_translationMatrix != NULL){
     gl->pushMatrix();

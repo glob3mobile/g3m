@@ -14,6 +14,7 @@
 #include "Mark.hpp"
 #include "MarkTouchListener.hpp"
 #include "DownloadPriority.hpp"
+#include "FloatBufferBuilderFromCartesian2D.hpp"
 
 void MarksRenderer::setMarkTouchListener(MarkTouchListener* markTouchListener,
                                          bool autoDelete) {
@@ -188,7 +189,7 @@ void MarksRenderer::render(const G3MRenderContext* rc,
   state.enableTextures();
   state.enableTexture2D();
   state.enableVerticesPosition();
-  gl->setState(state);
+  
 
   Vector2D textureTranslation(0.0, 0.0);
   Vector2D textureScale(1.0, 1.0);
@@ -202,6 +203,8 @@ void MarksRenderer::render(const G3MRenderContext* rc,
 
   gl->startBillBoardDrawing(camera->getWidth(),
                             camera->getHeight());
+  
+  state.setTextureCoordinates(gl->getBillboardTexCoord(), 2, 0);
 
   const int marksSize = _marks.size();
   for (int i = 0; i < marksSize; i++) {
@@ -209,7 +212,7 @@ void MarksRenderer::render(const G3MRenderContext* rc,
     //rc->getLogger()->logInfo("Rendering Mark: \"%s\"", mark->getName().c_str());
     
     if (mark->isReady()) {
-      mark->render(rc, cameraPosition);
+      mark->render(rc, cameraPosition, state);
     }
   }
   

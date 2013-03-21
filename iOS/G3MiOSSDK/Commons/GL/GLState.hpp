@@ -13,6 +13,7 @@ class IFloatBuffer;
 
 #include "Color.hpp"
 #include "GLConstants.hpp"
+#include "IFloatBuffer.hpp"
 
 
 class GL;
@@ -30,14 +31,25 @@ private:
   bool _flatColor;
   bool _cullFace;
   int  _culledFace;
-
-  IFloatBuffer* _colors;
+  
+  IFloatBuffer* _colors; //Vertex colors
+  int           _colorsTimeStamp;
   float         _intensity;
   float         _flatColorR;
   float         _flatColorG;
   float         _flatColorB;
   float         _flatColorA;
-
+  
+  IFloatBuffer* _vertices;
+  int           _verticesTimestamp;
+  int           _verticesSize;
+  int           _verticesStride;
+  
+  IFloatBuffer* _textureCoordinates;
+  int           _textureCoordinatesTimestamp;
+  int           _textureCoordinatesSize;
+  int           _textureCoordinatesStride;
+  
   float _lineWidth;
   float _pointSize;
   
@@ -48,7 +60,7 @@ private:
   
   int _blendSFactor;
   int _blendDFactor;
-
+  
   GLState() :
   _depthTest(true),
   _blend(false),
@@ -60,6 +72,7 @@ private:
   _cullFace(true),
   _culledFace(GLCullFace::back()),
   _colors(NULL),
+  _colorsTimeStamp(0),
   _intensity(0),
   _flatColorR(0),
   _flatColorG(0),
@@ -71,17 +84,25 @@ private:
   _polygonOffsetUnits(0),
   _polygonOffsetFill(false),
   _blendDFactor(GLBlendFactor::zero()),
-  _blendSFactor(GLBlendFactor::one())
+  _blendSFactor(GLBlendFactor::one()),
+  _vertices(NULL),
+  _verticesTimestamp(0),
+  _verticesSize(0),
+  _verticesStride(0),
+  _textureCoordinates(NULL),
+  _textureCoordinatesTimestamp(0),
+  _textureCoordinatesSize(0),
+  _textureCoordinatesStride(0)
   {
   }
-
-
-
+  
+  
+  
 public:
   static GLState* newDefault() {
     return new GLState();
   }
-
+  
   explicit GLState(const GLState& parentState) :
   _depthTest(parentState._depthTest),
   _blend(parentState._blend),
@@ -93,6 +114,7 @@ public:
   _cullFace(parentState._cullFace),
   _culledFace(parentState._culledFace),
   _colors(parentState._colors),
+  _colorsTimeStamp(parentState._colorsTimeStamp),
   _intensity(parentState._intensity),
   _flatColorR(parentState._flatColorR),
   _flatColorG(parentState._flatColorG),
@@ -104,43 +126,55 @@ public:
   _polygonOffsetUnits(parentState._polygonOffsetUnits),
   _polygonOffsetFill(parentState._polygonOffsetFill),
   _blendDFactor(parentState._blendDFactor),
-  _blendSFactor(parentState._blendSFactor)
+  _blendSFactor(parentState._blendSFactor),
+  _vertices(parentState._vertices),
+  _verticesTimestamp(parentState._verticesTimestamp),
+  _verticesSize(parentState._verticesSize),
+  _verticesStride(parentState._verticesStride),
+  _textureCoordinates(parentState._textureCoordinates),
+  _textureCoordinatesTimestamp(parentState._textureCoordinatesTimestamp),
+  _textureCoordinatesSize(parentState._textureCoordinatesSize),
+  _textureCoordinatesStride(parentState._textureCoordinatesStride)
   {
   }
-
+  
   ~GLState() {}
-
+  
   void enableDepthTest() { _depthTest = true; }
   void disableDepthTest() { _depthTest = false; }
   bool isEnabledDepthTest() const { return _depthTest; }
-
+  
   void enableBlend() { _blend = true; }
   void disableBlend() { _blend = false; }
   bool isEnabledBlend() const { return _blend; }
-
+  
   void enableTextures() { _textures = true; }
   void disableTextures() { _textures = false; }
   bool isEnabledTextures() const { return _textures; }
-
+  
   void enableTexture2D() { _texture2D = true; }
   void disableTexture2D() { _texture2D = false; }
   bool isEnabledTexture2D() const { return _texture2D; }
-
+  
   void enableVertexColor(IFloatBuffer* colors,
                          float intensity) {
     _vertexColor  = true;
     _colors       = colors;
     _intensity    = intensity;
+    _colorsTimeStamp = colors->timestamp();
   }
   void disableVertexColor() { _vertexColor = false; }
   bool isEnabledVertexColor() const { return _vertexColor; }
   IFloatBuffer* getColors() const { return _colors; }
   float getIntensity() const { return _intensity; }
-
-  void enableVerticesPosition() { _verticesPosition = true; }
+  
+  void enableVerticesPosition() {
+    _verticesPosition = true;
+  }
+  
   void disableVerticesPosition() { _verticesPosition = false; }
   bool isEnabledVerticesPosition() const { return _verticesPosition; }
-
+  
   void enableFlatColor(const Color& color,
                        float intensity) {
     _flatColor = true;
@@ -155,7 +189,7 @@ public:
   Color getFlatColor() const {
     return Color::fromRGBA(_flatColorR, _flatColorG, _flatColorB, _flatColorA);
   }
-
+  
   void enableCullFace(int face) {
     _cullFace   = true;
     _culledFace = face;
@@ -163,7 +197,7 @@ public:
   void disableCullFace() { _cullFace = false; }
   bool isEnabledCullFace() const { return _cullFace; }
   int getCulledFace() const { return _culledFace; }
-
+  
   void setLineWidth(float lineWidth) { _lineWidth = lineWidth; }
   float lineWidth() const { return _lineWidth; }
   
@@ -186,6 +220,20 @@ public:
   void setBlendFactors(int sFactor, int dFactor) {
     _blendSFactor = sFactor;
     _blendDFactor = dFactor;
+  }
+  
+  void setVertices(IFloatBuffer* vertices, int size, int stride) {
+    _vertices      = vertices;
+    _verticesTimestamp = vertices->timestamp();
+    _verticesSize = size;
+    _verticesStride = stride;
+  }
+  
+  void setTextureCoordinates(IFloatBuffer* texCoors, int size, int stride){
+    _textureCoordinates = texCoors;
+    _textureCoordinatesTimestamp = texCoors->timestamp();
+    _textureCoordinatesSize = size;
+    _textureCoordinatesStride = stride;
   }
   
   void applyChanges(const INativeGL* nativeGL, const GLState& currentState, const AttributesStruct& attributes,const UniformsStruct& uniforms) const;

@@ -16,6 +16,7 @@ class IGLTextureId;
 
 class G3MRenderContext;
 class IFloatBuffer;
+class GLState;
 
 class TextureMapping {
 public:
@@ -23,7 +24,7 @@ public:
   virtual ~TextureMapping() {
   }
   
-  virtual void bind(const G3MRenderContext* rc) const = 0;
+  virtual void bind(const G3MRenderContext* rc, const GLState& parentState) const = 0;
 
   virtual bool isTransparent(const G3MRenderContext* rc) const = 0;
 
@@ -75,7 +76,7 @@ public:
     return _texCoords;
   }
   
-  void bind(const G3MRenderContext* rc) const;
+  void bind(const G3MRenderContext* rc, const GLState& parentState) const;
 
   bool isTransparent(const G3MRenderContext* rc) const {
     return _isTransparent;

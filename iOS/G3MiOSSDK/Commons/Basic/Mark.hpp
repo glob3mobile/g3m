@@ -179,7 +179,7 @@ public:
                   long long downloadPriority);
 
   void render(const G3MRenderContext* rc,
-              const Vector3D& cameraPosition);
+              const Vector3D& cameraPosition, const GLState& parentState);
 
   bool isReady() const;
 

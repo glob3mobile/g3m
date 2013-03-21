@@ -60,27 +60,47 @@ void GLState::applyChanges(const INativeGL* nativeGL, const GLState& currentStat
     if (_vertexColor) {
       nativeGL->uniform1i(uniforms.EnableColorPerVertex, 1);
       nativeGL->enableVertexAttribArray(attributes.Color);
-      
-      int WITHOUT_TIMESTAMP;
-      if ((_colors != currentState._colors) /* ||
-                                             (_colorsTimestamp != colors->timestamp()) */) {
-                                               nativeGL->vertexAttribPointer(attributes.Color, 4, false, 0, _colors);
-                                               /*_colorsTimestamp = _colors->timestamp();*/
-                                             }
-    }
-    else {
+    }else {
       nativeGL->disableVertexAttribArray(attributes.Color);
       nativeGL->uniform1i(uniforms.EnableColorPerVertex, 0);
     }
   }
+  if (_vertexColor) {
+    if ((_colors != currentState._colors) || (_colorsTimeStamp != currentState._colorsTimeStamp)) {
+      nativeGL->vertexAttribPointer(attributes.Color, 4, false, 0, _colors);
+    }
+  }
+  
+  
+  // Vertex
+  if (_vertices != NULL){
+    if ((_vertices != currentState._vertices) || (_verticesTimestamp != currentState._verticesTimestamp) ||
+        (_verticesSize != currentState._verticesSize) || (_verticesStride != currentState._verticesStride)  ) {
+      nativeGL->vertexAttribPointer(attributes.Position, _verticesSize, false, _verticesStride, _vertices);
+    }
+  }
+  
   
   // Vertices Position
   if (_verticesPosition != currentState._verticesPosition) {
     if (_verticesPosition) {
       nativeGL->enableVertexAttribArray(attributes.Position);
+      
     }
     else {
       nativeGL->disableVertexAttribArray(attributes.Position);
+    }
+  }
+  
+  //Texture Coordinates
+  if (_textureCoordinates != NULL){
+    if (_textureCoordinates != currentState._textureCoordinates ||
+        _textureCoordinatesTimestamp != currentState._textureCoordinatesTimestamp ||
+        _textureCoordinatesSize != currentState._textureCoordinatesSize ||
+        _textureCoordinatesStride != currentState._textureCoordinatesStride){
+      nativeGL->vertexAttribPointer(attributes.TextureCoord,
+                                    _textureCoordinatesSize, false,
+                                    _textureCoordinatesStride, _textureCoordinates);
     }
   }
   
@@ -149,5 +169,5 @@ void GLState::applyChanges(const INativeGL* nativeGL, const GLState& currentStat
   if (_blendDFactor != currentState._blendDFactor || _blendSFactor != currentState._blendSFactor){
     nativeGL->blendFunc(_blendSFactor, _blendDFactor);
   }
-
+  
 }

@@ -13,7 +13,7 @@
 #include "TexturesHandler.hpp"
 
 
-void LazyTextureMapping::bind(const G3MRenderContext* rc) const {
+void LazyTextureMapping::bind(const G3MRenderContext* rc, const GLState& parentState) const {
   if (!_initialized) {
     _initializer->initialize();
 
@@ -32,7 +32,10 @@ void LazyTextureMapping::bind(const G3MRenderContext* rc) const {
 
     gl->transformTexCoords(_scale, _translation);
     gl->bindTexture(_glTextureId);
-    gl->setTextureCoordinates(2, 0, _texCoords);
+    
+    GLState state(parentState);
+    state.setTextureCoordinates(_texCoords, 2, 0);
+    gl->setState(state);
   }
   else {
     ILogger::instance()->logError("LazyTextureMapping::bind() with _texCoords == NULL");
@@ -139,7 +142,7 @@ void LeveledTexturedMesh::render(const G3MRenderContext* rc,
     state.enableTextures();
     state.enableTexture2D();
     
-    mapping->bind(rc);
+    mapping->bind(rc, state);
 
     _mesh->render(rc, state);
   }

@@ -39,12 +39,14 @@ void SGGeometryNode::rawRender(const G3MRenderContext* rc,
   if (_uv != NULL) {
     gl->transformTexCoords(1.0f, 1.0f,
                            0.0f, 0.0f);
-    gl->setTextureCoordinates(2, 0, _uv);
+    
+    
+    state.setTextureCoordinates(_uv, 2, 0);
   }
+  
+  state.setVertices(_vertices, 3, 0);
 
   gl->setState(state);
-
-  gl->vertexPointer(3, 0, _vertices);
 
   gl->drawElements(_primitive, _indices);
 }

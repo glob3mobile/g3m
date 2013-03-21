@@ -6,11 +6,6 @@
 //  Copyright 2011 Universidad de Las Palmas. All rights reserved.
 //
 
-
-#include <OpenGLES/ES2/gl.h>
-
-#include "GLTextureId_iOS.hpp"
-
 #include <list>
 
 #include "GL.hpp"
@@ -328,36 +323,6 @@ void GL::disablePolygonOffset() {
   _nativeGL->disable(GLFeature::polygonOffsetFill());
 }
 
-void GL::vertexPointer(int size,
-                       int stride,
-                       IFloatBuffer* vertices) {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::vertexPointer(size=%d, stride=%d, vertices=%s)",
-                                 size,
-                                 stride,
-                                 vertices->description().c_str());
-  }
-
-  if ((_vertices != vertices) ||
-      (_verticesTimestamp != vertices->timestamp()) ) {
-    _nativeGL->vertexAttribPointer(Attributes.Position, size, false, stride, vertices);
-    _vertices = vertices;
-    _verticesTimestamp = _vertices->timestamp();
-  }
-}
-
-//void GL::drawElements(int mode,
-//                      IIntBuffer* indices) {
-//  if (_verbose) {
-//    ILogger::instance()->logInfo("GL::drawElements(%d, %s)",
-//                                 mode,
-//                                 indices->description().c_str());
-//  }
-//
-//  _nativeGL->drawElements(mode,
-//                          indices->size(),
-//                          indices);
-//}
 void GL::drawElements(int mode,
                       IShortBuffer* indices) {
   if (_verbose) {
@@ -436,23 +401,6 @@ const IGLTextureId* GL::uploadTexture(const IImage* image,
   return texId;
 }
 
-void GL::setTextureCoordinates(int size,
-                               int stride,
-                               IFloatBuffer* textureCoordinates) {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::setTextureCoordinates(size=%d, stride=%d, textureCoordinates=%s)",
-                                 size,
-                                 stride,
-                                 textureCoordinates->description().c_str());
-  }
-
-  if ((_textureCoordinates != textureCoordinates) ||
-      (_textureCoordinatesTimestamp != textureCoordinates->timestamp()) ) {
-    _nativeGL->vertexAttribPointer(Attributes.TextureCoord, size, false, stride, textureCoordinates);
-    _textureCoordinates = textureCoordinates;
-    _textureCoordinatesTimestamp = _textureCoordinates->timestamp();
-  }
-}
 
 void GL::bindTexture(const IGLTextureId* textureId) {
   if (_verbose) {
@@ -495,32 +443,10 @@ void GL::startBillBoardDrawing(int viewPortWidth,
   _nativeGL->uniform2f(Uniforms.ViewPortExtent, viewPortWidth, viewPortHeight);
 
   color(1, 1, 1, 1);
-
-  setTextureCoordinates(2, 0, getBillboardTexCoord());
 }
 
 void GL::stopBillBoardDrawing() {
   _nativeGL->uniform1i(Uniforms.BillBoard, 0);
-}
-
-
-void GL::drawBillBoard(const IGLTextureId* textureId,
-                       IFloatBuffer* vertices,
-                       int textureWidth,
-                       int textureHeight) {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::drawBillBoard()");
-  }
-
-  int TODO_refactor_billboard;
-
-  _nativeGL->uniform2f(Uniforms.TextureExtent, textureWidth, textureHeight);
-
-  bindTexture(textureId);
-
-  vertexPointer(3, 0, vertices);
-
-  _nativeGL->drawArrays(GLPrimitive::triangleStrip(), 0, vertices->size() / 3);
 }
 
 void GL::setBlendFuncSrcAlpha() {
@@ -604,4 +530,8 @@ void GL::setState(const GLState& state) {
   delete _currentState;
   _currentState = new GLState(state);
   
+}
+
+void GL::setTexExtent(float w, float h){
+  _nativeGL->uniform2f(Uniforms.TextureExtent, w, h);
 }

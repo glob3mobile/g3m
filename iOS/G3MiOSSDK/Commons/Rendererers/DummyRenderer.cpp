@@ -72,13 +72,11 @@ void DummyRenderer::render(const G3MRenderContext* rc,
 
   GLState state(parentState);
   state.enableVerticesPosition();
+  state.setVertices(_vertices, 3, 0);
 
   GL* gl = rc->getGL();
 
   gl->setState(state);
-
-
-  gl->vertexPointer(3, 0, _vertices);
 
   {
     // draw a red square

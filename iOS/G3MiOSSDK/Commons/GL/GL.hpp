@@ -43,12 +43,12 @@ private:
   float _translationX;
   float _translationY;
 
-  IFloatBuffer* _vertices;
-  int           _verticesTimestamp;
-  IFloatBuffer* _textureCoordinates;
-  int           _textureCoordinatesTimestamp;
-  IFloatBuffer* _colors;
-  int           _colorsTimestamp;
+//  IFloatBuffer* _vertices;
+//  int           _verticesTimestamp;
+//  IFloatBuffer* _textureCoordinates;
+//  int           _textureCoordinatesTimestamp;
+  //IFloatBuffer* _colors;
+  //int           _colorsTimestamp;
 
   GLState *_currentState;
 
@@ -73,7 +73,7 @@ private:
                                           const std::string& name);
 
   IFloatBuffer* _billboardTexCoord;
-  IFloatBuffer* getBillboardTexCoord();
+
 
   const bool _verbose;
 
@@ -89,12 +89,12 @@ public:
   _scaleY(1),
   _translationX(0),
   _translationY(0),
-  _vertices(NULL),
-  _verticesTimestamp(0),
-  _textureCoordinates(NULL),
-  _textureCoordinatesTimestamp(0),
-  _colors(NULL),
-  _colorsTimestamp(0),
+//  _vertices(NULL),
+//  _verticesTimestamp(0),
+//  _textureCoordinates(NULL),
+//  _textureCoordinatesTimestamp(0),
+  //_colors(NULL),
+  //_colorsTimestamp(0),
   _billboardTexCoord(NULL),
   _program(NULL),
   _currentState(NULL),
@@ -117,6 +117,8 @@ public:
     
     _currentState = GLState::newDefault(); //Init after constants
   }
+  
+  IFloatBuffer* getBillboardTexCoord();
 
   void verticesColors(bool v);
 
@@ -132,12 +134,6 @@ public:
 
   void multMatrixf(const MutableMatrix44D &m);
 
-  void vertexPointer(int size,
-                     int stride,
-                     IFloatBuffer* vertices);
-
-//  void drawElements(int mode,
-//                    IIntBuffer* indices);
   void drawElements(int mode,
                     IShortBuffer* indices);
 
@@ -153,19 +149,11 @@ public:
 
   void disablePolygonOffset();
 
-  //  void lineWidth(float width);
-  //
-  //  void pointSize(float size);
-
   int getError();
 
   const IGLTextureId* uploadTexture(const IImage* image,
                                     int format,
                                     bool generateMipmap);
-
-  void setTextureCoordinates(int size,
-                             int stride,
-                             IFloatBuffer* texcoord);
 
   void bindTexture(const IGLTextureId* textureId);
 
@@ -173,10 +161,6 @@ public:
                              int viewPortHeight);
   void stopBillBoardDrawing();
 
-  void drawBillBoard(const IGLTextureId* textureId,
-                     IFloatBuffer* vertices,
-                     int textureWidth,
-                     int textureHeight);
 
   void deleteTexture(const IGLTextureId* textureId);
 
@@ -300,6 +284,8 @@ public:
   }
 
   void setState(const GLState& state);
+  
+  void setTexExtent(float w, float h);
 
 };
 

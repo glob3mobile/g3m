@@ -15,6 +15,7 @@
 class Mark;
 class Camera;
 class MarkTouchListener;
+class IFloatBuffer;
 
 class MarksRenderer : public LeafRenderer {
 private:
@@ -34,7 +35,7 @@ private:
   bool               _autoDeleteMarkTouchListener;
 
   long long _downloadPriority;
-
+  
 public:
 
   MarksRenderer(bool readyWhenMarksReady);

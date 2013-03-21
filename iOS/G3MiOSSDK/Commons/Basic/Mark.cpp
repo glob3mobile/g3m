@@ -338,7 +338,7 @@ IFloatBuffer* Mark::getVertices(const Planet* planet) {
 }
 
 void Mark::render(const G3MRenderContext* rc,
-                  const Vector3D& cameraPosition) {
+                  const Vector3D& cameraPosition, const GLState& parentState) {
   const Planet* planet = rc->getPlanet();
 
   const Vector3D* markPosition = getCartesianPosition(planet);
@@ -375,12 +375,20 @@ void Mark::render(const G3MRenderContext* rc,
 
       if (_textureId != NULL) {
         GL* gl = rc->getGL();
+        
+        IFloatBuffer* vertices = getVertices(planet);
 
-        gl->drawBillBoard(_textureId,
-                          getVertices(planet),
-                          _textureWidth,
-                          _textureHeight);
+        GLState state(parentState);
+        state.setVertices(vertices, 3, 0);
+        
+        gl->setTexExtent(_textureWidth, _textureHeight);
 
+        gl->bindTexture(_textureId);
+        
+        gl->setState(state);
+        
+        gl->drawArrays(GLPrimitive::triangleStrip(), 0, vertices->size() / 3);
+        
         _renderedMark = true;
       }
     }
