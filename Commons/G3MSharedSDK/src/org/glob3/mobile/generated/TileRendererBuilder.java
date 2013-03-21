@@ -335,24 +335,6 @@ public class TileRendererBuilder
     _texturePriority = texturePriority;
   }
 
-
-  /**
-   * Returns an array with the names of the layers that make up the default layerSet
-   *
-   * @return layersNames: std::vector<std::string>
-   */
-  public final java.util.ArrayList<String> getDefaultLayersNames()
-  {
-    java.util.ArrayList<String> layersNames = new java.util.ArrayList<String>();
-  
-    for (int i = 0; i < getLayerSet().size(); i++)
-    {
-      layersNames.add(getLayerSet().get(i).getName());
-    }
-  
-    return layersNames;
-  }
-
   public final void setElevationDataProvider(ElevationDataProvider elevationDataProvider)
   {
     if (_elevationDataProvider != null)
