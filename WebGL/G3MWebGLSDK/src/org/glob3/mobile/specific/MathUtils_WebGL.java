@@ -417,4 +417,16 @@ public final class MathUtils_WebGL
       return Short.MIN_VALUE;
    }
 
+
+   @Override
+   public double ceil(final double d) {
+      return Math.ceil(d);
+   }
+
+
+   @Override
+   public float ceil(final float f) {
+      return (float) Math.ceil(f);
+   }
+
 }

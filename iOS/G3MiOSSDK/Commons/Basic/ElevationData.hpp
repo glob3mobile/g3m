@@ -33,6 +33,14 @@ public:
 
   virtual Vector2I getExtent() const;
 
+  virtual int getExtentWidth() const {
+    return _width;
+  }
+
+  virtual int getExtentHeight() const {
+    return _height;
+  }
+
   virtual double getElevationAt(int x, int y,
                                 int *type) const = 0;
 
@@ -54,6 +62,10 @@ public:
   virtual Mesh* createMesh(const Ellipsoid* ellipsoid,
                            float verticalExaggeration,
                            const Geodetic3D& positionOffset) const;
+
+  virtual const Sector getSector() const {
+    return _sector;
+  }
 
 };
 

@@ -85,7 +85,8 @@ public class SingleBillElevationDataProvider extends ElevationDataProvider
     }
     else
     {
-      ElevationData elevationData = new SubviewElevationData(_elevationData, false, sector, resolution, _noDataValue);
+      final boolean useDecimation = false;
+      ElevationData elevationData = new SubviewElevationData(_elevationData, false, sector, resolution, _noDataValue, useDecimation);
       listener.onData(sector, resolution, elevationData);
     }
   

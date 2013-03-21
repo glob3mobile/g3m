@@ -34,6 +34,7 @@ public:
   static inline double log10_(double v)           { return log10(v);   }
   static inline double log_  (double v)           { return log(v);     }
   static inline double floor_(double d)           { return floor(d);   }
+  static inline double ceil_ (double d)           { return ceil(d);    }
 };
 
 class MathUtils_iOS: public IMathUtils {
@@ -163,6 +164,14 @@ public:
 
   float floor(float f) const {
     return floorf(f);
+  }
+
+  double ceil(double d) const {
+    return MathAux::ceil_(d);
+  }
+
+  float ceil(float f) const {
+    return ceilf(f);
   }
 
 };

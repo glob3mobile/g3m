@@ -124,6 +124,9 @@ public:
 
   virtual double floor(double d) const = 0;
   virtual float  floor(float f)  const = 0;
+  
+  virtual double ceil(double d) const = 0;
+  virtual float  ceil(float f)  const = 0;
 
   virtual double linearInterpolation(double from,
                                      double to,
