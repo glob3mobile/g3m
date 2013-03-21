@@ -168,14 +168,7 @@
                                  true,
                                  NULL,
                                  TimeInterval::fromDays(30),
-                                 new LayerTilesRenderParameters(Sector::fullSphere(),
-                                                                1,
-                                                                1,
-                                                                1,
-                                                                19,
-                                                                Vector2I(256, 256),
-                                                                LayerTilesRenderParameters::defaultTileMeshResolution(),
-                                                                true));
+                                 LayerTilesRenderParameters::createDefaultMercator(1, 19));
   csiro->setEnable(false);
   layers->addLayer(csiro);
   
