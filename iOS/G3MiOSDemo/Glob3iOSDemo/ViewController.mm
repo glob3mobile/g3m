@@ -177,40 +177,53 @@ public:
 
 - (void)  initializeElevationDataProvider: (G3MBuilder_iOS&) builder
 {
-  float verticalExaggeration = 5.0f;
+  float verticalExaggeration = 3.0f;
   builder.getTileRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
 
+  int _DGD_working_on_terrain;
   
 //  ElevationDataProvider* elevationDataProvider = NULL;
 
-  //  ElevationDataProvider* elevationDataProvider = new WMSBillElevationDataProvider();
+//  ElevationDataProvider* elevationDataProvider = new WMSBillElevationDataProvider();
 
-  //  ElevationDataProvider* elevationDataProvider;
-  //  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
-  //                                                              Sector::fullSphere(),
-  //                                                              Vector2I(2048, 1024),
-  //                                                              0);
+//  ElevationDataProvider* elevationDataProvider;
+//  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
+//                                                              Sector::fullSphere(),
+//                                                              Vector2I(2048, 1024),
+//                                                              0);
 
-  //  ElevationDataProvider* elevationDataProvider;
-  //  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///elev-35.0_-6.0_38.0_-2.0_4096x2048.bil", false),
-  //                                                              Sector::fromDegrees(35, -6, 38, -2),
-  //                                                              Vector2I(4096, 2048),
-  //                                                              0);
+//  ElevationDataProvider* elevationDataProvider;
+//  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///elev-35.0_-6.0_38.0_-2.0_4096x2048.bil", false),
+//                                                              Sector::fromDegrees(35, -6, 38, -2),
+//                                                              Vector2I(4096, 2048),
+//                                                              0);
 
-  //  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-4096x2048.bil", false),
-  //                                                              Sector::fullSphere(),
-  //                                                              Vector2I(4096, 2048),
-  //                                                              0);
+//  ElevationDataProvider* elevationDataProvider;
+//  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-4096x2048.bil", false),
+//                                                              Sector::fullSphere(),
+//                                                              Vector2I(4096, 2048),
+//                                                              0);
+
+//  ElevationDataProvider* elevationDataProvider;
+//  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///caceres-2008x2032.bil", false),
+//                                                              Sector::fromDegrees(
+//                                                                                  39.4642996294239623,
+//                                                                                  -6.3829977122432933,
+//                                                                                  39.4829891936013553,
+//                                                                                  -6.3645288909498845
+//                                                                                  ),
+//                                                              Vector2I(2008, 2032),
+//                                                              0);
 
   ElevationDataProvider* elevationDataProvider;
-  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///caceres-2008x2032.bil", false),
+  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///small-caceres.bil", false),
                                                               Sector::fromDegrees(
-                                                                                  39.4642996294239623,
-                                                                                  -6.3829977122432933,
-                                                                                  39.4829891936013553,
-                                                                                  -6.3645288909498845
+                                                                                  39.4642994358225678,
+                                                                                  -6.3829980000000042,
+                                                                                  39.4829889999999608,
+                                                                                  -6.3645291787065954
                                                                                   ),
-                                                              Vector2I(2008, 2032),
+                                                              Vector2I(251, 254),
                                                               0);
 
   builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProvider);
@@ -1006,8 +1019,14 @@ public:
 //                                                      Geodetic3D::fromDegrees(0.02, 0, 0),
 //                                                      2) );
 
-    const Sector subSector = _sector.shrinkedByPercent(0.33f);
+    const float verticalExaggeration = 3.0f;
+    const float pointSize = 4.0f;
+
+//    const Sector subSector = _sector.shrinkedByPercent(0.33f);
+    const Sector subSector = _sector;
     const Vector2I subResolution(128, 128);
+
+    int _DGD_working_on_terrain;
 
     const ElevationData* subElevationDataDecimated = new SubviewElevationData(elevationData,
                                                                               false,
@@ -1017,21 +1036,21 @@ public:
                                                                               true);
 
     _meshRenderer->addMesh( subElevationDataDecimated->createMesh(planet,
-                                                                  5,
+                                                                  verticalExaggeration,
                                                                   Geodetic3D::fromDegrees(0.02, 0.02, 0),
-                                                                  5) );
+                                                                  pointSize) );
 
     const ElevationData* subElevationDataNotDecimated = new SubviewElevationData(elevationData,
-                                                                              false,
-                                                                              subSector,
-                                                                              subResolution,
-                                                                              0,
-                                                                              false);
+                                                                                 false,
+                                                                                 subSector,
+                                                                                 subResolution,
+                                                                                 0,
+                                                                                 false);
 
     _meshRenderer->addMesh( subElevationDataNotDecimated->createMesh(planet,
-                                                                  5,
-                                                                  Geodetic3D::fromDegrees(0.02, 0.04, 0),
-                                                                  5) );
+                                                                     verticalExaggeration,
+                                                                     Geodetic3D::fromDegrees(0.02, 0.04, 0),
+                                                                     pointSize) );
 
     delete planet;
     delete elevationData;
