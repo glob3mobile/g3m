@@ -14,11 +14,15 @@
 void SimpleTextureMapping::bind(const G3MRenderContext* rc, const GLState& parentState) const {
   if (_texCoords != NULL) {
     GL* gl = rc->getGL();
-
-    gl->transformTexCoords(_scale, _translation);
-    gl->bindTexture(_glTextureId);
     
     GLState state(parentState);
+//    state.scaleTextureCoordinates(_scale);
+//    state.translateTextureCoordinates(_translation);
+
+    gl->transformTexCoords(_scale, _translation);
+    state.bindTexture(_glTextureId);
+    //gl->bindTexture(_glTextureId);
+    
     state.setTextureCoordinates(_texCoords, 2, 0);
     gl->setState(state);
   }

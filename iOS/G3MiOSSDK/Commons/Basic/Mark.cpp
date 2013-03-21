@@ -383,7 +383,9 @@ void Mark::render(const G3MRenderContext* rc,
         
         gl->setTexExtent(_textureWidth, _textureHeight);
 
-        gl->bindTexture(_textureId);
+        state.bindTexture(_textureId);
+        //gl->bindTexture(_textureId);
+        
         
         gl->setState(state);
         

@@ -172,8 +172,8 @@ bool GL::useProgram(ShaderProgram* program) {
   Uniforms.PointSize           = checkedGetUniformLocation(program, "PointSize");
 
   // default values
-  _nativeGL->uniform2f(Uniforms.ScaleTexCoord, _scaleX, _scaleY);
-  _nativeGL->uniform2f(Uniforms.TranslationTexCoord, _translationX, _translationY);
+  _nativeGL->uniform2f(Uniforms.ScaleTexCoord, 1.0, 1.0);
+  _nativeGL->uniform2f(Uniforms.TranslationTexCoord, 0.0, 0.0);
   _nativeGL->uniform1f(Uniforms.PointSize, 1);
 
   //BILLBOARDS
@@ -289,21 +289,22 @@ void GL::transformTexCoords(float scaleX,
     ILogger::instance()->logInfo("GL::transformTexCoords()");
   }
 
-  if ((_scaleX != scaleX) || (_scaleY != scaleY)) {
+//  if ((_scaleX != scaleX) || (_scaleY != scaleY)) {
+  //printf("GL     SCALE %f, %f\n", scaleX, scaleY);
     _nativeGL->uniform2f(Uniforms.ScaleTexCoord,
                          scaleX,
                          scaleY);
-    _scaleX = scaleX;
-    _scaleY = scaleY;
-  }
+//    _scaleX = scaleX;
+//    _scaleY = scaleY;
+//  }
 
-  if ((_translationX != translationX) || (_translationY != translationY)) {
+//  if ((translationX != translationX) || (_translationY != translationY)) {
     _nativeGL->uniform2f(Uniforms.TranslationTexCoord,
                          translationX,
                          translationY);
-    _translationX = translationX;
-    _translationY = translationY;
-  }
+//    _translationX = translationX;
+//    _translationY = translationY;
+//  }
 }
 
 void GL::enablePolygonOffset(float factor, float units) {
@@ -372,8 +373,12 @@ const IGLTextureId* GL::uploadTexture(const IImage* image,
     _nativeGL->pixelStorei(GLAlignment::unpack(), 1);
     
     int texture2D = GLTextureType::texture2D();
+    
+    GLState state(*_currentState);
+    state.bindTexture(texId);
+    setState(state);
 
-    bindTexture(texId);  //Do not use _native->bind 
+    //bindTexture(texId);  //Do not use _native->bind
     
     _nativeGL->texParameteri(texture2D,
                              GLTextureParameter::minFilter(),
@@ -392,6 +397,7 @@ const IGLTextureId* GL::uploadTexture(const IImage* image,
     if (generateMipmap) {
       _nativeGL->generateMipmap(texture2D);
     }
+    
   }
   else {
     ILogger::instance()->logError("can't get a valid texture id\n");
@@ -402,23 +408,23 @@ const IGLTextureId* GL::uploadTexture(const IImage* image,
 }
 
 
-void GL::bindTexture(const IGLTextureId* textureId) {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::bindTexture()");
-  }
-
-  if (textureId == NULL) {
-    ILogger::instance()->logError("Can't bind a NULL texture");
-  }
-  else {
-    if ((_boundTextureId == NULL) || !_boundTextureId->isEqualsTo(textureId)) {
-      _nativeGL->bindTexture(GLTextureType::texture2D(), textureId);
-      _boundTextureId = textureId;
-    } else{
-      //ILogger::instance()->logInfo("Texture %s already bound.", textureId->description().c_str());
-    }
-  }
-}
+//void GL::bindTexture(const IGLTextureId* textureId) {
+//  if (_verbose) {
+//    ILogger::instance()->logInfo("GL::bindTexture()");
+//  }
+//
+//  if (textureId == NULL) {
+//    ILogger::instance()->logError("Can't bind a NULL texture");
+//  }
+//  else {
+//    if ((_boundTextureId == NULL) || !_boundTextureId->isEqualsTo(textureId)) {
+//      _nativeGL->bindTexture(GLTextureType::texture2D(), textureId);
+//      _boundTextureId = textureId;
+//    } else{
+//      //ILogger::instance()->logInfo("Texture %s already bound.", textureId->description().c_str());
+//    }
+//  }
+//}
 
 IFloatBuffer* GL::getBillboardTexCoord() {
   if (_verbose) {
@@ -513,12 +519,16 @@ void GL::deleteTexture(const IGLTextureId* textureId) {
     else {
       delete textureId;
     }
-
-    if (_boundTextureId != NULL) {
-      if (_boundTextureId->isEqualsTo(textureId)) {
-        _boundTextureId = NULL;
-      }
+    
+    if (_currentState->getBoundTexture() == textureId){
+      _currentState->bindTexture(NULL);
     }
+
+//    if (_boundTextureId != NULL) {
+//      if (_boundTextureId->isEqualsTo(textureId)) {
+//        _boundTextureId = NULL;
+//      }
+//    }
 
     //ILogger::instance()->logInfo("  = delete textureId=%s", texture->description().c_str());
   }

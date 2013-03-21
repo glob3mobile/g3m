@@ -29,11 +29,17 @@ void LazyTextureMapping::bind(const G3MRenderContext* rc, const GLState& parentS
 
   if (_texCoords != NULL) {
     GL* gl = rc->getGL();
+    GLState state(parentState);
+    
+//    state.scaleTextureCoordinates(_scale);
+//    state.translateTextureCoordinates(_translation);
 
     gl->transformTexCoords(_scale, _translation);
-    gl->bindTexture(_glTextureId);
     
-    GLState state(parentState);
+    state.bindTexture(_glTextureId);
+    //gl->bindTexture(_glTextureId);
+    
+    
     state.setTextureCoordinates(_texCoords, 2, 0);
     gl->setState(state);
   }

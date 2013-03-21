@@ -104,6 +104,20 @@ void GLState::applyChanges(const INativeGL* nativeGL, const GLState& currentStat
     }
   }
   
+//  if (_textureCoordinatesScaleX != currentState._textureCoordinatesScaleX ||
+//      _textureCoordinatesScaleY != currentState._textureCoordinatesScaleY){
+//    printf("GLSTATE SCALE %f, %f\n", _textureCoordinatesScaleX, _textureCoordinatesScaleY);
+//    nativeGL->uniform2f(uniforms.ScaleTexCoord, _textureCoordinatesScaleX, _textureCoordinatesScaleY);
+//  }
+  
+//  if (_textureCoordinatesTranslationX != currentState._textureCoordinatesTranslationX ||
+//      _textureCoordinatesTranslationY != currentState._textureCoordinatesTranslationY){
+//    nativeGL->uniform2f(uniforms.TranslationTexCoord,
+//                         _textureCoordinatesTranslationX,
+//                         _textureCoordinatesTranslationY);
+//  }
+  
+  
   // Flat Color
   if (_flatColor != currentState._flatColor) {
     if (_flatColor) {
@@ -169,5 +183,13 @@ void GLState::applyChanges(const INativeGL* nativeGL, const GLState& currentStat
   if (_blendDFactor != currentState._blendDFactor || _blendSFactor != currentState._blendSFactor){
     nativeGL->blendFunc(_blendSFactor, _blendDFactor);
   }
+  
+  //Texture (After blending factors)
+  if (_boundTextureId != NULL){
+    if (_boundTextureId != currentState._boundTextureId){
+      nativeGL->bindTexture(GLTextureType::texture2D(), _boundTextureId);
+    }
+  }
+
   
 }

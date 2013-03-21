@@ -37,6 +37,9 @@ void SGGeometryNode::rawRender(const G3MRenderContext* rc,
   }
 
   if (_uv != NULL) {
+//    state.translateTextureCoordinates(0.0, 0.0);
+//    state.scaleTextureCoordinates(1.0, 1.0);
+    
     gl->transformTexCoords(1.0f, 1.0f,
                            0.0f, 0.0f);
     

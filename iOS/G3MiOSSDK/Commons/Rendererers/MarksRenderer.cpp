@@ -193,6 +193,10 @@ void MarksRenderer::render(const G3MRenderContext* rc,
 
   Vector2D textureTranslation(0.0, 0.0);
   Vector2D textureScale(1.0, 1.0);
+  
+//  state.translateTextureCoordinates(textureTranslation);
+//  state.scaleTextureCoordinates(textureScale);
+  
   gl->transformTexCoords(textureScale, textureTranslation);
 
   state.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());

@@ -38,28 +38,21 @@ private:
   std::list<const IGLTextureId*> _texturesIdBag;
   long                           _texturesIdAllocationCounter;
 
-  float _scaleX;
-  float _scaleY;
-  float _translationX;
-  float _translationY;
-
-//  IFloatBuffer* _vertices;
-//  int           _verticesTimestamp;
-//  IFloatBuffer* _textureCoordinates;
-//  int           _textureCoordinatesTimestamp;
-  //IFloatBuffer* _colors;
-  //int           _colorsTimestamp;
+//  float _scaleX;
+//  float _scaleY;
+//  float _translationX;
+//  float _translationY;
 
   GLState *_currentState;
 
   ShaderProgram* _program;
 
-#ifdef C_CODE
-  const IGLTextureId* _boundTextureId;
-#endif
-#ifdef JAVA_CODE
-  private IGLTextureId _boundTextureId;
-#endif
+//#ifdef C_CODE
+//  const IGLTextureId* _boundTextureId;
+//#endif
+//#ifdef JAVA_CODE
+//  private IGLTextureId _boundTextureId;
+//#endif
 
   inline void loadModelView();
 
@@ -85,10 +78,10 @@ public:
   _nativeGL(nativeGL),
   _verbose(verbose),
   _texturesIdAllocationCounter(0),
-  _scaleX(1),
-  _scaleY(1),
-  _translationX(0),
-  _translationY(0),
+//  _scaleX(1),
+//  _scaleY(1),
+//  _translationX(0),
+//  _translationY(0),
 //  _vertices(NULL),
 //  _verticesTimestamp(0),
 //  _textureCoordinates(NULL),
@@ -97,8 +90,8 @@ public:
   //_colorsTimestamp(0),
   _billboardTexCoord(NULL),
   _program(NULL),
-  _currentState(NULL),
-  _boundTextureId(NULL)
+  _currentState(NULL)
+//  _boundTextureId(NULL)
   {
     //Init Constants
     GLCullFace::init(_nativeGL);
@@ -155,7 +148,7 @@ public:
                                     int format,
                                     bool generateMipmap);
 
-  void bindTexture(const IGLTextureId* textureId);
+//  void bindTexture(const IGLTextureId* textureId);
 
   void startBillBoardDrawing(int viewPortWidth,
                              int viewPortHeight);

@@ -14,6 +14,8 @@ class IFloatBuffer;
 #include "Color.hpp"
 #include "GLConstants.hpp"
 #include "IFloatBuffer.hpp"
+#include "MutableVector2D.hpp"
+#include "Vector2D.hpp"
 
 
 class GL;
@@ -49,6 +51,19 @@ private:
   int           _textureCoordinatesTimestamp;
   int           _textureCoordinatesSize;
   int           _textureCoordinatesStride;
+  float _textureCoordinatesScaleX;
+  float _textureCoordinatesScaleY;
+  float _textureCoordinatesTranslationX;
+  float _textureCoordinatesTranslationY;
+  
+#ifdef C_CODE
+  const IGLTextureId* _boundTextureId;
+#endif
+#ifdef JAVA_CODE
+  private IGLTextureId _boundTextureId;
+#endif
+  
+  MutableMatrix44D    _modelViewMatrix;
   
   float _lineWidth;
   float _pointSize;
@@ -92,7 +107,12 @@ private:
   _textureCoordinates(NULL),
   _textureCoordinatesTimestamp(0),
   _textureCoordinatesSize(0),
-  _textureCoordinatesStride(0)
+  _textureCoordinatesStride(0),
+  _textureCoordinatesScaleX(1.0),
+  _textureCoordinatesScaleY(1.0),
+  _textureCoordinatesTranslationX(0.0),
+  _textureCoordinatesTranslationY(0.0),
+  _boundTextureId(NULL)
   {
   }
   
@@ -134,7 +154,12 @@ public:
   _textureCoordinates(parentState._textureCoordinates),
   _textureCoordinatesTimestamp(parentState._textureCoordinatesTimestamp),
   _textureCoordinatesSize(parentState._textureCoordinatesSize),
-  _textureCoordinatesStride(parentState._textureCoordinatesStride)
+  _textureCoordinatesStride(parentState._textureCoordinatesStride),
+  _textureCoordinatesScaleX(parentState._textureCoordinatesScaleX),
+  _textureCoordinatesScaleY(parentState._textureCoordinatesScaleY),
+  _textureCoordinatesTranslationX(parentState._textureCoordinatesTranslationX),
+  _textureCoordinatesTranslationY(parentState._textureCoordinatesTranslationY),
+  _boundTextureId(parentState._boundTextureId)
   {
   }
   
@@ -234,6 +259,44 @@ public:
     _textureCoordinatesTimestamp = texCoors->timestamp();
     _textureCoordinatesSize = size;
     _textureCoordinatesStride = stride;
+  }
+  
+  void scaleTextureCoordinates(float x, float y){
+    _textureCoordinatesScaleX = x;
+    _textureCoordinatesScaleY = y;
+  }
+  
+  void scaleTextureCoordinates(const MutableVector2D& scale){
+    _textureCoordinatesScaleX = (float) scale.x();
+    _textureCoordinatesScaleY = (float) scale.y();
+  }
+  
+  void scaleTextureCoordinates(const Vector2D& scale){
+    _textureCoordinatesScaleX = (float) scale.x();
+    _textureCoordinatesScaleY = (float) scale.y();
+  }
+  
+  void translateTextureCoordinates(float x, float y){
+    _textureCoordinatesTranslationX = x;
+    _textureCoordinatesTranslationY = y;
+  }
+  
+  void translateTextureCoordinates(const MutableVector2D& translation){
+    _textureCoordinatesTranslationX = (float) translation.x();
+    _textureCoordinatesTranslationY = (float) translation.y();
+  }
+  
+  void translateTextureCoordinates(const Vector2D& translation){
+    _textureCoordinatesTranslationX = (float) translation.x();
+    _textureCoordinatesTranslationY = (float) translation.y();
+  }
+  
+  void bindTexture(const IGLTextureId* textureId){
+    _boundTextureId = textureId;
+  }
+  
+  const IGLTextureId* getBoundTexture() const{
+    return _boundTextureId;
   }
   
   void applyChanges(const INativeGL* nativeGL, const GLState& currentState, const AttributesStruct& attributes,const UniformsStruct& uniforms) const;
