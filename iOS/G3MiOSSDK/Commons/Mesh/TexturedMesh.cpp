@@ -21,7 +21,6 @@ void TexturedMesh::render(const G3MRenderContext* rc,
   if (_transparent) {
     state.enableBlend();
     state.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
-    gl->setBlendFuncSrcAlpha();
   }
 
   _textureMapping->bind(rc, state);

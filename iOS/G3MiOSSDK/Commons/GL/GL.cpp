@@ -455,14 +455,6 @@ void GL::stopBillBoardDrawing() {
   _nativeGL->uniform1i(Uniforms.BillBoard, 0);
 }
 
-void GL::setBlendFuncSrcAlpha() {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::setBlendFuncSrcAlpha()");
-  }
-
-  _nativeGL->blendFunc(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
-}
-
 const IGLTextureId* GL::getGLTextureId() {
   if (_verbose) {
     ILogger::instance()->logInfo("GL::getGLTextureId()");

@@ -63,7 +63,7 @@ private:
   private IGLTextureId _boundTextureId;
 #endif
   
-  MutableMatrix44D    _modelViewMatrix;
+  //MutableMatrix44D    _modelViewMatrix;
   
   float _lineWidth;
   float _pointSize;

@@ -133,7 +133,6 @@ void BusyQuadRenderer::render(const G3MRenderContext* rc,
   gl->setState(state);
 
   state.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
-  gl->setBlendFuncSrcAlpha();
 
   gl->pushMatrix();
   MutableMatrix44D R1 = MutableMatrix44D::createRotationMatrix(Angle::zero(), Vector3D(-1, 0, 0));

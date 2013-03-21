@@ -129,7 +129,6 @@ void AbstractMesh::render(const G3MRenderContext *rc,
       state.enableBlend();
       
       state.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
-      gl->setBlendFuncSrcAlpha();
     }
   }
 

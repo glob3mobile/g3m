@@ -213,13 +213,6 @@ public:
                 col.getAlpha());
   }
 
-  /*void enableVertexFlatColor(const Color& c, float intensity) {
-   if (_verbose) ILogger::instance()->logInfo("GL::enableVertexFlatColor()");
-   enableVertexFlatColor(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha(), intensity);
-   }*/
-
-  void setBlendFuncSrcAlpha();
-
   void getViewport(int v[]) {
     if (_verbose) ILogger::instance()->logInfo("GL::getViewport()");
 
