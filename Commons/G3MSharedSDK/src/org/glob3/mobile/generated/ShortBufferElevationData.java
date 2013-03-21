@@ -84,17 +84,16 @@ public class ShortBufferElevationData extends BufferElevationData
     for (int i = 0; i < bufferSize; i++)
     {
       final short height = _buffer.get(i);
-      if (height != _noDataValue)
+  //    if (height != _noDataValue) {
+      if (height < minHeight)
       {
-        if (height < minHeight)
-        {
-          minHeight = height;
-        }
-        if (height > maxHeight)
-        {
-          maxHeight = height;
-        }
+        minHeight = height;
       }
+      if (height > maxHeight)
+      {
+        maxHeight = height;
+      }
+  //    }
     }
   
     if (minHeight == mu.maxInt16())
