@@ -136,6 +136,9 @@ public abstract class IMathUtils
   public abstract double floor(double d);
   public abstract float floor(float f);
 
+  public abstract double ceil(double d);
+  public abstract float ceil(float f);
+
   public double linearInterpolation(double from, double to, double alpha)
   {
     return from + ((to - from) * alpha);

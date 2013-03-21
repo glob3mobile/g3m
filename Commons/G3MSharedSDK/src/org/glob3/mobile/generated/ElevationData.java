@@ -45,6 +45,16 @@ public abstract class ElevationData
     return new Vector2I(_width, _height);
   }
 
+  public int getExtentWidth()
+  {
+    return _width;
+  }
+
+  public int getExtentHeight()
+  {
+    return _height;
+  }
+
   public abstract double getElevationAt(int x, int y, int type);
 
   public abstract double getElevationAt(Angle latitude, Angle longitude, int type);
@@ -128,6 +138,11 @@ public abstract class ElevationData
   
     return new DirectMesh(GLPrimitive.points(), true, vertices.getCenter(), vertices.create(), lineWidth, pointSize, flatColor, colors.create());
                           //GLPrimitive::lineStrip(),
+  }
+
+  public Sector getSector()
+  {
+    return _sector;
   }
 
 }
