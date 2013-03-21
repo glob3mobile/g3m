@@ -117,11 +117,13 @@ const long long SingleBillElevationDataProvider::requestElevationData(const Sect
     listener->onError(sector, resolution);
   }
   else {
+    const bool useDecimation = false;
     ElevationData *elevationData = new SubviewElevationData(_elevationData,
                                                             false,
                                                             sector,
                                                             resolution,
-                                                            _noDataValue);
+                                                            _noDataValue,
+                                                            useDecimation);
     listener->onData(sector,
                      resolution,
                      elevationData);

@@ -1001,8 +1001,25 @@ public:
                                                       5,
                                                       Geodetic3D::fromDegrees(0.02, 0, 0)) );
 
+    const ElevationData* subElevationData = new SubviewElevationData(elevationData,
+                                                                     false,
+                                                                     Sector::fromDegrees(
+                                                                                         39.4642996294239623,
+                                                                                         -6.3829977122432933,
+                                                                                         39.4829891936013553,
+                                                                                         -6.3645288909498845
+                                                                                         ).shrinkedByPercent(0.25f),
+                                                                     Vector2I(256, 128),
+                                                                     0,
+                                                                     true);
+  
+    _meshRenderer->addMesh( subElevationData->createMesh(planet,
+                                                         5,
+                                                         Geodetic3D::fromDegrees(0.02, 0.02, 0)) );
+
     delete planet;
     delete elevationData;
+    delete subElevationData;
   }
 
   void onError(const URL& url) {
