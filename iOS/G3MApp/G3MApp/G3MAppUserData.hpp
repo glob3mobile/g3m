@@ -33,7 +33,6 @@ public:
   
   void setSatelliteLayerEnabled(bool satelliteLayerEnabled);
   bool getSatelliteLayerEnabled();
-  void toggleSatelliteLayerEnabled();
   
   void setPlane(Shape* plane);
   Shape* getPlane();

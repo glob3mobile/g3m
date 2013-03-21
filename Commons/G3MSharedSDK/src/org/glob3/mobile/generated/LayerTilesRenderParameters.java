@@ -64,6 +64,15 @@ public class LayerTilesRenderParameters
     return new LayerTilesRenderParameters(topSector, topSectorSplitsByLatitude, topSectorSplitsByLongitude, firstLevel, maxLevel, LayerTilesRenderParameters.defaultTileTextureResolution(), LayerTilesRenderParameters.defaultTileMeshResolution(), mercator);
   }
 
+  public static LayerTilesRenderParameters createDefaultMercator(int firstLevel, int maxLevel)
+  {
+    final Sector topSector = Sector.fullSphere();
+    final int topSectorSplitsByLatitude = 1;
+    final int topSectorSplitsByLongitude = 1;
+    final boolean mercator = true;
+
+    return new LayerTilesRenderParameters(topSector, topSectorSplitsByLatitude, topSectorSplitsByLongitude, firstLevel, maxLevel, LayerTilesRenderParameters.defaultTileTextureResolution(), LayerTilesRenderParameters.defaultTileMeshResolution(), mercator);
+  }
 
   public void dispose()
   {

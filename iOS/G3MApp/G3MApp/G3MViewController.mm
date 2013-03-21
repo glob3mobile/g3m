@@ -17,6 +17,9 @@
 #import <G3MiOSSDK/MarksRenderer.hpp>
 #import <G3MiOSSDK/ShapesRenderer.hpp>
 #import <G3MiOSSDK/MeshRenderer.hpp>
+#import <G3MiOSSDK/MercatorTiledLayer.hpp>
+#import <G3MiOSSDK/LayerTilesRenderParameters.hpp>
+#import <G3MiOSSDK/MapQuestLayer.hpp>
 #import "G3MToolbar.h"
 #import "G3MAppUserData.hpp"
 #import "G3MMarkerUserData.hpp"
@@ -32,7 +35,7 @@
 
 @implementation G3MViewController
 
-@synthesize g3mWidget, demoSelector, demoMenu, toolbar, layerSwitcher, playButton;
+@synthesize g3mWidget, demoSelector, demoMenu, toolbar, layerSwitcher;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -65,8 +68,6 @@
   
   // Setup the builder
   builder.getTileRendererBuilder()->setLayerSet(userData->getLayerSet());
-  // store satellite layers names
-  satelliteLayersNames = builder.getTileRendererBuilder()->getDefaultLayersNames();
   //  builder.getTileRendererBuilder()->setShowStatistics(true);
   builder.addRenderer(markerRenderer);
   builder.addRenderer(shapeRenderer);
@@ -76,7 +77,7 @@
   
   // Initialize widget
   builder.initializeWidget();
-  [self resetWidget];
+  [self showSimpleGlob3];
   
   [self initDropDownMenu];
   [self initToolbar];
@@ -105,7 +106,6 @@
   [self setLayerSwitcher: nil];
   [self setDemoSelector:nil];
   [self setDemoMenu: nil];
-  [self setPlayButton: nil];
   
   [super viewDidUnload];
 }
@@ -129,7 +129,48 @@
 - (LayerSet*) createLayerSet: (bool) satelliteLayerEnabled
 {
   LayerSet* layers = LayerBuilder::createDefaultSatelliteImagery();
+  // store satellite layers names
+  satelliteLayersNames = LayerBuilder::getDefaultLayersNames();
+  
   layers->addLayer(LayerBuilder::createOSMLayer(!satelliteLayerEnabled));
+  
+  
+  MapQuestLayer* meteoriteBase = MapQuestLayer::newOSM(TimeInterval::fromDays(30));
+  meteoriteBase->setEnable(false);
+  layers->addLayer(meteoriteBase);
+  
+  std::vector<std::string> subdomains;
+  subdomains.push_back("0.");
+  subdomains.push_back("1.");
+  subdomains.push_back("2.");
+  subdomains.push_back("3.");
+  
+  MercatorTiledLayer* meteorites = new MercatorTiledLayer("CartoDB-meteoritessize",
+                                                          "http://",
+                                                          "tiles.cartocdn.com/osm2/tiles/meteoritessize",
+                                                          subdomains,
+                                                          "png",
+                                                          TimeInterval::fromDays(90),
+                                                          Sector::fullSphere(),
+                                                          2,
+                                                          17,
+                                                          NULL);
+  meteorites->setEnable(false);
+  layers->addLayer(meteorites);
+  
+  WMSLayer* csiro = new WMSLayer("g3m:mosaic-sst,g3m:mosaic-sla",
+                                 URL("http://ooap-dev.it.csiro.au/geoserver/g3m/wms", false),
+                                 WMS_1_1_0,
+                                 Sector::fullSphere(),
+                                 "image/png",
+                                 "EPSG:900913",
+                                 "",
+                                 true,
+                                 NULL,
+                                 TimeInterval::fromDays(30),
+                                 LayerTilesRenderParameters::createDefaultMercator(1, 19));
+  csiro->setEnable(false);
+  layers->addLayer(csiro);
   
   return layers;
 }
@@ -142,33 +183,43 @@
   ((G3MAppUserData*) [[self g3mWidget] userData])->getMeshRenderer()->setEnable(false);
   
   [[self g3mWidget] stopCameraAnimation];
-  [[self g3mWidget] resetCameraPosition];
-  [[self g3mWidget] setCameraPosition: Geodetic3D(Angle::fromDegrees(0),
-                                                  Angle::fromDegrees(0),
-                                                  25000000)];
-//  [[self g3mWidget] setAnimatedCameraPosition: Geodetic3D(Angle::fromDegrees(0),
-//                                                          Angle::fromDegrees(0),
-//                                                          25000000)];
+  
+  LayerSet* layerSet = ((G3MAppUserData*) [[self g3mWidget] userData])->getLayerSet();
+  for (int i = 0; i < layerSet->size(); i++) {
+    layerSet->get(i)->setEnable(false);
+  }
+}
 
+- (void) setSatelliteLayerEnabled: (bool) enabled
+{
+  LayerSet* layerSet = ((G3MAppUserData*) [[self g3mWidget] userData])->getLayerSet();
+  // satellite layers
+  for (int i = 0; i < satelliteLayersNames.size(); i++) {
+    layerSet->getLayer(satelliteLayersNames[i])->setEnable(enabled);
+  }
+  
+  ((G3MAppUserData*) [[self g3mWidget] userData])->setSatelliteLayerEnabled(enabled);
 }
 
 - (void) showSimpleGlob3
 {
-  const bool satelliteLayerEnabled = ((G3MAppUserData*) [[self g3mWidget] userData])->getSatelliteLayerEnabled();
-  if (!satelliteLayerEnabled) {
-    [self switchLayer];
-  }
+  [self setSatelliteLayerEnabled: true];
   
-  [[self g3mWidget] widget]->setAnimatedCameraPosition(Geodetic3D(Angle::fromDegrees(0),
-                                                                  Angle::fromDegrees(0),
-                                                                  25000000),
-                                                       TimeInterval::fromSeconds(5));
+  [[self g3mWidget] setAnimatedCameraPosition: Geodetic3D(Angle::fromDegrees(0),
+                                                          Angle::fromDegrees(0),
+                                                          25000000)
+                                 timeInterval: TimeInterval::fromSeconds(5)];
 }
 
 - (void) switchLayer
 {
-  ((G3MAppUserData*) [[self g3mWidget] userData])->toggleSatelliteLayerEnabled();
   const bool satelliteLayerEnabled = ((G3MAppUserData*) [[self g3mWidget] userData])->getSatelliteLayerEnabled();
+
+  LayerSet* layerSet = ((G3MAppUserData*) [[self g3mWidget] userData])->getLayerSet();
+  // osm
+  layerSet->getLayer("osm_auto:all")->setEnable(satelliteLayerEnabled);
+  // satellite layers
+  [self setSatelliteLayerEnabled: !satelliteLayerEnabled];
   
   if (satelliteLayerEnabled) {
     [[self layerSwitcher] setImage:[UIImage imageNamed:@"satellite-on-96x48.png"] forState:UIControlStateNormal];
@@ -176,36 +227,26 @@
   else {
     [[self layerSwitcher] setImage:[UIImage imageNamed:@"map-on-96x48.png"] forState:UIControlStateNormal];
   }
+}
+
+- (void) showMarkersDemo
+{
+  [self setSatelliteLayerEnabled: true];
+  ((G3MAppUserData*) [[self g3mWidget] userData])->getMarkerRenderer()->setEnable(true);
+  [self gotoPosition: Geodetic3D(Angle::fromDegrees(37.7658),
+                                 Angle::fromDegrees(-122.4185),
+                                 12000)];
+}
+
+- (void) showModelDemo
+{
+  [self setSatelliteLayerEnabled: true];
+  ((G3MAppUserData*) [[self g3mWidget] userData])->getShapeRenderer()->setEnable(true);
   
-  LayerSet* layerSet = ((G3MAppUserData*) [[self g3mWidget] userData])->getLayerSet();
-  // satellite layers
-  for (int i = 0; i < satelliteLayersNames.size(); i++) {
-    layerSet->getLayer(satelliteLayersNames[i])->setEnable(satelliteLayerEnabled);
-  }
-  // osm
-  layerSet->getLayer("osm_auto:all")->setEnable(!satelliteLayerEnabled);
-}
-
-- (void) gotoMarkersDemo
-{
-  [[self g3mWidget] widget]->setAnimatedCameraPosition(Geodetic3D(Angle::fromDegrees(37.7658),
-                                                                  Angle::fromDegrees(-122.4185),
-                                                                  12000),
-                                                       TimeInterval::fromSeconds(5));
-//  [[self toolbar] setVisible: FALSE];
-}
-
-- (void) gotoModelDemo
-{
   Shape* plane = ((G3MAppUserData*) [[self g3mWidget] userData])->getPlane();
   plane->setPosition(new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
                                     Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
                                     10000));
-  
-  [[self g3mWidget] widget]->setAnimatedCameraPosition(Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
-                                                                  Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
-                                                                  6000),
-                                                       TimeInterval::fromSeconds(5));
   
   plane->setAnimatedPosition(TimeInterval::fromSeconds(26),
                              Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
@@ -227,16 +268,40 @@
                      fromAzimuth,  toAzimuth,
                      fromAltitude, toAltitude);
   
-//  [[self toolbar] setVisible: FALSE];
+  [self gotoPosition: Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
+                                 Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
+                                 6000)];
 }
 
-- (void) gotoMeshDemo
+- (void) showMeshDemo
 {
-  [[self g3mWidget] widget]->setAnimatedCameraPosition(Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42),
-                                                                  Angle::fromDegreesMinutesSeconds(-77, 2, 11),
-                                                                  6700000),
-                                                       TimeInterval::fromSeconds(5));
-//  [[self toolbar] setVisible: FALSE];
+  [self setSatelliteLayerEnabled: true];
+  ((G3MAppUserData*) [[self g3mWidget] userData])->getMeshRenderer()->setEnable(true);
+  [self gotoPosition: Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
+                                 Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
+                                 6700000)];
+}
+
+- (void) showMeteoriteImpactsLayer
+{
+  ((G3MAppUserData*) [[self g3mWidget] userData])->setSatelliteLayerEnabled(false);
+  LayerSet* layerSet = ((G3MAppUserData*) [[self g3mWidget] userData])->getLayerSet();
+  
+  layerSet->getLayer("MapQuest-OSM")->setEnable(true);
+  layerSet->getLayer("CartoDB-meteoritessize")->setEnable(true);
+  layerSet->getLayer("g3m:mosaic-sst,g3m:mosaic-sla")->setEnable(true);
+  
+  
+  [[self g3mWidget] setAnimatedCameraPosition: Geodetic3D(Angle::fromDegrees(0),
+                                                          Angle::fromDegrees(0),
+                                                          25000000)
+                                 timeInterval: TimeInterval::fromSeconds(5)];
+}
+
+- (void) gotoPosition: (Geodetic3D) position
+{
+  [[self g3mWidget] setAnimatedCameraPosition: position
+                                 timeInterval: TimeInterval::fromSeconds(5)];
 }
 
 
@@ -264,10 +329,11 @@
   
   NSMutableArray *demoNames = [[NSMutableArray alloc] initWithObjects:
                                @"Simple glob3",
-                               @"Switch layer",
+                               @"Switch Layer",
                                @"Markers",
                                @"3D Model",
                                @"Point Mesh",
+                               @"Meteorite Impacts",
                                nil];
   
   [[self demoMenu] setDelegate: self];
@@ -306,50 +372,18 @@
   [[self layerSwitcher] addTarget: self
                            action: @selector(switchLayer)
                  forControlEvents: UIControlEventTouchUpInside];
-  
-  // playButton
-  [self setPlayButton: [self createToolbarButton: @"play.png"
-                                           frame: CGRectMake(10.0, 10.0, 48.0, 48.0)]];
 }
 
 - (void) updateToolbar: (NSString*) option
 {
   [[self toolbar] clear];
-  if ([option isEqual: @"Switch layer"]) {
+  if ([option isEqual: @"Switch Layer"]) {
     [[self toolbar] addSubview: [self layerSwitcher]];
     [[self toolbar] setVisible: TRUE];
   }
   else {
     [[self toolbar] setVisible: FALSE];
   }
-//  if ([option isEqual: @"Simple glob3"]) {
-//    [[self toolbar] setVisible: FALSE];
-//  }
-//  else if ([option isEqual: @"Switch layer"]) {
-//    [[self toolbar] addSubview: [self layerSwitcher]];
-//    [[self toolbar] setVisible: TRUE];
-//  }
-//  else if ([option isEqual: @"Markers"]) {
-//    [[self toolbar] addSubview: [self playButton]];
-//    [[self playButton] addTarget: self
-//                          action: @selector(gotoMarkersDemo)
-//                forControlEvents: UIControlEventTouchUpInside];
-//    [[self toolbar] setVisible: TRUE];
-//  }
-//  else if ([option isEqual: @"3D Model"]) {
-//    [[self toolbar] addSubview: [self playButton]];
-//    [[self playButton] addTarget: self
-//                          action: @selector(gotoModelDemo)
-//                forControlEvents: UIControlEventTouchUpInside];
-//    [[self toolbar] setVisible: TRUE];
-//  }
-//  else if ([option isEqual: @"Point Mesh"]) {
-//    [[self toolbar] addSubview: [self playButton]];
-//    [[self playButton] addTarget: self
-//                          action: @selector(gotoMeshDemo)
-//                forControlEvents: UIControlEventTouchUpInside];
-//    [[self toolbar] setVisible: TRUE];
-//  }
 }
 
 - (void) DropDownMenuDidChange: (NSString *) identifier
@@ -364,20 +398,20 @@
     if ([returnValue isEqual: @"Simple glob3"]) {
       [self showSimpleGlob3];
     }
-    else if ([returnValue isEqual: @"Switch layer"]) {
+    else if ([returnValue isEqual: @"Switch Layer"]) {
       [self switchLayer];
     }
     else if ([returnValue isEqual: @"Markers"]) {
-      ((G3MAppUserData*) [[self g3mWidget] userData])->getMarkerRenderer()->setEnable(true);
-      [self gotoMarkersDemo];
+      [self showMarkersDemo];
     }
     else if ([returnValue isEqual: @"3D Model"]) {
-      ((G3MAppUserData*) [[self g3mWidget] userData])->getShapeRenderer()->setEnable(true);
-      [self gotoModelDemo];
+      [self showModelDemo];
     }
     else if ([returnValue isEqual: @"Point Mesh"]) {
-      ((G3MAppUserData*) [[self g3mWidget] userData])->getMeshRenderer()->setEnable(true);
-      [self gotoMeshDemo];
+      [self showMeshDemo];
+    }
+    else if ([returnValue isEqualToString: @"Meteorite Impacts"]) {
+      [self showMeteoriteImpactsLayer];
     }
   }
 }
