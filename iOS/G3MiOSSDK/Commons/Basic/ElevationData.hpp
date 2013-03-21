@@ -9,10 +9,12 @@
 #ifndef __G3MiOSSDK__ElevationData__
 #define __G3MiOSSDK__ElevationData__
 
-class Vector2I;
 #include "Sector.hpp"
-
 #include <string>
+
+class Vector2I;
+class Mesh;
+class Ellipsoid;
 
 class ElevationData {
 protected:
@@ -48,6 +50,10 @@ public:
   virtual const std::string description(bool detailed) const = 0;
 
   virtual Vector2D getMinMaxHeights() const = 0;
+
+  virtual Mesh* createMesh(const Ellipsoid* ellipsoid,
+                           float verticalExaggeration,
+                           const Geodetic3D& positionOffset) const;
 
 };
 

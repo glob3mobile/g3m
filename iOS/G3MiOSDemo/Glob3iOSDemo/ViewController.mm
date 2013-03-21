@@ -995,104 +995,14 @@ public:
 
     ILogger::instance()->logInfo("Elevation data on %s", _sector.description().c_str());
 
-    int type;
-
-    double minHeight = elevationData->getElevationAt(_sector.lower(), &type);
-    double maxHeight = minHeight;
-
-    //    const double latStep = 0.01;
-    //    const double lonStep = 0.01;
-    //    const double latStep = (_sector.getDeltaLatitude()._degrees  / _extent._y) / 4 * 30;
-    //    const double lonStep = (_sector.getDeltaLongitude()._degrees / _extent._x) / 4 * 30;
-    //    const double latStep = (_sector.getDeltaLatitude()._degrees  / _extent._y) * 30 / 4;
-    //    const double lonStep = (_sector.getDeltaLongitude()._degrees / _extent._x) * 30 / 4;
-    const double latStep = (_sector.getDeltaLatitude()._degrees  / _extent._y);
-    const double lonStep = (_sector.getDeltaLongitude()._degrees / _extent._x);
-
-    const Geodetic2D targetLower(_sector.lower());
-    const Geodetic2D targetUpper(_sector.upper());
-
-    for (double lat = targetLower.latitude().degrees();
-         lat <= targetUpper.latitude().degrees();
-         lat += latStep) {
-      const Angle latitude(Angle::fromDegrees(lat));
-      for (double lon = targetLower.longitude().degrees();
-           lon <= targetUpper.longitude().degrees();
-           lon += lonStep) {
-        const Angle longitude(Angle::fromDegrees(lon));
-        const double height = elevationData->getElevationAt(latitude, longitude, &type);
-
-        if (height < minHeight) { minHeight = height; }
-        if (height > maxHeight) { maxHeight = height; }
-      }
-    }
-
-
-    const double deltaHeight = maxHeight - minHeight;
-
-    ILogger::instance()->logInfo("minHeight=%f maxHeight=%f delta=%f",
-                                 minHeight, maxHeight, deltaHeight);
-
-
     const Planet* planet = Planet::createEarth();
-    FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
-                                            planet,
-                                            Vector3D::zero());
-    FloatBufferBuilderFromColor colors;
+    
+    _meshRenderer->addMesh( elevationData->createMesh(planet,
+                                                      5,
+                                                      Geodetic3D::fromDegrees(0.02, 0, 0)) );
 
-    for (double lat = targetLower.latitude().degrees();
-         lat <= targetUpper.latitude().degrees();
-         lat += latStep) {
-      const Angle latitude(Angle::fromDegrees(lat));
-      for (double lon = targetLower.longitude().degrees();
-           lon <= targetUpper.longitude().degrees();
-           lon += lonStep) {
-        const Angle longitude(Angle::fromDegrees(lon));
-        const double height = elevationData->getElevationAt(latitude, longitude, &type);
-
-        const float alpha = (float) ((height - minHeight) / deltaHeight);
-
-        float r = alpha;
-        float g = alpha;
-        float b = alpha;
-        //        if (type == 1) {
-        //          g = 1;
-        //        }
-        //        else if (type == 2) {
-        //          r = 1;
-        //          g = 1;
-        //        }
-        //        else if (type == 3) {
-        //          r = 1;
-        //          b = 1;
-        //        }
-        //        else if (type == 4) {
-        //          r = 1;
-        //        }
-
-        vertices.add(latitude, longitude, 75000.0 + height * 10);
-
-        colors.add(r, g, b, 1);
-      }
-    }
-
-    const float lineWidth = 1;
-    const float pointSize = 3;
-    Color* flatColor = NULL;
-    Mesh* bilMesh = new DirectMesh(GLPrimitive::points(),
-                                   //GLPrimitive::lineStrip(),
-                                   true,
-                                   vertices.getCenter(),
-                                   vertices.create(),
-                                   lineWidth,
-                                   pointSize,
-                                   flatColor,
-                                   colors.create());
-
-    _meshRenderer->addMesh( bilMesh );
-
-    delete elevationData;
     delete planet;
+    delete elevationData;
   }
 
   void onError(const URL& url) {
@@ -1388,6 +1298,21 @@ public:
        Sector::fromDegrees(35, -6, 38, -2)),
        true);
        */
+
+      context->getDownloader()->requestBuffer(URL("file:///caceres-2008x2032.bil", false),
+                                              1000000,
+                                              TimeInterval::fromDays(30),
+                                              new Bil16Parser_IBufferDownloadListener(_shapesRenderer,
+                                                                                      _meshRenderer,
+                                                                                      Vector2I(2008, 2032),
+                                                                                      Sector::fromDegrees(
+                                                                                                          39.4642996294239623,
+                                                                                                          -6.3829977122432933,
+                                                                                                          39.4829891936013553,
+                                                                                                          -6.3645288909498845
+                                                                                                          )),
+                                              true);
+
 
       //      [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
       //                                                     Geodetic3D(Angle::fromDegrees(37.78333333),
