@@ -1020,11 +1020,11 @@ public:
 //                                                      2) );
 
     const float verticalExaggeration = 3.0f;
-    const float pointSize = 4.0f;
+    const float pointSize = 2.0f;
 
-//    const Sector subSector = _sector.shrinkedByPercent(0.33f);
-    const Sector subSector = _sector;
-    const Vector2I subResolution(128, 128);
+    const Sector subSector = _sector.shrinkedByPercent(0.6f);
+//    const Sector subSector = _sector;
+    const Vector2I subResolution(512, 512);
 
     int _DGD_working_on_terrain;
 

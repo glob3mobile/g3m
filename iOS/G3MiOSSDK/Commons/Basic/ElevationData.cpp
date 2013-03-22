@@ -50,6 +50,8 @@ Mesh* ElevationData::createMesh(const Ellipsoid* ellipsoid,
   int type = -1;
 
   for (int x = 0; x < _width; x++) {
+    const double u = (double) x / (_width  - 1);
+
     for (int y = 0; y < _height; y++) {
       const double height = getElevationAt(x, y, &type);
 
@@ -75,7 +77,6 @@ Mesh* ElevationData::createMesh(const Ellipsoid* ellipsoid,
       }
       */
 
-      const double u = (double) x / (_width  - 1);
       const double v = 1.0 - ( (double) y / (_height - 1) );
 
       const Geodetic2D position = _sector.getInnerPoint(u, v).add(positionOffset.asGeodetic2D());
