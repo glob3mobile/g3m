@@ -11,6 +11,7 @@
 #include "GLShaderAttributes.hpp"
 #include "GLShaderUniforms.hpp"
 #include "IFloatBuffer.hpp"
+#include "IGLTextureId.hpp"
 
 
 void GLState::applyChanges(const INativeGL* nativeGL, const GLState& currentState, const AttributesStruct& attributes, const UniformsStruct& uniforms) const{
@@ -104,18 +105,17 @@ void GLState::applyChanges(const INativeGL* nativeGL, const GLState& currentStat
     }
   }
   
-//  if (_textureCoordinatesScaleX != currentState._textureCoordinatesScaleX ||
-//      _textureCoordinatesScaleY != currentState._textureCoordinatesScaleY){
-//    printf("GLSTATE SCALE %f, %f\n", _textureCoordinatesScaleX, _textureCoordinatesScaleY);
-//    nativeGL->uniform2f(uniforms.ScaleTexCoord, _textureCoordinatesScaleX, _textureCoordinatesScaleY);
-//  }
+  if (_textureCoordinatesScaleX != currentState._textureCoordinatesScaleX ||
+      _textureCoordinatesScaleY != currentState._textureCoordinatesScaleY){
+    nativeGL->uniform2f(uniforms.ScaleTexCoord, _textureCoordinatesScaleX, _textureCoordinatesScaleY);
+  }
   
-//  if (_textureCoordinatesTranslationX != currentState._textureCoordinatesTranslationX ||
-//      _textureCoordinatesTranslationY != currentState._textureCoordinatesTranslationY){
-//    nativeGL->uniform2f(uniforms.TranslationTexCoord,
-//                         _textureCoordinatesTranslationX,
-//                         _textureCoordinatesTranslationY);
-//  }
+  if (_textureCoordinatesTranslationX != currentState._textureCoordinatesTranslationX ||
+      _textureCoordinatesTranslationY != currentState._textureCoordinatesTranslationY){
+    nativeGL->uniform2f(uniforms.TranslationTexCoord,
+                         _textureCoordinatesTranslationX,
+                         _textureCoordinatesTranslationY);
+  }
   
   
   // Flat Color
@@ -186,10 +186,54 @@ void GLState::applyChanges(const INativeGL* nativeGL, const GLState& currentStat
   
   //Texture (After blending factors)
   if (_boundTextureId != NULL){
-    if (_boundTextureId != currentState._boundTextureId){
+    if (currentState._boundTextureId == NULL ||
+        !_boundTextureId->isEqualsTo(currentState._boundTextureId)){
       nativeGL->bindTexture(GLTextureType::texture2D(), _boundTextureId);
+    } else{
+      //ILogger::instance()->logInfo("Texture already bound.\n");
     }
   }
-
+  
+  if (_billboarding != currentState._billboarding){
+    if (_billboarding){
+      nativeGL->uniform1i(uniforms.BillBoard, 1);
+    } else{
+      nativeGL->uniform1i(uniforms.BillBoard, 0);
+    }
+  }
+  
+  //Viewport
+  if (_viewportHeight != currentState._viewportHeight || _viewportWidth != currentState._viewportWidth){
+    nativeGL->uniform2f(uniforms.ViewPortExtent, _viewportWidth, _viewportHeight);
+  }
+  
+  //Tex parameters
+  int texture2D = GLTextureType::texture2D();
+  //if (_texParMinFilter != currentState._texParMinFilter){
+    nativeGL->texParameteri(texture2D, GLTextureParameter::minFilter(),_texParMinFilter);
+  //}
+  
+  //if (_texParMagFilter != currentState._texParMagFilter){
+    nativeGL->texParameteri(texture2D, GLTextureParameter::magFilter(),_texParMagFilter);
+  //}
+  
+  //if (_texParWrapS != currentState._texParWrapS){
+  nativeGL->texParameteri(texture2D, GLTextureParameter::wrapS(),_texParWrapS);
+  //}
+  
+  //if (_texParWrapT != currentState._texParWrapT){
+  nativeGL->texParameteri(texture2D, GLTextureParameter::wrapT(),_texParWrapT);
+  //}
+  
+  if (_pixelStoreIAlignmentUnpack != currentState._pixelStoreIAlignmentUnpack){
+    nativeGL->pixelStorei(GLAlignment::unpack(), _pixelStoreIAlignmentUnpack);
+  }
+  
+  if (_clearColorR != currentState._clearColorR ||
+      _clearColorG != currentState._clearColorG ||
+      _clearColorB != currentState._clearColorB ||
+      _clearColorA != currentState._clearColorA){
+    nativeGL->clearColor(_clearColorR, _clearColorG, _clearColorB, _clearColorA);
+  }
   
 }

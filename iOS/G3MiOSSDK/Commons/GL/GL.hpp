@@ -38,21 +38,9 @@ private:
   std::list<const IGLTextureId*> _texturesIdBag;
   long                           _texturesIdAllocationCounter;
 
-//  float _scaleX;
-//  float _scaleY;
-//  float _translationX;
-//  float _translationY;
-
   GLState *_currentState;
 
   ShaderProgram* _program;
-
-//#ifdef C_CODE
-//  const IGLTextureId* _boundTextureId;
-//#endif
-//#ifdef JAVA_CODE
-//  private IGLTextureId _boundTextureId;
-//#endif
 
   inline void loadModelView();
 
@@ -80,20 +68,9 @@ public:
   _nativeGL(nativeGL),
   _verbose(verbose),
   _texturesIdAllocationCounter(0),
-//  _scaleX(1),
-//  _scaleY(1),
-//  _translationX(0),
-//  _translationY(0),
-//  _vertices(NULL),
-//  _verticesTimestamp(0),
-//  _textureCoordinates(NULL),
-//  _textureCoordinatesTimestamp(0),
-  //_colors(NULL),
-  //_colorsTimestamp(0),
   _billboardTexCoord(NULL),
   _program(NULL),
   _currentState(NULL)
-//  _boundTextureId(NULL)
   {
     //Init Constants
     GLCullFace::init(_nativeGL);
@@ -115,11 +92,7 @@ public:
   
   IFloatBuffer* getBillboardTexCoord();
 
-//  void verticesColors(bool v);
-
   void clearScreen(float r, float g, float b, float a);
-
-//  void color(float r, float g, float b, float a);
 
   void pushMatrix();
 
@@ -140,71 +113,17 @@ public:
 
   bool useProgram(ShaderProgram* program);
 
-//  void enablePolygonOffset(float factor, float units);
-//
-//  void disablePolygonOffset();
-
   int getError();
 
   const IGLTextureId* uploadTexture(const IImage* image,
                                     int format,
                                     bool generateMipmap);
 
-//  void bindTexture(const IGLTextureId* textureId);
-
-  void startBillBoardDrawing(int viewPortWidth,
-                             int viewPortHeight);
-  void stopBillBoardDrawing();
-
+//  void startBillBoardDrawing(int viewPortWidth,
+//                             int viewPortHeight);
+//  void stopBillBoardDrawing();
 
   void deleteTexture(const IGLTextureId* textureId);
-
-  void transformTexCoords(float scaleX,
-                          float scaleY,
-                          float translationX,
-                          float translationY);
-
-  void transformTexCoords(double scaleX,
-                          double scaleY,
-                          double translationX,
-                          double translationY) {
-    if (_verbose) ILogger::instance()->logInfo("GL::transformTexCoords()");
-
-    transformTexCoords((float) scaleX,
-                       (float) scaleY,
-                       (float) translationX,
-                       (float) translationY);
-  }
-
-  void transformTexCoords(const Vector2D& scale,
-                          const Vector2D& translation) {
-    if (_verbose) ILogger::instance()->logInfo("GL::transformTexCoords()");
-
-    transformTexCoords((float) scale._x,
-                       (float) scale._y,
-                       (float) translation._x,
-                       (float) translation._y);
-  }
-
-  void transformTexCoords(const MutableVector2D& scale,
-                          const MutableVector2D& translation) {
-    if (_verbose) ILogger::instance()->logInfo("GL::transformTexCoords()");
-
-    transformTexCoords((float) scale.x(),
-                       (float) scale.y(),
-                       (float) translation.x(),
-                       (float) translation.y());
-  }
-
-
-//  void color(const Color& col) {
-//    if (_verbose) ILogger::instance()->logInfo("GL::color()");
-//
-//    color(col.getRed(),
-//          col.getGreen(),
-//          col.getBlue(),
-//          col.getAlpha());
-//  }
 
   void clearScreen(const Color& col) {
     if (_verbose) ILogger::instance()->logInfo("GL::clearScreen()");
@@ -228,11 +147,6 @@ public:
 #ifdef JAVA_CODE
     _nativeGL.dispose();
 #endif
-    
-    // GL is not owner of these buffers, it keeps a reference only for state-change-testing. NO DELETE THEM.
-    // delete _vertices;
-    // delete _textureCoordinates;
-    // delete _colors;
   }
 
   int createProgram() const {

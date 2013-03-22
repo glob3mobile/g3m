@@ -24,86 +24,6 @@
 #include "GLShaderAttributes.hpp"
 #include "GLShaderUniforms.hpp"
 
-//class UniformsStruct {
-//public:
-//
-//  IGLUniformID* Projection;
-//  IGLUniformID* Modelview;
-//  IGLUniformID* Sampler;
-//  IGLUniformID* EnableTexture;
-//  IGLUniformID* FlatColor;
-//  IGLUniformID* TranslationTexCoord;
-//  IGLUniformID* ScaleTexCoord;
-//  IGLUniformID* PointSize;
-//
-//  //FOR BILLBOARDING
-//  IGLUniformID* BillBoard;
-//  IGLUniformID* ViewPortExtent;
-//  IGLUniformID* TextureExtent;
-//
-//
-//  //FOR COLOR MIXING
-//  IGLUniformID* FlatColorIntensity;
-//  IGLUniformID* EnableColorPerVertex;
-//  IGLUniformID* EnableFlatColor;
-//  IGLUniformID* ColorPerVertexIntensity;
-//
-//  UniformsStruct() {
-//    Projection = NULL;
-//    Modelview = NULL;
-//    Sampler = NULL;
-//    EnableTexture = NULL;
-//    FlatColor = NULL;
-//    TranslationTexCoord = NULL;
-//    ScaleTexCoord = NULL;
-//    PointSize = NULL;
-//
-//    //FOR BILLBOARDING
-//    BillBoard = NULL;
-//    ViewPortExtent = NULL;
-//    TextureExtent = NULL;
-//
-//    //FOR COLOR MIXING
-//    FlatColorIntensity = NULL;
-//    EnableColorPerVertex = NULL;
-//    EnableFlatColor = NULL;
-//    ColorPerVertexIntensity = NULL;
-//  }
-//
-//  void deleteUniformsIDs(){
-//    delete Projection;
-//    delete Modelview;
-//    delete Sampler;
-//    delete EnableTexture;
-//    delete FlatColor;
-//    delete TranslationTexCoord;
-//    delete ScaleTexCoord;
-//    delete PointSize;
-//
-//    //FOR BILLBOARDING
-//    delete BillBoard;
-//    delete ViewPortExtent;
-//    delete TextureExtent;
-//
-//    //FOR COLOR MIXING
-//    delete FlatColorIntensity;
-//    delete EnableColorPerVertex;
-//    delete EnableFlatColor;
-//    delete ColorPerVertexIntensity;
-//  }
-//
-//  ~UniformsStruct(){
-//    deleteUniformsIDs();
-//  }
-//} Uniforms;
-//
-//
-//struct AttributesStruct {
-//  int Position;
-//  int TextureCoord;
-//  int Color;
-//} Attributes;
-
 struct AttributesStruct Attributes;
 struct UniformsStruct   Uniforms;
 
@@ -256,73 +176,13 @@ void GL::clearScreen(float r, float g, float b, float a) {
   if (_verbose) {
     ILogger::instance()->logInfo("GL::clearScreen()");
   }
+  
+  GLState state(*_currentState);
+  state.setClearColor(Color::fromRGBA(r, g, b, a));
 
-  _nativeGL->clearColor(r, g, b, a);
+  //_nativeGL->clearColor(r, g, b, a);
   _nativeGL->clear(GLBufferType::colorBuffer() | GLBufferType::depthBuffer());
 }
-
-//void GL::color(float r, float g, float b, float a) {
-//  if (_verbose) {
-//    ILogger::instance()->logInfo("GL::color()");
-//  }
-//
-////  if (
-////      (_flatColorR != r) ||
-////      (_flatColorG != g) ||
-////      (_flatColorB != b) ||
-////      (_flatColorA != a)
-////      ) {
-//    _nativeGL->uniform4f(Uniforms.FlatColor, r, g, b, a);
-////
-////    _flatColorR = r;
-////    _flatColorG = g;
-////    _flatColorB = b;
-////    _flatColorA = a;
-////  }
-//}
-
-void GL::transformTexCoords(float scaleX,
-                            float scaleY,
-                            float translationX,
-                            float translationY) {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::transformTexCoords()");
-  }
-
-//  if ((_scaleX != scaleX) || (_scaleY != scaleY)) {
-  //printf("GL     SCALE %f, %f\n", scaleX, scaleY);
-    _nativeGL->uniform2f(Uniforms.ScaleTexCoord,
-                         scaleX,
-                         scaleY);
-//    _scaleX = scaleX;
-//    _scaleY = scaleY;
-//  }
-
-//  if ((translationX != translationX) || (_translationY != translationY)) {
-    _nativeGL->uniform2f(Uniforms.TranslationTexCoord,
-                         translationX,
-                         translationY);
-//    _translationX = translationX;
-//    _translationY = translationY;
-//  }
-}
-
-//void GL::enablePolygonOffset(float factor, float units) {
-//  if (_verbose) {
-//    ILogger::instance()->logInfo("GL::enablePolygonOffset()");
-//  }
-//
-//  _nativeGL->enable(GLFeature::polygonOffsetFill());
-//  _nativeGL->polygonOffset(factor, units);
-//}
-//
-//void GL::disablePolygonOffset() {
-//  if (_verbose) {
-//    ILogger::instance()->logInfo("GL::disablePolygonOffset()");
-//  }
-//
-//  _nativeGL->disable(GLFeature::polygonOffsetFill());
-//}
 
 void GL::drawElements(int mode,
                       IShortBuffer* indices, const GLState& state) {
@@ -373,28 +233,19 @@ const IGLTextureId* GL::uploadTexture(const IImage* image,
   const IGLTextureId* texId = getGLTextureId();
   if (texId != NULL) {
     //_nativeGL->blendFunc(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
-    _nativeGL->pixelStorei(GLAlignment::unpack(), 1);
+    //_nativeGL->pixelStorei(GLAlignment::unpack(), 1);
     
     int texture2D = GLTextureType::texture2D();
     
     GLState state(*_currentState);
+    state.setPixelStoreIAlignmentUnpack(1);
     state.bindTexture(texId);
+    state.setTextureParameterMinFilter(GLTextureParameterValue::linear());
+    state.setTextureParameterMagFilter(GLTextureParameterValue::linear());
+    state.setTextureParameterWrapS(GLTextureParameterValue::clampToEdge());
+    state.setTextureParameterWrapT(GLTextureParameterValue::clampToEdge());
     setState(state);
-
-    //bindTexture(texId);  //Do not use _native->bind
     
-    _nativeGL->texParameteri(texture2D,
-                             GLTextureParameter::minFilter(),
-                             GLTextureParameterValue::linear());
-    _nativeGL->texParameteri(texture2D,
-                             GLTextureParameter::magFilter(),
-                             GLTextureParameterValue::linear());
-    _nativeGL->texParameteri(texture2D,
-                             GLTextureParameter::wrapS(),
-                             GLTextureParameterValue::clampToEdge());
-    _nativeGL->texParameteri(texture2D,
-                             GLTextureParameter::wrapT(),
-                             GLTextureParameterValue::clampToEdge());
     _nativeGL->texImage2D(image, format);
 
     if (generateMipmap) {
@@ -409,25 +260,6 @@ const IGLTextureId* GL::uploadTexture(const IImage* image,
 
   return texId;
 }
-
-
-//void GL::bindTexture(const IGLTextureId* textureId) {
-//  if (_verbose) {
-//    ILogger::instance()->logInfo("GL::bindTexture()");
-//  }
-//
-//  if (textureId == NULL) {
-//    ILogger::instance()->logError("Can't bind a NULL texture");
-//  }
-//  else {
-//    if ((_boundTextureId == NULL) || !_boundTextureId->isEqualsTo(textureId)) {
-//      _nativeGL->bindTexture(GLTextureType::texture2D(), textureId);
-//      _boundTextureId = textureId;
-//    } else{
-//      //ILogger::instance()->logInfo("Texture %s already bound.", textureId->description().c_str());
-//    }
-//  }
-//}
 
 IFloatBuffer* GL::getBillboardTexCoord() {
   if (_verbose) {
@@ -446,17 +278,17 @@ IFloatBuffer* GL::getBillboardTexCoord() {
   return _billboardTexCoord;
 }
 
-void GL::startBillBoardDrawing(int viewPortWidth,
-                               int viewPortHeight) {
-  _nativeGL->uniform1i(Uniforms.BillBoard, 1);
-  _nativeGL->uniform2f(Uniforms.ViewPortExtent, viewPortWidth, viewPortHeight);
-
-  //color(1, 1, 1, 1);
-}
-
-void GL::stopBillBoardDrawing() {
-  _nativeGL->uniform1i(Uniforms.BillBoard, 0);
-}
+//void GL::startBillBoardDrawing(int viewPortWidth,
+//                               int viewPortHeight) {
+//  //_nativeGL->uniform1i(Uniforms.BillBoard, 1);
+//  _nativeGL->uniform2f(Uniforms.ViewPortExtent, viewPortWidth, viewPortHeight);
+//
+//  //color(1, 1, 1, 1);
+//}
+//
+//void GL::stopBillBoardDrawing() {
+//  _nativeGL->uniform1i(Uniforms.BillBoard, 0);
+//}
 
 const IGLTextureId* GL::getGLTextureId() {
   if (_verbose) {
@@ -518,12 +350,6 @@ void GL::deleteTexture(const IGLTextureId* textureId) {
     if (_currentState->getBoundTexture() == textureId){
       _currentState->bindTexture(NULL);
     }
-
-//    if (_boundTextureId != NULL) {
-//      if (_boundTextureId->isEqualsTo(textureId)) {
-//        _boundTextureId = NULL;
-//      }
-//    }
 
     //ILogger::instance()->logInfo("  = delete textureId=%s", texture->description().c_str());
   }

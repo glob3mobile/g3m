@@ -193,18 +193,20 @@ void MarksRenderer::render(const G3MRenderContext* rc,
   Vector2D textureTranslation(0.0, 0.0);
   Vector2D textureScale(1.0, 1.0);
   
-//  state.translateTextureCoordinates(textureTranslation);
-//  state.scaleTextureCoordinates(textureScale);
-  
-  gl->transformTexCoords(textureScale, textureTranslation);
+  state.translateTextureCoordinates(textureTranslation);
+  state.scaleTextureCoordinates(textureScale);
 
   state.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
 
   const Camera* camera = rc->getCurrentCamera();
   const Vector3D cameraPosition = camera->getCartesianPosition();
+  
+  state.enableBillboarding();
+  state.setViewportSize(camera->getWidth(),
+                        camera->getHeight());
 
-  gl->startBillBoardDrawing(camera->getWidth(),
-                            camera->getHeight());
+//  gl->startBillBoardDrawing(camera->getWidth(),
+//                            camera->getHeight());
   
   state.setTextureCoordinates(gl->getBillboardTexCoord(), 2, 0);
 
@@ -218,5 +220,5 @@ void MarksRenderer::render(const G3MRenderContext* rc,
     }
   }
   
-  gl->stopBillBoardDrawing();
+//  gl->stopBillBoardDrawing();
 }

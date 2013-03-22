@@ -15,6 +15,7 @@ class IFloatBuffer;
 #include "GLConstants.hpp"
 #include "IFloatBuffer.hpp"
 #include "MutableVector2D.hpp"
+#include "MutableMatrix44D.hpp"
 #include "Vector2D.hpp"
 
 
@@ -24,6 +25,9 @@ class UniformsStruct;
 
 class GLState {
 private:
+  
+  int _stateTimeStamp;
+  
   bool _depthTest;
   bool _blend;
   bool _textures;
@@ -73,10 +77,34 @@ private:
   float _polygonOffsetFactor;
   float _polygonOffsetUnits;
   
+  //Blending Factors
   int _blendSFactor;
   int _blendDFactor;
   
+  //Billboarding
+  bool _billboarding;
+  
+  //Viewport
+  int _viewportWidth;
+  int _viewportHeight;
+  
+  //Texture Parameters
+  int _texParMinFilter;
+  int _texParMagFilter;
+  int _texParWrapS;
+  int _texParWrapT;
+  int _pixelStoreIAlignmentUnpack;
+  
+  //Clear color
+  float _clearColorR;
+  float _clearColorG;
+  float _clearColorB;
+  float _clearColorA;
+  
+  MutableMatrix44D _projectionMatrix;
+  
   GLState() :
+  _stateTimeStamp(0),
   _depthTest(true),
   _blend(false),
   _textures(false),
@@ -112,7 +140,20 @@ private:
   _textureCoordinatesScaleY(1.0),
   _textureCoordinatesTranslationX(0.0),
   _textureCoordinatesTranslationY(0.0),
-  _boundTextureId(NULL)
+  _boundTextureId(NULL),
+  _billboarding(false),
+  _viewportHeight(0),
+  _viewportWidth(0),
+  _texParMinFilter(-1),
+  _texParMagFilter(-1),
+  _texParWrapS(-1),
+  _texParWrapT(-1),
+  _pixelStoreIAlignmentUnpack(0),
+  _clearColorR(0.0),
+  _clearColorG(0.0),
+  _clearColorB(0.0),
+  _clearColorA(0.0),
+  _projectionMatrix(MutableMatrix44D::invalid())
   {
   }
   
@@ -124,6 +165,7 @@ public:
   }
   
   explicit GLState(const GLState& parentState) :
+  _stateTimeStamp(parentState._stateTimeStamp),
   _depthTest(parentState._depthTest),
   _blend(parentState._blend),
   _textures(parentState._textures),
@@ -159,34 +201,102 @@ public:
   _textureCoordinatesScaleY(parentState._textureCoordinatesScaleY),
   _textureCoordinatesTranslationX(parentState._textureCoordinatesTranslationX),
   _textureCoordinatesTranslationY(parentState._textureCoordinatesTranslationY),
-  _boundTextureId(parentState._boundTextureId)
+  _boundTextureId(parentState._boundTextureId),
+  _billboarding(parentState._billboarding),
+  _viewportWidth(parentState._viewportWidth),
+  _viewportHeight(parentState._viewportHeight),
+  _texParMinFilter(parentState._texParMinFilter),
+  _texParMagFilter(parentState._texParMagFilter),
+  _texParWrapS(parentState._texParWrapS),
+  _texParWrapT(parentState._texParWrapT),
+  _pixelStoreIAlignmentUnpack(parentState._pixelStoreIAlignmentUnpack),
+  _clearColorR(parentState._clearColorR),
+  _clearColorG(parentState._clearColorG),
+  _clearColorB(parentState._clearColorB),
+  _clearColorA(parentState._clearColorA),
+  _projectionMatrix(parentState._projectionMatrix)
   {
   }
   
   ~GLState() {}
   
-  void enableDepthTest() { _depthTest = true; }
-  void disableDepthTest() { _depthTest = false; }
+  void enableBillboarding(){
+    _billboarding = true;
+  }
+  void disableBillboarding(){
+    _billboarding = false;
+  }
+  
+  void setViewportSize(int w, int h){
+    _viewportWidth = w;
+    _viewportHeight = h;
+  }
+  
+  void enableDepthTest() {
+    if (_depthTest != true){
+      _depthTest = true;
+      _stateTimeStamp++;
+    }
+  }
+  void disableDepthTest() {
+    if (_depthTest != false){
+      _depthTest = false;
+      _stateTimeStamp++;
+    }
+  }
   bool isEnabledDepthTest() const { return _depthTest; }
   
-  void enableBlend() { _blend = true; }
-  void disableBlend() { _blend = false; }
+  void enableBlend() {
+    if (_blend != true){
+      _blend = true;
+      _stateTimeStamp++;
+    }
+  }
+  void disableBlend() {
+    if (_blend != false){
+      _blend = false;
+      _stateTimeStamp++;
+    }
+  }
   bool isEnabledBlend() const { return _blend; }
   
-  void enableTextures() { _textures = true; }
-  void disableTextures() { _textures = false; }
+  void enableTextures() {
+    if (_textures != true){
+      _textures = true;
+      _stateTimeStamp++;
+    }
+  }
+  void disableTextures() {
+    if (_textures != false){
+      _textures = false;
+      _stateTimeStamp++;
+    }
+  }
   bool isEnabledTextures() const { return _textures; }
   
-  void enableTexture2D() { _texture2D = true; }
-  void disableTexture2D() { _texture2D = false; }
+  void enableTexture2D() {
+    if (_texture2D != true){
+      _stateTimeStamp++;
+      _texture2D = true;
+    }
+  }
+  void disableTexture2D() {
+    if (_texture2D != false){
+      _texture2D = false;
+      _stateTimeStamp++;
+    }
+  }
   bool isEnabledTexture2D() const { return _texture2D; }
   
   void enableVertexColor(IFloatBuffer* colors,
                          float intensity) {
-    _vertexColor  = true;
-    _colors       = colors;
-    _intensity    = intensity;
-    _colorsTimeStamp = colors->timestamp();
+    if (colors != _colors || _vertexColor != true || _intensity != intensity || _colorsTimeStamp != colors->timestamp()){
+      _vertexColor  = true;
+      _colors       = colors;
+      _intensity    = intensity;
+      _colorsTimeStamp = colors->timestamp();
+      _stateTimeStamp++;
+    }
   }
   void disableVertexColor() { _vertexColor = false; }
   bool isEnabledVertexColor() const { return _vertexColor; }
@@ -297,6 +407,37 @@ public:
   
   const IGLTextureId* getBoundTexture() const{
     return _boundTextureId;
+  }
+  
+  void setTextureParameterMinFilter(int p){
+    _texParMinFilter = p;
+  }
+  
+  void setTextureParameterMagFilter(int p){
+    _texParMagFilter = p;
+  }
+  
+  void setTextureParameterWrapS(int p){
+    _texParWrapS = p;
+  }
+  
+  void setTextureParameterWrapT(int p){
+    _texParWrapT = p;
+  }
+  
+  void setPixelStoreIAlignmentUnpack(int p){
+    _pixelStoreIAlignmentUnpack = p;
+  }
+  
+  void setClearColor(const Color& color){
+    _clearColorR = color.getRed();
+    _clearColorG = color.getGreen();
+    _clearColorB = color.getBlue();
+    _clearColorA = color.getAlpha();
+  }
+  
+  void setProjectionMatrix(const MutableMatrix44D& projection){
+    _projectionMatrix = projection;
   }
   
   void applyChanges(const INativeGL* nativeGL, const GLState& currentState, const AttributesStruct& attributes,const UniformsStruct& uniforms) const;

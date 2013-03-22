@@ -18,10 +18,8 @@ GLState* SimpleTextureMapping::bind(const G3MRenderContext* rc, const GLState& p
   
   if (_texCoords != NULL) {
     GL* gl = rc->getGL();
-//    state.scaleTextureCoordinates(_scale);
-//    state.translateTextureCoordinates(_translation);
-
-    gl->transformTexCoords(_scale, _translation);
+    state->scaleTextureCoordinates(_scale);
+    state->translateTextureCoordinates(_translation);
     state->bindTexture(_glTextureId);
     
     state->setTextureCoordinates(_texCoords, 2, 0);  }
