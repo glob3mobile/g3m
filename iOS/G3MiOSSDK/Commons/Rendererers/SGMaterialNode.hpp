@@ -48,8 +48,8 @@ public:
     delete _specularColor;
   }
 
-  const GLState* createState(const G3MRenderContext* rc,
-                             const GLState& parentState);
+  GLState* createState(const G3MRenderContext* rc,
+                       const GLState& parentState);
 
 };
 

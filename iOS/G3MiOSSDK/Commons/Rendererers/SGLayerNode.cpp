@@ -97,7 +97,7 @@ const IGLTextureId* SGLayerNode::getTextureId(const G3MRenderContext* rc) {
   return _textureId;
 }
 
-const GLState* SGLayerNode::createState(const G3MRenderContext* rc,
+GLState* SGLayerNode::createState(const G3MRenderContext* rc,
                                         const GLState& parentState) {
   if (!_initialized) {
     _initialized = true;

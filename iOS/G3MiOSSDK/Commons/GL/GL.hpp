@@ -30,10 +30,10 @@ class GL {
 private:
   INativeGL* const _nativeGL;
 
-  MutableMatrix44D            _modelView;
+//  MutableMatrix44D            _modelView;
 
   // stack of ModelView matrices
-  std::list<MutableMatrix44D> _matrixStack;
+//  std::list<MutableMatrix44D> _matrixStack;
 
   std::list<const IGLTextureId*> _texturesIdBag;
   long                           _texturesIdAllocationCounter;
@@ -94,14 +94,6 @@ public:
 
   void clearScreen(float r, float g, float b, float a);
 
-  void pushMatrix();
-
-  void popMatrix();
-
-  void loadMatrixf(const MutableMatrix44D &m);
-
-  void multMatrixf(const MutableMatrix44D &m);
-
   void drawElements(int mode,
                     IShortBuffer* indices, const GLState& state);
 
@@ -116,10 +108,6 @@ public:
   const IGLTextureId* uploadTexture(const IImage* image,
                                     int format,
                                     bool generateMipmap);
-
-//  void startBillBoardDrawing(int viewPortWidth,
-//                             int viewPortHeight);
-//  void stopBillBoardDrawing();
 
   void deleteTexture(const IGLTextureId* textureId);
 

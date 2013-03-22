@@ -11,18 +11,8 @@
 #include "Context.hpp"
 #include "GL.hpp"
 
-void SGTranslateNode::prepareRender(const G3MRenderContext* rc) {
-  GL* gl = rc->getGL();
-
-  gl->pushMatrix();
-  gl->multMatrixf(MutableMatrix44D::createTranslationMatrix(_x, _y, _z));
-
-  SGNode::prepareRender(rc);
+void SGTranslateNode::prepareRender(const G3MRenderContext* rc, GLState& state) {
+  state.multiplyModelViewMatrix(MutableMatrix44D::createTranslationMatrix(_x, _y, _z));
+  SGNode::prepareRender(rc, state);
 }
 
-void SGTranslateNode::cleanUpRender(const G3MRenderContext* rc) {
-  GL* gl = rc->getGL();
-  gl->popMatrix();
-
-  SGNode::cleanUpRender(rc);
-}

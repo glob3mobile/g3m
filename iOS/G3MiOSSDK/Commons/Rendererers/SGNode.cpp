@@ -55,20 +55,20 @@ bool SGNode::isReadyToRender(const G3MRenderContext* rc) {
   return true;
 }
 
-void SGNode::prepareRender(const G3MRenderContext* rc) {
+void SGNode::prepareRender(const G3MRenderContext* rc, GLState& parentState) {
 
 }
 
-void SGNode::cleanUpRender(const G3MRenderContext* rc) {
-
-}
+//void SGNode::cleanUpRender(const G3MRenderContext* rc) {
+//
+//}
 
 void SGNode::rawRender(const G3MRenderContext* rc,
                        const GLState& parentState) {
 
 }
 
-const GLState* SGNode::createState(const G3MRenderContext* rc,
+GLState* SGNode::createState(const G3MRenderContext* rc,
                                    const GLState& parentState) {
   return  NULL;
 }
@@ -76,16 +76,16 @@ const GLState* SGNode::createState(const G3MRenderContext* rc,
 
 void SGNode::render(const G3MRenderContext* rc,
                     const GLState& parentState) {
-  const GLState* myState = createState(rc, parentState);
-  const GLState* state;
+  GLState* myState = createState(rc, parentState);
+  GLState* state;
   if (myState == NULL) {
-    state = &parentState;
+    state = new GLState(parentState);
   }
   else {
     state = myState;
   }
 
-  prepareRender(rc);
+  prepareRender(rc, *state);
 
   rawRender(rc, *state);
 
@@ -95,7 +95,7 @@ void SGNode::render(const G3MRenderContext* rc,
     child->render(rc, *state);
   }
 
-  cleanUpRender(rc);
+  //cleanUpRender(rc);
   
   delete myState;
 }

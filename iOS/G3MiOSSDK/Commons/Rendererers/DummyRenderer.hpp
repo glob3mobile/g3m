@@ -13,19 +13,27 @@
 
 class IFloatBuffer;
 class IShortBuffer;
+class GL;
+class Color;
+class Angle;
+class Vector3D;
+
 
 class DummyRenderer: public LeafRenderer {
-
+  
 private:
   double        _halfSize;
-
+  
   IShortBuffer* _indices;
   IFloatBuffer* _vertices;
-
+  
+  void drawFace(GL* gl, const GLState& parentState,
+                const Color& color, const Vector3D& translation, const Angle& a, const Vector3D& rotationAxis) const;
+  
 public:
   ~DummyRenderer();
   
-  void initialize(const G3MContext* context);  
+  void initialize(const G3MContext* context);
   
   void render(const G3MRenderContext* rc,
               const GLState& parentState);
@@ -35,13 +43,13 @@ public:
   
   void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height) {
-
+    
   }
   
   bool isReadyToRender(const G3MRenderContext* rc) {
     return true;
   }
-
+  
   void start(const G3MRenderContext* rc) {
     
   }
@@ -49,7 +57,7 @@ public:
   void stop(const G3MRenderContext* rc) {
     
   }
-
+  
   void onResume(const G3MContext* context) {
     
   }
@@ -57,11 +65,11 @@ public:
   void onPause(const G3MContext* context) {
     
   }
-
+  
   void onDestroy(const G3MContext* context) {
-
+    
   }
-
+  
 };
 
 #endif

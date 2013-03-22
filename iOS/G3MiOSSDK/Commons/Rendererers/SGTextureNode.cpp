@@ -31,21 +31,21 @@ bool SGTextureNode::isReadyToRender(const G3MRenderContext* rc) {
   return SGNode::isReadyToRender(rc);
 }
 
-void SGTextureNode::prepareRender(const G3MRenderContext* rc) {
+void SGTextureNode::prepareRender(const G3MRenderContext* rc, GLState& parentState) {
   const int layersCount = _layers.size();
   for (int i = 0; i < layersCount; i++) {
     SGLayerNode* layer = _layers[i];
-    layer->prepareRender(rc);
+    layer->prepareRender(rc, parentState);
   }
 }
 
-void SGTextureNode::cleanUpRender(const G3MRenderContext* rc) {
-  const int layersCount = _layers.size();
-  for (int i = 0; i < layersCount; i++) {
-    SGLayerNode* layer = _layers[i];
-    layer->cleanUpRender(rc);
-  }
-}
+//void SGTextureNode::cleanUpRender(const G3MRenderContext* rc) {
+//  const int layersCount = _layers.size();
+//  for (int i = 0; i < layersCount; i++) {
+//    SGLayerNode* layer = _layers[i];
+//    layer->cleanUpRender(rc);
+//  }
+//}
 
 //void SGTextureNode::rawRender(const G3MRenderContext* rc,
 //                              const GLState& parentState) {
@@ -89,16 +89,16 @@ SGTextureNode::~SGTextureNode() {
 
 void SGTextureNode::render(const G3MRenderContext* rc,
                            const GLState& parentState) {
-  const GLState* myState = createState(rc, parentState);
-  const GLState* state2;
+  GLState* myState = createState(rc, parentState);
+  GLState* state2;
   if (myState == NULL) {
-    state2 = &parentState;
+    state2 = new GLState(parentState);
   }
   else {
     state2 = myState;
   }
 
-  prepareRender(rc);
+  prepareRender(rc, *state2);
 
   //  rawRender(rc, *state);
 

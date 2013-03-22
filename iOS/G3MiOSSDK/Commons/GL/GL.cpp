@@ -14,11 +14,9 @@
 #include "Vector3D.hpp"
 #include "Vector2D.hpp"
 #include "INativeGL.hpp"
-//#include "IIntBuffer.hpp"
 #include "IShortBuffer.hpp"
 #include "IFactory.hpp"
 #include "FloatBufferBuilderFromCartesian2D.hpp"
-//#include "IGLUniformID.hpp"
 #include "IGLTextureId.hpp"
 
 #include "GLShaderAttributes.hpp"
@@ -113,54 +111,6 @@ bool GL::useProgram(ShaderProgram* program) {
   return !_errorGettingLocationOcurred;
 }
 
-void GL::loadModelView() {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::loadModelView()");
-  }
-
-  _nativeGL->uniformMatrix4fv(Uniforms.Modelview,
-                              false,
-                              &_modelView);
-}
-
-void GL::loadMatrixf(const MutableMatrix44D &modelView) {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::loadMatrixf()");
-  }
-
-  _modelView = modelView;
-
-  loadModelView();
-}
-
-void GL::multMatrixf(const MutableMatrix44D &m) {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::multMatrixf()");
-  }
-
-  _modelView = _modelView.multiply(m);
-
-  loadModelView();
-}
-
-void GL::popMatrix() {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::popMatrix()");
-  }
-
-  _modelView = _matrixStack.back();
-  _matrixStack.pop_back();
-
-  loadModelView();
-}
-
-void GL::pushMatrix() {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::pushMatrix()");
-  }
-
-  _matrixStack.push_back(_modelView);
-}
 
 void GL::clearScreen(float r, float g, float b, float a) {
   if (_verbose) {
@@ -169,8 +119,6 @@ void GL::clearScreen(float r, float g, float b, float a) {
   
   GLState state(*_currentState);
   state.setClearColor(Color::fromRGBA(r, g, b, a));
-
-  //_nativeGL->clearColor(r, g, b, a);
   _nativeGL->clear(GLBufferType::colorBuffer() | GLBufferType::depthBuffer());
 }
 

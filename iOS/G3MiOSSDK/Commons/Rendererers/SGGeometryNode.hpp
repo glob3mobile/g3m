@@ -49,7 +49,7 @@ public:
   void rawRender(const G3MRenderContext* rc,
                  const GLState& parentState);
 
-  const GLState* createState(const G3MRenderContext* rc,
+  GLState* createState(const G3MRenderContext* rc,
                              const GLState& parentState) {
     return NULL;
   }

@@ -99,8 +99,7 @@ void BusyMeshRenderer::render(const G3MRenderContext* rc,
                                                                             -halfHeight, halfHeight,
                                                                             -halfWidth, halfWidth);
   state.setProjectionMatrix(M);
-  //gl->setProjection(M);
-  gl->loadMatrixf(MutableMatrix44D::identity());
+  state.setModelViewMatrix(MutableMatrix44D::identity());
 
   // clear screen
   gl->clearScreen(_backgroundColor->getRed(),
@@ -108,12 +107,9 @@ void BusyMeshRenderer::render(const G3MRenderContext* rc,
                   _backgroundColor->getBlue(),
                   _backgroundColor->getAlpha());
 
-  gl->pushMatrix();
   MutableMatrix44D R1 = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, -1));
-  gl->multMatrixf(R1);
+  state.multiplyModelViewMatrix(R1);
 
   // draw mesh
   _mesh->render(rc, state);
-  
-  gl->popMatrix();
 }

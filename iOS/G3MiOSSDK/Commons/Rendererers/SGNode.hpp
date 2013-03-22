@@ -21,13 +21,13 @@ class SGNode {
 protected:
   const std::string _id;
   const std::string _sId;
-
-//  SGNode*              _parent;
+  
+  //  SGNode*              _parent;
   std::vector<SGNode*> _children;
-
-
-//  void setParent(SGNode* parent);
-
+  
+  
+  //  void setParent(SGNode* parent);
+  
 protected:
 #ifdef C_CODE
   const G3MContext* _context;
@@ -35,54 +35,54 @@ protected:
 #ifdef JAVA_CODE
   protected G3MContext _context;
 #endif
-
+  
   SGShape *_shape;
-
+  
 public:
-
+  
   SGNode(const std::string& id,
          const std::string& sId) :
   _id(id),
   _sId(sId),
   _context(NULL),
   _shape(NULL)
-//  _parent(NULL)
+  //  _parent(NULL)
   {
-
+    
   }
-
+  
   virtual ~SGNode();
-
+  
   virtual void initialize(const G3MContext* context,
                           SGShape *shape);
-
+  
   void addNode(SGNode* child);
-
+  
   virtual bool isReadyToRender(const G3MRenderContext* rc);
-
-  virtual void prepareRender(const G3MRenderContext* rc);
-
-  virtual void cleanUpRender(const G3MRenderContext* rc);
-
+  
+  virtual void prepareRender(const G3MRenderContext* rc, GLState& parentState);
+  
+  //  virtual void cleanUpRender(const G3MRenderContext* rc);
+  
   virtual void rawRender(const G3MRenderContext* rc,
                          const GLState& parentState);
-
+  
   virtual void render(const G3MRenderContext* rc,
                       const GLState& parentState);
-
-//  SGShape* getShape() const {
-//    if (_shape != NULL) {
-//      return _shape;
-//    }
-//    if (_parent != NULL) {
-//      return _parent->getShape();
-//    }
-//    return NULL;
-//  }
-
-  virtual const GLState* createState(const G3MRenderContext* rc,
-                                     const GLState& parentState);
-
+  
+  //  SGShape* getShape() const {
+  //    if (_shape != NULL) {
+  //      return _shape;
+  //    }
+  //    if (_parent != NULL) {
+  //      return _parent->getShape();
+  //    }
+  //    return NULL;
+  //  }
+  
+  virtual GLState* createState(const G3MRenderContext* rc,
+                               const GLState& parentState);
+  
 };
 
 #endif

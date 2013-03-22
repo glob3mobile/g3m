@@ -92,16 +92,10 @@ void Shape::render(const G3MRenderContext* rc,
       _pendingEffects.clear();
     }
 
+    GLState state(parentState);
+    state.multiplyModelViewMatrix(*getTransformMatrix( rc->getPlanet() ) );
 
-    GL* gl = rc->getGL();
-
-    gl->pushMatrix();
-
-    gl->multMatrixf( *getTransformMatrix( rc->getPlanet() ) );
-
-    rawRender(rc, parentState);
-
-    gl->popMatrix();
+    rawRender(rc, state);
   }
 }
 
