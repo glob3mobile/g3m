@@ -67,12 +67,23 @@ class ExportSceneJS(bpy.types.Operator, ExportHelper):
             )
     
     group_by = EnumProperty(
-        name="Group by",
+        name='Group by',
         description="Select the option to group by",
-        items=(('OMG', "obj/mat/geom", ""),
-               ('MG',  "mat/geom",     ""),
+        items=(('OMG',  'obj/mat/geom', ''),
+               ('MG',   'mat/geom',     ''),
         ),
         default='MG',
+    )
+    
+    vertices_range = EnumProperty(
+        name='Vertices Range',
+        description='Select the vertices range',
+        items=(('uint',     'uint',     ''),
+               ('int',      'int',      ''),
+               ('ushort',   'ushort',   ''),
+               ('short',    'short',    ''),
+        ),
+        default='short',
     )
 
     # context group
