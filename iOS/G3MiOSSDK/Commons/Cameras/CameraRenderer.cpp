@@ -70,3 +70,7 @@ bool CameraRenderer::onTouchEvent(const G3MEventContext* ec,
   // if no handler processed the event, return not-handled
   return false;
 }
+
+void CameraRenderer::changeGLState(const G3MRenderContext* rc, GLState* state) const{
+  rc->getCurrentCamera()->changeGLState(state);
+}

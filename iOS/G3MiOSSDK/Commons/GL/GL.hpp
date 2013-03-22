@@ -109,8 +109,6 @@ public:
                   int first,
                   int count, const GLState& state);
 
-  void setProjection(const MutableMatrix44D &projection);
-
   bool useProgram(ShaderProgram* program);
 
   int getError();

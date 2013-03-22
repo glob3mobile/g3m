@@ -205,9 +205,6 @@ void MarksRenderer::render(const G3MRenderContext* rc,
   state.setViewportSize(camera->getWidth(),
                         camera->getHeight());
 
-//  gl->startBillBoardDrawing(camera->getWidth(),
-//                            camera->getHeight());
-  
   state.setTextureCoordinates(gl->getBillboardTexCoord(), 2, 0);
 
   const int marksSize = _marks.size();
@@ -219,6 +216,4 @@ void MarksRenderer::render(const G3MRenderContext* rc,
       mark->render(rc, cameraPosition, state);
     }
   }
-  
-//  gl->stopBillBoardDrawing();
 }

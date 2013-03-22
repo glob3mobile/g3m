@@ -152,6 +152,8 @@ public:
 
   void render(const G3MRenderContext* rc,
               const GLState& parentState) const;
+  
+  void changeGLState(GLState* state) const;
 
   Vector3D pixel2Ray(const Vector2I& pixel) const;
 

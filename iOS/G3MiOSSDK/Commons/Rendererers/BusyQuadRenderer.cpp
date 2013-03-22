@@ -115,7 +115,10 @@ void BusyQuadRenderer::render(const G3MRenderContext* rc,
   MutableMatrix44D M = MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth, halfWidth,
                                                                             -halfHeight, halfHeight,
                                                                             -halfWidth, halfWidth);
-  gl->setProjection(M);
+  
+  state.setProjectionMatrix(M);
+  
+  //gl->setProjection(M);
   gl->loadMatrixf(MutableMatrix44D::identity());
 
   // clear screen

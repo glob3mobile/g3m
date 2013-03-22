@@ -123,16 +123,6 @@ void GL::loadModelView() {
                               &_modelView);
 }
 
-void GL::setProjection(const MutableMatrix44D &projection) {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::setProjection()");
-  }
-
-  _nativeGL->uniformMatrix4fv(Uniforms.Projection,
-                              false,
-                              &projection);
-}
-
 void GL::loadMatrixf(const MutableMatrix44D &modelView) {
   if (_verbose) {
     ILogger::instance()->logInfo("GL::loadMatrixf()");
@@ -232,9 +222,6 @@ const IGLTextureId* GL::uploadTexture(const IImage* image,
 
   const IGLTextureId* texId = getGLTextureId();
   if (texId != NULL) {
-    //_nativeGL->blendFunc(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
-    //_nativeGL->pixelStorei(GLAlignment::unpack(), 1);
-    
     int texture2D = GLTextureType::texture2D();
     
     GLState state(*_currentState);
@@ -277,18 +264,6 @@ IFloatBuffer* GL::getBillboardTexCoord() {
 
   return _billboardTexCoord;
 }
-
-//void GL::startBillBoardDrawing(int viewPortWidth,
-//                               int viewPortHeight) {
-//  //_nativeGL->uniform1i(Uniforms.BillBoard, 1);
-//  _nativeGL->uniform2f(Uniforms.ViewPortExtent, viewPortWidth, viewPortHeight);
-//
-//  //color(1, 1, 1, 1);
-//}
-//
-//void GL::stopBillBoardDrawing() {
-//  _nativeGL->uniform1i(Uniforms.BillBoard, 0);
-//}
 
 const IGLTextureId* GL::getGLTextureId() {
   if (_verbose) {
@@ -356,11 +331,8 @@ void GL::deleteTexture(const IGLTextureId* textureId) {
 }
 
 void GL::setState(const GLState& state) {
-  
+  //Changes current State and calls OpenGL API
   state.applyChanges(_nativeGL, *_currentState, Attributes, Uniforms);
-  delete _currentState;
-  _currentState = new GLState(state);
-  
 }
 
 void GL::setTexExtent(float w, float h){

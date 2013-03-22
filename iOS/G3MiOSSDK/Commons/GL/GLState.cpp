@@ -14,7 +14,7 @@
 #include "IGLTextureId.hpp"
 
 
-void GLState::applyChanges(const INativeGL* nativeGL, const GLState& currentState, const AttributesStruct& attributes, const UniformsStruct& uniforms) const{
+void GLState::applyChanges(const INativeGL* nativeGL, GLState& currentState, const AttributesStruct& attributes, const UniformsStruct& uniforms) const{
   
   // Depth Testh
   if (_depthTest != currentState._depthTest) {
@@ -24,6 +24,7 @@ void GLState::applyChanges(const INativeGL* nativeGL, const GLState& currentStat
     else {
       nativeGL->disable(GLFeature::depthTest());
     }
+    currentState._depthTest = _depthTest;
   }
   
   // Blending
@@ -34,6 +35,7 @@ void GLState::applyChanges(const INativeGL* nativeGL, const GLState& currentStat
     else {
       nativeGL->disable(GLFeature::blend());
     }
+    currentState._blend = _blend;
   }
   
   // Textures
@@ -44,6 +46,7 @@ void GLState::applyChanges(const INativeGL* nativeGL, const GLState& currentStat
     else {
       nativeGL->disableVertexAttribArray(attributes.TextureCoord);
     }
+    currentState._textures = _textures;
   }
   
   // Texture2D
@@ -54,6 +57,7 @@ void GLState::applyChanges(const INativeGL* nativeGL, const GLState& currentStat
     else {
       nativeGL->uniform1i(uniforms.EnableTexture, 0);
     }
+    currentState._texture2D = _texture2D;
   }
   
   // VertexColor
@@ -65,10 +69,13 @@ void GLState::applyChanges(const INativeGL* nativeGL, const GLState& currentStat
       nativeGL->disableVertexAttribArray(attributes.Color);
       nativeGL->uniform1i(uniforms.EnableColorPerVertex, 0);
     }
+    currentState._vertexColor = _vertexColor;
   }
   if (_vertexColor) {
     if ((_colors != currentState._colors) || (_colorsTimeStamp != currentState._colorsTimeStamp)) {
       nativeGL->vertexAttribPointer(attributes.Color, 4, false, 0, _colors);
+      currentState._colors = _colors;
+      currentState._colorsTimeStamp = _colorsTimeStamp;
     }
   }
   
@@ -78,19 +85,22 @@ void GLState::applyChanges(const INativeGL* nativeGL, const GLState& currentStat
     if ((_vertices != currentState._vertices) || (_verticesTimestamp != currentState._verticesTimestamp) ||
         (_verticesSize != currentState._verticesSize) || (_verticesStride != currentState._verticesStride)  ) {
       nativeGL->vertexAttribPointer(attributes.Position, _verticesSize, false, _verticesStride, _vertices);
+      currentState._vertices = _vertices;
+      currentState._verticesTimestamp = _verticesTimestamp;
+      currentState._verticesSize = _verticesSize;
+      currentState._verticesStride = _verticesStride;
     }
   }
-  
   
   // Vertices Position
   if (_verticesPosition != currentState._verticesPosition) {
     if (_verticesPosition) {
       nativeGL->enableVertexAttribArray(attributes.Position);
-      
     }
     else {
       nativeGL->disableVertexAttribArray(attributes.Position);
     }
+    currentState._verticesPosition = _verticesPosition;
   }
   
   //Texture Coordinates
@@ -102,19 +112,30 @@ void GLState::applyChanges(const INativeGL* nativeGL, const GLState& currentStat
       nativeGL->vertexAttribPointer(attributes.TextureCoord,
                                     _textureCoordinatesSize, false,
                                     _textureCoordinatesStride, _textureCoordinates);
+      
+      currentState._textureCoordinates = _textureCoordinates;
+      currentState._textureCoordinatesTimestamp = _textureCoordinatesTimestamp;
+      currentState._textureCoordinatesSize = _textureCoordinatesSize;
+      currentState._textureCoordinatesStride = _textureCoordinatesStride;
     }
   }
   
   if (_textureCoordinatesScaleX != currentState._textureCoordinatesScaleX ||
       _textureCoordinatesScaleY != currentState._textureCoordinatesScaleY){
     nativeGL->uniform2f(uniforms.ScaleTexCoord, _textureCoordinatesScaleX, _textureCoordinatesScaleY);
+    
+    currentState._textureCoordinatesScaleX = _textureCoordinatesScaleX;
+    currentState._textureCoordinatesScaleY = _textureCoordinatesScaleY;
   }
   
   if (_textureCoordinatesTranslationX != currentState._textureCoordinatesTranslationX ||
       _textureCoordinatesTranslationY != currentState._textureCoordinatesTranslationY){
     nativeGL->uniform2f(uniforms.TranslationTexCoord,
-                         _textureCoordinatesTranslationX,
-                         _textureCoordinatesTranslationY);
+                        _textureCoordinatesTranslationX,
+                        _textureCoordinatesTranslationY);
+    
+    currentState._textureCoordinatesTranslationX = _textureCoordinatesTranslationX;
+    currentState._textureCoordinatesTranslationY = _textureCoordinatesTranslationY;
   }
   
   
@@ -126,6 +147,7 @@ void GLState::applyChanges(const INativeGL* nativeGL, const GLState& currentStat
     else {
       nativeGL->uniform1i(uniforms.EnableFlatColor, 0);
     }
+    currentState._flatColor = _flatColor;
   }
   
   if (_flatColor) {
@@ -135,19 +157,28 @@ void GLState::applyChanges(const INativeGL* nativeGL, const GLState& currentStat
         (_flatColorA != currentState._flatColorA)
         ) {
       nativeGL->uniform4f(uniforms.FlatColor, _flatColorR, _flatColorG, _flatColorB,_flatColorA);
+      
+      currentState._flatColorR = _flatColorR;
+      currentState._flatColorG = _flatColorG;
+      currentState._flatColorB = _flatColorB;
+      currentState._flatColorA = _flatColorA;
     }
     
     if (_intensity != currentState._intensity) {
       nativeGL->uniform1f(uniforms.FlatColorIntensity, _intensity);
+      
+      currentState._intensity = _intensity;
     }
   }
   
   // Cull Face
   if (_cullFace != currentState._cullFace) {
+    currentState._cullFace = _cullFace;
     if (_cullFace) {
       nativeGL->enable(GLFeature::cullFace());
       if (_culledFace != currentState._culledFace) {
         nativeGL->cullFace(_culledFace);
+        currentState._culledFace = _culledFace;
       }
     }
     else {
@@ -157,21 +188,27 @@ void GLState::applyChanges(const INativeGL* nativeGL, const GLState& currentStat
   
   if (_lineWidth != currentState._lineWidth) {
     nativeGL->lineWidth(_lineWidth);
+    currentState._lineWidth = _cullFace;
   }
   
   if (_pointSize != currentState._pointSize) {
     nativeGL->uniform1f(uniforms.PointSize, _pointSize);
+    currentState._pointSize = _pointSize;
   }
   
   
   //Polygon Offset
   if (_polygonOffsetFill != currentState._polygonOffsetFill){
+    currentState._polygonOffsetFill = _polygonOffsetFill;
     if (_polygonOffsetFill){
       nativeGL->enable(GLFeature::polygonOffsetFill());
       
       if (_polygonOffsetFactor != currentState._polygonOffsetFactor ||
           _polygonOffsetUnits != currentState._polygonOffsetUnits){
         nativeGL->polygonOffset(_polygonOffsetFactor, _polygonOffsetUnits);
+        
+        currentState._polygonOffsetUnits = _polygonOffsetUnits;
+        currentState._polygonOffsetFactor = _polygonOffsetFactor;
       }
       
     } else{
@@ -182,6 +219,8 @@ void GLState::applyChanges(const INativeGL* nativeGL, const GLState& currentStat
   //Blending Factors
   if (_blendDFactor != currentState._blendDFactor || _blendSFactor != currentState._blendSFactor){
     nativeGL->blendFunc(_blendSFactor, _blendDFactor);
+    currentState._blendDFactor = _blendDFactor;
+    currentState._blendSFactor = _blendSFactor;
   }
   
   //Texture (After blending factors)
@@ -189,6 +228,8 @@ void GLState::applyChanges(const INativeGL* nativeGL, const GLState& currentStat
     if (currentState._boundTextureId == NULL ||
         !_boundTextureId->isEqualsTo(currentState._boundTextureId)){
       nativeGL->bindTexture(GLTextureType::texture2D(), _boundTextureId);
+      
+      currentState._boundTextureId = _boundTextureId;
     } else{
       //ILogger::instance()->logInfo("Texture already bound.\n");
     }
@@ -200,33 +241,42 @@ void GLState::applyChanges(const INativeGL* nativeGL, const GLState& currentStat
     } else{
       nativeGL->uniform1i(uniforms.BillBoard, 0);
     }
+    currentState._billboarding = _billboarding;
   }
   
   //Viewport
   if (_viewportHeight != currentState._viewportHeight || _viewportWidth != currentState._viewportWidth){
     nativeGL->uniform2f(uniforms.ViewPortExtent, _viewportWidth, _viewportHeight);
+    
+    currentState._viewportWidth = _viewportWidth;
+    currentState._viewportHeight = _viewportHeight;
   }
   
   //Tex parameters
   int texture2D = GLTextureType::texture2D();
   //if (_texParMinFilter != currentState._texParMinFilter){
-    nativeGL->texParameteri(texture2D, GLTextureParameter::minFilter(),_texParMinFilter);
+  nativeGL->texParameteri(texture2D, GLTextureParameter::minFilter(),_texParMinFilter);
+  currentState._texParMinFilter = _texParMinFilter;
   //}
   
   //if (_texParMagFilter != currentState._texParMagFilter){
-    nativeGL->texParameteri(texture2D, GLTextureParameter::magFilter(),_texParMagFilter);
+  nativeGL->texParameteri(texture2D, GLTextureParameter::magFilter(),_texParMagFilter);
+  currentState._texParMagFilter = _texParMagFilter;
   //}
   
   //if (_texParWrapS != currentState._texParWrapS){
   nativeGL->texParameteri(texture2D, GLTextureParameter::wrapS(),_texParWrapS);
+  currentState._texParWrapS = _texParWrapS;
   //}
   
   //if (_texParWrapT != currentState._texParWrapT){
   nativeGL->texParameteri(texture2D, GLTextureParameter::wrapT(),_texParWrapT);
+  currentState._texParWrapT = _texParWrapT;
   //}
   
   if (_pixelStoreIAlignmentUnpack != currentState._pixelStoreIAlignmentUnpack){
     nativeGL->pixelStorei(GLAlignment::unpack(), _pixelStoreIAlignmentUnpack);
+    currentState._pixelStoreIAlignmentUnpack = _pixelStoreIAlignmentUnpack;
   }
   
   if (_clearColorR != currentState._clearColorR ||
@@ -234,6 +284,22 @@ void GLState::applyChanges(const INativeGL* nativeGL, const GLState& currentStat
       _clearColorB != currentState._clearColorB ||
       _clearColorA != currentState._clearColorA){
     nativeGL->clearColor(_clearColorR, _clearColorG, _clearColorB, _clearColorA);
+    currentState._clearColorR = _clearColorR;
+    currentState._clearColorG = _clearColorG;
+    currentState._clearColorB = _clearColorB;
+    currentState._clearColorA = _clearColorA;
+  }
+  
+  //Projection
+  if (!_projectionMatrix.isEqualsTo(currentState._projectionMatrix)){
+    nativeGL->uniformMatrix4fv(uniforms.Projection, false, &_projectionMatrix);
+    currentState._projectionMatrix = _projectionMatrix;
+  }
+  
+  //Modelview
+  if (!_modelViewMatrix.isEqualsTo(currentState._modelViewMatrix)){
+    nativeGL->uniformMatrix4fv(uniforms.Modelview, false, &_modelViewMatrix);
+    currentState._modelViewMatrix = _modelViewMatrix;
   }
   
 }

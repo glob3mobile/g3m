@@ -17,6 +17,7 @@ class IFloatBuffer;
 #include "MutableVector2D.hpp"
 #include "MutableMatrix44D.hpp"
 #include "Vector2D.hpp"
+#include <list.h>
 
 
 class GL;
@@ -102,6 +103,8 @@ private:
   float _clearColorA;
   
   MutableMatrix44D _projectionMatrix;
+  MutableMatrix44D _modelViewMatrix;
+  
   
   GLState() :
   _stateTimeStamp(0),
@@ -153,7 +156,8 @@ private:
   _clearColorG(0.0),
   _clearColorB(0.0),
   _clearColorA(0.0),
-  _projectionMatrix(MutableMatrix44D::invalid())
+  _projectionMatrix(MutableMatrix44D::invalid()),
+  _modelViewMatrix(MutableMatrix44D::invalid())
   {
   }
   
@@ -214,7 +218,8 @@ public:
   _clearColorG(parentState._clearColorG),
   _clearColorB(parentState._clearColorB),
   _clearColorA(parentState._clearColorA),
-  _projectionMatrix(parentState._projectionMatrix)
+  _projectionMatrix(parentState._projectionMatrix),
+  _modelViewMatrix(parentState._modelViewMatrix)
   {
   }
   
@@ -440,7 +445,15 @@ public:
     _projectionMatrix = projection;
   }
   
-  void applyChanges(const INativeGL* nativeGL, const GLState& currentState, const AttributesStruct& attributes,const UniformsStruct& uniforms) const;
+  void setModelViewMatrix(const MutableMatrix44D& mv){
+    _modelViewMatrix = mv;
+  }
+  
+  void multiplyModelViewMatrix(const MutableMatrix44D& mv){
+    _modelViewMatrix = _modelViewMatrix.multiply(mv);
+  }
+  
+  void applyChanges(const INativeGL* nativeGL, GLState& currentState, const AttributesStruct& attributes,const UniformsStruct& uniforms) const;
   
 };
 
