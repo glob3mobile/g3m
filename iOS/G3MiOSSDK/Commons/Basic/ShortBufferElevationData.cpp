@@ -56,3 +56,31 @@ const std::string ShortBufferElevationData::description(bool detailed) const {
   delete isb;
   return s;
 }
+
+Vector2D ShortBufferElevationData::getMinMaxHeights() const {
+  const IMathUtils* mu = IMathUtils::instance();
+  short minHeight = mu->maxInt16();
+  short maxHeight = mu->minInt16();
+
+  const int bufferSize = _buffer->size();
+  for (int i = 0; i < bufferSize; i++) {
+    const short height = _buffer->get(i);
+//    if (height != _noDataValue) {
+    if (height < minHeight) {
+      minHeight = height;
+    }
+    if (height > maxHeight) {
+      maxHeight = height;
+    }
+//    }
+  }
+
+  if (minHeight == mu->maxInt16()) {
+    minHeight = 0;
+  }
+  if (maxHeight == mu->minInt16()) {
+    maxHeight = 0;
+  }
+
+  return Vector2D(minHeight, maxHeight);
+}

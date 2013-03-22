@@ -224,6 +224,7 @@ private:
   const GLState* _rootState;
 
   bool _initializationTaskWasRun;
+  bool _initializationTaskReady;
 
   bool _clickOnProcess;
 

@@ -96,6 +96,9 @@ public abstract class IMathUtils
   public abstract double log(double v);
   public abstract float log(float v);
 
+  public abstract short maxInt16();
+  public abstract short minInt16();
+
   public abstract int maxInt32();
   public abstract int minInt32();
 
@@ -132,6 +135,9 @@ public abstract class IMathUtils
 
   public abstract double floor(double d);
   public abstract float floor(float f);
+
+  public abstract double ceil(double d);
+  public abstract float ceil(float f);
 
   public double linearInterpolation(double from, double to, double alpha)
   {

@@ -31,30 +31,23 @@ private:
   const int _resolutionHeight;
   const double _noDataValue;
 
-  
-  void drainQueue() {
-    int _WORKING;
-  }
+
+  void drainQueue();
 
   const long long queueRequest(const Sector& sector,
                                const Vector2I& resolution,
                                IElevationDataListener* listener,
-                               bool autodeleteListener) {
-    int _WORKING;
-    return -1;
-  }
+                               bool autodeleteListener);
 
-  void removeQueueRequest(const long long requestId) {
-    int _WORKING;
-  }
-  
+  void removeQueueRequest(const long long requestId);
+
 
 public:
   SingleBillElevationDataProvider(const URL& bilUrl,
                                   const Sector& sector,
                                   const Vector2I& resolution,
                                   const double noDataValue);
-  
+
   bool isReadyToRender(const G3MRenderContext* rc) {
     return (_elevationDataResolved);
   }
@@ -70,7 +63,7 @@ public:
 
 
   void onElevationData(ElevationData* elevationData);
-
+  
 };
 
 #endif

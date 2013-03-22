@@ -57,7 +57,7 @@ public:
   void onDownload(const URL& url,
                   IByteBuffer* buffer) {
     const Vector2I resolution(_resolutionWidth, _resolutionHeight);
-    ElevationData* elevationData = BilParser::parseBil16(_sector, resolution, _noDataValue, buffer);
+    ElevationData* elevationData = BilParser::parseBil16(_sector, resolution, _noDataValue, -9999, buffer);
     delete buffer;
 
     _singleBillElevationDataProvider->onElevationData(elevationData);
@@ -117,11 +117,14 @@ const long long SingleBillElevationDataProvider::requestElevationData(const Sect
     listener->onError(sector, resolution);
   }
   else {
+    int _DGD_working_on_terrain;
+    const bool useDecimation = true;
     ElevationData *elevationData = new SubviewElevationData(_elevationData,
                                                             false,
                                                             sector,
                                                             resolution,
-                                                            _noDataValue);
+                                                            _noDataValue,
+                                                            useDecimation);
     listener->onData(sector,
                      resolution,
                      elevationData);
@@ -138,4 +141,20 @@ void SingleBillElevationDataProvider::cancelRequest(const long long requestId) {
   if (requestId >= 0) {
     removeQueueRequest(requestId);
   }
+}
+
+void SingleBillElevationDataProvider::drainQueue() {
+  int _WORKING;
+}
+
+const long long SingleBillElevationDataProvider::queueRequest(const Sector& sector,
+                                                              const Vector2I& resolution,
+                                                              IElevationDataListener* listener,
+                                                              bool autodeleteListener) {
+  int _WORKING;
+  return -1;
+}
+
+void SingleBillElevationDataProvider::removeQueueRequest(const long long requestId) {
+  int _WORKING;
 }

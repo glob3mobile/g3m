@@ -175,7 +175,7 @@ CameraRenderer* IG3MBuilder::getCameraRenderer() {
  */
 Renderer* IG3MBuilder::getBusyRenderer() {
   if (!_busyRenderer) {
-    _busyRenderer = new BusyMeshRenderer();
+    _busyRenderer = new BusyMeshRenderer(Color::newFromRGBA((float)0, (float)0, (float)0, (float)1));
   }
   
   return _busyRenderer;
@@ -620,7 +620,7 @@ G3MWidget* IG3MBuilder::create() {
                                             *getPeriodicalTasks());
   
   g3mWidget->setUserData(getUserData());
-  
+
   _gl = NULL;
   _storage = NULL;
   _downloader = NULL;

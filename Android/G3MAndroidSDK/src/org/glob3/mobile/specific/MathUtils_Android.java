@@ -369,4 +369,28 @@ public final class MathUtils_Android
       return Math.max(l1, l2);
    }
 
+
+   @Override
+   public short maxInt16() {
+      return Short.MAX_VALUE;
+   }
+
+
+   @Override
+   public short minInt16() {
+      return Short.MIN_VALUE;
+   }
+
+
+   @Override
+   public double ceil(final double d) {
+      return Math.ceil(d);
+   }
+
+
+   @Override
+   public float ceil(final float f) {
+      return (float) Math.ceil(f);
+   }
+
 }

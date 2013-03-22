@@ -10,10 +10,12 @@
 #define __G3MiOSSDK__LayerBuilder__
 
 #include "WMSLayer.hpp"
+#include <vector>
 
 class LayerBuilder {
 public:
   static LayerSet* createDefaultSatelliteImagery();
+  static std::vector<std::string> getDefaultLayersNames();
   static WMSLayer* createBingLayer(bool enabled);
   static WMSLayer* createOSMLayer(bool enabled);
   static WMSLayer* createPNOALayer(bool enabled);

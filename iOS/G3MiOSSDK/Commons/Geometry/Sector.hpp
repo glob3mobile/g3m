@@ -189,6 +189,16 @@ public:
                       _upper.sub( delta ) );
   }
 
+  Sector shrinkedByPercent(float percent) const {
+    const Angle deltaLatitude  = _deltaLatitude.times(percent).div(2);
+    const Angle deltaLongitude = _deltaLongitude.times(percent).div(2);
+
+    const Geodetic2D delta(deltaLatitude, deltaLongitude);
+
+    return Sector(_lower.add( delta ),
+                  _upper.sub( delta ) );
+  }
+
   bool isEqualsTo(const Sector& that) const {
     return _lower.isEqualsTo(that._lower) && _upper.isEqualsTo(that._upper);
   }

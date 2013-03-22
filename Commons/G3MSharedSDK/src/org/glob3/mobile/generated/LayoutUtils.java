@@ -19,6 +19,7 @@ package org.glob3.mobile.generated;
 
 
 //class Geodetic3D;
+//class Geodetic2D;
 //class Ellipsoid;
 
 
@@ -46,12 +47,30 @@ public class LayoutUtils
     {
       final double angleInRadians = startAngleInRadians + (deltaInRadians * i);
   
-      final Vector3D cartesianPosition = northInPlane.rotateAroundAxis(normal, Angle.fromRadians(angleInRadians));
+      final Vector3D finalVector = northInPlane.rotateAroundAxis(normal, Angle.fromRadians(angleInRadians));
+      final Vector3D cartesianPosition = cartesianCenter.add(finalVector);
   
       result.add(new Geodetic3D(ellipsoid.toGeodetic3D(cartesianPosition)));
     }
   
     return result;
   }
-
+  public static java.util.ArrayList<Geodetic2D> splitOverCircle(Ellipsoid ellipsoid, Geodetic2D center, double radiusInMeters, int splits)
+  {
+     return splitOverCircle(ellipsoid, center, radiusInMeters, splits, Angle.zero());
+  }
+  public static java.util.ArrayList<Geodetic2D> splitOverCircle(Ellipsoid ellipsoid, Geodetic2D center, double radiusInMeters, int splits, Angle startAngle)
+  {
+    java.util.ArrayList<Geodetic2D> result2D = new java.util.ArrayList<Geodetic2D>();
+    java.util.ArrayList<Geodetic3D> result3D = splitOverCircle(ellipsoid, new Geodetic3D(center, 0), radiusInMeters, splits, startAngle);
+  
+    for (int i = 0; i < splits; i++)
+    {
+      result2D.add(new Geodetic2D(result3D.get(i).asGeodetic2D()));
+      if (result3D.get(i) != null)
+         result3D.get(i).dispose();
+    }
+  
+    return result2D;
+  }
 }

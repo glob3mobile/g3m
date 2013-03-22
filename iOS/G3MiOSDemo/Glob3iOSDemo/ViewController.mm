@@ -36,6 +36,7 @@
 #import <G3MiOSSDK/BoxShape.hpp>
 #import <G3MiOSSDK/EllipsoidShape.hpp>
 #import <G3MiOSSDK/SceneJSShapesParser.hpp>
+#import <G3MiOSSDK/LayoutUtils.hpp>
 
 #import <G3MiOSSDK/IJSONParser.hpp>
 #import <G3MiOSSDK/JSONGenerator.hpp>
@@ -62,10 +63,14 @@
 #import <G3MiOSSDK/GoogleMapsLayer.hpp>
 #import <G3MiOSSDK/BingMapsLayer.hpp>
 
+#import <G3MiOSSDK/BusyQuadRenderer.hpp>
+#import <G3MiOSSDK/Factory_iOS.hpp>
+
 #import <G3MiOSSDK/G3MWidget.hpp>
 #import <G3MiOSSDK/GEOJSONParser.hpp>
 
-#import <G3MiOSSDK/GEOJSONParser.hpp>
+//import <G3MiOSSDK/WMSBillElevationDataProvider.hpp>
+#import <G3MiOSSDK/SingleBillElevationDataProvider.hpp>
 
 class TestVisibleSectorListener : public VisibleSectorListener {
 public:
@@ -169,6 +174,61 @@ public:
   builder.initializeWidget();
 }
 
+- (void)  initializeElevationDataProvider: (G3MBuilder_iOS&) builder
+{
+  float verticalExaggeration = 3.0f;
+  builder.getTileRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
+
+  int _DGD_working_on_terrain;
+  
+//  ElevationDataProvider* elevationDataProvider = NULL;
+
+//  ElevationDataProvider* elevationDataProvider = new WMSBillElevationDataProvider();
+
+//  ElevationDataProvider* elevationDataProvider;
+//  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
+//                                                              Sector::fullSphere(),
+//                                                              Vector2I(2048, 1024),
+//                                                              0);
+
+//  ElevationDataProvider* elevationDataProvider;
+//  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///elev-35.0_-6.0_38.0_-2.0_4096x2048.bil", false),
+//                                                              Sector::fromDegrees(35, -6, 38, -2),
+//                                                              Vector2I(4096, 2048),
+//                                                              0);
+
+//  ElevationDataProvider* elevationDataProvider;
+//  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-4096x2048.bil", false),
+//                                                              Sector::fullSphere(),
+//                                                              Vector2I(4096, 2048),
+//                                                              0);
+
+//  ElevationDataProvider* elevationDataProvider;
+//  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///caceres-2008x2032.bil", false),
+//                                                              Sector::fromDegrees(
+//                                                                                  39.4642996294239623,
+//                                                                                  -6.3829977122432933,
+//                                                                                  39.4829891936013553,
+//                                                                                  -6.3645288909498845
+//                                                                                  ),
+//                                                              Vector2I(2008, 2032),
+//                                                              0);
+
+  ElevationDataProvider* elevationDataProvider;
+  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///small-caceres.bil", false),
+                                                              Sector::fromDegrees(
+                                                                                  39.4642994358225678,
+                                                                                  -6.3829980000000042,
+                                                                                  39.4829889999999608,
+                                                                                  -6.3645291787065954
+                                                                                  ),
+                                                              Vector2I(251, 254),
+                                                              0);
+
+  builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProvider);
+}
+
+
 - (void) initCustomizedWithBuilder
 {
   G3MBuilder_iOS builder([self G3MWidget]);
@@ -196,12 +256,25 @@ public:
   //                                  NULL)
   //                     );
 
+  [self initializeElevationDataProvider: builder];
+
   builder.getTileRendererBuilder()->setLayerSet(layerSet);
   builder.getTileRendererBuilder()->setTileRendererParameters([self createTileRenderParameters]);
   builder.getTileRendererBuilder()->addVisibleSectorListener(new TestVisibleSectorListener(),
                                                              TimeInterval::fromSeconds(3));
 
-  Renderer* busyRenderer = new BusyMeshRenderer();
+  Renderer* busyRenderer = new BusyMeshRenderer(Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1));
+  
+//  // Busy quad renderer
+//  NSString* fn = [NSString stringWithCString: "horizontal-gears.png"
+//                                    encoding: [NSString defaultCStringEncoding]];
+//  UIImage* image = [UIImage imageNamed:fn];
+//  IImage* busyImg =  new Image_iOS(image, NULL);
+//  Renderer* busyRenderer = new BusyQuadRenderer(busyImg,
+//                                                Color::newFromRGBA(0.0, 0.0, 0.0, 1.0),
+//                                                Vector2D(250,194),
+//                                                false);
+
   builder.setBusyRenderer(busyRenderer);
 
   //    DummyRenderer* dum = new DummyRenderer();
@@ -212,7 +285,7 @@ public:
   MarksRenderer* marksRenderer = [self createMarksRenderer];
   builder.addRenderer(marksRenderer);
 
-  ShapesRenderer* shapesRenderer = [self createShapesRenderer];
+  ShapesRenderer* shapesRenderer = [self createShapesRenderer: builder.getPlanet()];
   builder.addRenderer(shapesRenderer);
 
 
@@ -726,7 +799,7 @@ public:
 
 }
 
-- (ShapesRenderer*) createShapesRenderer
+- (ShapesRenderer*) createShapesRenderer: (const Planet*) planet
 {
   ShapesRenderer* shapesRenderer = new ShapesRenderer();
 
@@ -825,18 +898,51 @@ public:
   //  shapesRenderer->addShape(colored);
 
   // to test layout::splitOverCircle
-    Shape* spheres = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(40.426042),
-                                                       Angle::fromDegrees(-3.704453),
-                                                       0),
-                                        Vector3D(1e5, 1e5, 1e5),
-                                        8,
-                                        1,
-                                        false,
-                                        false,
-                                        Color::newFromRGBA(0.8, 0, 0, 1.0),
-                                        Color::newFromRGBA(0, 0, 0, 1)
-                                        );
-    shapesRenderer->addShape(spheres);
+  Geodetic3D* center = new Geodetic3D(Angle::fromDegrees(40.429701),
+                                      Angle::fromDegrees(-3.703766),
+                                      0);
+  double radius = 5e4;
+  Vector3D radiusVector(radius, radius, radius);
+  Shape* centralSphere = new EllipsoidShape(center,
+                                      radiusVector,
+                                      8,
+                                      1,
+                                      false,
+                                      false,
+                                      Color::newFromRGBA(0.8, 0, 0, 0.5),
+                                      Color::newFromRGBA(0, 0, 0, 0.5)
+                                      );
+  shapesRenderer->addShape(centralSphere);
+  int splits = 5;
+  std::vector<Geodetic3D*> spheres3D = LayoutUtils::splitOverCircle(planet, *center, 1e6, splits);
+  for (int i=0; i<splits; i++) {
+    Shape* sphere = new EllipsoidShape(spheres3D[i],
+                                       radiusVector,
+                                       8,
+                                       1,
+                                       false,
+                                       false,
+                                       Color::newFromRGBA(0.0, 0.8, 0, 0.5),
+                                       Color::newFromRGBA(0, 0, 0, 0.5)
+                                       );
+    shapesRenderer->addShape(sphere);
+  }
+  std::vector<Geodetic2D*> spheres2D = LayoutUtils::splitOverCircle(planet, center->asGeodetic2D(), 1e6, splits, Angle::fromDegrees(36));
+  for (int i=0; i<splits; i++) {
+    Geodetic3D* centerSplit = new Geodetic3D(*spheres2D[i], 0);
+    delete spheres2D[i];
+    Shape* sphere = new EllipsoidShape(centerSplit,
+                                       radiusVector,
+                                       8,
+                                       1,
+                                       false,
+                                       false,
+                                       Color::newFromRGBA(0.8, 0.8, 0, 0.5),
+                                       Color::newFromRGBA(0, 0, 0, 0.5)
+                                       );
+    shapesRenderer->addShape(sphere);
+  }
+  
   
 
   return shapesRenderer;
@@ -892,113 +998,63 @@ public:
   void onDownload(const URL& url,
                   IByteBuffer* buffer) {
 
-    const ElevationData* elevationData = BilParser::parseBil16(_sector, _extent, 0, buffer);
+    const ElevationData* elevationData = BilParser::parseBil16(_sector,
+                                                               _extent,
+                                                               0,
+                                                               100,
+                                                               buffer);
     delete buffer;
 
     if (elevationData == NULL) {
       return;
     }
 
-    ILogger::instance()->logInfo("Elevation data on %s", _sector.description().c_str());
-
-    int type;
-
-    double minHeight = elevationData->getElevationAt(_sector.lower(), &type);
-    double maxHeight = minHeight;
-
-    //    const double latStep = 0.01;
-    //    const double lonStep = 0.01;
-    //    const double latStep = (_sector.getDeltaLatitude()._degrees  / _extent._y) / 4 * 30;
-    //    const double lonStep = (_sector.getDeltaLongitude()._degrees / _extent._x) / 4 * 30;
-    //    const double latStep = (_sector.getDeltaLatitude()._degrees  / _extent._y) * 30 / 4;
-    //    const double lonStep = (_sector.getDeltaLongitude()._degrees / _extent._x) * 30 / 4;
-    const double latStep = (_sector.getDeltaLatitude()._degrees  / _extent._y);
-    const double lonStep = (_sector.getDeltaLongitude()._degrees / _extent._x);
-
-    const Geodetic2D targetLower(_sector.lower());
-    const Geodetic2D targetUpper(_sector.upper());
-
-    for (double lat = targetLower.latitude().degrees();
-         lat <= targetUpper.latitude().degrees();
-         lat += latStep) {
-      const Angle latitude(Angle::fromDegrees(lat));
-      for (double lon = targetLower.longitude().degrees();
-           lon <= targetUpper.longitude().degrees();
-           lon += lonStep) {
-        const Angle longitude(Angle::fromDegrees(lon));
-        const double height = elevationData->getElevationAt(latitude, longitude, &type);
-
-        if (height < minHeight) { minHeight = height; }
-        if (height > maxHeight) { maxHeight = height; }
-      }
-    }
-
-
-    const double deltaHeight = maxHeight - minHeight;
-
-    ILogger::instance()->logInfo("minHeight=%f maxHeight=%f delta=%f",
-                                 minHeight, maxHeight, deltaHeight);
-
+    ILogger::instance()->logInfo("Elevation data=%s", elevationData->description(false).c_str());
 
     const Planet* planet = Planet::createEarth();
-    FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
-                                            planet,
-                                            Vector3D::zero());
-    FloatBufferBuilderFromColor colors;
+    
+//    _meshRenderer->addMesh( elevationData->createMesh(planet,
+//                                                      5,
+//                                                      Geodetic3D::fromDegrees(0.02, 0, 0),
+//                                                      2) );
 
-    for (double lat = targetLower.latitude().degrees();
-         lat <= targetUpper.latitude().degrees();
-         lat += latStep) {
-      const Angle latitude(Angle::fromDegrees(lat));
-      for (double lon = targetLower.longitude().degrees();
-           lon <= targetUpper.longitude().degrees();
-           lon += lonStep) {
-        const Angle longitude(Angle::fromDegrees(lon));
-        const double height = elevationData->getElevationAt(latitude, longitude, &type);
+    const float verticalExaggeration = 3.0f;
+    const float pointSize = 4.0f;
 
-        const float alpha = (float) ((height - minHeight) / deltaHeight);
+//    const Sector subSector = _sector.shrinkedByPercent(0.33f);
+    const Sector subSector = _sector;
+    const Vector2I subResolution(128, 128);
 
-        float r = alpha;
-        float g = alpha;
-        float b = alpha;
-        //        if (type == 1) {
-        //          g = 1;
-        //        }
-        //        else if (type == 2) {
-        //          r = 1;
-        //          g = 1;
-        //        }
-        //        else if (type == 3) {
-        //          r = 1;
-        //          b = 1;
-        //        }
-        //        else if (type == 4) {
-        //          r = 1;
-        //        }
+    int _DGD_working_on_terrain;
 
-        vertices.add(latitude, longitude, 75000.0 + height * 10);
+    const ElevationData* subElevationDataDecimated = new SubviewElevationData(elevationData,
+                                                                              false,
+                                                                              subSector,
+                                                                              subResolution,
+                                                                              0,
+                                                                              true);
 
-        colors.add(r, g, b, 1);
-      }
-    }
+    _meshRenderer->addMesh( subElevationDataDecimated->createMesh(planet,
+                                                                  verticalExaggeration,
+                                                                  Geodetic3D::fromDegrees(0.02, 0.02, 0),
+                                                                  pointSize) );
 
-    const float lineWidth = 1;
-    const float pointSize = 3;
-    Color* flatColor = NULL;
-    Mesh* bilMesh = new DirectMesh(GLPrimitive::points(),
-                                   //GLPrimitive::lineStrip(),
-                                   true,
-                                   vertices.getCenter(),
-                                   vertices.create(),
-                                   lineWidth,
-                                   pointSize,
-                                   flatColor,
-                                   colors.create());
+    const ElevationData* subElevationDataNotDecimated = new SubviewElevationData(elevationData,
+                                                                                 false,
+                                                                                 subSector,
+                                                                                 subResolution,
+                                                                                 0,
+                                                                                 false);
 
-    _meshRenderer->addMesh( bilMesh );
+    _meshRenderer->addMesh( subElevationDataNotDecimated->createMesh(planet,
+                                                                     verticalExaggeration,
+                                                                     Geodetic3D::fromDegrees(0.02, 0.04, 0),
+                                                                     pointSize) );
 
-    delete elevationData;
     delete planet;
+    delete elevationData;
+    delete subElevationDataDecimated;
+    delete subElevationDataNotDecimated;
   }
 
   void onError(const URL& url) {
@@ -1294,14 +1350,45 @@ public:
        Sector::fromDegrees(35, -6, 38, -2)),
        true);
        */
+      /*
+      context->getDownloader()->requestBuffer(URL("file:///caceres-2008x2032.bil", false),
+                                              1000000,
+                                              TimeInterval::fromDays(30),
+                                              new Bil16Parser_IBufferDownloadListener(_shapesRenderer,
+                                                                                      _meshRenderer,
+                                                                                      Vector2I(2008, 2032),
+                                                                                      Sector::fromDegrees(
+                                                                                                          39.4642996294239623,
+                                                                                                          -6.3829977122432933,
+                                                                                                          39.4829891936013553,
+                                                                                                          -6.3645288909498845
+                                                                                                          )),
+                                              true);
+       */
 
-            [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
-                                                           Geodetic3D(Angle::fromDegrees(37.78333333),
-                                                                      Angle::fromDegrees(-122.41666666666667),
-                                                                      1000000),
-                                                           Angle::fromDegrees(45),
-                                                           Angle::fromDegrees(50)
-                                                           );
+
+      context->getDownloader()->requestBuffer(URL("file:///small-caceres.bil", false),
+                                              1000000,
+                                              TimeInterval::fromDays(30),
+                                              new Bil16Parser_IBufferDownloadListener(_shapesRenderer,
+                                                                                      _meshRenderer,
+                                                                                      Vector2I(251, 254),
+                                                                                      Sector::fromDegrees(
+                                                                                                          39.4642994358225678,
+                                                                                                          -6.3829980000000042,
+                                                                                                          39.4829889999999608,
+                                                                                                          -6.3645291787065954
+                                                                                                          )
+                                                                                      ),
+                                              true);
+
+      //      [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
+      //                                                     Geodetic3D(Angle::fromDegrees(37.78333333),
+      //                                                                Angle::fromDegrees(-122.41666666666667),
+      //                                                                1000000)
+      //                                                     //Angle::fromDegrees(45),
+      //                                                     //Angle::fromDegrees(30)
+      //                                                     );
 
       /*
        NSString *bsonFilePath = [[NSBundle mainBundle] pathForResource: @"test"

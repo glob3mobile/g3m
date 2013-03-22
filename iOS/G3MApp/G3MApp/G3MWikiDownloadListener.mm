@@ -30,7 +30,7 @@ G3MWikiDownloadListener::G3MWikiDownloadListener(GInitializationTask* initTask,
 void G3MWikiDownloadListener::onDownload(const URL& url,
                                          IByteBuffer* buffer) {
   MarksRenderer* markerRenderer = ((G3MAppUserData*) [_widget userData])->getMarkerRenderer();
-  JSONBaseObject* json = IJSONParser::instance()->parse(buffer->getAsString());
+  const JSONBaseObject* json = IJSONParser::instance()->parse(buffer->getAsString());
   const JSONArray* features = json->asObject()->getAsArray("features");
   
   for (int i = 0; i < features->size(); i++) {

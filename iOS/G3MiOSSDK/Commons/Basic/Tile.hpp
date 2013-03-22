@@ -52,6 +52,10 @@ private:
 
   bool _texturizerDirty;
 
+  float _verticalExaggeration;
+  double _minHeight;
+  double _maxHeight;
+
   inline Mesh* getTessellatorMesh(const G3MRenderContext* rc,
                                   const TileRenderContext* trc);
 
@@ -71,10 +75,6 @@ private:
   void debugRender(const G3MRenderContext* rc,
                    const TileRenderContext* trc,
                    const GLState& parentState);
-
-//  const Angle calculateSplitLatitude(const Angle& lowerLatitude,
-//                                     const Angle& upperLatitude,
-//                                     bool mercator) const;
 
   inline Tile* createSubTile(const Angle& lowerLat, const Angle& lowerLon,
                              const Angle& upperLat, const Angle& upperLon,
@@ -187,15 +187,14 @@ public:
                    ElevationDataProvider* elevationDataProvider);
 
   void onElevationData(ElevationData* elevationData,
-                       float verticalExaggeration,
                        MeshHolder* meshHolder,
                        const TileTessellator* tessellator,
                        const Planet* planet,
                        const Vector2I& tileMeshResolution,
                        bool renderDebug);
   
-  double getMinHeight() { return 0.0; }
-
+  double getMinHeight() const;
+  double getMaxHeight() const;
 
   const std::string description() const;
 

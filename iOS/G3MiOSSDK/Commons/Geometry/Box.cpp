@@ -11,9 +11,13 @@
 #include "Camera.hpp"
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "ShortBufferBuilder.hpp"
-
+#include "IndexedMesh.hpp"
 #include "GLConstants.hpp"
 #include "Color.hpp"
+
+Box::~Box() {
+  delete _mesh;
+};
 
 const std::vector<Vector3D> Box::getCorners() const {
 #ifdef C_CODE
@@ -199,7 +203,8 @@ void Box::createMesh(Color* color) {
     0, 1, 1, 5, 5, 4, 4, 0
   };
   
-  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero());
+  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::firstVertex(),
+                                             Vector3D::zero());
   ShortBufferBuilder indices;
   
   const unsigned int numVertices = 8;
@@ -225,18 +230,18 @@ void Box::createMesh(Color* color) {
 void Box::render(const G3MRenderContext* rc,
                  const GLState& parentState) {
   if (_mesh == NULL) {
-    createMesh(Color::newFromRGBA((float)1.0, (float)1.0, (float)0.0, (float)1.0));
+    createMesh(Color::newFromRGBA(1.0f, 0.0f, 1.0f, 1.0f));
   }
   _mesh->render(rc, parentState);
 }
 
 bool Box::touchesBox(const Box* box) const {
-  if (_lower._x > box->_upper._x) return false;
-  if (_upper._x < box->_lower._x) return false;
-  if (_lower._y > box->_upper._y) return false;
-  if (_upper._y < box->_lower._y) return false;
-  if (_lower._z > box->_upper._z) return false;
-  if (_upper._z < box->_lower._z) return false;
+  if (_lower._x > box->_upper._x) { return false; }
+  if (_upper._x < box->_lower._x) { return false; }
+  if (_lower._y > box->_upper._y) { return false; }
+  if (_upper._y < box->_lower._y) { return false; }
+  if (_lower._z > box->_upper._z) { return false; }
+  if (_upper._z < box->_lower._z) { return false; }
   return true;
 }
 
@@ -253,4 +258,13 @@ Extent* Box::mergedWithBox(const Box* that) const {
 
   return new Box(Vector3D(lowerX, lowerY, lowerZ),
                  Vector3D(upperX, upperY, upperZ));
+}
+
+bool Box::fullContains(const Extent* that) const {
+  return that->fullContainedInBox(this);
+}
+
+bool Box::fullContainedInBox(const Box* box) const {
+//  return contains(box->_upper) && contains(box->_lower);
+  return box->contains(_upper) && box->contains(_lower);
 }

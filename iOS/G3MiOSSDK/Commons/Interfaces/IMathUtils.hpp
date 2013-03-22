@@ -87,6 +87,9 @@ public:
   virtual double log(double v) const = 0;
   virtual float  log(float v)  const = 0;
 
+  virtual short maxInt16() const = 0;
+  virtual short minInt16() const = 0;
+
   virtual int maxInt32() const = 0;
   virtual int minInt32() const = 0;
 
@@ -121,6 +124,9 @@ public:
 
   virtual double floor(double d) const = 0;
   virtual float  floor(float f)  const = 0;
+  
+  virtual double ceil(double d) const = 0;
+  virtual float  ceil(float f)  const = 0;
 
   virtual double linearInterpolation(double from,
                                      double to,

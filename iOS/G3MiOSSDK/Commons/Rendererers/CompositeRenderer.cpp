@@ -76,17 +76,17 @@ bool CompositeRenderer::isReadyToRender(const G3MRenderContext *rc) {
   return true;
 }
 
-void CompositeRenderer::start() {
+void CompositeRenderer::start(const G3MRenderContext* rc) {
   const int rendersSize = _renderers.size();
   for (int i = 0; i < rendersSize; i++) {
-    _renderers[i]->start();
+    _renderers[i]->start(rc);
   }
 }
 
-void CompositeRenderer::stop() {
+void CompositeRenderer::stop(const G3MRenderContext* rc) {
   const int rendersSize = _renderers.size();
   for (int i = 0; i < rendersSize; i++) {
-    _renderers[i]->stop();
+    _renderers[i]->stop(rc);
   }
 }
 

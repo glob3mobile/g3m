@@ -70,12 +70,13 @@ void BusyMeshRenderer::initialize(const G3MContext* context)
 
 }
 
-void BusyMeshRenderer::start() {
-  //int _TODO_start_effects;
+void BusyMeshRenderer::start(const G3MRenderContext* rc) {
+  Effect* effect = new BusyMeshEffect(this);
+  rc->getEffectsScheduler()->startEffect(effect, this);
 }
 
-void BusyMeshRenderer::stop() {
-  //int _TODO_stop_effects;
+void BusyMeshRenderer::stop(const G3MRenderContext* rc) {
+  rc->getEffectsScheduler()->cancelAllEffectsFor(this);
 }
 
 void BusyMeshRenderer::render(const G3MRenderContext* rc,
@@ -89,14 +90,6 @@ void BusyMeshRenderer::render(const G3MRenderContext* rc,
   
   state.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
 
-  // init effect in the first render
-  static bool firstTime = true;
-  if (firstTime) {
-    firstTime = false;
-    Effect *effect = new BusyMeshEffect(this);
-    rc->getEffectsScheduler()->startEffect(effect, this);
-  }
-
   // init modelview matrix
   int currentViewport[4];
   gl->getViewport(currentViewport);
@@ -109,12 +102,14 @@ void BusyMeshRenderer::render(const G3MRenderContext* rc,
   gl->loadMatrixf(MutableMatrix44D::identity());
 
   // clear screen
-  gl->clearScreen(0.0f, 0.0f, 0.0f, 1.0f);
+  gl->clearScreen(_backgroundColor->getRed(),
+                  _backgroundColor->getGreen(),
+                  _backgroundColor->getBlue(),
+                  _backgroundColor->getAlpha());
 
   gl->pushMatrix();
-  MutableMatrix44D R1 = MutableMatrix44D::createRotationMatrix(Angle::zero(), Vector3D(-1, 0, 0));
-  MutableMatrix44D R2 = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, -1));
-  gl->multMatrixf(R1.multiply(R2));
+  MutableMatrix44D R1 = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, -1));
+  gl->multMatrixf(R1);
 
   // draw mesh
   _mesh->render(rc, state);

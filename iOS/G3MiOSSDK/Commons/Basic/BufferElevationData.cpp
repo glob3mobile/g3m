@@ -66,14 +66,15 @@ double BufferElevationData::getElevationAt(const Angle& latitude,
   const double u = mu->clamp(uv._x, 0, 1);
   const double v = mu->clamp(uv._y, 0, 1);
   const double dX = u * (_width - 1);
-  const double dY = (1.0 - v) * (_height - 1);
+  //const double dY = (1.0 - v) * (_height - 1);
+  const double dY = v * (_height - 1);
 
   const int x = (int) dX;
   const int y = (int) dY;
-  const int nextX = (int) (dX + 1.0);
-  const int nextY = (int) (dY + 1.0);
-//  const int nextX = x + 1;
-//  const int nextY = y + 1;
+//  const int nextX = (int) (dX + 1.0);
+//  const int nextY = (int) (dY + 1.0);
+  const int nextX = x + 1;
+  const int nextY = y + 1;
   const double alphaY = dY - y;
   const double alphaX = dX - x;
 

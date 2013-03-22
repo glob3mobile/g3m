@@ -82,10 +82,10 @@ public:
                              int width, int height) {
   }
 
-  void start() {
+  void start(const G3MRenderContext* rc) {
   }
   
-  void stop() {
+  void stop(const G3MRenderContext* rc) {
   }
 
   void render(const G3MRenderContext* rc,

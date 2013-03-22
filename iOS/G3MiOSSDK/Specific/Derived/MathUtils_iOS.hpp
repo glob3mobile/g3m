@@ -34,6 +34,7 @@ public:
   static inline double log10_(double v)           { return log10(v);   }
   static inline double log_  (double v)           { return log(v);     }
   static inline double floor_(double d)           { return floor(d);   }
+  static inline double ceil_ (double d)           { return ceil(d);    }
 };
 
 class MathUtils_iOS: public IMathUtils {
@@ -94,7 +95,10 @@ public:
   
   double log(double v) const { return MathAux::log_(v); }
   float  log(float v)  const { return log(v); }
-  
+
+  short maxInt16() const { return std::numeric_limits<short>::max(); }
+  short minInt16() const { return std::numeric_limits<short>::min(); }
+
   int maxInt32() const { return std::numeric_limits<int>::max(); }
   int minInt32() const { return std::numeric_limits<int>::min(); }
 
@@ -160,6 +164,14 @@ public:
 
   float floor(float f) const {
     return floorf(f);
+  }
+
+  double ceil(double d) const {
+    return MathAux::ceil_(d);
+  }
+
+  float ceil(float f) const {
+    return ceilf(f);
   }
 
 };

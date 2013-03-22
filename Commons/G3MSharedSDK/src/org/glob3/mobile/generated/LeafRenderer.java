@@ -63,8 +63,8 @@ public abstract class LeafRenderer extends Renderer
 
   public abstract void onResizeViewportEvent(G3MEventContext ec, int width, int height);
 
-  public abstract void start();
+  public abstract void start(G3MRenderContext rc);
 
-  public abstract void stop();
+  public abstract void stop(G3MRenderContext rc);
 
 }

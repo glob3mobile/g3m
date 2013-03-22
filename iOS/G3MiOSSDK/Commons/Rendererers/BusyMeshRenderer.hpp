@@ -12,6 +12,7 @@
 #include "LeafRenderer.hpp"
 #include "IndexedMesh.hpp"
 #include "Effects.hpp"
+#include "Color.hpp"
 
 
 //***************************************************************
@@ -21,9 +22,14 @@ class BusyMeshRenderer : public LeafRenderer, EffectTarget {
 private:
   Mesh    *_mesh;
   double  _degrees;
+  Color*  _backgroundColor;
   
 public:    
-  BusyMeshRenderer(): _degrees(0) {}
+  BusyMeshRenderer(Color* backgroundColor):
+  _degrees(0),
+  _backgroundColor(backgroundColor)
+  {
+  }
   
   void initialize(const G3MContext* context);
   
@@ -46,6 +52,7 @@ public:
   
   virtual ~BusyMeshRenderer() {
     delete _mesh;
+    delete _backgroundColor;
   }
   
   void incDegrees(double value) { 
@@ -53,9 +60,9 @@ public:
     if (_degrees>360) _degrees -= 360;
   }
 
-  void start();
+  void start(const G3MRenderContext* rc);
   
-  void stop();
+  void stop(const G3MRenderContext* rc);
   
   void onResume(const G3MContext* context) {
     

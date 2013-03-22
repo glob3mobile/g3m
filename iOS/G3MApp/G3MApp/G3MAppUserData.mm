@@ -25,11 +25,6 @@ bool G3MAppUserData::getSatelliteLayerEnabled() {
   return _satelliteLayerEnabled;
 }
 
-void G3MAppUserData::toggleSatelliteLayerEnabled() {
-  _satelliteLayerEnabled = !_satelliteLayerEnabled;
-}
-
-
 void G3MAppUserData::setPlane(Shape* plane) {
   _plane = plane;
 }

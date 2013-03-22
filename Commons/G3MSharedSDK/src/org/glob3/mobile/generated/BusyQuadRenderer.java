@@ -28,9 +28,13 @@ package org.glob3.mobile.generated;
 public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
 {
   private double _degrees;
-//  const std::string _textureFilename;
+  //  const std::string _textureFilename;
   private IImage _image;
   private Mesh _quadMesh;
+
+  private final boolean _animated;
+  private final Vector2D _size ;
+  private Color _backgroundColor;
 
   private boolean initMesh(G3MRenderContext rc)
   {
@@ -49,18 +53,13 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
       return false;
     }
   
-    final float halfSize = 16F;
+    final double halfWidth = _size._x / 2;
+    final double hadfHeight = _size._y / 2;
     FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
-    vertices.add(-halfSize, +halfSize, 0);
-    vertices.add(-halfSize, -halfSize, 0);
-    vertices.add(+halfSize, +halfSize, 0);
-    vertices.add(+halfSize, -halfSize, 0);
-  
-    ShortBufferBuilder indices = new ShortBufferBuilder();
-    indices.add((short) 0);
-    indices.add((short) 1);
-    indices.add((short) 2);
-    indices.add((short) 3);
+    vertices.add(-halfWidth, +hadfHeight, 0);
+    vertices.add(-halfWidth, -hadfHeight, 0);
+    vertices.add(+halfWidth, +hadfHeight, 0);
+    vertices.add(+halfWidth, -hadfHeight, 0);
   
     FloatBufferBuilderFromCartesian2D texCoords = new FloatBufferBuilderFromCartesian2D();
     texCoords.add(0, 0);
@@ -68,22 +67,24 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
     texCoords.add(1, 0);
     texCoords.add(1, 1);
   
-    IndexedMesh im = new IndexedMesh(GLPrimitive.triangleStrip(), true, Vector3D.zero(), vertices.create(), indices.create(), 1);
+    DirectMesh im = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1);
   
     TextureMapping texMap = new SimpleTextureMapping(texId, texCoords.create(), true, false);
   
-    _quadMesh = new TexturedMesh(im, true, texMap, true, false);
+    _quadMesh = new TexturedMesh(im, true, texMap, true, true);
   
     return true;
   }
 
 
-
-  public BusyQuadRenderer(IImage image)
+  public BusyQuadRenderer(IImage image, Color backgroundColor, Vector2D size, boolean animated)
   {
      _degrees = 0;
      _quadMesh = null;
      _image = image;
+     _backgroundColor = backgroundColor;
+     _animated = animated;
+     _size = new Vector2D(size);
   }
 
   public final void initialize(G3MContext context)
@@ -95,7 +96,6 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
     return true;
   }
 
-  private boolean render_firstTime = true;
   public final void render(G3MRenderContext rc, GLState parentState)
   {
     GL gl = rc.getGL();
@@ -111,16 +111,6 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
       }
     }
   
-  
-    // init effect in the first render
-//    static boolean firstTime = true;
-    if (render_firstTime)
-    {
-      render_firstTime = false;
-      Effect effect = new BusyEffect(this);
-      rc.getEffectsScheduler().startEffect(effect, this);
-    }
-  
     // init modelview matrix
     int[] currentViewport = new int[4];
     gl.getViewport(currentViewport);
@@ -131,16 +121,15 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
     gl.loadMatrixf(MutableMatrix44D.identity());
   
     // clear screen
-    gl.clearScreen(0.0f, 0.0f, 0.0f, 1.0f);
+    gl.clearScreen(_backgroundColor.getRed(), _backgroundColor.getGreen(), _backgroundColor.getBlue(), _backgroundColor.getAlpha());
   
     gl.setState(state);
   
     gl.setBlendFuncSrcAlpha();
   
     gl.pushMatrix();
-    MutableMatrix44D R1 = MutableMatrix44D.createRotationMatrix(Angle.zero(), new Vector3D(-1, 0, 0));
     MutableMatrix44D R2 = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_degrees), new Vector3D(0, 0, 1));
-    gl.multMatrixf(R1.multiply(R2));
+    gl.multMatrixf(R2);
   
     // draw mesh
     _quadMesh.render(rc, parentState);
@@ -160,6 +149,10 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
 
   public void dispose()
   {
+    if (_quadMesh != null)
+       _quadMesh.dispose();
+    if (_backgroundColor != null)
+       _backgroundColor.dispose();
   }
 
   public final void incDegrees(double value)
@@ -169,14 +162,21 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
        _degrees -= 360;
   }
 
-  public final void start()
+  public final void start(G3MRenderContext rc)
   {
-    //int _TODO_start_effects;
+    if (_animated)
+    {
+      Effect effect = new BusyEffect(this);
+      rc.getEffectsScheduler().startEffect(effect, this);
+    }
   }
 
-  public final void stop()
+  public final void stop(G3MRenderContext rc)
   {
-    //int _TODO_stop_effects;
+    if (_animated)
+    {
+      rc.getEffectsScheduler().cancelAllEffectsFor(this);
+    }
   }
 
   public final void onResume(G3MContext context)

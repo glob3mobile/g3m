@@ -453,12 +453,12 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   }
 
 
-  public final void start()
+  public final void start(G3MRenderContext rc)
   {
     _firstRender = true;
   }
 
-  public final void stop()
+  public final void stop(G3MRenderContext rc)
   {
     _firstRender = false;
   }
