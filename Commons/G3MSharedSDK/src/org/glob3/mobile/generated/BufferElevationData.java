@@ -67,14 +67,15 @@ public abstract class BufferElevationData extends ElevationData
     final double u = mu.clamp(uv._x, 0, 1);
     final double v = mu.clamp(uv._y, 0, 1);
     final double dX = u * (_width - 1);
-    final double dY = (1.0 - v) * (_height - 1);
+    //const double dY = (1.0 - v) * (_height - 1);
+    final double dY = v * (_height - 1);
   
     final int x = (int) dX;
     final int y = (int) dY;
-    final int nextX = (int)(dX + 1.0);
-    final int nextY = (int)(dY + 1.0);
-  //  const int nextX = x + 1;
-  //  const int nextY = y + 1;
+  //  const int nextX = (int) (dX + 1.0);
+  //  const int nextY = (int) (dY + 1.0);
+    final int nextX = x + 1;
+    final int nextY = y + 1;
     final double alphaY = dY - y;
     final double alphaX = dX - x;
   

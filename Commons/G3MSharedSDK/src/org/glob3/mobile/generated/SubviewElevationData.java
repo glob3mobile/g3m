@@ -96,7 +96,7 @@ public class SubviewElevationData extends ElevationData
         ysize *= (1.0 - (y-y1));
       }
   
-      for (double x = floorX0; x <= ceilX1; y++)
+      for (double x = floorX0; x <= ceilX1; x++)
       {
         double size = ysize;
         final double height = _elevationData.getElevationAt((int) mu.min(x, maxX), (int) mu.min(y, maxY), unusedType);
@@ -224,17 +224,16 @@ public class SubviewElevationData extends ElevationData
       for (int y = 0; y < _height; y++)
       {
         final double height = getElevationAt(x, y, unusedType);
-        if (height != _noDataValue)
+  //      if (height != _noDataValue) {
+        if (height < minHeight)
         {
-          if (height < minHeight)
-          {
-            minHeight = height;
-          }
-          if (height > maxHeight)
-          {
-            maxHeight = height;
-          }
+          minHeight = height;
         }
+        if (height > maxHeight)
+        {
+          maxHeight = height;
+        }
+  //      }
       }
     }
   

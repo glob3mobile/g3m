@@ -84,17 +84,16 @@ public class FloatBufferElevationData extends BufferElevationData
     for (int i = 0; i < bufferSize; i++)
     {
       final float height = _buffer.get(i);
-      if (height != _noDataValue)
+  //    if (height != _noDataValue) {
+      if (height < minHeight)
       {
-        if (height < minHeight)
-        {
-          minHeight = height;
-        }
-        if (height > maxHeight)
-        {
-          maxHeight = height;
-        }
+        minHeight = height;
       }
+      if (height > maxHeight)
+      {
+        maxHeight = height;
+      }
+  //    }
     }
   
     if (minHeight == mu.maxFloat())

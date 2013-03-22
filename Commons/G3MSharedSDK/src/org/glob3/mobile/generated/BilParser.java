@@ -32,7 +32,7 @@ public class BilParser
   ///#include "IFloatBuffer.hpp"
   
   
-  public static ElevationData parseBil16(Sector sector, Vector2I extent, double noDataValue, IByteBuffer buffer)
+  public static ElevationData parseBil16(Sector sector, Vector2I extent, double noDataValue, double minValidHeight, IByteBuffer buffer)
   {
   
     final int size = extent._x * extent._y;
@@ -51,17 +51,21 @@ public class BilParser
     for (int i = 0; i < size; i++)
     {
       short height = iterator.nextInt16();
-      if (height == -9999)
+      if (height <= minValidHeight)
       {
-        height = 0;
+        height = (short) noDataValue;
       }
-      if (height == -32767)
+      else if (height == -9999)
       {
-        height = 0;
+        height = (short) noDataValue;
       }
-      if (height == -32768)
+      else if (height == -32767)
       {
-        height = 0;
+        height = (short) noDataValue;
+      }
+      else if (height == -32768)
+      {
+        height = (short) noDataValue;
       }
       //    if (height < 0) {
       //      height = 0;

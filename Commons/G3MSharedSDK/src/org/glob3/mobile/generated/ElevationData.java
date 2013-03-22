@@ -68,7 +68,7 @@ public abstract class ElevationData
 
   public abstract Vector2D getMinMaxHeights();
 
-  public Mesh createMesh(Ellipsoid ellipsoid, float verticalExaggeration, Geodetic3D positionOffset)
+  public Mesh createMesh(Ellipsoid ellipsoid, float verticalExaggeration, Geodetic3D positionOffset, float pointSize)
   {
   
     final Vector2D minMaxHeights = getMinMaxHeights();
@@ -76,17 +76,8 @@ public abstract class ElevationData
     final double maxHeight = minMaxHeights._y;
     final double deltaHeight = maxHeight - minHeight;
   
-    ILogger.instance().logInfo("minHeight=%f maxHeight=%f delta=%f", minHeight, maxHeight, deltaHeight);
-  
-  ////  const double latStepInDegrees = (_sector.getDeltaLatitude()._degrees  / _height) / 3 * 2;
-  ////  const double lonStepInDegrees = (_sector.getDeltaLongitude()._degrees / _width ) / 3 * 2;
-  //  const double latStepInDegrees = (_sector.getDeltaLatitude()._degrees  / _height);
-  //  const double lonStepInDegrees = (_sector.getDeltaLongitude()._degrees / _width);
-  //
-  //  const Geodetic2D targetLower(_sector.lower());
-  //  const Geodetic2D targetUpper(_sector.upper());
-  
-  
+  //  ILogger::instance()->logInfo("minHeight=%f maxHeight=%f delta=%f",
+  //                               minHeight, maxHeight, deltaHeight);
   
     FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.firstVertex(), ellipsoid, Vector3D.zero());
     FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
@@ -133,7 +124,7 @@ public abstract class ElevationData
     }
   
     final float lineWidth = 1F;
-    final float pointSize = 1F;
+  //  const float pointSize = 1;
     Color flatColor = null;
   
     return new DirectMesh(GLPrimitive.points(), true, vertices.getCenter(), vertices.create(), lineWidth, pointSize, flatColor, colors.create());

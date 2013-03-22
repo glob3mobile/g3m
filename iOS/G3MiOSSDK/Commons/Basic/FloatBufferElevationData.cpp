@@ -65,14 +65,14 @@ Vector2D FloatBufferElevationData::getMinMaxHeights() const {
   const int bufferSize = _buffer->size();
   for (int i = 0; i < bufferSize; i++) {
     const float height = _buffer->get(i);
-    if (height != _noDataValue) {
-      if (height < minHeight) {
-        minHeight = height;
-      }
-      if (height > maxHeight) {
-        maxHeight = height;
-      }
+//    if (height != _noDataValue) {
+    if (height < minHeight) {
+      minHeight = height;
     }
+    if (height > maxHeight) {
+      maxHeight = height;
+    }
+//    }
   }
 
   if (minHeight == mu->maxFloat()) {

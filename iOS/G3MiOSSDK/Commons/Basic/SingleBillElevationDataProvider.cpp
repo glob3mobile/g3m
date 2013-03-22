@@ -57,7 +57,7 @@ public:
   void onDownload(const URL& url,
                   IByteBuffer* buffer) {
     const Vector2I resolution(_resolutionWidth, _resolutionHeight);
-    ElevationData* elevationData = BilParser::parseBil16(_sector, resolution, _noDataValue, buffer);
+    ElevationData* elevationData = BilParser::parseBil16(_sector, resolution, _noDataValue, -9999, buffer);
     delete buffer;
 
     _singleBillElevationDataProvider->onElevationData(elevationData);
@@ -117,7 +117,8 @@ const long long SingleBillElevationDataProvider::requestElevationData(const Sect
     listener->onError(sector, resolution);
   }
   else {
-    const bool useDecimation = false;
+    int _DGD_working_on_terrain;
+    const bool useDecimation = true;
     ElevationData *elevationData = new SubviewElevationData(_elevationData,
                                                             false,
                                                             sector,
