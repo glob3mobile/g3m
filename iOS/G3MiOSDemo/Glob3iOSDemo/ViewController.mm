@@ -71,6 +71,7 @@
 
 //import <G3MiOSSDK/WMSBillElevationDataProvider.hpp>
 #import <G3MiOSSDK/SingleBillElevationDataProvider.hpp>
+#import <G3MiOSSDK/FloatBufferElevationData.hpp>
 
 
 class TestVisibleSectorListener : public VisibleSectorListener {
@@ -177,12 +178,12 @@ public:
 
 - (void)  initializeElevationDataProvider: (G3MBuilder_iOS&) builder
 {
-  float verticalExaggeration = 3.0f;
+  float verticalExaggeration = 5.0f;
   builder.getTileRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
 
   int _DGD_working_on_terrain;
   
-//  ElevationDataProvider* elevationDataProvider = NULL;
+  ElevationDataProvider* elevationDataProvider = NULL;
 
 //  ElevationDataProvider* elevationDataProvider = new WMSBillElevationDataProvider();
 
@@ -215,16 +216,16 @@ public:
 //                                                              Vector2I(2008, 2032),
 //                                                              0);
 
-  ElevationDataProvider* elevationDataProvider;
-  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///small-caceres.bil", false),
-                                                              Sector::fromDegrees(
-                                                                                  39.4642994358225678,
-                                                                                  -6.3829980000000042,
-                                                                                  39.4829889999999608,
-                                                                                  -6.3645291787065954
-                                                                                  ),
-                                                              Vector2I(251, 254),
-                                                              0);
+//  ElevationDataProvider* elevationDataProvider;
+//  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///small-caceres.bil", false),
+//                                                              Sector::fromDegrees(
+//                                                                                  39.4642994358225678,
+//                                                                                  -6.3829980000000042,
+//                                                                                  39.4829889999999608,
+//                                                                                  -6.3645291787065954
+//                                                                                  ),
+//                                                              Vector2I(251, 254),
+//                                                              0);
 
   builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProvider);
 }
@@ -1022,9 +1023,12 @@ public:
     const float verticalExaggeration = 3.0f;
     const float pointSize = 2.0f;
 
-    const Sector subSector = _sector.shrinkedByPercent(0.6f);
+    const Sector subSector = _sector.shrinkedByPercent(0.2f);
+//    const Sector subSector = _sector.shrinkedByPercent(0.9f);
 //    const Sector subSector = _sector;
-    const Vector2I subResolution(512, 512);
+//    const Vector2I subResolution(512, 512);
+//    const Vector2I subResolution(251*2, 254*2);
+    const Vector2I subResolution(251*2, 254*2);
 
     int _DGD_working_on_terrain;
 
@@ -1035,10 +1039,11 @@ public:
                                                                               0,
                                                                               true);
 
-    _meshRenderer->addMesh( subElevationDataDecimated->createMesh(planet,
-                                                                  verticalExaggeration,
-                                                                  Geodetic3D::fromDegrees(0.02, 0.02, 0),
-                                                                  pointSize) );
+//    _meshRenderer->addMesh( subElevationDataDecimated->createMesh(planet,
+//                                                                  verticalExaggeration,
+//                                                                  Geodetic3D::fromDegrees(0.02, 0.02, 0),
+//                                                                  pointSize) );
+
 
     const ElevationData* subElevationDataNotDecimated = new SubviewElevationData(elevationData,
                                                                                  false,
@@ -1047,13 +1052,45 @@ public:
                                                                                  0,
                                                                                  false);
 
-    _meshRenderer->addMesh( subElevationDataNotDecimated->createMesh(planet,
-                                                                     verticalExaggeration,
-                                                                     Geodetic3D::fromDegrees(0.02, 0.04, 0),
-                                                                     pointSize) );
+//    _meshRenderer->addMesh( subElevationDataNotDecimated->createMesh(planet,
+//                                                                     verticalExaggeration,
+//                                                                     Geodetic3D::fromDegrees(0.02,
+//                                                                                             0.02 + (subSector.getDeltaLongitude()._degrees * 1.05),
+//                                                                                             0),
+//                                                                     pointSize) );
+
+
+    IFloatBuffer* deltaBuffer = IFactory::instance()->createFloatBuffer( subResolution._x * subResolution._y );
+
+    int unusedType = -1;
+    for (int x = 0; x < subResolution._x; x++) {
+      for (int y = 0; y < subResolution._y; y++) {
+        const double height1 = subElevationDataDecimated->getElevationAt(x, y, &unusedType);
+        const double height2 = subElevationDataNotDecimated->getElevationAt(x, y, &unusedType);
+
+        const int index = ((subResolution._y-1-y) * subResolution._x) + x;
+        deltaBuffer->rawPut(index,  (float) (height1 - height2));
+      }
+    }
+
+    ElevationData* deltaElevation = new FloatBufferElevationData(subSector,
+                                                                 subResolution,
+                                                                 0,
+                                                                 deltaBuffer);
+
+    _meshRenderer->addMesh( deltaElevation->createMesh(planet,
+                                                       verticalExaggeration,
+                                                       Geodetic3D::fromDegrees(0.02,
+                                                                               0.02 + (subSector.getDeltaLongitude()._degrees * 2.1),
+                                                                               100),
+                                                       pointSize) );
+
+
+    delete deltaElevation;
 
     delete planet;
     delete elevationData;
+
     delete subElevationDataDecimated;
     delete subElevationDataNotDecimated;
   }
@@ -1368,7 +1405,7 @@ public:
                                               true);
        */
 
-
+      /*
       context->getDownloader()->requestBuffer(URL("file:///small-caceres.bil", false),
                                               1000000,
                                               TimeInterval::fromDays(30),
@@ -1383,6 +1420,7 @@ public:
                                                                                                           )
                                                                                       ),
                                               true);
+      */
 
       //      [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
       //                                                     Geodetic3D(Angle::fromDegrees(37.78333333),

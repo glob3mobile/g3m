@@ -178,9 +178,9 @@ void Tile::onElevationData(ElevationData* elevationData,
   _elevationData = elevationData;
 
   if (_elevationData != NULL) {
-    const Vector2D minMaxHeights = elevationData->getMinMaxHeights();
-    _minHeight = minMaxHeights._x;
-    _maxHeight = minMaxHeights._y;
+    const Vector3D minMaxAverageHeights = elevationData->getMinMaxAverageHeights();
+    _minHeight = minMaxAverageHeights._x;
+    _maxHeight = minMaxAverageHeights._y;
   }
   else {
     _minHeight = 0;

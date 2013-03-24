@@ -15,6 +15,7 @@
 class Vector2I;
 class Mesh;
 class Ellipsoid;
+class Vector3D;
 
 class ElevationData {
 protected:
@@ -57,7 +58,7 @@ public:
 
   virtual const std::string description(bool detailed) const = 0;
 
-  virtual Vector2D getMinMaxHeights() const = 0;
+  virtual Vector3D getMinMaxAverageHeights() const = 0;
 
   virtual Mesh* createMesh(const Ellipsoid* ellipsoid,
                            float verticalExaggeration,

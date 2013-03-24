@@ -34,13 +34,14 @@ Mesh* ElevationData::createMesh(const Ellipsoid* ellipsoid,
                                 const Geodetic3D& positionOffset,
                                 float pointSize) const {
 
-  const Vector2D minMaxHeights = getMinMaxHeights();
-  const double minHeight = minMaxHeights._x;
-  const double maxHeight = minMaxHeights._y;
-  const double deltaHeight = maxHeight - minHeight;
+  const Vector3D minMaxAverageHeights = getMinMaxAverageHeights();
+  const double minHeight     = minMaxAverageHeights._x;
+  const double maxHeight     = minMaxAverageHeights._y;
+  const double deltaHeight   = maxHeight - minHeight;
+  const double averageHeight = minMaxAverageHeights._z;
 
-//  ILogger::instance()->logInfo("minHeight=%f maxHeight=%f delta=%f",
-//                               minHeight, maxHeight, deltaHeight);
+  ILogger::instance()->logInfo("averageHeight=%f, minHeight=%f maxHeight=%f delta=%f",
+                               averageHeight, minHeight, maxHeight, deltaHeight);
 
   FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
                                           ellipsoid,
