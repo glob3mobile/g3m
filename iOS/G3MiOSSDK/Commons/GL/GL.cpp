@@ -282,7 +282,3 @@ void GL::setState(const GLState& state) {
   //Changes current State and calls OpenGL API
   state.applyChanges(_nativeGL, *_currentState, Attributes, Uniforms);
 }
-
-void GL::setTexExtent(float w, float h){
-  _nativeGL->uniform2f(Uniforms.TextureExtent, w, h);
-}

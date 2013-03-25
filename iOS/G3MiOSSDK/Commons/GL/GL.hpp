@@ -30,11 +30,6 @@ class GL {
 private:
   INativeGL* const _nativeGL;
 
-//  MutableMatrix44D            _modelView;
-
-  // stack of ModelView matrices
-//  std::list<MutableMatrix44D> _matrixStack;
-
   std::list<const IGLTextureId*> _texturesIdBag;
   long                           _texturesIdAllocationCounter;
 
@@ -55,7 +50,6 @@ private:
 
   IFloatBuffer* _billboardTexCoord;
 
-  
   void setState(const GLState& state);
 
   const bool _verbose;
@@ -170,9 +164,6 @@ public:
   void deleteProgram(int program) const  {
     _nativeGL->deleteProgram(program);
   }
-  
-  void setTexExtent(float w, float h);
-
 };
 
 #endif

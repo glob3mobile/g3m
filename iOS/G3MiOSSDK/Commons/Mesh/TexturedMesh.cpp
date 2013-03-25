@@ -12,8 +12,6 @@
 
 void TexturedMesh::render(const G3MRenderContext* rc,
                           const GLState& parentState) const {
-  GL* gl = rc->getGL();
-
   GLState* state = _textureMapping->bind(rc, parentState);
   
   if (_transparent) {

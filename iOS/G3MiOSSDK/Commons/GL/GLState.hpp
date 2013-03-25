@@ -60,6 +60,10 @@ private:
   float _textureCoordinatesScaleY;
   float _textureCoordinatesTranslationX;
   float _textureCoordinatesTranslationY;
+
+  //Texture Extent
+  float _textureWidth;
+  float _textureHeight;
   
 #ifdef C_CODE
   const IGLTextureId* _boundTextureId;
@@ -67,8 +71,6 @@ private:
 #ifdef JAVA_CODE
   private IGLTextureId _boundTextureId;
 #endif
-  
-  //MutableMatrix44D    _modelViewMatrix;
   
   float _lineWidth;
   float _pointSize;
@@ -157,7 +159,9 @@ private:
   _clearColorB(0.0),
   _clearColorA(0.0),
   _projectionMatrix(MutableMatrix44D::invalid()),
-  _modelViewMatrix(MutableMatrix44D::invalid())
+  _modelViewMatrix(MutableMatrix44D::invalid()),
+  _textureWidth(0.0),
+  _textureHeight(0.0)
   {
   }
   
@@ -408,6 +412,8 @@ public:
   
   void bindTexture(const IGLTextureId* textureId){
     _boundTextureId = textureId;
+    
+    _texParMinFilter = -1;
   }
   
   const IGLTextureId* getBoundTexture() const{
@@ -451,6 +457,11 @@ public:
   
   void multiplyModelViewMatrix(const MutableMatrix44D& mv){
     _modelViewMatrix = _modelViewMatrix.multiply(mv);
+  }
+  
+  void setTextureExtent(float w, float h){
+    _textureHeight = h;
+    _textureWidth = w;
   }
   
   void applyChanges(const INativeGL* nativeGL, GLState& currentState, const AttributesStruct& attributes,const UniformsStruct& uniforms) const;

@@ -17,7 +17,6 @@ GLState* SimpleTextureMapping::bind(const G3MRenderContext* rc, const GLState& p
   state->enableTexture2D();
   
   if (_texCoords != NULL) {
-    GL* gl = rc->getGL();
     state->scaleTextureCoordinates(_scale);
     state->translateTextureCoordinates(_translation);
     state->bindTexture(_glTextureId);

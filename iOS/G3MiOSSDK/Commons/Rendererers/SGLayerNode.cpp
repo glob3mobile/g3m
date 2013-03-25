@@ -113,9 +113,7 @@ GLState* SGLayerNode::createState(const G3MRenderContext* rc,
   state->enableTextures();
   state->enableTexture2D();
 
-  GL* gl = rc->getGL();
   state->bindTexture(texId);
-  //gl->bindTexture(texId);
 
   return state;
 }

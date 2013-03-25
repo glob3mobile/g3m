@@ -188,7 +188,7 @@ void GLState::applyChanges(const INativeGL* nativeGL, GLState& currentState, con
   
   if (_lineWidth != currentState._lineWidth) {
     nativeGL->lineWidth(_lineWidth);
-    currentState._lineWidth = _cullFace;
+    currentState._lineWidth = _lineWidth;
   }
   
   if (_pointSize != currentState._pointSize) {
@@ -254,7 +254,7 @@ void GLState::applyChanges(const INativeGL* nativeGL, GLState& currentState, con
   
   //Tex parameters
   int texture2D = GLTextureType::texture2D();
-  //if (_texParMinFilter != currentState._texParMinFilter){
+  //if (_texParMinFilter != -1 && _texParMinFilter != currentState._texParMinFilter){
   nativeGL->texParameteri(texture2D, GLTextureParameter::minFilter(),_texParMinFilter);
   currentState._texParMinFilter = _texParMinFilter;
   //}
@@ -300,6 +300,13 @@ void GLState::applyChanges(const INativeGL* nativeGL, GLState& currentState, con
   if (!_modelViewMatrix.isEqualsTo(currentState._modelViewMatrix)){
     nativeGL->uniformMatrix4fv(uniforms.Modelview, false, &_modelViewMatrix);
     currentState._modelViewMatrix = _modelViewMatrix;
+  }
+  
+  //Texture Extent
+  if (_textureWidth != currentState._textureWidth || _textureHeight != currentState._textureHeight){
+    nativeGL->uniform2f(uniforms.TextureExtent, _textureWidth, _textureHeight);
+    currentState._textureHeight = _textureHeight;
+    currentState._textureWidth = _textureWidth;
   }
   
 }

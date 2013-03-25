@@ -114,8 +114,6 @@ bool AbstractMesh::isTransparent(const G3MRenderContext* rc) const {
 
 void AbstractMesh::render(const G3MRenderContext *rc,
                           const GLState& parentState) const {
-  GL* gl = rc->getGL();
-
   GLState state(parentState);
   state.enableVerticesPosition();
   state.setLineWidth(_lineWidth);
