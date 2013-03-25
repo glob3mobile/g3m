@@ -247,8 +247,8 @@ public class GL
     GlobalMembersGL.Uniforms.PointSize = checkedGetUniformLocation(program, "PointSize");
   
     // default values
-    _nativeGL.uniform2f(GlobalMembersGL.Uniforms.ScaleTexCoord, 1.0, 1.0);
-    _nativeGL.uniform2f(GlobalMembersGL.Uniforms.TranslationTexCoord, 0.0, 0.0);
+    _nativeGL.uniform2f(GlobalMembersGL.Uniforms.ScaleTexCoord, (float)1.0, (float)1.0);
+    _nativeGL.uniform2f(GlobalMembersGL.Uniforms.TranslationTexCoord, (float)0.0, (float)0.0);
     _nativeGL.uniform1f(GlobalMembersGL.Uniforms.PointSize, 1);
   
     //BILLBOARDS

@@ -74,8 +74,8 @@ public class SGGeometryNode extends SGNode
   
     if (_uv != null)
     {
-      state.translateTextureCoordinates(0.0, 0.0);
-      state.scaleTextureCoordinates(1.0, 1.0);
+      state.translateTextureCoordinates((float)0.0, (float)0.0);
+      state.scaleTextureCoordinates((float)1.0, (float)1.0);
       state.setTextureCoordinates(_uv, 2, 0);
     }
   
