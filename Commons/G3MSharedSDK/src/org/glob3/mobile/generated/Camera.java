@@ -133,6 +133,7 @@ public class Camera
   {
     state.setProjectionMatrix(getProjectionMatrix());
     state.setModelViewMatrix(getModelMatrix());
+    state.enableDepthTest();
   }
 
   public final Vector3D pixel2Ray(Vector2I pixel)

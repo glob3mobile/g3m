@@ -26,9 +26,6 @@ package org.glob3.mobile.generated;
 
 public class GLState
 {
-
-  private int _stateTimeStamp;
-
   private boolean _depthTest;
   private boolean _blend;
   private boolean _textures;
@@ -105,7 +102,6 @@ public class GLState
 
   private GLState()
   {
-     _stateTimeStamp = 0;
      _depthTest = false;
      _blend = false;
      _textures = false;
@@ -169,7 +165,6 @@ public class GLState
 
   public GLState(GLState parentState)
   {
-     _stateTimeStamp = parentState._stateTimeStamp;
      _depthTest = parentState._depthTest;
      _blend = parentState._blend;
      _textures = parentState._textures;
@@ -243,19 +238,11 @@ public class GLState
 
   public final void enableDepthTest()
   {
-    if (_depthTest != true)
-    {
       _depthTest = true;
-      _stateTimeStamp++;
-    }
   }
   public final void disableDepthTest()
   {
-    if (_depthTest != false)
-    {
       _depthTest = false;
-      _stateTimeStamp++;
-    }
   }
   public final boolean isEnabledDepthTest()
   {
@@ -264,19 +251,11 @@ public class GLState
 
   public final void enableBlend()
   {
-    if (_blend != true)
-    {
       _blend = true;
-      _stateTimeStamp++;
-    }
   }
   public final void disableBlend()
   {
-    if (_blend != false)
-    {
       _blend = false;
-      _stateTimeStamp++;
-    }
   }
   public final boolean isEnabledBlend()
   {
@@ -285,19 +264,11 @@ public class GLState
 
   public final void enableTextures()
   {
-    if (_textures != true)
-    {
       _textures = true;
-      _stateTimeStamp++;
-    }
   }
   public final void disableTextures()
   {
-    if (_textures != false)
-    {
       _textures = false;
-      _stateTimeStamp++;
-    }
   }
   public final boolean isEnabledTextures()
   {
@@ -306,19 +277,11 @@ public class GLState
 
   public final void enableTexture2D()
   {
-    if (_texture2D != true)
-    {
-      _stateTimeStamp++;
       _texture2D = true;
-    }
   }
   public final void disableTexture2D()
   {
-    if (_texture2D != false)
-    {
       _texture2D = false;
-      _stateTimeStamp++;
-    }
   }
   public final boolean isEnabledTexture2D()
   {
@@ -327,14 +290,10 @@ public class GLState
 
   public final void enableVertexColor(IFloatBuffer colors, float intensity)
   {
-    if (colors != _colors || _vertexColor != true || _intensity != intensity || _colorsTimeStamp != colors.timestamp())
-    {
       _vertexColor = true;
       _colors = colors;
       _intensity = intensity;
       _colorsTimeStamp = colors.timestamp();
-      _stateTimeStamp++;
-    }
   }
   public final void disableVertexColor()
   {
@@ -576,7 +535,7 @@ public class GLState
   public final void applyChanges(INativeGL nativeGL, GLState currentState, AttributesStruct attributes, UniformsStruct uniforms)
   {
   
-    // Depth Testh
+    // Depth Test
     if (_depthTest != currentState._depthTest)
     {
       if (_depthTest)
@@ -588,7 +547,7 @@ public class GLState
         nativeGL.disable(GLFeature.depthTest());
       }
       currentState._depthTest = _depthTest;
-   }
+    }
   
     // Blending
     if (_blend != currentState._blend)
