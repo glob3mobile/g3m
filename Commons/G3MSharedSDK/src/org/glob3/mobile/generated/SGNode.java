@@ -27,11 +27,11 @@ public class SGNode
   protected final String _id;
   protected final String _sId;
 
-//  SGNode*              _parent;
+  //  SGNode*              _parent;
   protected java.util.ArrayList<SGNode> _children = new java.util.ArrayList<SGNode>();
 
 
-//  void setParent(SGNode* parent);
+  //  void setParent(SGNode* parent);
 
   protected G3MContext _context;
 
@@ -39,7 +39,7 @@ public class SGNode
 
 
   public SGNode(String id, String sId)
-//  _parent(NULL)
+  //  _parent(NULL)
   {
      _id = id;
      _sId = sId;
@@ -102,16 +102,6 @@ public class SGNode
     return true;
   }
 
-  public void prepareRender(G3MRenderContext rc)
-  {
-  
-  }
-
-  public void cleanUpRender(G3MRenderContext rc)
-  {
-  
-  }
-
   public void rawRender(G3MRenderContext rc, GLState parentState)
   {
   
@@ -119,19 +109,16 @@ public class SGNode
 
   public void render(G3MRenderContext rc, GLState parentState)
   {
-    final GLState myState = createState(rc, parentState);
-    final GLState state;
+    GLState myState = createState(rc, parentState);
+    GLState state;
     if (myState == null)
     {
-      state = parentState;
+      state = (GLState) parentState;
     }
     else
     {
       state = myState;
     }
-  
-    prepareRender(rc);
-  
     rawRender(rc, state);
   
     final int childrenCount = _children.size();
@@ -140,22 +127,19 @@ public class SGNode
       SGNode child = _children.get(i);
       child.render(rc, state);
     }
-  
-    cleanUpRender(rc);
-  
     if (myState != null)
        myState.dispose();
   }
 
-//  SGShape* getShape() const {
-//    if (_shape != NULL) {
-//      return _shape;
-//    }
-//    if (_parent != NULL) {
-//      return _parent->getShape();
-//    }
-//    return NULL;
-//  }
+  //  SGShape* getShape() const {
+  //    if (_shape != NULL) {
+  //      return _shape;
+  //    }
+  //    if (_parent != NULL) {
+  //      return _parent->getShape();
+  //    }
+  //    return NULL;
+  //  }
 
   public GLState createState(G3MRenderContext rc, GLState parentState)
   {

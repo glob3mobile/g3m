@@ -24,7 +24,7 @@ public class DirectMesh extends AbstractMesh
     GL gl = rc.getGL();
   
     final int verticesCount = getVertexCount();
-    gl.drawArrays(_primitive, 0, verticesCount);
+    gl.drawArrays(_primitive, 0, verticesCount, parentState);
   }
 
 

@@ -19,6 +19,11 @@ package org.glob3.mobile.generated;
 
 //class IFloatBuffer;
 //class IShortBuffer;
+//class GL;
+//class Color;
+//class Angle;
+//class Vector3D;
+
 
 public class DummyRenderer extends LeafRenderer
 {
@@ -27,6 +32,18 @@ public class DummyRenderer extends LeafRenderer
 
   private IShortBuffer _indices;
   private IFloatBuffer _vertices;
+
+  private void drawFace(GL gl, GLState parentState, Color color, Vector3D translation, Angle a, Vector3D rotationAxis)
+  {
+    GLState state = new GLState(parentState);
+  
+    state.enableFlatColor(color, 1.0);
+    MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(translation);
+    MutableMatrix44D R = MutableMatrix44D.createRotationMatrix(a, rotationAxis);
+  
+    state.multiplyModelViewMatrix(T.multiply(R));
+    gl.drawElements(GLPrimitive.triangleStrip(), _indices, state);
+  }
 
   public void dispose()
   {
@@ -86,79 +103,19 @@ public class DummyRenderer extends LeafRenderer
   
     GLState state = new GLState(parentState);
     state.enableVerticesPosition();
-  
+    state.setVertices(_vertices, 3, 0);
     GL gl = rc.getGL();
+    drawFace(gl, state, Color.fromRGBA((float) 1,(float) 0, (float) 0, (float) 1), new Vector3D(_halfSize,0,0), Angle.fromDegrees(0), new Vector3D(0,0,1));
   
-    gl.setState(state);
+    drawFace(gl, state, Color.fromRGBA((float) 0,(float) 1, (float) 0, (float) 1), new Vector3D(0,_halfSize,0), Angle.fromDegrees(90), new Vector3D(0,0,1));
   
+    drawFace(gl, state, Color.fromRGBA((float) 0,(float) 0, (float) 1, (float) 1), new Vector3D(0,-_halfSize,0), Angle.fromDegrees(-90), new Vector3D(0,0,1));
   
-    gl.vertexPointer(3, 0, _vertices);
+    drawFace(gl, state, Color.fromRGBA((float) 1,(float) 0, (float) 1, (float) 1), new Vector3D(0,0,-_halfSize), Angle.fromDegrees(90), new Vector3D(0,1,0));
   
-    {
-      // draw a red square
-      gl.color((float) 1, (float) 0, (float) 0, 1);
-      gl.pushMatrix();
-      MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(new Vector3D(_halfSize,0,0));
-      gl.multMatrixf(T);
-      gl.drawElements(GLPrimitive.triangleStrip(), _indices);
-      gl.popMatrix();
-    }
+    drawFace(gl, state, Color.fromRGBA((float) 0,(float) 1, (float) 1, (float) 1), new Vector3D(0,0,_halfSize), Angle.fromDegrees(-90), new Vector3D(0,1,0));
   
-    {
-      // draw a green square
-      gl.color((float) 0, (float) 1, (float) 0, 1);
-      gl.pushMatrix();
-      MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(new Vector3D(0,_halfSize,0));
-      MutableMatrix44D R = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(90), new Vector3D(0,0,1));
-      gl.multMatrixf(T.multiply(R));
-      gl.drawElements(GLPrimitive.triangleStrip(), _indices);
-      gl.popMatrix();
-    }
-  
-    {
-      // draw a blue square
-      gl.color((float) 0, (float) 0, (float) 1, 1);
-      gl.pushMatrix();
-      MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(new Vector3D(0,-_halfSize,0));
-      MutableMatrix44D R = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(-90), new Vector3D(0,0,1));
-      gl.multMatrixf(T.multiply(R));
-      gl.drawElements(GLPrimitive.triangleStrip(), _indices);
-      gl.popMatrix();
-    }
-  
-    {
-      // draw a purple square
-      gl.color((float) 1, (float) 0, (float) 1, 1);
-      gl.pushMatrix();
-      MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(new Vector3D(0,0,-_halfSize));
-      MutableMatrix44D R = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(90), new Vector3D(0,1,0));
-      gl.multMatrixf(T.multiply(R));
-      gl.drawElements(GLPrimitive.triangleStrip(), _indices);
-      gl.popMatrix();
-    }
-  
-    {
-      // draw a cian square
-      gl.color((float) 0, (float) 1, (float) 1, 1);
-      gl.pushMatrix();
-      MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(new Vector3D(0,0,_halfSize));
-      MutableMatrix44D R = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(-90), new Vector3D(0,1,0));
-      gl.multMatrixf(T.multiply(R));
-      gl.drawElements(GLPrimitive.triangleStrip(), _indices);
-      gl.popMatrix();
-    }
-  
-    {
-      // draw a grey square
-      gl.color((float) 0.5, (float) 0.5, (float) 0.5, 1);
-      gl.pushMatrix();
-      MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(new Vector3D(-_halfSize,0,0));
-      MutableMatrix44D R = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(180), new Vector3D(0,0,1));
-      gl.multMatrixf(T.multiply(R));
-      gl.drawElements(GLPrimitive.triangleStrip(), _indices);
-      gl.popMatrix();
-    }
-  
+    drawFace(gl, state, Color.fromRGBA((float) 0.5,(float) 0.5, (float) 0.5, (float) 1), new Vector3D(-_halfSize,0,0), Angle.fromDegrees(180), new Vector3D(0,0,1));
   }
 
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)

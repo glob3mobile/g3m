@@ -74,15 +74,13 @@ public class SGGeometryNode extends SGNode
   
     if (_uv != null)
     {
-      gl.transformTexCoords(1.0f, 1.0f, 0.0f, 0.0f);
-      gl.setTextureCoordinates(2, 0, _uv);
+      state.translateTextureCoordinates(0.0, 0.0);
+      state.scaleTextureCoordinates(1.0, 1.0);
+      state.setTextureCoordinates(_uv, 2, 0);
     }
   
-    gl.setState(state);
-  
-    gl.vertexPointer(3, 0, _vertices);
-  
-    gl.drawElements(_primitive, _indices);
+    state.setVertices(_vertices, 3, 0);
+    gl.drawElements(_primitive, _indices, state);
   }
 
   public final GLState createState(G3MRenderContext rc, GLState parentState)

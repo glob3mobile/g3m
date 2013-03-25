@@ -113,6 +113,8 @@ public abstract class INativeGL
   public abstract int Primitive_LineLoop();
   public abstract int Primitive_Points();
 
+  public abstract int BlendFactor_One();
+  public abstract int BlendFactor_Zero();
   public abstract int BlendFactor_SrcAlpha();
   public abstract int BlendFactor_OneMinusSrcAlpha();
 

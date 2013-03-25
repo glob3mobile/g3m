@@ -60,20 +60,18 @@ public class TexturedMesh extends Mesh
 
   public final void render(G3MRenderContext rc, GLState parentState)
   {
-    GL gl = rc.getGL();
+    GLState state = _textureMapping.bind(rc, parentState);
   
-    GLState state = new GLState(parentState);
-    state.enableTextures();
-    state.enableTexture2D();
     if (_transparent)
     {
       state.enableBlend();
-      gl.setBlendFuncSrcAlpha();
+      state.setBlendFactors(GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha());
     }
   
-    _textureMapping.bind(rc);
-  
     _mesh.render(rc, state);
+  
+    if (state != null)
+       state.dispose();
   }
 
   public final Extent getExtent()

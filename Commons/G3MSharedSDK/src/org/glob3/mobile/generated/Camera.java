@@ -124,9 +124,15 @@ public class Camera
 
   public final void render(G3MRenderContext rc, GLState parentState)
   {
-    GL gl = rc.getGL();
-    gl.setProjection(getProjectionMatrix());
-    gl.loadMatrixf(getModelMatrix());
+    //GL* gl = rc->getGL();
+    //gl->setProjection(getProjectionMatrix());
+    //gl->loadMatrixf(getModelMatrix());
+  }
+
+  public final void changeGLState(GLState state)
+  {
+    state.setProjectionMatrix(getProjectionMatrix());
+    state.setModelViewMatrix(getModelMatrix());
   }
 
   public final Vector3D pixel2Ray(Vector2I pixel)

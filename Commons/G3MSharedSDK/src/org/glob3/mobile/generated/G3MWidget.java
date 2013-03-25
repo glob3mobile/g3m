@@ -188,6 +188,7 @@ public class G3MWidget
     if (_mainRendererReady)
     {
       _cameraRenderer.render(rc, _rootState);
+      _cameraRenderer.changeGLState(rc, (GLState)_rootState);
     }
   
     if (_selectedRenderer.isEnable())

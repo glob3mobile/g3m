@@ -1,5 +1,13 @@
 package org.glob3.mobile.generated; 
-///#include "IIntBuffer.hpp"
+//
+//  GLShaderUniforms.h
+//  G3MiOSSDK
+//
+//  Created by Jose Miguel SN on 19/03/13.
+//
+//
+
+
 
 public class UniformsStruct
 {

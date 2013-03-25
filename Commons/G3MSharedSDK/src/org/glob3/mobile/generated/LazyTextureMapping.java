@@ -33,6 +33,7 @@ public class LazyTextureMapping extends TextureMapping
 
   private final boolean _transparent;
 
+
   public LazyTextureMapping(LazyTextureMappingInitializer initializer, TexturesHandler texturesHandler, boolean ownedTexCoords, boolean transparent)
   {
      _initializer = initializer;
@@ -62,7 +63,20 @@ public class LazyTextureMapping extends TextureMapping
     releaseGLTextureId();
   }
 
-  public final void bind(G3MRenderContext rc)
+  //void bind(const G3MRenderContext* rc, const GLState& parentState) const;
+
+  public final boolean isValid()
+  {
+    return _glTextureId != null;
+  }
+
+  public final void setGLTextureId(IGLTextureId glTextureId)
+  {
+    releaseGLTextureId();
+    _glTextureId = glTextureId;
+  }
+
+  public final GLState bind(G3MRenderContext rc, GLState parentState)
   {
     if (!_initialized)
     {
@@ -79,29 +93,25 @@ public class LazyTextureMapping extends TextureMapping
       _initialized = true;
     }
   
+    GLState state = new GLState(parentState);
+    state.enableTextures();
+    state.enableTexture2D();
+  
     if (_texCoords != null)
     {
-      GL gl = rc.getGL();
+      state.scaleTextureCoordinates(_scale);
+      state.translateTextureCoordinates(_translation);
+      state.bindTexture(_glTextureId);
+      state.setTextureCoordinates(_texCoords, 2, 0);
   
-      gl.transformTexCoords(_scale, _translation);
-      gl.bindTexture(_glTextureId);
-      gl.setTextureCoordinates(2, 0, _texCoords);
     }
     else
     {
       ILogger.instance().logError("LazyTextureMapping::bind() with _texCoords == NULL");
     }
-  }
-
-  public final boolean isValid()
-  {
-    return _glTextureId != null;
-  }
-
-  public final void setGLTextureId(IGLTextureId glTextureId)
-  {
-    releaseGLTextureId();
-    _glTextureId = glTextureId;
+  
+  
+    return state;
   }
 
 

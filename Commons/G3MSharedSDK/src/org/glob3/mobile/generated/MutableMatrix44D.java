@@ -149,6 +149,47 @@ public class MutableMatrix44D
     _columnMajorFloatArray = null;
   }
 
+  public final boolean isEqualsTo(MutableMatrix44D m)
+  {
+    if (_m00 != m._m00)
+       return false;
+    if (_m01 != m._m01)
+       return false;
+    if (_m02 != m._m02)
+       return false;
+    if (_m03 != m._m03)
+       return false;
+
+    if (_m10 != m._m10)
+       return false;
+    if (_m11 != m._m11)
+       return false;
+    if (_m12 != m._m12)
+       return false;
+    if (_m13 != m._m13)
+       return false;
+
+    if (_m20 != m._m20)
+       return false;
+    if (_m21 != m._m21)
+       return false;
+    if (_m22 != m._m22)
+       return false;
+    if (_m23 != m._m23)
+       return false;
+
+    if (_m30 != m._m30)
+       return false;
+    if (_m31 != m._m31)
+       return false;
+    if (_m32 != m._m32)
+       return false;
+    if (_m33 != m._m33)
+       return false;
+
+    return true;
+  }
+
   public final MutableMatrix44D copyFrom(MutableMatrix44D that)
   {
     if (this != that)

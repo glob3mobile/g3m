@@ -33,27 +33,15 @@ public class SGTranslateNode extends SGNode
 
   }
 
-  public final void prepareRender(G3MRenderContext rc)
-  {
-    GL gl = rc.getGL();
-  
-    gl.pushMatrix();
-    gl.multMatrixf(MutableMatrix44D.createTranslationMatrix(_x, _y, _z));
-  
-    super.prepareRender(rc);
-  }
-
-  public final void cleanUpRender(G3MRenderContext rc)
-  {
-    GL gl = rc.getGL();
-    gl.popMatrix();
-  
-    super.cleanUpRender(rc);
-  }
-
   public final GLState createState(G3MRenderContext rc, GLState parentState)
   {
-    return null;
+  
+    GLState state = new GLState(parentState);
+  
+    state.multiplyModelViewMatrix(MutableMatrix44D.createTranslationMatrix(_x, _y, _z));
+    //SGNode::prepareRender(rc, state);
+  
+    return state;
   }
 
 }

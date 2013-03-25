@@ -337,7 +337,7 @@ public class Mark
     }
   }
 
-  public final void render(G3MRenderContext rc, Vector3D cameraPosition)
+  public final void render(G3MRenderContext rc, Vector3D cameraPosition, GLState parentState)
   {
     final Planet planet = rc.getPlanet();
   
@@ -380,7 +380,13 @@ public class Mark
         {
           GL gl = rc.getGL();
   
-          gl.drawBillBoard(_textureId, getVertices(planet), _textureWidth, _textureHeight);
+          IFloatBuffer vertices = getVertices(planet);
+  
+          GLState state = new GLState(parentState);
+          state.setVertices(vertices, 3, 0);
+          state.setTextureExtent(_textureWidth, _textureHeight);
+          state.bindTexture(_textureId);
+          gl.drawArrays(GLPrimitive.triangleStrip(), 0, vertices.size() / 3, state);
   
           _renderedMark = true;
         }

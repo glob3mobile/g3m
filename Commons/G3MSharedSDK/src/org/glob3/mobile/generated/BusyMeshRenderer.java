@@ -94,7 +94,8 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
     // set mesh glstate
     GLState state = new GLState(parentState);
     state.enableBlend();
-    gl.setBlendFuncSrcAlpha();
+  
+    state.setBlendFactors(GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha());
   
     // init modelview matrix
     int[] currentViewport = new int[4];
@@ -102,20 +103,17 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
     final int halfWidth = currentViewport[2] / 2;
     final int halfHeight = currentViewport[3] / 2;
     MutableMatrix44D M = MutableMatrix44D.createOrthographicProjectionMatrix(-halfWidth, halfWidth, -halfHeight, halfHeight, -halfWidth, halfWidth);
-    gl.setProjection(M);
-    gl.loadMatrixf(MutableMatrix44D.identity());
+    state.setProjectionMatrix(M);
+    state.setModelViewMatrix(MutableMatrix44D.identity());
   
     // clear screen
     gl.clearScreen(_backgroundColor.getRed(), _backgroundColor.getGreen(), _backgroundColor.getBlue(), _backgroundColor.getAlpha());
   
-    gl.pushMatrix();
     MutableMatrix44D R1 = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_degrees), new Vector3D(0, 0, -1));
-    gl.multMatrixf(R1);
+    state.multiplyModelViewMatrix(R1);
   
     // draw mesh
     _mesh.render(rc, state);
-  
-    gl.popMatrix();
   }
 
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)

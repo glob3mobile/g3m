@@ -113,13 +113,12 @@ public class LeveledTexturedMesh extends Mesh
     }
     else
     {
-      GLState state = new GLState(parentState);
-      state.enableTextures();
-      state.enableTexture2D();
-  
-      mapping.bind(rc);
+      GLState state = mapping.bind(rc, parentState);
   
       _mesh.render(rc, state);
+  
+      if (state != null)
+         state.dispose();
     }
   }
 

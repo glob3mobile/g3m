@@ -121,8 +121,7 @@ public class SGLayerNode extends SGNode
     state.enableTextures();
     state.enableTexture2D();
   
-    GL gl = rc.getGL();
-    gl.bindTexture(texId);
+    state.bindTexture(texId);
   
     return state;
   }

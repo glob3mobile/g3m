@@ -225,16 +225,10 @@ public abstract class Shape implements EffectTarget
         _pendingEffects.clear();
       }
   
+      GLState state = new GLState(parentState);
+      state.multiplyModelViewMatrix(getTransformMatrix(rc.getPlanet()));
   
-      GL gl = rc.getGL();
-  
-      gl.pushMatrix();
-  
-      gl.multMatrixf(getTransformMatrix(rc.getPlanet()));
-  
-      rawRender(rc, parentState);
-  
-      gl.popMatrix();
+      rawRender(rc, state);
     }
   }
 

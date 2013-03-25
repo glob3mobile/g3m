@@ -52,6 +52,11 @@ public class CameraRenderer extends LeafRenderer
     }
   }
 
+  public final void changeGLState(G3MRenderContext rc, GLState state)
+  {
+    rc.getCurrentCamera().changeGLState(state);
+  }
+
   public final void initialize(G3MContext context)
   {
     //_logger = ic->getLogger();

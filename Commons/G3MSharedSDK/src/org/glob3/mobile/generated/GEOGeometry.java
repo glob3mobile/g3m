@@ -68,6 +68,8 @@ public abstract class GEOGeometry extends GEOObject
       {
         GLState state = new GLState(parentState);
         state.disableDepthTest();
+        //state.setPolygonOffsetFactor(1.0);
+        //state.setPolygonOffsetUnits(1.0);
         mesh.render(rc, state);
       }
     }

@@ -117,8 +117,6 @@ public abstract class AbstractMesh extends Mesh
 
   public final void render(G3MRenderContext rc, GLState parentState)
   {
-    GL gl = rc.getGL();
-  
     GLState state = new GLState(parentState);
     state.enableVerticesPosition();
     state.setLineWidth(_lineWidth);
@@ -133,26 +131,19 @@ public abstract class AbstractMesh extends Mesh
       if (_flatColor.isTransparent())
       {
         state.enableBlend();
-        gl.setBlendFuncSrcAlpha();
+  
+        state.setBlendFactors(GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha());
       }
     }
   
-    gl.vertexPointer(3, 0, _vertices);
+    state.setVertices(_vertices, 3, 0);
   
     if (_translationMatrix != null)
     {
-      gl.pushMatrix();
-      gl.multMatrixf(_translationMatrix);
+      state.multiplyModelViewMatrix(_translationMatrix);
     }
   
-    gl.setState(state);
     rawRender(rc, state);
-  
-    if (_translationMatrix != null)
-    {
-      gl.popMatrix();
-    }
-  
   }
 
   public final Extent getExtent()

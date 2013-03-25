@@ -20,6 +20,7 @@ package org.glob3.mobile.generated;
 //class Mark;
 //class Camera;
 //class MarkTouchListener;
+//class IFloatBuffer;
 
 public class MarksRenderer extends LeafRenderer
 {
@@ -101,18 +102,22 @@ public class MarksRenderer extends LeafRenderer
     state.enableTextures();
     state.enableTexture2D();
     state.enableVerticesPosition();
-    gl.setState(state);
   
     Vector2D textureTranslation = new Vector2D(0.0, 0.0);
     Vector2D textureScale = new Vector2D(1.0, 1.0);
-    gl.transformTexCoords(textureScale, textureTranslation);
   
-    gl.setBlendFuncSrcAlpha();
+    state.translateTextureCoordinates(textureTranslation);
+    state.scaleTextureCoordinates(textureScale);
+  
+    state.setBlendFactors(GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha());
   
     final Camera camera = rc.getCurrentCamera();
     final Vector3D cameraPosition = camera.getCartesianPosition();
   
-    gl.startBillBoardDrawing(camera.getWidth(), camera.getHeight());
+    state.enableBillboarding();
+    state.setViewportSize(camera.getWidth(), camera.getHeight());
+  
+    state.setTextureCoordinates(gl.getBillboardTexCoord(), 2, 0);
   
     final int marksSize = _marks.size();
     for (int i = 0; i < marksSize; i++)
@@ -122,11 +127,9 @@ public class MarksRenderer extends LeafRenderer
   
       if (mark.isReady())
       {
-        mark.render(rc, cameraPosition);
+        mark.render(rc, cameraPosition, state);
       }
     }
-  
-    gl.stopBillBoardDrawing();
   }
 
   public final void addMark(Mark mark)

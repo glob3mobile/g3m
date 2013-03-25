@@ -26,7 +26,7 @@ public class IndexedMesh extends AbstractMesh
   protected final void rawRender(G3MRenderContext rc, GLState parentState)
   {
     GL gl = rc.getGL();
-    gl.drawElements(_primitive, _indices);
+    gl.drawElements(_primitive, _indices, parentState);
   }
 
   public IndexedMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, IShortBuffer indices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors)

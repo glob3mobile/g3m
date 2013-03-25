@@ -48,20 +48,26 @@ public class SimpleTextureMapping extends TextureMapping
     return _texCoords;
   }
 
-  public final void bind(G3MRenderContext rc)
+  public final GLState bind(G3MRenderContext rc, GLState parentState)
   {
+    GLState state = new GLState(parentState);
+    state.enableTextures();
+    state.enableTexture2D();
+  
     if (_texCoords != null)
     {
-      GL gl = rc.getGL();
+      state.scaleTextureCoordinates(_scale);
+      state.translateTextureCoordinates(_translation);
+      state.bindTexture(_glTextureId);
   
-      gl.transformTexCoords(_scale, _translation);
-      gl.bindTexture(_glTextureId);
-      gl.setTextureCoordinates(2, 0, _texCoords);
+      state.setTextureCoordinates(_texCoords, 2, 0);
     }
     else
     {
       ILogger.instance().logError("SimpleTextureMapping::bind() with _texCoords == NULL");
     }
+  
+    return state;
   }
 
   public final boolean isTransparent(G3MRenderContext rc)

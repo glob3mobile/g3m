@@ -117,24 +117,22 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
     final int halfWidth = currentViewport[2] / 2;
     final int halfHeight = currentViewport[3] / 2;
     MutableMatrix44D M = MutableMatrix44D.createOrthographicProjectionMatrix(-halfWidth, halfWidth, -halfHeight, halfHeight, -halfWidth, halfWidth);
-    gl.setProjection(M);
-    gl.loadMatrixf(MutableMatrix44D.identity());
+  
+    state.setProjectionMatrix(M);
+  
+    //gl->setProjection(M);
+    state.setModelViewMatrix(MutableMatrix44D.identity());
+    //gl->loadMatrixf(MutableMatrix44D::identity());
   
     // clear screen
     gl.clearScreen(_backgroundColor.getRed(), _backgroundColor.getGreen(), _backgroundColor.getBlue(), _backgroundColor.getAlpha());
   
-    gl.setState(state);
+    state.setBlendFactors(GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha());
   
-    gl.setBlendFuncSrcAlpha();
-  
-    gl.pushMatrix();
     MutableMatrix44D R2 = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_degrees), new Vector3D(0, 0, 1));
-    gl.multMatrixf(R2);
   
     // draw mesh
     _quadMesh.render(rc, parentState);
-  
-    gl.popMatrix();
   }
 
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
