@@ -1623,7 +1623,7 @@ public:
        */
 
       /**/
-      /*
+      /**/
       //      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/coastline"
       //                                                                  ofType: @"geojson"];
 
@@ -1645,7 +1645,7 @@ public:
           _geoRenderer->addGEOObject(geoObject);
         }
       }
-      */
+      /**/
 
       /*
        NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"

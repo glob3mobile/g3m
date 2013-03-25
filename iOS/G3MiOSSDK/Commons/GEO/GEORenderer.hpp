@@ -26,6 +26,10 @@ private:
 
 public:
 
+  GEORenderer() {
+
+  }
+
   void addGEOObject(GEOObject* geoObject);
   
   void onResume(const G3MContext* context) {
