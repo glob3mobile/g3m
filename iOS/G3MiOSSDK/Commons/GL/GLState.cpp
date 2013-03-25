@@ -14,7 +14,8 @@
 #include "IGLTextureId.hpp"
 
 
-void GLState::applyChanges(const INativeGL* nativeGL, GLState& currentState, const AttributesStruct& attributes, const UniformsStruct& uniforms) const{
+
+void GLState::applyChanges(const INativeGL* nativeGL, GLState& currentState, const AttributesStruct& attributes,const UniformsStruct& uniforms) const{
   
   // Depth Testh
   if (_depthTest != currentState._depthTest) {

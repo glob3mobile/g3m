@@ -90,8 +90,8 @@ bool GL::useProgram(ShaderProgram* program) {
   Uniforms.PointSize           = checkedGetUniformLocation(program, "PointSize");
 
   // default values
-  _nativeGL->uniform2f(Uniforms.ScaleTexCoord, 1.0, 1.0);
-  _nativeGL->uniform2f(Uniforms.TranslationTexCoord, 0.0, 0.0);
+  _nativeGL->uniform2f(Uniforms.ScaleTexCoord, (float)1.0, (float)1.0);
+  _nativeGL->uniform2f(Uniforms.TranslationTexCoord, (float)0.0, (float)0.0);
   _nativeGL->uniform1f(Uniforms.PointSize, 1);
 
   //BILLBOARDS

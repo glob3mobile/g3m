@@ -72,7 +72,7 @@ void DummyRenderer::drawFace(GL* gl, const GLState& parentState,
 {
   GLState state(parentState);
   
-  state.enableFlatColor(color, 1.0);
+  state.enableFlatColor(color, (float)1.0);
   MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(translation);
   MutableMatrix44D R = MutableMatrix44D::createRotationMatrix(a, rotationAxis);
   
