@@ -26,9 +26,6 @@ class UniformsStruct;
 
 class GLState {
 private:
-  
-  int _stateTimeStamp;
-  
   bool _depthTest;
   bool _blend;
   bool _textures;
@@ -109,8 +106,7 @@ private:
   
   
   GLState() :
-  _stateTimeStamp(0),
-  _depthTest(true),
+  _depthTest(false),
   _blend(false),
   _textures(false),
   _texture2D(false),
@@ -173,7 +169,6 @@ public:
   }
   
   explicit GLState(const GLState& parentState) :
-  _stateTimeStamp(parentState._stateTimeStamp),
   _depthTest(parentState._depthTest),
   _blend(parentState._blend),
   _textures(parentState._textures),
@@ -242,70 +237,43 @@ public:
   }
   
   void enableDepthTest() {
-    if (_depthTest != true){
       _depthTest = true;
-      _stateTimeStamp++;
-    }
   }
   void disableDepthTest() {
-    if (_depthTest != false){
       _depthTest = false;
-      _stateTimeStamp++;
-    }
   }
   bool isEnabledDepthTest() const { return _depthTest; }
   
   void enableBlend() {
-    if (_blend != true){
       _blend = true;
-      _stateTimeStamp++;
-    }
   }
   void disableBlend() {
-    if (_blend != false){
       _blend = false;
-      _stateTimeStamp++;
-    }
   }
   bool isEnabledBlend() const { return _blend; }
   
   void enableTextures() {
-    if (_textures != true){
       _textures = true;
-      _stateTimeStamp++;
-    }
   }
   void disableTextures() {
-    if (_textures != false){
       _textures = false;
-      _stateTimeStamp++;
-    }
   }
   bool isEnabledTextures() const { return _textures; }
   
   void enableTexture2D() {
-    if (_texture2D != true){
-      _stateTimeStamp++;
       _texture2D = true;
-    }
   }
   void disableTexture2D() {
-    if (_texture2D != false){
       _texture2D = false;
-      _stateTimeStamp++;
-    }
   }
   bool isEnabledTexture2D() const { return _texture2D; }
   
   void enableVertexColor(IFloatBuffer* colors,
                          float intensity) {
-    if (colors != _colors || _vertexColor != true || _intensity != intensity || _colorsTimeStamp != colors->timestamp()){
       _vertexColor  = true;
       _colors       = colors;
       _intensity    = intensity;
       _colorsTimeStamp = colors->timestamp();
-      _stateTimeStamp++;
-    }
   }
   void disableVertexColor() { _vertexColor = false; }
   bool isEnabledVertexColor() const { return _vertexColor; }

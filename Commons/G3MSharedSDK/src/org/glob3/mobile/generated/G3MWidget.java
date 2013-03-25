@@ -189,6 +189,7 @@ public class G3MWidget
     {
       _cameraRenderer.render(rc, _rootState);
       _cameraRenderer.changeGLState(rc, (GLState)_rootState);
+      _rootState.enableDepthTest();
     }
   
     if (_selectedRenderer.isEnable())

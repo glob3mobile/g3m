@@ -195,6 +195,7 @@ void Camera::render(const G3MRenderContext* rc,
 void Camera::changeGLState(GLState* state) const {
   state->setProjectionMatrix(getProjectionMatrix());
   state->setModelViewMatrix(getModelMatrix());
+  state->enableDepthTest();
 }
 
 

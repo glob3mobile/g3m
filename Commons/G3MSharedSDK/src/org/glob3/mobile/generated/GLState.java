@@ -106,7 +106,7 @@ public class GLState
   private GLState()
   {
      _stateTimeStamp = 0;
-     _depthTest = true;
+     _depthTest = false;
      _blend = false;
      _textures = false;
      _texture2D = false;
@@ -588,7 +588,7 @@ public class GLState
         nativeGL.disable(GLFeature.depthTest());
       }
       currentState._depthTest = _depthTest;
-    }
+   }
   
     // Blending
     if (_blend != currentState._blend)

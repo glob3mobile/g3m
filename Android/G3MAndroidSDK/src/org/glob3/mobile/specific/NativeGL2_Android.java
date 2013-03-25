@@ -625,4 +625,16 @@ public final class NativeGL2_Android
    }
 
 
+@Override
+public int BlendFactor_One() {
+	return GLES20.GL_ONE;
+}
+
+
+@Override
+public int BlendFactor_Zero() {
+	return GLES20.GL_ZERO;
+}
+
+
 }

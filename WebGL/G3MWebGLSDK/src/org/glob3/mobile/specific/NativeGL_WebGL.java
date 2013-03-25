@@ -741,6 +741,18 @@ public final class NativeGL_WebGL
    }-*/;
 
 
+@Override
+public native int BlendFactor_One() /*-{
+	return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.ONE;
+}-*/;
+
+
+@Override
+public native int BlendFactor_Zero() /*-{
+	return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.ZERO;
+}-*/;
+
+
    // @Override
    //   public void uniform2f(final IGLUniformID loc,
    //                         final float x,

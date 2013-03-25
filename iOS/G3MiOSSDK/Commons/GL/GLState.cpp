@@ -17,7 +17,7 @@
 
 void GLState::applyChanges(const INativeGL* nativeGL, GLState& currentState, const AttributesStruct& attributes,const UniformsStruct& uniforms) const{
   
-  // Depth Testh
+  // Depth Test
   if (_depthTest != currentState._depthTest) {
     if (_depthTest) {
       nativeGL->enable(GLFeature::depthTest());
