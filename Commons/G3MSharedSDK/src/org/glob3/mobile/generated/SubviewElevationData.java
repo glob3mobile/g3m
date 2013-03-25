@@ -49,7 +49,31 @@ public class SubviewElevationData extends ElevationData
         final int index = ((_height-1-y) * _width) + x;
   
         final double height = getElevationBoxAt(x0, y0, x1, y1);
-        buffer.put(index, (float) height);
+        buffer.rawPut(index, (float) height);
+      }
+    }
+  
+    return buffer;
+  }
+  private IFloatBuffer createInterpolatedBuffer()
+  {
+    IFloatBuffer buffer = IFactory.instance().createFloatBuffer(_width * _height);
+  
+    int unusedType = -1;
+    for (int x = 0; x < _width; x++)
+    {
+      final double u = (double) x / (_width - 1);
+      for (int y = 0; y < _height; y++)
+      {
+        final double v = (double) y / (_height - 1);
+        final Geodetic2D position = _sector.getInnerPoint(u, v);
+  
+        final int index = ((_height-1-y) * _width) + x;
+  
+        final double height = _elevationData.getElevationAt(position.latitude(), position.longitude(), unusedType);
+  
+        buffer.rawPut(index, (float) height);
+  
       }
     }
   
@@ -58,7 +82,7 @@ public class SubviewElevationData extends ElevationData
 
   private double getElevationBoxAt(double x0, double y0, double x1, double y1)
   {
-  //  aaa;
+    //  aaa;
   
     final IMathUtils mu = IMathUtils.instance();
   
@@ -67,11 +91,14 @@ public class SubviewElevationData extends ElevationData
     final double floorX0 = mu.floor(x0);
     final double ceilX1 = mu.ceil(x1);
   
-    if (floorY0 < 0 || ceilY1 >= _elevationData.getExtentHeight())
+    final int parentHeight = _elevationData.getExtentHeight();
+    final int parentWidth = _elevationData.getExtentWidth();
+  
+    if (floorY0 < 0 || ceilY1 >= parentHeight)
     {
       return 0;
     }
-    if (floorX0 < 0 || ceilX1 >= _elevationData.getExtentWidth())
+    if (floorX0 < 0 || ceilX1 >= parentWidth)
     {
       return 0;
     }
@@ -81,8 +108,8 @@ public class SubviewElevationData extends ElevationData
     double heightSum = 0;
     double area = 0;
   
-    final double maxX = _elevationData.getExtentWidth() - 1;
-    final double maxY = _elevationData.getExtentHeight() - 1;
+    final double maxX = parentWidth - 1;
+    final double maxY = parentHeight - 1;
   
     for (double y = floorY0; y <= ceilY1; y++)
     {
@@ -96,10 +123,13 @@ public class SubviewElevationData extends ElevationData
         ysize *= (1.0 - (y-y1));
       }
   
+      final int yy = (int) mu.min(y, maxY);
+  
       for (double x = floorX0; x <= ceilX1; x++)
       {
+        final double height = _elevationData.getElevationAt((int) mu.min(x, maxX), yy, unusedType);
+  
         double size = ysize;
-        final double height = _elevationData.getElevationAt((int) mu.min(x, maxX), (int) mu.min(y, maxY), unusedType);
         if (x < x0)
         {
           size *= (1.0 - (x0-x));
@@ -108,6 +138,7 @@ public class SubviewElevationData extends ElevationData
         {
           size *= (1.0 - (x-x1));
         }
+  
         heightSum += height * size;
         area += size;
       }
@@ -139,7 +170,7 @@ public class SubviewElevationData extends ElevationData
     }
     else
     {
-      _buffer = null;
+      _buffer = createInterpolatedBuffer();
     }
   }
 
@@ -170,6 +201,7 @@ public class SubviewElevationData extends ElevationData
       type = 1;
       return _buffer.get(index);
     }
+  
   
     final double u = (double) x / (_width - 1);
     final double v = (double) y / (_height - 1);
@@ -209,13 +241,13 @@ public class SubviewElevationData extends ElevationData
     return s;
   }
 
-  public final Vector2D getMinMaxHeights()
+  public final Vector3D getMinMaxAverageHeights()
   {
-  
     final IMathUtils mu = IMathUtils.instance();
   
     double minHeight = mu.maxDouble();
     double maxHeight = mu.minDouble();
+    double sumHeight = 0.0;
   
     int unusedType = 0;
   
@@ -224,7 +256,7 @@ public class SubviewElevationData extends ElevationData
       for (int y = 0; y < _height; y++)
       {
         final double height = getElevationAt(x, y, unusedType);
-  //      if (height != _noDataValue) {
+        //      if (height != _noDataValue) {
         if (height < minHeight)
         {
           minHeight = height;
@@ -233,7 +265,8 @@ public class SubviewElevationData extends ElevationData
         {
           maxHeight = height;
         }
-  //      }
+        sumHeight += height;
+        //      }
       }
     }
   
@@ -246,7 +279,7 @@ public class SubviewElevationData extends ElevationData
       maxHeight = 0;
     }
   
-    return new Vector2D(minHeight, maxHeight);
+    return new Vector3D(minHeight, maxHeight, sumHeight / (_width * _height));
   }
 
 }

@@ -811,9 +811,9 @@ public class Tile
   
     if (_elevationData != null)
     {
-      final Vector2D minMaxHeights = elevationData.getMinMaxHeights();
-      _minHeight = minMaxHeights._x;
-      _maxHeight = minMaxHeights._y;
+      final Vector3D minMaxAverageHeights = elevationData.getMinMaxAverageHeights();
+      _minHeight = minMaxAverageHeights._x;
+      _maxHeight = minMaxAverageHeights._y;
     }
     else
     {

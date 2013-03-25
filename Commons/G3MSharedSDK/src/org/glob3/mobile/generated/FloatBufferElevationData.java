@@ -74,11 +74,12 @@ public class FloatBufferElevationData extends BufferElevationData
     return s;
   }
 
-  public final Vector2D getMinMaxHeights()
+  public final Vector3D getMinMaxAverageHeights()
   {
     final IMathUtils mu = IMathUtils.instance();
     float minHeight = mu.maxFloat();
     float maxHeight = mu.minFloat();
+    double sumHeight = 0.0;
   
     final int bufferSize = _buffer.size();
     for (int i = 0; i < bufferSize; i++)
@@ -93,6 +94,7 @@ public class FloatBufferElevationData extends BufferElevationData
       {
         maxHeight = height;
       }
+      sumHeight += height;
   //    }
     }
   
@@ -105,7 +107,7 @@ public class FloatBufferElevationData extends BufferElevationData
       maxHeight = 0F;
     }
   
-    return new Vector2D(minHeight, maxHeight);
+    return new Vector3D(minHeight, maxHeight, sumHeight / (_width * _height));
   }
 
 }

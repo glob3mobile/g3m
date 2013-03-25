@@ -78,6 +78,11 @@ double BufferElevationData::getElevationAt(const Angle& latitude,
   const double alphaY = dY - y;
   const double alphaX = dX - x;
 
+//  if (alphaX < 0 || alphaX > 1 ||
+//      alphaY < 0 || alphaY > 1) {
+//    printf("break point\n");
+//  }
+
   int unsedType = -1;
   double result;
   if (x == dX) {
@@ -90,7 +95,7 @@ double BufferElevationData::getElevationAt(const Angle& latitude,
       const double heightY     = getElevationAt(x, y,     &unsedType);
       const double heightNextY = getElevationAt(x, nextY, &unsedType);
       *type = 2;
-      result = mu->linearInterpolation(heightY, heightNextY, alphaY);
+      result = mu->linearInterpolation(heightNextY, heightY, alphaY);
     }
   }
   else {
@@ -103,20 +108,20 @@ double BufferElevationData::getElevationAt(const Angle& latitude,
     }
     else {
       // bilinear
-      const double valueSW = getElevationAt(x,     y,     &unsedType);
-      const double valueSE = getElevationAt(nextX, y,     &unsedType);
-      const double valueNE = getElevationAt(nextX, nextY, &unsedType);
-      const double valueNW = getElevationAt(x,     nextY, &unsedType);
+      const double valueNW = getElevationAt(x,     y,     &unsedType);
+      const double valueNE = getElevationAt(nextX, y,     &unsedType);
+      const double valueSE = getElevationAt(nextX, nextY, &unsedType);
+      const double valueSW = getElevationAt(x,     nextY, &unsedType);
 
       *type = 4;
       result = getInterpolator()->interpolation(valueSW,
                                                 valueSE,
                                                 valueNE,
                                                 valueNW,
-                                                alphaY,
-                                                alphaX);
+                                                alphaX,
+                                                alphaY);
     }
   }
-  
+
   return result;
 }

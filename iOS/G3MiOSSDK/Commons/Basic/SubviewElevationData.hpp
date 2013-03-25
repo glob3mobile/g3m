@@ -19,7 +19,8 @@ private:
   const IFloatBuffer*  _buffer;
 
   IFloatBuffer* createDecimatedBuffer() const;
-  
+  IFloatBuffer* createInterpolatedBuffer() const;
+
   double getElevationBoxAt(double x0, double y0,
                            double x1, double y1) const;
 
@@ -44,7 +45,7 @@ public:
 
   const std::string description(bool detailed) const;
 
-  Vector2D getMinMaxHeights() const;
+  Vector3D getMinMaxAverageHeights() const;
 
 };
 

@@ -11,6 +11,7 @@
 #include "IStringBuilder.hpp"
 #include "IFloatBuffer.hpp"
 #include "IFactory.hpp"
+#include "Vector3D.hpp"
 
 SubviewElevationData::SubviewElevationData(const ElevationData *elevationData,
                                            bool ownsElevationData,
@@ -26,7 +27,7 @@ _ownsElevationData(ownsElevationData)
     _buffer = createDecimatedBuffer();
   }
   else {
-    _buffer = NULL;
+    _buffer = createInterpolatedBuffer();
   }
 }
 
@@ -51,7 +52,7 @@ const Vector2D SubviewElevationData::getParentXYAt(const Geodetic2D& position) c
 
 double SubviewElevationData::getElevationBoxAt(double x0, double y0,
                                                double x1, double y1) const {
-//  aaa;
+  //  aaa;
 
   const IMathUtils* mu = IMathUtils::instance();
 
@@ -60,10 +61,13 @@ double SubviewElevationData::getElevationBoxAt(double x0, double y0,
   const double floorX0 = mu->floor(x0);
   const double ceilX1  = mu->ceil(x1);
 
-  if (floorY0 < 0 || ceilY1 >= _elevationData->getExtentHeight()) {
+  const int parentHeight = _elevationData->getExtentHeight();
+  const int parentWidth  = _elevationData->getExtentWidth();
+
+  if (floorY0 < 0 || ceilY1 >= parentHeight) {
     return 0;
   }
-  if (floorX0 < 0 || ceilX1 >= _elevationData->getExtentWidth()) {
+  if (floorX0 < 0 || ceilX1 >= parentWidth) {
     return 0;
   }
 
@@ -72,8 +76,8 @@ double SubviewElevationData::getElevationBoxAt(double x0, double y0,
   double heightSum = 0;
   double area = 0;
 
-  const double maxX = _elevationData->getExtentWidth()  - 1;
-  const double maxY = _elevationData->getExtentHeight() - 1;
+  const double maxX = parentWidth  - 1;
+  const double maxY = parentHeight - 1;
 
   for (double y=floorY0; y <= ceilY1; y++) {
     double ysize = 1.0;
@@ -84,17 +88,21 @@ double SubviewElevationData::getElevationBoxAt(double x0, double y0,
       ysize *= (1.0 - (y-y1));
     }
 
+    const int yy = (int) mu->min(y, maxY);
+
     for (double x=floorX0; x <= ceilX1; x++) {
-      double size = ysize;
       const double height = _elevationData->getElevationAt((int) mu->min(x, maxX),
-                                                           (int) mu->min(y, maxY),
+                                                           yy,
                                                            &unusedType);
+
+      double size = ysize;
       if (x < x0) {
         size *= (1.0 - (x0-x));
       }
       if (x > x1) {
         size *= (1.0 - (x-x1));
       }
+
       heightSum += height * size;
       area += size;
     }
@@ -126,7 +134,31 @@ IFloatBuffer* SubviewElevationData::createDecimatedBuffer() const {
 
       const double height = getElevationBoxAt(x0, y0,
                                               x1, y1);
-      buffer->put(index, (float) height);
+      buffer->rawPut(index, (float) height);
+    }
+  }
+
+  return buffer;
+}
+
+IFloatBuffer* SubviewElevationData::createInterpolatedBuffer() const {
+  IFloatBuffer* buffer = IFactory::instance()->createFloatBuffer(_width * _height);
+
+  int unusedType = -1;
+  for (int x = 0; x < _width; x++) {
+    const double u = (double) x / (_width - 1);
+    for (int y = 0; y < _height; y++) {
+      const double v = (double) y / (_height - 1);
+      const Geodetic2D position = _sector.getInnerPoint(u, v);
+
+      const int index = ((_height-1-y) * _width) + x;
+
+      const double height = _elevationData->getElevationAt(position.latitude(),
+                                                           position.longitude(),
+                                                           &unusedType);
+
+      buffer->rawPut(index, (float) height);
+      
     }
   }
 
@@ -154,6 +186,7 @@ double SubviewElevationData::getElevationAt(int x, int y,
     *type = 1;
     return _buffer->get(index);
   }
+
 
   const double u = (double) x / (_width - 1);
   const double v = (double) y / (_height - 1);
@@ -193,35 +226,38 @@ const std::string SubviewElevationData::description(bool detailed) const {
   return s;
 }
 
-Vector2D SubviewElevationData::getMinMaxHeights() const {
-
+Vector3D SubviewElevationData::getMinMaxAverageHeights() const {
   const IMathUtils* mu = IMathUtils::instance();
 
   double minHeight = mu->maxDouble();
   double maxHeight = mu->minDouble();
+  double sumHeight = 0.0;
 
   int unusedType = 0;
 
   for (int x = 0; x < _width; x++) {
     for (int y = 0; y < _height; y++) {
       const double height = getElevationAt(x, y, &unusedType);
-//      if (height != _noDataValue) {
+      //      if (height != _noDataValue) {
       if (height < minHeight) {
         minHeight = height;
       }
       if (height > maxHeight) {
         maxHeight = height;
       }
-//      }
+      sumHeight += height;
+      //      }
     }
   }
-  
+
   if (minHeight == mu->maxDouble()) {
     minHeight = 0;
   }
   if (maxHeight == mu->minDouble()) {
     maxHeight = 0;
   }
-
-  return Vector2D(minHeight, maxHeight);
+  
+  return Vector3D(minHeight,
+                  maxHeight,
+                  sumHeight / (_width * _height));
 }

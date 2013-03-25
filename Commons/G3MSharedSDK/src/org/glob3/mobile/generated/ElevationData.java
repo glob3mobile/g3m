@@ -20,6 +20,7 @@ package org.glob3.mobile.generated;
 //class Vector2I;
 //class Mesh;
 //class Ellipsoid;
+//class Vector3D;
 
 public abstract class ElevationData
 {
@@ -66,18 +67,18 @@ public abstract class ElevationData
 
   public abstract String description(boolean detailed);
 
-  public abstract Vector2D getMinMaxHeights();
+  public abstract Vector3D getMinMaxAverageHeights();
 
   public Mesh createMesh(Ellipsoid ellipsoid, float verticalExaggeration, Geodetic3D positionOffset, float pointSize)
   {
   
-    final Vector2D minMaxHeights = getMinMaxHeights();
-    final double minHeight = minMaxHeights._x;
-    final double maxHeight = minMaxHeights._y;
+    final Vector3D minMaxAverageHeights = getMinMaxAverageHeights();
+    final double minHeight = minMaxAverageHeights._x;
+    final double maxHeight = minMaxAverageHeights._y;
     final double deltaHeight = maxHeight - minHeight;
+    final double averageHeight = minMaxAverageHeights._z;
   
-  //  ILogger::instance()->logInfo("minHeight=%f maxHeight=%f delta=%f",
-  //                               minHeight, maxHeight, deltaHeight);
+    ILogger.instance().logInfo("averageHeight=%f, minHeight=%f maxHeight=%f delta=%f", averageHeight, minHeight, maxHeight, deltaHeight);
   
     FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.firstVertex(), ellipsoid, Vector3D.zero());
     FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
@@ -86,6 +87,8 @@ public abstract class ElevationData
   
     for (int x = 0; x < _width; x++)
     {
+      final double u = (double) x / (_width - 1);
+  
       for (int y = 0; y < _height; y++)
       {
         final double height = getElevationAt(x, y, type);
@@ -112,7 +115,6 @@ public abstract class ElevationData
         }
         */
   
-        final double u = (double) x / (_width - 1);
         final double v = 1.0 - ((double) y / (_height - 1));
   
         final Geodetic2D position = _sector.getInnerPoint(u, v).add(positionOffset.asGeodetic2D());
