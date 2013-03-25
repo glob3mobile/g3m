@@ -60,10 +60,6 @@ public:
   
   virtual bool isReadyToRender(const G3MRenderContext* rc);
   
-  virtual void prepareRender(const G3MRenderContext* rc, GLState& parentState);
-  
-  //  virtual void cleanUpRender(const G3MRenderContext* rc);
-  
   virtual void rawRender(const G3MRenderContext* rc,
                          const GLState& parentState);
   

@@ -31,22 +31,6 @@ bool SGTextureNode::isReadyToRender(const G3MRenderContext* rc) {
   return SGNode::isReadyToRender(rc);
 }
 
-void SGTextureNode::prepareRender(const G3MRenderContext* rc, GLState& parentState) {
-  const int layersCount = _layers.size();
-  for (int i = 0; i < layersCount; i++) {
-    SGLayerNode* layer = _layers[i];
-    layer->prepareRender(rc, parentState);
-  }
-}
-
-//void SGTextureNode::cleanUpRender(const G3MRenderContext* rc) {
-//  const int layersCount = _layers.size();
-//  for (int i = 0; i < layersCount; i++) {
-//    SGLayerNode* layer = _layers[i];
-//    layer->cleanUpRender(rc);
-//  }
-//}
-
 //void SGTextureNode::rawRender(const G3MRenderContext* rc,
 //                              const GLState& parentState) {
 //  const int layersCount = _layers.size();
@@ -98,8 +82,6 @@ void SGTextureNode::render(const G3MRenderContext* rc,
     state2 = myState;
   }
 
-  prepareRender(rc, *state2);
-
   //  rawRender(rc, *state);
 
   const int layersCount = _layers.size();
@@ -115,7 +97,7 @@ void SGTextureNode::render(const G3MRenderContext* rc,
       state = layerState;
     }
 
-    layer->rawRender(rc, *state);
+    //layer->rawRender(rc, *state);
 
     const int childrenCount = _children.size();
     for (int j = 0; j < childrenCount; j++) {
@@ -125,8 +107,6 @@ void SGTextureNode::render(const G3MRenderContext* rc,
 
     delete layerState;
   }
-  
-  cleanUpRender(rc);
   
   delete myState;
 }

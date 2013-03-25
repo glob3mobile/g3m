@@ -12,9 +12,10 @@
 #include "GL.hpp"
 #include "Vector3D.hpp"
 
-void SGRotateNode::prepareRender(const G3MRenderContext* rc, GLState& parentState) {
-  GLState state(parentState);
-  state.multiplyModelViewMatrix(MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_angle),
+GLState* SGRotateNode::createState(const G3MRenderContext* rc,
+                     const GLState& parentState) {
+  GLState* state = new GLState(parentState);
+  state->multiplyModelViewMatrix(MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_angle),
                                                                        Vector3D(_x, _y, _z)));
-  SGNode::prepareRender(rc, state);
+  return state;
 }

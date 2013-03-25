@@ -37,10 +37,6 @@ public:
 //  void rawRender(const G3MRenderContext* rc,
 //                 const GLState& parentState);
 
-  void prepareRender(const G3MRenderContext* rc, GLState& parentState);
-
-  void cleanUpRender(const G3MRenderContext* rc);
-
   GLState* createState(const G3MRenderContext* rc,
                        const GLState& parentState) {
     return  NULL;
