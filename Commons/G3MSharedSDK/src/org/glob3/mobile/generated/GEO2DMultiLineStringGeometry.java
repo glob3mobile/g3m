@@ -23,42 +23,9 @@ public class GEO2DMultiLineStringGeometry extends GEOMultiLineStringGeometry
 {
   private java.util.ArrayList<java.util.ArrayList<Geodetic2D>> _coordinatesArray;
 
-  protected final Mesh createMesh(G3MRenderContext rc)
+  protected final java.util.ArrayList<GEOSymbol> createSymbols(G3MRenderContext rc, GEOSymbolizer symbolizer)
   {
-  //  CompositeMesh* composite = new CompositeMesh();
-  //  const int coordinatesArrayCount = _coordinatesArray->size();
-  //  for (int i = 0; i < coordinatesArrayCount; i++) {
-  //    std::vector<Geodetic2D*>* coordinates = _coordinatesArray->at(i);
-  //
-  //    Color* color = Color::newFromRGBA(1, 1, 0, 1);
-  //    const float lineWidth = 2;
-  //
-  //    composite->addMesh( create2DBoundaryMesh(coordinates, color, lineWidth, rc) );
-  //  }
-  //  return composite;
-  
-    FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.firstVertex(), rc.getPlanet(), Geodetic2D.zero());
-  
-    final int coordinatesArrayCount = _coordinatesArray.size();
-    for (int i = 0; i < coordinatesArrayCount; i++)
-    {
-      java.util.ArrayList<Geodetic2D> coordinates = _coordinatesArray.get(i);
-      final int coordinatesCount = coordinates.size();
-      for (int j = 0; j < coordinatesCount; j++)
-      {
-        Geodetic2D coordinate = coordinates.get(j);
-        vertices.add(coordinate);
-        if ((j > 0) && (j < (coordinatesCount-1)))
-        {
-          vertices.add(coordinate);
-        }
-      }
-    }
-  
-    Color color = Color.newFromRGBA(1, 1, 1, 1);
-    final float lineWidth = 2F;
-  
-    return new DirectMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), lineWidth, 1, color);
+    return symbolizer.createSymbols(this);
   }
 
 
@@ -70,7 +37,12 @@ public class GEO2DMultiLineStringGeometry extends GEOMultiLineStringGeometry
 
 
   ///#include "CompositeMesh.hpp"
+  ///#include "Color.hpp"
   
+  ///#include "FloatBufferBuilderFromGeodetic.hpp"
+  ///#include "DirectMesh.hpp"
+  ///#include "GLConstants.hpp"
+  ///#include "Planet.hpp"
   
   public void dispose()
   {
@@ -89,6 +61,11 @@ public class GEO2DMultiLineStringGeometry extends GEOMultiLineStringGeometry
     }
   
     _coordinatesArray = null;
+  }
+
+  public final java.util.ArrayList<java.util.ArrayList<Geodetic2D>> getCoordinatesArray()
+  {
+    return _coordinatesArray;
   }
 
 }

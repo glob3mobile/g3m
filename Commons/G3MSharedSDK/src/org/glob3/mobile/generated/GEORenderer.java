@@ -18,12 +18,27 @@ package org.glob3.mobile.generated;
 
 
 //class GEOObject;
+//class GEOSymbolizer;
 
 public class GEORenderer extends LeafRenderer
 {
   private G3MContext _context;
   private java.util.ArrayList<GEOObject> _children = new java.util.ArrayList<GEOObject>();
 
+  private final GEOSymbolizer _symbolizer;
+
+
+  public GEORenderer(GEOSymbolizer symbolizer)
+  {
+     _symbolizer = symbolizer;
+
+  }
+
+  public void dispose()
+  {
+    if (_symbolizer != null)
+       _symbolizer.dispose();
+  }
 
   public final void addGEOObject(GEOObject geoObject)
   {
@@ -81,7 +96,7 @@ public class GEORenderer extends LeafRenderer
     for (int i = 0; i < childrenCount; i++)
     {
       GEOObject geoObject = _children.get(i);
-      geoObject.render(rc, parentState);
+      geoObject.render(rc, parentState, _symbolizer);
     }
   }
 
