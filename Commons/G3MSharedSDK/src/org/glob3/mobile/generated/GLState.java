@@ -145,7 +145,7 @@ public class GLState
      _texParMagFilter = -1;
      _texParWrapS = -1;
      _texParWrapT = -1;
-     _pixelStoreIAlignmentUnpack = 0;
+     _pixelStoreIAlignmentUnpack = -1;
      _clearColorR = 0.0F;
      _clearColorG = 0.0F;
      _clearColorB = 0.0F;
@@ -834,7 +834,7 @@ public class GLState
       //}
     }
   
-    if (_pixelStoreIAlignmentUnpack != currentState._pixelStoreIAlignmentUnpack)
+    if (_pixelStoreIAlignmentUnpack != -1 || _pixelStoreIAlignmentUnpack != currentState._pixelStoreIAlignmentUnpack)
     {
       nativeGL.pixelStorei(GLAlignment.unpack(), _pixelStoreIAlignmentUnpack);
       currentState._pixelStoreIAlignmentUnpack = _pixelStoreIAlignmentUnpack;
