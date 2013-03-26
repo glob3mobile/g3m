@@ -9,9 +9,7 @@
 #include "GEO2DLineStringGeometry.hpp"
 
 #include "Geodetic2D.hpp"
-//#include "Color.hpp"
 #include "GEOSymbolizer.hpp"
-//#include "GEOSymbol.hpp"
 
 GEO2DLineStringGeometry::~GEO2DLineStringGeometry() {
   const int coordinatesCount = _coordinates->size();
