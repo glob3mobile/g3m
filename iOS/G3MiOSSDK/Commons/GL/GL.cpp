@@ -119,6 +119,7 @@ void GL::clearScreen(float r, float g, float b, float a) {
   
   GLState state(*_currentState);
   state.setClearColor(Color::fromRGBA(r, g, b, a));
+  setState(state);
   _nativeGL->clear(GLBufferType::colorBuffer() | GLBufferType::depthBuffer());
 }
 

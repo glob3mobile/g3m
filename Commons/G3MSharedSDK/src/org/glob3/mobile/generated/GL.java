@@ -183,6 +183,7 @@ public class GL
   
     GLState state = new GLState(_currentState);
     state.setClearColor(Color.fromRGBA(r, g, b, a));
+    setState(state);
     _nativeGL.clear(GLBufferType.colorBuffer() | GLBufferType.depthBuffer());
   }
 
