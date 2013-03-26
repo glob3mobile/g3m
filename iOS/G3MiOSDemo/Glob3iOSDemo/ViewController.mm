@@ -1475,11 +1475,22 @@ public:
         }
       }
 
-      /**/
-      if (true) {
+      if (false) {
+        NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"A320"
+                                                                   ofType: @"bson"];
+        if (planeFilePath) {
+            NSData* data = [NSData dataWithContentsOfFile: planeFilePath];
+            const int length = [data length];
+            unsigned char* bytes = new unsigned char[ length ]; // will be deleted by IByteBuffer's destructor
+            [data getBytes: bytes
+                    length: length];
+            IByteBuffer* buffer = new ByteBuffer_iOS(bytes, length);
+            if (buffer) {
+                Shape* plane = SceneJSShapesParser::parseFromBSON(buffer, URL::FILE_PROTOCOL + "textures-A320/");
+          
         //      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
         //                                                                ofType: @"json"];
-
+/*
         NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"A320"
                                                                   ofType: @"json"];
         if (planeFilePath) {
@@ -1490,6 +1501,7 @@ public:
             std::string planeJSON = [nsPlaneJSON UTF8String];
             Shape* plane = SceneJSShapesParser::parseFromJSON(planeJSON, "file:///textures-A320/");
             //Shape* plane = SceneJSShapesParser::parse(planeJSON, "file:///textures-citation/");
+ */
             if (plane) {
               // Washington, DC
               plane->setPosition(new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
