@@ -149,7 +149,7 @@ private:
   _texParMagFilter(-1),
   _texParWrapS(-1),
   _texParWrapT(-1),
-  _pixelStoreIAlignmentUnpack(0),
+  _pixelStoreIAlignmentUnpack(-1),
   _clearColorR(0.0),
   _clearColorG(0.0),
   _clearColorB(0.0),

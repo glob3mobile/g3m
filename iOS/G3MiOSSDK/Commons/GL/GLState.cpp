@@ -277,7 +277,7 @@ void GLState::applyChanges(const INativeGL* nativeGL, GLState& currentState, con
     //}
   }
   
-  if (_pixelStoreIAlignmentUnpack != currentState._pixelStoreIAlignmentUnpack){
+  if (_pixelStoreIAlignmentUnpack != -1 || _pixelStoreIAlignmentUnpack != currentState._pixelStoreIAlignmentUnpack){
     nativeGL->pixelStorei(GLAlignment::unpack(), _pixelStoreIAlignmentUnpack);
     currentState._pixelStoreIAlignmentUnpack = _pixelStoreIAlignmentUnpack;
   }
