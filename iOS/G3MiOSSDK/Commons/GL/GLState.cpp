@@ -254,26 +254,28 @@ void GLState::applyChanges(const INativeGL* nativeGL, GLState& currentState, con
   }
   
   //Tex parameters
-  int texture2D = GLTextureType::texture2D();
-  //if (_texParMinFilter != -1 && _texParMinFilter != currentState._texParMinFilter){
-  nativeGL->texParameteri(texture2D, GLTextureParameter::minFilter(),_texParMinFilter);
-  currentState._texParMinFilter = _texParMinFilter;
-  //}
-  
-  //if (_texParMagFilter != currentState._texParMagFilter){
-  nativeGL->texParameteri(texture2D, GLTextureParameter::magFilter(),_texParMagFilter);
-  currentState._texParMagFilter = _texParMagFilter;
-  //}
-  
-  //if (_texParWrapS != currentState._texParWrapS){
-  nativeGL->texParameteri(texture2D, GLTextureParameter::wrapS(),_texParWrapS);
-  currentState._texParWrapS = _texParWrapS;
-  //}
-  
-  //if (_texParWrapT != currentState._texParWrapT){
-  nativeGL->texParameteri(texture2D, GLTextureParameter::wrapT(),_texParWrapT);
-  currentState._texParWrapT = _texParWrapT;
-  //}
+  if (_boundTextureId != NULL){
+    int texture2D = GLTextureType::texture2D();
+    //if (_texParMinFilter != -1 && _texParMinFilter != currentState._texParMinFilter){
+    nativeGL->texParameteri(texture2D, GLTextureParameter::minFilter(),_texParMinFilter);
+    currentState._texParMinFilter = _texParMinFilter;
+    //}
+    
+    //if (_texParMagFilter != currentState._texParMagFilter){
+    nativeGL->texParameteri(texture2D, GLTextureParameter::magFilter(),_texParMagFilter);
+    currentState._texParMagFilter = _texParMagFilter;
+    //}
+    
+    //if (_texParWrapS != currentState._texParWrapS){
+    nativeGL->texParameteri(texture2D, GLTextureParameter::wrapS(),_texParWrapS);
+    currentState._texParWrapS = _texParWrapS;
+    //}
+    
+    //if (_texParWrapT != currentState._texParWrapT){
+    nativeGL->texParameteri(texture2D, GLTextureParameter::wrapT(),_texParWrapT);
+    currentState._texParWrapT = _texParWrapT;
+    //}
+  }
   
   if (_pixelStoreIAlignmentUnpack != currentState._pixelStoreIAlignmentUnpack){
     nativeGL->pixelStorei(GLAlignment::unpack(), _pixelStoreIAlignmentUnpack);
