@@ -174,15 +174,12 @@ public class GL
     return _billboardTexCoord;
   }
 
-  public final void clearScreen(float r, float g, float b, float a)
+  public final void clearScreen(GLState state)
   {
     if (_verbose)
     {
       ILogger.instance().logInfo("GL::clearScreen()");
     }
-  
-    GLState state = new GLState(_currentState);
-    state.setClearColor(Color.fromRGBA(r, g, b, a));
     setState(state);
     _nativeGL.clear(GLBufferType.colorBuffer() | GLBufferType.depthBuffer());
   }
@@ -343,14 +340,6 @@ public class GL
   
       //ILogger::instance()->logInfo("  = delete textureId=%s", texture->description().c_str());
     }
-  }
-
-  public final void clearScreen(Color col)
-  {
-    if (_verbose)
-       ILogger.instance().logInfo("GL::clearScreen()");
-
-    clearScreen(col.getRed(), col.getGreen(), col.getBlue(), col.getAlpha());
   }
 
   public final void getViewport(int[] v)
