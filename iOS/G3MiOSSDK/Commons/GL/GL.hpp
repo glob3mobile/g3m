@@ -86,7 +86,7 @@ public:
   
   IFloatBuffer* getBillboardTexCoord();
 
-  void clearScreen(float r, float g, float b, float a);
+  void clearScreen(const GLState& state);
 
   void drawElements(int mode,
                     IShortBuffer* indices, const GLState& state);
@@ -104,15 +104,6 @@ public:
                                     bool generateMipmap);
 
   void deleteTexture(const IGLTextureId* textureId);
-
-  void clearScreen(const Color& col) {
-    if (_verbose) ILogger::instance()->logInfo("GL::clearScreen()");
-
-    clearScreen(col.getRed(),
-                col.getGreen(),
-                col.getBlue(),
-                col.getAlpha());
-  }
 
   void getViewport(int v[]) {
     if (_verbose) ILogger::instance()->logInfo("GL::getViewport()");

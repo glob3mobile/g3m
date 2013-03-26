@@ -112,13 +112,10 @@ bool GL::useProgram(ShaderProgram* program) {
 }
 
 
-void GL::clearScreen(float r, float g, float b, float a) {
+void GL::clearScreen(const GLState& state) {
   if (_verbose) {
     ILogger::instance()->logInfo("GL::clearScreen()");
   }
-  
-  GLState state(*_currentState);
-  state.setClearColor(Color::fromRGBA(r, g, b, a));
   setState(state);
   _nativeGL->clear(GLBufferType::colorBuffer() | GLBufferType::depthBuffer());
 }

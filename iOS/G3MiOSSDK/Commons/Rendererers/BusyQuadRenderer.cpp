@@ -123,10 +123,8 @@ void BusyQuadRenderer::render(const G3MRenderContext* rc,
   //gl->loadMatrixf(MutableMatrix44D::identity());
 
   // clear screen
-  gl->clearScreen(_backgroundColor->getRed(),
-                  _backgroundColor->getGreen(),
-                  _backgroundColor->getBlue(),
-                  _backgroundColor->getAlpha());
+  state.setClearColor(*_backgroundColor);
+  gl->clearScreen(state);
 
   state.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
 
