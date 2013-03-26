@@ -17,11 +17,6 @@ class GEO2DLineStringGeometry;
 #include <vector>
 
 class GEOSymbolizer {
-protected:
-  GEOSymbolizer() {
-
-  }
-
 public:
 #ifdef C_CODE
   virtual ~GEOSymbolizer() { }
