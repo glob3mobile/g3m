@@ -469,8 +469,6 @@ public class GLState
   public final void bindTexture(IGLTextureId textureId)
   {
     _boundTextureId = textureId;
-
-    _texParMinFilter = -1;
   }
 
   public final IGLTextureId getBoundTexture()

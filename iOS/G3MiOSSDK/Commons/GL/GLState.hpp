@@ -380,8 +380,6 @@ public:
   
   void bindTexture(const IGLTextureId* textureId){
     _boundTextureId = textureId;
-    
-    _texParMinFilter = -1;
   }
   
   const IGLTextureId* getBoundTexture() const{
