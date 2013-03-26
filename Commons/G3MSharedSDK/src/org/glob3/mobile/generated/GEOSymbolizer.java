@@ -22,12 +22,6 @@ package org.glob3.mobile.generated;
 
 public abstract class GEOSymbolizer
 {
-///#ifdef C_CODE
-//  virtual ~GEOSymbolizer() { }
-///#endif
-///#ifdef JAVA_CODE
-//  public void dispose();
-///#endif
   public void dispose()
   {
   }
