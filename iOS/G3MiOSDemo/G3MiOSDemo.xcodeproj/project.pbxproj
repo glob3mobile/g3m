@@ -44,6 +44,7 @@
 		D8EEF40F1577AA61003FEB5E /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF40E1577AA61003FEB5E /* OpenGLES.framework */; };
 		D8EEF4111577AAE2003FEB5E /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF4101577AAE2003FEB5E /* QuartzCore.framework */; };
 		D8EEF4221577AEE0003FEB5E /* libG3MiOSSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF41E1577AEC8003FEB5E /* libG3MiOSSDK.a */; };
+		E70B224D1700DBA300172DF3 /* A320.bson in Resources */ = {isa = PBXBuildFile; fileRef = E70B224C1700DBA300172DF3 /* A320.bson */; };
 		E71B15371626D27F003D1013 /* Default-Landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B152C1626D27F003D1013 /* Default-Landscape.png */; };
 		E71B15381626D27F003D1013 /* Default-Landscape@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B152D1626D27F003D1013 /* Default-Landscape@2x.png */; };
 		E71B15391626D27F003D1013 /* Default-Portrait.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B152E1626D27F003D1013 /* Default-Portrait.png */; };
@@ -123,6 +124,7 @@
 		D8EEF40E1577AA61003FEB5E /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		D8EEF4101577AAE2003FEB5E /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		D8EEF4161577AEC8003FEB5E /* G3MiOSSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = G3MiOSSDK.xcodeproj; path = ../G3MiOSSDK/G3MiOSSDK.xcodeproj; sourceTree = "<group>"; };
+		E70B224C1700DBA300172DF3 /* A320.bson */ = {isa = PBXFileReference; lastKnownFileType = file; path = A320.bson; sourceTree = "<group>"; };
 		E71B152C1626D27F003D1013 /* Default-Landscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Landscape.png"; path = "Resources/Default-Landscape.png"; sourceTree = "<group>"; };
 		E71B152D1626D27F003D1013 /* Default-Landscape@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Landscape@2x.png"; path = "Resources/Default-Landscape@2x.png"; sourceTree = "<group>"; };
 		E71B152E1626D27F003D1013 /* Default-Portrait.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Portrait.png"; path = "Resources/Default-Portrait.png"; sourceTree = "<group>"; };
@@ -231,6 +233,7 @@
 		D8EEF4271577B0D6003FEB5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				E70B224C1700DBA300172DF3 /* A320.bson */,
 				CF8C0EBA16FC99C400DBEDE4 /* cc3d4326.json */,
 				CFC39A8816FB9DB7004992C2 /* small-caceres.bil */,
 				E736067C16F8D7BE000E32AD /* horizontal-gears.png */,
@@ -392,6 +395,7 @@
 				CF13F2CC16F3AC4B005704D6 /* caceres-2008x2032.bil in Resources */,
 				CFC39A8916FB9DB7004992C2 /* small-caceres.bil in Resources */,
 				CF8C0EBB16FC99C400DBEDE4 /* cc3d4326.json in Resources */,
+				E70B224D1700DBA300172DF3 /* A320.bson in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
