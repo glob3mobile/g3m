@@ -178,6 +178,8 @@ public:
   virtual bool linkProgram(int program) const = 0;
   virtual void printProgramInfoLog(int program) const = 0;
   
+  virtual void bindAttribLocation(ShaderProgram* program, int loc, const std::string& name) const = 0;
+  
 };
 
 #endif

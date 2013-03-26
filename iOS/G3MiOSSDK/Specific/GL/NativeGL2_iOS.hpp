@@ -453,6 +453,10 @@ public:
     }
   }
   
+  void bindAttribLocation(ShaderProgram* program, int loc, const std::string& name) const{
+    glBindAttribLocation(program->getProgram(), loc, name.c_str());
+  }
+  
 };
 
 #endif

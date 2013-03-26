@@ -39,7 +39,9 @@ bool ShaderProgram::loadShaders(const std::string& vertexSource,
     _gl->deleteShader(fragmentShader);
     return false;
   }
-
+  
+  _gl->getNative()->bindAttribLocation(this, 0, "Position");
+  
   // link program
   if (!linkProgram()) {
     printf ("ERROR linking graphic program\n");

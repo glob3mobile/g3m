@@ -59,26 +59,31 @@ bool GL::useProgram(ShaderProgram* program) {
   if (_verbose) {
     ILogger::instance()->logInfo("GL::useProgram()");
   }
-
+  
   if (_program == program) {
     return true;
   }
   _program = program;
   
+  // Extract the handles to attributes
+  Attributes.Position     = checkedGetAttribLocation(program, "Position");
+  Attributes.TextureCoord = checkedGetAttribLocation(program, "TextureCoord");
+  Attributes.Color        = checkedGetAttribLocation(program, "Color");
+  
   // set shaders
   _nativeGL->useProgram(program);
-
+  
   //Methods checkedGetAttribLocation and checkedGetUniformLocation
   //will turn _errorGettingLocationOcurred to true is that happens
   _errorGettingLocationOcurred = false;
-
+  
   // Extract the handles to attributes
   Attributes.Position     = checkedGetAttribLocation(program, "Position");
   Attributes.TextureCoord = checkedGetAttribLocation(program, "TextureCoord");
   Attributes.Color        = checkedGetAttribLocation(program, "Color");
 
   Uniforms.deleteUniformsIDs(); //DELETING
-
+  
   // Extract the handles to uniforms
   Uniforms.Projection          = checkedGetUniformLocation(program, "Projection");
   Uniforms.Modelview           = checkedGetUniformLocation(program, "Modelview");
@@ -88,25 +93,27 @@ bool GL::useProgram(ShaderProgram* program) {
   Uniforms.TranslationTexCoord = checkedGetUniformLocation(program, "TranslationTexCoord");
   Uniforms.ScaleTexCoord       = checkedGetUniformLocation(program, "ScaleTexCoord");
   Uniforms.PointSize           = checkedGetUniformLocation(program, "PointSize");
-
+  
   // default values
   _nativeGL->uniform2f(Uniforms.ScaleTexCoord, (float)1.0, (float)1.0);
   _nativeGL->uniform2f(Uniforms.TranslationTexCoord, (float)0.0, (float)0.0);
   _nativeGL->uniform1f(Uniforms.PointSize, 1);
-
+  
   //BILLBOARDS
   Uniforms.BillBoard      = checkedGetUniformLocation(program, "BillBoard");
   Uniforms.ViewPortExtent = checkedGetUniformLocation(program, "ViewPortExtent");
   Uniforms.TextureExtent  = checkedGetUniformLocation(program, "TextureExtent");
   
   _nativeGL->uniform1i(Uniforms.BillBoard, 0); //NOT DRAWING BILLBOARD
-
+  
   //FOR FLAT COLOR MIXING
   Uniforms.FlatColorIntensity      = checkedGetUniformLocation(program, "FlatColorIntensity");
   Uniforms.ColorPerVertexIntensity = checkedGetUniformLocation(program, "ColorPerVertexIntensity");
   Uniforms.EnableColorPerVertex    = checkedGetUniformLocation(program, "EnableColorPerVertex");
   Uniforms.EnableFlatColor         = checkedGetUniformLocation(program, "EnableFlatColor");
-
+  
+  
+  
   //Return
   return !_errorGettingLocationOcurred;
 }
@@ -129,7 +136,7 @@ void GL::drawElements(int mode,
   }
   
   setState(state);
-
+  
   _nativeGL->drawElements(mode,
                           indices->size(),
                           indices);
@@ -144,7 +151,7 @@ void GL::drawArrays(int mode,
                                  first,
                                  count);
   }
-
+  
   setState(state);
   _nativeGL->drawArrays(mode,
                         first,
@@ -155,7 +162,7 @@ int GL::getError() {
   if (_verbose) {
     ILogger::instance()->logInfo("GL::getError()");
   }
-
+  
   return _nativeGL->getError();
 }
 
@@ -165,7 +172,7 @@ const IGLTextureId* GL::uploadTexture(const IImage* image,
   if (_verbose) {
     ILogger::instance()->logInfo("GL::uploadTexture()");
   }
-
+  
   const IGLTextureId* texId = getGLTextureId();
   if (texId != NULL) {
     int texture2D = GLTextureType::texture2D();
@@ -180,7 +187,7 @@ const IGLTextureId* GL::uploadTexture(const IImage* image,
     setState(state);
     
     _nativeGL->texImage2D(image, format);
-
+    
     if (generateMipmap) {
       _nativeGL->generateMipmap(texture2D);
     }
@@ -190,7 +197,7 @@ const IGLTextureId* GL::uploadTexture(const IImage* image,
     ILogger::instance()->logError("can't get a valid texture id\n");
     return NULL;
   }
-
+  
   return texId;
 }
 
@@ -198,7 +205,7 @@ IFloatBuffer* GL::getBillboardTexCoord() {
   if (_verbose) {
     ILogger::instance()->logInfo("GL::getBillboardTexCoord()");
   }
-
+  
   if (_billboardTexCoord == NULL) {
     FloatBufferBuilderFromCartesian2D texCoor;
     texCoor.add(1,1);
@@ -207,7 +214,7 @@ IFloatBuffer* GL::getBillboardTexCoord() {
     texCoor.add(0,0);
     _billboardTexCoord = texCoor.create();
   }
-
+  
   return _billboardTexCoord;
 }
 
@@ -215,43 +222,43 @@ const IGLTextureId* GL::getGLTextureId() {
   if (_verbose) {
     ILogger::instance()->logInfo("GL::getGLTextureId()");
   }
-
+  
   if (_texturesIdBag.size() == 0) {
     //const int bugdetSize = 256;
     const int bugdetSize = 1024;
     //const int bugdetSize = 10240;
-
+    
     const std::vector<IGLTextureId*> ids = _nativeGL->genTextures(bugdetSize);
     const int idsCount = ids.size();
     for (int i = 0; i < idsCount; i++) {
       // ILogger::instance()->logInfo("  = Created textureId=%s", ids[i]->description().c_str());
       _texturesIdBag.push_front(ids[i]);
     }
-
+    
     _texturesIdAllocationCounter += idsCount;
-
+    
     ILogger::instance()->logInfo("= Created %d texturesIds (accumulated %d).",
                                  idsCount,
                                  _texturesIdAllocationCounter);
   }
-
+  
   //  _texturesIdGetCounter++;
-
+  
   if (_texturesIdBag.size() == 0) {
     ILogger::instance()->logError("TextureIds bag exhausted");
     return NULL;
   }
-
+  
   const IGLTextureId* result = _texturesIdBag.back();
   _texturesIdBag.pop_back();
-
+  
   //  printf("   - Assigning 1 texturesId (#%d) from bag (bag size=%ld). Gets:%ld, Takes:%ld, Delta:%ld.\n",
   //         result.getGLTextureId(),
   //         _texturesIdBag.size(),
   //         _texturesIdGetCounter,
   //         _texturesIdTakeCounter,
   //         _texturesIdGetCounter - _texturesIdTakeCounter);
-
+  
   return result;
 }
 
@@ -259,7 +266,7 @@ void GL::deleteTexture(const IGLTextureId* textureId) {
   if (_verbose) {
     ILogger::instance()->logInfo("GL::deleteTexture()");
   }
-
+  
   if (textureId != NULL) {
     if ( _nativeGL->deleteTexture(textureId) ) {
       _texturesIdBag.push_back(textureId);
@@ -271,7 +278,7 @@ void GL::deleteTexture(const IGLTextureId* textureId) {
     if (_currentState->getBoundTexture() == textureId){
       _currentState->bindTexture(NULL);
     }
-
+    
     //ILogger::instance()->logInfo("  = delete textureId=%s", texture->description().c_str());
   }
 }

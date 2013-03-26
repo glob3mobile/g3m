@@ -155,6 +155,10 @@ public:
   void deleteProgram(int program) const  {
     _nativeGL->deleteProgram(program);
   }
+  
+  INativeGL* getNative() const{
+    return _nativeGL;
+  }
 };
 
 #endif

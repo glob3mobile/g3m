@@ -50,9 +50,9 @@ public final class Shaders_WebGL {
                                                     + "    else {" + "      gl_FragColor = FlatColor;" + "    }" + "    " + "  }"
                                                     + "  " + "}";
 
-   private final static String    _vertexShader   = "attribute vec4 Position;"
+   private final static String    _vertexShader   = "attribute vec4 Color;"
+		   											+ "attribute vec4 Position;"
                                                     + "attribute vec2 TextureCoord; "
-                                                    + "attribute vec4 Color;"
                                                     + "uniform mat4 Projection;"
                                                     + "uniform mat4 Modelview;"
                                                     + "uniform bool BillBoard;"
