@@ -24,11 +24,6 @@ package org.glob3.mobile.generated;
 
 public interface GEOSymbolizer
 {
-  GEOSymbolizer()
-  {
-
-  }
-
   public void dispose();
 
   java.util.ArrayList<GEOSymbol> createSymbols(GEO2DMultiLineStringGeometry geometry);
