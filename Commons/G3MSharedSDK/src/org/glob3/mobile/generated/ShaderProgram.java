@@ -63,6 +63,8 @@ public class ShaderProgram
       return false;
     }
   
+    _gl.getNative().bindAttribLocation(this, 0, "Position");
+  
     // link program
     if (!linkProgram())
     {

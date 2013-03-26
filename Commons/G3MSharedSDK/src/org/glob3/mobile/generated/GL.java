@@ -220,6 +220,11 @@ public class GL
     }
     _program = program;
   
+    // Extract the handles to attributes
+    GlobalMembersGL.Attributes.Position = checkedGetAttribLocation(program, "Position");
+    GlobalMembersGL.Attributes.TextureCoord = checkedGetAttribLocation(program, "TextureCoord");
+    GlobalMembersGL.Attributes.Color = checkedGetAttribLocation(program, "Color");
+  
     // set shaders
     _nativeGL.useProgram(program);
   
@@ -261,6 +266,8 @@ public class GL
     GlobalMembersGL.Uniforms.ColorPerVertexIntensity = checkedGetUniformLocation(program, "ColorPerVertexIntensity");
     GlobalMembersGL.Uniforms.EnableColorPerVertex = checkedGetUniformLocation(program, "EnableColorPerVertex");
     GlobalMembersGL.Uniforms.EnableFlatColor = checkedGetUniformLocation(program, "EnableFlatColor");
+  
+  
   
     //Return
     return !_errorGettingLocationOcurred;
@@ -398,5 +405,10 @@ public class GL
   public final void deleteProgram(int program)
   {
     _nativeGL.deleteProgram(program);
+  }
+
+  public final INativeGL getNative()
+  {
+    return _nativeGL;
   }
 }
