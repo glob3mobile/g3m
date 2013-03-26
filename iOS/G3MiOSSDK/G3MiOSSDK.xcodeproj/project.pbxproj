@@ -52,6 +52,12 @@
 		CF0C396A157F988100646A2F /* Mark.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF0C3969157F988100646A2F /* Mark.cpp */; };
 		CF0D9BB41601F46B00F28B7D /* ByteBuffer_iOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF0D9BB31601F46A00F28B7D /* ByteBuffer_iOS.cpp */; };
 		CF11E8C6164D653000935052 /* SGLayerNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF11E8C4164D653000935052 /* SGLayerNode.cpp */; };
+		CF1616821700B37A00581FFA /* GEOSymbolizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF1616801700B37A00581FFA /* GEOSymbolizer.cpp */; };
+		CF1616841700B4C200581FFA /* GEOSymbolizer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF1616811700B37A00581FFA /* GEOSymbolizer.hpp */; };
+		CF1616871700BDA700581FFA /* GEOSymbol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF1616851700BDA700581FFA /* GEOSymbol.cpp */; };
+		CF16168A1700CC9400581FFA /* GEOLine2DSymbol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF1616881700CC9400581FFA /* GEOLine2DSymbol.cpp */; };
+		CF16168B1700CD1100581FFA /* GEOSymbol.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF1616861700BDA700581FFA /* GEOSymbol.hpp */; };
+		CF16168C1700CD1100581FFA /* GEOLine2DSymbol.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF1616891700CC9400581FFA /* GEOLine2DSymbol.hpp */; };
 		CF27B16016D93DCA0000A415 /* BufferElevationData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF27B15E16D93DC90000A415 /* BufferElevationData.cpp */; };
 		CF27B16416D93F2C0000A415 /* ShortBufferElevationData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF27B16216D93F2B0000A415 /* ShortBufferElevationData.cpp */; };
 		CF2CDD991678292E002A78A9 /* GInitializationTask.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF2CDD971678292E002A78A9 /* GInitializationTask.cpp */; };
@@ -108,6 +114,12 @@
 		CF883BCB1594B9A500AEE39C /* Sector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF883BCA1594B9A500AEE39C /* Sector.cpp */; };
 		CF8A234F15C4306800FD56C9 /* Downloader_iOS_Handler.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF8A234D15C4306800FD56C9 /* Downloader_iOS_Handler.mm */; };
 		CF8A235415C4340900FD56C9 /* Downloader_iOS_Listener.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF8A235215C4340900FD56C9 /* Downloader_iOS_Listener.mm */; };
+		CF8ADFEF1701EBCB00FE9F56 /* GEOLine2DStyle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8ADFED1701EBCB00FE9F56 /* GEOLine2DStyle.cpp */; };
+		CF8ADFF21701EC0E00FE9F56 /* GEOStyle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8ADFF01701EC0E00FE9F56 /* GEOStyle.cpp */; };
+		CF8ADFF31701F24900FE9F56 /* GEOLine2DStyle.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF8ADFEE1701EBCB00FE9F56 /* GEOLine2DStyle.hpp */; };
+		CF8ADFF41701F24900FE9F56 /* GEOStyle.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF8ADFF11701EC0E00FE9F56 /* GEOStyle.hpp */; };
+		CF8ADFF71701F37300FE9F56 /* GEOMultiLine2DSymbol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8ADFF51701F37200FE9F56 /* GEOMultiLine2DSymbol.cpp */; };
+		CF8ADFF81701F39000FE9F56 /* GEOMultiLine2DSymbol.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF8ADFF61701F37300FE9F56 /* GEOMultiLine2DSymbol.hpp */; };
 		CF8B21B215DD32820068601A /* SQLiteStorage_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF8B21B015DD32820068601A /* SQLiteStorage_iOS.mm */; };
 		CF8B21C015DD345D0068601A /* SQDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = CF8B21BE15DD345D0068601A /* SQDatabase.m */; };
 		CF8D0BFE15AF0D32005B5433 /* TileTexturizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */; };
@@ -433,6 +445,12 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF8ADFF81701F39000FE9F56 /* GEOMultiLine2DSymbol.hpp in CopyFiles */,
+				CF8ADFF31701F24900FE9F56 /* GEOLine2DStyle.hpp in CopyFiles */,
+				CF8ADFF41701F24900FE9F56 /* GEOStyle.hpp in CopyFiles */,
+				CF16168B1700CD1100581FFA /* GEOSymbol.hpp in CopyFiles */,
+				CF16168C1700CD1100581FFA /* GEOLine2DSymbol.hpp in CopyFiles */,
+				CF1616841700B4C200581FFA /* GEOSymbolizer.hpp in CopyFiles */,
 				FB31AE3916F8A37D00C415FF /* LayoutUtils.hpp in CopyFiles */,
 				CFE676B316ECDA9100CB93B9 /* BingMapsLayer.hpp in CopyFiles */,
 				CF75C3A716EA62B800F7EE9F /* GoogleMapsLayer.hpp in CopyFiles */,
@@ -767,6 +785,12 @@
 		CF0D9BB31601F46A00F28B7D /* ByteBuffer_iOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ByteBuffer_iOS.cpp; path = Specific/Derived/ByteBuffer_iOS.cpp; sourceTree = "<group>"; };
 		CF11E8C4164D653000935052 /* SGLayerNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGLayerNode.cpp; path = Commons/Rendererers/SGLayerNode.cpp; sourceTree = "<group>"; };
 		CF11E8C5164D653000935052 /* SGLayerNode.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SGLayerNode.hpp; path = Commons/Rendererers/SGLayerNode.hpp; sourceTree = "<group>"; };
+		CF1616801700B37A00581FFA /* GEOSymbolizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEOSymbolizer.cpp; path = Commons/GEO/Symbolization/GEOSymbolizer.cpp; sourceTree = "<group>"; };
+		CF1616811700B37A00581FFA /* GEOSymbolizer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEOSymbolizer.hpp; path = Commons/GEO/Symbolization/GEOSymbolizer.hpp; sourceTree = "<group>"; };
+		CF1616851700BDA700581FFA /* GEOSymbol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEOSymbol.cpp; path = Commons/GEO/Symbolization/GEOSymbol.cpp; sourceTree = "<group>"; };
+		CF1616861700BDA700581FFA /* GEOSymbol.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEOSymbol.hpp; path = Commons/GEO/Symbolization/GEOSymbol.hpp; sourceTree = "<group>"; };
+		CF1616881700CC9400581FFA /* GEOLine2DSymbol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEOLine2DSymbol.cpp; path = Commons/GEO/Symbolization/GEOLine2DSymbol.cpp; sourceTree = "<group>"; };
+		CF1616891700CC9400581FFA /* GEOLine2DSymbol.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEOLine2DSymbol.hpp; path = Commons/GEO/Symbolization/GEOLine2DSymbol.hpp; sourceTree = "<group>"; };
 		CF27B15E16D93DC90000A415 /* BufferElevationData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BufferElevationData.cpp; path = Commons/Basic/BufferElevationData.cpp; sourceTree = "<group>"; };
 		CF27B15F16D93DC90000A415 /* BufferElevationData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = BufferElevationData.hpp; path = Commons/Basic/BufferElevationData.hpp; sourceTree = "<group>"; };
 		CF27B16216D93F2B0000A415 /* ShortBufferElevationData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ShortBufferElevationData.cpp; path = Commons/Basic/ShortBufferElevationData.cpp; sourceTree = "<group>"; };
@@ -867,6 +891,12 @@
 		CF8A234D15C4306800FD56C9 /* Downloader_iOS_Handler.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Downloader_iOS_Handler.mm; path = Specific/Derived/Downloader_iOS_Handler.mm; sourceTree = "<group>"; };
 		CF8A235115C4340900FD56C9 /* Downloader_iOS_Listener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Downloader_iOS_Listener.h; path = Specific/Derived/Downloader_iOS_Listener.h; sourceTree = "<group>"; };
 		CF8A235215C4340900FD56C9 /* Downloader_iOS_Listener.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = Downloader_iOS_Listener.mm; path = Specific/Derived/Downloader_iOS_Listener.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		CF8ADFED1701EBCB00FE9F56 /* GEOLine2DStyle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEOLine2DStyle.cpp; path = Commons/GEO/Symbolization/GEOLine2DStyle.cpp; sourceTree = "<group>"; };
+		CF8ADFEE1701EBCB00FE9F56 /* GEOLine2DStyle.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEOLine2DStyle.hpp; path = Commons/GEO/Symbolization/GEOLine2DStyle.hpp; sourceTree = "<group>"; };
+		CF8ADFF01701EC0E00FE9F56 /* GEOStyle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEOStyle.cpp; path = Commons/GEO/Symbolization/GEOStyle.cpp; sourceTree = "<group>"; };
+		CF8ADFF11701EC0E00FE9F56 /* GEOStyle.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEOStyle.hpp; path = Commons/GEO/Symbolization/GEOStyle.hpp; sourceTree = "<group>"; };
+		CF8ADFF51701F37200FE9F56 /* GEOMultiLine2DSymbol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEOMultiLine2DSymbol.cpp; path = Commons/GEO/Symbolization/GEOMultiLine2DSymbol.cpp; sourceTree = "<group>"; };
+		CF8ADFF61701F37300FE9F56 /* GEOMultiLine2DSymbol.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEOMultiLine2DSymbol.hpp; path = Commons/GEO/Symbolization/GEOMultiLine2DSymbol.hpp; sourceTree = "<group>"; };
 		CF8B21B015DD32820068601A /* SQLiteStorage_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = SQLiteStorage_iOS.mm; path = Specific/Derived/SQLiteStorage_iOS.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		CF8B21B115DD32820068601A /* SQLiteStorage_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SQLiteStorage_iOS.hpp; path = Specific/Derived/SQLiteStorage_iOS.hpp; sourceTree = "<group>"; };
 		CF8B21BD15DD345D0068601A /* SQDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SQDatabase.h; path = Specific/SQDatabase.h; sourceTree = "<group>"; };
@@ -1493,6 +1523,25 @@
 			name = Renderers;
 			sourceTree = "<group>";
 		};
+		CF1616831700B38300581FFA /* Symbolization */ = {
+			isa = PBXGroup;
+			children = (
+				CF8ADFED1701EBCB00FE9F56 /* GEOLine2DStyle.cpp */,
+				CF8ADFEE1701EBCB00FE9F56 /* GEOLine2DStyle.hpp */,
+				CF1616881700CC9400581FFA /* GEOLine2DSymbol.cpp */,
+				CF1616891700CC9400581FFA /* GEOLine2DSymbol.hpp */,
+				CF8ADFF51701F37200FE9F56 /* GEOMultiLine2DSymbol.cpp */,
+				CF8ADFF61701F37300FE9F56 /* GEOMultiLine2DSymbol.hpp */,
+				CF8ADFF01701EC0E00FE9F56 /* GEOStyle.cpp */,
+				CF8ADFF11701EC0E00FE9F56 /* GEOStyle.hpp */,
+				CF1616851700BDA700581FFA /* GEOSymbol.cpp */,
+				CF1616861700BDA700581FFA /* GEOSymbol.hpp */,
+				CF1616801700B37A00581FFA /* GEOSymbolizer.cpp */,
+				CF1616811700B37A00581FFA /* GEOSymbolizer.hpp */,
+			);
+			name = Symbolization;
+			sourceTree = "<group>";
+		};
 		CFB5274D16D5605C008374C2 /* Math */ = {
 			isa = PBXGroup;
 			children = (
@@ -1527,6 +1576,7 @@
 				CFDAE7A3166841C2006F6A00 /* GEOObject.hpp */,
 				CFC54E0D1669766B00E1CD15 /* GEORenderer.cpp */,
 				CFC54E0E1669766B00E1CD15 /* GEORenderer.hpp */,
+				CF1616831700B38300581FFA /* Symbolization */,
 			);
 			name = GEO;
 			sourceTree = "<group>";
@@ -1971,6 +2021,12 @@
 				E720E8C616EE470300103F20 /* SceneJSParserStatistics.cpp in Sources */,
 				CFCCFE0916F504590082F383 /* NativeGL2_iOS.mm in Sources */,
 				FB31AE3616F76B4C00C415FF /* LayoutUtils.cpp in Sources */,
+				CF1616821700B37A00581FFA /* GEOSymbolizer.cpp in Sources */,
+				CF1616871700BDA700581FFA /* GEOSymbol.cpp in Sources */,
+				CF16168A1700CC9400581FFA /* GEOLine2DSymbol.cpp in Sources */,
+				CF8ADFEF1701EBCB00FE9F56 /* GEOLine2DStyle.cpp in Sources */,
+				CF8ADFF21701EC0E00FE9F56 /* GEOStyle.cpp in Sources */,
+				CF8ADFF71701F37300FE9F56 /* GEOMultiLine2DSymbol.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

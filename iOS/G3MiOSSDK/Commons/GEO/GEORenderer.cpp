@@ -9,6 +9,11 @@
 #include "GEORenderer.hpp"
 
 #include "GEOObject.hpp"
+#include "GEOSymbolizer.hpp"
+
+GEORenderer::~GEORenderer() {
+  delete _symbolizer;
+}
 
 void GEORenderer::initialize(const G3MContext* context) {
   _context = context;
@@ -43,6 +48,6 @@ void GEORenderer::render(const G3MRenderContext* rc,
   const int childrenCount = _children.size();
   for (int i = 0; i < childrenCount; i++) {
     GEOObject* geoObject = _children[i];
-    geoObject->render(rc, parentState);
+    geoObject->render(rc, parentState, _symbolizer);
   }
 }

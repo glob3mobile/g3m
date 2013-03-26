@@ -15,32 +15,49 @@
 class Geodetic2D;
 class Mesh;
 class Color;
+class GEOSymbol;
+class GEOFeature;
 
 class GEOGeometry : public GEOObject {
 private:
-  Mesh* _mesh;
+  std::vector<Mesh*>* _meshes;
+
+  std::vector<Mesh*>* createMeshes(const G3MRenderContext* rc,
+                                   const GEOSymbolizer* symbolizer);
+
+  GEOFeature* _feature;
 
 protected:
-  virtual Mesh* getMesh(const G3MRenderContext* rc);
+  virtual std::vector<Mesh*>* getMeshes(const G3MRenderContext* rc,
+                                        const GEOSymbolizer* symbolizer);
 
-  virtual Mesh* createMesh(const G3MRenderContext* rc) = 0;
+  virtual std::vector<GEOSymbol*>* createSymbols(const G3MRenderContext* rc,
+                                                 const GEOSymbolizer* symbolizer) = 0;
 
-  Mesh* create2DBoundaryMesh(std::vector<Geodetic2D*>* coordinates,
-                             Color* color,
-                             float lineWidth,
-                             const G3MRenderContext* rc);
+//  Mesh* create2DBoundaryMesh(std::vector<Geodetic2D*>* coordinates,
+//                             Color* color,
+//                             float lineWidth,
+//                             const G3MRenderContext* rc);
 
 public:
   GEOGeometry() :
-  _mesh(NULL)
+  _meshes(NULL),
+  _feature(NULL)
   {
 
   }
 
   void render(const G3MRenderContext* rc,
-              const GLState& parentState);
+              const GLState& parentState,
+              const GEOSymbolizer* symbolizer);
 
   ~GEOGeometry();
+
+  void setFeature(GEOFeature* feature);
+
+  const GEOFeature* getFeature() const {
+    return _feature;
+  }
 
 };
 

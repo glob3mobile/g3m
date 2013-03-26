@@ -12,7 +12,6 @@
 #include "GEOLineStringGeometry.hpp"
 
 #include <vector>
-
 class Geodetic2D;
 
 class GEO2DLineStringGeometry : public GEOLineStringGeometry {
@@ -20,7 +19,8 @@ private:
   std::vector<Geodetic2D*>* _coordinates;
 
 protected:
-  Mesh* createMesh(const G3MRenderContext* rc);
+  std::vector<GEOSymbol*>* createSymbols(const G3MRenderContext* rc,
+                                         const GEOSymbolizer* symbolizer);
 
 public:
 
@@ -31,6 +31,10 @@ public:
   }
 
   ~GEO2DLineStringGeometry();
+
+  const std::vector<Geodetic2D*>* getCoordinates() const {
+    return _coordinates;
+  }
 
 };
 
