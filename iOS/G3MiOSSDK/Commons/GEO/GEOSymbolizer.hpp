@@ -16,12 +16,6 @@ class GEO2DLineStringGeometry;
 
 class GEOSymbolizer {
 public:
-//#ifdef C_CODE
-//  virtual ~GEOSymbolizer() { }
-//#endif
-//#ifdef JAVA_CODE
-//  public void dispose();
-//#endif
   virtual ~GEOSymbolizer() { }
 
   virtual std::vector<GEOSymbol*>* createSymbols(const GEO2DMultiLineStringGeometry* geometry) const = 0;
