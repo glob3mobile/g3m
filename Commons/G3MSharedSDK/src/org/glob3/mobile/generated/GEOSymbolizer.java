@@ -16,17 +16,23 @@ package org.glob3.mobile.generated;
 //
 
 
-//class Mesh;
-//class G3MRenderContext;
 //class GEOSymbol;
 //class GEO2DMultiLineStringGeometry;
 //class GEO2DLineStringGeometry;
 
-public interface GEOSymbolizer
+public abstract class GEOSymbolizer
 {
-  public void dispose();
+///#ifdef C_CODE
+//  virtual ~GEOSymbolizer() { }
+///#endif
+///#ifdef JAVA_CODE
+//  public void dispose();
+///#endif
+  public void dispose()
+  {
+  }
 
-  java.util.ArrayList<GEOSymbol> createSymbols(GEO2DMultiLineStringGeometry geometry);
-  java.util.ArrayList<GEOSymbol> createSymbols(GEO2DLineStringGeometry geometry);
+  public abstract java.util.ArrayList<GEOSymbol> createSymbols(GEO2DMultiLineStringGeometry geometry);
+  public abstract java.util.ArrayList<GEOSymbol> createSymbols(GEO2DLineStringGeometry geometry);
 
 }
