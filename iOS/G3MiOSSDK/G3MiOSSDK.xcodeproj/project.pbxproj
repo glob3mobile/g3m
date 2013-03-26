@@ -114,6 +114,12 @@
 		CF8AE0091702049F00FE9F56 /* GEOStyle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8AE0001702049F00FE9F56 /* GEOStyle.cpp */; };
 		CF8AE00A1702049F00FE9F56 /* GEOSymbol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8AE0021702049F00FE9F56 /* GEOSymbol.cpp */; };
 		CF8AE00B1702049F00FE9F56 /* GEOSymbolizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8AE0041702049F00FE9F56 /* GEOSymbolizer.cpp */; };
+		CF8AE00C170204C600FE9F56 /* GEOLine2DStyle.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF8ADFFB1702049F00FE9F56 /* GEOLine2DStyle.hpp */; };
+		CF8AE00D170204C600FE9F56 /* GEOLine2DSymbol.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF8ADFFD1702049F00FE9F56 /* GEOLine2DSymbol.hpp */; };
+		CF8AE00E170204C600FE9F56 /* GEOMultiLine2DSymbol.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF8ADFFF1702049F00FE9F56 /* GEOMultiLine2DSymbol.hpp */; };
+		CF8AE00F170204C600FE9F56 /* GEOStyle.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF8AE0011702049F00FE9F56 /* GEOStyle.hpp */; };
+		CF8AE010170204C600FE9F56 /* GEOSymbol.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF8AE0031702049F00FE9F56 /* GEOSymbol.hpp */; };
+		CF8AE011170204C600FE9F56 /* GEOSymbolizer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF8AE0051702049F00FE9F56 /* GEOSymbolizer.hpp */; };
 		CF8B21B215DD32820068601A /* SQLiteStorage_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF8B21B015DD32820068601A /* SQLiteStorage_iOS.mm */; };
 		CF8B21C015DD345D0068601A /* SQDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = CF8B21BE15DD345D0068601A /* SQDatabase.m */; };
 		CF8D0BFE15AF0D32005B5433 /* TileTexturizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */; };
@@ -439,6 +445,12 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF8AE00C170204C600FE9F56 /* GEOLine2DStyle.hpp in CopyFiles */,
+				CF8AE00D170204C600FE9F56 /* GEOLine2DSymbol.hpp in CopyFiles */,
+				CF8AE00E170204C600FE9F56 /* GEOMultiLine2DSymbol.hpp in CopyFiles */,
+				CF8AE00F170204C600FE9F56 /* GEOStyle.hpp in CopyFiles */,
+				CF8AE010170204C600FE9F56 /* GEOSymbol.hpp in CopyFiles */,
+				CF8AE011170204C600FE9F56 /* GEOSymbolizer.hpp in CopyFiles */,
 				FB31AE3916F8A37D00C415FF /* LayoutUtils.hpp in CopyFiles */,
 				CFE676B316ECDA9100CB93B9 /* BingMapsLayer.hpp in CopyFiles */,
 				CF75C3A716EA62B800F7EE9F /* GoogleMapsLayer.hpp in CopyFiles */,
