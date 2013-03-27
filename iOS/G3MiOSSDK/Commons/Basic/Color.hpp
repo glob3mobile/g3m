@@ -36,9 +36,7 @@ public:
   _alpha(that._alpha) {
   }
 
-  ~Color() {
-
-  }
+  ~Color() { }
 
   static Color fromRGBA(const float red,
                         const float green,

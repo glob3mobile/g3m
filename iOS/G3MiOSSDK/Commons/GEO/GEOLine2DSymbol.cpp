@@ -9,7 +9,8 @@
 #include "GEOLine2DSymbol.hpp"
 
 #include "GEOLine2DStyle.hpp"
-
+#include "Context.hpp"
+#include "Planet.hpp"
 
 GEOLine2DSymbol::GEOLine2DSymbol(const std::vector<Geodetic2D*>* coordinates,
                                  const GEOLine2DStyle& style,
@@ -27,5 +28,5 @@ Mesh* GEOLine2DSymbol::createMesh(const G3MRenderContext* rc) {
                           _lineColor,
                           _lineWidth,
                           _deltaHeight,
-                          rc);
+                          rc->getPlanet());
 }

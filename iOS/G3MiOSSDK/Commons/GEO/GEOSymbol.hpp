@@ -13,6 +13,7 @@
 
 class Mesh;
 class G3MRenderContext;
+class Ellipsoid;
 class Color;
 class Geodetic2D;
 
@@ -23,13 +24,13 @@ protected:
                          const Color& lineColor,
                          float lineWidth,
                          double deltaHeight,
-                         const G3MRenderContext* rc);
+                         const Ellipsoid* ellipsoid);
 
   Mesh* createLines2DMesh(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray,
                           const Color& lineColor,
                           float lineWidth,
                           double deltaHeight,
-                          const G3MRenderContext* rc);
+                          const Ellipsoid* ellipsoid);
 
 
 public:

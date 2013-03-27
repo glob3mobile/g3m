@@ -144,17 +144,17 @@ void SingleBillElevationDataProvider::cancelRequest(const long long requestId) {
 }
 
 void SingleBillElevationDataProvider::drainQueue() {
-  int _WORKING;
+  int _DGD_working_on_terrain;
 }
 
 const long long SingleBillElevationDataProvider::queueRequest(const Sector& sector,
                                                               const Vector2I& resolution,
                                                               IElevationDataListener* listener,
                                                               bool autodeleteListener) {
-  int _WORKING;
+  int _DGD_working_on_terrain;
   return -1;
 }
 
 void SingleBillElevationDataProvider::removeQueueRequest(const long long requestId) {
-  int _WORKING;
+  int _DGD_working_on_terrain;
 }
