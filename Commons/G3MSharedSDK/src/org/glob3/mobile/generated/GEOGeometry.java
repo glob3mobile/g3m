@@ -95,13 +95,6 @@ public abstract class GEOGeometry extends GEOObject
       final int meshesCount = _meshes.size();
       for (int i = 0; i < meshesCount; i++)
       {
-<<<<<<< HEAD
-        GLState state = new GLState(parentState);
-        state.disableDepthTest();
-        //state.setPolygonOffsetFactor(1.0);
-        //state.setPolygonOffsetUnits(1.0);
-        mesh.render(rc, state);
-=======
         Mesh mesh = meshes.get(0);
         if (mesh != null)
         {
@@ -114,7 +107,6 @@ public abstract class GEOGeometry extends GEOObject
             mesh.render(rc, state);
           }
         }
->>>>>>> origin/webgl-port
       }
     }
   }
