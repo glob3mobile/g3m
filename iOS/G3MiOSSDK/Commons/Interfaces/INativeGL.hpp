@@ -15,6 +15,7 @@ class IShortBuffer;
 class IImage;
 class IGLUniformID;
 class IGLTextureId;
+class GPUProgram;
 
 #include <vector>
 #include <string>
@@ -169,16 +170,17 @@ public:
   virtual int Error_NoError() const = 0;
 
   virtual int createProgram() const = 0;
-  virtual void deleteProgram(int program) const = 0;
+  virtual bool deleteProgram(int program) const = 0;
   virtual void attachShader(int program, int shader) const = 0;
   virtual int createShader(ShaderType type) const = 0;
   virtual bool compileShader (int shader, const std::string& source) const = 0;
-  virtual void deleteShader(int shader) const = 0;
+  virtual bool deleteShader(int shader) const = 0;
   virtual void printShaderInfoLog(int shader) const = 0;
   virtual bool linkProgram(int program) const = 0;
   virtual void printProgramInfoLog(int program) const = 0;
   
   virtual void bindAttribLocation(ShaderProgram* program, int loc, const std::string& name) const = 0;
+  virtual void bindAttribLocation(GPUProgram* program, int loc, const std::string& name) const = 0;
   
 };
 

@@ -19,6 +19,7 @@
 #include "ShortBuffer_iOS.hpp"
 #include "Image_iOS.hpp"
 #include "MutableMatrix44D.hpp"
+#include "GPUProgram.hpp"
 
 class NativeGL2_iOS: public INativeGL {
 public:
@@ -394,8 +395,13 @@ public:
     return glCreateProgram();
   }
   
-  void deleteProgram(int program) const {
+  bool deleteProgram(int program) const {
     glDeleteProgram(program);
+    return true;
+    int NOT_WORKING_APPARENTLY;
+//    int ps;
+//    glGetProgramiv(program, GL_DELETE_STATUS, &ps);
+//    return (ps == GL_TRUE);
   }
   
   void attachShader(int program, int shader) const {
@@ -420,8 +426,11 @@ public:
     return status;
   }
 
-  void deleteShader(int shader) const {
+  bool deleteShader(int shader) const {
     glDeleteShader(shader);
+    int ds;
+    glGetShaderiv(shader, GL_DELETE_STATUS, &ds);
+    return (ds == GL_TRUE);
   }
   
   void printShaderInfoLog(int shader) const {
@@ -455,6 +464,10 @@ public:
   
   void bindAttribLocation(ShaderProgram* program, int loc, const std::string& name) const{
     glBindAttribLocation(program->getProgram(), loc, name.c_str());
+  }
+  
+  void bindAttribLocation(GPUProgram* program, int loc, const std::string& name) const{
+    glBindAttribLocation(program->getProgramID(), loc, name.c_str());
   }
   
 };

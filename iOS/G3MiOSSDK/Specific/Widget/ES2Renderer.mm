@@ -46,7 +46,7 @@ enum {
       _gl = new GL(nGL,false);
     _firstRender = true;
     context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
-    
+
     if (!context || ![EAGLContext setCurrentContext:context] || ![self loadShaders]) {
       return nil;
     }
@@ -146,6 +146,11 @@ enum {
   if (_shaderProgram->loadShaders(vertexSource, fragmentSource)==false) {
     NSLog(@"Failed to load shaders");
     return FALSE;
+  }
+  
+  GPUProgram program(_gl->getNative(), vertexSource, fragmentSource);
+  if (program.isCreated()){
+    NSLog(@"GPU Program Loaded");
   }
 
   return TRUE;
