@@ -220,11 +220,6 @@ public class GL
     }
     _program = program;
   
-    // Extract the handles to attributes
-    GlobalMembersGL.Attributes.Position = checkedGetAttribLocation(program, "Position");
-    GlobalMembersGL.Attributes.TextureCoord = checkedGetAttribLocation(program, "TextureCoord");
-    GlobalMembersGL.Attributes.Color = checkedGetAttribLocation(program, "Color");
-  
     // set shaders
     _nativeGL.useProgram(program);
   
@@ -298,12 +293,14 @@ public class GL
       GLState state = new GLState(_currentState);
       state.setPixelStoreIAlignmentUnpack(1);
       state.bindTexture(texId);
-      state.setTextureParameterMinFilter(GLTextureParameterValue.linear());
-      state.setTextureParameterMagFilter(GLTextureParameterValue.linear());
-      state.setTextureParameterWrapS(GLTextureParameterValue.clampToEdge());
-      state.setTextureParameterWrapT(GLTextureParameterValue.clampToEdge());
       setState(state);
   
+      int linear = GLTextureParameterValue.linear();
+      int clampToEdge = GLTextureParameterValue.clampToEdge();
+      _nativeGL.texParameteri(texture2D, GLTextureParameter.minFilter(), linear);
+      _nativeGL.texParameteri(texture2D, GLTextureParameter.magFilter(),linear);
+      _nativeGL.texParameteri(texture2D, GLTextureParameter.wrapS(),clampToEdge);
+      _nativeGL.texParameteri(texture2D, GLTextureParameter.wrapT(),clampToEdge);
       _nativeGL.texImage2D(image, format);
   
       if (generateMipmap)

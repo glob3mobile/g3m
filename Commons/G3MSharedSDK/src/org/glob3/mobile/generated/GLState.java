@@ -84,10 +84,6 @@ public class GLState
   private int _viewportHeight;
 
   //Texture Parameters
-  private int _texParMinFilter;
-  private int _texParMagFilter;
-  private int _texParWrapS;
-  private int _texParWrapT;
   private int _pixelStoreIAlignmentUnpack;
 
   //Clear color
@@ -141,10 +137,6 @@ public class GLState
      _billboarding = false;
      _viewportHeight = 0;
      _viewportWidth = 0;
-     _texParMinFilter = -1;
-     _texParMagFilter = -1;
-     _texParWrapS = -1;
-     _texParWrapT = -1;
      _pixelStoreIAlignmentUnpack = -1;
      _clearColorR = 0.0F;
      _clearColorG = 0.0F;
@@ -204,10 +196,6 @@ public class GLState
      _billboarding = parentState._billboarding;
      _viewportWidth = parentState._viewportWidth;
      _viewportHeight = parentState._viewportHeight;
-     _texParMinFilter = parentState._texParMinFilter;
-     _texParMagFilter = parentState._texParMagFilter;
-     _texParWrapS = parentState._texParWrapS;
-     _texParWrapT = parentState._texParWrapT;
      _pixelStoreIAlignmentUnpack = parentState._pixelStoreIAlignmentUnpack;
      _clearColorR = parentState._clearColorR;
      _clearColorG = parentState._clearColorG;
@@ -474,26 +462,6 @@ public class GLState
   public final IGLTextureId getBoundTexture()
   {
     return _boundTextureId;
-  }
-
-  public final void setTextureParameterMinFilter(int p)
-  {
-    _texParMinFilter = p;
-  }
-
-  public final void setTextureParameterMagFilter(int p)
-  {
-    _texParMagFilter = p;
-  }
-
-  public final void setTextureParameterWrapS(int p)
-  {
-    _texParWrapS = p;
-  }
-
-  public final void setTextureParameterWrapT(int p)
-  {
-    _texParWrapT = p;
   }
 
   public final void setPixelStoreIAlignmentUnpack(int p)
@@ -805,35 +773,6 @@ public class GLState
   
       currentState._viewportWidth = _viewportWidth;
       currentState._viewportHeight = _viewportHeight;
-    }
-  
-    //Tex parameters
-    if (_boundTextureId != null)
-    {
-      int texture2D = GLTextureType.texture2D();
-      if (_texParMinFilter != -1) // && _texParMinFilter != currentState._texParMinFilter){
-      {
-        nativeGL.texParameteri(texture2D, GLTextureParameter.minFilter(),_texParMinFilter);
-        currentState._texParMinFilter = _texParMinFilter;
-      }
-  
-      if (_texParMagFilter != -1) // _texParMagFilter != currentState._texParMagFilter){
-      {
-        nativeGL.texParameteri(texture2D, GLTextureParameter.magFilter(),_texParMagFilter);
-        currentState._texParMagFilter = _texParMagFilter;
-      }
-  
-      if (_texParWrapS != -1) //_texParWrapS != currentState._texParWrapS){
-      {
-        nativeGL.texParameteri(texture2D, GLTextureParameter.wrapS(),_texParWrapS);
-        currentState._texParWrapS = _texParWrapS;
-      }
-  
-      if (_texParWrapT != -1) //_texParWrapT != currentState._texParWrapT){
-      {
-        nativeGL.texParameteri(texture2D, GLTextureParameter.wrapT(),_texParWrapT);
-        currentState._texParWrapT = _texParWrapT;
-      }
     }
   
     if (_pixelStoreIAlignmentUnpack != -1 && _pixelStoreIAlignmentUnpack != currentState._pixelStoreIAlignmentUnpack)
