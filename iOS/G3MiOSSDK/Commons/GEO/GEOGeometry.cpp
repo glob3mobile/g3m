@@ -9,60 +9,86 @@
 #include "GEOGeometry.hpp"
 
 #include "Mesh.hpp"
-
-#include "FloatBufferBuilderFromGeodetic.hpp"
-#include "DirectMesh.hpp"
-#include "GLConstants.hpp"
 #include "Camera.hpp"
 #include "GL.hpp"
+#include "GEOSymbolizer.hpp"
+#include "GEOSymbol.hpp"
+#include "GEOFeature.hpp"
 
 GEOGeometry::~GEOGeometry() {
-  delete _mesh;
+  if (_meshes != NULL) {
+    const int meshesCount = _meshes->size();
+    for (int i = 0; i < meshesCount; i++) {
+      delete _meshes->at(0);
+    }
+    delete _meshes;
+  }
 }
 
-Mesh* GEOGeometry::create2DBoundaryMesh(std::vector<Geodetic2D*>* coordinates,
-                                        Color* color,
-                                        float lineWidth,
-                                        const G3MRenderContext* rc) {
-  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
-                                          rc->getPlanet(),
-                                          Geodetic2D::zero());
+std::vector<Mesh*>* GEOGeometry::createMeshes(const G3MRenderContext* rc,
+                                              const GEOSymbolizer* symbolizer) {
 
-  const int coordinatesCount = coordinates->size();
-  for (int i = 0; i < coordinatesCount; i++) {
-    Geodetic2D* coordinate = coordinates->at(i);
-    vertices.add(*coordinate);
-    // vertices.add( Geodetic3D(*coordinate, 50) );
+  std::vector<GEOSymbol*>* symbols = createSymbols(rc, symbolizer);
+  if (symbols == NULL) {
+    return NULL;
   }
 
-  return new DirectMesh(GLPrimitive::lineStrip(),
-                        true,
-                        vertices.getCenter(),
-                        vertices.create(),
-                        lineWidth,
-                        1,
-                        color);
+  std::vector<Mesh*>* meshes = new std::vector<Mesh*>();
+
+  const int symbolsSize = symbols->size();
+  for (int i = 0; i < symbolsSize; i++) {
+    GEOSymbol* symbol = symbols->at(i);
+
+    Mesh* mesh = symbol->createMesh(rc);
+    if (mesh != NULL) {
+      meshes->push_back(mesh);
+    }
+    delete symbol;
+  }
+  delete symbols;
+
+  return meshes;
 }
 
-Mesh* GEOGeometry::getMesh(const G3MRenderContext* rc) {
-  if (_mesh == NULL) {
-    _mesh = createMesh(rc);
+
+std::vector<Mesh*>* GEOGeometry::getMeshes(const G3MRenderContext* rc,
+                                           const GEOSymbolizer* symbolizer) {
+  if (_meshes == NULL) {
+    _meshes = createMeshes(rc, symbolizer);
   }
-  return _mesh;
+  return _meshes;
 }
 
 void GEOGeometry::render(const G3MRenderContext* rc,
-                         const GLState& parentState) {
-  Mesh* mesh = getMesh(rc);
-  if (mesh != NULL) {
-    const Extent* extent = mesh->getExtent();
+                         const GLState& parentState,
+                         const GEOSymbolizer* symbolizer) {
+//  Mesh* mesh = getMesh(rc, symbolizer);
 
-    if ( extent->touches( rc->getCurrentCamera()->getFrustumInModelCoordinates() ) ) {
-      GLState state(parentState);
-      state.disableDepthTest();
-      //state.setPolygonOffsetFactor(1.0);
-      //state.setPolygonOffsetUnits(1.0);
-      mesh->render(rc, state);
+  std::vector<Mesh*>* meshes = getMeshes(rc, symbolizer);
+
+  if (meshes != NULL) {
+
+    const Frustum* frustum = rc->getCurrentCamera()->getFrustumInModelCoordinates();
+
+    const int meshesCount = _meshes->size();
+    for (int i = 0; i < meshesCount; i++) {
+      Mesh* mesh = meshes->at(0);
+      if (mesh != NULL) {
+        const Extent* extent = mesh->getExtent();
+
+        if ( extent->touches(frustum) ) {
+          GLState state(parentState);
+          state.disableDepthTest();
+          mesh->render(rc, state);
+        }
+      }
     }
+  }
+}
+
+void GEOGeometry::setFeature(GEOFeature* feature) {
+  if (_feature != feature) {
+    delete _feature;
+    _feature = feature;
   }
 }

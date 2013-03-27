@@ -11,6 +11,17 @@
 #include "GEOGeometry.hpp"
 #include "JSONObject.hpp"
 
+GEOFeature::GEOFeature(const JSONBaseObject* id,
+                       GEOGeometry* geometry,
+                       const JSONObject* properties) :
+_id(id),
+_geometry(geometry),
+_properties(properties)
+{
+  _geometry->setFeature(this);
+}
+
+
 GEOFeature::~GEOFeature() {
   delete _id;
   delete _geometry;
@@ -18,6 +29,7 @@ GEOFeature::~GEOFeature() {
 }
 
 void GEOFeature::render(const G3MRenderContext* rc,
-                        const GLState& parentState) {
-  _geometry->render(rc, parentState);
+                        const GLState& parentState,
+                        const GEOSymbolizer* symbolizer) {
+  _geometry->render(rc, parentState, symbolizer);
 }

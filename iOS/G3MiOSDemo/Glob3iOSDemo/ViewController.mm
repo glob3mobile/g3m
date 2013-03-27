@@ -72,6 +72,14 @@
 //import <G3MiOSSDK/WMSBillElevationDataProvider.hpp>
 #import <G3MiOSSDK/SingleBillElevationDataProvider.hpp>
 #import <G3MiOSSDK/FloatBufferElevationData.hpp>
+#import <G3MiOSSDK/GEOSymbolizer.hpp>
+#import <G3MiOSSDK/GEO2DMultiLineStringGeometry.hpp>
+#import <G3MiOSSDK/GEO2DLineStringGeometry.hpp>
+#import <G3MiOSSDK/GEOFeature.hpp>
+#import <G3MiOSSDK/JSONObject.hpp>
+#import <G3MiOSSDK/GEOLine2DSymbol.hpp>
+#import <G3MiOSSDK/GEOMultiLine2DSymbol.hpp>
+#import <G3MiOSSDK/GEOLine2DStyle.hpp>
 
 class TestVisibleSectorListener : public VisibleSectorListener {
 public:
@@ -718,7 +726,7 @@ public:
 
 - (TilesRenderParameters*) createTileRenderParameters
 {
-  const bool renderDebug = true;
+  const bool renderDebug = false;
   const bool useTilesSplitBudget = true;
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
@@ -949,9 +957,53 @@ public:
   return shapesRenderer;
 }
 
+
+class SampleSymbolizer : public GEOSymbolizer {
+private:
+
+  GEOLine2DStyle createStyle(const JSONObject* properties) const {
+    const std::string type = properties->getAsString("type", "");
+
+    if (type.compare("Water Indicator") == 0) {
+      return GEOLine2DStyle(Color::fromRGBA(1, 1, 0, 1), 4);
+    }
+    
+    return GEOLine2DStyle(Color::fromRGBA(1, 0, 1, 1), 2);
+  }
+
+public:
+
+  std::vector<GEOSymbol*>* createSymbols(const GEO2DLineStringGeometry* geometry) const {
+    const JSONObject* properties = geometry->getFeature()->getProperties();
+
+    std::vector<GEOSymbol*>* symbols = new std::vector<GEOSymbol*>();
+
+    symbols->push_back( new GEOLine2DSymbol(geometry->getCoordinates(),
+                                            createStyle(properties),
+                                            30000) );
+
+    return symbols;
+  }
+
+
+  std::vector<GEOSymbol*>* createSymbols(const GEO2DMultiLineStringGeometry* geometry) const {
+    const JSONObject* properties = geometry->getFeature()->getProperties();
+
+    std::vector<GEOSymbol*>* symbols = new std::vector<GEOSymbol*>();
+    
+    symbols->push_back( new GEOMultiLine2DSymbol(geometry->getCoordinatesArray(),
+                                                 createStyle(properties)) );
+
+    return symbols;
+  }
+};
+
+
 - (GEORenderer*) createGEORenderer
 {
-  GEORenderer* geoRenderer = new GEORenderer();
+  GEOSymbolizer* symbolizer = new SampleSymbolizer();
+
+  GEORenderer* geoRenderer = new GEORenderer(symbolizer);
 
   return geoRenderer;
 }
@@ -1633,8 +1685,8 @@ public:
        */
 
       /**/
-       //      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/coastline"
-       //                                                                  ofType: @"geojson"];
+      //      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/coastline"
+      //                                                                  ofType: @"geojson"];
 
        NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/boundary_lines_land"
        ofType: @"geojson"];
@@ -1655,6 +1707,19 @@ public:
        }
        }
 
+      if (geoJSONFilePath) {
+        NSString *nsGEOJSON = [NSString stringWithContentsOfFile: geoJSONFilePath
+                                                        encoding: NSUTF8StringEncoding
+                                                           error: nil];
+        if (nsGEOJSON) {
+          std::string geoJSON = [nsGEOJSON UTF8String];
+          
+          GEOObject* geoObject = GEOJSONParser::parse(geoJSON);
+          
+          _geoRenderer->addGEOObject(geoObject);
+        }
+      }
+      /**/
 
       /*
        NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"

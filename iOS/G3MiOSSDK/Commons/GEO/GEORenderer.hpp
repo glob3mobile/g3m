@@ -13,6 +13,7 @@
 
 #include <vector>
 class GEOObject;
+class GEOSymbolizer;
 
 class GEORenderer : public LeafRenderer {
 private:
@@ -24,7 +25,17 @@ private:
 #endif
   std::vector<GEOObject*> _children;
 
+  const GEOSymbolizer* _symbolizer;
+
 public:
+
+  GEORenderer(const GEOSymbolizer* symbolizer) :
+  _symbolizer(symbolizer)
+  {
+
+  }
+
+  virtual ~GEORenderer();
 
   void addGEOObject(GEOObject* geoObject);
   

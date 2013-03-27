@@ -19,7 +19,8 @@ private:
   std::vector<std::vector<Geodetic2D*>*>* _coordinatesArray;
 
 protected:
-  Mesh* createMesh(const G3MRenderContext* rc);
+  std::vector<GEOSymbol*>* createSymbols(const G3MRenderContext* rc,
+                                         const GEOSymbolizer* symbolizer);
 
 public:
 
@@ -29,6 +30,10 @@ public:
   }
 
   ~GEO2DMultiLineStringGeometry();
+
+  const std::vector<std::vector<Geodetic2D*>*>* getCoordinatesArray() const {
+    return _coordinatesArray;
+  }
 
 };
 

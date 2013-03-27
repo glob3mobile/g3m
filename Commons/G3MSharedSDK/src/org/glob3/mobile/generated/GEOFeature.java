@@ -34,7 +34,7 @@ public class GEOFeature extends GEOObject
      _id = id;
      _geometry = geometry;
      _properties = properties;
-
+    _geometry.setFeature(this);
   }
 
   public void dispose()
@@ -47,9 +47,15 @@ public class GEOFeature extends GEOObject
        _properties.dispose();
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final void render(G3MRenderContext rc, GLState parentState, GEOSymbolizer symbolizer)
   {
-    _geometry.render(rc, parentState);
+    _geometry.render(rc, parentState, symbolizer);
+  }
+
+
+  public final JSONObject getProperties()
+  {
+    return _properties;
   }
 
 }

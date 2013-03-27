@@ -12,6 +12,7 @@
 class G3MContext;
 class G3MRenderContext;
 class GLState;
+class GEOSymbolizer;
 
 class GEOObject {
 public:
@@ -28,7 +29,8 @@ public:
   }
 
   virtual void render(const G3MRenderContext* rc,
-                      const GLState& parentState) = 0;
+                      const GLState& parentState,
+                      const GEOSymbolizer* symbolizer) = 0;
 
 };
 

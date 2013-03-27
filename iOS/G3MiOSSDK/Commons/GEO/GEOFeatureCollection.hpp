@@ -25,7 +25,8 @@ public:
   virtual ~GEOFeatureCollection();
 
   void render(const G3MRenderContext* rc,
-              const GLState& parentState);
+              const GLState& parentState,
+              const GEOSymbolizer* symbolizer);
 
 };
 
