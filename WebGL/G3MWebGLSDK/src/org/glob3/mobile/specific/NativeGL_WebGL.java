@@ -753,6 +753,17 @@ public native int BlendFactor_Zero() /*-{
 }-*/;
 
 
+@Override
+public native void bindAttribLocation(ShaderProgram program, int loc, String name)  /*-{
+	debugger;
+	var progInt = program.@org.glob3.mobile.generated.ShaderProgram::getProgram()();
+	var shaderList = this.@org.glob3.mobile.specific.NativeGL_WebGL::_shaderList;
+	var jsoProgram = shaderList.@java.util.ArrayList::get(I)(progInt);
+	var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+	gl.bindAttribLocation(jsoProgram, loc, name);
+}-*/;
+
+
    // @Override
    //   public void uniform2f(final IGLUniformID loc,
    //                         final float x,

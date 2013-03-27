@@ -253,30 +253,6 @@ void GLState::applyChanges(const INativeGL* nativeGL, GLState& currentState, con
     currentState._viewportHeight = _viewportHeight;
   }
   
-  //Tex parameters
-  if (_boundTextureId != NULL){
-    int texture2D = GLTextureType::texture2D();
-    if (_texParMinFilter != -1){// && _texParMinFilter != currentState._texParMinFilter){
-      nativeGL->texParameteri(texture2D, GLTextureParameter::minFilter(),_texParMinFilter);
-      currentState._texParMinFilter = _texParMinFilter;
-    }
-    
-    if (_texParMagFilter != -1){// _texParMagFilter != currentState._texParMagFilter){
-      nativeGL->texParameteri(texture2D, GLTextureParameter::magFilter(),_texParMagFilter);
-      currentState._texParMagFilter = _texParMagFilter;
-    }
-    
-    if (_texParWrapS != -1){//_texParWrapS != currentState._texParWrapS){
-      nativeGL->texParameteri(texture2D, GLTextureParameter::wrapS(),_texParWrapS);
-      currentState._texParWrapS = _texParWrapS;
-    }
-    
-    if (_texParWrapT != -1){//_texParWrapT != currentState._texParWrapT){
-      nativeGL->texParameteri(texture2D, GLTextureParameter::wrapT(),_texParWrapT);
-      currentState._texParWrapT = _texParWrapT;
-    }
-  }
-  
   if (_pixelStoreIAlignmentUnpack != -1 && _pixelStoreIAlignmentUnpack != currentState._pixelStoreIAlignmentUnpack){
     nativeGL->pixelStorei(GLAlignment::unpack(), _pixelStoreIAlignmentUnpack);
     currentState._pixelStoreIAlignmentUnpack = _pixelStoreIAlignmentUnpack;

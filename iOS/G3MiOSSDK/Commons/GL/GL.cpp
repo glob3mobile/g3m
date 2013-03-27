@@ -64,12 +64,7 @@ bool GL::useProgram(ShaderProgram* program) {
     return true;
   }
   _program = program;
-  
-  // Extract the handles to attributes
-  Attributes.Position     = checkedGetAttribLocation(program, "Position");
-  Attributes.TextureCoord = checkedGetAttribLocation(program, "TextureCoord");
-  Attributes.Color        = checkedGetAttribLocation(program, "Color");
-  
+
   // set shaders
   _nativeGL->useProgram(program);
   
@@ -180,12 +175,14 @@ const IGLTextureId* GL::uploadTexture(const IImage* image,
     GLState state(*_currentState);
     state.setPixelStoreIAlignmentUnpack(1);
     state.bindTexture(texId);
-    state.setTextureParameterMinFilter(GLTextureParameterValue::linear());
-    state.setTextureParameterMagFilter(GLTextureParameterValue::linear());
-    state.setTextureParameterWrapS(GLTextureParameterValue::clampToEdge());
-    state.setTextureParameterWrapT(GLTextureParameterValue::clampToEdge());
     setState(state);
     
+    int linear = GLTextureParameterValue::linear();
+    int clampToEdge = GLTextureParameterValue::clampToEdge();
+    _nativeGL->texParameteri(texture2D, GLTextureParameter::minFilter(), linear);
+    _nativeGL->texParameteri(texture2D, GLTextureParameter::magFilter(),linear);
+    _nativeGL->texParameteri(texture2D, GLTextureParameter::wrapS(),clampToEdge);
+    _nativeGL->texParameteri(texture2D, GLTextureParameter::wrapT(),clampToEdge);
     _nativeGL->texImage2D(image, format);
     
     if (generateMipmap) {

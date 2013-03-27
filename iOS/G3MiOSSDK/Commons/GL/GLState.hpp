@@ -89,10 +89,6 @@ private:
   int _viewportHeight;
   
   //Texture Parameters
-  int _texParMinFilter;
-  int _texParMagFilter;
-  int _texParWrapS;
-  int _texParWrapT;
   int _pixelStoreIAlignmentUnpack;
   
   //Clear color
@@ -145,10 +141,6 @@ private:
   _billboarding(false),
   _viewportHeight(0),
   _viewportWidth(0),
-  _texParMinFilter(-1),
-  _texParMagFilter(-1),
-  _texParWrapS(-1),
-  _texParWrapT(-1),
   _pixelStoreIAlignmentUnpack(-1),
   _clearColorR(0.0),
   _clearColorG(0.0),
@@ -208,10 +200,6 @@ public:
   _billboarding(parentState._billboarding),
   _viewportWidth(parentState._viewportWidth),
   _viewportHeight(parentState._viewportHeight),
-  _texParMinFilter(parentState._texParMinFilter),
-  _texParMagFilter(parentState._texParMagFilter),
-  _texParWrapS(parentState._texParWrapS),
-  _texParWrapT(parentState._texParWrapT),
   _pixelStoreIAlignmentUnpack(parentState._pixelStoreIAlignmentUnpack),
   _clearColorR(parentState._clearColorR),
   _clearColorG(parentState._clearColorG),
@@ -384,22 +372,6 @@ public:
   
   const IGLTextureId* getBoundTexture() const{
     return _boundTextureId;
-  }
-  
-  void setTextureParameterMinFilter(int p){
-    _texParMinFilter = p;
-  }
-  
-  void setTextureParameterMagFilter(int p){
-    _texParMagFilter = p;
-  }
-  
-  void setTextureParameterWrapS(int p){
-    _texParWrapS = p;
-  }
-  
-  void setTextureParameterWrapT(int p){
-    _texParWrapT = p;
   }
   
   void setPixelStoreIAlignmentUnpack(int p){
