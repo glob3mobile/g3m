@@ -637,4 +637,10 @@ public int BlendFactor_Zero() {
 }
 
 
+@Override
+public void bindAttribLocation(ShaderProgram program, int loc, String name) {
+	GLES20.glBindAttribLocation(program.getProgram(), loc, name);
+}
+
+
 }
