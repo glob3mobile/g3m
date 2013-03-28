@@ -296,6 +296,8 @@ public class GEOJSONParser
       return null;
     }
   
+    GEOPointGeometry geo = null;
+  
     final int dimensions = jsCoordinates.size();
     if (dimensions == 2)
     {
@@ -304,7 +306,7 @@ public class GEOJSONParser
   
       _points2DCount++;
   
-      return new GEO2DPointGeometry(Geodetic2D.fromDegrees(latitudeDegrees, longitudeDegrees));
+      geo = new GEO2DPointGeometry(Geodetic2D.fromDegrees(latitudeDegrees, longitudeDegrees));
     }
   //  else if (dimensions == 3) {
   //    const double latitudeDegrees  = jsCoordinates->getAsNumber(1, 0.0);
@@ -314,9 +316,9 @@ public class GEOJSONParser
     else
     {
       ILogger.instance().logError("Mandatory \"coordinates\" dimensions not supported %d", dimensions);
-      return null;
     }
   
+    return geo;
   }
 
 
