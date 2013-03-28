@@ -24,9 +24,10 @@ public class GEOFeatureCollection extends GEOObject
 {
   private java.util.ArrayList<GEOFeature> _features = new java.util.ArrayList<GEOFeature>();
 
-  public final void addFeature(GEOFeature feature)
+  public GEOFeatureCollection(java.util.ArrayList<GEOFeature> features)
   {
-    _features.add(feature);
+     _features = features;
+
   }
 
   public void dispose()
@@ -40,13 +41,13 @@ public class GEOFeatureCollection extends GEOObject
     }
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState, GEOSymbolizer symbolizer)
+  public final void symbolize(G3MRenderContext rc, GEOSymbolizationContext sc)
   {
     final int featuresCount = _features.size();
     for (int i = 0; i < featuresCount; i++)
     {
       GEOFeature feature = _features.get(i);
-      feature.render(rc, parentState, symbolizer);
+      feature.symbolize(rc, sc);
     }
   }
 

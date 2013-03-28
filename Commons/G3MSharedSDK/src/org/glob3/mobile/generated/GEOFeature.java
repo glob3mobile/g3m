@@ -34,7 +34,10 @@ public class GEOFeature extends GEOObject
      _id = id;
      _geometry = geometry;
      _properties = properties;
-    _geometry.setFeature(this);
+    if (_geometry != null)
+    {
+      _geometry.setFeature(this);
+    }
   }
 
   public void dispose()
@@ -47,15 +50,17 @@ public class GEOFeature extends GEOObject
        _properties.dispose();
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState, GEOSymbolizer symbolizer)
-  {
-    _geometry.render(rc, parentState, symbolizer);
-  }
-
-
   public final JSONObject getProperties()
   {
     return _properties;
+  }
+
+  public final void symbolize(G3MRenderContext rc, GEOSymbolizationContext sc)
+  {
+    if (_geometry != null)
+    {
+      _geometry.symbolize(rc, sc);
+    }
   }
 
 }

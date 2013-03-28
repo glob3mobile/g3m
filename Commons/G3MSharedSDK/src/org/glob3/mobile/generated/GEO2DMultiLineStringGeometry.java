@@ -23,9 +23,9 @@ public class GEO2DMultiLineStringGeometry extends GEOMultiLineStringGeometry
 {
   private java.util.ArrayList<java.util.ArrayList<Geodetic2D>> _coordinatesArray;
 
-  protected final java.util.ArrayList<GEOSymbol> createSymbols(G3MRenderContext rc, GEOSymbolizer symbolizer)
+  protected final java.util.ArrayList<GEOSymbol> createSymbols(G3MRenderContext rc, GEOSymbolizationContext sc)
   {
-    return symbolizer.createSymbols(this);
+    return sc.getSymbolizer().createSymbols(this);
   }
 
 
@@ -35,15 +35,6 @@ public class GEO2DMultiLineStringGeometry extends GEOMultiLineStringGeometry
 
   }
 
-
-  ///#include "CompositeMesh.hpp"
-  ///#include "Color.hpp"
-  
-  ///#include "FloatBufferBuilderFromGeodetic.hpp"
-  ///#include "DirectMesh.hpp"
-  ///#include "GLConstants.hpp"
-  ///#include "Planet.hpp"
-  
   public void dispose()
   {
     final int coordinatesArrayCount = _coordinatesArray.size();
@@ -67,5 +58,6 @@ public class GEO2DMultiLineStringGeometry extends GEOMultiLineStringGeometry
   {
     return _coordinatesArray;
   }
+
 
 }

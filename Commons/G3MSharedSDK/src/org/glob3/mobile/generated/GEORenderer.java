@@ -19,18 +19,27 @@ package org.glob3.mobile.generated;
 
 //class GEOObject;
 //class GEOSymbolizer;
+//class MeshRenderer;
+//class MarksRenderer;
+//class ShapesRenderer;
+
 
 public class GEORenderer extends LeafRenderer
 {
-  private G3MContext _context;
   private java.util.ArrayList<GEOObject> _children = new java.util.ArrayList<GEOObject>();
 
   private final GEOSymbolizer _symbolizer;
+  private MeshRenderer _meshRenderer;
+  private ShapesRenderer _shapesRenderer;
+  private MarksRenderer _marksRenderer;
 
 
-  public GEORenderer(GEOSymbolizer symbolizer)
+  public GEORenderer(GEOSymbolizer symbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer)
   {
      _symbolizer = symbolizer;
+     _meshRenderer = meshRenderer;
+     _shapesRenderer = shapesRenderer;
+     _marksRenderer = marksRenderer;
 
   }
 
@@ -38,15 +47,19 @@ public class GEORenderer extends LeafRenderer
   {
     if (_symbolizer != null)
        _symbolizer.dispose();
+  
+    final int childrenCount = _children.size();
+    for (int i = 0; i < childrenCount; i++)
+    {
+      GEOObject geoObject = _children.get(i);
+      if (geoObject != null)
+         geoObject.dispose();
+    }
   }
 
   public final void addGEOObject(GEOObject geoObject)
   {
     _children.add(geoObject);
-    if (_context != null)
-    {
-      geoObject.initialize(_context);
-    }
   }
 
   public final void onResume(G3MContext context)
@@ -66,37 +79,33 @@ public class GEORenderer extends LeafRenderer
 
   public final void initialize(G3MContext context)
   {
-    _context = context;
-    final int childrenCount = _children.size();
-    for (int i = 0; i < childrenCount; i++)
-    {
-      GEOObject geoObject = _children.get(i);
-      geoObject.initialize(_context);
-    }
+
   }
 
   public final boolean isReadyToRender(G3MRenderContext rc)
   {
-    final int childrenCount = _children.size();
-    for (int i = 0; i < childrenCount; i++)
-    {
-      GEOObject geoObject = _children.get(i);
-      if (!geoObject.isReadyToRender(rc))
-      {
-        return false;
-      }
-    }
-  
     return true;
   }
 
   public final void render(G3MRenderContext rc, GLState parentState)
   {
     final int childrenCount = _children.size();
-    for (int i = 0; i < childrenCount; i++)
+    if (childrenCount > 0)
     {
-      GEOObject geoObject = _children.get(i);
-      geoObject.render(rc, parentState, _symbolizer);
+      final GEOSymbolizationContext sc = new GEOSymbolizationContext(_symbolizer, _meshRenderer, _shapesRenderer, _marksRenderer);
+  
+      for (int i = 0; i < childrenCount; i++)
+      {
+        final GEOObject geoObject = _children.get(i);
+        if (geoObject != null)
+        {
+          geoObject.symbolize(rc, sc);
+  
+          if (geoObject != null)
+             geoObject.dispose();
+        }
+      }
+      _children.clear();
     }
   }
 
