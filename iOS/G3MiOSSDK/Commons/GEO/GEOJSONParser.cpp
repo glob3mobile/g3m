@@ -99,6 +99,8 @@ GEOPointGeometry* GEOJSONParser::createPointGeometry(const JSONObject* jsonObjec
     return NULL;
   }
 
+  GEOPointGeometry* geo = NULL;
+  
   const int dimensions = jsCoordinates->size();
   if (dimensions == 2) {
     const double latitudeDegrees  = jsCoordinates->getAsNumber(1, 0.0);
@@ -106,7 +108,7 @@ GEOPointGeometry* GEOJSONParser::createPointGeometry(const JSONObject* jsonObjec
 
     _points2DCount++;
 
-    return new GEO2DPointGeometry( Geodetic2D::fromDegrees(latitudeDegrees, longitudeDegrees) );
+    geo = new GEO2DPointGeometry( Geodetic2D::fromDegrees(latitudeDegrees, longitudeDegrees) );
   }
 //  else if (dimensions == 3) {
 //    const double latitudeDegrees  = jsCoordinates->getAsNumber(1, 0.0);
@@ -115,9 +117,9 @@ GEOPointGeometry* GEOJSONParser::createPointGeometry(const JSONObject* jsonObjec
 //  }
   else {
     ILogger::instance()->logError("Mandatory \"coordinates\" dimensions not supported %d", dimensions);
-    return NULL;
   }
 
+  return geo;
 }
 
 GEOLineStringGeometry* GEOJSONParser::createLineStringGeometry(const JSONObject* jsonObject) const {
