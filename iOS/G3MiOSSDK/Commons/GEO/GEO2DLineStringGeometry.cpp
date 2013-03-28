@@ -10,6 +10,7 @@
 
 #include "Geodetic2D.hpp"
 #include "GEOSymbolizer.hpp"
+#include "GEOSymbolizationContext.hpp"
 
 GEO2DLineStringGeometry::~GEO2DLineStringGeometry() {
   const int coordinatesCount = _coordinates->size();
@@ -21,6 +22,6 @@ GEO2DLineStringGeometry::~GEO2DLineStringGeometry() {
 }
 
 std::vector<GEOSymbol*>* GEO2DLineStringGeometry::createSymbols(const G3MRenderContext* rc,
-                                                                const GEOSymbolizer* symbolizer) {
-  return symbolizer->createSymbols(this);
+                                                                const GEOSymbolizationContext& sc) const {
+  return sc.getSymbolizer()->createSymbols(this);
 }

@@ -29,15 +29,13 @@ public:
              const JSONObject* properties);
 
   ~GEOFeature();
-  
-  void render(const G3MRenderContext* rc,
-              const GLState& parentState,
-              const GEOSymbolizer* symbolizer);
-
 
   const JSONObject* getProperties() const {
     return _properties;
   }
+
+  void symbolize(const G3MRenderContext* rc,
+                 const GEOSymbolizationContext& sc) const;
 
 };
 

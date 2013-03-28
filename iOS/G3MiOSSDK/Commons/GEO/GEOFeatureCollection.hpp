@@ -20,13 +20,16 @@ private:
   std::vector<GEOFeature*> _features;
 
 public:
-  void addFeature(GEOFeature* feature);
+  GEOFeatureCollection(std::vector<GEOFeature*>& features) :
+  _features(features)
+  {
+
+  }
 
   virtual ~GEOFeatureCollection();
 
-  void render(const G3MRenderContext* rc,
-              const GLState& parentState,
-              const GEOSymbolizer* symbolizer);
+  void symbolize(const G3MRenderContext* rc,
+                 const GEOSymbolizationContext& sc) const;
 
 };
 

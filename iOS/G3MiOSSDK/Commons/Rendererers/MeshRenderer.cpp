@@ -30,12 +30,15 @@ MeshRenderer::~MeshRenderer() {
 
 void MeshRenderer::render(const G3MRenderContext* rc,
                           const GLState& parentState) {
+
+  const Frustum* frustum = rc->getCurrentCamera()->getFrustumInModelCoordinates();
+
   const int meshesCount = _meshes.size();
   for (int i = 0; i < meshesCount; i++) {
     Mesh* mesh = _meshes[i];
     const Extent* extent = mesh->getExtent();
 
-    if ( extent->touches( rc->getCurrentCamera()->getFrustumInModelCoordinates() ) ) {
+    if ( extent->touches(frustum) ) {
       mesh->render(rc, parentState);
     }
   }

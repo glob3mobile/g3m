@@ -32,7 +32,8 @@ AbstractMesh::AbstractMesh(const int primitive,
                            float pointSize,
                            Color* flatColor,
                            IFloatBuffer* colors,
-                           const float colorsIntensity) :
+                           const float colorsIntensity,
+                           bool depthTest) :
 _primitive(primitive),
 _owner(owner),
 _vertices(vertices),
@@ -45,7 +46,8 @@ _translationMatrix(( center.isNan() || center.isZero() )
                    ? NULL
                    : new MutableMatrix44D(MutableMatrix44D::createTranslationMatrix(center)) ),
 _lineWidth(lineWidth),
-_pointSize(pointSize)
+_pointSize(pointSize),
+_depthTest(depthTest)
 {
 
 }
@@ -129,6 +131,10 @@ void AbstractMesh::render(const G3MRenderContext *rc,
       state.enableBlend();
       gl->setBlendFuncSrcAlpha();
     }
+  }
+
+  if (!_depthTest) {
+    state.disableDepthTest();
   }
 
   gl->vertexPointer(3, 0, _vertices);

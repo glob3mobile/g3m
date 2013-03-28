@@ -14,23 +14,30 @@
 #include <vector>
 class GEOObject;
 class GEOSymbolizer;
+class MeshRenderer;
+class MarksRenderer;
+class ShapesRenderer;
+
 
 class GEORenderer : public LeafRenderer {
 private:
-#ifdef C_CODE
-  const G3MContext* _context;
-#endif
-#ifdef JAVA_CODE
-  private G3MContext _context;
-#endif
   std::vector<GEOObject*> _children;
 
   const GEOSymbolizer* _symbolizer;
+  MeshRenderer*   _meshRenderer;
+  ShapesRenderer* _shapesRenderer;
+  MarksRenderer*  _marksRenderer;
 
 public:
 
-  GEORenderer(const GEOSymbolizer* symbolizer) :
-  _symbolizer(symbolizer)
+  GEORenderer(const GEOSymbolizer* symbolizer,
+              MeshRenderer*   meshRenderer,
+              ShapesRenderer* shapesRenderer,
+              MarksRenderer*  marksRenderer) :
+  _symbolizer(symbolizer),
+  _meshRenderer(meshRenderer),
+  _shapesRenderer(shapesRenderer),
+  _marksRenderer(marksRenderer)
   {
 
   }
@@ -51,9 +58,13 @@ public:
 
   }
 
-  void initialize(const G3MContext* context);
+  void initialize(const G3MContext* context) {
+
+  }
   
-  bool isReadyToRender(const G3MRenderContext* rc);
+  bool isReadyToRender(const G3MRenderContext* rc) {
+    return true;
+  }
 
   void render(const G3MRenderContext* rc,
               const GLState& parentState);

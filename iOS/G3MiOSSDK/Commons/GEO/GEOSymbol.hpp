@@ -11,32 +11,16 @@
 
 #include <vector>
 
-class Mesh;
 class G3MRenderContext;
-class Ellipsoid;
-class Color;
-class Geodetic2D;
-
+class GEOSymbolizationContext;
 
 class GEOSymbol {
-protected:
-  Mesh* createLine2DMesh(const std::vector<Geodetic2D*>* coordinates,
-                         const Color& lineColor,
-                         float lineWidth,
-                         double deltaHeight,
-                         const Ellipsoid* ellipsoid);
-
-  Mesh* createLines2DMesh(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray,
-                          const Color& lineColor,
-                          float lineWidth,
-                          double deltaHeight,
-                          const Ellipsoid* ellipsoid);
-
 
 public:
   virtual ~GEOSymbol() { }
 
-  virtual Mesh* createMesh(const G3MRenderContext* rc) = 0;
+  virtual void symbolize(const G3MRenderContext* rc,
+                         const GEOSymbolizationContext& sc) const = 0 ;
 
 };
 

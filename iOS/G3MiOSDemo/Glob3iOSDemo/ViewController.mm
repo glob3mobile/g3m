@@ -77,10 +77,14 @@
 #import <G3MiOSSDK/GEO2DLineStringGeometry.hpp>
 #import <G3MiOSSDK/GEOFeature.hpp>
 #import <G3MiOSSDK/JSONObject.hpp>
-#import <G3MiOSSDK/GEOLine2DSymbol.hpp>
-#import <G3MiOSSDK/GEOMultiLine2DSymbol.hpp>
+#import <G3MiOSSDK/GEOLine2DMeshSymbol.hpp>
+#import <G3MiOSSDK/GEOMultiLine2DMeshSymbol.hpp>
 #import <G3MiOSSDK/GEOLine2DStyle.hpp>
-
+#import <G3MiOSSDK/GEOCircleShapeSymbol.hpp>
+#import <G3MiOSSDK/GEO2DPointGeometry.hpp>
+#import <G3MiOSSDK/GEOCircleShapeStyle.hpp>
+#import <G3MiOSSDK/GEOBoxShapeSymbol.hpp>
+#import <G3MiOSSDK/GEOBoxShapeStyle.hpp>
 
 class TestVisibleSectorListener : public VisibleSectorListener {
 public:
@@ -298,12 +302,14 @@ public:
   ShapesRenderer* shapesRenderer = [self createShapesRenderer: builder.getPlanet()];
   builder.addRenderer(shapesRenderer);
 
-
-  GEORenderer* geoRenderer = [self createGEORenderer];
-  builder.addRenderer(geoRenderer);
-
   MeshRenderer* meshRenderer = new MeshRenderer();
   builder.addRenderer( meshRenderer );
+
+  GEORenderer* geoRenderer = [self createGEORendererMeshRenderer: meshRenderer
+                                                  shapesRenderer: shapesRenderer
+                                                   marksRenderer: marksRenderer];
+  builder.addRenderer(geoRenderer);
+
 
   //  [self createInterpolationTest: meshRenderer];
 
@@ -496,7 +502,7 @@ public:
     layerSet->addLayer( new OSMLayer(TimeInterval::fromDays(30)) );
   }
 
-  const bool useMapQuestOSM = true;
+  const bool useMapQuestOSM = false;
   if (useMapQuestOSM) {
     layerSet->addLayer( MapQuestLayer::newOSM(TimeInterval::fromDays(30)) );
   }
@@ -525,10 +531,11 @@ public:
                                             TimeInterval::fromDays(30)) );
   }
 
-  const bool useBingMaps = false;
+  const bool useBingMaps = true;
   if (useBingMaps) {
     layerSet->addLayer( new BingMapsLayer(//BingMapType::Road(),
-                                          BingMapType::AerialWithLabels(),
+                                          //BingMapType::AerialWithLabels(),
+                                          BingMapType::Aerial(),
                                           "ArtXu2Z-XSlDVCRVtxtYqtIPVR_0qqLcrfsRyZK_ishjUKvTheYBUH9rDDmAPcnj",
                                           TimeInterval::fromDays(30)) );
   }
@@ -907,52 +914,52 @@ public:
   //                                      );
   //  shapesRenderer->addShape(colored);
 
-  // to test layout::splitOverCircle
-  Geodetic3D* center = new Geodetic3D(Angle::fromDegrees(40.429701),
-                                      Angle::fromDegrees(-3.703766),
-                                      0);
-  double radius = 5e4;
-  Vector3D radiusVector(radius, radius, radius);
-  Shape* centralSphere = new EllipsoidShape(center,
-                                      radiusVector,
-                                      8,
-                                      1,
-                                      false,
-                                      false,
-                                      Color::newFromRGBA(0.8, 0, 0, 0.5),
-                                      Color::newFromRGBA(0, 0, 0, 0.5)
-                                      );
-  shapesRenderer->addShape(centralSphere);
-  int splits = 5;
-  std::vector<Geodetic3D*> spheres3D = LayoutUtils::splitOverCircle(planet, *center, 1e6, splits);
-  for (int i=0; i<splits; i++) {
-    Shape* sphere = new EllipsoidShape(spheres3D[i],
-                                       radiusVector,
-                                       8,
-                                       1,
-                                       false,
-                                       false,
-                                       Color::newFromRGBA(0.0, 0.8, 0, 0.5),
-                                       Color::newFromRGBA(0, 0, 0, 0.5)
-                                       );
-    shapesRenderer->addShape(sphere);
-  }
-  std::vector<Geodetic2D*> spheres2D = LayoutUtils::splitOverCircle(planet, center->asGeodetic2D(), 1e6, splits, Angle::fromDegrees(36));
-  for (int i=0; i<splits; i++) {
-    Geodetic3D* centerSplit = new Geodetic3D(*spheres2D[i], 0);
-    delete spheres2D[i];
-    Shape* sphere = new EllipsoidShape(centerSplit,
-                                       radiusVector,
-                                       8,
-                                       1,
-                                       false,
-                                       false,
-                                       Color::newFromRGBA(0.8, 0.8, 0, 0.5),
-                                       Color::newFromRGBA(0, 0, 0, 0.5)
-                                       );
-    shapesRenderer->addShape(sphere);
-  }
-  
+//  // to test layout::splitOverCircle
+//  Geodetic3D* center = new Geodetic3D(Angle::fromDegrees(40.429701),
+//                                      Angle::fromDegrees(-3.703766),
+//                                      0);
+//  double radius = 5e4;
+//  Vector3D radiusVector(radius, radius, radius);
+//  Shape* centralSphere = new EllipsoidShape(center,
+//                                      radiusVector,
+//                                      8,
+//                                      1,
+//                                      false,
+//                                      false,
+//                                      Color::newFromRGBA(0.8, 0, 0, 0.5),
+//                                      Color::newFromRGBA(0, 0, 0, 0.5)
+//                                      );
+//  shapesRenderer->addShape(centralSphere);
+//  int splits = 5;
+//  std::vector<Geodetic3D*> spheres3D = LayoutUtils::splitOverCircle(planet, *center, 1e6, splits);
+//  for (int i=0; i<splits; i++) {
+//    Shape* sphere = new EllipsoidShape(spheres3D[i],
+//                                       radiusVector,
+//                                       8,
+//                                       1,
+//                                       false,
+//                                       false,
+//                                       Color::newFromRGBA(0.0, 0.8, 0, 0.5),
+//                                       Color::newFromRGBA(0, 0, 0, 0.5)
+//                                       );
+//    shapesRenderer->addShape(sphere);
+//  }
+//  std::vector<Geodetic2D*> spheres2D = LayoutUtils::splitOverCircle(planet, center->asGeodetic2D(), 1e6, splits, Angle::fromDegrees(36));
+//  for (int i=0; i<splits; i++) {
+//    Geodetic3D* centerSplit = new Geodetic3D(*spheres2D[i], 0);
+//    delete spheres2D[i];
+//    Shape* sphere = new EllipsoidShape(centerSplit,
+//                                       radiusVector,
+//                                       8,
+//                                       1,
+//                                       false,
+//                                       false,
+//                                       Color::newFromRGBA(0.8, 0.8, 0, 0.5),
+//                                       Color::newFromRGBA(0, 0, 0, 0.5)
+//                                       );
+//    shapesRenderer->addShape(sphere);
+//  }
+
   
 
   return shapesRenderer;
@@ -962,7 +969,9 @@ public:
 class SampleSymbolizer : public GEOSymbolizer {
 private:
 
-  GEOLine2DStyle createStyle(const JSONObject* properties) const {
+  GEOLine2DStyle createLineStyle(const GEOGeometry* geometry) const {
+    const JSONObject* properties = geometry->getFeature()->getProperties();
+
     const std::string type = properties->getAsString("type", "");
 
     if (type.compare("Water Indicator") == 0) {
@@ -972,39 +981,87 @@ private:
     return GEOLine2DStyle(Color::fromRGBA(1, 0, 1, 1), 2);
   }
 
+  GEOCircleShapeStyle createCircleShapeStyle(const GEOGeometry* geometry) const {
+    const JSONObject* properties = geometry->getFeature()->getProperties();
+
+
+    const double population = properties->getAsNumber("population", 0);
+
+    const IMathUtils* mu = IMathUtils::instance();
+
+    const double area = population * 1200;
+    const float radius = (float) mu->sqrt( area / mu->pi() );
+    Color color = Color::yellow();
+    int steps = 64;
+
+    return GEOCircleShapeStyle(radius, color, steps);
+  }
+
+  GEOBoxShapeStyle createBoxShapeStyle(const GEOGeometry* geometry) const {
+    const JSONObject* properties = geometry->getFeature()->getProperties();
+
+    const double population = properties->getAsNumber("population", 0);
+
+    const double boxExtent = 50000;
+    const double baseArea = boxExtent*boxExtent;
+    const double volume = population * boxExtent * 3500;
+    const double height = volume / baseArea;
+
+    return GEOBoxShapeStyle(Vector3D(boxExtent, boxExtent, height),
+                            1,
+                            Color::newFromRGBA(1, 1, 0, 1),
+                            Color::newFromRGBA(0.1, 0.1, 0, 1));
+  }
+
+
 public:
 
   std::vector<GEOSymbol*>* createSymbols(const GEO2DLineStringGeometry* geometry) const {
-    const JSONObject* properties = geometry->getFeature()->getProperties();
-
     std::vector<GEOSymbol*>* symbols = new std::vector<GEOSymbol*>();
 
-    symbols->push_back( new GEOLine2DSymbol(geometry->getCoordinates(),
-                                            createStyle(properties),
-                                            30000) );
+    symbols->push_back( new GEOLine2DMeshSymbol(geometry->getCoordinates(),
+                                                createLineStyle(geometry),
+                                                30000) );
 
     return symbols;
   }
 
 
   std::vector<GEOSymbol*>* createSymbols(const GEO2DMultiLineStringGeometry* geometry) const {
-    const JSONObject* properties = geometry->getFeature()->getProperties();
-
     std::vector<GEOSymbol*>* symbols = new std::vector<GEOSymbol*>();
     
-    symbols->push_back( new GEOMultiLine2DSymbol(geometry->getCoordinatesArray(),
-                                                 createStyle(properties)) );
+    symbols->push_back( new GEOMultiLine2DMeshSymbol(geometry->getCoordinatesArray(),
+                                                     createLineStyle(geometry)) );
 
     return symbols;
   }
+
+  std::vector<GEOSymbol*>* createSymbols(const GEO2DPointGeometry* geometry) const {
+    std::vector<GEOSymbol*>* symbols = new std::vector<GEOSymbol*>();
+
+//    symbols->push_back( new GEOCircleShapeSymbol(Geodetic3D(geometry->getPosition(), 100),
+//                                                 createCircleShapeStyle(geometry)) );
+
+    symbols->push_back( new GEOBoxShapeSymbol(Geodetic3D(geometry->getPosition(), 0),
+                                              createBoxShapeStyle(geometry)) );
+
+    return symbols;
+  }
+
 };
 
 
-- (GEORenderer*) createGEORenderer
+- (GEORenderer*) createGEORendererMeshRenderer: (MeshRenderer*) meshRenderer
+                                shapesRenderer: (ShapesRenderer*) shapesRenderer
+                                 marksRenderer: (MarksRenderer*) marksRenderer
 {
   GEOSymbolizer* symbolizer = new SampleSymbolizer();
 
-  GEORenderer* geoRenderer = new GEORenderer(symbolizer);
+
+  GEORenderer* geoRenderer = new GEORenderer(symbolizer,
+                                             meshRenderer,
+                                             shapesRenderer,
+                                             marksRenderer);
 
   return geoRenderer;
 }
@@ -1602,98 +1659,16 @@ public:
       /**/
 
 
-      /*
-       IFloatBuffer* vertices = IFactory::instance()->createFloatBuffer(6 * 3);
-       int i =0;
-       vertices->put(i++, -1);
-       vertices->put(i++, -0.5);
-       vertices->put(i++, 0);
 
-       vertices->put(i++, 0);
-       vertices->put(i++, 0);
-       vertices->put(i++, 0);
-
-       vertices->put(i++, 0);
-       vertices->put(i++, -0.5);
-       vertices->put(i++, 0);
-
-       vertices->put(i++, -1);
-       vertices->put(i++, -1);
-       vertices->put(i++, 0);
-
-       vertices->put(i++, 1);
-       vertices->put(i++, -0.5);
-       vertices->put(i++, 0);
-
-       vertices->put(i++, 1);
-       vertices->put(i++, -1);
-       vertices->put(i++, 0);
-
-       IShortBuffer* indices = IFactory::instance()->createShortBuffer(12);
-       i = 0;
-       indices->put(i++, 0);
-       indices->put(i++, 1);
-       indices->put(i++, 2);
-       indices->put(i++, 0);
-       indices->put(i++, 2);
-       indices->put(i++, 3);
-       indices->put(i++, 2);
-       indices->put(i++, 1);
-       indices->put(i++, 4);
-       indices->put(i++, 2);
-       indices->put(i++, 4);
-       indices->put(i++, 5);
-
-       IndexedMesh* travelledMesh = new IndexedMesh(GLPrimitive::triangleStrip(),
-       true,
-       Vector3D::zero(),
-       vertices,
-       indices,
-       1,
-       2,
-       Color::newFromRGBA(1, 1, 0, 1));
-
-       IndexedMesh* toTravelMesh = new IndexedMesh(GLPrimitive::triangleStrip(),
-       true,
-       Vector3D::zero(),
-       vertices,
-       indices,
-       1,
-       2,
-       Color::newFromRGBA(0.5, 0.5, 0.5, 1));
-
-       //      Geodetic3D* buenosAiresPosition = new Geodetic3D(Angle::fromDegreesMinutesSeconds(-34, 36, 13.44),
-       //                                                       Angle::fromDegreesMinutesSeconds(-58, 22, 53.74),
-       //                                                       1000);
-
-       //      Geodetic3D* dcPosition = new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
-       //                                              Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
-       //                                              600);
-       //      Shape* trailShape = new MeshShape(dcPosition, mesh);
-       //      // Washington, DC
-       //      trailShape->setHeading(Angle::fromDegrees(270));
-       //      trailShape->setScale(500, 500, 500);
-       //      _shapesRenderer->addShape(trailShape);
-
-       for (double lon = -70; lon >= -80; lon -= 0.008) {
-       Mesh* mesh = (lon >= -76.96) ? travelledMesh : toTravelMesh;
-       Shape* trailShape = new MeshShape(new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
-       Angle::fromDegrees(lon),
-       9400),
-       mesh);
-       trailShape->setHeading(Angle::fromDegrees(270));
-       const double scale = 500;
-       trailShape->setScale(scale * 2 / 3, scale * 1.8, scale);
-       _shapesRenderer->addShape(trailShape);
-       }
-       */
 
       /**/
       /**/
       //      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/coastline"
       //                                                                  ofType: @"geojson"];
 
-      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/boundary_lines_land"
+//      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/boundary_lines_land"
+//                                                                  ofType: @"geojson"];
+      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/cities"
                                                                   ofType: @"geojson"];
 
       //      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/extremadura-roads"
@@ -1703,6 +1678,7 @@ public:
         NSString *nsGEOJSON = [NSString stringWithContentsOfFile: geoJSONFilePath
                                                         encoding: NSUTF8StringEncoding
                                                            error: nil];
+
         if (nsGEOJSON) {
           std::string geoJSON = [nsGEOJSON UTF8String];
           
