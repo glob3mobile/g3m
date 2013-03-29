@@ -85,6 +85,8 @@
 #import <G3MiOSSDK/GEOCircleShapeStyle.hpp>
 #import <G3MiOSSDK/GEOBoxShapeSymbol.hpp>
 #import <G3MiOSSDK/GEOBoxShapeStyle.hpp>
+#import <G3MiOSSDK/GEOMarkSymbol.hpp>
+
 
 class TestVisibleSectorListener : public VisibleSectorListener {
 public:
@@ -296,14 +298,15 @@ public:
   //    SimplePlanetRenderer* spr = new SimplePlanetRenderer("world.jpg");
   //    builder->addRenderer(spr);
 
-  MarksRenderer* marksRenderer = [self createMarksRenderer];
-  builder.addRenderer(marksRenderer);
 
   ShapesRenderer* shapesRenderer = [self createShapesRenderer: builder.getPlanet()];
   builder.addRenderer(shapesRenderer);
 
   MeshRenderer* meshRenderer = new MeshRenderer();
   builder.addRenderer( meshRenderer );
+
+  MarksRenderer* marksRenderer = [self createMarksRenderer];
+  builder.addRenderer(marksRenderer);
 
   GEORenderer* geoRenderer = [self createGEORendererMeshRenderer: meshRenderer
                                                   shapesRenderer: shapesRenderer
@@ -1039,11 +1042,43 @@ public:
   std::vector<GEOSymbol*>* createSymbols(const GEO2DPointGeometry* geometry) const {
     std::vector<GEOSymbol*>* symbols = new std::vector<GEOSymbol*>();
 
-//    symbols->push_back( new GEOCircleShapeSymbol(Geodetic3D(geometry->getPosition(), 100),
+//    symbols->push_back( new GEOCircleShapeSymbol(Geodetic3D(geometry->getPosition(), 200),
 //                                                 createCircleShapeStyle(geometry)) );
 
     symbols->push_back( new GEOBoxShapeSymbol(Geodetic3D(geometry->getPosition(), 0),
                                               createBoxShapeStyle(geometry)) );
+
+
+
+    const JSONObject* properties = geometry->getFeature()->getProperties();
+
+    const std::string label = properties->getAsString("name", "");
+
+    if (label.compare("") != 0) {
+      double scalerank = properties->getAsNumber("scalerank", 0);
+
+//      Mark* mark = new Mark(const std::string& label,
+//                            const Geodetic3D&  position,
+//                            double             minDistanceToCamera=4.5e+06,
+//                            const float        labelFontSize=20,
+//                            const Color*       labelFontColor=Color::newFromRGBA(1, 1, 1, 1),
+//                            const Color*       labelShadowColor=Color::newFromRGBA(0, 0, 0, 1);
+
+//      const double population = properties->getAsNumber("population", 0);
+//
+//      const double boxExtent = 50000;
+//      const double baseArea = boxExtent*boxExtent;
+//      const double volume = population * boxExtent * 3500;
+//      const double height = (volume / baseArea) * 0.7;
+      const double height = 1000;
+
+      Mark* mark = new Mark(label,
+                            Geodetic3D(geometry->getPosition(), height),
+                            0,
+                            25 + (scalerank * -3) );
+
+      symbols->push_back( new GEOMarkSymbol(mark) );
+    }
 
     return symbols;
   }

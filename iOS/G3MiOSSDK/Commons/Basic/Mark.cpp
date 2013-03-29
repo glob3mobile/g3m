@@ -132,19 +132,19 @@ public:
 
 
 
-Mark::Mark(const std::string&   label,
-           const URL            iconURL,
-           const Geodetic3D&     position,
-           double               minDistanceToCamera,
-           const bool           labelBottom,
-           const float          labelFontSize,
-           const Color*         labelFontColor,
-           const Color*         labelShadowColor,
-           const int            labelGapSize,
-           MarkUserData*        userData,
-           bool                 autoDeleteUserData,
-           MarkTouchListener*   listener,
-           bool                 autoDeleteListener) :
+Mark::Mark(const std::string& label,
+           const URL          iconURL,
+           const Geodetic3D&  position,
+           double             minDistanceToCamera,
+           const bool         labelBottom,
+           const float        labelFontSize,
+           const Color*       labelFontColor,
+           const Color*       labelShadowColor,
+           const int          labelGapSize,
+           MarkUserData*      userData,
+           bool               autoDeleteUserData,
+           MarkTouchListener* listener,
+           bool               autoDeleteListener) :
 _label(label),
 _iconURL(iconURL),
 _position(position),
@@ -170,16 +170,16 @@ _autoDeleteListener(autoDeleteListener)
 
 }
 
-Mark::Mark(const std::string&   label,
-           const Geodetic3D&     position,
-           double               minDistanceToCamera,           
-           const float          labelFontSize,
-           const Color*         labelFontColor,
-           const Color*         labelShadowColor,
-           MarkUserData*        userData,
-           bool                 autoDeleteUserData,
-           MarkTouchListener*   listener,
-           bool                 autoDeleteListener) :
+Mark::Mark(const std::string& label,
+           const Geodetic3D&  position,
+           double             minDistanceToCamera,
+           const float        labelFontSize,
+           const Color*       labelFontColor,
+           const Color*       labelShadowColor,
+           MarkUserData*      userData,
+           bool               autoDeleteUserData,
+           MarkTouchListener* listener,
+           bool               autoDeleteListener) :
 _label(label),
 _labelBottom(true),
 _iconURL("", false),
@@ -206,12 +206,12 @@ _autoDeleteListener(autoDeleteListener)
 }
 
 Mark::Mark(const URL          iconURL,
-           const Geodetic3D&   position,
-           double minDistanceToCamera,
-           MarkUserData* userData,
-           bool autoDeleteUserData,
+           const Geodetic3D&  position,
+           double             minDistanceToCamera,
+           MarkUserData*      userData,
+           bool               autoDeleteUserData,
            MarkTouchListener* listener,
-           bool autoDeleteListener) :
+           bool               autoDeleteListener) :
 _label(""),
 _labelBottom(true),
 _iconURL(iconURL),

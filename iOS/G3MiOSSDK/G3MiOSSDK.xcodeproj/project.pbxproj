@@ -119,6 +119,8 @@
 		CF7E626615F7DD740086B71D /* IntBufferBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7E626415F7DD740086B71D /* IntBufferBuilder.cpp */; };
 		CF7EDA0516948302002C760A /* ByteBufferIterator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7EDA0316948302002C760A /* ByteBufferIterator.cpp */; };
 		CF7EDA0A1694914A002C760A /* BSONParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7EDA081694914A002C760A /* BSONParser.cpp */; };
+		CF83D50617049AB9009A39A5 /* GEOMarkSymbol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF83D50417049AB9009A39A5 /* GEOMarkSymbol.cpp */; };
+		CF83D50717049AE3009A39A5 /* GEOMarkSymbol.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF83D50517049AB9009A39A5 /* GEOMarkSymbol.hpp */; };
 		CF857B2E164C757A0089F1DE /* SGRotateNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF857B2C164C757A0089F1DE /* SGRotateNode.cpp */; };
 		CF857B33164C77B00089F1DE /* SGMaterialNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF857B31164C77B00089F1DE /* SGMaterialNode.cpp */; };
 		CF857B37164C78B10089F1DE /* SGTextureNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF857B35164C78B10089F1DE /* SGTextureNode.cpp */; };
@@ -465,6 +467,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF83D50717049AE3009A39A5 /* GEOMarkSymbol.hpp in CopyFiles */,
 				CF568EF2170473EC00EB8DC7 /* GEOBoxShapeStyle.hpp in CopyFiles */,
 				CF568EEE1704736E00EB8DC7 /* GEOShapeStyle.hpp in CopyFiles */,
 				CF568EEA170472BA00EB8DC7 /* GEOBoxShapeSymbol.hpp in CopyFiles */,
@@ -918,6 +921,8 @@
 		CF7EDA0416948302002C760A /* ByteBufferIterator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = ByteBufferIterator.hpp; path = Commons/Basic/ByteBufferIterator.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		CF7EDA081694914A002C760A /* BSONParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BSONParser.cpp; sourceTree = "<group>"; };
 		CF7EDA091694914A002C760A /* BSONParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BSONParser.hpp; sourceTree = "<group>"; };
+		CF83D50417049AB9009A39A5 /* GEOMarkSymbol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEOMarkSymbol.cpp; path = Commons/GEO/GEOMarkSymbol.cpp; sourceTree = "<group>"; };
+		CF83D50517049AB9009A39A5 /* GEOMarkSymbol.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEOMarkSymbol.hpp; path = Commons/GEO/GEOMarkSymbol.hpp; sourceTree = "<group>"; };
 		CF857B2C164C757A0089F1DE /* SGRotateNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGRotateNode.cpp; path = Commons/Rendererers/SGRotateNode.cpp; sourceTree = "<group>"; };
 		CF857B2D164C757A0089F1DE /* SGRotateNode.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SGRotateNode.hpp; path = Commons/Rendererers/SGRotateNode.hpp; sourceTree = "<group>"; };
 		CF857B31164C77B00089F1DE /* SGMaterialNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGMaterialNode.cpp; path = Commons/Rendererers/SGMaterialNode.cpp; sourceTree = "<group>"; };
@@ -1615,6 +1620,8 @@
 				CF8ADFFB1702049F00FE9F56 /* GEOLine2DStyle.hpp */,
 				CF94EB8D1669225600F2283C /* GEOLineStringGeometry.cpp */,
 				CF94EB8E1669225600F2283C /* GEOLineStringGeometry.hpp */,
+				CF83D50417049AB9009A39A5 /* GEOMarkSymbol.cpp */,
+				CF83D50517049AB9009A39A5 /* GEOMarkSymbol.hpp */,
 				CF1871BD17036DD700092888 /* GEOMeshSymbol.cpp */,
 				CF1871BE17036DD700092888 /* GEOMeshSymbol.hpp */,
 				CF8ADFFE1702049F00FE9F56 /* GEOMultiLine2DMeshSymbol.cpp */,
@@ -2099,6 +2106,7 @@
 				CF568EE91704726700EB8DC7 /* GEOBoxShapeSymbol.cpp in Sources */,
 				CF568EED170472F700EB8DC7 /* GEOShapeStyle.cpp in Sources */,
 				CF568EF1170473AF00EB8DC7 /* GEOBoxShapeStyle.cpp in Sources */,
+				CF83D50617049AB9009A39A5 /* GEOMarkSymbol.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
