@@ -13,10 +13,16 @@
 class Shape;
 
 class GEOShapeSymbol : public GEOSymbol {
-protected:
-  virtual Shape* createShape(const G3MRenderContext* rc) const = 0;
+private:
+  Shape* _shape;
 
 public:
+  GEOShapeSymbol(Shape* shape) :
+  _shape(shape)
+  {
+
+  }
+
   void symbolize(const G3MRenderContext* rc,
                  const GEOSymbolizationContext& sc) const;
 

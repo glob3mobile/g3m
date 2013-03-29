@@ -72,6 +72,7 @@
 //import <G3MiOSSDK/WMSBillElevationDataProvider.hpp>
 #import <G3MiOSSDK/SingleBillElevationDataProvider.hpp>
 #import <G3MiOSSDK/FloatBufferElevationData.hpp>
+
 #import <G3MiOSSDK/GEOSymbolizer.hpp>
 #import <G3MiOSSDK/GEO2DMultiLineStringGeometry.hpp>
 #import <G3MiOSSDK/GEO2DLineStringGeometry.hpp>
@@ -80,11 +81,8 @@
 #import <G3MiOSSDK/GEOLine2DMeshSymbol.hpp>
 #import <G3MiOSSDK/GEOMultiLine2DMeshSymbol.hpp>
 #import <G3MiOSSDK/GEOLine2DStyle.hpp>
-#import <G3MiOSSDK/GEOCircleShapeSymbol.hpp>
 #import <G3MiOSSDK/GEO2DPointGeometry.hpp>
-#import <G3MiOSSDK/GEOCircleShapeStyle.hpp>
-#import <G3MiOSSDK/GEOBoxShapeSymbol.hpp>
-#import <G3MiOSSDK/GEOBoxShapeStyle.hpp>
+#import <G3MiOSSDK/GEOShapeSymbol.hpp>
 #import <G3MiOSSDK/GEOMarkSymbol.hpp>
 
 
@@ -984,9 +982,8 @@ private:
     return GEOLine2DStyle(Color::fromRGBA(1, 0, 1, 1), 2);
   }
 
-  GEOCircleShapeStyle createCircleShapeStyle(const GEOGeometry* geometry) const {
+  CircleShape* createCircleShape(const GEO2DPointGeometry* geometry) const {
     const JSONObject* properties = geometry->getFeature()->getProperties();
-
 
     const double population = properties->getAsNumber("population", 0);
 
@@ -994,13 +991,14 @@ private:
 
     const double area = population * 1200;
     const float radius = (float) mu->sqrt( area / mu->pi() );
-    Color color = Color::yellow();
-    int steps = 64;
+    Color* color = Color::newFromRGBA(1, 1, 0, 1);
 
-    return GEOCircleShapeStyle(radius, color, steps);
+    return new CircleShape(new Geodetic3D(geometry->getPosition(), 200),
+                           radius,
+                           color);
   }
 
-  GEOBoxShapeStyle createBoxShapeStyle(const GEOGeometry* geometry) const {
+  BoxShape* createBoxShape(const GEO2DPointGeometry* geometry) const {
     const JSONObject* properties = geometry->getFeature()->getProperties();
 
     const double population = properties->getAsNumber("population", 0);
@@ -1010,11 +1008,38 @@ private:
     const double volume = population * boxExtent * 3500;
     const double height = volume / baseArea;
 
-    return GEOBoxShapeStyle(Vector3D(boxExtent, boxExtent, height),
-                            1,
-                            Color::newFromRGBA(1, 1, 0, 1),
-                            Color::newFromRGBA(0.1, 0.1, 0, 1));
+    return new BoxShape(new Geodetic3D(geometry->getPosition(), 0),
+                        Vector3D(boxExtent, boxExtent, height),
+                        1,
+                        Color::newFromRGBA(1, 1, 0, 1),
+                        Color::newFromRGBA(0.1, 0.1, 0, 1));
   }
+
+  Mark* createMark(const GEO2DPointGeometry* geometry) const {
+    const JSONObject* properties = geometry->getFeature()->getProperties();
+
+    const std::string label = properties->getAsString("name", "");
+
+    if (label.compare("") != 0) {
+      double scalerank = properties->getAsNumber("scalerank", 0);
+
+      //      const double population = properties->getAsNumber("population", 0);
+      //
+      //      const double boxExtent = 50000;
+      //      const double baseArea = boxExtent*boxExtent;
+      //      const double volume = population * boxExtent * 3500;
+      //      const double height = (volume / baseArea) * 0.7;
+      const double height = 1000;
+
+      return new Mark(label,
+                      Geodetic3D(geometry->getPosition(), height),
+                      0,
+                      25 + (scalerank * -3) );
+    }
+
+    return NULL;
+  }
+  
 
 
 public:
@@ -1042,41 +1067,12 @@ public:
   std::vector<GEOSymbol*>* createSymbols(const GEO2DPointGeometry* geometry) const {
     std::vector<GEOSymbol*>* symbols = new std::vector<GEOSymbol*>();
 
-//    symbols->push_back( new GEOCircleShapeSymbol(Geodetic3D(geometry->getPosition(), 200),
-//                                                 createCircleShapeStyle(geometry)) );
+    //symbols->push_back( new GEOShapeSymbol( createCircleShape(geometry) ) );
 
-    symbols->push_back( new GEOBoxShapeSymbol(Geodetic3D(geometry->getPosition(), 0),
-                                              createBoxShapeStyle(geometry)) );
+    symbols->push_back( new GEOShapeSymbol( createBoxShape(geometry) ) );
 
-
-
-    const JSONObject* properties = geometry->getFeature()->getProperties();
-
-    const std::string label = properties->getAsString("name", "");
-
-    if (label.compare("") != 0) {
-      double scalerank = properties->getAsNumber("scalerank", 0);
-
-//      Mark* mark = new Mark(const std::string& label,
-//                            const Geodetic3D&  position,
-//                            double             minDistanceToCamera=4.5e+06,
-//                            const float        labelFontSize=20,
-//                            const Color*       labelFontColor=Color::newFromRGBA(1, 1, 1, 1),
-//                            const Color*       labelShadowColor=Color::newFromRGBA(0, 0, 0, 1);
-
-//      const double population = properties->getAsNumber("population", 0);
-//
-//      const double boxExtent = 50000;
-//      const double baseArea = boxExtent*boxExtent;
-//      const double volume = population * boxExtent * 3500;
-//      const double height = (volume / baseArea) * 0.7;
-      const double height = 1000;
-
-      Mark* mark = new Mark(label,
-                            Geodetic3D(geometry->getPosition(), height),
-                            0,
-                            25 + (scalerank * -3) );
-
+    Mark* mark = createMark(geometry);
+    if (mark != NULL) {
       symbols->push_back( new GEOMarkSymbol(mark) );
     }
 

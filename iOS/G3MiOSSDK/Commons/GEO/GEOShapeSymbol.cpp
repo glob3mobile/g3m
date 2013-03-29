@@ -13,14 +13,14 @@
 
 void GEOShapeSymbol::symbolize(const G3MRenderContext* rc,
                                const GEOSymbolizationContext& sc) const {
-  ShapesRenderer* shapeRenderer = sc.getShapesRenderer();
-  if (shapeRenderer == NULL) {
-    ILogger::instance()->logError("Can't simbolize with Shape, ShapesRenderer was not set");
-  }
-  else {
-    Shape* shape = createShape(rc);
-    if (shape != NULL) {
-      shapeRenderer->addShape(shape);
+  if (_shape != NULL) {
+    ShapesRenderer* shapeRenderer = sc.getShapesRenderer();
+    if (shapeRenderer == NULL) {
+      ILogger::instance()->logError("Can't simbolize with Shape, ShapesRenderer was not set");
+      delete _shape;
+    }
+    else {
+      shapeRenderer->addShape(_shape);
     }
   }
 }
