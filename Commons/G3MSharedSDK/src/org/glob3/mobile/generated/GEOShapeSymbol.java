@@ -18,23 +18,30 @@ package org.glob3.mobile.generated;
 
 //class Shape;
 
-public abstract class GEOShapeSymbol extends GEOSymbol
+public class GEOShapeSymbol extends GEOSymbol
 {
-  protected abstract Shape createShape(G3MRenderContext rc);
+  private Shape _shape;
+
+  public GEOShapeSymbol(Shape shape)
+  {
+     _shape = shape;
+
+  }
 
   public final void symbolize(G3MRenderContext rc, GEOSymbolizationContext sc)
   {
-    ShapesRenderer shapeRenderer = sc.getShapesRenderer();
-    if (shapeRenderer == null)
+    if (_shape != null)
     {
-      ILogger.instance().logError("Can't simbolize with Shape, ShapesRenderer was not set");
-    }
-    else
-    {
-      Shape shape = createShape(rc);
-      if (shape != null)
+      ShapesRenderer shapeRenderer = sc.getShapesRenderer();
+      if (shapeRenderer == null)
       {
-        shapeRenderer.addShape(shape);
+        ILogger.instance().logError("Can't simbolize with Shape, ShapesRenderer was not set");
+        if (_shape != null)
+           _shape.dispose();
+      }
+      else
+      {
+        shapeRenderer.addShape(_shape);
       }
     }
   }
