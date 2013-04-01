@@ -11,6 +11,7 @@
 
 #include <iostream.h>
 #include <string.h>
+#include <vector.h>
 
 #include "Attribute.hpp"
 #include "Uniform.hpp"
@@ -24,11 +25,14 @@ class GPUProgram{
   INativeGL* _nativeGL;
   int _programID;
   bool _programCreated;
+  vector<Attribute*> _attributes;
+  vector<Uniform*> _uniforms;
   
   bool compileShader(int shader, const std::string& source) const;
   bool linkProgram() const;
   void deleteShader(int shader) const;
-  void deleteProgram(int p) const;
+  
+  void getVariables();
   
 public:
   
@@ -39,6 +43,10 @@ public:
   
   int getProgramID() const{ return _programID;}
   bool isCreated() const{ return _programCreated;}
+  void deleteProgram(int p);
+  
+  Uniform* getUniform(const std::string name) const;
+  Attribute* getAttribute(const std::string name) const;
   
   
 };

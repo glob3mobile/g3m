@@ -288,4 +288,9 @@ void GLState::applyChanges(const INativeGL* nativeGL, GLState& currentState, con
     currentState._textureWidth = _textureWidth;
   }
   
+  if (currentState._program != _program){
+    nativeGL->useProgram(_program);
+    currentState._program = _program;
+  }
+  
 }

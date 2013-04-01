@@ -52,6 +52,8 @@ GPUProgram::GPUProgram(INativeGL* nativeGL, const std::string& vertexSource,
   deleteShader(vertexShader);
   deleteShader(fragmentShader);
   
+  getVariables();
+  
   _programCreated = true; //Program fully created
   
 }
@@ -89,8 +91,47 @@ void GPUProgram::deleteShader(int shader) const{
   }
 }
 
-void GPUProgram::deleteProgram(int p) const{
+void GPUProgram::deleteProgram(int p){
   if (!_nativeGL->deleteProgram(p)){
     ILogger::instance()->logError("GPUProgram: Problem encountered while deleting program.");
   }
+  _programCreated = false;
+}
+
+void GPUProgram::getVariables(){
+  
+  //Uniforms
+  int n = _nativeGL->getProgramiv(this, GLVariable::activeUniforms());
+  for (int i = 0; i < n; i++) {
+    Uniform* u = _nativeGL->getActiveUniform(this, i);
+    _uniforms.push_back(u);
+  }
+  
+  //Attributes
+  n = _nativeGL->getProgramiv(this, GLVariable::activeAttributes());
+  for (int i = 0; i < n; i++) {
+    Attribute* a = _nativeGL->getActiveAttribute(this, i);
+    _attributes.push_back(a);
+  }
+  
+}
+
+Uniform* GPUProgram::getUniform(const std::string name) const{
+  for (int i = 0; i < _uniforms.size(); i++) {
+    Uniform *u = _uniforms[i];
+    if (u != NULL && u->getName() == name){
+      return u;
+    }
+  }
+  return NULL;
+}
+
+Attribute* GPUProgram::getAttribute(const std::string name) const{
+  for (int i = 0; i < _uniforms.size(); i++) {
+    Attribute *a = _attributes[i];
+    if (a != NULL && a->getName() == name){
+      return a;
+    }
+  }
+  return NULL;
 }

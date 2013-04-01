@@ -52,19 +52,19 @@ public:
   static int polygonOffsetFill() {
     return _polygonOffsetFill;
   }
-
+  
   static int depthTest() {
     return _depthTest;
   }
-
+  
   static int blend() {
     return _blend;
   }
-
+  
   static int cullFace() {
     return _cullFace;
   }
-
+  
   static void init(const INativeGL* ngl){
     _polygonOffsetFill = ngl->Feature_PolygonOffsetFill();
     _depthTest = ngl->Feature_DepthTest();
@@ -97,26 +97,26 @@ class GLPrimitive {
   static int _triangles;
   static int _triangleStrip;
   static int _triangleFan;
-
+  
   static int _lines;
   static int _lineStrip;
   static int _lineLoop;
-
+  
   static int _points;
   
 public:
   static int triangles() {
     return _triangles;
   }
-
+  
   static int triangleStrip() {
     return _triangleStrip;
   }
-
+  
   static int triangleFan() {
     return _triangleFan;
   }
-
+  
   static int lines() {
     return _lines;
   }
@@ -137,11 +137,11 @@ public:
     _triangles     = ngl->Primitive_Triangles();
     _triangleStrip = ngl->Primitive_TriangleStrip();
     _triangleFan   = ngl->Primitive_TriangleFan();
-
+    
     _lines     = ngl->Primitive_Lines();
     _lineStrip = ngl->Primitive_LineStrip();
     _lineLoop  = ngl->Primitive_LineLoop();
-
+    
     _points = ngl->Primitive_Points();
   }
 };
@@ -239,11 +239,21 @@ public:
 class GLVariable{
   static int _viewport;
   
+  static int _activeUniforms;
+  static int _activeAttributes;
+  
 public:
   static int viewport(){ return _viewport;}
   
+  static int activeUniforms(){ return _activeUniforms;}
+  static int activeAttributes(){ return _activeAttributes;}
+  
+  
   static void init(const INativeGL* ngl){
     _viewport = ngl->Variable_Viewport();
+    _activeAttributes = ngl->Variable_ActiveAttributes();
+    _activeUniforms = ngl->Variable_ActiveUniforms();
+    
   }
 };
 

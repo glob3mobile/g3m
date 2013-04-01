@@ -22,6 +22,9 @@ class GPUProgram;
 
 #include "ShaderProgram.hpp"
 
+class Uniform;
+class Attribute;
+
 class MutableMatrix44D;
 
 class INativeGL {
@@ -30,6 +33,8 @@ public:
   virtual ~INativeGL() { };
 
   virtual void useProgram(ShaderProgram* program) const = 0;
+  
+  virtual void useProgram(GPUProgram* program) const = 0;
 
   virtual int getAttribLocation(ShaderProgram* program,
                                 const std::string& name) const = 0;
@@ -166,6 +171,8 @@ public:
   virtual int Format_RGBA() const = 0;
 
   virtual int Variable_Viewport() const = 0;
+  virtual int Variable_ActiveAttributes() const = 0;
+  virtual int Variable_ActiveUniforms() const = 0;
 
   virtual int Error_NoError() const = 0;
 
@@ -180,7 +187,12 @@ public:
   virtual void printProgramInfoLog(int program) const = 0;
   
   virtual void bindAttribLocation(ShaderProgram* program, int loc, const std::string& name) const = 0;
-  virtual void bindAttribLocation(GPUProgram* program, int loc, const std::string& name) const = 0;
+  virtual void bindAttribLocation(const GPUProgram* program, int loc, const std::string& name) const = 0;
+  
+  virtual int getProgramiv(const GPUProgram* program, int param) const = 0;
+  
+  virtual Uniform* getActiveUniform(const GPUProgram* program, int i) const = 0;
+  virtual Attribute* getActiveAttribute(const GPUProgram* program, int i) const = 0;
   
 };
 

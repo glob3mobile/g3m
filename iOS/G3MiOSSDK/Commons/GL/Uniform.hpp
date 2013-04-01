@@ -11,6 +11,7 @@
 
 #include "Vector2D.hpp"
 #include "IGLUniformID.hpp"
+#include "MutableMatrix44D.hpp"
 
 class Uniform{
 protected:
@@ -18,6 +19,7 @@ protected:
   IGLUniformID* _id;
 public:
   ~Uniform(){ delete _id;}
+  Uniform(const std::string&name, IGLUniformID* id):_name(name), _id(id){}
   
   const std::string getName() const{ return _name;}
   IGLUniformID* getID() const{ return _id;}
@@ -26,6 +28,7 @@ public:
 class UniformVec2Float: public Uniform{
   double _x, _y;
 public:
+  UniformVec2Float(const std::string&name, IGLUniformID* id):Uniform(name,id){}
   void set(INativeGL* nativeGL, const Vector2D& v) {
     double x = v.x();
     double y = v.y();
@@ -37,14 +40,56 @@ public:
   }
 };
 
+class UniformVec4Float: public Uniform{
+  double _x, _y, _z, _w;
+public:
+  UniformVec4Float(const std::string&name, IGLUniformID* id):Uniform(name,id){}
+  void set(INativeGL* nativeGL, double x, double y, double z, double w) {
+    if (x != _x || y != _y || z != _z || w != _w){
+      nativeGL->uniform4f(_id, (float)x, (float)y, (float)z, (float) w);
+      _x = x;
+      _y = y;
+      _z = z;
+      _w = w;
+    }
+  }
+};
+
 class UniformBool: public Uniform{
   bool _b;
 public:
+  UniformBool(const std::string&name, IGLUniformID* id):Uniform(name,id){}
   void set(INativeGL* nativeGL, bool b) {
     if (_b != b){
       if (b) nativeGL->uniform1i(_id, 1);
       else nativeGL->uniform1i(_id, 0);
       _b = b;
+    }
+  }
+};
+
+class UniformMatrix4Float: public Uniform{
+  MutableMatrix44D _m;
+public:
+  UniformMatrix4Float(const std::string&name, IGLUniformID* id):Uniform(name,id){}
+  
+  void set(INativeGL* nativeGL, MutableMatrix44D m) {
+    if (!_m.isEqualsTo(m)){
+      nativeGL->uniformMatrix4fv(_id, false, &m);
+      _m = m;
+    }
+  }
+};
+
+class UniformFloat: public Uniform{
+  double _d;
+public:
+  UniformFloat(const std::string&name, IGLUniformID* id):Uniform(name,id){}
+  
+  void set(INativeGL* nativeGL, double d) {
+    if (_d != d){
+      nativeGL->uniform1f(_id, (float)d);
+      _d = d;
     }
   }
 };

@@ -17,12 +17,14 @@ class IFloatBuffer;
 #include "MutableVector2D.hpp"
 #include "MutableMatrix44D.hpp"
 #include "Vector2D.hpp"
+
 #include <list.h>
 
 
 class GL;
 struct AttributesStruct;
 class UniformsStruct;
+class GPUProgram;
 
 class GLState {
 private:
@@ -100,6 +102,8 @@ private:
   MutableMatrix44D _projectionMatrix;
   MutableMatrix44D _modelViewMatrix;
   
+  GPUProgram* _program;
+  
   
   GLState() :
   _depthTest(false),
@@ -149,7 +153,8 @@ private:
   _projectionMatrix(MutableMatrix44D::invalid()),
   _modelViewMatrix(MutableMatrix44D::invalid()),
   _textureWidth(0.0),
-  _textureHeight(0.0)
+  _textureHeight(0.0),
+  _program(NULL)
   {
   }
   
@@ -206,7 +211,8 @@ public:
   _clearColorB(parentState._clearColorB),
   _clearColorA(parentState._clearColorA),
   _projectionMatrix(parentState._projectionMatrix),
-  _modelViewMatrix(parentState._modelViewMatrix)
+  _modelViewMatrix(parentState._modelViewMatrix),
+  _program(parentState._program)
   {
   }
   
@@ -403,6 +409,10 @@ public:
   }
   
   void applyChanges(const INativeGL* nativeGL, GLState& currentState, const AttributesStruct& attributes,const UniformsStruct& uniforms) const;
+  
+  void setProgram(GPUProgram* program){
+    _program = program;
+  }
   
 };
 

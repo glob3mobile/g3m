@@ -151,6 +151,8 @@ enum {
   GPUProgram program(_gl->getNative(), vertexSource, fragmentSource);
   if (program.isCreated()){
     NSLog(@"GPU Program Loaded");
+    UniformMatrix4Float* u = (UniformMatrix4Float*) program.getUniform("Modelview");
+    u->set(_gl->getNative(), MutableMatrix44D::identity());
   }
 
   return TRUE;

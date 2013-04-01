@@ -18,6 +18,8 @@ class Attribute{
   std::string _name;
   int _id;
 public:
+  Attribute(std::string name, int id):_name(name),_id(id){}
+  
   const std::string getName() const{ return _name;}
   int getID() const{ return _id;}
 };
@@ -47,7 +49,9 @@ protected:
   }
   
 public:
-  AttributeVecFloat(int size):_buffer(NULL),
+  AttributeVecFloat(std::string name, int id, int size):
+  Attribute(name, id),
+  _buffer(NULL),
   _timeStamp(-1),
   _index(-1),
   _stride(-1),
@@ -72,22 +76,22 @@ public:
 
 class AttributeVec1Float: public AttributeVecFloat{
 public:
-  AttributeVec1Float():AttributeVecFloat(1){}
+  AttributeVec1Float(std::string name, int id):AttributeVecFloat(name, id, 1){}
 };
 
 class AttributeVec2Float: public AttributeVecFloat{
 public:
-  AttributeVec2Float():AttributeVecFloat(2){}
+  AttributeVec2Float(std::string name, int id):AttributeVecFloat(name, id, 2){}
 };
 
 class AttributeVec3Float: public AttributeVecFloat{
 public:
-  AttributeVec3Float():AttributeVecFloat(3){}
+  AttributeVec3Float(std::string name, int id):AttributeVecFloat(name, id, 3){}
 };
 
 class AttributeVec4Float: public AttributeVecFloat{
 public:
-  AttributeVec4Float():AttributeVecFloat(4){}
+  AttributeVec4Float(std::string name, int id):AttributeVecFloat(name, id, 4){}
 };
 
 

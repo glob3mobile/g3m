@@ -28,6 +28,10 @@ public:
 //    glUseProgram(((GLProgramId_iOS*)program)->getID());
     glUseProgram(program->getProgram());
   }
+  
+  void useProgram(GPUProgram* program) const {
+    glUseProgram(program->getProgramID());
+  }
 
   int getAttribLocation(ShaderProgram* program,
                         const std::string& name) const {
@@ -386,6 +390,14 @@ public:
   int Variable_Viewport() const {
     return GL_VIEWPORT;
   }
+  
+  int Variable_ActiveAttributes() const{
+    return GL_ACTIVE_ATTRIBUTES;
+  }
+  
+  virtual int Variable_ActiveUniforms() const{
+    return GL_ACTIVE_UNIFORMS;
+  }
 
   int Error_NoError() const {
     return GL_NO_ERROR;
@@ -466,8 +478,85 @@ public:
     glBindAttribLocation(program->getProgram(), loc, name.c_str());
   }
   
-  void bindAttribLocation(GPUProgram* program, int loc, const std::string& name) const{
+  void bindAttribLocation(const GPUProgram* program, int loc, const std::string& name) const{
     glBindAttribLocation(program->getProgramID(), loc, name.c_str());
+  }
+  
+  int getProgramiv(const GPUProgram* program, int pname) const{
+    int i = 0;
+    glGetProgramiv(program->getProgramID(), pname, &i);
+    return i;
+  }
+  
+  Attribute* getActiveAttribute(const GPUProgram* program, int i) const{
+    GLint maxLength;
+    glGetProgramiv(program->getProgramID(), GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &maxLength);
+  
+    GLsizei bufsize = maxLength;
+    
+    GLchar name[maxLength];
+    GLsizei length;
+    GLint size;
+    GLenum type;
+    
+    glGetActiveAttrib(program->getProgramID(),
+                      i,
+                      bufsize,
+                      &length,
+                      &size,
+                      &type,
+                      name);
+    
+    NSLog(@"Attribute Name: %s", name);
+    switch (type) {
+      case GL_FLOAT_VEC4:
+        return new AttributeVec4Float(name, i);
+      case GL_FLOAT_VEC2:
+        return new AttributeVec2Float(name, i);
+      default:
+        return NULL;
+        break;
+    }
+  }
+  
+  Uniform* getActiveUniform(const GPUProgram* program, int i) const{
+    GLint maxLength;
+    glGetProgramiv(program->getProgramID(), GL_ACTIVE_UNIFORM_MAX_LENGTH, &maxLength);
+    
+    GLsizei bufsize = maxLength;
+    
+    GLchar name[maxLength];
+    GLsizei length;
+    GLint size;
+    GLenum type;
+    
+    glGetActiveUniform(program->getProgramID(),
+                       i,
+                       bufsize,
+                       &length,
+                       &size,
+                       &type,
+                       name);
+    
+    NSLog(@"Uniform Name: %s", name);
+    switch (type) {
+      case GL_FLOAT_MAT4:
+        return new UniformMatrix4Float(name, new GLUniformID_iOS(i));
+      case GL_FLOAT_VEC4:
+        return new UniformVec4Float(name, new GLUniformID_iOS(i));
+      case GL_FLOAT:
+        return new UniformFloat(name, new GLUniformID_iOS(i));
+      case GL_FLOAT_VEC2:
+        return new UniformVec2Float(name, new GLUniformID_iOS(i));
+      case GL_BOOL:
+        return new UniformBool(name, new GLUniformID_iOS(i));
+      case GL_SAMPLER_2D:
+        int NOT_IMPLEMENTED_YET;
+        return NULL;
+      default:
+        return NULL;
+        break;
+    }
   }
   
 };
