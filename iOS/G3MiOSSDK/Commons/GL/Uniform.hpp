@@ -36,7 +36,7 @@ public:
 #ifdef C_CODE
 template<class T>
 #else
-template<T extends IUniformType<T>
+template<T extends IUniformType<T> >
 #endif
 class IUniform{
 protected:
