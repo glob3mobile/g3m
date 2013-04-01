@@ -51,14 +51,17 @@ public:
   
   void set(GL* gl, T x) {
     if (_value->isEqualsTo(&x)){
-      x->setUniform(gl, _id);
+      x->set(gl, _id);
       _value = x;
     }
   }
   
-  class UniformException{
-    
-  };
+#ifdef C_CODE
+  class UniformException{};
+#endif
+#ifdef JAVA_CODE
+  public static class UniformException extends Throwable{}
+#endif
   
   void launchException() {
     throw new UniformException();
