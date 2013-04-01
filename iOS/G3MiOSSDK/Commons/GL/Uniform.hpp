@@ -40,11 +40,11 @@ protected:
   T* _value;
   
 public:
-  ~IUniform(){ delete _id;}
+  ~IUniform(){ delete _id; delete _value;}
   IUniform(const std::string& name, IGLUniformID* id):_name(name), _id(id){}
   
-  void set(GL* gl, T* x) {
-    if (_value->isEqualsTo(x)){
+  void set(GL* gl, T x) {
+    if (_value->isEqualsTo(&x)){
       x->setUniform(gl, _id);
       _value = x;
     }
