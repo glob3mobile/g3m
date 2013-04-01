@@ -25,6 +25,7 @@ class UniformTypeBool: public IUniformType<bool>{
   
 public:
   bool _b;
+  ~UniformTypeBool(){}
   bool isEqualsTo(UniformTypeBool* u) const{ return _b != u->_b;}
   void set(GL* gl, IGLUniformID* id) const{
     if (_b) gl->uniform1i(id, 1);
@@ -32,7 +33,13 @@ public:
   }
 };
 
-template<class T> class IUniform{
+#ifdef C_CODE
+template<class T>
+#endif
+#ifdef JAVA_CODE
+template<T extends IUniformType<T>
+#endif
+class IUniform{
 protected:
   std::string _name;
   IGLUniformID* _id;
@@ -48,6 +55,14 @@ public:
       x->setUniform(gl, _id);
       _value = x;
     }
+  }
+  
+  class UniformException{
+    
+  };
+  
+  void launchException() {
+    throw new UniformException();
   }
 };
 
@@ -80,6 +95,7 @@ public:
       
       
       IUniform<UniformTypeBool > boolUniform("",0);
+      boolUniform.launchException();
     }
   }
 };
