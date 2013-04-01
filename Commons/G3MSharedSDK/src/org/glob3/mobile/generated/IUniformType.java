@@ -1,4 +1,11 @@
 package org.glob3.mobile.generated; 
+     public static void launchException()
+     {
+       throw new UniformException();
+     }
+   }
+}
+
 //
 //  Uniforms.hpp
 //  G3MiOSSDK
