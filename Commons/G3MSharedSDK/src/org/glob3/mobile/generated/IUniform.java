@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
-//C++ TO JAVA CONVERTER TODO TASK: The original C++ template specifier was replaced with a Java generic specifier, which may not produce the same behavior:
-public class IUniform<T>
+template<T extends IUniformType<T>
+public class IUniform
 {
   protected String _name;
   protected IGLUniformID _id;
@@ -26,5 +26,15 @@ public class IUniform<T>
       x.setUniform(gl, _id);
       _value = x;
     }
+  }
+
+  public static class UniformException
+  {
+
+  }
+
+  public final void launchException()
+  {
+    throw new UniformException();
   }
 }

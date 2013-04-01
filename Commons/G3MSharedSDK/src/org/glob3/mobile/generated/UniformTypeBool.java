@@ -3,6 +3,9 @@ public class UniformTypeBool implements IUniformType<Boolean>
 {
 
   public boolean _b;
+  public void dispose()
+  {
+  }
   public final boolean isEqualsTo(UniformTypeBool u)
   {
      return _b != u._b;

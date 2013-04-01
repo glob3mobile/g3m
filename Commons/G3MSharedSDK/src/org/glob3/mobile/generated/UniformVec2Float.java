@@ -21,6 +21,7 @@ public class UniformVec2Float extends Uniform
 
 
       IUniform<UniformTypeBool > boolUniform = new IUniform<UniformTypeBool >("",0);
+      boolUniform.launchException();
     }
   }
 }
