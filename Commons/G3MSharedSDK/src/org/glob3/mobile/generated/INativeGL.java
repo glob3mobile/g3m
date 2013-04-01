@@ -14,8 +14,12 @@ package org.glob3.mobile.generated;
 //class IImage;
 //class IGLUniformID;
 //class IGLTextureId;
+//class GPUProgram;
 
 
+
+//class Uniform;
+//class Attribute;
 
 //class MutableMatrix44D;
 
@@ -27,6 +31,8 @@ public abstract class INativeGL
   }
 
   public abstract void useProgram(ShaderProgram program);
+
+  public abstract void useProgram(GPUProgram program);
 
   public abstract int getAttribLocation(ShaderProgram program, String name);
 
@@ -134,19 +140,27 @@ public abstract class INativeGL
   public abstract int Format_RGBA();
 
   public abstract int Variable_Viewport();
+  public abstract int Variable_ActiveAttributes();
+  public abstract int Variable_ActiveUniforms();
 
   public abstract int Error_NoError();
 
   public abstract int createProgram();
-  public abstract void deleteProgram(int program);
+  public abstract boolean deleteProgram(int program);
   public abstract void attachShader(int program, int shader);
   public abstract int createShader(ShaderType type);
   public abstract boolean compileShader (int shader, String source);
-  public abstract void deleteShader(int shader);
+  public abstract boolean deleteShader(int shader);
   public abstract void printShaderInfoLog(int shader);
   public abstract boolean linkProgram(int program);
   public abstract void printProgramInfoLog(int program);
 
   public abstract void bindAttribLocation(ShaderProgram program, int loc, String name);
+  public abstract void bindAttribLocation(GPUProgram program, int loc, String name);
+
+  public abstract int getProgramiv(GPUProgram program, int param);
+
+  public abstract Uniform getActiveUniform(GPUProgram program, int i);
+  public abstract Attribute getActiveAttribute(GPUProgram program, int i);
 
 }

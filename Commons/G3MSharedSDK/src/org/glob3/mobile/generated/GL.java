@@ -408,4 +408,28 @@ public class GL
   {
     return _nativeGL;
   }
+
+  public final void uniform2f(IGLUniformID loc, float x, float y)
+  {
+     _nativeGL.uniform2f(loc, x, y);
+  }
+
+  public final void uniform1f(IGLUniformID loc, float x)
+  {
+     _nativeGL.uniform1f(loc, x);
+  }
+  public final void uniform1i(IGLUniformID loc, int v)
+  {
+     _nativeGL.uniform1i(loc, v);
+  }
+
+  public final void uniformMatrix4fv(IGLUniformID location, boolean transpose, MutableMatrix44D matrix)
+  {
+     _nativeGL.uniformMatrix4fv(location, transpose, matrix);
+  }
+
+  public final void uniform4f(IGLUniformID location, float v0, float v1, float v2, float v3)
+  {
+     _nativeGL.uniform4f(location, v0, v1, v2, v3);
+  }
 }

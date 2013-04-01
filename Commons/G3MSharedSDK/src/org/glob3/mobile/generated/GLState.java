@@ -20,9 +20,11 @@ package org.glob3.mobile.generated;
 
 
 
+
 //class GL;
 //struct AttributesStruct;
 //class UniformsStruct;
+//class GPUProgram;
 
 public class GLState
 {
@@ -95,6 +97,8 @@ public class GLState
   private MutableMatrix44D _projectionMatrix = new MutableMatrix44D();
   private MutableMatrix44D _modelViewMatrix = new MutableMatrix44D();
 
+  private GPUProgram _program;
+
 
   private GLState()
   {
@@ -146,6 +150,7 @@ public class GLState
      _modelViewMatrix = new MutableMatrix44D(MutableMatrix44D.invalid());
      _textureWidth = 0.0F;
      _textureHeight = 0.0F;
+     _program = null;
   }
 
 
@@ -203,6 +208,7 @@ public class GLState
      _clearColorA = parentState._clearColorA;
      _projectionMatrix = new MutableMatrix44D(parentState._projectionMatrix);
      _modelViewMatrix = new MutableMatrix44D(parentState._modelViewMatrix);
+     _program = parentState._program;
   }
 
   public void dispose()
@@ -812,6 +818,17 @@ public class GLState
       currentState._textureWidth = _textureWidth;
     }
   
+    if (currentState._program != _program)
+    {
+      nativeGL.useProgram(_program);
+      currentState._program = _program;
+    }
+  
+  }
+
+  public final void setProgram(GPUProgram program)
+  {
+    _program = program;
   }
 
 }
