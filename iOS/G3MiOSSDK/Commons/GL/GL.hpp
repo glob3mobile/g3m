@@ -29,34 +29,34 @@ class IGLUniformID;
 class GL {
 private:
   INativeGL* const _nativeGL;
-
+  
   std::list<const IGLTextureId*> _texturesIdBag;
   long                           _texturesIdAllocationCounter;
-
+  
   GLState *_currentState;
-
+  
   ShaderProgram* _program;
-
+  
   inline void loadModelView();
-
+  
   const IGLTextureId* getGLTextureId();
-
+  
   //Get Locations warning of errors
   bool _errorGettingLocationOcurred;
   int checkedGetAttribLocation(ShaderProgram* program,
                                const std::string& name);
   IGLUniformID* checkedGetUniformLocation(ShaderProgram* program,
                                           const std::string& name);
-
+  
   IFloatBuffer* _billboardTexCoord;
-
+  
   void setState(const GLState& state);
-
+  
   const bool _verbose;
-
+  
 public:
-
-
+  
+  
   GL(INativeGL* const nativeGL,
      bool verbose) :
   _nativeGL(nativeGL),
@@ -85,32 +85,32 @@ public:
   }
   
   IFloatBuffer* getBillboardTexCoord();
-
+  
   void clearScreen(const GLState& state);
-
+  
   void drawElements(int mode,
                     IShortBuffer* indices, const GLState& state);
-
+  
   void drawArrays(int mode,
                   int first,
                   int count, const GLState& state);
-
+  
   bool useProgram(ShaderProgram* program);
-
+  
   int getError();
-
+  
   const IGLTextureId* uploadTexture(const IImage* image,
                                     int format,
                                     bool generateMipmap);
-
+  
   void deleteTexture(const IGLTextureId* textureId);
-
+  
   void getViewport(int v[]) {
     if (_verbose) ILogger::instance()->logInfo("GL::getViewport()");
-
+    
     _nativeGL->getIntegerv(GLVariable::viewport(), v);
   }
-
+  
   ~GL() {
 #ifdef C_CODE
     delete _nativeGL;
@@ -119,39 +119,39 @@ public:
     _nativeGL.dispose();
 #endif
   }
-
+  
   int createProgram() const {
     return _nativeGL->createProgram();
   }
-
+  
   void attachShader(int program, int shader) const {
     _nativeGL->attachShader(program, shader);
   }
-
+  
   int createShader(ShaderType type) const {
     return _nativeGL->createShader(type);
   }
-
+  
   bool compileShader(int shader, const std::string& source) const {
     return _nativeGL->compileShader(shader, source);
   }
-
+  
   void deleteShader(int shader) const {
     _nativeGL->deleteShader(shader);
   }
-
+  
   void printShaderInfoLog(int shader) const {
     _nativeGL->printShaderInfoLog(shader);
   }
-
+  
   bool linkProgram(int program) const {
     return _nativeGL->linkProgram(program);
   }
-
+  
   void printProgramInfoLog(int program) const {
     _nativeGL->linkProgram(program);
   }
-
+  
   void deleteProgram(int program) const  {
     _nativeGL->deleteProgram(program);
   }
@@ -159,6 +159,25 @@ public:
   INativeGL* getNative() const{
     return _nativeGL;
   }
+  
+  void uniform2f(IGLUniformID* loc,
+                 float x,
+                 float y) const{ _nativeGL->uniform2f(loc, x, y);}
+  
+  void uniform1f(IGLUniformID* loc,
+                 float x) const{ _nativeGL->uniform1f(loc, x);}
+  void uniform1i(IGLUniformID* loc,
+                 int v) const{ _nativeGL->uniform1i(loc, v);}
+  
+  void uniformMatrix4fv(IGLUniformID* location,
+                        bool transpose,
+                        const MutableMatrix44D* matrix) const{ _nativeGL->uniformMatrix4fv(location, transpose, matrix);}
+  
+  void uniform4f(IGLUniformID* location,
+                 float v0,
+                 float v1,
+                 float v2,
+                 float v3) const{ _nativeGL->uniform4f(location, v0, v1, v2, v3);}
 };
 
 #endif

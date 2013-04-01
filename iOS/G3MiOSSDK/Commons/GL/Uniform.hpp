@@ -12,6 +12,45 @@
 #include "Vector2D.hpp"
 #include "IGLUniformID.hpp"
 #include "MutableMatrix44D.hpp"
+#include "GL.hpp"
+
+template <class T> class IUniformType{
+public:
+  virtual ~IUniformType() = 0;
+  virtual bool isEqualsTo(T x) const = 0;
+  virtual void set(GL* gl, IGLUniformID* id) const = 0;
+};
+
+class UniformTypeBool: public IUniformType<bool>{
+  
+public:
+  bool _b;
+  bool isEqualsTo(UniformTypeBool* u) const{ return _b != u->_b;}
+  void set(GL* gl, IGLUniformID* id) const{
+    if (_b) gl->uniform1i(id, 1);
+    else gl->uniform1i(id, 0);
+  }
+};
+
+template<class T> class IUniform{
+protected:
+  std::string _name;
+  IGLUniformID* _id;
+  
+  T* _value;
+  
+public:
+  ~IUniform(){ delete _id;}
+  IUniform(const std::string& name, IGLUniformID* id):_name(name), _id(id){}
+  
+  void set(GL* gl, T* x) {
+    if (_value->isEqualsTo(x)){
+      x->setUniform(gl, _id);
+      _value = x;
+    }
+  }
+};
+
 
 class Uniform{
 protected:
@@ -29,13 +68,18 @@ class UniformVec2Float: public Uniform{
   double _x, _y;
 public:
   UniformVec2Float(const std::string&name, IGLUniformID* id):Uniform(name,id){}
-  void set(INativeGL* nativeGL, const Vector2D& v) {
+  void set(GL* gl, const Vector2D& v) {
     double x = v.x();
     double y = v.y();
     if (x != _x || y != _y){
-      nativeGL->uniform2f(_id, (float)x, (float)y);
+      gl->uniform2f(_id, (float)x, (float)y);
       _x = x;
       _y = y;
+      
+      
+      
+      
+      IUniform<UniformTypeBool > boolUniform("",0);
     }
   }
 };
@@ -44,9 +88,9 @@ class UniformVec4Float: public Uniform{
   double _x, _y, _z, _w;
 public:
   UniformVec4Float(const std::string&name, IGLUniformID* id):Uniform(name,id){}
-  void set(INativeGL* nativeGL, double x, double y, double z, double w) {
+  void set(GL* gl, double x, double y, double z, double w) {
     if (x != _x || y != _y || z != _z || w != _w){
-      nativeGL->uniform4f(_id, (float)x, (float)y, (float)z, (float) w);
+      gl->uniform4f(_id, (float)x, (float)y, (float)z, (float) w);
       _x = x;
       _y = y;
       _z = z;
@@ -59,10 +103,10 @@ class UniformBool: public Uniform{
   bool _b;
 public:
   UniformBool(const std::string&name, IGLUniformID* id):Uniform(name,id){}
-  void set(INativeGL* nativeGL, bool b) {
+  void set(GL* gl, bool b) {
     if (_b != b){
-      if (b) nativeGL->uniform1i(_id, 1);
-      else nativeGL->uniform1i(_id, 0);
+      if (b) gl->uniform1i(_id, 1);
+      else gl->uniform1i(_id, 0);
       _b = b;
     }
   }
@@ -73,9 +117,9 @@ class UniformMatrix4Float: public Uniform{
 public:
   UniformMatrix4Float(const std::string&name, IGLUniformID* id):Uniform(name,id){}
   
-  void set(INativeGL* nativeGL, MutableMatrix44D m) {
+  void set(GL* gl, MutableMatrix44D m) {
     if (!_m.isEqualsTo(m)){
-      nativeGL->uniformMatrix4fv(_id, false, &m);
+      gl->uniformMatrix4fv(_id, false, &m);
       _m = m;
     }
   }
@@ -86,9 +130,9 @@ class UniformFloat: public Uniform{
 public:
   UniformFloat(const std::string&name, IGLUniformID* id):Uniform(name,id){}
   
-  void set(INativeGL* nativeGL, double d) {
+  void set(GL* gl, double d) {
     if (_d != d){
-      nativeGL->uniform1f(_id, (float)d);
+      gl->uniform1f(_id, (float)d);
       _d = d;
     }
   }
