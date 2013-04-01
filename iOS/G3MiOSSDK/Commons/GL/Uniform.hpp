@@ -35,8 +35,7 @@ public:
 
 #ifdef C_CODE
 template<class T>
-#endif
-#ifdef JAVA_CODE
+#else
 template<T extends IUniformType<T>
 #endif
 class IUniform{
