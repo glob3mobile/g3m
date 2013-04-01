@@ -23,15 +23,12 @@ public class IUniform<T extends IUniformType<T>>
   {
     if (_value.isEqualsTo(x))
     {
-      x.setUniform(gl, _id);
+      x.set(gl, _id);
       _value = x;
     }
   }
 
-  public static class UniformException
-  {
-
-  }
+  public static class UniformException extends Throwable{}
 
   public final void launchException()
   {

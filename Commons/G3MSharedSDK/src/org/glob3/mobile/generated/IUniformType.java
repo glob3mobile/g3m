@@ -12,7 +12,7 @@ package org.glob3.mobile.generated;
 //C++ TO JAVA CONVERTER TODO TASK: The original C++ template specifier was replaced with a Java generic specifier, which may not produce the same behavior:
 public interface IUniformType<T>
 {
-  public void dispose();
+  public void dispose()
   boolean isEqualsTo(T x);
   void set(GL gl, IGLUniformID id);
 }
