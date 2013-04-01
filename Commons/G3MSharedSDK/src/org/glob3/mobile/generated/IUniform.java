@@ -1,4 +1,6 @@
 package org.glob3.mobile.generated; 
+public static class G3MError extends java.lang.RuntimeException{}
+
 //C++ TO JAVA CONVERTER TODO TASK: C++ template specifiers with non-type parameters cannot be converted to Java:
 public class IUniform<T extends IUniformType<T>>
 {
@@ -28,10 +30,8 @@ public class IUniform<T extends IUniformType<T>>
     }
   }
 
-  public static class UniformException extends Throwable{}
-
-  public final void launchException()
+  public final void launchException() throws G3MError
   {
-    throw new UniformException();
+    throw new G3MError();
   }
 }
