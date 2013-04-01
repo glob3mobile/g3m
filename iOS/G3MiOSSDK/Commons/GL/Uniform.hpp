@@ -34,6 +34,13 @@ public:
 };
 
 #ifdef C_CODE
+class G3MError{};
+#endif
+#ifdef JAVA_CODE
+public static class G3MError extends java.lang.RuntimeException{}
+#endif
+
+#ifdef C_CODE
 template<class T>
 #else
 template<T extends IUniformType<T> >
@@ -56,15 +63,8 @@ public:
     }
   }
   
-#ifdef C_CODE
-  class UniformException{};
-#endif
-#ifdef JAVA_CODE
-  public static class UniformException extends Throwable{}
-#endif
-  
-  void launchException() {
-    throw new UniformException();
+  void launchException() throw(G3MError){
+    throw new G3MError();
   }
 };
 
