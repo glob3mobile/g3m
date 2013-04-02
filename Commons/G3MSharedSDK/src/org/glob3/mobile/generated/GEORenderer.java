@@ -22,21 +22,32 @@ package org.glob3.mobile.generated;
 //class MeshRenderer;
 //class MarksRenderer;
 //class ShapesRenderer;
-
+//class GEORenderer_ObjectSymbolizerPair;
 
 public class GEORenderer extends LeafRenderer
 {
-  private java.util.ArrayList<GEOObject> _children = new java.util.ArrayList<GEOObject>();
+  private java.util.ArrayList<GEORenderer_ObjectSymbolizerPair> _children = new java.util.ArrayList<GEORenderer_ObjectSymbolizerPair>();
 
-  private final GEOSymbolizer _symbolizer;
+  private final GEOSymbolizer _defaultSymbolizer;
+
   private MeshRenderer _meshRenderer;
   private ShapesRenderer _shapesRenderer;
   private MarksRenderer _marksRenderer;
 
 
-  public GEORenderer(GEOSymbolizer symbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer)
+  /**
+   Creates a GEORenderer.
+
+   defaultSymbolizer: Default Symbolizer, can be NULL.  In case of NULL, one instance of GEOSymbolizer must be passed in every call to addGEOObject();
+
+   meshRenderer:   Can be NULL as long as no GEOMarkSymbol is used in any symbolizer.
+   shapesRenderer: Can be NULL as long as no GEOShapeSymbol is used in any symbolizer.
+   marksRenderer:  Can be NULL as long as no GEOMeshSymbol is used in any symbolizer.
+
+   */
+  public GEORenderer(GEOSymbolizer defaultSymbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer)
   {
-     _symbolizer = symbolizer;
+     _defaultSymbolizer = defaultSymbolizer;
      _meshRenderer = meshRenderer;
      _shapesRenderer = shapesRenderer;
      _marksRenderer = marksRenderer;
@@ -45,21 +56,39 @@ public class GEORenderer extends LeafRenderer
 
   public void dispose()
   {
-    if (_symbolizer != null)
-       _symbolizer.dispose();
+    if (_defaultSymbolizer != null)
+       _defaultSymbolizer.dispose();
   
     final int childrenCount = _children.size();
     for (int i = 0; i < childrenCount; i++)
     {
-      GEOObject geoObject = _children.get(i);
-      if (geoObject != null)
-         geoObject.dispose();
+      GEORenderer_ObjectSymbolizerPair pair = _children.get(i);
+      if (pair != null)
+         pair.dispose();
     }
   }
 
+  /**
+   Add a new GEOObject.
+
+   symbolizer: The symbolizer to be used for the given geoObject.  Can be NULL as long as a defaultSymbolizer was given in the GEORenderer constructor.
+   */
   public final void addGEOObject(GEOObject geoObject)
   {
-    _children.add(geoObject);
+     addGEOObject(geoObject, null);
+  }
+  public final void addGEOObject(GEOObject geoObject, GEOSymbolizer symbolizer)
+  {
+    if ((symbolizer == null) && (_defaultSymbolizer == null))
+    {
+      ILogger.instance().logError("Can't add a geoObject without a symbolizer if the defaultSymbolizer was not given in the GEORenderer constructor");
+      if (geoObject != null)
+         geoObject.dispose();
+    }
+    else
+    {
+      _children.add(new GEORenderer_ObjectSymbolizerPair(geoObject, symbolizer));
+    }
   }
 
   public final void onResume(G3MContext context)
@@ -92,18 +121,21 @@ public class GEORenderer extends LeafRenderer
     final int childrenCount = _children.size();
     if (childrenCount > 0)
     {
-      final GEOSymbolizationContext sc = new GEOSymbolizationContext(_symbolizer, _meshRenderer, _shapesRenderer, _marksRenderer);
   
       for (int i = 0; i < childrenCount; i++)
       {
-        final GEOObject geoObject = _children.get(i);
-        if (geoObject != null)
-        {
-          geoObject.symbolize(rc, sc);
+        final GEORenderer_ObjectSymbolizerPair pair = _children.get(i);
   
-          if (geoObject != null)
-             geoObject.dispose();
+        if (pair._geoObject != null)
+        {
+          final GEOSymbolizer symbolizer = pair._symbolizer == null ? _defaultSymbolizer : pair._symbolizer;
+  
+          final GEOSymbolizationContext sc = new GEOSymbolizationContext(symbolizer, _meshRenderer, _shapesRenderer, _marksRenderer);
+          pair._geoObject.symbolize(rc, sc);
         }
+  
+        if (pair != null)
+           pair.dispose();
       }
       _children.clear();
     }
