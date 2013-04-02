@@ -17,24 +17,35 @@ class GEOSymbolizer;
 class MeshRenderer;
 class MarksRenderer;
 class ShapesRenderer;
-
+class GEORenderer_ObjectSymbolizerPair;
 
 class GEORenderer : public LeafRenderer {
 private:
-  std::vector<GEOObject*> _children;
+  std::vector<GEORenderer_ObjectSymbolizerPair*> _children;
 
-  const GEOSymbolizer* _symbolizer;
+  const GEOSymbolizer* _defaultSymbolizer;
+
   MeshRenderer*   _meshRenderer;
   ShapesRenderer* _shapesRenderer;
   MarksRenderer*  _marksRenderer;
 
 public:
 
-  GEORenderer(const GEOSymbolizer* symbolizer,
+  /**
+   Creates a GEORenderer.
+
+   defaultSymbolizer: Default Symbolizer, can be NULL.  In case of NULL, one instance of GEOSymbolizer must be passed in every call to addGEOObject();
+
+   meshRenderer:   Can be NULL as long as no GEOMarkSymbol is used in any symbolizer.
+   shapesRenderer: Can be NULL as long as no GEOShapeSymbol is used in any symbolizer.
+   marksRenderer:  Can be NULL as long as no GEOMeshSymbol is used in any symbolizer.
+
+   */
+  GEORenderer(const GEOSymbolizer* defaultSymbolizer,
               MeshRenderer*   meshRenderer,
               ShapesRenderer* shapesRenderer,
               MarksRenderer*  marksRenderer) :
-  _symbolizer(symbolizer),
+  _defaultSymbolizer(defaultSymbolizer),
   _meshRenderer(meshRenderer),
   _shapesRenderer(shapesRenderer),
   _marksRenderer(marksRenderer)
@@ -44,8 +55,14 @@ public:
 
   virtual ~GEORenderer();
 
-  void addGEOObject(GEOObject* geoObject);
-  
+  /**
+   Add a new GEOObject.
+
+   symbolizer: The symbolizer to be used for the given geoObject.  Can be NULL as long as a defaultSymbolizer was given in the GEORenderer constructor.
+   */
+  void addGEOObject(GEOObject* geoObject,
+                    GEOSymbolizer* symbolizer = NULL);
+
   void onResume(const G3MContext* context) {
 
   }
@@ -61,7 +78,7 @@ public:
   void initialize(const G3MContext* context) {
 
   }
-  
+
   bool isReadyToRender(const G3MRenderContext* rc) {
     return true;
   }
