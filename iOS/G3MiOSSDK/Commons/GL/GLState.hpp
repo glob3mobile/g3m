@@ -408,7 +408,7 @@ public:
     _textureWidth = w;
   }
   
-  void applyChanges(const INativeGL* nativeGL, GLState& currentState, const AttributesStruct& attributes,const UniformsStruct& uniforms) const;
+  void applyChanges(GL* gl, GLState& currentState, const AttributesStruct& attributes,const UniformsStruct& uniforms) const;
   
   void setProgram(GPUProgram* program){
     _program = program;

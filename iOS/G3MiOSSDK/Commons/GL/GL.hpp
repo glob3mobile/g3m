@@ -160,20 +160,20 @@ public:
     return _nativeGL;
   }
   
-  void uniform2f(IGLUniformID* loc,
+  void uniform2f(const IGLUniformID* loc,
                  float x,
                  float y) const{ _nativeGL->uniform2f(loc, x, y);}
   
-  void uniform1f(IGLUniformID* loc,
+  void uniform1f(const IGLUniformID* loc,
                  float x) const{ _nativeGL->uniform1f(loc, x);}
-  void uniform1i(IGLUniformID* loc,
+  void uniform1i(const IGLUniformID* loc,
                  int v) const{ _nativeGL->uniform1i(loc, v);}
   
-  void uniformMatrix4fv(IGLUniformID* location,
+  void uniformMatrix4fv(const IGLUniformID* location,
                         bool transpose,
                         const MutableMatrix44D* matrix) const{ _nativeGL->uniformMatrix4fv(location, transpose, matrix);}
   
-  void uniform4f(IGLUniformID* location,
+  void uniform4f(const IGLUniformID* location,
                  float v0,
                  float v1,
                  float v2,
@@ -181,9 +181,9 @@ public:
   
   GLState* getCurrentState() const{ return _currentState;}
   
-  void useProgram(GPUProgram* program) {
-    _nativeGL->useProgram(program);
-  }
+  void useProgram(GPUProgram* program) ;
+  
+  void setUniformsDefaultValues() const;
 };
 
 #endif

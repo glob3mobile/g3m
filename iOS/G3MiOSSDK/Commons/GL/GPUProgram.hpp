@@ -39,9 +39,11 @@ class GPUProgram{
   
   GPUProgram(){}
   
+  Uniform* getUniform(const std::string name) const;
+  
 public:
   
-  static GPUProgram* createProgram(INativeGL* nativeGL, const std::string name, const std::string& vertexSource,
+  static GPUProgram* createProgram(GL* gl, const std::string name, const std::string& vertexSource,
                                                const std::string& fragmentSource);
   
   ~GPUProgram();
@@ -52,9 +54,17 @@ public:
   bool isCreated() const{ return _programCreated;}
   void deleteProgram(int p);
   
-  Uniform* getUniform(const std::string name) const;
   Attribute* getAttribute(const std::string name) const;
   
+  UniformBool* getUniformBool(const std::string name) const;
+  UniformVec2Float* getUniformVec2Float(const std::string name) const;
+  UniformVec4Float* getUniformVec4Float(const std::string name) const;
+  UniformFloat* getUniformFloat(const std::string name) const;
+  
+  void onUsed();
+  void onUnused();
+  void applyChanges(GL* gl);
+/*
   void setUniform(GL* gl, const std::string& name, const Vector2D& v) const{
     Uniform* u = getUniform(name);
     if (u != NULL && u->getType() == GLType::glVec2Float()) {
@@ -99,6 +109,8 @@ public:
       throw G3MError("Error setting Uniform " + name);
     }
   }
+  */
+  
   
 };
 

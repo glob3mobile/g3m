@@ -46,25 +46,25 @@ public:
     return (IGLUniformID*) new GLUniformID_iOS(id);
   }
 
-  void uniform2f(IGLUniformID* loc,
+  void uniform2f(const IGLUniformID* loc,
                  float x, float y) const {
     const int location = ((GLUniformID_iOS*)loc)->getID();
     glUniform2f(location, x, y);
   }
 
-  void uniform1f(IGLUniformID* loc,
+  void uniform1f(const IGLUniformID* loc,
                  float x) const {
     const int location = ((GLUniformID_iOS*)loc)->getID();
     glUniform1f(location, x);
   }
 
-  void uniform1i(IGLUniformID* loc,
+  void uniform1i(const IGLUniformID* loc,
                  int v) const {
     const int location = ((GLUniformID_iOS*)loc)->getID();
     glUniform1i(location, v);
   }
 
-  void uniformMatrix4fv(IGLUniformID* location,
+  void uniformMatrix4fv(const IGLUniformID* location,
                         bool transpose,
                         const MutableMatrix44D* matrix) const {
     const int loc = ((GLUniformID_iOS*)location)->getID();
@@ -82,7 +82,7 @@ public:
     glClear(buffers);
   }
 
-  void uniform4f(IGLUniformID* location,
+  void uniform4f(const IGLUniformID* location,
                  float v0, float v1, float v2, float v3) const {
     const int loc = ((GLUniformID_iOS*)location)->getID();
     glUniform4f(loc, v0, v1, v2, v3);
@@ -520,12 +520,15 @@ public:
                       &type,
                       name);
     
-    NSLog(@"Attribute Name: %s", name);
+    
+    const int id = glGetAttribLocation(program->getProgramID(), name);
+    
+    NSLog(@"Attribute Name: %s - %d", name, id);
     switch (type) {
       case GL_FLOAT_VEC4:
-        return new AttributeVec4Float(name, i);
+        return new AttributeVec4Float(name, id);
       case GL_FLOAT_VEC2:
-        return new AttributeVec2Float(name, i);
+        return new AttributeVec2Float(name, id);
       default:
         return NULL;
         break;
@@ -551,18 +554,20 @@ public:
                        &type,
                        name);
     
-    NSLog(@"Uniform Name: %s", name);
+    const int id = glGetUniformLocation(program->getProgramID(), name);
+    
+    NSLog(@"Uniform Name: %s - %d", name, id);
     switch (type) {
       case GL_FLOAT_MAT4:
-        return new UniformMatrix4Float(name, new GLUniformID_iOS(i));
+        return new UniformMatrix4Float(name, new GLUniformID_iOS(id));
       case GL_FLOAT_VEC4:
-        return new UniformVec4Float(name, new GLUniformID_iOS(i));
+        return new UniformVec4Float(name, new GLUniformID_iOS(id));
       case GL_FLOAT:
-        return new UniformFloat(name, new GLUniformID_iOS(i));
+        return new UniformFloat(name, new GLUniformID_iOS(id));
       case GL_FLOAT_VEC2:
-        return new UniformVec2Float(name, new GLUniformID_iOS(i));
+        return new UniformVec2Float(name, new GLUniformID_iOS(id));
       case GL_BOOL:
-        return new UniformBool(name, new GLUniformID_iOS(i));
+        return new UniformBool(name, new GLUniformID_iOS(id));
       case GL_SAMPLER_2D:
         int NOT_IMPLEMENTED_YET;
         return NULL;

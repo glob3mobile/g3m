@@ -76,7 +76,7 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
                                   initializationTask,
                                   autoDeleteInitializationTask,
                                   periodicalTasks,
-                                  NULL); //GPUProgramManager
+                                  gpuProgramManager); //GPUProgramManager
     [self widget]->setUserData(userData);
 }
 

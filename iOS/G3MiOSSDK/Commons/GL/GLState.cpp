@@ -17,7 +17,18 @@
 
 
 
-void GLState::applyChanges(const INativeGL* nativeGL, GLState& currentState, const AttributesStruct& attributes,const UniformsStruct& uniforms) const{
+void GLState::applyChanges(GL* gl, GLState& currentState, const AttributesStruct& attributes,const UniformsStruct& uniforms) const{
+  
+  //Program
+  if (_program != NULL){
+    if( currentState._program != _program){
+      gl->useProgram(_program);
+      currentState._program = _program;
+    }
+    _program->applyChanges(gl);
+  }
+  
+  INativeGL* nativeGL = gl->getNative();
   
   // Depth Test
   if (_depthTest != currentState._depthTest) {
@@ -290,9 +301,5 @@ void GLState::applyChanges(const INativeGL* nativeGL, GLState& currentState, con
     currentState._textureWidth = _textureWidth;
   }
   
-  if (_program != NULL && currentState._program != _program){
-    nativeGL->useProgram(_program);
-    currentState._program = _program;
-  }
   
 }

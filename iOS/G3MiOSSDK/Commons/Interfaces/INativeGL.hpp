@@ -42,17 +42,17 @@ public:
   virtual IGLUniformID* getUniformLocation(ShaderProgram* program,
                                            const std::string& name) const = 0;
 
-  virtual void uniform2f(IGLUniformID* loc,
+  virtual void uniform2f(const IGLUniformID* loc,
                          float x,
                          float y) const = 0;
 
-  virtual void uniform1f(IGLUniformID* loc,
+  virtual void uniform1f(const IGLUniformID* loc,
                          float x) const = 0;
 
-  virtual void uniform1i(IGLUniformID* loc,
+  virtual void uniform1i(const IGLUniformID* loc,
                          int v) const = 0;
 
-  virtual void uniformMatrix4fv(IGLUniformID* location,
+  virtual void uniformMatrix4fv(const IGLUniformID* location,
                                 bool transpose,
                                 const MutableMatrix44D* matrix) const = 0;
 
@@ -63,7 +63,7 @@ public:
 
   virtual void clear(int buffers) const = 0;
 
-  virtual void uniform4f(IGLUniformID* location,
+  virtual void uniform4f(const IGLUniformID* location,
                          float v0,
                          float v1,
                          float v2,

@@ -16,86 +16,143 @@
 
 class Uniform{
 protected:
-  std::string _name;
-  IGLUniformID* _id;
+  const std::string _name;
+  const IGLUniformID* _id;
   
   const int _type;
+  bool _setted;
+  bool _dirty;
 public:
-  ~Uniform(){ delete _id;}
-  Uniform(const std::string&name, IGLUniformID* id, int type):_name(name), _id(id), _type(type){}
+  virtual ~Uniform(){ delete _id;}
+  Uniform(const std::string&name, IGLUniformID* id, int type):
+  _name(name),
+  _id(id),
+  _type(type),
+  _setted(false),
+  _dirty(false){}
   
   const std::string getName() const{ return _name;}
-  IGLUniformID* getID() const{ return _id;}
+  const IGLUniformID* getID() const{ return _id;}
   int getType() const{ return _type;}
+  
+  virtual void applyIfDirty(GL* gl) = 0;
 };
-
+//////////////////////////////////////////////////////////////////
 class UniformVec2Float: public Uniform{
   double _x, _y;
 public:
   UniformVec2Float(const std::string&name, IGLUniformID* id):Uniform(name,id,GLType::glVec2Float()){}
-  void set(GL* gl, const Vector2D& v) {
+  void set(const Vector2D& v) {
     double x = v.x();
     double y = v.y();
-    if (x != _x || y != _y){
-      gl->uniform2f(_id, (float)x, (float)y);
+    if (!_setted || x != _x || y != _y){
       _x = x;
       _y = y;
+      _setted = true;
+      _dirty = true;
+    }
+  }
+  void set(GL* gl, float x, float y) {
+    if (!_setted || x != _x || y != _y){
+      _dirty = true;
+      _x = x;
+      _y = y;
+      _setted = true;
+    }
+  }
+  
+  void applyIfDirty(GL* gl){
+    if (_dirty){
+      gl->uniform2f(_id, (float)_x, (float)_y);
+      _dirty = false;
     }
   }
 };
-
+//////////////////////////////////////////////////////////////////
 class UniformVec4Float: public Uniform{
   double _x, _y, _z, _w;
 public:
   UniformVec4Float(const std::string&name, IGLUniformID* id):Uniform(name,id,GLType::glVec4Float()){}
-  void set(GL* gl, double x, double y, double z, double w) {
-    if (x != _x || y != _y || z != _z || w != _w){
-      gl->uniform4f(_id, (float)x, (float)y, (float)z, (float) w);
+  void set(double x, double y, double z, double w) {
+    if (!_setted || x != _x || y != _y || z != _z || w != _w){
+      _dirty = true;
       _x = x;
       _y = y;
       _z = z;
       _w = w;
+      _setted = true;
+    }
+  }
+  
+  void applyIfDirty(GL* gl){
+    if (_dirty){
+      gl->uniform4f(_id, (float)_x, (float)_y, (float)_z, (float) _w);
+      _dirty = false;
     }
   }
 };
-
+//////////////////////////////////////////////////////////////////
 class UniformBool: public Uniform{
   bool _b;
 public:
   UniformBool(const std::string&name, IGLUniformID* id):Uniform(name,id,GLType::glBool()){}
-  void set(GL* gl, bool b) {
-    if (_b != b){
-      if (b) gl->uniform1i(_id, 1);
-      else gl->uniform1i(_id, 0);
+  void set(bool b) {
+    if (!_setted || _b != b){
+      _dirty = true;
       _b = b;
+      _setted = true;
+    }
+  }
+  
+  void applyIfDirty(GL* gl){
+    if (_dirty){
+      if (_b) gl->uniform1i(_id, 1);
+      else gl->uniform1i(_id, 0);
+      _dirty = false;
     }
   }
 };
-
+//////////////////////////////////////////////////////////////////
 class UniformMatrix4Float: public Uniform{
   MutableMatrix44D _m;
 public:
   UniformMatrix4Float(const std::string&name, IGLUniformID* id):Uniform(name,id,GLType::glMatrix4Float()){}
   
-  void set(GL* gl, MutableMatrix44D m) {
-    if (!_m.isEqualsTo(m)){
-      gl->uniformMatrix4fv(_id, false, &m);
+  void set(MutableMatrix44D m) {
+    if (!_setted || !_m.isEqualsTo(m)){
+      _dirty = true;
       _m = m;
+      _setted = true;
+    }
+  }
+  
+  void applyIfDirty(GL* gl){
+    if (_dirty){
+      gl->uniformMatrix4fv(_id, false, &_m);
+      _dirty = false;
     }
   }
 };
-
+//////////////////////////////////////////////////////////////////
 class UniformFloat: public Uniform{
   double _d;
 public:
   UniformFloat(const std::string&name, IGLUniformID* id):Uniform(name,id, GLType::glFloat()){}
   
-  void set(GL* gl, double d) {
-    if (_d != d){
-      gl->uniform1f(_id, (float)d);
+  void set(double d) {
+    if (!_setted || _d != d){
+      _dirty = true;
       _d = d;
+      _setted = true;
+    }
+  }
+  
+  void applyIfDirty(GL* gl){
+    if (_dirty){
+      gl->uniform1f(_id, (float)_d);
+      _dirty = false;
     }
   }
 };
-
+//////////////////////////////////////////////////////////////////
 #endif

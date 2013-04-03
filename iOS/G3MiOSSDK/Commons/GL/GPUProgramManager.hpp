@@ -48,7 +48,7 @@ public:
       
       //Compile new Program
       if (ps != NULL){
-        prog = GPUProgram::createProgram(_gl->getNative(),
+        prog = GPUProgram::createProgram(_gl,
                                          ps->_name,
                                          ps->_vertexSource,
                                          ps->_fragmentSource);

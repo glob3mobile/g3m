@@ -34,6 +34,8 @@
 #include "TouchEvent.hpp"
 #include "GPUProgramManager.hpp"
 
+#include "GLState.hpp"
+
 void G3MWidget::initSingletons(ILogger*            logger,
                                IFactory*           factory,
                                const IStringUtils* stringUtils,
@@ -307,6 +309,18 @@ void G3MWidget::onResizeViewportEvent(int width, int height) {
 
 
 void G3MWidget::render(int width, int height) {
+  
+  //Setting Program
+  if (!_mainRendererReady){
+    GPUProgram* prog = _gpuProgramManager->getProgram("DefaultProgram");
+    //_gl->useProgram(prog);
+    ((GLState*)_rootState)->setProgram(prog);
+    prog->getUniformVec2Float("ScaleTexCoord")->set(Vector2D(1.0,1.0));
+    prog->getUniformVec2Float("TranslationTexCoord")->set(Vector2D(0.0,0.0));
+    prog->getUniformFloat("PointSize")->set(1);
+    prog->getUniformBool("BillBoard")->set(false);
+  }
+  
   if (_paused) {
     return;
   }
@@ -321,11 +335,7 @@ void G3MWidget::render(int width, int height) {
   _timer->start();
   _renderCounter++;
   
-  //Setting Program
-  if (!_mainRendererReady){
-    GPUProgram* prog = _gpuProgramManager->getProgram("DefaultProgram");
-    _gl->useProgram(prog);
-  }
+
   
   if (_initializationTask != NULL) {
     if (!_initializationTaskWasRun) {

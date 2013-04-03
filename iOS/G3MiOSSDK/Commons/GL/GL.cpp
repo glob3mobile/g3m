@@ -21,6 +21,7 @@
 
 #include "GLShaderAttributes.hpp"
 #include "GLShaderUniforms.hpp"
+#include "GPUProgram.hpp"
 
 struct AttributesStruct Attributes;
 struct UniformsStruct   Uniforms;
@@ -55,18 +56,26 @@ IGLUniformID* GL::checkedGetUniformLocation(ShaderProgram* program,
   return uID;
 }
 
+void GL::setUniformsDefaultValues() const{
+  // default values
+  _nativeGL->uniform2f(Uniforms.ScaleTexCoord, (float)1.0, (float)1.0);
+  _nativeGL->uniform2f(Uniforms.TranslationTexCoord, (float)0.0, (float)0.0);
+  _nativeGL->uniform1f(Uniforms.PointSize, 1);
+  _nativeGL->uniform1i(Uniforms.BillBoard, 0); //NOT DRAWING BILLBOARD
+}
+
 bool GL::useProgram(ShaderProgram* program) {
   if (_verbose) {
     ILogger::instance()->logInfo("GL::useProgram()");
   }
   
-  if (_program == program) {
-    return true;
-  }
+//  if (_program == program) {
+//    return true;
+//  }
   _program = program;
 
   // set shaders
-  _nativeGL->useProgram(program);
+  //_nativeGL->useProgram(program);
   
   //Methods checkedGetAttribLocation and checkedGetUniformLocation
   //will turn _errorGettingLocationOcurred to true is that happens
@@ -88,18 +97,12 @@ bool GL::useProgram(ShaderProgram* program) {
   Uniforms.TranslationTexCoord = checkedGetUniformLocation(program, "TranslationTexCoord");
   Uniforms.ScaleTexCoord       = checkedGetUniformLocation(program, "ScaleTexCoord");
   Uniforms.PointSize           = checkedGetUniformLocation(program, "PointSize");
-  
-  // default values
-  _nativeGL->uniform2f(Uniforms.ScaleTexCoord, (float)1.0, (float)1.0);
-  _nativeGL->uniform2f(Uniforms.TranslationTexCoord, (float)0.0, (float)0.0);
-  _nativeGL->uniform1f(Uniforms.PointSize, 1);
-  
+
   //BILLBOARDS
   Uniforms.BillBoard      = checkedGetUniformLocation(program, "BillBoard");
   Uniforms.ViewPortExtent = checkedGetUniformLocation(program, "ViewPortExtent");
   Uniforms.TextureExtent  = checkedGetUniformLocation(program, "TextureExtent");
   
-  _nativeGL->uniform1i(Uniforms.BillBoard, 0); //NOT DRAWING BILLBOARD
   
   //FOR FLAT COLOR MIXING
   Uniforms.FlatColorIntensity      = checkedGetUniformLocation(program, "FlatColorIntensity");
@@ -107,7 +110,7 @@ bool GL::useProgram(ShaderProgram* program) {
   Uniforms.EnableColorPerVertex    = checkedGetUniformLocation(program, "EnableColorPerVertex");
   Uniforms.EnableFlatColor         = checkedGetUniformLocation(program, "EnableFlatColor");
   
-  
+  //setUniformsDefaultValues();
   
   //Return
   return !_errorGettingLocationOcurred;
@@ -282,5 +285,10 @@ void GL::deleteTexture(const IGLTextureId* textureId) {
 
 void GL::setState(const GLState& state) {
   //Changes current State and calls OpenGL API
-  state.applyChanges(_nativeGL, *_currentState, Attributes, Uniforms);
+  state.applyChanges(this, *_currentState, Attributes, Uniforms);
+}
+
+void GL::useProgram(GPUProgram* program) {
+  _nativeGL->useProgram(program);
+  program->onUsed();
 }

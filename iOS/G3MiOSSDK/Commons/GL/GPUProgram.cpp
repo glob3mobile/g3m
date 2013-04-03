@@ -12,13 +12,15 @@
 
 #include "G3MError.hpp"
 
-GPUProgram* GPUProgram::createProgram(INativeGL* nativeGL, const std::string name, const std::string& vertexSource,
-                                 const std::string& fragmentSource){
+#include "ShaderProgram.hpp"
+
+GPUProgram* GPUProgram::createProgram(GL* gl, const std::string name, const std::string& vertexSource,
+                                      const std::string& fragmentSource){
   
   GPUProgram* p = new GPUProgram();
   
   p->_programCreated = false;
-  p->_nativeGL = nativeGL;
+  p->_nativeGL = gl->getNative();
   p->_programID = p->_nativeGL->createProgram();
   
   // compile vertex shader
@@ -58,8 +60,6 @@ GPUProgram* GPUProgram::createProgram(INativeGL* nativeGL, const std::string nam
   p->deleteShader(fragmentShader);
   
   p->getVariables();
-  
-  p->_name = name; //NAME
   
   return p;
 }
@@ -132,11 +132,70 @@ Uniform* GPUProgram::getUniform(const std::string name) const{
   }
 }
 
+UniformBool* GPUProgram::getUniformBool(const std::string name) const{
+  Uniform* u = getUniform(name);
+  if (u!= NULL && u->getType() == GLType::glBool()){
+    return (UniformBool*)u;
+  } else{
+    return NULL;
+  }
+}
+
+UniformVec2Float* GPUProgram::getUniformVec2Float(const std::string name) const {
+  Uniform* u = getUniform(name);
+  if (u!= NULL && u->getType() == GLType::glVec2Float()){
+    return (UniformVec2Float*)u;
+  } else{
+    return NULL;
+  }
+}
+UniformVec4Float* GPUProgram::getUniformVec4Float(const std::string name) const{
+  Uniform* u = getUniform(name);
+  if (u!= NULL && u->getType() == GLType::glVec4Float()){
+    return (UniformVec4Float*)u;
+  } else{
+    return NULL;
+  }
+}
+UniformFloat* GPUProgram::getUniformFloat(const std::string name) const{
+  Uniform* u = getUniform(name);
+  if (u!= NULL && u->getType() == GLType::glFloat()){
+    return (UniformFloat*)u;
+  } else{
+    return NULL;
+  }
+}
+
 Attribute* GPUProgram::getAttribute(const std::string name) const{
   std::map<std::string, Attribute*> ::const_iterator it = _attributes.find(name);
   if (it != _attributes.end()){
     return it->second;
   } else{
     return NULL;
+  }
+}
+
+/**
+ Must be called when the program is used
+ */
+void GPUProgram::onUsed(){
+  ILogger::instance()->logInfo("GPUProgram %s being used", _name.c_str());
+}
+/**
+ Must be called when the program is no longer used
+ */
+void GPUProgram::onUnused(){
+    ILogger::instance()->logInfo("GPUProgram %s unused", _name.c_str());
+}
+
+/**
+ Must be called before drawing to apply Uniforms and Attributes new values
+ */
+void GPUProgram::applyChanges(GL* gl){
+  //ILogger::instance()->logInfo("GPUProgram %s applying changes", _name.c_str());
+  
+  std::map<std::string, Uniform*>::iterator iter;
+  for (iter = _uniforms.begin(); iter != _uniforms.end(); iter++) {
+    iter->second->applyIfDirty(gl);
   }
 }

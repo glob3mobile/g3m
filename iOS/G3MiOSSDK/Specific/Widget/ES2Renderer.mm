@@ -88,10 +88,6 @@ enum {
   }
 
   // Use shader program
-  
-  //widget->getGL()->getNative()->useProgram(_gpuProgram);
-  //widget->setDefaultProgram(_gpuProgram);
-  
   widget->getGL()->useProgram(_shaderProgram);
   widget->render(_width, _height);
 
@@ -152,20 +148,20 @@ enum {
     NSLog(@"Failed to load shaders");
     return FALSE;
   }
-  
-  try {
-    _gpuProgram = GPUProgram::createProgram(_gl->getNative(), "", vertexSource, fragmentSource);
-    if (_gpuProgram != NULL){
-      NSLog(@"GPU Program Loaded");
-      try {
-        _gpuProgram->setUniform(_gl, "Modelview", MutableMatrix44D::identity());
-      } catch (G3MError* e) {
-        NSLog(@"%s", e->getMessage().c_str());
-      }
-    }
-  } catch (G3MError* e) {
-    NSLog(@"%s", e->getMessage().c_str());
-  }
+//  
+//  try {
+//    _gpuProgram = GPUProgram::createProgram(_gl->getNative(), "", vertexSource, fragmentSource);
+//    if (_gpuProgram != NULL){
+//      NSLog(@"GPU Program Loaded");
+//      try {
+//        _gpuProgram->setUniform(_gl, "Modelview", MutableMatrix44D::identity());
+//      } catch (G3MError* e) {
+//        NSLog(@"%s", e->getMessage().c_str());
+//      }
+//    }
+//  } catch (G3MError* e) {
+//    NSLog(@"%s", e->getMessage().c_str());
+//  }
 
   return TRUE;
 }
