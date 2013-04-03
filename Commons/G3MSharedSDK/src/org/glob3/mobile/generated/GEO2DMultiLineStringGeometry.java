@@ -17,14 +17,11 @@ package org.glob3.mobile.generated;
 
 
 
-
 //class Geodetic2D;
 
 public class GEO2DMultiLineStringGeometry extends GEOMultiLineStringGeometry
 {
   private java.util.ArrayList<java.util.ArrayList<Geodetic2D>> _coordinatesArray;
-  private Color _color;
-  private final float _lineWidth;
 
   protected final java.util.ArrayList<GEOSymbol> createSymbols(G3MRenderContext rc, GEOSymbolizationContext sc)
   {
@@ -32,14 +29,11 @@ public class GEO2DMultiLineStringGeometry extends GEOMultiLineStringGeometry
   }
 
 
-    public GEO2DMultiLineStringGeometry(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray, Color color, float lineWidth)
+  public GEO2DMultiLineStringGeometry(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray)
   {
-       _coordinatesArray = coordinatesArray;
-       _color = color;
-       _lineWidth = lineWidth;
+     _coordinatesArray = coordinatesArray;
 
   }
-
 
   public void dispose()
   {

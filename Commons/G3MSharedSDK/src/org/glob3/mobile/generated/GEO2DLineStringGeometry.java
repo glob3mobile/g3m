@@ -22,12 +22,9 @@ package org.glob3.mobile.generated;
 public class GEO2DLineStringGeometry extends GEOLineStringGeometry
 {
   private java.util.ArrayList<Geodetic2D> _coordinates;
-  private Color _color;
-  private final float _lineWidth;
 
   protected final java.util.ArrayList<GEOSymbol> createSymbols(G3MRenderContext rc, GEOSymbolizationContext sc)
   {
-
     return sc.getSymbolizer().createSymbols(this);
   }
 
@@ -36,8 +33,6 @@ public class GEO2DLineStringGeometry extends GEOLineStringGeometry
   public GEO2DLineStringGeometry(java.util.ArrayList<Geodetic2D> coordinates)
   {
      _coordinates = coordinates;
-     _color = color;
-     _lineWidth = lineWidth;
 
   }
 

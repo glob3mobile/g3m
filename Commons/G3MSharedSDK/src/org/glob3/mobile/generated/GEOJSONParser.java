@@ -165,11 +165,11 @@ public class GEOJSONParser
   
     if (type.compareTo("LineString") == 0)
     {
-      geo = createLineStringGeometry(jsonObject, Color.newFromRGBA(1, 1, 0, 1), 2);
+      geo = createLineStringGeometry(jsonObject);
     }
     else if (type.compareTo("MultiLineString") == 0)
     {
-      geo = createMultiLineStringGeometry(jsonObject, Color.newFromRGBA(1, 1, 1, 1), 2);
+      geo = createMultiLineStringGeometry(jsonObject);
     }
     else if (type.compareTo("Point") == 0)
     {
@@ -182,7 +182,7 @@ public class GEOJSONParser
   
     return geo;
   }
-  private GEOLineStringGeometry createLineStringGeometry(JSONObject jsonObject, Color color, float lineWidth)
+  private GEOLineStringGeometry createLineStringGeometry(JSONObject jsonObject)
   {
   
     final JSONArray jsCoordinates = jsonObject.getAsArray("coordinates");
@@ -207,7 +207,7 @@ public class GEOJSONParser
       java.util.ArrayList<Geodetic2D> coordinates = create2DCoordinates(jsCoordinates);
       if (coordinates != null)
       {
-        geo = new GEO2DLineStringGeometry(coordinates, color, lineWidth);
+        geo = new GEO2DLineStringGeometry(coordinates);
         _lineStrings2DCount++;
       }
     }
@@ -224,7 +224,7 @@ public class GEOJSONParser
   
     return geo;
   }
-  private GEOMultiLineStringGeometry createMultiLineStringGeometry(JSONObject jsonObject, Color color, float lineWidth)
+  private GEOMultiLineStringGeometry createMultiLineStringGeometry(JSONObject jsonObject)
   {
   
     final JSONArray jsCoordinatesArray = jsonObject.getAsArray("coordinates");
@@ -272,7 +272,7 @@ public class GEOJSONParser
         }
       }
   
-      geo = new GEO2DMultiLineStringGeometry(coordinatesArray, color, lineWidth);
+      geo = new GEO2DMultiLineStringGeometry(coordinatesArray);
       _multiLineStrings2DCount++;
     }
     /*
@@ -359,18 +359,6 @@ public class GEOJSONParser
     ILogger.instance().logInfo("GEOJSONParser Statistics: Coordinates2D=%d, Points2D=%d, LineStrings2D=%d, MultiLineStrings2D=%d (LineStrings2D=%d), features=%d, featuresCollection=%d", _coordinates2DCount, _points2DCount, _lineStrings2DCount, _multiLineStrings2DCount, _lineStringsInMultiLineString2DCount, _featuresCount, _featuresCollectionCount);
   }
 
-
-  public static GEOLineStringGeometry createLineString(JSONObject jsonObject, Color color, float lineWidth)
-  {
-      GEOJSONParser parser = new GEOJSONParser("");
-      return parser.createLineStringGeometry(jsonObject, color, lineWidth);
-  }
-
-  public static GEOMultiLineStringGeometry createMultiLineString(JSONObject jsonObject, Color color, float lineWidth)
-  {
-      GEOJSONParser parser = new GEOJSONParser("");
-      return parser.createMultiLineStringGeometry(jsonObject, color, lineWidth);
-  }
 
   public static GEOObject parse(String json)
   {
