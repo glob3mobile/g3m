@@ -9,6 +9,8 @@
 #include "GEO2DLineStringGeometry.hpp"
 
 #include "Geodetic2D.hpp"
+#include "GEOSymbolizer.hpp"
+#include "GEOSymbolizationContext.hpp"
 
 GEO2DLineStringGeometry::~GEO2DLineStringGeometry() {
   const int coordinatesCount = _coordinates->size();
@@ -19,7 +21,7 @@ GEO2DLineStringGeometry::~GEO2DLineStringGeometry() {
   delete _coordinates;
 }
 
-Mesh* GEO2DLineStringGeometry::createMesh(const G3MRenderContext* rc) {
-
-  return create2DBoundaryMesh(_coordinates, _color, _lineWidth, rc);
+std::vector<GEOSymbol*>* GEO2DLineStringGeometry::createSymbols(const G3MRenderContext* rc,
+                                                                const GEOSymbolizationContext& sc) const {
+  return sc.getSymbolizer()->createSymbols(this);
 }

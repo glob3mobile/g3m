@@ -17,66 +17,61 @@ package org.glob3.mobile.generated;
 
 
 
-//class Geodetic2D;
-//class Mesh;
-//class Color;
+//class GEOSymbol;
+//class GEOFeature;
 
 public abstract class GEOGeometry extends GEOObject
 {
-  private Mesh _mesh;
+  private GEOFeature _feature;
 
-  protected Mesh getMesh(G3MRenderContext rc)
-  {
-    if (_mesh == null)
-    {
-      _mesh = createMesh(rc);
-    }
-    return _mesh;
-  }
-
-  protected abstract Mesh createMesh(G3MRenderContext rc);
-
-  protected final Mesh create2DBoundaryMesh(java.util.ArrayList<Geodetic2D> coordinates, Color color, float lineWidth, G3MRenderContext rc)
-  {
-    FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.firstVertex(), rc.getPlanet(), Geodetic2D.zero());
-  
-    final int coordinatesCount = coordinates.size();
-    for (int i = 0; i < coordinatesCount; i++)
-    {
-      Geodetic2D coordinate = coordinates.get(i);
-      vertices.add(coordinate);
-      // vertices.add( Geodetic3D(*coordinate, 50) );
-    }
-  
-    return new DirectMesh(GLPrimitive.lineStrip(), true, vertices.getCenter(), vertices.create(), lineWidth, 1, color);
-  }
+  protected abstract java.util.ArrayList<GEOSymbol> createSymbols(G3MRenderContext rc, GEOSymbolizationContext sc);
 
   public GEOGeometry()
   {
-     _mesh = null;
+     _feature = null;
 
-  }
-
-  public final void render(G3MRenderContext rc, GLState parentState)
-  {
-    Mesh mesh = getMesh(rc);
-    if (mesh != null)
-    {
-      final Extent extent = mesh.getExtent();
-  
-      if (extent.touches(rc.getCurrentCamera().getFrustumInModelCoordinates()))
-      {
-        GLState state = new GLState(parentState);
-        state.disableDepthTest();
-        mesh.render(rc, state);
-      }
-    }
   }
 
   public void dispose()
   {
-    if (_mesh != null)
-       _mesh.dispose();
+  
+  }
+
+  public final void setFeature(GEOFeature feature)
+  {
+    if (_feature != feature)
+    {
+      if (_feature != null)
+         _feature.dispose();
+      _feature = feature;
+    }
+  }
+
+  public final GEOFeature getFeature()
+  {
+    return _feature;
+  }
+
+  public final void symbolize(G3MRenderContext rc, GEOSymbolizationContext sc)
+  {
+    java.util.ArrayList<GEOSymbol> symbols = createSymbols(rc, sc);
+    if (symbols == null)
+    {
+      return;
+    }
+  
+    final int symbolsSize = symbols.size();
+    for (int i = 0; i < symbolsSize; i++)
+    {
+      final GEOSymbol symbol = symbols.get(i);
+  
+      symbol.symbolize(rc, sc);
+  
+      if (symbol != null)
+         symbol.dispose();
+    }
+  
+    symbols = null;
   }
 
 }

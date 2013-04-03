@@ -18,16 +18,17 @@ class Color;
 
 class AbstractMesh : public Mesh {
 protected:
-  const int                _primitive;
-  const bool               _owner;
-  Vector3D                 _center;
-  const MutableMatrix44D*  _translationMatrix;
-  IFloatBuffer*            _vertices;
-  Color*                   _flatColor;
-  IFloatBuffer*            _colors;
-  const float              _colorsIntensity;
-  const float              _lineWidth;
-  const float              _pointSize;
+  const int               _primitive;
+  const bool              _owner;
+  Vector3D                _center;
+  const MutableMatrix44D* _translationMatrix;
+  IFloatBuffer*           _vertices;
+  Color*                  _flatColor;
+  IFloatBuffer*           _colors;
+  const float             _colorsIntensity;
+  const float             _lineWidth;
+  const float             _pointSize;
+  const bool              _depthTest;
 
   mutable Extent* _extent;
   Extent* computeExtent() const;
@@ -40,7 +41,8 @@ protected:
                float pointSize,
                Color* flatColor,
                IFloatBuffer* colors,
-               const float colorsIntensity);
+               const float colorsIntensity,
+               bool depthTest);
 
   virtual void rawRender(const G3MRenderContext* rc,
                          const GLState& parentState) const = 0;

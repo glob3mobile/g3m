@@ -78,7 +78,6 @@ public class Color
 
   public void dispose()
   {
-
   }
 
   public static Color fromRGBA(float red, float green, float blue, float alpha)

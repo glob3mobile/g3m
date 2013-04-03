@@ -29,26 +29,41 @@ import mathutils
 import bpy_extras.io_utils
 import re
 
+maxVerticesByGeometry = 0
 
-def add_vertice(material,
-                vertex, normal, uv):
-    indicesDict = material["indicesDict"];
-    vertexKey = (vertex, normal, uv)
+    
+def add_vertices(material,
+                 firstVertexKey,
+                 secondVertexKey,
+                 thirdVertexKey):
 
-    if (vertexKey in indicesDict):
-        index = indicesDict[ vertexKey ]
-    else:
-        index = len( indicesDict ) + 1
-        indicesDict[ vertexKey ] = index
-
-        material["vertices"].append( vertex )
-        if ( normal ):
-            material["normals"].append( normal )
-        if ( uv ):
-            material["uv"].append( uv )
-
-    material["indices"].append( index )
-
+    curGeom = material["currentGeom"]
+    # if first geometry or current geometry reached maxVerticesByGeometry
+    if ( ( curGeom == None ) or ( ( curGeom ) and ( len( curGeom["vertices"] ) > maxVerticesByGeometry ) ) ):
+        curGeom = create_geometry()
+        material["geometries"].append( curGeom )
+        material["currentGeom"] = curGeom
+        
+    indicesDict = curGeom["indicesDict"];
+    vertexKeys = (firstVertexKey, secondVertexKey, thirdVertexKey)
+    
+    for vertexKey in vertexKeys:
+        if ( vertexKey ):
+            if ( vertexKey in indicesDict ):
+                index = indicesDict[ vertexKey ]
+            else:
+                index = len( indicesDict ) + 1
+                indicesDict[ vertexKey ] = index
+        
+                ( vertex, normal, uv ) = vertexKey
+                curGeom["vertices"].append( vertex )
+                if ( normal ):
+                    curGeom["normals"].append( normal )
+                if ( uv ):
+                    curGeom["uv"].append( uv )
+        
+            curGeom["indices"].append( index )
+            
 
 def create_object(name):
     object = {}
@@ -67,15 +82,24 @@ def create_material(materialKey, blenderMaterial):
     material["texture"] = materialKey[1]
 
     material["blenderMaterial"] = blenderMaterial
-
-    material["vertices"] = []
-    material["normals"]  = []
-    material["uv"]       = []
-    material["indices"]  = []
-
-    material["indicesDict"] = {}
-
+    
+    material["geometries"] = []
+    material["currentGeom"] = None
+    
     return material
+
+
+def create_geometry():
+    geometry = {}
+
+    geometry["vertices"] = []
+    geometry["normals"]  = []
+    geometry["uv"]       = []
+    geometry["indices"]  = []
+
+    geometry["indicesDict"] = {}
+    
+    return geometry
 
 
 def name_compat(name):
@@ -95,6 +119,82 @@ def test_nurbs_compat(ob):
 
     return False
 
+def get_max_vertices(vert_range):
+    if vert_range == 'short':
+        return ((2**15) - 1)
+    if vert_range == 'ushort':
+        return ((2**16) - 1)
+    if vert_range == 'int':
+        return ((2**31) - 1)
+    if vert_range == 'uint':
+        return ((2**32) - 1)
+
+
+def write_geometries(fw, geometryName, material):
+    geomCounter = 1
+    firstGeometry = True
+    for geom in material["geometries"]:
+        # start geometry
+        if ( firstGeometry ):
+            firstGeometry = False
+            fw('      {"type":"geometry","primitive":"triangles","id":"%s"\n' % geometryName )
+        else:
+            fw('      ,{"type":"geometry","primitive":"triangles","id":"%s"\n' % ( geometryName + '_' + str( geomCounter ) ) )
+            geomCounter = geomCounter + 1
+
+        # start positions (vertices)
+        fw('      ,"positions":[\n')
+        firstVertex = True
+        for vertex in geom["vertices"]:
+            if firstVertex:
+                firstVertex = False
+                fw('        %.10g,%.10g,%.10g' %  vertex)
+            else:
+                fw(',\n        %.10g,%.10g,%.10g' %  vertex)
+        # end positions (vertices)
+        fw('\n       ]\n')
+
+        if (geom["normals"]):
+            # start normals
+            fw('      ,"normals":[\n')
+            firstNormal = True
+            for normal in geom["normals"]:
+                if firstNormal:
+                    firstNormal = False
+                    fw('        %.10g,%.10g,%.10g\n' %  normal)
+                else:
+                    fw('        ,%.10g,%.10g,%.10g\n' %  normal)
+            # end normals
+            fw('       ]\n')
+
+        if (geom["uv"]):
+            fw('      ,"uv":[\n')
+            firstUV = True
+            for uv in geom["uv"]:
+                x,y = uv
+                if firstUV:
+                    firstUV = False
+                    fw('        %.10g,%.10g' %  uv)
+                else:
+                    fw(',\n        %.10g,%.10g' %  uv)
+            # end uv
+            fw('\n       ]\n')
+
+        # start indices
+        fw('      ,"indices":[')
+        firstIndex = True
+        for index in geom["indices"]:
+            if firstIndex:
+                firstIndex = False
+                fw('%g' %  (index - 1))
+            else:
+                fw(',%g' %  (index - 1))
+        # end indices
+        fw(']\n')
+
+        #end geometry
+        fw('      }\n')
+#end def write_geometries
 
 # Write file grouping data by Object-Material-Geometry
 def write_file_grouped_by_OMG(fw, objectsList):
@@ -134,53 +234,7 @@ def write_file_grouped_by_OMG(fw, objectsList):
                 uri=re.sub(r'\.[0-9]{3}', r'', material["texture"])
                 fw('      {"type":"texture","layers":[{"uri":"%s"}],"nodes":[\n' % uri)
 
-            # start geometry
-            fw('      {"type":"geometry","primitive":"triangles","id":"%s_%s"\n' % (object["name"], material["name"]) )
-            fw('      ,"positions":[\n')
-
-            firstVertex = True
-            for vertex in material["vertices"]:
-                if firstVertex:
-                    firstVertex = False
-                    fw('        %.10g,%.10g,%.10g\n' %  vertex)
-                else:
-                    fw('        ,%.10g,%.10g,%.10g\n' %  vertex)
-            fw('      ]\n')
-
-            if (material["normals"]):
-                fw('      ,"normals":[\n')
-                firstNormal = True
-                for normal in material["normals"]:
-                    if firstNormal:
-                        firstNormal = False
-                        fw('        %.10g,%.10g,%.10g\n' %  normal)
-                    else:
-                        fw('        ,%.10g,%.10g,%.10g\n' %  normal)
-                fw('      ]\n')
-
-            if (material["uv"]):
-                fw('      ,"uv":[\n')
-                firstUV = True
-                for uv in material["uv"]:
-                    if firstUV:
-                        firstUV = False
-                        fw('        %.10g,%.10g\n' %  uv)
-                    else:
-                        fw('        ,%.10g,%.10g\n' %  uv)
-                fw('      ]\n')
-
-            fw('      ,"indices":[')
-            firstIndex = True
-            for index in material["indices"]:
-                if not firstIndex:
-                    fw(',%g' %  (index - 1))
-                else:
-                    fw('%g' %  (index - 1))
-                    firstIndex = False
-            fw(']\n')
-
-            #end geometry
-            fw('      }\n')
+            write_geometries(fw, object["name"] + "_" + material["name"], material)
 
             if (material["texture"]):
                 fw('      ]}\n')
@@ -221,61 +275,7 @@ def write_file_grouped_by_MG(fw, materialsDict):
             uri=re.sub(r'\.[0-9]{3}', r'', material["texture"])
             fw('    {"type":"texture","layers":[{"uri":"%s"}],"nodes":[\n' % uri)
 
-        # start geometry
-        fw('      {"type":"geometry","primitive":"triangles","id":"%s"\n' % material["name"] )
-
-        # start positions (vertices)
-        fw('      ,"positions":[\n')
-        firstVertex = True
-        for vertex in material["vertices"]:
-            if firstVertex:
-                firstVertex = False
-                fw('        %.10g,%.10g,%.10g' %  vertex)
-            else:
-                fw(',\n        %.10g,%.10g,%.10g' %  vertex)
-        # end positions (vertices)
-        fw('\n       ]\n')
-
-        if (material["normals"]):
-            # start normals
-            fw('      ,"normals":[\n')
-            firstNormal = True
-            for normal in material["normals"]:
-                if firstNormal:
-                    firstNormal = False
-                    fw('        %.10g,%.10g,%.10g\n' %  normal)
-                else:
-                    fw('        ,%.10g,%.10g,%.10g\n' %  normal)
-            # end normals
-            fw('       ]\n')
-
-        if (material["uv"]):
-            fw('      ,"uv":[\n')
-            firstUV = True
-            for uv in material["uv"]:
-                x,y = uv
-                if firstUV:
-                    firstUV = False
-                    fw('        %.10g,%.10g' %  uv)
-                else:
-                    fw(',\n        %.10g,%.10g' %  uv)
-            # end uv
-            fw('\n       ]\n')
-
-        # start indices
-        fw('      ,"indices":[')
-        firstIndex = True
-        for index in material["indices"]:
-            if firstIndex:
-                firstIndex = False
-                fw('%g' %  (index - 1))
-            else:
-                fw(',%g' %  (index - 1))
-        # end indices
-        fw(']\n')
-
-        #end geometry
-        fw('      }\n')
+        write_geometries(fw, material["name"], material)
 
         if (material["texture"]):
             fw('    ]}\n')
@@ -289,12 +289,16 @@ def write_file(filepath,
                objects,
                scene,
                EXPORT_GROUPBY='MG',
+               EXPORT_VERT_RANGE='short',
                EXPORT_NORMALS=False,
                EXPORT_UV=True,
                EXPORT_KEEP_VERT_ORDER=False,
                EXPORT_GLOBAL_MATRIX=None,
                EXPORT_PATH_MODE='AUTO',
                ):
+    global maxVerticesByGeometry
+    maxVerticesByGeometry = get_max_vertices( EXPORT_VERT_RANGE ) - 5
+    
     objectsList = []
     materialsDict = {}
 
@@ -452,9 +456,16 @@ def write_file(filepath,
                 else:
                     # split quad into 2 triangles
                     f_v_iter = (f_v_orig[0], f_v_orig[1], f_v_orig[2]), (f_v_orig[0], f_v_orig[2], f_v_orig[3])
+                    
+                material = None
+                if ( EXPORT_GROUPBY == 'MG' ):
+                    material = materialsDict.get(materialKey)
+                else:
+                    material = currentMaterial
 
                 # support for triangulation
                 for f_v in f_v_iter:
+                    vertex1 = vertex2 = vertex3 = None
                     for vi, v in f_v:
                         vertex = v.co[:]
 
@@ -476,12 +487,22 @@ def write_file(filepath,
                             uv = (uvX, uvY)
                         else:
                             uv = None
-
+                        
                         #AT_WORK
-                        if (EXPORT_GROUPBY == 'MG'):
-                            add_vertice(materialsDict.get(materialKey), vertex, normal, uv)
+                        if ( vertex1 == None ) :
+                            vertex1 = (vertex, normal, uv)
+                        elif ( vertex2 == None ) :
+                            vertex2 = (vertex, normal, uv)
                         else:
-                            add_vertice(currentMaterial, vertex, normal, uv)
+                            vertex3 = (vertex, normal, uv)
+                            
+                        if ( vertex1 and vertex2 and vertex3 ):
+                            add_vertices(material, vertex1, vertex2, vertex3)
+                            vertex1 = vertex2 = vertex3 = None
+                            
+                    # if vertices count is not 3-multiple
+                    if ( vertex1 ):
+                        add_vertices(material, vertex1, vertex2, vertex3)
 
 
             # clean up
@@ -513,6 +534,7 @@ def write_file(filepath,
 def _write(context,
            filepath,
            EXPORT_GROUPBY,
+           EXPORT_VERT_RANGE,
            EXPORT_NORMALS,  # not yet
            EXPORT_UV,  # ok
            EXPORT_KEEP_VERT_ORDER,
@@ -558,6 +580,7 @@ def _write(context,
                    objects,
                    scene,
                    EXPORT_GROUPBY,
+                   EXPORT_VERT_RANGE,
                    EXPORT_NORMALS,
                    EXPORT_UV,
                    EXPORT_KEEP_VERT_ORDER,
@@ -583,6 +606,7 @@ def save(operator,
          context,
          filepath="",
          group_by="MG",
+         vertices_range="ushort",
          use_normals=False,
          use_uvs=True,
          keep_vertex_order=False,
@@ -595,6 +619,7 @@ def save(operator,
     _write(context,
            filepath,
            EXPORT_GROUPBY=group_by,
+           EXPORT_VERT_RANGE=vertices_range,
            EXPORT_NORMALS=use_normals,
            EXPORT_UV=use_uvs,
            EXPORT_KEEP_VERT_ORDER=keep_vertex_order,

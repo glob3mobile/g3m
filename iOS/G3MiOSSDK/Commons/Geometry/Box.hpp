@@ -13,44 +13,52 @@
 #include "Vector3D.hpp"
 #include "Vector3F.hpp"
 #include "Frustum.hpp"
-#include "IndexedMesh.hpp"
-
-#include <vector>
 
 class Vector2D;
-
+class Mesh;
+class Color;
 
 class Box: public Extent {
-  
+private:
+  const Vector3D _lower;
+  const Vector3D _upper;
+
+#ifdef JAVA_CODE
+  private java.util.ArrayList<Vector3D> _cornersD = null; // cache for getCorners() method
+  private java.util.ArrayList<Vector3F> _cornersF = null; // cache for getCornersF() method
+#endif
+
+  Mesh *_mesh;
+  void createMesh(Color* flatColor);
+
 public:
   Box(const Vector3D& lower,
       const Vector3D& upper):
   _lower(lower),
   _upper(upper),
   _mesh(NULL)
-  {}
-  
-  ~Box() {
-    delete _mesh;
-  };
+  {
+  }
+
+  ~Box();
   
   bool touches(const Frustum* frustum) const {
     return frustum->touchesWithBox(this);
   };
-  
+
   Vector3D getLower() const { return _lower; }
   Vector3D getUpper() const { return _upper; }
-  
+
   inline const std::vector<Vector3D> getCorners() const;
   inline const std::vector<Vector3F> getCornersF() const;
 
   double squaredProjectedArea(const G3MRenderContext* rc) const;
   Vector2I projectedExtent(const G3MRenderContext* rc) const;
-  
+
   bool contains(const Vector3D& p) const;
-  
+
   Vector3D intersectionWithRay(const Vector3D& origin, const Vector3D& direction) const;
-  
+
   void render(const G3MRenderContext* rc,
               const GLState& parentState);
 
@@ -64,20 +72,12 @@ public:
   }
 
   Extent* mergedWithBox(const Box* that) const;
+  
+  bool fullContains(const Extent* that) const;
+
+  bool fullContainedInBox(const Box* box) const;
 
   
-private:
-  const Vector3D _lower;
-  const Vector3D _upper;
-  
-#ifdef JAVA_CODE
-  private java.util.ArrayList<Vector3D> _cornersD = null; // cache for getCorners() method
-  private java.util.ArrayList<Vector3F> _cornersF = null; // cache for getCornersF() method
-#endif
-  
-  Mesh *_mesh;  
-  void createMesh(Color *flatColor);
-
 };
 
 #endif

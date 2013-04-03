@@ -17,7 +17,8 @@ DirectMesh::DirectMesh(const int primitive,
                        float pointSize,
                        Color* flatColor,
                        IFloatBuffer* colors,
-                       const float colorsIntensity) :
+                       const float colorsIntensity,
+                       bool depthTest) :
 AbstractMesh(primitive,
              owner,
              center,
@@ -26,7 +27,8 @@ AbstractMesh(primitive,
              pointSize,
              flatColor,
              colors,
-             colorsIntensity)
+             colorsIntensity,
+             depthTest)
 {
 }
 

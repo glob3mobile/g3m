@@ -30,7 +30,8 @@ public:
               float pointSize = 1,
               Color* flatColor = NULL,
               IFloatBuffer* colors = NULL,
-              const float colorsIntensity = 0.0f);
+              const float colorsIntensity = 0.0f,
+              bool depthTest = true);
 
   ~IndexedMesh();
 

@@ -19,7 +19,7 @@ private:
   double _extentZ;
 
   float _borderWidth;
-  
+
   Color* _surfaceColor;
   Color* _borderColor;
 
@@ -84,7 +84,7 @@ public:
       cleanMesh();
     }
   }
-
+  
 };
 
 #endif

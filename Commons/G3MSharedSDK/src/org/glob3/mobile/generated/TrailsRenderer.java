@@ -59,12 +59,12 @@ public class TrailsRenderer extends LeafRenderer
 
   }
 
-  public final void start()
+  public final void start(G3MRenderContext rc)
   {
 
   }
 
-  public final void stop()
+  public final void stop(G3MRenderContext rc)
   {
 
   }

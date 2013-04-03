@@ -29,7 +29,7 @@ public class CameraGoToPositionEffect extends EffectWithDuration
   {
     // curve parameters
     final double distanceInDegreesMaxHeight = 180;
-    final double maxHeight = planet.getRadii().axisAverage();
+    final double maxHeight = planet.getRadii().axisAverage() * 5;
 
 
     // rough estimation of distance using lat/lon degrees

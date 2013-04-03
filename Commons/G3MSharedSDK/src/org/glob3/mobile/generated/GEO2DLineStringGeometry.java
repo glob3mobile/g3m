@@ -17,7 +17,6 @@ package org.glob3.mobile.generated;
 
 
 
-
 //class Geodetic2D;
 
 public class GEO2DLineStringGeometry extends GEOLineStringGeometry
@@ -26,14 +25,15 @@ public class GEO2DLineStringGeometry extends GEOLineStringGeometry
   private Color _color;
   private final float _lineWidth;
 
-  protected final Mesh createMesh(G3MRenderContext rc)
+  protected final java.util.ArrayList<GEOSymbol> createSymbols(G3MRenderContext rc, GEOSymbolizationContext sc)
   {
-  
-    return create2DBoundaryMesh(_coordinates, _color, _lineWidth, rc);
+
+    return sc.getSymbolizer().createSymbols(this);
   }
 
 
-  public GEO2DLineStringGeometry(java.util.ArrayList<Geodetic2D> coordinates, Color color, float lineWidth)
+
+  public GEO2DLineStringGeometry(java.util.ArrayList<Geodetic2D> coordinates)
   {
      _coordinates = coordinates;
      _color = color;
@@ -53,5 +53,11 @@ public class GEO2DLineStringGeometry extends GEOLineStringGeometry
     }
     _coordinates = null;
   }
+
+  public final java.util.ArrayList<Geodetic2D> getCoordinates()
+  {
+    return _coordinates;
+  }
+
 
 }

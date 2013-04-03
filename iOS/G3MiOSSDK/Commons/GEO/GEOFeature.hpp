@@ -26,18 +26,16 @@ public:
 
   GEOFeature(const JSONBaseObject* id,
              GEOGeometry* geometry,
-             const JSONObject* properties) :
-  _id(id),
-  _geometry(geometry),
-  _properties(properties)
-  {
-
-  }
+             const JSONObject* properties);
 
   ~GEOFeature();
-  
-  void render(const G3MRenderContext* rc,
-              const GLState& parentState);
+
+  const JSONObject* getProperties() const {
+    return _properties;
+  }
+
+  void symbolize(const G3MRenderContext* rc,
+                 const GEOSymbolizationContext& sc) const;
 
 };
 

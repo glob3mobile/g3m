@@ -67,16 +67,22 @@ public abstract class BufferElevationData extends ElevationData
     final double u = mu.clamp(uv._x, 0, 1);
     final double v = mu.clamp(uv._y, 0, 1);
     final double dX = u * (_width - 1);
-    final double dY = (1.0 - v) * (_height - 1);
+    //const double dY = (1.0 - v) * (_height - 1);
+    final double dY = v * (_height - 1);
   
     final int x = (int) dX;
     final int y = (int) dY;
-    final int nextX = (int)(dX + 1.0);
-    final int nextY = (int)(dY + 1.0);
-  //  const int nextX = x + 1;
-  //  const int nextY = y + 1;
+  //  const int nextX = (int) (dX + 1.0);
+  //  const int nextY = (int) (dY + 1.0);
+    final int nextX = x + 1;
+    final int nextY = y + 1;
     final double alphaY = dY - y;
     final double alphaX = dX - x;
+  
+  //  if (alphaX < 0 || alphaX > 1 ||
+  //      alphaY < 0 || alphaY > 1) {
+  //    printf("break point\n");
+  //  }
   
     int unsedType = -1;
     double result;
@@ -93,7 +99,7 @@ public abstract class BufferElevationData extends ElevationData
         final double heightY = getElevationAt(x, y, unsedType);
         final double heightNextY = getElevationAt(x, nextY, unsedType);
         type = 2;
-        result = mu.linearInterpolation(heightY, heightNextY, alphaY);
+        result = mu.linearInterpolation(heightNextY, heightY, alphaY);
       }
     }
     else
@@ -109,13 +115,13 @@ public abstract class BufferElevationData extends ElevationData
       else
       {
         // bilinear
-        final double valueSW = getElevationAt(x, y, unsedType);
-        final double valueSE = getElevationAt(nextX, y, unsedType);
-        final double valueNE = getElevationAt(nextX, nextY, unsedType);
-        final double valueNW = getElevationAt(x, nextY, unsedType);
+        final double valueNW = getElevationAt(x, y, unsedType);
+        final double valueNE = getElevationAt(nextX, y, unsedType);
+        final double valueSE = getElevationAt(nextX, nextY, unsedType);
+        final double valueSW = getElevationAt(x, nextY, unsedType);
   
         type = 4;
-        result = getInterpolator().interpolation(valueSW, valueSE, valueNE, valueNW, alphaY, alphaX);
+        result = getInterpolator().interpolation(valueSW, valueSE, valueNE, valueNW, alphaX, alphaY);
       }
     }
   

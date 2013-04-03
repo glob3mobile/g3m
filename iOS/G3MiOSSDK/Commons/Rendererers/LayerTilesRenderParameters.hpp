@@ -52,7 +52,7 @@ public:
   }
 
   static const Vector2I defaultTileMeshResolution() {
-    return Vector2I(16, 16);
+    return Vector2I(20, 20);
   }
 
   static const Vector2I defaultTileTextureResolution () {
@@ -76,6 +76,22 @@ public:
                                           mercator);
   }
 
+  static LayerTilesRenderParameters* createDefaultMercator(const int firstLevel,
+                                                           const int maxLevel) {
+    const Sector topSector = Sector::fullSphere();
+    const int  topSectorSplitsByLatitude  = 1;
+    const int  topSectorSplitsByLongitude = 1;
+    const bool mercator = true;
+    
+    return new LayerTilesRenderParameters(topSector,
+                                          topSectorSplitsByLatitude,
+                                          topSectorSplitsByLongitude,
+                                          firstLevel,
+                                          maxLevel,
+                                          LayerTilesRenderParameters::defaultTileTextureResolution(),
+                                          LayerTilesRenderParameters::defaultTileMeshResolution(),
+                                          mercator);
+  }
 
   ~LayerTilesRenderParameters() {
   }

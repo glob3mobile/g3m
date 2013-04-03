@@ -25,12 +25,17 @@
 
 #include "GLConstants.hpp"
 
-void BusyQuadRenderer::start() {
-  //int _TODO_start_effects;
+void BusyQuadRenderer::start(const G3MRenderContext* rc) {
+  if (_animated) {
+    Effect *effect = new BusyEffect(this);
+    rc->getEffectsScheduler()->startEffect(effect, this);
+  }
 }
 
-void BusyQuadRenderer::stop() {
-  //int _TODO_stop_effects;
+void BusyQuadRenderer::stop(const G3MRenderContext* rc) {
+  if (_animated) {
+    rc->getEffectsScheduler()->cancelAllEffectsFor(this);
+  }
 }
 
 
@@ -57,18 +62,13 @@ bool BusyQuadRenderer::initMesh(const G3MRenderContext* rc) {
     return false;
   }
 
-  const float halfSize = 16;
+  const double halfWidth = _size._x / 2;
+  const double hadfHeight = _size._y / 2;
   FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero());
-  vertices.add(-halfSize, +halfSize, 0);
-  vertices.add(-halfSize, -halfSize, 0);
-  vertices.add(+halfSize, +halfSize, 0);
-  vertices.add(+halfSize, -halfSize, 0);
-
-  ShortBufferBuilder indices;
-  indices.add((short) 0);
-  indices.add((short) 1);
-  indices.add((short) 2);
-  indices.add((short) 3);
+  vertices.add(-halfWidth, +hadfHeight, 0);
+  vertices.add(-halfWidth, -hadfHeight, 0);
+  vertices.add(+halfWidth, +hadfHeight, 0);
+  vertices.add(+halfWidth, -hadfHeight, 0);
 
   FloatBufferBuilderFromCartesian2D texCoords;
   texCoords.add(0, 0);
@@ -76,19 +76,19 @@ bool BusyQuadRenderer::initMesh(const G3MRenderContext* rc) {
   texCoords.add(1, 0);
   texCoords.add(1, 1);
 
-  IndexedMesh *im = new IndexedMesh(GLPrimitive::triangleStrip(),
-                                    true,
-                                    Vector3D::zero(),
-                                    vertices.create(),
-                                    indices.create(),
-                                    1);
+  DirectMesh *im = new DirectMesh(GLPrimitive::triangleStrip(),
+                                  true,
+                                  vertices.getCenter(),
+                                  vertices.create(),
+                                  1,
+                                  1);
 
   TextureMapping* texMap = new SimpleTextureMapping(texId,
                                                     texCoords.create(),
                                                     true,
                                                     false);
 
-  _quadMesh = new TexturedMesh(im, true, texMap, true, false);
+  _quadMesh = new TexturedMesh(im, true, texMap, true, true);
 
   return true;
 }
@@ -107,15 +107,6 @@ void BusyQuadRenderer::render(const G3MRenderContext* rc,
     }
   }
 
-
-  // init effect in the first render
-  static bool firstTime = true;
-  if (firstTime) {
-    firstTime = false;
-    Effect *effect = new BusyEffect(this);
-    rc->getEffectsScheduler()->startEffect(effect, this);
-  }
-
   // init modelview matrix
   int currentViewport[4];
   gl->getViewport(currentViewport);
@@ -128,16 +119,18 @@ void BusyQuadRenderer::render(const G3MRenderContext* rc,
   gl->loadMatrixf(MutableMatrix44D::identity());
 
   // clear screen
-  gl->clearScreen(0.0f, 0.0f, 0.0f, 1.0f);
+  gl->clearScreen(_backgroundColor->getRed(),
+                  _backgroundColor->getGreen(),
+                  _backgroundColor->getBlue(),
+                  _backgroundColor->getAlpha());
 
   gl->setState(state);
 
   gl->setBlendFuncSrcAlpha();
 
   gl->pushMatrix();
-  MutableMatrix44D R1 = MutableMatrix44D::createRotationMatrix(Angle::zero(), Vector3D(-1, 0, 0));
   MutableMatrix44D R2 = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, 1));
-  gl->multMatrixf(R1.multiply(R2));
+  gl->multMatrixf(R2);
 
   // draw mesh
   _quadMesh->render(rc, parentState);

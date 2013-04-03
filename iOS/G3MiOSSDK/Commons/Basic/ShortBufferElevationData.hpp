@@ -29,6 +29,8 @@ public:
 
   const std::string description(bool detailed) const;
 
+  Vector3D getMinMaxAverageHeights() const;
+
 };
 
 #endif

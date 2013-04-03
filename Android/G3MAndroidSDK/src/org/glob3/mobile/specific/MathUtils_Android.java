@@ -374,5 +374,28 @@ public final class MathUtils_Android
    public int parseIntHex(final String hex) {
       return Integer.parseInt(hex, 16);
    }
+    
+                
+   public short maxInt16() {
+      return Short.MAX_VALUE;
+   }
+
+
+   @Override
+   public short minInt16() {
+      return Short.MIN_VALUE;
+   }
+
+
+   @Override
+   public double ceil(final double d) {
+      return Math.ceil(d);
+   }
+
+
+   @Override
+   public float ceil(final float f) {
+      return (float) Math.ceil(f);
+   }
 
 }

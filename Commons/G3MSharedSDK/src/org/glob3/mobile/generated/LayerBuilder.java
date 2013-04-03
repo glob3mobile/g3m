@@ -34,6 +34,21 @@ public class LayerBuilder
   
     return layerSet;
   }
+
+  /**
+   * Returns an array with the names of the layers that make up the default layerSet
+   *
+   * @return layersNames: std::vector<std::string>
+   */
+  public static java.util.ArrayList<String> getDefaultLayersNames()
+  {
+    java.util.ArrayList<String> layersNames = new java.util.ArrayList<String>();
+    layersNames.add("bmng200405");
+    layersNames.add("esat");
+    layersNames.add("ve");
+  
+    return layersNames;
+  }
   public static WMSLayer createBingLayer(boolean enabled)
   {
     WMSLayer bing = new WMSLayer("ve", new URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?", false), WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/jpeg", "EPSG:4326", "", false, null, TimeInterval.fromDays(30));

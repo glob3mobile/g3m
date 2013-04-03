@@ -489,6 +489,16 @@ public class Sector
     return new Sector(_lower.add(delta), _upper.sub(delta));
   }
 
+  public final Sector shrinkedByPercent(float percent)
+  {
+    final Angle deltaLatitude = _deltaLatitude.times(percent).div(2);
+    final Angle deltaLongitude = _deltaLongitude.times(percent).div(2);
+
+    final Geodetic2D delta = new Geodetic2D(deltaLatitude, deltaLongitude);
+
+    return new Sector(_lower.add(delta), _upper.sub(delta));
+  }
+
   public final boolean isEqualsTo(Sector that)
   {
     return _lower.isEqualsTo(that._lower) && _upper.isEqualsTo(that._upper);

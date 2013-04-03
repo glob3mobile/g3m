@@ -28,21 +28,25 @@ public class DirectMesh extends AbstractMesh
   }
 
 
+  public DirectMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors, float colorsIntensity)
+  {
+     this(primitive, owner, center, vertices, lineWidth, pointSize, flatColor, colors, colorsIntensity, true);
+  }
   public DirectMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors)
   {
-     this(primitive, owner, center, vertices, lineWidth, pointSize, flatColor, colors, 0.0f);
+     this(primitive, owner, center, vertices, lineWidth, pointSize, flatColor, colors, 0.0f, true);
   }
   public DirectMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor)
   {
-     this(primitive, owner, center, vertices, lineWidth, pointSize, flatColor, null, 0.0f);
+     this(primitive, owner, center, vertices, lineWidth, pointSize, flatColor, null, 0.0f, true);
   }
   public DirectMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize)
   {
-     this(primitive, owner, center, vertices, lineWidth, pointSize, null, null, 0.0f);
+     this(primitive, owner, center, vertices, lineWidth, pointSize, null, null, 0.0f, true);
   }
-  public DirectMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors, float colorsIntensity)
+  public DirectMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors, float colorsIntensity, boolean depthTest)
   {
-     super(primitive, owner, center, vertices, lineWidth, pointSize, flatColor, colors, colorsIntensity);
+     super(primitive, owner, center, vertices, lineWidth, pointSize, flatColor, colors, colorsIntensity, depthTest);
   }
 
   public void dispose()

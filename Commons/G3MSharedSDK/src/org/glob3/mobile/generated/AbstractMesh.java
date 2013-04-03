@@ -33,6 +33,7 @@ public abstract class AbstractMesh extends Mesh
   protected final float _colorsIntensity;
   protected final float _lineWidth;
   protected final float _pointSize;
+  protected final boolean _depthTest;
 
   protected Extent _extent;
   protected final Extent computeExtent()
@@ -79,7 +80,7 @@ public abstract class AbstractMesh extends Mesh
     return new Box(new Vector3D(minX, minY, minZ), new Vector3D(maxX, maxY, maxZ));
   }
 
-  protected AbstractMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors, float colorsIntensity)
+  protected AbstractMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors, float colorsIntensity, boolean depthTest)
   {
      _primitive = primitive;
      _owner = owner;
@@ -92,6 +93,7 @@ public abstract class AbstractMesh extends Mesh
      _translationMatrix = (center.isNan() || center.isZero()) ? null : new MutableMatrix44D(MutableMatrix44D.createTranslationMatrix(center));
      _lineWidth = lineWidth;
      _pointSize = pointSize;
+     _depthTest = depthTest;
   
   }
 
@@ -135,6 +137,11 @@ public abstract class AbstractMesh extends Mesh
         state.enableBlend();
         gl.setBlendFuncSrcAlpha();
       }
+    }
+  
+    if (!_depthTest)
+    {
+      state.disableDepthTest();
     }
   
     gl.vertexPointer(3, 0, _vertices);

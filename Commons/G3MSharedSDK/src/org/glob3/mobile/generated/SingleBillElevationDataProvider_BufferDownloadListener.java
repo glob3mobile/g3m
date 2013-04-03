@@ -20,7 +20,7 @@ public class SingleBillElevationDataProvider_BufferDownloadListener extends IBuf
   public final void onDownload(URL url, IByteBuffer buffer)
   {
     final Vector2I resolution = new Vector2I(_resolutionWidth, _resolutionHeight);
-    ElevationData elevationData = BilParser.parseBil16(_sector, resolution, _noDataValue, buffer);
+    ElevationData elevationData = BilParser.parseBil16(_sector, resolution, _noDataValue, -9999, buffer);
     if (buffer != null)
        buffer.dispose();
 

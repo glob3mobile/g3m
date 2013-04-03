@@ -74,4 +74,40 @@ public class ShortBufferElevationData extends BufferElevationData
     return s;
   }
 
+  public final Vector3D getMinMaxAverageHeights()
+  {
+    final IMathUtils mu = IMathUtils.instance();
+    short minHeight = mu.maxInt16();
+    short maxHeight = mu.minInt16();
+    double sumHeight = 0.0;
+  
+    final int bufferSize = _buffer.size();
+    for (int i = 0; i < bufferSize; i++)
+    {
+      final short height = _buffer.get(i);
+  //    if (height != _noDataValue) {
+      if (height < minHeight)
+      {
+        minHeight = height;
+      }
+      if (height > maxHeight)
+      {
+        maxHeight = height;
+      }
+      sumHeight += height;
+  //    }
+    }
+  
+    if (minHeight == mu.maxInt16())
+    {
+      minHeight = 0;
+    }
+    if (maxHeight == mu.minInt16())
+    {
+      maxHeight = 0;
+    }
+  
+    return new Vector3D(minHeight, maxHeight, sumHeight / (_width * _height));
+  }
+
 }

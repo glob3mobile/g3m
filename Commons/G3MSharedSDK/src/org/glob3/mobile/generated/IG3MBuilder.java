@@ -139,7 +139,7 @@ public abstract class IG3MBuilder
   {
     if (_busyRenderer == null)
     {
-      _busyRenderer = new BusyMeshRenderer();
+      _busyRenderer = new BusyMeshRenderer(Color.newFromRGBA((float)0, (float)0, (float)0, (float)1));
     }
   
     return _busyRenderer;

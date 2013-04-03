@@ -10,6 +10,7 @@
 
 #include "IShortBuffer.hpp"
 #include "IStringBuilder.hpp"
+#include "Vector3D.hpp"
 
 ShortBufferElevationData::ShortBufferElevationData(const Sector& sector,
                                                    const Vector2I& resolution,
@@ -55,4 +56,36 @@ const std::string ShortBufferElevationData::description(bool detailed) const {
   const std::string s = isb->getString();
   delete isb;
   return s;
+}
+
+Vector3D ShortBufferElevationData::getMinMaxAverageHeights() const {
+  const IMathUtils* mu = IMathUtils::instance();
+  short minHeight = mu->maxInt16();
+  short maxHeight = mu->minInt16();
+  double sumHeight = 0.0;
+
+  const int bufferSize = _buffer->size();
+  for (int i = 0; i < bufferSize; i++) {
+    const short height = _buffer->get(i);
+//    if (height != _noDataValue) {
+    if (height < minHeight) {
+      minHeight = height;
+    }
+    if (height > maxHeight) {
+      maxHeight = height;
+    }
+    sumHeight += height;
+//    }
+  }
+
+  if (minHeight == mu->maxInt16()) {
+    minHeight = 0;
+  }
+  if (maxHeight == mu->minInt16()) {
+    maxHeight = 0;
+  }
+
+  return Vector3D(minHeight,
+                  maxHeight,
+                  sumHeight / (_width * _height));
 }

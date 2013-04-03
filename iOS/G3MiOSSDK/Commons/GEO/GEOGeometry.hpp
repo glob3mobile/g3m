@@ -12,35 +12,34 @@
 #include "GEOObject.hpp"
 
 #include <vector>
-class Geodetic2D;
-class Mesh;
-class Color;
+class GEOSymbol;
+class GEOFeature;
 
 class GEOGeometry : public GEOObject {
 private:
-  Mesh* _mesh;
+  GEOFeature* _feature;
 
 protected:
-  virtual Mesh* getMesh(const G3MRenderContext* rc);
-
-  virtual Mesh* createMesh(const G3MRenderContext* rc) = 0;
-
-  Mesh* create2DBoundaryMesh(std::vector<Geodetic2D*>* coordinates,
-                             Color* color,
-                             float lineWidth,
-                             const G3MRenderContext* rc);
+  virtual std::vector<GEOSymbol*>* createSymbols(const G3MRenderContext* rc,
+                                                 const GEOSymbolizationContext& sc) const = 0;
 
 public:
   GEOGeometry() :
-  _mesh(NULL)
+  _feature(NULL)
   {
 
   }
 
-  void render(const G3MRenderContext* rc,
-              const GLState& parentState);
-
   ~GEOGeometry();
+
+  void setFeature(GEOFeature* feature);
+
+  const GEOFeature* getFeature() const {
+    return _feature;
+  }
+
+  void symbolize(const G3MRenderContext* rc,
+                 const GEOSymbolizationContext& sc) const;
 
 };
 

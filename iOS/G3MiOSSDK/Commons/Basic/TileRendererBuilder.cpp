@@ -12,8 +12,7 @@
 #include "EllipsoidalTileTessellator.hpp"
 #include "LayerBuilder.hpp"
 #include "DownloadPriority.hpp"
-//#include "WMSBillElevationDataProvider.hpp"
-#include "SingleBillElevationDataProvider.hpp"
+#include "ElevationDataProvider.hpp"
 
 TileRendererBuilder::TileRendererBuilder() {  
   _showStatistics = false;
@@ -29,6 +28,9 @@ TileRendererBuilder::TileRendererBuilder() {
   _visibleSectorListeners = NULL;
   _stabilizationMilliSeconds = NULL;
   _texturePriority = DownloadPriority::HIGHER;
+
+  _elevationDataProvider = NULL;
+  _verticalExaggeration = 0.0f;
 }
 
 TileRendererBuilder::~TileRendererBuilder() {
@@ -36,6 +38,7 @@ TileRendererBuilder::~TileRendererBuilder() {
   delete _layerSet;
   delete _texturizer;
   delete _tileTessellator;
+  delete _elevationDataProvider;
 }
 
 /**
@@ -166,21 +169,6 @@ long long TileRendererBuilder::getTexturePriority() {
   return _texturePriority;
 }
 
-/**
- * Returns an array with the names of the layers that make up the default layerSet
- *
- * @return layersNames: std::vector<std::string>
- */
-std::vector<std::string> TileRendererBuilder::getDefaultLayersNames() {
-  std::vector<std::string> layersNames;
-  
-  for (int i = 0; i < getLayerSet()->size(); i++) {
-    layersNames.push_back(getLayerSet()->get(i)->getName());
-  }
-  
-  return layersNames;
-}
-
 void TileRendererBuilder::setTileTessellator(TileTessellator *tileTessellator) {
   if (_tileTessellator) {
     ILogger::instance()->logError("LOGIC ERROR: _tileTessellator already initialized");
@@ -243,47 +231,38 @@ void TileRendererBuilder::setTexturePriority(long long texturePriority) {
   _texturePriority = texturePriority;
 }
 
+void TileRendererBuilder::setElevationDataProvider(ElevationDataProvider* elevationDataProvider) {
+  if (_elevationDataProvider != NULL) {
+    ILogger::instance()->logError("LOGIC ERROR: _elevationDataProvider already initialized");
+    return;
+  }
+  _elevationDataProvider = elevationDataProvider;
+}
+
+void TileRendererBuilder::setVerticalExaggeration(float verticalExaggeration) {
+  if (_verticalExaggeration > 0.0f) {
+    ILogger::instance()->logError("LOGIC ERROR: _verticalExaggeration already initialized");
+    return;
+  }
+  _verticalExaggeration = verticalExaggeration;
+}
+
+ElevationDataProvider* TileRendererBuilder::getElevationDataProvider() {
+  return _elevationDataProvider;
+}
+
+float TileRendererBuilder::getVerticalExaggeration() {
+  if (_verticalExaggeration <= 0.0f) {
+    _verticalExaggeration = 1.0f;
+  }
+  return _verticalExaggeration;
+}
+
+
 TileRenderer* TileRendererBuilder::create() {
-  int _TODO_make_configurable_1;
-  
-  ElevationDataProvider* elevationDataProvider = NULL;
-
-//  ElevationDataProvider* elevationDataProvider = new WMSBillElevationDataProvider();
-  
-//  ElevationDataProvider* elevationDataProvider;
-//  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
-//                                                              Sector::fullSphere(),
-//                                                              Vector2I(2048, 1024),
-//                                                              0);
-
-//  ElevationDataProvider* elevationDataProvider;
-//  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///elev-35.0_-6.0_38.0_-2.0_4096x2048.bil", false),
-//                                                              Sector::fromDegrees(35, -6, 38, -2),
-//                                                              Vector2I(4096, 2048),
-//                                                              0);
-
-//  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-4096x2048.bil", false),
-//                                                              Sector::fullSphere(),
-//                                                              Vector2I(4096, 2048),
-//                                                              0);
-
-//  ElevationDataProvider* elevationDataProvider;
-//  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///caceres-2008x2032.bil", false),
-//                                                              Sector::fromDegrees(
-//                                                                                  39.4642996294239623,
-//                                                                                  -6.3829977122432933,
-//                                                                                  39.4829891936013553,
-//                                                                                  -6.3645288909498845
-//                                                                                  ),
-//                                                              Vector2I(2008, 2032),
-//                                                              0);
-
-  int _TODO_make_configurable_2;
-  float verticalExaggeration = 5;
-  
   TileRenderer* tileRenderer = new TileRenderer(getTileTessellator(),
-                                                elevationDataProvider,
-                                                verticalExaggeration,
+                                                getElevationDataProvider(),
+                                                getVerticalExaggeration(),
                                                 getTexturizer(),
                                                 getLayerSet(),
                                                 getParameters(),
@@ -303,6 +282,8 @@ TileRenderer* TileRendererBuilder::create() {
   _visibleSectorListeners = NULL;
   delete _stabilizationMilliSeconds;
   _stabilizationMilliSeconds = NULL;
+
+  _elevationDataProvider = NULL;
   
   return tileRenderer;
 }
