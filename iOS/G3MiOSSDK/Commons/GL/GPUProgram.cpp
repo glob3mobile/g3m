@@ -10,53 +10,60 @@
 
 #include "GL.hpp"
 
-GPUProgram::GPUProgram(INativeGL* nativeGL, const std::string& vertexSource,
-           const std::string& fragmentSource){
+#include "G3MError.hpp"
+
+GPUProgram* GPUProgram::createProgram(INativeGL* nativeGL, const std::string name, const std::string& vertexSource,
+                                 const std::string& fragmentSource){
   
-  _programCreated = false;
+  GPUProgram* p = new GPUProgram();
   
-  _nativeGL = nativeGL;
-  _programID = _nativeGL->createProgram();
-  
+  p->_programCreated = false;
+  p->_nativeGL = nativeGL;
+  p->_programID = p->_nativeGL->createProgram();
   
   // compile vertex shader
-  int vertexShader= _nativeGL->createShader(VERTEX_SHADER);
-  if (!compileShader(vertexShader, vertexSource)) {
+  int vertexShader= p->_nativeGL->createShader(VERTEX_SHADER);
+  if (!p->compileShader(vertexShader, vertexSource)) {
     ILogger::instance()->logError("GPUProgram: ERROR compiling vertex shader\n");
-    deleteShader(vertexShader);
-    deleteProgram(_programID);
-    return;
+    p->deleteShader(vertexShader);
+    p->deleteProgram(p->_programID);
+    throw new G3MError("GPUProgram: ERROR compiling vertex shader");
+    return NULL;
   }
   
   // compile fragment shader
-  int fragmentShader = _nativeGL->createShader(FRAGMENT_SHADER);
-  if (!compileShader(fragmentShader, fragmentSource)) {
+  int fragmentShader = p->_nativeGL->createShader(FRAGMENT_SHADER);
+  if (!p->compileShader(fragmentShader, fragmentSource)) {
     ILogger::instance()->logError("GPUProgram: ERROR compiling fragment shader\n");
-    deleteShader(fragmentShader);
-    deleteProgram(_programID);
-    return;
+    p->deleteShader(fragmentShader);
+    p->deleteProgram(p->_programID);
+    throw new G3MError("GPUProgram: ERROR compiling fragment shader");
+    return NULL;
   }
   
-  _nativeGL->bindAttribLocation(this, 0, "Position");
+  p->_nativeGL->bindAttribLocation(p, 0, "Position");
   
   // link program
-  if (!linkProgram()) {
+  if (!p->linkProgram()) {
     ILogger::instance()->logError("GPUProgram: ERROR linking graphic program\n");
-    deleteShader(vertexShader);
-    deleteShader(fragmentShader);
-    deleteProgram(_programID);
-    return;
+    p->deleteShader(vertexShader);
+    p->deleteShader(fragmentShader);
+    p->deleteProgram(p->_programID);
+    throw new G3MError("GPUProgram: ERROR linking graphic program");
+    return NULL;
   }
   
   // free shaders
-  deleteShader(vertexShader);
-  deleteShader(fragmentShader);
+  p->deleteShader(vertexShader);
+  p->deleteShader(fragmentShader);
   
-  getVariables();
+  p->getVariables();
   
-  _programCreated = true; //Program fully created
+  p->_name = name; //NAME
   
+  return p;
 }
+
 
 GPUProgram::~GPUProgram(){
 }
@@ -104,34 +111,32 @@ void GPUProgram::getVariables(){
   int n = _nativeGL->getProgramiv(this, GLVariable::activeUniforms());
   for (int i = 0; i < n; i++) {
     Uniform* u = _nativeGL->getActiveUniform(this, i);
-    _uniforms.push_back(u);
+    if (u != NULL) _uniforms[u->getName()] = u;
   }
   
   //Attributes
   n = _nativeGL->getProgramiv(this, GLVariable::activeAttributes());
   for (int i = 0; i < n; i++) {
     Attribute* a = _nativeGL->getActiveAttribute(this, i);
-    _attributes.push_back(a);
+    if (a != NULL) _attributes[a->getName()] = a;
   }
   
 }
 
 Uniform* GPUProgram::getUniform(const std::string name) const{
-  for (int i = 0; i < _uniforms.size(); i++) {
-    Uniform *u = _uniforms[i];
-    if (u != NULL && u->getName() == name){
-      return u;
-    }
+  std::map<std::string, Uniform*> ::const_iterator it = _uniforms.find(name);
+  if (it != _uniforms.end()){
+    return it->second;
+  } else{
+    return NULL;
   }
-  return NULL;
 }
 
 Attribute* GPUProgram::getAttribute(const std::string name) const{
-  for (int i = 0; i < _uniforms.size(); i++) {
-    Attribute *a = _attributes[i];
-    if (a != NULL && a->getName() == name){
-      return a;
-    }
+  std::map<std::string, Attribute*> ::const_iterator it = _attributes.find(name);
+  if (it != _attributes.end()){
+    return it->second;
+  } else{
+    return NULL;
   }
-  return NULL;
 }

@@ -19,6 +19,8 @@
 #include "StringBuilder_iOS.hpp"
 #include "TextUtils_iOS.hpp"
 
+#include "GPUProgramManager.hpp"
+
 @interface G3MWidget_iOS ()
 @property(nonatomic, getter=isAnimating) BOOL animating;
 @end
@@ -56,6 +58,9 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
    periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
           userData: (WidgetUserData*) userData
 {
+  GPUProgramFactory * gpuProgramFactory = new GPUProgramFactory();
+  GPUProgramManager * gpuProgramManager = new GPUProgramManager([_renderer getGL], gpuProgramFactory);
+  
     _widgetVP = G3MWidget::create([_renderer getGL],
                                   storage,
                                   downloader,
@@ -70,7 +75,8 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
                                   logDownloaderStatistics,
                                   initializationTask,
                                   autoDeleteInitializationTask,
-                                  periodicalTasks);
+                                  periodicalTasks,
+                                  NULL); //GPUProgramManager
     [self widget]->setUserData(userData);
 }
 

@@ -40,6 +40,9 @@ class IStorage;
 class ITextUtils;
 class G3MEventContext;
 
+class GPUProgram;
+class GPUProgramManager;
+
 #include <vector>
 #include <string>
 
@@ -99,7 +102,8 @@ public:
                            const bool                       logDownloaderStatistics,
                            GInitializationTask*             initializationTask,
                            bool                             autoDeleteInitializationTask,
-                           std::vector<PeriodicalTask*>     periodicalTasks);
+                           std::vector<PeriodicalTask*>     periodicalTasks,
+                           GPUProgramManager*               gpuProgramManager);
 
   ~G3MWidget();
 
@@ -227,7 +231,9 @@ private:
   bool _initializationTaskReady;
 
   bool _clickOnProcess;
-
+  
+  GPUProgramManager* _gpuProgramManager;
+  
   G3MWidget(GL*                              gl,
             IStorage*                        storage,
             IDownloader*                     downloader,
@@ -242,7 +248,8 @@ private:
             const bool                       logDownloaderStatistics,
             GInitializationTask*             initializationTask,
             bool                             autoDeleteInitializationTask,
-            std::vector<PeriodicalTask*>     periodicalTasks);
+            std::vector<PeriodicalTask*>     periodicalTasks,
+            GPUProgramManager*               gpuProgramManager);
 
   void notifyTouchEvent(const G3MEventContext &ec,
                         const TouchEvent* touchEvent) const;

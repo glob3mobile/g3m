@@ -211,6 +211,9 @@
 		CFFEC12615C2EBA6003FA986 /* URL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFEC12515C2EBA6003FA986 /* URL.cpp */; };
 		D80D521215EE2B0100ACEA16 /* IMathUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80D521115EE2B0100ACEA16 /* IMathUtils.cpp */; };
 		D80D525915EE698E00ACEA16 /* TileTessellator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80D525815EE698E00ACEA16 /* TileTessellator.cpp */; };
+		D80E59B2170B12CD00E7C799 /* GPUProgramFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80E59B0170B12CD00E7C799 /* GPUProgramFactory.cpp */; };
+		D80E59B5170B155C00E7C799 /* GPUProgramManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80E59B3170B155C00E7C799 /* GPUProgramManager.cpp */; };
+		D80E59B6170B223A00E7C799 /* GPUProgramFactory.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D80E59B1170B12CD00E7C799 /* GPUProgramFactory.hpp */; };
 		D81BA17115CBF19F004EF0B0 /* GL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81BA16F15CBF19E004EF0B0 /* GL.cpp */; };
 		D81D2072160748EA009A8BA6 /* GLConstants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81D2071160748EA009A8BA6 /* GLConstants.cpp */; };
 		D8228EBF157F7F7900BBAF60 /* MutableMatrix44D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */; };
@@ -447,6 +450,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D80E59B6170B223A00E7C799 /* GPUProgramFactory.hpp in CopyFiles */,
 				CF8AE00C170204C600FE9F56 /* GEOLine2DStyle.hpp in CopyFiles */,
 				CF8AE00D170204C600FE9F56 /* GEOLine2DSymbol.hpp in CopyFiles */,
 				CF8AE00E170204C600FE9F56 /* GEOMultiLine2DSymbol.hpp in CopyFiles */,
@@ -1049,6 +1053,11 @@
 		D80D521115EE2B0100ACEA16 /* IMathUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IMathUtils.cpp; path = Commons/Interfaces/IMathUtils.cpp; sourceTree = "<group>"; };
 		D80D525515EE66D700ACEA16 /* INativeGL.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = INativeGL.hpp; path = Commons/Interfaces/INativeGL.hpp; sourceTree = "<group>"; };
 		D80D525815EE698E00ACEA16 /* TileTessellator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileTessellator.cpp; path = Commons/Basic/TileTessellator.cpp; sourceTree = "<group>"; };
+		D80E59AF170AEE7F00E7C799 /* G3MError.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = G3MError.hpp; sourceTree = "<group>"; };
+		D80E59B0170B12CD00E7C799 /* GPUProgramFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GPUProgramFactory.cpp; sourceTree = "<group>"; };
+		D80E59B1170B12CD00E7C799 /* GPUProgramFactory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GPUProgramFactory.hpp; sourceTree = "<group>"; };
+		D80E59B3170B155C00E7C799 /* GPUProgramManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GPUProgramManager.cpp; sourceTree = "<group>"; };
+		D80E59B4170B155C00E7C799 /* GPUProgramManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GPUProgramManager.hpp; sourceTree = "<group>"; };
 		D81BA16E15CBF19E004EF0B0 /* GL.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GL.hpp; sourceTree = "<group>"; };
 		D81BA16F15CBF19E004EF0B0 /* GL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = GL.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D81D2071160748EA009A8BA6 /* GLConstants.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLConstants.cpp; sourceTree = "<group>"; };
@@ -1333,6 +1342,7 @@
 				CF27B16316D93F2C0000A415 /* ShortBufferElevationData.hpp */,
 				CFEBDF1C16E8C9C70063B49F /* MercatorUtils.cpp */,
 				CFEBDF1D16E8C9C80063B49F /* MercatorUtils.hpp */,
+				D80E59AF170AEE7F00E7C799 /* G3MError.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -1684,6 +1694,10 @@
 				D8715C1D17032AC700CF7BE2 /* GPUProgram.hpp */,
 				D8715C1F170344FB00CF7BE2 /* Attribute.hpp */,
 				D8715C201703491700CF7BE2 /* Uniform.hpp */,
+				D80E59B0170B12CD00E7C799 /* GPUProgramFactory.cpp */,
+				D80E59B1170B12CD00E7C799 /* GPUProgramFactory.hpp */,
+				D80E59B3170B155C00E7C799 /* GPUProgramManager.cpp */,
+				D80E59B4170B155C00E7C799 /* GPUProgramManager.hpp */,
 			);
 			name = GL;
 			path = Commons/GL;
@@ -2037,6 +2051,8 @@
 				CF8AE00A1702049F00FE9F56 /* GEOSymbol.cpp in Sources */,
 				CF8AE00B1702049F00FE9F56 /* GEOSymbolizer.cpp in Sources */,
 				D8715C1E17032AC700CF7BE2 /* GPUProgram.cpp in Sources */,
+				D80E59B2170B12CD00E7C799 /* GPUProgramFactory.cpp in Sources */,
+				D80E59B5170B155C00E7C799 /* GPUProgramManager.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

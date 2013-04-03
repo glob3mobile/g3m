@@ -302,6 +302,19 @@ public:
   int Type_Int() const {
     return GL_INT;
   }
+  
+  int Type_Vec2Float() const{
+    return GL_FLOAT_VEC2;
+  }
+  virtual int Type_Vec4Float() const{
+    return GL_FLOAT_VEC4;
+  }
+  virtual int Type_Bool() const{
+    return GL_BOOL;
+  }
+  virtual int Type_Matrix4Float() const{
+    return GL_FLOAT_MAT4;
+  }
 
   int Primitive_Triangles() const {
     return GL_TRIANGLES;

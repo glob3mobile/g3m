@@ -88,6 +88,10 @@ enum {
   }
 
   // Use shader program
+  
+  //widget->getGL()->getNative()->useProgram(_gpuProgram);
+  //widget->setDefaultProgram(_gpuProgram);
+  
   widget->getGL()->useProgram(_shaderProgram);
   widget->render(_width, _height);
 
@@ -96,6 +100,7 @@ enum {
     // This call is redundant, but needed if dealing with multiple renderbuffers.
     glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
     _firstRender = false;
+    
   }
   [context presentRenderbuffer:GL_RENDERBUFFER];
 }
@@ -148,11 +153,18 @@ enum {
     return FALSE;
   }
   
-  GPUProgram program(_gl->getNative(), vertexSource, fragmentSource);
-  if (program.isCreated()){
-    NSLog(@"GPU Program Loaded");
-    UniformMatrix4Float* u = (UniformMatrix4Float*) program.getUniform("Modelview");
-    u->set(_gl, MutableMatrix44D::identity());
+  try {
+    _gpuProgram = GPUProgram::createProgram(_gl->getNative(), "", vertexSource, fragmentSource);
+    if (_gpuProgram != NULL){
+      NSLog(@"GPU Program Loaded");
+      try {
+        _gpuProgram->setUniform(_gl, "Modelview", MutableMatrix44D::identity());
+      } catch (G3MError* e) {
+        NSLog(@"%s", e->getMessage().c_str());
+      }
+    }
+  } catch (G3MError* e) {
+    NSLog(@"%s", e->getMessage().c_str());
   }
 
   return TRUE;

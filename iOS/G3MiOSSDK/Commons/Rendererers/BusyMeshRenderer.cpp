@@ -21,6 +21,8 @@
 #include "ShortBufferBuilder.hpp"
 #include "GLConstants.hpp"
 
+#include "GPUProgram.hpp"
+
 void BusyMeshRenderer::initialize(const G3MContext* context)
 {
   unsigned int numStrides = 60;
@@ -98,6 +100,9 @@ void BusyMeshRenderer::render(const G3MRenderContext* rc,
   MutableMatrix44D M = MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth, halfWidth,
                                                                             -halfHeight, halfHeight,
                                                                             -halfWidth, halfWidth);
+  
+  //state.getProgram()->setUniform(rc->getGL(), "Projection", M);
+  
   state.setProjectionMatrix(M);
   state.setModelViewMatrix(MutableMatrix44D::identity());
 

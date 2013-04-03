@@ -16,6 +16,7 @@
 
 //#include "GLProgramId_iOS.hpp"
 #include "ShaderProgram.hpp"
+#include "GPUProgram.hpp"
 
 class GL;
 
@@ -34,6 +35,8 @@ class GL;
   //IGLProgramId* program;
   ShaderProgram* _shaderProgram;
 //  ShaderProgram* _shaderProgram2;
+  
+  GPUProgram* _gpuProgram;
 
   BOOL _firstRender;
   

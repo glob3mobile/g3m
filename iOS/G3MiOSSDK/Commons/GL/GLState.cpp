@@ -13,6 +13,8 @@
 #include "IFloatBuffer.hpp"
 #include "IGLTextureId.hpp"
 
+#include "GPUProgram.hpp"
+
 
 
 void GLState::applyChanges(const INativeGL* nativeGL, GLState& currentState, const AttributesStruct& attributes,const UniformsStruct& uniforms) const{
@@ -288,7 +290,7 @@ void GLState::applyChanges(const INativeGL* nativeGL, GLState& currentState, con
     currentState._textureWidth = _textureWidth;
   }
   
-  if (currentState._program != _program){
+  if (_program != NULL && currentState._program != _program){
     nativeGL->useProgram(_program);
     currentState._program = _program;
   }

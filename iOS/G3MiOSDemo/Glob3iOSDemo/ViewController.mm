@@ -81,6 +81,9 @@
 #import <G3MiOSSDK/GEOMultiLine2DSymbol.hpp>
 #import <G3MiOSSDK/GEOLine2DStyle.hpp>
 
+#include "GPUProgramFactory.hpp"
+
+
 class TestVisibleSectorListener : public VisibleSectorListener {
 public:
   void onVisibleSectorChange(const Sector& visibleSector,
@@ -237,6 +240,30 @@ public:
   builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProvider);
 }
 
+- (GPUProgramSources) loadDefaultGPUProgramSourcesFromDisk{
+  //GPU Program Sources
+  NSString* vertShaderPathname = [[NSBundle mainBundle] pathForResource: @"Shader"
+                                                                 ofType: @"vsh"];
+  if (!vertShaderPathname) {
+    NSLog(@"Can't load Shader.vsh");
+  }
+  const std::string vertexSource ([[NSString stringWithContentsOfFile: vertShaderPathname
+                                                             encoding: NSUTF8StringEncoding
+                                                                error: nil] UTF8String]);
+  
+  NSString* fragShaderPathname = [[NSBundle mainBundle] pathForResource: @"Shader"
+                                                                 ofType: @"fsh"];
+  if (!fragShaderPathname) {
+    NSLog(@"Can't load Shader.fsh");
+  }
+  
+  const std::string fragmentSource ([[NSString stringWithContentsOfFile: fragShaderPathname
+                                                               encoding: NSUTF8StringEncoding
+                                                                  error: nil] UTF8String]);
+  
+  return GPUProgramSources("DefaultProgram", vertexSource, fragmentSource);
+
+}
 
 - (void) initCustomizedWithBuilder
 {
@@ -321,6 +348,9 @@ public:
 
   const bool logDownloaderStatistics = false;
   builder.setLogDownloaderStatistics(logDownloaderStatistics);
+  
+  GPUProgramSources sources = [self loadDefaultGPUProgramSourcesFromDisk];
+  builder.addGPUProgramSources(sources);
 
   //  WidgetUserData* userData = NULL;
   //  builder.setUserData(userData);

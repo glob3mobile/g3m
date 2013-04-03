@@ -24,6 +24,8 @@ class TileRendererBuilder;
 class Planet;
 class Renderer;
 class WidgetUserData;
+class GPUProgramSources;
+class GPUProgramManager;
 
 class IG3MBuilder {
 
@@ -45,6 +47,8 @@ private:
   bool _logDownloaderStatistics;
   WidgetUserData* _userData;
   
+  std::vector<GPUProgramSources> _sources;
+  
   GL* getGL();
   IDownloader* getDownloader();
   IThreadUtils* getThreadUtils();
@@ -59,6 +63,8 @@ private:
   bool getAutoDeleteInitializationTask();
   std::vector<PeriodicalTask*>* getPeriodicalTasks();
   WidgetUserData* getUserData();
+  
+  GPUProgramManager* getGPUProgramManager();
 
 
   std::vector<ICameraConstrainer*>* createDefaultCameraConstraints();
@@ -118,6 +124,8 @@ public:
 
   const Planet* getPlanet();
   TileRendererBuilder* getTileRendererBuilder();
+  
+  void addGPUProgramSources(GPUProgramSources& s);
 };
 
 #endif /* defined(__G3MiOSSDK__IG3MBuilder__) */

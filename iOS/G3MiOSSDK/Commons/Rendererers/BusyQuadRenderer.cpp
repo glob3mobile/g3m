@@ -24,6 +24,7 @@
 #include "ShortBufferBuilder.hpp"
 
 #include "GLConstants.hpp"
+#include "GPUProgram.hpp"
 
 void BusyQuadRenderer::start(const G3MRenderContext* rc) {
   if (_animated) {
@@ -115,7 +116,7 @@ void BusyQuadRenderer::render(const G3MRenderContext* rc,
   MutableMatrix44D M = MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth, halfWidth,
                                                                             -halfHeight, halfHeight,
                                                                             -halfWidth, halfWidth);
-  
+  //state.getProgram()->setUniform(rc->getGL(), "Projection", M);
   state.setProjectionMatrix(M);
   
   //gl->setProjection(M);

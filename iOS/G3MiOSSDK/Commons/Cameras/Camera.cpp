@@ -16,6 +16,8 @@
 #include "GL.hpp"
 #include "Vector2F.hpp"
 
+#include "GPUProgram.hpp"
+
 void Camera::initialize(const G3MContext* context)
 {
   _planet = context->getPlanet();
@@ -190,6 +192,7 @@ void Camera::render(const G3MRenderContext* rc,
   //GL* gl = rc->getGL();
   //gl->setProjection(getProjectionMatrix());
   //gl->loadMatrixf(getModelMatrix());
+  //parentState.getProgram()->setUniform(rc->getGL(), "Projection", getProjectionMatrix());
 }
 
 void Camera::changeGLState(GLState* state) const {

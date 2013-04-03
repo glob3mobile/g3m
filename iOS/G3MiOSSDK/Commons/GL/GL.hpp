@@ -178,6 +178,12 @@ public:
                  float v1,
                  float v2,
                  float v3) const{ _nativeGL->uniform4f(location, v0, v1, v2, v3);}
+  
+  GLState* getCurrentState() const{ return _currentState;}
+  
+  void useProgram(GPUProgram* program) {
+    _nativeGL->useProgram(program);
+  }
 };
 
 #endif

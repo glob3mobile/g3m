@@ -32,6 +32,7 @@
 #include "GInitializationTask.hpp"
 #include "ITextUtils.hpp"
 #include "TouchEvent.hpp"
+#include "GPUProgramManager.hpp"
 
 void G3MWidget::initSingletons(ILogger*            logger,
                                IFactory*           factory,
@@ -68,7 +69,8 @@ G3MWidget::G3MWidget(GL*                              gl,
                      const bool                       logDownloaderStatistics,
                      GInitializationTask*             initializationTask,
                      bool                             autoDeleteInitializationTask,
-                     std::vector<PeriodicalTask*>     periodicalTasks):
+                     std::vector<PeriodicalTask*>     periodicalTasks,
+                     GPUProgramManager*               gpuProgramManager):
 _rootState(GLState::newDefault()),
 _frameTasksExecutor( new FrameTasksExecutor() ),
 _effectsScheduler( new EffectsScheduler() ),
@@ -117,7 +119,8 @@ _context(new G3MContext(IFactory::instance(),
 _paused(false),
 _initializationTaskWasRun(false),
 _initializationTaskReady(true),
-_clickOnProcess(false)
+_clickOnProcess(false),
+_gpuProgramManager(gpuProgramManager)
 {
   _effectsScheduler->initialize(_context);
   _cameraRenderer->initialize(_context);
@@ -159,7 +162,8 @@ G3MWidget* G3MWidget::create(GL*                              gl,
                              const bool                       logDownloaderStatistics,
                              GInitializationTask*             initializationTask,
                              bool                             autoDeleteInitializationTask,
-                             std::vector<PeriodicalTask*>     periodicalTasks) {
+                             std::vector<PeriodicalTask*>     periodicalTasks,
+                             GPUProgramManager*               gpuProgramManager) {
 
   return new G3MWidget(gl,
                        storage,
@@ -175,7 +179,8 @@ G3MWidget* G3MWidget::create(GL*                              gl,
                        logDownloaderStatistics,
                        initializationTask,
                        autoDeleteInitializationTask,
-                       periodicalTasks);
+                       periodicalTasks,
+                       gpuProgramManager);
 }
 
 G3MWidget::~G3MWidget() {
@@ -316,6 +321,12 @@ void G3MWidget::render(int width, int height) {
   _timer->start();
   _renderCounter++;
   
+  //Setting Program
+  if (!_mainRendererReady){
+    GPUProgram* prog = _gpuProgramManager->getProgram("DefaultProgram");
+    _gl->useProgram(prog);
+  }
+  
   if (_initializationTask != NULL) {
     if (!_initializationTaskWasRun) {
       _initializationTask->run(_context);
@@ -364,7 +375,8 @@ void G3MWidget::render(int width, int height) {
                       _downloader,
                       _effectsScheduler,
                       IFactory::instance()->createTimer(),
-                      _storage);
+                      _storage,
+                      _gpuProgramManager);
 
   _mainRendererReady = _initializationTaskReady && _mainRenderer->isReadyToRender(&rc);
 
@@ -403,6 +415,7 @@ void G3MWidget::render(int width, int height) {
     _selectedRenderer = selectedRenderer;
     _selectedRenderer->start(&rc);
   }
+  
 
   ((GLState*)_rootState)->setClearColor(_backgroundColor);
   _gl->clearScreen(*_rootState);

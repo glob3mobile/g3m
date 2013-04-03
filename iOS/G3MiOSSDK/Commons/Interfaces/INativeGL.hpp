@@ -141,6 +141,10 @@ public:
   virtual int Type_UnsignedByte() const = 0;
   virtual int Type_UnsignedInt() const = 0;
   virtual int Type_Int() const = 0;
+  virtual int Type_Vec2Float() const = 0;
+  virtual int Type_Vec4Float() const = 0;
+  virtual int Type_Bool() const = 0;
+  virtual int Type_Matrix4Float() const = 0;
 
   virtual int Primitive_Triangles() const = 0;
   virtual int Primitive_TriangleStrip() const = 0;

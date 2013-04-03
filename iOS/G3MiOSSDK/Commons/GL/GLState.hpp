@@ -414,6 +414,10 @@ public:
     _program = program;
   }
   
+  GPUProgram* getProgram() const{
+    return _program;
+  }
+  
 };
 
 #endif
