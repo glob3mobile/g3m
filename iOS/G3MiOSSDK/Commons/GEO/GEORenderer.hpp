@@ -104,6 +104,18 @@ public:
     
   }
   
+  MeshRenderer* getMeshRenderer(){
+    return _meshRenderer;
+  }
+  
+  MarksRenderer* getMarksRenderer(){
+    return _marksRenderer;
+  }
+  
+  ShapesRenderer* getShapesRenderer(){
+    return _shapesRenderer;
+  }
+  
 };
 
 #endif
