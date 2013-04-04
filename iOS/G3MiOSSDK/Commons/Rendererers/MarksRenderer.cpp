@@ -224,4 +224,7 @@ void MarksRenderer::render(const G3MRenderContext* rc,
       mark->render(rc, cameraPosition, state);
     }
   }
+  
+  int IS_A_HACK_;//???????
+  enableTexture->set(false); //DISABLING TEXTURES
 }
