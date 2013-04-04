@@ -12,6 +12,9 @@
 #include "GL.hpp"
 #include "TexturesHandler.hpp"
 
+#include "GPUProgram.hpp"
+#include "GPUProgramManager.hpp"
+
 
 GLState* LazyTextureMapping::bind(const G3MRenderContext* rc, const GLState& parentState) const {
   if (!_initialized) {
@@ -29,7 +32,11 @@ GLState* LazyTextureMapping::bind(const G3MRenderContext* rc, const GLState& par
   
   GLState *state = new GLState(parentState);
   state->enableTextures();
-  state->enableTexture2D();
+  
+  GPUProgram* prog = rc->getGPUProgramManager()->getProgram("DefaultProgram");
+  UniformBool* enableTexture = prog->getUniformBool("EnableTexture");
+  enableTexture->set(true);
+  //state->enableTexture2D();
 
   if (_texCoords != NULL) {
     state->scaleTextureCoordinates(_scale);

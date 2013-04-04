@@ -31,7 +31,7 @@ private:
   bool _depthTest;
   bool _blend;
   bool _textures;
-  bool _texture2D;
+  //bool _texture2D;
   bool _vertexColor;
   bool _verticesPosition;
   bool _flatColor;
@@ -99,7 +99,7 @@ private:
   float _clearColorB;
   float _clearColorA;
   
-  MutableMatrix44D _projectionMatrix;
+//  MutableMatrix44D _projectionMatrix;
   MutableMatrix44D _modelViewMatrix;
   
   GPUProgram* _program;
@@ -109,7 +109,7 @@ private:
   _depthTest(false),
   _blend(false),
   _textures(false),
-  _texture2D(false),
+  //_texture2D(false),
   _vertexColor(false),
   _verticesPosition(false),
   _flatColor(false),
@@ -150,7 +150,7 @@ private:
   _clearColorG(0.0),
   _clearColorB(0.0),
   _clearColorA(0.0),
-  _projectionMatrix(MutableMatrix44D::invalid()),
+//  _projectionMatrix(MutableMatrix44D::invalid()),
   _modelViewMatrix(MutableMatrix44D::invalid()),
   _textureWidth(0.0),
   _textureHeight(0.0),
@@ -169,7 +169,7 @@ public:
   _depthTest(parentState._depthTest),
   _blend(parentState._blend),
   _textures(parentState._textures),
-  _texture2D(parentState._texture2D),
+//  _texture2D(parentState._texture2D),
   _vertexColor(parentState._vertexColor),
   _verticesPosition(parentState._verticesPosition),
   _flatColor(parentState._flatColor),
@@ -210,7 +210,7 @@ public:
   _clearColorG(parentState._clearColorG),
   _clearColorB(parentState._clearColorB),
   _clearColorA(parentState._clearColorA),
-  _projectionMatrix(parentState._projectionMatrix),
+//  _projectionMatrix(parentState._projectionMatrix),
   _modelViewMatrix(parentState._modelViewMatrix),
   _program(parentState._program)
   {
@@ -254,13 +254,13 @@ public:
   }
   bool isEnabledTextures() const { return _textures; }
   
-  void enableTexture2D() {
-      _texture2D = true;
-  }
-  void disableTexture2D() {
-      _texture2D = false;
-  }
-  bool isEnabledTexture2D() const { return _texture2D; }
+//  void enableTexture2D() {
+//      _texture2D = true;
+//  }
+//  void disableTexture2D() {
+//      _texture2D = false;
+//  }
+//  bool isEnabledTexture2D() const { return _texture2D; }
   
   void enableVertexColor(IFloatBuffer* colors,
                          float intensity) {
@@ -391,9 +391,9 @@ public:
     _clearColorA = color.getAlpha();
   }
   
-  void setProjectionMatrix(const MutableMatrix44D& projection){
-    _projectionMatrix = projection;
-  }
+//  void setProjectionMatrix(const MutableMatrix44D& projection){
+//    _projectionMatrix = projection;
+//  }
   
   void setModelViewMatrix(const MutableMatrix44D& mv){
     _modelViewMatrix = mv;
@@ -414,9 +414,9 @@ public:
     _program = program;
   }
   
-  GPUProgram* getProgram() const{
-    return _program;
-  }
+//  GPUProgram* getProgram() const{
+//    return _program;
+//  }
   
 };
 

@@ -17,6 +17,9 @@
 #include "TexturesHandler.hpp"
 #include "IStringBuilder.hpp"
 
+#include "GPUProgramManager.hpp"
+#include "GPUProgram.hpp"
+
 #define TEXTURES_DOWNLOAD_PRIORITY 1000000
 
 
@@ -111,7 +114,12 @@ GLState* SGLayerNode::createState(const G3MRenderContext* rc,
 
   GLState* state = new GLState(parentState);
   state->enableTextures();
-  state->enableTexture2D();
+  
+  GPUProgram* prog = rc->getGPUProgramManager()->getProgram("DefaultProgram");
+  UniformBool* enableTexture = prog->getUniformBool("EnableTexture");
+  enableTexture->set(true);
+  
+  //state->enableTexture2D();
 
   state->bindTexture(texId);
 

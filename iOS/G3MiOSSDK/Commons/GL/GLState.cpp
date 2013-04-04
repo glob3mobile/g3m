@@ -64,15 +64,15 @@ void GLState::applyChanges(GL* gl, GLState& currentState, const AttributesStruct
   }
   
   // Texture2D
-  if (_texture2D != currentState._texture2D) {
-    if (_texture2D) {
-      nativeGL->uniform1i(uniforms.EnableTexture, 1);
-    }
-    else {
-      nativeGL->uniform1i(uniforms.EnableTexture, 0);
-    }
-    currentState._texture2D = _texture2D;
-  }
+//  if (_texture2D != currentState._texture2D) {
+//    if (_texture2D) {
+//      nativeGL->uniform1i(uniforms.EnableTexture, 1);
+//    }
+//    else {
+//      nativeGL->uniform1i(uniforms.EnableTexture, 0);
+//    }
+//    currentState._texture2D = _texture2D;
+//  }
   
   // VertexColor
   if (_vertexColor != currentState._vertexColor) {
@@ -282,13 +282,13 @@ void GLState::applyChanges(GL* gl, GLState& currentState, const AttributesStruct
     currentState._clearColorA = _clearColorA;
   }
   
-  //Projection
-  if (!_projectionMatrix.isEqualsTo(currentState._projectionMatrix)){
-    nativeGL->uniformMatrix4fv(uniforms.Projection, false, &_projectionMatrix);
-    currentState._projectionMatrix = _projectionMatrix;
-  }
+//  //Projection
+//  if (!_projectionMatrix.isEqualsTo(currentState._projectionMatrix)){
+//    nativeGL->uniformMatrix4fv(uniforms.Projection, false, &_projectionMatrix);
+//    currentState._projectionMatrix = _projectionMatrix;
+//  }
   
-  //Modelview
+//  //Modelview
   if (!_modelViewMatrix.isEqualsTo(currentState._modelViewMatrix)){
     nativeGL->uniformMatrix4fv(uniforms.Modelview, false, &_modelViewMatrix);
     currentState._modelViewMatrix = _modelViewMatrix;

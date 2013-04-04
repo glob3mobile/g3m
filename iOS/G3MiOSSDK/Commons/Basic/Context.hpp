@@ -233,6 +233,10 @@ public:
   FrameTasksExecutor* getFrameTasksExecutor() const {
     return _frameTasksExecutor;
   }
+  
+  GPUProgramManager* getGPUProgramManager() const{
+    return _gpuProgramManager;
+  }
 
   virtual ~G3MRenderContext();
 

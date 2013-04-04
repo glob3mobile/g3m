@@ -22,6 +22,7 @@
 #include "GLConstants.hpp"
 
 #include "GPUProgram.hpp"
+#include "GPUProgramManager.hpp"
 
 void BusyMeshRenderer::initialize(const G3MContext* context)
 {
@@ -103,7 +104,14 @@ void BusyMeshRenderer::render(const G3MRenderContext* rc,
   
   //state.getProgram()->setUniform(rc->getGL(), "Projection", M);
   
-  state.setProjectionMatrix(M);
+  GPUProgram* prog = rc->getGPUProgramManager()->getProgram("DefaultProgram");
+  UniformMatrix4Float* projection = prog->getUniformMatrix4Float("Projection");
+  UniformMatrix4Float* modelview = prog->getUniformMatrix4Float("Modelview");
+  state.setProgram(prog);
+  projection->set(M);
+  //modelview->set(MutableMatrix44D::identity());
+  
+  //state.setProjectionMatrix(M);
   state.setModelViewMatrix(MutableMatrix44D::identity());
 
   // clear screen

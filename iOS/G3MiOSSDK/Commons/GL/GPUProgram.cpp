@@ -19,6 +19,8 @@ GPUProgram* GPUProgram::createProgram(GL* gl, const std::string name, const std:
   
   GPUProgram* p = new GPUProgram();
   
+  p->_name = name;
+  
   p->_programCreated = false;
   p->_nativeGL = gl->getNative();
   p->_programID = p->_nativeGL->createProgram();
@@ -166,6 +168,15 @@ UniformFloat* GPUProgram::getUniformFloat(const std::string name) const{
   }
 }
 
+UniformMatrix4Float* GPUProgram::getUniformMatrix4Float(const std::string name) const{
+  Uniform* u = getUniform(name);
+  if (u!= NULL && u->getType() == GLType::glMatrix4Float()){
+    return (UniformMatrix4Float*)u;
+  } else{
+    return NULL;
+  }
+}
+
 Attribute* GPUProgram::getAttribute(const std::string name) const{
   std::map<std::string, Attribute*> ::const_iterator it = _attributes.find(name);
   if (it != _attributes.end()){
@@ -196,6 +207,6 @@ void GPUProgram::applyChanges(GL* gl){
   
   std::map<std::string, Uniform*>::iterator iter;
   for (iter = _uniforms.begin(); iter != _uniforms.end(); iter++) {
-    iter->second->applyIfDirty(gl);
+    iter->second->applyChanges(gl);
   }
 }

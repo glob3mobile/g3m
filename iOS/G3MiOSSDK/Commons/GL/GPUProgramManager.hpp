@@ -57,7 +57,9 @@ public:
           return NULL;
         }
         
-        _programs[prog->getName()] = prog;
+        //_programs[prog->getName()] = prog;
+        
+        _programs.insert ( std::pair<std::string, GPUProgram*>(prog->getName(),prog) );
       }
       return prog;
     }

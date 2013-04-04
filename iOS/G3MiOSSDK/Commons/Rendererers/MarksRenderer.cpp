@@ -16,6 +16,9 @@
 #include "DownloadPriority.hpp"
 #include "FloatBufferBuilderFromCartesian2D.hpp"
 
+#include "GPUProgram.hpp"
+#include "GPUProgramManager.hpp"
+
 void MarksRenderer::setMarkTouchListener(MarkTouchListener* markTouchListener,
                                          bool autoDelete) {
   if ( _autoDeleteMarkTouchListener ) {
@@ -187,7 +190,12 @@ void MarksRenderer::render(const G3MRenderContext* rc,
   state.disableDepthTest();
   state.enableBlend();
   state.enableTextures();
-  state.enableTexture2D();
+  
+  GPUProgram* prog = rc->getGPUProgramManager()->getProgram("DefaultProgram");
+  UniformBool* enableTexture = prog->getUniformBool("EnableTexture");
+  enableTexture->set(true);
+  
+  //state.enableTexture2D();
   state.enableVerticesPosition();
   
   Vector2D textureTranslation(0.0, 0.0);

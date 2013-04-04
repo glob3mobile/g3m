@@ -60,6 +60,7 @@ public:
   UniformVec2Float* getUniformVec2Float(const std::string name) const;
   UniformVec4Float* getUniformVec4Float(const std::string name) const;
   UniformFloat* getUniformFloat(const std::string name) const;
+  UniformMatrix4Float* getUniformMatrix4Float(const std::string name) const;
   
   void onUsed();
   void onUnused();

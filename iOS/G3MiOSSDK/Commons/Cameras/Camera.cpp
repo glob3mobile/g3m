@@ -17,6 +17,7 @@
 #include "Vector2F.hpp"
 
 #include "GPUProgram.hpp"
+#include "GPUProgramManager.hpp"
 
 void Camera::initialize(const G3MContext* context)
 {
@@ -193,10 +194,15 @@ void Camera::render(const G3MRenderContext* rc,
   //gl->setProjection(getProjectionMatrix());
   //gl->loadMatrixf(getModelMatrix());
   //parentState.getProgram()->setUniform(rc->getGL(), "Projection", getProjectionMatrix());
+  GPUProgram* prog = rc->getGPUProgramManager()->getProgram("DefaultProgram");
+  UniformMatrix4Float* projection = prog->getUniformMatrix4Float("Projection");
+  UniformMatrix4Float* modelview = prog->getUniformMatrix4Float("Modelview");
+  projection->set(getProjectionMatrix());
+  //modelview->set(getModelViewMatrix());
 }
 
 void Camera::changeGLState(GLState* state) const {
-  state->setProjectionMatrix(getProjectionMatrix());
+  //state->setProjectionMatrix(getProjectionMatrix());
   state->setModelViewMatrix(getModelMatrix());
   state->enableDepthTest();
 }
