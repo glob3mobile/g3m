@@ -161,4 +161,19 @@ public class GEORenderer extends LeafRenderer
 
   }
 
+  public final MeshRenderer getMeshRenderer()
+  {
+    return _meshRenderer;
+  }
+
+  public final MarksRenderer getMarksRenderer()
+  {
+    return _marksRenderer;
+  }
+
+  public final ShapesRenderer getShapesRenderer()
+  {
+    return _shapesRenderer;
+  }
+
 }
