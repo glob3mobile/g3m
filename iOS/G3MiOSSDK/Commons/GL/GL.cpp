@@ -22,6 +22,9 @@
 #include "GLShaderAttributes.hpp"
 #include "GLShaderUniforms.hpp"
 #include "GPUProgram.hpp"
+#include "GPUUniform.hpp"
+#include "GPUProgramState.hpp"
+#include "GPUProgramManager.hpp"
 
 struct AttributesStruct Attributes;
 struct UniformsStruct   Uniforms;
@@ -69,11 +72,11 @@ bool GL::useProgram(ShaderProgram* program) {
     ILogger::instance()->logInfo("GL::useProgram()");
   }
   
-//  if (_program == program) {
-//    return true;
-//  }
+  //  if (_program == program) {
+  //    return true;
+  //  }
   _program = program;
-
+  
   // set shaders
   //_nativeGL->useProgram(program);
   
@@ -85,7 +88,7 @@ bool GL::useProgram(ShaderProgram* program) {
   Attributes.Position     = checkedGetAttribLocation(program, "Position");
   Attributes.TextureCoord = checkedGetAttribLocation(program, "TextureCoord");
   Attributes.Color        = checkedGetAttribLocation(program, "Color");
-
+  
   Uniforms.deleteUniformsIDs(); //DELETING
   
   // Extract the handles to uniforms
@@ -97,7 +100,7 @@ bool GL::useProgram(ShaderProgram* program) {
   Uniforms.TranslationTexCoord = checkedGetUniformLocation(program, "TranslationTexCoord");
   Uniforms.ScaleTexCoord       = checkedGetUniformLocation(program, "ScaleTexCoord");
   Uniforms.PointSize           = checkedGetUniformLocation(program, "PointSize");
-
+  
   //BILLBOARDS
   Uniforms.BillBoard      = checkedGetUniformLocation(program, "BillBoard");
   Uniforms.ViewPortExtent = checkedGetUniformLocation(program, "ViewPortExtent");
@@ -110,7 +113,7 @@ bool GL::useProgram(ShaderProgram* program) {
   Uniforms.EnableColorPerVertex    = checkedGetUniformLocation(program, "EnableColorPerVertex");
   Uniforms.EnableFlatColor         = checkedGetUniformLocation(program, "EnableFlatColor");
   
-  //setUniformsDefaultValues();
+  setUniformsDefaultValues();
   
   //Return
   return !_errorGettingLocationOcurred;
@@ -121,19 +124,22 @@ void GL::clearScreen(const GLState& state) {
   if (_verbose) {
     ILogger::instance()->logInfo("GL::clearScreen()");
   }
-  setState(state);
+  setGLState(state);
   _nativeGL->clear(GLBufferType::colorBuffer() | GLBufferType::depthBuffer());
 }
 
 void GL::drawElements(int mode,
-                      IShortBuffer* indices, const GLState& state) {
+                      IShortBuffer* indices, const GLState& state,
+                      GPUProgramManager& progManager,
+                      const GPUProgramState* gpuState) {
   if (_verbose) {
     ILogger::instance()->logInfo("GL::drawElements(%d, %s)",
                                  mode,
                                  indices->description().c_str());
   }
   
-  setState(state);
+  setGLState(state);
+  setProgramState(progManager, *gpuState);
   
   _nativeGL->drawElements(mode,
                           indices->size(),
@@ -142,7 +148,9 @@ void GL::drawElements(int mode,
 
 void GL::drawArrays(int mode,
                     int first,
-                    int count, const GLState& state) {
+                    int count, const GLState& state,
+                    GPUProgramManager& progManager,
+                    const GPUProgramState* gpuState) {
   if (_verbose) {
     ILogger::instance()->logInfo("GL::drawArrays(%d, %d, %d)",
                                  mode,
@@ -150,7 +158,9 @@ void GL::drawArrays(int mode,
                                  count);
   }
   
-  setState(state);
+  setGLState(state);
+  setProgramState(progManager, *gpuState);
+  
   _nativeGL->drawArrays(mode,
                         first,
                         count);
@@ -178,7 +188,7 @@ const IGLTextureId* GL::uploadTexture(const IImage* image,
     GLState state(*_currentState);
     state.setPixelStoreIAlignmentUnpack(1);
     state.bindTexture(texId);
-    setState(state);
+    setGLState(state);
     
     int linear = GLTextureParameterValue::linear();
     int clampToEdge = GLTextureParameterValue::clampToEdge();
@@ -283,9 +293,19 @@ void GL::deleteTexture(const IGLTextureId* textureId) {
   }
 }
 
-void GL::setState(const GLState& state) {
-  //Changes current State and calls OpenGL API
+void GL::setGLState(const GLState& state) {
   state.applyChanges(this, *_currentState, Attributes, Uniforms);
+}
+
+void GL::setProgramState(GPUProgramManager& progManager, const GPUProgramState& progState) {
+  
+  GPUProgram* prog = progManager.getProgram(progState);
+  if (prog != _currentGPUProgram){
+    _currentGPUProgram = prog;
+    useProgram(prog);
+  }
+  
+  progState.applyChanges(this, *prog);
 }
 
 void GL::useProgram(GPUProgram* program) {

@@ -23,6 +23,7 @@
 
 #include "GPUProgram.hpp"
 #include "GPUProgramManager.hpp"
+#include "GPUUniform.hpp"
 
 void BusyMeshRenderer::initialize(const G3MContext* context)
 {
@@ -70,7 +71,6 @@ void BusyMeshRenderer::initialize(const G3MContext* context)
                           1,
                           NULL,
                           colors.create());
-
 }
 
 void BusyMeshRenderer::start(const G3MRenderContext* rc) {
@@ -104,12 +104,17 @@ void BusyMeshRenderer::render(const G3MRenderContext* rc,
   
   //state.getProgram()->setUniform(rc->getGL(), "Projection", M);
   
-  GPUProgram* prog = rc->getGPUProgramManager()->getProgram("DefaultProgram");
-  UniformMatrix4Float* projection = prog->getUniformMatrix4Float("Projection");
-  UniformMatrix4Float* modelview = prog->getUniformMatrix4Float("Modelview");
-  state.setProgram(prog);
-  projection->set(M);
+  //GPUProgram* prog = rc->getGPUProgramManager()->getProgram("DefaultProgram");
+  int _WORKING_JM;
+//  UniformMatrix4Float* projection = prog->getUniformMatrix4Float("Projection");
+//  UniformMatrix4Float* modelview = prog->getUniformMatrix4Float("Modelview");
+  //state.setProgram(prog);
+//  projection->set(M);
   //modelview->set(MutableMatrix44D::identity());
+  
+  
+  _programState.setValueToUniform("Projection", M);
+  _programState.setValueToUniform("Modelview", MutableMatrix44D::identity());
   
   //state.setProjectionMatrix(M);
   state.setModelViewMatrix(MutableMatrix44D::identity());
@@ -122,5 +127,5 @@ void BusyMeshRenderer::render(const G3MRenderContext* rc,
   state.multiplyModelViewMatrix(R1);
 
   // draw mesh
-  _mesh->render(rc, state);
+  _mesh->render(rc, state, &_programState);
 }

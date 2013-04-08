@@ -43,7 +43,8 @@ _indices(indices)
 }
 
 void IndexedMesh::rawRender(const G3MRenderContext* rc,
-                            const GLState& parentState) const {
+                            const GLState& parentState,
+                            const GPUProgramState* gpuParentProgramState) const {
   GL* gl = rc->getGL();
-  gl->drawElements(_primitive, _indices, parentState);
+  gl->drawElements(_primitive, _indices, parentState, *rc->getGPUProgramManager(), gpuParentProgramState);
 }

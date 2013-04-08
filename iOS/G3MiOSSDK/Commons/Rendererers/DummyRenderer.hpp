@@ -17,6 +17,7 @@ class GL;
 class Color;
 class Angle;
 class Vector3D;
+class GPUProgramManager;
 
 
 class DummyRenderer: public LeafRenderer {
@@ -28,7 +29,7 @@ private:
   IFloatBuffer* _vertices;
   
   void drawFace(GL* gl, const GLState& parentState,
-                const Color& color, const Vector3D& translation, const Angle& a, const Vector3D& rotationAxis) const;
+                const Color& color, const Vector3D& translation, const Angle& a, const Vector3D& rotationAxis, GPUProgramManager &manager, const GPUProgramManager* gpuParentProgramState) const;
   
 public:
   ~DummyRenderer();

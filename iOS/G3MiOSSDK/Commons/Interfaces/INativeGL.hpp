@@ -22,7 +22,7 @@ class GPUProgram;
 
 #include "ShaderProgram.hpp"
 
-class Uniform;
+class GPUUniform;
 class Attribute;
 
 class MutableMatrix44D;
@@ -195,7 +195,7 @@ public:
   
   virtual int getProgramiv(const GPUProgram* program, int param) const = 0;
   
-  virtual Uniform* getActiveUniform(const GPUProgram* program, int i) const = 0;
+  virtual GPUUniform* getActiveUniform(const GPUProgram* program, int i) const = 0;
   virtual Attribute* getActiveAttribute(const GPUProgram* program, int i) const = 0;
   
 };

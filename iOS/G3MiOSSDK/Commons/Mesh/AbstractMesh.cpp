@@ -113,7 +113,8 @@ bool AbstractMesh::isTransparent(const G3MRenderContext* rc) const {
 
 
 void AbstractMesh::render(const G3MRenderContext *rc,
-                          const GLState& parentState) const {
+                          const GLState& parentState,
+                          const GPUProgramState* gpuParentProgramState) const {
   GLState state(parentState);
   state.enableVerticesPosition();
   state.setLineWidth(_lineWidth);
@@ -136,5 +137,5 @@ void AbstractMesh::render(const G3MRenderContext *rc,
     state.multiplyModelViewMatrix(*_translationMatrix);
   }
 
-  rawRender(rc, state);
+  rawRender(rc, state, gpuParentProgramState);
 }

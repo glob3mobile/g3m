@@ -56,7 +56,7 @@ public:
   }
   
   void render(const G3MRenderContext* rc,
-              const GLState& parentState) const;
+              const GLState& parentState, const GPUProgramState* gpuParentProgramState) const;
 
   Extent* getExtent()  const {
     return (_mesh == NULL) ? NULL : _mesh->getExtent();

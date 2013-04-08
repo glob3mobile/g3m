@@ -153,7 +153,8 @@ public:
   const Vector3D getVertex(int i) const;
   
   void render(const G3MRenderContext* rc,
-              const GLState& parentState) const;
+              const GLState& parentState,
+              const GPUProgramState* gpuParentProgramState) const;
   
   Extent* getExtent() const;
 

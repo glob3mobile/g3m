@@ -26,6 +26,10 @@ class IGLUniformID;
 
 #include "IGLTextureId.hpp"
 
+class GPUProgramManager;
+class GPUProgramState;
+class GPUProgram;
+
 class GL {
 private:
   INativeGL* const _nativeGL;
@@ -36,6 +40,8 @@ private:
   GLState *_currentState;
   
   ShaderProgram* _program;
+  
+  GPUProgram* _currentGPUProgram;
   
   inline void loadModelView();
   
@@ -50,9 +56,10 @@ private:
   
   IFloatBuffer* _billboardTexCoord;
   
-  void setState(const GLState& state);
-  
   const bool _verbose;
+  
+  void setGLState(const GLState& state);
+  void setProgramState(GPUProgramManager& progManager, const GPUProgramState& progState);
   
 public:
   
@@ -64,7 +71,8 @@ public:
   _texturesIdAllocationCounter(0),
   _billboardTexCoord(NULL),
   _program(NULL),
-  _currentState(NULL)
+  _currentState(NULL),
+  _currentGPUProgram(NULL)
   {
     //Init Constants
     GLCullFace::init(_nativeGL);
@@ -89,11 +97,13 @@ public:
   void clearScreen(const GLState& state);
   
   void drawElements(int mode,
-                    IShortBuffer* indices, const GLState& state);
+                    IShortBuffer* indices, const GLState& state,
+                    GPUProgramManager& progManager,const GPUProgramState* gpuState);
   
   void drawArrays(int mode,
                   int first,
-                  int count, const GLState& state);
+                  int count, const GLState& state,
+                  GPUProgramManager& progManager,const GPUProgramState* gpuState);
   
   bool useProgram(ShaderProgram* program);
   
@@ -136,8 +146,8 @@ public:
     return _nativeGL->compileShader(shader, source);
   }
   
-  void deleteShader(int shader) const {
-    _nativeGL->deleteShader(shader);
+  bool deleteShader(int shader) const {
+    return _nativeGL->deleteShader(shader);
   }
   
   void printShaderInfoLog(int shader) const {
@@ -152,8 +162,8 @@ public:
     _nativeGL->linkProgram(program);
   }
   
-  void deleteProgram(int program) const  {
-    _nativeGL->deleteProgram(program);
+  bool deleteProgram(int program) const  {
+    return _nativeGL->deleteProgram(program);
   }
   
   INativeGL* getNative() const{
@@ -178,6 +188,30 @@ public:
                  float v1,
                  float v2,
                  float v3) const{ _nativeGL->uniform4f(location, v0, v1, v2, v3);}
+  
+  void vertexAttribPointer(int index,
+                           int size,
+                           bool normalized,
+                           int stride,
+                           IFloatBuffer* buffer) const{
+    _nativeGL->vertexAttribPointer(index, size, normalized, stride, buffer);
+  }
+  
+  void bindAttribLocation(const GPUProgram* program, int loc, const std::string& name) const{
+    _nativeGL->bindAttribLocation(program, loc, name);
+  }
+  
+  int getProgramiv(const GPUProgram* program, int pname) const{
+    return _nativeGL->getProgramiv(program, pname);
+  }
+  
+  GPUUniform* getActiveUniform(const GPUProgram* program, int i) const{
+    return _nativeGL->getActiveUniform(program, i);
+  }
+  
+  Attribute* getActiveAttribute(const GPUProgram* program, int i) const{
+    return _nativeGL->getActiveAttribute(program, i);
+  }
   
   GLState* getCurrentState() const{ return _currentState;}
   

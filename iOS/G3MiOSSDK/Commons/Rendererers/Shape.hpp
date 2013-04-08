@@ -19,6 +19,7 @@ class MutableMatrix44D;
 #include <vector>
 
 class ShapePendingEffect;
+class GPUProgramState;
 
 class Shape : public EffectTarget {
 private:
@@ -149,7 +150,7 @@ public:
                    const Angle& fromAltitude, const Angle& toAltitude);
 
   void render(const G3MRenderContext* rc,
-              const GLState& parentState);
+              const GLState& parentState, const GPUProgramState* gpuParentProgramState);
 
   virtual void initialize(const G3MContext* context) {
 
@@ -158,7 +159,7 @@ public:
   virtual bool isReadyToRender(const G3MRenderContext* rc) = 0;
 
   virtual void rawRender(const G3MRenderContext* rc,
-                         const GLState& parentState) = 0;
+                         const GLState& parentState, const GPUProgramState* gpuParentProgramState) = 0;
 
   virtual bool isTransparent(const G3MRenderContext* rc) = 0;
     

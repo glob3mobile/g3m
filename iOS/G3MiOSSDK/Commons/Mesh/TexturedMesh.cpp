@@ -11,7 +11,7 @@
 #include "GL.hpp"
 
 void TexturedMesh::render(const G3MRenderContext* rc,
-                          const GLState& parentState) const {
+                          const GLState& parentState,const GPUProgramState* gpuParentProgramState) const {
   GLState* state = _textureMapping->bind(rc, parentState);
   
   if (_transparent) {
@@ -19,7 +19,7 @@ void TexturedMesh::render(const G3MRenderContext* rc,
     state->setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
   }
 
-  _mesh->render(rc, *state);
+  _mesh->render(rc, *state, gpuParentProgramState);
   
   delete state;
 }

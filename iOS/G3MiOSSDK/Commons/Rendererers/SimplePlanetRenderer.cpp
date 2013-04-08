@@ -153,11 +153,11 @@ Mesh* SimplePlanetRenderer::createMesh(const G3MRenderContext* rc) {
 }
 
 void SimplePlanetRenderer::render(const G3MRenderContext* rc,
-                                  const GLState& parentState) {
+                                  const GLState& parentState, const GPUProgramState* gpuParentProgramState) {
   if (_mesh == NULL) {
     _mesh = createMesh(rc);
   }
   if (_mesh != NULL) {
-    _mesh->render(rc, parentState);
+    _mesh->render(rc, parentState, gpuParentProgramState);
   }
 }

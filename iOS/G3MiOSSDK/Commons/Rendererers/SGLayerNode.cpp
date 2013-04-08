@@ -116,8 +116,9 @@ GLState* SGLayerNode::createState(const G3MRenderContext* rc,
   state->enableTextures();
   
   GPUProgram* prog = rc->getGPUProgramManager()->getProgram("DefaultProgram");
-  UniformBool* enableTexture = prog->getUniformBool("EnableTexture");
-  enableTexture->set(true);
+  int _WORKING_JM;
+  //UniformBool* enableTexture = prog->getUniformBool("EnableTexture");
+  //enableTexture->set(true);
   
   //state->enableTexture2D();
 

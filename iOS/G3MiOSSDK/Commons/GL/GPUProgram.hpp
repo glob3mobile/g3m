@@ -14,9 +14,10 @@
 #include <map>
 
 #include "Attribute.hpp"
-#include "Uniform.hpp"
 
 #include "G3MError.hpp"
+
+#include "GPUUniform.hpp"
 
 class IFloatBuffer;
 
@@ -24,22 +25,24 @@ class GL;
 
 class GPUProgram{
   
-  INativeGL* _nativeGL;
+  //INativeGL* _nativeGL;
   int _programID;
   bool _programCreated;
   std::map<std::string, Attribute*> _attributes;
-  std::map<std::string, Uniform*> _uniforms;
+  std::map<std::string, GPUUniform*> _uniforms;
   std::string _name;
   
-  bool compileShader(int shader, const std::string& source) const;
-  bool linkProgram() const;
-  void deleteShader(int shader) const;
+  bool compileShader(GL* gl, int shader, const std::string& source) const;
+  bool linkProgram(GL* gl) const;
+  void deleteShader(GL* gl, int shader) const;
   
-  void getVariables();
+  void getVariables(GL* gl);
   
   GPUProgram(){}
   
-  Uniform* getUniform(const std::string name) const;
+  GPUUniform* getUniform(const std::string name) const;
+  //Uniform* getUniform(const std::string name) const;
+  Attribute* getAttribute(const std::string name) const;
   
 public:
   
@@ -52,15 +55,19 @@ public:
   
   int getProgramID() const{ return _programID;}
   bool isCreated() const{ return _programCreated;}
-  void deleteProgram(int p);
+  void deleteProgram(GL* gl, int p);
   
-  Attribute* getAttribute(const std::string name) const;
+  GPUUniformBool* getGPUUniformBool(const std::string name) const;
+  GPUUniformVec2Float* getGPUUniformVec2Float(const std::string name) const;
+  GPUUniformVec4Float* getGPUUniformVec4Float(const std::string name) const;
+  GPUUniformFloat* getGPUUniformFloat(const std::string name) const;
+  GPUUniformMatrix4Float* getGPUUniformMatrix4Float(const std::string name) const;
+
   
-  UniformBool* getUniformBool(const std::string name) const;
-  UniformVec2Float* getUniformVec2Float(const std::string name) const;
-  UniformVec4Float* getUniformVec4Float(const std::string name) const;
-  UniformFloat* getUniformFloat(const std::string name) const;
-  UniformMatrix4Float* getUniformMatrix4Float(const std::string name) const;
+  AttributeVec1Float* getAttributeVec1Float(const std::string name) const;
+  AttributeVec2Float* getAttributeVec2Float(const std::string name) const;
+  AttributeVec3Float* getAttributeVec3Float(const std::string name) const;
+  AttributeVec4Float* getAttributeVec4Float(const std::string name) const;
   
   void onUsed();
   void onUnused();

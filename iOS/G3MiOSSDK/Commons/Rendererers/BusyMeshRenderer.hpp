@@ -14,6 +14,8 @@
 #include "Effects.hpp"
 #include "Color.hpp"
 
+#include "GPUProgramState.hpp"
+
 
 //***************************************************************
 
@@ -24,10 +26,13 @@ private:
   double  _degrees;
   Color*  _backgroundColor;
   
+  GPUProgramState _programState;
+  
 public:    
   BusyMeshRenderer(Color* backgroundColor):
   _degrees(0),
-  _backgroundColor(backgroundColor)
+  _backgroundColor(backgroundColor),
+  _programState(NULL)
   {
   }
   

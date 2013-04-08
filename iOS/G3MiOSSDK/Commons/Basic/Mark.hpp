@@ -23,6 +23,7 @@ class IFloatBuffer;
 class IGLTextureId;
 class MarkTouchListener;
 class GLState;
+class GPUProgramState;
 
 class MarkUserData {
 public:
@@ -179,7 +180,7 @@ public:
                   long long downloadPriority);
 
   void render(const G3MRenderContext* rc,
-              const Vector3D& cameraPosition, const GLState& parentState);
+              const Vector3D& cameraPosition, const GLState& parentState, const GPUProgramState* gpuParentProgramState);
 
   bool isReady() const;
 

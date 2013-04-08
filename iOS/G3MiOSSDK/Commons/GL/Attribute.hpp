@@ -12,16 +12,25 @@
 
 #include "INativeGL.hpp"
 #include "IFloatBuffer.hpp"
+#include "GL.hpp" 
 
 
 class Attribute{
+protected:
   std::string _name;
   int _id;
+  
+  bool _wasSet;
+  bool _dirty;
+  
 public:
-  Attribute(std::string name, int id):_name(name),_id(id){}
+  virtual ~Attribute(){}
+  Attribute(std::string name, int id):_name(name),_id(id),_wasSet(false), _dirty(false){}
   
   const std::string getName() const{ return _name;}
   int getID() const{ return _id;}
+  
+  virtual void applyChanges(GL* gl) = 0;
 };
 
 class AttributeVecFloat: public Attribute{
@@ -61,16 +70,27 @@ public:
   
   void set(INativeGL* _nativeGL, IFloatBuffer* buffer, int index, int stride, bool normalized) {
     
-    if (equalsTo(buffer, index, stride, normalized)){
-      _nativeGL->vertexAttribPointer(index,//Index
-                                     _size,//Size
-                                     normalized,//Normalized
-                                     stride,//Stride
-                                     buffer);
+    if (!_wasSet || equalsTo(buffer, index, stride, normalized)){
+//      _nativeGL->vertexAttribPointer(index,//Index
+//                                     _size,//Size
+//                                     normalized,//Normalized
+//                                     stride,//Stride
+//                                     buffer);
       
       save(buffer, index, stride, normalized);
+      _wasSet = true;
+      _dirty = true;
     }
   }
+  
+  void applyChanges(GL* gl){
+    if (_dirty){
+      gl->vertexAttribPointer(_index, _size, _normalized, _stride, _buffer);
+      _dirty = false;
+    }
+  }
+  
+  int getSize() const { return _size;}
 
 };
 

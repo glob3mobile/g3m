@@ -315,10 +315,11 @@ void G3MWidget::render(int width, int height) {
     GPUProgram* prog = _gpuProgramManager->getProgram("DefaultProgram");
     //_gl->useProgram(prog);
     ((GLState*)_rootState)->setProgram(prog);
-    prog->getUniformVec2Float("ScaleTexCoord")->set(Vector2D(1.0,1.0));
-    prog->getUniformVec2Float("TranslationTexCoord")->set(Vector2D(0.0,0.0));
-    prog->getUniformFloat("PointSize")->set(1);
-    prog->getUniformBool("BillBoard")->set(false);
+    int _WORKING_JM;
+//    prog->getUniformVec2Float("ScaleTexCoord")->set(Vector2D(1.0,1.0));
+//    prog->getUniformVec2Float("TranslationTexCoord")->set(Vector2D(0.0,0.0));
+//    prog->getUniformFloat("PointSize")->set(1);
+//    prog->getUniformBool("BillBoard")->set(false);
   }
   
   if (_paused) {

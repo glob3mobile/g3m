@@ -13,6 +13,8 @@
 
 #include <vector>
 
+class GPUProgramState;
+
 class CompositeShape : public Shape {
 private:
   std::vector<Shape*> _children;
@@ -38,7 +40,7 @@ public:
   bool isReadyToRender(const G3MRenderContext* rc);
 
   void rawRender(const G3MRenderContext* rc,
-                 const GLState& parentState);
+                 const GLState& parentState, const GPUProgramManager* gpuParentProgramState);
 
 };
 

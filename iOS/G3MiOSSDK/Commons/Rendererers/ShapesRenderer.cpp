@@ -30,14 +30,14 @@ public:
   }
 
   void render(const G3MRenderContext* rc,
-              const GLState& parentState) {
-    _shape->render(rc, parentState);
+              const GLState& parentState, const GPUProgramState* gpuParentProgramState) {
+    _shape->render(rc, parentState, gpuParentProgramState);
   }
 
 };
 
 void ShapesRenderer::render(const G3MRenderContext* rc,
-                            const GLState& parentState) {
+                            const GLState& parentState, const GPUProgramState* gpuParentProgramState) {
   const Vector3D cameraPosition = rc->getCurrentCamera()->getCartesianPosition();
 
   const int shapesCount = _shapes.size();
@@ -52,7 +52,7 @@ void ShapesRenderer::render(const G3MRenderContext* rc,
                                                            squaredDistanceFromEye));
     }
     else {
-      shape->render(rc, parentState);
+      shape->render(rc, parentState, gpuParentProgramState);
     }
   }
 }

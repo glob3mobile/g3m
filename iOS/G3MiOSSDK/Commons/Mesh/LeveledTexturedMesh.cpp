@@ -33,9 +33,10 @@ GLState* LazyTextureMapping::bind(const G3MRenderContext* rc, const GLState& par
   GLState *state = new GLState(parentState);
   state->enableTextures();
   
-  GPUProgram* prog = rc->getGPUProgramManager()->getProgram("DefaultProgram");
-  UniformBool* enableTexture = prog->getUniformBool("EnableTexture");
-  enableTexture->set(true);
+  int _WORKING_JM;
+//  GPUProgram* prog = rc->getGPUProgramManager()->getProgram("DefaultProgram");
+//  UniformBool* enableTexture = prog->getUniformBool("EnableTexture");
+//  enableTexture->set(true);
   //state->enableTexture2D();
 
   if (_texCoords != NULL) {
@@ -143,15 +144,16 @@ const IGLTextureId* LeveledTexturedMesh::getTopLevelGLTextureId() const {
 
 
 void LeveledTexturedMesh::render(const G3MRenderContext* rc,
-                                 const GLState& parentState) const {
+                                 const GLState& parentState,
+                                 const GPUProgramState* gpuParentProgramState) const {
   LazyTextureMapping* mapping = getCurrentTextureMapping();
   if (mapping == NULL) {
-    _mesh->render(rc, parentState);
+    _mesh->render(rc, parentState, gpuParentProgramState);
   }
   else {
     GLState *state = mapping->bind(rc, parentState);
 
-    _mesh->render(rc, *state);
+    _mesh->render(rc, *state, gpuParentProgramState);
     
     delete state;
   }

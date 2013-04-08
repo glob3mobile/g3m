@@ -65,6 +65,11 @@ public:
     }
   }
   
+  GPUProgram* getProgram(const GPUProgramState& state) {
+    int WORKING_JM;
+    return getProgram("DefaultProgram");
+  }
+  
   
 };
 

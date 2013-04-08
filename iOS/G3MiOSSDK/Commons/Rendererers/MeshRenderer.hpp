@@ -18,8 +18,13 @@ class Mesh;
 class MeshRenderer : public LeafRenderer {
 private:
   std::vector<Mesh*> _meshes;
+  
+  GPUProgramState _programState;
 
 public:
+  
+  MeshRenderer():_programState(NULL){}
+  
   ~MeshRenderer();
 
   void addMesh(Mesh* mesh) {

@@ -192,8 +192,9 @@ void MarksRenderer::render(const G3MRenderContext* rc,
   state.enableTextures();
   
   GPUProgram* prog = rc->getGPUProgramManager()->getProgram("DefaultProgram");
-  UniformBool* enableTexture = prog->getUniformBool("EnableTexture");
-  enableTexture->set(true);
+  int _WORKING_JM;
+  //UniformBool* enableTexture = prog->getUniformBool("EnableTexture");
+  //enableTexture->set(true);
   
   //state.enableTexture2D();
   state.enableVerticesPosition();
@@ -226,5 +227,6 @@ void MarksRenderer::render(const G3MRenderContext* rc,
   }
   
   int IS_A_HACK_;//???????
-  enableTexture->set(false); //DISABLING TEXTURES
+  int _WORKING_JM2;
+  //enableTexture->set(false); //DISABLING TEXTURES
 }

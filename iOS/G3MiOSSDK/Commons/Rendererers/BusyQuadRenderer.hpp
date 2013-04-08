@@ -16,6 +16,8 @@
 #include "Color.hpp"
 #include "DirectMesh.hpp"
 
+#include "GPUProgramState.hpp"
+
 
 //***************************************************************
 
@@ -31,6 +33,8 @@ private:
   const Vector2D  _size;
   Color*          _backgroundColor;
   
+  GPUProgramState _programState;
+  
   bool initMesh(const G3MRenderContext* rc);
   
   
@@ -44,7 +48,8 @@ public:
   _image(image),
   _backgroundColor(backgroundColor),
   _animated(animated),
-  _size(size)
+  _size(size),
+  _programState(NULL)
   {
   }
   

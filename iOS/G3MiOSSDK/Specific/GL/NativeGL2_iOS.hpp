@@ -535,7 +535,7 @@ public:
     }
   }
   
-  Uniform* getActiveUniform(const GPUProgram* program, int i) const{
+  GPUUniform* getActiveUniform(const GPUProgram* program, int i) const{
     GLint maxLength;
     glGetProgramiv(program->getProgramID(), GL_ACTIVE_UNIFORM_MAX_LENGTH, &maxLength);
     
@@ -559,15 +559,15 @@ public:
     NSLog(@"Uniform Name: %s - %d", name, id);
     switch (type) {
       case GL_FLOAT_MAT4:
-        return new UniformMatrix4Float(name, new GLUniformID_iOS(id));
+        return new GPUUniformMatrix4Float(name, new GLUniformID_iOS(id));
       case GL_FLOAT_VEC4:
-        return new UniformVec4Float(name, new GLUniformID_iOS(id));
+        return new GPUUniformVec4Float(name, new GLUniformID_iOS(id));
       case GL_FLOAT:
-        return new UniformFloat(name, new GLUniformID_iOS(id));
+        return new GPUUniformFloat(name, new GLUniformID_iOS(id));
       case GL_FLOAT_VEC2:
-        return new UniformVec2Float(name, new GLUniformID_iOS(id));
+        return new GPUUniformVec2Float(name, new GLUniformID_iOS(id));
       case GL_BOOL:
-        return new UniformBool(name, new GLUniformID_iOS(id));
+        return new GPUUniformBool(name, new GLUniformID_iOS(id));
       case GL_SAMPLER_2D:
         int NOT_IMPLEMENTED_YET;
         return NULL;
