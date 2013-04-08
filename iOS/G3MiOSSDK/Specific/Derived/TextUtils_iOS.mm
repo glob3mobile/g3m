@@ -47,6 +47,10 @@ void TextUtils_iOS::createLabelImage(const std::string& label,
 
   CGContextRef ctx = UIGraphicsGetCurrentContext();
 
+//  int __REMOVE;
+//  CGContextSetRGBFillColor(ctx, 0.75f, 0.75f, 0.75f, 1);
+//  CGContextFillRect(ctx, CGRectMake(0, 0, imageSize.width, imageSize.height));
+
   CGContextSetFillColorWithColor(ctx, toCGColor(color));
 
   if (shadowColor != NULL) {
