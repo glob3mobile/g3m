@@ -289,10 +289,10 @@ void GLState::applyChanges(GL* gl, GLState& currentState, const AttributesStruct
 //  }
   
 //  //Modelview
-  if (!_modelViewMatrix.isEqualsTo(currentState._modelViewMatrix)){
-    nativeGL->uniformMatrix4fv(uniforms.Modelview, false, &_modelViewMatrix);
-    currentState._modelViewMatrix = _modelViewMatrix;
-  }
+//  if (!_modelViewMatrix.isEqualsTo(currentState._modelViewMatrix)){
+//    nativeGL->uniformMatrix4fv(uniforms.Modelview, false, &_modelViewMatrix);
+//    currentState._modelViewMatrix = _modelViewMatrix;
+//  }
   
   //Texture Extent
   if (_textureWidth != currentState._textureWidth || _textureHeight != currentState._textureHeight){

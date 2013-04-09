@@ -62,7 +62,7 @@ public:
       if (_value != NULL){
         delete _value;
       }
-      _value = v->deepCopy();           //if there's no value we store it
+      _value = v->deepCopy();
     }
   }
   
@@ -150,6 +150,7 @@ public:
   void setUniform(GL* gl, const IGLUniformID* id) const{
     gl->uniformMatrix4fv(id, false, &_m);
   }
+
   bool isEqualsTo(const GPUUniformValue* v) const{
     GPUUniformValueMatrix4Float *v2 = (GPUUniformValueMatrix4Float *)v;
     const MutableMatrix44D* m = &(v2->_m);

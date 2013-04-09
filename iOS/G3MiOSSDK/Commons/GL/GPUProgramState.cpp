@@ -8,7 +8,7 @@
 
 #include "GPUProgramState.hpp"
 
-void GPUProgramState::applyChanges(GL* gl, const GPUProgram& prog) const{
+void GPUProgramState::applyChanges(GL* gl, GPUProgram& prog) const{
   
   if (_parentState != NULL){
     _parentState->applyChanges(gl, prog);
@@ -29,7 +29,7 @@ void GPUProgramState::applyChanges(GL* gl, const GPUProgram& prog) const{
       } else{
         u->set(v);
       }
-      return;
+      continue;
     }
     if (type == GLType::glVec2Float()){
       GPUUniformVec2Float* u = prog.getGPUUniformVec2Float(name);
@@ -38,7 +38,7 @@ void GPUProgramState::applyChanges(GL* gl, const GPUProgram& prog) const{
       } else{
         u->set(v);
       }
-      return;
+      continue;
     }
     if (type == GLType::glVec4Float()){
       GPUUniformVec4Float* u = prog.getGPUUniformVec4Float(name);
@@ -47,7 +47,7 @@ void GPUProgramState::applyChanges(GL* gl, const GPUProgram& prog) const{
       } else{
         u->set(v);
       }
-      return;
+      continue;
     }
     if (type == GLType::glFloat()){
       GPUUniformFloat* u = prog.getGPUUniformFloat(name);
@@ -56,7 +56,7 @@ void GPUProgramState::applyChanges(GL* gl, const GPUProgram& prog) const{
       } else{
         u->set(v);
       }
-      return;
+      continue;
     }
     if (type == GLType::glMatrix4Float()){
       GPUUniformMatrix4Float* u = prog.getGPUUniformMatrix4Float(name);
@@ -65,9 +65,11 @@ void GPUProgramState::applyChanges(GL* gl, const GPUProgram& prog) const{
       } else{
         u->set(v);
       }
-      return;
+      continue;
     }
   }
+  
+  prog.applyChanges(gl); //Applying changes on GPU
 }
 
 GPUUniformValue* GPUProgramState::getUniformValue(const std::string name) const{

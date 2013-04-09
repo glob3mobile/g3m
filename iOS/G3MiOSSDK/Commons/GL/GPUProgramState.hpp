@@ -58,7 +58,11 @@ public:
     setValueToUniform(name, new GPUUniformValueMatrix4Float(m));
   }
   
-  void applyChanges(GL* gl, const GPUProgram& prog) const;
+  void multiplyValueOfUniform(const std::string& name, const MutableMatrix44D& m){
+    setValueToUniform(name, new GPUUniformValueMatrix4Float(m));
+  }
+  
+  void applyChanges(GL* gl, GPUProgram& prog) const;
   
   GPUUniformValue* getUniformValue(const std::string name) const;
 };
