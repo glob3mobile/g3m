@@ -29,7 +29,7 @@ GEOFeature::~GEOFeature() {
 }
 
 void GEOFeature::render(const G3MRenderContext* rc,
-                        const GLState& parentState,
+                        const GLState& parentState, const GPUProgramState* parentProgramState,
                         const GEOSymbolizer* symbolizer) {
-  _geometry->render(rc, parentState, symbolizer);
+  _geometry->render(rc, parentState, parentProgramState, symbolizer);
 }

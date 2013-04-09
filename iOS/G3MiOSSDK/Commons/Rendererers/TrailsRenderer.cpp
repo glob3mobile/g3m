@@ -145,11 +145,11 @@ Mesh* Trail::getMesh(const Planet* planet) {
 }
 
 void Trail::render(const G3MRenderContext* rc,
-                   const GLState& parentState) {
+                   const GLState& parentState, const GPUProgramState* parentProgramState) {
   if (_visible) {
     Mesh* mesh = getMesh(rc->getPlanet());
     if (mesh != NULL) {
-      mesh->render(rc, parentState);
+      mesh->render(rc, parentState, parentProgramState);
     }
   }
 }
@@ -172,6 +172,6 @@ void TrailsRenderer::render(const G3MRenderContext* rc,
   const int trailsCount = _trails.size();
   for (int i = 0; i < trailsCount; i++) {
     Trail* trail = _trails[i];
-    trail->render(rc, parentState);
+    trail->render(rc, parentState, &_programState);
   }
 }

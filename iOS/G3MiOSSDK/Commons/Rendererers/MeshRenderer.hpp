@@ -12,6 +12,8 @@
 #include "LeafRenderer.hpp"
 #include <vector>
 
+#include "GPUProgramState.hpp"
+
 class Mesh;
 
 

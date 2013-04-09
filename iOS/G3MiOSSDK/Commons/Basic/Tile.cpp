@@ -443,7 +443,7 @@ void Tile::prepareForFullRendering(const G3MRenderContext* rc,
 
 void Tile::rawRender(const G3MRenderContext *rc,
                      const TileRenderContext* trc,
-                     const GLState& parentState) {
+                     const GLState& parentState, const GPUProgramState* parentProgramState) {
 
   Mesh* tessellatorMesh = getTessellatorMesh(rc, trc);
   if (tessellatorMesh == NULL) {
@@ -452,7 +452,7 @@ void Tile::rawRender(const G3MRenderContext *rc,
 
   TileTexturizer* texturizer = trc->getTexturizer();
   if (texturizer == NULL) {
-    tessellatorMesh->render(rc, parentState);
+    tessellatorMesh->render(rc, parentState, parentProgramState);
   }
   else {
     const bool needsToCallTexturizer = (_texturizedMesh == NULL) || isTexturizerDirty();
@@ -466,10 +466,10 @@ void Tile::rawRender(const G3MRenderContext *rc,
     }
 
     if (_texturizedMesh != NULL) {
-      _texturizedMesh->render(rc, parentState);
+      _texturizedMesh->render(rc, parentState, parentProgramState);
     }
     else {
-      tessellatorMesh->render(rc, parentState);
+      tessellatorMesh->render(rc, parentState, parentProgramState);
     }
   }
 
@@ -477,10 +477,10 @@ void Tile::rawRender(const G3MRenderContext *rc,
 
 void Tile::debugRender(const G3MRenderContext* rc,
                        const TileRenderContext* trc,
-                       const GLState& parentState) {
+                       const GLState& parentState, const GPUProgramState* parentProgramState) {
   Mesh* debugMesh = getDebugMesh(rc, trc);
   if (debugMesh != NULL) {
-    debugMesh->render(rc, parentState);
+    debugMesh->render(rc, parentState, parentProgramState);
   }
 }
 
@@ -577,7 +577,7 @@ void Tile::deleteTexturizedMesh(TileTexturizer* texturizer) {
 
 void Tile::render(const G3MRenderContext* rc,
                   const TileRenderContext* trc,
-                  const GLState& parentState,
+                  const GLState& parentState, const GPUProgramState* parentProgramState,
                   std::list<Tile*>* toVisitInNextIteration) {
 
   const float verticalExaggeration =  trc->getVerticalExaggeration();
@@ -602,9 +602,9 @@ void Tile::render(const G3MRenderContext* rc,
                               );
 
     if (isRawRender) {
-      rawRender(rc, trc, parentState);
+      rawRender(rc, trc, parentState, parentProgramState);
       if (trc->getParameters()->_renderDebug) {
-        debugRender(rc, trc, parentState);
+        debugRender(rc, trc, parentState, parentProgramState);
       }
 
       statistics->computeTileRendered(this);

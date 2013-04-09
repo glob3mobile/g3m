@@ -19,7 +19,7 @@ private:
 protected:
   void rawRender(const G3MRenderContext* rc,
                  const GLState& parentState,
-                 const GPUProgramState* gpuParentProgramState) const;
+                 const GPUProgramState* parentProgramState) const;
 
 public:
   IndexedMesh(const int primitive,

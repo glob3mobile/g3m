@@ -11,6 +11,7 @@
 
 #include "LeafRenderer.hpp"
 #include "Shape.hpp"
+#include "GPUProgramState.hpp"
 #include <vector>
 
 class ShapesRenderer : public LeafRenderer {
@@ -23,11 +24,14 @@ private:
 #ifdef JAVA_CODE
   private G3MContext _context;
 #endif
+  
+  GPUProgramState _programState;
 
 public:
 
   ShapesRenderer() :
-  _context(NULL)
+  _context(NULL),
+  _programState(NULL)
   {
 
   }
@@ -89,7 +93,7 @@ public:
   }
 
   void render(const G3MRenderContext* rc,
-              const GLState& parentState, const GPUProgramState* gpuParentProgramState);
+              const GLState& parentState);
 
 };
 

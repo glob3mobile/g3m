@@ -17,6 +17,7 @@ class Mesh;
 class Color;
 class GEOSymbol;
 class GEOFeature;
+class GPUProgramState;
 
 class GEOGeometry : public GEOObject {
 private:
@@ -48,7 +49,7 @@ public:
   }
 
   void render(const G3MRenderContext* rc,
-              const GLState& parentState,
+              const GLState& parentState, const GPUProgramState* parentProgramState,
               const GEOSymbolizer* symbolizer);
 
   ~GEOGeometry();

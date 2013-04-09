@@ -338,7 +338,7 @@ IFloatBuffer* Mark::getVertices(const Planet* planet) {
 }
 
 void Mark::render(const G3MRenderContext* rc,
-                  const Vector3D& cameraPosition, const GLState& parentState, const GPUProgramState* gpuParentProgramState) {
+                  const Vector3D& cameraPosition, const GLState& parentState, const GPUProgramState* parentProgramState) {
   const Planet* planet = rc->getPlanet();
 
   const Vector3D* markPosition = getCartesianPosition(planet);
@@ -382,7 +382,7 @@ void Mark::render(const G3MRenderContext* rc,
         state.setVertices(vertices, 3, 0);
         state.setTextureExtent(_textureWidth, _textureHeight);
         state.bindTexture(_textureId);
-        gl->drawArrays(GLPrimitive::triangleStrip(), 0, vertices->size() / 3, state, *rc->getGPUProgramManager(), gpuParentProgramState);
+        gl->drawArrays(GLPrimitive::triangleStrip(), 0, vertices->size() / 3, state, *rc->getGPUProgramManager(), parentProgramState);
         
         _renderedMark = true;
       }

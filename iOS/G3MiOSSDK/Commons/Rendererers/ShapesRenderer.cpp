@@ -11,16 +11,21 @@
 #include "OrderedRenderable.hpp"
 #include "Camera.hpp"
 
+#include "GPUProgramState.hpp"
+
 class TransparentShapeWrapper : public OrderedRenderable {
 private:
   Shape* _shape;
   const double _squaredDistanceFromEye;
+  
+  GPUProgramState _programState;
 
 public:
   TransparentShapeWrapper(Shape* shape,
                           double squaredDistanceFromEye) :
   _shape(shape),
-  _squaredDistanceFromEye(squaredDistanceFromEye)
+  _squaredDistanceFromEye(squaredDistanceFromEye),
+  _programState(NULL)
   {
 
   }
@@ -30,14 +35,14 @@ public:
   }
 
   void render(const G3MRenderContext* rc,
-              const GLState& parentState, const GPUProgramState* gpuParentProgramState) {
-    _shape->render(rc, parentState, gpuParentProgramState);
+              const GLState& parentState) {
+    _shape->render(rc, parentState, &_programState);
   }
 
 };
 
 void ShapesRenderer::render(const G3MRenderContext* rc,
-                            const GLState& parentState, const GPUProgramState* gpuParentProgramState) {
+                            const GLState& parentState) {
   const Vector3D cameraPosition = rc->getCurrentCamera()->getCartesianPosition();
 
   const int shapesCount = _shapes.size();
@@ -52,7 +57,7 @@ void ShapesRenderer::render(const G3MRenderContext* rc,
                                                            squaredDistanceFromEye));
     }
     else {
-      shape->render(rc, parentState, gpuParentProgramState);
+      shape->render(rc, parentState, &_programState);
     }
   }
 }

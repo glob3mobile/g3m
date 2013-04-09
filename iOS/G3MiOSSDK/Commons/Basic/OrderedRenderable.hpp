@@ -11,6 +11,7 @@
 
 #include "Context.hpp"
 class GLState;
+class GPUProgramState;
 
 class OrderedRenderable {
 public:

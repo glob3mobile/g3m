@@ -61,7 +61,7 @@ public:
 
   void render(const G3MRenderContext* rc,
               const GLState& parentState,
-              const GPUProgramState* gpuParentProgramState);
+              const GPUProgramState* parentProgramState);
 
   bool touchesBox(const Box* box) const;
 

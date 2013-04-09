@@ -13,6 +13,7 @@
 
 class IFloatBuffer;
 class IShortBuffer;
+class GPUProgramState;
 
 class SGGeometryNode : public SGNode {
 private:
@@ -47,7 +48,7 @@ public:
   ~SGGeometryNode();
 
   void rawRender(const G3MRenderContext* rc,
-                 const GLState& parentState);
+                 const GLState& parentState, const GPUProgramState* parentProgramState);
 
   GLState* createState(const G3MRenderContext* rc,
                              const GLState& parentState) {

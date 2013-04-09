@@ -35,7 +35,8 @@ _context(NULL),
 _lastCamera(NULL),
 _markTouchListener(NULL),
 _autoDeleteMarkTouchListener(false),
-_downloadPriority(DownloadPriority::MEDIUM)
+_downloadPriority(DownloadPriority::MEDIUM),
+_programState(NULL)
 {
 }
 
@@ -222,7 +223,7 @@ void MarksRenderer::render(const G3MRenderContext* rc,
     //rc->getLogger()->logInfo("Rendering Mark: \"%s\"", mark->getName().c_str());
     
     if (mark->isReady()) {
-      mark->render(rc, cameraPosition, state);
+      mark->render(rc, cameraPosition, state, &_programState);
     }
   }
   

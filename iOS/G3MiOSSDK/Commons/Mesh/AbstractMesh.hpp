@@ -44,14 +44,14 @@ protected:
 
   virtual void rawRender(const G3MRenderContext* rc,
                          const GLState& parentState,
-                         const GPUProgramState* gpuParentProgramState) const = 0;
+                         const GPUProgramState* parentProgramState) const = 0;
 
 public:
   ~AbstractMesh();
 
   void render(const G3MRenderContext* rc,
               const GLState& parentState,
-              const GPUProgramState* gpuParentProgramState) const;
+              const GPUProgramState* parentProgramState) const;
 
   Extent* getExtent() const;
 

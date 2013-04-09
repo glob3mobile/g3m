@@ -13,6 +13,7 @@
 #include "Geodetic3D.hpp"
 #include <vector>
 #include "Color.hpp"
+#include "GPUProgramState.hpp"
 
 class Mesh;
 class Planet;
@@ -49,7 +50,7 @@ public:
   ~Trail();
 
   void render(const G3MRenderContext* rc,
-              const GLState& parentState);
+              const GLState& parentState, const GPUProgramState* parentProgramState);
 
   void setVisible(bool visible) {
     _visible = visible;
@@ -85,9 +86,13 @@ public:
 class TrailsRenderer : public LeafRenderer {
 private:
   std::vector<Trail*> _trails;
+  
+  GPUProgramState _programState;
 
 public:
-  TrailsRenderer() {
+  TrailsRenderer():
+  _programState(NULL)
+  {
   }
 
   void addTrail(Trail* trail);

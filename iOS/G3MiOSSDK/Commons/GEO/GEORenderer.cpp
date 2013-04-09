@@ -48,6 +48,6 @@ void GEORenderer::render(const G3MRenderContext* rc,
   const int childrenCount = _children.size();
   for (int i = 0; i < childrenCount; i++) {
     GEOObject* geoObject = _children[i];
-    geoObject->render(rc, parentState, _symbolizer);
+    geoObject->render(rc, parentState, &_programState, _symbolizer);
   }
 }

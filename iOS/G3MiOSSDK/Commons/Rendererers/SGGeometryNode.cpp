@@ -23,7 +23,7 @@ SGGeometryNode::~SGGeometryNode() {
 }
 
 void SGGeometryNode::rawRender(const G3MRenderContext* rc,
-                               const GLState& parentState) {
+                               const GLState& parentState, const GPUProgramState* parentProgramState) {
   GL* gl = rc->getGL();
 
   GLState state(parentState);
@@ -43,5 +43,5 @@ void SGGeometryNode::rawRender(const G3MRenderContext* rc,
   }
   
   state.setVertices(_vertices, 3, 0);
-  gl->drawElements(_primitive, _indices, state);
+  gl->drawElements(_primitive, _indices, state, *rc->getGPUProgramManager(), parentProgramState);
 }

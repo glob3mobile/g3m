@@ -38,7 +38,7 @@ public:
   virtual Vector3D intersectionWithRay(const Vector3D& origin, const Vector3D& direction) const = 0;
   
   virtual void render(const G3MRenderContext* rc,
-                      const GLState& parentState, const GPUProgramState* gpuParentProgramState) = 0;
+                      const GLState& parentState, const GPUProgramState* parentProgramState) = 0;
 
   virtual bool touches(const Frustum *frustum) const = 0;
 

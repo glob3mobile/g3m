@@ -25,6 +25,7 @@ class LayerTilesRenderParameters;
 #include "TileKey.hpp"
 #include "Camera.hpp"
 #include "LayerSet.hpp"
+#include "GPUProgramState.hpp"
 
 
 class TileRenderContext {
@@ -45,7 +46,6 @@ private:
   ITimer* _lastSplitTimer; // timer to start every time a tile get splitted into subtiles
   
   long long _texturePriority;
-
 public:
   TileRenderContext(const TileTessellator*       tessellator,
                     ElevationDataProvider*       elevationDataProvider,
@@ -324,6 +324,8 @@ private:
   long long _texturePriority;
 
   float _verticalExaggeration;
+  
+  GPUProgramState _programState;
 
 public:
   TileRenderer(const TileTessellator* tessellator,

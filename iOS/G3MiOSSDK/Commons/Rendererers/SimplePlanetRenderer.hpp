@@ -47,7 +47,7 @@ public:
   void initialize(const G3MContext* context);  
   
   void render(const G3MRenderContext* rc,
-              const GLState& parentState, const GPUProgramState* gpuParentProgramState);
+              const GLState& parentState, const GPUProgramState* parentProgramState);
   
   bool onTouchEvent(const G3MEventContext* ec,
                     const TouchEvent* touchEvent) {

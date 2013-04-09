@@ -12,6 +12,8 @@
 #include "Mesh.hpp"
 #include "Vector3D.hpp"
 
+#include "GPUProgramState.hpp"
+
 class MeshHolder : public Mesh {
 private:
   Mesh* _mesh;
@@ -43,8 +45,8 @@ public:
   }
 
   void render(const G3MRenderContext* rc,
-              const GLState& parentState) const {
-    _mesh->render(rc, parentState);
+              const GLState& parentState, const GPUProgramState* parentProgramState) const {
+    _mesh->render(rc, parentState, parentProgramState);
   }
 
   Extent* getExtent() const {

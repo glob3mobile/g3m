@@ -42,11 +42,11 @@ bool CompositeMesh::isTransparent(const G3MRenderContext* rc) const {
 }
 
 void CompositeMesh::render(const G3MRenderContext* rc,
-                           const GLState& parentState, const GPUProgramManager* gpuParentProgramState) const {
+                           const GLState& parentState, const GPUProgramState* parentProgramState) const {
   const int childrenCount = _children.size();
   for (int i = 0; i < childrenCount; i++) {
     Mesh* child = _children[i];
-    child->render(rc, parentState, gpuParentProgramState);
+    child->render(rc, parentState, parentProgramState);
   }
 }
 

@@ -34,10 +34,10 @@ bool AbstractMeshShape::isReadyToRender(const G3MRenderContext* rc) {
 
 void AbstractMeshShape::rawRender(const G3MRenderContext* rc,
                           const GLState& parentState,
-                                  const GPUProgramState* gpuParentProgramState) {
+                                  const GPUProgramState* parentProgramState) {
   const Mesh* mesh = getMesh(rc);
   if (mesh != NULL) {
-    mesh->render(rc, parentState, gpuParentProgramState);
+    mesh->render(rc, parentState, parentProgramState);
   }
 }
 

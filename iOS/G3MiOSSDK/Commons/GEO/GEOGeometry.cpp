@@ -15,6 +15,8 @@
 #include "GEOSymbol.hpp"
 #include "GEOFeature.hpp"
 
+#include "GPUProgramState.hpp"
+
 GEOGeometry::~GEOGeometry() {
   if (_meshes != NULL) {
     const int meshesCount = _meshes->size();
@@ -60,7 +62,7 @@ std::vector<Mesh*>* GEOGeometry::getMeshes(const G3MRenderContext* rc,
 }
 
 void GEOGeometry::render(const G3MRenderContext* rc,
-                         const GLState& parentState,
+                         const GLState& parentState, const GPUProgramState* parentProgramState,
                          const GEOSymbolizer* symbolizer) {
 //  Mesh* mesh = getMesh(rc, symbolizer);
 
@@ -79,7 +81,7 @@ void GEOGeometry::render(const G3MRenderContext* rc,
         if ( extent->touches(frustum) ) {
           GLState state(parentState);
           state.disableDepthTest();
-          mesh->render(rc, state);
+          mesh->render(rc, state, parentProgramState);
         }
       }
     }

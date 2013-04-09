@@ -28,6 +28,7 @@ class ElevationDataProvider;
 class ElevationData;
 class MeshHolder;
 class Vector2I;
+class GPUProgramState;
 
 #include "ITexturizerData.hpp"
 
@@ -70,11 +71,11 @@ private:
 
   inline void rawRender(const G3MRenderContext* rc,
                         const TileRenderContext* trc,
-                        const GLState& parentState);
+                        const GLState& parentState, const GPUProgramState* parentProgramState);
 
   void debugRender(const G3MRenderContext* rc,
                    const TileRenderContext* trc,
-                   const GLState& parentState);
+                   const GLState& parentState, const GPUProgramState* parentProgramState);
 
   inline Tile* createSubTile(const Angle& lowerLat, const Angle& lowerLon,
                              const Angle& upperLat, const Angle& upperLon,
@@ -144,7 +145,7 @@ public:
 
   void render(const G3MRenderContext* rc,
               const TileRenderContext* trc,
-              const GLState& parentState,
+              const GLState& parentState, const GPUProgramState* parentProgramState,
               std::list<Tile*>* toVisitInNextIteration);
 
   const TileKey getKey() const;

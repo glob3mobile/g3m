@@ -22,6 +22,8 @@
 #include "LayerTilesRenderParameters.hpp"
 #include "MercatorUtils.hpp"
 
+#include "GPUProgramState.hpp"
+
 #include <algorithm>
 
 class VisibleSectorListenerEntry {
@@ -125,7 +127,8 @@ _firstRender(false),
 _context(NULL),
 _lastVisibleSector(NULL),
 _texturePriority(texturePriority),
-_allFirstLevelTilesAreTextureSolved(false)
+_allFirstLevelTilesAreTextureSolved(false),
+_programState(NULL)
 {
   _layerSet->setChangeListener(this);
 }
@@ -459,7 +462,7 @@ void TileRenderer::render(const G3MRenderContext* rc,
       Tile* tile = _firstLevelTiles[i];
       tile->render(rc,
                    &trc,
-                   parentState,
+                   parentState, &_programState,
                    NULL);
     }
   }
@@ -479,7 +482,7 @@ void TileRenderer::render(const G3MRenderContext* rc,
 
         tile->render(rc,
                      &trc,
-                     parentState,
+                     parentState, &_programState,
                      &toVisitInNextIteration);
       }
 

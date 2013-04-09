@@ -145,15 +145,15 @@ const IGLTextureId* LeveledTexturedMesh::getTopLevelGLTextureId() const {
 
 void LeveledTexturedMesh::render(const G3MRenderContext* rc,
                                  const GLState& parentState,
-                                 const GPUProgramState* gpuParentProgramState) const {
+                                 const GPUProgramState* parentProgramState) const {
   LazyTextureMapping* mapping = getCurrentTextureMapping();
   if (mapping == NULL) {
-    _mesh->render(rc, parentState, gpuParentProgramState);
+    _mesh->render(rc, parentState, parentProgramState);
   }
   else {
     GLState *state = mapping->bind(rc, parentState);
 
-    _mesh->render(rc, *state, gpuParentProgramState);
+    _mesh->render(rc, *state, parentProgramState);
     
     delete state;
   }

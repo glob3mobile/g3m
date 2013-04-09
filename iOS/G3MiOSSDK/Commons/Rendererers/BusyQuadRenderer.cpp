@@ -143,5 +143,5 @@ void BusyQuadRenderer::render(const G3MRenderContext* rc,
   MutableMatrix44D R2 = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, 1));
 
   // draw mesh
-  _quadMesh->render(rc, parentState, _programState);
+  _quadMesh->render(rc, parentState, &_programState);
 }

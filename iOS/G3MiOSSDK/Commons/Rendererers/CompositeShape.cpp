@@ -33,10 +33,10 @@ bool CompositeShape::isReadyToRender(const G3MRenderContext *rc) {
 }
 
 void CompositeShape::rawRender(const G3MRenderContext* rc,
-                               const GLState& parentState, const GPUProgramManager* gpuParentProgramState) {
+                               const GLState& parentState, const GPUProgramState* parentProgramState) {
   int childrenCount = _children.size();
   for (int i = 0; i < childrenCount; i++) {
     Shape* child = _children[i];
-    child->render(rc, parentState, gpuParentProgramState);
+    child->render(rc, parentState, parentProgramState);
   }
 }

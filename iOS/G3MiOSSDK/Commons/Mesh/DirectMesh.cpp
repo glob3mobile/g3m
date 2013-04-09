@@ -31,9 +31,9 @@ AbstractMesh(primitive,
 }
 
 void DirectMesh::rawRender(const G3MRenderContext* rc,
-                           const GLState& parentState, const GPUProgramState* gpuParentProgramState) const {
+                           const GLState& parentState, const GPUProgramState* parentProgramState) const {
   GL* gl = rc->getGL();
 
   const int verticesCount = getVertexCount();
-  gl->drawArrays(_primitive, 0, verticesCount, parentState, *rc->getGPUProgramManager(), gpuParentProgramState);
+  gl->drawArrays(_primitive, 0, verticesCount, parentState, *rc->getGPUProgramManager(), parentProgramState);
 }

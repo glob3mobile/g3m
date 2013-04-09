@@ -35,6 +35,7 @@
 #include "GPUProgramManager.hpp"
 
 #include "GLState.hpp"
+#include "GPUProgramState.hpp"
 
 void G3MWidget::initSingletons(ILogger*            logger,
                                IFactory*           factory,

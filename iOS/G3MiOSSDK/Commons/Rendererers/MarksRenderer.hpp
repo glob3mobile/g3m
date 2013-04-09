@@ -12,6 +12,8 @@
 #include <vector>
 #include "LeafRenderer.hpp"
 
+#include "GPUProgramState.hpp"
+
 class Mark;
 class Camera;
 class MarkTouchListener;
@@ -35,6 +37,8 @@ private:
   bool               _autoDeleteMarkTouchListener;
 
   long long _downloadPriority;
+  
+  GPUProgramState _programState;
   
 public:
 

@@ -36,7 +36,7 @@ void MeshRenderer::render(const G3MRenderContext* rc,
     const Extent* extent = mesh->getExtent();
 
     if ( extent->touches( rc->getCurrentCamera()->getFrustumInModelCoordinates() ) ) {
-      mesh->render(rc, parentState, _programState);
+      mesh->render(rc, parentState, &_programState);
     }
   }
 }

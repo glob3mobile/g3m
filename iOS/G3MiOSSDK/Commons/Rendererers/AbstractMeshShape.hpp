@@ -42,7 +42,7 @@ public:
 
   void rawRender(const G3MRenderContext* rc,
                  const GLState& parentState,
-                 const GPUProgramManager* gpuParentProgramState);
+                 const GPUProgramState* parentProgramState);
 
   virtual ~AbstractMeshShape();
 

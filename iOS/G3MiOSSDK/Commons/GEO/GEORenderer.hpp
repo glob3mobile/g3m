@@ -10,6 +10,8 @@
 #define __G3MiOSSDK__GEORenderer__
 
 #include "LeafRenderer.hpp"
+#include "GPUProgramState.hpp"
+
 
 #include <vector>
 class GEOObject;
@@ -26,11 +28,14 @@ private:
   std::vector<GEOObject*> _children;
 
   const GEOSymbolizer* _symbolizer;
+  
+  GPUProgramState _programState;
 
 public:
 
   GEORenderer(const GEOSymbolizer* symbolizer) :
-  _symbolizer(symbolizer)
+  _symbolizer(symbolizer),
+  _programState(NULL)
   {
 
   }

@@ -180,7 +180,7 @@ public:
                   long long downloadPriority);
 
   void render(const G3MRenderContext* rc,
-              const Vector3D& cameraPosition, const GLState& parentState, const GPUProgramState* gpuParentProgramState);
+              const Vector3D& cameraPosition, const GLState& parentState, const GPUProgramState* parentProgramState);
 
   bool isReady() const;
 

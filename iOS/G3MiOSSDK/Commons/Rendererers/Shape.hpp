@@ -150,7 +150,7 @@ public:
                    const Angle& fromAltitude, const Angle& toAltitude);
 
   void render(const G3MRenderContext* rc,
-              const GLState& parentState, const GPUProgramState* gpuParentProgramState);
+              const GLState& parentState, const GPUProgramState* parentProgramState);
 
   virtual void initialize(const G3MContext* context) {
 
@@ -159,7 +159,7 @@ public:
   virtual bool isReadyToRender(const G3MRenderContext* rc) = 0;
 
   virtual void rawRender(const G3MRenderContext* rc,
-                         const GLState& parentState, const GPUProgramState* gpuParentProgramState) = 0;
+                         const GLState& parentState, const GPUProgramState* parentProgramState) = 0;
 
   virtual bool isTransparent(const G3MRenderContext* rc) = 0;
     
