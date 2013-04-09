@@ -154,7 +154,7 @@ public class SceneParser
       wmsVersion = WMSServerVersion.WMS_1_3_0;
     }
   
-    WMSLayer wmsLayer = new WMSLayer(URL.escape(layersSecuence), new URL(jsonURL, false), wmsVersion, sector, "image/png", "EPSG:4326", "", transparent, levelTileCondition, TimeInterval.fromDays(30), new LayerTilesRenderParameters(Sector.fullSphere(),jsonSplitsLat,jsonSplitsLon,0,16,new Vector2I(256,256),new Vector2I(16,16),false));
+    WMSLayer wmsLayer = new WMSLayer(URL.escape(layersSecuence), new URL(jsonURL, false), wmsVersion, sector, "image/png", "EPSG:4326", "", transparent, levelTileCondition, TimeInterval.fromDays(30), new LayerTilesRenderParameters(Sector.fullSphere(),jsonSplitsLat,jsonSplitsLon,0,19,new Vector2I(256,256),new Vector2I(16,16),false));
     layerSet.addLayer(wmsLayer);
   }
   private void parserJSONTMSLayer(LayerSet layerSet, JSONObject jsonLayer)
@@ -194,7 +194,7 @@ public class SceneParser
     if (layersName != null)
        layersName.dispose();
   
-    TMSLayer tmsLayer = new TMSLayer(URL.escape(layersSecuence), new URL(jsonURL, false), sector, "image/jpeg", "EPSG:4326", transparent, levelTileCondition, TimeInterval.fromDays(30), new LayerTilesRenderParameters(Sector.fullSphere(),jsonSplitsLat,jsonSplitsLon,0,16,new Vector2I(256,256),new Vector2I(16,16),false));
+    TMSLayer tmsLayer = new TMSLayer(URL.escape(layersSecuence), new URL(jsonURL, false), sector, "image/jpeg", "EPSG:4326", transparent, levelTileCondition, TimeInterval.fromDays(30), new LayerTilesRenderParameters(Sector.fullSphere(),jsonSplitsLat,jsonSplitsLon,0,19,new Vector2I(256,256),new Vector2I(16,16),false));
   
     layerSet.addLayer(tmsLayer);
   }
@@ -310,9 +310,9 @@ public class SceneParser
       {
         minLevel = 0;
       }
-      if (maxLevel >= 16)
+      if (maxLevel >= 19)
       {
-        maxLevel = 16;
+        maxLevel = 19;
       }
       if (minLevel < maxLevel)
       {
