@@ -173,7 +173,7 @@ void SceneParser::parserJSONWMSLayer(LayerSet* layerSet, const JSONObject* jsonL
                                     "EPSG:4326",
                                     "",
                                     transparent,
-                                    levelTileCondition, TimeInterval::fromDays(30), new LayerTilesRenderParameters(Sector::fullSphere(),jsonSplitsLat,jsonSplitsLon,0,16,Vector2I(256,256),Vector2I(16,16),false));
+                                    levelTileCondition, TimeInterval::fromDays(30), new LayerTilesRenderParameters(Sector::fullSphere(),jsonSplitsLat,jsonSplitsLon,0,19,Vector2I(256,256),Vector2I(16,16),false));
   layerSet->addLayer(wmsLayer);
 }
 
@@ -213,7 +213,7 @@ void SceneParser::parserJSONTMSLayer(LayerSet* layerSet, const JSONObject* jsonL
                                     "EPSG:4326",
                                     transparent,
                                     levelTileCondition,
-                                    TimeInterval::fromDays(30), new LayerTilesRenderParameters(Sector::fullSphere(),jsonSplitsLat,jsonSplitsLon,0,16,Vector2I(256,256),Vector2I(16,16),false));
+                                    TimeInterval::fromDays(30), new LayerTilesRenderParameters(Sector::fullSphere(),jsonSplitsLat,jsonSplitsLon,0,19,Vector2I(256,256),Vector2I(16,16),false));
   
   layerSet->addLayer(tmsLayer);
 }
@@ -226,8 +226,8 @@ LevelTileCondition* SceneParser::getLevelCondition(const JSONString* jsonMinLeve
     if (minLevel <= 0) {
       minLevel = 0;
     }
-    if (maxLevel >= 16){
-      maxLevel = 16;
+    if (maxLevel >= 19){
+      maxLevel = 19;
     }
     if (minLevel < maxLevel){
       levelTileCondition = new LevelTileCondition(minLevel, maxLevel);
