@@ -6,37 +6,76 @@
 //
 //
 
-#ifndef __G3MiOSSDK__G3MError__
-#define __G3MiOSSDK__G3MError__
+//#ifndef __G3MiOSSDK__G3MError__
+//#define __G3MiOSSDK__G3MError__
+//
+//#ifdef C_CODE
+//
+//#include <string>
+//
+//class G3MError {
+//private:
+//  const std::string _description;
+//
+//public:
+//
+//  G3MError(const std::string& description) :
+//  _description(description)
+//  {
+//
+//  }
+//
+//};
+//#endif
+//
+//#endif
+//
+//#ifdef JAVA_CODE
+//public class G3MError extends java.lang.RuntimeException {
+//  private static final long serialVersionUID = 1L;
+//
+//
+//  public G3MError(final String description) {
+//    super(description);
+//  }
+//}
+//#endif
 
-#ifdef C_CODE
+
+
+
+
+
+
+#ifndef G3MiOSSDK_G3MError_hpp
+#define G3MiOSSDK_G3MError_hpp
 
 #include <string>
 
+#ifdef C_CODE
 class G3MError {
 private:
   const std::string _description;
 
 public:
-
   G3MError(const std::string& description) :
   _description(description)
   {
-
   }
 
+  const std::string getDescription() const {
+    return _description;
+  }
 };
 #endif
-
-#endif
-
 #ifdef JAVA_CODE
 public class G3MError extends java.lang.RuntimeException {
-  private static final long serialVersionUID = 1L;
-
+	private static final long serialVersionUID = 1L;
 
   public G3MError(final String description) {
     super(description);
   }
 }
+#endif
+
 #endif
