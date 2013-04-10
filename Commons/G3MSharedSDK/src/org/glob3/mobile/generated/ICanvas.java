@@ -36,14 +36,14 @@ public abstract class ICanvas
   {
     if (!isInitialized())
     {
-      throw new G3MError("Canvas is not initialized");
+      throw G3MError("Canvas is not initialized");
     }
   }
   private void checkCurrentFont()
   {
     if (_currentFont == null)
     {
-      throw new G3MError("Current font no set");
+      throw G3MError("Current font no set");
     }
   }
 
@@ -103,12 +103,12 @@ public abstract class ICanvas
   {
     if ((width <= 0) || (height <= 0))
     {
-      throw new G3MError("Invalid extent");
+      throw G3MError("Invalid extent");
     }
   
     if (isInitialized())
     {
-      throw new G3MError("Canvas already initialized");
+      throw G3MError("Canvas already initialized");
     }
   
     _width = width;
