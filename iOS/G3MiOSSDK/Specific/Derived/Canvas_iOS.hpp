@@ -27,9 +27,6 @@ private:
 
   UIFont* createUIFont(const GFont& font);
 
-  const Vector2F textExtent(const std::string& text,
-                            UIFont* uiFont);
-
   void tryToSetCurrentFontToContext();
 
 protected:
@@ -91,7 +88,7 @@ public:
   _currentUIFont(nil)
   {
   }
-
+  
   virtual ~Canvas_iOS();
   
 };

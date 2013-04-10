@@ -249,16 +249,6 @@ UIFont* Canvas_iOS::createUIFont(const GFont& font) {
                          size: font.getSize()];
 }
 
-const Vector2F Canvas_iOS::textExtent(const std::string& text,
-                                      UIFont* uiFont) {
-  NSString* nsString = [NSString stringWithCString: text.c_str()
-                                          encoding: NSUTF8StringEncoding];
-
-  CGSize cgSize = [nsString sizeWithFont: uiFont];
-
-  return Vector2F(cgSize.width, cgSize.height);
-}
-
 void Canvas_iOS::_setFont(const GFont& font) {
   _currentUIFont = createUIFont(font);
 
@@ -266,7 +256,12 @@ void Canvas_iOS::_setFont(const GFont& font) {
 }
 
 const Vector2F Canvas_iOS::_textExtent(const std::string& text) {
-  return textExtent(text, _currentUIFont);
+  NSString* nsString = [NSString stringWithCString: text.c_str()
+                                          encoding: NSUTF8StringEncoding];
+
+  CGSize cgSize = [nsString sizeWithFont: _currentUIFont];
+
+  return Vector2F(cgSize.width, cgSize.height);
 }
 
 void Canvas_iOS::_fillText(const std::string& text,
