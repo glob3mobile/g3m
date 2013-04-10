@@ -347,7 +347,8 @@ public class SceneParser
       }
       if (minx < maxx && miny < maxy)
       {
-        return Sector.fromDegrees(miny, minx, maxy, maxx);
+        return new Sector(new Geodetic2D(Angle.fromDegrees(miny), Angle.fromDegrees(minx)), new Geodetic2D(Angle.fromDegrees(maxy), Angle.fromDegrees(maxx)));
+  
       }
     }
     return Sector.fullSphere();
