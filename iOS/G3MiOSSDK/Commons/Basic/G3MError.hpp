@@ -10,6 +10,7 @@
 #define __G3MiOSSDK__G3MError__
 
 #ifdef C_CODE
+
 #include <string>
 
 class G3MError {
