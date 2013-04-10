@@ -118,12 +118,6 @@ public abstract class ICanvas
     _initialize(width, height);
   }
 
-  /**
-   Returns the size of the text if it were to be rendered with the specified font on a single line.
-
-   NOTE: No need to initialize the canvas before calling this method.
-   */
-  public abstract Vector2F textExtent(String text, GFont font);
 
   /**
    Returns the size of the text if it were to be rendered with the actual font on a single line.
