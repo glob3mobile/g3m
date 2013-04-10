@@ -9,6 +9,7 @@
 #ifndef __G3MiOSSDK__G3MError__
 #define __G3MiOSSDK__G3MError__
 
+#ifdef C_CODE
 #include <string>
 
 class G3MError {
@@ -24,5 +25,17 @@ public:
   }
 
 };
+#endif
+
+#ifdef JAVA_CODE
+public class G3MError extends java.lang.RuntimeException {
+  private static final long serialVersionUID = 1L;
+
+
+  public G3MError(final String description) {
+    super(description);
+  }
+}
+#endif
 
 #endif
