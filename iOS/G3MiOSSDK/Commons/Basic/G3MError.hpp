@@ -27,6 +27,8 @@ public:
 };
 #endif
 
+#endif
+
 #ifdef JAVA_CODE
 public class G3MError extends java.lang.RuntimeException {
   private static final long serialVersionUID = 1L;
@@ -36,6 +38,4 @@ public class G3MError extends java.lang.RuntimeException {
     super(description);
   }
 }
-#endif
-
 #endif

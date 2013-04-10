@@ -54,6 +54,19 @@ public:
     return GFont(GFont::MONOSPACED, size, bold, italic);
   }
 
+  GFont(const GFont& that) :
+  _name(that._name),
+  _size(that._size),
+  _bold(that._bold),
+  _italic(that._italic)
+  {
+
+  }
+
+  ~GFont() {
+
+  }
+
   bool isSerif() const;
   bool isSansSerif() const;
   bool isMonospaced() const;
