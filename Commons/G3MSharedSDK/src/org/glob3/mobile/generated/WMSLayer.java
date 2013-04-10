@@ -328,11 +328,26 @@ public class WMSLayer extends Layer
   
     final IMathUtils mu = IMathUtils.instance();
   
+    double u;
+    double v;
+    if (_parameters._mercator)
+    {
+      u = sector.getUCoordinates(position.longitude());
+      v = MercatorUtils.getMercatorV(position.latitude());
+    }
+    else
+    {
+      final Vector2D uv = sector.getUVCoordinates(position);
+      u = uv._x;
+      v = uv._y;
+    }
+  
     //X and Y
-    int TODO_CONSIDER_MERCATOR;
-    final Vector2D uv = sector.getUVCoordinates(position);
-    final int x = (int) mu.round((uv._x * _parameters._tileTextureResolution._x));
-    final int y = (int) mu.round((uv._y * _parameters._tileTextureResolution._y));
+    //const Vector2D uv = sector.getUVCoordinates(position);
+  //  const int x = (int) mu->round( (uv._x * _parameters->_tileTextureResolution._x) );
+  //  const int y = (int) mu->round( (uv._y * _parameters->_tileTextureResolution._y) );
+    final int x = (int) mu.round((u * _parameters._tileTextureResolution._x));
+    final int y = (int) mu.round((v * _parameters._tileTextureResolution._y));
     // const int y = (int) mu->round( ((1.0 - uv._y) * _parameters->_tileTextureResolution._y) );
   
     IStringBuilder isb = IStringBuilder.newStringBuilder();

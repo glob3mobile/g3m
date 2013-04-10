@@ -71,9 +71,19 @@ public class Color
     return Color.fromRGBA(1, 0, 1, 1);
   }
 
+  public static Color red()
+  {
+    return Color.fromRGBA(1, 0, 0, 1);
+  }
+
   public static Color green()
   {
     return Color.fromRGBA(0, 1, 0, 1);
+  }
+
+  public static Color blue()
+  {
+    return Color.fromRGBA(0, 0, 1, 1);
   }
 
   public final float getRed()
