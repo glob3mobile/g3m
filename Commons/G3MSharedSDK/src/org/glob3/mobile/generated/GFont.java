@@ -89,6 +89,20 @@ public class GFont
     return new GFont(GFont.MONOSPACED, size, bold, italic);
   }
 
+  public GFont(GFont that)
+  {
+     _name = that._name;
+     _size = that._size;
+     _bold = that._bold;
+     _italic = that._italic;
+
+  }
+
+  public void dispose()
+  {
+
+  }
+
   public final boolean isSerif()
   {
     return (_name.compareTo(GFont.SERIF) == 0);
