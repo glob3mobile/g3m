@@ -48,6 +48,9 @@ void Canvas_iOS::_initialize(int width, int height) {
     return;
   }
 
+//  CGContextScaleCTM(_context, 1, -1);
+//  CGContextTranslateCTM(_context, 0, -height);
+
   tryToSetCurrentFontToContext();
 }
 

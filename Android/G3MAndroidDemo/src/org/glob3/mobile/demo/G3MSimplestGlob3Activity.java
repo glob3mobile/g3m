@@ -205,6 +205,10 @@ public class G3MSimplestGlob3Activity
             canvas.setShadow(Color.black(), 5, 1, -1);
             canvas.fillText(text, 128 - (textExtent._x / 2), 128 - (textExtent._y / 2));
 
+            canvas.removeShadow();
+            canvas.setFillColor(Color.black());
+            canvas.fillRectangle(10, 10, 5, 5);
+
             final IImageListener listener = new IImageListener() {
 
                @Override

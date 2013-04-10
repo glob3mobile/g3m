@@ -1472,9 +1472,15 @@ public:
                        128 - textExtent._x/2,
                        128 - textExtent._y/2);
 
+
+      canvas->removeShadow();
+      canvas->setFillColor(Color::black());
+      canvas->fillRectangle(10, 10, 5, 5);
+
+
       canvas->createImage(new MyImageListener(_shapesRenderer),
                           true);
-
+      
       delete canvas;
     }
 
