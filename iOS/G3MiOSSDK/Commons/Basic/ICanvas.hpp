@@ -79,7 +79,7 @@ protected:
 
   virtual void _fillText(const std::string& text,
                          float x, float y) = 0;
-  
+
 public:
   ICanvas() :
   _width(-1),
@@ -95,13 +95,6 @@ public:
    */
   void initialize(int width, int height);
 
-  /**
-   Returns the size of the text if it were to be rendered with the specified font on a single line.
-
-   NOTE: No need to initialize the canvas before calling this method.
-   */
-  virtual const Vector2F textExtent(const std::string& text,
-                                    const GFont& font) = 0;
 
   /**
    Returns the size of the text if it were to be rendered with the actual font on a single line.

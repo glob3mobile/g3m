@@ -259,11 +259,6 @@ const Vector2F Canvas_iOS::textExtent(const std::string& text,
   return Vector2F(cgSize.width, cgSize.height);
 }
 
-const Vector2F Canvas_iOS::textExtent(const std::string& text,
-                                      const GFont& font) {
-  return textExtent(text, createUIFont(font));
-}
-
 void Canvas_iOS::_setFont(const GFont& font) {
   _currentUIFont = createUIFont(font);
 

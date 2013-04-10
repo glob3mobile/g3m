@@ -93,9 +93,6 @@ public:
   }
 
   virtual ~Canvas_iOS();
-
-  const Vector2F textExtent(const std::string& text,
-                            const GFont& font);
   
 };
 
