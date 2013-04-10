@@ -265,7 +265,9 @@ Sector SceneParser::getSector(const JSONObject* jsonBBOX){
       maxy = 90;
     }
     if (minx < maxx && miny < maxy) {
-      return Sector::fromDegrees(miny, minx, maxy, maxx);
+      return Sector(Geodetic2D(Angle::fromDegrees(miny), Angle::fromDegrees(minx)),
+             Geodetic2D(Angle::fromDegrees(maxy), Angle::fromDegrees(maxx)));
+
     }
   }
   return Sector::fullSphere();
