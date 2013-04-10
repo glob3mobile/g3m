@@ -154,8 +154,6 @@
 		CFA59ECE171482560095E2EF /* Canvas_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFA59ECC171482560095E2EF /* Canvas_iOS.mm */; };
 		CFA59ECF1714856A0095E2EF /* ICanvas.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFA59ECA171467890095E2EF /* ICanvas.hpp */; };
 		CFA59ED01714856A0095E2EF /* Canvas_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFA59ECD171482560095E2EF /* Canvas_iOS.hpp */; };
-		CFA59ED3171488130095E2EF /* G3MError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFA59ED1171488130095E2EF /* G3MError.cpp */; };
-		CFA59ED41714887C0095E2EF /* G3MError.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFA59ED2171488130095E2EF /* G3MError.hpp */; };
 		CFA71BE515D2E85600F8C78D /* MultiLayerTileTexturizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFA71BE315D2E85600F8C78D /* MultiLayerTileTexturizer.cpp */; };
 		CFA71BEA15D2F6D200F8C78D /* TilesRenderParameters.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFA71BE815D2F6D200F8C78D /* TilesRenderParameters.cpp */; };
 		CFB5275016D5607F008374C2 /* Interpolator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFB5274E16D5607F008374C2 /* Interpolator.cpp */; };
@@ -466,7 +464,6 @@
 			dstSubfolderSpec = 16;
 			files = (
 				CF0755971715B9570084CC14 /* GFont.hpp in CopyFiles */,
-				CFA59ED41714887C0095E2EF /* G3MError.hpp in CopyFiles */,
 				CFA59ECF1714856A0095E2EF /* ICanvas.hpp in CopyFiles */,
 				CFA59ED01714856A0095E2EF /* Canvas_iOS.hpp in CopyFiles */,
 				CF83D50717049AE3009A39A5 /* GEOMarkSymbol.hpp in CopyFiles */,
@@ -977,8 +974,6 @@
 		CFA59ECA171467890095E2EF /* ICanvas.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ICanvas.hpp; path = Commons/Basic/ICanvas.hpp; sourceTree = "<group>"; };
 		CFA59ECC171482560095E2EF /* Canvas_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Canvas_iOS.mm; path = Specific/Derived/Canvas_iOS.mm; sourceTree = "<group>"; };
 		CFA59ECD171482560095E2EF /* Canvas_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Canvas_iOS.hpp; path = Specific/Derived/Canvas_iOS.hpp; sourceTree = "<group>"; };
-		CFA59ED1171488130095E2EF /* G3MError.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = G3MError.cpp; path = Commons/Basic/G3MError.cpp; sourceTree = "<group>"; };
-		CFA59ED2171488130095E2EF /* G3MError.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = G3MError.hpp; path = Commons/Basic/G3MError.hpp; sourceTree = "<group>"; };
 		CFA71BE115D2E84300F8C78D /* MultiLayerTileTexturizer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MultiLayerTileTexturizer.hpp; path = Commons/Basic/MultiLayerTileTexturizer.hpp; sourceTree = "<group>"; };
 		CFA71BE315D2E85600F8C78D /* MultiLayerTileTexturizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MultiLayerTileTexturizer.cpp; path = Commons/Basic/MultiLayerTileTexturizer.cpp; sourceTree = "<group>"; };
 		CFA71BE715D2F6C500F8C78D /* TilesRenderParameters.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TilesRenderParameters.hpp; path = Commons/Rendererers/TilesRenderParameters.hpp; sourceTree = "<group>"; };
@@ -1306,8 +1301,6 @@
 				CFDA835816D6698700295F96 /* FloatBufferElevationData.hpp */,
 				CF73BFD915E114E3001CE412 /* FrameTasksExecutor.cpp */,
 				CF73BFDA15E114E3001CE412 /* FrameTasksExecutor.hpp */,
-				CFA59ED1171488130095E2EF /* G3MError.cpp */,
-				CFA59ED2171488130095E2EF /* G3MError.hpp */,
 				383BD3901577EE500012AC53 /* G3MWidget.cpp */,
 				D88B5E5115C162AF0083A43F /* G3MWidget.hpp */,
 				CF2CDD971678292E002A78A9 /* GInitializationTask.cpp */,
@@ -2097,7 +2090,6 @@
 				CF83D50617049AB9009A39A5 /* GEOMarkSymbol.cpp in Sources */,
 				CFA59ECB171467890095E2EF /* ICanvas.cpp in Sources */,
 				CFA59ECE171482560095E2EF /* Canvas_iOS.mm in Sources */,
-				CFA59ED3171488130095E2EF /* G3MError.cpp in Sources */,
 				CF0755961715B9120084CC14 /* GFont.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

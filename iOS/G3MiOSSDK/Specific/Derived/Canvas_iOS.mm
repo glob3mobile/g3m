@@ -8,7 +8,6 @@
 
 #include "Canvas_iOS.hpp"
 
-#include "G3MError.hpp"
 #include "Color.hpp"
 #include "Image_iOS.hpp"
 #include "IImageListener.hpp"
@@ -45,7 +44,8 @@ void Canvas_iOS::_initialize(int width, int height) {
   CGColorSpaceRelease( colorSpace );
 
   if (_context == NULL) {
-    throw G3MError("Can't create CGContext");
+    ILogger::instance()->logError("Can't create CGContext");
+    return;
   }
 
   tryToSetCurrentFontToContext();
@@ -241,7 +241,8 @@ UIFont* Canvas_iOS::createUIFont(const GFont& font) {
     }
   }
   else {
-    throw G3MError("Unsupported Font type");
+    ILogger::instance()->logError("Unsupported Font type");
+    return nil;
   }
 
   return [UIFont fontWithName: fontName

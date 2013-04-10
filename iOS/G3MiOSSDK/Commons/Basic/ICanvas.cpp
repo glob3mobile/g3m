@@ -8,7 +8,6 @@
 
 #include "ICanvas.hpp"
 
-#include "G3MError.hpp"
 #include "GFont.hpp"
 
 ICanvas::~ICanvas() {
@@ -17,11 +16,13 @@ ICanvas::~ICanvas() {
 
 void ICanvas::initialize(int width, int height) {
   if ((width <= 0) || (height <= 0)) {
-    throw G3MError("Invalid extent");
+    ILogger::instance()->logError("Invalid extent");
+    return;
   }
 
   if (isInitialized()) {
-    throw G3MError("Canvas already initialized");
+    ILogger::instance()->logError("Canvas already initialized");
+    return;
   }
 
   _width  = width;
@@ -31,13 +32,13 @@ void ICanvas::initialize(int width, int height) {
 
 void ICanvas::checkInitialized() const {
   if (!isInitialized()) {
-    throw G3MError("Canvas is not initialized");
+    ILogger::instance()->logError("Canvas is not initialized");
   }
 }
 
 void ICanvas::checkCurrentFont() const {
   if (_currentFont == NULL) {
-    throw G3MError("Current font no set");
+    ILogger::instance()->logError("Current font no set");
   }
 }
 
