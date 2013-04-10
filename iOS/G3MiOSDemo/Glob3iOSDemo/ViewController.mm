@@ -84,6 +84,7 @@
 #import <G3MiOSSDK/GEO2DPointGeometry.hpp>
 #import <G3MiOSSDK/GEOShapeSymbol.hpp>
 #import <G3MiOSSDK/GEOMarkSymbol.hpp>
+#import <G3MiOSSDK/GFont.hpp>
 
 
 class TestVisibleSectorListener : public VisibleSectorListener {
@@ -503,7 +504,7 @@ public:
     layerSet->addLayer( new OSMLayer(TimeInterval::fromDays(30)) );
   }
 
-  const bool useMapQuestOSM = false;
+  const bool useMapQuestOSM = true;
   if (useMapQuestOSM) {
     layerSet->addLayer( MapQuestLayer::newOSM(TimeInterval::fromDays(30)) );
   }
@@ -532,7 +533,7 @@ public:
                                             TimeInterval::fromDays(30)) );
   }
 
-  const bool useBingMaps = true;
+  const bool useBingMaps = false;
   if (useBingMaps) {
     layerSet->addLayer( new BingMapsLayer(//BingMapType::Road(),
                                           //BingMapType::AerialWithLabels(),
@@ -735,7 +736,7 @@ public:
 
 - (TilesRenderParameters*) createTileRenderParameters
 {
-  const bool renderDebug = false;
+  const bool renderDebug = true;
   const bool useTilesSplitBudget = true;
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
@@ -821,12 +822,12 @@ public:
 {
   ShapesRenderer* shapesRenderer = new ShapesRenderer();
 
-  Shape* quad1 = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
-                                              Angle::fromDegrees(-122),
-                                              8000),
-                               URL("file:///g3m-marker.png", false),
-                               50000, 50000);
-  shapesRenderer->addShape(quad1);
+//  Shape* quad1 = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
+//                                              Angle::fromDegrees(-122),
+//                                              8000),
+//                               URL("file:///g3m-marker.png", false),
+//                               50000, 50000);
+//  shapesRenderer->addShape(quad1);
 
   Shape* quad2 = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
                                               Angle::fromDegrees(-123),
@@ -1399,8 +1400,88 @@ public:
                             color);
     }
 
+    void testCanvas(const IFactory* factory) {
+
+      class MyImageListener : public IImageListener {
+      private:
+        ShapesRenderer* _shapesRenderer;
+        
+      public:
+        MyImageListener(ShapesRenderer* shapesRenderer) :
+        _shapesRenderer(shapesRenderer)
+        {
+
+        }
+
+        void imageCreated(IImage* image) {
+          //printf("Created image=%s\n", image->description().c_str());
+          //delete image;
+
+          Shape* quad = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
+                                                     Angle::fromDegrees(-121.5),
+                                                     8000),
+                                      image,
+                                      50000, 50000);
+          _shapesRenderer->addShape(quad);
+        }
+      };
+
+
+      ICanvas* canvas = factory->createCanvas();
+
+      
+      const std::string text = "Hello World!";
+      //const GFont font = GFont::serif();
+      //const GFont font = GFont::monospaced();
+      const GFont font = GFont::sansSerif();
+
+      canvas->setFont(font);
+
+      const Vector2F textExtent = canvas->textExtent(text);
+
+
+      canvas->initialize(256, 256);
+
+      canvas->setFillColor( Color::fromRGBA(1, 1, 1, 0.75) );
+      canvas->fillRoundedRectangle(0, 0, 256, 256, 32);
+
+
+      canvas->setShadow(Color::black(), 5, 3.5, -3.5);
+      canvas->setFillColor( Color::fromRGBA(1, 0, 0, 0.5) );
+      canvas->fillRectangle(32, 64, 64, 128);
+      canvas->removeShadow();
+
+
+      canvas->setStrokeColor( Color::fromRGBA(1, 0, 1, 0.9) );
+      canvas->setStrokeWidth(2.5f);
+      const float margin = 1.25f;
+      canvas->strokeRoundedRectangle(0 + margin, 0 + margin,
+                                     256 - (margin * 2), 256 - (margin * 2),
+                                     32);
+
+      canvas->setFillColor( Color::fromRGBA(1, 1, 0, 0.9) );
+      canvas->setStrokeWidth(1.1f);
+      canvas->setStrokeColor( Color::fromRGBA(0, 0, 0, 0.9) );
+      canvas->fillAndStrokeRoundedRectangle(128, 16, 64, 64, 8);
+
+      int __DGD_working_at_Canvas;
+
+      canvas->setFillColor( Color::white() );
+      canvas->setShadow(Color::black(), 5, 1, -1);
+      canvas->fillText(text,
+                       128 - textExtent._x/2,
+                       128 - textExtent._y/2);
+
+      canvas->createImage(new MyImageListener(_shapesRenderer),
+                          true);
+
+      delete canvas;
+    }
+
     void run(const G3MContext* context) {
       printf("Running initialization Task\n");
+
+      testCanvas(context->getFactory());
 
 //      const Sector targetSector(Sector::fromDegrees(35, -6, 38, -2));
 

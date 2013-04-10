@@ -18,6 +18,7 @@
 #include "IntBuffer_iOS.hpp"
 #include "ShortBuffer_iOS.hpp"
 #include "IImageListener.hpp"
+#include "Canvas_iOS.hpp"
 
 class Factory_iOS: public IFactory {
 public:
@@ -138,6 +139,10 @@ public:
 
   IShortBuffer* createShortBuffer(int size) const {
     return new ShortBuffer_iOS(size);
+  }
+
+  ICanvas* createCanvas() const {
+    return new Canvas_iOS();
   }
 
 };

@@ -48,6 +48,8 @@
 		CCC2A03F15CA6C7D00923850 /* TileRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCC2A02C15CA6C7D00923850 /* TileRenderer.cpp */; };
 		CF00E444166FD77E0098CABD /* IImageListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF00E442166FD77E0098CABD /* IImageListener.cpp */; };
 		CF022386166836F500024B73 /* GEOJSONParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF022384166836F500024B73 /* GEOJSONParser.cpp */; };
+		CF0755961715B9120084CC14 /* GFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF0755941715B9120084CC14 /* GFont.cpp */; };
+		CF0755971715B9570084CC14 /* GFont.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF0755951715B9120084CC14 /* GFont.hpp */; };
 		CF0A8183163303E800036277 /* MutableVector2I.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF0A8181163303E800036277 /* MutableVector2I.cpp */; };
 		CF0C396A157F988100646A2F /* Mark.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF0C3969157F988100646A2F /* Mark.cpp */; };
 		CF0D9BB41601F46B00F28B7D /* ByteBuffer_iOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF0D9BB31601F46A00F28B7D /* ByteBuffer_iOS.cpp */; };
@@ -148,6 +150,12 @@
 		CFA1899A15F8D7CA0048BF46 /* FloatBuffer_iOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFA1899815F8D7CA0048BF46 /* FloatBuffer_iOS.cpp */; };
 		CFA1899F15F8D9F80048BF46 /* IntBuffer_iOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFA1899D15F8D9F80048BF46 /* IntBuffer_iOS.cpp */; };
 		CFA189AF15F926CA0048BF46 /* IFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFA189AD15F926CA0048BF46 /* IFactory.cpp */; };
+		CFA59ECB171467890095E2EF /* ICanvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFA59EC9171467890095E2EF /* ICanvas.cpp */; };
+		CFA59ECE171482560095E2EF /* Canvas_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFA59ECC171482560095E2EF /* Canvas_iOS.mm */; };
+		CFA59ECF1714856A0095E2EF /* ICanvas.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFA59ECA171467890095E2EF /* ICanvas.hpp */; };
+		CFA59ED01714856A0095E2EF /* Canvas_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFA59ECD171482560095E2EF /* Canvas_iOS.hpp */; };
+		CFA59ED3171488130095E2EF /* G3MError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFA59ED1171488130095E2EF /* G3MError.cpp */; };
+		CFA59ED41714887C0095E2EF /* G3MError.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFA59ED2171488130095E2EF /* G3MError.hpp */; };
 		CFA71BE515D2E85600F8C78D /* MultiLayerTileTexturizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFA71BE315D2E85600F8C78D /* MultiLayerTileTexturizer.cpp */; };
 		CFA71BEA15D2F6D200F8C78D /* TilesRenderParameters.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFA71BE815D2F6D200F8C78D /* TilesRenderParameters.cpp */; };
 		CFB5275016D5607F008374C2 /* Interpolator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFB5274E16D5607F008374C2 /* Interpolator.cpp */; };
@@ -457,6 +465,10 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF0755971715B9570084CC14 /* GFont.hpp in CopyFiles */,
+				CFA59ED41714887C0095E2EF /* G3MError.hpp in CopyFiles */,
+				CFA59ECF1714856A0095E2EF /* ICanvas.hpp in CopyFiles */,
+				CFA59ED01714856A0095E2EF /* Canvas_iOS.hpp in CopyFiles */,
 				CF83D50717049AE3009A39A5 /* GEOMarkSymbol.hpp in CopyFiles */,
 				CF1871CC170398BC00092888 /* GEOShapeSymbol.hpp in CopyFiles */,
 				CF1871C4170394AA00092888 /* GEOSymbolizationContext.hpp in CopyFiles */,
@@ -795,6 +807,8 @@
 		CF022385166836F500024B73 /* GEOJSONParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEOJSONParser.hpp; path = Commons/GEO/GEOJSONParser.hpp; sourceTree = "<group>"; };
 		CF024DC616A84F330051255C /* VisibleSectorListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = VisibleSectorListener.hpp; path = Commons/Rendererers/VisibleSectorListener.hpp; sourceTree = "<group>"; };
 		CF03683416A499F0006CE160 /* LabelPosition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LabelPosition.h; path = Commons/Basic/LabelPosition.h; sourceTree = "<group>"; };
+		CF0755941715B9120084CC14 /* GFont.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GFont.cpp; path = Commons/Basic/GFont.cpp; sourceTree = "<group>"; };
+		CF0755951715B9120084CC14 /* GFont.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GFont.hpp; path = Commons/Basic/GFont.hpp; sourceTree = "<group>"; };
 		CF08483515D41EF700327171 /* IGLTextureId.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IGLTextureId.hpp; path = Commons/Interfaces/IGLTextureId.hpp; sourceTree = "<group>"; };
 		CF0A8181163303E800036277 /* MutableVector2I.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MutableVector2I.cpp; path = Commons/Geometry/MutableVector2I.cpp; sourceTree = "<group>"; };
 		CF0A8182163303E800036277 /* MutableVector2I.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MutableVector2I.hpp; path = Commons/Geometry/MutableVector2I.hpp; sourceTree = "<group>"; };
@@ -959,6 +973,12 @@
 		CFA1899D15F8D9F80048BF46 /* IntBuffer_iOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IntBuffer_iOS.cpp; path = Specific/Derived/IntBuffer_iOS.cpp; sourceTree = "<group>"; };
 		CFA1899E15F8D9F80048BF46 /* IntBuffer_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IntBuffer_iOS.hpp; path = Specific/Derived/IntBuffer_iOS.hpp; sourceTree = "<group>"; };
 		CFA189AD15F926CA0048BF46 /* IFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IFactory.cpp; path = Commons/Interfaces/IFactory.cpp; sourceTree = "<group>"; };
+		CFA59EC9171467890095E2EF /* ICanvas.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ICanvas.cpp; path = Commons/Basic/ICanvas.cpp; sourceTree = "<group>"; };
+		CFA59ECA171467890095E2EF /* ICanvas.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ICanvas.hpp; path = Commons/Basic/ICanvas.hpp; sourceTree = "<group>"; };
+		CFA59ECC171482560095E2EF /* Canvas_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Canvas_iOS.mm; path = Specific/Derived/Canvas_iOS.mm; sourceTree = "<group>"; };
+		CFA59ECD171482560095E2EF /* Canvas_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Canvas_iOS.hpp; path = Specific/Derived/Canvas_iOS.hpp; sourceTree = "<group>"; };
+		CFA59ED1171488130095E2EF /* G3MError.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = G3MError.cpp; path = Commons/Basic/G3MError.cpp; sourceTree = "<group>"; };
+		CFA59ED2171488130095E2EF /* G3MError.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = G3MError.hpp; path = Commons/Basic/G3MError.hpp; sourceTree = "<group>"; };
 		CFA71BE115D2E84300F8C78D /* MultiLayerTileTexturizer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MultiLayerTileTexturizer.hpp; path = Commons/Basic/MultiLayerTileTexturizer.hpp; sourceTree = "<group>"; };
 		CFA71BE315D2E85600F8C78D /* MultiLayerTileTexturizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MultiLayerTileTexturizer.cpp; path = Commons/Basic/MultiLayerTileTexturizer.cpp; sourceTree = "<group>"; };
 		CFA71BE715D2F6C500F8C78D /* TilesRenderParameters.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TilesRenderParameters.hpp; path = Commons/Rendererers/TilesRenderParameters.hpp; sourceTree = "<group>"; };
@@ -1177,6 +1197,8 @@
 			children = (
 				CF0D9BB31601F46A00F28B7D /* ByteBuffer_iOS.cpp */,
 				D8E17DDC15FE2B4F00C980E6 /* ByteBuffer_iOS.hpp */,
+				CFA59ECD171482560095E2EF /* Canvas_iOS.hpp */,
+				CFA59ECC171482560095E2EF /* Canvas_iOS.mm */,
 				CFFEC11F15C2E9B0003FA986 /* Downloader_iOS.hpp */,
 				CFFEC12215C2EA5F003FA986 /* Downloader_iOS.mm */,
 				CF8A234C15C4306800FD56C9 /* Downloader_iOS_Handler.h */,
@@ -1196,22 +1218,22 @@
 				CFA1899E15F8D9F80048BF46 /* IntBuffer_iOS.hpp */,
 				A70F5609161B5C6000340256 /* JSONParser_iOS.hpp */,
 				A70F560C161B5CD800340256 /* JSONParser_iOS.mm */,
-				383BD37A1577EDC00012AC53 /* Logger_iOS.mm */,
 				383BD37B1577EDC00012AC53 /* Logger_iOS.hpp */,
+				383BD37A1577EDC00012AC53 /* Logger_iOS.mm */,
 				D8FEDAC815E7C219007633A0 /* MathUtils_iOS.hpp */,
+				CFBD42DE16AA1A8900663F21 /* ShortBuffer_iOS.cpp */,
+				CFBD42DF16AA1A8900663F21 /* ShortBuffer_iOS.hpp */,
 				CF8B21B115DD32820068601A /* SQLiteStorage_iOS.hpp */,
 				CF8B21B015DD32820068601A /* SQLiteStorage_iOS.mm */,
 				D8A723AD15E4D47E00ABDF07 /* StringBuilder_iOS.cpp */,
 				D8A723AB15E4D42B00ABDF07 /* StringBuilder_iOS.hpp */,
 				CFB72A6D15E682B400A5BAF4 /* StringUtils_iOS.hpp */,
 				CFB72A6C15E682B400A5BAF4 /* StringUtils_iOS.mm */,
-				CFFAFD71169F2E3000BCE129 /* TextUtils_iOS.mm */,
 				CFFAFD72169F2E3000BCE129 /* TextUtils_iOS.hpp */,
+				CFFAFD71169F2E3000BCE129 /* TextUtils_iOS.mm */,
 				CF47030A15EFB4C000426B8B /* ThreadUtils_iOS.hpp */,
 				CF47030915EFB4C000426B8B /* ThreadUtils_iOS.mm */,
 				CF31CBF315878BE40085E8F1 /* Timer_iOS.hpp */,
-				CFBD42DE16AA1A8900663F21 /* ShortBuffer_iOS.cpp */,
-				CFBD42DF16AA1A8900663F21 /* ShortBuffer_iOS.hpp */,
 			);
 			name = Derived;
 			sourceTree = "<group>";
@@ -1249,6 +1271,10 @@
 		383BD3891577EDF40012AC53 /* Basic */ = {
 			isa = PBXGroup;
 			children = (
+				CF35A20516D3D44E00D795D8 /* BilParser.cpp */,
+				CF35A20616D3D44E00D795D8 /* BilParser.hpp */,
+				CF27B15E16D93DC90000A415 /* BufferElevationData.cpp */,
+				CF27B15F16D93DC90000A415 /* BufferElevationData.hpp */,
 				CF4FAAC11695C66F009734CA /* ByteBufferBuilder.cpp */,
 				CF4FAAC21695C66F009734CA /* ByteBufferBuilder.hpp */,
 				CF7EDA0316948302002C760A /* ByteBufferIterator.cpp */,
@@ -1263,6 +1289,10 @@
 				E7EC944416C4F43300B32D9F /* DownloadPriority.hpp */,
 				CF31CBF0158776120085E8F1 /* Effects.cpp */,
 				CF31CBEE158776020085E8F1 /* Effects.hpp */,
+				CFD3D8AB16D1686700CE9242 /* ElevationData.cpp */,
+				CFD3D8AC16D1686800CE9242 /* ElevationData.hpp */,
+				CFD3D8A716D15ECF00CE9242 /* ElevationDataProvider.cpp */,
+				CFD3D8A816D15ED000CE9242 /* ElevationDataProvider.hpp */,
 				CF9AEBC1159B3FEA004C3558 /* EllipsoidalTileTessellator.cpp */,
 				CF9AEBC0159B3FDD004C3558 /* EllipsoidalTileTessellator.hpp */,
 				CF7E625F15F7D6FC0086B71D /* FloatBufferBuilder.cpp */,
@@ -1272,8 +1302,12 @@
 				D8C912D915F9FE78003F92A4 /* FloatBufferBuilderFromColor.hpp */,
 				CFD3D8A016CFDD0000CE9242 /* FloatBufferBuilderFromGeodetic.cpp */,
 				D8CD74DD15F8DE9500B801CC /* FloatBufferBuilderFromGeodetic.hpp */,
+				CFDA835716D6698700295F96 /* FloatBufferElevationData.cpp */,
+				CFDA835816D6698700295F96 /* FloatBufferElevationData.hpp */,
 				CF73BFD915E114E3001CE412 /* FrameTasksExecutor.cpp */,
 				CF73BFDA15E114E3001CE412 /* FrameTasksExecutor.hpp */,
+				CFA59ED1171488130095E2EF /* G3MError.cpp */,
+				CFA59ED2171488130095E2EF /* G3MError.hpp */,
 				383BD3901577EE500012AC53 /* G3MWidget.cpp */,
 				D88B5E5115C162AF0083A43F /* G3MWidget.hpp */,
 				CF2CDD971678292E002A78A9 /* GInitializationTask.cpp */,
@@ -1282,6 +1316,8 @@
 				CF527E1A162E2B4200E0BDE0 /* GTask.hpp */,
 				CF9D2D8615F7D3C100B5CE2E /* IBuffer.cpp */,
 				CF9D2D8715F7D3C100B5CE2E /* IBuffer.hpp */,
+				CFA59EC9171467890095E2EF /* ICanvas.cpp */,
+				CFA59ECA171467890095E2EF /* ICanvas.hpp */,
 				CF6873A315F77F54002EDFD0 /* IFloatBuffer.cpp */,
 				CF6873A415F77F54002EDFD0 /* IFloatBuffer.hpp */,
 				E77A1008165BEDC500FE5515 /* IG3MBuilder.cpp */,
@@ -1301,6 +1337,8 @@
 				E7B9964D16A94EC400753FC3 /* LayerBuilder.hpp */,
 				CF0C3969157F988100646A2F /* Mark.cpp */,
 				CF0C3967157F987200646A2F /* Mark.hpp */,
+				CFEBDF1C16E8C9C70063B49F /* MercatorUtils.cpp */,
+				CFEBDF1D16E8C9C80063B49F /* MercatorUtils.hpp */,
 				CFA71BE315D2E85600F8C78D /* MultiLayerTileTexturizer.cpp */,
 				CFA71BE115D2E84300F8C78D /* MultiLayerTileTexturizer.hpp */,
 				CF9592AC1652E28500CB7AC8 /* OrderedRenderable.cpp */,
@@ -1312,7 +1350,13 @@
 				CFF8C4BC15DEB6A70034A576 /* RCObject.hpp */,
 				CF923CA216AB126D00D04301 /* ShortBufferBuilder.cpp */,
 				CF923CA316AB126D00D04301 /* ShortBufferBuilder.hpp */,
+				CF27B16216D93F2B0000A415 /* ShortBufferElevationData.cpp */,
+				CF27B16316D93F2C0000A415 /* ShortBufferElevationData.hpp */,
 				D8CD74D615F8D3F000B801CC /* SimpleFloatBufferBuilder.hpp */,
+				CFDA835316D6602500295F96 /* SingleBillElevationDataProvider.cpp */,
+				CFDA835416D6602500295F96 /* SingleBillElevationDataProvider.hpp */,
+				CFDA836016D6776B00295F96 /* SubviewElevationData.cpp */,
+				CFDA836116D6776B00295F96 /* SubviewElevationData.hpp */,
 				CFE0844015E27A310004EC0E /* TerrainTouchEventListener.hpp */,
 				D87EC5CD15BEB31000E38C36 /* TextureBuilder.hpp */,
 				CF883B811590984900AEE39C /* TexturesHandler.cpp */,
@@ -1332,28 +1376,12 @@
 				383BD3941577EE500012AC53 /* TouchEvent.hpp */,
 				CFFEC12515C2EBA6003FA986 /* URL.cpp */,
 				CFFEC12415C2EB96003FA986 /* URL.hpp */,
-				CF8D0BFB15AF0D23005B5433 /* TileTexturizer.hpp */,
-				CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */,
-				CFD3D8A716D15ECF00CE9242 /* ElevationDataProvider.cpp */,
-				CFD3D8A816D15ED000CE9242 /* ElevationDataProvider.hpp */,
-				CFD3D8AB16D1686700CE9242 /* ElevationData.cpp */,
-				CFD3D8AC16D1686800CE9242 /* ElevationData.hpp */,
 				CFD3D8AF16D1729900CE9242 /* WMSBillElevationDataProvider.cpp */,
 				CFD3D8B016D1729A00CE9242 /* WMSBillElevationDataProvider.hpp */,
-				CF35A20516D3D44E00D795D8 /* BilParser.cpp */,
-				CF35A20616D3D44E00D795D8 /* BilParser.hpp */,
-				CFDA835316D6602500295F96 /* SingleBillElevationDataProvider.cpp */,
-				CFDA835416D6602500295F96 /* SingleBillElevationDataProvider.hpp */,
-				CFDA835716D6698700295F96 /* FloatBufferElevationData.cpp */,
-				CFDA835816D6698700295F96 /* FloatBufferElevationData.hpp */,
-				CFDA836016D6776B00295F96 /* SubviewElevationData.cpp */,
-				CFDA836116D6776B00295F96 /* SubviewElevationData.hpp */,
-				CF27B15E16D93DC90000A415 /* BufferElevationData.cpp */,
-				CF27B15F16D93DC90000A415 /* BufferElevationData.hpp */,
-				CF27B16216D93F2B0000A415 /* ShortBufferElevationData.cpp */,
-				CF27B16316D93F2C0000A415 /* ShortBufferElevationData.hpp */,
-				CFEBDF1C16E8C9C70063B49F /* MercatorUtils.cpp */,
-				CFEBDF1D16E8C9C80063B49F /* MercatorUtils.hpp */,
+				CF8D0BFB15AF0D23005B5433 /* TileTexturizer.hpp */,
+				CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */,
+				CF0755941715B9120084CC14 /* GFont.cpp */,
+				CF0755951715B9120084CC14 /* GFont.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -2067,6 +2095,10 @@
 				CF1871C3170389AB00092888 /* GEOSymbolizationContext.cpp in Sources */,
 				CF1871CA1703983C00092888 /* GEOShapeSymbol.cpp in Sources */,
 				CF83D50617049AB9009A39A5 /* GEOMarkSymbol.cpp in Sources */,
+				CFA59ECB171467890095E2EF /* ICanvas.cpp in Sources */,
+				CFA59ECE171482560095E2EF /* Canvas_iOS.mm in Sources */,
+				CFA59ED3171488130095E2EF /* G3MError.cpp in Sources */,
+				CF0755961715B9120084CC14 /* GFont.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
