@@ -23,23 +23,23 @@ package org.glob3.mobile.generated;
 
 public abstract class ICanvas
 {
-  private int _width;
-  private int _height;
-  private GFont _currentFont;
+  protected int _canvasWidth;
+  protected int _canvasHeight;
+  protected GFont _currentFont;
 
-  private boolean isInitialized()
+  protected final boolean isInitialized()
   {
-    return (_width > 0) && (_height > 0);
+    return (_canvasWidth > 0) && (_canvasHeight > 0);
   }
 
-  private void checkInitialized()
+  protected final void checkInitialized()
   {
     if (!isInitialized())
     {
       ILogger.instance().logError("Canvas is not initialized");
     }
   }
-  private void checkCurrentFont()
+  protected final void checkCurrentFont()
   {
     if (_currentFont == null)
     {
@@ -58,17 +58,17 @@ public abstract class ICanvas
   protected abstract void _setStrokeWidth(float width);
 
 
-  protected abstract void _fillRectangle(float x, float y, float width, float height);
+  protected abstract void _fillRectangle(float left, float top, float width, float height);
 
-  protected abstract void _strokeRectangle(float x, float y, float width, float height);
+  protected abstract void _strokeRectangle(float left, float top, float width, float height);
 
-  protected abstract void _fillAndStrokeRectangle(float x, float y, float width, float height);
+  protected abstract void _fillAndStrokeRectangle(float left, float top, float width, float height);
 
 
-  protected abstract void _fillRoundedRectangle(float x, float y, float width, float height, float radius);
+  protected abstract void _fillRoundedRectangle(float left, float top, float width, float height, float radius);
 
-  protected abstract void _strokeRoundedRectangle(float x, float y, float width, float height, float radius);
-  protected abstract void _fillAndStrokeRoundedRectangle(float x, float y, float width, float height, float radius);
+  protected abstract void _strokeRoundedRectangle(float left, float top, float width, float height, float radius);
+  protected abstract void _fillAndStrokeRoundedRectangle(float left, float top, float width, float height, float radius);
 
   protected abstract void _setShadow(Color color, float blur, float offsetX, float offsetY);
 
@@ -81,12 +81,12 @@ public abstract class ICanvas
 
   protected abstract Vector2F _textExtent(String text);
 
-  protected abstract void _fillText(String text, float x, float y);
+  protected abstract void _fillText(String text, float left, float top);
 
   public ICanvas()
   {
-     _width = -1;
-     _height = -1;
+     _canvasWidth = -1;
+     _canvasHeight = -1;
      _currentFont = null;
   }
 
@@ -113,8 +113,8 @@ public abstract class ICanvas
       return;
     }
   
-    _width = width;
-    _height = height;
+    _canvasWidth = width;
+    _canvasHeight = height;
     _initialize(width, height);
   }
 
@@ -176,40 +176,40 @@ public abstract class ICanvas
   }
 
 
-  public final void fillRectangle(float x, float y, float width, float height)
+  public final void fillRectangle(float left, float top, float width, float height)
   {
     checkInitialized();
-    _fillRectangle(x, y, width, height);
+    _fillRectangle(left, top, width, height);
   }
 
-  public final void strokeRectangle(float x, float y, float width, float height)
+  public final void strokeRectangle(float left, float top, float width, float height)
   {
     checkInitialized();
-    _strokeRectangle(x, y, width, height);
+    _strokeRectangle(left, top, width, height);
   }
 
-  public final void fillAndStrokeRectangle(float x, float y, float width, float height)
+  public final void fillAndStrokeRectangle(float left, float top, float width, float height)
   {
     checkInitialized();
-    _fillAndStrokeRectangle(x, y, width, height);
+    _fillAndStrokeRectangle(left, top, width, height);
   }
 
-  public final void fillRoundedRectangle(float x, float y, float width, float height, float radius)
+  public final void fillRoundedRectangle(float left, float top, float width, float height, float radius)
   {
     checkInitialized();
-    _fillRoundedRectangle(x, y, width, height, radius);
+    _fillRoundedRectangle(left, top, width, height, radius);
   }
 
-  public final void strokeRoundedRectangle(float x, float y, float width, float height, float radius)
+  public final void strokeRoundedRectangle(float left, float top, float width, float height, float radius)
   {
     checkInitialized();
-    _strokeRoundedRectangle(x, y, width, height, radius);
+    _strokeRoundedRectangle(left, top, width, height, radius);
   }
 
-  public final void fillAndStrokeRoundedRectangle(float x, float y, float width, float height, float radius)
+  public final void fillAndStrokeRoundedRectangle(float left, float top, float width, float height, float radius)
   {
     checkInitialized();
-    _fillAndStrokeRoundedRectangle(x, y, width, height, radius);
+    _fillAndStrokeRoundedRectangle(left, top, width, height, radius);
   }
 
   public final void createImage(IImageListener listener, boolean autodelete)
@@ -218,11 +218,21 @@ public abstract class ICanvas
     _createImage(listener, autodelete);
   }
 
-  public final void fillText(String text, float x, float y)
+  public final void fillText(String text, float left, float top)
   {
     checkInitialized();
     checkCurrentFont();
-    _fillText(text, x, y);
+    _fillText(text, left, top);
+  }
+
+  public final int getWidth()
+  {
+    return _canvasWidth;
+  }
+
+  public final int getHeight()
+  {
+    return _canvasHeight;
   }
 
 }
