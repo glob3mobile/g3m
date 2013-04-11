@@ -17,9 +17,11 @@ private:
   const ElevationData* _elevationData;
   const bool           _ownsElevationData;
   const IFloatBuffer*  _buffer;
+  
+  bool                 _hasNoData;
 
-  IFloatBuffer* createDecimatedBuffer() const;
-  IFloatBuffer* createInterpolatedBuffer() const;
+  IFloatBuffer* createDecimatedBuffer();
+  IFloatBuffer* createInterpolatedBuffer();
 
   double getElevationBoxAt(double x0, double y0,
                            double x1, double y1) const;
@@ -46,6 +48,8 @@ public:
   const std::string description(bool detailed) const;
 
   Vector3D getMinMaxAverageHeights() const;
+  
+  bool hasNoData() const{ return _hasNoData;}
 
 };
 

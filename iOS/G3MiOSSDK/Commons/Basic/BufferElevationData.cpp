@@ -43,7 +43,13 @@ double BufferElevationData::getElevationAt(int x, int y,
     return _noDataValue;
   }
   *type = 1;
-  return getValueInBufferAt( index );
+  
+  double d = getValueInBufferAt( index );
+  if (d == _noDataValue){
+    return IMathUtils::instance()->NanD();
+  } else {
+    return d;
+  }
 }
 
 
@@ -83,6 +89,8 @@ double BufferElevationData::getElevationAt(const Angle& latitude,
 //    printf("break point\n");
 //  }
 
+  
+  IMathUtils *m = IMathUtils::instance();
   int unsedType = -1;
   double result;
   if (x == dX) {
@@ -91,29 +99,46 @@ double BufferElevationData::getElevationAt(const Angle& latitude,
       result = getElevationAt(x, y, type);
     }
     else {
+      
+      *type = 2;
       // linear on Y
       const double heightY     = getElevationAt(x, y,     &unsedType);
+      if (m->isNan(heightY)){return m->NanD();}
       const double heightNextY = getElevationAt(x, nextY, &unsedType);
-      *type = 2;
+      if (m->isNan(heightNextY)){return m->NanD();}
+      
+      if (m->isNan(heightY) || m->isNan(heightNextY)){
+        return m->NanD();
+      }
+      
       result = mu->linearInterpolation(heightNextY, heightY, alphaY);
     }
   }
   else {
     if (y == dY) {
+      
+      *type = 3;
       // linear on X
       const double heightX     = getElevationAt(x,     y, &unsedType);
+      if (m->isNan(heightX)){return m->NanD();}
       const double heightNextX = getElevationAt(nextX, y, &unsedType);
-      *type = 3;
+      if (m->isNan(heightNextX)){return m->NanD();}
+      
       result = mu->linearInterpolation(heightX, heightNextX, alphaX);
     }
     else {
+      
+      *type = 4;
       // bilinear
       const double valueNW = getElevationAt(x,     y,     &unsedType);
+      if (m->isNan(valueNW)){return m->NanD();}
       const double valueNE = getElevationAt(nextX, y,     &unsedType);
+      if (m->isNan(valueNE)){return m->NanD();}
       const double valueSE = getElevationAt(nextX, nextY, &unsedType);
+      if (m->isNan(valueSE)){return m->NanD();}
       const double valueSW = getElevationAt(x,     nextY, &unsedType);
+      if (m->isNan(valueSW)){return m->NanD();}
 
-      *type = 4;
       result = getInterpolator()->interpolation(valueSW,
                                                 valueSE,
                                                 valueNE,

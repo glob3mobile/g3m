@@ -38,6 +38,7 @@ ElevationData* BilParser::parseBil16(const Sector& sector,
   IShortBuffer* shortBuffer = IFactory::instance()->createShortBuffer(size);
   for (int i = 0; i < size; i++) {
     short height = iterator.nextInt16();
+    int WORKING_NODATA;
     if (height <= minValidHeight) {
       height = (short) noDataValue;
     }

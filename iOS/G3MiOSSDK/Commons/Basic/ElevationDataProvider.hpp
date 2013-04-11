@@ -15,6 +15,8 @@ class ElevationData;
 class G3MContext;
 class G3MRenderContext;
 
+#include <vector.h>
+
 class IElevationDataListener {
 public:
 #ifdef C_CODE
@@ -51,6 +53,10 @@ public:
                                                bool autodeleteListener) = 0;
 
   virtual void cancelRequest(const long long requestId) = 0;
+  
+  virtual std::vector<const Sector*> getSectors() const = 0;
+  
+  virtual Vector2I getMinResolution() const = 0;
   
 };
 

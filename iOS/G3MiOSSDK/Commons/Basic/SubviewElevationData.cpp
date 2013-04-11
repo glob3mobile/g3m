@@ -23,6 +23,7 @@ ElevationData(sector, resolution, noDataValue),
 _elevationData(elevationData),
 _ownsElevationData(ownsElevationData)
 {
+  _hasNoData = false;
   if (useDecimation) {
     _buffer = createDecimatedBuffer();
   }
@@ -52,8 +53,6 @@ const Vector2D SubviewElevationData::getParentXYAt(const Geodetic2D& position) c
 
 double SubviewElevationData::getElevationBoxAt(double x0, double y0,
                                                double x1, double y1) const {
-  //  aaa;
-
   const IMathUtils* mu = IMathUtils::instance();
 
   const double floorY0 = mu->floor(y0);
@@ -94,6 +93,10 @@ double SubviewElevationData::getElevationBoxAt(double x0, double y0,
       const double height = _elevationData->getElevationAt((int) mu->min(x, maxX),
                                                            yy,
                                                            &unusedType);
+      
+      if (IMathUtils::instance()->isNan(height)){
+        return IMathUtils::instance()->NanD();
+      }
 
       double size = ysize;
       if (x < x0) {
@@ -111,12 +114,14 @@ double SubviewElevationData::getElevationBoxAt(double x0, double y0,
   return heightSum/area;
 }
 
-IFloatBuffer* SubviewElevationData::createDecimatedBuffer() const {
+IFloatBuffer* SubviewElevationData::createDecimatedBuffer() {
   IFloatBuffer* buffer = IFactory::instance()->createFloatBuffer(_width * _height);
 
   const Vector2D parentXYAtLower = getParentXYAt(_sector.lower());
   const Vector2D parentXYAtUpper = getParentXYAt(_sector.upper());
   const Vector2D parentDeltaXY = parentXYAtUpper.sub(parentXYAtLower);
+  
+  IMathUtils *mu = IMathUtils::instance();
 
   for (int x = 0; x < _width; x++) {
     const double u0 = (double) x     / (_width - 1);
@@ -135,15 +140,22 @@ IFloatBuffer* SubviewElevationData::createDecimatedBuffer() const {
       const double height = getElevationBoxAt(x0, y0,
                                               x1, y1);
       buffer->rawPut(index, (float) height);
+      
+      if (mu->isNan(height)){
+        _hasNoData = true;
+      }
     }
   }
 
   return buffer;
 }
 
-IFloatBuffer* SubviewElevationData::createInterpolatedBuffer() const {
+IFloatBuffer* SubviewElevationData::createInterpolatedBuffer() {
   IFloatBuffer* buffer = IFactory::instance()->createFloatBuffer(_width * _height);
 
+  
+  IMathUtils *mu = IMathUtils::instance();
+  
   int unusedType = -1;
   for (int x = 0; x < _width; x++) {
     const double u = (double) x / (_width - 1);
@@ -158,6 +170,10 @@ IFloatBuffer* SubviewElevationData::createInterpolatedBuffer() const {
                                                            &unusedType);
 
       buffer->rawPut(index, (float) height);
+      
+      if (mu->isNan(height)){
+        _hasNoData = true;
+      }
       
     }
   }

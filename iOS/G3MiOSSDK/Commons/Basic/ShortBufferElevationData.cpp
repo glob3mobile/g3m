@@ -22,6 +22,15 @@ _buffer(buffer)
   if (_buffer->size() != (_width * _height) ) {
     ILogger::instance()->logError("Invalid buffer size");
   }
+  
+  int size = buffer->size();
+  _hasNoData = false;
+  for (int i = 0; i < size; i++) {
+    if (buffer->get(i) == noDataValue){
+      _hasNoData = true;
+      break;
+    }
+  }
 }
 
 ShortBufferElevationData::~ShortBufferElevationData() {

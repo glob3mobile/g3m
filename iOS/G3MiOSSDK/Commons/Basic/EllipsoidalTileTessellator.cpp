@@ -68,6 +68,7 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
                                           planet,
                                           sector.getCenter());
 
+  IMathUtils *mu = IMathUtils::instance();
   int unusedType = -1;
   for (int j = 0; j < tileResolution._y; j++) {
     const double v = (double) j / (tileResolution._y-1);
@@ -77,13 +78,22 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
       const Geodetic2D position = sector.getInnerPoint(u, v);
       
       double height = 0;
+      
       if (elevationData != NULL) {
 //        height = elevationData->getElevationAt(i, j) * verticalExaggeration;
         height = elevationData->getElevationAt(position,
                                                &unusedType) * verticalExaggeration;
+        
+        if (mu->isNan(height) ){
+          int ADD_PARAMETER_DEFAULT_HEIGHT;///!!!!!!
+          height = 0;
+        }
+        
+        
         if (height < minHeight) {
           minHeight = height;
         }
+        
       }
 
       vertices.add( position, height );
@@ -330,7 +340,7 @@ Mesh* EllipsoidalTileTessellator::createTileDebugMesh(const Planet* planet,
     indices.add(posS++);
   }
 
-  Color *color = Color::newFromRGBA((float) 1.0, (float) 0, (float) 0, (float) 1.0);
+  Color *color = Color::newFromRGBA((float) 1.0, (float) 0.0, (float) 0, (float) 1.0);
 
   return new IndexedMesh(GLPrimitive::lineLoop(),
                          true,

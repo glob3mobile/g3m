@@ -227,6 +227,9 @@
 		D81D2072160748EA009A8BA6 /* GLConstants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81D2071160748EA009A8BA6 /* GLConstants.cpp */; };
 		D8228EBF157F7F7900BBAF60 /* MutableMatrix44D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */; };
 		D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */; };
+		D86F9E31171581E9004849AF /* CompositeElevationDataProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D86F9E2F171581E9004849AF /* CompositeElevationDataProvider.cpp */; };
+		D86F9E32171592E3004849AF /* CompositeElevationDataProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D86F9E30171581E9004849AF /* CompositeElevationDataProvider.hpp */; };
+		D87A1DF41716F62C001AC5E3 /* CompositeElevationData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87A1DF21716F62C001AC5E3 /* CompositeElevationData.cpp */; };
 		D87EC5C715BEB12F00E38C36 /* LayerSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87EC5C215BEB12F00E38C36 /* LayerSet.cpp */; };
 		D87EC5C915BEB12F00E38C36 /* WMSLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87EC5C415BEB12F00E38C36 /* WMSLayer.cpp */; };
 		D87EC5CE15BEB31000E38C36 /* CPUTextureBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87EC5CB15BEB31000E38C36 /* CPUTextureBuilder.cpp */; };
@@ -457,6 +460,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D86F9E32171592E3004849AF /* CompositeElevationDataProvider.hpp in CopyFiles */,
 				CF83D50717049AE3009A39A5 /* GEOMarkSymbol.hpp in CopyFiles */,
 				CF1871CC170398BC00092888 /* GEOShapeSymbol.hpp in CopyFiles */,
 				CF1871C4170394AA00092888 /* GEOSymbolizationContext.hpp in CopyFiles */,
@@ -1085,6 +1089,10 @@
 		D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = MutableMatrix44D.cpp; path = Commons/Geometry/MutableMatrix44D.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MutableVector3D.cpp; path = Commons/Geometry/MutableVector3D.cpp; sourceTree = "<group>"; };
 		D84D5A30157E0EAA000C5E35 /* MutableVector3D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = MutableVector3D.hpp; path = Commons/Geometry/MutableVector3D.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		D86F9E2F171581E9004849AF /* CompositeElevationDataProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CompositeElevationDataProvider.cpp; sourceTree = "<group>"; };
+		D86F9E30171581E9004849AF /* CompositeElevationDataProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CompositeElevationDataProvider.hpp; sourceTree = "<group>"; };
+		D87A1DF21716F62C001AC5E3 /* CompositeElevationData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CompositeElevationData.cpp; sourceTree = "<group>"; };
+		D87A1DF31716F62C001AC5E3 /* CompositeElevationData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CompositeElevationData.hpp; sourceTree = "<group>"; };
 		D87EC5C115BEB12F00E38C36 /* Layer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Layer.hpp; sourceTree = "<group>"; };
 		D87EC5C215BEB12F00E38C36 /* LayerSet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LayerSet.cpp; sourceTree = "<group>"; };
 		D87EC5C315BEB12F00E38C36 /* LayerSet.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LayerSet.hpp; sourceTree = "<group>"; };
@@ -1354,6 +1362,10 @@
 				CF27B16316D93F2C0000A415 /* ShortBufferElevationData.hpp */,
 				CFEBDF1C16E8C9C70063B49F /* MercatorUtils.cpp */,
 				CFEBDF1D16E8C9C80063B49F /* MercatorUtils.hpp */,
+				D86F9E2F171581E9004849AF /* CompositeElevationDataProvider.cpp */,
+				D86F9E30171581E9004849AF /* CompositeElevationDataProvider.hpp */,
+				D87A1DF21716F62C001AC5E3 /* CompositeElevationData.cpp */,
+				D87A1DF31716F62C001AC5E3 /* CompositeElevationData.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -2067,6 +2079,8 @@
 				CF1871C3170389AB00092888 /* GEOSymbolizationContext.cpp in Sources */,
 				CF1871CA1703983C00092888 /* GEOShapeSymbol.cpp in Sources */,
 				CF83D50617049AB9009A39A5 /* GEOMarkSymbol.cpp in Sources */,
+				D86F9E31171581E9004849AF /* CompositeElevationDataProvider.cpp in Sources */,
+				D87A1DF41716F62C001AC5E3 /* CompositeElevationData.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

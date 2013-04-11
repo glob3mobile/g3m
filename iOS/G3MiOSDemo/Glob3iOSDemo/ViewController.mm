@@ -85,6 +85,8 @@
 #import <G3MiOSSDK/GEOShapeSymbol.hpp>
 #import <G3MiOSSDK/GEOMarkSymbol.hpp>
 
+#import <G3MiOSSDK/CompositeElevationDataProvider.hpp>
+
 
 class TestVisibleSectorListener : public VisibleSectorListener {
 public:
@@ -200,10 +202,16 @@ public:
 //  ElevationDataProvider* elevationDataProvider = new WMSBillElevationDataProvider();
 
 //  ElevationDataProvider* elevationDataProvider;
+  
+  
 //  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
 //                                                              Sector::fullSphere(),
 //                                                              Vector2I(2048, 1024),
 //                                                              0);
+
+  
+  
+  
 
 //  ElevationDataProvider* elevationDataProvider;
 //  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///elev-35.0_-6.0_38.0_-2.0_4096x2048.bil", false),
@@ -217,16 +225,16 @@ public:
 //                                                              Vector2I(4096, 2048),
 //                                                              0);
 
-//  ElevationDataProvider* elevationDataProvider;
-//  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///caceres-2008x2032.bil", false),
-//                                                              Sector::fromDegrees(
-//                                                                                  39.4642996294239623,
-//                                                                                  -6.3829977122432933,
-//                                                                                  39.4829891936013553,
-//                                                                                  -6.3645288909498845
-//                                                                                  ),
-//                                                              Vector2I(2008, 2032),
-//                                                              0);
+  //ElevationDataProvider* elevationDataProvider;
+  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///caceres-2008x2032.bil", false),
+                                                              Sector::fromDegrees(
+                                                                                  39.4642996294239623,
+                                                                                  -6.3829977122432933,
+                                                                                  39.4829891936013553,
+                                                                                  -6.3645288909498845
+                                                                                  ),
+                                                              Vector2I(2008, 2032),
+                                                              0);
 
 //  ElevationDataProvider* elevationDataProvider;
 //  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///small-caceres.bil", false),
@@ -238,6 +246,11 @@ public:
 //                                                                                  ),
 //                                                              Vector2I(251, 254),
 //                                                              0);
+  
+  
+  CompositeElevationDataProvider* compElevationDataProvider = new CompositeElevationDataProvider();
+  compElevationDataProvider->addElevationDataProvider(elevationDataProvider);
+  elevationDataProvider = compElevationDataProvider;
 
   builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProvider);
 }
@@ -503,7 +516,7 @@ public:
     layerSet->addLayer( new OSMLayer(TimeInterval::fromDays(30)) );
   }
 
-  const bool useMapQuestOSM = false;
+  const bool useMapQuestOSM = true;
   if (useMapQuestOSM) {
     layerSet->addLayer( MapQuestLayer::newOSM(TimeInterval::fromDays(30)) );
   }
@@ -532,7 +545,7 @@ public:
                                             TimeInterval::fromDays(30)) );
   }
 
-  const bool useBingMaps = true;
+  const bool useBingMaps = false;
   if (useBingMaps) {
     layerSet->addLayer( new BingMapsLayer(//BingMapType::Road(),
                                           //BingMapType::AerialWithLabels(),
@@ -735,7 +748,7 @@ public:
 
 - (TilesRenderParameters*) createTileRenderParameters
 {
-  const bool renderDebug = false;
+  const bool renderDebug = true;
   const bool useTilesSplitBudget = true;
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
@@ -1179,10 +1192,10 @@ public:
                                                                               0,
                                                                               true);
 
-//    _meshRenderer->addMesh( subElevationDataDecimated->createMesh(planet,
-//                                                                  verticalExaggeration,
-//                                                                  Geodetic3D::fromDegrees(0.02, 0.02, 0),
-//                                                                  pointSize) );
+    _meshRenderer->addMesh( subElevationDataDecimated->createMesh(planet,
+                                                                  verticalExaggeration,
+                                                                  Geodetic3D::fromDegrees(0.02, 0.02, 0),
+                                                                  pointSize) );
 
 
     const ElevationData* subElevationDataNotDecimated = new SubviewElevationData(elevationData,
@@ -1515,7 +1528,8 @@ public:
        Sector::fullSphere()),
        true);
        */
-      /*
+      
+      
        context->getDownloader()->requestBuffer(//URL("file:///sample_bil16_150x150.bil", false),
        //URL("file:///409_554.bil", false),
        //URL("file:///full-earth-512x512.bil", false),
@@ -1527,7 +1541,7 @@ public:
        Vector2I(4096, 2048),
        Sector::fromDegrees(35, -6, 38, -2)),
        true);
-       */
+      
 
       /*
       context->getDownloader()->requestBuffer(URL("file:///caceres-2008x2032.bil", false),

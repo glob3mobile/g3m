@@ -13,6 +13,7 @@
 
 #include "URL.hpp"
 #include "Sector.hpp"
+#include "Vector2I.hpp"
 #include <stddef.h>
 class Vector2I;
 
@@ -63,6 +64,16 @@ public:
 
 
   void onElevationData(ElevationData* elevationData);
+  
+  std::vector<const Sector*> getSectors() const{
+    std::vector<const Sector*> sectors;
+    sectors.push_back(&_sector);
+    return sectors;
+  }
+  
+  Vector2I getMinResolution() const{
+    return Vector2I(_resolutionWidth,_resolutionHeight);
+  }
   
 };
 

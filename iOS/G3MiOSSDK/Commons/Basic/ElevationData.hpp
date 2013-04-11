@@ -68,6 +68,8 @@ public:
   virtual const Sector getSector() const {
     return _sector;
   }
+  
+  virtual bool hasNoData() const = 0;
 
 };
 

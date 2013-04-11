@@ -12,6 +12,8 @@
 #include "ElevationDataProvider.hpp"
 #include <stddef.h>
 
+#include "Vector2I.hpp"
+
 class IDownloader;
 
 class WMSBillElevationDataProvider : public ElevationDataProvider {
@@ -36,6 +38,16 @@ public:
                                        bool autodeleteListener);
 
   void cancelRequest(const long long requestId);
+  
+  std::vector<const Sector*> getSectors() const{
+    int WORKING_JM;
+    return std::vector<const Sector*>();
+  }
+  
+  Vector2I getMinResolution() const{
+    int WORKING_JM;
+    return Vector2I(0,0);
+  }
 
 };
 

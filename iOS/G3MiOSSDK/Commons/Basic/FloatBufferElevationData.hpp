@@ -15,6 +15,7 @@ class IFloatBuffer;
 class FloatBufferElevationData : public BufferElevationData {
 private:
   IFloatBuffer*  _buffer;
+  bool           _hasNoData;
 
 protected:
   double getValueInBufferAt(int index) const;
@@ -30,6 +31,8 @@ public:
   const std::string description(bool detailed) const;
 
   Vector3D getMinMaxAverageHeights() const;
+  
+  bool hasNoData() const { return _hasNoData;}
 
 };
 
