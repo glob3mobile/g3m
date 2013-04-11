@@ -128,7 +128,7 @@ public class Canvas_WebGL
       final int b = Math.round(255 * color.getBlue());
       final float a = color.getAlpha();
 
-      return "rgba(" + r + "," + g + "," + b + "," + a + ")";
+      return "rgba(" + r + ", " + g + ", " + b + ", " + a + ")";
    }
 
 

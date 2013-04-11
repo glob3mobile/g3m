@@ -145,6 +145,7 @@ public class G3MWebGLDemo
 
             canvas.setFillColor(Color.fromRGBA(1f, 1f, 1f, 0.75f));
             canvas.fillRoundedRectangle(0, 0, 256, 256, 32);
+            //canvas.fillRectangle(0, 0, 256, 256);
 
             canvas.setShadow(Color.black(), 5f, 3.5f, -3.5f);
             canvas.setFillColor(Color.fromRGBA(1f, 0f, 0f, 0.5f));
@@ -156,11 +157,13 @@ public class G3MWebGLDemo
             canvas.setStrokeWidth(2.5f);
             final float margin = 1.25f;
             canvas.strokeRoundedRectangle(0 + margin, 0 + margin, 256 - (margin * 2), 256 - (margin * 2), 32);
+            //canvas.strokeRectangle(0 + margin, 0 + margin, 256 - (margin * 2), 256 - (margin * 2));
 
             canvas.setFillColor(Color.fromRGBA(1, 1, 0, 0.9f));
             canvas.setStrokeWidth(1.1f);
             canvas.setStrokeColor(Color.fromRGBA(0, 0, 0, 0.9f));
             canvas.fillAndStrokeRoundedRectangle(128, 16, 64, 64, 8);
+            //canvas.fillAndStrokeRectangle(128, 16, 64, 64);
 
             final int __DGD_working_at_Canvas;
 
