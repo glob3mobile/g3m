@@ -20,7 +20,7 @@ private:
 
   CGColorRef createCGColor(const Color& color);
 
-  void drawRoundedRectangle(float x, float y,
+  void drawRoundedRectangle(float left, float top,
                             float width, float height,
                             float radius,
                             CGPathDrawingMode mode);
@@ -48,25 +48,25 @@ protected:
   void _removeShadow();
 
 
-  void _fillRectangle(float x, float y,
+  void _fillRectangle(float left, float top,
                       float width, float height);
 
-  void _strokeRectangle(float x, float y,
+  void _strokeRectangle(float left, float top,
                         float width, float height);
 
-  void _fillAndStrokeRectangle(float x, float y,
+  void _fillAndStrokeRectangle(float left, float top,
                                float width, float height);
 
 
-  void _fillRoundedRectangle(float x, float y,
+  void _fillRoundedRectangle(float left, float top,
                              float width, float height,
                              float radius);
 
-  void _strokeRoundedRectangle(float x, float y,
+  void _strokeRoundedRectangle(float left, float top,
                                float width, float height,
                                float radius);
 
-  void _fillAndStrokeRoundedRectangle(float x, float y,
+  void _fillAndStrokeRoundedRectangle(float left, float top,
                                       float width, float height,
                                       float radius);
 
@@ -79,7 +79,7 @@ protected:
   const Vector2F _textExtent(const std::string& text);
 
   void _fillText(const std::string& text,
-                 float x, float y);
+                 float left, float top);
 
 
 public:

@@ -171,62 +171,62 @@ public class Canvas_Android
 
 
    @Override
-   protected void _fillRectangle(final float x,
-                                 final float y,
+   protected void _fillRectangle(final float left,
+                                 final float top,
                                  final float width,
                                  final float height) {
-      _canvas.drawRect(x, y, x + width, y + height, _fillPaint);
+      _canvas.drawRect(left, top, left + width, top + height, _fillPaint);
    }
 
 
    @Override
-   protected void _strokeRectangle(final float x,
-                                   final float y,
+   protected void _strokeRectangle(final float left,
+                                   final float top,
                                    final float width,
                                    final float height) {
-      _canvas.drawRect(x, y, x + width, y + height, _strokePaint);
+      _canvas.drawRect(left, top, left + width, top + height, _strokePaint);
    }
 
 
    @Override
-   protected void _fillAndStrokeRectangle(final float x,
-                                          final float y,
+   protected void _fillAndStrokeRectangle(final float left,
+                                          final float top,
                                           final float width,
                                           final float height) {
-      _fillRectangle(x, y, width, height);
-      _strokeRectangle(x, y, width, height);
+      _fillRectangle(left, top, width, height);
+      _strokeRectangle(left, top, width, height);
    }
 
 
    @Override
-   protected void _fillRoundedRectangle(final float x,
-                                        final float y,
+   protected void _fillRoundedRectangle(final float left,
+                                        final float top,
                                         final float width,
                                         final float height,
                                         final float radius) {
-      _rect.set(x, y, x + width, y + height);
+      _rect.set(left, top, left + width, top + height);
       _canvas.drawRoundRect(_rect, radius, radius, _fillPaint);
    }
 
 
    @Override
-   protected void _strokeRoundedRectangle(final float x,
-                                          final float y,
+   protected void _strokeRoundedRectangle(final float left,
+                                          final float top,
                                           final float width,
                                           final float height,
                                           final float radius) {
-      _rect.set(x, y, x + width, y + height);
+      _rect.set(left, top, left + width, top + height);
       _canvas.drawRoundRect(_rect, radius, radius, _strokePaint);
    }
 
 
    @Override
-   protected void _fillAndStrokeRoundedRectangle(final float x,
-                                                 final float y,
+   protected void _fillAndStrokeRoundedRectangle(final float left,
+                                                 final float top,
                                                  final float width,
                                                  final float height,
                                                  final float radius) {
-      _rect.set(x, y, x + width, y + height);
+      _rect.set(left, top, left + width, top + height);
       _canvas.drawRoundRect(_rect, radius, radius, _fillPaint);
       _canvas.drawRoundRect(_rect, radius, radius, _strokePaint);
    }
@@ -234,9 +234,9 @@ public class Canvas_Android
 
    @Override
    protected void _fillText(final String text,
-                            final float x,
-                            final float y) {
-      _canvas.drawText(text, x, y, _fillPaint);
+                            final float left,
+                            final float top) {
+      _canvas.drawText(text, left, top, _fillPaint);
    }
 
 

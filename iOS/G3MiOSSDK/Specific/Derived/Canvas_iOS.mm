@@ -113,26 +113,26 @@ void Canvas_iOS::_createImage(IImageListener* listener,
   }
 }
 
-void Canvas_iOS::_fillRectangle(float x, float y,
+void Canvas_iOS::_fillRectangle(float left, float top,
                                 float width, float height) {
   CGContextFillRect(_context,
-                    CGRectMake(x, y,
+                    CGRectMake(left, top,
                                width, height));
 }
 
 
-void Canvas_iOS::_strokeRectangle(float x, float y,
+void Canvas_iOS::_strokeRectangle(float left, float top,
                                   float width, float height) {
   CGContextStrokeRect(_context,
-                      CGRectMake(x, y,
+                      CGRectMake(left, top,
                                  width, height));
 }
 
-void Canvas_iOS::drawRoundedRectangle(float x, float y,
+void Canvas_iOS::drawRoundedRectangle(float left, float top,
                                       float width, float height,
                                       float radius,
                                       CGPathDrawingMode mode) {
-  CGRect rrect = CGRectMake(x, y,
+  CGRect rrect = CGRectMake(left, top,
                             width, height);
 
 	const float minx = CGRectGetMinX(rrect);
@@ -151,34 +151,34 @@ void Canvas_iOS::drawRoundedRectangle(float x, float y,
 	CGContextDrawPath(_context, mode);
 }
 
-void Canvas_iOS::_fillRoundedRectangle(float x, float y,
+void Canvas_iOS::_fillRoundedRectangle(float left, float top,
                                        float width, float height,
                                        float radius) {
-  drawRoundedRectangle(x, y,
+  drawRoundedRectangle(left, top,
                        width, height,
                        radius,
                        kCGPathFill);
 }
 
-void Canvas_iOS::_strokeRoundedRectangle(float x, float y,
+void Canvas_iOS::_strokeRoundedRectangle(float left, float top,
                                          float width, float height,
                                          float radius) {
-  drawRoundedRectangle(x, y,
+  drawRoundedRectangle(left, top,
                        width, height,
                        radius,
                        kCGPathStroke);
 }
 
-void Canvas_iOS::_fillAndStrokeRectangle(float x, float y,
+void Canvas_iOS::_fillAndStrokeRectangle(float left, float top,
                                          float width, float height) {
-  _fillRectangle(x, y, width, height);
-  _strokeRectangle(x, y, width, height);
+  _fillRectangle(left, top, width, height);
+  _strokeRectangle(left, top, width, height);
 }
 
-void Canvas_iOS::_fillAndStrokeRoundedRectangle(float x, float y,
+void Canvas_iOS::_fillAndStrokeRoundedRectangle(float left, float top,
                                                 float width, float height,
                                                 float radius) {
-  drawRoundedRectangle(x, y,
+  drawRoundedRectangle(left, top,
                        width, height,
                        radius,
                        kCGPathFillStroke);
@@ -268,9 +268,9 @@ const Vector2F Canvas_iOS::_textExtent(const std::string& text) {
 }
 
 void Canvas_iOS::_fillText(const std::string& text,
-                           float x, float y) {
+                           float left, float top) {
   CGContextShowTextAtPoint(_context,
-                           x, y,
+                           left, top,
                            text.c_str(),
                            text.size());
 }

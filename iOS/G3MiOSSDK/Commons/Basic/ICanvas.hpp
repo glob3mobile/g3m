@@ -41,24 +41,24 @@ protected:
   virtual void _setStrokeWidth(float width) = 0;
 
 
-  virtual void _fillRectangle(float x, float y,
+  virtual void _fillRectangle(float left, float top,
                               float width, float height) = 0;
 
-  virtual void _strokeRectangle(float x, float y,
+  virtual void _strokeRectangle(float left, float top,
                                 float width, float height) = 0;
 
-  virtual void _fillAndStrokeRectangle(float x, float y,
+  virtual void _fillAndStrokeRectangle(float left, float top,
                                        float width, float height) = 0;
 
 
-  virtual void _fillRoundedRectangle(float x, float y,
+  virtual void _fillRoundedRectangle(float left, float top,
                                      float width, float height,
                                      float radius) = 0;
 
-  virtual void _strokeRoundedRectangle(float x, float y,
+  virtual void _strokeRoundedRectangle(float left, float top,
                                        float width, float height,
                                        float radius) = 0;
-  virtual void _fillAndStrokeRoundedRectangle(float x, float y,
+  virtual void _fillAndStrokeRoundedRectangle(float left, float top,
                                               float width, float height,
                                               float radius) = 0;
 
@@ -78,7 +78,7 @@ protected:
   virtual const Vector2F _textExtent(const std::string& text) = 0;
 
   virtual void _fillText(const std::string& text,
-                         float x, float y) = 0;
+                         float left, float top) = 0;
 
 public:
   ICanvas() :
@@ -126,24 +126,24 @@ public:
   void removeShadow();
 
 
-  void fillRectangle(float x, float y,
+  void fillRectangle(float left, float top,
                      float width, float height);
 
-  void strokeRectangle(float x, float y,
+  void strokeRectangle(float left, float top,
                        float width, float height);
 
-  void fillAndStrokeRectangle(float x, float y,
+  void fillAndStrokeRectangle(float left, float top,
                               float width, float height);
 
-  void fillRoundedRectangle(float x, float y,
+  void fillRoundedRectangle(float left, float top,
                             float width, float height,
                             float radius);
 
-  void strokeRoundedRectangle(float x, float y,
+  void strokeRoundedRectangle(float left, float top,
                               float width, float height,
                               float radius);
 
-  void fillAndStrokeRoundedRectangle(float x, float y,
+  void fillAndStrokeRoundedRectangle(float left, float top,
                                      float width, float height,
                                      float radius);
 
@@ -151,7 +151,15 @@ public:
                    bool autodelete);
 
   void fillText(const std::string& text,
-                float x, float y);
+                float left, float top);
+
+  int getWidth() const {
+    return _width;
+  }
+  
+  int getHeight() const {
+    return _height;
+  }
   
 };
 

@@ -71,50 +71,50 @@ void ICanvas::removeShadow() {
   _removeShadow();
 }
 
-void ICanvas::fillRectangle(float x, float y,
+void ICanvas::fillRectangle(float left, float top,
                             float width, float height) {
   checkInitialized();
-  _fillRectangle(x, y,
+  _fillRectangle(left, top,
                  width, height);
 }
 
-void ICanvas::strokeRectangle(float x, float y,
+void ICanvas::strokeRectangle(float left, float top,
                               float width, float height) {
   checkInitialized();
-  _strokeRectangle(x, y,
+  _strokeRectangle(left, top,
                    width, height);
 }
 
-void ICanvas::fillRoundedRectangle(float x, float y,
+void ICanvas::fillRoundedRectangle(float left, float top,
                                    float width, float height,
                                    float radius) {
   checkInitialized();
-  _fillRoundedRectangle(x, y,
+  _fillRoundedRectangle(left, top,
                         width, height,
                         radius);
 }
 
-void ICanvas::strokeRoundedRectangle(float x, float y,
+void ICanvas::strokeRoundedRectangle(float left, float top,
                                      float width, float height,
                                      float radius) {
   checkInitialized();
-  _strokeRoundedRectangle(x, y,
+  _strokeRoundedRectangle(left, top,
                           width, height,
                           radius);
 }
 
-void ICanvas::fillAndStrokeRectangle(float x, float y,
+void ICanvas::fillAndStrokeRectangle(float left, float top,
                                      float width, float height) {
   checkInitialized();
-  _fillAndStrokeRectangle(x, y,
+  _fillAndStrokeRectangle(left, top,
                           width, height);
 }
 
-void ICanvas::fillAndStrokeRoundedRectangle(float x, float y,
+void ICanvas::fillAndStrokeRoundedRectangle(float left, float top,
                                             float width, float height,
                                             float radius) {
   checkInitialized();
-  _fillAndStrokeRoundedRectangle(x, y,
+  _fillAndStrokeRoundedRectangle(left, top,
                                  width, height,
                                  radius);
 }
@@ -137,8 +137,8 @@ const Vector2F ICanvas::textExtent(const std::string& text) {
 }
 
 void ICanvas::fillText(const std::string& text,
-                       float x, float y) {
+                       float left, float top) {
   checkInitialized();
   checkCurrentFont();
-  _fillText(text, x, y);
+  _fillText(text, left, top);
 }
