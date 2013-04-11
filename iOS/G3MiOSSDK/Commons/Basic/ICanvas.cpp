@@ -25,8 +25,8 @@ void ICanvas::initialize(int width, int height) {
     return;
   }
 
-  _width  = width;
-  _height = height;
+  _canvasWidth  = width;
+  _canvasHeight = height;
   _initialize(width, height);
 }
 

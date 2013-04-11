@@ -17,19 +17,18 @@ class GFont;
 #include "Vector2F.hpp"
 
 class ICanvas {
-private:
-  int _width;
-  int _height;
+protected:
+  int _canvasWidth;
+  int _canvasHeight;
   GFont* _currentFont;
 
   bool isInitialized() const {
-    return (_width > 0) && (_height > 0);
+    return (_canvasWidth > 0) && (_canvasHeight > 0);
   }
 
   inline void checkInitialized() const;
   inline void checkCurrentFont() const;
 
-protected:
 
   virtual void _initialize(int width, int height) = 0;
 
@@ -82,8 +81,8 @@ protected:
 
 public:
   ICanvas() :
-  _width(-1),
-  _height(-1),
+  _canvasWidth(-1),
+  _canvasHeight(-1),
   _currentFont(NULL)
   {
   }
@@ -154,11 +153,11 @@ public:
                 float left, float top);
 
   int getWidth() const {
-    return _width;
+    return _canvasWidth;
   }
   
   int getHeight() const {
-    return _height;
+    return _canvasHeight;
   }
   
 };

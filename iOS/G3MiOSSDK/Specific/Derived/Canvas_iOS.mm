@@ -13,6 +13,7 @@
 #include "IImageListener.hpp"
 #include "GFont.hpp"
 
+
 Canvas_iOS::~Canvas_iOS() {
   if (_context) {
     CGContextRelease( _context );
@@ -47,9 +48,6 @@ void Canvas_iOS::_initialize(int width, int height) {
     ILogger::instance()->logError("Can't create CGContext");
     return;
   }
-
-//  CGContextScaleCTM(_context, 1, -1);
-//  CGContextTranslateCTM(_context, 0, -height);
 
   tryToSetCurrentFontToContext();
 }
@@ -116,24 +114,24 @@ void Canvas_iOS::_createImage(IImageListener* listener,
 void Canvas_iOS::_fillRectangle(float left, float top,
                                 float width, float height) {
   CGContextFillRect(_context,
-                    CGRectMake(left, top,
-                               width, height));
+                    CGRectMake(left, _canvasHeight - top,
+                               width, -height));
 }
 
 
 void Canvas_iOS::_strokeRectangle(float left, float top,
                                   float width, float height) {
   CGContextStrokeRect(_context,
-                      CGRectMake(left, top,
-                                 width, height));
+                      CGRectMake(left, _canvasHeight - top,
+                                 width, -height));
 }
 
 void Canvas_iOS::drawRoundedRectangle(float left, float top,
                                       float width, float height,
                                       float radius,
                                       CGPathDrawingMode mode) {
-  CGRect rrect = CGRectMake(left, top,
-                            width, height);
+  CGRect rrect = CGRectMake(left, _canvasHeight - top,
+                            width, -height);
 
 	const float minx = CGRectGetMinX(rrect);
   const float midx = CGRectGetMidX(rrect);
@@ -270,7 +268,7 @@ const Vector2F Canvas_iOS::_textExtent(const std::string& text) {
 void Canvas_iOS::_fillText(const std::string& text,
                            float left, float top) {
   CGContextShowTextAtPoint(_context,
-                           left, top,
+                           left, _canvasHeight - top,
                            text.c_str(),
                            text.size());
 }
