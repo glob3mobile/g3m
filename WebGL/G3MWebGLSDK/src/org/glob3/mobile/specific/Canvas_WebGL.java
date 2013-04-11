@@ -213,7 +213,8 @@ public class Canvas_WebGL
                                    final float left,
                                    final float top) /*-{
 		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_context;
-		context.fillText(text, left, top);
+		var textHeight = this.@org.glob3.mobile.specific.Canvas_WebGL::_currentFontSize * 1.66;
+		context.fillText(text, left, top + textHeight);
    }-*/;
 
 
