@@ -28,11 +28,11 @@ public class Canvas_WebGL
 
 
    native void initialize() /*-{
-		this.@org.glob3.mobile.specific.Canvas_WebGL::_canvas = $doc
-				.createElement("canvas");
+		var canvas = $doc.createElement("canvas");
+		var context = canvas.getContext("2d");
 
-		this.@org.glob3.mobile.specific.Canvas_WebGL::_context = canvas
-				.getContext("2d");
+		this.@org.glob3.mobile.specific.Canvas_WebGL::_canvas = canvas;
+		this.@org.glob3.mobile.specific.Canvas_WebGL::_context = context;
    }-*/;
 
 
@@ -111,39 +111,37 @@ public class Canvas_WebGL
 		var width = this.@org.glob3.mobile.specific.Canvas_WebGL::_context
 				.measureText(text).width;
 
-		var height = Math.round(_currentFontSize * 1.66);
+		var height = Math
+				.round(this.@org.glob3.mobile.specific.Canvas_WebGL::_currentFontSize * 1.66);
 
 		return @org.glob3.mobile.generated.Vector2F::new(FF)(width, height);
    }-*/;
 
 
-   private static native String toJSColor(final Color color) /*-{
-		if (color) {
-			var r = Math
-					.round(255 * color.@org.glob3.mobile.generated.Color::getRed()());
-			var g = Math
-					.round(255 * color.@org.glob3.mobile.generated.Color::getGreen()());
-			var b = Math
-					.round(255 * color.@org.glob3.mobile.generated.Color::getBlue()());
-			var a = Math
-					.round(255 * color.@org.glob3.mobile.generated.Color::getAlpha()());
-			return "rgba(" + r + "," + g + "," + b + "," + a + ")";
-		} else {
-			return null;
-		}
-   }-*/;
+   private static String createDOMColor(final Color color) {
+      if (color == null) {
+         return null;
+      }
+
+      final int r = Math.round(255 * color.getRed());
+      final int g = Math.round(255 * color.getGreen());
+      final int b = Math.round(255 * color.getBlue());
+      final float a = color.getAlpha();
+
+      return "rgba(" + r + "," + g + "," + b + "," + a + ")";
+   }
 
 
    @Override
    protected native void _setFillColor(final Color color) /*-{
-		var jsColor = this.@org.glob3.mobile.specific.Canvas_WebGL::toJSColor(Lorg/glob3/mobile/generated/Color;)(color);
+		var jsColor = @org.glob3.mobile.specific.Canvas_WebGL::createDOMColor(Lorg/glob3/mobile/generated/Color;)(color);
 		this.@org.glob3.mobile.specific.Canvas_WebGL::_context.fillStyle = jsColor;
    }-*/;
 
 
    @Override
    protected native void _setStrokeColor(final Color color) /*-{
-		var jsColor = this.@org.glob3.mobile.specific.Canvas_WebGL::toJSColor(Lorg/glob3/mobile/generated/Color;)(color);
+		var jsColor = @org.glob3.mobile.specific.Canvas_WebGL::createDOMColor(Lorg/glob3/mobile/generated/Color;)(color);
 		this.@org.glob3.mobile.specific.Canvas_WebGL::_context.strokeStyle = jsColor;
    }-*/;
 
@@ -152,6 +150,130 @@ public class Canvas_WebGL
    protected native void _setStrokeWidth(final float width) /*-{
 		this.@org.glob3.mobile.specific.Canvas_WebGL::_context.lineWidth = width;
    }-*/;
+
+
+   @Override
+   protected native void _setShadow(final Color color,
+                                    final float blur,
+                                    final float offsetX,
+                                    final float offsetY) /*-{
+		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_context;
+
+		context.shadowColor = @org.glob3.mobile.specific.Canvas_WebGL::createDOMColor(Lorg/glob3/mobile/generated/Color;)(color);
+		context.shadowBlur = blur;
+		context.shadowOffsetX = offsetX;
+		context.shadowOffsetY = offsetY;
+   }-*/;
+
+
+   @Override
+   protected native void _removeShadow() /*-{
+		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_context;
+
+		context.shadowColor = "rgba(0,0,0,0)";
+		context.shadowBlur = 0;
+		context.shadowOffsetX = 0;
+		context.shadowOffsetY = 0;
+   }-*/;
+
+
+   @Override
+   protected native void _fillRectangle(final float left,
+                                        final float top,
+                                        final float width,
+                                        final float height) /*-{
+		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_context;
+		context.fillRect(left, top, width, height);
+   }-*/;
+
+
+   @Override
+   protected native void _strokeRectangle(final float left,
+                                          final float top,
+                                          final float width,
+                                          final float height) /*-{
+		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_context;
+		context.strokeRect(left, top, width, height);
+   }-*/;
+
+
+   @Override
+   protected native void _fillAndStrokeRectangle(final float left,
+                                                 final float top,
+                                                 final float width,
+                                                 final float height) /*-{
+		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_context;
+		context.fillRect(left, top, width, height);
+		context.strokeRect(left, top, width, height);
+   }-*/;
+
+
+   @Override
+   protected native void _fillText(final String text,
+                                   final float left,
+                                   final float top) /*-{
+		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_context;
+		context.fillText(text, left, top);
+   }-*/;
+
+
+   private native void roundRect(final float x,
+                                 final float y,
+                                 final float width,
+                                 final float height,
+                                 final float radius,
+                                 final boolean fill,
+                                 final boolean stroke) /*-{
+		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_context;
+		context.beginPath();
+		context.moveTo(x + radius, y);
+		context.lineTo(x + width - radius, y);
+		context.quadraticCurveTo(x + width, y, x + width, y + radius);
+		context.lineTo(x + width, y + height - radius);
+		context.quadraticCurveTo(x + width, y + height, x + width - radius, y
+				+ height);
+		context.lineTo(x + radius, y + height);
+		context.quadraticCurveTo(x, y + height, x, y + height - radius);
+		context.lineTo(x, y + radius);
+		context.quadraticCurveTo(x, y, x + radius, y);
+		context.closePath();
+		if (fill) {
+			context.fill();
+		}
+		if (stroke) {
+			context.stroke();
+		}
+   }-*/;
+
+
+   @Override
+   protected void _fillRoundedRectangle(final float left,
+                                        final float top,
+                                        final float width,
+                                        final float height,
+                                        final float radius) {
+      roundRect(left, top, width, height, radius, true, false);
+   }
+
+
+   @Override
+   protected void _strokeRoundedRectangle(final float left,
+                                          final float top,
+                                          final float width,
+                                          final float height,
+                                          final float radius) {
+      roundRect(left, top, width, height, radius, false, true);
+   }
+
+
+   @Override
+   protected void _fillAndStrokeRoundedRectangle(final float left,
+                                                 final float top,
+                                                 final float width,
+                                                 final float height,
+                                                 final float radius) {
+      roundRect(left, top, width, height, radius, true, true);
+   }
 
 
 }
