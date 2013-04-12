@@ -17,9 +17,8 @@ SubviewElevationData::SubviewElevationData(const ElevationData *elevationData,
                                            bool ownsElevationData,
                                            const Sector& sector,
                                            const Vector2I& resolution,
-                                           double noDataValue,
                                            bool useDecimation) :
-ElevationData(sector, resolution, noDataValue),
+ElevationData(sector, resolution),
 _elevationData(elevationData),
 _ownsElevationData(ownsElevationData)
 {
@@ -197,7 +196,7 @@ double SubviewElevationData::getElevationAt(int x, int y,
     if ( (index < 0) || (index >= _buffer->size()) ) {
       printf("break point on me\n");
       *type = 0;
-      return _noDataValue;
+      return IMathUtils::instance()->NanD();
     }
     *type = 1;
     return _buffer->get(index);
@@ -221,7 +220,7 @@ double SubviewElevationData::getElevationAt(const Angle& latitude,
     //                                  _sector.description().c_str(),
     //                                  latitude.description().c_str(),
     //                                  longitude.description().c_str());
-    return _noDataValue;
+    return IMathUtils::instance()->NanD();
   }
   return _elevationData->getElevationAt(latitude, longitude, type);
 }

@@ -24,7 +24,7 @@ public:
 
   static ElevationData* parseBil16(const Sector& sector,
                                    const Vector2I& extent,
-                                   double noDataValue,
+                                   short noDataValue,
                                    double minValidHeight,
                                    const IByteBuffer* buffer);
 

@@ -14,10 +14,11 @@
 
 FloatBufferElevationData::FloatBufferElevationData(const Sector& sector,
                                                    const Vector2I& resolution,
-                                                   double noDataValue,
+                                                   float noDataValue,
                                                    IFloatBuffer* buffer) :
-BufferElevationData(sector, resolution, noDataValue, buffer->size()),
-_buffer(buffer)
+BufferElevationData(sector, resolution, buffer->size()),
+_buffer(buffer),
+_noDataValue(noDataValue)
 {
   if (_buffer->size() != (_width * _height) ) {
     ILogger::instance()->logError("Invalid buffer size");
@@ -38,7 +39,12 @@ FloatBufferElevationData::~FloatBufferElevationData() {
 }
 
 double FloatBufferElevationData::getValueInBufferAt(int index) const {
-  return _buffer->get(index);
+  float f = _buffer->get(index);
+  if (f == _noDataValue){
+    return IMathUtils::instance()->NanD();
+  } else{
+    return f;
+  }
 }
 
 const std::string FloatBufferElevationData::description(bool detailed) const {

@@ -123,7 +123,6 @@ const long long SingleBillElevationDataProvider::requestElevationData(const Sect
                                                             false,
                                                             sector,
                                                             resolution,
-                                                            _noDataValue,
                                                             useDecimation);
     listener->onData(sector,
                      resolution,

@@ -25,7 +25,6 @@ protected:
 public:
   BufferElevationData(const Sector& sector,
                       const Vector2I& resolution,
-                      double noDataValue,
                       int bufferSize);
 
   virtual ~BufferElevationData();

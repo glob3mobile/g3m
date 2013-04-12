@@ -16,12 +16,11 @@
 #include "GLConstants.hpp"
 
 ElevationData::ElevationData(const Sector& sector,
-                             const Vector2I& resolution,
-                             double noDataValue) :
+                             const Vector2I& resolution) :
 _sector(sector),
 _width(resolution._x),
 _height(resolution._y),
-_noDataValue(noDataValue)
+_resolution(resolution)
 {
 }
 
@@ -39,9 +38,10 @@ Mesh* ElevationData::createMesh(const Ellipsoid* ellipsoid,
   const double maxHeight     = minMaxAverageHeights._y;
   const double deltaHeight   = maxHeight - minHeight;
   const double averageHeight = minMaxAverageHeights._z;
-
+  
   ILogger::instance()->logInfo("averageHeight=%f, minHeight=%f maxHeight=%f delta=%f",
                                averageHeight, minHeight, maxHeight, deltaHeight);
+
 
   FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
                                           ellipsoid,
@@ -49,12 +49,18 @@ Mesh* ElevationData::createMesh(const Ellipsoid* ellipsoid,
   FloatBufferBuilderFromColor colors;
 
   int type = -1;
+  
+  IMathUtils* mu = IMathUtils::instance();
 
   for (int x = 0; x < _width; x++) {
     const double u = (double) x / (_width  - 1);
 
     for (int y = 0; y < _height; y++) {
-      const double height = getElevationAt(x, y, &type);
+      double height = getElevationAt(x, y, &type);
+      
+      if (mu->isNan(height)){
+        height = 0; //Default height at no data
+      }
 
       const float alpha = (float) ((height - minHeight) / deltaHeight);
 

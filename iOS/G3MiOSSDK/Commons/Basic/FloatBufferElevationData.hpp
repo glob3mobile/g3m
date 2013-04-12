@@ -16,6 +16,7 @@ class FloatBufferElevationData : public BufferElevationData {
 private:
   IFloatBuffer*  _buffer;
   bool           _hasNoData;
+  float          _noDataValue;
 
 protected:
   double getValueInBufferAt(int index) const;
@@ -23,7 +24,7 @@ protected:
 public:
   FloatBufferElevationData(const Sector& sector,
                            const Vector2I& resolution,
-                           double noDataValue,
+                           float noDataValue,
                            IFloatBuffer* buffer);
 
   virtual ~FloatBufferElevationData();

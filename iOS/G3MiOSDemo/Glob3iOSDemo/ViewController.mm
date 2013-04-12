@@ -213,20 +213,20 @@ public:
   
   
 
-//  ElevationDataProvider* elevationDataProvider;
-//  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///elev-35.0_-6.0_38.0_-2.0_4096x2048.bil", false),
-//                                                              Sector::fromDegrees(35, -6, 38, -2),
-//                                                              Vector2I(4096, 2048),
-//                                                              0);
+  ElevationDataProvider* elevationDataProvider1;
+  elevationDataProvider1 = new SingleBillElevationDataProvider(URL("file:///elev-35.0_-6.0_38.0_-2.0_4096x2048.bil", false),
+                                                              Sector::fromDegrees(35, -6, 38, -2),
+                                                              Vector2I(4096, 2048),
+                                                              0);
 
-//  ElevationDataProvider* elevationDataProvider;
-//  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-4096x2048.bil", false),
-//                                                              Sector::fullSphere(),
-//                                                              Vector2I(4096, 2048),
-//                                                              0);
+  ElevationDataProvider* elevationDataProvider2;
+  elevationDataProvider2 = new SingleBillElevationDataProvider(URL("file:///full-earth-4096x2048.bil", false),
+                                                              Sector::fullSphere(),
+                                                              Vector2I(4096, 2048),
+                                                              0);
 
-  //ElevationDataProvider* elevationDataProvider;
-  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///caceres-2008x2032.bil", false),
+  ElevationDataProvider* elevationDataProvider3;
+  elevationDataProvider3 = new SingleBillElevationDataProvider(URL("file:///caceres-2008x2032.bil", false),
                                                               Sector::fromDegrees(
                                                                                   39.4642996294239623,
                                                                                   -6.3829977122432933,
@@ -236,20 +236,23 @@ public:
                                                               Vector2I(2008, 2032),
                                                               0);
 
-//  ElevationDataProvider* elevationDataProvider;
-//  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///small-caceres.bil", false),
-//                                                              Sector::fromDegrees(
-//                                                                                  39.4642994358225678,
-//                                                                                  -6.3829980000000042,
-//                                                                                  39.4829889999999608,
-//                                                                                  -6.3645291787065954
-//                                                                                  ),
-//                                                              Vector2I(251, 254),
-//                                                              0);
+  ElevationDataProvider* elevationDataProvider4;
+  elevationDataProvider4 = new SingleBillElevationDataProvider(URL("file:///small-caceres.bil", false),
+                                                              Sector::fromDegrees(
+                                                                                  39.4642994358225678,
+                                                                                  -6.3829980000000042,
+                                                                                  39.4829889999999608,
+                                                                                  -6.3645291787065954
+                                                                                  ),
+                                                              Vector2I(251, 254),
+                                                              0);
   
   
   CompositeElevationDataProvider* compElevationDataProvider = new CompositeElevationDataProvider();
-  compElevationDataProvider->addElevationDataProvider(elevationDataProvider);
+  compElevationDataProvider->addElevationDataProvider(elevationDataProvider1);
+  compElevationDataProvider->addElevationDataProvider(elevationDataProvider2);
+  compElevationDataProvider->addElevationDataProvider(elevationDataProvider3);
+  compElevationDataProvider->addElevationDataProvider(elevationDataProvider4);
   elevationDataProvider = compElevationDataProvider;
 
   builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProvider);
@@ -1189,7 +1192,6 @@ public:
                                                                               false,
                                                                               subSector,
                                                                               subResolution,
-                                                                              0,
                                                                               true);
 
     _meshRenderer->addMesh( subElevationDataDecimated->createMesh(planet,
@@ -1202,27 +1204,33 @@ public:
                                                                                  false,
                                                                                  subSector,
                                                                                  subResolution,
-                                                                                 0,
                                                                                  false);
 
-//    _meshRenderer->addMesh( subElevationDataNotDecimated->createMesh(planet,
-//                                                                     verticalExaggeration,
-//                                                                     Geodetic3D::fromDegrees(0.02,
-//                                                                                             0.02 + (subSector.getDeltaLongitude()._degrees * 1.05),
-//                                                                                             0),
-//                                                                     pointSize) );
+    _meshRenderer->addMesh( subElevationDataNotDecimated->createMesh(planet,
+                                                                     verticalExaggeration,
+                                                                     Geodetic3D::fromDegrees(0.02,
+                                                                                             0.02 + (subSector.getDeltaLongitude()._degrees * 1.05),
+                                                                                             0),
+                                                                     pointSize) );
 
 
     IFloatBuffer* deltaBuffer = IFactory::instance()->createFloatBuffer( subResolution._x * subResolution._y );
 
+    IMathUtils *mu = IMathUtils::instance();
     int unusedType = -1;
     for (int x = 0; x < subResolution._x; x++) {
       for (int y = 0; y < subResolution._y; y++) {
         const double height1 = subElevationDataDecimated->getElevationAt(x, y, &unusedType);
         const double height2 = subElevationDataNotDecimated->getElevationAt(x, y, &unusedType);
-
+        
         const int index = ((subResolution._y-1-y) * subResolution._x) + x;
-        deltaBuffer->rawPut(index,  (float) (height1 - height2));
+        
+        if (mu->isNan(height1) || mu->isNan(height2)){
+          deltaBuffer->rawPut(index,  mu->NanF());
+        } else{
+          deltaBuffer->rawPut(index,  (float) (height1 - height2));
+        }
+
       }
     }
 
@@ -1246,6 +1254,7 @@ public:
 
     delete subElevationDataDecimated;
     delete subElevationDataNotDecimated;
+
   }
 
   void onError(const URL& url) {
@@ -1518,16 +1527,16 @@ public:
 
       //      targetSector.c
 
-      /*
-       context->getDownloader()->requestBuffer(URL("file:///full-earth-2048x1024.bil", false),
-       1000000,
-       TimeInterval::fromDays(30),
-       new Bil16Parser_IBufferDownloadListener(_shapesRenderer,
-       _meshRenderer,
-       Vector2I(2048, 1024),
-       Sector::fullSphere()),
-       true);
-       */
+      
+//       context->getDownloader()->requestBuffer(URL("file:///full-earth-2048x1024.bil", false),
+//       1000000,
+//       TimeInterval::fromDays(30),
+//       new Bil16Parser_IBufferDownloadListener(_shapesRenderer,
+//       _meshRenderer,
+//       Vector2I(2048, 1024),
+//       Sector::fullSphere()),
+//       true);
+      
       
       
        context->getDownloader()->requestBuffer(//URL("file:///sample_bil16_150x150.bil", false),
@@ -1541,6 +1550,7 @@ public:
        Vector2I(4096, 2048),
        Sector::fromDegrees(35, -6, 38, -2)),
        true);
+       
       
 
       /*

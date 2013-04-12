@@ -10,6 +10,7 @@
 #define __G3MiOSSDK__ElevationData__
 
 #include "Sector.hpp"
+#include "Vector2I.hpp"
 #include <string>
 
 class Vector2I;
@@ -22,12 +23,11 @@ protected:
   const Sector _sector;
   const int _width;
   const int _height;
-  const double _noDataValue;
+  const Vector2I _resolution;
 
 public:
   ElevationData(const Sector& sector,
-                const Vector2I& resolution,
-                double noDataValue);
+                const Vector2I& resolution);
 
   virtual ~ElevationData() {
   }
@@ -49,7 +49,7 @@ public:
                                 const Angle& longitude,
                                 int *type) const = 0;
 
-  virtual double getElevationAt(const Geodetic2D& position,
+  double getElevationAt(const Geodetic2D& position,
                                 int *type) const {
     return getElevationAt(position.latitude(),
                           position.longitude(),
@@ -70,6 +70,10 @@ public:
   }
   
   virtual bool hasNoData() const = 0;
+  
+  const Vector2I getResolution() const {
+    return _resolution;
+  }
 
 };
 

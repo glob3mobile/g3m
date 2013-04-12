@@ -10,6 +10,7 @@
 #define G3MiOSSDK_ByteBuffer_iOS_hpp
 
 #include "IByteBuffer.hpp"
+#include "ILogger.hpp"
 
 class ByteBuffer_iOS : public IByteBuffer {
 private:
@@ -22,7 +23,9 @@ public:
   _values(new unsigned char[size]),
   _size(size),
   _timestamp(0) {
-
+    if (_values == NULL){
+      ILogger::instance()->logError("Allocating error.");
+    }
   }
 
   ByteBuffer_iOS(unsigned char* values, int size) :

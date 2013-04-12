@@ -19,9 +19,8 @@ Interpolator* BufferElevationData::getInterpolator() const {
 
 BufferElevationData::BufferElevationData(const Sector& sector,
                                          const Vector2I& resolution,
-                                         double noDataValue,
                                          int bufferSize) :
-ElevationData(sector, resolution, noDataValue),
+ElevationData(sector, resolution),
 _bufferSize(bufferSize),
 _interpolator(NULL)
 {
@@ -40,16 +39,12 @@ double BufferElevationData::getElevationAt(int x, int y,
   if ( (index < 0) || (index >= _bufferSize) ) {
     printf("break point on me\n");
     *type = 0;
-    return _noDataValue;
+    return IMathUtils::instance()->NanD();
   }
   *type = 1;
   
   double d = getValueInBufferAt( index );
-  if (d == _noDataValue){
-    return IMathUtils::instance()->NanD();
-  } else {
-    return d;
-  }
+  return d;
 }
 
 
@@ -63,7 +58,7 @@ double BufferElevationData::getElevationAt(const Angle& latitude,
     //                                  _sector.description().c_str(),
     //                                  latitude.description().c_str(),
     //                                  longitude.description().c_str());
-    return _noDataValue;
+    return IMathUtils::instance()->NanD();
   }
 
   const IMathUtils* mu = IMathUtils::instance();

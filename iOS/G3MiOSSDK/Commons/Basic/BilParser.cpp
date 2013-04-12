@@ -18,7 +18,7 @@
 
 ElevationData* BilParser::parseBil16(const Sector& sector,
                                      const Vector2I& extent,
-                                     double noDataValue,
+                                     short noDataValue,
                                      double minValidHeight,
                                      const IByteBuffer* buffer) {
 
@@ -40,16 +40,16 @@ ElevationData* BilParser::parseBil16(const Sector& sector,
     short height = iterator.nextInt16();
     int WORKING_NODATA;
     if (height <= minValidHeight) {
-      height = (short) noDataValue;
+      height = noDataValue;
     }
     else if (height == -9999) {
-      height = (short) noDataValue;
+      height = noDataValue;
     }
     else if (height == -32767) {
-      height = (short) noDataValue;
+      height = noDataValue;
     }
     else if (height == -32768) {
-      height = (short) noDataValue;
+      height = noDataValue;
     }
     //    if (height < 0) {
     //      height = 0;

@@ -9,6 +9,7 @@
 #include "CompositeElevationDataProvider.hpp"
 
 #include "Vector2I.hpp"
+#include "CompositeElevationData.hpp"
 
 void CompositeElevationDataProvider::addElevationDataProvider(ElevationDataProvider* edp){
   _providers.push_back(edp);
@@ -110,7 +111,7 @@ void CompositeElevationDataProvider::cancelRequest(const long long requestId){
     _requests.erase(requestId);
     delete req;
   } else{
-    ILogger::instance()->logError("Canceling unexisting request.");
+    ILogger::instance()->logError("Canceling unexisting request in CompositeElevationDataProvider.");
   }
 }
 
@@ -123,36 +124,57 @@ void CompositeElevationDataProvider::deleteRequest(const CompositeElevationDataP
       return;
     }
   }
+  ILogger::instance()->logError("Deleting unexisting request in CompositeElevationDataProvider.");
 }
 
 #pragma mark Request
 
+CompositeElevationDataProvider::CompositeElevationDataProvider_Request::
+CompositeElevationDataProvider_Request(CompositeElevationDataProvider* provider,
+                                       const Sector& sector,
+                                       const Vector2I &resolution,
+                                       IElevationDataListener *listener,
+                                       bool autodelete):
+_providers(provider->getProviders(sector)),
+_sector(sector),
+_resolution(resolution),
+_listener(listener),
+_autodelete(autodelete),
+_compProvider(provider),
+_currentRequestEDP(NULL),
+_compData(NULL){
+  launchNewRequest();
+}
+
 void CompositeElevationDataProvider::CompositeElevationDataProvider_Request::respondToListener() const{
   
-  if (_data.size() ==0){
+  if (_compData == NULL){
     _listener->onError(_sector, _resolution);
   } else{
-    ElevationData* data = _data[0];
-    int CREATE_COMPOSITE_DATA;///!!!!!!!!!!!!!!!!!!
-    
-    _listener->onData(_sector, _resolution, data);
+    _listener->onData(_sector, _resolution, _compData);
     if (_autodelete){
       delete _listener;
     }
-    
     _compProvider->deleteRequest(this); //AUTODELETE
   }
 }
 
 ElevationDataProvider* CompositeElevationDataProvider::
 CompositeElevationDataProvider_Request::
-popBestProvider(std::vector<ElevationDataProvider*>& ps) const{
+popBestProvider(std::vector<ElevationDataProvider*>& ps, const Vector2I& resolution) const{
   std::vector<ElevationDataProvider*>::iterator edp = ps.end();
-  double minRes = 99999999999;
+  double bestRes = resolution.squaredLength();
+  double selectedRes = 99999999999;
+  double selectedResDistance = 99999999999999999;
+  IMathUtils *mu = IMathUtils::instance();
   for (std::vector<ElevationDataProvider*>::iterator it = ps.begin() ; it != ps.end(); ++it){
     double res = (*it)->getMinResolution().squaredLength();
-    if (minRes > res){
-      minRes = res;
+    double newResDistance = mu->abs(bestRes - res);
+    
+    if (newResDistance < selectedResDistance || //Closer Resolution
+        (newResDistance == selectedResDistance && res < selectedRes)){ //or equal and higher resolution
+      selectedResDistance = newResDistance;
+      selectedRes = res;
       edp = it;
     }
   }
@@ -166,7 +188,7 @@ popBestProvider(std::vector<ElevationDataProvider*>& ps) const{
 }
 
 bool CompositeElevationDataProvider::CompositeElevationDataProvider_Request::launchNewRequest(){
-  _currentRequestEDP = popBestProvider(_providers);
+  _currentRequestEDP = popBestProvider(_providers, _resolution);
   if (_currentRequestEDP != NULL){
     _currentRequestID = _currentRequestEDP->requestElevationData(_sector, _resolution, this, false);
     return true;
@@ -179,7 +201,14 @@ void CompositeElevationDataProvider::CompositeElevationDataProvider_Request::onD
                                                                                     const Vector2I& resolution,
                                                                                     ElevationData* elevationData){
   
-  _data.push_back(elevationData);
+  //_data.push_back(elevationData);
+  
+  if (_compData == NULL){
+    _compData = new CompositeElevationData(elevationData);
+  } else{
+    _compData->addElevationData(elevationData);
+  }
+  
   
   if (sector.fullContains(_sector) && !elevationData->hasNoData()){
     respondToListener();    //If this data is enough we respond

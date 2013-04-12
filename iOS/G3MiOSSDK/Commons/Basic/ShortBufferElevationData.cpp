@@ -14,10 +14,11 @@
 
 ShortBufferElevationData::ShortBufferElevationData(const Sector& sector,
                                                    const Vector2I& resolution,
-                                                   double noDataValue,
+                                                   short noDataValue,
                                                    IShortBuffer* buffer) :
-BufferElevationData(sector, resolution, noDataValue, buffer->size()),
-_buffer(buffer)
+BufferElevationData(sector, resolution, buffer->size()),
+_buffer(buffer),
+_noDataValue(noDataValue)
 {
   if (_buffer->size() != (_width * _height) ) {
     ILogger::instance()->logError("Invalid buffer size");
@@ -38,7 +39,12 @@ ShortBufferElevationData::~ShortBufferElevationData() {
 }
 
 double ShortBufferElevationData::getValueInBufferAt(int index) const {
-  return _buffer->get(index);
+  short s = _buffer->get(index);
+  if (s == _noDataValue){
+    return IMathUtils::instance()->NanD();
+  } else{
+    return s;
+  }
 }
 
 const std::string ShortBufferElevationData::description(bool detailed) const {
@@ -72,28 +78,28 @@ Vector3D ShortBufferElevationData::getMinMaxAverageHeights() const {
   short minHeight = mu->maxInt16();
   short maxHeight = mu->minInt16();
   double sumHeight = 0.0;
-
+  
   const int bufferSize = _buffer->size();
   for (int i = 0; i < bufferSize; i++) {
     const short height = _buffer->get(i);
-//    if (height != _noDataValue) {
-    if (height < minHeight) {
-      minHeight = height;
+    if (height != _noDataValue) {
+      if (height < minHeight) {
+        minHeight = height;
+      }
+      if (height > maxHeight) {
+        maxHeight = height;
+      }
+      sumHeight += height;
     }
-    if (height > maxHeight) {
-      maxHeight = height;
-    }
-    sumHeight += height;
-//    }
   }
-
+  
   if (minHeight == mu->maxInt16()) {
     minHeight = 0;
   }
   if (maxHeight == mu->minInt16()) {
     maxHeight = 0;
   }
-
+  
   return Vector3D(minHeight,
                   maxHeight,
                   sumHeight / (_width * _height));

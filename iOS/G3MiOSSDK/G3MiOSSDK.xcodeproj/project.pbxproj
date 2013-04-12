@@ -226,6 +226,7 @@
 		D81BA17115CBF19F004EF0B0 /* GL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81BA16F15CBF19E004EF0B0 /* GL.cpp */; };
 		D81D2072160748EA009A8BA6 /* GLConstants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81D2071160748EA009A8BA6 /* GLConstants.cpp */; };
 		D8228EBF157F7F7900BBAF60 /* MutableMatrix44D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */; };
+		D843BB7317181F8D00019A0D /* CompositeElevationData.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D87A1DF31716F62C001AC5E3 /* CompositeElevationData.hpp */; };
 		D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */; };
 		D86F9E31171581E9004849AF /* CompositeElevationDataProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D86F9E2F171581E9004849AF /* CompositeElevationDataProvider.cpp */; };
 		D86F9E32171592E3004849AF /* CompositeElevationDataProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D86F9E30171581E9004849AF /* CompositeElevationDataProvider.hpp */; };
@@ -460,6 +461,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D843BB7317181F8D00019A0D /* CompositeElevationData.hpp in CopyFiles */,
 				D86F9E32171592E3004849AF /* CompositeElevationDataProvider.hpp in CopyFiles */,
 				CF83D50717049AE3009A39A5 /* GEOMarkSymbol.hpp in CopyFiles */,
 				CF1871CC170398BC00092888 /* GEOShapeSymbol.hpp in CopyFiles */,

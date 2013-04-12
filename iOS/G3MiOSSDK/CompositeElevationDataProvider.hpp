@@ -17,7 +17,8 @@
 #include "Sector.hpp"
 
 #include "ElevationData.hpp"
-#include "Vector2I.hpp"
+
+class CompositeElevationData;
 
 class CompositeElevationDataProvider: public ElevationDataProvider {
 private:
@@ -30,40 +31,30 @@ private:
   
   class CompositeElevationDataProvider_Request: public IElevationDataListener{
     
+    CompositeElevationData* _compData;
+    IElevationDataListener * _listener;
+    const bool _autodelete;
+    const Vector2I _resolution;
+    const Sector& _sector;
+    ElevationDataProvider* _currentRequestEDP;
+    long long _currentRequestID;
+    CompositeElevationDataProvider* const _compProvider;
+    
     std::vector<ElevationDataProvider*> _providers;
     
-    ElevationDataProvider* popBestProvider(std::vector<ElevationDataProvider*>& ps) const;
+    ElevationDataProvider* popBestProvider(std::vector<ElevationDataProvider*>& ps, const Vector2I& resolution) const;
     
     void respondToListener() const;
     
     bool launchNewRequest();
-    
-    std::vector<ElevationData*> _data;
-    IElevationDataListener * _listener;
-    const bool _autodelete;
-    const Vector2I _resolution;
-    
-    const Sector& _sector;
-    
-    ElevationDataProvider* _currentRequestEDP;
-    long long _currentRequestID;
-    CompositeElevationDataProvider* const _compProvider;
+
   public:
     
     CompositeElevationDataProvider_Request(CompositeElevationDataProvider* provider,
                                            const Sector& sector,
                                            const Vector2I &resolution,
                                            IElevationDataListener *listener,
-                                           bool autodelete):
-    _providers(provider->getProviders(sector)),
-    _sector(sector),
-    _resolution(resolution),
-    _listener(listener),
-    _autodelete(autodelete),
-    _compProvider(provider),
-    _currentRequestEDP(NULL){
-      launchNewRequest();
-    }
+                                           bool autodelete);
     
     void onData(const Sector& sector,
                 const Vector2I& resolution,
@@ -78,6 +69,9 @@ private:
   
   
   std::map<long long, CompositeElevationDataProvider_Request*> _requests;
+  
+  
+  void deleteRequest(const CompositeElevationDataProvider_Request* req);
   
   
 public:
@@ -106,8 +100,6 @@ public:
   std::vector<const Sector*> getSectors() const;
   
   Vector2I getMinResolution() const;
-  
-  void deleteRequest(const CompositeElevationDataProvider_Request* req);
   
 };
 

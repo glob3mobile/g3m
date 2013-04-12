@@ -10,6 +10,7 @@
 #define __G3MiOSSDK__ShortBuffer_iOS__
 
 #include "IShortBuffer.hpp"
+#include "ILogger.hpp"
 
 class ShortBuffer_iOS : public IShortBuffer {
 private:
@@ -23,6 +24,9 @@ public:
   _timestamp(0)
   {
     _values = new short[size];
+    if (_values == NULL){
+      ILogger::instance()->logError("Allocating error.");
+    }
   }
 
   virtual ~ShortBuffer_iOS() {

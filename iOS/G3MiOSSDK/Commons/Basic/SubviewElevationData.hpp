@@ -33,7 +33,6 @@ public:
                        bool ownsElevationData,
                        const Sector& sector,
                        const Vector2I& resolution,
-                       double noDataValue,
                        bool useDecimation);
 
   ~SubviewElevationData();

@@ -10,6 +10,7 @@
 #define __G3MiOSSDK__FloatBuffer_iOS__
 
 #include "IFloatBuffer.hpp"
+#include "ILogger.hpp"
 
 class FloatBuffer_iOS : public IFloatBuffer {
 private:
@@ -23,11 +24,12 @@ private:
 public:
   FloatBuffer_iOS(int size) :
   _size(size),
-  _timestamp(0)
-//  _glBufferBound(false),
-//  _glBuffer(0)
+  _timestamp(0),
+  _values(new float[size])
   {
-    _values = new float[size];
+    if (_values == NULL){
+      ILogger::instance()->logError("Allocating error.");
+    }
   }
   
   FloatBuffer_iOS(float f0,
