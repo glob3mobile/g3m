@@ -31,7 +31,7 @@ public class GLState
   private boolean _depthTest;
   private boolean _blend;
   private boolean _textures;
-  private boolean _texture2D;
+  //bool _texture2D;
   private boolean _vertexColor;
   private boolean _verticesPosition;
   private boolean _flatColor;
@@ -94,18 +94,19 @@ public class GLState
   private float _clearColorB;
   private float _clearColorA;
 
-  private MutableMatrix44D _projectionMatrix = new MutableMatrix44D();
+//  MutableMatrix44D _projectionMatrix;
   private MutableMatrix44D _modelViewMatrix = new MutableMatrix44D();
 
   private GPUProgram _program;
 
 
   private GLState()
+  //_texture2D(false),
+//  _projectionMatrix(MutableMatrix44D::invalid()),
   {
      _depthTest = false;
      _blend = false;
      _textures = false;
-     _texture2D = false;
      _vertexColor = false;
      _verticesPosition = false;
      _flatColor = false;
@@ -146,7 +147,6 @@ public class GLState
      _clearColorG = 0.0F;
      _clearColorB = 0.0F;
      _clearColorA = 0.0F;
-     _projectionMatrix = new MutableMatrix44D(MutableMatrix44D.invalid());
      _modelViewMatrix = new MutableMatrix44D(MutableMatrix44D.invalid());
      _textureWidth = 0.0F;
      _textureHeight = 0.0F;
@@ -161,11 +161,12 @@ public class GLState
   }
 
   public GLState(GLState parentState)
+//  _texture2D(parentState._texture2D),
+//  _projectionMatrix(parentState._projectionMatrix),
   {
      _depthTest = parentState._depthTest;
      _blend = parentState._blend;
      _textures = parentState._textures;
-     _texture2D = parentState._texture2D;
      _vertexColor = parentState._vertexColor;
      _verticesPosition = parentState._verticesPosition;
      _flatColor = parentState._flatColor;
@@ -206,7 +207,6 @@ public class GLState
      _clearColorG = parentState._clearColorG;
      _clearColorB = parentState._clearColorB;
      _clearColorA = parentState._clearColorA;
-     _projectionMatrix = new MutableMatrix44D(parentState._projectionMatrix);
      _modelViewMatrix = new MutableMatrix44D(parentState._modelViewMatrix);
      _program = parentState._program;
   }
@@ -269,18 +269,13 @@ public class GLState
      return _textures;
   }
 
-  public final void enableTexture2D()
-  {
-      _texture2D = true;
-  }
-  public final void disableTexture2D()
-  {
-      _texture2D = false;
-  }
-  public final boolean isEnabledTexture2D()
-  {
-     return _texture2D;
-  }
+//  void enableTexture2D() {
+//      _texture2D = true;
+//  }
+//  void disableTexture2D() {
+//      _texture2D = false;
+//  }
+//  bool isEnabledTexture2D() const { return _texture2D; }
 
   public final void enableVertexColor(IFloatBuffer colors, float intensity)
   {
@@ -483,10 +478,9 @@ public class GLState
     _clearColorA = color.getAlpha();
   }
 
-  public final void setProjectionMatrix(MutableMatrix44D projection)
-  {
-    _projectionMatrix = projection;
-  }
+//  void setProjectionMatrix(const MutableMatrix44D& projection){
+//    _projectionMatrix = projection;
+//  }
 
   public final void setModelViewMatrix(MutableMatrix44D mv)
   {
@@ -504,8 +498,27 @@ public class GLState
     _textureWidth = w;
   }
 
-  public final void applyChanges(INativeGL nativeGL, GLState currentState, AttributesStruct attributes, UniformsStruct uniforms)
+
+  //#include "G3MError.hpp"
+  //#include "G3MError.hpp"
+  
+  
+  
+  public final void applyChanges(GL gl, GLState currentState, AttributesStruct attributes, UniformsStruct uniforms)
   {
+  
+    //Program
+    if (_program != null)
+    {
+      if(currentState._program != _program)
+      {
+        gl.useProgram(_program);
+        currentState._program = _program;
+      }
+      _program.applyChanges(gl);
+    }
+  
+    INativeGL nativeGL = gl.getNative();
   
     // Depth Test
     if (_depthTest != currentState._depthTest)
@@ -550,18 +563,15 @@ public class GLState
     }
   
     // Texture2D
-    if (_texture2D != currentState._texture2D)
-    {
-      if (_texture2D)
-      {
-        nativeGL.uniform1i(uniforms.EnableTexture, 1);
-      }
-      else
-      {
-        nativeGL.uniform1i(uniforms.EnableTexture, 0);
-      }
-      currentState._texture2D = _texture2D;
-    }
+  //  if (_texture2D != currentState._texture2D) {
+  //    if (_texture2D) {
+  //      nativeGL->uniform1i(uniforms.EnableTexture, 1);
+  //    }
+  //    else {
+  //      nativeGL->uniform1i(uniforms.EnableTexture, 0);
+  //    }
+  //    currentState._texture2D = _texture2D;
+  //  }
   
     // VertexColor
     if (_vertexColor != currentState._vertexColor)
@@ -796,19 +806,17 @@ public class GLState
       currentState._clearColorA = _clearColorA;
     }
   
-    //Projection
-    if (!_projectionMatrix.isEqualsTo(currentState._projectionMatrix))
-    {
-      nativeGL.uniformMatrix4fv(uniforms.Projection, false, _projectionMatrix);
-      currentState._projectionMatrix = _projectionMatrix;
-    }
+  //  //Projection
+  //  if (!_projectionMatrix.isEqualsTo(currentState._projectionMatrix)){
+  //    nativeGL->uniformMatrix4fv(uniforms.Projection, false, &_projectionMatrix);
+  //    currentState._projectionMatrix = _projectionMatrix;
+  //  }
   
-    //Modelview
-    if (!_modelViewMatrix.isEqualsTo(currentState._modelViewMatrix))
-    {
-      nativeGL.uniformMatrix4fv(uniforms.Modelview, false, _modelViewMatrix);
-      currentState._modelViewMatrix = _modelViewMatrix;
-    }
+  //  //Modelview
+  //  if (!_modelViewMatrix.isEqualsTo(currentState._modelViewMatrix)){
+  //    nativeGL->uniformMatrix4fv(uniforms.Modelview, false, &_modelViewMatrix);
+  //    currentState._modelViewMatrix = _modelViewMatrix;
+  //  }
   
     //Texture Extent
     if (_textureWidth != currentState._textureWidth || _textureHeight != currentState._textureHeight)
@@ -818,11 +826,6 @@ public class GLState
       currentState._textureWidth = _textureWidth;
     }
   
-    if (currentState._program != _program)
-    {
-      nativeGL.useProgram(_program);
-      currentState._program = _program;
-    }
   
   }
 
@@ -830,5 +833,9 @@ public class GLState
   {
     _program = program;
   }
+
+//  GPUProgram* getProgram() const{
+//    return _program;
+//  }
 
 }

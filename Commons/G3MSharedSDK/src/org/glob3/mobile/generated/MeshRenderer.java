@@ -17,12 +17,23 @@ package org.glob3.mobile.generated;
 
 
 
+//#include "G3MError.hpp"
+//#include "G3MError.hpp"
+
 //class Mesh;
 
 
 public class MeshRenderer extends LeafRenderer
 {
   private java.util.ArrayList<Mesh> _meshes = new java.util.ArrayList<Mesh>();
+
+  private GPUProgramState _programState = new GPUProgramState();
+
+
+  public MeshRenderer()
+  {
+     _programState = new GPUProgramState(null);
+  }
 
   public void dispose()
   {
@@ -87,7 +98,7 @@ public class MeshRenderer extends LeafRenderer
   
       if (extent.touches(rc.getCurrentCamera().getFrustumInModelCoordinates()))
       {
-        mesh.render(rc, parentState);
+        mesh.render(rc, parentState, _programState);
       }
     }
   }

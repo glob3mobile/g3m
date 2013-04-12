@@ -20,6 +20,9 @@ package org.glob3.mobile.generated;
 
 
 
+//#include "G3MError.hpp"
+//#include "G3MError.hpp"
+
 
 //***************************************************************
 
@@ -31,10 +34,13 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
   private double _degrees;
   private Color _backgroundColor;
 
+  private GPUProgramState _programState = new GPUProgramState();
+
   public BusyMeshRenderer(Color backgroundColor)
   {
      _degrees = 0;
      _backgroundColor = backgroundColor;
+     _programState = new GPUProgramState(null);
   }
 
   public final void initialize(G3MContext context)
@@ -79,7 +85,6 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
   
     // create mesh
     _mesh = new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, null, colors.create());
-  
   }
 
   public final boolean isReadyToRender(G3MRenderContext rc)
@@ -103,7 +108,22 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
     final int halfWidth = currentViewport[2] / 2;
     final int halfHeight = currentViewport[3] / 2;
     MutableMatrix44D M = MutableMatrix44D.createOrthographicProjectionMatrix(-halfWidth, halfWidth, -halfHeight, halfHeight, -halfWidth, halfWidth);
-    state.setProjectionMatrix(M);
+  
+    //state.getProgram()->setUniform(rc->getGL(), "Projection", M);
+  
+    //GPUProgram* prog = rc->getGPUProgramManager()->getProgram("DefaultProgram");
+    int _WORKING_JM;
+  //  UniformMatrix4Float* projection = prog->getUniformMatrix4Float("Projection");
+  //  UniformMatrix4Float* modelview = prog->getUniformMatrix4Float("Modelview");
+    //state.setProgram(prog);
+  //  projection->set(M);
+    //modelview->set(MutableMatrix44D::identity());
+  
+  
+    _programState.setValueToUniform("Projection", M);
+    //_programState.setValueToUniform("Modelview", MutableMatrix44D::identity());
+  
+    //state.setProjectionMatrix(M);
     state.setModelViewMatrix(MutableMatrix44D.identity());
   
     // clear screen
@@ -113,8 +133,10 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
     MutableMatrix44D R1 = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_degrees), new Vector3D(0, 0, -1));
     state.multiplyModelViewMatrix(R1);
   
+    _programState.setValueToUniform("Modelview", R1);
+  
     // draw mesh
-    _mesh.render(rc, state);
+    _mesh.render(rc, state, _programState);
   }
 
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)

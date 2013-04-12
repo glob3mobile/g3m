@@ -17,6 +17,9 @@ package org.glob3.mobile.generated;
 
 
 
+//#include "G3MError.hpp"
+//#include "G3MError.hpp"
+
 //class Mark;
 //class Camera;
 //class MarkTouchListener;
@@ -35,6 +38,8 @@ public class MarksRenderer extends LeafRenderer
 
   private long _downloadPriority;
 
+  private GPUProgramState _programState = new GPUProgramState();
+
 
   public MarksRenderer(boolean readyWhenMarksReady)
   {
@@ -44,6 +49,7 @@ public class MarksRenderer extends LeafRenderer
      _markTouchListener = null;
      _autoDeleteMarkTouchListener = false;
      _downloadPriority = DownloadPriority.MEDIUM;
+     _programState = new GPUProgramState(null);
   }
 
   public final void setMarkTouchListener(MarkTouchListener markTouchListener, boolean autoDelete)
@@ -100,7 +106,13 @@ public class MarksRenderer extends LeafRenderer
     state.disableDepthTest();
     state.enableBlend();
     state.enableTextures();
-    state.enableTexture2D();
+  
+    GPUProgram prog = rc.getGPUProgramManager().getProgram("DefaultProgram");
+    int _WORKING_JM;
+    //UniformBool* enableTexture = prog->getUniformBool("EnableTexture");
+    //enableTexture->set(true);
+  
+    //state.enableTexture2D();
     state.enableVerticesPosition();
   
     Vector2D textureTranslation = new Vector2D(0.0, 0.0);
@@ -127,9 +139,13 @@ public class MarksRenderer extends LeafRenderer
   
       if (mark.isReady())
       {
-        mark.render(rc, cameraPosition, state);
+        mark.render(rc, cameraPosition, state, _programState);
       }
     }
+  
+    int IS_A_HACK_; //???????
+    int _WORKING_JM2;
+    //enableTexture->set(false); //DISABLING TEXTURES
   }
 
   public final void addMark(Mark mark)

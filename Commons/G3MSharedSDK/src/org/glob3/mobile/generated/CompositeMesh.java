@@ -86,13 +86,13 @@ public class CompositeMesh extends Mesh
     return Vector3D.nan();
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final void render(G3MRenderContext rc, GLState parentState, GPUProgramState parentProgramState)
   {
     final int childrenCount = _children.size();
     for (int i = 0; i < childrenCount; i++)
     {
       Mesh child = _children.get(i);
-      child.render(rc, parentState);
+      child.render(rc, parentState, parentProgramState);
     }
   }
 

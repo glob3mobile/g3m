@@ -16,6 +16,8 @@ package org.glob3.mobile.generated;
 //
 
 
+//#include "G3MError.hpp"
+//#include "G3MError.hpp"
 
 public class ShapesRenderer extends LeafRenderer
 {
@@ -23,10 +25,13 @@ public class ShapesRenderer extends LeafRenderer
 
   private G3MContext _context;
 
+  private GPUProgramState _programState = new GPUProgramState();
+
 
   public ShapesRenderer()
   {
      _context = null;
+     _programState = new GPUProgramState(null);
 
   }
 
@@ -117,7 +122,7 @@ public class ShapesRenderer extends LeafRenderer
       }
       else
       {
-        shape.render(rc, parentState);
+        shape.render(rc, parentState, _programState);
       }
     }
   }

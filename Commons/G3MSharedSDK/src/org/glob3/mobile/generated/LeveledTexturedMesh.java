@@ -104,18 +104,18 @@ public class LeveledTexturedMesh extends Mesh
     return _mesh.getVertex(i);
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final void render(G3MRenderContext rc, GLState parentState, GPUProgramState parentProgramState)
   {
     LazyTextureMapping mapping = getCurrentTextureMapping();
     if (mapping == null)
     {
-      _mesh.render(rc, parentState);
+      _mesh.render(rc, parentState, parentProgramState);
     }
     else
     {
       GLState state = mapping.bind(rc, parentState);
   
-      _mesh.render(rc, state);
+      _mesh.render(rc, state, parentProgramState);
   
       if (state != null)
          state.dispose();

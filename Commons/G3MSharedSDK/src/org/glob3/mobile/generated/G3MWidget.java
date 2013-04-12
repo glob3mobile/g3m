@@ -2,6 +2,11 @@ package org.glob3.mobile.generated;
 public class G3MWidget
 {
 
+
+  //#include "G3MError.hpp"
+  //#include "G3MError.hpp"
+  
+  
   public static void initSingletons(ILogger logger, IFactory factory, IStringUtils stringUtils, IStringBuilder stringBuilder, IMathUtils mathUtils, IJSONParser jsonParser, ITextUtils textUtils)
   {
     if (ILogger.instance() == null)
@@ -20,10 +25,10 @@ public class G3MWidget
     }
   }
 
-  public static G3MWidget create(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks)
+  public static G3MWidget create(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager)
   {
   
-    return new G3MWidget(gl, storage, downloader, threadUtils, planet, cameraConstrainers, cameraRenderer, mainRenderer, busyRenderer, backgroundColor, logFPS, logDownloaderStatistics, initializationTask, autoDeleteInitializationTask, periodicalTasks);
+    return new G3MWidget(gl, storage, downloader, threadUtils, planet, cameraConstrainers, cameraRenderer, mainRenderer, busyRenderer, backgroundColor, logFPS, logDownloaderStatistics, initializationTask, autoDeleteInitializationTask, periodicalTasks, gpuProgramManager);
   }
 
   public void dispose()
@@ -88,6 +93,20 @@ public class G3MWidget
 
   public final void render(int width, int height)
   {
+  
+    //Setting Program
+    if (!_mainRendererReady)
+    {
+      GPUProgram prog = _gpuProgramManager.getProgram("DefaultProgram");
+      //_gl->useProgram(prog);
+      ((GLState)_rootState).setProgram(prog);
+      int _WORKING_JM;
+  //    prog->getUniformVec2Float("ScaleTexCoord")->set(Vector2D(1.0,1.0));
+  //    prog->getUniformVec2Float("TranslationTexCoord")->set(Vector2D(0.0,0.0));
+  //    prog->getUniformFloat("PointSize")->set(1);
+  //    prog->getUniformBool("BillBoard")->set(false);
+    }
+  
     if (_paused)
     {
       return;
@@ -103,6 +122,8 @@ public class G3MWidget
   
     _timer.start();
     _renderCounter++;
+  
+  
   
     if (_initializationTask != null)
     {
@@ -141,7 +162,7 @@ public class G3MWidget
     }
     _currentCamera.copyFrom(_nextCamera);
   
-    G3MRenderContext rc = new G3MRenderContext(_frameTasksExecutor, IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _gl, _currentCamera, _nextCamera, _texturesHandler, _textureBuilder, _downloader, _effectsScheduler, IFactory.instance().createTimer(), _storage);
+    G3MRenderContext rc = new G3MRenderContext(_frameTasksExecutor, IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _gl, _currentCamera, _nextCamera, _texturesHandler, _textureBuilder, _downloader, _effectsScheduler, IFactory.instance().createTimer(), _storage, _gpuProgramManager);
   
     _mainRendererReady = _initializationTaskReady && _mainRenderer.isReadyToRender(rc);
   
@@ -182,6 +203,7 @@ public class G3MWidget
       _selectedRenderer = selectedRenderer;
       _selectedRenderer.start(rc);
     }
+  
   
     ((GLState)_rootState).setClearColor(_backgroundColor);
     _gl.clearScreen(_rootState);
@@ -569,7 +591,9 @@ public class G3MWidget
 
   private boolean _clickOnProcess;
 
-  private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks)
+  private GPUProgramManager _gpuProgramManager;
+
+  private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager)
   /*
    =======
   _gl( new GL(nativeGL, false) ),
@@ -611,6 +635,7 @@ public class G3MWidget
      _initializationTaskWasRun = false;
      _initializationTaskReady = true;
      _clickOnProcess = false;
+     _gpuProgramManager = gpuProgramManager;
     _effectsScheduler.initialize(_context);
     _cameraRenderer.initialize(_context);
     _mainRenderer.initialize(_context);

@@ -127,11 +127,18 @@ public class Camera
     //GL* gl = rc->getGL();
     //gl->setProjection(getProjectionMatrix());
     //gl->loadMatrixf(getModelMatrix());
+    //parentState.getProgram()->setUniform(rc->getGL(), "Projection", getProjectionMatrix());
+    int _WORKING_JM;
+  //  GPUProgram* prog = rc->getGPUProgramManager()->getProgram("DefaultProgram");
+  //  UniformMatrix4Float* projection = prog->getUniformMatrix4Float("Projection");
+  //  UniformMatrix4Float* modelview = prog->getUniformMatrix4Float("Modelview");
+  //  projection->set(getProjectionMatrix());
+    //modelview->set(getModelViewMatrix());
   }
 
   public final void changeGLState(GLState state)
   {
-    state.setProjectionMatrix(getProjectionMatrix());
+    //state->setProjectionMatrix(getProjectionMatrix());
     state.setModelViewMatrix(getModelMatrix());
     state.enableDepthTest();
   }
@@ -310,6 +317,10 @@ public class Camera
     return point0.angleBetween(point1);
   }
 
+
+  //#include "G3MError.hpp"
+  //#include "G3MError.hpp"
+  
   public final void initialize(G3MContext context)
   {
     _planet = context.getPlanet();

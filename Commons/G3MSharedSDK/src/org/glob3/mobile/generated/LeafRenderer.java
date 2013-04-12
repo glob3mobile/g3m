@@ -17,6 +17,8 @@ package org.glob3.mobile.generated;
 
 
 
+//class GPUProgramState;
+
 public abstract class LeafRenderer extends Renderer
 {
   private boolean _enable;

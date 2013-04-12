@@ -16,6 +16,8 @@ package org.glob3.mobile.generated;
 //
 
 
+//#include "G3MError.hpp"
+//#include "G3MError.hpp"
 
 //class Mesh;
 //class Planet;
@@ -174,14 +176,14 @@ public class Trail
        _mesh.dispose();
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final void render(G3MRenderContext rc, GLState parentState, GPUProgramState parentProgramState)
   {
     if (_visible)
     {
       Mesh mesh = getMesh(rc.getPlanet());
       if (mesh != null)
       {
-        mesh.render(rc, parentState);
+        mesh.render(rc, parentState, parentProgramState);
       }
     }
   }

@@ -16,6 +16,9 @@ package org.glob3.mobile.generated;
 //
 
 
+//#include "G3MError.hpp"
+//#include "G3MError.hpp"
+
 
 //class GEOObject;
 //class GEOSymbolizer;
@@ -27,10 +30,13 @@ public class GEORenderer extends LeafRenderer
 
   private final GEOSymbolizer _symbolizer;
 
+  private GPUProgramState _programState = new GPUProgramState();
+
 
   public GEORenderer(GEOSymbolizer symbolizer)
   {
      _symbolizer = symbolizer;
+     _programState = new GPUProgramState(null);
 
   }
 
@@ -96,7 +102,7 @@ public class GEORenderer extends LeafRenderer
     for (int i = 0; i < childrenCount; i++)
     {
       GEOObject geoObject = _children.get(i);
-      geoObject.render(rc, parentState, _symbolizer);
+      geoObject.render(rc, parentState, _programState, _symbolizer);
     }
   }
 

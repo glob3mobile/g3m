@@ -3,8 +3,11 @@ public class TrailsRenderer extends LeafRenderer
 {
   private java.util.ArrayList<Trail> _trails = new java.util.ArrayList<Trail>();
 
+  private GPUProgramState _programState = new GPUProgramState();
+
   public TrailsRenderer()
   {
+     _programState = new GPUProgramState(null);
   }
 
   public final void addTrail(Trail trail)
@@ -75,7 +78,7 @@ public class TrailsRenderer extends LeafRenderer
     for (int i = 0; i < trailsCount; i++)
     {
       Trail trail = _trails.get(i);
-      trail.render(rc, parentState);
+      trail.render(rc, parentState, _programState);
     }
   }
 

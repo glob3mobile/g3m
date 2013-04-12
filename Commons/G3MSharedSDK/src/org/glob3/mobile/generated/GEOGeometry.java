@@ -22,6 +22,7 @@ package org.glob3.mobile.generated;
 //class Color;
 //class GEOSymbol;
 //class GEOFeature;
+//class GPUProgramState;
 
 public abstract class GEOGeometry extends GEOObject
 {
@@ -81,7 +82,7 @@ public abstract class GEOGeometry extends GEOObject
 
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState, GEOSymbolizer symbolizer)
+  public final void render(G3MRenderContext rc, GLState parentState, GPUProgramState parentProgramState, GEOSymbolizer symbolizer)
   {
   //  Mesh* mesh = getMesh(rc, symbolizer);
   
@@ -104,13 +105,17 @@ public abstract class GEOGeometry extends GEOObject
           {
             GLState state = new GLState(parentState);
             state.disableDepthTest();
-            mesh.render(rc, state);
+            mesh.render(rc, state, parentProgramState);
           }
         }
       }
     }
   }
 
+
+  //#include "G3MError.hpp"
+  //#include "G3MError.hpp"
+  
   public void dispose()
   {
     if (_meshes != null)
