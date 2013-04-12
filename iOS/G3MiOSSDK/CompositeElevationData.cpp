@@ -8,8 +8,9 @@
 
 #include "CompositeElevationData.hpp"
 #include "Vector3D.hpp"
+#include "IStringBuilder.hpp"
 
-double CompositeElevationData::getElevationAt(int x, int y, int *type) const{
+double CompositeElevationData::getElevationAt(int x, int y, int *type, double valueForNoData) const{
   IMathUtils* mu = IMathUtils::instance();
   int s = _data.size();
   for (int i = 0; i < s; i++) {
@@ -19,7 +20,7 @@ double CompositeElevationData::getElevationAt(int x, int y, int *type) const{
     }
   }
   
-  return mu->NanD();
+  return valueForNoData;
 }
 
 
@@ -58,105 +59,51 @@ void CompositeElevationData::addElevationData(ElevationData* data){
 
 double CompositeElevationData::getElevationAt(const Angle& latitude,
                                            const Angle& longitude,
-                                           int *type) const {
+                                           int *type,
+                                            double valueForNoData) const {
   
-  
-  if (!_sector.contains(latitude, longitude)) {
-    //    ILogger::instance()->logError("Sector %s doesn't contain lat=%s lon=%s",
-    //                                  _sector.description().c_str(),
-    //                                  latitude.description().c_str(),
-    //                                  longitude.description().c_str());
-    return IMathUtils::instance()->NanD();
-  }
-  
-  const IMathUtils* mu = IMathUtils::instance();
-  
-  int CAMBIAR;//!!!!!!!!!!!!!
-  
-  const Vector2D uv = _sector.getUVCoordinates(latitude, longitude);
-  const double u = mu->clamp(uv._x, 0, 1);
-  const double v = mu->clamp(uv._y, 0, 1);
-  const double dX = u * (_width - 1);
-  //const double dY = (1.0 - v) * (_height - 1);
-  const double dY = v * (_height - 1);
-  
-  const int x = (int) dX;
-  const int y = (int) dY;
-  //  const int nextX = (int) (dX + 1.0);
-  //  const int nextY = (int) (dY + 1.0);
-  const int nextX = x + 1;
-  const int nextY = y + 1;
-  const double alphaY = dY - y;
-  const double alphaX = dX - x;
-  
-  //  if (alphaX < 0 || alphaX > 1 ||
-  //      alphaY < 0 || alphaY > 1) {
-  //    printf("break point\n");
-  //  }
-  
-  
-  IMathUtils *m = IMathUtils::instance();
-  int unsedType = -1;
-  double result;
-  if (x == dX) {
-    if (y == dY) {
-      // exact on grid point
-      result = getElevationAt(x, y, type);
-    }
-    else {
-      
-      *type = 2;
-      // linear on Y
-      const double heightY     = getElevationAt(x, y,     &unsedType);
-      if (m->isNan(heightY)){return m->NanD();}
-      const double heightNextY = getElevationAt(x, nextY, &unsedType);
-      if (m->isNan(heightNextY)){return m->NanD();}
-      
-      if (m->isNan(heightY) || m->isNan(heightNextY)){
-        return m->NanD();
-      }
-      
-      result = mu->linearInterpolation(heightNextY, heightY, alphaY);
-    }
-  }
-  else {
-    if (y == dY) {
-      
-      *type = 3;
-      // linear on X
-      const double heightX     = getElevationAt(x,     y, &unsedType);
-      if (m->isNan(heightX)){return m->NanD();}
-      const double heightNextX = getElevationAt(nextX, y, &unsedType);
-      if (m->isNan(heightNextX)){return m->NanD();}
-      
-      result = mu->linearInterpolation(heightX, heightNextX, alphaX);
-    }
-    else {
-      
-      *type = 4;
-      // bilinear
-      const double valueNW = getElevationAt(x,     y,     &unsedType);
-      if (m->isNan(valueNW)){return m->NanD();}
-      const double valueNE = getElevationAt(nextX, y,     &unsedType);
-      if (m->isNan(valueNE)){return m->NanD();}
-      const double valueSE = getElevationAt(nextX, nextY, &unsedType);
-      if (m->isNan(valueSE)){return m->NanD();}
-      const double valueSW = getElevationAt(x,     nextY, &unsedType);
-      if (m->isNan(valueSW)){return m->NanD();}
-      
-      result = _interpolator->interpolation(valueSW,
-                                                valueSE,
-                                                valueNE,
-                                                valueNW,
-                                                alphaX,
-                                                alphaY);
+  IMathUtils* mu = IMathUtils::instance();
+  int s = _data.size();
+  for (int i = 0; i < s; i++) {
+    double h = _data[i]->getElevationAt(latitude, longitude, type);
+    if (!mu->isNan(h)){
+      return h;
     }
   }
   
-  return result;
+  return valueForNoData;
 }
 
-Vector3D CompositeElevationData::getMinMaxAverageHeights() const {
+
+
+const std::string CompositeElevationData::description(bool detailed) const{
+  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  isb->addString("(CompositeElevationData extent=");
+  isb->addInt(_width);
+  isb->addString("x");
+  isb->addInt(_height);
+  isb->addString(" sector=");
+  isb->addString( _sector.description() );
+  int unusedType = -1;
+  if (detailed) {
+    isb->addString("\n");
+    for (int row = 0; row < _width; row++) {
+      //isb->addString("   ");
+      for (int col = 0; col < _height; col++) {
+        isb->addDouble( getElevationAt(col, row, &unusedType) );
+        isb->addString(",");
+      }
+      isb->addString("\n");
+    }
+  }
+  isb->addString(")");
+  const std::string s = isb->getString();
+  delete isb;
+  return s;
+}
+
+Vector3D CompositeElevationData::getMinMaxAverageHeights() const{
+  
   const IMathUtils* mu = IMathUtils::instance();
   double minHeight = mu->maxDouble();
   double maxHeight = mu->minDouble();
@@ -165,7 +112,7 @@ Vector3D CompositeElevationData::getMinMaxAverageHeights() const {
   int type;
   for (int i = 0; i < _width; i++) {
     for (int j = 0; j < _height; j++) {
-      double height = getElevationAt(i, j, &type);
+      const double height = getElevationAt(i, j, &type);
       if (!mu->isNan(height)){
         if (height < minHeight) {
           minHeight = height;
@@ -177,7 +124,7 @@ Vector3D CompositeElevationData::getMinMaxAverageHeights() const {
       }
     }
   }
-  
+
   if (minHeight == mu->maxDouble()) {
     minHeight = 0;
   }
@@ -188,8 +135,5 @@ Vector3D CompositeElevationData::getMinMaxAverageHeights() const {
   return Vector3D(minHeight,
                   maxHeight,
                   sumHeight / (_width * _height));
-}
-
-const std::string CompositeElevationData::description(bool detailed) const{
-  return "";
+  
 }

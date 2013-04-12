@@ -43,10 +43,19 @@ public:
   }
   
   int get(int i) const {
+    if (i < 0 || i > _size){
+      ILogger::instance()->logError("Buffer Get error.");
+    }
+    
     return _values[i];
   }
   
   void put(int i, int value) {
+    
+    if (i < 0 || i > _size){
+      ILogger::instance()->logError("Buffer Put error.");
+    }
+    
     if (_values[i] != value) {
       _values[i] = value;
       _timestamp++;
@@ -54,6 +63,11 @@ public:
   }
   
   void rawPut(int i, int value) {
+    
+    if (i < 0 || i > _size){
+      ILogger::instance()->logError("Buffer Put error.");
+    }
+    
     _values[i] = value;
   }
   

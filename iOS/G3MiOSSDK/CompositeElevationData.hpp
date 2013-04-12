@@ -59,9 +59,9 @@ public:
     return _data[0]->getExtent()._y;
   }
   
-  double getElevationAt(int x, int y, int *type) const;
+  double getElevationAt(int x, int y, int *type, double valueForNoData = IMathUtils::instance()->NanD()) const;
   
-  double getElevationAt(const Angle& latitude,const Angle& longitude, int *type) const;
+  double getElevationAt(const Angle& latitude,const Angle& longitude, int *type, double valueForNoData) const;
   
   const std::string description(bool detailed) const;
   

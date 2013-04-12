@@ -46,7 +46,7 @@ private:
     
     void respondToListener() const;
     
-    bool launchNewRequest();
+    
 
   public:
     
@@ -55,6 +55,8 @@ private:
                                            const Vector2I &resolution,
                                            IElevationDataListener *listener,
                                            bool autodelete);
+    
+    bool launchNewRequest();
     
     void onData(const Sector& sector,
                 const Vector2I& resolution,

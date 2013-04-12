@@ -43,11 +43,13 @@ public:
   }
 
   virtual double getElevationAt(int x, int y,
-                                int *type) const = 0;
+                                int *type,
+                                double valueForNoData = IMathUtils::instance()->NanD()) const = 0;
 
   virtual double getElevationAt(const Angle& latitude,
                                 const Angle& longitude,
-                                int *type) const = 0;
+                                int *type,
+                                double valueForNoData = IMathUtils::instance()->NanD()) const = 0;
 
   double getElevationAt(const Geodetic2D& position,
                                 int *type) const {

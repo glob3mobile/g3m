@@ -188,7 +188,8 @@ SubviewElevationData::~SubviewElevationData() {
 }
 
 double SubviewElevationData::getElevationAt(int x, int y,
-                                            int *type) const {
+                                            int *type,
+                                            double valueForNoData) const {
 
   if (_buffer != NULL) {
     const int index = ((_height-1-y) * _width) + x;
@@ -199,7 +200,13 @@ double SubviewElevationData::getElevationAt(int x, int y,
       return IMathUtils::instance()->NanD();
     }
     *type = 1;
-    return _buffer->get(index);
+    
+    double h = _buffer->get(index);
+    if (IMathUtils::instance()->isNan(h)){
+      return valueForNoData;
+    } else{
+      return h;
+    }
   }
 
 
@@ -209,12 +216,14 @@ double SubviewElevationData::getElevationAt(int x, int y,
 
   return getElevationAt(position.latitude(),
                         position.longitude(),
-                        type);
+                        type,
+                        valueForNoData);
 }
 
 double SubviewElevationData::getElevationAt(const Angle& latitude,
                                             const Angle& longitude,
-                                            int *type) const {
+                                            int *type,
+                                            double valueForNoData) const {
   if (!_sector.contains(latitude, longitude)) {
     //    ILogger::instance()->logError("Sector %s doesn't contain lat=%s lon=%s",
     //                                  _sector.description().c_str(),
@@ -222,7 +231,13 @@ double SubviewElevationData::getElevationAt(const Angle& latitude,
     //                                  longitude.description().c_str());
     return IMathUtils::instance()->NanD();
   }
-  return _elevationData->getElevationAt(latitude, longitude, type);
+  
+  double h = _elevationData->getElevationAt(latitude, longitude, type);
+  if (IMathUtils::instance()->isNan(h)){
+    return valueForNoData;
+  } else{
+    return h;
+  }
 }
 
 const std::string SubviewElevationData::description(bool detailed) const {

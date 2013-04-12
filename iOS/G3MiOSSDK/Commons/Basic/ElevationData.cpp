@@ -56,11 +56,7 @@ Mesh* ElevationData::createMesh(const Ellipsoid* ellipsoid,
     const double u = (double) x / (_width  - 1);
 
     for (int y = 0; y < _height; y++) {
-      double height = getElevationAt(x, y, &type);
-      
-      if (mu->isNan(height)){
-        height = 0; //Default height at no data
-      }
+      double height = getElevationAt(x, y, &type,0);
 
       const float alpha = (float) ((height - minHeight) / deltaHeight);
 

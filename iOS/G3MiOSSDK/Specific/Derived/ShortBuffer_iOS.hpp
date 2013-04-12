@@ -42,10 +42,20 @@ public:
   }
 
   short get(int i) const {
+    
+    if (i < 0 || i > _size){
+      ILogger::instance()->logError("Buffer Put error.");
+    }
+    
     return _values[i];
   }
 
   void put(int i, short value) {
+    
+    if (i < 0 || i > _size){
+      ILogger::instance()->logError("Buffer Put error.");
+    }
+    
     if (_values[i] != value) {
       _values[i] = value;
       _timestamp++;
@@ -53,6 +63,11 @@ public:
   }
 
   void rawPut(int i, short value) {
+    
+    if (i < 0 || i > _size){
+      ILogger::instance()->logError("Buffer Put error.");
+    }
+    
     _values[i] = value;
   }
 
