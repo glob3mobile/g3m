@@ -94,6 +94,18 @@
 		CF6B5F6516C194D200C590C1 /* JSONInteger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6B5F6316C194D200C590C1 /* JSONInteger.cpp */; };
 		CF6B5F6916C1956B00C590C1 /* JSONLong.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6B5F6716C1956B00C590C1 /* JSONLong.cpp */; };
 		CF6D404815C8278C008D8D78 /* Downloader_iOS_WorkerThread.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF6D404615C8278C008D8D78 /* Downloader_iOS_WorkerThread.mm */; };
+		CF6D723817184BE40043C74B /* ImageBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6D723617184BE40043C74B /* ImageBuilder.cpp */; };
+		CF6D723B17184D620043C74B /* CanvasElement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6D723917184D620043C74B /* CanvasElement.cpp */; };
+		CF6D723D17184D920043C74B /* CanvasElement.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6D723A17184D620043C74B /* CanvasElement.hpp */; };
+		CF6D7240171854F50043C74B /* TextCanvasElement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6D723E171854F50043C74B /* TextCanvasElement.cpp */; };
+		CF6D72411718554D0043C74B /* TextCanvasElement.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6D723F171854F50043C74B /* TextCanvasElement.hpp */; };
+		CF6D7244171859C40043C74B /* BalloonCanvasElement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6D7242171859C40043C74B /* BalloonCanvasElement.cpp */; };
+		CF6D724717185CF20043C74B /* GroupCanvasElement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6D724517185CF20043C74B /* GroupCanvasElement.cpp */; };
+		CF6D724817185F370043C74B /* BalloonCanvasElement.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6D7243171859C40043C74B /* BalloonCanvasElement.hpp */; };
+		CF6D724917185F370043C74B /* GroupCanvasElement.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6D724617185CF20043C74B /* GroupCanvasElement.hpp */; };
+		CF6D724C171861770043C74B /* ColumnCanvasElement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6D724A171861770043C74B /* ColumnCanvasElement.cpp */; };
+		CF6D724D171861B80043C74B /* ColumnCanvasElement.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6D724B171861770043C74B /* ColumnCanvasElement.hpp */; };
+		CF6D724E17186C090043C74B /* ImageBuilder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6D723717184BE40043C74B /* ImageBuilder.hpp */; };
 		CF73BFDB15E114E3001CE412 /* FrameTasksExecutor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF73BFD915E114E3001CE412 /* FrameTasksExecutor.cpp */; };
 		CF75C39516E92CDF00F7EE9F /* HereLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF75C39316E92CDF00F7EE9F /* HereLayer.cpp */; };
 		CF75C39616E92D1300F7EE9F /* HereLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF75C39416E92CDF00F7EE9F /* HereLayer.hpp */; };
@@ -463,6 +475,12 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF6D724E17186C090043C74B /* ImageBuilder.hpp in CopyFiles */,
+				CF6D724D171861B80043C74B /* ColumnCanvasElement.hpp in CopyFiles */,
+				CF6D724817185F370043C74B /* BalloonCanvasElement.hpp in CopyFiles */,
+				CF6D724917185F370043C74B /* GroupCanvasElement.hpp in CopyFiles */,
+				CF6D72411718554D0043C74B /* TextCanvasElement.hpp in CopyFiles */,
+				CF6D723D17184D920043C74B /* CanvasElement.hpp in CopyFiles */,
 				CF0755971715B9570084CC14 /* GFont.hpp in CopyFiles */,
 				CFA59ECF1714856A0095E2EF /* ICanvas.hpp in CopyFiles */,
 				CFA59ED01714856A0095E2EF /* Canvas_iOS.hpp in CopyFiles */,
@@ -885,6 +903,18 @@
 		CF6B5F6816C1956B00C590C1 /* JSONLong.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JSONLong.hpp; sourceTree = "<group>"; };
 		CF6D404515C8278C008D8D78 /* Downloader_iOS_WorkerThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Downloader_iOS_WorkerThread.h; path = Specific/Derived/Downloader_iOS_WorkerThread.h; sourceTree = "<group>"; };
 		CF6D404615C8278C008D8D78 /* Downloader_iOS_WorkerThread.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Downloader_iOS_WorkerThread.mm; path = Specific/Derived/Downloader_iOS_WorkerThread.mm; sourceTree = "<group>"; };
+		CF6D723617184BE40043C74B /* ImageBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = ImageBuilder.cpp; path = Commons/Basic/ImageBuilder.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		CF6D723717184BE40043C74B /* ImageBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = ImageBuilder.hpp; path = Commons/Basic/ImageBuilder.hpp; sourceTree = "<group>"; };
+		CF6D723917184D620043C74B /* CanvasElement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = CanvasElement.cpp; path = Commons/Basic/CanvasElement.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		CF6D723A17184D620043C74B /* CanvasElement.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = CanvasElement.hpp; path = Commons/Basic/CanvasElement.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		CF6D723E171854F50043C74B /* TextCanvasElement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TextCanvasElement.cpp; path = Commons/Basic/TextCanvasElement.cpp; sourceTree = "<group>"; };
+		CF6D723F171854F50043C74B /* TextCanvasElement.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TextCanvasElement.hpp; path = Commons/Basic/TextCanvasElement.hpp; sourceTree = "<group>"; };
+		CF6D7242171859C40043C74B /* BalloonCanvasElement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BalloonCanvasElement.cpp; path = Commons/Basic/BalloonCanvasElement.cpp; sourceTree = "<group>"; };
+		CF6D7243171859C40043C74B /* BalloonCanvasElement.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = BalloonCanvasElement.hpp; path = Commons/Basic/BalloonCanvasElement.hpp; sourceTree = "<group>"; };
+		CF6D724517185CF20043C74B /* GroupCanvasElement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GroupCanvasElement.cpp; path = Commons/Basic/GroupCanvasElement.cpp; sourceTree = "<group>"; };
+		CF6D724617185CF20043C74B /* GroupCanvasElement.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GroupCanvasElement.hpp; path = Commons/Basic/GroupCanvasElement.hpp; sourceTree = "<group>"; };
+		CF6D724A171861770043C74B /* ColumnCanvasElement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ColumnCanvasElement.cpp; path = Commons/Basic/ColumnCanvasElement.cpp; sourceTree = "<group>"; };
+		CF6D724B171861770043C74B /* ColumnCanvasElement.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ColumnCanvasElement.hpp; path = Commons/Basic/ColumnCanvasElement.hpp; sourceTree = "<group>"; };
 		CF73BFD915E114E3001CE412 /* FrameTasksExecutor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FrameTasksExecutor.cpp; path = Commons/Basic/FrameTasksExecutor.cpp; sourceTree = "<group>"; };
 		CF73BFDA15E114E3001CE412 /* FrameTasksExecutor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FrameTasksExecutor.hpp; path = Commons/Basic/FrameTasksExecutor.hpp; sourceTree = "<group>"; };
 		CF75C39316E92CDF00F7EE9F /* HereLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HereLayer.cpp; sourceTree = "<group>"; };
@@ -1247,18 +1277,18 @@
 		383BD3881577EDE30012AC53 /* Commons */ = {
 			isa = PBXGroup;
 			children = (
-				CFB5274D16D5605C008374C2 /* Math */,
-				A7BF53831607643400662135 /* JSON */,
-				D892FBCD15C930E600E69254 /* GL */,
 				383BD3891577EDF40012AC53 /* Basic */,
 				CC596F1B15C46CD7008FC230 /* Cameras */,
 				D8AD760F1599B5B900A7D39A /* Downloader */,
+				CFDAE7A1166840E0006F6A00 /* GEO */,
 				383BD38A1577EDFD0012AC53 /* Geometry */,
+				D892FBCD15C930E600E69254 /* GL */,
 				383BD38B1577EE040012AC53 /* Interfaces */,
+				A7BF53831607643400662135 /* JSON */,
 				D87EC5C015BEB12F00E38C36 /* Layers */,
+				CFB5274D16D5605C008374C2 /* Math */,
 				D8A5601915AEF47300035086 /* Mesh */,
 				CCC2A01A15CA6B8200923850 /* Renderers */,
-				CFDAE7A1166840E0006F6A00 /* GEO */,
 			);
 			name = Commons;
 			sourceTree = "<group>";
@@ -1303,6 +1333,8 @@
 				CF73BFDA15E114E3001CE412 /* FrameTasksExecutor.hpp */,
 				383BD3901577EE500012AC53 /* G3MWidget.cpp */,
 				D88B5E5115C162AF0083A43F /* G3MWidget.hpp */,
+				CF0755941715B9120084CC14 /* GFont.cpp */,
+				CF0755951715B9120084CC14 /* GFont.hpp */,
 				CF2CDD971678292E002A78A9 /* GInitializationTask.cpp */,
 				CF2CDD981678292E002A78A9 /* GInitializationTask.hpp */,
 				CF527E19162E2B4200E0BDE0 /* GTask.cpp */,
@@ -1373,8 +1405,18 @@
 				CFD3D8B016D1729A00CE9242 /* WMSBillElevationDataProvider.hpp */,
 				CF8D0BFB15AF0D23005B5433 /* TileTexturizer.hpp */,
 				CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */,
-				CF0755941715B9120084CC14 /* GFont.cpp */,
-				CF0755951715B9120084CC14 /* GFont.hpp */,
+				CF6D723617184BE40043C74B /* ImageBuilder.cpp */,
+				CF6D723717184BE40043C74B /* ImageBuilder.hpp */,
+				CF6D723917184D620043C74B /* CanvasElement.cpp */,
+				CF6D723A17184D620043C74B /* CanvasElement.hpp */,
+				CF6D723E171854F50043C74B /* TextCanvasElement.cpp */,
+				CF6D723F171854F50043C74B /* TextCanvasElement.hpp */,
+				CF6D7242171859C40043C74B /* BalloonCanvasElement.cpp */,
+				CF6D7243171859C40043C74B /* BalloonCanvasElement.hpp */,
+				CF6D724517185CF20043C74B /* GroupCanvasElement.cpp */,
+				CF6D724617185CF20043C74B /* GroupCanvasElement.hpp */,
+				CF6D724A171861770043C74B /* ColumnCanvasElement.cpp */,
+				CF6D724B171861770043C74B /* ColumnCanvasElement.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -2091,6 +2133,12 @@
 				CFA59ECB171467890095E2EF /* ICanvas.cpp in Sources */,
 				CFA59ECE171482560095E2EF /* Canvas_iOS.mm in Sources */,
 				CF0755961715B9120084CC14 /* GFont.cpp in Sources */,
+				CF6D723817184BE40043C74B /* ImageBuilder.cpp in Sources */,
+				CF6D723B17184D620043C74B /* CanvasElement.cpp in Sources */,
+				CF6D7240171854F50043C74B /* TextCanvasElement.cpp in Sources */,
+				CF6D7244171859C40043C74B /* BalloonCanvasElement.cpp in Sources */,
+				CF6D724717185CF20043C74B /* GroupCanvasElement.cpp in Sources */,
+				CF6D724C171861770043C74B /* ColumnCanvasElement.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

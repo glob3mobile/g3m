@@ -267,8 +267,26 @@ const Vector2F Canvas_iOS::_textExtent(const std::string& text) {
 
 void Canvas_iOS::_fillText(const std::string& text,
                            float left, float top) {
-  CGContextShowTextAtPoint(_context,
-                           left, _canvasHeight - top,
-                           text.c_str(),
-                           text.size());
+//  const Vector2F textExtent = _textExtent(text);
+//
+//  CGContextShowTextAtPoint(_context,
+//                           left, _canvasHeight - top - textExtent._y,
+//                           text.c_str(),
+//                           text.size());
+
+  UIGraphicsPushContext(_context);
+
+  CGContextSaveGState(_context);
+  CGContextTranslateCTM(_context, 0.0f, _canvasHeight);
+  CGContextScaleCTM(_context, 1.0f, -1.0f);
+
+  NSString* nsText = [NSString stringWithCString: text.c_str()
+                                        encoding: NSUTF8StringEncoding];
+
+  [nsText drawAtPoint: CGPointMake(left, top)
+             withFont: _currentUIFont];
+
+  CGContextRestoreGState(_context);
+
+  UIGraphicsPopContext();
 }
