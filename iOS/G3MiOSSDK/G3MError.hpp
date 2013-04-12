@@ -11,8 +11,12 @@
 
 #include <string>
 
-#ifdef C_CODE
-class G3MError{
+
+class G3MError
+#ifndef C_CODE
+: public java.lang.RuntimeException
+#endif
+{
   
 private:
   std::string _message;
@@ -22,12 +26,7 @@ public:
   std::string getMessage() const { return _message;}
   
 };
-#endif
-#ifdef JAVA_CODE
-class G3MError extends java.lang.RuntimeException{
-	private static final long serialVersionUID = 1L;
-}
-#endif
+
 
 
 
