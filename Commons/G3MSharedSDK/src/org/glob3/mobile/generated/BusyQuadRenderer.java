@@ -20,6 +20,9 @@ package org.glob3.mobile.generated;
 
 
 
+//#include "G3MError.hpp"
+//#include "G3MError.hpp"
+
 
 //***************************************************************
 
@@ -35,6 +38,8 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
   private final boolean _animated;
   private final Vector2D _size ;
   private Color _backgroundColor;
+
+  private GPUProgramState _programState = new GPUProgramState();
 
   private boolean initMesh(G3MRenderContext rc)
   {
@@ -85,6 +90,7 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
      _backgroundColor = backgroundColor;
      _animated = animated;
      _size = new Vector2D(size);
+     _programState = new GPUProgramState(null);
   }
 
   public final void initialize(G3MContext context)
@@ -117,8 +123,17 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
     final int halfWidth = currentViewport[2] / 2;
     final int halfHeight = currentViewport[3] / 2;
     MutableMatrix44D M = MutableMatrix44D.createOrthographicProjectionMatrix(-halfWidth, halfWidth, -halfHeight, halfHeight, -halfWidth, halfWidth);
+    //state.getProgram()->setUniform(rc->getGL(), "Projection", M);
   
-    state.setProjectionMatrix(M);
+    GPUProgram prog = rc.getGPUProgramManager().getProgram("DefaultProgram");
+    int _WORKING_JM;
+  //  UniformMatrix4Float* projection = prog->getUniformMatrix4Float("Projection");
+  //  UniformMatrix4Float* modelview = prog->getUniformMatrix4Float("Modelview");
+  
+    state.setProgram(prog);
+  //  projection->set(M);
+    //modelview->set(MutableMatrix44D::identity());
+    //state.setProjectionMatrix(M);
   
     //gl->setProjection(M);
     state.setModelViewMatrix(MutableMatrix44D.identity());
@@ -133,7 +148,7 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
     MutableMatrix44D R2 = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_degrees), new Vector3D(0, 0, 1));
   
     // draw mesh
-    _quadMesh.render(rc, parentState);
+    _quadMesh.render(rc, parentState, _programState);
   }
 
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)

@@ -18,6 +18,7 @@ package org.glob3.mobile.generated;
 
 
 //class Vector3D;
+//class GPUProgramState;
 
 public abstract class Mesh
 {
@@ -30,7 +31,7 @@ public abstract class Mesh
 
   public abstract Vector3D getVertex(int i);
 
-  public abstract void render(G3MRenderContext rc, GLState parentState);
+  public abstract void render(G3MRenderContext rc, GLState parentState, GPUProgramState parentProgramState);
 
   public abstract Extent getExtent();
 

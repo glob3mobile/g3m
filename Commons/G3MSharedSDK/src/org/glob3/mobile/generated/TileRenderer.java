@@ -181,6 +181,8 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 
   private float _verticalExaggeration;
 
+  private GPUProgramState _programState = new GPUProgramState();
+
   public TileRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters parameters, boolean showStatistics, long texturePriority)
   {
      _tessellator = tessellator;
@@ -198,6 +200,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
      _lastVisibleSector = null;
      _texturePriority = texturePriority;
      _allFirstLevelTilesAreTextureSolved = false;
+     _programState = new GPUProgramState(null);
     _layerSet.setChangeListener(this);
   }
 
@@ -268,7 +271,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
       for (int i = 0; i < firstLevelTilesCount; i++)
       {
         Tile tile = _firstLevelTiles.get(i);
-        tile.render(rc, trc, parentState, null);
+        tile.render(rc, trc, parentState, _programState, null);
       }
     }
     else
@@ -287,7 +290,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
         {
           Tile tile = iter.next();
   
-          tile.render(rc, trc, parentState, toVisitInNextIteration);
+          tile.render(rc, trc, parentState, _programState, toVisitInNextIteration);
         }
   
         toVisit = toVisitInNextIteration;

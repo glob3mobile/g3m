@@ -23,6 +23,7 @@ package org.glob3.mobile.generated;
 //class IGLTextureId;
 //class MarkTouchListener;
 //class GLState;
+//class GPUProgramState;
 
 public class MarkUserData
 {

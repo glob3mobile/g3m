@@ -24,6 +24,10 @@ package org.glob3.mobile.generated;
 //class IGLUniformID;
 
 
+//class GPUProgramManager;
+//class GPUProgramState;
+//class GPUProgram;
+
 public class GL
 {
   private final INativeGL _nativeGL;
@@ -34,6 +38,8 @@ public class GL
   private GLState _currentState;
 
   private ShaderProgram _program;
+
+  private GPUProgram _currentGPUProgram;
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  void loadModelView();
@@ -118,13 +124,24 @@ public class GL
 
   private IFloatBuffer _billboardTexCoord;
 
-  private void setState(GLState state)
-  {
-    //Changes current State and calls OpenGL API
-    state.applyChanges(_nativeGL, _currentState, GlobalMembersGL.Attributes, GlobalMembersGL.Uniforms);
-  }
-
   private final boolean _verbose;
+
+  private void setGLState(GLState state)
+  {
+    state.applyChanges(this, _currentState, GlobalMembersGL.Attributes, GlobalMembersGL.Uniforms);
+  }
+  private void setProgramState(GPUProgramManager progManager, GPUProgramState progState)
+  {
+  
+    GPUProgram prog = progManager.getProgram(progState);
+    if (prog != _currentGPUProgram)
+    {
+      _currentGPUProgram = prog;
+      useProgram(prog);
+    }
+  
+    progState.applyChanges(this, prog);
+  }
 
 
 
@@ -136,6 +153,7 @@ public class GL
      _billboardTexCoord = null;
      _program = null;
      _currentState = null;
+     _currentGPUProgram = null;
     //Init Constants
     GLCullFace.init(_nativeGL);
     GLBufferType.init(_nativeGL);
@@ -180,32 +198,15 @@ public class GL
     {
       ILogger.instance().logInfo("GL::clearScreen()");
     }
-    setState(state);
+    setGLState(state);
     _nativeGL.clear(GLBufferType.colorBuffer() | GLBufferType.depthBuffer());
   }
 
-  public final void drawElements(int mode, IShortBuffer indices, GLState state)
-  {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::drawElements(%d, %s)", mode, indices.description());
-    }
-  
-    setState(state);
-  
-    _nativeGL.drawElements(mode, indices.size(), indices);
-  }
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  void drawElements(int mode, IShortBuffer indices, GLState state, GPUProgramManager progManager, GPUProgramState gpuState);
 
-  public final void drawArrays(int mode, int first, int count, GLState state)
-  {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::drawArrays(%d, %d, %d)", mode, first, count);
-    }
-  
-    setState(state);
-    _nativeGL.drawArrays(mode, first, count);
-  }
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  void drawArrays(int mode, int first, int count, GLState state, GPUProgramManager progManager, GPUProgramState gpuState);
 
   public final boolean useProgram(ShaderProgram program)
   {
@@ -214,14 +215,13 @@ public class GL
       ILogger.instance().logInfo("GL::useProgram()");
     }
   
-    if (_program == program)
-    {
-      return true;
-    }
+    //  if (_program == program) {
+    //    return true;
+    //  }
     _program = program;
   
     // set shaders
-    _nativeGL.useProgram(program);
+    //_nativeGL->useProgram(program);
   
     //Methods checkedGetAttribLocation and checkedGetUniformLocation
     //will turn _errorGettingLocationOcurred to true is that happens
@@ -244,17 +244,11 @@ public class GL
     GlobalMembersGL.Uniforms.ScaleTexCoord = checkedGetUniformLocation(program, "ScaleTexCoord");
     GlobalMembersGL.Uniforms.PointSize = checkedGetUniformLocation(program, "PointSize");
   
-    // default values
-    _nativeGL.uniform2f(GlobalMembersGL.Uniforms.ScaleTexCoord, (float)1.0, (float)1.0);
-    _nativeGL.uniform2f(GlobalMembersGL.Uniforms.TranslationTexCoord, (float)0.0, (float)0.0);
-    _nativeGL.uniform1f(GlobalMembersGL.Uniforms.PointSize, 1);
-  
     //BILLBOARDS
     GlobalMembersGL.Uniforms.BillBoard = checkedGetUniformLocation(program, "BillBoard");
     GlobalMembersGL.Uniforms.ViewPortExtent = checkedGetUniformLocation(program, "ViewPortExtent");
     GlobalMembersGL.Uniforms.TextureExtent = checkedGetUniformLocation(program, "TextureExtent");
   
-    _nativeGL.uniform1i(GlobalMembersGL.Uniforms.BillBoard, 0); //NOT DRAWING BILLBOARD
   
     //FOR FLAT COLOR MIXING
     GlobalMembersGL.Uniforms.FlatColorIntensity = checkedGetUniformLocation(program, "FlatColorIntensity");
@@ -262,7 +256,7 @@ public class GL
     GlobalMembersGL.Uniforms.EnableColorPerVertex = checkedGetUniformLocation(program, "EnableColorPerVertex");
     GlobalMembersGL.Uniforms.EnableFlatColor = checkedGetUniformLocation(program, "EnableFlatColor");
   
-  
+    setUniformsDefaultValues();
   
     //Return
     return !_errorGettingLocationOcurred;
@@ -293,7 +287,7 @@ public class GL
       GLState state = new GLState(_currentState);
       state.setPixelStoreIAlignmentUnpack(1);
       state.bindTexture(texId);
-      setState(state);
+      setGLState(state);
   
       int linear = GLTextureParameterValue.linear();
       int clampToEdge = GLTextureParameterValue.clampToEdge();
@@ -379,9 +373,9 @@ public class GL
     return _nativeGL.compileShader(shader, source);
   }
 
-  public final void deleteShader(int shader)
+  public final boolean deleteShader(int shader)
   {
-    _nativeGL.deleteShader(shader);
+    return _nativeGL.deleteShader(shader);
   }
 
   public final void printShaderInfoLog(int shader)
@@ -399,9 +393,9 @@ public class GL
     _nativeGL.linkProgram(program);
   }
 
-  public final void deleteProgram(int program)
+  public final boolean deleteProgram(int program)
   {
-    _nativeGL.deleteProgram(program);
+    return _nativeGL.deleteProgram(program);
   }
 
   public final INativeGL getNative()
@@ -431,5 +425,50 @@ public class GL
   public final void uniform4f(IGLUniformID location, float v0, float v1, float v2, float v3)
   {
      _nativeGL.uniform4f(location, v0, v1, v2, v3);
+  }
+
+  public final void vertexAttribPointer(int index, int size, boolean normalized, int stride, IFloatBuffer buffer)
+  {
+    _nativeGL.vertexAttribPointer(index, size, normalized, stride, buffer);
+  }
+
+  public final void bindAttribLocation(GPUProgram program, int loc, String name)
+  {
+    _nativeGL.bindAttribLocation(program, loc, name);
+  }
+
+  public final int getProgramiv(GPUProgram program, int pname)
+  {
+    return _nativeGL.getProgramiv(program, pname);
+  }
+
+  public final GPUUniform getActiveUniform(GPUProgram program, int i)
+  {
+    return _nativeGL.getActiveUniform(program, i);
+  }
+
+  public final Attribute getActiveAttribute(GPUProgram program, int i)
+  {
+    return _nativeGL.getActiveAttribute(program, i);
+  }
+
+  public final GLState getCurrentState()
+  {
+     return _currentState;
+  }
+
+  public final void useProgram(GPUProgram program)
+  {
+    _nativeGL.useProgram(program);
+    program.onUsed();
+  }
+
+  public final void setUniformsDefaultValues()
+  {
+    // default values
+    _nativeGL.uniform2f(GlobalMembersGL.Uniforms.ScaleTexCoord, (float)1.0, (float)1.0);
+    _nativeGL.uniform2f(GlobalMembersGL.Uniforms.TranslationTexCoord, (float)0.0, (float)0.0);
+    _nativeGL.uniform1f(GlobalMembersGL.Uniforms.PointSize, 1);
+    _nativeGL.uniform1i(GlobalMembersGL.Uniforms.BillBoard, 0); //NOT DRAWING BILLBOARD
   }
 }

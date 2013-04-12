@@ -20,6 +20,7 @@ package org.glob3.mobile.generated;
 //class G3MRenderContext;
 //class GLState;
 //class GEOSymbolizer;
+//class GPUProgramState;
 
 public abstract class GEOObject
 {
@@ -38,6 +39,6 @@ public abstract class GEOObject
     return true;
   }
 
-  public abstract void render(G3MRenderContext rc, GLState parentState, GEOSymbolizer symbolizer);
+  public abstract void render(G3MRenderContext rc, GLState parentState, GPUProgramState parentProgramState, GEOSymbolizer symbolizer);
 
 }

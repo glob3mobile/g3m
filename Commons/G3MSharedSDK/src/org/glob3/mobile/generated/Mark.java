@@ -337,7 +337,7 @@ public class Mark
     }
   }
 
-  public final void render(G3MRenderContext rc, Vector3D cameraPosition, GLState parentState)
+  public final void render(G3MRenderContext rc, Vector3D cameraPosition, GLState parentState, GPUProgramState parentProgramState)
   {
     final Planet planet = rc.getPlanet();
   
@@ -386,7 +386,7 @@ public class Mark
           state.setVertices(vertices, 3, 0);
           state.setTextureExtent(_textureWidth, _textureHeight);
           state.bindTexture(_textureId);
-          gl.drawArrays(GLPrimitive.triangleStrip(), 0, vertices.size() / 3, state);
+          gl.drawArrays(GLPrimitive.triangleStrip(), 0, vertices.size() / 3, state, rc.getGPUProgramManager(), parentProgramState);
   
           _renderedMark = true;
         }

@@ -39,12 +39,32 @@ public class AttributeVecFloat extends Attribute
   public final void set(INativeGL _nativeGL, IFloatBuffer buffer, int index, int stride, boolean normalized)
   {
 
-    if (equalsTo(buffer, index, stride, normalized))
+    if (!_wasSet || equalsTo(buffer, index, stride, normalized))
     {
-      _nativeGL.vertexAttribPointer(index, _size, normalized, stride, buffer); //Stride - Normalized - Size - Index
+//      _nativeGL->vertexAttribPointer(index,//Index
+//                                     _size,//Size
+//                                     normalized,//Normalized
+//                                     stride,//Stride
+//                                     buffer);
 
       save(buffer, index, stride, normalized);
+      _wasSet = true;
+      _dirty = true;
     }
+  }
+
+  public final void applyChanges(GL gl)
+  {
+    if (_dirty)
+    {
+      gl.vertexAttribPointer(_index, _size, _normalized, _stride, _buffer);
+      _dirty = false;
+    }
+  }
+
+  public final int getSize()
+  {
+     return _size;
   }
 
 }

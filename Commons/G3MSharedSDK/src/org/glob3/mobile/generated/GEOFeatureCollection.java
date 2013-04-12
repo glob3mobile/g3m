@@ -19,6 +19,7 @@ package org.glob3.mobile.generated;
 
 
 //class GEOFeature;
+//class GPUProgramState;
 
 public class GEOFeatureCollection extends GEOObject
 {
@@ -40,13 +41,13 @@ public class GEOFeatureCollection extends GEOObject
     }
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState, GEOSymbolizer symbolizer)
+  public final void render(G3MRenderContext rc, GLState parentState, GPUProgramState parentProgramState, GEOSymbolizer symbolizer)
   {
     final int featuresCount = _features.size();
     for (int i = 0; i < featuresCount; i++)
     {
       GEOFeature feature = _features.get(i);
-      feature.render(rc, parentState, symbolizer);
+      feature.render(rc, parentState, parentProgramState, symbolizer);
     }
   }
 

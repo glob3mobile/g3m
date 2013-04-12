@@ -17,6 +17,9 @@ package org.glob3.mobile.generated;
 
 
 
+//#include "G3MError.hpp"
+//#include "G3MError.hpp"
+
 public class MeshHolder extends Mesh
 {
   private Mesh _mesh;
@@ -53,9 +56,9 @@ public class MeshHolder extends Mesh
     return _mesh.getVertex(i);
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final void render(G3MRenderContext rc, GLState parentState, GPUProgramState parentProgramState)
   {
-    _mesh.render(rc, parentState);
+    _mesh.render(rc, parentState, parentProgramState);
   }
 
   public final Extent getExtent()

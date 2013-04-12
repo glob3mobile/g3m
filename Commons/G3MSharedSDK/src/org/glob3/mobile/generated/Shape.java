@@ -21,6 +21,7 @@ package org.glob3.mobile.generated;
 
 
 //class ShapePendingEffect;
+//class GPUProgramState;
 
 public abstract class Shape implements EffectTarget
 {
@@ -200,7 +201,7 @@ public abstract class Shape implements EffectTarget
     _pendingEffects.add(new ShapePendingEffect(effect, true));
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final void render(G3MRenderContext rc, GLState parentState, GPUProgramState parentProgramState)
   {
     if (isReadyToRender(rc))
     {
@@ -228,7 +229,7 @@ public abstract class Shape implements EffectTarget
       GLState state = new GLState(parentState);
       state.multiplyModelViewMatrix(getTransformMatrix(rc.getPlanet()));
   
-      rawRender(rc, state);
+      rawRender(rc, state, parentProgramState);
     }
   }
 
@@ -239,7 +240,7 @@ public abstract class Shape implements EffectTarget
 
   public abstract boolean isReadyToRender(G3MRenderContext rc);
 
-  public abstract void rawRender(G3MRenderContext rc, GLState parentState);
+  public abstract void rawRender(G3MRenderContext rc, GLState parentState, GPUProgramState parentProgramState);
 
   public abstract boolean isTransparent(G3MRenderContext rc);
 

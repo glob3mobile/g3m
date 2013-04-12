@@ -76,6 +76,11 @@ public class LazyTextureMapping extends TextureMapping
     _glTextureId = glTextureId;
   }
 
+
+  //#include "G3MError.hpp"
+  //#include "G3MError.hpp"
+  
+  
   public final GLState bind(G3MRenderContext rc, GLState parentState)
   {
     if (!_initialized)
@@ -95,7 +100,12 @@ public class LazyTextureMapping extends TextureMapping
   
     GLState state = new GLState(parentState);
     state.enableTextures();
-    state.enableTexture2D();
+  
+    int _WORKING_JM;
+  //  GPUProgram* prog = rc->getGPUProgramManager()->getProgram("DefaultProgram");
+  //  UniformBool* enableTexture = prog->getUniformBool("EnableTexture");
+  //  enableTexture->set(true);
+    //state->enableTexture2D();
   
     if (_texCoords != null)
     {

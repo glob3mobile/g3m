@@ -58,21 +58,8 @@ public class TexturedMesh extends Mesh
     }
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
-  {
-    GLState state = _textureMapping.bind(rc, parentState);
-  
-    if (_transparent)
-    {
-      state.enableBlend();
-      state.setBlendFactors(GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha());
-    }
-  
-    _mesh.render(rc, state);
-  
-    if (state != null)
-       state.dispose();
-  }
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  void render(G3MRenderContext rc, GLState parentState, GPUProgramState parentProgramState);
 
   public final Extent getExtent()
   {

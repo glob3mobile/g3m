@@ -240,13 +240,13 @@ public class Box extends Extent
     return Vector3D.nan();
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final void render(G3MRenderContext rc, GLState parentState, GPUProgramState parentProgramState)
   {
     if (_mesh == null)
     {
       createMesh(Color.newFromRGBA(1.0f, 0.0f, 1.0f, 1.0f));
     }
-    _mesh.render(rc, parentState);
+    _mesh.render(rc, parentState, parentProgramState);
   }
 
   public final boolean touchesBox(Box box)

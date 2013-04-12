@@ -19,6 +19,7 @@ package org.glob3.mobile.generated;
 
 //class IFloatBuffer;
 //class IShortBuffer;
+//class GPUProgramState;
 
 public class SGGeometryNode extends SGNode
 {
@@ -56,7 +57,7 @@ public class SGGeometryNode extends SGNode
        _indices.dispose();
   }
 
-  public final void rawRender(G3MRenderContext rc, GLState parentState)
+  public final void rawRender(G3MRenderContext rc, GLState parentState, GPUProgramState parentProgramState)
   {
     GL gl = rc.getGL();
   
@@ -80,7 +81,7 @@ public class SGGeometryNode extends SGNode
     }
   
     state.setVertices(_vertices, 3, 0);
-    gl.drawElements(_primitive, _indices, state);
+    gl.drawElements(_primitive, _indices, state, rc.getGPUProgramManager(), parentProgramState);
   }
 
   public final GLState createState(G3MRenderContext rc, GLState parentState)

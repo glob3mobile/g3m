@@ -18,7 +18,7 @@ package org.glob3.mobile.generated;
 
 
 
-//class Uniform;
+//class GPUUniform;
 //class Attribute;
 
 //class MutableMatrix44D;
@@ -110,6 +110,10 @@ public abstract class INativeGL
   public abstract int Type_UnsignedByte();
   public abstract int Type_UnsignedInt();
   public abstract int Type_Int();
+  public abstract int Type_Vec2Float();
+  public abstract int Type_Vec4Float();
+  public abstract int Type_Bool();
+  public abstract int Type_Matrix4Float();
 
   public abstract int Primitive_Triangles();
   public abstract int Primitive_TriangleStrip();
@@ -160,7 +164,7 @@ public abstract class INativeGL
 
   public abstract int getProgramiv(GPUProgram program, int param);
 
-  public abstract Uniform getActiveUniform(GPUProgram program, int i);
+  public abstract GPUUniform getActiveUniform(GPUProgram program, int i);
   public abstract Attribute getActiveAttribute(GPUProgram program, int i);
 
 }

@@ -95,7 +95,7 @@ public abstract class AbstractMesh extends Mesh
   
   }
 
-  protected abstract void rawRender(G3MRenderContext rc, GLState parentState);
+  protected abstract void rawRender(G3MRenderContext rc, GLState parentState, GPUProgramState parentProgramState);
 
   public void dispose()
   {
@@ -115,7 +115,7 @@ public abstract class AbstractMesh extends Mesh
        _translationMatrix.dispose();
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final void render(G3MRenderContext rc, GLState parentState, GPUProgramState parentProgramState)
   {
     GLState state = new GLState(parentState);
     state.enableVerticesPosition();
@@ -143,7 +143,7 @@ public abstract class AbstractMesh extends Mesh
       state.multiplyModelViewMatrix(_translationMatrix);
     }
   
-    rawRender(rc, state);
+    rawRender(rc, state, parentProgramState);
   }
 
   public final Extent getExtent()

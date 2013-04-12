@@ -18,6 +18,8 @@ package org.glob3.mobile.generated;
 
 
 
+//class GPUProgramState;
+
 public abstract class CompositeShape extends Shape
 {
   private java.util.ArrayList<Shape> _children = new java.util.ArrayList<Shape>();
@@ -66,13 +68,13 @@ public abstract class CompositeShape extends Shape
     return false;
   }
 
-  public final void rawRender(G3MRenderContext rc, GLState parentState)
+  public final void rawRender(G3MRenderContext rc, GLState parentState, GPUProgramState parentProgramState)
   {
     int childrenCount = _children.size();
     for (int i = 0; i < childrenCount; i++)
     {
       Shape child = _children.get(i);
-      child.render(rc, parentState);
+      child.render(rc, parentState, parentProgramState);
     }
   }
 

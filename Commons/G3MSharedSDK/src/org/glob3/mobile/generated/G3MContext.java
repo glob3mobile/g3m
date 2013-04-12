@@ -33,6 +33,7 @@ package org.glob3.mobile.generated;
 //class IJSONParser;
 //class IStorage;
 //class OrderedRenderable;
+//class GPUProgramManager;
 
 
 public class G3MContext

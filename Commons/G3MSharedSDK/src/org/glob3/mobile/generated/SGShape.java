@@ -49,7 +49,7 @@ public class SGShape extends Shape
     return _node.isReadyToRender(rc);
   }
 
-  public final void rawRender(G3MRenderContext rc, GLState parentState)
+  public final void rawRender(G3MRenderContext rc, GLState parentState, GPUProgramState parentProgramState)
   {
     _node.render(rc, parentState);
   }

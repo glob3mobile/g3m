@@ -33,6 +33,7 @@ package org.glob3.mobile.generated;
 //class ElevationData;
 //class MeshHolder;
 //class Vector2I;
+//class GPUProgramState;
 
 
 public class Tile
@@ -218,7 +219,7 @@ public class Tile
     return false;
   }
 
-  private void rawRender(G3MRenderContext rc, TileRenderContext trc, GLState parentState)
+  private void rawRender(G3MRenderContext rc, TileRenderContext trc, GLState parentState, GPUProgramState parentProgramState)
   {
   
     Mesh tessellatorMesh = getTessellatorMesh(rc, trc);
@@ -230,7 +231,7 @@ public class Tile
     TileTexturizer texturizer = trc.getTexturizer();
     if (texturizer == null)
     {
-      tessellatorMesh.render(rc, parentState);
+      tessellatorMesh.render(rc, parentState, parentProgramState);
     }
     else
     {
@@ -243,22 +244,22 @@ public class Tile
   
       if (_texturizedMesh != null)
       {
-        _texturizedMesh.render(rc, parentState);
+        _texturizedMesh.render(rc, parentState, parentProgramState);
       }
       else
       {
-        tessellatorMesh.render(rc, parentState);
+        tessellatorMesh.render(rc, parentState, parentProgramState);
       }
     }
   
   }
 
-  private void debugRender(G3MRenderContext rc, TileRenderContext trc, GLState parentState)
+  private void debugRender(G3MRenderContext rc, TileRenderContext trc, GLState parentState, GPUProgramState parentProgramState)
   {
     Mesh debugMesh = getDebugMesh(rc, trc);
     if (debugMesh != null)
     {
-      debugMesh.render(rc, parentState);
+      debugMesh.render(rc, parentState, parentProgramState);
     }
   }
 
@@ -488,6 +489,10 @@ public class Tile
     }
   }
 
+
+  //#include "G3MError.hpp"
+  //#include "G3MError.hpp"
+  
   public Tile(TileTexturizer texturizer, Tile parent, Sector sector, int level, int row, int column)
   {
      _texturizer = texturizer;
@@ -599,7 +604,7 @@ public class Tile
     }
   }
 
-  public final void render(G3MRenderContext rc, TileRenderContext trc, GLState parentState, java.util.LinkedList<Tile> toVisitInNextIteration)
+  public final void render(G3MRenderContext rc, TileRenderContext trc, GLState parentState, GPUProgramState parentProgramState, java.util.LinkedList<Tile> toVisitInNextIteration)
   {
   
     final float verticalExaggeration = trc.getVerticalExaggeration();
@@ -623,10 +628,10 @@ public class Tile
   
       if (isRawRender)
       {
-        rawRender(rc, trc, parentState);
+        rawRender(rc, trc, parentState, parentProgramState);
         if (trc.getParameters()._renderDebug)
         {
-          debugRender(rc, trc, parentState);
+          debugRender(rc, trc, parentState, parentProgramState);
         }
   
         statistics.computeTileRendered(this);

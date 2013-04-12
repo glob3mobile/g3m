@@ -48,11 +48,22 @@ public class SimpleTextureMapping extends TextureMapping
     return _texCoords;
   }
 
+
+  //#include "G3MError.hpp"
+  //#include "G3MError.hpp"
+  
   public final GLState bind(G3MRenderContext rc, GLState parentState)
   {
     GLState state = new GLState(parentState);
     state.enableTextures();
-    state.enableTexture2D();
+  
+    GPUProgram prog = rc.getGPUProgramManager().getProgram("DefaultProgram");
+  
+    int _WORKING_JM;
+    //UniformBool* enableTexture = prog->getUniformBool("EnableTexture");
+    //enableTexture->set(true);
+  
+    //state->enableTexture2D();
   
     if (_texCoords != null)
     {

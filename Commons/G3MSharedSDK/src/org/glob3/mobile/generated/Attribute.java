@@ -11,14 +11,23 @@ package org.glob3.mobile.generated;
 
 
 
-public class Attribute
+public abstract class Attribute
 {
-  private String _name;
-  private int _id;
+  protected String _name;
+  protected int _id;
+
+  protected boolean _wasSet;
+  protected boolean _dirty;
+
+  public void dispose()
+  {
+  }
   public Attribute(String name, int id)
   {
      _name = name;
      _id = id;
+     _wasSet = false;
+     _dirty = false;
   }
 
   public final String getName()
@@ -29,4 +38,6 @@ public class Attribute
   {
      return _id;
   }
+
+  public abstract void applyChanges(GL gl);
 }

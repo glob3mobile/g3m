@@ -18,6 +18,10 @@ package org.glob3.mobile.generated;
 
 
 
+//#include "G3MError.hpp"
+
+//#include "G3MError.hpp"
+
 //class IFloatBuffer;
 
 //class GL;
@@ -25,24 +29,24 @@ package org.glob3.mobile.generated;
 public class GPUProgram
 {
 
-  private INativeGL _nativeGL;
+  //INativeGL* _nativeGL;
   private int _programID;
   private boolean _programCreated;
-  private java.util.ArrayList<Attribute> _attributes = new java.util.ArrayList<Attribute>();
-  private java.util.ArrayList<Uniform> _uniforms = new java.util.ArrayList<Uniform>();
+  private java.util.HashMap<String, Attribute> _attributes = new java.util.HashMap<String, Attribute>();
+  private java.util.HashMap<String, GPUUniform> _uniforms = new java.util.HashMap<String, GPUUniform>();
+  private String _name;
 
-  private boolean compileShader(int shader, String source)
+  private boolean compileShader(GL gl, int shader, String source)
   {
-    boolean result = _nativeGL.compileShader(shader, source);
+    boolean result = gl.compileShader(shader, source);
   
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if DEBUG
-    _nativeGL.printShaderInfoLog(shader);
-//#endif
+  ///#if defined(DEBUG)
+  //  _nativeGL->printShaderInfoLog(shader);
+  ///#endif
   
     if (result)
     {
-      _nativeGL.attachShader(_programID, shader);
+      gl.attachShader(_programID, shader);
     }
     else
     {
@@ -51,98 +55,142 @@ public class GPUProgram
   
     return result;
   }
-  private boolean linkProgram()
+  private boolean linkProgram(GL gl)
   {
-    boolean result = _nativeGL.linkProgram(_programID);
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if DEBUG
-    _nativeGL.printProgramInfoLog(_programID);
-//#endif
+    boolean result = gl.linkProgram(_programID);
+  ///#if defined(DEBUG)
+  //  _nativeGL->printProgramInfoLog(_programID);
+  ///#endif
     return result;
   }
-  private void deleteShader(int shader)
+  private void deleteShader(GL gl, int shader)
   {
-    if (!_nativeGL.deleteShader(shader))
+    if (!gl.deleteShader(shader))
     {
       ILogger.instance().logError("GPUProgram: Problem encountered while deleting shader.");
     }
   }
 
-  private void getVariables()
+  private void getVariables(GL gl)
   {
   
     //Uniforms
-    int n = _nativeGL.getProgramiv(this, GLVariable.activeUniforms());
+    int n = gl.getProgramiv(this, GLVariable.activeUniforms());
     for (int i = 0; i < n; i++)
     {
-      Uniform u = _nativeGL.getActiveUniform(this, i);
-      _uniforms.add(u);
+      GPUUniform u = gl.getActiveUniform(this, i);
+      if (u != null)
+         _uniforms.put(u.getName(), u);
     }
   
     //Attributes
-    n = _nativeGL.getProgramiv(this, GLVariable.activeAttributes());
+    n = gl.getProgramiv(this, GLVariable.activeAttributes());
     for (int i = 0; i < n; i++)
     {
-      Attribute a = _nativeGL.getActiveAttribute(this, i);
-      _attributes.add(a);
+      Attribute a = gl.getActiveAttribute(this, i);
+      if (a != null)
+         _attributes.put(a.getName(), a);
     }
   
   }
 
+  private GPUProgram()
+  {
+  }
 
-  public GPUProgram(INativeGL nativeGL, String vertexSource, String fragmentSource)
+  private GPUUniform getUniform(String name)
+  {
+    java.util.HashMap<String, GPUUniform> const_iterator it = _uniforms.indexOf(name);
+    if (it != _uniforms.end())
+    {
+      return it.second;
+    }
+    else
+    {
+      return null;
+    }
+  }
+  //Uniform* getUniform(const std::string name) const;
+  private Attribute getAttribute(String name)
+  {
+    java.util.HashMap<String, Attribute> const_iterator it = _attributes.indexOf(name);
+    if (it != _attributes.end())
+    {
+      return it.second;
+    }
+    else
+    {
+      return null;
+    }
+  }
+
+
+
+  //#include "G3MError.hpp"
+  
+  
+  public static GPUProgram createProgram(GL gl, String name, String vertexSource, String fragmentSource)
   {
   
-    _programCreated = false;
+    GPUProgram p = new GPUProgram();
   
-    _nativeGL = nativeGL;
-    _programID = _nativeGL.createProgram();
+    p._name = name;
   
+    p._programCreated = false;
+    //p->_nativeGL = gl->getNative();
+    p._programID = gl.createProgram();
   
     // compile vertex shader
-    int vertexShader = _nativeGL.createShader(ShaderType.VERTEX_SHADER);
-    if (!compileShader(vertexShader, vertexSource))
+    int vertexShader = gl.createShader(ShaderType.VERTEX_SHADER);
+    if (!p.compileShader(gl, vertexShader, vertexSource))
     {
       ILogger.instance().logError("GPUProgram: ERROR compiling vertex shader\n");
-      deleteShader(vertexShader);
-      deleteProgram(_programID);
-      return;
+      p.deleteShader(gl, vertexShader);
+      p.deleteProgram(gl, p._programID);
+      throw new G3MError("GPUProgram: ERROR compiling vertex shader");
+      return null;
     }
   
     // compile fragment shader
-    int fragmentShader = _nativeGL.createShader(ShaderType.FRAGMENT_SHADER);
-    if (!compileShader(fragmentShader, fragmentSource))
+    int fragmentShader = gl.createShader(ShaderType.FRAGMENT_SHADER);
+    if (!p.compileShader(gl, fragmentShader, fragmentSource))
     {
       ILogger.instance().logError("GPUProgram: ERROR compiling fragment shader\n");
-      deleteShader(fragmentShader);
-      deleteProgram(_programID);
-      return;
+      p.deleteShader(gl, fragmentShader);
+      p.deleteProgram(gl, p._programID);
+      throw new G3MError("GPUProgram: ERROR compiling fragment shader");
+      return null;
     }
   
-    _nativeGL.bindAttribLocation(this, 0, "Position");
+    gl.bindAttribLocation(p, 0, "Position");
   
     // link program
-    if (!linkProgram())
+    if (!p.linkProgram(gl))
     {
       ILogger.instance().logError("GPUProgram: ERROR linking graphic program\n");
-      deleteShader(vertexShader);
-      deleteShader(fragmentShader);
-      deleteProgram(_programID);
-      return;
+      p.deleteShader(gl, vertexShader);
+      p.deleteShader(gl, fragmentShader);
+      p.deleteProgram(gl, p._programID);
+      throw new G3MError("GPUProgram: ERROR linking graphic program");
+      return null;
     }
   
     // free shaders
-    deleteShader(vertexShader);
-    deleteShader(fragmentShader);
+    p.deleteShader(gl, vertexShader);
+    p.deleteShader(gl, fragmentShader);
   
-    getVariables();
+    p.getVariables(gl);
   
-    _programCreated = true; //Program fully created
-  
+    return p;
   }
 
   public void dispose()
   {
+  }
+
+  public final String getName()
+  {
+     return _name;
   }
 
   public final int getProgramID()
@@ -153,39 +201,207 @@ public class GPUProgram
   {
      return _programCreated;
   }
-  public final void deleteProgram(int p)
+  public final void deleteProgram(GL gl, int p)
   {
-    if (!_nativeGL.deleteProgram(p))
+    if (!gl.deleteProgram(p))
     {
       ILogger.instance().logError("GPUProgram: Problem encountered while deleting program.");
     }
     _programCreated = false;
   }
 
-  public final Uniform getUniform(String name)
+  public final GPUUniformBool getGPUUniformBool(String name)
   {
-    for (int i = 0; i < _uniforms.size(); i++)
+    GPUUniform u = getUniform(name);
+    if (u!= null && u.getType() == GLType.glBool())
     {
-      Uniform u = _uniforms.get(i);
-      if (u != null && name.equals(u.getName()))
-      {
-        return u;
-      }
+      return (GPUUniformBool)u;
     }
-    return null;
+    else
+    {
+      return null;
+    }
   }
-  public final Attribute getAttribute(String name)
+  public final GPUUniformVec2Float getGPUUniformVec2Float(String name)
   {
-    for (int i = 0; i < _uniforms.size(); i++)
+    GPUUniform u = getUniform(name);
+    if (u!= null && u.getType() == GLType.glVec2Float())
     {
-      Attribute a = _attributes.get(i);
-      if (a != null && name.equals(a.getName()))
-      {
-        return a;
-      }
+      return (GPUUniformVec2Float)u;
     }
-    return null;
+    else
+    {
+      return null;
+    }
   }
+  public final GPUUniformVec4Float getGPUUniformVec4Float(String name)
+  {
+    GPUUniform u = getUniform(name);
+    if (u!= null && u.getType() == GLType.glVec4Float())
+    {
+      return (GPUUniformVec4Float)u;
+    }
+    else
+    {
+      return null;
+    }
+  }
+  public final GPUUniformFloat getGPUUniformFloat(String name)
+  {
+    GPUUniform u = getUniform(name);
+    if (u!= null && u.getType() == GLType.glFloat())
+    {
+      return (GPUUniformFloat)u;
+    }
+    else
+    {
+      return null;
+    }
+  }
+  public final GPUUniformMatrix4Float getGPUUniformMatrix4Float(String name)
+  {
+    GPUUniform u = getUniform(name);
+    if (u!= null && u.getType() == GLType.glMatrix4Float())
+    {
+      return (GPUUniformMatrix4Float)u;
+    }
+    else
+    {
+      return null;
+    }
+  }
+
+
+  public final AttributeVec1Float getAttributeVec1Float(String name)
+  {
+    AttributeVecFloat a = (AttributeVecFloat)getAttribute(name);
+    if (a!= null && a.getSize() == 1)
+    {
+      return (AttributeVec1Float)a;
+    }
+    else
+    {
+      return null;
+    }
+  }
+  public final AttributeVec2Float getAttributeVec2Float(String name)
+  {
+    AttributeVecFloat a = (AttributeVecFloat)getAttribute(name);
+    if (a!= null && a.getSize() == 2)
+    {
+      return (AttributeVec2Float)a;
+    }
+    else
+    {
+      return null;
+    }
+  }
+  public final AttributeVec3Float getAttributeVec3Float(String name)
+  {
+    AttributeVecFloat a = (AttributeVecFloat)getAttribute(name);
+    if (a!= null && a.getSize() == 3)
+    {
+      return (AttributeVec3Float)a;
+    }
+    else
+    {
+      return null;
+    }
+  }
+  public final AttributeVec4Float getAttributeVec4Float(String name)
+  {
+    AttributeVecFloat a = (AttributeVecFloat)getAttribute(name);
+    if (a!= null && a.getSize() == 4)
+    {
+      return (AttributeVec4Float)a;
+    }
+    else
+    {
+      return null;
+    }
+  }
+
+
+  /**
+   Must be called when the program is used
+   */
+  public final void onUsed()
+  {
+    ILogger.instance().logInfo("GPUProgram %s being used", _name);
+  }
+  /**
+   Must be called when the program is no longer used
+   */
+  public final void onUnused()
+  {
+      ILogger.instance().logInfo("GPUProgram %s unused", _name);
+  }
+
+  /**
+   Must be called before drawing to apply Uniforms and Attributes new values
+   */
+  public final void applyChanges(GL gl)
+  {
+    //ILogger::instance()->logInfo("GPUProgram %s applying changes", _name.c_str());
+  
+    java.util.Iterator<String, GPUUniform> iter;
+    for (iter = _uniforms.iterator(); iter.hasNext();)
+    {
+      iter.second.applyChanges(gl);
+    }
+  
+    java.util.Iterator<String, Attribute> iter2;
+    for (iter2 = _attributes.iterator(); iter2.hasNext();)
+    {
+      iter2.second.applyChanges(gl);
+    }
+  }
+/*
+  void setUniform(GL* gl, const std::string& name, const Vector2D& v) const{
+    Uniform* u = getUniform(name);
+    if (u != NULL && u->getType() == GLType::glVec2Float()) {
+      ((UniformVec2Float*)u)->set(gl, v);
+    } else{
+      throw G3MError("Error setting Uniform " + name);
+    }
+  }
+  
+  void setUniform(GL* gl, const std::string& name, double x, double y, double z, double w) const{
+    Uniform* u = getUniform(name);
+    if (u != NULL && u->getType() == GLType::glVec4Float()) {
+      ((UniformVec4Float*)u)->set(gl, x,y,z,w);
+    } else{
+      throw G3MError("Error setting Uniform " + name);
+    }
+  }
+  
+  void setUniform(GL* gl, const std::string& name, bool b) const{
+    Uniform* u = getUniform(name);
+    if (u != NULL && u->getType() == GLType::glBool()) {
+      ((UniformBool*)u)->set(gl, b);
+    } else{
+      throw G3MError("Error setting Uniform " + name);
+    }
+  }
+  
+  void setUniform(GL* gl, const std::string& name, float f) const{
+    Uniform* u = getUniform(name);
+    if (u != NULL && u->getType() == GLType::glFloat()) {
+      ((UniformFloat*)u)->set(gl, f);
+    } else{
+      throw G3MError("Error setting Uniform " + name);
+    }
+  }
+  
+  void setUniform(GL* gl, const std::string& name, const MutableMatrix44D& m) const{
+    Uniform* u = getUniform(name);
+    if (u != NULL && u->getType() == GLType::glMatrix4Float()) {
+      ((UniformMatrix4Float*)u)->set(gl, m);
+    } else{
+      throw G3MError("Error setting Uniform " + name);
+    }
+  }
+  */
 
 
 }

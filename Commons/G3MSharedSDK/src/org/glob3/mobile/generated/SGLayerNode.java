@@ -119,7 +119,13 @@ public class SGLayerNode extends SGNode
   
     GLState state = new GLState(parentState);
     state.enableTextures();
-    state.enableTexture2D();
+  
+    GPUProgram prog = rc.getGPUProgramManager().getProgram("DefaultProgram");
+    int _WORKING_JM;
+    //UniformBool* enableTexture = prog->getUniformBool("EnableTexture");
+    //enableTexture->set(true);
+  
+    //state->enableTexture2D();
   
     state.bindTexture(texId);
   
