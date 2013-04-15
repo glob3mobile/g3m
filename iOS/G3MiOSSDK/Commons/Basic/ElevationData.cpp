@@ -49,9 +49,6 @@ Mesh* ElevationData::createMesh(const Ellipsoid* ellipsoid,
   FloatBufferBuilderFromColor colors;
 
   int type = -1;
-  
-  IMathUtils* mu = IMathUtils::instance();
-
   for (int x = 0; x < _width; x++) {
     const double u = (double) x / (_width  - 1);
 

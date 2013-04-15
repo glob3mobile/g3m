@@ -28,9 +28,10 @@ _resolutionHeight(resolution._y),
 _noDataValue(noDataValue),
 _elevationData(NULL),
 _elevationDataResolved(false),
-_useFloat(useFloat)
+_useFloat(useFloat),
+_currentRequestID(0)
 {
-
+  
 }
 
 class SingleBillElevationDataProvider_BufferDownloadListener : public IBufferDownloadListener {
@@ -41,7 +42,7 @@ private:
   const int _resolutionHeight;
   const double _noDataValue;
   const bool _useFloat;
-
+  
 public:
   SingleBillElevationDataProvider_BufferDownloadListener(SingleBillElevationDataProvider* singleBillElevationDataProvider,
                                                          const Sector& sector,
@@ -56,9 +57,9 @@ public:
   _noDataValue(noDataValue),
   _useFloat(useFloat)
   {
-
+    
   }
-
+  
   void onDownload(const URL& url,
                   IByteBuffer* buffer) {
     const Vector2I resolution(_resolutionWidth, _resolutionHeight);
@@ -66,27 +67,27 @@ public:
     ElevationData* elevationData = NULL;
     //TODO: NECESARY USE FLOAT?????
     if (!_useFloat){
-    elevationData = BilParser::parseBil16(_sector, resolution, (short)_noDataValue, -9999, buffer);
+      elevationData = BilParser::parseBil16(_sector, resolution, (short)_noDataValue, -9999, buffer);
     } else{
-    elevationData = BilParser::parseBil16ToFloatElevationData(_sector, resolution, (short)_noDataValue, -9999, buffer);
+      elevationData = BilParser::parseBil16ToFloatElevationData(_sector, resolution, (short)_noDataValue, -9999, buffer);
     }
     
     delete buffer;
-
+    
     _singleBillElevationDataProvider->onElevationData(elevationData);
   }
-
+  
   void onError(const URL& url) {
     _singleBillElevationDataProvider->onElevationData(NULL);
   }
-
+  
   void onCancel(const URL& url) {
-
+    
   }
-
+  
   void onCanceledDownload(const URL& url,
                           IByteBuffer* data) {
-
+    
   }
 };
 
@@ -97,7 +98,7 @@ void SingleBillElevationDataProvider::onElevationData(ElevationData* elevationDa
     ILogger::instance()->logError("Can't download Elevation-Data from %s",
                                   _bilUrl.getPath().c_str());
   }
-
+  
   drainQueue();
 }
 
@@ -126,7 +127,7 @@ const long long SingleBillElevationDataProvider::requestElevationData(const Sect
                         listener,
                         autodeleteListener);
   }
-
+  
   if (_elevationData == NULL) {
     listener->onError(sector, resolution);
   }
@@ -142,11 +143,11 @@ const long long SingleBillElevationDataProvider::requestElevationData(const Sect
                      resolution,
                      elevationData);
   }
-
+  
   if (autodeleteListener) {
     delete listener;
   }
-
+  
   return -1;
 }
 
@@ -157,17 +158,34 @@ void SingleBillElevationDataProvider::cancelRequest(const long long requestId) {
 }
 
 void SingleBillElevationDataProvider::drainQueue() {
-  int _DGD_working_on_terrain;
+  if (!_elevationDataResolved) {
+    ILogger::instance()->logError("Trying to drain queue of requests without data.");
+    return;
+  }
+  
+  std::map<long long, SingleBillElevationDataProvider_Request*>::iterator it = _requests.begin();
+  for (; it != _requests.end(); it++) {
+    SingleBillElevationDataProvider_Request* r = it->second;
+    requestElevationData(r->_sector, r->_resolution, r->_listener, r->_autodeleteListener);
+    delete r;
+  }
+  _requests.clear();
 }
 
 const long long SingleBillElevationDataProvider::queueRequest(const Sector& sector,
                                                               const Vector2I& resolution,
                                                               IElevationDataListener* listener,
                                                               bool autodeleteListener) {
-  int _DGD_working_on_terrain;
-  return -1;
+  _currentRequestID++;
+  _requests[_currentRequestID] = new SingleBillElevationDataProvider_Request(sector, resolution, listener, autodeleteListener);
+  return _currentRequestID;
 }
 
 void SingleBillElevationDataProvider::removeQueueRequest(const long long requestId) {
-  int _DGD_working_on_terrain;
+  
+  std::map<long long, SingleBillElevationDataProvider_Request*>::iterator it = _requests.find(requestId);
+  if (it != _requests.end()){
+    delete it->second;
+    _requests.erase(it);
+  }
 }

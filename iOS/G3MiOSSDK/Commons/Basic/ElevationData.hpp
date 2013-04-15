@@ -56,7 +56,8 @@ public:
                         double valueForNoData = IMathUtils::instance()->NanD()) const {
     return getElevationAt(position.latitude(),
                           position.longitude(),
-                          type);
+                          type,
+                          valueForNoData);
   }
 
   virtual const std::string description(bool detailed) const = 0;

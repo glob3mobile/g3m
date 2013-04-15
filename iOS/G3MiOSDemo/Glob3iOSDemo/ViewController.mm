@@ -204,10 +204,11 @@ public:
 //  ElevationDataProvider* elevationDataProvider;
   
   
-  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
-                                                              Sector::fullSphere(),
-                                                              Vector2I(2048, 1024),
-                                                              0, true);
+//  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
+//                                                              Sector::fullSphere(),
+//                                                              Vector2I(2048, 1024),
+//                                                              0,
+//                                                              true); //Storing as floats
 
   ElevationDataProvider* elevationDataProvider1;
 //  elevationDataProvider1 = new SingleBillElevationDataProvider(URL("file:///elev-35.0_-6.0_38.0_-2.0_4096x2048.bil", false),
@@ -222,34 +223,34 @@ public:
 //                                                              0);
 
   ElevationDataProvider* elevationDataProvider3;
-//  elevationDataProvider3 = new SingleBillElevationDataProvider(URL("file:///caceres-2008x2032.bil", false),
-//                                                              Sector::fromDegrees(
-//                                                                                  39.4642996294239623,
-//                                                                                  -6.3829977122432933,
-//                                                                                  39.4829891936013553,
-//                                                                                  -6.3645288909498845
-//                                                                                  ),
-//                                                              Vector2I(2008, 2032),
-//                                                              0);
+  elevationDataProvider3 = new SingleBillElevationDataProvider(URL("file:///caceres-2008x2032.bil", false),
+                                                              Sector::fromDegrees(
+                                                                                  39.4642996294239623,
+                                                                                  -6.3829977122432933,
+                                                                                  39.4829891936013553,
+                                                                                  -6.3645288909498845
+                                                                                  ),
+                                                              Vector2I(2008, 2032),
+                                                              0);
 
   ElevationDataProvider* elevationDataProvider4;
-  elevationDataProvider4 = new SingleBillElevationDataProvider(URL("file:///small-caceres.bil", false),
-                                                              Sector::fromDegrees(
-                                                                                  39.4642994358225678,
-                                                                                  -6.3829980000000042,
-                                                                                  39.4829889999999608,
-                                                                                  -6.3645291787065954
-                                                                                  ),
-                                                              Vector2I(251, 254),
-                                                              0);
+//  elevationDataProvider4 = new SingleBillElevationDataProvider(URL("file:///small-caceres.bil", false),
+//                                                              Sector::fromDegrees(
+//                                                                                  39.4642994358225678,
+//                                                                                  -6.3829980000000042,
+//                                                                                  39.4829889999999608,
+//                                                                                  -6.3645291787065954
+//                                                                                  ),
+//                                                              Vector2I(251, 254),
+//                                                              0);
   
   
   CompositeElevationDataProvider* compElevationDataProvider = new CompositeElevationDataProvider();
-  compElevationDataProvider->addElevationDataProvider(elevationDataProvider);
+  //compElevationDataProvider->addElevationDataProvider(elevationDataProvider);
   //compElevationDataProvider->addElevationDataProvider(elevationDataProvider1);
   //compElevationDataProvider->addElevationDataProvider(elevationDataProvider2);
-  //compElevationDataProvider->addElevationDataProvider(elevationDataProvider3);
-  compElevationDataProvider->addElevationDataProvider(elevationDataProvider4);
+  compElevationDataProvider->addElevationDataProvider(elevationDataProvider3);
+  //compElevationDataProvider->addElevationDataProvider(elevationDataProvider4);
   elevationDataProvider = compElevationDataProvider;
 
   builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProvider);

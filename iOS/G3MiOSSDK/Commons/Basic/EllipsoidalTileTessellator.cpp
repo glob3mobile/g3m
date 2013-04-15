@@ -68,8 +68,6 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
   FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(),
                                           planet,
                                           sector.getCenter());
-
-  IMathUtils *mu = IMathUtils::instance();
   int unusedType = -1;
   for (int j = 0; j < tileResolution._y; j++) {
     const double v = (double) j / (tileResolution._y-1);
