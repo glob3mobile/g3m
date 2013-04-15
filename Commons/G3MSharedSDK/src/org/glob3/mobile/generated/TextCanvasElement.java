@@ -21,7 +21,7 @@ package org.glob3.mobile.generated;
 public class TextCanvasElement extends CanvasElement
 {
   private final String _text;
-  private final GFont _font = new GFont();
+  private GFont _font = new GFont();
   private final Color _color ;
 
   public TextCanvasElement(String text, GFont font, Color color)
