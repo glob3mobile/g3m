@@ -611,6 +611,7 @@ void Tile::render(const G3MRenderContext* rc,
       
       prune(trc->getTexturizer(),
             trc->getElevationDataProvider());
+      //TODO: AVISAR CAMBIO DE TERRENO
     }
     else {
       const Geodetic2D lower = _sector.lower();
@@ -644,6 +645,7 @@ void Tile::render(const G3MRenderContext* rc,
     
     prune(trc->getTexturizer(),
           trc->getElevationDataProvider());
+    //TODO: AVISAR CAMBIO DE TERRENO
   }
 }
 

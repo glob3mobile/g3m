@@ -76,6 +76,8 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
 
       const Geodetic2D position = sector.getInnerPoint(u, v);
       
+      //TODO: 
+      
       double height = 0;
       
       if (elevationData != NULL) {
