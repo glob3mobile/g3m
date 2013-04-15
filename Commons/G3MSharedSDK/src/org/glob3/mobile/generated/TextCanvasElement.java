@@ -21,7 +21,7 @@ package org.glob3.mobile.generated;
 public class TextCanvasElement extends CanvasElement
 {
   private final String _text;
-  private GFont _font = new GFont();
+  private final GFont _font;
   private final Color _color ;
 
   public TextCanvasElement(String text, GFont font, Color color)
@@ -34,7 +34,8 @@ public class TextCanvasElement extends CanvasElement
 
   public void dispose()
   {
-
+    if (_font != null)
+       _font.dispose();
   }
 
   public final Vector2F getExtent(ICanvas canvas)
