@@ -46,6 +46,11 @@ public class Color
     return new Color(red, green, blue, alpha);
   }
 
+  public static Color transparent()
+  {
+    return Color.fromRGBA(0, 0, 0, 0);
+  }
+
   public static Color black()
   {
     return Color.fromRGBA(0, 0, 0, 1);
