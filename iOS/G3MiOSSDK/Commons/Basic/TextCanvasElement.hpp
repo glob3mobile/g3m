@@ -18,7 +18,7 @@
 class TextCanvasElement : public CanvasElement {
 private:
   const std::string _text;
-  const GFont       _font;
+  GFont             _font;
   const Color       _color;
 
 public:
