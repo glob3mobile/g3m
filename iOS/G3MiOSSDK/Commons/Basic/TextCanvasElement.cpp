@@ -14,14 +14,14 @@
 
 
 const Vector2F TextCanvasElement::getExtent(ICanvas* canvas) {
-  canvas->setFont(_font);
+  canvas->setFont(*_font);
   return canvas->textExtent(_text);
 }
 
 void TextCanvasElement::drawAt(float left,
                                float top,
                                ICanvas* canvas) {
-  canvas->setFont(_font);
+  canvas->setFont(*_font);
   canvas->setFillColor(_color);
   canvas->fillText(_text, left, top);
 }

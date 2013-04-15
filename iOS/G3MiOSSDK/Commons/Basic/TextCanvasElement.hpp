@@ -18,7 +18,7 @@
 class TextCanvasElement : public CanvasElement {
 private:
   const std::string _text;
-  GFont             _font;
+  const GFont*      _font;
   const Color       _color;
 
 public:
@@ -26,14 +26,14 @@ public:
                     const GFont& font,
                     const Color& color) :
   _text(text),
-  _font(font),
+  _font(new GFont(font)),
   _color(color)
   {
 
   }
 
   virtual ~TextCanvasElement() {
-
+    delete _font;
   }
 
   const Vector2F getExtent(ICanvas* canvas);
