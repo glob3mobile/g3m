@@ -63,11 +63,9 @@ public:
   }
 
   void rawPut(int i, short value) {
-    
     if (i < 0 || i > _size){
       ILogger::instance()->logError("Buffer Put error.");
     }
-    
     _values[i] = value;
   }
 

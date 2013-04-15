@@ -19,14 +19,16 @@
 SingleBillElevationDataProvider::SingleBillElevationDataProvider(const URL& bilUrl,
                                                                  const Sector& sector,
                                                                  const Vector2I& resolution,
-                                                                 const double noDataValue) :
+                                                                 const double noDataValue,
+                                                                 const bool useFloat) :
 _bilUrl(bilUrl),
 _sector(sector),
 _resolutionWidth(resolution._x),
 _resolutionHeight(resolution._y),
 _noDataValue(noDataValue),
 _elevationData(NULL),
-_elevationDataResolved(false)
+_elevationDataResolved(false),
+_useFloat(useFloat)
 {
 
 }
@@ -38,18 +40,21 @@ private:
   const int _resolutionWidth;
   const int _resolutionHeight;
   const double _noDataValue;
+  const bool _useFloat;
 
 public:
   SingleBillElevationDataProvider_BufferDownloadListener(SingleBillElevationDataProvider* singleBillElevationDataProvider,
                                                          const Sector& sector,
                                                          int resolutionWidth,
                                                          int resolutionHeight,
-                                                         double noDataValue) :
+                                                         double noDataValue,
+                                                         const bool useFloat) :
   _singleBillElevationDataProvider(singleBillElevationDataProvider),
   _sector(sector),
   _resolutionWidth(resolutionWidth),
   _resolutionHeight(resolutionHeight),
-  _noDataValue(noDataValue)
+  _noDataValue(noDataValue),
+  _useFloat(useFloat)
   {
 
   }
@@ -57,7 +62,15 @@ public:
   void onDownload(const URL& url,
                   IByteBuffer* buffer) {
     const Vector2I resolution(_resolutionWidth, _resolutionHeight);
-    ElevationData* elevationData = BilParser::parseBil16(_sector, resolution, _noDataValue, -9999, buffer);
+    
+    ElevationData* elevationData = NULL;
+    //TODO: NECESARY USE FLOAT?????
+    if (!_useFloat){
+    elevationData = BilParser::parseBil16(_sector, resolution, (short)_noDataValue, -9999, buffer);
+    } else{
+    elevationData = BilParser::parseBil16ToFloatElevationData(_sector, resolution, (short)_noDataValue, -9999, buffer);
+    }
+    
     delete buffer;
 
     _singleBillElevationDataProvider->onElevationData(elevationData);
@@ -97,7 +110,8 @@ void SingleBillElevationDataProvider::initialize(const G3MContext* context) {
                                                                                                        _sector,
                                                                                                        _resolutionWidth,
                                                                                                        _resolutionHeight,
-                                                                                                       _noDataValue),
+                                                                                                       _noDataValue,
+                                                                                                       _useFloat),
                                             true);
   }
 }

@@ -58,7 +58,8 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
                                                  const Tile* tile,
                                                  const ElevationData* elevationData,
                                                  float verticalExaggeration,
-                                                 bool renderDebug) const {
+                                                 bool renderDebug,
+                                                 double defaultHeight) const {
 
   const Sector sector = tile->getSector();
   const Vector2I tileResolution = calculateResolution(rawResolution, sector);
@@ -82,14 +83,9 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
       if (elevationData != NULL) {
 //        height = elevationData->getElevationAt(i, j) * verticalExaggeration;
         height = elevationData->getElevationAt(position,
-                                               &unusedType) * verticalExaggeration;
-        
-        if (mu->isNan(height) ){
-          int ADD_PARAMETER_DEFAULT_HEIGHT;///!!!!!!
-          height = 0;
-        }
-        
-        
+                                               &unusedType,
+                                               defaultHeight) * verticalExaggeration;
+
         if (height < minHeight) {
           minHeight = height;
         }

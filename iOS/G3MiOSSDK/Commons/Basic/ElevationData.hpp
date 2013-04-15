@@ -52,7 +52,8 @@ public:
                                 double valueForNoData = IMathUtils::instance()->NanD()) const = 0;
 
   double getElevationAt(const Geodetic2D& position,
-                                int *type) const {
+                                int *type,
+                        double valueForNoData = IMathUtils::instance()->NanD()) const {
     return getElevationAt(position.latitude(),
                           position.longitude(),
                           type);

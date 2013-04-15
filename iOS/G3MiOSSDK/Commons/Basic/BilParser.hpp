@@ -21,13 +21,20 @@ private:
   BilParser();
   
 public:
-
+  
   static ElevationData* parseBil16(const Sector& sector,
                                    const Vector2I& extent,
                                    short noDataValue,
                                    double minValidHeight,
                                    const IByteBuffer* buffer);
-
+  
+  //TODO: NECESARY USE FLOAT?????
+  static ElevationData* parseBil16ToFloatElevationData(const Sector& sector,
+                                                        const Vector2I& extent,
+                                                        short noDataValue,
+                                                        double minValidHeight,
+                                                        const IByteBuffer* buffer);
+  
 };
 
 #endif

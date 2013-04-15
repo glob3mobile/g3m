@@ -31,6 +31,8 @@ private:
   const int _resolutionWidth;
   const int _resolutionHeight;
   const double _noDataValue;
+  
+  const bool _useFloat;
 
 
   void drainQueue();
@@ -47,7 +49,8 @@ public:
   SingleBillElevationDataProvider(const URL& bilUrl,
                                   const Sector& sector,
                                   const Vector2I& resolution,
-                                  const double noDataValue);
+                                  const double noDataValue,
+                                  const bool useFloat = false);
 
   bool isReadyToRender(const G3MRenderContext* rc) {
     return (_elevationDataResolved);

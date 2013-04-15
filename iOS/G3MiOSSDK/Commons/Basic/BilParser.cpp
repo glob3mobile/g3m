@@ -10,10 +10,11 @@
 
 #include "IByteBuffer.hpp"
 #include "ByteBufferIterator.hpp"
-//#include "IFloatBuffer.hpp"
+#include "IFloatBuffer.hpp"
 #include "IShortBuffer.hpp"
 #include "IFactory.hpp"
 #include "ShortBufferElevationData.hpp"
+#include "FloatBufferElevationData.hpp"
 
 
 ElevationData* BilParser::parseBil16(const Sector& sector,
@@ -38,6 +39,7 @@ ElevationData* BilParser::parseBil16(const Sector& sector,
   IShortBuffer* shortBuffer = IFactory::instance()->createShortBuffer(size);
   for (int i = 0; i < size; i++) {
     short height = iterator.nextInt16();
+    
     int WORKING_NODATA;
     if (height <= minValidHeight) {
       height = noDataValue;
@@ -61,4 +63,64 @@ ElevationData* BilParser::parseBil16(const Sector& sector,
                                       extent,
                                       noDataValue,
                                       shortBuffer);
+}
+
+//TODO: NECESARY USE FLOAT?????
+
+ElevationData* BilParser::parseBil16ToFloatElevationData(const Sector& sector,
+                                                      const Vector2I& extent,
+                                                      short noDataValue,
+                                                      double minValidHeight,
+                                                      const IByteBuffer* buffer){
+  const int size = extent._x * extent._y;
+  //  const int size = (extent._x + margin) * (extent._y + margin);
+  
+  const int expectedSizeInBytes = size * 2;
+  if (buffer->size() != expectedSizeInBytes) {
+    ILogger::instance()->logError("Invalid buffer size, expected %d bytes, but got %d",
+                                  expectedSizeInBytes,
+                                  buffer->size());
+    return NULL;
+  }
+  
+  ByteBufferIterator iterator(buffer);
+  
+  IFloatBuffer* floatBuffer = IFactory::instance()->createFloatBuffer(size);
+  for (int i = 0; i < size; i++) {
+    unsigned short uHeight = iterator.nextUInt16();
+    float height = (float) uHeight;
+    
+    
+//    float height = (float) iterator.nextInt16();
+
+    if (i % 100 == 0){
+      printf("%f\n", height);
+      if (height < 0.0){
+        printf("NEGATIVO %f\n", height);
+      }
+    }
+    
+    int WORKING_NODATA;
+    if (height <= minValidHeight) {
+      height = noDataValue;
+    }
+    else if (height == -9999) {
+      height = noDataValue;
+    }
+    else if (height == -32767) {
+      height = noDataValue;
+    }
+    else if (height == -32768) {
+      height = noDataValue;
+    }
+    
+    floatBuffer->rawPut(i, height);
+  }
+  
+  return new FloatBufferElevationData(sector,
+                                      extent,
+                                      noDataValue,
+                                      floatBuffer);
+  
+  
 }

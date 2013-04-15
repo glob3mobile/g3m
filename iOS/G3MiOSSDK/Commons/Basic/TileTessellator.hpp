@@ -33,7 +33,8 @@ public:
                                const Tile* tile,
                                const ElevationData* elevationData,
                                float verticalExaggeration,
-                               bool debug) const = 0;
+                               bool debug,
+                               double defaultHeight = 0) const = 0;
 
   virtual Vector2I getTileMeshResolution(const Planet* planet,
                                          const Vector2I& resolution,
