@@ -94,7 +94,7 @@ public class Color
   {
       return hexToRGB(hex);
   }
-  
+
   public static Color transparent()
   {
     return Color.fromRGBA(0, 0, 0, 0);
