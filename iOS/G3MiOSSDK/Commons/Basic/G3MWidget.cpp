@@ -542,7 +542,7 @@ void G3MWidget::setAnimatedCameraPosition(const TimeInterval& interval,
                                           const Angle& pitch,
                                           const bool linearTiming,
                                           const bool linearHeight) {
-  const Geodetic3D fromPosition = _planet->toGeodetic3D( _nextCamera->getCartesianPosition() );
+  const Geodetic3D fromPosition = _nextCamera->getGeodeticPosition();
   const Angle fromHeading = _nextCamera->getHeading();
   const Angle fromPitch   = _nextCamera->getPitch();
 

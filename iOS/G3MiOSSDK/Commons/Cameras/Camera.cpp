@@ -132,13 +132,13 @@ void Camera::print() {
   ILogger::instance()->logInfo("Width: %d, Height %d\n", _width, _height);
 }
 
-Angle Camera::getHeading(const Vector3D& normal) const {
+const Angle Camera::getHeading(const Vector3D& normal) const {
   const Vector3D north2D  = Vector3D::upZ().projectionInPlane(normal);
   const Vector3D up2D     = _up.asVector3D().projectionInPlane(normal);
   return up2D.signedAngleBetween(north2D, normal);
 }
 
-Angle Camera::getHeading() const {
+const Angle Camera::getHeading() const {
   const Vector3D normal = _planet->geodeticSurfaceNormal( _position );
   return getHeading(normal);
 }
@@ -151,7 +151,7 @@ void Camera::setHeading(const Angle& angle) {
   //printf ("previous heading=%f   current heading=%f\n", currentHeading.degrees(), getHeading().degrees());
 }
 
-Angle Camera::getPitch() const {
+const Angle Camera::getPitch() const {
   const Vector3D normal = _planet->geodeticSurfaceNormal(_position);
   const Angle angle     = _up.asVector3D().angleBetween(normal);
   return Angle::fromDegrees(90).sub(angle);
@@ -193,7 +193,7 @@ void Camera::render(const G3MRenderContext* rc,
 }
 
 
-Vector3D Camera::pixel2Ray(const Vector2I& pixel) const {
+const Vector3D Camera::pixel2Ray(const Vector2I& pixel) const {
   const int px = pixel._x;
   const int py = _height - pixel._y;
   const Vector3D pixel3D(px, py, 0);
@@ -207,18 +207,18 @@ Vector3D Camera::pixel2Ray(const Vector2I& pixel) const {
   return obj.sub(_position.asVector3D());
 }
 
-Vector3D Camera::pixel2PlanetPoint(const Vector2I& pixel) const {
+const Vector3D Camera::pixel2PlanetPoint(const Vector2I& pixel) const {
   return _planet->closestIntersection(_position.asVector3D(), pixel2Ray(pixel));
 }
 
-Vector2I Camera::point2Pixel(const Vector3D& point) const {
+const Vector2I Camera::point2Pixel(const Vector3D& point) const {
   const Vector2D p = getModelViewMatrix().project(point,
                                                   0, 0, _width, _height);
 
   return Vector2I( (int) p._x, (int) (_height - p._y) );
 }
 
-Vector2I Camera::point2Pixel(const Vector3F& point) const {
+const Vector2I Camera::point2Pixel(const Vector3F& point) const {
   const Vector2F p = getModelViewMatrix().project(point,
                                                   0, 0, _width, _height);
 
