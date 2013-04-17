@@ -9,6 +9,9 @@ attribute vec4 Position;
 attribute vec2 TextureCoord;
 attribute vec4 Color;
 
+uniform mediump vec2 TranslationTexCoord;
+uniform mediump vec2 ScaleTexCoord;
+
 uniform mat4 Projection;
 uniform mat4 Modelview;
 
@@ -30,7 +33,7 @@ void main() {
     gl_Position.y -= ((TextureCoord.y - 0.5) * 2.0 * TextureExtent.y / ViewPortExtent.y) * gl_Position.w;
   }
 
-  TextureCoordOut = TextureCoord;
+  TextureCoordOut = (TextureCoord * ScaleTexCoord) + TranslationTexCoord;
 
   VertexColor = Color;
 

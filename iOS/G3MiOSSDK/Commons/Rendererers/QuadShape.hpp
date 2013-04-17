@@ -48,6 +48,22 @@ public:
   }
 
   QuadShape(Geodetic3D* position,
+            IImage* textureImage,
+            float width,
+            float height) :
+  AbstractMeshShape(position),
+  _textureURL(URL("", false)),
+  _width(width),
+  _height(height),
+  _textureRequested(true),
+  _textureImage(textureImage),
+  _color(NULL)
+  {
+
+  }
+
+
+  QuadShape(Geodetic3D* position,
             float width,
             float height,
             Color* color) :
