@@ -471,22 +471,6 @@ public class G3MWidget
   {
      setAnimatedCameraPosition(interval, fromPosition, toPosition, fromHeading, toHeading, fromPitch, toPitch, false, false);
   }
-  public final void setAnimatedCameraPosition(TimeInterval interval, Geodetic3D fromPosition, Geodetic3D toPosition, Angle fromHeading, Angle toHeading, Angle fromPitch)
-  {
-     setAnimatedCameraPosition(interval, fromPosition, toPosition, fromHeading, toHeading, fromPitch, Angle.zero(), false, false);
-  }
-  public final void setAnimatedCameraPosition(TimeInterval interval, Geodetic3D fromPosition, Geodetic3D toPosition, Angle fromHeading, Angle toHeading)
-  {
-     setAnimatedCameraPosition(interval, fromPosition, toPosition, fromHeading, toHeading, Angle.zero(), Angle.zero(), false, false);
-  }
-  public final void setAnimatedCameraPosition(TimeInterval interval, Geodetic3D fromPosition, Geodetic3D toPosition, Angle fromHeading)
-  {
-     setAnimatedCameraPosition(interval, fromPosition, toPosition, fromHeading, Angle.zero(), Angle.zero(), Angle.zero(), false, false);
-  }
-  public final void setAnimatedCameraPosition(TimeInterval interval, Geodetic3D fromPosition, Geodetic3D toPosition)
-  {
-     setAnimatedCameraPosition(interval, fromPosition, toPosition, Angle.zero(), Angle.zero(), Angle.zero(), Angle.zero(), false, false);
-  }
   public final void setAnimatedCameraPosition(TimeInterval interval, Geodetic3D fromPosition, Geodetic3D toPosition, Angle fromHeading, Angle toHeading, Angle fromPitch, Angle toPitch, boolean linearTiming, boolean linearHeight)
   {
     double finalLatInDegrees = toPosition.latitude()._degrees;
