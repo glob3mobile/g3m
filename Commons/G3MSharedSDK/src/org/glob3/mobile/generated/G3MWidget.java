@@ -456,7 +456,7 @@ public class G3MWidget
   }
   public final void setAnimatedCameraPosition(TimeInterval interval, Geodetic3D position, Angle heading, Angle pitch, boolean linearTiming, boolean linearHeight)
   {
-    final Geodetic3D fromPosition = _planet.toGeodetic3D(_nextCamera.getCartesianPosition());
+    final Geodetic3D fromPosition = _nextCamera.getGeodeticPosition();
     final Angle fromHeading = _nextCamera.getHeading();
     final Angle fromPitch = _nextCamera.getPitch();
   
