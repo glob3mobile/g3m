@@ -103,6 +103,10 @@ public:
   
   Vector2I getMinResolution() const;
   
+  ElevationData* createSubviewOfElevationData(ElevationData* elevationData,
+                                              const Sector& sector,
+                                              const Vector2I& resolution) const;
+  
 };
 
 #endif /* defined(__G3MiOSSDK__CompositeElevationDataProvider__) */

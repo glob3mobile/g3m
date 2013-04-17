@@ -10,6 +10,7 @@
 
 #include "Vector2I.hpp"
 #include "CompositeElevationData.hpp"
+#include "SubviewElevationData.hpp"
 
 void CompositeElevationDataProvider::addElevationDataProvider(ElevationDataProvider* edp){
   _providers.push_back(edp);
@@ -229,4 +230,14 @@ void CompositeElevationDataProvider::CompositeElevationDataProvider_Request::onE
   if (!t){
     respondToListener(); //If there are no more providers we respond
   }
+}
+
+ElevationData* CompositeElevationDataProvider::createSubviewOfElevationData(ElevationData* elevationData,
+                                            const Sector& sector,
+                                            const Vector2I& resolution) const{
+  return new SubviewElevationData(elevationData,
+                                  false,
+                                  sector,
+                                  resolution,
+                                  false);
 }

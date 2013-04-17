@@ -28,6 +28,8 @@ class ElevationDataProvider;
 class ElevationData;
 class MeshHolder;
 class Vector2I;
+class LeveledMesh;
+class TileMeshBuilder;
 
 #include "ITexturizerData.hpp"
 
@@ -50,7 +52,7 @@ private:
   std::vector<Tile*>* _subtiles;
   bool _justCreatedSubtiles;
 
-  bool _texturizerDirty;
+  bool _texturizerDirty;    //Texturizer needs to be called
 
   float _verticalExaggeration;
   double _minHeight;
@@ -103,6 +105,11 @@ private:
   Extent* getTileExtent(const G3MRenderContext *rc);
 
   void cancelElevationDataRequest(ElevationDataProvider* elevationDataProvider);
+  
+  bool _elevationDataSolved;
+  
+  LeveledMesh* _leveledMesh;
+  TileMeshBuilder* _tileMeshBuilder;
 
 public:
   Tile(TileTexturizer* texturizer,
@@ -201,6 +208,27 @@ public:
   inline std::vector<Tile*>* createSubTiles(const Angle& splitLatitude,
                                             const Angle& splitLongitude,
                                             bool setParent);
+  
+  bool isElevationDataSolved() const{
+    return _elevationDataSolved;
+  }
+  
+  void setElevationData(ElevationData* ed, bool isSolved){
+    _elevationData = ed;
+    _elevationDataSolved = isSolved;
+  }
+  
+  ElevationData* getElevationData() const{
+    return _elevationData;
+  }
+  
+  void setLeveledMesh(LeveledMesh* lm) {
+    _leveledMesh = lm;
+  }
+  
+  LeveledMesh* getLeveledMesh() const{
+    return _leveledMesh;
+  }
 
 };
 

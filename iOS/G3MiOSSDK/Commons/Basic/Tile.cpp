@@ -23,6 +23,7 @@
 #include "LayerTilesRenderParameters.hpp"
 #include "IStringBuilder.hpp"
 #include "MercatorUtils.hpp"
+#include "TileMeshBuilder.hpp"
 
 Tile::Tile(TileTexturizer* texturizer,
            Tile* parent,
@@ -50,7 +51,10 @@ _elevationData(NULL),
 _elevationRequestId(-1000),
 _minHeight(0),
 _maxHeight(0),
-_verticalExaggeration(0)
+_verticalExaggeration(0),
+_elevationDataSolved(false),
+_leveledMesh(NULL),
+_tileMeshBuilder(NULL)  //TODO: CREATE MESH BUILDER
 {
   //  int __remove_tile_print;
   //  printf("Created tile=%s\n deltaLat=%s deltaLon=%s\n",
