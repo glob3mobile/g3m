@@ -93,22 +93,21 @@ public class WMSLayer extends Layer
   
      //Server name
     String req = _mapServerURL.getPath();
-     if (req.charAt(req.length()-1) != '?')
+     if (req.charAt(req.length() - 1) != '?')
      {
         req += '?';
      }
   
-    //If the server refer to itself as localhost...
-    int pos = req.indexOf("localhost");
-    if (pos != -1)
-    {
-      req = req.substring(pos+9);
-  
-      int pos2 = req.indexOf("/", 8);
-      String newHost = req.substring(0, pos2);
-  
-      req = newHost + req;
-    }
+  //  //If the server refer to itself as localhost...
+  //  const int localhostPos = req.find("localhost");
+  //  if (localhostPos != -1) {
+  //    req = req.substr(localhostPos+9);
+  //
+  //    const int slashPos = req.find("/", 8);
+  //    std::string newHost = req.substr(0, slashPos);
+  //
+  //    req = newHost + req;
+  //  }
   
     req += "REQUEST=GetMap&SERVICE=WMS";
   
