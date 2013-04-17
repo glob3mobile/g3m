@@ -111,20 +111,20 @@ std::vector<Petition*> WMSLayer::createTileMapPetitions(const G3MRenderContext* 
 
 	//Server name
   std::string req = _mapServerURL.getPath();
-	if (req[req.size()-1] != '?') {
+	if (req[req.size() - 1] != '?') {
 		req += '?';
 	}
 
-  //If the server refer to itself as localhost...
-  int pos = req.find("localhost");
-  if (pos != -1) {
-    req = req.substr(pos+9);
-
-    int pos2 = req.find("/", 8);
-    std::string newHost = req.substr(0, pos2);
-
-    req = newHost + req;
-  }
+//  //If the server refer to itself as localhost...
+//  const int localhostPos = req.find("localhost");
+//  if (localhostPos != -1) {
+//    req = req.substr(localhostPos+9);
+//
+//    const int slashPos = req.find("/", 8);
+//    std::string newHost = req.substr(0, slashPos);
+//
+//    req = newHost + req;
+//  }
 
   req += "REQUEST=GetMap&SERVICE=WMS";
 

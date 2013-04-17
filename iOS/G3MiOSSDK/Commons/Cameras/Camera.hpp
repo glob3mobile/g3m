@@ -206,7 +206,7 @@ public:
     return getHalfFrustumMC();
   }
 
-  void setPosition(const Geodetic3D& position);
+//  void setPosition(const Geodetic3D& position);
 
   Vector3D getHorizontalVector();
 
@@ -224,20 +224,28 @@ public:
     }
   }
 
+  void setCartesianPosition(const Vector3D& v){
+    setCartesianPosition(v.asMutableVector3D());
+  }
+
   Angle getHeading() const;
   void setHeading(const Angle& angle);
   Angle getPitch() const;
   void setPitch(const Angle& angle);
 
-  void orbitTo(const Vector3D& pos);
-  void orbitTo(const Geodetic3D& g3d) {
-    orbitTo( _planet->toCartesian(g3d) );
+  void setGeodeticPosition(const Geodetic3D& g3d) {
+    _setGeodeticPosition( _planet->toCartesian(g3d) );
   }
-  void orbitTo(const Angle &latitude, const Angle &longitude, const double height) {
-    orbitTo(_planet->toCartesian(latitude, longitude, height));
+
+  void setGeodeticPosition(const Angle &latitude,
+                           const Angle &longitude,
+                           const double height) {
+    _setGeodeticPosition( _planet->toCartesian(latitude, longitude, height) );
   }
-  void orbitTo(const Geodetic2D &g2d, const double height) {
-    orbitTo(_planet->toCartesian(g2d.latitude(), g2d.longitude(), height));
+
+  void setGeodeticPosition(const Geodetic2D &g2d,
+                           const double height) {
+    _setGeodeticPosition( _planet->toCartesian(g2d.latitude(), g2d.longitude(), height) );
   }
 
   /**
@@ -432,7 +440,8 @@ private:
                        znear, zfar);
   }
   
-  
+  void _setGeodeticPosition(const Vector3D& pos);
+
 };
 
 #endif
