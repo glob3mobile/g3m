@@ -21,6 +21,8 @@ void SimpleCameraConstrainer::onCameraChange(const Planet *planet,
 
   if (cameraHeight > radii*9) {
     nextCamera->resetPosition();
-    nextCamera->setPosition(  planet->toGeodetic3D(previousCamera->getCartesianPosition())  );
+//    nextCamera->setPosition(  planet->toGeodetic3D(previousCamera->getCartesianPosition())  );
+    nextCamera->setCartesianPosition( previousCamera->getCartesianPosition() );
+
   }
 }

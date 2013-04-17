@@ -87,7 +87,7 @@ public class CameraGoToPositionEffect extends EffectWithDuration
     }
 
     Camera camera = rc.getNextCamera();
-    camera.orbitTo(Angle.linearInterpolation(_fromPosition.latitude(), _toPosition.latitude(), alpha), Angle.linearInterpolation(_fromPosition.longitude(), _toPosition.longitude(), alpha), height);
+    camera.setGeodeticPosition(Angle.linearInterpolation(_fromPosition.latitude(), _toPosition.latitude(), alpha), Angle.linearInterpolation(_fromPosition.longitude(), _toPosition.longitude(), alpha), height);
 
 
     final Angle heading = Angle.linearInterpolation(_fromHeading, _toHeading, alpha);
@@ -115,7 +115,7 @@ public class CameraGoToPositionEffect extends EffectWithDuration
 
   public void stop(G3MRenderContext rc, TimeInterval when)
   {
-    rc.getNextCamera().orbitTo(_toPosition);
+    rc.getNextCamera().setGeodeticPosition(_toPosition);
   }
 
   public void cancel(TimeInterval when)

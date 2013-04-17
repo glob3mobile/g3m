@@ -164,7 +164,7 @@ void Camera::setPitch(const Angle& angle) {
   //printf ("previous pitch=%f   current pitch=%f\n", currentPitch.degrees(), getPitch().degrees());
 }
 
-void Camera::orbitTo(const Vector3D& pos) {
+void Camera::_setGeodeticPosition(const Vector3D& pos) {
   const Angle heading = getHeading();
   const Angle pitch = getPitch();
 
@@ -269,9 +269,9 @@ void Camera::rotateWithAxisAndPoint(const Vector3D& axis, const Vector3D& point,
   applyTransform(m);
 }
 
-void Camera::setPosition(const Geodetic3D& g3d) {
-  setCartesianPosition( _planet->toCartesian(g3d).asMutableVector3D() );
-}
+//void Camera::setPosition(const Geodetic3D& g3d) {
+//  setCartesianPosition( _planet->toCartesian(g3d).asMutableVector3D() );
+//}
 
 Vector3D Camera::centerOfViewOnPlanet() const {
   const Vector3D ray = _center.sub(_position).asVector3D();
