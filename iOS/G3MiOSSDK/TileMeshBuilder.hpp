@@ -13,45 +13,84 @@
 
 #include "Tile.hpp"
 #include "TileTessellator.hpp"
+#include "ElevationDataProvider.hpp"
 
 class LeveledMesh;
 
+class ElevationDataProviderListener: public IElevationDataListener{
+  TileMeshBuilder* _meshBuilder;
+  long long _id;
+  ElevationDataProvider* _provider;
+public:
+  ElevationDataProviderListener(TileMeshBuilder* meshBuilder):
+  _meshBuilder(meshBuilder),
+  _provider(NULL)
+  {}
+  
+  void launch(ElevationDataProvider* provider,
+              const Sector& sector,
+              const Vector2I& resolution);
+  
+  void cancel();
+  
+  void onData(const Sector& sector,
+              const Vector2I& resolution,
+              ElevationData* elevationData);
+  
+  void onError(const Sector& sector,
+               const Vector2I& resolution);
+  
+};
+
+
 class TileMeshBuilder{
   Tile* _tile;
-  TileTessellator* _tesselator;
-  ElevationDataProvider* _provider;
   Tile* _ancestorWithElevationDataSolved;
-  
-  Mesh* createMeshWithoutElevation(const Planet* planet,
+  ElevationDataProviderListener* _listener;
+  ElevationDataProvider* _provider;
+  int _resX, _resY;
+  /*
+  Mesh* createMeshWithoutElevation(const TileTessellator* tesselator,
+                                   const Planet* planet,
                                    const Vector2I& resolution,
                                    bool debug) const;
   
-  Mesh* createMeshWithElevation(const Planet* planet,
+  Mesh* createMeshWithElevation(const TileTessellator* tesselator,
+                                const Planet* planet,
                                 const Vector2I& resolution,
                                 float verticalExaggeration,
                                 bool debug) const;
-  
-  //TODO: DOWNLOAD LISTENER
-  
+  */
+  void sendPetition(ElevationDataProvider* provider, const Vector2I& resolution);
+
+  void findAncestorWithElevationDataSolved();
+  void fillTileWithAncestorElevationData(ElevationDataProvider* provider);
   
 public:
   
-  TileMeshBuilder(Tile* tile,
-                  TileTessellator* tesselator,
-                  ElevationDataProvider* edp):
+  TileMeshBuilder(Tile* tile):
   _tile(tile),
-  _tesselator(tesselator),
-  _provider(edp),
-  _ancestorWithElevationDataSolved(NULL){}
+  _ancestorWithElevationDataSolved(NULL),
+  _listener(NULL),
+  _provider(NULL)
+  {
+  }
   
-  void findAncestorWithElevationDataSolved();
-  
-  LeveledMesh* createTileMesh(const Planet* planet,
+  /*
+  LeveledMesh* createTileMesh(const TileTessellator* tesselator,
+                              ElevationDataProvider* provider,
+                              const Planet* planet,
                               const Vector2I& resolution,
                               float verticalExaggeration,
                               bool debug,
                               double defaultHeight = 0);
+   */
   
+  void fillTileWithElevationData(ElevationDataProvider* provider, const Vector2I& resolution);
+  
+  void onAncestorSolvedElevationData(Tile* ancestor);
+  void onSolvedElevationData(ElevationData* ed);
+  void cancelElevationDataRequest();
 };
 
 

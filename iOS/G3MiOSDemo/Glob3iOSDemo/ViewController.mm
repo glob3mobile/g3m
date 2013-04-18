@@ -87,6 +87,7 @@
 #import <G3MiOSSDK/GFont.hpp>
 
 #import <G3MiOSSDK/CompositeElevationDataProvider.hpp>
+#import <G3MiOSSDK/LayerTilesRenderParameters.hpp>
 
 
 class TestVisibleSectorListener : public VisibleSectorListener {
@@ -534,13 +535,34 @@ public:
 {
   LayerSet* layerSet = new LayerSet();
   
+  const bool useOrtoAyto = false;
+  if (useOrtoAyto){
+  WMSLayer* ortoAyto = new WMSLayer("orto_refundida",
+                                    URL("http://195.57.27.86/wms_etiquetas_con_orto.mapdef?request=getCapabilities&version=1.1.1&service=WMS", false),
+                                    WMS_1_1_0,
+                                    Sector(Geodetic2D(Angle::fromDegrees(39.350228), Angle::fromDegrees(-6.508713)),
+                                           Geodetic2D(Angle::fromDegrees(39.536351), Angle::fromDegrees(-6.25946))),
+                                    "image/jpeg",
+                                    "EPSG:4326",
+                                    "",
+                                    false,
+                                    new LevelTileCondition(10, 19),
+                                    TimeInterval::fromDays(30),
+                                    new LayerTilesRenderParameters(Sector::fullSphere(),
+                                                                   1,2,0,19,
+                                                                   Vector2I(256,256),
+                                                                   Vector2I(16,16),
+                                                                   false));
+    layerSet->addLayer(ortoAyto);
+  }
+  
   const bool useOSM = false;
   if (useOSM) {
     layerSet->addLayer( new OSMLayer(TimeInterval::fromDays(30)) );
   }
   
   //TODO: Check merkator with elevations
-  const bool useMapQuestOSM = true;
+  const bool useMapQuestOSM = false;
   if (useMapQuestOSM) {
     layerSet->addLayer( MapQuestLayer::newOSM(TimeInterval::fromDays(30)) );
   }
@@ -578,7 +600,7 @@ public:
                                           TimeInterval::fromDays(30)) );
   }
   
-  const bool blueMarble = false;
+  const bool blueMarble = true;
   if (blueMarble) {
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
                                         URL("http://www.nasa.network.com/wms?", false),

@@ -26,7 +26,18 @@ std::vector<Petition*> LayerSet::createTileMapPetitions(const G3MRenderContext* 
   for (int i = 0; i < layersSize; i++) {
     Layer* layer = _layers[i];
     if (layer->isAvailable(rc, tile)) {
-      std::vector<Petition*> pet = layer->createTileMapPetitions(rc, tile);
+      
+      const Tile* petitionTile = tile;
+      while (petitionTile->getLevel() > layer->getLayerTilesRenderParameters()->_maxLevel && petitionTile != NULL) {
+        petitionTile = petitionTile->getParent();
+      }
+      
+      if (petitionTile == NULL){
+        printf("Error retrieving requests.");
+      }
+      
+      //std::vector<Petition*> pet = layer->createTileMapPetitions(rc, tile);
+      std::vector<Petition*> pet = layer->createTileMapPetitions(rc, petitionTile);
 
       //Storing petitions
       for (int j = 0; j < pet.size(); j++) {

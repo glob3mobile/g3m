@@ -106,6 +106,8 @@ std::vector<Petition*> WMSLayer::createTileMapPetitions(const G3MRenderContext* 
       sector.getDeltaLongitude().isZero() ) {
     return petitions;
   }
+  
+  //TODO: MUST SCALE WIDTH,HEIGHT
 
   const Vector2I tileTextureResolution = _parameters->_tileTextureResolution;
 

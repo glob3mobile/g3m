@@ -106,10 +106,12 @@ private:
 
   void cancelElevationDataRequest(ElevationDataProvider* elevationDataProvider);
   
-  bool _elevationDataSolved;
+  //bool _elevationDataSolved;
   
   LeveledMesh* _leveledMesh;
-  TileMeshBuilder* _tileMeshBuilder;
+  TileMeshBuilder* _meshBuilder;
+  bool _meshMustActualizeDueNewElevationData;
+  int _levelOfElevationData;
 
 public:
   Tile(TileTexturizer* texturizer,
@@ -198,7 +200,8 @@ public:
                        const TileTessellator* tessellator,
                        const Planet* planet,
                        const Vector2I& tileMeshResolution,
-                       bool renderDebug);
+                       bool renderDebug,
+                       bool isSolved);
   
   double getMinHeight() const;
   double getMaxHeight() const;
@@ -210,16 +213,17 @@ public:
                                             bool setParent);
   
   bool isElevationDataSolved() const{
-    return _elevationDataSolved;
-  }
-  
-  void setElevationData(ElevationData* ed, bool isSolved){
-    _elevationData = ed;
-    _elevationDataSolved = isSolved;
+    return _levelOfElevationData == _level;
   }
   
   ElevationData* getElevationData() const{
     return _elevationData;
+  }
+  
+  void setElevationData(ElevationData* ed, int level);
+  
+  int getElevationDataLevel() const{
+    return _levelOfElevationData;
   }
   
   void setLeveledMesh(LeveledMesh* lm) {
@@ -229,6 +233,8 @@ public:
   LeveledMesh* getLeveledMesh() const{
     return _leveledMesh;
   }
+  
+  void ancestorElevationDataSolvedChanged(Tile *ancestor);
 
 };
 

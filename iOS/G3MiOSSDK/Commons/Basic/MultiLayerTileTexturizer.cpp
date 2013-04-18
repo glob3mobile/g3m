@@ -160,20 +160,24 @@ private:
   TileTextureBuilder* _builder;
 
 #ifdef C_CODE
-  const std::vector<RectangleI*> _rectangles;
+  const std::vector<RectangleI*> _srcRects;
+    const std::vector<RectangleI*> _dstRects;
 #endif
 #ifdef JAVA_CODE
-  private final java.util.ArrayList<RectangleI> _rectangles;
+  private final java.util.ArrayList<RectangleI> _srcRects;
+  private final java.util.ArrayList<RectangleI> _dstRects;
 #endif
 
   const std::string _textureId;
 
 public:
   TextureUploader(TileTextureBuilder* builder,
-                  std::vector<RectangleI*> rectangles,
+                  std::vector<RectangleI*> srcRects,
+                  std::vector<RectangleI*> dstRects,
                   const std::string& textureId) :
   _builder(builder),
-  _rectangles(rectangles),
+  _srcRects(srcRects),
+  _dstRects(dstRects),
   _textureId(textureId)
   {
 
@@ -378,7 +382,8 @@ public:
       }
 
       std::vector<IImage*>     images;
-      std::vector<RectangleI*> rectangles;
+      std::vector<RectangleI*> sourceRects;
+      std::vector<RectangleI*> destRects;
       std::string textureId = _tile->getKey().tinyDescription();
 
       const Sector tileSector = _tile->getSector();
@@ -386,12 +391,18 @@ public:
       for (int i = 0; i < _petitionsCount; i++) {
         const Petition* petition = _petitions[i];
         IImage* image = petition->getImage();
+        
 
         if (image != NULL) {
+          //TODO: Find intersection image sector - tile sector = srcReq
+          Sector intersectionSector = _tile->getSector().intersection(petition->getSector());
+          
+          sourceRects.push_back(getImageRectangleInTexture(petition->getSector(),
+                                                           intersectionSector));
+          
           images.push_back(image);
 
-          rectangles.push_back(getImageRectangleInTexture(tileSector,
-                                                          petition->getSector()));
+          destRects.push_back(getImageRectangleInTexture(tileSector, petition->getSector()));
 
           textureId += petition->getURL().getPath();
           textureId += "_";
@@ -402,9 +413,13 @@ public:
         _textureBuilder->createTextureFromImages(_gl,
                                                  _factory,
                                                  images,
-                                                 rectangles,
+                                                 sourceRects,
+                                                 destRects,
                                                  _tileTextureResolution,
-                                                 new TextureUploader(this, rectangles, textureId),
+                                                 new TextureUploader(this,
+                                                                     sourceRects,
+                                                                     destRects,
+                                                                     textureId),
                                                  true);
       }
 
@@ -414,7 +429,8 @@ public:
   }
 
   void imageCreated(IImage* image,
-                    std::vector<RectangleI*> rectangles,
+                    std::vector<RectangleI*> srcRects,
+                    std::vector<RectangleI*> dstRects,
                     const std::string& textureId) {
 #ifdef JAVA_CODE
     synchronized (this) {
@@ -440,8 +456,12 @@ public:
 
       IFactory::instance()->deleteImage(image);
 
-      for (int i = 0; i < rectangles.size(); i++) {
-        delete rectangles[i];
+      for (int i = 0; i < srcRects.size(); i++) {
+        delete srcRects[i];
+      }
+      
+      for (int i = 0; i < dstRects.size(); i++) {
+        delete dstRects[i];
       }
 
 #ifdef JAVA_CODE
@@ -623,7 +643,8 @@ public:
 
 void TextureUploader::imageCreated(IImage* image) {
   _builder->imageCreated(image,
-                         _rectangles,
+                         _srcRects,
+                         _dstRects,
                          _textureId);
 }
 

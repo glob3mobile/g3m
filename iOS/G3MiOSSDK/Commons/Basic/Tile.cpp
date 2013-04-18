@@ -25,6 +25,8 @@
 #include "MercatorUtils.hpp"
 #include "TileMeshBuilder.hpp"
 
+#include "LeveledMesh.hpp"
+
 Tile::Tile(TileTexturizer* texturizer,
            Tile* parent,
            const Sector& sector,
@@ -52,9 +54,11 @@ _elevationRequestId(-1000),
 _minHeight(0),
 _maxHeight(0),
 _verticalExaggeration(0),
-_elevationDataSolved(false),
+//_elevationDataSolved(false),
 _leveledMesh(NULL),
-_tileMeshBuilder(NULL)  //TODO: CREATE MESH BUILDER
+_meshBuilder(new TileMeshBuilder(this)),  //Creating MeshBuilder
+_meshMustActualizeDueNewElevationData(true),
+_levelOfElevationData(-1)
 {
   //  int __remove_tile_print;
   //  printf("Created tile=%s\n deltaLat=%s deltaLon=%s\n",
@@ -84,6 +88,26 @@ Tile::~Tile() {
   
   delete _elevationData;
   _elevationData = NULL;
+  
+  //TODO:...
+  delete _leveledMesh;
+  
+  _meshBuilder->cancelElevationDataRequest();
+  delete _meshBuilder;
+  _meshBuilder = NULL;
+}
+
+void Tile::ancestorElevationDataSolvedChanged(Tile *ancestor){
+  
+  _meshBuilder->onAncestorSolvedElevationData(ancestor);  //Informing TileMeshBuilder
+  
+  if (_subtiles != NULL) {                                //Informing our children
+    const int subtilesSize = _subtiles->size();
+    for (int i = 0; i < subtilesSize; i++) {
+      Tile* subtile = _subtiles->at(i);
+      subtile->ancestorElevationDataSolvedChanged(ancestor);
+    }
+  }
 }
 
 void Tile::ancestorTexturedSolvedChanged(Tile* ancestor,
@@ -118,7 +142,7 @@ void Tile::setTextureSolved(bool textureSolved) {
     }
   }
 }
-
+/*
 class TileElevationDataListener : public IElevationDataListener {
 private:
   Tile*                  _tile;
@@ -160,7 +184,8 @@ public:
                            _tessellator,
                            _planet,
                            _tileMeshResolution,
-                           _renderDebug);
+                           _renderDebug,
+                           true);
   }
   
   void onError(const Sector& sector,
@@ -168,13 +193,15 @@ public:
     
   }
 };
-
+*/
+/*
 void Tile::onElevationData(ElevationData* elevationData,
                            MeshHolder* meshHolder,
                            const TileTessellator* tessellator,
                            const Planet* planet,
                            const Vector2I& tileMeshResolution,
-                           bool renderDebug) {
+                           bool renderDebug,
+                           bool isSolved) {
   _elevationRequestId = -1000;
   if (_elevationData != NULL) {
     delete _elevationData;
@@ -199,18 +226,44 @@ void Tile::onElevationData(ElevationData* elevationData,
                                                    _elevationData,
                                                    _verticalExaggeration,
                                                    renderDebug) );
+
+}
+*/
+void Tile::setElevationData(ElevationData* ed, int level){
+  //TODO: CHECK
+  if (!isElevationDataSolved()){                          //If we already had our data we do nothing
+    if (_elevationData != NULL){
+      delete _elevationData;
+    }
+    
+    _elevationData = ed;
+    _levelOfElevationData = level;
+    _meshMustActualizeDueNewElevationData = true;       //Actualize mesh
+    
+    if (isElevationDataSolved() && _subtiles != NULL){    //If we have just gotten our data we inform our children
+      const int subtilesSize = _subtiles->size();
+      for (int i = 0; i < subtilesSize; i++) {
+        Tile* subtile = _subtiles->at(i);
+        subtile->ancestorElevationDataSolvedChanged(this);
+      }
+    }
+  }
 }
 
 Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
                                const TileRenderContext* trc) {
-  if ( _tessellatorMesh == NULL ) {
+  
+  const LayerTilesRenderParameters* layerTilesRenderParameters = trc->getLayerTilesRenderParameters();
+  const Vector2I tileMeshResolution(layerTilesRenderParameters->_tileMeshResolution);
+  ElevationDataProvider* elevationDataProvider = trc->getElevationDataProvider();
+  
+  //Actualizing ElevationData if needed
+  _meshBuilder->fillTileWithElevationData(elevationDataProvider, tileMeshResolution);
+  
+  if ( _tessellatorMesh == NULL || _meshMustActualizeDueNewElevationData) {
     const TileTessellator* tessellator = trc->getTessellator();
     const bool renderDebug = trc->getParameters()->_renderDebug;
-    ElevationDataProvider* elevationDataProvider = trc->getElevationDataProvider();
     const Planet* planet = rc->getPlanet();
-    
-    const LayerTilesRenderParameters* layerTilesRenderParameters = trc->getLayerTilesRenderParameters();
-    const Vector2I tileMeshResolution(layerTilesRenderParameters->_tileMeshResolution);
     
     if (elevationDataProvider == NULL) {
       // no elevation data provider, just create a simple mesh without elevation
@@ -223,6 +276,8 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
     }
     else {
       if (_elevationData == NULL) {
+        //TODO:Check
+        /*
         MeshHolder* meshHolder = new MeshHolder( tessellator->createTileMesh(planet,
                                                                              tileMeshResolution,
                                                                              this,
@@ -245,6 +300,7 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
                                                                                                              renderDebug),
                                                                           listener,
                                                                           true);
+         */
       }
       else {
         // the elevation data is already available, create a simple "inflated" mesh with
@@ -256,6 +312,7 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
                                                        renderDebug);
       }
     }
+    
     
     //    Mesh* tessellatorMesh = tessellator->createTileMesh(rc, this, renderDebug);
     //
@@ -272,6 +329,34 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
     //    }
     
   }
+  
+  /*
+  //TODO: CHECKING ELEVATION LOGIC
+  if (_meshMustActualizeDueNewElevationData){
+    const TileTessellator* tessellator = trc->getTessellator();
+    const bool renderDebug = trc->getParameters()->_renderDebug;
+    ElevationDataProvider* elevationDataProvider = trc->getElevationDataProvider();
+    const Planet* planet = rc->getPlanet();
+    
+    const LayerTilesRenderParameters* layerTilesRenderParameters = trc->getLayerTilesRenderParameters();
+    const Vector2I tileMeshResolution(layerTilesRenderParameters->_tileMeshResolution);
+    
+    
+    Vector2I resolution = tessellator->getTileMeshResolution(planet,
+                                                             tileMeshResolution,
+                                                             this,
+                                                             renderDebug);
+    
+    
+    _leveledMesh = _meshBuilder->createTileMesh(tessellator,
+                                                elevationDataProvider,
+                                                planet,
+                                                resolution,
+                                                _verticalExaggeration,
+                                                renderDebug);
+    _meshMustActualizeDueNewElevationData = false;
+  }
+  */
   return _tessellatorMesh;
 }
 
@@ -281,6 +366,7 @@ Mesh* Tile::getDebugMesh(const G3MRenderContext* rc,
     const LayerTilesRenderParameters* layerTilesRenderParameters = trc->getLayerTilesRenderParameters();
     const Vector2I tileMeshResolution(layerTilesRenderParameters->_tileMeshResolution);
     
+    //TODO: CHECK
     _debugMesh = trc->getTessellator()->createTileDebugMesh(rc->getPlanet(), tileMeshResolution, this);
   }
   return _debugMesh;
@@ -498,6 +584,9 @@ std::vector<Tile*>* Tile::getSubTiles(const Angle& splitLatitude,
 }
 
 void Tile::cancelElevationDataRequest(ElevationDataProvider* elevationDataProvider) {
+  
+  _meshBuilder->cancelElevationDataRequest();
+  
   if (_elevationRequestId > 0) {
     elevationDataProvider->cancelRequest(_elevationRequestId);
     _elevationRequestId = -1000;
