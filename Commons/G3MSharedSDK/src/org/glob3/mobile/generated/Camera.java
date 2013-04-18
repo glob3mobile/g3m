@@ -383,6 +383,11 @@ public class Camera
     //printf ("previous pitch=%f   current pitch=%f\n", currentPitch.degrees(), getPitch().degrees());
   }
 
+  public final Geodetic3D getGeodeticPosition()
+  {
+    return _planet.toGeodetic3D(getCartesianPosition());
+  }
+
   public final void setGeodeticPosition(Geodetic3D g3d)
   {
     _setGeodeticPosition(_planet.toCartesian(g3d));
