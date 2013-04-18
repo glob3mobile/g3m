@@ -18,6 +18,7 @@ public class SceneParser
   private static final String MAXLEVEL = "maxlevel";
   private static final String STATUS = "status";
   private static final String NAME = "name";
+  private static final String LEGENDNAME = "legendName";
   private static final String URLICON = "urlIcon";
   private static final String MINDISTANCE = "minDistance";
   private static final String COLORLINE = "colorLine";
@@ -278,10 +279,25 @@ public class SceneParser
         nameFileFormatted = namefileTruncated;
       }
   
+      // Check if scene file has nameleyend on each geojson file
+      // else it takes from nameFileFormatted, without accent and probably with grammar mistakes due to it is taken from a file served by an URL
+      // when SceneGenerater will be updated this ckeck can be removed
+      final JSONString legendNameJSON = jsonItems.getAsObject(i).getAsString(LEGENDNAME);
+      String legendName;
+      if (legendNameJSON != null)
+      {
+        legendName = legendNameJSON.value();
+      }
+      else
+      {
+        legendName = nameFileFormatted;
+      }
+  
       java.util.HashMap<String, String> geojsonMetadata = new java.util.HashMap<String, String>();
   
       geojsonMetadata.put(URLICON,urlIcon);
       geojsonMetadata.put(NAME,namefileTruncated);
+      geojsonMetadata.put(LEGENDNAME,legendName);
       geojsonMetadata.put(COLORLINE,colorLine);
       geojsonMetadata.put(WEB,urlWeb);
       geojsonMetadata.put(MINDISTANCE,minDistance);
