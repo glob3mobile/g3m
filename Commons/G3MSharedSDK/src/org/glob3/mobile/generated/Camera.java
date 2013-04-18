@@ -274,10 +274,7 @@ public class Camera
     return getHalfFrustumMC();
   }
 
-  public final void setPosition(Geodetic3D g3d)
-  {
-    setCartesianPosition(_planet.toCartesian(g3d).asMutableVector3D());
-  }
+//  void setPosition(const Geodetic3D& position);
 
   public final Vector3D getHorizontalVector()
   {
@@ -354,6 +351,11 @@ public class Camera
     }
   }
 
+  public final void setCartesianPosition(Vector3D v)
+  {
+    setCartesianPosition(v.asMutableVector3D());
+  }
+
   public final Angle getHeading()
   {
     final Vector3D normal = _planet.geodeticSurfaceNormal(_position);
@@ -381,39 +383,24 @@ public class Camera
     //printf ("previous pitch=%f   current pitch=%f\n", currentPitch.degrees(), getPitch().degrees());
   }
 
-  public final void orbitTo(Vector3D pos)
+  public final Geodetic3D getGeodeticPosition()
   {
-    final Angle heading = getHeading();
-    final Angle pitch = getPitch();
-  
-    setPitch(Angle.zero());
-  
-    final MutableVector3D finalPos = pos.asMutableVector3D();
-    final Vector3D axis = _position.cross(finalPos).asVector3D();
-    if (axis.length()<1e-3)
-    {
-      return;
-    }
-    final Angle angle = _position.angleBetween(finalPos);
-    rotateWithAxis(axis, angle);
-  
-    final double dist = _position.length() - pos.length();
-    moveForward(dist);
-  
-    setHeading(heading);
-    setPitch(pitch);
+    return _planet.toGeodetic3D(getCartesianPosition());
   }
-  public final void orbitTo(Geodetic3D g3d)
+
+  public final void setGeodeticPosition(Geodetic3D g3d)
   {
-    orbitTo(_planet.toCartesian(g3d));
+    _setGeodeticPosition(_planet.toCartesian(g3d));
   }
-  public final void orbitTo(Angle latitude, Angle longitude, double height)
+
+  public final void setGeodeticPosition(Angle latitude, Angle longitude, double height)
   {
-    orbitTo(_planet.toCartesian(latitude, longitude, height));
+    _setGeodeticPosition(_planet.toCartesian(latitude, longitude, height));
   }
-  public final void orbitTo(Geodetic2D g2d, double height)
+
+  public final void setGeodeticPosition(Geodetic2D g2d, double height)
   {
-    orbitTo(_planet.toCartesian(g2d.latitude(), g2d.longitude(), height));
+    _setGeodeticPosition(_planet.toCartesian(g2d.latitude(), g2d.longitude(), height));
   }
 
   /**
@@ -492,6 +479,11 @@ public class Camera
     //_dirtyFlags.setAll(true);
   }
 
+
+  //void Camera::setPosition(const Geodetic3D& g3d) {
+  //  setCartesianPosition( _planet->toCartesian(g3d).asMutableVector3D() );
+  //}
+  
   private Vector3D centerOfViewOnPlanet()
   {
     final Vector3D ray = _center.sub(_position).asVector3D();
@@ -665,5 +657,27 @@ public class Camera
     return new FrustumData(left, right, bottom, top, znear, zfar);
   }
 
+  private void _setGeodeticPosition(Vector3D pos)
+  {
+    final Angle heading = getHeading();
+    final Angle pitch = getPitch();
+  
+    setPitch(Angle.zero());
+  
+    final MutableVector3D finalPos = pos.asMutableVector3D();
+    final Vector3D axis = _position.cross(finalPos).asVector3D();
+    if (axis.length()<1e-3)
+    {
+      return;
+    }
+    final Angle angle = _position.angleBetween(finalPos);
+    rotateWithAxis(axis, angle);
+  
+    final double dist = _position.length() - pos.length();
+    moveForward(dist);
+  
+    setHeading(heading);
+    setPitch(pitch);
+  }
 
 }
