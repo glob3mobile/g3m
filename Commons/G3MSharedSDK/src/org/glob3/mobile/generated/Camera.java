@@ -112,6 +112,36 @@ public class Camera
     _halfFrustumInModelCoordinates = (that._frustumInModelCoordinates == null) ? null : new Frustum(that._frustumInModelCoordinates);
   }
 
+
+  //void Camera::resetPosition() {
+  //  _position = MutableVector3D(0, 0, 0);
+  //  _center = MutableVector3D(0, 0, 0);
+  //  _up = MutableVector3D(0, 0, 1);
+  //
+  //  _dirtyFlags.setAll(true);
+  //
+  //  _frustumData = FrustumData();
+  //  _projectionMatrix = MutableMatrix44D();
+  //  _modelMatrix = MutableMatrix44D();
+  //  _modelViewMatrix = MutableMatrix44D();
+  //  _cartesianCenterOfView = MutableVector3D();
+  //
+  //  delete _geodeticCenterOfView;
+  //  _geodeticCenterOfView = NULL;
+  //
+  //  delete _frustum;
+  //  _frustum = NULL;
+  //
+  //  delete _frustumInModelCoordinates;
+  //  _frustumInModelCoordinates = NULL;
+  //
+  //  delete _halfFrustumInModelCoordinates;
+  //  _halfFrustumInModelCoordinates = NULL;
+  //
+  //  delete _halfFrustum;
+  //  _halfFrustum = NULL;
+  //}
+  
   public final void resizeViewport(int width, int height)
   {
     _width = width;
@@ -307,40 +337,7 @@ public class Camera
     _dirtyFlags.setAll(true);
   }
 
-  public final void resetPosition()
-  {
-    _position = new MutableVector3D(0, 0, 0);
-    _center = new MutableVector3D(0, 0, 0);
-    _up = new MutableVector3D(0, 0, 1);
-  
-    _dirtyFlags.setAll(true);
-  
-    _frustumData = new FrustumData();
-    _projectionMatrix = new MutableMatrix44D();
-    _modelMatrix = new MutableMatrix44D();
-    _modelViewMatrix = new MutableMatrix44D();
-    _cartesianCenterOfView = new MutableVector3D();
-  
-    if (_geodeticCenterOfView != null)
-       _geodeticCenterOfView.dispose();
-    _geodeticCenterOfView = null;
-  
-    if (_frustum != null)
-       _frustum.dispose();
-    _frustum = null;
-  
-    if (_frustumInModelCoordinates != null)
-       _frustumInModelCoordinates.dispose();
-    _frustumInModelCoordinates = null;
-  
-    if (_halfFrustumInModelCoordinates != null)
-       _halfFrustumInModelCoordinates.dispose();
-    _halfFrustumInModelCoordinates = null;
-  
-    if (_halfFrustum != null)
-       _halfFrustum.dispose();
-    _halfFrustum = null;
-  }
+//  void resetPosition();
 
   public final void setCartesianPosition(MutableVector3D v)
   {
