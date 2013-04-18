@@ -55,6 +55,7 @@ const std::string SceneParser::ISTRANSPARENT = "isTransparent";
 const std::string SceneParser::ITEMS = "items";
 const std::string SceneParser::STATUS = "status";
 const std::string SceneParser::NAME = "name";
+const std::string SceneParser::LEGENDNAME = "legendName";
 const std::string SceneParser::URLICON = "urlIcon";
 const std::string SceneParser::MINDISTANCE = "minDistance";
 const std::string SceneParser::COLORLINE = "colorLine";
@@ -332,11 +333,23 @@ void SceneParser::parserGEOJSONLayer(LayerSet* layerSet, const JSONObject* jsonL
       nameFileFormatted = namefileTruncated;
     }
     
+    // Check if scene file has nameleyend on each geojson file
+    // else it takes from nameFileFormatted, without accent and probably with grammar mistakes due to it is taken from a file served by an URL
+    // when SceneGenerater will be updated this ckeck can be removed
+    const JSONString* legendNameJSON = jsonItems->getAsObject(i)->getAsString(LEGENDNAME);
+    std::string legendName;
+    if (legendNameJSON != NULL) {
+      legendName = legendNameJSON->value();
+    } else {
+      legendName = nameFileFormatted;
+    }
+    
     std::map<std::string, std::string>* geojsonMetadata = new std::map<std::string, std::string>;
     
 #ifdef C_CODE
     geojsonMetadata->insert(std::make_pair(URLICON,urlIcon));
     geojsonMetadata->insert(std::make_pair(NAME,nameFileFormatted));
+    geojsonMetadata->insert(std::make_pair(LEGENDNAME,legendName));
     geojsonMetadata->insert(std::make_pair(COLORLINE,colorLine));
     geojsonMetadata->insert(std::make_pair(WEB,urlWeb));
     geojsonMetadata->insert(std::make_pair(MINDISTANCE,minDistance));
@@ -346,6 +359,7 @@ void SceneParser::parserGEOJSONLayer(LayerSet* layerSet, const JSONObject* jsonL
 #ifdef JAVA_CODE
     geojsonMetadata.put(URLICON,urlIcon);
     geojsonMetadata.put(NAME,namefileTruncated);
+    geojsonMetadata.put(LEGENDNAME,legendName);
     geojsonMetadata.put(COLORLINE,colorLine);
     geojsonMetadata.put(WEB,urlWeb);
     geojsonMetadata.put(MINDISTANCE,minDistance);

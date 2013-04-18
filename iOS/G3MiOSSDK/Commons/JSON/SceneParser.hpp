@@ -41,6 +41,7 @@ class SceneParser{
   static const std::string MAXLEVEL;
   static const std::string STATUS;
   static const std::string NAME;
+  static const std::string LEGENDNAME;
   static const std::string URLICON;
   static const std::string MINDISTANCE;
   static const std::string COLORLINE;
