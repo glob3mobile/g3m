@@ -180,15 +180,19 @@ public:
 
 
   //Dragging camera
-  void dragCamera(const Vector3D& p0, const Vector3D& p1);
-  void rotateWithAxis(const Vector3D& axis, const Angle& delta);
+  void dragCamera(const Vector3D& p0,
+                  const Vector3D& p1);
+  void rotateWithAxis(const Vector3D& axis,
+                      const Angle& delta);
   void moveForward(double d);
 
   //Pivot
   void pivotOnCenter(const Angle& a);
 
   //Rotate
-  void rotateWithAxisAndPoint(const Vector3D& axis, const Vector3D& point, const Angle& delta);
+  void rotateWithAxisAndPoint(const Vector3D& axis,
+                              const Vector3D& point,
+                              const Angle& delta);
 
   void print();
 
@@ -215,7 +219,7 @@ public:
 
   void initialize(const G3MContext* context);
 
-  void resetPosition();
+//  void resetPosition();
 
   void setCartesianPosition(const MutableVector3D& v){
     if (!v.equalTo(_position)){

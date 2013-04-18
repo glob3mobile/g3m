@@ -605,6 +605,6 @@ void G3MWidget::stopCameraAnimation() {
   _effectsScheduler->cancelAllEffectsFor(target);
 }
 
-void G3MWidget::resetCameraPosition() {
-  getNextCamera()->resetPosition();
-}
+//void G3MWidget::resetCameraPosition() {
+//  getNextCamera()->resetPosition();
+//}

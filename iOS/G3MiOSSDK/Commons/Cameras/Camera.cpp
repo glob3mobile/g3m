@@ -87,34 +87,34 @@ _camEffectTarget(new CameraEffectTarget())
   resizeViewport(width, height);
 }
 
-void Camera::resetPosition() {
-  _position = MutableVector3D(0, 0, 0);
-  _center = MutableVector3D(0, 0, 0);
-  _up = MutableVector3D(0, 0, 1);
-
-  _dirtyFlags.setAll(true);
-
-  _frustumData = FrustumData();
-  _projectionMatrix = MutableMatrix44D();
-  _modelMatrix = MutableMatrix44D();
-  _modelViewMatrix = MutableMatrix44D();
-  _cartesianCenterOfView = MutableVector3D();
-
-  delete _geodeticCenterOfView;
-  _geodeticCenterOfView = NULL;
-
-  delete _frustum;
-  _frustum = NULL;
-
-  delete _frustumInModelCoordinates;
-  _frustumInModelCoordinates = NULL;
-
-  delete _halfFrustumInModelCoordinates;
-  _halfFrustumInModelCoordinates = NULL;
-
-  delete _halfFrustum;
-  _halfFrustum = NULL;
-}
+//void Camera::resetPosition() {
+//  _position = MutableVector3D(0, 0, 0);
+//  _center = MutableVector3D(0, 0, 0);
+//  _up = MutableVector3D(0, 0, 1);
+//
+//  _dirtyFlags.setAll(true);
+//
+//  _frustumData = FrustumData();
+//  _projectionMatrix = MutableMatrix44D();
+//  _modelMatrix = MutableMatrix44D();
+//  _modelViewMatrix = MutableMatrix44D();
+//  _cartesianCenterOfView = MutableVector3D();
+//
+//  delete _geodeticCenterOfView;
+//  _geodeticCenterOfView = NULL;
+//
+//  delete _frustum;
+//  _frustum = NULL;
+//
+//  delete _frustumInModelCoordinates;
+//  _frustumInModelCoordinates = NULL;
+//
+//  delete _halfFrustumInModelCoordinates;
+//  _halfFrustumInModelCoordinates = NULL;
+//
+//  delete _halfFrustum;
+//  _halfFrustum = NULL;
+//}
 
 void Camera::resizeViewport(int width, int height) {
   _width = width;
