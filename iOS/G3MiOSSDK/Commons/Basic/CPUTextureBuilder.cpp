@@ -136,7 +136,9 @@ const void CPUTextureBuilder::createTextureFromImages(GL* gl,
       tailDestRectangles.push_back( destRectangles[i] );
     }
     
-    images[0]->combineWith(*srcRectangles[0],
+    RectangleI* image0SrcRect = srcRectangles[0];
+    
+    images[0]->combineWith(*image0SrcRect,
                            tailImages,
                            tailSourceRectangles,
                            tailDestRectangles,

@@ -26,8 +26,11 @@ std::vector<Petition*> LayerSet::createTileMapPetitions(const G3MRenderContext* 
   for (int i = 0; i < layersSize; i++) {
     Layer* layer = _layers[i];
     if (layer->isAvailable(rc, tile)) {
-      
+#ifdef C_CODE
       const Tile* petitionTile = tile;
+#else
+      Tile* petitionTile = tile;
+#endif
       while (petitionTile->getLevel() > layer->getLayerTilesRenderParameters()->_maxLevel && petitionTile != NULL) {
         petitionTile = petitionTile->getParent();
       }
