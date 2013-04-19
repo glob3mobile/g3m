@@ -38,7 +38,7 @@ public abstract class Layer
 
   protected LayerTilesRenderParameters _parameters;
 
-  protected final TimeInterval _timeToCache;
+  protected final TimeInterval _timeToCache = new TimeInterval();
 
   protected final void notifyChanges()
   {

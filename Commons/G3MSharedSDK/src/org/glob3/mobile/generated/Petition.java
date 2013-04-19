@@ -49,6 +49,7 @@ public class Petition
      _timeToCacheInMS = timeToCache.milliseconds();
      _isTransparent = isTransparent;
      _image = null;
+
   }
 
   public void dispose()
