@@ -170,8 +170,7 @@ public class LayerSet
       Layer layer = _layers.get(i);
       if (layer.isAvailable(rc, tile))
       {
-  
-        final Tile petitionTile = tile;
+        Tile petitionTile = tile;
         while (petitionTile.getLevel() > layer.getLayerTilesRenderParameters()._maxLevel && petitionTile != null)
         {
           petitionTile = petitionTile.getParent();

@@ -76,7 +76,9 @@ public class CPUTextureBuilder extends TextureBuilder
         tailDestRectangles.add(destRectangles.get(i));
       }
   
-      images.get(0).combineWith(*srcRectangles.get(0), tailImages, tailSourceRectangles, tailDestRectangles, new Vector2I(width, height), listener, autodelete);
+      RectangleI image0SrcRect = srcRectangles.get(0);
+  
+      images.get(0).combineWith(image0SrcRect, tailImages, tailSourceRectangles, tailDestRectangles, new Vector2I(width, height), listener, autodelete);
     }
   }
 
