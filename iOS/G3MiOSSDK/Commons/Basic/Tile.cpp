@@ -277,7 +277,7 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
     else {
       if (_elevationData == NULL) {
         //TODO:Check
-        /*
+        
         MeshHolder* meshHolder = new MeshHolder( tessellator->createTileMesh(planet,
                                                                              tileMeshResolution,
                                                                              this,
@@ -285,7 +285,7 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
                                                                              _verticalExaggeration,
                                                                              renderDebug) );
         _tessellatorMesh = meshHolder;
-        
+      /*
         TileElevationDataListener* listener = new TileElevationDataListener(this,
                                                                             meshHolder,
                                                                             tessellator,
@@ -300,7 +300,8 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
                                                                                                              renderDebug),
                                                                           listener,
                                                                           true);
-         */
+       */
+         
       }
       else {
         // the elevation data is already available, create a simple "inflated" mesh with

@@ -106,7 +106,8 @@ public:
                    IImageListener* listener,
                    bool autodelete) const;
   
-  void combineWith(const std::vector<const IImage*>& images,
+  void combineWith(const RectangleI& thisSourceRect,
+                   const std::vector<const IImage*>& images,
                    const std::vector<RectangleI*>& sourceRects,
                    const std::vector<RectangleI*>& destRects,
                    const Vector2I& size,

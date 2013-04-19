@@ -50,7 +50,7 @@ std::vector<Petition*> LayerSet::createTileMapPetitions(const G3MRenderContext* 
     rc->getLogger()->logWarning("Can't create map petitions for tile %s",
                                 tile->getKey().description().c_str());
   }
-
+  
   return petitions;
 }
 
@@ -198,7 +198,7 @@ LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters() const {
         //   ILogger::instance()->logError("Inconsistency in Layer's Parameters: maxLevel");
         //   return NULL;
         // }
-        if ( maxLevel > layerParam->_maxLevel ) {
+        if ( maxLevel < layerParam->_maxLevel ) {
           ILogger::instance()->logWarning("Inconsistency in Layer's Parameters: maxLevel (downgrading from %d to %d)",
                                           maxLevel,
                                           layerParam->_maxLevel);

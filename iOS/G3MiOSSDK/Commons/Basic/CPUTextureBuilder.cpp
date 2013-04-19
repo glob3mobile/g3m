@@ -119,13 +119,13 @@ const void CPUTextureBuilder::createTextureFromImages(GL* gl,
     factory->createImageFromSize(width, height,
                                  listener, autodelete);
   }
-  else if (imagesSize == 1) {
+  /*else if (imagesSize == 1) {
     RectangleI* rectangle = destRectangles[0];
     images[0]->subImage(*rectangle,
                         new CPUTextureBuilderSubImageImageLister(width, height,
                                                                  listener, autodelete),
                         true);
-  }
+  }*/
   else {
     std::vector<const IImage*> tailImages;
     std::vector<RectangleI*> tailSourceRectangles;
@@ -135,10 +135,11 @@ const void CPUTextureBuilder::createTextureFromImages(GL* gl,
       tailDestRectangles.push_back( destRectangles[i] );
       
       //TODO: Check sector
-      tailSourceRectangles.push_back(new RectangleI(0,0,images[i]->getWidth(), images[i]->getHeight()));
+      tailSourceRectangles.push_back(srcRectangles[i]);
     }
     
-    images[0]->combineWith(tailImages,
+    images[0]->combineWith(*srcRectangles[0],
+                           tailImages,
                            tailSourceRectangles,
                            tailDestRectangles,
                            Vector2I(width, height),

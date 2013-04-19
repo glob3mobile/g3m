@@ -89,7 +89,8 @@ void Image_iOS::drawUIImageOnContext(const CGContextRef& context,
   
   //Cropping other image if neccesary
   CGImage* CGotherIm = NULL;
-  if (sourceRect._width != destRect._width || sourceRect._height){
+  if (sourceRect._width != other.getWidth() || sourceRect._height != other.getHeight() ||
+      sourceRect._x != 0 || sourceRect._y != 0 ){
     CGRect cropRect = CGRectMake(sourceRect._x,
                                  sourceRect._y,
                                  sourceRect._width,
@@ -99,7 +100,7 @@ void Image_iOS::drawUIImageOnContext(const CGContextRef& context,
   } else{
     CGotherIm = [otherIm CGImage];
   }
-  
+  //TODO: CHECK THIS
   CGContextDrawImage(context,
                      CGRectMake(destRect._x,
                                 destRect._y,
@@ -142,31 +143,6 @@ void Image_iOS::combineWith(const IImage& other,
                      _image.CGImage);
   
   drawUIImageOnContext(context, other, sourceRect, destRect);
-  
-//  //Cropping other image if neccesary
-//  CGImage* CGotherIm = NULL;
-//  if (sourceRect._width != destRect._width || sourceRect._height){
-//    CGRect cropRect = CGRectMake(sourceRect._x,
-//                                 sourceRect._y,
-//                                 sourceRect._width,
-//                                 sourceRect._height);
-//    
-//    CGotherIm = CGImageCreateWithImageInRect([otherIm CGImage], cropRect);
-//  } else{
-//    CGotherIm = [otherIm CGImage];
-//  }
-//  
-//  CGContextDrawImage(context,
-//                     CGRectMake(destRect._x,
-//                                destRect._y,
-//                                destRect._width,
-//                                destRect._height),
-//                     CGotherIm);
-//  
-//  //Releasing if cropped
-//  if (CGotherIm != otherIm.CGImage){
-//      CGImageRelease(CGotherIm);
-//  }
   
   //SAVING IMAGE
   CGImageRef imgRef = CGBitmapContextCreateImage(context);
@@ -253,20 +229,40 @@ void Image_iOS::combineWith(const std::vector<const IImage*>& images,
 }
 */
 
-void Image_iOS::combineWith(const std::vector<const IImage*>& images,
+void Image_iOS::combineWith(const RectangleI& thisSourceRect,
+                            const std::vector<const IImage*>& images,
                             const std::vector<RectangleI*>& sourceRects,
                             const std::vector<RectangleI*>& destRects,
                             const Vector2I& size,
                             IImageListener* listener,
                             bool autodelete) const {
   
+  CGImage * thisCGImage = _image.CGImage;
+  if (thisSourceRect._x != 0 || thisSourceRect._y != 0 ||
+      thisSourceRect._width != this->getWidth() || thisSourceRect._height != this->getHeight()){
+    
+    //We have to crop this image first
+    CGRect cropRect = CGRectMake(thisSourceRect._x,
+                                 thisSourceRect._y,
+                                 thisSourceRect._width,
+                                 thisSourceRect._height);
+    
+    //Cropping image
+    thisCGImage = CGImageCreateWithImageInRect(thisCGImage, cropRect);
+  }
+
   int width = size._x;
   int height = size._y;
   
   const int imagesSize = images.size();
   if (imagesSize == 0 || imagesSize != sourceRects.size() || imagesSize != destRects.size() ) {
     if (getWidth() == width && getHeight() == height) {
-      listener->imageCreated( shallowCopy() );
+      
+      if (thisCGImage == _image.CGImage){
+        listener->imageCreated( shallowCopy() );
+      } else{
+        listener->imageCreated(new Image_iOS([[UIImage alloc] initWithCGImage:thisCGImage], NULL)); //TODO:Check
+      }
       if (autodelete) {
         delete listener;
       }
@@ -294,25 +290,17 @@ void Image_iOS::combineWith(const std::vector<const IImage*>& images,
     // draw the receiver image
     CGContextDrawImage(context,
                        bounds,
-                       _image.CGImage);
+                       thisCGImage);
+    
+    if (thisCGImage != _image.CGImage){
+      CGImageRelease(thisCGImage);
+    }
     
     // draw the images one over the other
     for (int i = 0; i < imagesSize; i++) {
-//      UIImage* image = ((Image_iOS*) images[i])->getUIImage();
-//      const RectangleI* rect = rectangles[i];
-//      
-//      
-//      
-//      CGContextDrawImage(context,
-//                         CGRectMake(rect->_x,
-//                                    rect->_y,
-//                                    rect->_width,
-//                                    rect->_height ),
-//                         image.CGImage);
-      
       const IImage* other = images[i];
       const RectangleI *sourceRect = sourceRects[i];
-      const RectangleI *destRect = destRects[i];
+      const RectangleI *destRect = destRects[i];      //Destination in final image pixels
       
       drawUIImageOnContext(context, *other, *sourceRect, *destRect);
     }

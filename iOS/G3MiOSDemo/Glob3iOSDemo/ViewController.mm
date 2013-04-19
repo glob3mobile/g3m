@@ -88,6 +88,7 @@
 
 #import <G3MiOSSDK/CompositeElevationDataProvider.hpp>
 #import <G3MiOSSDK/LayerTilesRenderParameters.hpp>
+#import <G3MiOSSDK/RectangleI.hpp>
 
 
 class TestVisibleSectorListener : public VisibleSectorListener {
@@ -535,27 +536,6 @@ public:
 {
   LayerSet* layerSet = new LayerSet();
   
-  const bool useOrtoAyto = false;
-  if (useOrtoAyto){
-  WMSLayer* ortoAyto = new WMSLayer("orto_refundida",
-                                    URL("http://195.57.27.86/wms_etiquetas_con_orto.mapdef?request=getCapabilities&version=1.1.1&service=WMS", false),
-                                    WMS_1_1_0,
-                                    Sector(Geodetic2D(Angle::fromDegrees(39.350228), Angle::fromDegrees(-6.508713)),
-                                           Geodetic2D(Angle::fromDegrees(39.536351), Angle::fromDegrees(-6.25946))),
-                                    "image/jpeg",
-                                    "EPSG:4326",
-                                    "",
-                                    false,
-                                    new LevelTileCondition(10, 19),
-                                    TimeInterval::fromDays(30),
-                                    new LayerTilesRenderParameters(Sector::fullSphere(),
-                                                                   1,2,0,19,
-                                                                   Vector2I(256,256),
-                                                                   Vector2I(16,16),
-                                                                   false));
-    layerSet->addLayer(ortoAyto);
-  }
-  
   const bool useOSM = false;
   if (useOSM) {
     layerSet->addLayer( new OSMLayer(TimeInterval::fromDays(30)) );
@@ -612,7 +592,12 @@ public:
                                         false,
                                         //new LevelTileCondition(0, 6),
                                         NULL,
-                                        TimeInterval::fromDays(30));
+                                        TimeInterval::fromDays(30),
+                                        new LayerTilesRenderParameters(Sector::fullSphere(),
+                                                                       2,4,0,6,
+                                                                       Vector2I(256,256),
+                                                                       LayerTilesRenderParameters::defaultTileMeshResolution(),
+                                                                       false));
     layerSet->addLayer(blueMarble);
     
     //    WMSLayer* i3Landsat = new WMSLayer("esat",
@@ -628,6 +613,26 @@ public:
     //    layerSet->addLayer(i3Landsat);
   }
   
+  const bool useOrtoAyto = true;
+  if (useOrtoAyto){
+    WMSLayer* ortoAyto = new WMSLayer("orto_refundida",
+                                      URL("http://195.57.27.86/wms_etiquetas_con_orto.mapdef?", false),
+                                      WMS_1_1_0,
+                                      Sector(Geodetic2D(Angle::fromDegrees(39.350228), Angle::fromDegrees(-6.508713)),
+                                             Geodetic2D(Angle::fromDegrees(39.536351), Angle::fromDegrees(-6.25946))),
+                                      "image/jpeg",
+                                      "EPSG:4326",
+                                      "",
+                                      false,
+                                      new LevelTileCondition(4, 19),
+                                      TimeInterval::fromDays(30),
+                                      new LayerTilesRenderParameters(Sector::fullSphere(),
+                                                                     2,4,0,19,
+                                                                     Vector2I(256,256),
+                                                                     LayerTilesRenderParameters::defaultTileMeshResolution(),
+                                                                     false));
+    layerSet->addLayer(ortoAyto);
+  }
   
   bool useWMSBing = false;
   if (useWMSBing) {
@@ -1021,6 +1026,37 @@ public:
   //  }
   
   
+  Image_iOS* im = new Image_iOS([[UIImage alloc] initWithContentsOfFile:
+                                 [[NSBundle mainBundle] pathForResource: @"g3m-marker" ofType: @"png"]], NULL);
+  
+  Image_iOS* im2 = new Image_iOS([[UIImage alloc] initWithContentsOfFile:
+                                 [[NSBundle mainBundle] pathForResource: @"sand-clock" ofType: @"png"]], NULL);
+  std::vector<const IImage*> ims; ims.push_back(im2);
+  RectangleI * rectIM = new RectangleI(0,0, im->getWidth(), im->getHeight() / 2);
+  std::vector<RectangleI*> sr; sr.push_back(new RectangleI(0,0, im2->getWidth(), im2->getHeight()));
+  std::vector<RectangleI*> dr; dr.push_back(new RectangleI(0,0, 256, 256));
+  
+  
+  class MyIImageListener: public IImageListener{
+  public:
+    MyIImageListener(ShapesRenderer* render):_render(render){
+      
+    }
+    ShapesRenderer* _render;
+    void imageCreated(IImage* image){
+      
+      Shape* quadX = new QuadShape(new Geodetic3D(Angle::fromDegrees(30.136637),
+                                                  Angle::fromDegrees(-15.447636),
+                                                  8000),
+                                   image,
+                                   350000, 750000);
+      _render->addShape(quadX);
+    }
+  };
+  
+  im->combineWith(*rectIM, ims, sr, dr, Vector2I(256,256), new MyIImageListener(shapesRenderer), true);
+  
+
   
   return shapesRenderer;
 }

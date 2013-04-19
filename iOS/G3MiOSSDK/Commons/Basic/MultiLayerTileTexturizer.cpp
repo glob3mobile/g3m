@@ -371,6 +371,41 @@ public:
                           (int) mu->round( widthFactor            * textureWidth ),
                           (int) mu->round( heightFactor           * textureHeight ));
   }
+  
+  RectangleI* getImageRectangle(const IImage& wholeImage,
+                                const Sector& wholeSector,
+                                         const Sector& imageSector) const {
+    
+    printf("WHOLE SECTOR: %s\n", wholeSector.description().c_str());
+    printf("IMAGE SECTOR: %s\n", imageSector.description().c_str());
+    const IMathUtils* mu = IMathUtils::instance();
+    
+    //const Vector2D lowerFactor = wholeSector.getUVCoordinates(imageSector.lower());
+    
+    double minWholeLat = wholeSector.lower().latitude().degrees();
+    double minWholeLon = wholeSector.lower().longitude().degrees();
+    double maxWholeLat = wholeSector.upper().latitude().degrees();
+    double maxWholeLon = wholeSector.upper().longitude().degrees();
+    
+    double minImageLat = imageSector.lower().latitude().degrees();
+    double minImageLon = imageSector.lower().longitude().degrees();
+    
+    
+    double lowerFactorX = (minImageLon - minWholeLon) / (maxWholeLon - minWholeLon);
+    double lowerFactorY = (minImageLat - minWholeLat) / (maxWholeLat - minWholeLat);
+    const Vector2D lowerFactor(lowerFactorX, lowerFactorY);
+    
+    const double widthFactor  = imageSector.getDeltaLongitude().div(wholeSector.getDeltaLongitude());
+    const double heightFactor = imageSector.getDeltaLatitude().div(wholeSector.getDeltaLatitude());
+    
+    const int textureWidth  = wholeImage.getWidth();
+    const int textureHeight = wholeImage.getHeight();
+    
+    return new RectangleI((int) mu->round( lowerFactor._x         * textureWidth ),
+                          (int) mu->round( (1.0 - (lowerFactor._y + heightFactor)) * textureHeight ),
+                          (int) mu->round( widthFactor            * textureWidth ),
+                          (int) mu->round( heightFactor           * textureHeight ));
+  }
 
   void composeAndUploadTexture() {
 #ifdef JAVA_CODE
@@ -387,22 +422,37 @@ public:
       std::string textureId = _tile->getKey().tinyDescription();
 
       const Sector tileSector = _tile->getSector();
-
+      
       for (int i = 0; i < _petitionsCount; i++) {
         const Petition* petition = _petitions[i];
         IImage* image = petition->getImage();
         
 
         if (image != NULL) {
-          //TODO: Find intersection image sector - tile sector = srcReq
-          Sector intersectionSector = _tile->getSector().intersection(petition->getSector());
           
-          sourceRects.push_back(getImageRectangleInTexture(petition->getSector(),
-                                                           intersectionSector));
+          Sector petitionSector = petition->getSector();
+          
+          //TODO: Find intersection image sector - tile sector = srcReq
+          Sector intersectionSector = tileSector.intersection(petitionSector);
+          
+          RectangleI *sourceRect = NULL;
+          if (!intersectionSector.isEqualsTo(petitionSector)){
+            printf("USING FATHER");
+            
+            //Intersection with father image
+            sourceRect = getImageRectangle(*image, petitionSector, intersectionSector);
+          } else{
+            sourceRect = new RectangleI(0,0, image->getWidth(), image->getHeight());
+          }
+          
+          //Part of the image we are going to draw
+          sourceRects.push_back(sourceRect);
           
           images.push_back(image);
 
-          destRects.push_back(getImageRectangleInTexture(tileSector, petition->getSector()));
+          //Where we are going to draw the image
+          //destRects.push_back(getImageRectangleInTexture(tileSector, petition->getSector()));
+          destRects.push_back(getImageRectangleInTexture(tileSector, intersectionSector));
 
           textureId += petition->getURL().getPath();
           textureId += "_";
