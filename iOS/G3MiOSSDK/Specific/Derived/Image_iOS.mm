@@ -67,7 +67,7 @@ void Image_iOS::drawUIImageOnContext(const CGContextRef& context,
   }
   
 }
-
+/*
 void Image_iOS::combineWith(const RectangleI& thisSourceRect,
                             const IImage& other,
                             const RectangleI& sourceRect,
@@ -250,7 +250,7 @@ void Image_iOS::subImage(const RectangleI& rect,
     delete listener;
   }
 }
-
+*/
 unsigned char* Image_iOS::createByteArrayRGBA8888() const {
   const int width  = getWidth();
   const int height = getHeight();
@@ -274,7 +274,7 @@ unsigned char* Image_iOS::createByteArrayRGBA8888() const {
   
   return result;
 }
-
+/*
 void Image_iOS::scale(int width, int height,
                       IImageListener* listener,
                       bool autodelete) const {
@@ -298,7 +298,7 @@ void Image_iOS::scale(int width, int height,
     delete listener;
   }
 }
-
+*/
 const std::string Image_iOS::description() const {
   IStringBuilder *isb = IStringBuilder::newStringBuilder();
   isb->addString("Image_iOS ");

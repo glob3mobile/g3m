@@ -23,35 +23,35 @@ public:
   virtual int getHeight() const = 0;
   virtual Vector2I getExtent() const = 0;
   
-  
-  virtual void subImage(const RectangleI& rect,
-                        IImageListener* listener,
-                        bool autodelete) const = 0;
-  
-  virtual void scale(int width, int height,
-                     IImageListener* listener,
-                     bool autodelete) const = 0;
+//  
+//  virtual void subImage(const RectangleI& rect,
+//                        IImageListener* listener,
+//                        bool autodelete) const = 0;
+//  
+//  virtual void scale(int width, int height,
+//                     IImageListener* listener,
+//                     bool autodelete) const = 0;
   
   virtual const std::string description() const = 0;
   
   virtual IImage* shallowCopy() const = 0;
   
-  
-  virtual void combineWith(const RectangleI& thisSourceRect,
-                           const IImage& other,
-                           const RectangleI& sourceRect,
-                           const RectangleI& destRect,
-                           const Vector2I& destSize,
-                           IImageListener* listener,
-                           bool autodelete) const = 0;
-  
-  virtual void combineWith(const RectangleI& thisSourceRect,
-                           const std::vector<const IImage*>& images,
-                           const std::vector<RectangleI*>& sourceRects,
-                           const std::vector<RectangleI*>& destRects,
-                           const Vector2I& size,
-                           IImageListener* listener,
-                           bool autodelete) const = 0;
+//  
+//  virtual void combineWith(const RectangleI& thisSourceRect,
+//                           const IImage& other,
+//                           const RectangleI& sourceRect,
+//                           const RectangleI& destRect,
+//                           const Vector2I& destSize,
+//                           IImageListener* listener,
+//                           bool autodelete) const = 0;
+//  
+//  virtual void combineWith(const RectangleI& thisSourceRect,
+//                           const std::vector<const IImage*>& images,
+//                           const std::vector<RectangleI*>& sourceRects,
+//                           const std::vector<RectangleI*>& destRects,
+//                           const Vector2I& size,
+//                           IImageListener* listener,
+//                           bool autodelete) const = 0;
   
 };
 

@@ -70,20 +70,20 @@ public:
     return Vector2I(getWidth(), getHeight());
   }
   
-  void subImage(const RectangleI& rect,
-                IImageListener* listener,
-                bool autodelete) const;
+//  void subImage(const RectangleI& rect,
+//                IImageListener* listener,
+//                bool autodelete) const;
   
   unsigned char* createByteArrayRGBA8888() const;
-  
-  void scale(int width, int height,
-             IImageListener* listener,
-             bool autodelete) const;
-  
+//  
+//  void scale(int width, int height,
+//             IImageListener* listener,
+//             bool autodelete) const;
+//  
   const std::string description() const;
   
   IImage* shallowCopy() const;
-  
+  /*
   void combineWith(const RectangleI& thisSourceRect,
                    const IImage& other,
                    const RectangleI& sourceRect,
@@ -99,7 +99,7 @@ public:
                    const Vector2I& size,
                    IImageListener* listener,
                    bool autodelete) const;
-  
+  */
 };
 
 #endif
