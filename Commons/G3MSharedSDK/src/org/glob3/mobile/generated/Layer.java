@@ -38,7 +38,7 @@ public abstract class Layer
 
   protected LayerTilesRenderParameters _parameters;
 
-  protected final TimeInterval _timeToCache = new TimeInterval();
+  protected final long _timeToCacheMS;
 
   protected final void notifyChanges()
   {
@@ -57,7 +57,7 @@ public abstract class Layer
      _condition = condition;
      _name = name;
      _layerSet = null;
-     _timeToCache = new TimeInterval(timeToCache);
+     _timeToCacheMS = timeToCache.milliseconds();
      _enable = true;
      _parameters = parameters;
 
@@ -73,6 +73,11 @@ public abstract class Layer
     }
   }
 
+
+  public final TimeInterval getTimeToCache()
+  {
+    return TimeInterval.fromMilliseconds(_timeToCacheMS);
+  }
 
   public void setEnable(boolean enable)
   {

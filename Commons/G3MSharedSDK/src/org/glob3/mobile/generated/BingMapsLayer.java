@@ -114,7 +114,7 @@ public class BingMapsLayer extends Layer
     path = su.replaceSubstring(path, "{quadkey}", quadkey);
     path = su.replaceSubstring(path, "{culture}", "en-US");
   
-    petitions.add(new Petition(tileSector, new URL(path, false), _timeToCache, true));
+    petitions.add(new Petition(tileSector, new URL(path, false), getTimeToCache(), true));
   
     return petitions;
   }

@@ -73,7 +73,7 @@ public abstract class TMSLayer extends Layer
   
     ILogger.instance().logInfo(isb.getString());
   
-    Petition petition = new Petition(tileSector, new URL(isb.getString(), false), _timeToCache, _isTransparent);
+    Petition petition = new Petition(tileSector, new URL(isb.getString(), false), getTimeToCache(), _isTransparent);
     petitions.add(petition);
   
      return petitions;
