@@ -23,25 +23,26 @@ class Vector2I;
 
 class TextureBuilder {
 public:
-
+  
   virtual const void createTextureFromImage(GL* gl,
                                             const IFactory* factory,
                                             IImage* image,
                                             const Vector2I& textureResolution,
                                             IImageListener* listener,
                                             bool autodelete) const = 0;
-
+  
   virtual const void createTextureFromImages(GL* gl,
                                              const IFactory* factory,
                                              const std::vector<IImage*>& images,
-                                             const std::vector<RectangleI*>& rectangles,
+                                             const std::vector<RectangleI*>& srcRectangles,
+                                             const std::vector<RectangleI*>& destRectangles,
                                              const Vector2I& textureResolution,
                                              IImageListener* listener,
                                              bool autodelete) const = 0;
-
+  
   virtual ~TextureBuilder() {
   }
-
+  
 };
 
 #endif
