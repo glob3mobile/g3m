@@ -44,7 +44,7 @@ protected:
   protected LayerTilesRenderParameters _parameters;
 #endif
 
-  const TimeInterval& _timeToCache;
+  const TimeInterval _timeToCache;
 
   void notifyChanges() const;
 

@@ -55,6 +55,7 @@ public:
   _isTransparent(isTransparent),
   _image(NULL)
   {
+
   }
   
   ~Petition(){
