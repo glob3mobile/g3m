@@ -22,9 +22,6 @@ public abstract class IImage
   public abstract int getHeight();
   public abstract Vector2I getExtent();
 
-  public abstract void combineWith(IImage other, RectangleI rect, int width, int height, IImageListener listener, boolean autodelete);
-
-  public abstract void combineWith(java.util.ArrayList<IImage> images, java.util.ArrayList<RectangleI> rectangles, int width, int height, IImageListener listener, boolean autodelete);
 
   public abstract void subImage(RectangleI rect, IImageListener listener, boolean autodelete);
 
@@ -33,5 +30,10 @@ public abstract class IImage
   public abstract String description();
 
   public abstract IImage shallowCopy();
+
+
+  public abstract void combineWith(RectangleI thisSourceRect, IImage other, RectangleI sourceRect, RectangleI destRect, Vector2I destSize, IImageListener listener, boolean autodelete);
+
+  public abstract void combineWith(RectangleI thisSourceRect, java.util.ArrayList<IImage> images, java.util.ArrayList<RectangleI> sourceRects, java.util.ArrayList<RectangleI> destRects, Vector2I size, IImageListener listener, boolean autodelete);
 
 }

@@ -44,60 +44,39 @@ public class CPUTextureBuilder extends TextureBuilder
     }
   }
 
-  public final void createTextureFromImages(GL gl, IFactory factory, java.util.ArrayList<IImage> images, java.util.ArrayList<RectangleI> rectangles, Vector2I textureResolution, IImageListener listener, boolean autodelete)
+  public final void createTextureFromImages(GL gl, IFactory factory, java.util.ArrayList<IImage> images, java.util.ArrayList<RectangleI> srcRectangles, java.util.ArrayList<RectangleI> destRectangles, Vector2I textureResolution, IImageListener listener, boolean autodelete)
   {
     final int width = textureResolution._x;
     final int height = textureResolution._y;
   
     final int imagesSize = images.size();
   
-    if (imagesSize == 0 || imagesSize != rectangles.size())
+    if (imagesSize == 0 || imagesSize != destRectangles.size() || imagesSize != srcRectangles.size())
     {
       ILogger.instance().logWarning("Creating blank Image");
       //return factory->createImageFromSize(width, height);
       factory.createImageFromSize(width, height, listener, autodelete);
     }
-    else if (imagesSize == 1)
-    {
-      RectangleI rectangle = rectangles.get(0);
-      images.get(0).subImage(rectangle, new CPUTextureBuilderSubImageImageLister(width, height, listener, autodelete), true);
-    }
+    /*else if (imagesSize == 1) {
+     RectangleI* rectangle = destRectangles[0];
+     images[0]->subImage(*rectangle,
+     new CPUTextureBuilderSubImageImageLister(width, height,
+     listener, autodelete),
+     true);
+     }*/
     else
     {
       final java.util.ArrayList<IImage> tailImages = new java.util.ArrayList<IImage>();
-      java.util.ArrayList<RectangleI> tailRectangles = new java.util.ArrayList<RectangleI>();
+      java.util.ArrayList<RectangleI> tailSourceRectangles = new java.util.ArrayList<RectangleI>();
+      java.util.ArrayList<RectangleI> tailDestRectangles = new java.util.ArrayList<RectangleI>();
       for (int i = 1; i < imagesSize; i++)
       {
         tailImages.add(images.get(i));
-        tailRectangles.add(rectangles.get(i));
+        tailSourceRectangles.add(srcRectangles.get(i));
+        tailDestRectangles.add(destRectangles.get(i));
       }
   
-      images.get(0).combineWith(tailImages, tailRectangles, width, height, listener, autodelete);
-  
-  //    const IImage* base;
-  //    int i;
-  //    const RectangleI baseRec(0, 0, width, height);
-  //    // if (rectangles.size() > 0 && rectangles[0]->equalTo(baseRec)){
-  //    if (rectangles[0]->equalTo(baseRec)){
-  //      base = images[0]->shallowCopy();
-  //      i = 1;
-  //    }
-  //    else {
-  //      base = factory->createImageFromSize(width, height,
-  //                                          new CPUTextureBuilderIImageListener(),
-  //                                          true);
-  //      i = 0;
-  //    }
-  //
-  //    for (; i < images.size(); i++) {
-  //      const IImage* currentImage = images[i];
-  //      const RectangleI* currentRect = rectangles[i];
-  //
-  //      IImage* im2 = base->combineWith(*currentImage, *currentRect, width, height);
-  //      delete base;
-  //      base = im2;
-  //    }
-  //    return base;
+      images.get(0).combineWith(*srcRectangles.get(0), tailImages, tailSourceRectangles, tailDestRectangles, new Vector2I(width, height), listener, autodelete);
     }
   }
 
