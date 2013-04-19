@@ -210,6 +210,8 @@ public class WMSLayer extends Layer
       req += _extraParameter;
     }
   
+  //  printf("Request: %s\n", req.c_str());
+  
     Petition petition = new Petition(sector, new URL(req, false), _timeToCache, _isTransparent);
     petitions.add(petition);
   

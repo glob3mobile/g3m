@@ -513,10 +513,7 @@ public class G3MWidget
     _effectsScheduler.cancelAllEffectsFor(target);
   }
 
-  public final void resetCameraPosition()
-  {
-    getNextCamera().resetPosition();
-  }
+//  void resetCameraPosition();
 
   public final CameraRenderer getCameraRenderer()
   {
@@ -668,3 +665,6 @@ public class G3MWidget
   }
 
 }
+//void G3MWidget::resetCameraPosition() {
+//  getNextCamera()->resetPosition();
+//}
