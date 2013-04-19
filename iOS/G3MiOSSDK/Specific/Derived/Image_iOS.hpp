@@ -84,7 +84,8 @@ public:
   
   IImage* shallowCopy() const;
   
-  void combineWith(const IImage& other,
+  void combineWith(const RectangleI& thisSourceRect,
+                   const IImage& other,
                    const RectangleI& sourceRect,
                    const RectangleI& destRect,
                    const Vector2I& destSize,

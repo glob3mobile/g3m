@@ -37,7 +37,9 @@ public:
   virtual IImage* shallowCopy() const = 0;
   
   
-  virtual void combineWith(const IImage& other, const RectangleI& sourceRect,
+  virtual void combineWith(const RectangleI& thisSourceRect,
+                           const IImage& other,
+                           const RectangleI& sourceRect,
                            const RectangleI& destRect,
                            const Vector2I& destSize,
                            IImageListener* listener,

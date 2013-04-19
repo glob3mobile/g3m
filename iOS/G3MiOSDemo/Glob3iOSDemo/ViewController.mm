@@ -86,6 +86,7 @@
 #import <G3MiOSSDK/GEOMarkSymbol.hpp>
 #import <G3MiOSSDK/GFont.hpp>
 
+#import <G3MiOSSDK/LayerTilesRenderParameters.hpp>
 
 class TestVisibleSectorListener : public VisibleSectorListener {
 public:
@@ -504,7 +505,7 @@ public:
     layerSet->addLayer( new OSMLayer(TimeInterval::fromDays(30)) );
   }
 
-  const bool useMapQuestOSM = true;
+  const bool useMapQuestOSM = false;
   if (useMapQuestOSM) {
     layerSet->addLayer( MapQuestLayer::newOSM(TimeInterval::fromDays(30)) );
   }
@@ -541,8 +542,10 @@ public:
                                           "ArtXu2Z-XSlDVCRVtxtYqtIPVR_0qqLcrfsRyZK_ishjUKvTheYBUH9rDDmAPcnj",
                                           TimeInterval::fromDays(30)) );
   }
+  
 
-  const bool blueMarble = false;
+
+  const bool blueMarble = true;
   if (blueMarble) {
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
                                         URL("http://www.nasa.network.com/wms?", false),
@@ -568,6 +571,27 @@ public:
     //                                       new LevelTileCondition(7, 100),
     //                                       TimeInterval::fromDays(30));
     //    layerSet->addLayer(i3Landsat);
+  }
+  
+  const bool useOrtoAyto = true;
+  if (useOrtoAyto){
+    WMSLayer* ortoAyto = new WMSLayer("orto_refundida",
+                                      URL("http://195.57.27.86/wms_etiquetas_con_orto.mapdef?", false),
+                                      WMS_1_1_0,
+                                      Sector(Geodetic2D(Angle::fromDegrees(39.350228), Angle::fromDegrees(-6.508713)),
+                                             Geodetic2D(Angle::fromDegrees(39.536351), Angle::fromDegrees(-6.25946))),
+                                      "image/jpeg",
+                                      "EPSG:4326",
+                                      "",
+                                      false,
+                                      new LevelTileCondition(4, 19),
+                                      TimeInterval::fromDays(30),
+                                      new LayerTilesRenderParameters(Sector::fullSphere(),
+                                                                     2,4,0,19,
+                                                                     Vector2I(256,256),
+                                                                     LayerTilesRenderParameters::defaultTileMeshResolution(),
+                                                                     false));
+    layerSet->addLayer(ortoAyto);
   }
 
 

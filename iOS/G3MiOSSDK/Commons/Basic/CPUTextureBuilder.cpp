@@ -132,10 +132,8 @@ const void CPUTextureBuilder::createTextureFromImages(GL* gl,
     std::vector<RectangleI*> tailDestRectangles;
     for (int i = 1; i < imagesSize; i++) {
       tailImages.push_back( images[i] );
-      tailDestRectangles.push_back( destRectangles[i] );
-      
-      //TODO: Check sector
       tailSourceRectangles.push_back(srcRectangles[i]);
+      tailDestRectangles.push_back( destRectangles[i] );
     }
     
     images[0]->combineWith(*srcRectangles[0],

@@ -53,7 +53,7 @@ void Image_iOS::drawUIImageOnContext(const CGContextRef& context,
   } else{
     CGotherIm = [otherIm CGImage];
   }
-  //TODO: CHECK THIS
+  
   CGContextDrawImage(context,
                      CGRectMake(destRect._x,
                                 destRect._y,
@@ -68,12 +68,27 @@ void Image_iOS::drawUIImageOnContext(const CGContextRef& context,
   
 }
 
-void Image_iOS::combineWith(const IImage& other,
+void Image_iOS::combineWith(const RectangleI& thisSourceRect,
+                            const IImage& other,
                             const RectangleI& sourceRect,
                             const RectangleI& destRect,
                             const Vector2I& size,
                             IImageListener* listener,
                             bool autodelete) const {
+  
+  CGImage * thisCGImage = _image.CGImage;
+  if (thisSourceRect._x != 0 || thisSourceRect._y != 0 ||
+      thisSourceRect._width != this->getWidth() || thisSourceRect._height != this->getHeight()){
+    
+    //We have to crop this image first
+    CGRect cropRect = CGRectMake(thisSourceRect._x,
+                                 thisSourceRect._y,
+                                 thisSourceRect._width,
+                                 thisSourceRect._height);
+    
+    //Cropping image
+    thisCGImage = CGImageCreateWithImageInRect(thisCGImage, cropRect);
+  }
   
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
   unsigned char* imageData = new unsigned char[size._x * size._y * 4];
@@ -93,7 +108,11 @@ void Image_iOS::combineWith(const IImage& other,
   //We draw the images one over the other
   CGContextDrawImage(context,
                      bounds,
-                     _image.CGImage);
+                     thisCGImage);
+  
+  if (thisCGImage != _image.CGImage){
+    CGImageRelease(thisCGImage);
+  }
   
   drawUIImageOnContext(context, other, sourceRect, destRect);
   
