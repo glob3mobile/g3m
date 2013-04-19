@@ -15,10 +15,6 @@
 #include "TimeInterval.hpp"
 #include "IFactory.hpp"
 
-//#include "Context.hpp"
-//#include "GTask.hpp"
-//#include "IThreadUtils.hpp"
-//#include "FrameTasksExecutor.hpp"
 
 class BufferSaverDownloadListener : public IBufferDownloadListener {
 private:
@@ -60,11 +56,9 @@ public:
     if (!url.isFileProtocol()) {
       if (buffer != NULL) {
         if (_storage->isAvailable()) {
-          //if (!_cacheStorage->containsBuffer(url)) {
           _downloader->countSave();
 
           _storage->saveBuffer(url, buffer, _timeToCache, _downloader->saveInBackground());
-          //}
         }
         else {
           ILogger::instance()->logWarning("The cacheStorage is not available, skipping buffer save.");
@@ -145,11 +139,9 @@ public:
     if (!url.isFileProtocol()) {
       if (image != NULL) {
         if (_storage->isAvailable()) {
-          //if (!_cacheStorage->containsImage(url)) {
           _downloader->countSave();
 
           _storage->saveImage(url, image, _timeToCache, _downloader->saveInBackground());
-          //}
         }
         else {
           ILogger::instance()->logWarning("The cacheStorage is not available, skipping image save.");
@@ -237,41 +229,6 @@ IImage* CachedDownloader::getCachedImage(const URL& url) {
   return cachedImage;
 }
 
-
-//class CachedDownloader_InvokeRenderer : public FrameTask {
-//private:
-//  const URL               _url;
-//  IImage*                 _image;
-//  IImageDownloadListener* _listener;
-//  const bool              _deleteListener;
-//
-//public:
-//  CachedDownloader_InvokeRenderer(const URL               url,
-//                                  IImage*                 image,
-//                                  IImageDownloadListener* listener,
-//                                  const bool              deleteListener) :
-//  _url(url),
-//  _image(image),
-//  _listener(listener),
-//  _deleteListener(deleteListener)
-//  {
-//
-//  }
-//
-//  bool isCanceled(const G3MRenderContext *rc) {
-//    return false;
-//  }
-//
-//  void execute(const G3MRenderContext* rc) {
-//    _listener->onDownload(_url, _image);
-//
-//    if (_deleteListener) {
-//      delete _listener;
-//    }
-//  }
-//};
-
-
 long long CachedDownloader::requestImage(const URL& url,
                                          long long priority,
                                          const TimeInterval& timeToCache,
@@ -347,7 +304,6 @@ const std::string CachedDownloader::statistics() {
   isb->addString(", saves=");
   isb->addInt(_savesCounter);
   isb->addString(", downloader=");
-  //isb->addString(IDownloader::instance()->statistics());
   isb->addString(_downloader->statistics());
   const std::string s = isb->getString();
   delete isb;
@@ -368,7 +324,5 @@ void CachedDownloader::onDestroy(const G3MContext* context) {
 
 void CachedDownloader::initialize(const G3MContext* context,
                                   FrameTasksExecutor* frameTasksExecutor) {
-//  _context = context;
-//  _frameTasksExecutor = frameTasksExecutor;
   _downloader->initialize(context, frameTasksExecutor);
 }
