@@ -1,9 +1,4 @@
 package org.glob3.mobile.generated; 
-///#include "Context.hpp"
-///#include "GTask.hpp"
-///#include "IThreadUtils.hpp"
-///#include "FrameTasksExecutor.hpp"
-
 public class BufferSaverDownloadListener extends IBufferDownloadListener
 {
   private CachedDownloader _downloader;
@@ -40,11 +35,9 @@ public class BufferSaverDownloadListener extends IBufferDownloadListener
       {
         if (_storage.isAvailable())
         {
-          //if (!_cacheStorage->containsBuffer(url)) {
           _downloader.countSave();
 
           _storage.saveBuffer(url, buffer, _timeToCache, _downloader.saveInBackground());
-          //}
         }
         else
         {
