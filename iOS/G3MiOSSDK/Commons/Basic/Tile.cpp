@@ -55,9 +55,9 @@ _minHeight(0),
 _maxHeight(0),
 _verticalExaggeration(0),
 //_elevationDataSolved(false),
-_leveledMesh(NULL),
-_meshBuilder(NULL/*new TileMeshBuilder(this)*/),  //Creating MeshBuilder
-_meshMustActualizeDueNewElevationData(true),
+//_leveledMesh(NULL),
+//_meshBuilder(NULL/*new TileMeshBuilder(this)*/),  //Creating MeshBuilder
+_meshMustActualizeDueNewElevationData(false),
 _levelOfElevationData(-1)
 {
   //  int __remove_tile_print;
@@ -89,8 +89,8 @@ Tile::~Tile() {
   delete _elevationData;
   _elevationData = NULL;
   
-  //TODO:...
-  delete _leveledMesh;
+//  //TODO:...
+//  delete _leveledMesh;
   
   //_meshBuilder->cancelElevationDataRequest();
   //delete _meshBuilder;
@@ -99,7 +99,7 @@ Tile::~Tile() {
 
 void Tile::ancestorElevationDataSolvedChanged(Tile *ancestor){
   
-  _meshBuilder->onAncestorSolvedElevationData(ancestor);  //Informing TileMeshBuilder
+  //_meshBuilder->onAncestorSolvedElevationData(ancestor);  //Informing TileMeshBuilder
   
   if (_subtiles != NULL) {                                //Informing our children
     const int subtilesSize = _subtiles->size();

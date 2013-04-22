@@ -108,8 +108,8 @@ private:
   
   //bool _elevationDataSolved;
   
-  LeveledMesh* _leveledMesh;
-  TileMeshBuilder* _meshBuilder;
+  //LeveledMesh* _leveledMesh;
+  //TileMeshBuilder* _meshBuilder;
   bool _meshMustActualizeDueNewElevationData;
   int _levelOfElevationData;
 
@@ -226,13 +226,13 @@ public:
     return _levelOfElevationData;
   }
   
-  void setLeveledMesh(LeveledMesh* lm) {
-    _leveledMesh = lm;
-  }
-  
-  LeveledMesh* getLeveledMesh() const{
-    return _leveledMesh;
-  }
+//  void setLeveledMesh(LeveledMesh* lm) {
+//    _leveledMesh = lm;
+//  }
+//  
+//  LeveledMesh* getLeveledMesh() const{
+//    return _leveledMesh;
+//  }
   
   void ancestorElevationDataSolvedChanged(Tile *ancestor);
 

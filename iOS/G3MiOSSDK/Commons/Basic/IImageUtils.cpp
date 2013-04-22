@@ -77,9 +77,13 @@ void IImageUtils::combine(const std::vector<const IImage*>& images,
       RectangleF* srcRect = sourceRects[i];
       RectangleF* dstRect = destRects[i];
       
-      canvas->drawImage(image,
-                        srcRect->_x, srcRect->_y, srcRect->_width, srcRect->_height,
-                        dstRect->_x, dstRect->_y, dstRect->_width, dstRect->_height);
+      if (image == NULL || srcRect == NULL || dstRect == NULL){
+        ILogger::instance()->logError("Null parameter passed to IImageUtils::combine()");
+      } else{
+        canvas->drawImage(image,
+                          srcRect->_x, srcRect->_y, srcRect->_width, srcRect->_height,
+                          dstRect->_x, dstRect->_y, dstRect->_width, dstRect->_height);
+      }
     }
     
     
