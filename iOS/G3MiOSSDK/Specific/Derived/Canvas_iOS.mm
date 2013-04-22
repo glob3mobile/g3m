@@ -322,7 +322,7 @@ void Canvas_iOS::_drawImage(const IImage* image, float left, float top, float wi
 
 void Canvas_iOS::_drawImage(const IImage* image,
                 float srcLeft, float srcTop, float srcWidth, float srcHeight,
-                            float destLeft, float destTop, float destWidth, float destHeigtt){
+                            float destLeft, float destTop, float destWidth, float destHeight){
 
   //Cropping other image if neccesary
   UIImage * uiImage = ((Image_iOS*)image)->getUIImage();
