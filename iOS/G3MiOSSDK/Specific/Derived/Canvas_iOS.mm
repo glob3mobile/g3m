@@ -340,7 +340,7 @@ void Canvas_iOS::_drawImage(const IImage* image,
                        CGRectMake(destLeft,
                                   destTop,
                                   destWidth,
-                                  destHeigtt),
+                                  destHeight),
                        CGIm);
     
     CGImageRelease(CGIm);
@@ -351,7 +351,7 @@ void Canvas_iOS::_drawImage(const IImage* image,
                        CGRectMake(destLeft,
                                   destTop,
                                   destWidth,
-                                  destHeigtt),
+                                  destHeight),
                        CGIm);
   }
   
