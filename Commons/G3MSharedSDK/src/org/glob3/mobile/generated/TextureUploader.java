@@ -8,7 +8,7 @@ public class TextureUploader extends IImageListener
 
   private final String _textureId;
 
-  public TextureUploader(TileTextureBuilder builder, java.util.ArrayList<RectangleI> srcRects, java.util.ArrayList<RectangleI> dstRects, String textureId)
+  public TextureUploader(TileTextureBuilder builder, java.util.ArrayList<RectangleF> srcRects, java.util.ArrayList<RectangleF> dstRects, String textureId)
   {
      _builder = builder;
      _srcRects = srcRects;

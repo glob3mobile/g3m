@@ -40,11 +40,13 @@ public class CPUTextureBuilder extends TextureBuilder
     }
     else
     {
-      image.scale(width, height, listener, autodelete);
+      IImageUtils.scale(image, new Vector2I(width, height), listener, autodelete);
+  
+      //image->scale(width, height, listener, autodelete);
     }
   }
 
-  public final void createTextureFromImages(GL gl, IFactory factory, java.util.ArrayList<IImage> images, java.util.ArrayList<RectangleI> srcRectangles, java.util.ArrayList<RectangleI> destRectangles, Vector2I textureResolution, IImageListener listener, boolean autodelete)
+  public final void createTextureFromImages(GL gl, IFactory factory, java.util.ArrayList<IImage> images, java.util.ArrayList<RectangleF> srcRectangles, java.util.ArrayList<RectangleF> destRectangles, Vector2I textureResolution, IImageListener listener, boolean autodelete)
   {
     final int width = textureResolution._x;
     final int height = textureResolution._y;
@@ -66,19 +68,48 @@ public class CPUTextureBuilder extends TextureBuilder
      }*/
     else
     {
-      final java.util.ArrayList<IImage> tailImages = new java.util.ArrayList<IImage>();
-      java.util.ArrayList<RectangleI> tailSourceRectangles = new java.util.ArrayList<RectangleI>();
-      java.util.ArrayList<RectangleI> tailDestRectangles = new java.util.ArrayList<RectangleI>();
-      for (int i = 1; i < imagesSize; i++)
-      {
-        tailImages.add(images.get(i));
-        tailSourceRectangles.add(srcRectangles.get(i));
-        tailDestRectangles.add(destRectangles.get(i));
+      /*
+      std::vector<const IImage*> tailImages;
+      std::vector<RectangleI*> tailSourceRectangles;
+      std::vector<RectangleI*> tailDestRectangles;
+      for (int i = 1; i < imagesSize; i++) {
+        tailImages.push_back( images[i] );
+        tailSourceRectangles.push_back(srcRectangles[i]);
+        tailDestRectangles.push_back( destRectangles[i] );
       }
+      
+      RectangleI* image0SrcRect = srcRectangles[0];
+      
+      images[0]->combineWith(*image0SrcRect,
+                             tailImages,
+                             tailSourceRectangles,
+                             tailDestRectangles,
+                             Vector2I(width, height),
+                             listener,
+                             autodelete);
+       */
   
-      RectangleI image0SrcRect = srcRectangles.get(0);
+      //TODO: Check!!!!!!!!!!!!!!
+  //    std::vector<const IImage*> images2;
+  //    std::vector<RectangleF*> srf;
+  //    std::vector<RectangleF*> drf;
+  //    for (int i = 0; i < imagesSize; i++) {
+  //      images2.push_back( images[i] );
+  //      srf.push_back(new RectangleF(srcRectangles[i]->_x,
+  //                                                    srcRectangles[i]->_y,
+  //                                                    srcRectangles[i]->_width,
+  //                                                    srcRectangles[i]->_height));
+  //      drf.push_back(new RectangleF(destRectangles[i]->_x,
+  //                                   destRectangles[i]->_y,
+  //                                   destRectangles[i]->_width,
+  //                                   destRectangles[i]->_height));
+  //
+  //      delete srcRectangles[i];
+  //      delete destRectangles[i];
+  //    }
+  //
   
-      images.get(0).combineWith(image0SrcRect, tailImages, tailSourceRectangles, tailDestRectangles, new Vector2I(width, height), listener, autodelete);
+      IImageUtils.combine(images, srcRectangles, destRectangles, new Vector2I(width, height), listener, autodelete);
     }
   }
 

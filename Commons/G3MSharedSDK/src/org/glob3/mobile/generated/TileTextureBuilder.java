@@ -165,7 +165,7 @@ public class TileTextureBuilder extends RCObject
     deletePetitions();
   }
 
-  public final RectangleI getImageRectangleInTexture(Sector wholeSector, Sector imageSector)
+  public final RectangleF getImageRectangleInTexture(Sector wholeSector, Sector imageSector)
   {
 
     final IMathUtils mu = IMathUtils.instance();
@@ -178,10 +178,10 @@ public class TileTextureBuilder extends RCObject
     final int textureWidth = _tileTextureResolution._x;
     final int textureHeight = _tileTextureResolution._y;
 
-    return new RectangleI((int) mu.round(lowerFactor._x * textureWidth), (int) mu.round((1.0 - lowerFactor._y) * textureHeight), (int) mu.round(widthFactor * textureWidth), (int) mu.round(heightFactor * textureHeight));
+    return new RectangleF((float) mu.round(lowerFactor._x * textureWidth), (float) mu.round((1.0 - lowerFactor._y) * textureHeight), (float) mu.round(widthFactor * textureWidth), (float) mu.round(heightFactor * textureHeight));
   }
 
-  public final RectangleI getImageRectangle(IImage wholeImage, Sector wholeSector, Sector imageSector)
+  public final RectangleF getImageRectangle(IImage wholeImage, Sector wholeSector, Sector imageSector)
   {
     final IMathUtils mu = IMathUtils.instance();
 
@@ -203,7 +203,7 @@ public class TileTextureBuilder extends RCObject
     final int textureWidth = wholeImage.getWidth();
     final int textureHeight = wholeImage.getHeight();
 
-    return new RectangleI((int) mu.round(lowerFactor._x * textureWidth), (int) mu.round((1.0 - (lowerFactor._y + heightFactor)) * textureHeight), (int) mu.round(widthFactor * textureWidth), (int) mu.round(heightFactor * textureHeight));
+    return new RectangleF((float) mu.round(lowerFactor._x * textureWidth), (float) mu.round((1.0 - (lowerFactor._y + heightFactor)) * textureHeight), (float) mu.round(widthFactor * textureWidth), (float) mu.round(heightFactor * textureHeight));
   }
 
   public final void composeAndUploadTexture()
@@ -215,9 +215,9 @@ public class TileTextureBuilder extends RCObject
         return;
       }
 
-      java.util.ArrayList<IImage> images = new java.util.ArrayList<IImage>();
-      java.util.ArrayList<RectangleI> sourceRects = new java.util.ArrayList<RectangleI>();
-      java.util.ArrayList<RectangleI> destRects = new java.util.ArrayList<RectangleI>();
+      final java.util.ArrayList<IImage> images = new java.util.ArrayList<IImage>();
+      java.util.ArrayList<RectangleF> sourceRects = new java.util.ArrayList<RectangleF>();
+      java.util.ArrayList<RectangleF> destRects = new java.util.ArrayList<RectangleF>();
       String textureId = _tile.getKey().tinyDescription();
 
       final Sector tileSector = _tile.getSector();
@@ -236,14 +236,14 @@ public class TileTextureBuilder extends RCObject
           //Finding intersection image sector - tile sector = srcReq
           Sector intersectionSector = tileSector.intersection(petitionSector);
 
-          RectangleI sourceRect = null;
+          RectangleF sourceRect = null;
           if (!intersectionSector.isEqualsTo(petitionSector))
           {
             sourceRect = getImageRectangle(image, petitionSector, intersectionSector); //Intersection with upper level image
           }
           else
           {
-            sourceRect = new RectangleI(0,0, image.getWidth(), image.getHeight());
+            sourceRect = new RectangleF((float)0,(float)0, (float)image.getWidth(), (float)image.getHeight());
           }
 
           //Part of the image we are going to draw
@@ -267,7 +267,7 @@ public class TileTextureBuilder extends RCObject
     }
   }
 
-  public final void imageCreated(IImage image, java.util.ArrayList<RectangleI> srcRects, java.util.ArrayList<RectangleI> dstRects, String textureId)
+  public final void imageCreated(IImage image, java.util.ArrayList<RectangleF> srcRects, java.util.ArrayList<RectangleF> dstRects, String textureId)
   {
     synchronized (this) {
 
@@ -293,14 +293,12 @@ public class TileTextureBuilder extends RCObject
 
       for (int i = 0; i < srcRects.size(); i++)
       {
-        if (srcRects.get(i) != null)
-           srcRects.get(i).dispose();
+        srcRects.get(i).dispose();
       }
 
       for (int i = 0; i < dstRects.size(); i++)
       {
-        if (dstRects.get(i) != null)
-           dstRects.get(i).dispose();
+        dstRects.get(i).dispose();
       }
 
     }
