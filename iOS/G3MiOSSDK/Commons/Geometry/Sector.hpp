@@ -64,8 +64,6 @@ public:
 
   const Vector2D div(const Sector& that) const;
 
-//  Vector2D getTranslationFactor(const Sector& that) const;
-
   bool fullContains(const Sector& that) const;
 
   Sector intersection(const Sector& that) const;

@@ -14,16 +14,16 @@ void FloatBufferBuilderFromGeodetic::add(const Angle& latitude,
     setCenter(vector);
   }
 
-  float x = (float) vector._x;
-  float y = (float) vector._y;
-  float z = (float) vector._z;
+  double x = vector._x;
+  double y = vector._y;
+  double z = vector._z;
   if (_centerStrategy != CenterStrategy::noCenter()) {
     x -= _cx;
     y -= _cy;
     z -= _cz;
   }
 
-  _values.push_back(x);
-  _values.push_back(y);
-  _values.push_back(z);
+  _values.push_back((float) x);
+  _values.push_back((float) y);
+  _values.push_back((float) z);
 }
