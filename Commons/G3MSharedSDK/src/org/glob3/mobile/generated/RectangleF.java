@@ -24,6 +24,10 @@ public class RectangleF
      _height = height;
   }
 
+  public void dispose(){
+    
+  }
+
   public RectangleF(RectangleF that)
   {
      _x = that._x;

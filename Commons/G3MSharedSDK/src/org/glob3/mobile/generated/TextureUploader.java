@@ -3,8 +3,8 @@ public class TextureUploader extends IImageListener
 {
   private TileTextureBuilder _builder;
 
-  private final java.util.ArrayList<RectangleI> _srcRects;
-  private final java.util.ArrayList<RectangleI> _dstRects;
+  private final java.util.ArrayList<RectangleF> _srcRects;
+  private final java.util.ArrayList<RectangleF> _dstRects;
 
   private final String _textureId;
 
