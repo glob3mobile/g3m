@@ -178,7 +178,10 @@ public class TileTextureBuilder extends RCObject
     final int textureWidth = _tileTextureResolution._x;
     final int textureHeight = _tileTextureResolution._y;
 
-    return new RectangleF((float) mu.round(lowerFactor._x * textureWidth), (float) mu.round((1.0 - (lowerFactor._y + heightFactor)) * textureHeight), (float) mu.round(widthFactor * textureWidth), (float) mu.round(heightFactor * textureHeight));
+    return new RectangleF((float) mu.round(lowerFactor._x * textureWidth),
+    		(float) mu.round((lowerFactor._y - heightFactor)         * textureHeight),
+    		(float) mu.round(widthFactor * textureWidth), 
+    		(float) mu.round(heightFactor * textureHeight));
   }
 
   public final RectangleF getImageRectangle(IImage wholeImage, Sector wholeSector, Sector imageSector)

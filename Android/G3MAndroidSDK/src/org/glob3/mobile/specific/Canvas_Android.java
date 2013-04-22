@@ -5,6 +5,7 @@ import org.glob3.mobile.generated.GFont;
 import org.glob3.mobile.generated.ICanvas;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IImageListener;
+import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.Vector2F;
 
 import android.graphics.Bitmap;
@@ -208,9 +209,10 @@ public class Canvas_Android extends ICanvas {
 			float height) {
 		Bitmap bitmap = ((Image_Android) image).getBitmap();
 
-		RectF dst = new RectF(left, top, 
-				left + width, // Right
-				top + height); // Bottom
+		RectF dst = new RectF(left, 
+								top, 
+								left + width, // Right
+								top + height); // Bottom
 
 		_canvas.drawBitmap(bitmap, null, dst, null);
 	}
@@ -219,15 +221,20 @@ public class Canvas_Android extends ICanvas {
 	protected void _drawImage(IImage image, float srcLeft, float srcTop,
 			float srcWidth, float srcHeight, float destLeft, float destTop,
 			float destWidth, float destHeight) {
+		ILogger.instance().logError("RECT: %f, %f, %f, %f - %f, %f, %f, %f ",  srcLeft,  srcTop,
+				 srcWidth,  srcHeight,  destLeft,  destTop,
+				 destWidth,  destHeight);
 		Bitmap bitmap = ((Image_Android) image).getBitmap();
 
-		RectF dst = new RectF(destLeft, destTop, 
-				destLeft + destWidth, // Right
-				image.getHeight() - destTop); // Bottom
-		
-		Rect src = new Rect((int)srcLeft, (int)srcTop, 
-				(int)(srcLeft + srcWidth), // Right
-				(int)(srcTop + srcHeight)); // Bottom
+		RectF dst = new RectF(destLeft, 
+								destTop, 
+								destLeft + destWidth, // Right
+								destTop + destHeight); // Bottom
+
+		Rect src = new Rect((int)srcLeft,
+							(int)srcTop, 
+							(int)(srcLeft + srcWidth), // Right
+							(int)(srcTop + srcHeight)); // Bottom
 
 		_canvas.drawBitmap(bitmap, src, dst, null);
 

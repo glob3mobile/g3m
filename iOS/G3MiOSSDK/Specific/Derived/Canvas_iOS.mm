@@ -327,8 +327,9 @@ void Canvas_iOS::_drawImage(const IImage* image,
   //Cropping other image if neccesary
   UIImage * uiImage = ((Image_iOS*)image)->getUIImage();
   
+  int h = CGImageGetHeight([uiImage CGImage]);
   CGRect destRect = CGRectMake(destLeft,
-                               destTop + destHeight, //Bottom
+                               h - (destTop + destHeight), //Bottom
                                destWidth,
                                destHeight);
   
