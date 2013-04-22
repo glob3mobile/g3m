@@ -27,6 +27,7 @@
 #include "GLConstants.hpp"
 #include "IImageListener.hpp"
 #include "LayerTilesRenderParameters.hpp"
+#include "RectangleF.hpp"
 
 
 enum TileTextureBuilder_PetitionStatus {
@@ -160,8 +161,8 @@ private:
   TileTextureBuilder* _builder;
   
 #ifdef C_CODE
-  const std::vector<RectangleI*> _srcRects;
-  const std::vector<RectangleI*> _dstRects;
+  const std::vector<RectangleF*> _srcRects;
+  const std::vector<RectangleF*> _dstRects;
 #endif
 #ifdef JAVA_CODE
   private final java.util.ArrayList<RectangleI> _srcRects;
@@ -172,8 +173,8 @@ private:
   
 public:
   TextureUploader(TileTextureBuilder* builder,
-                  std::vector<RectangleI*> srcRects,
-                  std::vector<RectangleI*> dstRects,
+                  std::vector<RectangleF*> srcRects,
+                  std::vector<RectangleF*> dstRects,
                   const std::string& textureId) :
   _builder(builder),
   _srcRects(srcRects),
@@ -353,7 +354,7 @@ public:
     deletePetitions();
   }
   
-  RectangleI* getImageRectangleInTexture(const Sector& wholeSector,
+  RectangleF* getImageRectangleInTexture(const Sector& wholeSector,
                                          const Sector& imageSector) const {
     
     const IMathUtils* mu = IMathUtils::instance();
@@ -366,13 +367,13 @@ public:
     const int textureWidth  = _tileTextureResolution._x;
     const int textureHeight = _tileTextureResolution._y;
     
-    return new RectangleI((int) mu->round( lowerFactor._x         * textureWidth ),
-                          (int) mu->round( (1.0 - lowerFactor._y) * textureHeight ),
-                          (int) mu->round( widthFactor            * textureWidth ),
-                          (int) mu->round( heightFactor           * textureHeight ));
+    return new RectangleF((float) mu->round( lowerFactor._x         * textureWidth ),
+                          (float) mu->round( (1.0 - lowerFactor._y) * textureHeight ),
+                          (float) mu->round( widthFactor            * textureWidth ),
+                          (float) mu->round( heightFactor           * textureHeight ));
   }
-  
-  RectangleI* getImageRectangle(const IImage& wholeImage,
+
+  RectangleF* getImageRectangle(const IImage& wholeImage,
                                 const Sector& wholeSector,
                                 const Sector& imageSector) const {
     const IMathUtils* mu = IMathUtils::instance();
@@ -395,10 +396,10 @@ public:
     const int textureWidth  = wholeImage.getWidth();
     const int textureHeight = wholeImage.getHeight();
     
-    return new RectangleI((int) mu->round( lowerFactor._x         * textureWidth ),
-                          (int) mu->round( (1.0 - (lowerFactor._y + heightFactor)) * textureHeight ),
-                          (int) mu->round( widthFactor            * textureWidth ),
-                          (int) mu->round( heightFactor           * textureHeight ));
+    return new RectangleF((float) mu->round( lowerFactor._x         * textureWidth ),
+                          (float) mu->round( (1.0 - (lowerFactor._y + heightFactor)) * textureHeight ),
+                          (float) mu->round( widthFactor            * textureWidth ),
+                          (float) mu->round( heightFactor           * textureHeight ));
   }
   
   void composeAndUploadTexture() {
@@ -410,9 +411,9 @@ public:
         return;
       }
       
-      std::vector<IImage*>     images;
-      std::vector<RectangleI*> sourceRects;
-      std::vector<RectangleI*> destRects;
+      std::vector<const IImage*>     images;
+      std::vector<RectangleF*> sourceRects;
+      std::vector<RectangleF*> destRects;
       std::string textureId = _tile->getKey().tinyDescription();
       
       const Sector tileSector = _tile->getSector();
@@ -429,11 +430,11 @@ public:
           //Finding intersection image sector - tile sector = srcReq
           Sector intersectionSector = tileSector.intersection(petitionSector);
           
-          RectangleI *sourceRect = NULL;
+          RectangleF *sourceRect = NULL;
           if (!intersectionSector.isEqualsTo(petitionSector)){
             sourceRect = getImageRectangle(*image, petitionSector, intersectionSector); //Intersection with upper level image
           } else{
-            sourceRect = new RectangleI(0,0, image->getWidth(), image->getHeight());
+            sourceRect = new RectangleF((float)0,(float)0, (float)image->getWidth(), (float)image->getHeight());
           }
           
           //Part of the image we are going to draw
@@ -469,8 +470,8 @@ public:
   }
   
   void imageCreated(IImage* image,
-                    std::vector<RectangleI*> srcRects,
-                    std::vector<RectangleI*> dstRects,
+                    std::vector<RectangleF*> srcRects,
+                    std::vector<RectangleF*> dstRects,
                     const std::string& textureId) {
 #ifdef JAVA_CODE
     synchronized (this) {

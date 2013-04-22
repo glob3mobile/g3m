@@ -23,9 +23,9 @@ public:
   
   const void createTextureFromImages(GL* gl,
                                      const IFactory* factory,
-                                     const std::vector<IImage*>& images,
-                                     const std::vector<RectangleI*>& srcRectangles,
-                                     const std::vector<RectangleI*>& destRectangles,
+                                     const std::vector<const IImage*>& images,
+                                     const std::vector<RectangleF*>& srcRectangles,
+                                     const std::vector<RectangleF*>& destRectangles,
                                      const Vector2I& textureResolution,
                                      IImageListener* listener,
                                      bool autodelete) const;

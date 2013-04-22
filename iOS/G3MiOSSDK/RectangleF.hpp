@@ -1,5 +1,5 @@
 //
-//  RectangleF.h
+//  RectangleF.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 19/04/13.

@@ -108,9 +108,9 @@ public:
 
 const void CPUTextureBuilder::createTextureFromImages(GL* gl,
                                                       const IFactory* factory,
-                                                      const std::vector<IImage*>& images,
-                                                      const std::vector<RectangleI*>& srcRectangles,
-                                                      const std::vector<RectangleI*>& destRectangles,
+                                                      const std::vector<const IImage*>& images,
+                                                      const std::vector<RectangleF*>& srcRectangles,
+                                                      const std::vector<RectangleF*>& destRectangles,
                                                       const Vector2I& textureResolution,
                                                       IImageListener* listener,
                                                       bool autodelete) const{
@@ -155,28 +155,28 @@ const void CPUTextureBuilder::createTextureFromImages(GL* gl,
      */
     
     //TODO: Check!!!!!!!!!!!!!!
-    std::vector<const IImage*> images2;
-    std::vector<RectangleF*> srf;
-    std::vector<RectangleF*> drf;
-    for (int i = 0; i < imagesSize; i++) {
-      images2.push_back( images[i] );
-      srf.push_back(new RectangleF(srcRectangles[i]->_x,
-                                                    srcRectangles[i]->_y,
-                                                    srcRectangles[i]->_width,
-                                                    srcRectangles[i]->_height));
-      drf.push_back(new RectangleF(destRectangles[i]->_x,
-                                   destRectangles[i]->_y,
-                                   destRectangles[i]->_width,
-                                   destRectangles[i]->_height));
-      
-      delete srcRectangles[i];
-      delete destRectangles[i];
-    }
+//    std::vector<const IImage*> images2;
+//    std::vector<RectangleF*> srf;
+//    std::vector<RectangleF*> drf;
+//    for (int i = 0; i < imagesSize; i++) {
+//      images2.push_back( images[i] );
+//      srf.push_back(new RectangleF(srcRectangles[i]->_x,
+//                                                    srcRectangles[i]->_y,
+//                                                    srcRectangles[i]->_width,
+//                                                    srcRectangles[i]->_height));
+//      drf.push_back(new RectangleF(destRectangles[i]->_x,
+//                                   destRectangles[i]->_y,
+//                                   destRectangles[i]->_width,
+//                                   destRectangles[i]->_height));
+//      
+//      delete srcRectangles[i];
+//      delete destRectangles[i];
+//    }
+//    
     
-    
-    IImageUtils::combine(images2,
-                         srf,
-                         drf,
+    IImageUtils::combine(images,
+                         srcRectangles,
+                         destRectangles,
                          Vector2I(width, height),
                          listener,
                          autodelete);

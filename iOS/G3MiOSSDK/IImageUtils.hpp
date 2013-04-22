@@ -11,7 +11,7 @@
 
 #include <iostream>
 
-#include "RectangleF.h"
+#include "RectangleF.hpp"
 #include "IImage.hpp"
 
 class IImageUtils{

@@ -24,11 +24,6 @@ private:
   Image_iOS(const Image_iOS& that);
   void operator=(const Image_iOS& that);
   
-  void drawUIImageOnContext(const CGContextRef& context,
-                            const IImage& other,
-                            const RectangleI& sourceRect,
-                            const RectangleI& destRect) const;
-  
 public:
   
   virtual ~Image_iOS() {
@@ -70,36 +65,11 @@ public:
     return Vector2I(getWidth(), getHeight());
   }
   
-//  void subImage(const RectangleI& rect,
-//                IImageListener* listener,
-//                bool autodelete) const;
-  
   unsigned char* createByteArrayRGBA8888() const;
-//  
-//  void scale(int width, int height,
-//             IImageListener* listener,
-//             bool autodelete) const;
-//  
+  
   const std::string description() const;
   
   IImage* shallowCopy() const;
-  /*
-  void combineWith(const RectangleI& thisSourceRect,
-                   const IImage& other,
-                   const RectangleI& sourceRect,
-                   const RectangleI& destRect,
-                   const Vector2I& destSize,
-                   IImageListener* listener,
-                   bool autodelete) const;
-  
-  void combineWith(const RectangleI& thisSourceRect,
-                   const std::vector<const IImage*>& images,
-                   const std::vector<RectangleI*>& sourceRects,
-                   const std::vector<RectangleI*>& destRects,
-                   const Vector2I& size,
-                   IImageListener* listener,
-                   bool autodelete) const;
-  */
 };
 
 #endif

@@ -1129,7 +1129,7 @@
 		D81FB47C1636A5AE00CC2CA7 /* PeriodicalTask.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PeriodicalTask.hpp; path = Commons/Basic/PeriodicalTask.hpp; sourceTree = "<group>"; };
 		D8228EBC157F7F6100BBAF60 /* MutableMatrix44D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MutableMatrix44D.hpp; path = Commons/Geometry/MutableMatrix44D.hpp; sourceTree = "<group>"; };
 		D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = MutableMatrix44D.cpp; path = Commons/Geometry/MutableMatrix44D.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		D823E8BC172183940088701F /* RectangleF.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RectangleF.h; sourceTree = "<group>"; };
+		D823E8BC172183940088701F /* RectangleF.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RectangleF.hpp; sourceTree = "<group>"; };
 		D823E8BD172183D60088701F /* IImageUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IImageUtils.cpp; sourceTree = "<group>"; };
 		D823E8BE172183D60088701F /* IImageUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IImageUtils.hpp; sourceTree = "<group>"; };
 		D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MutableVector3D.cpp; path = Commons/Geometry/MutableVector3D.cpp; sourceTree = "<group>"; };
@@ -1473,7 +1473,7 @@
 				CF35DD4B16C6995C002EFC96 /* Vector3F.hpp */,
 				CF35DD4E16C69B08002EFC96 /* Vector2F.cpp */,
 				CF35DD4F16C69B08002EFC96 /* Vector2F.hpp */,
-				D823E8BC172183940088701F /* RectangleF.h */,
+				D823E8BC172183940088701F /* RectangleF.hpp */,
 			);
 			name = Geometry;
 			sourceTree = "<group>";

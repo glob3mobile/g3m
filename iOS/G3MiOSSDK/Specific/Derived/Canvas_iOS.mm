@@ -335,20 +335,24 @@ void Canvas_iOS::_drawImage(const IImage* image,
                                  srcHeight);
     
     CGIm = CGImageCreateWithImageInRect([uiImage CGImage], cropRect);
+    
+    CGContextDrawImage(_context,
+                       CGRectMake(destLeft,
+                                  destTop,
+                                  destWidth,
+                                  destHeigtt),
+                       CGIm);
+    
+    CGImageRelease(CGIm);
   } else{
     CGIm = [uiImage CGImage];
-  }
-
-  CGContextDrawImage(_context,
-                     CGRectMake(destLeft,
-                                destTop,
-                                destWidth,
-                                destHeigtt),
-                     CGIm);
-  
-  //Releasing if cropped
-  if (CGIm != uiImage.CGImage){
-    CGImageRelease(CGIm);
+    
+    CGContextDrawImage(_context,
+                       CGRectMake(destLeft,
+                                  destTop,
+                                  destWidth,
+                                  destHeigtt),
+                       CGIm);
   }
   
 }
