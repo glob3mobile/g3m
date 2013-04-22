@@ -40,6 +40,8 @@ import org.glob3.mobile.generated.JSONArray;
 import org.glob3.mobile.generated.JSONBaseObject;
 import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.LayerSet;
+import org.glob3.mobile.generated.LayerTilesRenderParameters;
+import org.glob3.mobile.generated.LevelTileCondition;
 import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarkTouchListener;
 import org.glob3.mobile.generated.MarksRenderer;
@@ -58,6 +60,7 @@ import org.glob3.mobile.generated.TileRendererBuilder;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.Vector2F;
+import org.glob3.mobile.generated.Vector2I;
 import org.glob3.mobile.generated.Vector3D;
 import org.glob3.mobile.generated.WMSLayer;
 import org.glob3.mobile.generated.WMSServerVersion;
@@ -407,6 +410,48 @@ public class G3MWebGLDemo
          final CompositeRenderer mainRenderer = new CompositeRenderer();
 
          final LayerSet layerSet = new LayerSet();
+         
+         final boolean blueMarble = true;
+         if (blueMarble) {
+           WMSLayer blueMarbleL = new WMSLayer("bmng200405",
+                                               new URL("http://www.nasa.network.com/wms?", false),
+                                               WMSServerVersion.WMS_1_1_0,
+                                               Sector.fullSphere(),
+                                               "image/jpeg",
+                                               "EPSG:4326",
+                                               "",
+                                               false,
+                                               new LevelTileCondition(0, 6),
+                                               TimeInterval.fromDays(30));
+           layerSet.addLayer(blueMarbleL);
+         }
+         
+         final boolean useOrtoAyto = true;
+         if (useOrtoAyto){
+        	 
+        	 LayerTilesRenderParameters ltrp = new LayerTilesRenderParameters(Sector.fullSphere(),
+                     2,4,0,19,
+                     new Vector2I(256,256),
+                     LayerTilesRenderParameters.defaultTileMeshResolution(),
+                     false);
+        	 
+           WMSLayer ortoAyto = new WMSLayer("orto_refundida",
+                                             new URL("http://195.57.27.86/wms_etiquetas_con_orto.mapdef?", false),
+                                             WMSServerVersion.WMS_1_1_0,
+                                             new Sector(new Geodetic2D(Angle.fromDegrees(39.350228), 
+                                            		 				   Angle.fromDegrees(-6.508713)),
+                                            		 	new Geodetic2D(Angle.fromDegrees(39.536351), 
+                                            		 			       Angle.fromDegrees(-6.25946))),
+                                             "image/jpeg",
+                                             "EPSG:4326",
+                                             "",
+                                             false,
+                                             new LevelTileCondition(4, 19),
+                                             TimeInterval.fromDays(30), ltrp );
+           layerSet.addLayer(ortoAyto);
+         }
+
+         
          final boolean useBing = false;
          if (useBing) {
             final WMSLayer bing = new WMSLayer( //
@@ -422,7 +467,7 @@ public class G3MWebGLDemo
                      TimeInterval.fromDays(30));
             layerSet.addLayer(bing);
          }
-         final boolean useOSMLatLon = true;
+         final boolean useOSMLatLon = false;
          if (useOSMLatLon) {
             //         final WMSLayer osm = new WMSLayer( //
             //                  "osm", //
@@ -452,7 +497,7 @@ public class G3MWebGLDemo
             layerSet.addLayer(osm);
          }
 
-         final boolean usePnoa = true;
+         final boolean usePnoa = false;
          if (usePnoa) {
             final WMSLayer pnoa = new WMSLayer( //
                      "PNOA", //
@@ -481,6 +526,7 @@ public class G3MWebGLDemo
                      TimeInterval.fromDays(30));
             layerSet.addLayer(ayto);
          }
+         
 
 
          final TileRendererBuilder tlBuilder = new TileRendererBuilder();

@@ -195,6 +195,10 @@ public class LayerSet
     {
       rc.getLogger().logWarning("Can't create map petitions for tile %s", tile.getKey().description());
     }
+    
+    if (petitions.size() > 1){
+    	rc.getLogger().logWarning("2 PET");
+    }
   
     return petitions;
   }

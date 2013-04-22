@@ -210,7 +210,7 @@ public class Canvas_Android extends ICanvas {
 
 		RectF dst = new RectF(left, top, 
 				left + width, // Right
-				top - height); // Bottom
+				top + height); // Bottom
 
 		_canvas.drawBitmap(bitmap, null, dst, null);
 	}
@@ -223,11 +223,11 @@ public class Canvas_Android extends ICanvas {
 
 		RectF dst = new RectF(destLeft, destTop, 
 				destLeft + destWidth, // Right
-				destTop - destHeight); // Bottom
+				destTop + destHeight); // Bottom
 		
 		Rect src = new Rect((int)srcLeft, (int)srcTop, 
 				(int)(srcLeft + srcWidth), // Right
-				(int)(srcTop - srcHeight)); // Bottom
+				(int)(srcTop + srcHeight)); // Bottom
 
 		_canvas.drawBitmap(bitmap, src, dst, null);
 
