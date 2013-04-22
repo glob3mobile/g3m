@@ -178,7 +178,7 @@ public class LayerSet
   
         if (petitionTile == null)
         {
-          System.out.print("Error retrieving requests.");
+          ILogger.instance().logError("Error retrieving requests.");
         }
   
         java.util.ArrayList<Petition> pet = layer.createTileMapPetitions(rc, petitionTile);
@@ -194,10 +194,6 @@ public class LayerSet
     if (petitions.isEmpty())
     {
       rc.getLogger().logWarning("Can't create map petitions for tile %s", tile.getKey().description());
-    }
-    
-    if (petitions.size() > 1){
-    	rc.getLogger().logWarning("2 PET");
     }
   
     return petitions;
