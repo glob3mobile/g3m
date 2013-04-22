@@ -223,7 +223,7 @@ public class Canvas_Android extends ICanvas {
 
 		RectF dst = new RectF(destLeft, destTop, 
 				destLeft + destWidth, // Right
-				destTop + destHeight); // Bottom
+				image.getHeight() - destTop); // Bottom
 		
 		Rect src = new Rect((int)srcLeft, (int)srcTop, 
 				(int)(srcLeft + srcWidth), // Right

@@ -368,7 +368,7 @@ public:
     const int textureHeight = _tileTextureResolution._y;
     
     return new RectangleF((float) mu->round( lowerFactor._x         * textureWidth ),
-                          (float) mu->round( lowerFactor._y         * textureHeight ),
+                          (float) mu->round( (1.0 - (lowerFactor._y + heightFactor))         * textureHeight ),
                           (float) mu->round( widthFactor            * textureWidth ),
                           (float) mu->round( heightFactor           * textureHeight ));
   }
