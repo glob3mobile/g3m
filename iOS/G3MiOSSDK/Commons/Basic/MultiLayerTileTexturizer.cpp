@@ -165,8 +165,8 @@ private:
   const std::vector<RectangleF*> _dstRects;
 #endif
 #ifdef JAVA_CODE
-  private final java.util.ArrayList<RectangleI> _srcRects;
-  private final java.util.ArrayList<RectangleI> _dstRects;
+  private final java.util.ArrayList<RectangleF> _srcRects;
+  private final java.util.ArrayList<RectangleF> _dstRects;
 #endif
   
   const std::string _textureId;

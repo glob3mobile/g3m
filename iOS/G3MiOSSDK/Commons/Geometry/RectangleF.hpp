@@ -26,6 +26,12 @@ public:
   {
   }
   
+#ifdef JAVA_CODE
+  public void dispose(){
+    
+  }
+#endif
+  
   RectangleF(const RectangleF& that):
   _x(that._x),
   _y(that._y),
