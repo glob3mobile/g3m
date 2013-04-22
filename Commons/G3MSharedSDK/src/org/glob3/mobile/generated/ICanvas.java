@@ -88,7 +88,7 @@ public abstract class ICanvas
 
   protected abstract void _drawImage(IImage image, float left, float top, float width, float height);
 
-  protected abstract void _drawImage(IImage image, float srcLeft, float srcTop, float srcWidth, float srcHeigtt, float destLeft, float destTop, float destWidth, float destHeigtt);
+  protected abstract void _drawImage(IImage image, float srcLeft, float srcTop, float srcWidth, float srcHeight, float destLeft, float destTop, float destWidth, float destHeight);
 
   public ICanvas()
   {
