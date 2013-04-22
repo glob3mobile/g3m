@@ -56,7 +56,7 @@ _maxHeight(0),
 _verticalExaggeration(0),
 //_elevationDataSolved(false),
 _leveledMesh(NULL),
-_meshBuilder(new TileMeshBuilder(this)),  //Creating MeshBuilder
+_meshBuilder(NULL/*new TileMeshBuilder(this)*/),  //Creating MeshBuilder
 _meshMustActualizeDueNewElevationData(true),
 _levelOfElevationData(-1)
 {
@@ -92,9 +92,9 @@ Tile::~Tile() {
   //TODO:...
   delete _leveledMesh;
   
-  _meshBuilder->cancelElevationDataRequest();
-  delete _meshBuilder;
-  _meshBuilder = NULL;
+  //_meshBuilder->cancelElevationDataRequest();
+  //delete _meshBuilder;
+  //_meshBuilder = NULL;
 }
 
 void Tile::ancestorElevationDataSolvedChanged(Tile *ancestor){
@@ -258,7 +258,7 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
   ElevationDataProvider* elevationDataProvider = trc->getElevationDataProvider();
   
   //Actualizing ElevationData if needed
-  _meshBuilder->fillTileWithElevationData(elevationDataProvider, tileMeshResolution);
+  //_meshBuilder->fillTileWithElevationData(elevationDataProvider, tileMeshResolution);
   
   if ( _tessellatorMesh == NULL || _meshMustActualizeDueNewElevationData) {
     const TileTessellator* tessellator = trc->getTessellator();
@@ -586,7 +586,7 @@ std::vector<Tile*>* Tile::getSubTiles(const Angle& splitLatitude,
 
 void Tile::cancelElevationDataRequest(ElevationDataProvider* elevationDataProvider) {
   
-  _meshBuilder->cancelElevationDataRequest();
+  //_meshBuilder->cancelElevationDataRequest();
   
   if (_elevationRequestId > 0) {
     elevationDataProvider->cancelRequest(_elevationRequestId);

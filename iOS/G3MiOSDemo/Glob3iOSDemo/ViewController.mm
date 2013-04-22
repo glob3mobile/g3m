@@ -89,7 +89,7 @@
 #import <G3MiOSSDK/CompositeElevationDataProvider.hpp>
 #import <G3MiOSSDK/LayerTilesRenderParameters.hpp>
 #import <G3MiOSSDK/RectangleI.hpp>
-
+#import <G3MiOSSDK/LayerTilesRenderParameters.hpp>
 
 class TestVisibleSectorListener : public VisibleSectorListener {
 public:
@@ -540,7 +540,7 @@ public:
   if (useOSM) {
     layerSet->addLayer( new OSMLayer(TimeInterval::fromDays(30)) );
   }
-  
+
   //TODO: Check merkator with elevations
   const bool useMapQuestOSM = false;
   if (useMapQuestOSM) {
@@ -579,7 +579,7 @@ public:
                                           "ArtXu2Z-XSlDVCRVtxtYqtIPVR_0qqLcrfsRyZK_ishjUKvTheYBUH9rDDmAPcnj",
                                           TimeInterval::fromDays(30)) );
   }
-  
+
   const bool blueMarble = true;
   if (blueMarble) {
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
@@ -633,7 +633,7 @@ public:
                                                                      false));
     layerSet->addLayer(ortoAyto);
   }
-  
+
   bool useWMSBing = false;
   if (useWMSBing) {
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
@@ -1024,39 +1024,6 @@ public:
   //                                       );
   //    shapesRenderer->addShape(sphere);
   //  }
-  
-  
-  Image_iOS* im = new Image_iOS([[UIImage alloc] initWithContentsOfFile:
-                                 [[NSBundle mainBundle] pathForResource: @"g3m-marker" ofType: @"png"]], NULL);
-  
-  Image_iOS* im2 = new Image_iOS([[UIImage alloc] initWithContentsOfFile:
-                                 [[NSBundle mainBundle] pathForResource: @"sand-clock" ofType: @"png"]], NULL);
-  std::vector<const IImage*> ims; ims.push_back(im2);
-  RectangleI * rectIM = new RectangleI(0,0, im->getWidth(), im->getHeight() / 2);
-  std::vector<RectangleI*> sr; sr.push_back(new RectangleI(0,0, im2->getWidth(), im2->getHeight()));
-  std::vector<RectangleI*> dr; dr.push_back(new RectangleI(0,0, 256, 256));
-  
-  
-  class MyIImageListener: public IImageListener{
-  public:
-    MyIImageListener(ShapesRenderer* render):_render(render){
-      
-    }
-    ShapesRenderer* _render;
-    void imageCreated(IImage* image){
-      
-      Shape* quadX = new QuadShape(new Geodetic3D(Angle::fromDegrees(30.136637),
-                                                  Angle::fromDegrees(-15.447636),
-                                                  8000),
-                                   image,
-                                   350000, 750000);
-      _render->addShape(quadX);
-    }
-  };
-  
-  im->combineWith(*rectIM, ims, sr, dr, Vector2I(256,256), new MyIImageListener(shapesRenderer), true);
-  
-
   
   return shapesRenderer;
 }

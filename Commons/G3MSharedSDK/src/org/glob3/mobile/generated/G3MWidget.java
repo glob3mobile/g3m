@@ -412,7 +412,7 @@ public class G3MWidget
 
   public final void setCameraPosition(Geodetic3D position)
   {
-    getNextCamera().setPosition(position);
+    getNextCamera().setGeodeticPosition(position);
   }
 
   public final void setCameraHeading(Angle angle)
@@ -438,58 +438,73 @@ public class G3MWidget
     setAnimatedCameraPosition(TimeInterval.fromSeconds(3), position, heading, pitch);
   }
 
-  public final void setAnimatedCameraPosition(TimeInterval interval, Geodetic3D position, Angle heading)
+  public final void setAnimatedCameraPosition(TimeInterval interval, Geodetic3D position, Angle heading, Angle pitch, boolean linearTiming)
   {
-     setAnimatedCameraPosition(interval, position, heading, Angle.zero());
-  }
-  public final void setAnimatedCameraPosition(TimeInterval interval, Geodetic3D position)
-  {
-     setAnimatedCameraPosition(interval, position, Angle.zero(), Angle.zero());
+     setAnimatedCameraPosition(interval, position, heading, pitch, linearTiming, false);
   }
   public final void setAnimatedCameraPosition(TimeInterval interval, Geodetic3D position, Angle heading, Angle pitch)
   {
+     setAnimatedCameraPosition(interval, position, heading, pitch, false, false);
+  }
+  public final void setAnimatedCameraPosition(TimeInterval interval, Geodetic3D position, Angle heading)
+  {
+     setAnimatedCameraPosition(interval, position, heading, Angle.zero(), false, false);
+  }
+  public final void setAnimatedCameraPosition(TimeInterval interval, Geodetic3D position)
+  {
+     setAnimatedCameraPosition(interval, position, Angle.zero(), Angle.zero(), false, false);
+  }
+  public final void setAnimatedCameraPosition(TimeInterval interval, Geodetic3D position, Angle heading, Angle pitch, boolean linearTiming, boolean linearHeight)
+  {
+    final Geodetic3D fromPosition = _nextCamera.getGeodeticPosition();
+    final Angle fromHeading = _nextCamera.getHeading();
+    final Angle fromPitch = _nextCamera.getPitch();
   
-    final Geodetic3D fromPosition = _planet.toGeodetic3D(_currentCamera.getCartesianPosition());
-  
-    double finalLat = position.latitude()._degrees;
-    double finalLon = position.longitude()._degrees;
+    setAnimatedCameraPosition(interval, fromPosition, position, fromHeading, heading, fromPitch, pitch, linearTiming, linearHeight);
+  }
+
+  public final void setAnimatedCameraPosition(TimeInterval interval, Geodetic3D fromPosition, Geodetic3D toPosition, Angle fromHeading, Angle toHeading, Angle fromPitch, Angle toPitch, boolean linearTiming)
+  {
+     setAnimatedCameraPosition(interval, fromPosition, toPosition, fromHeading, toHeading, fromPitch, toPitch, linearTiming, false);
+  }
+  public final void setAnimatedCameraPosition(TimeInterval interval, Geodetic3D fromPosition, Geodetic3D toPosition, Angle fromHeading, Angle toHeading, Angle fromPitch, Angle toPitch)
+  {
+     setAnimatedCameraPosition(interval, fromPosition, toPosition, fromHeading, toHeading, fromPitch, toPitch, false, false);
+  }
+  public final void setAnimatedCameraPosition(TimeInterval interval, Geodetic3D fromPosition, Geodetic3D toPosition, Angle fromHeading, Angle toHeading, Angle fromPitch, Angle toPitch, boolean linearTiming, boolean linearHeight)
+  {
+    double finalLatInDegrees = toPosition.latitude()._degrees;
+    double finalLonInDegrees = toPosition.longitude()._degrees;
   
     //Fixing final latitude
-    while (finalLat > 90)
+    while (finalLatInDegrees > 90)
     {
-      finalLat -= 360;
+      finalLatInDegrees -= 360;
     }
-    while (finalLat < -90)
+    while (finalLatInDegrees < -90)
     {
-      finalLat += 360;
+      finalLatInDegrees += 360;
     }
   
     //Fixing final longitude
-    while (finalLon > 360)
+    while (finalLonInDegrees > 360)
     {
-      finalLon -= 360;
+      finalLonInDegrees -= 360;
     }
-    while (finalLon < 0)
+    while (finalLonInDegrees < 0)
     {
-      finalLon += 360;
+      finalLonInDegrees += 360;
     }
-    if (Math.abs(finalLon - fromPosition.longitude()._degrees) > 180)
+    if (Math.abs(finalLonInDegrees - fromPosition.longitude()._degrees) > 180)
     {
-      finalLon -= 360;
+      finalLonInDegrees -= 360;
     }
   
-    final Geodetic3D toPosition = Geodetic3D.fromDegrees(finalLat, finalLon, position.height());
-  
-    final Angle fromHeading = _currentCamera.getHeading();
-    final Angle toHeading = heading;
-    final Angle fromPitch = _currentCamera.getPitch();
-    final Angle toPitch = pitch;
+    final Geodetic3D finalToPosition = Geodetic3D.fromDegrees(finalLatInDegrees, finalLonInDegrees, toPosition.height());
   
     stopCameraAnimation();
-    int TODO_make_linearHeight_configurable;
-    final boolean linearTiming = false;
-    final boolean linearHeight = false;
-    _effectsScheduler.startEffect(new CameraGoToPositionEffect(interval, fromPosition, toPosition, fromHeading, toHeading, fromPitch, toPitch, linearTiming, linearHeight), _nextCamera.getEffectTarget());
+  
+    _effectsScheduler.startEffect(new CameraGoToPositionEffect(interval, fromPosition, finalToPosition, fromHeading, toHeading, fromPitch, toPitch, linearTiming, linearHeight), _nextCamera.getEffectTarget());
   }
 
   public final void stopCameraAnimation()
@@ -498,10 +513,7 @@ public class G3MWidget
     _effectsScheduler.cancelAllEffectsFor(target);
   }
 
-  public final void resetCameraPosition()
-  {
-    getNextCamera().resetPosition();
-  }
+//  void resetCameraPosition();
 
   public final CameraRenderer getCameraRenderer()
   {
@@ -653,3 +665,6 @@ public class G3MWidget
   }
 
 }
+//void G3MWidget::resetCameraPosition() {
+//  getNextCamera()->resetPosition();
+//}

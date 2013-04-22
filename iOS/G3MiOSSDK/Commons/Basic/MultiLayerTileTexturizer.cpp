@@ -27,6 +27,7 @@
 #include "GLConstants.hpp"
 #include "IImageListener.hpp"
 #include "LayerTilesRenderParameters.hpp"
+#include "RectangleF.hpp"
 
 
 enum TileTextureBuilder_PetitionStatus {
@@ -43,20 +44,20 @@ private:
 public:
   BuilderDownloadStepDownloadListener(TileTextureBuilder* builder,
                                       int position);
-
+  
   void onDownload(const URL& url,
                   IImage* image);
-
+  
   void onError(const URL& url);
-
+  
   void onCanceledDownload(const URL& url,
                           IImage* image) {
   }
-
+  
   void onCancel(const URL& url);
-
+  
   virtual ~BuilderDownloadStepDownloadListener();
-
+  
 };
 
 
@@ -64,10 +65,10 @@ class LTMInitializer : public LazyTextureMappingInitializer {
 private:
   const Tile* _tile;
   const Tile* _ancestor;
-
+  
   MutableVector2D _scale;
   MutableVector2D _translation;
-
+  
   const TileTessellator* _tessellator;
 #ifdef C_CODE
   const Vector2I _resolution;
@@ -75,9 +76,9 @@ private:
 #ifdef JAVA_CODE
   private final Vector2I _resolution;
 #endif
-
+  
   const bool _mercator;
-
+  
 public:
   LTMInitializer(const Vector2I& resolution,
                  const Tile* tile,
@@ -92,97 +93,97 @@ public:
   _translation(0,0),
   _mercator(mercator)
   {
-
+    
   }
-
+  
   virtual ~LTMInitializer() {
-
+    
   }
-
+  
   void initialize() {
     // The default scale and translation are ok when (tile == _ancestor)
     if (_tile != _ancestor) {
       const Sector tileSector = _tile->getSector();
-
+      
       const Vector2D lowerTextCoordUV = _tessellator->getTextCoord(_ancestor,
                                                                    tileSector.lower(),
                                                                    _mercator);
-
+      
       const Vector2D upperTextCoordUV = _tessellator->getTextCoord(_ancestor,
                                                                    tileSector.upper(),
                                                                    _mercator);
-
+      
       _scale       = MutableVector2D(upperTextCoordUV._x - lowerTextCoordUV._x,
                                      lowerTextCoordUV._y - upperTextCoordUV._y);
-
+      
       _translation = MutableVector2D(lowerTextCoordUV._x,
                                      upperTextCoordUV._y);
     }
   }
-
+  
   const MutableVector2D getScale() const {
     return _scale;
   }
-
+  
   const MutableVector2D getTranslation() const {
     return _translation;
   }
-
+  
   IFloatBuffer* createTextCoords() const {
     return _tessellator->createTextCoords(_resolution, _tile, _mercator);
   }
-
+  
 };
 
 
 class TileTextureBuilderHolder : public ITexturizerData {
 private:
   TileTextureBuilder* _builder;
-
+  
 public:
   TileTextureBuilderHolder(TileTextureBuilder* builder) :
   _builder(builder)
   {
-
+    
   }
-
+  
   TileTextureBuilder* get() const {
     return _builder;
   }
-
+  
   virtual ~TileTextureBuilderHolder();
-
+  
 };
 
 
 class TextureUploader : public IImageListener {
 private:
   TileTextureBuilder* _builder;
-
+  
 #ifdef C_CODE
-  const std::vector<RectangleI*> _srcRects;
-    const std::vector<RectangleI*> _dstRects;
+  const std::vector<RectangleF*> _srcRects;
+  const std::vector<RectangleF*> _dstRects;
 #endif
 #ifdef JAVA_CODE
-  private final java.util.ArrayList<RectangleI> _srcRects;
-  private final java.util.ArrayList<RectangleI> _dstRects;
+  private final java.util.ArrayList<RectangleF> _srcRects;
+  private final java.util.ArrayList<RectangleF> _dstRects;
 #endif
-
+  
   const std::string _textureId;
-
+  
 public:
   TextureUploader(TileTextureBuilder* builder,
-                  std::vector<RectangleI*> srcRects,
-                  std::vector<RectangleI*> dstRects,
+                  std::vector<RectangleF*> srcRects,
+                  std::vector<RectangleF*> dstRects,
                   const std::string& textureId) :
   _builder(builder),
   _srcRects(srcRects),
   _dstRects(dstRects),
   _textureId(textureId)
   {
-
+    
   }
-
+  
   void imageCreated(IImage* image);
 };
 
@@ -191,16 +192,16 @@ class TileTextureBuilder : public RCObject {
 private:
   MultiLayerTileTexturizer* _texturizer;
   Tile*                     _tile;
-
+  
   std::vector<Petition*> _petitions;
   int                    _petitionsCount;
   int                    _stepsDone;
-
+  
   const IFactory*  _factory;
   TexturesHandler* _texturesHandler;
   TextureBuilder*  _textureBuilder;
   GL*              _gl;
-
+  
 #ifdef C_CODE
   const Vector2I   _tileTextureResolution;
   const Vector2I   _tileMeshResolution;
@@ -210,42 +211,42 @@ private:
   private final Vector2I _tileMeshResolution;
 #endif
   const bool       _mercator;
-
+  
   IDownloader*     _downloader;
-
+  
   const Mesh* _tessellatorMesh;
-
+  
   const TileTessellator* _tessellator;
-
+  
   const int    _firstLevel;
-
+  
   std::vector<TileTextureBuilder_PetitionStatus> _status;
   std::vector<long long>                         _requestsIds;
-
-
+  
+  
   bool _finalized;
   bool _canceled;
   bool _anyCanceled;
   bool _alreadyStarted;
   
   long long _texturePriority;
-
-
+  
+  
   const std::vector<Petition*> cleanUpPetitions(const std::vector<Petition*>& petitions) const {
     const int petitionsSize = petitions.size();
     if (petitionsSize <= 1) {
       return petitions;
     }
-
+    
     std::vector<Petition*> result;
     for (int i = 0; i < petitionsSize; i++) {
       Petition* currentPetition = petitions[i];
       const Sector currentSector = currentPetition->getSector();
-
+      
       bool coveredByFollowingPetition = false;
       for (int j = i+1; j < petitionsSize; j++) {
         Petition* followingPetition = petitions[j];
-
+        
         // only opaque petitions can cover
         if (!followingPetition->isTransparent()) {
           if (followingPetition->getSector().fullContains(currentSector)) {
@@ -254,7 +255,7 @@ private:
           }
         }
       }
-
+      
       if (coveredByFollowingPetition) {
         delete currentPetition;
       }
@@ -262,14 +263,14 @@ private:
         result.push_back(currentPetition);
       }
     }
-
+    
     return result;
   }
   
-
+  
 public:
   LeveledTexturedMesh* _mesh;
-
+  
   TileTextureBuilder(MultiLayerTileTexturizer* texturizer,
                      const G3MRenderContext*   rc,
                      const LayerSet*           layerSet,
@@ -300,16 +301,16 @@ public:
   _texturePriority(texturePriority)
   {
     _petitions = cleanUpPetitions(layerSet->createTileMapPetitions(rc, tile));
-
+    
     _petitionsCount = _petitions.size();
-
+    
     for (int i = 0; i < _petitionsCount; i++) {
       _status.push_back(STATUS_PENDING);
     }
-
+    
     _mesh = createMesh();
   }
-
+  
   void start() {
     if (_canceled) {
       return;
@@ -318,22 +319,22 @@ public:
       return;
     }
     _alreadyStarted = true;
-
+    
     if (_tile == NULL) {
       return;
     }
-
+    
     for (int i = 0; i < _petitionsCount; i++) {
       const Petition* petition = _petitions[i];
-
+      
       //      const long long priority =  (_parameters->_incrementalTileQuality
       //                                   ? 1000 - _tile->getLevel()
       //                                   : _tile->getLevel());
-
+      
       const long long priority = _texturePriority + _tile->getLevel();
-
+      
       //      printf("%s\n", petition->getURL().getPath().c_str());
-
+      
       const long long requestId = _downloader->requestImage(URL(petition->getURL()),
                                                             priority,
                                                             petition->getTimeToCache(),
@@ -344,43 +345,38 @@ public:
       }
     }
   }
-
+  
   ~TileTextureBuilder() {
     if (!_finalized && !_canceled) {
       cancel();
     }
-
+    
     deletePetitions();
   }
-
-  RectangleI* getImageRectangleInTexture(const Sector& wholeSector,
+  
+  RectangleF* getImageRectangleInTexture(const Sector& wholeSector,
                                          const Sector& imageSector) const {
-
+    
     const IMathUtils* mu = IMathUtils::instance();
     
     const Vector2D lowerFactor = wholeSector.getUVCoordinates(imageSector.lower());
-
+    
     const double widthFactor  = imageSector.getDeltaLongitude().div(wholeSector.getDeltaLongitude());
     const double heightFactor = imageSector.getDeltaLatitude().div(wholeSector.getDeltaLatitude());
-
+    
     const int textureWidth  = _tileTextureResolution._x;
     const int textureHeight = _tileTextureResolution._y;
-
-    return new RectangleI((int) mu->round( lowerFactor._x         * textureWidth ),
-                          (int) mu->round( (1.0 - lowerFactor._y) * textureHeight ),
-                          (int) mu->round( widthFactor            * textureWidth ),
-                          (int) mu->round( heightFactor           * textureHeight ));
+    
+    return new RectangleF((float) mu->round( lowerFactor._x         * textureWidth ),
+                          (float) mu->round( (1.0 - lowerFactor._y) * textureHeight ),
+                          (float) mu->round( widthFactor            * textureWidth ),
+                          (float) mu->round( heightFactor           * textureHeight ));
   }
-  
-  RectangleI* getImageRectangle(const IImage& wholeImage,
+
+  RectangleF* getImageRectangle(const IImage& wholeImage,
                                 const Sector& wholeSector,
-                                         const Sector& imageSector) const {
-    
-    printf("WHOLE SECTOR: %s\n", wholeSector.description().c_str());
-    printf("IMAGE SECTOR: %s\n", imageSector.description().c_str());
+                                const Sector& imageSector) const {
     const IMathUtils* mu = IMathUtils::instance();
-    
-    //const Vector2D lowerFactor = wholeSector.getUVCoordinates(imageSector.lower());
     
     double minWholeLat = wholeSector.lower().latitude().degrees();
     double minWholeLon = wholeSector.lower().longitude().degrees();
@@ -389,7 +385,6 @@ public:
     
     double minImageLat = imageSector.lower().latitude().degrees();
     double minImageLon = imageSector.lower().longitude().degrees();
-    
     
     double lowerFactorX = (minImageLon - minWholeLon) / (maxWholeLon - minWholeLon);
     double lowerFactorY = (minImageLat - minWholeLat) / (maxWholeLat - minWholeLat);
@@ -401,64 +396,57 @@ public:
     const int textureWidth  = wholeImage.getWidth();
     const int textureHeight = wholeImage.getHeight();
     
-    return new RectangleI((int) mu->round( lowerFactor._x         * textureWidth ),
-                          (int) mu->round( (1.0 - (lowerFactor._y + heightFactor)) * textureHeight ),
-                          (int) mu->round( widthFactor            * textureWidth ),
-                          (int) mu->round( heightFactor           * textureHeight ));
+    return new RectangleF((float) mu->round( lowerFactor._x         * textureWidth ),
+                          (float) mu->round( (1.0 - (lowerFactor._y + heightFactor)) * textureHeight ),
+                          (float) mu->round( widthFactor            * textureWidth ),
+                          (float) mu->round( heightFactor           * textureHeight ));
   }
-
+  
   void composeAndUploadTexture() {
 #ifdef JAVA_CODE
     synchronized (this) {
 #endif
-
+      
       if (_mesh == NULL) {
         return;
       }
 
-      std::vector<IImage*>     images;
-      std::vector<RectangleI*> sourceRects;
-      std::vector<RectangleI*> destRects;
+      std::vector<const IImage*>     images;
+      std::vector<RectangleF*> sourceRects;
+      std::vector<RectangleF*> destRects;
       std::string textureId = _tile->getKey().tinyDescription();
-
+      
       const Sector tileSector = _tile->getSector();
       
       for (int i = 0; i < _petitionsCount; i++) {
         const Petition* petition = _petitions[i];
         IImage* image = petition->getImage();
-        
 
         if (image != NULL) {
           
           Sector petitionSector = petition->getSector();
-          
-          //TODO: Find intersection image sector - tile sector = srcReq
+
+          //Finding intersection image sector - tile sector = srcReq
           Sector intersectionSector = tileSector.intersection(petitionSector);
           
-          RectangleI *sourceRect = NULL;
+          RectangleF *sourceRect = NULL;
           if (!intersectionSector.isEqualsTo(petitionSector)){
-            printf("USING FATHER");
-            
-            //Intersection with father image
-            sourceRect = getImageRectangle(*image, petitionSector, intersectionSector);
+            sourceRect = getImageRectangle(*image, petitionSector, intersectionSector); //Intersection with upper level image
           } else{
-            sourceRect = new RectangleI(0,0, image->getWidth(), image->getHeight());
+            sourceRect = new RectangleF((float)0,(float)0, (float)image->getWidth(), (float)image->getHeight());
           }
           
           //Part of the image we are going to draw
           sourceRects.push_back(sourceRect);
           
           images.push_back(image);
-
           //Where we are going to draw the image
-          //destRects.push_back(getImageRectangleInTexture(tileSector, petition->getSector()));
           destRects.push_back(getImageRectangleInTexture(tileSector, intersectionSector));
-
           textureId += petition->getURL().getPath();
           textureId += "_";
         }
       }
-
+      
       if (images.size() > 0) {
         _textureBuilder->createTextureFromImages(_gl,
                                                  _factory,
@@ -472,38 +460,38 @@ public:
                                                                      textureId),
                                                  true);
       }
-
+      
 #ifdef JAVA_CODE
     }
 #endif
   }
-
+  
   void imageCreated(IImage* image,
-                    std::vector<RectangleI*> srcRects,
-                    std::vector<RectangleI*> dstRects,
+                    std::vector<RectangleF*> srcRects,
+                    std::vector<RectangleF*> dstRects,
                     const std::string& textureId) {
 #ifdef JAVA_CODE
     synchronized (this) {
 #endif
-
+      
       if (_mesh == NULL) {
         IFactory::instance()->deleteImage(image);
         return;
       }
-
+      
       const bool isMipmap = false;
-
+      
       const IGLTextureId* glTextureId = _texturesHandler->getGLTextureId(image,
                                                                          GLFormat::rgba(),
                                                                          textureId,
                                                                          isMipmap);
-
+      
       if (glTextureId != NULL) {
         if (!_mesh->setGLTextureIdForLevel(0, glTextureId)) {
           _texturesHandler->releaseGLTextureId(glTextureId);
         }
       }
-
+      
       IFactory::instance()->deleteImage(image);
 
       for (int i = 0; i < srcRects.size(); i++) {
@@ -513,26 +501,26 @@ public:
       for (int i = 0; i < dstRects.size(); i++) {
         delete dstRects[i];
       }
-
+      
 #ifdef JAVA_CODE
     }
 #endif
   }
-
+  
   void done() {
     if (!_finalized) {
       _finalized = true;
-
+      
       if (!_canceled && (_tile != NULL) && (_mesh != NULL)) {
         composeAndUploadTexture();
       }
-
+      
       if (_tile != NULL) {
         _tile->setTextureSolved(true);
       }
     }
   }
-
+  
   void deletePetitions() {
     for (int i = 0; i < _petitionsCount; i++) {
       Petition* petition = _petitions[i];
@@ -541,26 +529,26 @@ public:
     _petitions.clear();
     _petitionsCount = 0;
   }
-
+  
   void stepDone() {
     _stepsDone++;
-
+    
     if (_stepsDone == _petitionsCount) {
       if (_anyCanceled) {
         ILogger::instance()->logInfo("Completed with cancelation\n");
       }
-
+      
       done();
     }
   }
-
+  
   void cancel() {
     if (_canceled) {
       return;
     }
-
+    
     _canceled = true;
-
+    
     if (!_finalized) {
       for (int i = 0; i < _requestsIds.size(); i++) {
         const long long requestId = _requestsIds[i];
@@ -569,19 +557,19 @@ public:
     }
     _requestsIds.clear();
   }
-
+  
   bool isCanceled() const {
     return _canceled;
   }
-
-//  void checkIsPending(int position) const {
-//    if (_status[position] != STATUS_PENDING) {
-//      ILogger::instance()->logError("Logic error: Expected STATUS_PENDING at position #%d but found status: %d\n",
-//                                    position,
-//                                    _status[position]);
-//    }
-//  }
-
+  
+  //  void checkIsPending(int position) const {
+  //    if (_status[position] != STATUS_PENDING) {
+  //      ILogger::instance()->logError("Logic error: Expected STATUS_PENDING at position #%d but found status: %d\n",
+  //                                    position,
+  //                                    _status[position]);
+  //    }
+  //  }
+  
   void stepDownloaded(int position,
                       IImage* image) {
     if (_canceled) {
@@ -589,29 +577,29 @@ public:
       return;
     }
     //checkIsPending(position);
-
+    
     _status[position]  = STATUS_DOWNLOADED;
     _petitions[position]->setImage( image );
-
+    
     stepDone();
   }
-
+  
   void stepCanceled(int position) {
     if (_canceled) {
       return;
     }
     //checkIsPending(position);
-
+    
     _anyCanceled = true;
-
+    
     _status[position] = STATUS_CANCELED;
-
+    
     stepDone();
   }
-
+  
   LeveledTexturedMesh* createMesh() const {
     std::vector<LazyTextureMapping*>* mappings = new std::vector<LazyTextureMapping*>();
-
+    
     Tile* ancestor = _tile;
     bool fallbackSolved = false;
     while (ancestor != NULL) {
@@ -631,7 +619,7 @@ public:
                                          ownedTexCoords,
                                          transparent);
       }
-
+      
       if (ancestor != _tile) {
         if (!fallbackSolved) {
           const IGLTextureId* glTextureId= _texturizer->getTopLevelGLTextureIdForTile(ancestor);
@@ -649,46 +637,46 @@ public:
           }
         }
       }
-
+      
       mappings->push_back(mapping);
       ancestor = ancestor->getParent();
     }
-
+    
     if ((mappings != NULL) && (_tile != NULL)) {
       if (mappings->size() != (_tile->getLevel() - _firstLevel + 1) ) {
         ILogger::instance()->logInfo("pleae break (point) me\n");
       }
     }
-
+    
     return new LeveledTexturedMesh(_tessellatorMesh,
                                    false,
                                    mappings);
   }
-
+  
   LeveledTexturedMesh* getMesh() {
     return _mesh;
   }
-
+  
   void cleanMesh() {
 #ifdef JAVA_CODE
     synchronized (this) {
 #endif
-
+      
       if (_mesh != NULL) {
         _mesh = NULL;
       }
-
+      
 #ifdef JAVA_CODE
     }
 #endif
   }
-
+  
   void cleanTile() {
     if (_tile != NULL) {
       _tile = NULL;
     }
   }
-
+  
 };
 
 void TextureUploader::imageCreated(IImage* image) {
@@ -711,7 +699,7 @@ _position(position)
 
 BuilderDownloadStepDownloadListener::~BuilderDownloadStepDownloadListener() {
   //  testState();
-
+  
   if (_builder != NULL) {
     _builder->_release();
   }
@@ -744,11 +732,11 @@ void BuilderDownloadStepDownloadListener::onCancel(const URL& url) {
 MultiLayerTileTexturizer::MultiLayerTileTexturizer() :
 _texturesHandler(NULL)
 {
-
+  
 }
 
 MultiLayerTileTexturizer::~MultiLayerTileTexturizer() {
-
+  
 }
 
 void MultiLayerTileTexturizer::initialize(const G3MContext* context,
@@ -760,22 +748,22 @@ void MultiLayerTileTexturizer::initialize(const G3MContext* context,
 class BuilderStartTask : public FrameTask {
 private:
   TileTextureBuilder* _builder;
-
+  
 public:
   BuilderStartTask(TileTextureBuilder* builder) :
   _builder(builder)
   {
     _builder->_retain();
   }
-
+  
   virtual ~BuilderStartTask() {
     _builder->_release();
   }
-
+  
   void execute(const G3MRenderContext* rc) {
     _builder->start();
   }
-
+  
   bool isCanceled(const G3MRenderContext *rc) {
     return _builder->isCanceled();
   }
@@ -788,10 +776,10 @@ Mesh* MultiLayerTileTexturizer::texturize(const G3MRenderContext* rc,
                                           Mesh* tessellatorMesh,
                                           Mesh* previousMesh) {
   _texturesHandler = rc->getTexturesHandler();
-
-
+  
+  
   TileTextureBuilderHolder* builderHolder = (TileTextureBuilderHolder*) tile->getTexturizerData();
-
+  
   if (builderHolder == NULL) {
     builderHolder = new TileTextureBuilderHolder(new TileTextureBuilder(this,
                                                                         rc,
@@ -805,7 +793,7 @@ Mesh* MultiLayerTileTexturizer::texturize(const G3MRenderContext* rc,
                                                  );
     tile->setTexturizerData(builderHolder);
   }
-
+  
   TileTextureBuilder* builder = builderHolder->get();
   if (trc->isForcedFullRender()) {
     builder->start();
@@ -813,16 +801,16 @@ Mesh* MultiLayerTileTexturizer::texturize(const G3MRenderContext* rc,
   else {
     rc->getFrameTasksExecutor()->addPreRenderTask(new BuilderStartTask(builder));
   }
-
+  
   tile->setTexturizerDirty(false);
   return builder->getMesh();
 }
 
 void MultiLayerTileTexturizer::tileToBeDeleted(Tile* tile,
                                                Mesh* mesh) {
-
+  
   TileTextureBuilderHolder* builderHolder = (TileTextureBuilderHolder*) tile->getTexturizerData();
-
+  
   if (builderHolder != NULL) {
     TileTextureBuilder* builder = builderHolder->get();
     builder->cancel();
@@ -853,7 +841,7 @@ void MultiLayerTileTexturizer::tileMeshToBeDeleted(Tile* tile,
 
 const IGLTextureId* MultiLayerTileTexturizer::getTopLevelGLTextureIdForTile(Tile* tile) {
   LeveledTexturedMesh* mesh = (LeveledTexturedMesh*) tile->getTexturizedMesh();
-
+  
   return (mesh == NULL) ? NULL : mesh->getTopLevelGLTextureId();
 }
 
@@ -872,26 +860,26 @@ void MultiLayerTileTexturizer::ancestorTexturedSolvedChanged(Tile* tile,
   if (!textureSolved) {
     return;
   }
-
+  
   if (tile->isTextureSolved()) {
     return;
   }
-
+  
   LeveledTexturedMesh* ancestorMesh = getMesh(ancestorTile);
   if (ancestorMesh == NULL) {
     return;
   }
-
+  
   const IGLTextureId* glTextureId = ancestorMesh->getTopLevelGLTextureId();
   if (glTextureId == NULL) {
     return;
   }
-
+  
   LeveledTexturedMesh* tileMesh = getMesh(tile);
   if (tileMesh == NULL) {
     return;
   }
-
+  
   const int level = tile->getLevel() - ancestorTile->getLevel();
   _texturesHandler->retainGLTextureId(glTextureId);
   if (!tileMesh->setGLTextureIdForLevel(level, glTextureId)) {
@@ -919,6 +907,6 @@ bool MultiLayerTileTexturizer::onTerrainTouchEvent(const G3MEventContext* ec,
   if (layerSet == NULL) {
     return false;
   }
-
+  
   return layerSet->onTerrainTouchEvent(ec, position, tile);
 }

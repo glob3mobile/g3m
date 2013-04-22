@@ -13,6 +13,8 @@
 #include "IImageListener.hpp"
 #include "RectangleI.hpp"
 
+#include "IImageUtils.hpp"
+
 const void CPUTextureBuilder::createTextureFromImage(GL* gl,
                                                      const IFactory* factory,
                                                      IImage* image,
@@ -32,7 +34,9 @@ const void CPUTextureBuilder::createTextureFromImage(GL* gl,
     }
   }
   else {
-    image->scale(width, height, listener, autodelete);
+    IImageUtils::scale(image, Vector2I(width, height), listener, autodelete);
+    
+    //image->scale(width, height, listener, autodelete);
   }
 }
 
@@ -41,7 +45,7 @@ private:
   IImage*         _imageToDelete;
   IImageListener* _listener;
   const bool      _autodelete;
-
+  
 public:
   ImageDeleterImageLister(IImage* imageToDelete,
                           IImageListener* listener,
@@ -50,15 +54,15 @@ public:
   _listener(listener),
   _autodelete(autodelete)
   {
-
+    
   }
-
+  
   void imageCreated(IImage* image) {
     if (_imageToDelete != NULL) {
       IFactory::instance()->deleteImage(_imageToDelete);
       _imageToDelete = NULL;
     }
-
+    
     if (_listener != NULL) {
       _listener->imageCreated(image);
       if (_autodelete) {
@@ -73,7 +77,7 @@ class CPUTextureBuilderSubImageImageLister : public IImageListener {
 private:
   const int _width;
   const int _height;
-
+  
   IImageListener* _listener;
   const bool      _autodelete;
   
@@ -86,65 +90,47 @@ public:
   _listener(listener),
   _autodelete(autodelete)
   {
-
+    
   }
-
+  
   void imageCreated(IImage* image) {
+    //    image->scale(_width, _height,
+    //                 _listener, _autodelete);
 //    image->scale(_width, _height,
-//                 _listener, _autodelete);
-    image->scale(_width, _height,
-                 new ImageDeleterImageLister(image, _listener, _autodelete), true);
-
-//    IFactory::instance()->deleteImage(image);
+//                 new ImageDeleterImageLister(image, _listener, _autodelete), true);
+    
+    //    IFactory::instance()->deleteImage(image);
+    
+    IImageUtils::scale(image, Vector2I(_width, _height), _listener, _autodelete);
   }
 };
 
 
 const void CPUTextureBuilder::createTextureFromImages(GL* gl,
                                                       const IFactory* factory,
-                                                      const std::vector<IImage*>& images,
-                                                      const std::vector<RectangleI*>& srcRectangles,
-                                                      const std::vector<RectangleI*>& destRectangles,
+                                                      const std::vector<const IImage*>& images,
+                                                      const std::vector<RectangleF*>& srcRectangles,
+                                                      const std::vector<RectangleF*>& destRectangles,
                                                       const Vector2I& textureResolution,
                                                       IImageListener* listener,
                                                       bool autodelete) const{
   const int width  = textureResolution._x;
   const int height = textureResolution._y;
-
+  
   const int imagesSize = images.size();
-
   if (imagesSize == 0 || imagesSize != destRectangles.size() || imagesSize != srcRectangles.size()) {
     ILogger::instance()->logWarning("Creating blank Image");
     //return factory->createImageFromSize(width, height);
     factory->createImageFromSize(width, height,
                                  listener, autodelete);
   }
-  /*else if (imagesSize == 1) {
-    RectangleI* rectangle = destRectangles[0];
-    images[0]->subImage(*rectangle,
-                        new CPUTextureBuilderSubImageImageLister(width, height,
-                                                                 listener, autodelete),
-                        true);
-  }*/
   else {
-    std::vector<const IImage*> tailImages;
-    std::vector<RectangleI*> tailSourceRectangles;
-    std::vector<RectangleI*> tailDestRectangles;
-    for (int i = 1; i < imagesSize; i++) {
-      tailImages.push_back( images[i] );
-      tailDestRectangles.push_back( destRectangles[i] );
-      
-      //TODO: Check sector
-      tailSourceRectangles.push_back(srcRectangles[i]);
-    }
-    
-    images[0]->combineWith(*srcRectangles[0],
-                           tailImages,
-                           tailSourceRectangles,
-                           tailDestRectangles,
-                           Vector2I(width, height),
-                           listener,
-                           autodelete);
+    IImageUtils::combine(images,
+                         srcRectangles,
+                         destRectangles,
+                         Vector2I(width, height),
+                         listener,
+                         autodelete);
   }
 }
 
@@ -152,4 +138,4 @@ const void CPUTextureBuilder::createTextureFromImages(GL* gl,
 
 
 
- 
+

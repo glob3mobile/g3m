@@ -142,3 +142,22 @@ void ICanvas::fillText(const std::string& text,
   checkCurrentFont();
   _fillText(text, left, top);
 }
+
+void ICanvas::drawImage(const IImage* image, float left, float top){
+  checkInitialized();
+  _drawImage(image, left, top);
+}
+
+void ICanvas::drawImage(const IImage* image, float left, float top, float width, float height){
+  checkInitialized();
+  _drawImage(image, left, top, width, height);
+}
+
+void ICanvas::drawImage(const IImage* image,
+               float srcLeft, float srcTop, float srcWidth, float srcHeigtt,
+                        float destLeft, float destTop, float destWidth, float destHeigtt){
+  checkInitialized();
+  _drawImage(image,
+             srcLeft, srcTop, srcWidth, srcHeigtt,
+             destLeft, destTop, destWidth, destHeigtt);
+}

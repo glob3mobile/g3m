@@ -19,6 +19,7 @@ package org.glob3.mobile.generated;
 //class Color;
 //class IImageListener;
 //class GFont;
+//class IImage;
 
 
 public abstract class ICanvas
@@ -83,6 +84,12 @@ public abstract class ICanvas
 
   protected abstract void _fillText(String text, float left, float top);
 
+  protected abstract void _drawImage(IImage image, float left, float top);
+
+  protected abstract void _drawImage(IImage image, float left, float top, float width, float height);
+
+  protected abstract void _drawImage(IImage image, float srcLeft, float srcTop, float srcWidth, float srcHeight, float destLeft, float destTop, float destWidth, float destHeight);
+
   public ICanvas()
   {
      _canvasWidth = -1;
@@ -121,7 +128,7 @@ public abstract class ICanvas
 
   /**
    Returns the size of the text if it were to be rendered with the actual font on a single line.
-
+   
    NOTE: The current font has to be set before calling this method.
    NOTE: No need to initialize the canvas before calling this method.
    */
@@ -133,7 +140,7 @@ public abstract class ICanvas
 
   /**
    Set the actual font.
-
+   
    NOTE: No need to initialize the canvas before calling this method.
    */
   public final void setFont(GFont font)
@@ -223,6 +230,24 @@ public abstract class ICanvas
     checkInitialized();
     checkCurrentFont();
     _fillText(text, left, top);
+  }
+
+  public final void drawImage(IImage image, float left, float top)
+  {
+    checkInitialized();
+    _drawImage(image, left, top);
+  }
+
+  public final void drawImage(IImage image, float left, float top, float width, float height)
+  {
+    checkInitialized();
+    _drawImage(image, left, top, width, height);
+  }
+
+  public final void drawImage(IImage image, float srcLeft, float srcTop, float srcWidth, float srcHeigtt, float destLeft, float destTop, float destWidth, float destHeigtt)
+  {
+    checkInitialized();
+    _drawImage(image, srcLeft, srcTop, srcWidth, srcHeigtt, destLeft, destTop, destWidth, destHeigtt);
   }
 
   public final int getWidth()

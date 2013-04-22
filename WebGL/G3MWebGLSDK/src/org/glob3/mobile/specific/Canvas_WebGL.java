@@ -5,6 +5,7 @@ package org.glob3.mobile.specific;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.GFont;
 import org.glob3.mobile.generated.ICanvas;
+import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IImageListener;
 import org.glob3.mobile.generated.Vector2F;
 
@@ -275,6 +276,38 @@ public class Canvas_WebGL
                                                  final float radius) {
       roundRect(left, top, width, height, radius, true, true);
    }
+
+
+@Override
+protected native void _drawImage(IImage image, float left, float top) /*-{
+	var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_context;
+	var image = other.@org.glob3.mobile.specific.Image_WebGL::_imgObject
+	
+	context.drawImage(image, left, top);
+}-*/;
+
+
+@Override
+protected native void _drawImage(IImage image, float left, float top, float width,
+		float height) /*-{
+	var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_context;
+	var image = other.@org.glob3.mobile.specific.Image_WebGL::_imgObject
+	
+	context.drawImage(image, left, top, width, height);
+}-*/;
+
+
+@Override
+protected native void _drawImage(IImage image, float srcLeft, float srcTop,
+		float srcWidth, float srcHeight, float destLeft, float destTop,
+		float destWidth, float destHeigtt) /*-{
+	var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_context;
+	var image = other.@org.glob3.mobile.specific.Image_WebGL::_imgObject
+
+	context.drawImage(image, 
+					  srcLeft, srcTop, srcWidth, srcHeight,
+					  destLeft, destTop, destWidth, destHeight);
+}-*/;
 
 
 }
