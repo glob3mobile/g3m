@@ -25,7 +25,10 @@ public:
 #ifdef JAVA_CODE
   public void dispose();
 #endif
-
+  
+  /**
+   Callback method for ElevationData creation. Pointer is owned by Listener
+   */
   virtual void onData(const Sector& sector,
                       const Vector2I& resolution,
                       ElevationData* elevationData) = 0;

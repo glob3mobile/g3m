@@ -252,14 +252,14 @@ public:
   
   
   
-  CompositeElevationDataProvider* compElevationDataProvider = new CompositeElevationDataProvider();
-  compElevationDataProvider->addElevationDataProvider(elevationDataProvider);
+  //CompositeElevationDataProvider* compElevationDataProvider = new CompositeElevationDataProvider();
+  //compElevationDataProvider->addElevationDataProvider(elevationDataProvider);
   //compElevationDataProvider->addElevationDataProvider(elevationDataProvider1);
   //compElevationDataProvider->addElevationDataProvider(elevationDataProvider2);
   //compElevationDataProvider->addElevationDataProvider(elevationDataProvider3);
   //compElevationDataProvider->addElevationDataProvider(elevationDataProvider4);
   //compElevationDataProvider->addElevationDataProvider(elevationDataProvider5);
-  elevationDataProvider = compElevationDataProvider;
+  //elevationDataProvider = compElevationDataProvider;
   
   builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProvider);
 }
