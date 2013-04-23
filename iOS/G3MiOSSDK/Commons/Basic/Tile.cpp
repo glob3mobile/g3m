@@ -203,18 +203,20 @@ void Tile::onElevationData(ElevationData* elevationData,
 Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
                                const TileRenderContext* trc) {
   
+  
+  const TileTessellator* tessellator = trc->getTessellator();
+  const bool renderDebug = trc->getParameters()->_renderDebug;
+  ElevationDataProvider* elevationDataProvider = trc->getElevationDataProvider();
+  const Planet* planet = rc->getPlanet();
+  
+  const LayerTilesRenderParameters* layerTilesRenderParameters = trc->getLayerTilesRenderParameters();
+  const Vector2I tileMeshResolution(layerTilesRenderParameters->_tileMeshResolution);
+  
   if (_elevationData == NULL){
     getElevationDataFromAncestor(trc->getLayerTilesRenderParameters()->_tileMeshResolution);
   }
   
   if ( _tessellatorMesh == NULL ) {
-    const TileTessellator* tessellator = trc->getTessellator();
-    const bool renderDebug = trc->getParameters()->_renderDebug;
-    ElevationDataProvider* elevationDataProvider = trc->getElevationDataProvider();
-    const Planet* planet = rc->getPlanet();
-    
-    const LayerTilesRenderParameters* layerTilesRenderParameters = trc->getLayerTilesRenderParameters();
-    const Vector2I tileMeshResolution(layerTilesRenderParameters->_tileMeshResolution);
     
     if (elevationDataProvider == NULL) {
       // no elevation data provider, just create a simple mesh without elevation
@@ -227,6 +229,9 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
     }
     else {
       if (_elevationData == NULL) {
+        
+        getElevationDataFromAncestor(tileMeshResolution); //Getting from ancestor
+        
         MeshHolder* meshHolder = new MeshHolder( tessellator->createTileMesh(planet,
                                                                              tileMeshResolution,
                                                                              this,
