@@ -301,9 +301,10 @@ protected native void _drawImage(IImage image, float left, float top, float widt
 protected native void _drawImage(IImage image, float srcLeft, float srcTop,
 		float srcWidth, float srcHeight, float destLeft, float destTop,
 		float destWidth, float destHeigtt) /*-{
+			debugger;
 	var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_context;
 	var image = other.@org.glob3.mobile.specific.Image_WebGL::_imgObject
-
+	
 	context.drawImage(image, 
 					  srcLeft, srcTop, srcWidth, srcHeight,
 					  destLeft, destTop, destWidth, destHeight);

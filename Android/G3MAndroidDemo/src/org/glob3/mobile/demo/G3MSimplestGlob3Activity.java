@@ -115,9 +115,10 @@ public class G3MSimplestGlob3Activity
                false, //
                null, //
                TimeInterval.fromDays(30));
-      //layerSet.addLayer(osm);
+      layerSet.addLayer(osm);
       
-      final boolean blueMarble = true;
+      //Checking use of images of upper LOD
+      final boolean blueMarble = false;
       if (blueMarble) {
         WMSLayer blueMarbleL = new WMSLayer("bmng200405",
                                             new URL("http://www.nasa.network.com/wms?", false),
@@ -127,12 +128,13 @@ public class G3MSimplestGlob3Activity
                                             "EPSG:4326",
                                             "",
                                             false,
-                                            new LevelTileCondition(0, 6),
+                                            //new LevelTileCondition(0, 6),
+                                            null,
                                             TimeInterval.fromDays(30));
         layerSet.addLayer(blueMarbleL);
       }
       
-      final boolean useOrtoAyto = true;
+      final boolean useOrtoAyto = false;
       if (useOrtoAyto){
      	 
      	 LayerTilesRenderParameters ltrp = new LayerTilesRenderParameters(Sector.fullSphere(),
