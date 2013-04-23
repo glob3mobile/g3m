@@ -26,22 +26,23 @@ void IImageUtils::createShallowCopy(const IImage* image,
   }
 }
 
-void IImageUtils::scale(const IImage* image,
-                        const Vector2I& size,
+void IImageUtils::scale(const int width,
+                        const int height,
+                        const IImage* image,
                         IImageListener* listener,
                         bool autodelete) {
-  if (size._x == image->getWidth() &&
-      size._y == image->getHeight()) {
+  if (width == image->getWidth() &&
+      height == image->getHeight()) {
     createShallowCopy(image,
                       listener,
                       autodelete);
   }
   else {
     ICanvas* canvas = IFactory::instance()->createCanvas();
-    canvas->initialize(size._x, size._y);
+    canvas->initialize(width, height);
 
     canvas->drawImage(image,
-                      0, 0, size._x, size._y);
+                      0, 0, width, height);
 
     canvas->createImage(listener, autodelete);
     delete canvas;
@@ -77,15 +78,17 @@ void IImageUtils::subImage(const IImage* image,
   }
 }
 
-void IImageUtils::combine(const std::vector<const IImage*>& images,
+void IImageUtils::combine(const int width,
+                          const int height,
+                          const std::vector<const IImage*>& images,
                           const std::vector<RectangleF*>& sourceRects,
                           const std::vector<RectangleF*>& destRects,
-                          const Vector2I& size,
                           IImageListener* listener,
                           bool autodelete){
 
   const int imagesSize = images.size();
-  if (imagesSize == 0 || imagesSize != sourceRects.size() || imagesSize != destRects.size()) {
+
+  if (imagesSize != sourceRects.size() || imagesSize != destRects.size()) {
     ILogger::instance()->logError("Failure at combine images.");
     return;
   }
@@ -101,10 +104,11 @@ void IImageUtils::combine(const std::vector<const IImage*>& images,
         sourceRect->_height == image->getHeight() &&
         destRect->_x == 0 &&
         destRect->_y == 0 &&
-        destRect->_width == size._x &&
-        destRect->_height == size._y) {
-      scale(image,
-            size,
+        destRect->_width == width &&
+        destRect->_height == height) {
+      scale(width,
+            height,
+            image,
             listener,
             autodelete);
       return;
@@ -113,7 +117,7 @@ void IImageUtils::combine(const std::vector<const IImage*>& images,
 
 
   ICanvas* canvas = IFactory::instance()->createCanvas();
-  canvas->initialize(size._x, size._y);
+  canvas->initialize(width, height);
 
   for (int i = 0; i < imagesSize ; i++) {
     const IImage* image = images[i];

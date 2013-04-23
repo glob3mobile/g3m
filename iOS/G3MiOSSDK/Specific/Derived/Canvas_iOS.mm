@@ -354,7 +354,7 @@ void Canvas_iOS::_drawImage(const IImage* image,
     CGContextDrawImage(_context,
                        destRect,
                        cgCropImage);
-    
+
     CGImageRelease(cgCropImage);
   }
 }

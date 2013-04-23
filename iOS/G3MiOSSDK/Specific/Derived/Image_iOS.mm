@@ -13,25 +13,25 @@
 #include "IImageListener.hpp"
 #include "RectangleI.hpp"
 
-Image_iOS::Image_iOS(int width, int height) {
-  CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-  unsigned char* imageData = new unsigned char[height * width * 4];
-  
-  CGContextRef context = CGBitmapContextCreate(imageData,
-                                               width, height,
-                                               8, 4 * width,
-                                               colorSpace,
-                                               kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big );
-  CGColorSpaceRelease( colorSpace );
-  CGContextClearRect( context, CGRectMake( 0, 0, width, height ) );
-  
-  CGImageRef imgRef = CGBitmapContextCreateImage(context);
-  _image = [UIImage imageWithCGImage:imgRef];
-  CGImageRelease(imgRef);
-  CGContextRelease(context);
-  
-  delete[] imageData;
-}
+//Image_iOS::Image_iOS(int width, int height) {
+//  CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+//  unsigned char* imageData = new unsigned char[height * width * 4];
+//  
+//  CGContextRef context = CGBitmapContextCreate(imageData,
+//                                               width, height,
+//                                               8, 4 * width,
+//                                               colorSpace,
+//                                               kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big );
+//  CGColorSpaceRelease( colorSpace );
+//  CGContextClearRect( context, CGRectMake( 0, 0, width, height ) );
+//  
+//  CGImageRef imgRef = CGBitmapContextCreateImage(context);
+//  _image = [UIImage imageWithCGImage:imgRef];
+//  CGImageRelease(imgRef);
+//  CGContextRelease(context);
+//  
+//  delete[] imageData;
+//}
 
 unsigned char* Image_iOS::createByteArrayRGBA8888() const {
   const int width  = getWidth();

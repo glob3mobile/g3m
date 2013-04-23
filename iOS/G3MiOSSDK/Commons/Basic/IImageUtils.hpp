@@ -14,7 +14,6 @@
 class RectangleF;
 class IImage;
 class IImageListener;
-class Vector2I;
 
 class IImageUtils {
 private:
@@ -27,8 +26,9 @@ private:
                                 bool autodelete);
 
 public:
-  static void scale(const IImage* image,
-                    const Vector2I& size,
+  static void scale(const int width,
+                    const int height,
+                    const IImage* image,
                     IImageListener* listener,
                     bool autodelete);
 
@@ -37,13 +37,14 @@ public:
                        IImageListener* listener,
                        bool autodelete);
 
-  static void combine(const std::vector<const IImage*>& images,
+  static void combine(const int width,
+                      const int height,
+                      const std::vector<const IImage*>& images,
                       const std::vector<RectangleF*>& sourceRects,
                       const std::vector<RectangleF*>& destRects,
-                      const Vector2I& size,
                       IImageListener* listener,
                       bool autodelete);
-  
+
 };
 
 #endif
