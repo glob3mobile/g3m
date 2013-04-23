@@ -15,13 +15,12 @@ class IFactory;
 class RectangleI;
 class IImageListener;
 class RectangleF;
-
+class Vector2I;
 #include <vector>
 
 class TextureBuilder {
 public:
-  virtual const void createTextureFromImages(int textureWidth,
-                                             int textureHeight,
+  virtual const void createTextureFromImages(const Vector2I& textureExtent,
                                              const std::vector<const IImage*>& images,
                                              const std::vector<RectangleF*>& srcRectangles,
                                              const std::vector<RectangleF*>& destRectangles,

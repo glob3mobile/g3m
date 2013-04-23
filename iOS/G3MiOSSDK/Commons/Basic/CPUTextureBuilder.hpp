@@ -13,8 +13,7 @@
 
 class CPUTextureBuilder: public TextureBuilder {
 public:
-  const void createTextureFromImages(int textureWidth,
-                                     int textureHeight,
+  const void createTextureFromImages(const Vector2I& textureExtent,
                                      const std::vector<const IImage*>& images,
                                      const std::vector<RectangleF*>& srcRectangles,
                                      const std::vector<RectangleF*>& destRectangles,

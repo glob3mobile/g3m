@@ -10,12 +10,10 @@
 
 #include "IImage.hpp"
 #include "IImageListener.hpp"
-#include "ICanvas.hpp"
 #include "IFactory.hpp"
+#include "ICanvas.hpp"
 #include "RectangleF.hpp"
 
-
-//delete_canvas;
 
 void IImageUtils::createShallowCopy(const IImage* image,
                                     IImageListener* listener,
@@ -26,8 +24,8 @@ void IImageUtils::createShallowCopy(const IImage* image,
   }
 }
 
-void IImageUtils::scale(const int width,
-                        const int height,
+void IImageUtils::scale(int width,
+                        int height,
                         const IImage* image,
                         IImageListener* listener,
                         bool autodelete) {
@@ -78,8 +76,8 @@ void IImageUtils::subImage(const IImage* image,
   }
 }
 
-void IImageUtils::combine(const int width,
-                          const int height,
+void IImageUtils::combine(int width,
+                          int height,
                           const std::vector<const IImage*>& images,
                           const std::vector<RectangleF*>& sourceRects,
                           const std::vector<RectangleF*>& destRects,

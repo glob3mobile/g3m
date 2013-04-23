@@ -562,7 +562,7 @@ public:
                                                                        2,
                                                                        4,
                                                                        0,
-                                                                       4,
+                                                                       8,
                                                                        LayerTilesRenderParameters::defaultTileTextureResolution(),
                                                                        LayerTilesRenderParameters::defaultTileMeshResolution(),
                                                                        false)

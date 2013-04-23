@@ -11,15 +11,13 @@
 #include "IImageUtils.hpp"
 
 
-const void CPUTextureBuilder::createTextureFromImages(int textureWidth,
-                                                      int textureHeight,
+const void CPUTextureBuilder::createTextureFromImages(const Vector2I& textureExtent,
                                                       const std::vector<const IImage*>& images,
                                                       const std::vector<RectangleF*>& srcRectangles,
                                                       const std::vector<RectangleF*>& destRectangles,
                                                       IImageListener* listener,
                                                       bool autodelete) const{
-  IImageUtils::combine(textureWidth,
-                       textureHeight,
+  IImageUtils::combine(textureExtent,
                        images,
                        srcRectangles,
                        destRectangles,
