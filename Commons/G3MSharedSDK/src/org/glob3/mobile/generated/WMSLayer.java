@@ -333,7 +333,7 @@ public class WMSLayer extends Layer
     double v;
     if (_parameters._mercator)
     {
-      u = sector.getUCoordinates(position.longitude());
+      u = sector.getUCoordinate(position.longitude());
       v = MercatorUtils.getMercatorV(position.latitude());
     }
     else

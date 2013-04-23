@@ -406,15 +406,15 @@ public class Sector
 
   public final Vector2D getUVCoordinates(Angle latitude, Angle longitude)
   {
-    return new Vector2D(getUCoordinates(longitude), getVCoordinates(latitude));
+    return new Vector2D(getUCoordinate(longitude), getVCoordinate(latitude));
   }
 
-  public final double getUCoordinates(Angle longitude)
+  public final double getUCoordinate(Angle longitude)
   {
     return (longitude._radians - _lower.longitude()._radians) / _deltaLongitude._radians;
   }
 
-  public final double getVCoordinates(Angle latitude)
+  public final double getVCoordinate(Angle latitude)
   {
     return (_upper.latitude()._radians - latitude._radians) / _deltaLatitude._radians;
   }
