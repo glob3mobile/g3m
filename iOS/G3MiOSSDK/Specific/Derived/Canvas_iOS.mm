@@ -331,9 +331,11 @@ void Canvas_iOS::_drawImage(const IImage* image,
 
   const int imageHeight = image->getHeight();
   CGRect destRect = CGRectMake(destLeft,
-                               imageHeight - (destTop + destHeight), // Bottom
+                               //imageHeight - (destTop + destHeight), // Bottom
+                               _canvasHeight - destTop,
                                destWidth,
-                               destHeight);
+                               //destHeight);
+                               -destHeight);
 
   if ((srcLeft == 0) &&
       (srcTop  == 0) &&
@@ -346,7 +348,8 @@ void Canvas_iOS::_drawImage(const IImage* image,
   else {
     // Cropping image
     CGRect cropRect = CGRectMake(srcLeft,
-                                 srcTop + srcHeight, // Bottom
+                                 //imageHeight - (srcTop + srcHeight), // Bottom
+                                 srcTop,
                                  srcWidth,
                                  srcHeight);
 
