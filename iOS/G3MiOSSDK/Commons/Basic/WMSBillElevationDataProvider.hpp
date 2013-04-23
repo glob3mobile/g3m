@@ -48,6 +48,12 @@ public:
     int WORKING_JM;
     return Vector2I(0,0);
   }
+  
+  ElevationData* createSubviewOfElevationData(ElevationData* elevationData,
+                                              const Sector& sector,
+                                              const Vector2I& resolution) const{
+  //TODO
+  }
 
 };
 

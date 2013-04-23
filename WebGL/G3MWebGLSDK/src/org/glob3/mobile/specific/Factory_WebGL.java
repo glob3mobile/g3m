@@ -5,6 +5,7 @@ package org.glob3.mobile.specific;
 import java.util.HashMap;
 
 import org.glob3.mobile.generated.IByteBuffer;
+import org.glob3.mobile.generated.ICanvas;
 import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IFloatBuffer;
 import org.glob3.mobile.generated.IImage;
@@ -145,6 +146,12 @@ public final class Factory_WebGL
    @Override
    public IShortBuffer createShortBuffer(final int size) {
       return new ShortBuffer_WebGL(size);
+   }
+
+
+   @Override
+   public ICanvas createCanvas() {
+      return new Canvas_WebGL();
    }
 
 }

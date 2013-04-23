@@ -32,7 +32,6 @@ public:
   short         nextInt16();
   int           nextInt32();
   long long     nextInt64();
-  unsigned short nextUInt16();
 
   IByteBuffer* nextBufferUpTo(unsigned char sentinel);
 

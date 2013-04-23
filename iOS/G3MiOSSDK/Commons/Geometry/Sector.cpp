@@ -205,6 +205,37 @@ Sector Sector::mergedWith(const Sector& that) const {
   return Sector(low, up);
 }
 
+const Geodetic2D Sector::clamp(const Geodetic2D& position) const {
+  if (contains(position)) {
+    return position;
+  }
+
+  double latitudeInDegrees = position.latitude().degrees();
+  double longitudeInDegrees = position.longitude().degrees();
+
+  const double upperLatitudeInDegrees  = _upper.latitude().degrees();
+  if (latitudeInDegrees > upperLatitudeInDegrees) {
+    latitudeInDegrees = upperLatitudeInDegrees;
+  }
+
+  const double upperLongitudeInDegrees = _upper.longitude().degrees();
+  if (longitudeInDegrees > upperLongitudeInDegrees) {
+    longitudeInDegrees = upperLongitudeInDegrees;
+  }
+
+  const double lowerLatitudeInDegrees  = _lower.latitude().degrees();
+  if (latitudeInDegrees < lowerLatitudeInDegrees) {
+    latitudeInDegrees = lowerLatitudeInDegrees;
+  }
+
+  const double lowerLongitudeInDegrees  = _lower.longitude().degrees();
+  if (longitudeInDegrees < lowerLongitudeInDegrees) {
+    longitudeInDegrees = lowerLongitudeInDegrees;
+  }
+
+  return Geodetic2D::fromDegrees(latitudeInDegrees, longitudeInDegrees);
+}
+
 const Geodetic2D Sector::getClosestPoint(const Geodetic2D& pos) const {
   // if pos is included, return pos
   if (contains(pos)) {

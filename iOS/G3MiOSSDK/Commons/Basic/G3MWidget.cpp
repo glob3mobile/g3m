@@ -527,7 +527,7 @@ void G3MWidget::setCameraPitch(const Angle& angle) {
 }
 
 void G3MWidget::setCameraPosition(const Geodetic3D& position) {
-  getNextCamera()->setPosition(position);
+  getNextCamera()->setGeodeticPosition(position);
 }
 
 void G3MWidget::setAnimatedCameraPosition(const Geodetic3D& position,
@@ -539,45 +539,60 @@ void G3MWidget::setAnimatedCameraPosition(const Geodetic3D& position,
 void G3MWidget::setAnimatedCameraPosition(const TimeInterval& interval,
                                           const Geodetic3D& position,
                                           const Angle& heading,
-                                          const Angle& pitch) {
+                                          const Angle& pitch,
+                                          const bool linearTiming,
+                                          const bool linearHeight) {
+  const Geodetic3D fromPosition = _nextCamera->getGeodeticPosition();
+  const Angle fromHeading = _nextCamera->getHeading();
+  const Angle fromPitch   = _nextCamera->getPitch();
 
-  const Geodetic3D fromPosition = _planet->toGeodetic3D( _currentCamera->getCartesianPosition() );
+  setAnimatedCameraPosition(interval,
+                            fromPosition, position,
+                            fromHeading,  heading,
+                            fromPitch,    pitch,
+                            linearTiming,
+                            linearHeight);
+}
 
-  double finalLat = position.latitude()._degrees;
-  double finalLon = position.longitude()._degrees;
+void G3MWidget::setAnimatedCameraPosition(const TimeInterval& interval,
+                                          const Geodetic3D& fromPosition,
+                                          const Geodetic3D& toPosition,
+                                          const Angle& fromHeading,
+                                          const Angle& toHeading,
+                                          const Angle& fromPitch,
+                                          const Angle& toPitch,
+                                          const bool linearTiming,
+                                          const bool linearHeight) {
+  double finalLatInDegrees = toPosition.latitude()._degrees;
+  double finalLonInDegrees = toPosition.longitude()._degrees;
 
   //Fixing final latitude
-  while (finalLat > 90) {
-    finalLat -= 360;
+  while (finalLatInDegrees > 90) {
+    finalLatInDegrees -= 360;
   }
-  while (finalLat < -90) {
-    finalLat += 360;
+  while (finalLatInDegrees < -90) {
+    finalLatInDegrees += 360;
   }
 
   //Fixing final longitude
-  while (finalLon > 360) {
-    finalLon -= 360;
+  while (finalLonInDegrees > 360) {
+    finalLonInDegrees -= 360;
   }
-  while (finalLon < 0) {
-    finalLon += 360;
+  while (finalLonInDegrees < 0) {
+    finalLonInDegrees += 360;
   }
-  if (fabs(finalLon - fromPosition.longitude()._degrees) > 180) {
-    finalLon -= 360;
+  if (fabs(finalLonInDegrees - fromPosition.longitude()._degrees) > 180) {
+    finalLonInDegrees -= 360;
   }
 
-  const Geodetic3D toPosition = Geodetic3D::fromDegrees(finalLat, finalLon, position.height());
-
-  const Angle fromHeading = _currentCamera->getHeading();
-  const Angle toHeading = heading;
-  const Angle fromPitch = _currentCamera->getPitch();
-  const Angle toPitch = pitch;
+  const Geodetic3D finalToPosition = Geodetic3D::fromDegrees(finalLatInDegrees,
+                                                             finalLonInDegrees,
+                                                             toPosition.height());
 
   stopCameraAnimation();
-  int TODO_make_linearHeight_configurable;
-  const bool linearTiming=false;
-  const bool linearHeight=false;
+
   _effectsScheduler->startEffect(new CameraGoToPositionEffect(interval,
-                                                              fromPosition, toPosition,
+                                                              fromPosition, finalToPosition,
                                                               fromHeading,  toHeading,
                                                               fromPitch,    toPitch,
                                                               linearTiming,
@@ -590,6 +605,6 @@ void G3MWidget::stopCameraAnimation() {
   _effectsScheduler->cancelAllEffectsFor(target);
 }
 
-void G3MWidget::resetCameraPosition() {
-  getNextCamera()->resetPosition();
-}
+//void G3MWidget::resetCameraPosition() {
+//  getNextCamera()->resetPosition();
+//}

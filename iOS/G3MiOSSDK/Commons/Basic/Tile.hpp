@@ -28,6 +28,8 @@ class ElevationDataProvider;
 class ElevationData;
 class MeshHolder;
 class Vector2I;
+class LeveledMesh;
+class TileMeshBuilder;
 
 #include "ITexturizerData.hpp"
 
@@ -50,7 +52,7 @@ private:
   std::vector<Tile*>* _subtiles;
   bool _justCreatedSubtiles;
 
-  bool _texturizerDirty;
+  bool _texturizerDirty;    //Texturizer needs to be called
 
   float _verticalExaggeration;
   double _minHeight;
@@ -103,6 +105,13 @@ private:
   Extent* getTileExtent(const G3MRenderContext *rc);
 
   void cancelElevationDataRequest(ElevationDataProvider* elevationDataProvider);
+  
+  //bool _elevationDataSolved;
+  
+  //LeveledMesh* _leveledMesh;
+  //TileMeshBuilder* _meshBuilder;
+  bool _meshMustActualizeDueNewElevationData;
+  int _levelOfElevationData;
 
 public:
   Tile(TileTexturizer* texturizer,
@@ -191,7 +200,8 @@ public:
                        const TileTessellator* tessellator,
                        const Planet* planet,
                        const Vector2I& tileMeshResolution,
-                       bool renderDebug);
+                       bool renderDebug,
+                       bool isSolved);
   
   double getMinHeight() const;
   double getMaxHeight() const;
@@ -201,6 +211,30 @@ public:
   inline std::vector<Tile*>* createSubTiles(const Angle& splitLatitude,
                                             const Angle& splitLongitude,
                                             bool setParent);
+  
+  bool isElevationDataSolved() const{
+    return _levelOfElevationData == _level;
+  }
+  
+  ElevationData* getElevationData() const{
+    return _elevationData;
+  }
+  
+  void setElevationData(ElevationData* ed, int level);
+  
+  int getElevationDataLevel() const{
+    return _levelOfElevationData;
+  }
+  
+//  void setLeveledMesh(LeveledMesh* lm) {
+//    _leveledMesh = lm;
+//  }
+//  
+//  LeveledMesh* getLeveledMesh() const{
+//    return _leveledMesh;
+//  }
+  
+  void ancestorElevationDataSolvedChanged(Tile *ancestor);
 
 };
 

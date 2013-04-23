@@ -28,6 +28,7 @@ private:
   const Angle _deltaLongitude;
 
 
+  const Geodetic2D getClosestPoint(const Geodetic2D& pos) const;
 
 public:
 
@@ -173,9 +174,7 @@ public:
 
   bool isBackOriented(const G3MRenderContext *rc, double height) const;
 
-  const Geodetic2D getClosestPoint(const Geodetic2D& pos) const;
-
-  const Geodetic2D getApproximatedClosestPoint(const Geodetic2D& pos) const;
+  const Geodetic2D clamp(const Geodetic2D& pos) const;
 
   const std::string description() const;
 

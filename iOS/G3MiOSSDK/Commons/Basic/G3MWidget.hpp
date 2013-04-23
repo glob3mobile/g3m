@@ -158,12 +158,24 @@ public:
 
   void setAnimatedCameraPosition(const TimeInterval& interval,
                                  const Geodetic3D& position,
-                                 const Angle& heading=Angle::zero(),
-                                 const Angle& pitch=Angle::zero());
-  
+                                 const Angle& heading = Angle::zero(),
+                                 const Angle& pitch   = Angle::zero(),
+                                 const bool linearTiming = false,
+                                 const bool linearHeight = false);
+
+  void setAnimatedCameraPosition(const TimeInterval& interval,
+                                 const Geodetic3D& fromPosition,
+                                 const Geodetic3D& toPosition,
+                                 const Angle& fromHeading,
+                                 const Angle& toHeading,
+                                 const Angle& fromPitch,
+                                 const Angle& toPitch,
+                                 const bool linearTiming  = false,
+                                 const bool linearHeight  = false);
+
   void stopCameraAnimation();
 
-  void resetCameraPosition();
+//  void resetCameraPosition();
 
   CameraRenderer* getCameraRenderer() const {
     return _cameraRenderer;

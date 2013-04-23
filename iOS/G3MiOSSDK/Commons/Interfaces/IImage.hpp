@@ -18,33 +18,13 @@ class IImageListener;
 class IImage {
 public:
   virtual ~IImage() {}
-
+  
   virtual int getWidth() const = 0;
   virtual int getHeight() const = 0;
   virtual Vector2I getExtent() const = 0;
-
-  virtual void combineWith(const IImage& other,
-                           const RectangleI& rect,
-                           int width, int height,
-                           IImageListener* listener,
-                           bool autodelete) const = 0;
-
-  virtual void combineWith(const std::vector<const IImage*>& images,
-                           const std::vector<RectangleI*>& rectangles,
-                           int width, int height,
-                           IImageListener* listener,
-                           bool autodelete) const = 0;
-
-  virtual void subImage(const RectangleI& rect,
-                        IImageListener* listener,
-                        bool autodelete) const = 0;
-
-  virtual void scale(int width, int height,
-                     IImageListener* listener,
-                     bool autodelete) const = 0;
-
+  
   virtual const std::string description() const = 0;
-
+  
   virtual IImage* shallowCopy() const = 0;
   
 };
