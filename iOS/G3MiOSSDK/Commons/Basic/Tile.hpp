@@ -28,6 +28,7 @@ class ElevationDataProvider;
 class ElevationData;
 class MeshHolder;
 class Vector2I;
+class TileElevationDataListener;
 
 #include "ITexturizerData.hpp"
 
@@ -46,6 +47,7 @@ private:
   long long      _elevationRequestId;
   Mesh* _debugMesh;
   Mesh* _texturizedMesh;
+  TileElevationDataListener* _elevationDataListener;
 
   bool _textureSolved;
   std::vector<Tile*>* _subtiles;

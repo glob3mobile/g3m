@@ -26,6 +26,8 @@
 
 #include "SubviewElevationData.hpp"
 
+#include "TileElevationDataListener.hpp"
+
 Tile::Tile(TileTexturizer* texturizer,
            Tile* parent,
            const Sector& sector,
@@ -50,6 +52,7 @@ _texturizerData(NULL),
 _tileExtent(NULL),
 _elevationData(NULL),
 _elevationDataLevel(-1),
+_elevationDataListener(NULL),
 _elevationRequestId(-1000),
 _minHeight(0),
 _maxHeight(0),
@@ -118,6 +121,7 @@ void Tile::setTextureSolved(bool textureSolved) {
   }
 }
 
+/*
 class TileElevationDataListener : public IElevationDataListener {
 private:
   Tile*                  _tile;
@@ -167,6 +171,7 @@ public:
     
   }
 };
+ */
 
 void Tile::onElevationData(ElevationData* elevationData,
                            MeshHolder* meshHolder,
@@ -214,6 +219,13 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
   
   if (_elevationData == NULL){
     getElevationDataFromAncestor(trc->getLayerTilesRenderParameters()->_tileMeshResolution);
+    if (_elevationDataListener == NULL){
+      
+      Vector2I res = tessellator->getTileMeshResolution(planet,                                                                                                            tileMeshResolution,                                                                                                            this,                                                                                                           renderDebug);
+      
+      _elevationDataListener = new TileElevationDataListener(this, res, elevationDataProvider);
+      _elevationDataListener->sendRequest();
+    }
   }
   
   if ( _tessellatorMesh == NULL ) {
@@ -240,20 +252,20 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
                                                                              renderDebug) );
         _tessellatorMesh = meshHolder;
         
-        TileElevationDataListener* listener = new TileElevationDataListener(this,
-                                                                            meshHolder,
-                                                                            tessellator,
-                                                                            planet,
-                                                                            tileMeshResolution,
-                                                                            renderDebug);
-        
-        _elevationRequestId = elevationDataProvider->requestElevationData(_sector,
-                                                                          tessellator->getTileMeshResolution(planet,
-                                                                                                             tileMeshResolution,
-                                                                                                             this,
-                                                                                                             renderDebug),
-                                                                          listener,
-                                                                          true);
+//        TileElevationDataListener* listener = new TileElevationDataListener(this,
+//                                                                            meshHolder,
+//                                                                            tessellator,
+//                                                                            planet,
+//                                                                            tileMeshResolution,
+//                                                                            renderDebug);
+//        
+//        _elevationRequestId = elevationDataProvider->requestElevationData(_sector,
+//                                                                          tessellator->getTileMeshResolution(planet,
+//                                                                                                             tileMeshResolution,
+//                                                                                                             this,
+//                                                                                                             renderDebug),
+//                                                                          listener,
+//                                                                          true);
       }
       else {
         // the elevation data is already available, create a simple "inflated" mesh with

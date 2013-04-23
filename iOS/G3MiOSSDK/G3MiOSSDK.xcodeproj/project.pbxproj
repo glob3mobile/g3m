@@ -238,6 +238,7 @@
 		D8A5601F15AEF64E00035086 /* IndexedMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A5601B15AEF64E00035086 /* IndexedMesh.cpp */; };
 		D8A5602115AEF64E00035086 /* Mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A5601D15AEF64E00035086 /* Mesh.cpp */; };
 		D8A723AE15E4D47E00ABDF07 /* StringBuilder_iOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A723AD15E4D47E00ABDF07 /* StringBuilder_iOS.cpp */; };
+		D8C771761726BAF900500920 /* TileElevationDataListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8C771741726BAF900500920 /* TileElevationDataListener.cpp */; };
 		D8D347BA15E5133B00EDB394 /* IStringBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8D347B915E5133B00EDB394 /* IStringBuilder.cpp */; };
 		D8EEF3B91577924D003FEB5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF3B81577924D003FEB5E /* Foundation.framework */; };
 		E705123C165E782C00AEADB9 /* TileRendererBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E705123A165E782C00AEADB9 /* TileRendererBuilder.cpp */; };
@@ -1118,6 +1119,8 @@
 		D8A723AD15E4D47E00ABDF07 /* StringBuilder_iOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = StringBuilder_iOS.cpp; path = Specific/Derived/StringBuilder_iOS.cpp; sourceTree = "<group>"; };
 		D8B3A95F160B691C0085D553 /* GLTextureId_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = GLTextureId_iOS.hpp; path = Specific/GL/GLTextureId_iOS.hpp; sourceTree = "<group>"; };
 		D8B3A961160B69620085D553 /* GLUniformID_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GLUniformID_iOS.hpp; path = Specific/GL/GLUniformID_iOS.hpp; sourceTree = "<group>"; };
+		D8C771741726BAF900500920 /* TileElevationDataListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TileElevationDataListener.cpp; sourceTree = "<group>"; };
+		D8C771751726BAF900500920 /* TileElevationDataListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TileElevationDataListener.hpp; sourceTree = "<group>"; };
 		D8C912D915F9FE78003F92A4 /* FloatBufferBuilderFromColor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = FloatBufferBuilderFromColor.hpp; path = Commons/Basic/FloatBufferBuilderFromColor.hpp; sourceTree = "<group>"; };
 		D8CD6F7815A6FFAC00279BE7 /* IBufferDownloadListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IBufferDownloadListener.hpp; path = Commons/Downloader/IBufferDownloadListener.hpp; sourceTree = "<group>"; };
 		D8CD74D615F8D3F000B801CC /* SimpleFloatBufferBuilder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = SimpleFloatBufferBuilder.hpp; path = Commons/Basic/SimpleFloatBufferBuilder.hpp; sourceTree = "<group>"; };
@@ -1368,6 +1371,8 @@
 				D86F9E30171581E9004849AF /* CompositeElevationDataProvider.hpp */,
 				D87A1DF21716F62C001AC5E3 /* CompositeElevationData.cpp */,
 				D87A1DF31716F62C001AC5E3 /* CompositeElevationData.hpp */,
+				D8C771741726BAF900500920 /* TileElevationDataListener.cpp */,
+				D8C771751726BAF900500920 /* TileElevationDataListener.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -2083,6 +2088,7 @@
 				CF83D50617049AB9009A39A5 /* GEOMarkSymbol.cpp in Sources */,
 				D86F9E31171581E9004849AF /* CompositeElevationDataProvider.cpp in Sources */,
 				D87A1DF41716F62C001AC5E3 /* CompositeElevationData.cpp in Sources */,
+				D8C771761726BAF900500920 /* TileElevationDataListener.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
