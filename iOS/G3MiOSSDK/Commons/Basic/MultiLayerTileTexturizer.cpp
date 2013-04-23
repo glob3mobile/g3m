@@ -354,52 +354,20 @@ public:
     deletePetitions();
   }
   
-  RectangleF* getImageRectangleInTexture(const Sector& wholeSector,
-                                         const Sector& imageSector) const {
-    
-    const IMathUtils* mu = IMathUtils::instance();
-    
-    const Vector2D lowerFactor = wholeSector.getUVCoordinates(imageSector.lower());
-    
-    const double widthFactor  = imageSector.getDeltaLongitude().div(wholeSector.getDeltaLongitude());
-    const double heightFactor = imageSector.getDeltaLatitude().div(wholeSector.getDeltaLatitude());
-    
-    const int textureWidth  = _tileTextureResolution._x;
-    const int textureHeight = _tileTextureResolution._y;
-    
-    return new RectangleF((float) mu->round( lowerFactor._x         * textureWidth ),
-                          (float) mu->round( (lowerFactor._y - heightFactor)         * textureHeight ),
-                          (float) mu->round( widthFactor            * textureWidth ),
-                          (float) mu->round( heightFactor           * textureHeight ));
-  }
-
-  RectangleF* getImageRectangle(const IImage& wholeImage,
+  RectangleF* getInnerRectangle(int wholeSectorWidth, int wholeSectorHeight,
                                 const Sector& wholeSector,
-                                const Sector& imageSector) const {
-    const IMathUtils* mu = IMathUtils::instance();
-    
-    double minWholeLat = wholeSector.lower().latitude().degrees();
-    double minWholeLon = wholeSector.lower().longitude().degrees();
-    double maxWholeLat = wholeSector.upper().latitude().degrees();
-    double maxWholeLon = wholeSector.upper().longitude().degrees();
-    
-    double minImageLat = imageSector.lower().latitude().degrees();
-    double minImageLon = imageSector.lower().longitude().degrees();
-    
-    double lowerFactorX = (minImageLon - minWholeLon) / (maxWholeLon - minWholeLon);
-    double lowerFactorY = (minImageLat - minWholeLat) / (maxWholeLat - minWholeLat);
-    const Vector2D lowerFactor(lowerFactorX, lowerFactorY);
-    
-    const double widthFactor  = imageSector.getDeltaLongitude().div(wholeSector.getDeltaLongitude());
-    const double heightFactor = imageSector.getDeltaLatitude().div(wholeSector.getDeltaLatitude());
-    
-    const int textureWidth  = wholeImage.getWidth();
-    const int textureHeight = wholeImage.getHeight();
-    
-    return new RectangleF((float) mu->round( lowerFactor._x         * textureWidth ),
-                          (float) mu->round( (1.0 - (lowerFactor._y + heightFactor)) * textureHeight ),
-                          (float) mu->round( widthFactor            * textureWidth ),
-                          (float) mu->round( heightFactor           * textureHeight ));
+                                const Sector& innerSector) const {
+    //printf("%s - %s\n", wholeSector.description().c_str(), innerSector.description().c_str());
+
+    const double widthFactor  = innerSector.getDeltaLongitude().div(wholeSector.getDeltaLongitude());
+    const double heightFactor = innerSector.getDeltaLatitude().div(wholeSector.getDeltaLatitude());
+
+    const Vector2D lowerUV = wholeSector.getUVCoordinates(innerSector.getNW());
+
+    return new RectangleF((float) (lowerUV._x   * wholeSectorWidth),
+                          (float) (lowerUV._y   * wholeSectorHeight),
+                          (float) (widthFactor  * wholeSectorWidth),
+                          (float) (heightFactor * wholeSectorHeight));
   }
   
   void composeAndUploadTexture() {
@@ -424,26 +392,33 @@ public:
         
         
         if (image != NULL) {
-          
-          Sector petitionSector = petition->getSector();
-          
+          const Sector imageSector = petition->getSector();
+
           //Finding intersection image sector - tile sector = srcReq
-          Sector intersectionSector = tileSector.intersection(petitionSector);
-          
-          RectangleF *sourceRect = NULL;
-          if (!intersectionSector.isEqualsTo(petitionSector)){
-            sourceRect = getImageRectangle(*image, petitionSector, intersectionSector); //Intersection with upper level image
-          } else{
-            sourceRect = new RectangleF((float)0,(float)0, (float)image->getWidth(), (float)image->getHeight());
+          const Sector intersectionSector = tileSector.intersection(imageSector);
+
+          RectangleF* sourceRect = NULL;
+          if (!intersectionSector.isEqualsTo(imageSector)){
+            sourceRect = getInnerRectangle(image->getWidth(), image->getHeight(),
+                                           imageSector,
+                                           intersectionSector);
           }
-          
+          else {
+            sourceRect = new RectangleF((float) 0, (float) 0,
+                                        (float) image->getWidth(), (float) image->getHeight());
+          }
+
           //Part of the image we are going to draw
           sourceRects.push_back(sourceRect);
           
           images.push_back(image);
           
           //Where we are going to draw the image
-          destRects.push_back(getImageRectangleInTexture(tileSector, intersectionSector));
+          //destRects.push_back(getImageRectangleInTexture(tileSector, intersectionSector));
+          destRects.push_back(getInnerRectangle(_tileTextureResolution._x,
+                                                _tileTextureResolution._y,
+                                                tileSector,
+                                                intersectionSector));
           
           textureId += petition->getURL().getPath();
           textureId += "_";
