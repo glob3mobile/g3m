@@ -8,35 +8,73 @@
 
 #include "IImageUtils.hpp"
 
+#include "IImage.hpp"
+#include "IImageListener.hpp"
 #include "ICanvas.hpp"
 #include "IFactory.hpp"
-#include "IImage.hpp"
-#include "RectangleI.hpp"
-#include "IImageListener.hpp"
+#include "RectangleF.hpp"
 
-void IImageUtils::scale(const IImage* image, const Vector2I& size,
-                        IImageListener* listener,
-                        bool autodelete){
-  ICanvas* canvas = IFactory::instance()->createCanvas();
-  canvas->initialize(size._x, size._y);
-  canvas->drawImage(image, (float)0.0, (float)0.0, (float)size._x, (float)size._y);
-  
-  canvas->createImage(listener, autodelete);
-  delete canvas;
+
+//delete_canvas;
+
+void IImageUtils::createShallowCopy(const IImage* image,
+                                    IImageListener* listener,
+                                    bool autodelete) {
+  listener->imageCreated( image->shallowCopy() );
+  if (autodelete) {
+    delete listener;
+  }
 }
 
-void IImageUtils::subImage(const IImage* image, const RectangleF& rect,
+void IImageUtils::scale(const IImage* image,
+                        const Vector2I& size,
+                        IImageListener* listener,
+                        bool autodelete) {
+  if (size._x == image->getWidth() &&
+      size._y == image->getHeight()) {
+    createShallowCopy(image,
+                      listener,
+                      autodelete);
+  }
+  else {
+    ICanvas* canvas = IFactory::instance()->createCanvas();
+    canvas->initialize(size._x, size._y);
+
+    canvas->drawImage(image,
+                      0, 0, size._x, size._y);
+
+    canvas->createImage(listener, autodelete);
+    delete canvas;
+  }
+}
+
+void IImageUtils::subImage(const IImage* image,
+                           const RectangleF& rect,
                            IImageListener* listener,
-                           bool autodelete){
-  
-  ICanvas* canvas = IFactory::instance()->createCanvas();
-  canvas->initialize((int)rect._width, (int)rect._height);
-  canvas->drawImage(image,
-                    (float)rect._x, (float)rect._y, (float)rect._width, (float)rect._height,
-                    (float)0, (float)0, (float)rect._width, (float)rect._height);
-  
-  canvas->createImage(listener, autodelete);
-  delete canvas;
+                           bool autodelete) {
+
+  if (rect._x == 0 &&
+      rect._y == 0 &&
+      rect._width == image->getWidth() &&
+      rect._height == image->getHeight()) {
+    createShallowCopy(image,
+                      listener,
+                      autodelete);
+  }
+  else {
+    ICanvas* canvas = IFactory::instance()->createCanvas();
+
+    IMathUtils* mu = IMathUtils::instance();
+    canvas->initialize((int) mu->round(rect._width),
+                       (int) mu->round(rect._height));
+
+    canvas->drawImage(image,
+                      rect._x, rect._y, rect._width, rect._height,
+                      0, 0, rect._width, rect._height);
+
+    canvas->createImage(listener, autodelete);
+    delete canvas;
+  }
 }
 
 void IImageUtils::combine(const std::vector<const IImage*>& images,
@@ -45,45 +83,48 @@ void IImageUtils::combine(const std::vector<const IImage*>& images,
                           const Vector2I& size,
                           IImageListener* listener,
                           bool autodelete){
-  
+
   const int imagesSize = images.size();
-  if (imagesSize == 0 || imagesSize != sourceRects.size() || imagesSize != destRects.size()){
+  if (imagesSize == 0 || imagesSize != sourceRects.size() || imagesSize != destRects.size()) {
     ILogger::instance()->logError("Failure at combine images.");
     return;
   }
-  
-  if (imagesSize == 1){
-    int im0Width = images[0]->getWidth();
-    int im0Height = images[0]->getHeight();
-    
-    if (im0Width == size._x && im0Height == size._y &&
-        sourceRects[0]->_x == 0 && sourceRects[0]->_y == 0 &&
-        sourceRects[0]->_width == im0Width && sourceRects[0]->_height == im0Height) {
-      listener->imageCreated( images[0]->shallowCopy() );
-      if (autodelete) {
-        delete listener;
-      }
-    } else{
-      scale(images[0], size,listener, autodelete);
+
+  if (imagesSize == 1) {
+    const IImage* image = images[0];
+    const RectangleF* sourceRect = sourceRects[0];
+    const RectangleF* destRect   = destRects[0];
+
+    if (sourceRect->_x == 0 &&
+        sourceRect->_y == 0 &&
+        sourceRect->_width == image->getWidth() &&
+        sourceRect->_height == image->getHeight() &&
+        destRect->_x == 0 &&
+        destRect->_y == 0 &&
+        destRect->_width == size._x &&
+        destRect->_height == size._y) {
+      scale(image,
+            size,
+            listener,
+            autodelete);
+      return;
     }
-  } else{
-    
-    
-    ICanvas* canvas = IFactory::instance()->createCanvas();
-    canvas->initialize((int)size._x, (int)size._y);
-    
-    for (int i = 0; i < imagesSize ; i++) {
-      const IImage* image = images[i];
-      RectangleF* srcRect = sourceRects[i];
-      RectangleF* dstRect = destRects[i];
-      
-      canvas->drawImage(image,
-                        srcRect->_x, srcRect->_y, srcRect->_width, srcRect->_height,
-                        dstRect->_x, dstRect->_y, dstRect->_width, dstRect->_height);
-    }
-    
-    
-    canvas->createImage(listener, autodelete);
-    delete canvas;
   }
+
+
+  ICanvas* canvas = IFactory::instance()->createCanvas();
+  canvas->initialize(size._x, size._y);
+
+  for (int i = 0; i < imagesSize ; i++) {
+    const IImage* image = images[i];
+    const RectangleF* srcRect = sourceRects[i];
+    const RectangleF* dstRect = destRects[i];
+
+    canvas->drawImage(image,
+                      srcRect->_x, srcRect->_y, srcRect->_width, srcRect->_height,
+                      dstRect->_x, dstRect->_y, dstRect->_width, dstRect->_height);
+  }
+
+  canvas->createImage(listener, autodelete);
+  delete canvas;
 }

@@ -7,6 +7,7 @@ import org.glob3.mobile.generated.Vector2I;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
+
 public final class Image_WebGL
          extends
             IImage {
@@ -46,9 +47,10 @@ public final class Image_WebGL
       return new Vector2I(getWidth(), getHeight());
    }
 
+
    @Override
    public String description() {
-      return "Image WebGL " + getWidth() + " x " + getHeight() + ", _image=(" + _imgObject + ")";
+      return "Image_WebGL " + getWidth() + " x " + getHeight() + ", _image=(" + _imgObject + ")";
    }
 
 

@@ -154,7 +154,7 @@ void ICanvas::drawImage(const IImage* image, float left, float top, float width,
 }
 
 void ICanvas::drawImage(const IImage* image,
-               float srcLeft, float srcTop, float srcWidth, float srcHeigtt,
+                        float srcLeft, float srcTop, float srcWidth, float srcHeigtt,
                         float destLeft, float destTop, float destWidth, float destHeigtt){
   checkInitialized();
   _drawImage(image,

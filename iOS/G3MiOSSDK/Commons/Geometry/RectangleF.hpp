@@ -16,7 +16,7 @@ public:
   const float _y;
   const float _width;
   const float _height;
-  
+
   RectangleF(float x, float y,
              float width, float height):
   _x(x),
@@ -25,13 +25,7 @@ public:
   _height(height)
   {
   }
-  
-#ifdef JAVA_CODE
-  public void dispose(){
-    
-  }
-#endif
-  
+
   RectangleF(const RectangleF& that):
   _x(that._x),
   _y(that._y),
@@ -39,9 +33,14 @@ public:
   _height(that._height)
   {
   }
-  
+
+  ~RectangleF() {
+
+  }
+
   bool equalTo(const RectangleF& that) const{
-    return (_x == that._x) && (_y == that._y) && (_width == that._width) && (_height == that._height);
+    return ((_x == that._x)         && (_y == that._y) &&
+            (_width == that._width) && (_height == that._height));
   }
   
 };

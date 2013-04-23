@@ -9,11 +9,11 @@
 #ifndef G3MiOSSDK_IImage_h
 #define G3MiOSSDK_IImage_h
 
-#include <vector>
+//#include <vector>
 //#include "RectangleI.hpp"
 #include "Vector2I.hpp"
-class RectangleI;
-class IImageListener;
+//class RectangleI;
+//class IImageListener;
 
 class IImage {
 public:
