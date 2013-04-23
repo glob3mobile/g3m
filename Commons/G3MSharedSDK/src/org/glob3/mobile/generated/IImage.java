@@ -8,6 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 
+///#include <vector>
 ///#include "RectangleI.hpp"
 //class RectangleI;
 //class IImageListener;

@@ -128,7 +128,7 @@ public abstract class ICanvas
 
   /**
    Returns the size of the text if it were to be rendered with the actual font on a single line.
-   
+
    NOTE: The current font has to be set before calling this method.
    NOTE: No need to initialize the canvas before calling this method.
    */
@@ -140,7 +140,7 @@ public abstract class ICanvas
 
   /**
    Set the actual font.
-   
+
    NOTE: No need to initialize the canvas before calling this method.
    */
   public final void setFont(GFont font)

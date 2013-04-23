@@ -293,12 +293,14 @@ public class TileTextureBuilder extends RCObject
 
       for (int i = 0; i < srcRects.size(); i++)
       {
-        srcRects.get(i).dispose();
+        if (srcRects.get(i) != null)
+           srcRects.get(i).dispose();
       }
 
       for (int i = 0; i < dstRects.size(); i++)
       {
-        dstRects.get(i).dispose();
+        if (dstRects.get(i) != null)
+           dstRects.get(i).dispose();
       }
 
     }

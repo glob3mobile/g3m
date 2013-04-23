@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  IImageUtils.h
+//  IImageUtils.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 19/04/13.
@@ -17,30 +17,70 @@ package org.glob3.mobile.generated;
 
 
 
+//class RectangleF;
+//class IImage;
+//class IImageListener;
+//class Vector2I;
 
 public class IImageUtils
 {
+  private IImageUtils()
+  {
+
+  }
+
+
+  //delete_canvas;
+  
+  private static void createShallowCopy(IImage image, IImageListener listener, boolean autodelete)
+  {
+    listener.imageCreated(image.shallowCopy());
+    if (autodelete)
+    {
+      if (listener != null)
+         listener.dispose();
+    }
+  }
+
   public static void scale(IImage image, Vector2I size, IImageListener listener, boolean autodelete)
   {
-    ICanvas canvas = IFactory.instance().createCanvas();
-    canvas.initialize(size._x, size._y);
-    canvas.drawImage(image, (float)0.0, (float)0.0, (float)size._x, (float)size._y);
+    if (size._x == image.getWidth() && size._y == image.getHeight())
+    {
+      createShallowCopy(image, listener, autodelete);
+    }
+    else
+    {
+      ICanvas canvas = IFactory.instance().createCanvas();
+      canvas.initialize(size._x, size._y);
   
-    canvas.createImage(listener, autodelete);
-    if (canvas != null)
-       canvas.dispose();
+      canvas.drawImage(image, 0, 0, size._x, size._y);
+  
+      canvas.createImage(listener, autodelete);
+      if (canvas != null)
+         canvas.dispose();
+    }
   }
 
   public static void subImage(IImage image, RectangleF rect, IImageListener listener, boolean autodelete)
   {
   
-    ICanvas canvas = IFactory.instance().createCanvas();
-    canvas.initialize((int)rect._width, (int)rect._height);
-    canvas.drawImage(image, (float)rect._x, (float)rect._y, (float)rect._width, (float)rect._height, (float)0, (float)0, (float)rect._width, (float)rect._height);
+    if (rect._x == 0 && rect._y == 0 && rect._width == image.getWidth() && rect._height == image.getHeight())
+    {
+      createShallowCopy(image, listener, autodelete);
+    }
+    else
+    {
+      ICanvas canvas = IFactory.instance().createCanvas();
   
-    canvas.createImage(listener, autodelete);
-    if (canvas != null)
-       canvas.dispose();
+      IMathUtils mu = IMathUtils.instance();
+      canvas.initialize((int) mu.round(rect._width), (int) mu.round(rect._height));
+  
+      canvas.drawImage(image, rect._x, rect._y, rect._width, rect._height, 0, 0, rect._width, rect._height);
+  
+      canvas.createImage(listener, autodelete);
+      if (canvas != null)
+         canvas.dispose();
+    }
   }
 
   public static void combine(java.util.ArrayList<IImage> images, java.util.ArrayList<RectangleF> sourceRects, java.util.ArrayList<RectangleF> destRects, Vector2I size, IImageListener listener, boolean autodelete)
@@ -55,44 +95,33 @@ public class IImageUtils
   
     if (imagesSize == 1)
     {
-      int im0Width = images.get(0).getWidth();
-      int im0Height = images.get(0).getHeight();
+      IImage image = images.get(0);
+      final RectangleF sourceRect = sourceRects.get(0);
+      final RectangleF destRect = destRects.get(0);
   
-      if (im0Width == size._x && im0Height == size._y && sourceRects.get(0)._x == 0 && sourceRects.get(0)._y == 0 && sourceRects.get(0)._width == im0Width && sourceRects.get(0)._height == im0Height)
+      if (sourceRect._x == 0 && sourceRect._y == 0 && sourceRect._width == image.getWidth() && sourceRect._height == image.getHeight() && destRect._x == 0 && destRect._y == 0 && destRect._width == size._x && destRect._height == size._y)
       {
-        listener.imageCreated(images.get(0).shallowCopy());
-        if (autodelete)
-        {
-          if (listener != null)
-             listener.dispose();
-        }
-      }
-      else
-      {
-        scale(images.get(0), size, listener, autodelete);
+        scale(image, size, listener, autodelete);
+        return;
       }
     }
-    else
+  
+  
+    ICanvas canvas = IFactory.instance().createCanvas();
+    canvas.initialize(size._x, size._y);
+  
+    for (int i = 0; i < imagesSize ; i++)
     {
+      IImage image = images.get(i);
+      final RectangleF srcRect = sourceRects.get(i);
+      final RectangleF dstRect = destRects.get(i);
   
-  
-      ICanvas canvas = IFactory.instance().createCanvas();
-      canvas.initialize((int)size._x, (int)size._y);
-  
-      for (int i = 0; i < imagesSize ; i++)
-      {
-        IImage image = images.get(i);
-        RectangleF srcRect = sourceRects.get(i);
-        RectangleF dstRect = destRects.get(i);
-  
-        canvas.drawImage(image, srcRect._x, srcRect._y, srcRect._width, srcRect._height, dstRect._x, dstRect._y, dstRect._width, dstRect._height);
-      }
-  
-  
-      canvas.createImage(listener, autodelete);
-      if (canvas != null)
-         canvas.dispose();
+      canvas.drawImage(image, srcRect._x, srcRect._y, srcRect._width, srcRect._height, dstRect._x, dstRect._y, dstRect._width, dstRect._height);
     }
+  
+    canvas.createImage(listener, autodelete);
+    if (canvas != null)
+       canvas.dispose();
   }
 
 }

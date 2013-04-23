@@ -24,10 +24,6 @@ public class RectangleF
      _height = height;
   }
 
-  public void dispose(){
-    
-  }
-
   public RectangleF(RectangleF that)
   {
      _x = that._x;
@@ -36,9 +32,14 @@ public class RectangleF
      _height = that._height;
   }
 
+  public void dispose()
+  {
+
+  }
+
   public final boolean equalTo(RectangleF that)
   {
-    return (_x == that._x) && (_y == that._y) && (_width == that._width) && (_height == that._height);
+    return ((_x == that._x) && (_y == that._y) && (_width == that._width) && (_height == that._height));
   }
 
 }
