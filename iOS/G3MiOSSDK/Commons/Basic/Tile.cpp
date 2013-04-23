@@ -798,6 +798,11 @@ void Tile::setElevationData(ElevationData* ed, int level){
     
     _elevationData = ed;
     _elevationDataLevel = level;
+    
+    if (isElevationDataSolved()){
+      //TODO: NOTIFY CHILDREN
+    }
+    
   }
 }
 

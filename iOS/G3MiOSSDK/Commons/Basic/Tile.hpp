@@ -217,6 +217,10 @@ public:
   void setElevationData(ElevationData* ed, int level);
   
   void getElevationDataFromAncestor(const Vector2I& resolution);
+  
+  void onElevationDataListenerFinished(){
+    _elevationDataListener = NULL;
+  }
 
 };
 
