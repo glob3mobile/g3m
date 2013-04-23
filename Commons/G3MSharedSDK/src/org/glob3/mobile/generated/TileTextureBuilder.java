@@ -8,10 +8,8 @@ public class TileTextureBuilder extends RCObject
   private int _petitionsCount;
   private int _stepsDone;
 
-  private IFactory _factory; // FINAL WORD REMOVE BY CONVERSOR RULE
   private TexturesHandler _texturesHandler;
   private TextureBuilder _textureBuilder;
-  private GL _gl;
 
   private final Vector2I _tileTextureResolution;
   private final Vector2I _tileMeshResolution;
@@ -87,10 +85,8 @@ public class TileTextureBuilder extends RCObject
   public TileTextureBuilder(MultiLayerTileTexturizer texturizer, G3MRenderContext rc, LayerSet layerSet, IDownloader downloader, Tile tile, Mesh tessellatorMesh, TileTessellator tessellator, long texturePriority)
   {
      _texturizer = texturizer;
-     _factory = rc.getFactory();
      _texturesHandler = rc.getTexturesHandler();
      _textureBuilder = rc.getTextureBuilder();
-     _gl = rc.getGL();
      _tileTextureResolution = layerSet.getLayerTilesRenderParameters()._tileTextureResolution;
      _tileMeshResolution = layerSet.getLayerTilesRenderParameters()._tileMeshResolution;
      _mercator = layerSet.getLayerTilesRenderParameters()._mercator;
@@ -138,10 +134,6 @@ public class TileTextureBuilder extends RCObject
     for (int i = 0; i < _petitionsCount; i++)
     {
       final Petition petition = _petitions.get(i);
-
-      //      const long long priority =  (_parameters->_incrementalTileQuality
-      //                                   ? 1000 - _tile->getLevel()
-      //                                   : _tile->getLevel());
 
       final long priority = _texturePriority + _tile.getLevel();
 
@@ -198,7 +190,6 @@ public class TileTextureBuilder extends RCObject
         final Petition petition = _petitions.get(i);
         IImage image = petition.getImage();
 
-
         if (image != null)
         {
           final Sector imageSector = petition.getSector();
@@ -213,7 +204,7 @@ public class TileTextureBuilder extends RCObject
           }
           else
           {
-            sourceRect = new RectangleF((float) 0, (float) 0, (float) image.getWidth(), (float) image.getHeight());
+            sourceRect = new RectangleF(0, 0, image.getWidth(), image.getHeight());
           }
 
           //Part of the image we are going to draw
@@ -232,7 +223,7 @@ public class TileTextureBuilder extends RCObject
 
       if (images.size() > 0)
       {
-        _textureBuilder.createTextureFromImages(_gl, _factory, images, sourceRects, destRects, _tileTextureResolution, new TextureUploader(this, sourceRects, destRects, textureId), true);
+        _textureBuilder.createTextureFromImages(_tileTextureResolution._x, _tileTextureResolution._y, images, sourceRects, destRects, new TextureUploader(this, sourceRects, destRects, textureId), true);
       }
 
     }

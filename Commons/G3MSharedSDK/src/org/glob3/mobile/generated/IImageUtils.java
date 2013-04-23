@@ -20,7 +20,6 @@ package org.glob3.mobile.generated;
 //class RectangleF;
 //class IImage;
 //class IImageListener;
-//class Vector2I;
 
 public class IImageUtils
 {
@@ -42,18 +41,18 @@ public class IImageUtils
     }
   }
 
-  public static void scale(IImage image, Vector2I size, IImageListener listener, boolean autodelete)
+  public static void scale(int width, int height, IImage image, IImageListener listener, boolean autodelete)
   {
-    if (size._x == image.getWidth() && size._y == image.getHeight())
+    if (width == image.getWidth() && height == image.getHeight())
     {
       createShallowCopy(image, listener, autodelete);
     }
     else
     {
       ICanvas canvas = IFactory.instance().createCanvas();
-      canvas.initialize(size._x, size._y);
+      canvas.initialize(width, height);
   
-      canvas.drawImage(image, 0, 0, size._x, size._y);
+      canvas.drawImage(image, 0, 0, width, height);
   
       canvas.createImage(listener, autodelete);
       if (canvas != null)
@@ -83,11 +82,12 @@ public class IImageUtils
     }
   }
 
-  public static void combine(java.util.ArrayList<IImage> images, java.util.ArrayList<RectangleF> sourceRects, java.util.ArrayList<RectangleF> destRects, Vector2I size, IImageListener listener, boolean autodelete)
+  public static void combine(int width, int height, java.util.ArrayList<IImage> images, java.util.ArrayList<RectangleF> sourceRects, java.util.ArrayList<RectangleF> destRects, IImageListener listener, boolean autodelete)
   {
   
     final int imagesSize = images.size();
-    if (imagesSize == 0 || imagesSize != sourceRects.size() || imagesSize != destRects.size())
+  
+    if (imagesSize != sourceRects.size() || imagesSize != destRects.size())
     {
       ILogger.instance().logError("Failure at combine images.");
       return;
@@ -99,16 +99,16 @@ public class IImageUtils
       final RectangleF sourceRect = sourceRects.get(0);
       final RectangleF destRect = destRects.get(0);
   
-      if (sourceRect._x == 0 && sourceRect._y == 0 && sourceRect._width == image.getWidth() && sourceRect._height == image.getHeight() && destRect._x == 0 && destRect._y == 0 && destRect._width == size._x && destRect._height == size._y)
+      if (sourceRect._x == 0 && sourceRect._y == 0 && sourceRect._width == image.getWidth() && sourceRect._height == image.getHeight() && destRect._x == 0 && destRect._y == 0 && destRect._width == width && destRect._height == height)
       {
-        scale(image, size, listener, autodelete);
+        scale(width, height, image, listener, autodelete);
         return;
       }
     }
   
   
     ICanvas canvas = IFactory.instance().createCanvas();
-    canvas.initialize(size._x, size._y);
+    canvas.initialize(width, height);
   
     for (int i = 0; i < imagesSize ; i++)
     {
