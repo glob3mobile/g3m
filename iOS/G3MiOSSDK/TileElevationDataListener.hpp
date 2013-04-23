@@ -51,7 +51,12 @@ public:
   }
   
   void sendRequest(){
-    _requestID = _provider->requestElevationData(_tile->getSector(), _resolution, this, true);
+    //_requestID = _provider->requestElevationData(_tile->getSector(), _resolution, this, true);
+  }
+  
+  void cancelRequest(){
+    _tile = NULL;
+    _provider->cancelRequest(_requestID);
   }
 };
 
