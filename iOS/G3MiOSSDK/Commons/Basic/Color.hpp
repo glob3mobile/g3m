@@ -52,10 +52,6 @@ public:
     return new Color(red, green, blue, alpha);
   }
 
-  static Color transparent() {
-    return Color::fromRGBA(0, 0, 0, 0);
-  }
-
   static Color black() {
     return Color::fromRGBA(0, 0, 0, 1);
   }
@@ -76,16 +72,8 @@ public:
     return Color::fromRGBA(1, 0, 1, 1);
   }
   
-  static Color red() {
-    return Color::fromRGBA(1, 0, 0, 1);
-  }
-
   static Color green() {
     return Color::fromRGBA(0, 1, 0, 1);
-  }
-
-  static Color blue() {
-    return Color::fromRGBA(0, 0, 1, 1);
   }
 
   float getRed() const {

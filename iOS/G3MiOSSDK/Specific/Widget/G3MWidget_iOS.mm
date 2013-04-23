@@ -142,15 +142,18 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
   return self;
 }
 
+//** Agustin cancelled lonpressgesture because touchedmoved and touchedended event don't work
 - (IBAction)handleLongPress:(UIGestureRecognizer *)sender {
+
   //  printf ("Longpress. state=%d\n", sender.state);
   //
   //  if (sender.state == UIGestureRecognizerStateEnded) {
   //    NSLog(@"LONG PRESS");
   //  }
 
-  if (sender.state == 1) {
-    CGPoint tapPoint = [sender locationInView:sender.view];
+  if (sender.state == 1){
+
+    CGPoint tapPoint = [sender locationInView:sender.view.superview];
 
     std::vector<const Touch*> pointers = std::vector<const Touch*>();
     Touch *touch = new Touch(Vector2I((int) tapPoint.x,
@@ -413,9 +416,9 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
   [self widget]->stopCameraAnimation();
 }
 
-//- (void)resetCameraPosition {
-//  [self widget]->resetCameraPosition();
-//}
+- (void)resetCameraPosition {
+  [self widget]->resetCameraPosition();
+}
 
 - (WidgetUserData*) userData
 {

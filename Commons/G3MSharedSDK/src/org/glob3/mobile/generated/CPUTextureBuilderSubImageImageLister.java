@@ -18,13 +18,10 @@ public class CPUTextureBuilderSubImageImageLister extends IImageListener
 
   public final void imageCreated(IImage image)
   {
-    //    image->scale(_width, _height,
-    //                 _listener, _autodelete);
 //    image->scale(_width, _height,
-//                 new ImageDeleterImageLister(image, _listener, _autodelete), true);
+//                 _listener, _autodelete);
+    image.scale(_width, _height, new ImageDeleterImageLister(image, _listener, _autodelete), true);
 
-    //    IFactory::instance()->deleteImage(image);
-
-    IImageUtils.scale(image, new Vector2I(_width, _height), _listener, _autodelete);
+//    IFactory::instance()->deleteImage(image);
   }
 }

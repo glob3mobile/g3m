@@ -119,7 +119,6 @@ private:
   IImage* _textureImage;
   int     _textureWidth;
   int     _textureHeight;
-  const std::string _imageID;
 
   bool    _renderedMark;
 
@@ -159,18 +158,6 @@ public:
    * Creates a marker just with icon, without label
    */
   Mark(const URL          iconURL,
-       const Geodetic3D&  position,
-       double             minDistanceToCamera=4.5e+06,
-       MarkUserData*      userData=NULL,
-       bool               autoDeleteUserData=true,
-       MarkTouchListener* listener=NULL,
-       bool               autoDeleteListener=false);
-
-  /**
-   * Creates a marker whith a given pre-renderer IImage
-   */
-  Mark(IImage*            image,
-       const std::string& imageID,
        const Geodetic3D&  position,
        double             minDistanceToCamera=4.5e+06,
        MarkUserData*      userData=NULL,

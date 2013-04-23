@@ -26,21 +26,7 @@ std::vector<Petition*> LayerSet::createTileMapPetitions(const G3MRenderContext* 
   for (int i = 0; i < layersSize; i++) {
     Layer* layer = _layers[i];
     if (layer->isAvailable(rc, tile)) {
-
-#ifdef C_CODE
-      const Tile* petitionTile = tile;
-#else
-      Tile* petitionTile = tile;
-#endif
-      while (petitionTile->getLevel() > layer->getLayerTilesRenderParameters()->_maxLevel && petitionTile != NULL) {
-        petitionTile = petitionTile->getParent();
-      }
-      
-      if (petitionTile == NULL){
-        printf("Error retrieving requests.");
-      }
-
-      std::vector<Petition*> pet = layer->createTileMapPetitions(rc, petitionTile);
+      std::vector<Petition*> pet = layer->createTileMapPetitions(rc, tile);
 
       //Storing petitions
       for (int j = 0; j < pet.size(); j++) {
@@ -53,7 +39,7 @@ std::vector<Petition*> LayerSet::createTileMapPetitions(const G3MRenderContext* 
     rc->getLogger()->logWarning("Can't create map petitions for tile %s",
                                 tile->getKey().description().c_str());
   }
-  
+
   return petitions;
 }
 
@@ -201,8 +187,8 @@ LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters() const {
         //   ILogger::instance()->logError("Inconsistency in Layer's Parameters: maxLevel");
         //   return NULL;
         // }
-        if ( maxLevel < layerParam->_maxLevel ) {
-          ILogger::instance()->logWarning("Inconsistency in Layer's Parameters: maxLevel (upgrading from %d to %d)",
+        if ( maxLevel > layerParam->_maxLevel ) {
+          ILogger::instance()->logWarning("Inconsistency in Layer's Parameters: maxLevel (downgrading from %d to %d)",
                                           maxLevel,
                                           layerParam->_maxLevel);
           maxLevel = layerParam->_maxLevel;

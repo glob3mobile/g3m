@@ -106,27 +106,25 @@ std::vector<Petition*> WMSLayer::createTileMapPetitions(const G3MRenderContext* 
       sector.getDeltaLongitude().isZero() ) {
     return petitions;
   }
-  
-  //TODO: MUST SCALE WIDTH,HEIGHT
 
   const Vector2I tileTextureResolution = _parameters->_tileTextureResolution;
 
 	//Server name
   std::string req = _mapServerURL.getPath();
-	if (req[req.size() - 1] != '?') {
+	if (req[req.size()-1] != '?') {
 		req += '?';
 	}
 
-//  //If the server refer to itself as localhost...
-//  const int localhostPos = req.find("localhost");
-//  if (localhostPos != -1) {
-//    req = req.substr(localhostPos+9);
-//
-//    const int slashPos = req.find("/", 8);
-//    std::string newHost = req.substr(0, slashPos);
-//
-//    req = newHost + req;
-//  }
+  //If the server refer to itself as localhost...
+  int pos = req.find("localhost");
+  if (pos != -1) {
+    req = req.substr(pos+9);
+
+    int pos2 = req.find("/", 8);
+    std::string newHost = req.substr(0, pos2);
+
+    req = newHost + req;
+  }
 
   req += "REQUEST=GetMap&SERVICE=WMS";
 
@@ -218,8 +216,6 @@ std::vector<Petition*> WMSLayer::createTileMapPetitions(const G3MRenderContext* 
     req += "&";
     req += _extraParameter;
   }
-
-//  printf("Request: %s\n", req.c_str());
 
   Petition *petition = new Petition(sector, URL(req, false), _timeToCache, _isTransparent);
   petitions.push_back(petition);
@@ -326,24 +322,11 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& position,
 
   const IMathUtils* mu = IMathUtils::instance();
 
-  double u;
-  double v;
-  if (_parameters->_mercator) {
-    u = sector.getUCoordinates(position.longitude());
-    v = MercatorUtils::getMercatorV(position.latitude());
-  }
-  else {
-    const Vector2D uv = sector.getUVCoordinates(position);
-    u = uv._x;
-    v = uv._y;
-  }
-
   //X and Y
-  //const Vector2D uv = sector.getUVCoordinates(position);
-//  const int x = (int) mu->round( (uv._x * _parameters->_tileTextureResolution._x) );
-//  const int y = (int) mu->round( (uv._y * _parameters->_tileTextureResolution._y) );
-  const int x = (int) mu->round( (u * _parameters->_tileTextureResolution._x) );
-  const int y = (int) mu->round( (v * _parameters->_tileTextureResolution._y) );
+  int TODO_CONSIDER_MERCATOR;
+  const Vector2D uv = sector.getUVCoordinates(position);
+  const int x = (int) mu->round( (uv._x * _parameters->_tileTextureResolution._x) );
+  const int y = (int) mu->round( (uv._y * _parameters->_tileTextureResolution._y) );
   // const int y = (int) mu->round( ((1.0 - uv._y) * _parameters->_tileTextureResolution._y) );
 
   IStringBuilder* isb = IStringBuilder::newStringBuilder();

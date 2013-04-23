@@ -28,8 +28,6 @@ class ElevationDataProvider;
 class ElevationData;
 class MeshHolder;
 class Vector2I;
-class LeveledMesh;
-class TileMeshBuilder;
 
 #include "ITexturizerData.hpp"
 
@@ -43,6 +41,7 @@ private:
   const int       _column;
 
   Mesh* _tessellatorMesh;
+  int            _elevationDataLevel;
   ElevationData* _elevationData;
   long long      _elevationRequestId;
   Mesh* _debugMesh;
@@ -52,7 +51,7 @@ private:
   std::vector<Tile*>* _subtiles;
   bool _justCreatedSubtiles;
 
-  bool _texturizerDirty;    //Texturizer needs to be called
+  bool _texturizerDirty;
 
   float _verticalExaggeration;
   double _minHeight;
@@ -105,13 +104,6 @@ private:
   Extent* getTileExtent(const G3MRenderContext *rc);
 
   void cancelElevationDataRequest(ElevationDataProvider* elevationDataProvider);
-  
-  //bool _elevationDataSolved;
-  
-  //LeveledMesh* _leveledMesh;
-  //TileMeshBuilder* _meshBuilder;
-  bool _meshMustActualizeDueNewElevationData;
-  int _levelOfElevationData;
 
 public:
   Tile(TileTexturizer* texturizer,
@@ -200,8 +192,7 @@ public:
                        const TileTessellator* tessellator,
                        const Planet* planet,
                        const Vector2I& tileMeshResolution,
-                       bool renderDebug,
-                       bool isSolved);
+                       bool renderDebug);
   
   double getMinHeight() const;
   double getMaxHeight() const;
@@ -213,7 +204,7 @@ public:
                                             bool setParent);
   
   bool isElevationDataSolved() const{
-    return _levelOfElevationData == _level;
+    return _elevationDataLevel >= _level;
   }
   
   ElevationData* getElevationData() const{
@@ -222,19 +213,7 @@ public:
   
   void setElevationData(ElevationData* ed, int level);
   
-  int getElevationDataLevel() const{
-    return _levelOfElevationData;
-  }
-  
-//  void setLeveledMesh(LeveledMesh* lm) {
-//    _leveledMesh = lm;
-//  }
-//  
-//  LeveledMesh* getLeveledMesh() const{
-//    return _leveledMesh;
-//  }
-  
-  void ancestorElevationDataSolvedChanged(Tile *ancestor);
+  void getElevationDataFromAncestor(const Vector2I& resolution);
 
 };
 

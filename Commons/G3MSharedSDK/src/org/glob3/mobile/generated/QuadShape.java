@@ -111,19 +111,6 @@ public class QuadShape extends AbstractMeshShape
 
   }
 
-  public QuadShape(Geodetic3D position, IImage textureImage, float width, float height)
-  {
-     super(position);
-     _textureURL = new URL(new URL("", false));
-     _width = width;
-     _height = height;
-     _textureRequested = true;
-     _textureImage = textureImage;
-     _color = null;
-
-  }
-
-
   public QuadShape(Geodetic3D position, float width, float height, Color color)
   {
      super(position);

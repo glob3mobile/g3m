@@ -153,12 +153,12 @@ public:
   void render(const G3MRenderContext* rc,
               const GLState& parentState) const;
 
-  const Vector3D pixel2Ray(const Vector2I& pixel) const;
+  Vector3D pixel2Ray(const Vector2I& pixel) const;
 
-  const Vector3D pixel2PlanetPoint(const Vector2I& pixel) const;
+  Vector3D pixel2PlanetPoint(const Vector2I& pixel) const;
 
-  const Vector2I point2Pixel(const Vector3D& point) const;
-  const Vector2I point2Pixel(const Vector3F& point) const;
+  Vector2I point2Pixel(const Vector3D& point) const;
+  Vector2I point2Pixel(const Vector3F& point) const;
 
   int getWidth() const { return _width; }
   int getHeight() const { return _height; }
@@ -171,28 +171,24 @@ public:
     return _camEffectTarget;
   }
 
-  const Vector3D getCartesianPosition() const { return _position.asVector3D(); }
-  const Vector3D getCenter() const { return _center.asVector3D(); }
-  const Vector3D getUp() const { return _up.asVector3D(); }
-  const Geodetic3D getGeodeticCenterOfView() const { return *_getGeodeticCenterOfView(); }
-  const Vector3D getXYZCenterOfView() const { return _getCartesianCenterOfView().asVector3D(); }
-  const Vector3D getViewDirection() const { return _center.sub(_position).asVector3D(); }
+  Vector3D getCartesianPosition() const { return _position.asVector3D(); }
+  Vector3D getCenter() const { return _center.asVector3D(); }
+  Vector3D getUp() const { return _up.asVector3D(); }
+  Geodetic3D getGeodeticCenterOfView() const { return *_getGeodeticCenterOfView(); }
+  Vector3D getXYZCenterOfView() const { return _getCartesianCenterOfView().asVector3D(); }
+  Vector3D getViewDirection() const { return _center.sub(_position).asVector3D(); }
 
 
   //Dragging camera
-  void dragCamera(const Vector3D& p0,
-                  const Vector3D& p1);
-  void rotateWithAxis(const Vector3D& axis,
-                      const Angle& delta);
+  void dragCamera(const Vector3D& p0, const Vector3D& p1);
+  void rotateWithAxis(const Vector3D& axis, const Angle& delta);
   void moveForward(double d);
 
   //Pivot
   void pivotOnCenter(const Angle& a);
 
   //Rotate
-  void rotateWithAxisAndPoint(const Vector3D& axis,
-                              const Vector3D& point,
-                              const Angle& delta);
+  void rotateWithAxisAndPoint(const Vector3D& axis, const Vector3D& point, const Angle& delta);
 
   void print();
 
@@ -210,7 +206,7 @@ public:
     return getHalfFrustumMC();
   }
 
-//  void setPosition(const Geodetic3D& position);
+  void setPosition(const Geodetic3D& position);
 
   Vector3D getHorizontalVector();
 
@@ -219,7 +215,7 @@ public:
 
   void initialize(const G3MContext* context);
 
-//  void resetPosition();
+  void resetPosition();
 
   void setCartesianPosition(const MutableVector3D& v){
     if (!v.equalTo(_position)){
@@ -228,32 +224,20 @@ public:
     }
   }
 
-  void setCartesianPosition(const Vector3D& v){
-    setCartesianPosition(v.asMutableVector3D());
-  }
-
-  const Angle getHeading() const;
+  Angle getHeading() const;
   void setHeading(const Angle& angle);
-  const Angle getPitch() const;
+  Angle getPitch() const;
   void setPitch(const Angle& angle);
 
-  const Geodetic3D getGeodeticPosition() const {
-    return _planet->toGeodetic3D( getCartesianPosition() );
+  void orbitTo(const Vector3D& pos);
+  void orbitTo(const Geodetic3D& g3d) {
+    orbitTo( _planet->toCartesian(g3d) );
   }
-
-  void setGeodeticPosition(const Geodetic3D& g3d) {
-    _setGeodeticPosition( _planet->toCartesian(g3d) );
+  void orbitTo(const Angle &latitude, const Angle &longitude, const double height) {
+    orbitTo(_planet->toCartesian(latitude, longitude, height));
   }
-
-  void setGeodeticPosition(const Angle &latitude,
-                           const Angle &longitude,
-                           const double height) {
-    _setGeodeticPosition( _planet->toCartesian(latitude, longitude, height) );
-  }
-
-  void setGeodeticPosition(const Geodetic2D &g2d,
-                           const double height) {
-    _setGeodeticPosition( _planet->toCartesian(g2d.latitude(), g2d.longitude(), height) );
+  void orbitTo(const Geodetic2D &g2d, const double height) {
+    orbitTo(_planet->toCartesian(g2d.latitude(), g2d.longitude(), height));
   }
 
   /**
@@ -271,7 +255,7 @@ public:
 
 
 private:
-  const Angle getHeading(const Vector3D& normal) const;
+  Angle getHeading(const Vector3D& normal) const;
 
   //IF A NEW ATTRIBUTE IS ADDED CHECK CONSTRUCTORS AND RESET() !!!!
   int _width;
@@ -448,8 +432,7 @@ private:
                        znear, zfar);
   }
   
-  void _setGeodeticPosition(const Vector3D& pos);
-
+  
 };
 
 #endif

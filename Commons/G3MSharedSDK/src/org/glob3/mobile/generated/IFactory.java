@@ -25,7 +25,6 @@ package org.glob3.mobile.generated;
 //class IByteBuffer;
 //class ILogger;
 //class IImageListener;
-//class ICanvas;
 
 public abstract class IFactory
 {
@@ -76,7 +75,5 @@ public abstract class IFactory
   public abstract IByteBuffer createByteBuffer(int length);
 
   public abstract IByteBuffer createByteBuffer(byte[] data, int length);
-
-  public abstract ICanvas createCanvas();
 
 }

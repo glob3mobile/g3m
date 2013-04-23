@@ -165,8 +165,7 @@ _userData(userData),
 _autoDeleteUserData(autoDeleteUserData),
 _minDistanceToCamera(minDistanceToCamera),
 _listener(listener),
-_autoDeleteListener(autoDeleteListener),
-_imageID( iconURL.getPath() + "_" + label )
+_autoDeleteListener(autoDeleteListener)
 {
 
 }
@@ -201,8 +200,7 @@ _userData(userData),
 _autoDeleteUserData(autoDeleteUserData),
 _minDistanceToCamera(minDistanceToCamera),
 _listener(listener),
-_autoDeleteListener(autoDeleteListener),
-_imageID( "_" + label )
+_autoDeleteListener(autoDeleteListener)
 {
 
 }
@@ -234,44 +232,9 @@ _userData(userData),
 _autoDeleteUserData(autoDeleteUserData),
 _minDistanceToCamera(minDistanceToCamera),
 _listener(listener),
-_autoDeleteListener(autoDeleteListener),
-_imageID( iconURL.getPath() + "_" )
+_autoDeleteListener(autoDeleteListener)
 {
 
-}
-
-Mark::Mark(IImage*            image,
-           const std::string& imageID,
-           const Geodetic3D&  position,
-           double             minDistanceToCamera,
-           MarkUserData*      userData,
-           bool               autoDeleteUserData,
-           MarkTouchListener* listener,
-           bool               autoDeleteListener) :
-_label(""),
-_labelBottom(true),
-_iconURL(URL("", false)),
-_position(position),
-_labelFontSize(20),
-_labelFontColor(NULL),
-_labelShadowColor(NULL),
-_labelGapSize(2),
-_textureId(NULL),
-_cartesianPosition(NULL),
-_vertices(NULL),
-_textureSolved(true),
-_textureImage(image),
-_renderedMark(false),
-_textureWidth(image->getWidth()),
-_textureHeight(image->getHeight()),
-_userData(userData),
-_autoDeleteUserData(autoDeleteUserData),
-_minDistanceToCamera(minDistanceToCamera),
-_listener(listener),
-_autoDeleteListener(autoDeleteListener),
-_imageID( imageID )
-{
-  
 }
 
 void Mark::initialize(const G3MContext* context,
@@ -402,7 +365,7 @@ void Mark::render(const G3MRenderContext* rc,
         if (_textureImage != NULL) {
           _textureId = rc->getTexturesHandler()->getGLTextureId(_textureImage,
                                                                 GLFormat::rgba(),
-                                                                _imageID,
+                                                                _iconURL.getPath() + "_" + _label,
                                                                 false);
 
           rc->getFactory()->deleteImage(_textureImage);

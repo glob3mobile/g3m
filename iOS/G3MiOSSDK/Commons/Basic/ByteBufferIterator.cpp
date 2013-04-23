@@ -60,6 +60,22 @@ short ByteBufferIterator::nextInt16() {
   return result;
 }
 
+unsigned short ByteBufferIterator::nextUInt16() {
+  // LittleEndian
+#ifdef C_CODE
+  const unsigned char b1 = nextUInt8();
+  const unsigned char b2 = nextUInt8();
+#endif
+#ifdef JAVA_CODE
+  final short b1 = (short) (nextUInt8() & 0xFF);
+  final short b2 = (short) (nextUInt8() & 0xFF);
+#endif
+  
+  const unsigned int iResult = ((int) b1) | ((int) (b2 << 8));
+  const unsigned short result = (unsigned short) iResult;
+  return result;
+}
+
 int ByteBufferIterator::nextInt32() {
   // LittleEndian
 #ifdef C_CODE

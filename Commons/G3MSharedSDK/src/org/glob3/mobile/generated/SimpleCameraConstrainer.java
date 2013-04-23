@@ -30,16 +30,15 @@ public class SimpleCameraConstrainer implements ICameraConstrainer
   {
   
     final double radii = planet.getRadii().maxAxis();
-    final double maxHeight = radii *9;
   
-    final Geodetic3D cameraPosition = nextCamera.getGeodeticPosition();
-    final double cameraHeight = cameraPosition.height();
+    final Geodetic3D cameraPosition3D = planet.toGeodetic3D(nextCamera.getCartesianPosition());
+    final double cameraHeight = cameraPosition3D.height();
   
-    if (cameraHeight > maxHeight)
+    if (cameraHeight > radii *9)
     {
-      nextCamera.setGeodeticPosition(cameraPosition.latitude(), cameraPosition.longitude(), maxHeight);
+      nextCamera.resetPosition();
+      nextCamera.setPosition(planet.toGeodetic3D(previousCamera.getCartesianPosition()));
     }
-  
   }
 
 }

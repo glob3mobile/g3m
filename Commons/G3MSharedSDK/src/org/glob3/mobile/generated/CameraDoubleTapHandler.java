@@ -46,7 +46,7 @@ public class CameraDoubleTapHandler extends CameraEventHandler
     final Angle angle = Angle.fromRadians(- IMathUtils.instance().asin(axis.length()/initialPoint.length()/centerPoint.length()));
   
     // compute zoom factor
-    final double height = camera.getGeodeticPosition().height();
+    final double height = eventContext.getPlanet().toGeodetic3D(camera.getCartesianPosition()).height();
     final double distance = height * 0.6;
   
     // create effect

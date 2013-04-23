@@ -58,10 +58,6 @@ public:
   
   virtual Vector2I getMinResolution() const = 0;
   
-  virtual ElevationData* createSubviewOfElevationData(ElevationData* elevationData,
-                                                      const Sector& sector,
-                                                      const Vector2I& resolution) const = 0;
-  
 };
 
 #endif

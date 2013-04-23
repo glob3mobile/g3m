@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.glob3.mobile.generated.IByteBuffer;
-import org.glob3.mobile.generated.ICanvas;
 import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IFloatBuffer;
 import org.glob3.mobile.generated.IImage;
@@ -177,12 +176,6 @@ public final class Factory_Android
    @Override
    public IShortBuffer createShortBuffer(final int size) {
       return new ShortBuffer_Android(size);
-   }
-
-
-   @Override
-   public ICanvas createCanvas() {
-      return new Canvas_Android();
    }
 
 }

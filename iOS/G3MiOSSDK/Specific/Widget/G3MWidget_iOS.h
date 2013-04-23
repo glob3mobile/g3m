@@ -105,7 +105,7 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
 
 - (void)stopCameraAnimation;
 
-//- (void)resetCameraPosition;
+- (void)resetCameraPosition;
 
 - (WidgetUserData*) userData;
 

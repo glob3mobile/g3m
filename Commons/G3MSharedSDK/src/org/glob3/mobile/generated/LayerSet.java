@@ -75,9 +75,9 @@ public class LayerSet
           //   ILogger::instance()->logError("Inconsistency in Layer's Parameters: maxLevel");
           //   return NULL;
           // }
-          if (maxLevel < layerParam._maxLevel)
+          if (maxLevel > layerParam._maxLevel)
           {
-            ILogger.instance().logWarning("Inconsistency in Layer's Parameters: maxLevel (upgrading from %d to %d)", maxLevel, layerParam._maxLevel);
+            ILogger.instance().logWarning("Inconsistency in Layer's Parameters: maxLevel (downgrading from %d to %d)", maxLevel, layerParam._maxLevel);
             maxLevel = layerParam._maxLevel;
           }
   
@@ -170,18 +170,7 @@ public class LayerSet
       Layer layer = _layers.get(i);
       if (layer.isAvailable(rc, tile))
       {
-        Tile petitionTile = tile;
-        while (petitionTile.getLevel() > layer.getLayerTilesRenderParameters()._maxLevel && petitionTile != null)
-        {
-          petitionTile = petitionTile.getParent();
-        }
-  
-        if (petitionTile == null)
-        {
-          System.out.print("Error retrieving requests.");
-        }
-  
-        java.util.ArrayList<Petition> pet = layer.createTileMapPetitions(rc, petitionTile);
+        java.util.ArrayList<Petition> pet = layer.createTileMapPetitions(rc, tile);
   
         //Storing petitions
         for (int j = 0; j < pet.size(); j++)

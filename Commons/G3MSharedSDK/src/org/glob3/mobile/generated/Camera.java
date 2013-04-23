@@ -112,36 +112,6 @@ public class Camera
     _halfFrustumInModelCoordinates = (that._frustumInModelCoordinates == null) ? null : new Frustum(that._frustumInModelCoordinates);
   }
 
-
-  //void Camera::resetPosition() {
-  //  _position = MutableVector3D(0, 0, 0);
-  //  _center = MutableVector3D(0, 0, 0);
-  //  _up = MutableVector3D(0, 0, 1);
-  //
-  //  _dirtyFlags.setAll(true);
-  //
-  //  _frustumData = FrustumData();
-  //  _projectionMatrix = MutableMatrix44D();
-  //  _modelMatrix = MutableMatrix44D();
-  //  _modelViewMatrix = MutableMatrix44D();
-  //  _cartesianCenterOfView = MutableVector3D();
-  //
-  //  delete _geodeticCenterOfView;
-  //  _geodeticCenterOfView = NULL;
-  //
-  //  delete _frustum;
-  //  _frustum = NULL;
-  //
-  //  delete _frustumInModelCoordinates;
-  //  _frustumInModelCoordinates = NULL;
-  //
-  //  delete _halfFrustumInModelCoordinates;
-  //  _halfFrustumInModelCoordinates = NULL;
-  //
-  //  delete _halfFrustum;
-  //  _halfFrustum = NULL;
-  //}
-  
   public final void resizeViewport(int width, int height)
   {
     _width = width;
@@ -304,7 +274,10 @@ public class Camera
     return getHalfFrustumMC();
   }
 
-//  void setPosition(const Geodetic3D& position);
+  public final void setPosition(Geodetic3D g3d)
+  {
+    setCartesianPosition(_planet.toCartesian(g3d).asMutableVector3D());
+  }
 
   public final Vector3D getHorizontalVector()
   {
@@ -337,7 +310,40 @@ public class Camera
     _dirtyFlags.setAll(true);
   }
 
-//  void resetPosition();
+  public final void resetPosition()
+  {
+    _position = new MutableVector3D(0, 0, 0);
+    _center = new MutableVector3D(0, 0, 0);
+    _up = new MutableVector3D(0, 0, 1);
+  
+    _dirtyFlags.setAll(true);
+  
+    _frustumData = new FrustumData();
+    _projectionMatrix = new MutableMatrix44D();
+    _modelMatrix = new MutableMatrix44D();
+    _modelViewMatrix = new MutableMatrix44D();
+    _cartesianCenterOfView = new MutableVector3D();
+  
+    if (_geodeticCenterOfView != null)
+       _geodeticCenterOfView.dispose();
+    _geodeticCenterOfView = null;
+  
+    if (_frustum != null)
+       _frustum.dispose();
+    _frustum = null;
+  
+    if (_frustumInModelCoordinates != null)
+       _frustumInModelCoordinates.dispose();
+    _frustumInModelCoordinates = null;
+  
+    if (_halfFrustumInModelCoordinates != null)
+       _halfFrustumInModelCoordinates.dispose();
+    _halfFrustumInModelCoordinates = null;
+  
+    if (_halfFrustum != null)
+       _halfFrustum.dispose();
+    _halfFrustum = null;
+  }
 
   public final void setCartesianPosition(MutableVector3D v)
   {
@@ -346,11 +352,6 @@ public class Camera
       _position = new MutableVector3D(v);
       _dirtyFlags.setAll(true);
     }
-  }
-
-  public final void setCartesianPosition(Vector3D v)
-  {
-    setCartesianPosition(v.asMutableVector3D());
   }
 
   public final Angle getHeading()
@@ -380,24 +381,39 @@ public class Camera
     //printf ("previous pitch=%f   current pitch=%f\n", currentPitch.degrees(), getPitch().degrees());
   }
 
-  public final Geodetic3D getGeodeticPosition()
+  public final void orbitTo(Vector3D pos)
   {
-    return _planet.toGeodetic3D(getCartesianPosition());
+    final Angle heading = getHeading();
+    final Angle pitch = getPitch();
+  
+    setPitch(Angle.zero());
+  
+    final MutableVector3D finalPos = pos.asMutableVector3D();
+    final Vector3D axis = _position.cross(finalPos).asVector3D();
+    if (axis.length()<1e-3)
+    {
+      return;
+    }
+    final Angle angle = _position.angleBetween(finalPos);
+    rotateWithAxis(axis, angle);
+  
+    final double dist = _position.length() - pos.length();
+    moveForward(dist);
+  
+    setHeading(heading);
+    setPitch(pitch);
   }
-
-  public final void setGeodeticPosition(Geodetic3D g3d)
+  public final void orbitTo(Geodetic3D g3d)
   {
-    _setGeodeticPosition(_planet.toCartesian(g3d));
+    orbitTo(_planet.toCartesian(g3d));
   }
-
-  public final void setGeodeticPosition(Angle latitude, Angle longitude, double height)
+  public final void orbitTo(Angle latitude, Angle longitude, double height)
   {
-    _setGeodeticPosition(_planet.toCartesian(latitude, longitude, height));
+    orbitTo(_planet.toCartesian(latitude, longitude, height));
   }
-
-  public final void setGeodeticPosition(Geodetic2D g2d, double height)
+  public final void orbitTo(Geodetic2D g2d, double height)
   {
-    _setGeodeticPosition(_planet.toCartesian(g2d.latitude(), g2d.longitude(), height));
+    orbitTo(_planet.toCartesian(g2d.latitude(), g2d.longitude(), height));
   }
 
   /**
@@ -476,11 +492,6 @@ public class Camera
     //_dirtyFlags.setAll(true);
   }
 
-
-  //void Camera::setPosition(const Geodetic3D& g3d) {
-  //  setCartesianPosition( _planet->toCartesian(g3d).asMutableVector3D() );
-  //}
-  
   private Vector3D centerOfViewOnPlanet()
   {
     final Vector3D ray = _center.sub(_position).asVector3D();
@@ -654,27 +665,5 @@ public class Camera
     return new FrustumData(left, right, bottom, top, znear, zfar);
   }
 
-  private void _setGeodeticPosition(Vector3D pos)
-  {
-    final Angle heading = getHeading();
-    final Angle pitch = getPitch();
-  
-    setPitch(Angle.zero());
-  
-    final MutableVector3D finalPos = pos.asMutableVector3D();
-    final Vector3D axis = _position.cross(finalPos).asVector3D();
-    if (axis.length()<1e-3)
-    {
-      return;
-    }
-    final Angle angle = _position.angleBetween(finalPos);
-    rotateWithAxis(axis, angle);
-  
-    final double dist = _position.length() - pos.length();
-    moveForward(dist);
-  
-    setHeading(heading);
-    setPitch(pitch);
-  }
 
 }

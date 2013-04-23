@@ -31,10 +31,6 @@ public:
 
   }
 
-  ~Vector2F() {
-
-  }
-
   float x() const {
     return _x;
   }

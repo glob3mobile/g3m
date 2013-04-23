@@ -84,12 +84,9 @@
 #import <G3MiOSSDK/GEO2DPointGeometry.hpp>
 #import <G3MiOSSDK/GEOShapeSymbol.hpp>
 #import <G3MiOSSDK/GEOMarkSymbol.hpp>
-#import <G3MiOSSDK/GFont.hpp>
 
 #import <G3MiOSSDK/CompositeElevationDataProvider.hpp>
-#import <G3MiOSSDK/LayerTilesRenderParameters.hpp>
-#import <G3MiOSSDK/RectangleI.hpp>
-#import <G3MiOSSDK/LayerTilesRenderParameters.hpp>
+
 
 class TestVisibleSectorListener : public VisibleSectorListener {
 public:
@@ -206,18 +203,18 @@ public:
   
   //  ElevationDataProvider* elevationDataProvider;
   
-  /*
-   elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
-   Sector::fullSphere(),
-   Vector2I(2048, 1024),
-   0);
-   */
+  
+    elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
+                                                                Sector::fullSphere(),
+                                                                Vector2I(2048, 1024),
+                                                                0,
+                                                                true); //Storing as floats
   
   ElevationDataProvider* elevationDataProvider1;
-//  elevationDataProvider1 = new SingleBillElevationDataProvider(URL("file:///elev-35.0_-6.0_38.0_-2.0_4096x2048.bil", false),
-//                                                               Sector::fromDegrees(35, -6, 38, -2),
-//                                                               Vector2I(4096, 2048),
-//                                                               0);
+  //  elevationDataProvider1 = new SingleBillElevationDataProvider(URL("file:///elev-35.0_-6.0_38.0_-2.0_4096x2048.bil", false),
+  //                                                              Sector::fromDegrees(35, -6, 38, -2),
+  //                                                              Vector2I(4096, 2048),
+  //                                                              0);
   
   ElevationDataProvider* elevationDataProvider2;
   //  elevationDataProvider2 = new SingleBillElevationDataProvider(URL("file:///full-earth-4096x2048.bil", false),
@@ -247,34 +244,21 @@ public:
   //                                                              Vector2I(251, 254),
   //                                                              0);
   
-  //  ElevationDataProvider* elevationDataProvider5;
-  //  elevationDataProvider5 = new SingleBillElevationDataProvider(URL("file:///elev-35.0_-6.0_38.0_-2.0_4096x2048.bil", false),
-  //                                                               Sector::fromDegrees(35, -6, 38, -2),
-  //                                                               Vector2I(4096, 2048),0);
-  
-  ElevationDataProvider* elevationDataProvider6;
-  elevationDataProvider6 = new SingleBillElevationDataProvider(URL("file:///full-earth-512x512.bil", false),
-                                                               Sector::fullSphere(),
-                                                               Vector2I(512, 512),
-                                                               0);
-  
-  ElevationDataProvider* elevationDataProvider7;
-  elevationDataProvider7 = new SingleBillElevationDataProvider(URL("file:///full-earth-256x256.bil", false),
-                                                               Sector::fullSphere(),
-                                                               Vector2I(256, 256),
-                                                               0);
+  ElevationDataProvider* elevationDataProvider5;
+  elevationDataProvider5 = new SingleBillElevationDataProvider(
+                                                               URL("file:///elev-35.0_-6.0_38.0_-2.0_4096x2048.bil", false),
+                                                               Sector::fromDegrees(35, -6, 38, -2),
+                                                               Vector2I(4096, 2048),0);
   
   
   
   CompositeElevationDataProvider* compElevationDataProvider = new CompositeElevationDataProvider();
-  //compElevationDataProvider->addElevationDataProvider(elevationDataProvider1);
+  compElevationDataProvider->addElevationDataProvider(elevationDataProvider);
   //compElevationDataProvider->addElevationDataProvider(elevationDataProvider1);
   //compElevationDataProvider->addElevationDataProvider(elevationDataProvider2);
   //compElevationDataProvider->addElevationDataProvider(elevationDataProvider3);
   //compElevationDataProvider->addElevationDataProvider(elevationDataProvider4);
   //compElevationDataProvider->addElevationDataProvider(elevationDataProvider5);
-  compElevationDataProvider->addElevationDataProvider(elevationDataProvider6);
-  //compElevationDataProvider->addElevationDataProvider(elevationDataProvider7);
   elevationDataProvider = compElevationDataProvider;
   
   builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProvider);
@@ -540,9 +524,9 @@ public:
   if (useOSM) {
     layerSet->addLayer( new OSMLayer(TimeInterval::fromDays(30)) );
   }
-
+  
   //TODO: Check merkator with elevations
-  const bool useMapQuestOSM = false;
+  const bool useMapQuestOSM = true;
   if (useMapQuestOSM) {
     layerSet->addLayer( MapQuestLayer::newOSM(TimeInterval::fromDays(30)) );
   }
@@ -579,8 +563,8 @@ public:
                                           "ArtXu2Z-XSlDVCRVtxtYqtIPVR_0qqLcrfsRyZK_ishjUKvTheYBUH9rDDmAPcnj",
                                           TimeInterval::fromDays(30)) );
   }
-
-  const bool blueMarble = true;
+  
+  const bool blueMarble = false;
   if (blueMarble) {
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
                                         URL("http://www.nasa.network.com/wms?", false),
@@ -592,12 +576,7 @@ public:
                                         false,
                                         //new LevelTileCondition(0, 6),
                                         NULL,
-                                        TimeInterval::fromDays(30),
-                                        new LayerTilesRenderParameters(Sector::fullSphere(),
-                                                                       2,4,0,6,
-                                                                       Vector2I(256,256),
-                                                                       LayerTilesRenderParameters::defaultTileMeshResolution(),
-                                                                       false));
+                                        TimeInterval::fromDays(30));
     layerSet->addLayer(blueMarble);
     
     //    WMSLayer* i3Landsat = new WMSLayer("esat",
@@ -613,27 +592,7 @@ public:
     //    layerSet->addLayer(i3Landsat);
   }
   
-  const bool useOrtoAyto = true;
-  if (useOrtoAyto){
-    WMSLayer* ortoAyto = new WMSLayer("orto_refundida",
-                                      URL("http://195.57.27.86/wms_etiquetas_con_orto.mapdef?", false),
-                                      WMS_1_1_0,
-                                      Sector(Geodetic2D(Angle::fromDegrees(39.350228), Angle::fromDegrees(-6.508713)),
-                                             Geodetic2D(Angle::fromDegrees(39.536351), Angle::fromDegrees(-6.25946))),
-                                      "image/jpeg",
-                                      "EPSG:4326",
-                                      "",
-                                      false,
-                                      new LevelTileCondition(4, 19),
-                                      TimeInterval::fromDays(30),
-                                      new LayerTilesRenderParameters(Sector::fullSphere(),
-                                                                     2,4,0,19,
-                                                                     Vector2I(256,256),
-                                                                     LayerTilesRenderParameters::defaultTileMeshResolution(),
-                                                                     false));
-    layerSet->addLayer(ortoAyto);
-  }
-
+  
   bool useWMSBing = false;
   if (useWMSBing) {
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
@@ -891,7 +850,7 @@ public:
                                URL("file:///g3m-marker.png", false),
                                50000, 50000);
   shapesRenderer->addShape(quad1);
-
+  
   Shape* quad2 = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
                                               Angle::fromDegrees(-123),
                                               8000),
@@ -1024,6 +983,8 @@ public:
   //                                       );
   //    shapesRenderer->addShape(sphere);
   //  }
+  
+  
   
   return shapesRenderer;
 }
@@ -1466,98 +1427,12 @@ public:
                             1,
                             color);
     }
-
-    void testCanvas(const IFactory* factory) {
-
-      class MyImageListener : public IImageListener {
-      private:
-        ShapesRenderer* _shapesRenderer;
-        
-      public:
-        MyImageListener(ShapesRenderer* shapesRenderer) :
-        _shapesRenderer(shapesRenderer)
-        {
-
-        }
-
-        void imageCreated(IImage* image) {
-          //printf("Created image=%s\n", image->description().c_str());
-          //delete image;
-
-          Shape* quad = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
-                                                     Angle::fromDegrees(-121.5),
-                                                     8000),
-                                      image,
-                                      50000, 50000);
-          _shapesRenderer->addShape(quad);
-        }
-      };
-
-
-      ICanvas* canvas = factory->createCanvas();
-
-      
-      const std::string text = "Hello World!";
-      //const GFont font = GFont::serif();
-      //const GFont font = GFont::monospaced();
-      const GFont font = GFont::sansSerif();
-
-      canvas->setFont(font);
-
-      const Vector2F textExtent = canvas->textExtent(text);
-
-
-      canvas->initialize(256, 256);
-
-      canvas->setFillColor( Color::fromRGBA(1, 1, 1, 0.75) );
-      canvas->fillRoundedRectangle(0, 0, 256, 256, 32);
-
-
-      canvas->setShadow(Color::black(), 5, 3.5, -3.5);
-      canvas->setFillColor( Color::fromRGBA(1, 0, 0, 0.5) );
-      canvas->fillRectangle(32, 64, 64, 128);
-      canvas->removeShadow();
-
-
-      canvas->setStrokeColor( Color::fromRGBA(1, 0, 1, 0.9) );
-      canvas->setStrokeWidth(2.5f);
-      const float margin = 1.25f;
-      canvas->strokeRoundedRectangle(0 + margin, 0 + margin,
-                                     256 - (margin * 2), 256 - (margin * 2),
-                                     32);
-
-      canvas->setFillColor( Color::fromRGBA(1, 1, 0, 0.9) );
-      canvas->setStrokeWidth(1.1f);
-      canvas->setStrokeColor( Color::fromRGBA(0, 0, 0, 0.9) );
-      canvas->fillAndStrokeRoundedRectangle(128, 16, 64, 64, 8);
-
-      int __DGD_working_at_Canvas;
-
-      canvas->setFillColor( Color::white() );
-      canvas->setShadow(Color::black(), 5, 1, -1);
-      canvas->fillText(text,
-                       128 - textExtent._x/2,
-                       128 - textExtent._y/2);
-
-
-      canvas->removeShadow();
-      canvas->setFillColor(Color::black());
-      canvas->fillRectangle(10, 10, 5, 5);
-
-
-      canvas->createImage(new MyImageListener(_shapesRenderer),
-                          true);
-      
-      delete canvas;
-    }
-
+    
     void run(const G3MContext* context) {
       printf("Running initialization Task\n");
-
-      testCanvas(context->getFactory());
-
-//      const Sector targetSector(Sector::fromDegrees(35, -6, 38, -2));
-
+      
+      //      const Sector targetSector(Sector::fromDegrees(35, -6, 38, -2));
+      
       _meshRenderer->addMesh( createSectorMesh(context->getPlanet(),
                                                20,
                                                Sector::fromDegrees(35, -6, 38, -2),
@@ -1671,18 +1546,18 @@ public:
       
       
       /*
-       context->getDownloader()->requestBuffer(//URL("file:///sample_bil16_150x150.bil", false),
-       //URL("file:///409_554.bil", false),
-       //URL("file:///full-earth-512x512.bil", false),
-       URL("file:///elev-35.0_-6.0_38.0_-2.0_4096x2048.bil", false),
-       1000000,
-       TimeInterval::fromDays(30),
-       new Bil16Parser_IBufferDownloadListener(_shapesRenderer,
-       _meshRenderer,
-       Vector2I(4096, 2048),
-       Sector::fromDegrees(35, -6, 38, -2)),
-       true);
-       */
+      context->getDownloader()->requestBuffer(//URL("file:///sample_bil16_150x150.bil", false),
+                                              //URL("file:///409_554.bil", false),
+                                              //URL("file:///full-earth-512x512.bil", false),
+                                              URL("file:///elev-35.0_-6.0_38.0_-2.0_4096x2048.bil", false),
+                                              1000000,
+                                              TimeInterval::fromDays(30),
+                                              new Bil16Parser_IBufferDownloadListener(_shapesRenderer,
+                                                                                      _meshRenderer,
+                                                                                      Vector2I(4096, 2048),
+                                                                                      Sector::fromDegrees(35, -6, 38, -2)),
+                                              true);
+      */
       
       
       /*

@@ -93,21 +93,22 @@ public class WMSLayer extends Layer
   
      //Server name
     String req = _mapServerURL.getPath();
-     if (req.charAt(req.length() - 1) != '?')
+     if (req.charAt(req.length()-1) != '?')
      {
         req += '?';
      }
   
-  //  //If the server refer to itself as localhost...
-  //  const int localhostPos = req.find("localhost");
-  //  if (localhostPos != -1) {
-  //    req = req.substr(localhostPos+9);
-  //
-  //    const int slashPos = req.find("/", 8);
-  //    std::string newHost = req.substr(0, slashPos);
-  //
-  //    req = newHost + req;
-  //  }
+    //If the server refer to itself as localhost...
+    int pos = req.indexOf("localhost");
+    if (pos != -1)
+    {
+      req = req.substring(pos+9);
+  
+      int pos2 = req.indexOf("/", 8);
+      String newHost = req.substring(0, pos2);
+  
+      req = newHost + req;
+    }
   
     req += "REQUEST=GetMap&SERVICE=WMS";
   
@@ -209,8 +210,6 @@ public class WMSLayer extends Layer
       req += "&";
       req += _extraParameter;
     }
-  
-  //  printf("Request: %s\n", req.c_str());
   
     Petition petition = new Petition(sector, new URL(req, false), _timeToCache, _isTransparent);
     petitions.add(petition);
@@ -329,26 +328,11 @@ public class WMSLayer extends Layer
   
     final IMathUtils mu = IMathUtils.instance();
   
-    double u;
-    double v;
-    if (_parameters._mercator)
-    {
-      u = sector.getUCoordinates(position.longitude());
-      v = MercatorUtils.getMercatorV(position.latitude());
-    }
-    else
-    {
-      final Vector2D uv = sector.getUVCoordinates(position);
-      u = uv._x;
-      v = uv._y;
-    }
-  
     //X and Y
-    //const Vector2D uv = sector.getUVCoordinates(position);
-  //  const int x = (int) mu->round( (uv._x * _parameters->_tileTextureResolution._x) );
-  //  const int y = (int) mu->round( (uv._y * _parameters->_tileTextureResolution._y) );
-    final int x = (int) mu.round((u * _parameters._tileTextureResolution._x));
-    final int y = (int) mu.round((v * _parameters._tileTextureResolution._y));
+    int TODO_CONSIDER_MERCATOR;
+    final Vector2D uv = sector.getUVCoordinates(position);
+    final int x = (int) mu.round((uv._x * _parameters._tileTextureResolution._x));
+    final int y = (int) mu.round((uv._y * _parameters._tileTextureResolution._y));
     // const int y = (int) mu->round( ((1.0 - uv._y) * _parameters->_tileTextureResolution._y) );
   
     IStringBuilder isb = IStringBuilder.newStringBuilder();
