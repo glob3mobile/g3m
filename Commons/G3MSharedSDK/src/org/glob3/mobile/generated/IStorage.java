@@ -16,9 +16,6 @@ package org.glob3.mobile.generated;
 //
 
 
-///#include "URL.hpp"
-///#include "IByteBuffer.hpp"
-///#include "IImage.hpp"
 //class URL;
 //class IByteBuffer;
 //class IImage;
@@ -47,20 +44,14 @@ public abstract class IStorage
   }
 
 
-//  virtual bool containsBuffer(const URL& url) = 0;
-
   public abstract void saveBuffer(URL url, IByteBuffer buffer, TimeInterval timeToExpires, boolean saveInBackground);
 
   public abstract IByteBuffer readBuffer(URL url);
 
 
-
-//  virtual bool containsImage(const URL& url) = 0;
-
   public abstract void saveImage(URL url, IImage image, TimeInterval timeToExpires, boolean saveInBackground);
 
   public abstract IImage readImage(URL url);
-
 
 
   public abstract void onResume(G3MContext context);

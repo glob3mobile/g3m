@@ -150,7 +150,7 @@ public class HereLayer extends Layer
     if (isb != null)
        isb.dispose();
   
-    petitions.add(new Petition(tileSector, new URL(path, false), _timeToCache, true));
+    petitions.add(new Petition(tileSector, new URL(path, false), getTimeToCache(), true));
   
     return petitions;
   }

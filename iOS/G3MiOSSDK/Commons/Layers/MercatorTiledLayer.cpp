@@ -113,7 +113,7 @@ std::vector<Petition*> MercatorTiledLayer::createTileMapPetitions(const G3MRende
 
   petitions.push_back( new Petition(tileSector,
                                     URL(path, false),
-                                    _timeToCache,
+                                    getTimeToCache(),
                                     true) );
   
   return petitions;

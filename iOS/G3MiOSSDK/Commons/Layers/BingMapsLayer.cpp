@@ -281,7 +281,7 @@ std::vector<Petition*> BingMapsLayer::createTileMapPetitions(const G3MRenderCont
 
   petitions.push_back( new Petition(tileSector,
                                     URL(path, false),
-                                    _timeToCache,
+                                    getTimeToCache(),
                                     true) );
   
   return petitions;

@@ -17,7 +17,6 @@ import org.glob3.mobile.generated.CompositeRenderer;
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GFont;
 import org.glob3.mobile.generated.GInitializationTask;
-import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.ICanvas;
@@ -26,10 +25,7 @@ import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IImageListener;
 import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IThreadUtils;
-import org.glob3.mobile.generated.LayerBuilder;
 import org.glob3.mobile.generated.LayerSet;
-import org.glob3.mobile.generated.LayerTilesRenderParameters;
-import org.glob3.mobile.generated.LevelTileCondition;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.QuadShape;
@@ -42,7 +38,6 @@ import org.glob3.mobile.generated.TileRendererBuilder;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.Vector2F;
-import org.glob3.mobile.generated.Vector2I;
 import org.glob3.mobile.generated.WMSLayer;
 import org.glob3.mobile.generated.WMSServerVersion;
 import org.glob3.mobile.generated.WidgetUserData;
@@ -117,7 +112,7 @@ public class G3MSimplestGlob3Activity
                null, //
                TimeInterval.fromDays(30));
       layerSet.addLayer(osm);
-      
+
       final TileRendererBuilder tlBuilder = new TileRendererBuilder();
       tlBuilder.setLayerSet(layerSet);
       tlBuilder.setRenderDebug(true);

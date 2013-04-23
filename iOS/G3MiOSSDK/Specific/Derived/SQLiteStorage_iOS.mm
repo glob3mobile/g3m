@@ -125,19 +125,6 @@ void SQLiteStorage_iOS::showStatistics() const {
   [rs2 close];
 }
 
-
-//bool SQLiteStorage_iOS::containsBuffer(const URL& url) {
-//  NSString* name = toNSString(url.getPath());
-//
-//  SQResultSet* rs = [_readDB executeQuery:@"SELECT 1 FROM buffer2 WHERE (name = ?)", name];
-//
-//  BOOL hasAny = [rs next];
-//
-//  [rs close];
-//
-//  return hasAny;
-//}
-
 void SQLiteStorage_iOS::rawSave(NSString* table,
                                 NSString* name,
                                 NSData* contents,
@@ -238,18 +225,6 @@ IByteBuffer* SQLiteStorage_iOS::readBuffer(const URL& url) {
 
   return result;
 }
-
-//bool SQLiteStorage_iOS::containsImage(const URL& url) {
-//  NSString* name = toNSString(url.getPath());
-//
-//  SQResultSet* rs = [_readDB executeQuery:@"SELECT 1 FROM image2 WHERE (name = ?)", name];
-//
-//  BOOL hasAny = [rs next];
-//
-//  [rs close];
-//
-//  return hasAny;
-//}
 
 void SQLiteStorage_iOS::saveImage(const URL& url,
                                   const IImage* image,

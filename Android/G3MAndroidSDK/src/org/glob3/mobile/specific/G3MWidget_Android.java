@@ -482,11 +482,6 @@ public final class G3MWidget_Android
    }
 
 
-//   public void resetCameraPosition() {
-//      //getG3MWidget().resetCameraPosition();
-//   }
-
-
    public void setCameraPitch(final Angle angle) {
       getG3MWidget().setCameraPitch(angle);
    }

@@ -149,7 +149,7 @@ std::vector<Petition*> HereLayer::createTileMapPetitions(const G3MRenderContext*
 
   petitions.push_back( new Petition(tileSector,
                                     URL(path, false),
-                                    _timeToCache,
+                                    getTimeToCache(),
                                     true) );
 
   return petitions;

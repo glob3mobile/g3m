@@ -107,7 +107,7 @@ std::vector<Petition*> GoogleMapsLayer::createTileMapPetitions(const G3MRenderCo
 
   petitions.push_back( new Petition(tileSector,
                                     URL(path, false),
-                                    _timeToCache,
+                                    getTimeToCache(),
                                     true) );
   
   return petitions;

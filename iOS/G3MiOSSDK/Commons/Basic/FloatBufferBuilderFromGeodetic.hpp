@@ -10,9 +10,8 @@
 #define G3MiOSSDK_FloatBufferBuilderFromGeodetic_hpp
 
 #include "FloatBufferBuilder.hpp"
-#include "FloatBufferBuilderFromCartesian3D.hpp"
-#include "Ellipsoid.hpp"
 
+#include "Ellipsoid.hpp"
 #include "Geodetic3D.hpp"
 #include "Geodetic2D.hpp"
 #include "Vector3D.hpp"
@@ -67,16 +66,22 @@ public:
            const double height);
 
   void add(const Geodetic3D& position) {
-    add(position.latitude(), position.longitude(), position.height());
+    add(position.latitude(),
+        position.longitude(),
+        position.height());
   }
 
   void add(const Geodetic2D& position) {
-    add(position.latitude(), position.longitude(), 0.0);
+    add(position.latitude(),
+        position.longitude(),
+        0.0);
   }
 
   void add(const Geodetic2D& position,
            const double height) {
-    add(position.latitude(), position.longitude(), height);
+    add(position.latitude(),
+        position.longitude(),
+        height);
   }
 
   Vector3D getCenter() {

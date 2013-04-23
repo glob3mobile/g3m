@@ -66,7 +66,10 @@ std::vector<Petition*> TMSLayer::getMapPetitions(const G3MRenderContext* rc,
   
   ILogger::instance()->logInfo(isb->getString());
   
-  Petition *petition = new Petition(tileSector, URL(isb->getString(), false), _timeToCache, _isTransparent);
+  Petition *petition = new Petition(tileSector,
+                                    URL(isb->getString(), false),
+                                    getTimeToCache(),
+                                    _isTransparent);
   petitions.push_back(petition);
   
 	return petitions;

@@ -1,12 +1,23 @@
 package org.glob3.mobile.generated; 
 //
-//  FloatBufferBuilderFromCartesian3D.hpp
+//  FloatBufferBuilder.cpp
 //  G3MiOSSDK
 //
-//  Created by José Miguel S N on 06/09/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Created by Diego Gomez Deck on 05/09/12.
+//
 //
 
+//
+//  FloatBufferBuilder.hpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 05/09/12.
+//
+//
+
+
+
+//class IFloatBuffer;
 
 
 public class CenterStrategy
@@ -18,7 +29,6 @@ public class CenterStrategy
   private CenterStrategy()
   {
   }
-
 
   public static int noCenter()
   {
