@@ -26,6 +26,7 @@ import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IImageListener;
 import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IThreadUtils;
+import org.glob3.mobile.generated.LayerBuilder;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.LayerTilesRenderParameters;
 import org.glob3.mobile.generated.LevelTileCondition;
@@ -116,49 +117,6 @@ public class G3MSimplestGlob3Activity
                null, //
                TimeInterval.fromDays(30));
       layerSet.addLayer(osm);
-      
-      //Checking use of images of upper LOD
-      final boolean blueMarble = false;
-      if (blueMarble) {
-        WMSLayer blueMarbleL = new WMSLayer("bmng200405",
-                                            new URL("http://www.nasa.network.com/wms?", false),
-                                            WMSServerVersion.WMS_1_1_0,
-                                            Sector.fullSphere(),
-                                            "image/jpeg",
-                                            "EPSG:4326",
-                                            "",
-                                            false,
-                                            //new LevelTileCondition(0, 6),
-                                            null,
-                                            TimeInterval.fromDays(30));
-        layerSet.addLayer(blueMarbleL);
-      }
-      
-      final boolean useOrtoAyto = false;
-      if (useOrtoAyto){
-     	 
-     	 LayerTilesRenderParameters ltrp = new LayerTilesRenderParameters(Sector.fullSphere(),
-                  2,4,0,19,
-                  new Vector2I(256,256),
-                  LayerTilesRenderParameters.defaultTileMeshResolution(),
-                  false);
-     	 
-        WMSLayer ortoAyto = new WMSLayer("orto_refundida",
-                                          new URL("http://195.57.27.86/wms_etiquetas_con_orto.mapdef?", false),
-                                          WMSServerVersion.WMS_1_1_0,
-                                          new Sector(new Geodetic2D(Angle.fromDegrees(39.350228), 
-                                         		 				   Angle.fromDegrees(-6.508713)),
-                                         		 	new Geodetic2D(Angle.fromDegrees(39.536351), 
-                                         		 			       Angle.fromDegrees(-6.25946))),
-                                          "image/jpeg",
-                                          "EPSG:4326",
-                                          "",
-                                          false,
-                                          new LevelTileCondition(4, 19),
-                                          TimeInterval.fromDays(30), ltrp );
-        layerSet.addLayer(ortoAyto);
-      }
-      
       
       final TileRendererBuilder tlBuilder = new TileRendererBuilder();
       tlBuilder.setLayerSet(layerSet);
