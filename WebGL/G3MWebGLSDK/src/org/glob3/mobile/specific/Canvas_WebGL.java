@@ -278,37 +278,47 @@ public class Canvas_WebGL
    }
 
 
-@Override
-protected native void _drawImage(IImage image, float left, float top) /*-{
-	var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_context;
-	var imageJS = image.@org.glob3.mobile.specific.Image_WebGL::_imgObject
-	
-	context.drawImage(imageJS, left, top);
-}-*/;
+   @Override
+   protected native void _drawImage(IImage image,
+                                    float left,
+                                    float top) /*-{
+		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_context;
+		var imageJS = image.@org.glob3.mobile.specific.Image_WebGL::_imgObject
+
+		context.drawImage(imageJS, left, top);
+   }-*/;
 
 
-@Override
-protected native void _drawImage(IImage image, float left, float top, float width,
-		float height) /*-{
-	var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_context;
-	var imageJS = image.@org.glob3.mobile.specific.Image_WebGL::_imgObject
-	
-	context.drawImage(imageJS, left, top, width, height);
-}-*/;
+   @Override
+   protected native void _drawImage(IImage image,
+                                    float left,
+                                    float top,
+                                    float width,
+                                    float height) /*-{
+		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_context;
+		var imageJS = image.@org.glob3.mobile.specific.Image_WebGL::_imgObject
+
+		context.drawImage(imageJS, left, top, width, height);
+   }-*/;
 
 
-@Override
-protected native void _drawImage(IImage image, float srcLeft, float srcTop,
-		float srcWidth, float srcHeight, float destLeft, float destTop,
-		float destWidth, float destHeigtt) /*-{
-			debugger;
-	var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_context;
-	var imageJS = image.@org.glob3.mobile.specific.Image_WebGL::_imgObject
-	
-	context.drawImage(imageJS, 
-					  srcLeft, srcTop, srcWidth, srcHeight,
-					  destLeft, destTop, destWidth, destHeight);
-}-*/;
+   @Override
+   protected native void _drawImage(IImage image,
+                                    float srcLeft,
+                                    float srcTop,
+                                    float srcWidth,
+                                    float srcHeight,
+                                    float destLeft,
+                                    float destTop,
+                                    float destWidth,
+                                    float destHeigtt) /*-{
+		debugger;
+		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_context;
+		var imageJS = image.@org.glob3.mobile.specific.Image_WebGL::_imgObject
+
+		context.drawImage(imageJS, srcLeft, srcTop, srcWidth, srcHeight,
+				destLeft, destTop, destWidth, destHeight);
+   }-*/;
 
 
 }

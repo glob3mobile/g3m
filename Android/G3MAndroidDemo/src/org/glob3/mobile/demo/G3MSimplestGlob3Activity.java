@@ -26,6 +26,8 @@ import org.glob3.mobile.generated.IImageListener;
 import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.LayerSet;
+import org.glob3.mobile.generated.LayerTilesRenderParameters;
+import org.glob3.mobile.generated.LevelTileCondition;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.QuadShape;
@@ -99,19 +101,60 @@ public class G3MSimplestGlob3Activity
 
       final CompositeRenderer mainRenderer = new CompositeRenderer();
       final LayerSet layerSet = new LayerSet();
-      final WMSLayer osm = new WMSLayer( //
-               "osm_auto:all", //
-               new URL("http://129.206.228.72/cached/osm", false), //
+      //      final WMSLayer osm = new WMSLayer( //
+      //               "osm_auto:all", //
+      //               new URL("http://129.206.228.72/cached/osm", false), //
+      //               WMSServerVersion.WMS_1_1_0, //
+      //               //Sector.fromDegrees(-85.05, -180.0, 85.05, 180.0), //
+      //               Sector.fullSphere(), //
+      //               "image/jpeg", //
+      //               "EPSG:4326", //
+      //               "", //
+      //               false, //
+      //               null, //
+      //               TimeInterval.fromDays(30));
+      //      layerSet.addLayer(osm);
+
+
+      final WMSLayer blueMarbleL = new WMSLayer( //
+               "bmng200405", //
+               new URL("http://www.nasa.network.com/wms?", false), //
                WMSServerVersion.WMS_1_1_0, //
-               //Sector.fromDegrees(-85.05, -180.0, 85.05, 180.0), //
                Sector.fullSphere(), //
                "image/jpeg", //
                "EPSG:4326", //
                "", //
                false, //
+               //new LevelTileCondition(0, 6),
                null, //
                TimeInterval.fromDays(30));
-      layerSet.addLayer(osm);
+      layerSet.addLayer(blueMarbleL);
+
+
+      final WMSLayer ortoAyto = new WMSLayer( //
+               "orto_refundida", //
+               new URL("http://195.57.27.86/wms_etiquetas_con_orto.mapdef?", false), //
+               WMSServerVersion.WMS_1_1_0, //
+               Sector.fromDegrees(39.350228, -6.508713, 39.536351, -6.25946), //
+               //               new Sector(Geodetic2D.fromDegrees(39.350228, -6.508713), //
+               //                        Geodetic2D.fromDegrees(39.536351, -6.25946)), //
+               "image/jpeg", //
+               "EPSG:4326", //
+               "", //
+               false, //
+               new LevelTileCondition(4, 19), //
+               TimeInterval.fromDays(30), //
+               new LayerTilesRenderParameters(//
+                        Sector.fullSphere(), //
+                        2, //
+                        4, //
+                        0, //
+                        19, //
+                        LayerTilesRenderParameters.defaultTileTextureResolution(), //
+                        LayerTilesRenderParameters.defaultTileMeshResolution(), //
+                        false));
+      layerSet.addLayer(ortoAyto);
+
 
       final TileRendererBuilder tlBuilder = new TileRendererBuilder();
       tlBuilder.setLayerSet(layerSet);

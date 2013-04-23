@@ -557,7 +557,16 @@ public:
                                         false,
                                         //new LevelTileCondition(0, 6),
                                         NULL,
-                                        TimeInterval::fromDays(30));
+                                        TimeInterval::fromDays(30),
+                                        new LayerTilesRenderParameters(Sector::fullSphere(),
+                                                                       2,
+                                                                       4,
+                                                                       0,
+                                                                       4,
+                                                                       LayerTilesRenderParameters::defaultTileTextureResolution(),
+                                                                       LayerTilesRenderParameters::defaultTileMeshResolution(),
+                                                                       false)
+                                        );
     layerSet->addLayer(blueMarble);
 
     //    WMSLayer* i3Landsat = new WMSLayer("esat",
