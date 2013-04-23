@@ -28,7 +28,8 @@ public:
                             ElevationDataProvider* provider) :
   _tile(tile),
   _resolution(resolution),
-  _provider(provider)
+  _provider(provider),
+  _requestID(-1)
   {
     
   }
@@ -56,7 +57,9 @@ public:
   
   void cancelRequest(){
     _tile = NULL;
-    _provider->cancelRequest(_requestID);
+    if (_requestID != -1){
+      _provider->cancelRequest(_requestID);
+    }
   }
 };
 

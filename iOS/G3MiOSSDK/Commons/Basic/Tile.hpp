@@ -105,7 +105,7 @@ private:
   Extent* _tileExtent;
   Extent* getTileExtent(const G3MRenderContext *rc);
 
-  void cancelElevationDataRequest(ElevationDataProvider* elevationDataProvider);
+  //void cancelElevationDataRequest(ElevationDataProvider* elevationDataProvider);
 
 public:
   Tile(TileTexturizer* texturizer,
@@ -188,13 +188,14 @@ public:
 
   void toBeDeleted(TileTexturizer*        texturizer,
                    ElevationDataProvider* elevationDataProvider);
-
+/*
   void onElevationData(ElevationData* elevationData,
                        MeshHolder* meshHolder,
                        const TileTessellator* tessellator,
                        const Planet* planet,
                        const Vector2I& tileMeshResolution,
                        bool renderDebug);
+ */
   
   double getMinHeight() const;
   double getMaxHeight() const;

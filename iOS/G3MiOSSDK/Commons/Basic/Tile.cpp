@@ -179,6 +179,7 @@ void Tile::setTextureSolved(bool textureSolved) {
  };
  */
 
+/*
 void Tile::onElevationData(ElevationData* elevationData,
                            MeshHolder* meshHolder,
                            const TileTessellator* tessellator,
@@ -210,7 +211,7 @@ void Tile::onElevationData(ElevationData* elevationData,
                                                    _verticalExaggeration,
                                                    renderDebug) );
 }
-
+*/
 Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
                                const TileRenderContext* trc) {
   
@@ -523,14 +524,14 @@ std::vector<Tile*>* Tile::getSubTiles(const Angle& splitLatitude,
   }
   return _subtiles;
 }
-
+/*
 void Tile::cancelElevationDataRequest(ElevationDataProvider* elevationDataProvider) {
   if (_elevationRequestId > 0) {
     elevationDataProvider->cancelRequest(_elevationRequestId);
     _elevationRequestId = -1000;
   }
 }
-
+*/
 void Tile::toBeDeleted(TileTexturizer*        texturizer,
                        ElevationDataProvider* elevationDataProvider) {
   if (texturizer != NULL) {
@@ -538,7 +539,11 @@ void Tile::toBeDeleted(TileTexturizer*        texturizer,
   }
   
   if (elevationDataProvider != NULL) {
-    cancelElevationDataRequest(elevationDataProvider);
+    //cancelElevationDataRequest(elevationDataProvider);
+    
+    if (_elevationDataListener != NULL){
+      _elevationDataListener->cancelRequest();
+    }
   }
 }
 
@@ -561,9 +566,9 @@ void Tile::prune(TileTexturizer* texturizer,
         texturizer->tileToBeDeleted(subtile, subtile->_texturizedMesh);
       }
       
-      if (elevationDataProvider != NULL) {
-        subtile->cancelElevationDataRequest(elevationDataProvider);
-      }
+//      if (elevationDataProvider != NULL) {
+//        //subtile->cancelElevationDataRequest(elevationDataProvider);
+//      }
       
       delete subtile;
     }
