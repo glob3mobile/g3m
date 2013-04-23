@@ -223,7 +223,7 @@ public class TileTextureBuilder extends RCObject
 
       if (images.size() > 0)
       {
-        _textureBuilder.createTextureFromImages(_tileTextureResolution._x, _tileTextureResolution._y, images, sourceRects, destRects, new TextureUploader(this, sourceRects, destRects, textureId), true);
+        _textureBuilder.createTextureFromImages(_tileTextureResolution, images, sourceRects, destRects, new TextureUploader(this, sourceRects, destRects, textureId), true);
       }
 
     }

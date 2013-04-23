@@ -14,11 +14,11 @@ package org.glob3.mobile.generated;
 //class RectangleI;
 //class IImageListener;
 //class RectangleF;
-
+//class Vector2I;
 
 public abstract class TextureBuilder
 {
-  public abstract void createTextureFromImages(int textureWidth, int textureHeight, java.util.ArrayList<IImage> images, java.util.ArrayList<RectangleF> srcRectangles, java.util.ArrayList<RectangleF> destRectangles, IImageListener listener, boolean autodelete);
+  public abstract void createTextureFromImages(Vector2I textureExtent, java.util.ArrayList<IImage> images, java.util.ArrayList<RectangleF> srcRectangles, java.util.ArrayList<RectangleF> destRectangles, IImageListener listener, boolean autodelete);
 
   public void dispose()
   {

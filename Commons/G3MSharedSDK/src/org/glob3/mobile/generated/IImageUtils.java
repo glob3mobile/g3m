@@ -20,6 +20,7 @@ package org.glob3.mobile.generated;
 //class RectangleF;
 //class IImage;
 //class IImageListener;
+//class Vector2I;
 
 public class IImageUtils
 {
@@ -28,9 +29,6 @@ public class IImageUtils
 
   }
 
-
-  //delete_canvas;
-  
   private static void createShallowCopy(IImage image, IImageListener listener, boolean autodelete)
   {
     listener.imageCreated(image.shallowCopy());
@@ -40,6 +38,7 @@ public class IImageUtils
          listener.dispose();
     }
   }
+
 
   public static void scale(int width, int height, IImage image, IImageListener listener, boolean autodelete)
   {
@@ -59,6 +58,12 @@ public class IImageUtils
          canvas.dispose();
     }
   }
+
+  public static void scale(Vector2I extent, IImage image, IImageListener listener, boolean autodelete)
+  {
+    scale(extent._x, extent._y, image, listener, autodelete);
+  }
+
 
   public static void subImage(IImage image, RectangleF rect, IImageListener listener, boolean autodelete)
   {
@@ -81,6 +86,7 @@ public class IImageUtils
          canvas.dispose();
     }
   }
+
 
   public static void combine(int width, int height, java.util.ArrayList<IImage> images, java.util.ArrayList<RectangleF> sourceRects, java.util.ArrayList<RectangleF> destRects, IImageListener listener, boolean autodelete)
   {
@@ -122,6 +128,11 @@ public class IImageUtils
     canvas.createImage(listener, autodelete);
     if (canvas != null)
        canvas.dispose();
+  }
+
+  public static void combine(Vector2I extent, java.util.ArrayList<IImage> images, java.util.ArrayList<RectangleF> sourceRects, java.util.ArrayList<RectangleF> destRects, IImageListener listener, boolean autodelete)
+  {
+    combine(extent._x, extent._y, images, sourceRects, destRects, listener, autodelete);
   }
 
 }

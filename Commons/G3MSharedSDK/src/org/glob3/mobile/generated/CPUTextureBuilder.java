@@ -19,9 +19,9 @@ package org.glob3.mobile.generated;
 
 public class CPUTextureBuilder extends TextureBuilder
 {
-  public final void createTextureFromImages(int textureWidth, int textureHeight, java.util.ArrayList<IImage> images, java.util.ArrayList<RectangleF> srcRectangles, java.util.ArrayList<RectangleF> destRectangles, IImageListener listener, boolean autodelete)
+  public final void createTextureFromImages(Vector2I textureExtent, java.util.ArrayList<IImage> images, java.util.ArrayList<RectangleF> srcRectangles, java.util.ArrayList<RectangleF> destRectangles, IImageListener listener, boolean autodelete)
   {
-    IImageUtils.combine(textureWidth, textureHeight, images, srcRectangles, destRectangles, listener, autodelete);
+    IImageUtils.combine(textureExtent, images, srcRectangles, destRectangles, listener, autodelete);
   }
 
 }
