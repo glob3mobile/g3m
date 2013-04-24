@@ -58,7 +58,8 @@ public class QuadShape extends AbstractMeshShape
       _textureRequested = true;
       if (_textureURL.getPath().length() != 0)
       {
-        rc.getDownloader().requestImage(_textureURL, 1000000, TimeInterval.fromDays(30), new QuadShape_IImageDownloadListener(this), true);
+        int __TODO_readDirty;
+        rc.getDownloader().requestImage(_textureURL, 1000000, TimeInterval.fromDays(30), true, new QuadShape_IImageDownloadListener(this), true);
       }
     }
   

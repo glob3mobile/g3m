@@ -21,7 +21,7 @@ public class IconDownloadListener extends IImageDownloadListener
 
   }
 
-  public final void onDownload(URL url, IImage image)
+  public final void onDownload(URL url, IImage image, boolean expired)
   {
     final boolean hasLabel = (_label.length() != 0);
 
@@ -54,7 +54,7 @@ public class IconDownloadListener extends IImageDownloadListener
     _mark.onTextureDownloadError();
   }
 
-  public final void onCanceledDownload(URL url, IImage image)
+  public final void onCanceledDownload(URL url, IImage image, boolean expired)
   {
     // do nothing
   }

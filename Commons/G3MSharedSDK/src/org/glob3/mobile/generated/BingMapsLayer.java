@@ -51,17 +51,21 @@ public class BingMapsLayer extends Layer
    imagerySet: "Aerial", "AerialWithLabels", "Road", "OrdnanceSurvey" or "CollinsBart". See class BingMapType for constants.
    key: Bing Maps key. See http: //msdn.microsoft.com/en-us/library/gg650598.aspx
    */
-  public BingMapsLayer(String imagerySet, String key, TimeInterval timeToCache, int initialLevel)
+  public BingMapsLayer(String imagerySet, String key, TimeInterval timeToCache, boolean readExpired, int initialLevel)
   {
-     this(imagerySet, key, timeToCache, initialLevel, null);
+     this(imagerySet, key, timeToCache, readExpired, initialLevel, null);
+  }
+  public BingMapsLayer(String imagerySet, String key, TimeInterval timeToCache, boolean readExpired)
+  {
+     this(imagerySet, key, timeToCache, readExpired, 2, null);
   }
   public BingMapsLayer(String imagerySet, String key, TimeInterval timeToCache)
   {
-     this(imagerySet, key, timeToCache, 2, null);
+     this(imagerySet, key, timeToCache, true, 2, null);
   }
-  public BingMapsLayer(String imagerySet, String key, TimeInterval timeToCache, int initialLevel, LayerCondition condition)
+  public BingMapsLayer(String imagerySet, String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, LayerCondition condition)
   {
-     super(condition, "BingMaps", timeToCache, null);
+     super(condition, "BingMaps", timeToCache, readExpired, null);
      _imagerySet = imagerySet;
      _key = key;
      _initialLevel = initialLevel;
@@ -114,7 +118,7 @@ public class BingMapsLayer extends Layer
     path = su.replaceSubstring(path, "{quadkey}", quadkey);
     path = su.replaceSubstring(path, "{culture}", "en-US");
   
-    petitions.add(new Petition(tileSector, new URL(path, false), getTimeToCache(), true));
+    petitions.add(new Petition(tileSector, new URL(path, false), getTimeToCache(), getReadExpired(), true));
   
     return petitions;
   }

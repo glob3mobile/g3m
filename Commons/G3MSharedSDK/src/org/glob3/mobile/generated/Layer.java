@@ -39,6 +39,7 @@ public abstract class Layer
   protected LayerTilesRenderParameters _parameters;
 
   protected final long _timeToCacheMS;
+  protected final boolean _readExpired;
 
   protected final void notifyChanges()
   {
@@ -52,12 +53,13 @@ public abstract class Layer
     }
   }
 
-  protected Layer(LayerCondition condition, String name, TimeInterval timeToCache, LayerTilesRenderParameters parameters)
+  protected Layer(LayerCondition condition, String name, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters)
   {
      _condition = condition;
      _name = name;
      _layerSet = null;
      _timeToCacheMS = timeToCache.milliseconds();
+     _readExpired = readExpired;
      _enable = true;
      _parameters = parameters;
 
@@ -77,6 +79,11 @@ public abstract class Layer
   public final TimeInterval getTimeToCache()
   {
     return TimeInterval.fromMilliseconds(_timeToCacheMS);
+  }
+
+  public final boolean getReadExpired()
+  {
+    return _readExpired;
   }
 
   public void setEnable(boolean enable)

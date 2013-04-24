@@ -375,7 +375,8 @@ public class Mark
       {
         IDownloader downloader = context.getDownloader();
   
-        downloader.requestImage(_iconURL, downloadPriority, TimeInterval.fromDays(30), new IconDownloadListener(this, _label, _labelBottom, _labelFontSize, _labelFontColor, _labelShadowColor, _labelGapSize), true);
+        int __TODO_readDirty;
+        downloader.requestImage(_iconURL, downloadPriority, TimeInterval.fromDays(30), true, new IconDownloadListener(this, _label, _labelBottom, _labelFontSize, _labelFontColor, _labelShadowColor, _labelGapSize), true);
       }
       else
       {
