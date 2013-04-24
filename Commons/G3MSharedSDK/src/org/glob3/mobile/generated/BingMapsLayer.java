@@ -132,7 +132,7 @@ public class BingMapsLayer extends Layer
   {
     final URL url = new URL("http://dev.virtualearth.net/REST/v1/Imagery/Metadata/" + _imagerySet + "?key=" + _key, false);
   
-    context.getDownloader().requestBuffer(url, DownloadPriority.HIGHEST, TimeInterval.fromDays(1), false, new BingMapsLayer_MetadataBufferDownloadListener(this), true);
+    context.getDownloader().requestBuffer(url, DownloadPriority.HIGHEST, TimeInterval.fromDays(1), true, new BingMapsLayer_MetadataBufferDownloadListener(this), true);
   }
 
   public final void onDowloadMetadata(IByteBuffer buffer)

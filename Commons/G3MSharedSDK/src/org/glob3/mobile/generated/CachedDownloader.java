@@ -99,33 +99,6 @@ public class CachedDownloader extends IDownloader
 
   public final long requestBuffer(URL url, long priority, TimeInterval timeToCache, boolean readExpired, IBufferDownloadListener listener, boolean deleteListener)
   {
-  //  _requestsCounter++;
-  //
-  //  IByteBuffer* cachedBuffer = _storage->isAvailable() ? _storage->readBuffer(url) : NULL;
-  //  if (cachedBuffer == NULL) {
-  //    // cache miss
-  //    return _downloader->requestBuffer(url,
-  //                                      priority,
-  //                                      TimeInterval::zero(),
-  //                                      new BufferSaverDownloadListener(this,
-  //                                                                      listener,
-  //                                                                      deleteListener,
-  //                                                                      _storage,
-  //                                                                      timeToCache),
-  //                                      true);
-  //  }
-  //
-  //  // cache hit
-  //  _cacheHitsCounter++;
-  //
-  //  listener->onDownload(url, cachedBuffer);
-  //
-  //  if (deleteListener) {
-  //    delete listener;
-  //  }
-  //
-  //  return -1;
-  
   
     _requestsCounter++;
   
@@ -150,8 +123,6 @@ public class CachedDownloader extends IDownloader
   
       return -1;
     }
-  
-  
   
     // cache miss
     return _downloader.requestBuffer(url, priority, TimeInterval.zero(), false, new BufferSaverDownloadListener(this, cachedBuffer, listener, deleteListener, _storage, timeToCache), true);
