@@ -12,7 +12,7 @@
 
 LayerSet* LayerBuilder::createDefaultSatelliteImagery() {
   LayerSet* layerSet = new LayerSet();
-  
+
   WMSLayer* blueMarble = new WMSLayer("bmng200405",
                                       URL("http://www.nasa.network.com/wms?", false),
                                       WMS_1_1_0,
@@ -25,7 +25,7 @@ LayerSet* LayerBuilder::createDefaultSatelliteImagery() {
                                       TimeInterval::fromDays(30),
                                       true);
   layerSet->addLayer(blueMarble);
-  
+
   WMSLayer* i3Landsat = new WMSLayer("esat",
                                      URL("http://data.worldwind.arc.nasa.gov/wms?", false),
                                      WMS_1_1_0,
@@ -38,7 +38,7 @@ LayerSet* LayerBuilder::createDefaultSatelliteImagery() {
                                      TimeInterval::fromDays(30),
                                      true);
   layerSet->addLayer(i3Landsat);
-  
+
   WMSLayer* bing = new WMSLayer("ve",
                                 URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?", false),
                                 WMS_1_1_0,
@@ -51,7 +51,7 @@ LayerSet* LayerBuilder::createDefaultSatelliteImagery() {
                                 TimeInterval::fromDays(30),
                                 true);
   layerSet->addLayer(bing);
-  
+
   return layerSet;
 }
 
@@ -65,7 +65,7 @@ std::vector<std::string> LayerBuilder::getDefaultLayersNames() {
   layersNames.push_back("bmng200405");
   layersNames.push_back("esat");
   layersNames.push_back("ve");
-  
+
   return layersNames;
 }
 
@@ -82,7 +82,7 @@ WMSLayer* LayerBuilder::createBingLayer(bool enabled) {
                                 TimeInterval::fromDays(30),
                                 true);
   bing->setEnable(enabled);
-  
+
   return bing;
 }
 
@@ -100,8 +100,8 @@ WMSLayer* LayerBuilder::createOSMLayer(bool enabled) {
                                TimeInterval::fromDays(30),
                                true);
   osm->setEnable(enabled);
-  
-  return osm;  
+
+  return osm;
 }
 
 WMSLayer* LayerBuilder::createPNOALayer(bool enabled) {
@@ -117,7 +117,7 @@ WMSLayer* LayerBuilder::createPNOALayer(bool enabled) {
                                 TimeInterval::fromDays(30),
                                 true);
   pnoa->setEnable(enabled);
-  
+
   return pnoa;
 }
 
@@ -134,7 +134,7 @@ WMSLayer* LayerBuilder::createBlueMarbleLayer(bool enabled) {
                                       TimeInterval::fromDays(30),
                                       true);
   blueMarble->setEnable(enabled);
-  
+
   return blueMarble;
 }
 
@@ -151,7 +151,7 @@ WMSLayer* LayerBuilder::createI3LandSatLayer(bool enabled) {
                                      TimeInterval::fromDays(30),
                                      true);
   i3Landsat->setEnable(enabled);
-  
+
   return i3Landsat;
 }
 
@@ -168,6 +168,6 @@ WMSLayer* LayerBuilder::createPoliticalLayer(bool enabled) {
                                      TimeInterval::fromDays(30),
                                      true);
   political->setEnable(enabled);
-  
+
   return political;
 }
