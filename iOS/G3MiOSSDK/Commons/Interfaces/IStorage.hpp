@@ -31,6 +31,10 @@ public:
   {
   }
 
+  ~IImageResult() {
+
+  }
+
   IImage* getImage() const {
     return _image;
   }
