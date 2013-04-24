@@ -39,6 +39,7 @@ public:
   virtual long long requestBuffer(const URL& url,
                                   long long priority,
                                   const TimeInterval& timeToCache,
+                                  bool readExpired,
                                   IBufferDownloadListener* listener,
                                   bool deleteListener) = 0;
 

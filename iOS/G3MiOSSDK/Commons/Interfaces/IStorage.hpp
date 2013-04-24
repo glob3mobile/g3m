@@ -45,6 +45,33 @@ public:
 };
 
 
+class IByteBufferResult {
+private:
+  IByteBuffer* _buffer;
+  const bool   _expired;
+
+public:
+  IByteBufferResult(IByteBuffer* buffer,
+                    bool expired) :
+  _buffer(buffer),
+  _expired(expired)
+  {
+  }
+
+  ~IByteBufferResult() {
+
+  }
+
+  IByteBuffer* getBuffer() const {
+    return _buffer;
+  }
+
+  bool isExpired() const {
+    return _expired;
+  }
+};
+
+
 class IStorage {
 protected:
 #ifdef C_CODE
@@ -66,7 +93,9 @@ public:
   virtual void initialize(const G3MContext* context);
 
 
-  virtual IByteBuffer* readBuffer(const URL& url) = 0;
+//  virtual IByteBuffer* readBuffer(const URL& url) = 0;
+  virtual IByteBufferResult readBuffer(const URL& url,
+                                       bool readExpired) = 0;
 
   virtual IImageResult readImage(const URL& url,
                                  bool readExpired) = 0;

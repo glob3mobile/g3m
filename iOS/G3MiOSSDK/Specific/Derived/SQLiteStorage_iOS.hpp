@@ -45,7 +45,9 @@ public:
   }
 
 
-  IByteBuffer* readBuffer(const URL& url);
+  //  IByteBuffer* readBuffer(const URL& url);
+  IByteBufferResult readBuffer(const URL& url,
+                               bool readExpired);
 
   IImageResult readImage(const URL& url,
                          bool readExpired);

@@ -48,7 +48,7 @@
 
     IByteBuffer* buffer = IFactory::instance()->createByteBuffer(bytes, length);
 
-    _cppBufferListener->onDownload(url, buffer);
+    _cppBufferListener->onDownload(url, buffer, false);
   }
 
   if (_cppImageListener) {
@@ -95,7 +95,7 @@
             length: length];
     
     IByteBuffer* buffer = IFactory::instance()->createByteBuffer(bytes, length);
-    _cppBufferListener->onCanceledDownload(url, buffer);
+    _cppBufferListener->onCanceledDownload(url, buffer, false);
     delete buffer;
   }
   

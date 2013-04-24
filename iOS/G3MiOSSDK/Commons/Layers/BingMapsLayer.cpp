@@ -55,7 +55,8 @@ public:
   }
 
   void onDownload(const URL& url,
-                  IByteBuffer* buffer) {
+                  IByteBuffer* buffer,
+                  bool expired) {
     _bingMapsLayer->onDowloadMetadata(buffer);
   }
 
@@ -68,7 +69,8 @@ public:
   }
 
   void onCanceledDownload(const URL& url,
-                          IByteBuffer* data) {
+                          IByteBuffer* data,
+                          bool expired) {
     // do nothing, the request won't be cancelled
   }
 };
@@ -218,6 +220,7 @@ void BingMapsLayer::initialize(const G3MContext* context) {
   context->getDownloader()->requestBuffer(url,
                                           DownloadPriority::HIGHEST,
                                           TimeInterval::fromDays(1),
+                                          false,
                                           new BingMapsLayer_MetadataBufferDownloadListener(this),
                                           true);
 }

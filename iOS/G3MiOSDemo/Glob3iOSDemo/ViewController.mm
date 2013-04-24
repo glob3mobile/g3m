@@ -1147,7 +1147,8 @@ public:
   }
 
   void onDownload(const URL& url,
-                  IByteBuffer* buffer) {
+                  IByteBuffer* buffer,
+                  bool expired) {
 
     const ElevationData* elevationData = BilParser::parseBil16(_sector,
                                                                _extent,
@@ -1253,7 +1254,8 @@ public:
   }
 
   void onCanceledDownload(const URL& url,
-                          IByteBuffer* data) {
+                          IByteBuffer* data,
+                          bool expired) {
 
   }
 
@@ -1472,7 +1474,7 @@ public:
       canvas->setStrokeColor( Color::fromRGBA(0, 0, 0, 0.9) );
       canvas->fillAndStrokeRoundedRectangle(128, 16, 64, 64, 8);
 
-      int __DGD_working_at_Canvas;
+      int _DGD_working_on_Canvas;
 
       canvas->setFillColor( Color::white() );
       canvas->setShadow(Color::black(), 5, 1, -1);

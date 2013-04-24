@@ -18,12 +18,17 @@
 
 class BufferSaverDownloadListener : public IBufferDownloadListener {
 private:
-  CachedDownloader*        _downloader;
+  CachedDownloader* _downloader;
+
+  IByteBuffer* _expiredBuffer;
+
   IBufferDownloadListener* _listener;
-  const bool               _deleteListener;
-  IStorage*                _storage;
+  const bool _deleteListener;
+
+  IStorage* _storage;
+
 #ifdef C_CODE
-  const TimeInterval       _timeToCache;
+  const TimeInterval _timeToCache;
 #endif
 #ifdef JAVA_CODE
   private final TimeInterval _timeToCache;
@@ -31,17 +36,23 @@ private:
 
 public:
   BufferSaverDownloadListener(CachedDownloader* downloader,
+                              IByteBuffer* expiredBuffer,
                               IBufferDownloadListener* listener,
                               bool deleteListener,
                               IStorage* storage,
                               const TimeInterval& timeToCache) :
   _downloader(downloader),
+  _expiredBuffer(expiredBuffer),
   _listener(listener),
   _deleteListener(deleteListener),
   _storage(storage),
   _timeToCache(timeToCache)
   {
 
+  }
+
+  ~BufferSaverDownloadListener() {
+    delete _expiredBuffer;
   }
 
   void deleteListener() {
@@ -68,25 +79,37 @@ public:
   }
 
   void onDownload(const URL& url,
-                  IByteBuffer* data) {
-    saveBuffer(url, data);
+                  IByteBuffer* data,
+                  bool expired) {
+    if (!expired) {
+      saveBuffer(url, data);
+    }
 
-    _listener->onDownload(url, data);
+    _listener->onDownload(url, data, expired);
 
     deleteListener();
   }
 
   void onError(const URL& url) {
-    _listener->onError(url);
+    if (_expiredBuffer == NULL) {
+      _listener->onError(url);
+    }
+    else {
+      _listener->onDownload(url, _expiredBuffer, true);
+      _expiredBuffer = NULL;
+    }
 
     deleteListener();
   }
 
   void onCanceledDownload(const URL& url,
-                          IByteBuffer* buffer) {
-    saveBuffer(url, buffer);
+                          IByteBuffer* buffer,
+                          bool expired) {
+    if (!expired) {
+      saveBuffer(url, buffer);
+    }
 
-    _listener->onCanceledDownload(url, buffer);
+    _listener->onCanceledDownload(url, buffer, expired);
 
     // no deleteListener() call, onCanceledDownload() is always called before onCancel().
   }
@@ -229,38 +252,6 @@ void CachedDownloader::stop() {
 void CachedDownloader::cancelRequest(long long requestId) {
   _downloader->cancelRequest(requestId);
 }
-long long CachedDownloader::requestBuffer(const URL& url,
-                                          long long priority,
-                                          const TimeInterval& timeToCache,
-                                          IBufferDownloadListener* listener,
-                                          bool deleteListener) {
-  _requestsCounter++;
-
-  IByteBuffer* cachedBuffer = _storage->isAvailable() ? _storage->readBuffer(url) : NULL;
-  if (cachedBuffer == NULL) {
-    // cache miss
-    return _downloader->requestBuffer(url,
-                                      priority,
-                                      TimeInterval::zero(),
-                                      new BufferSaverDownloadListener(this,
-                                                                      listener,
-                                                                      deleteListener,
-                                                                      _storage,
-                                                                      timeToCache),
-                                      true);
-  }
-
-  // cache hit
-  _cacheHitsCounter++;
-
-  listener->onDownload(url, cachedBuffer);
-
-  if (deleteListener) {
-    delete listener;
-  }
-
-  return -1;
-}
 
 const std::string CachedDownloader::statistics() {
   IStringBuilder *isb = IStringBuilder::newStringBuilder();
@@ -303,6 +294,10 @@ IImageResult CachedDownloader::getCachedImageResult(const URL& url,
       return IImageResult(_lastImageResult->getImage()->shallowCopy(),
                           _lastImageResult->isExpired());
     }
+  }
+
+  if (!_storage->isAvailable()) {
+    return IImageResult(NULL, false);
   }
 
   IImageResult cachedImageResult = _storage->readImage(url, readExpired);
@@ -360,5 +355,76 @@ long long CachedDownloader::requestImage(const URL& url,
                                                                   _storage,
                                                                   timeToCache),
                                    true);
-  
+
+}
+
+long long CachedDownloader::requestBuffer(const URL& url,
+                                          long long priority,
+                                          const TimeInterval& timeToCache,
+                                          bool readExpired,
+                                          IBufferDownloadListener* listener,
+                                          bool deleteListener) {
+//  _requestsCounter++;
+//
+//  IByteBuffer* cachedBuffer = _storage->isAvailable() ? _storage->readBuffer(url) : NULL;
+//  if (cachedBuffer == NULL) {
+//    // cache miss
+//    return _downloader->requestBuffer(url,
+//                                      priority,
+//                                      TimeInterval::zero(),
+//                                      new BufferSaverDownloadListener(this,
+//                                                                      listener,
+//                                                                      deleteListener,
+//                                                                      _storage,
+//                                                                      timeToCache),
+//                                      true);
+//  }
+//  
+//  // cache hit
+//  _cacheHitsCounter++;
+//  
+//  listener->onDownload(url, cachedBuffer);
+//  
+//  if (deleteListener) {
+//    delete listener;
+//  }
+//  
+//  return -1;
+
+
+  _requestsCounter++;
+
+  IByteBufferResult cachedBufferResult = _storage->isAvailable()
+  /*                                         */ ? _storage->readBuffer(url, readExpired)
+  /*                                         */ : IByteBufferResult(NULL, false);
+
+  IByteBuffer* cachedBuffer = cachedBufferResult.getBuffer();
+
+  if (cachedBuffer != NULL && !cachedBufferResult.isExpired()) {
+    // cache hit
+    _cacheHitsCounter++;
+
+    listener->onDownload(url, cachedBuffer, false);
+
+    if (deleteListener) {
+      delete listener;
+    }
+
+    return -1;
+  }
+
+
+
+  // cache miss
+  return _downloader->requestBuffer(url,
+                                    priority,
+                                    TimeInterval::zero(),
+                                    false,
+                                    new BufferSaverDownloadListener(this,
+                                                                    cachedBuffer,
+                                                                    listener,
+                                                                    deleteListener,
+                                                                    _storage,
+                                                                    timeToCache),
+                                    true);
 }

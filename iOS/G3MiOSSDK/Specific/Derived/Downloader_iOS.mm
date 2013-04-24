@@ -183,6 +183,7 @@ long long Downloader_iOS::requestImage(const URL& url,
 long long Downloader_iOS::requestBuffer(const URL &url,
                                         long long priority,
                                         const TimeInterval& timeToCache,
+                                        bool readExpired,
                                         IBufferDownloadListener* cppListener,
                                         bool deleteListener) {
 
