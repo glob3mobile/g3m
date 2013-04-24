@@ -4,7 +4,6 @@ package org.glob3.mobile.demo;
 
 import java.util.ArrayList;
 
-import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.BusyMeshRenderer;
 import org.glob3.mobile.generated.CachedDownloader;
 import org.glob3.mobile.generated.CameraDoubleDragHandler;
@@ -15,29 +14,21 @@ import org.glob3.mobile.generated.CameraSingleDragHandler;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.CompositeRenderer;
 import org.glob3.mobile.generated.G3MContext;
-import org.glob3.mobile.generated.GFont;
 import org.glob3.mobile.generated.GInitializationTask;
-import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraConstrainer;
-import org.glob3.mobile.generated.ICanvas;
 import org.glob3.mobile.generated.IDownloader;
-import org.glob3.mobile.generated.IImage;
-import org.glob3.mobile.generated.IImageListener;
 import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
-import org.glob3.mobile.generated.QuadShape;
 import org.glob3.mobile.generated.Sector;
-import org.glob3.mobile.generated.Shape;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.SimpleCameraConstrainer;
 import org.glob3.mobile.generated.TileRenderer;
 import org.glob3.mobile.generated.TileRendererBuilder;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
-import org.glob3.mobile.generated.Vector2F;
 import org.glob3.mobile.generated.WMSLayer;
 import org.glob3.mobile.generated.WMSServerVersion;
 import org.glob3.mobile.generated.WidgetUserData;
@@ -166,64 +157,64 @@ public class G3MSimplestGlob3Activity
       final GInitializationTask initializationTask = new GInitializationTask() {
          @Override
          public void run(final G3MContext context) {
-            final ICanvas canvas = context.getFactory().createCanvas();
-
-
-            final String text = "Hello World!";
-            //final GFont font = GFont.serif();
-            //final GFont font = GFont.monospaced();
-            final GFont font = GFont.sansSerif();
-
-            canvas.setFont(font);
-
-            final Vector2F textExtent = canvas.textExtent(text);
-
-            canvas.initialize(256, 256);
-
-            canvas.setFillColor(Color.fromRGBA(1f, 1f, 1f, 0.75f));
-            canvas.fillRoundedRectangle(0, 0, 256, 256, 32);
-
-            canvas.setShadow(Color.black(), 5f, 3.5f, -3.5f);
-            canvas.setFillColor(Color.fromRGBA(1f, 0f, 0f, 0.5f));
-            canvas.fillRectangle(32, 64, 64, 128);
-            canvas.removeShadow();
-
-
-            canvas.setStrokeColor(Color.fromRGBA(1f, 0f, 1f, 0.9f));
-            canvas.setStrokeWidth(2.5f);
-            final float margin = 1.25f;
-            canvas.strokeRoundedRectangle(0 + margin, 0 + margin, 256 - (margin * 2), 256 - (margin * 2), 32);
-
-            canvas.setFillColor(Color.fromRGBA(1, 1, 0, 0.9f));
-            canvas.setStrokeWidth(1.1f);
-            canvas.setStrokeColor(Color.fromRGBA(0, 0, 0, 0.9f));
-            canvas.fillAndStrokeRoundedRectangle(128, 16, 64, 64, 8);
-
-            final int __DGD_working_at_Canvas;
-
-
-            canvas.setFillColor(Color.white());
-            canvas.setShadow(Color.black(), 5, 1, -1);
-            canvas.fillText(text, 128 - (textExtent._x / 2), 128 - (textExtent._y / 2));
-
-            canvas.removeShadow();
-            canvas.setFillColor(Color.black());
-            canvas.fillRectangle(10, 10, 5, 5);
-
-            final IImageListener listener = new IImageListener() {
-
-               @Override
-               public void imageCreated(final IImage image) {
-                  final Shape quad = new QuadShape( //
-                           new Geodetic3D(Angle.fromDegrees(37.78333333), Angle.fromDegrees(-121.5), 8000), //
-                           image, //
-                           50000, 50000);
-                  shapesRenderer.addShape(quad);
-               }
-            };
-            canvas.createImage(listener, true);
-
-            canvas.dispose();
+            //            final ICanvas canvas = context.getFactory().createCanvas();
+            //
+            //
+            //            final String text = "Hello World!";
+            //            //final GFont font = GFont.serif();
+            //            //final GFont font = GFont.monospaced();
+            //            final GFont font = GFont.sansSerif();
+            //
+            //            canvas.setFont(font);
+            //
+            //            final Vector2F textExtent = canvas.textExtent(text);
+            //
+            //            canvas.initialize(256, 256);
+            //
+            //            canvas.setFillColor(Color.fromRGBA(1f, 1f, 1f, 0.75f));
+            //            canvas.fillRoundedRectangle(0, 0, 256, 256, 32);
+            //
+            //            canvas.setShadow(Color.black(), 5f, 3.5f, -3.5f);
+            //            canvas.setFillColor(Color.fromRGBA(1f, 0f, 0f, 0.5f));
+            //            canvas.fillRectangle(32, 64, 64, 128);
+            //            canvas.removeShadow();
+            //
+            //
+            //            canvas.setStrokeColor(Color.fromRGBA(1f, 0f, 1f, 0.9f));
+            //            canvas.setStrokeWidth(2.5f);
+            //            final float margin = 1.25f;
+            //            canvas.strokeRoundedRectangle(0 + margin, 0 + margin, 256 - (margin * 2), 256 - (margin * 2), 32);
+            //
+            //            canvas.setFillColor(Color.fromRGBA(1, 1, 0, 0.9f));
+            //            canvas.setStrokeWidth(1.1f);
+            //            canvas.setStrokeColor(Color.fromRGBA(0, 0, 0, 0.9f));
+            //            canvas.fillAndStrokeRoundedRectangle(128, 16, 64, 64, 8);
+            //
+            //            final int __DGD_working_at_Canvas;
+            //
+            //
+            //            canvas.setFillColor(Color.white());
+            //            canvas.setShadow(Color.black(), 5, 1, -1);
+            //            canvas.fillText(text, 128 - (textExtent._x / 2), 128 - (textExtent._y / 2));
+            //
+            //            canvas.removeShadow();
+            //            canvas.setFillColor(Color.black());
+            //            canvas.fillRectangle(10, 10, 5, 5);
+            //
+            //            final IImageListener listener = new IImageListener() {
+            //
+            //               @Override
+            //               public void imageCreated(final IImage image) {
+            //                  final Shape quad = new QuadShape( //
+            //                           new Geodetic3D(Angle.fromDegrees(37.78333333), Angle.fromDegrees(-121.5), 8000), //
+            //                           image, //
+            //                           50000, 50000);
+            //                  shapesRenderer.addShape(quad);
+            //               }
+            //            };
+            //            canvas.createImage(listener, true);
+            //
+            //            canvas.dispose();
 
          }
 
