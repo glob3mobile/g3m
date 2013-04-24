@@ -20,7 +20,6 @@ public abstract class IStorage
 
   public abstract IByteBuffer readBuffer(URL url);
 
-  //  virtual IImage* readImage(const URL& url) = 0;
   public abstract IImageResult readImage(URL url, boolean readExpired);
 
   public abstract void saveBuffer(URL url, IByteBuffer buffer, TimeInterval timeToExpires, boolean saveInBackground);
