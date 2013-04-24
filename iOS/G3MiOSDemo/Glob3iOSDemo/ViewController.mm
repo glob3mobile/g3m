@@ -87,6 +87,8 @@
 #import <G3MiOSSDK/GFont.hpp>
 
 #import <G3MiOSSDK/LayerTilesRenderParameters.hpp>
+#import <G3MiOSSDK/IImageUtils.hpp>
+#import <G3MiOSSDK/RectangleF.hpp>
 
 class TestVisibleSectorListener : public VisibleSectorListener {
 public:
@@ -994,8 +996,50 @@ public:
 //                                       );
 //    shapesRenderer->addShape(sphere);
 //  }
-
   
+  Image_iOS *image1 = new Image_iOS([[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"g3m-marker" ofType:@"png"]], NULL);
+  
+    Image_iOS *image2 = new Image_iOS([[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"horizontal-gears" ofType:@"png"]], NULL);
+  
+  std::vector<const IImage*> images;
+  images.push_back(image2);
+  images.push_back(image1);
+  
+  std::vector<RectangleF *> srcRs;
+  srcRs.push_back(new RectangleF(0,0,490,380));
+  srcRs.push_back(new RectangleF(0,0,72,72));
+  
+  std::vector<RectangleF *> destRs;
+  destRs.push_back(new RectangleF(0,0,256,256));
+  destRs.push_back(new RectangleF(128,128,128,64));
+  
+  class QuadListener: public IImageListener {
+    ShapesRenderer* _sr;
+  public:
+    
+    QuadListener(ShapesRenderer* sr):_sr(sr){
+      
+    }
+    
+    void imageCreated(IImage* image){
+      
+      
+      Shape* quadImages = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
+                                                       Angle::fromDegrees(-123),
+                                                       8000),
+                                        image,
+                                        75000, 35000);
+      
+      _sr->addShape(quadImages);
+    }
+  };
+  
+  
+  IImageUtils::combine(images,
+                       srcRs,
+                       destRs,
+                       Vector2I(256,256),
+                       new QuadListener(shapesRenderer), true);
 
   return shapesRenderer;
 }
