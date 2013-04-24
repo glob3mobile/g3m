@@ -195,18 +195,7 @@ public class EllipsoidShape extends AbstractMeshShape
   
         vertices.add(innerPoint);
   
-  
-  //      double vv;
-  //      if (_mercator) {
-  //        vv = MercatorUtils::getMercatorV(innerPoint.latitude());
-  //      }
-  //      else {
-  //        vv = v;
-  //      }
-  
         final double vv = _mercator ? MercatorUtils.getMercatorV(innerPoint.latitude()) : v;
-        /*                    */
-        /*                    */
   
         texCoords.add((float) u, (float) vv);
       }
