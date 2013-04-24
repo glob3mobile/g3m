@@ -160,8 +160,6 @@ void ICanvas::drawImage(const IImage* image,
                         float destLeft, float destTop, float destWidth, float destHeight){
   checkInitialized();
   
-  
-  
   RectangleF srcR(srcLeft, srcTop, srcWidth, srcHeight);
   RectangleF imR(0,0,image->getWidth(), image->getHeight());
   
