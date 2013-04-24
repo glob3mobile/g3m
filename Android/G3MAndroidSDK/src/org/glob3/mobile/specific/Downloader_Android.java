@@ -164,23 +164,24 @@ public final class Downloader_Android
    public long requestImage(final URL url,
                             final long priority,
                             final TimeInterval timeToCache,
+                            final boolean readExpired,
                             final IImageDownloadListener listener,
                             final boolean deleteListener) {
-
       Downloader_Android_Handler handler = null;
       long requestId;
 
       synchronized (this) {
          _requestsCounter++;
          requestId = _requestIdCounter++;
-         handler = _downloadingHandlers.get(url.getPath());
+         final String path = url.getPath();
+         handler = _downloadingHandlers.get(path);
 
          if (handler == null) {
-            handler = _queuedHandlers.get(url.getPath());
+            handler = _queuedHandlers.get(path);
             if (handler == null) {
                // new handler, queue it
                handler = new Downloader_Android_Handler(url, listener, priority, requestId);
-               _queuedHandlers.put(url.getPath(), handler);
+               _queuedHandlers.put(path, handler);
             }
             else {
                // the URL is queued for future download, just add the new listener
@@ -340,5 +341,6 @@ public final class Downloader_Android
    public void onDestroy(final G3MContext context) {
       stop();
    }
+
 
 }

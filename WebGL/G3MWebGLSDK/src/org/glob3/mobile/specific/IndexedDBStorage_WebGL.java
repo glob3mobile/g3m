@@ -5,6 +5,7 @@ package org.glob3.mobile.specific;
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.IByteBuffer;
 import org.glob3.mobile.generated.IImage;
+import org.glob3.mobile.generated.IImageResult;
 import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
@@ -24,27 +25,15 @@ public final class IndexedDBStorage_WebGL
    }
 
 
-   //   @Override
-   //   public boolean containsBuffer(final URL url) {
-   //      return false;
-   //   }
-
-
    @Override
    public IByteBuffer readBuffer(final URL url) {
-      // TODO Auto-generated method stub
       return null;
    }
 
 
-   //   @Override
-   //   public boolean containsImage(final URL url) {
-   //      return false;
-   //   }
-
-
    @Override
-   public IImage readImage(final URL url) {
+   public IImageResult readImage(final URL url,
+                                 final boolean readExpired) {
       return null;
    }
 

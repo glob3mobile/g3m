@@ -76,7 +76,6 @@ void SGLayerNode::requestImage(const G3MRenderContext* rc) {
     return;
   }
 
-  int __TODO_readDirty;
   rc->getDownloader()->requestImage(getURL(),
                                     TEXTURES_DOWNLOAD_PRIORITY,
                                     TimeInterval::fromDays(30),

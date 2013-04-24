@@ -135,7 +135,8 @@ public final class Downloader_WebGL
    @Override
    public long requestImage(final URL url,
                             final long priority,
-                            final TimeInterval timeToExpires,
+                            final TimeInterval timeToCache,
+                            final boolean readExpired,
                             final IImageDownloadListener listener,
                             final boolean deleteListener) {
       final long requestId;
@@ -287,5 +288,6 @@ public final class Downloader_WebGL
                           final FrameTasksExecutor frameTasksExecutor) {
 
    }
+
 
 }

@@ -97,7 +97,7 @@ public final class ListenerEntry {
             _imageListener.onError(url);
          }
          else {
-            _imageListener.onDownload(url, image);
+            _imageListener.onDownload(url, image, false);
             //IFactory.instance().deleteImage(image);
          }
       }
@@ -118,7 +118,7 @@ public final class ListenerEntry {
             log(LogLevel.ErrorLevel, ": Can't create image from data");
          }
          else {
-            _imageListener.onCanceledDownload(url, image);
+            _imageListener.onCanceledDownload(url, image, false);
             IFactory.instance().deleteImage(image);
          }
       }

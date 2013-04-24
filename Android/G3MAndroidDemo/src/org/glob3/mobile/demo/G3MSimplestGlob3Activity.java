@@ -110,7 +110,8 @@ public class G3MSimplestGlob3Activity
                "", //
                false, //
                null, //
-               TimeInterval.fromDays(30));
+               TimeInterval.fromDays(30), //
+               true);
       layerSet.addLayer(osm);
       final TileRendererBuilder tlBuilder = new TileRendererBuilder();
       tlBuilder.setLayerSet(layerSet);

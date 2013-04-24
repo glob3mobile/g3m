@@ -102,7 +102,7 @@ public final class ListenerEntry {
          }
          else {
             final IImage image = new Image_Android(bitmap, data);
-            _imageListener.onDownload(url, image);
+            _imageListener.onDownload(url, image, false);
             //IFactory.instance().deleteImage(image);
          }
       }
@@ -122,7 +122,7 @@ public final class ListenerEntry {
          }
          else {
             final IImage image = new Image_Android(bitmap, data);
-            _imageListener.onCanceledDownload(url, image);
+            _imageListener.onCanceledDownload(url, image, false);
             IFactory.instance().deleteImage(image);
          }
       }

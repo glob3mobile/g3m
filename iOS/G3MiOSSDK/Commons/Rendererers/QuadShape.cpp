@@ -89,7 +89,6 @@ Mesh* QuadShape::createMesh(const G3MRenderContext* rc) {
   if (!_textureRequested) {
     _textureRequested = true;
     if (_textureURL.getPath().length() != 0) {
-      int __TODO_readDirty;
       rc->getDownloader()->requestImage(_textureURL,
                                         1000000,
                                         TimeInterval::fromDays(30),

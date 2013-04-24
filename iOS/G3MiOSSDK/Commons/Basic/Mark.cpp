@@ -285,7 +285,6 @@ void Mark::initialize(const G3MContext* context,
     if (hasIconURL) {
       IDownloader* downloader = context->getDownloader();
 
-      int __TODO_readDirty;
       downloader->requestImage(_iconURL,
                                downloadPriority,
                                TimeInterval::fromDays(30),

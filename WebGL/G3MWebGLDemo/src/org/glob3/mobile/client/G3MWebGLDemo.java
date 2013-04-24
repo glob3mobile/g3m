@@ -419,7 +419,8 @@ public class G3MWebGLDemo
                      "", //
                      false, //
                      null, //
-                     TimeInterval.fromDays(30));
+                     TimeInterval.fromDays(30), //
+                     true);
             layerSet.addLayer(bing);
          }
          final boolean useOSMLatLon = true;
@@ -448,7 +449,8 @@ public class G3MWebGLDemo
                      false, //
                      // new LevelTileCondition(3, 100));
                      null, //
-                     TimeInterval.fromDays(30));
+                     TimeInterval.fromDays(30), //
+                     true);
             layerSet.addLayer(osm);
          }
 
@@ -463,7 +465,8 @@ public class G3MWebGLDemo
                      "", //
                      true, //
                      null, //
-                     TimeInterval.fromDays(30));
+                     TimeInterval.fromDays(30), //
+                     true);
             layerSet.addLayer(pnoa);
          }
 
@@ -478,7 +481,8 @@ public class G3MWebGLDemo
                      "", //
                      true, //
                      null, //
-                     TimeInterval.fromDays(30));
+                     TimeInterval.fromDays(30), //
+                     true);
             layerSet.addLayer(ayto);
          }
 
