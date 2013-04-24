@@ -213,7 +213,6 @@ public class TileTextureBuilder extends RCObject
           images.add(image);
 
           //Where we are going to draw the image
-          //destRects.push_back(getImageRectangleInTexture(tileSector, intersectionSector));
           destRects.add(getInnerRectangle(_tileTextureResolution._x, _tileTextureResolution._y, tileSector, intersectionSector));
 
           textureId += petition.getURL().getPath();
