@@ -68,7 +68,6 @@ public:
 
   virtual IByteBuffer* readBuffer(const URL& url) = 0;
 
-  //  virtual IImage* readImage(const URL& url) = 0;
   virtual IImageResult readImage(const URL& url,
                                  bool readExpired) = 0;
 

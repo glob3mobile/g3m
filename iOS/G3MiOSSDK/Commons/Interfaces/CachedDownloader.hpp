@@ -25,13 +25,9 @@ private:
 
   const bool _saveInBackground;
 
-//  IImage* getCachedImage(const URL& url,
-//                         bool readExpired);
   IImageResult getCachedImageResult(const URL& url,
                                     bool readExpired);
 
-  //IImage* _lastImage;
-  //URL*    _lastImageURL;
   IImageResult* _lastImageResult;
   URL*          _lastImageURL;
 
@@ -45,7 +41,6 @@ public:
   _cacheHitsCounter(0),
   _savesCounter(0),
   _saveInBackground(saveInBackground),
-//  _lastImage(NULL),
   _lastImageResult(NULL),
   _lastImageURL(NULL)
   {

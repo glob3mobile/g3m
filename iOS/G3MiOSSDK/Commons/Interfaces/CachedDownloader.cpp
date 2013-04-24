@@ -295,40 +295,6 @@ void CachedDownloader::initialize(const G3MContext* context,
 }
 
 
-//IImage* CachedDownloader::getCachedImage(const URL& url,
-//                                               bool readExpired) {
-//  if ( (_lastImage != NULL) && (_lastImageURL != NULL) ) {
-//    if (_lastImageURL->isEqualsTo(url)) {
-//      // ILogger::instance()->logInfo("Used chached image for %s", url.description().c_str());
-//      return _lastImage->shallowCopy();
-//    }
-//  }
-//
-//  if (!_storage->isAvailable()) {
-//    return NULL;
-//  }
-//
-//  //IImage* cachedImage = _storage->isAvailable() ? _storage->readImage(url) : NULL;
-//
-//  IImageResult cachedImageResult = _storage->readImage(url, readExpired);
-//  IImage* cachedImage = cachedImageResult.getImage();
-//
-//  //if (!cachedImageResult.isExpired()) {
-//  if (cachedImage != NULL) {
-//    if (_lastImage != NULL) {
-//      IFactory::instance()->deleteImage(_lastImage);
-//    }
-//    _lastImage = cachedImage->shallowCopy();
-//
-//    delete _lastImageURL;
-//    _lastImageURL = new URL(url);
-//  }
-//  //}
-//
-//  return cachedImage;
-//}
-
-
 IImageResult CachedDownloader::getCachedImageResult(const URL& url,
                                                     bool readExpired) {
   if ( (_lastImageResult != NULL) && (_lastImageURL != NULL) ) {
@@ -365,32 +331,6 @@ long long CachedDownloader::requestImage(const URL& url,
                                          IImageDownloadListener* listener,
                                          bool deleteListener) {
   _requestsCounter++;
-
-//  IImage* cachedImage = getCachedImage(url, readExpired);
-//  if (cachedImage != NULL) {
-//    // cache hit
-//    _cacheHitsCounter++;
-//
-//    listener->onDownload(url, cachedImage, false);
-//
-//    if (deleteListener) {
-//      delete listener;
-//    }
-//
-//    return -1;
-//  }
-//
-//  // cache miss
-//  return _downloader->requestImage(url,
-//                                   priority,
-//                                   TimeInterval::zero(),
-//                                   false,
-//                                   new ImageSaverDownloadListener(this,
-//                                                                  listener,
-//                                                                  deleteListener,
-//                                                                  _storage,
-//                                                                  timeToCache),
-//                                   true);
 
   IImageResult cachedImageResult = getCachedImageResult(url, readExpired);
   IImage* cachedImage = cachedImageResult.getImage();
