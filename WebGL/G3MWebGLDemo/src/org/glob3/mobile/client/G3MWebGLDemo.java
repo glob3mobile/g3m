@@ -98,10 +98,10 @@ public class G3MWebGLDemo
       if (_widget == null) {
 
          // initialize a customized widget without using any builder
-         initWithoutBuilder();
+         //initWithoutBuilder();
 
          // initialize a default widget by using a builder
-         //initDefaultWithBuilder();
+         initDefaultWithBuilder();
 
          // initialize a customized widget by using a builder
          //         initCustomizedWithBuilder();
@@ -593,7 +593,7 @@ public class G3MWebGLDemo
             mainRenderer.addRenderer(shapesRenderer);
 
 
-            final boolean testingImagesCombine = true;
+            final boolean testingImagesCombine = false;
             if (testingImagesCombine) {
                class DL
                         extends
