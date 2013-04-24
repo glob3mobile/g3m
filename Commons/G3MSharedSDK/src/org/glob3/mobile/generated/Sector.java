@@ -30,6 +30,80 @@ public class Sector
   private final Angle _deltaLongitude ;
 
 
+  private Geodetic2D getClosestPoint(Geodetic2D pos)
+  {
+    // if pos is included, return pos
+    if (contains(pos))
+    {
+      return pos;
+    }
+  
+    // test longitude
+    Geodetic2D center = getCenter();
+    double lon = pos.longitude()._degrees;
+    double centerLon = center.longitude()._degrees;
+    double oppLon1 = centerLon - 180;
+    double oppLon2 = centerLon + 180;
+    if (lon<oppLon1)
+      lon+=360;
+    if (lon>oppLon2)
+      lon-=360;
+    double minLon = _lower.longitude()._degrees;
+    double maxLon = _upper.longitude()._degrees;
+    //bool insideLon    = true;
+    if (lon < minLon)
+    {
+      lon = minLon;
+      //insideLon = false;
+    }
+    if (lon > maxLon)
+    {
+      lon = maxLon;
+      //insideLon = false;
+    }
+  
+    // test latitude
+    double lat = pos.latitude()._degrees;
+    double minLat = _lower.latitude()._degrees;
+    double maxLat = _upper.latitude()._degrees;
+    //bool insideLat    = true;
+    if (lat < minLat)
+    {
+      lat = minLat;
+      //insideLat = false;
+    }
+    if (lat > maxLat)
+    {
+      lat = maxLat;
+      //insideLat = false;
+    }
+  
+    return new Geodetic2D(Angle.fromDegrees(lat), Angle.fromDegrees(lon));
+  
+    /* // here we have to handle the case where sector is close to the pole,
+    // and the latitude of the other point must be seen from the other side
+    Geodetic2D point(Angle::fromDegrees(lat), Angle::fromDegrees(lon));
+    if (touchesNorthPole()) {
+      Geodetic2D pole(Angle::fromDegrees(90), Angle::fromDegrees(0));
+      Angle angle1 = pos.angleTo(point);
+      Angle angle2 = pos.angleTo(pole);
+      if (angle1.greaterThan(angle2))
+        return pole;
+    }
+    if (touchesSouthPole()) {
+      Geodetic2D pole(Angle::fromDegrees(-90), Angle::fromDegrees(0));
+      Angle angle1 = pos.angleTo(point);
+      Angle angle2 = pos.angleTo(pole);
+      if (angle1.greaterThan(angle2))
+        return pole;
+    }
+    return point;*/
+  
+    /*
+     const Angle lat = pos.latitude().nearestAngleInInterval(_lower.latitude(), _upper.latitude());
+     const Angle lon = pos.longitude().nearestAngleInInterval(_lower.longitude(), _upper.longitude());
+     return Geodetic2D(lat, lon);*/
+  }
 
 
   public void dispose()
@@ -387,83 +461,42 @@ public class Sector
     return (planet.geodeticSurfaceNormal(point).dot(eye.sub(point)) <= 0);
   }
 
-  public final Geodetic2D getClosestPoint(Geodetic2D pos)
+  public final Geodetic2D clamp(Geodetic2D position)
   {
-    // if pos is included, return pos
-    if (contains(pos))
+    if (contains(position))
     {
-      return pos;
+      return position;
     }
   
-    // test longitude
-    Geodetic2D center = getCenter();
-    double lon = pos.longitude()._degrees;
-    double centerLon = center.longitude()._degrees;
-    double oppLon1 = centerLon - 180;
-    double oppLon2 = centerLon + 180;
-    if (lon<oppLon1)
-      lon+=360;
-    if (lon>oppLon2)
-      lon-=360;
-    double minLon = _lower.longitude()._degrees;
-    double maxLon = _upper.longitude()._degrees;
-    //bool insideLon    = true;
-    if (lon < minLon)
+    double latitudeInDegrees = position.latitude().degrees();
+    double longitudeInDegrees = position.longitude().degrees();
+  
+    final double upperLatitudeInDegrees = _upper.latitude().degrees();
+    if (latitudeInDegrees > upperLatitudeInDegrees)
     {
-      lon = minLon;
-      //insideLon = false;
-    }
-    if (lon > maxLon)
-    {
-      lon = maxLon;
-      //insideLon = false;
+      latitudeInDegrees = upperLatitudeInDegrees;
     }
   
-    // test latitude
-    double lat = pos.latitude()._degrees;
-    double minLat = _lower.latitude()._degrees;
-    double maxLat = _upper.latitude()._degrees;
-    //bool insideLat    = true;
-    if (lat < minLat)
+    final double upperLongitudeInDegrees = _upper.longitude().degrees();
+    if (longitudeInDegrees > upperLongitudeInDegrees)
     {
-      lat = minLat;
-      //insideLat = false;
+      longitudeInDegrees = upperLongitudeInDegrees;
     }
-    if (lat > maxLat)
+  
+    final double lowerLatitudeInDegrees = _lower.latitude().degrees();
+    if (latitudeInDegrees < lowerLatitudeInDegrees)
     {
-      lat = maxLat;
-      //insideLat = false;
+      latitudeInDegrees = lowerLatitudeInDegrees;
     }
   
-    return new Geodetic2D(Angle.fromDegrees(lat), Angle.fromDegrees(lon));
-  
-    /* // here we have to handle the case where sector is close to the pole,
-    // and the latitude of the other point must be seen from the other side
-    Geodetic2D point(Angle::fromDegrees(lat), Angle::fromDegrees(lon));
-    if (touchesNorthPole()) {
-      Geodetic2D pole(Angle::fromDegrees(90), Angle::fromDegrees(0));
-      Angle angle1 = pos.angleTo(point);
-      Angle angle2 = pos.angleTo(pole);
-      if (angle1.greaterThan(angle2))
-        return pole;
+    final double lowerLongitudeInDegrees = _lower.longitude().degrees();
+    if (longitudeInDegrees < lowerLongitudeInDegrees)
+    {
+      longitudeInDegrees = lowerLongitudeInDegrees;
     }
-    if (touchesSouthPole()) {
-      Geodetic2D pole(Angle::fromDegrees(-90), Angle::fromDegrees(0));
-      Angle angle1 = pos.angleTo(point);
-      Angle angle2 = pos.angleTo(pole);
-      if (angle1.greaterThan(angle2))
-        return pole;
-    }
-    return point;*/
   
-    /*
-     const Angle lat = pos.latitude().nearestAngleInInterval(_lower.latitude(), _upper.latitude());
-     const Angle lon = pos.longitude().nearestAngleInInterval(_lower.longitude(), _upper.longitude());
-     return Geodetic2D(lat, lon);*/
+    return Geodetic2D.fromDegrees(latitudeInDegrees, longitudeInDegrees);
   }
-
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  Geodetic2D getApproximatedClosestPoint(Geodetic2D pos);
 
   public final String description()
   {

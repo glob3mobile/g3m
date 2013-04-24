@@ -165,7 +165,7 @@ public class TileTextureBuilder extends RCObject
     deletePetitions();
   }
 
-  public final RectangleI getImageRectangleInTexture(Sector wholeSector, Sector imageSector)
+  public final RectangleF getImageRectangleInTexture(Sector wholeSector, Sector imageSector)
   {
 
     final IMathUtils mu = IMathUtils.instance();
@@ -178,7 +178,32 @@ public class TileTextureBuilder extends RCObject
     final int textureWidth = _tileTextureResolution._x;
     final int textureHeight = _tileTextureResolution._y;
 
-    return new RectangleI((int) mu.round(lowerFactor._x * textureWidth), (int) mu.round((1.0 - lowerFactor._y) * textureHeight), (int) mu.round(widthFactor * textureWidth), (int) mu.round(heightFactor * textureHeight));
+    return new RectangleF((float) mu.round(lowerFactor._x * textureWidth), (float) mu.round((1.0 - lowerFactor._y) * textureHeight), (float) mu.round(widthFactor * textureWidth), (float) mu.round(heightFactor * textureHeight));
+  }
+
+  public final RectangleF getImageRectangle(IImage wholeImage, Sector wholeSector, Sector imageSector)
+  {
+    final IMathUtils mu = IMathUtils.instance();
+
+    double minWholeLat = wholeSector.lower().latitude().degrees();
+    double minWholeLon = wholeSector.lower().longitude().degrees();
+    double maxWholeLat = wholeSector.upper().latitude().degrees();
+    double maxWholeLon = wholeSector.upper().longitude().degrees();
+
+    double minImageLat = imageSector.lower().latitude().degrees();
+    double minImageLon = imageSector.lower().longitude().degrees();
+
+    double lowerFactorX = (minImageLon - minWholeLon) / (maxWholeLon - minWholeLon);
+    double lowerFactorY = (minImageLat - minWholeLat) / (maxWholeLat - minWholeLat);
+    final Vector2D lowerFactor = new Vector2D(lowerFactorX, lowerFactorY);
+
+    final double widthFactor = imageSector.getDeltaLongitude().div(wholeSector.getDeltaLongitude());
+    final double heightFactor = imageSector.getDeltaLatitude().div(wholeSector.getDeltaLatitude());
+
+    final int textureWidth = wholeImage.getWidth();
+    final int textureHeight = wholeImage.getHeight();
+
+    return new RectangleF((float) mu.round(lowerFactor._x * textureWidth), (float) mu.round((1.0 - (lowerFactor._y + heightFactor)) * textureHeight), (float) mu.round(widthFactor * textureWidth), (float) mu.round(heightFactor * textureHeight));
   }
 
   public final void composeAndUploadTexture()
@@ -190,8 +215,9 @@ public class TileTextureBuilder extends RCObject
         return;
       }
 
-      java.util.ArrayList<IImage> images = new java.util.ArrayList<IImage>();
-      java.util.ArrayList<RectangleI> rectangles = new java.util.ArrayList<RectangleI>();
+      final java.util.ArrayList<IImage> images = new java.util.ArrayList<IImage>();
+      java.util.ArrayList<RectangleF> sourceRects = new java.util.ArrayList<RectangleF>();
+      java.util.ArrayList<RectangleF> destRects = new java.util.ArrayList<RectangleF>();
       String textureId = _tile.getKey().tinyDescription();
 
       final Sector tileSector = _tile.getSector();
@@ -201,11 +227,32 @@ public class TileTextureBuilder extends RCObject
         final Petition petition = _petitions.get(i);
         IImage image = petition.getImage();
 
+
         if (image != null)
         {
+
+          Sector petitionSector = petition.getSector();
+
+          //Finding intersection image sector - tile sector = srcReq
+          Sector intersectionSector = tileSector.intersection(petitionSector);
+
+          RectangleF sourceRect = null;
+          if (!intersectionSector.isEqualsTo(petitionSector))
+          {
+            sourceRect = getImageRectangle(image, petitionSector, intersectionSector); //Intersection with upper level image
+          }
+          else
+          {
+            sourceRect = new RectangleF((float)0,(float)0, (float)image.getWidth(), (float)image.getHeight());
+          }
+
+          //Part of the image we are going to draw
+          sourceRects.add(sourceRect);
+
           images.add(image);
 
-          rectangles.add(getImageRectangleInTexture(tileSector, petition.getSector()));
+          //Where we are going to draw the image
+          destRects.add(getImageRectangleInTexture(tileSector, intersectionSector));
 
           textureId += petition.getURL().getPath();
           textureId += "_";
@@ -214,13 +261,13 @@ public class TileTextureBuilder extends RCObject
 
       if (images.size() > 0)
       {
-        _textureBuilder.createTextureFromImages(_gl, _factory, images, rectangles, _tileTextureResolution, new TextureUploader(this, rectangles, textureId), true);
+        _textureBuilder.createTextureFromImages(_gl, _factory, images, sourceRects, destRects, _tileTextureResolution, new TextureUploader(this, sourceRects, destRects, textureId), true);
       }
 
     }
   }
 
-  public final void imageCreated(IImage image, java.util.ArrayList<RectangleI> rectangles, String textureId)
+  public final void imageCreated(IImage image, java.util.ArrayList<RectangleF> srcRects, java.util.ArrayList<RectangleF> dstRects, String textureId)
   {
     synchronized (this) {
 
@@ -244,10 +291,14 @@ public class TileTextureBuilder extends RCObject
 
       IFactory.instance().deleteImage(image);
 
-      for (int i = 0; i < rectangles.size(); i++)
+      for (int i = 0; i < srcRects.size(); i++)
       {
-        if (rectangles.get(i) != null)
-           rectangles.get(i).dispose();
+        srcRects.get(i).dispose();
+      }
+
+      for (int i = 0; i < dstRects.size(); i++)
+      {
+        dstRects.get(i).dispose();
       }
 
     }
@@ -323,13 +374,13 @@ public class TileTextureBuilder extends RCObject
     return _canceled;
   }
 
-//  void checkIsPending(int position) const {
-//    if (_status[position] != STATUS_PENDING) {
-//      ILogger::instance()->logError("Logic error: Expected STATUS_PENDING at position #%d but found status: %d\n",
-//                                    position,
-//                                    _status[position]);
-//    }
-//  }
+  //  void checkIsPending(int position) const {
+  //    if (_status[position] != STATUS_PENDING) {
+  //      ILogger::instance()->logError("Logic error: Expected STATUS_PENDING at position #%d but found status: %d\n",
+  //                                    position,
+  //                                    _status[position]);
+  //    }
+  //  }
 
   public final void stepDownloaded(int position, IImage image)
   {

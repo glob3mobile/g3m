@@ -22,16 +22,34 @@ public abstract class IImage
   public abstract int getHeight();
   public abstract Vector2I getExtent();
 
-  public abstract void combineWith(IImage other, RectangleI rect, int width, int height, IImageListener listener, boolean autodelete);
-
-  public abstract void combineWith(java.util.ArrayList<IImage> images, java.util.ArrayList<RectangleI> rectangles, int width, int height, IImageListener listener, boolean autodelete);
-
-  public abstract void subImage(RectangleI rect, IImageListener listener, boolean autodelete);
-
-  public abstract void scale(int width, int height, IImageListener listener, boolean autodelete);
+//  
+//  virtual void subImage(const RectangleI& rect,
+//                        IImageListener* listener,
+//                        bool autodelete) const = 0;
+//  
+//  virtual void scale(int width, int height,
+//                     IImageListener* listener,
+//                     bool autodelete) const = 0;
 
   public abstract String description();
 
   public abstract IImage shallowCopy();
+
+//  
+//  virtual void combineWith(const RectangleI& thisSourceRect,
+//                           const IImage& other,
+//                           const RectangleI& sourceRect,
+//                           const RectangleI& destRect,
+//                           const Vector2I& destSize,
+//                           IImageListener* listener,
+//                           bool autodelete) const = 0;
+//  
+//  virtual void combineWith(const RectangleI& thisSourceRect,
+//                           const std::vector<const IImage*>& images,
+//                           const std::vector<RectangleI*>& sourceRects,
+//                           const std::vector<RectangleI*>& destRects,
+//                           const Vector2I& size,
+//                           IImageListener* listener,
+//                           bool autodelete) const = 0;
 
 }

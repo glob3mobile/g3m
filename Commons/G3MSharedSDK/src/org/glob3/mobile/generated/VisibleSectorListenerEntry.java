@@ -31,9 +31,7 @@ public class VisibleSectorListenerEntry
 
   public final void notifyListener(Sector visibleSector, G3MRenderContext rc)
   {
-    final Geodetic3D cameraPosition = rc.getPlanet().toGeodetic3D(rc.getCurrentCamera().getCartesianPosition());
-
-    _listener.onVisibleSectorChange(_lastSector, cameraPosition);
+    _listener.onVisibleSectorChange(_lastSector, rc.getCurrentCamera().getGeodeticPosition());
   }
 
   public final void tryToNotifyListener(Sector visibleSector, G3MRenderContext rc)

@@ -27,7 +27,6 @@ public:
                                    short noDataValue,
                                    double minValidHeight,
                                    const IByteBuffer* buffer);
-  
 };
 
 #endif

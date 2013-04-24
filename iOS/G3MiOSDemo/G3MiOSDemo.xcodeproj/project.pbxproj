@@ -24,13 +24,14 @@
 		CF8C0EBB16FC99C400DBEDE4 /* cc3d4326.json in Resources */ = {isa = PBXBuildFile; fileRef = CF8C0EBA16FC99C400DBEDE4 /* cc3d4326.json */; };
 		CF8EE55B16CE94E40033AB7A /* mercator_debug.png in Resources */ = {isa = PBXBuildFile; fileRef = CF8EE55A16CE94E40033AB7A /* mercator_debug.png */; };
 		CF91C53016D7C03C00E25C24 /* full-earth-4096x2048.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF91C52F16D7C03B00E25C24 /* full-earth-4096x2048.bil */; };
-		CFB5274B16D53906008374C2 /* full-earth-2048x1024.bil in Resources */ = {isa = PBXBuildFile; fileRef = CFB5274A16D53906008374C2 /* full-earth-2048x1024.bil */; };
 		CFC39A8916FB9DB7004992C2 /* small-caceres.bil in Resources */ = {isa = PBXBuildFile; fileRef = CFC39A8816FB9DB7004992C2 /* small-caceres.bil */; };
 		CFCC53F316D50D8900671DC4 /* full-earth-512x512.bil in Resources */ = {isa = PBXBuildFile; fileRef = CFCC53F216D50D8900671DC4 /* full-earth-512x512.bil */; };
 		CFD42AB816DBAEFD00B03961 /* elev-35.0_-6.0_38.0_-2.0_4096x2048.bil in Resources */ = {isa = PBXBuildFile; fileRef = CFD42AB716DBAEFD00B03961 /* elev-35.0_-6.0_38.0_-2.0_4096x2048.bil */; };
 		CFE3DBB1164B0E7D00910037 /* seymour-plane.json in Resources */ = {isa = PBXBuildFile; fileRef = CFE3DBB0164B0E7D00910037 /* seymour-plane.json */; };
 		CFEA76681666DCB000E89BC7 /* images in Resources */ = {isa = PBXBuildFile; fileRef = CFEA76671666DCB000E89BC7 /* images */; };
 		CFF95F7D158A748F00B56E11 /* plane.png in Resources */ = {isa = PBXBuildFile; fileRef = CFF95F7C158A748F00B56E11 /* plane.png */; };
+		D882B1CD171D77C000C2AD9C /* full-earth-256x256.bil in Resources */ = {isa = PBXBuildFile; fileRef = D882B1CC171D76AD00C2AD9C /* full-earth-256x256.bil */; };
+		D8857E95171C4ABC0016302B /* full-earth-2048x1024.bil in Resources */ = {isa = PBXBuildFile; fileRef = D8857E94171C4ABC0016302B /* full-earth-2048x1024.bil */; };
 		D8E93BE01588A171009D497C /* world.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D8E93BDF1588A171009D497C /* world.jpg */; };
 		D8EEF38B1577920B003FEB5E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF38A1577920B003FEB5E /* UIKit.framework */; };
 		D8EEF38D1577920B003FEB5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF38C1577920B003FEB5E /* Foundation.framework */; };
@@ -98,7 +99,6 @@
 		CF8C0EBA16FC99C400DBEDE4 /* cc3d4326.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = cc3d4326.json; sourceTree = "<group>"; };
 		CF8EE55A16CE94E40033AB7A /* mercator_debug.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mercator_debug.png; sourceTree = "<group>"; };
 		CF91C52F16D7C03B00E25C24 /* full-earth-4096x2048.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "full-earth-4096x2048.bil"; sourceTree = "<group>"; };
-		CFB5274A16D53906008374C2 /* full-earth-2048x1024.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "full-earth-2048x1024.bil"; sourceTree = "<group>"; };
 		CFC39A8816FB9DB7004992C2 /* small-caceres.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "small-caceres.bil"; sourceTree = "<group>"; };
 		CFCC53F216D50D8900671DC4 /* full-earth-512x512.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "full-earth-512x512.bil"; sourceTree = "<group>"; };
 		CFCCFE0C16F506C20082F383 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
@@ -106,6 +106,8 @@
 		CFE3DBB0164B0E7D00910037 /* seymour-plane.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "seymour-plane.json"; sourceTree = "<group>"; };
 		CFEA76671666DCB000E89BC7 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
 		CFF95F7C158A748F00B56E11 /* plane.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plane.png; sourceTree = "<group>"; };
+		D882B1CC171D76AD00C2AD9C /* full-earth-256x256.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = "full-earth-256x256.bil"; sourceTree = "<group>"; };
+		D8857E94171C4ABC0016302B /* full-earth-2048x1024.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = "full-earth-2048x1024.bil"; sourceTree = "<group>"; };
 		D8E93BDF1588A171009D497C /* world.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = world.jpg; sourceTree = "<group>"; };
 		D8EEF3861577920B003FEB5E /* G3MiOSDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = G3MiOSDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8EEF38A1577920B003FEB5E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -233,6 +235,8 @@
 		D8EEF4271577B0D6003FEB5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D882B1CC171D76AD00C2AD9C /* full-earth-256x256.bil */,
+				D8857E94171C4ABC0016302B /* full-earth-2048x1024.bil */,
 				E70B224C1700DBA300172DF3 /* A320.bson */,
 				CF8C0EBA16FC99C400DBEDE4 /* cc3d4326.json */,
 				CFC39A8816FB9DB7004992C2 /* small-caceres.bil */,
@@ -243,7 +247,6 @@
 				E728385416E914D80037AA5C /* g3m-marker.png */,
 				CFD42AB716DBAEFD00B03961 /* elev-35.0_-6.0_38.0_-2.0_4096x2048.bil */,
 				CF91C52F16D7C03B00E25C24 /* full-earth-4096x2048.bil */,
-				CFB5274A16D53906008374C2 /* full-earth-2048x1024.bil */,
 				CFCC53F216D50D8900671DC4 /* full-earth-512x512.bil */,
 				CF04CCF916D3E4D5004DFACF /* 409_554.bil */,
 				CF35A20A16D3D70100D795D8 /* sample_bil16_150x150.bil */,
@@ -353,6 +356,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D882B1CD171D77C000C2AD9C /* full-earth-256x256.bil in Resources */,
+				D8857E95171C4ABC0016302B /* full-earth-2048x1024.bil in Resources */,
 				CF09A94E16A0A0F500E72811 /* test.bson in Resources */,
 				D8EEF3951577920B003FEB5E /* InfoPlist.strings in Resources */,
 				D8EEF39E1577920B003FEB5E /* MainStoryboard_iPhone.storyboard in Resources */,
@@ -384,7 +389,6 @@
 				CF35A20B16D3D70100D795D8 /* sample_bil16_150x150.bil in Resources */,
 				CF04CCFA16D3E4D5004DFACF /* 409_554.bil in Resources */,
 				CFCC53F316D50D8900671DC4 /* full-earth-512x512.bil in Resources */,
-				CFB5274B16D53906008374C2 /* full-earth-2048x1024.bil in Resources */,
 				CF91C53016D7C03C00E25C24 /* full-earth-4096x2048.bil in Resources */,
 				CFD42AB816DBAEFD00B03961 /* elev-35.0_-6.0_38.0_-2.0_4096x2048.bil in Resources */,
 				E728385516E914D80037AA5C /* g3m-marker.png in Resources */,
