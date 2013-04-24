@@ -279,8 +279,12 @@ public class G3MWebGLDemo
 
          @Override
          public void run(final G3MContext context) {
-            context.getDownloader().requestBuffer(new URL("http://glob3m.glob3mobile.com/test/aircraft-A320/A320.bson", false),
-                     0, TimeInterval.forever(), new IBufferDownloadListener() {
+            context.getDownloader().requestBuffer( //
+                     new URL("http://glob3m.glob3mobile.com/test/aircraft-A320/A320.bson", false), //
+                     0, //
+                     TimeInterval.forever(), //
+                     true, //
+                     new IBufferDownloadListener() {
 
                         @Override
                         public void onError(final URL url) {
@@ -290,7 +294,8 @@ public class G3MWebGLDemo
 
                         @Override
                         public void onDownload(final URL url,
-                                               final IByteBuffer buffer) {
+                                               final IByteBuffer buffer,
+                                               final boolean expired) {
                            final Shape aircraft = SceneJSShapesParser.parseFromBSON(buffer,
                                     "http://glob3m.glob3mobile.com/test/aircraft-A320/textures-A320/");
 
@@ -310,7 +315,8 @@ public class G3MWebGLDemo
 
                         @Override
                         public void onCanceledDownload(final URL url,
-                                                       final IByteBuffer data) {
+                                                       final IByteBuffer data,
+                                                       final boolean expired) {
                         }
 
 
@@ -584,7 +590,8 @@ public class G3MWebGLDemo
 
                @Override
                public void onDownload(final URL url,
-                                      final IByteBuffer buffer) {
+                                      final IByteBuffer buffer,
+                                      final boolean expired) {
 
                   final String response = buffer.getAsString();
                   final IJSONParser parser = context.getJSONParser();
@@ -644,13 +651,18 @@ public class G3MWebGLDemo
 
                @Override
                public void onCanceledDownload(final URL url,
-                                              final IByteBuffer data) {
+                                              final IByteBuffer data,
+                                              final boolean expired) {
                   //Do Nothing
                }
             };
 
-            downloader.requestBuffer(new URL("http://openweathermap.org/data/2.1/find/city?bbox=-80,-180,80,180,4&cluster=yes",
-                     false), 0, TimeInterval.fromHours(1.0), listener, false);
+            downloader.requestBuffer( //
+                     new URL("http://openweathermap.org/data/2.1/find/city?bbox=-80,-180,80,180,4&cluster=yes", false), //
+                     0, //
+                     TimeInterval.fromHours(1.0), //
+                     false, listener, //
+                     false);
          }
 
 

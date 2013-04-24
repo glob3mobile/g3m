@@ -4,6 +4,7 @@ package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.IByteBuffer;
+import org.glob3.mobile.generated.IByteBufferResult;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IImageResult;
 import org.glob3.mobile.generated.IStorage;
@@ -26,7 +27,8 @@ public final class IndexedDBStorage_WebGL
 
 
    @Override
-   public IByteBuffer readBuffer(final URL url) {
+   public IByteBufferResult readBuffer(final URL url,
+                                       final boolean readExpired) {
       return null;
    }
 

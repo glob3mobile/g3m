@@ -123,13 +123,49 @@ public final class Downloader_Android
    }
 
 
+   //   @Override
+   //   public long requestBuffer(final URL url,
+   //                             final long priority,
+   //                             final TimeInterval timeToCache,
+   //                             final IBufferDownloadListener listener,
+   //                             final boolean deleteListener) {
+   //
+   //      Downloader_Android_Handler handler = null;
+   //      long requestId;
+   //
+   //      synchronized (this) {
+   //         _requestsCounter++;
+   //         requestId = _requestIdCounter++;
+   //         handler = _downloadingHandlers.get(url.getPath());
+   //
+   //         if (handler == null) {
+   //            handler = _queuedHandlers.get(url.getPath());
+   //            if (handler == null) {
+   //               // new handler, queue it
+   //               handler = new Downloader_Android_Handler(url, listener, priority, requestId);
+   //               _queuedHandlers.put(url.getPath(), handler);
+   //            }
+   //            else {
+   //               // the URL is queued for future download, just add the new listener
+   //               handler.addListener(listener, priority, requestId);
+   //            }
+   //         }
+   //         else {
+   //            // the URL is being downloaded, just add the new listener
+   //            handler.addListener(listener, priority, requestId);
+   //         }
+   //      }
+   //
+   //      return requestId;
+   //   }
+
    @Override
    public long requestBuffer(final URL url,
                              final long priority,
                              final TimeInterval timeToCache,
+                             final boolean readExpired,
                              final IBufferDownloadListener listener,
                              final boolean deleteListener) {
-
       Downloader_Android_Handler handler = null;
       long requestId;
 

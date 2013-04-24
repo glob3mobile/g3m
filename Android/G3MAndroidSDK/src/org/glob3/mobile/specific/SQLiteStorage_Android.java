@@ -8,6 +8,7 @@ import java.io.File;
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.IByteBuffer;
+import org.glob3.mobile.generated.IByteBufferResult;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IImageResult;
 import org.glob3.mobile.generated.ILogger;
@@ -180,9 +181,38 @@ public final class SQLiteStorage_Android
    }
 
 
+   //   @Override
+   //   public synchronized IByteBuffer readBuffer(final URL url) {
+   //      ByteBuffer_Android result = null;
+   //      final String name = url.getPath();
+   //
+   //      final Cursor cursor = _readDB.query( // 
+   //               "buffer2", //
+   //               new String[] { "contents", "expiration" }, //
+   //               "name = ?", //
+   //               new String[] { name }, //
+   //               null, //
+   //               null, //
+   //               null);
+   //      if (cursor.moveToFirst()) {
+   //         final byte[] data = cursor.getBlob(0);
+   //         final String expirationS = cursor.getString(1);
+   //         final long expirationInterval = Long.parseLong(expirationS);
+   //
+   //         if (expirationInterval > System.currentTimeMillis()) {
+   //            result = new ByteBuffer_Android(data);
+   //         }
+   //      }
+   //      cursor.close();
+   //
+   //      return result;
+   //   }
+
    @Override
-   public synchronized IByteBuffer readBuffer(final URL url) {
-      ByteBuffer_Android result = null;
+   public IByteBufferResult readBuffer(final URL url,
+                                       final boolean readExpired) {
+      ByteBuffer_Android buffer = null;
+      boolean expired = false;
       final String name = url.getPath();
 
       final Cursor cursor = _readDB.query( // 
@@ -198,13 +228,14 @@ public final class SQLiteStorage_Android
          final String expirationS = cursor.getString(1);
          final long expirationInterval = Long.parseLong(expirationS);
 
-         if (expirationInterval > System.currentTimeMillis()) {
-            result = new ByteBuffer_Android(data);
+         expired = (expirationInterval <= System.currentTimeMillis());
+         if (!expired || readExpired) {
+            buffer = new ByteBuffer_Android(data);
          }
       }
       cursor.close();
 
-      return result;
+      return new IByteBufferResult(buffer, expired);
    }
 
 

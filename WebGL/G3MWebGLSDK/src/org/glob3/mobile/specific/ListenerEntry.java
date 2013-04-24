@@ -87,7 +87,7 @@ public final class ListenerEntry {
       if (_bufferListener != null) {
          final IByteBuffer byteBuffer = new ByteBuffer_WebGL(data);
 
-         _bufferListener.onDownload(url, byteBuffer);
+         _bufferListener.onDownload(url, byteBuffer, false);
       }
       if (_imageListener != null) {
          final Image_WebGL image = new Image_WebGL(data);
@@ -109,7 +109,7 @@ public final class ListenerEntry {
       if (_bufferListener != null) {
          final IByteBuffer byteBuffer = new ByteBuffer_WebGL(data);
 
-         _bufferListener.onCanceledDownload(url, byteBuffer);
+         _bufferListener.onCanceledDownload(url, byteBuffer, false);
       }
       if (_imageListener != null) {
          final Image_WebGL image = new Image_WebGL(data);
