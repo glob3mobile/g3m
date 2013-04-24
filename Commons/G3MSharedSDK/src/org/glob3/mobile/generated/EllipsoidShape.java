@@ -171,7 +171,6 @@ public class EllipsoidShape extends AbstractMeshShape
       _textureRequested = true;
       if (_textureURL.getPath().length() != 0)
       {
-        int __TODO_readDirty;
         rc.getDownloader().requestImage(_textureURL, 1000000, TimeInterval.fromDays(30), true, new EllipsoidShape_IImageDownloadListener(this), true);
       }
     }

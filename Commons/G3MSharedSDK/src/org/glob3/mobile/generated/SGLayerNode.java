@@ -59,7 +59,6 @@ public class SGLayerNode extends SGNode
       return;
     }
   
-    int __TODO_readDirty;
     rc.getDownloader().requestImage(getURL(), DefineConstants.TEXTURES_DOWNLOAD_PRIORITY, TimeInterval.fromDays(30), true, new SGLayerNode_ImageDownloadListener(this), true);
   }
 
