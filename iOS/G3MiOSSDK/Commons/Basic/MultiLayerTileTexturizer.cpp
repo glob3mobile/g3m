@@ -197,11 +197,9 @@ private:
   int                    _petitionsCount;
   int                    _stepsDone;
   
-  const IFactory*  _factory;
   TexturesHandler* _texturesHandler;
   TextureBuilder*  _textureBuilder;
-  GL*              _gl;
-  
+
 #ifdef C_CODE
   const Vector2I   _tileTextureResolution;
   const Vector2I   _tileMeshResolution;
@@ -280,10 +278,8 @@ public:
                      const TileTessellator*    tessellator,
                      long long                 texturePriority) :
   _texturizer(texturizer),
-  _factory(rc->getFactory()),
   _texturesHandler(rc->getTexturesHandler()),
   _textureBuilder(rc->getTextureBuilder()),
-  _gl(rc->getGL()),
   _tileTextureResolution( layerSet->getLayerTilesRenderParameters()->_tileTextureResolution ),
   _tileMeshResolution( layerSet->getLayerTilesRenderParameters()->_tileMeshResolution ),
   _mercator( layerSet->getLayerTilesRenderParameters()->_mercator ),
@@ -326,11 +322,7 @@ public:
     
     for (int i = 0; i < _petitionsCount; i++) {
       const Petition* petition = _petitions[i];
-      
-      //      const long long priority =  (_parameters->_incrementalTileQuality
-      //                                   ? 1000 - _tile->getLevel()
-      //                                   : _tile->getLevel());
-      
+            
       const long long priority = _texturePriority + _tile->getLevel();
       
       //      printf("%s\n", petition->getURL().getPath().c_str());
@@ -353,22 +345,21 @@ public:
     
     deletePetitions();
   }
-
+  
   RectangleF* getInnerRectangle(int wholeSectorWidth, int wholeSectorHeight,
                                 const Sector& wholeSector,
                                 const Sector& innerSector) const {
-    printf("%s - %s\n", wholeSector.description().c_str(), innerSector.description().c_str());
-    
+    //printf("%s - %s\n", wholeSector.description().c_str(), innerSector.description().c_str());
+
     const double widthFactor  = innerSector.getDeltaLongitude().div(wholeSector.getDeltaLongitude());
     const double heightFactor = innerSector.getDeltaLatitude().div(wholeSector.getDeltaLatitude());
-    
+
     const Vector2D lowerUV = wholeSector.getUVCoordinates(innerSector.getNW());
-    
-    
-    return new RectangleF((float)(lowerUV._x        * wholeSectorWidth),
-                          (float)(lowerUV._y        * wholeSectorHeight),
-                          (float)(widthFactor            * wholeSectorWidth),
-                          (float)(heightFactor           * wholeSectorHeight ));
+
+    return new RectangleF((float) (lowerUV._x   * wholeSectorWidth),
+                          (float) (lowerUV._y   * wholeSectorHeight),
+                          (float) (widthFactor  * wholeSectorWidth),
+                          (float) (heightFactor * wholeSectorHeight));
   }
   
   void composeAndUploadTexture() {
@@ -391,46 +382,44 @@ public:
         const Petition* petition = _petitions[i];
         IImage* image = petition->getImage();
         
-        
         if (image != NULL) {
-          
-          Sector petitionSector = petition->getSector();
-          
+          const Sector imageSector = petition->getSector();
+
           //Finding intersection image sector - tile sector = srcReq
-          Sector intersectionSector = tileSector.intersection(petitionSector);
-          
-          RectangleF *sourceRect = NULL;
-          if (!intersectionSector.isEqualsTo(petitionSector)){//Intersection with upper level image
+          const Sector intersectionSector = tileSector.intersection(imageSector);
+
+          RectangleF* sourceRect = NULL;
+          if (!intersectionSector.isEqualsTo(imageSector)){
             sourceRect = getInnerRectangle(image->getWidth(), image->getHeight(),
-                                           petitionSector,
+                                           imageSector,
                                            intersectionSector);
-          } else{
-            sourceRect = new RectangleF((float)0,(float)0, (float)image->getWidth(), (float)image->getHeight());
           }
-          
+          else {
+            sourceRect = new RectangleF(0, 0,
+                                        image->getWidth(), image->getHeight());
+          }
+
           //Part of the image we are going to draw
           sourceRects.push_back(sourceRect);
-          
+
           images.push_back(image);
-          
+
           //Where we are going to draw the image
           destRects.push_back(getInnerRectangle(_tileTextureResolution._x,
                                                 _tileTextureResolution._y,
                                                 tileSector,
                                                 intersectionSector));
-          
+
           textureId += petition->getURL().getPath();
           textureId += "_";
         }
       }
       
       if (images.size() > 0) {
-        _textureBuilder->createTextureFromImages(_gl,
-                                                 _factory,
+        _textureBuilder->createTextureFromImages(_tileTextureResolution,
                                                  images,
                                                  sourceRects,
                                                  destRects,
-                                                 _tileTextureResolution,
                                                  new TextureUploader(this,
                                                                      sourceRects,
                                                                      destRects,

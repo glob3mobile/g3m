@@ -564,7 +564,7 @@ public:
                                                                        2,
                                                                        4,
                                                                        0,
-                                                                       4,
+                                                                       8,
                                                                        LayerTilesRenderParameters::defaultTileTextureResolution(),
                                                                        LayerTilesRenderParameters::defaultTileMeshResolution(),
                                                                        false)
@@ -1035,10 +1035,10 @@ public:
   };
   
   
-  IImageUtils::combine(images,
+  IImageUtils::combine(Vector2I(256,256),
+                       images,
                        srcRs,
                        destRs,
-                       Vector2I(256,256),
                        new QuadListener(shapesRenderer), true);
 
   return shapesRenderer;

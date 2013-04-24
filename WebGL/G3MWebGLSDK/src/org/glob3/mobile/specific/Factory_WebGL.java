@@ -66,27 +66,27 @@ public final class Factory_WebGL
    }
 
 
-   @Override
-   public native void createImageFromSize(final int width,
-                                          final int height,
-                                          final IImageListener listener,
-                                          final boolean autodelete) /*-{
-		//      return new Image_WebGL(width, height);
-
-		var canvas = $doc.createElement("canvas");
-		canvas.width = width;
-		canvas.height = height;
-
-		var context = canvas.getContext("2d");
-		context.clearRect(0, 0, width, height);
-
-		var jsResult = new Image();
-		jsResult.onload = function() {
-			var result = @org.glob3.mobile.specific.Image_WebGL::new(Lcom/google/gwt/core/client/JavaScriptObject;)(jsResult);
-			listener.@org.glob3.mobile.generated.IImageListener::imageCreated(Lorg/glob3/mobile/generated/IImage;)(result);
-		};
-		jsResult.src = canvas.toDataURL();
-   }-*/;
+   //   @Override
+   //   public native void createImageFromSize(final int width,
+   //                                          final int height,
+   //                                          final IImageListener listener,
+   //                                          final boolean autodelete) /*-{
+   //		//      return new Image_WebGL(width, height);
+   //
+   //		var canvas = $doc.createElement("canvas");
+   //		canvas.width = width;
+   //		canvas.height = height;
+   //
+   //		var context = canvas.getContext("2d");
+   //		context.clearRect(0, 0, width, height);
+   //
+   //		var jsResult = new Image();
+   //		jsResult.onload = function() {
+   //			var result = @org.glob3.mobile.specific.Image_WebGL::new(Lcom/google/gwt/core/client/JavaScriptObject;)(jsResult);
+   //			listener.@org.glob3.mobile.generated.IImageListener::imageCreated(Lorg/glob3/mobile/generated/IImage;)(result);
+   //		};
+   //		jsResult.src = canvas.toDataURL();
+   //   }-*/;
 
 
    @Override

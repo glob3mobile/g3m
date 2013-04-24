@@ -159,15 +159,15 @@ public:
 
   Vector2D getUVCoordinates(const Angle& latitude,
                             const Angle& longitude) const {
-    return Vector2D(getUCoordinates(longitude),
-                    getVCoordinates(latitude));
+    return Vector2D(getUCoordinate(longitude),
+                    getVCoordinate(latitude));
   }
 
-  double getUCoordinates(const Angle& longitude) const {
+  double getUCoordinate(const Angle& longitude) const {
     return (longitude._radians - _lower.longitude()._radians) / _deltaLongitude._radians;
   }
 
-  double getVCoordinates(const Angle& latitude) const {
+  double getVCoordinate(const Angle& latitude) const {
     return (_upper.latitude()._radians - latitude._radians)   / _deltaLatitude._radians;
   }
 

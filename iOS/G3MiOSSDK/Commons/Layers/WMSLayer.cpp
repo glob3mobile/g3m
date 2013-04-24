@@ -330,7 +330,7 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& position,
   double u;
   double v;
   if (_parameters->_mercator) {
-    u = sector.getUCoordinates(position.longitude());
+    u = sector.getUCoordinate(position.longitude());
     v = MercatorUtils::getMercatorV(position.latitude());
   }
   else {
