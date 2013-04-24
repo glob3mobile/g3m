@@ -29,43 +29,6 @@ public class CachedDownloader extends IDownloader
 
   private final boolean _saveInBackground;
 
-//  IImage* getCachedImage(const URL& url,
-//                         bool readExpired);
-
-  //IImage* CachedDownloader::getCachedImage(const URL& url,
-  //                                               bool readExpired) {
-  //  if ( (_lastImage != NULL) && (_lastImageURL != NULL) ) {
-  //    if (_lastImageURL->isEqualsTo(url)) {
-  //      // ILogger::instance()->logInfo("Used chached image for %s", url.description().c_str());
-  //      return _lastImage->shallowCopy();
-  //    }
-  //  }
-  //
-  //  if (!_storage->isAvailable()) {
-  //    return NULL;
-  //  }
-  //
-  //  //IImage* cachedImage = _storage->isAvailable() ? _storage->readImage(url) : NULL;
-  //
-  //  IImageResult cachedImageResult = _storage->readImage(url, readExpired);
-  //  IImage* cachedImage = cachedImageResult.getImage();
-  //
-  //  //if (!cachedImageResult.isExpired()) {
-  //  if (cachedImage != NULL) {
-  //    if (_lastImage != NULL) {
-  //      IFactory::instance()->deleteImage(_lastImage);
-  //    }
-  //    _lastImage = cachedImage->shallowCopy();
-  //
-  //    delete _lastImageURL;
-  //    _lastImageURL = new URL(url);
-  //  }
-  //  //}
-  //
-  //  return cachedImage;
-  //}
-  
-  
   private IImageResult getCachedImageResult(URL url, boolean readExpired)
   {
     if ((_lastImageResult != null) && (_lastImageURL != null))
@@ -98,13 +61,10 @@ public class CachedDownloader extends IDownloader
     return new IImageResult(cachedImage, cachedImageResult.isExpired());
   }
 
-  //IImage* _lastImage;
-  //URL*    _lastImageURL;
   private IImageResult _lastImageResult;
   private URL _lastImageURL;
 
   public CachedDownloader(IDownloader downloader, IStorage storage, boolean saveInBackground)
-//  _lastImage(NULL),
   {
      _downloader = downloader;
      _storage = storage;
@@ -160,32 +120,6 @@ public class CachedDownloader extends IDownloader
   public final long requestImage(URL url, long priority, TimeInterval timeToCache, boolean readExpired, IImageDownloadListener listener, boolean deleteListener)
   {
     _requestsCounter++;
-  
-  //  IImage* cachedImage = getCachedImage(url, readExpired);
-  //  if (cachedImage != NULL) {
-  //    // cache hit
-  //    _cacheHitsCounter++;
-  //
-  //    listener->onDownload(url, cachedImage, false);
-  //
-  //    if (deleteListener) {
-  //      delete listener;
-  //    }
-  //
-  //    return -1;
-  //  }
-  //
-  //  // cache miss
-  //  return _downloader->requestImage(url,
-  //                                   priority,
-  //                                   TimeInterval::zero(),
-  //                                   false,
-  //                                   new ImageSaverDownloadListener(this,
-  //                                                                  listener,
-  //                                                                  deleteListener,
-  //                                                                  _storage,
-  //                                                                  timeToCache),
-  //                                   true);
   
     IImageResult cachedImageResult = getCachedImageResult(url, readExpired);
     IImage cachedImage = cachedImageResult.getImage();
