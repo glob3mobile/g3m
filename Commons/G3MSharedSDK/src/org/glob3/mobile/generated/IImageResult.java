@@ -35,6 +35,11 @@ public class IImageResult
      _expired = expired;
   }
 
+  public void dispose()
+  {
+
+  }
+
   public final IImage getImage()
   {
     return _image;
