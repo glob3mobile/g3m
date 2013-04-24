@@ -81,7 +81,8 @@ public:
   }
 
   void onDownload(const URL& url,
-                  IImage* image) {
+                  IImage* image,
+                  bool expired) {
     const bool hasLabel = ( _label.length() != 0 );
 
     if (hasLabel) {
@@ -123,7 +124,8 @@ public:
   }
 
   void onCanceledDownload(const URL& url,
-                          IImage* image) {
+                          IImage* image,
+                          bool expired) {
     // do nothing
   }
 };
@@ -283,9 +285,11 @@ void Mark::initialize(const G3MContext* context,
     if (hasIconURL) {
       IDownloader* downloader = context->getDownloader();
 
+      int __TODO_readDirty;
       downloader->requestImage(_iconURL,
                                downloadPriority,
                                TimeInterval::fromDays(30),
+                               true,
                                new IconDownloadListener(this,
                                                         _label,
                                                         _labelBottom,

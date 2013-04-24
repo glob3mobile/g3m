@@ -45,6 +45,7 @@ public:
   virtual long long requestImage(const URL& url,
                                  long long priority,
                                  const TimeInterval& timeToCache,
+                                 bool readExpired,
                                  IImageDownloadListener* listener,
                                  bool deleteListener) = 0;
 

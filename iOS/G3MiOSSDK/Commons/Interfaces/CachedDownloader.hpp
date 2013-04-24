@@ -25,15 +25,14 @@ private:
 
   const bool _saveInBackground;
 
-  IImage* getCachedImage(const URL& url);
+//  IImage* getCachedImage(const URL& url,
+//                         bool readExpired);
+  IImageResult getCachedImageResult(const URL& url,
+                                    bool readExpired);
 
-#ifdef C_CODE
-  const IImage* _lastImage;
-#endif
-#ifdef JAVA_CODE
-  private IImage _lastImage;
-#endif
-
+  //IImage* _lastImage;
+  //URL*    _lastImageURL;
+  IImageResult* _lastImageResult;
   URL*          _lastImageURL;
 
 public:
@@ -46,7 +45,8 @@ public:
   _cacheHitsCounter(0),
   _savesCounter(0),
   _saveInBackground(saveInBackground),
-  _lastImage(NULL),
+//  _lastImage(NULL),
+  _lastImageResult(NULL),
   _lastImageURL(NULL)
   {
 
@@ -69,13 +69,14 @@ public:
   long long requestImage(const URL& url,
                          long long priority,
                          const TimeInterval& timeToCache,
+                         bool readExpired,
                          IImageDownloadListener* listener,
                          bool deleteListener);
 
   void cancelRequest(long long requestId);
 
   virtual ~CachedDownloader();
-  
+
   const std::string statistics();
 
   void countSave() {
@@ -90,7 +91,7 @@ public:
 
   void initialize(const G3MContext* context,
                   FrameTasksExecutor* frameTasksExecutor);
-
+  
 };
 
 #endif

@@ -554,7 +554,8 @@ public:
                                         false,
                                         //new LevelTileCondition(0, 6),
                                         NULL,
-                                        TimeInterval::fromDays(30));
+                                        TimeInterval::fromDays(30),
+                                        true);
     layerSet->addLayer(blueMarble);
 
     //    WMSLayer* i3Landsat = new WMSLayer("esat",
@@ -582,7 +583,8 @@ public:
                                         "",
                                         false,
                                         new LevelTileCondition(0, 5),
-                                        TimeInterval::fromDays(30));
+                                        TimeInterval::fromDays(30),
+                                        true);
     layerSet->addLayer(blueMarble);
 
 
@@ -597,7 +599,8 @@ public:
                                   "",
                                   false,
                                   new LevelTileCondition(6, 500),
-                                  TimeInterval::fromDays(30));
+                                  TimeInterval::fromDays(30),
+                                  true);
     layerSet->addLayer(bing);
   }
 
@@ -611,7 +614,8 @@ public:
                                        "countryboundaries",
                                        true,
                                        NULL,
-                                       TimeInterval::fromDays(30));
+                                       TimeInterval::fromDays(30),
+                                       true);
     layerSet->addLayer(political);
   }
 
@@ -627,7 +631,8 @@ public:
                                  "",
                                  false,
                                  NULL,
-                                 TimeInterval::fromDays(30));
+                                 TimeInterval::fromDays(30),
+                                 true);
     // osm->setEnable(false);
 
     layerSet->addLayer(osm);
@@ -657,7 +662,8 @@ public:
                                   "",
                                   true,
                                   NULL,
-                                  TimeInterval::fromDays(30));
+                                  TimeInterval::fromDays(30),
+                                  true);
     layerSet->addLayer(pnoa);
   }
 
@@ -672,7 +678,8 @@ public:
                                   "",
                                   true,
                                   NULL,
-                                  TimeInterval::fromDays(30));
+                                  TimeInterval::fromDays(30),
+                                  true);
     layerSet->addLayer(ayto);
 
   }
@@ -711,7 +718,8 @@ public:
                                       "", //
                                       true, //
                                       NULL, //
-                                      TimeInterval::fromDays(30));
+                                      TimeInterval::fromDays(30),
+                                      true);
 
     class CatastroTerrainTouchEventListener : public TerrainTouchEventListener {
     public:

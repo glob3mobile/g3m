@@ -256,8 +256,38 @@ void SQLiteStorage_iOS::saveImage(const URL& url,
   }
 }
 
-IImage* SQLiteStorage_iOS::readImage(const URL& url) {
-  IImage* result = NULL;
+//IImage* SQLiteStorage_iOS::readImage(const URL& url) {
+//  IImage* result = NULL;
+//
+//  NSString* name = toNSString(url.getPath());
+//  SQResultSet* rs = [_readDB executeQuery:@"SELECT contents, expiration FROM image2 WHERE (name = ?)", name];
+//  if ([rs next]) {
+//    NSData* data = [rs dataColumnByIndex: 0];
+//    const double expirationInterval = [[rs stringColumnByIndex:1] doubleValue];
+//    NSDate* expiration = [NSDate dateWithTimeIntervalSince1970:expirationInterval];
+//
+//    if ([expiration compare:[NSDate date]] == NSOrderedDescending) {
+//      UIImage* uiImage = [UIImage imageWithData:data];
+//      if (uiImage) {
+//        result = new Image_iOS(uiImage,
+//                               NULL /* data is not needed */);
+//      }
+//      else {
+//        ILogger::instance()->logError("Can't create image with contents of storage.");
+//      }
+//    }
+//  }
+//  
+//  [rs close];
+//  
+//  return result;
+//}
+
+
+IImageResult SQLiteStorage_iOS::readImage(const URL& url,
+                                          bool readExpired) {
+  IImage* image = NULL;
+  bool expired = false;
 
   NSString* name = toNSString(url.getPath());
   SQResultSet* rs = [_readDB executeQuery:@"SELECT contents, expiration FROM image2 WHERE (name = ?)", name];
@@ -266,19 +296,26 @@ IImage* SQLiteStorage_iOS::readImage(const URL& url) {
     const double expirationInterval = [[rs stringColumnByIndex:1] doubleValue];
     NSDate* expiration = [NSDate dateWithTimeIntervalSince1970:expirationInterval];
 
-    if ([expiration compare:[NSDate date]] == NSOrderedDescending) {
+    expired = ( [expiration compare:[NSDate date]] != NSOrderedDescending );
+
+    if (expired) {
+      int __Remove_debug_code;
+      printf("break point on me\n");
+    }
+
+    if (readExpired || !expired) {
       UIImage* uiImage = [UIImage imageWithData:data];
       if (uiImage) {
-        result = new Image_iOS(uiImage,
-                               NULL/* data is not needed */);
+        image = new Image_iOS(uiImage,
+                              NULL /* data is not needed */);
       }
       else {
         ILogger::instance()->logError("Can't create image with contents of storage.");
       }
     }
   }
-  
+
   [rs close];
-  
-  return result;
+
+  return IImageResult(image, expired);
 }

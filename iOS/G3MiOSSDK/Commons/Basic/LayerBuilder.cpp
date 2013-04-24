@@ -22,7 +22,8 @@ LayerSet* LayerBuilder::createDefaultSatelliteImagery() {
                                       "",
                                       false,
                                       new LevelTileCondition(0, 6),
-                                      TimeInterval::fromDays(30));
+                                      TimeInterval::fromDays(30),
+                                      true);
   layerSet->addLayer(blueMarble);
   
   WMSLayer* i3Landsat = new WMSLayer("esat",
@@ -34,7 +35,8 @@ LayerSet* LayerBuilder::createDefaultSatelliteImagery() {
                                      "",
                                      false,
                                      new LevelTileCondition(7, 10),
-                                     TimeInterval::fromDays(30));
+                                     TimeInterval::fromDays(30),
+                                     true);
   layerSet->addLayer(i3Landsat);
   
   WMSLayer* bing = new WMSLayer("ve",
@@ -46,7 +48,8 @@ LayerSet* LayerBuilder::createDefaultSatelliteImagery() {
                                 "",
                                 false,
                                 new LevelTileCondition(11, 1000),
-                                TimeInterval::fromDays(30));
+                                TimeInterval::fromDays(30),
+                                true);
   layerSet->addLayer(bing);
   
   return layerSet;
@@ -76,7 +79,8 @@ WMSLayer* LayerBuilder::createBingLayer(bool enabled) {
                                 "",
                                 false,
                                 NULL,
-                                TimeInterval::fromDays(30));
+                                TimeInterval::fromDays(30),
+                                true);
   bing->setEnable(enabled);
   
   return bing;
@@ -93,7 +97,8 @@ WMSLayer* LayerBuilder::createOSMLayer(bool enabled) {
                                "",
                                false,
                                NULL,
-                               TimeInterval::fromDays(30));
+                               TimeInterval::fromDays(30),
+                               true);
   osm->setEnable(enabled);
   
   return osm;  
@@ -109,7 +114,8 @@ WMSLayer* LayerBuilder::createPNOALayer(bool enabled) {
                                 "",
                                 true,
                                 NULL,
-                                TimeInterval::fromDays(30));
+                                TimeInterval::fromDays(30),
+                                true);
   pnoa->setEnable(enabled);
   
   return pnoa;
@@ -125,7 +131,8 @@ WMSLayer* LayerBuilder::createBlueMarbleLayer(bool enabled) {
                                       "",
                                       false,
                                       new LevelTileCondition(0, 6),
-                                      TimeInterval::fromDays(30));
+                                      TimeInterval::fromDays(30),
+                                      true);
   blueMarble->setEnable(enabled);
   
   return blueMarble;
@@ -141,7 +148,8 @@ WMSLayer* LayerBuilder::createI3LandSatLayer(bool enabled) {
                                      "",
                                      false,
                                      new LevelTileCondition(7, 100),
-                                     TimeInterval::fromDays(30));
+                                     TimeInterval::fromDays(30),
+                                     true);
   i3Landsat->setEnable(enabled);
   
   return i3Landsat;
@@ -157,7 +165,8 @@ WMSLayer* LayerBuilder::createPoliticalLayer(bool enabled) {
                                      "countryboundaries",
                                      true,
                                      NULL,
-                                     TimeInterval::fromDays(30));
+                                     TimeInterval::fromDays(30),
+                                     true);
   political->setEnable(enabled);
   
   return political;

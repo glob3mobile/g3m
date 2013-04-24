@@ -161,7 +161,8 @@ public:
   }
 
   void onDownload(const URL& url,
-                  IImage* image)  {
+                  IImage* image,
+                  bool expired)  {
     _ellipsoidShape->imageDownloaded(image);
   }
 
@@ -174,7 +175,8 @@ public:
   }
 
   void onCanceledDownload(const URL& url,
-                          IImage* image)  {
+                          IImage* image,
+                          bool expired)  {
 
   }
 };
@@ -190,9 +192,11 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
   if (!_textureRequested) {
     _textureRequested = true;
     if (_textureURL.getPath().length() != 0) {
+      int __TODO_readDirty;
       rc->getDownloader()->requestImage(_textureURL,
                                         1000000,
                                         TimeInterval::fromDays(30),
+                                        true,
                                         new EllipsoidShape_IImageDownloadListener(this),
                                         true);
     }

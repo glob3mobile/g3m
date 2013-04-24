@@ -37,6 +37,8 @@ private:
 #endif
 
   const long long _timeToCacheInMS;
+  const bool      _readExpired;
+  
   const bool _isTransparent;
   
   Petition(const Petition& that);
@@ -48,10 +50,12 @@ public:
   Petition(const Sector& sector,
            const URL& url,
            const TimeInterval& timeToCache,
+           bool readExpired,
            bool isTransparent):
   _sector(new Sector(sector)),
   _url(url),
   _timeToCacheInMS(timeToCache.milliseconds()),
+  _readExpired(readExpired),
   _isTransparent(isTransparent),
   _image(NULL)
   {
@@ -88,6 +92,10 @@ public:
 
   const TimeInterval getTimeToCache() const {
     return TimeInterval::fromMilliseconds(_timeToCacheInMS);
+  }
+
+  bool getReadExpired() const {
+    return _readExpired;
   }
 
   bool isTransparent() const {

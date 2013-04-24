@@ -74,6 +74,7 @@ public:
   BingMapsLayer(const std::string& imagerySet,
                 const std::string& key,
                 const TimeInterval& timeToCache,
+                bool readExpired = true,
                 int initialLevel = 2,
                 LayerCondition* condition = NULL);
 

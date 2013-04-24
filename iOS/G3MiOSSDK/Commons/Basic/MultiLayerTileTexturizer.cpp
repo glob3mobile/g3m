@@ -45,12 +45,14 @@ public:
                                       int position);
 
   void onDownload(const URL& url,
-                  IImage* image);
+                  IImage* image,
+                  bool expired);
 
   void onError(const URL& url);
 
   void onCanceledDownload(const URL& url,
-                          IImage* image) {
+                          IImage* image,
+                          bool expired) {
   }
 
   void onCancel(const URL& url);
@@ -333,6 +335,7 @@ public:
       const long long requestId = _downloader->requestImage(URL(petition->getURL()),
                                                             priority,
                                                             petition->getTimeToCache(),
+                                                            petition->getReadExpired(),
                                                             new BuilderDownloadStepDownloadListener(this, i),
                                                             true);
       if (requestId >= 0) {
@@ -655,7 +658,8 @@ TileTextureBuilderHolder::~TileTextureBuilderHolder() {
 
 
 void BuilderDownloadStepDownloadListener::onDownload(const URL& url,
-                                                     IImage* image) {
+                                                     IImage* image,
+                                                     bool expired) {
   //  _onDownload++;
   _builder->stepDownloaded(_position, image);
 }
