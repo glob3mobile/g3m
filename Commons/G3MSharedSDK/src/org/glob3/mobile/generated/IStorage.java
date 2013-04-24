@@ -18,7 +18,8 @@ public abstract class IStorage
   }
 
 
-  public abstract IByteBuffer readBuffer(URL url);
+//  virtual IByteBuffer* readBuffer(const URL& url) = 0;
+  public abstract IByteBufferResult readBuffer(URL url, boolean readExpired);
 
   public abstract IImageResult readImage(URL url, boolean readExpired);
 

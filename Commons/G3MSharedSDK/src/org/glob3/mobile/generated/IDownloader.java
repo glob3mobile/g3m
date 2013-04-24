@@ -42,7 +42,7 @@ public abstract class IDownloader
 
   public abstract void stop();
 
-  public abstract long requestBuffer(URL url, long priority, TimeInterval timeToCache, IBufferDownloadListener listener, boolean deleteListener);
+  public abstract long requestBuffer(URL url, long priority, TimeInterval timeToCache, boolean readExpired, IBufferDownloadListener listener, boolean deleteListener);
 
   public abstract long requestImage(URL url, long priority, TimeInterval timeToCache, boolean readExpired, IImageDownloadListener listener, boolean deleteListener);
 

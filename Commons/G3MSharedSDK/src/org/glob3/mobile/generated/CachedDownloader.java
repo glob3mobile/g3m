@@ -40,6 +40,11 @@ public class CachedDownloader extends IDownloader
       }
     }
   
+    if (!_storage.isAvailable())
+    {
+      return new IImageResult(null, false);
+    }
+  
     IImageResult cachedImageResult = _storage.readImage(url, readExpired);
     IImage cachedImage = cachedImageResult.getImage();
   
@@ -92,29 +97,64 @@ public class CachedDownloader extends IDownloader
     _downloader.stop();
   }
 
-  public final long requestBuffer(URL url, long priority, TimeInterval timeToCache, IBufferDownloadListener listener, boolean deleteListener)
+  public final long requestBuffer(URL url, long priority, TimeInterval timeToCache, boolean readExpired, IBufferDownloadListener listener, boolean deleteListener)
   {
+  //  _requestsCounter++;
+  //
+  //  IByteBuffer* cachedBuffer = _storage->isAvailable() ? _storage->readBuffer(url) : NULL;
+  //  if (cachedBuffer == NULL) {
+  //    // cache miss
+  //    return _downloader->requestBuffer(url,
+  //                                      priority,
+  //                                      TimeInterval::zero(),
+  //                                      new BufferSaverDownloadListener(this,
+  //                                                                      listener,
+  //                                                                      deleteListener,
+  //                                                                      _storage,
+  //                                                                      timeToCache),
+  //                                      true);
+  //  }
+  //
+  //  // cache hit
+  //  _cacheHitsCounter++;
+  //
+  //  listener->onDownload(url, cachedBuffer);
+  //
+  //  if (deleteListener) {
+  //    delete listener;
+  //  }
+  //
+  //  return -1;
+  
+  
     _requestsCounter++;
   
-    IByteBuffer cachedBuffer = _storage.isAvailable() ? _storage.readBuffer(url) : null;
-    if (cachedBuffer == null)
+    IByteBufferResult cachedBufferResult = _storage.isAvailable() ? _storage.readBuffer(url, readExpired) : new IByteBufferResult(null, false);
+    /*                                         */
+    /*                                         */
+  
+    IByteBuffer cachedBuffer = cachedBufferResult.getBuffer();
+  
+    if (cachedBuffer != null && !cachedBufferResult.isExpired())
     {
-      // cache miss
-      return _downloader.requestBuffer(url, priority, TimeInterval.zero(), new BufferSaverDownloadListener(this, listener, deleteListener, _storage, timeToCache), true);
+      // cache hit
+      _cacheHitsCounter++;
+  
+      listener.onDownload(url, cachedBuffer, false);
+  
+      if (deleteListener)
+      {
+        if (listener != null)
+           listener.dispose();
+      }
+  
+      return -1;
     }
   
-    // cache hit
-    _cacheHitsCounter++;
   
-    listener.onDownload(url, cachedBuffer);
   
-    if (deleteListener)
-    {
-      if (listener != null)
-         listener.dispose();
-    }
-  
-    return -1;
+    // cache miss
+    return _downloader.requestBuffer(url, priority, TimeInterval.zero(), false, new BufferSaverDownloadListener(this, cachedBuffer, listener, deleteListener, _storage, timeToCache), true);
   }
 
   public final long requestImage(URL url, long priority, TimeInterval timeToCache, boolean readExpired, IImageDownloadListener listener, boolean deleteListener)
