@@ -220,7 +220,7 @@ void BingMapsLayer::initialize(const G3MContext* context) {
   context->getDownloader()->requestBuffer(url,
                                           DownloadPriority::HIGHEST,
                                           TimeInterval::fromDays(1),
-                                          false,
+                                          true,
                                           new BingMapsLayer_MetadataBufferDownloadListener(this),
                                           true);
 }
