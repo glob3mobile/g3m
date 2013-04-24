@@ -997,21 +997,21 @@ public:
 //    shapesRenderer->addShape(sphere);
 //  }
   
-  Image_iOS *image1 = new Image_iOS([[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"g3m-marker" ofType:@"png"]], NULL);
+  Image_iOS *image1 = new Image_iOS([[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Icon-72" ofType:@"png"]], NULL);
   
-    Image_iOS *image2 = new Image_iOS([[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"horizontal-gears" ofType:@"png"]], NULL);
+    Image_iOS *image2 = new Image_iOS([[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Default-Landscape" ofType:@"png"]], NULL);
   
   std::vector<const IImage*> images;
   images.push_back(image2);
   images.push_back(image1);
   
   std::vector<RectangleF *> srcRs;
-  srcRs.push_back(new RectangleF(0,0,490,380));
-  srcRs.push_back(new RectangleF(0,0,72,72));
+  srcRs.push_back(new RectangleF(0,0,1024,748));
+  srcRs.push_back(new RectangleF(0, 0, 72, 72));
   
   std::vector<RectangleF *> destRs;
   destRs.push_back(new RectangleF(0,0,256,256));
-  destRs.push_back(new RectangleF(128,128,128,64));
+  destRs.push_back(new RectangleF(0, 128, 64, 64));
   
   class QuadListener: public IImageListener {
     ShapesRenderer* _sr;
@@ -1024,11 +1024,11 @@ public:
     void imageCreated(IImage* image){
       
       
-      Shape* quadImages = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
-                                                       Angle::fromDegrees(-123),
+      Shape* quadImages = new QuadShape(new Geodetic3D(Angle::fromDegrees(28.410728),
+                                                       Angle::fromDegrees(-16.339417),
                                                        8000),
                                         image,
-                                        75000, 35000);
+                                        49000, 38000);
       
       _sr->addShape(quadImages);
     }

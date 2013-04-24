@@ -166,8 +166,8 @@ public:
   void drawImage(const IImage* image, float left, float top, float width, float height);
 
   void drawImage(const IImage* image,
-                 float srcLeft, float srcTop, float srcWidth, float srcHeigtt,
-                 float destLeft, float destTop, float destWidth, float destHeigtt);
+                 float srcLeft, float srcTop, float srcWidth, float srcHeight,
+                 float destLeft, float destTop, float destWidth, float destHeight);
 
   int getWidth() const {
     return _canvasWidth;

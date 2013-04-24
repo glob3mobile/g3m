@@ -89,7 +89,7 @@ protected:
                   float width, float height);
 
   void _drawImage(const IImage* image,
-                  float srcLeft, float srcTop, float srcWidth, float srcHeigtt,
+                  float srcLeft, float srcTop, float srcWidth, float srcHeight,
                   float destLeft, float destTop, float destWidth, float destHeight);
 
 

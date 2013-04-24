@@ -173,6 +173,51 @@ public class G3MSimplestGlob3Activity
       final ShapesRenderer shapesRenderer = new ShapesRenderer();
       mainRenderer.addRenderer(shapesRenderer);
 
+      //      final boolean testingImagesCombine = true;
+      //      if (testingImagesCombine) {
+      //         final Bitmap b1 = BitmapFactory.decodeResource(getResources(), R.drawable.play);
+      //         final Bitmap b2 = BitmapFactory.decodeResource(getResources(), R.drawable.bg);
+      //         final Image_Android image1 = new Image_Android(b1, null);
+      //         final Image_Android image2 = new Image_Android(b2, null);
+      //
+      //         final java.util.ArrayList<IImage> images = new ArrayList<IImage>();
+      //         images.add(image2);
+      //         images.add(image1);
+      //
+      //         final java.util.ArrayList<RectangleF> srcRs = new ArrayList<RectangleF>();
+      //         srcRs.add(new RectangleF(0, 0, 640, 960));
+      //         srcRs.add(new RectangleF(0, 0, 48, 48));
+      //
+      //         final java.util.ArrayList<RectangleF> destRs = new ArrayList<RectangleF>();
+      //         destRs.add(new RectangleF(0, 0, 256, 256));
+      //         destRs.add(new RectangleF(0, 128, 130, 130));
+      //
+      //         class QuadListener
+      //                  extends
+      //                     IImageListener {
+      //            ShapesRenderer _sr;
+      //
+      //
+      //            public QuadListener(final ShapesRenderer sr) {
+      //               _sr = sr;
+      //
+      //            }
+      //
+      //
+      //            @Override
+      //            public void imageCreated(final IImage image) {
+      //               final Shape quadImages = new QuadShape(new Geodetic3D(Angle.fromDegrees(28.410728), Angle.fromDegrees(-16.339417),
+      //                        8000), image, 49000, 38000);
+      //
+      //               _sr.addShape(quadImages);
+      //            }
+      //         }
+      //
+      //
+      //         IImageUtils.combine(new Vector2I(256, 256), images, srcRs, destRs, new QuadListener(shapesRenderer), true);
+      //      }
+
+
       //      final MarksRenderer marksRenderer = new MarksRenderer(false);
       //      final Mark m1 = new Mark("Fuerteventura", //
       //               new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false), //
@@ -280,7 +325,7 @@ public class G3MSimplestGlob3Activity
 
 
          @Override
-         public boolean isDone(final G3MContext context) {
+         public final boolean isDone(final G3MContext context) {
             return true;
          }
       };

@@ -31,7 +31,9 @@ import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.ICanvas;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IImage;
+import org.glob3.mobile.generated.IImageDownloadListener;
 import org.glob3.mobile.generated.IImageListener;
+import org.glob3.mobile.generated.IImageUtils;
 import org.glob3.mobile.generated.IJSONParser;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IStorage;
@@ -50,6 +52,7 @@ import org.glob3.mobile.generated.MeshRenderer;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.QuadShape;
+import org.glob3.mobile.generated.RectangleF;
 import org.glob3.mobile.generated.SceneJSShapesParser;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.Shape;
@@ -95,10 +98,10 @@ public class G3MWebGLDemo
       if (_widget == null) {
 
          // initialize a customized widget without using any builder
-//                  initWithoutBuilder();
+         initWithoutBuilder();
 
          // initialize a default widget by using a builder
-         initDefaultWithBuilder();
+         //initDefaultWithBuilder();
 
          // initialize a customized widget by using a builder
          //         initCustomizedWithBuilder();
@@ -202,54 +205,35 @@ public class G3MWebGLDemo
             return true;
          }
       };
-      
+
       final LayerSet layerSet = new LayerSet();
-      
+
       final boolean blueMarble = true;
       if (blueMarble) {
-        WMSLayer blueMarbleL = new WMSLayer("bmng200405",
-                                            new URL("http://www.nasa.network.com/wms?", false),
-                                            WMSServerVersion.WMS_1_1_0,
-                                            Sector.fullSphere(),
-                                            "image/jpeg",
-                                            "EPSG:4326",
-                                            "",
-                                            false,
-                                            //new LevelTileCondition(0, 6),
-                                            null,
-                                            TimeInterval.fromDays(30));
-        layerSet.addLayer(blueMarbleL);
+         final WMSLayer blueMarbleL = new WMSLayer("bmng200405", new URL("http://www.nasa.network.com/wms?", false),
+                  WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/jpeg", "EPSG:4326", "", false,
+                  //new LevelTileCondition(0, 6),
+                  null, TimeInterval.fromDays(30));
+         layerSet.addLayer(blueMarbleL);
       }
-      
+
       final boolean useOrtoAyto = true;
-      if (useOrtoAyto){
-     	 
-     	 LayerTilesRenderParameters ltrp = new LayerTilesRenderParameters(Sector.fullSphere(),
-                  2,4,0,19,
-                  new Vector2I(256,256),
-                  LayerTilesRenderParameters.defaultTileMeshResolution(),
-                  false);
-     	 
-        WMSLayer ortoAyto = new WMSLayer("orto_refundida",
-                                          new URL("http://195.57.27.86/wms_etiquetas_con_orto.mapdef?", false),
-                                          WMSServerVersion.WMS_1_1_0,
-                                          new Sector(new Geodetic2D(Angle.fromDegrees(39.350228), 
-                                         		 				   Angle.fromDegrees(-6.508713)),
-                                         		 	new Geodetic2D(Angle.fromDegrees(39.536351), 
-                                         		 			       Angle.fromDegrees(-6.25946))),
-                                          "image/jpeg",
-                                          "EPSG:4326",
-                                          "",
-                                          false,
-                                          new LevelTileCondition(4, 19),
-                                          TimeInterval.fromDays(30), ltrp );
-        layerSet.addLayer(ortoAyto);
+      if (useOrtoAyto) {
+
+         final LayerTilesRenderParameters ltrp = new LayerTilesRenderParameters(Sector.fullSphere(), 2, 4, 0, 19, new Vector2I(
+                  256, 256), LayerTilesRenderParameters.defaultTileMeshResolution(), false);
+
+         final WMSLayer ortoAyto = new WMSLayer("orto_refundida", new URL("http://195.57.27.86/wms_etiquetas_con_orto.mapdef?",
+                  false), WMSServerVersion.WMS_1_1_0, new Sector(new Geodetic2D(Angle.fromDegrees(39.350228),
+                  Angle.fromDegrees(-6.508713)), new Geodetic2D(Angle.fromDegrees(39.536351), Angle.fromDegrees(-6.25946))),
+                  "image/jpeg", "EPSG:4326", "", false, new LevelTileCondition(4, 19), TimeInterval.fromDays(30), ltrp);
+         layerSet.addLayer(ortoAyto);
       }
-      
+
       builder.setInitializationTask(initializationTask);
 
       _widget = builder.createWidget();
-      
+
    }
 
 
@@ -455,49 +439,31 @@ public class G3MWebGLDemo
          final CompositeRenderer mainRenderer = new CompositeRenderer();
 
          final LayerSet layerSet = new LayerSet();
-         
+
          final boolean blueMarble = true;
          if (blueMarble) {
-           WMSLayer blueMarbleL = new WMSLayer("bmng200405",
-                                               new URL("http://www.nasa.network.com/wms?", false),
-                                               WMSServerVersion.WMS_1_1_0,
-                                               Sector.fullSphere(),
-                                               "image/jpeg",
-                                               "EPSG:4326",
-                                               "",
-                                               false,
-                                               //new LevelTileCondition(0, 6),
-                                               null,
-                                               TimeInterval.fromDays(30));
-           layerSet.addLayer(blueMarbleL);
-         }
-         
-         final boolean useOrtoAyto = true;
-         if (useOrtoAyto){
-        	 
-        	 LayerTilesRenderParameters ltrp = new LayerTilesRenderParameters(Sector.fullSphere(),
-                     2,4,0,19,
-                     new Vector2I(256,256),
-                     LayerTilesRenderParameters.defaultTileMeshResolution(),
-                     false);
-        	 
-           WMSLayer ortoAyto = new WMSLayer("orto_refundida",
-                                             new URL("http://195.57.27.86/wms_etiquetas_con_orto.mapdef?", false),
-                                             WMSServerVersion.WMS_1_1_0,
-                                             new Sector(new Geodetic2D(Angle.fromDegrees(39.350228), 
-                                            		 				   Angle.fromDegrees(-6.508713)),
-                                            		 	new Geodetic2D(Angle.fromDegrees(39.536351), 
-                                            		 			       Angle.fromDegrees(-6.25946))),
-                                             "image/jpeg",
-                                             "EPSG:4326",
-                                             "",
-                                             false,
-                                             new LevelTileCondition(4, 19),
-                                             TimeInterval.fromDays(30), ltrp );
-           layerSet.addLayer(ortoAyto);
+            final WMSLayer blueMarbleL = new WMSLayer("bmng200405", new URL("http://www.nasa.network.com/wms?", false),
+                     WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/jpeg", "EPSG:4326", "", false,
+                     //new LevelTileCondition(0, 6),
+                     null, TimeInterval.fromDays(30));
+            layerSet.addLayer(blueMarbleL);
          }
 
-         
+         final boolean useOrtoAyto = true;
+         if (useOrtoAyto) {
+
+            final LayerTilesRenderParameters ltrp = new LayerTilesRenderParameters(Sector.fullSphere(), 2, 4, 0, 19,
+                     new Vector2I(256, 256), LayerTilesRenderParameters.defaultTileMeshResolution(), false);
+
+            final WMSLayer ortoAyto = new WMSLayer("orto_refundida", new URL(
+                     "http://195.57.27.86/wms_etiquetas_con_orto.mapdef?", false), WMSServerVersion.WMS_1_1_0, new Sector(
+                     new Geodetic2D(Angle.fromDegrees(39.350228), Angle.fromDegrees(-6.508713)), new Geodetic2D(
+                              Angle.fromDegrees(39.536351), Angle.fromDegrees(-6.25946))), "image/jpeg", "EPSG:4326", "", false,
+                     new LevelTileCondition(4, 19), TimeInterval.fromDays(30), ltrp);
+            layerSet.addLayer(ortoAyto);
+         }
+
+
          final boolean useBing = false;
          if (useBing) {
             final WMSLayer bing = new WMSLayer( //
@@ -572,7 +538,6 @@ public class G3MWebGLDemo
                      TimeInterval.fromDays(30));
             layerSet.addLayer(ayto);
          }
-         
 
 
          final TileRendererBuilder tlBuilder = new TileRendererBuilder();
@@ -626,6 +591,91 @@ public class G3MWebGLDemo
             shapesRenderer.addShape(box);
 
             mainRenderer.addRenderer(shapesRenderer);
+
+
+            final boolean testingImagesCombine = true;
+            if (testingImagesCombine) {
+               class DL
+                        extends
+                           IImageDownloadListener {
+
+                  @Override
+                  public void onDownload(final URL url,
+                                         final IImage image) {
+
+                     final int w = image.getWidth();
+                     final int h = image.getHeight();
+
+                     final java.util.ArrayList<IImage> images = new ArrayList<IImage>();
+                     images.add(image);
+                     images.add(image);
+
+                     final java.util.ArrayList<RectangleF> srcRs = new ArrayList<RectangleF>();
+                     srcRs.add(new RectangleF(0, 0, image.getWidth(), image.getHeight()));
+                     srcRs.add(new RectangleF(10, 0, image.getWidth() - 10, image.getHeight()));
+
+                     final java.util.ArrayList<RectangleF> destRs = new ArrayList<RectangleF>();
+                     destRs.add(new RectangleF(0, 0, 256, 256));
+                     destRs.add(new RectangleF(50, 20, 256, 70));
+
+                     class QuadListener
+                              extends
+                                 IImageListener {
+                        ShapesRenderer _sr;
+
+
+                        public QuadListener(final ShapesRenderer sr) {
+                           _sr = sr;
+
+                        }
+
+
+                        @Override
+                        public void imageCreated(final IImage image) {
+                           final Shape quadImages = new QuadShape(new Geodetic3D(Angle.fromDegrees(28.410728),
+                                    Angle.fromDegrees(-16.339417), 8000), image, 50000, 50000);
+
+                           _sr.addShape(quadImages);
+                        }
+                     }
+
+
+                     IImageUtils.combine(new Vector2I(256, 256), images, srcRs, destRs, new QuadListener(shapesRenderer), true);
+
+                  }
+
+
+                  @Override
+                  public void onError(final URL url) {
+                     // TODO Auto-generated method stub
+
+                  }
+
+
+                  @Override
+                  public void onCancel(final URL url) {
+                     // TODO Auto-generated method stub
+
+                  }
+
+
+                  @Override
+                  public void onCanceledDownload(final URL url,
+                                                 final IImage image) {
+                     // TODO Auto-generated method stub
+
+                  }
+
+               }
+
+
+               downloader.requestImage(
+                        new URL(
+                                 "http://www.nasa.network.com/wms?REQUEST=GetMap&SERVICE=WMS&VERSION=1.1.1&WIDTH=256&HEIGHT=256&BBOX=-45.0,-90.0,0.0,-45.0&LAYERS=bmng200405&FORMAT=image/jpeg&SRS=EPSG:4326&STYLES=&TRANSPARENT=FALSE",
+                                 false), 100000, TimeInterval.fromDays(1), new DL(), true);
+
+            }
+
          }
 
 
