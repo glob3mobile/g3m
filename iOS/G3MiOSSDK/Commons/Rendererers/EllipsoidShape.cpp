@@ -218,19 +218,8 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
       const Geodetic2D innerPoint = sector.getInnerPoint(u, v);
 
       vertices.add(innerPoint);
-
-
-//      double vv;
-//      if (_mercator) {
-//        vv = MercatorUtils::getMercatorV(innerPoint.latitude());
-//      }
-//      else {
-//        vv = v;
-//      }
       
-      const double vv = _mercator
-      /*                    */ ? MercatorUtils::getMercatorV(innerPoint.latitude())
-      /*                    */ : v;
+      const double vv = _mercator ? MercatorUtils::getMercatorV(innerPoint.latitude()) : v;
 
       texCoords.add((float) u, (float) vv);
     }
