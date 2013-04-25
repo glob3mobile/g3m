@@ -72,6 +72,7 @@ public:
   static bool fullContains(float outerX, float outerY, float outerWidth, float outerHeight,
                            float innerX, float innerY, float innerWidth, float innerHeight) {
     const IMathUtils* mu = IMathUtils::instance();
+
     if (!mu->isBetween(innerX, outerX, outerX + outerWidth)) {
       return false;
     }
