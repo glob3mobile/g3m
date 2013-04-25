@@ -470,12 +470,6 @@ public final class G3MWidget_WebGL
       getG3MWidget().stopCameraAnimation();
    }
 
-
-//   public void resetCameraPosition() {
-//      getG3MWidget().resetCameraPosition();
-//   }
-
-
    public G3MContext getG3MContext() {
       return getG3MWidget().getG3MContext();
    }

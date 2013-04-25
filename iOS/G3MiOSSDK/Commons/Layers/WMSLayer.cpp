@@ -221,7 +221,10 @@ std::vector<Petition*> WMSLayer::createTileMapPetitions(const G3MRenderContext* 
 
 //  printf("Request: %s\n", req.c_str());
 
-  Petition *petition = new Petition(sector, URL(req, false), _timeToCache, _isTransparent);
+  Petition *petition = new Petition(sector,
+                                    URL(req, false),
+                                    getTimeToCache(),
+                                    _isTransparent);
   petitions.push_back(petition);
 
 	return petitions;

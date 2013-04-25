@@ -44,7 +44,7 @@ protected:
   protected LayerTilesRenderParameters _parameters;
 #endif
 
-  const TimeInterval& _timeToCache;
+  const long long _timeToCacheMS;
 
   void notifyChanges() const;
 
@@ -55,7 +55,7 @@ protected:
   _condition(condition),
   _name(name),
   _layerSet(NULL),
-  _timeToCache(timeToCache),
+  _timeToCacheMS(timeToCache.milliseconds()),
   _enable(true),
   _parameters(parameters)
   {
@@ -65,6 +65,10 @@ protected:
   void setParameters(const LayerTilesRenderParameters* parameters);
 
 public:
+
+  const TimeInterval getTimeToCache() const {
+    return TimeInterval::fromMilliseconds(_timeToCacheMS);
+  }
 
   virtual void setEnable(bool enable) {
     if (enable != _enable) {
