@@ -145,12 +145,14 @@ void ICanvas::fillText(const std::string& text,
   _fillText(text, left, top);
 }
 
-void ICanvas::drawImage(const IImage* image, float left, float top){
+void ICanvas::drawImage(const IImage* image,
+                        float left, float top){
   checkInitialized();
   _drawImage(image, left, top);
 }
 
-void ICanvas::drawImage(const IImage* image, float left, float top, float width, float height){
+void ICanvas::drawImage(const IImage* image,
+                        float left, float top, float width, float height){
   checkInitialized();
   _drawImage(image, left, top, width, height);
 }
@@ -159,14 +161,14 @@ void ICanvas::drawImage(const IImage* image,
                         float srcLeft, float srcTop, float srcWidth, float srcHeight,
                         float destLeft, float destTop, float destWidth, float destHeight){
   checkInitialized();
-  
+
   RectangleF srcR(srcLeft, srcTop, srcWidth, srcHeight);
   RectangleF imR(0,0,image->getWidth(), image->getHeight());
-  
+
   if (!imR.fullContains(srcR)){
     ILogger::instance()->logError("Invalid source rectangle in drawImage");
   }
-  
+
   _drawImage(image,
              srcLeft, srcTop, srcWidth, srcHeight,
              destLeft, destTop, destWidth, destHeight);
