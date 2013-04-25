@@ -37,7 +37,7 @@ std::vector<Petition*> LayerSet::createTileMapPetitions(const G3MRenderContext* 
       }
       
       if (petitionTile == NULL){
-        printf("Error retrieving requests.");
+        ILogger::instance()->logError("Error retrieving requests.");
       }
 
       std::vector<Petition*> pet = layer->createTileMapPetitions(rc, petitionTile);

@@ -31,14 +31,14 @@ public:
     delete timer;
   }
 
-  void createImageFromSize(int width, int height,
-                           IImageListener* listener,
-                           bool autodelete) const {
-    listener->imageCreated( new Image_iOS(width, height) );
-    if (autodelete) {
-      delete listener;
-    }
-  }
+//  void createImageFromSize(int width, int height,
+//                           IImageListener* listener,
+//                           bool autodelete) const {
+//    listener->imageCreated( new Image_iOS(width, height) );
+//    if (autodelete) {
+//      delete listener;
+//    }
+//  }
 
   void createImageFromFileName(const std::string& filename,
                                IImageListener* listener,

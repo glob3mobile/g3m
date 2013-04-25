@@ -8,10 +8,8 @@ public class TileTextureBuilder extends RCObject
   private int _petitionsCount;
   private int _stepsDone;
 
-  private IFactory _factory; // FINAL WORD REMOVE BY CONVERSOR RULE
   private TexturesHandler _texturesHandler;
   private TextureBuilder _textureBuilder;
-  private GL _gl;
 
   private final Vector2I _tileTextureResolution;
   private final Vector2I _tileMeshResolution;
@@ -87,10 +85,8 @@ public class TileTextureBuilder extends RCObject
   public TileTextureBuilder(MultiLayerTileTexturizer texturizer, G3MRenderContext rc, LayerSet layerSet, IDownloader downloader, Tile tile, Mesh tessellatorMesh, TileTessellator tessellator, long texturePriority)
   {
      _texturizer = texturizer;
-     _factory = rc.getFactory();
      _texturesHandler = rc.getTexturesHandler();
      _textureBuilder = rc.getTextureBuilder();
-     _gl = rc.getGL();
      _tileTextureResolution = layerSet.getLayerTilesRenderParameters()._tileTextureResolution;
      _tileMeshResolution = layerSet.getLayerTilesRenderParameters()._tileMeshResolution;
      _mercator = layerSet.getLayerTilesRenderParameters()._mercator;
@@ -139,10 +135,6 @@ public class TileTextureBuilder extends RCObject
     {
       final Petition petition = _petitions.get(i);
 
-      //      const long long priority =  (_parameters->_incrementalTileQuality
-      //                                   ? 1000 - _tile->getLevel()
-      //                                   : _tile->getLevel());
-
       final long priority = _texturePriority + _tile.getLevel();
 
       //      printf("%s\n", petition->getURL().getPath().c_str());
@@ -165,45 +157,16 @@ public class TileTextureBuilder extends RCObject
     deletePetitions();
   }
 
-  public final RectangleF getImageRectangleInTexture(Sector wholeSector, Sector imageSector)
+  public final RectangleF getInnerRectangle(int wholeSectorWidth, int wholeSectorHeight, Sector wholeSector, Sector innerSector)
   {
+    //printf("%s - %s\n", wholeSector.description().c_str(), innerSector.description().c_str());
 
-    final IMathUtils mu = IMathUtils.instance();
+    final double widthFactor = innerSector.getDeltaLongitude().div(wholeSector.getDeltaLongitude());
+    final double heightFactor = innerSector.getDeltaLatitude().div(wholeSector.getDeltaLatitude());
 
-    final Vector2D lowerFactor = wholeSector.getUVCoordinates(imageSector.lower());
+    final Vector2D lowerUV = wholeSector.getUVCoordinates(innerSector.getNW());
 
-    final double widthFactor = imageSector.getDeltaLongitude().div(wholeSector.getDeltaLongitude());
-    final double heightFactor = imageSector.getDeltaLatitude().div(wholeSector.getDeltaLatitude());
-
-    final int textureWidth = _tileTextureResolution._x;
-    final int textureHeight = _tileTextureResolution._y;
-
-    return new RectangleF((float) mu.round(lowerFactor._x * textureWidth), (float) mu.round((1.0 - lowerFactor._y) * textureHeight), (float) mu.round(widthFactor * textureWidth), (float) mu.round(heightFactor * textureHeight));
-  }
-
-  public final RectangleF getImageRectangle(IImage wholeImage, Sector wholeSector, Sector imageSector)
-  {
-    final IMathUtils mu = IMathUtils.instance();
-
-    double minWholeLat = wholeSector.lower().latitude().degrees();
-    double minWholeLon = wholeSector.lower().longitude().degrees();
-    double maxWholeLat = wholeSector.upper().latitude().degrees();
-    double maxWholeLon = wholeSector.upper().longitude().degrees();
-
-    double minImageLat = imageSector.lower().latitude().degrees();
-    double minImageLon = imageSector.lower().longitude().degrees();
-
-    double lowerFactorX = (minImageLon - minWholeLon) / (maxWholeLon - minWholeLon);
-    double lowerFactorY = (minImageLat - minWholeLat) / (maxWholeLat - minWholeLat);
-    final Vector2D lowerFactor = new Vector2D(lowerFactorX, lowerFactorY);
-
-    final double widthFactor = imageSector.getDeltaLongitude().div(wholeSector.getDeltaLongitude());
-    final double heightFactor = imageSector.getDeltaLatitude().div(wholeSector.getDeltaLatitude());
-
-    final int textureWidth = wholeImage.getWidth();
-    final int textureHeight = wholeImage.getHeight();
-
-    return new RectangleF((float) mu.round(lowerFactor._x * textureWidth), (float) mu.round((1.0 - (lowerFactor._y + heightFactor)) * textureHeight), (float) mu.round(widthFactor * textureWidth), (float) mu.round(heightFactor * textureHeight));
+    return new RectangleF((float)(lowerUV._x * wholeSectorWidth), (float)(lowerUV._y * wholeSectorHeight), (float)(widthFactor * wholeSectorWidth), (float)(heightFactor * wholeSectorHeight));
   }
 
   public final void composeAndUploadTexture()
@@ -227,23 +190,21 @@ public class TileTextureBuilder extends RCObject
         final Petition petition = _petitions.get(i);
         IImage image = petition.getImage();
 
-
         if (image != null)
         {
-
-          Sector petitionSector = petition.getSector();
+          final Sector imageSector = petition.getSector();
 
           //Finding intersection image sector - tile sector = srcReq
-          Sector intersectionSector = tileSector.intersection(petitionSector);
+          final Sector intersectionSector = tileSector.intersection(imageSector);
 
           RectangleF sourceRect = null;
-          if (!intersectionSector.isEqualsTo(petitionSector))
+          if (!intersectionSector.isEqualsTo(imageSector))
           {
-            sourceRect = getImageRectangle(image, petitionSector, intersectionSector); //Intersection with upper level image
+            sourceRect = getInnerRectangle(image.getWidth(), image.getHeight(), imageSector, intersectionSector);
           }
           else
           {
-            sourceRect = new RectangleF((float)0,(float)0, (float)image.getWidth(), (float)image.getHeight());
+            sourceRect = new RectangleF(0, 0, image.getWidth(), image.getHeight());
           }
 
           //Part of the image we are going to draw
@@ -252,7 +213,7 @@ public class TileTextureBuilder extends RCObject
           images.add(image);
 
           //Where we are going to draw the image
-          destRects.add(getImageRectangleInTexture(tileSector, intersectionSector));
+          destRects.add(getInnerRectangle(_tileTextureResolution._x, _tileTextureResolution._y, tileSector, intersectionSector));
 
           textureId += petition.getURL().getPath();
           textureId += "_";
@@ -261,7 +222,7 @@ public class TileTextureBuilder extends RCObject
 
       if (images.size() > 0)
       {
-        _textureBuilder.createTextureFromImages(_gl, _factory, images, sourceRects, destRects, _tileTextureResolution, new TextureUploader(this, sourceRects, destRects, textureId), true);
+        _textureBuilder.createTextureFromImages(_tileTextureResolution, images, sourceRects, destRects, new TextureUploader(this, sourceRects, destRects, textureId), true);
       }
 
     }
@@ -293,12 +254,14 @@ public class TileTextureBuilder extends RCObject
 
       for (int i = 0; i < srcRects.size(); i++)
       {
-        srcRects.get(i).dispose();
+        if (srcRects.get(i) != null)
+           srcRects.get(i).dispose();
       }
 
       for (int i = 0; i < dstRects.size(); i++)
       {
-        dstRects.get(i).dispose();
+        if (dstRects.get(i) != null)
+           dstRects.get(i).dispose();
       }
 
     }

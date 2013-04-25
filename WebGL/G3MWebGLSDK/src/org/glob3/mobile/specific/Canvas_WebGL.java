@@ -16,8 +16,8 @@ public class Canvas_WebGL
          extends
             ICanvas {
 
-   private JavaScriptObject _canvas;
-   private JavaScriptObject _context;
+   private JavaScriptObject _domCanvas;
+   private JavaScriptObject _domCanvasContext;
 
    private String           _currentDOMFont;
    private float            _currentFontSize;
@@ -32,15 +32,15 @@ public class Canvas_WebGL
 		var canvas = $doc.createElement("canvas");
 		var context = canvas.getContext("2d");
 
-		this.@org.glob3.mobile.specific.Canvas_WebGL::_canvas = canvas;
-		this.@org.glob3.mobile.specific.Canvas_WebGL::_context = context;
+		this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvas = canvas;
+		this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext = context;
    }-*/;
 
 
    @Override
    protected native void _initialize(final int width,
                                      final int height) /*-{
-		var canvas = this.@org.glob3.mobile.specific.Canvas_WebGL::_canvas;
+		var canvas = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvas;
 		canvas.width = width;
 		canvas.height = height;
 
@@ -77,7 +77,7 @@ public class Canvas_WebGL
    private native void tryToSetCurrentFontToContext() /*-{
 		var currentDOMFont = this.@org.glob3.mobile.specific.Canvas_WebGL::_currentDOMFont;
 		if (currentDOMFont) {
-			this.@org.glob3.mobile.specific.Canvas_WebGL::_context.font = currentDOMFont;
+			this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext.font = currentDOMFont;
 		}
    }-*/;
 
@@ -102,14 +102,14 @@ public class Canvas_WebGL
 				listener.@org.glob3.mobile.generated.IImageListener::dispose()();
 			}
 		};
-		jsImage.src = this.@org.glob3.mobile.specific.Canvas_WebGL::_canvas
+		jsImage.src = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvas
 				.toDataURL();
    }-*/;
 
 
    @Override
    protected native Vector2F _textExtent(final String text) /*-{
-		var width = this.@org.glob3.mobile.specific.Canvas_WebGL::_context
+		var width = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext
 				.measureText(text).width;
 
 		var height = Math
@@ -136,20 +136,20 @@ public class Canvas_WebGL
    @Override
    protected native void _setFillColor(final Color color) /*-{
 		var jsColor = @org.glob3.mobile.specific.Canvas_WebGL::createDOMColor(Lorg/glob3/mobile/generated/Color;)(color);
-		this.@org.glob3.mobile.specific.Canvas_WebGL::_context.fillStyle = jsColor;
+		this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext.fillStyle = jsColor;
    }-*/;
 
 
    @Override
    protected native void _setStrokeColor(final Color color) /*-{
 		var jsColor = @org.glob3.mobile.specific.Canvas_WebGL::createDOMColor(Lorg/glob3/mobile/generated/Color;)(color);
-		this.@org.glob3.mobile.specific.Canvas_WebGL::_context.strokeStyle = jsColor;
+		this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext.strokeStyle = jsColor;
    }-*/;
 
 
    @Override
    protected native void _setStrokeWidth(final float width) /*-{
-		this.@org.glob3.mobile.specific.Canvas_WebGL::_context.lineWidth = width;
+		this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext.lineWidth = width;
    }-*/;
 
 
@@ -158,7 +158,7 @@ public class Canvas_WebGL
                                     final float blur,
                                     final float offsetX,
                                     final float offsetY) /*-{
-		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_context;
+		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
 
 		context.shadowColor = @org.glob3.mobile.specific.Canvas_WebGL::createDOMColor(Lorg/glob3/mobile/generated/Color;)(color);
 		context.shadowBlur = blur;
@@ -169,7 +169,7 @@ public class Canvas_WebGL
 
    @Override
    protected native void _removeShadow() /*-{
-		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_context;
+		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
 
 		context.shadowColor = "rgba(0,0,0,0)";
 		context.shadowBlur = 0;
@@ -183,7 +183,7 @@ public class Canvas_WebGL
                                         final float top,
                                         final float width,
                                         final float height) /*-{
-		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_context;
+		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
 		context.fillRect(left, top, width, height);
    }-*/;
 
@@ -193,7 +193,7 @@ public class Canvas_WebGL
                                           final float top,
                                           final float width,
                                           final float height) /*-{
-		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_context;
+		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
 		context.strokeRect(left, top, width, height);
    }-*/;
 
@@ -203,7 +203,7 @@ public class Canvas_WebGL
                                                  final float top,
                                                  final float width,
                                                  final float height) /*-{
-		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_context;
+		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
 		context.fillRect(left, top, width, height);
 		context.strokeRect(left, top, width, height);
    }-*/;
@@ -213,7 +213,7 @@ public class Canvas_WebGL
    protected native void _fillText(final String text,
                                    final float left,
                                    final float top) /*-{
-		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_context;
+		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
 		var textHeight = this.@org.glob3.mobile.specific.Canvas_WebGL::_currentFontSize * 1.66;
 		context.fillText(text, left, top + textHeight);
    }-*/;
@@ -226,7 +226,7 @@ public class Canvas_WebGL
                                  final float radius,
                                  final boolean fill,
                                  final boolean stroke) /*-{
-		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_context;
+		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
 		context.beginPath();
 		context.moveTo(x + radius, y);
 		context.lineTo(x + width - radius, y);
@@ -278,36 +278,46 @@ public class Canvas_WebGL
    }
 
 
-@Override
-protected native void _drawImage(IImage image, float left, float top) /*-{
-	var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_context;
-	var image = other.@org.glob3.mobile.specific.Image_WebGL::_imgObject
-	
-	context.drawImage(image, left, top);
-}-*/;
+   @Override
+   protected native void _drawImage(IImage image,
+                                    float left,
+                                    float top) /*-{
+		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
+		var imageJS = image.@org.glob3.mobile.specific.Image_WebGL::_imgObject
+
+		context.drawImage(imageJS, left, top);
+   }-*/;
 
 
-@Override
-protected native void _drawImage(IImage image, float left, float top, float width,
-		float height) /*-{
-	var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_context;
-	var image = other.@org.glob3.mobile.specific.Image_WebGL::_imgObject
-	
-	context.drawImage(image, left, top, width, height);
-}-*/;
+   @Override
+   protected native void _drawImage(IImage image,
+                                    float left,
+                                    float top,
+                                    float width,
+                                    float height) /*-{
+		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
+		var imageJS = image.@org.glob3.mobile.specific.Image_WebGL::_imgObject
+
+		context.drawImage(imageJS, left, top, width, height);
+   }-*/;
 
 
-@Override
-protected native void _drawImage(IImage image, float srcLeft, float srcTop,
-		float srcWidth, float srcHeight, float destLeft, float destTop,
-		float destWidth, float destHeigtt) /*-{
-	var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_context;
-	var image = other.@org.glob3.mobile.specific.Image_WebGL::_imgObject
+   @Override
+   protected native void _drawImage(IImage image,
+                                    float srcLeft,
+                                    float srcTop,
+                                    float srcWidth,
+                                    float srcHeight,
+                                    float destLeft,
+                                    float destTop,
+                                    float destWidth,
+                                    float destHeight) /*-{
+		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
+		var imageJS = image.@org.glob3.mobile.specific.Image_WebGL::getImage()();
 
-	context.drawImage(image, 
-					  srcLeft, srcTop, srcWidth, srcHeight,
-					  destLeft, destTop, destWidth, destHeight);
-}-*/;
+		context.drawImage(imageJS, srcLeft, srcTop, srcWidth, srcHeight,
+				destLeft, destTop, destWidth, destHeight);
+   }-*/;
 
 
 }

@@ -117,13 +117,31 @@ void CompositeElevationDataProvider::cancelRequest(const long long requestId){
   }
 }
 
-void CompositeElevationDataProvider::deleteRequest(const CompositeElevationDataProvider_Request* req){
+void CompositeElevationDataProvider::requestFinished(const CompositeElevationDataProvider_Request* req){
+  
+  CompositeElevationData* data = req->_compData;
+  IElevationDataListener * listener = req->_listener;
+  const bool autodelete = req->_autodelete;
+  const Vector2I resolution = req->_resolution;
+  const Sector& sector = req->_sector;
+  
+  if (data == NULL){
+    listener->onError(sector, resolution);
+    if (autodelete){
+      delete listener;
+    }
+  } else{
+    listener->onData(sector, resolution, data);
+    if (autodelete){
+      delete listener;
+    }
+  }
+  
   std::map<long long, CompositeElevationDataProvider_Request*>::iterator it;
   for (it =  _requests.begin(); it !=  _requests.end(); it++) {
     const CompositeElevationDataProvider_Request* reqI = it->second;
     if (reqI == req){
       _requests.erase(it);
-      delete req;
       return;
     }
   }
@@ -148,18 +166,21 @@ _currentRequestEDP(NULL),
 _compData(NULL){
 }
 
-void CompositeElevationDataProvider::CompositeElevationDataProvider_Request::respondToListener() const{
-  
-  if (_compData == NULL){
-    _listener->onError(_sector, _resolution);
-  } else{
-    _listener->onData(_sector, _resolution, _compData);
-    if (_autodelete){
-      delete _listener;
-    }
-    _compProvider->deleteRequest(this); //AUTODELETE
-  }
-}
+//void CompositeElevationDataProvider::CompositeElevationDataProvider_Request::respondToListener(){
+//  if (_compData == NULL){
+//    _listener->onError(_sector, _resolution);
+//    if (_autodelete){
+//      delete _listener;
+//    }
+//  } else{
+//    _listener->onData(_sector, _resolution, _compData);
+//    if (_autodelete){
+//      //delete _listener;
+//    }
+//    _compProvider->deleteRequest(this); //AUTODELETE
+//  }
+//  _listener = NULL;
+//}
 
 ElevationDataProvider* CompositeElevationDataProvider::
 CompositeElevationDataProvider_Request::
@@ -192,7 +213,7 @@ popBestProvider(std::vector<ElevationDataProvider*>& ps, const Vector2I& resolut
 bool CompositeElevationDataProvider::CompositeElevationDataProvider_Request::launchNewRequest(){
   _currentRequestEDP = popBestProvider(_providers, _resolution);
   if (_currentRequestEDP != NULL){
-    _currentRequestID = _currentRequestEDP->requestElevationData(_sector, _resolution, this, false);
+    _currentRequestID = _currentRequestEDP->requestElevationData(_sector, _resolution, this, true);
     return true;
   } else{
     return false;
@@ -210,10 +231,12 @@ void CompositeElevationDataProvider::CompositeElevationDataProvider_Request::onD
   
   
   if (!_compData->hasNoData()){
-    respondToListener();    //If this data is enough we respond
+    _compProvider->requestFinished(this);//If this data is enough we respond
+//    respondToListener();    
   } else{
     if (!launchNewRequest()){
-      respondToListener(); //If there are no more providers we respond
+//      respondToListener(); //If there are no more providers we respond
+      _compProvider->requestFinished(this);
     }
   }
 }
@@ -228,7 +251,8 @@ void CompositeElevationDataProvider::CompositeElevationDataProvider_Request::onE
                                                                                      const Vector2I& resolution){
   bool t = launchNewRequest();
   if (!t){
-    respondToListener(); //If there are no more providers we respond
+    //respondToListener(); //If there are no more providers we respond
+    _compProvider->requestFinished(this);
   }
 }
 

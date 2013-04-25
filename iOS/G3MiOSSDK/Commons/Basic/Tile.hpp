@@ -42,8 +42,7 @@ private:
   const int       _column;
 
   Mesh* _tessellatorMesh;
-  int            _elevationDataLevel;
-  ElevationData* _elevationData;
+
   //long long      _elevationRequestId;
   Mesh* _debugMesh;
   Mesh* _texturizedMesh;
@@ -105,7 +104,11 @@ private:
   Extent* _tileExtent;
   Extent* getTileExtent(const G3MRenderContext *rc);
 
-  //void cancelElevationDataRequest(ElevationDataProvider* elevationDataProvider);
+  int            _elevationDataLevel;
+  ElevationData* _elevationData;
+  bool           _mustActualizeMeshDueToNewElevationData;
+  ElevationDataProvider*  _lastElevationDataProvider;
+  int _lastTileMeshResolutionX, _lastTileMeshResolutionY;
 
 public:
   Tile(TileTexturizer* texturizer,
@@ -211,9 +214,17 @@ public:
   
   void getElevationDataFromAncestor(const Vector2I& resolution);
   
-  void onElevationDataListenerFinished(){
-    _elevationDataListener = NULL;
-  }
+  void onElevationDataListenerFinished();
+  
+  void initializeElevationData(ElevationDataProvider* elevationDataProvider,
+                               const TileTessellator* tesselator,
+                               const Vector2I& tileMeshResolution,
+                               const Planet* planet,
+                               bool renderDebug);
+  
+  void ancestorChangedElevationData(Tile* ancestor);
+  
+  ElevationData* createElevationDataSubviewFromAncestor(Tile* ancestor) const;
 
 
 };

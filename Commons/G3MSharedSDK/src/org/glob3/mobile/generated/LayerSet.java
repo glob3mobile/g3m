@@ -178,7 +178,7 @@ public class LayerSet
   
         if (petitionTile == null)
         {
-          System.out.print("Error retrieving requests.");
+          ILogger.instance().logError("Error retrieving requests.");
         }
   
         java.util.ArrayList<Petition> pet = layer.createTileMapPetitions(rc, petitionTile);

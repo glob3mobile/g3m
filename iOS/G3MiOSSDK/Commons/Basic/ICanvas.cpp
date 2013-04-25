@@ -9,6 +9,8 @@
 #include "ICanvas.hpp"
 
 #include "GFont.hpp"
+#include "RectangleF.hpp"
+#include "IImage.hpp"
 
 ICanvas::~ICanvas() {
   delete _currentFont;
@@ -154,10 +156,18 @@ void ICanvas::drawImage(const IImage* image, float left, float top, float width,
 }
 
 void ICanvas::drawImage(const IImage* image,
-               float srcLeft, float srcTop, float srcWidth, float srcHeigtt,
-                        float destLeft, float destTop, float destWidth, float destHeigtt){
+                        float srcLeft, float srcTop, float srcWidth, float srcHeight,
+                        float destLeft, float destTop, float destWidth, float destHeight){
   checkInitialized();
+  
+  RectangleF srcR(srcLeft, srcTop, srcWidth, srcHeight);
+  RectangleF imR(0,0,image->getWidth(), image->getHeight());
+  
+  if (!imR.fullContains(srcR)){
+    ILogger::instance()->logError("Invalid source rectangle in drawImage");
+  }
+  
   _drawImage(image,
-             srcLeft, srcTop, srcWidth, srcHeigtt,
-             destLeft, destTop, destWidth, destHeigtt);
+             srcLeft, srcTop, srcWidth, srcHeight,
+             destLeft, destTop, destWidth, destHeight);
 }

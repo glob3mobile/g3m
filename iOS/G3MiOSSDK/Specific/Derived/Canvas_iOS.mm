@@ -270,12 +270,12 @@ const Vector2F Canvas_iOS::_textExtent(const std::string& text) {
 
 void Canvas_iOS::_fillText(const std::string& text,
                            float left, float top) {
-//  const Vector2F textExtent = _textExtent(text);
-//
-//  CGContextShowTextAtPoint(_context,
-//                           left, _canvasHeight - top - textExtent._y,
-//                           text.c_str(),
-//                           text.size());
+  //  const Vector2F textExtent = _textExtent(text);
+  //
+  //  CGContextShowTextAtPoint(_context,
+  //                           left, _canvasHeight - top - textExtent._y,
+  //                           text.c_str(),
+  //                           text.size());
 
   UIGraphicsPushContext(_context);
 
@@ -294,65 +294,67 @@ void Canvas_iOS::_fillText(const std::string& text,
   UIGraphicsPopContext();
 }
 
-void Canvas_iOS::_drawImage(const IImage* image, float left, float top){
-  UIImage* otherIm = ((Image_iOS&)image).getUIImage();
-  CGImage* CGIm = [otherIm CGImage];
-  
+void Canvas_iOS::_drawImage(const IImage* image,
+                            float left, float top){
+  UIImage* uiImage = ((Image_iOS*) image)->getUIImage();
+  CGImage* cgImage = [uiImage CGImage];
+
   CGContextDrawImage(_context,
                      CGRectMake(left,
                                 top,
-                                CGImageGetWidth(CGIm),
-                                CGImageGetHeight(CGIm)),
-                     CGIm);
+                                image->getWidth(),
+                                image->getHeight()),
+                     cgImage);
 }
 
-void Canvas_iOS::_drawImage(const IImage* image, float left, float top, float width, float height){
-  
-  UIImage* otherIm = ((Image_iOS&)image).getUIImage();
-  CGImage* CGIm = [otherIm CGImage];
-  
+void Canvas_iOS::_drawImage(const IImage* image,
+                            float left, float top,
+                            float width, float height){
+
+  UIImage* uiImage = ((Image_iOS*) image)->getUIImage();
+  CGImage* cgImage = [uiImage CGImage];
+
   CGContextDrawImage(_context,
                      CGRectMake(left,
                                 top,
                                 width,
                                 height),
-                     CGIm);
-  
+                     cgImage);
 }
 
 void Canvas_iOS::_drawImage(const IImage* image,
-                float srcLeft, float srcTop, float srcWidth, float srcHeight,
+                            float srcLeft, float srcTop, float srcWidth, float srcHeight,
                             float destLeft, float destTop, float destWidth, float destHeight){
 
-  //Cropping other image if neccesary
-  UIImage * uiImage = ((Image_iOS*)image)->getUIImage();
-  CGImage* CGIm = NULL;
-  if (srcWidth != image->getWidth() || srcHeight != image->getHeight() ||
-      srcLeft != 0 || srcTop != 0 ){
+  UIImage* uiImage = ((Image_iOS*) image)->getUIImage();
+  CGImage* cgImage = [uiImage CGImage];
+
+  CGRect destRect = CGRectMake(destLeft,
+                               _canvasHeight - (destTop + destHeight), // Bottom
+                               destWidth,
+                               destHeight);
+
+  if ((srcLeft == 0) &&
+      (srcTop == 0) &&
+      (srcWidth == image->getWidth()) &&
+      (srcHeight == image->getHeight())) {
+    CGContextDrawImage(_context,
+                       destRect,
+                       cgImage);
+  }
+  else {
+    // Cropping image
     CGRect cropRect = CGRectMake(srcLeft,
                                  srcTop,
                                  srcWidth,
                                  srcHeight);
-    
-    CGIm = CGImageCreateWithImageInRect([uiImage CGImage], cropRect);
-    
+
+    CGImage* cgCropImage = CGImageCreateWithImageInRect(cgImage, cropRect);
+
     CGContextDrawImage(_context,
-                       CGRectMake(destLeft,
-                                  destTop,
-                                  destWidth,
-                                  destHeight),
-                       CGIm);
-    
-    CGImageRelease(CGIm);
-  } else{
-    CGIm = [uiImage CGImage];
-    
-    CGContextDrawImage(_context,
-                       CGRectMake(destLeft,
-                                  destTop,
-                                  destWidth,
-                                  destHeight),
-                       CGIm);
+                       destRect,
+                       cgCropImage);
+
+    CGImageRelease(cgCropImage);
   }
-  
 }

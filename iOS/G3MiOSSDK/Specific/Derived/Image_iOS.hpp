@@ -39,8 +39,8 @@ public:
     
   }
   
-  Image_iOS(int width, int height);
-  
+//  Image_iOS(int width, int height);
+
   UIImage* getUIImage() const {
     return _image;
   }

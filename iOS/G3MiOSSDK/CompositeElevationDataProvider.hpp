@@ -29,7 +29,11 @@ private:
   long long _currentID;
   
   
+  
   class CompositeElevationDataProvider_Request: public IElevationDataListener{
+    
+    
+  public:
     
     CompositeElevationData* _compData;
     IElevationDataListener * _listener;
@@ -44,11 +48,8 @@ private:
     
     ElevationDataProvider* popBestProvider(std::vector<ElevationDataProvider*>& ps, const Vector2I& resolution) const;
     
-    void respondToListener() const;
-    
-    
+//    void respondToListener();
 
-  public:
     
     CompositeElevationDataProvider_Request(CompositeElevationDataProvider* provider,
                                            const Sector& sector,
@@ -72,9 +73,7 @@ private:
   
   std::map<long long, CompositeElevationDataProvider_Request*> _requests;
   
-  
-  void deleteRequest(const CompositeElevationDataProvider_Request* req);
-  
+  void requestFinished(const CompositeElevationDataProvider_Request* req);
   
 public:
   CompositeElevationDataProvider():_context(NULL), _currentID(0){}

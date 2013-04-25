@@ -112,14 +112,111 @@ public class G3MSimplestGlob3Activity
                null, //
                TimeInterval.fromDays(30));
       layerSet.addLayer(osm);
+
+
+      //      final WMSLayer blueMarbleL = new WMSLayer( //
+      //               "bmng200405", //
+      //               new URL("http://www.nasa.network.com/wms?", false), //
+      //               WMSServerVersion.WMS_1_1_0, //
+      //               Sector.fullSphere(), //
+      //               "image/jpeg", //
+      //               "EPSG:4326", //
+      //               "", //
+      //               false, //
+      //               //new LevelTileCondition(0, 6),
+      //               null, //
+      //               TimeInterval.fromDays(30), //
+      //               new LayerTilesRenderParameters( //
+      //                        Sector.fullSphere(), //
+      //                        2, //
+      //                        4, //
+      //                        0, //
+      //                        8, //
+      //                        LayerTilesRenderParameters.defaultTileTextureResolution(), //
+      //                        LayerTilesRenderParameters.defaultTileMeshResolution(), //
+      //                        false));
+      //      layerSet.addLayer(blueMarbleL);
+      //
+      //
+      //      final WMSLayer ortoAyto = new WMSLayer( //
+      //               "orto_refundida", //
+      //               new URL("http://195.57.27.86/wms_etiquetas_con_orto.mapdef?", false), //
+      //               WMSServerVersion.WMS_1_1_0, //
+      //               Sector.fromDegrees(39.350228, -6.508713, 39.536351, -6.25946), //
+      //               //               new Sector(Geodetic2D.fromDegrees(39.350228, -6.508713), //
+      //               //                        Geodetic2D.fromDegrees(39.536351, -6.25946)), //
+      //               "image/jpeg", //
+      //               "EPSG:4326", //
+      //               "", //
+      //               false, //
+      //               new LevelTileCondition(4, 19), //
+      //               TimeInterval.fromDays(30), //
+      //               new LayerTilesRenderParameters(//
+      //                        Sector.fullSphere(), //
+      //                        2, //
+      //                        4, //
+      //                        0, //
+      //                        19, //
+      //                        LayerTilesRenderParameters.defaultTileTextureResolution(), //
+      //                        LayerTilesRenderParameters.defaultTileMeshResolution(), //
+      //                        false));
+      //      layerSet.addLayer(ortoAyto);
+
+
       final TileRendererBuilder tlBuilder = new TileRendererBuilder();
       tlBuilder.setLayerSet(layerSet);
+      tlBuilder.setRenderDebug(true);
       final TileRenderer tileRenderer = tlBuilder.create();
       mainRenderer.addRenderer(tileRenderer);
 
 
       final ShapesRenderer shapesRenderer = new ShapesRenderer();
       mainRenderer.addRenderer(shapesRenderer);
+
+      //      final boolean testingImagesCombine = true;
+      //      if (testingImagesCombine) {
+      //         final Bitmap b1 = BitmapFactory.decodeResource(getResources(), R.drawable.play);
+      //         final Bitmap b2 = BitmapFactory.decodeResource(getResources(), R.drawable.bg);
+      //         final Image_Android image1 = new Image_Android(b1, null);
+      //         final Image_Android image2 = new Image_Android(b2, null);
+      //
+      //         final java.util.ArrayList<IImage> images = new ArrayList<IImage>();
+      //         images.add(image2);
+      //         images.add(image1);
+      //
+      //         final java.util.ArrayList<RectangleF> srcRs = new ArrayList<RectangleF>();
+      //         srcRs.add(new RectangleF(0, 0, 640, 960));
+      //         srcRs.add(new RectangleF(0, 0, 48, 48));
+      //
+      //         final java.util.ArrayList<RectangleF> destRs = new ArrayList<RectangleF>();
+      //         destRs.add(new RectangleF(0, 0, 256, 256));
+      //         destRs.add(new RectangleF(0, 128, 130, 130));
+      //
+      //         class QuadListener
+      //                  extends
+      //                     IImageListener {
+      //            ShapesRenderer _sr;
+      //
+      //
+      //            public QuadListener(final ShapesRenderer sr) {
+      //               _sr = sr;
+      //
+      //            }
+      //
+      //
+      //            @Override
+      //            public void imageCreated(final IImage image) {
+      //               final Shape quadImages = new QuadShape(new Geodetic3D(Angle.fromDegrees(28.410728), Angle.fromDegrees(-16.339417),
+      //                        8000), image, 49000, 38000);
+      //
+      //               _sr.addShape(quadImages);
+      //            }
+      //         }
+      //
+      //
+      //         IImageUtils.combine(new Vector2I(256, 256), images, srcRs, destRs, new QuadListener(shapesRenderer), true);
+      //      }
+
 
       //      final MarksRenderer marksRenderer = new MarksRenderer(false);
       //      final Mark m1 = new Mark("Fuerteventura", //
@@ -228,7 +325,7 @@ public class G3MSimplestGlob3Activity
 
 
          @Override
-         public boolean isDone(final G3MContext context) {
+         public final boolean isDone(final G3MContext context) {
             return true;
          }
       };

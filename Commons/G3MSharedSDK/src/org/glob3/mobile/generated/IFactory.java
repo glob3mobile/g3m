@@ -56,7 +56,9 @@ public abstract class IFactory
 
   public abstract void createImageFromBuffer(IByteBuffer buffer, IImageListener listener, boolean autodelete);
 
-  public abstract void createImageFromSize(int width, int height, IImageListener listener, boolean autodelete);
+//  virtual void createImageFromSize(int width, int height,
+//                                   IImageListener* listener,
+//                                   bool autodelete) const = 0;
 
   public abstract void deleteImage(IImage image);
 

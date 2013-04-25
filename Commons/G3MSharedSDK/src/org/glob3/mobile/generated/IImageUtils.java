@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  IImageUtils.h
+//  IImageUtils.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 19/04/13.
@@ -17,37 +17,83 @@ package org.glob3.mobile.generated;
 
 
 
+//class RectangleF;
+//class IImage;
+//class IImageListener;
+//class Vector2I;
 
 public class IImageUtils
 {
-  public static void scale(IImage image, Vector2I size, IImageListener listener, boolean autodelete)
+  private IImageUtils()
   {
-    ICanvas canvas = IFactory.instance().createCanvas();
-    canvas.initialize(size._x, size._y);
-    canvas.drawImage(image, (float)0.0, (float)0.0, (float)size._x, (float)size._y);
-  
-    canvas.createImage(listener, autodelete);
-    if (canvas != null)
-       canvas.dispose();
+
   }
+
+  private static void createShallowCopy(IImage image, IImageListener listener, boolean autodelete)
+  {
+    listener.imageCreated(image.shallowCopy());
+    if (autodelete)
+    {
+      if (listener != null)
+         listener.dispose();
+    }
+  }
+
+
+  public static void scale(int width, int height, IImage image, IImageListener listener, boolean autodelete)
+  {
+    if (width == image.getWidth() && height == image.getHeight())
+    {
+      createShallowCopy(image, listener, autodelete);
+    }
+    else
+    {
+      ICanvas canvas = IFactory.instance().createCanvas();
+      canvas.initialize(width, height);
+  
+      canvas.drawImage(image, 0, 0, width, height);
+  
+      canvas.createImage(listener, autodelete);
+      if (canvas != null)
+         canvas.dispose();
+    }
+  }
+
+  public static void scale(Vector2I extent, IImage image, IImageListener listener, boolean autodelete)
+  {
+    scale(extent._x, extent._y, image, listener, autodelete);
+  }
+
 
   public static void subImage(IImage image, RectangleF rect, IImageListener listener, boolean autodelete)
   {
   
-    ICanvas canvas = IFactory.instance().createCanvas();
-    canvas.initialize((int)rect._width, (int)rect._height);
-    canvas.drawImage(image, (float)rect._x, (float)rect._y, (float)rect._width, (float)rect._height, (float)0, (float)0, (float)rect._width, (float)rect._height);
+    if (rect._x == 0 && rect._y == 0 && rect._width == image.getWidth() && rect._height == image.getHeight())
+    {
+      createShallowCopy(image, listener, autodelete);
+    }
+    else
+    {
+      ICanvas canvas = IFactory.instance().createCanvas();
   
-    canvas.createImage(listener, autodelete);
-    if (canvas != null)
-       canvas.dispose();
+      IMathUtils mu = IMathUtils.instance();
+      canvas.initialize((int) mu.round(rect._width), (int) mu.round(rect._height));
+  
+      canvas.drawImage(image, rect._x, rect._y, rect._width, rect._height, 0, 0, rect._width, rect._height);
+  
+      canvas.createImage(listener, autodelete);
+      if (canvas != null)
+         canvas.dispose();
+    }
   }
 
-  public static void combine(java.util.ArrayList<IImage> images, java.util.ArrayList<RectangleF> sourceRects, java.util.ArrayList<RectangleF> destRects, Vector2I size, IImageListener listener, boolean autodelete)
+
+  public static void combine(int width, int height, java.util.ArrayList<IImage> images, java.util.ArrayList<RectangleF> sourceRects, java.util.ArrayList<RectangleF> destRects, IImageListener listener, boolean autodelete)
   {
   
     final int imagesSize = images.size();
-    if (imagesSize == 0 || imagesSize != sourceRects.size() || imagesSize != destRects.size())
+  
+    if (imagesSize != sourceRects.size() || imagesSize != destRects.size())
     {
       ILogger.instance().logError("Failure at combine images.");
       return;
@@ -55,44 +101,38 @@ public class IImageUtils
   
     if (imagesSize == 1)
     {
-      int im0Width = images.get(0).getWidth();
-      int im0Height = images.get(0).getHeight();
+      IImage image = images.get(0);
+      final RectangleF sourceRect = sourceRects.get(0);
+      final RectangleF destRect = destRects.get(0);
   
-      if (im0Width == size._x && im0Height == size._y && sourceRects.get(0)._x == 0 && sourceRects.get(0)._y == 0 && sourceRects.get(0)._width == im0Width && sourceRects.get(0)._height == im0Height)
+      if (sourceRect._x == 0 && sourceRect._y == 0 && sourceRect._width == image.getWidth() && sourceRect._height == image.getHeight() && destRect._x == 0 && destRect._y == 0 && destRect._width == width && destRect._height == height)
       {
-        listener.imageCreated(images.get(0).shallowCopy());
-        if (autodelete)
-        {
-          if (listener != null)
-             listener.dispose();
-        }
-      }
-      else
-      {
-        scale(images.get(0), size, listener, autodelete);
+        scale(width, height, image, listener, autodelete);
+        return;
       }
     }
-    else
+  
+  
+    ICanvas canvas = IFactory.instance().createCanvas();
+    canvas.initialize(width, height);
+  
+    for (int i = 0; i < imagesSize ; i++)
     {
+      IImage image = images.get(i);
+      final RectangleF srcRect = sourceRects.get(i);
+      final RectangleF dstRect = destRects.get(i);
   
-  
-      ICanvas canvas = IFactory.instance().createCanvas();
-      canvas.initialize((int)size._x, (int)size._y);
-  
-      for (int i = 0; i < imagesSize ; i++)
-      {
-        IImage image = images.get(i);
-        RectangleF srcRect = sourceRects.get(i);
-        RectangleF dstRect = destRects.get(i);
-  
-        canvas.drawImage(image, srcRect._x, srcRect._y, srcRect._width, srcRect._height, dstRect._x, dstRect._y, dstRect._width, dstRect._height);
-      }
-  
-  
-      canvas.createImage(listener, autodelete);
-      if (canvas != null)
-         canvas.dispose();
+      canvas.drawImage(image, srcRect._x, srcRect._y, srcRect._width, srcRect._height, dstRect._x, dstRect._y, dstRect._width, dstRect._height);
     }
+  
+    canvas.createImage(listener, autodelete);
+    if (canvas != null)
+       canvas.dispose();
+  }
+
+  public static void combine(Vector2I extent, java.util.ArrayList<IImage> images, java.util.ArrayList<RectangleF> sourceRects, java.util.ArrayList<RectangleF> destRects, IImageListener listener, boolean autodelete)
+  {
+    combine(extent._x, extent._y, images, sourceRects, destRects, listener, autodelete);
   }
 
 }
