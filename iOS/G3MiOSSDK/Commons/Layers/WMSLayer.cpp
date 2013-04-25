@@ -335,7 +335,7 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& position,
   double u;
   double v;
   if (_parameters->_mercator) {
-    u = sector.getUCoordinates(position.longitude());
+    u = sector.getUCoordinate(position.longitude());
     v = MercatorUtils::getMercatorV(position.latitude());
   }
   else {
@@ -346,19 +346,16 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& position,
 
   //X and Y
   //const Vector2D uv = sector.getUVCoordinates(position);
-//  const int x = (int) mu->round( (uv._x * _parameters->_tileTextureResolution._x) );
-//  const int y = (int) mu->round( (uv._y * _parameters->_tileTextureResolution._y) );
-  const int x = (int) mu->round( (u * _parameters->_tileTextureResolution._x) );
-  const int y = (int) mu->round( (v * _parameters->_tileTextureResolution._y) );
-  // const int y = (int) mu->round( ((1.0 - uv._y) * _parameters->_tileTextureResolution._y) );
+  const long long x = mu->round( (u * _parameters->_tileTextureResolution._x) );
+  const long long y = mu->round( (v * _parameters->_tileTextureResolution._y) );
 
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("&X=");
-  isb->addInt(x);
+  isb->addLong(x);
   isb->addString("&Y=");
-  isb->addInt(y);
+  isb->addLong(y);
   req += isb->getString();
   delete isb;
-  
+
 	return URL(req, false);
 }

@@ -8,10 +8,8 @@ public class TileTextureBuilder extends RCObject
   private int _petitionsCount;
   private int _stepsDone;
 
-  private IFactory _factory; // FINAL WORD REMOVE BY CONVERSOR RULE
   private TexturesHandler _texturesHandler;
   private TextureBuilder _textureBuilder;
-  private GL _gl;
 
   private final Vector2I _tileTextureResolution;
   private final Vector2I _tileMeshResolution;
@@ -87,10 +85,8 @@ public class TileTextureBuilder extends RCObject
   public TileTextureBuilder(MultiLayerTileTexturizer texturizer, G3MRenderContext rc, LayerSet layerSet, IDownloader downloader, Tile tile, Mesh tessellatorMesh, TileTessellator tessellator, long texturePriority)
   {
      _texturizer = texturizer;
-     _factory = rc.getFactory();
      _texturesHandler = rc.getTexturesHandler();
      _textureBuilder = rc.getTextureBuilder();
-     _gl = rc.getGL();
      _tileTextureResolution = layerSet.getLayerTilesRenderParameters()._tileTextureResolution;
      _tileMeshResolution = layerSet.getLayerTilesRenderParameters()._tileMeshResolution;
      _mercator = layerSet.getLayerTilesRenderParameters()._mercator;
@@ -139,10 +135,6 @@ public class TileTextureBuilder extends RCObject
     {
       final Petition petition = _petitions.get(i);
 
-      //      const long long priority =  (_parameters->_incrementalTileQuality
-      //                                   ? 1000 - _tile->getLevel()
-      //                                   : _tile->getLevel());
-
       final long priority = _texturePriority + _tile.getLevel();
 
       //      printf("%s\n", petition->getURL().getPath().c_str());
@@ -165,20 +157,16 @@ public class TileTextureBuilder extends RCObject
     deletePetitions();
   }
 
-  public final RectangleI getImageRectangleInTexture(Sector wholeSector, Sector imageSector)
+  public final RectangleF getInnerRectangle(int wholeSectorWidth, int wholeSectorHeight, Sector wholeSector, Sector innerSector)
   {
+    //printf("%s - %s\n", wholeSector.description().c_str(), innerSector.description().c_str());
 
-    final IMathUtils mu = IMathUtils.instance();
+    final double widthFactor = innerSector.getDeltaLongitude().div(wholeSector.getDeltaLongitude());
+    final double heightFactor = innerSector.getDeltaLatitude().div(wholeSector.getDeltaLatitude());
 
-    final Vector2D lowerFactor = wholeSector.getUVCoordinates(imageSector.lower());
+    final Vector2D lowerUV = wholeSector.getUVCoordinates(innerSector.getNW());
 
-    final double widthFactor = imageSector.getDeltaLongitude().div(wholeSector.getDeltaLongitude());
-    final double heightFactor = imageSector.getDeltaLatitude().div(wholeSector.getDeltaLatitude());
-
-    final int textureWidth = _tileTextureResolution._x;
-    final int textureHeight = _tileTextureResolution._y;
-
-    return new RectangleI((int) mu.round(lowerFactor._x * textureWidth), (int) mu.round((1.0 - lowerFactor._y) * textureHeight), (int) mu.round(widthFactor * textureWidth), (int) mu.round(heightFactor * textureHeight));
+    return new RectangleF((float)(lowerUV._x * wholeSectorWidth), (float)(lowerUV._y * wholeSectorHeight), (float)(widthFactor * wholeSectorWidth), (float)(heightFactor * wholeSectorHeight));
   }
 
   public final void composeAndUploadTexture()
@@ -190,8 +178,9 @@ public class TileTextureBuilder extends RCObject
         return;
       }
 
-      java.util.ArrayList<IImage> images = new java.util.ArrayList<IImage>();
-      java.util.ArrayList<RectangleI> rectangles = new java.util.ArrayList<RectangleI>();
+      final java.util.ArrayList<IImage> images = new java.util.ArrayList<IImage>();
+      java.util.ArrayList<RectangleF> sourceRects = new java.util.ArrayList<RectangleF>();
+      java.util.ArrayList<RectangleF> destRects = new java.util.ArrayList<RectangleF>();
       String textureId = _tile.getKey().tinyDescription();
 
       final Sector tileSector = _tile.getSector();
@@ -203,9 +192,28 @@ public class TileTextureBuilder extends RCObject
 
         if (image != null)
         {
+          final Sector imageSector = petition.getSector();
+
+          //Finding intersection image sector - tile sector = srcReq
+          final Sector intersectionSector = tileSector.intersection(imageSector);
+
+          RectangleF sourceRect = null;
+          if (!intersectionSector.isEqualsTo(imageSector))
+          {
+            sourceRect = getInnerRectangle(image.getWidth(), image.getHeight(), imageSector, intersectionSector);
+          }
+          else
+          {
+            sourceRect = new RectangleF(0, 0, image.getWidth(), image.getHeight());
+          }
+
+          //Part of the image we are going to draw
+          sourceRects.add(sourceRect);
+
           images.add(image);
 
-          rectangles.add(getImageRectangleInTexture(tileSector, petition.getSector()));
+          //Where we are going to draw the image
+          destRects.add(getInnerRectangle(_tileTextureResolution._x, _tileTextureResolution._y, tileSector, intersectionSector));
 
           textureId += petition.getURL().getPath();
           textureId += "_";
@@ -214,13 +222,13 @@ public class TileTextureBuilder extends RCObject
 
       if (images.size() > 0)
       {
-        _textureBuilder.createTextureFromImages(_gl, _factory, images, rectangles, _tileTextureResolution, new TextureUploader(this, rectangles, textureId), true);
+        _textureBuilder.createTextureFromImages(_tileTextureResolution, images, sourceRects, destRects, new TextureUploader(this, sourceRects, destRects, textureId), true);
       }
 
     }
   }
 
-  public final void imageCreated(IImage image, java.util.ArrayList<RectangleI> rectangles, String textureId)
+  public final void imageCreated(IImage image, java.util.ArrayList<RectangleF> srcRects, java.util.ArrayList<RectangleF> dstRects, String textureId)
   {
     synchronized (this) {
 
@@ -244,10 +252,16 @@ public class TileTextureBuilder extends RCObject
 
       IFactory.instance().deleteImage(image);
 
-      for (int i = 0; i < rectangles.size(); i++)
+      for (int i = 0; i < srcRects.size(); i++)
       {
-        if (rectangles.get(i) != null)
-           rectangles.get(i).dispose();
+        if (srcRects.get(i) != null)
+           srcRects.get(i).dispose();
+      }
+
+      for (int i = 0; i < dstRects.size(); i++)
+      {
+        if (dstRects.get(i) != null)
+           dstRects.get(i).dispose();
       }
 
     }
@@ -323,13 +337,13 @@ public class TileTextureBuilder extends RCObject
     return _canceled;
   }
 
-//  void checkIsPending(int position) const {
-//    if (_status[position] != STATUS_PENDING) {
-//      ILogger::instance()->logError("Logic error: Expected STATUS_PENDING at position #%d but found status: %d\n",
-//                                    position,
-//                                    _status[position]);
-//    }
-//  }
+  //  void checkIsPending(int position) const {
+  //    if (_status[position] != STATUS_PENDING) {
+  //      ILogger::instance()->logError("Logic error: Expected STATUS_PENDING at position #%d but found status: %d\n",
+  //                                    position,
+  //                                    _status[position]);
+  //    }
+  //  }
 
   public final void stepDownloaded(int position, IImage image)
   {

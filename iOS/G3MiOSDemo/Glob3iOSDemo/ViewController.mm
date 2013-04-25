@@ -86,6 +86,9 @@
 #import <G3MiOSSDK/GEOMarkSymbol.hpp>
 #import <G3MiOSSDK/GFont.hpp>
 
+#import <G3MiOSSDK/LayerTilesRenderParameters.hpp>
+#import <G3MiOSSDK/IImageUtils.hpp>
+#import <G3MiOSSDK/RectangleF.hpp>
 
 class TestVisibleSectorListener : public VisibleSectorListener {
 public:
@@ -541,8 +544,10 @@ public:
                                           "ArtXu2Z-XSlDVCRVtxtYqtIPVR_0qqLcrfsRyZK_ishjUKvTheYBUH9rDDmAPcnj",
                                           TimeInterval::fromDays(30)) );
   }
+  
 
-  const bool blueMarble = false;
+
+  const bool blueMarble = true;
   if (blueMarble) {
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
                                         URL("http://www.nasa.network.com/wms?", false),
@@ -555,7 +560,16 @@ public:
                                         //new LevelTileCondition(0, 6),
                                         NULL,
                                         TimeInterval::fromDays(30),
-                                        true);
+                                        true,
+                                        new LayerTilesRenderParameters(Sector::fullSphere(),
+                                                                       2,
+                                                                       4,
+                                                                       0,
+                                                                       8,
+                                                                       LayerTilesRenderParameters::defaultTileTextureResolution(),
+                                                                       LayerTilesRenderParameters::defaultTileMeshResolution(),
+                                                                       false)
+                                        );
     layerSet->addLayer(blueMarble);
 
     //    WMSLayer* i3Landsat = new WMSLayer("esat",
@@ -569,6 +583,27 @@ public:
     //                                       new LevelTileCondition(7, 100),
     //                                       TimeInterval::fromDays(30));
     //    layerSet->addLayer(i3Landsat);
+  }
+  
+  const bool useOrtoAyto = true;
+  if (useOrtoAyto){
+    WMSLayer* ortoAyto = new WMSLayer("orto_refundida",
+                                      URL("http://195.57.27.86/wms_etiquetas_con_orto.mapdef?", false),
+                                      WMS_1_1_0,
+                                      Sector(Geodetic2D(Angle::fromDegrees(39.350228), Angle::fromDegrees(-6.508713)),
+                                             Geodetic2D(Angle::fromDegrees(39.536351), Angle::fromDegrees(-6.25946))),
+                                      "image/jpeg",
+                                      "EPSG:4326",
+                                      "",
+                                      false,
+                                      new LevelTileCondition(4, 19),
+                                      TimeInterval::fromDays(30),
+                                      new LayerTilesRenderParameters(Sector::fullSphere(),
+                                                                     2,4,0,19,
+                                                                     Vector2I(256,256),
+                                                                     LayerTilesRenderParameters::defaultTileMeshResolution(),
+                                                                     false));
+    layerSet->addLayer(ortoAyto);
   }
 
 
@@ -969,8 +1004,56 @@ public:
 //                                       );
 //    shapesRenderer->addShape(sphere);
 //  }
-
   
+  Image_iOS *image1 = new Image_iOS([[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Icon-72" ofType:@"png"]], NULL);
+  
+    Image_iOS *image2 = new Image_iOS([[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Default-Landscape" ofType:@"png"]], NULL);
+  
+  std::vector<const IImage*> images;
+  images.push_back(image2);
+  images.push_back(image1);
+  
+  std::vector<RectangleF *> srcRs;
+  srcRs.push_back(new RectangleF(0,0,1024,748));
+  srcRs.push_back(new RectangleF(0, 0, 72, 72));
+  
+  std::vector<RectangleF *> destRs;
+  destRs.push_back(new RectangleF(0,0,256,256));
+  destRs.push_back(new RectangleF(0, 128, 64, 64));
+  
+  class QuadListener: public IImageListener {
+    ShapesRenderer* _sr;
+  public:
+    
+    QuadListener(ShapesRenderer* sr):_sr(sr){
+      
+    }
+    
+    void imageCreated(IImage* image){
+      
+      
+      Shape* quadImages = new QuadShape(new Geodetic3D(Angle::fromDegrees(28.410728),
+                                                       Angle::fromDegrees(-16.339417),
+                                                       8000),
+                                        image,
+                                        49000, 38000);
+      
+      _sr->addShape(quadImages);
+    }
+  };
+  
+  
+  IImageUtils::combine(Vector2I(256,256),
+                       images,
+                       srcRs,
+                       destRs,
+                       new QuadListener(shapesRenderer), true);
+  
+  for (int i = 0; i < 2; i++) {
+    delete images[i];
+    delete srcRs[i];
+    delete destRs[i];
+  }
 
   return shapesRenderer;
 }

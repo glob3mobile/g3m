@@ -92,22 +92,22 @@ public final class Factory_Android
    }
 
 
-   @Override
-   public void createImageFromSize(final int width,
-                                   final int height,
-                                   final IImageListener listener,
-                                   final boolean autodelete) {
-      final Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-      final Image_Android result;
-      if (bitmap == null) {
-         ILogger.instance().logError("FACTORY: Can't create empty image");
-         result = null;
-      }
-      else {
-         result = new Image_Android(bitmap, null);
-      }
-      listener.imageCreated(result);
-   }
+   //   @Override
+   //   public void createImageFromSize(final int width,
+   //                                   final int height,
+   //                                   final IImageListener listener,
+   //                                   final boolean autodelete) {
+   //      final Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+   //      final Image_Android result;
+   //      if (bitmap == null) {
+   //         ILogger.instance().logError("FACTORY: Can't create empty image");
+   //         result = null;
+   //      }
+   //      else {
+   //         result = new Image_Android(bitmap, null);
+   //      }
+   //      listener.imageCreated(result);
+   //   }
 
 
    @Override

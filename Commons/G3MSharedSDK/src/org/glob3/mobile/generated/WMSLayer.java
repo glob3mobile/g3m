@@ -330,7 +330,7 @@ public class WMSLayer extends Layer
     double v;
     if (_parameters._mercator)
     {
-      u = sector.getUCoordinates(position.longitude());
+      u = sector.getUCoordinate(position.longitude());
       v = MercatorUtils.getMercatorV(position.latitude());
     }
     else
@@ -342,17 +342,14 @@ public class WMSLayer extends Layer
   
     //X and Y
     //const Vector2D uv = sector.getUVCoordinates(position);
-  //  const int x = (int) mu->round( (uv._x * _parameters->_tileTextureResolution._x) );
-  //  const int y = (int) mu->round( (uv._y * _parameters->_tileTextureResolution._y) );
-    final int x = (int) mu.round((u * _parameters._tileTextureResolution._x));
-    final int y = (int) mu.round((v * _parameters._tileTextureResolution._y));
-    // const int y = (int) mu->round( ((1.0 - uv._y) * _parameters->_tileTextureResolution._y) );
+    final long x = mu.round((u * _parameters._tileTextureResolution._x));
+    final long y = mu.round((v * _parameters._tileTextureResolution._y));
   
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     isb.addString("&X=");
-    isb.addInt(x);
+    isb.addLong(x);
     isb.addString("&Y=");
-    isb.addInt(y);
+    isb.addLong(y);
     req += isb.getString();
     if (isb != null)
        isb.dispose();
