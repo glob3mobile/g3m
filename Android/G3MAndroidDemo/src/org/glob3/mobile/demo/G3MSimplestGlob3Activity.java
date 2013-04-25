@@ -157,7 +157,7 @@ public class G3MSimplestGlob3Activity
 
       final TileRendererBuilder tlBuilder = new TileRendererBuilder();
       tlBuilder.setLayerSet(layerSet);
-      tlBuilder.setRenderDebug(true);
+      tlBuilder.setRenderDebug(false);
       final TileRenderer tileRenderer = tlBuilder.create();
       mainRenderer.addRenderer(tileRenderer);
 

@@ -56,7 +56,7 @@ bool Sector::isBackOriented(const G3MRenderContext *rc,
                             double minHeight) const {
   const Camera* camera = rc->getCurrentCamera();
   const Planet* planet = rc->getPlanet();
-  
+
   // compute angle with normals in the four corners
   const Vector3D eye = camera->getCartesianPosition();
 
@@ -71,7 +71,7 @@ bool Sector::isBackOriented(const G3MRenderContext *rc,
 
   const Vector3D cartesianSE = planet->toCartesian(getSE());
   if (planet->geodeticSurfaceNormal(cartesianSE).dot(eye.sub(cartesianSE)) > 0) { return false; }
-  
+
   // compute angle with normal in the closest point to the camera
   const Geodetic2D center = camera->getGeodeticCenterOfView().asGeodetic2D();
 
