@@ -342,10 +342,10 @@ Extent* Tile::getTileExtent(const G3MRenderContext *rc) {
 
 bool Tile::isVisible(const G3MRenderContext *rc,
                      const TileRenderContext* trc) {
-//  // test if sector is back oriented with respect to the camera
-//  if (_sector.isBackOriented(rc, getMinHeight())) {
-//    return false;
-//  }
+  // test if sector is back oriented with respect to the camera
+  if (_sector.isBackOriented(rc, getMinHeight())) {
+    return false;
+  }
 
   const Extent* extent = getTessellatorMesh(rc, trc)->getExtent();
   if (extent == NULL) {
@@ -360,16 +360,6 @@ bool Tile::isVisible(const G3MRenderContext *rc,
 
   return extent->touches( rc->getCurrentCamera()->getFrustumInModelCoordinates() );
   //return extent->touches( rc->getCurrentCamera()->getHalfFrustuminModelCoordinates() );
-
-//  const Extent* extent = getTessellatorMesh(rc, trc)->getExtent();
-//  if (extent == NULL) {
-//    return false;
-//  }
-//  if ( !extent->touches( rc->getCurrentCamera()->getFrustumInModelCoordinates() ) ) {
-//    return false;
-//  }
-//
-//  return !_sector.isBackOriented(rc, getMinHeight());
 }
 
 bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
