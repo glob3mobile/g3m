@@ -52,32 +52,33 @@ const Angle Sector::getInnerPointLatitude(double v) const {
   return Angle::linearInterpolation( _lower.latitude(), _upper.latitude(),  (float) (1.0-v) );
 }
 
-bool Sector::isBackOriented(const G3MRenderContext *rc, double height) const {
+bool Sector::isBackOriented(const G3MRenderContext *rc,
+                            double minHeight) const {
   const Camera* camera = rc->getCurrentCamera();
   const Planet* planet = rc->getPlanet();
   
   // compute angle with normals in the four corners
   const Vector3D eye = camera->getCartesianPosition();
 
-  const Vector3D pointNW = planet->toCartesian(getNW());
-  if (planet->geodeticSurfaceNormal(pointNW).dot(eye.sub(pointNW)) > 0) { return false; }
+  const Vector3D cartesianNW = planet->toCartesian(getNW());
+  if (planet->geodeticSurfaceNormal(cartesianNW).dot(eye.sub(cartesianNW)) > 0) { return false; }
 
-  const Vector3D pointNE = planet->toCartesian(getNE());
-  if (planet->geodeticSurfaceNormal(pointNE).dot(eye.sub(pointNE)) > 0) { return false; }
+  const Vector3D cartesianNE = planet->toCartesian(getNE());
+  if (planet->geodeticSurfaceNormal(cartesianNE).dot(eye.sub(cartesianNE)) > 0) { return false; }
 
-  const Vector3D pointSW = planet->toCartesian(getSW());
-  if (planet->geodeticSurfaceNormal(pointSW).dot(eye.sub(pointSW)) > 0) { return false; }
+  const Vector3D cartesianSW = planet->toCartesian(getSW());
+  if (planet->geodeticSurfaceNormal(cartesianSW).dot(eye.sub(cartesianSW)) > 0) { return false; }
 
-  const Vector3D pointSE = planet->toCartesian(getSE());
-  if (planet->geodeticSurfaceNormal(pointSE).dot(eye.sub(pointSE)) > 0) { return false; }
+  const Vector3D cartesianSE = planet->toCartesian(getSE());
+  if (planet->geodeticSurfaceNormal(cartesianSE).dot(eye.sub(cartesianSE)) > 0) { return false; }
   
   // compute angle with normal in the closest point to the camera
   const Geodetic2D center = camera->getGeodeticCenterOfView().asGeodetic2D();
 
-  const Vector3D point = planet->toCartesian(getClosestPoint(center), height);
+  const Vector3D cartesianCenter = planet->toCartesian(getClosestPoint(center), minHeight);
 
   // if all the angles are higher than 90, sector is back oriented
-  return (planet->geodeticSurfaceNormal(point).dot(eye.sub(point)) <= 0);
+  return (planet->geodeticSurfaceNormal(cartesianCenter).dot(eye.sub(cartesianCenter)) <= 0);
 }
 
 /*
