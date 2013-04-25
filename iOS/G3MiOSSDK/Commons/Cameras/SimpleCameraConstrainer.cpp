@@ -16,6 +16,7 @@ void SimpleCameraConstrainer::onCameraChange(const Planet *planet,
 
   const double radii = planet->getRadii().maxAxis();
   const double maxHeight = radii*9;
+  const double minHeight = 10;
 
   const Geodetic3D cameraPosition = nextCamera->getGeodeticPosition();
   const double cameraHeight = cameraPosition.height();
@@ -24,6 +25,11 @@ void SimpleCameraConstrainer::onCameraChange(const Planet *planet,
     nextCamera->setGeodeticPosition(cameraPosition.latitude(),
                                     cameraPosition.longitude(),
                                     maxHeight);
+  }
+  else if (cameraHeight < minHeight) {
+    nextCamera->setGeodeticPosition(cameraPosition.latitude(),
+                                    cameraPosition.longitude(),
+                                    minHeight);
   }
   
 }
