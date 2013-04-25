@@ -1040,6 +1040,12 @@ public:
                        srcRs,
                        destRs,
                        new QuadListener(shapesRenderer), true);
+  
+  for (int i = 0; i < 2; i++) {
+    delete images[i];
+    delete srcRs[i];
+    delete destRs[i];
+  }
 
   return shapesRenderer;
 }
