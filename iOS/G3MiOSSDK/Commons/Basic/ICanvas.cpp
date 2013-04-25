@@ -145,14 +145,14 @@ void ICanvas::fillText(const std::string& text,
   _fillText(text, left, top);
 }
 
-void ICanvas::drawImage(const IImage* image, float left, float top){
+void ICanvas::drawImage(const IImage* image, float destLeft, float destTop){
   checkInitialized();
-  _drawImage(image, left, top);
+  _drawImage(image, destLeft, destTop);
 }
 
-void ICanvas::drawImage(const IImage* image, float left, float top, float width, float height){
+void ICanvas::drawImage(const IImage* image, float destLeft, float destTop, float destWidth, float destHeight){
   checkInitialized();
-  _drawImage(image, left, top, width, height);
+  _drawImage(image, destLeft, destTop, destWidth, destHeight);
 }
 
 void ICanvas::drawImage(const IImage* image,
