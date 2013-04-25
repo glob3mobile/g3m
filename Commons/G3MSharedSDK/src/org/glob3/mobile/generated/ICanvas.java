@@ -84,9 +84,9 @@ public abstract class ICanvas
 
   protected abstract void _fillText(String text, float left, float top);
 
-  protected abstract void _drawImage(IImage image, float left, float top);
+  protected abstract void _drawImage(IImage image, float destLeft, float destTop);
 
-  protected abstract void _drawImage(IImage image, float left, float top, float width, float height);
+  protected abstract void _drawImage(IImage image, float destLeft, float destTop, float destWidth, float destHeight);
 
   protected abstract void _drawImage(IImage image, float srcLeft, float srcTop, float srcWidth, float srcHeight, float destLeft, float destTop, float destWidth, float destHeight);
 
@@ -128,7 +128,7 @@ public abstract class ICanvas
 
   /**
    Returns the size of the text if it were to be rendered with the actual font on a single line.
-
+   
    NOTE: The current font has to be set before calling this method.
    NOTE: No need to initialize the canvas before calling this method.
    */
@@ -140,7 +140,7 @@ public abstract class ICanvas
 
   /**
    Set the actual font.
-
+   
    NOTE: No need to initialize the canvas before calling this method.
    */
   public final void setFont(GFont font)
@@ -232,26 +232,23 @@ public abstract class ICanvas
     _fillText(text, left, top);
   }
 
-  public final void drawImage(IImage image, float left, float top)
+  public final void drawImage(IImage image, float destLeft, float destTop)
   {
     checkInitialized();
-    _drawImage(image, left, top);
+    _drawImage(image, destLeft, destTop);
   }
 
-  public final void drawImage(IImage image, float left, float top, float width, float height)
+  public final void drawImage(IImage image, float destLeft, float destTop, float destWidth, float destHeight)
   {
     checkInitialized();
-    _drawImage(image, left, top, width, height);
+    _drawImage(image, destLeft, destTop, destWidth, destHeight);
   }
 
   public final void drawImage(IImage image, float srcLeft, float srcTop, float srcWidth, float srcHeight, float destLeft, float destTop, float destWidth, float destHeight)
   {
     checkInitialized();
   
-    RectangleF srcR = new RectangleF(srcLeft, srcTop, srcWidth, srcHeight);
-    RectangleF imR = new RectangleF(0,0,image.getWidth(), image.getHeight());
-  
-    if (!imR.fullContains(srcR))
+    if (!RectangleF.fullContains(0, 0, image.getWidth(), image.getHeight(), srcLeft, srcTop, srcWidth, srcHeight))
     {
       ILogger.instance().logError("Invalid source rectangle in drawImage");
     }
