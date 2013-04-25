@@ -31,19 +31,21 @@ std::vector<Petition*> LayerSet::createTileMapPetitions(const G3MRenderContext* 
 #else
       Tile* petitionTile = tile;
 #endif
-      while (petitionTile->getLevel() > layer->getLayerTilesRenderParameters()->_maxLevel && petitionTile != NULL) {
+      const int maxLevel = layer->getLayerTilesRenderParameters()->_maxLevel;
+      while ((petitionTile->getLevel() > maxLevel) && (petitionTile != NULL)) {
         petitionTile = petitionTile->getParent();
       }
-      
-      if (petitionTile == NULL){
-        ILogger::instance()->logError("Error retrieving requests.");
-      }
-      
-      std::vector<Petition*> pet = layer->createTileMapPetitions(rc, petitionTile);
 
-      //Storing petitions
-      for (int j = 0; j < pet.size(); j++) {
-        petitions.push_back(pet[j]);
+      if (petitionTile == NULL) {
+        ILogger::instance()->logError("Can't find a valid tile for petitions");
+      }
+      else {
+        std::vector<Petition*> tilePetitions = layer->createTileMapPetitions(rc, petitionTile);
+
+        const int tilePetitionsSize = tilePetitions.size();
+        for (int j = 0; j < tilePetitionsSize; j++) {
+          petitions.push_back( tilePetitions[j] );
+        }
       }
     }
   }
@@ -196,10 +198,6 @@ LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters() const {
           return NULL;
         }
 
-        // if ( maxLevel != layerParam->_maxLevel ) {
-        //   ILogger::instance()->logError("Inconsistency in Layer's Parameters: maxLevel");
-        //   return NULL;
-        // }
         if ( maxLevel < layerParam->_maxLevel ) {
           ILogger::instance()->logWarning("Inconsistency in Layer's Parameters: maxLevel (upgrading from %d to %d)",
                                           maxLevel,
@@ -236,7 +234,7 @@ LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters() const {
   }
 
   if (first) {
-    ILogger::instance()->logError("Can't create LayerSet's LayerTilesRenderParameters, not found any enable Layer");
+    ILogger::instance()->logError("Can't create LayerSet's LayerTilesRenderParameters, not found any enabled Layer");
     return NULL;
   }
 
@@ -248,8 +246,8 @@ LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters() const {
                                                                           Vector2I(tileTextureWidth, tileTextureHeight),
                                                                           Vector2I(tileMeshWidth,    tileMeshHeight),
                                                                           mercator);
-
+  
   delete topSector;
-
+  
   return parameters;
 }

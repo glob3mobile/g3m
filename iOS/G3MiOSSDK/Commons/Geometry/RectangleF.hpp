@@ -13,12 +13,6 @@
 class RectangleF {
 private:
 
-  static bool isBetween(float value,
-                        float min,
-                        float max){
-    return (value >= min) && (value <= max);
-  }
-
 public:
   const float _x;
   const float _y;
@@ -54,22 +48,46 @@ public:
   }
 
   bool fullContains(const RectangleF& that) const {
-    if (!isBetween(that._x, _x, _x + _width)) {
+    const IMathUtils* mu = IMathUtils::instance();
+
+    if (!mu->isBetween(that._x, _x, _x + _width)) {
       return false;
     }
 
-    if (!isBetween(that._x + that._width, _x, _x + _width)) {
+    if (!mu->isBetween(that._x + that._width, _x, _x + _width)) {
       return false;
     }
 
-    if (!isBetween(that._y, _y, _y + _height)) {
+    if (!mu->isBetween(that._y, _y, _y + _height)) {
       return false;
     }
 
-    if (!isBetween(that._y + that._height, _y, _y + _height)) {
+    if (!mu->isBetween(that._y + that._height, _y, _y + _height)) {
       return false;
     }
 
+    return true;
+  }
+
+  static bool fullContains(float outerX, float outerY, float outerWidth, float outerHeight,
+                           float innerX, float innerY, float innerWidth, float innerHeight) {
+    const IMathUtils* mu = IMathUtils::instance();
+    if (!mu->isBetween(innerX, outerX, outerX + outerWidth)) {
+      return false;
+    }
+
+    if (!mu->isBetween(innerX + innerWidth, outerX, outerX + outerWidth)) {
+      return false;
+    }
+
+    if (!mu->isBetween(innerY, outerY, outerY + outerHeight)) {
+      return false;
+    }
+
+    if (!mu->isBetween(innerY + innerHeight, outerY, outerY + outerHeight)) {
+      return false;
+    }
+    
     return true;
   }
   
