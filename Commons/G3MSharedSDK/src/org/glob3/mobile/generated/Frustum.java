@@ -20,22 +20,6 @@ public class Frustum
 
   private Extent _extent;
 
-  /*  Frustum(const Plane& leftPlane,
-   const Plane& rightPlane,
-   const Plane& bottomPlane,
-   const Plane& topPlane,
-   const Plane& nearPlane,
-   const Plane& farPlane) :
-   _leftPlane(leftPlane),
-   _rightPlane(rightPlane),
-   _bottomPlane(bottomPlane),
-   _topPlane(topPlane),
-   _nearPlane(nearPlane),
-   _farPlane(farPlane)
-   {
-   
-   }*/
-
   private Frustum(Frustum that, MutableMatrix44D matrix, MutableMatrix44D inverse)
   {
      _ltn = new Vector3D(that._ltn.transformedBy(inverse, 1));
@@ -328,27 +312,6 @@ public class Frustum
     return true;
   }
 
-  /*
-   Frustum transformedBy(const MutableMatrix44D& matrix) const {
-   return Frustum(_leftPlane.transformedBy(matrix),
-   _rightPlane.transformedBy(matrix),
-   _bottomPlane.transformedBy(matrix),
-   _topPlane.transformedBy(matrix),
-   _nearPlane.transformedBy(matrix),
-   _farPlane.transformedBy(matrix));
-   }
-   
-   
-   Frustum* transformedBy_P(const MutableMatrix44D& matrix) const {
-   return new Frustum(_leftPlane.transformedBy(matrix),
-   _rightPlane.transformedBy(matrix),
-   _bottomPlane.transformedBy(matrix),
-   _topPlane.transformedBy(matrix),
-   _nearPlane.transformedBy(matrix),
-   _farPlane.transformedBy(matrix));
-   }*/
-
-
   public final Frustum transformedBy_P(MutableMatrix44D matrix)
   {
     return new Frustum(this, matrix, matrix.inversed());
@@ -364,4 +327,5 @@ public class Frustum
   {
      return _extent;
   }
+
 }
