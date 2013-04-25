@@ -172,11 +172,11 @@ public:
   int getWidth() const {
     return _canvasWidth;
   }
-
+  
   int getHeight() const {
     return _canvasHeight;
   }
-
+  
 };
 
 #endif

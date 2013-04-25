@@ -146,20 +146,20 @@ void ICanvas::fillText(const std::string& text,
 }
 
 void ICanvas::drawImage(const IImage* image,
-                        float left, float top){
+                        float left, float top) {
   checkInitialized();
   _drawImage(image, left, top);
 }
 
 void ICanvas::drawImage(const IImage* image,
-                        float left, float top, float width, float height){
+                        float left, float top, float width, float height) {
   checkInitialized();
   _drawImage(image, left, top, width, height);
 }
 
 void ICanvas::drawImage(const IImage* image,
                         float srcLeft, float srcTop, float srcWidth, float srcHeight,
-                        float destLeft, float destTop, float destWidth, float destHeight){
+                        float destLeft, float destTop, float destWidth, float destHeight) {
   checkInitialized();
 
   RectangleF srcR(srcLeft, srcTop, srcWidth, srcHeight);
