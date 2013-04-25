@@ -596,11 +596,14 @@ public:
                                       "EPSG:4326",
                                       "",
                                       false,
-                                      new LevelTileCondition(4, 19),
+                                      new LevelTileCondition(2, 19),
+                                      //NULL,
                                       TimeInterval::fromDays(30),
+                                      true,
                                       new LayerTilesRenderParameters(Sector::fullSphere(),
-                                                                     2,4,0,19,
-                                                                     Vector2I(256,256),
+                                                                     2, 4,
+                                                                     0, 19,
+                                                                     LayerTilesRenderParameters::defaultTileTextureResolution(),
                                                                      LayerTilesRenderParameters::defaultTileMeshResolution(),
                                                                      false));
     layerSet->addLayer(ortoAyto);
