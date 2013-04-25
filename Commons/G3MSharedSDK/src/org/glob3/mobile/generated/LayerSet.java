@@ -71,10 +71,6 @@ public class LayerSet
             return null;
           }
   
-          // if ( maxLevel != layerParam->_maxLevel ) {
-          //   ILogger::instance()->logError("Inconsistency in Layer's Parameters: maxLevel");
-          //   return NULL;
-          // }
           if (maxLevel < layerParam._maxLevel)
           {
             ILogger.instance().logWarning("Inconsistency in Layer's Parameters: maxLevel (upgrading from %d to %d)", maxLevel, layerParam._maxLevel);
@@ -111,7 +107,7 @@ public class LayerSet
   
     if (first)
     {
-      ILogger.instance().logError("Can't create LayerSet's LayerTilesRenderParameters, not found any enable Layer");
+      ILogger.instance().logError("Can't create LayerSet's LayerTilesRenderParameters, not found any enabled Layer");
       return null;
     }
   
@@ -171,22 +167,25 @@ public class LayerSet
       if (layer.isAvailable(rc, tile))
       {
         Tile petitionTile = tile;
-        while (petitionTile.getLevel() > layer.getLayerTilesRenderParameters()._maxLevel && petitionTile != null)
+        final int maxLevel = layer.getLayerTilesRenderParameters()._maxLevel;
+        while ((petitionTile.getLevel() > maxLevel) && (petitionTile != null))
         {
           petitionTile = petitionTile.getParent();
         }
   
         if (petitionTile == null)
         {
-          ILogger.instance().logError("Error retrieving requests.");
+          ILogger.instance().logError("Can't find a valid tile for petitions");
         }
-  
-        java.util.ArrayList<Petition> pet = layer.createTileMapPetitions(rc, petitionTile);
-  
-        //Storing petitions
-        for (int j = 0; j < pet.size(); j++)
+        else
         {
-          petitions.add(pet.get(j));
+          java.util.ArrayList<Petition> tilePetitions = layer.createTileMapPetitions(rc, petitionTile);
+  
+          final int tilePetitionsSize = tilePetitions.size();
+          for (int j = 0; j < tilePetitionsSize; j++)
+          {
+            petitions.add(tilePetitions.get(j));
+          }
         }
       }
     }

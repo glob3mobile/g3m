@@ -36,7 +36,7 @@ public class ImageBuilder
   
     final IMathUtils mu = IMathUtils.instance();
   
-    canvas.initialize((int) mu.round(extent._x), (int) mu.round(extent._y));
+    canvas.initialize(mu.round(extent._x), mu.round(extent._y));
   
     element.drawAt(0, 0, canvas);
   
