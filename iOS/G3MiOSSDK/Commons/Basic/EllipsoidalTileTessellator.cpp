@@ -78,6 +78,8 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
 
       double height = 0;
       
+      //TODO: MERCATOR!!!
+      
       if (elevationData != NULL) {
 //        height = elevationData->getElevationAt(i, j) * verticalExaggeration;
         height = elevationData->getElevationAt(position,

@@ -776,7 +776,3 @@ ElevationData* Tile::createElevationDataSubviewFromAncestor(Tile* ancestor) cons
   
   
 }
-
-void Tile::onElevationDataListenerFinished(){
-  _elevationDataListener = NULL;
-}

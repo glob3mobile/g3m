@@ -42,20 +42,16 @@ public:
     
     if (_tile != NULL){
       _tile->setElevationData(elevationData, _tile->getLevel());
-      _tile->onElevationDataListenerFinished();
     }
 
   }
   
   void onError(const Sector& sector,
                const Vector2I& resolution) {
-    if (_tile != NULL){
-      _tile->onElevationDataListenerFinished();
-    }
   }
   
   void sendRequest(){
-    _requestID = _provider->requestElevationData(_tile->getSector(), _resolution, this, true);
+    _requestID = _provider->requestElevationData(_tile->getSector(), _resolution, this, false);
   }
   
   void cancelRequest(){

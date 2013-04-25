@@ -73,7 +73,7 @@ private:
   
   std::map<long long, CompositeElevationDataProvider_Request*> _requests;
   
-  void requestFinished(const CompositeElevationDataProvider_Request* req);
+  void requestFinished(CompositeElevationDataProvider_Request* req);
   
 public:
   CompositeElevationDataProvider():_context(NULL), _currentID(0){}

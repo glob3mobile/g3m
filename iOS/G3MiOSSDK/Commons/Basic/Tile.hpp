@@ -214,8 +214,6 @@ public:
   
   void getElevationDataFromAncestor(const Vector2I& resolution);
   
-  void onElevationDataListenerFinished();
-  
   void initializeElevationData(ElevationDataProvider* elevationDataProvider,
                                const TileTessellator* tesselator,
                                const Vector2I& tileMeshResolution,

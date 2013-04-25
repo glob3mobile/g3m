@@ -117,7 +117,7 @@ void CompositeElevationDataProvider::cancelRequest(const long long requestId){
   }
 }
 
-void CompositeElevationDataProvider::requestFinished(const CompositeElevationDataProvider_Request* req){
+void CompositeElevationDataProvider::requestFinished(CompositeElevationDataProvider_Request* req){
   
   CompositeElevationData* data = req->_compData;
   IElevationDataListener * listener = req->_listener;
@@ -129,11 +129,13 @@ void CompositeElevationDataProvider::requestFinished(const CompositeElevationDat
     listener->onError(sector, resolution);
     if (autodelete){
       delete listener;
+      req->_listener = NULL;
     }
   } else{
     listener->onData(sector, resolution, data);
     if (autodelete){
       delete listener;
+      req->_listener = NULL;
     }
   }
   
@@ -165,22 +167,6 @@ _compProvider(provider),
 _currentRequestEDP(NULL),
 _compData(NULL){
 }
-
-//void CompositeElevationDataProvider::CompositeElevationDataProvider_Request::respondToListener(){
-//  if (_compData == NULL){
-//    _listener->onError(_sector, _resolution);
-//    if (_autodelete){
-//      delete _listener;
-//    }
-//  } else{
-//    _listener->onData(_sector, _resolution, _compData);
-//    if (_autodelete){
-//      //delete _listener;
-//    }
-//    _compProvider->deleteRequest(this); //AUTODELETE
-//  }
-//  _listener = NULL;
-//}
 
 ElevationDataProvider* CompositeElevationDataProvider::
 CompositeElevationDataProvider_Request::
@@ -231,11 +217,9 @@ void CompositeElevationDataProvider::CompositeElevationDataProvider_Request::onD
   
   
   if (!_compData->hasNoData()){
-    _compProvider->requestFinished(this);//If this data is enough we respond
-//    respondToListener();    
+    _compProvider->requestFinished(this);//If this data is enough we respond   
   } else{
-    if (!launchNewRequest()){
-//      respondToListener(); //If there are no more providers we respond
+    if (!launchNewRequest()){//If there are no more providers we respond
       _compProvider->requestFinished(this);
     }
   }
