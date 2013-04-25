@@ -192,6 +192,12 @@ public:
     const float epsilon = 1e-8f;
     return abs(x - y) <= epsilon * max(abs(x), abs(y), 1.0f);
   }
+  
+  virtual bool isBetween(float value,
+                        float min,
+                        float max) const {
+    return (value >= min) && (value <= max);
+  }
 
 };
 
