@@ -420,7 +420,7 @@ public class Sector
   }
 
 
-  public final boolean isBackOriented(G3MRenderContext rc, double height)
+  public final boolean isBackOriented(G3MRenderContext rc, double minHeight)
   {
     final Camera camera = rc.getCurrentCamera();
     final Planet planet = rc.getPlanet();
@@ -428,26 +428,26 @@ public class Sector
     // compute angle with normals in the four corners
     final Vector3D eye = camera.getCartesianPosition();
   
-    final Vector3D pointNW = planet.toCartesian(getNW());
-    if (planet.geodeticSurfaceNormal(pointNW).dot(eye.sub(pointNW)) > 0)
+    final Vector3D cartesianNW = planet.toCartesian(getNW());
+    if (planet.geodeticSurfaceNormal(cartesianNW).dot(eye.sub(cartesianNW)) > 0)
     {
        return false;
     }
   
-    final Vector3D pointNE = planet.toCartesian(getNE());
-    if (planet.geodeticSurfaceNormal(pointNE).dot(eye.sub(pointNE)) > 0)
+    final Vector3D cartesianNE = planet.toCartesian(getNE());
+    if (planet.geodeticSurfaceNormal(cartesianNE).dot(eye.sub(cartesianNE)) > 0)
     {
        return false;
     }
   
-    final Vector3D pointSW = planet.toCartesian(getSW());
-    if (planet.geodeticSurfaceNormal(pointSW).dot(eye.sub(pointSW)) > 0)
+    final Vector3D cartesianSW = planet.toCartesian(getSW());
+    if (planet.geodeticSurfaceNormal(cartesianSW).dot(eye.sub(cartesianSW)) > 0)
     {
        return false;
     }
   
-    final Vector3D pointSE = planet.toCartesian(getSE());
-    if (planet.geodeticSurfaceNormal(pointSE).dot(eye.sub(pointSE)) > 0)
+    final Vector3D cartesianSE = planet.toCartesian(getSE());
+    if (planet.geodeticSurfaceNormal(cartesianSE).dot(eye.sub(cartesianSE)) > 0)
     {
        return false;
     }
@@ -455,10 +455,10 @@ public class Sector
     // compute angle with normal in the closest point to the camera
     final Geodetic2D center = camera.getGeodeticCenterOfView().asGeodetic2D();
   
-    final Vector3D point = planet.toCartesian(getClosestPoint(center), height);
+    final Vector3D cartesianCenter = planet.toCartesian(getClosestPoint(center), minHeight);
   
     // if all the angles are higher than 90, sector is back oriented
-    return (planet.geodeticSurfaceNormal(point).dot(eye.sub(point)) <= 0);
+    return (planet.geodeticSurfaceNormal(cartesianCenter).dot(eye.sub(cartesianCenter)) <= 0);
   }
 
   public final Geodetic2D clamp(Geodetic2D position)
