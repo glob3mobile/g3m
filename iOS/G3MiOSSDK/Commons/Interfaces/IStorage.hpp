@@ -93,7 +93,6 @@ public:
   virtual void initialize(const G3MContext* context);
 
 
-//  virtual IByteBuffer* readBuffer(const URL& url) = 0;
   virtual IByteBufferResult readBuffer(const URL& url,
                                        bool readExpired) = 0;
 

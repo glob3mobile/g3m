@@ -45,7 +45,6 @@ public:
   }
 
 
-  //  IByteBuffer* readBuffer(const URL& url);
   IByteBufferResult readBuffer(const URL& url,
                                bool readExpired);
 
