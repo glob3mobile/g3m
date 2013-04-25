@@ -341,16 +341,16 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& position,
 
   //X and Y
   //const Vector2D uv = sector.getUVCoordinates(position);
-  const int x = mu->round( (u * _parameters->_tileTextureResolution._x) );
-  const int y = mu->round( (v * _parameters->_tileTextureResolution._y) );
+  const long long x = mu->round( (u * _parameters->_tileTextureResolution._x) );
+  const long long y = mu->round( (v * _parameters->_tileTextureResolution._y) );
 
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("&X=");
-  isb->addInt(x);
+  isb->addLong(x);
   isb->addString("&Y=");
-  isb->addInt(y);
+  isb->addLong(y);
   req += isb->getString();
   delete isb;
-  
+
 	return URL(req, false);
 }

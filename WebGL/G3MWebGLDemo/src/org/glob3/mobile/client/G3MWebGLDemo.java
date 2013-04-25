@@ -631,9 +631,9 @@ public class G3MWebGLDemo
 
 
                         @Override
-                        public void imageCreated(final IImage image) {
+                        public void imageCreated(final IImage image2) {
                            final Shape quadImages = new QuadShape(new Geodetic3D(Angle.fromDegrees(28.410728),
-                                    Angle.fromDegrees(-16.339417), 8000), image, 50000, 50000);
+                                    Angle.fromDegrees(-16.339417), 8000), image2, 50000, 50000);
 
                            _sr.addShape(quadImages);
                         }
