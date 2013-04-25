@@ -345,14 +345,14 @@ public class WMSLayer extends Layer
   
     //X and Y
     //const Vector2D uv = sector.getUVCoordinates(position);
-    final int x = mu.round((u * _parameters._tileTextureResolution._x));
-    final int y = mu.round((v * _parameters._tileTextureResolution._y));
+    final long x = mu.round((u * _parameters._tileTextureResolution._x));
+    final long y = mu.round((v * _parameters._tileTextureResolution._y));
   
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     isb.addString("&X=");
-    isb.addInt(x);
+    isb.addLong(x);
     isb.addString("&Y=");
-    isb.addInt(y);
+    isb.addLong(y);
     req += isb.getString();
     if (isb != null)
        isb.dispose();

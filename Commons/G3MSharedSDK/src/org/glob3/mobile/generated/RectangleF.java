@@ -76,6 +76,7 @@ public class RectangleF
   public static boolean fullContains(float outerX, float outerY, float outerWidth, float outerHeight, float innerX, float innerY, float innerWidth, float innerHeight)
   {
     final IMathUtils mu = IMathUtils.instance();
+
     if (!mu.isBetween(innerX, outerX, outerX + outerWidth))
     {
       return false;
