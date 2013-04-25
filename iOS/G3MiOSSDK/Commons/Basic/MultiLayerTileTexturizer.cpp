@@ -46,14 +46,9 @@ public:
                                       int position);
   
   void onDownload(const URL& url,
-<<<<<<< HEAD
                   IImage* image,
                   bool expired);
 
-=======
-                  IImage* image);
-  
->>>>>>> webgl-port
   void onError(const URL& url);
   
   void onCanceledDownload(const URL& url,
