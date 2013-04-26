@@ -15,7 +15,7 @@ class ElevationData;
 class G3MContext;
 class G3MRenderContext;
 
-#include <vector.h>
+#include <vector>
 
 class IElevationDataListener {
 public:

@@ -10,8 +10,8 @@
 #define __G3MiOSSDK__CompositeElevationDataProvider__
 
 #include <iostream>
-#include <vector.h>
-#include <map.h>
+#include <vector>
+#include <map>
 
 #include "ElevationDataProvider.hpp"
 #include "Sector.hpp"
