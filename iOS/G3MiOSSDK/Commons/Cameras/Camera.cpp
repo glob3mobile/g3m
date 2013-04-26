@@ -120,7 +120,7 @@ void Camera::resizeViewport(int width, int height) {
   _width = width;
   _height = height;
 
-  _dirtyFlags._projectionMatrix = true;
+  _dirtyFlags._projectionMatrixDirty = true;
 
   //cleanCachedValues();
 }

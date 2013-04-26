@@ -300,7 +300,6 @@ void G3MWidget::onResizeViewportEvent(int width, int height) {
   }
 }
 
-
 void G3MWidget::render(int width, int height) {
   if (_paused) {
     return;
@@ -346,6 +345,11 @@ void G3MWidget::render(int width, int height) {
                                 _currentCamera,
                                 _nextCamera);
   }
+  
+  _nextCamera->forceMatrixCreation();
+  //_currentCamera->forceMatrixCreation();
+
+  
   _currentCamera->copyFrom(*_nextCamera);
 
   G3MRenderContext rc(_frameTasksExecutor,
