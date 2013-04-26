@@ -48,20 +48,19 @@ void Camera::copyFrom(const Camera &that) {
   _geodeticCenterOfView = (that._geodeticCenterOfView == NULL) ? NULL : new Geodetic3D(*that._geodeticCenterOfView);
 
   delete _frustum;
-  delete _frustumInModelCoordinates;
-  delete _halfFrustum;
-  delete _halfFrustumInModelCoordinates;
-  delete _camEffectTarget;
-
-  _camEffectTarget = new CameraEffectTarget();
-
   _frustum = (that._frustum == NULL) ? NULL : new Frustum(*that._frustum);
 
+  delete _frustumInModelCoordinates;
   _frustumInModelCoordinates = (that._frustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._frustumInModelCoordinates);
 
+  delete _halfFrustum;
   _halfFrustum = (that._frustum == NULL) ? NULL : new Frustum(*that._frustum);
 
+  delete _halfFrustumInModelCoordinates;
   _halfFrustumInModelCoordinates = (that._frustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._frustumInModelCoordinates);
+  
+  delete _geodeticPosition;
+  _geodeticPosition = ((that._geodeticPosition == NULL) ? NULL : new Geodetic3D(*that._geodeticPosition));
 }
 
 Camera::Camera(int width, int height) :
@@ -82,9 +81,11 @@ _frustum(NULL),
 _frustumInModelCoordinates(NULL),
 _halfFrustumInModelCoordinates(NULL),
 _halfFrustum(NULL),
-_camEffectTarget(new CameraEffectTarget())
+_camEffectTarget(new CameraEffectTarget()),
+_geodeticPosition(NULL)
 {
   resizeViewport(width, height);
+  _dirtyFlags.setAll(true);
 }
 
 //void Camera::resetPosition() {
@@ -121,6 +122,8 @@ void Camera::resizeViewport(int width, int height) {
   _height = height;
 
   _dirtyFlags._projectionMatrixDirty = true;
+  
+  _dirtyFlags.setAll(true);
 
   //cleanCachedValues();
 }

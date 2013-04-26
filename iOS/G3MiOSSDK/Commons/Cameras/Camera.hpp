@@ -130,7 +130,8 @@ public:
   _frustumInModelCoordinates((that._frustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._frustumInModelCoordinates)),
   _halfFrustum((that._halfFrustum == NULL) ? NULL : new Frustum(*that._halfFrustum)),
   _halfFrustumInModelCoordinates((that._halfFrustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._halfFrustumInModelCoordinates)),
-  _camEffectTarget(new CameraEffectTarget())
+  _camEffectTarget(new CameraEffectTarget()),
+  _geodeticPosition((that._geodeticPosition == NULL) ? NULL: new Geodetic3D(*that._geodeticPosition))
   {
   }
 
@@ -223,6 +224,7 @@ public:
   void setCartesianPosition(const MutableVector3D& v){
     if (!v.equalTo(_position)){
       _position = MutableVector3D(v);
+      _geodeticPosition = NULL;
       _dirtyFlags.setAll(true);
     }
   }
@@ -237,7 +239,10 @@ public:
   void setPitch(const Angle& angle);
 
   const Geodetic3D getGeodeticPosition() const {
-    return _planet->toGeodetic3D( getCartesianPosition() );
+    if (_geodeticPosition == NULL){
+      _geodeticPosition = new Geodetic3D(_planet->toGeodetic3D( getCartesianPosition() ));
+    }
+    return *_geodeticPosition;
   }
 
   void setGeodeticPosition(const Geodetic3D& g3d) {
@@ -287,6 +292,8 @@ private:
   MutableVector3D _position;            // position
   MutableVector3D _center;              // point where camera is looking at
   MutableVector3D _up;                  // vertical vector
+  
+  mutable Geodetic3D*     _geodeticPosition;    //Must be updated when changing position
 
   mutable CameraDirtyFlags _dirtyFlags;
   mutable FrustumData      _frustumData;

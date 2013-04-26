@@ -292,6 +292,7 @@ void G3MWidget::onResizeViewportEvent(int width, int height) {
 
     // _nextCamera->resizeViewport(width, height);
 
+    _currentCamera->resizeViewport(width, height);
     _cameraRenderer->onResizeViewportEvent(&ec, width, height);
 
     if (_mainRenderer->isEnable()) {
@@ -346,10 +347,8 @@ void G3MWidget::render(int width, int height) {
                                 _nextCamera);
   }
 
-  int __TODO_FixIt;
-  if (_mainRendererReady){
-    _nextCamera->forceMatrixCreation();
-  }
+  
+  _nextCamera->forceMatrixCreation();
   
   _currentCamera->copyFrom(*_nextCamera);
 
