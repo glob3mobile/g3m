@@ -172,7 +172,8 @@ public:
   }
 
 
-  bool isBackOriented(const G3MRenderContext *rc, double height) const;
+  bool isBackOriented(const G3MRenderContext *rc,
+                      double minHeight) const;
 
   const Geodetic2D clamp(const Geodetic2D& pos) const;
 

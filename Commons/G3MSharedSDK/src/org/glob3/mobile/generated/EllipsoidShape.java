@@ -171,7 +171,7 @@ public class EllipsoidShape extends AbstractMeshShape
       _textureRequested = true;
       if (_textureURL.getPath().length() != 0)
       {
-        rc.getDownloader().requestImage(_textureURL, 1000000, TimeInterval.fromDays(30), new EllipsoidShape_IImageDownloadListener(this), true);
+        rc.getDownloader().requestImage(_textureURL, 1000000, TimeInterval.fromDays(30), true, new EllipsoidShape_IImageDownloadListener(this), true);
       }
     }
   
@@ -195,18 +195,7 @@ public class EllipsoidShape extends AbstractMeshShape
   
         vertices.add(innerPoint);
   
-  
-  //      double vv;
-  //      if (_mercator) {
-  //        vv = MercatorUtils::getMercatorV(innerPoint.latitude());
-  //      }
-  //      else {
-  //        vv = v;
-  //      }
-  
         final double vv = _mercator ? MercatorUtils.getMercatorV(innerPoint.latitude()) : v;
-        /*                    */
-        /*                    */
   
         texCoords.add((float) u, (float) vv);
       }

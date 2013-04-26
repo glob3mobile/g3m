@@ -18,12 +18,17 @@
 
 class BufferSaverDownloadListener : public IBufferDownloadListener {
 private:
-  CachedDownloader*        _downloader;
+  CachedDownloader* _downloader;
+
+  IByteBuffer* _expiredBuffer;
+
   IBufferDownloadListener* _listener;
-  const bool               _deleteListener;
-  IStorage*                _storage;
+  const bool _deleteListener;
+
+  IStorage* _storage;
+
 #ifdef C_CODE
-  const TimeInterval       _timeToCache;
+  const TimeInterval _timeToCache;
 #endif
 #ifdef JAVA_CODE
   private final TimeInterval _timeToCache;
@@ -31,17 +36,23 @@ private:
 
 public:
   BufferSaverDownloadListener(CachedDownloader* downloader,
+                              IByteBuffer* expiredBuffer,
                               IBufferDownloadListener* listener,
                               bool deleteListener,
                               IStorage* storage,
                               const TimeInterval& timeToCache) :
   _downloader(downloader),
+  _expiredBuffer(expiredBuffer),
   _listener(listener),
   _deleteListener(deleteListener),
   _storage(storage),
   _timeToCache(timeToCache)
   {
 
+  }
+
+  ~BufferSaverDownloadListener() {
+    delete _expiredBuffer;
   }
 
   void deleteListener() {
@@ -68,25 +79,37 @@ public:
   }
 
   void onDownload(const URL& url,
-                  IByteBuffer* data) {
-    saveBuffer(url, data);
+                  IByteBuffer* data,
+                  bool expired) {
+    if (!expired) {
+      saveBuffer(url, data);
+    }
 
-    _listener->onDownload(url, data);
+    _listener->onDownload(url, data, expired);
 
     deleteListener();
   }
 
   void onError(const URL& url) {
-    _listener->onError(url);
+    if (_expiredBuffer == NULL) {
+      _listener->onError(url);
+    }
+    else {
+      _listener->onDownload(url, _expiredBuffer, true);
+      _expiredBuffer = NULL;
+    }
 
     deleteListener();
   }
 
   void onCanceledDownload(const URL& url,
-                          IByteBuffer* buffer) {
-    saveBuffer(url, buffer);
+                          IByteBuffer* buffer,
+                          bool expired) {
+    if (!expired) {
+      saveBuffer(url, buffer);
+    }
 
-    _listener->onCanceledDownload(url, buffer);
+    _listener->onCanceledDownload(url, buffer, expired);
 
     // no deleteListener() call, onCanceledDownload() is always called before onCancel().
   }
@@ -101,12 +124,17 @@ public:
 
 class ImageSaverDownloadListener : public IImageDownloadListener {
 private:
-  CachedDownloader*       _downloader;
+  CachedDownloader* _downloader;
+
+  IImage* _expiredImage;
+
   IImageDownloadListener* _listener;
-  const bool              _deleteListener;
-  IStorage*               _storage;
+  const bool _deleteListener;
+
+  IStorage* _storage;
+
 #ifdef C_CODE
-  const TimeInterval       _timeToCache;
+  const TimeInterval _timeToCache;
 #endif
 #ifdef JAVA_CODE
   private final TimeInterval _timeToCache;
@@ -114,11 +142,13 @@ private:
 
 public:
   ImageSaverDownloadListener(CachedDownloader* downloader,
+                             IImage* expiredImage,
                              IImageDownloadListener* listener,
                              bool deleteListener,
                              IStorage* storage,
                              const TimeInterval& timeToCache) :
   _downloader(downloader),
+  _expiredImage(expiredImage),
   _listener(listener),
   _deleteListener(deleteListener),
   _storage(storage),
@@ -132,6 +162,10 @@ public:
       delete _listener;
       _listener = NULL;
     }
+  }
+
+  ~ImageSaverDownloadListener() {
+    delete _expiredImage;
   }
 
   void saveImage(const URL& url,
@@ -151,25 +185,37 @@ public:
   }
 
   void onDownload(const URL& url,
-                  IImage* image) {
-    saveImage(url, image);
+                  IImage* image,
+                  bool expired) {
+    if (!expired) {
+      saveImage(url, image);
+    }
 
-    _listener->onDownload(url, image);
+    _listener->onDownload(url, image, expired);
 
     deleteListener();
   }
 
   void onError(const URL& url) {
-    _listener->onError(url);
+    if (_expiredImage == NULL) {
+      _listener->onError(url);
+    }
+    else {
+      _listener->onDownload(url, _expiredImage, true);
+      _expiredImage = NULL;
+    }
 
     deleteListener();
   }
 
   void onCanceledDownload(const URL& url,
-                          IImage* image) {
-    saveImage(url, image);
+                          IImage* image,
+                          bool expired) {
+    if (!expired) {
+      saveImage(url, image);
+    }
 
-    _listener->onCanceledDownload(url, image);
+    _listener->onCanceledDownload(url, image, expired);
 
     // no deleteListener() call, onCanceledDownload() is always called before onCancel().
   }
@@ -185,8 +231,12 @@ public:
 CachedDownloader::~CachedDownloader() {
   delete _downloader;
 
-  if (_lastImage != NULL) {
-    IFactory::instance()->deleteImage(_lastImage);
+  //  if (_lastImage != NULL) {
+  //    IFactory::instance()->deleteImage(_lastImage);
+  //  }
+  if (_lastImageResult != NULL) {
+    IFactory::instance()->deleteImage(_lastImageResult->getImage());
+    delete _lastImageResult;
   }
   delete _lastImageURL;
 }
@@ -201,98 +251,6 @@ void CachedDownloader::stop() {
 
 void CachedDownloader::cancelRequest(long long requestId) {
   _downloader->cancelRequest(requestId);
-}
-
-IImage* CachedDownloader::getCachedImage(const URL& url) {
-  //return _storage->isAvailable() ? _storage->readImage(url) : NULL;
-
-
-  if ( (_lastImage != NULL) && (_lastImageURL != NULL) ) {
-    if (_lastImageURL->isEqualsTo(url)) {
-      // ILogger::instance()->logInfo("Used chached image for %s", url.description().c_str());
-      return _lastImage->shallowCopy();
-    }
-  }
-
-  IImage* cachedImage = _storage->isAvailable() ? _storage->readImage(url) : NULL;
-
-  if (cachedImage != NULL) {
-    if (_lastImage != NULL) {
-      IFactory::instance()->deleteImage(_lastImage);
-    }
-    _lastImage = cachedImage->shallowCopy();
-
-    delete _lastImageURL;
-    _lastImageURL = new URL(url);
-  }
-
-  return cachedImage;
-}
-
-long long CachedDownloader::requestImage(const URL& url,
-                                         long long priority,
-                                         const TimeInterval& timeToCache,
-                                         IImageDownloadListener* listener,
-                                         bool deleteListener) {
-  _requestsCounter++;
-
-  IImage* cachedImage = getCachedImage(url);
-  if (cachedImage != NULL) {
-    // cache hit
-    _cacheHitsCounter++;
-
-    listener->onDownload(url, cachedImage);
-
-    if (deleteListener) {
-      delete listener;
-    }
-
-    return -1;
-  }
-
-  // cache miss
-  return _downloader->requestImage(url,
-                                   priority,
-                                   TimeInterval::zero(),
-                                   new ImageSaverDownloadListener(this,
-                                                                  listener,
-                                                                  deleteListener,
-                                                                  _storage,
-                                                                  timeToCache),
-                                   true);
-}
-
-long long CachedDownloader::requestBuffer(const URL& url,
-                                          long long priority,
-                                          const TimeInterval& timeToCache,
-                                          IBufferDownloadListener* listener,
-                                          bool deleteListener) {
-  _requestsCounter++;
-
-  IByteBuffer* cachedBuffer = _storage->isAvailable() ? _storage->readBuffer(url) : NULL;
-  if (cachedBuffer == NULL) {
-    // cache miss
-    return _downloader->requestBuffer(url,
-                                      priority,
-                                      TimeInterval::zero(),
-                                      new BufferSaverDownloadListener(this,
-                                                                      listener,
-                                                                      deleteListener,
-                                                                      _storage,
-                                                                      timeToCache),
-                                      true);
-  }
-
-  // cache hit
-  _cacheHitsCounter++;
-
-  listener->onDownload(url, cachedBuffer);
-
-  if (deleteListener) {
-    delete listener;
-  }
-
-  return -1;
 }
 
 const std::string CachedDownloader::statistics() {
@@ -325,4 +283,119 @@ void CachedDownloader::onDestroy(const G3MContext* context) {
 void CachedDownloader::initialize(const G3MContext* context,
                                   FrameTasksExecutor* frameTasksExecutor) {
   _downloader->initialize(context, frameTasksExecutor);
+}
+
+
+IImageResult CachedDownloader::getCachedImageResult(const URL& url,
+                                                    bool readExpired) {
+  if ( (_lastImageResult != NULL) && (_lastImageURL != NULL) ) {
+    if (_lastImageURL->isEqualsTo(url)) {
+      // ILogger::instance()->logInfo("Used chached image for %s", url.description().c_str());
+      return IImageResult(_lastImageResult->getImage()->shallowCopy(),
+                          _lastImageResult->isExpired());
+    }
+  }
+
+  if (!_storage->isAvailable()) {
+    return IImageResult(NULL, false);
+  }
+
+  IImageResult cachedImageResult = _storage->readImage(url, readExpired);
+  IImage* cachedImage = cachedImageResult.getImage();
+
+  if (cachedImage != NULL) {
+    if (_lastImageResult != NULL) {
+      IFactory::instance()->deleteImage(_lastImageResult->getImage());
+      delete _lastImageResult;
+    }
+    _lastImageResult = new IImageResult(cachedImage->shallowCopy(),
+                                        cachedImageResult.isExpired());
+
+    delete _lastImageURL;
+    _lastImageURL = new URL(url);
+  }
+
+  return IImageResult(cachedImage,
+                      cachedImageResult.isExpired());
+}
+
+long long CachedDownloader::requestImage(const URL& url,
+                                         long long priority,
+                                         const TimeInterval& timeToCache,
+                                         bool readExpired,
+                                         IImageDownloadListener* listener,
+                                         bool deleteListener) {
+  _requestsCounter++;
+
+  IImageResult cachedImageResult = getCachedImageResult(url, readExpired);
+  IImage* cachedImage = cachedImageResult.getImage();
+
+  if (cachedImage != NULL && !cachedImageResult.isExpired()) {
+    // cache hit
+    _cacheHitsCounter++;
+
+    listener->onDownload(url, cachedImage, false);
+
+    if (deleteListener) {
+      delete listener;
+    }
+
+    return -1;
+  }
+
+  // cache miss
+  return _downloader->requestImage(url,
+                                   priority,
+                                   TimeInterval::zero(),
+                                   false,
+                                   new ImageSaverDownloadListener(this,
+                                                                  cachedImage,
+                                                                  listener,
+                                                                  deleteListener,
+                                                                  _storage,
+                                                                  timeToCache),
+                                   true);
+
+}
+
+long long CachedDownloader::requestBuffer(const URL& url,
+                                          long long priority,
+                                          const TimeInterval& timeToCache,
+                                          bool readExpired,
+                                          IBufferDownloadListener* listener,
+                                          bool deleteListener) {
+
+  _requestsCounter++;
+
+  IByteBufferResult cachedBufferResult = _storage->isAvailable()
+  /*                                         */ ? _storage->readBuffer(url, readExpired)
+  /*                                         */ : IByteBufferResult(NULL, false);
+
+  IByteBuffer* cachedBuffer = cachedBufferResult.getBuffer();
+
+  if (cachedBuffer != NULL && !cachedBufferResult.isExpired()) {
+    // cache hit
+    _cacheHitsCounter++;
+
+    listener->onDownload(url, cachedBuffer, false);
+
+    if (deleteListener) {
+      delete listener;
+    }
+
+    return -1;
+  }
+
+  // cache miss
+  return _downloader->requestBuffer(url,
+                                    priority,
+                                    TimeInterval::zero(),
+                                    false,
+                                    new BufferSaverDownloadListener(this,
+                                                                    cachedBuffer,
+                                                                    listener,
+                                                                    deleteListener,
+                                                                    _storage,
+                                                                    timeToCache),
+                                    true);
 }

@@ -62,6 +62,7 @@ public:
            const bool isTransparent,
            LayerCondition* condition,
            const TimeInterval& timeToCache,
+           bool readExpired,
            const LayerTilesRenderParameters* parameters = NULL);
 
   WMSLayer(const std::string& mapLayer,
@@ -74,14 +75,12 @@ public:
            const bool isTransparent,
            LayerCondition* condition,
            const TimeInterval& timeToCache,
+           bool readExpired,
            const LayerTilesRenderParameters* parameters = NULL);
+
 
   std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
                                                 const Tile* tile) const;
-
-  //  bool isTransparent() const{
-  //    return _isTransparent;
-  //  }
 
   URL getFeatureInfoURL(const Geodetic2D& g,
                         const Sector& sector) const;

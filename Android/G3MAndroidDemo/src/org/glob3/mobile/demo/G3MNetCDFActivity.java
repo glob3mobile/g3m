@@ -220,7 +220,8 @@ public class G3MNetCDFActivity
 
                @Override
                public void onDownload(final URL url,
-                                      final IByteBuffer buffer) {
+                                      final IByteBuffer buffer,
+                                      final boolean expired) {
 
                   //                  final String response = buffer.getAsString();
                   //                  final IJSONParser parser = new JSONParser_Android();
@@ -286,28 +287,28 @@ public class G3MNetCDFActivity
 
                @Override
                public void onError(final URL url) {
-                  // TODO Auto-generated method stub
-
                }
 
 
                @Override
                public void onCancel(final URL url) {
-                  // TODO Auto-generated method stub
-
                }
 
 
                @Override
                public void onCanceledDownload(final URL url,
-                                              final IByteBuffer data) {
-                  // TODO Auto-generated method stub
-
+                                              final IByteBuffer data,
+                                              final boolean expired) {
                }
 
             };
-            downloader.requestBuffer(new URL("file:///ACCESS-A.2011020104.nc3.slice10.bson", false), 0, TimeInterval.forever(),
-                     listener, false);
+            downloader.requestBuffer( //
+                     new URL("file:///ACCESS-A.2011020104.nc3.slice10.bson", false), //
+                     0, //
+                     TimeInterval.forever(), //
+                     true, //
+                     listener, //
+                     false);
          }
 
 
@@ -347,7 +348,8 @@ public class G3MNetCDFActivity
 
                @Override
                public void onDownload(final URL url,
-                                      final IByteBuffer buffer) {
+                                      final IByteBuffer buffer,
+                                      final boolean expired) {
 
 
                   final String response = buffer.getAsString();
@@ -417,23 +419,25 @@ public class G3MNetCDFActivity
 
                @Override
                public void onCanceledDownload(final URL url,
-                                              final IByteBuffer data) {
-                  // TODO Auto-generated method stub
-
+                                              final IByteBuffer data,
+                                              final boolean expired) {
                }
 
 
                @Override
                public void onCancel(final URL url) {
-                  // TODO Auto-generated method stub
-
                }
             };
 
             //            downloader.requestBuffer(new URL("http://csiro.glob3mobile.com/yassiDebug.json", false), 0, TimeInterval.forever(),
             //                     listener, false);
-            downloader.requestBuffer(new URL("http://csiro.glob3mobile.com/ACCESS-A.2011020104.nc13slice10.json", false), 0,
-                     TimeInterval.forever(), listener, false);
+            downloader.requestBuffer( //
+                     new URL("http://csiro.glob3mobile.com/ACCESS-A.2011020104.nc13slice10.json", false), //
+                     0, //
+                     TimeInterval.forever(), //
+                     true, //
+                     listener, //
+                     false);
          }
 
 
@@ -466,7 +470,8 @@ public class G3MNetCDFActivity
 
                @Override
                public void onDownload(final URL url,
-                                      final IByteBuffer buffer) {
+                                      final IByteBuffer buffer,
+                                      final boolean expired) {
 
 
                   final String response = buffer.getAsString();
@@ -531,29 +536,29 @@ public class G3MNetCDFActivity
 
                @Override
                public void onError(final URL url) {
-                  // TODO Auto-generated method stub
-
                }
 
 
                @Override
                public void onCancel(final URL url) {
-                  // TODO Auto-generated method stub
-
                }
 
 
                @Override
                public void onCanceledDownload(final URL url,
-                                              final IByteBuffer data) {
-                  // TODO Auto-generated method stub
-
+                                              final IByteBuffer data,
+                                              final boolean expired) {
                }
 
             };
 
-            downloader.requestBuffer(new URL("http://csiro.glob3mobile.com/21.periods.json", false), 0, TimeInterval.forever(),
-                     listener, false);
+            downloader.requestBuffer( //
+                     new URL("http://csiro.glob3mobile.com/21.periods.json", false), //
+                     0, //
+                     TimeInterval.forever(), //
+                     true, //
+                     listener, //
+                     false);
          }
 
 
@@ -586,7 +591,8 @@ public class G3MNetCDFActivity
 
                @Override
                public void onDownload(final URL url,
-                                      final IByteBuffer buffer) {
+                                      final IByteBuffer buffer,
+                                      final boolean expired) {
 
 
                   final String response = buffer.getAsString();
@@ -638,29 +644,29 @@ public class G3MNetCDFActivity
 
                @Override
                public void onError(final URL url) {
-                  // TODO Auto-generated method stub
-
                }
 
 
                @Override
                public void onCancel(final URL url) {
-                  // TODO Auto-generated method stub
-
                }
 
 
                @Override
                public void onCanceledDownload(final URL url,
-                                              final IByteBuffer data) {
-                  // TODO Auto-generated method stub
-
+                                              final IByteBuffer data,
+                                              final boolean expired) {
                }
 
             };
 
-            downloader.requestBuffer(new URL("http://csiro.glob3mobile.com/21.periods.json", false), 0, TimeInterval.forever(),
-                     listener, false);
+            downloader.requestBuffer( //
+                     new URL("http://csiro.glob3mobile.com/21.periods.json", false), //
+                     0, //
+                     TimeInterval.forever(), //
+                     true, //
+                     listener, //
+                     false);
          }
 
 

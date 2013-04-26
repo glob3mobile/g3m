@@ -33,13 +33,13 @@ public abstract class TMSLayer extends Layer
   private final boolean _isTransparent;
 
 
-  public TMSLayer(String mapLayer, URL mapServerURL, Sector sector, String format, String srs, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache)
+  public TMSLayer(String mapLayer, URL mapServerURL, Sector sector, String format, String srs, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired)
   {
-     this(mapLayer, mapServerURL, sector, format, srs, isTransparent, condition, timeToCache, null);
+     this(mapLayer, mapServerURL, sector, format, srs, isTransparent, condition, timeToCache, readExpired, null);
   }
-  public TMSLayer(String mapLayer, URL mapServerURL, Sector sector, String format, String srs, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, LayerTilesRenderParameters parameters)
+  public TMSLayer(String mapLayer, URL mapServerURL, Sector sector, String format, String srs, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters)
   {
-     super(condition, mapLayer, timeToCache, (parameters == null) ? LayerTilesRenderParameters.createDefaultNonMercator(sector) : parameters);
+     super(condition, mapLayer, timeToCache, readExpired, (parameters == null) ? LayerTilesRenderParameters.createDefaultNonMercator(sector) : parameters);
      _mapServerURL = mapServerURL;
      _mapLayer = mapLayer;
      _sector = new Sector(sector);
@@ -73,7 +73,7 @@ public abstract class TMSLayer extends Layer
   
     ILogger.instance().logInfo(isb.getString());
   
-    Petition petition = new Petition(tileSector, new URL(isb.getString(), false), getTimeToCache(), _isTransparent);
+    Petition petition = new Petition(tileSector, new URL(isb.getString(), false), getTimeToCache(), getReadExpired(), _isTransparent);
     petitions.add(petition);
   
      return petitions;

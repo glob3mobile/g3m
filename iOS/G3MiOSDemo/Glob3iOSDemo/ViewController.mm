@@ -594,6 +594,7 @@ public:
                                         //new LevelTileCondition(0, 6),
                                         NULL,
                                         TimeInterval::fromDays(30),
+                                        true,
                                         new LayerTilesRenderParameters(Sector::fullSphere(),
                                                                        2,
                                                                        4,
@@ -629,11 +630,14 @@ public:
                                       "EPSG:4326",
                                       "",
                                       false,
-                                      new LevelTileCondition(4, 19),
+                                      new LevelTileCondition(2, 19),
+                                      //NULL,
                                       TimeInterval::fromDays(30),
+                                      true,
                                       new LayerTilesRenderParameters(Sector::fullSphere(),
-                                                                     2,4,0,19,
-                                                                     Vector2I(256,256),
+                                                                     2, 4,
+                                                                     0, 19,
+                                                                     LayerTilesRenderParameters::defaultTileTextureResolution(),
                                                                      LayerTilesRenderParameters::defaultTileMeshResolution(),
                                                                      false));
     layerSet->addLayer(ortoAyto);
@@ -650,7 +654,8 @@ public:
                                         "",
                                         false,
                                         new LevelTileCondition(0, 5),
-                                        TimeInterval::fromDays(30));
+                                        TimeInterval::fromDays(30),
+                                        true);
     layerSet->addLayer(blueMarble);
     
     
@@ -665,7 +670,8 @@ public:
                                   "",
                                   false,
                                   new LevelTileCondition(6, 500),
-                                  TimeInterval::fromDays(30));
+                                  TimeInterval::fromDays(30),
+                                  true);
     layerSet->addLayer(bing);
   }
   
@@ -679,7 +685,8 @@ public:
                                        "countryboundaries",
                                        true,
                                        NULL,
-                                       TimeInterval::fromDays(30));
+                                       TimeInterval::fromDays(30),
+                                       true);
     layerSet->addLayer(political);
   }
   
@@ -695,7 +702,8 @@ public:
                                  "",
                                  false,
                                  NULL,
-                                 TimeInterval::fromDays(30));
+                                 TimeInterval::fromDays(30),
+                                 true);
     // osm->setEnable(false);
     
     layerSet->addLayer(osm);
@@ -725,7 +733,8 @@ public:
                                   "",
                                   true,
                                   NULL,
-                                  TimeInterval::fromDays(30));
+                                  TimeInterval::fromDays(30),
+                                  true);
     layerSet->addLayer(pnoa);
   }
   
@@ -740,7 +749,8 @@ public:
                                   "",
                                   true,
                                   NULL,
-                                  TimeInterval::fromDays(30));
+                                  TimeInterval::fromDays(30),
+                                  true);
     layerSet->addLayer(ayto);
     
   }
@@ -779,7 +789,8 @@ public:
                                       "", //
                                       true, //
                                       NULL, //
-                                      TimeInterval::fromDays(30));
+                                      TimeInterval::fromDays(30),
+                                      true);
     
     class CatastroTerrainTouchEventListener : public TerrainTouchEventListener {
     public:
@@ -804,7 +815,7 @@ public:
 
 - (TilesRenderParameters*) createTileRenderParameters
 {
-  const bool renderDebug = true;
+  const bool renderDebug = false;
   const bool useTilesSplitBudget = true;
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
@@ -1079,7 +1090,7 @@ public:
     delete srcRs[i];
     delete destRs[i];
   }
-  
+
   return shapesRenderer;
 }
 
@@ -1255,8 +1266,8 @@ public:
   }
   
   void onDownload(const URL& url,
-                  IByteBuffer* buffer) {
-    
+                  IByteBuffer* buffer,
+                  bool expired) {
     const ElevationData* elevationData = BilParser::parseBil16(_sector,
                                                                _extent,
                                                                0,
@@ -1367,8 +1378,8 @@ public:
   }
   
   void onCanceledDownload(const URL& url,
-                          IByteBuffer* data) {
-    
+                          IByteBuffer* data,
+                          bool expired) {
   }
   
 };
@@ -1585,8 +1596,8 @@ public:
       canvas->setStrokeWidth(1.1f);
       canvas->setStrokeColor( Color::fromRGBA(0, 0, 0, 0.9) );
       canvas->fillAndStrokeRoundedRectangle(128, 16, 64, 64, 8);
-      
-      int __DGD_working_at_Canvas;
+
+      int _DGD_working_on_Canvas;
       
       canvas->setFillColor( Color::white() );
       canvas->setShadow(Color::black(), 5, 1, -1);

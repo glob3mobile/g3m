@@ -290,8 +290,8 @@ void G3MWidget::onResizeViewportEvent(int width, int height) {
 
     _nextCamera->resizeViewport(width, height);
 
-       _nextCamera->resizeViewport(width, height);
-      
+    // _nextCamera->resizeViewport(width, height);
+
     _cameraRenderer->onResizeViewportEvent(&ec, width, height);
 
     if (_mainRenderer->isEnable()) {
@@ -346,6 +346,14 @@ void G3MWidget::render(int width, int height) {
                                 _currentCamera,
                                 _nextCamera);
   }
+
+  int __TODO_FixIt;
+  /*
+   _nextCamera->forceMatrixCalculation();
+
+   The _nextCamera is always dirty (as the getProjectionMatrix() and getModelMatrix() are not called if render() is not called).  When the _nextCamera got copied into _currentCamera, the _currentCamera is always dirty, forcing the same calculation in every frame.
+   */
+
   _currentCamera->copyFrom(*_nextCamera);
 
   G3MRenderContext rc(_frameTasksExecutor,

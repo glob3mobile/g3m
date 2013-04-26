@@ -29,17 +29,21 @@ public class OSMLayer extends MercatorTiledLayer
     return result;
   }
 
-  public OSMLayer(TimeInterval timeToCache, int initialLevel)
+  public OSMLayer(TimeInterval timeToCache, boolean readExpired, int initialLevel)
   {
-     this(timeToCache, initialLevel, null);
+     this(timeToCache, readExpired, initialLevel, null);
+  }
+  public OSMLayer(TimeInterval timeToCache, boolean readExpired)
+  {
+     this(timeToCache, readExpired, 2, null);
   }
   public OSMLayer(TimeInterval timeToCache)
   {
-     this(timeToCache, 2, null);
+     this(timeToCache, true, 2, null);
   }
-  public OSMLayer(TimeInterval timeToCache, int initialLevel, LayerCondition condition)
+  public OSMLayer(TimeInterval timeToCache, boolean readExpired, int initialLevel, LayerCondition condition)
   {
-     super("OpenStreetMap", "http://", "tile.openstreetmap.org", getSubdomains(), "png", timeToCache, Sector.fullSphere(), initialLevel, 18, condition);
+     super("OpenStreetMap", "http://", "tile.openstreetmap.org", getSubdomains(), "png", timeToCache, readExpired, Sector.fullSphere(), initialLevel, 18, condition);
 
   }
 

@@ -139,7 +139,7 @@ public class TileTextureBuilder extends RCObject
 
       //      printf("%s\n", petition->getURL().getPath().c_str());
 
-      final long requestId = _downloader.requestImage(new URL(petition.getURL()), priority, petition.getTimeToCache(), new BuilderDownloadStepDownloadListener(this, i), true);
+      final long requestId = _downloader.requestImage(new URL(petition.getURL()), priority, petition.getTimeToCache(), petition.getReadExpired(), new BuilderDownloadStepDownloadListener(this, i), true);
       if (requestId >= 0)
       {
         _requestsIds.add(requestId);

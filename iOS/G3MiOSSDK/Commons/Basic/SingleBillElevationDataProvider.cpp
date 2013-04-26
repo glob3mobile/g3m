@@ -56,7 +56,8 @@ public:
   }
   
   void onDownload(const URL& url,
-                  IByteBuffer* buffer) {
+                  IByteBuffer* buffer,
+                  bool expired) {
     const Vector2I resolution(_resolutionWidth, _resolutionHeight);
     
     ElevationData* elevationData = BilParser::parseBil16(_sector, resolution, (short)_noDataValue, -9999, buffer);
@@ -75,8 +76,8 @@ public:
   }
   
   void onCanceledDownload(const URL& url,
-                          IByteBuffer* data) {
-    
+                          IByteBuffer* data,
+                          bool expired) {
   }
 };
 
@@ -96,6 +97,7 @@ void SingleBillElevationDataProvider::initialize(const G3MContext* context) {
     context->getDownloader()->requestBuffer(_bilUrl,
                                             2000000000,
                                             TimeInterval::fromDays(30),
+                                            true,
                                             new SingleBillElevationDataProvider_BufferDownloadListener(this,
                                                                                                        _sector,
                                                                                                        _resolutionWidth,

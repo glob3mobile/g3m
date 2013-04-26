@@ -139,6 +139,14 @@ public class G3MWidget
       ICameraConstrainer constrainer = _cameraConstrainers.get(i);
       constrainer.onCameraChange(_planet, _currentCamera, _nextCamera);
     }
+  
+    int __TODO_FixIt;
+    /*
+     _nextCamera->forceMatrixCalculation();
+  
+     The _nextCamera is always dirty (as the getProjectionMatrix() and getModelMatrix() are not called if render() is not called).  When the _nextCamera got copied into _currentCamera, the _currentCamera is always dirty, forcing the same calculation in every frame.
+     */
+  
     _currentCamera.copyFrom(_nextCamera);
   
     G3MRenderContext rc = new G3MRenderContext(_frameTasksExecutor, IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _gl, _currentCamera, _nextCamera, _texturesHandler, _textureBuilder, _downloader, _effectsScheduler, IFactory.instance().createTimer(), _storage);
@@ -313,7 +321,7 @@ public class G3MWidget
   
       _nextCamera.resizeViewport(width, height);
   
-         _nextCamera.resizeViewport(width, height);
+      // _nextCamera->resizeViewport(width, height);
   
       _cameraRenderer.onResizeViewportEvent(ec, width, height);
   

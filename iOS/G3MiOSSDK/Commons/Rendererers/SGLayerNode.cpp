@@ -20,19 +20,20 @@
 #define TEXTURES_DOWNLOAD_PRIORITY 1000000
 
 
-class ImageDownloadListener : public IImageDownloadListener {
+class SGLayerNode_ImageDownloadListener : public IImageDownloadListener {
 private:
   SGLayerNode* _layerNode;
 
 public:
-  ImageDownloadListener(SGLayerNode* layerNode) :
+  SGLayerNode_ImageDownloadListener(SGLayerNode* layerNode) :
   _layerNode(layerNode)
   {
 
   }
 
   void onDownload(const URL& url,
-                  IImage* image) {
+                  IImage* image,
+                  bool expired) {
     _layerNode->onImageDownload(image);
   }
 
@@ -46,7 +47,8 @@ public:
   }
 
   void onCanceledDownload(const URL& url,
-                          IImage* image) {
+                          IImage* image,
+                          bool expired) {
 
   }
 };
@@ -77,7 +79,8 @@ void SGLayerNode::requestImage(const G3MRenderContext* rc) {
   rc->getDownloader()->requestImage(getURL(),
                                     TEXTURES_DOWNLOAD_PRIORITY,
                                     TimeInterval::fromDays(30),
-                                    new ImageDownloadListener(this),
+                                    true,
+                                    new SGLayerNode_ImageDownloadListener(this),
                                     true);
 }
 

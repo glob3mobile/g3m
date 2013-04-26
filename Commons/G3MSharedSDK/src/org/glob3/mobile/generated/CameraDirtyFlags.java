@@ -31,7 +31,7 @@ public class CameraDirtyFlags
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  CameraDirtyFlags operator =(CameraDirtyFlags that);
 
-  public boolean _frustumData;
+  public boolean _frustumDataDirty;
   public boolean _projectionMatrix;
   public boolean _modelMatrix;
   public boolean _modelViewMatrix;
@@ -50,7 +50,7 @@ public class CameraDirtyFlags
 
   public final void copyFrom(CameraDirtyFlags other)
   {
-    _frustumData = other._frustumData;
+     _frustumDataDirty = other._frustumDataDirty;
     _projectionMatrix = other._projectionMatrix;
     _modelMatrix = other._modelMatrix;
     _modelViewMatrix = other._modelViewMatrix;
@@ -65,7 +65,7 @@ public class CameraDirtyFlags
 
   public CameraDirtyFlags(CameraDirtyFlags other)
   {
-    _frustumData = other._frustumData;
+     _frustumDataDirty = other._frustumDataDirty;
     _projectionMatrix = other._projectionMatrix;
     _modelMatrix = other._modelMatrix;
     _modelViewMatrix = other._modelViewMatrix;
@@ -81,7 +81,7 @@ public class CameraDirtyFlags
   {
     String d = "";
 
-    if (_frustumData)
+    if (_frustumDataDirty)
        d+= "FD ";
     if (_projectionMatrix)
        d += "PM ";
@@ -108,7 +108,7 @@ public class CameraDirtyFlags
 
   public final void setAll(boolean value)
   {
-    _frustumData = value;
+     _frustumDataDirty = value;
     _projectionMatrix = value;
     _modelMatrix = value;
     _modelViewMatrix = value;
