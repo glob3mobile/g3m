@@ -233,8 +233,6 @@ public class Frustum
 
   public final boolean touchesWithBox(Box box)
   {
-    boolean outside;
-  
     // test first if frustum extent intersect with box
     if (!getExtent().touchesBox(box))
     {
@@ -243,69 +241,83 @@ public class Frustum
   
     final java.util.ArrayList<Vector3F> corners = box.getCornersF();
   
+    boolean outside;
+  
     // test with left plane
     outside = true;
-    for (int i = 0; i<8; i++)
-      if (_leftPlane.signedDistance(corners.get(i))<0)
+    for (int i = 0; i < 8; i++)
+    {
+      if (_leftPlane.signedDistance(corners.get(i)) < 0)
       {
         outside = false;
         break;
       }
+    }
     if (outside)
        return false;
   
     // test with bottom plane
     outside = true;
-    for (int i = 0; i<8; i++)
-      if (_bottomPlane.signedDistance(corners.get(i))<0)
+    for (int i = 0; i < 8; i++)
+    {
+      if (_bottomPlane.signedDistance(corners.get(i)) < 0)
       {
         outside = false;
         break;
       }
+    }
     if (outside)
        return false;
   
     // test with right plane
     outside = true;
-    for (int i = 0; i<8; i++)
-      if (_rightPlane.signedDistance(corners.get(i))<0)
+    for (int i = 0; i < 8; i++)
+    {
+      if (_rightPlane.signedDistance(corners.get(i)) < 0)
       {
         outside = false;
         break;
       }
+    }
     if (outside)
        return false;
   
     // test with top plane
     outside = true;
-    for (int i = 0; i<8; i++)
-      if (_topPlane.signedDistance(corners.get(i))<0)
+    for (int i = 0; i < 8; i++)
+    {
+      if (_topPlane.signedDistance(corners.get(i)) < 0)
       {
         outside = false;
         break;
       }
+    }
     if (outside)
        return false;
   
     // test with near plane
     outside = true;
-    for (int i = 0; i<8; i++)
-      if (_nearPlane.signedDistance(corners.get(i))<0)
+    for (int i = 0; i < 8; i++)
+    {
+      if (_nearPlane.signedDistance(corners.get(i)) < 0)
       {
         outside = false;
         break;
       }
+    }
     if (outside)
        return false;
   
     // test with far plane
     outside = true;
-    for (int i = 0; i<8; i++)
-      if (_farPlane.signedDistance(corners.get(i))<0)
+    for (int i = 0; i < 8; i++)
+    {
+      if (_farPlane.signedDistance(corners.get(i)) < 0)
       {
         outside = false;
         break;
       }
+    }
     if (outside)
        return false;
   
