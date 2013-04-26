@@ -446,7 +446,7 @@ private:
 //                       bottom, top,
 //                       znear, zfar);
 
-    int __Testing_new_zNear_xFar_politic;
+    int __Testing_new_zNear_zFar_politic;
 
     const double height = getGeodeticPosition().height();
     const double zNear = height * 0.1;
