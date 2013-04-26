@@ -224,7 +224,6 @@ public:
   
   ElevationData* createElevationDataSubviewFromAncestor(Tile* ancestor) const;
 
-
 };
 
 #endif

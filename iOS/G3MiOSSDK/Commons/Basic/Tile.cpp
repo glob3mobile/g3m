@@ -90,10 +90,8 @@ Tile::~Tile() {
   _elevationData = NULL;
   
   if (_elevationDataListener != NULL){
-    _elevationDataListener->cancelRequest();
-    delete _elevationDataListener;
+    _elevationDataListener->cancelRequest(); //The listener will auto delete
     _elevationDataListener = NULL;
-    
   }
 }
 
@@ -749,7 +747,9 @@ void Tile::ancestorChangedElevationData(Tile* ancestor){
   
   if (ancestor->getLevel() > _elevationDataLevel){
     ElevationData* subView = createElevationDataSubviewFromAncestor(ancestor);
-    setElevationData(subView, ancestor->getLevel());
+    if (subView != NULL){
+      setElevationData(subView, ancestor->getLevel());
+    }
   }
   
   if (_subtiles != NULL) {
@@ -763,6 +763,16 @@ void Tile::ancestorChangedElevationData(Tile* ancestor){
 
 ElevationData* Tile::createElevationDataSubviewFromAncestor(Tile* ancestor) const{
   ElevationData* ed = ancestor->getElevationData();
+  
+  if (ed == NULL){
+    ILogger::instance()->logError("Ancestor can't have undefined Elevation Data.");
+    return NULL;
+  }
+  
+  if (ed->getExtentWidth() < 1 || ed->getExtentHeight() < 1){
+    ILogger::instance()->logWarning("Tile too small for ancestor elevation data.");
+    return NULL;
+  }
   
   if (_lastElevationDataProvider != NULL && _lastTileMeshResolutionX > 0 && _lastTileMeshResolutionY > 0 ){
     ElevationData* subView = _lastElevationDataProvider->createSubviewOfElevationData(ed,

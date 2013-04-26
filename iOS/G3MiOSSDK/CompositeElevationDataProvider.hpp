@@ -32,6 +32,11 @@ private:
   
   class CompositeElevationDataProvider_Request: public IElevationDataListener{
     
+    ElevationDataProvider* _currentRequestEDP;
+    long long _currentRequestID;
+    CompositeElevationDataProvider* const _compProvider;
+    
+    bool _hasBeenCanceled;
     
   public:
     
@@ -40,16 +45,10 @@ private:
     const bool _autodelete;
     const Vector2I _resolution;
     const Sector& _sector;
-    ElevationDataProvider* _currentRequestEDP;
-    long long _currentRequestID;
-    CompositeElevationDataProvider* const _compProvider;
     
     std::vector<ElevationDataProvider*> _providers;
     
     ElevationDataProvider* popBestProvider(std::vector<ElevationDataProvider*>& ps, const Vector2I& resolution) const;
-    
-//    void respondToListener();
-
     
     CompositeElevationDataProvider_Request(CompositeElevationDataProvider* provider,
                                            const Sector& sector,

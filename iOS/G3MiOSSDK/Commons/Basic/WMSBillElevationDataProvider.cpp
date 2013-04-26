@@ -17,6 +17,7 @@
 #include "TimeInterval.hpp"
 #include "IBufferDownloadListener.hpp"
 #include "BilParser.hpp"
+#include "SubviewElevationData.hpp"
 
 
 class WMSBillElevationDataProvider_BufferDownloadListener : public IBufferDownloadListener {
@@ -102,10 +103,12 @@ const long long WMSBillElevationDataProvider::requestElevationData(const Sector&
     ILogger::instance()->logError("WMSBillElevationDataProvider was not initialized.");
     return -1;
   }
-
+  
+  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  
+/*
   // http://data.worldwind.arc.nasa.gov/elev?REQUEST=GetMap&SERVICE=WMS&VERSION=1.3.0&LAYERS=srtm30&STYLES=&FORMAT=image/bil&CRS=EPSG:4326&BBOX=-180.0,-90.0,180.0,90.0&WIDTH=10&HEIGHT=10
 
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
 
   isb->addString("http://data.worldwind.arc.nasa.gov/elev?");
   isb->addString("REQUEST=GetMap");
@@ -115,7 +118,10 @@ const long long WMSBillElevationDataProvider::requestElevationData(const Sector&
   isb->addString("&STYLES=");
   isb->addString("&FORMAT=image/bil");
   isb->addString("&CRS=EPSG:4326");
-
+*/
+  
+  isb->addString(_url.getPath());
+  
   isb->addString("&BBOX=");
   isb->addDouble(sector.lower().latitude()._degrees);
   isb->addString(",");
@@ -150,4 +156,14 @@ const long long WMSBillElevationDataProvider::requestElevationData(const Sector&
 
 void WMSBillElevationDataProvider::cancelRequest(const long long requestId) {
   _downloader->cancelRequest(requestId);
+}
+
+ElevationData* WMSBillElevationDataProvider::createSubviewOfElevationData(ElevationData* elevationData,
+                                            const Sector& sector,
+                                            const Vector2I& resolution) const{
+  return new SubviewElevationData(elevationData,
+                                  false,
+                                  sector,
+                                  resolution,
+                                  false);
 }

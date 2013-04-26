@@ -22,6 +22,11 @@ ElevationData(sector, resolution),
 _elevationData(elevationData),
 _ownsElevationData(ownsElevationData)
 {
+  if (_elevationData == NULL || _elevationData->getExtentWidth() < 1 || _elevationData->getExtentHeight() < 1){
+    ILogger::instance()->logError("SubviewElevationData can't subview given elevation data.");
+    return;
+  }
+  
   _hasNoData = false;
   if (useDecimation) {
     _buffer = createDecimatedBuffer();

@@ -13,15 +13,22 @@
 #include <stddef.h>
 
 #include "Vector2I.hpp"
+#include "URL.hpp"
+#include "Sector.hpp"
 
 class IDownloader;
 
 class WMSBillElevationDataProvider : public ElevationDataProvider {
 private:
   IDownloader* _downloader;
+  URL          _url;
+  Sector       _sector;
 
 public:
-  WMSBillElevationDataProvider() :
+  WMSBillElevationDataProvider(const URL& url,
+                               const Sector& sector) :
+  _url(url),
+  _sector(sector),
   _downloader(NULL) {
 
   }
@@ -40,8 +47,9 @@ public:
   void cancelRequest(const long long requestId);
   
   std::vector<const Sector*> getSectors() const{
-    int WORKING_JM;
-    return std::vector<const Sector*>();
+    std::vector<const Sector*> sectors;
+    sectors.push_back(&_sector);
+    return sectors;
   }
   
   Vector2I getMinResolution() const{
@@ -51,9 +59,7 @@ public:
   
   ElevationData* createSubviewOfElevationData(ElevationData* elevationData,
                                               const Sector& sector,
-                                              const Vector2I& resolution) const{
-  //TODO
-  }
+                                              const Vector2I& resolution) const;
 
 };
 
