@@ -11,24 +11,15 @@
 
 #include "TextureBuilder.hpp"
 
-class CPUTextureBuilder:public TextureBuilder {
+class CPUTextureBuilder: public TextureBuilder {
 public:
-
-  const void createTextureFromImage(GL* gl,
-                                    const IFactory* factory,
-                                    IImage* image,
-                                    const Vector2I& textureResolution,
-                                    IImageListener* listener,
-                                    bool autodelete) const;
-
-  const void createTextureFromImages(GL* gl,
-                                     const IFactory* factory,
-                                     const std::vector<IImage*>& images,
-                                     const std::vector<RectangleI*>& rectangles,
-                                     const Vector2I& textureResolution,
+  const void createTextureFromImages(const Vector2I& textureExtent,
+                                     const std::vector<const IImage*>& images,
+                                     const std::vector<RectangleF*>& srcRectangles,
+                                     const std::vector<RectangleF*>& destRectangles,
                                      IImageListener* listener,
                                      bool autodelete) const;
-
+  
 };
 
 #endif

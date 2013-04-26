@@ -2,9 +2,9 @@
 
 package org.glob3.mobile.specific;
 
-import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.GFont;
 import org.glob3.mobile.generated.ICanvas;
+import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IImageListener;
 import org.glob3.mobile.generated.Vector2F;
 
@@ -26,7 +26,8 @@ public class Canvas_Android
    private final Paint _strokePaint;
    private Typeface    _currentTypeface = null;
 
-   final private RectF _rect            = new RectF(); // RectF instance for reuse (and avoid garbage)
+   private final RectF _rectF           = new RectF(); // RectF instance for reuse (and avoid garbage)
+   private final Rect  _rect            = new Rect(); // Rect instance for reuse (and avoid garbage)
 
 
    Canvas_Android() {
@@ -37,7 +38,7 @@ public class Canvas_Android
       _strokePaint = new Paint();
       _strokePaint.setAntiAlias(true);
       _strokePaint.setStyle(Paint.Style.STROKE);
-      //_strokePaint.setARGB(0, 0, 0, 0);
+      // _strokePaint.setARGB(0, 0, 0, 0);
    }
 
 
@@ -113,7 +114,8 @@ public class Canvas_Android
 
    @Override
    protected Vector2F _textExtent(final String text) {
-      final Rect textBounds = new Rect();
+      //final Rect textBounds = new Rect();
+      final Rect textBounds = _rect;
       _fillPaint.getTextBounds(text, 0, text.length(), textBounds);
       final int width = textBounds.width();
       final int height = textBounds.height();
@@ -136,13 +138,13 @@ public class Canvas_Android
 
 
    @Override
-   protected void _setFillColor(final Color color) {
+   protected void _setFillColor(final org.glob3.mobile.generated.Color color) {
       _fillPaint.setColor(toAndroidColor(color));
    }
 
 
    @Override
-   protected void _setStrokeColor(final Color color) {
+   protected void _setStrokeColor(final org.glob3.mobile.generated.Color color) {
       _strokePaint.setColor(toAndroidColor(color));
    }
 
@@ -154,7 +156,7 @@ public class Canvas_Android
 
 
    @Override
-   protected void _setShadow(final Color color,
+   protected void _setShadow(final org.glob3.mobile.generated.Color color,
                              final float blur,
                              final float offsetX,
                              final float offsetY) {
@@ -204,8 +206,8 @@ public class Canvas_Android
                                         final float width,
                                         final float height,
                                         final float radius) {
-      _rect.set(left, top, left + width, top + height);
-      _canvas.drawRoundRect(_rect, radius, radius, _fillPaint);
+      _rectF.set(left, top, left + width, top + height);
+      _canvas.drawRoundRect(_rectF, radius, radius, _fillPaint);
    }
 
 
@@ -215,8 +217,8 @@ public class Canvas_Android
                                           final float width,
                                           final float height,
                                           final float radius) {
-      _rect.set(left, top, left + width, top + height);
-      _canvas.drawRoundRect(_rect, radius, radius, _strokePaint);
+      _rectF.set(left, top, left + width, top + height);
+      _canvas.drawRoundRect(_rectF, radius, radius, _strokePaint);
    }
 
 
@@ -226,9 +228,9 @@ public class Canvas_Android
                                                  final float width,
                                                  final float height,
                                                  final float radius) {
-      _rect.set(left, top, left + width, top + height);
-      _canvas.drawRoundRect(_rect, radius, radius, _fillPaint);
-      _canvas.drawRoundRect(_rect, radius, radius, _strokePaint);
+      _rectF.set(left, top, left + width, top + height);
+      _canvas.drawRoundRect(_rectF, radius, radius, _fillPaint);
+      _canvas.drawRoundRect(_rectF, radius, radius, _strokePaint);
    }
 
 
@@ -237,6 +239,80 @@ public class Canvas_Android
                             final float left,
                             final float top) {
       _canvas.drawText(text, left, top, _fillPaint);
+   }
+
+
+   @Override
+   protected void _drawImage(final IImage image,
+                             final float left,
+                             final float top) {
+      final Bitmap bitmap = ((Image_Android) image).getBitmap();
+      _canvas.drawBitmap(bitmap, left, top, null);
+   }
+
+
+   @Override
+   protected void _drawImage(final IImage image,
+                             final float left,
+                             final float top,
+                             final float width,
+                             final float height) {
+      final Bitmap bitmap = ((Image_Android) image).getBitmap();
+
+      //      final RectF dst = new RectF( //
+      //               left, //
+      //               top, //
+      //               left + width, // Right
+      //               top + height); // Bottom
+
+      final RectF dst = _rectF;
+      dst.set(left, //
+               top, //
+               left + width, // Right
+               top + height); // Bottom
+
+      _canvas.drawBitmap(bitmap, null, dst, null);
+   }
+
+
+   @Override
+   protected void _drawImage(final IImage image,
+                             final float srcLeft,
+                             final float srcTop,
+                             final float srcWidth,
+                             final float srcHeight,
+                             final float destLeft,
+                             final float destTop,
+                             final float destWidth,
+                             final float destHeight) {
+      //ILogger.instance().logError("RECT: %f, %f, %f, %f - %f, %f, %f, %f ", srcLeft, srcTop, srcWidth, srcHeight, destLeft, destTop, destWidth, destHeight);
+      final Bitmap bitmap = ((Image_Android) image).getBitmap();
+
+      //      final RectF dst = new RectF( //
+      //               destLeft, //
+      //               destTop, //
+      //               destLeft + destWidth, // Right
+      //               destTop + destHeight); // Bottom
+
+      final RectF dst = _rectF;
+      dst.set(destLeft, //
+               destTop, //
+               destLeft + destWidth, // Right
+               destTop + destHeight); // Bottom
+
+      //      final Rect src = new Rect( //
+      //               Math.round(srcLeft), //
+      //               Math.round(srcTop), //
+      //               Math.round(srcLeft + srcWidth), // Right
+      //               Math.round(srcTop + srcHeight)); // Bottom
+
+      final Rect src = _rect;
+      src.set(Math.round(srcLeft), //
+               Math.round(srcTop), //
+               Math.round(srcLeft + srcWidth), // Right
+               Math.round(srcTop + srcHeight)); // Bottom
+
+      _canvas.drawBitmap(bitmap, src, dst, null);
    }
 
 

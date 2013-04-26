@@ -18,6 +18,7 @@ package org.glob3.mobile.generated;
 
 
 
+//class Sector_Geodetic2DCachedData;
 
 public class Sector
 {
@@ -105,9 +106,23 @@ public class Sector
      return Geodetic2D(lat, lon);*/
   }
 
+  // cached values for speed up in isBackOriented()
+  private Sector_Geodetic2DCachedData _nwData;
+  private Sector_Geodetic2DCachedData _neData;
+  private Sector_Geodetic2DCachedData _swData;
+  private Sector_Geodetic2DCachedData _seData;
+
 
   public void dispose()
   {
+    if (_nwData != null)
+       _nwData.dispose();
+    if (_neData != null)
+       _neData.dispose();
+    if (_swData != null)
+       _swData.dispose();
+    if (_seData != null)
+       _seData.dispose();
   }
 
   public Sector(Geodetic2D lower, Geodetic2D upper)
@@ -117,6 +132,10 @@ public class Sector
      _deltaLatitude = new Angle(upper.latitude().sub(lower.latitude()));
      _deltaLongitude = new Angle(upper.longitude().sub(lower.longitude()));
      _center = new Geodetic2D(Angle.midAngle(lower.latitude(), upper.latitude()), Angle.midAngle(lower.longitude(), upper.longitude()));
+     _nwData = null;
+     _neData = null;
+     _swData = null;
+     _seData = null;
   }
 
 
@@ -127,6 +146,10 @@ public class Sector
      _deltaLatitude = new Angle(sector._deltaLatitude);
      _deltaLongitude = new Angle(sector._deltaLongitude);
      _center = new Geodetic2D(sector._center);
+     _nwData = null;
+     _neData = null;
+     _swData = null;
+     _seData = null;
   }
 
   public static Sector fromDegrees(double minLat, double minLon, double maxLat, double maxLon)
@@ -406,21 +429,21 @@ public class Sector
 
   public final Vector2D getUVCoordinates(Angle latitude, Angle longitude)
   {
-    return new Vector2D(getUCoordinates(longitude), getVCoordinates(latitude));
+    return new Vector2D(getUCoordinate(longitude), getVCoordinate(latitude));
   }
 
-  public final double getUCoordinates(Angle longitude)
+  public final double getUCoordinate(Angle longitude)
   {
     return (longitude._radians - _lower.longitude()._radians) / _deltaLongitude._radians;
   }
 
-  public final double getVCoordinates(Angle latitude)
+  public final double getVCoordinate(Angle latitude)
   {
     return (_upper.latitude()._radians - latitude._radians) / _deltaLatitude._radians;
   }
 
 
-  public final boolean isBackOriented(G3MRenderContext rc, double height)
+  public final boolean isBackOriented(G3MRenderContext rc, double minHeight)
   {
     final Camera camera = rc.getCurrentCamera();
     final Planet planet = rc.getPlanet();
@@ -428,37 +451,61 @@ public class Sector
     // compute angle with normals in the four corners
     final Vector3D eye = camera.getCartesianPosition();
   
-    final Vector3D pointNW = planet.toCartesian(getNW());
-    if (planet.geodeticSurfaceNormal(pointNW).dot(eye.sub(pointNW)) > 0)
+    if (_nwData == null)
+    {
+       _nwData = new Sector_Geodetic2DCachedData(planet, getNW());
+    }
+    if (_nwData.test(eye))
     {
        return false;
     }
   
-    final Vector3D pointNE = planet.toCartesian(getNE());
-    if (planet.geodeticSurfaceNormal(pointNE).dot(eye.sub(pointNE)) > 0)
+    if (_neData == null)
+    {
+       _neData = new Sector_Geodetic2DCachedData(planet, getNE());
+    }
+    if (_neData.test(eye))
     {
        return false;
     }
   
-    final Vector3D pointSW = planet.toCartesian(getSW());
-    if (planet.geodeticSurfaceNormal(pointSW).dot(eye.sub(pointSW)) > 0)
+    if (_swData == null)
+    {
+       _swData = new Sector_Geodetic2DCachedData(planet, getSW());
+    }
+    if (_swData.test(eye))
     {
        return false;
     }
   
-    final Vector3D pointSE = planet.toCartesian(getSE());
-    if (planet.geodeticSurfaceNormal(pointSE).dot(eye.sub(pointSE)) > 0)
+    if (_seData == null)
+    {
+       _seData = new Sector_Geodetic2DCachedData(planet, getSE());
+    }
+    if (_seData.test(eye))
     {
        return false;
     }
+  
+  //  const Vector3D cartesianNW = planet->toCartesian(getNW());
+  //  if (planet->geodeticSurfaceNormal(cartesianNW).dot(eye.sub(cartesianNW)) > 0) { return false; }
+  //
+  //  const Vector3D cartesianNE = planet->toCartesian(getNE());
+  //  if (planet->geodeticSurfaceNormal(cartesianNE).dot(eye.sub(cartesianNE)) > 0) { return false; }
+  //
+  //  const Vector3D cartesianSW = planet->toCartesian(getSW());
+  //  if (planet->geodeticSurfaceNormal(cartesianSW).dot(eye.sub(cartesianSW)) > 0) { return false; }
+  //
+  //  const Vector3D cartesianSE = planet->toCartesian(getSE());
+  //  if (planet->geodeticSurfaceNormal(cartesianSE).dot(eye.sub(cartesianSE)) > 0) { return false; }
   
     // compute angle with normal in the closest point to the camera
     final Geodetic2D center = camera.getGeodeticCenterOfView().asGeodetic2D();
   
-    final Vector3D point = planet.toCartesian(getClosestPoint(center), height);
+    final Vector3D cartesianCenter = planet.toCartesian(getClosestPoint(center), minHeight);
   
     // if all the angles are higher than 90, sector is back oriented
-    return (planet.geodeticSurfaceNormal(point).dot(eye.sub(point)) <= 0);
+    return (planet.geodeticSurfaceNormal(cartesianCenter).dot(eye.sub(cartesianCenter)) <= 0);
   }
 
   public final Geodetic2D clamp(Geodetic2D position)
@@ -548,8 +595,3 @@ public class Sector
   }
 
 }
-//Vector2D Sector::getTranslationFactor(const Sector& that) const {
-//  const Vector2D uv = that.getUVCoordinates(_lower);
-//  const double scaleY = _deltaLatitude.div(that._deltaLatitude);
-//  return Vector2D(uv._x, uv._y - scaleY);
-//}

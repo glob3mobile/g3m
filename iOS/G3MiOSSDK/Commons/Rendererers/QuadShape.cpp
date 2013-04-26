@@ -55,7 +55,8 @@ public:
   }
 
   void onDownload(const URL& url,
-                  IImage* image)  {
+                  IImage* image,
+                  bool expired)  {
     _quadShape->imageDownloaded(image);
   }
 
@@ -68,7 +69,8 @@ public:
   }
 
   void onCanceledDownload(const URL& url,
-                          IImage* image)  {
+                          IImage* image,
+                          bool expired)  {
 
   }
 };
@@ -90,6 +92,7 @@ Mesh* QuadShape::createMesh(const G3MRenderContext* rc) {
       rc->getDownloader()->requestImage(_textureURL,
                                         1000000,
                                         TimeInterval::fromDays(30),
+                                        true,
                                         new QuadShape_IImageDownloadListener(this),
                                         true);
     }

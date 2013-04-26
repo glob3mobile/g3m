@@ -134,8 +134,7 @@ bool Frustum::touchesWithBox(const Box *box) const {
 }
 
 
-Extent* Frustum::computeExtent()
-{
+Extent* Frustum::computeExtent() {
   double minx=1e10, miny=1e10, minz=1e10;
   double maxx=-1e10, maxy=-1e10, maxz=-1e10;
 
@@ -173,4 +172,3 @@ Extent* Frustum::computeExtent()
 
   return new Box(Vector3D(minx, miny, minz), Vector3D(maxx, maxy, maxz));
 }
-

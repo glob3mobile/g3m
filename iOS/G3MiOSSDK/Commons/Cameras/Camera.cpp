@@ -317,3 +317,81 @@ void Camera::setPointOfView(const Geodetic3D& center,
   setUp(finalUp.asMutableVector3D());
 //  _dirtyFlags.setAll(true);
 }
+
+FrustumData Camera::calculateFrustumData() const {
+  //    // compute znear value
+  //    const double maxRadius = _planet->getRadii().maxAxis();
+  //    const double distanceToPlanetCenter = _position.length();
+  //    const double distanceToSurface = distanceToPlanetCenter - maxRadius;
+  //
+  //    double znear;
+  //    if (distanceToSurface > maxRadius/5) {
+  //      znear = maxRadius / 10;
+  //    }
+  //    else if (distanceToSurface > maxRadius/500) {
+  //      znear = maxRadius / 1e4;
+  //    }
+  //    else if (distanceToSurface > maxRadius/2000) {
+  //      znear = maxRadius / 1e5;
+  //    }
+  //    else {
+  //      znear = maxRadius / 1e6 * 3;
+  //    }
+  //
+  //    // compute zfar value
+  //    double zfar = 10000 * znear;
+  //    if (zfar > distanceToPlanetCenter) {
+  //      zfar = distanceToPlanetCenter;
+  //    }
+  //
+  //    // compute rest of frustum numbers
+  //    const double ratioScreen = (double) _height / _width;
+  //    const double right = 0.3 / ratioScreen * znear;
+  //    const double left = -right;
+  //    const double top = 0.3 * znear;
+  //    const double bottom = -top;
+  //
+  //    return FrustumData(left, right,
+  //                       bottom, top,
+  //                       znear, zfar);
+
+  int __Testing_new_zNear_zFar_politic;
+
+  const double height = getGeodeticPosition().height();
+  double zNear = height * 0.1;
+
+  double zFar = 10000 * zNear;
+  const double distance2ToPlanetCenter = _position.squaredLength();
+  if ((zFar * zFar) > distance2ToPlanetCenter) {
+    zFar = IMathUtils::instance()->sqrt(distance2ToPlanetCenter);
+  }
+
+  const double goalRatio = 1000;
+  const double ratio = zFar / zNear;
+  if (ratio < goalRatio) {
+    zNear = zFar / goalRatio;
+    //ratio = zFar / zNear;
+  }
+
+//  int __TODO_remove_debug_code;
+//  printf(">>> height=%f zNear=%f zFar=%f ratio=%f\n",
+//         height,
+//         zNear,
+//         zFar,
+//         ratio);
+
+  // compute rest of frustum numbers
+  const double _tanHalfFieldOfView = 0.3; // aprox tan(34 degrees / 2)
+
+  const double ratioScreen = (double) _height / _width;
+  const double right = _tanHalfFieldOfView / ratioScreen * zNear;
+  const double left = -right;
+  const double top = _tanHalfFieldOfView * zNear;
+  const double bottom = -top;
+
+
+  return FrustumData(left, right,
+                     bottom, top,
+                     zNear, zFar);
+}
+

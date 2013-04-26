@@ -24,6 +24,7 @@ MercatorTiledLayer::MercatorTiledLayer(const std::string&              name,
                                        const std::vector<std::string>& subdomains,
                                        const std::string&              imageFormat,
                                        const TimeInterval&             timeToCache,
+                                       bool                            readExpired,
                                        const Sector&                   sector,
                                        int                             initialLevel,
                                        int                             maxLevel,
@@ -31,6 +32,7 @@ MercatorTiledLayer::MercatorTiledLayer(const std::string&              name,
 Layer(condition,
       name,
       timeToCache,
+      readExpired,
       new LayerTilesRenderParameters(Sector::fullSphere(),
                                      1,
                                      1,
@@ -114,6 +116,7 @@ std::vector<Petition*> MercatorTiledLayer::createTileMapPetitions(const G3MRende
   petitions.push_back( new Petition(tileSector,
                                     URL(path, false),
                                     getTimeToCache(),
+                                    getReadExpired(),
                                     true) );
   
   return petitions;

@@ -81,7 +81,7 @@ public class WMSBillElevationDataProvider extends ElevationDataProvider
   
     final double noDataValue = 0;
   
-    return _downloader.requestBuffer(new URL(path, false), 2000000000, TimeInterval.fromDays(30), new WMSBillElevationDataProvider_BufferDownloadListener(sector, resolution, noDataValue, listener, autodeleteListener), true);
+    return _downloader.requestBuffer(new URL(path, false), 2000000000, TimeInterval.fromDays(30), true, new WMSBillElevationDataProvider_BufferDownloadListener(sector, resolution, noDataValue, listener, autodeleteListener), true);
   }
 
   public final void cancelRequest(long requestId)

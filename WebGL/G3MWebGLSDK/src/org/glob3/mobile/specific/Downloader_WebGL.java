@@ -86,13 +86,59 @@ public final class Downloader_WebGL
    }
 
 
+   //   @Override
+   //   public long requestBuffer(final URL url,
+   //                             final long priority,
+   //                             final TimeInterval timeToExpires,
+   //                             final IBufferDownloadListener listener,
+   //                             final boolean deleteListener) {
+   //
+   //      final long requestId;
+   //      Downloader_WebGL_Handler handler = null;
+   //      final URL proxyUrl;
+   //      final String urlPath = url.getPath();
+   //      if (urlPath.startsWith("http://") || urlPath.startsWith("https://")) {
+   //         proxyUrl = new URL(_proxy + urlPath, false);
+   //      }
+   //      else {
+   //         // assumes the URL is a relative URL to the server, no need to use proxy
+   //         proxyUrl = url;
+   //      }
+   //
+   //      _requestsCounter++;
+   //      requestId = _requestIdCounter++;
+   //      handler = _downloadingHandlers.get(proxyUrl);
+   //
+   //      if ((handler != null) && !handler.isRequestingImage()) {
+   //         // the URL is being downloaded, just add the new listener
+   //         handler.addListener(listener, priority, requestId);
+   //      }
+   //      else {
+   //         handler = _queuedHandlers.get(proxyUrl);
+   //         if ((handler != null) && !handler.isRequestingImage()) {
+   //            // the URL is queued for future download, just add the new listener
+   //            handler.addListener(listener, priority, requestId);
+   //         }
+   //         else {
+   //            // new handler, queue it
+   //            //            handler = new Downloader_WebGL_HandlerImpl(proxyUrl, listener, priority, requestId);
+   //            handler = GWT.create(Downloader_WebGL_Handler.class);
+   //            handler.init(proxyUrl, listener, priority, requestId);
+   //            _queuedHandlers.put(proxyUrl, handler);
+   //         }
+   //      }
+   //
+   //      return requestId;
+   //   }
+
+
    @Override
    public long requestBuffer(final URL url,
                              final long priority,
-                             final TimeInterval timeToExpires,
+                             final TimeInterval timeToCache,
+                             final boolean readExpired,
                              final IBufferDownloadListener listener,
                              final boolean deleteListener) {
-
       final long requestId;
       Downloader_WebGL_Handler handler = null;
       final URL proxyUrl;
@@ -135,7 +181,8 @@ public final class Downloader_WebGL
    @Override
    public long requestImage(final URL url,
                             final long priority,
-                            final TimeInterval timeToExpires,
+                            final TimeInterval timeToCache,
+                            final boolean readExpired,
                             final IImageDownloadListener listener,
                             final boolean deleteListener) {
       final long requestId;
@@ -287,5 +334,6 @@ public final class Downloader_WebGL
                           final FrameTasksExecutor frameTasksExecutor) {
 
    }
+
 
 }

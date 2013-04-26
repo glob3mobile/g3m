@@ -32,9 +32,9 @@ public class MercatorTiledLayer extends Layer
    Implementation details: http: //wiki.openstreetmap.org/wiki/Slippy_map_tilenames
    */
   
-  public MercatorTiledLayer(String name, String protocol, String domain, java.util.ArrayList<String> subdomains, String imageFormat, TimeInterval timeToCache, Sector sector, int initialLevel, int maxLevel, LayerCondition condition)
+  public MercatorTiledLayer(String name, String protocol, String domain, java.util.ArrayList<String> subdomains, String imageFormat, TimeInterval timeToCache, boolean readExpired, Sector sector, int initialLevel, int maxLevel, LayerCondition condition)
   {
-     super(condition, name, timeToCache, new LayerTilesRenderParameters(Sector.fullSphere(), 1, 1, initialLevel, maxLevel, new Vector2I(256, 256), LayerTilesRenderParameters.defaultTileMeshResolution(), true));
+     super(condition, name, timeToCache, readExpired, new LayerTilesRenderParameters(Sector.fullSphere(), 1, 1, initialLevel, maxLevel, new Vector2I(256, 256), LayerTilesRenderParameters.defaultTileMeshResolution(), true));
      _protocol = protocol;
      _domain = domain;
      _subdomains = subdomains;
@@ -104,7 +104,7 @@ public class MercatorTiledLayer extends Layer
     if (isb != null)
        isb.dispose();
   
-    petitions.add(new Petition(tileSector, new URL(path, false), getTimeToCache(), true));
+    petitions.add(new Petition(tileSector, new URL(path, false), getTimeToCache(), getReadExpired(), true));
   
     return petitions;
   }

@@ -16,6 +16,7 @@
 #include "Vector2D.hpp"
 #include "Geodetic3D.hpp"
 
+class Sector_Geodetic2DCachedData;
 
 class Sector {
 
@@ -30,9 +31,15 @@ private:
 
   const Geodetic2D getClosestPoint(const Geodetic2D& pos) const;
 
+  // cached values for speed up in isBackOriented()
+  mutable Sector_Geodetic2DCachedData* _nwData;
+  mutable Sector_Geodetic2DCachedData* _neData;
+  mutable Sector_Geodetic2DCachedData* _swData;
+  mutable Sector_Geodetic2DCachedData* _seData;
+
 public:
 
-  ~Sector() { }
+  ~Sector();
 
   Sector(const Geodetic2D& lower,
          const Geodetic2D& upper) :
@@ -41,7 +48,11 @@ public:
   _deltaLatitude(upper.latitude().sub(lower.latitude())),
   _deltaLongitude(upper.longitude().sub(lower.longitude())),
   _center(Angle::midAngle(lower.latitude(), upper.latitude()),
-          Angle::midAngle(lower.longitude(), upper.longitude()))
+          Angle::midAngle(lower.longitude(), upper.longitude())),
+  _nwData(NULL),
+  _neData(NULL),
+  _swData(NULL),
+  _seData(NULL)
   {
   }
 
@@ -51,7 +62,11 @@ public:
   _upper(sector._upper),
   _deltaLatitude(sector._deltaLatitude),
   _deltaLongitude(sector._deltaLongitude),
-  _center(sector._center)
+  _center(sector._center),
+  _nwData(NULL),
+  _neData(NULL),
+  _swData(NULL),
+  _seData(NULL)
   {
   }
 
@@ -159,20 +174,21 @@ public:
 
   Vector2D getUVCoordinates(const Angle& latitude,
                             const Angle& longitude) const {
-    return Vector2D(getUCoordinates(longitude),
-                    getVCoordinates(latitude));
+    return Vector2D(getUCoordinate(longitude),
+                    getVCoordinate(latitude));
   }
 
-  double getUCoordinates(const Angle& longitude) const {
+  double getUCoordinate(const Angle& longitude) const {
     return (longitude._radians - _lower.longitude()._radians) / _deltaLongitude._radians;
   }
 
-  double getVCoordinates(const Angle& latitude) const {
+  double getVCoordinate(const Angle& latitude) const {
     return (_upper.latitude()._radians - latitude._radians)   / _deltaLatitude._radians;
   }
 
 
-  bool isBackOriented(const G3MRenderContext *rc, double height) const;
+  bool isBackOriented(const G3MRenderContext *rc,
+                      double minHeight) const;
 
   const Geodetic2D clamp(const Geodetic2D& pos) const;
 

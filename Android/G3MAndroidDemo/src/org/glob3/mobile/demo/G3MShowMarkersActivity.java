@@ -66,7 +66,8 @@ public class G3MShowMarkersActivity
 
                @Override
                public void onDownload(final URL url,
-                                      final IByteBuffer buffer) {
+                                      final IByteBuffer buffer,
+                                      final boolean expired) {
 
                   final String response = buffer.getAsString();
                   final IJSONParser parser = new JSONParser_Android();
@@ -125,13 +126,19 @@ public class G3MShowMarkersActivity
 
                @Override
                public void onCanceledDownload(final URL url,
-                                              final IByteBuffer data) {
+                                              final IByteBuffer data,
+                                              final boolean expired) {
                   //Do Nothing
                }
             };
 
-            downloader.requestBuffer(new URL("http://openweathermap.org/data/2.1/find/city?bbox=-80,-180,80,180,4&cluster=yes",
-                     false), 0, TimeInterval.fromHours(1.0), listener, false);
+            downloader.requestBuffer( //
+                     new URL("http://openweathermap.org/data/2.1/find/city?bbox=-80,-180,80,180,4&cluster=yes", false), //
+                     0, //
+                     TimeInterval.fromHours(1.0), //
+                     false, //
+                     listener, //
+                     false);
          }
 
 

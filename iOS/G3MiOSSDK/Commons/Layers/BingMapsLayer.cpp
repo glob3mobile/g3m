@@ -25,11 +25,13 @@
 BingMapsLayer::BingMapsLayer(const std::string& imagerySet,
                              const std::string& key,
                              const TimeInterval& timeToCache,
+                             bool readExpired,
                              int initialLevel,
                              LayerCondition* condition) :
 Layer(condition,
       "BingMaps",
       timeToCache,
+      readExpired,
       NULL),
 _imagerySet(imagerySet),
 _key(key),
@@ -53,7 +55,8 @@ public:
   }
 
   void onDownload(const URL& url,
-                  IByteBuffer* buffer) {
+                  IByteBuffer* buffer,
+                  bool expired) {
     _bingMapsLayer->onDowloadMetadata(buffer);
   }
 
@@ -66,7 +69,8 @@ public:
   }
 
   void onCanceledDownload(const URL& url,
-                          IByteBuffer* data) {
+                          IByteBuffer* data,
+                          bool expired) {
     // do nothing, the request won't be cancelled
   }
 };
@@ -216,6 +220,7 @@ void BingMapsLayer::initialize(const G3MContext* context) {
   context->getDownloader()->requestBuffer(url,
                                           DownloadPriority::HIGHEST,
                                           TimeInterval::fromDays(1),
+                                          true,
                                           new BingMapsLayer_MetadataBufferDownloadListener(this),
                                           true);
 }
@@ -282,6 +287,7 @@ std::vector<Petition*> BingMapsLayer::createTileMapPetitions(const G3MRenderCont
   petitions.push_back( new Petition(tileSector,
                                     URL(path, false),
                                     getTimeToCache(),
+                                    getReadExpired(),
                                     true) );
   
   return petitions;

@@ -42,7 +42,6 @@ public:
   mutable bool _halfFrustumDirty;
   mutable bool _halfFrustumMCDirty;
 
-
   CameraDirtyFlags() {
     setAll(true);
   }
@@ -58,6 +57,7 @@ public:
     _frustumMCDirty             = other._frustumMCDirty;
     _halfFrustumDirty           = other._halfFrustumDirty;
     _halfFrustumMCDirty         = other._halfFrustumMCDirty;
+
   }
 
 
@@ -77,11 +77,10 @@ public:
 
   std::string description(){
     std::string d = "";
-
     if (_frustumDataDirty) d+= "FD ";
     if (_projectionMatrixDirty) d += "PM ";
     if (_modelMatrixDirty) d+= "MM ";
-
+    
     if (_modelViewMatrixDirty) d+= "MVM ";
     if (_cartesianCenterOfViewDirty) d += "CCV ";
     if (_geodeticCenterOfViewDirty) d+= "GCV ";
@@ -210,7 +209,7 @@ public:
     return getHalfFrustumMC();
   }
 
-//  void setPosition(const Geodetic3D& position);
+  //  void setPosition(const Geodetic3D& position);
 
   Vector3D getHorizontalVector();
 
@@ -219,7 +218,7 @@ public:
 
   void initialize(const G3MContext* context);
 
-//  void resetPosition();
+  //  void resetPosition();
 
   void setCartesianPosition(const MutableVector3D& v){
     if (!v.equalTo(_position)){
@@ -271,11 +270,10 @@ public:
   
   void forceMatrixCreation(){
     //MutableMatrix44D projectionMatrix = MutableMatrix44D::createProjectionMatrix(_frustumData);
-    getFrustumData();
-    //getProjectionMatrix();
-    //getModelMatrix();
+    //getFrustumData();
+    getProjectionMatrix();
+    getModelMatrix();
   }
-
 
 private:
   const Angle getHeading(const Vector3D& normal) const;
@@ -309,7 +307,7 @@ private:
 
     }
   };
-  
+
   CameraEffectTarget* _camEffectTarget;
 
   void applyTransform(const MutableMatrix44D& mat);
@@ -417,44 +415,8 @@ private:
     return _halfFrustumInModelCoordinates;
   }
 
-  FrustumData calculateFrustumData() const{
-    // compute znear value
-    const double maxRadius = _planet->getRadii().maxAxis();
-    const double distanceToPlanetCenter = _position.length();
-    const double distanceToSurface = distanceToPlanetCenter - maxRadius;
+  FrustumData calculateFrustumData() const;
 
-    double znear;
-    if (distanceToSurface > maxRadius/5) {
-      znear = maxRadius / 10;
-    }
-    else if (distanceToSurface > maxRadius/500) {
-      znear = maxRadius / 1e4;
-    }
-    else if (distanceToSurface > maxRadius/2000) {
-      znear = maxRadius / 1e5;
-    }
-    else {
-      znear = maxRadius / 1e6 * 3;
-    }
-
-    // compute zfar value
-    double zfar = 10000 * znear;
-    if (zfar > distanceToPlanetCenter) {
-      zfar = distanceToPlanetCenter;
-    }
-
-    // compute rest of frustum numbers
-    const double ratioScreen = (double) _height / _width;
-    const double right = 0.3 / ratioScreen * znear;
-    const double left = -right;
-    const double top = 0.3 * znear;
-    const double bottom = -top;
-    
-    return FrustumData(left, right,
-                       bottom, top,
-                       znear, zfar);
-  }
-  
   void _setGeodeticPosition(const Vector3D& pos);
 
 };

@@ -29,40 +29,44 @@ public class CachedDownloader extends IDownloader
 
   private final boolean _saveInBackground;
 
-  private IImage getCachedImage(URL url)
+  private IImageResult getCachedImageResult(URL url, boolean readExpired)
   {
-    //return _storage->isAvailable() ? _storage->readImage(url) : NULL;
-  
-  
-    if ((_lastImage != null) && (_lastImageURL != null))
+    if ((_lastImageResult != null) && (_lastImageURL != null))
     {
       if (_lastImageURL.isEqualsTo(url))
       {
         // ILogger::instance()->logInfo("Used chached image for %s", url.description().c_str());
-        return _lastImage.shallowCopy();
+        return new IImageResult(_lastImageResult.getImage().shallowCopy(), _lastImageResult.isExpired());
       }
     }
   
-    IImage cachedImage = _storage.isAvailable() ? _storage.readImage(url) : null;
+    if (!_storage.isAvailable())
+    {
+      return new IImageResult(null, false);
+    }
+  
+    IImageResult cachedImageResult = _storage.readImage(url, readExpired);
+    IImage cachedImage = cachedImageResult.getImage();
   
     if (cachedImage != null)
     {
-      if (_lastImage != null)
+      if (_lastImageResult != null)
       {
-        IFactory.instance().deleteImage(_lastImage);
+        IFactory.instance().deleteImage(_lastImageResult.getImage());
+        if (_lastImageResult != null)
+           _lastImageResult.dispose();
       }
-      _lastImage = cachedImage.shallowCopy();
+      _lastImageResult = new IImageResult(cachedImage.shallowCopy(), cachedImageResult.isExpired());
   
       if (_lastImageURL != null)
          _lastImageURL.dispose();
       _lastImageURL = new URL(url);
     }
   
-    return cachedImage;
+    return new IImageResult(cachedImage, cachedImageResult.isExpired());
   }
 
-  private IImage _lastImage;
-
+  private IImageResult _lastImageResult;
   private URL _lastImageURL;
 
   public CachedDownloader(IDownloader downloader, IStorage storage, boolean saveInBackground)
@@ -73,7 +77,7 @@ public class CachedDownloader extends IDownloader
      _cacheHitsCounter = 0;
      _savesCounter = 0;
      _saveInBackground = saveInBackground;
-     _lastImage = null;
+     _lastImageResult = null;
      _lastImageURL = null;
 
   }
@@ -93,42 +97,23 @@ public class CachedDownloader extends IDownloader
     _downloader.stop();
   }
 
-  public final long requestBuffer(URL url, long priority, TimeInterval timeToCache, IBufferDownloadListener listener, boolean deleteListener)
+  public final long requestBuffer(URL url, long priority, TimeInterval timeToCache, boolean readExpired, IBufferDownloadListener listener, boolean deleteListener)
   {
+  
     _requestsCounter++;
   
-    IByteBuffer cachedBuffer = _storage.isAvailable() ? _storage.readBuffer(url) : null;
-    if (cachedBuffer == null)
-    {
-      // cache miss
-      return _downloader.requestBuffer(url, priority, TimeInterval.zero(), new BufferSaverDownloadListener(this, listener, deleteListener, _storage, timeToCache), true);
-    }
+    IByteBufferResult cachedBufferResult = _storage.isAvailable() ? _storage.readBuffer(url, readExpired) : new IByteBufferResult(null, false);
+    /*                                         */
+    /*                                         */
   
-    // cache hit
-    _cacheHitsCounter++;
+    IByteBuffer cachedBuffer = cachedBufferResult.getBuffer();
   
-    listener.onDownload(url, cachedBuffer);
-  
-    if (deleteListener)
-    {
-      if (listener != null)
-         listener.dispose();
-    }
-  
-    return -1;
-  }
-
-  public final long requestImage(URL url, long priority, TimeInterval timeToCache, IImageDownloadListener listener, boolean deleteListener)
-  {
-    _requestsCounter++;
-  
-    IImage cachedImage = getCachedImage(url);
-    if (cachedImage != null)
+    if (cachedBuffer != null && !cachedBufferResult.isExpired())
     {
       // cache hit
       _cacheHitsCounter++;
   
-      listener.onDownload(url, cachedImage);
+      listener.onDownload(url, cachedBuffer, false);
   
       if (deleteListener)
       {
@@ -140,7 +125,35 @@ public class CachedDownloader extends IDownloader
     }
   
     // cache miss
-    return _downloader.requestImage(url, priority, TimeInterval.zero(), new ImageSaverDownloadListener(this, listener, deleteListener, _storage, timeToCache), true);
+    return _downloader.requestBuffer(url, priority, TimeInterval.zero(), false, new BufferSaverDownloadListener(this, cachedBuffer, listener, deleteListener, _storage, timeToCache), true);
+  }
+
+  public final long requestImage(URL url, long priority, TimeInterval timeToCache, boolean readExpired, IImageDownloadListener listener, boolean deleteListener)
+  {
+    _requestsCounter++;
+  
+    IImageResult cachedImageResult = getCachedImageResult(url, readExpired);
+    IImage cachedImage = cachedImageResult.getImage();
+  
+    if (cachedImage != null && !cachedImageResult.isExpired())
+    {
+      // cache hit
+      _cacheHitsCounter++;
+  
+      listener.onDownload(url, cachedImage, false);
+  
+      if (deleteListener)
+      {
+        if (listener != null)
+           listener.dispose();
+      }
+  
+      return -1;
+    }
+  
+    // cache miss
+    return _downloader.requestImage(url, priority, TimeInterval.zero(), false, new ImageSaverDownloadListener(this, cachedImage, listener, deleteListener, _storage, timeToCache), true);
+  
   }
 
   public final void cancelRequest(long requestId)
@@ -153,9 +166,14 @@ public class CachedDownloader extends IDownloader
     if (_downloader != null)
        _downloader.dispose();
   
-    if (_lastImage != null)
+    //  if (_lastImage != NULL) {
+    //    IFactory::instance()->deleteImage(_lastImage);
+    //  }
+    if (_lastImageResult != null)
     {
-      IFactory.instance().deleteImage(_lastImage);
+      IFactory.instance().deleteImage(_lastImageResult.getImage());
+      if (_lastImageResult != null)
+         _lastImageResult.dispose();
     }
     if (_lastImageURL != null)
        _lastImageURL.dispose();

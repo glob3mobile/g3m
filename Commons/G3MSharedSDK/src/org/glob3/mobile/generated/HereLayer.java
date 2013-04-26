@@ -26,17 +26,21 @@ public class HereLayer extends Layer
   private final String _appCode;
 
 
-  public HereLayer(String appId, String appCode, TimeInterval timeToCache, int initialLevel)
+  public HereLayer(String appId, String appCode, TimeInterval timeToCache, boolean readExpired, int initialLevel)
   {
-     this(appId, appCode, timeToCache, initialLevel, null);
+     this(appId, appCode, timeToCache, readExpired, initialLevel, null);
+  }
+  public HereLayer(String appId, String appCode, TimeInterval timeToCache, boolean readExpired)
+  {
+     this(appId, appCode, timeToCache, readExpired, 2, null);
   }
   public HereLayer(String appId, String appCode, TimeInterval timeToCache)
   {
-     this(appId, appCode, timeToCache, 2, null);
+     this(appId, appCode, timeToCache, true, 2, null);
   }
-  public HereLayer(String appId, String appCode, TimeInterval timeToCache, int initialLevel, LayerCondition condition)
+  public HereLayer(String appId, String appCode, TimeInterval timeToCache, boolean readExpired, int initialLevel, LayerCondition condition)
   {
-     super(condition, "here", timeToCache, new LayerTilesRenderParameters(Sector.fullSphere(), 1, 1, initialLevel, 20, new Vector2I(256, 256), LayerTilesRenderParameters.defaultTileMeshResolution(), true));
+     super(condition, "here", timeToCache, readExpired, new LayerTilesRenderParameters(Sector.fullSphere(), 1, 1, initialLevel, 20, new Vector2I(256, 256), LayerTilesRenderParameters.defaultTileMeshResolution(), true));
      _appId = appId;
      _appCode = appCode;
      _sector = new Sector(Sector.fullSphere());
@@ -150,7 +154,7 @@ public class HereLayer extends Layer
     if (isb != null)
        isb.dispose();
   
-    petitions.add(new Petition(tileSector, new URL(path, false), getTimeToCache(), true));
+    petitions.add(new Petition(tileSector, new URL(path, false), getTimeToCache(), getReadExpired(), true));
   
     return petitions;
   }

@@ -33,6 +33,7 @@ public:
                      const std::vector<std::string>& subdomains,
                      const std::string&              imageFormat,
                      const TimeInterval&             timeToCache,
+                     bool                            readExpired,
                      const Sector&                   sector,
                      int                             initialLevel,
                      int                             maxLevel,
