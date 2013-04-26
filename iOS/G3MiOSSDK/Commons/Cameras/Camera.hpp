@@ -95,7 +95,7 @@ public:
   void setAll(bool value) {
     _frustumDataDirty           = value;
     _projectionMatrixDirty      = value;
-    _modelMatrixDirty          = value;
+    _modelMatrixDirty           = value;
     _modelViewMatrixDirty       = value;
     _cartesianCenterOfViewDirty = value;
     _geodeticCenterOfViewDirty  = value;
