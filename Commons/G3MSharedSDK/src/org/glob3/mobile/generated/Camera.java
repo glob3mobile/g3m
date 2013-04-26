@@ -183,13 +183,17 @@ public class Camera
   {
     final Vector2D p = getModelViewMatrix().project(point, 0, 0, _width, _height);
   
-    return new Vector2I((int) p._x, (int)(_height - p._y));
+    final IMathUtils mu = IMathUtils.instance();
+  
+    return new Vector2I(mu.round((float) p._x), mu.round((float)((double) _height - p._y)));
   }
   public final Vector2I point2Pixel(Vector3F point)
   {
     final Vector2F p = getModelViewMatrix().project(point, 0, 0, _width, _height);
   
-    return new Vector2I((int) p._x, (int)(_height - p._y));
+    final IMathUtils mu = IMathUtils.instance();
+  
+    return new Vector2I(mu.round(p._x), mu.round((float) _height - p._y));
   }
 
   public final int getWidth()
