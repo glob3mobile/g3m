@@ -9,7 +9,10 @@ public class Sector_Geodetic2DCachedData
   {
      _cartesian = new Vector3D(planet.toCartesian(position));
      _geodeticSurfaceNormal = new Vector3D(planet.geodeticSurfaceNormal(_cartesian));
+  }
 
+  public void dispose()
+  {
   }
 
   public final boolean test(Vector3D eye)
