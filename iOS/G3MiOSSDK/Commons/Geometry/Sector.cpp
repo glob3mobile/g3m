@@ -103,17 +103,19 @@ bool Sector::isBackOriented(const G3MRenderContext *rc,
   if (_seData == NULL)    { _seData = new Sector_Geodetic2DCachedData(planet, getSE()); }
   if (_seData->test(eye)) { return false; }
 
-//  const Vector3D cartesianNW = planet->toCartesian(getNW());
-//  if (planet->geodeticSurfaceNormal(cartesianNW).dot(eye.sub(cartesianNW)) > 0) { return false; }
-//
-//  const Vector3D cartesianNE = planet->toCartesian(getNE());
-//  if (planet->geodeticSurfaceNormal(cartesianNE).dot(eye.sub(cartesianNE)) > 0) { return false; }
-//
-//  const Vector3D cartesianSW = planet->toCartesian(getSW());
-//  if (planet->geodeticSurfaceNormal(cartesianSW).dot(eye.sub(cartesianSW)) > 0) { return false; }
-//
-//  const Vector3D cartesianSE = planet->toCartesian(getSE());
-//  if (planet->geodeticSurfaceNormal(cartesianSE).dot(eye.sub(cartesianSE)) > 0) { return false; }
+  /*
+  const Vector3D cartesianNW = planet->toCartesian(getNW());
+  if (planet->geodeticSurfaceNormal(cartesianNW).dot(eye.sub(cartesianNW)) > 0) { return false; }
+
+  const Vector3D cartesianNE = planet->toCartesian(getNE());
+  if (planet->geodeticSurfaceNormal(cartesianNE).dot(eye.sub(cartesianNE)) > 0) { return false; }
+
+  const Vector3D cartesianSW = planet->toCartesian(getSW());
+  if (planet->geodeticSurfaceNormal(cartesianSW).dot(eye.sub(cartesianSW)) > 0) { return false; }
+
+  const Vector3D cartesianSE = planet->toCartesian(getSE());
+  if (planet->geodeticSurfaceNormal(cartesianSE).dot(eye.sub(cartesianSE)) > 0) { return false; }
+  */
 
   // compute angle with normal in the closest point to the camera
   const Geodetic2D center = camera->getGeodeticCenterOfView().asGeodetic2D();
