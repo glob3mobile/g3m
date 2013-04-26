@@ -66,7 +66,9 @@ public:
   _cartesian( planet->toCartesian(position) ),
   _geodeticSurfaceNormal( planet->geodeticSurfaceNormal(_cartesian) )
   {
+  }
 
+  ~Sector_Geodetic2DCachedData() {
   }
 
   bool test(const Vector3D& eye) const {
