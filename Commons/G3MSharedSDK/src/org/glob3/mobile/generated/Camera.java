@@ -66,6 +66,8 @@ public class Camera
        _halfFrustumInModelCoordinates.dispose();
     if (_geodeticCenterOfView != null)
        _geodeticCenterOfView.dispose();
+    if (_geodeticPosition != null)
+       _geodeticPosition.dispose();
   }
 
   public final void copyFrom(Camera that)
@@ -352,6 +354,8 @@ public class Camera
     if (!v.equalTo(_position))
     {
       _position = new MutableVector3D(v);
+      if (_geodeticPosition != null)
+         _geodeticPosition.dispose();
       _geodeticPosition = null;
       _dirtyFlags.setAll(true);
     }
