@@ -218,14 +218,20 @@ const Vector2I Camera::point2Pixel(const Vector3D& point) const {
   const Vector2D p = getModelViewMatrix().project(point,
                                                   0, 0, _width, _height);
 
-  return Vector2I( (int) p._x, (int) (_height - p._y) );
+  const IMathUtils* mu = IMathUtils::instance();
+
+  return Vector2I(mu->round( (float) p._x ),
+                  mu->round( (float) ((double) _height - p._y) ) );
 }
 
 const Vector2I Camera::point2Pixel(const Vector3F& point) const {
   const Vector2F p = getModelViewMatrix().project(point,
                                                   0, 0, _width, _height);
 
-  return Vector2I( (int) p._x, (int) (_height - p._y) );
+  const IMathUtils* mu = IMathUtils::instance();
+
+  return Vector2I(mu->round( p._x ),
+                  mu->round( (float) _height - p._y ) );
 }
 
 void Camera::applyTransform(const MutableMatrix44D& M) {

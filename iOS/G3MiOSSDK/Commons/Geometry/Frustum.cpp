@@ -50,8 +50,6 @@ bool Frustum::contains(const Vector3D& point) const {
 
 
 bool Frustum::touchesWithBox(const Box *box) const {
-  bool outside;
-
   // test first if frustum extent intersect with box
   if (!getExtent()->touchesBox(box)) {
     return false;
@@ -76,58 +74,66 @@ bool Frustum::touchesWithBox(const Box *box) const {
   const std::vector<Vector3F> corners = box->getCornersF();
 #endif
 
+  bool outside;
+
   // test with left plane
   outside = true;
-  for (int i=0; i<8; i++)
-    if (_leftPlane.signedDistance(corners[i])<0) {
+  for (int i = 0; i < 8; i++) {
+    if (_leftPlane.signedDistance(corners[i]) < 0) {
       outside = false;
       break;
     }
+  }
   if (outside) return false;
 
   // test with bottom plane
   outside = true;
-  for (int i=0; i<8; i++)
-    if (_bottomPlane.signedDistance(corners[i])<0) {
+  for (int i = 0; i < 8; i++) {
+    if (_bottomPlane.signedDistance(corners[i]) < 0) {
       outside = false;
       break;
     }
+  }
   if (outside) return false;
 
   // test with right plane
   outside = true;
-  for (int i=0; i<8; i++)
-    if (_rightPlane.signedDistance(corners[i])<0) {
+  for (int i = 0; i < 8; i++) {
+    if (_rightPlane.signedDistance(corners[i]) < 0) {
       outside = false;
       break;
     }
+  }
   if (outside) return false;
 
   // test with top plane
   outside = true;
-  for (int i=0; i<8; i++)
-    if (_topPlane.signedDistance(corners[i])<0) {
+  for (int i = 0; i < 8; i++) {
+    if (_topPlane.signedDistance(corners[i]) < 0) {
       outside = false;
       break;
     }
+  }
   if (outside) return false;
 
   // test with near plane
   outside = true;
-  for (int i=0; i<8; i++)
-    if (_nearPlane.signedDistance(corners[i])<0) {
+  for (int i = 0; i < 8; i++) {
+    if (_nearPlane.signedDistance(corners[i]) < 0) {
       outside = false;
       break;
     }
+  }
   if (outside) return false;
 
   // test with far plane
   outside = true;
-  for (int i=0; i<8; i++)
-    if (_farPlane.signedDistance(corners[i])<0) {
+  for (int i = 0; i < 8; i++) {
+    if (_farPlane.signedDistance(corners[i]) < 0) {
       outside = false;
       break;
     }
+  }
   if (outside) return false;
 
   return true;
