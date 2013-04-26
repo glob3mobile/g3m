@@ -264,9 +264,9 @@ public:
   //                                                               Vector2I(256, 256),
   //                                                               0);
   
-    ElevationDataProvider* elevationDataProvider8;
-    elevationDataProvider8 = new WMSBillElevationDataProvider(URL("http://data.worldwind.arc.nasa.gov/elev?REQUEST=GetMap&SERVICE=WMS&VERSION=1.3.0&LAYERS=srtm30&STYLES=&FORMAT=image/bil&CRS=EPSG:4326&BBOX=-180.0,-90.0,180.0,90.0&WIDTH=10&HEIGHT=10", false),
-                                                              Sector::fullSphere());
+//    ElevationDataProvider* elevationDataProvider8;
+//    elevationDataProvider8 = new WMSBillElevationDataProvider(URL("http://data.worldwind.arc.nasa.gov/elev?REQUEST=GetMap&SERVICE=WMS&VERSION=1.3.0&LAYERS=srtm30&STYLES=&FORMAT=image/bil&CRS=EPSG:4326&BBOX=-180.0,-90.0,180.0,90.0&WIDTH=10&HEIGHT=10", false),
+//                                                              Sector::fullSphere());
   
   
   CompositeElevationDataProvider* compElevationDataProvider = new CompositeElevationDataProvider();
