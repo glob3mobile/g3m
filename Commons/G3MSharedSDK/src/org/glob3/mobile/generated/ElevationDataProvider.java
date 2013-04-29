@@ -15,4 +15,10 @@ public abstract class ElevationDataProvider
 
   public abstract void cancelRequest(long requestId);
 
+  public abstract java.util.ArrayList<Sector> getSectors();
+
+  public abstract Vector2I getMinResolution();
+
+  public abstract ElevationData createSubviewOfElevationData(ElevationData elevationData, Sector sector, Vector2I resolution);
+
 }

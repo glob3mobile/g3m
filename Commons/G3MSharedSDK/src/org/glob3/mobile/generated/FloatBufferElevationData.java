@@ -21,19 +21,41 @@ package org.glob3.mobile.generated;
 public class FloatBufferElevationData extends BufferElevationData
 {
   private IFloatBuffer _buffer;
+  private boolean _hasNoData;
+  private float _noDataValue;
 
   protected final double getValueInBufferAt(int index)
   {
-    return _buffer.get(index);
+    float f = _buffer.get(index);
+    if (f == _noDataValue)
+    {
+      return IMathUtils.instance().NanD();
+    }
+    else
+    {
+      return f;
+    }
   }
 
-  public FloatBufferElevationData(Sector sector, Vector2I resolution, double noDataValue, IFloatBuffer buffer)
+  public FloatBufferElevationData(Sector sector, Vector2I resolution, float noDataValue, IFloatBuffer buffer)
   {
-     super(sector, resolution, noDataValue, buffer.size());
+     super(sector, resolution, buffer.size());
      _buffer = buffer;
+     _noDataValue = noDataValue;
     if (_buffer.size() != (_width * _height))
     {
       ILogger.instance().logError("Invalid buffer size");
+    }
+  
+    int size = buffer.size();
+    _hasNoData = false;
+    for (int i = 0; i < size; i++)
+    {
+      if (buffer.get(i) == noDataValue)
+      {
+        _hasNoData = true;
+        break;
+      }
     }
   }
 
@@ -108,6 +130,11 @@ public class FloatBufferElevationData extends BufferElevationData
     }
   
     return new Vector3D(minHeight, maxHeight, sumHeight / (_width * _height));
+  }
+
+  public final boolean hasNoData()
+  {
+     return _hasNoData;
   }
 
 }

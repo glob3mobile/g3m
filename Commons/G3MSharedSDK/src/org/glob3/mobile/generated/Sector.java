@@ -499,7 +499,7 @@ public class Sector
   
     const Vector3D cartesianSE = planet->toCartesian(getSE());
     if (planet->geodeticSurfaceNormal(cartesianSE).dot(eye.sub(cartesianSE)) > 0) { return false; }
-    */
+  */
   
     // compute angle with normal in the closest point to the camera
     final Geodetic2D center = camera.getGeodeticCenterOfView().asGeodetic2D();

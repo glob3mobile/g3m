@@ -34,9 +34,9 @@ public abstract class BufferElevationData extends ElevationData
 
   protected abstract double getValueInBufferAt(int index);
 
-  public BufferElevationData(Sector sector, Vector2I resolution, double noDataValue, int bufferSize)
+  public BufferElevationData(Sector sector, Vector2I resolution, int bufferSize)
   {
-     super(sector, resolution, noDataValue);
+     super(sector, resolution);
      _bufferSize = bufferSize;
      _interpolator = null;
   
@@ -48,7 +48,12 @@ public abstract class BufferElevationData extends ElevationData
        _interpolator.dispose();
   }
 
+
   public final double getElevationAt(Angle latitude, Angle longitude, int type)
+  {
+     return getElevationAt(latitude, longitude, type, IMathUtils.instance().NanD());
+  }
+  public final double getElevationAt(Angle latitude, Angle longitude, int type, double valueForNoData)
   {
   
   
@@ -58,7 +63,7 @@ public abstract class BufferElevationData extends ElevationData
       //                                  _sector.description().c_str(),
       //                                  latitude.description().c_str(),
       //                                  longitude.description().c_str());
-      return _noDataValue;
+      return valueForNoData;
     }
   
     final IMathUtils mu = IMathUtils.instance();
@@ -84,6 +89,8 @@ public abstract class BufferElevationData extends ElevationData
   //    printf("break point\n");
   //  }
   
+  
+    IMathUtils m = IMathUtils.instance();
     int unsedType = -1;
     double result;
     if (x == dX)
@@ -95,10 +102,25 @@ public abstract class BufferElevationData extends ElevationData
       }
       else
       {
+  
+        type = 2;
         // linear on Y
         final double heightY = getElevationAt(x, y, unsedType);
+        if (m.isNan(heightY))
+        {
+           return valueForNoData;
+        }
         final double heightNextY = getElevationAt(x, nextY, unsedType);
-        type = 2;
+        if (m.isNan(heightNextY))
+        {
+           return valueForNoData;
+        }
+  
+        if (m.isNan(heightY) || m.isNan(heightNextY))
+        {
+          return valueForNoData;
+        }
+  
         result = mu.linearInterpolation(heightNextY, heightY, alphaY);
       }
     }
@@ -106,21 +128,48 @@ public abstract class BufferElevationData extends ElevationData
     {
       if (y == dY)
       {
+  
+        type = 3;
         // linear on X
         final double heightX = getElevationAt(x, y, unsedType);
+        if (m.isNan(heightX))
+        {
+           return valueForNoData;
+        }
         final double heightNextX = getElevationAt(nextX, y, unsedType);
-        type = 3;
+        if (m.isNan(heightNextX))
+        {
+           return valueForNoData;
+        }
+  
         result = mu.linearInterpolation(heightX, heightNextX, alphaX);
       }
       else
       {
-        // bilinear
-        final double valueNW = getElevationAt(x, y, unsedType);
-        final double valueNE = getElevationAt(nextX, y, unsedType);
-        final double valueSE = getElevationAt(nextX, nextY, unsedType);
-        final double valueSW = getElevationAt(x, nextY, unsedType);
   
         type = 4;
+        // bilinear
+        final double valueNW = getElevationAt(x, y, unsedType);
+        if (m.isNan(valueNW))
+        {
+           return valueForNoData;
+        }
+        final double valueNE = getElevationAt(nextX, y, unsedType);
+        if (m.isNan(valueNE))
+        {
+           return valueForNoData;
+        }
+        final double valueSE = getElevationAt(nextX, nextY, unsedType);
+        if (m.isNan(valueSE))
+        {
+           return valueForNoData;
+        }
+        final double valueSW = getElevationAt(x, nextY, unsedType);
+        if (m.isNan(valueSW))
+        {
+           return valueForNoData;
+        }
+  
         result = getInterpolator().interpolation(valueSW, valueSE, valueNE, valueNW, alphaX, alphaY);
       }
     }
@@ -130,6 +179,10 @@ public abstract class BufferElevationData extends ElevationData
 
   public double getElevationAt(int x, int y, int type)
   {
+     return getElevationAt(x, y, type, IMathUtils.instance().NanD());
+  }
+  public double getElevationAt(int x, int y, int type, double valueForNoData)
+  {
     final int index = ((_height-1-y) * _width) + x;
   //  const int index = ((_width-1-x) * _height) + y;
   
@@ -137,10 +190,19 @@ public abstract class BufferElevationData extends ElevationData
     {
       System.out.print("break point on me\n");
       type = 0;
-      return _noDataValue;
+      return valueForNoData;
     }
     type = 1;
-    return getValueInBufferAt(index);
+  
+    double d = getValueInBufferAt(index);
+    if (IMathUtils.instance().isNan(d))
+    {
+      return valueForNoData;
+    }
+    else
+    {
+      return d;
+    }
   }
 
 }

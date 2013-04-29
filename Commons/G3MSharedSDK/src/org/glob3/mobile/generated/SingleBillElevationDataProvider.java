@@ -21,6 +21,27 @@ package org.glob3.mobile.generated;
 
 public class SingleBillElevationDataProvider extends ElevationDataProvider
 {
+
+  private static class SingleBillElevationDataProvider_Request
+  {
+    public final Sector _sector ;
+    public final Vector2I _resolution;
+    public final IElevationDataListener _listener;
+    public final boolean _autodeleteListener;
+
+    public SingleBillElevationDataProvider_Request(Sector sector, Vector2I resolution, IElevationDataListener listener, boolean autodeleteListener)
+    {
+       _sector = new Sector(sector);
+       _resolution = new Vector2I(resolution);
+       _listener = listener;
+       _autodeleteListener = autodeleteListener;
+    }
+  }
+
+  private long _currentRequestID;
+  private java.util.HashMap<Long, SingleBillElevationDataProvider_Request> _requests = new java.util.HashMap<Long, SingleBillElevationDataProvider_Request>();
+
+
   private ElevationData _elevationData;
   private boolean _elevationDataResolved;
   private final URL _bilUrl;
@@ -29,21 +50,41 @@ public class SingleBillElevationDataProvider extends ElevationDataProvider
   private final int _resolutionHeight;
   private final double _noDataValue;
 
-
   private void drainQueue()
   {
-    int _DGD_working_on_terrain;
+    if (!_elevationDataResolved)
+    {
+      ILogger.instance().logError("Trying to drain queue of requests without data.");
+      return;
+    }
+  
+    java.util.Iterator<Long, SingleBillElevationDataProvider_Request> it = _requests.iterator();
+    for (; it.hasNext();)
+    {
+      SingleBillElevationDataProvider_Request r = it.next().getValue();
+      requestElevationData(r._sector, r._resolution, r._listener, r._autodeleteListener);
+      if (r != null)
+         r.dispose();
+    }
+    _requests.clear();
   }
 
   private long queueRequest(Sector sector, Vector2I resolution, IElevationDataListener listener, boolean autodeleteListener)
   {
-    int _DGD_working_on_terrain;
-    return -1;
+    _currentRequestID++;
+    _requests.put(_currentRequestID, new SingleBillElevationDataProvider_Request(sector, resolution, listener, autodeleteListener));
+    return _currentRequestID;
   }
 
   private void removeQueueRequest(long requestId)
   {
-    int _DGD_working_on_terrain;
+  
+    java.util.Iterator<Long, SingleBillElevationDataProvider_Request> it = _requests.indexOf(requestId);
+    if (it.hasNext())
+    {
+      it.next().getValue() = null;
+      _requests.remove(it);
+    }
   }
 
 
@@ -56,6 +97,7 @@ public class SingleBillElevationDataProvider extends ElevationDataProvider
      _noDataValue = noDataValue;
      _elevationData = null;
      _elevationDataResolved = false;
+     _currentRequestID = 0;
   
   }
 
@@ -87,7 +129,7 @@ public class SingleBillElevationDataProvider extends ElevationDataProvider
     {
       int _DGD_working_on_terrain;
       final boolean useDecimation = false;
-      ElevationData elevationData = new SubviewElevationData(_elevationData, false, sector, resolution, _noDataValue, useDecimation);
+      ElevationData elevationData = new SubviewElevationData(_elevationData, false, sector, resolution, useDecimation);
       listener.onData(sector, resolution, elevationData);
     }
   
@@ -119,6 +161,23 @@ public class SingleBillElevationDataProvider extends ElevationDataProvider
     }
   
     drainQueue();
+  }
+
+  public final java.util.ArrayList<Sector> getSectors()
+  {
+    final java.util.ArrayList<Sector> sectors = new java.util.ArrayList<Sector>();
+    sectors.add(_sector);
+    return sectors;
+  }
+
+  public final Vector2I getMinResolution()
+  {
+    return new Vector2I(_resolutionWidth,_resolutionHeight);
+  }
+
+  public final ElevationData createSubviewOfElevationData(ElevationData elevationData, Sector sector, Vector2I resolution)
+  {
+    return new SubviewElevationData(elevationData, false, sector, resolution, false);
   }
 
 }

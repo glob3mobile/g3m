@@ -27,14 +27,14 @@ public abstract class ElevationData
   protected final Sector _sector ;
   protected final int _width;
   protected final int _height;
-  protected final double _noDataValue;
+  protected final Vector2I _resolution = new Vector2I();
 
-  public ElevationData(Sector sector, Vector2I resolution, double noDataValue)
+  public ElevationData(Sector sector, Vector2I resolution)
   {
      _sector = new Sector(sector);
      _width = resolution._x;
      _height = resolution._y;
-     _noDataValue = noDataValue;
+     _resolution = new Vector2I(resolution);
   }
 
   public void dispose()
@@ -56,13 +56,25 @@ public abstract class ElevationData
     return _height;
   }
 
-  public abstract double getElevationAt(int x, int y, int type);
-
-  public abstract double getElevationAt(Angle latitude, Angle longitude, int type);
-
-  public double getElevationAt(Geodetic2D position, int type)
+  public abstract double getElevationAt(int x, int y, int type)
   {
-    return getElevationAt(position.latitude(), position.longitude(), type);
+     return getElevationAt(x, y, type, IMathUtils.instance().NanD());
+  }
+  public abstract double getElevationAt(int x, int y, int type, double valueForNoData);
+
+  public abstract double getElevationAt(Angle latitude, Angle longitude, int type)
+  {
+     return getElevationAt(latitude, longitude, type, IMathUtils.instance().NanD());
+  }
+  public abstract double getElevationAt(Angle latitude, Angle longitude, int type, double valueForNoData);
+
+  public final double getElevationAt(Geodetic2D position, int type)
+  {
+     return getElevationAt(position, type, IMathUtils.instance().NanD());
+  }
+  public final double getElevationAt(Geodetic2D position, int type, double valueForNoData)
+  {
+    return getElevationAt(position.latitude(), position.longitude(), type, valueForNoData);
   }
 
   public abstract String description(boolean detailed);
@@ -80,18 +92,18 @@ public abstract class ElevationData
   
     ILogger.instance().logInfo("averageHeight=%f, minHeight=%f maxHeight=%f delta=%f", averageHeight, minHeight, maxHeight, deltaHeight);
   
+  
     FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.firstVertex(), ellipsoid, Vector3D.zero());
     FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
   
     int type = -1;
-  
     for (int x = 0; x < _width; x++)
     {
       final double u = (double) x / (_width - 1);
   
       for (int y = 0; y < _height; y++)
       {
-        final double height = getElevationAt(x, y, type);
+        double height = getElevationAt(x, y, type, 0);
   
         final float alpha = (float)((height - minHeight) / deltaHeight);
   
@@ -136,6 +148,13 @@ public abstract class ElevationData
   public Sector getSector()
   {
     return _sector;
+  }
+
+  public abstract boolean hasNoData();
+
+  public final Vector2I getResolution()
+  {
+    return _resolution;
   }
 
 }

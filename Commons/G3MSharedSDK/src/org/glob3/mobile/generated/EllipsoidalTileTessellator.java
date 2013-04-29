@@ -61,13 +61,16 @@ public class EllipsoidalTileTessellator extends TileTessellator
 
   public final Mesh createTileMesh(Planet planet, Vector2I rawResolution, Tile tile, ElevationData elevationData, float verticalExaggeration, boolean renderDebug)
   {
+     return createTileMesh(planet, rawResolution, tile, elevationData, verticalExaggeration, renderDebug, 0);
+  }
+  public final Mesh createTileMesh(Planet planet, Vector2I rawResolution, Tile tile, ElevationData elevationData, float verticalExaggeration, boolean renderDebug, double defaultHeight)
+  {
   
     final Sector sector = tile.getSector();
     final Vector2I tileResolution = calculateResolution(rawResolution, sector);
   
     double minHeight = 0;
     FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.givenCenter(), planet, sector.getCenter());
-  
     int unusedType = -1;
     for (int j = 0; j < tileResolution._y; j++)
     {
@@ -79,14 +82,19 @@ public class EllipsoidalTileTessellator extends TileTessellator
         final Geodetic2D position = sector.getInnerPoint(u, v);
   
         double height = 0;
+  
+        //TODO: MERCATOR!!!
+  
         if (elevationData != null)
         {
   //        height = elevationData->getElevationAt(i, j) * verticalExaggeration;
-          height = elevationData.getElevationAt(position, unusedType) * verticalExaggeration;
+          height = elevationData.getElevationAt(position, unusedType, defaultHeight) * verticalExaggeration;
+  
           if (height < minHeight)
           {
             minHeight = height;
           }
+  
         }
   
         vertices.add(position, height);
@@ -214,7 +222,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
       indices.add(posS++);
     }
   
-    Color color = Color.newFromRGBA((float) 1.0, (float) 0, (float) 0, (float) 1.0);
+    Color color = Color.newFromRGBA((float) 1.0, (float) 0.0, (float) 0, (float) 1.0);
   
     return new IndexedMesh(GLPrimitive.lineLoop(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, color);
   }

@@ -193,7 +193,6 @@ public class TileTextureBuilder extends RCObject
         if (image != null)
         {
           final Sector imageSector = petition.getSector();
-
           //Finding intersection image sector - tile sector = srcReq
           final Sector intersectionSector = tileSector.intersection(imageSector);
 
@@ -214,7 +213,6 @@ public class TileTextureBuilder extends RCObject
 
           //Where we are going to draw the image
           destRects.add(getInnerRectangle(_tileTextureResolution._x, _tileTextureResolution._y, tileSector, intersectionSector));
-
           textureId += petition.getURL().getPath();
           textureId += "_";
         }
