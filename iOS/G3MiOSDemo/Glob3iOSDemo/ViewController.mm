@@ -626,8 +626,8 @@ public:
   }
   
   const bool useOrtoAyto = true;
-  if (useOrtoAyto){
-    WMSLayer* ortoAyto = new WMSLayer("orto_refundida",
+  if (useOrtoAyto) {
+    WMSLayer* ortoAyto = new WMSLayer("orto_refundida,etiquetas_50k,Numeros%20de%20Gobierno,etiquetas%20inicial,etiquetas%2020k,Nombres%20de%20Via,etiquetas%2015k,etiquetas%202k,etiquetas%2010k",
                                       URL("http://195.57.27.86/wms_etiquetas_con_orto.mapdef?", false),
                                       WMS_1_1_0,
                                       Sector(Geodetic2D(Angle::fromDegrees(39.350228), Angle::fromDegrees(-6.508713)),
@@ -636,13 +636,13 @@ public:
                                       "EPSG:4326",
                                       "",
                                       false,
-                                      new LevelTileCondition(2, 19),
+                                      new LevelTileCondition(3, 20),
                                       //NULL,
                                       TimeInterval::fromDays(30),
-                                      true,
+                                      false,
                                       new LayerTilesRenderParameters(Sector::fullSphere(),
                                                                      2, 4,
-                                                                     0, 19,
+                                                                     0, 20,
                                                                      LayerTilesRenderParameters::defaultTileTextureResolution(),
                                                                      LayerTilesRenderParameters::defaultTileMeshResolution(),
                                                                      false));
