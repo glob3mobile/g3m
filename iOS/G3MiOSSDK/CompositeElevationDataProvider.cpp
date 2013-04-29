@@ -147,8 +147,6 @@ void CompositeElevationDataProvider::requestFinished(CompositeElevationDataProvi
     }
   }
   
-  delete req; //Deleting CompositeElevationDataProvider_Request
-
   if (it == _requests.end()){
     ILogger::instance()->logError("Deleting nonexisting request in CompositeElevationDataProvider.");
   }
@@ -207,6 +205,7 @@ bool CompositeElevationDataProvider::CompositeElevationDataProvider_Request::lau
     _currentRequestID = _currentRequestEDP->requestElevationData(_sector, _resolution, this, false);
     return true;
   } else{
+    _currentRequestID = -1; //Waiting for no request
     return false;
   }
 }
@@ -214,8 +213,10 @@ bool CompositeElevationDataProvider::CompositeElevationDataProvider_Request::lau
 void CompositeElevationDataProvider::CompositeElevationDataProvider_Request::onData(const Sector& sector,
                                                                                     const Vector2I& resolution,
                                                                                     ElevationData* elevationData){
+  _currentRequestID = -1; //Waiting for no request
   if (_hasBeenCanceled){
     delete elevationData;
+    delete _compData;
     delete this;
   } else {
     
@@ -224,7 +225,6 @@ void CompositeElevationDataProvider::CompositeElevationDataProvider_Request::onD
     } else{
       _compData->addElevationData(elevationData);
     }
-    
     
     if (!_compData->hasNoData()){
       _compProvider->requestFinished(this);//If this data is enough we respond
@@ -241,16 +241,19 @@ void CompositeElevationDataProvider::CompositeElevationDataProvider_Request::can
     _currentRequestEDP->cancelRequest(_currentRequestID);
   }
   _hasBeenCanceled = true;
+  
+  if (_currentRequestID == -1){
+    delete this;
+  }
 }
 
 void CompositeElevationDataProvider::CompositeElevationDataProvider_Request::onError(const Sector& sector,
                                                                                      const Vector2I& resolution){
+  _currentRequestID = -1; //Waiting for no request
   if (_hasBeenCanceled){
     delete this;
   } else{
-    
-    bool t = launchNewRequest();
-    if (!t){
+    if (!launchNewRequest()){
       //If there are no more providers we respond
       _compProvider->requestFinished(this);
     }
