@@ -158,6 +158,10 @@
 		CF94EB8F1669225600F2283C /* GEOLineStringGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF94EB8D1669225600F2283C /* GEOLineStringGeometry.cpp */; };
 		CF94EB941669307700F2283C /* GEO2DLineStringGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF94EB921669307700F2283C /* GEO2DLineStringGeometry.cpp */; };
 		CF9592AE1652E28500CB7AC8 /* OrderedRenderable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9592AC1652E28500CB7AC8 /* OrderedRenderable.cpp */; };
+		CF9AB329172E9E210014547A /* TileElevationDataListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D89D9CC7172E95370058CA9D /* TileElevationDataListener.hpp */; };
+		CF9AB32A172E9E210014547A /* CompositeElevationData.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D89D9CC9172E95370058CA9D /* CompositeElevationData.hpp */; };
+		CF9AB32B172E9E210014547A /* CompositeElevationDataProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D89D9CCB172E95370058CA9D /* CompositeElevationDataProvider.hpp */; };
+		CF9AB32C172E9E210014547A /* LeveledMesh.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D882B1CF171D8D6100C2AD9C /* LeveledMesh.hpp */; };
 		CF9AEBC2159B3FEB004C3558 /* EllipsoidalTileTessellator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9AEBC1159B3FEA004C3558 /* EllipsoidalTileTessellator.cpp */; };
 		CF9CD89A15DBE2C800C6FD7E /* CachedDownloader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9CD89815DBE2C800C6FD7E /* CachedDownloader.cpp */; };
 		CF9D2D8815F7D3C100B5CE2E /* IBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9D2D8615F7D3C100B5CE2E /* IBuffer.cpp */; };
@@ -484,6 +488,10 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF9AB329172E9E210014547A /* TileElevationDataListener.hpp in CopyFiles */,
+				CF9AB32A172E9E210014547A /* CompositeElevationData.hpp in CopyFiles */,
+				CF9AB32B172E9E210014547A /* CompositeElevationDataProvider.hpp in CopyFiles */,
+				CF9AB32C172E9E210014547A /* LeveledMesh.hpp in CopyFiles */,
 				D8A1BF541729369600B103E3 /* IImageUtils.cpp in CopyFiles */,
 				D868D0751727FFBD00A8595E /* MeshShape.hpp in CopyFiles */,
 				CF41B7DB1726BFDC007DECD8 /* IImageUtils.hpp in CopyFiles */,
