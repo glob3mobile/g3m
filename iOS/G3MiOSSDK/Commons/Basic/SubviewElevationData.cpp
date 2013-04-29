@@ -24,6 +24,7 @@ _ownsElevationData(ownsElevationData)
 {
   if (_elevationData == NULL || _elevationData->getExtentWidth() < 1 || _elevationData->getExtentHeight() < 1){
     ILogger::instance()->logError("SubviewElevationData can't subview given elevation data.");
+    _buffer = NULL;
     return;
   }
   
@@ -229,15 +230,17 @@ double SubviewElevationData::getElevationAt(const Angle& latitude,
                                             const Angle& longitude,
                                             int *type,
                                             double valueForNoData) const {
+  
+  //TODO: Change this method
   if (!_sector.contains(latitude, longitude)) {
     //    ILogger::instance()->logError("Sector %s doesn't contain lat=%s lon=%s",
     //                                  _sector.description().c_str(),
     //                                  latitude.description().c_str(),
     //                                  longitude.description().c_str());
-    return IMathUtils::instance()->NanD();
+    return valueForNoData;
   }
   
-  double h = _elevationData->getElevationAt(latitude, longitude, type);
+  double h = _elevationData->getElevationAt(latitude, longitude, type, valueForNoData);
   if (IMathUtils::instance()->isNan(h)){
     return valueForNoData;
   } else{

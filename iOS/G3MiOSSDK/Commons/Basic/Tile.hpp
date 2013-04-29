@@ -223,6 +223,10 @@ public:
   void ancestorChangedElevationData(Tile* ancestor);
   
   ElevationData* createElevationDataSubviewFromAncestor(Tile* ancestor) const;
+  
+  void onElevationDataListenerDeleted(){
+    _elevationDataListener = NULL;
+  }
 
 };
 

@@ -35,6 +35,9 @@ public:
 
   virtual void onError(const Sector& sector,
                        const Vector2I& resolution) = 0;
+  
+  virtual void onCancel(const Sector& sector,
+                       const Vector2I& resolution) = 0;
 
 };
 

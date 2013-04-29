@@ -69,7 +69,7 @@ const long long CompositeElevationDataProvider::requestElevationData(const Secto
   _currentID++;
   _requests[_currentID] =  req;
   
-  req->launchNewRequest();
+  req->launchNewStep();
   
   return _currentID;
 }
@@ -119,25 +119,8 @@ void CompositeElevationDataProvider::cancelRequest(const long long requestId){
 
 void CompositeElevationDataProvider::requestFinished(CompositeElevationDataProvider_Request* req){
   
-  CompositeElevationData* data = req->_compData;
-  IElevationDataListener * listener = req->_listener;
-  const bool autodelete = req->_autodelete;
-  const Vector2I resolution = req->_resolution;
-  const Sector& sector = req->_sector;
+  req->respondToListener();
   
-  if (data == NULL){
-    listener->onError(sector, resolution);
-    if (autodelete){
-      delete listener;
-      req->_listener = NULL;
-    }
-  } else{
-    listener->onData(sector, resolution, data);
-    if (autodelete){
-      delete listener;
-      req->_listener = NULL;
-    }
-  }
   std::map<long long, CompositeElevationDataProvider_Request*>::iterator it;
   for (it =  _requests.begin(); it !=  _requests.end(); it++) {
     const CompositeElevationDataProvider_Request* reqI = it->second;
@@ -150,6 +133,17 @@ void CompositeElevationDataProvider::requestFinished(CompositeElevationDataProvi
   if (it == _requests.end()){
     ILogger::instance()->logError("Deleting nonexisting request in CompositeElevationDataProvider.");
   }
+}
+
+
+ElevationData* CompositeElevationDataProvider::createSubviewOfElevationData(ElevationData* elevationData,
+                                                                            const Sector& sector,
+                                                                            const Vector2I& resolution) const{
+  return new SubviewElevationData(elevationData,
+                                  false,
+                                  sector,
+                                  resolution,
+                                  false);
 }
 
 #pragma mark Request
@@ -166,18 +160,17 @@ _resolution(resolution),
 _listener(listener),
 _autodelete(autodelete),
 _compProvider(provider),
-_currentRequestEDP(NULL),
 _compData(NULL),
-_hasBeenCanceled(false){
+_currentStep(NULL){
 }
 
 ElevationDataProvider* CompositeElevationDataProvider::
 CompositeElevationDataProvider_Request::
 popBestProvider(std::vector<ElevationDataProvider*>& ps, const Vector2I& resolution) const{
-  std::vector<ElevationDataProvider*>::iterator edp = ps.end();
+  std::vector<ElevationDataProvider*>::iterator edp = (std::vector<ElevationDataProvider*>::iterator) ps.end();
   double bestRes = resolution.squaredLength();
-  double selectedRes = 99999999999;
-  double selectedResDistance = 99999999999999999;
+  double selectedRes = IMathUtils::instance()->maxDouble();
+  double selectedResDistance = IMathUtils::instance()->maxDouble();
   IMathUtils *mu = IMathUtils::instance();
   for (std::vector<ElevationDataProvider*>::iterator it = ps.begin() ; it != ps.end(); ++it){
     double res = (*it)->getMinResolution().squaredLength();
@@ -199,13 +192,13 @@ popBestProvider(std::vector<ElevationDataProvider*>& ps, const Vector2I& resolut
   return provider;
 }
 
-bool CompositeElevationDataProvider::CompositeElevationDataProvider_Request::launchNewRequest(){
-  _currentRequestEDP = popBestProvider(_providers, _resolution);
-  if (_currentRequestEDP != NULL){
-    _currentRequestID = _currentRequestEDP->requestElevationData(_sector, _resolution, this, false);
+bool CompositeElevationDataProvider::CompositeElevationDataProvider_Request::launchNewStep(){
+  ElevationDataProvider* bestProvider = popBestProvider(_providers, _resolution);
+  if (bestProvider != NULL){
+    _currentStep = new CompositeElevationDataProvider_RequestStep(this, bestProvider, _sector, _resolution);
     return true;
   } else{
-    _currentRequestID = -1; //Waiting for no request
+    _currentStep = NULL; //Waiting for no request
     return false;
   }
 }
@@ -213,59 +206,100 @@ bool CompositeElevationDataProvider::CompositeElevationDataProvider_Request::lau
 void CompositeElevationDataProvider::CompositeElevationDataProvider_Request::onData(const Sector& sector,
                                                                                     const Vector2I& resolution,
                                                                                     ElevationData* elevationData){
-  _currentRequestID = -1; //Waiting for no request
-  if (_hasBeenCanceled){
-    delete elevationData;
-    delete _compData;
-    delete this;
-  } else {
-    
-    if (_compData == NULL){
-      _compData = new CompositeElevationData(elevationData);
-    } else{
-      _compData->addElevationData(elevationData);
-    }
-    
-    if (!_compData->hasNoData()){
-      _compProvider->requestFinished(this);//If this data is enough we respond
-    } else{
-      if (!launchNewRequest()){//If there are no more providers we respond
-        _compProvider->requestFinished(this);
-      }
-    }
-  }
-}
-
-void CompositeElevationDataProvider::CompositeElevationDataProvider_Request::cancel(){
-  if (_currentRequestEDP != NULL){
-    _currentRequestEDP->cancelRequest(_currentRequestID);
-  }
-  _hasBeenCanceled = true;
-  
-  if (_currentRequestID == -1){
-    delete this;
-  }
-}
-
-void CompositeElevationDataProvider::CompositeElevationDataProvider_Request::onError(const Sector& sector,
-                                                                                     const Vector2I& resolution){
-  _currentRequestID = -1; //Waiting for no request
-  if (_hasBeenCanceled){
-    delete this;
+  _currentStep = NULL;
+  if (_compData == NULL){
+    _compData = new CompositeElevationData(elevationData);
   } else{
-    if (!launchNewRequest()){
-      //If there are no more providers we respond
+    _compData->addElevationData(elevationData);
+  }
+  
+  if (!_compData->hasNoData()){
+    _compProvider->requestFinished(this);//If this data is enough we respond
+  } else{
+    if (!launchNewStep()){//If there are no more providers we respond
       _compProvider->requestFinished(this);
     }
   }
 }
 
-ElevationData* CompositeElevationDataProvider::createSubviewOfElevationData(ElevationData* elevationData,
-                                                                            const Sector& sector,
-                                                                            const Vector2I& resolution) const{
-  return new SubviewElevationData(elevationData,
-                                  false,
-                                  sector,
-                                  resolution,
-                                  false);
+void CompositeElevationDataProvider::CompositeElevationDataProvider_Request::cancel(){
+  
+  if (_currentStep != NULL){
+    _currentStep->cancel();
+    _currentStep = NULL;
+  }
+  
+  _listener->onCancel(_sector, _resolution);
+  if (_autodelete){
+    delete _listener;
+  }
+}
+
+void CompositeElevationDataProvider::CompositeElevationDataProvider_Request::onError(const Sector& sector,
+                                                                                     const Vector2I& resolution){
+  _currentStep = NULL;
+  if (!launchNewStep()){
+    //If there are no more providers we respond
+    _compProvider->requestFinished(this);
+  }
+}
+
+void CompositeElevationDataProvider::CompositeElevationDataProvider_Request::respondToListener() const{
+  
+  if (_compData == NULL){
+    _listener->onError(_sector, _resolution);
+    if (_autodelete){
+      delete _listener;
+    }
+  } else{
+    _listener->onData(_sector, _resolution, _compData);
+    if (_autodelete){
+      delete _listener;
+    }
+  }
+}
+
+void CompositeElevationDataProvider::CompositeElevationDataProvider_Request::onCancel(const Sector& sector,
+                                                                                      const Vector2I& resolution){
+  _currentStep = NULL;
+}
+
+#pragma mark RequestStep
+
+CompositeElevationDataProvider::CompositeElevationDataProvider_RequestStep::
+CompositeElevationDataProvider_RequestStep(CompositeElevationDataProvider_Request* request,
+                                           ElevationDataProvider* provider,
+                                           const Sector& sector,
+                                           const Vector2I &resolution):
+_request(request),
+_provider(provider){
+  _id = _provider->requestElevationData(sector, resolution, this, true);
+}
+
+
+void CompositeElevationDataProvider::CompositeElevationDataProvider_RequestStep::onData(const Sector& sector,
+                                                                                        const Vector2I& resolution,
+                                                                                        ElevationData* elevationData){
+  if (_request != NULL){
+    _request->onData(sector, resolution, elevationData);
+  }
+}
+
+void CompositeElevationDataProvider::CompositeElevationDataProvider_RequestStep::cancel(){
+  _provider->cancelRequest(_id);
+  _request = NULL;
+}
+
+void CompositeElevationDataProvider::CompositeElevationDataProvider_RequestStep::onError(const Sector& sector,
+                                                                                         const Vector2I& resolution){
+  if (_request != NULL){
+    _request->onError(sector, resolution);
+  }
+}
+
+void CompositeElevationDataProvider::CompositeElevationDataProvider_RequestStep::onCancel(const Sector& sector,
+                                                                                          const Vector2I& resolution){
+  if (_request != NULL){
+    _request->onCancel(sector, resolution);
+  }
 }

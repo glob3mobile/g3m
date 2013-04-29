@@ -28,23 +28,50 @@ private:
   std::vector<ElevationDataProvider*> getProviders(const Sector& s) const;
   long long _currentID;
   
+  class CompositeElevationDataProvider_Request;
   
-  
-  class CompositeElevationDataProvider_Request: public IElevationDataListener{
-    
-    ElevationDataProvider* _currentRequestEDP;
-    long long _currentRequestID;
-    CompositeElevationDataProvider* const _compProvider;
-    
-    bool _hasBeenCanceled;
+  class CompositeElevationDataProvider_RequestStep: public IElevationDataListener{
     
   public:
     
+    CompositeElevationDataProvider_Request* _request;
+    ElevationDataProvider* _provider;
+    long long _id;
+    
+    CompositeElevationDataProvider_RequestStep(CompositeElevationDataProvider_Request* request,
+                                               ElevationDataProvider* provider,
+                                               const Sector& sector,
+                                               const Vector2I &resolution);
+    
+    
+    void onData(const Sector& sector,
+                const Vector2I& resolution,
+                ElevationData* elevationData);
+    
+    void cancel();
+    
+    void onError(const Sector& sector,
+                 const Vector2I& resolution);
+    
+    void onCancel(const Sector& sector,
+                  const Vector2I& resolution);
+    
+  };
+  
+  
+  
+  class CompositeElevationDataProvider_Request: public IElevationDataListener{
+
+    CompositeElevationDataProvider* const _compProvider;
+    CompositeElevationDataProvider_RequestStep* _currentStep;
+    
     CompositeElevationData* _compData;
-    IElevationDataListener * _listener;
+    IElevationDataListener* _listener;
     const bool _autodelete;
     const Vector2I _resolution;
-    const Sector& _sector;
+    const Sector _sector;
+    
+  public:
     
     std::vector<ElevationDataProvider*> _providers;
     
@@ -56,7 +83,9 @@ private:
                                            IElevationDataListener *listener,
                                            bool autodelete);
     
-    bool launchNewRequest();
+    ~CompositeElevationDataProvider_Request(){}
+    
+    bool launchNewStep();
     
     void onData(const Sector& sector,
                 const Vector2I& resolution,
@@ -66,6 +95,11 @@ private:
     
     void onError(const Sector& sector,
                  const Vector2I& resolution);
+    
+    void onCancel(const Sector& sector,
+                  const Vector2I& resolution);
+    
+    void respondToListener() const;
     
   };
   
