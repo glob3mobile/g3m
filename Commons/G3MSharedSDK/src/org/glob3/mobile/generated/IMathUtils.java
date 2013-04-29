@@ -74,8 +74,8 @@ public abstract class IMathUtils
   public abstract double atan2(double u, double v);
   public abstract float atan2(float u, float v);
 
-  public abstract double round(double v);
-  public abstract float round(float v);
+  public abstract long round(double v);
+  public abstract int round(float v);
 
   public abstract int abs(int v);
   public abstract double abs(double v);
@@ -204,4 +204,8 @@ public abstract class IMathUtils
     return Math.abs(x - y) <= epsilon * max(Math.abs(x), Math.abs(y), 1.0f);
   }
 
+  public boolean isBetween(float value, float min, float max)
+  {
+    return (value >= min) && (value <= max);
+  }
 }

@@ -26,11 +26,6 @@ public class TimeInterval
 
   }
 
-  //  TimeInterval() :
-  //  _milliseconds(0)
-  //  {
-  //  }
-
   public static TimeInterval fromMilliseconds(long milliseconds)
   {
     return new TimeInterval(milliseconds);

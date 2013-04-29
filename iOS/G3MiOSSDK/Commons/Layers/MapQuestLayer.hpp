@@ -33,6 +33,7 @@ private:
                 int initialLevel,
                 int maxLevel,
                 const TimeInterval& timeToCache,
+                bool readExpired,
                 LayerCondition* condition) :
   MercatorTiledLayer(name,
                      "http://",
@@ -40,6 +41,7 @@ private:
                      subdomains,
                      "jpg",
                      timeToCache,
+                     readExpired,
                      Sector::fullSphere(),
                      initialLevel,
                      maxLevel,
@@ -52,6 +54,7 @@ private:
 public:
 
   static MapQuestLayer* newOSM(const TimeInterval& timeToCache,
+                               bool readExpired = true,
                                int initialLevel = 2,
                                LayerCondition* condition = NULL) {
     return new MapQuestLayer("MapQuest-OSM",
@@ -60,11 +63,13 @@ public:
                              initialLevel,
                              19,
                              timeToCache,
+                             readExpired,
                              condition);
   }
 
 
   static MapQuestLayer* newOpenAerial(const TimeInterval& timeToCache,
+                                      bool readExpired = true,
                                       int initialLevel = 2,
                                       LayerCondition* condition = NULL) {
     return new MapQuestLayer("MapQuest-OpenAerial",
@@ -73,6 +78,7 @@ public:
                              initialLevel,
                              11,
                              timeToCache,
+                             readExpired,
                              condition);
   }
   

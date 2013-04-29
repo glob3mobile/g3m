@@ -13,7 +13,7 @@ public class BuilderDownloadStepDownloadListener extends IImageDownloadListener
     _builder._retain();
   }
 
-  public final void onDownload(URL url, IImage image)
+  public final void onDownload(URL url, IImage image, boolean expired)
   {
     //  _onDownload++;
     _builder.stepDownloaded(_position, image);
@@ -25,7 +25,7 @@ public class BuilderDownloadStepDownloadListener extends IImageDownloadListener
     _builder.stepCanceled(_position);
   }
 
-  public final void onCanceledDownload(URL url, IImage image)
+  public final void onCanceledDownload(URL url, IImage image, boolean expired)
   {
   }
 

@@ -65,8 +65,8 @@ public:
   virtual double atan2(double u, double v) const = 0;
   virtual float  atan2(float u,  float v)  const = 0;
 
-  virtual double round(double v) const = 0;
-  virtual float  round(float v)  const = 0;
+  virtual long long round(double v) const = 0;
+  virtual int       round(float v)  const = 0;
 
   virtual int    abs(int v)    const = 0;
   virtual double abs(double v) const = 0;
@@ -110,7 +110,7 @@ public:
 
   virtual double max(double d1, double d2) const = 0;
   virtual float  max(float f1,  float f2)  const = 0;
-  
+
   virtual int max(int i1, int i2) const = 0;
   virtual long long max(long long l1, long long l2) const = 0;
 
@@ -124,7 +124,7 @@ public:
 
   virtual double floor(double d) const = 0;
   virtual float  floor(float f)  const = 0;
-  
+
   virtual double ceil(double d) const = 0;
   virtual float  ceil(float f)  const = 0;
 
@@ -193,6 +193,11 @@ public:
     return abs(x - y) <= epsilon * max(abs(x), abs(y), 1.0f);
   }
 
+  virtual bool isBetween(float value,
+                         float min,
+                         float max) const {
+    return (value >= min) && (value <= max);
+  }
 };
 
 #endif

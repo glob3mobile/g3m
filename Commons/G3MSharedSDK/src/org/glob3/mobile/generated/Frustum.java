@@ -20,22 +20,6 @@ public class Frustum
 
   private Extent _extent;
 
-  /*  Frustum(const Plane& leftPlane,
-   const Plane& rightPlane,
-   const Plane& bottomPlane,
-   const Plane& topPlane,
-   const Plane& nearPlane,
-   const Plane& farPlane) :
-   _leftPlane(leftPlane),
-   _rightPlane(rightPlane),
-   _bottomPlane(bottomPlane),
-   _topPlane(topPlane),
-   _nearPlane(nearPlane),
-   _farPlane(farPlane)
-   {
-   
-   }*/
-
   private Frustum(Frustum that, MutableMatrix44D matrix, MutableMatrix44D inverse)
   {
      _ltn = new Vector3D(that._ltn.transformedBy(inverse, 1));
@@ -249,8 +233,6 @@ public class Frustum
 
   public final boolean touchesWithBox(Box box)
   {
-    boolean outside;
-  
     // test first if frustum extent intersect with box
     if (!getExtent().touchesBox(box))
     {
@@ -259,95 +241,88 @@ public class Frustum
   
     final java.util.ArrayList<Vector3F> corners = box.getCornersF();
   
+    boolean outside;
+  
     // test with left plane
     outside = true;
-    for (int i = 0; i<8; i++)
-      if (_leftPlane.signedDistance(corners.get(i))<0)
+    for (int i = 0; i < 8; i++)
+    {
+      if (_leftPlane.signedDistance(corners.get(i)) < 0)
       {
         outside = false;
         break;
       }
+    }
     if (outside)
        return false;
   
     // test with bottom plane
     outside = true;
-    for (int i = 0; i<8; i++)
-      if (_bottomPlane.signedDistance(corners.get(i))<0)
+    for (int i = 0; i < 8; i++)
+    {
+      if (_bottomPlane.signedDistance(corners.get(i)) < 0)
       {
         outside = false;
         break;
       }
+    }
     if (outside)
        return false;
   
     // test with right plane
     outside = true;
-    for (int i = 0; i<8; i++)
-      if (_rightPlane.signedDistance(corners.get(i))<0)
+    for (int i = 0; i < 8; i++)
+    {
+      if (_rightPlane.signedDistance(corners.get(i)) < 0)
       {
         outside = false;
         break;
       }
+    }
     if (outside)
        return false;
   
     // test with top plane
     outside = true;
-    for (int i = 0; i<8; i++)
-      if (_topPlane.signedDistance(corners.get(i))<0)
+    for (int i = 0; i < 8; i++)
+    {
+      if (_topPlane.signedDistance(corners.get(i)) < 0)
       {
         outside = false;
         break;
       }
+    }
     if (outside)
        return false;
   
     // test with near plane
     outside = true;
-    for (int i = 0; i<8; i++)
-      if (_nearPlane.signedDistance(corners.get(i))<0)
+    for (int i = 0; i < 8; i++)
+    {
+      if (_nearPlane.signedDistance(corners.get(i)) < 0)
       {
         outside = false;
         break;
       }
+    }
     if (outside)
        return false;
   
     // test with far plane
     outside = true;
-    for (int i = 0; i<8; i++)
-      if (_farPlane.signedDistance(corners.get(i))<0)
+    for (int i = 0; i < 8; i++)
+    {
+      if (_farPlane.signedDistance(corners.get(i)) < 0)
       {
         outside = false;
         break;
       }
+    }
     if (outside)
        return false;
   
     return true;
   }
-
-  /*
-   Frustum transformedBy(const MutableMatrix44D& matrix) const {
-   return Frustum(_leftPlane.transformedBy(matrix),
-   _rightPlane.transformedBy(matrix),
-   _bottomPlane.transformedBy(matrix),
-   _topPlane.transformedBy(matrix),
-   _nearPlane.transformedBy(matrix),
-   _farPlane.transformedBy(matrix));
-   }
-   
-   
-   Frustum* transformedBy_P(const MutableMatrix44D& matrix) const {
-   return new Frustum(_leftPlane.transformedBy(matrix),
-   _rightPlane.transformedBy(matrix),
-   _bottomPlane.transformedBy(matrix),
-   _topPlane.transformedBy(matrix),
-   _nearPlane.transformedBy(matrix),
-   _farPlane.transformedBy(matrix));
-   }*/
-
 
   public final Frustum transformedBy_P(MutableMatrix44D matrix)
   {
@@ -364,4 +339,5 @@ public class Frustum
   {
      return _extent;
   }
+
 }

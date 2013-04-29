@@ -161,7 +161,8 @@ public:
   }
 
   void onDownload(const URL& url,
-                  IImage* image)  {
+                  IImage* image,
+                  bool expired)  {
     _ellipsoidShape->imageDownloaded(image);
   }
 
@@ -174,7 +175,8 @@ public:
   }
 
   void onCanceledDownload(const URL& url,
-                          IImage* image)  {
+                          IImage* image,
+                          bool expired)  {
 
   }
 };
@@ -193,6 +195,7 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
       rc->getDownloader()->requestImage(_textureURL,
                                         1000000,
                                         TimeInterval::fromDays(30),
+                                        true,
                                         new EllipsoidShape_IImageDownloadListener(this),
                                         true);
     }
@@ -215,19 +218,8 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
       const Geodetic2D innerPoint = sector.getInnerPoint(u, v);
 
       vertices.add(innerPoint);
-
-
-//      double vv;
-//      if (_mercator) {
-//        vv = MercatorUtils::getMercatorV(innerPoint.latitude());
-//      }
-//      else {
-//        vv = v;
-//      }
       
-      const double vv = _mercator
-      /*                    */ ? MercatorUtils::getMercatorV(innerPoint.latitude())
-      /*                    */ : v;
+      const double vv = _mercator ? MercatorUtils::getMercatorV(innerPoint.latitude()) : v;
 
       texCoords.add((float) u, (float) vv);
     }

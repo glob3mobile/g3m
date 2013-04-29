@@ -52,32 +52,78 @@ const Angle Sector::getInnerPointLatitude(double v) const {
   return Angle::linearInterpolation( _lower.latitude(), _upper.latitude(),  (float) (1.0-v) );
 }
 
-bool Sector::isBackOriented(const G3MRenderContext *rc, double height) const {
+
+
+class Sector_Geodetic2DCachedData {
+private:
+  const Vector3D _cartesian;
+  const Vector3D _geodeticSurfaceNormal;
+
+public:
+
+  Sector_Geodetic2DCachedData(const Planet* planet,
+                              const Geodetic2D position) :
+  _cartesian( planet->toCartesian(position) ),
+  _geodeticSurfaceNormal( planet->geodeticSurfaceNormal(_cartesian) )
+  {
+  }
+
+  ~Sector_Geodetic2DCachedData() {
+  }
+
+  bool test(const Vector3D& eye) const {
+    return _geodeticSurfaceNormal.dot( eye.sub(_cartesian) ) > 0;
+  }
+};
+
+Sector::~Sector() {
+  delete _nwData;
+  delete _neData;
+  delete _swData;
+  delete _seData;
+}
+
+bool Sector::isBackOriented(const G3MRenderContext *rc,
+                            double minHeight) const {
   const Camera* camera = rc->getCurrentCamera();
   const Planet* planet = rc->getPlanet();
-  
+
   // compute angle with normals in the four corners
   const Vector3D eye = camera->getCartesianPosition();
 
-  const Vector3D pointNW = planet->toCartesian(getNW());
-  if (planet->geodeticSurfaceNormal(pointNW).dot(eye.sub(pointNW)) > 0) { return false; }
+  if (_nwData == NULL)    { _nwData = new Sector_Geodetic2DCachedData(planet, getNW()); }
+  if (_nwData->test(eye)) { return false; }
 
-  const Vector3D pointNE = planet->toCartesian(getNE());
-  if (planet->geodeticSurfaceNormal(pointNE).dot(eye.sub(pointNE)) > 0) { return false; }
+  if (_neData == NULL)    { _neData = new Sector_Geodetic2DCachedData(planet, getNE()); }
+  if (_neData->test(eye)) { return false; }
 
-  const Vector3D pointSW = planet->toCartesian(getSW());
-  if (planet->geodeticSurfaceNormal(pointSW).dot(eye.sub(pointSW)) > 0) { return false; }
+  if (_swData == NULL)    { _swData = new Sector_Geodetic2DCachedData(planet, getSW()); }
+  if (_swData->test(eye)) { return false; }
 
-  const Vector3D pointSE = planet->toCartesian(getSE());
-  if (planet->geodeticSurfaceNormal(pointSE).dot(eye.sub(pointSE)) > 0) { return false; }
-  
+  if (_seData == NULL)    { _seData = new Sector_Geodetic2DCachedData(planet, getSE()); }
+  if (_seData->test(eye)) { return false; }
+
+  /*
+  const Vector3D cartesianNW = planet->toCartesian(getNW());
+  if (planet->geodeticSurfaceNormal(cartesianNW).dot(eye.sub(cartesianNW)) > 0) { return false; }
+
+  const Vector3D cartesianNE = planet->toCartesian(getNE());
+  if (planet->geodeticSurfaceNormal(cartesianNE).dot(eye.sub(cartesianNE)) > 0) { return false; }
+
+  const Vector3D cartesianSW = planet->toCartesian(getSW());
+  if (planet->geodeticSurfaceNormal(cartesianSW).dot(eye.sub(cartesianSW)) > 0) { return false; }
+
+  const Vector3D cartesianSE = planet->toCartesian(getSE());
+  if (planet->geodeticSurfaceNormal(cartesianSE).dot(eye.sub(cartesianSE)) > 0) { return false; }
+  */
+
   // compute angle with normal in the closest point to the camera
   const Geodetic2D center = camera->getGeodeticCenterOfView().asGeodetic2D();
 
-  const Vector3D point = planet->toCartesian(getClosestPoint(center), height);
+  const Vector3D cartesianCenter = planet->toCartesian(getClosestPoint(center), minHeight);
 
   // if all the angles are higher than 90, sector is back oriented
-  return (planet->geodeticSurfaceNormal(point).dot(eye.sub(point)) <= 0);
+  return (planet->geodeticSurfaceNormal(cartesianCenter).dot(eye.sub(cartesianCenter)) <= 0);
 }
 
 /*
@@ -203,6 +249,37 @@ Sector Sector::mergedWith(const Sector& that) const {
   const Geodetic2D up(upLat, upLon);
 
   return Sector(low, up);
+}
+
+const Geodetic2D Sector::clamp(const Geodetic2D& position) const {
+  if (contains(position)) {
+    return position;
+  }
+
+  double latitudeInDegrees = position.latitude().degrees();
+  double longitudeInDegrees = position.longitude().degrees();
+
+  const double upperLatitudeInDegrees  = _upper.latitude().degrees();
+  if (latitudeInDegrees > upperLatitudeInDegrees) {
+    latitudeInDegrees = upperLatitudeInDegrees;
+  }
+
+  const double upperLongitudeInDegrees = _upper.longitude().degrees();
+  if (longitudeInDegrees > upperLongitudeInDegrees) {
+    longitudeInDegrees = upperLongitudeInDegrees;
+  }
+
+  const double lowerLatitudeInDegrees  = _lower.latitude().degrees();
+  if (latitudeInDegrees < lowerLatitudeInDegrees) {
+    latitudeInDegrees = lowerLatitudeInDegrees;
+  }
+
+  const double lowerLongitudeInDegrees  = _lower.longitude().degrees();
+  if (longitudeInDegrees < lowerLongitudeInDegrees) {
+    longitudeInDegrees = lowerLongitudeInDegrees;
+  }
+
+  return Geodetic2D::fromDegrees(latitudeInDegrees, longitudeInDegrees);
 }
 
 const Geodetic2D Sector::getClosestPoint(const Geodetic2D& pos) const {

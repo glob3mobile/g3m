@@ -17,11 +17,13 @@
 HereLayer::HereLayer(const std::string& appId,
                      const std::string& appCode,
                      const TimeInterval& timeToCache,
+                     bool readExpired,
                      int initialLevel,
                      LayerCondition* condition) :
 Layer(condition,
       "here",
       timeToCache,
+      readExpired,
       new LayerTilesRenderParameters(Sector::fullSphere(),
                                      1,
                                      1,
@@ -149,7 +151,8 @@ std::vector<Petition*> HereLayer::createTileMapPetitions(const G3MRenderContext*
 
   petitions.push_back( new Petition(tileSector,
                                     URL(path, false),
-                                    _timeToCache,
+                                    getTimeToCache(),
+                                    getReadExpired(),
                                     true) );
 
   return petitions;

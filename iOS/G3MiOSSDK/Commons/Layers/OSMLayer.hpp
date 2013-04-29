@@ -24,6 +24,7 @@ private:
 
 public:
   OSMLayer(const TimeInterval& timeToCache,
+           bool readExpired = true,
            int initialLevel = 2,
            LayerCondition* condition = NULL) :
   MercatorTiledLayer("OpenStreetMap",
@@ -32,6 +33,7 @@ public:
                      getSubdomains(),
                      "png",
                      timeToCache,
+                     readExpired,
                      Sector::fullSphere(),
                      initialLevel,
                      18,

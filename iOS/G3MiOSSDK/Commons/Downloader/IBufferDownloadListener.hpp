@@ -20,7 +20,8 @@ public:
    Callback method invoked on a successful download.  The buffer has to be deleted in C++ / .disposed() in Java
    */
   virtual void onDownload(const URL& url,
-                          IByteBuffer* buffer) = 0;
+                          IByteBuffer* buffer,
+                          bool expired) = 0;
 
   /**
    Callback method invoke after an error trying to download url
@@ -38,7 +39,8 @@ public:
    The buffer WILL be deleted/disposed after the method finishs.  If you need to keep the buffer, use shallowCopy() to store a copy of the buffer.
    */
   virtual void onCanceledDownload(const URL& url,
-                                  IByteBuffer* data) = 0;
+                                  IByteBuffer* buffer,
+                                  bool expired) = 0;
 
 };
 

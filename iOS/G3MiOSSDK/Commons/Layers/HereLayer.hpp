@@ -25,6 +25,7 @@ public:
   HereLayer(const std::string& appId,
             const std::string& appCode,
             const TimeInterval& timeToCache,
+            bool readExpired = true,
             int initialLevel = 2,
             LayerCondition* condition = NULL);
 

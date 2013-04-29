@@ -31,6 +31,7 @@ public class SimpleCameraConstrainer implements ICameraConstrainer
   
     final double radii = planet.getRadii().maxAxis();
     final double maxHeight = radii *9;
+    final double minHeight = 10;
   
     final Geodetic3D cameraPosition = nextCamera.getGeodeticPosition();
     final double cameraHeight = cameraPosition.height();
@@ -38,6 +39,10 @@ public class SimpleCameraConstrainer implements ICameraConstrainer
     if (cameraHeight > maxHeight)
     {
       nextCamera.setGeodeticPosition(cameraPosition.latitude(), cameraPosition.longitude(), maxHeight);
+    }
+    else if (cameraHeight < minHeight)
+    {
+      nextCamera.setGeodeticPosition(cameraPosition.latitude(), cameraPosition.longitude(), minHeight);
     }
   
   }

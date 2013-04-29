@@ -290,8 +290,9 @@ void G3MWidget::onResizeViewportEvent(int width, int height) {
 
     _nextCamera->resizeViewport(width, height);
 
-       _nextCamera->resizeViewport(width, height);
-      
+    // _nextCamera->resizeViewport(width, height);
+
+    _currentCamera->resizeViewport(width, height);
     _cameraRenderer->onResizeViewportEvent(&ec, width, height);
 
     if (_mainRenderer->isEnable()) {
@@ -299,7 +300,6 @@ void G3MWidget::onResizeViewportEvent(int width, int height) {
     }
   }
 }
-
 
 void G3MWidget::render(int width, int height) {
   if (_paused) {
@@ -346,6 +346,10 @@ void G3MWidget::render(int width, int height) {
                                 _currentCamera,
                                 _nextCamera);
   }
+
+  
+  _nextCamera->forceMatrixCreation();
+  
   _currentCamera->copyFrom(*_nextCamera);
 
   G3MRenderContext rc(_frameTasksExecutor,
@@ -605,6 +609,6 @@ void G3MWidget::stopCameraAnimation() {
   _effectsScheduler->cancelAllEffectsFor(target);
 }
 
-void G3MWidget::resetCameraPosition() {
-  getNextCamera()->resetPosition();
-}
+//void G3MWidget::resetCameraPosition() {
+//  getNextCamera()->resetPosition();
+//}

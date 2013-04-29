@@ -16,11 +16,13 @@
 
 GoogleMapsLayer::GoogleMapsLayer(const std::string& key,
                                  const TimeInterval& timeToCache,
+                                 bool readExpired,
                                  int initialLevel,
                                  LayerCondition* condition) :
 Layer(condition,
       "GoogleMaps",
       timeToCache,
+      readExpired,
       new LayerTilesRenderParameters(Sector::fullSphere(),
                                      1,
                                      1,
@@ -107,7 +109,8 @@ std::vector<Petition*> GoogleMapsLayer::createTileMapPetitions(const G3MRenderCo
 
   petitions.push_back( new Petition(tileSector,
                                     URL(path, false),
-                                    _timeToCache,
+                                    getTimeToCache(),
+                                    getReadExpired(),
                                     true) );
   
   return petitions;
