@@ -10,8 +10,8 @@
 #define __G3MiOSSDK__CompositeElevationDataProvider__
 
 #include <iostream>
-#include <vector.h>
-#include <map.h>
+#include <vector>
+#include <map>
 
 #include "ElevationDataProvider.hpp"
 #include "Sector.hpp"
@@ -29,26 +29,26 @@ private:
   long long _currentID;
   
   
+  
   class CompositeElevationDataProvider_Request: public IElevationDataListener{
+    
+    ElevationDataProvider* _currentRequestEDP;
+    long long _currentRequestID;
+    CompositeElevationDataProvider* const _compProvider;
+    
+    bool _hasBeenCanceled;
+    
+  public:
     
     CompositeElevationData* _compData;
     IElevationDataListener * _listener;
     const bool _autodelete;
     const Vector2I _resolution;
     const Sector& _sector;
-    ElevationDataProvider* _currentRequestEDP;
-    long long _currentRequestID;
-    CompositeElevationDataProvider* const _compProvider;
     
     std::vector<ElevationDataProvider*> _providers;
     
     ElevationDataProvider* popBestProvider(std::vector<ElevationDataProvider*>& ps, const Vector2I& resolution) const;
-    
-    void respondToListener() const;
-    
-    
-
-  public:
     
     CompositeElevationDataProvider_Request(CompositeElevationDataProvider* provider,
                                            const Sector& sector,
@@ -72,9 +72,7 @@ private:
   
   std::map<long long, CompositeElevationDataProvider_Request*> _requests;
   
-  
-  void deleteRequest(const CompositeElevationDataProvider_Request* req);
-  
+  void requestFinished(CompositeElevationDataProvider_Request* req);
   
 public:
   CompositeElevationDataProvider():_context(NULL), _currentID(0){}

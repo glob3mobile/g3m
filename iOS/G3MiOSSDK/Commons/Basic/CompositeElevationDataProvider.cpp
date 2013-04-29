@@ -117,17 +117,39 @@ void CompositeElevationDataProvider::cancelRequest(const long long requestId){
   }
 }
 
-void CompositeElevationDataProvider::deleteRequest(const CompositeElevationDataProvider_Request* req){
+void CompositeElevationDataProvider::requestFinished(CompositeElevationDataProvider_Request* req){
+  
+  CompositeElevationData* data = req->_compData;
+  IElevationDataListener * listener = req->_listener;
+  const bool autodelete = req->_autodelete;
+  const Vector2I resolution = req->_resolution;
+  const Sector& sector = req->_sector;
+  
+  if (data == NULL){
+    listener->onError(sector, resolution);
+    if (autodelete){
+      delete listener;
+      req->_listener = NULL;
+    }
+  } else{
+    listener->onData(sector, resolution, data);
+    if (autodelete){
+      delete listener;
+      req->_listener = NULL;
+    }
+  }
   std::map<long long, CompositeElevationDataProvider_Request*>::iterator it;
   for (it =  _requests.begin(); it !=  _requests.end(); it++) {
     const CompositeElevationDataProvider_Request* reqI = it->second;
     if (reqI == req){
       _requests.erase(it);
-      delete req;
-      return;
+      break;
     }
   }
-  ILogger::instance()->logError("Deleting nonexisting request in CompositeElevationDataProvider.");
+  
+  if (it == _requests.end()){
+    ILogger::instance()->logError("Deleting nonexisting request in CompositeElevationDataProvider.");
+  }
 }
 
 #pragma mark Request
@@ -145,20 +167,8 @@ _listener(listener),
 _autodelete(autodelete),
 _compProvider(provider),
 _currentRequestEDP(NULL),
-_compData(NULL){
-}
-
-void CompositeElevationDataProvider::CompositeElevationDataProvider_Request::respondToListener() const{
-  
-  if (_compData == NULL){
-    _listener->onError(_sector, _resolution);
-  } else{
-    _listener->onData(_sector, _resolution, _compData);
-    if (_autodelete){
-      delete _listener;
-    }
-    _compProvider->deleteRequest(this); //AUTODELETE
-  }
+_compData(NULL),
+_hasBeenCanceled(false){
 }
 
 ElevationDataProvider* CompositeElevationDataProvider::
@@ -195,6 +205,7 @@ bool CompositeElevationDataProvider::CompositeElevationDataProvider_Request::lau
     _currentRequestID = _currentRequestEDP->requestElevationData(_sector, _resolution, this, false);
     return true;
   } else{
+    _currentRequestID = -1; //Waiting for no request
     return false;
   }
 }
@@ -202,18 +213,25 @@ bool CompositeElevationDataProvider::CompositeElevationDataProvider_Request::lau
 void CompositeElevationDataProvider::CompositeElevationDataProvider_Request::onData(const Sector& sector,
                                                                                     const Vector2I& resolution,
                                                                                     ElevationData* elevationData){
-  if (_compData == NULL){
-    _compData = new CompositeElevationData(elevationData);
-  } else{
-    _compData->addElevationData(elevationData);
-  }
-  
-  
-  if (!_compData->hasNoData()){
-    respondToListener();    //If this data is enough we respond
-  } else{
-    if (!launchNewRequest()){
-      respondToListener(); //If there are no more providers we respond
+  _currentRequestID = -1; //Waiting for no request
+  if (_hasBeenCanceled){
+    delete elevationData;
+    delete _compData;
+    delete this;
+  } else {
+    
+    if (_compData == NULL){
+      _compData = new CompositeElevationData(elevationData);
+    } else{
+      _compData->addElevationData(elevationData);
+    }
+    
+    if (!_compData->hasNoData()){
+      _compProvider->requestFinished(this);//If this data is enough we respond
+    } else{
+      if (!launchNewRequest()){//If there are no more providers we respond
+        _compProvider->requestFinished(this);
+      }
     }
   }
 }
@@ -222,19 +240,29 @@ void CompositeElevationDataProvider::CompositeElevationDataProvider_Request::can
   if (_currentRequestEDP != NULL){
     _currentRequestEDP->cancelRequest(_currentRequestID);
   }
+  _hasBeenCanceled = true;
+  
+  if (_currentRequestID == -1){
+    delete this;
+  }
 }
 
 void CompositeElevationDataProvider::CompositeElevationDataProvider_Request::onError(const Sector& sector,
                                                                                      const Vector2I& resolution){
-  bool t = launchNewRequest();
-  if (!t){
-    respondToListener(); //If there are no more providers we respond
+  _currentRequestID = -1; //Waiting for no request
+  if (_hasBeenCanceled){
+    delete this;
+  } else{
+    if (!launchNewRequest()){
+      //If there are no more providers we respond
+      _compProvider->requestFinished(this);
+    }
   }
 }
 
 ElevationData* CompositeElevationDataProvider::createSubviewOfElevationData(ElevationData* elevationData,
-                                            const Sector& sector,
-                                            const Vector2I& resolution) const{
+                                                                            const Sector& sector,
+                                                                            const Vector2I& resolution) const{
   return new SubviewElevationData(elevationData,
                                   false,
                                   sector,
