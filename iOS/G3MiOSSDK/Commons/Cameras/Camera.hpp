@@ -31,79 +31,78 @@ private:
   CameraDirtyFlags& operator=(const CameraDirtyFlags& that);
 
 public:
-  mutable bool  _frustumDataDirty;
-  mutable bool _projectionMatrix;
-  mutable bool _modelMatrix;
-  mutable bool _modelViewMatrix;
-  mutable bool _cartesianCenterOfView;
-  mutable bool _geodeticCenterOfView;
-  mutable bool _frustum;
-  mutable bool _frustumMC;
-  mutable bool _halfFrustum;
-  mutable bool _halfFrustumMC;
-
+  mutable bool _frustumDataDirty;
+  mutable bool _projectionMatrixDirty;
+  mutable bool _modelMatrixDirty;
+  mutable bool _modelViewMatrixDirty;
+  mutable bool _cartesianCenterOfViewDirty;
+  mutable bool _geodeticCenterOfViewDirty;
+  mutable bool _frustumDirty;
+  mutable bool _frustumMCDirty;
+  mutable bool _halfFrustumDirty;
+  mutable bool _halfFrustumMCDirty;
 
   CameraDirtyFlags() {
     setAll(true);
   }
 
   void copyFrom(const CameraDirtyFlags& other){
-     _frustumDataDirty           = other. _frustumDataDirty;
-    _projectionMatrix      = other._projectionMatrix;
-    _modelMatrix           = other._modelMatrix;
-    _modelViewMatrix       = other._modelViewMatrix;
-    _cartesianCenterOfView = other._cartesianCenterOfView;
-    _geodeticCenterOfView  = other._geodeticCenterOfView;
-    _frustum               = other._frustum;
-    _frustumMC             = other._frustumMC;
-    _halfFrustum           = other._halfFrustum;
-    _halfFrustumMC         = other._halfFrustumMC;
+    _frustumDataDirty           = other._frustumDataDirty;
+    _projectionMatrixDirty      = other._projectionMatrixDirty;
+    _modelMatrixDirty           = other._modelMatrixDirty;
+    _modelViewMatrixDirty       = other._modelViewMatrixDirty;
+    _cartesianCenterOfViewDirty = other._cartesianCenterOfViewDirty;
+    _geodeticCenterOfViewDirty  = other._geodeticCenterOfViewDirty;
+    _frustumDirty               = other._frustumDirty;
+    _frustumMCDirty             = other._frustumMCDirty;
+    _halfFrustumDirty           = other._halfFrustumDirty;
+    _halfFrustumMCDirty         = other._halfFrustumMCDirty;
+
   }
 
 
   CameraDirtyFlags(const CameraDirtyFlags& other)
   {
-     _frustumDataDirty           = other. _frustumDataDirty;
-    _projectionMatrix      = other._projectionMatrix;
-    _modelMatrix           = other._modelMatrix;
-    _modelViewMatrix       = other._modelViewMatrix;
-    _cartesianCenterOfView = other._cartesianCenterOfView;
-    _geodeticCenterOfView  = other._geodeticCenterOfView;
-    _frustum               = other._frustum;
-    _frustumMC             = other._frustumMC;
-    _halfFrustum           = other._halfFrustum;
-    _halfFrustumMC         = other._halfFrustumMC;
+    _frustumDataDirty           = other._frustumDataDirty;
+    _projectionMatrixDirty      = other._projectionMatrixDirty;
+    _modelMatrixDirty           = other._modelMatrixDirty;
+    _modelViewMatrixDirty       = other._modelViewMatrixDirty;
+    _cartesianCenterOfViewDirty = other._cartesianCenterOfViewDirty;
+    _geodeticCenterOfViewDirty  = other._geodeticCenterOfViewDirty;
+    _frustumDirty               = other._frustumDirty;
+    _frustumMCDirty             = other._frustumMCDirty;
+    _halfFrustumDirty           = other._halfFrustumDirty;
+    _halfFrustumMCDirty         = other._halfFrustumMCDirty;
   }
 
   std::string description(){
     std::string d = "";
+    if (_frustumDataDirty) d+= "FD ";
+    if (_projectionMatrixDirty) d += "PM ";
+    if (_modelMatrixDirty) d+= "MM ";
 
-    if ( _frustumDataDirty) d+= "FD ";
-    if (_projectionMatrix) d += "PM ";
-    if (_modelMatrix) d+= "MM ";
+    if (_modelViewMatrixDirty) d+= "MVM ";
+    if (_cartesianCenterOfViewDirty) d += "CCV ";
+    if (_geodeticCenterOfViewDirty) d+= "GCV ";
 
-    if (_modelViewMatrix) d+= "MVM ";
-    if (_cartesianCenterOfView) d += "CCV ";
-    if (_geodeticCenterOfView) d+= "GCV ";
-
-    if (_frustum) d+= "F ";
-    if (_frustumMC) d += "FMC ";
-    if (_halfFrustum) d+= "HF ";
-    if (_halfFrustumMC) d+= "HFMC ";
+    if (_frustumDirty) d+= "F ";
+    if (_frustumMCDirty) d += "FMC ";
+    if (_halfFrustumDirty) d+= "HF ";
+    if (_halfFrustumMCDirty) d+= "HFMC ";
     return d;
   }
 
   void setAll(bool value) {
-     _frustumDataDirty           = value;
-    _projectionMatrix      = value;
-    _modelMatrix           = value;
-    _modelViewMatrix       = value;
-    _cartesianCenterOfView = value;
-    _geodeticCenterOfView  = value;
-    _frustum               = value;
-    _frustumMC             = value;
-    _halfFrustum           = value;
-    _halfFrustumMC         = value;
+    _frustumDataDirty           = value;
+    _projectionMatrixDirty      = value;
+    _modelMatrixDirty           = value;
+    _modelViewMatrixDirty       = value;
+    _cartesianCenterOfViewDirty = value;
+    _geodeticCenterOfViewDirty  = value;
+    _frustumDirty               = value;
+    _frustumMCDirty             = value;
+    _halfFrustumDirty           = value;
+    _halfFrustumMCDirty         = value;
   }
 };
 
@@ -131,7 +130,8 @@ public:
   _frustumInModelCoordinates((that._frustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._frustumInModelCoordinates)),
   _halfFrustum((that._halfFrustum == NULL) ? NULL : new Frustum(*that._halfFrustum)),
   _halfFrustumInModelCoordinates((that._halfFrustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._halfFrustumInModelCoordinates)),
-  _camEffectTarget(new CameraEffectTarget())
+  _camEffectTarget(new CameraEffectTarget()),
+  _geodeticPosition((that._geodeticPosition == NULL) ? NULL: new Geodetic3D(*that._geodeticPosition))
   {
   }
 
@@ -144,6 +144,7 @@ public:
     delete _halfFrustum;
     delete _halfFrustumInModelCoordinates;
     delete _geodeticCenterOfView;
+    delete _geodeticPosition;
   }
 
   void copyFrom(const Camera &c);
@@ -198,8 +199,8 @@ public:
 
   const Frustum* const getFrustumInModelCoordinates() const {
     //    return getFrustumMC();
-    if (_dirtyFlags._frustumMC) {
-      _dirtyFlags._frustumMC = false;
+    if (_dirtyFlags._frustumMCDirty) {
+      _dirtyFlags._frustumMCDirty = false;
       delete _frustumInModelCoordinates;
       _frustumInModelCoordinates = getFrustum()->transformedBy_P(getModelMatrix());
     }
@@ -224,6 +225,8 @@ public:
   void setCartesianPosition(const MutableVector3D& v){
     if (!v.equalTo(_position)){
       _position = MutableVector3D(v);
+      delete _geodeticPosition;
+      _geodeticPosition = NULL;
       _dirtyFlags.setAll(true);
     }
   }
@@ -238,7 +241,10 @@ public:
   void setPitch(const Angle& angle);
 
   const Geodetic3D getGeodeticPosition() const {
-    return _planet->toGeodetic3D( getCartesianPosition() );
+    if (_geodeticPosition == NULL) {
+      _geodeticPosition = new Geodetic3D( _planet->toGeodetic3D(getCartesianPosition()) );
+    }
+    return *_geodeticPosition;
   }
 
   void setGeodeticPosition(const Geodetic3D& g3d) {
@@ -269,6 +275,13 @@ public:
                       const Angle& azimuth,
                       const Angle& altitude);
 
+  void forceMatrixCreation(){
+    //MutableMatrix44D projectionMatrix = MutableMatrix44D::createProjectionMatrix(_frustumData);
+    //getFrustumData();
+    getProjectionMatrix();
+    getModelMatrix();
+  }
+
 private:
   const Angle getHeading(const Vector3D& normal) const;
 
@@ -281,6 +294,8 @@ private:
   MutableVector3D _position;            // position
   MutableVector3D _center;              // point where camera is looking at
   MutableVector3D _up;                  // vertical vector
+
+  mutable Geodetic3D*     _geodeticPosition;    //Must be updated when changing position
 
   mutable CameraDirtyFlags _dirtyFlags;
   mutable FrustumData      _frustumData;
@@ -324,8 +339,8 @@ private:
 
   // data to compute frustum
   FrustumData getFrustumData() const {
-    if (_dirtyFlags. _frustumDataDirty) {
-      _dirtyFlags. _frustumDataDirty = false;
+    if (_dirtyFlags._frustumDataDirty) {
+      _dirtyFlags._frustumDataDirty = false;
       _frustumData = calculateFrustumData();
     }
     return _frustumData;
@@ -333,8 +348,8 @@ private:
 
   // opengl projection matrix
   MutableMatrix44D getProjectionMatrix() const{
-    if (_dirtyFlags._projectionMatrix) {
-      _dirtyFlags._projectionMatrix = false;
+    if (_dirtyFlags._projectionMatrixDirty) {
+      _dirtyFlags._projectionMatrixDirty = false;
       _projectionMatrix = MutableMatrix44D::createProjectionMatrix(getFrustumData());
     }
     return _projectionMatrix;
@@ -342,8 +357,8 @@ private:
 
   // Model matrix, computed in CPU in double precision
   MutableMatrix44D getModelMatrix() const {
-    if (_dirtyFlags._modelMatrix) {
-      _dirtyFlags._modelMatrix = false;
+    if (_dirtyFlags._modelMatrixDirty) {
+      _dirtyFlags._modelMatrixDirty = false;
       _modelMatrix = MutableMatrix44D::createModelMatrix(_position, _center, _up);
     }
     return _modelMatrix;
@@ -351,8 +366,8 @@ private:
 
   // multiplication of model * projection
   MutableMatrix44D getModelViewMatrix() const {
-    if (_dirtyFlags._modelViewMatrix) {
-      _dirtyFlags._modelViewMatrix = false;
+    if (_dirtyFlags._modelViewMatrixDirty) {
+      _dirtyFlags._modelViewMatrixDirty = false;
       _modelViewMatrix = getProjectionMatrix().multiply(getModelMatrix());
     }
     return _modelViewMatrix;
@@ -360,8 +375,8 @@ private:
 
   // intersection of view direction with globe in(x,y,z)
   MutableVector3D   _getCartesianCenterOfView() const {
-    if (_dirtyFlags._cartesianCenterOfView) {
-      _dirtyFlags._cartesianCenterOfView = false;
+    if (_dirtyFlags._cartesianCenterOfViewDirty) {
+      _dirtyFlags._cartesianCenterOfViewDirty = false;
       _cartesianCenterOfView = centerOfViewOnPlanet().asMutableVector3D();
     }
     return _cartesianCenterOfView;
@@ -369,8 +384,8 @@ private:
 
   // intersection of view direction with globe in geodetic
   Geodetic3D*     _getGeodeticCenterOfView() const {
-    if (_dirtyFlags._geodeticCenterOfView) {
-      _dirtyFlags._geodeticCenterOfView = false;
+    if (_dirtyFlags._geodeticCenterOfViewDirty) {
+      _dirtyFlags._geodeticCenterOfViewDirty = false;
       delete _geodeticCenterOfView;
       _geodeticCenterOfView = new Geodetic3D(_planet->toGeodetic3D(getXYZCenterOfView()));
     }
@@ -379,8 +394,8 @@ private:
 
   // camera frustum
   Frustum*  getFrustum() const {
-    if (_dirtyFlags._frustum) {
-      _dirtyFlags._frustum = false;
+    if (_dirtyFlags._frustumDirty) {
+      _dirtyFlags._frustumDirty = false;
       delete _frustum;
       _frustum = new Frustum(getFrustumData());
     }
@@ -389,8 +404,8 @@ private:
 
   Frustum* getHalfFrustum() const {
     // __temporal_test_for_clipping;
-    if (_dirtyFlags._halfFrustum) {
-      _dirtyFlags._halfFrustum = false;
+    if (_dirtyFlags._halfFrustumDirty) {
+      _dirtyFlags._halfFrustumDirty = false;
       delete _halfFrustum;
       FrustumData data = getFrustumData();
       _halfFrustum = new Frustum(data._left/4, data._right/4,
@@ -401,85 +416,18 @@ private:
   }
 
   Frustum* getHalfFrustumMC() const {
-    if (_dirtyFlags._halfFrustumMC) {
-      _dirtyFlags._halfFrustumMC = false;
+    if (_dirtyFlags._halfFrustumMCDirty) {
+      _dirtyFlags._halfFrustumMCDirty = false;
       delete _halfFrustumInModelCoordinates;
       _halfFrustumInModelCoordinates = getHalfFrustum()->transformedBy_P(getModelMatrix());
     }
     return _halfFrustumInModelCoordinates;
   }
-
-  FrustumData calculateFrustumData() const {
-//    // compute znear value
-//    const double maxRadius = _planet->getRadii().maxAxis();
-//    const double distanceToPlanetCenter = _position.length();
-//    const double distanceToSurface = distanceToPlanetCenter - maxRadius;
-//
-//    double znear;
-//    if (distanceToSurface > maxRadius/5) {
-//      znear = maxRadius / 10;
-//    }
-//    else if (distanceToSurface > maxRadius/500) {
-//      znear = maxRadius / 1e4;
-//    }
-//    else if (distanceToSurface > maxRadius/2000) {
-//      znear = maxRadius / 1e5;
-//    }
-//    else {
-//      znear = maxRadius / 1e6 * 3;
-//    }
-//
-//    // compute zfar value
-//    double zfar = 10000 * znear;
-//    if (zfar > distanceToPlanetCenter) {
-//      zfar = distanceToPlanetCenter;
-//    }
-//
-//    // compute rest of frustum numbers
-//    const double ratioScreen = (double) _height / _width;
-//    const double right = 0.3 / ratioScreen * znear;
-//    const double left = -right;
-//    const double top = 0.3 * znear;
-//    const double bottom = -top;
-//
-//    return FrustumData(left, right,
-//                       bottom, top,
-//                       znear, zfar);
-
-    int __Testing_new_zNear_xFar_politic;
-
-    const double height = getGeodeticPosition().height();
-    const double zNear = height * 0.1;
-
-    double zFar = 10000 * zNear;
-    const double distance2ToPlanetCenter = _position.squaredLength();
-    if ((zFar * zFar) > distance2ToPlanetCenter) {
-      zFar = IMathUtils::instance()->sqrt(distance2ToPlanetCenter);
-    }
-    
-//    int __TODO_remove_debug_code;
-//    printf(">>> height=%f zNear=%f zFar=%f\n",
-//           height,
-//           zNear,
-//           zFar);
-
-    // compute rest of frustum numbers
-    const double _tanHalfFieldOfView = 0.3; // aprox tan(34 degrees / 2)
-
-    const double ratioScreen = (double) _height / _width;
-    const double right = _tanHalfFieldOfView / ratioScreen * zNear;
-    const double left = -right;
-    const double top = _tanHalfFieldOfView * zNear;
-    const double bottom = -top;
-
-
-    return FrustumData(left, right,
-                       bottom, top,
-                       zNear, zFar);
-  }
-
+  
+  FrustumData calculateFrustumData() const;
+  
   void _setGeodeticPosition(const Vector3D& pos);
-
+  
 };
 
 #endif
