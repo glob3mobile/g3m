@@ -28,7 +28,7 @@ class ElevationDataProvider;
 class ElevationData;
 class MeshHolder;
 class Vector2I;
-class TileElevationDataListener;
+class TileElevationDataRequest;
 
 #include "ITexturizerData.hpp"
 
@@ -46,7 +46,7 @@ private:
   //long long      _elevationRequestId;
   Mesh* _debugMesh;
   Mesh* _texturizedMesh;
-  TileElevationDataListener* _elevationDataListener;
+  TileElevationDataRequest* _elevationDataRequest;
 
   bool _textureSolved;
   std::vector<Tile*>* _subtiles;
@@ -223,10 +223,6 @@ public:
   void ancestorChangedElevationData(Tile* ancestor);
   
   ElevationData* createElevationDataSubviewFromAncestor(Tile* ancestor) const;
-  
-  void onElevationDataListenerDeleted(){
-    _elevationDataListener = NULL;
-  }
 
 };
 
