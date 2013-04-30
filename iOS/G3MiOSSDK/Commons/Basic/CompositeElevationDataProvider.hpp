@@ -37,18 +37,21 @@ private:
     CompositeElevationDataProvider_Request* _request;
     ElevationDataProvider* _provider;
     long long _id;
+    Sector _sector;
+    Vector2I _resolution;
     
     CompositeElevationDataProvider_RequestStep(CompositeElevationDataProvider_Request* request,
                                                ElevationDataProvider* provider,
                                                const Sector& sector,
                                                const Vector2I &resolution);
     
+    void send();
+    
+    void cancel();
     
     void onData(const Sector& sector,
                 const Vector2I& resolution,
                 ElevationData* elevationData);
-    
-    void cancel();
     
     void onError(const Sector& sector,
                  const Vector2I& resolution);
@@ -65,7 +68,7 @@ private:
     CompositeElevationDataProvider* const _compProvider;
     CompositeElevationDataProvider_RequestStep* _currentStep;
     
-    CompositeElevationData* _compData;
+    ElevationData* _compData;
     IElevationDataListener* _listener;
     const bool _autodelete;
     const Vector2I _resolution;

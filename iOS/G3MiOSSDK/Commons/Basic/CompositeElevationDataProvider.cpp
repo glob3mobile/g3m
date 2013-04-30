@@ -126,13 +126,14 @@ void CompositeElevationDataProvider::requestFinished(CompositeElevationDataProvi
     const CompositeElevationDataProvider_Request* reqI = it->second;
     if (reqI == req){
       _requests.erase(it);
-      break;
+      
+      delete req;
+
+      return;
     }
   }
   
-  if (it == _requests.end()){
-    ILogger::instance()->logError("Deleting nonexisting request in CompositeElevationDataProvider.");
-  }
+  ILogger::instance()->logError("Deleting nonexisting request in CompositeElevationDataProvider.");
 }
 
 
@@ -196,6 +197,7 @@ bool CompositeElevationDataProvider::CompositeElevationDataProvider_Request::lau
   ElevationDataProvider* bestProvider = popBestProvider(_providers, _resolution);
   if (bestProvider != NULL){
     _currentStep = new CompositeElevationDataProvider_RequestStep(this, bestProvider, _sector, _resolution);
+    _currentStep->send();
     return true;
   } else{
     _currentStep = NULL; //Waiting for no request
@@ -210,7 +212,7 @@ void CompositeElevationDataProvider::CompositeElevationDataProvider_Request::onD
   if (_compData == NULL){
     _compData = new CompositeElevationData(elevationData);
   } else{
-    _compData->addElevationData(elevationData);
+    ((CompositeElevationData*)_compData)->addElevationData(elevationData);
   }
   
   if (!_compData->hasNoData()){
@@ -272,8 +274,13 @@ CompositeElevationDataProvider_RequestStep(CompositeElevationDataProvider_Reques
                                            const Sector& sector,
                                            const Vector2I &resolution):
 _request(request),
-_provider(provider){
-  _id = _provider->requestElevationData(sector, resolution, this, true);
+_provider(provider),
+_sector(sector),
+_resolution(resolution){
+}
+
+void CompositeElevationDataProvider::CompositeElevationDataProvider_RequestStep::send(){
+    _id = _provider->requestElevationData(_sector, _resolution, this, false);
 }
 
 

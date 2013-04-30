@@ -43,12 +43,10 @@ public:
       _tile->setElevationData(elevationData, _tile->getLevel());
       _tile->onElevationDataListenerDeleted();
     }
-    _requestID = -1;
   }
   
   void onError(const Sector& sector,
                const Vector2I& resolution) {
-    _requestID = -1;
     if (_tile != NULL){
       _tile->onElevationDataListenerDeleted();
     }
@@ -56,7 +54,6 @@ public:
   
   void onCancel(const Sector& sector,
                const Vector2I& resolution) {
-    _requestID = -1;
     if (_tile != NULL){
       _tile->onElevationDataListenerDeleted();
     }
