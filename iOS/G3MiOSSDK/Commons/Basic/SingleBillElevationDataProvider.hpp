@@ -16,33 +16,35 @@
 #include "Vector2I.hpp"
 #include <stddef.h>
 #include <map>
-class Vector2I;
+#include "Sector.hpp"
+
+
+struct SingleBillElevationDataProvider_Request {
+  const Sector _sector;
+  const Vector2I _extent;
+  IElevationDataListener* const _listener;
+  const bool _autodeleteListener;
+
+  SingleBillElevationDataProvider_Request(const Sector& sector,
+                                          const Vector2I& extent,
+                                          IElevationDataListener* listener,
+                                          bool autodeleteListener):
+  _sector(sector),
+  _extent(extent),
+  _listener(listener),
+  _autodeleteListener(autodeleteListener)
+  {
+  }
+};
 
 class SingleBillElevationDataProvider : public ElevationDataProvider {
 private:
-  
-  struct SingleBillElevationDataProvider_Request{
-    const Sector _sector;
-    const Vector2I& _resolution;
-    IElevationDataListener* const _listener;
-    const bool _autodeleteListener;
 
-    SingleBillElevationDataProvider_Request(const Sector& sector,
-                                            const Vector2I& resolution,
-                                            IElevationDataListener* listener,
-                                            bool autodeleteListener):
-    _sector(sector),
-    _resolution(resolution),
-    _listener(listener),
-    _autodeleteListener(autodeleteListener)
-    {
-    }
-  };
-  
+
   long long _currentRequestID;
   std::map<long long, SingleBillElevationDataProvider_Request*> _requests;
-  
-  
+
+
   ElevationData* _elevationData;
   bool _elevationDataResolved;
 #ifdef C_CODE
@@ -52,55 +54,55 @@ private:
   private final URL _bilUrl;
 #endif
   const Sector _sector;
-  const int _resolutionWidth;
-  const int _resolutionHeight;
+  const int _extentWidth;
+  const int _extentHeight;
   const double _noDataValue;
-  
+
   void drainQueue();
-  
+
   const long long queueRequest(const Sector& sector,
-                               const Vector2I& resolution,
+                               const Vector2I& extent,
                                IElevationDataListener* listener,
                                bool autodeleteListener);
-  
+
   void removeQueueRequest(const long long requestId);
-  
-  
+
+
 public:
   SingleBillElevationDataProvider(const URL& bilUrl,
                                   const Sector& sector,
-                                  const Vector2I& resolution,
+                                  const Vector2I& extent,
                                   const double noDataValue);
-  
+
   bool isReadyToRender(const G3MRenderContext* rc) {
     return (_elevationDataResolved);
   }
-  
+
   void initialize(const G3MContext* context);
-  
+
   const long long requestElevationData(const Sector& sector,
-                                       const Vector2I& resolution,
+                                       const Vector2I& extent,
                                        IElevationDataListener* listener,
                                        bool autodeleteListener);
-  
+
   void cancelRequest(const long long requestId);
-  
-  
+
+
   void onElevationData(ElevationData* elevationData);
-  
-  std::vector<const Sector*> getSectors() const{
-    std::vector<const Sector*> sectors;
-    sectors.push_back(&_sector);
-    return sectors;
+
+  //  std::vector<const Sector*> getSectors() const{
+  //    std::vector<const Sector*> sectors;
+  //    sectors.push_back(&_sector);
+  //    return sectors;
+  //  }
+
+  const Vector2I getMinResolution() const{
+    return Vector2I(_extentWidth, _extentHeight);
   }
-  
-  Vector2I getMinResolution() const{
-    return Vector2I(_resolutionWidth,_resolutionHeight);
-  }
-  
-  ElevationData* createSubviewOfElevationData(ElevationData* elevationData,
-                                              const Sector& sector,
-                                              const Vector2I& resolution) const;
+
+  //  ElevationData* createSubviewOfElevationData(ElevationData* elevationData,
+  //                                              const Sector& sector,
+  //                                              const Vector2I& extent};
   
 };
 

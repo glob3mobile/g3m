@@ -10,45 +10,49 @@
 #include "Vector3D.hpp"
 #include "IStringBuilder.hpp"
 
-double CompositeElevationData::getElevationAt(int x, int y, int *type, double valueForNoData) const{
+double CompositeElevationData::getElevationAt(int x,
+                                              int y,
+                                              double valueForNoData) const{
   IMathUtils* mu = IMathUtils::instance();
   int s = _data.size();
   for (int i = 0; i < s; i++) {
-    double h = _data[i]->getElevationAt(x, y, type);
+    double h = _data[i]->getElevationAt(x, y, valueForNoData);
     if (!mu->isNan(h)){
       return h;
     }
   }
-  
+
   return valueForNoData;
 }
 
 
 void CompositeElevationData::addElevationData(ElevationData* data){
-  
+
   ElevationData* d0 = _data[0];
-  
-  if (data->getExtent()._x != _width || data->getExtent()._y != _height){
+
+  if ((data->getExtentWidth()  != _width) ||
+      (data->getExtentHeight() != _height)) {
     ILogger::instance()->logError("Extents don't match.");
   }
-  
+
   Sector s = data->getSector();
   Sector s2 = d0->getSector();
-  
+
   if (!data->getSector().isEqualsTo(getSector())){
     ILogger::instance()->logError("Sectors don't match.");
   }
-  
-  
+
+
   const IMathUtils* mu = IMathUtils::instance();
   _data.push_back(data);
-  
+
+
+  const double nanD = IMathUtils::instance()->NanD();
   
   //Checking NoData
-  int type;
   for (int i = 0; i < _width; i++) {
     for (int j = 0; j < _height; j++) {
-      double height = getElevationAt(i, j, &type);
+      double height = getElevationAt(i, j, nanD);
       if (mu->isNan(height)){
         _hasNoData = true;
         return;
@@ -58,19 +62,18 @@ void CompositeElevationData::addElevationData(ElevationData* data){
 }
 
 double CompositeElevationData::getElevationAt(const Angle& latitude,
-                                           const Angle& longitude,
-                                           int *type,
-                                            double valueForNoData) const {
-  
+                                              const Angle& longitude,
+                                              double valueForNoData) const {
+
   IMathUtils* mu = IMathUtils::instance();
   int s = _data.size();
   for (int i = 0; i < s; i++) {
-    double h = _data[i]->getElevationAt(latitude, longitude, type);
+    double h = _data[i]->getElevationAt(latitude, longitude, valueForNoData);
     if (!mu->isNan(h)){
       return h;
     }
   }
-  
+
   return valueForNoData;
 }
 
@@ -84,13 +87,13 @@ const std::string CompositeElevationData::description(bool detailed) const{
   isb->addInt(_height);
   isb->addString(" sector=");
   isb->addString( _sector.description() );
-  int unusedType = -1;
   if (detailed) {
+    const double nanD = IMathUtils::instance()->NanD();
     isb->addString("\n");
     for (int row = 0; row < _width; row++) {
       //isb->addString("   ");
       for (int col = 0; col < _height; col++) {
-        isb->addDouble( getElevationAt(col, row, &unusedType) );
+        isb->addDouble( getElevationAt(col, row, nanD) );
         isb->addString(",");
       }
       isb->addString("\n");
@@ -103,16 +106,15 @@ const std::string CompositeElevationData::description(bool detailed) const{
 }
 
 Vector3D CompositeElevationData::getMinMaxAverageHeights() const{
-  
   const IMathUtils* mu = IMathUtils::instance();
   double minHeight = mu->maxDouble();
   double maxHeight = mu->minDouble();
   double sumHeight = 0.0;
-  
-  int type;
+
+  const double nanD = IMathUtils::instance()->NanD();
   for (int i = 0; i < _width; i++) {
     for (int j = 0; j < _height; j++) {
-      const double height = getElevationAt(i, j, &type);
+      const double height = getElevationAt(i, j, nanD);
       if (!mu->isNan(height)){
         if (height < minHeight) {
           minHeight = height;
@@ -131,9 +133,8 @@ Vector3D CompositeElevationData::getMinMaxAverageHeights() const{
   if (maxHeight == mu->minDouble()) {
     maxHeight = 0;
   }
-  
+
   return Vector3D(minHeight,
                   maxHeight,
                   sumHeight / (_width * _height));
-  
 }

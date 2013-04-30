@@ -1,5 +1,5 @@
 //
-//  LeveledMesh.h
+//  LeveledMesh.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 16/04/13.
@@ -8,8 +8,6 @@
 
 #ifndef __G3MiOSSDK__LeveledMesh__
 #define __G3MiOSSDK__LeveledMesh__
-
-#include <iostream>
 
 #include "Mesh.hpp"
 #include "Vector3D.hpp"
@@ -67,4 +65,4 @@ public:
   
 };
 
-#endif /* defined(__G3MiOSSDK__LeveledMesh__) */
+#endif

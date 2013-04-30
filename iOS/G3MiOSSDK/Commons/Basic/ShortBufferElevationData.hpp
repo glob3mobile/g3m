@@ -23,7 +23,7 @@ protected:
 
 public:
   ShortBufferElevationData(const Sector& sector,
-                           const Vector2I& resolution,
+                           const Vector2I& extent,
                            short noDataValue,
                            IShortBuffer* buffer);
 

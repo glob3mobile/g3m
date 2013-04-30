@@ -602,10 +602,8 @@ public:
                                         TimeInterval::fromDays(30),
                                         true,
                                         new LayerTilesRenderParameters(Sector::fullSphere(),
-                                                                       2,
-                                                                       4,
-                                                                       0,
-                                                                       8,
+                                                                       2, 4,
+                                                                       0, 8,
                                                                        LayerTilesRenderParameters::defaultTileTextureResolution(),
                                                                        LayerTilesRenderParameters::defaultTileMeshResolution(),
                                                                        false)
@@ -1335,11 +1333,10 @@ public:
     IFloatBuffer* deltaBuffer = IFactory::instance()->createFloatBuffer( subResolution._x * subResolution._y );
     
     IMathUtils *mu = IMathUtils::instance();
-    int unusedType = -1;
     for (int x = 0; x < subResolution._x; x++) {
       for (int y = 0; y < subResolution._y; y++) {
-        const double height1 = subElevationDataDecimated->getElevationAt(x, y, &unusedType);
-        const double height2 = subElevationDataNotDecimated->getElevationAt(x, y, &unusedType);
+        const double height1 = subElevationDataDecimated->getElevationAt(x, y);
+        const double height2 = subElevationDataNotDecimated->getElevationAt(x, y);
         
         const int index = ((subResolution._y-1-y) * subResolution._x) + x;
         

@@ -120,4 +120,4 @@ public:
   TileRendererBuilder* getTileRendererBuilder();
 };
 
-#endif /* defined(__G3MiOSSDK__IG3MBuilder__) */
+#endif

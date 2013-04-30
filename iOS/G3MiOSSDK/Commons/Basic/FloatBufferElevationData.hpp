@@ -23,7 +23,7 @@ protected:
 
 public:
   FloatBufferElevationData(const Sector& sector,
-                           const Vector2I& resolution,
+                           const Vector2I& extent,
                            float noDataValue,
                            IFloatBuffer* buffer);
 

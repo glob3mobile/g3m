@@ -9,30 +9,33 @@
 #ifndef __G3MiOSSDK__ElevationData__
 #define __G3MiOSSDK__ElevationData__
 
-#include "Sector.hpp"
-#include "Vector2I.hpp"
 #include <string>
+#include "Geodetic2D.hpp"
+#include "Geodetic3D.hpp"
+#include "Sector.hpp"
 
 class Vector2I;
 class Mesh;
 class Ellipsoid;
 class Vector3D;
 
+
 class ElevationData {
 protected:
   const Sector _sector;
+  
   const int _width;
   const int _height;
-  const Vector2I _resolution;
 
 public:
   ElevationData(const Sector& sector,
-                const Vector2I& resolution);
+                const Vector2I& extent);
 
   virtual ~ElevationData() {
+
   }
 
-  virtual Vector2I getExtent() const;
+  virtual const Vector2I getExtent() const;
 
   virtual int getExtentWidth() const {
     return _width;
@@ -42,21 +45,20 @@ public:
     return _height;
   }
 
-  virtual double getElevationAt(int x, int y,
-                                int *type,
-                                double valueForNoData = IMathUtils::instance()->NanD()) const = 0;
+  virtual const Geodetic2D getResolution() const = 0;
+
+  virtual double getElevationAt(int x,
+                                int y,
+                                double valueForNoData) const = 0;
 
   virtual double getElevationAt(const Angle& latitude,
                                 const Angle& longitude,
-                                int *type,
-                                double valueForNoData = IMathUtils::instance()->NanD()) const = 0;
+                                double valueForNoData) const = 0;
 
   double getElevationAt(const Geodetic2D& position,
-                                int *type,
-                        double valueForNoData = IMathUtils::instance()->NanD()) const {
+                        double valueForNoData) const {
     return getElevationAt(position.latitude(),
                           position.longitude(),
-                          type,
                           valueForNoData);
   }
 
@@ -72,12 +74,8 @@ public:
   virtual const Sector getSector() const {
     return _sector;
   }
-  
+
   virtual bool hasNoData() const = 0;
-  
-  const Vector2I getResolution() const {
-    return _resolution;
-  }
 
 };
 

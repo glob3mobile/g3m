@@ -21,7 +21,8 @@ public:
 
   virtual int getWidth() const = 0;
   virtual int getHeight() const = 0;
-  virtual Vector2I getExtent() const = 0;
+  virtual const Vector2I getExtent() const = 0;
+
   virtual const std::string description() const = 0;
 
   virtual IImage* shallowCopy() const = 0;

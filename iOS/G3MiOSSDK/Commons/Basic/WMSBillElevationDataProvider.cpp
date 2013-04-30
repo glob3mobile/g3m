@@ -34,13 +34,13 @@ private:
 public:
 
   WMSBillElevationDataProvider_BufferDownloadListener(const Sector& sector,
-                                                      const Vector2I& resolution,
+                                                      const Vector2I& extent,
                                                       double noDataValue,
                                                       IElevationDataListener* listener,
                                                       bool autodeleteListener) :
   _sector(sector),
-  _width(resolution._x),
-  _height(resolution._y),
+  _width(extent._x),
+  _height(extent._y),
   _noDataValue(noDataValue),
   _listener(listener),
   _autodeleteListener(autodeleteListener)
@@ -52,7 +52,7 @@ public:
                   IByteBuffer* buffer,
                   bool expired) {
     const Vector2I resolution(_width, _height);
-    ElevationData* elevationData = BilParser::parseBil16(_sector, resolution, _noDataValue, -9999, buffer);
+    ElevationData* elevationData = BilParser::parseBil16(_sector, resolution, _noDataValue, buffer);
     delete buffer;
 
     if (elevationData == NULL) {
@@ -96,32 +96,32 @@ void WMSBillElevationDataProvider::initialize(const G3MContext* context) {
 }
 
 const long long WMSBillElevationDataProvider::requestElevationData(const Sector& sector,
-                                                                   const Vector2I& resolution,
+                                                                   const Vector2I& extent,
                                                                    IElevationDataListener* listener,
                                                                    bool autodeleteListener) {
   if (_downloader == NULL) {
     ILogger::instance()->logError("WMSBillElevationDataProvider was not initialized.");
     return -1;
   }
-  
+
   IStringBuilder *isb = IStringBuilder::newStringBuilder();
-  
-/*
-  // http://data.worldwind.arc.nasa.gov/elev?REQUEST=GetMap&SERVICE=WMS&VERSION=1.3.0&LAYERS=srtm30&STYLES=&FORMAT=image/bil&CRS=EPSG:4326&BBOX=-180.0,-90.0,180.0,90.0&WIDTH=10&HEIGHT=10
+
+  /*
+   // http://data.worldwind.arc.nasa.gov/elev?REQUEST=GetMap&SERVICE=WMS&VERSION=1.3.0&LAYERS=srtm30&STYLES=&FORMAT=image/bil&CRS=EPSG:4326&BBOX=-180.0,-90.0,180.0,90.0&WIDTH=10&HEIGHT=10
 
 
-  isb->addString("http://data.worldwind.arc.nasa.gov/elev?");
-  isb->addString("REQUEST=GetMap");
-  isb->addString("&SERVICE=WMS");
-  isb->addString("&VERSION=1.3.0");
-  isb->addString("&LAYERS=srtm30");
-  isb->addString("&STYLES=");
-  isb->addString("&FORMAT=image/bil");
-  isb->addString("&CRS=EPSG:4326");
-*/
-  
+   isb->addString("http://data.worldwind.arc.nasa.gov/elev?");
+   isb->addString("REQUEST=GetMap");
+   isb->addString("&SERVICE=WMS");
+   isb->addString("&VERSION=1.3.0");
+   isb->addString("&LAYERS=srtm30");
+   isb->addString("&STYLES=");
+   isb->addString("&FORMAT=image/bil");
+   isb->addString("&CRS=EPSG:4326");
+   */
+
   isb->addString(_url.getPath());
-  
+
   isb->addString("&BBOX=");
   isb->addDouble(sector.lower().latitude()._degrees);
   isb->addString(",");
@@ -132,9 +132,9 @@ const long long WMSBillElevationDataProvider::requestElevationData(const Sector&
   isb->addDouble(sector.upper().longitude()._degrees);
 
   isb->addString("&WIDTH=");
-  isb->addInt(resolution._x);
+  isb->addInt(extent._x);
   isb->addString("&HEIGHT=");
-  isb->addInt(resolution._y);
+  isb->addInt(extent._y);
 
   const std::string path = isb->getString();
   delete isb;
@@ -147,7 +147,7 @@ const long long WMSBillElevationDataProvider::requestElevationData(const Sector&
                                     TimeInterval::fromDays(30),
                                     true,
                                     new WMSBillElevationDataProvider_BufferDownloadListener(sector,
-                                                                                            resolution,
+                                                                                            extent,
                                                                                             noDataValue,
                                                                                             listener,
                                                                                             autodeleteListener),
@@ -158,12 +158,12 @@ void WMSBillElevationDataProvider::cancelRequest(const long long requestId) {
   _downloader->cancelRequest(requestId);
 }
 
-ElevationData* WMSBillElevationDataProvider::createSubviewOfElevationData(ElevationData* elevationData,
-                                            const Sector& sector,
-                                            const Vector2I& resolution) const{
-  return new SubviewElevationData(elevationData,
-                                  false,
-                                  sector,
-                                  resolution,
-                                  false);
-}
+//ElevationData* WMSBillElevationDataProvider::createSubviewOfElevationData(ElevationData* elevationData,
+//                                                                          const Sector& sector,
+//                                                                          const Vector2I& extent) const{
+//  return new SubviewElevationData(elevationData,
+//                                  false,
+//                                  sector,
+//                                  extent,
+//                                  false);
+//}

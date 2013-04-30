@@ -40,7 +40,7 @@ public:
   void initialize(const G3MContext* context);
 
   const long long requestElevationData(const Sector& sector,
-                                       const Vector2I& resolution,
+                                       const Vector2I& extent,
                                        IElevationDataListener* listener,
                                        bool autodeleteListener);
 
@@ -52,14 +52,14 @@ public:
     return sectors;
   }
   
-  Vector2I getMinResolution() const{
+  const Vector2I getMinResolution() const{
     int WORKING_JM;
-    return Vector2I(0,0);
+    return Vector2I::zero();
   }
   
-  ElevationData* createSubviewOfElevationData(ElevationData* elevationData,
-                                              const Sector& sector,
-                                              const Vector2I& resolution) const;
+//  ElevationData* createSubviewOfElevationData(ElevationData* elevationData,
+//                                              const Sector& sector,
+//                                              const Vector2I& extent) const;
 
 };
 

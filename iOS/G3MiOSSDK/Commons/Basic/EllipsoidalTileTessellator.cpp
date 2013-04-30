@@ -68,7 +68,6 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
   FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(),
                                           planet,
                                           sector.getCenter());
-  int unusedType = -1;
   for (int j = 0; j < tileResolution._y; j++) {
     const double v = (double) j / (tileResolution._y-1);
     for (int i = 0; i < tileResolution._x; i++) {
@@ -83,7 +82,6 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
       if (elevationData != NULL) {
 //        height = elevationData->getElevationAt(i, j) * verticalExaggeration;
         height = elevationData->getElevationAt(position,
-                                               &unusedType,
                                                defaultHeight) * verticalExaggeration;
 
         if (height < minHeight) {

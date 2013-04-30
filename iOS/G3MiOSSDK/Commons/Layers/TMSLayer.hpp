@@ -9,8 +9,6 @@
 #ifndef __G3MiOSSDK__TMSLayer__
 #define __G3MiOSSDK__TMSLayer__
 
-#include <iostream>
-
 #include "Layer.hpp"
 
 
@@ -55,4 +53,4 @@ public:
 
 };
 
-#endif /* defined(__G3MiOSSDK__TMSLayer__) */
+#endif

@@ -9,6 +9,7 @@
 #include "BufferElevationData.hpp"
 
 #include "BilinearInterpolator.hpp"
+#include "Vector2I.hpp"
 
 Interpolator* BufferElevationData::getInterpolator() const {
   if (_interpolator == NULL) {
@@ -18,11 +19,13 @@ Interpolator* BufferElevationData::getInterpolator() const {
 }
 
 BufferElevationData::BufferElevationData(const Sector& sector,
-                                         const Vector2I& resolution,
+                                         const Vector2I& extent,
                                          int bufferSize) :
-ElevationData(sector, resolution),
+ElevationData(sector, extent),
 _bufferSize(bufferSize),
-_interpolator(NULL)
+_interpolator(NULL),
+_resolution(sector.getDeltaLatitude().div(extent._y),
+            sector.getDeltaLongitude().div(extent._x))
 {
 
 }
@@ -31,31 +34,29 @@ BufferElevationData::~BufferElevationData() {
   delete _interpolator;
 }
 
-double BufferElevationData::getElevationAt(int x, int y,
-                                           int *type,
+double BufferElevationData::getElevationAt(int x,
+                                           int y,
                                            double valueForNoData) const {
   const int index = ((_height-1-y) * _width) + x;
-//  const int index = ((_width-1-x) * _height) + y;
+  //  const int index = ((_width-1-x) * _height) + y;
 
   if ( (index < 0) || (index >= _bufferSize) ) {
     printf("break point on me\n");
-    *type = 0;
     return valueForNoData;
   }
-  *type = 1;
-  
-  double d = getValueInBufferAt( index );
-  if (IMathUtils::instance()->isNan(d)){
+
+  const double elevation = getValueInBufferAt( index );
+  if ( IMathUtils::instance()->isNan(elevation) ) {
     return valueForNoData;
-  } else{
-    return d;
+  }
+  else {
+    return elevation;
   }
 }
 
 
 double BufferElevationData::getElevationAt(const Angle& latitude,
                                            const Angle& longitude,
-                                           int *type,
                                            double valueForNoData) const {
 
 
@@ -78,67 +79,72 @@ double BufferElevationData::getElevationAt(const Angle& latitude,
 
   const int x = (int) dX;
   const int y = (int) dY;
-//  const int nextX = (int) (dX + 1.0);
-//  const int nextY = (int) (dY + 1.0);
+  //  const int nextX = (int) (dX + 1.0);
+  //  const int nextY = (int) (dY + 1.0);
   const int nextX = x + 1;
   const int nextY = y + 1;
   const double alphaY = dY - y;
   const double alphaX = dX - x;
 
-//  if (alphaX < 0 || alphaX > 1 ||
-//      alphaY < 0 || alphaY > 1) {
-//    printf("break point\n");
-//  }
+  //  if (alphaX < 0 || alphaX > 1 ||
+  //      alphaY < 0 || alphaY > 1) {
+  //    printf("break point\n");
+  //  }
 
-  
-  IMathUtils *m = IMathUtils::instance();
-  int unsedType = -1;
+
   double result;
   if (x == dX) {
     if (y == dY) {
       // exact on grid point
-      result = getElevationAt(x, y, type);
+      result = getElevationAt(x, y, valueForNoData);
     }
     else {
-      
-      *type = 2;
       // linear on Y
-      const double heightY     = getElevationAt(x, y,     &unsedType);
-      if (m->isNan(heightY)){return valueForNoData;}
-      const double heightNextY = getElevationAt(x, nextY, &unsedType);
-      if (m->isNan(heightNextY)){return valueForNoData;}
-      
-      if (m->isNan(heightY) || m->isNan(heightNextY)){
+      const double heightY = getElevationAt(x, y, valueForNoData);
+      if (mu->isNan(heightY)) {
         return valueForNoData;
       }
-      
+
+      const double heightNextY = getElevationAt(x, nextY, valueForNoData);
+      if (mu->isNan(heightNextY)) {
+        return valueForNoData;
+      }
+
       result = mu->linearInterpolation(heightNextY, heightY, alphaY);
     }
   }
   else {
     if (y == dY) {
-      
-      *type = 3;
       // linear on X
-      const double heightX     = getElevationAt(x,     y, &unsedType);
-      if (m->isNan(heightX)){return valueForNoData;}
-      const double heightNextX = getElevationAt(nextX, y, &unsedType);
-      if (m->isNan(heightNextX)){return valueForNoData;}
-      
+      const double heightX = getElevationAt(x, y, valueForNoData);
+      if (mu->isNan(heightX)) {
+        return valueForNoData;
+      }
+      const double heightNextX = getElevationAt(nextX, y, valueForNoData);
+      if (mu->isNan(heightNextX)) {
+        return valueForNoData;
+      }
+
       result = mu->linearInterpolation(heightX, heightNextX, alphaX);
     }
     else {
-      
-      *type = 4;
       // bilinear
-      const double valueNW = getElevationAt(x,     y,     &unsedType);
-      if (m->isNan(valueNW)){return valueForNoData;}
-      const double valueNE = getElevationAt(nextX, y,     &unsedType);
-      if (m->isNan(valueNE)){return valueForNoData;}
-      const double valueSE = getElevationAt(nextX, nextY, &unsedType);
-      if (m->isNan(valueSE)){return valueForNoData;}
-      const double valueSW = getElevationAt(x,     nextY, &unsedType);
-      if (m->isNan(valueSW)){return valueForNoData;}
+      const double valueNW = getElevationAt(x, y, valueForNoData);
+      if (mu->isNan(valueNW)){
+        return valueForNoData;
+      }
+      const double valueNE = getElevationAt(nextX, y, valueForNoData);
+      if (mu->isNan(valueNE)){
+        return valueForNoData;
+      }
+      const double valueSE = getElevationAt(nextX, nextY, valueForNoData);
+      if (mu->isNan(valueSE)){
+        return valueForNoData;
+      }
+      const double valueSW = getElevationAt(x, nextY, valueForNoData);
+      if (mu->isNan(valueSW)){
+        return valueForNoData;
+      }
 
       result = getInterpolator()->interpolation(valueSW,
                                                 valueSE,
@@ -148,6 +154,6 @@ double BufferElevationData::getElevationAt(const Angle& latitude,
                                                 alphaY);
     }
   }
-
+  
   return result;
 }

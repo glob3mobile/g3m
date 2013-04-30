@@ -15,16 +15,16 @@
 #include "DirectMesh.hpp"
 #include "GLConstants.hpp"
 
+
 ElevationData::ElevationData(const Sector& sector,
-                             const Vector2I& resolution) :
+                             const Vector2I& extent) :
 _sector(sector),
-_width(resolution._x),
-_height(resolution._y),
-_resolution(resolution)
+_width(extent._x),
+_height(extent._y)
 {
 }
 
-Vector2I ElevationData::getExtent() const {
+const Vector2I ElevationData::getExtent() const {
   return Vector2I(_width, _height);
 }
 
@@ -48,34 +48,22 @@ Mesh* ElevationData::createMesh(const Ellipsoid* ellipsoid,
                                           Vector3D::zero());
   FloatBufferBuilderFromColor colors;
 
-  int type = -1;
+  const IMathUtils* mu = IMathUtils::instance();
+  const double nanD = mu->NanD();
   for (int x = 0; x < _width; x++) {
     const double u = (double) x / (_width  - 1);
 
     for (int y = 0; y < _height; y++) {
-      double height = getElevationAt(x, y, &type,0);
+      const double height = getElevationAt(x, y, nanD);
+      if (mu->isNan(height)) {
+        continue;
+      }
 
       const float alpha = (float) ((height - minHeight) / deltaHeight);
-
-      float r = alpha;
-      float g = alpha;
-      float b = alpha;
-      /*
-      if (type == 1) {
-        g = 1;
-      }
-      else if (type == 2) {
-        r = 1;
-        g = 1;
-      }
-      else if (type == 3) {
-        r = 1;
-        b = 1;
-      }
-      else if (type == 4) {
-        r = 1;
-      }
-      */
+      const float r = alpha;
+      const float g = alpha;
+      const float b = alpha;
+      colors.add(r, g, b, 1);
 
       const double v = 1.0 - ( (double) y / (_height - 1) );
 
@@ -84,12 +72,10 @@ Mesh* ElevationData::createMesh(const Ellipsoid* ellipsoid,
       vertices.add(position,
                    positionOffset.height() + (height * verticalExaggeration));
 
-      colors.add(r, g, b, 1);
     }
   }
 
   const float lineWidth = 1;
-//  const float pointSize = 1;
   Color* flatColor = NULL;
 
   return new DirectMesh(GLPrimitive::points(),

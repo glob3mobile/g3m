@@ -10,7 +10,6 @@
 
 #include "Context.hpp"
 #include "IDownloader.hpp"
-#include "Vector2I.hpp"
 #include "IBufferDownloadListener.hpp"
 #include "TimeInterval.hpp"
 #include "BilParser.hpp"
@@ -18,18 +17,18 @@
 
 SingleBillElevationDataProvider::SingleBillElevationDataProvider(const URL& bilUrl,
                                                                  const Sector& sector,
-                                                                 const Vector2I& resolution,
+                                                                 const Vector2I& extent,
                                                                  const double noDataValue) :
 _bilUrl(bilUrl),
 _sector(sector),
-_resolutionWidth(resolution._x),
-_resolutionHeight(resolution._y),
+_extentWidth(extent._x),
+_extentHeight(extent._y),
 _noDataValue(noDataValue),
 _elevationData(NULL),
 _elevationDataResolved(false),
 _currentRequestID(0)
 {
-  
+
 }
 
 class SingleBillElevationDataProvider_BufferDownloadListener : public IBufferDownloadListener {
@@ -39,7 +38,7 @@ private:
   const int _resolutionWidth;
   const int _resolutionHeight;
   const double _noDataValue;
-  
+
 public:
   SingleBillElevationDataProvider_BufferDownloadListener(SingleBillElevationDataProvider* singleBillElevationDataProvider,
                                                          const Sector& sector,
@@ -52,29 +51,29 @@ public:
   _resolutionHeight(resolutionHeight),
   _noDataValue(noDataValue)
   {
-    
+
   }
-  
+
   void onDownload(const URL& url,
                   IByteBuffer* buffer,
                   bool expired) {
     const Vector2I resolution(_resolutionWidth, _resolutionHeight);
-    
-    ElevationData* elevationData = BilParser::parseBil16(_sector, resolution, (short)_noDataValue, -9999, buffer);
+
+    ElevationData* elevationData = BilParser::parseBil16(_sector, resolution, _noDataValue, buffer);
 
     delete buffer;
-    
+
     _singleBillElevationDataProvider->onElevationData(elevationData);
   }
-  
+
   void onError(const URL& url) {
     _singleBillElevationDataProvider->onElevationData(NULL);
   }
-  
+
   void onCancel(const URL& url) {
-    
+
   }
-  
+
   void onCanceledDownload(const URL& url,
                           IByteBuffer* data,
                           bool expired) {
@@ -88,7 +87,7 @@ void SingleBillElevationDataProvider::onElevationData(ElevationData* elevationDa
     ILogger::instance()->logError("Can't download Elevation-Data from %s",
                                   _bilUrl.getPath().c_str());
   }
-  
+
   drainQueue();
 }
 
@@ -100,26 +99,26 @@ void SingleBillElevationDataProvider::initialize(const G3MContext* context) {
                                             true,
                                             new SingleBillElevationDataProvider_BufferDownloadListener(this,
                                                                                                        _sector,
-                                                                                                       _resolutionWidth,
-                                                                                                       _resolutionHeight,
+                                                                                                       _extentWidth,
+                                                                                                       _extentHeight,
                                                                                                        _noDataValue),
                                             true);
   }
 }
 
 const long long SingleBillElevationDataProvider::requestElevationData(const Sector& sector,
-                                                                      const Vector2I& resolution,
+                                                                      const Vector2I& extent,
                                                                       IElevationDataListener* listener,
                                                                       bool autodeleteListener) {
   if (!_elevationDataResolved) {
     return queueRequest(sector,
-                        resolution,
+                        extent,
                         listener,
                         autodeleteListener);
   }
-  
+
   if (_elevationData == NULL) {
-    listener->onError(sector, resolution);
+    listener->onError(sector, extent);
   }
   else {
     int _DGD_working_on_terrain;
@@ -127,17 +126,17 @@ const long long SingleBillElevationDataProvider::requestElevationData(const Sect
     ElevationData *elevationData = new SubviewElevationData(_elevationData,
                                                             false,
                                                             sector,
-                                                            resolution,
+                                                            extent,
                                                             useDecimation);
     listener->onData(sector,
-                     resolution,
+                     extent,
                      elevationData);
   }
-  
+
   if (autodeleteListener) {
     delete listener;
   }
-  
+
   return -1;
 }
 
@@ -152,27 +151,27 @@ void SingleBillElevationDataProvider::drainQueue() {
     ILogger::instance()->logError("Trying to drain queue of requests without data.");
     return;
   }
-  
+
   std::map<long long, SingleBillElevationDataProvider_Request*>::iterator it = _requests.begin();
   for (; it != _requests.end(); it++) {
     SingleBillElevationDataProvider_Request* r = it->second;
-    requestElevationData(r->_sector, r->_resolution, r->_listener, r->_autodeleteListener);
+    requestElevationData(r->_sector, r->_extent, r->_listener, r->_autodeleteListener);
     delete r;
   }
   _requests.clear();
 }
 
 const long long SingleBillElevationDataProvider::queueRequest(const Sector& sector,
-                                                              const Vector2I& resolution,
+                                                              const Vector2I& extent,
                                                               IElevationDataListener* listener,
                                                               bool autodeleteListener) {
   _currentRequestID++;
-  _requests[_currentRequestID] = new SingleBillElevationDataProvider_Request(sector, resolution, listener, autodeleteListener);
+  _requests[_currentRequestID] = new SingleBillElevationDataProvider_Request(sector, extent, listener, autodeleteListener);
   return _currentRequestID;
 }
 
 void SingleBillElevationDataProvider::removeQueueRequest(const long long requestId) {
-  
+
   std::map<long long, SingleBillElevationDataProvider_Request*>::iterator it = _requests.find(requestId);
   if (it != _requests.end()){
     delete it->second;
@@ -180,12 +179,12 @@ void SingleBillElevationDataProvider::removeQueueRequest(const long long request
   }
 }
 
-ElevationData* SingleBillElevationDataProvider::createSubviewOfElevationData(ElevationData* elevationData,
-                                            const Sector& sector,
-                                            const Vector2I& resolution) const{
-  return new SubviewElevationData(elevationData,
-                                  false,
-                                  sector,
-                                  resolution,
-                                  false);
-}
+//ElevationData* SingleBillElevationDataProvider::createSubviewOfElevationData(ElevationData* elevationData,
+//                                                                             const Sector& sector,
+//                                                                             const Vector2I& extent) const{
+//  return new SubviewElevationData(elevationData,
+//                                  false,
+//                                  sector,
+//                                  extent,
+//                                  false);
+//}

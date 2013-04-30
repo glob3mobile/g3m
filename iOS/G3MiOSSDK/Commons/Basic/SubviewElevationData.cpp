@@ -12,21 +12,26 @@
 #include "IFloatBuffer.hpp"
 #include "IFactory.hpp"
 #include "Vector3D.hpp"
+#include "Vector2I.hpp"
 
 SubviewElevationData::SubviewElevationData(const ElevationData *elevationData,
                                            bool ownsElevationData,
                                            const Sector& sector,
-                                           const Vector2I& resolution,
+                                           const Vector2I& extent,
                                            bool useDecimation) :
-ElevationData(sector, resolution),
+ElevationData(sector, extent),
 _elevationData(elevationData),
-_ownsElevationData(ownsElevationData)
+_ownsElevationData(ownsElevationData),
+_resolution(sector.getDeltaLatitude().div(extent._y),
+            sector.getDeltaLongitude().div(extent._x))
 {
-  if (_elevationData == NULL || _elevationData->getExtentWidth() < 1 || _elevationData->getExtentHeight() < 1){
+  if ((_elevationData == NULL) ||
+      (_elevationData->getExtentWidth() < 1) ||
+      (_elevationData->getExtentHeight() < 1)) {
     ILogger::instance()->logError("SubviewElevationData can't subview given elevation data.");
     return;
   }
-  
+
   _hasNoData = false;
   if (useDecimation) {
     _buffer = createDecimatedBuffer();
@@ -74,8 +79,6 @@ double SubviewElevationData::getElevationBoxAt(double x0, double y0,
     return 0;
   }
 
-  int unusedType = -1;
-
   double heightSum = 0;
   double area = 0;
 
@@ -95,9 +98,8 @@ double SubviewElevationData::getElevationBoxAt(double x0, double y0,
 
     for (double x=floorX0; x <= ceilX1; x++) {
       const double height = _elevationData->getElevationAt((int) mu->min(x, maxX),
-                                                           yy,
-                                                           &unusedType);
-      
+                                                           yy);
+
       if (IMathUtils::instance()->isNan(height)){
         return IMathUtils::instance()->NanD();
       }
@@ -124,7 +126,7 @@ IFloatBuffer* SubviewElevationData::createDecimatedBuffer() {
   const Vector2D parentXYAtLower = getParentXYAt(_sector.lower());
   const Vector2D parentXYAtUpper = getParentXYAt(_sector.upper());
   const Vector2D parentDeltaXY = parentXYAtUpper.sub(parentXYAtLower);
-  
+
   IMathUtils *mu = IMathUtils::instance();
 
   for (int x = 0; x < _width; x++) {
@@ -144,7 +146,7 @@ IFloatBuffer* SubviewElevationData::createDecimatedBuffer() {
       const double height = getElevationBoxAt(x0, y0,
                                               x1, y1);
       buffer->rawPut(index, (float) height);
-      
+
       if (mu->isNan(height)){
         _hasNoData = true;
       }
@@ -157,10 +159,9 @@ IFloatBuffer* SubviewElevationData::createDecimatedBuffer() {
 IFloatBuffer* SubviewElevationData::createInterpolatedBuffer() {
   IFloatBuffer* buffer = IFactory::instance()->createFloatBuffer(_width * _height);
 
-  
+
   IMathUtils *mu = IMathUtils::instance();
-  
-  int unusedType = -1;
+
   for (int x = 0; x < _width; x++) {
     const double u = (double) x / (_width - 1);
     for (int y = 0; y < _height; y++) {
@@ -170,15 +171,14 @@ IFloatBuffer* SubviewElevationData::createInterpolatedBuffer() {
       const int index = ((_height-1-y) * _width) + x;
 
       const double height = _elevationData->getElevationAt(position.latitude(),
-                                                           position.longitude(),
-                                                           &unusedType);
+                                                           position.longitude());
 
       buffer->rawPut(index, (float) height);
-      
+
       if (mu->isNan(height)){
         _hasNoData = true;
       }
-      
+
     }
   }
 
@@ -192,8 +192,8 @@ SubviewElevationData::~SubviewElevationData() {
   delete _buffer;
 }
 
-double SubviewElevationData::getElevationAt(int x, int y,
-                                            int *type,
+double SubviewElevationData::getElevationAt(int x,
+                                            int y,
                                             double valueForNoData) const {
 
   if (_buffer != NULL) {
@@ -201,11 +201,9 @@ double SubviewElevationData::getElevationAt(int x, int y,
 
     if ( (index < 0) || (index >= _buffer->size()) ) {
       printf("break point on me\n");
-      *type = 0;
       return IMathUtils::instance()->NanD();
     }
-    *type = 1;
-    
+
     double h = _buffer->get(index);
     if (IMathUtils::instance()->isNan(h)){
       return valueForNoData;
@@ -221,28 +219,21 @@ double SubviewElevationData::getElevationAt(int x, int y,
 
   return getElevationAt(position.latitude(),
                         position.longitude(),
-                        type,
                         valueForNoData);
 }
 
 double SubviewElevationData::getElevationAt(const Angle& latitude,
                                             const Angle& longitude,
-                                            int *type,
                                             double valueForNoData) const {
   if (!_sector.contains(latitude, longitude)) {
     //    ILogger::instance()->logError("Sector %s doesn't contain lat=%s lon=%s",
     //                                  _sector.description().c_str(),
     //                                  latitude.description().c_str(),
     //                                  longitude.description().c_str());
-    return IMathUtils::instance()->NanD();
-  }
-  
-  double h = _elevationData->getElevationAt(latitude, longitude, type);
-  if (IMathUtils::instance()->isNan(h)){
     return valueForNoData;
-  } else{
-    return h;
   }
+
+  return _elevationData->getElevationAt(latitude, longitude, valueForNoData);
 }
 
 const std::string SubviewElevationData::description(bool detailed) const {
@@ -268,20 +259,20 @@ Vector3D SubviewElevationData::getMinMaxAverageHeights() const {
   double maxHeight = mu->minDouble();
   double sumHeight = 0.0;
 
-  int unusedType = 0;
+  const double nanD = mu->NanD();
 
   for (int x = 0; x < _width; x++) {
     for (int y = 0; y < _height; y++) {
-      const double height = getElevationAt(x, y, &unusedType);
-      //      if (height != _noDataValue) {
-      if (height < minHeight) {
-        minHeight = height;
+      const double height = getElevationAt(x, y, nanD);
+      if ( !mu->isNan(height) ) {
+        if (height < minHeight) {
+          minHeight = height;
+        }
+        if (height > maxHeight) {
+          maxHeight = height;
+        }
+        sumHeight += height;
       }
-      if (height > maxHeight) {
-        maxHeight = height;
-      }
-      sumHeight += height;
-      //      }
     }
   }
 
@@ -291,7 +282,7 @@ Vector3D SubviewElevationData::getMinMaxAverageHeights() const {
   if (maxHeight == mu->minDouble()) {
     maxHeight = 0;
   }
-  
+
   return Vector3D(minHeight,
                   maxHeight,
                   sumHeight / (_width * _height));

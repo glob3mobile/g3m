@@ -35,4 +35,4 @@ public:
   void log() const;
 };
 
-#endif /* defined(__G3MiOSSDK__SceneJSParserStatistics__) */
+#endif

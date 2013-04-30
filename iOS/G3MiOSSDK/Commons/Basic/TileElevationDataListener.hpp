@@ -1,5 +1,5 @@
 //
-//  TileElevationDataListener.h
+//  TileElevationDataListener.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 23/04/13.
@@ -9,8 +9,6 @@
 #ifndef __G3MiOSSDK__TileElevationDataListener__
 #define __G3MiOSSDK__TileElevationDataListener__
 
-#include <iostream>
-
 #include "ElevationDataProvider.hpp"
 #include "Tile.hpp"
 #include "Vector2I.hpp"
@@ -19,17 +17,17 @@ class TileElevationDataListener : public IElevationDataListener {
 private:
   Tile*                  _tile;
   long long              _requestID;
-  Vector2I _resolution;
+  const Vector2I _extent;
   ElevationDataProvider* _provider;
   bool                   _isFinished;
   bool                   _deletingWhenFinished;
   
 public:
   TileElevationDataListener(Tile* tile,
-                            const Vector2I& resolution,
+                            const Vector2I& extent,
                             ElevationDataProvider* provider) :
   _tile(tile),
-  _resolution(resolution),
+  _extent(extent),
   _provider(provider),
   _requestID(-1),
   _isFinished(false),
@@ -41,7 +39,7 @@ public:
   ~TileElevationDataListener() {}
   
   void onData(const Sector& sector,
-              const Vector2I& resolution,
+              const Vector2I& extent,
               ElevationData* elevationData) {
     
     if (_tile != NULL){
@@ -56,7 +54,7 @@ public:
   }
   
   void onError(const Sector& sector,
-               const Vector2I& resolution) {
+               const Vector2I& extent) {
     _isFinished = true;
     if (_deletingWhenFinished){
       delete this;
@@ -64,7 +62,7 @@ public:
   }
   
   void sendRequest(){
-    _requestID = _provider->requestElevationData(_tile->getSector(), _resolution, this, false);
+    _requestID = _provider->requestElevationData(_tile->getSector(), _extent, this, false);
   }
   
   void cancelRequest(){
@@ -79,4 +77,4 @@ public:
   }
 };
 
-#endif /* defined(__G3MiOSSDK__TileElevationDataListener__) */
+#endif

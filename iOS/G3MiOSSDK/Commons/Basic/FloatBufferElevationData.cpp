@@ -13,10 +13,10 @@
 #include "Vector3D.hpp"
 
 FloatBufferElevationData::FloatBufferElevationData(const Sector& sector,
-                                                   const Vector2I& resolution,
+                                                   const Vector2I& extent,
                                                    float noDataValue,
                                                    IFloatBuffer* buffer) :
-BufferElevationData(sector, resolution, buffer->size()),
+BufferElevationData(sector, extent, buffer->size()),
 _buffer(buffer),
 _noDataValue(noDataValue)
 {
@@ -55,13 +55,13 @@ const std::string FloatBufferElevationData::description(bool detailed) const {
   isb->addInt(_height);
   isb->addString(" sector=");
   isb->addString( _sector.description() );
-  int unusedType = -1;
   if (detailed) {
+    const double nanD = IMathUtils::instance()->NanD();
     isb->addString("\n");
     for (int row = 0; row < _width; row++) {
       //isb->addString("   ");
       for (int col = 0; col < _height; col++) {
-        isb->addDouble( getElevationAt(col, row, &unusedType) );
+        isb->addDouble( getElevationAt(col, row, nanD) );
         isb->addString(",");
       }
       isb->addString("\n");

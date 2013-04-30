@@ -20,6 +20,8 @@ private:
   
   bool                 _hasNoData;
 
+  const Geodetic2D _resolution;
+
   IFloatBuffer* createDecimatedBuffer();
   IFloatBuffer* createInterpolatedBuffer();
 
@@ -32,19 +34,22 @@ public:
   SubviewElevationData(const ElevationData *elevationData,
                        bool ownsElevationData,
                        const Sector& sector,
-                       const Vector2I& resolution,
+                       const Vector2I& extent,
                        bool useDecimation);
+
+  virtual const Geodetic2D getResolution() const {
+    return _resolution;
+  }
+
 
   ~SubviewElevationData();
 
   double getElevationAt(int x, int y,
-                        int *type,
-                        double valueForNoData = IMathUtils::instance()->NanD()) const;
+                        double valueForNoData) const;
 
   double getElevationAt(const Angle& latitude,
                         const Angle& longitude,
-                        int *type,
-                        double valueForNoData = IMathUtils::instance()->NanD()) const;
+                        double valueForNoData) const;
 
   const std::string description(bool detailed) const;
 
