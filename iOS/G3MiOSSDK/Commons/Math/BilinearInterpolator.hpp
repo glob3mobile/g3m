@@ -18,7 +18,7 @@ public:
                        double valueNE,
                        double valueNW,
                        double u,
-                       double v);
+                       double v) const;
 };
 
 #endif

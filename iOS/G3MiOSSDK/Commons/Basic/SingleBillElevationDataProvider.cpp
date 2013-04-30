@@ -19,13 +19,11 @@
 
 SingleBillElevationDataProvider::SingleBillElevationDataProvider(const URL& bilUrl,
                                                                  const Sector& sector,
-                                                                 const Vector2I& extent,
-                                                                 const double noDataValue) :
+                                                                 const Vector2I& extent) :
 _bilUrl(bilUrl),
 _sector(sector),
 _extentWidth(extent._x),
 _extentHeight(extent._y),
-_noDataValue(noDataValue),
 _elevationData(NULL),
 _elevationDataResolved(false),
 _currentRequestID(0)
@@ -39,19 +37,16 @@ private:
   const Sector _sector;
   const int _resolutionWidth;
   const int _resolutionHeight;
-  const double _noDataValue;
 
 public:
   SingleBillElevationDataProvider_BufferDownloadListener(SingleBillElevationDataProvider* singleBillElevationDataProvider,
                                                          const Sector& sector,
                                                          int resolutionWidth,
-                                                         int resolutionHeight,
-                                                         double noDataValue) :
+                                                         int resolutionHeight) :
   _singleBillElevationDataProvider(singleBillElevationDataProvider),
   _sector(sector),
   _resolutionWidth(resolutionWidth),
-  _resolutionHeight(resolutionHeight),
-  _noDataValue(noDataValue)
+  _resolutionHeight(resolutionHeight)
   {
 
   }
@@ -61,7 +56,7 @@ public:
                   bool expired) {
     const Vector2I resolution(_resolutionWidth, _resolutionHeight);
 
-    ShortBufferElevationData* elevationData = BilParser::parseBil16(_sector, resolution, _noDataValue, buffer);
+    ShortBufferElevationData* elevationData = BilParser::parseBil16(_sector, resolution, buffer);
 
     delete buffer;
 
@@ -102,8 +97,7 @@ void SingleBillElevationDataProvider::initialize(const G3MContext* context) {
                                             new SingleBillElevationDataProvider_BufferDownloadListener(this,
                                                                                                        _sector,
                                                                                                        _extentWidth,
-                                                                                                       _extentHeight,
-                                                                                                       _noDataValue),
+                                                                                                       _extentHeight),
                                             true);
   }
 }

@@ -20,7 +20,9 @@ ElevationData::ElevationData(const Sector& sector,
                              const Vector2I& extent) :
 _sector(sector),
 _width(extent._x),
-_height(extent._y)
+_height(extent._y),
+_resolution(sector.getDeltaLatitude().div(extent._y),
+            sector.getDeltaLongitude().div(extent._x))
 {
 }
 
@@ -49,12 +51,11 @@ Mesh* ElevationData::createMesh(const Ellipsoid* ellipsoid,
   FloatBufferBuilderFromColor colors;
 
   const IMathUtils* mu = IMathUtils::instance();
-  const double nanD = mu->NanD();
   for (int x = 0; x < _width; x++) {
     const double u = (double) x / (_width  - 1);
 
     for (int y = 0; y < _height; y++) {
-      const double height = getElevationAt(x, y, nanD);
+      const double height = getElevationAt(x, y);
       if (mu->isNan(height)) {
         continue;
       }

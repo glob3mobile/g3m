@@ -25,7 +25,6 @@ private:
   const Sector            _sector;
   const int               _width;
   const int               _height;
-  const double            _noDataValue;
 
   IElevationDataListener* _listener;
   const bool              _autodeleteListener;
@@ -35,13 +34,11 @@ public:
 
   WMSBillElevationDataProvider_BufferDownloadListener(const Sector& sector,
                                                       const Vector2I& extent,
-                                                      double noDataValue,
                                                       IElevationDataListener* listener,
                                                       bool autodeleteListener) :
   _sector(sector),
   _width(extent._x),
   _height(extent._y),
-  _noDataValue(noDataValue),
   _listener(listener),
   _autodeleteListener(autodeleteListener)
   {
@@ -52,7 +49,7 @@ public:
                   IByteBuffer* buffer,
                   bool expired) {
     const Vector2I resolution(_width, _height);
-    ShortBufferElevationData* elevationData = BilParser::parseBil16(_sector, resolution, _noDataValue, buffer);
+    ShortBufferElevationData* elevationData = BilParser::parseBil16(_sector, resolution, buffer);
     delete buffer;
 
     if (elevationData == NULL) {
@@ -140,15 +137,12 @@ const long long WMSBillElevationDataProvider::requestElevationData(const Sector&
   delete isb;
 
 
-  const double noDataValue = 0;
-
   return _downloader->requestBuffer(URL(path, false),
                                     2000000000,
                                     TimeInterval::fromDays(30),
                                     true,
                                     new WMSBillElevationDataProvider_BufferDownloadListener(sector,
                                                                                             extent,
-                                                                                            noDataValue,
                                                                                             listener,
                                                                                             autodeleteListener),
                                     true);

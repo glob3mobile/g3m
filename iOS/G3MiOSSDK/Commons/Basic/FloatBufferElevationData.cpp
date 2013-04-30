@@ -12,22 +12,25 @@
 #include "IStringBuilder.hpp"
 #include "Vector3D.hpp"
 
+const float FloatBufferElevationData::NO_DATA_VALUE = IMathUtils::instance()->NanF();
+
+
 FloatBufferElevationData::FloatBufferElevationData(const Sector& sector,
                                                    const Vector2I& extent,
-                                                   float noDataValue,
+                                                   const Sector& realSector,
+                                                   const Vector2I& realExtent,
                                                    IFloatBuffer* buffer) :
-BufferElevationData(sector, extent, buffer->size()),
-_buffer(buffer),
-_noDataValue(noDataValue)
+BufferElevationData(sector, extent, realSector, realExtent, buffer->size()),
+_buffer(buffer)
 {
   if (_buffer->size() != (_width * _height) ) {
     ILogger::instance()->logError("Invalid buffer size");
   }
-  
-  int size = buffer->size();
+
+  const int size = buffer->size();
   _hasNoData = false;
   for (int i = 0; i < size; i++) {
-    if (buffer->get(i) == noDataValue){
+    if (buffer->get(i) == NO_DATA_VALUE){
       _hasNoData = true;
       break;
     }
@@ -39,10 +42,11 @@ FloatBufferElevationData::~FloatBufferElevationData() {
 }
 
 double FloatBufferElevationData::getValueInBufferAt(int index) const {
-  float f = _buffer->get(index);
-  if (f == _noDataValue){
+  const float f = _buffer->get(index);
+  if (f == NO_DATA_VALUE){
     return IMathUtils::instance()->NanD();
-  } else{
+  }
+  else {
     return f;
   }
 }
@@ -56,12 +60,11 @@ const std::string FloatBufferElevationData::description(bool detailed) const {
   isb->addString(" sector=");
   isb->addString( _sector.description() );
   if (detailed) {
-    const double nanD = IMathUtils::instance()->NanD();
     isb->addString("\n");
     for (int row = 0; row < _width; row++) {
       //isb->addString("   ");
       for (int col = 0; col < _height; col++) {
-        isb->addDouble( getElevationAt(col, row, nanD) );
+        isb->addDouble( getElevationAt(col, row) );
         isb->addString(",");
       }
       isb->addString("\n");
@@ -82,15 +85,15 @@ Vector3D FloatBufferElevationData::getMinMaxAverageHeights() const {
   const int bufferSize = _buffer->size();
   for (int i = 0; i < bufferSize; i++) {
     const float height = _buffer->get(i);
-//    if (height != _noDataValue) {
-    if (height < minHeight) {
-      minHeight = height;
+    if (height != NO_DATA_VALUE) {
+      if (height < minHeight) {
+        minHeight = height;
+      }
+      if (height > maxHeight) {
+        maxHeight = height;
+      }
+      sumHeight += height;
     }
-    if (height > maxHeight) {
-      maxHeight = height;
-    }
-    sumHeight += height;
-//    }
   }
 
   if (minHeight == mu->maxFloat()) {

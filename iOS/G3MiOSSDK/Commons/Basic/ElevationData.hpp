@@ -23,9 +23,10 @@ class Vector3D;
 class ElevationData {
 protected:
   const Sector _sector;
-  
   const int _width;
   const int _height;
+
+  const Geodetic2D _resolution;
 
 public:
   ElevationData(const Sector& sector,
@@ -45,22 +46,14 @@ public:
     return _height;
   }
 
-  virtual const Geodetic2D getResolution() const = 0;
+  const Geodetic2D getResolution() const {
+    return _resolution;
+  }
+
+  virtual const Geodetic2D getRealResolution() const = 0;
 
   virtual double getElevationAt(int x,
-                                int y,
-                                double valueForNoData) const = 0;
-
-  virtual double getElevationAt(const Angle& latitude,
-                                const Angle& longitude,
-                                double valueForNoData) const = 0;
-
-  double getElevationAt(const Geodetic2D& position,
-                        double valueForNoData) const {
-    return getElevationAt(position.latitude(),
-                          position.longitude(),
-                          valueForNoData);
-  }
+                                int y) const = 0;
 
   virtual const std::string description(bool detailed) const = 0;
 

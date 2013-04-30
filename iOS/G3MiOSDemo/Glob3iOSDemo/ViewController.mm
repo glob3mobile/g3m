@@ -93,6 +93,9 @@
 #import <G3MiOSSDK/QuadShape.hpp>
 #import <G3MiOSSDK/IImageUtils.hpp>
 #import <G3MiOSSDK/RectangleF.hpp>
+#import <G3MiOSSDK/ShortBufferElevationData.hpp>
+
+
 
 class TestVisibleSectorListener : public VisibleSectorListener {
 public:
@@ -210,8 +213,7 @@ public:
   //  ElevationDataProvider* elevationDataProvider;
   elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
                                                               Sector::fullSphere(),
-                                                              Vector2I(2048, 1024),
-                                                              0);
+                                                              Vector2I(2048, 1024));
   
   //  ElevationDataProvider* elevationDataProvider1;
   //  elevationDataProvider1 = new SingleBillElevationDataProvider(URL("file:///elev-35.0_-6.0_38.0_-2.0_4096x2048.bil", false),
@@ -244,8 +246,7 @@ public:
                                                                                     39.4829889999999608,
                                                                                     -6.3645291787065954
                                                                                     ),
-                                                                Vector2I(251, 254),
-                                                                0);
+                                                                Vector2I(251, 254));
   
   //  ElevationDataProvider* elevationDataProvider5;
   //  elevationDataProvider5 = new SingleBillElevationDataProvider(URL("file:///elev-35.0_-6.0_38.0_-2.0_4096x2048.bil", false),
@@ -1272,11 +1273,9 @@ public:
   void onDownload(const URL& url,
                   IByteBuffer* buffer,
                   bool expired) {
-    const ElevationData* elevationData = BilParser::parseBil16(_sector,
-                                                               _extent,
-                                                               0,
-                                                               100,
-                                                               buffer);
+    const ShortBufferElevationData* elevationData = BilParser::parseBil16(_sector,
+                                                                          _extent,
+                                                                          buffer);
     delete buffer;
     
     if (elevationData == NULL) {
@@ -1332,7 +1331,7 @@ public:
     
     IFloatBuffer* deltaBuffer = IFactory::instance()->createFloatBuffer( subResolution._x * subResolution._y );
     
-    IMathUtils *mu = IMathUtils::instance();
+    IMathUtils* mu = IMathUtils::instance();
     for (int x = 0; x < subResolution._x; x++) {
       for (int y = 0; y < subResolution._y; y++) {
         const double height1 = subElevationDataDecimated->getElevationAt(x, y);
@@ -1351,7 +1350,8 @@ public:
     
     ElevationData* deltaElevation = new FloatBufferElevationData(subSector,
                                                                  subResolution,
-                                                                 0,
+                                                                 subSector,
+                                                                 subResolution,
                                                                  deltaBuffer);
     
     _meshRenderer->addMesh( deltaElevation->createMesh(planet,

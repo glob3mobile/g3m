@@ -10,17 +10,14 @@
 
 #include "IByteBuffer.hpp"
 #include "ByteBufferIterator.hpp"
-//#include "IFloatBuffer.hpp"
 #include "IShortBuffer.hpp"
 #include "IFactory.hpp"
 #include "ShortBufferElevationData.hpp"
-//#include "FloatBufferElevationData.hpp"
 #include "Vector2I.hpp"
 
 
 ShortBufferElevationData* BilParser::parseBil16(const Sector& sector,
                                                 const Vector2I& extent,
-                                                short noDataValue,
                                                 const IByteBuffer* buffer) {
 
   const int size = extent._x * extent._y;
@@ -42,10 +39,10 @@ ShortBufferElevationData* BilParser::parseBil16(const Sector& sector,
     short height = iterator.nextInt16();
 
     if (height == -9999) {
-      height = noDataValue;
+      height = ShortBufferElevationData::NO_DATA_VALUE;
     }
     else if (height == minValue) {
-      height = noDataValue;
+      height = ShortBufferElevationData::NO_DATA_VALUE;
     }
 
     shortBuffer->rawPut(i, height);
@@ -53,6 +50,7 @@ ShortBufferElevationData* BilParser::parseBil16(const Sector& sector,
 
   return new ShortBufferElevationData(sector,
                                       extent,
-                                      noDataValue,
+                                      sector,
+                                      extent,
                                       shortBuffer);
 }

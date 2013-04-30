@@ -16,15 +16,18 @@ class ShortBufferElevationData : public BufferElevationData {
 private:
   IShortBuffer*  _buffer;
   bool           _hasNoData;
-  short          _noDataValue;
 
 protected:
   double getValueInBufferAt(int index) const;
 
 public:
+
+  static const short NO_DATA_VALUE;
+
   ShortBufferElevationData(const Sector& sector,
                            const Vector2I& extent,
-                           short noDataValue,
+                           const Sector& realSector,
+                           const Vector2I& realExtent,
                            IShortBuffer* buffer);
 
   virtual ~ShortBufferElevationData();

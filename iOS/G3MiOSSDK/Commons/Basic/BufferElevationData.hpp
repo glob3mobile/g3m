@@ -10,39 +10,33 @@
 #define __G3MiOSSDK__BufferElevationData__
 
 #include "ElevationData.hpp"
-class Interpolator;
 
 class BufferElevationData : public ElevationData {
 private:
-  mutable Interpolator*  _interpolator;
-
   const int _bufferSize;
 
-  const Geodetic2D _resolution;
+  const Geodetic2D _realResolution;
 
 protected:
-  Interpolator*  getInterpolator() const;
-
   virtual double getValueInBufferAt(int index) const = 0;
 
 public:
   BufferElevationData(const Sector& sector,
                       const Vector2I& extent,
+                      const Sector& realSector,
+                      const Vector2I& realExtent,
                       int bufferSize);
 
-  virtual ~BufferElevationData();
+  virtual ~BufferElevationData() {
 
-  const Geodetic2D getResolution() const {
-    return _resolution;
   }
 
-  double getElevationAt(const Angle& latitude,
-                        const Angle& longitude,
-                        double valueForNoData) const;
+  const Geodetic2D getRealResolution() const {
+    return _realResolution;
+  }
 
-  virtual double getElevationAt(int x,
-                                int y,
-                                double valueForNoData) const;
+  double getElevationAt(int x,
+                        int y) const;
 
 };
 

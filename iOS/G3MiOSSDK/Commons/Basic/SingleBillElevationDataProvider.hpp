@@ -56,7 +56,6 @@ private:
   const Sector _sector;
   const int _extentWidth;
   const int _extentHeight;
-  const double _noDataValue;
 
   void drainQueue();
 
@@ -71,8 +70,7 @@ private:
 public:
   SingleBillElevationDataProvider(const URL& bilUrl,
                                   const Sector& sector,
-                                  const Vector2I& extent,
-                                  const double noDataValue);
+                                  const Vector2I& extent);
 
   bool isReadyToRender(const G3MRenderContext* rc) {
     return (_elevationDataResolved);
@@ -90,11 +88,11 @@ public:
 
   void onElevationData(ElevationData* elevationData);
 
-  //  std::vector<const Sector*> getSectors() const{
-  //    std::vector<const Sector*> sectors;
-  //    sectors.push_back(&_sector);
-  //    return sectors;
-  //  }
+  std::vector<const Sector*> getSectors() const{
+    std::vector<const Sector*> sectors;
+    sectors.push_back(&_sector);
+    return sectors;
+  }
 
   const Vector2I getMinResolution() const{
     return Vector2I(_extentWidth, _extentHeight);

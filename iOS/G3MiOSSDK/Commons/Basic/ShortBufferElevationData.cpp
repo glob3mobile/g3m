@@ -12,22 +12,25 @@
 #include "IStringBuilder.hpp"
 #include "Vector3D.hpp"
 
+const short ShortBufferElevationData::NO_DATA_VALUE = IMathUtils::instance()->minInt16();
+
+
 ShortBufferElevationData::ShortBufferElevationData(const Sector& sector,
                                                    const Vector2I& extent,
-                                                   short noDataValue,
+                                                   const Sector& realSector,
+                                                   const Vector2I& realExtent,
                                                    IShortBuffer* buffer) :
-BufferElevationData(sector, extent, buffer->size()),
-_buffer(buffer),
-_noDataValue(noDataValue)
+BufferElevationData(sector, extent, realSector, realExtent, buffer->size()),
+_buffer(buffer)
 {
   if (_buffer->size() != (_width * _height) ) {
     ILogger::instance()->logError("Invalid buffer size");
   }
   
-  int size = buffer->size();
+  const int size = buffer->size();
   _hasNoData = false;
   for (int i = 0; i < size; i++) {
-    if (buffer->get(i) == noDataValue){
+    if (buffer->get(i) == NO_DATA_VALUE){
       _hasNoData = true;
       break;
     }
@@ -39,10 +42,11 @@ ShortBufferElevationData::~ShortBufferElevationData() {
 }
 
 double ShortBufferElevationData::getValueInBufferAt(int index) const {
-  short s = _buffer->get(index);
-  if (s == _noDataValue){
+  const short s = _buffer->get(index);
+  if (s == NO_DATA_VALUE){
     return IMathUtils::instance()->NanD();
-  } else{
+  }
+  else {
     return s;
   }
 }
@@ -56,12 +60,11 @@ const std::string ShortBufferElevationData::description(bool detailed) const {
   isb->addString(" sector=");
   isb->addString( _sector.description() );
   if (detailed) {
-    const double nanD = IMathUtils::instance()->NanD();
     isb->addString("\n");
     for (int row = 0; row < _width; row++) {
       //isb->addString("   ");
       for (int col = 0; col < _height; col++) {
-        isb->addDouble( getElevationAt(col, row, nanD) );
+        isb->addDouble( getElevationAt(col, row) );
         isb->addString(",");
       }
       isb->addString("\n");
@@ -82,7 +85,7 @@ Vector3D ShortBufferElevationData::getMinMaxAverageHeights() const {
   const int bufferSize = _buffer->size();
   for (int i = 0; i < bufferSize; i++) {
     const short height = _buffer->get(i);
-    if (height != _noDataValue) {
+    if (height != NO_DATA_VALUE) {
       if (height < minHeight) {
         minHeight = height;
       }

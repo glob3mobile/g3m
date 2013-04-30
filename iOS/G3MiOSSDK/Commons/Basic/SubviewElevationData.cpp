@@ -21,9 +21,7 @@ SubviewElevationData::SubviewElevationData(const ElevationData *elevationData,
                                            bool useDecimation) :
 ElevationData(sector, extent),
 _elevationData(elevationData),
-_ownsElevationData(ownsElevationData),
-_resolution(sector.getDeltaLatitude().div(extent._y),
-            sector.getDeltaLongitude().div(extent._x))
+_ownsElevationData(ownsElevationData)
 {
   if ((_elevationData == NULL) ||
       (_elevationData->getExtentWidth() < 1) ||
@@ -194,8 +192,7 @@ SubviewElevationData::~SubviewElevationData() {
 }
 
 double SubviewElevationData::getElevationAt(int x,
-                                            int y,
-                                            double valueForNoData) const {
+                                            int y) const {
 
   if (_buffer != NULL) {
     const int index = ((_height-1-y) * _width) + x;
@@ -205,12 +202,7 @@ double SubviewElevationData::getElevationAt(int x,
       return IMathUtils::instance()->NanD();
     }
 
-    double h = _buffer->get(index);
-    if (IMathUtils::instance()->isNan(h)){
-      return valueForNoData;
-    } else{
-      return h;
-    }
+    return _buffer->get(index);
   }
 
 
@@ -219,24 +211,7 @@ double SubviewElevationData::getElevationAt(int x,
   const Geodetic2D position = _sector.getInnerPoint(u, v);
 
   return getElevationAt(position.latitude(),
-                        position.longitude(),
-                        valueForNoData);
-}
-
-double SubviewElevationData::getElevationAt(const Angle& latitude,
-                                            const Angle& longitude,
-                                            double valueForNoData) const {
-  
-  //TODO: Change this method
-  if (!_sector.contains(latitude, longitude)) {
-    //    ILogger::instance()->logError("Sector %s doesn't contain lat=%s lon=%s",
-    //                                  _sector.description().c_str(),
-    //                                  latitude.description().c_str(),
-    //                                  longitude.description().c_str());
-    return valueForNoData;
-  }
-  
-  return _elevationData->getElevationAt(latitude, longitude, valueForNoData);
+                        position.longitude());
 }
 
 const std::string SubviewElevationData::description(bool detailed) const {
@@ -262,11 +237,9 @@ Vector3D SubviewElevationData::getMinMaxAverageHeights() const {
   double maxHeight = mu->minDouble();
   double sumHeight = 0.0;
 
-  const double nanD = mu->NanD();
-
   for (int x = 0; x < _width; x++) {
     for (int y = 0; y < _height; y++) {
-      const double height = getElevationAt(x, y, nanD);
+      const double height = getElevationAt(x, y);
       if ( !mu->isNan(height) ) {
         if (height < minHeight) {
           minHeight = height;

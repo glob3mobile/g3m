@@ -48,36 +48,12 @@ public:
     delete _interpolator;
   }
 
-  const Vector2I getExtent() const{
-    return _data[0]->getExtent();
-  }
-
-  int getExtentWidth() const {
-    return _data[0]->getExtent()._x;
-  }
-
-  int getExtentHeight() const {
-    return _data[0]->getExtent()._y;
-  }
-
   double getElevationAt(int x,
-                        int y,
-                        double valueForNoData) const;
-
-  double getElevationAt(const Angle& latitude,
-                        const Angle& longitude,
-                        double valueForNoData) const;
+                        int y) const;
 
   const std::string description(bool detailed) const;
 
   Vector3D getMinMaxAverageHeights() const;
-
-  Mesh* createMesh(const Ellipsoid* ellipsoid,
-                   float verticalExaggeration,
-                   const Geodetic3D& positionOffset,
-                   float pointSize) const{
-    return NULL;
-  }
 
   const Sector getSector() const {
     return _sector;
@@ -87,6 +63,7 @@ public:
     return _hasNoData;
   }
 
+  const Geodetic2D getRealResolution() const;
 
 };
 

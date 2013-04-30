@@ -11,23 +11,21 @@
 #include "IStringBuilder.hpp"
 
 double CompositeElevationData::getElevationAt(int x,
-                                              int y,
-                                              double valueForNoData) const{
-  IMathUtils* mu = IMathUtils::instance();
-  int s = _data.size();
-  for (int i = 0; i < s; i++) {
-    double h = _data[i]->getElevationAt(x, y, valueForNoData);
+                                              int y) const{
+  const IMathUtils* mu = IMathUtils::instance();
+  const int size = _data.size();
+  for (int i = 0; i < size; i++) {
+    const double h = _data[i]->getElevationAt(x, y);
     if (!mu->isNan(h)){
       return h;
     }
   }
 
-  return valueForNoData;
+  return mu->NanD();
 }
 
 
 void CompositeElevationData::addElevationData(ElevationData* data){
-
   ElevationData* d0 = _data[0];
 
   if ((data->getExtentWidth()  != _width) ||
@@ -45,14 +43,11 @@ void CompositeElevationData::addElevationData(ElevationData* data){
 
   const IMathUtils* mu = IMathUtils::instance();
   _data.push_back(data);
-
-
-  const double nanD = IMathUtils::instance()->NanD();
   
   //Checking NoData
   for (int i = 0; i < _width; i++) {
     for (int j = 0; j < _height; j++) {
-      double height = getElevationAt(i, j, nanD);
+      double height = getElevationAt(i, j);
       if (mu->isNan(height)){
         _hasNoData = true;
         return;
@@ -60,24 +55,6 @@ void CompositeElevationData::addElevationData(ElevationData* data){
     }
   }
 }
-
-double CompositeElevationData::getElevationAt(const Angle& latitude,
-                                              const Angle& longitude,
-                                              double valueForNoData) const {
-
-  IMathUtils* mu = IMathUtils::instance();
-  int s = _data.size();
-  for (int i = 0; i < s; i++) {
-    double h = _data[i]->getElevationAt(latitude, longitude, valueForNoData);
-    if (!mu->isNan(h)){
-      return h;
-    }
-  }
-
-  return valueForNoData;
-}
-
-
 
 const std::string CompositeElevationData::description(bool detailed) const{
   IStringBuilder *isb = IStringBuilder::newStringBuilder();
@@ -88,12 +65,11 @@ const std::string CompositeElevationData::description(bool detailed) const{
   isb->addString(" sector=");
   isb->addString( _sector.description() );
   if (detailed) {
-    const double nanD = IMathUtils::instance()->NanD();
     isb->addString("\n");
     for (int row = 0; row < _width; row++) {
       //isb->addString("   ");
       for (int col = 0; col < _height; col++) {
-        isb->addDouble( getElevationAt(col, row, nanD) );
+        isb->addDouble( getElevationAt(col, row) );
         isb->addString(",");
       }
       isb->addString("\n");
@@ -111,10 +87,9 @@ Vector3D CompositeElevationData::getMinMaxAverageHeights() const{
   double maxHeight = mu->minDouble();
   double sumHeight = 0.0;
 
-  const double nanD = IMathUtils::instance()->NanD();
   for (int i = 0; i < _width; i++) {
     for (int j = 0; j < _height; j++) {
-      const double height = getElevationAt(i, j, nanD);
+      const double height = getElevationAt(i, j);
       if (!mu->isNan(height)){
         if (height < minHeight) {
           minHeight = height;
@@ -137,4 +112,8 @@ Vector3D CompositeElevationData::getMinMaxAverageHeights() const{
   return Vector3D(minHeight,
                   maxHeight,
                   sumHeight / (_width * _height));
+}
+
+const Geodetic2D CompositeElevationData::getRealResolution() const {
+  int _TODO_complete;
 }
