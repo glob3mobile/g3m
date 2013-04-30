@@ -44,13 +44,7 @@ public:
   }
   
   void onError(const Sector& sector,
-<<<<<<< HEAD
                const Vector2I& extent) {
-    _isFinished = true;
-    if (_deletingWhenFinished){
-      delete this;
-=======
-               const Vector2I& resolution) {
     if (_tile != NULL){
       _tile->onElevationDataListenerDeleted();
     }
@@ -60,16 +54,11 @@ public:
                const Vector2I& resolution) {
     if (_tile != NULL){
       _tile->onElevationDataListenerDeleted();
->>>>>>> 7fb860e4b4f43468814fc002eedb4be0455427e2
     }
   }
   
   void sendRequest(){
-<<<<<<< HEAD
-    _requestID = _provider->requestElevationData(_tile->getSector(), _extent, this, false);
-=======
-    _requestID = _provider->requestElevationData(_tile->getSector(), _resolution, this, true);
->>>>>>> 7fb860e4b4f43468814fc002eedb4be0455427e2
+    _requestID = _provider->requestElevationData(_tile->getSector(), _extent, this, true);
   }
   
   void cancelRequest(){

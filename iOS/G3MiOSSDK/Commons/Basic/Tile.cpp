@@ -697,7 +697,7 @@ void Tile::setElevationData(ElevationData* ed, int level){
   }
 }
 
-void Tile::getElevationDataFromAncestor(const Vector2I& resolution){
+void Tile::getElevationDataFromAncestor(const Vector2I& extent) {
 
   if (_elevationData == NULL){
 
@@ -707,7 +707,8 @@ void Tile::getElevationDataFromAncestor(const Vector2I& resolution){
     }
 
     if (ancestor != NULL){
-      ElevationData* subView = createElevationDataSubviewFromAncestor(ancestor); ancestor->getElevationData();
+      ElevationData* subView = createElevationDataSubviewFromAncestor(ancestor);
+      //ancestor->getElevationData();
       setElevationData(subView, ancestor->getLevel());
     }
 

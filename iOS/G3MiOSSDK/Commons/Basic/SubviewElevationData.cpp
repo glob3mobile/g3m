@@ -233,17 +233,9 @@ double SubviewElevationData::getElevationAt(const Angle& latitude,
     //                                  _sector.description().c_str(),
     //                                  latitude.description().c_str(),
     //                                  longitude.description().c_str());
-<<<<<<< HEAD
-=======
     return valueForNoData;
   }
   
-  double h = _elevationData->getElevationAt(latitude, longitude, type, valueForNoData);
-  if (IMathUtils::instance()->isNan(h)){
->>>>>>> 7fb860e4b4f43468814fc002eedb4be0455427e2
-    return valueForNoData;
-  }
-
   return _elevationData->getElevationAt(latitude, longitude, valueForNoData);
 }
 

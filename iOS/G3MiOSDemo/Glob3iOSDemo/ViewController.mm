@@ -1233,7 +1233,7 @@ public:
 //class TestElevationDataListener : public IElevationDataListener {
 //public:
 //  void onData(const Sector& sector,
-//              const Vector2I& resolution,
+//              const Vector2I& extent,
 //              ElevationData* elevationData) {
 //    if (elevationData != NULL) {
 //      ILogger::instance()->logInfo("Elevation data for sector=%s", sector.description().c_str());
@@ -1243,7 +1243,7 @@ public:
 //  }
 //
 //  void onError(const Sector& sector,
-//               const Vector2I& resolution) {
+//               const Vector2I& extent) {
 //
 //  }
 //};

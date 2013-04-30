@@ -212,7 +212,7 @@ public:
   
   void setElevationData(ElevationData* ed, int level);
   
-  void getElevationDataFromAncestor(const Vector2I& resolution);
+  void getElevationDataFromAncestor(const Vector2I& extent);
   
   void initializeElevationData(ElevationDataProvider* elevationDataProvider,
                                const TileTessellator* tesselator,

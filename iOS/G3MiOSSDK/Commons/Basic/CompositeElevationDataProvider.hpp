@@ -70,14 +70,14 @@ private:
     void cancel();
     
     void onData(const Sector& sector,
-                const Vector2I& resolution,
+                const Vector2I& extent,
                 ElevationData* elevationData);
     
     void onError(const Sector& sector,
-                 const Vector2I& resolution);
+                 const Vector2I& extent);
     
     void onCancel(const Sector& sector,
-                  const Vector2I& resolution);
+                  const Vector2I& extent);
     
   };
   
