@@ -106,7 +106,6 @@ public class Sector
      return Geodetic2D(lat, lon);*/
   }
 
-
   // cached values for speed up in isBackOriented()
   private Sector_Geodetic2DCachedData _nwData;
   private Sector_Geodetic2DCachedData _neData;
@@ -167,8 +166,6 @@ public class Sector
     final double scaleY = _deltaLatitude.div(that._deltaLatitude);
     return new Vector2D(scaleX, scaleY);
   }
-
-//  Vector2D getTranslationFactor(const Sector& that) const;
 
   public final boolean fullContains(Sector s)
   {
@@ -442,7 +439,6 @@ public class Sector
   {
     return (_upper.latitude()._radians - latitude._radians) / _deltaLatitude._radians;
   }
-
 
   public final boolean isBackOriented(G3MRenderContext rc, double minHeight)
   {

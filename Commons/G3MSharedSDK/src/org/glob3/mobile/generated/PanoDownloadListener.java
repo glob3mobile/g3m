@@ -14,20 +14,20 @@ public class PanoDownloadListener extends IBufferDownloadListener
 
     public PanoDownloadListener(MarksRenderer marksRenderer, MarkTouchListener panoTouchListener, String urlIcon)
     {
-        _marksRenderer = marksRenderer;
-        _panoTouchListener = panoTouchListener;
-        _urlIcon = urlIcon;
+      _marksRenderer = marksRenderer;
+      _panoTouchListener = panoTouchListener;
+      _urlIcon = urlIcon;
     }
 
-    public final void onDownload(URL url, IByteBuffer buffer)
+    public final void onDownload(URL url, IByteBuffer buffer, boolean expired)
     {
-        String String = buffer.getAsString();
-        final JSONBaseObject json = IJSONParser.instance().parse(String);
-        ILogger.instance().logInfo(url.getPath());
-        parseMETADATA(IStringUtils.instance().substring(url.getPath(), 0, IStringUtils.instance().indexOf(url.getPath(), "/info.txt")), json.asObject());
-        IJSONParser.instance().deleteJSONData(json);
-        if (buffer != null)
-           buffer.dispose();
+      String String = buffer.getAsString();
+      final JSONBaseObject json = IJSONParser.instance().parse(String);
+      ILogger.instance().logInfo(url.getPath());
+      parseMETADATA(IStringUtils.instance().substring(url.getPath(), 0, IStringUtils.instance().indexOf(url.getPath(), "/info.txt")), json.asObject());
+      IJSONParser.instance().deleteJSONData(json);
+      if (buffer != null)
+         buffer.dispose();
     }
 
     public final void onError(URL url)
@@ -38,7 +38,7 @@ public class PanoDownloadListener extends IBufferDownloadListener
     public final void onCancel(URL url)
     {
     }
-    public final void onCanceledDownload(URL url, IByteBuffer data)
+    public final void onCanceledDownload(URL url, IByteBuffer data, boolean expired)
     {
     }
 
@@ -48,11 +48,11 @@ public class PanoDownloadListener extends IBufferDownloadListener
     private void parseMETADATA(String url, JSONObject json)
     {
     
-        final Angle latitude = Angle.fromDegrees(json.getAsObject(POSITION).getAsNumber(LAT).value());
-        final Angle longitude = Angle.fromDegrees(json.getAsObject(POSITION).getAsNumber(LON).value());
+      final Angle latitude = Angle.fromDegrees(json.getAsObject(POSITION).getAsNumber(LAT).value());
+      final Angle longitude = Angle.fromDegrees(json.getAsObject(POSITION).getAsNumber(LON).value());
     
-        Mark mark = new Mark(new URL(_urlIcon,false), new Geodetic3D(latitude, longitude, 0), 0, new PanoMarkUserData(json.getAsString(NAME).value(), new URL(url, false)),true, _panoTouchListener,true);
+      Mark mark = new Mark(new URL(_urlIcon,false), new Geodetic3D(latitude, longitude, 0), 0, new PanoMarkUserData(json.getAsString(NAME).value(), new URL(url, false)),true, _panoTouchListener,true);
     
-        _marksRenderer.addMark(mark);
+      _marksRenderer.addMark(mark);
     }
 }

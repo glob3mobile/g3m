@@ -41,14 +41,32 @@ public class AppParser
     String jsonBaseLayer = jsonWorld.getAsString(BASELAYER).value();
     final JSONArray jsonBbox = jsonWorld.getAsArray(BBOX);
   
+  
+    /*
+    
+     WMSLayer(const std::string& mapLayer,
+     const URL& mapServerURL,
+     const WMSServerVersion mapServerVersion,
+     const Sector& sector,
+     const std::string& format,
+     const std::string srs,
+     const std::string& style,
+     const bool isTransparent,
+     LayerCondition* condition,
+     const TimeInterval& timeToCache,
+     bool readExpired,
+     const LayerTilesRenderParameters* parameters = NULL);
+    
+     */
+  
     if (jsonBaseLayer.equals("BING"))
     {
-      WMSLayer bing = new WMSLayer("ve", new URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?",true), WMSServerVersion.WMS_1_1_0, Sector.fromDegrees(jsonBbox.getAsNumber(1).value(), jsonBbox.getAsNumber(0).value(), jsonBbox.getAsNumber(3).value(), jsonBbox.getAsNumber(2).value()), "image/jpeg", "EPSG:4326", "", false, null, TimeInterval.fromDays(30));
+      WMSLayer bing = new WMSLayer("ve", new URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?",true), WMSServerVersion.WMS_1_1_0, Sector.fromDegrees(jsonBbox.getAsNumber(1).value(), jsonBbox.getAsNumber(0).value(), jsonBbox.getAsNumber(3).value(), jsonBbox.getAsNumber(2).value()), "image/jpeg", "EPSG:4326", "", false, null, TimeInterval.fromDays(30), true);
       layerSet.addLayer(bing);
     }
     else
     {
-      WMSLayer osm = new WMSLayer("osm", new URL("http://wms.latlon.org/",true), WMSServerVersion.WMS_1_1_0, Sector.fromDegrees(jsonBbox.getAsNumber(1).value(), jsonBbox.getAsNumber(0).value(), jsonBbox.getAsNumber(3).value(), jsonBbox.getAsNumber(2).value()), "image/jpeg", "EPSG:4326", "", false, null, TimeInterval.fromDays(30));
+      WMSLayer osm = new WMSLayer("osm", new URL("http://wms.latlon.org/",true), WMSServerVersion.WMS_1_1_0, Sector.fromDegrees(jsonBbox.getAsNumber(1).value(), jsonBbox.getAsNumber(0).value(), jsonBbox.getAsNumber(3).value(), jsonBbox.getAsNumber(2).value()), "image/jpeg", "EPSG:4326", "", false, null, TimeInterval.fromDays(30), true);
       layerSet.addLayer(osm);
     }
     parseCustomData(marks, jsonWorld.getAsObject(CUSTOMDATA));

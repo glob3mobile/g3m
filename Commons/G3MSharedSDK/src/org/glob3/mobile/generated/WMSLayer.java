@@ -342,6 +342,7 @@ public class WMSLayer extends Layer
   
     //X and Y
     //const Vector2D uv = sector.getUVCoordinates(position);
+  
     final long x = mu.round((u * _parameters._tileTextureResolution._x));
     final long y = mu.round((v * _parameters._tileTextureResolution._y));
   

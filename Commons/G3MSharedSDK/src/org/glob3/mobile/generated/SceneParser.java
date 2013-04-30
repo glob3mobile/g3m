@@ -125,6 +125,12 @@ public class SceneParser
   
     boolean transparent = isTransparent(jsonLayer.getAsString(ISTRANSPARENT));
   
+    String format = "image/png";
+    if (!transparent)
+    {
+      format = "image/jpeg";
+    }
+  
     LevelTileCondition levelTileCondition = getLevelCondition(jsonLayer.getAsString(MINLEVEL), jsonLayer.getAsString(MAXLEVEL));
     Sector sector = getSector(jsonLayer.getAsObject(BBOX));
   
@@ -155,7 +161,7 @@ public class SceneParser
       wmsVersion = WMSServerVersion.WMS_1_3_0;
     }
   
-    WMSLayer wmsLayer = new WMSLayer(URL.escape(layersSecuence), new URL(jsonURL, false), wmsVersion, sector, "image/png", "EPSG:4326", "", transparent, levelTileCondition, TimeInterval.fromDays(30), new LayerTilesRenderParameters(Sector.fullSphere(),jsonSplitsLat,jsonSplitsLon,0,19,new Vector2I(256,256),new Vector2I(16,16),false));
+    WMSLayer wmsLayer = new WMSLayer(URL.escape(layersSecuence), new URL(jsonURL, false), wmsVersion, sector, format, "EPSG:4326", "", transparent, levelTileCondition, TimeInterval.fromDays(30), true, new LayerTilesRenderParameters(Sector.fullSphere(),jsonSplitsLat,jsonSplitsLon,0,19,LayerTilesRenderParameters.defaultTileTextureResolution(),LayerTilesRenderParameters.defaultTileMeshResolution(),false));
     layerSet.addLayer(wmsLayer);
   }
   private void parserJSONTMSLayer(LayerSet layerSet, JSONObject jsonLayer)
@@ -195,7 +201,7 @@ public class SceneParser
     if (layersName != null)
        layersName.dispose();
   
-    TMSLayer tmsLayer = new TMSLayer(URL.escape(layersSecuence), new URL(jsonURL, false), sector, "image/jpeg", "EPSG:4326", transparent, levelTileCondition, TimeInterval.fromDays(30), new LayerTilesRenderParameters(Sector.fullSphere(),jsonSplitsLat,jsonSplitsLon,0,19,new Vector2I(256,256),new Vector2I(16,16),false));
+    TMSLayer tmsLayer = new TMSLayer(URL.escape(layersSecuence), new URL(jsonURL, false), sector, "image/jpeg", "EPSG:4326", transparent, levelTileCondition, TimeInterval.fromDays(30), true, new LayerTilesRenderParameters(Sector.fullSphere(),jsonSplitsLat,jsonSplitsLon,0,19,LayerTilesRenderParameters.defaultTileTextureResolution(),LayerTilesRenderParameters.defaultTileMeshResolution(),false));
   
     layerSet.addLayer(tmsLayer);
   }

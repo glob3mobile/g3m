@@ -9,7 +9,6 @@ package org.glob3.mobile.generated;
 
 
 
-
 public class FloatBufferBuilderFromCartesian3D extends FloatBufferBuilder
 {
   private final int _centerStrategy;
