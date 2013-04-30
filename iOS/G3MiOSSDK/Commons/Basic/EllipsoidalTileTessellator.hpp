@@ -40,8 +40,7 @@ public:
                        const Tile* tile,
                        const ElevationData* elevationData,
                        float verticalExaggeration,
-                       bool debug,
-                       double defaultHeight = 0) const;
+                       bool debug) const;
 
   Mesh* createTileDebugMesh(const Planet* planet,
                             const Vector2I& resolution,

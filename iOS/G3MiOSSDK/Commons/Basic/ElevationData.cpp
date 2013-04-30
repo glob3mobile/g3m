@@ -15,6 +15,9 @@
 #include "DirectMesh.hpp"
 #include "GLConstants.hpp"
 
+double ElevationData::getElevationAt(const Vector2I& position) const {
+  return getElevationAt(position._x, position._y);
+}
 
 ElevationData::ElevationData(const Sector& sector,
                              const Vector2I& extent) :

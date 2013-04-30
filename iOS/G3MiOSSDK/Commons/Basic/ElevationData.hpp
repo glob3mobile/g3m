@@ -55,6 +55,8 @@ public:
   virtual double getElevationAt(int x,
                                 int y) const = 0;
 
+  double getElevationAt(const Vector2I& position) const;
+
   virtual const std::string description(bool detailed) const = 0;
 
   virtual Vector3D getMinMaxAverageHeights() const = 0;
