@@ -29,6 +29,7 @@ _resolution(sector.getDeltaLatitude().div(extent._y),
       (_elevationData->getExtentWidth() < 1) ||
       (_elevationData->getExtentHeight() < 1)) {
     ILogger::instance()->logError("SubviewElevationData can't subview given elevation data.");
+    _buffer = NULL;
     return;
   }
 
@@ -225,11 +226,21 @@ double SubviewElevationData::getElevationAt(int x,
 double SubviewElevationData::getElevationAt(const Angle& latitude,
                                             const Angle& longitude,
                                             double valueForNoData) const {
+  
+  //TODO: Change this method
   if (!_sector.contains(latitude, longitude)) {
     //    ILogger::instance()->logError("Sector %s doesn't contain lat=%s lon=%s",
     //                                  _sector.description().c_str(),
     //                                  latitude.description().c_str(),
     //                                  longitude.description().c_str());
+<<<<<<< HEAD
+=======
+    return valueForNoData;
+  }
+  
+  double h = _elevationData->getElevationAt(latitude, longitude, type, valueForNoData);
+  if (IMathUtils::instance()->isNan(h)){
+>>>>>>> 7fb860e4b4f43468814fc002eedb4be0455427e2
     return valueForNoData;
   }
 

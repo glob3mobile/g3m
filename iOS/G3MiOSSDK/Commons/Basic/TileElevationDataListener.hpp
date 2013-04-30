@@ -19,8 +19,6 @@ private:
   long long              _requestID;
   const Vector2I _extent;
   ElevationDataProvider* _provider;
-  bool                   _isFinished;
-  bool                   _deletingWhenFinished;
   
 public:
   TileElevationDataListener(Tile* tile,
@@ -29,9 +27,7 @@ public:
   _tile(tile),
   _extent(extent),
   _provider(provider),
-  _requestID(-1),
-  _isFinished(false),
-  _deletingWhenFinished(false)
+  _requestID(-1)
   {
     
   }
@@ -41,38 +37,45 @@ public:
   void onData(const Sector& sector,
               const Vector2I& extent,
               ElevationData* elevationData) {
-    
     if (_tile != NULL){
       _tile->setElevationData(elevationData, _tile->getLevel());
-    }
-    
-    _isFinished = true;
-    
-    if (_deletingWhenFinished){
-      delete this;
+      _tile->onElevationDataListenerDeleted();
     }
   }
   
   void onError(const Sector& sector,
+<<<<<<< HEAD
                const Vector2I& extent) {
     _isFinished = true;
     if (_deletingWhenFinished){
       delete this;
+=======
+               const Vector2I& resolution) {
+    if (_tile != NULL){
+      _tile->onElevationDataListenerDeleted();
+    }
+  }
+  
+  void onCancel(const Sector& sector,
+               const Vector2I& resolution) {
+    if (_tile != NULL){
+      _tile->onElevationDataListenerDeleted();
+>>>>>>> 7fb860e4b4f43468814fc002eedb4be0455427e2
     }
   }
   
   void sendRequest(){
+<<<<<<< HEAD
     _requestID = _provider->requestElevationData(_tile->getSector(), _extent, this, false);
+=======
+    _requestID = _provider->requestElevationData(_tile->getSector(), _resolution, this, true);
+>>>>>>> 7fb860e4b4f43468814fc002eedb4be0455427e2
   }
   
   void cancelRequest(){
     _tile = NULL;
-    if (_requestID != -1 && !_isFinished){
+    if (_requestID != -1){
       _provider->cancelRequest(_requestID);
-    }
-    _deletingWhenFinished = true;
-    if (_isFinished){
-      delete this;
     }
   }
 };
