@@ -14,6 +14,8 @@
 #include "TimeInterval.hpp"
 #include "BilParser.hpp"
 #include "SubviewElevationData.hpp"
+#include "ShortBufferElevationData.hpp"
+
 
 SingleBillElevationDataProvider::SingleBillElevationDataProvider(const URL& bilUrl,
                                                                  const Sector& sector,
@@ -59,7 +61,7 @@ public:
                   bool expired) {
     const Vector2I resolution(_resolutionWidth, _resolutionHeight);
 
-    ElevationData* elevationData = BilParser::parseBil16(_sector, resolution, _noDataValue, buffer);
+    ShortBufferElevationData* elevationData = BilParser::parseBil16(_sector, resolution, _noDataValue, buffer);
 
     delete buffer;
 

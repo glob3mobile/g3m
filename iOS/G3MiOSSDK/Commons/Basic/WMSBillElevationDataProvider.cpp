@@ -17,7 +17,7 @@
 #include "TimeInterval.hpp"
 #include "IBufferDownloadListener.hpp"
 #include "BilParser.hpp"
-#include "SubviewElevationData.hpp"
+#include "ShortBufferElevationData.hpp"
 
 
 class WMSBillElevationDataProvider_BufferDownloadListener : public IBufferDownloadListener {
@@ -52,7 +52,7 @@ public:
                   IByteBuffer* buffer,
                   bool expired) {
     const Vector2I resolution(_width, _height);
-    ElevationData* elevationData = BilParser::parseBil16(_sector, resolution, _noDataValue, buffer);
+    ShortBufferElevationData* elevationData = BilParser::parseBil16(_sector, resolution, _noDataValue, buffer);
     delete buffer;
 
     if (elevationData == NULL) {
