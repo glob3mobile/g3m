@@ -8,6 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 
+///#include <vector>
 ///#include "RectangleI.hpp"
 //class RectangleI;
 //class IImageListener;
@@ -22,16 +23,7 @@ public abstract class IImage
   public abstract int getHeight();
   public abstract Vector2I getExtent();
 
-  public abstract void combineWith(IImage other, RectangleI rect, int width, int height, IImageListener listener, boolean autodelete);
-
-  public abstract void combineWith(java.util.ArrayList<IImage> images, java.util.ArrayList<RectangleI> rectangles, int width, int height, IImageListener listener, boolean autodelete);
-
-  public abstract void subImage(RectangleI rect, IImageListener listener, boolean autodelete);
-
-  public abstract void scale(int width, int height, IImageListener listener, boolean autodelete);
-
   public abstract String description();
 
   public abstract IImage shallowCopy();
-
 }

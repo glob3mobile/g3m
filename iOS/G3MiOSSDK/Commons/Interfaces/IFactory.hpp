@@ -50,9 +50,9 @@ public:
                                      IImageListener* listener,
                                      bool autodelete) const = 0;
 
-  virtual void createImageFromSize(int width, int height,
-                                   IImageListener* listener,
-                                   bool autodelete) const = 0;
+//  virtual void createImageFromSize(int width, int height,
+//                                   IImageListener* listener,
+//                                   bool autodelete) const = 0;
 
   virtual void deleteImage(const IImage* image) const = 0;
 

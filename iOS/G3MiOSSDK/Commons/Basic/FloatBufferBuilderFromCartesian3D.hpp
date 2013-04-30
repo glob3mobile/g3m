@@ -12,20 +12,6 @@
 #include "Vector3D.hpp"
 #include "FloatBufferBuilder.hpp"
 
-class CenterStrategy {
-  static const int _noCenter = 0;
-  static const int _firstVertex = 1;
-  static const int _givenCenter = 2;
-
-  CenterStrategy(){};
-
-public:
-
-  static int noCenter(){ return _noCenter;}
-  static int firstVertex(){ return _firstVertex;}
-  static int givenCenter(){ return _givenCenter;}
-};
-
 class FloatBufferBuilderFromCartesian3D: public FloatBufferBuilder {
 private:
   const int _centerStrategy;
@@ -55,8 +41,10 @@ public:
   }
 
   void add(double x, double y, double z) {
-    if (_centerStrategy == CenterStrategy::firstVertex() && _values.size() == 0) {
-      setCenter(x, y, z);
+    if (_centerStrategy == CenterStrategy::firstVertex()) {
+      if (_values.size() == 0) {
+        setCenter(x, y, z);
+      }
     }
 
     if (_centerStrategy == CenterStrategy::noCenter()) {
@@ -72,8 +60,10 @@ public:
   }
 
   void add(float x, float y, float z) {
-    if (_centerStrategy == CenterStrategy::firstVertex() && _values.size() == 0) {
-      setCenter(x, y, z);
+    if (_centerStrategy == CenterStrategy::firstVertex()) {
+      if (_values.size() == 0) {
+        setCenter(x, y, z);
+      }
     }
 
     if (_centerStrategy == CenterStrategy::noCenter()) {

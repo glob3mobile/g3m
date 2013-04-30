@@ -175,7 +175,7 @@ public:
 
   void stopCameraAnimation();
 
-  void resetCameraPosition();
+//  void resetCameraPosition();
 
   CameraRenderer* getCameraRenderer() const {
     return _cameraRenderer;

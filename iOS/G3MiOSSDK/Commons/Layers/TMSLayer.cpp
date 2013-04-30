@@ -25,11 +25,13 @@ TMSLayer::TMSLayer(const std::string& mapLayer,
                    const bool isTransparent,
                    LayerCondition* condition,
                    const TimeInterval& timeToCache,
+                   bool readExpired,
                    const LayerTilesRenderParameters* parameters):
 
 Layer(condition,
       mapLayer,
       timeToCache,
+      readExpired,
       (parameters == NULL)
       ? LayerTilesRenderParameters::createDefaultNonMercator(sector)
       : parameters),
@@ -42,15 +44,17 @@ _isTransparent(isTransparent)
 {
 }
 
+
 std::vector<Petition*> TMSLayer::createTileMapPetitions(const G3MRenderContext* rc,
                                                  const Tile* tile) const {
-  std::vector<Petition*> petitions;
   
+  std::vector<Petition*> petitions;
+
   const Sector tileSector = tile->getSector();
   if (!_sector.touchesWith(tileSector)) {
     return petitions;
   }
-  
+
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString(_mapServerURL.getPath());
   isb->addString(_mapLayer);
@@ -62,14 +66,18 @@ std::vector<Petition*> TMSLayer::createTileMapPetitions(const G3MRenderContext* 
   isb->addInt(tile->getRow());
   isb->addString(".");
   isb->addString(IStringUtils::instance()->replaceSubstring(_format, "image/", ""));
-  
+
   ILogger::instance()->logInfo(isb->getString());
-  
-  Petition *petition = new Petition(tileSector, URL(isb->getString(), false), _timeToCache, _isTransparent);
+
+  Petition *petition = new Petition(tileSector,
+                                    URL(isb->getString(), false),
+                                    getTimeToCache(),
+                                    getReadExpired(),
+                                    _isTransparent);
   petitions.push_back(petition);
-  
+
 	return petitions;
-  
+
 }
 
 URL TMSLayer::getFeatureInfoURL(const Geodetic2D& g,

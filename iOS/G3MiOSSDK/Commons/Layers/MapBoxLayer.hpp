@@ -29,6 +29,7 @@ public:
   
   MapBoxLayer(const std::string& mapKey,
               const TimeInterval& timeToCache,
+              bool readExpired = true,
               //int initialMapBoxLevel = 1,
               LayerCondition* condition = NULL) :
   MercatorTiledLayer("MapBoxLayer",
@@ -37,6 +38,7 @@ public:
                      getSubdomains(),
                      "png",
                      timeToCache,
+                     readExpired,
                      Sector::fullSphere(),
                      1, //initialMapBoxLevel,
                      17,

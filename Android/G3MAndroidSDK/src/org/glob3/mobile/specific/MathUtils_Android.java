@@ -140,13 +140,13 @@ public final class MathUtils_Android
 
 
    @Override
-   public double round(final double v) {
+   public long round(final double v) {
       return Math.round(v);
    }
 
 
    @Override
-   public float round(final float v) {
+   public int round(final float v) {
       return Math.round(v);
    }
 

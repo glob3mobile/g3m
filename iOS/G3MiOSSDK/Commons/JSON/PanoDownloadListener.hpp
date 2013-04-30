@@ -60,7 +60,8 @@ public:
     PanoDownloadListener(MarksRenderer* _marksRenderer, MarkTouchListener* panoTouchListener, std::string urlIcon);
     
     void onDownload(const URL& url,
-                    IByteBuffer* buffer);
+                    IByteBuffer* buffer,
+                    bool expired);
     
     void onError(const URL& url){
         ILogger::instance()->logError("The requested pano could not be found!");    
@@ -68,7 +69,8 @@ public:
     
     void onCancel(const URL& url){}
     void onCanceledDownload(const URL& url,
-                            IByteBuffer* data) {}
+                            IByteBuffer* data,
+                            bool expired) {}
     
     ~PanoDownloadListener(){}
 private:

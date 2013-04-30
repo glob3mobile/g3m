@@ -414,9 +414,9 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
   [self widget]->stopCameraAnimation();
 }
 
-- (void)resetCameraPosition {
-  [self widget]->resetCameraPosition();
-}
+//- (void)resetCameraPosition {
+//  [self widget]->resetCameraPosition();
+//}
 
 - (WidgetUserData*) userData
 {

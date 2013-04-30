@@ -1,24 +1,4 @@
 package org.glob3.mobile.generated; 
-//
-//  FloatBufferBuilder.cpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 05/09/12.
-//
-//
-
-//
-//  FloatBufferBuilder.hpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 05/09/12.
-//
-//
-
-
-
-//class IFloatBuffer;
-
 public class FloatBufferBuilder
 {
   protected java.util.ArrayList<Float> _values = new java.util.ArrayList<Float>();

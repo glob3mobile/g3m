@@ -139,6 +139,10 @@ public class G3MWidget
       ICameraConstrainer constrainer = _cameraConstrainers.get(i);
       constrainer.onCameraChange(_planet, _currentCamera, _nextCamera);
     }
+  
+  
+    _nextCamera.forceMatrixCreation();
+  
     _currentCamera.copyFrom(_nextCamera);
   
     G3MRenderContext rc = new G3MRenderContext(_frameTasksExecutor, IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _gl, _currentCamera, _nextCamera, _texturesHandler, _textureBuilder, _downloader, _effectsScheduler, IFactory.instance().createTimer(), _storage);
@@ -313,8 +317,9 @@ public class G3MWidget
   
       _nextCamera.resizeViewport(width, height);
   
-         _nextCamera.resizeViewport(width, height);
+      // _nextCamera->resizeViewport(width, height);
   
+      _currentCamera.resizeViewport(width, height);
       _cameraRenderer.onResizeViewportEvent(ec, width, height);
   
       if (_mainRenderer.isEnable())
@@ -513,10 +518,7 @@ public class G3MWidget
     _effectsScheduler.cancelAllEffectsFor(target);
   }
 
-  public final void resetCameraPosition()
-  {
-    getNextCamera().resetPosition();
-  }
+//  void resetCameraPosition();
 
   public final CameraRenderer getCameraRenderer()
   {
@@ -668,3 +670,6 @@ public class G3MWidget
   }
 
 }
+//void G3MWidget::resetCameraPosition() {
+//  getNextCamera()->resetPosition();
+//}

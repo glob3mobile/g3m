@@ -168,7 +168,6 @@
 		D8EEF37B1577920A003FEB5E = {
 			isa = PBXGroup;
 			children = (
-				CFCCFE0C16F506C20082F383 /* GLKit.framework */,
 				D8EEF3891577920B003FEB5E /* Frameworks */,
 				D8EEF3901577920B003FEB5E /* G3MiOSDemo */,
 				D8EEF4161577AEC8003FEB5E /* G3MiOSSDK.xcodeproj */,
@@ -187,8 +186,9 @@
 		D8EEF3891577920B003FEB5E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				443BBC8215A5C21F00EAE280 /* CoreData.framework */,
 				44EEB5DF159B2B8B0086F243 /* libsqlite3.dylib */,
+				CFCCFE0C16F506C20082F383 /* GLKit.framework */,
+				443BBC8215A5C21F00EAE280 /* CoreData.framework */,
 				D8EEF40E1577AA61003FEB5E /* OpenGLES.framework */,
 				D8EEF4101577AAE2003FEB5E /* QuartzCore.framework */,
 				D8EEF38A1577920B003FEB5E /* UIKit.framework */,

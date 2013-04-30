@@ -9,7 +9,7 @@ public class BingMapsLayer_MetadataBufferDownloadListener extends IBufferDownloa
 
   }
 
-  public final void onDownload(URL url, IByteBuffer buffer)
+  public final void onDownload(URL url, IByteBuffer buffer, boolean expired)
   {
     _bingMapsLayer.onDowloadMetadata(buffer);
   }
@@ -24,7 +24,7 @@ public class BingMapsLayer_MetadataBufferDownloadListener extends IBufferDownloa
     // do nothing, the request won't be cancelled
   }
 
-  public final void onCanceledDownload(URL url, IByteBuffer data)
+  public final void onCanceledDownload(URL url, IByteBuffer data, boolean expired)
   {
     // do nothing, the request won't be cancelled
   }

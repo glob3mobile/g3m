@@ -48,7 +48,8 @@ public:
   }
 
   void onDownload(const URL& url,
-                  IByteBuffer* buffer) {
+                  IByteBuffer* buffer,
+                  bool expired) {
     const Vector2I resolution(_width, _height);
     ElevationData* elevationData = BilParser::parseBil16(_sector, resolution, _noDataValue, -9999, buffer);
     delete buffer;
@@ -81,7 +82,8 @@ public:
   }
 
   void onCanceledDownload(const URL& url,
-                          IByteBuffer* data) {
+                          IByteBuffer* data,
+                          bool expired) {
 
   }
 
@@ -137,6 +139,7 @@ const long long WMSBillElevationDataProvider::requestElevationData(const Sector&
   return _downloader->requestBuffer(URL(path, false),
                                     2000000000,
                                     TimeInterval::fromDays(30),
+                                    true,
                                     new WMSBillElevationDataProvider_BufferDownloadListener(sector,
                                                                                             resolution,
                                                                                             noDataValue,

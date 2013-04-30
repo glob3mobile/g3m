@@ -44,18 +44,21 @@ protected:
   protected LayerTilesRenderParameters _parameters;
 #endif
 
-  const TimeInterval& _timeToCache;
+  const long long _timeToCacheMS;
+  const bool      _readExpired;
 
   void notifyChanges() const;
 
   Layer(LayerCondition* condition,
         const std::string& name,
         const TimeInterval& timeToCache,
+        bool readExpired,
         const LayerTilesRenderParameters* parameters) :
   _condition(condition),
   _name(name),
   _layerSet(NULL),
-  _timeToCache(timeToCache),
+  _timeToCacheMS(timeToCache.milliseconds()),
+  _readExpired(readExpired),
   _enable(true),
   _parameters(parameters)
   {
@@ -65,6 +68,14 @@ protected:
   void setParameters(const LayerTilesRenderParameters* parameters);
 
 public:
+
+  const TimeInterval getTimeToCache() const {
+    return TimeInterval::fromMilliseconds(_timeToCacheMS);
+  }
+
+  bool getReadExpired() const {
+    return _readExpired;
+  }
 
   virtual void setEnable(bool enable) {
     if (enable != _enable) {

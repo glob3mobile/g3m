@@ -58,6 +58,24 @@ void AppParser::parseWorldConfiguration(LayerSet* layerSet, MarksRenderer* marks
   std::string jsonBaseLayer = jsonWorld->getAsString(BASELAYER)->value();
   const JSONArray* jsonBbox = jsonWorld->getAsArray(BBOX);
   
+  
+  /*
+   
+   WMSLayer(const std::string& mapLayer,
+   const URL& mapServerURL,
+   const WMSServerVersion mapServerVersion,
+   const Sector& sector,
+   const std::string& format,
+   const std::string srs,
+   const std::string& style,
+   const bool isTransparent,
+   LayerCondition* condition,
+   const TimeInterval& timeToCache,
+   bool readExpired,
+   const LayerTilesRenderParameters* parameters = NULL);
+   
+   */
+  
   if (jsonBaseLayer == "BING"){
     WMSLayer* bing = new WMSLayer("ve",
                                   URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?",true),
@@ -67,7 +85,9 @@ void AppParser::parseWorldConfiguration(LayerSet* layerSet, MarksRenderer* marks
                                   "EPSG:4326",
                                   "",
                                   false,
-                                  NULL, TimeInterval::fromDays(30));
+                                  NULL,
+                                  TimeInterval::fromDays(30),
+                                  true);
     layerSet->addLayer(bing);
   }else{
     WMSLayer* osm = new WMSLayer("osm",
@@ -78,7 +98,9 @@ void AppParser::parseWorldConfiguration(LayerSet* layerSet, MarksRenderer* marks
                                  "EPSG:4326",
                                  "",
                                  false,
-                                 NULL, TimeInterval::fromDays(30));
+                                 NULL,
+                                 TimeInterval::fromDays(30),
+                                 true);
     layerSet->addLayer(osm);
   }
   parseCustomData(marks, jsonWorld->getAsObject(CUSTOMDATA));

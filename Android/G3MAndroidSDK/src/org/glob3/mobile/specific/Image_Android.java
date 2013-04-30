@@ -2,17 +2,10 @@
 
 package org.glob3.mobile.specific;
 
-import java.util.ArrayList;
-
 import org.glob3.mobile.generated.IImage;
-import org.glob3.mobile.generated.IImageListener;
-import org.glob3.mobile.generated.ILogger;
-import org.glob3.mobile.generated.RectangleI;
 import org.glob3.mobile.generated.Vector2I;
 
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Rect;
 
 
 public final class Image_Android
@@ -161,122 +154,122 @@ public final class Image_Android
    }
 
 
-   @Override
-   public void combineWith(final ArrayList<IImage> images,
-                           final ArrayList<RectangleI> rectangles,
-                           final int width,
-                           final int height,
-                           final IImageListener listener,
-                           final boolean autodelete) {
-      final int imagesSize = images.size();
-      if (imagesSize == 0) {
-         scale(width, height, listener, autodelete);
-      }
-      else if (imagesSize == 1) {
-         final IImage other = images.get(0);
-         final RectangleI rect = rectangles.get(0);
-
-         combineWith(other, rect, width, height, listener, autodelete);
-      }
-      else {
-         final Bitmap bm1;
-         if ((getWidth() != width) || (getHeight() != height)) {
-            bm1 = Bitmap.createBitmap(_bitmapHolder._bitmap, 0, 0, width, height);
-         }
-         else {
-            bm1 = _bitmapHolder._bitmap;
-         }
-         final Bitmap canvasBitmap = bm1.copy(Bitmap.Config.ARGB_8888, true); //MAKE MUTABLE
-         final Canvas canvas = new Canvas(canvasBitmap);
-
-         for (int i = 0; i < imagesSize; i++) {
-            final IImage other = images.get(i);
-            final RectangleI rect = rectangles.get(i);
-            final Bitmap bm2 = ((Image_Android) other).getBitmap();
-
-            final int left = rect._x;
-            final int right = rect._x + rect._width;
-
-            final int bottom = height - rect._y;
-            final int top = height - (rect._y + rect._height);
-
-            final Rect dstRect = new Rect(left, top, right, bottom);
-
-            canvas.drawBitmap(bm2, null, dstRect, null);
-         }
-
-         final Image_Android result = new Image_Android(canvasBitmap, null);
-         listener.imageCreated(result);
-      }
-   }
-
-
-   @Override
-   public void combineWith(final IImage other,
-                           final RectangleI rect,
-                           final int width,
-                           final int height,
-                           final IImageListener listener,
-                           final boolean autodelete) {
-      final Bitmap bm1 = Bitmap.createScaledBitmap(_bitmapHolder._bitmap, width, height, false);
-      final Bitmap canvasBitmap = bm1.copy(Bitmap.Config.ARGB_8888, true); //MAKE MUTABLE
-      final Canvas canvas = new Canvas(canvasBitmap);
-
-      final Bitmap otherBitmap = ((Image_Android) other).getBitmap();
-
-      final int left = rect._x;
-      final int right = rect._x + rect._width;
-      final int bottom = height - rect._y;
-      final int top = height - (rect._y + rect._height);
-      canvas.drawBitmap(otherBitmap, null, new Rect(left, top, right, bottom), null);
-
-      final Image_Android result = new Image_Android(canvasBitmap, null);
-      listener.imageCreated(result);
-   }
+   //   @Override
+   //   public void combineWith(final ArrayList<IImage> images,
+   //                           final ArrayList<RectangleI> rectangles,
+   //                           final int width,
+   //                           final int height,
+   //                           final IImageListener listener,
+   //                           final boolean autodelete) {
+   //      final int imagesSize = images.size();
+   //      if (imagesSize == 0) {
+   //         scale(width, height, listener, autodelete);
+   //      }
+   //      else if (imagesSize == 1) {
+   //         final IImage other = images.get(0);
+   //         final RectangleI rect = rectangles.get(0);
+   //
+   //         combineWith(other, rect, width, height, listener, autodelete);
+   //      }
+   //      else {
+   //         final Bitmap bm1;
+   //         if ((getWidth() != width) || (getHeight() != height)) {
+   //            bm1 = Bitmap.createBitmap(_bitmapHolder._bitmap, 0, 0, width, height);
+   //         }
+   //         else {
+   //            bm1 = _bitmapHolder._bitmap;
+   //         }
+   //         final Bitmap canvasBitmap = bm1.copy(Bitmap.Config.ARGB_8888, true); //MAKE MUTABLE
+   //         final Canvas canvas = new Canvas(canvasBitmap);
+   //
+   //         for (int i = 0; i < imagesSize; i++) {
+   //            final IImage other = images.get(i);
+   //            final RectangleI rect = rectangles.get(i);
+   //            final Bitmap bm2 = ((Image_Android) other).getBitmap();
+   //
+   //            final int left = rect._x;
+   //            final int right = rect._x + rect._width;
+   //
+   //            final int bottom = height - rect._y;
+   //            final int top = height - (rect._y + rect._height);
+   //
+   //            final Rect dstRect = new Rect(left, top, right, bottom);
+   //
+   //            canvas.drawBitmap(bm2, null, dstRect, null);
+   //         }
+   //
+   //         final Image_Android result = new Image_Android(canvasBitmap, null);
+   //         listener.imageCreated(result);
+   //      }
+   //   }
 
 
-   @Override
-   public void subImage(final RectangleI rect,
-                        final IImageListener listener,
-                        final boolean autodelete) {
-      final Image_Android result;
-      if ((rect._x == 0) && (rect._y == 0) && (rect._width == getWidth()) && (rect._height == getHeight())) {
-         result = shallowCopy();
-      }
-      else {
-         final Bitmap bitmap = Bitmap.createBitmap(_bitmapHolder._bitmap, rect._x, rect._y, rect._width, rect._height);
-         result = new Image_Android(bitmap, null);
-      }
-      listener.imageCreated(result);
-   }
+   //   @Override
+   //   public void combineWith(final IImage other,
+   //                           final RectangleI rect,
+   //                           final int width,
+   //                           final int height,
+   //                           final IImageListener listener,
+   //                           final boolean autodelete) {
+   //      final Bitmap bm1 = Bitmap.createScaledBitmap(_bitmapHolder._bitmap, width, height, false);
+   //      final Bitmap canvasBitmap = bm1.copy(Bitmap.Config.ARGB_8888, true); //MAKE MUTABLE
+   //      final Canvas canvas = new Canvas(canvasBitmap);
+   //
+   //      final Bitmap otherBitmap = ((Image_Android) other).getBitmap();
+   //
+   //      final int left = rect._x;
+   //      final int right = rect._x + rect._width;
+   //      final int bottom = height - rect._y;
+   //      final int top = height - (rect._y + rect._height);
+   //      canvas.drawBitmap(otherBitmap, null, new Rect(left, top, right, bottom), null);
+   //
+   //      final Image_Android result = new Image_Android(canvasBitmap, null);
+   //      listener.imageCreated(result);
+   //   }
 
 
-   @Override
-   public void scale(final int width,
-                     final int height,
-                     final IImageListener listener,
-                     final boolean autodelete) {
-      final Image_Android result;
-      if ((width == getWidth()) && (height == getHeight())) {
-         result = shallowCopy();
-      }
-      else {
-         final Bitmap bitmap = Bitmap.createScaledBitmap(_bitmapHolder._bitmap, width, height, false);
-         if (bitmap == null) {
-            ILogger.instance().logError("Can't scale Image");
-            result = null;
-         }
-         else {
-            result = new Image_Android(bitmap, null);
-         }
-      }
-      listener.imageCreated(result);
-   }
+   //   @Override
+   //   public void subImage(final RectangleI rect,
+   //                        final IImageListener listener,
+   //                        final boolean autodelete) {
+   //      final Image_Android result;
+   //      if ((rect._x == 0) && (rect._y == 0) && (rect._width == getWidth()) && (rect._height == getHeight())) {
+   //         result = shallowCopy();
+   //      }
+   //      else {
+   //         final Bitmap bitmap = Bitmap.createBitmap(_bitmapHolder._bitmap, rect._x, rect._y, rect._width, rect._height);
+   //         result = new Image_Android(bitmap, null);
+   //      }
+   //      listener.imageCreated(result);
+   //   }
+
+
+   //   @Override
+   //   public void scale(final int width,
+   //                     final int height,
+   //                     final IImageListener listener,
+   //                     final boolean autodelete) {
+   //      final Image_Android result;
+   //      if ((width == getWidth()) && (height == getHeight())) {
+   //         result = shallowCopy();
+   //      }
+   //      else {
+   //         final Bitmap bitmap = Bitmap.createScaledBitmap(_bitmapHolder._bitmap, width, height, false);
+   //         if (bitmap == null) {
+   //            ILogger.instance().logError("Can't scale Image");
+   //            result = null;
+   //         }
+   //         else {
+   //            result = new Image_Android(bitmap, null);
+   //         }
+   //      }
+   //      listener.imageCreated(result);
+   //   }
 
 
    @Override
    public String description() {
-      return "Image Android " + getWidth() + " x " + getHeight() + ", _image=(" + _bitmapHolder._bitmap.describeContents() + ")";
+      return "Image_Android " + getWidth() + " x " + getHeight() + ", _image=(" + _bitmapHolder._bitmap.describeContents() + ")";
    }
 
 
@@ -305,6 +298,92 @@ public final class Image_Android
 
       super.dispose();
    }
+
+
+   //@Override
+   //public void combineWith(RectangleI thisSourceRect, IImage other,
+   //		RectangleI sourceRect, RectangleI destRect, Vector2I destSize,
+   //		IImageListener listener, boolean autodelete) {
+   //	// TODO Auto-generated method stub
+   //	
+   //}
+
+
+   //@Override
+   //public void combineWith(RectangleI thisSourceRect, 
+   //		ArrayList<IImage> images,
+   //		ArrayList<RectangleI> sourceRects, 
+   //		ArrayList<RectangleI> destRects,
+   //		Vector2I size, 
+   //		IImageListener listener, 
+   //		boolean autodelete) {
+   //	
+   //	int width = size._x;
+   //	int height = size._y;
+   //	
+   //    final int imagesSize = images.size();
+   //    if (imagesSize == 0) {
+   //       scale(width, height, listener, autodelete);
+   //    }
+   ////    else
+   ////    	if (imagesSize == 1) {
+   ////       final IImage other = images.get(0);
+   ////       final RectangleI rect = rectangles.get(0);
+   ////
+   ////       combineWith(other, rect, width, height, listener, autodelete);
+   ////    }
+   //    else {
+   //       Bitmap bm1;
+   //	   //Cropping bitmap if necessary
+   //       if (thisSourceRect._x != 0 || thisSourceRect._y != 0 ||
+   //    	  (getWidth() != thisSourceRect._width) || (getHeight() != thisSourceRect._height)) {
+   //
+   //          bm1 = Bitmap.createBitmap(_bitmapHolder._bitmap, 0, 0, width, height);
+   //       }
+   //       else {
+   //          bm1 = _bitmapHolder._bitmap;
+   //       }
+   //       
+   //     //Scaling bitmap if necessary
+   //       if (bm1.getHeight() != height || bm1.getWidth() != width){
+   //           bm1 = Bitmap.createScaledBitmap(bm1, width, height, false);
+   //       }
+   //       
+   //       final Bitmap canvasBitmap = bm1.copy(Bitmap.Config.ARGB_8888, true); //MAKE MUTABLE
+   //       final Canvas canvas = new Canvas(canvasBitmap);
+   //
+   //       for (int i = 0; i < imagesSize; i++) {
+   //          final IImage other = images.get(i);
+   //          
+   //          final RectangleI srcR = sourceRects.get(i);
+   //          final RectangleI dstR = destRects.get(i);
+   //          
+   //
+   //          final Rect srcRect = new Rect(srcR._x, //LEFT
+   //        		  height - (srcR._y + srcR._height), //TOP
+   //        		  right, //RIGHT
+   //        		  bottom);
+   //          
+   //
+   //          final Rect dstRect = new Rect(left, top, right, bottom);
+   //          
+   //          final RectangleI rect = rectangles.get(i);
+   //          final Bitmap bm2 = ((Image_Android) other).getBitmap();
+   //
+   //          final int left = rect._x;
+   //          final int right = rect._x + rect._width;
+   //
+   //          final int bottom = height - rect._y;
+   //          final int top = height - (rect._y + rect._height);
+   //
+   //
+   //          canvas.drawBitmap(bm2, null, dstRect, null);
+   //       }
+   //
+   //       final Image_Android result = new Image_Android(canvasBitmap, null);
+   //       listener.imageCreated(result);
+   //    }
+   //}
 
 
    //   @Override

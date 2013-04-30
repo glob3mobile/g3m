@@ -38,7 +38,6 @@ public:
   _znear(znear),
   _zfar(zfar)
   {
-    
   }
   
   FrustumData(const FrustumData& fd) :
@@ -47,7 +46,9 @@ public:
   _bottom(fd._bottom),
   _top(fd._top),
   _znear(fd._znear),
-  _zfar(fd._zfar){}
+  _zfar(fd._zfar)
+  {
+  }
   
   FrustumData():
   _left(-1),
@@ -56,7 +57,9 @@ public:
   _top(1),
   _znear(1),
   _zfar(10)
-  {}
+  {
+  }
+
 };
 
 
@@ -74,23 +77,9 @@ private:
   
   Extent*   _extent;
   
-  /*  Frustum(const Plane& leftPlane,
-   const Plane& rightPlane,
-   const Plane& bottomPlane,
-   const Plane& topPlane,
-   const Plane& nearPlane,
-   const Plane& farPlane) :
-   _leftPlane(leftPlane),
-   _rightPlane(rightPlane),
-   _bottomPlane(bottomPlane),
-   _topPlane(topPlane),
-   _nearPlane(nearPlane),
-   _farPlane(farPlane)
-   {
-   
-   }*/
-  
-  Frustum(const Frustum *that, const MutableMatrix44D& matrix, const MutableMatrix44D& inverse):
+  Frustum(const Frustum *that,
+          const MutableMatrix44D& matrix,
+          const MutableMatrix44D& inverse):
   _ltn(that->_ltn.transformedBy(inverse, 1)),
   _rtn(that->_rtn.transformedBy(inverse, 1)),
   _lbn(that->_lbn.transformedBy(inverse, 1)),
@@ -168,27 +157,6 @@ public:
   
   bool touchesWithBox(const Box *box) const;
   
-  /*
-   Frustum transformedBy(const MutableMatrix44D& matrix) const {
-   return Frustum(_leftPlane.transformedBy(matrix),
-   _rightPlane.transformedBy(matrix),
-   _bottomPlane.transformedBy(matrix),
-   _topPlane.transformedBy(matrix),
-   _nearPlane.transformedBy(matrix),
-   _farPlane.transformedBy(matrix));
-   }
-   
-   
-   Frustum* transformedBy_P(const MutableMatrix44D& matrix) const {
-   return new Frustum(_leftPlane.transformedBy(matrix),
-   _rightPlane.transformedBy(matrix),
-   _bottomPlane.transformedBy(matrix),
-   _topPlane.transformedBy(matrix),
-   _nearPlane.transformedBy(matrix),
-   _farPlane.transformedBy(matrix));
-   }*/
-  
-  
   Frustum* transformedBy_P(const MutableMatrix44D& matrix) const {
     return new Frustum(this, matrix, matrix.inversed());
   }
@@ -198,6 +166,7 @@ public:
   }
   
   Extent *getExtent() const { return _extent; }
+
 };
 
 #endif

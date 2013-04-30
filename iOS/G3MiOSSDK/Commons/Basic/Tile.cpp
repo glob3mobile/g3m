@@ -352,11 +352,11 @@ bool Tile::isVisible(const G3MRenderContext *rc,
     return false;
   }
 
-////  const Extent* extent = getTileExtent(rc);
-//  const Extent* tileExtent = getTileExtent(rc);
-//  if (!tileExtent->fullContains(extent)) {
-//    printf("break point on me\n");
-//  }
+  ////const Extent* extent = getTileExtent(rc);
+  //const Extent* tileExtent = getTileExtent(rc);
+  //if (!tileExtent->fullContains(extent)) {
+  //  printf("break point on me\n");
+  //}
 
   return extent->touches( rc->getCurrentCamera()->getFrustumInModelCoordinates() );
   //return extent->touches( rc->getCurrentCamera()->getHalfFrustuminModelCoordinates() );

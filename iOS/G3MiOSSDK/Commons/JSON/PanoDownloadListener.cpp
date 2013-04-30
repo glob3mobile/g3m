@@ -28,29 +28,30 @@ const std::string PanoDownloadListener::LAT = "lat";
 const std::string PanoDownloadListener::LON = "lon";
 
 PanoDownloadListener::PanoDownloadListener(MarksRenderer* marksRenderer, MarkTouchListener* panoTouchListener, std::string urlIcon){
-    _marksRenderer = marksRenderer;
-    _panoTouchListener = panoTouchListener;
-    _urlIcon = urlIcon;
+  _marksRenderer = marksRenderer;
+  _panoTouchListener = panoTouchListener;
+  _urlIcon = urlIcon;
 }
 
 void PanoDownloadListener::onDownload(const URL& url,
-                                         IByteBuffer* buffer){
-    std::string string = buffer->getAsString();
-    const JSONBaseObject* json = IJSONParser::instance()->parse(string);
-    ILogger::instance()->logInfo(url.getPath());
-    parseMETADATA(IStringUtils::instance()->substring(url.getPath(), 0, IStringUtils::instance()->indexOf(url.getPath(), "/info.txt")),json->asObject());
-    IJSONParser::instance()->deleteJSONData(json);
-    delete buffer;
+                                      IByteBuffer* buffer,
+                                      bool expired){
+  std::string string = buffer->getAsString();
+  const JSONBaseObject* json = IJSONParser::instance()->parse(string);
+  ILogger::instance()->logInfo(url.getPath());
+  parseMETADATA(IStringUtils::instance()->substring(url.getPath(), 0, IStringUtils::instance()->indexOf(url.getPath(), "/info.txt")),json->asObject());
+  IJSONParser::instance()->deleteJSONData(json);
+  delete buffer;
 }
 
 
 void PanoDownloadListener::parseMETADATA(std::string url, const JSONObject* json){
   
-    const Angle latitude = Angle::fromDegrees(json->getAsObject(POSITION)->getAsNumber(LAT)->value());
-    const Angle longitude = Angle::fromDegrees(json->getAsObject(POSITION)->getAsNumber(LON)->value());
+  const Angle latitude = Angle::fromDegrees(json->getAsObject(POSITION)->getAsNumber(LAT)->value());
+  const Angle longitude = Angle::fromDegrees(json->getAsObject(POSITION)->getAsNumber(LON)->value());
   
-    Mark* mark = new Mark(URL(_urlIcon,false),
+  Mark* mark = new Mark(URL(_urlIcon,false),
                         Geodetic3D(latitude, longitude, 0), 0, new PanoMarkUserData(json->getAsString(NAME)->value(), new URL(url, false)),true, _panoTouchListener,true);
-    
-    _marksRenderer->addMark(mark);
+  
+  _marksRenderer->addMark(mark);
 }

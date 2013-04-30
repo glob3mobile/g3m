@@ -141,6 +141,11 @@ void SceneParser::parserJSONWMSLayer(LayerSet* layerSet, const JSONObject* jsonL
   
   bool transparent = isTransparent(jsonLayer->getAsString(ISTRANSPARENT));
   
+  string format = "image/png";
+  if (!transparent) {
+    format = "image/jpeg";
+  }
+  
   LevelTileCondition* levelTileCondition = getLevelCondition(jsonLayer->getAsString(MINLEVEL),jsonLayer->getAsString(MAXLEVEL));
   Sector sector = getSector(jsonLayer->getAsObject(BBOX));
   
@@ -170,11 +175,11 @@ void SceneParser::parserJSONWMSLayer(LayerSet* layerSet, const JSONObject* jsonL
                                     URL(jsonURL, false),
                                     wmsVersion,
                                     sector,
-                                    "image/png",
+                                    format,
                                     "EPSG:4326",
                                     "",
                                     transparent,
-                                    levelTileCondition, TimeInterval::fromDays(30), new LayerTilesRenderParameters(Sector::fullSphere(),jsonSplitsLat,jsonSplitsLon,0,19,Vector2I(256,256),Vector2I(16,16),false));
+                                    levelTileCondition, TimeInterval::fromDays(30), true, new LayerTilesRenderParameters(Sector::fullSphere(),jsonSplitsLat,jsonSplitsLon,0,19,LayerTilesRenderParameters::defaultTileTextureResolution(),LayerTilesRenderParameters::defaultTileMeshResolution(),false));
   layerSet->addLayer(wmsLayer);
 }
 
@@ -214,7 +219,9 @@ void SceneParser::parserJSONTMSLayer(LayerSet* layerSet, const JSONObject* jsonL
                                     "EPSG:4326",
                                     transparent,
                                     levelTileCondition,
-                                    TimeInterval::fromDays(30), new LayerTilesRenderParameters(Sector::fullSphere(),jsonSplitsLat,jsonSplitsLon,0,19,Vector2I(256,256),Vector2I(16,16),false));
+                                    TimeInterval::fromDays(30),
+                                    true,
+                                    new LayerTilesRenderParameters(Sector::fullSphere(),jsonSplitsLat,jsonSplitsLon,0,19,LayerTilesRenderParameters::defaultTileTextureResolution(),LayerTilesRenderParameters::defaultTileMeshResolution(),false));
   
   layerSet->addLayer(tmsLayer);
 }
