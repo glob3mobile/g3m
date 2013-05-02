@@ -162,4 +162,14 @@ public class SGNode
     return null;
   }
 
+  public final int getChildrenCount()
+  {
+    return _children.size();
+  }
+
+  public final SGNode getChild(int i)
+  {
+    return _children.get(i);
+  }
+
 }

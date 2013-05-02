@@ -37,12 +37,12 @@ public class SceneJSShapesParser
   private Shape _rootShape;
   private final String _uriPrefix;
 
-  private SceneJSShapesParser(JSONBaseObject jsonObject, String uriPrefix)
+  private SceneJSShapesParser(JSONBaseObject jsonObject, String uriPrefix, boolean isTransparent)
   {
      _uriPrefix = uriPrefix;
      _rootShape = null;
     _statistics = new SceneJSParserStatistics();
-    pvtParse(jsonObject);
+    pvtParse(jsonObject, isTransparent);
   
     _statistics.log();
     if (_statistics != null)
@@ -54,7 +54,7 @@ public class SceneJSShapesParser
     return _rootShape;
   }
 
-  private void pvtParse(JSONBaseObject json)
+  private void pvtParse(JSONBaseObject json, boolean isTransparent)
   {
     //  _rootShape = toShape(jsonRootObject);
   
@@ -62,7 +62,7 @@ public class SceneJSShapesParser
   
     if (node != null)
     {
-      _rootShape = new SGShape(node, _uriPrefix);
+      _rootShape = new SGShape(node, _uriPrefix, isTransparent);
     }
   
     if (json != null)
@@ -489,7 +489,8 @@ public class SceneJSShapesParser
       colors = IFactory.instance().createFloatBuffer(colorsCount);
       for (int i = 0; i < colorsCount; i++)
       {
-        colors.put(i, (float) jsColors.getAsNumber(i).value());
+        final float value = (float) jsColors.getAsNumber(i).value();
+        colors.put(i, value);
       }
       processedKeys++;
     }
@@ -643,27 +644,30 @@ public class SceneJSShapesParser
   private SceneJSParserStatistics _statistics;
 
 
-  public static Shape parseFromJSONBaseObject(JSONBaseObject jsonObject, String uriPrefix)
+  public static Shape parseFromJSONBaseObject(JSONBaseObject jsonObject, String uriPrefix, boolean isTransparent)
   {
-    return new SceneJSShapesParser(jsonObject, uriPrefix).getRootShape();
+    return new SceneJSShapesParser(jsonObject, uriPrefix, isTransparent).getRootShape();
   }
-  public static Shape parseFromJSON(String json, String uriPrefix)
+
+  public static Shape parseFromJSON(String json, String uriPrefix, boolean isTransparent)
   {
     final JSONBaseObject jsonObject = IJSONParser.instance().parse(json);
   
-    return new SceneJSShapesParser(jsonObject, uriPrefix).getRootShape();
+    return new SceneJSShapesParser(jsonObject, uriPrefix, isTransparent).getRootShape();
   }
-  public static Shape parseFromJSON(IByteBuffer json, String uriPrefix)
+
+  public static Shape parseFromJSON(IByteBuffer json, String uriPrefix, boolean isTransparent)
   {
     final JSONBaseObject jsonObject = IJSONParser.instance().parse(json.getAsString());
   
-    return new SceneJSShapesParser(jsonObject, uriPrefix).getRootShape();
+    return new SceneJSShapesParser(jsonObject, uriPrefix, isTransparent).getRootShape();
   }
-  public static Shape parseFromBSON(IByteBuffer bson, String uriPrefix)
+
+  public static Shape parseFromBSON(IByteBuffer bson, String uriPrefix, boolean isTransparent)
   {
     final JSONBaseObject jsonObject = BSONParser.parse(bson);
   
-    return new SceneJSShapesParser(jsonObject, uriPrefix).getRootShape();
+    return new SceneJSShapesParser(jsonObject, uriPrefix, isTransparent).getRootShape();
   }
 
 }

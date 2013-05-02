@@ -40,6 +40,16 @@ public class SGMaterialNode extends SGNode
 
   }
 
+  public final void setBaseColor(Color baseColor)
+  {
+    if (baseColor != _baseColor)
+    {
+      if (_baseColor != null)
+         _baseColor.dispose();
+      _baseColor = baseColor;
+    }
+  }
+
   public void dispose()
   {
     if (_baseColor != null)

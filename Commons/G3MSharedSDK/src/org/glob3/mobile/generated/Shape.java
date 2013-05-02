@@ -155,6 +155,11 @@ public abstract class Shape implements EffectTarget
     cleanTransformMatrix();
   }
 
+  public final void setScale(double scale)
+  {
+    setScale(scale, scale, scale);
+  }
+
   public final void setScale(double scaleX, double scaleY, double scaleZ)
   {
     _scaleX = scaleX;
