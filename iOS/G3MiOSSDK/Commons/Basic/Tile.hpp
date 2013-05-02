@@ -43,7 +43,6 @@ private:
 
   Mesh* _tessellatorMesh;
 
-  //long long      _elevationRequestId;
   Mesh* _debugMesh;
   Mesh* _texturizedMesh;
   TileElevationDataRequest* _elevationDataRequest;
