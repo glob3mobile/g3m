@@ -65,8 +65,7 @@ public class SGMaterialNode extends SGNode
   
     GLState state = new GLState(parentState);
     final float colorsIntensity = 1F;
-    //state->enableFlatColor(*_specularColor, colorsIntensity);
-    state.enableFlatColor(*_baseColor, colorsIntensity);
+    state.enableFlatColor(_baseColor, colorsIntensity);
   
     return state;
   }
