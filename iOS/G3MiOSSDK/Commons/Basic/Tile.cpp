@@ -26,7 +26,7 @@
 
 #include "SubviewElevationData.hpp"
 
-#include "TileElevationDataListener.hpp"
+#include "TileElevationDataRequest.hpp"
 
 Tile::Tile(TileTexturizer* texturizer,
            Tile* parent,
@@ -52,7 +52,7 @@ _texturizerData(NULL),
 _tileExtent(NULL),
 _elevationData(NULL),
 _elevationDataLevel(-1),
-_elevationDataListener(NULL),
+_elevationDataRequest(NULL),
 _minHeight(0),
 _maxHeight(0),
 _verticalExaggeration(0),
@@ -89,9 +89,10 @@ Tile::~Tile() {
   delete _elevationData;
   _elevationData = NULL;
 
-  if (_elevationDataListener != NULL){
-    _elevationDataListener->cancelRequest(); //The listener will auto delete
-    _elevationDataListener = NULL;
+  if (_elevationDataRequest != NULL) {
+    _elevationDataRequest->cancelRequest(); //The listener will auto delete
+    delete _elevationDataRequest;
+    _elevationDataRequest = NULL;
   }
 }
 
@@ -421,9 +422,8 @@ void Tile::toBeDeleted(TileTexturizer*        texturizer,
 
   if (elevationDataProvider != NULL) {
     //cancelElevationDataRequest(elevationDataProvider);
-
-    if (_elevationDataListener != NULL){
-      _elevationDataListener->cancelRequest();
+    if (_elevationDataRequest != NULL){
+      _elevationDataRequest->cancelRequest();
     }
   }
 }
@@ -725,16 +725,14 @@ void Tile::initializeElevationData(ElevationDataProvider* elevationDataProvider,
   _lastElevationDataProvider = elevationDataProvider;
   _lastTileMeshResolutionX = tileMeshResolution._x;
   _lastTileMeshResolutionY = tileMeshResolution._y;
-
-  if (_elevationDataListener == NULL){
+  if (_elevationDataRequest == NULL){
 
     Vector2I res = tessellator->getTileMeshResolution(planet,
                                                       tileMeshResolution,
                                                       this,
                                                       renderDebug);
-
-    _elevationDataListener = new TileElevationDataListener(this, res, elevationDataProvider);
-    _elevationDataListener->sendRequest();
+    _elevationDataRequest = new TileElevationDataRequest(this, res, elevationDataProvider);
+    _elevationDataRequest->sendRequest();
   }
 
   //If after petition we still have no data we request from ancestor
@@ -787,5 +785,5 @@ ElevationData* Tile::createElevationDataSubviewFromAncestor(Tile* ancestor) cons
     ILogger::instance()->logError("Can't create subview of elevation data from ancestor");
     return NULL;
   }
-  
+
 }

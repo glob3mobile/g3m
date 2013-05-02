@@ -198,10 +198,12 @@ popBestProvider(std::vector<ElevationDataProvider*>& ps, const Vector2I& extent)
 }
 
 bool CompositeElevationDataProvider::CompositeElevationDataProvider_Request::launchNewStep(){
-  ElevationDataProvider* bestProvider = popBestProvider(_providers, _resolution);
-  if (bestProvider != NULL){
-    _currentStep = new CompositeElevationDataProvider_RequestStep(this, bestProvider, _sector, _resolution);
-    _currentStep->send();
+  _currentProvider = popBestProvider(_providers, _resolution);
+  if (_currentProvider != NULL){
+    _currentStep = new CompositeElevationDataProvider_RequestStepListener(this);
+    
+    _currentID = _currentProvider->requestElevationData(_sector, _resolution, _currentStep, true);
+    
     return true;
   } else{
     _currentStep = NULL; //Waiting for no request
@@ -231,7 +233,8 @@ void CompositeElevationDataProvider::CompositeElevationDataProvider_Request::onD
 void CompositeElevationDataProvider::CompositeElevationDataProvider_Request::cancel() {
   
   if (_currentStep != NULL){
-    _currentStep->cancel();
+    _currentStep->_request = NULL;
+    _currentProvider->cancelRequest(_currentID);
     _currentStep = NULL;
   }
   
@@ -272,45 +275,29 @@ void CompositeElevationDataProvider::CompositeElevationDataProvider_Request::onC
 
 #pragma mark RequestStep
 
-CompositeElevationDataProvider::CompositeElevationDataProvider_RequestStep::
-CompositeElevationDataProvider_RequestStep(CompositeElevationDataProvider_Request* request,
-                                           ElevationDataProvider* provider,
-                                           const Sector& sector,
-                                           const Vector2I &resolution):
-_request(request),
-_provider(provider),
-_sector(sector),
-_resolution(resolution){
+CompositeElevationDataProvider::CompositeElevationDataProvider_RequestStepListener::
+CompositeElevationDataProvider_RequestStepListener(CompositeElevationDataProvider_Request* request):
+_request(request){
 }
 
-void CompositeElevationDataProvider::CompositeElevationDataProvider_RequestStep::send(){
-    _id = _provider->requestElevationData(_sector, _resolution, this, false);
-}
-
-
-void CompositeElevationDataProvider::CompositeElevationDataProvider_RequestStep::onData(const Sector& sector,
+void CompositeElevationDataProvider::CompositeElevationDataProvider_RequestStepListener::onData(const Sector& sector,
                                                                                         const Vector2I& extent,
-                                                                                        ElevationData* elevationData) {
+                                                                                        ElevationData* elevationData){
   if (_request != NULL){
     _request->onData(sector, extent, elevationData);
   }
 }
 
-void CompositeElevationDataProvider::CompositeElevationDataProvider_RequestStep::cancel(){
-  _provider->cancelRequest(_id);
-  _request = NULL;
-}
-
-void CompositeElevationDataProvider::CompositeElevationDataProvider_RequestStep::onError(const Sector& sector,
-                                                                                         const Vector2I& extent) {
+void CompositeElevationDataProvider::CompositeElevationDataProvider_RequestStepListener::onError(const Sector& sector,
+                                                                                         const Vector2I& extent){
   if (_request != NULL){
     _request->onError(sector, extent);
   }
 }
 
-void CompositeElevationDataProvider::CompositeElevationDataProvider_RequestStep::onCancel(const Sector& sector,
-                                                                                          const Vector2I& extent) {
-  if (_request != NULL){
-    _request->onCancel(sector, extent);
-  }
-}
+//void CompositeElevationDataProvider::CompositeElevationDataProvider_RequestStep::onCancel(const Sector& sector,
+//                                                                                          const Vector2I& extent) {
+//  if (_request != NULL){
+//    _request->onCancel(sector, extent);
+//  }
+//}

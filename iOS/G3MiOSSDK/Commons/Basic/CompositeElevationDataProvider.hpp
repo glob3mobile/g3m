@@ -50,25 +50,14 @@ private:
 
   class CompositeElevationDataProvider_Request;
   
-  class CompositeElevationDataProvider_RequestStep: public IElevationDataListener{
+  class CompositeElevationDataProvider_RequestStepListener: public IElevationDataListener{
     
   public:
     
     CompositeElevationDataProvider_Request* _request;
-    ElevationDataProvider* _provider;
-    long long _id;
-    Sector _sector;
-    Vector2I _resolution;
     
-    CompositeElevationDataProvider_RequestStep(CompositeElevationDataProvider_Request* request,
-                                               ElevationDataProvider* provider,
-                                               const Sector& sector,
-                                               const Vector2I &resolution);
-    
-    void send();
-    
-    void cancel();
-    
+    CompositeElevationDataProvider_RequestStepListener(CompositeElevationDataProvider_Request* request);
+
     void onData(const Sector& sector,
                 const Vector2I& extent,
                 ElevationData* elevationData);
@@ -83,10 +72,13 @@ private:
   
   
   
-  class CompositeElevationDataProvider_Request: public IElevationDataListener{
+  class CompositeElevationDataProvider_Request {
 
-    CompositeElevationDataProvider* const _compProvider;
-    CompositeElevationDataProvider_RequestStep* _currentStep;
+    CompositeElevationDataProvider* const       _compProvider;
+    
+    ElevationDataProvider*                      _currentProvider;
+    CompositeElevationDataProvider_RequestStepListener* _currentStep;
+    long long                                   _currentID;
     
     ElevationData* _compData;
     IElevationDataListener* _listener;
