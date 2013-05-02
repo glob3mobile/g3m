@@ -19,7 +19,7 @@ package org.glob3.mobile.generated;
 
 public class SGMaterialNode extends SGNode
 {
-  private final Color _baseColor;
+  private Color _baseColor;
   private final Color _specularColor;
 
 //  const double _specular;
@@ -44,16 +44,14 @@ public class SGMaterialNode extends SGNode
   {
     if (baseColor != _baseColor)
     {
-      if (_baseColor != null)
-         _baseColor.dispose();
+      _baseColor = null;
       _baseColor = baseColor;
     }
   }
 
   public void dispose()
   {
-    if (_baseColor != null)
-       _baseColor.dispose();
+    _baseColor = null;
     if (_specularColor != null)
        _specularColor.dispose();
   }
@@ -68,7 +66,7 @@ public class SGMaterialNode extends SGNode
     GLState state = new GLState(parentState);
     final float colorsIntensity = 1F;
     //state->enableFlatColor(*_specularColor, colorsIntensity);
-    state.enableFlatColor(_baseColor, colorsIntensity);
+    state.enableFlatColor(*_baseColor, colorsIntensity);
   
     return state;
   }
