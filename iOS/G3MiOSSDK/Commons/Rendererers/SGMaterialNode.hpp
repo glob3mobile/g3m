@@ -43,6 +43,13 @@ public:
 
   }
 
+  void setBaseColor(Color* baseColor) {
+    if (baseColor != _baseColor) {
+      delete _baseColor;
+      _baseColor = baseColor;
+    }
+  }
+
   ~SGMaterialNode() {
     delete _baseColor;
     delete _specularColor;

@@ -17,6 +17,7 @@
 #include "TexturesHandler.hpp"
 #include "IStringBuilder.hpp"
 
+
 #define TEXTURES_DOWNLOAD_PRIORITY 1000000
 
 
@@ -115,6 +116,8 @@ const GLState* SGLayerNode::createState(const G3MRenderContext* rc,
   GLState* state = new GLState(parentState);
   state->enableTextures();
   state->enableTexture2D();
+  state->enableBlend();
+  int __WORKING;
 
   GL* gl = rc->getGL();
   gl->bindTexture(texId);

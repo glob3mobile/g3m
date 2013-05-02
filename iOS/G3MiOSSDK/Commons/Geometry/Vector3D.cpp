@@ -15,7 +15,7 @@
 
 Vector3D Vector3D::normalized() const {
   const double d = length();
-  return Vector3D(_x / d, _y /d, _z / d);
+  return Vector3D(_x / d, _y / d, _z / d);
 }
 
 Angle Vector3D::angleBetween(const Vector3D& other) const {

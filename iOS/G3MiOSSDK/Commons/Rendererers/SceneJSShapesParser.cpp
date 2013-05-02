@@ -32,50 +32,56 @@
 #include "SceneJSParserStatistics.hpp"
 
 Shape* SceneJSShapesParser::parseFromJSONBaseObject(const JSONBaseObject *jsonObject,
-                                                    const std::string &uriPrefix) {
-  return SceneJSShapesParser(jsonObject, uriPrefix).getRootShape();
+                                                    const std::string &uriPrefix,
+                                                    bool isTransparent) {
+  return SceneJSShapesParser(jsonObject, uriPrefix, isTransparent).getRootShape();
 }
 
 Shape* SceneJSShapesParser::parseFromJSON(const std::string &json,
-                                          const std::string &uriPrefix) {
+                                          const std::string &uriPrefix,
+                                          bool isTransparent) {
   const JSONBaseObject* jsonObject = IJSONParser::instance()->parse(json);
 
-  return SceneJSShapesParser(jsonObject, uriPrefix).getRootShape();
+  return SceneJSShapesParser(jsonObject, uriPrefix, isTransparent).getRootShape();
 }
 
 Shape* SceneJSShapesParser::parseFromJSON(const IByteBuffer* json,
-                                          const std::string& uriPrefix) {
+                                          const std::string& uriPrefix,
+                                          bool isTransparent) {
   const JSONBaseObject* jsonObject = IJSONParser::instance()->parse(json->getAsString());
 
-  return SceneJSShapesParser(jsonObject, uriPrefix).getRootShape();
+  return SceneJSShapesParser(jsonObject, uriPrefix, isTransparent).getRootShape();
 }
 
 Shape* SceneJSShapesParser::parseFromBSON(IByteBuffer *bson,
-                                          const std::string &uriPrefix) {
+                                          const std::string &uriPrefix,
+                                          bool isTransparent) {
   const JSONBaseObject* jsonObject = BSONParser::parse(bson);
 
-  return SceneJSShapesParser(jsonObject, uriPrefix).getRootShape();
+  return SceneJSShapesParser(jsonObject, uriPrefix, isTransparent).getRootShape();
 }
 
-void SceneJSShapesParser::pvtParse(const JSONBaseObject* json) {
+void SceneJSShapesParser::pvtParse(const JSONBaseObject* json,
+                                   bool isTransparent) {
   //  _rootShape = toShape(jsonRootObject);
 
   SGNode* node = toNode(json);
 
   if (node != NULL) {
-    _rootShape = new SGShape(node, _uriPrefix);
+    _rootShape = new SGShape(node, _uriPrefix, isTransparent);
   }
 
   delete json;
 }
 
 SceneJSShapesParser::SceneJSShapesParser(const JSONBaseObject* jsonObject,
-                                         const std::string& uriPrefix) :
+                                         const std::string& uriPrefix,
+                                         bool isTransparent) :
 _uriPrefix(uriPrefix),
 _rootShape(NULL)
 {
   _statistics = new SceneJSParserStatistics();
-  pvtParse(jsonObject);
+  pvtParse(jsonObject, isTransparent);
 
   _statistics->log();
   delete _statistics;
@@ -492,7 +498,8 @@ SGGeometryNode* SceneJSShapesParser::createGeometryNode(const JSONObject* jsonOb
     const int colorsCount = jsColors->size();
     colors = IFactory::instance()->createFloatBuffer(colorsCount);
     for (int i = 0; i < colorsCount; i++) {
-      colors->put(i, (float) jsColors->getAsNumber(i)->value());
+      const float value = (float) jsColors->getAsNumber(i)->value();
+      colors->put(i, value);
     }
     processedKeys++;
   }

@@ -32,13 +32,15 @@ private:
   const std::string& _uriPrefix;
 
   SceneJSShapesParser(const JSONBaseObject* jsonObject,
-                      const std::string& uriPrefix);
+                      const std::string& uriPrefix,
+                      bool isTransparent);
 
   Shape* getRootShape() const {
     return _rootShape;
   }
 
-  void pvtParse(const JSONBaseObject* json);
+  void pvtParse(const JSONBaseObject* json,
+                bool isTransparent);
 
   SGNode* toNode(const JSONBaseObject* jsonBaseObject) const;
 
@@ -57,19 +59,26 @@ private:
   SGLayerNode*     createLayerNode    (const JSONObject* jsonObject) const;
 
   Color* parseColor(const JSONObject* jsColor) const;
-  
+
   SceneJSParserStatistics* _statistics;
 
 public:
 
   static Shape* parseFromJSONBaseObject(const JSONBaseObject* jsonObject,
-                                        const std::string& uriPrefix);
+                                        const std::string& uriPrefix,
+                                        bool isTransparent);
+
   static Shape* parseFromJSON(const std::string& json,
-                              const std::string& uriPrefix);
+                              const std::string& uriPrefix,
+                              bool isTransparent);
+
   static Shape* parseFromJSON(const IByteBuffer* json,
-                              const std::string& uriPrefix);
+                              const std::string& uriPrefix,
+                              bool isTransparent);
+
   static Shape* parseFromBSON(IByteBuffer* bson,
-                              const std::string& uriPrefix);
+                              const std::string& uriPrefix,
+                              bool isTransparent);
   
 };
 
