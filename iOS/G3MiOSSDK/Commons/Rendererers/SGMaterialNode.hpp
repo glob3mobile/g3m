@@ -14,7 +14,12 @@
 
 class SGMaterialNode : public SGNode {
 private:
+#ifdef C_CODE
   const Color* _baseColor;
+#endif
+#ifdef JAVA_CODE
+  private Color _baseColor;
+#endif
   const Color* _specularColor;
 
 //  const double _specular;
