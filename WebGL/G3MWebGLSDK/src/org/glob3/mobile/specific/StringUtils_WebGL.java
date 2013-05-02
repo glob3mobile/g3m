@@ -72,10 +72,11 @@ public final class StringUtils_WebGL
    @Override
    public String ltrim(final String string) {
       int index = 0;
-      while ((index < string.length()) && (string.charAt(index) == ' ')) {
+      final int stringLength = string.length();
+      while ((index < stringLength) && (string.charAt(index) == ' ')) {
          index++;
       }
-      return string.substring(index, string.length());
+      return string.substring(index, stringLength);
    }
 
 
