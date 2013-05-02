@@ -24,7 +24,7 @@ public:
                              G3MWidget_iOS* widget);
   
   void onDownload(const URL& url,
-                  IByteBuffer* buffer);
+                  IByteBuffer* buffer, bool expired);
   
   void onError(const URL& url);
   
@@ -32,7 +32,7 @@ public:
   }
   
   void onCanceledDownload(const URL& url,
-                          IByteBuffer* data) {
+                          IByteBuffer* data, bool expired) {
   }
   
 };
