@@ -10,30 +10,33 @@
 #define __G3MiOSSDK__SubviewElevationData__
 
 #include "ElevationData.hpp"
+
 class IFloatBuffer;
 class InterpolatedElevationData;
 
 class SubviewElevationData : public ElevationData {
 private:
-  const InterpolatedElevationData* _elevationData;
-  const bool                       _ownsElevationData;
+//  const InterpolatedElevationData* _elevationData;
+//  const bool                       _ownsElevationData;
   const IFloatBuffer*              _buffer;
   
   bool _hasNoData;
 
   const Geodetic2D _realResolution;
 
-  IFloatBuffer* createDecimatedBuffer();
-  IFloatBuffer* createInterpolatedBuffer();
+  IFloatBuffer* createDecimatedBuffer(const InterpolatedElevationData& elevationData);
+  IFloatBuffer* createInterpolatedBuffer(const InterpolatedElevationData& elevationData);
 
-  double getElevationBoxAt(double x0, double y0,
+  double getElevationBoxAt(const InterpolatedElevationData& elevationData,
+                           double x0, double y0,
                            double x1, double y1) const;
 
-  const Vector2D getParentXYAt(const Geodetic2D& position) const;
+  const Vector2D getParentXYAt(const InterpolatedElevationData& elevationData,
+                               const Geodetic2D& position) const;
 
 public:
-  SubviewElevationData(const ElevationData *elevationData,
-                       bool ownsElevationData,
+  SubviewElevationData(const ElevationData* elevationData,
+                       //bool ownsElevationData,
                        const Sector& sector,
                        const Vector2I& extent,
                        bool useDecimation);

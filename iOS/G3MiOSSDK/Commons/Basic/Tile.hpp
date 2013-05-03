@@ -103,11 +103,12 @@ private:
   Extent* _tileExtent;
   Extent* getTileExtent(const G3MRenderContext *rc);
 
-  int            _elevationDataLevel;
-  ElevationData* _elevationData;
-  bool           _mustActualizeMeshDueToNewElevationData;
-  ElevationDataProvider*  _lastElevationDataProvider;
-  int _lastTileMeshResolutionX, _lastTileMeshResolutionY;
+  int                    _elevationDataLevel;
+  ElevationData*         _elevationData;
+  bool                   _mustActualizeMeshDueToNewElevationData;
+  ElevationDataProvider* _lastElevationDataProvider;
+  int _lastTileMeshResolutionX;
+  int _lastTileMeshResolutionY;
 
 public:
   Tile(TileTexturizer* texturizer,
@@ -201,11 +202,11 @@ public:
                                             const Angle& splitLongitude,
                                             bool setParent);
   
-  bool isElevationDataSolved() const{
-    return _elevationDataLevel == _level;
+  bool isElevationDataSolved() const {
+    return (_elevationDataLevel == _level);
   }
   
-  ElevationData* getElevationData() const{
+  ElevationData* getElevationData() const {
     return _elevationData;
   }
   

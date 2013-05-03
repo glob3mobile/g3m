@@ -12,27 +12,30 @@
 #include "Interpolator.hpp"
 #include "IStringBuilder.hpp"
 #include "Vector3D.hpp"
+#include "BilinearInterpolator.hpp"
 
 InterpolatedElevationData::InterpolatedElevationData(const ElevationData* elevationData,
-                                                     bool deleteElevationData,
-                                                     const Interpolator* interpolator,
-                                                     bool deleteInterpolator) :
+                                                     bool deleteElevationData) :
 ElevationData( elevationData->getSector(), elevationData->getExtent() ),
 _elevationData(elevationData),
 _deleteElevationData(deleteElevationData),
-_interpolator(interpolator),
-_deleteInterpolator(deleteInterpolator)
+_interpolator(NULL)
 {
 
+}
+
+Interpolator* InterpolatedElevationData::getInterpolator() {
+  if (_interpolator == NULL) {
+    _interpolator = new BilinearInterpolator();
+  }
+  return _interpolator;
 }
 
 InterpolatedElevationData::~InterpolatedElevationData() {
   if (_deleteElevationData) {
     delete _elevationData;
   }
-  if (_deleteInterpolator) {
-    delete _interpolator;
-  }
+  delete _interpolator;
 }
 
 double InterpolatedElevationData::getElevationAt(int x,
@@ -116,19 +119,19 @@ double InterpolatedElevationData::getElevationAt(const Angle& latitude,
     else {
       // bilinear
       const double valueNW = getElevationAt(x, y);
-      if (mu->isNan(valueNW)){
+      if (mu->isNan(valueNW)) {
         return nanD;
       }
       const double valueNE = getElevationAt(nextX, y);
-      if (mu->isNan(valueNE)){
+      if (mu->isNan(valueNE)) {
         return nanD;
       }
       const double valueSE = getElevationAt(nextX, nextY);
-      if (mu->isNan(valueSE)){
+      if (mu->isNan(valueSE)) {
         return nanD;
       }
       const double valueSW = getElevationAt(x, nextY);
-      if (mu->isNan(valueSW)){
+      if (mu->isNan(valueSW)) {
         return nanD;
       }
 

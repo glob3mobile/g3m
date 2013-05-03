@@ -698,22 +698,21 @@ void Tile::setElevationData(ElevationData* ed, int level){
 }
 
 void Tile::getElevationDataFromAncestor(const Vector2I& extent) {
-
-  if (_elevationData == NULL){
-
-    Tile* ancestor = this;
-    while (ancestor != NULL && !ancestor->isElevationDataSolved()) {
+  if (_elevationData == NULL) {
+    Tile* ancestor = getParent();
+    while ((ancestor != NULL) &&
+           !ancestor->isElevationDataSolved()) {
       ancestor = ancestor->getParent();
     }
 
-    if (ancestor != NULL){
+    if (ancestor != NULL) {
       ElevationData* subView = createElevationDataSubviewFromAncestor(ancestor);
-      //ancestor->getElevationData();
       setElevationData(subView, ancestor->getLevel());
     }
-
   }
-
+  else {
+    printf("break point on me\n");
+  }
 }
 
 void Tile::initializeElevationData(ElevationDataProvider* elevationDataProvider,

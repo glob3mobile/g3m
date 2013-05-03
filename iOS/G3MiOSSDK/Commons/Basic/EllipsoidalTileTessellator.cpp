@@ -23,7 +23,8 @@
 #include "Planet.hpp"
 #include "IFactory.hpp"
 #include "IFloatBuffer.hpp"
-#include "ElevationData.hpp"
+//#include "ElevationData.hpp"
+#include "InterpolatedElevationData.hpp"
 #include "MercatorUtils.hpp"
 
 Vector2I EllipsoidalTileTessellator::getTileMeshResolution(const Planet* planet,
@@ -56,7 +57,7 @@ Vector2I EllipsoidalTileTessellator::calculateResolution(const Vector2I& rawReso
 Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
                                                  const Vector2I& rawResolution,
                                                  const Tile* tile,
-                                                 const ElevationData* elevationData,
+                                                 const InterpolatedElevationData* elevationData,
                                                  float verticalExaggeration,
                                                  bool renderDebug) const {
 

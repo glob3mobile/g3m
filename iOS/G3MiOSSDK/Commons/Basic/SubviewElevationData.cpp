@@ -14,63 +14,58 @@
 #include "Vector3D.hpp"
 #include "Vector2I.hpp"
 #include "InterpolatedElevationData.hpp"
-#include "BilinearInterpolator.hpp"
 
-//const ElevationData* elevationData,
-//bool deleteElevationData,
-//const Interpolator* interpolator,
-//bool deleteInterpolator
-
-SubviewElevationData::SubviewElevationData(const ElevationData *elevationData,
-                                           bool ownsElevationData,
+SubviewElevationData::SubviewElevationData(const ElevationData* elevationData,
+                                           //bool ownsElevationData,
                                            const Sector& sector,
                                            const Vector2I& extent,
                                            bool useDecimation) :
 ElevationData(sector, extent),
-_elevationData( new InterpolatedElevationData(elevationData,
-                                              ownsElevationData,
-                                              new BilinearInterpolator(),
-                                              true) ),
-_ownsElevationData(ownsElevationData),
+//_elevationData( new InterpolatedElevationData(elevationData,
+//                                              ownsElevationData) ),
+//_ownsElevationData(ownsElevationData),
 _realResolution( elevationData->getRealResolution() )
 {
-  if ((_elevationData == NULL) ||
-      (_elevationData->getExtentWidth() < 1) ||
-      (_elevationData->getExtentHeight() < 1)) {
+  if ((elevationData == NULL) ||
+      (elevationData->getExtentWidth() < 1) ||
+      (elevationData->getExtentHeight() < 1)) {
     ILogger::instance()->logError("SubviewElevationData can't subview given elevation data.");
     _buffer = NULL;
     return;
   }
 
   _hasNoData = false;
+  const InterpolatedElevationData interpolatedElevationData(elevationData, false);
   if (useDecimation) {
-    _buffer = createDecimatedBuffer();
+    _buffer = createDecimatedBuffer( interpolatedElevationData );
   }
   else {
-    _buffer = createInterpolatedBuffer();
+    _buffer = createInterpolatedBuffer( interpolatedElevationData );
   }
 }
 
-const Vector2D SubviewElevationData::getParentXYAt(const Geodetic2D& position) const {
-  const Sector parentSector = _elevationData->getSector();
+const Vector2D SubviewElevationData::getParentXYAt(const InterpolatedElevationData& elevationData,
+                                                   const Geodetic2D& position) const {
+  const Sector parentSector = elevationData.getSector();
   const Geodetic2D parentLower = parentSector.lower();
 
   const double parentX = (
                           ( position.longitude().radians() - parentLower.longitude().radians() )
                           / parentSector.getDeltaLongitude().radians()
-                          * _elevationData->getExtentWidth()
+                          * elevationData.getExtentWidth()
                           );
 
   const double parentY = (
                           ( position.latitude().radians() - parentLower.latitude().radians() )
                           / parentSector.getDeltaLatitude().radians()
-                          * _elevationData->getExtentHeight()
+                          * elevationData.getExtentHeight()
                           );
 
   return Vector2D(parentX, parentY);
 }
 
-double SubviewElevationData::getElevationBoxAt(double x0, double y0,
+double SubviewElevationData::getElevationBoxAt(const InterpolatedElevationData& elevationData,
+                                               double x0, double y0,
                                                double x1, double y1) const {
   const IMathUtils* mu = IMathUtils::instance();
 
@@ -79,8 +74,8 @@ double SubviewElevationData::getElevationBoxAt(double x0, double y0,
   const double floorX0 = mu->floor(x0);
   const double ceilX1  = mu->ceil(x1);
 
-  const int parentHeight = _elevationData->getExtentHeight();
-  const int parentWidth  = _elevationData->getExtentWidth();
+  const int parentHeight = elevationData.getExtentHeight();
+  const int parentWidth  = elevationData.getExtentWidth();
 
   if (floorY0 < 0 || ceilY1 >= parentHeight) {
     return 0;
@@ -95,7 +90,7 @@ double SubviewElevationData::getElevationBoxAt(double x0, double y0,
   const double maxX = parentWidth  - 1;
   const double maxY = parentHeight - 1;
 
-  for (double y=floorY0; y <= ceilY1; y++) {
+  for (double y = floorY0; y <= ceilY1; y++) {
     double ysize = 1.0;
     if (y < y0) {
       ysize *= (1.0 - (y0-y));
@@ -106,12 +101,12 @@ double SubviewElevationData::getElevationBoxAt(double x0, double y0,
 
     const int yy = (int) mu->min(y, maxY);
 
-    for (double x=floorX0; x <= ceilX1; x++) {
-      const double height = _elevationData->getElevationAt((int) mu->min(x, maxX),
-                                                           yy);
+    for (double x = floorX0; x <= ceilX1; x++) {
+      const double height = elevationData.getElevationAt((int) mu->min(x, maxX),
+                                                         yy);
 
-      if (IMathUtils::instance()->isNan(height)){
-        return IMathUtils::instance()->NanD();
+      if (mu->isNan(height)) {
+        return mu->NanD();
       }
 
       double size = ysize;
@@ -130,11 +125,11 @@ double SubviewElevationData::getElevationBoxAt(double x0, double y0,
   return heightSum/area;
 }
 
-IFloatBuffer* SubviewElevationData::createDecimatedBuffer() {
+IFloatBuffer* SubviewElevationData::createDecimatedBuffer(const InterpolatedElevationData& elevationData) {
   IFloatBuffer* buffer = IFactory::instance()->createFloatBuffer(_width * _height);
 
-  const Vector2D parentXYAtLower = getParentXYAt(_sector.lower());
-  const Vector2D parentXYAtUpper = getParentXYAt(_sector.upper());
+  const Vector2D parentXYAtLower = getParentXYAt(elevationData, _sector.lower());
+  const Vector2D parentXYAtUpper = getParentXYAt(elevationData, _sector.upper());
   const Vector2D parentDeltaXY = parentXYAtUpper.sub(parentXYAtLower);
 
   IMathUtils *mu = IMathUtils::instance();
@@ -153,12 +148,15 @@ IFloatBuffer* SubviewElevationData::createDecimatedBuffer() {
 
       const int index = ((_height-1-y) * _width) + x;
 
-      const double height = getElevationBoxAt(x0, y0,
+      const double height = getElevationBoxAt(elevationData,
+                                              x0, y0,
                                               x1, y1);
       buffer->rawPut(index, (float) height);
 
-      if (mu->isNan(height)){
-        _hasNoData = true;
+      if (!_hasNoData) {
+        if (mu->isNan(height)){
+          _hasNoData = true;
+        }
       }
     }
   }
@@ -166,7 +164,7 @@ IFloatBuffer* SubviewElevationData::createDecimatedBuffer() {
   return buffer;
 }
 
-IFloatBuffer* SubviewElevationData::createInterpolatedBuffer() {
+IFloatBuffer* SubviewElevationData::createInterpolatedBuffer(const InterpolatedElevationData& elevationData) {
   IFloatBuffer* buffer = IFactory::instance()->createFloatBuffer(_width * _height);
 
 
@@ -180,15 +178,16 @@ IFloatBuffer* SubviewElevationData::createInterpolatedBuffer() {
 
       const int index = ((_height-1-y) * _width) + x;
 
-      const double height = _elevationData->getElevationAt(position.latitude(),
-                                                           position.longitude());
+      const double height = elevationData.getElevationAt(position.latitude(),
+                                                         position.longitude());
 
       buffer->rawPut(index, (float) height);
 
-      if (mu->isNan(height)){
-        _hasNoData = true;
+      if (!_hasNoData) {
+        if (mu->isNan(height)){
+          _hasNoData = true;
+        }
       }
-
     }
   }
 
@@ -196,16 +195,16 @@ IFloatBuffer* SubviewElevationData::createInterpolatedBuffer() {
 }
 
 SubviewElevationData::~SubviewElevationData() {
-  if (_ownsElevationData) {
-    delete _elevationData;
-  }
+  //  if (_ownsElevationData) {
+//  delete _elevationData;
+  //  }
   delete _buffer;
 }
 
 double SubviewElevationData::getElevationAt(int x,
                                             int y) const {
 
-  if (_buffer != NULL) {
+//  if (_buffer != NULL) {
     const int index = ((_height-1-y) * _width) + x;
 
     if ( (index < 0) || (index >= _buffer->size()) ) {
@@ -214,15 +213,15 @@ double SubviewElevationData::getElevationAt(int x,
     }
 
     return _buffer->get(index);
-  }
-
-
-  const double u = (double) x / (_width - 1);
-  const double v = (double) y / (_height - 1);
-  const Geodetic2D position = _sector.getInnerPoint(u, v);
-
-  return getElevationAt(position.latitude(),
-                        position.longitude());
+//  }
+//
+//
+//  const double u = (double) x / (_width - 1);
+//  const double v = (double) y / (_height - 1);
+//  const Geodetic2D position = _sector.getInnerPoint(u, v);
+//
+//  return getElevationAt(position.latitude(),
+//                        position.longitude());
 }
 
 const std::string SubviewElevationData::description(bool detailed) const {
@@ -233,12 +232,22 @@ const std::string SubviewElevationData::description(bool detailed) const {
   isb->addInt(_height);
   isb->addString(" sector=");
   isb->addString( _sector.description() );
-  isb->addString(" on ElevationData=");
-  isb->addString( _elevationData->description(detailed) );
+  if (detailed) {
+    isb->addString("\n");
+    for (int row = 0; row < _width; row++) {
+      //isb->addString("   ");
+      for (int col = 0; col < _height; col++) {
+        isb->addDouble( getElevationAt(col, row) );
+        isb->addString(",");
+      }
+      isb->addString("\n");
+    }
+  }
   isb->addString(")");
   const std::string s = isb->getString();
   delete isb;
   return s;
+
 }
 
 Vector3D SubviewElevationData::getMinMaxAverageHeights() const {

@@ -1304,7 +1304,6 @@ public:
     int _DGD_working_on_terrain;
     
     const ElevationData* subElevationDataDecimated = new SubviewElevationData(elevationData,
-                                                                              false,
                                                                               subSector,
                                                                               subResolution,
                                                                               true);
@@ -1316,7 +1315,6 @@ public:
     
     
     const ElevationData* subElevationDataNotDecimated = new SubviewElevationData(elevationData,
-                                                                                 false,
                                                                                  subSector,
                                                                                  subResolution,
                                                                                  false);

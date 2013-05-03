@@ -18,14 +18,13 @@ private:
   const ElevationData* _elevationData;
   const bool           _deleteElevationData;
 
-  const Interpolator* _interpolator;
-  const bool          _deleteInterpolator;
+  Interpolator* _interpolator;
+
+  Interpolator* getInterpolator();
 
 public:
   InterpolatedElevationData(const ElevationData* elevationData,
-                            bool deleteElevationData,
-                            const Interpolator* interpolator,
-                            bool deleteInterpolator);
+                            bool deleteElevationData);
 
 
   virtual ~InterpolatedElevationData();

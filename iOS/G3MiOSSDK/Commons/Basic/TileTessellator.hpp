@@ -15,7 +15,7 @@ class Mesh;
 class Tile;
 class MutableVector2D;
 class IFloatBuffer;
-class ElevationData;
+class InterpolatedElevationData;
 class Geodetic2D;
 
 #include "Vector2I.hpp"
@@ -31,7 +31,7 @@ public:
   virtual Mesh* createTileMesh(const Planet* planet,
                                const Vector2I& resolution,
                                const Tile* tile,
-                               const ElevationData* elevationData,
+                               const InterpolatedElevationData* elevationData,
                                float verticalExaggeration,
                                bool debug) const = 0;
 
