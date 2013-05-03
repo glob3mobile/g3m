@@ -29,7 +29,7 @@ G3MWeatherDownloadListener::G3MWeatherDownloadListener(GInitializationTask* init
 }
 
 void G3MWeatherDownloadListener::onDownload(const URL& url,
-                IByteBuffer* buffer) {
+                IByteBuffer* buffer, bool expired) {
   MarksRenderer* markerRenderer = ((G3MAppUserData*) [_widget userData])->getMarkerRenderer();
   const JSONBaseObject* json = IJSONParser::instance()->parse(buffer->getAsString());
   const JSONArray* marks = json->asObject()->getAsArray("list");

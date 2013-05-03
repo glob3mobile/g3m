@@ -16,11 +16,15 @@ const GLState* SGMaterialNode::createState(const G3MRenderContext* rc,
   if (_baseColor == NULL) {
     return NULL;
   }
-  
+
   GLState* state = new GLState(parentState);
   const float colorsIntensity = 1;
-  //state->enableFlatColor(*_specularColor, colorsIntensity);
+#ifdef C_CODE
   state->enableFlatColor(*_baseColor, colorsIntensity);
+#endif
+#ifdef JAVA_CODE
+  state.enableFlatColor(_baseColor, colorsIntensity);
+#endif
 
   return state;
 }

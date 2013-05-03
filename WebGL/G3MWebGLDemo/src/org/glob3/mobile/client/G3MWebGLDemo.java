@@ -352,7 +352,7 @@ public class G3MWebGLDemo
                                                final IByteBuffer buffer,
                                                final boolean expired) {
                            final Shape aircraft = SceneJSShapesParser.parseFromBSON(buffer,
-                                    "http://glob3m.glob3mobile.com/test/aircraft-A320/textures-A320/");
+                                    "http://glob3m.glob3mobile.com/test/aircraft-A320/textures-A320/", false);
 
                            if (aircraft != null) {
                               // Washington, DC

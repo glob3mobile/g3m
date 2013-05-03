@@ -89,6 +89,11 @@
 #import <G3MiOSSDK/LayerTilesRenderParameters.hpp>
 #import <G3MiOSSDK/IImageUtils.hpp>
 #import <G3MiOSSDK/RectangleF.hpp>
+#import <G3MiOSSDK/SGShape.hpp>
+#import <G3MiOSSDK/SGNode.hpp>
+#import <G3MiOSSDK/SGMaterialNode.hpp>
+
+
 
 class TestVisibleSectorListener : public VisibleSectorListener {
 public:
@@ -507,7 +512,7 @@ public:
     layerSet->addLayer( new OSMLayer(TimeInterval::fromDays(30)) );
   }
 
-  const bool useMapQuestOSM = false;
+  const bool useMapQuestOSM = true;
   if (useMapQuestOSM) {
     layerSet->addLayer( MapQuestLayer::newOSM(TimeInterval::fromDays(30)) );
   }
@@ -547,7 +552,7 @@ public:
   
 
 
-  const bool blueMarble = true;
+  const bool blueMarble = false;
   if (blueMarble) {
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
                                         URL("http://www.nasa.network.com/wms?", false),
@@ -585,7 +590,7 @@ public:
     //    layerSet->addLayer(i3Landsat);
   }
   
-  const bool useOrtoAyto = true;
+  const bool useOrtoAyto = false;
   if (useOrtoAyto) {
     WMSLayer* ortoAyto = new WMSLayer("orto_refundida,etiquetas_50k,Numeros%20de%20Gobierno,etiquetas%20inicial,etiquetas%2020k,Nombres%20de%20Via,etiquetas%2015k,etiquetas%202k,etiquetas%2010k",
                                       URL("http://195.57.27.86/wms_etiquetas_con_orto.mapdef?", false),
@@ -1348,6 +1353,61 @@ public:
 };
 
 
+class RadarParser_BufferDownloadListener : public IBufferDownloadListener {
+private:
+  ShapesRenderer* _shapesRenderer;
+
+public:
+  RadarParser_BufferDownloadListener(ShapesRenderer* shapesRenderer) :
+  _shapesRenderer(shapesRenderer)
+  {
+
+  }
+  
+  void onDownload(const URL& url,
+                  IByteBuffer* buffer,
+                  bool expired) {
+
+    SGShape* radarModel = (SGShape*) SceneJSShapesParser::parseFromBSON(buffer,
+                                                                        "http://radar3d.glob3mobile.com/models/",
+                                                                        true);
+
+    SGNode* node  = radarModel->getNode();
+
+    const int childrenCount = node->getChildrenCount();
+    for (int i = 0; i < childrenCount; i++) {
+      SGNode* child = node->getChild(i);
+      SGMaterialNode* material = (SGMaterialNode*) child;
+      material->setBaseColor( NULL );
+    }
+
+//    radarModel->setPosition(Geodetic3D::fromDegrees(0, 0, 0));
+    radarModel->setPosition(new Geodetic3D(Angle::zero(), Angle::zero(), 10000));
+//    radarModel->setPosition(new Geodetic3D(Angle::fromDegreesMinutesSeconds(25, 47, 16),
+//                                           Angle::fromDegreesMinutesSeconds(-80, 13, 27),
+//                                           10000));
+    //radarModel->setScale(10);
+
+    _shapesRenderer->addShape(radarModel);
+
+    delete buffer;
+  }
+
+  void onError(const URL& url) {
+    printf("Error downloading %s\n", url.getPath().c_str());
+  }
+
+  void onCancel(const URL& url) {
+  }
+
+  void onCanceledDownload(const URL& url,
+                          IByteBuffer* buffer,
+                          bool expired) {
+  }
+
+};
+
+
 - (GInitializationTask*) createSampleInitializationTask: (ShapesRenderer*) shapesRenderer
                                             geoRenderer: (GEORenderer*) geoRenderer
                                            meshRenderer: (MeshRenderer*) meshRenderer
@@ -1358,6 +1418,17 @@ public:
     ShapesRenderer* _shapesRenderer;
     GEORenderer*    _geoRenderer;
     MeshRenderer*   _meshRenderer;
+
+    void textRadar(const G3MContext* context) {
+
+      context->getDownloader()->requestBuffer(URL("http://radar3d.glob3mobile.com/models/radar.bson", false),
+                                              1000000,
+                                              TimeInterval::fromDays(1),
+                                              true,
+                                              new RadarParser_BufferDownloadListener(_shapesRenderer),
+                                              true);
+    }
+
 
   public:
     SampleInitializationTask(G3MWidget_iOS*  iosWidget,
@@ -1580,12 +1651,17 @@ public:
       delete canvas;
     }
 
+
     void run(const G3MContext* context) {
       printf("Running initialization Task\n");
 
       testCanvas(context->getFactory());
 
 //      const Sector targetSector(Sector::fromDegrees(35, -6, 38, -2));
+
+
+      textRadar(context);
+
 
       _meshRenderer->addMesh( createSectorMesh(context->getPlanet(),
                                                20,
@@ -1787,7 +1863,9 @@ public:
                                                                error: nil];
           if (nsCC3dJSON) {
             std::string cc3dJSON = [nsCC3dJSON UTF8String];
-            Shape* cc3d = SceneJSShapesParser::parseFromJSON(cc3dJSON, "file:///");
+            Shape* cc3d = SceneJSShapesParser::parseFromJSON(cc3dJSON,
+                                                             "file:///",
+                                                             false);
             if (cc3d) {
               cc3d->setPosition(new Geodetic3D(Angle::fromDegrees(39.473641),
                                                Angle::fromDegrees(-6.370732),
@@ -1812,7 +1890,9 @@ public:
                     length: length];
             IByteBuffer* buffer = new ByteBuffer_iOS(bytes, length);
             if (buffer) {
-                Shape* plane = SceneJSShapesParser::parseFromBSON(buffer, URL::FILE_PROTOCOL + "textures-A320/");
+                Shape* plane = SceneJSShapesParser::parseFromBSON(buffer,
+                                                                  URL::FILE_PROTOCOL + "textures-A320/",
+                                                                  false);
           
           
         //      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"

@@ -23,13 +23,13 @@ public:
   G3MWikiDownloadListener(GInitializationTask* initTask,
                           G3MWidget_iOS* widget);
   
-  void onDownload(const URL& url, IByteBuffer* buffer);
+  void onDownload(const URL& url, IByteBuffer* buffer, bool expired);
   void onError(const URL& url);
   
   void onCancel(const URL& url) {
   }
   
-  void onCanceledDownload(const URL& url, IByteBuffer* data) {
+  void onCanceledDownload(const URL& url, IByteBuffer* data, bool expired) {
   }
   
 };

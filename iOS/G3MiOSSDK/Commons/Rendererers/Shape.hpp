@@ -96,6 +96,10 @@ public:
     cleanTransformMatrix();
   }
 
+  void setScale(double scale) {
+    setScale(scale, scale, scale);
+  }
+
   void setScale(double scaleX,
                 double scaleY,
                 double scaleZ) {
