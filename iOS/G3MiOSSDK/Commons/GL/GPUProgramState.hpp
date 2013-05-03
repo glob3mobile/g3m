@@ -25,12 +25,14 @@ class GPUProgramState{
   
   const GPUProgramState* _parentState;
   
-  void setValueToUniform(const std::string& name, GPUUniformValue* v);
-  void setValueToAttribute(const std::string& name, GPUAttributeValue* v);
+  void setUniformValue(const std::string& name, GPUUniformValue* v);
+  void setAttributeValue(const std::string& name, GPUAttributeValue* v);
   
 public:
   
-  GPUProgramState(GPUProgramState* parentState):_parentState(parentState){}
+  
+  GPUProgramState(const GPUProgramState* parentState):_parentState(parentState){}
+  
   
   ~GPUProgramState(){
     for(std::map<std::string, GPUUniformValue*> ::const_iterator it = _uniformValues.begin();
@@ -39,7 +41,7 @@ public:
       delete it->second;
     }
   }
-
+  
   
   void setValueToUniform(const std::string& name, bool b){
     setValueToUniform(name, new GPUUniformValueBool(b));
@@ -62,15 +64,19 @@ public:
   }
   
   void multiplyValueOfUniform(const std::string& name, const MutableMatrix44D& m){
-    //TODO ...
-    setValueToUniform(name, new GPUUniformValueMatrix4Float(m));
+    MutableMatrix44D parentsMatrix = getAccumulatedMatrixFromParent(name);
+    setValueToUniform(name, new GPUUniformValueMatrix4Float(parentsMatrix.multiply(m)) );
   }
   
-  void setValueToAttribute(const std::string& name, IFloatBuffer* buffer, int size, int index, bool normalized, int stride);
+  void setAttributeValue(const std::string& name,
+                         IFloatBuffer* buffer, int attributeSize,
+                         int arrayElementSize, int index, bool normalized, int stride);
   
   void applyChanges(GL* gl, GPUProgram& prog) const;
   
-//  GPUUniformValue* getUniformValue(const std::string name) const;
+  MutableMatrix44D getAccumulatedMatrixFromParent(const std::string name);
+  
+  //  GPUUniformValue* getUniformValue(const std::string name) const;
 };
 
 #endif /* defined(__G3MiOSSDK__GPUProgramState__) */

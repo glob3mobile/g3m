@@ -159,6 +159,8 @@ public:
   GPUUniformValue* deepCopy() const{
     return new GPUUniformValueMatrix4Float(_m);
   }
+  
+  MutableMatrix44D getValue() const{ return _m;}
 };
 class GPUUniformMatrix4Float: public GPUUniform{
 public:

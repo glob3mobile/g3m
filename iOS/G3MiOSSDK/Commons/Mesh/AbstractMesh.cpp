@@ -13,6 +13,8 @@
 #include "GL.hpp"
 #include "Box.hpp"
 
+#include "GPUProgramState.hpp"
+
 AbstractMesh::~AbstractMesh() {
   if (_owner) {
     delete _vertices;
@@ -115,6 +117,15 @@ bool AbstractMesh::isTransparent(const G3MRenderContext* rc) const {
 void AbstractMesh::render(const G3MRenderContext *rc,
                           const GLState& parentState,
                           const GPUProgramState* parentProgramState) const {
+  
+  GPUProgramState progState(parentProgramState);
+  progState.setAttributeValue("Position",
+                              _vertices, 4, //The attribute is a float vector of 4 elements
+                              3,            //Our buffer contains elements of 3
+                              0,            //Index 0
+                              false,        //Not normalized
+                              0);           //Stride 0
+  
   GLState state(parentState);
   state.enableVerticesPosition();
   state.setLineWidth(_lineWidth);
@@ -131,11 +142,11 @@ void AbstractMesh::render(const G3MRenderContext *rc,
     }
   }
 
-  state.setVertices(_vertices, 3, 0);
+  //state.setVertices(_vertices, 3, 0);
 
   if (_translationMatrix != NULL){
     state.multiplyModelViewMatrix(*_translationMatrix);
   }
 
-  rawRender(rc, state, parentProgramState);
+  rawRender(rc, state, &progState);
 }

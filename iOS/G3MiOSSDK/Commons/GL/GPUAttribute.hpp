@@ -17,17 +17,24 @@
 class GPUAttributeValue{
 protected:
   const int _type;
-  const int _size;
+  const int _attributeSize;
   const int _index;
   int           _stride;
   bool          _normalized;
   
+  const int _arrayElementSize;
+  
 public:
-  GPUAttributeValue(int type, int size, int index, int stride, bool normalized):
-  _type(type),_size(size),_index(index), _stride(stride), _normalized(normalized){}
+  GPUAttributeValue(int type, int attributeSize, int arrayElementSize, int index, int stride, bool normalized):
+  _type(type),
+  _attributeSize(attributeSize),
+  _index(index),
+  _stride(stride),
+  _normalized(normalized),
+  _arrayElementSize(arrayElementSize){}
   
   int getType() const { return _type;}
-  int getSize() const { return _size;}
+  int getAttributeSize() const { return _attributeSize;}
   int getIndex() const { return _index;}
   int getStride() const { return _stride;}
   bool getNormalized() const { return _normalized;}
@@ -68,7 +75,7 @@ public:
   int getSize() const{ return _size;}
   
   void set(GPUAttributeValue* v){
-    if (_type != v->getType() || _size != v->getSize()){ //type checking
+    if (_type != v->getType() || _size != v->getAttributeSize()){ //type checking
       delete v;
       ILogger::instance()->logError("Attempting to set uniform " + _name + "with invalid value type.");
       return;
@@ -91,34 +98,42 @@ public:
 };
 
 ///////////
-class GPUAttributeValueVec1Float: public GPUAttributeValue{
+
+class GPUAttributeValueVecFloat: public GPUAttributeValue{
   IFloatBuffer* _buffer;
   int _timeStamp;
 public:
-  GPUAttributeValueVec1Float(IFloatBuffer* buffer, int index, int stride, bool normalized):
+  GPUAttributeValueVecFloat(IFloatBuffer* buffer, int arrayElementSize, int attributeSize, int index, int stride, bool normalized):
   _buffer(buffer),
   _timeStamp(buffer->timestamp()),
-  GPUAttributeValue(GLType::glFloat(), 1, index, stride, normalized){}
+  GPUAttributeValue(GLType::glFloat(), attributeSize, arrayElementSize, index, stride, normalized){}
   
   void setAttribute(GL* gl, const int id) const{
-    gl->vertexAttribPointer(_index, _size, _normalized, _stride, _buffer);
+    gl->vertexAttribPointer(_index, _attributeSize, _normalized, _stride, _buffer);
   }
   
   bool isEqualsTo(const GPUAttributeValue* v) const{
-    return (_buffer == ((GPUAttributeValueVec1Float*)v)->_buffer) &&
-    (_timeStamp == ((GPUAttributeValueVec1Float*)v)->_timeStamp) &&
+    return (_buffer == ((GPUAttributeValueVecFloat*)v)->_buffer) &&
+    (_timeStamp == ((GPUAttributeValueVecFloat*)v)->_timeStamp) &&
     (_type == v->getType()) &&
-    (_size == v->getSize()) &&
+    (_attributeSize == v->getAttributeSize()) &&
     (_stride == v->getStride()) &&
     (_normalized == v->getNormalized());
   }
   
   GPUAttributeValue* shallowCopy() const{
-    GPUAttributeValueVec1Float* v = new GPUAttributeValueVec1Float(_buffer, _index, _stride, _normalized);
+    GPUAttributeValueVecFloat* v = new GPUAttributeValueVecFloat(_buffer, _attributeSize,
+                                                                 _arrayElementSize, _index, _stride, _normalized);
     v->_timeStamp = _timeStamp;
     return v;
   }
   
+};
+
+class GPUAttributeValueVec1Float: public GPUAttributeValueVecFloat{
+public:
+  GPUAttributeValueVec1Float(IFloatBuffer* buffer, int arrayElementSize, int index, int stride, bool normalized):
+  GPUAttributeValueVecFloat(buffer, 1, arrayElementSize, index, stride, normalized){}
 };
 class GPUAttributeVec1Float: public GPUAttribute{
 public:
@@ -126,35 +141,12 @@ public:
 };
 ////////
 ///////////
-class GPUAttributeValueVec2Float: public GPUAttributeValue{
-  IFloatBuffer* _buffer;
-  int _timeStamp;
+class GPUAttributeValueVec2Float: public GPUAttributeValueVecFloat{
 public:
-  GPUAttributeValueVec2Float(IFloatBuffer* buffer, int index, int stride, bool normalized):
-  _buffer(buffer),
-  _timeStamp(buffer->timestamp()),
-  GPUAttributeValue(GLType::glFloat(), 2, index, stride, normalized){}
-  
-  void setAttribute(GL* gl, const int id) const{
-    gl->vertexAttribPointer(_index, _size, _normalized, _stride, _buffer);
-  }
-  
-  bool isEqualsTo(const GPUAttributeValue* v) const{
-    return (_buffer == ((GPUAttributeValueVec2Float*)v)->_buffer) &&
-    (_timeStamp == ((GPUAttributeValueVec2Float*)v)->_timeStamp) &&
-    (_type == v->getType()) &&
-    (_size == v->getSize()) &&
-    (_stride == v->getStride()) &&
-    (_normalized == v->getNormalized());
-  }
-  
-  GPUAttributeValue* shallowCopy() const{
-    GPUAttributeValueVec2Float* v = new GPUAttributeValueVec2Float(_buffer, _index, _stride, _normalized);
-    v->_timeStamp = _timeStamp;
-    return v;
-  }
-  
+  GPUAttributeValueVec2Float(IFloatBuffer* buffer, int arrayElementSize, int index, int stride, bool normalized):
+  GPUAttributeValueVecFloat(buffer, 2, arrayElementSize, index, stride, normalized){}
 };
+
 class GPUAttributeVec2Float: public GPUAttribute{
 public:
   GPUAttributeVec2Float(const std::string&name, int id):GPUAttribute(name, id, GLType::glFloat(), 2){}
@@ -162,34 +154,10 @@ public:
 ////////
 
 ///////////
-class GPUAttributeValueVec3Float: public GPUAttributeValue{
-  IFloatBuffer* _buffer;
-  int _timeStamp;
+class GPUAttributeValueVec3Float: public GPUAttributeValueVecFloat{
 public:
-  GPUAttributeValueVec3Float(IFloatBuffer* buffer, int index, int stride, bool normalized):
-  _buffer(buffer),
-  _timeStamp(buffer->timestamp()),
-  GPUAttributeValue(GLType::glFloat(), 3, index, stride, normalized){}
-  
-  void setAttribute(GL* gl, const int id) const{
-    gl->vertexAttribPointer(_index, _size, _normalized, _stride, _buffer);
-  }
-  
-  bool isEqualsTo(const GPUAttributeValue* v) const{
-    return (_buffer == ((GPUAttributeValueVec3Float*)v)->_buffer) &&
-    (_timeStamp == ((GPUAttributeValueVec3Float*)v)->_timeStamp) &&
-    (_type == v->getType()) &&
-    (_size == v->getSize()) &&
-    (_stride == v->getStride()) &&
-    (_normalized == v->getNormalized());
-  }
-  
-  GPUAttributeValue* shallowCopy() const{
-    GPUAttributeValueVec3Float* v = new GPUAttributeValueVec3Float(_buffer, _index, _stride, _normalized);
-    v->_timeStamp = _timeStamp;
-    return v;
-  }
-  
+  GPUAttributeValueVec3Float(IFloatBuffer* buffer, int arrayElementSize, int index, int stride, bool normalized):
+  GPUAttributeValueVecFloat(buffer, 3, arrayElementSize, index, stride, normalized){}
 };
 class GPUAttributeVec3Float: public GPUAttribute{
 public:
@@ -198,34 +166,10 @@ public:
 ////////
 
 ///////////
-class GPUAttributeValueVec4Float: public GPUAttributeValue{
-  IFloatBuffer* _buffer;
-  int _timeStamp;
+class GPUAttributeValueVec4Float: public GPUAttributeValueVecFloat{
 public:
-  GPUAttributeValueVec4Float(IFloatBuffer* buffer, int index, int stride, bool normalized):
-  _buffer(buffer),
-  _timeStamp(buffer->timestamp()),
-  GPUAttributeValue(GLType::glFloat(), 4, index, stride, normalized){}
-  
-  void setAttribute(GL* gl, const int id) const{
-    gl->vertexAttribPointer(_index, _size, _normalized, _stride, _buffer);
-  }
-  
-  bool isEqualsTo(const GPUAttributeValue* v) const{
-    return (_buffer == ((GPUAttributeValueVec4Float*)v)->_buffer) &&
-    (_timeStamp == ((GPUAttributeValueVec4Float*)v)->_timeStamp) &&
-    (_type == v->getType()) &&
-    (_size == v->getSize()) &&
-    (_stride == v->getStride()) &&
-    (_normalized == v->getNormalized());
-  }
-  
-  GPUAttributeValue* shallowCopy() const{
-    GPUAttributeValueVec4Float* v = new GPUAttributeValueVec4Float(_buffer, _index, _stride, _normalized);
-    v->_timeStamp = _timeStamp;
-    return v;
-  }
-  
+  GPUAttributeValueVec4Float(IFloatBuffer* buffer, int arrayElementSize, int index, int stride, bool normalized):
+  GPUAttributeValueVecFloat(buffer, 4, arrayElementSize, index, stride, normalized){}
 };
 class GPUAttributeVec4Float: public GPUAttribute{
 public:
