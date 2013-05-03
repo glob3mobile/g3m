@@ -130,6 +130,16 @@ public abstract class Shape implements EffectTarget
     _pendingEffects.add(new ShapePendingEffect(effect, false));
   }
 
+  public final void setAnimatedPosition(TimeInterval duration, Geodetic3D position, Angle pitch, Angle heading)
+  {
+     setAnimatedPosition(duration, position, pitch, heading, false);
+  }
+  public final void setAnimatedPosition(TimeInterval duration, Geodetic3D position, Angle pitch, Angle heading, boolean linearInterpolation)
+  {
+    Effect effect = new ShapeFullPositionEffect(duration, this, _position, position, _pitch, pitch, _heading,heading, linearInterpolation);
+    _pendingEffects.add(new ShapePendingEffect(effect, false));
+  }
+
   public final void setAnimatedPosition(Geodetic3D position)
   {
      setAnimatedPosition(position, false);
