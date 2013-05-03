@@ -12,6 +12,9 @@
 class Angle;
 class Geodetic2D;
 
+#include <string>
+
+
 class Interpolator {
 protected:
   Interpolator() {
@@ -47,7 +50,9 @@ public:
                                double valueNW,
                                double u,
                                double v) const = 0;
-  
+
+  const std::string description() const;
+
 };
 
 #endif

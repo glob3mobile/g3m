@@ -13,12 +13,19 @@
 
 class BilinearInterpolator : public Interpolator {
 public:
+
   double interpolation(double valueSW,
                        double valueSE,
                        double valueNE,
                        double valueNW,
                        double u,
                        double v) const;
+
+  
+  const std::string description() const {
+    return "BilinearInterpolator";
+  }
+
 };
 
 #endif

@@ -13,6 +13,13 @@
 #include "IFactory.hpp"
 #include "Vector3D.hpp"
 #include "Vector2I.hpp"
+#include "InterpolatedElevationData.hpp"
+#include "BilinearInterpolator.hpp"
+
+//const ElevationData* elevationData,
+//bool deleteElevationData,
+//const Interpolator* interpolator,
+//bool deleteInterpolator
 
 SubviewElevationData::SubviewElevationData(const ElevationData *elevationData,
                                            bool ownsElevationData,
@@ -20,8 +27,12 @@ SubviewElevationData::SubviewElevationData(const ElevationData *elevationData,
                                            const Vector2I& extent,
                                            bool useDecimation) :
 ElevationData(sector, extent),
-_elevationData(elevationData),
-_ownsElevationData(ownsElevationData)
+_elevationData( new InterpolatedElevationData(elevationData,
+                                              ownsElevationData,
+                                              new BilinearInterpolator(),
+                                              true) ),
+_ownsElevationData(ownsElevationData),
+_realResolution( elevationData->getRealResolution() )
 {
   if ((_elevationData == NULL) ||
       (_elevationData->getExtentWidth() < 1) ||

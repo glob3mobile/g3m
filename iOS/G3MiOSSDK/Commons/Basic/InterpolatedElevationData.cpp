@@ -10,6 +10,8 @@
 
 #include "Vector2I.hpp"
 #include "Interpolator.hpp"
+#include "IStringBuilder.hpp"
+#include "Vector3D.hpp"
 
 InterpolatedElevationData::InterpolatedElevationData(const ElevationData* elevationData,
                                                      bool deleteElevationData,
@@ -140,4 +142,29 @@ double InterpolatedElevationData::getElevationAt(const Angle& latitude,
   }
 
   return result;
+}
+
+
+const Geodetic2D InterpolatedElevationData::getRealResolution() const {
+  return _elevationData->getRealResolution();
+}
+
+bool InterpolatedElevationData::hasNoData() const {
+  return _elevationData->hasNoData();
+}
+
+const std::string InterpolatedElevationData::description(bool detailed) const {
+  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  isb->addString("(InterpolatedElevationData on=");
+  isb->addString(_elevationData->description(detailed));
+  isb->addString(" interpolator=");
+  isb->addString(_interpolator->description());
+  isb->addString(")");
+  const std::string s = isb->getString();
+  delete isb;
+  return s;
+}
+
+Vector3D InterpolatedElevationData::getMinMaxAverageHeights() const {
+  return _elevationData->getMinMaxAverageHeights();
 }

@@ -41,6 +41,14 @@ public:
                           position.longitude());
   }
 
+  const Geodetic2D getRealResolution() const;
+
+  bool hasNoData() const;
+
+  const std::string description(bool detailed) const;
+
+  Vector3D getMinMaxAverageHeights() const;
+
 };
 
 #endif

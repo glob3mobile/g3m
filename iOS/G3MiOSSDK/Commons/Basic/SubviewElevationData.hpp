@@ -11,14 +11,17 @@
 
 #include "ElevationData.hpp"
 class IFloatBuffer;
+class InterpolatedElevationData;
 
 class SubviewElevationData : public ElevationData {
 private:
-  const ElevationData* _elevationData;
-  const bool           _ownsElevationData;
-  const IFloatBuffer*  _buffer;
+  const InterpolatedElevationData* _elevationData;
+  const bool                       _ownsElevationData;
+  const IFloatBuffer*              _buffer;
   
-  bool                 _hasNoData;
+  bool _hasNoData;
+
+  const Geodetic2D _realResolution;
 
   IFloatBuffer* createDecimatedBuffer();
   IFloatBuffer* createInterpolatedBuffer();
@@ -35,8 +38,11 @@ public:
                        const Vector2I& extent,
                        bool useDecimation);
 
-
   ~SubviewElevationData();
+
+  const Geodetic2D getRealResolution() const {
+    return _realResolution;
+  }
 
   double getElevationAt(int x, int y) const;
 
