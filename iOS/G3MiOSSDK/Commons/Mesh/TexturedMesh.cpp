@@ -14,6 +14,9 @@ void TexturedMesh::render(const G3MRenderContext* rc,
                           const GLState& parentState,const GPUProgramState* parentProgramState) const {
   GLState* state = _textureMapping->bind(rc, parentState);
   
+  state->enableTextures();
+  state->enableTexture2D();
+  
   if (_transparent) {
     state->enableBlend();
     state->setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());

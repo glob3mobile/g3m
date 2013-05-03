@@ -13,9 +13,7 @@
 #include <string.h>
 #include <map>
 
-#include "Attribute.hpp"
-
-#include "G3MError.hpp"
+#include "GPUAttribute.hpp"
 
 #include "GPUUniform.hpp"
 
@@ -28,7 +26,7 @@ class GPUProgram{
   //INativeGL* _nativeGL;
   int _programID;
   bool _programCreated;
-  std::map<std::string, Attribute*> _attributes;
+  std::map<std::string, GPUAttribute*> _attributes;
   std::map<std::string, GPUUniform*> _uniforms;
   std::string _name;
   
@@ -42,7 +40,7 @@ class GPUProgram{
   
   GPUUniform* getUniform(const std::string name) const;
   //Uniform* getUniform(const std::string name) const;
-  Attribute* getAttribute(const std::string name) const;
+  GPUAttribute* getAttribute(const std::string name) const;
   
 public:
   
@@ -64,10 +62,10 @@ public:
   GPUUniformMatrix4Float* getGPUUniformMatrix4Float(const std::string name) const;
 
   
-  AttributeVec1Float* getAttributeVec1Float(const std::string name) const;
-  AttributeVec2Float* getAttributeVec2Float(const std::string name) const;
-  AttributeVec3Float* getAttributeVec3Float(const std::string name) const;
-  AttributeVec4Float* getAttributeVec4Float(const std::string name) const;
+  GPUAttributeVec1Float* getGPUAttributeVec1Float(const std::string name) const;
+  GPUAttributeVec2Float* getGPUAttributeVec2Float(const std::string name) const;
+  GPUAttributeVec3Float* getGPUAttributeVec3Float(const std::string name) const;
+  GPUAttributeVec4Float* getGPUAttributeVec4Float(const std::string name) const;
   
   void onUsed();
   void onUnused();

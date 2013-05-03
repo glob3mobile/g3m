@@ -197,7 +197,7 @@ void MarksRenderer::render(const G3MRenderContext* rc,
   //UniformBool* enableTexture = prog->getUniformBool("EnableTexture");
   //enableTexture->set(true);
   
-  //state.enableTexture2D();
+  state.enableTexture2D();
   state.enableVerticesPosition();
   
   Vector2D textureTranslation(0.0, 0.0);

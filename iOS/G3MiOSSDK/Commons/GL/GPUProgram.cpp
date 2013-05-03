@@ -10,8 +10,6 @@
 
 #include "GL.hpp"
 
-#include "G3MError.hpp"
-
 #include "ShaderProgram.hpp"
 
 GPUProgram* GPUProgram::createProgram(GL* gl, const std::string name, const std::string& vertexSource,
@@ -31,7 +29,7 @@ GPUProgram* GPUProgram::createProgram(GL* gl, const std::string name, const std:
     ILogger::instance()->logError("GPUProgram: ERROR compiling vertex shader\n");
     p->deleteShader(gl, vertexShader);
     p->deleteProgram(gl, p->_programID);
-    throw new G3MError("GPUProgram: ERROR compiling vertex shader");
+    ILogger::instance()->logError("GPUProgram: ERROR compiling vertex shader");
     return NULL;
   }
   
@@ -41,7 +39,7 @@ GPUProgram* GPUProgram::createProgram(GL* gl, const std::string name, const std:
     ILogger::instance()->logError("GPUProgram: ERROR compiling fragment shader\n");
     p->deleteShader(gl, fragmentShader);
     p->deleteProgram(gl, p->_programID);
-    throw new G3MError("GPUProgram: ERROR compiling fragment shader");
+    ILogger::instance()->logError("GPUProgram: ERROR compiling fragment shader");
     return NULL;
   }
   
@@ -53,7 +51,7 @@ GPUProgram* GPUProgram::createProgram(GL* gl, const std::string name, const std:
     p->deleteShader(gl, vertexShader);
     p->deleteShader(gl, fragmentShader);
     p->deleteProgram(gl, p->_programID);
-    throw new G3MError("GPUProgram: ERROR linking graphic program");
+    ILogger::instance()->logError("GPUProgram: ERROR linking graphic program");
     return NULL;
   }
   
@@ -119,7 +117,7 @@ void GPUProgram::getVariables(GL* gl){
   //Attributes
   n = gl->getProgramiv(this, GLVariable::activeAttributes());
   for (int i = 0; i < n; i++) {
-    Attribute* a = gl->getActiveAttribute(this, i);
+    GPUAttribute* a = gl->getActiveAttribute(this, i);
     if (a != NULL) _attributes[a->getName()] = a;
   }
   
@@ -179,8 +177,8 @@ GPUUniformMatrix4Float* GPUProgram::getGPUUniformMatrix4Float(const std::string 
   }
 }
 
-Attribute* GPUProgram::getAttribute(const std::string name) const{
-  std::map<std::string, Attribute*> ::const_iterator it = _attributes.find(name);
+GPUAttribute* GPUProgram::getAttribute(const std::string name) const{
+  std::map<std::string, GPUAttribute*> ::const_iterator it = _attributes.find(name);
   if (it != _attributes.end()){
     return it->second;
   } else{
@@ -188,37 +186,37 @@ Attribute* GPUProgram::getAttribute(const std::string name) const{
   }
 }
 
-AttributeVec1Float* GPUProgram::getAttributeVec1Float(const std::string name) const{
-  AttributeVecFloat* a = (AttributeVecFloat*)getAttribute(name);
-  if (a!= NULL && a->getSize() == 1){
-    return (AttributeVec1Float*)a;
+GPUAttributeVec1Float* GPUProgram::getGPUAttributeVec1Float(const std::string name) const{
+  GPUAttributeVec1Float* a = (GPUAttributeVec1Float*)getAttribute(name);
+  if (a!= NULL && a->getSize() == 1 && a->getType() == GLType::glFloat()){
+    return (GPUAttributeVec1Float*)a;
   } else{
     return NULL;
   }
 }
 
-AttributeVec2Float* GPUProgram::getAttributeVec2Float(const std::string name) const{
-  AttributeVecFloat* a = (AttributeVecFloat*)getAttribute(name);
-  if (a!= NULL && a->getSize() == 2){
-    return (AttributeVec2Float*)a;
+GPUAttributeVec2Float* GPUProgram::getGPUAttributeVec2Float(const std::string name) const{
+  GPUAttributeVec2Float* a = (GPUAttributeVec2Float*)getAttribute(name);
+  if (a!= NULL && a->getSize() == 2 && a->getType() == GLType::glFloat()){
+    return (GPUAttributeVec2Float*)a;
   } else{
     return NULL;
   }
 }
 
-AttributeVec3Float* GPUProgram::getAttributeVec3Float(const std::string name) const{
-  AttributeVecFloat* a = (AttributeVecFloat*)getAttribute(name);
-  if (a!= NULL && a->getSize() == 3){
-    return (AttributeVec3Float*)a;
+GPUAttributeVec3Float* GPUProgram::getGPUAttributeVec3Float(const std::string name) const{
+  GPUAttributeVec3Float* a = (GPUAttributeVec3Float*)getAttribute(name);
+  if (a!= NULL && a->getSize() == 3 && a->getType() == GLType::glFloat()){
+    return (GPUAttributeVec3Float*)a;
   } else{
     return NULL;
   }
 }
 
-AttributeVec4Float* GPUProgram::getAttributeVec4Float(const std::string name) const{
-  AttributeVecFloat* a = (AttributeVecFloat*)getAttribute(name);
-  if (a!= NULL && a->getSize() == 4){
-    return (AttributeVec4Float*)a;
+GPUAttributeVec4Float* GPUProgram::getGPUAttributeVec4Float(const std::string name) const{
+  GPUAttributeVec4Float* a = (GPUAttributeVec4Float*)getAttribute(name);
+  if (a!= NULL && a->getSize() == 4 && a->getType() == GLType::glFloat()){
+    return (GPUAttributeVec4Float*)a;
   } else{
     return NULL;
   }
@@ -248,7 +246,7 @@ void GPUProgram::applyChanges(GL* gl){
     iter->second->applyChanges(gl);
   }
   
-  std::map<std::string, Attribute*>::iterator iter2;
+  std::map<std::string, GPUAttribute*>::iterator iter2;
   for (iter2 = _attributes.begin(); iter2 != _attributes.end(); iter2++) {
     iter2->second->applyChanges(gl);
   }

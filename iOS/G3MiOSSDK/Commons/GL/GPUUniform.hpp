@@ -12,7 +12,6 @@
 #include "GL.hpp"
 #include "GLConstants.hpp"
 #include "IGLUniformID.hpp"
-#include "G3MError.hpp"
 
 class GPUUniformValue{
   const int _type;
@@ -55,7 +54,8 @@ public:
   void set(GPUUniformValue* v){
     if (_type != v->getType()){ //type checking 
       delete v;
-      throw G3MError("Attempting to set uniform " + _name + "with invalid value type.");
+      ILogger::instance()->logError("Attempting to set uniform " + _name + "with invalid value type.");
+      return;
     }
     if (_value == NULL || _value->isEqualsTo(v)){
       _dirty = true;

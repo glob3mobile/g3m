@@ -209,7 +209,7 @@ public:
     return _nativeGL->getActiveUniform(program, i);
   }
   
-  Attribute* getActiveAttribute(const GPUProgram* program, int i) const{
+  GPUAttribute* getActiveAttribute(const GPUProgram* program, int i) const{
     return _nativeGL->getActiveAttribute(program, i);
   }
   

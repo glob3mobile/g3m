@@ -114,10 +114,12 @@ void BusyMeshRenderer::render(const G3MRenderContext* rc,
   
   
   _programState.setValueToUniform("Projection", M);
+  _programState.setValueToUniform("Modelview", MutableMatrix44D::identity());
+  
   //_programState.setValueToUniform("Modelview", MutableMatrix44D::identity());
   
   //state.setProjectionMatrix(M);
-  state.setModelViewMatrix(MutableMatrix44D::identity());
+  //state.setModelViewMatrix(MutableMatrix44D::identity());
 
   // clear screen
   state.setClearColor(*_backgroundColor);

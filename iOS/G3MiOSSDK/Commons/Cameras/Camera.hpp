@@ -21,6 +21,8 @@
 #include "Vector3F.hpp"
 #include "Effects.hpp"
 
+#include "GPUProgramState.hpp"
+
 class ILogger;
 
 
@@ -254,6 +256,14 @@ public:
                       double distance,
                       const Angle& azimuth,
                       const Angle& altitude);
+  
+  /**
+   Setting projection and modelview matrix
+   */
+  void applyOnGPUProgramState(GPUProgramState& state) const{
+    state.setValueToUniform("Projection", getProjectionMatrix());
+    state.setValueToUniform("Modelview", getModelMatrix());
+  }
 
 
 private:
@@ -433,7 +443,6 @@ private:
                        bottom, top,
                        znear, zfar);
   }
-  
   
 };
 

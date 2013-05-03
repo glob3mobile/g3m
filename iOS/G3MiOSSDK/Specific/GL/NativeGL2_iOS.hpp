@@ -501,7 +501,7 @@ public:
     return i;
   }
   
-  Attribute* getActiveAttribute(const GPUProgram* program, int i) const{
+  GPUAttribute* getActiveAttribute(const GPUProgram* program, int i) const{
     GLint maxLength;
     glGetProgramiv(program->getProgramID(), GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &maxLength);
   
@@ -526,9 +526,9 @@ public:
     NSLog(@"Attribute Name: %s - %d", name, id);
     switch (type) {
       case GL_FLOAT_VEC4:
-        return new AttributeVec4Float(name, id);
+        return new GPUAttributeVec4Float(name, id);
       case GL_FLOAT_VEC2:
-        return new AttributeVec2Float(name, id);
+        return new GPUAttributeVec2Float(name, id);
       default:
         return NULL;
         break;

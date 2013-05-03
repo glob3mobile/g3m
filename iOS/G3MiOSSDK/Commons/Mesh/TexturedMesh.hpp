@@ -38,7 +38,7 @@ public:
   _transparent(transparent)
 
   {
-//    GLState* state = _mesh->getGLState();
+    //GLState* state = _mesh->getGLState();
 //    state->enableTextures();
 //    state->enableTexture2D();
 //    if (_transparent) {

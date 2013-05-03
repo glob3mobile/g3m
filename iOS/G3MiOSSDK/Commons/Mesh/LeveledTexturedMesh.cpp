@@ -37,7 +37,7 @@ GLState* LazyTextureMapping::bind(const G3MRenderContext* rc, const GLState& par
 //  GPUProgram* prog = rc->getGPUProgramManager()->getProgram("DefaultProgram");
 //  UniformBool* enableTexture = prog->getUniformBool("EnableTexture");
 //  enableTexture->set(true);
-  //state->enableTexture2D();
+  state->enableTexture2D();
 
   if (_texCoords != NULL) {
     state->scaleTextureCoordinates(_scale);

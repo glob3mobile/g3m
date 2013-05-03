@@ -14,16 +14,19 @@
 #include <string>
 
 #include "GPUUniform.hpp"
+#include "GPUAttribute.hpp"
 #include "GL.hpp"
 #include "GPUProgram.hpp"
 
 class GPUProgramState{
   
   std::map<std::string, GPUUniformValue*> _uniformValues;
+  std::map<std::string, GPUAttributeValue*> _attributesValues;
   
   const GPUProgramState* _parentState;
   
   void setValueToUniform(const std::string& name, GPUUniformValue* v);
+  void setValueToAttribute(const std::string& name, GPUAttributeValue* v);
   
 public:
   
@@ -59,12 +62,15 @@ public:
   }
   
   void multiplyValueOfUniform(const std::string& name, const MutableMatrix44D& m){
+    //TODO ...
     setValueToUniform(name, new GPUUniformValueMatrix4Float(m));
   }
   
+  void setValueToAttribute(const std::string& name, IFloatBuffer* buffer, int size, int index, bool normalized, int stride);
+  
   void applyChanges(GL* gl, GPUProgram& prog) const;
   
-  GPUUniformValue* getUniformValue(const std::string name) const;
+//  GPUUniformValue* getUniformValue(const std::string name) const;
 };
 
 #endif /* defined(__G3MiOSSDK__GPUProgramState__) */
