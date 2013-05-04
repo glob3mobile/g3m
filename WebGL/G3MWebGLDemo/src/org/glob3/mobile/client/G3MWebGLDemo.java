@@ -127,7 +127,7 @@ public class G3MWebGLDemo
       final ShapesRenderer shapesRenderer = new ShapesRenderer();
       builder.addRenderer(shapesRenderer);
 
-      //builder.setInitializationTask(createMarkersInitializationTask());
+      builder.setInitializationTask(createMarkersInitializationTask());
 
       final GInitializationTask initializationTask = new GInitializationTask() {
          @Override

@@ -4,7 +4,6 @@ package org.glob3.mobile.specific;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Locale;
 
 import org.glob3.mobile.generated.IStringUtils;
 
@@ -89,6 +88,6 @@ public final class StringUtils_WebGL
 
    @Override
    public String toUpperCase(final String string) {
-      return string.toUpperCase(Locale.ENGLISH);
+      return string.toUpperCase();
    }
 }

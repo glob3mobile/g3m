@@ -35,6 +35,7 @@ import org.glob3.mobile.generated.WidgetUserData;
 
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.event.dom.client.TouchEvent;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
@@ -164,7 +165,14 @@ public final class G3MWidget_WebGL
       jsDefineG3MBrowserObjects();
 
       // Events
-      sinkEvents(Event.MOUSEEVENTS | Event.ONCONTEXTMENU | Event.ONDBLCLICK | Event.ONMOUSEWHEEL);
+
+      if (TouchEvent.isSupported()) {
+         sinkEvents(Event.TOUCHEVENTS);
+      }
+      else {
+         sinkEvents(Event.MOUSEEVENTS | Event.ONCONTEXTMENU | Event.ONDBLCLICK | Event.ONMOUSEWHEEL);
+      }
+
    }
 
 
