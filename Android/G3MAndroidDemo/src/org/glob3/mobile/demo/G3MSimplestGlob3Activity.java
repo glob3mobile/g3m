@@ -4,7 +4,6 @@ package org.glob3.mobile.demo;
 
 import java.util.ArrayList;
 
-import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.BusyMeshRenderer;
 import org.glob3.mobile.generated.CachedDownloader;
 import org.glob3.mobile.generated.CameraDoubleDragHandler;
@@ -16,7 +15,6 @@ import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.CompositeRenderer;
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GInitializationTask;
-import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IStorage;
@@ -93,26 +91,26 @@ public class G3MSimplestGlob3Activity
 
       final CompositeRenderer mainRenderer = new CompositeRenderer();
       final LayerSet layerSet = new LayerSet();
-      final WMSLayer osm = new WMSLayer( //
-               "osm_auto:all", //
-               new URL("http://129.206.228.72/cached/osm", false), //
-               WMSServerVersion.WMS_1_1_0, //
-               //Sector.fromDegrees(-85.05, -180.0, 85.05, 180.0), //
-               Sector.fullSphere(), //
-               "image/jpeg", //
-               "EPSG:4326", //
-               "", //
-               false, //
-               null, //
-               TimeInterval.fromDays(30), //
-               true);
+      //      final WMSLayer osm = new WMSLayer( //
+      //               "osm_auto:all", //
+      //               new URL("http://129.206.228.72/cached/osm", false), //
+      //               WMSServerVersion.WMS_1_1_0, //
+      //               //Sector.fromDegrees(-85.05, -180.0, 85.05, 180.0), //
+      //               Sector.fullSphere(), //
+      //               "image/jpeg", //
+      //               "EPSG:4326", //
+      //               "", //
+      //               false, //
+      //               null, //
+      //               TimeInterval.fromDays(30), //
+      //               true);
       //      layerSet.addLayer(osm);
 
       final LayerTilesRenderParameters params = new LayerTilesRenderParameters(Sector.fullSphere(), 2, 4, 1, 19,
                LayerTilesRenderParameters.defaultTileTextureResolution(), LayerTilesRenderParameters.defaultTileMeshResolution(),
                false);
-      final Sector bbox = new Sector(new Geodetic2D(Angle.fromDegrees(-6.858), Angle.fromDegrees(39.182)), new Geodetic2D(
-               Angle.fromDegrees(-6.089), Angle.fromDegrees(39.657)));
+      //final Sector bbox = new Sector(new Geodetic2D(Angle.fromDegrees(-6.858), Angle.fromDegrees(39.182)), new Geodetic2D(
+      //         Angle.fromDegrees(-6.089), Angle.fromDegrees(39.657)));
 
       final WMSLayer aytoLayer = new WMSLayer( //
                "sigaytocc:AytoCC", //

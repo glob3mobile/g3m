@@ -158,7 +158,8 @@ public final class MotionEventProcessor {
    }
 
 
-   private TouchEvent processTouchCancel(final Event event) {
+   private TouchEvent processTouchCancel(@SuppressWarnings("unused")
+   final Event event) {
       _previousTouchesPositions = new HashMap<Integer, Vector2I>();
       return null;
    }
