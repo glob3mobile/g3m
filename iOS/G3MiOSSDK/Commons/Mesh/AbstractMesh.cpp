@@ -142,7 +142,7 @@ void AbstractMesh::render(const G3MRenderContext *rc,
     }
   }
 
-  //state.setVertices(_vertices, 3, 0);
+//  state.setVertices(_vertices, 3, 0);
 
   if (_translationMatrix != NULL){
     state.multiplyModelViewMatrix(*_translationMatrix);

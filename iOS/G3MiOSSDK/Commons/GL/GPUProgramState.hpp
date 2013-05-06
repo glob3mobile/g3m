@@ -17,11 +17,13 @@
 #include "GPUAttribute.hpp"
 #include "GL.hpp"
 #include "GPUProgram.hpp"
+#include "MutableMatrix44D.hpp"
 
 class GPUProgramState{
   
   std::map<std::string, GPUUniformValue*> _uniformValues;
   std::map<std::string, GPUAttributeValue*> _attributesValues;
+  std::map<std::string, bool> _attributesEnabled;
   
   const GPUProgramState* _parentState;
   
@@ -43,38 +45,27 @@ public:
   }
   
   
-  void setValueToUniform(const std::string& name, bool b){
-    setValueToUniform(name, new GPUUniformValueBool(b));
-  }
+  void setUniformValue(const std::string& name, bool b);
   
-  void setValueToUniform(const std::string& name, float f){
-    setValueToUniform(name, new GPUUniformValueFloat(f));
-  }
+  void setUniformValue(const std::string& name, float f);
   
-  void setValueToUniform(const std::string& name, const Vector2D& v){
-    setValueToUniform(name, new GPUUniformValueVec2Float(v._x, v._y));
-  }
+  void setUniformValue(const std::string& name, const Vector2D& v);
   
-  void setValueToUniform(const std::string& name, double x, double y, double z, double w){
-    setValueToUniform(name, new GPUUniformValueVec4Float(x,y,z,w));
-  }
+  void setUniformValue(const std::string& name, double x, double y, double z, double w);
   
-  void setValueToUniform(const std::string& name, const MutableMatrix44D& m){
-    setValueToUniform(name, new GPUUniformValueMatrix4Float(m));
-  }
+  void setUniformValue(const std::string& name, const MutableMatrix44D& m);
   
-  void multiplyValueOfUniform(const std::string& name, const MutableMatrix44D& m){
-    MutableMatrix44D parentsMatrix = getAccumulatedMatrixFromParent(name);
-    setValueToUniform(name, new GPUUniformValueMatrix4Float(parentsMatrix.multiply(m)) );
-  }
+  void multiplyUniformValue(const std::string& name, const MutableMatrix44D& m);
   
   void setAttributeValue(const std::string& name,
                          IFloatBuffer* buffer, int attributeSize,
                          int arrayElementSize, int index, bool normalized, int stride);
   
+  void setAttributeEnabled(const std::string& name, bool enabled);
+  
   void applyChanges(GL* gl, GPUProgram& prog) const;
   
-  MutableMatrix44D getAccumulatedMatrixFromParent(const std::string name);
+  MutableMatrix44D getMatrixValue(const std::string name) const;
   
   //  GPUUniformValue* getUniformValue(const std::string name) const;
 };

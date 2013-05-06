@@ -96,14 +96,14 @@ void GLState::applyChanges(GL* gl, GLState& currentState, const AttributesStruct
   
   // Vertex
   if (_vertices != NULL){
-    if ((_vertices != currentState._vertices) || (_verticesTimestamp != currentState._verticesTimestamp) ||
-        (_verticesSize != currentState._verticesSize) || (_verticesStride != currentState._verticesStride)  ) {
+//    if ((_vertices != currentState._vertices) || (_verticesTimestamp != currentState._verticesTimestamp) ||
+//        (_verticesSize != currentState._verticesSize) || (_verticesStride != currentState._verticesStride)  ) {
       nativeGL->vertexAttribPointer(attributes.Position, _verticesSize, false, _verticesStride, _vertices);
-      currentState._vertices = _vertices;
-      currentState._verticesTimestamp = _verticesTimestamp;
-      currentState._verticesSize = _verticesSize;
-      currentState._verticesStride = _verticesStride;
-    }
+//      currentState._vertices = _vertices;
+//      currentState._verticesTimestamp = _verticesTimestamp;
+//      currentState._verticesSize = _verticesSize;
+//      currentState._verticesStride = _verticesStride;
+//    }
   }
   
   // Vertices Position

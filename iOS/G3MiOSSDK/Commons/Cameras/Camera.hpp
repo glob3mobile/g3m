@@ -21,9 +21,10 @@
 #include "Vector3F.hpp"
 #include "Effects.hpp"
 
-#include "GPUProgramState.hpp"
+//#include "GPUProgramState.hpp"
 
 class ILogger;
+class GPUProgramState;
 
 
 class CameraDirtyFlags {
@@ -260,10 +261,7 @@ public:
   /**
    Setting projection and modelview matrix
    */
-  void applyOnGPUProgramState(GPUProgramState& state) const{
-    state.setValueToUniform("Projection", getProjectionMatrix());
-    state.setValueToUniform("Modelview", getModelMatrix());
-  }
+  void applyOnGPUProgramState(GPUProgramState& state) const;
 
 
 private:

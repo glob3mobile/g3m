@@ -69,6 +69,18 @@ void GPUProgramState::applyChanges(GL* gl, GPUProgram& prog) const{
     }
   }
   
+  for(std::map<std::string, bool> ::const_iterator it = _attributesEnabled.begin();
+      it != _attributesEnabled.end();
+      it++){
+    std::string name = it->first;
+    GPUAttribute* a = prog.getGPUAttribute(name);
+    if (a == NULL){
+      ILogger::instance()->logError("ATTRIBUTE NOT FOUND " + name + ". COULDN'T CHANGE ENABLED STATE.");
+    } else{
+      a->setEnable(it->second);
+    }
+  }
+  
   for(std::map<std::string, GPUAttributeValue*> ::const_iterator it = _attributesValues.begin();
       it != _attributesValues.end();
       it++){
@@ -99,7 +111,11 @@ void GPUProgramState::applyChanges(GL* gl, GPUProgram& prog) const{
     }
     
     if (type == GLType::glFloat() && size == 3){
-      GPUAttributeVec3Float* a = prog.getGPUAttributeVec3Float(name);
+      GPUAttribute* a = prog.getGPUAttributeVec3Float(name);
+      if (a == NULL){
+        a = prog.getGPUAttributeVec4Float(name); //A VEC3 COLUD BE STORED IN A VEC4 ATTRIBUTE
+      }
+      
       if (a == NULL){
         ILogger::instance()->logError("ATTRIBUTE NOT FOUND " + name);
       } else{
@@ -174,21 +190,64 @@ void GPUProgramState::setAttributeValue(const std::string& name,
   }
 }
 
-MutableMatrix44D GPUProgramState::getAccumulatedMatrixFromParent(const std::string name){
+MutableMatrix44D GPUProgramState::getMatrixValue(const std::string name) const{
   
-  MutableMatrix44D m;
-  if (_parentState == NULL){
-    MutableMatrix44D m = MutableMatrix44D::identity();
-  } else{
-    std::map<std::string, GPUUniformValue*> ::const_iterator it = _parentState->_uniformValues.find(name);
-    if (it != _uniformValues.end()){
-      GPUUniformValue* uv = it->second;
-      if (uv->getType() == GLType::glMatrix4Float()){
-        GPUUniformValueMatrix4Float *uvm = (GPUUniformValueMatrix4Float *) uv;
-        m = m.multiply(uvm->getValue());
-      }
+  std::map<std::string, GPUUniformValue*> ::const_iterator it = _uniformValues.find(name);
+  if (it != _uniformValues.end()){
+    GPUUniformValue* uv = it->second;
+    if (uv->getType() == GLType::glMatrix4Float()){
+      GPUUniformValueMatrix4Float *uvm = (GPUUniformValueMatrix4Float *) uv;
+      return uvm->getValue();
     }
   }
+  
+  return MutableMatrix44D::identity();
+}
 
-  return m;
+void GPUProgramState::setUniformValue(const std::string& name, bool b){
+  setUniformValue(name, new GPUUniformValueBool(b) );
+}
+
+void GPUProgramState::setUniformValue(const std::string& name, float f){
+  setUniformValue(name, new GPUUniformValueFloat(f));
+}
+
+void GPUProgramState::setUniformValue(const std::string& name, const Vector2D& v){
+  setUniformValue(name, new GPUUniformValueVec2Float(v._x, v._y));
+}
+
+void GPUProgramState::setUniformValue(const std::string& name, double x, double y, double z, double w){
+  setUniformValue(name, new GPUUniformValueVec4Float(x,y,z,w));
+}
+
+void GPUProgramState::setUniformValue(const std::string& name, const MutableMatrix44D& m){
+  setUniformValue(name, new GPUUniformValueMatrix4Float(m));
+}
+
+void GPUProgramState::multiplyUniformValue(const std::string& name, const MutableMatrix44D& m){
+  MutableMatrix44D parentM = _parentState->getMatrixValue(name);
+  MutableMatrix44D thisM = _parentState->getMatrixValue(name);
+  
+  MutableMatrix44D acumulatedM;
+  if (parentM.isIdentity()){
+    acumulatedM = thisM;
+  } else{
+    if (thisM.isIdentity()){
+      acumulatedM = parentM;
+    } else{
+      acumulatedM = parentM.multiply(thisM);
+    }
+  }
+  
+  if (acumulatedM.isIdentity()){
+    acumulatedM = acumulatedM.multiply(m);
+  } else{
+    acumulatedM = m;
+  }
+  
+  setUniformValue(name, new GPUUniformValueMatrix4Float(acumulatedM ));
+}
+
+void GPUProgramState::setAttributeEnabled(const std::string& name, bool enabled){
+  _attributesEnabled[name] = enabled;
 }

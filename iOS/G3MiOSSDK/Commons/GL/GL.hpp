@@ -218,6 +218,14 @@ public:
   void useProgram(GPUProgram* program) ;
   
   void setUniformsDefaultValues() const;
+  
+  void enableVertexAttribArray(int location) const{
+    _nativeGL->enableVertexAttribArray(location);
+  }
+  
+  void disableVertexAttribArray(int location) const{
+    _nativeGL->disableVertexAttribArray(location);
+  }
 };
 
 #endif

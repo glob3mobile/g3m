@@ -113,7 +113,7 @@ void BusyMeshRenderer::render(const G3MRenderContext* rc,
   //modelview->set(MutableMatrix44D::identity());
   
   
-  _programState.setValueToUniform("Projection", M);
+  _programState.setUniformValue("Projection", M);
   //_programState.setValueToUniform("Modelview", MutableMatrix44D::identity());
   
   //_programState.setValueToUniform("Modelview", MutableMatrix44D::identity());
@@ -128,7 +128,7 @@ void BusyMeshRenderer::render(const G3MRenderContext* rc,
   MutableMatrix44D R1 = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, -1));
   //state.multiplyModelViewMatrix(R1);
   
-  _programState.setValueToUniform("Modelview", R1);
+  _programState.setUniformValue("Modelview", R1);
 
   // draw mesh
   _mesh->render(rc, state, &_programState);

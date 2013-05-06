@@ -138,8 +138,9 @@ void GL::drawElements(int mode,
                                  indices->description().c_str());
   }
   
-  setGLState(state);
+  
   setProgramState(progManager, *gpuState);
+  setGLState(state);
   
   _nativeGL->drawElements(mode,
                           indices->size(),
@@ -158,8 +159,9 @@ void GL::drawArrays(int mode,
                                  count);
   }
   
-  setGLState(state);
+  
   setProgramState(progManager, *gpuState);
+  setGLState(state);
   
   _nativeGL->drawArrays(mode,
                         first,

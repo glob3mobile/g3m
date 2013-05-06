@@ -81,7 +81,7 @@
 #import <G3MiOSSDK/GEOMultiLine2DSymbol.hpp>
 #import <G3MiOSSDK/GEOLine2DStyle.hpp>
 
-#include "GPUProgramFactory.hpp"
+#include <G3MiOSSDK/GPUProgramFactory.hpp>
 
 
 class TestVisibleSectorListener : public VisibleSectorListener {

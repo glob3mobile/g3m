@@ -57,7 +57,7 @@ public:
       ILogger::instance()->logError("Attempting to set uniform " + _name + "with invalid value type.");
       return;
     }
-    if (_value == NULL || _value->isEqualsTo(v)){
+    if (_value == NULL || !_value->isEqualsTo(v)){
       _dirty = true;
       if (_value != NULL){
         delete _value;
@@ -78,7 +78,7 @@ class GPUUniformValueBool:public GPUUniformValue{
 public:
   const bool _value;
   
-  GPUUniformValueBool(bool b):_value(b),GPUUniformValue(GLType::glBool()){}
+  GPUUniformValueBool(bool b):_value(b),GPUUniformValue(GLType::glBool()){} 
   
   void setUniform(GL* gl, const IGLUniformID* id) const{
     if (_value) gl->uniform1i(id, 1);

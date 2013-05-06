@@ -37,10 +37,7 @@ class GPUProgram{
   void getVariables(GL* gl);
   
   GPUProgram(){}
-  
-  GPUUniform* getUniform(const std::string name) const;
-  //Uniform* getUniform(const std::string name) const;
-  GPUAttribute* getAttribute(const std::string name) const;
+
   
 public:
   
@@ -54,6 +51,10 @@ public:
   int getProgramID() const{ return _programID;}
   bool isCreated() const{ return _programCreated;}
   void deleteProgram(GL* gl, int p);
+  
+  
+  GPUUniform* getGPUUniform(const std::string name) const;
+  GPUAttribute* getGPUAttribute(const std::string name) const;
   
   GPUUniformBool* getGPUUniformBool(const std::string name) const;
   GPUUniformVec2Float* getGPUUniformVec2Float(const std::string name) const;

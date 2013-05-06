@@ -55,6 +55,10 @@ protected:
   const int _type;
   const int _size;
   
+  
+  bool _dirtyEnabled;
+  bool _enabled;
+  
 public:
   
   virtual ~GPUAttribute(){
@@ -67,7 +71,9 @@ public:
   _dirty(false),
   _value(NULL),
   _type(type),
-  _size(size){}
+  _size(size),
+  _enabled(true),
+  _dirtyEnabled(false){}
   
   const std::string getName() const{ return _name;}
   const int getID() const{ return _id;}
@@ -75,21 +81,38 @@ public:
   int getSize() const{ return _size;}
   
   void set(GPUAttributeValue* v){
-    if (_type != v->getType() || _size != v->getAttributeSize()){ //type checking
+    if (_type != v->getType()){ //type checking
       delete v;
-      ILogger::instance()->logError("Attempting to set uniform " + _name + "with invalid value type.");
+      ILogger::instance()->logError("Attempting to set attribute " + _name + "with invalid value type.");
       return;
     }
-    if (_value == NULL || _value->isEqualsTo(v)){
+    if (_value == NULL || !_value->isEqualsTo(v)){
       _dirty = true;
       if (_value != NULL){
         delete _value;
       }
       _value = v->shallowCopy();
+      delete v;
+    }
+  }
+  
+  void setEnable(bool b){
+    if (b != _enabled){
+      _enabled = b;
+      _dirtyEnabled = true;
     }
   }
   
   virtual void applyChanges(GL* gl){
+    if (_dirtyEnabled){
+      _dirtyEnabled = false;
+      if (_enabled){
+        gl->enableVertexAttribArray(_id);
+      } else{
+        gl->disableVertexAttribArray(_id);
+      }
+    }
+    
     if (_dirty){
       _value->setAttribute(gl, _id);
       _dirty = false;
@@ -109,7 +132,7 @@ public:
   GPUAttributeValue(GLType::glFloat(), attributeSize, arrayElementSize, index, stride, normalized){}
   
   void setAttribute(GL* gl, const int id) const{
-    gl->vertexAttribPointer(_index, _attributeSize, _normalized, _stride, _buffer);
+    gl->vertexAttribPointer(_index, _arrayElementSize, _normalized, _stride, _buffer);
   }
   
   bool isEqualsTo(const GPUAttributeValue* v) const{

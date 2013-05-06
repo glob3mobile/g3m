@@ -16,8 +16,7 @@
 #include "GL.hpp"
 #include "Vector2F.hpp"
 
-#include "GPUProgram.hpp"
-#include "GPUProgramManager.hpp"
+#include "GPUProgramState.hpp"
 
 void Camera::initialize(const G3MContext* context)
 {
@@ -332,4 +331,9 @@ void Camera::setPointOfView(const Geodetic3D& center,
   setCenter(cartesianCenter.asMutableVector3D());
   setUp(finalUp.asMutableVector3D());
 //  _dirtyFlags.setAll(true);
+}
+
+void Camera::applyOnGPUProgramState(GPUProgramState& state) const{
+  state.setUniformValue("Projection", getProjectionMatrix());
+  state.setUniformValue("Modelview", getModelMatrix());
 }
