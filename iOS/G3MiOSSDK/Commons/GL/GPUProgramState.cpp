@@ -30,17 +30,17 @@ void GPUProgramState::setValuesOntoGPUProgram(GPUProgram& prog) const
         } else{
           if (type == GLType::glFloat()){
             u = prog.getGPUUniformFloat(name);
-          } else{
+          } else
             if (type == GLType::glMatrix4Float()){
               u = prog.getGPUUniformMatrix4Float(name);
             }
-          }
         }
       }
     }
     
+    
     if (u == NULL){
-      ILogger::instance()->logError("UNIFORM NOT FOUND");
+      ILogger::instance()->logError("UNIFORM " + name + " NOT FOUND");
     } else{
       u->set(v);
     }

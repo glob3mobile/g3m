@@ -120,12 +120,12 @@ void BusyQuadRenderer::render(const G3MRenderContext* rc,
                                                                             -halfWidth, halfWidth);
   //state.getProgram()->setUniform(rc->getGL(), "Projection", M);
   
-  GPUProgram* prog = rc->getGPUProgramManager()->getProgram("DefaultProgram");
-  int _WORKING_JM;
+//  GPUProgram* prog = rc->getGPUProgramManager()->getProgram("DefaultProgram");
+//  int _WORKING_JM;
 //  UniformMatrix4Float* projection = prog->getUniformMatrix4Float("Projection");
 //  UniformMatrix4Float* modelview = prog->getUniformMatrix4Float("Modelview");
   
-  state.setProgram(prog);
+//  state.setProgram(prog);
 //  projection->set(M);
   //modelview->set(MutableMatrix44D::identity());
   //state.setProjectionMatrix(M);

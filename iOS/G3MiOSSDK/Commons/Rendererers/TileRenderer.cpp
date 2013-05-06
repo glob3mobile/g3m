@@ -358,6 +358,9 @@ void TileRenderer::initialize(const G3MContext* context) {
   if (_elevationDataProvider != NULL) {
     _elevationDataProvider->initialize(context);
   }
+  
+  //Initializing program State
+  _programState.setUniformValue("BillBoard", false);
 }
 
 bool TileRenderer::isReadyToRender(const G3MRenderContext *rc) {

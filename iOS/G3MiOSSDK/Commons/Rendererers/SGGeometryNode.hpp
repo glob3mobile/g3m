@@ -55,6 +55,8 @@ public:
     return NULL;
   }
   
+  GPUProgramState * createGPUProgramState(const G3MRenderContext *rc, const GPUProgramState *parentState);
+  
 };
 
 #endif

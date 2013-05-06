@@ -20,13 +20,13 @@
 void GLState::applyChanges(GL* gl, GLState& currentState, const AttributesStruct& attributes,const UniformsStruct& uniforms) const{
   
   //Program
-  if (_program != NULL){
-    if( currentState._program != _program){
-      gl->useProgram(_program);
-      currentState._program = _program;
-    }
-    _program->applyChanges(gl);
-  }
+//  if (_program != NULL){
+//    if( currentState._program != _program){
+//      gl->useProgram(_program);
+//      currentState._program = _program;
+//    }
+//    _program->applyChanges(gl);
+//  }
   
   INativeGL* nativeGL = gl->getNative();
   
@@ -74,24 +74,24 @@ void GLState::applyChanges(GL* gl, GLState& currentState, const AttributesStruct
     currentState._texture2D = _texture2D;
   }
   
-  // VertexColor
-  if (_vertexColor != currentState._vertexColor) {
-    if (_vertexColor) {
-      nativeGL->uniform1i(uniforms.EnableColorPerVertex, 1);
-      nativeGL->enableVertexAttribArray(attributes.Color);
-    }else {
-      nativeGL->disableVertexAttribArray(attributes.Color);
-      nativeGL->uniform1i(uniforms.EnableColorPerVertex, 0);
-    }
-    currentState._vertexColor = _vertexColor;
-  }
-  if (_vertexColor) {
-    if ((_colors != currentState._colors) || (_colorsTimeStamp != currentState._colorsTimeStamp)) {
-      nativeGL->vertexAttribPointer(attributes.Color, 4, false, 0, _colors);
-      currentState._colors = _colors;
-      currentState._colorsTimeStamp = _colorsTimeStamp;
-    }
-  }
+//  // VertexColor
+//  if (_vertexColor != currentState._vertexColor) {
+//    if (_vertexColor) {
+//      nativeGL->uniform1i(uniforms.EnableColorPerVertex, 1);
+//      nativeGL->enableVertexAttribArray(attributes.Color);
+//    }else {
+//      nativeGL->disableVertexAttribArray(attributes.Color);
+//      nativeGL->uniform1i(uniforms.EnableColorPerVertex, 0);
+//    }
+//    currentState._vertexColor = _vertexColor;
+//  }
+//  if (_vertexColor) {
+//    if ((_colors != currentState._colors) || (_colorsTimeStamp != currentState._colorsTimeStamp)) {
+//      nativeGL->vertexAttribPointer(attributes.Color, 4, false, 0, _colors);
+//      currentState._colors = _colors;
+//      currentState._colorsTimeStamp = _colorsTimeStamp;
+//    }
+//  }
   
   
   // Vertex
@@ -249,22 +249,22 @@ void GLState::applyChanges(GL* gl, GLState& currentState, const AttributesStruct
     }
   }
   
-  if (_billboarding != currentState._billboarding){
-    if (_billboarding){
-      nativeGL->uniform1i(uniforms.BillBoard, 1);
-    } else{
-      nativeGL->uniform1i(uniforms.BillBoard, 0);
-    }
-    currentState._billboarding = _billboarding;
-  }
+//  if (_billboarding != currentState._billboarding){
+//    if (_billboarding){
+//      nativeGL->uniform1i(uniforms.BillBoard, 1);
+//    } else{
+//      nativeGL->uniform1i(uniforms.BillBoard, 0);
+//    }
+//    currentState._billboarding = _billboarding;
+//  }
   
-  //Viewport
-  if (_viewportHeight != currentState._viewportHeight || _viewportWidth != currentState._viewportWidth){
-    nativeGL->uniform2f(uniforms.ViewPortExtent, _viewportWidth, _viewportHeight);
-    
-    currentState._viewportWidth = _viewportWidth;
-    currentState._viewportHeight = _viewportHeight;
-  }
+//  //Viewport
+//  if (_viewportHeight != currentState._viewportHeight || _viewportWidth != currentState._viewportWidth){
+//    nativeGL->uniform2f(uniforms.ViewPortExtent, _viewportWidth, _viewportHeight);
+//    
+//    currentState._viewportWidth = _viewportWidth;
+//    currentState._viewportHeight = _viewportHeight;
+//  }
   
   if (_pixelStoreIAlignmentUnpack != -1 && _pixelStoreIAlignmentUnpack != currentState._pixelStoreIAlignmentUnpack){
     nativeGL->pixelStorei(GLAlignment::unpack(), _pixelStoreIAlignmentUnpack);

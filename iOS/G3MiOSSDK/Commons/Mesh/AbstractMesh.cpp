@@ -135,6 +135,7 @@ void AbstractMesh::render(const G3MRenderContext *rc,
   
   if (_colors != NULL){
     progState.setAttributeEnabled("Color", true);
+    progState.setUniformValue("EnableColorPerVertex", true);
     progState.setAttributeValue("Color",
                                 _colors, 4,   //The attribute is a float vector of 4 elements RGBA
                                 4,            //Our buffer contains elements of 4
@@ -143,6 +144,9 @@ void AbstractMesh::render(const G3MRenderContext *rc,
                                 0);           //Stride 0
     
     progState.setUniformValue("FlatColorIntensity", _colorsIntensity);
+  } else{
+    progState.setAttributeEnabled("Color", false);
+    progState.setUniformValue("EnableColorPerVertex", false);
   }
   
   if (_flatColor != NULL){

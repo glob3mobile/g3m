@@ -175,3 +175,7 @@ void TrailsRenderer::render(const G3MRenderContext* rc,
     trail->render(rc, parentState, &_programState);
   }
 }
+
+void TrailsRenderer::initialize(const G3MContext* context) {
+  _programState.setUniformValue("BillBoard", false);
+}

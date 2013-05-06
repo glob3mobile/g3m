@@ -101,33 +101,12 @@ void BusyMeshRenderer::render(const G3MRenderContext* rc,
   MutableMatrix44D M = MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth, halfWidth,
                                                                             -halfHeight, halfHeight,
                                                                             -halfWidth, halfWidth);
-  
-  //state.getProgram()->setUniform(rc->getGL(), "Projection", M);
-  
-  //GPUProgram* prog = rc->getGPUProgramManager()->getProgram("DefaultProgram");
-  int _WORKING_JM;
-//  UniformMatrix4Float* projection = prog->getUniformMatrix4Float("Projection");
-//  UniformMatrix4Float* modelview = prog->getUniformMatrix4Float("Modelview");
-  //state.setProgram(prog);
-//  projection->set(M);
-  //modelview->set(MutableMatrix44D::identity());
-  
-  
   _programState.setUniformValue("Projection", M);
-  //_programState.setValueToUniform("Modelview", MutableMatrix44D::identity());
-  
-  //_programState.setValueToUniform("Modelview", MutableMatrix44D::identity());
-  
-  //state.setProjectionMatrix(M);
-  //state.setModelViewMatrix(MutableMatrix44D::identity());
-
   // clear screen
   state.setClearColor(*_backgroundColor);
   gl->clearScreen(state);
 
   MutableMatrix44D R1 = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, -1));
-  //state.multiplyModelViewMatrix(R1);
-  
   _programState.setUniformValue("Modelview", R1);
 
   // draw mesh

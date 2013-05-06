@@ -48,7 +48,7 @@ public:
   }
 
   void initialize(const G3MContext* context) {
-
+    _programState.setUniformValue("BillBoard", false);
   }
 
   bool isReadyToRender(const G3MRenderContext* rc) {

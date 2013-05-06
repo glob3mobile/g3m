@@ -111,9 +111,7 @@ public:
 
   }
 
-  void initialize(const G3MContext* context) {
-
-  }
+  void initialize(const G3MContext* context);
 
   bool isReadyToRender(const G3MRenderContext* rc) {
     return true;

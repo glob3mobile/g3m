@@ -62,6 +62,10 @@ void MarksRenderer::initialize(const G3MContext* context) {
     Mark* mark = _marks[i];
     mark->initialize(context, _downloadPriority);
   }
+  
+  //Creating program state
+  _programState.setAttributeEnabled("Position", true);
+  _programState.setUniformValue("BillBoard", true);
 }
 
 void MarksRenderer::addMark(Mark* mark) {
@@ -192,13 +196,15 @@ void MarksRenderer::render(const G3MRenderContext* rc,
   state.enableBlend();
   state.enableTextures();
   
-  GPUProgram* prog = rc->getGPUProgramManager()->getProgram("DefaultProgram");
+//  GPUProgram* prog = rc->getGPUProgramManager()->getProgram("DefaultProgram");
   int _WORKING_JM;
   //UniformBool* enableTexture = prog->getUniformBool("EnableTexture");
   //enableTexture->set(true);
   
   state.enableTexture2D();
-  state.enableVerticesPosition();
+  //state.enableVerticesPosition();
+  
+  
   
   Vector2D textureTranslation(0.0, 0.0);
   Vector2D textureScale(1.0, 1.0);
@@ -211,9 +217,10 @@ void MarksRenderer::render(const G3MRenderContext* rc,
   const Camera* camera = rc->getCurrentCamera();
   const Vector3D cameraPosition = camera->getCartesianPosition();
   
-  state.enableBillboarding();
-  state.setViewportSize(camera->getWidth(),
-                        camera->getHeight());
+  //state.enableBillboarding();
+//  state.setViewportSize(camera->getWidth(),
+//                        camera->getHeight());
+  _programState.setUniformValue("ViewPortExtent", Vector2D( (double)camera->getWidth(), (double)camera->getHeight() ));
 
   state.setTextureCoordinates(gl->getBillboardTexCoord(), 2, 0);
 

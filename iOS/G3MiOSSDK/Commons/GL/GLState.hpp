@@ -32,19 +32,19 @@ private:
   bool _blend;
   bool _textures;
   bool _texture2D;
-  bool _vertexColor;
-  bool _verticesPosition;
+//  bool _vertexColor;
+//  bool _verticesPosition;
   bool _flatColor;
   bool _cullFace;
   int  _culledFace;
   
-  IFloatBuffer* _colors; //Vertex colors
-  int           _colorsTimeStamp;
-  float         _intensity;
-  float         _flatColorR;
-  float         _flatColorG;
-  float         _flatColorB;
-  float         _flatColorA;
+//  IFloatBuffer* _colors; //Vertex colors
+//  int           _colorsTimeStamp;
+//  float         _intensity;
+//  float         _flatColorR;
+//  float         _flatColorG;
+//  float         _flatColorB;
+//  float         _flatColorA;
   
 //  IFloatBuffer* _vertices;
 //  int           _verticesTimestamp;
@@ -84,11 +84,11 @@ private:
   int _blendDFactor;
   
   //Billboarding
-  bool _billboarding;
+//  bool _billboarding;
   
-  //Viewport
-  int _viewportWidth;
-  int _viewportHeight;
+//  //Viewport
+//  int _viewportWidth;
+//  int _viewportHeight;
   
   //Texture Parameters
   int _pixelStoreIAlignmentUnpack;
@@ -102,7 +102,7 @@ private:
   MutableMatrix44D _projectionMatrix;
   MutableMatrix44D _modelViewMatrix;
   
-  GPUProgram* _program;
+//  GPUProgram* _program;
   
   
   GLState() :
@@ -110,18 +110,18 @@ private:
   _blend(false),
   _textures(false),
   _texture2D(false),
-  _vertexColor(false),
-  _verticesPosition(false),
+//  _vertexColor(false),
+//  _verticesPosition(false),
   _flatColor(false),
   _cullFace(true),
   _culledFace(GLCullFace::back()),
-  _colors(NULL),
-  _colorsTimeStamp(0),
-  _intensity(0),
-  _flatColorR(0),
-  _flatColorG(0),
-  _flatColorB(0),
-  _flatColorA(0),
+//  _colors(NULL),
+//  _colorsTimeStamp(0),
+//  _intensity(0),
+//  _flatColorR(0),
+//  _flatColorG(0),
+//  _flatColorB(0),
+//  _flatColorA(0),
   _lineWidth(1),
   _pointSize(1),
   _polygonOffsetFactor(0),
@@ -142,9 +142,9 @@ private:
   _textureCoordinatesTranslationX(0.0),
   _textureCoordinatesTranslationY(0.0),
   _boundTextureId(NULL),
-  _billboarding(false),
-  _viewportHeight(0),
-  _viewportWidth(0),
+//  _billboarding(false),
+//  _viewportHeight(0),
+//  _viewportWidth(0),
   _pixelStoreIAlignmentUnpack(-1),
   _clearColorR(0.0),
   _clearColorG(0.0),
@@ -153,8 +153,8 @@ private:
   _projectionMatrix(MutableMatrix44D::invalid()),
   _modelViewMatrix(MutableMatrix44D::invalid()),
   _textureWidth(0.0),
-  _textureHeight(0.0),
-  _program(NULL)
+  _textureHeight(0.0)
+//  _program(NULL)
   {
   }
   
@@ -170,18 +170,18 @@ public:
   _blend(parentState._blend),
   _textures(parentState._textures),
   _texture2D(parentState._texture2D),
-  _vertexColor(parentState._vertexColor),
-  _verticesPosition(parentState._verticesPosition),
+//  _vertexColor(parentState._vertexColor),
+//  _verticesPosition(parentState._verticesPosition),
   _flatColor(parentState._flatColor),
   _cullFace(parentState._cullFace),
   _culledFace(parentState._culledFace),
-  _colors(parentState._colors),
-  _colorsTimeStamp(parentState._colorsTimeStamp),
-  _intensity(parentState._intensity),
-  _flatColorR(parentState._flatColorR),
-  _flatColorG(parentState._flatColorG),
-  _flatColorB(parentState._flatColorB),
-  _flatColorA(parentState._flatColorA),
+//  _colors(parentState._colors),
+//  _colorsTimeStamp(parentState._colorsTimeStamp),
+//  _intensity(parentState._intensity),
+//  _flatColorR(parentState._flatColorR),
+//  _flatColorG(parentState._flatColorG),
+//  _flatColorB(parentState._flatColorB),
+//  _flatColorA(parentState._flatColorA),
   _lineWidth(parentState._lineWidth),
   _pointSize(parentState._pointSize),
   _polygonOffsetFactor(parentState._polygonOffsetFactor),
@@ -202,33 +202,33 @@ public:
   _textureCoordinatesTranslationX(parentState._textureCoordinatesTranslationX),
   _textureCoordinatesTranslationY(parentState._textureCoordinatesTranslationY),
   _boundTextureId(parentState._boundTextureId),
-  _billboarding(parentState._billboarding),
-  _viewportWidth(parentState._viewportWidth),
-  _viewportHeight(parentState._viewportHeight),
+//  _billboarding(parentState._billboarding),
+//  _viewportWidth(parentState._viewportWidth),
+//  _viewportHeight(parentState._viewportHeight),
   _pixelStoreIAlignmentUnpack(parentState._pixelStoreIAlignmentUnpack),
   _clearColorR(parentState._clearColorR),
   _clearColorG(parentState._clearColorG),
   _clearColorB(parentState._clearColorB),
   _clearColorA(parentState._clearColorA),
   _projectionMatrix(parentState._projectionMatrix),
-  _modelViewMatrix(parentState._modelViewMatrix),
-  _program(parentState._program)
+  _modelViewMatrix(parentState._modelViewMatrix)
+//  _program(parentState._program)
   {
   }
   
   ~GLState() {}
   
-  void enableBillboarding(){
-    _billboarding = true;
-  }
-  void disableBillboarding(){
-    _billboarding = false;
-  }
+//  void enableBillboarding(){
+//    _billboarding = true;
+//  }
+//  void disableBillboarding(){
+//    _billboarding = false;
+//  }
   
-  void setViewportSize(int w, int h){
-    _viewportWidth = w;
-    _viewportHeight = h;
-  }
+//  void setViewportSize(int w, int h){
+//    _viewportWidth = w;
+//    _viewportHeight = h;
+//  }
   
   void enableDepthTest() {
       _depthTest = true;
@@ -262,24 +262,24 @@ public:
   }
   bool isEnabledTexture2D() const { return _texture2D; }
   
-  void enableVertexColor(IFloatBuffer* colors,
-                         float intensity) {
-      _vertexColor  = true;
-      _colors       = colors;
-      _intensity    = intensity;
-      _colorsTimeStamp = colors->timestamp();
-  }
-  void disableVertexColor() { _vertexColor = false; }
-  bool isEnabledVertexColor() const { return _vertexColor; }
-  IFloatBuffer* getColors() const { return _colors; }
-  float getIntensity() const { return _intensity; }
+//  void enableVertexColor(IFloatBuffer* colors,
+//                         float intensity) {
+//      _vertexColor  = true;
+//      _colors       = colors;
+//      _intensity    = intensity;
+//      _colorsTimeStamp = colors->timestamp();
+//  }
+//  void disableVertexColor() { _vertexColor = false; }
+//  bool isEnabledVertexColor() const { return _vertexColor; }
+//  IFloatBuffer* getColors() const { return _colors; }
+//  float getIntensity() const { return _intensity; }
   
-  void enableVerticesPosition() {
-    _verticesPosition = true;
-  }
+//  void enableVerticesPosition() {
+//    _verticesPosition = true;
+//  }
   
-  void disableVerticesPosition() { _verticesPosition = false; }
-  bool isEnabledVerticesPosition() const { return _verticesPosition; }
+//  void disableVerticesPosition() { _verticesPosition = false; }
+//  bool isEnabledVerticesPosition() const { return _verticesPosition; }
   
 //  void enableFlatColor(const Color& color,
 //                       float intensity) {
@@ -292,9 +292,9 @@ public:
 //  }
   void disableFlatColor() { _flatColor = false; }
   bool isEnabledFlatColor() const { return _flatColor; }
-  Color getFlatColor() const {
-    return Color::fromRGBA(_flatColorR, _flatColorG, _flatColorB, _flatColorA);
-  }
+//  Color getFlatColor() const {
+//    return Color::fromRGBA(_flatColorR, _flatColorG, _flatColorB, _flatColorA);
+//  }
   
   void enableCullFace(int face) {
     _cullFace   = true;
@@ -410,9 +410,9 @@ public:
   
   void applyChanges(GL* gl, GLState& currentState, const AttributesStruct& attributes,const UniformsStruct& uniforms) const;
   
-  void setProgram(GPUProgram* program){
-    _program = program;
-  }
+//  void setProgram(GPUProgram* program){
+//    _program = program;
+//  }
   
 //  GPUProgram* getProgram() const{
 //    return _program;
