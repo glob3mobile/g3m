@@ -72,7 +72,7 @@ public:
   _value(NULL),
   _type(type),
   _size(size),
-  _enabled(true),
+  _enabled(false),
   _dirtyEnabled(false){}
   
   const std::string getName() const{ return _name;}

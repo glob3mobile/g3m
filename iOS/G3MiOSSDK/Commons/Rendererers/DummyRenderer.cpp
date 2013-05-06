@@ -74,19 +74,20 @@ void DummyRenderer::drawFace(GL* gl, const GLState& parentState,
                              const Vector3D& rotationAxis, GPUProgramManager &manager,
                              const GPUProgramState* parentProgramState) const
 {
-  GLState state(parentState);
-  
-  state.enableFlatColor(color, (float)1.0);
-  MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(translation);
-  MutableMatrix44D R = MutableMatrix44D::createRotationMatrix(a, rotationAxis);
-  
-  state.multiplyModelViewMatrix(T.multiply(R));
-  gl->drawElements(GLPrimitive::triangleStrip(), _indices, state, manager, parentProgramState);
+  //TODO: Adapt to gpuprogramstate
+//  GLState state(parentState);
+//  
+//  state.enableFlatColor(color, (float)1.0);
+//  MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(translation);
+//  MutableMatrix44D R = MutableMatrix44D::createRotationMatrix(a, rotationAxis);
+//  
+//  state.multiplyModelViewMatrix(T.multiply(R));
+//  gl->drawElements(GLPrimitive::triangleStrip(), _indices, state, manager, parentProgramState);
 }
 
 void DummyRenderer::render(const G3MRenderContext* rc,
                            const GLState& parentState) {
-  
+  /*
   GPUProgramState progState(NULL);
   
   GLState state(parentState);
@@ -123,4 +124,5 @@ void DummyRenderer::render(const G3MRenderContext* rc,
            Color::fromRGBA((float) 0.5,(float)  0.5, (float) 0.5, (float) 1),
            Vector3D(-_halfSize,0,0),
            Angle::fromDegrees(180), Vector3D(0,0,1), *manager, &progState);
+   */
 }

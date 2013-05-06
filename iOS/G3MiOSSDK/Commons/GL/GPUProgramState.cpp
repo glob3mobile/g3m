@@ -8,12 +8,8 @@
 
 #include "GPUProgramState.hpp"
 
-void GPUProgramState::applyChanges(GL* gl, GPUProgram& prog) const{
-  
-  if (_parentState != NULL){
-    _parentState->applyChanges(gl, prog);
-  }
-  
+void GPUProgramState::setValuesOntoGPUProgram(GPUProgram& prog) const
+{
   for(std::map<std::string, GPUUniformValue*> ::const_iterator it = _uniformValues.begin();
       it != _uniformValues.end();
       it++){
@@ -21,51 +17,32 @@ void GPUProgramState::applyChanges(GL* gl, GPUProgram& prog) const{
     std::string name = it->first;
     GPUUniformValue* v = it->second;
     
+    GPUUniform* u = NULL;
     const int type = v->getType();
     if (type == GLType::glBool()){
-      GPUUniformBool* u = prog.getGPUUniformBool(name);
-      if (u == NULL){
-        ILogger::instance()->logError("UNIFORM NOT FOUND");
+      u = prog.getGPUUniformBool(name);
+    } else {
+      if (type == GLType::glVec2Float()){
+        u = prog.getGPUUniformVec2Float(name);
       } else{
-        u->set(v);
+        if (type == GLType::glVec4Float()){
+          u = prog.getGPUUniformVec4Float(name);
+        } else{
+          if (type == GLType::glFloat()){
+            u = prog.getGPUUniformFloat(name);
+          } else{
+            if (type == GLType::glMatrix4Float()){
+              u = prog.getGPUUniformMatrix4Float(name);
+            }
+          }
+        }
       }
-      continue;
     }
-    if (type == GLType::glVec2Float()){
-      GPUUniformVec2Float* u = prog.getGPUUniformVec2Float(name);
-      if (u == NULL){
-        ILogger::instance()->logError("UNIFORM NOT FOUND");
-      } else{
-        u->set(v);
-      }
-      continue;
-    }
-    if (type == GLType::glVec4Float()){
-      GPUUniformVec4Float* u = prog.getGPUUniformVec4Float(name);
-      if (u == NULL){
-        ILogger::instance()->logError("UNIFORM NOT FOUND");
-      } else{
-        u->set(v);
-      }
-      continue;
-    }
-    if (type == GLType::glFloat()){
-      GPUUniformFloat* u = prog.getGPUUniformFloat(name);
-      if (u == NULL){
-        ILogger::instance()->logError("UNIFORM NOT FOUND");
-      } else{
-        u->set(v);
-      }
-      continue;
-    }
-    if (type == GLType::glMatrix4Float()){
-      GPUUniformMatrix4Float* u = prog.getGPUUniformMatrix4Float(name);
-      if (u == NULL){
-        ILogger::instance()->logError("UNIFORM NOT FOUND");
-      } else{
-        u->set(v);
-      }
-      continue;
+    
+    if (u == NULL){
+      ILogger::instance()->logError("UNIFORM NOT FOUND");
+    } else{
+      u->set(v);
     }
   }
   
@@ -135,6 +112,15 @@ void GPUProgramState::applyChanges(GL* gl, GPUProgram& prog) const{
     }
     
   }
+}
+
+void GPUProgramState::applyChanges(GL* gl, GPUProgram& prog) const{
+  
+  if (_parentState != NULL){
+    _parentState->setValuesOntoGPUProgram(prog);
+  }
+  
+  setValuesOntoGPUProgram(prog);
   
   prog.applyChanges(gl); //Applying changes on GPU
 }

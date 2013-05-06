@@ -16,6 +16,7 @@ class G3MContext;
 class G3MRenderContext;
 class SGShape;
 class GLState;
+class GPUProgramState;
 
 class SGNode {
 protected:
@@ -61,10 +62,10 @@ public:
   virtual bool isReadyToRender(const G3MRenderContext* rc);
   
   virtual void rawRender(const G3MRenderContext* rc,
-                         const GLState& parentState);
+                         const GLState& parentState, const GPUProgramState* parentProgramState);
   
   virtual void render(const G3MRenderContext* rc,
-                      const GLState& parentState);
+                      const GLState& parentState, const GPUProgramState* parentProgramState);
   
   //  SGShape* getShape() const {
   //    if (_shape != NULL) {
@@ -78,6 +79,9 @@ public:
   
   virtual GLState* createState(const G3MRenderContext* rc,
                                const GLState& parentState);
+  
+  virtual GPUProgramState* createGPUProgramState(const G3MRenderContext* rc,
+                                                 const GPUProgramState* parentState);
   
 };
 

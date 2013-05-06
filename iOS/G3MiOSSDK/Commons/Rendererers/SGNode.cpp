@@ -9,6 +9,7 @@
 #include "SGNode.hpp"
 
 #include "GLState.hpp"
+#include "GPUProgramState.hpp"
 
 SGNode::~SGNode() {
   const int childrenCount = _children.size();
@@ -23,7 +24,7 @@ void SGNode::initialize(const G3MContext* context,
                         SGShape *shape) {
   _context = context;
   _shape = shape;
-
+  
   const int childrenCount = _children.size();
   for (int i = 0; i < childrenCount; i++) {
     SGNode* child = _children[i];
@@ -32,7 +33,7 @@ void SGNode::initialize(const G3MContext* context,
 }
 
 void SGNode::addNode(SGNode* child) {
-//  child->setParent(this);
+  //  child->setParent(this);
   _children.push_back(child);
   if (_context != NULL) {
     child->initialize(_context, _shape);
@@ -51,23 +52,28 @@ bool SGNode::isReadyToRender(const G3MRenderContext* rc) {
       return false;
     }
   }
-
+  
   return true;
 }
 
 void SGNode::rawRender(const G3MRenderContext* rc,
-                       const GLState& parentState) {
-
+                       const GLState& parentState, const GPUProgramState* parentProgramState) {
+  
 }
 
 GLState* SGNode::createState(const G3MRenderContext* rc,
-                                   const GLState& parentState) {
+                             const GLState& parentState) {
   return  NULL;
+}
+
+GPUProgramState* SGNode::createGPUProgramState(const G3MRenderContext* rc,
+                                               const GPUProgramState* parentState){
+  return new GPUProgramState(parentState);
 }
 
 
 void SGNode::render(const G3MRenderContext* rc,
-                    const GLState& parentState) {
+                    const GLState& parentState, const GPUProgramState* parentProgramState) {
   GLState* myState = createState(rc, parentState);
   GLState* state;
   if (myState == NULL) {
@@ -76,12 +82,16 @@ void SGNode::render(const G3MRenderContext* rc,
   else {
     state = myState;
   }
-  rawRender(rc, *state);
-
+  
+  GPUProgramState* myGPUProgramState = createGPUProgramState(rc, parentProgramState);
+  rawRender(rc, *state, myGPUProgramState);
+  
   const int childrenCount = _children.size();
   for (int i = 0; i < childrenCount; i++) {
     SGNode* child = _children[i];
-    child->render(rc, *state);
+    child->render(rc, *state, parentProgramState);
   }
+  
+  delete myGPUProgramState;
   delete myState;
 }

@@ -67,6 +67,8 @@ public:
   
   MutableMatrix44D getMatrixValue(const std::string name) const;
   
+  void setValuesOntoGPUProgram(GPUProgram& prog) const;
+  
   //  GPUUniformValue* getUniformValue(const std::string name) const;
 };
 

@@ -95,27 +95,27 @@ void GLState::applyChanges(GL* gl, GLState& currentState, const AttributesStruct
   
   
   // Vertex
-  if (_vertices != NULL){
-//    if ((_vertices != currentState._vertices) || (_verticesTimestamp != currentState._verticesTimestamp) ||
-//        (_verticesSize != currentState._verticesSize) || (_verticesStride != currentState._verticesStride)  ) {
-      nativeGL->vertexAttribPointer(attributes.Position, _verticesSize, false, _verticesStride, _vertices);
-//      currentState._vertices = _vertices;
-//      currentState._verticesTimestamp = _verticesTimestamp;
-//      currentState._verticesSize = _verticesSize;
-//      currentState._verticesStride = _verticesStride;
-//    }
-  }
+//  if (_vertices != NULL){
+////    if ((_vertices != currentState._vertices) || (_verticesTimestamp != currentState._verticesTimestamp) ||
+////        (_verticesSize != currentState._verticesSize) || (_verticesStride != currentState._verticesStride)  ) {
+//      nativeGL->vertexAttribPointer(attributes.Position, _verticesSize, false, _verticesStride, _vertices);
+////      currentState._vertices = _vertices;
+////      currentState._verticesTimestamp = _verticesTimestamp;
+////      currentState._verticesSize = _verticesSize;
+////      currentState._verticesStride = _verticesStride;
+////    }
+//  }
   
   // Vertices Position
-  if (_verticesPosition != currentState._verticesPosition) {
-    if (_verticesPosition) {
-      nativeGL->enableVertexAttribArray(attributes.Position);
-    }
-    else {
-      nativeGL->disableVertexAttribArray(attributes.Position);
-    }
-    currentState._verticesPosition = _verticesPosition;
-  }
+//  if (_verticesPosition != currentState._verticesPosition) {
+//    if (_verticesPosition) {
+//      nativeGL->enableVertexAttribArray(attributes.Position);
+//    }
+//    else {
+//      nativeGL->disableVertexAttribArray(attributes.Position);
+//    }
+//    currentState._verticesPosition = _verticesPosition;
+//  }
   
   //Texture Coordinates
   if (_textureCoordinates != NULL){
@@ -154,36 +154,36 @@ void GLState::applyChanges(GL* gl, GLState& currentState, const AttributesStruct
   
   
   // Flat Color
-  if (_flatColor != currentState._flatColor) {
-    if (_flatColor) {
-      nativeGL->uniform1i(uniforms.EnableFlatColor, 1);
-    }
-    else {
-      nativeGL->uniform1i(uniforms.EnableFlatColor, 0);
-    }
-    currentState._flatColor = _flatColor;
-  }
+//  if (_flatColor != currentState._flatColor) {
+//    if (_flatColor) {
+//      nativeGL->uniform1i(uniforms.EnableFlatColor, 1);
+//    }
+//    else {
+//      nativeGL->uniform1i(uniforms.EnableFlatColor, 0);
+//    }
+//    currentState._flatColor = _flatColor;
+//  }
   
-  if (_flatColor) {
-    if ((_flatColorR != currentState._flatColorR) ||
-        (_flatColorG != currentState._flatColorG) ||
-        (_flatColorB != currentState._flatColorB) ||
-        (_flatColorA != currentState._flatColorA)
-        ) {
-      nativeGL->uniform4f(uniforms.FlatColor, _flatColorR, _flatColorG, _flatColorB,_flatColorA);
-      
-      currentState._flatColorR = _flatColorR;
-      currentState._flatColorG = _flatColorG;
-      currentState._flatColorB = _flatColorB;
-      currentState._flatColorA = _flatColorA;
-    }
-    
-    if (_intensity != currentState._intensity) {
-      nativeGL->uniform1f(uniforms.FlatColorIntensity, _intensity);
-      
-      currentState._intensity = _intensity;
-    }
-  }
+//  if (_flatColor) {
+//    if ((_flatColorR != currentState._flatColorR) ||
+//        (_flatColorG != currentState._flatColorG) ||
+//        (_flatColorB != currentState._flatColorB) ||
+//        (_flatColorA != currentState._flatColorA)
+//        ) {
+//      nativeGL->uniform4f(uniforms.FlatColor, _flatColorR, _flatColorG, _flatColorB,_flatColorA);
+//      
+//      currentState._flatColorR = _flatColorR;
+//      currentState._flatColorG = _flatColorG;
+//      currentState._flatColorB = _flatColorB;
+//      currentState._flatColorA = _flatColorA;
+//    }
+//    
+//    if (_intensity != currentState._intensity) {
+//      nativeGL->uniform1f(uniforms.FlatColorIntensity, _intensity);
+//      
+//      currentState._intensity = _intensity;
+//    }
+//  }
   
   // Cull Face
   if (_cullFace != currentState._cullFace) {

@@ -72,7 +72,7 @@ SGTextureNode::~SGTextureNode() {
 }
 
 void SGTextureNode::render(const G3MRenderContext* rc,
-                           const GLState& parentState) {
+                           const GLState& parentState, const GPUProgramState* parentProgramState) {
   GLState* myState = createState(rc, parentState);
   GLState* state2;
   if (myState == NULL) {
@@ -102,7 +102,7 @@ void SGTextureNode::render(const G3MRenderContext* rc,
     const int childrenCount = _children.size();
     for (int j = 0; j < childrenCount; j++) {
       SGNode* child = _children[j];
-      child->render(rc, *state);
+      child->render(rc, *state, parentProgramState);
     }
 
     delete layerState;

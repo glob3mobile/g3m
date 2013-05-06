@@ -118,7 +118,14 @@ void AbstractMesh::render(const G3MRenderContext *rc,
                           const GLState& parentState,
                           const GPUProgramState* parentProgramState) const {
   
+  
+  GLState state(parentState);
+  //state.enableVerticesPosition();
+  state.setLineWidth(_lineWidth);
+  state.setPointSize(_pointSize);
+  
   GPUProgramState progState(parentProgramState);
+  progState.setAttributeEnabled("Position", true);
   progState.setAttributeValue("Position",
                               _vertices, 4, //The attribute is a float vector of 4 elements
                               3,            //Our buffer contains elements of 3
@@ -126,21 +133,45 @@ void AbstractMesh::render(const G3MRenderContext *rc,
                               false,        //Not normalized
                               0);           //Stride 0
   
-  GLState state(parentState);
-  state.enableVerticesPosition();
-  state.setLineWidth(_lineWidth);
-  state.setPointSize(_pointSize);
-  if (_colors) {
-    state.enableVertexColor(_colors, _colorsIntensity);
+  if (_colors != NULL){
+    progState.setAttributeEnabled("Color", true);
+    progState.setAttributeValue("Color",
+                                _colors, 4,   //The attribute is a float vector of 4 elements RGBA
+                                4,            //Our buffer contains elements of 4
+                                0,            //Index 0
+                                false,        //Not normalized
+                                0);           //Stride 0
+    
+    progState.setUniformValue("FlatColorIntensity", _colorsIntensity);
   }
-  if (_flatColor) {
-    state.enableFlatColor(*_flatColor, _colorsIntensity);
-    if (_flatColor->isTransparent()) {
+  
+  if (_flatColor != NULL){
+    progState.setUniformValue("EnableFlatColor", true);
+    progState.setUniformValue("FlatColor",
+                              (double)_flatColor->getRed(),
+                              (double)_flatColor->getBlue(),
+                              (double) _flatColor->getGreen(),
+                              (double) _flatColor->getAlpha());
+    
+    progState.setUniformValue("FlatColorIntensity", _colorsIntensity);
+    
+    if (_flatColor->isTransparent()){
       state.enableBlend();
-      
       state.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
     }
   }
+
+//  if (_colors) {
+//    state.enableVertexColor(_colors, _colorsIntensity);
+//  }
+//  if (_flatColor) {
+//    state.enableFlatColor(*_flatColor, _colorsIntensity);
+//    if (_flatColor->isTransparent()) {
+//      state.enableBlend();
+//      
+//      state.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
+//    }
+//  }
 
 //  state.setVertices(_vertices, 3, 0);
 

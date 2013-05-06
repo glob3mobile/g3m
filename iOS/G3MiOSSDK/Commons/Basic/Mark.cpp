@@ -19,6 +19,7 @@
 #include "ITextUtils.hpp"
 #include "IImageListener.hpp"
 
+#include "GPUProgramState.hpp"
 
 class MarkLabelImageListener : public IImageListener {
 private:
@@ -344,6 +345,7 @@ void Mark::render(const G3MRenderContext* rc,
   const Vector3D* markPosition = getCartesianPosition(planet);
 
   const Vector3D markCameraVector = markPosition->sub(cameraPosition);
+  
 
   // mark will be renderered only if is renderable by distance and placed on a visible globe area
   bool renderableByDistance;
@@ -377,12 +379,21 @@ void Mark::render(const G3MRenderContext* rc,
         GL* gl = rc->getGL();
         
         IFloatBuffer* vertices = getVertices(planet);
+        
+        GPUProgramState progState(parentProgramState);
+        progState.setAttributeEnabled("Position", true);
+        progState.setAttributeValue("Position",
+                                    vertices, 4, //The attribute is a float vector of 4 elements
+                                    3,            //Our buffer contains elements of 3
+                                    0,            //Index 0
+                                    false,        //Not normalized
+                                    0);           //Stride 0
 
         GLState state(parentState);
-        state.setVertices(vertices, 3, 0);
+        //state.setVertices(vertices, 3, 0);
         state.setTextureExtent(_textureWidth, _textureHeight);
         state.bindTexture(_textureId);
-        gl->drawArrays(GLPrimitive::triangleStrip(), 0, vertices->size() / 3, state, *rc->getGPUProgramManager(), parentProgramState);
+        gl->drawArrays(GLPrimitive::triangleStrip(), 0, vertices->size() / 3, state, *rc->getGPUProgramManager(), &progState);
         
         _renderedMark = true;
       }

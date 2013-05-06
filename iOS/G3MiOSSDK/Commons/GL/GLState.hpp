@@ -46,10 +46,10 @@ private:
   float         _flatColorB;
   float         _flatColorA;
   
-  IFloatBuffer* _vertices;
-  int           _verticesTimestamp;
-  int           _verticesSize;
-  int           _verticesStride;
+//  IFloatBuffer* _vertices;
+//  int           _verticesTimestamp;
+//  int           _verticesSize;
+//  int           _verticesStride;
   
   IFloatBuffer* _textureCoordinates;
   int           _textureCoordinatesTimestamp;
@@ -129,10 +129,10 @@ private:
   _polygonOffsetFill(false),
   _blendDFactor(GLBlendFactor::zero()),
   _blendSFactor(GLBlendFactor::one()),
-  _vertices(NULL),
-  _verticesTimestamp(0),
-  _verticesSize(0),
-  _verticesStride(0),
+//  _vertices(NULL),
+//  _verticesTimestamp(0),
+//  _verticesSize(0),
+//  _verticesStride(0),
   _textureCoordinates(NULL),
   _textureCoordinatesTimestamp(0),
   _textureCoordinatesSize(0),
@@ -189,10 +189,10 @@ public:
   _polygonOffsetFill(parentState._polygonOffsetFill),
   _blendDFactor(parentState._blendDFactor),
   _blendSFactor(parentState._blendSFactor),
-  _vertices(parentState._vertices),
-  _verticesTimestamp(parentState._verticesTimestamp),
-  _verticesSize(parentState._verticesSize),
-  _verticesStride(parentState._verticesStride),
+//  _vertices(parentState._vertices),
+//  _verticesTimestamp(parentState._verticesTimestamp),
+//  _verticesSize(parentState._verticesSize),
+//  _verticesStride(parentState._verticesStride),
   _textureCoordinates(parentState._textureCoordinates),
   _textureCoordinatesTimestamp(parentState._textureCoordinatesTimestamp),
   _textureCoordinatesSize(parentState._textureCoordinatesSize),
@@ -281,15 +281,15 @@ public:
   void disableVerticesPosition() { _verticesPosition = false; }
   bool isEnabledVerticesPosition() const { return _verticesPosition; }
   
-  void enableFlatColor(const Color& color,
-                       float intensity) {
-    _flatColor = true;
-    _flatColorR = color.getRed();
-    _flatColorG = color.getGreen();
-    _flatColorB = color.getBlue();
-    _flatColorA= color.getAlpha();
-    _intensity = intensity;
-  }
+//  void enableFlatColor(const Color& color,
+//                       float intensity) {
+//    _flatColor = true;
+//    _flatColorR = color.getRed();
+//    _flatColorG = color.getGreen();
+//    _flatColorB = color.getBlue();
+//    _flatColorA= color.getAlpha();
+//    _intensity = intensity;
+//  }
   void disableFlatColor() { _flatColor = false; }
   bool isEnabledFlatColor() const { return _flatColor; }
   Color getFlatColor() const {
@@ -328,12 +328,12 @@ public:
     _blendDFactor = dFactor;
   }
   
-  void setVertices(IFloatBuffer* vertices, int size, int stride) {
-    _vertices      = vertices;
-    _verticesTimestamp = vertices->timestamp();
-    _verticesSize = size;
-    _verticesStride = stride;
-  }
+//  void setVertices(IFloatBuffer* vertices, int size, int stride) {
+//    _vertices      = vertices;
+//    _verticesTimestamp = vertices->timestamp();
+//    _verticesSize = size;
+//    _verticesStride = stride;
+//  }
   
   void setTextureCoordinates(IFloatBuffer* texCoors, int size, int stride){
     _textureCoordinates = texCoors;

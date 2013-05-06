@@ -14,6 +14,8 @@
 #include "IFloatBuffer.hpp"
 #include "IShortBuffer.hpp"
 
+#include "GPUProgramState.hpp"
+
 SGGeometryNode::~SGGeometryNode() {
   delete _vertices;
   delete _colors;
@@ -42,6 +44,15 @@ void SGGeometryNode::rawRender(const G3MRenderContext* rc,
     state.setTextureCoordinates(_uv, 2, 0);
   }
   
-  state.setVertices(_vertices, 3, 0);
-  gl->drawElements(_primitive, _indices, state, *rc->getGPUProgramManager(), parentProgramState);
+  GPUProgramState progState(parentProgramState);
+  progState.setAttributeEnabled("Position", true);
+  progState.setAttributeValue("Position",
+                              _vertices, 4, //The attribute is a float vector of 4 elements
+                              3,            //Our buffer contains elements of 3
+                              0,            //Index 0
+                              false,        //Not normalized
+                              0);           //Stride 0
+  
+  //state.setVertices(_vertices, 3, 0);
+  gl->drawElements(_primitive, _indices, state, *rc->getGPUProgramManager(), &progState);
 }
