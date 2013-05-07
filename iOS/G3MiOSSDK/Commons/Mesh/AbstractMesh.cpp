@@ -153,8 +153,8 @@ void AbstractMesh::render(const G3MRenderContext *rc,
     progState.setUniformValue("EnableFlatColor", true);
     progState.setUniformValue("FlatColor",
                               (double)_flatColor->getRed(),
-                              (double)_flatColor->getBlue(),
-                              (double) _flatColor->getGreen(),
+                              (double)_flatColor->getGreen(),
+                              (double) _flatColor->getBlue(),
                               (double) _flatColor->getAlpha());
     
     progState.setUniformValue("FlatColorIntensity", _colorsIntensity);
