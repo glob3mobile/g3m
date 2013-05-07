@@ -19,6 +19,7 @@
 
 #include "GPUProgramManager.hpp"
 #include "GPUProgram.hpp"
+#include "GPUProgramState.hpp"
 
 #define TEXTURES_DOWNLOAD_PRIORITY 1000000
 
@@ -100,6 +101,14 @@ const IGLTextureId* SGLayerNode::getTextureId(const G3MRenderContext* rc) {
   return _textureId;
 }
 
+GPUProgramState* SGLayerNode::createGPUProgramState(const G3MRenderContext* rc, const GPUProgramState* parentState){
+  
+  GPUProgramState* progState = new GPUProgramState(parentState);
+  progState->setAttributeEnabled("TextureCoord", true);
+  progState->setUniformValue("EnableTexture", true);
+  return progState;
+}
+
 GLState* SGLayerNode::createState(const G3MRenderContext* rc,
                                         const GLState& parentState) {
   if (!_initialized) {
@@ -113,14 +122,14 @@ GLState* SGLayerNode::createState(const G3MRenderContext* rc,
   }
 
   GLState* state = new GLState(parentState);
-  state->enableTextures();
+//  state->enableTextures();
   
 //  GPUProgram* prog = rc->getGPUProgramManager()->getProgram("DefaultProgram");
 //  int _WORKING_JM;
   //UniformBool* enableTexture = prog->getUniformBool("EnableTexture");
   //enableTexture->set(true);
   
-  state->enableTexture2D();
+//  state->enableTexture2D();
 
   state->bindTexture(texId);
 

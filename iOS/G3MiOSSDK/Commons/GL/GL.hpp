@@ -54,7 +54,7 @@ private:
   IGLUniformID* checkedGetUniformLocation(ShaderProgram* program,
                                           const std::string& name);
   
-  IFloatBuffer* _billboardTexCoord;
+//  IFloatBuffer* _billboardTexCoord;
   
   const bool _verbose;
   
@@ -69,7 +69,7 @@ public:
   _nativeGL(nativeGL),
   _verbose(verbose),
   _texturesIdAllocationCounter(0),
-  _billboardTexCoord(NULL),
+//  _billboardTexCoord(NULL),
   _program(NULL),
   _currentState(NULL),
   _currentGPUProgram(NULL)
@@ -92,7 +92,7 @@ public:
     _currentState = GLState::newDefault(); //Init after constants
   }
   
-  IFloatBuffer* getBillboardTexCoord();
+//  IFloatBuffer* getBillboardTexCoord();
   
   void clearScreen(const GLState& state);
   

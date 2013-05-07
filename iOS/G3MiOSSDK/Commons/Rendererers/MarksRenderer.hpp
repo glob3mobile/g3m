@@ -40,6 +40,8 @@ private:
   
   GPUProgramState _programState;
   
+  IFloatBuffer* _billboardTexCoord;
+  
 public:
 
   MarksRenderer(bool readyWhenMarksReady);

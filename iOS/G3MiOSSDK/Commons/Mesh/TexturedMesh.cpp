@@ -10,19 +10,24 @@
 
 #include "GL.hpp"
 
+#include "GPUProgramState.hpp"
+
 void TexturedMesh::render(const G3MRenderContext* rc,
                           const GLState& parentState,const GPUProgramState* parentProgramState) const {
-  GLState* state = _textureMapping->bind(rc, parentState);
   
-  state->enableTextures();
-  state->enableTexture2D();
+  GPUProgramState progState(parentProgramState);
+  
+  GLState* state = _textureMapping->bind(rc, parentState, progState);
+  
+  //state->enableTextures();
+//  state->enableTexture2D();
   
   if (_transparent) {
     state->enableBlend();
     state->setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
   }
 
-  _mesh->render(rc, *state, parentProgramState);
+  _mesh->render(rc, *state, &progState);
   
   delete state;
 }

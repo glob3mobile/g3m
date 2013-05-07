@@ -14,9 +14,10 @@
 
 #include "GPUProgram.hpp"
 #include "GPUProgramManager.hpp"
+#include "GPUProgramState.hpp"
 
 
-GLState* LazyTextureMapping::bind(const G3MRenderContext* rc, const GLState& parentState) const {
+GLState* LazyTextureMapping::bind(const G3MRenderContext* rc, const GLState& parentState, GPUProgramState& progState) const {
   if (!_initialized) {
     _initializer->initialize();
 
@@ -30,20 +31,26 @@ GLState* LazyTextureMapping::bind(const G3MRenderContext* rc, const GLState& par
     _initialized = true;
   }
   
-  GLState *state = new GLState(parentState);
-  state->enableTextures();
+  progState.setAttributeEnabled("TextureCoord", true);
+  progState.setUniformValue("EnableTexture", true);
   
-  int _WORKING_JM;
-//  GPUProgram* prog = rc->getGPUProgramManager()->getProgram("DefaultProgram");
-//  UniformBool* enableTexture = prog->getUniformBool("EnableTexture");
-//  enableTexture->set(true);
-  state->enableTexture2D();
+  GLState *state = new GLState(parentState);
+  //state->enableTextures();
+
+//  state->enableTexture2D();
 
   if (_texCoords != NULL) {
     state->scaleTextureCoordinates(_scale);
     state->translateTextureCoordinates(_translation);
     state->bindTexture(_glTextureId);
-    state->setTextureCoordinates(_texCoords, 2, 0);
+//    state->setTextureCoordinates(_texCoords, 2, 0);
+    
+    progState.setAttributeValue("TextureCoord",
+                                _texCoords, 2,
+                                2,
+                                0,
+                                false,
+                                0);
     
   }
   else {
@@ -151,9 +158,12 @@ void LeveledTexturedMesh::render(const G3MRenderContext* rc,
     _mesh->render(rc, parentState, parentProgramState);
   }
   else {
-    GLState *state = mapping->bind(rc, parentState);
+    
+    GPUProgramState progState(parentProgramState);
+    
+    GLState *state = mapping->bind(rc, parentState, progState);
 
-    _mesh->render(rc, *state, parentProgramState);
+    _mesh->render(rc, *state, &progState);
     
     delete state;
   }

@@ -28,6 +28,12 @@ GPUProgramState * SGGeometryNode::createGPUProgramState(const G3MRenderContext *
   GPUProgramState* progState = new GPUProgramState(parentState);
   
   progState->setAttributeEnabled("Position", true);
+  progState->setAttributeValue("Position",
+                              _vertices, 4, //The attribute is a float vector of 4 elements
+                              3,            //Our buffer contains elements of 3
+                              0,            //Index 0
+                              false,        //Not normalized
+                              0);           //Stride 0
   
   if (_colors != NULL){
     progState->setAttributeEnabled("Color", true);
@@ -44,6 +50,16 @@ GPUProgramState * SGGeometryNode::createGPUProgramState(const G3MRenderContext *
     progState->setAttributeEnabled("Color", false);
     progState->setUniformValue("EnableColorPerVertex", false);
   }
+  
+  if (_uv != NULL){
+    progState->setAttributeValue("TextureCoord",
+                                _uv, 2,
+                                2,
+                                0,
+                                false,
+                                0);
+  }
+  
   return progState;
 }
 
@@ -64,18 +80,13 @@ void SGGeometryNode::rawRender(const G3MRenderContext* rc,
   if (_uv != NULL) {
     state.translateTextureCoordinates((float)0.0, (float)0.0);
     state.scaleTextureCoordinates((float)1.0, (float)1.0);
-    state.setTextureCoordinates(_uv, 2, 0);
+//    state.setTextureCoordinates(_uv, 2, 0);
   }
   
-  GPUProgramState progState(parentProgramState);
-  progState.setAttributeEnabled("Position", true);
-  progState.setAttributeValue("Position",
-                              _vertices, 4, //The attribute is a float vector of 4 elements
-                              3,            //Our buffer contains elements of 3
-                              0,            //Index 0
-                              false,        //Not normalized
-                              0);           //Stride 0
+//  GPUProgramState progState(parentProgramState);
+//  progState.setAttributeEnabled("Position", true);
+
   
   //state.setVertices(_vertices, 3, 0);
-  gl->drawElements(_primitive, _indices, state, *rc->getGPUProgramManager(), &progState);
+  gl->drawElements(_primitive, _indices, state, *rc->getGPUProgramManager(), parentProgramState);
 }

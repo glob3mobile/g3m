@@ -30,8 +30,8 @@ class GLState {
 private:
   bool _depthTest;
   bool _blend;
-  bool _textures;
-  bool _texture2D;
+//  bool _textures;
+//  bool _texture2D;
 //  bool _vertexColor;
 //  bool _verticesPosition;
   bool _flatColor;
@@ -51,10 +51,10 @@ private:
 //  int           _verticesSize;
 //  int           _verticesStride;
   
-  IFloatBuffer* _textureCoordinates;
-  int           _textureCoordinatesTimestamp;
-  int           _textureCoordinatesSize;
-  int           _textureCoordinatesStride;
+//  IFloatBuffer* _textureCoordinates;
+//  int           _textureCoordinatesTimestamp;
+//  int           _textureCoordinatesSize;
+//  int           _textureCoordinatesStride;
   float _textureCoordinatesScaleX;
   float _textureCoordinatesScaleY;
   float _textureCoordinatesTranslationX;
@@ -108,8 +108,8 @@ private:
   GLState() :
   _depthTest(false),
   _blend(false),
-  _textures(false),
-  _texture2D(false),
+//  _textures(false),
+//  _texture2D(false),
 //  _vertexColor(false),
 //  _verticesPosition(false),
   _flatColor(false),
@@ -133,10 +133,10 @@ private:
 //  _verticesTimestamp(0),
 //  _verticesSize(0),
 //  _verticesStride(0),
-  _textureCoordinates(NULL),
-  _textureCoordinatesTimestamp(0),
-  _textureCoordinatesSize(0),
-  _textureCoordinatesStride(0),
+//  _textureCoordinates(NULL),
+//  _textureCoordinatesTimestamp(0),
+//  _textureCoordinatesSize(0),
+//  _textureCoordinatesStride(0),
   _textureCoordinatesScaleX(1.0),
   _textureCoordinatesScaleY(1.0),
   _textureCoordinatesTranslationX(0.0),
@@ -168,8 +168,8 @@ public:
   explicit GLState(const GLState& parentState) :
   _depthTest(parentState._depthTest),
   _blend(parentState._blend),
-  _textures(parentState._textures),
-  _texture2D(parentState._texture2D),
+//  _textures(parentState._textures),
+//  _texture2D(parentState._texture2D),
 //  _vertexColor(parentState._vertexColor),
 //  _verticesPosition(parentState._verticesPosition),
   _flatColor(parentState._flatColor),
@@ -193,10 +193,10 @@ public:
 //  _verticesTimestamp(parentState._verticesTimestamp),
 //  _verticesSize(parentState._verticesSize),
 //  _verticesStride(parentState._verticesStride),
-  _textureCoordinates(parentState._textureCoordinates),
-  _textureCoordinatesTimestamp(parentState._textureCoordinatesTimestamp),
-  _textureCoordinatesSize(parentState._textureCoordinatesSize),
-  _textureCoordinatesStride(parentState._textureCoordinatesStride),
+//  _textureCoordinates(parentState._textureCoordinates),
+//  _textureCoordinatesTimestamp(parentState._textureCoordinatesTimestamp),
+//  _textureCoordinatesSize(parentState._textureCoordinatesSize),
+//  _textureCoordinatesStride(parentState._textureCoordinatesStride),
   _textureCoordinatesScaleX(parentState._textureCoordinatesScaleX),
   _textureCoordinatesScaleY(parentState._textureCoordinatesScaleY),
   _textureCoordinatesTranslationX(parentState._textureCoordinatesTranslationX),
@@ -246,21 +246,21 @@ public:
   }
   bool isEnabledBlend() const { return _blend; }
   
-  void enableTextures() {
-      _textures = true;
-  }
-  void disableTextures() {
-      _textures = false;
-  }
-  bool isEnabledTextures() const { return _textures; }
+//  void enableTextures() {
+//      _textures = true;
+//  }
+//  void disableTextures() {
+//      _textures = false;
+//  }
+//  bool isEnabledTextures() const { return _textures; }
   
-  void enableTexture2D() {
-      _texture2D = true;
-  }
-  void disableTexture2D() {
-      _texture2D = false;
-  }
-  bool isEnabledTexture2D() const { return _texture2D; }
+//  void enableTexture2D() {
+//      _texture2D = true;
+//  }
+//  void disableTexture2D() {
+//      _texture2D = false;
+//  }
+//  bool isEnabledTexture2D() const { return _texture2D; }
   
 //  void enableVertexColor(IFloatBuffer* colors,
 //                         float intensity) {
@@ -335,12 +335,12 @@ public:
 //    _verticesStride = stride;
 //  }
   
-  void setTextureCoordinates(IFloatBuffer* texCoors, int size, int stride){
-    _textureCoordinates = texCoors;
-    _textureCoordinatesTimestamp = texCoors->timestamp();
-    _textureCoordinatesSize = size;
-    _textureCoordinatesStride = stride;
-  }
+//  void setTextureCoordinates(IFloatBuffer* texCoors, int size, int stride){
+//    _textureCoordinates = texCoors;
+//    _textureCoordinatesTimestamp = texCoors->timestamp();
+//    _textureCoordinatesSize = size;
+//    _textureCoordinatesStride = stride;
+//  }
   
   void scaleTextureCoordinates(float x, float y){
     _textureCoordinatesScaleX = x;

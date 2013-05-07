@@ -52,27 +52,27 @@ void GLState::applyChanges(GL* gl, GLState& currentState, const AttributesStruct
     currentState._blend = _blend;
   }
   
-  // Textures
-  if (_textures != currentState._textures) {
-    if (_textures) {
-      nativeGL->enableVertexAttribArray(attributes.TextureCoord);
-    }
-    else {
-      nativeGL->disableVertexAttribArray(attributes.TextureCoord);
-    }
-    currentState._textures = _textures;
-  }
+//  // Textures
+//  if (_textures != currentState._textures) {
+//    if (_textures) {
+//      nativeGL->enableVertexAttribArray(attributes.TextureCoord);
+//    }
+//    else {
+//      nativeGL->disableVertexAttribArray(attributes.TextureCoord);
+//    }
+//    currentState._textures = _textures;
+//  }
   
-  // Texture2D
-  if (_texture2D != currentState._texture2D) {
-    if (_texture2D) {
-      nativeGL->uniform1i(uniforms.EnableTexture, 1);
-    }
-    else {
-      nativeGL->uniform1i(uniforms.EnableTexture, 0);
-    }
-    currentState._texture2D = _texture2D;
-  }
+//  // Texture2D
+//  if (_texture2D != currentState._texture2D) {
+//    if (_texture2D) {
+//      nativeGL->uniform1i(uniforms.EnableTexture, 1);
+//    }
+//    else {
+//      nativeGL->uniform1i(uniforms.EnableTexture, 0);
+//    }
+//    currentState._texture2D = _texture2D;
+//  }
   
 //  // VertexColor
 //  if (_vertexColor != currentState._vertexColor) {
@@ -118,21 +118,21 @@ void GLState::applyChanges(GL* gl, GLState& currentState, const AttributesStruct
 //  }
   
   //Texture Coordinates
-  if (_textureCoordinates != NULL){
-    if (_textureCoordinates != currentState._textureCoordinates ||
-        _textureCoordinatesTimestamp != currentState._textureCoordinatesTimestamp ||
-        _textureCoordinatesSize != currentState._textureCoordinatesSize ||
-        _textureCoordinatesStride != currentState._textureCoordinatesStride){
-      nativeGL->vertexAttribPointer(attributes.TextureCoord,
-                                    _textureCoordinatesSize, false,
-                                    _textureCoordinatesStride, _textureCoordinates);
-      
-      currentState._textureCoordinates = _textureCoordinates;
-      currentState._textureCoordinatesTimestamp = _textureCoordinatesTimestamp;
-      currentState._textureCoordinatesSize = _textureCoordinatesSize;
-      currentState._textureCoordinatesStride = _textureCoordinatesStride;
-    }
-  }
+//  if (_textureCoordinates != NULL){
+//    if (_textureCoordinates != currentState._textureCoordinates ||
+//        _textureCoordinatesTimestamp != currentState._textureCoordinatesTimestamp ||
+//        _textureCoordinatesSize != currentState._textureCoordinatesSize ||
+//        _textureCoordinatesStride != currentState._textureCoordinatesStride){
+//      nativeGL->vertexAttribPointer(attributes.TextureCoord,
+//                                    _textureCoordinatesSize, false,
+//                                    _textureCoordinatesStride, _textureCoordinates);
+//      
+//      currentState._textureCoordinates = _textureCoordinates;
+//      currentState._textureCoordinatesTimestamp = _textureCoordinatesTimestamp;
+//      currentState._textureCoordinatesSize = _textureCoordinatesSize;
+//      currentState._textureCoordinatesStride = _textureCoordinatesStride;
+//    }
+//  }
   
   if (_textureCoordinatesScaleX != currentState._textureCoordinatesScaleX ||
       _textureCoordinatesScaleY != currentState._textureCoordinatesScaleY){

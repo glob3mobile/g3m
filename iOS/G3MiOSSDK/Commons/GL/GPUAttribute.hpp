@@ -132,7 +132,12 @@ public:
   GPUAttributeValue(GLType::glFloat(), attributeSize, arrayElementSize, index, stride, normalized){}
   
   void setAttribute(GL* gl, const int id) const{
-    gl->vertexAttribPointer(_index, _arrayElementSize, _normalized, _stride, _buffer);
+    if (_index != 0){
+      //TODO: Change vertexAttribPointer
+      ILogger::instance()->logError("INDEX NO 0");
+    }
+    
+    gl->vertexAttribPointer(id, _arrayElementSize, _normalized, _stride, _buffer);
   }
   
   bool isEqualsTo(const GPUAttributeValue* v) const{

@@ -101,7 +101,7 @@ public:
     _glTextureId = glTextureId;
   }
 
-  GLState* bind(const G3MRenderContext* rc, const GLState& parentState) const;
+  GLState* bind(const G3MRenderContext* rc, const GLState& parentState, GPUProgramState& progState) const;
   
 
   const IGLTextureId* getGLTextureId() const {

@@ -213,22 +213,22 @@ const IGLTextureId* GL::uploadTexture(const IImage* image,
   return texId;
 }
 
-IFloatBuffer* GL::getBillboardTexCoord() {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::getBillboardTexCoord()");
-  }
-  
-  if (_billboardTexCoord == NULL) {
-    FloatBufferBuilderFromCartesian2D texCoor;
-    texCoor.add(1,1);
-    texCoor.add(1,0);
-    texCoor.add(0,1);
-    texCoor.add(0,0);
-    _billboardTexCoord = texCoor.create();
-  }
-  
-  return _billboardTexCoord;
-}
+//IFloatBuffer* GL::getBillboardTexCoord() {
+//  if (_verbose) {
+//    ILogger::instance()->logInfo("GL::getBillboardTexCoord()");
+//  }
+//  
+//  if (_billboardTexCoord == NULL) {
+//    FloatBufferBuilderFromCartesian2D texCoor;
+//    texCoor.add(1,1);
+//    texCoor.add(1,0);
+//    texCoor.add(0,1);
+//    texCoor.add(0,0);
+//    _billboardTexCoord = texCoor.create();
+//  }
+//  
+//  return _billboardTexCoord;
+//}
 
 const IGLTextureId* GL::getGLTextureId() {
   if (_verbose) {

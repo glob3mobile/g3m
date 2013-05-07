@@ -64,6 +64,14 @@ std::vector<Mesh*>* GEOGeometry::getMeshes(const G3MRenderContext* rc,
 void GEOGeometry::render(const G3MRenderContext* rc,
                          const GLState& parentState, const GPUProgramState* parentProgramState,
                          const GEOSymbolizer* symbolizer) {
+  
+  
+  GPUProgramState progState(parentProgramState);
+  progState.setUniformValue("EnableTexture", false);
+  progState.setAttributeEnabled("TextureCoord", false);
+  
+  GLState state(parentState);
+  state.disableDepthTest();
 //  Mesh* mesh = getMesh(rc, symbolizer);
 
   std::vector<Mesh*>* meshes = getMeshes(rc, symbolizer);
@@ -79,9 +87,8 @@ void GEOGeometry::render(const G3MRenderContext* rc,
         const Extent* extent = mesh->getExtent();
 
         if ( extent->touches(frustum) ) {
-          GLState state(parentState);
-          state.disableDepthTest();
-          mesh->render(rc, state, parentProgramState);
+          
+          mesh->render(rc, state, &progState);
         }
       }
     }
