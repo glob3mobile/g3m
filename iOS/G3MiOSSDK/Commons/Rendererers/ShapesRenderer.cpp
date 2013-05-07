@@ -27,7 +27,9 @@ public:
   _squaredDistanceFromEye(squaredDistanceFromEye),
   _programState(NULL)
   {
-
+    _programState.setUniformValue("BillBoard", false);
+    _programState.setUniformValue("EnableTexture", false);
+    _programState.setAttributeEnabled("TextureCoord", false);
   }
 
   double squaredDistanceFromEye() const {

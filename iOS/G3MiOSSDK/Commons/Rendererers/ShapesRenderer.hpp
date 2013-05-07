@@ -73,6 +73,8 @@ public:
     }
     
     _programState.setUniformValue("BillBoard", false);
+    _programState.setUniformValue("EnableTexture", false);
+    _programState.setAttributeEnabled("TextureCoord", false);
   }
   
   bool isReadyToRender(const G3MRenderContext* rc) {

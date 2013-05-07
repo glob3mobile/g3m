@@ -87,8 +87,6 @@ void MarksRenderer::initialize(const G3MContext* context) {
                                   false,
                                   0);
   
-  _programState.setUniformValue("ScaleTexCoord", Vector2D(1.0, 1.0));
-  _programState.setUniformValue("TranslationTexCoord", Vector2D(0.0, 0.0));
 }
 
 void MarksRenderer::addMark(Mark* mark) {
@@ -229,12 +227,12 @@ void MarksRenderer::render(const G3MRenderContext* rc,
   
   
   
-//  Vector2D textureTranslation(0.0, 0.0);
-//  Vector2D textureScale(1.0, 1.0);
+  Vector2D textureTranslation(0.0, 0.0);
+  Vector2D textureScale(1.0, 1.0);
   
 //  state.translateTextureCoordinates(textureTranslation);
 //  state.scaleTextureCoordinates(textureScale);
-  
+//  
   state.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
   
   const Camera* camera = rc->getCurrentCamera();
@@ -245,7 +243,11 @@ void MarksRenderer::render(const G3MRenderContext* rc,
   //                        camera->getHeight());
   _programState.setUniformValue("ViewPortExtent", Vector2D( (double)camera->getWidth(), (double)camera->getHeight() ));
   
-//  state.setTextureCoordinates(_billboardTexCoord, 2, 0);
+  
+  _programState.setUniformValue("TranslationTexCoord", Vector2D(0.0, 0.0));
+  _programState.setUniformValue("ScaleTexCoord", Vector2D(1.0, 1.0));
+  
+  state.setTextureCoordinates(_billboardTexCoord, 2, 0);
   
   const int marksSize = _marks.size();
   for (int i = 0; i < marksSize; i++) {

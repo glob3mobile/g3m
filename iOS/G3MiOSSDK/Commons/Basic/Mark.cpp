@@ -388,6 +388,8 @@ void Mark::render(const G3MRenderContext* rc,
                                     0,            //Index 0
                                     false,        //Not normalized
                                     0);           //Stride 0
+        
+        printf("MARK %f, %d, %d\n", vertices->get(0), _textureWidth, _textureHeight );
 
         GLState state(parentState);
         //state.setVertices(vertices, 3, 0);

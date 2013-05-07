@@ -61,6 +61,8 @@ private:
   void setGLState(const GLState& state);
   void setProgramState(GPUProgramManager& progManager, const GPUProgramState& progState);
   
+  void applyGLStateAndGPUProgramState(const GLState& state, GPUProgramManager& progManager, const GPUProgramState& progState);
+  
 public:
   
   
@@ -226,6 +228,8 @@ public:
   void disableVertexAttribArray(int location) const{
     _nativeGL->disableVertexAttribArray(location);
   }
+  
+  
 };
 
 #endif

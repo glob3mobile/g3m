@@ -15,6 +15,40 @@
 
 #include "GPUProgram.hpp"
 
+void GLState::applyChangesAfterGPUProgramWasSet(GL* gl, GLState& currentState) const {
+  
+  
+  //Texture (After blending factors)
+  if (_boundTextureId != NULL){
+    if (currentState._boundTextureId == NULL ||
+        !_boundTextureId->isEqualsTo(currentState._boundTextureId)){
+      gl->getNative()->bindTexture(GLTextureType::texture2D(), _boundTextureId);
+      
+      currentState._boundTextureId = _boundTextureId;
+    } else{
+      //ILogger::instance()->logInfo("Texture already bound.\n");
+    }
+  }
+  
+  if (_pixelStoreIAlignmentUnpack != -1 && _pixelStoreIAlignmentUnpack != currentState._pixelStoreIAlignmentUnpack){
+    gl->getNative()->pixelStorei(GLAlignment::unpack(), _pixelStoreIAlignmentUnpack);
+    currentState._pixelStoreIAlignmentUnpack = _pixelStoreIAlignmentUnpack;
+  }
+  
+  if (_clearColorR != currentState._clearColorR ||
+      _clearColorG != currentState._clearColorG ||
+      _clearColorB != currentState._clearColorB ||
+      _clearColorA != currentState._clearColorA){
+    gl->getNative()->clearColor(_clearColorR, _clearColorG, _clearColorB, _clearColorA);
+    currentState._clearColorR = _clearColorR;
+    currentState._clearColorG = _clearColorG;
+    currentState._clearColorB = _clearColorB;
+    currentState._clearColorA = _clearColorA;
+  }
+  
+
+}
+
 
 
 void GLState::applyChanges(GL* gl, GLState& currentState, const AttributesStruct& attributes,const UniformsStruct& uniforms) const{
@@ -118,21 +152,21 @@ void GLState::applyChanges(GL* gl, GLState& currentState, const AttributesStruct
 //  }
   
   //Texture Coordinates
-//  if (_textureCoordinates != NULL){
+  if (_textureCoordinates != NULL){
 //    if (_textureCoordinates != currentState._textureCoordinates ||
 //        _textureCoordinatesTimestamp != currentState._textureCoordinatesTimestamp ||
 //        _textureCoordinatesSize != currentState._textureCoordinatesSize ||
 //        _textureCoordinatesStride != currentState._textureCoordinatesStride){
-//      nativeGL->vertexAttribPointer(attributes.TextureCoord,
-//                                    _textureCoordinatesSize, false,
-//                                    _textureCoordinatesStride, _textureCoordinates);
-//      
+      nativeGL->vertexAttribPointer(attributes.TextureCoord,
+                                    _textureCoordinatesSize, false,
+                                    _textureCoordinatesStride, _textureCoordinates);
+//
 //      currentState._textureCoordinates = _textureCoordinates;
 //      currentState._textureCoordinatesTimestamp = _textureCoordinatesTimestamp;
 //      currentState._textureCoordinatesSize = _textureCoordinatesSize;
 //      currentState._textureCoordinatesStride = _textureCoordinatesStride;
 //    }
-//  }
+  }
   
 //  if (_textureCoordinatesScaleX != currentState._textureCoordinatesScaleX ||
 //      _textureCoordinatesScaleY != currentState._textureCoordinatesScaleY){
@@ -141,7 +175,7 @@ void GLState::applyChanges(GL* gl, GLState& currentState, const AttributesStruct
 //    currentState._textureCoordinatesScaleX = _textureCoordinatesScaleX;
 //    currentState._textureCoordinatesScaleY = _textureCoordinatesScaleY;
 //  }
-  
+//  
 //  if (_textureCoordinatesTranslationX != currentState._textureCoordinatesTranslationX ||
 //      _textureCoordinatesTranslationY != currentState._textureCoordinatesTranslationY){
 //    nativeGL->uniform2f(uniforms.TranslationTexCoord,
@@ -151,7 +185,7 @@ void GLState::applyChanges(GL* gl, GLState& currentState, const AttributesStruct
 //    currentState._textureCoordinatesTranslationX = _textureCoordinatesTranslationX;
 //    currentState._textureCoordinatesTranslationY = _textureCoordinatesTranslationY;
 //  }
-//  
+
   
   // Flat Color
 //  if (_flatColor != currentState._flatColor) {
@@ -232,22 +266,25 @@ void GLState::applyChanges(GL* gl, GLState& currentState, const AttributesStruct
   
   //Blending Factors
   if (_blendDFactor != currentState._blendDFactor || _blendSFactor != currentState._blendSFactor){
-    nativeGL->blendFunc(_blendSFactor, _blendDFactor);
+    gl->getNative()->blendFunc(_blendSFactor, _blendDFactor);
     currentState._blendDFactor = _blendDFactor;
     currentState._blendSFactor = _blendSFactor;
   }
+
   
-  //Texture (After blending factors)
-  if (_boundTextureId != NULL){
-    if (currentState._boundTextureId == NULL ||
-        !_boundTextureId->isEqualsTo(currentState._boundTextureId)){
-      nativeGL->bindTexture(GLTextureType::texture2D(), _boundTextureId);
-      
-      currentState._boundTextureId = _boundTextureId;
-    } else{
-      //ILogger::instance()->logInfo("Texture already bound.\n");
-    }
-  }
+
+  
+//  //Texture (After blending factors)
+//  if (_boundTextureId != NULL){
+//    if (currentState._boundTextureId == NULL ||
+//        !_boundTextureId->isEqualsTo(currentState._boundTextureId)){
+//      gl->getNative()->bindTexture(GLTextureType::texture2D(), _boundTextureId);
+//      
+//      currentState._boundTextureId = _boundTextureId;
+//    } else{
+//      //ILogger::instance()->logInfo("Texture already bound.\n");
+//    }
+//  }
   
 //  if (_billboarding != currentState._billboarding){
 //    if (_billboarding){
@@ -265,22 +302,7 @@ void GLState::applyChanges(GL* gl, GLState& currentState, const AttributesStruct
 //    currentState._viewportWidth = _viewportWidth;
 //    currentState._viewportHeight = _viewportHeight;
 //  }
-  
-  if (_pixelStoreIAlignmentUnpack != -1 && _pixelStoreIAlignmentUnpack != currentState._pixelStoreIAlignmentUnpack){
-    nativeGL->pixelStorei(GLAlignment::unpack(), _pixelStoreIAlignmentUnpack);
-    currentState._pixelStoreIAlignmentUnpack = _pixelStoreIAlignmentUnpack;
-  }
-  
-  if (_clearColorR != currentState._clearColorR ||
-      _clearColorG != currentState._clearColorG ||
-      _clearColorB != currentState._clearColorB ||
-      _clearColorA != currentState._clearColorA){
-    nativeGL->clearColor(_clearColorR, _clearColorG, _clearColorB, _clearColorA);
-    currentState._clearColorR = _clearColorR;
-    currentState._clearColorG = _clearColorG;
-    currentState._clearColorB = _clearColorB;
-    currentState._clearColorA = _clearColorA;
-  }
+ 
   
 //  //Projection
   if (!_projectionMatrix.isEqualsTo(currentState._projectionMatrix)){
@@ -294,12 +316,17 @@ void GLState::applyChanges(GL* gl, GLState& currentState, const AttributesStruct
     currentState._modelViewMatrix = _modelViewMatrix;
   }
   
+  
+  
   //Texture Extent
   if (_textureWidth != currentState._textureWidth || _textureHeight != currentState._textureHeight){
-    nativeGL->uniform2f(uniforms.TextureExtent, _textureWidth, _textureHeight);
+    gl->getNative()->uniform2f(uniforms.TextureExtent, _textureWidth, _textureHeight);
     currentState._textureHeight = _textureHeight;
     currentState._textureWidth = _textureWidth;
   }
+  
+  
+  //applyChangesAfterGPUProgramWasSet(gl, currentState);
   
   
 }

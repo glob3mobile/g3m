@@ -139,8 +139,9 @@ void GL::drawElements(int mode,
   }
   
   
-  setProgramState(progManager, *gpuState);
-  setGLState(state);
+  //setProgramState(progManager, *gpuState);
+  //setGLState(state);
+  applyGLStateAndGPUProgramState(state, progManager, *gpuState);
   
   _nativeGL->drawElements(mode,
                           indices->size(),
@@ -160,8 +161,10 @@ void GL::drawArrays(int mode,
   }
   
   
-  setProgramState(progManager, *gpuState);
-  setGLState(state);
+//  setProgramState(progManager, *gpuState);
+//  setGLState(state);
+  applyGLStateAndGPUProgramState(state, progManager, *gpuState);
+
   
   _nativeGL->drawArrays(mode,
                         first,
@@ -297,6 +300,7 @@ void GL::deleteTexture(const IGLTextureId* textureId) {
 
 void GL::setGLState(const GLState& state) {
   state.applyChanges(this, *_currentState, Attributes, Uniforms);
+  state.applyChangesAfterGPUProgramWasSet(this, *_currentState);
 }
 
 void GL::setProgramState(GPUProgramManager& progManager, const GPUProgramState& progState) {
@@ -313,4 +317,13 @@ void GL::setProgramState(GPUProgramManager& progManager, const GPUProgramState& 
 void GL::useProgram(GPUProgram* program) {
   _nativeGL->useProgram(program);
   program->onUsed();
+}
+
+void GL::applyGLStateAndGPUProgramState(const GLState& state, GPUProgramManager& progManager, const GPUProgramState& progState){
+  
+  state.applyChanges(this, *_currentState, Attributes, Uniforms);
+  setProgramState(progManager, progState);
+  state.applyChangesAfterGPUProgramWasSet(this, *_currentState);
+
+  
 }

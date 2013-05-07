@@ -51,3 +51,5 @@ void GEORenderer::render(const G3MRenderContext* rc,
     geoObject->render(rc, parentState, &_programState, _symbolizer);
   }
 }
+
+
