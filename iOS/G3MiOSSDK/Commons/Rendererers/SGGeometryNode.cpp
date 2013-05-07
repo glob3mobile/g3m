@@ -58,6 +58,9 @@ GPUProgramState * SGGeometryNode::createGPUProgramState(const G3MRenderContext *
                                 0,
                                 false,
                                 0);
+    
+    progState->setUniformValue("ScaleTexCoord", Vector2D(1.0, 1.0));
+    progState->setUniformValue("TranslationTexCoord", Vector2D(0.0, 0.0));
   }
   
   return progState;
@@ -67,7 +70,7 @@ void SGGeometryNode::rawRender(const G3MRenderContext* rc,
                                const GLState& parentState, const GPUProgramState* parentProgramState) {
   GL* gl = rc->getGL();
 
-  GLState state(parentState);
+//  GLState state(parentState);
 //  state.enableVerticesPosition();
 //  if (_colors == NULL) {
 //    state.disableVertexColor();
@@ -77,16 +80,17 @@ void SGGeometryNode::rawRender(const G3MRenderContext* rc,
 //    state.enableVertexColor(_colors, colorsIntensity);
 //  }
 
-  if (_uv != NULL) {
-    state.translateTextureCoordinates((float)0.0, (float)0.0);
-    state.scaleTextureCoordinates((float)1.0, (float)1.0);
-//    state.setTextureCoordinates(_uv, 2, 0);
-  }
+//  if (_uv != NULL) {
+//    state.translateTextureCoordinates((float)0.0, (float)0.0);
+//    
+////    state.scaleTextureCoordinates((float)1.0, (float)1.0);
+////    state.setTextureCoordinates(_uv, 2, 0);
+//  }
   
 //  GPUProgramState progState(parentProgramState);
 //  progState.setAttributeEnabled("Position", true);
 
   
   //state.setVertices(_vertices, 3, 0);
-  gl->drawElements(_primitive, _indices, state, *rc->getGPUProgramManager(), parentProgramState);
+  gl->drawElements(_primitive, _indices, parentState, *rc->getGPUProgramManager(), parentProgramState);
 }

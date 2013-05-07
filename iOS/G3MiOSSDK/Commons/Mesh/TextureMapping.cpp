@@ -42,8 +42,11 @@ GLState* SimpleTextureMapping::bind(const G3MRenderContext* rc, const GLState& p
                                 false,
                                 0);
     
-    state->scaleTextureCoordinates(_scale);
-    state->translateTextureCoordinates(_translation);
+    progState.setUniformValue("ScaleTexCoord", _scale.asVector2D());
+    progState.setUniformValue("TranslationTexCoord", _translation.asVector2D());
+    
+//    state->scaleTextureCoordinates(_scale);
+//    state->translateTextureCoordinates(_translation);
     state->bindTexture(_glTextureId);
     
 //    state->setTextureCoordinates(_texCoords, 2, 0);

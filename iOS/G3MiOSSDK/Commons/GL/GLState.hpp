@@ -55,10 +55,10 @@ private:
 //  int           _textureCoordinatesTimestamp;
 //  int           _textureCoordinatesSize;
 //  int           _textureCoordinatesStride;
-  float _textureCoordinatesScaleX;
-  float _textureCoordinatesScaleY;
-  float _textureCoordinatesTranslationX;
-  float _textureCoordinatesTranslationY;
+//  float _textureCoordinatesScaleX;
+//  float _textureCoordinatesScaleY;
+//  float _textureCoordinatesTranslationX;
+//  float _textureCoordinatesTranslationY;
 
   //Texture Extent
   float _textureWidth;
@@ -137,10 +137,10 @@ private:
 //  _textureCoordinatesTimestamp(0),
 //  _textureCoordinatesSize(0),
 //  _textureCoordinatesStride(0),
-  _textureCoordinatesScaleX(1.0),
-  _textureCoordinatesScaleY(1.0),
-  _textureCoordinatesTranslationX(0.0),
-  _textureCoordinatesTranslationY(0.0),
+//  _textureCoordinatesScaleX(1.0),
+//  _textureCoordinatesScaleY(1.0),
+//  _textureCoordinatesTranslationX(0.0),
+//  _textureCoordinatesTranslationY(0.0),
   _boundTextureId(NULL),
 //  _billboarding(false),
 //  _viewportHeight(0),
@@ -197,10 +197,10 @@ public:
 //  _textureCoordinatesTimestamp(parentState._textureCoordinatesTimestamp),
 //  _textureCoordinatesSize(parentState._textureCoordinatesSize),
 //  _textureCoordinatesStride(parentState._textureCoordinatesStride),
-  _textureCoordinatesScaleX(parentState._textureCoordinatesScaleX),
-  _textureCoordinatesScaleY(parentState._textureCoordinatesScaleY),
-  _textureCoordinatesTranslationX(parentState._textureCoordinatesTranslationX),
-  _textureCoordinatesTranslationY(parentState._textureCoordinatesTranslationY),
+//  _textureCoordinatesScaleX(parentState._textureCoordinatesScaleX),
+//  _textureCoordinatesScaleY(parentState._textureCoordinatesScaleY),
+//  _textureCoordinatesTranslationX(parentState._textureCoordinatesTranslationX),
+//  _textureCoordinatesTranslationY(parentState._textureCoordinatesTranslationY),
   _boundTextureId(parentState._boundTextureId),
 //  _billboarding(parentState._billboarding),
 //  _viewportWidth(parentState._viewportWidth),
@@ -342,35 +342,35 @@ public:
 //    _textureCoordinatesStride = stride;
 //  }
   
-  void scaleTextureCoordinates(float x, float y){
-    _textureCoordinatesScaleX = x;
-    _textureCoordinatesScaleY = y;
-  }
+//  void scaleTextureCoordinates(float x, float y){
+//    _textureCoordinatesScaleX = x;
+//    _textureCoordinatesScaleY = y;
+//  }
+//  
+//  void scaleTextureCoordinates(const MutableVector2D& scale){
+//    _textureCoordinatesScaleX = (float) scale.x();
+//    _textureCoordinatesScaleY = (float) scale.y();
+//  }
+//  
+//  void scaleTextureCoordinates(const Vector2D& scale){
+//    _textureCoordinatesScaleX = (float) scale.x();
+//    _textureCoordinatesScaleY = (float) scale.y();
+//  }
   
-  void scaleTextureCoordinates(const MutableVector2D& scale){
-    _textureCoordinatesScaleX = (float) scale.x();
-    _textureCoordinatesScaleY = (float) scale.y();
-  }
-  
-  void scaleTextureCoordinates(const Vector2D& scale){
-    _textureCoordinatesScaleX = (float) scale.x();
-    _textureCoordinatesScaleY = (float) scale.y();
-  }
-  
-  void translateTextureCoordinates(float x, float y){
-    _textureCoordinatesTranslationX = x;
-    _textureCoordinatesTranslationY = y;
-  }
-  
-  void translateTextureCoordinates(const MutableVector2D& translation){
-    _textureCoordinatesTranslationX = (float) translation.x();
-    _textureCoordinatesTranslationY = (float) translation.y();
-  }
-  
-  void translateTextureCoordinates(const Vector2D& translation){
-    _textureCoordinatesTranslationX = (float) translation.x();
-    _textureCoordinatesTranslationY = (float) translation.y();
-  }
+//  void translateTextureCoordinates(float x, float y){
+//    _textureCoordinatesTranslationX = x;
+//    _textureCoordinatesTranslationY = y;
+//  }
+//  
+//  void translateTextureCoordinates(const MutableVector2D& translation){
+//    _textureCoordinatesTranslationX = (float) translation.x();
+//    _textureCoordinatesTranslationY = (float) translation.y();
+//  }
+//  
+//  void translateTextureCoordinates(const Vector2D& translation){
+//    _textureCoordinatesTranslationX = (float) translation.x();
+//    _textureCoordinatesTranslationY = (float) translation.y();
+//  }
   
   void bindTexture(const IGLTextureId* textureId){
     _boundTextureId = textureId;

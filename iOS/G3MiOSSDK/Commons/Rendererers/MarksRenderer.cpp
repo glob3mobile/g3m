@@ -86,6 +86,9 @@ void MarksRenderer::initialize(const G3MContext* context) {
                                   0,
                                   false,
                                   0);
+  
+  _programState.setUniformValue("ScaleTexCoord", Vector2D(1.0, 1.0));
+  _programState.setUniformValue("TranslationTexCoord", Vector2D(0.0, 0.0));
 }
 
 void MarksRenderer::addMark(Mark* mark) {
@@ -226,11 +229,11 @@ void MarksRenderer::render(const G3MRenderContext* rc,
   
   
   
-  Vector2D textureTranslation(0.0, 0.0);
-  Vector2D textureScale(1.0, 1.0);
+//  Vector2D textureTranslation(0.0, 0.0);
+//  Vector2D textureScale(1.0, 1.0);
   
-  state.translateTextureCoordinates(textureTranslation);
-  state.scaleTextureCoordinates(textureScale);
+//  state.translateTextureCoordinates(textureTranslation);
+//  state.scaleTextureCoordinates(textureScale);
   
   state.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
   
@@ -254,7 +257,7 @@ void MarksRenderer::render(const G3MRenderContext* rc,
     }
   }
   
-  int IS_A_HACK_;//???????
-  int _WORKING_JM2;
+//  int IS_A_HACK_;//???????
+//  int _WORKING_JM2;
   //enableTexture->set(false); //DISABLING TEXTURES
 }

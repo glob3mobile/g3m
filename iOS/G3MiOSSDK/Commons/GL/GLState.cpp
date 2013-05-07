@@ -134,24 +134,24 @@ void GLState::applyChanges(GL* gl, GLState& currentState, const AttributesStruct
 //    }
 //  }
   
-  if (_textureCoordinatesScaleX != currentState._textureCoordinatesScaleX ||
-      _textureCoordinatesScaleY != currentState._textureCoordinatesScaleY){
-    nativeGL->uniform2f(uniforms.ScaleTexCoord, _textureCoordinatesScaleX, _textureCoordinatesScaleY);
-    
-    currentState._textureCoordinatesScaleX = _textureCoordinatesScaleX;
-    currentState._textureCoordinatesScaleY = _textureCoordinatesScaleY;
-  }
+//  if (_textureCoordinatesScaleX != currentState._textureCoordinatesScaleX ||
+//      _textureCoordinatesScaleY != currentState._textureCoordinatesScaleY){
+//    nativeGL->uniform2f(uniforms.ScaleTexCoord, _textureCoordinatesScaleX, _textureCoordinatesScaleY);
+//    
+//    currentState._textureCoordinatesScaleX = _textureCoordinatesScaleX;
+//    currentState._textureCoordinatesScaleY = _textureCoordinatesScaleY;
+//  }
   
-  if (_textureCoordinatesTranslationX != currentState._textureCoordinatesTranslationX ||
-      _textureCoordinatesTranslationY != currentState._textureCoordinatesTranslationY){
-    nativeGL->uniform2f(uniforms.TranslationTexCoord,
-                        _textureCoordinatesTranslationX,
-                        _textureCoordinatesTranslationY);
-    
-    currentState._textureCoordinatesTranslationX = _textureCoordinatesTranslationX;
-    currentState._textureCoordinatesTranslationY = _textureCoordinatesTranslationY;
-  }
-  
+//  if (_textureCoordinatesTranslationX != currentState._textureCoordinatesTranslationX ||
+//      _textureCoordinatesTranslationY != currentState._textureCoordinatesTranslationY){
+//    nativeGL->uniform2f(uniforms.TranslationTexCoord,
+//                        _textureCoordinatesTranslationX,
+//                        _textureCoordinatesTranslationY);
+//    
+//    currentState._textureCoordinatesTranslationX = _textureCoordinatesTranslationX;
+//    currentState._textureCoordinatesTranslationY = _textureCoordinatesTranslationY;
+//  }
+//  
   
   // Flat Color
 //  if (_flatColor != currentState._flatColor) {

@@ -40,8 +40,10 @@ GLState* LazyTextureMapping::bind(const G3MRenderContext* rc, const GLState& par
 //  state->enableTexture2D();
 
   if (_texCoords != NULL) {
-    state->scaleTextureCoordinates(_scale);
-    state->translateTextureCoordinates(_translation);
+    progState.setUniformValue("ScaleTexCoord", _scale.asVector2D());
+    progState.setUniformValue("TranslationTexCoord", _translation.asVector2D());
+//    state->scaleTextureCoordinates(_scale);
+//    state->translateTextureCoordinates(_translation);
     state->bindTexture(_glTextureId);
 //    state->setTextureCoordinates(_texCoords, 2, 0);
     
