@@ -47,6 +47,12 @@ public:
         it++){
       delete it->second;
     }
+    
+    for(std::map<std::string, GPUAttributeValue*> ::const_iterator it = _attributesValues.begin();
+        it != _attributesValues.end();
+        it++){
+      delete it->second;
+    }
   }
   
   
