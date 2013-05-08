@@ -210,11 +210,13 @@ void MarksRenderer::render(const G3MRenderContext* rc,
   // Saving camera for use in onTouchEvent
   _lastCamera = rc->getCurrentCamera();
   
+  
 //  GL* gl = rc->getGL();
   
   GLState state(parentState);
   state.disableDepthTest();
   state.enableBlend();
+
   //  state.enableTextures();
   
   //  GPUProgram* prog = rc->getGPUProgramManager()->getProgram("DefaultProgram");
@@ -241,11 +243,15 @@ void MarksRenderer::render(const G3MRenderContext* rc,
   //state.enableBillboarding();
   //  state.setViewportSize(camera->getWidth(),
   //                        camera->getHeight());
+  
+  _lastCamera->applyOnGPUProgramState(_programState);
+  
   _programState.setUniformValue("ViewPortExtent", Vector2D( (double)camera->getWidth(), (double)camera->getHeight() ));
   
   
   _programState.setUniformValue("TranslationTexCoord", Vector2D(0.0, 0.0));
   _programState.setUniformValue("ScaleTexCoord", Vector2D(1.0, 1.0));
+  
   
 //  state.setTextureCoordinates(_billboardTexCoord, 2, 0);
   

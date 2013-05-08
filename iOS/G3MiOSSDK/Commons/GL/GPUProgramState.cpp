@@ -239,7 +239,7 @@ void GPUProgramState::setAttributeEnabled(const std::string& name, bool enabled)
 }
 
 std::string GPUProgramState::description() const{
-  std::string desc = "PROGRAM STATE\n==========";
+  std::string desc = "PROGRAM STATE\n==========\n";
   
   for(std::map<std::string, GPUUniformValue*> ::const_iterator it = _uniformValues.begin();
       it != _uniformValues.end();

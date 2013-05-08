@@ -15,6 +15,7 @@
 #include "GLState.hpp"
 #include "IFactory.hpp"
 #include "IFloatBuffer.hpp"
+#include "Camera.hpp"
 
 Trail::~Trail() {
   delete _mesh;
@@ -169,6 +170,9 @@ void TrailsRenderer::addTrail(Trail* trail) {
 
 void TrailsRenderer::render(const G3MRenderContext* rc,
                             const GLState& parentState) {
+  
+  rc->getCurrentCamera()->applyOnGPUProgramState(_programState);// Setting projection and modelview
+  
   const int trailsCount = _trails.size();
   for (int i = 0; i < trailsCount; i++) {
     Trail* trail = _trails[i];

@@ -255,10 +255,10 @@ void GLState::applyChanges(GL* gl, GLState& currentState, const AttributesStruct
  
   
 //  //Projection
-  if (!_projectionMatrix.isEqualsTo(currentState._projectionMatrix)){
-    nativeGL->uniformMatrix4fv(uniforms.Projection, false, &_projectionMatrix);
-    currentState._projectionMatrix = _projectionMatrix;
-  }
+//  if (!_projectionMatrix.isEqualsTo(currentState._projectionMatrix)){
+//    nativeGL->uniformMatrix4fv(uniforms.Projection, false, &_projectionMatrix);
+//    currentState._projectionMatrix = _projectionMatrix;
+//  }
   
 //  //Modelview
   if (!_modelViewMatrix.isEqualsTo(currentState._modelViewMatrix)){

@@ -38,6 +38,7 @@ public:
 
   void render(const G3MRenderContext* rc,
               const GLState& parentState) {
+    rc->getCurrentCamera()->applyOnGPUProgramState(_programState);
     _shape->render(rc, parentState, &_programState);
   }
 
@@ -45,8 +46,12 @@ public:
 
 void ShapesRenderer::render(const G3MRenderContext* rc,
                             const GLState& parentState) {
+  
+  rc->getCurrentCamera()->applyOnGPUProgramState(_programState);// Setting projection and modelview
+  
   const Vector3D cameraPosition = rc->getCurrentCamera()->getCartesianPosition();
 
+  
   const int shapesCount = _shapes.size();
   for (int i = 0; i < shapesCount; i++) {
     Shape* shape = _shapes[i];

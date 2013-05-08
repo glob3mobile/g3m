@@ -444,7 +444,6 @@ void Tile::prepareForFullRendering(const G3MRenderContext* rc,
 void Tile::rawRender(const G3MRenderContext *rc,
                      const TileRenderContext* trc,
                      const GLState& parentState, const GPUProgramState* parentProgramState) {
-
   Mesh* tessellatorMesh = getTessellatorMesh(rc, trc);
   if (tessellatorMesh == NULL) {
     return;

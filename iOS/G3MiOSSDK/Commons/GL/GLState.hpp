@@ -99,7 +99,7 @@ private:
   float _clearColorB;
   float _clearColorA;
   
-  MutableMatrix44D _projectionMatrix;
+//  MutableMatrix44D _projectionMatrix;
   MutableMatrix44D _modelViewMatrix;
   
 //  GPUProgram* _program;
@@ -150,7 +150,7 @@ private:
   _clearColorG(0.0),
   _clearColorB(0.0),
   _clearColorA(0.0),
-  _projectionMatrix(MutableMatrix44D::invalid()),
+//  _projectionMatrix(MutableMatrix44D::invalid()),
   _modelViewMatrix(MutableMatrix44D::invalid())
 //  _textureWidth(0.0),
 //  _textureHeight(0.0)
@@ -210,7 +210,7 @@ public:
   _clearColorG(parentState._clearColorG),
   _clearColorB(parentState._clearColorB),
   _clearColorA(parentState._clearColorA),
-  _projectionMatrix(parentState._projectionMatrix),
+//  _projectionMatrix(parentState._projectionMatrix),
   _modelViewMatrix(parentState._modelViewMatrix)
 //  _program(parentState._program)
   {
@@ -391,9 +391,9 @@ public:
     _clearColorA = color.getAlpha();
   }
   
-  void setProjectionMatrix(const MutableMatrix44D& projection){
-    _projectionMatrix = projection;
-  }
+//  void setProjectionMatrix(const MutableMatrix44D& projection){
+//    _projectionMatrix = projection;
+//  }
   
   void setModelViewMatrix(const MutableMatrix44D& mv){
     _modelViewMatrix = mv;
