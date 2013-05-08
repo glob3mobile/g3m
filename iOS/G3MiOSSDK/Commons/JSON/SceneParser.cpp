@@ -179,7 +179,7 @@ void SceneParser::parserJSONWMSLayer(LayerSet* layerSet, const JSONObject* jsonL
                                     "EPSG:4326",
                                     "",
                                     transparent,
-                                    levelTileCondition, TimeInterval::fromDays(30), true, new LayerTilesRenderParameters(Sector::fullSphere(),jsonSplitsLat,jsonSplitsLon,0,19,LayerTilesRenderParameters::defaultTileTextureResolution(),LayerTilesRenderParameters::defaultTileMeshResolution(),false));
+                                    levelTileCondition, TimeInterval::fromDays(30), true, new LayerTilesRenderParameters(Sector::fullSphere(),jsonSplitsLat,jsonSplitsLon,1,19,LayerTilesRenderParameters::defaultTileTextureResolution(),LayerTilesRenderParameters::defaultTileMeshResolution(),false));
   layerSet->addLayer(wmsLayer);
 }
 
@@ -221,7 +221,7 @@ void SceneParser::parserJSONTMSLayer(LayerSet* layerSet, const JSONObject* jsonL
                                     levelTileCondition,
                                     TimeInterval::fromDays(30),
                                     true,
-                                    new LayerTilesRenderParameters(Sector::fullSphere(),jsonSplitsLat,jsonSplitsLon,0,19,LayerTilesRenderParameters::defaultTileTextureResolution(),LayerTilesRenderParameters::defaultTileMeshResolution(),false));
+                                    new LayerTilesRenderParameters(Sector::fullSphere(),jsonSplitsLat,jsonSplitsLon,1,19,LayerTilesRenderParameters::defaultTileTextureResolution(),LayerTilesRenderParameters::defaultTileMeshResolution(),false));
   
   layerSet->addLayer(tmsLayer);
 }
