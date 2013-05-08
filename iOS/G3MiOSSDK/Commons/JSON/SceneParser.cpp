@@ -215,7 +215,7 @@ void SceneParser::parserJSONTMSLayer(LayerSet* layerSet, const JSONObject* jsonL
   TMSLayer* tmsLayer = new TMSLayer(URL::escape(layersSecuence),
                                     URL(jsonURL, false),
                                     sector,
-                                    "image/jpeg",
+                                    "image/png",
                                     "EPSG:4326",
                                     transparent,
                                     levelTileCondition,
