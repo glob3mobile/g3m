@@ -14,13 +14,6 @@
 
 GLState* SGTranslateNode::createState(const G3MRenderContext* rc,
                      const GLState& parentState) {
-  
-//  GLState *state = new GLState(parentState);
-//  
-//  //state->multiplyModelViewMatrix(MutableMatrix44D::createTranslationMatrix(_x, _y, _z));
-//  //SGNode::prepareRender(rc, state);
-//  
-//  return state;
   return NULL;
 }
 

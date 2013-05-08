@@ -124,15 +124,6 @@ void GPUProgramState::applyChanges(GL* gl, GPUProgram& prog) const{
   prog.applyChanges(gl); //Applying changes on GPU
 }
 
-//GPUUniformValue* GPUProgramState::getUniformValue(const std::string name) const{
-//  std::map<std::string, GPUUniformValue*> ::const_iterator it = _uniformValues.find(name);
-//  if (it != _uniformValues.end()){
-//    return it->second;
-//  } else{
-//    return NULL;
-//  }
-//}
-
 void GPUProgramState::setUniformValue(const std::string& name, GPUUniformValue* v){
   std::map<std::string, GPUUniformValue*> ::iterator it = _uniformValues.find(name);
   if (it != _uniformValues.end()){

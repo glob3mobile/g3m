@@ -71,8 +71,6 @@ public:
   void applyChanges(GL* gl, GPUProgram& prog) const;
   
   std::string description() const;
-  
-  //  GPUUniformValue* getUniformValue(const std::string name) const;
 };
 
 #endif /* defined(__G3MiOSSDK__GPUProgramState__) */

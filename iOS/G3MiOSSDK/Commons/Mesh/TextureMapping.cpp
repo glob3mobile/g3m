@@ -16,18 +16,7 @@
 #include "GPUProgramState.hpp"
 
 GLState* SimpleTextureMapping::bind(const G3MRenderContext* rc, const GLState& parentState, GPUProgramState& progState) const {
-  
-  //state->enableTextures();
-  
-  //  GPUProgram* prog = rc->getGPUProgramManager()->getProgram("DefaultProgram");
-  
-  //  int _WORKING_JM;
-  //UniformBool* enableTexture = prog->getUniformBool("EnableTexture");
-  //enableTexture->set(true);
-  
-  //  state->enableTexture2D();
-  
-  
+
   GLState* state= new GLState(parentState);
   if (_texCoords != NULL) {
     
@@ -44,12 +33,8 @@ GLState* SimpleTextureMapping::bind(const G3MRenderContext* rc, const GLState& p
     
     progState.setUniformValue("ScaleTexCoord", _scale.asVector2D());
     progState.setUniformValue("TranslationTexCoord", _translation.asVector2D());
-    
-//    state->scaleTextureCoordinates(_scale);
-//    state->translateTextureCoordinates(_translation);
+  
     state->bindTexture(_glTextureId);
-    
-//    state->setTextureCoordinates(_texCoords, 2, 0);
   }
   else {
     ILogger::instance()->logError("SimpleTextureMapping::bind() with _texCoords == NULL");

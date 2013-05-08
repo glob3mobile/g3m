@@ -92,11 +92,6 @@ void Shape::render(const G3MRenderContext* rc,
       }
       _pendingEffects.clear();
     }
-
-//    GLState state(parentState);
-//    state.multiplyModelViewMatrix(*getTransformMatrix( rc->getPlanet() ) );
-//
-//    rawRender(rc, state, parentProgramState);
     
     GPUProgramState progState(parentProgramState);
     progState.multiplyUniformValue("Modelview", *getTransformMatrix( rc->getPlanet() ));

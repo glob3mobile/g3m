@@ -69,28 +69,5 @@ GPUProgramState * SGGeometryNode::createGPUProgramState(const G3MRenderContext *
 void SGGeometryNode::rawRender(const G3MRenderContext* rc,
                                const GLState& parentState, const GPUProgramState* parentProgramState) {
   GL* gl = rc->getGL();
-
-//  GLState state(parentState);
-//  state.enableVerticesPosition();
-//  if (_colors == NULL) {
-//    state.disableVertexColor();
-//  }
-//  else {
-//    const float colorsIntensity = 1;
-//    state.enableVertexColor(_colors, colorsIntensity);
-//  }
-
-//  if (_uv != NULL) {
-//    state.translateTextureCoordinates((float)0.0, (float)0.0);
-//    
-////    state.scaleTextureCoordinates((float)1.0, (float)1.0);
-////    state.setTextureCoordinates(_uv, 2, 0);
-//  }
-  
-//  GPUProgramState progState(parentProgramState);
-//  progState.setAttributeEnabled("Position", true);
-
-  
-  //state.setVertices(_vertices, 3, 0);
   gl->drawElements(_primitive, _indices, parentState, *rc->getGPUProgramManager(), parentProgramState);
 }

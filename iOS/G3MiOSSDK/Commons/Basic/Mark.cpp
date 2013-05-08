@@ -381,7 +381,6 @@ void Mark::render(const G3MRenderContext* rc,
         IFloatBuffer* vertices = getVertices(planet);
         
         GPUProgramState progState(parentProgramState);
-//        progState.setAttributeEnabled("Position", true);
         progState.setAttributeValue("Position",
                                     vertices, 4, //The attribute is a float vector of 4 elements
                                     3,            //Our buffer contains elements of 3
@@ -394,8 +393,6 @@ void Mark::render(const G3MRenderContext* rc,
         const int nVertices = vertices->size() / 3;
         
         GLState state(parentState);
-        //state.setVertices(vertices, 3, 0);
-//        state.setTextureExtent(_textureWidth, _textureHeight);
         state.bindTexture(_textureId);
         
         GPUProgramManager& progManager = *rc->getGPUProgramManager();

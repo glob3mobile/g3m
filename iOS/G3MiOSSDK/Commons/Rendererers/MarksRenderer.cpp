@@ -87,8 +87,6 @@ void MarksRenderer::initialize(const G3MContext* context) {
                                   false,
                                   0);
   
-  
-  
   _programState.setUniformValue("TranslationTexCoord", Vector2D(0.0, 0.0));
   _programState.setUniformValue("ScaleTexCoord", Vector2D(1.0, 1.0));
   _programState.setUniformValue("ColorPerVertexIntensity", (float) 0.0);
@@ -215,52 +213,20 @@ bool MarksRenderer::isReadyToRender(const G3MRenderContext* rc) {
 
 void MarksRenderer::render(const G3MRenderContext* rc,
                            const GLState& parentState) {
-  //  rc.getLogger()->logInfo("MarksRenderer::render()");
-  
   // Saving camera for use in onTouchEvent
   _lastCamera = rc->getCurrentCamera();
-  
-  
-//  GL* gl = rc->getGL();
   
   GLState state(parentState);
   state.disableDepthTest();
   state.enableBlend();
-
-  //  state.enableTextures();
-  
-  //  GPUProgram* prog = rc->getGPUProgramManager()->getProgram("DefaultProgram");
-  int _WORKING_JM;
-  //UniformBool* enableTexture = prog->getUniformBool("EnableTexture");
-  //enableTexture->set(true);
-  
-  //  state.enableTexture2D();
-  //state.enableVerticesPosition();
-  
-  
-  
-  Vector2D textureTranslation(0.0, 0.0);
-  Vector2D textureScale(1.0, 1.0);
-  
-//  state.translateTextureCoordinates(textureTranslation);
-//  state.scaleTextureCoordinates(textureScale);
-//  
   state.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
   
   const Camera* camera = rc->getCurrentCamera();
   const Vector3D cameraPosition = camera->getCartesianPosition();
   
-  //state.enableBillboarding();
-  //  state.setViewportSize(camera->getWidth(),
-  //                        camera->getHeight());
-  
   _lastCamera->applyOnGPUProgramState(_programState);
   
   _programState.setUniformValue("ViewPortExtent", Vector2D( (double)camera->getWidth(), (double)camera->getHeight() ));
-  
-  
-  
-//  state.setTextureCoordinates(_billboardTexCoord, 2, 0);
   
   const int marksSize = _marks.size();
   for (int i = 0; i < marksSize; i++) {
@@ -271,8 +237,4 @@ void MarksRenderer::render(const G3MRenderContext* rc,
       mark->render(rc, cameraPosition, state, &_programState);
     }
   }
-  
-//  int IS_A_HACK_;//???????
-//  int _WORKING_JM2;
-  //enableTexture->set(false); //DISABLING TEXTURES
 }
