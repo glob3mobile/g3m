@@ -131,7 +131,7 @@ void BusyQuadRenderer::render(const G3MRenderContext* rc,
   //state.setProjectionMatrix(M);
   
   //gl->setProjection(M);
-  state.setModelViewMatrix(MutableMatrix44D::identity());
+//  state.setModelViewMatrix(MutableMatrix44D::identity());
   //gl->loadMatrixf(MutableMatrix44D::identity());
 
   // clear screen
@@ -141,6 +141,7 @@ void BusyQuadRenderer::render(const G3MRenderContext* rc,
   state.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
 
   MutableMatrix44D R2 = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, 1));
+  _programState.setUniformValue("Modelview", R2);
 
   // draw mesh
   _quadMesh->render(rc, parentState, &_programState);

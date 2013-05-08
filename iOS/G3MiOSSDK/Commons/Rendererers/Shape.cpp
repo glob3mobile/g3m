@@ -14,6 +14,7 @@
 #include "ShapeOrbitCameraEffect.hpp"
 #include "ShapePositionEffect.hpp"
 #include "Camera.hpp"
+#include "GPUProgramState.hpp"
 
 class ShapePendingEffect {
 public:
@@ -92,10 +93,14 @@ void Shape::render(const G3MRenderContext* rc,
       _pendingEffects.clear();
     }
 
-    GLState state(parentState);
-    state.multiplyModelViewMatrix(*getTransformMatrix( rc->getPlanet() ) );
-
-    rawRender(rc, state, parentProgramState);
+//    GLState state(parentState);
+//    state.multiplyModelViewMatrix(*getTransformMatrix( rc->getPlanet() ) );
+//
+//    rawRender(rc, state, parentProgramState);
+    
+    GPUProgramState progState(parentProgramState);
+    progState.multiplyUniformValue("Modelview", *getTransformMatrix( rc->getPlanet() ));
+    rawRender(rc, parentState, &progState);
   }
 }
 

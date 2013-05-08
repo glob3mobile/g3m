@@ -203,7 +203,7 @@ void Camera::render(const G3MRenderContext* rc,
 
 void Camera::changeGLState(GLState* state) const {
 //  state->setProjectionMatrix(getProjectionMatrix());
-  state->setModelViewMatrix(getModelMatrix());
+//  state->setModelViewMatrix(getModelMatrix());
   state->enableDepthTest();
 }
 
@@ -335,5 +335,5 @@ void Camera::setPointOfView(const Geodetic3D& center,
 
 void Camera::applyOnGPUProgramState(GPUProgramState& state) const{
   state.setUniformValue("Projection", getProjectionMatrix());
-//  state.setUniformValue("Modelview", getModelMatrix());
+  state.setUniformValue("Modelview", getModelMatrix());
 }

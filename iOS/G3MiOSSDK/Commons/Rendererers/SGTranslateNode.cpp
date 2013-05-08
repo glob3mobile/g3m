@@ -10,14 +10,25 @@
 
 #include "Context.hpp"
 #include "GL.hpp"
+#include "GPUProgramState.hpp"
 
 GLState* SGTranslateNode::createState(const G3MRenderContext* rc,
                      const GLState& parentState) {
   
-  GLState *state = new GLState(parentState);
+//  GLState *state = new GLState(parentState);
+//  
+//  //state->multiplyModelViewMatrix(MutableMatrix44D::createTranslationMatrix(_x, _y, _z));
+//  //SGNode::prepareRender(rc, state);
+//  
+//  return state;
+  return NULL;
+}
+
+GPUProgramState* SGTranslateNode::createGPUProgramState(const G3MRenderContext* rc,
+                                               const GPUProgramState* parentState){
   
-  state->multiplyModelViewMatrix(MutableMatrix44D::createTranslationMatrix(_x, _y, _z));
-  //SGNode::prepareRender(rc, state);
+  GPUProgramState* progState = new GPUProgramState(parentState);
+  progState->multiplyUniformValue("Modelview", MutableMatrix44D::createTranslationMatrix(_x, _y, _z));
+  return progState;
   
-  return state;
 }

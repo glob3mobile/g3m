@@ -106,6 +106,15 @@ const IFloatBuffer* MutableMatrix44D::getColumnMajorFloatBuffer() const {
 }
 
 MutableMatrix44D MutableMatrix44D::multiply(const MutableMatrix44D &that) const {
+  
+  if (this->isIdentity()){
+    return that;
+  } else{
+    if (that.isIdentity()){
+      return *this;
+    }
+  }
+  
   const double that00 = that._m00;
   const double that10 = that._m10;
   const double that20 = that._m20;

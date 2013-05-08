@@ -100,7 +100,7 @@ private:
   float _clearColorA;
   
 //  MutableMatrix44D _projectionMatrix;
-  MutableMatrix44D _modelViewMatrix;
+//  MutableMatrix44D _modelViewMatrix;
   
 //  GPUProgram* _program;
   
@@ -149,9 +149,9 @@ private:
   _clearColorR(0.0),
   _clearColorG(0.0),
   _clearColorB(0.0),
-  _clearColorA(0.0),
+  _clearColorA(0.0)
 //  _projectionMatrix(MutableMatrix44D::invalid()),
-  _modelViewMatrix(MutableMatrix44D::invalid())
+//  _modelViewMatrix(MutableMatrix44D::invalid())
 //  _textureWidth(0.0),
 //  _textureHeight(0.0)
 //  _program(NULL)
@@ -209,9 +209,9 @@ public:
   _clearColorR(parentState._clearColorR),
   _clearColorG(parentState._clearColorG),
   _clearColorB(parentState._clearColorB),
-  _clearColorA(parentState._clearColorA),
+  _clearColorA(parentState._clearColorA)
 //  _projectionMatrix(parentState._projectionMatrix),
-  _modelViewMatrix(parentState._modelViewMatrix)
+//  _modelViewMatrix(parentState._modelViewMatrix)
 //  _program(parentState._program)
   {
   }
@@ -395,13 +395,13 @@ public:
 //    _projectionMatrix = projection;
 //  }
   
-  void setModelViewMatrix(const MutableMatrix44D& mv){
-    _modelViewMatrix = mv;
-  }
-  
-  void multiplyModelViewMatrix(const MutableMatrix44D& mv){
-    _modelViewMatrix = _modelViewMatrix.multiply(mv);
-  }
+//  void setModelViewMatrix(const MutableMatrix44D& mv){
+//    _modelViewMatrix = mv;
+//  }
+//  
+//  void multiplyModelViewMatrix(const MutableMatrix44D& mv){
+//    _modelViewMatrix = _modelViewMatrix.multiply(mv);
+//  }
   
 //  void setTextureExtent(float w, float h){
 //    _textureHeight = h;

@@ -186,7 +186,7 @@ public:
                             0, 0, 0, 1);
   }
   
-  bool isIdentity() {
+  bool isIdentity() const {
     static const MutableMatrix44D identity = MutableMatrix44D::identity();
     return isEqualsTo(identity);
   }

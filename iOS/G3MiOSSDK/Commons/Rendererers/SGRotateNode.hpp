@@ -17,7 +17,7 @@ private:
   const double _y;
   const double _z;
   const double _angle;
-
+  
 public:
   SGRotateNode(const std::string& id,
                const std::string& sId,
@@ -31,12 +31,15 @@ public:
   _z(z),
   _angle(angle)
   {
-
+    
   }
-
+  
   GLState* createState(const G3MRenderContext* rc,
                        const GLState& parentState);
-
+  
+  GPUProgramState* createGPUProgramState(const G3MRenderContext* rc,
+                                         const GPUProgramState* parentState);
+  
 };
 
 #endif

@@ -30,6 +30,11 @@ class GPUProgramState{
   void setUniformValue(const std::string& name, GPUUniformValue* v);
   void setAttributeValue(const std::string& name, GPUAttributeValue* v);
   
+  
+  MutableMatrix44D* getMatrixValue(const std::string name) const;
+  
+  void setValuesOntoGPUProgram(GPUProgram& prog) const;
+  
 public:
   
   
@@ -64,10 +69,6 @@ public:
   void setAttributeEnabled(const std::string& name, bool enabled);
   
   void applyChanges(GL* gl, GPUProgram& prog) const;
-  
-  MutableMatrix44D getMatrixValue(const std::string name) const;
-  
-  void setValuesOntoGPUProgram(GPUProgram& prog) const;
   
   std::string description() const;
   

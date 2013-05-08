@@ -175,18 +175,18 @@ void GPUProgramState::setAttributeValue(const std::string& name,
   }
 }
 
-MutableMatrix44D GPUProgramState::getMatrixValue(const std::string name) const{
+MutableMatrix44D* GPUProgramState::getMatrixValue(const std::string name) const{
   
   std::map<std::string, GPUUniformValue*> ::const_iterator it = _uniformValues.find(name);
   if (it != _uniformValues.end()){
     GPUUniformValue* uv = it->second;
     if (uv->getType() == GLType::glMatrix4Float()){
       GPUUniformValueMatrix4Float *uvm = (GPUUniformValueMatrix4Float *) uv;
-      return uvm->getValue();
+      return new MutableMatrix44D(uvm->getValue());
     }
   }
   
-  return MutableMatrix44D::identity();
+  return NULL;
 }
 
 void GPUProgramState::setUniformValue(const std::string& name, bool b){
@@ -210,27 +210,30 @@ void GPUProgramState::setUniformValue(const std::string& name, const MutableMatr
 }
 
 void GPUProgramState::multiplyUniformValue(const std::string& name, const MutableMatrix44D& m){
-  MutableMatrix44D parentM = _parentState->getMatrixValue(name);
-  MutableMatrix44D thisM = _parentState->getMatrixValue(name);
   
-  MutableMatrix44D acumulatedM;
-  if (parentM.isIdentity()){
-    acumulatedM = thisM;
+  
+  MutableMatrix44D previousM;
+  MutableMatrix44D* thisM = getMatrixValue(name);
+  if (thisM != NULL){
+    previousM = *thisM;
+    delete thisM;
   } else{
-    if (thisM.isIdentity()){
-      acumulatedM = parentM;
+    MutableMatrix44D* parentM = NULL;
+    const GPUProgramState* parent = _parentState;
+    while (parent != NULL && parentM == NULL) {
+      parentM = parent->getMatrixValue(name);
+      parent = parent->_parentState;
+    }
+    
+    if (parentM != NULL){
+      previousM = *parentM;
+      delete parentM;
     } else{
-      acumulatedM = parentM.multiply(thisM);
+      ILogger::instance()->logError("Multiplying matrix uniform without a previous value.");
     }
   }
-  
-  if (acumulatedM.isIdentity()){
-    acumulatedM = acumulatedM.multiply(m);
-  } else{
-    acumulatedM = m;
-  }
-  
-  setUniformValue(name, new GPUUniformValueMatrix4Float(acumulatedM ));
+
+  setUniformValue(name, new GPUUniformValueMatrix4Float(previousM.multiply(m) ));
 }
 
 void GPUProgramState::setAttributeEnabled(const std::string& name, bool enabled){

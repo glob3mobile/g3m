@@ -232,7 +232,7 @@ void GPUProgram::onUsed(){
  Must be called when the program is no longer used
  */
 void GPUProgram::onUnused(){
-  ILogger::instance()->logInfo("GPUProgram %s unused", _name.c_str());
+  //ILogger::instance()->logInfo("GPUProgram %s unused", _name.c_str());
   
   for (std::map<std::string, GPUUniform*>::iterator iter = _uniforms.begin(); iter != _uniforms.end(); iter++) {
     GPUUniform* u = iter->second;
@@ -256,9 +256,9 @@ void GPUProgram::applyChanges(GL* gl){
     if (u->wasSet()){
       u->applyChanges(gl);
     } else{
-      if (u->getName().compare("Modelview") != 0){
+      //if (u->getName().compare("Modelview") != 0){
       ILogger::instance()->logError("Uniform " + u->getName() + " was not set.");
-      }
+      //}
     }
   }
   
@@ -268,7 +268,7 @@ void GPUProgram::applyChanges(GL* gl){
     if (a->wasSet()){
       a->applyChanges(gl);
     } else{
-      if (!a->wasSet() && a->isEnabled()){
+      if (a->isEnabled()){
         ILogger::instance()->logError("Attribute " + a->getName() + " was not set but it is enabled.");
       }
     }

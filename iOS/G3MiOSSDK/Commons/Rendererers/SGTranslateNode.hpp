@@ -34,6 +34,9 @@ public:
 
   GLState* createState(const G3MRenderContext* rc,
                        const GLState& parentState);
+  
+  GPUProgramState* createGPUProgramState(const G3MRenderContext* rc,
+                                         const GPUProgramState* parentState);
 
 };
 
