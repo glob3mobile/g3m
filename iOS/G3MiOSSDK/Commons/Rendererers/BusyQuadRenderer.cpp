@@ -26,8 +26,6 @@
 #include "GLConstants.hpp"
 #include "GPUProgram.hpp"
 
-#include "GPUProgramManager.hpp"
-
 void BusyQuadRenderer::start(const G3MRenderContext* rc) {
   if (_animated) {
     Effect *effect = new BusyEffect(this);
@@ -118,22 +116,6 @@ void BusyQuadRenderer::render(const G3MRenderContext* rc,
   MutableMatrix44D M = MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth, halfWidth,
                                                                             -halfHeight, halfHeight,
                                                                             -halfWidth, halfWidth);
-  //state.getProgram()->setUniform(rc->getGL(), "Projection", M);
-  
-//  GPUProgram* prog = rc->getGPUProgramManager()->getProgram("DefaultProgram");
-//  int _WORKING_JM;
-//  UniformMatrix4Float* projection = prog->getUniformMatrix4Float("Projection");
-//  UniformMatrix4Float* modelview = prog->getUniformMatrix4Float("Modelview");
-  
-//  state.setProgram(prog);
-//  projection->set(M);
-  //modelview->set(MutableMatrix44D::identity());
-  //state.setProjectionMatrix(M);
-  
-  //gl->setProjection(M);
-//  state.setModelViewMatrix(MutableMatrix44D::identity());
-  //gl->loadMatrixf(MutableMatrix44D::identity());
-
   // clear screen
   state.setClearColor(*_backgroundColor);
   gl->clearScreen(state);

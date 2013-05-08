@@ -8,7 +8,6 @@
 
 #include "AbstractMeshShape.hpp"
 #include "Mesh.hpp"
-//#include "GL.hpp"
 
 AbstractMeshShape::~AbstractMeshShape() {
   delete _mesh;

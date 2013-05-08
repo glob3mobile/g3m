@@ -120,7 +120,6 @@ void AbstractMesh::render(const G3MRenderContext *rc,
   
   
   GLState state(parentState);
-  //state.enableVerticesPosition();
   state.setLineWidth(_lineWidth);
   state.setPointSize(_pointSize);
   
@@ -171,23 +170,7 @@ void AbstractMesh::render(const G3MRenderContext *rc,
     progState.setUniformValue("FlatColorIntensity", (float)0.0);
   }
 
-//  if (_colors) {
-//    state.enableVertexColor(_colors, _colorsIntensity);
-//  }
-//  if (_flatColor) {
-//    state.enableFlatColor(*_flatColor, _colorsIntensity);
-//    if (_flatColor->isTransparent()) {
-//      state.enableBlend();
-//      
-//      state.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
-//    }
-//  }
-
-//  state.setVertices(_vertices, 3, 0);
-
   if (_translationMatrix != NULL){
-//    state.multiplyModelViewMatrix(*_translationMatrix);
-    
     progState.multiplyUniformValue("Modelview", *_translationMatrix);
   }
 
