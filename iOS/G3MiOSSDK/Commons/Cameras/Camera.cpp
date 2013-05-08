@@ -189,24 +189,8 @@ void Camera::orbitTo(const Vector3D& pos) {
 
 void Camera::render(const G3MRenderContext* rc,
                     const GLState& parentState) const {
-  //GL* gl = rc->getGL();
-  //gl->setProjection(getProjectionMatrix());
-  //gl->loadMatrixf(getModelMatrix());
-  //parentState.getProgram()->setUniform(rc->getGL(), "Projection", getProjectionMatrix());
-  int _WORKING_JM;
-//  GPUProgram* prog = rc->getGPUProgramManager()->getProgram("DefaultProgram");
-//  UniformMatrix4Float* projection = prog->getUniformMatrix4Float("Projection");
-//  UniformMatrix4Float* modelview = prog->getUniformMatrix4Float("Modelview");
-//  projection->set(getProjectionMatrix());
-  //modelview->set(getModelViewMatrix());
+  //TODO: NO LONGER NEEDED!!!
 }
-
-void Camera::changeGLState(GLState* state) const {
-//  state->setProjectionMatrix(getProjectionMatrix());
-//  state->setModelViewMatrix(getModelMatrix());
-  state->enableDepthTest();
-}
-
 
 Vector3D Camera::pixel2Ray(const Vector2I& pixel) const {
   const int px = pixel._x;

@@ -81,8 +81,6 @@ public:
   void render(const G3MRenderContext* rc,
               const GLState& parentState);
   
-  void changeGLState(const G3MRenderContext* rc, GLState* state) const;
-
   void initialize(const G3MContext* context);
 
   bool onTouchEvent(const G3MEventContext* ec,

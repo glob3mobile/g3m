@@ -36,6 +36,7 @@
 
 #include "GLState.hpp"
 #include "GPUProgramState.hpp"
+#include "GLState.hpp"
 
 void G3MWidget::initSingletons(ILogger*            logger,
                                IFactory*           factory,
@@ -434,7 +435,7 @@ void G3MWidget::render(int width, int height) {
 
   if (_mainRendererReady) {
     _cameraRenderer->render(&rc, *_rootState);
-    _cameraRenderer->changeGLState(&rc, (GLState*)_rootState);
+    ((GLState*)_rootState)->enableDepthTest(); //Enabling depth test
   }
 
   if (_selectedRenderer->isEnable()) {
