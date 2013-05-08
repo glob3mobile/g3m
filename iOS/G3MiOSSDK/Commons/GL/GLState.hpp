@@ -41,7 +41,6 @@ private:
 #endif
   
   float _lineWidth;
-  float _pointSize;
   
   //Polygon Offset
   bool  _polygonOffsetFill;
@@ -67,7 +66,6 @@ private:
   _cullFace(true),
   _culledFace(GLCullFace::back()),
   _lineWidth(1),
-  _pointSize(1),
   _polygonOffsetFactor(0),
   _polygonOffsetUnits(0),
   _polygonOffsetFill(false),
@@ -95,7 +93,6 @@ public:
   _cullFace(parentState._cullFace),
   _culledFace(parentState._culledFace),
   _lineWidth(parentState._lineWidth),
-  _pointSize(parentState._pointSize),
   _polygonOffsetFactor(parentState._polygonOffsetFactor),
   _polygonOffsetUnits(parentState._polygonOffsetUnits),
   _polygonOffsetFill(parentState._polygonOffsetFill),
@@ -139,9 +136,6 @@ public:
   void setLineWidth(float lineWidth) { _lineWidth = lineWidth; }
   float lineWidth() const { return _lineWidth; }
   
-  void setPointSize(float ps) { _pointSize = ps;}
-  float pointSize() const { return _pointSize;}
-  
   void enablePolygonOffsetFill(float factor, float units){
     _polygonOffsetFill = true;
     _polygonOffsetFactor = factor;
@@ -179,7 +173,7 @@ public:
     _clearColorA = color.getAlpha();
   }
   
-  void applyChanges(GL* gl, GLState& currentState, const AttributesStruct& attributes,const UniformsStruct& uniforms) const;
+  void applyChanges(GL* gl, GLState& currentState) const;
 };
 
 #endif

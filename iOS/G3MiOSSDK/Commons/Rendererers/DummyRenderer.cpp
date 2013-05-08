@@ -18,6 +18,7 @@
 #include "IShortBuffer.hpp"
 
 #include "GPUProgramState.hpp"
+#include "Camera.hpp"
 
 DummyRenderer::~DummyRenderer() {
   delete _indices;
@@ -74,25 +75,35 @@ void DummyRenderer::drawFace(GL* gl, const GLState& parentState,
                              const Vector3D& rotationAxis, GPUProgramManager &manager,
                              const GPUProgramState* parentProgramState) const
 {
-  //TODO: Adapt to gpuprogramstate
-//  GLState state(parentState);
-//  
-//  state.enableFlatColor(color, (float)1.0);
-//  MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(translation);
-//  MutableMatrix44D R = MutableMatrix44D::createRotationMatrix(a, rotationAxis);
-//  
-//  state.multiplyModelViewMatrix(T.multiply(R));
-//  gl->drawElements(GLPrimitive::triangleStrip(), _indices, state, manager, parentProgramState);
+  
+  GPUProgramState progState(parentProgramState);
+  progState.setUniformValue("FlatColor", color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+  progState.setUniformValue("FlatColorIntensity", (float)1.0);
+
+  MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(translation);
+  MutableMatrix44D R = MutableMatrix44D::createRotationMatrix(a, rotationAxis);
+  
+  progState.multiplyUniformValue("Modelview", T.multiply(R));
+  
+  gl->drawElements(GLPrimitive::triangleStrip(), _indices, parentState, manager, &progState);
 }
 
 void DummyRenderer::render(const G3MRenderContext* rc,
                            const GLState& parentState) {
-  /*
+  
   GPUProgramState progState(NULL);
+  rc->getCurrentCamera()->applyOnGPUProgramState(progState);
+  
+  progState.setAttributeEnabled("Position", true);
+  progState.setAttributeValue("Position",
+                              _vertices, 4, //The attribute is a float vector of 4 elements
+                              3,            //Our buffer contains elements of 3
+                              0,            //Index 0
+                              false,        //Not normalized
+                              0);           //Stride 0
   
   GLState state(parentState);
-  state.enableVerticesPosition();
-  state.setVertices(_vertices, 3, 0);
+
   GL* gl = rc->getGL();
   GPUProgramManager* manager = rc->getGPUProgramManager();
   drawFace(gl, state,
@@ -124,5 +135,4 @@ void DummyRenderer::render(const G3MRenderContext* rc,
            Color::fromRGBA((float) 0.5,(float)  0.5, (float) 0.5, (float) 1),
            Vector3D(-_halfSize,0,0),
            Angle::fromDegrees(180), Vector3D(0,0,1), *manager, &progState);
-   */
 }

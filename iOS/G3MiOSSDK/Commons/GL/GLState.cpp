@@ -16,7 +16,7 @@
 #include "GPUProgram.hpp"
 
 
-void GLState::applyChanges(GL* gl, GLState& currentState, const AttributesStruct& attributes,const UniformsStruct& uniforms) const{
+void GLState::applyChanges(GL* gl, GLState& currentState) const{
 
   INativeGL* nativeGL = gl->getNative();
   
@@ -61,12 +61,6 @@ void GLState::applyChanges(GL* gl, GLState& currentState, const AttributesStruct
     nativeGL->lineWidth(_lineWidth);
     currentState._lineWidth = _lineWidth;
   }
-  
-  if (_pointSize != currentState._pointSize) {
-    nativeGL->uniform1f(uniforms.PointSize, _pointSize);
-    currentState._pointSize = _pointSize;
-  }
-  
   
   //Polygon Offset
   if (_polygonOffsetFill != currentState._polygonOffsetFill){

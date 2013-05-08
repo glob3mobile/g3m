@@ -138,9 +138,6 @@ void GL::drawElements(int mode,
                                  indices->description().c_str());
   }
   
-  
-  //setProgramState(progManager, *gpuState);
-  //setGLState(state);
   applyGLStateAndGPUProgramState(state, progManager, *gpuState);
   
   _nativeGL->drawElements(mode,
@@ -148,7 +145,7 @@ void GL::drawElements(int mode,
                           indices);
   
   //TODO: CHECKING GPU STATUS BY DELETING ALL
-  progManager.getProgram(*gpuState)->onUnused();
+  //progManager.getProgram(*gpuState)->onUnused();
 }
 
 void GL::drawArrays(int mode,
@@ -163,9 +160,6 @@ void GL::drawArrays(int mode,
                                  count);
   }
   
-  
-//  setProgramState(progManager, *gpuState);
-//  setGLState(state);
   applyGLStateAndGPUProgramState(state, progManager, *gpuState);
 
   
@@ -218,23 +212,6 @@ const IGLTextureId* GL::uploadTexture(const IImage* image,
   
   return texId;
 }
-
-//IFloatBuffer* GL::getBillboardTexCoord() {
-//  if (_verbose) {
-//    ILogger::instance()->logInfo("GL::getBillboardTexCoord()");
-//  }
-//  
-//  if (_billboardTexCoord == NULL) {
-//    FloatBufferBuilderFromCartesian2D texCoor;
-//    texCoor.add(1,1);
-//    texCoor.add(1,0);
-//    texCoor.add(0,1);
-//    texCoor.add(0,0);
-//    _billboardTexCoord = texCoor.create();
-//  }
-//  
-//  return _billboardTexCoord;
-//}
 
 const IGLTextureId* GL::getGLTextureId() {
   if (_verbose) {
@@ -302,7 +279,7 @@ void GL::deleteTexture(const IGLTextureId* textureId) {
 }
 
 void GL::setGLState(const GLState& state) {
-  state.applyChanges(this, *_currentState, Attributes, Uniforms);
+  state.applyChanges(this, *_currentState);
 }
 
 void GL::setProgramState(GPUProgramManager& progManager, const GPUProgramState& progState) {
@@ -321,9 +298,6 @@ void GL::useProgram(GPUProgram* program) {
 }
 
 void GL::applyGLStateAndGPUProgramState(const GLState& state, GPUProgramManager& progManager, const GPUProgramState& progState){
-  
-  state.applyChanges(this, *_currentState, Attributes, Uniforms);
-  
+  state.applyChanges(this, *_currentState);
   setProgramState(progManager, progState);
-
 }

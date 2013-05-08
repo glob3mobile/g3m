@@ -121,9 +121,11 @@ void AbstractMesh::render(const G3MRenderContext *rc,
   
   GLState state(parentState);
   state.setLineWidth(_lineWidth);
-  state.setPointSize(_pointSize);
   
   GPUProgramState progState(parentProgramState);
+  
+  progState.setUniformValue("PointSize", _pointSize);
+  
   progState.setAttributeEnabled("Position", true);
   progState.setAttributeValue("Position",
                               _vertices, 4, //The attribute is a float vector of 4 elements
