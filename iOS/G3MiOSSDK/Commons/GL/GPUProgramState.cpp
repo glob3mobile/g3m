@@ -10,6 +10,9 @@
 
 void GPUProgramState::setValuesOntoGPUProgram(GPUProgram& prog) const
 {
+  if (_parentState != NULL){
+    _parentState->setValuesOntoGPUProgram(prog);
+  }
   
   for(std::map<std::string, GPUUniformValue*> ::const_iterator it = _uniformValues.begin();
       it != _uniformValues.end();
@@ -116,10 +119,6 @@ void GPUProgramState::setValuesOntoGPUProgram(GPUProgram& prog) const
 }
 
 void GPUProgramState::applyChanges(GL* gl, GPUProgram& prog) const{
-  if (_parentState != NULL){
-    _parentState->setValuesOntoGPUProgram(prog);
-  }
-  
   setValuesOntoGPUProgram(prog);
   
   prog.applyChanges(gl); //Applying changes on GPU

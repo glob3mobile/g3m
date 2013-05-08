@@ -146,6 +146,9 @@ void GL::drawElements(int mode,
   _nativeGL->drawElements(mode,
                           indices->size(),
                           indices);
+  
+  //TODO: CHECKING GPU STATUS BY DELETING ALL
+  progManager.getProgram(*gpuState)->onUnused();
 }
 
 void GL::drawArrays(int mode,

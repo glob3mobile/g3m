@@ -143,10 +143,11 @@ void AbstractMesh::render(const G3MRenderContext *rc,
                                 false,        //Not normalized
                                 0);           //Stride 0
     
-    progState.setUniformValue("FlatColorIntensity", _colorsIntensity);
+    progState.setUniformValue("ColorPerVertexIntensity", _colorsIntensity);
   } else{
     progState.setAttributeEnabled("Color", false);
     progState.setUniformValue("EnableColorPerVertex", false);
+    progState.setUniformValue("ColorPerVertexIntensity", (float)0.0);
   }
   
   if (_flatColor != NULL){
@@ -163,6 +164,11 @@ void AbstractMesh::render(const G3MRenderContext *rc,
       state.enableBlend();
       state.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
     }
+  } else{
+    progState.setUniformValue("EnableFlatColor", false);
+    progState.setUniformValue("ColorPerVertexIntensity", (float)0.0);
+    progState.setUniformValue("FlatColor", (float)0.0, (float)0.0, (float)0.0, (float)0.0);
+    progState.setUniformValue("FlatColorIntensity", (float)0.0);
   }
 
 //  if (_colors) {

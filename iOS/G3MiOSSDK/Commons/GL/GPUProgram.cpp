@@ -70,18 +70,18 @@ GPUProgram::~GPUProgram(){
 
 bool GPUProgram::linkProgram(GL* gl) const {
   bool result = gl->linkProgram(_programID);
-//#if defined(DEBUG)
-//  _nativeGL->printProgramInfoLog(_programID);
-//#endif
+  //#if defined(DEBUG)
+  //  _nativeGL->printProgramInfoLog(_programID);
+  //#endif
   return result;
 }
 
 bool GPUProgram::compileShader(GL* gl, int shader, const std::string& source) const{
   bool result = gl->compileShader(shader, source);
   
-//#if defined(DEBUG)
-//  _nativeGL->printShaderInfoLog(shader);
-//#endif
+  //#if defined(DEBUG)
+  //  _nativeGL->printShaderInfoLog(shader);
+  //#endif
   
   if (result){
     gl->attachShader(_programID, shader);
@@ -232,7 +232,17 @@ void GPUProgram::onUsed(){
  Must be called when the program is no longer used
  */
 void GPUProgram::onUnused(){
-    ILogger::instance()->logInfo("GPUProgram %s unused", _name.c_str());
+  ILogger::instance()->logInfo("GPUProgram %s unused", _name.c_str());
+  
+  for (std::map<std::string, GPUUniform*>::iterator iter = _uniforms.begin(); iter != _uniforms.end(); iter++) {
+    GPUUniform* u = iter->second;
+    u->unset();
+  }
+  
+  for (std::map<std::string, GPUAttribute*>::iterator iter = _attributes.begin(); iter != _attributes.end(); iter++) {
+    GPUAttribute* a = iter->second;
+    a->unset();
+  }
 }
 
 /**
@@ -240,13 +250,27 @@ void GPUProgram::onUnused(){
  */
 void GPUProgram::applyChanges(GL* gl){
   //ILogger::instance()->logInfo("GPUProgram %s applying changes", _name.c_str());
-  std::map<std::string, GPUUniform*>::iterator iter;
-  for (iter = _uniforms.begin(); iter != _uniforms.end(); iter++) {
-    iter->second->applyChanges(gl);
+  for (std::map<std::string, GPUUniform*>::iterator iter = _uniforms.begin(); iter != _uniforms.end(); iter++) {
+    
+    GPUUniform* u = iter->second;
+    if (u->wasSet()){
+      u->applyChanges(gl);
+    } else{
+      if (u->getName().compare("Modelview") != 0){
+      ILogger::instance()->logError("Uniform " + u->getName() + " was not set.");
+      }
+    }
   }
   
-  std::map<std::string, GPUAttribute*>::iterator iter2;
-  for (iter2 = _attributes.begin(); iter2 != _attributes.end(); iter2++) {
-    iter2->second->applyChanges(gl);
+  for (std::map<std::string, GPUAttribute*>::iterator iter = _attributes.begin(); iter != _attributes.end(); iter++) {
+    
+    GPUAttribute* a = iter->second;
+    if (a->wasSet()){
+      a->applyChanges(gl);
+    } else{
+      if (!a->wasSet() && a->isEnabled()){
+        ILogger::instance()->logError("Attribute " + a->getName() + " was not set but it is enabled.");
+      }
+    }
   }
 }

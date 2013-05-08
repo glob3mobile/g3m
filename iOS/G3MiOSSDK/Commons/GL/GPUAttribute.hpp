@@ -83,6 +83,18 @@ public:
   const int getID() const{ return _id;}
   int getType() const{ return _type;}
   int getSize() const{ return _size;}
+  bool wasSet() const{ return _value != NULL;}
+  bool isEnabled() const { return _enabled;}
+  
+  void unset(){
+    if (_value != NULL){
+      delete _value;
+      _value = NULL;
+    }
+    _enabled = false;
+    _dirty = false;
+    _dirtyEnabled = false;
+  }
   
   void set(GPUAttributeValue* v){
     if (_type != v->getType()){ //type checking

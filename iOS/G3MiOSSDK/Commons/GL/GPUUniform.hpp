@@ -53,6 +53,15 @@ public:
   const std::string getName() const{ return _name;}
   const IGLUniformID* getID() const{ return _id;}
   int getType() const{ return _type;}
+  bool wasSet() const { return _value != NULL;}
+  
+  void unset(){
+    if (_value != NULL){
+      delete _value;
+      _value = NULL;
+    }
+    _dirty = false;
+  }
   
   void set(GPUUniformValue* v){
     if (_type != v->getType()){ //type checking 

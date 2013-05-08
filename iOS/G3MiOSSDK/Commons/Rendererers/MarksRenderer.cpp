@@ -87,6 +87,16 @@ void MarksRenderer::initialize(const G3MContext* context) {
                                   false,
                                   0);
   
+  
+  
+  _programState.setUniformValue("TranslationTexCoord", Vector2D(0.0, 0.0));
+  _programState.setUniformValue("ScaleTexCoord", Vector2D(1.0, 1.0));
+  _programState.setUniformValue("ColorPerVertexIntensity", (float) 0.0);
+  _programState.setUniformValue("EnableColorPerVertex", false);
+  _programState.setUniformValue("EnableFlatColor", false);
+  _programState.setUniformValue("FlatColor", (float) 0.0, (float) 0.0, (float) 0.0, (float) 0.0);
+  _programState.setUniformValue("FlatColorIntensity", (float) 0.0);
+  _programState.setUniformValue("PointSize", (float) 0.0);
 }
 
 void MarksRenderer::addMark(Mark* mark) {
@@ -248,9 +258,6 @@ void MarksRenderer::render(const G3MRenderContext* rc,
   
   _programState.setUniformValue("ViewPortExtent", Vector2D( (double)camera->getWidth(), (double)camera->getHeight() ));
   
-  
-  _programState.setUniformValue("TranslationTexCoord", Vector2D(0.0, 0.0));
-  _programState.setUniformValue("ScaleTexCoord", Vector2D(1.0, 1.0));
   
   
 //  state.setTextureCoordinates(_billboardTexCoord, 2, 0);
