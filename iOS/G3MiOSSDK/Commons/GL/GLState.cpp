@@ -267,13 +267,13 @@ void GLState::applyChanges(GL* gl, GLState& currentState, const AttributesStruct
   }
   
   
-  
-  //Texture Extent
-  if (_textureWidth != currentState._textureWidth || _textureHeight != currentState._textureHeight){
-    gl->getNative()->uniform2f(uniforms.TextureExtent, _textureWidth, _textureHeight);
-    currentState._textureHeight = _textureHeight;
-    currentState._textureWidth = _textureWidth;
-  }
+//  
+//  //Texture Extent
+//  if (_textureWidth != currentState._textureWidth || _textureHeight != currentState._textureHeight){
+//    gl->getNative()->uniform2f(uniforms.TextureExtent, _textureWidth, _textureHeight);
+//    currentState._textureHeight = _textureHeight;
+//    currentState._textureWidth = _textureWidth;
+//  }
   
 
   

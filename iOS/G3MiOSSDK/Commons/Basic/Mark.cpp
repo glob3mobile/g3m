@@ -388,11 +388,14 @@ void Mark::render(const G3MRenderContext* rc,
                                     0,            //Index 0
                                     false,        //Not normalized
                                     0);           //Stride 0
+        
+        progState.setUniformValue("TextureExtent", Vector2D(_textureWidth, _textureHeight));
+        
         const int nVertices = vertices->size() / 3;
         
         GLState state(parentState);
         //state.setVertices(vertices, 3, 0);
-        state.setTextureExtent(_textureWidth, _textureHeight);
+//        state.setTextureExtent(_textureWidth, _textureHeight);
         state.bindTexture(_textureId);
         
         GPUProgramManager& progManager = *rc->getGPUProgramManager();

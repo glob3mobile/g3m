@@ -69,6 +69,7 @@ void GEOGeometry::render(const G3MRenderContext* rc,
   GPUProgramState progState(parentProgramState);
   progState.setUniformValue("EnableTexture", false);
   progState.setAttributeEnabled("TextureCoord", false);
+  progState.setUniformValue("BillBoard", false);
   
   GLState state(parentState);
   state.disableDepthTest();

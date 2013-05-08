@@ -61,8 +61,8 @@ private:
 //  float _textureCoordinatesTranslationY;
 
   //Texture Extent
-  float _textureWidth;
-  float _textureHeight;
+//  float _textureWidth;
+//  float _textureHeight;
   
 #ifdef C_CODE
   const IGLTextureId* _boundTextureId;
@@ -151,9 +151,9 @@ private:
   _clearColorB(0.0),
   _clearColorA(0.0),
   _projectionMatrix(MutableMatrix44D::invalid()),
-  _modelViewMatrix(MutableMatrix44D::invalid()),
-  _textureWidth(0.0),
-  _textureHeight(0.0)
+  _modelViewMatrix(MutableMatrix44D::invalid())
+//  _textureWidth(0.0),
+//  _textureHeight(0.0)
 //  _program(NULL)
   {
   }
@@ -403,10 +403,10 @@ public:
     _modelViewMatrix = _modelViewMatrix.multiply(mv);
   }
   
-  void setTextureExtent(float w, float h){
-    _textureHeight = h;
-    _textureWidth = w;
-  }
+//  void setTextureExtent(float w, float h){
+//    _textureHeight = h;
+//    _textureWidth = w;
+//  }
   
   void applyChanges(GL* gl, GLState& currentState, const AttributesStruct& attributes,const UniformsStruct& uniforms) const;
   
