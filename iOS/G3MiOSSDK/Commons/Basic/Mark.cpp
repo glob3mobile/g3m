@@ -381,21 +381,29 @@ void Mark::render(const G3MRenderContext* rc,
         IFloatBuffer* vertices = getVertices(planet);
         
         GPUProgramState progState(parentProgramState);
-        progState.setAttributeEnabled("Position", true);
+//        progState.setAttributeEnabled("Position", true);
         progState.setAttributeValue("Position",
                                     vertices, 4, //The attribute is a float vector of 4 elements
                                     3,            //Our buffer contains elements of 3
                                     0,            //Index 0
                                     false,        //Not normalized
                                     0);           //Stride 0
+        const int nVertices = vertices->size() / 3;
         
-        printf("MARK %f, %d, %d\n", vertices->get(0), _textureWidth, _textureHeight );
-
         GLState state(parentState);
         //state.setVertices(vertices, 3, 0);
         state.setTextureExtent(_textureWidth, _textureHeight);
         state.bindTexture(_textureId);
-        gl->drawArrays(GLPrimitive::triangleStrip(), 0, vertices->size() / 3, state, *rc->getGPUProgramManager(), &progState);
+        
+        GPUProgramManager& progManager = *rc->getGPUProgramManager();
+        
+        
+        gl->drawArrays(GLPrimitive::triangleStrip(),
+                       0,
+                       nVertices,
+                       state,
+                       progManager,
+                       &progState);
         
         _renderedMark = true;
       }

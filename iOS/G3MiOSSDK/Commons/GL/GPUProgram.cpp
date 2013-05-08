@@ -240,7 +240,6 @@ void GPUProgram::onUnused(){
  */
 void GPUProgram::applyChanges(GL* gl){
   //ILogger::instance()->logInfo("GPUProgram %s applying changes", _name.c_str());
-  
   std::map<std::string, GPUUniform*>::iterator iter;
   for (iter = _uniforms.begin(); iter != _uniforms.end(); iter++) {
     iter->second->applyChanges(gl);

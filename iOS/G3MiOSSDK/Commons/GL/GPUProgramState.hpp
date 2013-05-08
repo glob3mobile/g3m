@@ -69,6 +69,8 @@ public:
   
   void setValuesOntoGPUProgram(GPUProgram& prog) const;
   
+  std::string description() const;
+  
   //  GPUUniformValue* getUniformValue(const std::string name) const;
 };
 

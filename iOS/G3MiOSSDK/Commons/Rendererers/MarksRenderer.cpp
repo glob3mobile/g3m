@@ -210,7 +210,7 @@ void MarksRenderer::render(const G3MRenderContext* rc,
   // Saving camera for use in onTouchEvent
   _lastCamera = rc->getCurrentCamera();
   
-  GL* gl = rc->getGL();
+//  GL* gl = rc->getGL();
   
   GLState state(parentState);
   state.disableDepthTest();
@@ -247,7 +247,7 @@ void MarksRenderer::render(const G3MRenderContext* rc,
   _programState.setUniformValue("TranslationTexCoord", Vector2D(0.0, 0.0));
   _programState.setUniformValue("ScaleTexCoord", Vector2D(1.0, 1.0));
   
-  state.setTextureCoordinates(_billboardTexCoord, 2, 0);
+//  state.setTextureCoordinates(_billboardTexCoord, 2, 0);
   
   const int marksSize = _marks.size();
   for (int i = 0; i < marksSize; i++) {

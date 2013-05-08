@@ -300,11 +300,9 @@ void GL::deleteTexture(const IGLTextureId* textureId) {
 
 void GL::setGLState(const GLState& state) {
   state.applyChanges(this, *_currentState, Attributes, Uniforms);
-  state.applyChangesAfterGPUProgramWasSet(this, *_currentState);
 }
 
 void GL::setProgramState(GPUProgramManager& progManager, const GPUProgramState& progState) {
-  
   GPUProgram* prog = progManager.getProgram(progState);
   if (prog != _currentGPUProgram){
     _currentGPUProgram = prog;
@@ -322,8 +320,7 @@ void GL::useProgram(GPUProgram* program) {
 void GL::applyGLStateAndGPUProgramState(const GLState& state, GPUProgramManager& progManager, const GPUProgramState& progState){
   
   state.applyChanges(this, *_currentState, Attributes, Uniforms);
-  setProgramState(progManager, progState);
-  state.applyChangesAfterGPUProgramWasSet(this, *_currentState);
-
   
+  setProgramState(progManager, progState);
+
 }

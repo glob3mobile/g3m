@@ -109,7 +109,7 @@ public:
     
     const float* pointer = buffer_iOS->getPointer();
     glVertexAttribPointer(index, size, GL_FLOAT, normalized, stride, pointer);
-
+    
 //    FloatBuffer_iOS* buffer_iOS = (FloatBuffer_iOS*) buffer;
 //
 //    GLuint glBuffer = buffer_iOS->getGLBuffer(size);

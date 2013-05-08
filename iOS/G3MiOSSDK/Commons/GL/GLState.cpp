@@ -15,41 +15,6 @@
 
 #include "GPUProgram.hpp"
 
-void GLState::applyChangesAfterGPUProgramWasSet(GL* gl, GLState& currentState) const {
-  
-  
-  //Texture (After blending factors)
-  if (_boundTextureId != NULL){
-    if (currentState._boundTextureId == NULL ||
-        !_boundTextureId->isEqualsTo(currentState._boundTextureId)){
-      gl->getNative()->bindTexture(GLTextureType::texture2D(), _boundTextureId);
-      
-      currentState._boundTextureId = _boundTextureId;
-    } else{
-      //ILogger::instance()->logInfo("Texture already bound.\n");
-    }
-  }
-  
-  if (_pixelStoreIAlignmentUnpack != -1 && _pixelStoreIAlignmentUnpack != currentState._pixelStoreIAlignmentUnpack){
-    gl->getNative()->pixelStorei(GLAlignment::unpack(), _pixelStoreIAlignmentUnpack);
-    currentState._pixelStoreIAlignmentUnpack = _pixelStoreIAlignmentUnpack;
-  }
-  
-  if (_clearColorR != currentState._clearColorR ||
-      _clearColorG != currentState._clearColorG ||
-      _clearColorB != currentState._clearColorB ||
-      _clearColorA != currentState._clearColorA){
-    gl->getNative()->clearColor(_clearColorR, _clearColorG, _clearColorB, _clearColorA);
-    currentState._clearColorR = _clearColorR;
-    currentState._clearColorG = _clearColorG;
-    currentState._clearColorB = _clearColorB;
-    currentState._clearColorA = _clearColorA;
-  }
-  
-
-}
-
-
 
 void GLState::applyChanges(GL* gl, GLState& currentState, const AttributesStruct& attributes,const UniformsStruct& uniforms) const{
   
@@ -151,22 +116,7 @@ void GLState::applyChanges(GL* gl, GLState& currentState, const AttributesStruct
 //    currentState._verticesPosition = _verticesPosition;
 //  }
   
-  //Texture Coordinates
-  if (_textureCoordinates != NULL){
-//    if (_textureCoordinates != currentState._textureCoordinates ||
-//        _textureCoordinatesTimestamp != currentState._textureCoordinatesTimestamp ||
-//        _textureCoordinatesSize != currentState._textureCoordinatesSize ||
-//        _textureCoordinatesStride != currentState._textureCoordinatesStride){
-      nativeGL->vertexAttribPointer(attributes.TextureCoord,
-                                    _textureCoordinatesSize, false,
-                                    _textureCoordinatesStride, _textureCoordinates);
-//
-//      currentState._textureCoordinates = _textureCoordinates;
-//      currentState._textureCoordinatesTimestamp = _textureCoordinatesTimestamp;
-//      currentState._textureCoordinatesSize = _textureCoordinatesSize;
-//      currentState._textureCoordinatesStride = _textureCoordinatesStride;
-//    }
-  }
+
   
 //  if (_textureCoordinatesScaleX != currentState._textureCoordinatesScaleX ||
 //      _textureCoordinatesScaleY != currentState._textureCoordinatesScaleY){
@@ -325,8 +275,38 @@ void GLState::applyChanges(GL* gl, GLState& currentState, const AttributesStruct
     currentState._textureWidth = _textureWidth;
   }
   
+
   
   //applyChangesAfterGPUProgramWasSet(gl, currentState);
+  
+  //Texture (After blending factors)
+  if (_boundTextureId != NULL){
+    if (currentState._boundTextureId == NULL ||
+        !_boundTextureId->isEqualsTo(currentState._boundTextureId)){
+      gl->getNative()->bindTexture(GLTextureType::texture2D(), _boundTextureId);
+      
+      currentState._boundTextureId = _boundTextureId;
+    } else{
+      //ILogger::instance()->logInfo("Texture already bound.\n");
+    }
+  }
+  
+  if (_pixelStoreIAlignmentUnpack != -1 && _pixelStoreIAlignmentUnpack != currentState._pixelStoreIAlignmentUnpack){
+    gl->getNative()->pixelStorei(GLAlignment::unpack(), _pixelStoreIAlignmentUnpack);
+    currentState._pixelStoreIAlignmentUnpack = _pixelStoreIAlignmentUnpack;
+  }
+  
+  if (_clearColorR != currentState._clearColorR ||
+      _clearColorG != currentState._clearColorG ||
+      _clearColorB != currentState._clearColorB ||
+      _clearColorA != currentState._clearColorA){
+    gl->getNative()->clearColor(_clearColorR, _clearColorG, _clearColorB, _clearColorA);
+    currentState._clearColorR = _clearColorR;
+    currentState._clearColorG = _clearColorG;
+    currentState._clearColorB = _clearColorB;
+    currentState._clearColorA = _clearColorA;
+  }
+  
   
   
 }

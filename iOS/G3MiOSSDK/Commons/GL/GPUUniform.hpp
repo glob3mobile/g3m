@@ -12,6 +12,7 @@
 #include "GL.hpp"
 #include "GLConstants.hpp"
 #include "IGLUniformID.hpp"
+#include "IStringBuilder.hpp"
 
 class GPUUniformValue{
   const int _type;
@@ -22,6 +23,8 @@ public:
   virtual void setUniform(GL* gl, const IGLUniformID* id) const = 0;
   virtual bool isEqualsTo(const GPUUniformValue* v) const = 0;
   virtual GPUUniformValue* deepCopy() const = 0;
+  
+  virtual std::string description() const = 0;
 };
 
 
@@ -53,7 +56,7 @@ public:
   
   void set(GPUUniformValue* v){
     if (_type != v->getType()){ //type checking 
-      delete v;
+//      delete v;
       ILogger::instance()->logError("Attempting to set uniform " + _name + "with invalid value type.");
       return;
     }
@@ -63,6 +66,7 @@ public:
         delete _value;
       }
       _value = v->deepCopy();
+//      delete v;
     }
   }
   
@@ -90,6 +94,15 @@ public:
   GPUUniformValue* deepCopy() const{
     return new GPUUniformValueBool(_value);
   }
+  
+  std::string description() const{
+    IStringBuilder *isb = IStringBuilder::newStringBuilder();
+    isb->addString("Uniform Value Boolean: ");
+    isb->addBool(_value);
+    std::string s = isb->getString();
+    delete isb;
+    return s;
+  }
 };
 class GPUUniformBool: public GPUUniform{
 public:
@@ -111,6 +124,17 @@ public:
   }
   GPUUniformValue* deepCopy() const{
     return new GPUUniformValueVec2Float(_x,_y);
+  }
+  
+  std::string description() const{
+    IStringBuilder *isb = IStringBuilder::newStringBuilder();
+    isb->addString("Uniform Value Vec2Float: x:");
+    isb->addDouble(_x);
+    isb->addString("y:");
+    isb->addDouble(_y);
+    std::string s = isb->getString();
+    delete isb;
+    return s;
   }
 };
 class GPUUniformVec2Float: public GPUUniform{
@@ -134,6 +158,21 @@ public:
   }
   GPUUniformValue* deepCopy() const{
     return new GPUUniformValueVec4Float(_x,_y,_z,_w);
+  }
+  
+  std::string description() const{
+    IStringBuilder *isb = IStringBuilder::newStringBuilder();
+    isb->addString("Uniform Value Vec4Float: x:");
+    isb->addDouble(_x);
+    isb->addString("y:");
+    isb->addDouble(_y);
+    isb->addString("z:");
+    isb->addDouble(_z);
+    isb->addString("w:");
+    isb->addDouble(_w);
+    std::string s = isb->getString();
+    delete isb;
+    return s;
   }
 };
 class GPUUniformVec4Float: public GPUUniform{
@@ -160,6 +199,14 @@ public:
     return new GPUUniformValueMatrix4Float(_m);
   }
   
+  std::string description() const{
+    IStringBuilder *isb = IStringBuilder::newStringBuilder();
+    isb->addString("Uniform Value Matrix44D.");
+    std::string s = isb->getString();
+    delete isb;
+    return s;
+  }
+  
   MutableMatrix44D getValue() const{ return _m;}
 };
 class GPUUniformMatrix4Float: public GPUUniform{
@@ -182,6 +229,15 @@ public:
   }
   GPUUniformValue* deepCopy() const{
     return new GPUUniformValueFloat(_value);
+  }
+  
+  std::string description() const{
+    IStringBuilder *isb = IStringBuilder::newStringBuilder();
+    isb->addString("Uniform Value Float: ");
+    isb->addDouble(_value);
+    std::string s = isb->getString();
+    delete isb;
+    return s;
   }
 };
 class GPUUniformFloat: public GPUUniform{

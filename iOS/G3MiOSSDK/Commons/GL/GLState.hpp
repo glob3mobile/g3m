@@ -51,14 +51,14 @@ private:
 //  int           _verticesSize;
 //  int           _verticesStride;
   
-  IFloatBuffer* _textureCoordinates;
-  int           _textureCoordinatesTimestamp;
-  int           _textureCoordinatesSize;
-  int           _textureCoordinatesStride;
-  float _textureCoordinatesScaleX;
-  float _textureCoordinatesScaleY;
-  float _textureCoordinatesTranslationX;
-  float _textureCoordinatesTranslationY;
+//  IFloatBuffer* _textureCoordinates;
+//  int           _textureCoordinatesTimestamp;
+//  int           _textureCoordinatesSize;
+//  int           _textureCoordinatesStride;
+//  float _textureCoordinatesScaleX;
+//  float _textureCoordinatesScaleY;
+//  float _textureCoordinatesTranslationX;
+//  float _textureCoordinatesTranslationY;
 
   //Texture Extent
   float _textureWidth;
@@ -133,14 +133,14 @@ private:
 //  _verticesTimestamp(0),
 //  _verticesSize(0),
 //  _verticesStride(0),
-  _textureCoordinates(NULL),
-  _textureCoordinatesTimestamp(0),
-  _textureCoordinatesSize(0),
-  _textureCoordinatesStride(0),
-  _textureCoordinatesScaleX(1.0),
-  _textureCoordinatesScaleY(1.0),
-  _textureCoordinatesTranslationX(0.0),
-  _textureCoordinatesTranslationY(0.0),
+//  _textureCoordinates(NULL),
+//  _textureCoordinatesTimestamp(0),
+//  _textureCoordinatesSize(0),
+//  _textureCoordinatesStride(0),
+//  _textureCoordinatesScaleX(1.0),
+//  _textureCoordinatesScaleY(1.0),
+//  _textureCoordinatesTranslationX(0.0),
+//  _textureCoordinatesTranslationY(0.0),
   _boundTextureId(NULL),
 //  _billboarding(false),
 //  _viewportHeight(0),
@@ -193,14 +193,14 @@ public:
 //  _verticesTimestamp(parentState._verticesTimestamp),
 //  _verticesSize(parentState._verticesSize),
 //  _verticesStride(parentState._verticesStride),
-  _textureCoordinates(parentState._textureCoordinates),
-  _textureCoordinatesTimestamp(parentState._textureCoordinatesTimestamp),
-  _textureCoordinatesSize(parentState._textureCoordinatesSize),
-  _textureCoordinatesStride(parentState._textureCoordinatesStride),
-  _textureCoordinatesScaleX(parentState._textureCoordinatesScaleX),
-  _textureCoordinatesScaleY(parentState._textureCoordinatesScaleY),
-  _textureCoordinatesTranslationX(parentState._textureCoordinatesTranslationX),
-  _textureCoordinatesTranslationY(parentState._textureCoordinatesTranslationY),
+//  _textureCoordinates(parentState._textureCoordinates),
+//  _textureCoordinatesTimestamp(parentState._textureCoordinatesTimestamp),
+//  _textureCoordinatesSize(parentState._textureCoordinatesSize),
+//  _textureCoordinatesStride(parentState._textureCoordinatesStride),
+//  _textureCoordinatesScaleX(parentState._textureCoordinatesScaleX),
+//  _textureCoordinatesScaleY(parentState._textureCoordinatesScaleY),
+//  _textureCoordinatesTranslationX(parentState._textureCoordinatesTranslationX),
+//  _textureCoordinatesTranslationY(parentState._textureCoordinatesTranslationY),
   _boundTextureId(parentState._boundTextureId),
 //  _billboarding(parentState._billboarding),
 //  _viewportWidth(parentState._viewportWidth),
@@ -335,12 +335,12 @@ public:
 //    _verticesStride = stride;
 //  }
   
-  void setTextureCoordinates(IFloatBuffer* texCoors, int size, int stride){
-    _textureCoordinates = texCoors;
-    _textureCoordinatesTimestamp = texCoors->timestamp();
-    _textureCoordinatesSize = size;
-    _textureCoordinatesStride = stride;
-  }
+//  void setTextureCoordinates(IFloatBuffer* texCoors, int size, int stride){
+//    _textureCoordinates = texCoors;
+//    _textureCoordinatesTimestamp = texCoors->timestamp();
+//    _textureCoordinatesSize = size;
+//    _textureCoordinatesStride = stride;
+//  }
   
 //  void scaleTextureCoordinates(float x, float y){
 //    _textureCoordinatesScaleX = x;
@@ -409,8 +409,6 @@ public:
   }
   
   void applyChanges(GL* gl, GLState& currentState, const AttributesStruct& attributes,const UniformsStruct& uniforms) const;
-  
-  void applyChangesAfterGPUProgramWasSet(GL* gl, GLState& currentState) const;
   
 //  void setProgram(GPUProgram* program){
 //    _program = program;

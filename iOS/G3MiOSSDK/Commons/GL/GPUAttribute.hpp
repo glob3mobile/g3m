@@ -14,6 +14,8 @@
 #include "IFloatBuffer.hpp"
 #include "GL.hpp"
 
+#include "IStringBuilder.hpp"
+
 class GPUAttributeValue{
 protected:
   const int _type;
@@ -42,6 +44,8 @@ public:
   virtual void setAttribute(GL* gl, const int id) const = 0;
   virtual bool isEqualsTo(const GPUAttributeValue* v) const = 0;
   virtual GPUAttributeValue* shallowCopy() const = 0;
+  
+  virtual std::string description() const = 0;
 };
 
 class GPUAttribute{
@@ -82,7 +86,7 @@ public:
   
   void set(GPUAttributeValue* v){
     if (_type != v->getType()){ //type checking
-      delete v;
+      //delete v;
       ILogger::instance()->logError("Attempting to set attribute " + _name + "with invalid value type.");
       return;
     }
@@ -92,7 +96,7 @@ public:
         delete _value;
       }
       _value = v->shallowCopy();
-      delete v;
+      //delete v;
     }
   }
   
@@ -126,7 +130,7 @@ class GPUAttributeValueVecFloat: public GPUAttributeValue{
   IFloatBuffer* _buffer;
   int _timeStamp;
 public:
-  GPUAttributeValueVecFloat(IFloatBuffer* buffer, int arrayElementSize, int attributeSize, int index, int stride, bool normalized):
+  GPUAttributeValueVecFloat(IFloatBuffer* buffer, int attributeSize, int arrayElementSize, int index, int stride, bool normalized):
   _buffer(buffer),
   _timeStamp(buffer->timestamp()),
   GPUAttributeValue(GLType::glFloat(), attributeSize, arrayElementSize, index, stride, normalized){}
@@ -151,9 +155,32 @@ public:
   
   GPUAttributeValue* shallowCopy() const{
     GPUAttributeValueVecFloat* v = new GPUAttributeValueVecFloat(_buffer, _attributeSize,
-                                                                 _arrayElementSize, _index, _stride, _normalized);
+                                                                 _arrayElementSize,
+                                                                 _index,
+                                                                 _stride,
+                                                                 _normalized);
     v->_timeStamp = _timeStamp;
     return v;
+  }
+  
+  std::string description() const{
+    
+    IStringBuilder *isb = IStringBuilder::newStringBuilder();
+    isb->addString("Attribute Value Float.");
+    isb->addString(" ArrayElementSize:");
+    isb->addInt(_arrayElementSize);
+    isb->addString(" AttributeSize:");
+    isb->addInt(_attributeSize);
+    isb->addString(" Index:");
+    isb->addInt(_index);
+    isb->addString(" Stride:");
+    isb->addInt(_stride);
+    isb->addString(" Normalized:");
+    isb->addBool(_normalized);
+    
+    std::string s = isb->getString();
+    delete isb;
+    return s;
   }
   
 };

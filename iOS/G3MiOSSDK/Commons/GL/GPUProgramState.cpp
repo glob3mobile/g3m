@@ -10,6 +10,7 @@
 
 void GPUProgramState::setValuesOntoGPUProgram(GPUProgram& prog) const
 {
+  
   for(std::map<std::string, GPUUniformValue*> ::const_iterator it = _uniformValues.begin();
       it != _uniformValues.end();
       it++){
@@ -115,7 +116,6 @@ void GPUProgramState::setValuesOntoGPUProgram(GPUProgram& prog) const
 }
 
 void GPUProgramState::applyChanges(GL* gl, GPUProgram& prog) const{
-  
   if (_parentState != NULL){
     _parentState->setValuesOntoGPUProgram(prog);
   }
@@ -236,4 +236,45 @@ void GPUProgramState::multiplyUniformValue(const std::string& name, const Mutabl
 
 void GPUProgramState::setAttributeEnabled(const std::string& name, bool enabled){
   _attributesEnabled[name] = enabled;
+}
+
+std::string GPUProgramState::description() const{
+  std::string desc = "PROGRAM STATE\n==========";
+  
+  for(std::map<std::string, GPUUniformValue*> ::const_iterator it = _uniformValues.begin();
+      it != _uniformValues.end();
+      it++){
+    
+    std::string name = it->first;
+    GPUUniformValue* v = it->second;
+    
+    desc += "Uniform " + name + ":\n";
+    desc += v->description() + "\n";
+  }
+  
+  for(std::map<std::string, bool> ::const_iterator it = _attributesEnabled.begin();
+      it != _attributesEnabled.end();
+      it++){
+    std::string name = it->first;
+    desc += "Attribute " + name;
+    if (it->second) desc += " ENABLED\n";
+    else desc += " ENABLED\n";
+  }
+  
+  for(std::map<std::string, GPUAttributeValue*> ::const_iterator it = _attributesValues.begin();
+      it != _attributesValues.end();
+      it++){
+    
+    std::string name = it->first;
+    GPUAttributeValue* v = it->second;
+    
+    desc += "Attribute " + name + ":\n";
+    desc += v->description() + "\n";
+  }
+  
+  if (_parentState != NULL){
+    desc = "PARENT " + _parentState->description() + desc;
+  }
+  
+  return desc;
 }
