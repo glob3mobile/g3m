@@ -19,6 +19,7 @@ class IShortBuffer;
 class IByteBuffer;
 class ILogger;
 class IImageListener;
+class ICanvas;
 
 class IFactory {
 private:
@@ -49,9 +50,9 @@ public:
                                      IImageListener* listener,
                                      bool autodelete) const = 0;
 
-  virtual void createImageFromSize(int width, int height,
-                                   IImageListener* listener,
-                                   bool autodelete) const = 0;
+//  virtual void createImageFromSize(int width, int height,
+//                                   IImageListener* listener,
+//                                   bool autodelete) const = 0;
 
   virtual void deleteImage(const IImage* image) const = 0;
 
@@ -86,6 +87,8 @@ public:
   virtual IByteBuffer* createByteBuffer(int length) const = 0;
 
   virtual IByteBuffer* createByteBuffer(unsigned char data[], int length) const = 0;
+
+  virtual ICanvas* createCanvas() const = 0;
 
 };
 

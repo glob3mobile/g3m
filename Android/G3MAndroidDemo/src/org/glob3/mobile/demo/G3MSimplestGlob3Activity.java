@@ -13,15 +13,18 @@ import org.glob3.mobile.generated.CameraRotationHandler;
 import org.glob3.mobile.generated.CameraSingleDragHandler;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.CompositeRenderer;
+import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.LayerSet;
+import org.glob3.mobile.generated.LayerTilesRenderParameters;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.Sector;
+import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.SimpleCameraConstrainer;
 import org.glob3.mobile.generated.TileRenderer;
 import org.glob3.mobile.generated.TileRendererBuilder;
@@ -88,9 +91,30 @@ public class G3MSimplestGlob3Activity
 
       final CompositeRenderer mainRenderer = new CompositeRenderer();
       final LayerSet layerSet = new LayerSet();
-      final WMSLayer osm = new WMSLayer( //
-               "osm_auto:all", //
-               new URL("http://129.206.228.72/cached/osm", false), //
+      //      final WMSLayer osm = new WMSLayer( //
+      //               "osm_auto:all", //
+      //               new URL("http://129.206.228.72/cached/osm", false), //
+      //               WMSServerVersion.WMS_1_1_0, //
+      //               //Sector.fromDegrees(-85.05, -180.0, 85.05, 180.0), //
+      //               Sector.fullSphere(), //
+      //               "image/jpeg", //
+      //               "EPSG:4326", //
+      //               "", //
+      //               false, //
+      //               null, //
+      //               TimeInterval.fromDays(30), //
+      //               true);
+      //      layerSet.addLayer(osm);
+
+      final LayerTilesRenderParameters params = new LayerTilesRenderParameters(Sector.fullSphere(), 2, 4, 1, 19,
+               LayerTilesRenderParameters.defaultTileTextureResolution(), LayerTilesRenderParameters.defaultTileMeshResolution(),
+               false);
+      //final Sector bbox = new Sector(new Geodetic2D(Angle.fromDegrees(-6.858), Angle.fromDegrees(39.182)), new Geodetic2D(
+      //         Angle.fromDegrees(-6.089), Angle.fromDegrees(39.657)));
+
+      final WMSLayer aytoLayer = new WMSLayer( //
+               "sigaytocc:AytoCC", //
+               new URL("http://195.57.27.86:8080/geoserver/gwc/service/wms?", false), //
                WMSServerVersion.WMS_1_1_0, //
                //Sector.fromDegrees(-85.05, -180.0, 85.05, 180.0), //
                Sector.fullSphere(), //
@@ -99,12 +123,114 @@ public class G3MSimplestGlob3Activity
                "", //
                false, //
                null, //
-               TimeInterval.fromDays(30));
-      layerSet.addLayer(osm);
+               TimeInterval.fromDays(30), //
+               true, params);
+
+      layerSet.addLayer(aytoLayer);
+
+
+      //      final WMSLayer blueMarbleL = new WMSLayer( //
+      //               "bmng200405", //
+      //               new URL("http://www.nasa.network.com/wms?", false), //
+      //               WMSServerVersion.WMS_1_1_0, //
+      //               Sector.fullSphere(), //
+      //               "image/jpeg", //
+      //               "EPSG:4326", //
+      //               "", //
+      //               false, //
+      //               //new LevelTileCondition(0, 6),
+      //               null, //
+      //               TimeInterval.fromDays(30), //
+      //               new LayerTilesRenderParameters( //
+      //                        Sector.fullSphere(), //
+      //                        2, //
+      //                        4, //
+      //                        0, //
+      //                        8, //
+      //                        LayerTilesRenderParameters.defaultTileTextureResolution(), //
+      //                        LayerTilesRenderParameters.defaultTileMeshResolution(), //
+      //                        false));
+      //      layerSet.addLayer(blueMarbleL);
+      //
+      //
+      //      final WMSLayer ortoAyto = new WMSLayer( //
+      //               "orto_refundida", //
+      //               new URL("http://195.57.27.86/wms_etiquetas_con_orto.mapdef?", false), //
+      //               WMSServerVersion.WMS_1_1_0, //
+      //               Sector.fromDegrees(39.350228, -6.508713, 39.536351, -6.25946), //
+      //               //               new Sector(Geodetic2D.fromDegrees(39.350228, -6.508713), //
+      //               //                        Geodetic2D.fromDegrees(39.536351, -6.25946)), //
+      //               "image/jpeg", //
+      //               "EPSG:4326", //
+      //               "", //
+      //               false, //
+      //               new LevelTileCondition(4, 19), //
+      //               TimeInterval.fromDays(30), //
+      //               new LayerTilesRenderParameters(//
+      //                        Sector.fullSphere(), //
+      //                        2, //
+      //                        4, //
+      //                        0, //
+      //                        19, //
+      //                        LayerTilesRenderParameters.defaultTileTextureResolution(), //
+      //                        LayerTilesRenderParameters.defaultTileMeshResolution(), //
+      //                        false));
+      //      layerSet.addLayer(ortoAyto);
+
+
       final TileRendererBuilder tlBuilder = new TileRendererBuilder();
       tlBuilder.setLayerSet(layerSet);
+      tlBuilder.setRenderDebug(false);
       final TileRenderer tileRenderer = tlBuilder.create();
       mainRenderer.addRenderer(tileRenderer);
+
+
+      final ShapesRenderer shapesRenderer = new ShapesRenderer();
+      mainRenderer.addRenderer(shapesRenderer);
+
+      //      final boolean testingImagesCombine = true;
+      //      if (testingImagesCombine) {
+      //         final Bitmap b1 = BitmapFactory.decodeResource(getResources(), R.drawable.play);
+      //         final Bitmap b2 = BitmapFactory.decodeResource(getResources(), R.drawable.bg);
+      //         final Image_Android image1 = new Image_Android(b1, null);
+      //         final Image_Android image2 = new Image_Android(b2, null);
+      //
+      //         final java.util.ArrayList<IImage> images = new ArrayList<IImage>();
+      //         images.add(image2);
+      //         images.add(image1);
+      //
+      //         final java.util.ArrayList<RectangleF> srcRs = new ArrayList<RectangleF>();
+      //         srcRs.add(new RectangleF(0, 0, 640, 960));
+      //         srcRs.add(new RectangleF(0, 0, 48, 48));
+      //
+      //         final java.util.ArrayList<RectangleF> destRs = new ArrayList<RectangleF>();
+      //         destRs.add(new RectangleF(0, 0, 256, 256));
+      //         destRs.add(new RectangleF(0, 128, 130, 130));
+      //
+      //         class QuadListener
+      //                  extends
+      //                     IImageListener {
+      //            ShapesRenderer _sr;
+      //
+      //
+      //            public QuadListener(final ShapesRenderer sr) {
+      //               _sr = sr;
+      //
+      //            }
+      //
+      //
+      //            @Override
+      //            public void imageCreated(final IImage image) {
+      //               final Shape quadImages = new QuadShape(new Geodetic3D(Angle.fromDegrees(28.410728), Angle.fromDegrees(-16.339417),
+      //                        8000), image, 49000, 38000);
+      //
+      //               _sr.addShape(quadImages);
+      //            }
+      //         }
+      //
+      //
+      //         IImageUtils.combine(new Vector2I(256, 256), images, srcRs, destRs, new QuadListener(shapesRenderer), true);
+      //      }
 
 
       //      final MarksRenderer marksRenderer = new MarksRenderer(false);
@@ -145,7 +271,79 @@ public class G3MSimplestGlob3Activity
       //            return true;
       //         }
       //      };
-      final GInitializationTask initializationTask = null;
+
+      // final GInitializationTask initializationTask = null;
+
+      final GInitializationTask initializationTask = new GInitializationTask() {
+         @Override
+         public void run(final G3MContext context) {
+            //            final ICanvas canvas = context.getFactory().createCanvas();
+            //
+            //
+            //            final String text = "Hello World!";
+            //            //final GFont font = GFont.serif();
+            //            //final GFont font = GFont.monospaced();
+            //            final GFont font = GFont.sansSerif();
+            //
+            //            canvas.setFont(font);
+            //
+            //            final Vector2F textExtent = canvas.textExtent(text);
+            //
+            //            canvas.initialize(256, 256);
+            //
+            //            canvas.setFillColor(Color.fromRGBA(1f, 1f, 1f, 0.75f));
+            //            canvas.fillRoundedRectangle(0, 0, 256, 256, 32);
+            //
+            //            canvas.setShadow(Color.black(), 5f, 3.5f, -3.5f);
+            //            canvas.setFillColor(Color.fromRGBA(1f, 0f, 0f, 0.5f));
+            //            canvas.fillRectangle(32, 64, 64, 128);
+            //            canvas.removeShadow();
+            //
+            //
+            //            canvas.setStrokeColor(Color.fromRGBA(1f, 0f, 1f, 0.9f));
+            //            canvas.setStrokeWidth(2.5f);
+            //            final float margin = 1.25f;
+            //            canvas.strokeRoundedRectangle(0 + margin, 0 + margin, 256 - (margin * 2), 256 - (margin * 2), 32);
+            //
+            //            canvas.setFillColor(Color.fromRGBA(1, 1, 0, 0.9f));
+            //            canvas.setStrokeWidth(1.1f);
+            //            canvas.setStrokeColor(Color.fromRGBA(0, 0, 0, 0.9f));
+            //            canvas.fillAndStrokeRoundedRectangle(128, 16, 64, 64, 8);
+            //
+            //            final int __DGD_working_at_Canvas;
+            //
+            //
+            //            canvas.setFillColor(Color.white());
+            //            canvas.setShadow(Color.black(), 5, 1, -1);
+            //            canvas.fillText(text, 128 - (textExtent._x / 2), 128 - (textExtent._y / 2));
+            //
+            //            canvas.removeShadow();
+            //            canvas.setFillColor(Color.black());
+            //            canvas.fillRectangle(10, 10, 5, 5);
+            //
+            //            final IImageListener listener = new IImageListener() {
+            //
+            //               @Override
+            //               public void imageCreated(final IImage image) {
+            //                  final Shape quad = new QuadShape( //
+            //                           new Geodetic3D(Angle.fromDegrees(37.78333333), Angle.fromDegrees(-121.5), 8000), //
+            //                           image, //
+            //                           50000, 50000);
+            //                  shapesRenderer.addShape(quad);
+            //               }
+            //            };
+            //            canvas.createImage(listener, true);
+            //
+            //            canvas.dispose();
+
+         }
+
+
+         @Override
+         public final boolean isDone(final G3MContext context) {
+            return true;
+         }
+      };
 
       final boolean autoDeleteInitializationTask = true;
 

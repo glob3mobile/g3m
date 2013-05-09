@@ -151,6 +151,7 @@
                                                           subdomains,
                                                           "png",
                                                           TimeInterval::fromDays(90),
+                                                          true,
                                                           Sector::fullSphere(),
                                                           2,
                                                           17,

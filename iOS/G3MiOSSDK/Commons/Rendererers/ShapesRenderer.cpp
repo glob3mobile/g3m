@@ -35,6 +35,11 @@ public:
     _programState.setUniformValue("TranslationTexCoord", Vector2D(0.0,0.0));
     _programState.setUniformValue("ViewPortExtent", Vector2D(0.0,0.0));
     
+    _programState.setUniformValue("ColorPerVertexIntensity", (float)0.0);
+    _programState.setUniformValue("EnableFlatColor", false);
+    _programState.setUniformValue("FlatColor", (float)0.0, (float)0.0, (float)0.0, (float)0.0);
+    _programState.setUniformValue("FlatColorIntensity", (float)0.0);
+    
     _programState.setAttributeEnabled("TextureCoord", false);
     _programState.setAttributeEnabled("Color", false);
   }

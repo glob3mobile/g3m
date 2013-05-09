@@ -32,18 +32,18 @@ public class SingleBillElevationDataProvider extends ElevationDataProvider
 
   private void drainQueue()
   {
-    int _WORKING;
+    int _DGD_working_on_terrain;
   }
 
   private long queueRequest(Sector sector, Vector2I resolution, IElevationDataListener listener, boolean autodeleteListener)
   {
-    int _WORKING;
+    int _DGD_working_on_terrain;
     return -1;
   }
 
   private void removeQueueRequest(long requestId)
   {
-    int _WORKING;
+    int _DGD_working_on_terrain;
   }
 
 
@@ -68,7 +68,7 @@ public class SingleBillElevationDataProvider extends ElevationDataProvider
   {
     if (!_elevationDataResolved)
     {
-      context.getDownloader().requestBuffer(_bilUrl, 2000000000, TimeInterval.fromDays(30), new SingleBillElevationDataProvider_BufferDownloadListener(this, _sector, _resolutionWidth, _resolutionHeight, _noDataValue), true);
+      context.getDownloader().requestBuffer(_bilUrl, 2000000000, TimeInterval.fromDays(30), true, new SingleBillElevationDataProvider_BufferDownloadListener(this, _sector, _resolutionWidth, _resolutionHeight, _noDataValue), true);
     }
   }
 

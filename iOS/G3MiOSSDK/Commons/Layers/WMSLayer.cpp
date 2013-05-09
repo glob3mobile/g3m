@@ -28,10 +28,12 @@ WMSLayer::WMSLayer(const std::string& mapLayer,
                    const bool isTransparent,
                    LayerCondition* condition,
                    const TimeInterval& timeToCache,
+                   bool readExpired,
                    const LayerTilesRenderParameters* parameters):
 Layer(condition,
       mapLayer,
       timeToCache,
+      readExpired,
       (parameters == NULL)
       ? LayerTilesRenderParameters::createDefaultNonMercator(Sector::fullSphere())
       : parameters),
@@ -61,10 +63,12 @@ WMSLayer::WMSLayer(const std::string& mapLayer,
                    const bool isTransparent,
                    LayerCondition* condition,
                    const TimeInterval& timeToCache,
+                   bool readExpired,
                    const LayerTilesRenderParameters* parameters):
 Layer(condition,
       mapLayer,
       timeToCache,
+      readExpired,
       (parameters == NULL)
       ? LayerTilesRenderParameters::createDefaultNonMercator(Sector::fullSphere())
       : parameters),
@@ -111,20 +115,20 @@ std::vector<Petition*> WMSLayer::createTileMapPetitions(const G3MRenderContext* 
 
 	//Server name
   std::string req = _mapServerURL.getPath();
-	if (req[req.size()-1] != '?') {
+	if (req[req.size() - 1] != '?') {
 		req += '?';
 	}
 
-  //If the server refer to itself as localhost...
-  int pos = req.find("localhost");
-  if (pos != -1) {
-    req = req.substr(pos+9);
-
-    int pos2 = req.find("/", 8);
-    std::string newHost = req.substr(0, pos2);
-
-    req = newHost + req;
-  }
+//  //If the server refer to itself as localhost...
+//  const int localhostPos = req.find("localhost");
+//  if (localhostPos != -1) {
+//    req = req.substr(localhostPos+9);
+//
+//    const int slashPos = req.find("/", 8);
+//    std::string newHost = req.substr(0, slashPos);
+//
+//    req = newHost + req;
+//  }
 
   req += "REQUEST=GetMap&SERVICE=WMS";
 
@@ -217,7 +221,13 @@ std::vector<Petition*> WMSLayer::createTileMapPetitions(const G3MRenderContext* 
     req += _extraParameter;
   }
 
-  Petition *petition = new Petition(sector, URL(req, false), _timeToCache, _isTransparent);
+//  printf("Request: %s\n", req.c_str());
+
+  Petition *petition = new Petition(sector,
+                                    URL(req, false),
+                                    getTimeToCache(),
+                                    getReadExpired(),
+                                    _isTransparent);
   petitions.push_back(petition);
 
 	return petitions;
@@ -322,20 +332,30 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& position,
 
   const IMathUtils* mu = IMathUtils::instance();
 
+  double u;
+  double v;
+  if (_parameters->_mercator) {
+    u = sector.getUCoordinate(position.longitude());
+    v = MercatorUtils::getMercatorV(position.latitude());
+  }
+  else {
+    const Vector2D uv = sector.getUVCoordinates(position);
+    u = uv._x;
+    v = uv._y;
+  }
+
   //X and Y
-  int TODO_CONSIDER_MERCATOR;
-  const Vector2D uv = sector.getUVCoordinates(position);
-  const int x = (int) mu->round( (uv._x * _parameters->_tileTextureResolution._x) );
-  const int y = (int) mu->round( (uv._y * _parameters->_tileTextureResolution._y) );
-  // const int y = (int) mu->round( ((1.0 - uv._y) * _parameters->_tileTextureResolution._y) );
+  //const Vector2D uv = sector.getUVCoordinates(position);
+  const long long x = mu->round( (u * _parameters->_tileTextureResolution._x) );
+  const long long y = mu->round( (v * _parameters->_tileTextureResolution._y) );
 
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("&X=");
-  isb->addInt(x);
+  isb->addLong(x);
   isb->addString("&Y=");
-  isb->addInt(y);
+  isb->addLong(y);
   req += isb->getString();
   delete isb;
-  
+
 	return URL(req, false);
 }

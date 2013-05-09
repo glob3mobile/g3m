@@ -18,6 +18,7 @@
 #include "IntBuffer_iOS.hpp"
 #include "ShortBuffer_iOS.hpp"
 #include "IImageListener.hpp"
+#include "Canvas_iOS.hpp"
 
 class Factory_iOS: public IFactory {
 public:
@@ -30,14 +31,14 @@ public:
     delete timer;
   }
 
-  void createImageFromSize(int width, int height,
-                           IImageListener* listener,
-                           bool autodelete) const {
-    listener->imageCreated( new Image_iOS(width, height) );
-    if (autodelete) {
-      delete listener;
-    }
-  }
+//  void createImageFromSize(int width, int height,
+//                           IImageListener* listener,
+//                           bool autodelete) const {
+//    listener->imageCreated( new Image_iOS(width, height) );
+//    if (autodelete) {
+//      delete listener;
+//    }
+//  }
 
   void createImageFromFileName(const std::string& filename,
                                IImageListener* listener,
@@ -138,6 +139,10 @@ public:
 
   IShortBuffer* createShortBuffer(int size) const {
     return new ShortBuffer_iOS(size);
+  }
+
+  ICanvas* createCanvas() const {
+    return new Canvas_iOS();
   }
 
 };

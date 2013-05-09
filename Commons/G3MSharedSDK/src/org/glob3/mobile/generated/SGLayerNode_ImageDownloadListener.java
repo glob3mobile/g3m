@@ -5,17 +5,17 @@ package org.glob3.mobile.generated;
 //#define TEXTURES_DOWNLOAD_PRIORITY 1000000
 
 
-public class ImageDownloadListener extends IImageDownloadListener
+public class SGLayerNode_ImageDownloadListener extends IImageDownloadListener
 {
   private SGLayerNode _layerNode;
 
-  public ImageDownloadListener(SGLayerNode layerNode)
+  public SGLayerNode_ImageDownloadListener(SGLayerNode layerNode)
   {
      _layerNode = layerNode;
 
   }
 
-  public final void onDownload(URL url, IImage image)
+  public final void onDownload(URL url, IImage image, boolean expired)
   {
     _layerNode.onImageDownload(image);
   }
@@ -30,7 +30,7 @@ public class ImageDownloadListener extends IImageDownloadListener
 
   }
 
-  public final void onCanceledDownload(URL url, IImage image)
+  public final void onCanceledDownload(URL url, IImage image, boolean expired)
   {
 
   }

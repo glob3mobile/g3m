@@ -90,13 +90,16 @@ public class MeshRenderer extends LeafRenderer
 
   public final void render(G3MRenderContext rc, GLState parentState)
   {
+  
+    final Frustum frustum = rc.getCurrentCamera().getFrustumInModelCoordinates();
+  
     final int meshesCount = _meshes.size();
     for (int i = 0; i < meshesCount; i++)
     {
       Mesh mesh = _meshes.get(i);
       final Extent extent = mesh.getExtent();
   
-      if (extent.touches(rc.getCurrentCamera().getFrustumInModelCoordinates()))
+      if (extent.touches(frustum))
       {
         mesh.render(rc, parentState, _programState);
       }

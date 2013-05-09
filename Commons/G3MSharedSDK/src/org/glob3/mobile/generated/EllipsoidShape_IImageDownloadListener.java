@@ -10,7 +10,7 @@ public class EllipsoidShape_IImageDownloadListener extends IImageDownloadListene
 
   }
 
-  public final void onDownload(URL url, IImage image)
+  public final void onDownload(URL url, IImage image, boolean expired)
   {
     _ellipsoidShape.imageDownloaded(image);
   }
@@ -25,7 +25,7 @@ public class EllipsoidShape_IImageDownloadListener extends IImageDownloadListene
 
   }
 
-  public final void onCanceledDownload(URL url, IImage image)
+  public final void onCanceledDownload(URL url, IImage image, boolean expired)
   {
 
   }

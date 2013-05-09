@@ -23,10 +23,11 @@ public class GEO2DLineStringGeometry extends GEOLineStringGeometry
 {
   private java.util.ArrayList<Geodetic2D> _coordinates;
 
-  protected final java.util.ArrayList<GEOSymbol> createSymbols(G3MRenderContext rc, GEOSymbolizer symbolizer)
+  protected final java.util.ArrayList<GEOSymbol> createSymbols(G3MRenderContext rc, GEOSymbolizationContext sc)
   {
-    return symbolizer.createSymbols(this);
+    return sc.getSymbolizer().createSymbols(this);
   }
+
 
 
   public GEO2DLineStringGeometry(java.util.ArrayList<Geodetic2D> coordinates)
@@ -51,5 +52,6 @@ public class GEO2DLineStringGeometry extends GEOLineStringGeometry
   {
     return _coordinates;
   }
+
 
 }

@@ -28,7 +28,7 @@ package org.glob3.mobile.generated;
 //class GEOGeometry;
 //class GEOLineStringGeometry;
 //class GEOMultiLineStringGeometry;
-
+//class GEOPointGeometry;
 //class Geodetic2D;
 
 public class GEOJSONParser
@@ -36,6 +36,7 @@ public class GEOJSONParser
   private final String _json;
 
   // statistics
+  private int _points2DCount;
   private int _coordinates2DCount;
   private int _lineStrings2DCount;
   private int _multiLineStrings2DCount;
@@ -47,6 +48,7 @@ public class GEOJSONParser
   private GEOJSONParser(String json)
   {
      _json = json;
+     _points2DCount = 0;
      _coordinates2DCount = 0;
      _lineStrings2DCount = 0;
      _multiLineStrings2DCount = 0;
@@ -100,7 +102,7 @@ public class GEOJSONParser
 
   private GEOFeatureCollection createFeaturesCollection(JSONObject jsonObject)
   {
-    GEOFeatureCollection geo = new GEOFeatureCollection();
+    java.util.ArrayList<GEOFeature> features = new java.util.ArrayList<GEOFeature>();
   
     final JSONArray jsFeatures = jsonObject.getAsArray("features");
     if (jsFeatures != null)
@@ -112,13 +114,13 @@ public class GEOJSONParser
         if (jsFeature != null)
         {
           GEOFeature feature = createFeature(jsFeature);
-          geo.addFeature(feature);
+          features.add(feature);
         }
       }
     }
   
     _featuresCollectionCount++;
-    return geo;
+    return new GEOFeatureCollection(features);
   }
   private GEOFeature createFeature(JSONObject jsonObject)
   {
@@ -152,8 +154,8 @@ public class GEOJSONParser
     /*
      "LineString"
      "MultiLineString"
-  
      "Point"
+  
      "MultiPoint"
      "Polygon"
      "MultiPolygon"
@@ -167,6 +169,10 @@ public class GEOJSONParser
     else if (type.compareTo("MultiLineString") == 0)
     {
       geo = createMultiLineStringGeometry(jsonObject);
+    }
+    else if (type.compareTo("Point") == 0)
+    {
+      geo = createPointGeometry(jsonObject);
     }
     else
     {
@@ -281,6 +287,39 @@ public class GEOJSONParser
   
     return geo;
   }
+  private GEOPointGeometry createPointGeometry(JSONObject jsonObject)
+  {
+    final JSONArray jsCoordinates = jsonObject.getAsArray("coordinates");
+    if (jsCoordinates == null)
+    {
+      ILogger.instance().logError("Mandatory \"coordinates\" attribute is not present");
+      return null;
+    }
+  
+    GEOPointGeometry geo = null;
+  
+    final int dimensions = jsCoordinates.size();
+    if (dimensions == 2)
+    {
+      final double latitudeDegrees = jsCoordinates.getAsNumber(1, 0.0);
+      final double longitudeDegrees = jsCoordinates.getAsNumber(0, 0.0);
+  
+      _points2DCount++;
+  
+      geo = new GEO2DPointGeometry(Geodetic2D.fromDegrees(latitudeDegrees, longitudeDegrees));
+    }
+  //  else if (dimensions == 3) {
+  //    const double latitudeDegrees  = jsCoordinates->getAsNumber(1, 0.0);
+  //    const double longitudeDegrees = jsCoordinates->getAsNumber(0, 0.0);
+  //    const double height           = jsCoordinates->getAsNumber(2, 0.0);
+  //  }
+    else
+    {
+      ILogger.instance().logError("Mandatory \"coordinates\" dimensions not supported %d", dimensions);
+    }
+  
+    return geo;
+  }
 
 
   private java.util.ArrayList<Geodetic2D> create2DCoordinates(JSONArray jsCoordinates)
@@ -316,7 +355,7 @@ public class GEOJSONParser
 
   private void showStatistics()
   {
-    ILogger.instance().logInfo("GEOJSONParser Statistics: Coordinates2D=%d, LineStrings2D=%d, MultiLineStrings2D=%d (LineStrings2D=%d), features=%d, featuresCollection=%d", _coordinates2DCount, _lineStrings2DCount, _multiLineStrings2DCount, _lineStringsInMultiLineString2DCount, _featuresCount, _featuresCollectionCount);
+    ILogger.instance().logInfo("GEOJSONParser Statistics: Coordinates2D=%d, Points2D=%d, LineStrings2D=%d, MultiLineStrings2D=%d (LineStrings2D=%d), features=%d, featuresCollection=%d", _coordinates2DCount, _points2DCount, _lineStrings2DCount, _multiLineStrings2DCount, _lineStringsInMultiLineString2DCount, _featuresCount, _featuresCollectionCount);
   }
 
 

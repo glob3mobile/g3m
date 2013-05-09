@@ -10,7 +10,7 @@ public class QuadShape_IImageDownloadListener extends IImageDownloadListener
 
   }
 
-  public final void onDownload(URL url, IImage image)
+  public final void onDownload(URL url, IImage image, boolean expired)
   {
     _quadShape.imageDownloaded(image);
   }
@@ -25,7 +25,7 @@ public class QuadShape_IImageDownloadListener extends IImageDownloadListener
 
   }
 
-  public final void onCanceledDownload(URL url, IImage image)
+  public final void onCanceledDownload(URL url, IImage image, boolean expired)
   {
 
   }

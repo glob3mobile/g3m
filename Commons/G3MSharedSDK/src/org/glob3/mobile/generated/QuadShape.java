@@ -58,7 +58,7 @@ public class QuadShape extends AbstractMeshShape
       _textureRequested = true;
       if (_textureURL.getPath().length() != 0)
       {
-        rc.getDownloader().requestImage(_textureURL, 1000000, TimeInterval.fromDays(30), new QuadShape_IImageDownloadListener(this), true);
+        rc.getDownloader().requestImage(_textureURL, 1000000, TimeInterval.fromDays(30), true, new QuadShape_IImageDownloadListener(this), true);
       }
     }
   
@@ -110,6 +110,19 @@ public class QuadShape extends AbstractMeshShape
      _color = null;
 
   }
+
+  public QuadShape(Geodetic3D position, IImage textureImage, float width, float height)
+  {
+     super(position);
+     _textureURL = new URL(new URL("", false));
+     _width = width;
+     _height = height;
+     _textureRequested = true;
+     _textureImage = textureImage;
+     _color = null;
+
+  }
+
 
   public QuadShape(Geodetic3D position, float width, float height, Color color)
   {

@@ -10,39 +10,50 @@
 
 #include "GEOObject.hpp"
 #include "GEOSymbolizer.hpp"
+#include "GEOSymbolizationContext.hpp"
+#include "ILogger.hpp"
 #include "Context.hpp"
 #include "Camera.hpp"
 
+class GEORenderer_ObjectSymbolizerPair {
+public:
+  const GEOObject*     _geoObject;
+  const GEOSymbolizer* _symbolizer;
+
+  GEORenderer_ObjectSymbolizerPair(GEOObject* geoObject,
+                                   GEOSymbolizer* symbolizer) :
+  _geoObject(geoObject),
+  _symbolizer(symbolizer)
+  {
+
+  }
+
+  ~GEORenderer_ObjectSymbolizerPair() {
+    delete _geoObject;
+    delete _symbolizer;
+  }
+};
+
+
 GEORenderer::~GEORenderer() {
-  delete _symbolizer;
-}
+  delete _defaultSymbolizer;
 
-void GEORenderer::initialize(const G3MContext* context) {
-  _context = context;
   const int childrenCount = _children.size();
   for (int i = 0; i < childrenCount; i++) {
-    GEOObject* geoObject = _children[i];
-    geoObject->initialize(_context);
+    GEORenderer_ObjectSymbolizerPair* pair = _children[i];
+    delete pair;
   }
 }
 
-void GEORenderer::addGEOObject(GEOObject* geoObject) {
-  _children.push_back(geoObject);
-  if (_context != NULL) {
-    geoObject->initialize(_context);
+void GEORenderer::addGEOObject(GEOObject* geoObject,
+                               GEOSymbolizer* symbolizer) {
+  if ( (symbolizer == NULL) && (_defaultSymbolizer == NULL) ) {
+    ILogger::instance()->logError("Can't add a geoObject without a symbolizer if the defaultSymbolizer was not given in the GEORenderer constructor");
+    delete geoObject;
   }
-}
-
-bool GEORenderer::isReadyToRender(const G3MRenderContext* rc) {
-  const int childrenCount = _children.size();
-  for (int i = 0; i < childrenCount; i++) {
-    GEOObject* geoObject = _children[i];
-    if (!geoObject->isReadyToRender(rc)) {
-      return false;
-    }
+  else {
+    _children.push_back( new GEORenderer_ObjectSymbolizerPair(geoObject, symbolizer) );
   }
-
-  return true;
 }
 
 void GEORenderer::render(const G3MRenderContext* rc,
@@ -51,9 +62,30 @@ void GEORenderer::render(const G3MRenderContext* rc,
   rc->getCurrentCamera()->applyOnGPUProgramState(_programState);
   
   const int childrenCount = _children.size();
-  for (int i = 0; i < childrenCount; i++) {
-    GEOObject* geoObject = _children[i];
-    geoObject->render(rc, parentState, &_programState, _symbolizer);
+//<<<<<<< HEAD
+//  for (int i = 0; i < childrenCount; i++) {
+//    GEOObject* geoObject = _children[i];
+//    geoObject->render(rc, parentState, &_programState, _symbolizer);
+//=======
+  if (childrenCount > 0) {
+
+    for (int i = 0; i < childrenCount; i++) {
+      const GEORenderer_ObjectSymbolizerPair* pair = _children[i];
+
+      if (pair->_geoObject != NULL) {
+        const GEOSymbolizer* symbolizer = (pair->_symbolizer == NULL) ? _defaultSymbolizer : pair->_symbolizer;
+
+        const GEOSymbolizationContext sc(symbolizer,
+                                         _meshRenderer,
+                                         _shapesRenderer,
+                                         _marksRenderer);
+        pair->_geoObject->symbolize(rc, sc);
+      }
+
+      delete pair;
+    }
+    _children.clear();
+//>>>>>>> webgl-port
   }
 }
 

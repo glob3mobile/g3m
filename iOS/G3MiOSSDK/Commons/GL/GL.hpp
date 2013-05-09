@@ -39,20 +39,11 @@ private:
   
   GLState *_currentState;
   
-//  ShaderProgram* _program;
-  
   GPUProgram* _currentGPUProgram;
   
   inline void loadModelView();
   
   const IGLTextureId* getGLTextureId();
-  
-  //Get Locations warning of errors
-//  bool _errorGettingLocationOcurred;
-//  int checkedGetAttribLocation(ShaderProgram* program,
-//                               const std::string& name);
-//  IGLUniformID* checkedGetUniformLocation(ShaderProgram* program,
-//                                          const std::string& name);
   
   const bool _verbose;
   
@@ -101,8 +92,6 @@ public:
                   int first,
                   int count, const GLState& state,
                   GPUProgramManager& progManager,const GPUProgramState* gpuState);
-  
-//  bool useProgram(ShaderProgram* program);
   
   int getError();
   
@@ -213,8 +202,6 @@ public:
   GLState* getCurrentState() const{ return _currentState;}
   
   void useProgram(GPUProgram* program) ;
-  
-//  void setUniformsDefaultValues() const;
   
   void enableVertexAttribArray(int location) const{
     _nativeGL->enableVertexAttribArray(location);

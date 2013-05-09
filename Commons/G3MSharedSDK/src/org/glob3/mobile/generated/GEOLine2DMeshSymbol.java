@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
 //
-//  GEOLine2DSymbol.cpp
+//  GEOLine2DMeshSymbol.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 3/25/13.
@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  GEOLine2DSymbol.hpp
+//  GEOLine2DMeshSymbol.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 3/25/13.
@@ -20,7 +20,7 @@ package org.glob3.mobile.generated;
 //class GEOLine2DStyle;
 
 
-public class GEOLine2DSymbol extends GEOSymbol
+public class GEOLine2DMeshSymbol extends GEOMeshSymbol
 {
   private final java.util.ArrayList<Geodetic2D> _coordinates;
 
@@ -30,11 +30,11 @@ public class GEOLine2DSymbol extends GEOSymbol
   private double _deltaHeight;
 
 
-  public GEOLine2DSymbol(java.util.ArrayList<Geodetic2D> coordinates, GEOLine2DStyle style)
+  public GEOLine2DMeshSymbol(java.util.ArrayList<Geodetic2D> coordinates, GEOLine2DStyle style)
   {
      this(coordinates, style, 0.0);
   }
-  public GEOLine2DSymbol(java.util.ArrayList<Geodetic2D> coordinates, GEOLine2DStyle style, double deltaHeight)
+  public GEOLine2DMeshSymbol(java.util.ArrayList<Geodetic2D> coordinates, GEOLine2DStyle style, double deltaHeight)
   {
      _coordinates = coordinates;
      _lineColor = new Color(style.getColor());
@@ -50,7 +50,7 @@ public class GEOLine2DSymbol extends GEOSymbol
 
   public final Mesh createMesh(G3MRenderContext rc)
   {
-    return createLine2DMesh(_coordinates, _lineColor, _lineWidth, _deltaHeight, rc);
+    return createLine2DMesh(_coordinates, _lineColor, _lineWidth, _deltaHeight, rc.getPlanet());
   }
 
 }

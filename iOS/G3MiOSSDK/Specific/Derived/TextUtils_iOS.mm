@@ -37,6 +37,7 @@ void TextUtils_iOS::createLabelImage(const std::string& label,
   NSString* text = [NSString stringWithCString: label.c_str()
                                       encoding: NSUTF8StringEncoding];
 
+  
   UIFont *font = [UIFont systemFontOfSize: fontSize];
   CGSize textSize = [text sizeWithFont: font];
 
@@ -46,6 +47,10 @@ void TextUtils_iOS::createLabelImage(const std::string& label,
   UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
 
   CGContextRef ctx = UIGraphicsGetCurrentContext();
+
+//  int __REMOVE;
+//  CGContextSetRGBFillColor(ctx, 0, 0, 0, 0.5f);
+//  CGContextFillRect(ctx, CGRectMake(0, 0, imageSize.width, imageSize.height));
 
   CGContextSetFillColorWithColor(ctx, toCGColor(color));
 

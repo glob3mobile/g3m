@@ -9,14 +9,8 @@
 #include "GEO2DMultiLineStringGeometry.hpp"
 
 #include "Geodetic2D.hpp"
-//#include "CompositeMesh.hpp"
-//#include "Color.hpp"
-
-//#include "FloatBufferBuilderFromGeodetic.hpp"
-//#include "DirectMesh.hpp"
-//#include "GLConstants.hpp"
-//#include "Planet.hpp"
 #include "GEOSymbolizer.hpp"
+#include "GEOSymbolizationContext.hpp"
 
 GEO2DMultiLineStringGeometry::~GEO2DMultiLineStringGeometry() {
   const int coordinatesArrayCount = _coordinatesArray->size();
@@ -34,6 +28,6 @@ GEO2DMultiLineStringGeometry::~GEO2DMultiLineStringGeometry() {
 }
 
 std::vector<GEOSymbol*>* GEO2DMultiLineStringGeometry::createSymbols(const G3MRenderContext* rc,
-                                                                     const GEOSymbolizer* symbolizer) {
-  return symbolizer->createSymbols(this);
+                                                                     const GEOSymbolizationContext& sc) const {
+  return sc.getSymbolizer()->createSymbols(this);
 }

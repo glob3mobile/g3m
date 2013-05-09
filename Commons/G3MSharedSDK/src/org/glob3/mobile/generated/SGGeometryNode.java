@@ -57,7 +57,12 @@ public class SGGeometryNode extends SGNode
        _indices.dispose();
   }
 
+<<<<<<< HEAD
   public final void rawRender(G3MRenderContext rc, GLState parentState, GPUProgramState parentProgramState)
+=======
+
+  public final void rawRender(G3MRenderContext rc, GLState parentState)
+>>>>>>> webgl-port
   {
     GL gl = rc.getGL();
   

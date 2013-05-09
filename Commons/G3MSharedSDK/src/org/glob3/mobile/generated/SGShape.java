@@ -25,13 +25,21 @@ public class SGShape extends Shape
   private SGNode _node;
   private final String _uriPrefix;
 
+  private final boolean _isTransparent;
 
-  public SGShape(SGNode node, String uriPrefix)
+
+  public SGShape(SGNode node, String uriPrefix, boolean isTransparent)
   {
      super(null);
      _node = node;
      _uriPrefix = uriPrefix;
+     _isTransparent = isTransparent;
 
+  }
+
+  public final SGNode getNode()
+  {
+    return _node;
   }
 
   public final String getURIPrefix()
@@ -56,8 +64,7 @@ public class SGShape extends Shape
 
   public final boolean isTransparent(G3MRenderContext rc)
   {
-  //  return _node->isTransparent(rc);
-    return false;
+    return _isTransparent;
   }
 
 }

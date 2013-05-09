@@ -55,7 +55,8 @@ public:
   }
 
   void onDownload(const URL& url,
-                  IByteBuffer* buffer) {
+                  IByteBuffer* buffer,
+                  bool expired) {
     const Vector2I resolution(_resolutionWidth, _resolutionHeight);
     ElevationData* elevationData = BilParser::parseBil16(_sector, resolution, _noDataValue, -9999, buffer);
     delete buffer;
@@ -72,7 +73,8 @@ public:
   }
 
   void onCanceledDownload(const URL& url,
-                          IByteBuffer* data) {
+                          IByteBuffer* data,
+                          bool expired) {
 
   }
 };
@@ -93,6 +95,7 @@ void SingleBillElevationDataProvider::initialize(const G3MContext* context) {
     context->getDownloader()->requestBuffer(_bilUrl,
                                             2000000000,
                                             TimeInterval::fromDays(30),
+                                            true,
                                             new SingleBillElevationDataProvider_BufferDownloadListener(this,
                                                                                                        _sector,
                                                                                                        _resolutionWidth,
@@ -144,17 +147,17 @@ void SingleBillElevationDataProvider::cancelRequest(const long long requestId) {
 }
 
 void SingleBillElevationDataProvider::drainQueue() {
-  int _WORKING;
+  int _DGD_working_on_terrain;
 }
 
 const long long SingleBillElevationDataProvider::queueRequest(const Sector& sector,
                                                               const Vector2I& resolution,
                                                               IElevationDataListener* listener,
                                                               bool autodeleteListener) {
-  int _WORKING;
+  int _DGD_working_on_terrain;
   return -1;
 }
 
 void SingleBillElevationDataProvider::removeQueueRequest(const long long requestId) {
-  int _WORKING;
+  int _DGD_working_on_terrain;
 }

@@ -22,7 +22,7 @@ private:
   IFloatBuffer* _colors;
   IFloatBuffer* _uv;
   IFloatBuffer* _normals;
-  IShortBuffer*   _indices;
+  IShortBuffer* _indices;
 
 public:
 
@@ -46,6 +46,7 @@ public:
   }
 
   ~SGGeometryNode();
+
 
   void rawRender(const G3MRenderContext* rc,
                  const GLState& parentState, const GPUProgramState* parentProgramState);

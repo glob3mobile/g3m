@@ -18,9 +18,10 @@ _id(id),
 _geometry(geometry),
 _properties(properties)
 {
-  _geometry->setFeature(this);
+  if (_geometry != NULL) {
+    _geometry->setFeature(this);
+  }
 }
-
 
 GEOFeature::~GEOFeature() {
   delete _id;
@@ -28,8 +29,9 @@ GEOFeature::~GEOFeature() {
   delete _properties;
 }
 
-void GEOFeature::render(const G3MRenderContext* rc,
-                        const GLState& parentState, const GPUProgramState* parentProgramState,
-                        const GEOSymbolizer* symbolizer) {
-  _geometry->render(rc, parentState, parentProgramState, symbolizer);
+void GEOFeature::symbolize(const G3MRenderContext* rc,
+                           const GEOSymbolizationContext& sc) const {
+  if (_geometry != NULL) {
+    _geometry->symbolize(rc, sc);
+  }
 }

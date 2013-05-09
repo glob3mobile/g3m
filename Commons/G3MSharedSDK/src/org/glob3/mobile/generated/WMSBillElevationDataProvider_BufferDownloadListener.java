@@ -22,7 +22,7 @@ public class WMSBillElevationDataProvider_BufferDownloadListener extends IBuffer
 
   }
 
-  public final void onDownload(URL url, IByteBuffer buffer)
+  public final void onDownload(URL url, IByteBuffer buffer, boolean expired)
   {
     final Vector2I resolution = new Vector2I(_width, _height);
     ElevationData elevationData = BilParser.parseBil16(_sector, resolution, _noDataValue, -9999, buffer);
@@ -64,7 +64,7 @@ public class WMSBillElevationDataProvider_BufferDownloadListener extends IBuffer
 
   }
 
-  public final void onCanceledDownload(URL url, IByteBuffer data)
+  public final void onCanceledDownload(URL url, IByteBuffer data, boolean expired)
   {
 
   }

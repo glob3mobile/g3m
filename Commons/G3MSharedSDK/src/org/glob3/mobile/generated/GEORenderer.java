@@ -22,36 +22,85 @@ package org.glob3.mobile.generated;
 
 //class GEOObject;
 //class GEOSymbolizer;
+//class MeshRenderer;
+//class MarksRenderer;
+//class ShapesRenderer;
+//class GEORenderer_ObjectSymbolizerPair;
 
 public class GEORenderer extends LeafRenderer
 {
-  private G3MContext _context;
-  private java.util.ArrayList<GEOObject> _children = new java.util.ArrayList<GEOObject>();
+  private java.util.ArrayList<GEORenderer_ObjectSymbolizerPair> _children = new java.util.ArrayList<GEORenderer_ObjectSymbolizerPair>();
 
-  private final GEOSymbolizer _symbolizer;
+  private final GEOSymbolizer _defaultSymbolizer;
 
+<<<<<<< HEAD
   private GPUProgramState _programState = new GPUProgramState();
 
+=======
+  private MeshRenderer _meshRenderer;
+  private ShapesRenderer _shapesRenderer;
+  private MarksRenderer _marksRenderer;
+>>>>>>> webgl-port
 
-  public GEORenderer(GEOSymbolizer symbolizer)
+
+  /**
+   Creates a GEORenderer.
+
+   defaultSymbolizer: Default Symbolizer, can be NULL.  In case of NULL, one instance of GEOSymbolizer must be passed in every call to addGEOObject();
+
+   meshRenderer:   Can be NULL as long as no GEOMarkSymbol is used in any symbolizer.
+   shapesRenderer: Can be NULL as long as no GEOShapeSymbol is used in any symbolizer.
+   marksRenderer:  Can be NULL as long as no GEOMeshSymbol is used in any symbolizer.
+
+   */
+  public GEORenderer(GEOSymbolizer defaultSymbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer)
   {
+<<<<<<< HEAD
      _symbolizer = symbolizer;
      _programState = new GPUProgramState(null);
+=======
+     _defaultSymbolizer = defaultSymbolizer;
+     _meshRenderer = meshRenderer;
+     _shapesRenderer = shapesRenderer;
+     _marksRenderer = marksRenderer;
+>>>>>>> webgl-port
 
   }
 
   public void dispose()
   {
-    if (_symbolizer != null)
-       _symbolizer.dispose();
+    if (_defaultSymbolizer != null)
+       _defaultSymbolizer.dispose();
+  
+    final int childrenCount = _children.size();
+    for (int i = 0; i < childrenCount; i++)
+    {
+      GEORenderer_ObjectSymbolizerPair pair = _children.get(i);
+      if (pair != null)
+         pair.dispose();
+    }
   }
 
+  /**
+   Add a new GEOObject.
+
+   symbolizer: The symbolizer to be used for the given geoObject.  Can be NULL as long as a defaultSymbolizer was given in the GEORenderer constructor.
+   */
   public final void addGEOObject(GEOObject geoObject)
   {
-    _children.add(geoObject);
-    if (_context != null)
+     addGEOObject(geoObject, null);
+  }
+  public final void addGEOObject(GEOObject geoObject, GEOSymbolizer symbolizer)
+  {
+    if ((symbolizer == null) && (_defaultSymbolizer == null))
     {
-      geoObject.initialize(_context);
+      ILogger.instance().logError("Can't add a geoObject without a symbolizer if the defaultSymbolizer was not given in the GEORenderer constructor");
+      if (geoObject != null)
+         geoObject.dispose();
+    }
+    else
+    {
+      _children.add(new GEORenderer_ObjectSymbolizerPair(geoObject, symbolizer));
     }
   }
 
@@ -72,37 +121,41 @@ public class GEORenderer extends LeafRenderer
 
   public final void initialize(G3MContext context)
   {
-    _context = context;
-    final int childrenCount = _children.size();
-    for (int i = 0; i < childrenCount; i++)
-    {
-      GEOObject geoObject = _children.get(i);
-      geoObject.initialize(_context);
-    }
+
   }
 
   public final boolean isReadyToRender(G3MRenderContext rc)
   {
-    final int childrenCount = _children.size();
-    for (int i = 0; i < childrenCount; i++)
-    {
-      GEOObject geoObject = _children.get(i);
-      if (!geoObject.isReadyToRender(rc))
-      {
-        return false;
-      }
-    }
-  
     return true;
   }
 
   public final void render(G3MRenderContext rc, GLState parentState)
   {
     final int childrenCount = _children.size();
-    for (int i = 0; i < childrenCount; i++)
+    if (childrenCount > 0)
     {
+<<<<<<< HEAD
       GEOObject geoObject = _children.get(i);
       geoObject.render(rc, parentState, _programState, _symbolizer);
+=======
+  
+      for (int i = 0; i < childrenCount; i++)
+      {
+        final GEORenderer_ObjectSymbolizerPair pair = _children.get(i);
+  
+        if (pair._geoObject != null)
+        {
+          final GEOSymbolizer symbolizer = (pair._symbolizer == null) ? _defaultSymbolizer : pair._symbolizer;
+  
+          final GEOSymbolizationContext sc = new GEOSymbolizationContext(symbolizer, _meshRenderer, _shapesRenderer, _marksRenderer);
+          pair._geoObject.symbolize(rc, sc);
+        }
+  
+        if (pair != null)
+           pair.dispose();
+      }
+      _children.clear();
+>>>>>>> webgl-port
     }
   }
 

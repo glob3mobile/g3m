@@ -36,9 +36,7 @@ public:
   _alpha(that._alpha) {
   }
 
-  ~Color() {
-
-  }
+  ~Color() { }
 
   static Color fromRGBA(const float red,
                         const float green,
@@ -52,6 +50,10 @@ public:
                             const float blue,
                             const float alpha) {
     return new Color(red, green, blue, alpha);
+  }
+
+  static Color transparent() {
+    return Color::fromRGBA(0, 0, 0, 0);
   }
 
   static Color black() {
@@ -74,8 +76,16 @@ public:
     return Color::fromRGBA(1, 0, 1, 1);
   }
   
+  static Color red() {
+    return Color::fromRGBA(1, 0, 0, 1);
+  }
+
   static Color green() {
     return Color::fromRGBA(0, 1, 0, 1);
+  }
+
+  static Color blue() {
+    return Color::fromRGBA(0, 0, 1, 1);
   }
 
   float getRed() const {

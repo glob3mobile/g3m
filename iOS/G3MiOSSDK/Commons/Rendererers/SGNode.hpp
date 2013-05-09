@@ -83,6 +83,13 @@ public:
   virtual GPUProgramState* createGPUProgramState(const G3MRenderContext* rc,
                                                  const GPUProgramState* parentState);
   
+  int getChildrenCount() const {
+    return _children.size();
+  }
+
+  SGNode* getChild(int i) const {
+    return _children[i];
+  }
 };
 
 #endif

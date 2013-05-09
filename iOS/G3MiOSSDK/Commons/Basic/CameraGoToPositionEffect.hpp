@@ -99,9 +99,9 @@ public:
     }
 
     Camera *camera = rc->getNextCamera();
-    camera->orbitTo(Angle::linearInterpolation(_fromPosition.latitude(),  _toPosition.latitude(),  alpha),
-                    Angle::linearInterpolation(_fromPosition.longitude(), _toPosition.longitude(), alpha),
-                    height);
+    camera->setGeodeticPosition(Angle::linearInterpolation(_fromPosition.latitude(),  _toPosition.latitude(),  alpha),
+                                Angle::linearInterpolation(_fromPosition.longitude(), _toPosition.longitude(), alpha),
+                                height);
 
 
     const Angle heading = Angle::linearInterpolation(_fromHeading, _toHeading, alpha);
@@ -126,7 +126,7 @@ public:
 
   virtual void stop(const G3MRenderContext *rc,
                     const TimeInterval& when) {
-    rc->getNextCamera()->orbitTo(_toPosition);
+    rc->getNextCamera()->setGeodeticPosition(_toPosition);
   }
 
   virtual void cancel(const TimeInterval& when) {

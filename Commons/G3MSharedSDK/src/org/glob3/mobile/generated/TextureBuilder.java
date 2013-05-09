@@ -8,23 +8,17 @@ package org.glob3.mobile.generated;
 //
 
 
-///#include "IImage.hpp"
-///#include "GL.hpp"
-///#include "IFactory.hpp"
+
 //class IImage;
-//class GL;
 //class IFactory;
 //class RectangleI;
 //class IImageListener;
+//class RectangleF;
 //class Vector2I;
-
 
 public abstract class TextureBuilder
 {
-
-  public abstract void createTextureFromImage(GL gl, IFactory factory, IImage image, Vector2I textureResolution, IImageListener listener, boolean autodelete);
-
-  public abstract void createTextureFromImages(GL gl, IFactory factory, java.util.ArrayList<IImage> images, java.util.ArrayList<RectangleI> rectangles, Vector2I textureResolution, IImageListener listener, boolean autodelete);
+  public abstract void createTextureFromImages(Vector2I textureExtent, java.util.ArrayList<IImage> images, java.util.ArrayList<RectangleF> srcRectangles, java.util.ArrayList<RectangleF> destRectangles, IImageListener listener, boolean autodelete);
 
   public void dispose()
   {

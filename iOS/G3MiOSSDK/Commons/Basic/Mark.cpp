@@ -82,7 +82,8 @@ public:
   }
 
   void onDownload(const URL& url,
-                  IImage* image) {
+                  IImage* image,
+                  bool expired) {
     const bool hasLabel = ( _label.length() != 0 );
 
     if (hasLabel) {
@@ -124,7 +125,8 @@ public:
   }
 
   void onCanceledDownload(const URL& url,
-                          IImage* image) {
+                          IImage* image,
+                          bool expired) {
     // do nothing
   }
 };
@@ -133,19 +135,19 @@ public:
 
 
 
-Mark::Mark(const std::string&   label,
-           const URL            iconURL,
-           const Geodetic3D&     position,
-           double               minDistanceToCamera,
-           const bool           labelBottom,
-           const float          labelFontSize,
-           const Color*         labelFontColor,
-           const Color*         labelShadowColor,
-           const int            labelGapSize,
-           MarkUserData*        userData,
-           bool                 autoDeleteUserData,
-           MarkTouchListener*   listener,
-           bool                 autoDeleteListener) :
+Mark::Mark(const std::string& label,
+           const URL          iconURL,
+           const Geodetic3D&  position,
+           double             minDistanceToCamera,
+           const bool         labelBottom,
+           const float        labelFontSize,
+           const Color*       labelFontColor,
+           const Color*       labelShadowColor,
+           const int          labelGapSize,
+           MarkUserData*      userData,
+           bool               autoDeleteUserData,
+           MarkTouchListener* listener,
+           bool               autoDeleteListener) :
 _label(label),
 _iconURL(iconURL),
 _position(position),
@@ -166,21 +168,22 @@ _userData(userData),
 _autoDeleteUserData(autoDeleteUserData),
 _minDistanceToCamera(minDistanceToCamera),
 _listener(listener),
-_autoDeleteListener(autoDeleteListener)
+_autoDeleteListener(autoDeleteListener),
+_imageID( iconURL.getPath() + "_" + label )
 {
 
 }
 
-Mark::Mark(const std::string&   label,
-           const Geodetic3D&     position,
-           double               minDistanceToCamera,           
-           const float          labelFontSize,
-           const Color*         labelFontColor,
-           const Color*         labelShadowColor,
-           MarkUserData*        userData,
-           bool                 autoDeleteUserData,
-           MarkTouchListener*   listener,
-           bool                 autoDeleteListener) :
+Mark::Mark(const std::string& label,
+           const Geodetic3D&  position,
+           double             minDistanceToCamera,
+           const float        labelFontSize,
+           const Color*       labelFontColor,
+           const Color*       labelShadowColor,
+           MarkUserData*      userData,
+           bool               autoDeleteUserData,
+           MarkTouchListener* listener,
+           bool               autoDeleteListener) :
 _label(label),
 _labelBottom(true),
 _iconURL("", false),
@@ -201,18 +204,19 @@ _userData(userData),
 _autoDeleteUserData(autoDeleteUserData),
 _minDistanceToCamera(minDistanceToCamera),
 _listener(listener),
-_autoDeleteListener(autoDeleteListener)
+_autoDeleteListener(autoDeleteListener),
+_imageID( "_" + label )
 {
 
 }
 
 Mark::Mark(const URL          iconURL,
-           const Geodetic3D&   position,
-           double minDistanceToCamera,
-           MarkUserData* userData,
-           bool autoDeleteUserData,
+           const Geodetic3D&  position,
+           double             minDistanceToCamera,
+           MarkUserData*      userData,
+           bool               autoDeleteUserData,
            MarkTouchListener* listener,
-           bool autoDeleteListener) :
+           bool               autoDeleteListener) :
 _label(""),
 _labelBottom(true),
 _iconURL(iconURL),
@@ -233,9 +237,44 @@ _userData(userData),
 _autoDeleteUserData(autoDeleteUserData),
 _minDistanceToCamera(minDistanceToCamera),
 _listener(listener),
-_autoDeleteListener(autoDeleteListener)
+_autoDeleteListener(autoDeleteListener),
+_imageID( iconURL.getPath() + "_" )
 {
 
+}
+
+Mark::Mark(IImage*            image,
+           const std::string& imageID,
+           const Geodetic3D&  position,
+           double             minDistanceToCamera,
+           MarkUserData*      userData,
+           bool               autoDeleteUserData,
+           MarkTouchListener* listener,
+           bool               autoDeleteListener) :
+_label(""),
+_labelBottom(true),
+_iconURL(URL("", false)),
+_position(position),
+_labelFontSize(20),
+_labelFontColor(NULL),
+_labelShadowColor(NULL),
+_labelGapSize(2),
+_textureId(NULL),
+_cartesianPosition(NULL),
+_vertices(NULL),
+_textureSolved(true),
+_textureImage(image),
+_renderedMark(false),
+_textureWidth(image->getWidth()),
+_textureHeight(image->getHeight()),
+_userData(userData),
+_autoDeleteUserData(autoDeleteUserData),
+_minDistanceToCamera(minDistanceToCamera),
+_listener(listener),
+_autoDeleteListener(autoDeleteListener),
+_imageID( imageID )
+{
+  
 }
 
 void Mark::initialize(const G3MContext* context,
@@ -250,6 +289,7 @@ void Mark::initialize(const G3MContext* context,
       downloader->requestImage(_iconURL,
                                downloadPriority,
                                TimeInterval::fromDays(30),
+                               true,
                                new IconDownloadListener(this,
                                                         _label,
                                                         _labelBottom,
@@ -367,7 +407,7 @@ void Mark::render(const G3MRenderContext* rc,
         if (_textureImage != NULL) {
           _textureId = rc->getTexturesHandler()->getGLTextureId(_textureImage,
                                                                 GLFormat::rgba(),
-                                                                _iconURL.getPath() + "_" + _label,
+                                                                _imageID,
                                                                 false);
 
           rc->getFactory()->deleteImage(_textureImage);

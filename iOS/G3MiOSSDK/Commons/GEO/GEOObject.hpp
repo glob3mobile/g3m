@@ -9,11 +9,8 @@
 #ifndef __G3MiOSSDK__GEOObject__
 #define __G3MiOSSDK__GEOObject__
 
-class G3MContext;
 class G3MRenderContext;
-class GLState;
-class GEOSymbolizer;
-class GPUProgramState;
+class GEOSymbolizationContext;
 
 class GEOObject {
 public:
@@ -21,18 +18,8 @@ public:
 
   }
 
-  virtual void initialize(const G3MContext* context) {
-
-  }
-
-  virtual bool isReadyToRender(const G3MRenderContext* rc) {
-    return true;
-  }
-
-  virtual void render(const G3MRenderContext* rc,
-                      const GLState& parentState, const GPUProgramState* parentProgramState,
-                      const GEOSymbolizer* symbolizer) = 0;
-
+  virtual void symbolize(const G3MRenderContext* rc,
+                         const GEOSymbolizationContext& sc) const = 0 ;
 };
 
 #endif

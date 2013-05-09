@@ -71,13 +71,9 @@ public class LayerSet
             return null;
           }
   
-          // if ( maxLevel != layerParam->_maxLevel ) {
-          //   ILogger::instance()->logError("Inconsistency in Layer's Parameters: maxLevel");
-          //   return NULL;
-          // }
-          if (maxLevel > layerParam._maxLevel)
+          if (maxLevel < layerParam._maxLevel)
           {
-            ILogger.instance().logWarning("Inconsistency in Layer's Parameters: maxLevel (downgrading from %d to %d)", maxLevel, layerParam._maxLevel);
+            ILogger.instance().logWarning("Inconsistency in Layer's Parameters: maxLevel (upgrading from %d to %d)", maxLevel, layerParam._maxLevel);
             maxLevel = layerParam._maxLevel;
           }
   
@@ -111,7 +107,7 @@ public class LayerSet
   
     if (first)
     {
-      ILogger.instance().logError("Can't create LayerSet's LayerTilesRenderParameters, not found any enable Layer");
+      ILogger.instance().logError("Can't create LayerSet's LayerTilesRenderParameters, not found any enabled Layer");
       return null;
     }
   
@@ -170,12 +166,26 @@ public class LayerSet
       Layer layer = _layers.get(i);
       if (layer.isAvailable(rc, tile))
       {
-        java.util.ArrayList<Petition> pet = layer.createTileMapPetitions(rc, tile);
-  
-        //Storing petitions
-        for (int j = 0; j < pet.size(); j++)
+        Tile petitionTile = tile;
+        final int maxLevel = layer.getLayerTilesRenderParameters()._maxLevel;
+        while ((petitionTile.getLevel() > maxLevel) && (petitionTile != null))
         {
-          petitions.add(pet.get(j));
+          petitionTile = petitionTile.getParent();
+        }
+  
+        if (petitionTile == null)
+        {
+          ILogger.instance().logError("Can't find a valid tile for petitions");
+        }
+        else
+        {
+          java.util.ArrayList<Petition> tilePetitions = layer.createTileMapPetitions(rc, petitionTile);
+  
+          final int tilePetitionsSize = tilePetitions.size();
+          for (int j = 0; j < tilePetitionsSize; j++)
+          {
+            petitions.add(tilePetitions.get(j));
+          }
         }
       }
     }

@@ -49,7 +49,7 @@ void GL::drawElements(int mode,
                           indices);
   
   //TODO: CHECKING GPU STATUS BY DELETING ALL
-  //progManager.getProgram(*gpuState)->onUnused();
+  progManager.getProgram(*gpuState)->onUnused();
 }
 
 void GL::drawArrays(int mode,
@@ -70,6 +70,9 @@ void GL::drawArrays(int mode,
   _nativeGL->drawArrays(mode,
                         first,
                         count);
+  
+  //TODO: CHECKING GPU STATUS BY DELETING ALL
+  progManager.getProgram(*gpuState)->onUnused();
 }
 
 int GL::getError() {

@@ -36,7 +36,6 @@ public class FrustumData
      _top = top;
      _znear = znear;
      _zfar = zfar;
-
   }
 
   public FrustumData(FrustumData fd)
@@ -58,4 +57,5 @@ public class FrustumData
      _znear = 1;
      _zfar = 10;
   }
+
 }

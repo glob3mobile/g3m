@@ -42,6 +42,11 @@ public class Vector2F
 
   }
 
+  public void dispose()
+  {
+
+  }
+
   public final float x()
   {
     return _x;

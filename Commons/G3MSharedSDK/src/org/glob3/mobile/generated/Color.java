@@ -34,7 +34,6 @@ public class Color
 
   public void dispose()
   {
-
   }
 
   public static Color fromRGBA(float red, float green, float blue, float alpha)
@@ -45,6 +44,11 @@ public class Color
   public static Color newFromRGBA(float red, float green, float blue, float alpha)
   {
     return new Color(red, green, blue, alpha);
+  }
+
+  public static Color transparent()
+  {
+    return Color.fromRGBA(0, 0, 0, 0);
   }
 
   public static Color black()
@@ -72,9 +76,19 @@ public class Color
     return Color.fromRGBA(1, 0, 1, 1);
   }
 
+  public static Color red()
+  {
+    return Color.fromRGBA(1, 0, 0, 1);
+  }
+
   public static Color green()
   {
     return Color.fromRGBA(0, 1, 0, 1);
+  }
+
+  public static Color blue()
+  {
+    return Color.fromRGBA(0, 0, 1, 1);
   }
 
   public final float getRed()

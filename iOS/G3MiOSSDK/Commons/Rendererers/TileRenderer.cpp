@@ -58,9 +58,8 @@ public:
 
   void notifyListener(const Sector* visibleSector,
                       const G3MRenderContext* rc) const {
-    const Geodetic3D cameraPosition = rc->getPlanet()->toGeodetic3D( rc->getCurrentCamera()->getCartesianPosition() );
-
-    _listener->onVisibleSectorChange(*_lastSector, cameraPosition);
+    _listener->onVisibleSectorChange(*_lastSector,
+                                     rc->getCurrentCamera()->getGeodeticPosition());
   }
 
   void tryToNotifyListener(const Sector* visibleSector,

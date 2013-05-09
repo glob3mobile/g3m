@@ -16,7 +16,7 @@ class TimeInterval {
 private:
   const long long _milliseconds;
 
-  TimeInterval(const long long milliseconds) :
+  explicit TimeInterval(const long long milliseconds) :
   _milliseconds(milliseconds)
   {
 
@@ -28,11 +28,6 @@ public:
   {
 
   }
-
-  //  TimeInterval() :
-  //  _milliseconds(0)
-  //  {
-  //  }
 
   static TimeInterval fromMilliseconds(const long long milliseconds) {
     return TimeInterval(milliseconds);

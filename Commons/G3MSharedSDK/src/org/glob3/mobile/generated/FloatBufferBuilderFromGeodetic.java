@@ -58,24 +58,26 @@ public class FloatBufferBuilderFromGeodetic extends FloatBufferBuilder
   {
     final Vector3D vector = _ellipsoid.toCartesian(latitude, longitude, height);
   
-    if (_centerStrategy == CenterStrategy.firstVertex() && _values.size() == 0)
+    if (_centerStrategy == CenterStrategy.firstVertex())
     {
-      setCenter(vector);
+      if (_values.size() == 0)
+      {
+        setCenter(vector);
+      }
     }
   
-    float x = (float) vector._x;
-    float y = (float) vector._y;
-    float z = (float) vector._z;
-    if (_centerStrategy != CenterStrategy.noCenter())
+    if (_centerStrategy == CenterStrategy.noCenter())
     {
-      x -= _cx;
-      y -= _cy;
-      z -= _cz;
+      _values.add((float) vector._x);
+      _values.add((float) vector._y);
+      _values.add((float) vector._z);
     }
-  
-    _values.add(x);
-    _values.add(y);
-    _values.add(z);
+    else
+    {
+      _values.add((float)(vector._x - _cx));
+      _values.add((float)(vector._y - _cy));
+      _values.add((float)(vector._z - _cz));
+    }
   }
 
   public final void add(Geodetic3D position)

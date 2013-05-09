@@ -256,9 +256,7 @@ void GPUProgram::applyChanges(GL* gl){
     if (u->wasSet()){
       u->applyChanges(gl);
     } else{
-      //if (u->getName().compare("Modelview") != 0){
       ILogger::instance()->logError("Uniform " + u->getName() + " was not set.");
-      //}
     }
   }
   

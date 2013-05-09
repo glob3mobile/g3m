@@ -34,7 +34,8 @@ AbstractMesh::AbstractMesh(const int primitive,
                            float pointSize,
                            Color* flatColor,
                            IFloatBuffer* colors,
-                           const float colorsIntensity) :
+                           const float colorsIntensity,
+                           bool depthTest) :
 _primitive(primitive),
 _owner(owner),
 _vertices(vertices),
@@ -47,7 +48,8 @@ _translationMatrix(( center.isNan() || center.isZero() )
                    ? NULL
                    : new MutableMatrix44D(MutableMatrix44D::createTranslationMatrix(center)) ),
 _lineWidth(lineWidth),
-_pointSize(pointSize)
+_pointSize(pointSize),
+_depthTest(depthTest)
 {
 
 }
@@ -170,6 +172,10 @@ void AbstractMesh::render(const G3MRenderContext *rc,
     progState.setUniformValue("ColorPerVertexIntensity", (float)0.0);
     progState.setUniformValue("FlatColor", (float)0.0, (float)0.0, (float)0.0, (float)0.0);
     progState.setUniformValue("FlatColorIntensity", (float)0.0);
+  }
+
+  if (!_depthTest) {
+    state.disableDepthTest();
   }
 
   if (_translationMatrix != NULL){

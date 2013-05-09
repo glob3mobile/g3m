@@ -20,7 +20,7 @@ private:
 
 protected:
   std::vector<GEOSymbol*>* createSymbols(const G3MRenderContext* rc,
-                                         const GEOSymbolizer* symbolizer);
+                                         const GEOSymbolizationContext& sc) const;
 
 public:
 
@@ -35,6 +35,7 @@ public:
     return _coordinatesArray;
   }
 
+  
 };
 
 #endif

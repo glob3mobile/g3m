@@ -59,7 +59,7 @@ public class SGLayerNode extends SGNode
       return;
     }
   
-    rc.getDownloader().requestImage(getURL(), DefineConstants.TEXTURES_DOWNLOAD_PRIORITY, TimeInterval.fromDays(30), new ImageDownloadListener(this), true);
+    rc.getDownloader().requestImage(getURL(), DefineConstants.TEXTURES_DOWNLOAD_PRIORITY, TimeInterval.fromDays(30), true, new SGLayerNode_ImageDownloadListener(this), true);
   }
 
   private IGLTextureId _textureId;
@@ -75,6 +75,7 @@ public class SGLayerNode extends SGNode
   
     return new URL(path, false);
   }
+
 
 
   public SGLayerNode(String id, String sId, String uri, String applyTo, String blendMode, boolean flipY, String magFilter, String minFilter, String wrapS, String wrapT)
@@ -119,6 +120,12 @@ public class SGLayerNode extends SGNode
   
     GLState state = new GLState(parentState);
     state.enableTextures();
+<<<<<<< HEAD
+=======
+    state.enableTexture2D();
+    state.enableBlend();
+    int __WORKING;
+>>>>>>> webgl-port
   
     GPUProgram prog = rc.getGPUProgramManager().getProgram("DefaultProgram");
     int _WORKING_JM;

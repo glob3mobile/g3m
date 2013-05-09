@@ -16,11 +16,14 @@ package org.glob3.mobile.generated;
 //
 
 
-//class G3MContext;
 //class G3MRenderContext;
+<<<<<<< HEAD
 //class GLState;
 //class GEOSymbolizer;
 //class GPUProgramState;
+=======
+//class GEOSymbolizationContext;
+>>>>>>> webgl-port
 
 public abstract class GEOObject
 {
@@ -29,6 +32,7 @@ public abstract class GEOObject
 
   }
 
+<<<<<<< HEAD
   public void initialize(G3MContext context)
   {
 
@@ -40,5 +44,8 @@ public abstract class GEOObject
   }
 
   public abstract void render(G3MRenderContext rc, GLState parentState, GPUProgramState parentProgramState, GEOSymbolizer symbolizer);
+=======
+  public abstract void symbolize(G3MRenderContext rc, GEOSymbolizationContext sc);
+>>>>>>> webgl-port
 
 }

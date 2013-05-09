@@ -50,20 +50,19 @@ void Camera::copyFrom(const Camera &that) {
   _geodeticCenterOfView = (that._geodeticCenterOfView == NULL) ? NULL : new Geodetic3D(*that._geodeticCenterOfView);
 
   delete _frustum;
-  delete _frustumInModelCoordinates;
-  delete _halfFrustum;
-  delete _halfFrustumInModelCoordinates;
-  delete _camEffectTarget;
-
-  _camEffectTarget = new CameraEffectTarget();
-
   _frustum = (that._frustum == NULL) ? NULL : new Frustum(*that._frustum);
 
+  delete _frustumInModelCoordinates;
   _frustumInModelCoordinates = (that._frustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._frustumInModelCoordinates);
 
+  delete _halfFrustum;
   _halfFrustum = (that._frustum == NULL) ? NULL : new Frustum(*that._frustum);
 
+  delete _halfFrustumInModelCoordinates;
   _halfFrustumInModelCoordinates = (that._frustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._frustumInModelCoordinates);
+  
+  delete _geodeticPosition;
+  _geodeticPosition = ((that._geodeticPosition == NULL) ? NULL : new Geodetic3D(*that._geodeticPosition));
 }
 
 Camera::Camera(int width, int height) :
@@ -84,45 +83,49 @@ _frustum(NULL),
 _frustumInModelCoordinates(NULL),
 _halfFrustumInModelCoordinates(NULL),
 _halfFrustum(NULL),
-_camEffectTarget(new CameraEffectTarget())
+_camEffectTarget(new CameraEffectTarget()),
+_geodeticPosition(NULL)
 {
   resizeViewport(width, height);
-}
-
-void Camera::resetPosition() {
-  _position = MutableVector3D(0, 0, 0);
-  _center = MutableVector3D(0, 0, 0);
-  _up = MutableVector3D(0, 0, 1);
-
   _dirtyFlags.setAll(true);
-
-  _frustumData = FrustumData();
-  _projectionMatrix = MutableMatrix44D();
-  _modelMatrix = MutableMatrix44D();
-  _modelViewMatrix = MutableMatrix44D();
-  _cartesianCenterOfView = MutableVector3D();
-
-  delete _geodeticCenterOfView;
-  _geodeticCenterOfView = NULL;
-
-  delete _frustum;
-  _frustum = NULL;
-
-  delete _frustumInModelCoordinates;
-  _frustumInModelCoordinates = NULL;
-
-  delete _halfFrustumInModelCoordinates;
-  _halfFrustumInModelCoordinates = NULL;
-
-  delete _halfFrustum;
-  _halfFrustum = NULL;
 }
+
+//void Camera::resetPosition() {
+//  _position = MutableVector3D(0, 0, 0);
+//  _center = MutableVector3D(0, 0, 0);
+//  _up = MutableVector3D(0, 0, 1);
+//
+//  _dirtyFlags.setAll(true);
+//
+//  _frustumData = FrustumData();
+//  _projectionMatrix = MutableMatrix44D();
+//  _modelMatrix = MutableMatrix44D();
+//  _modelViewMatrix = MutableMatrix44D();
+//  _cartesianCenterOfView = MutableVector3D();
+//
+//  delete _geodeticCenterOfView;
+//  _geodeticCenterOfView = NULL;
+//
+//  delete _frustum;
+//  _frustum = NULL;
+//
+//  delete _frustumInModelCoordinates;
+//  _frustumInModelCoordinates = NULL;
+//
+//  delete _halfFrustumInModelCoordinates;
+//  _halfFrustumInModelCoordinates = NULL;
+//
+//  delete _halfFrustum;
+//  _halfFrustum = NULL;
+//}
 
 void Camera::resizeViewport(int width, int height) {
   _width = width;
   _height = height;
 
-  _dirtyFlags._projectionMatrix = true;
+  _dirtyFlags._projectionMatrixDirty = true;
+  
+  _dirtyFlags.setAll(true);
 
   //cleanCachedValues();
 }
@@ -134,13 +137,13 @@ void Camera::print() {
   ILogger::instance()->logInfo("Width: %d, Height %d\n", _width, _height);
 }
 
-Angle Camera::getHeading(const Vector3D& normal) const {
+const Angle Camera::getHeading(const Vector3D& normal) const {
   const Vector3D north2D  = Vector3D::upZ().projectionInPlane(normal);
   const Vector3D up2D     = _up.asVector3D().projectionInPlane(normal);
   return up2D.signedAngleBetween(north2D, normal);
 }
 
-Angle Camera::getHeading() const {
+const Angle Camera::getHeading() const {
   const Vector3D normal = _planet->geodeticSurfaceNormal( _position );
   return getHeading(normal);
 }
@@ -153,7 +156,7 @@ void Camera::setHeading(const Angle& angle) {
   //printf ("previous heading=%f   current heading=%f\n", currentHeading.degrees(), getHeading().degrees());
 }
 
-Angle Camera::getPitch() const {
+const Angle Camera::getPitch() const {
   const Vector3D normal = _planet->geodeticSurfaceNormal(_position);
   const Angle angle     = _up.asVector3D().angleBetween(normal);
   return Angle::fromDegrees(90).sub(angle);
@@ -166,7 +169,7 @@ void Camera::setPitch(const Angle& angle) {
   //printf ("previous pitch=%f   current pitch=%f\n", currentPitch.degrees(), getPitch().degrees());
 }
 
-void Camera::orbitTo(const Vector3D& pos) {
+void Camera::_setGeodeticPosition(const Vector3D& pos) {
   const Angle heading = getHeading();
   const Angle pitch = getPitch();
 
@@ -192,7 +195,7 @@ void Camera::render(const G3MRenderContext* rc,
   //TODO: NO LONGER NEEDED!!!
 }
 
-Vector3D Camera::pixel2Ray(const Vector2I& pixel) const {
+const Vector3D Camera::pixel2Ray(const Vector2I& pixel) const {
   const int px = pixel._x;
   const int py = _height - pixel._y;
   const Vector3D pixel3D(px, py, 0);
@@ -206,22 +209,33 @@ Vector3D Camera::pixel2Ray(const Vector2I& pixel) const {
   return obj.sub(_position.asVector3D());
 }
 
-Vector3D Camera::pixel2PlanetPoint(const Vector2I& pixel) const {
+const Vector3D Camera::pixel2PlanetPoint(const Vector2I& pixel) const {
   return _planet->closestIntersection(_position.asVector3D(), pixel2Ray(pixel));
 }
 
-Vector2I Camera::point2Pixel(const Vector3D& point) const {
+const Vector2I Camera::point2Pixel(const Vector3D& point) const {
   const Vector2D p = getModelViewMatrix().project(point,
                                                   0, 0, _width, _height);
 
-  return Vector2I( (int) p._x, (int) (_height - p._y) );
+//  const IMathUtils* mu = IMathUtils::instance();
+//
+//  return Vector2I(mu->round( (float) p._x ),
+//                  mu->round( (float) ((double) _height - p._y) ) );
+//
+  return Vector2I((int) p._x,
+                  (int) (_height - p._y) );
 }
 
-Vector2I Camera::point2Pixel(const Vector3F& point) const {
+const Vector2I Camera::point2Pixel(const Vector3F& point) const {
   const Vector2F p = getModelViewMatrix().project(point,
                                                   0, 0, _width, _height);
 
-  return Vector2I( (int) p._x, (int) (_height - p._y) );
+//  const IMathUtils* mu = IMathUtils::instance();
+//
+//  return Vector2I(mu->round( p._x ),
+//                  mu->round( (float) _height - p._y ) );
+  return Vector2I((int) p._x ,
+                  (int) (_height - p._y ) );
 }
 
 void Camera::applyTransform(const MutableMatrix44D& M) {
@@ -268,9 +282,9 @@ void Camera::rotateWithAxisAndPoint(const Vector3D& axis, const Vector3D& point,
   applyTransform(m);
 }
 
-void Camera::setPosition(const Geodetic3D& g3d) {
-  setCartesianPosition( _planet->toCartesian(g3d).asMutableVector3D() );
-}
+//void Camera::setPosition(const Geodetic3D& g3d) {
+//  setCartesianPosition( _planet->toCartesian(g3d).asMutableVector3D() );
+//}
 
 Vector3D Camera::centerOfViewOnPlanet() const {
   const Vector3D ray = _center.sub(_position).asVector3D();
@@ -317,7 +331,94 @@ void Camera::setPointOfView(const Geodetic3D& center,
 //  _dirtyFlags.setAll(true);
 }
 
+
 void Camera::applyOnGPUProgramState(GPUProgramState& state) const{
   state.setUniformValue("Projection", getProjectionMatrix());
   state.setUniformValue("Modelview", getModelMatrix());
+}
+
+FrustumData Camera::calculateFrustumData() const {
+  //    // compute znear value
+  //    const double maxRadius = _planet->getRadii().maxAxis();
+  //    const double distanceToPlanetCenter = _position.length();
+  //    const double distanceToSurface = distanceToPlanetCenter - maxRadius;
+  //
+  //    double znear;
+  //    if (distanceToSurface > maxRadius/5) {
+  //      znear = maxRadius / 10;
+  //    }
+  //    else if (distanceToSurface > maxRadius/500) {
+  //      znear = maxRadius / 1e4;
+  //    }
+  //    else if (distanceToSurface > maxRadius/2000) {
+  //      znear = maxRadius / 1e5;
+  //    }
+  //    else {
+  //      znear = maxRadius / 1e6 * 3;
+  //    }
+  //
+  //    // compute zfar value
+  //    double zfar = 10000 * znear;
+  //    if (zfar > distanceToPlanetCenter) {
+  //      zfar = distanceToPlanetCenter;
+  //    }
+  //
+  //    // compute rest of frustum numbers
+  //    const double ratioScreen = (double) _height / _width;
+  //    const double right = 0.3 / ratioScreen * znear;
+  //    const double left = -right;
+  //    const double top = 0.3 * znear;
+  //    const double bottom = -top;
+  //
+  //    return FrustumData(left, right,
+  //                       bottom, top,
+  //                       znear, zfar);
+
+  int __Testing_new_zNear_zFar_politic;
+
+  const double height = getGeodeticPosition().height();
+  double zNear = height * 0.1;
+
+  /*
+  // compute zfar value using distance to horizon (Agustin version)
+  const double distanceToPlanetCenter = _position.length();
+  const double planetRadius = distanceToPlanetCenter - height;
+  const double distanceToHorizon = sqrt(distanceToPlanetCenter*distanceToPlanetCenter-planetRadius*planetRadius);
+  const double zfar = distanceToHorizon * 2.0;
+  printf ("ratio z = %f\n", zfar/znear);
+   */
+
+  double zFar = 10000 * zNear;
+  const double distance2ToPlanetCenter = _position.squaredLength();
+  if ((zFar * zFar) > distance2ToPlanetCenter) {
+    zFar = IMathUtils::instance()->sqrt(distance2ToPlanetCenter);
+  }
+
+  const double goalRatio = 1000;
+  const double ratio = zFar / zNear;
+  if (ratio < goalRatio) {
+    zNear = zFar / goalRatio;
+    //ratio = zFar / zNear;
+  }
+
+//  int __TODO_remove_debug_code;
+//  printf(">>> height=%f zNear=%f zFar=%f ratio=%f\n",
+//         height,
+//         zNear,
+//         zFar,
+//         ratio);
+
+  // compute rest of frustum numbers
+  const double _tanHalfFieldOfView = 0.3; // aprox tan(34 degrees / 2)
+
+  const double ratioScreen = (double) _height / _width;
+  const double right = _tanHalfFieldOfView / ratioScreen * zNear;
+  const double left = -right;
+  const double top = _tanHalfFieldOfView * zNear;
+  const double bottom = -top;
+
+
+  return FrustumData(left, right,
+                     bottom, top,
+                     zNear, zFar);
 }

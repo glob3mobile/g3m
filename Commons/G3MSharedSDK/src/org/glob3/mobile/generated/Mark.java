@@ -96,6 +96,7 @@ public class Mark
   private IImage _textureImage;
   private int _textureWidth;
   private int _textureHeight;
+  private final String _imageID;
 
   private boolean _renderedMark;
 
@@ -165,6 +166,7 @@ public class Mark
      _minDistanceToCamera = minDistanceToCamera;
      _listener = listener;
      _autoDeleteListener = autoDeleteListener;
+     _imageID = iconURL.getPath() + "_" + label;
   
   }
 
@@ -226,6 +228,7 @@ public class Mark
      _minDistanceToCamera = minDistanceToCamera;
      _listener = listener;
      _autoDeleteListener = autoDeleteListener;
+     _imageID = "_" + label;
   
   }
 
@@ -275,6 +278,57 @@ public class Mark
      _minDistanceToCamera = minDistanceToCamera;
      _listener = listener;
      _autoDeleteListener = autoDeleteListener;
+     _imageID = iconURL.getPath() + "_";
+  
+  }
+
+  /**
+   * Creates a marker whith a given pre-renderer IImage
+   */
+  public Mark(IImage image, String imageID, Geodetic3D position, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener)
+  {
+     this(image, imageID, position, minDistanceToCamera, userData, autoDeleteUserData, listener, false);
+  }
+  public Mark(IImage image, String imageID, Geodetic3D position, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData)
+  {
+     this(image, imageID, position, minDistanceToCamera, userData, autoDeleteUserData, null, false);
+  }
+  public Mark(IImage image, String imageID, Geodetic3D position, double minDistanceToCamera, MarkUserData userData)
+  {
+     this(image, imageID, position, minDistanceToCamera, userData, true, null, false);
+  }
+  public Mark(IImage image, String imageID, Geodetic3D position, double minDistanceToCamera)
+  {
+     this(image, imageID, position, minDistanceToCamera, null, true, null, false);
+  }
+  public Mark(IImage image, String imageID, Geodetic3D position)
+  {
+     this(image, imageID, position, 4.5e+06, null, true, null, false);
+  }
+  public Mark(IImage image, String imageID, Geodetic3D position, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener, boolean autoDeleteListener)
+  {
+     _label = "";
+     _labelBottom = true;
+     _iconURL = new URL(new URL("", false));
+     _position = new Geodetic3D(position);
+     _labelFontSize = 20F;
+     _labelFontColor = null;
+     _labelShadowColor = null;
+     _labelGapSize = 2;
+     _textureId = null;
+     _cartesianPosition = null;
+     _vertices = null;
+     _textureSolved = true;
+     _textureImage = image;
+     _renderedMark = false;
+     _textureWidth = image.getWidth();
+     _textureHeight = image.getHeight();
+     _userData = userData;
+     _autoDeleteUserData = autoDeleteUserData;
+     _minDistanceToCamera = minDistanceToCamera;
+     _listener = listener;
+     _autoDeleteListener = autoDeleteListener;
+     _imageID = imageID;
   
   }
 
@@ -321,7 +375,7 @@ public class Mark
       {
         IDownloader downloader = context.getDownloader();
   
-        downloader.requestImage(_iconURL, downloadPriority, TimeInterval.fromDays(30), new IconDownloadListener(this, _label, _labelBottom, _labelFontSize, _labelFontColor, _labelShadowColor, _labelGapSize), true);
+        downloader.requestImage(_iconURL, downloadPriority, TimeInterval.fromDays(30), true, new IconDownloadListener(this, _label, _labelBottom, _labelFontSize, _labelFontColor, _labelShadowColor, _labelGapSize), true);
       }
       else
       {
@@ -369,7 +423,7 @@ public class Mark
         {
           if (_textureImage != null)
           {
-            _textureId = rc.getTexturesHandler().getGLTextureId(_textureImage, GLFormat.rgba(), _iconURL.getPath() + "_" + _label, false);
+            _textureId = rc.getTexturesHandler().getGLTextureId(_textureImage, GLFormat.rgba(), _imageID, false);
   
             rc.getFactory().deleteImage(_textureImage);
             _textureImage = null;

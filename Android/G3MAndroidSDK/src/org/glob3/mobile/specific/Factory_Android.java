@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.glob3.mobile.generated.IByteBuffer;
+import org.glob3.mobile.generated.ICanvas;
 import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IFloatBuffer;
 import org.glob3.mobile.generated.IImage;
@@ -91,22 +92,22 @@ public final class Factory_Android
    }
 
 
-   @Override
-   public void createImageFromSize(final int width,
-                                   final int height,
-                                   final IImageListener listener,
-                                   final boolean autodelete) {
-      final Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-      final Image_Android result;
-      if (bitmap == null) {
-         ILogger.instance().logError("FACTORY: Can't create empty image");
-         result = null;
-      }
-      else {
-         result = new Image_Android(bitmap, null);
-      }
-      listener.imageCreated(result);
-   }
+   //   @Override
+   //   public void createImageFromSize(final int width,
+   //                                   final int height,
+   //                                   final IImageListener listener,
+   //                                   final boolean autodelete) {
+   //      final Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+   //      final Image_Android result;
+   //      if (bitmap == null) {
+   //         ILogger.instance().logError("FACTORY: Can't create empty image");
+   //         result = null;
+   //      }
+   //      else {
+   //         result = new Image_Android(bitmap, null);
+   //      }
+   //      listener.imageCreated(result);
+   //   }
 
 
    @Override
@@ -176,6 +177,12 @@ public final class Factory_Android
    @Override
    public IShortBuffer createShortBuffer(final int size) {
       return new ShortBuffer_Android(size);
+   }
+
+
+   @Override
+   public ICanvas createCanvas() {
+      return new Canvas_Android();
    }
 
 }

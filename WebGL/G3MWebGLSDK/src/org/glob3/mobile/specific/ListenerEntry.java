@@ -87,7 +87,7 @@ public final class ListenerEntry {
       if (_bufferListener != null) {
          final IByteBuffer byteBuffer = new ByteBuffer_WebGL(data);
 
-         _bufferListener.onDownload(url, byteBuffer);
+         _bufferListener.onDownload(url, byteBuffer, false);
       }
       if (_imageListener != null) {
          final Image_WebGL image = new Image_WebGL(data);
@@ -97,7 +97,7 @@ public final class ListenerEntry {
             _imageListener.onError(url);
          }
          else {
-            _imageListener.onDownload(url, image);
+            _imageListener.onDownload(url, image, false);
             //IFactory.instance().deleteImage(image);
          }
       }
@@ -109,7 +109,7 @@ public final class ListenerEntry {
       if (_bufferListener != null) {
          final IByteBuffer byteBuffer = new ByteBuffer_WebGL(data);
 
-         _bufferListener.onCanceledDownload(url, byteBuffer);
+         _bufferListener.onCanceledDownload(url, byteBuffer, false);
       }
       if (_imageListener != null) {
          final Image_WebGL image = new Image_WebGL(data);
@@ -118,7 +118,7 @@ public final class ListenerEntry {
             log(LogLevel.ErrorLevel, ": Can't create image from data");
          }
          else {
-            _imageListener.onCanceledDownload(url, image);
+            _imageListener.onCanceledDownload(url, image, false);
             IFactory.instance().deleteImage(image);
          }
       }

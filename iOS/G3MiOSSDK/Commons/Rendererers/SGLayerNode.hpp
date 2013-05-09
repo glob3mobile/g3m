@@ -44,6 +44,7 @@ private:
 
   URL getURL() const;
 
+
 public:
 
   SGLayerNode(const std::string& id,

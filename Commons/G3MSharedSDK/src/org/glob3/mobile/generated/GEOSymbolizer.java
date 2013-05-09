@@ -19,6 +19,9 @@ package org.glob3.mobile.generated;
 //class GEOSymbol;
 //class GEO2DMultiLineStringGeometry;
 //class GEO2DLineStringGeometry;
+//class GEO2DPointGeometry;
+//class GEOObject;
+
 
 public abstract class GEOSymbolizer
 {
@@ -28,5 +31,7 @@ public abstract class GEOSymbolizer
 
   public abstract java.util.ArrayList<GEOSymbol> createSymbols(GEO2DMultiLineStringGeometry geometry);
   public abstract java.util.ArrayList<GEOSymbol> createSymbols(GEO2DLineStringGeometry geometry);
+
+  public abstract java.util.ArrayList<GEOSymbol> createSymbols(GEO2DPointGeometry geometry);
 
 }
