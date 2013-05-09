@@ -63,7 +63,7 @@ public class TMSLayer extends Layer
     isb.addString(_mapServerURL.getPath());
     isb.addString(_mapLayer);
     isb.addString("/");
-    isb.addInt(tile.getLevel());
+    isb.addInt(tile.getLevel()+_parameters._firstLevel);
     isb.addString("/");
     isb.addInt(tile.getColumn());
     isb.addString("/");
