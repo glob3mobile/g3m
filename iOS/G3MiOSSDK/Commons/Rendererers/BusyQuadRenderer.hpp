@@ -54,6 +54,21 @@ public:
   }
   
   void initialize(const G3MContext* context) {
+    _programState.setUniformValue("BillBoard", false);
+    _programState.setUniformValue("EnableTexture", false);
+    _programState.setUniformValue("PointSize", (float)1.0);
+    _programState.setUniformValue("ScaleTexCoord", Vector2D(1.0,1.0));
+    _programState.setUniformValue("TextureExtent", Vector2D(0.0,0.0));
+    _programState.setUniformValue("TranslationTexCoord", Vector2D(0.0,0.0));
+    _programState.setUniformValue("ViewPortExtent", Vector2D(0.0,0.0));
+    
+    _programState.setUniformValue("ColorPerVertexIntensity", (float)0.0);
+    _programState.setUniformValue("EnableFlatColor", false);
+    _programState.setUniformValue("FlatColor", (float)0.0, (float)0.0, (float)0.0, (float)0.0);
+    _programState.setUniformValue("FlatColorIntensity", (float)0.0);
+    
+    _programState.setAttributeEnabled("TextureCoord", false);
+    _programState.setAttributeEnabled("Color", false);
   }
   
   bool isReadyToRender(const G3MRenderContext* rc) {

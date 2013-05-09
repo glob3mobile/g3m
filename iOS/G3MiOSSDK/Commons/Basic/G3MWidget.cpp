@@ -79,11 +79,6 @@ _rootState(GLState::newDefault()),
 _frameTasksExecutor( new FrameTasksExecutor() ),
 _effectsScheduler( new EffectsScheduler() ),
 _gl(gl),
-/*
- =======
-_gl( new GL(nativeGL, false) ),
->>>>>>> origin/webgl-port
- */
 _downloader(downloader),
 _storage(storage),
 _threadUtils(threadUtils),

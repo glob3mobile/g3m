@@ -95,22 +95,9 @@ void Shape::render(const G3MRenderContext* rc,
       _pendingEffects.clear();
     }
     
-//<<<<<<< HEAD
     GPUProgramState progState(parentProgramState);
     progState.multiplyUniformValue("Modelview", *getTransformMatrix( rc->getPlanet() ));
     rawRender(rc, parentState, &progState);
-//=======
-//    
-//    GL* gl = rc->getGL();
-//    
-//    gl->pushMatrix();
-//    
-//    gl->multMatrixf( *getTransformMatrix( rc->getPlanet() ) );
-//    
-//    rawRender(rc, parentState);
-//    
-//    gl->popMatrix();
-//>>>>>>> webgl-port
   }
 }
 

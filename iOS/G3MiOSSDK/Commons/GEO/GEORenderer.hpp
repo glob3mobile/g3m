@@ -24,17 +24,6 @@ class GEORenderer : public LeafRenderer {
 private:
   std::vector<GEORenderer_ObjectSymbolizerPair*> _children;
 
-//<<<<<<< HEAD
-//  const GEOSymbolizer* _symbolizer;
-//  
-//  
-//
-//public:
-//
-//  GEORenderer(const GEOSymbolizer* symbolizer) :
-//  _symbolizer(symbolizer),
-//  _programState(NULL)
-//=======
   const GEOSymbolizer* _defaultSymbolizer;
 
   MeshRenderer*   _meshRenderer;
@@ -64,7 +53,6 @@ public:
   _shapesRenderer(shapesRenderer),
   _marksRenderer(marksRenderer),
   _programState(NULL)
-//>>>>>>> webgl-port
   {
     _programState.setUniformValue("BillBoard", false);
     _programState.setUniformValue("EnableTexture", false);

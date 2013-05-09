@@ -62,11 +62,6 @@ void GEORenderer::render(const G3MRenderContext* rc,
   rc->getCurrentCamera()->applyOnGPUProgramState(_programState);
   
   const int childrenCount = _children.size();
-//<<<<<<< HEAD
-//  for (int i = 0; i < childrenCount; i++) {
-//    GEOObject* geoObject = _children[i];
-//    geoObject->render(rc, parentState, &_programState, _symbolizer);
-//=======
   if (childrenCount > 0) {
 
     for (int i = 0; i < childrenCount; i++) {
@@ -85,7 +80,6 @@ void GEORenderer::render(const G3MRenderContext* rc,
       delete pair;
     }
     _children.clear();
-//>>>>>>> webgl-port
   }
 }
 

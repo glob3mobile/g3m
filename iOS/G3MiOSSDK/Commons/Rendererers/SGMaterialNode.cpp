@@ -33,20 +33,6 @@ GPUProgramState* SGMaterialNode::createGPUProgramState(const G3MRenderContext* r
     const float colorsIntensity = 1;
     progState->setUniformValue("FlatColorIntensity", colorsIntensity);
   }
-//<<<<<<< HEAD
   
   return progState;
-//=======
-//
-//  GLState* state = new GLState(parentState);
-//  const float colorsIntensity = 1;
-//#ifdef C_CODE
-//  state->enableFlatColor(*_baseColor, colorsIntensity);
-//#endif
-//#ifdef JAVA_CODE
-//  state.enableFlatColor(_baseColor, colorsIntensity);
-//#endif
-//
-//  return state;
-//>>>>>>> webgl-port
 }

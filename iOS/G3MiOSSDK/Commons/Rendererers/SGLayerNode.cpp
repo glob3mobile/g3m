@@ -126,18 +126,8 @@ GLState* SGLayerNode::createState(const G3MRenderContext* rc,
   }
 
   GLState* state = new GLState(parentState);
-//<<<<<<< HEAD
   state->bindTexture(texId);
   int __WORKING;
-
-//=======
-//  state->enableTextures();
-//  state->enableTexture2D();
-//  state->enableBlend();
-//
-//  GL* gl = rc->getGL();
-//  gl->bindTexture(texId);
-//>>>>>>> webgl-port
 
   return state;
 }
