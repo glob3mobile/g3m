@@ -61,7 +61,14 @@ public class Browser_Android {
       //_webView.getSettings().setBuiltInZoomControls(true);
       //_webView.getSettings().setUseWideViewPort(true);
 
-      _webView.setWebViewClient(new WebViewClient());
+      _webView.setWebViewClient(new WebViewClient() {
+         @Override
+         public boolean shouldOverrideUrlLoading(final WebView view,
+                                                 final String url) {
+            view.loadUrl(url);
+            return true;
+         }
+      });
       _webView.setWebChromeClient(new WebChromeClient() {
          @Override
          public boolean onJsAlert(final WebView view,
