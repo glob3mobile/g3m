@@ -226,7 +226,7 @@ GPUAttributeVec4Float* GPUProgram::getGPUAttributeVec4Float(const std::string na
  Must be called when the program is used
  */
 void GPUProgram::onUsed(){
-  ILogger::instance()->logInfo("GPUProgram %s being used", _name.c_str());
+//  ILogger::instance()->logInfo("GPUProgram %s being used", _name.c_str());
 }
 /**
  Must be called when the program is no longer used

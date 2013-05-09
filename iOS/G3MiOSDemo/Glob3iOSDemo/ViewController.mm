@@ -275,7 +275,30 @@ public:
                                                                   error: nil] UTF8String]);
   
   return GPUProgramSources("DefaultProgram", vertexSource, fragmentSource);
+}
 
+- (GPUProgramSources) loadDefaultGPUProgramSourcesWithName: (NSString*) name{
+  //GPU Program Sources
+  NSString* vertShaderPathname = [[NSBundle mainBundle] pathForResource: name
+                                                                 ofType: @"vsh"];
+  if (!vertShaderPathname) {
+    NSLog(@"Can't load Shader.vsh");
+  }
+  const std::string vertexSource ([[NSString stringWithContentsOfFile: vertShaderPathname
+                                                             encoding: NSUTF8StringEncoding
+                                                                error: nil] UTF8String]);
+  
+  NSString* fragShaderPathname = [[NSBundle mainBundle] pathForResource: name
+                                                                 ofType: @"fsh"];
+  if (!fragShaderPathname) {
+    NSLog(@"Can't load Shader.fsh");
+  }
+  
+  const std::string fragmentSource ([[NSString stringWithContentsOfFile: fragShaderPathname
+                                                               encoding: NSUTF8StringEncoding
+                                                                  error: nil] UTF8String]);
+  
+  return GPUProgramSources([name UTF8String], vertexSource, fragmentSource);
 }
 
 - (void) initCustomizedWithBuilder
@@ -367,6 +390,12 @@ public:
   
   GPUProgramSources sources = [self loadDefaultGPUProgramSourcesFromDisk];
   builder.addGPUProgramSources(sources);
+  
+  GPUProgramSources sourcesDefault = [self loadDefaultGPUProgramSourcesWithName:@"Default"];
+  builder.addGPUProgramSources(sourcesDefault);
+  
+  GPUProgramSources sourcesBillboard = [self loadDefaultGPUProgramSourcesWithName:@"Billboard"];
+  builder.addGPUProgramSources(sourcesBillboard);
 
   //  WidgetUserData* userData = NULL;
   //  builder.setUserData(userData);

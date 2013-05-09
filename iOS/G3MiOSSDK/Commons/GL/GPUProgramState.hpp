@@ -76,6 +76,8 @@ public:
   
   void applyChanges(GL* gl, GPUProgram& prog) const;
   
+  std::vector<std::string> getUniformsNames() const;
+  
   std::string description() const;
 };
 

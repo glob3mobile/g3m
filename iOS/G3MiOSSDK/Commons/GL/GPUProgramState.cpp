@@ -223,7 +223,7 @@ void GPUProgramState::multiplyUniformValue(const std::string& name, const Mutabl
       ILogger::instance()->logError("Multiplying matrix uniform without a previous value.");
     }
   }
-
+  
   setUniformValue(name, new GPUUniformValueMatrix4Float(previousM.multiply(m) ));
 }
 
@@ -270,4 +270,23 @@ std::string GPUProgramState::description() const{
   }
   
   return desc;
+}
+
+std::vector<std::string> GPUProgramState::getUniformsNames() const{
+  std::vector<std::string> us;
+  
+  const GPUProgramState* state = this;
+  while (state != NULL) {
+    
+    for(std::map<std::string, GPUUniformValue*> ::const_iterator it = state->_uniformValues.begin();
+        it != state->_uniformValues.end();
+        it++){
+      us.push_back(it->first);
+    }
+    
+    state = state->_parentState;
+    
+  }
+  
+  return us;
 }

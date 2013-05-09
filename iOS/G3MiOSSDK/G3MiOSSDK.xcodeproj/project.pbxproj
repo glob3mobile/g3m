@@ -262,14 +262,18 @@
 		D87F26F317130BA80048AD70 /* GPUUniform.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D87BF6DB170F0628004D467D /* GPUUniform.hpp */; };
 		D87F26F517130C020048AD70 /* GPUAttribute.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8715C1F170344FB00CF7BE2 /* GPUAttribute.hpp */; };
 		D89DA21A15FF6C32008CD5F5 /* Image_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = D89DA21815FF6C31008CD5F5 /* Image_iOS.mm */; };
-		D8A1CB6F1737B364004EF534 /* GPUProgramManager.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D80E59B4170B155C00E7C799 /* GPUProgramManager.hpp */; };
 		D89FBD7D1725444800FFA541 /* MeshShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D89FBD7B1725444800FFA541 /* MeshShape.cpp */; };
 		D89FBD801725446C00FFA541 /* IImageUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D89FBD7E1725446C00FFA541 /* IImageUtils.cpp */; };
+		D8A1CB6F1737B364004EF534 /* GPUProgramManager.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D80E59B4170B155C00E7C799 /* GPUProgramManager.hpp */; };
 		D8A5601F15AEF64E00035086 /* IndexedMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A5601B15AEF64E00035086 /* IndexedMesh.cpp */; };
 		D8A5602115AEF64E00035086 /* Mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A5601D15AEF64E00035086 /* Mesh.cpp */; };
 		D8A723AE15E4D47E00ABDF07 /* StringBuilder_iOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A723AD15E4D47E00ABDF07 /* StringBuilder_iOS.cpp */; };
 		D8B17F5B16F7693A007A9E43 /* GLState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B17F5916F76939007A9E43 /* GLState.cpp */; };
 		D8B2054B1737B68400750AE4 /* GPUProgramFactory.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B2054A1737B65A00750AE4 /* GPUProgramFactory.hpp */; };
+		D8CE5D34173BB5D800C7AAE6 /* Default.vsh in Sources */ = {isa = PBXBuildFile; fileRef = D8CE5D32173BB5D800C7AAE6 /* Default.vsh */; };
+		D8CE5D35173BB5D800C7AAE6 /* Default.fsh in Sources */ = {isa = PBXBuildFile; fileRef = D8CE5D33173BB5D800C7AAE6 /* Default.fsh */; };
+		D8CE5D38173BB68200C7AAE6 /* Billboard.fsh in Sources */ = {isa = PBXBuildFile; fileRef = D8CE5D36173BB68200C7AAE6 /* Billboard.fsh */; };
+		D8CE5D39173BB68200C7AAE6 /* Billboard.vsh in Sources */ = {isa = PBXBuildFile; fileRef = D8CE5D37173BB68200C7AAE6 /* Billboard.vsh */; };
 		D8D347BA15E5133B00EDB394 /* IStringBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8D347B915E5133B00EDB394 /* IStringBuilder.cpp */; };
 		D8EEF3B91577924D003FEB5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF3B81577924D003FEB5E /* Foundation.framework */; };
 		E705123C165E782C00AEADB9 /* TileRendererBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E705123A165E782C00AEADB9 /* TileRendererBuilder.cpp */; };
@@ -1201,6 +1205,10 @@
 		D8CD74D815F8D56800B801CC /* FloatBufferBuilderFromCartesian3D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = FloatBufferBuilderFromCartesian3D.hpp; path = Commons/Basic/FloatBufferBuilderFromCartesian3D.hpp; sourceTree = "<group>"; };
 		D8CD74D915F8DBE800B801CC /* FloatBufferBuilderFromCartesian2D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = FloatBufferBuilderFromCartesian2D.hpp; path = Commons/Basic/FloatBufferBuilderFromCartesian2D.hpp; sourceTree = "<group>"; };
 		D8CD74DD15F8DE9500B801CC /* FloatBufferBuilderFromGeodetic.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = FloatBufferBuilderFromGeodetic.hpp; path = Commons/Basic/FloatBufferBuilderFromGeodetic.hpp; sourceTree = "<group>"; };
+		D8CE5D32173BB5D800C7AAE6 /* Default.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Default.vsh; sourceTree = "<group>"; };
+		D8CE5D33173BB5D800C7AAE6 /* Default.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Default.fsh; sourceTree = "<group>"; };
+		D8CE5D36173BB68200C7AAE6 /* Billboard.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Billboard.fsh; sourceTree = "<group>"; };
+		D8CE5D37173BB68200C7AAE6 /* Billboard.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Billboard.vsh; sourceTree = "<group>"; };
 		D8D347B915E5133B00EDB394 /* IStringBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IStringBuilder.cpp; path = Commons/Interfaces/IStringBuilder.cpp; sourceTree = "<group>"; };
 		D8E17DD515FE2ABF00C980E6 /* IByteBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IByteBuffer.hpp; path = Commons/Interfaces/IByteBuffer.hpp; sourceTree = "<group>"; };
 		D8E17DDC15FE2B4F00C980E6 /* ByteBuffer_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ByteBuffer_iOS.hpp; path = Specific/Derived/ByteBuffer_iOS.hpp; sourceTree = "<group>"; };
@@ -1928,6 +1936,10 @@
 		E70B56E016D3CCCD00C5FFFB /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
+				D8CE5D36173BB68200C7AAE6 /* Billboard.fsh */,
+				D8CE5D37173BB68200C7AAE6 /* Billboard.vsh */,
+				D8CE5D32173BB5D800C7AAE6 /* Default.vsh */,
+				D8CE5D33173BB5D800C7AAE6 /* Default.fsh */,
 				E70B56E116D3CCCD00C5FFFB /* Shader.fsh */,
 				E70B56E216D3CCCD00C5FFFB /* Shader.vsh */,
 			);
@@ -2205,6 +2217,10 @@
 				D89FBD7D1725444800FFA541 /* MeshShape.cpp in Sources */,
 				D89FBD801725446C00FFA541 /* IImageUtils.cpp in Sources */,
 				441C28BD1733D413007DC83F /* ShapeFullPositionEffect.cpp in Sources */,
+				D8CE5D34173BB5D800C7AAE6 /* Default.vsh in Sources */,
+				D8CE5D35173BB5D800C7AAE6 /* Default.fsh in Sources */,
+				D8CE5D38173BB68200C7AAE6 /* Billboard.fsh in Sources */,
+				D8CE5D39173BB68200C7AAE6 /* Billboard.vsh in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -18,6 +18,7 @@
 
 #include "GPUProgram.hpp"
 #include "GL.hpp"
+#include "GPUProgramState.hpp"
 
 class GPUProgramManager{
   
@@ -67,7 +68,15 @@ public:
   
   GPUProgram* getProgram(const GPUProgramState& state) {
     int WORKING_JM;
-    return getProgram("DefaultProgram");
+    
+    std::vector<std::string> us = state.getUniformsNames();
+    for (int i = 0; i < us.size(); i++) {
+      if (us[i].compare("ScaleTexCoord") == 0){
+        return getProgram("DefaultProgram");
+      }
+    }
+    
+    return getProgram("Billboard");
   }
   
   
