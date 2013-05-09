@@ -31,6 +31,13 @@ public class Browser_Android {
    }
 
 
+   public Browser_Android(final Activity activity,
+                          final WebView webView) {
+      _activity = activity;
+      _webView = webView;
+   }
+
+
    public void openInBrowser(final String targetUrl) {
 
       final URL url = new URL(targetUrl, false);
@@ -62,6 +69,17 @@ public class Browser_Android {
                                   final String message,
                                   final JsResult result) {
             return super.onJsAlert(view, url, message, result);
+         }
+
+
+         @Override
+         public void onProgressChanged(final WebView view,
+                                       final int progress) {
+            if (_activity != null) {
+               if (progress == 100) {
+                  _activity.setProgressBarIndeterminateVisibility(false);
+               }
+            }
          }
       });
 
