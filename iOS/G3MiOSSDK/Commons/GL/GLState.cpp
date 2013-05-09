@@ -8,8 +8,6 @@
 
 #include "GLState.hpp"
 
-#include "GLShaderAttributes.hpp"
-#include "GLShaderUniforms.hpp"
 #include "IFloatBuffer.hpp"
 #include "IGLTextureId.hpp"
 

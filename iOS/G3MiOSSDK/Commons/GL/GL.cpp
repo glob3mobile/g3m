@@ -19,106 +19,10 @@
 #include "FloatBufferBuilderFromCartesian2D.hpp"
 #include "IGLTextureId.hpp"
 
-#include "GLShaderAttributes.hpp"
-#include "GLShaderUniforms.hpp"
 #include "GPUProgram.hpp"
 #include "GPUUniform.hpp"
 #include "GPUProgramState.hpp"
 #include "GPUProgramManager.hpp"
-
-struct AttributesStruct Attributes;
-struct UniformsStruct   Uniforms;
-
-int GL::checkedGetAttribLocation(ShaderProgram* program,
-                                 const std::string& name) {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::checkedGetAttribLocation()");
-  }
-  int l = _nativeGL->getAttribLocation(program, name);
-  if (l == -1) {
-    ILogger::instance()->logError("Error fetching Attribute, Program=%s, Variable=\"%s\"",
-                                  program->description().c_str(),
-                                  name.c_str());
-    _errorGettingLocationOcurred = true;
-  }
-  return l;
-}
-
-IGLUniformID* GL::checkedGetUniformLocation(ShaderProgram* program,
-                                            const std::string& name) {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::checkedGetUniformLocation()");
-  }
-  IGLUniformID* uID = _nativeGL->getUniformLocation(program, name);
-  if (!uID->isValid()) {
-    ILogger::instance()->logError("Error fetching Uniform, Program=%s, Variable=\"%s\"",
-                                  program->description().c_str(),
-                                  name.c_str());
-    _errorGettingLocationOcurred = true;
-  }
-  return uID;
-}
-
-void GL::setUniformsDefaultValues() const{
-  // default values
-  _nativeGL->uniform2f(Uniforms.ScaleTexCoord, (float)1.0, (float)1.0);
-  _nativeGL->uniform2f(Uniforms.TranslationTexCoord, (float)0.0, (float)0.0);
-  _nativeGL->uniform1f(Uniforms.PointSize, 1);
-  _nativeGL->uniform1i(Uniforms.BillBoard, 0); //NOT DRAWING BILLBOARD
-}
-
-bool GL::useProgram(ShaderProgram* program) {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::useProgram()");
-  }
-  
-  //  if (_program == program) {
-  //    return true;
-  //  }
-  _program = program;
-  
-  // set shaders
-  //_nativeGL->useProgram(program);
-  
-  //Methods checkedGetAttribLocation and checkedGetUniformLocation
-  //will turn _errorGettingLocationOcurred to true is that happens
-  _errorGettingLocationOcurred = false;
-  
-  // Extract the handles to attributes
-  Attributes.Position     = checkedGetAttribLocation(program, "Position");
-  Attributes.TextureCoord = checkedGetAttribLocation(program, "TextureCoord");
-  Attributes.Color        = checkedGetAttribLocation(program, "Color");
-  
-  Uniforms.deleteUniformsIDs(); //DELETING
-  
-  // Extract the handles to uniforms
-  Uniforms.Projection          = checkedGetUniformLocation(program, "Projection");
-  Uniforms.Modelview           = checkedGetUniformLocation(program, "Modelview");
-  Uniforms.Sampler             = checkedGetUniformLocation(program, "Sampler");
-  Uniforms.EnableTexture       = checkedGetUniformLocation(program, "EnableTexture");
-  Uniforms.FlatColor           = checkedGetUniformLocation(program, "FlatColor");
-  Uniforms.TranslationTexCoord = checkedGetUniformLocation(program, "TranslationTexCoord");
-  Uniforms.ScaleTexCoord       = checkedGetUniformLocation(program, "ScaleTexCoord");
-  Uniforms.PointSize           = checkedGetUniformLocation(program, "PointSize");
-  
-  //BILLBOARDS
-  Uniforms.BillBoard      = checkedGetUniformLocation(program, "BillBoard");
-  Uniforms.ViewPortExtent = checkedGetUniformLocation(program, "ViewPortExtent");
-  Uniforms.TextureExtent  = checkedGetUniformLocation(program, "TextureExtent");
-  
-  
-  //FOR FLAT COLOR MIXING
-  Uniforms.FlatColorIntensity      = checkedGetUniformLocation(program, "FlatColorIntensity");
-  Uniforms.ColorPerVertexIntensity = checkedGetUniformLocation(program, "ColorPerVertexIntensity");
-  Uniforms.EnableColorPerVertex    = checkedGetUniformLocation(program, "EnableColorPerVertex");
-  Uniforms.EnableFlatColor         = checkedGetUniformLocation(program, "EnableFlatColor");
-  
-  setUniformsDefaultValues();
-  
-  //Return
-  return !_errorGettingLocationOcurred;
-}
-
 
 void GL::clearScreen(const GLState& state) {
   if (_verbose) {

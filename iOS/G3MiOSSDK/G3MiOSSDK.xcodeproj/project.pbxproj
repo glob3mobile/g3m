@@ -1090,8 +1090,6 @@
 		D87EC5CC15BEB31000E38C36 /* CPUTextureBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = CPUTextureBuilder.hpp; path = Commons/Basic/CPUTextureBuilder.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D87EC5CD15BEB31000E38C36 /* TextureBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TextureBuilder.hpp; path = Commons/Basic/TextureBuilder.hpp; sourceTree = "<group>"; };
 		D87EC5D215BEC73400E38C36 /* RectangleD.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = RectangleD.hpp; path = Commons/Geometry/RectangleD.hpp; sourceTree = "<group>"; };
-		D88818C516F87840009B577B /* GLShaderUniforms.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLShaderUniforms.hpp; sourceTree = "<group>"; };
-		D88818C616F8785B009B577B /* GLShaderAttributes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLShaderAttributes.hpp; sourceTree = "<group>"; };
 		D88B5E5115C162AF0083A43F /* G3MWidget.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = G3MWidget.hpp; path = Commons/Basic/G3MWidget.hpp; sourceTree = "<group>"; };
 		D892FBCB15C930CC00E69254 /* NativeGL2_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NativeGL2_iOS.hpp; path = Specific/GL/NativeGL2_iOS.hpp; sourceTree = "<group>"; };
 		D89DA21715FF6C31008CD5F5 /* Image_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Image_iOS.hpp; path = Specific/Derived/Image_iOS.hpp; sourceTree = "<group>"; };
@@ -1700,8 +1698,6 @@
 				CC733B481637F79E0035C4CC /* ShaderProgram.cpp */,
 				D8E76950160742FD008EC7B9 /* GLConstants.hpp */,
 				D8B17F5916F76939007A9E43 /* GLState.cpp */,
-				D88818C516F87840009B577B /* GLShaderUniforms.hpp */,
-				D88818C616F8785B009B577B /* GLShaderAttributes.hpp */,
 				D8715C1C17032AC700CF7BE2 /* GPUProgram.cpp */,
 				D8715C1D17032AC700CF7BE2 /* GPUProgram.hpp */,
 				D8715C1F170344FB00CF7BE2 /* GPUAttribute.hpp */,

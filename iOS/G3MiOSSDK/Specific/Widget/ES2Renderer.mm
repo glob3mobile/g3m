@@ -88,7 +88,6 @@ enum {
   }
 
   // Use shader program
-  widget->getGL()->useProgram(_shaderProgram);
   widget->render(_width, _height);
 
   if (_firstRender) {
