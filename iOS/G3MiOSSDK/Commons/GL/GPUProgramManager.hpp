@@ -72,7 +72,7 @@ public:
     std::vector<std::string> us = state.getUniformsNames();
     for (int i = 0; i < us.size(); i++) {
       if (us[i].compare("ScaleTexCoord") == 0){
-        return getProgram("DefaultProgram");
+        return getProgram("Default");
       }
     }
     
