@@ -359,11 +359,11 @@ void TileRenderer::initialize(const G3MContext* context) {
   }
   
   //Initializing program State
-//  _programState.setUniformValue("BillBoard", false);
+  _programState.setUniformValue("BillBoard", false);
   _programState.setUniformValue("EnableTexture", false);
   _programState.setUniformValue("PointSize", (float)1.0);
-//  _programState.setUniformValue("TextureExtent", Vector2D(0.0,0.0));
-//  _programState.setUniformValue("ViewPortExtent", Vector2D(0.0,0.0));
+  _programState.setUniformValue("TextureExtent", Vector2D(0.0,0.0));
+  _programState.setUniformValue("ViewPortExtent", Vector2D(0.0,0.0));
 }
 
 bool TileRenderer::isReadyToRender(const G3MRenderContext *rc) {

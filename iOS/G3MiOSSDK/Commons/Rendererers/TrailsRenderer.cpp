@@ -181,10 +181,10 @@ void TrailsRenderer::render(const G3MRenderContext* rc,
 }
 
 void TrailsRenderer::initialize(const G3MContext* context) {
-//  _programState.setUniformValue("BillBoard", false);
+  _programState.setUniformValue("BillBoard", false);
   _programState.setUniformValue("EnableTexture", false);
   _programState.setUniformValue("ScaleTexCoord", Vector2D(1.0, 1.0));
-//  _programState.setUniformValue("TextureExtent", Vector2D(0.0, 0.0));
+  _programState.setUniformValue("TextureExtent", Vector2D(0.0, 0.0));
   _programState.setUniformValue("TranslationTexCoord", Vector2D(0.0, 0.0));
-//  _programState.setUniformValue("ViewPortExtent", Vector2D(0.0, 0.0));
+  _programState.setUniformValue("ViewPortExtent", Vector2D(0.0, 0.0));
 }

@@ -192,6 +192,9 @@ void GL::setGLState(const GLState& state) {
 void GL::setProgramState(GPUProgramManager& progManager, const GPUProgramState& progState) {
   GPUProgram* prog = progManager.getProgram(progState);
   if (prog != _currentGPUProgram){
+    if (_currentGPUProgram != NULL){
+      _currentGPUProgram->onUnused();
+    }
     _currentGPUProgram = prog;
     useProgram(prog);
   }
