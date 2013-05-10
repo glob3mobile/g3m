@@ -69,9 +69,9 @@ void MarksRenderer::initialize(const G3MContext* context) {
   
   //Creating program state
   _programState.setAttributeEnabled("Position", true);
-  _programState.setUniformValue("BillBoard", true);
+//  _programState.setUniformValue("BillBoard", true);
   _programState.setAttributeEnabled("TextureCoord", true);
-  _programState.setUniformValue("EnableTexture", true);
+//  _programState.setUniformValue("EnableTexture", true);
   
   FloatBufferBuilderFromCartesian2D texCoor;
   texCoor.add(1,1);
@@ -87,14 +87,14 @@ void MarksRenderer::initialize(const G3MContext* context) {
                                   false,
                                   0);
   
-  _programState.setUniformValue("TranslationTexCoord", Vector2D(0.0, 0.0));
-  _programState.setUniformValue("ScaleTexCoord", Vector2D(1.0, 1.0));
-  _programState.setUniformValue("ColorPerVertexIntensity", (float) 0.0);
-  _programState.setUniformValue("EnableColorPerVertex", false);
-  _programState.setUniformValue("EnableFlatColor", false);
-  _programState.setUniformValue("FlatColor", (float) 0.0, (float) 0.0, (float) 0.0, (float) 0.0);
-  _programState.setUniformValue("FlatColorIntensity", (float) 0.0);
-  _programState.setUniformValue("PointSize", (float) 0.0);
+//  _programState.setUniformValue("TranslationTexCoord", Vector2D(0.0, 0.0));
+//  _programState.setUniformValue("ScaleTexCoord", Vector2D(1.0, 1.0));
+//  _programState.setUniformValue("ColorPerVertexIntensity", (float) 0.0);
+//  _programState.setUniformValue("EnableColorPerVertex", false);
+//  _programState.setUniformValue("EnableFlatColor", false);
+//  _programState.setUniformValue("FlatColor", (float) 0.0, (float) 0.0, (float) 0.0, (float) 0.0);
+//  _programState.setUniformValue("FlatColorIntensity", (float) 0.0);
+//  _programState.setUniformValue("PointSize", (float) 0.0);
 }
 
 void MarksRenderer::addMark(Mark* mark) {
