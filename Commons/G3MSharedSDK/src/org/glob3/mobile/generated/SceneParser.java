@@ -161,7 +161,7 @@ public class SceneParser
       wmsVersion = WMSServerVersion.WMS_1_3_0;
     }
   
-    WMSLayer wmsLayer = new WMSLayer(URL.escape(layersSecuence), new URL(jsonURL, false), wmsVersion, sector, format, "EPSG:4326", "", transparent, levelTileCondition, TimeInterval.fromDays(30), true, new LayerTilesRenderParameters(Sector.fullSphere(),jsonSplitsLat,jsonSplitsLon,1,19,LayerTilesRenderParameters.defaultTileTextureResolution(),LayerTilesRenderParameters.defaultTileMeshResolution(),false));
+    WMSLayer wmsLayer = new WMSLayer(URL.escape(layersSecuence), new URL(jsonURL, false), wmsVersion, sector, format, "EPSG:4326", "", transparent, levelTileCondition, TimeInterval.fromDays(30), true, new LayerTilesRenderParameters(Sector.fullSphere(),jsonSplitsLat,jsonSplitsLon,0,19,LayerTilesRenderParameters.defaultTileTextureResolution(),LayerTilesRenderParameters.defaultTileMeshResolution(),false));
     layerSet.addLayer(wmsLayer);
   }
   private void parserJSONTMSLayer(LayerSet layerSet, JSONObject jsonLayer)
@@ -179,6 +179,7 @@ public class SceneParser
     boolean transparent = isTransparent(jsonLayer.getAsString(ISTRANSPARENT));
   
     LevelTileCondition levelTileCondition = getLevelCondition(jsonLayer.getAsString(MINLEVEL), jsonLayer.getAsString(MAXLEVEL));
+  
     Sector sector = getSector(jsonLayer.getAsObject(BBOX));
   
     final JSONArray jsonItems = jsonLayer.getAsArray(ITEMS);
@@ -201,7 +202,7 @@ public class SceneParser
     if (layersName != null)
        layersName.dispose();
   
-    TMSLayer tmsLayer = new TMSLayer(URL.escape(layersSecuence), new URL(jsonURL, false), sector, "image/png", "EPSG:4326", transparent, levelTileCondition, TimeInterval.fromDays(30), true, new LayerTilesRenderParameters(Sector.fullSphere(),jsonSplitsLat,jsonSplitsLon,1,19,LayerTilesRenderParameters.defaultTileTextureResolution(),LayerTilesRenderParameters.defaultTileMeshResolution(),false));
+    TMSLayer tmsLayer = new TMSLayer(URL.escape(layersSecuence), new URL(jsonURL, false), sector, "image/png", "EPSG:4326", transparent, levelTileCondition, TimeInterval.fromDays(30), true, new LayerTilesRenderParameters(Sector.fullSphere(),jsonSplitsLat,jsonSplitsLon,0,19,LayerTilesRenderParameters.defaultTileTextureResolution(),LayerTilesRenderParameters.defaultTileMeshResolution(),false));
   
     layerSet.addLayer(tmsLayer);
   }
