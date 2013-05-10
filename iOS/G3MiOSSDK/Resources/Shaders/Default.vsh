@@ -1,8 +1,7 @@
 //
-//  Shader.vsh
+//  Default.vsh
 //
-//  Created by Agustín Trujillo Pino on 12/01/11.
-//  Copyright 2011 Universidad de Las Palmas. All rights reserved.
+//  Created by José Miguel Santana Núñez
 //
 
 attribute vec4 Position;
@@ -20,12 +19,13 @@ uniform float PointSize;
 varying vec4 VertexColor;
 varying vec2 TextureCoordOut;
 
+
 void main() {
   gl_Position = Projection * Modelview * Position;
-
+  
   TextureCoordOut = (TextureCoord * ScaleTexCoord) + TranslationTexCoord;
-
+  
   VertexColor = Color;
-
+  
   gl_PointSize = PointSize;
 }

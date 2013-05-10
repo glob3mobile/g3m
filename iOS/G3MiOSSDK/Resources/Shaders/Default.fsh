@@ -1,13 +1,10 @@
 //
-//  Shader.fsh
+//  Default.vsh
 //
-//  Created by Agustín Trujillo Pino on 12/01/11.
-//  Copyright 2011 Universidad de Las Palmas. All rights reserved.
+//  Created by José Miguel Santana Núñez
 //
 
 varying mediump vec2 TextureCoordOut;
-//uniform mediump vec2 TranslationTexCoord;
-//uniform mediump vec2 ScaleTexCoord;
 
 varying mediump vec4 VertexColor;
 
@@ -24,7 +21,7 @@ void main() {
   
   if (EnableTexture) {
     gl_FragColor = texture2D(Sampler, TextureCoordOut);
-
+    
     if (EnableFlatColor || EnableColorPerVertex){
       lowp vec4 color;
       if (EnableFlatColor) {

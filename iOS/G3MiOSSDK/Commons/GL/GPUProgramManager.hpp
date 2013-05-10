@@ -71,12 +71,12 @@ public:
     
     std::vector<std::string> us = state.getUniformsNames();
     for (int i = 0; i < us.size(); i++) {
-      if (us[i].compare("BillBoard") == 0){
-        return getProgram("DefaultProgram");
+      if (us[i].compare("ViewPortExtent") == 0){
+        return getProgram("Billboard");
       }
     }
     
-    return getProgram("Billboard");
+    return getProgram("Default");
   }
   
   
