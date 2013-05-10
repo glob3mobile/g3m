@@ -125,11 +125,7 @@ public class SceneParser
   
     boolean transparent = isTransparent(jsonLayer.getAsString(ISTRANSPARENT));
   
-    String format = "image/png";
-    if (!transparent)
-    {
-      format = "image/jpeg";
-    }
+    String format = getFormat(transparent);
   
     LevelTileCondition levelTileCondition = getLevelCondition(jsonLayer.getAsString(MINLEVEL), jsonLayer.getAsString(MAXLEVEL));
     Sector sector = getSector(jsonLayer.getAsObject(BBOX));
@@ -178,6 +174,8 @@ public class SceneParser
   
     boolean transparent = isTransparent(jsonLayer.getAsString(ISTRANSPARENT));
   
+    String format = getFormat(transparent);
+  
     LevelTileCondition levelTileCondition = getLevelCondition(jsonLayer.getAsString(MINLEVEL), jsonLayer.getAsString(MAXLEVEL));
   
     Sector sector = getSector(jsonLayer.getAsObject(BBOX));
@@ -202,7 +200,7 @@ public class SceneParser
     if (layersName != null)
        layersName.dispose();
   
-    TMSLayer tmsLayer = new TMSLayer(URL.escape(layersSecuence), new URL(jsonURL, false), sector, "image/png", "EPSG:4326", transparent, levelTileCondition, TimeInterval.fromDays(30), true, new LayerTilesRenderParameters(Sector.fullSphere(),jsonSplitsLat,jsonSplitsLon,0,19,LayerTilesRenderParameters.defaultTileTextureResolution(),LayerTilesRenderParameters.defaultTileMeshResolution(),false));
+    TMSLayer tmsLayer = new TMSLayer(URL.escape(layersSecuence), new URL(jsonURL, false), sector, format, "EPSG:4326", transparent, levelTileCondition, TimeInterval.fromDays(30), true, new LayerTilesRenderParameters(Sector.fullSphere(),jsonSplitsLat,jsonSplitsLon,0,19,LayerTilesRenderParameters.defaultTileTextureResolution(),LayerTilesRenderParameters.defaultTileMeshResolution(),false));
   
     layerSet.addLayer(tmsLayer);
   }
@@ -387,6 +385,15 @@ public class SceneParser
       }
     }
     return isTransparent;
+  }
+  private String getFormat(boolean transparent)
+  {
+    String format = "image/png";
+    if (!transparent)
+    {
+      format = "image/jpeg";
+    }
+    return format;
   }
 
   protected SceneParser()
