@@ -31,7 +31,9 @@ public:
   virtual GLState* bind(const G3MRenderContext* rc, const GLState& parentState, GPUProgramState& progState) const = 0;
 
   virtual bool isTransparent(const G3MRenderContext* rc) const = 0;
-
+  
+  virtual void modifyGLState(GLState* glState) const = 0;
+  virtual void modifyGPUProgramState(GPUProgramState* progState) const= 0;
 };
 
 
@@ -85,6 +87,10 @@ public:
   bool isTransparent(const G3MRenderContext* rc) const {
     return _isTransparent;
   }
+  
+  void modifyGLState(GLState* glState) const;
+  
+  void modifyGPUProgramState(GPUProgramState* progState) const;
 
 };
 #endif

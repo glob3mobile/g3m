@@ -60,6 +60,8 @@ private:
   float _clearColorB;
   float _clearColorA;
   
+public:
+  
   GLState() :
   _depthTest(false),
   _blend(false),
@@ -80,9 +82,6 @@ private:
   {
   }
   
-  
-  
-public:
   static GLState* newDefault() {
     return new GLState();
   }

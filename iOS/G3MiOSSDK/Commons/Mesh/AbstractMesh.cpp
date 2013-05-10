@@ -21,7 +21,7 @@ AbstractMesh::~AbstractMesh() {
     delete _colors;
     delete _flatColor;
   }
-
+  
   delete _extent;
   delete _translationMatrix;
 }
@@ -51,41 +51,41 @@ _lineWidth(lineWidth),
 _pointSize(pointSize),
 _depthTest(depthTest)
 {
-
+  
 }
 
 Extent* AbstractMesh::computeExtent() const {
   const int vertexCount = getVertexCount();
-
+  
   if (vertexCount <= 0) {
     return NULL;
   }
-
+  
   double minX = 1e12;
   double minY = 1e12;
   double minZ = 1e12;
-
+  
   double maxX = -1e12;
   double maxY = -1e12;
   double maxZ = -1e12;
-
+  
   for (int i=0; i < vertexCount; i++) {
     const int i3 = i * 3;
-
+    
     const double x = _vertices->get(i3    ) + _center._x;
     const double y = _vertices->get(i3 + 1) + _center._y;
     const double z = _vertices->get(i3 + 2) + _center._z;
-
+    
     if (x < minX) minX = x;
     if (x > maxX) maxX = x;
-
+    
     if (y < minY) minY = y;
     if (y > maxY) maxY = y;
-
+    
     if (z < minZ) minZ = z;
     if (z > maxZ) maxZ = z;
   }
-
+  
   return new Box(Vector3D(minX, minY, minZ),
                  Vector3D(maxX, maxY, maxZ));
 }
@@ -173,14 +173,77 @@ void AbstractMesh::render(const G3MRenderContext *rc,
     progState.setUniformValue("FlatColor", (float)0.0, (float)0.0, (float)0.0, (float)0.0);
     progState.setUniformValue("FlatColorIntensity", (float)0.0);
   }
-
+  
   if (!_depthTest) {
     state.disableDepthTest();
   }
-
+  
   if (_translationMatrix != NULL){
     progState.multiplyUniformValue("Modelview", *_translationMatrix);
   }
-
+  
   rawRender(rc, state, &progState);
 }
+
+GLState* AbstractMesh::getGLState(){
+  glState.setLineWidth(_lineWidth);
+  if (_flatColor->isTransparent()){
+    glState.enableBlend();
+    glState.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
+  }
+  return &glState;
+}
+
+
+GPUProgramState* AbstractMesh::getGPUProgramState(){
+  
+  progState.setUniformValue("PointSize", _pointSize);
+  
+  progState.setAttributeEnabled("Position", true);
+  progState.setAttributeValue("Position",
+                              _vertices, 4, //The attribute is a float vector of 4 elements
+                              3,            //Our buffer contains elements of 3
+                              0,            //Index 0
+                              false,        //Not normalized
+                              0);           //Stride 0
+  
+  if (_colors != NULL){
+    progState.setAttributeEnabled("Color", true);
+    progState.setUniformValue("EnableColorPerVertex", true);
+    progState.setAttributeValue("Color",
+                                _colors, 4,   //The attribute is a float vector of 4 elements RGBA
+                                4,            //Our buffer contains elements of 4
+                                0,            //Index 0
+                                false,        //Not normalized
+                                0);           //Stride 0
+    
+    progState.setUniformValue("ColorPerVertexIntensity", _colorsIntensity);
+  } else{
+    progState.setAttributeEnabled("Color", false);
+    progState.setUniformValue("EnableColorPerVertex", false);
+    progState.setUniformValue("ColorPerVertexIntensity", (float)0.0);
+  }
+  
+  if (_flatColor != NULL){
+    progState.setUniformValue("EnableFlatColor", true);
+    progState.setUniformValue("FlatColor",
+                              (double)_flatColor->getRed(),
+                              (double)_flatColor->getGreen(),
+                              (double) _flatColor->getBlue(),
+                              (double) _flatColor->getAlpha());
+    
+    progState.setUniformValue("FlatColorIntensity", _colorsIntensity);
+  } else{
+    progState.setUniformValue("EnableFlatColor", false);
+    progState.setUniformValue("ColorPerVertexIntensity", (float)0.0);
+    progState.setUniformValue("FlatColor", (float)0.0, (float)0.0, (float)0.0, (float)0.0);
+    progState.setUniformValue("FlatColorIntensity", (float)0.0);
+  }
+  
+  if (_translationMatrix != NULL){
+    progState.multiplyUniformValue("Modelview", *_translationMatrix);
+  }
+  
+  return &progState;
+}
+

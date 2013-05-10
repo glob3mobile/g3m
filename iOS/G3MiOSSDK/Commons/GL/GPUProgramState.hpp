@@ -35,10 +35,36 @@ class GPUProgramState{
   
   void setValuesOntoGPUProgram(GPUProgram& prog) const;
   
+  class GPUProgramApplication{
+  public:
+    struct UniformStruct{
+      GPUUniform* uniform;
+      GPUUniformValue* value;
+    };
+    
+    struct AttributeStruct{
+      GPUAttribute* uniform;
+      GPUAttributeValue* value;
+      bool enabled;
+    };
+
+    std::vector<UniformStruct> _uniforms;
+    std::vector<AttributeStruct> _attributes;
+    
+    GPUProgramApplication(const GPUProgram* program,
+                          const GPUProgramState* state);
+    
+    void apply();
+  };
+  
+  GPUProgramApplication* _application;
+  
+  
 public:
   
+  GPUProgramState():_parentState(NULL), _application(NULL){}
   
-  GPUProgramState(const GPUProgramState* parentState):_parentState(parentState){}
+  GPUProgramState(const GPUProgramState* parentState):_parentState(parentState), _application(NULL){}
   
   
   ~GPUProgramState(){

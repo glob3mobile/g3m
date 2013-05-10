@@ -14,7 +14,7 @@
 
 #include "GPUProgramState.hpp"
 
-class MeshHolder : public Mesh {
+class MeshHolder : public Mesh, public GLClientNotDrawable {
 private:
   Mesh* _mesh;
 
@@ -56,6 +56,12 @@ public:
   bool isTransparent(const G3MRenderContext* rc) const {
     return _mesh->isTransparent(rc);
   }
+  
+  void notifyGLClientChildrenParentHasChanged(){
+    _mesh->actualizeGLState(this);
+  }
+  void modifyGLState(GLState* glState) const{}
+  void modifyGPUProgramState(GPUProgramState* progState) const{}
   
 };
 

@@ -12,10 +12,12 @@
 #include "Context.hpp"
 #include "Extent.hpp"
 
+#include "GLClient.hpp"
+
 class Vector3D;
 class GPUProgramState;
 
-class Mesh {
+class Mesh: public GLClient{
 public:
   
   virtual ~Mesh() { }

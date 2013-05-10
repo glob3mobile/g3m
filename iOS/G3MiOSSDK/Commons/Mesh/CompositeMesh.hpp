@@ -11,7 +11,7 @@
 
 #include "Mesh.hpp"
 
-class CompositeMesh : public Mesh {
+class CompositeMesh : public Mesh, public GLClientNotDrawable {
 private:
   std::vector<Mesh*> _children;
 
@@ -35,6 +35,18 @@ public:
   bool isTransparent(const G3MRenderContext* rc) const;
 
   void addMesh(Mesh* mesh);
+
+  //GLClientNotDrawable
+  int WORKING_JM;
+  void notifyGLClientChildrenParentHasChanged(){
+    const int childrenCount = _children.size();
+    for (int i = 1; i < childrenCount; i++) {
+      Mesh* child = _children[i];
+      child->actualizeGLState(this);
+    }
+  }
+  void modifyGLState(GLState* glState) const{}
+  void modifyGPUProgramState(GPUProgramState* progState) const{}
 
 };
 

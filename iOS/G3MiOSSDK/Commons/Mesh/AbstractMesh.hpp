@@ -16,7 +16,7 @@ class IFloatBuffer;
 class Color;
 #include "Vector3D.hpp"
 
-class AbstractMesh : public Mesh {
+class AbstractMesh : public Mesh, public GLClientDrawable {
 protected:
   const int               _primitive;
   const bool              _owner;
@@ -47,6 +47,9 @@ protected:
   virtual void rawRender(const G3MRenderContext* rc,
                          const GLState& parentState,
                          const GPUProgramState* parentProgramState) const = 0;
+  
+  GLState glState;
+  GPUProgramState progState;
 
 public:
   ~AbstractMesh();
@@ -62,6 +65,10 @@ public:
   const Vector3D getVertex(int i) const;
 
   bool isTransparent(const G3MRenderContext* rc) const;
+
+  //Drawable GLClient
+  GLState* getGLState();
+  GPUProgramState* getGPUProgramState();
   
 };
 

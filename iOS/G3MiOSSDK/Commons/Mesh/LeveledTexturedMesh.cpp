@@ -63,6 +63,63 @@ GLState* LazyTextureMapping::bind(const G3MRenderContext* rc, const GLState& par
   return state;
 }
 
+void LazyTextureMapping::modifyGLState(GLState* glState) const{
+  if (!_initialized) {
+    _initializer->initialize();
+    
+    _scale       = _initializer->getScale();
+    _translation = _initializer->getTranslation();
+    _texCoords   = _initializer->createTextCoords();
+    
+    delete _initializer;
+    _initializer = NULL;
+    
+    _initialized = true;
+  }
+  
+  if (_texCoords != NULL) {
+    glState->bindTexture(_glTextureId);
+  }
+  else {
+    ILogger::instance()->logError("LazyTextureMapping::bind() with _texCoords == NULL");
+  }
+  
+}
+
+void LazyTextureMapping::modifyGPUProgramState(GPUProgramState* progState) const{
+  if (!_initialized) {
+    _initializer->initialize();
+    
+    _scale       = _initializer->getScale();
+    _translation = _initializer->getTranslation();
+    _texCoords   = _initializer->createTextCoords();
+    
+    delete _initializer;
+    _initializer = NULL;
+    
+    _initialized = true;
+  }
+  
+  progState->setAttributeEnabled("TextureCoord", true);
+  progState->setUniformValue("EnableTexture", true);
+  
+  if (_texCoords != NULL) {
+    progState->setUniformValue("ScaleTexCoord", _scale.asVector2D());
+    progState->setUniformValue("TranslationTexCoord", _translation.asVector2D());
+    
+    progState->setAttributeValue("TextureCoord",
+                                _texCoords, 2,
+                                2,
+                                0,
+                                false,
+                                0);
+  }
+  else {
+    ILogger::instance()->logError("LazyTextureMapping::bind() with _texCoords == NULL");
+  }
+  
+}
+
 void LazyTextureMapping::releaseGLTextureId() {
   if (_texturesHandler) {
     if (_glTextureId != NULL) {
@@ -178,6 +235,9 @@ bool LeveledTexturedMesh::setGLTextureIdForLevel(int level,
   }
   if (glTextureId != NULL) {
     if (!_currentLevelIsValid || (level < _currentLevel)) {
+      
+      notifyGLClientChildrenParentHasChanged(); //Changing states for children
+      
       _mappings->at(level)->setGLTextureId(glTextureId);
       _currentLevelIsValid = false;
       return true;
@@ -205,4 +265,18 @@ bool LeveledTexturedMesh::isTransparent(const G3MRenderContext* rc) const {
   }
   
   return mapping->isTransparent(rc);
+}
+
+void LeveledTexturedMesh::notifyGLClientChildrenParentHasChanged(){
+  ((Mesh*)_mesh)->actualizeGLState(this);
+}
+
+void LeveledTexturedMesh::modifyGLState(GLState* glState) const{
+  LazyTextureMapping* mapping = getCurrentTextureMapping();
+  mapping->modifyGLState(glState);
+}
+
+void LeveledTexturedMesh::modifyGPUProgramState(GPUProgramState* progState) const{
+  LazyTextureMapping* mapping = getCurrentTextureMapping();
+  mapping->modifyGPUProgramState(progState);
 }

@@ -14,7 +14,7 @@
 #include "Vector3D.hpp"
 
 
-class TexturedMesh: public Mesh
+class TexturedMesh: public Mesh, public GLClientNotDrawable
 {
 private:
   const Mesh*           _mesh;
@@ -36,7 +36,6 @@ public:
   _textureMapping(textureMapping),
   _ownedTexMapping(ownedTexMapping),
   _transparent(transparent)
-
   {
   }
   
@@ -71,6 +70,15 @@ public:
   bool isTransparent(const G3MRenderContext* rc) const {
     return _transparent;
   }
+  
+  //Implement on all nodes
+  bool isDrawable() const{ return false;}
+  
+  void notifyGLClientChildrenParentHasChanged(){
+    ((Mesh*)_mesh)->actualizeGLState(this);
+  }
+  void modifyGLState(GLState* glState) const;
+  void modifyGPUProgramState(GPUProgramState* progState) const;
 };
 
 #endif

@@ -13,7 +13,7 @@
 
 class IShortBuffer;
 
-class IndexedMesh : public AbstractMesh {
+class IndexedMesh : public AbstractMesh{
 private:
   IShortBuffer*       _indices;
 protected:

@@ -290,3 +290,16 @@ std::vector<std::string> GPUProgramState::getUniformsNames() const{
   
   return us;
 }
+
+#pragma mark GPUProgramApplication
+
+GPUProgramState::GPUProgramApplication::GPUProgramApplication(const GPUProgram* program,
+                                                              const GPUProgramState* state){
+  
+  
+  
+}
+
+void GPUProgramState::GPUProgramApplication::apply(){
+  
+}
