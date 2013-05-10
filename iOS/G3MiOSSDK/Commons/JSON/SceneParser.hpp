@@ -80,6 +80,7 @@ private:
   LevelTileCondition* getLevelCondition(const JSONString* jsonMinLevel, const JSONString* jsonMaxLevel);
   Sector getSector(const JSONObject* jsonBBOX);
   bool isTransparent(const JSONString* jsonBBOX);
+  std::string getFormat(bool transparent);
   
 protected:
   SceneParser();

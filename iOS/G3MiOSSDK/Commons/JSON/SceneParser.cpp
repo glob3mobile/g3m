@@ -141,10 +141,7 @@ void SceneParser::parserJSONWMSLayer(LayerSet* layerSet, const JSONObject* jsonL
   
   bool transparent = isTransparent(jsonLayer->getAsString(ISTRANSPARENT));
   
-  string format = "image/png";
-  if (!transparent) {
-    format = "image/jpeg";
-  }
+  std::string format = getFormat(transparent);
   
   LevelTileCondition* levelTileCondition = getLevelCondition(jsonLayer->getAsString(MINLEVEL),jsonLayer->getAsString(MAXLEVEL));
   Sector sector = getSector(jsonLayer->getAsObject(BBOX));
@@ -193,6 +190,8 @@ void SceneParser::parserJSONTMSLayer(LayerSet* layerSet, const JSONObject* jsonL
   
   bool transparent = isTransparent(jsonLayer->getAsString(ISTRANSPARENT));
   
+  std::string format = getFormat(transparent);
+  
   LevelTileCondition* levelTileCondition = getLevelCondition(jsonLayer->getAsString(MINLEVEL),jsonLayer->getAsString(MAXLEVEL));
 
   Sector sector = getSector(jsonLayer->getAsObject(BBOX));
@@ -216,7 +215,7 @@ void SceneParser::parserJSONTMSLayer(LayerSet* layerSet, const JSONObject* jsonL
   TMSLayer* tmsLayer = new TMSLayer(URL::escape(layersSecuence),
                                     URL(jsonURL, false),
                                     sector,
-                                    "image/png",
+                                    format,
                                     "EPSG:4326",
                                     transparent,
                                     levelTileCondition,
@@ -281,6 +280,15 @@ Sector SceneParser::getSector(const JSONObject* jsonBBOX){
   }
   return Sector::fullSphere();
 }
+
+std::string SceneParser::getFormat(bool transparent){
+  std::string format = "image/png";
+  if (!transparent) {
+    format = "image/jpeg";
+  }
+  return format;
+}
+
 
 void SceneParser::parserJSON3DLayer(LayerSet* layerSet, const JSONObject* jsonLayer){
   cout << "Parsing 3D Layer " << jsonLayer->getAsString(NAME)->value() << "..." << endl;
