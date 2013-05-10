@@ -14,7 +14,7 @@
 
 #include "GPUProgramState.hpp"
 
-class MeshHolder : public Mesh, public GLClientNotDrawable {
+class MeshHolder : public Mesh {
 private:
   Mesh* _mesh;
 
@@ -60,8 +60,8 @@ public:
   void notifyGLClientChildrenParentHasChanged(){
     _mesh->actualizeGLState(this);
   }
-  void modifyGLState(GLState* glState) const{}
-  void modifyGPUProgramState(GPUProgramState* progState) const{}
+  void modifyGLState(GLState& glState) const{}
+  void modifyGPUProgramState(GPUProgramState& progState) const{}
   
 };
 

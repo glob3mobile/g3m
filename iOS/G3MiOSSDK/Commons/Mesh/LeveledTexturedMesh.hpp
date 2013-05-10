@@ -112,14 +112,14 @@ public:
     return _transparent;
   }
   
-  void modifyGLState(GLState* glState) const;
+  void modifyGLState(GLState& glState) const;
   
-  void modifyGPUProgramState(GPUProgramState* progState) const;
+  void modifyGPUProgramState(GPUProgramState& progState) const;
 
 };
 
 
-class LeveledTexturedMesh : public Mesh, public GLClientNotDrawable {
+class LeveledTexturedMesh : public Mesh {
 private:
   const Mesh* _mesh;
   const bool  _ownedMesh;
@@ -173,8 +173,8 @@ public:
   bool isTransparent(const G3MRenderContext* rc) const;
   
   void notifyGLClientChildrenParentHasChanged();
-  void modifyGLState(GLState* glState) const;
-  void modifyGPUProgramState(GPUProgramState* progState) const;
+  void modifyGLState(GLState& glState) const;
+  void modifyGPUProgramState(GPUProgramState& progState) const;
   
 };
 

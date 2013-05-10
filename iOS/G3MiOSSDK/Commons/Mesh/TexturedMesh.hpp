@@ -13,8 +13,10 @@
 #include "TextureMapping.hpp"
 #include "Vector3D.hpp"
 
+#include "GLClient.hpp"
 
-class TexturedMesh: public Mesh, public GLClientNotDrawable
+
+class TexturedMesh: public Mesh
 {
 private:
   const Mesh*           _mesh;
@@ -71,14 +73,9 @@ public:
     return _transparent;
   }
   
-  //Implement on all nodes
-  bool isDrawable() const{ return false;}
-  
-  void notifyGLClientChildrenParentHasChanged(){
-    ((Mesh*)_mesh)->actualizeGLState(this);
-  }
-  void modifyGLState(GLState* glState) const;
-  void modifyGPUProgramState(GPUProgramState* progState) const;
+  void notifyGLClientChildrenParentHasChanged();
+  void modifyGLState(GLState& glState) const;
+  void modifyGPUProgramState(GPUProgramState& progState) const;
 };
 
 #endif

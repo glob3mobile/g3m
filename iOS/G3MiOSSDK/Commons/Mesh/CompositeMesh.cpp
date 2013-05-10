@@ -93,3 +93,11 @@ void CompositeMesh::addMesh(Mesh* mesh) {
 
   _children.push_back(mesh);
 }
+
+void CompositeMesh::notifyGLClientChildrenParentHasChanged(){
+  const int childrenCount = _children.size();
+  for (int i = 1; i < childrenCount; i++) {
+    Mesh* child = _children[i];
+    child->actualizeGLState(this);
+  }
+}

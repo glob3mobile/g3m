@@ -16,11 +16,13 @@
 
 #include "GPUProgramState.hpp"
 
+#include "GLClient.hpp"
+
 
 //***************************************************************
 
 
-class BusyMeshRenderer : public LeafRenderer, EffectTarget {
+class BusyMeshRenderer : public LeafRenderer, EffectTarget, GLClient {
 private:
   Mesh    *_mesh;
   double  _degrees;
@@ -28,12 +30,17 @@ private:
   
   GPUProgramState _programState;
   
+  MutableMatrix44D _projectionMatrix;
+  MutableMatrix44D _modelviewMatrix;
+  
 public:    
   BusyMeshRenderer(Color* backgroundColor):
   _degrees(0),
   _backgroundColor(backgroundColor),
   _programState(NULL)
   {
+    _modelviewMatrix = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, -1));
+    _projectionMatrix = MutableMatrix44D::invalid();
   }
   
   void initialize(const G3MContext* context);
@@ -52,7 +59,11 @@ public:
   
   void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height) {
-    
+    const int halfWidth = width / 2;
+    const int halfHeight = height / 2;
+    _projectionMatrix = MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth, halfWidth,
+                                                                              -halfHeight, halfHeight,
+                                                                              -halfWidth, halfWidth);
   }
   
   virtual ~BusyMeshRenderer() {
@@ -63,6 +74,7 @@ public:
   void incDegrees(double value) { 
     _degrees += value; 
     if (_degrees>360) _degrees -= 360;
+    _modelviewMatrix = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, -1));
   }
 
   void start(const G3MRenderContext* rc);
@@ -79,7 +91,15 @@ public:
 
   void onDestroy(const G3MContext* context) {
 
-  }  
+  }
+  
+  void notifyGLClientChildrenParentHasChanged(){
+    _mesh->actualizeGLState(this);
+  }
+  
+  void modifyGLState(GLState& glState) const;
+  
+  void modifyGPUProgramState(GPUProgramState& progState) const;
 };
 
 //***************************************************************

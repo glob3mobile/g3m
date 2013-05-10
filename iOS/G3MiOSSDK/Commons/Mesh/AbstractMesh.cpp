@@ -185,17 +185,16 @@ void AbstractMesh::render(const G3MRenderContext *rc,
   rawRender(rc, state, &progState);
 }
 
-GLState* AbstractMesh::getGLState(){
+void AbstractMesh::modifyGLState(GLState& glState) const{
   glState.setLineWidth(_lineWidth);
-  if (_flatColor->isTransparent()){
+  if (_flatColor != NULL && _flatColor->isTransparent()){
     glState.enableBlend();
     glState.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
   }
-  return &glState;
 }
 
 
-GPUProgramState* AbstractMesh::getGPUProgramState(){
+void AbstractMesh::modifyGPUProgramState(GPUProgramState& progState) const{
   
   progState.setUniformValue("PointSize", _pointSize);
   
@@ -243,7 +242,9 @@ GPUProgramState* AbstractMesh::getGPUProgramState(){
   if (_translationMatrix != NULL){
     progState.multiplyUniformValue("Modelview", *_translationMatrix);
   }
-  
-  return &progState;
 }
 
+void AbstractMesh::getGLStateAndGPUProgramState(GLState** glState, GPUProgramState** progState){
+  (*glState) = &_glState;
+  (*progState) = &_progState;
+}
