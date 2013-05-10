@@ -120,7 +120,9 @@ void AbstractMesh::render(const G3MRenderContext *rc,
                           const GLState& parentState,
                           const GPUProgramState* parentProgramState) const {
   
+  rawRender(rc, _glState, &_progState);
   
+  /*
   GLState state(parentState);
   state.setLineWidth(_lineWidth);
   
@@ -183,6 +185,7 @@ void AbstractMesh::render(const G3MRenderContext *rc,
   }
   
   rawRender(rc, state, &progState);
+   */
 }
 
 void AbstractMesh::modifyGLState(GLState& glState) const{
