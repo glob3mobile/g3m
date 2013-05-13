@@ -23,6 +23,7 @@
 #include "LayerTilesRenderParameters.hpp"
 #include "IStringBuilder.hpp"
 #include "MercatorUtils.hpp"
+#include "LeveledTexturedMesh.hpp"
 
 Tile::Tile(TileTexturizer* texturizer,
            Tile* parent,
@@ -437,11 +438,14 @@ void Tile::prepareForFullRendering(const G3MRenderContext* rc,
                                               this,
                                               tessellatorMesh,
                                               _texturizedMesh);
+      
+      ((LeveledTexturedMesh*)_texturizedMesh)->setGLClientParent(this);
+      
+      
+      //Storing camera matrix values for glclient children and notifying children
+      //this->actualizeGLState(rc->getCurrentCamera());
     }
   }
-  
-  //Storing camera matrix values for glclient children and notifying children
-  this->actualizeGLState(rc->getCurrentCamera());
 }
 
 void Tile::rawRender(const G3MRenderContext *rc,
@@ -465,6 +469,8 @@ void Tile::rawRender(const G3MRenderContext *rc,
                                               this,
                                               tessellatorMesh,
                                               _texturizedMesh);
+      
+      ((LeveledTexturedMesh*)_texturizedMesh)->setGLClientParent(this);
     }
 
     if (_texturizedMesh != NULL) {

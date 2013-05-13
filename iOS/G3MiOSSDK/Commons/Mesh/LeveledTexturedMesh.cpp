@@ -15,6 +15,7 @@
 #include "GPUProgram.hpp"
 #include "GPUProgramManager.hpp"
 #include "GPUProgramState.hpp"
+#include "Camera.hpp"
 
 
 GLState* LazyTextureMapping::bind(const G3MRenderContext* rc, const GLState& parentState, GPUProgramState& progState) const {
@@ -171,27 +172,37 @@ LazyTextureMapping* LeveledTexturedMesh::getCurrentTextureMapping() const {
   }
 
   if (!_currentLevelIsValid) {
+    
+    int newCurrentLevel = 0;
+    
     for (int i = 0; i < _levelsCount; i++) {
       LazyTextureMapping* mapping = _mappings->at(i);
       if (mapping != NULL) {
         if (mapping->isValid()) {
           //ILogger::instance()->logInfo("LeveledTexturedMesh changed from level %d to %d", _currentLevel, i);
-          _currentLevel = i;
+          newCurrentLevel = i;
           _currentLevelIsValid = true;
           break;
         }
       }
     }
-
-    if (_currentLevelIsValid) {
-      for (int i = _currentLevel+1; i < _levelsCount; i++) {
-        LazyTextureMapping* mapping = _mappings->at(i);
-        if (mapping != NULL) {
-          _mappings->at(i) = NULL;
-          delete mapping;
+    
+    if (newCurrentLevel != _currentLevel){
+      _currentLevel = newCurrentLevel;
+      //MESH SHOULD BE NOTIFIED TO CHANGE STATE FROM TILE
+      
+      if (_currentLevelIsValid) {
+        for (int i = _currentLevel+1; i < _levelsCount; i++) {
+          LazyTextureMapping* mapping = _mappings->at(i);
+          if (mapping != NULL) {
+            _mappings->at(i) = NULL;
+            delete mapping;
+          }
         }
       }
     }
+
+
   }
 
   return _currentLevelIsValid ? _mappings->at(_currentLevel) : NULL;
@@ -213,6 +224,7 @@ void LeveledTexturedMesh::render(const G3MRenderContext* rc,
                                  const GLState& parentState,
                                  const GPUProgramState* parentProgramState) const {
   LazyTextureMapping* mapping = getCurrentTextureMapping();
+  updateLastUsedMapping(rc, mapping);
   if (mapping == NULL) {
     _mesh->render(rc, parentState, parentProgramState);
   }
@@ -276,4 +288,13 @@ void LeveledTexturedMesh::modifyGLState(GLState& glState) const{
 void LeveledTexturedMesh::modifyGPUProgramState(GPUProgramState& progState) const{
   LazyTextureMapping* mapping = getCurrentTextureMapping();
   mapping->modifyGPUProgramState(progState);
+}
+
+void LeveledTexturedMesh::updateLastUsedMapping(const G3MRenderContext* rc, LazyTextureMapping* mapping) const{
+  if (_lastUsedMapping != mapping){
+    _lastUsedMapping = mapping;
+    if (_parentGLClient != NULL){
+      _parentGLClient->actualizeGLState(rc->getCurrentCamera());
+    }
+  }
 }

@@ -201,8 +201,8 @@ public:
     MutableMatrix44D m = MutableMatrix44D(*_stack[0]);
     const int size = _stack.size();
     for (int i = 1; i < size; i++) {
-      //m = m.multiply(*_stack[i]);
-      m = _stack[i]->multiply(m);
+      m = m.multiply(*_stack[i]);
+      //m = _stack[i]->multiply(m);
     }
     
     gl->uniformMatrix4fv(id, false, &m);

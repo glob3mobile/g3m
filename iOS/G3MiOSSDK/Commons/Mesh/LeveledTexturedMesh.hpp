@@ -45,22 +45,22 @@ private:
 #endif
   
   mutable bool _initialized;
-
+  
   mutable bool             _ownedTexCoords;
   mutable IFloatBuffer*    _texCoords;
   mutable MutableVector2D  _translation;
   mutable MutableVector2D  _scale;
-    
+  
   TexturesHandler* _texturesHandler;
   
   LazyTextureMapping& operator=(const LazyTextureMapping& that);
   
   LazyTextureMapping(const LazyTextureMapping& that);
   void releaseGLTextureId();
-
+  
   const bool _transparent;
   
-
+  
 public:
   LazyTextureMapping(LazyTextureMappingInitializer* initializer,
                      TexturesHandler* texturesHandler,
@@ -83,7 +83,7 @@ public:
     _initializer = NULL;
     
     if (_ownedTexCoords) {
-        delete _texCoords;
+      delete _texCoords;
     }
     _texCoords = NULL;
     
@@ -91,7 +91,7 @@ public:
   }
   
   //void bind(const G3MRenderContext* rc, const GLState& parentState) const;
-
+  
   bool isValid() const {
     return _glTextureId != NULL;
   }
@@ -100,14 +100,14 @@ public:
     releaseGLTextureId();
     _glTextureId = glTextureId;
   }
-
+  
   GLState* bind(const G3MRenderContext* rc, const GLState& parentState, GPUProgramState& progState) const;
   
-
+  
   const IGLTextureId* getGLTextureId() const {
     return _glTextureId;
   }
-
+  
   bool isTransparent(const G3MRenderContext* rc) const {
     return _transparent;
   }
@@ -115,7 +115,7 @@ public:
   void modifyGLState(GLState& glState) const;
   
   void modifyGPUProgramState(GPUProgramState& progState) const;
-
+  
 };
 
 
@@ -123,7 +123,7 @@ class LeveledTexturedMesh : public Mesh {
 private:
   const Mesh* _mesh;
   const bool  _ownedMesh;
-
+  
   mutable std::vector<LazyTextureMapping*>* _mappings;
   
   
@@ -131,9 +131,15 @@ private:
   
   mutable int  _currentLevel;
   mutable bool _currentLevelIsValid;
-    
+  
   LazyTextureMapping* getCurrentTextureMapping() const;
-
+  
+  
+  GLClient* _parentGLClient; //Tipically tile
+  mutable LazyTextureMapping* _lastUsedMapping;
+  
+  void updateLastUsedMapping(const G3MRenderContext* rc, LazyTextureMapping* mapping) const;
+  
 public:
   LeveledTexturedMesh(const Mesh* mesh,
                       bool ownedMesh,
@@ -143,7 +149,9 @@ public:
   _mappings(mappings),
   _levelsCount(mappings->size()),
   _currentLevel(mappings->size() + 1),
-  _currentLevelIsValid(false)
+  _currentLevelIsValid(false),
+  _parentGLClient(NULL),
+  _lastUsedMapping(NULL)
   {
     if (_mappings->size() <= 0) {
       ILogger::instance()->logError("LOGIC ERROR\n");
@@ -161,12 +169,12 @@ public:
               const GPUProgramState* parentProgramState) const;
   
   Extent* getExtent() const;
-
+  
   bool setGLTextureIdForLevel(int level,
                               const IGLTextureId* glTextureId);
   
-//  void setGLTextureIdForInversedLevel(int inversedLevel,
-//                                      const const GLTextureId*glTextureId);
+  //  void setGLTextureIdForInversedLevel(int inversedLevel,
+  //                                      const const GLTextureId*glTextureId);
   
   const IGLTextureId* getTopLevelGLTextureId() const;
   
@@ -175,6 +183,10 @@ public:
   void notifyGLClientChildrenParentHasChanged();
   void modifyGLState(GLState& glState) const;
   void modifyGPUProgramState(GPUProgramState& progState) const;
+  
+  void setGLClientParent(GLClient* parent){
+    _parentGLClient = parent;
+  }
   
 };
 
