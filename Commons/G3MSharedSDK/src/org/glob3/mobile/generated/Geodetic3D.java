@@ -136,4 +136,69 @@ public class Geodetic3D
     return new Geodetic3D(_latitude.div(magnitude), _longitude.div(magnitude), _height / magnitude);
   }
 
+  /**
+   * Given a start point, initial bearing, and distance, this will calculate the destination point and final bearing travelling along a (shortest distance) great
+   * circle arc.
+   * See http: //www.movable-type.co.uk/scripts/latlong.html
+   *
+   */
+
+  public static Geodetic3D calculateRhumbLineDestination(Geodetic3D position, double distance, double R, Angle bearing)
+  {
+
+    bearing = bearing.normalized();
+
+    final double angularDistance = distance / (R + position.height());
+
+    final double dLat = angularDistance * bearing.cosinus();
+
+    final double nLatRadians = position.latitude().radians() + dLat;
+    final Angle aLat = Angle.fromRadians(nLatRadians);
+
+    final double tg1 = IMathUtils.instance().tan((IMathUtils.instance().pi() / 4) + (aLat.radians() / 2));
+    final double tg2 = IMathUtils.instance().tan((IMathUtils.instance().pi() / 4) + position.latitude().radians());
+
+    final double stretchedLatitudeDifference = IMathUtils.instance().log(tg1 / tg2);
+    ILogger.instance().logWarning("stretchedLatitudeDifference: %", stretchedLatitudeDifference);
+
+    double q;
+    if ((dLat != 0) && !IMathUtils.instance().isNan(stretchedLatitudeDifference))
+    {
+      q = dLat / stretchedLatitudeDifference;
+    }
+    else
+    {
+      q = position.latitude().cosinus();
+    }
+
+    final double dLon = (angularDistance * bearing.sinus()) / q;
+    //TODO: this
+    //// check for some daft bugger going past the pole, normalise latitude if so
+    //if (Math.abs(lat2) > Math.PI/2) lat2 = lat2>0 ? Math.PI-lat2 : -Math.PI-lat2;
+
+    final double a = position.longitude().radians() + dLon + IMathUtils.instance().pi();
+    final double nLonRadians = IMathUtils.instance().fmod(a, (2 * IMathUtils.instance().pi()))- IMathUtils.instance().pi();
+
+    final Angle aLon = Angle.fromRadians(nLonRadians);
+
+
+    final Geodetic3D destination = new Geodetic3D.Geodetic3D(aLat, aLon, position.height());
+    //Only for debug
+    ILogger.instance().logWarning("Initial Position: " + position.description());
+    ILogger.instance().logWarning("Destination Position: " + destination.description());
+
+    Angle angle = Geodetic2D.bearing(destination.asGeodetic2D(), position.asGeodetic2D());
+
+    ILogger.instance().logWarning("Angle between obj and behin position: " + angle.description() + ". Diference with heading: " + angle.sub(bearing).description());
+
+    return destination;
+  }
+
+
+  public static Geodetic3D calculateInverseRhumbLineDestination(Geodetic3D position, double distance, double R, Angle bearing)
+  {
+    return calculateRhumbLineDestination(position, distance, R, bearing.add(Angle.fromDegrees(180)));
+  }
+
+
 }

@@ -69,6 +69,7 @@ public class Geodetic2D
     return bearing(from.latitude(), from.longitude(), to.latitude(), to.longitude());
   }
 
+
   public Geodetic2D(Angle latitude, Angle longitude)
   {
      _latitude = new Angle(latitude);
