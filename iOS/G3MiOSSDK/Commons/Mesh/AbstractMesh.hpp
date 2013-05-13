@@ -47,6 +47,7 @@ protected:
   virtual void rawRender(const G3MRenderContext* rc,
                          const GLState& parentState,
                          const GPUProgramState* parentProgramState) const = 0;
+protected:
   
   GLState _glState;
   GPUProgramState _progState;

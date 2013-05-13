@@ -298,7 +298,7 @@ public:
     getProjectionMatrix();
     getModelViewMatrix();
     progState.setUniformValue("Projection", &_projectionMatrix);
-    progState.setUniformValue("Modelview", &_modelViewMatrix);
+    progState.setUniformValue("Modelview", &_modelMatrix);
   }
 
 private:

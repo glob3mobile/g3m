@@ -22,6 +22,7 @@ class IFloatBuffer;
 #include "ILogger.hpp"
 #include "Geodetic2D.hpp"
 #include "Geodetic3D.hpp"
+#include "IStringBuilder.hpp"
 
 #include <string>
 
@@ -197,6 +198,19 @@ public:
 
   bool isValid() const {
     return _isValid;
+  }
+  
+  std::string description() const{
+    IStringBuilder *isb = IStringBuilder::newStringBuilder();
+    isb->addString("MUTABLE MATRIX 44D: ");
+    float* f = getColumnMajorFloatArray();
+    for (int i = 0; i < 16; i++) {
+      isb->addDouble(f[i]);
+      if (i < 15) isb->addString(", ");
+    }
+    const std::string s = isb->getString();
+    delete isb;
+    return s;
   }
 
   //

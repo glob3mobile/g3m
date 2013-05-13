@@ -439,6 +439,9 @@ void Tile::prepareForFullRendering(const G3MRenderContext* rc,
                                               _texturizedMesh);
     }
   }
+  
+  //Storing camera matrix values for glclient children and notifying children
+  this->actualizeGLState(rc->getCurrentCamera());
 }
 
 void Tile::rawRender(const G3MRenderContext *rc,
@@ -578,9 +581,6 @@ void Tile::render(const G3MRenderContext* rc,
                   const TileRenderContext* trc,
                   const GLState& parentState, const GPUProgramState* parentProgramState,
                   std::list<Tile*>* toVisitInNextIteration) {
-  
-  //Storing camera matrix values for glclient children and notifying children
-  this->actualizeGLState(rc->getCurrentCamera());
 
   const float verticalExaggeration =  trc->getVerticalExaggeration();
   if (verticalExaggeration != _verticalExaggeration) {
