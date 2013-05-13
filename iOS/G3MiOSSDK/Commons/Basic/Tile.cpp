@@ -578,6 +578,9 @@ void Tile::render(const G3MRenderContext* rc,
                   const TileRenderContext* trc,
                   const GLState& parentState, const GPUProgramState* parentProgramState,
                   std::list<Tile*>* toVisitInNextIteration) {
+  
+  //Storing camera matrix values for glclient children and notifying children
+  this->actualizeGLState(rc->getCurrentCamera());
 
   const float verticalExaggeration =  trc->getVerticalExaggeration();
   if (verticalExaggeration != _verticalExaggeration) {
@@ -749,3 +752,21 @@ double Tile::getMinHeight() const {
 double Tile::getMaxHeight() const {
   return _maxHeight;
 }
+
+#pragma mark GLClient
+
+void Tile::notifyGLClientChildrenParentHasChanged(){
+  if (_texturizedMesh != NULL){
+    _texturizedMesh->actualizeGLState(this);
+  } else{
+    if (_tessellatorMesh != NULL){
+      _tessellatorMesh->actualizeGLState(this);
+    }
+  }
+}
+
+void Tile::modifyGLState(GLState& glState) const{
+  glState.enableDepthTest();
+}
+
+void Tile::modifyGPUProgramState(GPUProgramState& progState) const{}

@@ -243,7 +243,7 @@ void AbstractMesh::modifyGPUProgramState(GPUProgramState& progState) const{
   }
   
   if (_translationMatrix != NULL){
-    progState.multiplyUniformValue("Modelview", *_translationMatrix);
+    progState.multiplyUniformValue("Modelview", _translationMatrix);
   }
 }
 

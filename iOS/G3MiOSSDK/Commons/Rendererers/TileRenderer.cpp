@@ -444,7 +444,7 @@ void TileRenderer::render(const G3MRenderContext* rc,
   // Saving camera for use in onTouchEvent
   _lastCamera = rc->getCurrentCamera();
   
-  _lastCamera->applyOnGPUProgramState(_programState); //Projection and Modelview
+  //_lastCamera->applyOnGPUProgramState(_programState); //Projection and Modelview
   
   TilesStatistics statistics;
 

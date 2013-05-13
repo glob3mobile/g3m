@@ -189,11 +189,73 @@ public:
   GPUUniformVec4Float(const std::string&name, IGLUniformID* id):GPUUniform(name,id, GLType::glVec4Float()){}
 };
 ////////////////////////////////////////////////////////////////////////
+class GPUUniformValueMatrix4FloatStack:public GPUUniformValue{
+public:
+  std::vector<const MutableMatrix44D*> _stack;
+  
+  GPUUniformValueMatrix4FloatStack(const MutableMatrix44D* m):GPUUniformValue(GLType::glMatrix4Float()){
+    _stack.push_back(m);
+  }
+  
+  void setUniform(GL* gl, const IGLUniformID* id) const{
+    MutableMatrix44D m = MutableMatrix44D(*_stack[0]);
+    const int size = _stack.size();
+    for (int i = 1; i < size; i++) {
+      //m = m.multiply(*_stack[i]);
+      m = _stack[i]->multiply(m);
+    }
+    
+    gl->uniformMatrix4fv(id, false, &m);
+  }
+  
+  bool isEqualsTo(const GPUUniformValue* v) const{
+    //TODO: FIX
+    return false;
+//    GPUUniformValueMatrix4FloatStack *v2 = (GPUUniformValueMatrix4FloatStack *)v;
+//    if (_stack.size() != v2->_stack.size()){
+//      return false;
+//    }
+//    
+//    for (int i = _stack.size(); i > -1; i--) {
+//      const MutableMatrix44D* m = v2->_stack[i];
+//      const MutableMatrix44D* m2 = _stack[i];
+//      if (!m->isEqualsTo(*m2)){
+//        return false;
+//      }
+//    }
+//    return true;
+  }
+  
+  void multiplyMatrix(const MutableMatrix44D* m){
+    _stack.push_back(m);
+  }
+  
+  void loadMatrix(const MutableMatrix44D* m){
+    _stack.clear();
+    _stack.push_back(m);
+  }
+  
+  GPUUniformValue* deepCopy() const{
+    GPUUniformValueMatrix4FloatStack* v = new GPUUniformValueMatrix4FloatStack(_stack[0]);
+    for (int i = 1; i < _stack.size(); i++) {
+      v->multiplyMatrix(_stack[i]);
+    }
+    return v;
+  }
+  
+  std::string description() const{
+    IStringBuilder *isb = IStringBuilder::newStringBuilder();
+    isb->addString("Uniform Value Matrix44D Stack.");
+    std::string s = isb->getString();
+    delete isb;
+    return s;
+  }
+};
 class GPUUniformValueMatrix4Float:public GPUUniformValue{
 public:
   const MutableMatrix44D _m;
   
-  GPUUniformValueMatrix4Float(const MutableMatrix44D& m):_m(m),GPUUniformValue(GLType::glMatrix4Float()){}
+  GPUUniformValueMatrix4Float(const MutableMatrix44D m):_m(m),GPUUniformValue(GLType::glMatrix4Float()){}
   
   void setUniform(GL* gl, const IGLUniformID* id) const{
     gl->uniformMatrix4fv(id, false, &_m);

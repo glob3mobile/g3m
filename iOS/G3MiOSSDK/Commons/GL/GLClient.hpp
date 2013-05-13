@@ -31,7 +31,9 @@ public:
     (*progState) = NULL;
   }
   
-  virtual void notifyGLClientChildrenParentHasChanged(){} //Idle if this is a drawable client
+  virtual void notifyGLClientChildrenParentHasChanged(){
+    //TIPICALLY: _mesh->actualizeGLState(this);
+  } //Idle if this is a drawable client
   
   virtual void modifyGLState(GLState& glState) const = 0;
   virtual void modifyGPUProgramState(GPUProgramState& progState) const = 0;

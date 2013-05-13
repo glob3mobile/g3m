@@ -200,6 +200,42 @@ void GPUProgramState::setUniformValue(const std::string& name, const MutableMatr
   setUniformValue(name, new GPUUniformValueMatrix4Float(m));
 }
 
+void GPUProgramState::setUniformValue(const std::string& name, const MutableMatrix44D* m){
+  
+  for(std::map<std::string, GPUUniformValue*> ::iterator it = _uniformValues.begin();
+      it != _uniformValues.end();
+      it++){
+    std::string thisName = it->first;
+    GPUUniformValue* uv = (GPUUniformValue*)it->second;
+    if (thisName.compare(name) == 0 && uv->getType() == GLType::glMatrix4Float()){
+      GPUUniformValueMatrix4FloatStack* v = (GPUUniformValueMatrix4FloatStack*)it->second;
+      v->loadMatrix(m);
+      return;
+    }
+  }
+  
+  setUniformValue(name, new GPUUniformValueMatrix4FloatStack(m));
+}
+
+void GPUProgramState::multiplyUniformValue(const std::string& name, const MutableMatrix44D* m){
+  
+  for(std::map<std::string, GPUUniformValue*> ::iterator it = _uniformValues.begin();
+      it != _uniformValues.end();
+      it++){
+    std::string thisName = it->first;
+    GPUUniformValue* uv = (GPUUniformValue*)it->second;
+    if (thisName.compare(name) == 0 && uv->getType() == GLType::glMatrix4Float()){
+      GPUUniformValueMatrix4FloatStack* v = (GPUUniformValueMatrix4FloatStack*)it->second;
+      v->multiplyMatrix(m);
+      return;
+    }
+  }
+  
+  ILogger::instance()->logError("CAN'T MULTIPLY UNLOADED MATRIX");
+  
+}
+
+
 void GPUProgramState::multiplyUniformValue(const std::string& name, const MutableMatrix44D& m){
   
   
@@ -293,10 +329,8 @@ std::vector<std::string> GPUProgramState::getUniformsNames() const{
 
 #pragma mark GPUProgramApplication
 
-GPUProgramState::GPUProgramApplication::GPUProgramApplication(const GPUProgram* program,
-                                                              const GPUProgramState* state){
-  
-  
+GPUProgramState::GPUProgramApplication::GPUProgramApplication(const GPUProgram& prog,
+                                                              const GPUProgramState& state){
   
 }
 

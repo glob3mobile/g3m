@@ -38,11 +38,13 @@ class GPUProgramState{
   class GPUProgramApplication{
   public:
     struct UniformStruct{
+      std::string name;
       GPUUniform* uniform;
       GPUUniformValue* value;
     };
     
     struct AttributeStruct{
+      std::string name;
       GPUAttribute* uniform;
       GPUAttributeValue* value;
       bool enabled;
@@ -51,8 +53,8 @@ class GPUProgramState{
     std::vector<UniformStruct> _uniforms;
     std::vector<AttributeStruct> _attributes;
     
-    GPUProgramApplication(const GPUProgram* program,
-                          const GPUProgramState* state);
+    GPUProgramApplication(const GPUProgram& program,
+                          const GPUProgramState& state);
     
     void apply();
   };
@@ -68,6 +70,8 @@ public:
   
   
   ~GPUProgramState(){
+    delete _application;
+    
     for(std::map<std::string, GPUUniformValue*> ::const_iterator it = _uniformValues.begin();
         it != _uniformValues.end();
         it++){
@@ -91,6 +95,10 @@ public:
   void setUniformValue(const std::string& name, double x, double y, double z, double w);
   
   void setUniformValue(const std::string& name, const MutableMatrix44D& m);
+  
+  void setUniformValue(const std::string& name, const MutableMatrix44D* m);
+  
+  void multiplyUniformValue(const std::string& name, const MutableMatrix44D* m);
   
   void multiplyUniformValue(const std::string& name, const MutableMatrix44D& m);
   

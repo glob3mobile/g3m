@@ -23,6 +23,8 @@
 
 //#include "GPUProgramState.hpp"
 
+#include "GLClient.hpp"
+
 class ILogger;
 class GPUProgramState;
 
@@ -113,7 +115,7 @@ public:
 /**
  * Class to control the camera.
  */
-class Camera {
+class Camera: public GLClient {
 public:
   Camera(const Camera &that):
   _width(that._width),
@@ -288,6 +290,15 @@ public:
     //getFrustumData();
     getProjectionMatrix();
     getModelMatrix();
+  }
+  
+  //GLClient
+  void modifyGLState(GLState& glState) const{}
+  void modifyGPUProgramState(GPUProgramState& progState) const{
+    getProjectionMatrix();
+    getModelViewMatrix();
+    progState.setUniformValue("Projection", &_projectionMatrix);
+    progState.setUniformValue("Modelview", &_modelViewMatrix);
   }
 
 private:

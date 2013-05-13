@@ -72,21 +72,24 @@ void BusyMeshRenderer::initialize(const G3MContext* context)
                           NULL,
                           colors.create());
   
-  //  _programState.setUniformValue("BillBoard", false);
-  _programState.setUniformValue("EnableTexture", false);
-  _programState.setUniformValue("PointSize", (float)1.0);
-  _programState.setUniformValue("ScaleTexCoord", Vector2D(1.0,1.0));
-  //  _programState.setUniformValue("TextureExtent", Vector2D(0.0,0.0));
-  _programState.setUniformValue("TranslationTexCoord", Vector2D(0.0,0.0));
-  //  _programState.setUniformValue("ViewPortExtent", Vector2D(0.0,0.0));
+  notifyGLClientChildrenParentHasChanged();
   
-  _programState.setUniformValue("ColorPerVertexIntensity", (float)0.0);
-  _programState.setUniformValue("EnableFlatColor", false);
-  _programState.setUniformValue("FlatColor", (float)0.0, (float)0.0, (float)0.0, (float)0.0);
-  _programState.setUniformValue("FlatColorIntensity", (float)0.0);
+//  //  _programState.setUniformValue("BillBoard", false);
+//  _programState.setUniformValue("EnableTexture", false);
+//  _programState.setUniformValue("PointSize", (float)1.0);
+//  _programState.setUniformValue("ScaleTexCoord", Vector2D(1.0,1.0));
+//  //  _programState.setUniformValue("TextureExtent", Vector2D(0.0,0.0));
+//  _programState.setUniformValue("TranslationTexCoord", Vector2D(0.0,0.0));
+//  //  _programState.setUniformValue("ViewPortExtent", Vector2D(0.0,0.0));
+//  
+//  _programState.setUniformValue("ColorPerVertexIntensity", (float)0.0);
+//  _programState.setUniformValue("EnableFlatColor", false);
+//  _programState.setUniformValue("FlatColor", (float)0.0, (float)0.0, (float)0.0, (float)0.0);
+//  _programState.setUniformValue("FlatColorIntensity", (float)0.0);
+//  
+//  _programState.setAttributeEnabled("TextureCoord", false);
+//  _programState.setAttributeEnabled("Color", false);
   
-  _programState.setAttributeEnabled("TextureCoord", false);
-  _programState.setAttributeEnabled("Color", false);
 }
 
 void BusyMeshRenderer::start(const G3MRenderContext* rc) {
@@ -128,18 +131,19 @@ void BusyMeshRenderer::render(const G3MRenderContext* rc,
 //  MutableMatrix44D M = MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth, halfWidth,
 //                                                                            -halfHeight, halfHeight,
 //                                                                            -halfWidth, halfWidth);
-  _programState.setUniformValue("Projection", _projectionMatrix);
+//  _programState.setUniformValue("Projection", _projectionMatrix);
   // clear screen
   state.setClearColor(*_backgroundColor);
   gl->clearScreen(state);
   
 //  MutableMatrix44D R1 = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, -1));
-  _programState.setUniformValue("Modelview", _modelviewMatrix);
+//  _programState.setUniformValue("Modelview", _modelviewMatrix);
   
   notifyGLClientChildrenParentHasChanged();
   
   // draw mesh
-  _mesh->render(rc, state, &_programState);
+//  _mesh->render(rc, state, &_programState);
+  _mesh->render(rc, state, NULL);
 }
 
 void BusyMeshRenderer::modifyGLState(GLState& glState) const{
@@ -163,8 +167,8 @@ void BusyMeshRenderer::modifyGPUProgramState(GPUProgramState& progState) const{
   progState.setAttributeEnabled("Color", false);
   
   //Modelview and projection
-  MutableMatrix44D R1 = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, -1));
-  progState.setUniformValue("Modelview", R1);
+  _modelviewMatrix = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, -1));
+  progState.setUniformValue("Modelview", &_modelviewMatrix); //Program state will store a pointer
   
-  progState.setUniformValue("Projection", _projectionMatrix);
+  progState.setUniformValue("Projection", &_projectionMatrix);
 }

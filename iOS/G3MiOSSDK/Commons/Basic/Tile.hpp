@@ -11,6 +11,7 @@
 
 #include "Sector.hpp"
 #include <list>
+#include "GLClient.hpp"
 
 class G3MRenderContext;
 class Mesh;
@@ -32,7 +33,7 @@ class GPUProgramState;
 
 #include "ITexturizerData.hpp"
 
-class Tile {
+class Tile: public GLClient {
 private:
   TileTexturizer* _texturizer;
   Tile*           _parent;
@@ -202,6 +203,11 @@ public:
   inline std::vector<Tile*>* createSubTiles(const Angle& splitLatitude,
                                             const Angle& splitLongitude,
                                             bool setParent);
+  
+  //Not drawable gl client
+  void notifyGLClientChildrenParentHasChanged(); 
+  void modifyGLState(GLState& glState) const;
+  void modifyGPUProgramState(GPUProgramState& progState) const;
 
 };
 

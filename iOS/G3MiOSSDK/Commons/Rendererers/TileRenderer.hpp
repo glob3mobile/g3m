@@ -27,7 +27,6 @@ class LayerTilesRenderParameters;
 #include "LayerSet.hpp"
 #include "GPUProgramState.hpp"
 
-
 class TileRenderContext {
 private:
   const TileTessellator*       _tessellator;
