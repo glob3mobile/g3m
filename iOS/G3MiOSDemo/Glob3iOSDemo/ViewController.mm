@@ -362,7 +362,7 @@ public:
   //builder.addRenderer( meshRenderer );
 
   MarksRenderer* marksRenderer = [self createMarksRenderer];
-  //builder.addRenderer(marksRenderer);
+  builder.addRenderer(marksRenderer);
 
   GEORenderer* geoRenderer = [self createGEORendererMeshRenderer: meshRenderer
                                                   shapesRenderer: shapesRenderer
