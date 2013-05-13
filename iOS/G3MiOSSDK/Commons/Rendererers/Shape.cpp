@@ -130,6 +130,10 @@ void Shape::orbitCamera(const TimeInterval& duration,
   _pendingEffects.push_back( new ShapePendingEffect(effect, true) );
 }
 
+void Shape::setEffect(Effect* effect){
+  _pendingEffects.push_back( new ShapePendingEffect(effect, false) );
+}
+
 void Shape::setAnimatedPosition(const TimeInterval& duration,
                                 const Geodetic3D& position,
                                 bool linearInterpolation) {

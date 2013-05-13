@@ -73,6 +73,8 @@ public:
     cleanTransformMatrix();
   }
   
+  void setEffect(Effect* effect);
+  
   void setAnimatedPosition(const TimeInterval& duration,
                            const Geodetic3D& position,
                            bool linearInterpolation=false);
