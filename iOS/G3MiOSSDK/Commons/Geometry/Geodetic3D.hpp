@@ -153,7 +153,7 @@ public:
     const Angle aLon = Angle::fromRadians(nLonRadians);
     
     
-    const Geodetic3D destination =  Geodetic3D::Geodetic3D(aLat, aLon, position.height());
+    const Geodetic3D destination =  Geodetic3D(aLat, aLon, position.height());
     //Only for debug
     ILogger::instance()->logWarning("Initial Position: " + position.description());
     ILogger::instance()->logWarning("Destination Position: " + destination.description());
