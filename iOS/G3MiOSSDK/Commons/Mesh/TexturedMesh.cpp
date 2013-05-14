@@ -19,10 +19,10 @@ void TexturedMesh::render(const G3MRenderContext* rc,
   
   GLState* state = _textureMapping->bind(rc, parentState, progState);
 
-  if (_transparent) {
-    state->enableBlend();
-    state->setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
-  }
+//  if (_transparent) {
+//    state->enableBlend();
+//    state->setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
+//  }
 
   _mesh->render(rc, *state, &progState);
   

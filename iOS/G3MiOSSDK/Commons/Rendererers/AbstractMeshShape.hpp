@@ -10,6 +10,9 @@
 #define __G3MiOSSDK__AbstractMeshShape__
 
 #include "Shape.hpp"
+
+#include "GLClient.hpp"
+
 class Mesh;
 
 class AbstractMeshShape : public Shape {
@@ -48,6 +51,7 @@ public:
 
   bool isTransparent(const G3MRenderContext* rc);
   
+  void notifyGLClientChildrenParentHasChanged();
 };
 
 #endif

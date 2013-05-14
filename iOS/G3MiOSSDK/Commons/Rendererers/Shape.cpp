@@ -57,7 +57,7 @@ void Shape::cleanTransformMatrix() {
   _transformMatrix = NULL;
 }
 
-MutableMatrix44D* Shape::createTransformMatrix(const Planet* planet) {
+MutableMatrix44D* Shape::createTransformMatrix(const Planet* planet) const {
   const MutableMatrix44D geodeticTransform   = (_position == NULL) ? MutableMatrix44D::identity() : planet->createGeodeticTransformMatrix(*_position);
   
   const MutableMatrix44D headingRotation = MutableMatrix44D::createRotationMatrix(*_heading, Vector3D::downZ());
@@ -68,7 +68,7 @@ MutableMatrix44D* Shape::createTransformMatrix(const Planet* planet) {
   return new MutableMatrix44D( geodeticTransform.multiply(localTransform) );
 }
 
-MutableMatrix44D* Shape::getTransformMatrix(const Planet* planet) {
+MutableMatrix44D* Shape::getTransformMatrix(const Planet* planet) const {
   if (_transformMatrix == NULL) {
     _transformMatrix = createTransformMatrix(planet);
   }
@@ -96,7 +96,7 @@ void Shape::render(const G3MRenderContext* rc,
     }
     
     GPUProgramState progState(parentProgramState);
-    progState.multiplyUniformValue("Modelview", *getTransformMatrix( rc->getPlanet() ));
+    //progState.multiplyUniformValue("Modelview", *getTransformMatrix( rc->getPlanet() ));
     rawRender(rc, parentState, &progState);
   }
 }
@@ -147,4 +147,12 @@ void Shape::setAnimatedPosition(const TimeInterval& duration,
                                                *_pitch, pitch,*_heading,heading,
                                                linearInterpolation);
   _pendingEffects.push_back( new ShapePendingEffect(effect, false) );
+}
+
+void Shape::modifyGPUProgramState(GPUProgramState& progState) const{
+  if (_planet != NULL){
+    progState.multiplyUniformValue("Modelview", getTransformMatrix( _planet ));
+  } else{
+    ILogger::instance()->logError("Shape not initialized");
+  }
 }

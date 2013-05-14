@@ -69,22 +69,9 @@ public:
   GPUProgramState(const GPUProgramState* parentState):_parentState(parentState), _application(NULL){}
   
   
-  ~GPUProgramState(){
-    delete _application;
-    
-    for(std::map<std::string, GPUUniformValue*> ::const_iterator it = _uniformValues.begin();
-        it != _uniformValues.end();
-        it++){
-      delete it->second;
-    }
-    
-    for(std::map<std::string, GPUAttributeValue*> ::const_iterator it = _attributesValues.begin();
-        it != _attributesValues.end();
-        it++){
-      delete it->second;
-    }
-  }
+  ~GPUProgramState();
   
+  void clear();
   
   void setUniformValue(const std::string& name, bool b);
   

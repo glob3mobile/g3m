@@ -35,8 +35,10 @@ public:
     //TIPICALLY: _mesh->actualizeGLState(this);
   } //Idle if this is a drawable client
   
-  virtual void modifyGLState(GLState& glState) const = 0;
-  virtual void modifyGPUProgramState(GPUProgramState& progState) const = 0;
+  //Implemented if the node modifies the GLState
+  virtual void modifyGLState(GLState& glState) const{}
+  //Implemented if the node modifies the GPUProgramState
+  virtual void modifyGPUProgramState(GPUProgramState& progState) const{}
   
   /**
    Invoked by parent to change my GLState and GPUProgramState

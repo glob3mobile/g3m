@@ -248,6 +248,7 @@ void AbstractMesh::modifyGPUProgramState(GPUProgramState& progState) const{
 }
 
 void AbstractMesh::getGLStateAndGPUProgramState(GLState** glState, GPUProgramState** progState){
+  _progState.clear();
   (*glState) = &_glState;
   (*progState) = &_progState;
 }

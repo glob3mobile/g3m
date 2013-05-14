@@ -12,6 +12,7 @@
 #include "Geodetic3D.hpp"
 #include "Context.hpp"
 #include "Vector3D.hpp"
+#include "GLClient.hpp"
 
 class MutableMatrix44D;
 
@@ -21,7 +22,7 @@ class MutableMatrix44D;
 class ShapePendingEffect;
 class GPUProgramState;
 
-class Shape : public EffectTarget {
+class Shape : public EffectTarget, public GLClient {
 private:
   Geodetic3D* _position;
   
@@ -32,9 +33,11 @@ private:
   double      _scaleY;
   double      _scaleZ;
   
-  MutableMatrix44D* _transformMatrix;
-  MutableMatrix44D* createTransformMatrix(const Planet* planet);
-  MutableMatrix44D* getTransformMatrix(const Planet* planet);
+  const Planet* _planet;
+  
+  mutable MutableMatrix44D* _transformMatrix;
+  MutableMatrix44D* createTransformMatrix(const Planet* planet) const;
+  MutableMatrix44D* getTransformMatrix(const Planet* planet) const;
   
   std::vector<ShapePendingEffect*> _pendingEffects;
   
@@ -49,7 +52,8 @@ public:
   _scaleX(1),
   _scaleY(1),
   _scaleZ(1),
-  _transformMatrix(NULL)
+  _transformMatrix(NULL),
+  _planet(NULL)
   {
     
   }
@@ -163,7 +167,7 @@ public:
               const GLState& parentState, const GPUProgramState* parentProgramState);
 
   virtual void initialize(const G3MContext* context) {
-    
+    _planet = context->getPlanet();
   }
   
   virtual bool isReadyToRender(const G3MRenderContext* rc) = 0;
@@ -172,6 +176,8 @@ public:
                          const GLState& parentState, const GPUProgramState* parentProgramState) = 0;
 
   virtual bool isTransparent(const G3MRenderContext* rc) = 0;
+  
+  void modifyGPUProgramState(GPUProgramState& progState) const;
   
 };
 

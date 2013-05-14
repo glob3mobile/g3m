@@ -8,6 +8,29 @@
 
 #include "GPUProgramState.hpp"
 
+GPUProgramState::~GPUProgramState(){
+  clear();
+}
+
+void GPUProgramState::clear(){
+  delete _application;
+  
+  for(std::map<std::string, GPUUniformValue*> ::const_iterator it = _uniformValues.begin();
+      it != _uniformValues.end();
+      it++){
+    delete it->second;
+  }
+  _uniformValues.clear();
+  
+  for(std::map<std::string, GPUAttributeValue*> ::const_iterator it = _attributesValues.begin();
+      it != _attributesValues.end();
+      it++){
+    delete it->second;
+  }
+  _attributesEnabled.clear();
+  _attributesValues.clear();
+}
+
 void GPUProgramState::setValuesOntoGPUProgram(GPUProgram& prog) const
 {
   if (_parentState != NULL){

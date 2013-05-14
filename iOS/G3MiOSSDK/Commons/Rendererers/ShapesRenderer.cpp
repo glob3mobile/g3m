@@ -13,7 +13,7 @@
 
 #include "GPUProgramState.hpp"
 
-class TransparentShapeWrapper : public OrderedRenderable {
+class TransparentShapeWrapper : public OrderedRenderable/*, public GLClient*/ {
 private:
   Shape* _shape;
   const double _squaredDistanceFromEye;
@@ -50,19 +50,43 @@ public:
 
   void render(const G3MRenderContext* rc,
               const GLState& parentState) {
-    rc->getCurrentCamera()->applyOnGPUProgramState(_programState);
+    //rc->getCurrentCamera()->applyOnGPUProgramState(_programState);
+    
+//    actualizeGLState(rc->getCurrentCamera());
+    
     _shape->render(rc, parentState, &_programState);
   }
+  
+//  void notifyGLClientChildrenParentHasChanged(){
+//    _shape->actualizeGLState(this);
+//  }
+//  
+//  void modifyGLState(GLState& glState) const{}
+//  
+//  void modifyGPUProgramState(GPUProgramState& progState) const{
+//    progState.setUniformValue("EnableTexture", false);
+//    progState.setUniformValue("PointSize", (float)1.0);
+//    progState.setUniformValue("ScaleTexCoord", Vector2D(1.0,1.0));
+//    progState.setUniformValue("TranslationTexCoord", Vector2D(0.0,0.0));
+//    
+//    progState.setUniformValue("ColorPerVertexIntensity", (float)0.0);
+//    progState.setUniformValue("EnableFlatColor", false);
+//    progState.setUniformValue("FlatColor", (float)0.0, (float)0.0, (float)0.0, (float)0.0);
+//    progState.setUniformValue("FlatColorIntensity", (float)0.0);
+//    
+//    progState.setAttributeEnabled("TextureCoord", false);
+//    progState.setAttributeEnabled("Color", false);
+//  }
 
 };
 
 void ShapesRenderer::render(const G3MRenderContext* rc,
                             const GLState& parentState) {
   
-  rc->getCurrentCamera()->applyOnGPUProgramState(_programState);// Setting projection and modelview
+//  rc->getCurrentCamera()->applyOnGPUProgramState(_programState);// Setting projection and modelview
+  actualizeGLState(rc->getCurrentCamera());
   
   const Vector3D cameraPosition = rc->getCurrentCamera()->getCartesianPosition();
-
   
   const int shapesCount = _shapes.size();
   for (int i = 0; i < shapesCount; i++) {
@@ -78,4 +102,32 @@ void ShapesRenderer::render(const G3MRenderContext* rc,
       shape->render(rc, parentState, &_programState);
     }
   }
+}
+
+void ShapesRenderer::notifyGLClientChildrenParentHasChanged(){
+  const int shapesCount = _shapes.size();
+  for (int i = 0; i < shapesCount; i++) {
+    Shape* shape = _shapes[i];
+    shape->actualizeGLState(this);
+  }
+}
+
+void ShapesRenderer::modifyGLState(GLState& glState) const{
+  
+}
+
+void ShapesRenderer::modifyGPUProgramState(GPUProgramState& progState) const{
+  
+  progState.setUniformValue("EnableTexture", false);
+  progState.setUniformValue("PointSize", (float)1.0);
+  progState.setUniformValue("ScaleTexCoord", Vector2D(1.0,1.0));
+  progState.setUniformValue("TranslationTexCoord", Vector2D(0.0,0.0));
+  
+  progState.setUniformValue("ColorPerVertexIntensity", (float)0.0);
+  progState.setUniformValue("EnableFlatColor", false);
+  progState.setUniformValue("FlatColor", (float)0.0, (float)0.0, (float)0.0, (float)0.0);
+  progState.setUniformValue("FlatColorIntensity", (float)0.0);
+  
+  progState.setAttributeEnabled("TextureCoord", false);
+  progState.setAttributeEnabled("Color", false);
 }

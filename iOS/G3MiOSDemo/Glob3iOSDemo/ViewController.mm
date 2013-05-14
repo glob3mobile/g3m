@@ -356,7 +356,7 @@ public:
 
 
   ShapesRenderer* shapesRenderer = [self createShapesRenderer: builder.getPlanet()];
-  //builder.addRenderer(shapesRenderer);
+  builder.addRenderer(shapesRenderer);
 
   MeshRenderer* meshRenderer = new MeshRenderer();
   //builder.addRenderer( meshRenderer );

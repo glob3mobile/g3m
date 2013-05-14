@@ -12,9 +12,10 @@
 #include "LeafRenderer.hpp"
 #include "Shape.hpp"
 #include "GPUProgramState.hpp"
+#include "GLClient.hpp"
 #include <vector>
 
-class ShapesRenderer : public LeafRenderer {
+class ShapesRenderer : public LeafRenderer, public GLClient {
 private:
   std::vector<Shape*> _shapes;
 
@@ -105,6 +106,16 @@ public:
 
   void render(const G3MRenderContext* rc,
               const GLState& parentState);
+  
+  //Idle if this is not a drawable client
+  virtual void getGLStateAndGPUProgramState(GLState** glState, GPUProgramState** progState){
+    (*glState) = NULL;
+    (*progState) = NULL;
+  }
+  
+  void notifyGLClientChildrenParentHasChanged();
+  void modifyGLState(GLState& glState) const;
+  void modifyGPUProgramState(GPUProgramState& progState) const;
 
 };
 

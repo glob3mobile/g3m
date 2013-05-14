@@ -41,7 +41,8 @@ public:
 
   void rawRender(const G3MRenderContext* rc,
                  const GLState& parentState, const GPUProgramState* parentProgramState);
-
+  
+  void notifyGLClientChildrenParentHasChanged();
 };
 
 #endif
