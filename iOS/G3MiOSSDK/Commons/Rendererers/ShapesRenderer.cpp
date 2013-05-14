@@ -113,7 +113,7 @@ void ShapesRenderer::notifyGLClientChildrenParentHasChanged(){
 }
 
 void ShapesRenderer::modifyGLState(GLState& glState) const{
-  
+  glState.enableDepthTest();
 }
 
 void ShapesRenderer::modifyGPUProgramState(GPUProgramState& progState) const{
