@@ -1446,7 +1446,7 @@ public:
 //                                           10000));
     //radarModel->setScale(10);
 
-    _shapesRenderer->addShape(radarModel);
+    //_shapesRenderer->addShape(radarModel);
 
     delete buffer;
   }
