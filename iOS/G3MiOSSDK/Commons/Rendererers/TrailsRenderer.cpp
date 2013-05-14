@@ -148,12 +148,32 @@ Mesh* Trail::getMesh(const Planet* planet) {
 void Trail::render(const G3MRenderContext* rc,
                    const GLState& parentState, const GPUProgramState* parentProgramState) {
   if (_visible) {
+    
+    bool hasBeenRenderized = (_mesh != NULL) && !_positionsDirty;
+    
     Mesh* mesh = getMesh(rc->getPlanet());
     if (mesh != NULL) {
+      if (!hasBeenRenderized){
+        actualizeGLState(rc->getCurrentCamera()); //Actualize _mesh GLstate with camera
+      }
+      
       mesh->render(rc, parentState, parentProgramState);
     }
   }
 }
+
+void Trail::notifyGLClientChildrenParentHasChanged(){
+  _mesh->actualizeGLState(this);
+}
+void Trail::modifyGLState(GLState& glState) const{}
+
+void Trail::modifyGPUProgramState(GPUProgramState& progState) const{
+  progState.setUniformValue("EnableTexture", false);
+  progState.setUniformValue("ScaleTexCoord", Vector2D(1.0, 1.0));
+  progState.setUniformValue("TranslationTexCoord", Vector2D(0.0, 0.0));
+}
+
+#pragma mark TrailsRenderer
 
 TrailsRenderer::~TrailsRenderer() {
   const int trailsCount = _trails.size();
@@ -173,6 +193,7 @@ void TrailsRenderer::render(const G3MRenderContext* rc,
   
   rc->getCurrentCamera()->applyOnGPUProgramState(_programState);// Setting projection and modelview
   
+  
   const int trailsCount = _trails.size();
   for (int i = 0; i < trailsCount; i++) {
     Trail* trail = _trails[i];
@@ -188,3 +209,4 @@ void TrailsRenderer::initialize(const G3MContext* context) {
   _programState.setUniformValue("TranslationTexCoord", Vector2D(0.0, 0.0));
 //  _programState.setUniformValue("ViewPortExtent", Vector2D(0.0, 0.0));
 }
+

@@ -14,11 +14,12 @@
 #include <vector>
 #include "Color.hpp"
 #include "GPUProgramState.hpp"
+#include "GLClient.hpp"
 
 class Mesh;
 class Planet;
 
-class Trail {
+class Trail: public GLClient {
 private:
   bool _visible;
   const unsigned long _maxSteps;
@@ -79,6 +80,10 @@ public:
 
     _positions.push_back(new Geodetic3D(position));
   }
+  
+  void notifyGLClientChildrenParentHasChanged();
+  void modifyGLState(GLState& glState) const;
+  void modifyGPUProgramState(GPUProgramState& progState) const;
 
 };
 

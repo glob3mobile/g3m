@@ -292,6 +292,10 @@ public:
     getModelMatrix();
   }
   
+  void actualizeChildGLState(GLClient* child) const{
+    child->actualizeGLState(this);
+  }
+  
   //GLClient
   void modifyGLState(GLState& glState) const{}
   void modifyGPUProgramState(GPUProgramState& progState) const{

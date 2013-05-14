@@ -2125,7 +2125,7 @@ public:
                       7500);
   trail->addPosition(position);
   trailsRenderer->addTrail(trail);
- // builder->addRenderer(trailsRenderer);
+  builder->addRenderer(trailsRenderer);
 
   //  renderers.push_back(new GLErrorRenderer());
 
