@@ -458,7 +458,7 @@ void Tile::rawRender(const G3MRenderContext *rc,
 
   TileTexturizer* texturizer = trc->getTexturizer();
   if (texturizer == NULL) {
-    tessellatorMesh->render(rc, parentState, parentProgramState);
+    tessellatorMesh->render(rc);
   }
   else {
     const bool needsToCallTexturizer = (_texturizedMesh == NULL) || isTexturizerDirty();
@@ -474,10 +474,10 @@ void Tile::rawRender(const G3MRenderContext *rc,
     }
 
     if (_texturizedMesh != NULL) {
-      _texturizedMesh->render(rc, parentState, parentProgramState);
+      _texturizedMesh->render(rc);
     }
     else {
-      tessellatorMesh->render(rc, parentState, parentProgramState);
+      tessellatorMesh->render(rc);
     }
   }
 
@@ -488,7 +488,7 @@ void Tile::debugRender(const G3MRenderContext* rc,
                        const GLState& parentState, const GPUProgramState* parentProgramState) {
   Mesh* debugMesh = getDebugMesh(rc, trc);
   if (debugMesh != NULL) {
-    debugMesh->render(rc, parentState, parentProgramState);
+    debugMesh->render(rc);
   }
 }
 

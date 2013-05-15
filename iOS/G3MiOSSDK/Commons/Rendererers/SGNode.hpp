@@ -12,13 +12,15 @@
 #include <string>
 #include <vector>
 
+#include "GLClient.hpp"
+
 class G3MContext;
 class G3MRenderContext;
 class SGShape;
 class GLState;
 class GPUProgramState;
 
-class SGNode {
+class SGNode: public GLClient {
 protected:
   const std::string _id;
   const std::string _sId;
@@ -61,11 +63,9 @@ public:
   
   virtual bool isReadyToRender(const G3MRenderContext* rc);
   
-  virtual void rawRender(const G3MRenderContext* rc,
-                         const GLState& parentState, const GPUProgramState* parentProgramState);
+  virtual void rawRender(const G3MRenderContext* rc);
   
-  virtual void render(const G3MRenderContext* rc,
-                      const GLState& parentState, const GPUProgramState* parentProgramState);
+  virtual void render(const G3MRenderContext* rc);
   
   //  SGShape* getShape() const {
   //    if (_shape != NULL) {
@@ -77,11 +77,11 @@ public:
   //    return NULL;
   //  }
   
-  virtual GLState* createState(const G3MRenderContext* rc,
-                               const GLState& parentState);
-  
-  virtual GPUProgramState* createGPUProgramState(const G3MRenderContext* rc,
-                                                 const GPUProgramState* parentState);
+//  virtual GLState* createState(const G3MRenderContext* rc,
+//                               const GLState& parentState);
+//  
+//  virtual GPUProgramState* createGPUProgramState(const G3MRenderContext* rc,
+//                                                 const GPUProgramState* parentState);
   
   int getChildrenCount() const {
     return _children.size();
@@ -90,6 +90,8 @@ public:
   SGNode* getChild(int i) const {
     return _children[i];
   }
+  
+  void notifyGLClientChildrenParentHasChanged();
 };
 
 #endif

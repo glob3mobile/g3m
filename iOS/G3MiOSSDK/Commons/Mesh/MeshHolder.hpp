@@ -44,9 +44,8 @@ public:
     return _mesh->getVertex(i);
   }
 
-  void render(const G3MRenderContext* rc,
-              const GLState& parentState, const GPUProgramState* parentProgramState) const {
-    _mesh->render(rc, parentState, parentProgramState);
+  void render(const G3MRenderContext* rc) const {
+    _mesh->render(rc);
   }
 
   Extent* getExtent() const {

@@ -158,6 +158,6 @@ void SimplePlanetRenderer::render(const G3MRenderContext* rc,
     _mesh = createMesh(rc);
   }
   if (_mesh != NULL) {
-    _mesh->render(rc, parentState, parentProgramState);
+    _mesh->render(rc);
   }
 }

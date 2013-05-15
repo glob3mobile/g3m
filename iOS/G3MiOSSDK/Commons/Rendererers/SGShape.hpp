@@ -47,8 +47,7 @@ public:
 
   bool isReadyToRender(const G3MRenderContext* rc);
 
-  void rawRender(const G3MRenderContext* rc,
-                 const GLState& parentState, const GPUProgramState* parentProgramState);
+  void rawRender(const G3MRenderContext* rc);
 
   bool isTransparent(const G3MRenderContext* rc) {
     return _isTransparent;

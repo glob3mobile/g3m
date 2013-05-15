@@ -28,8 +28,6 @@ private:
   double  _degrees;
   Color*  _backgroundColor;
   
-//  GPUProgramState _programState;
-  
   MutableMatrix44D _projectionMatrix;
   mutable MutableMatrix44D _modelviewMatrix;
   
@@ -37,7 +35,6 @@ public:
   BusyMeshRenderer(Color* backgroundColor):
   _degrees(0),
   _backgroundColor(backgroundColor)
-//  _programState(NULL)
   {
     _modelviewMatrix = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, -1));
     _projectionMatrix = MutableMatrix44D::invalid();

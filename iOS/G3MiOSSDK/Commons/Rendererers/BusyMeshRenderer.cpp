@@ -143,7 +143,7 @@ void BusyMeshRenderer::render(const G3MRenderContext* rc,
   
   // draw mesh
 //  _mesh->render(rc, state, &_programState);
-  _mesh->render(rc, state, NULL);
+  _mesh->render(rc);
 }
 
 void BusyMeshRenderer::modifyGLState(GLState& glState) const{

@@ -38,8 +38,6 @@ private:
 
   long long _downloadPriority;
   
-  GPUProgramState _programState;
-  
   IFloatBuffer* _billboardTexCoord;
   
 public:

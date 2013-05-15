@@ -9,7 +9,7 @@
 
 
 #include "IMathUtils.hpp"
-#include <string.h>
+#include <string>
 
 #include "Camera.hpp"
 #include "Plane.hpp"
@@ -332,10 +332,10 @@ void Camera::setPointOfView(const Geodetic3D& center,
 }
 
 
-void Camera::applyOnGPUProgramState(GPUProgramState& state) const{
-  state.setUniformValue("Projection", getProjectionMatrix());
-  state.setUniformValue("Modelview", getModelMatrix());
-}
+//void Camera::applyOnGPUProgramState(GPUProgramState& state) const{
+//  state.setUniformValue("Projection", getProjectionMatrix());
+//  state.setUniformValue("Modelview", getModelMatrix());
+//}
 
 FrustumData Camera::calculateFrustumData() const {
   //    // compute znear value

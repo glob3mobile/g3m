@@ -44,9 +44,7 @@ protected:
                const float colorsIntensity,
                bool depthTest);
 
-  virtual void rawRender(const G3MRenderContext* rc,
-                         const GLState& parentState,
-                         const GPUProgramState* parentProgramState) const = 0;
+  virtual void rawRender(const G3MRenderContext* rc) const = 0;
 protected:
   
   GLState _glState;
@@ -55,9 +53,7 @@ protected:
 public:
   ~AbstractMesh();
 
-  void render(const G3MRenderContext* rc,
-              const GLState& parentState,
-              const GPUProgramState* parentProgramState) const;
+  void render(const G3MRenderContext* rc) const;
 
   Extent* getExtent() const;
 

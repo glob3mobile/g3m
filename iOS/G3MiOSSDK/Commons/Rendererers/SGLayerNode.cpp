@@ -105,6 +105,7 @@ const IGLTextureId* SGLayerNode::getTextureId(const G3MRenderContext* rc) {
   return _textureId;
 }
 
+/*
 GPUProgramState* SGLayerNode::createGPUProgramState(const G3MRenderContext* rc, const GPUProgramState* parentState){
   
   GPUProgramState* progState = new GPUProgramState(parentState);
@@ -130,4 +131,24 @@ GLState* SGLayerNode::createState(const G3MRenderContext* rc,
   int __WORKING;
 
   return state;
+}
+*/
+void SGLayerNode::modifyGLState(GLState& glState) const{
+  
+  int __WORKING;
+  /*if (!_initialized) {
+    _initialized = true;
+    requestImage(rc);
+  }
+  
+  const IGLTextureId* texId = getTextureId(rc);
+  if (texId != NULL) {
+    state.bindTexture(texId);
+  }
+   */
+}
+
+void SGLayerNode::modifyGPUProgramState(GPUProgramState& progState) const{
+  progState.setAttributeEnabled("TextureCoord", true);
+  progState.setUniformValue("EnableTexture", true);
 }

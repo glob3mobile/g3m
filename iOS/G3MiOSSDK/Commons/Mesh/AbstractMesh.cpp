@@ -116,76 +116,9 @@ bool AbstractMesh::isTransparent(const G3MRenderContext* rc) const {
 }
 
 
-void AbstractMesh::render(const G3MRenderContext *rc,
-                          const GLState& parentState,
-                          const GPUProgramState* parentProgramState) const {
+void AbstractMesh::render(const G3MRenderContext *rc) const {
   
-  rawRender(rc, _glState, &_progState);
-  
-  /*
-  GLState state(parentState);
-  state.setLineWidth(_lineWidth);
-  
-  GPUProgramState progState(parentProgramState);
-  
-  progState.setUniformValue("PointSize", _pointSize);
-  
-  progState.setAttributeEnabled("Position", true);
-  progState.setAttributeValue("Position",
-                              _vertices, 4, //The attribute is a float vector of 4 elements
-                              3,            //Our buffer contains elements of 3
-                              0,            //Index 0
-                              false,        //Not normalized
-                              0);           //Stride 0
-  
-  if (_colors != NULL){
-    progState.setAttributeEnabled("Color", true);
-    progState.setUniformValue("EnableColorPerVertex", true);
-    progState.setAttributeValue("Color",
-                                _colors, 4,   //The attribute is a float vector of 4 elements RGBA
-                                4,            //Our buffer contains elements of 4
-                                0,            //Index 0
-                                false,        //Not normalized
-                                0);           //Stride 0
-    
-    progState.setUniformValue("ColorPerVertexIntensity", _colorsIntensity);
-  } else{
-    progState.setAttributeEnabled("Color", false);
-    progState.setUniformValue("EnableColorPerVertex", false);
-    progState.setUniformValue("ColorPerVertexIntensity", (float)0.0);
-  }
-  
-  if (_flatColor != NULL){
-    progState.setUniformValue("EnableFlatColor", true);
-    progState.setUniformValue("FlatColor",
-                              (double)_flatColor->getRed(),
-                              (double)_flatColor->getGreen(),
-                              (double) _flatColor->getBlue(),
-                              (double) _flatColor->getAlpha());
-    
-    progState.setUniformValue("FlatColorIntensity", _colorsIntensity);
-    
-    if (_flatColor->isTransparent()){
-      state.enableBlend();
-      state.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
-    }
-  } else{
-    progState.setUniformValue("EnableFlatColor", false);
-    progState.setUniformValue("ColorPerVertexIntensity", (float)0.0);
-    progState.setUniformValue("FlatColor", (float)0.0, (float)0.0, (float)0.0, (float)0.0);
-    progState.setUniformValue("FlatColorIntensity", (float)0.0);
-  }
-  
-  if (!_depthTest) {
-    state.disableDepthTest();
-  }
-  
-  if (_translationMatrix != NULL){
-    progState.multiplyUniformValue("Modelview", *_translationMatrix);
-  }
-  
-  rawRender(rc, state, &progState);
-   */
+  rawRender(rc);
 }
 
 void AbstractMesh::modifyGLState(GLState& glState) const{

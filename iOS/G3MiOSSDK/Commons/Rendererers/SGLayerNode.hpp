@@ -28,7 +28,7 @@ private:
 //  const std::string _wrapS;
 //  const std::string _wrapT;
 
-  bool _initialized;
+  mutable bool _initialized;
 
   const IGLTextureId* getTextureId(const G3MRenderContext* rc);
 
@@ -79,6 +79,15 @@ public:
                              const GLState& parentState);
   
   GPUProgramState* createGPUProgramState(const G3MRenderContext* rc, const GPUProgramState* parentState);
+  
+  //Idle if this is not a drawable client
+  virtual void getGLStateAndGPUProgramState(GLState** glState, GPUProgramState** progState){
+    (*glState) = NULL;
+    (*progState) = NULL;
+  }
+
+  void modifyGLState(GLState& glState) const;
+  void modifyGPUProgramState(GPUProgramState& progState) const;
 
 };
 

@@ -83,7 +83,9 @@ void DummyRenderer::drawFace(GL* gl, const GLState& parentState,
   MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(translation);
   MutableMatrix44D R = MutableMatrix44D::createRotationMatrix(a, rotationAxis);
   
-  progState.multiplyUniformValue("Modelview", T.multiply(R));
+  MutableMatrix44D TR = T.multiply(R);
+  
+  progState.multiplyUniformValue("Modelview", &TR);
   
   gl->drawElements(GLPrimitive::triangleStrip(), _indices, parentState, manager, &progState);
 }
@@ -92,7 +94,7 @@ void DummyRenderer::render(const G3MRenderContext* rc,
                            const GLState& parentState) {
   
   GPUProgramState progState(NULL);
-  rc->getCurrentCamera()->applyOnGPUProgramState(progState);
+//  rc->getCurrentCamera()->applyOnGPUProgramState(progState);
   
   progState.setAttributeEnabled("Position", true);
   progState.setAttributeValue("Position",

@@ -9,8 +9,8 @@
 #ifndef __G3MiOSSDK__GPUProgram__
 #define __G3MiOSSDK__GPUProgram__
 
-#include <iostream.h>
-#include <string.h>
+#include <iostream>
+#include <string>
 #include <map>
 
 #include "GPUAttribute.hpp"

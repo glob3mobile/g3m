@@ -71,16 +71,16 @@ SGTextureNode::~SGTextureNode() {
   }
 }
 
-void SGTextureNode::render(const G3MRenderContext* rc,
-                           const GLState& parentState, const GPUProgramState* parentProgramState) {
-  GLState* myState = createState(rc, parentState);
-  GLState* state2;
-  if (myState == NULL) {
-    state2 = new GLState(parentState);
-  }
-  else {
-    state2 = myState;
-  }
+/*
+void SGTextureNode::render(const G3MRenderContext* rc) {
+//  GLState* myState = createState(rc, parentState);
+//  GLState* state2;
+//  if (myState == NULL) {
+//    state2 = new GLState(parentState);
+//  }
+//  else {
+//    state2 = myState;
+//  }
 
   //  rawRender(rc, *state);
 
@@ -102,11 +102,28 @@ void SGTextureNode::render(const G3MRenderContext* rc,
     const int childrenCount = _children.size();
     for (int j = 0; j < childrenCount; j++) {
       SGNode* child = _children[j];
-      child->render(rc, *state, parentProgramState);
+      child->render(rc);
     }
 
     delete layerState;
   }
   
   delete myState;
+}
+*/
+
+void SGTextureNode::modifyGLState(GLState& glState) const{
+  const int layersCount = _layers.size();
+  for (int i = 0; i < layersCount; i++) {
+    SGLayerNode* layer = _layers[i];
+    layer->modifyGLState(glState);
+  }
+}
+
+void SGTextureNode::modifyGPUProgramState(GPUProgramState& progState) const{
+  const int layersCount = _layers.size();
+  for (int i = 0; i < layersCount; i++) {
+    SGLayerNode* layer = _layers[i];
+    layer->modifyGPUProgramState(progState);
+  }
 }

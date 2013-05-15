@@ -387,7 +387,7 @@ IFloatBuffer* Mark::getVertices(const Planet* planet) {
 }
 
 void Mark::render(const G3MRenderContext* rc,
-                  const Vector3D& cameraPosition, const GLState& parentState, const GPUProgramState* parentProgramState) {
+                  const Vector3D& cameraPosition) {
   const Planet* planet = rc->getPlanet();
   
   const Vector3D* markPosition = getCartesianPosition(planet);

@@ -6,8 +6,6 @@
 //
 //
 
-//#include <math.h>
-
 #include "EllipsoidShape.hpp"
 
 #include "ShortBufferBuilder.hpp"

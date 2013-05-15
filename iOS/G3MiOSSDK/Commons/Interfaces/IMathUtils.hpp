@@ -9,7 +9,7 @@
 #ifndef G3MiOSSDK_IMathUtils_hpp
 #define G3MiOSSDK_IMathUtils_hpp
 
-#include <string.h>
+#include <string>
 #include <cstdio>
 #include "ILogger.hpp"
 

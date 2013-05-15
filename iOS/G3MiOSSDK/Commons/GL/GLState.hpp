@@ -18,7 +18,7 @@ class IFloatBuffer;
 #include "MutableMatrix44D.hpp"
 #include "Vector2D.hpp"
 
-#include <list.h>
+#include <list>
 
 
 class GL;
@@ -86,25 +86,25 @@ public:
     return new GLState();
   }
   
-  explicit GLState(const GLState& parentState) :
-  _depthTest(parentState._depthTest),
-  _blend(parentState._blend),
-  _cullFace(parentState._cullFace),
-  _culledFace(parentState._culledFace),
-  _lineWidth(parentState._lineWidth),
-  _polygonOffsetFactor(parentState._polygonOffsetFactor),
-  _polygonOffsetUnits(parentState._polygonOffsetUnits),
-  _polygonOffsetFill(parentState._polygonOffsetFill),
-  _blendDFactor(parentState._blendDFactor),
-  _blendSFactor(parentState._blendSFactor),
-  _boundTextureId(parentState._boundTextureId),
-  _pixelStoreIAlignmentUnpack(parentState._pixelStoreIAlignmentUnpack),
-  _clearColorR(parentState._clearColorR),
-  _clearColorG(parentState._clearColorG),
-  _clearColorB(parentState._clearColorB),
-  _clearColorA(parentState._clearColorA)
-  {
-  }
+//  explicit GLState(const GLState& parentState) :
+//  _depthTest(parentState._depthTest),
+//  _blend(parentState._blend),
+//  _cullFace(parentState._cullFace),
+//  _culledFace(parentState._culledFace),
+//  _lineWidth(parentState._lineWidth),
+//  _polygonOffsetFactor(parentState._polygonOffsetFactor),
+//  _polygonOffsetUnits(parentState._polygonOffsetUnits),
+//  _polygonOffsetFill(parentState._polygonOffsetFill),
+//  _blendDFactor(parentState._blendDFactor),
+//  _blendSFactor(parentState._blendSFactor),
+//  _boundTextureId(parentState._boundTextureId),
+//  _pixelStoreIAlignmentUnpack(parentState._pixelStoreIAlignmentUnpack),
+//  _clearColorR(parentState._clearColorR),
+//  _clearColorG(parentState._clearColorG),
+//  _clearColorB(parentState._clearColorB),
+//  _clearColorA(parentState._clearColorA)
+//  {
+//  }
   
   ~GLState() {}
   

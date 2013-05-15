@@ -11,12 +11,16 @@
 
 #include "SGNode.hpp"
 
+#include "Vector3D.hpp"
+
 class SGRotateNode : public SGNode {
 private:
   const double _x;
   const double _y;
   const double _z;
   const double _angle;
+  
+  MutableMatrix44D _rotationMatrix;
   
 public:
   SGRotateNode(const std::string& id,
@@ -29,16 +33,19 @@ public:
   _x(x),
   _y(y),
   _z(z),
-  _angle(angle)
+  _angle(angle),
+  _rotationMatrix(MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_angle), Vector3D(_x, _y, _z)))
   {
-    
   }
   
-  GLState* createState(const G3MRenderContext* rc,
-                       const GLState& parentState);
+//  GLState* createState(const G3MRenderContext* rc,
+//                       const GLState& parentState);
+//  
+//  GPUProgramState* createGPUProgramState(const G3MRenderContext* rc,
+//                                         const GPUProgramState* parentState);
   
-  GPUProgramState* createGPUProgramState(const G3MRenderContext* rc,
-                                         const GPUProgramState* parentState);
+  void modifyGLState(GLState& glState) const;
+  void modifyGPUProgramState(GPUProgramState& progState) const;
   
 };
 

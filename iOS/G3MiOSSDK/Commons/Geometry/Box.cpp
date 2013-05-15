@@ -232,7 +232,7 @@ void Box::render(const G3MRenderContext* rc,
   if (_mesh == NULL) {
     createMesh(Color::newFromRGBA(1.0f, 0.0f, 1.0f, 1.0f));
   }
-  _mesh->render(rc, parentState, parentProgramState);
+  _mesh->render(rc);
 }
 
 bool Box::touchesBox(const Box* box) const {

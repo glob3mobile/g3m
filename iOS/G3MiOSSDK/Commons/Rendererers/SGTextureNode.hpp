@@ -42,8 +42,10 @@ public:
     return  NULL;
   }
 
-  void render(const G3MRenderContext* rc,
-              const GLState& parentState, const GPUProgramState* parentProgramState);
+//  void render(const G3MRenderContext* rc);
+  
+  void modifyGLState(GLState& glState) const;
+  void modifyGPUProgramState(GPUProgramState& progState) const;
   
   
 };

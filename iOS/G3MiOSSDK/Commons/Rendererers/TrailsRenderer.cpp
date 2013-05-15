@@ -157,7 +157,7 @@ void Trail::render(const G3MRenderContext* rc,
         actualizeGLState(rc->getCurrentCamera()); //Actualize _mesh GLstate with camera
       }
       
-      mesh->render(rc, parentState, parentProgramState);
+      mesh->render(rc);
     }
   }
 }
@@ -191,7 +191,7 @@ void TrailsRenderer::addTrail(Trail* trail) {
 void TrailsRenderer::render(const G3MRenderContext* rc,
                             const GLState& parentState) {
   
-  rc->getCurrentCamera()->applyOnGPUProgramState(_programState);// Setting projection and modelview
+//  rc->getCurrentCamera()->applyOnGPUProgramState(_programState);// Setting projection and modelview
   
   
   const int trailsCount = _trails.size();

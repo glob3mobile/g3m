@@ -35,8 +35,7 @@ _context(NULL),
 _lastCamera(NULL),
 _markTouchListener(NULL),
 _autoDeleteMarkTouchListener(false),
-_downloadPriority(DownloadPriority::MEDIUM),
-_programState(NULL)
+_downloadPriority(DownloadPriority::MEDIUM)
 {
 }
 
@@ -66,35 +65,6 @@ void MarksRenderer::initialize(const G3MContext* context) {
     Mark* mark = _marks[i];
     mark->initialize(context, _downloadPriority);
   }
-  
-  //Creating program state
-  _programState.setAttributeEnabled("Position", true);
-//  _programState.setUniformValue("BillBoard", true);
-  _programState.setAttributeEnabled("TextureCoord", true);
-//  _programState.setUniformValue("EnableTexture", true);
-  
-  FloatBufferBuilderFromCartesian2D texCoor;
-  texCoor.add(1,1);
-  texCoor.add(1,0);
-  texCoor.add(0,1);
-  texCoor.add(0,0);
-  _billboardTexCoord = texCoor.create();
-  
-  _programState.setAttributeValue("TextureCoord",
-                                  _billboardTexCoord, 2,
-                                  2,
-                                  0,
-                                  false,
-                                  0);
-  
-//  _programState.setUniformValue("TranslationTexCoord", Vector2D(0.0, 0.0));
-//  _programState.setUniformValue("ScaleTexCoord", Vector2D(1.0, 1.0));
-//  _programState.setUniformValue("ColorPerVertexIntensity", (float) 0.0);
-//  _programState.setUniformValue("EnableColorPerVertex", false);
-//  _programState.setUniformValue("EnableFlatColor", false);
-//  _programState.setUniformValue("FlatColor", (float) 0.0, (float) 0.0, (float) 0.0, (float) 0.0);
-//  _programState.setUniformValue("FlatColorIntensity", (float) 0.0);
-//  _programState.setUniformValue("PointSize", (float) 0.0);
 }
 
 void MarksRenderer::addMark(Mark* mark) {
@@ -223,18 +193,14 @@ void MarksRenderer::render(const G3MRenderContext* rc,
   
   const Camera* camera = rc->getCurrentCamera();
   const Vector3D cameraPosition = camera->getCartesianPosition();
-  
-  _lastCamera->applyOnGPUProgramState(_programState);
-  
-  _programState.setUniformValue("ViewPortExtent", Vector2D( (double)camera->getWidth(), (double)camera->getHeight() ));
-  
+
   const int marksSize = _marks.size();
   for (int i = 0; i < marksSize; i++) {
     Mark* mark = _marks[i];
     //rc->getLogger()->logInfo("Rendering Mark: \"%s\"", mark->getName().c_str());
     
     if (mark->isReady()) {
-      mark->render(rc, cameraPosition, state, &_programState);
+      mark->render(rc, cameraPosition);
     }
   }
 }

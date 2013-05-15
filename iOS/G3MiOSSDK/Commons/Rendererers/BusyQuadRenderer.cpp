@@ -116,15 +116,54 @@ void BusyQuadRenderer::render(const G3MRenderContext* rc,
   MutableMatrix44D M = MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth, halfWidth,
                                                                             -halfHeight, halfHeight,
                                                                             -halfWidth, halfWidth);
+  
+  if (!_projectionMatrix.isValid()){
+    // init modelview matrix
+    int currentViewport[4];
+    gl->getViewport(currentViewport);
+    const int halfWidth = currentViewport[2] / 2;
+    const int halfHeight = currentViewport[3] / 2;
+    _projectionMatrix = MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth, halfWidth,
+                                                                             -halfHeight, halfHeight,
+                                                                             -halfWidth, halfWidth);
+  }
+  
   // clear screen
   state.setClearColor(*_backgroundColor);
   gl->clearScreen(state);
 
   state.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
 
-  MutableMatrix44D R2 = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, 1));
-  _programState.setUniformValue("Modelview", R2);
+//  MutableMatrix44D R2 = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, 1));
+//  _programState.setUniformValue("Modelview", _modelviewMatrix);
 
   // draw mesh
-  _quadMesh->render(rc, parentState, &_programState);
+  _quadMesh->render(rc);
+}
+
+void BusyQuadRenderer::modifyGLState(GLState& glState) const{
+  glState.enableBlend();
+  glState.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
+  glState.setClearColor(*_backgroundColor);
+}
+
+void BusyQuadRenderer::modifyGPUProgramState(GPUProgramState& progState) const{
+  progState.setUniformValue("EnableTexture", false);
+  progState.setUniformValue("PointSize", (float)1.0);
+  progState.setUniformValue("ScaleTexCoord", Vector2D(1.0,1.0));
+  progState.setUniformValue("TranslationTexCoord", Vector2D(0.0,0.0));
+  
+  progState.setUniformValue("ColorPerVertexIntensity", (float)0.0);
+  progState.setUniformValue("EnableFlatColor", false);
+  progState.setUniformValue("FlatColor", (float)0.0, (float)0.0, (float)0.0, (float)0.0);
+  progState.setUniformValue("FlatColorIntensity", (float)0.0);
+  
+  progState.setAttributeEnabled("TextureCoord", false);
+  progState.setAttributeEnabled("Color", false);
+  
+  //Modelview and projection
+  _modelviewMatrix = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, 1));
+  progState.setUniformValue("Modelview", &_modelviewMatrix); //Program state will store a pointer
+  
+  progState.setUniformValue("Projection", &_projectionMatrix);
 }

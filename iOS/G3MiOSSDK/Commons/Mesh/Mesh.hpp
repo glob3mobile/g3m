@@ -26,9 +26,7 @@ public:
   
   virtual const Vector3D getVertex(int i) const = 0;
   
-  virtual void render(const G3MRenderContext* rc,
-                      const GLState& parentState,
-                      const GPUProgramState* parentProgramState) const = 0;
+  virtual void render(const G3MRenderContext* rc) const = 0;
   
   virtual Extent* getExtent() const = 0;
   

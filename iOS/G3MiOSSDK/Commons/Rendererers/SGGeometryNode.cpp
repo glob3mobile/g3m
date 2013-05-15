@@ -24,11 +24,62 @@ SGGeometryNode::~SGGeometryNode() {
   delete _indices;
 }
 
-GPUProgramState * SGGeometryNode::createGPUProgramState(const G3MRenderContext *rc, const GPUProgramState *parentState){
-  GPUProgramState* progState = new GPUProgramState(parentState);
+//GPUProgramState * SGGeometryNode::createGPUProgramState(const G3MRenderContext *rc, const GPUProgramState *parentState){
+//  GPUProgramState* progState = new GPUProgramState(parentState);
+//  
+//  progState->setAttributeEnabled("Position", true);
+//  progState->setAttributeValue("Position",
+//                               _vertices, 4, //The attribute is a float vector of 4 elements
+//                               3,            //Our buffer contains elements of 3
+//                               0,            //Index 0
+//                               false,        //Not normalized
+//                               0);           //Stride 0
+//  
+//  if (_colors != NULL){
+//    progState->setAttributeEnabled("Color", true);
+//    progState->setUniformValue("EnableColorPerVertex", true);
+//    progState->setAttributeValue("Color",
+//                                 _colors, 4,   //The attribute is a float vector of 4 elements RGBA
+//                                 4,            //Our buffer contains elements of 4
+//                                 0,            //Index 0
+//                                 false,        //Not normalized
+//                                 0);           //Stride 0
+//    const float colorsIntensity = 1;
+//    progState->setUniformValue("FlatColorIntensity", colorsIntensity);
+//  } else{
+//    progState->setAttributeEnabled("Color", false);
+//    progState->setUniformValue("EnableColorPerVertex", false);
+//  }
+//  
+//  if (_uv != NULL){
+//    progState->setAttributeValue("TextureCoord",
+//                                 _uv, 2,
+//                                 2,
+//                                 0,
+//                                 false,
+//                                 0);
+//    
+//    progState->setUniformValue("ScaleTexCoord", Vector2D(1.0, 1.0));
+//    progState->setUniformValue("TranslationTexCoord", Vector2D(0.0, 0.0));
+//  }
+//  
+//  return progState;
+//}
+
+void SGGeometryNode::rawRender(const G3MRenderContext* rc,
+                               const GLState& parentState, const GPUProgramState* parentProgramState) {
+  GL* gl = rc->getGL();
+  gl->drawElements(_primitive, _indices, parentState, *rc->getGPUProgramManager(), parentProgramState);
+}
+
+void SGGeometryNode::modifyGLState(GLState& glState) const{
   
-  progState->setAttributeEnabled("Position", true);
-  progState->setAttributeValue("Position",
+}
+
+void SGGeometryNode::modifyGPUProgramState(GPUProgramState& progState) const{
+  
+  progState.setAttributeEnabled("Position", true);
+  progState.setAttributeValue("Position",
                               _vertices, 4, //The attribute is a float vector of 4 elements
                               3,            //Our buffer contains elements of 3
                               0,            //Index 0
@@ -36,38 +87,30 @@ GPUProgramState * SGGeometryNode::createGPUProgramState(const G3MRenderContext *
                               0);           //Stride 0
   
   if (_colors != NULL){
-    progState->setAttributeEnabled("Color", true);
-    progState->setUniformValue("EnableColorPerVertex", true);
-    progState->setAttributeValue("Color",
+    progState.setAttributeEnabled("Color", true);
+    progState.setUniformValue("EnableColorPerVertex", true);
+    progState.setAttributeValue("Color",
                                 _colors, 4,   //The attribute is a float vector of 4 elements RGBA
                                 4,            //Our buffer contains elements of 4
                                 0,            //Index 0
                                 false,        //Not normalized
                                 0);           //Stride 0
     const float colorsIntensity = 1;
-    progState->setUniformValue("FlatColorIntensity", colorsIntensity);
+    progState.setUniformValue("FlatColorIntensity", colorsIntensity);
   } else{
-    progState->setAttributeEnabled("Color", false);
-    progState->setUniformValue("EnableColorPerVertex", false);
+    progState.setAttributeEnabled("Color", false);
+    progState.setUniformValue("EnableColorPerVertex", false);
   }
   
   if (_uv != NULL){
-    progState->setAttributeValue("TextureCoord",
+    progState.setAttributeValue("TextureCoord",
                                 _uv, 2,
                                 2,
                                 0,
                                 false,
                                 0);
     
-    progState->setUniformValue("ScaleTexCoord", Vector2D(1.0, 1.0));
-    progState->setUniformValue("TranslationTexCoord", Vector2D(0.0, 0.0));
+    progState.setUniformValue("ScaleTexCoord", Vector2D(1.0, 1.0));
+    progState.setUniformValue("TranslationTexCoord", Vector2D(0.0, 0.0));
   }
-  
-  return progState;
-}
-
-void SGGeometryNode::rawRender(const G3MRenderContext* rc,
-                               const GLState& parentState, const GPUProgramState* parentProgramState) {
-  GL* gl = rc->getGL();
-  gl->drawElements(_primitive, _indices, parentState, *rc->getGPUProgramManager(), parentProgramState);
 }

@@ -54,7 +54,7 @@ public:
     
 //    actualizeGLState(rc->getCurrentCamera());
     
-    _shape->render(rc, parentState, &_programState);
+    _shape->render(rc);
   }
   
 //  void notifyGLClientChildrenParentHasChanged(){
@@ -99,7 +99,7 @@ void ShapesRenderer::render(const G3MRenderContext* rc,
       rc->addOrderedRenderable(new TransparentShapeWrapper(shape, squaredDistanceFromEye));
     }
     else {
-      shape->render(rc, parentState, &_programState);
+      shape->render(rc);
     }
   }
 }

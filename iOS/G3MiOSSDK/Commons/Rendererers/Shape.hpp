@@ -163,8 +163,7 @@ public:
                    const Angle& fromAzimuth,  const Angle& toAzimuth,
                    const Angle& fromAltitude, const Angle& toAltitude);
   
-  void render(const G3MRenderContext* rc,
-              const GLState& parentState, const GPUProgramState* parentProgramState);
+  void render(const G3MRenderContext* rc);
 
   virtual void initialize(const G3MContext* context) {
     _planet = context->getPlanet();
@@ -172,8 +171,7 @@ public:
   
   virtual bool isReadyToRender(const G3MRenderContext* rc) = 0;
   
-  virtual void rawRender(const G3MRenderContext* rc,
-                         const GLState& parentState, const GPUProgramState* parentProgramState) = 0;
+  virtual void rawRender(const G3MRenderContext* rc) = 0;
 
   virtual bool isTransparent(const G3MRenderContext* rc) = 0;
   

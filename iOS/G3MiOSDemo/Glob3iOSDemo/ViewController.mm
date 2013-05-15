@@ -367,7 +367,7 @@ public:
   GEORenderer* geoRenderer = [self createGEORendererMeshRenderer: meshRenderer
                                                   shapesRenderer: shapesRenderer
                                                    marksRenderer: marksRenderer];
-  //builder.addRenderer(geoRenderer);
+  builder.addRenderer(geoRenderer);
 
 
   //  [self createInterpolationTest: meshRenderer];

@@ -33,9 +33,9 @@ void GPUProgramState::clear(){
 
 void GPUProgramState::setValuesOntoGPUProgram(GPUProgram& prog) const
 {
-  if (_parentState != NULL){
-    _parentState->setValuesOntoGPUProgram(prog);
-  }
+//  if (_parentState != NULL){
+//    _parentState->setValuesOntoGPUProgram(prog);
+//  }
   
   for(std::map<std::string, GPUUniformValue*> ::const_iterator it = _uniformValues.begin();
       it != _uniformValues.end();
@@ -219,9 +219,9 @@ void GPUProgramState::setUniformValue(const std::string& name, double x, double 
   setUniformValue(name, new GPUUniformValueVec4Float(x,y,z,w));
 }
 
-void GPUProgramState::setUniformValue(const std::string& name, const MutableMatrix44D& m){
-  setUniformValue(name, new GPUUniformValueMatrix4Float(m));
-}
+//void GPUProgramState::setUniformValue(const std::string& name, const MutableMatrix44D& m){
+//  setUniformValue(name, new GPUUniformValueMatrix4Float(m));
+//}
 
 void GPUProgramState::setUniformValue(const std::string& name, const MutableMatrix44D* m){
   
@@ -259,32 +259,32 @@ void GPUProgramState::multiplyUniformValue(const std::string& name, const Mutabl
 }
 
 
-void GPUProgramState::multiplyUniformValue(const std::string& name, const MutableMatrix44D& m){
-  
-  
-  MutableMatrix44D previousM;
-  MutableMatrix44D* thisM = getMatrixValue(name);
-  if (thisM != NULL){
-    previousM = *thisM;
-    delete thisM;
-  } else{
-    MutableMatrix44D* parentM = NULL;
-    const GPUProgramState* parent = _parentState;
-    while (parent != NULL && parentM == NULL) {
-      parentM = parent->getMatrixValue(name);
-      parent = parent->_parentState;
-    }
-    
-    if (parentM != NULL){
-      previousM = *parentM;
-      delete parentM;
-    } else{
-      ILogger::instance()->logError("Multiplying matrix uniform without a previous value.");
-    }
-  }
-  
-  setUniformValue(name, new GPUUniformValueMatrix4Float(previousM.multiply(m) ));
-}
+//void GPUProgramState::multiplyUniformValue(const std::string& name, const MutableMatrix44D& m){
+//  
+//  
+//  MutableMatrix44D previousM;
+//  MutableMatrix44D* thisM = getMatrixValue(name);
+//  if (thisM != NULL){
+//    previousM = *thisM;
+//    delete thisM;
+//  } else{
+//    MutableMatrix44D* parentM = NULL;
+//    const GPUProgramState* parent = _parentState;
+//    while (parent != NULL && parentM == NULL) {
+//      parentM = parent->getMatrixValue(name);
+//      parent = parent->_parentState;
+//    }
+//    
+//    if (parentM != NULL){
+//      previousM = *parentM;
+//      delete parentM;
+//    } else{
+//      ILogger::instance()->logError("Multiplying matrix uniform without a previous value.");
+//    }
+//  }
+//  
+//  setUniformValue(name, new GPUUniformValueMatrix4Float(previousM.multiply(m) ));
+//}
 
 void GPUProgramState::setAttributeEnabled(const std::string& name, bool enabled){
   _attributesEnabled[name] = enabled;
@@ -324,9 +324,9 @@ std::string GPUProgramState::description() const{
     desc += v->description() + "\n";
   }
   
-  if (_parentState != NULL){
-    desc = "PARENT " + _parentState->description() + desc;
-  }
+//  if (_parentState != NULL){
+//    desc = "PARENT " + _parentState->description() + desc;
+//  }
   
   return desc;
 }
@@ -334,18 +334,18 @@ std::string GPUProgramState::description() const{
 std::vector<std::string> GPUProgramState::getUniformsNames() const{
   std::vector<std::string> us;
   
-  const GPUProgramState* state = this;
-  while (state != NULL) {
-    
-    for(std::map<std::string, GPUUniformValue*> ::const_iterator it = state->_uniformValues.begin();
-        it != state->_uniformValues.end();
+//  const GPUProgramState* state = this;
+//  while (state != NULL) {
+//    
+    for(std::map<std::string, GPUUniformValue*> ::const_iterator it = /*state->*/_uniformValues.begin();
+        it != /*state->*/_uniformValues.end();
         it++){
       us.push_back(it->first);
     }
     
-    state = state->_parentState;
+//    state = state->_parentState;
     
-  }
+//  }
   
   return us;
 }
