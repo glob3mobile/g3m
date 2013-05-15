@@ -30,9 +30,14 @@ MeshRenderer::~MeshRenderer() {
 
 void MeshRenderer::render(const G3MRenderContext* rc,
                           const GLState& parentState) {
-  rc->getCurrentCamera()->applyOnGPUProgramState(_programState);
+//  rc->getCurrentCamera()->applyOnGPUProgramState(_programState);
   
   const Frustum* frustum = rc->getCurrentCamera()->getFrustumInModelCoordinates();
+  
+  if (_dirtyGLStates){
+    actualizeGLState(rc->getCurrentCamera());
+    _dirtyGLStates = true;
+  }
 
   const int meshesCount = _meshes.size();
   for (int i = 0; i < meshesCount; i++) {
@@ -43,4 +48,23 @@ void MeshRenderer::render(const G3MRenderContext* rc,
       mesh->render(rc, parentState, &_programState);
     }
   }
+}
+
+void MeshRenderer::notifyGLClientChildrenParentHasChanged(){
+  const int meshesCount = _meshes.size();
+  for (int i = 0; i < meshesCount; i++) {
+    Mesh* mesh = _meshes[i];
+    mesh->actualizeGLState(this);
+  }
+}
+
+void MeshRenderer::modifyGLState(GLState& glState) const{
+  glState.enableDepthTest();
+}
+
+void MeshRenderer::modifyGPUProgramState(GPUProgramState& progState) const{
+  progState.setUniformValue("EnableTexture", false);
+  progState.setUniformValue("PointSize", (float)1.0);
+  progState.setUniformValue("ScaleTexCoord", Vector2D(1.0,1.0));
+  progState.setUniformValue("TranslationTexCoord", Vector2D(0.0,0.0));
 }

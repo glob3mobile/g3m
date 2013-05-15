@@ -359,7 +359,7 @@ public:
   builder.addRenderer(shapesRenderer);
 
   MeshRenderer* meshRenderer = new MeshRenderer();
-  //builder.addRenderer( meshRenderer );
+  builder.addRenderer( meshRenderer );
 
   MarksRenderer* marksRenderer = [self createMarksRenderer];
   builder.addRenderer(marksRenderer);

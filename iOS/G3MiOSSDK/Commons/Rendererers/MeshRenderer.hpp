@@ -14,23 +14,28 @@
 
 #include "GPUProgramState.hpp"
 
+#include "GLClient.hpp"
+
 class Mesh;
 
 
-class MeshRenderer : public LeafRenderer {
+class MeshRenderer : public LeafRenderer, public GLClient {
 private:
   std::vector<Mesh*> _meshes;
   
   GPUProgramState _programState;
+  
+  bool _dirtyGLStates;
 
 public:
   
-  MeshRenderer():_programState(NULL){}
+  MeshRenderer():_programState(NULL), _dirtyGLStates(false){}
   
   ~MeshRenderer();
 
   void addMesh(Mesh* mesh) {
     _meshes.push_back(mesh);
+    _dirtyGLStates = true;
   }
 
   void clearMeshes();
@@ -81,6 +86,10 @@ public:
   void stop(const G3MRenderContext* rc) {
     
   }
+  
+  void notifyGLClientChildrenParentHasChanged();
+  void modifyGLState(GLState& glState) const;
+  void modifyGPUProgramState(GPUProgramState& progState) const;
   
 };
 
