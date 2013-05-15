@@ -181,15 +181,14 @@ bool MarksRenderer::isReadyToRender(const G3MRenderContext* rc) {
   return true;
 }
 
-void MarksRenderer::render(const G3MRenderContext* rc,
-                           const GLState& parentState) {
+void MarksRenderer::render(const G3MRenderContext* rc) {
   // Saving camera for use in onTouchEvent
   _lastCamera = rc->getCurrentCamera();
   
-  GLState state(parentState);
-  state.disableDepthTest();
-  state.enableBlend();
-  state.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
+//  GLState state(parentState);
+//  state.disableDepthTest();
+//  state.enableBlend();
+//  state.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
   
   const Camera* camera = rc->getCurrentCamera();
   const Vector3D cameraPosition = camera->getCartesianPosition();

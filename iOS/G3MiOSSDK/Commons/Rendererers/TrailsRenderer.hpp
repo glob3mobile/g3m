@@ -50,8 +50,7 @@ public:
 
   ~Trail();
 
-  void render(const G3MRenderContext* rc,
-              const GLState& parentState, const GPUProgramState* parentProgramState);
+  void render(const G3MRenderContext* rc);
 
   void setVisible(bool visible) {
     _visible = visible;
@@ -91,12 +90,9 @@ public:
 class TrailsRenderer : public LeafRenderer {
 private:
   std::vector<Trail*> _trails;
-  
-  GPUProgramState _programState;
 
 public:
-  TrailsRenderer():
-  _programState(NULL)
+  TrailsRenderer()
   {
   }
 
@@ -140,8 +136,7 @@ public:
 
   }
 
-  void render(const G3MRenderContext* rc,
-              const GLState& parentState);
+  void render(const G3MRenderContext* rc);
   
 };
 

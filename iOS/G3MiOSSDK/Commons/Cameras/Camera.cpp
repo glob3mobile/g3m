@@ -331,12 +331,6 @@ void Camera::setPointOfView(const Geodetic3D& center,
 //  _dirtyFlags.setAll(true);
 }
 
-
-//void Camera::applyOnGPUProgramState(GPUProgramState& state) const{
-//  state.setUniformValue("Projection", getProjectionMatrix());
-//  state.setUniformValue("Modelview", getModelMatrix());
-//}
-
 FrustumData Camera::calculateFrustumData() const {
   //    // compute znear value
   //    const double maxRadius = _planet->getRadii().maxAxis();

@@ -94,7 +94,6 @@ void DummyRenderer::render(const G3MRenderContext* rc,
                            const GLState& parentState) {
   
   GPUProgramState progState(NULL);
-//  rc->getCurrentCamera()->applyOnGPUProgramState(progState);
   
   progState.setAttributeEnabled("Position", true);
   progState.setAttributeValue("Position",

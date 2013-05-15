@@ -28,10 +28,7 @@ MeshRenderer::~MeshRenderer() {
   }
 }
 
-void MeshRenderer::render(const G3MRenderContext* rc,
-                          const GLState& parentState) {
-//  rc->getCurrentCamera()->applyOnGPUProgramState(_programState);
-  
+void MeshRenderer::render(const G3MRenderContext* rc) {
   const Frustum* frustum = rc->getCurrentCamera()->getFrustumInModelCoordinates();
   
   if (_dirtyGLStates){

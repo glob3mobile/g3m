@@ -26,13 +26,10 @@ private:
   private G3MContext _context;
 #endif
   
-  GPUProgramState _programState;
-
 public:
 
   ShapesRenderer() :
-  _context(NULL),
-  _programState(NULL)
+  _context(NULL)
   {
 
   }
@@ -72,17 +69,6 @@ public:
       Shape* shape = _shapes[i];
       shape->initialize(context);
     }
-    
-//    _programState.setUniformValue("BillBoard", false);
-    _programState.setUniformValue("EnableTexture", false);
-    _programState.setUniformValue("PointSize", (float)1.0);
-    _programState.setUniformValue("ScaleTexCoord", Vector2D(1.0,1.0));
-//    _programState.setUniformValue("TextureExtent", Vector2D(0.0,0.0));
-    _programState.setUniformValue("TranslationTexCoord", Vector2D(0.0,0.0));
-//    _programState.setUniformValue("ViewPortExtent", Vector2D(0.0,0.0));
-    
-    _programState.setAttributeEnabled("TextureCoord", false);
-    _programState.setAttributeEnabled("Color", false);
   }
   
   bool isReadyToRender(const G3MRenderContext* rc) {
@@ -104,8 +90,7 @@ public:
   void stop(const G3MRenderContext* rc) {
   }
 
-  void render(const G3MRenderContext* rc,
-              const GLState& parentState);
+  void render(const G3MRenderContext* rc);
   
   //Idle if this is not a drawable client
   virtual void getGLStateAndGPUProgramState(GLState** glState, GPUProgramState** progState){

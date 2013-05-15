@@ -73,23 +73,6 @@ void BusyMeshRenderer::initialize(const G3MContext* context)
                           colors.create());
   
   notifyGLClientChildrenParentHasChanged();
-  
-//  //  _programState.setUniformValue("BillBoard", false);
-//  _programState.setUniformValue("EnableTexture", false);
-//  _programState.setUniformValue("PointSize", (float)1.0);
-//  _programState.setUniformValue("ScaleTexCoord", Vector2D(1.0,1.0));
-//  //  _programState.setUniformValue("TextureExtent", Vector2D(0.0,0.0));
-//  _programState.setUniformValue("TranslationTexCoord", Vector2D(0.0,0.0));
-//  //  _programState.setUniformValue("ViewPortExtent", Vector2D(0.0,0.0));
-//  
-//  _programState.setUniformValue("ColorPerVertexIntensity", (float)0.0);
-//  _programState.setUniformValue("EnableFlatColor", false);
-//  _programState.setUniformValue("FlatColor", (float)0.0, (float)0.0, (float)0.0, (float)0.0);
-//  _programState.setUniformValue("FlatColorIntensity", (float)0.0);
-//  
-//  _programState.setAttributeEnabled("TextureCoord", false);
-//  _programState.setAttributeEnabled("Color", false);
-  
 }
 
 void BusyMeshRenderer::start(const G3MRenderContext* rc) {
@@ -101,13 +84,12 @@ void BusyMeshRenderer::stop(const G3MRenderContext* rc) {
   rc->getEffectsScheduler()->cancelAllEffectsFor(this);
 }
 
-void BusyMeshRenderer::render(const G3MRenderContext* rc,
-                              const GLState& parentState)
+void BusyMeshRenderer::render(const G3MRenderContext* rc)
 {
   GL* gl = rc->getGL();
   
   // set mesh glstate
-  GLState state(parentState);
+  GLState state;
   state.enableBlend();
   
   state.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
@@ -122,27 +104,11 @@ void BusyMeshRenderer::render(const G3MRenderContext* rc,
                                                                              -halfHeight, halfHeight,
                                                                              -halfWidth, halfWidth);
   }
-//  
-//  // init modelview matrix
-//  int currentViewport[4];
-//  gl->getViewport(currentViewport);
-//  const int halfWidth = currentViewport[2] / 2;
-//  const int halfHeight = currentViewport[3] / 2;
-//  MutableMatrix44D M = MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth, halfWidth,
-//                                                                            -halfHeight, halfHeight,
-//                                                                            -halfWidth, halfWidth);
-//  _programState.setUniformValue("Projection", _projectionMatrix);
-  // clear screen
+
   state.setClearColor(*_backgroundColor);
   gl->clearScreen(state);
   
-//  MutableMatrix44D R1 = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, -1));
-//  _programState.setUniformValue("Modelview", _modelviewMatrix);
-  
   notifyGLClientChildrenParentHasChanged();
-  
-  // draw mesh
-//  _mesh->render(rc, state, &_programState);
   _mesh->render(rc);
 }
 

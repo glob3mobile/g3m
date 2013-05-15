@@ -71,12 +71,10 @@ private:
                                   const TileRenderContext* trc);
 
   inline void rawRender(const G3MRenderContext* rc,
-                        const TileRenderContext* trc,
-                        const GLState& parentState, const GPUProgramState* parentProgramState);
+                        const TileRenderContext* trc);
 
   void debugRender(const G3MRenderContext* rc,
-                   const TileRenderContext* trc,
-                   const GLState& parentState, const GPUProgramState* parentProgramState);
+                   const TileRenderContext* trc);
 
   inline Tile* createSubTile(const Angle& lowerLat, const Angle& lowerLon,
                              const Angle& upperLat, const Angle& upperLon,
@@ -146,7 +144,6 @@ public:
 
   void render(const G3MRenderContext* rc,
               const TileRenderContext* trc,
-              const GLState& parentState, const GPUProgramState* parentProgramState,
               std::list<Tile*>* toVisitInNextIteration);
 
   const TileKey getKey() const;

@@ -56,11 +56,7 @@ void GEORenderer::addGEOObject(GEOObject* geoObject,
   }
 }
 
-void GEORenderer::render(const G3MRenderContext* rc,
-                         const GLState& parentState) {
-  
-//  rc->getCurrentCamera()->applyOnGPUProgramState(_programState);
-  
+void GEORenderer::render(const G3MRenderContext* rc) {
   const int childrenCount = _children.size();
   if (childrenCount > 0) {
 

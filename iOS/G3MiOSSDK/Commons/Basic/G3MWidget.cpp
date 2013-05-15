@@ -433,12 +433,12 @@ void G3MWidget::render(int width, int height) {
   _gl->clearScreen(*_rootState);
 
   if (_mainRendererReady) {
-    _cameraRenderer->render(&rc, *_rootState);
+    _cameraRenderer->render(&rc);
     ((GLState*)_rootState)->enableDepthTest(); //Enabling depth test
   }
 
   if (_selectedRenderer->isEnable()) {
-    _selectedRenderer->render(&rc, *_rootState);
+    _selectedRenderer->render(&rc);
   }
 
   std::vector<OrderedRenderable*>* orderedRenderables = rc.getSortedOrderedRenderables();

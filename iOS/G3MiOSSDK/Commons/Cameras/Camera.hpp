@@ -279,11 +279,6 @@ public:
                       double distance,
                       const Angle& azimuth,
                       const Angle& altitude);
-  
-  /**
-   Setting projection and modelview matrix
-   */
-//  void applyOnGPUProgramState(GPUProgramState& state) const;
 
   void forceMatrixCreation(){
     //MutableMatrix44D projectionMatrix = MutableMatrix44D::createProjectionMatrix(_frustumData);

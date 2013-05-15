@@ -439,12 +439,9 @@ bool TileRenderer::isReadyToRender(const G3MRenderContext *rc) {
   return true;
 }
 
-void TileRenderer::render(const G3MRenderContext* rc,
-                          const GLState& parentState) {
+void TileRenderer::render(const G3MRenderContext* rc) {
   // Saving camera for use in onTouchEvent
   _lastCamera = rc->getCurrentCamera();
-  
-  //_lastCamera->applyOnGPUProgramState(_programState); //Projection and Modelview
   
   TilesStatistics statistics;
 
@@ -470,7 +467,6 @@ void TileRenderer::render(const G3MRenderContext* rc,
       Tile* tile = _firstLevelTiles[i];
       tile->render(rc,
                    &trc,
-                   parentState, &_programState,
                    NULL);
     }
   }
@@ -490,7 +486,6 @@ void TileRenderer::render(const G3MRenderContext* rc,
 
         tile->render(rc,
                      &trc,
-                     parentState, &_programState,
                      &toVisitInNextIteration);
       }
 
