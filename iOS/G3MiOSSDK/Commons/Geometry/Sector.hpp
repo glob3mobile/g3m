@@ -77,15 +77,21 @@ public:
   _deltaLatitude(sector._deltaLatitude),
   _deltaLongitude(sector._deltaLongitude),
   _center(sector._center),
-  _deltaRadius(sector._deltaRadius),
+  _deltaRadius(sector._deltaRadius)
   /*
    _nwData(NULL),
   _neData(NULL),
   _swData(NULL),
   _seData(NULL),
    */
-  _cartesianCenter((sector._cartesianCenter==NULL)? NULL : new Vector3D(*(sector._cartesianCenter)))
   {
+    if (sector._cartesianCenter==NULL)
+      _cartesianCenter = NULL;
+    else {
+      const Vector3D* cartesianCenter = sector._cartesianCenter;
+      _cartesianCenter = new Vector3D(*cartesianCenter);
+    }
+      
   }
 
   static Sector fromDegrees(double minLat, double minLon, double maxLat, double maxLon){
