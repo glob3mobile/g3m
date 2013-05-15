@@ -10,11 +10,12 @@
 #define G3MiOSSDK_Planet_hpp
 
 #include "PureEllipsoid.hpp"
+#include "Sphere.hpp"
 
 #include <string>
 
 
-class Planet : public PureEllipsoid {
+class Planet : public Sphere {
 private:
   const std::string _name;
 
@@ -22,7 +23,7 @@ public:
 
   Planet(const std::string& name,
          const Vector3D& radii) :
-  PureEllipsoid(radii),
+  Sphere(radii),
   _name(name)
   {
   }
