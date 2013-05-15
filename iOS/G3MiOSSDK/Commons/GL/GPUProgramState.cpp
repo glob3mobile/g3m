@@ -13,7 +13,7 @@ GPUProgramState::~GPUProgramState(){
 }
 
 void GPUProgramState::clear(){
-  delete _application;
+//  delete _application;
   
   for(std::map<std::string, GPUUniformValue*> ::const_iterator it = _uniformValues.begin();
       it != _uniformValues.end();
@@ -31,6 +31,140 @@ void GPUProgramState::clear(){
   _attributesValues.clear();
 }
 
+void GPUProgramState::applyValuesToLinkedProgram(GL* gl) const{
+  for(std::map<std::string, GPUUniformValue*> ::const_iterator it = _uniformValues.begin();
+      it != _uniformValues.end();
+      it++){
+    std::string name = it->first;
+    GPUUniformValue* v = it->second;
+    v->setValueToLinkedUniform(gl);
+  }
+  
+  for(std::map<std::string, attributeEnabledStruct> ::const_iterator it = _attributesEnabled.begin();
+      it != _attributesEnabled.end();
+      it++){
+    GPUAttribute* a = it->second.attribute;
+    if (a == NULL){
+      ILogger::instance()->logError("NO ATTRIBUTE LINKED");
+    } else{
+      a->setEnable(it->second.value);
+    }
+  }
+  
+  for(std::map<std::string, GPUAttributeValue*> ::const_iterator it = _attributesValues.begin();
+      it != _attributesValues.end();
+      it++){
+    GPUAttributeValue* v = it->second;
+    v->setValueToLinkedAttribute(gl);
+  }
+}
+
+void GPUProgramState::linkToProgram(GPUProgram& prog) const{
+  for(std::map<std::string, GPUUniformValue*> ::const_iterator it = _uniformValues.begin();
+      it != _uniformValues.end();
+      it++){
+    
+    std::string name = it->first;
+    GPUUniformValue* v = it->second;
+    
+    GPUUniform* u = NULL;
+    const int type = v->getType();
+    if (type == GLType::glBool()){
+      u = prog.getGPUUniformBool(name);
+    } else {
+      if (type == GLType::glVec2Float()){
+        u = prog.getGPUUniformVec2Float(name);
+      } else{
+        if (type == GLType::glVec4Float()){
+          u = prog.getGPUUniformVec4Float(name);
+        } else{
+          if (type == GLType::glFloat()){
+            u = prog.getGPUUniformFloat(name);
+          } else
+            if (type == GLType::glMatrix4Float()){
+              u = prog.getGPUUniformMatrix4Float(name);
+            }
+        }
+      }
+    }
+    
+    
+    if (u == NULL){
+      ILogger::instance()->logError("UNIFORM " + name + " NOT FOUND");
+    } else{
+      v->linkToGPUUniform(u);
+    }
+  }
+  
+  for(std::map<std::string, attributeEnabledStruct> ::const_iterator it = _attributesEnabled.begin();
+      it != _attributesEnabled.end();
+      it++){
+    std::string name = it->first;
+    GPUAttribute* a = prog.getGPUAttribute(name);
+    if (a == NULL){
+      ILogger::instance()->logError("ATTRIBUTE NOT FOUND " + name + ". COULDN'T CHANGE ENABLED STATE.");
+    } else{
+      it->second.attribute = a;
+    }
+  }
+  
+  for(std::map<std::string, GPUAttributeValue*> ::const_iterator it = _attributesValues.begin();
+      it != _attributesValues.end();
+      it++){
+    
+    std::string name = it->first;
+    GPUAttributeValue* v = it->second;
+    
+    const int type = v->getType();
+    const int size = v->getAttributeSize();
+    if (type == GLType::glFloat() && size == 1){
+      GPUAttributeVec1Float* a = prog.getGPUAttributeVec1Float(name);
+      if (a == NULL){
+        ILogger::instance()->logError("ATTRIBUTE NOT FOUND " + name);
+      } else{
+        v->linkToGPUAttribute(a);
+      }
+      continue;
+    }
+    
+    if (type == GLType::glFloat() && size == 2){
+      GPUAttributeVec2Float* a = prog.getGPUAttributeVec2Float(name);
+      if (a == NULL){
+        ILogger::instance()->logError("ATTRIBUTE NOT FOUND " + name);
+      } else{
+        v->linkToGPUAttribute(a);
+      }
+      continue;
+    }
+    
+    if (type == GLType::glFloat() && size == 3){
+      GPUAttribute* a = prog.getGPUAttributeVec3Float(name);
+      if (a == NULL){
+        a = prog.getGPUAttributeVec4Float(name); //A VEC3 COLUD BE STORED IN A VEC4 ATTRIBUTE
+      }
+      
+      if (a == NULL){
+        ILogger::instance()->logError("ATTRIBUTE NOT FOUND " + name);
+      } else{
+        v->linkToGPUAttribute(a);
+      }
+      continue;
+    }
+    
+    if (type == GLType::glFloat() && size == 4){
+      GPUAttributeVec4Float* a = prog.getGPUAttributeVec4Float(name);
+      if (a == NULL){
+        ILogger::instance()->logError("ATTRIBUTE NOT FOUND " + name);
+      } else{
+        v->linkToGPUAttribute(a);
+      }
+      continue;
+    }
+    
+  }
+}
+
+/*
 void GPUProgramState::setValuesOntoGPUProgram(GPUProgram& prog) const
 {
 //  if (_parentState != NULL){
@@ -73,7 +207,7 @@ void GPUProgramState::setValuesOntoGPUProgram(GPUProgram& prog) const
     }
   }
   
-  for(std::map<std::string, bool> ::const_iterator it = _attributesEnabled.begin();
+  for(std::map<std::string, attributeEnabledStruct> ::const_iterator it = _attributesEnabled.begin();
       it != _attributesEnabled.end();
       it++){
     std::string name = it->first;
@@ -81,7 +215,7 @@ void GPUProgramState::setValuesOntoGPUProgram(GPUProgram& prog) const
     if (a == NULL){
       ILogger::instance()->logError("ATTRIBUTE NOT FOUND " + name + ". COULDN'T CHANGE ENABLED STATE.");
     } else{
-      a->setEnable(it->second);
+      a->setEnable(it->second.value);
     }
   }
   
@@ -140,11 +274,19 @@ void GPUProgramState::setValuesOntoGPUProgram(GPUProgram& prog) const
     
   }
 }
-
+*/
 void GPUProgramState::applyChanges(GL* gl, GPUProgram& prog) const{
-  setValuesOntoGPUProgram(prog);
+//  setValuesOntoGPUProgram(prog);
+//  
+//  prog.applyChanges(gl); //Applying changes on GPU
   
-  prog.applyChanges(gl); //Applying changes on GPU
+  
+  if (_lastProgramUsed != NULL || _lastProgramUsed != &prog){
+    linkToProgram(prog);
+    _lastProgramUsed = &prog;
+  }
+  applyValuesToLinkedProgram(gl);
+  
 }
 
 void GPUProgramState::setUniformValue(const std::string& name, GPUUniformValue* v){
@@ -287,7 +429,11 @@ void GPUProgramState::multiplyUniformValue(const std::string& name, const Mutabl
 //}
 
 void GPUProgramState::setAttributeEnabled(const std::string& name, bool enabled){
-  _attributesEnabled[name] = enabled;
+  attributeEnabledStruct ae;
+  ae.value = enabled;
+  ae.attribute = NULL;
+  
+  _attributesEnabled[name] = ae;
 }
 
 std::string GPUProgramState::description() const{
@@ -304,12 +450,12 @@ std::string GPUProgramState::description() const{
     desc += v->description() + "\n";
   }
   
-  for(std::map<std::string, bool> ::const_iterator it = _attributesEnabled.begin();
+  for(std::map<std::string, attributeEnabledStruct> ::const_iterator it = _attributesEnabled.begin();
       it != _attributesEnabled.end();
       it++){
     std::string name = it->first;
     desc += "Attribute " + name;
-    if (it->second) desc += " ENABLED\n";
+    if (it->second.value) desc += " ENABLED\n";
     else desc += " ENABLED\n";
   }
   
@@ -350,13 +496,13 @@ std::vector<std::string> GPUProgramState::getUniformsNames() const{
   return us;
 }
 
-#pragma mark GPUProgramApplication
-
-GPUProgramState::GPUProgramApplication::GPUProgramApplication(const GPUProgram& prog,
-                                                              const GPUProgramState& state){
-  
-}
-
-void GPUProgramState::GPUProgramApplication::apply(){
-  
-}
+//#pragma mark GPUProgramApplication
+//
+//GPUProgramState::GPUProgramApplication::GPUProgramApplication(const GPUProgram& prog,
+//                                                              const GPUProgramState& state){
+//  
+//}
+//
+//void GPUProgramState::GPUProgramApplication::apply(){
+//  
+//}

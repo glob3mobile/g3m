@@ -323,8 +323,6 @@ private:
   long long _texturePriority;
 
   float _verticalExaggeration;
-  
-  GPUProgramState _programState;
 
 public:
   TileRenderer(const TileTessellator* tessellator,

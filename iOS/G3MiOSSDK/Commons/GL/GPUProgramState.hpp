@@ -21,9 +21,13 @@
 
 class GPUProgramState{
   
+  struct attributeEnabledStruct{
+    bool value;
+    mutable GPUAttribute* attribute;
+  };
   std::map<std::string, GPUUniformValue*> _uniformValues;
   std::map<std::string, GPUAttributeValue*> _attributesValues;
-  std::map<std::string, bool> _attributesEnabled;
+  std::map<std::string, attributeEnabledStruct> _attributesEnabled;
   
 //  const GPUProgramState* _parentState;
   
@@ -33,40 +37,45 @@ class GPUProgramState{
   
   MutableMatrix44D* getMatrixValue(const std::string name) const;
   
-  void setValuesOntoGPUProgram(GPUProgram& prog) const;
+//  void setValuesOntoGPUProgram(GPUProgram& prog) const;
   
-  class GPUProgramApplication{
-  public:
-    struct UniformStruct{
-      std::string name;
-      GPUUniform* uniform;
-      GPUUniformValue* value;
-    };
-    
-    struct AttributeStruct{
-      std::string name;
-      GPUAttribute* uniform;
-      GPUAttributeValue* value;
-      bool enabled;
-    };
-
-    std::vector<UniformStruct> _uniforms;
-    std::vector<AttributeStruct> _attributes;
-    
-    GPUProgramApplication(const GPUProgram& program,
-                          const GPUProgramState& state);
-    
-    void apply();
-  };
+  void linkToProgram(GPUProgram& prog) const;
+  void applyValuesToLinkedProgram(GL* gl) const;
   
-  GPUProgramApplication* _application;
+//  class GPUProgramApplication{
+//  public:
+//    struct UniformStruct{
+//      std::string name;
+//      GPUUniform* uniform;
+//      GPUUniformValue* value;
+//    };
+//    
+//    struct AttributeStruct{
+//      std::string name;
+//      GPUAttribute* uniform;
+//      GPUAttributeValue* value;
+//      bool enabled;
+//    };
+//
+//    std::vector<UniformStruct> _uniforms;
+//    std::vector<AttributeStruct> _attributes;
+//    
+//    GPUProgramApplication(const GPUProgram& program,
+//                          const GPUProgramState& state);
+//    
+//    void apply();
+//  };
+//  
+//  GPUProgramApplication* _application;
+  
+  mutable GPUProgram* _lastProgramUsed;
   
   
 public:
   
-  GPUProgramState():/*_parentState(NULL)*/ _application(NULL){}
+  GPUProgramState(): _lastProgramUsed(NULL){}
   
-  GPUProgramState(const GPUProgramState* parentState):/*_parentState(parentState), */_application(NULL){}
+//  GPUProgramState(const GPUProgramState* parentState):/*_parentState(parentState), */_application(NULL){}
   
   
   ~GPUProgramState();

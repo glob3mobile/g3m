@@ -16,8 +16,11 @@
 
 class GPUUniformValue{
   const int _type;
+  
+  const IGLUniformID* _id;
+  
 public:
-  GPUUniformValue(int type):_type(type){}
+  GPUUniformValue(int type):_type(type), _id(NULL){}
   int getType() const { return _type;}
   virtual ~GPUUniformValue(){}
   virtual void setUniform(GL* gl, const IGLUniformID* id) const = 0;
@@ -25,6 +28,20 @@ public:
   virtual GPUUniformValue* deepCopy() const = 0;
   
   virtual std::string description() const = 0;
+
+  void linkToGPUUniform(GPUUniform* u);
+  
+  void unLinkToGPUUniform(){
+    _id = NULL;
+  }
+  
+  void setValueToLinkedUniform(GL* gl) const{
+    if (_id == NULL){
+      ILogger::instance()->logError("Uniform unlinked");
+    } else{
+      setUniform(gl, _id);
+    }
+  }
 };
 
 
@@ -86,6 +103,14 @@ public:
     }
   }
 };
+
+void GPUUniformValue::linkToGPUUniform(GPUUniform* u) {
+  if (u == NULL || u->getID() == NULL){
+    ILogger::instance()->logError("Attempting to link unvalid uniform.");
+  }
+  _id = u->getID();
+}
+
 ////////////////////////////////////////////////////////////////////////
 class GPUUniformValueBool:public GPUUniformValue{
 public:

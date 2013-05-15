@@ -76,64 +76,66 @@ void DummyRenderer::drawFace(GL* gl, const GLState& parentState,
                              const GPUProgramState* parentProgramState) const
 {
   
-  GPUProgramState progState(parentProgramState);
-  progState.setUniformValue("FlatColor", color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
-  progState.setUniformValue("FlatColorIntensity", (float)1.0);
-
-  MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(translation);
-  MutableMatrix44D R = MutableMatrix44D::createRotationMatrix(a, rotationAxis);
-  
-  MutableMatrix44D TR = T.multiply(R);
-  
-  progState.multiplyUniformValue("Modelview", &TR);
-  
-  gl->drawElements(GLPrimitive::triangleStrip(), _indices, parentState, manager, &progState);
+//  GPUProgramState progState(parentProgramState);
+//  progState.setUniformValue("FlatColor", color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+//  progState.setUniformValue("FlatColorIntensity", (float)1.0);
+//
+//  MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(translation);
+//  MutableMatrix44D R = MutableMatrix44D::createRotationMatrix(a, rotationAxis);
+//  
+//  MutableMatrix44D TR = T.multiply(R);
+//  
+//  progState.multiplyUniformValue("Modelview", &TR);
+//  
+//  gl->drawElements(GLPrimitive::triangleStrip(), _indices, parentState, manager, &progState);
 }
 
 void DummyRenderer::render(const G3MRenderContext* rc,
                            const GLState& parentState) {
   
-  GPUProgramState progState(NULL);
+  //TODO: IMPLEMENT
   
-  progState.setAttributeEnabled("Position", true);
-  progState.setAttributeValue("Position",
-                              _vertices, 4, //The attribute is a float vector of 4 elements
-                              3,            //Our buffer contains elements of 3
-                              0,            //Index 0
-                              false,        //Not normalized
-                              0);           //Stride 0
+//  GPUProgramState progState(NULL);
   
-  GLState state(parentState);
-
-  GL* gl = rc->getGL();
-  GPUProgramManager* manager = rc->getGPUProgramManager();
-  drawFace(gl, state,
-           Color::fromRGBA((float) 1,(float)  0, (float) 0, (float) 1),
-           Vector3D(_halfSize,0,0),
-           Angle::fromDegrees(0), Vector3D(0,0,1), *manager, &progState);
-  
-  drawFace(gl, state,
-           Color::fromRGBA((float) 0,(float)  1, (float) 0, (float) 1),
-           Vector3D(0,_halfSize,0),
-           Angle::fromDegrees(90), Vector3D(0,0,1), *manager, &progState);
-  
-  drawFace(gl, state,
-           Color::fromRGBA((float) 0,(float)  0, (float) 1, (float) 1),
-           Vector3D(0,-_halfSize,0),
-           Angle::fromDegrees(-90), Vector3D(0,0,1), *manager, &progState);
-  
-  drawFace(gl, state,
-           Color::fromRGBA((float) 1,(float)  0, (float) 1, (float) 1),
-           Vector3D(0,0,-_halfSize),
-           Angle::fromDegrees(90), Vector3D(0,1,0), *manager, &progState);
-  
-  drawFace(gl, state,
-           Color::fromRGBA((float) 0,(float) 1, (float) 1, (float) 1),
-           Vector3D(0,0,_halfSize),
-           Angle::fromDegrees(-90), Vector3D(0,1,0), *manager, &progState);
-  
-  drawFace(gl, state,
-           Color::fromRGBA((float) 0.5,(float)  0.5, (float) 0.5, (float) 1),
-           Vector3D(-_halfSize,0,0),
-           Angle::fromDegrees(180), Vector3D(0,0,1), *manager, &progState);
+//  progState.setAttributeEnabled("Position", true);
+//  progState.setAttributeValue("Position",
+//                              _vertices, 4, //The attribute is a float vector of 4 elements
+//                              3,            //Our buffer contains elements of 3
+//                              0,            //Index 0
+//                              false,        //Not normalized
+//                              0);           //Stride 0
+//  
+//  GLState state(parentState);
+//
+//  GL* gl = rc->getGL();
+//  GPUProgramManager* manager = rc->getGPUProgramManager();
+//  drawFace(gl, state,
+//           Color::fromRGBA((float) 1,(float)  0, (float) 0, (float) 1),
+//           Vector3D(_halfSize,0,0),
+//           Angle::fromDegrees(0), Vector3D(0,0,1), *manager, &progState);
+//  
+//  drawFace(gl, state,
+//           Color::fromRGBA((float) 0,(float)  1, (float) 0, (float) 1),
+//           Vector3D(0,_halfSize,0),
+//           Angle::fromDegrees(90), Vector3D(0,0,1), *manager, &progState);
+//  
+//  drawFace(gl, state,
+//           Color::fromRGBA((float) 0,(float)  0, (float) 1, (float) 1),
+//           Vector3D(0,-_halfSize,0),
+//           Angle::fromDegrees(-90), Vector3D(0,0,1), *manager, &progState);
+//  
+//  drawFace(gl, state,
+//           Color::fromRGBA((float) 1,(float)  0, (float) 1, (float) 1),
+//           Vector3D(0,0,-_halfSize),
+//           Angle::fromDegrees(90), Vector3D(0,1,0), *manager, &progState);
+//  
+//  drawFace(gl, state,
+//           Color::fromRGBA((float) 0,(float) 1, (float) 1, (float) 1),
+//           Vector3D(0,0,_halfSize),
+//           Angle::fromDegrees(-90), Vector3D(0,1,0), *manager, &progState);
+//  
+//  drawFace(gl, state,
+//           Color::fromRGBA((float) 0.5,(float)  0.5, (float) 0.5, (float) 1),
+//           Vector3D(-_halfSize,0,0),
+//           Angle::fromDegrees(180), Vector3D(0,0,1), *manager, &progState);
 }

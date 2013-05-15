@@ -26,6 +26,8 @@ protected:
   
   const int _arrayElementSize;
   
+  int _id;
+  
 public:
   GPUAttributeValue(int type, int attributeSize, int arrayElementSize, int index, int stride, bool normalized):
   _type(type),
@@ -33,7 +35,8 @@ public:
   _index(index),
   _stride(stride),
   _normalized(normalized),
-  _arrayElementSize(arrayElementSize){}
+  _arrayElementSize(arrayElementSize),
+  _id(-1){}
   
   int getType() const { return _type;}
   int getAttributeSize() const { return _attributeSize;}
@@ -46,6 +49,20 @@ public:
   virtual GPUAttributeValue* shallowCopy() const = 0;
   
   virtual std::string description() const = 0;
+  
+  void linkToGPUAttribute(GPUAttribute* a);
+  
+  void unLinkToGPUAttribute(){
+    _id = -1;
+  }
+  
+  void setValueToLinkedAttribute(GL* gl) const{
+    if (_id == -1){
+      ILogger::instance()->logError("Uniform unlinked");
+    } else{
+      setAttribute(gl, _id);
+    }
+  }
 };
 
 class GPUAttribute{
@@ -135,6 +152,10 @@ public:
     }
   }
 };
+
+void GPUAttributeValue::linkToGPUAttribute(GPUAttribute* a){
+  _id = a->getID();
+}
 
 ///////////
 
