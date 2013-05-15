@@ -297,7 +297,7 @@ Vector3D Camera::centerOfViewOnPlanet() const {
 Vector3D Camera::getHorizontalVector() {
   int todo_remove_get_in_matrix;
   const MutableMatrix44D M = getModelMatrix();
-  return Vector3D(M.get(0), M.get(4), M.get(8));
+  return Vector3D(M.get0(), M.get4(), M.get8());
 }
 
 Angle Camera::compute3DAngularDistance(const Vector2I& pixel0,
