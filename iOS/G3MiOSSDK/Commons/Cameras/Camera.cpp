@@ -61,6 +61,7 @@ void Camera::copyFrom(const Camera &that) {
   
   delete _geodeticPosition;
   _geodeticPosition = ((that._geodeticPosition == NULL) ? NULL : new Geodetic3D(*that._geodeticPosition));
+  _angle2Horizon = that._angle2Horizon;
 }
 
 Camera::Camera(int width, int height) :
@@ -82,7 +83,8 @@ _frustumInModelCoordinates(NULL),
 _halfFrustumInModelCoordinates(NULL),
 _halfFrustum(NULL),
 _camEffectTarget(new CameraEffectTarget()),
-_geodeticPosition(NULL)
+_geodeticPosition(NULL),
+_angle2Horizon(-99)
 {
   resizeViewport(width, height);
   _dirtyFlags.setAll(true);

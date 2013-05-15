@@ -53,7 +53,7 @@ const Angle Sector::getInnerPointLatitude(double v) const {
 }
 
 
-
+/*
 class Sector_Geodetic2DCachedData {
 private:
   const Vector3D _cartesian;
@@ -74,16 +74,35 @@ public:
   bool test(const Vector3D& eye) const {
     return _geodeticSurfaceNormal.dot( eye.sub(_cartesian) ) > 0;
   }
-};
+};*/
 
 Sector::~Sector() {
-  delete _nwData;
+  /*
+   delete _nwData;
   delete _neData;
   delete _swData;
   delete _seData;
+   */
+  if (_cartesianCenter) delete _cartesianCenter;
 }
 
+
 bool Sector::isBackOriented(const G3MRenderContext *rc,
+                            double minHeight) const {
+  const Camera* camera = rc->getCurrentCamera();
+  const Planet* planet = rc->getPlanet();
+      
+  // compute angle with camera position
+  const Vector3D centerCamera = camera->getCartesianPosition();
+  double angle = centerCamera.angleBetween(getCartesianCenter(planet)).radians();
+  if (angle-getDeltaRadius() > camera->getAngle2Horizon()) {
+    return true;
+  } else
+    return false;
+}
+
+/*
+bool Sector::isBackOriented_v4(const G3MRenderContext *rc,
                             double minHeight) const {
   const Camera* camera = rc->getCurrentCamera();
   const Planet* planet = rc->getPlanet();
@@ -103,19 +122,18 @@ bool Sector::isBackOriented(const G3MRenderContext *rc,
   if (_seData == NULL)    { _seData = new Sector_Geodetic2DCachedData(planet, getSE()); }
   if (_seData->test(eye)) { return false; }
 
-  /*
-  const Vector3D cartesianNW = planet->toCartesian(getNW());
-  if (planet->geodeticSurfaceNormal(cartesianNW).dot(eye.sub(cartesianNW)) > 0) { return false; }
+  
+  //const Vector3D cartesianNW = planet->toCartesian(getNW());
+  //if (planet->geodeticSurfaceNormal(cartesianNW).dot(eye.sub(cartesianNW)) > 0) { return false; }
 
-  const Vector3D cartesianNE = planet->toCartesian(getNE());
-  if (planet->geodeticSurfaceNormal(cartesianNE).dot(eye.sub(cartesianNE)) > 0) { return false; }
+  //const Vector3D cartesianNE = planet->toCartesian(getNE());
+  //if (planet->geodeticSurfaceNormal(cartesianNE).dot(eye.sub(cartesianNE)) > 0) { return false; }
 
-  const Vector3D cartesianSW = planet->toCartesian(getSW());
-  if (planet->geodeticSurfaceNormal(cartesianSW).dot(eye.sub(cartesianSW)) > 0) { return false; }
+  //const Vector3D cartesianSW = planet->toCartesian(getSW());
+  //if (planet->geodeticSurfaceNormal(cartesianSW).dot(eye.sub(cartesianSW)) > 0) { return false; }
 
-  const Vector3D cartesianSE = planet->toCartesian(getSE());
-  if (planet->geodeticSurfaceNormal(cartesianSE).dot(eye.sub(cartesianSE)) > 0) { return false; }
-  */
+  //const Vector3D cartesianSE = planet->toCartesian(getSE());
+  //if (planet->geodeticSurfaceNormal(cartesianSE).dot(eye.sub(cartesianSE)) > 0) { return false; }
 
   // compute angle with normal in the closest point to the camera
   const Geodetic2D center = camera->getGeodeticCenterOfView().asGeodetic2D();
@@ -124,7 +142,8 @@ bool Sector::isBackOriented(const G3MRenderContext *rc,
 
   // if all the angles are higher than 90, sector is back oriented
   return (planet->geodeticSurfaceNormal(cartesianCenter).dot(eye.sub(cartesianCenter)) <= 0);
-}
+}*/
+
 
 /*
 bool Sector::isBackOriented_v3(const G3MRenderContext *rc, double height) const {
@@ -282,6 +301,7 @@ const Geodetic2D Sector::clamp(const Geodetic2D& position) const {
   return Geodetic2D::fromDegrees(latitudeInDegrees, longitudeInDegrees);
 }
 
+/*
 const Geodetic2D Sector::getClosestPoint(const Geodetic2D& pos) const {
   // if pos is included, return pos
   if (contains(pos)) {
@@ -325,6 +345,7 @@ const Geodetic2D Sector::getClosestPoint(const Geodetic2D& pos) const {
   }
 
   return Geodetic2D(Angle::fromDegrees(lat), Angle::fromDegrees(lon));
+ */
   
   /*// here we have to handle the case where sector is close to the pole,
   // and the latitude of the other point must be seen from the other side
@@ -349,7 +370,7 @@ const Geodetic2D Sector::getClosestPoint(const Geodetic2D& pos) const {
    const Angle lat = pos.latitude().nearestAngleInInterval(_lower.latitude(), _upper.latitude());
    const Angle lon = pos.longitude().nearestAngleInInterval(_lower.longitude(), _upper.longitude());
    return Geodetic2D(lat, lon);*/
-}
+//}
 
 const std::string Sector::description() const {
   IStringBuilder *isb = IStringBuilder::newStringBuilder();
@@ -374,3 +395,10 @@ const Vector2D Sector::div(const Sector& that) const {
 //  const double scaleY = _deltaLatitude.div(that._deltaLatitude);
 //  return Vector2D(uv._x, uv._y - scaleY);
 //}
+
+const Vector3D Sector::getCartesianCenter(const Planet* planet) const {
+  if (_cartesianCenter==NULL)
+    _cartesianCenter = new Vector3D(planet->toCartesian(_center));
+  return *_cartesianCenter;
+}
+

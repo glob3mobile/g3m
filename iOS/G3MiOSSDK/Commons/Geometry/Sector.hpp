@@ -10,13 +10,15 @@
 #define G3MiOSSDK_Sector_h
 
 #include <vector>
+#include <math.h>
 
 #include "Geodetic2D.hpp"
 #include "Context.hpp"
 #include "Vector2D.hpp"
 #include "Geodetic3D.hpp"
+#include "Vector3D.hpp"
 
-class Sector_Geodetic2DCachedData;
+//class Sector_Geodetic2DCachedData;
 
 class Sector {
 
@@ -27,15 +29,23 @@ private:
 
   const Angle _deltaLatitude;
   const Angle _deltaLongitude;
+  
+  // this lazy value represent the half diagonal of the sector, measured in radians
+  // it's stored in double instead of Angle class to optimize performance in android
+  // this value is only used in the method Sector::isBackOriented
+  mutable double _deltaRadius;
 
+  //const Geodetic2D getClosestPoint(const Geodetic2D& pos) const;
 
-  const Geodetic2D getClosestPoint(const Geodetic2D& pos) const;
-
+  /*
   // cached values for speed up in isBackOriented()
   mutable Sector_Geodetic2DCachedData* _nwData;
   mutable Sector_Geodetic2DCachedData* _neData;
   mutable Sector_Geodetic2DCachedData* _swData;
   mutable Sector_Geodetic2DCachedData* _seData;
+   */
+  
+  mutable Vector3D* _cartesianCenter;
 
 public:
 
@@ -49,10 +59,14 @@ public:
   _deltaLongitude(upper.longitude().sub(lower.longitude())),
   _center(Angle::midAngle(lower.latitude(), upper.latitude()),
           Angle::midAngle(lower.longitude(), upper.longitude())),
-  _nwData(NULL),
+  _deltaRadius(-1.0),
+  /*
+   _nwData(NULL),
   _neData(NULL),
   _swData(NULL),
-  _seData(NULL)
+  _seData(NULL),
+   */
+  _cartesianCenter(NULL)
   {
   }
 
@@ -63,10 +77,14 @@ public:
   _deltaLatitude(sector._deltaLatitude),
   _deltaLongitude(sector._deltaLongitude),
   _center(sector._center),
-  _nwData(NULL),
+  _deltaRadius(sector._deltaRadius),
+  /*
+   _nwData(NULL),
   _neData(NULL),
   _swData(NULL),
-  _seData(NULL)
+  _seData(NULL),
+   */
+  _cartesianCenter((sector._cartesianCenter==NULL)? NULL : new Vector3D(*(sector._cartesianCenter)))
   {
   }
 
@@ -226,6 +244,13 @@ public:
     return (_lower.latitude()._degrees <= -89.9);
   }
   
+  double getDeltaRadius() const {
+    if (_deltaRadius<0.0)
+      _deltaRadius = sqrt(_deltaLatitude.radians()*_deltaLatitude.radians()+_deltaLongitude.radians()*_deltaLongitude.radians())*0.5;
+    return _deltaRadius;
+  }
+  
+  const Vector3D getCartesianCenter(const Planet* planet) const;
 };
 
 

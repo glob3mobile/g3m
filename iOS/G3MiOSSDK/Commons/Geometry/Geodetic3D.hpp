@@ -119,7 +119,8 @@ public:
                                                   const double R,
                                                   Angle bearing) {
     
-    bearing = bearing.normalized();
+    int _ERROR_IN_ANGLE_CONSTRUCTOR;
+    //bearing = bearing.normalized();
     
     const double angularDistance = distance / (R + position.height());
     

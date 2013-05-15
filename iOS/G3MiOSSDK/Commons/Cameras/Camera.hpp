@@ -10,6 +10,8 @@
 #ifndef CAMERA
 #define CAMERA
 
+#include <math.h>
+
 #include "Planet.hpp"
 #include "MutableVector3D.hpp"
 #include "Context.hpp"
@@ -131,7 +133,8 @@ public:
   _halfFrustum((that._halfFrustum == NULL) ? NULL : new Frustum(*that._halfFrustum)),
   _halfFrustumInModelCoordinates((that._halfFrustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._halfFrustumInModelCoordinates)),
   _camEffectTarget(new CameraEffectTarget()),
-  _geodeticPosition((that._geodeticPosition == NULL) ? NULL: new Geodetic3D(*that._geodeticPosition))
+  _geodeticPosition((that._geodeticPosition == NULL) ? NULL: new Geodetic3D(*that._geodeticPosition)),
+  _angle2Horizon(that._angle2Horizon)
   {
   }
 
@@ -228,6 +231,9 @@ public:
       delete _geodeticPosition;
       _geodeticPosition = NULL;
       _dirtyFlags.setAll(true);
+      const double distanceToPlanetCenter = _position.length();
+      const double planetRadius = distanceToPlanetCenter - getGeodeticPosition().height();
+      _angle2Horizon = acos(planetRadius/distanceToPlanetCenter);
     }
   }
 
@@ -281,6 +287,8 @@ public:
     getProjectionMatrix();
     getModelMatrix();
   }
+  
+  double getAngle2Horizon() const { return _angle2Horizon; }
 
 private:
   const Angle getHeading(const Vector3D& normal) const;
@@ -296,6 +304,12 @@ private:
   MutableVector3D _up;                  // vertical vector
   
   mutable Geodetic3D*     _geodeticPosition;    //Must be updated when changing position
+
+  // this value is only used in the method Sector::isBackOriented
+  // it's stored in double instead of Angle class to optimize performance in android
+  // Must be updated when changing position
+  mutable double          _angle2Horizon;
+  
 
   mutable CameraDirtyFlags _dirtyFlags;
   mutable FrustumData      _frustumData;
