@@ -9,17 +9,10 @@
 #include "Sphere.hpp"
 
 
-Sphere::Sphere(const Vector3D& radii):
+Sphere::Sphere(double radii):
 _radii(radii),
-_radiiSquared(Vector3D(radii._x * radii._x ,
-                       radii._y * radii._y,
-                       radii._z * radii._z)),
-_radiiToTheFourth(Vector3D(_radiiSquared._x * _radiiSquared._x ,
-                           _radiiSquared._y * _radiiSquared._y,
-                           _radiiSquared._z * _radiiSquared._z)),
-_oneOverRadiiSquared(Vector3D(1.0 / (radii._x * radii._x ),
-                              1.0 / (radii._y * radii._y),
-                              1.0 / (radii._z * radii._z)))
+_radiiSquared(radii*radii),
+_oneOverRadiiSquared(1.0/radii/radii)
 {
 
 }
@@ -39,17 +32,11 @@ std::vector<double> Sphere::intersectionsDistances(const Vector3D& origin,
   std::vector<double> intersections;
 
   // By laborious algebraic manipulation....
-  const double a = (direction._x * direction._x * _oneOverRadiiSquared._x +
-                    direction._y * direction._y * _oneOverRadiiSquared._y +
-                    direction._z * direction._z * _oneOverRadiiSquared._z);
+  const double a = direction._x * direction._x  + direction._y * direction._y + direction._z * direction._z;
 
-  const double b = 2.0 * (origin._x * direction._x * _oneOverRadiiSquared._x +
-                          origin._y * direction._y * _oneOverRadiiSquared._y +
-                          origin._z * direction._z * _oneOverRadiiSquared._z);
+  const double b = 2.0 * (origin._x * direction._x + origin._y * direction._y + origin._z * direction._z);
 
-  const double c = (origin._x * origin._x * _oneOverRadiiSquared._x +
-                    origin._y * origin._y * _oneOverRadiiSquared._y +
-                    origin._z * origin._z * _oneOverRadiiSquared._z - 1.0);
+  const double c = origin._x * origin._x + origin._y * origin._y + origin._z * origin._z - _radiiSquared;
 
   // Solve the quadratic equation: ax^2 + bx + c = 0.
   // Algorithm is from Wikipedia's "Quadratic equation" topic, and Wikipedia credits
@@ -66,9 +53,9 @@ std::vector<double> Sphere::intersectionsDistances(const Vector3D& origin,
     return intersections;
   }
 
-  const double t = -0.5 * (b + (b > 0.0 ? 1.0 : -1.0) * IMathUtils::instance()->sqrt(discriminant));
-  const double root1 = t / a;
-  const double root2 = c / t;
+  const double rootDiscriminant = IMathUtils::instance()->sqrt(discriminant);
+  const double root1 = (-b + rootDiscriminant) / (2*a);
+  const double root2 = (-b - rootDiscriminant) / (2*a);
 
   // Two intersections - return the smallest first.
   if (root1 < root2) {
@@ -85,15 +72,7 @@ std::vector<double> Sphere::intersectionsDistances(const Vector3D& origin,
 Vector3D Sphere::toCartesian(const Angle& latitude,
                                 const Angle& longitude,
                                 const double height) const {
-  const Vector3D n = geodeticSurfaceNormal(latitude, longitude);
-
-  const Vector3D k = _radiiSquared.times(n);
-  const double gamma = IMathUtils::instance()->sqrt((k._x * n._x) +
-                                                    (k._y * n._y) +
-                                                    (k._z * n._z));
-
-  const Vector3D rSurface = k.div(gamma);
-  return rSurface.add(n.times(height));
+  return geodeticSurfaceNormal(latitude, longitude).times(_radii+height);
 }
 
 Geodetic2D Sphere::toGeodetic2D(const Vector3D& positionOnEllipsoid) const {
@@ -116,67 +95,12 @@ Geodetic3D Sphere::toGeodetic3D(const Vector3D& position) const {
 
 
 Vector3D Sphere::scaleToGeodeticSurface(const Vector3D& position) const {
-  const IMathUtils* mu = IMathUtils::instance();
-
-  const double beta = 1.0 / mu->sqrt((position._x * position._x) * _oneOverRadiiSquared._x +
-                                     (position._y * position._y) * _oneOverRadiiSquared._y +
-                                     (position._z * position._z) * _oneOverRadiiSquared._z);
-
-  const double n = Vector3D(beta * position._x * _oneOverRadiiSquared._x,
-                            beta * position._y * _oneOverRadiiSquared._y,
-                            beta * position._z * _oneOverRadiiSquared._z).length();
-
-  double alpha = (1.0 - beta) * (position.length() / n);
-
-  const double x2 = position._x * position._x;
-  const double y2 = position._y * position._y;
-  const double z2 = position._z * position._z;
-
-  double da = 0.0;
-  double db = 0.0;
-  double dc = 0.0;
-
-  double s = 0.0;
-  double dSdA = 1.0;
-
-  do {
-    alpha -= (s / dSdA);
-
-    da = 1.0 + (alpha * _oneOverRadiiSquared._x);
-    db = 1.0 + (alpha * _oneOverRadiiSquared._y);
-    dc = 1.0 + (alpha * _oneOverRadiiSquared._z);
-
-    const double da2 = da * da;
-    const double db2 = db * db;
-    const double dc2 = dc * dc;
-
-    const double da3 = da * da2;
-    const double db3 = db * db2;
-    const double dc3 = dc * dc2;
-
-    s = (x2 / (_radiiSquared._x * da2) +
-         y2 / (_radiiSquared._y * db2) +
-         z2 / (_radiiSquared._z * dc2) - 1.0);
-
-    dSdA = (-2.0 *
-            (x2 / (_radiiToTheFourth._x * da3) +
-             y2 / (_radiiToTheFourth._y * db3) +
-             z2 / (_radiiToTheFourth._z * dc3)));
-  }
-  while (mu->abs(s) > 1e-10);
-
-  return Vector3D(position._x / da,
-                  position._y / db,
-                  position._z / dc);
+  return geodeticSurfaceNormal(position).times(_radii);
 }
 
 
 Vector3D Sphere::scaleToGeocentricSurface(const Vector3D& position) const {
-  const double beta = 1.0 / IMathUtils::instance()->sqrt((position._x * position._x) * _oneOverRadiiSquared._x +
-                                                         (position._y * position._y) * _oneOverRadiiSquared._y +
-                                                         (position._z * position._z) * _oneOverRadiiSquared._z);
-  
-  return position.times(beta);
+  return scaleToGeodeticSurface(position);
 }
 
 
@@ -226,8 +150,7 @@ double Sphere::computePreciseLatLonDistance(const Geodetic2D& g1,
                                                const Geodetic2D& g2) const {
   const IMathUtils* mu = IMathUtils::instance();
 
-  const Vector3D radius = _radii;
-  const double R = (radius._x + radius._y + radius._z) / 3;
+  const double R = _radii;
 
   // spheric distance from P to Q
   // this is the right form, but it's the most complex
@@ -256,8 +179,7 @@ double Sphere::computeFastLatLonDistance(const Geodetic2D& g1,
                                             const Geodetic2D& g2) const {
   const IMathUtils* mu = IMathUtils::instance();
   
-  const Vector3D radius = _radii;
-  const double R = (radius._x + radius._y + radius._z) / 3;
+  const double R = _radii;
 
   const double medLat = g1.latitude()._degrees;
   const double medLon = g1.longitude()._degrees;
@@ -293,7 +215,7 @@ Vector3D Sphere::closestPointToSphere(const Vector3D& pos, const Vector3D& ray) 
   double t = 0;
 
   // compute radius for the rotation
-  const double R0 = (_radii._x + _radii._y + _radii._y) /3;
+  const double R0 = _radii;
 
   // compute the point in this ray that are to a distance R from the origin.
   const double U2 = ray.squaredLength();

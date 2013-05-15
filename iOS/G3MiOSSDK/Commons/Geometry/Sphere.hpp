@@ -16,22 +16,21 @@
 
 class Sphere: public Ellipsoid {
 private:
-  const Vector3D _radii;
-  const Vector3D _radiiSquared;
-  const Vector3D _radiiToTheFourth;
-  const Vector3D _oneOverRadiiSquared;
+  const double _radii;
+  const double _radiiSquared;
+  const double _oneOverRadiiSquared;
 
 
 public:
 
-  Sphere(const Vector3D& radii);
+  Sphere(double radii);
 
   ~Sphere() {
 
   }
 
   Vector3D getRadii() const{
-    return _radii;
+    return Vector3D(_radii, _radii, _radii);
   }
 
   Vector3D centricSurfaceNormal(const Vector3D& positionOnEllipsoid) const {
@@ -39,11 +38,11 @@ public:
   }
 
   Vector3D geodeticSurfaceNormal(const Vector3D& positionOnEllipsoid) const {
-    return positionOnEllipsoid.times(_oneOverRadiiSquared).normalized();
+    return positionOnEllipsoid.normalized();
   }
 
   Vector3D geodeticSurfaceNormal(const MutableVector3D& positionOnEllipsoid) const {
-    return positionOnEllipsoid.times(_oneOverRadiiSquared).normalized().asVector3D();
+    return positionOnEllipsoid.normalized().asVector3D();
   }
   
 

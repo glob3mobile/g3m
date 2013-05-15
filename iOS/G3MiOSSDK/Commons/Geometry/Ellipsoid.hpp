@@ -18,7 +18,7 @@
 class Ellipsoid {
   
 public:
-    
+  
   virtual ~Ellipsoid() {}
   
   virtual Vector3D getRadii() const = 0;
