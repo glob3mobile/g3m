@@ -1,15 +1,15 @@
 //
-//  Ellipsoid.cpp
+//  PureEllipsoid.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 31/05/12.
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
-#include "Ellipsoid.hpp"
+#include "PureEllipsoid.hpp"
 
 
-Ellipsoid::Ellipsoid(const Vector3D& radii):
+PureEllipsoid::PureEllipsoid(const Vector3D& radii):
 _radii(radii),
 _radiiSquared(Vector3D(radii._x * radii._x ,
                        radii._y * radii._y,
@@ -25,7 +25,7 @@ _oneOverRadiiSquared(Vector3D(1.0 / (radii._x * radii._x ),
 }
 
 
-Vector3D Ellipsoid::geodeticSurfaceNormal(const Angle& latitude,
+Vector3D PureEllipsoid::geodeticSurfaceNormal(const Angle& latitude,
                                           const Angle& longitude) const {
   const double cosLatitude = latitude.cosinus();
 
@@ -34,7 +34,7 @@ Vector3D Ellipsoid::geodeticSurfaceNormal(const Angle& latitude,
                   latitude.sinus());
 }
 
-std::vector<double> Ellipsoid::intersectionsDistances(const Vector3D& origin,
+std::vector<double> PureEllipsoid::intersectionsDistances(const Vector3D& origin,
                                                       const Vector3D& direction) const {
   std::vector<double> intersections;
 
@@ -82,7 +82,7 @@ std::vector<double> Ellipsoid::intersectionsDistances(const Vector3D& origin,
   return intersections;
 }
 
-Vector3D Ellipsoid::toCartesian(const Angle& latitude,
+Vector3D PureEllipsoid::toCartesian(const Angle& latitude,
                                 const Angle& longitude,
                                 const double height) const {
   const Vector3D n = geodeticSurfaceNormal(latitude, longitude);
@@ -96,7 +96,7 @@ Vector3D Ellipsoid::toCartesian(const Angle& latitude,
   return rSurface.add(n.times(height));
 }
 
-Geodetic2D Ellipsoid::toGeodetic2D(const Vector3D& positionOnEllipsoid) const {
+Geodetic2D PureEllipsoid::toGeodetic2D(const Vector3D& positionOnEllipsoid) const {
   const Vector3D n = geodeticSurfaceNormal(positionOnEllipsoid);
 
   const IMathUtils* mu = IMathUtils::instance();
@@ -105,7 +105,7 @@ Geodetic2D Ellipsoid::toGeodetic2D(const Vector3D& positionOnEllipsoid) const {
 }
 
 
-Geodetic3D Ellipsoid::toGeodetic3D(const Vector3D& position) const {
+Geodetic3D PureEllipsoid::toGeodetic3D(const Vector3D& position) const {
   const Vector3D p = scaleToGeodeticSurface(position);
   const Vector3D h = position.sub(p);
 
@@ -115,7 +115,7 @@ Geodetic3D Ellipsoid::toGeodetic3D(const Vector3D& position) const {
 }
 
 
-Vector3D Ellipsoid::scaleToGeodeticSurface(const Vector3D& position) const {
+Vector3D PureEllipsoid::scaleToGeodeticSurface(const Vector3D& position) const {
   const IMathUtils* mu = IMathUtils::instance();
 
   const double beta = 1.0 / mu->sqrt((position._x * position._x) * _oneOverRadiiSquared._x +
@@ -171,7 +171,7 @@ Vector3D Ellipsoid::scaleToGeodeticSurface(const Vector3D& position) const {
 }
 
 
-Vector3D Ellipsoid::scaleToGeocentricSurface(const Vector3D& position) const {
+Vector3D PureEllipsoid::scaleToGeocentricSurface(const Vector3D& position) const {
   const double beta = 1.0 / IMathUtils::instance()->sqrt((position._x * position._x) * _oneOverRadiiSquared._x +
                                                          (position._y * position._y) * _oneOverRadiiSquared._y +
                                                          (position._z * position._z) * _oneOverRadiiSquared._z);
@@ -180,7 +180,7 @@ Vector3D Ellipsoid::scaleToGeocentricSurface(const Vector3D& position) const {
 }
 
 
-Geodetic2D Ellipsoid::getMidPoint (const Geodetic2D& P0, const Geodetic2D& P1) const
+Geodetic2D PureEllipsoid::getMidPoint (const Geodetic2D& P0, const Geodetic2D& P1) const
 {
   const Vector3D v0 = toCartesian(P0);
   const Vector3D v1 = toCartesian(P1);
@@ -191,7 +191,7 @@ Geodetic2D Ellipsoid::getMidPoint (const Geodetic2D& P0, const Geodetic2D& P1) c
 }
 
 
-std::list<Vector3D> Ellipsoid::computeCurve(const Vector3D& start,
+std::list<Vector3D> PureEllipsoid::computeCurve(const Vector3D& start,
                                             const Vector3D& stop,
                                             double granularity) const {
   if (granularity <= 0.0) {
@@ -222,7 +222,7 @@ std::list<Vector3D> Ellipsoid::computeCurve(const Vector3D& start,
 
 
 // compute distance from two points
-double Ellipsoid::computePreciseLatLonDistance(const Geodetic2D& g1,
+double PureEllipsoid::computePreciseLatLonDistance(const Geodetic2D& g1,
                                                const Geodetic2D& g2) const {
   const IMathUtils* mu = IMathUtils::instance();
 
@@ -252,7 +252,7 @@ double Ellipsoid::computePreciseLatLonDistance(const Geodetic2D& g1,
 
 
 // compute distance from two points
-double Ellipsoid::computeFastLatLonDistance(const Geodetic2D& g1,
+double PureEllipsoid::computeFastLatLonDistance(const Geodetic2D& g1,
                                             const Geodetic2D& g2) const {
   const IMathUtils* mu = IMathUtils::instance();
   
@@ -278,7 +278,7 @@ double Ellipsoid::computeFastLatLonDistance(const Geodetic2D& g1,
   return dist * mu->pi() / 180 * R;
 }
 
-Vector3D Ellipsoid::closestIntersection(const Vector3D& pos,
+Vector3D PureEllipsoid::closestIntersection(const Vector3D& pos,
                                         const Vector3D& ray) const {
   std::vector<double> distances = intersectionsDistances(pos , ray);
   if (distances.empty()) {
@@ -287,7 +287,7 @@ Vector3D Ellipsoid::closestIntersection(const Vector3D& pos,
   return pos.add(ray.times(distances[0]));
 }
 
-Vector3D Ellipsoid::closestPointToSphere(const Vector3D& pos, const Vector3D& ray) const {
+Vector3D PureEllipsoid::closestPointToSphere(const Vector3D& pos, const Vector3D& ray) const {
   const IMathUtils* mu = IMathUtils::instance();
 
   double t = 0;
@@ -329,7 +329,7 @@ Vector3D Ellipsoid::closestPointToSphere(const Vector3D& pos, const Vector3D& ra
   return result;
 }
 
-MutableMatrix44D Ellipsoid::createGeodeticTransformMatrix(const Geodetic3D& position) const {
+MutableMatrix44D PureEllipsoid::createGeodeticTransformMatrix(const Geodetic3D& position) const {
   const MutableMatrix44D translation = MutableMatrix44D::createTranslationMatrix( toCartesian(position) );
   const MutableMatrix44D rotation    = MutableMatrix44D::createGeodeticRotationMatrix( position );
 

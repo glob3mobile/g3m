@@ -23,6 +23,7 @@
 #include "TexturedMesh.hpp"
 #include "Sector.hpp"
 #include "MercatorUtils.hpp"
+#include "PureEllipsoid.hpp"
 
 EllipsoidShape::~EllipsoidShape() {
   delete _surfaceColor;
@@ -201,7 +202,7 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
     }
   }
 
-  const Ellipsoid ellipsoid( Vector3D(_radiusX, _radiusY, _radiusZ) );
+  const PureEllipsoid ellipsoid( Vector3D(_radiusX, _radiusY, _radiusZ) );
   const Sector sector(Sector::fullSphere());
 
   FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(), &ellipsoid, Vector3D::zero());
