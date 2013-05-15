@@ -117,7 +117,14 @@ public class Sector
      _deltaLongitude = new Angle(sector._deltaLongitude);
      _center = new Geodetic2D(sector._center);
      _deltaRadius = sector._deltaRadius;
-     _cartesianCenter = (sector._cartesianCenter == null)? null : new Vector3D(*(sector._cartesianCenter));
+    if (sector._cartesianCenter == null)
+      _cartesianCenter = null;
+    else
+    {
+      final Vector3D cartesianCenter = sector._cartesianCenter;
+      _cartesianCenter = new Vector3D(cartesianCenter);
+    }
+
   }
 
   public static Sector fromDegrees(double minLat, double minLon, double maxLat, double maxLon)
