@@ -69,10 +69,10 @@ public class Plane
   {
     int TODO_Multiplication_with_Matrix;
   
-    final double a = _normal._x *M.get(0) + _normal._y *M.get(1) + _normal._z *M.get(2) + _d *M.get(3);
-    final double b = _normal._x *M.get(4) + _normal._y *M.get(5) + _normal._z *M.get(6) + _d *M.get(7);
-    final double c = _normal._x *M.get(8) + _normal._y *M.get(9) + _normal._z *M.get(10) + _d *M.get(11);
-    final double d = _normal._x *M.get(12) + _normal._y *M.get(13) + _normal._z *M.get(14) + _d *M.get(15);
+    final double a = _normal._x *M.get0() + _normal._y *M.get1() + _normal._z *M.get2() + _d *M.get3();
+    final double b = _normal._x *M.get4() + _normal._y *M.get5() + _normal._z *M.get6() + _d *M.get7();
+    final double c = _normal._x *M.get8() + _normal._y *M.get9() + _normal._z *M.get10() + _d *M.get11();
+    final double d = _normal._x *M.get12() + _normal._y *M.get13() + _normal._z *M.get14() + _d *M.get15();
   
     return new Plane(a, b, c, d);
   }

@@ -307,11 +307,75 @@ public class MutableMatrix44D
 
   //METHODS TO EXTRACT VALUES FROM THE MATRIX
 
-  //Returns values from 0..15 in column mayor order
-  public final double get(int i)
+  public final double get0()
   {
-    switch (i)
-    {
+     return _m00;
+  }
+  public final double get1()
+  {
+     return _m10;
+  }
+  public final double get2()
+  {
+     return _m20;
+  }
+  public final double get3()
+  {
+     return _m30;
+  }
+  public final double get4()
+  {
+     return _m01;
+  }
+  public final double get5()
+  {
+     return _m11;
+  }
+  public final double get6()
+  {
+     return _m21;
+  }
+  public final double get7()
+  {
+     return _m31;
+  }
+  public final double get8()
+  {
+     return _m02;
+  }
+  public final double get9()
+  {
+     return _m12;
+  }
+  public final double get10()
+  {
+     return _m22;
+  }
+  public final double get11()
+  {
+     return _m32;
+  }
+  public final double get12()
+  {
+     return _m03;
+  }
+  public final double get13()
+  {
+     return _m13;
+  }
+  public final double get14()
+  {
+     return _m23;
+  }
+  public final double get15()
+  {
+     return _m33;
+  }
+
+  /*
+  //Returns values from 0..15 in column mayor order
+  double get(int i) const {
+    switch (i) {
       case 0:
         return _m00;
       case 1:
@@ -345,10 +409,10 @@ public class MutableMatrix44D
       case 15:
         return _m33;
       default:
-        ILogger.instance().logError("Accesing MutableMutableMatrix44D44D out of index");
+        ILogger::instance()->logError("Accesing MutableMutableMatrix44D44D out of index");
         return 0;
     }
-  }
+  }*/
 
   public final IFloatBuffer getColumnMajorFloatBuffer()
   {

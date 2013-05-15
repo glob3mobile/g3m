@@ -146,7 +146,8 @@ public class Geodetic3D
   public static Geodetic3D calculateRhumbLineDestination(Geodetic3D position, double distance, double R, Angle bearing)
   {
 
-    bearing = bearing.normalized();
+    int _ERROR_IN_ANGLE_CONSTRUCTOR;
+    //bearing = bearing.normalized();
 
     final double angularDistance = distance / (R + position.height());
 

@@ -25,6 +25,7 @@ public class Camera
      _halfFrustumInModelCoordinates = (that._halfFrustumInModelCoordinates == null) ? null : new Frustum(that._halfFrustumInModelCoordinates);
      _camEffectTarget = new CameraEffectTarget();
      _geodeticPosition = (that._geodeticPosition == null) ? null: new Geodetic3D(that._geodeticPosition);
+     _angle2Horizon = that._angle2Horizon;
   }
 
   public Camera(int width, int height)
@@ -48,6 +49,7 @@ public class Camera
      _halfFrustum = null;
      _camEffectTarget = new CameraEffectTarget();
      _geodeticPosition = null;
+     _angle2Horizon = -99;
     resizeViewport(width, height);
     _dirtyFlags.setAll(true);
   }
@@ -114,6 +116,7 @@ public class Camera
     if (_geodeticPosition != null)
        _geodeticPosition.dispose();
     _geodeticPosition = ((that._geodeticPosition == null) ? null : new Geodetic3D(that._geodeticPosition));
+    _angle2Horizon = that._angle2Horizon;
   }
 
 
@@ -325,7 +328,7 @@ public class Camera
   {
     int todo_remove_get_in_matrix;
     final MutableMatrix44D M = getModelMatrix();
-    return new Vector3D(M.get(0), M.get(4), M.get(8));
+    return new Vector3D(M.get0(), M.get4(), M.get8());
   }
 
   public final Angle compute3DAngularDistance(Vector2I pixel0, Vector2I pixel1)
@@ -363,6 +366,9 @@ public class Camera
          _geodeticPosition.dispose();
       _geodeticPosition = null;
       _dirtyFlags.setAll(true);
+      final double distanceToPlanetCenter = _position.length();
+      final double planetRadius = distanceToPlanetCenter - getGeodeticPosition().height();
+      _angle2Horizon = Math.acos(planetRadius/distanceToPlanetCenter);
     }
   }
 
@@ -455,6 +461,11 @@ public class Camera
     getModelMatrix();
   }
 
+  public final double getAngle2Horizon()
+  {
+     return _angle2Horizon;
+  }
+
   private Angle getHeading(Vector3D normal)
   {
     final Vector3D north2D = Vector3D.upZ().projectionInPlane(normal);
@@ -473,6 +484,12 @@ public class Camera
   private MutableVector3D _up = new MutableVector3D(); // vertical vector
 
   private Geodetic3D _geodeticPosition; //Must be updated when changing position
+
+  // this value is only used in the method Sector::isBackOriented
+  // it's stored in double instead of Angle class to optimize performance in android
+  // Must be updated when changing position
+  private double _angle2Horizon;
+
 
   private CameraDirtyFlags _dirtyFlags = new CameraDirtyFlags();
   private FrustumData _frustumData = new FrustumData();
