@@ -117,9 +117,9 @@ public:
   static Geodetic3D calculateRhumbLineDestination(const Geodetic3D& position,
                                                   const double distance,
                                                   const double R,
-                                                  Angle bearing) {
+                                                  Angle bearing0) {
     
-    bearing = bearing.normalized();
+    Angle bearing = bearing0.normalized();
     
     const double angularDistance = distance / (R + position.height());
     
