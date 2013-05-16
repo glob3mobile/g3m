@@ -115,7 +115,7 @@ void Shape::setAnimatedScale(const TimeInterval& duration,
                                         this,
                                         _scaleX, _scaleY, _scaleZ,
                                         scaleX, scaleY, scaleZ);
-  _pendingEffects.push_back( new ShapePendingEffect(effect, false) );
+  addShapeEffect(effect);
 }
 
 void Shape::orbitCamera(const TimeInterval& duration,
@@ -130,7 +130,7 @@ void Shape::orbitCamera(const TimeInterval& duration,
   _pendingEffects.push_back( new ShapePendingEffect(effect, true) );
 }
 
-void Shape::setEffect(Effect* effect){
+void Shape::addShapeEffect(Effect* effect){
   _pendingEffects.push_back( new ShapePendingEffect(effect, false) );
 }
 
@@ -142,7 +142,7 @@ void Shape::setAnimatedPosition(const TimeInterval& duration,
                                            *_position,
                                            position,
                                            linearInterpolation);
-  _pendingEffects.push_back( new ShapePendingEffect(effect, false) );
+  addShapeEffect(effect);
 }
 
 void Shape::setAnimatedPosition(const TimeInterval& duration,
@@ -156,5 +156,5 @@ void Shape::setAnimatedPosition(const TimeInterval& duration,
                                                position,
                                                *_pitch, pitch,*_heading,heading,
                                                linearInterpolation);
-  _pendingEffects.push_back( new ShapePendingEffect(effect, false) );
+  addShapeEffect(effect);
 }
