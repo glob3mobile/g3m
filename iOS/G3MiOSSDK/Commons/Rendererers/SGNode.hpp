@@ -51,7 +51,6 @@ public:
   _shape(NULL)
   //  _parent(NULL)
   {
-    
   }
   
   virtual ~SGNode();

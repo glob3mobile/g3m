@@ -1479,12 +1479,12 @@ public:
 
     void textRadar(const G3MContext* context) {
 
-      context->getDownloader()->requestBuffer(URL("http://radar3d.glob3mobile.com/models/radar.bson", false),
-                                              1000000,
-                                              TimeInterval::fromDays(1),
-                                              true,
-                                              new RadarParser_BufferDownloadListener(_shapesRenderer),
-                                              true);
+//      context->getDownloader()->requestBuffer(URL("http://radar3d.glob3mobile.com/models/radar.bson", false),
+//                                              1000000,
+//                                              TimeInterval::fromDays(1),
+//                                              true,
+//                                              new RadarParser_BufferDownloadListener(_shapesRenderer),
+//                                              true);
     }
 
 
