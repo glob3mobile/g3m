@@ -26,6 +26,7 @@ public class Camera
      _camEffectTarget = new CameraEffectTarget();
      _geodeticPosition = (that._geodeticPosition == null) ? null: new Geodetic3D(that._geodeticPosition);
      _angle2Horizon = that._angle2Horizon;
+     _normalizedPosition = new MutableVector3D(that._normalizedPosition);
   }
 
   public Camera(int width, int height)
@@ -50,6 +51,7 @@ public class Camera
      _camEffectTarget = new CameraEffectTarget();
      _geodeticPosition = null;
      _angle2Horizon = -99;
+     _normalizedPosition = new MutableVector3D(0, 0, 0);
     resizeViewport(width, height);
     _dirtyFlags.setAll(true);
   }
@@ -82,6 +84,7 @@ public class Camera
     _position = new MutableVector3D(that._position);
     _center = new MutableVector3D(that._center);
     _up = new MutableVector3D(that._up);
+    _normalizedPosition = new MutableVector3D(that._normalizedPosition);
   
     _dirtyFlags.copyFrom(that._dirtyFlags);
   
@@ -233,6 +236,10 @@ public class Camera
   {
      return _position.asVector3D();
   }
+  public final Vector3D getNormalizedPosition()
+  {
+     return _normalizedPosition.asVector3D();
+  }
   public final Vector3D getCenter()
   {
      return _center.asVector3D();
@@ -369,6 +376,7 @@ public class Camera
       final double distanceToPlanetCenter = _position.length();
       final double planetRadius = distanceToPlanetCenter - getGeodeticPosition().height();
       _angle2Horizon = Math.acos(planetRadius/distanceToPlanetCenter);
+      _normalizedPosition = _position.normalized();
     }
   }
 
@@ -466,6 +474,7 @@ public class Camera
      return _angle2Horizon;
   }
 
+
   private Angle getHeading(Vector3D normal)
   {
     final Vector3D north2D = Vector3D.upZ().projectionInPlane(normal);
@@ -489,6 +498,7 @@ public class Camera
   // it's stored in double instead of Angle class to optimize performance in android
   // Must be updated when changing position
   private double _angle2Horizon;
+  private MutableVector3D _normalizedPosition = new MutableVector3D();
 
 
   private CameraDirtyFlags _dirtyFlags = new CameraDirtyFlags();

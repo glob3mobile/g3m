@@ -45,7 +45,7 @@ public class Sector
   mutable Sector_Geodetic2DCachedData* _seData;
    */
 
-  private Vector3D _cartesianCenter;
+  private Vector3D _normalizedCartesianCenter;
 
 
 
@@ -80,9 +80,9 @@ public class Sector
     delete _swData;
     delete _seData;
      */
-    if (_cartesianCenter != null)
-       if (_cartesianCenter != null)
-          _cartesianCenter.dispose();
+    if (_normalizedCartesianCenter != null)
+       if (_normalizedCartesianCenter != null)
+          _normalizedCartesianCenter.dispose();
   }
 
   public Sector(Geodetic2D lower, Geodetic2D upper)
@@ -99,7 +99,7 @@ public class Sector
      _deltaLongitude = new Angle(upper.longitude().sub(lower.longitude()));
      _center = new Geodetic2D(Angle.midAngle(lower.latitude(), upper.latitude()), Angle.midAngle(lower.longitude(), upper.longitude()));
      _deltaRadius = -1.0;
-     _cartesianCenter = null;
+     _normalizedCartesianCenter = null;
   }
 
 
@@ -117,12 +117,12 @@ public class Sector
      _deltaLongitude = new Angle(sector._deltaLongitude);
      _center = new Geodetic2D(sector._center);
      _deltaRadius = sector._deltaRadius;
-    if (sector._cartesianCenter == null)
-      _cartesianCenter = null;
+    if (sector._normalizedCartesianCenter == null)
+      _normalizedCartesianCenter = null;
     else
     {
-      final Vector3D cartesianCenter = sector._cartesianCenter;
-      _cartesianCenter = new Vector3D(cartesianCenter);
+      final Vector3D normalizedCartesianCenter = sector._normalizedCartesianCenter;
+      _normalizedCartesianCenter = new Vector3D(normalizedCartesianCenter);
     }
 
   }
@@ -468,8 +468,9 @@ public class Sector
     final Planet planet = rc.getPlanet();
   
     // compute angle with camera position
-    final Vector3D centerCamera = camera.getCartesianPosition();
-    double angle = centerCamera.angleBetween(getCartesianCenter(planet)).radians();
+    //const Vector3D centerCamera = camera->getCartesianPosition();
+    //double angle = centerCamera.angleBetween(getCartesianCenter(planet)).radians();
+    double angle = IMathUtils.instance().acos(camera.getNormalizedPosition().dot(getNormalizedCartesianCenter(planet)));
     if (angle-getDeltaRadius() > camera.getAngle2Horizon())
     {
       return true;
@@ -650,10 +651,10 @@ public class Sector
   //  return Vector2D(uv._x, uv._y - scaleY);
   //}
   
-  public final Vector3D getCartesianCenter(Planet planet)
+  public final Vector3D getNormalizedCartesianCenter(Planet planet)
   {
-    if (_cartesianCenter == null)
-      _cartesianCenter = new Vector3D(planet.toCartesian(_center));
-    return _cartesianCenter;
+    if (_normalizedCartesianCenter == null)
+      _normalizedCartesianCenter = new Vector3D(planet.toCartesian(_center).normalized());
+    return _normalizedCartesianCenter;
   }
 }
