@@ -13,7 +13,7 @@ GPUProgramState::~GPUProgramState(){
 }
 
 void GPUProgramState::clear(){
-//  delete _application;
+  _lastProgramUsed = NULL;
   
   for(std::map<std::string, GPUUniformValue*> ::const_iterator it = _uniformValues.begin();
       it != _uniformValues.end();
@@ -331,19 +331,19 @@ void GPUProgramState::setAttributeValue(const std::string& name,
   }
 }
 
-MutableMatrix44D* GPUProgramState::getMatrixValue(const std::string name) const{
-  
-  std::map<std::string, GPUUniformValue*> ::const_iterator it = _uniformValues.find(name);
-  if (it != _uniformValues.end()){
-    GPUUniformValue* uv = it->second;
-    if (uv->getType() == GLType::glMatrix4Float()){
-      GPUUniformValueMatrix4Float *uvm = (GPUUniformValueMatrix4Float *) uv;
-      return new MutableMatrix44D(uvm->getValue());
-    }
-  }
-  
-  return NULL;
-}
+//MutableMatrix44D* GPUProgramState::getMatrixValue(const std::string name) const{
+//  
+//  std::map<std::string, GPUUniformValue*> ::const_iterator it = _uniformValues.find(name);
+//  if (it != _uniformValues.end()){
+//    GPUUniformValue* uv = it->second;
+//    if (uv->getType() == GLType::glMatrix4Float()){
+//      GPUUniformValueMatrix4Float *uvm = (GPUUniformValueMatrix4Float *) uv;
+//      return new MutableMatrix44D(uvm->getValue());
+//    }
+//  }
+//  
+//  return NULL;
+//}
 
 void GPUProgramState::setUniformValue(const std::string& name, bool b){
   setUniformValue(name, new GPUUniformValueBool(b) );

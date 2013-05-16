@@ -269,6 +269,8 @@
 		D8A5601F15AEF64E00035086 /* IndexedMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A5601B15AEF64E00035086 /* IndexedMesh.cpp */; };
 		D8A5602115AEF64E00035086 /* Mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A5601D15AEF64E00035086 /* Mesh.cpp */; };
 		D8A723AE15E4D47E00ABDF07 /* StringBuilder_iOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A723AD15E4D47E00ABDF07 /* StringBuilder_iOS.cpp */; };
+		D8A76ECD1744F02400E0FFE8 /* GPUAttribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A76ECC1744F02400E0FFE8 /* GPUAttribute.cpp */; };
+		D8A76ECF1744F0C900E0FFE8 /* GPUUniform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A76ECE1744F0C900E0FFE8 /* GPUUniform.cpp */; };
 		D8B17F5B16F7693A007A9E43 /* GLState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B17F5916F76939007A9E43 /* GLState.cpp */; };
 		D8B2054B1737B68400750AE4 /* GPUProgramFactory.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B2054A1737B65A00750AE4 /* GPUProgramFactory.hpp */; };
 		D8CE5D34173BB5D800C7AAE6 /* Default.vsh in Sources */ = {isa = PBXBuildFile; fileRef = D8CE5D32173BB5D800C7AAE6 /* Default.vsh */; };
@@ -1198,6 +1200,8 @@
 		D8A723A715E4D2C500ABDF07 /* IStringBuilder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IStringBuilder.hpp; path = Commons/Interfaces/IStringBuilder.hpp; sourceTree = "<group>"; };
 		D8A723AB15E4D42B00ABDF07 /* StringBuilder_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = StringBuilder_iOS.hpp; path = Specific/Derived/StringBuilder_iOS.hpp; sourceTree = "<group>"; };
 		D8A723AD15E4D47E00ABDF07 /* StringBuilder_iOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = StringBuilder_iOS.cpp; path = Specific/Derived/StringBuilder_iOS.cpp; sourceTree = "<group>"; };
+		D8A76ECC1744F02400E0FFE8 /* GPUAttribute.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GPUAttribute.cpp; sourceTree = "<group>"; };
+		D8A76ECE1744F0C900E0FFE8 /* GPUUniform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GPUUniform.cpp; sourceTree = "<group>"; };
 		D8B17F5916F76939007A9E43 /* GLState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLState.cpp; sourceTree = "<group>"; };
 		D8B2054A1737B65A00750AE4 /* GPUProgramFactory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GPUProgramFactory.hpp; sourceTree = "<group>"; };
 		D8B3A95F160B691C0085D553 /* GLTextureId_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = GLTextureId_iOS.hpp; path = Specific/GL/GLTextureId_iOS.hpp; sourceTree = "<group>"; };
@@ -1843,6 +1847,8 @@
 				D87BF6D9170F0333004D467D /* GPUProgramState.hpp */,
 				D87BF6DB170F0628004D467D /* GPUUniform.hpp */,
 				D88F1667173CFF5900ED8823 /* GLClient.hpp */,
+				D8A76ECC1744F02400E0FFE8 /* GPUAttribute.cpp */,
+				D8A76ECE1744F0C900E0FFE8 /* GPUUniform.cpp */,
 			);
 			name = GL;
 			path = Commons/GL;
@@ -2225,6 +2231,8 @@
 				D8CE5D35173BB5D800C7AAE6 /* Default.fsh in Sources */,
 				D8CE5D38173BB68200C7AAE6 /* Billboard.fsh in Sources */,
 				D8CE5D39173BB68200C7AAE6 /* Billboard.vsh in Sources */,
+				D8A76ECD1744F02400E0FFE8 /* GPUAttribute.cpp in Sources */,
+				D8A76ECF1744F0C900E0FFE8 /* GPUUniform.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -473,6 +473,7 @@ double Mark::getMinDistanceToCamera() {
 }
 
 void Mark::getGLStateAndGPUProgramState(GLState** glState, GPUProgramState** progState){
+  _progState.clear();
   (*glState) = &_glState;
   (*progState) = &_progState;
 }

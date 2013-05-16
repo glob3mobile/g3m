@@ -91,13 +91,7 @@ public:
   }
 
   void render(const G3MRenderContext* rc);
-  
-  //Idle if this is not a drawable client
-  virtual void getGLStateAndGPUProgramState(GLState** glState, GPUProgramState** progState){
-    (*glState) = NULL;
-    (*progState) = NULL;
-  }
-  
+
   void notifyGLClientChildrenParentHasChanged();
   void modifyGLState(GLState& glState) const;
   void modifyGPUProgramState(GPUProgramState& progState) const;

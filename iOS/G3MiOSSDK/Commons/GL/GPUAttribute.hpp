@@ -16,6 +16,8 @@
 
 #include "IStringBuilder.hpp"
 
+class GPUAttribute;
+
 class GPUAttributeValue{
 protected:
   const int _type;
@@ -26,7 +28,7 @@ protected:
   
   const int _arrayElementSize;
   
-  int _id;
+  mutable GPUAttribute* _attribute;
   
 public:
   GPUAttributeValue(int type, int attributeSize, int arrayElementSize, int index, int stride, bool normalized):
@@ -36,7 +38,7 @@ public:
   _stride(stride),
   _normalized(normalized),
   _arrayElementSize(arrayElementSize),
-  _id(-1){}
+  _attribute(NULL){}
   
   int getType() const { return _type;}
   int getAttributeSize() const { return _attributeSize;}
@@ -50,19 +52,15 @@ public:
   
   virtual std::string description() const = 0;
   
-  void linkToGPUAttribute(GPUAttribute* a);
+  void linkToGPUAttribute(GPUAttribute* a){
+    _attribute = a;
+  }
   
   void unLinkToGPUAttribute(){
-    _id = -1;
+    _attribute = NULL;
   }
   
-  void setValueToLinkedAttribute(GL* gl) const{
-    if (_id == -1){
-      ILogger::instance()->logError("Uniform unlinked");
-    } else{
-      setAttribute(gl, _id);
-    }
-  }
+  void setValueToLinkedAttribute(GL* gl) const;
 };
 
 class GPUAttribute{
@@ -152,10 +150,6 @@ public:
     }
   }
 };
-
-void GPUAttributeValue::linkToGPUAttribute(GPUAttribute* a){
-  _id = a->getID();
-}
 
 ///////////
 

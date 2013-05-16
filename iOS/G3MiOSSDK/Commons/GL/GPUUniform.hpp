@@ -14,13 +14,15 @@
 #include "IGLUniformID.hpp"
 #include "IStringBuilder.hpp"
 
+class GPUUniform;
+
 class GPUUniformValue{
   const int _type;
   
-  const IGLUniformID* _id;
+  mutable GPUUniform* _uniform;
   
 public:
-  GPUUniformValue(int type):_type(type), _id(NULL){}
+  GPUUniformValue(int type):_type(type), _uniform(NULL){}
   int getType() const { return _type;}
   virtual ~GPUUniformValue(){}
   virtual void setUniform(GL* gl, const IGLUniformID* id) const = 0;
@@ -29,19 +31,15 @@ public:
   
   virtual std::string description() const = 0;
 
-  void linkToGPUUniform(GPUUniform* u);
+  void linkToGPUUniform(GPUUniform* u){
+    _uniform = u;
+  }
   
   void unLinkToGPUUniform(){
-    _id = NULL;
+    _uniform = NULL;
   }
   
-  void setValueToLinkedUniform(GL* gl) const{
-    if (_id == NULL){
-      ILogger::instance()->logError("Uniform unlinked");
-    } else{
-      setUniform(gl, _id);
-    }
-  }
+  void setValueToLinkedUniform(GL* gl) const;
 };
 
 
@@ -103,13 +101,6 @@ public:
     }
   }
 };
-
-void GPUUniformValue::linkToGPUUniform(GPUUniform* u) {
-  if (u == NULL || u->getID() == NULL){
-    ILogger::instance()->logError("Attempting to link unvalid uniform.");
-  }
-  _id = u->getID();
-}
 
 ////////////////////////////////////////////////////////////////////////
 class GPUUniformValueBool:public GPUUniformValue{

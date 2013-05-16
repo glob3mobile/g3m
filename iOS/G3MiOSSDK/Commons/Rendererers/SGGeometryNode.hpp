@@ -63,6 +63,7 @@ public:
   
   //Idle if this is not a drawable client
   void getGLStateAndGPUProgramState(GLState** glState, GPUProgramState** progState){
+    _programState.clear();
     (*glState) = &_glState;
     (*progState) = &_programState;
   }

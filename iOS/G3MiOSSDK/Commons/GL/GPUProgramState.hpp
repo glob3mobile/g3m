@@ -35,38 +35,10 @@ class GPUProgramState{
   void setAttributeValue(const std::string& name, GPUAttributeValue* v);
   
   
-  MutableMatrix44D* getMatrixValue(const std::string name) const;
-  
-//  void setValuesOntoGPUProgram(GPUProgram& prog) const;
+//  MutableMatrix44D* getMatrixValue(const std::string name) const;
   
   void linkToProgram(GPUProgram& prog) const;
   void applyValuesToLinkedProgram(GL* gl) const;
-  
-//  class GPUProgramApplication{
-//  public:
-//    struct UniformStruct{
-//      std::string name;
-//      GPUUniform* uniform;
-//      GPUUniformValue* value;
-//    };
-//    
-//    struct AttributeStruct{
-//      std::string name;
-//      GPUAttribute* uniform;
-//      GPUAttributeValue* value;
-//      bool enabled;
-//    };
-//
-//    std::vector<UniformStruct> _uniforms;
-//    std::vector<AttributeStruct> _attributes;
-//    
-//    GPUProgramApplication(const GPUProgram& program,
-//                          const GPUProgramState& state);
-//    
-//    void apply();
-//  };
-//  
-//  GPUProgramApplication* _application;
   
   mutable GPUProgram* _lastProgramUsed;
   
