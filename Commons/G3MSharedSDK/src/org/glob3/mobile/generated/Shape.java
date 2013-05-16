@@ -120,7 +120,7 @@ public abstract class Shape implements EffectTarget
     cleanTransformMatrix();
   }
 
-  public final void setEffect(Effect effect)
+  public final void addShapeEffect(Effect effect)
   {
     _pendingEffects.add(new ShapePendingEffect(effect, false));
   }
@@ -132,7 +132,7 @@ public abstract class Shape implements EffectTarget
   public final void setAnimatedPosition(TimeInterval duration, Geodetic3D position, boolean linearInterpolation)
   {
     Effect effect = new ShapePositionEffect(duration, this, _position, position, linearInterpolation);
-    _pendingEffects.add(new ShapePendingEffect(effect, false));
+    addShapeEffect(effect);
   }
 
   public final void setAnimatedPosition(TimeInterval duration, Geodetic3D position, Angle pitch, Angle heading)
@@ -142,7 +142,7 @@ public abstract class Shape implements EffectTarget
   public final void setAnimatedPosition(TimeInterval duration, Geodetic3D position, Angle pitch, Angle heading, boolean linearInterpolation)
   {
     Effect effect = new ShapeFullPositionEffect(duration, this, _position, position, _pitch, pitch, _heading,heading, linearInterpolation);
-    _pendingEffects.add(new ShapePendingEffect(effect, false));
+    addShapeEffect(effect);
   }
 
   public final void setAnimatedPosition(Geodetic3D position)
@@ -196,7 +196,7 @@ public abstract class Shape implements EffectTarget
   public final void setAnimatedScale(TimeInterval duration, double scaleX, double scaleY, double scaleZ)
   {
     Effect effect = new ShapeScaleEffect(duration, this, _scaleX, _scaleY, _scaleZ, scaleX, scaleY, scaleZ);
-    _pendingEffects.add(new ShapePendingEffect(effect, false));
+    addShapeEffect(effect);
   }
 
   public final void setAnimatedScale(double scaleX, double scaleY, double scaleZ)
