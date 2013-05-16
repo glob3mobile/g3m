@@ -75,7 +75,6 @@ G3MWidget::G3MWidget(GL*                              gl,
                      bool                             autoDeleteInitializationTask,
                      std::vector<PeriodicalTask*>     periodicalTasks,
                      GPUProgramManager*               gpuProgramManager):
-_rootState(GLState::newDefault()),
 _frameTasksExecutor( new FrameTasksExecutor() ),
 _effectsScheduler( new EffectsScheduler() ),
 _gl(gl),
@@ -215,8 +214,6 @@ G3MWidget::~G3MWidget() {
   }
 
   delete _context;
-
-  delete _rootState;
 }
 
 void G3MWidget::notifyTouchEvent(const G3MEventContext &ec,
@@ -306,19 +303,7 @@ void G3MWidget::onResizeViewportEvent(int width, int height) {
 }
 
 void G3MWidget::render(int width, int height) {
-  
-  //Setting Program
-//  if (!_mainRendererReady){
-//    GPUProgram* prog = _gpuProgramManager->getProgram("DefaultProgram");
-//    //_gl->useProgram(prog);
-//    ((GLState*)_rootState)->setProgram(prog);
-//    int _WORKING_JM;
-////    prog->getUniformVec2Float("ScaleTexCoord")->set(Vector2D(1.0,1.0));
-////    prog->getUniformVec2Float("TranslationTexCoord")->set(Vector2D(0.0,0.0));
-////    prog->getUniformFloat("PointSize")->set(1);
-////    prog->getUniformBool("BillBoard")->set(false);
-//  }
-  
+
   if (_paused) {
     return;
   }
@@ -428,13 +413,12 @@ void G3MWidget::render(int width, int height) {
     _selectedRenderer->start(&rc);
   }
   
-
-  ((GLState*)_rootState)->setClearColor(_backgroundColor);
-  _gl->clearScreen(*_rootState);
+  GLState state;
+  state.setClearColor(_backgroundColor);
+  _gl->clearScreen(state);
 
   if (_mainRendererReady) {
     _cameraRenderer->render(&rc);
-    ((GLState*)_rootState)->enableDepthTest(); //Enabling depth test
   }
 
   if (_selectedRenderer->isEnable()) {
@@ -446,7 +430,7 @@ void G3MWidget::render(int width, int height) {
     const int orderedRenderablesCount = orderedRenderables->size();
     for (int i = 0; i < orderedRenderablesCount; i++) {
       OrderedRenderable* orderedRenderable = orderedRenderables->at(i);
-      orderedRenderable->render(&rc, *_rootState);
+      orderedRenderable->render(&rc);
       delete orderedRenderable;
     }
   }

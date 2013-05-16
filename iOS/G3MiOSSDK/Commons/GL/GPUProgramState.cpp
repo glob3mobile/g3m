@@ -31,13 +31,13 @@ void GPUProgramState::clear(){
   _attributesValues.clear();
 }
 
-void GPUProgramState::applyValuesToLinkedProgram(GL* gl) const{
+void GPUProgramState::applyValuesToLinkedProgram() const{
   for(std::map<std::string, GPUUniformValue*> ::const_iterator it = _uniformValues.begin();
       it != _uniformValues.end();
       it++){
     std::string name = it->first;
     GPUUniformValue* v = it->second;
-    v->setValueToLinkedUniform(gl);
+    v->setValueToLinkedUniform();
   }
   
   for(std::map<std::string, attributeEnabledStruct> ::const_iterator it = _attributesEnabled.begin();
@@ -55,7 +55,7 @@ void GPUProgramState::applyValuesToLinkedProgram(GL* gl) const{
       it != _attributesValues.end();
       it++){
     GPUAttributeValue* v = it->second;
-    v->setValueToLinkedAttribute(gl);
+    v->setValueToLinkedAttribute();
   }
 }
 
@@ -166,12 +166,12 @@ void GPUProgramState::linkToProgram(GPUProgram& prog) const{
   }
 }
 
-void GPUProgramState::applyChanges(GL* gl, GPUProgram& prog) const{
-  if (_lastProgramUsed != NULL || _lastProgramUsed != &prog){
-    linkToProgram(prog);
+void GPUProgramState::applyChanges(GL* gl) const{
+  if (_lastProgramUsed == NULL){
+    ILogger::instance()->logError("Trying to use unlinked GPUProgramState.");
   }
-  applyValuesToLinkedProgram(gl);
-  
+  applyValuesToLinkedProgram();
+  _lastProgramUsed->applyChanges(gl);
 }
 
 void GPUProgramState::setUniformValue(const std::string& name, GPUUniformValue* v){

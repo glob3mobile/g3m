@@ -30,8 +30,7 @@ public:
     return _squaredDistanceFromEye;
   }
 
-  void render(const G3MRenderContext* rc,
-              const GLState& parentState) {
+  void render(const G3MRenderContext* rc) {
     _shape->render(rc);
   }
 

@@ -8,12 +8,12 @@
 
 #include "GPUUniform.hpp"
 
-void GPUUniformValue::setValueToLinkedUniform(GL* gl) const{
+void GPUUniformValue::setValueToLinkedUniform() const{
   if (_uniform == NULL){
     ILogger::instance()->logError("Uniform unlinked");
   } else{
     _uniform->set((GPUUniformValue*)this);
-    _uniform->applyChanges(gl);
+//    _uniform->applyChanges(gl);
     
     //    setUniform(gl, _uniform->getID());
   }

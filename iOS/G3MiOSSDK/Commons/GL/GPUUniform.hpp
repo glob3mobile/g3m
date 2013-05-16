@@ -39,7 +39,7 @@ public:
     _uniform = NULL;
   }
   
-  void setValueToLinkedUniform(GL* gl) const;
+  void setValueToLinkedUniform() const;
 };
 
 

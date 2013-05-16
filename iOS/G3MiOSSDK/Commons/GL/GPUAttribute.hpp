@@ -60,7 +60,7 @@ public:
     _attribute = NULL;
   }
   
-  void setValueToLinkedAttribute(GL* gl) const;
+  void setValueToLinkedAttribute() const;
 };
 
 class GPUAttribute{

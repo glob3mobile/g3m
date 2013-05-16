@@ -209,7 +209,7 @@ void GL::setProgramState(GPUProgramManager& progManager, const GPUProgramState& 
     useProgram(prog);
   }
   
-  progState.applyChanges(this, *prog);
+  progState.applyChanges(this);
 }
 
 void GL::useProgram(GPUProgram* program) {

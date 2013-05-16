@@ -236,9 +236,6 @@ private:
   const G3MContext* _context;
 
   bool _paused;
-
-  const GLState* _rootState;
-
   bool _initializationTaskWasRun;
   bool _initializationTaskReady;
 
