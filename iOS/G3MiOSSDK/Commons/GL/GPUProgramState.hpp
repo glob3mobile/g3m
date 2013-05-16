@@ -29,26 +29,17 @@ class GPUProgramState{
   std::map<std::string, GPUAttributeValue*> _attributesValues;
   std::map<std::string, attributeEnabledStruct> _attributesEnabled;
   
-//  const GPUProgramState* _parentState;
-  
   void setUniformValue(const std::string& name, GPUUniformValue* v);
   void setAttributeValue(const std::string& name, GPUAttributeValue* v);
-  
-  
-//  MutableMatrix44D* getMatrixValue(const std::string name) const;
   
   void linkToProgram(GPUProgram& prog) const;
   void applyValuesToLinkedProgram(GL* gl) const;
   
   mutable GPUProgram* _lastProgramUsed;
   
-  
 public:
   
   GPUProgramState(): _lastProgramUsed(NULL){}
-  
-//  GPUProgramState(const GPUProgramState* parentState):/*_parentState(parentState), */_application(NULL){}
-  
   
   ~GPUProgramState();
   
@@ -62,13 +53,9 @@ public:
   
   void setUniformValue(const std::string& name, double x, double y, double z, double w);
   
-//  void setUniformValue(const std::string& name, const MutableMatrix44D& m);
-  
   void setUniformValue(const std::string& name, const MutableMatrix44D* m);
   
   void multiplyUniformValue(const std::string& name, const MutableMatrix44D* m);
-  
-//  void multiplyUniformValue(const std::string& name, const MutableMatrix44D& m);
   
   void setAttributeValue(const std::string& name,
                          IFloatBuffer* buffer, int attributeSize,
