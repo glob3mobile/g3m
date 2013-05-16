@@ -33,6 +33,7 @@ void Camera::copyFrom(const Camera &that) {
   _position = MutableVector3D(that._position);
   _center   = MutableVector3D(that._center);
   _up       = MutableVector3D(that._up);
+  _normalizedPosition = MutableVector3D(that._normalizedPosition);
 
   _dirtyFlags.copyFrom(that._dirtyFlags);
 
@@ -84,7 +85,8 @@ _halfFrustumInModelCoordinates(NULL),
 _halfFrustum(NULL),
 _camEffectTarget(new CameraEffectTarget()),
 _geodeticPosition(NULL),
-_angle2Horizon(-99)
+_angle2Horizon(-99),
+_normalizedPosition(0, 0, 0)
 {
   resizeViewport(width, height);
   _dirtyFlags.setAll(true);

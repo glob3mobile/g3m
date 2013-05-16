@@ -134,7 +134,8 @@ public:
   _halfFrustumInModelCoordinates((that._halfFrustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._halfFrustumInModelCoordinates)),
   _camEffectTarget(new CameraEffectTarget()),
   _geodeticPosition((that._geodeticPosition == NULL) ? NULL: new Geodetic3D(*that._geodeticPosition)),
-  _angle2Horizon(that._angle2Horizon)
+  _angle2Horizon(that._angle2Horizon),
+  _normalizedPosition(that._normalizedPosition)
   {
   }
 
@@ -176,6 +177,7 @@ public:
   }
 
   const Vector3D getCartesianPosition() const { return _position.asVector3D(); }
+  const Vector3D getNormalizedPosition() const { return _normalizedPosition.asVector3D(); }
   const Vector3D getCenter() const { return _center.asVector3D(); }
   const Vector3D getUp() const { return _up.asVector3D(); }
   const Geodetic3D getGeodeticCenterOfView() const { return *_getGeodeticCenterOfView(); }
@@ -234,6 +236,7 @@ public:
       const double distanceToPlanetCenter = _position.length();
       const double planetRadius = distanceToPlanetCenter - getGeodeticPosition().height();
       _angle2Horizon = acos(planetRadius/distanceToPlanetCenter);
+      _normalizedPosition = _position.normalized();
     }
   }
 
@@ -289,6 +292,7 @@ public:
   }
   
   double getAngle2Horizon() const { return _angle2Horizon; }
+  
 
 private:
   const Angle getHeading(const Vector3D& normal) const;
@@ -309,6 +313,7 @@ private:
   // it's stored in double instead of Angle class to optimize performance in android
   // Must be updated when changing position
   mutable double          _angle2Horizon;
+  MutableVector3D         _normalizedPosition;
   
 
   mutable CameraDirtyFlags _dirtyFlags;

@@ -83,7 +83,7 @@ Sector::~Sector() {
   delete _swData;
   delete _seData;
    */
-  if (_cartesianCenter) delete _cartesianCenter;
+  if (_normalizedCartesianCenter) delete _normalizedCartesianCenter;
 }
 
 
@@ -93,8 +93,9 @@ bool Sector::isBackOriented(const G3MRenderContext *rc,
   const Planet* planet = rc->getPlanet();
       
   // compute angle with camera position
-  const Vector3D centerCamera = camera->getCartesianPosition();
-  double angle = centerCamera.angleBetween(getCartesianCenter(planet)).radians();
+  //const Vector3D centerCamera = camera->getCartesianPosition();
+  //double angle = centerCamera.angleBetween(getCartesianCenter(planet)).radians();
+  double angle = IMathUtils::instance()->acos(camera->getNormalizedPosition().dot(getNormalizedCartesianCenter(planet)));
   if (angle-getDeltaRadius() > camera->getAngle2Horizon()) {
     return true;
   } else
@@ -396,9 +397,9 @@ const Vector2D Sector::div(const Sector& that) const {
 //  return Vector2D(uv._x, uv._y - scaleY);
 //}
 
-const Vector3D Sector::getCartesianCenter(const Planet* planet) const {
-  if (_cartesianCenter==NULL)
-    _cartesianCenter = new Vector3D(planet->toCartesian(_center));
-  return *_cartesianCenter;
+const Vector3D Sector::getNormalizedCartesianCenter(const Planet* planet) const {
+  if (_normalizedCartesianCenter == NULL)
+    _normalizedCartesianCenter = new Vector3D(planet->toCartesian(_center).normalized());
+  return *_normalizedCartesianCenter;
 }
 

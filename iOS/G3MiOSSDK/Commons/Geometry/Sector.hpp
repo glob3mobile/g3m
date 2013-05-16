@@ -45,7 +45,7 @@ private:
   mutable Sector_Geodetic2DCachedData* _seData;
    */
   
-  mutable Vector3D* _cartesianCenter;
+  mutable Vector3D* _normalizedCartesianCenter;
 
 public:
 
@@ -66,7 +66,7 @@ public:
   _swData(NULL),
   _seData(NULL),
    */
-  _cartesianCenter(NULL)
+  _normalizedCartesianCenter(NULL)
   {
   }
 
@@ -85,11 +85,11 @@ public:
   _seData(NULL),
    */
   {
-    if (sector._cartesianCenter==NULL)
-      _cartesianCenter = NULL;
+    if (sector._normalizedCartesianCenter==NULL)
+      _normalizedCartesianCenter = NULL;
     else {
-      const Vector3D* cartesianCenter = sector._cartesianCenter;
-      _cartesianCenter = new Vector3D(*cartesianCenter);
+      const Vector3D* normalizedCartesianCenter = sector._normalizedCartesianCenter;
+      _normalizedCartesianCenter = new Vector3D(*normalizedCartesianCenter);
     }
       
   }
@@ -256,7 +256,7 @@ public:
     return _deltaRadius;
   }
   
-  const Vector3D getCartesianCenter(const Planet* planet) const;
+  const Vector3D getNormalizedCartesianCenter(const Planet* planet) const;
 };
 
 
