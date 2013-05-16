@@ -190,7 +190,17 @@ void GL::setGLState(const GLState& state) {
 }
 
 void GL::setProgramState(GPUProgramManager& progManager, const GPUProgramState& progState) {
-  GPUProgram* prog = progManager.getProgram(progState);
+//  GPUProgram* prog = progManager.getProgram(progState);
+  
+  GPUProgram* prog = NULL;
+  if (!progState.isLinkedToProgram()) {
+    prog = progState.getLinkedProgram();
+    prog = progManager.getProgram(progState);
+    progState.linkToProgram(*prog);
+  } else{
+    prog = progState.getLinkedProgram();
+  }
+  
   if (prog != _currentGPUProgram){
     if (_currentGPUProgram != NULL){
       _currentGPUProgram->onUnused();

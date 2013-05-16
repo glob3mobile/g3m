@@ -91,7 +91,6 @@ void GPUProgramState::linkToProgram(GPUProgram& prog) const{
       }
     }
     
-    
     if (u == NULL){
       ILogger::instance()->logError("UNIFORM " + name + " NOT FOUND");
     } else{

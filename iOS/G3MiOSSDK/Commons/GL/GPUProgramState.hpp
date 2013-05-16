@@ -32,7 +32,6 @@ class GPUProgramState{
   void setUniformValue(const std::string& name, GPUUniformValue* v);
   void setAttributeValue(const std::string& name, GPUAttributeValue* v);
   
-  void linkToProgram(GPUProgram& prog) const;
   void applyValuesToLinkedProgram(GL* gl) const;
   
   mutable GPUProgram* _lastProgramUsed;
@@ -64,6 +63,16 @@ public:
   void setAttributeEnabled(const std::string& name, bool enabled);
   
   void applyChanges(GL* gl, GPUProgram& prog) const;
+  
+  void linkToProgram(GPUProgram& prog) const;
+  
+  bool isLinkedToProgram() const{
+    return _lastProgramUsed = NULL;
+  }
+  
+  GPUProgram* getLinkedProgram() const{
+    return _lastProgramUsed;
+  }
   
   std::vector<std::string> getUniformsNames() const;
   
