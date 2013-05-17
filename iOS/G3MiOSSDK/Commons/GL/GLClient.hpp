@@ -12,9 +12,6 @@
 #include "GPUProgramState.hpp"
 #include "GLState.hpp"
 
-class GLClientDrawable;
-class GLClientNotDrawable;
-
 class GLClient{
 protected:
   const GLClient* _parent;

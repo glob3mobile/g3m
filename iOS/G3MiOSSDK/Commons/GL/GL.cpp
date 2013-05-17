@@ -65,7 +65,7 @@ void GL::drawArrays(int mode,
   }
   
   applyGLStateAndGPUProgramState(state, progManager, *gpuState);
-
+  
   
   _nativeGL->drawArrays(mode,
                         first,
@@ -190,26 +190,26 @@ void GL::setGLState(const GLState& state) {
 }
 
 void GL::setProgramState(GPUProgramManager& progManager, const GPUProgramState& progState) {
-//  GPUProgram* prog = progManager.getProgram(progState);
-  
   GPUProgram* prog = NULL;
   if (!progState.isLinkedToProgram()) {
-    prog = progState.getLinkedProgram();
     prog = progManager.getProgram(progState);
     progState.linkToProgram(*prog);
   } else{
     prog = progState.getLinkedProgram();
   }
-  
-  if (prog != _currentGPUProgram){
-    if (_currentGPUProgram != NULL){
-      _currentGPUProgram->onUnused();
+  if (prog != NULL){
+    if (prog != _currentGPUProgram){
+      if (_currentGPUProgram != NULL){
+        _currentGPUProgram->onUnused();
+      }
+      _currentGPUProgram = prog;
+      useProgram(prog);
     }
-    _currentGPUProgram = prog;
-    useProgram(prog);
+    
+    progState.applyChanges(this);
+  } else{
+    ILogger::instance()->logError("No available GPUProgram for this state.");
   }
-  
-  progState.applyChanges(this);
 }
 
 void GL::useProgram(GPUProgram* program) {
