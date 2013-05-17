@@ -9,11 +9,11 @@
 #include "SGMaterialNode.hpp"
 
 #include "Context.hpp"
-#include "GLState.hpp"
+#include "GLGlobalState.hpp"
 #include "GPUProgramState.hpp"
 
-//GLState* SGMaterialNode::createState(const G3MRenderContext* rc,
-//                                     const GLState& parentState) {
+//GLGlobalState* SGMaterialNode::createState(const G3MRenderContext* rc,
+//                                     const GLGlobalState& parentState) {
 //  return NULL;
 //}
 //
@@ -38,7 +38,7 @@
 //}
 
 
-void SGMaterialNode::modifyGLState(GLState& glState) const{
+void SGMaterialNode::modifyGLGlobalState(GLGlobalState& GLGlobalState) const{
   
 }
 void SGMaterialNode::modifyGPUProgramState(GPUProgramState& progState) const{

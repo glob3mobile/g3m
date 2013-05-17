@@ -48,6 +48,6 @@ bool AbstractMeshShape::isTransparent(const G3MRenderContext* rc) {
 
 void AbstractMeshShape::notifyGLClientChildrenParentHasChanged(){
   if (_mesh != NULL){
-    _mesh->actualizeGLState(this);
+    _mesh->actualizeGLGlobalState(this);
   }
 }

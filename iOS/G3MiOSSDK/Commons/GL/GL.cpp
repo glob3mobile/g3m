@@ -24,16 +24,22 @@
 #include "GPUProgramState.hpp"
 #include "GPUProgramManager.hpp"
 
-void GL::clearScreen(const GLState& state) {
+#include "GLState.hpp"
+
+void GL::clearScreen(const GLGlobalState& state) {
   if (_verbose) {
     ILogger::instance()->logInfo("GL::clearScreen()");
   }
-  setGLState(state);
+  
+  GLState glState((GLGlobalState*)&state, NULL);
+  glState.applyGlobalStateOnGPU(this);
+  
+  //setGLGlobalState(state);
   _nativeGL->clear(GLBufferType::colorBuffer() | GLBufferType::depthBuffer());
 }
 
 void GL::drawElements(int mode,
-                      IShortBuffer* indices, const GLState& state,
+                      IShortBuffer* indices, const GLGlobalState& state,
                       GPUProgramManager& progManager,
                       const GPUProgramState* gpuState) {
   if (_verbose) {
@@ -42,7 +48,10 @@ void GL::drawElements(int mode,
                                  indices->description().c_str());
   }
   
-  applyGLStateAndGPUProgramState(state, progManager, *gpuState);
+  GLState glState((GLGlobalState*)&state, (GPUProgramState*)gpuState);
+  glState.applyOnGPU(this, progManager);
+  
+  //applyGLGlobalStateAndGPUProgramState(state, progManager, *gpuState);
   
   _nativeGL->drawElements(mode,
                           indices->size(),
@@ -54,7 +63,7 @@ void GL::drawElements(int mode,
 
 void GL::drawArrays(int mode,
                     int first,
-                    int count, const GLState& state,
+                    int count, const GLGlobalState& state,
                     GPUProgramManager& progManager,
                     const GPUProgramState* gpuState) {
   if (_verbose) {
@@ -64,7 +73,10 @@ void GL::drawArrays(int mode,
                                  count);
   }
   
-  applyGLStateAndGPUProgramState(state, progManager, *gpuState);
+  GLState glState((GLGlobalState*)&state, (GPUProgramState*)gpuState);
+  glState.applyOnGPU(this, progManager);
+  
+//  applyGLGlobalStateAndGPUProgramState(state, progManager, *gpuState);
   
   
   _nativeGL->drawArrays(mode,
@@ -94,10 +106,14 @@ const IGLTextureId* GL::uploadTexture(const IImage* image,
   if (texId != NULL) {
     int texture2D = GLTextureType::texture2D();
     
-    GLState state(*_currentState);
+    GLGlobalState state(*GLState::getCurrentGLGlobalState());
     state.setPixelStoreIAlignmentUnpack(1);
     state.bindTexture(texId);
-    setGLState(state);
+    
+    GLState glState((GLGlobalState*)&state, NULL);
+    glState.applyGlobalStateOnGPU(this);
+    
+//    setGLGlobalState(state);
     
     int linear = GLTextureParameterValue::linear();
     int clampToEdge = GLTextureParameterValue::clampToEdge();
@@ -177,47 +193,47 @@ void GL::deleteTexture(const IGLTextureId* textureId) {
       delete textureId;
     }
     
-    if (_currentState->getBoundTexture() == textureId){
-      _currentState->bindTexture(NULL);
+    if (GLState::getCurrentGLGlobalState()->getBoundTexture() == textureId){
+      GLState::getCurrentGLGlobalState()->bindTexture(NULL);
     }
     
     //ILogger::instance()->logInfo("  = delete textureId=%s", texture->description().c_str());
   }
 }
 
-void GL::setGLState(const GLState& state) {
-  state.applyChanges(this, *_currentState);
-}
-
-void GL::setProgramState(GPUProgramManager& progManager, const GPUProgramState& progState) {
-  GPUProgram* prog = NULL;
-  if (!progState.isLinkedToProgram()) {
-    prog = progManager.getProgram(progState);
-    progState.linkToProgram(*prog);
-  } else{
-    prog = progState.getLinkedProgram();
-  }
-  if (prog != NULL){
-    if (prog != _currentGPUProgram){
-      if (_currentGPUProgram != NULL){
-        _currentGPUProgram->onUnused();
-      }
-      _currentGPUProgram = prog;
-      useProgram(prog);
-    }
-    
-    progState.applyChanges(this);
-  } else{
-    ILogger::instance()->logError("No available GPUProgram for this state.");
-  }
-}
+//void GL::setGLGlobalState(const GLGlobalState& state) {
+//  state.applyChanges(this, *_currentState);
+//}
+//
+//void GL::setProgramState(GPUProgramManager& progManager, const GPUProgramState& progState) {
+//  GPUProgram* prog = NULL;
+//  if (!progState.isLinkedToProgram()) {
+//    prog = progManager.getProgram(progState);
+//    progState.linkToProgram(*prog);
+//  } else{
+//    prog = progState.getLinkedProgram();
+//  }
+//  if (prog != NULL){
+//    if (prog != _currentGPUProgram){
+//      if (_currentGPUProgram != NULL){
+//        _currentGPUProgram->onUnused();
+//      }
+//      _currentGPUProgram = prog;
+//      useProgram(prog);
+//    }
+//    
+//    progState.applyChanges(this);
+//  } else{
+//    ILogger::instance()->logError("No available GPUProgram for this state.");
+//  }
+//}
 
 void GL::useProgram(GPUProgram* program) {
   _nativeGL->useProgram(program);
   program->onUsed();
 }
 
-void GL::applyGLStateAndGPUProgramState(const GLState& state, GPUProgramManager& progManager, const GPUProgramState& progState){
-  state.applyChanges(this, *_currentState);
-  setProgramState(progManager, progState);
-}
+//void GL::applyGLGlobalStateAndGPUProgramState(const GLGlobalState& state, GPUProgramManager& progManager, const GPUProgramState& progState){
+//  state.applyChanges(this, *_currentState);
+//  setProgramState(progManager, progState);
+//}

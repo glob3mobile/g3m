@@ -121,11 +121,11 @@ void AbstractMesh::render(const G3MRenderContext *rc) const {
   rawRender(rc);
 }
 
-void AbstractMesh::modifyGLState(GLState& glState) const{
-  glState.setLineWidth(_lineWidth);
+void AbstractMesh::modifyGLGlobalState(GLGlobalState& GLGlobalState) const{
+  GLGlobalState.setLineWidth(_lineWidth);
   if (_flatColor != NULL && _flatColor->isTransparent()){
-    glState.enableBlend();
-    glState.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
+    GLGlobalState.enableBlend();
+    GLGlobalState.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
   }
 }
 
@@ -180,8 +180,8 @@ void AbstractMesh::modifyGPUProgramState(GPUProgramState& progState) const{
   }
 }
 
-void AbstractMesh::getGLStateAndGPUProgramState(GLState** glState, GPUProgramState** progState){
+void AbstractMesh::getGLGlobalStateAndGPUProgramState(GLGlobalState** GLGlobalState, GPUProgramState** progState){
   _progState.clear();
-  (*glState) = &_glState;
+  (*GLGlobalState) = &_GLGlobalState;
   (*progState) = &_progState;
 }

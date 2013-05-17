@@ -34,9 +34,9 @@
 #include "TouchEvent.hpp"
 #include "GPUProgramManager.hpp"
 
-#include "GLState.hpp"
+#include "GLGlobalState.hpp"
 #include "GPUProgramState.hpp"
-#include "GLState.hpp"
+#include "GLGlobalState.hpp"
 
 void G3MWidget::initSingletons(ILogger*            logger,
                                IFactory*           factory,
@@ -413,7 +413,7 @@ void G3MWidget::render(int width, int height) {
     _selectedRenderer->start(&rc);
   }
   
-  GLState state;
+  GLGlobalState state;
   state.setClearColor(_backgroundColor);
   _gl->clearScreen(state);
 

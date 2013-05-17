@@ -22,16 +22,16 @@ class Mesh;
 class MeshRenderer : public LeafRenderer, public GLClient {
 private:
   std::vector<Mesh*> _meshes;
-  bool _dirtyGLStates;
+  bool _dirtyGLGlobalStates;
 public:
   
-  MeshRenderer(): _dirtyGLStates(false){}
+  MeshRenderer(): _dirtyGLGlobalStates(false){}
   
   ~MeshRenderer();
 
   void addMesh(Mesh* mesh) {
     _meshes.push_back(mesh);
-    _dirtyGLStates = true;
+    _dirtyGLGlobalStates = true;
   }
 
   void clearMeshes();
@@ -77,7 +77,7 @@ public:
   }
   
   void notifyGLClientChildrenParentHasChanged();
-  void modifyGLState(GLState& glState) const;
+  void modifyGLGlobalState(GLGlobalState& GLGlobalState) const;
   void modifyGPUProgramState(GPUProgramState& progState) const;
   
 };

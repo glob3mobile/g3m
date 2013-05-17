@@ -90,7 +90,7 @@ public:
     releaseGLTextureId();
   }
   
-  //void bind(const G3MRenderContext* rc, const GLState& parentState) const;
+  //void bind(const G3MRenderContext* rc, const GLGlobalState& parentState) const;
   
   bool isValid() const {
     return _glTextureId != NULL;
@@ -101,7 +101,7 @@ public:
     _glTextureId = glTextureId;
   }
   
-  GLState* bind(const G3MRenderContext* rc, const GLState& parentState, GPUProgramState& progState) const;
+  GLGlobalState* bind(const G3MRenderContext* rc, const GLGlobalState& parentState, GPUProgramState& progState) const;
   
   
   const IGLTextureId* getGLTextureId() const {
@@ -112,7 +112,7 @@ public:
     return _transparent;
   }
   
-  void modifyGLState(GLState& glState) const;
+  void modifyGLGlobalState(GLGlobalState& GLGlobalState) const;
   
   void modifyGPUProgramState(GPUProgramState& progState) const;
   
@@ -179,7 +179,7 @@ public:
   bool isTransparent(const G3MRenderContext* rc) const;
   
   void notifyGLClientChildrenParentHasChanged();
-  void modifyGLState(GLState& glState) const;
+  void modifyGLGlobalState(GLGlobalState& GLGlobalState) const;
   void modifyGPUProgramState(GPUProgramState& progState) const;
   
   void setGLClientParent(GLClient* parent){

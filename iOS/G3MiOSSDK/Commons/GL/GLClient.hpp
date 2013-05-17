@@ -10,7 +10,7 @@
 #define G3MiOSSDK_GLClient_hpp
 
 #include "GPUProgramState.hpp"
-#include "GLState.hpp"
+#include "GLGlobalState.hpp"
 
 class GLClient{
 protected:
@@ -23,45 +23,45 @@ public:
   virtual ~GLClient(){}
   
   //Idle if this is not a drawable client
-  virtual void getGLStateAndGPUProgramState(GLState** glState, GPUProgramState** progState){
-    (*glState) = NULL;
+  virtual void getGLGlobalStateAndGPUProgramState(GLGlobalState** GLGlobalState, GPUProgramState** progState){
+    (*GLGlobalState) = NULL;
     (*progState) = NULL;
   }
   
   virtual void notifyGLClientChildrenParentHasChanged(){
-    //TIPICALLY: _mesh->actualizeGLState(this);
+    //TIPICALLY: _mesh->actualizeGLGlobalState(this);
   } //Idle if this is a drawable client
   
-  //Implemented if the node modifies the GLState
-  virtual void modifyGLState(GLState& glState) const{}
+  //Implemented if the node modifies the GLGlobalState
+  virtual void modifyGLGlobalState(GLGlobalState& GLGlobalState) const{}
   //Implemented if the node modifies the GPUProgramState
   virtual void modifyGPUProgramState(GPUProgramState& progState) const{}
   
   /**
-   Invoked by parent to change my GLState and GPUProgramState
+   Invoked by parent to change my GLGlobalState and GPUProgramState
    */
-  void actualizeGLState(const GLClient* parent){
+  void actualizeGLGlobalState(const GLClient* parent){
     _parent = parent;
     notifyGLClientChildrenParentHasChanged();
     
-    GLState* glState;
+    GLGlobalState* GLGlobalState;
     GPUProgramState* programState;
-    getGLStateAndGPUProgramState(&glState, &programState);
-    if (glState != NULL && programState != NULL){
+    getGLGlobalStateAndGPUProgramState(&GLGlobalState, &programState);
+    if (GLGlobalState != NULL && programState != NULL){
       //We are a drawable client
-      modifyGLStatesHierarchy(*glState, *programState);
+      modifyGLGlobalStatesHierarchy(*GLGlobalState, *programState);
     }
     
   }
   
   /**
-   Modifying current children's GLState and GPUProgramState
+   Modifying current children's GLGlobalState and GPUProgramState
    */
-  void modifyGLStatesHierarchy(GLState& glState, GPUProgramState& programState) const{
+  void modifyGLGlobalStatesHierarchy(GLGlobalState& GLGlobalState, GPUProgramState& programState) const{
     if (_parent != NULL){
-      _parent->modifyGLStatesHierarchy(glState, programState);
+      _parent->modifyGLGlobalStatesHierarchy(GLGlobalState, programState);
     }
-    modifyGLState(glState);
+    modifyGLGlobalState(GLGlobalState);
     modifyGPUProgramState(programState);
   }
 };

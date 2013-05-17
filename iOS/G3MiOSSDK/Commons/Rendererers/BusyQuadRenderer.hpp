@@ -64,7 +64,7 @@ public:
   }
   
   void render(const G3MRenderContext* rc,
-              const GLState& parentState);
+              const GLGlobalState& parentState);
   
   bool onTouchEvent(const G3MEventContext* ec,
                     const TouchEvent* touchEvent) {
@@ -103,7 +103,7 @@ public:
     
   }
   
-  void modifyGLState(GLState& glState) const;
+  void modifyGLGlobalState(GLGlobalState& GLGlobalState) const;
   
   void modifyGPUProgramState(GPUProgramState& progState) const;
   

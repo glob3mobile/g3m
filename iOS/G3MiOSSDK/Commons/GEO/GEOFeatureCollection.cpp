@@ -15,7 +15,7 @@
 //}
 
 //void GEOFeatureCollection::render(const G3MRenderContext* rc,
-//                                  const GLState& parentState, const GPUProgramState* parentProgramState,
+//                                  const GLGlobalState& parentState, const GPUProgramState* parentProgramState,
 //                                  const GEOSymbolizer* symbolizer) {
 //  const int featuresCount = _features.size();
 //  for (int i = 0; i < featuresCount; i++) {

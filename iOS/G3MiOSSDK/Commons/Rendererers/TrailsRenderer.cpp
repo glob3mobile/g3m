@@ -12,7 +12,7 @@
 #include "DirectMesh.hpp"
 #include "Planet.hpp"
 #include "GLConstants.hpp"
-#include "GLState.hpp"
+#include "GLGlobalState.hpp"
 #include "IFactory.hpp"
 #include "IFloatBuffer.hpp"
 #include "Camera.hpp"
@@ -153,7 +153,7 @@ void Trail::render(const G3MRenderContext* rc) {
     Mesh* mesh = getMesh(rc->getPlanet());
     if (mesh != NULL) {
       if (!hasBeenRenderized){
-        actualizeGLState(rc->getCurrentCamera()); //Actualize _mesh GLstate with camera
+        actualizeGLGlobalState(rc->getCurrentCamera()); //Actualize _mesh GLGlobalState with camera
       }
       
       mesh->render(rc);
@@ -162,9 +162,9 @@ void Trail::render(const G3MRenderContext* rc) {
 }
 
 void Trail::notifyGLClientChildrenParentHasChanged(){
-  _mesh->actualizeGLState(this);
+  _mesh->actualizeGLGlobalState(this);
 }
-void Trail::modifyGLState(GLState& glState) const{}
+void Trail::modifyGLGlobalState(GLGlobalState& GLGlobalState) const{}
 
 void Trail::modifyGPUProgramState(GPUProgramState& progState) const{
   progState.setUniformValue("EnableTexture", false);

@@ -24,7 +24,7 @@ private:
   IFloatBuffer* _normals;
   IShortBuffer* _indices;
   
-  GLState _glState;
+  GLGlobalState _GLGlobalState;
   GPUProgramState _programState;
 
 public:
@@ -52,23 +52,23 @@ public:
 
 
   void rawRender(const G3MRenderContext* rc,
-                 const GLState& parentState, const GPUProgramState* parentProgramState);
+                 const GLGlobalState& parentState, const GPUProgramState* parentProgramState);
 
-//  GLState* createState(const G3MRenderContext* rc,
-//                             const GLState& parentState) {
+//  GLGlobalState* createState(const G3MRenderContext* rc,
+//                             const GLGlobalState& parentState) {
 //    return NULL;
 //  }
 //  
 //  GPUProgramState * createGPUProgramState(const G3MRenderContext *rc, const GPUProgramState *parentState);
   
   //Idle if this is not a drawable client
-  void getGLStateAndGPUProgramState(GLState** glState, GPUProgramState** progState){
+  void getGLGlobalStateAndGPUProgramState(GLGlobalState** GLGlobalState, GPUProgramState** progState){
     _programState.clear();
-    (*glState) = &_glState;
+    (*GLGlobalState) = &_GLGlobalState;
     (*progState) = &_programState;
   }
 
-  void modifyGLState(GLState& glState) const;
+  void modifyGLGlobalState(GLGlobalState& GLGlobalState) const;
   void modifyGPUProgramState(GPUProgramState& progState) const;
   
 };

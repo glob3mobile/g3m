@@ -16,7 +16,7 @@ class GEOGeometry;
 class JSONBaseObject;
 class JSONObject;
 class GPUProgramState;
-class GLState;
+class GLGlobalState;
 class GEOSymbolizer;
 
 class GEOFeature : public GEOObject {
@@ -34,7 +34,7 @@ public:
   ~GEOFeature();
   
 //  void render(const G3MRenderContext* rc,
-//              const GLState& parentState, const GPUProgramState* parentProgramState,
+//              const GLGlobalState& parentState, const GPUProgramState* parentProgramState,
 //              const GEOSymbolizer* symbolizer);
 
   const JSONObject* getProperties() const {

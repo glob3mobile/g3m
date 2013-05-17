@@ -17,7 +17,7 @@
 class G3MContext;
 class G3MRenderContext;
 class SGShape;
-class GLState;
+class GLGlobalState;
 class GPUProgramState;
 
 class SGNode: public GLClient {
@@ -76,8 +76,8 @@ public:
   //    return NULL;
   //  }
   
-//  virtual GLState* createState(const G3MRenderContext* rc,
-//                               const GLState& parentState);
+//  virtual GLGlobalState* createState(const G3MRenderContext* rc,
+//                               const GLGlobalState& parentState);
 //  
 //  virtual GPUProgramState* createGPUProgramState(const G3MRenderContext* rc,
 //                                                 const GPUProgramState* parentState);

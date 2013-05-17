@@ -17,7 +17,7 @@
 #include "MutableVector2D.hpp"
 #include "IFloatBuffer.hpp"
 #include "GLConstants.hpp"
-#include "GLState.hpp"
+#include "GLGlobalState.hpp"
 
 #include <list>
 
@@ -37,9 +37,8 @@ private:
   std::list<const IGLTextureId*> _texturesIdBag;
   long                           _texturesIdAllocationCounter;
   
-  GLState *_currentState;
-  
-  GPUProgram* _currentGPUProgram;
+//  GLGlobalState *_currentState;
+//  GPUProgram* _currentGPUProgram;
   
   inline void loadModelView();
   
@@ -47,10 +46,10 @@ private:
   
   const bool _verbose;
   
-  void setGLState(const GLState& state);
-  void setProgramState(GPUProgramManager& progManager, const GPUProgramState& progState);
-  
-  void applyGLStateAndGPUProgramState(const GLState& state, GPUProgramManager& progManager, const GPUProgramState& progState);
+//  void setGLGlobalState(const GLGlobalState& state);
+//  void setProgramState(GPUProgramManager& progManager, const GPUProgramState& progState);
+//  
+//  void applyGLGlobalStateAndGPUProgramState(const GLGlobalState& state, GPUProgramManager& progManager, const GPUProgramState& progState);
   
 public:
   
@@ -59,10 +58,10 @@ public:
      bool verbose) :
   _nativeGL(nativeGL),
   _verbose(verbose),
-  _texturesIdAllocationCounter(0),
+  _texturesIdAllocationCounter(0)
 //  _program(NULL),
-  _currentState(NULL),
-  _currentGPUProgram(NULL)
+//  _currentState(NULL),
+//  _currentGPUProgram(NULL)
   {
     //Init Constants
     GLCullFace::init(_nativeGL);
@@ -79,18 +78,18 @@ public:
     GLVariable::init(_nativeGL);
     GLError::init(_nativeGL);
     
-    _currentState = GLState::newDefault(); //Init after constants
+//    _currentState = GLGlobalState::newDefault(); //Init after constants
   }
   
-  void clearScreen(const GLState& state);
+  void clearScreen(const GLGlobalState& state);
   
   void drawElements(int mode,
-                    IShortBuffer* indices, const GLState& state,
+                    IShortBuffer* indices, const GLGlobalState& state,
                     GPUProgramManager& progManager,const GPUProgramState* gpuState);
   
   void drawArrays(int mode,
                   int first,
-                  int count, const GLState& state,
+                  int count, const GLGlobalState& state,
                   GPUProgramManager& progManager,const GPUProgramState* gpuState);
   
   int getError();
@@ -199,7 +198,7 @@ public:
     return _nativeGL->getActiveAttribute(program, i);
   }
   
-  GLState* getCurrentState() const{ return _currentState;}
+//  GLGlobalState* getCurrentState() const{ return _currentState;}
   
   void useProgram(GPUProgram* program) ;
   

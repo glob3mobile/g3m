@@ -73,7 +73,7 @@ public:
   }
   
   void notifyGLClientChildrenParentHasChanged();
-  void modifyGLState(GLState& glState) const;
+  void modifyGLGlobalState(GLGlobalState& GLGlobalState) const;
   void modifyGPUProgramState(GPUProgramState& progState) const;
 };
 

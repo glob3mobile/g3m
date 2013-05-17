@@ -13,7 +13,7 @@ class TouchEvent;
 class G3MContext;
 class G3MRenderContext;
 class G3MEventContext;
-class GLState;
+class GLGlobalState;
 
 class Renderer {
 public:

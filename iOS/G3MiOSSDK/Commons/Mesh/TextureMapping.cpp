@@ -15,9 +15,9 @@
 #include "GPUProgram.hpp"
 #include "GPUProgramState.hpp"
 
-GLState* SimpleTextureMapping::bind(const G3MRenderContext* rc, const GLState& parentState, GPUProgramState& progState) const {
+GLGlobalState* SimpleTextureMapping::bind(const G3MRenderContext* rc, const GLGlobalState& parentState, GPUProgramState& progState) const {
 
-  GLState* state= new GLState(parentState);
+  GLGlobalState* state= new GLGlobalState(parentState);
   if (_texCoords != NULL) {
     
     
@@ -49,9 +49,9 @@ SimpleTextureMapping::~SimpleTextureMapping() {
   }
 }
 
-void SimpleTextureMapping::modifyGLState(GLState& glState) const{
+void SimpleTextureMapping::modifyGLGlobalState(GLGlobalState& GLGlobalState) const{
   if (_texCoords != NULL) {
-    glState.bindTexture(_glTextureId);
+    GLGlobalState.bindTexture(_glTextureId);
   }
   else {
     ILogger::instance()->logError("SimpleTextureMapping::bind() with _texCoords == NULL");

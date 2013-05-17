@@ -191,7 +191,7 @@ void Camera::_setGeodeticPosition(const Vector3D& pos) {
 }
 
 void Camera::render(const G3MRenderContext* rc,
-                    const GLState& parentState) const {
+                    const GLGlobalState& parentState) const {
   //TODO: NO LONGER NEEDED!!!
 }
 

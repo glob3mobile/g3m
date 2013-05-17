@@ -423,14 +423,14 @@ void Mark::render(const G3MRenderContext* rc,
           
           viewportWidth = rc->getCurrentCamera()->getWidth();
           viewportHeight = rc->getCurrentCamera()->getHeight();
-          actualizeGLState(rc->getCurrentCamera()); //Ready for rendering
+          actualizeGLGlobalState(rc->getCurrentCamera()); //Ready for rendering
         }
       } else{
         if (rc->getCurrentCamera()->getWidth() != viewportWidth ||
             rc->getCurrentCamera()->getHeight() != viewportHeight){
           viewportWidth = rc->getCurrentCamera()->getWidth();
           viewportHeight = rc->getCurrentCamera()->getHeight();
-          actualizeGLState(rc->getCurrentCamera()); //Ready for rendering
+          actualizeGLGlobalState(rc->getCurrentCamera()); //Ready for rendering
         }
       }
       
@@ -438,7 +438,7 @@ void Mark::render(const G3MRenderContext* rc,
         GL* gl = rc->getGL();
         
         
-        //        GLState state(parentState);
+        //        GLGlobalState state(parentState);
         //        state.bindTexture(_textureId);
         
         GPUProgramManager& progManager = *rc->getGPUProgramManager();
@@ -446,7 +446,7 @@ void Mark::render(const G3MRenderContext* rc,
         gl->drawArrays(GLPrimitive::triangleStrip(),
                        0,
                        4,
-                       _glState,
+                       _GLGlobalState,
                        progManager,
                        &_progState);
         
@@ -472,17 +472,17 @@ double Mark::getMinDistanceToCamera() {
   return _minDistanceToCamera;
 }
 
-void Mark::getGLStateAndGPUProgramState(GLState** glState, GPUProgramState** progState){
+void Mark::getGLGlobalStateAndGPUProgramState(GLGlobalState** GLGlobalState, GPUProgramState** progState){
   _progState.clear();
-  (*glState) = &_glState;
+  (*GLGlobalState) = &_GLGlobalState;
   (*progState) = &_progState;
 }
 
-void Mark::modifyGLState(GLState& glState) const{
-  glState.disableDepthTest();
-  glState.enableBlend();
-  glState.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
-  glState.bindTexture(_textureId);
+void Mark::modifyGLGlobalState(GLGlobalState& GLGlobalState) const{
+  GLGlobalState.disableDepthTest();
+  GLGlobalState.enableBlend();
+  GLGlobalState.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
+  GLGlobalState.bindTexture(_textureId);
 }
 
 void Mark::modifyGPUProgramState(GPUProgramState& progState) const{

@@ -47,7 +47,7 @@ protected:
   virtual void rawRender(const G3MRenderContext* rc) const = 0;
 protected:
   
-  GLState _glState;
+  GLGlobalState _GLGlobalState;
   GPUProgramState _progState;
 
 public:
@@ -64,8 +64,8 @@ public:
   bool isTransparent(const G3MRenderContext* rc) const;
 
   //Drawable GLClient
-  void getGLStateAndGPUProgramState(GLState** glState, GPUProgramState** progState);
-  void modifyGLState(GLState& glState) const;
+  void getGLGlobalStateAndGPUProgramState(GLGlobalState** GLGlobalState, GPUProgramState** progState);
+  void modifyGLGlobalState(GLGlobalState& GLGlobalState) const;
   void modifyGPUProgramState(GPUProgramState& progState) const;
   
 };

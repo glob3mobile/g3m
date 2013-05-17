@@ -57,9 +57,9 @@ public:
   }
   
   void notifyGLClientChildrenParentHasChanged(){
-    _mesh->actualizeGLState(this);
+    _mesh->actualizeGLGlobalState(this);
   }
-  void modifyGLState(GLState& glState) const{}
+  void modifyGLGlobalState(GLGlobalState& GLGlobalState) const{}
   void modifyGPUProgramState(GPUProgramState& progState) const{}
   
 };

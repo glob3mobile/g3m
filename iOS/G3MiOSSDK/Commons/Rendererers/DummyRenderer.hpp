@@ -28,7 +28,7 @@ private:
   IShortBuffer* _indices;
   IFloatBuffer* _vertices;
   
-  void drawFace(GL* gl, const GLState& parentState,
+  void drawFace(GL* gl, const GLGlobalState& parentState,
                 const Color& color, const Vector3D& translation, const Angle& a,
                 const Vector3D& rotationAxis, GPUProgramManager &manager,
                 const GPUProgramState* parentProgramState) const;
@@ -39,7 +39,7 @@ public:
   void initialize(const G3MContext* context);
   
   void render(const G3MRenderContext* rc,
-              const GLState& parentState);
+              const GLGlobalState& parentState);
   
   bool onTouchEvent(const G3MEventContext* ec,
                     const TouchEvent* touchEvent);

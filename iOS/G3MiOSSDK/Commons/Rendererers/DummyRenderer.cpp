@@ -70,7 +70,7 @@ bool DummyRenderer::onTouchEvent(const G3MEventContext* ec,
   return false;
 }
 
-void DummyRenderer::drawFace(GL* gl, const GLState& parentState,
+void DummyRenderer::drawFace(GL* gl, const GLGlobalState& parentState,
                              const Color& color, const Vector3D& translation, const Angle& a,
                              const Vector3D& rotationAxis, GPUProgramManager &manager,
                              const GPUProgramState* parentProgramState) const
@@ -91,7 +91,7 @@ void DummyRenderer::drawFace(GL* gl, const GLState& parentState,
 }
 
 void DummyRenderer::render(const G3MRenderContext* rc,
-                           const GLState& parentState) {
+                           const GLGlobalState& parentState) {
   
   //TODO: IMPLEMENT
   
@@ -105,7 +105,7 @@ void DummyRenderer::render(const G3MRenderContext* rc,
 //                              false,        //Not normalized
 //                              0);           //Stride 0
 //  
-//  GLState state(parentState);
+//  GLGlobalState state(parentState);
 //
 //  GL* gl = rc->getGL();
 //  GPUProgramManager* manager = rc->getGPUProgramManager();

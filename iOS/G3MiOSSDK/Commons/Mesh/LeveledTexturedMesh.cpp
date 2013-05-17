@@ -18,7 +18,7 @@
 #include "Camera.hpp"
 
 
-GLState* LazyTextureMapping::bind(const G3MRenderContext* rc, const GLState& parentState, GPUProgramState& progState) const {
+GLGlobalState* LazyTextureMapping::bind(const G3MRenderContext* rc, const GLGlobalState& parentState, GPUProgramState& progState) const {
   if (!_initialized) {
     _initializer->initialize();
 
@@ -35,7 +35,7 @@ GLState* LazyTextureMapping::bind(const G3MRenderContext* rc, const GLState& par
   progState.setAttributeEnabled("TextureCoord", true);
   progState.setUniformValue("EnableTexture", true);
   
-  GLState *state = new GLState(parentState);
+  GLGlobalState *state = new GLGlobalState(parentState);
   //state->enableTextures();
 
 //  state->enableTexture2D();
@@ -64,7 +64,7 @@ GLState* LazyTextureMapping::bind(const G3MRenderContext* rc, const GLState& par
   return state;
 }
 
-void LazyTextureMapping::modifyGLState(GLState& glState) const{
+void LazyTextureMapping::modifyGLGlobalState(GLGlobalState& GLGlobalState) const{
   if (!_initialized) {
     _initializer->initialize();
     
@@ -79,7 +79,7 @@ void LazyTextureMapping::modifyGLState(GLState& glState) const{
   }
   
   if (_texCoords != NULL) {
-    glState.bindTexture(_glTextureId);
+    GLGlobalState.bindTexture(_glTextureId);
   }
   else {
     ILogger::instance()->logError("LazyTextureMapping::bind() with _texCoords == NULL");
@@ -268,12 +268,12 @@ bool LeveledTexturedMesh::isTransparent(const G3MRenderContext* rc) const {
 }
 
 void LeveledTexturedMesh::notifyGLClientChildrenParentHasChanged(){
-  ((Mesh*)_mesh)->actualizeGLState(this);
+  ((Mesh*)_mesh)->actualizeGLGlobalState(this);
 }
 
-void LeveledTexturedMesh::modifyGLState(GLState& glState) const{
+void LeveledTexturedMesh::modifyGLGlobalState(GLGlobalState& GLGlobalState) const{
   LazyTextureMapping* mapping = getCurrentTextureMapping();
-  mapping->modifyGLState(glState);
+  mapping->modifyGLGlobalState(GLGlobalState);
 }
 
 void LeveledTexturedMesh::modifyGPUProgramState(GPUProgramState& progState) const{
@@ -285,7 +285,7 @@ void LeveledTexturedMesh::updateLastUsedMapping(const G3MRenderContext* rc, Lazy
   if (_lastUsedMapping != mapping){
     _lastUsedMapping = mapping;
     if (_parentGLClient != NULL){
-      _parentGLClient->actualizeGLState(rc->getCurrentCamera());
+      _parentGLClient->actualizeGLGlobalState(rc->getCurrentCamera());
     }
   }
 }

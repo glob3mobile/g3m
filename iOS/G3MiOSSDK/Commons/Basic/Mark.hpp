@@ -23,7 +23,7 @@ class IImage;
 class IFloatBuffer;
 class IGLTextureId;
 class MarkTouchListener;
-class GLState;
+class GLGlobalState;
 class GPUProgramState;
 
 class MarkUserData {
@@ -125,7 +125,7 @@ private:
   
   bool    _renderedMark;
   
-  GLState _glState;
+  GLGlobalState _GLGlobalState;
   GPUProgramState _progState;
   
   static IFloatBuffer* _billboardTexCoord;
@@ -245,8 +245,8 @@ public:
   double getMinDistanceToCamera();
   
   //Drawable client
-  void getGLStateAndGPUProgramState(GLState** glState, GPUProgramState** progState);
-  void modifyGLState(GLState& glState) const;
+  void getGLGlobalStateAndGPUProgramState(GLGlobalState** GLGlobalState, GPUProgramState** progState);
+  void modifyGLGlobalState(GLGlobalState& GLGlobalState) const;
   void modifyGPUProgramState(GPUProgramState& progState) const;
   
 };

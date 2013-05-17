@@ -10,7 +10,7 @@
 #define __G3MiOSSDK__OrderedRenderable__
 
 #include "Context.hpp"
-class GLState;
+class GLGlobalState;
 class GPUProgramState;
 
 class OrderedRenderable {

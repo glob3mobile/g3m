@@ -8,7 +8,7 @@
 
 #include "SGNode.hpp"
 
-#include "GLState.hpp"
+#include "GLGlobalState.hpp"
 #include "GPUProgramState.hpp"
 
 #include "SGShape.hpp"
@@ -62,8 +62,8 @@ void SGNode::rawRender(const G3MRenderContext* rc) {
   
 }
 
-//GLState* SGNode::createState(const G3MRenderContext* rc,
-//                             const GLState& parentState) {
+//GLGlobalState* SGNode::createState(const G3MRenderContext* rc,
+//                             const GLGlobalState& parentState) {
 //  return  NULL;
 //}
 //
@@ -74,10 +74,10 @@ void SGNode::rawRender(const G3MRenderContext* rc) {
 
 
 void SGNode::render(const G3MRenderContext* rc) {
-//  GLState* myState = createState(rc, parentState);
-//  GLState* state;
+//  GLGlobalState* myState = createState(rc, parentState);
+//  GLGlobalState* state;
 //  if (myState == NULL) {
-//    state = (GLState*) &parentState;
+//    state = (GLGlobalState*) &parentState;
 //  }
 //  else {
 //    state = myState;
@@ -99,11 +99,11 @@ void SGNode::render(const G3MRenderContext* rc) {
 void SGNode::notifyGLClientChildrenParentHasChanged(){
   
   if (_shape != NULL){
-    _shape->actualizeGLState(this);
+    _shape->actualizeGLGlobalState(this);
   }
   
   const int nChildren = getChildrenCount();
   for (int i = 0; i < nChildren; i++) {
-    _children[i]->actualizeGLState(this);
+    _children[i]->actualizeGLGlobalState(this);
   }
 }

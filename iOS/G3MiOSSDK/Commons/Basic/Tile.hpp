@@ -23,7 +23,7 @@ class TilesStatistics;
 class TileRenderContext;
 class TileKey;
 class Vector3D;
-class GLState;
+class GLGlobalState;
 class Extent;
 class ElevationDataProvider;
 class ElevationData;
@@ -203,7 +203,7 @@ public:
   
   //Not drawable gl client
   void notifyGLClientChildrenParentHasChanged(); 
-  void modifyGLState(GLState& glState) const;
+  void modifyGLGlobalState(GLGlobalState& GLGlobalState) const;
   void modifyGPUProgramState(GPUProgramState& progState) const;
 
 };

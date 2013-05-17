@@ -12,8 +12,8 @@
 #include "GL.hpp"
 #include "GPUProgramState.hpp"
 
-//GLState* SGTranslateNode::createState(const G3MRenderContext* rc,
-//                     const GLState& parentState) {
+//GLGlobalState* SGTranslateNode::createState(const G3MRenderContext* rc,
+//                     const GLGlobalState& parentState) {
 //  return NULL;
 //}
 //
@@ -26,7 +26,7 @@
 //  
 //}
 
-void SGTranslateNode::modifyGLState(GLState& glState) const{
+void SGTranslateNode::modifyGLGlobalState(GLGlobalState& GLGlobalState) const{
   
 }
 

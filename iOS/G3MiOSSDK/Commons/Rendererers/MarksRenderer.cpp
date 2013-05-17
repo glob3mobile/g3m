@@ -185,7 +185,7 @@ void MarksRenderer::render(const G3MRenderContext* rc) {
   // Saving camera for use in onTouchEvent
   _lastCamera = rc->getCurrentCamera();
   
-//  GLState state(parentState);
+//  GLGlobalState state(parentState);
 //  state.disableDepthTest();
 //  state.enableBlend();
 //  state.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());

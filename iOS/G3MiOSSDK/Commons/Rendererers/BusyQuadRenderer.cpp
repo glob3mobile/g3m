@@ -96,10 +96,10 @@ bool BusyQuadRenderer::initMesh(const G3MRenderContext* rc) {
 
 
 void BusyQuadRenderer::render(const G3MRenderContext* rc,
-                              const GLState& parentState) {
+                              const GLGlobalState& parentState) {
   GL* gl = rc->getGL();
 
-  GLState state(parentState);
+  GLGlobalState state(parentState);
   state.enableBlend();
 
   if (_quadMesh == NULL){
@@ -141,10 +141,10 @@ void BusyQuadRenderer::render(const G3MRenderContext* rc,
   _quadMesh->render(rc);
 }
 
-void BusyQuadRenderer::modifyGLState(GLState& glState) const{
-  glState.enableBlend();
-  glState.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
-  glState.setClearColor(*_backgroundColor);
+void BusyQuadRenderer::modifyGLGlobalState(GLGlobalState& GLGlobalState) const{
+  GLGlobalState.enableBlend();
+  GLGlobalState.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
+  GLGlobalState.setClearColor(*_backgroundColor);
 }
 
 void BusyQuadRenderer::modifyGPUProgramState(GPUProgramState& progState) const{

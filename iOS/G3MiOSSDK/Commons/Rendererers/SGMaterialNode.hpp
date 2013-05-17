@@ -60,12 +60,12 @@ public:
     delete _specularColor;
   }
 
-//  GLState* createState(const G3MRenderContext* rc,
-//                       const GLState& parentState);
+//  GLGlobalState* createState(const G3MRenderContext* rc,
+//                       const GLGlobalState& parentState);
 //  
 //  GPUProgramState* createGPUProgramState(const G3MRenderContext* rc, const GPUProgramState* parentState);
   
-  void modifyGLState(GLState& glState) const;
+  void modifyGLGlobalState(GLGlobalState& GLGlobalState) const;
   void modifyGPUProgramState(GPUProgramState& progState) const;
 
 };

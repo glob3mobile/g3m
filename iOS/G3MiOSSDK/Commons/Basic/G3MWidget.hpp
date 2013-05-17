@@ -50,7 +50,7 @@ class GPUProgramManager;
 #include "Angle.hpp"
 
 class G3MContext;
-class GLState;
+class GLGlobalState;
 
 class WidgetUserData {
 private:

@@ -15,7 +15,7 @@
 #include "TileRenderer.hpp"
 #include "TilesRenderParameters.hpp"
 #include "TileKey.hpp"
-#include "GLState.hpp"
+#include "GLGlobalState.hpp"
 #include "Box.hpp"
 #include "ElevationDataProvider.hpp"
 #include "MeshHolder.hpp"
@@ -443,7 +443,7 @@ void Tile::prepareForFullRendering(const G3MRenderContext* rc,
       
       
       //Storing camera matrix values for glclient children and notifying children
-      //this->actualizeGLState(rc->getCurrentCamera());
+      //this->actualizeGLGlobalState(rc->getCurrentCamera());
     }
   }
 }
@@ -760,16 +760,16 @@ double Tile::getMaxHeight() const {
 
 void Tile::notifyGLClientChildrenParentHasChanged(){
   if (_texturizedMesh != NULL){
-    _texturizedMesh->actualizeGLState(this);
+    _texturizedMesh->actualizeGLGlobalState(this);
   } else{
     if (_tessellatorMesh != NULL){
-      _tessellatorMesh->actualizeGLState(this);
+      _tessellatorMesh->actualizeGLGlobalState(this);
     }
   }
 }
 
-void Tile::modifyGLState(GLState& glState) const{
-  glState.enableDepthTest();
+void Tile::modifyGLGlobalState(GLGlobalState& GLGlobalState) const{
+  GLGlobalState.enableDepthTest();
 }
 
 void Tile::modifyGPUProgramState(GPUProgramState& progState) const{}

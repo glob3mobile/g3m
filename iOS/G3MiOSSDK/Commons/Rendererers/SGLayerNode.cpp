@@ -114,8 +114,8 @@ GPUProgramState* SGLayerNode::createGPUProgramState(const G3MRenderContext* rc, 
   return progState;
 }
 
-GLState* SGLayerNode::createState(const G3MRenderContext* rc,
-                                        const GLState& parentState) {
+GLGlobalState* SGLayerNode::createState(const G3MRenderContext* rc,
+                                        const GLGlobalState& parentState) {
   if (!_initialized) {
     _initialized = true;
     requestImage(rc);
@@ -126,14 +126,14 @@ GLState* SGLayerNode::createState(const G3MRenderContext* rc,
     return NULL;
   }
 
-  GLState* state = new GLState(parentState);
+  GLGlobalState* state = new GLGlobalState(parentState);
   state->bindTexture(texId);
   int __WORKING;
 
   return state;
 }
 */
-void SGLayerNode::modifyGLState(GLState& glState) const{
+void SGLayerNode::modifyGLGlobalState(GLGlobalState& GLGlobalState) const{
   
   int __WORKING;
   /*if (!_initialized) {

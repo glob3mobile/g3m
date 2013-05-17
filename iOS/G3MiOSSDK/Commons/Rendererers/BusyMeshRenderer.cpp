@@ -88,8 +88,8 @@ void BusyMeshRenderer::render(const G3MRenderContext* rc)
 {
   GL* gl = rc->getGL();
   
-  // set mesh glstate
-  GLState state;
+  // set mesh GLGlobalState
+  GLGlobalState state;
   state.enableBlend();
   
   state.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
@@ -112,10 +112,10 @@ void BusyMeshRenderer::render(const G3MRenderContext* rc)
   _mesh->render(rc);
 }
 
-void BusyMeshRenderer::modifyGLState(GLState& glState) const{
-  glState.enableBlend();
-  glState.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
-  glState.setClearColor(*_backgroundColor);
+void BusyMeshRenderer::modifyGLGlobalState(GLGlobalState& GLGlobalState) const{
+  GLGlobalState.enableBlend();
+  GLGlobalState.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
+  GLGlobalState.setClearColor(*_backgroundColor);
 }
 
 void BusyMeshRenderer::modifyGPUProgramState(GPUProgramState& progState) const{

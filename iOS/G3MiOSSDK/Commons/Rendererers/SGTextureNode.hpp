@@ -35,16 +35,16 @@ public:
                   SGShape *shape);
 
 //  void rawRender(const G3MRenderContext* rc,
-//                 const GLState& parentState);
+//                 const GLGlobalState& parentState);
 
-  GLState* createState(const G3MRenderContext* rc,
-                       const GLState& parentState) {
+  GLGlobalState* createState(const G3MRenderContext* rc,
+                       const GLGlobalState& parentState) {
     return  NULL;
   }
 
 //  void render(const G3MRenderContext* rc);
   
-  void modifyGLState(GLState& glState) const;
+  void modifyGLGlobalState(GLGlobalState& GLGlobalState) const;
   void modifyGPUProgramState(GPUProgramState& progState) const;
   
   

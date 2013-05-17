@@ -16,11 +16,11 @@ void TexturedMesh::render(const G3MRenderContext* rc) const {
   _mesh->render(rc);
 }
 
-void TexturedMesh::modifyGLState(GLState& glState) const{
-  _textureMapping->modifyGLState(glState);
+void TexturedMesh::modifyGLGlobalState(GLGlobalState& GLGlobalState) const{
+  _textureMapping->modifyGLGlobalState(GLGlobalState);
   if (_transparent) {
-    glState.enableBlend();
-    glState.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
+    GLGlobalState.enableBlend();
+    GLGlobalState.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
   }
 }
 
@@ -30,5 +30,5 @@ void TexturedMesh::modifyGPUProgramState(GPUProgramState& progState) const{
 
 void TexturedMesh::notifyGLClientChildrenParentHasChanged(){
   Mesh* mesh = (Mesh*)_mesh;
-  mesh->actualizeGLState(this);
+  mesh->actualizeGLGlobalState(this);
 }

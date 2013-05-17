@@ -31,9 +31,9 @@ MeshRenderer::~MeshRenderer() {
 void MeshRenderer::render(const G3MRenderContext* rc) {
   const Frustum* frustum = rc->getCurrentCamera()->getFrustumInModelCoordinates();
   
-  if (_dirtyGLStates){
-    actualizeGLState(rc->getCurrentCamera());
-    _dirtyGLStates = true;
+  if (_dirtyGLGlobalStates){
+    actualizeGLGlobalState(rc->getCurrentCamera());
+    _dirtyGLGlobalStates = true;
   }
 
   const int meshesCount = _meshes.size();
@@ -51,12 +51,12 @@ void MeshRenderer::notifyGLClientChildrenParentHasChanged(){
   const int meshesCount = _meshes.size();
   for (int i = 0; i < meshesCount; i++) {
     Mesh* mesh = _meshes[i];
-    mesh->actualizeGLState(this);
+    mesh->actualizeGLGlobalState(this);
   }
 }
 
-void MeshRenderer::modifyGLState(GLState& glState) const{
-  glState.enableDepthTest();
+void MeshRenderer::modifyGLGlobalState(GLGlobalState& GLGlobalState) const{
+  GLGlobalState.enableDepthTest();
 }
 
 void MeshRenderer::modifyGPUProgramState(GPUProgramState& progState) const{

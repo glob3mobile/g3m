@@ -67,12 +67,12 @@ SGGeometryNode::~SGGeometryNode() {
 //}
 
 void SGGeometryNode::rawRender(const G3MRenderContext* rc,
-                               const GLState& parentState, const GPUProgramState* parentProgramState) {
+                               const GLGlobalState& parentState, const GPUProgramState* parentProgramState) {
   GL* gl = rc->getGL();
   gl->drawElements(_primitive, _indices, parentState, *rc->getGPUProgramManager(), parentProgramState);
 }
 
-void SGGeometryNode::modifyGLState(GLState& glState) const{
+void SGGeometryNode::modifyGLGlobalState(GLGlobalState& GLGlobalState) const{
   
 }
 

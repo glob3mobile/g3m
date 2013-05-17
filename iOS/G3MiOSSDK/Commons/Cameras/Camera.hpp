@@ -157,7 +157,7 @@ public:
   void resizeViewport(int width, int height);
 
   void render(const G3MRenderContext* rc,
-              const GLState& parentState) const;
+              const GLGlobalState& parentState) const;
 
   const Vector3D pixel2Ray(const Vector2I& pixel) const;
 
@@ -287,12 +287,12 @@ public:
     getModelMatrix();
   }
   
-  void actualizeChildGLState(GLClient* child) const{
-    child->actualizeGLState(this);
+  void actualizeChildGLGlobalState(GLClient* child) const{
+    child->actualizeGLGlobalState(this);
   }
   
   //GLClient
-  void modifyGLState(GLState& glState) const{}
+  void modifyGLGlobalState(GLGlobalState& GLGlobalState) const{}
   void modifyGPUProgramState(GPUProgramState& progState) const{
     getProjectionMatrix();
     getModelViewMatrix();

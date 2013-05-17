@@ -13,8 +13,8 @@
 #include "Vector3D.hpp"
 #include "GPUProgramState.hpp"
 
-//GLState* SGRotateNode::createState(const G3MRenderContext* rc,
-//                     const GLState& parentState) {
+//GLGlobalState* SGRotateNode::createState(const G3MRenderContext* rc,
+//                     const GLGlobalState& parentState) {
 //  return NULL;
 //}
 //
@@ -28,7 +28,7 @@
 //  
 //}
 
-void SGRotateNode::modifyGLState(GLState& glState) const{
+void SGRotateNode::modifyGLGlobalState(GLGlobalState& GLGlobalState) const{
   
 }
 

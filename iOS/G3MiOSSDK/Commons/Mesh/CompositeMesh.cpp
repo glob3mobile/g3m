@@ -97,6 +97,6 @@ void CompositeMesh::notifyGLClientChildrenParentHasChanged(){
   const int childrenCount = _children.size();
   for (int i = 0; i < childrenCount; i++) {
     Mesh* child = _children[i];
-    child->actualizeGLState(this);
+    child->actualizeGLGlobalState(this);
   }
 }
