@@ -28,6 +28,11 @@ class GLState{
   
 public:
   
+  GLState():
+  _programState(new GPUProgramState()),
+  _globalState(new GLGlobalState()){}
+  
+  //For debugging purposes only
   GLState(GLGlobalState*   globalState,
           GPUProgramState* programState):_programState(programState), _globalState(globalState){}
   
