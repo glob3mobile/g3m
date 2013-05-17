@@ -9,9 +9,11 @@
 #ifndef G3MiOSSDK_PureEllipsoid_hpp
 #define G3MiOSSDK_PureEllipsoid_hpp
 
+/*
 #include "MutableVector3D.hpp"
 #include "Geodetic3D.hpp"
 #include "Ellipsoid.hpp"
+
 
 
 class PureEllipsoid: public Ellipsoid {
@@ -113,5 +115,7 @@ public:
   MutableMatrix44D createGeodeticTransformMatrix(const Geodetic3D& position) const;
   
 };
+ 
+ */
 
 #endif

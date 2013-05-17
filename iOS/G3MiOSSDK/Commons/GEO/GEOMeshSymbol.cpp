@@ -22,9 +22,9 @@ Mesh* GEOMeshSymbol::createLine2DMesh(const std::vector<Geodetic2D*>* coordinate
                                       const Color& lineColor,
                                       float lineWidth,
                                       double deltaHeight,
-                                      const Ellipsoid* ellipsoid) const {
+                                      const Planet* planet) const {
   FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
-                                          ellipsoid,
+                                          planet,
                                           Geodetic2D::zero());
 
   const int coordinatesCount = coordinates->size();
@@ -51,10 +51,10 @@ Mesh* GEOMeshSymbol::createLines2DMesh(const std::vector<std::vector<Geodetic2D*
                                        const Color& lineColor,
                                        float lineWidth,
                                        double deltaHeight,
-                                       const Ellipsoid* ellipsoid) const {
+                                       const Planet* planet) const {
 
   FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
-                                          ellipsoid,
+                                          planet,
                                           Geodetic2D::zero());
   ShortBufferBuilder indices;
 

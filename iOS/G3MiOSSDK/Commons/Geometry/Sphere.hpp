@@ -11,10 +11,10 @@
 
 #include "MutableVector3D.hpp"
 #include "Geodetic3D.hpp"
-#include "Ellipsoid.hpp"
+#include "Planet.hpp"
 
 
-class Sphere: public Ellipsoid {
+class Sphere: public Planet {
 private:
   const double _radii;
   const double _radiiSquared;

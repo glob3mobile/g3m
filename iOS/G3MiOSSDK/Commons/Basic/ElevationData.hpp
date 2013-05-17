@@ -60,7 +60,7 @@ public:
 
   virtual Vector3D getMinMaxAverageHeights() const = 0;
 
-  virtual Mesh* createMesh(const Ellipsoid* ellipsoid,
+  virtual Mesh* createMesh(const Planet* planet,
                            float verticalExaggeration,
                            const Geodetic3D& positionOffset,
                            float pointSize) const;

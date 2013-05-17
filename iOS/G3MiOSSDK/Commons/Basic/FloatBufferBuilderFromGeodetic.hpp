@@ -30,12 +30,12 @@ private:
     _cz = (float) center._z;
   }
 
-  const Ellipsoid * _ellipsoid;
+  const Planet * _ellipsoid;
 
 public:
 
   FloatBufferBuilderFromGeodetic(int centerStrategy,
-                                 const Ellipsoid* ellipsoid,
+                                 const Planet* ellipsoid,
                                  const Vector3D& center):
   _ellipsoid(ellipsoid),
   _centerStrategy(centerStrategy)
@@ -44,7 +44,7 @@ public:
   }
 
   FloatBufferBuilderFromGeodetic(int centerStrategy,
-                                 const Ellipsoid* ellipsoid,
+                                 const Planet* ellipsoid,
                                  const Geodetic2D& center):
   _ellipsoid(ellipsoid),
   _centerStrategy(centerStrategy)
@@ -53,7 +53,7 @@ public:
   }
 
   FloatBufferBuilderFromGeodetic(int centerStrategy,
-                                 const Ellipsoid* ellipsoid,
+                                 const Planet* ellipsoid,
                                  const Geodetic3D& center):
   _ellipsoid(ellipsoid),
   _centerStrategy(centerStrategy)
