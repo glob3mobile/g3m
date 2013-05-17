@@ -23,7 +23,6 @@
 #include "TexturedMesh.hpp"
 #include "Sector.hpp"
 #include "MercatorUtils.hpp"
-#include "PureEllipsoid.hpp"
 
 EllipsoidShape::~EllipsoidShape() {
   delete _surfaceColor;

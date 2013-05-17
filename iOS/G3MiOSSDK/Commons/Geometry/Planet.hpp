@@ -9,66 +9,10 @@
 #ifndef G3MiOSSDK_Planet_hpp
 #define G3MiOSSDK_Planet_hpp
 
-#include "PureEllipsoid.hpp"
-//#include "Sphere.hpp"
-
 #include <string>
 #include <list>
 #include <vector>
 #include "Vector3D.hpp"
-
-
-// I'M SURE THERE ARE BETTER WAYS OF CREATING DIFFERENT PLANETS DEPENDING OF USING ELLIPSOID OR SPHERE 
-
-
-
-//class Planet : public Sphere {
-//private:
-//  const std::string _name;
-//  
-//public:
-//  
-//  Planet(const std::string& name,
-//         const Vector3D& radii) :
-//  Sphere(radii.x()),
-//  _name(name)
-//  {
-//  }
-//  
-//  static const Planet* createEarth() {
-//    return new Planet("Earth", Vector3D(6378137.0, 6378137.0, 6356752.314245));
-//  }
-//  
-//  std::string getName() const {
-//    return _name;
-//  }
-//  
-//};
-
-
-/*
-class Planet : public PureEllipsoid {
-private:
-  const std::string _name;
-
-public:
-
-  Planet(const std::string& name,
-         const Vector3D& radii) :
-  PureEllipsoid(radii),
-  _name(name)
-  {
-  }
-
-  static const Planet* createEarth() {
-    return new Planet("Earth", Vector3D(6378137.0, 6378137.0, 6356752.314245));
-  }
-
-  std::string getName() const {
-    return _name;
-  }
-
-};*/
 
 class Planet {
 public:
