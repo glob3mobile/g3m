@@ -194,6 +194,7 @@ void GL::setProgramState(GPUProgramManager& progManager, const GPUProgramState& 
   
   GPUProgram* prog = NULL;
   if (!progState.isLinkedToProgram()) {
+    prog = progState.getLinkedProgram();
     prog = progManager.getProgram(progState);
     progState.linkToProgram(*prog);
   } else{

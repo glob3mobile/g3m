@@ -38,11 +38,8 @@ public:
 
 void ShapesRenderer::render(const G3MRenderContext* rc) {
   
-  if (_mustActualizeChildrenStates){
-    actualizeGLState(rc->getCurrentCamera());// Setting projection and modelview
-    _mustActualizeChildrenStates = false;
-  }
-
+  actualizeGLState(rc->getCurrentCamera());// Setting projection and modelview
+  
   const Vector3D cameraPosition = rc->getCurrentCamera()->getCartesianPosition();
   
   const int shapesCount = _shapes.size();
@@ -65,9 +62,7 @@ void ShapesRenderer::notifyGLClientChildrenParentHasChanged(){
   const int shapesCount = _shapes.size();
   for (int i = 0; i < shapesCount; i++) {
     Shape* shape = _shapes[i];
-    if (shape->hasCreatedGLStates()){
-      shape->actualizeGLState(this);
-    }
+    shape->actualizeGLState(this);
   }
 }
 

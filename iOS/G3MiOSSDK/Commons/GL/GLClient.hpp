@@ -12,10 +12,12 @@
 #include "GPUProgramState.hpp"
 #include "GLState.hpp"
 
+class GLClientDrawable;
+class GLClientNotDrawable;
+
 class GLClient{
 protected:
   const GLClient* _parent;
-  mutable bool _hasCreatedGLStates;
   
 public:
   
@@ -42,8 +44,6 @@ public:
    Invoked by parent to change my GLState and GPUProgramState
    */
   void actualizeGLState(const GLClient* parent){
-    _hasCreatedGLStates = false;
-    
     _parent = parent;
     notifyGLClientChildrenParentHasChanged();
     
@@ -54,10 +54,7 @@ public:
       //We are a drawable client
       modifyGLStatesHierarchy(*glState, *programState);
     }
-  }
-  
-  bool hasCreatedGLStates() const{
-    return _hasCreatedGLStates;
+    
   }
   
   /**
@@ -69,7 +66,6 @@ public:
     }
     modifyGLState(glState);
     modifyGPUProgramState(programState);
-    _hasCreatedGLStates = true;
   }
 };
 
