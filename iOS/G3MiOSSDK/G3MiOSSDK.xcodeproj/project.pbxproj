@@ -14,7 +14,6 @@
 		383BD3991577EE500012AC53 /* G3MWidget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 383BD3901577EE500012AC53 /* G3MWidget.cpp */; };
 		383BD39C1577EE500012AC53 /* TouchEvent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 383BD3931577EE500012AC53 /* TouchEvent.cpp */; };
 		383BD3AB1577EE5A0012AC53 /* Angle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 383BD39E1577EE5A0012AC53 /* Angle.cpp */; };
-		383BD3AD1577EE5A0012AC53 /* PureEllipsoid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 383BD3A01577EE5A0012AC53 /* PureEllipsoid.cpp */; };
 		383BD3AF1577EE5A0012AC53 /* Geodetic2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 383BD3A21577EE5A0012AC53 /* Geodetic2D.cpp */; };
 		383BD3B11577EE5A0012AC53 /* Geodetic3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 383BD3A41577EE5A0012AC53 /* Geodetic3D.cpp */; };
 		383BD3B41577EE5A0012AC53 /* Vector2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 383BD3A71577EE5A0012AC53 /* Vector2D.cpp */; };
@@ -350,7 +349,6 @@
 		E780A54C16D3AED9000F0395 /* NullStorage.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 382D4B92159DC26000FE9296 /* NullStorage.hpp */; };
 		E780A54D16D3AED9000F0395 /* Angle.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 383BD39F1577EE5A0012AC53 /* Angle.hpp */; };
 		E780A54E16D3AED9000F0395 /* Box.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CC41E3CB15B4651700B5581C /* Box.hpp */; };
-		E780A54F16D3AED9000F0395 /* PureEllipsoid.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 383BD3A11577EE5A0012AC53 /* PureEllipsoid.hpp */; };
 		E780A55016D3AED9000F0395 /* Extent.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CC41E3C915B4649800B5581C /* Extent.hpp */; };
 		E780A55116D3AED9000F0395 /* Frustum.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CC41E3B315B32D2E00B5581C /* Frustum.hpp */; };
 		E780A55216D3AED9000F0395 /* Geodetic2D.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 383BD3A31577EE5A0012AC53 /* Geodetic2D.hpp */; };
@@ -549,7 +547,6 @@
 				E780A54C16D3AED9000F0395 /* NullStorage.hpp in CopyFiles */,
 				E780A54D16D3AED9000F0395 /* Angle.hpp in CopyFiles */,
 				E780A54E16D3AED9000F0395 /* Box.hpp in CopyFiles */,
-				E780A54F16D3AED9000F0395 /* PureEllipsoid.hpp in CopyFiles */,
 				E780A55016D3AED9000F0395 /* Extent.hpp in CopyFiles */,
 				E780A55116D3AED9000F0395 /* Frustum.hpp in CopyFiles */,
 				E780A55216D3AED9000F0395 /* Geodetic2D.hpp in CopyFiles */,
@@ -756,8 +753,6 @@
 		383BD3941577EE500012AC53 /* TouchEvent.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = TouchEvent.hpp; path = Commons/Basic/TouchEvent.hpp; sourceTree = "<group>"; };
 		383BD39E1577EE5A0012AC53 /* Angle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Angle.cpp; path = Commons/Geometry/Angle.cpp; sourceTree = "<group>"; };
 		383BD39F1577EE5A0012AC53 /* Angle.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = Angle.hpp; path = Commons/Geometry/Angle.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		383BD3A01577EE5A0012AC53 /* PureEllipsoid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PureEllipsoid.cpp; path = Commons/Geometry/PureEllipsoid.cpp; sourceTree = "<group>"; };
-		383BD3A11577EE5A0012AC53 /* PureEllipsoid.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = PureEllipsoid.hpp; path = Commons/Geometry/PureEllipsoid.hpp; sourceTree = "<group>"; };
 		383BD3A21577EE5A0012AC53 /* Geodetic2D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Geodetic2D.cpp; path = Commons/Geometry/Geodetic2D.cpp; sourceTree = "<group>"; };
 		383BD3A31577EE5A0012AC53 /* Geodetic2D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Geodetic2D.hpp; path = Commons/Geometry/Geodetic2D.hpp; sourceTree = "<group>"; };
 		383BD3A41577EE5A0012AC53 /* Geodetic3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Geodetic3D.cpp; path = Commons/Geometry/Geodetic3D.cpp; sourceTree = "<group>"; };
@@ -1476,8 +1471,6 @@
 				CC41E39F15B1FD5B00B5581C /* Plane.cpp */,
 				CC41E39D15B1FD1300B5581C /* Plane.hpp */,
 				383BD3A61577EE5A0012AC53 /* Planet.hpp */,
-				383BD3A01577EE5A0012AC53 /* PureEllipsoid.cpp */,
-				383BD3A11577EE5A0012AC53 /* PureEllipsoid.hpp */,
 				D87EC5D215BEC73400E38C36 /* RectangleD.hpp */,
 				CFCEFF24163476F100FC4AB0 /* RectangleI.cpp */,
 				CFCEFF25163476F100FC4AB0 /* RectangleI.hpp */,
@@ -1968,7 +1961,6 @@
 				383BD3991577EE500012AC53 /* G3MWidget.cpp in Sources */,
 				383BD39C1577EE500012AC53 /* TouchEvent.cpp in Sources */,
 				383BD3AB1577EE5A0012AC53 /* Angle.cpp in Sources */,
-				383BD3AD1577EE5A0012AC53 /* PureEllipsoid.cpp in Sources */,
 				383BD3AF1577EE5A0012AC53 /* Geodetic2D.cpp in Sources */,
 				383BD3B11577EE5A0012AC53 /* Geodetic3D.cpp in Sources */,
 				383BD3B41577EE5A0012AC53 /* Vector2D.cpp in Sources */,

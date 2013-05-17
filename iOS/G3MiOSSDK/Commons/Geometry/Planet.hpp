@@ -74,6 +74,7 @@ class Planet {
 public:
   
   static const Planet* createEarth();
+  static const Planet* createSphericalEarth();
   
   virtual ~Planet() {}
   
