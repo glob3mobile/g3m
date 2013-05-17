@@ -18,7 +18,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class Sphere extends Ellipsoid
+public class Sphere extends Planet
 {
   private final double _radii;
   private final double _radiiSquared;

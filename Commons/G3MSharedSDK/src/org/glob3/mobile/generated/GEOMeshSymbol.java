@@ -21,13 +21,14 @@ package org.glob3.mobile.generated;
 //class Geodetic2D;
 //class Color;
 //class Ellipsoid;
+//class Planet;
 
 public abstract class GEOMeshSymbol extends GEOSymbol
 {
 
-  protected final Mesh createLine2DMesh(java.util.ArrayList<Geodetic2D> coordinates, Color lineColor, float lineWidth, double deltaHeight, Ellipsoid ellipsoid)
+  protected final Mesh createLine2DMesh(java.util.ArrayList<Geodetic2D> coordinates, Color lineColor, float lineWidth, double deltaHeight, Planet planet)
   {
-    FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.firstVertex(), ellipsoid, Geodetic2D.zero());
+    FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.firstVertex(), planet, Geodetic2D.zero());
   
     final int coordinatesCount = coordinates.size();
     for (int i = 0; i < coordinatesCount; i++)
@@ -39,10 +40,10 @@ public abstract class GEOMeshSymbol extends GEOSymbol
     return new DirectMesh(GLPrimitive.lineStrip(), true, vertices.getCenter(), vertices.create(), lineWidth, 1, new Color(lineColor), null, 0.0f, false);
   }
 
-  protected final Mesh createLines2DMesh(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray, Color lineColor, float lineWidth, double deltaHeight, Ellipsoid ellipsoid)
+  protected final Mesh createLines2DMesh(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray, Color lineColor, float lineWidth, double deltaHeight, Planet planet)
   {
   
-    FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.firstVertex(), ellipsoid, Geodetic2D.zero());
+    FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.firstVertex(), planet, Geodetic2D.zero());
     ShortBufferBuilder indices = new ShortBufferBuilder();
   
     final int coordinatesArrayCount = coordinatesArray.size();

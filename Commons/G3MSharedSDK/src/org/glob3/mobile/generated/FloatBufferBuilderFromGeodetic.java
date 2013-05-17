@@ -30,24 +30,24 @@ public class FloatBufferBuilderFromGeodetic extends FloatBufferBuilder
     _cz = (float) center._z;
   }
 
-  private final Ellipsoid _ellipsoid;
+  private final Planet _ellipsoid;
 
 
-  public FloatBufferBuilderFromGeodetic(int centerStrategy, Ellipsoid ellipsoid, Vector3D center)
+  public FloatBufferBuilderFromGeodetic(int centerStrategy, Planet ellipsoid, Vector3D center)
   {
      _ellipsoid = ellipsoid;
      _centerStrategy = centerStrategy;
     setCenter(center);
   }
 
-  public FloatBufferBuilderFromGeodetic(int centerStrategy, Ellipsoid ellipsoid, Geodetic2D center)
+  public FloatBufferBuilderFromGeodetic(int centerStrategy, Planet ellipsoid, Geodetic2D center)
   {
      _ellipsoid = ellipsoid;
      _centerStrategy = centerStrategy;
     setCenter(_ellipsoid.toCartesian(center));
   }
 
-  public FloatBufferBuilderFromGeodetic(int centerStrategy, Ellipsoid ellipsoid, Geodetic3D center)
+  public FloatBufferBuilderFromGeodetic(int centerStrategy, Planet ellipsoid, Geodetic3D center)
   {
      _ellipsoid = ellipsoid;
      _centerStrategy = centerStrategy;
