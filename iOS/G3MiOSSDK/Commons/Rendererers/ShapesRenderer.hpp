@@ -26,10 +26,13 @@ private:
   private G3MContext _context;
 #endif
   
+  bool _mustActualizeChildrenStates;
+  
 public:
 
   ShapesRenderer() :
-  _context(NULL)
+  _context(NULL),
+  _mustActualizeChildrenStates(false)
   {
 
   }
@@ -47,6 +50,7 @@ public:
     if (_context != NULL) {
       shape->initialize(_context);
     }
+    _mustActualizeChildrenStates = true;
   }
 
   void onResume(const G3MContext* context) {
