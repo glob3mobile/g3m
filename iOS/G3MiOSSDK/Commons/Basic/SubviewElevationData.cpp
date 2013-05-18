@@ -13,7 +13,6 @@
 #include "IFactory.hpp"
 #include "Vector3D.hpp"
 #include "Vector2I.hpp"
-#include "InterpolatedElevationData.hpp"
 
 SubviewElevationData::SubviewElevationData(const ElevationData* elevationData,
                                            //bool ownsElevationData,
@@ -21,9 +20,6 @@ SubviewElevationData::SubviewElevationData(const ElevationData* elevationData,
                                            const Vector2I& extent,
                                            bool useDecimation) :
 ElevationData(sector, extent),
-//_elevationData( new InterpolatedElevationData(elevationData,
-//                                              ownsElevationData) ),
-//_ownsElevationData(ownsElevationData),
 _realResolution( elevationData->getRealResolution() )
 {
   if ((elevationData == NULL) ||
@@ -35,16 +31,15 @@ _realResolution( elevationData->getRealResolution() )
   }
 
   _hasNoData = false;
-  const InterpolatedElevationData interpolatedElevationData(elevationData, false);
   if (useDecimation) {
-    _buffer = createDecimatedBuffer( interpolatedElevationData );
+    _buffer = createDecimatedBuffer( elevationData );
   }
   else {
-    _buffer = createInterpolatedBuffer( interpolatedElevationData );
+    _buffer = createInterpolatedBuffer( elevationData );
   }
 }
 
-const Vector2D SubviewElevationData::getParentXYAt(const InterpolatedElevationData& elevationData,
+const Vector2D SubviewElevationData::getParentXYAt(const ElevationData* elevationData,
                                                    const Geodetic2D& position) const {
   const Sector parentSector = elevationData.getSector();
   const Geodetic2D parentLower = parentSector.lower();
@@ -64,7 +59,7 @@ const Vector2D SubviewElevationData::getParentXYAt(const InterpolatedElevationDa
   return Vector2D(parentX, parentY);
 }
 
-double SubviewElevationData::getElevationBoxAt(const InterpolatedElevationData& elevationData,
+double SubviewElevationData::getElevationBoxAt(const ElevationData& elevationData,
                                                double x0, double y0,
                                                double x1, double y1) const {
   const IMathUtils* mu = IMathUtils::instance();
@@ -125,7 +120,7 @@ double SubviewElevationData::getElevationBoxAt(const InterpolatedElevationData& 
   return heightSum/area;
 }
 
-IFloatBuffer* SubviewElevationData::createDecimatedBuffer(const InterpolatedElevationData& elevationData) {
+IFloatBuffer* SubviewElevationData::createDecimatedBuffer(const ElevationData* elevationData) {
   IFloatBuffer* buffer = IFactory::instance()->createFloatBuffer(_width * _height);
 
   const Vector2D parentXYAtLower = getParentXYAt(elevationData, _sector.lower());
@@ -164,7 +159,7 @@ IFloatBuffer* SubviewElevationData::createDecimatedBuffer(const InterpolatedElev
   return buffer;
 }
 
-IFloatBuffer* SubviewElevationData::createInterpolatedBuffer(const InterpolatedElevationData& elevationData) {
+IFloatBuffer* SubviewElevationData::createInterpolatedBuffer(const ElevationData* elevationData) {
   IFloatBuffer* buffer = IFactory::instance()->createFloatBuffer(_width * _height);
 
 

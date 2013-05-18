@@ -23,8 +23,7 @@
 #include "Planet.hpp"
 #include "IFactory.hpp"
 #include "IFloatBuffer.hpp"
-//#include "ElevationData.hpp"
-#include "InterpolatedElevationData.hpp"
+#include "ElevationData.hpp"
 #include "MercatorUtils.hpp"
 
 Vector2I EllipsoidalTileTessellator::getTileMeshResolution(const Planet* planet,

@@ -18,9 +18,13 @@ class Vector2I;
 class Mesh;
 class Ellipsoid;
 class Vector3D;
-
+class Interpolator;
 
 class ElevationData {
+private:
+  mutable Interpolator* _interpolator;
+  Interpolator* getInterpolator() const;
+
 protected:
   const Sector _sector;
   const int _width;
@@ -32,9 +36,7 @@ public:
   ElevationData(const Sector& sector,
                 const Vector2I& extent);
 
-  virtual ~ElevationData() {
-
-  }
+  virtual ~ElevationData();
 
   virtual const Vector2I getExtent() const;
 
@@ -72,6 +74,16 @@ public:
 
   virtual bool hasNoData() const = 0;
 
+
+  double getElevationAt(const Angle& latitude,
+                        const Angle& longitude) const;
+
+  double getElevationAt(const Geodetic2D& position) const {
+    return getElevationAt(position.latitude(),
+                          position.longitude());
+  }
+  
+  
 };
 
 #endif
