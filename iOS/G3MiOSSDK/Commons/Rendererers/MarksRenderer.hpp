@@ -14,12 +14,14 @@
 
 #include "GPUProgramState.hpp"
 
+#include "SceneGraphNode.hpp"
+
 class Mark;
 class Camera;
 class MarkTouchListener;
 class IFloatBuffer;
 
-class MarksRenderer : public LeafRenderer {
+class MarksRenderer : public LeafRenderer, SceneGraphNode {
 private:
   const bool         _readyWhenMarksReady;
   std::vector<Mark*> _marks;
@@ -95,6 +97,19 @@ public:
 
   long long getDownloadPriority() const {
     return _downloadPriority;
+  }
+  
+  
+  void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode){
+    //NOT RENDERABLE NODE
+  }
+  
+  bool isInsideCameraFrustum(const Camera* rc){
+    return true;
+  }
+  
+  void modifiyGLState(GLState* state){
+    
   }
   
 };

@@ -40,6 +40,14 @@ public:
   
   void applyOnGPU(GL* gl, GPUProgramManager& progManager);
   
+  GPUProgramState* getGPUProgramState() const{
+    return _programState;
+  }
+  
+  GLGlobalState* getGLGlobalState() const{
+    return _globalState;
+  }
+  
   static GLGlobalState* getCurrentGLGlobalState() {
     return &_currentGPUGlobalState;
   }

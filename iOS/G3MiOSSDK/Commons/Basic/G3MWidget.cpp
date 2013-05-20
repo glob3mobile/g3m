@@ -118,7 +118,8 @@ _paused(false),
 _initializationTaskWasRun(false),
 _initializationTaskReady(true),
 _clickOnProcess(false),
-_gpuProgramManager(gpuProgramManager)
+_gpuProgramManager(gpuProgramManager),
+_sgRenderer(NULL)
 {
   _effectsScheduler->initialize(_context);
   _cameraRenderer->initialize(_context);
@@ -434,6 +435,11 @@ void G3MWidget::render(int width, int height) {
       delete orderedRenderable;
     }
   }
+  
+  if (_sgRenderer == NULL){
+    _sgRenderer = new SceneGraphRenderer(_currentCamera);
+  }
+  _sgRenderer->render(&rc);
 
   //  _frameTasksExecutor->doPostRenderCycle(&rc);
 

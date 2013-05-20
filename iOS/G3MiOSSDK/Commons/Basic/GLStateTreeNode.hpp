@@ -18,25 +18,37 @@
 class SceneGraphNode;
 class GLStateTreeNode{
   SceneGraphNode* _sgNode;
-  std::vector<GLStateTreeNode*> _children;
+  std::vector<GLStateTreeNode*> _children;  //OTHER IMPLEMENTATIONS MAY HAVE ONLY ONE CHILD (FOR PERFORMANCE)
   const GLStateTreeNode* const _parent;
   
   GLState* _state;
   
   std::list<SceneGraphNode*> getHierachy() const;
   
-public:
   GLStateTreeNode(SceneGraphNode* sgNode, GLStateTreeNode* parent):
   _sgNode(sgNode), _state(NULL), _parent(parent){}
   
-  ~GLStateTreeNode();
+public:
   
-  GLStateTreeNode* getChildNodeForSGNode(SceneGraphNode* node){
-    return NULL;
+  static GLStateTreeNode* createRootNodeForSGNode(SceneGraphNode* sgNode){
+    return new GLStateTreeNode(sgNode, NULL);
   }
   
-  void addChildren(GLStateTreeNode* child){
+  ~GLStateTreeNode();
+  
+  GLStateTreeNode* createChildNodeForSGNode(SceneGraphNode* sgNode){
+    GLStateTreeNode* child = new GLStateTreeNode(sgNode, this);
     _children.push_back(child);
+    return child;
+  }
+  
+  GLStateTreeNode* getChildNodeForSGNode(SceneGraphNode* node){
+    for (std::vector<GLStateTreeNode*>::iterator it = _children.begin(); it != _children.end(); it++) {
+      if ((*it)->_sgNode == node){
+        return *it;
+      }
+    }
+    return NULL;
   }
   
   SceneGraphNode* getSGNode() const{

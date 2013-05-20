@@ -26,8 +26,6 @@ private:
   
   virtual bool isInsideCameraFrustum(const Camera* rc) = 0;
   
-  virtual GLStateTreeNode* getGLStateTreeNodeForChild(SceneGraphNode* child) = 0;
-  
   int getChildrenCount() const {
     return _children.size();
   }
@@ -45,7 +43,7 @@ public:
   
 /////////////////
   
-  void render(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode);
+  void render(const G3MRenderContext* rc, GLStateTreeNode* parentStateTreeNode);
   
   bool isVisible() const { return _isVisible;}
   

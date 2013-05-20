@@ -253,7 +253,8 @@ public:
   
   GPUUniformValue* deepCopy() const{
     GPUUniformValueMatrix4FloatStack* v = new GPUUniformValueMatrix4FloatStack(_stack[0]);
-    for (int i = 1; i < _stack.size(); i++) {
+    const int stackSize = _stack.size();
+    for (int i = 1; i < stackSize; i++) {
       v->multiplyMatrix(_stack[i]);
     }
     return v;

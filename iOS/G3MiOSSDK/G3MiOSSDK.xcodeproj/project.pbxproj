@@ -276,6 +276,11 @@
 		D8B2054B1737B68400750AE4 /* GPUProgramFactory.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B2054A1737B65A00750AE4 /* GPUProgramFactory.hpp */; };
 		D8B9E002174A359900B865B7 /* SceneGraphNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B9DFFE174A359900B865B7 /* SceneGraphNode.cpp */; };
 		D8B9E003174A359900B865B7 /* GLStateTreeNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B9E000174A359900B865B7 /* GLStateTreeNode.cpp */; };
+		D8B9E004174A361C00B865B7 /* SceneGraphNode.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B9DFFF174A359900B865B7 /* SceneGraphNode.hpp */; };
+		D8B9E005174A3CFD00B865B7 /* GLState.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D80A28701746572E0058CEC3 /* GLState.hpp */; };
+		D8B9E008174A47AD00B865B7 /* SceneGraphRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B9E006174A47AD00B865B7 /* SceneGraphRenderer.cpp */; };
+		D8B9E009174A484500B865B7 /* GLStateTreeNode.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B9E001174A359900B865B7 /* GLStateTreeNode.hpp */; };
+		D8B9E00A174A4AFE00B865B7 /* SceneGraphRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B9E007174A47AD00B865B7 /* SceneGraphRenderer.hpp */; };
 		D8CE5D34173BB5D800C7AAE6 /* Default.vsh in Sources */ = {isa = PBXBuildFile; fileRef = D8CE5D32173BB5D800C7AAE6 /* Default.vsh */; };
 		D8CE5D35173BB5D800C7AAE6 /* Default.fsh in Sources */ = {isa = PBXBuildFile; fileRef = D8CE5D33173BB5D800C7AAE6 /* Default.fsh */; };
 		D8CE5D38173BB68200C7AAE6 /* Billboard.fsh in Sources */ = {isa = PBXBuildFile; fileRef = D8CE5D36173BB68200C7AAE6 /* Billboard.fsh */; };
@@ -502,6 +507,10 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D8B9E00A174A4AFE00B865B7 /* SceneGraphRenderer.hpp in CopyFiles */,
+				D8B9E009174A484500B865B7 /* GLStateTreeNode.hpp in CopyFiles */,
+				D8B9E005174A3CFD00B865B7 /* GLState.hpp in CopyFiles */,
+				D8B9E004174A361C00B865B7 /* SceneGraphNode.hpp in CopyFiles */,
 				D88F1668173CFFF000ED8823 /* GLClient.hpp in CopyFiles */,
 				D8B2054B1737B68400750AE4 /* GPUProgramFactory.hpp in CopyFiles */,
 				D8A1CB6F1737B364004EF534 /* GPUProgramManager.hpp in CopyFiles */,
@@ -1215,6 +1224,8 @@
 		D8B9DFFF174A359900B865B7 /* SceneGraphNode.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SceneGraphNode.hpp; path = Commons/Basic/SceneGraphNode.hpp; sourceTree = "<group>"; };
 		D8B9E000174A359900B865B7 /* GLStateTreeNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GLStateTreeNode.cpp; path = Commons/Basic/GLStateTreeNode.cpp; sourceTree = "<group>"; };
 		D8B9E001174A359900B865B7 /* GLStateTreeNode.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GLStateTreeNode.hpp; path = Commons/Basic/GLStateTreeNode.hpp; sourceTree = "<group>"; };
+		D8B9E006174A47AD00B865B7 /* SceneGraphRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SceneGraphRenderer.cpp; sourceTree = "<group>"; };
+		D8B9E007174A47AD00B865B7 /* SceneGraphRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SceneGraphRenderer.hpp; sourceTree = "<group>"; };
 		D8C912D915F9FE78003F92A4 /* FloatBufferBuilderFromColor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = FloatBufferBuilderFromColor.hpp; path = Commons/Basic/FloatBufferBuilderFromColor.hpp; sourceTree = "<group>"; };
 		D8CD6F7815A6FFAC00279BE7 /* IBufferDownloadListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IBufferDownloadListener.hpp; path = Commons/Downloader/IBufferDownloadListener.hpp; sourceTree = "<group>"; };
 		D8CD74D615F8D3F000B801CC /* SimpleFloatBufferBuilder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = SimpleFloatBufferBuilder.hpp; path = Commons/Basic/SimpleFloatBufferBuilder.hpp; sourceTree = "<group>"; };
@@ -1685,6 +1696,8 @@
 				CF024DC616A84F330051255C /* VisibleSectorListener.hpp */,
 				CFD42ABA16DBFE8600B03961 /* LayerTilesRenderParameters.cpp */,
 				CFD42ABB16DBFE8600B03961 /* LayerTilesRenderParameters.hpp */,
+				D8B9E006174A47AD00B865B7 /* SceneGraphRenderer.cpp */,
+				D8B9E007174A47AD00B865B7 /* SceneGraphRenderer.hpp */,
 			);
 			name = Renderers;
 			sourceTree = "<group>";
@@ -2251,6 +2264,7 @@
 				D80A28711746572E0058CEC3 /* GLState.cpp in Sources */,
 				D8B9E002174A359900B865B7 /* SceneGraphNode.cpp in Sources */,
 				D8B9E003174A359900B865B7 /* GLStateTreeNode.cpp in Sources */,
+				D8B9E008174A47AD00B865B7 /* SceneGraphRenderer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -25,6 +25,8 @@
 
 #include "GLClient.hpp"
 
+#include "SceneGraphNode.hpp"
+
 class ILogger;
 class GPUProgramState;
 
@@ -115,7 +117,7 @@ public:
 /**
  * Class to control the camera.
  */
-class Camera: public GLClient {
+class Camera: public GLClient, public SceneGraphNode {
 public:
   Camera(const Camera &that):
   _width(that._width),
@@ -298,6 +300,24 @@ public:
     getModelViewMatrix();
     progState.setUniformValue("Projection", &_projectionMatrix);
     progState.setUniformValue("Modelview", &_modelMatrix);
+  }
+  
+  //SCENE GRAPH
+  
+  void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode){
+    getModelMatrix();
+    getProjectionMatrix();
+  }
+  
+  bool isInsideCameraFrustum(const Camera* rc){
+    return true;
+  }
+  
+  void modifiyGLState(GLState* state){
+    getProjectionMatrix();
+    getModelViewMatrix();
+    state->getGPUProgramState()->setUniformValue("Projection", &_projectionMatrix);
+    state->getGPUProgramState()->setUniformValue("Modelview", &_modelMatrix);
   }
 
 private:

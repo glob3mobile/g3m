@@ -7,21 +7,23 @@
 //
 
 #include "SceneGraphNode.hpp"
+#include "GLStateTreeNode.hpp"
 
-void SceneGraphNode::render(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode){
+void SceneGraphNode::render(const G3MRenderContext* rc, GLStateTreeNode* parentStateTreeNode){
+
   if (_isVisible && isInsideCameraFrustum(rc->getCurrentCamera())){
+
+    GLStateTreeNode* myStateTreeNode = parentStateTreeNode->getChildNodeForSGNode(this);
+    if (myStateTreeNode == NULL){
+      myStateTreeNode = parentStateTreeNode->createChildNodeForSGNode(this);
+    }
+    
     rawRender(rc, myStateTreeNode);
     
     int count = getChildrenCount();
     for (int i = 0; i < count; i++) {
       SceneGraphNode* child = _children[i];
-      GLStateTreeNode* childSTN = myStateTreeNode->getChildNodeForSGNode(child);
-      if (childSTN == NULL){
-        childSTN = new GLStateTreeNode(child, myStateTreeNode);
-        myStateTreeNode->addChildren(childSTN);
-      }
-      
-      child->render(rc, childSTN);
+      child->render(rc, myStateTreeNode);
     }
   }
 }
