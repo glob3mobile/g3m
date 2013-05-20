@@ -309,7 +309,7 @@ public:
     getProjectionMatrix();
   }
   
-  bool isInsideCameraFrustum(const Camera* rc){
+  bool isInsideCameraFrustum(const G3MRenderContext* rc){
     return true;
   }
   

@@ -24,7 +24,7 @@ private:
   
   virtual void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode) = 0;
   
-  virtual bool isInsideCameraFrustum(const Camera* rc) = 0;
+  virtual bool isInsideCameraFrustum(const G3MRenderContext* rc) = 0;
   
   int getChildrenCount() const {
     return _children.size();

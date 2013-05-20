@@ -529,3 +529,131 @@ void Mark::modifyGPUProgramState(GPUProgramState& progState) const{
     progState.setUniformValue("ViewPortExtent", Vector2D( (double)viewportWidth, (double)viewportHeight ));
   }
 }
+
+bool Mark::isInsideCameraFrustum(const G3MRenderContext* rc){
+  const Planet* planet = rc->getPlanet();
+  
+  const Vector3D* markPosition = getCartesianPosition(planet);
+  
+  const Vector3D markCameraVector = markPosition->sub(rc->getCurrentCamera()->getCartesianPosition());
+  
+  // mark will be renderered only if is renderable by distance and placed on a visible globe area
+  bool renderableByDistance;
+  if (_minDistanceToCamera == 0) {
+    renderableByDistance = true;
+  }
+  else {
+    const double squaredDistanceToCamera = markCameraVector.squaredLength();
+    renderableByDistance = ( squaredDistanceToCamera <= (_minDistanceToCamera * _minDistanceToCamera) );
+  }
+  
+  _renderedMark = false;
+  if (renderableByDistance) {
+    const Vector3D normalAtMarkPosition = planet->geodeticSurfaceNormal(*markPosition);
+    if (normalAtMarkPosition.angleBetween(markCameraVector)._radians > IMathUtils::instance()->halfPi()) {
+      return true;
+    }
+  }
+  
+  return false;
+}
+
+void Mark::rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode){
+  //  printf("RENDERING SGMARK\n");
+  
+  if (_textureId == NULL) {
+    if (_textureImage != NULL) {
+      _textureId = rc->getTexturesHandler()->getGLTextureId(_textureImage,
+                                                            GLFormat::rgba(),
+                                                            _imageID,
+                                                            false);
+      
+      rc->getFactory()->deleteImage(_textureImage);
+      _textureImage = NULL;
+      
+      viewportWidth = rc->getCurrentCamera()->getWidth();
+      viewportHeight = rc->getCurrentCamera()->getHeight();
+      actualizeGLGlobalState(rc->getCurrentCamera()); //Ready for rendering
+    }
+  } else{
+    if (rc->getCurrentCamera()->getWidth() != viewportWidth ||
+        rc->getCurrentCamera()->getHeight() != viewportHeight){
+      viewportWidth = rc->getCurrentCamera()->getWidth();
+      viewportHeight = rc->getCurrentCamera()->getHeight();
+      actualizeGLGlobalState(rc->getCurrentCamera()); //Ready for rendering
+    }
+  }
+  
+  if (_textureId != NULL) {
+    _planet = rc->getPlanet();
+    
+    GL* gl = rc->getGL();
+    
+    GPUProgramManager& progManager = *rc->getGPUProgramManager();
+    
+    GLState* glState = myStateTreeNode->getGLState();
+    
+    gl->drawArrays(GLPrimitive::triangleStrip(),
+                   0,
+                   4,
+                   glState,
+                   progManager);
+  }
+  
+}
+
+void Mark::modifiyGLState(GLState* state){
+  
+  GLGlobalState *globalState = state->getGLGlobalState();
+  
+  globalState->disableDepthTest();
+  globalState->enableBlend();
+  globalState->setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
+  globalState->bindTexture(_textureId);
+  
+  GPUProgramState* progState = state->getGPUProgramState();
+  
+  if (_planet == NULL){
+    ILogger::instance()->logError("Planet NULL");
+  } else{
+    
+    progState->setAttributeEnabled("Position", true);
+    progState->setAttributeEnabled("TextureCoord", true);
+    
+    if (_billboardTexCoord == NULL){
+      FloatBufferBuilderFromCartesian2D texCoor;
+      texCoor.add(1,1);
+      texCoor.add(1,0);
+      texCoor.add(0,1);
+      texCoor.add(0,0);
+      _billboardTexCoord = texCoor.create();
+    }
+    
+    progState->setAttributeValue("TextureCoord",
+                                 _billboardTexCoord, 2,
+                                 2,
+                                 0,
+                                 false,
+                                 0);
+    
+    const Vector3D* pos = new Vector3D( _planet->toCartesian(_position) );
+    FloatBufferBuilderFromCartesian3D vertex(CenterStrategy::noCenter(), Vector3D::zero());
+    vertex.add(*pos);
+    vertex.add(*pos);
+    vertex.add(*pos);
+    vertex.add(*pos);
+    
+    IFloatBuffer* vertices = vertex.create();
+    
+    progState->setAttributeValue("Position",
+                                 vertices, 4, //The attribute is a float vector of 4 elements
+                                 3,            //Our buffer contains elements of 3
+                                 0,            //Index 0
+                                 false,        //Not normalized
+                                 0);           //Stride 0
+    
+    progState->setUniformValue("TextureExtent", Vector2D(_textureWidth, _textureHeight));
+    progState->setUniformValue("ViewPortExtent", Vector2D( (double)viewportWidth, (double)viewportHeight ));
+  }
+  
+}

@@ -19,7 +19,7 @@ GLStateTreeNode::~GLStateTreeNode(){
 
 std::list<SceneGraphNode*> GLStateTreeNode::getHierachy() const{
   std::list<SceneGraphNode*> h;
-  const GLStateTreeNode* ancestor = _parent;
+  const GLStateTreeNode* ancestor = this;
   while (ancestor != NULL) {
     h.push_front(ancestor->getSGNode());
     ancestor = ancestor->_parent;

@@ -29,6 +29,7 @@ class IGLUniformID;
 class GPUProgramManager;
 class GPUProgramState;
 class GPUProgram;
+class GLState;
 
 class GL {
 private:
@@ -91,6 +92,11 @@ public:
                   int first,
                   int count, const GLGlobalState& state,
                   GPUProgramManager& progManager,const GPUProgramState* gpuState);
+  
+  void drawArrays(int mode,
+                  int first,
+                  int count, GLState* state,
+                  GPUProgramManager& progManager);
   
   int getError();
   

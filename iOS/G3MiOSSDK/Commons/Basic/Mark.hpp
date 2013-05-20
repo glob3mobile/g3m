@@ -19,6 +19,8 @@
 #include "Color.hpp"
 #include "GLClient.hpp"
 
+#include "SceneGraphNode.hpp"
+
 class IImage;
 class IFloatBuffer;
 class IGLTextureId;
@@ -34,7 +36,7 @@ public:
 };
 
 
-class Mark: public GLClient {
+class Mark: public GLClient, public SceneGraphNode {
 private:
   /**
    * The text the mark displays.
@@ -248,6 +250,13 @@ public:
   void getGLGlobalStateAndGPUProgramState(GLGlobalState** GLGlobalState, GPUProgramState** progState);
   void modifyGLGlobalState(GLGlobalState& GLGlobalState) const;
   void modifyGPUProgramState(GPUProgramState& progState) const;
+  
+  //Scene Graph Node
+  void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode);
+  
+  bool isInsideCameraFrustum(const G3MRenderContext* rc);
+
+  void modifiyGLState(GLState* state);
   
 };
 

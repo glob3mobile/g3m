@@ -14,6 +14,8 @@
 #include "Camera.hpp"
 #include "SceneGraphNode.hpp"
 #include "Context.hpp"
+#include "MarksRenderer.hpp"
+#include "Mark.hpp"
 
 class SceneGraphRenderer: public SceneGraphNode{
   
@@ -21,11 +23,26 @@ class SceneGraphRenderer: public SceneGraphNode{
   Camera* _camera;
   
 public:
-  SceneGraphRenderer(Camera* cam): _camera(cam){
+  SceneGraphRenderer(Camera* cam, const G3MContext *context): _camera(cam){
     
     _rootState = GLStateTreeNode::createRootNodeForSGNode(this);
     
+    MarksRenderer* mr = new MarksRenderer(true);
+    cam->addChildren(mr);
     
+    for (int i = 0; i < 100; i++){
+      const Angle latitude  = Angle::fromDegrees( (int) (arc4random() % 180) - 90 );
+      const Angle longitude = Angle::fromDegrees( (int) (arc4random() % 360) - 180 );
+      
+      Mark* m = new Mark("Random Mark",
+                          Geodetic3D(latitude,
+                                     longitude,
+                                     0),
+                          0);
+      
+      m->initialize(context, 100);
+      mr->addMark(m);
+    }
   }
   
   void render(const G3MRenderContext* rc){
@@ -34,8 +51,8 @@ public:
   
   void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode){}
   
-  bool isInsideCameraFrustum(const Camera* rc){ return true;}
-
+  bool isInsideCameraFrustum(const G3MRenderContext* rc){ return true;}
+  
   
   void modifiyGLState(GLState* state){}
   

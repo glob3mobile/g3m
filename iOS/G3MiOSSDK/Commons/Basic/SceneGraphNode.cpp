@@ -11,7 +11,7 @@
 
 void SceneGraphNode::render(const G3MRenderContext* rc, GLStateTreeNode* parentStateTreeNode){
 
-  if (_isVisible && isInsideCameraFrustum(rc->getCurrentCamera())){
+  if (_isVisible && isInsideCameraFrustum(rc)){
 
     GLStateTreeNode* myStateTreeNode = parentStateTreeNode->getChildNodeForSGNode(this);
     if (myStateTreeNode == NULL){

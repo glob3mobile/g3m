@@ -437,7 +437,7 @@ void G3MWidget::render(int width, int height) {
   }
   
   if (_sgRenderer == NULL){
-    _sgRenderer = new SceneGraphRenderer(_currentCamera);
+    _sgRenderer = new SceneGraphRenderer(_currentCamera, &rc);
   }
   _sgRenderer->render(&rc);
 

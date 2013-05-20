@@ -87,6 +87,27 @@ void GL::drawArrays(int mode,
   //progManager.getProgram(*gpuState)->onUnused();
 }
 
+void GL::drawArrays(int mode,
+                int first,
+                int count, GLState* state,
+                GPUProgramManager& progManager){
+  if (_verbose) {
+    ILogger::instance()->logInfo("GL::drawArrays(%d, %d, %d)",
+                                 mode,
+                                 first,
+                                 count);
+  }
+  
+  state->applyOnGPU(this, progManager);
+  
+  //  applyGLGlobalStateAndGPUProgramState(state, progManager, *gpuState);
+  
+  
+  _nativeGL->drawArrays(mode,
+                        first,
+                        count);
+}
+
 int GL::getError() {
   if (_verbose) {
     ILogger::instance()->logInfo("GL::getError()");

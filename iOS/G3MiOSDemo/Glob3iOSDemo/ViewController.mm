@@ -356,18 +356,18 @@ public:
 
 
   ShapesRenderer* shapesRenderer = [self createShapesRenderer: builder.getPlanet()];
-  builder.addRenderer(shapesRenderer);
+  //builder.addRenderer(shapesRenderer);
 
   MeshRenderer* meshRenderer = new MeshRenderer();
-  builder.addRenderer( meshRenderer );
+  //builder.addRenderer( meshRenderer );
 
   MarksRenderer* marksRenderer = [self createMarksRenderer];
-  builder.addRenderer(marksRenderer);
+  //builder.addRenderer(marksRenderer);
 
   GEORenderer* geoRenderer = [self createGEORendererMeshRenderer: meshRenderer
                                                   shapesRenderer: shapesRenderer
                                                    marksRenderer: marksRenderer];
-  builder.addRenderer(geoRenderer);
+  //builder.addRenderer(geoRenderer);
 
 
   //  [self createInterpolationTest: meshRenderer];

@@ -21,7 +21,7 @@ class Camera;
 class MarkTouchListener;
 class IFloatBuffer;
 
-class MarksRenderer : public LeafRenderer, SceneGraphNode {
+class MarksRenderer : public LeafRenderer, public SceneGraphNode {
 private:
   const bool         _readyWhenMarksReady;
   std::vector<Mark*> _marks;
@@ -104,7 +104,7 @@ public:
     //NOT RENDERABLE NODE
   }
   
-  bool isInsideCameraFrustum(const Camera* rc){
+  bool isInsideCameraFrustum(const G3MRenderContext* rc){
     return true;
   }
   
