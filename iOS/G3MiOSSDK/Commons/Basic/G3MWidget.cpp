@@ -435,11 +435,6 @@ void G3MWidget::render(int width, int height) {
       delete orderedRenderable;
     }
   }
-  
-  if (_sgRenderer == NULL){
-    _sgRenderer = new SceneGraphRenderer(_currentCamera, &rc);
-  }
-  _sgRenderer->render(&rc);
 
   //  _frameTasksExecutor->doPostRenderCycle(&rc);
 

@@ -32,3 +32,21 @@ void TexturedMesh::notifyGLClientChildrenParentHasChanged(){
   Mesh* mesh = (Mesh*)_mesh;
   mesh->actualizeGLGlobalState(this);
 }
+
+void TexturedMesh::rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode){}
+
+bool TexturedMesh::isInsideCameraFrustum(const G3MRenderContext* rc){
+  return true;
+}
+
+void TexturedMesh::modifiyGLState(GLState* state){
+  GLGlobalState& globalState = *state->getGLGlobalState();
+  _textureMapping->modifyGLGlobalState(globalState);
+  if (_transparent) {
+    globalState.enableBlend();
+    globalState.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
+  }
+  
+  GPUProgramState& progState = *state->getGPUProgramState();
+  _textureMapping->modifyGPUProgramState(progState);
+}

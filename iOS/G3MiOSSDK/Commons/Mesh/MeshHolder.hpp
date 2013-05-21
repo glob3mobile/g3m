@@ -62,6 +62,18 @@ public:
   void modifyGLGlobalState(GLGlobalState& GLGlobalState) const{}
   void modifyGPUProgramState(GPUProgramState& progState) const{}
   
+  //Scene Graph Node
+  void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode){
+    //TODO: Implement
+    //It's necessary a holder with the Scene Graph approach
+  }
+  bool isInsideCameraFrustum(const G3MRenderContext* rc){
+    //TODO: Implement
+  }
+  void modifiyGLState(GLState* state){
+    //TODO: Implement
+  }
+  
 };
 
 #endif

@@ -14,10 +14,12 @@
 
 #include "GLClient.hpp"
 
+#include "SceneGraphNode.hpp"
+
 class Vector3D;
 class GPUProgramState;
 
-class Mesh: public GLClient{
+class Mesh: public GLClient, public SceneGraphNode{
 public:
   
   virtual ~Mesh() { }

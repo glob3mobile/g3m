@@ -61,6 +61,22 @@ void GL::drawElements(int mode,
   //progManager.getProgram(*gpuState)->onUnused();
 }
 
+void GL::drawElements(int mode,
+                  IShortBuffer* indices, GLState* state,
+                  GPUProgramManager& progManager){
+  if (_verbose) {
+    ILogger::instance()->logInfo("GL::drawElements(%d, %s)",
+                                 mode,
+                                 indices->description().c_str());
+  }
+  
+  state->applyOnGPU(this, progManager);
+  
+  _nativeGL->drawElements(mode,
+                          indices->size(),
+                          indices);
+}
+
 void GL::drawArrays(int mode,
                     int first,
                     int count, const GLGlobalState& state,
@@ -99,10 +115,6 @@ void GL::drawArrays(int mode,
   }
   
   state->applyOnGPU(this, progManager);
-  
-  //  applyGLGlobalStateAndGPUProgramState(state, progManager, *gpuState);
-  
-  
   _nativeGL->drawArrays(mode,
                         first,
                         count);
@@ -127,7 +139,8 @@ const IGLTextureId* GL::uploadTexture(const IImage* image,
   if (texId != NULL) {
     int texture2D = GLTextureType::texture2D();
     
-    GLGlobalState state(*GLState::getCurrentGLGlobalState());
+//    GLGlobalState state(*GLState::getCurrentGLGlobalState());
+    GLGlobalState state = GLState::createCopyOfCurrentGLGlobalState();
     state.setPixelStoreIAlignmentUnpack(1);
     state.bindTexture(texId);
     
@@ -214,9 +227,11 @@ void GL::deleteTexture(const IGLTextureId* textureId) {
       delete textureId;
     }
     
-    if (GLState::getCurrentGLGlobalState()->getBoundTexture() == textureId){
-      GLState::getCurrentGLGlobalState()->bindTexture(NULL);
-    }
+    GLState::textureHasBeenDeleted(textureId);
+    
+//    if (GLState::getCurrentGLGlobalState()->getBoundTexture() == textureId){
+//      GLState::getCurrentGLGlobalState()->bindTexture(NULL);
+//    }
     
     //ILogger::instance()->logInfo("  = delete textureId=%s", texture->description().c_str());
   }

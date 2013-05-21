@@ -289,3 +289,15 @@ void LeveledTexturedMesh::updateLastUsedMapping(const G3MRenderContext* rc, Lazy
     }
   }
 }
+
+
+//TODO: Implement!!!!
+void LeveledTexturedMesh::rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode){}
+
+bool LeveledTexturedMesh::isInsideCameraFrustum(const G3MRenderContext* rc){
+  return true;
+}
+
+void LeveledTexturedMesh::modifiyGLState(GLState* state){
+  
+}

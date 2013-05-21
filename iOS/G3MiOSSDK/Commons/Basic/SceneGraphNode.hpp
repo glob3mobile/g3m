@@ -17,7 +17,7 @@
 #include "GLStateTreeNode.hpp"
 
 class SceneGraphNode{
-private:
+protected:
   bool _isVisible;
   
   std::vector<SceneGraphNode*> _children;
@@ -30,7 +30,7 @@ private:
     return _children.size();
   }
   
-  SceneGraphNode* getChild(int i) const {
+  const SceneGraphNode* getChild(int i) const {
     return _children[i];
   }
   

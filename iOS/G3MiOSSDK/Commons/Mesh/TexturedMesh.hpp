@@ -39,6 +39,7 @@ public:
   _ownedTexMapping(ownedTexMapping),
   _transparent(transparent)
   {
+    addChildren((Mesh*)mesh); //New and only child (not const)!!
   }
   
   ~TexturedMesh(){
@@ -75,6 +76,11 @@ public:
   void notifyGLClientChildrenParentHasChanged();
   void modifyGLGlobalState(GLGlobalState& GLGlobalState) const;
   void modifyGPUProgramState(GPUProgramState& progState) const;
+  
+  //Scene Graph Node
+  void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode);
+  bool isInsideCameraFrustum(const G3MRenderContext* rc);
+  void modifiyGLState(GLState* state);
 };
 
 #endif

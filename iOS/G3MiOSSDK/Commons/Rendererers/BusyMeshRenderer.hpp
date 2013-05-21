@@ -18,11 +18,13 @@
 
 #include "GLClient.hpp"
 
+#include "SceneGraphNode.hpp"
+
 
 //***************************************************************
 
 
-class BusyMeshRenderer : public LeafRenderer, EffectTarget, GLClient {
+class BusyMeshRenderer : public LeafRenderer, EffectTarget, GLClient, public SceneGraphNode {
 private:
   Mesh    *_mesh;
   double  _degrees;
@@ -96,6 +98,12 @@ public:
   void modifyGLGlobalState(GLGlobalState& GLGlobalState) const;
   
   void modifyGPUProgramState(GPUProgramState& progState) const;
+  
+  //Scene Graph Node
+  void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode);
+  bool isInsideCameraFrustum(const G3MRenderContext* rc);
+  void modifiyGLState(GLState* state);
+  
 };
 
 //***************************************************************

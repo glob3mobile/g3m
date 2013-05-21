@@ -16,45 +16,74 @@
 #include "Context.hpp"
 #include "MarksRenderer.hpp"
 #include "Mark.hpp"
+#include "Renderer.hpp"
 
-class SceneGraphRenderer: public SceneGraphNode{
+class SceneGraphRenderer: public Renderer{
   
   GLStateTreeNode* _rootState;
   Camera* _camera;
   
+  std::vector<SceneGraphNode*> _nodes;
+  
 public:
-  SceneGraphRenderer(Camera* cam, const G3MContext *context): _camera(cam){
+  SceneGraphRenderer(std::vector<SceneGraphNode*> nodes): _camera(NULL), _nodes(nodes){
+    printf("SCENE GRAPH CREATED");
     
-    _rootState = GLStateTreeNode::createRootNodeForSGNode(this);
-    
-    MarksRenderer* mr = new MarksRenderer(true);
-    cam->addChildren(mr);
-    
-    for (int i = 0; i < 100; i++){
-      const Angle latitude  = Angle::fromDegrees( (int) (arc4random() % 180) - 90 );
-      const Angle longitude = Angle::fromDegrees( (int) (arc4random() % 360) - 180 );
-      
-      Mark* m = new Mark("Random Mark",
-                          Geodetic3D(latitude,
-                                     longitude,
-                                     0),
-                          0);
-      
-      m->initialize(context, 100);
-      mr->addMark(m);
-    }
   }
   
-  void render(const G3MRenderContext* rc){
-    _camera->SceneGraphNode::render(rc, _rootState);
+  void render(const G3MRenderContext* rc);
+  
+  
+  /////////////////////////////////
+  
+  bool isEnable() const{
+    return true;
   }
   
-  void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode){}
-  
-  bool isInsideCameraFrustum(const G3MRenderContext* rc){ return true;}
+  void setEnable(bool enable){}
   
   
-  void modifiyGLState(GLState* state){}
+  void initialize(const G3MContext* context){
+    _rootState = GLStateTreeNode::createRootNodeForSGNode(NULL);
+//    
+//    MarksRenderer* mr = new MarksRenderer(true);
+//    rc->getCurrentCamera->addChildren(mr);
+//    
+//    for (int i = 0; i < 2000; i++){
+//      const Angle latitude  = Angle::fromDegrees( (int) (arc4random() % 180) - 90 );
+//      const Angle longitude = Angle::fromDegrees( (int) (arc4random() % 360));
+//      
+//      Mark* m = new Mark("Random Mark",
+//                         Geodetic3D(latitude,
+//                                    longitude,
+//                                    0),
+//                         0);
+//      
+//      m->initialize(context, 100);
+//      mr->addMark(m);
+//    }
+  }
+  
+  bool isReadyToRender(const G3MRenderContext* rc){
+    return true;
+  }
+  
+  
+  bool onTouchEvent(const G3MEventContext* ec,
+                    const TouchEvent* touchEvent){}
+  
+  void onResizeViewportEvent(const G3MEventContext* ec,
+                             int width, int height){}
+  
+  void start(const G3MRenderContext* rc){}
+  
+  void stop(const G3MRenderContext* rc){}
+  
+  void onResume(const G3MContext* context){}
+  
+  void onPause(const G3MContext* context){}
+  
+  void onDestroy(const G3MContext* context){}
   
 };
 

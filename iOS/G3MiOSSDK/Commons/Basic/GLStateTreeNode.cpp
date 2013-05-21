@@ -35,7 +35,9 @@ GLState* GLStateTreeNode::getGLState() {
     for (std::list<SceneGraphNode*>::iterator it = hierachi.begin();
          it != hierachi.end(); it++) {
       SceneGraphNode* sgNode = *it;
-      sgNode->modifiyGLState(_state);
+      if (sgNode != NULL){
+        sgNode->modifiyGLState(_state);
+      }
     }
   }
   return _state;

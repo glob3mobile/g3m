@@ -40,6 +40,11 @@ public:
   void notifyGLClientChildrenParentHasChanged();
   void modifyGLGlobalState(GLGlobalState& GLGlobalState) const{}
   void modifyGPUProgramState(GPUProgramState& progState) const{}
+  
+  void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode);
+  bool isInsideCameraFrustum(const G3MRenderContext* rc);
+  void modifiyGLState(GLState* state);
+
 
 };
 

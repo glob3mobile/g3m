@@ -33,6 +33,8 @@ public:
               bool depthTest = true);
 
   ~IndexedMesh();
+  
+  void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode);
 
 };
 

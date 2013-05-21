@@ -88,6 +88,10 @@ public:
                     IShortBuffer* indices, const GLGlobalState& state,
                     GPUProgramManager& progManager,const GPUProgramState* gpuState);
   
+  void drawElements(int mode,
+                    IShortBuffer* indices, GLState* state,
+                    GPUProgramManager& progManager);
+  
   void drawArrays(int mode,
                   int first,
                   int count, const GLGlobalState& state,

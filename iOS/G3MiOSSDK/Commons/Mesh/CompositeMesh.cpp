@@ -91,6 +91,8 @@ void CompositeMesh::addMesh(Mesh* mesh) {
   _extent = NULL;
 
   _children.push_back(mesh);
+  
+  SceneGraphNode::addChildren(mesh);
 }
 
 void CompositeMesh::notifyGLClientChildrenParentHasChanged(){
@@ -100,3 +102,9 @@ void CompositeMesh::notifyGLClientChildrenParentHasChanged(){
     child->actualizeGLGlobalState(this);
   }
 }
+
+void CompositeMesh::rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode){}
+bool CompositeMesh::isInsideCameraFrustum(const G3MRenderContext* rc){
+  return true;
+}
+void CompositeMesh::modifiyGLState(GLState* state){}

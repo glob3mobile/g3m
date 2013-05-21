@@ -28,6 +28,8 @@ class GLStateTreeNode{
   GLStateTreeNode(SceneGraphNode* sgNode, GLStateTreeNode* parent):
   _sgNode(sgNode), _state(NULL), _parent(parent){}
   
+  static GLStateTreeNode _rootNode; //Root node of the whole tree
+  
 public:
   
   static GLStateTreeNode* createRootNodeForSGNode(SceneGraphNode* sgNode){

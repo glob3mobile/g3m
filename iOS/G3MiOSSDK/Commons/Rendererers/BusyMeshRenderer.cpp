@@ -73,6 +73,8 @@ void BusyMeshRenderer::initialize(const G3MContext* context)
                           colors.create());
   
   notifyGLClientChildrenParentHasChanged();
+  
+  addChildren(_mesh);
 }
 
 void BusyMeshRenderer::start(const G3MRenderContext* rc) {
@@ -104,7 +106,7 @@ void BusyMeshRenderer::render(const G3MRenderContext* rc)
                                                                              -halfHeight, halfHeight,
                                                                              -halfWidth, halfWidth);
   }
-
+  
   state.setClearColor(*_backgroundColor);
   gl->clearScreen(state);
   
@@ -137,4 +139,66 @@ void BusyMeshRenderer::modifyGPUProgramState(GPUProgramState& progState) const{
   progState.setUniformValue("Modelview", &_modelviewMatrix); //Program state will store a pointer
   
   progState.setUniformValue("Projection", &_projectionMatrix);
+}
+
+void BusyMeshRenderer::rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode){
+  GL* gl = rc->getGL();
+  
+  // set mesh GLGlobalState
+  GLGlobalState state;
+  state.enableBlend();
+  
+  state.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
+  
+  if (!_projectionMatrix.isValid()){
+    // init modelview matrix
+    int currentViewport[4];
+    gl->getViewport(currentViewport);
+    const int halfWidth = currentViewport[2] / 2;
+    const int halfHeight = currentViewport[3] / 2;
+    _projectionMatrix = MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth, halfWidth,
+                                                                             -halfHeight, halfHeight,
+                                                                             -halfWidth, halfWidth);
+  }
+  
+  state.setClearColor(*_backgroundColor);
+  gl->clearScreen(state);
+  
+  notifyGLClientChildrenParentHasChanged();
+  _mesh->render(rc);
+}
+
+bool BusyMeshRenderer::isInsideCameraFrustum(const G3MRenderContext* rc){
+  return true;
+}
+
+void BusyMeshRenderer::modifiyGLState(GLState* state){
+  
+  GLGlobalState& globalState = * state->getGLGlobalState();
+  
+  globalState.enableBlend();
+  globalState.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
+  globalState.setClearColor(*_backgroundColor);
+  
+  GPUProgramState& progState = * state->getGPUProgramState();
+  
+  progState.setUniformValue("EnableTexture", false);
+  progState.setUniformValue("PointSize", (float)1.0);
+  progState.setUniformValue("ScaleTexCoord", Vector2D(1.0,1.0));
+  progState.setUniformValue("TranslationTexCoord", Vector2D(0.0,0.0));
+  
+  progState.setUniformValue("ColorPerVertexIntensity", (float)0.0);
+  progState.setUniformValue("EnableFlatColor", false);
+  progState.setUniformValue("FlatColor", (float)0.0, (float)0.0, (float)0.0, (float)0.0);
+  progState.setUniformValue("FlatColorIntensity", (float)0.0);
+  
+  progState.setAttributeEnabled("TextureCoord", false);
+  progState.setAttributeEnabled("Color", false);
+  
+  //Modelview and projection
+  _modelviewMatrix = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, -1));
+  progState.setUniformValue("Modelview", &_modelviewMatrix); //Program state will store a pointer
+  
+  progState.setUniformValue("Projection", &_projectionMatrix);
+  
 }

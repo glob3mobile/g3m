@@ -11,10 +11,11 @@
 
 #include "Mesh.hpp"
 
+#include "Vector3D.hpp"
+
 class MutableMatrix44D;
 class IFloatBuffer;
 class Color;
-#include "Vector3D.hpp"
 
 class AbstractMesh : public Mesh {
 protected:
@@ -67,6 +68,11 @@ public:
   void getGLGlobalStateAndGPUProgramState(GLGlobalState** GLGlobalState, GPUProgramState** progState);
   void modifyGLGlobalState(GLGlobalState& GLGlobalState) const;
   void modifyGPUProgramState(GPUProgramState& progState) const;
+  
+  //Scene Graph Node
+//  void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode);
+  bool isInsideCameraFrustum(const G3MRenderContext* rc);
+  void modifiyGLState(GLState* state);
   
 };
 

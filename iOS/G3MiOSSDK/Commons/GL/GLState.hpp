@@ -48,13 +48,23 @@ public:
     return _globalState;
   }
   
-  static GLGlobalState* getCurrentGLGlobalState() {
-    return &_currentGPUGlobalState;
+  static void textureHasBeenDeleted(const IGLTextureId* textureId){
+    if (_currentGPUGlobalState.getBoundTexture() == textureId){
+      _currentGPUGlobalState.bindTexture(NULL);
+    }
   }
   
-  static const GPUProgram* getGPUProgram() {
-    return _currentGPUProgram;
+  static GLGlobalState createCopyOfCurrentGLGlobalState(){
+    return GLGlobalState(_currentGPUGlobalState);
   }
+  
+//  static const GLGlobalState* getCurrentGLGlobalState() {
+//    return &_currentGPUGlobalState;
+//  }
+  
+//  static const GPUProgram* getGPUProgram() {
+//    return _currentGPUProgram;
+//  }
 };
 
 #endif /* defined(__G3MiOSSDK__GLState__) */

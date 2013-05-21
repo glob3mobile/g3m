@@ -31,6 +31,8 @@ public:
   ~DirectMesh() {
 
   }
+  
+  void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode);
 
 };
 
