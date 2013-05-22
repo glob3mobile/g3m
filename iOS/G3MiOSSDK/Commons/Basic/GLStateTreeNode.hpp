@@ -33,33 +33,22 @@ protected:
   GLStateTreeNode():_sgNode(NULL), _state(NULL), _parent(NULL){}
   
   std::list<SceneGraphNode*> getHierachy() const;
-  
-public:
-  
-  ~GLStateTreeNode();
-  
-  GLStateTreeNode* createChildNodeForSGNode(SceneGraphNode* sgNode){
-    GLStateTreeNode* child = new GLStateTreeNode(sgNode, this);
-    _children.push_back(child);
-    return child;
-  }
-  
-  GLStateTreeNode* getChildNodeForSGNode(SceneGraphNode* node){
-    for (std::vector<GLStateTreeNode*>::iterator it = _children.begin(); it != _children.end(); it++) {
-      if ((*it)->_sgNode == node){
-        return *it;
-      }
-    }
-    return NULL;
-  }
+
+  void prune(SceneGraphNode* sgNode);
   
   SceneGraphNode* getSGNode() const{
     return _sgNode;
   }
   
-  GLState* getGLState();
+public:
   
-  void prune(SceneGraphNode* sgNode);
+  ~GLStateTreeNode();
+  
+  GLStateTreeNode* createChildNodeForSGNode(SceneGraphNode* sgNode);
+  
+  GLStateTreeNode* getChildNodeForSGNode(SceneGraphNode* node) const;
+  
+  GLState* getGLState();
 };
 
 

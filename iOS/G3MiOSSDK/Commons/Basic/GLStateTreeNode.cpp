@@ -13,6 +13,21 @@
 
 GLStateTreeNode GLStateTree::_rootNode;
 
+GLStateTreeNode* GLStateTreeNode::createChildNodeForSGNode(SceneGraphNode* sgNode){
+  GLStateTreeNode* child = new GLStateTreeNode(sgNode, this);
+  _children.push_back(child);
+  return child;
+}
+
+GLStateTreeNode* GLStateTreeNode::getChildNodeForSGNode(SceneGraphNode* node) const {
+  for (std::vector<GLStateTreeNode*>::const_iterator it = _children.begin(); it != _children.end(); it++) {
+    if ((*it)->_sgNode == node){
+      return *it;
+    }
+  }
+  return NULL;
+}
+
 GLStateTreeNode::~GLStateTreeNode(){
   for (std::vector<GLStateTreeNode*>::iterator it = _children.begin(); it != _children.end(); it++) {
     delete (*it);
