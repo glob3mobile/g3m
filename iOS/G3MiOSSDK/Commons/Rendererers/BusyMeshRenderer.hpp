@@ -103,6 +103,7 @@ public:
   void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode);
   bool isInsideCameraFrustum(const G3MRenderContext* rc);
   void modifiyGLState(GLState* state);
+  void onInitialize(const G3MContext* context);
   
 };
 

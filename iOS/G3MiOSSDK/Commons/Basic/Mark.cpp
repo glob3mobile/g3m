@@ -555,7 +555,8 @@ bool Mark::isInsideCameraFrustum(const G3MRenderContext* rc){
     }
   }
   
-  return false;
+  //Checking with frustum
+  return rc->getCurrentCamera()->getFrustumInModelCoordinates()->contains(*_cartesianPosition);
 }
 
 void Mark::rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode){
@@ -656,4 +657,46 @@ void Mark::modifiyGLState(GLState* state){
     progState->setUniformValue("ViewPortExtent", Vector2D( (double)viewportWidth, (double)viewportHeight ));
   }
   
+}
+
+void Mark::onInitialize(const G3MContext* context) {
+  
+  _planet = context->getPlanet();
+  
+  if (!_textureSolved) {
+    const bool hasLabel   = ( _label.length()             != 0 );
+    const bool hasIconURL = ( _iconURL.getPath().length() != 0 );
+    
+    if (hasIconURL) {
+      IDownloader* downloader = context->getDownloader();
+      
+      int downloadPriority = 100;
+      
+      downloader->requestImage(_iconURL,
+                               downloadPriority,
+                               TimeInterval::fromDays(30),
+                               true,
+                               new IconDownloadListener(this,
+                                                        _label,
+                                                        _labelBottom,
+                                                        _labelFontSize,
+                                                        _labelFontColor,
+                                                        _labelShadowColor,
+                                                        _labelGapSize),
+                               true);
+    }
+    else {
+      if (hasLabel) {
+        ITextUtils::instance()->createLabelImage(_label,
+                                                 _labelFontSize,
+                                                 _labelFontColor,
+                                                 _labelShadowColor,
+                                                 new MarkLabelImageListener(NULL, this),
+                                                 true);
+      }
+      else {
+        ILogger::instance()->logWarning("Marker created without label nor icon");
+      }
+    }
+  }
 }

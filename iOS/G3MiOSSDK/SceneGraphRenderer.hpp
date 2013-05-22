@@ -24,9 +24,11 @@ class SceneGraphRenderer: public Renderer{
   Camera* _camera;
   
   std::vector<SceneGraphNode*> _nodes;
+  bool _usesCurrentCamera;
   
 public:
-  SceneGraphRenderer(std::vector<SceneGraphNode*> nodes): _camera(NULL), _nodes(nodes){
+  SceneGraphRenderer(std::vector<SceneGraphNode*> nodes, bool usesCurrentCamera):
+  _camera(NULL), _nodes(nodes), _usesCurrentCamera(usesCurrentCamera){
     printf("SCENE GRAPH CREATED");
     
   }
@@ -44,7 +46,11 @@ public:
   
   
   void initialize(const G3MContext* context){
-    _rootState = GLStateTreeNode::createRootNodeForSGNode(NULL);
+    _rootState = GLStateTree::createNodeForSGNode(NULL);// GLStateTreeNode::createRootNodeForSGNode(NULL);
+    
+    for (int i = 0; i < _nodes.size(); i++) {
+      _nodes[i]->initialize(context);
+    }
 //    
 //    MarksRenderer* mr = new MarksRenderer(true);
 //    rc->getCurrentCamera->addChildren(mr);

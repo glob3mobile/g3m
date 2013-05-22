@@ -17,9 +17,12 @@
 #include "GLStateTreeNode.hpp"
 
 class SceneGraphNode{
+private:
+  GLStateTreeNode* _lastParentStateNode;
+  GLStateTreeNode* _lastStateNode;
+  
 protected:
   bool _isVisible;
-  
   std::vector<SceneGraphNode*> _children;
   
   virtual void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode) = 0;
@@ -34,12 +37,18 @@ protected:
     return _children[i];
   }
   
-public:
-  SceneGraphNode():_isVisible(true){}
+  virtual void onInitialize(const G3MContext* context){}
   
-  virtual ~SceneGraphNode(){}
+public:
+  SceneGraphNode():_isVisible(true), _lastParentStateNode(NULL), _lastStateNode(NULL){}
+  
+  virtual ~SceneGraphNode(){
+    GLStateTree::prune(this); //Deleting states
+  }
   
   virtual void modifiyGLState(GLState* state) = 0;
+  
+  void initialize(const G3MContext* context);
   
 /////////////////
   

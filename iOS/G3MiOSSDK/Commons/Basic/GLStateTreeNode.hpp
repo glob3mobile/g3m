@@ -16,25 +16,25 @@
 
 
 class SceneGraphNode;
+
 class GLStateTreeNode{
+  
+protected:
   SceneGraphNode* _sgNode;
   std::vector<GLStateTreeNode*> _children;  //OTHER IMPLEMENTATIONS MAY HAVE ONLY ONE CHILD (FOR PERFORMANCE)
   const GLStateTreeNode* const _parent;
-  
   GLState* _state;
-  
-  std::list<SceneGraphNode*> getHierachy() const;
+
+  friend class GLStateTree; //Tree can create nodes
   
   GLStateTreeNode(SceneGraphNode* sgNode, GLStateTreeNode* parent):
   _sgNode(sgNode), _state(NULL), _parent(parent){}
   
-  static GLStateTreeNode _rootNode; //Root node of the whole tree
+  GLStateTreeNode():_sgNode(NULL), _state(NULL), _parent(NULL){}
+  
+  std::list<SceneGraphNode*> getHierachy() const;
   
 public:
-  
-  static GLStateTreeNode* createRootNodeForSGNode(SceneGraphNode* sgNode){
-    return new GLStateTreeNode(sgNode, NULL);
-  }
   
   ~GLStateTreeNode();
   
@@ -58,6 +58,23 @@ public:
   }
   
   GLState* getGLState();
+  
+  void prune(SceneGraphNode* sgNode);
+};
+
+
+class GLStateTree{
+  
+  static GLStateTreeNode _rootNode;
+  
+public:
+  
+  static GLStateTreeNode* createNodeForSGNode(SceneGraphNode* sgNode);
+  
+  static void prune(SceneGraphNode* sgNode){
+    _rootNode.prune(sgNode);
+  }
+  
 };
 
 #endif /* defined(__G3MiOSSDK__GLStateTreeNode__) */

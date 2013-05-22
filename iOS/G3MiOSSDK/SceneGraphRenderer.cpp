@@ -9,6 +9,9 @@
 #include "SceneGraphRenderer.hpp"
 
 void SceneGraphRenderer::render(const G3MRenderContext* rc){
+  
+  if (_usesCurrentCamera){
+  
   if (_camera == NULL){
     _camera = (Camera*)rc->getCurrentCamera();
     int nNodes = _nodes.size();
@@ -18,4 +21,11 @@ void SceneGraphRenderer::render(const G3MRenderContext* rc){
   }
   
   _camera->SceneGraphNode::render(rc, _rootState);
+    
+  } else{
+    int nNodes = _nodes.size();
+    for (int i = 0; i < nNodes; i++) {
+      _nodes[i]->render(rc, _rootState);
+    }
+  }
 }

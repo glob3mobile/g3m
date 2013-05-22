@@ -347,6 +347,13 @@ public:
   //                                                Vector2D(250,194),
   //                                                false);
   
+  bool testingSG = true;
+  if (testingSG){
+    std::vector<SceneGraphNode*> nodes;
+    nodes.push_back((BusyMeshRenderer*)busyRenderer);
+    busyRenderer = new SceneGraphRenderer(nodes, false);
+  }
+  
   builder.setBusyRenderer(busyRenderer);
   
   //    DummyRenderer* dum = new DummyRenderer();
@@ -368,20 +375,19 @@ public:
                                                   shapesRenderer: shapesRenderer
                                                    marksRenderer: marksRenderer];
   //builder.addRenderer(geoRenderer);
-  bool testingSG = true;
   if (testingSG){
     std::vector<SceneGraphNode*> nodes;
-
-    
     
     MarksRenderer* mr = new MarksRenderer(true);
     nodes.push_back(mr);
     
-    for (int i = 0; i < 2000; i++){
+    for (int i = 0; i < 500; i++){
       const Angle latitude  = Angle::fromDegrees( (int) (arc4random() % 180) - 90 );
       const Angle longitude = Angle::fromDegrees( (int) (arc4random() % 360));
       
-      Mark* m = new Mark("Random Mark",
+      NSString *string = [[NSString alloc] initWithFormat:@"Mark %0.1f, %0.1f", latitude.degrees(), longitude.degrees(), nil];
+      
+      Mark* m = new Mark([string UTF8String],
                          Geodetic3D(latitude,
                                     longitude,
                                     0),
@@ -390,7 +396,7 @@ public:
       mr->addMark(m);
     }
     
-    SceneGraphRenderer* sgr = new SceneGraphRenderer(nodes);
+    SceneGraphRenderer* sgr = new SceneGraphRenderer(nodes, true);
     builder.addRenderer(sgr);
   }
   

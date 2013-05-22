@@ -10,6 +10,9 @@
 
 #include "SceneGraphNode.hpp"
 
+
+GLStateTreeNode GLStateTree::_rootNode;
+
 GLStateTreeNode::~GLStateTreeNode(){
   for (std::vector<GLStateTreeNode*>::iterator it = _children.begin(); it != _children.end(); it++) {
     delete (*it);
@@ -42,3 +45,20 @@ GLState* GLStateTreeNode::getGLState() {
   }
   return _state;
 }
+
+void GLStateTreeNode::prune(SceneGraphNode* sgNode){
+  for (std::vector<GLStateTreeNode*>::iterator it = _children.begin(); it != _children.end(); it++) {
+    (*it)->prune(sgNode);
+    
+    if ((*it)->_sgNode == sgNode){
+      delete (*it);
+      _children.erase(it);
+    }
+  }
+}
+
+GLStateTreeNode* GLStateTree::createNodeForSGNode(SceneGraphNode* sgNode){
+  return new GLStateTreeNode(sgNode, &_rootNode);
+}
+
+

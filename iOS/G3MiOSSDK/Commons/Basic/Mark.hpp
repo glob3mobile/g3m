@@ -258,6 +258,8 @@ public:
 
   void modifiyGLState(GLState* state);
   
+  void onInitialize(const G3MContext* context);
+  
 };
 
 #endif
