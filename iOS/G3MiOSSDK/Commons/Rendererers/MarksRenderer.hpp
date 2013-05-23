@@ -101,7 +101,7 @@ public:
   
   
   void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode){
-    //NOT RENDERABLE NODE
+    _lastCamera = rc->getCurrentCamera();
   }
   
   bool isInsideCameraFrustum(const G3MRenderContext* rc){
@@ -112,6 +112,7 @@ public:
     
   }
   
+  void onTouchEventRecived(const G3MEventContext* ec, const TouchEvent* touchEvent);
 };
 
 #endif

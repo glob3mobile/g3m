@@ -381,17 +381,52 @@ public:
     MarksRenderer* mr = new MarksRenderer(true);
     nodes.push_back(mr);
     
+    class TestMarkTouchListenerSG : public MarkTouchListener {
+    public:
+      bool touchedMark(Mark* mark) {
+        NSString* message = [NSString stringWithFormat: @"Touched on mark \"%s\"", mark->getLabel().c_str()];
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Glob3 Demo"
+                                                        message:message
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+        
+        return true;
+      }
+    };
+    
     for (int i = 0; i < 500; i++){
       const Angle latitude  = Angle::fromDegrees( (int) (arc4random() % 180) - 90 );
       const Angle longitude = Angle::fromDegrees( (int) (arc4random() % 360));
       
       NSString *string = [[NSString alloc] initWithFormat:@"Mark %0.1f, %0.1f", latitude.degrees(), longitude.degrees(), nil];
       
+      
+      
       Mark* m = new Mark([string UTF8String],
-                         Geodetic3D(latitude,
-                                    longitude,
-                                    0),
-                         0);
+                         Geodetic3D(latitude, longitude, 0),
+                         0,
+                         20,
+                         Color::newFromRGBA(1, 1, 1, 1),
+                         Color::newFromRGBA(0, 0, 0, 1),
+                         NULL,
+                         true,
+                         new TestMarkTouchListenerSG(),
+                         true);
+      
+//      Mark(const std::string& label,
+//           const Geodetic3D&  position,
+//           double             minDistanceToCamera=4.5e+06,
+//           const float        labelFontSize=20,
+//           const Color*       labelFontColor=Color::newFromRGBA(1, 1, 1, 1),
+//           const Color*       labelShadowColor=Color::newFromRGBA(0, 0, 0, 1),
+//           MarkUserData*      userData=NULL,
+//           bool               autoDeleteUserData=true,
+//           MarkTouchListener* listener=NULL,
+//           bool               autoDeleteListener=false);
+      
       
       mr->addMark(m);
     }

@@ -76,7 +76,14 @@ public:
   
   
   bool onTouchEvent(const G3MEventContext* ec,
-                    const TouchEvent* touchEvent){}
+                    const TouchEvent* touchEvent){
+    
+    for (int i = 0; i < _nodes.size(); i++) {
+      _nodes[i]->touchEvent(ec, touchEvent);
+    }
+    
+    return false;
+  }
   
   void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height){}

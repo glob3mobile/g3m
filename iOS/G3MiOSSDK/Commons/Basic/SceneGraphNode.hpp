@@ -15,6 +15,7 @@
 #include "GLState.hpp"
 
 #include "GLStateTreeNode.hpp"
+#include "TouchEvent.hpp"
 
 class SceneGraphNode{
 private:
@@ -29,15 +30,17 @@ protected:
   
   virtual bool isInsideCameraFrustum(const G3MRenderContext* rc) = 0;
   
-  int getChildrenCount() const {
-    return _children.size();
-  }
-  
-  const SceneGraphNode* getChild(int i) const {
-    return _children[i];
-  }
+//  int getChildrenCount() const {
+//    return _children.size();
+//  }
+//  
+//  const SceneGraphNode* getChild(int i) const {
+//    return _children[i];
+//  }
   
   virtual void onInitialize(const G3MContext* context){}
+  
+  virtual void onTouchEventRecived(const G3MEventContext* ec, const TouchEvent* touchEvent){}
   
 public:
   SceneGraphNode():_isVisible(true), _lastParentStateNode(NULL), _lastStateNode(NULL){}
@@ -50,8 +53,6 @@ public:
   
   void initialize(const G3MContext* context);
   
-/////////////////
-  
   void render(const G3MRenderContext* rc, GLStateTreeNode* parentStateTreeNode);
   
   bool isVisible() const { return _isVisible;}
@@ -61,6 +62,10 @@ public:
   void addChildren(SceneGraphNode* child){
     _children.push_back(child);
   }
+  
+  void touchEvent(const G3MEventContext* ec, const TouchEvent* touchEvent);
+  
+  
 };
 
 #endif /* defined(__G3MiOSSDK__SceneGraphNode__) */
