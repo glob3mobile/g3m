@@ -45,6 +45,13 @@ void Layer::setLayerSet(LayerSet* layerSet) {
   _layerSet = layerSet;
 }
 
+void Layer::removeLayerSet(LayerSet* layerSet) {
+  if (_layerSet != layerSet) {
+    ILogger::instance()->logError("_layerSet doesn't match.");
+  }
+  _layerSet = NULL;
+}
+
 void Layer::notifyChanges() const {
   if (_layerSet == NULL) {
 //    ILogger::instance()->logError("Can't notify changes, _layerSet was not set");

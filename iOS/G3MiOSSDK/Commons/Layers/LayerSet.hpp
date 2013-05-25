@@ -51,7 +51,7 @@ public:
 
   ~LayerSet();
 
-  void removeAllLayers();
+  void removeAllLayers(const bool deleteLayers);
   
   void addLayer(Layer* layer);
   

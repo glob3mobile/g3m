@@ -51,8 +51,6 @@ private:
 
   Renderer* createBusyRenderer();
 
-  GInitializationTask* createInitializationTask();
-
   std::vector<PeriodicalTask*>* createPeriodicalTasks();
 
   const URL createSceneDescriptionURL() const;

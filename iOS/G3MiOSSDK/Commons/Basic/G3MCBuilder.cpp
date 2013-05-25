@@ -69,14 +69,6 @@ GL* G3MCBuilder::getGL() {
   return _gl;
 }
 
-LayerSet* G3MCBuilder::getLayerSet() {
-  if (_layerSet == NULL) {
-    _layerSet = new LayerSet();
-    recreateLayerSet();
-  }
-  return _layerSet;
-}
-
 TileRenderer* G3MCBuilder::createTileRenderer() {
   const TileTessellator* tessellator = new EllipsoidalTileTessellator(true);
 
@@ -247,24 +239,24 @@ public:
 };
 
 
-class G3MCInitializationTask : public GInitializationTask {
-private:
-  G3MCBuilder* _builder;
-  const URL    _sceneDescriptionURL;
-
-  bool _isInitialized;
-
-public:
-  G3MCInitializationTask(G3MCBuilder* builder,
-                         const URL& sceneDescriptionURL) :
-  _builder(builder),
-  _sceneDescriptionURL(sceneDescriptionURL),
-  _isInitialized(false)
-  {
-
-  }
-
-  void run(const G3MContext* context) {
+//class G3MCInitializationTask : public GInitializationTask {
+//private:
+//  G3MCBuilder* _builder;
+//  const URL    _sceneDescriptionURL;
+//
+//  bool _isInitialized;
+//
+//public:
+//  G3MCInitializationTask(G3MCBuilder* builder,
+//                         const URL& sceneDescriptionURL) :
+//  _builder(builder),
+//  _sceneDescriptionURL(sceneDescriptionURL),
+//  _isInitialized(false)
+//  {
+//
+//  }
+//
+//  void run(const G3MContext* context) {
 //    IDownloader* downloader = context->getDownloader();
 //
 //    downloader->requestBuffer(_sceneDescriptionURL,
@@ -273,14 +265,14 @@ public:
 //                              true,
 //                              new G3MCSceneDescriptionBufferListener(_builder),
 //                              true);
-  }
-
-  bool isDone(const G3MContext* context) {
-    //return _isInitialized;
-    int __FIX_IT;
-    return true;
-  }
-};
+//  }
+//
+//  bool isDone(const G3MContext* context) {
+//    //return _isInitialized;
+//    int __FIX_IT;
+//    return true;
+//  }
+//};
 
 
 class G3MCPeriodicalTask : public GTask {
@@ -301,10 +293,10 @@ public:
   }
   
   void run(const G3MContext* context) {
-    ILogger::instance()->logInfo("G3MCPeriodicalTask executed");
+    //ILogger::instance()->logInfo("G3MCPeriodicalTask executed");
 
     IDownloader* downloader = context->getDownloader();
-    if (_requestId > 0) {
+    if (_requestId >= 0) {
       downloader->cancelRequest(_requestId);
     }
 
@@ -318,12 +310,20 @@ public:
 };
 
 
+LayerSet* G3MCBuilder::getLayerSet() {
+  if (_layerSet == NULL) {
+    _layerSet = new LayerSet();
+    recreateLayerSet();
+  }
+  return _layerSet;
+}
+
 void G3MCBuilder::recreateLayerSet() {
   if (_layerSet == NULL) {
     ILogger::instance()->logError("Can't recreate the LayerSet before creating the widget");
   }
   else {
-    _layerSet->removeAllLayers();
+    _layerSet->removeAllLayers(false);
     if (_baseLayer != NULL) {
       _layerSet->addLayer(_baseLayer);
     }
@@ -334,11 +334,10 @@ void G3MCBuilder::setBaseLayer(Layer* baseLayer) {
   if (_baseLayer != baseLayer) {
     if (_baseLayer != NULL) {
       delete _baseLayer;
-      _baseLayer = NULL;
     }
     _baseLayer = baseLayer;
+    recreateLayerSet();
   }
-  recreateLayerSet();
 }
 
 
@@ -346,11 +345,6 @@ const URL G3MCBuilder::createSceneDescriptionURL() const {
   std::string serverPath = _serverURL.getPath();
 
   return URL(serverPath + "/scenes/" + _sceneId, false);
-}
-
-
-GInitializationTask* G3MCBuilder::createInitializationTask() {
-  return new G3MCInitializationTask(this, createSceneDescriptionURL());
 }
 
 
@@ -390,6 +384,9 @@ G3MWidget* G3MCBuilder::create() {
 
   Color backgroundColor = Color::fromRGBA(0, 0, 0, 1);
 
+  // GInitializationTask* initializationTask = new G3MCInitializationTask(this, createSceneDescriptionURL());
+  GInitializationTask* initializationTask = NULL;
+
   std::vector<PeriodicalTask*>* periodicalTasks = createPeriodicalTasks();
 
   G3MWidget * g3mWidget = G3MWidget::create(getGL(),
@@ -404,7 +401,8 @@ G3MWidget* G3MCBuilder::create() {
                                             backgroundColor,
                                             false, // logFPS
                                             false, // logDownloaderStatistics
-                                            createInitializationTask(),
+                                            //createInitializationTask(),
+                                            initializationTask,
                                             true, // autoDeleteInitializationTask
                                             *periodicalTasks);
 
