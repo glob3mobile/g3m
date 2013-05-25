@@ -124,6 +124,18 @@ void LayerSet::addLayer(Layer* layer) {
   layersChanged();
 }
 
+void LayerSet::removeAllLayers() {
+  const int layersSize = _layers.size();
+  if (layersSize > 0) {
+    for (unsigned int i = 0; i < layersSize; i++) {
+      delete _layers[i];
+    }
+    _layers.clear();
+
+    layersChanged();
+  }
+}
+
 void LayerSet::layerChanged(const Layer* layer) const {
   layersChanged();
 }

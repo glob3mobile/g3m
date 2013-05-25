@@ -93,6 +93,7 @@
 #import <G3MiOSSDK/SGNode.hpp>
 #import <G3MiOSSDK/SGMaterialNode.hpp>
 
+#import <G3MiOSSDK/G3MCBuilder_iOS.hpp>
 
 
 class TestVisibleSectorListener : public VisibleSectorListener {
@@ -127,13 +128,25 @@ public:
   // [self initWithoutBuilder];
 
   // initizalize a default widget by using a builder
-  //  [self initDefaultWithBuilder];
+  //[self initWithDefaultBuilder];
 
   // initialize a customized widget by using a buider
-  [self initCustomizedWithBuilder];
+  //[self initCustomizedWithBuilder];
+
+  [self initWithG3MCBuilder];
 
   [[self G3MWidget] startAnimation];
+} 
+
+- (void) initWithG3MCBuilder
+{
+  _g3mcBuilder =  new G3MCBuilder_iOS([self G3MWidget],
+                                      URL("http://localhost:8080/g3mc-server", false),
+                                      "2g5h0rkyevpzly86wkx");
+
+  _g3mcBuilder->initializeWidget();
 }
+
 
 //- (void) initWithoutBuilder
 //{
@@ -189,13 +202,14 @@ public:
 //
 //}
 
-- (void) initDefaultWithBuilder
+- (void) initWithDefaultBuilder
 {
   G3MBuilder_iOS builder([self G3MWidget]);
 
-  // initialization
   builder.initializeWidget();
 }
+
+
 
 - (void)  initializeElevationDataProvider: (G3MBuilder_iOS&) builder
 {

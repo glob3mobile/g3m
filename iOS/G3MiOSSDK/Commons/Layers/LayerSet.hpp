@@ -50,6 +50,8 @@ public:
   }
 
   ~LayerSet();
+
+  void removeAllLayers();
   
   void addLayer(Layer* layer);
   
