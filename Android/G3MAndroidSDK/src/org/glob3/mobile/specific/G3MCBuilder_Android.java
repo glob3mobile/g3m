@@ -52,4 +52,14 @@ public class G3MCBuilder_Android
       return new ThreadUtils_Android(_nativeWidget);
    }
 
+
+   public G3MWidget_Android createWidget() {
+      setGL(_nativeWidget.getGL());
+
+      _nativeWidget.setWidget(create());
+
+      return _nativeWidget;
+   }
+
+
 }
