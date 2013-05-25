@@ -33,7 +33,13 @@ class LayerSet;
 
 class G3MCBuilder {
 private:
+#ifdef C_CODE
   const URL         _serverURL;
+#endif
+#ifdef JAVA_CODE
+  private final URL _serverURL;
+#endif
+
   const std::string _sceneId;
 
   Layer* _baseLayer;

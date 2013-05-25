@@ -278,7 +278,12 @@ public:
 class G3MCPeriodicalTask : public GTask {
 private:
   G3MCBuilder* _builder;
+#ifdef C_CODE
   const URL    _sceneDescriptionURL;
+#endif
+#ifdef JAVA_CODE
+  private final URL _sceneDescriptionURL;
+#endif
 
   long long _requestId;
 
