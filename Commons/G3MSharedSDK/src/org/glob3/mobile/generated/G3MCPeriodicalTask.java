@@ -38,14 +38,14 @@ package org.glob3.mobile.generated;
 public class G3MCPeriodicalTask extends GTask
 {
   private G3MCBuilder _builder;
-  private final URL _sceneDescriptionURL = new URL();
+  private final URL _sceneDescriptionURL;
 
   private long _requestId;
 
   public G3MCPeriodicalTask(G3MCBuilder builder, URL sceneDescriptionURL)
   {
      _builder = builder;
-     _sceneDescriptionURL = new URL(sceneDescriptionURL);
+     _sceneDescriptionURL = sceneDescriptionURL;
      _requestId = -1;
 
   }

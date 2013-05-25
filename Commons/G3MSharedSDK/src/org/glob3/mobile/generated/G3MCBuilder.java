@@ -36,7 +36,8 @@ package org.glob3.mobile.generated;
 
 public abstract class G3MCBuilder
 {
-  private final URL _serverURL = new URL();
+  private final URL _serverURL;
+
   private final String _sceneId;
 
   private Layer _baseLayer;
@@ -140,7 +141,7 @@ public abstract class G3MCBuilder
 
   protected G3MCBuilder(URL serverURL, String sceneId)
   {
-     _serverURL = new URL(serverURL);
+     _serverURL = serverURL;
      _sceneId = sceneId;
      _gl = null;
      _glob3Created = false;
