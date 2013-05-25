@@ -144,17 +144,19 @@ private:
   G3MCBuilder* _builder;
 
   Layer* parseLayer(const JSONObject* jsonBaseLayer) const {
+    const TimeInterval defaultTimeToCache = TimeInterval::fromDays(30);
+
     const std::string layerType = jsonBaseLayer->getAsString("layer", "<layer not present>");
     if (layerType.compare("OSM") == 0) {
-      return new OSMLayer(TimeInterval::fromDays(30));
+      return new OSMLayer(defaultTimeToCache);
     }
-    if (layerType.compare("MapQuest") == 0) {
+    else if (layerType.compare("MapQuest") == 0) {
       const std::string imagery = jsonBaseLayer->getAsString("imagery", "<imagery not present>");
       if (imagery.compare("OpenAerial") == 0) {
-        return MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30));
+        return MapQuestLayer::newOpenAerial(defaultTimeToCache);
       }
       else if (imagery.compare("OSM") == 0) {
-        return MapQuestLayer::newOSM(TimeInterval::fromDays(30));
+        return MapQuestLayer::newOSM(defaultTimeToCache);
       }
       else {
         ILogger::instance()->logError("Unsupported MapQuest imagery \"%s\"",
@@ -263,14 +265,14 @@ public:
   }
 
   void run(const G3MContext* context) {
-    IDownloader* downloader = context->getDownloader();
-
-    downloader->requestBuffer(_sceneDescriptionURL,
-                              DownloadPriority::HIGHEST,
-                              TimeInterval::zero(),
-                              true,
-                              new G3MCSceneDescriptionBufferListener(_builder),
-                              true);
+//    IDownloader* downloader = context->getDownloader();
+//
+//    downloader->requestBuffer(_sceneDescriptionURL,
+//                              DownloadPriority::HIGHEST,
+//                              TimeInterval::zero(),
+//                              true,
+//                              new G3MCSceneDescriptionBufferListener(_builder),
+//                              true);
   }
 
   bool isDone(const G3MContext* context) {
@@ -279,6 +281,42 @@ public:
     return true;
   }
 };
+
+
+class G3MCPeriodicalTask : public GTask {
+private:
+  G3MCBuilder* _builder;
+  const URL    _sceneDescriptionURL;
+
+  long long _requestId;
+
+public:
+  G3MCPeriodicalTask(G3MCBuilder* builder,
+                     const URL& sceneDescriptionURL) :
+  _builder(builder),
+  _sceneDescriptionURL(sceneDescriptionURL),
+  _requestId(-1)
+  {
+
+  }
+  
+  void run(const G3MContext* context) {
+    ILogger::instance()->logInfo("G3MCPeriodicalTask executed");
+
+    IDownloader* downloader = context->getDownloader();
+    if (_requestId > 0) {
+      downloader->cancelRequest(_requestId);
+    }
+
+    _requestId = downloader->requestBuffer(_sceneDescriptionURL,
+                                           DownloadPriority::HIGHEST,
+                                           TimeInterval::zero(),
+                                           true,
+                                           new G3MCSceneDescriptionBufferListener(_builder),
+                                           true);
+  }
+};
+
 
 void G3MCBuilder::recreateLayerSet() {
   if (_layerSet == NULL) {
@@ -315,8 +353,12 @@ GInitializationTask* G3MCBuilder::createInitializationTask() {
   return new G3MCInitializationTask(this, createSceneDescriptionURL());
 }
 
+
 std::vector<PeriodicalTask*>* G3MCBuilder::createPeriodicalTasks() {
   std::vector<PeriodicalTask*>* periodicalTasks = new std::vector<PeriodicalTask*>();
+
+  periodicalTasks->push_back(new PeriodicalTask(TimeInterval::fromSeconds(15),
+                                                new G3MCPeriodicalTask(this, createSceneDescriptionURL())));
 
   return periodicalTasks;
 }
