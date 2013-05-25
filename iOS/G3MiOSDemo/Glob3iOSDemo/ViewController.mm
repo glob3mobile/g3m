@@ -142,7 +142,10 @@ public:
 {
   _g3mcBuilder =  new G3MCBuilder_iOS([self G3MWidget],
                                       URL("http://localhost:8080/g3mc-server", false),
-                                      "2g5h0rkyevpzly86wkx");
+                                      "2g59wh610g6c1kmkt0l");
+
+  //  2g5h0rkyevpzly86wkx  -> OSM
+  //  2g59wh610g6c1kmkt0l  -> MapQuestLayer
 
   _g3mcBuilder->initializeWidget();
 }

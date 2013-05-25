@@ -33,6 +33,7 @@
 #include "JSONString.hpp"
 
 #include "OSMLayer.hpp"
+#include "MapQuestLayer.hpp"
 
 G3MCBuilder::G3MCBuilder(const URL& serverURL,
                          const std::string& sceneId) :
@@ -147,8 +148,23 @@ private:
     if (layerType.compare("OSM") == 0) {
       return new OSMLayer(TimeInterval::fromDays(30));
     }
+    if (layerType.compare("MapQuest") == 0) {
+      const std::string imagery = jsonBaseLayer->getAsString("imagery", "<imagery not present>");
+      if (imagery.compare("OpenAerial") == 0) {
+        return MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30));
+      }
+      else if (imagery.compare("OSM") == 0) {
+        return MapQuestLayer::newOSM(TimeInterval::fromDays(30));
+      }
+      else {
+        ILogger::instance()->logError("Unsupported MapQuest imagery \"%s\"",
+                                      imagery.c_str());
+        return NULL;
+      }
+    }
     else {
-      ILogger::instance()->logError("Unsupported layer type \"%s\"", layerType.c_str());
+      ILogger::instance()->logError("Unsupported layer type \"%s\"",
+                                    layerType.c_str());
       return NULL;
     }
   }
