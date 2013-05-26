@@ -142,7 +142,7 @@ Renderer* G3MCBuilder::createBusyRenderer() {
 }
 
 
-class G3MCSceneDescriptionBufferListener : public IBufferDownloadListener {
+class G3MCBuilder_SceneDescriptionBufferListener : public IBufferDownloadListener {
 private:
   G3MCBuilder* _builder;
 
@@ -175,7 +175,7 @@ private:
   }
 
 public:
-  G3MCSceneDescriptionBufferListener(G3MCBuilder* builder) :
+  G3MCBuilder_SceneDescriptionBufferListener(G3MCBuilder* builder) :
   _builder(builder)
   {
   }
@@ -213,7 +213,7 @@ public:
             else {
               Layer* baseLayer = parseLayer(jsonBaseLayer);
               _builder->setBaseLayer(baseLayer);
-              
+
               _builder->setSceneTimestamp(timestamp);
             }
           }
@@ -251,7 +251,7 @@ public:
 };
 
 
-//class G3MCInitializationTask : public GInitializationTask {
+//class G3MCBuilder_InitializationTask : public GInitializationTask {
 //private:
 //  G3MCBuilder* _builder;
 //  const URL    _sceneDescriptionURL;
@@ -259,7 +259,7 @@ public:
 //  bool _isInitialized;
 //
 //public:
-//  G3MCInitializationTask(G3MCBuilder* builder,
+//  G3MCBuilder_InitializationTask(G3MCBuilder* builder,
 //                         const URL& sceneDescriptionURL) :
 //  _builder(builder),
 //  _sceneDescriptionURL(sceneDescriptionURL),
@@ -287,7 +287,7 @@ public:
 //};
 
 
-class G3MCPullScenePeriodicalTask : public GTask {
+class G3MCBuilder_PullScenePeriodicalTask : public GTask {
 private:
   G3MCBuilder* _builder;
 #ifdef C_CODE
@@ -300,8 +300,8 @@ private:
   long long _requestId;
 
 public:
-  G3MCPullScenePeriodicalTask(G3MCBuilder* builder,
-                              const URL& sceneDescriptionURL) :
+  G3MCBuilder_PullScenePeriodicalTask(G3MCBuilder* builder,
+                                      const URL& sceneDescriptionURL) :
   _builder(builder),
   _sceneDescriptionURL(sceneDescriptionURL),
   _requestId(-1)
@@ -321,7 +321,7 @@ public:
                                            DownloadPriority::HIGHEST,
                                            TimeInterval::zero(),
                                            true,
-                                           new G3MCSceneDescriptionBufferListener(_builder),
+                                           new G3MCBuilder_SceneDescriptionBufferListener(_builder),
                                            true);
   }
 };
@@ -369,8 +369,8 @@ std::vector<PeriodicalTask*>* G3MCBuilder::createPeriodicalTasks() {
   std::vector<PeriodicalTask*>* periodicalTasks = new std::vector<PeriodicalTask*>();
 
   periodicalTasks->push_back(new PeriodicalTask(TimeInterval::fromSeconds(15),
-                                                new G3MCPullScenePeriodicalTask(this,
-                                                                                createSceneDescriptionURL())));
+                                                new G3MCBuilder_PullScenePeriodicalTask(this,
+                                                                                        createSceneDescriptionURL())));
 
   return periodicalTasks;
 }
@@ -432,14 +432,14 @@ G3MWidget* G3MCBuilder::create() {
 }
 
 
-class G3MCScenesDescriptionsBufferListener : public IBufferDownloadListener {
+class G3MCBuilder_ScenesDescriptionsBufferListener : public IBufferDownloadListener {
 private:
   G3MCBuilderScenesDescriptionsListener* _listener;
   const bool _autoDelete;
 
 public:
-  G3MCScenesDescriptionsBufferListener(G3MCBuilderScenesDescriptionsListener* listener,
-                                       bool autoDelete) :
+  G3MCBuilder_ScenesDescriptionsBufferListener(G3MCBuilderScenesDescriptionsListener* listener,
+                                               bool autoDelete) :
   _listener(listener),
   _autoDelete(autoDelete)
   {
@@ -466,7 +466,7 @@ public:
       }
       else {
         std::vector<G3MCSceneDescription*>* scenesDescriptions = new std::vector<G3MCSceneDescription*>();
-        
+
         const int size = jsonScenesDescriptions->size();
 
         for (int i = 0; i < size; i++) {
@@ -550,7 +550,7 @@ void G3MCBuilder::requestScenesDescriptions(G3MCBuilderScenesDescriptionsListene
                                  DownloadPriority::HIGHEST,
                                  TimeInterval::zero(),
                                  true,
-                                 new G3MCScenesDescriptionsBufferListener(listener, autoDelete),
+                                 new G3MCBuilder_ScenesDescriptionsBufferListener(listener, autoDelete),
                                  true);
 }
 
