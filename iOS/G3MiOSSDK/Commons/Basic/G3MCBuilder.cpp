@@ -488,7 +488,7 @@ public:
               const int tagsCount = jsonTags->size();
               for (int j = 0; j < tagsCount; j++) {
                 const std::string tag = jsonTags->getAsString(j, "");
-                if (!tag.empty()) {
+                if (tag.size() > 0) {
                   tags.push_back(tag);
                 }
               }

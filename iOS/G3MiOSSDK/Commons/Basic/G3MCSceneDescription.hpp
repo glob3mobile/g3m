@@ -19,7 +19,12 @@ private:
   const std::string              _name;
   const std::string              _description;
   const std::string              _iconURL;
+#ifdef C_CODE
   const std::vector<std::string> _tags;
+#endif
+#ifdef JAVA_CODE
+  private final java.util.ArrayList<String> _tags;
+#endif
 
 public:
 
