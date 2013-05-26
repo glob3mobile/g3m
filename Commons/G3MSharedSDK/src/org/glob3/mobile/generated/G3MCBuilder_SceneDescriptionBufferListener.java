@@ -79,8 +79,7 @@ public class G3MCBuilder_SceneDescriptionBufferListener extends IBufferDownloadL
             else
             {
               Layer baseLayer = parseLayer(jsonBaseLayer);
-              _builder.setBaseLayer(baseLayer);
-
+              _builder.changeBaseLayer(baseLayer);
               _builder.setSceneTimestamp(timestamp);
             }
           }

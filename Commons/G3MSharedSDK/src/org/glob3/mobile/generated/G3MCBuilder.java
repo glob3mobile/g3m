@@ -5,7 +5,7 @@ public abstract class G3MCBuilder
 
   private final URL _serverURL;
 
-  private final String _sceneId;
+  private String _sceneId;
 
   private Layer _baseLayer;
 
@@ -21,8 +21,6 @@ public abstract class G3MCBuilder
     ElevationDataProvider elevationDataProvider = null;
     final float verticalExaggeration = 1F;
     TileTexturizer texturizer = new MultiLayerTileTexturizer();
-    //LayerSet* layerSet = new LayerSet();
-    LayerSet layerSet = getLayerSet();
   
     final boolean renderDebug = false;
     final boolean useTilesSplitBudget = true;
@@ -33,7 +31,7 @@ public abstract class G3MCBuilder
     final boolean showStatistics = false;
     long texturePriority = DownloadPriority.HIGHER;
   
-    return new TileRenderer(tessellator, elevationDataProvider, verticalExaggeration, texturizer, layerSet, parameters, showStatistics, texturePriority);
+    return new TileRenderer(tessellator, elevationDataProvider, verticalExaggeration, texturizer, _layerSet, parameters, showStatistics, texturePriority);
   }
 
   private java.util.ArrayList<ICameraConstrainer> createCameraConstraints()
@@ -68,17 +66,11 @@ public abstract class G3MCBuilder
   {
     java.util.ArrayList<PeriodicalTask> periodicalTasks = new java.util.ArrayList<PeriodicalTask>();
   
-    periodicalTasks.add(new PeriodicalTask(TimeInterval.fromSeconds(15), new G3MCBuilder_PullScenePeriodicalTask(this, createSceneDescriptionURL())));
+    periodicalTasks.add(new PeriodicalTask(TimeInterval.fromSeconds(15), new G3MCBuilder_PullScenePeriodicalTask(this)));
   
     return periodicalTasks;
   }
 
-  private URL createSceneDescriptionURL()
-  {
-    String serverPath = _serverURL.getPath();
-  
-    return new URL(serverPath + "/scenes/" + _sceneId, false);
-  }
   private URL createScenesDescriptionsURL()
   {
     String serverPath = _serverURL.getPath();
@@ -86,29 +78,24 @@ public abstract class G3MCBuilder
     return new URL(serverPath + "/scenes/", false);
   }
 
-  private LayerSet getLayerSet()
-  {
-    if (_layerSet == null)
-    {
-      _layerSet = new LayerSet();
-      recreateLayerSet();
-    }
-    return _layerSet;
-  }
+//  LayerSet* getLayerSet();
   private void recreateLayerSet()
   {
-    if (_layerSet == null)
+    _layerSet.removeAllLayers(false);
+    if (_baseLayer != null)
     {
-      ILogger.instance().logError("Can't recreate the LayerSet before creating the widget");
+      _layerSet.addLayer(_baseLayer);
     }
-    else
+  }
+
+  private IThreadUtils _threadUtils;
+  private IThreadUtils getThreadUtils()
+  {
+    if (_threadUtils == null)
     {
-      _layerSet.removeAllLayers(false);
-      if (_baseLayer != null)
-      {
-        _layerSet.addLayer(_baseLayer);
-      }
+      _threadUtils = createThreadUtils();
     }
+    return _threadUtils;
   }
 
   private IDownloader _downloader;
@@ -126,13 +113,14 @@ public abstract class G3MCBuilder
   {
      _serverURL = serverURL;
      _sceneId = sceneId;
+     _sceneTimestamp = -1;
      _gl = null;
      _glob3Created = false;
      _storage = null;
-     _layerSet = null;
+     _threadUtils = null;
+     _layerSet = new LayerSet();
      _baseLayer = null;
      _downloader = null;
-     _sceneTimestamp = -1;
   
   }
 
@@ -191,7 +179,7 @@ public abstract class G3MCBuilder
   
     java.util.ArrayList<PeriodicalTask> periodicalTasks = createPeriodicalTasks();
   
-    G3MWidget g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), createThreadUtils(), createPlanet(), cameraConstraints, createCameraRenderer(), mainRenderer, createBusyRenderer(), backgroundColor, false, false, initializationTask, true, periodicalTasks); // autoDeleteInitializationTask -  logDownloaderStatistics -  logFPS
+    G3MWidget g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), createPlanet(), cameraConstraints, createCameraRenderer(), mainRenderer, createBusyRenderer(), backgroundColor, false, false, initializationTask, true, periodicalTasks); // autoDeleteInitializationTask -  logDownloaderStatistics -  logFPS
   
     //  g3mWidget->setUserData(getUserData());
   
@@ -222,17 +210,8 @@ public abstract class G3MCBuilder
   protected abstract IThreadUtils createThreadUtils();
 
 
-  public final int getSceneTimestamp()
-  {
-    return _sceneTimestamp;
-  }
-
-  public final void setSceneTimestamp(int timestamp)
-  {
-    _sceneTimestamp = timestamp;
-  }
-
-  public final void setBaseLayer(Layer baseLayer)
+  /** Private to G3M, don't call it */
+  public final void changeBaseLayer(Layer baseLayer)
   {
     if (_baseLayer != baseLayer)
     {
@@ -243,6 +222,51 @@ public abstract class G3MCBuilder
       }
       _baseLayer = baseLayer;
       recreateLayerSet();
+    }
+  }
+
+  /** Private to G3M, don't call it */
+  public final int getSceneTimestamp()
+  {
+    return _sceneTimestamp;
+  }
+
+  /** Private to G3M, don't call it */
+  public final void setSceneTimestamp(int timestamp)
+  {
+    _sceneTimestamp = timestamp;
+  }
+
+  /** Private to G3M, don't call it */
+  public final URL createSceneDescriptionURL()
+  {
+    String serverPath = _serverURL.getPath();
+  
+    return new URL(serverPath + "/scenes/" + _sceneId, false);
+  }
+
+  /** Private to G3M, don't call it */
+  public final void rawChangeScene(String sceneId)
+  {
+    if (sceneId.compareTo(_sceneId) != 0)
+    {
+      _layerSet.removeAllLayers(false);
+      if (_baseLayer != null)
+      {
+        if (_baseLayer != null)
+           _baseLayer.dispose();
+        _baseLayer = null;
+      }
+      _sceneTimestamp = -1;
+      _sceneId = sceneId;
+    }
+  }
+
+  public final void changeScene(String sceneId)
+  {
+    if (sceneId.compareTo(_sceneId) != 0)
+    {
+      getThreadUtils().invokeInRendererThread(new G3MCBuilder_ChangeSceneIdTask(this, sceneId), true);
     }
   }
 
