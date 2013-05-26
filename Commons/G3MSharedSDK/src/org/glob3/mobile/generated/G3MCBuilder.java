@@ -68,7 +68,7 @@ public abstract class G3MCBuilder
   {
     java.util.ArrayList<PeriodicalTask> periodicalTasks = new java.util.ArrayList<PeriodicalTask>();
   
-    periodicalTasks.add(new PeriodicalTask(TimeInterval.fromSeconds(15), new G3MCPullScenePeriodicalTask(this, createSceneDescriptionURL())));
+    periodicalTasks.add(new PeriodicalTask(TimeInterval.fromSeconds(15), new G3MCBuilder_PullScenePeriodicalTask(this, createSceneDescriptionURL())));
   
     return periodicalTasks;
   }
@@ -252,7 +252,7 @@ public abstract class G3MCBuilder
   }
   public final void requestScenesDescriptions(G3MCBuilderScenesDescriptionsListener listener, boolean autoDelete)
   {
-    getDownloader().requestBuffer(createScenesDescriptionsURL(), DownloadPriority.HIGHEST, TimeInterval.zero(), true, new G3MCScenesDescriptionsBufferListener(listener, autoDelete), true);
+    getDownloader().requestBuffer(createScenesDescriptionsURL(), DownloadPriority.HIGHEST, TimeInterval.zero(), true, new G3MCBuilder_ScenesDescriptionsBufferListener(listener, autoDelete), true);
   }
 
 }

@@ -1,10 +1,10 @@
 package org.glob3.mobile.generated; 
-public class G3MCScenesDescriptionsBufferListener extends IBufferDownloadListener
+public class G3MCBuilder_ScenesDescriptionsBufferListener extends IBufferDownloadListener
 {
   private G3MCBuilderScenesDescriptionsListener _listener;
   private final boolean _autoDelete;
 
-  public G3MCScenesDescriptionsBufferListener(G3MCBuilderScenesDescriptionsListener listener, boolean autoDelete)
+  public G3MCBuilder_ScenesDescriptionsBufferListener(G3MCBuilderScenesDescriptionsListener listener, boolean autoDelete)
   {
      _listener = listener;
      _autoDelete = autoDelete;

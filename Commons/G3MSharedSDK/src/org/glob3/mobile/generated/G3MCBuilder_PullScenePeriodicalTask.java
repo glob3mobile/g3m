@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-//class G3MCInitializationTask : public GInitializationTask {
+//class G3MCBuilder_InitializationTask : public GInitializationTask {
 //private:
 //  G3MCBuilder* _builder;
 //  const URL    _sceneDescriptionURL;
@@ -7,7 +7,7 @@ package org.glob3.mobile.generated;
 //  bool _isInitialized;
 //
 //public:
-//  G3MCInitializationTask(G3MCBuilder* builder,
+//  G3MCBuilder_InitializationTask(G3MCBuilder* builder,
 //                         const URL& sceneDescriptionURL) :
 //  _builder(builder),
 //  _sceneDescriptionURL(sceneDescriptionURL),
@@ -35,14 +35,14 @@ package org.glob3.mobile.generated;
 //};
 
 
-public class G3MCPullScenePeriodicalTask extends GTask
+public class G3MCBuilder_PullScenePeriodicalTask extends GTask
 {
   private G3MCBuilder _builder;
   private final URL _sceneDescriptionURL;
 
   private long _requestId;
 
-  public G3MCPullScenePeriodicalTask(G3MCBuilder builder, URL sceneDescriptionURL)
+  public G3MCBuilder_PullScenePeriodicalTask(G3MCBuilder builder, URL sceneDescriptionURL)
   {
      _builder = builder;
      _sceneDescriptionURL = sceneDescriptionURL;
@@ -60,6 +60,6 @@ public class G3MCPullScenePeriodicalTask extends GTask
       downloader.cancelRequest(_requestId);
     }
 
-    _requestId = downloader.requestBuffer(_sceneDescriptionURL, DownloadPriority.HIGHEST, TimeInterval.zero(), true, new G3MCSceneDescriptionBufferListener(_builder), true);
+    _requestId = downloader.requestBuffer(_sceneDescriptionURL, DownloadPriority.HIGHEST, TimeInterval.zero(), true, new G3MCBuilder_SceneDescriptionBufferListener(_builder), true);
   }
 }
