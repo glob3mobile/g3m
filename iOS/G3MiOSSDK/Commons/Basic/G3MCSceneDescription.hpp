@@ -14,17 +14,12 @@
 
 class G3MCSceneDescription {
 private:
-  const std::string              _id;
-  const std::string              _user;
-  const std::string              _name;
-  const std::string              _description;
-  const std::string              _iconURL;
-#ifdef C_CODE
-  const std::vector<std::string> _tags;
-#endif
-#ifdef JAVA_CODE
-  private final java.util.ArrayList<String> _tags;
-#endif
+  const std::string        _id;
+  const std::string        _user;
+  const std::string        _name;
+  const std::string        _description;
+  const std::string        _iconURL;
+  std::vector<std::string> _tags;
 
 public:
 
