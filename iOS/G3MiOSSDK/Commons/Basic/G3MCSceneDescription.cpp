@@ -39,9 +39,7 @@ std::vector<std::string> G3MCSceneDescription::getTags() const {
 }
 
 const std::string G3MCSceneDescription::description() const {
-  //return "TODO: G3MCSceneDescription::description()";
   IStringBuilder *isb = IStringBuilder::newStringBuilder();
-  //isb->addDouble(_degrees);
   isb->addString("[Scene id=");
   isb->addString(_id);
   isb->addString(", user=");
