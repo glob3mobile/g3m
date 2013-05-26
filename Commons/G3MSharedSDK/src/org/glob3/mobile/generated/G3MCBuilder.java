@@ -1,39 +1,4 @@
 package org.glob3.mobile.generated; 
-//
-//  G3MCBuilder.cpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 5/25/13.
-//
-//
-
-//
-//  G3MCBuilder.hpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 5/25/13.
-//
-//
-
-
-
-//class GL;
-//class G3MWidget;
-//class TileRenderer;
-//class IStorage;
-//class IDownloader;
-//class IThreadUtils;
-//class Planet;
-//class ICameraConstrainer;
-//class CameraRenderer;
-//class Renderer;
-//class GInitializationTask;
-//class PeriodicalTask;
-//class Layer;
-//class LayerSet;
-
-
-
 public abstract class G3MCBuilder
 {
   private final URL _serverURL;
@@ -101,7 +66,7 @@ public abstract class G3MCBuilder
   {
     java.util.ArrayList<PeriodicalTask> periodicalTasks = new java.util.ArrayList<PeriodicalTask>();
   
-    periodicalTasks.add(new PeriodicalTask(TimeInterval.fromSeconds(15), new G3MCPeriodicalTask(this, createSceneDescriptionURL())));
+    periodicalTasks.add(new PeriodicalTask(TimeInterval.fromSeconds(15), new G3MCPullScenePeriodicalTask(this, createSceneDescriptionURL())));
   
     return periodicalTasks;
   }
@@ -111,6 +76,12 @@ public abstract class G3MCBuilder
     String serverPath = _serverURL.getPath();
   
     return new URL(serverPath + "/scenes/" + _sceneId, false);
+  }
+  private URL createScenesDescriptionsURL()
+  {
+    String serverPath = _serverURL.getPath();
+  
+    return new URL(serverPath + "/scenes/", false);
   }
 
   private LayerSet getLayerSet()
@@ -138,6 +109,16 @@ public abstract class G3MCBuilder
     }
   }
 
+  private IDownloader _downloader;
+  private IDownloader getDownloader()
+  {
+    if (_downloader == null)
+    {
+      _downloader = createDownloader();
+    }
+    return _downloader;
+  }
+
 
   protected G3MCBuilder(URL serverURL, String sceneId)
   {
@@ -148,6 +129,7 @@ public abstract class G3MCBuilder
      _storage = null;
      _layerSet = null;
      _baseLayer = null;
+     _downloader = null;
   
   }
 
@@ -206,8 +188,7 @@ public abstract class G3MCBuilder
   
     java.util.ArrayList<PeriodicalTask> periodicalTasks = createPeriodicalTasks();
   
-    G3MWidget g3mWidget = G3MWidget.create(getGL(), getStorage(), createDownloader(), createThreadUtils(), createPlanet(), cameraConstraints, createCameraRenderer(), mainRenderer, createBusyRenderer(), backgroundColor, false, false, initializationTask, true, periodicalTasks); // autoDeleteInitializationTask -  logDownloaderStatistics -  logFPS
-                                              //createInitializationTask(),
+    G3MWidget g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), createThreadUtils(), createPlanet(), cameraConstraints, createCameraRenderer(), mainRenderer, createBusyRenderer(), backgroundColor, false, false, initializationTask, true, periodicalTasks); // autoDeleteInitializationTask -  logDownloaderStatistics -  logFPS
   
     //  g3mWidget->setUserData(getUserData());
   
@@ -249,6 +230,15 @@ public abstract class G3MCBuilder
       _baseLayer = baseLayer;
       recreateLayerSet();
     }
+  }
+
+  public final void requestScenesDescriptions(G3MCBuilderScenesDescriptionsListener listener)
+  {
+     requestScenesDescriptions(listener, true);
+  }
+  public final void requestScenesDescriptions(G3MCBuilderScenesDescriptionsListener listener, boolean autoDelete)
+  {
+    getDownloader().requestBuffer(createScenesDescriptionsURL(), DownloadPriority.HIGHEST, TimeInterval.zero(), true, new G3MCScenesDescriptionsBufferListener(listener, autoDelete), true);
   }
 
 }

@@ -35,14 +35,14 @@ package org.glob3.mobile.generated;
 //};
 
 
-public class G3MCPeriodicalTask extends GTask
+public class G3MCPullScenePeriodicalTask extends GTask
 {
   private G3MCBuilder _builder;
   private final URL _sceneDescriptionURL;
 
   private long _requestId;
 
-  public G3MCPeriodicalTask(G3MCBuilder builder, URL sceneDescriptionURL)
+  public G3MCPullScenePeriodicalTask(G3MCBuilder builder, URL sceneDescriptionURL)
   {
      _builder = builder;
      _sceneDescriptionURL = sceneDescriptionURL;

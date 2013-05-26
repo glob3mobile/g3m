@@ -94,8 +94,8 @@ public class G3MCSceneDescriptionBufferListener extends IBufferDownloadListener
     if (buffer != null)
        buffer.dispose();
 
-    int __TODO_flag_initialization_task_as_initialized;
-//    _initializationTask->setInitialized(true);
+    //    int __TODO_flag_initialization_task_as_initialized;
+    //    _initializationTask->setInitialized(true);
   }
 
   public final void onError(URL url)
