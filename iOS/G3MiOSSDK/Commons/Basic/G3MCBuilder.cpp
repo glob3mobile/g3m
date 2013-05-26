@@ -387,7 +387,7 @@ G3MWidget* G3MCBuilder::create() {
 
   std::vector<ICameraConstrainer*>* cameraConstraints = createCameraConstraints();
 
-  Color backgroundColor = Color::fromRGBA(0, 0, 0, 1);
+  Color backgroundColor = Color::fromRGBA(0, 0.1f, 0.2f, 1);
 
   // GInitializationTask* initializationTask = new G3MCInitializationTask(this, createSceneDescriptionURL());
   GInitializationTask* initializationTask = NULL;
