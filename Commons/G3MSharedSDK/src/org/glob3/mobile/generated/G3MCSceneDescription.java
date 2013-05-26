@@ -81,9 +81,7 @@ public class G3MCSceneDescription
 
   public final String description()
   {
-    //return "TODO: G3MCSceneDescription::description()";
     IStringBuilder isb = IStringBuilder.newStringBuilder();
-    //isb->addDouble(_degrees);
     isb.addString("[Scene id=");
     isb.addString(_id);
     isb.addString(", user=");
