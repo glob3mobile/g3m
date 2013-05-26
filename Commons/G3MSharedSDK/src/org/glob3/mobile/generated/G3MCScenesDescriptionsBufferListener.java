@@ -63,7 +63,7 @@ public class G3MCScenesDescriptionsBufferListener extends IBufferDownloadListene
               for (int j = 0; j < tagsCount; j++)
               {
                 final String tag = jsonTags.getAsString(j, "");
-                if (!tag.length() == 0)
+                if (tag.length() > 0)
                 {
                   tags.add(tag);
                 }
