@@ -24,7 +24,7 @@ public class G3MCSceneDescription
   private final String _name;
   private final String _description;
   private final String _iconURL;
-  private final java.util.ArrayList<String> _tags;
+  private java.util.ArrayList<String> _tags = new java.util.ArrayList<String>();
 
 
   public G3MCSceneDescription(String id, String user, String name, String description, String iconURL, java.util.ArrayList<String> tags)
@@ -69,7 +69,7 @@ public class G3MCSceneDescription
     final int size = _tags.size();
     for (int i = 0; i < size; i++)
     {
-      result.add(_tags[i]);
+      result.add(_tags.get(i));
     }
     return result;
   }
@@ -103,7 +103,7 @@ public class G3MCSceneDescription
       {
         isb.addString(", ");
       }
-      isb.addString(_tags[i]);
+      isb.addString(_tags.get(i));
     }
     isb.addString("]");
   
