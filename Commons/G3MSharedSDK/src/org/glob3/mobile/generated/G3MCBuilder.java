@@ -1,6 +1,8 @@
 package org.glob3.mobile.generated; 
 public abstract class G3MCBuilder
 {
+  private int _sceneTimestamp;
+
   private final URL _serverURL;
 
   private final String _sceneId;
@@ -130,6 +132,7 @@ public abstract class G3MCBuilder
      _layerSet = null;
      _baseLayer = null;
      _downloader = null;
+     _sceneTimestamp = -1;
   
   }
 
@@ -217,6 +220,17 @@ public abstract class G3MCBuilder
   protected abstract IDownloader createDownloader();
 
   protected abstract IThreadUtils createThreadUtils();
+
+
+  public final int getSceneTimestamp()
+  {
+    return _sceneTimestamp;
+  }
+
+  public final void setSceneTimestamp(int timestamp)
+  {
+    _sceneTimestamp = timestamp;
+  }
 
   public final void setBaseLayer(Layer baseLayer)
   {

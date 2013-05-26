@@ -39,7 +39,6 @@ public class G3MCSceneDescriptionBufferListener extends IBufferDownloadListener
   public G3MCSceneDescriptionBufferListener(G3MCBuilder builder)
   {
      _builder = builder;
-
   }
 
 
@@ -64,21 +63,26 @@ public class G3MCSceneDescriptionBufferListener extends IBufferDownloadListener
         final JSONString error = jsonObject.getAsString("error");
         if (error == null)
         {
+          final int timestamp = (int) jsonObject.getAsNumber("ts", 0);
 
-          final String user = jsonObject.getAsString("user", "<user not present>");
-          final String name = jsonObject.getAsString("name", "<name not present>");
-
-          final JSONObject jsonBaseLayer = jsonObject.getAsObject("baseLayer");
-
-          if (jsonBaseLayer == null)
+          if (_builder.getSceneTimestamp() != timestamp)
           {
-            ILogger.instance().logError("Attribute 'baseLayer' not found in SceneJSON");
-          }
-          else
-          {
-            Layer baseLayer = parseLayer(jsonBaseLayer);
+            final String user = jsonObject.getAsString("user", "<user not present>");
+            final String name = jsonObject.getAsString("name", "<name not present>");
 
-            _builder.setBaseLayer(baseLayer);
+            final JSONObject jsonBaseLayer = jsonObject.getAsObject("baseLayer");
+
+            if (jsonBaseLayer == null)
+            {
+              ILogger.instance().logError("Attribute 'baseLayer' not found in SceneJSON");
+            }
+            else
+            {
+              Layer baseLayer = parseLayer(jsonBaseLayer);
+              _builder.setBaseLayer(baseLayer);
+
+              _builder.setSceneTimestamp(timestamp);
+            }
           }
         }
         else
