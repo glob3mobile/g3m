@@ -299,6 +299,28 @@ private:
 
   long long _requestId;
 
+
+  URL getURL() const {
+    const int sceneTimestamp = _builder->getSceneTimestamp();
+
+    if (sceneTimestamp < 0) {
+      return _sceneDescriptionURL;
+    }
+
+    IStringBuilder* ib = IStringBuilder::newStringBuilder();
+
+    ib->addString(_sceneDescriptionURL.getPath());
+    ib->addString("?lastTs=");
+    ib->addInt(sceneTimestamp);
+
+    const std::string path = ib->getString();
+
+    delete ib;
+
+    return URL(path, false);
+  }
+  
+  
 public:
   G3MCBuilder_PullScenePeriodicalTask(G3MCBuilder* builder,
                                       const URL& sceneDescriptionURL) :
@@ -317,7 +339,7 @@ public:
       downloader->cancelRequest(_requestId);
     }
 
-    _requestId = downloader->requestBuffer(_sceneDescriptionURL,
+    _requestId = downloader->requestBuffer(getURL(),
                                            DownloadPriority::HIGHEST,
                                            TimeInterval::zero(),
                                            true,
