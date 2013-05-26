@@ -42,6 +42,31 @@ public class G3MCBuilder_PullScenePeriodicalTask extends GTask
 
   private long _requestId;
 
+
+  private URL getURL()
+  {
+    final int sceneTimestamp = _builder.getSceneTimestamp();
+
+    if (sceneTimestamp < 0)
+    {
+      return _sceneDescriptionURL;
+    }
+
+    IStringBuilder ib = IStringBuilder.newStringBuilder();
+
+    ib.addString(_sceneDescriptionURL.getPath());
+    ib.addString("?lastTs=");
+    ib.addInt(sceneTimestamp);
+
+    final String path = ib.getString();
+
+    if (ib != null)
+       ib.dispose();
+
+    return new URL(path, false);
+  }
+
+
   public G3MCBuilder_PullScenePeriodicalTask(G3MCBuilder builder, URL sceneDescriptionURL)
   {
      _builder = builder;
@@ -60,6 +85,6 @@ public class G3MCBuilder_PullScenePeriodicalTask extends GTask
       downloader.cancelRequest(_requestId);
     }
 
-    _requestId = downloader.requestBuffer(_sceneDescriptionURL, DownloadPriority.HIGHEST, TimeInterval.zero(), true, new G3MCBuilder_SceneDescriptionBufferListener(_builder), true);
+    _requestId = downloader.requestBuffer(getURL(), DownloadPriority.HIGHEST, TimeInterval.zero(), true, new G3MCBuilder_SceneDescriptionBufferListener(_builder), true);
   }
 }
