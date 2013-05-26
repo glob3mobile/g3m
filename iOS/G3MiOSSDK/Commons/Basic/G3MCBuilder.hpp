@@ -48,6 +48,8 @@ public:
 
 class G3MCBuilder {
 private:
+  int _sceneTimestamp;
+
 #ifdef C_CODE
   const URL         _serverURL;
 #endif
@@ -108,6 +110,11 @@ protected:
   virtual IThreadUtils* createThreadUtils() = 0;
 
 public:
+
+  int getSceneTimestamp() const;
+
+  void setSceneTimestamp(const int timestamp);
+
   void setBaseLayer(Layer* baseLayer);
 
   void requestScenesDescriptions(G3MCBuilderScenesDescriptionsListener* listener,

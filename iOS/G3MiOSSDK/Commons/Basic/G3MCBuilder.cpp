@@ -46,7 +46,8 @@ _glob3Created(false),
 _storage(NULL),
 _layerSet(NULL),
 _baseLayer(NULL),
-_downloader(NULL)
+_downloader(NULL),
+_sceneTimestamp(-1)
 {
 
 }
@@ -177,7 +178,6 @@ public:
   G3MCSceneDescriptionBufferListener(G3MCBuilder* builder) :
   _builder(builder)
   {
-
   }
 
 
@@ -199,21 +199,23 @@ public:
       else {
         const JSONString* error = jsonObject->getAsString("error");
         if (error == NULL) {
+          const int timestamp = (int) jsonObject->getAsNumber("ts", 0);
 
-          const std::string user = jsonObject->getAsString("user",
-                                                           "<user not present>");
-          const std::string name = jsonObject->getAsString("name",
-                                                           "<name not present>");
+          if (_builder->getSceneTimestamp() != timestamp) {
+            const std::string user = jsonObject->getAsString("user", "<user not present>");
+            const std::string name = jsonObject->getAsString("name", "<name not present>");
 
-          const JSONObject* jsonBaseLayer = jsonObject->getAsObject("baseLayer");
+            const JSONObject* jsonBaseLayer = jsonObject->getAsObject("baseLayer");
 
-          if (jsonBaseLayer == NULL) {
-            ILogger::instance()->logError("Attribute 'baseLayer' not found in SceneJSON");
-          }
-          else {
-            Layer* baseLayer = parseLayer(jsonBaseLayer);
-
-            _builder->setBaseLayer(baseLayer);
+            if (jsonBaseLayer == NULL) {
+              ILogger::instance()->logError("Attribute 'baseLayer' not found in SceneJSON");
+            }
+            else {
+              Layer* baseLayer = parseLayer(jsonBaseLayer);
+              _builder->setBaseLayer(baseLayer);
+              
+              _builder->setSceneTimestamp(timestamp);
+            }
           }
         }
         else {
@@ -550,4 +552,12 @@ void G3MCBuilder::requestScenesDescriptions(G3MCBuilderScenesDescriptionsListene
                                  true,
                                  new G3MCScenesDescriptionsBufferListener(listener, autoDelete),
                                  true);
+}
+
+int G3MCBuilder::getSceneTimestamp() const {
+  return _sceneTimestamp;
+}
+
+void G3MCBuilder::setSceneTimestamp(const int timestamp) {
+  _sceneTimestamp = timestamp;
 }
