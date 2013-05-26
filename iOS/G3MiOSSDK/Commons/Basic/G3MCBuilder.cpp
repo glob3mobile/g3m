@@ -33,7 +33,7 @@
 #include "JSONString.hpp"
 #include "JSONArray.hpp"
 #include "G3MCSceneDescription.hpp"
-
+#include "IThreadUtils.hpp"
 #include "OSMLayer.hpp"
 #include "MapQuestLayer.hpp"
 
@@ -41,13 +41,14 @@ G3MCBuilder::G3MCBuilder(const URL& serverURL,
                          const std::string& sceneId) :
 _serverURL(serverURL),
 _sceneId(sceneId),
+_sceneTimestamp(-1),
 _gl(NULL),
 _glob3Created(false),
 _storage(NULL),
-_layerSet(NULL),
+_threadUtils(NULL),
+_layerSet( new LayerSet() ),
 _baseLayer(NULL),
-_downloader(NULL),
-_sceneTimestamp(-1)
+_downloader(NULL)
 {
 
 }
@@ -57,6 +58,13 @@ IDownloader* G3MCBuilder::getDownloader() {
     _downloader = createDownloader();
   }
   return _downloader;
+}
+
+IThreadUtils* G3MCBuilder::getThreadUtils() {
+  if (_threadUtils == NULL) {
+    _threadUtils = createThreadUtils();
+  }
+  return _threadUtils;
 }
 
 
@@ -86,8 +94,6 @@ TileRenderer* G3MCBuilder::createTileRenderer() {
   ElevationDataProvider* elevationDataProvider = NULL;
   const float verticalExaggeration = 1;
   TileTexturizer* texturizer = new MultiLayerTileTexturizer();
-  //LayerSet* layerSet = new LayerSet();
-  LayerSet* layerSet = getLayerSet();
 
   const bool renderDebug = false;
   const bool useTilesSplitBudget = true;
@@ -105,7 +111,7 @@ TileRenderer* G3MCBuilder::createTileRenderer() {
                           elevationDataProvider,
                           verticalExaggeration,
                           texturizer,
-                          layerSet,
+                          _layerSet,
                           parameters,
                           showStatistics,
                           texturePriority);
@@ -212,8 +218,7 @@ public:
             }
             else {
               Layer* baseLayer = parseLayer(jsonBaseLayer);
-              _builder->setBaseLayer(baseLayer);
-
+              _builder->changeBaseLayer(baseLayer);
               _builder->setSceneTimestamp(timestamp);
             }
           }
@@ -290,18 +295,14 @@ public:
 class G3MCBuilder_PullScenePeriodicalTask : public GTask {
 private:
   G3MCBuilder* _builder;
-#ifdef C_CODE
-  const URL    _sceneDescriptionURL;
-#endif
-#ifdef JAVA_CODE
-  private final URL _sceneDescriptionURL;
-#endif
 
   long long _requestId;
 
 
   URL getURL() const {
     const int sceneTimestamp = _builder->getSceneTimestamp();
+
+    const URL _sceneDescriptionURL = _builder->createSceneDescriptionURL();
 
     if (sceneTimestamp < 0) {
       return _sceneDescriptionURL;
@@ -319,13 +320,11 @@ private:
 
     return URL(path, false);
   }
-  
-  
+
+
 public:
-  G3MCBuilder_PullScenePeriodicalTask(G3MCBuilder* builder,
-                                      const URL& sceneDescriptionURL) :
+  G3MCBuilder_PullScenePeriodicalTask(G3MCBuilder* builder) :
   _builder(builder),
-  _sceneDescriptionURL(sceneDescriptionURL),
   _requestId(-1)
   {
 
@@ -349,27 +348,14 @@ public:
 };
 
 
-LayerSet* G3MCBuilder::getLayerSet() {
-  if (_layerSet == NULL) {
-    _layerSet = new LayerSet();
-    recreateLayerSet();
-  }
-  return _layerSet;
-}
-
 void G3MCBuilder::recreateLayerSet() {
-  if (_layerSet == NULL) {
-    ILogger::instance()->logError("Can't recreate the LayerSet before creating the widget");
-  }
-  else {
-    _layerSet->removeAllLayers(false);
-    if (_baseLayer != NULL) {
-      _layerSet->addLayer(_baseLayer);
-    }
+  _layerSet->removeAllLayers(false);
+  if (_baseLayer != NULL) {
+    _layerSet->addLayer(_baseLayer);
   }
 }
 
-void G3MCBuilder::setBaseLayer(Layer* baseLayer) {
+void G3MCBuilder::changeBaseLayer(Layer* baseLayer) {
   if (_baseLayer != baseLayer) {
     if (_baseLayer != NULL) {
       delete _baseLayer;
@@ -391,8 +377,7 @@ std::vector<PeriodicalTask*>* G3MCBuilder::createPeriodicalTasks() {
   std::vector<PeriodicalTask*>* periodicalTasks = new std::vector<PeriodicalTask*>();
 
   periodicalTasks->push_back(new PeriodicalTask(TimeInterval::fromSeconds(15),
-                                                new G3MCBuilder_PullScenePeriodicalTask(this,
-                                                                                        createSceneDescriptionURL())));
+                                                new G3MCBuilder_PullScenePeriodicalTask(this)));
 
   return periodicalTasks;
 }
@@ -432,7 +417,7 @@ G3MWidget* G3MCBuilder::create() {
   G3MWidget * g3mWidget = G3MWidget::create(getGL(),
                                             getStorage(),
                                             getDownloader(),
-                                            createThreadUtils(),
+                                            getThreadUtils(),
                                             createPlanet(),
                                             *cameraConstraints,
                                             createCameraRenderer(),
@@ -582,4 +567,43 @@ int G3MCBuilder::getSceneTimestamp() const {
 
 void G3MCBuilder::setSceneTimestamp(const int timestamp) {
   _sceneTimestamp = timestamp;
+}
+
+
+class G3MCBuilder_ChangeSceneIdTask : public GTask {
+private:
+  G3MCBuilder*      _builder;
+  const std::string _sceneId;
+
+public:
+  G3MCBuilder_ChangeSceneIdTask(G3MCBuilder* builder,
+                                const std::string& sceneId) :
+  _builder(builder),
+  _sceneId(sceneId)
+  {
+  }
+
+  void run(const G3MContext* context) {
+    _builder->rawChangeScene(_sceneId);
+  }
+};
+
+
+void G3MCBuilder::rawChangeScene(const std::string& sceneId) {
+  if (sceneId.compare(_sceneId) != 0) {
+    _layerSet->removeAllLayers(false);
+    if (_baseLayer != NULL) {
+      delete _baseLayer;
+      _baseLayer = NULL;
+    }
+    _sceneTimestamp = -1;
+    _sceneId = sceneId;
+  }
+}
+
+void G3MCBuilder::changeScene(const std::string& sceneId) {
+  if (sceneId.compare(_sceneId) != 0) {
+    getThreadUtils()->invokeInRendererThread(new G3MCBuilder_ChangeSceneIdTask(this, sceneId),
+                                             true);
+  }
 }

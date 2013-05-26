@@ -57,7 +57,7 @@ private:
   private final URL _serverURL;
 #endif
 
-  const std::string _sceneId;
+  std::string _sceneId;
 
   Layer* _baseLayer;
 
@@ -76,11 +76,13 @@ private:
 
   std::vector<PeriodicalTask*>* createPeriodicalTasks();
 
-  const URL createSceneDescriptionURL() const;
   const URL createScenesDescriptionsURL() const;
 
-  LayerSet* getLayerSet();
+//  LayerSet* getLayerSet();
   void recreateLayerSet();
+
+  IThreadUtils* _threadUtils;
+  IThreadUtils* getThreadUtils();
 
   IDownloader* _downloader;
   IDownloader* getDownloader();
@@ -111,11 +113,22 @@ protected:
 
 public:
 
+  /** Private to G3M, don't call it */
+  void changeBaseLayer(Layer* baseLayer);
+
+  /** Private to G3M, don't call it */
   int getSceneTimestamp() const;
 
+  /** Private to G3M, don't call it */
   void setSceneTimestamp(const int timestamp);
 
-  void setBaseLayer(Layer* baseLayer);
+  /** Private to G3M, don't call it */
+  const URL createSceneDescriptionURL() const;
+
+  /** Private to G3M, don't call it */
+  void rawChangeScene(const std::string& sceneId);
+
+  void changeScene(const std::string& sceneId);
 
   void requestScenesDescriptions(G3MCBuilderScenesDescriptionsListener* listener,
                                  bool autoDelete = true);
