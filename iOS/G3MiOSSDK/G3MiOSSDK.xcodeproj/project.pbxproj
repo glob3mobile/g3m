@@ -70,6 +70,8 @@
 		CF27B16016D93DCA0000A415 /* BufferElevationData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF27B15E16D93DC90000A415 /* BufferElevationData.cpp */; };
 		CF27B16416D93F2C0000A415 /* ShortBufferElevationData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF27B16216D93F2B0000A415 /* ShortBufferElevationData.cpp */; };
 		CF2CDD991678292E002A78A9 /* GInitializationTask.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF2CDD971678292E002A78A9 /* GInitializationTask.cpp */; };
+		CF2D85DE17526A7B00F4BEC9 /* G3MCSceneDescription.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF2D85DC17526A7B00F4BEC9 /* G3MCSceneDescription.cpp */; };
+		CF2D85DF17526AA800F4BEC9 /* G3MCSceneDescription.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF2D85DD17526A7B00F4BEC9 /* G3MCSceneDescription.hpp */; };
 		CF31CBF1158776130085E8F1 /* Effects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF31CBF0158776120085E8F1 /* Effects.cpp */; };
 		CF35A20716D3D44E00D795D8 /* BilParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF35A20516D3D44E00D795D8 /* BilParser.cpp */; };
 		CF35DD4C16C6995D002EFC96 /* Vector3F.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF35DD4A16C6995C002EFC96 /* Vector3F.cpp */; };
@@ -485,6 +487,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF2D85DF17526AA800F4BEC9 /* G3MCSceneDescription.hpp in CopyFiles */,
 				CFC3F8FF1751114800986630 /* G3MCBuilder_iOS.hpp in CopyFiles */,
 				CFC3F8FB17510F7100986630 /* G3MCBuilder.hpp in CopyFiles */,
 				441C28BE1733DA3D007DC83F /* ShapeFullPositionEffect.hpp in CopyFiles */,
@@ -865,6 +868,8 @@
 		CF27B16316D93F2C0000A415 /* ShortBufferElevationData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ShortBufferElevationData.hpp; path = Commons/Basic/ShortBufferElevationData.hpp; sourceTree = "<group>"; };
 		CF2CDD971678292E002A78A9 /* GInitializationTask.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GInitializationTask.cpp; path = Commons/Basic/GInitializationTask.cpp; sourceTree = "<group>"; };
 		CF2CDD981678292E002A78A9 /* GInitializationTask.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GInitializationTask.hpp; path = Commons/Basic/GInitializationTask.hpp; sourceTree = "<group>"; };
+		CF2D85DC17526A7B00F4BEC9 /* G3MCSceneDescription.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = G3MCSceneDescription.cpp; path = Commons/Basic/G3MCSceneDescription.cpp; sourceTree = "<group>"; };
+		CF2D85DD17526A7B00F4BEC9 /* G3MCSceneDescription.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = G3MCSceneDescription.hpp; path = Commons/Basic/G3MCSceneDescription.hpp; sourceTree = "<group>"; };
 		CF31CBEE158776020085E8F1 /* Effects.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Effects.hpp; path = Commons/Basic/Effects.hpp; sourceTree = "<group>"; };
 		CF31CBF0158776120085E8F1 /* Effects.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Effects.cpp; path = Commons/Basic/Effects.cpp; sourceTree = "<group>"; };
 		CF31CBF215878AF90085E8F1 /* ITimer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ITimer.hpp; path = Commons/Interfaces/ITimer.hpp; sourceTree = "<group>"; };
@@ -1261,6 +1266,8 @@
 				CFA1899915F8D7CA0048BF46 /* FloatBuffer_iOS.hpp */,
 				E705123F165E916000AEADB9 /* G3MBuilder_iOS.hpp */,
 				E7051240165E916000AEADB9 /* G3MBuilder_iOS.mm */,
+				CFC3F8FD175110FE00986630 /* G3MCBuilder_iOS.hpp */,
+				CFC3F8FC175110FE00986630 /* G3MCBuilder_iOS.mm */,
 				D89DA21715FF6C31008CD5F5 /* Image_iOS.hpp */,
 				D89DA21815FF6C31008CD5F5 /* Image_iOS.mm */,
 				CFA1899D15F8D9F80048BF46 /* IntBuffer_iOS.cpp */,
@@ -1283,8 +1290,6 @@
 				CF47030A15EFB4C000426B8B /* ThreadUtils_iOS.hpp */,
 				CF47030915EFB4C000426B8B /* ThreadUtils_iOS.mm */,
 				CF31CBF315878BE40085E8F1 /* Timer_iOS.hpp */,
-				CFC3F8FC175110FE00986630 /* G3MCBuilder_iOS.mm */,
-				CFC3F8FD175110FE00986630 /* G3MCBuilder_iOS.hpp */,
 			);
 			name = Derived;
 			sourceTree = "<group>";
@@ -1322,8 +1327,8 @@
 		383BD3891577EDF40012AC53 /* Basic */ = {
 			isa = PBXGroup;
 			children = (
-				D89FBD7E1725446C00FFA541 /* IImageUtils.cpp */,
-				D89FBD7F1725446C00FFA541 /* IImageUtils.hpp */,
+				CF6D7242171859C40043C74B /* BalloonCanvasElement.cpp */,
+				CF6D7243171859C40043C74B /* BalloonCanvasElement.hpp */,
 				CF35A20516D3D44E00D795D8 /* BilParser.cpp */,
 				CF35A20616D3D44E00D795D8 /* BilParser.hpp */,
 				CF27B15E16D93DC90000A415 /* BufferElevationData.cpp */,
@@ -1333,7 +1338,11 @@
 				CF7EDA0316948302002C760A /* ByteBufferIterator.cpp */,
 				CF7EDA0416948302002C760A /* ByteBufferIterator.hpp */,
 				D8EB78831637F6B500C4EB57 /* CameraGoToPositionEffect.hpp */,
+				CF6D723917184D620043C74B /* CanvasElement.cpp */,
+				CF6D723A17184D620043C74B /* CanvasElement.hpp */,
 				CFF95F761588E82200B56E11 /* Color.hpp */,
+				CF6D724A171861770043C74B /* ColumnCanvasElement.cpp */,
+				CF6D724B171861770043C74B /* ColumnCanvasElement.hpp */,
 				383BD38E1577EE500012AC53 /* Context.cpp */,
 				383BD38F1577EE500012AC53 /* Context.hpp */,
 				D87EC5CB15BEB31000E38C36 /* CPUTextureBuilder.cpp */,
@@ -1359,12 +1368,18 @@
 				CFDA835816D6698700295F96 /* FloatBufferElevationData.hpp */,
 				CF73BFD915E114E3001CE412 /* FrameTasksExecutor.cpp */,
 				CF73BFDA15E114E3001CE412 /* FrameTasksExecutor.hpp */,
+				CFC3F8F817510DA700986630 /* G3MCBuilder.cpp */,
+				CFC3F8F917510DA700986630 /* G3MCBuilder.hpp */,
+				CF2D85DC17526A7B00F4BEC9 /* G3MCSceneDescription.cpp */,
+				CF2D85DD17526A7B00F4BEC9 /* G3MCSceneDescription.hpp */,
 				383BD3901577EE500012AC53 /* G3MWidget.cpp */,
 				D88B5E5115C162AF0083A43F /* G3MWidget.hpp */,
 				CF0755941715B9120084CC14 /* GFont.cpp */,
 				CF0755951715B9120084CC14 /* GFont.hpp */,
 				CF2CDD971678292E002A78A9 /* GInitializationTask.cpp */,
 				CF2CDD981678292E002A78A9 /* GInitializationTask.hpp */,
+				CF6D724517185CF20043C74B /* GroupCanvasElement.cpp */,
+				CF6D724617185CF20043C74B /* GroupCanvasElement.hpp */,
 				CF527E19162E2B4200E0BDE0 /* GTask.cpp */,
 				CF527E1A162E2B4200E0BDE0 /* GTask.hpp */,
 				CF9D2D8615F7D3C100B5CE2E /* IBuffer.cpp */,
@@ -1375,8 +1390,12 @@
 				CF6873A415F77F54002EDFD0 /* IFloatBuffer.hpp */,
 				E77A1008165BEDC500FE5515 /* IG3MBuilder.cpp */,
 				E77A1009165BEDC500FE5515 /* IG3MBuilder.hpp */,
+				D89FBD7E1725446C00FFA541 /* IImageUtils.cpp */,
+				D89FBD7F1725446C00FFA541 /* IImageUtils.hpp */,
 				CF6873A815F77FFC002EDFD0 /* IIntBuffer.cpp */,
 				CF6873A915F77FFC002EDFD0 /* IIntBuffer.hpp */,
+				CF6D723617184BE40043C74B /* ImageBuilder.cpp */,
+				CF6D723717184BE40043C74B /* ImageBuilder.hpp */,
 				CF7E626415F7DD740086B71D /* IntBufferBuilder.cpp */,
 				CF7E626515F7DD740086B71D /* IntBufferBuilder.hpp */,
 				CFBD42D916AA151100663F21 /* IShortBuffer.cpp */,
@@ -1411,6 +1430,8 @@
 				CFDA836016D6776B00295F96 /* SubviewElevationData.cpp */,
 				CFDA836116D6776B00295F96 /* SubviewElevationData.hpp */,
 				CFE0844015E27A310004EC0E /* TerrainTouchEventListener.hpp */,
+				CF6D723E171854F50043C74B /* TextCanvasElement.cpp */,
+				CF6D723F171854F50043C74B /* TextCanvasElement.hpp */,
 				D87EC5CD15BEB31000E38C36 /* TextureBuilder.hpp */,
 				CF883B811590984900AEE39C /* TexturesHandler.cpp */,
 				CF883B7F1590983B00AEE39C /* TexturesHandler.hpp */,
@@ -1433,20 +1454,6 @@
 				CFD3D8B016D1729A00CE9242 /* WMSBillElevationDataProvider.hpp */,
 				CF8D0BFB15AF0D23005B5433 /* TileTexturizer.hpp */,
 				CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */,
-				CF6D723617184BE40043C74B /* ImageBuilder.cpp */,
-				CF6D723717184BE40043C74B /* ImageBuilder.hpp */,
-				CF6D723917184D620043C74B /* CanvasElement.cpp */,
-				CF6D723A17184D620043C74B /* CanvasElement.hpp */,
-				CF6D723E171854F50043C74B /* TextCanvasElement.cpp */,
-				CF6D723F171854F50043C74B /* TextCanvasElement.hpp */,
-				CF6D7242171859C40043C74B /* BalloonCanvasElement.cpp */,
-				CF6D7243171859C40043C74B /* BalloonCanvasElement.hpp */,
-				CF6D724517185CF20043C74B /* GroupCanvasElement.cpp */,
-				CF6D724617185CF20043C74B /* GroupCanvasElement.hpp */,
-				CF6D724A171861770043C74B /* ColumnCanvasElement.cpp */,
-				CF6D724B171861770043C74B /* ColumnCanvasElement.hpp */,
-				CFC3F8F817510DA700986630 /* G3MCBuilder.cpp */,
-				CFC3F8F917510DA700986630 /* G3MCBuilder.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -2177,6 +2184,7 @@
 				441C28BD1733D413007DC83F /* ShapeFullPositionEffect.cpp in Sources */,
 				CFC3F8FA17510DA800986630 /* G3MCBuilder.cpp in Sources */,
 				CFC3F8FE175110FE00986630 /* G3MCBuilder_iOS.mm in Sources */,
+				CF2D85DE17526A7B00F4BEC9 /* G3MCSceneDescription.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

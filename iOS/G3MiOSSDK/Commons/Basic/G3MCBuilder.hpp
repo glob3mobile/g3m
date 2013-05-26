@@ -25,11 +25,26 @@ class GInitializationTask;
 class PeriodicalTask;
 class Layer;
 class LayerSet;
+class G3MCSceneDescription;
 
 #include "URL.hpp"
 
 #include <vector>
 #include <string>
+
+
+class G3MCBuilderScenesDescriptionsListener {
+public:
+  virtual ~G3MCBuilderScenesDescriptionsListener() {
+
+  }
+
+  virtual void onDownload(std::vector<G3MCSceneDescription*>* scenesDescriptions) = 0;
+
+  virtual void onError() = 0;
+  
+};
+
 
 class G3MCBuilder {
 private:
@@ -60,9 +75,13 @@ private:
   std::vector<PeriodicalTask*>* createPeriodicalTasks();
 
   const URL createSceneDescriptionURL() const;
+  const URL createScenesDescriptionsURL() const;
 
   LayerSet* getLayerSet();
   void recreateLayerSet();
+
+  IDownloader* _downloader;
+  IDownloader* getDownloader();
 
 
 protected:
@@ -90,6 +109,9 @@ protected:
 
 public:
   void setBaseLayer(Layer* baseLayer);
+
+  void requestScenesDescriptions(G3MCBuilderScenesDescriptionsListener* listener,
+                                 bool autoDelete = true);
 
 };
 

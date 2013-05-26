@@ -94,6 +94,7 @@
 #import <G3MiOSSDK/SGMaterialNode.hpp>
 
 #import <G3MiOSSDK/G3MCBuilder_iOS.hpp>
+#import <G3MiOSSDK/G3MCSceneDescription.hpp>
 
 
 class TestVisibleSectorListener : public VisibleSectorListener {
@@ -138,11 +139,37 @@ public:
   [[self G3MWidget] startAnimation];
 } 
 
+
+class TestG3MCBuilderScenesDescriptionsListener  : public G3MCBuilderScenesDescriptionsListener {
+public:
+  void onDownload(std::vector<G3MCSceneDescription*>* scenesDescriptions) {
+    const int scenesCount = scenesDescriptions->size();
+    for (int i = 0; i < scenesCount; i++) {
+      G3MCSceneDescription* sceneDescription = scenesDescriptions->at(i);
+      ILogger::instance()->logInfo("%s", sceneDescription->description().c_str());
+    }
+
+    for (int i = 0; i < scenesCount; i++) {
+      delete scenesDescriptions->at(i);
+    }
+
+    delete scenesDescriptions;
+  }
+
+  void onError() {
+    ILogger::instance()->logError("Error downloading ScenesDescriptions");
+  }
+
+};
+
+
 - (void) initWithG3MCBuilder
 {
   _g3mcBuilder =  new G3MCBuilder_iOS([self G3MWidget],
                                       URL("http://localhost:8080/g3mc-server", false),
                                       "2g59wh610g6c1kmkt0l");
+
+  _g3mcBuilder->requestScenesDescriptions(new TestG3MCBuilderScenesDescriptionsListener(), true);
 
   _g3mcBuilder->initializeWidget();
 }

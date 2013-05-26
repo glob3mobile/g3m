@@ -31,6 +31,8 @@
 #include "IJSONParser.hpp"
 #include "JSONObject.hpp"
 #include "JSONString.hpp"
+#include "JSONArray.hpp"
+#include "G3MCSceneDescription.hpp"
 
 #include "OSMLayer.hpp"
 #include "MapQuestLayer.hpp"
@@ -43,9 +45,17 @@ _gl(NULL),
 _glob3Created(false),
 _storage(NULL),
 _layerSet(NULL),
-_baseLayer(NULL)
+_baseLayer(NULL),
+_downloader(NULL)
 {
-  
+
+}
+
+IDownloader* G3MCBuilder::getDownloader() {
+  if (_downloader == NULL) {
+    _downloader = createDownloader();
+  }
+  return _downloader;
 }
 
 
@@ -167,9 +177,9 @@ public:
   G3MCSceneDescriptionBufferListener(G3MCBuilder* builder) :
   _builder(builder)
   {
-    
+
   }
-  
+
 
   void onDownload(const URL& url,
                   IByteBuffer* buffer,
@@ -217,8 +227,8 @@ public:
 
     delete buffer;
 
-    int __TODO_flag_initialization_task_as_initialized;
-//    _initializationTask->setInitialized(true);
+    //    int __TODO_flag_initialization_task_as_initialized;
+    //    _initializationTask->setInitialized(true);
   }
 
   void onError(const URL& url) {
@@ -275,7 +285,7 @@ public:
 //};
 
 
-class G3MCPeriodicalTask : public GTask {
+class G3MCPullScenePeriodicalTask : public GTask {
 private:
   G3MCBuilder* _builder;
 #ifdef C_CODE
@@ -288,15 +298,15 @@ private:
   long long _requestId;
 
 public:
-  G3MCPeriodicalTask(G3MCBuilder* builder,
-                     const URL& sceneDescriptionURL) :
+  G3MCPullScenePeriodicalTask(G3MCBuilder* builder,
+                              const URL& sceneDescriptionURL) :
   _builder(builder),
   _sceneDescriptionURL(sceneDescriptionURL),
   _requestId(-1)
   {
 
   }
-  
+
   void run(const G3MContext* context) {
     //ILogger::instance()->logInfo("G3MCPeriodicalTask executed");
 
@@ -357,7 +367,8 @@ std::vector<PeriodicalTask*>* G3MCBuilder::createPeriodicalTasks() {
   std::vector<PeriodicalTask*>* periodicalTasks = new std::vector<PeriodicalTask*>();
 
   periodicalTasks->push_back(new PeriodicalTask(TimeInterval::fromSeconds(15),
-                                                new G3MCPeriodicalTask(this, createSceneDescriptionURL())));
+                                                new G3MCPullScenePeriodicalTask(this,
+                                                                                createSceneDescriptionURL())));
 
   return periodicalTasks;
 }
@@ -396,7 +407,7 @@ G3MWidget* G3MCBuilder::create() {
 
   G3MWidget * g3mWidget = G3MWidget::create(getGL(),
                                             getStorage(),
-                                            createDownloader(),
+                                            getDownloader(),
                                             createThreadUtils(),
                                             createPlanet(),
                                             *cameraConstraints,
@@ -404,11 +415,10 @@ G3MWidget* G3MCBuilder::create() {
                                             mainRenderer,
                                             createBusyRenderer(),
                                             backgroundColor,
-                                            false, // logFPS
-                                            false, // logDownloaderStatistics
-                                            //createInitializationTask(),
+                                            false,      // logFPS
+                                            false,      // logDownloaderStatistics
                                             initializationTask,
-                                            true, // autoDeleteInitializationTask
+                                            true,       // autoDeleteInitializationTask
                                             *periodicalTasks);
 
   //  g3mWidget->setUserData(getUserData());
@@ -417,4 +427,127 @@ G3MWidget* G3MCBuilder::create() {
   delete periodicalTasks;
 
   return g3mWidget;
+}
+
+
+class G3MCScenesDescriptionsBufferListener : public IBufferDownloadListener {
+private:
+  G3MCBuilderScenesDescriptionsListener* _listener;
+  const bool _autoDelete;
+
+public:
+  G3MCScenesDescriptionsBufferListener(G3MCBuilderScenesDescriptionsListener* listener,
+                                       bool autoDelete) :
+  _listener(listener),
+  _autoDelete(autoDelete)
+  {
+
+  }
+
+
+  void onDownload(const URL& url,
+                  IByteBuffer* buffer,
+                  bool expired) {
+
+    const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(buffer);
+
+    if (jsonBaseObject == NULL) {
+      ILogger::instance()->logError("Can't parse ScenesDescriptionJSON from %s",
+                                    url.getPath().c_str());
+      onError(url);
+    }
+    else {
+      const JSONArray* jsonScenesDescriptions = jsonBaseObject->asArray();
+      if (jsonScenesDescriptions == NULL) {
+        ILogger::instance()->logError("ScenesDescriptionJSON: invalid format (1)");
+        onError(url);
+      }
+      else {
+        std::vector<G3MCSceneDescription*>* scenesDescriptions = new std::vector<G3MCSceneDescription*>();
+        
+        const int size = jsonScenesDescriptions->size();
+
+        for (int i = 0; i < size; i++) {
+          const JSONObject* jsonSceneDescription = jsonScenesDescriptions->getAsObject(i);
+          if (jsonSceneDescription == NULL) {
+            ILogger::instance()->logError("ScenesDescriptionJSON: invalid format (2) at index #%d", i);
+          }
+          else {
+            const std::string id          = jsonSceneDescription->getAsString("id",          "<invalid id>");
+            const std::string user        = jsonSceneDescription->getAsString("user",        "<invalid user>");
+            const std::string name        = jsonSceneDescription->getAsString("name",        "<invalid name>");
+            const std::string description = jsonSceneDescription->getAsString("description", "");
+            const std::string iconURL     = jsonSceneDescription->getAsString("iconURL",     "<invalid iconURL>");
+
+            std::vector<std::string> tags;
+            const JSONArray* jsonTags = jsonSceneDescription->getAsArray("tags");
+            if (jsonTags == NULL) {
+              ILogger::instance()->logError("ScenesDescriptionJSON: invalid format (3) at index #%d", i);
+            }
+            else {
+              const int tagsCount = jsonTags->size();
+              for (int j = 0; j < tagsCount; j++) {
+                const std::string tag = jsonTags->getAsString(j, "");
+                if (!tag.empty()) {
+                  tags.push_back(tag);
+                }
+              }
+            }
+
+            scenesDescriptions->push_back( new G3MCSceneDescription(id,
+                                                                    user,
+                                                                    name,
+                                                                    description,
+                                                                    iconURL,
+                                                                    tags) );
+
+          }
+        }
+
+        _listener->onDownload(scenesDescriptions);
+        if (_autoDelete) {
+          delete _listener;
+        }
+      }
+
+      delete jsonBaseObject;
+    }
+
+    delete buffer;
+  }
+
+  void onError(const URL& url) {
+    _listener->onError();
+    if (_autoDelete) {
+      delete _listener;
+    }
+  }
+
+  void onCancel(const URL& url) {
+    // do nothing
+  }
+
+  void onCanceledDownload(const URL& url,
+                          IByteBuffer* buffer,
+                          bool expired) {
+    // do nothing
+  }
+
+};
+
+const URL G3MCBuilder::createScenesDescriptionsURL() const {
+  std::string serverPath = _serverURL.getPath();
+
+  return URL(serverPath + "/scenes/", false);
+}
+
+
+void G3MCBuilder::requestScenesDescriptions(G3MCBuilderScenesDescriptionsListener* listener,
+                                            bool autoDelete) {
+  getDownloader()->requestBuffer(createScenesDescriptionsURL(),
+                                 DownloadPriority::HIGHEST,
+                                 TimeInterval::zero(),
+                                 true,
+                                 new G3MCScenesDescriptionsBufferListener(listener, autoDelete),
+                                 true);
 }
