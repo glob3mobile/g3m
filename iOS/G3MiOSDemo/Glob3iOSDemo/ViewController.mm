@@ -166,9 +166,12 @@ public:
 
 - (void) initWithG3MCBuilder
 {
+  G3MCSceneChangeListener* sceneListener = NULL;
+  
   _g3mcBuilder =  new G3MCBuilder_iOS([self G3MWidget],
                                       URL("http://localhost:8080/g3mc-server", false),
-                                      "2g59wh610g6c1kmkt0l");
+                                      "2g59wh610g6c1kmkt0l",
+                                      sceneListener);
 
   //_g3mcBuilder->requestScenesDescriptions(new TestG3MCBuilderScenesDescriptionsListener(), true);
 

@@ -42,17 +42,21 @@
 
 
 G3MCBuilder::G3MCBuilder(const URL& serverURL,
-                         const std::string& sceneId) :
+                         const std::string& sceneId,
+                         G3MCSceneChangeListener* sceneListener) :
 _serverURL(serverURL),
-_sceneId(sceneId),
 _sceneTimestamp(-1),
+_sceneId(sceneId),
+_sceneUser(""),
+_sceneName(""),
 _gl(NULL),
 _glob3Created(false),
 _storage(NULL),
 _threadUtils(NULL),
 _layerSet( new LayerSet() ),
 _baseLayer(NULL),
-_downloader(NULL)
+_downloader(NULL),
+_sceneListener(sceneListener)
 {
 
 }
@@ -70,7 +74,6 @@ IThreadUtils* G3MCBuilder::getThreadUtils() {
   }
   return _threadUtils;
 }
-
 
 void G3MCBuilder::setGL(GL *gl) {
   if (_gl) {
@@ -171,7 +174,7 @@ private:
     if (imagery.compare("OpenAerial") == 0) {
       return MapQuestLayer::newOpenAerial(timeToCache);
     }
-    
+
     // defaults to OSM
     return MapQuestLayer::newOSM(timeToCache);
   }
@@ -262,21 +265,37 @@ public:
           const int timestamp = (int) jsonObject->getAsNumber("ts", 0);
 
           if (_builder->getSceneTimestamp() != timestamp) {
-            const std::string user = jsonObject->getAsString("user", "<user not present>");
-            const std::string name = jsonObject->getAsString("name", "<name not present>");
+            const JSONString* jsonUser = jsonObject->getAsString("user");
+            if (jsonUser == NULL) {
+              ILogger::instance()->logError("Attribute 'user' not found in SceneJSON");
+            }
+            else {
+              _builder->setSceneUser(jsonUser->value());
+            }
+            
+            const JSONString* jsonName = jsonObject->getAsString("name");
+            if (jsonName == NULL) {
+              ILogger::instance()->logError("Attribute 'name' not found in SceneJSON");
+            }
+            else {
+              _builder->setSceneName(jsonName->value());
+            }
 
             const JSONObject* jsonBaseLayer = jsonObject->getAsObject("baseLayer");
-
             if (jsonBaseLayer == NULL) {
               ILogger::instance()->logError("Attribute 'baseLayer' not found in SceneJSON");
             }
             else {
               Layer* baseLayer = parseLayer(jsonBaseLayer);
-              if (baseLayer != NULL) {
+              if (baseLayer == NULL)  {
+                ILogger::instance()->logError("Can't parse attribute 'baseLayer' in SceneJSON");
+              }
+              else {
                 _builder->changeBaseLayer(baseLayer);
-                _builder->setSceneTimestamp(timestamp);
               }
             }
+
+            _builder->setSceneTimestamp(timestamp);
           }
         }
         else {
@@ -417,7 +436,12 @@ void G3MCBuilder::changeBaseLayer(Layer* baseLayer) {
       delete _baseLayer;
     }
     _baseLayer = baseLayer;
+
     recreateLayerSet();
+
+    if (_sceneListener != NULL) {
+      _sceneListener->onBaseLayerChanged(_baseLayer);
+    }
   }
 }
 
@@ -625,6 +649,25 @@ void G3MCBuilder::setSceneTimestamp(const int timestamp) {
   _sceneTimestamp = timestamp;
 }
 
+void G3MCBuilder::setSceneUser(const std::string& user) {
+  if (_sceneUser.compare(user) != 0) {
+    _sceneUser = user;
+
+    if (_sceneListener != NULL) {
+      _sceneListener->onUserChanged(_sceneUser);
+    }
+  }
+}
+
+void G3MCBuilder::setSceneName(const std::string& name) {
+  if (_sceneName.compare(name) != 0) {
+    _sceneName = name;
+
+    if (_sceneListener != NULL) {
+      _sceneListener->onNameChanged(_sceneName);
+    }
+  }
+}
 
 class G3MCBuilder_ChangeSceneIdTask : public GTask {
 private:
