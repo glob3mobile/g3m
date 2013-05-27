@@ -14,7 +14,8 @@ public abstract class G3MCBuilder
   private Layer _baseLayer;
 
   private GL _gl;
-  private boolean _glob3Created;
+//  bool _glob3Created;
+  private G3MWidget _g3mWidget;
   private IStorage _storage;
 
   private LayerSet _layerSet;
@@ -129,7 +130,7 @@ public abstract class G3MCBuilder
      _sceneUser = "";
      _sceneName = "";
      _gl = null;
-     _glob3Created = false;
+     _g3mWidget = null;
      _storage = null;
      _threadUtils = null;
      _layerSet = new LayerSet();
@@ -170,12 +171,11 @@ public abstract class G3MCBuilder
 
   protected final G3MWidget create()
   {
-    if (_glob3Created)
+    if (_g3mWidget != null)
     {
       ILogger.instance().logError("The G3MWidget was already created, can't create more than one");
       return null;
     }
-    _glob3Created = true;
   
   
     CompositeRenderer mainRenderer = new CompositeRenderer();
@@ -194,14 +194,14 @@ public abstract class G3MCBuilder
   
     java.util.ArrayList<PeriodicalTask> periodicalTasks = createPeriodicalTasks();
   
-    G3MWidget g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), createPlanet(), cameraConstraints, createCameraRenderer(), mainRenderer, createBusyRenderer(), backgroundColor, false, false, initializationTask, true, periodicalTasks); // autoDeleteInitializationTask -  logDownloaderStatistics -  logFPS
+    _g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), createPlanet(), cameraConstraints, createCameraRenderer(), mainRenderer, createBusyRenderer(), backgroundColor, false, false, initializationTask, true, periodicalTasks); // autoDeleteInitializationTask -  logDownloaderStatistics -  logFPS
   
     //  g3mWidget->setUserData(getUserData());
   
     cameraConstraints = null;
     periodicalTasks = null;
   
-    return g3mWidget;
+    return _g3mWidget;
   }
 
   protected final Planet createPlanet()
@@ -308,6 +308,12 @@ public abstract class G3MCBuilder
       }
       _sceneTimestamp = -1;
       _sceneId = sceneId;
+  
+      if (_g3mWidget != null)
+      {
+        // force inmediate ejecution of PeriodicalTasks
+        _g3mWidget.resetPeriodicalTasksTimeouts();
+      }
     }
   }
 
