@@ -26,7 +26,7 @@ public class TilesRenderParameters
   public final boolean _forceFirstLevelTilesRenderOnStart;
   public final boolean _incrementalTileQuality;
   public final boolean _renderIncompletePlanet;
-  public final URL _incompletePlanetTexureURL = new URL();
+  public final URL _incompletePlanetTexureURL;
 
   public TilesRenderParameters(boolean renderDebug, boolean useTilesSplitBudget, boolean forceFirstLevelTilesRenderOnStart, boolean incrementalTileQuality, boolean renderIncompletePlanet, URL incompletePlanetTexureURL)
   {
@@ -35,7 +35,7 @@ public class TilesRenderParameters
      _forceFirstLevelTilesRenderOnStart = forceFirstLevelTilesRenderOnStart;
      _incrementalTileQuality = incrementalTileQuality;
      _renderIncompletePlanet = renderIncompletePlanet;
-     _incompletePlanetTexureURL = new URL(incompletePlanetTexureURL);
+     _incompletePlanetTexureURL = incompletePlanetTexureURL;
 
   }
 
