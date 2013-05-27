@@ -108,10 +108,11 @@ TileRenderer* G3MCBuilder::createTileRenderer() {
   const bool incrementalTileQuality = false;
   const bool renderIncompletePlanet = false;
 
-  int _TODO_select_PlanetIncompletedTexture;
-  const URL incompletePlanetTexureURL("http://steve.files.wordpress.com/2006/03/Matrix%20tut%202.jpg", false);
-  //const URL incompletePlanetTexureURL("http://www.myfreetextures.com/wp-content/uploads/2011/06/stripes1.jpg", false);
-  //const URL incompletePlanetTexureURL("http://images.fineartamerica.com/images-medium-large/optical-illusion-the-grid-sumit-mehndiratta.jpg", false);
+  // int _TODO_select_PlanetIncompletedTexture;
+  // const URL incompletePlanetTexureURL("http://steve.files.wordpress.com/2006/03/Matrix%20tut%202.jpg", false);
+  // const URL incompletePlanetTexureURL("http://www.myfreetextures.com/wp-content/uploads/2011/06/stripes1.jpg", false);
+  // const URL incompletePlanetTexureURL("http://images.fineartamerica.com/images-medium-large/optical-illusion-the-grid-sumit-mehndiratta.jpg", false);
+  const URL incompletePlanetTexureURL("", false);
 
   const TilesRenderParameters* parameters = new TilesRenderParameters(renderDebug,
                                                                       useTilesSplitBudget,
