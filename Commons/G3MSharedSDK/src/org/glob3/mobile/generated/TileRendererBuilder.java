@@ -190,7 +190,9 @@ public class TileRendererBuilder
   }
   private TilesRenderParameters createTileRendererParameters()
   {
-    return new TilesRenderParameters(getRenderDebug(), getUseTilesSplitBudget(), getForceFirstLevelTilesRenderOnStart(), getIncrementalTileQuality());
+    int __TODO_MakeConfigurable_renderIncompletePlanet;
+    final boolean renderIncompletePlanet = false;
+    return new TilesRenderParameters(getRenderDebug(), getUseTilesSplitBudget(), getForceFirstLevelTilesRenderOnStart(), getIncrementalTileQuality(), renderIncompletePlanet);
   }
   private TileTessellator createTileTessellator()
   {

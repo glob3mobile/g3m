@@ -26,7 +26,8 @@ public abstract class G3MCBuilder
     final boolean useTilesSplitBudget = true;
     final boolean forceFirstLevelTilesRenderOnStart = true;
     final boolean incrementalTileQuality = false;
-    final TilesRenderParameters parameters = new TilesRenderParameters(renderDebug, useTilesSplitBudget, forceFirstLevelTilesRenderOnStart, incrementalTileQuality);
+    final boolean renderIncompletePlanet = true;
+    final TilesRenderParameters parameters = new TilesRenderParameters(renderDebug, useTilesSplitBudget, forceFirstLevelTilesRenderOnStart, incrementalTileQuality, renderIncompletePlanet);
   
     final boolean showStatistics = false;
     long texturePriority = DownloadPriority.HIGHER;
