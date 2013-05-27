@@ -261,6 +261,36 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   
     return true;
   }
+  private void renderIncompletePlanet(G3MRenderContext rc, GLState parentState)
+  {
+  
+    if (_incompleteShape == null)
+    {
+      final short resolution = 16;
+      final float borderWidth = 0F;
+      final boolean texturedInside = false;
+      final boolean mercator = false;
+  
+  //    Color* surfaceColor = Color::newFromRGBA(0.5f, 0.5f, 0.5f, 0.5f);
+  //    Color* borderColor  = Color::newFromRGBA(1, 1, 1, 1);
+  
+  //    _incompleteShape = new EllipsoidShape(new Geodetic3D(Angle::zero(), Angle::zero(), 0),
+  //                                          rc->getPlanet()->getRadii(),
+  //                                          resolution,
+  //                                          borderWidth,
+  //                                          texturedInside,
+  //                                          mercator,
+  //                                          surfaceColor,
+  //                                          borderColor);
+  
+      _incompleteShape = new EllipsoidShape(new Geodetic3D(Angle.zero(), Angle.zero(), 0), _parameters._incompletePlanetTexureURL, rc.getPlanet().getRadii(), resolution, borderWidth, texturedInside, mercator);
+  
+    }
+  
+    _incompleteShape.rawRender(rc, parentState);
+  }
+
+  private EllipsoidShape _incompleteShape;
 
 
   public TileRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters parameters, boolean showStatistics, long texturePriority)
@@ -280,12 +310,16 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
      _lastVisibleSector = null;
      _texturePriority = texturePriority;
      _allFirstLevelTilesAreTextureSolved = false;
+     _incompleteShape = null;
     _layerSet.setChangeListener(this);
   }
 
   public void dispose()
   {
     clearFirstLevelTiles();
+  
+    if (_incompleteShape != null)
+       _incompleteShape.dispose();
   
     if (_tessellator != null)
        _tessellator.dispose();
@@ -332,6 +366,14 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 
   public final void render(G3MRenderContext rc, GLState parentState)
   {
+  
+    if (!isReadyToRenderTiles(rc) && _parameters._renderIncompletePlanet)
+    {
+      renderIncompletePlanet(rc, parentState);
+      return;
+    }
+  
+  
     // Saving camera for use in onTouchEvent
     _lastCamera = rc.getCurrentCamera();
   

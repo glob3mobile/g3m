@@ -27,7 +27,13 @@ public abstract class G3MCBuilder
     final boolean forceFirstLevelTilesRenderOnStart = true;
     final boolean incrementalTileQuality = false;
     final boolean renderIncompletePlanet = true;
-    final TilesRenderParameters parameters = new TilesRenderParameters(renderDebug, useTilesSplitBudget, forceFirstLevelTilesRenderOnStart, incrementalTileQuality, renderIncompletePlanet);
+  
+    int _TODO_select_PlanetIncompletedTexture;
+    final URL incompletePlanetTexureURL = new URL("http://steve.files.wordpress.com/2006/03/Matrix%20tut%202.jpg", false);
+    //const URL incompletePlanetTexureURL("http://www.myfreetextures.com/wp-content/uploads/2011/06/stripes1.jpg", false);
+    //const URL incompletePlanetTexureURL("http://images.fineartamerica.com/images-medium-large/optical-illusion-the-grid-sumit-mehndiratta.jpg", false);
+  
+    final TilesRenderParameters parameters = new TilesRenderParameters(renderDebug, useTilesSplitBudget, forceFirstLevelTilesRenderOnStart, incrementalTileQuality, renderIncompletePlanet, incompletePlanetTexureURL);
   
     final boolean showStatistics = false;
     long texturePriority = DownloadPriority.HIGHER;
