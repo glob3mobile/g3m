@@ -14,19 +14,22 @@
 
 class TilesRenderParameters {
 public:
-  const bool      _renderDebug;
-  const bool      _useTilesSplitBudget;
-  const bool      _forceFirstLevelTilesRenderOnStart;
-  const bool      _incrementalTileQuality;
+  const bool _renderDebug;
+  const bool _useTilesSplitBudget;
+  const bool _forceFirstLevelTilesRenderOnStart;
+  const bool _incrementalTileQuality;
+  const bool _renderIncompletePlanet;
 
   TilesRenderParameters(const bool renderDebug,
                         const bool useTilesSplitBudget,
                         const bool forceFirstLevelTilesRenderOnStart,
-                        const bool incrementalTileQuality) :
+                        const bool incrementalTileQuality,
+                        const bool renderIncompletePlanet) :
   _renderDebug(renderDebug),
   _useTilesSplitBudget(useTilesSplitBudget),
   _forceFirstLevelTilesRenderOnStart(forceFirstLevelTilesRenderOnStart),
-  _incrementalTileQuality(incrementalTileQuality)
+  _incrementalTileQuality(incrementalTileQuality),
+  _renderIncompletePlanet(renderIncompletePlanet)
   {
 
   }

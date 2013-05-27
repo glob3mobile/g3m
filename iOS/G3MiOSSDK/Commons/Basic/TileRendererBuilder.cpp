@@ -289,10 +289,13 @@ TileRenderer* TileRendererBuilder::create() {
 }
 
 TilesRenderParameters* TileRendererBuilder::createTileRendererParameters() {
+  int __TODO_MakeConfigurable_renderIncompletePlanet;
+  const bool renderIncompletePlanet = false;
   return new TilesRenderParameters(getRenderDebug(),
                                    getUseTilesSplitBudget(),
                                    getForceFirstLevelTilesRenderOnStart(),
-                                   getIncrementalTileQuality());
+                                   getIncrementalTileQuality(),
+                                   renderIncompletePlanet);
 }
 
 TileTessellator* TileRendererBuilder::createTileTessellator() {

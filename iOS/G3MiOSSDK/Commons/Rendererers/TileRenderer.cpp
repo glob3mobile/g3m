@@ -356,7 +356,7 @@ void TileRenderer::initialize(const G3MContext* context) {
   }
 }
 
-bool TileRenderer::isReadyToRender(const G3MRenderContext *rc) {
+bool TileRenderer::isReadyToRenderTiles(const G3MRenderContext *rc) {
   if (!_layerSet->isReady()) {
     return false;
   }
@@ -425,8 +425,12 @@ bool TileRenderer::isReadyToRender(const G3MRenderContext *rc) {
       _allFirstLevelTilesAreTextureSolved = true;
     }
   }
-
+  
   return true;
+}
+
+bool TileRenderer::isReadyToRender(const G3MRenderContext *rc) {
+  return isReadyToRenderTiles(rc) || _parameters->_renderIncompletePlanet;
 }
 
 void TileRenderer::render(const G3MRenderContext* rc,

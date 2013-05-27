@@ -325,6 +325,9 @@ private:
 
   float _verticalExaggeration;
 
+  bool isReadyToRenderTiles(const G3MRenderContext* rc);
+
+
 public:
   TileRenderer(const TileTessellator* tessellator,
                ElevationDataProvider* elevationDataProvider,

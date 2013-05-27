@@ -103,10 +103,12 @@ TileRenderer* G3MCBuilder::createTileRenderer() {
   const bool useTilesSplitBudget = true;
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
+  const bool renderIncompletePlanet = true;
   const TilesRenderParameters* parameters = new TilesRenderParameters(renderDebug,
                                                                       useTilesSplitBudget,
                                                                       forceFirstLevelTilesRenderOnStart,
-                                                                      incrementalTileQuality);
+                                                                      incrementalTileQuality,
+                                                                      renderIncompletePlanet);
 
   const bool showStatistics = false;
   long long texturePriority = DownloadPriority::HIGHER;

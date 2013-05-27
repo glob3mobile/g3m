@@ -133,9 +133,9 @@ public:
   //[self initWithDefaultBuilder];
 
   // initialize a customized widget by using a buider
-  [self initCustomizedWithBuilder];
+  //[self initCustomizedWithBuilder];
 
-  //[self initWithG3MCBuilder];
+  [self initWithG3MCBuilder];
 
   [[self G3MWidget] startAnimation];
 } 
@@ -840,11 +840,13 @@ public:
   const bool useTilesSplitBudget = true;
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
+  const bool renderIncompletePlanet = false;
 
   return new TilesRenderParameters(renderDebug,
                                    useTilesSplitBudget,
                                    forceFirstLevelTilesRenderOnStart,
-                                   incrementalTileQuality);
+                                   incrementalTileQuality,
+                                   renderIncompletePlanet);
 }
 
 - (TileRenderer*) createTileRenderer: (TilesRenderParameters*) parameters
