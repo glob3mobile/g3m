@@ -329,25 +329,31 @@ bool GPUProgramState::isLinkableToProgram(const GPUProgram& program) const{
   if (program.getGPUAttributesNumber() != _attributesEnabled.size()){
     return false;
   }
-  if (program.getGPUAttributesNumber() != _attributesValues.size()){
-    return false;
-  }
-  if (program.getGPUUniformsNumber()   != _uniformValues.size()){
-    return false;
-  }
   
-  for(std::map<std::string, GPUUniformValue*> ::const_iterator it = /*state->*/_uniformValues.begin();
-      it != _uniformValues.end();
+  int nDisabledAtt = 0;
+  for(std::map<std::string, attributeEnabledStruct> ::const_iterator it = _attributesEnabled.begin();
+      it != _attributesEnabled.end();
       it++){
-    if (program.getGPUUniform(it->first) == NULL){
+    if (it->second.value == false){
+      nDisabledAtt++;
+    }
+    if (program.getGPUAttribute(it->first) == NULL){
       return false;
     }
   }
   
-  for(std::map<std::string, attributeEnabledStruct> ::const_iterator it = _attributesEnabled.begin();
-      it != _attributesEnabled.end();
+  if (program.getGPUAttributesNumber() != _attributesValues.size() + nDisabledAtt){
+    return false;
+  }
+  
+  if (program.getGPUUniformsNumber()   != _uniformValues.size()){
+    return false;
+  }
+  
+  for(std::map<std::string, GPUUniformValue*> ::const_iterator it = _uniformValues.begin();
+      it != _uniformValues.end();
       it++){
-    if (program.getGPUAttribute(it->first) == NULL){
+    if (program.getGPUUniform(it->first) == NULL){
       return false;
     }
   }
