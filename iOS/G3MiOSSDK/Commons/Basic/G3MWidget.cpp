@@ -301,6 +301,15 @@ void G3MWidget::onResizeViewportEvent(int width, int height) {
   }
 }
 
+
+void G3MWidget::resetPeriodicalTasksTimeouts() {
+  const int periodicalTasksCount = _periodicalTasks.size();
+  for (int i = 0; i < periodicalTasksCount; i++) {
+    PeriodicalTask* pt = _periodicalTasks[i];
+    pt->resetTimeout();
+  }
+}
+
 void G3MWidget::render(int width, int height) {
   if (_paused) {
     return;
@@ -331,7 +340,7 @@ void G3MWidget::render(int width, int height) {
     }
   }
 
-  //Start periodical task
+  // Start periodical tasks
   const int periodicalTasksCount = _periodicalTasks.size();
   for (int i = 0; i < periodicalTasksCount; i++) {
     PeriodicalTask* pt = _periodicalTasks[i];

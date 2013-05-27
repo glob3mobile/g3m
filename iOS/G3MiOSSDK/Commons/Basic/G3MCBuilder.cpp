@@ -50,7 +50,7 @@ _sceneId(sceneId),
 _sceneUser(""),
 _sceneName(""),
 _gl(NULL),
-_glob3Created(false),
+_g3mWidget(NULL),
 _storage(NULL),
 _threadUtils(NULL),
 _layerSet( new LayerSet() ),
@@ -472,11 +472,10 @@ IStorage* G3MCBuilder::getStorage() {
 
 
 G3MWidget* G3MCBuilder::create() {
-  if (_glob3Created) {
+  if (_g3mWidget != NULL) {
     ILogger::instance()->logError("The G3MWidget was already created, can't create more than one");
     return NULL;
   }
-  _glob3Created = true;
 
 
   CompositeRenderer* mainRenderer = new CompositeRenderer();
@@ -495,28 +494,28 @@ G3MWidget* G3MCBuilder::create() {
 
   std::vector<PeriodicalTask*>* periodicalTasks = createPeriodicalTasks();
 
-  G3MWidget * g3mWidget = G3MWidget::create(getGL(),
-                                            getStorage(),
-                                            getDownloader(),
-                                            getThreadUtils(),
-                                            createPlanet(),
-                                            *cameraConstraints,
-                                            createCameraRenderer(),
-                                            mainRenderer,
-                                            createBusyRenderer(),
-                                            backgroundColor,
-                                            false,      // logFPS
-                                            false,      // logDownloaderStatistics
-                                            initializationTask,
-                                            true,       // autoDeleteInitializationTask
-                                            *periodicalTasks);
+  _g3mWidget = G3MWidget::create(getGL(),
+                                 getStorage(),
+                                 getDownloader(),
+                                 getThreadUtils(),
+                                 createPlanet(),
+                                 *cameraConstraints,
+                                 createCameraRenderer(),
+                                 mainRenderer,
+                                 createBusyRenderer(),
+                                 backgroundColor,
+                                 false,      // logFPS
+                                 false,      // logDownloaderStatistics
+                                 initializationTask,
+                                 true,       // autoDeleteInitializationTask
+                                 *periodicalTasks);
 
   //  g3mWidget->setUserData(getUserData());
 
   delete cameraConstraints;
   delete periodicalTasks;
 
-  return g3mWidget;
+  return _g3mWidget;
 }
 
 
@@ -688,7 +687,6 @@ public:
   }
 };
 
-
 void G3MCBuilder::rawChangeScene(const std::string& sceneId) {
   if (sceneId.compare(_sceneId) != 0) {
     _layerSet->removeAllLayers(false);
@@ -698,6 +696,11 @@ void G3MCBuilder::rawChangeScene(const std::string& sceneId) {
     }
     _sceneTimestamp = -1;
     _sceneId = sceneId;
+
+    if (_g3mWidget != NULL) {
+      // force inmediate ejecution of PeriodicalTasks 
+      _g3mWidget->resetPeriodicalTasksTimeouts();
+    }
   }
 }
 

@@ -81,7 +81,8 @@ private:
   Layer* _baseLayer;
 
   GL* _gl;
-  bool _glob3Created;
+//  bool _glob3Created;
+  G3MWidget* _g3mWidget;
   IStorage* _storage;
 
   LayerSet* _layerSet;
