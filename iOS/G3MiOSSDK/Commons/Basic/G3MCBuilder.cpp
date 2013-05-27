@@ -103,7 +103,7 @@ TileRenderer* G3MCBuilder::createTileRenderer() {
   const bool useTilesSplitBudget = true;
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
-  const bool renderIncompletePlanet = true;
+  const bool renderIncompletePlanet = false;
 
   int _TODO_select_PlanetIncompletedTexture;
   const URL incompletePlanetTexureURL("http://steve.files.wordpress.com/2006/03/Matrix%20tut%202.jpg", false);
