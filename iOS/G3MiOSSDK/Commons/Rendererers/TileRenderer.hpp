@@ -26,6 +26,7 @@ class LayerTilesRenderParameters;
 #include "Camera.hpp"
 #include "LayerSet.hpp"
 
+class EllipsoidShape;
 
 class TileRenderContext {
 private:
@@ -326,6 +327,10 @@ private:
   float _verticalExaggeration;
 
   bool isReadyToRenderTiles(const G3MRenderContext* rc);
+  void renderIncompletePlanet(const G3MRenderContext* rc,
+                              const GLState& parentState);
+
+  EllipsoidShape* _incompleteShape;
 
 
 public:

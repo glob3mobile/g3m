@@ -168,7 +168,7 @@ public:
 {
   _g3mcBuilder =  new G3MCBuilder_iOS([self G3MWidget],
                                       URL("http://localhost:8080/g3mc-server", false),
-                                      "2g59wh610g6c1kmkt0l");
+                                      "2g59wh610g6c1kmkt0l--");
 
   //_g3mcBuilder->requestScenesDescriptions(new TestG3MCBuilderScenesDescriptionsListener(), true);
 
@@ -841,12 +841,15 @@ public:
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
   const bool renderIncompletePlanet = false;
+  const URL incompletePlanetTexureURL("", false);
+
 
   return new TilesRenderParameters(renderDebug,
                                    useTilesSplitBudget,
                                    forceFirstLevelTilesRenderOnStart,
                                    incrementalTileQuality,
-                                   renderIncompletePlanet);
+                                   renderIncompletePlanet,
+                                   incompletePlanetTexureURL);
 }
 
 - (TileRenderer*) createTileRenderer: (TilesRenderParameters*) parameters

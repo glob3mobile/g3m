@@ -11,6 +11,7 @@
 
 //#include "Sector.hpp"
 //#include "Vector2I.hpp"
+#include "URL.hpp"
 
 class TilesRenderParameters {
 public:
@@ -19,17 +20,20 @@ public:
   const bool _forceFirstLevelTilesRenderOnStart;
   const bool _incrementalTileQuality;
   const bool _renderIncompletePlanet;
+  const URL  _incompletePlanetTexureURL;
 
   TilesRenderParameters(const bool renderDebug,
                         const bool useTilesSplitBudget,
                         const bool forceFirstLevelTilesRenderOnStart,
                         const bool incrementalTileQuality,
-                        const bool renderIncompletePlanet) :
+                        const bool renderIncompletePlanet,
+                        const URL& incompletePlanetTexureURL) :
   _renderDebug(renderDebug),
   _useTilesSplitBudget(useTilesSplitBudget),
   _forceFirstLevelTilesRenderOnStart(forceFirstLevelTilesRenderOnStart),
   _incrementalTileQuality(incrementalTileQuality),
-  _renderIncompletePlanet(renderIncompletePlanet)
+  _renderIncompletePlanet(renderIncompletePlanet),
+  _incompletePlanetTexureURL(incompletePlanetTexureURL)
   {
 
   }
