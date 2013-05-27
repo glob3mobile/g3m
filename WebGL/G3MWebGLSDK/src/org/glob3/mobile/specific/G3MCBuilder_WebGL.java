@@ -3,6 +3,7 @@
 package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.G3MCBuilder;
+import org.glob3.mobile.generated.G3MCSceneChangeListener;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IThreadUtils;
@@ -18,8 +19,9 @@ public class G3MCBuilder_WebGL
 
 
    public G3MCBuilder_WebGL(final URL serverURL,
-                            final String sceneId) {
-      super(serverURL, sceneId);
+                            final String sceneId,
+                            final G3MCSceneChangeListener sceneListener) {
+      super(serverURL, sceneId, sceneListener);
 
       _nativeWidget = new G3MWidget_WebGL();
    }

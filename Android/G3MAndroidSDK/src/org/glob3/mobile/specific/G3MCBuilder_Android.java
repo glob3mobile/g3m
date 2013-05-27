@@ -4,6 +4,7 @@ package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.CachedDownloader;
 import org.glob3.mobile.generated.G3MCBuilder;
+import org.glob3.mobile.generated.G3MCSceneChangeListener;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IThreadUtils;
@@ -22,8 +23,9 @@ public class G3MCBuilder_Android
 
    public G3MCBuilder_Android(final Context context,
                               final URL serverURL,
-                              final String sceneID) {
-      super(serverURL, sceneID);
+                              final String sceneID,
+                              final G3MCSceneChangeListener sceneListener) {
+      super(serverURL, sceneID, sceneListener);
 
       _nativeWidget = new G3MWidget_Android(context);
    }
