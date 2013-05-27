@@ -169,7 +169,7 @@ public:
                                       URL("http://localhost:8080/g3mc-server", false),
                                       "2g59wh610g6c1kmkt0l");
 
-  _g3mcBuilder->requestScenesDescriptions(new TestG3MCBuilderScenesDescriptionsListener(), true);
+  //_g3mcBuilder->requestScenesDescriptions(new TestG3MCBuilderScenesDescriptionsListener(), true);
 
   _g3mcBuilder->initializeWidget();
 }
