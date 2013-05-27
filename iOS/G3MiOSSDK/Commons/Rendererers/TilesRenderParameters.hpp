@@ -20,7 +20,12 @@ public:
   const bool _forceFirstLevelTilesRenderOnStart;
   const bool _incrementalTileQuality;
   const bool _renderIncompletePlanet;
+#ifdef C_CODE
   const URL  _incompletePlanetTexureURL;
+#endif
+#ifdef JAVA_CODE
+  public final URL _incompletePlanetTexureURL;
+#endif
 
   TilesRenderParameters(const bool renderDebug,
                         const bool useTilesSplitBudget,
