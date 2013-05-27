@@ -3,9 +3,55 @@ public class G3MCBuilder_SceneDescriptionBufferListener extends IBufferDownloadL
 {
   private G3MCBuilder _builder;
 
+  private MapQuestLayer parseMapQuestLayer(JSONObject jsonBaseLayer, TimeInterval timeToCache)
+  {
+    final String imagery = jsonBaseLayer.getAsString("imagery", "<imagery not present>");
+    if (imagery.compareTo("OpenAerial") == 0)
+    {
+      return MapQuestLayer.newOpenAerial(timeToCache);
+    }
+    else
+    {
+      return MapQuestLayer.newOSM(timeToCache);
+    }
+  }
+
+  private BingMapsLayer parseBingMapsLayer(JSONObject jsonBaseLayer, TimeInterval timeToCache)
+  {
+    final String key = jsonBaseLayer.getAsString("key", "");
+    final String imagerySet = jsonBaseLayer.getAsString("imagerySet", "Aerial");
+
+    return new BingMapsLayer(imagerySet, key, timeToCache);
+  }
+
+  private CartoDBLayer parseCartoDBLayer(JSONObject jsonBaseLayer, TimeInterval timeToCache)
+  {
+    final String userName = jsonBaseLayer.getAsString("userName", "");
+    final String table = jsonBaseLayer.getAsString("table", "");
+
+    return new CartoDBLayer(userName, table, timeToCache);
+  }
+
+  private MapBoxLayer parseMapBoxLayer(JSONObject jsonBaseLayer, TimeInterval timeToCache)
+  {
+    final String mapKey = jsonBaseLayer.getAsString("mapKey", "");
+
+    return new MapBoxLayer(mapKey, timeToCache);
+  }
+
   private Layer parseLayer(JSONObject jsonBaseLayer)
   {
     final TimeInterval defaultTimeToCache = TimeInterval.fromDays(30);
+
+    /*
+     "OSM"
+     "MapQuest"
+     "BingMaps"
+     "MapBox"
+     "CartoDB"
+     
+     "WMS"
+     */
 
     final String layerType = jsonBaseLayer.getAsString("layer", "<layer not present>");
     if (layerType.compareTo("OSM") == 0)
@@ -14,20 +60,19 @@ public class G3MCBuilder_SceneDescriptionBufferListener extends IBufferDownloadL
     }
     else if (layerType.compareTo("MapQuest") == 0)
     {
-      final String imagery = jsonBaseLayer.getAsString("imagery", "<imagery not present>");
-      if (imagery.compareTo("OpenAerial") == 0)
-      {
-        return MapQuestLayer.newOpenAerial(defaultTimeToCache);
-      }
-      else if (imagery.compareTo("OSM") == 0)
-      {
-        return MapQuestLayer.newOSM(defaultTimeToCache);
-      }
-      else
-      {
-        ILogger.instance().logError("Unsupported MapQuest imagery \"%s\"", imagery);
-        return null;
-      }
+      return parseMapQuestLayer(jsonBaseLayer, defaultTimeToCache);
+    }
+    else if (layerType.compareTo("BingMaps") == 0)
+    {
+      return parseBingMapsLayer(jsonBaseLayer, defaultTimeToCache);
+    }
+    else if (layerType.compareTo("CartoDB") == 0)
+    {
+      return parseCartoDBLayer(jsonBaseLayer, defaultTimeToCache);
+    }
+    else if (layerType.compareTo("MapBox") == 0)
+    {
+      return parseMapBoxLayer(jsonBaseLayer, defaultTimeToCache);
     }
     else
     {
@@ -79,8 +124,11 @@ public class G3MCBuilder_SceneDescriptionBufferListener extends IBufferDownloadL
             else
             {
               Layer baseLayer = parseLayer(jsonBaseLayer);
-              _builder.changeBaseLayer(baseLayer);
-              _builder.setSceneTimestamp(timestamp);
+              if (baseLayer != null)
+              {
+                _builder.changeBaseLayer(baseLayer);
+                _builder.setSceneTimestamp(timestamp);
+              }
             }
           }
         }
