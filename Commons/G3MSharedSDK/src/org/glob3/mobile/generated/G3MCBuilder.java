@@ -26,7 +26,7 @@ public abstract class G3MCBuilder
     final boolean useTilesSplitBudget = true;
     final boolean forceFirstLevelTilesRenderOnStart = true;
     final boolean incrementalTileQuality = false;
-    final boolean renderIncompletePlanet = true;
+    final boolean renderIncompletePlanet = false;
   
     int _TODO_select_PlanetIncompletedTexture;
     final URL incompletePlanetTexureURL = new URL("http://steve.files.wordpress.com/2006/03/Matrix%20tut%202.jpg", false);
