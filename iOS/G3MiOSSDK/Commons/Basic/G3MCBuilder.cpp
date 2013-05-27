@@ -171,9 +171,9 @@ private:
     if (imagery.compare("OpenAerial") == 0) {
       return MapQuestLayer::newOpenAerial(timeToCache);
     }
-    else {
-      return MapQuestLayer::newOSM(timeToCache);
-    }
+    
+    // defaults to OSM
+    return MapQuestLayer::newOSM(timeToCache);
   }
 
   BingMapsLayer* parseBingMapsLayer(const JSONObject* jsonBaseLayer,
