@@ -72,6 +72,8 @@
 		CF2CDD991678292E002A78A9 /* GInitializationTask.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF2CDD971678292E002A78A9 /* GInitializationTask.cpp */; };
 		CF2D85DE17526A7B00F4BEC9 /* G3MCSceneDescription.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF2D85DC17526A7B00F4BEC9 /* G3MCSceneDescription.cpp */; };
 		CF2D85DF17526AA800F4BEC9 /* G3MCSceneDescription.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF2D85DD17526A7B00F4BEC9 /* G3MCSceneDescription.hpp */; };
+		CF2D85E21753B4B600F4BEC9 /* CartoDBLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF2D85E01753B4B600F4BEC9 /* CartoDBLayer.cpp */; };
+		CF2D85E31753B4F200F4BEC9 /* CartoDBLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF2D85E11753B4B600F4BEC9 /* CartoDBLayer.hpp */; };
 		CF31CBF1158776130085E8F1 /* Effects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF31CBF0158776120085E8F1 /* Effects.cpp */; };
 		CF35A20716D3D44E00D795D8 /* BilParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF35A20516D3D44E00D795D8 /* BilParser.cpp */; };
 		CF35DD4C16C6995D002EFC96 /* Vector3F.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF35DD4A16C6995C002EFC96 /* Vector3F.cpp */; };
@@ -487,6 +489,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF2D85E31753B4F200F4BEC9 /* CartoDBLayer.hpp in CopyFiles */,
 				CF2D85DF17526AA800F4BEC9 /* G3MCSceneDescription.hpp in CopyFiles */,
 				CFC3F8FF1751114800986630 /* G3MCBuilder_iOS.hpp in CopyFiles */,
 				CFC3F8FB17510F7100986630 /* G3MCBuilder.hpp in CopyFiles */,
@@ -870,6 +873,8 @@
 		CF2CDD981678292E002A78A9 /* GInitializationTask.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GInitializationTask.hpp; path = Commons/Basic/GInitializationTask.hpp; sourceTree = "<group>"; };
 		CF2D85DC17526A7B00F4BEC9 /* G3MCSceneDescription.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = G3MCSceneDescription.cpp; path = Commons/Basic/G3MCSceneDescription.cpp; sourceTree = "<group>"; };
 		CF2D85DD17526A7B00F4BEC9 /* G3MCSceneDescription.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = G3MCSceneDescription.hpp; path = Commons/Basic/G3MCSceneDescription.hpp; sourceTree = "<group>"; };
+		CF2D85E01753B4B600F4BEC9 /* CartoDBLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CartoDBLayer.cpp; sourceTree = "<group>"; };
+		CF2D85E11753B4B600F4BEC9 /* CartoDBLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CartoDBLayer.hpp; sourceTree = "<group>"; };
 		CF31CBEE158776020085E8F1 /* Effects.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Effects.hpp; path = Commons/Basic/Effects.hpp; sourceTree = "<group>"; };
 		CF31CBF0158776120085E8F1 /* Effects.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Effects.cpp; path = Commons/Basic/Effects.cpp; sourceTree = "<group>"; };
 		CF31CBF215878AF90085E8F1 /* ITimer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ITimer.hpp; path = Commons/Interfaces/ITimer.hpp; sourceTree = "<group>"; };
@@ -1798,6 +1803,8 @@
 				E87557C616E915D10031FBB3 /* TMSLayer.hpp */,
 				D87EC5C415BEB12F00E38C36 /* WMSLayer.cpp */,
 				D87EC5C515BEB12F00E38C36 /* WMSLayer.hpp */,
+				CF2D85E01753B4B600F4BEC9 /* CartoDBLayer.cpp */,
+				CF2D85E11753B4B600F4BEC9 /* CartoDBLayer.hpp */,
 			);
 			name = Layers;
 			path = Commons/Layers;
@@ -2185,6 +2192,7 @@
 				CFC3F8FA17510DA800986630 /* G3MCBuilder.cpp in Sources */,
 				CFC3F8FE175110FE00986630 /* G3MCBuilder_iOS.mm in Sources */,
 				CF2D85DE17526A7B00F4BEC9 /* G3MCSceneDescription.cpp in Sources */,
+				CF2D85E21753B4B600F4BEC9 /* CartoDBLayer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

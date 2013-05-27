@@ -57,6 +57,7 @@
 #import <G3MiOSSDK/PeriodicalTask.hpp>
 #import <G3MiOSSDK/IDownloader.hpp>
 #import <G3MiOSSDK/OSMLayer.hpp>
+#import <G3MiOSSDK/CartoDBLayer.hpp>
 #import <G3MiOSSDK/HereLayer.hpp>
 #import <G3MiOSSDK/MapQuestLayer.hpp>
 #import <G3MiOSSDK/MapBoxLayer.hpp>
@@ -132,9 +133,9 @@ public:
   //[self initWithDefaultBuilder];
 
   // initialize a customized widget by using a buider
-  //[self initCustomizedWithBuilder];
+  [self initCustomizedWithBuilder];
 
-  [self initWithG3MCBuilder];
+  //[self initWithG3MCBuilder];
 
   [[self G3MWidget] startAnimation];
 } 
@@ -556,6 +557,13 @@ public:
   const bool useMapQuestOSM = true;
   if (useMapQuestOSM) {
     layerSet->addLayer( MapQuestLayer::newOSM(TimeInterval::fromDays(30)) );
+  }
+
+  const bool useCartoDB = true;
+  if (useCartoDB) {
+    layerSet->addLayer( new CartoDBLayer("mdelacalle",
+                                         "tm_world_borders_simpl_0_3",
+                                         TimeInterval::fromDays(30)) );
   }
 
   const bool useMapQuestOpenAerial = false;

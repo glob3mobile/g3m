@@ -36,6 +36,10 @@
 #include "IThreadUtils.hpp"
 #include "OSMLayer.hpp"
 #include "MapQuestLayer.hpp"
+#include "BingMapsLayer.hpp"
+#include "CartoDBLayer.hpp"
+#include "MapBoxLayer.hpp"
+
 
 G3MCBuilder::G3MCBuilder(const URL& serverURL,
                          const std::string& sceneId) :
@@ -152,30 +156,71 @@ class G3MCBuilder_SceneDescriptionBufferListener : public IBufferDownloadListene
 private:
   G3MCBuilder* _builder;
 
+  MapQuestLayer* parseMapQuestLayer(const JSONObject* jsonBaseLayer,
+                                    const TimeInterval& timeToCache) const {
+    const std::string imagery = jsonBaseLayer->getAsString("imagery", "<imagery not present>");
+    if (imagery.compare("OpenAerial") == 0) {
+      return MapQuestLayer::newOpenAerial(timeToCache);
+    }
+    else {
+      return MapQuestLayer::newOSM(timeToCache);
+    }
+  }
+
+  BingMapsLayer* parseBingMapsLayer(const JSONObject* jsonBaseLayer,
+                                    const TimeInterval& timeToCache) const {
+    const std::string key = jsonBaseLayer->getAsString("key", "");
+    const std::string imagerySet = jsonBaseLayer->getAsString("imagerySet", "Aerial");
+
+    return new BingMapsLayer(imagerySet, key, timeToCache);
+  }
+
+  CartoDBLayer* parseCartoDBLayer(const JSONObject* jsonBaseLayer,
+                                    const TimeInterval& timeToCache) const {
+    const std::string userName = jsonBaseLayer->getAsString("userName", "");
+    const std::string table    = jsonBaseLayer->getAsString("table",    "");
+
+    return new CartoDBLayer(userName, table, timeToCache);
+  }
+
+  MapBoxLayer* parseMapBoxLayer(const JSONObject* jsonBaseLayer,
+                                const TimeInterval& timeToCache) const {
+    const std::string mapKey = jsonBaseLayer->getAsString("mapKey", "");
+
+    return new MapBoxLayer(mapKey, timeToCache);
+  }
+
   Layer* parseLayer(const JSONObject* jsonBaseLayer) const {
     const TimeInterval defaultTimeToCache = TimeInterval::fromDays(30);
+
+    /*
+     "OSM"
+     "MapQuest"
+     "BingMaps"
+     "MapBox"
+     "CartoDB"
+     
+     "WMS"
+     */
 
     const std::string layerType = jsonBaseLayer->getAsString("layer", "<layer not present>");
     if (layerType.compare("OSM") == 0) {
       return new OSMLayer(defaultTimeToCache);
     }
     else if (layerType.compare("MapQuest") == 0) {
-      const std::string imagery = jsonBaseLayer->getAsString("imagery", "<imagery not present>");
-      if (imagery.compare("OpenAerial") == 0) {
-        return MapQuestLayer::newOpenAerial(defaultTimeToCache);
-      }
-      else if (imagery.compare("OSM") == 0) {
-        return MapQuestLayer::newOSM(defaultTimeToCache);
-      }
-      else {
-        ILogger::instance()->logError("Unsupported MapQuest imagery \"%s\"",
-                                      imagery.c_str());
-        return NULL;
-      }
+      return parseMapQuestLayer(jsonBaseLayer, defaultTimeToCache);
+    }
+    else if (layerType.compare("BingMaps") == 0) {
+      return parseBingMapsLayer(jsonBaseLayer, defaultTimeToCache);
+    }
+    else if (layerType.compare("CartoDB") == 0) {
+      return parseCartoDBLayer(jsonBaseLayer, defaultTimeToCache);
+    }
+    else if (layerType.compare("MapBox") == 0) {
+      return parseMapBoxLayer(jsonBaseLayer, defaultTimeToCache);
     }
     else {
-      ILogger::instance()->logError("Unsupported layer type \"%s\"",
-                                    layerType.c_str());
+      ILogger::instance()->logError("Unsupported layer type \"%s\"", layerType.c_str());
       return NULL;
     }
   }
@@ -218,8 +263,10 @@ public:
             }
             else {
               Layer* baseLayer = parseLayer(jsonBaseLayer);
-              _builder->changeBaseLayer(baseLayer);
-              _builder->setSceneTimestamp(timestamp);
+              if (baseLayer != NULL) {
+                _builder->changeBaseLayer(baseLayer);
+                _builder->setSceneTimestamp(timestamp);
+              }
             }
           }
         }
