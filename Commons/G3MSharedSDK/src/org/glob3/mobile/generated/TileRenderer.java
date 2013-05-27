@@ -181,6 +181,118 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 
   private float _verticalExaggeration;
 
+  private boolean isReadyToRenderTiles(G3MRenderContext rc)
+  {
+    if (!_layerSet.isReady())
+    {
+      return false;
+    }
+  
+    if (_elevationDataProvider != null)
+    {
+      if (!_elevationDataProvider.isReadyToRender(rc))
+      {
+        return false;
+      }
+    }
+  
+    if (_firstLevelTilesJustCreated)
+    {
+      _firstLevelTilesJustCreated = false;
+  
+      final int firstLevelTilesCount = _firstLevelTiles.size();
+  
+      if (_parameters._forceFirstLevelTilesRenderOnStart)
+      {
+        TilesStatistics statistics = new TilesStatistics();
+  
+        TileRenderContext trc = new TileRenderContext(_tessellator, _elevationDataProvider, _texturizer, _layerSet, _parameters, statistics, _lastSplitTimer, true, _texturePriority, _verticalExaggeration);
+  
+        for (int i = 0; i < firstLevelTilesCount; i++)
+        {
+          Tile tile = _firstLevelTiles.get(i);
+          tile.prepareForFullRendering(rc, trc);
+        }
+      }
+  
+      if (_texturizer != null)
+      {
+        for (int i = 0; i < firstLevelTilesCount; i++)
+        {
+          Tile tile = _firstLevelTiles.get(i);
+          _texturizer.justCreatedTopTile(rc, tile, _layerSet);
+        }
+      }
+    }
+  
+    if (_parameters._forceFirstLevelTilesRenderOnStart)
+    {
+      if (!_allFirstLevelTilesAreTextureSolved)
+      {
+        final int firstLevelTilesCount = _firstLevelTiles.size();
+        for (int i = 0; i < firstLevelTilesCount; i++)
+        {
+          Tile tile = _firstLevelTiles.get(i);
+          if (!tile.isTextureSolved())
+          {
+            return false;
+          }
+        }
+  
+        if (_tessellator != null)
+        {
+          if (!_tessellator.isReady(rc))
+          {
+            return false;
+          }
+        }
+  
+        if (_texturizer != null)
+        {
+          if (!_texturizer.isReady(rc, _layerSet))
+          {
+            return false;
+          }
+        }
+  
+        _allFirstLevelTilesAreTextureSolved = true;
+      }
+    }
+  
+    return true;
+  }
+  private void renderIncompletePlanet(G3MRenderContext rc, GLState parentState)
+  {
+  
+    if (_incompleteShape == null)
+    {
+      final short resolution = 16;
+      final float borderWidth = 0F;
+      final boolean texturedInside = false;
+      final boolean mercator = false;
+  
+  //    Color* surfaceColor = Color::newFromRGBA(0.5f, 0.5f, 0.5f, 0.5f);
+  //    Color* borderColor  = Color::newFromRGBA(1, 1, 1, 1);
+  
+  //    _incompleteShape = new EllipsoidShape(new Geodetic3D(Angle::zero(), Angle::zero(), 0),
+  //                                          rc->getPlanet()->getRadii(),
+  //                                          resolution,
+  //                                          borderWidth,
+  //                                          texturedInside,
+  //                                          mercator,
+  //                                          surfaceColor,
+  //                                          borderColor);
+  
+      _incompleteShape = new EllipsoidShape(new Geodetic3D(Angle.zero(), Angle.zero(), 0), _parameters._incompletePlanetTexureURL, rc.getPlanet().getRadii(), resolution, borderWidth, texturedInside, mercator);
+  
+    }
+  
+    _incompleteShape.rawRender(rc, parentState);
+  }
+
+  private EllipsoidShape _incompleteShape;
+
+
   public TileRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters parameters, boolean showStatistics, long texturePriority)
   {
      _tessellator = tessellator;
@@ -198,12 +310,16 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
      _lastVisibleSector = null;
      _texturePriority = texturePriority;
      _allFirstLevelTilesAreTextureSolved = false;
+     _incompleteShape = null;
     _layerSet.setChangeListener(this);
   }
 
   public void dispose()
   {
     clearFirstLevelTiles();
+  
+    if (_incompleteShape != null)
+       _incompleteShape.dispose();
   
     if (_tessellator != null)
        _tessellator.dispose();
@@ -250,6 +366,14 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 
   public final void render(G3MRenderContext rc, GLState parentState)
   {
+  
+    if (!isReadyToRenderTiles(rc) && _parameters._renderIncompletePlanet)
+    {
+      renderIncompletePlanet(rc, parentState);
+      return;
+    }
+  
+  
     // Saving camera for use in onTouchEvent
     _lastCamera = rc.getCurrentCamera();
   
@@ -373,83 +497,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 
   public final boolean isReadyToRender(G3MRenderContext rc)
   {
-    if (!_layerSet.isReady())
-    {
-      return false;
-    }
-  
-    if (_elevationDataProvider != null)
-    {
-      if (!_elevationDataProvider.isReadyToRender(rc))
-      {
-        return false;
-      }
-    }
-  
-    if (_firstLevelTilesJustCreated)
-    {
-      _firstLevelTilesJustCreated = false;
-  
-      final int firstLevelTilesCount = _firstLevelTiles.size();
-  
-      if (_parameters._forceFirstLevelTilesRenderOnStart)
-      {
-        TilesStatistics statistics = new TilesStatistics();
-  
-        TileRenderContext trc = new TileRenderContext(_tessellator, _elevationDataProvider, _texturizer, _layerSet, _parameters, statistics, _lastSplitTimer, true, _texturePriority, _verticalExaggeration);
-  
-        for (int i = 0; i < firstLevelTilesCount; i++)
-        {
-          Tile tile = _firstLevelTiles.get(i);
-          tile.prepareForFullRendering(rc, trc);
-        }
-      }
-  
-      if (_texturizer != null)
-      {
-        for (int i = 0; i < firstLevelTilesCount; i++)
-        {
-          Tile tile = _firstLevelTiles.get(i);
-          _texturizer.justCreatedTopTile(rc, tile, _layerSet);
-        }
-      }
-    }
-  
-    if (_parameters._forceFirstLevelTilesRenderOnStart)
-    {
-      if (!_allFirstLevelTilesAreTextureSolved)
-      {
-        final int firstLevelTilesCount = _firstLevelTiles.size();
-        for (int i = 0; i < firstLevelTilesCount; i++)
-        {
-          Tile tile = _firstLevelTiles.get(i);
-          if (!tile.isTextureSolved())
-          {
-            return false;
-          }
-        }
-  
-        if (_tessellator != null)
-        {
-          if (!_tessellator.isReady(rc))
-          {
-            return false;
-          }
-        }
-  
-        if (_texturizer != null)
-        {
-          if (!_texturizer.isReady(rc, _layerSet))
-          {
-            return false;
-          }
-        }
-  
-        _allFirstLevelTilesAreTextureSolved = true;
-      }
-    }
-  
-    return true;
+    return isReadyToRenderTiles(rc) || _parameters._renderIncompletePlanet;
   }
 
 

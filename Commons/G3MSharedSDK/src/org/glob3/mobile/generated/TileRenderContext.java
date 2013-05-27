@@ -26,6 +26,7 @@ package org.glob3.mobile.generated;
 //class LayerTilesRenderParameters;
 
 
+//class EllipsoidShape;
 
 public class TileRenderContext
 {

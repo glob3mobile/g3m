@@ -174,13 +174,19 @@ public:
 
 #ifdef JAVA_CODE
   @Override
-	public int hashCode() {
-		return Double.toString(_degrees).hashCode();
-	}
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    long temp;
+    temp = Double.doubleToLongBits(_radians);
+    result = (prime * result) + (int) (temp ^ (temp >>> 32));
+    return result;
+  }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
+
+  @Override
+  public boolean equals(final Object obj) {
+    if (this == obj) {
       return true;
     }
     if (obj == null) {
@@ -190,11 +196,11 @@ public:
       return false;
     }
     final Angle other = (Angle) obj;
-    if (_degrees != other._degrees) {
+    if (Double.doubleToLongBits(_radians) != Double.doubleToLongBits(other._radians)) {
       return false;
     }
     return true;
-	}
+  }
 #endif
 
   ~Angle() {

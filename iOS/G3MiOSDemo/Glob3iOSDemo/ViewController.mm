@@ -57,6 +57,7 @@
 #import <G3MiOSSDK/PeriodicalTask.hpp>
 #import <G3MiOSSDK/IDownloader.hpp>
 #import <G3MiOSSDK/OSMLayer.hpp>
+#import <G3MiOSSDK/CartoDBLayer.hpp>
 #import <G3MiOSSDK/HereLayer.hpp>
 #import <G3MiOSSDK/MapQuestLayer.hpp>
 #import <G3MiOSSDK/MapBoxLayer.hpp>
@@ -93,6 +94,8 @@
 #import <G3MiOSSDK/SGNode.hpp>
 #import <G3MiOSSDK/SGMaterialNode.hpp>
 
+#import <G3MiOSSDK/G3MCBuilder_iOS.hpp>
+#import <G3MiOSSDK/G3MCSceneDescription.hpp>
 
 
 class TestVisibleSectorListener : public VisibleSectorListener {
@@ -127,13 +130,51 @@ public:
   // [self initWithoutBuilder];
 
   // initizalize a default widget by using a builder
-  //  [self initDefaultWithBuilder];
+  //[self initWithDefaultBuilder];
 
   // initialize a customized widget by using a buider
-  [self initCustomizedWithBuilder];
+  //[self initCustomizedWithBuilder];
+
+  [self initWithG3MCBuilder];
 
   [[self G3MWidget] startAnimation];
+} 
+
+
+class TestG3MCBuilderScenesDescriptionsListener  : public G3MCBuilderScenesDescriptionsListener {
+public:
+  void onDownload(std::vector<G3MCSceneDescription*>* scenesDescriptions) {
+    const int scenesCount = scenesDescriptions->size();
+    for (int i = 0; i < scenesCount; i++) {
+      G3MCSceneDescription* sceneDescription = scenesDescriptions->at(i);
+      ILogger::instance()->logInfo("%s", sceneDescription->description().c_str());
+    }
+
+    for (int i = 0; i < scenesCount; i++) {
+      delete scenesDescriptions->at(i);
+    }
+
+    delete scenesDescriptions;
+  }
+
+  void onError() {
+    ILogger::instance()->logError("Error downloading ScenesDescriptions");
+  }
+
+};
+
+
+- (void) initWithG3MCBuilder
+{
+  _g3mcBuilder =  new G3MCBuilder_iOS([self G3MWidget],
+                                      URL("http://localhost:8080/g3mc-server", false),
+                                      "2g59wh610g6c1kmkt0l");
+
+  //_g3mcBuilder->requestScenesDescriptions(new TestG3MCBuilderScenesDescriptionsListener(), true);
+
+  _g3mcBuilder->initializeWidget();
 }
+
 
 //- (void) initWithoutBuilder
 //{
@@ -189,13 +230,14 @@ public:
 //
 //}
 
-- (void) initDefaultWithBuilder
+- (void) initWithDefaultBuilder
 {
   G3MBuilder_iOS builder([self G3MWidget]);
 
-  // initialization
   builder.initializeWidget();
 }
+
+
 
 - (void)  initializeElevationDataProvider: (G3MBuilder_iOS&) builder
 {
@@ -517,6 +559,13 @@ public:
     layerSet->addLayer( MapQuestLayer::newOSM(TimeInterval::fromDays(30)) );
   }
 
+  const bool useCartoDB = true;
+  if (useCartoDB) {
+    layerSet->addLayer( new CartoDBLayer("mdelacalle",
+                                         "tm_world_borders_simpl_0_3",
+                                         TimeInterval::fromDays(30)) );
+  }
+
   const bool useMapQuestOpenAerial = false;
   if (useMapQuestOpenAerial) {
     layerSet->addLayer( MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30)) );
@@ -791,11 +840,16 @@ public:
   const bool useTilesSplitBudget = true;
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
+  const bool renderIncompletePlanet = false;
+  const URL incompletePlanetTexureURL("", false);
+
 
   return new TilesRenderParameters(renderDebug,
                                    useTilesSplitBudget,
                                    forceFirstLevelTilesRenderOnStart,
-                                   incrementalTileQuality);
+                                   incrementalTileQuality,
+                                   renderIncompletePlanet,
+                                   incompletePlanetTexureURL);
 }
 
 - (TileRenderer*) createTileRenderer: (TilesRenderParameters*) parameters

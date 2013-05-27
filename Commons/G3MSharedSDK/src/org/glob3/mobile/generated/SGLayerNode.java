@@ -122,7 +122,7 @@ public class SGLayerNode extends SGNode
     state.enableTextures();
     state.enableTexture2D();
     state.enableBlend();
-    int __WORKING;
+    //int __WORKING;
   
     GL gl = rc.getGL();
     gl.bindTexture(texId);

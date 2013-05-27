@@ -25,13 +25,17 @@ public class TilesRenderParameters
   public final boolean _useTilesSplitBudget;
   public final boolean _forceFirstLevelTilesRenderOnStart;
   public final boolean _incrementalTileQuality;
+  public final boolean _renderIncompletePlanet;
+  public final URL _incompletePlanetTexureURL;
 
-  public TilesRenderParameters(boolean renderDebug, boolean useTilesSplitBudget, boolean forceFirstLevelTilesRenderOnStart, boolean incrementalTileQuality)
+  public TilesRenderParameters(boolean renderDebug, boolean useTilesSplitBudget, boolean forceFirstLevelTilesRenderOnStart, boolean incrementalTileQuality, boolean renderIncompletePlanet, URL incompletePlanetTexureURL)
   {
      _renderDebug = renderDebug;
      _useTilesSplitBudget = useTilesSplitBudget;
      _forceFirstLevelTilesRenderOnStart = forceFirstLevelTilesRenderOnStart;
      _incrementalTileQuality = incrementalTileQuality;
+     _renderIncompletePlanet = renderIncompletePlanet;
+     _incompletePlanetTexureURL = incompletePlanetTexureURL;
 
   }
 
