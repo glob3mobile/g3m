@@ -10,10 +10,9 @@ public class G3MCBuilder_SceneDescriptionBufferListener extends IBufferDownloadL
     {
       return MapQuestLayer.newOpenAerial(timeToCache);
     }
-    else
-    {
-      return MapQuestLayer.newOSM(timeToCache);
-    }
+
+    // defaults to OSM
+    return MapQuestLayer.newOSM(timeToCache);
   }
 
   private BingMapsLayer parseBingMapsLayer(JSONObject jsonBaseLayer, TimeInterval timeToCache)
