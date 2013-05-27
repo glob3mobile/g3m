@@ -67,6 +67,14 @@ public:
   }
   
   GPUProgram* getProgram(const GPUProgramState& state) {
+    
+    for(std::map<std::string, GPUProgram*>::const_iterator it = _programs.begin();
+        it != _programs.end(); it++){
+      if (state.isLinkableToProgram(*it->second)){
+        return it->second;
+      }
+    }
+    
     int WORKING_JM;
     
     std::vector<std::string> us = state.getUniformsNames();

@@ -52,6 +52,9 @@ public:
   bool isCreated() const{ return _programCreated;}
   void deleteProgram(GL* gl, int p);
   
+  int getGPUAttributesNumber() const { return _attributes.size();}
+  int getGPUUniformsNumber() const { return _uniforms.size();}
+  
   
   GPUUniform* getGPUUniform(const std::string name) const;
   GPUAttribute* getGPUAttribute(const std::string name) const;

@@ -67,7 +67,7 @@ public:
   void linkToProgram(GPUProgram& prog) const;
   
   bool isLinkedToProgram() const{
-    return _lastProgramUsed = NULL;
+    return _lastProgramUsed != NULL;
   }
   
   GPUProgram* getLinkedProgram() const{
@@ -77,6 +77,8 @@ public:
   std::vector<std::string> getUniformsNames() const;
   
   std::string description() const;
+  
+  bool isLinkableToProgram(const GPUProgram& program) const;
 };
 
 #endif /* defined(__G3MiOSSDK__GPUProgramState__) */
