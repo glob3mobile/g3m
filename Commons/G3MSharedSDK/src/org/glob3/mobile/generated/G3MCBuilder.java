@@ -1,11 +1,15 @@
 package org.glob3.mobile.generated; 
 public abstract class G3MCBuilder
 {
-  private int _sceneTimestamp;
 
   private final URL _serverURL;
 
+  private G3MCSceneChangeListener _sceneListener;
+
+  private int _sceneTimestamp;
   private String _sceneId;
+  private String _sceneUser;
+  private String _sceneName;
 
   private Layer _baseLayer;
 
@@ -116,11 +120,13 @@ public abstract class G3MCBuilder
   }
 
 
-  protected G3MCBuilder(URL serverURL, String sceneId)
+  protected G3MCBuilder(URL serverURL, String sceneId, G3MCSceneChangeListener sceneListener)
   {
      _serverURL = serverURL;
-     _sceneId = sceneId;
      _sceneTimestamp = -1;
+     _sceneId = sceneId;
+     _sceneUser = "";
+     _sceneName = "";
      _gl = null;
      _glob3Created = false;
      _storage = null;
@@ -128,6 +134,7 @@ public abstract class G3MCBuilder
      _layerSet = new LayerSet();
      _baseLayer = null;
      _downloader = null;
+     _sceneListener = sceneListener;
   
   }
 
@@ -228,7 +235,13 @@ public abstract class G3MCBuilder
            _baseLayer.dispose();
       }
       _baseLayer = baseLayer;
+  
       recreateLayerSet();
+  
+      if (_sceneListener != null)
+      {
+        _sceneListener.onBaseLayerChanged(_baseLayer);
+      }
     }
   }
 
@@ -242,6 +255,34 @@ public abstract class G3MCBuilder
   public final void setSceneTimestamp(int timestamp)
   {
     _sceneTimestamp = timestamp;
+  }
+
+  /** Private to G3M, don't call it */
+  public final void setSceneUser(String user)
+  {
+    if (_sceneUser.compareTo(user) != 0)
+    {
+      _sceneUser = user;
+  
+      if (_sceneListener != null)
+      {
+        _sceneListener.onUserChanged(_sceneUser);
+      }
+    }
+  }
+
+  /** Private to G3M, don't call it */
+  public final void setSceneName(String name)
+  {
+    if (_sceneName.compareTo(name) != 0)
+    {
+      _sceneName = name;
+  
+      if (_sceneListener != null)
+      {
+        _sceneListener.onNameChanged(_sceneName);
+      }
+    }
   }
 
   /** Private to G3M, don't call it */
