@@ -33,16 +33,16 @@ public:
     return Vector3D(_radii, _radii, _radii);
   }
 
-  Vector3D centricSurfaceNormal(const Vector3D& positionOnEllipsoid) const {
-    return positionOnEllipsoid.normalized();
+  Vector3D centricSurfaceNormal(const Vector3D& position) const {
+    return position.normalized();
   }
 
-  Vector3D geodeticSurfaceNormal(const Vector3D& positionOnEllipsoid) const {
-    return positionOnEllipsoid.normalized();
+  Vector3D geodeticSurfaceNormal(const Vector3D& position) const {
+    return position.normalized();
   }
 
-  Vector3D geodeticSurfaceNormal(const MutableVector3D& positionOnEllipsoid) const {
-    return positionOnEllipsoid.normalized().asVector3D();
+  Vector3D geodeticSurfaceNormal(const MutableVector3D& position) const {
+    return position.normalized().asVector3D();
   }
   
 
@@ -83,7 +83,7 @@ public:
                        height);
   }
 
-  Geodetic2D toGeodetic2D(const Vector3D& positionOnEllipsoid) const;
+  Geodetic2D toGeodetic2D(const Vector3D& position) const;
 
   Geodetic3D toGeodetic3D(const Vector3D& position) const;
 

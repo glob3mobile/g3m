@@ -75,8 +75,8 @@ Vector3D Sphere::toCartesian(const Angle& latitude,
   return geodeticSurfaceNormal(latitude, longitude).times(_radii+height);
 }
 
-Geodetic2D Sphere::toGeodetic2D(const Vector3D& positionOnEllipsoid) const {
-  const Vector3D n = geodeticSurfaceNormal(positionOnEllipsoid);
+Geodetic2D Sphere::toGeodetic2D(const Vector3D& position) const {
+  const Vector3D n = geodeticSurfaceNormal(position);
 
   const IMathUtils* mu = IMathUtils::instance();
   return Geodetic2D(Angle::fromRadians(mu->asin(n._z)),
