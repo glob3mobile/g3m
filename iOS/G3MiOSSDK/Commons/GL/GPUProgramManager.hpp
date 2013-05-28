@@ -78,7 +78,8 @@ public:
     int WORKING_JM;
     
     std::vector<std::string> us = state.getUniformsNames();
-    for (int i = 0; i < us.size(); i++) {
+    int size = us.size();
+    for (int i = 0; i < size; i++) {
       if (us[i].compare("ViewPortExtent") == 0){
         return getProgram("Billboard");
       }

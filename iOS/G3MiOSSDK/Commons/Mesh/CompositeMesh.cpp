@@ -92,7 +92,7 @@ void CompositeMesh::addMesh(Mesh* mesh) {
 
   _children.push_back(mesh);
   
-  SceneGraphNode::addChildren(mesh);
+  SceneGraphNode::addChild(mesh);
 }
 
 void CompositeMesh::notifyGLClientChildrenParentHasChanged(){

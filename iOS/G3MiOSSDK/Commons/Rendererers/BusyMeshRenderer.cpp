@@ -247,5 +247,5 @@ void BusyMeshRenderer::onInitialize(const G3MContext* context)
                           1,
                           NULL,
                           colors.create());
-  addChildren(_mesh);
+  addChild(_mesh);
 }

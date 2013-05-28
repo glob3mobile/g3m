@@ -48,7 +48,8 @@ public:
   void initialize(const G3MContext* context){
     _rootState = GLStateTree::createNodeForSGNode(NULL);// GLStateTreeNode::createRootNodeForSGNode(NULL);
     
-    for (int i = 0; i < _nodes.size(); i++) {
+    int size = _nodes.size();
+    for (int i = 0; i < size; i++) {
       _nodes[i]->initialize(context);
     }
 //    

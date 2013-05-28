@@ -73,7 +73,7 @@ void MarksRenderer::addMark(Mark* mark) {
     mark->initialize(_context, _downloadPriority);
   }
   
-  addChildren(mark);
+  addChild(mark);
 }
 
 void MarksRenderer::removeMark(Mark* mark){
@@ -107,8 +107,6 @@ bool MarksRenderer::onTouchEvent(const G3MEventContext* ec,
                                  const TouchEvent* touchEvent) {
   
   bool handled = false;
-  
-  //  if ( (touchEvent->getType() == Down) && (touchEvent->getTouchCount() == 1) ) {
   if ( touchEvent->getType() == DownUp ) {
     
     if (_lastCamera != NULL) {
@@ -187,19 +185,12 @@ void MarksRenderer::render(const G3MRenderContext* rc) {
   // Saving camera for use in onTouchEvent
   _lastCamera = rc->getCurrentCamera();
   
-//  GLGlobalState state(parentState);
-//  state.disableDepthTest();
-//  state.enableBlend();
-//  state.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
-  
   const Camera* camera = rc->getCurrentCamera();
   const Vector3D cameraPosition = camera->getCartesianPosition();
 
   const int marksSize = _marks.size();
   for (int i = 0; i < marksSize; i++) {
     Mark* mark = _marks[i];
-    //rc->getLogger()->logInfo("Rendering Mark: \"%s\"", mark->getName().c_str());
-    
     if (mark->isReady()) {
       mark->render(rc, cameraPosition);
     }
@@ -207,10 +198,7 @@ void MarksRenderer::render(const G3MRenderContext* rc) {
 }
 
 void MarksRenderer::onTouchEventRecived(const G3MEventContext* ec, const TouchEvent* touchEvent) {
-  
-  bool handled = false;
-  
-  //  if ( (touchEvent->getType() == Down) && (touchEvent->getTouchCount() == 1) ) {
+
   if ( touchEvent->getType() == DownUp ) {
     
     if (_lastCamera != NULL) {
@@ -227,9 +215,6 @@ void MarksRenderer::onTouchEventRecived(const G3MEventContext* ec, const TouchEv
         if (!mark->isReady()) {
           continue;
         }
-//        if (!mark->isRendered()) {
-//          continue;
-//        }
         
         const int textureWidth = mark->getTextureWidth();
         if (textureWidth <= 0) {
@@ -259,10 +244,9 @@ void MarksRenderer::onTouchEventRecived(const G3MEventContext* ec, const TouchEv
       }
       
       if (nearestMark != NULL) {
-        handled = nearestMark->touched();
-        if (!handled) {
+        if (!nearestMark->touched()) {
           if (_markTouchListener != NULL) {
-            handled = _markTouchListener->touchedMark(nearestMark);
+            _markTouchListener->touchedMark(nearestMark);
           }
         }
       }

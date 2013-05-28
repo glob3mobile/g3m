@@ -39,7 +39,7 @@ public:
   _ownedTexMapping(ownedTexMapping),
   _transparent(transparent)
   {
-    addChildren((Mesh*)mesh); //New and only child (not const)!!
+    addChild((Mesh*)mesh); //New and only child (not const)!!
   }
   
   ~TexturedMesh(){

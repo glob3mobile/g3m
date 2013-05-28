@@ -16,7 +16,7 @@ void SceneGraphRenderer::render(const G3MRenderContext* rc){
     _camera = (Camera*)rc->getCurrentCamera();
     int nNodes = _nodes.size();
     for (int i = 0; i < nNodes; i++) {
-      _camera->addChildren(_nodes[i]);
+      _camera->addChild(_nodes[i]);
     }
   }
   

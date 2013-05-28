@@ -22,13 +22,14 @@ private:
   GLStateTreeNode* _lastParentStateNode;
   GLStateTreeNode* _lastStateNode;
   
-protected:
-  bool _isVisible;
+  bool _isVisible; //TODO: enable
   std::vector<SceneGraphNode*> _children;
+  
+protected:
   
   virtual void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode) = 0;
   
-  virtual bool isInsideCameraFrustum(const G3MRenderContext* rc) = 0;
+  virtual bool isInsideCameraFrustum(const G3MRenderContext* rc) = 0; //TODO: isVisible
   
 //  int getChildrenCount() const {
 //    return _children.size();
@@ -59,8 +60,18 @@ public:
   
   void setVisible(bool v) { _isVisible = v;}
   
-  void addChildren(SceneGraphNode* child){
+  void addChild(SceneGraphNode* child){
     _children.push_back(child);
+  }
+  
+  void eraseChild(SceneGraphNode* child){
+    for (std::vector<SceneGraphNode*>::iterator it = _children.begin();
+         it != _children.end();
+         it++) {
+      if (*it == child){
+        _children.erase(it);
+      }
+    }
   }
   
   void touchEvent(const G3MEventContext* ec, const TouchEvent* touchEvent);
