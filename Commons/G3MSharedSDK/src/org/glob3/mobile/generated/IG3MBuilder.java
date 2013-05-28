@@ -20,6 +20,7 @@ package org.glob3.mobile.generated;
 //class IStorage;
 //class IDownloader;
 //class IThreadUtils;
+//class ICameraActivityListener;
 //class CameraRenderer;
 //class ICameraConstrainer;
 //class Color;
@@ -37,6 +38,7 @@ public abstract class IG3MBuilder
   private GL _gl;
   private IDownloader _downloader;
   private IThreadUtils _threadUtils;
+  private ICameraActivityListener _cameraActivityListener;
   private Planet _planet; // REMOVED FINAL WORD BY CONVERSOR RULE
   private java.util.ArrayList<ICameraConstrainer> _cameraConstraints;
   private CameraRenderer _cameraRenderer;
@@ -95,6 +97,21 @@ public abstract class IG3MBuilder
     }
   
     return _threadUtils;
+  }
+
+  /**
+   * Returns the _cameraActivityListener. If it does not exist, it will be default initializated.
+   *
+   * @return _threadUtils: IThreadUtils*
+   */
+  private ICameraActivityListener getCameraActivityListener()
+  {
+    if (_cameraActivityListener == null)
+    {
+      _cameraActivityListener = createDefaultCameraActivityListener();
+    }
+  
+    return _cameraActivityListener;
   }
 
   /**
@@ -359,7 +376,7 @@ public abstract class IG3MBuilder
       mainRenderer = getTileRendererBuilder().create();
     }
   
-    G3MWidget g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), getPlanet(), getCameraConstraints(), getCameraRenderer(), mainRenderer, getBusyRenderer(), getBackgroundColor(), getLogFPS(), getLogDownloaderStatistics(), getInitializationTask(), getAutoDeleteInitializationTask(), getPeriodicalTasks());
+    G3MWidget g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), getCameraActivityListener(), getPlanet(), getCameraConstraints(), getCameraRenderer(), mainRenderer, getBusyRenderer(), getBackgroundColor(), getLogFPS(), getLogDownloaderStatistics(), getInitializationTask(), getAutoDeleteInitializationTask(), getPeriodicalTasks());
   
     g3mWidget.setUserData(getUserData());
   
@@ -367,6 +384,7 @@ public abstract class IG3MBuilder
     _storage = null;
     _downloader = null;
     _threadUtils = null;
+    _cameraActivityListener = null;
     _planet = null;
     _cameraConstraints = null;
     _cameraConstraints = null;
@@ -385,6 +403,8 @@ public abstract class IG3MBuilder
   protected abstract IThreadUtils createDefaultThreadUtils();
   protected abstract IStorage createDefaultStorage();
   protected abstract IDownloader createDefaultDownloader();
+  protected abstract ICameraActivityListener createDefaultCameraActivityListener();
+
 
   public IG3MBuilder()
   {
@@ -392,6 +412,7 @@ public abstract class IG3MBuilder
      _storage = null;
      _downloader = null;
      _threadUtils = null;
+     _cameraActivityListener = null;
      _planet = null;
      _cameraConstraints = null;
      _cameraRenderer = null;
@@ -416,6 +437,8 @@ public abstract class IG3MBuilder
        _downloader.dispose();
     if (_threadUtils != null)
        _threadUtils.dispose();
+    if (_cameraActivityListener != null)
+       _cameraActivityListener.dispose();
     if (_planet != null)
        _planet.dispose();
     if (_cameraConstraints != null)
@@ -533,6 +556,8 @@ public abstract class IG3MBuilder
     }
     _threadUtils = threadUtils;
   }
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  void setCameraActivityListener(ICameraActivityListener cameraActivityListener);
 
   /**
    * Sets the _planet

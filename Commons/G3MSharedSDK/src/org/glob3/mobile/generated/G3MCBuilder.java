@@ -121,6 +121,16 @@ public abstract class G3MCBuilder
     return _downloader;
   }
 
+  private ICameraActivityListener _cameraActivityListener;
+  private ICameraActivityListener getCameraActivityListener()
+  {
+    if (_cameraActivityListener == null)
+    {
+      _cameraActivityListener = createCameraActivityListener();
+    }
+    return _cameraActivityListener;
+  }
+
 
   protected G3MCBuilder(URL serverURL, String sceneId, G3MCSceneChangeListener sceneListener)
   {
@@ -194,7 +204,7 @@ public abstract class G3MCBuilder
   
     java.util.ArrayList<PeriodicalTask> periodicalTasks = createPeriodicalTasks();
   
-    _g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), createPlanet(), cameraConstraints, createCameraRenderer(), mainRenderer, createBusyRenderer(), backgroundColor, false, false, initializationTask, true, periodicalTasks); // autoDeleteInitializationTask -  logDownloaderStatistics -  logFPS
+    _g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), getCameraActivityListener(), createPlanet(), cameraConstraints, createCameraRenderer(), mainRenderer, createBusyRenderer(), backgroundColor, false, false, initializationTask, true, periodicalTasks); // autoDeleteInitializationTask -  logDownloaderStatistics -  logFPS
   
     //  g3mWidget->setUserData(getUserData());
   
@@ -223,6 +233,8 @@ public abstract class G3MCBuilder
   protected abstract IDownloader createDownloader();
 
   protected abstract IThreadUtils createThreadUtils();
+
+  protected abstract ICameraActivityListener createCameraActivityListener();
 
 
   /** Private to G3M, don't call it */

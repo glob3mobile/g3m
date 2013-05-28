@@ -20,10 +20,10 @@ public class G3MWidget
     }
   }
 
-  public static G3MWidget create(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks)
+  public static G3MWidget create(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks)
   {
   
-    return new G3MWidget(gl, storage, downloader, threadUtils, planet, cameraConstrainers, cameraRenderer, mainRenderer, busyRenderer, backgroundColor, logFPS, logDownloaderStatistics, initializationTask, autoDeleteInitializationTask, periodicalTasks);
+    return new G3MWidget(gl, storage, downloader, threadUtils, cameraActivityListener, planet, cameraConstrainers, cameraRenderer, mainRenderer, busyRenderer, backgroundColor, logFPS, logDownloaderStatistics, initializationTask, autoDeleteInitializationTask, periodicalTasks);
   }
 
   public void dispose()
@@ -63,6 +63,8 @@ public class G3MWidget
        _storage.dispose();
     if (_threadUtils != null)
        _threadUtils.dispose();
+    if (_cameraActivityListener != null)
+       _cameraActivityListener.dispose();
   
     for (int n = 0; n < _cameraConstrainers.size(); n++)
     {
@@ -527,7 +529,7 @@ public class G3MWidget
     _effectsScheduler.cancelAllEffectsFor(target);
   }
 
-//  void resetCameraPosition();
+  //  void resetCameraPosition();
 
   public final CameraRenderer getCameraRenderer()
   {
@@ -542,6 +544,7 @@ public class G3MWidget
   private IStorage _storage;
   private IDownloader _downloader;
   private IThreadUtils _threadUtils;
+  private ICameraActivityListener _cameraActivityListener;
 
   private FrameTasksExecutor _frameTasksExecutor;
   private GL _gl;
@@ -593,7 +596,7 @@ public class G3MWidget
 
   private boolean _clickOnProcess;
 
-  private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks)
+  private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks)
   /*
    =======
   _gl( new GL(nativeGL, false) ),
@@ -607,6 +610,7 @@ public class G3MWidget
      _downloader = downloader;
      _storage = storage;
      _threadUtils = threadUtils;
+     _cameraActivityListener = cameraActivityListener;
      _texturesHandler = new TexturesHandler(_gl, false);
      _textureBuilder = new CPUTextureBuilder();
      _planet = planet;
@@ -674,7 +678,11 @@ public class G3MWidget
   
     if (!handled)
     {
-      _cameraRenderer.onTouchEvent(ec, touchEvent);
+      handled = _cameraRenderer.onTouchEvent(ec, touchEvent);
+      if(handled && _cameraActivityListener != null)
+      {
+        _cameraActivityListener.touchEventHandled();
+      }
     }
   }
 
