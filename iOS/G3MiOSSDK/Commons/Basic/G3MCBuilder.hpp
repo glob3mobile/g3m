@@ -17,6 +17,7 @@ class TileRenderer;
 class IStorage;
 class IDownloader;
 class IThreadUtils;
+class ICameraActivityListener;
 class Planet;
 class ICameraConstrainer;
 class CameraRenderer;
@@ -86,6 +87,9 @@ private:
 
   IDownloader* _downloader;
   IDownloader* getDownloader();
+  
+  ICameraActivityListener* _cameraActivityListener;
+  ICameraActivityListener* getCameraActivityListener();
 
 
 protected:
@@ -110,6 +114,8 @@ protected:
   virtual IDownloader* createDownloader() = 0;
 
   virtual IThreadUtils* createThreadUtils() = 0;
+  
+  virtual ICameraActivityListener* createCameraActivityListener() = 0;
 
 public:
 

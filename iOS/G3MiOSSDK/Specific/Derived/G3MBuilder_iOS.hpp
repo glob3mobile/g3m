@@ -20,6 +20,8 @@ protected:
   IThreadUtils* createDefaultThreadUtils();
   IStorage*     createDefaultStorage();
   IDownloader*  createDefaultDownloader();
+  ICameraActivityListener*  createDefaultCameraActivityListener();
+
 
 public:
   G3MBuilder_iOS(G3MWidget_iOS* nativeWidget);

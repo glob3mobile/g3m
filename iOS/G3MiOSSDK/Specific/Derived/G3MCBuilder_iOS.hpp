@@ -26,6 +26,7 @@ protected:
 
   IThreadUtils* createThreadUtils();
 
+  ICameraActivityListener*  createCameraActivityListener();
 
 public:
   G3MCBuilder_iOS(G3MWidget_iOS* nativeWidget,

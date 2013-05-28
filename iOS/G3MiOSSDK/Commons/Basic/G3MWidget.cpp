@@ -33,6 +33,8 @@
 #include "ITextUtils.hpp"
 #include "TouchEvent.hpp"
 
+#include "ICameraActivityListener.hpp"
+
 void G3MWidget::initSingletons(ILogger*            logger,
                                IFactory*           factory,
                                const IStringUtils* stringUtils,
@@ -58,6 +60,7 @@ G3MWidget::G3MWidget(GL*                              gl,
                      IStorage*                        storage,
                      IDownloader*                     downloader,
                      IThreadUtils*                    threadUtils,
+                     ICameraActivityListener*         cameraActivityListener,
                      const Planet*                    planet,
                      std::vector<ICameraConstrainer*> cameraConstrainers,
                      CameraRenderer*                  cameraRenderer,
@@ -81,6 +84,7 @@ _gl( new GL(nativeGL, false) ),
 _downloader(downloader),
 _storage(storage),
 _threadUtils(threadUtils),
+_cameraActivityListener(cameraActivityListener),
 _texturesHandler( new TexturesHandler(_gl, false) ),
 _textureBuilder( new CPUTextureBuilder() ),
 _planet(planet),
@@ -149,6 +153,7 @@ G3MWidget* G3MWidget::create(GL*                              gl,
                              IStorage*                        storage,
                              IDownloader*                     downloader,
                              IThreadUtils*                    threadUtils,
+                             ICameraActivityListener*         cameraActivityListener,
                              const Planet*                    planet,
                              std::vector<ICameraConstrainer*> cameraConstrainers,
                              CameraRenderer*                  cameraRenderer,
@@ -165,6 +170,7 @@ G3MWidget* G3MWidget::create(GL*                              gl,
                        storage,
                        downloader,
                        threadUtils,
+                       cameraActivityListener,
                        planet,
                        cameraConstrainers,
                        cameraRenderer,
@@ -199,6 +205,7 @@ G3MWidget::~G3MWidget() {
 
   delete _storage;
   delete _threadUtils;
+  delete _cameraActivityListener;
 
   for (unsigned int n=0; n < _cameraConstrainers.size(); n++) {
     delete _cameraConstrainers[n];
@@ -223,7 +230,10 @@ void G3MWidget::notifyTouchEvent(const G3MEventContext &ec,
   }
 
   if (!handled) {
-    _cameraRenderer->onTouchEvent(&ec, touchEvent);
+    handled = _cameraRenderer->onTouchEvent(&ec, touchEvent);
+    if(handled && _cameraActivityListener != NULL){
+      _cameraActivityListener->touchEventHandled();
+    }
   }
 }
 

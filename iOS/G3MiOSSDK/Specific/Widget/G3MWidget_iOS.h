@@ -19,6 +19,7 @@
 class IStorage;
 class IDownloader;
 class IThreadUtils;
+class ICameraActivityListener;
 class Planet;
 class Color;
 class CameraRenderer;
@@ -69,6 +70,7 @@ enum GL_version {
 - (void)initWidget: (IStorage*) storage
         downloader: (IDownloader*) downloader
        threadUtils: (IThreadUtils*) threadUtils
+cameraActivityListener:(ICameraActivityListener*) cameraActivityListener
             planet: (const Planet*) planet
  cameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstrainers
     cameraRenderer: (CameraRenderer*) cameraRenderer
