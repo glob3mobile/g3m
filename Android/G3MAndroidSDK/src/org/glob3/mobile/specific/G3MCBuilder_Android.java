@@ -5,6 +5,7 @@ package org.glob3.mobile.specific;
 import org.glob3.mobile.generated.CachedDownloader;
 import org.glob3.mobile.generated.G3MCBuilder;
 import org.glob3.mobile.generated.G3MCSceneChangeListener;
+import org.glob3.mobile.generated.ICameraActivityListener;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IThreadUtils;
@@ -52,6 +53,12 @@ public class G3MCBuilder_Android
    @Override
    protected IThreadUtils createThreadUtils() {
       return new ThreadUtils_Android(_nativeWidget);
+   }
+
+
+   @Override
+   protected ICameraActivityListener createCameraActivityListener() {
+      return new CameraActivityListener_Android();
    }
 
 

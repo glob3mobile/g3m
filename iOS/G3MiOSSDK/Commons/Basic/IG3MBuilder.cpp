@@ -360,6 +360,24 @@ void IG3MBuilder::setThreadUtils(IThreadUtils *threadUtils) {
 }
 
 /**
+ * Sets the _cameraActivityListener
+ *
+ * @param cameraActivityListener - cannot be NULL.
+ */
+void IG3MBuilder::setCameraActivityListener(ICameraActivityListener *cameraActivityListener) {
+  if (_cameraActivityListener) {
+    ILogger::instance()->logError("LOGIC ERROR: _cameraActivityListener already initialized");
+    return;
+  }
+  if (!cameraActivityListener) {
+    ILogger::instance()->logError("LOGIC ERROR: cameraActivityListener cannot be NULL");
+    return;
+  }
+  _cameraActivityListener = cameraActivityListener;
+}
+
+
+/**
  * Sets the _planet
  *
  * @param planet - cannot be NULL.

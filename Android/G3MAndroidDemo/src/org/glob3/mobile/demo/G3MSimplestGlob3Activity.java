@@ -15,6 +15,7 @@ import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.CompositeRenderer;
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GInitializationTask;
+import org.glob3.mobile.generated.ICameraActivityListener;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IStorage;
@@ -33,6 +34,7 @@ import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.WMSLayer;
 import org.glob3.mobile.generated.WMSServerVersion;
 import org.glob3.mobile.generated.WidgetUserData;
+import org.glob3.mobile.specific.CameraActivityListener_Android;
 import org.glob3.mobile.specific.Downloader_Android;
 import org.glob3.mobile.specific.G3MBaseActivity;
 import org.glob3.mobile.specific.G3MWidget_Android;
@@ -74,6 +76,7 @@ public class G3MSimplestGlob3Activity
                saveInBackground);
 
       final IThreadUtils threadUtils = new ThreadUtils_Android(_widgetAndroid);
+      final ICameraActivityListener cameraActivityListener = new CameraActivityListener_Android();
 
       final Planet planet = Planet.createEarth();
 
@@ -355,6 +358,7 @@ public class G3MSimplestGlob3Activity
                storage, // 
                downloader, //
                threadUtils, //
+               cameraActivityListener,//
                planet, //
                cameraConstraints, //
                cameraRenderer, //
