@@ -45,6 +45,10 @@ public:
     IFactory::instance()->deleteTimer(_timer);
   }
 
+  void resetTimeout() {
+    _lastExecutionMS = 0;
+  }
+
   void executeIfNecessary(const G3MContext* context) {
     long long now = getTimer()->now().milliseconds();
 

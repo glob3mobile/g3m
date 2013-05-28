@@ -10,10 +10,9 @@ public class G3MCBuilder_SceneDescriptionBufferListener extends IBufferDownloadL
     {
       return MapQuestLayer.newOpenAerial(timeToCache);
     }
-    else
-    {
-      return MapQuestLayer.newOSM(timeToCache);
-    }
+
+    // defaults to OSM
+    return MapQuestLayer.newOSM(timeToCache);
   }
 
   private BingMapsLayer parseBingMapsLayer(JSONObject jsonBaseLayer, TimeInterval timeToCache)
@@ -112,11 +111,27 @@ public class G3MCBuilder_SceneDescriptionBufferListener extends IBufferDownloadL
 
           if (_builder.getSceneTimestamp() != timestamp)
           {
-            final String user = jsonObject.getAsString("user", "<user not present>");
-            final String name = jsonObject.getAsString("name", "<name not present>");
+            final JSONString jsonUser = jsonObject.getAsString("user");
+            if (jsonUser == null)
+            {
+              ILogger.instance().logError("Attribute 'user' not found in SceneJSON");
+            }
+            else
+            {
+              _builder.setSceneUser(jsonUser.value());
+            }
+
+            final JSONString jsonName = jsonObject.getAsString("name");
+            if (jsonName == null)
+            {
+              ILogger.instance().logError("Attribute 'name' not found in SceneJSON");
+            }
+            else
+            {
+              _builder.setSceneName(jsonName.value());
+            }
 
             final JSONObject jsonBaseLayer = jsonObject.getAsObject("baseLayer");
-
             if (jsonBaseLayer == null)
             {
               ILogger.instance().logError("Attribute 'baseLayer' not found in SceneJSON");
@@ -124,12 +139,17 @@ public class G3MCBuilder_SceneDescriptionBufferListener extends IBufferDownloadL
             else
             {
               Layer baseLayer = parseLayer(jsonBaseLayer);
-              if (baseLayer != null)
+              if (baseLayer == null)
+              {
+                ILogger.instance().logError("Can't parse attribute 'baseLayer' in SceneJSON");
+              }
+              else
               {
                 _builder.changeBaseLayer(baseLayer);
-                _builder.setSceneTimestamp(timestamp);
               }
             }
+
+            _builder.setSceneTimestamp(timestamp);
           }
         }
         else

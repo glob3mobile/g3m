@@ -15,8 +15,9 @@
 
 G3MCBuilder_iOS::G3MCBuilder_iOS(G3MWidget_iOS* nativeWidget,
                                  const URL& serverURL,
-                                 const std::string& sceneId) :
-G3MCBuilder(serverURL, sceneId),
+                                 const std::string& sceneId,
+                                 G3MCSceneChangeListener* sceneListener) :
+G3MCBuilder(serverURL, sceneId, sceneListener),
 _nativeWidget(nativeWidget)
 {
   [_nativeWidget initSingletons];

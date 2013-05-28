@@ -124,7 +124,7 @@ public class G3MWidget
       }
     }
   
-    //Start periodical task
+    // Start periodical tasks
     final int periodicalTasksCount = _periodicalTasks.size();
     for (int i = 0; i < periodicalTasksCount; i++)
     {
@@ -414,6 +414,15 @@ public class G3MWidget
     addPeriodicalTask(new PeriodicalTask(interval, task));
   }
 
+  public final void resetPeriodicalTasksTimeouts()
+  {
+    final int periodicalTasksCount = _periodicalTasks.size();
+    for (int i = 0; i < periodicalTasksCount; i++)
+    {
+      PeriodicalTask pt = _periodicalTasks.get(i);
+      pt.resetTimeout();
+    }
+  }
 
   public final void setCameraPosition(Geodetic3D position)
   {

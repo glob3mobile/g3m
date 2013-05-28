@@ -1,16 +1,21 @@
 package org.glob3.mobile.generated; 
 public abstract class G3MCBuilder
 {
-  private int _sceneTimestamp;
 
   private final URL _serverURL;
 
+  private G3MCSceneChangeListener _sceneListener;
+
+  private int _sceneTimestamp;
   private String _sceneId;
+  private String _sceneUser;
+  private String _sceneName;
 
   private Layer _baseLayer;
 
   private GL _gl;
-  private boolean _glob3Created;
+//  bool _glob3Created;
+  private G3MWidget _g3mWidget;
   private IStorage _storage;
 
   private LayerSet _layerSet;
@@ -28,10 +33,11 @@ public abstract class G3MCBuilder
     final boolean incrementalTileQuality = false;
     final boolean renderIncompletePlanet = false;
   
-    int _TODO_select_PlanetIncompletedTexture;
-    final URL incompletePlanetTexureURL = new URL("http://steve.files.wordpress.com/2006/03/Matrix%20tut%202.jpg", false);
-    //const URL incompletePlanetTexureURL("http://www.myfreetextures.com/wp-content/uploads/2011/06/stripes1.jpg", false);
-    //const URL incompletePlanetTexureURL("http://images.fineartamerica.com/images-medium-large/optical-illusion-the-grid-sumit-mehndiratta.jpg", false);
+    // int _TODO_select_PlanetIncompletedTexture;
+    // const URL incompletePlanetTexureURL("http://steve.files.wordpress.com/2006/03/Matrix%20tut%202.jpg", false);
+    // const URL incompletePlanetTexureURL("http://www.myfreetextures.com/wp-content/uploads/2011/06/stripes1.jpg", false);
+    // const URL incompletePlanetTexureURL("http://images.fineartamerica.com/images-medium-large/optical-illusion-the-grid-sumit-mehndiratta.jpg", false);
+    final URL incompletePlanetTexureURL = new URL("", false);
   
     final TilesRenderParameters parameters = new TilesRenderParameters(renderDebug, useTilesSplitBudget, forceFirstLevelTilesRenderOnStart, incrementalTileQuality, renderIncompletePlanet, incompletePlanetTexureURL);
   
@@ -116,18 +122,21 @@ public abstract class G3MCBuilder
   }
 
 
-  protected G3MCBuilder(URL serverURL, String sceneId)
+  protected G3MCBuilder(URL serverURL, String sceneId, G3MCSceneChangeListener sceneListener)
   {
      _serverURL = serverURL;
-     _sceneId = sceneId;
      _sceneTimestamp = -1;
+     _sceneId = sceneId;
+     _sceneUser = "";
+     _sceneName = "";
      _gl = null;
-     _glob3Created = false;
+     _g3mWidget = null;
      _storage = null;
      _threadUtils = null;
      _layerSet = new LayerSet();
      _baseLayer = null;
      _downloader = null;
+     _sceneListener = sceneListener;
   
   }
 
@@ -162,12 +171,11 @@ public abstract class G3MCBuilder
 
   protected final G3MWidget create()
   {
-    if (_glob3Created)
+    if (_g3mWidget != null)
     {
       ILogger.instance().logError("The G3MWidget was already created, can't create more than one");
       return null;
     }
-    _glob3Created = true;
   
   
     CompositeRenderer mainRenderer = new CompositeRenderer();
@@ -186,14 +194,14 @@ public abstract class G3MCBuilder
   
     java.util.ArrayList<PeriodicalTask> periodicalTasks = createPeriodicalTasks();
   
-    G3MWidget g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), createPlanet(), cameraConstraints, createCameraRenderer(), mainRenderer, createBusyRenderer(), backgroundColor, false, false, initializationTask, true, periodicalTasks); // autoDeleteInitializationTask -  logDownloaderStatistics -  logFPS
+    _g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), createPlanet(), cameraConstraints, createCameraRenderer(), mainRenderer, createBusyRenderer(), backgroundColor, false, false, initializationTask, true, periodicalTasks); // autoDeleteInitializationTask -  logDownloaderStatistics -  logFPS
   
     //  g3mWidget->setUserData(getUserData());
   
     cameraConstraints = null;
     periodicalTasks = null;
   
-    return g3mWidget;
+    return _g3mWidget;
   }
 
   protected final Planet createPlanet()
@@ -228,7 +236,13 @@ public abstract class G3MCBuilder
            _baseLayer.dispose();
       }
       _baseLayer = baseLayer;
+  
       recreateLayerSet();
+  
+      if (_sceneListener != null)
+      {
+        _sceneListener.onBaseLayerChanged(_baseLayer);
+      }
     }
   }
 
@@ -242,6 +256,34 @@ public abstract class G3MCBuilder
   public final void setSceneTimestamp(int timestamp)
   {
     _sceneTimestamp = timestamp;
+  }
+
+  /** Private to G3M, don't call it */
+  public final void setSceneUser(String user)
+  {
+    if (_sceneUser.compareTo(user) != 0)
+    {
+      _sceneUser = user;
+  
+      if (_sceneListener != null)
+      {
+        _sceneListener.onUserChanged(_sceneUser);
+      }
+    }
+  }
+
+  /** Private to G3M, don't call it */
+  public final void setSceneName(String name)
+  {
+    if (_sceneName.compareTo(name) != 0)
+    {
+      _sceneName = name;
+  
+      if (_sceneListener != null)
+      {
+        _sceneListener.onNameChanged(_sceneName);
+      }
+    }
   }
 
   /** Private to G3M, don't call it */
@@ -266,6 +308,12 @@ public abstract class G3MCBuilder
       }
       _sceneTimestamp = -1;
       _sceneId = sceneId;
+  
+      if (_g3mWidget != null)
+      {
+        // force inmediate ejecution of PeriodicalTasks
+        _g3mWidget.resetPeriodicalTasksTimeouts();
+      }
     }
   }
 

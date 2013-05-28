@@ -147,8 +147,9 @@ public:
   
   void addPeriodicalTask(const TimeInterval& interval,
                          GTask* task);
-  
-  
+
+  void resetPeriodicalTasksTimeouts();
+
   void setCameraPosition(const Geodetic3D& position);
   
   void setCameraHeading(const Angle& angle);

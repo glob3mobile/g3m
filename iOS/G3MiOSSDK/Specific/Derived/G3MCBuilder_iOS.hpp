@@ -31,7 +31,8 @@ protected:
 public:
   G3MCBuilder_iOS(G3MWidget_iOS* nativeWidget,
                   const URL& serverURL,
-                  const std::string& sceneId);
+                  const std::string& sceneId,
+                  G3MCSceneChangeListener* sceneListener);
 
   void initializeWidget();
   

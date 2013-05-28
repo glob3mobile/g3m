@@ -34,6 +34,21 @@ class G3MCSceneDescription;
 #include <string>
 
 
+class G3MCSceneChangeListener {
+public:
+  virtual ~G3MCSceneChangeListener() {
+
+  }
+
+  virtual void onBaseLayerChanged(Layer* baseLayer) = 0;
+
+  virtual void onUserChanged(const std::string& user) = 0;
+
+  virtual void onNameChanged(const std::string& name) = 0;
+  
+};
+
+
 class G3MCBuilderScenesDescriptionsListener {
 public:
   virtual ~G3MCBuilderScenesDescriptionsListener() {
@@ -49,7 +64,6 @@ public:
 
 class G3MCBuilder {
 private:
-  int _sceneTimestamp;
 
 #ifdef C_CODE
   const URL         _serverURL;
@@ -58,12 +72,18 @@ private:
   private final URL _serverURL;
 #endif
 
+  G3MCSceneChangeListener* _sceneListener;
+
+  int _sceneTimestamp;
   std::string _sceneId;
+  std::string _sceneUser;
+  std::string _sceneName;
 
   Layer* _baseLayer;
 
   GL* _gl;
-  bool _glob3Created;
+//  bool _glob3Created;
+  G3MWidget* _g3mWidget;
   IStorage* _storage;
 
   LayerSet* _layerSet;
@@ -94,7 +114,8 @@ private:
 
 protected:
   G3MCBuilder(const URL& serverURL,
-              const std::string& sceneId);
+              const std::string& sceneId,
+              G3MCSceneChangeListener* sceneListener);
   
   virtual ~G3MCBuilder() {
   }
@@ -127,6 +148,12 @@ public:
 
   /** Private to G3M, don't call it */
   void setSceneTimestamp(const int timestamp);
+
+  /** Private to G3M, don't call it */
+  void setSceneUser(const std::string& user);
+
+  /** Private to G3M, don't call it */
+  void setSceneName(const std::string& name);
 
   /** Private to G3M, don't call it */
   const URL createSceneDescriptionURL() const;
