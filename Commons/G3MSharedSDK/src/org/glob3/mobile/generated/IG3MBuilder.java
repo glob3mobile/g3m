@@ -556,8 +556,26 @@ public abstract class IG3MBuilder
     }
     _threadUtils = threadUtils;
   }
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  void setCameraActivityListener(ICameraActivityListener cameraActivityListener);
+
+  /**
+   * Sets the _cameraActivityListener
+   *
+   * @param cameraActivityListener - cannot be NULL.
+   */
+  public final void setCameraActivityListener(ICameraActivityListener cameraActivityListener)
+  {
+    if (_cameraActivityListener != null)
+    {
+      ILogger.instance().logError("LOGIC ERROR: _cameraActivityListener already initialized");
+      return;
+    }
+    if (cameraActivityListener == null)
+    {
+      ILogger.instance().logError("LOGIC ERROR: cameraActivityListener cannot be NULL");
+      return;
+    }
+    _cameraActivityListener = cameraActivityListener;
+  }
 
   /**
    * Sets the _planet
