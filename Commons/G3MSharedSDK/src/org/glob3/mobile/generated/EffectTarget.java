@@ -26,7 +26,6 @@ package org.glob3.mobile.generated;
 
 public interface EffectTarget
 {
-  public final void dispose()
-  {
-  }
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  void dispose();
 }
