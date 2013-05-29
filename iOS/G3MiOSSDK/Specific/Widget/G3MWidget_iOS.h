@@ -67,22 +67,22 @@ enum GL_version {
 
 - (void)drawView: (id)sender;
 
-- (void)initWidget: (IStorage*) storage
-        downloader: (IDownloader*) downloader
-       threadUtils: (IThreadUtils*) threadUtils
-cameraActivityListener:(ICameraActivityListener*) cameraActivityListener
-            planet: (const Planet*) planet
- cameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstrainers
-    cameraRenderer: (CameraRenderer*) cameraRenderer
-      mainRenderer: (Renderer*) mainRenderer
-      busyRenderer: (Renderer*) busyRenderer
-   backgroundColor: (Color) backgroundColor
-            logFPS: (bool) logFPS
-logDownloaderStatistics: (bool) logDownloaderStatistics
-initializationTask: (GInitializationTask*) initializationTask
+- (void)          initWidget: (IStorage*) storage
+                  downloader: (IDownloader*) downloader
+                 threadUtils: (IThreadUtils*) threadUtils
+      cameraActivityListener: (ICameraActivityListener*) cameraActivityListener
+                      planet: (const Planet*) planet
+           cameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstrainers
+              cameraRenderer: (CameraRenderer*) cameraRenderer
+                mainRenderer: (Renderer*) mainRenderer
+                busyRenderer: (Renderer*) busyRenderer
+             backgroundColor: (Color) backgroundColor
+                      logFPS: (bool) logFPS
+     logDownloaderStatistics: (bool) logDownloaderStatistics
+          initializationTask: (GInitializationTask*) initializationTask
 autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
-   periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
-          userData: (WidgetUserData*) userData;
+             periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
+                    userData: (WidgetUserData*) userData;
 
 - (GL*)getGL;
 

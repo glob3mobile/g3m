@@ -10,7 +10,6 @@
 #include "CachedDownloader.hpp"
 #include "Downloader_iOS.hpp"
 #include "ThreadUtils_iOS.hpp"
-#include "CameraActivityListener_iOS.hpp"
 #include "SQLiteStorage_iOS.hpp"
 
 G3MCBuilder_iOS::G3MCBuilder_iOS(G3MWidget_iOS* nativeWidget,
@@ -44,8 +43,4 @@ IDownloader* G3MCBuilder_iOS::createDownloader() {
 
 IThreadUtils* G3MCBuilder_iOS::createThreadUtils() {
   return new ThreadUtils_iOS();
-}
-
-ICameraActivityListener* G3MCBuilder_iOS::createCameraActivityListener() {
-  return new CameraActivityListener_iOS();
 }

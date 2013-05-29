@@ -137,10 +137,6 @@ IThreadUtils* IG3MBuilder::getThreadUtils() {
  * @return _threadUtils: IThreadUtils*
  */
 ICameraActivityListener* IG3MBuilder::getCameraActivityListener() {
-  if (!_cameraActivityListener) {
-    _cameraActivityListener = createDefaultCameraActivityListener();
-  }
-  
   return _cameraActivityListener;
 }
 

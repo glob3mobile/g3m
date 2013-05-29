@@ -18,4 +18,4 @@ public:
 };
 
 
-#endif /* defined(__G3MiOSSDK__ICameraActivityListener__) */
+#endif

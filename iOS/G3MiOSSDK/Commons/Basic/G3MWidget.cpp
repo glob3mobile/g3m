@@ -231,8 +231,10 @@ void G3MWidget::notifyTouchEvent(const G3MEventContext &ec,
 
   if (!handled) {
     handled = _cameraRenderer->onTouchEvent(&ec, touchEvent);
-    if(handled && _cameraActivityListener != NULL){
-      _cameraActivityListener->touchEventHandled();
+    if (handled) {
+      if (_cameraActivityListener != NULL) {
+        _cameraActivityListener->touchEventHandled();
+      }
     }
   }
 }

@@ -20,7 +20,6 @@ protected:
   IThreadUtils* createDefaultThreadUtils();
   IStorage*     createDefaultStorage();
   IDownloader*  createDefaultDownloader();
-  ICameraActivityListener*  createDefaultCameraActivityListener();
 
 
 public:

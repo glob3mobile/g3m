@@ -17,7 +17,6 @@ class TileRenderer;
 class IStorage;
 class IDownloader;
 class IThreadUtils;
-class ICameraActivityListener;
 class Planet;
 class ICameraConstrainer;
 class CameraRenderer;
@@ -107,10 +106,6 @@ private:
 
   IDownloader* _downloader;
   IDownloader* getDownloader();
-  
-  ICameraActivityListener* _cameraActivityListener;
-  ICameraActivityListener* getCameraActivityListener();
-
 
 protected:
   G3MCBuilder(const URL& serverURL,
@@ -136,8 +131,6 @@ protected:
 
   virtual IThreadUtils* createThreadUtils() = 0;
   
-  virtual ICameraActivityListener* createCameraActivityListener() = 0;
-
 public:
 
   /** Private to G3M, don't call it */

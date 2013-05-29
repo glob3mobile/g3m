@@ -34,7 +34,6 @@
 #include "JSONArray.hpp"
 #include "G3MCSceneDescription.hpp"
 #include "IThreadUtils.hpp"
-#include "ICameraActivityListener.hpp"
 #include "OSMLayer.hpp"
 #include "MapQuestLayer.hpp"
 #include "BingMapsLayer.hpp"
@@ -67,13 +66,6 @@ IDownloader* G3MCBuilder::getDownloader() {
     _downloader = createDownloader();
   }
   return _downloader;
-}
-
-ICameraActivityListener* G3MCBuilder::getCameraActivityListener() {
-  if (_cameraActivityListener == NULL) {
-    _cameraActivityListener = createCameraActivityListener();
-  }
-  return _cameraActivityListener;
 }
 
 IThreadUtils* G3MCBuilder::getThreadUtils() {
@@ -501,12 +493,14 @@ G3MWidget* G3MCBuilder::create() {
   GInitializationTask* initializationTask = NULL;
   
   std::vector<PeriodicalTask*>* periodicalTasks = createPeriodicalTasks();
-  
+
+  ICameraActivityListener* cameraActivityListener = NULL;
+
   _g3mWidget = G3MWidget::create(getGL(),
                                  getStorage(),
                                  getDownloader(),
                                  getThreadUtils(),
-                                 getCameraActivityListener(),
+                                 cameraActivityListener,
                                  createPlanet(),
                                  *cameraConstraints,
                                  createCameraRenderer(),

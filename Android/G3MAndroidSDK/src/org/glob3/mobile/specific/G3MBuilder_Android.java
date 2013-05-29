@@ -3,7 +3,6 @@
 package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.CachedDownloader;
-import org.glob3.mobile.generated.ICameraActivityListener;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IG3MBuilder;
 import org.glob3.mobile.generated.IStorage;
@@ -59,10 +58,5 @@ public class G3MBuilder_Android
                saveInBackground);
    }
 
-
-   @Override
-   protected ICameraActivityListener createDefaultCameraActivityListener() {
-      return new CameraActivityListener_Android();
-   }
 
 }

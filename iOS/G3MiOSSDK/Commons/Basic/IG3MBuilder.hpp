@@ -84,7 +84,6 @@ protected:
   virtual IThreadUtils* createDefaultThreadUtils() = 0;
   virtual IStorage*     createDefaultStorage()     = 0;
   virtual IDownloader*  createDefaultDownloader()  = 0;
-  virtual ICameraActivityListener*  createDefaultCameraActivityListener()  = 0;
   
   
 public:

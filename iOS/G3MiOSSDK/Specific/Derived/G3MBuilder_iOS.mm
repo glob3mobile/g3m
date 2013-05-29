@@ -9,7 +9,6 @@
 #import "G3MBuilder_iOS.hpp"
 #include "Factory_iOS.hpp"
 #include "ThreadUtils_iOS.hpp"
-#include "CameraActivityListener_iOS.hpp"
 #include "SQLiteStorage_iOS.hpp"
 #include "CachedDownloader.hpp"
 #include "Downloader_iOS.hpp"
@@ -31,13 +30,6 @@ IThreadUtils* G3MBuilder_iOS::createDefaultThreadUtils() {
 
   return threadUtils;
 }
-
-ICameraActivityListener* G3MBuilder_iOS::createDefaultCameraActivityListener() {
-  ICameraActivityListener* cameraActivityListener = new CameraActivityListener_iOS();
-  
-  return cameraActivityListener;
-}
-
 
 IStorage* G3MBuilder_iOS::createDefaultStorage() {
   IStorage* storage = new SQLiteStorage_iOS("g3m.cache");

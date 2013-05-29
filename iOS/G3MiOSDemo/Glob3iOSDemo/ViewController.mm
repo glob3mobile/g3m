@@ -133,9 +133,9 @@ public:
   //[self initWithDefaultBuilder];
 
   // initialize a customized widget by using a buider
-  //[self initCustomizedWithBuilder];
+  [self initCustomizedWithBuilder];
 
-  [self initWithG3MCBuilder];
+  //[self initWithG3MCBuilder];
 
   [[self G3MWidget] startAnimation];
 } 
