@@ -1,4 +1,9 @@
-package org.glob3.mobile.generated; 
+
+
+package org.glob3.mobile.generated;
+
+import java.util.Iterator;
+import java.util.Map;
 //
 //  GPUProgramState.cpp
 //  G3MiOSSDK
@@ -6,6 +11,7 @@ package org.glob3.mobile.generated;
 //  Created by Jose Miguel SN on 05/04/13.
 //
 //
+
 
 //
 //  GPUProgramState.h
@@ -16,41 +22,68 @@ package org.glob3.mobile.generated;
 //
 
 
+public class GPUProgramState {
+
+   private static class attributeEnabledStruct {
+      public boolean      value;
+      public GPUAttribute attribute;
+   }
+
+   private final java.util.HashMap<String, GPUUniformValue>        _uniformValues     = new java.util.HashMap<String, GPUUniformValue>();
+   private final java.util.HashMap<String, GPUAttributeValue>      _attributesValues  = new java.util.HashMap<String, GPUAttributeValue>();
+   private final java.util.HashMap<String, attributeEnabledStruct> _attributesEnabled = new java.util.HashMap<String, attributeEnabledStruct>();
 
 
-public class GPUProgramState
-{
+   private void setUniformValue(final String name,
+                                final GPUUniformValue v) {
+      _uniformValues.put(name, v);
+   }
 
-  private static class attributeEnabledStruct
+
+   private void setAttributeValue(final String name,
+                                  final GPUAttributeValue v) {
+      _attributesValues.put(name, v);
+   }
+
+
+   private void applyValuesToLinkedProgram()
   {
-    public boolean value;
-    public GPUAttribute attribute;
-  }
-  private java.util.HashMap<String, GPUUniformValue> _uniformValues = new java.util.HashMap<String, GPUUniformValue>();
-  private java.util.HashMap<String, GPUAttributeValue> _attributesValues = new java.util.HashMap<String, GPUAttributeValue>();
-  private java.util.HashMap<String, attributeEnabledStruct> _attributesEnabled = new java.util.HashMap<String, attributeEnabledStruct>();
-
-  private void setUniformValue(String name, GPUUniformValue v)
-  {
-    _uniformValues.put(name, v);
-  }
-  private void setAttributeValue(String name, GPUAttributeValue v)
-  {
-    _attributesValues.put(name, v);
-  }
-
-  private void applyValuesToLinkedProgram()
-  {
-    for(java.util.HashMap<String, GPUUniformValue> const_iterator it = _uniformValues.iterator(); it != _uniformValues.end(); it++)
+     {
+     final Iterator it = _uniformValues.entrySet().iterator();
+     while (it.hasNext()) {
+         final Map.Entry pairs = (Map.Entry)it.next();
+         final GPUUniformValue v = (GPUUniformValue) pairs.getValue();
+         v.setValueToLinkedUniform();
+     }
+     }
+     
+     {
+     final Iterator it = _attributesEnabled.entrySet().iterator();
+     while (it.hasNext()) {
+         final Map.Entry pairs = (Map.Entry)it.next();
+         final attributeEnabledStruct a = (attributeEnabledStruct) pairs.getValue();
+         if (a.attribute == null) {
+          ILogger.instance().logError("NO ATTRIBUTE LINKED");
+     }
+     else
+     {
+       a.setEnable(it.second.value);
+     }
+         v.setValueToLinkedUniform();
+     }
+     }
+     
+     
+    for(final java.util.HashMap<String, GPUUniformValue> const_iterator it = _uniformValues.iterator(); it != _uniformValues.end(); it++)
     {
-      String name = it.first;
-      GPUUniformValue v = it.second;
+      final String name = it.first;
+      final GPUUniformValue v = it.second;
       v.setValueToLinkedUniform();
     }
   
-    for(java.util.HashMap<String, attributeEnabledStruct> const_iterator it = _attributesEnabled.iterator(); it != _attributesEnabled.end(); it++)
+    for(final java.util.HashMap<String, attributeEnabledStruct> const_iterator it = _attributesEnabled.iterator(); it != _attributesEnabled.end(); it++)
     {
-      GPUAttribute a = it.second.attribute;
+      final GPUAttribute a = it.second.attribute;
       if (a == null)
       {
         ILogger.instance().logError("NO ATTRIBUTE LINKED");
@@ -61,37 +94,37 @@ public class GPUProgramState
       }
     }
   
-    for(java.util.HashMap<String, GPUAttributeValue> const_iterator it = _attributesValues.iterator(); it != _attributesValues.end(); it++)
+    for(final java.util.HashMap<String, GPUAttributeValue> const_iterator it = _attributesValues.iterator(); it != _attributesValues.end(); it++)
     {
-      GPUAttributeValue v = it.second;
+      final GPUAttributeValue v = it.second;
       v.setValueToLinkedAttribute();
     }
   }
 
-  private GPUProgram _lastProgramUsed;
+   private GPUProgram _lastProgramUsed;
 
 
-  public GPUProgramState()
-  {
-     _lastProgramUsed = null;
-  }
+   public GPUProgramState() {
+      _lastProgramUsed = null;
+   }
 
-  public void dispose()
-  {
-    clear();
-  }
 
-  public final void clear()
+   public void dispose() {
+      clear();
+   }
+
+
+   public final void clear()
   {
     _lastProgramUsed = null;
   
-    for(java.util.HashMap<String, GPUUniformValue> const_iterator it = _uniformValues.iterator(); it != _uniformValues.end(); it++)
+    for(final java.util.HashMap<String, GPUUniformValue> const_iterator it = _uniformValues.iterator(); it != _uniformValues.end(); it++)
     {
       it.second = null;
     }
     _uniformValues.clear();
   
-    for(java.util.HashMap<String, GPUAttributeValue> const_iterator it = _attributesValues.iterator(); it != _attributesValues.end(); it++)
+    for(final java.util.HashMap<String, GPUAttributeValue> const_iterator it = _attributesValues.iterator(); it != _attributesValues.end(); it++)
     {
       it.second = null;
     }
@@ -99,36 +132,44 @@ public class GPUProgramState
     _attributesValues.clear();
   }
 
-  public final void setUniformValue(String name, boolean b)
-  {
-    setUniformValue(name, new GPUUniformValueBool(b));
-  }
 
-  public final void setUniformValue(String name, float f)
-  {
-    setUniformValue(name, new GPUUniformValueFloat(f));
-  }
+   public final void setUniformValue(final String name,
+                                     final boolean b) {
+      setUniformValue(name, new GPUUniformValueBool(b));
+   }
 
-  public final void setUniformValue(String name, Vector2D v)
-  {
-    setUniformValue(name, new GPUUniformValueVec2Float(v._x, v._y));
-  }
 
-  public final void setUniformValue(String name, double x, double y, double z, double w)
-  {
-    setUniformValue(name, new GPUUniformValueVec4Float(x,y,z,w));
-  }
+   public final void setUniformValue(final String name,
+                                     final float f) {
+      setUniformValue(name, new GPUUniformValueFloat(f));
+   }
 
-  public final void setUniformValue(String name, MutableMatrix44D m)
+
+   public final void setUniformValue(final String name,
+                                     final Vector2D v) {
+      setUniformValue(name, new GPUUniformValueVec2Float(v._x, v._y));
+   }
+
+
+   public final void setUniformValue(final String name,
+                                     final double x,
+                                     final double y,
+                                     final double z,
+                                     final double w) {
+      setUniformValue(name, new GPUUniformValueVec4Float(x, y, z, w));
+   }
+
+
+   public final void setUniformValue(final String name, final MutableMatrix44D m)
   {
   
-    for(java.util.HashMap<String, GPUUniformValue> iterator it = _uniformValues.iterator(); it != _uniformValues.end(); it++)
+    for(final java.util.HashMap<String, GPUUniformValue> iterator it = _uniformValues.iterator(); it != _uniformValues.end(); it++)
     {
-      String thisName = it.first;
-      GPUUniformValue uv = (GPUUniformValue)it.second;
-      if (thisName.compareTo(name) == 0 && uv.getType() == GLType.glMatrix4Float())
+      final String thisName = it.first;
+      final GPUUniformValue uv = (GPUUniformValue)it.second;
+      if ((thisName.compareTo(name) == 0) && (uv.getType() == GLType.glMatrix4Float()))
       {
-        GPUUniformValueMatrix4FloatStack v = (GPUUniformValueMatrix4FloatStack)it.second;
+        final GPUUniformValueMatrix4FloatStack v = (GPUUniformValueMatrix4FloatStack)it.second;
         v.loadMatrix(m);
         return;
       }
@@ -137,16 +178,17 @@ public class GPUProgramState
     setUniformValue(name, new GPUUniformValueMatrix4FloatStack(m));
   }
 
-  public final void multiplyUniformValue(String name, MutableMatrix44D m)
+
+   public final void multiplyUniformValue(final String name, final MutableMatrix44D m)
   {
   
-    for(java.util.HashMap<String, GPUUniformValue> iterator it = _uniformValues.iterator(); it != _uniformValues.end(); it++)
+    for(final java.util.HashMap<String, GPUUniformValue> iterator it = _uniformValues.iterator(); it != _uniformValues.end(); it++)
     {
-      String thisName = it.first;
-      GPUUniformValue uv = (GPUUniformValue)it.second;
-      if (thisName.compareTo(name) == 0 && uv.getType() == GLType.glMatrix4Float())
+      final String thisName = it.first;
+      final GPUUniformValue uv = (GPUUniformValue)it.second;
+      if ((thisName.compareTo(name) == 0) && (uv.getType() == GLType.glMatrix4Float()))
       {
-        GPUUniformValueMatrix4FloatStack v = (GPUUniformValueMatrix4FloatStack)it.second;
+        final GPUUniformValueMatrix4FloatStack v = (GPUUniformValueMatrix4FloatStack)it.second;
         v.multiplyMatrix(m);
         return;
       }
@@ -156,61 +198,67 @@ public class GPUProgramState
   
   }
 
-  public final void setAttributeValue(String name, IFloatBuffer buffer, int attributeSize, int arrayElementSize, int index, boolean normalized, int stride)
-  {
-    switch (attributeSize)
-    {
-      case 1:
-        setAttributeValue(name, new GPUAttributeValueVec1Float(buffer, arrayElementSize, index, stride, normalized));
-        break;
-  
-      case 2:
-        setAttributeValue(name, new GPUAttributeValueVec2Float(buffer, arrayElementSize, index, stride, normalized));
-        break;
-  
-      case 3:
-        setAttributeValue(name, new GPUAttributeValueVec3Float(buffer, arrayElementSize, index, stride, normalized));
-        break;
-  
-      case 4:
-        setAttributeValue(name, new GPUAttributeValueVec4Float(buffer, arrayElementSize, index, stride, normalized));
-        break;
-  
-      default:
-        ILogger.instance().logError("Invalid size for Attribute.");
-        break;
-    }
-  }
 
-  public final void setAttributeEnabled(String name, boolean enabled)
-  {
-    attributeEnabledStruct ae = new attributeEnabledStruct();
-    ae.value = enabled;
-    ae.attribute = null;
-  
-    _attributesEnabled.put(name, ae);
-  }
+   public final void setAttributeValue(final String name,
+                                       final IFloatBuffer buffer,
+                                       final int attributeSize,
+                                       final int arrayElementSize,
+                                       final int index,
+                                       final boolean normalized,
+                                       final int stride) {
+      switch (attributeSize) {
+         case 1:
+            setAttributeValue(name, new GPUAttributeValueVec1Float(buffer, arrayElementSize, index, stride, normalized));
+            break;
 
-  public final void applyChanges(GL gl)
-  {
-    if (_lastProgramUsed == null)
-    {
-      ILogger.instance().logError("Trying to use unlinked GPUProgramState.");
-    }
-    applyValuesToLinkedProgram();
-    _lastProgramUsed.applyChanges(gl);
-  }
+         case 2:
+            setAttributeValue(name, new GPUAttributeValueVec2Float(buffer, arrayElementSize, index, stride, normalized));
+            break;
 
-  public final void linkToProgram(GPUProgram prog)
+         case 3:
+            setAttributeValue(name, new GPUAttributeValueVec3Float(buffer, arrayElementSize, index, stride, normalized));
+            break;
+
+         case 4:
+            setAttributeValue(name, new GPUAttributeValueVec4Float(buffer, arrayElementSize, index, stride, normalized));
+            break;
+
+         default:
+            ILogger.instance().logError("Invalid size for Attribute.");
+            break;
+      }
+   }
+
+
+   public final void setAttributeEnabled(final String name,
+                                         final boolean enabled) {
+      final attributeEnabledStruct ae = new attributeEnabledStruct();
+      ae.value = enabled;
+      ae.attribute = null;
+
+      _attributesEnabled.put(name, ae);
+   }
+
+
+   public final void applyChanges(final GL gl) {
+      if (_lastProgramUsed == null) {
+         ILogger.instance().logError("Trying to use unlinked GPUProgramState.");
+      }
+      applyValuesToLinkedProgram();
+      _lastProgramUsed.applyChanges(gl);
+   }
+
+
+   public final void linkToProgram(final GPUProgram prog)
   {
   
     _lastProgramUsed = prog;
   
-    for(java.util.HashMap<String, GPUUniformValue> const_iterator it = _uniformValues.iterator(); it != _uniformValues.end(); it++)
+    for(final java.util.HashMap<String, GPUUniformValue> const_iterator it = _uniformValues.iterator(); it != _uniformValues.end(); it++)
     {
   
-      String name = it.first;
-      GPUUniformValue v = it.second;
+      final String name = it.first;
+      final GPUUniformValue v = it.second;
   
       GPUUniform u = null;
       final int type = v.getType();
@@ -255,10 +303,10 @@ public class GPUProgramState
       }
     }
   
-    for(java.util.HashMap<String, attributeEnabledStruct> const_iterator it = _attributesEnabled.iterator(); it != _attributesEnabled.end(); it++)
+    for(final java.util.HashMap<String, attributeEnabledStruct> const_iterator it = _attributesEnabled.iterator(); it != _attributesEnabled.end(); it++)
     {
-      String name = it.first;
-      GPUAttribute a = prog.getGPUAttribute(name);
+      final String name = it.first;
+      final GPUAttribute a = prog.getGPUAttribute(name);
       if (a == null)
       {
         ILogger.instance().logError("ATTRIBUTE NOT FOUND " + name + ". COULDN'T CHANGE ENABLED STATE.");
@@ -269,17 +317,17 @@ public class GPUProgramState
       }
     }
   
-    for(java.util.HashMap<String, GPUAttributeValue> const_iterator it = _attributesValues.iterator(); it != _attributesValues.end(); it++)
+    for(final java.util.HashMap<String, GPUAttributeValue> const_iterator it = _attributesValues.iterator(); it != _attributesValues.end(); it++)
     {
   
-      String name = it.first;
-      GPUAttributeValue v = it.second;
+      final String name = it.first;
+      final GPUAttributeValue v = it.second;
   
       final int type = v.getType();
       final int size = v.getAttributeSize();
-      if (type == GLType.glFloat() && size == 1)
+      if ((type == GLType.glFloat()) && (size == 1))
       {
-        GPUAttributeVec1Float a = prog.getGPUAttributeVec1Float(name);
+        final GPUAttributeVec1Float a = prog.getGPUAttributeVec1Float(name);
         if (a == null)
         {
           ILogger.instance().logError("ATTRIBUTE NOT FOUND " + name);
@@ -291,9 +339,9 @@ public class GPUProgramState
         continue;
       }
   
-      if (type == GLType.glFloat() && size == 2)
+      if ((type == GLType.glFloat()) && (size == 2))
       {
-        GPUAttributeVec2Float a = prog.getGPUAttributeVec2Float(name);
+        final GPUAttributeVec2Float a = prog.getGPUAttributeVec2Float(name);
         if (a == null)
         {
           ILogger.instance().logError("ATTRIBUTE NOT FOUND " + name);
@@ -305,7 +353,7 @@ public class GPUProgramState
         continue;
       }
   
-      if (type == GLType.glFloat() && size == 3)
+      if ((type == GLType.glFloat()) && (size == 3))
       {
         GPUAttribute a = prog.getGPUAttributeVec3Float(name);
         if (a == null)
@@ -324,9 +372,9 @@ public class GPUProgramState
         continue;
       }
   
-      if (type == GLType.glFloat() && size == 4)
+      if ((type == GLType.glFloat()) && (size == 4))
       {
-        GPUAttributeVec4Float a = prog.getGPUAttributeVec4Float(name);
+        final GPUAttributeVec4Float a = prog.getGPUAttributeVec4Float(name);
         if (a == null)
         {
           ILogger.instance().logError("ATTRIBUTE NOT FOUND " + name);
@@ -341,21 +389,22 @@ public class GPUProgramState
     }
   }
 
-  public final boolean isLinkedToProgram()
-  {
-    return _lastProgramUsed != null;
-  }
 
-  public final GPUProgram getLinkedProgram()
-  {
-    return _lastProgramUsed;
-  }
+   public final boolean isLinkedToProgram() {
+      return _lastProgramUsed != null;
+   }
 
-  public final java.util.ArrayList<String> getUniformsNames()
+
+   public final GPUProgram getLinkedProgram() {
+      return _lastProgramUsed;
+   }
+
+
+   public final java.util.ArrayList<String> getUniformsNames()
   {
-    java.util.ArrayList<String> us = new java.util.ArrayList<String>();
+    final java.util.ArrayList<String> us = new java.util.ArrayList<String>();
   
-      for(java.util.HashMap<String, GPUUniformValue> const_iterator it = _uniformValues.iterator(); it != _uniformValues.end(); it++) //state->
+      for(final java.util.HashMap<String, GPUUniformValue> const_iterator it = _uniformValues.iterator(); it != _uniformValues.end(); it++) //state->
       {
         us.add(it.first);
       }
@@ -363,35 +412,38 @@ public class GPUProgramState
     return us;
   }
 
-  public final String description()
+
+   public final String description()
   {
     String desc = "PROGRAM STATE\n==========\n";
   
-    for(java.util.HashMap<String, GPUUniformValue> const_iterator it = _uniformValues.iterator(); it != _uniformValues.end(); it++)
+    for(final java.util.HashMap<String, GPUUniformValue> const_iterator it = _uniformValues.iterator(); it != _uniformValues.end(); it++)
     {
   
-      String name = it.first;
-      GPUUniformValue v = it.second;
+      final String name = it.first;
+      final GPUUniformValue v = it.second;
   
       desc += "Uniform " + name + ":\n";
       desc += v.description() + "\n";
     }
   
-    for(java.util.HashMap<String, attributeEnabledStruct> const_iterator it = _attributesEnabled.iterator(); it != _attributesEnabled.end(); it++)
+    for(final java.util.HashMap<String, attributeEnabledStruct> const_iterator it = _attributesEnabled.iterator(); it != _attributesEnabled.end(); it++)
     {
-      String name = it.first;
+      final String name = it.first;
       desc += "Attribute " + name;
-      if (it.second.value)
+      if (it.second.value) {
          desc += " ENABLED\n";
-      else
+      }
+      else {
          desc += " ENABLED\n";
+      }
     }
   
-    for(java.util.HashMap<String, GPUAttributeValue> const_iterator it = _attributesValues.iterator(); it != _attributesValues.end(); it++)
+    for(final java.util.HashMap<String, GPUAttributeValue> const_iterator it = _attributesValues.iterator(); it != _attributesValues.end(); it++)
     {
   
-      String name = it.first;
-      GPUAttributeValue v = it.second;
+      final String name = it.first;
+      final GPUAttributeValue v = it.second;
   
       desc += "Attribute " + name + ":\n";
       desc += v.description() + "\n";
@@ -400,7 +452,8 @@ public class GPUProgramState
     return desc;
   }
 
-  public final boolean isLinkableToProgram(GPUProgram program)
+
+   public final boolean isLinkableToProgram(final GPUProgram program)
   {
   
     if (program.getGPUAttributesNumber() != _attributesEnabled.size())
@@ -409,7 +462,7 @@ public class GPUProgramState
     }
   
     int nDisabledAtt = 0;
-    for(java.util.HashMap<String, attributeEnabledStruct> const_iterator it = _attributesEnabled.iterator(); it != _attributesEnabled.end(); it++)
+    for(final java.util.HashMap<String, attributeEnabledStruct> const_iterator it = _attributesEnabled.iterator(); it != _attributesEnabled.end(); it++)
     {
       if (it.second.value == false)
       {
@@ -421,7 +474,7 @@ public class GPUProgramState
       }
     }
   
-    if (program.getGPUAttributesNumber() != _attributesValues.size() + nDisabledAtt)
+    if (program.getGPUAttributesNumber() != (_attributesValues.size() + nDisabledAtt))
     {
       return false;
     }
@@ -431,7 +484,7 @@ public class GPUProgramState
       return false;
     }
   
-    for(java.util.HashMap<String, GPUUniformValue> const_iterator it = _uniformValues.iterator(); it != _uniformValues.end(); it++)
+    for(final java.util.HashMap<String, GPUUniformValue> const_iterator it = _uniformValues.iterator(); it != _uniformValues.end(); it++)
     {
       if (program.getGPUUniform(it.first) == null)
       {
@@ -439,7 +492,7 @@ public class GPUProgramState
       }
     }
   
-    for(java.util.HashMap<String, GPUAttributeValue> const_iterator it = _attributesValues.iterator(); it != _attributesValues.end(); it++)
+    for(final java.util.HashMap<String, GPUAttributeValue> const_iterator it = _attributesValues.iterator(); it != _attributesValues.end(); it++)
     {
       if (program.getGPUAttribute(it.first) == null)
       {

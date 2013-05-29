@@ -14,24 +14,28 @@ GPUProgramState::~GPUProgramState(){
 
 void GPUProgramState::clear(){
   _lastProgramUsed = NULL;
-  
+#ifdef C_CODE
   for(std::map<std::string, GPUUniformValue*> ::const_iterator it = _uniformValues.begin();
       it != _uniformValues.end();
       it++){
     delete it->second;
   }
+#endif
   _uniformValues.clear();
   
+#ifdef C_CODE
   for(std::map<std::string, GPUAttributeValue*> ::const_iterator it = _attributesValues.begin();
       it != _attributesValues.end();
       it++){
     delete it->second;
   }
+#endif
   _attributesEnabled.clear();
   _attributesValues.clear();
 }
 
 void GPUProgramState::applyValuesToLinkedProgram() const{
+#ifdef C_CODE
   for(std::map<std::string, GPUUniformValue*> ::const_iterator it = _uniformValues.begin();
       it != _uniformValues.end();
       it++){
@@ -57,6 +61,42 @@ void GPUProgramState::applyValuesToLinkedProgram() const{
     GPUAttributeValue* v = it->second;
     v->setValueToLinkedAttribute();
   }
+#endif
+#ifdef JAVA_CODE
+  {
+    final Iterator it = _uniformValues.entrySet().iterator();
+    while (it.hasNext()) {
+      final Map.Entry pairs = (Map.Entry)it.next();
+      final GPUUniformValue v = (GPUUniformValue) pairs.getValue();
+      v.setValueToLinkedUniform();
+    }
+  }
+  
+  {
+    final Iterator it = _attributesEnabled.entrySet().iterator();
+    while (it.hasNext()) {
+      final Map.Entry pairs = (Map.Entry)it.next();
+      final attributeEnabledStruct a = (attributeEnabledStruct) pairs.getValue();
+      if (a.attribute == null) {
+        ILogger.instance().logError("NO ATTRIBUTE LINKED");
+      }
+      else
+      {
+        a.attribute.setEnable(a.value);
+      }
+    }
+  }
+  
+  
+  {
+    final Iterator it = _attributesValues.entrySet().iterator();
+    while (it.hasNext()) {
+      final Map.Entry pairs = (Map.Entry)it.next();
+      final GPUAttributeValue a = (GPUAttributeValue) pairs.getValue();
+      a.setValueToLinkedAttribute();
+    }
+  }
+#endif
 }
 
 void GPUProgramState::linkToProgram(GPUProgram& prog) const{
@@ -238,6 +278,7 @@ void GPUProgramState::setUniformValue(const std::string& name, double x, double 
 
 void GPUProgramState::setUniformValue(const std::string& name, const MutableMatrix44D* m){
   
+#ifdef C_CODE
   for(std::map<std::string, GPUUniformValue*> ::iterator it = _uniformValues.begin();
       it != _uniformValues.end();
       it++){
@@ -249,11 +290,28 @@ void GPUProgramState::setUniformValue(const std::string& name, const MutableMatr
       return;
     }
   }
+#endif
+#ifdef JAVA_CODE
+  final Iterator it = _uniformValues.entrySet().iterator();
+  while (it.hasNext()) {
+    final Map.Entry pairs = (Map.Entry)it.next();
+    final String thisName =  (String) pairs.getKey();
+    final GPUUniformValue uv = (GPUUniformValue) pairs.getValue();
+    if ((thisName.compareTo(name) == 0) && (uv.getType() == GLType.glMatrix4Float()))
+    {
+      final GPUUniformValueMatrix4FloatStack v = (GPUUniformValueMatrix4FloatStack)uv;
+      v.loadMatrix(m);
+      return;
+    }
+  }
+#endif
   
   setUniformValue(name, new GPUUniformValueMatrix4FloatStack(m));
 }
 
 void GPUProgramState::multiplyUniformValue(const std::string& name, const MutableMatrix44D* m){
+  
+#ifdef C_CODE
   
   for(std::map<std::string, GPUUniformValue*> ::iterator it = _uniformValues.begin();
       it != _uniformValues.end();
@@ -266,6 +324,22 @@ void GPUProgramState::multiplyUniformValue(const std::string& name, const Mutabl
       return;
     }
   }
+  
+#endif
+#ifdef JAVA_CODE
+  final Iterator it = _uniformValues.entrySet().iterator();
+  while (it.hasNext()) {
+    final Map.Entry pairs = (Map.Entry)it.next();
+    final String thisName =  (String) pairs.getKey();
+    final GPUUniformValue uv = (GPUUniformValue) pairs.getValue();
+    if ((thisName.compareTo(name) == 0) && (uv.getType() == GLType.glMatrix4Float()))
+    {
+      final GPUUniformValueMatrix4FloatStack v = (GPUUniformValueMatrix4FloatStack)uv;
+      v.multiplyMatrix(m);
+      return;
+    }
+  }
+#endif
   
   ILogger::instance()->logError("CAN'T MULTIPLY UNLOADED MATRIX");
   
@@ -281,7 +355,8 @@ void GPUProgramState::setAttributeEnabled(const std::string& name, bool enabled)
 
 std::string GPUProgramState::description() const{
   std::string desc = "PROGRAM STATE\n==========\n";
-  
+  //TODO: IMPLEMENT
+#ifdef C_CODE
   for(std::map<std::string, GPUUniformValue*> ::const_iterator it = _uniformValues.begin();
       it != _uniformValues.end();
       it++){
@@ -312,24 +387,34 @@ std::string GPUProgramState::description() const{
     desc += "Attribute " + name + ":\n";
     desc += v->description() + "\n";
   }
-  
+#endif
   return desc;
 }
 
 std::vector<std::string> GPUProgramState::getUniformsNames() const{
   std::vector<std::string> us;
   
+#ifdef C_CODE
     for(std::map<std::string, GPUUniformValue*> ::const_iterator it = /*state->*/_uniformValues.begin();
         it != _uniformValues.end();
         it++){
       us.push_back(it->first);
     }
+#endif
+  
+#ifdef JAVA_CODE
+  final Iterator it = _uniformValues.entrySet().iterator();
+  while (it.hasNext()) {
+    final Map.Entry pairs = (Map.Entry)it.next();
+    us.add(pairs.getKey());
+  }
+#endif
 
   return us;
 }
 
 bool GPUProgramState::isLinkableToProgram(const GPUProgram& program) const{
-  
+#ifdef C_CODE
   if (program.getGPUAttributesNumber() != _attributesEnabled.size()){
     return false;
   }
@@ -371,5 +456,64 @@ bool GPUProgramState::isLinkableToProgram(const GPUProgram& program) const{
   }
   
   return true;
+#endif
+#ifdef JAVA_CODE
+  if (program.getGPUAttributesNumber() != _attributesEnabled.size())
+  {
+    return false;
+  }
+  
+  int nDisabledAtt = 0;
+  {
+    final Iterator it = _attributesEnabled.entrySet().iterator();
+    while (it.hasNext()) {
+      final Map.Entry pairs = (Map.Entry)it.next();
+      final String thisName =  (String) pairs.getKey();
+      final attributeEnabledStruct ae =  (attributeEnabledStruct) pairs.getValue();
+      if (ae.value == false)
+      {
+        nDisabledAtt++;
+      }
+      if (program.getGPUAttribute(thisName) == null)
+      {
+        return false;
+      }
+    }
+  }
+  
+  if (program.getGPUAttributesNumber() != (_attributesValues.size() + nDisabledAtt))
+  {
+    return false;
+  }
+  
+  if (program.getGPUUniformsNumber() != _uniformValues.size())
+  {
+    return false;
+  }
+  
+  {
+    final Iterator it = _uniformValues.entrySet().iterator();
+    while (it.hasNext()) {
+      final Map.Entry pairs = (Map.Entry)it.next();
+      final String thisName =  (String) pairs.getKey();
+      if (program.getGPUUniform(thisName) == null)
+      {
+        return false;
+      }
+    }
+  }
+  
+  {
+    final Iterator it = _attributesValues.entrySet().iterator();
+    while (it.hasNext()) {
+      final Map.Entry pairs = (Map.Entry)it.next();
+      final String thisName =  (String) pairs.getKey();
+      if (program.getGPUAttribute(thisName) == null)
+      {
+        return false;
+      }
+    }
+  }
+#endif
 }
 

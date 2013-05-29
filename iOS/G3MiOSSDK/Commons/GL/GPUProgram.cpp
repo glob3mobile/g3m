@@ -245,7 +245,7 @@ void GPUProgram::onUsed(){
  */
 void GPUProgram::onUnused(){
   //ILogger::instance()->logInfo("GPUProgram %s unused", _name.c_str());
-  
+#ifdef C_CODE
   for (std::map<std::string, GPUUniform*>::iterator iter = _uniforms.begin(); iter != _uniforms.end(); iter++) {
     GPUUniform* u = iter->second;
     u->unset();
@@ -255,6 +255,22 @@ void GPUProgram::onUnused(){
     GPUAttribute* a = iter->second;
     a->unset();
   }
+#endif
+#ifdef JAVA_CODE
+  Iterator it = _uniforms.entrySet().iterator();
+  while (it.hasNext()) {
+    Map.Entry pairs = (Map.Entry)it.next();
+    GPUUniform u = (GPUUniform) pairs.getValue();
+    u.unset();
+  }
+  
+  Iterator it2 = _attributes.entrySet().iterator();
+  while (it2.hasNext()) {
+    Map.Entry pairs = (Map.Entry)it2.next();
+    GPUAttribute a = (GPUUniform) pairs.getValue();
+    a.unset();
+  }
+#endif
 }
 
 /**
@@ -262,6 +278,7 @@ void GPUProgram::onUnused(){
  */
 void GPUProgram::applyChanges(GL* gl){
   //ILogger::instance()->logInfo("GPUProgram %s applying changes", _name.c_str());
+#ifdef C_CODE
   for (std::map<std::string, GPUUniform*>::iterator iter = _uniforms.begin(); iter != _uniforms.end(); iter++) {
     
     GPUUniform* u = iter->second;
@@ -283,4 +300,31 @@ void GPUProgram::applyChanges(GL* gl){
       }
     }
   }
+#endif
+#ifdef JAVA_CODE
+  Iterator it = _uniforms.entrySet().iterator();
+  while (it.hasNext()) {
+    Map.Entry pairs = (Map.Entry)it.next();
+    GPUUniform u = (GPUUniform) pairs.getValue();
+    if (u.wasSet()){
+      u.applyChanges(gl);
+    } else{
+      ILogger.instance().logError("Uniform " + u.getName() + " was not set.");
+    }
+  }
+  
+  Iterator it2 = _attributes.entrySet().iterator();
+  while (it2.hasNext()) {
+    Map.Entry pairs = (Map.Entry)it2.next();
+    GPUAttribute a = (GPUUniform) pairs.getValue();
+    if (a.wasSet()){
+      a.applyChanges(gl);
+    } else{
+      if (a.isEnabled()){
+        ILogger.instance().logError("Attribute " + a.getName() + " was not set but it is enabled.");
+      }
+    }
+  }
+  
+#endif
 }

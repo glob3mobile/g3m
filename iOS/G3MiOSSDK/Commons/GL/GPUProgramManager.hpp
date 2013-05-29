@@ -30,12 +30,13 @@ public:
   
   GPUProgramManager(GL* gl, GPUProgramFactory *factory):_gl(gl), _factory(factory){}
   
-  GPUProgramManager(){
+  ~GPUProgramManager(){
     delete _factory;
-    
+#ifdef C_CODE
     for (std::map<std::string, GPUProgram*>::iterator it = _programs.begin(); it != _programs.end(); ++it){
       delete it->second;
     }
+#endif
   }
   
   GPUProgram* getCompiledProgram(const std::string& name){
@@ -55,11 +56,8 @@ public:
   GPUProgram* getProgram(const std::string& name){
     
     GPUProgram* prog = getCompiledProgram(name);
-    if (prog != NULL){
-      return prog;
-    } else{
+    if (prog == NULL){
       const GPUProgramSources* ps = _factory->get(name);
-      GPUProgram* prog = NULL;
       
       //Compile new Program
       if (ps != NULL){
@@ -72,22 +70,34 @@ public:
           return NULL;
         }
         
-        //_programs[prog->getName()] = prog;
+        _programs[name] = prog;
         
-        _programs.insert ( std::pair<std::string, GPUProgram*>(prog->getName(),prog) );
+        //_programs.insert ( std::pair<std::string, GPUProgram*>(prog->getName(),prog) );
       }
-      return prog;
+      
     }
+    return prog;
   }
   
   GPUProgram* getProgram(const GPUProgramState& state) {
-    
+#ifdef C_CODE
     for(std::map<std::string, GPUProgram*>::const_iterator it = _programs.begin();
         it != _programs.end(); it++){
       if (state.isLinkableToProgram(*it->second)){
         return it->second;
       }
     }
+#endif
+#ifdef JAVA_CODE
+    Iterator it = _programs.entrySet().iterator();
+    while (it.hasNext()) {
+      Map.Entry pairs = (Map.Entry)it.next();
+      GPUProgram p = (GPUProgram) pairs.getValue();
+      if (state.isLinkableToProgram(p)) {
+        return p;
+      }
+    }
+#endif
     
     int WORKING_JM;
     
