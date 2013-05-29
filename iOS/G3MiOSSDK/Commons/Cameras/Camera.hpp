@@ -117,7 +117,7 @@ public:
 /**
  * Class to control the camera.
  */
-class Camera: public GLClient, public SceneGraphNode {
+class Camera: public SceneGraphNode {
 public:
   Camera(const Camera &that):
   _width(that._width),

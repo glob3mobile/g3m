@@ -36,7 +36,7 @@ public:
 };
 
 
-class Mark: public GLClient, public SceneGraphNode {
+class Mark: public SceneGraphNode {
 private:
   /**
    * The text the mark displays.
