@@ -1,4 +1,7 @@
-package org.glob3.mobile.generated; 
+
+
+package org.glob3.mobile.generated;
+
 //
 //  Effects.cpp
 //  G3MiOSSDK
@@ -17,16 +20,13 @@ package org.glob3.mobile.generated;
 //
 
 
-
-
-
-
 //TODO: REMOVE GLCLIENT
 
 //class G3MRenderContext;
 //class G3MContext;
 
-public interface EffectTarget extends GLClient
-{
-  public void dispose();
+public interface EffectTarget
+         extends
+            GLClient {
+   public void dispose();
 }

@@ -30,7 +30,7 @@ public:
   virtual ~EffectTarget() { }
 #endif
 #ifdef JAVA_CODE
-  public void dispose();
+  public void dispose(){ }
 #endif
 };
 
