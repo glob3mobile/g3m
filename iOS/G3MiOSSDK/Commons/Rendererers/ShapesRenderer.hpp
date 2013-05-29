@@ -15,7 +15,7 @@
 #include "GLClient.hpp"
 #include <vector>
 
-class ShapesRenderer : public LeafRenderer, public GLClient {
+class ShapesRenderer : public LeafRenderer {
 private:
   std::vector<Shape*> _shapes;
 
@@ -95,6 +95,10 @@ public:
   void notifyGLClientChildrenParentHasChanged();
   void modifyGLGlobalState(GLGlobalState& GLGlobalState) const;
   void modifyGPUProgramState(GPUProgramState& progState) const;
+  
+  void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode){}
+  bool isInsideCameraFrustum(const G3MRenderContext* rc){ return true;}
+  void modifiyGLState(GLState* state){}
 
 };
 

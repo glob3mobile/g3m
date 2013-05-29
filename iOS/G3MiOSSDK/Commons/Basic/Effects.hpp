@@ -9,7 +9,7 @@
 #ifndef G3MiOSSDK_Effects_hpp
 #define G3MiOSSDK_Effects_hpp
 
-#include "Renderer.hpp"
+
 #include "TimeInterval.hpp"
 #include "ITimer.hpp"
 
@@ -20,6 +20,9 @@
 
 #include "GLClient.hpp"
 //TODO: REMOVE GLCLIENT
+
+class G3MRenderContext;
+class G3MContext;
 
 class EffectTarget :public GLClient{
 public:

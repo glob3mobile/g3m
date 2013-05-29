@@ -21,7 +21,7 @@ class Camera;
 class MarkTouchListener;
 class IFloatBuffer;
 
-class MarksRenderer : public LeafRenderer, public SceneGraphNode {
+class MarksRenderer : public LeafRenderer {
 private:
   const bool         _readyWhenMarksReady;
   std::vector<Mark*> _marks;

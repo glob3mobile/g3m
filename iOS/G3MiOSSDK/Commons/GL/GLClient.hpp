@@ -14,7 +14,7 @@
 
 class GLClient{
 protected:
-  const GLClient* _parent;
+  GLClient* _parent;
   
 public:
   
@@ -49,7 +49,7 @@ public:
    Invoked by parent to change my GLGlobalState and GPUProgramState
    */
   void actualizeGLGlobalState(const GLClient* parent){
-    _parent = parent;
+    _parent = (GLClient*)parent;
     notifyGLClientChildrenParentHasChanged();
     
     GLGlobalState* GLGlobalState = getGLGlobalState();

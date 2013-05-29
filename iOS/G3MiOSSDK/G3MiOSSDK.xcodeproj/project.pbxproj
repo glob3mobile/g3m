@@ -263,6 +263,7 @@
 		D87F26F317130BA80048AD70 /* GPUUniform.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D87BF6DB170F0628004D467D /* GPUUniform.hpp */; };
 		D87F26F517130C020048AD70 /* GPUAttribute.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8715C1F170344FB00CF7BE2 /* GPUAttribute.hpp */; };
 		D881840017560F660062C9FC /* SceneGraphRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D88183FE17560F660062C9FC /* SceneGraphRenderer.cpp */; };
+		D881840117562C2F0062C9FC /* SceneGraphRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D88183FF17560F660062C9FC /* SceneGraphRenderer.hpp */; };
 		D88F1668173CFFF000ED8823 /* GLClient.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D88F1667173CFF5900ED8823 /* GLClient.hpp */; };
 		D89DA21A15FF6C32008CD5F5 /* Image_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = D89DA21815FF6C31008CD5F5 /* Image_iOS.mm */; };
 		D89FBD7D1725444800FFA541 /* MeshShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D89FBD7B1725444800FFA541 /* MeshShape.cpp */; };
@@ -506,6 +507,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D881840117562C2F0062C9FC /* SceneGraphRenderer.hpp in CopyFiles */,
 				D8B9E009174A484500B865B7 /* GLStateTreeNode.hpp in CopyFiles */,
 				D8B9E005174A3CFD00B865B7 /* GLState.hpp in CopyFiles */,
 				D8B9E004174A361C00B865B7 /* SceneGraphNode.hpp in CopyFiles */,

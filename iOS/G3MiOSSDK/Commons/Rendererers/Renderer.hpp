@@ -15,7 +15,9 @@ class G3MRenderContext;
 class G3MEventContext;
 class GLGlobalState;
 
-class Renderer {
+#include "SceneGraphNode.hpp"
+
+class Renderer: public SceneGraphNode {
 public:
   virtual bool isEnable() const = 0;
   

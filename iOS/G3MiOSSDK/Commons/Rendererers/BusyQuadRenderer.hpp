@@ -25,7 +25,7 @@
 //***************************************************************
 
 
-class BusyQuadRenderer : public LeafRenderer, EffectTarget, GLClient {
+class BusyQuadRenderer : public LeafRenderer{
 private:
   double      _degrees;
   //  const std::string _textureFilename;

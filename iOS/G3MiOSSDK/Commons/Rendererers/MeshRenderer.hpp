@@ -19,7 +19,7 @@
 class Mesh;
 
 
-class MeshRenderer : public LeafRenderer, public GLClient {
+class MeshRenderer : public LeafRenderer {
 private:
   std::vector<Mesh*> _meshes;
   bool _dirtyGLGlobalStates;
@@ -79,6 +79,10 @@ public:
   void notifyGLClientChildrenParentHasChanged();
   void modifyGLGlobalState(GLGlobalState& GLGlobalState) const;
   void modifyGPUProgramState(GPUProgramState& progState) const;
+  
+  void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode){}
+  bool isInsideCameraFrustum(const G3MRenderContext* rc){ return true;}
+  void modifiyGLState(GLState* state){}
   
 };
 
