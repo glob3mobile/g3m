@@ -17,10 +17,11 @@
 #include "GLStateTreeNode.hpp"
 #include "TouchEvent.hpp"
 
-#include "GLClient.hpp"
-//TODO: REMOVE GLCLIENT
 
-class SceneGraphNode: public GLClient{
+
+#include "Effects.hpp"
+
+class SceneGraphNode: public EffectTarget{
 private:
   GLStateTreeNode* _lastParentStateNode;
   GLStateTreeNode* _lastStateNode;

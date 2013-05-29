@@ -24,7 +24,7 @@
 //***************************************************************
 
 
-class BusyMeshRenderer : public LeafRenderer, EffectTarget, public SceneGraphNode {
+class BusyMeshRenderer : public LeafRenderer, public SceneGraphNode {
 private:
   Mesh    *_mesh;
   double  _degrees;

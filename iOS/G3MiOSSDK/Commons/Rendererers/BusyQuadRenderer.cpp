@@ -94,12 +94,13 @@ bool BusyQuadRenderer::initMesh(const G3MRenderContext* rc) {
   return true;
 }
 
-
+//TODO: REMOVE???
 void BusyQuadRenderer::render(const G3MRenderContext* rc,
                               const GLGlobalState& parentState) {
   GL* gl = rc->getGL();
 
-  GLGlobalState state(parentState);
+  //GLGlobalState state(parentState);
+  GLGlobalState state;
   state.enableBlend();
 
   if (_quadMesh == NULL){
@@ -109,14 +110,6 @@ void BusyQuadRenderer::render(const G3MRenderContext* rc,
   }
 
   // init modelview matrix
-  int currentViewport[4];
-  gl->getViewport(currentViewport);
-  const int halfWidth = currentViewport[2] / 2;
-  const int halfHeight = currentViewport[3] / 2;
-  MutableMatrix44D M = MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth, halfWidth,
-                                                                            -halfHeight, halfHeight,
-                                                                            -halfWidth, halfWidth);
-  
   if (!_projectionMatrix.isValid()){
     // init modelview matrix
     int currentViewport[4];

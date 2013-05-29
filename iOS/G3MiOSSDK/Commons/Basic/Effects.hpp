@@ -18,7 +18,10 @@
 
 #include <vector>
 
-class EffectTarget {
+#include "GLClient.hpp"
+//TODO: REMOVE GLCLIENT
+
+class EffectTarget :public GLClient{
 public:
 #ifdef C_CODE
   virtual ~EffectTarget() { }
