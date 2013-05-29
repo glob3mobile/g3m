@@ -62,10 +62,17 @@ public:
 //  GPUProgramState * createGPUProgramState(const G3MRenderContext *rc, const GPUProgramState *parentState);
   
   //Idle if this is not a drawable client
-  void getGLGlobalStateAndGPUProgramState(GLGlobalState** GLGlobalState, GPUProgramState** progState){
+//  void getGLGlobalStateAndGPUProgramState(GLGlobalState** GLGlobalState, GPUProgramState** progState){
+//    _programState.clear();
+////    (*GLGlobalState) = &_GLGlobalState;
+////    (*progState) = &_programState;
+//  }
+  GLGlobalState* getGLGlobalState(){
+    return &_GLGlobalState;
+  }
+  GPUProgramState* getGPUProgramState(){
     _programState.clear();
-    (*GLGlobalState) = &_GLGlobalState;
-    (*progState) = &_programState;
+    return &_programState;
   }
 
   void modifyGLGlobalState(GLGlobalState& GLGlobalState) const;

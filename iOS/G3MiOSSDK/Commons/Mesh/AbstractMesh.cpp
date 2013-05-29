@@ -181,11 +181,11 @@ void AbstractMesh::modifyGPUProgramState(GPUProgramState& progState) const{
   }
 }
 
-void AbstractMesh::getGLGlobalStateAndGPUProgramState(GLGlobalState** GLGlobalState, GPUProgramState** progState){
-  _progState.clear();
-  (*GLGlobalState) = &_GLGlobalState;
-  (*progState) = &_progState;
-}
+//void AbstractMesh::getGLGlobalStateAndGPUProgramState(GLGlobalState** GLGlobalState, GPUProgramState** progState){
+//  _progState.clear();
+////  (*GLGlobalState) = &_GLGlobalState;
+////  (*progState) = &_progState;
+//}
 
 //Scene Graph Node
 //void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode){

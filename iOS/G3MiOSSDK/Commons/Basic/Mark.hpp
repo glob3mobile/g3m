@@ -247,7 +247,14 @@ public:
   double getMinDistanceToCamera();
   
   //Drawable client
-  void getGLGlobalStateAndGPUProgramState(GLGlobalState** GLGlobalState, GPUProgramState** progState);
+  GLGlobalState* getGLGlobalState(){
+    return &_GLGlobalState;
+  }
+  GPUProgramState* getGPUProgramState(){
+    _progState.clear();
+    return &_progState;
+  }
+//  void getGLGlobalStateAndGPUProgramState(GLGlobalState** GLGlobalState, GPUProgramState** progState);
   void modifyGLGlobalState(GLGlobalState& GLGlobalState) const;
   void modifyGPUProgramState(GPUProgramState& progState) const;
   

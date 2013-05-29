@@ -472,11 +472,11 @@ double Mark::getMinDistanceToCamera() {
   return _minDistanceToCamera;
 }
 
-void Mark::getGLGlobalStateAndGPUProgramState(GLGlobalState** GLGlobalState, GPUProgramState** progState){
-  _progState.clear();
-  (*GLGlobalState) = &_GLGlobalState;
-  (*progState) = &_progState;
-}
+//void Mark::getGLGlobalStateAndGPUProgramState(GLGlobalState** GLGlobalState, GPUProgramState** progState){
+//  _progState.clear();
+////  (*GLGlobalState) = &_GLGlobalState;
+////  (*progState) = &_progState;
+//}
 
 void Mark::modifyGLGlobalState(GLGlobalState& GLGlobalState) const{
   GLGlobalState.disableDepthTest();

@@ -22,10 +22,18 @@ public:
   
   virtual ~GLClient(){}
   
-  //Idle if this is not a drawable client
-  virtual void getGLGlobalStateAndGPUProgramState(GLGlobalState** GLGlobalState, GPUProgramState** progState){
-    (*GLGlobalState) = NULL;
-    (*progState) = NULL;
+//  //Idle if this is not a drawable client
+//  virtual void getGLGlobalStateAndGPUProgramState(GLGlobalState** GLGlobalState, GPUProgramState** progState){
+//    (*GLGlobalState) = NULL;
+//    (*progState) = NULL;
+//  }
+  
+  virtual GLGlobalState* getGLGlobalState(){
+    return NULL;
+  }
+  
+  virtual GPUProgramState* getGPUProgramState(){
+    return NULL;
   }
   
   virtual void notifyGLClientChildrenParentHasChanged(){
@@ -44,9 +52,9 @@ public:
     _parent = parent;
     notifyGLClientChildrenParentHasChanged();
     
-    GLGlobalState* GLGlobalState;
-    GPUProgramState* programState;
-    getGLGlobalStateAndGPUProgramState(&GLGlobalState, &programState);
+    GLGlobalState* GLGlobalState = getGLGlobalState();
+    GPUProgramState* programState = getGPUProgramState();
+//    getGLGlobalStateAndGPUProgramState(&GLGlobalState, &programState);
     if (GLGlobalState != NULL && programState != NULL){
       //We are a drawable client
       modifyGLGlobalStatesHierarchy(*GLGlobalState, *programState);
