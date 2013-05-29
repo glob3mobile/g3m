@@ -19,7 +19,9 @@ package org.glob3.mobile.generated;
 
 
 
-public interface EffectTarget
+//TODO: REMOVE GLCLIENT
+
+public interface EffectTarget extends GLClient
 {
   public void dispose();
 }

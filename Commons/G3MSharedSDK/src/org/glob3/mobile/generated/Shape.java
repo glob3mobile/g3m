@@ -23,8 +23,7 @@ package org.glob3.mobile.generated;
 //class ShapePendingEffect;
 //class GPUProgramState;
 
-//C++ TO JAVA CONVERTER TODO TASK: Multiple inheritance is not available in Java:
-public abstract class Shape implements EffectTarget, GLClient
+public abstract class Shape implements EffectTarget
 {
   private Geodetic3D _position;
 

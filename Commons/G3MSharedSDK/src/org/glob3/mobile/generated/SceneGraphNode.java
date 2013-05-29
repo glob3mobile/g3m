@@ -19,9 +19,10 @@ package org.glob3.mobile.generated;
 
 
 
-//TODO: REMOVE GLCLIENT
 
-public abstract class SceneGraphNode extends GLClient
+
+
+public abstract class SceneGraphNode implements EffectTarget
 {
   private GLStateTreeNode _lastParentStateNode;
   private GLStateTreeNode _lastStateNode;

@@ -102,11 +102,14 @@ public abstract class BusyQuadRenderer extends LeafRenderer implements EffectTar
     return true;
   }
 
+
+  //TODO: REMOVE???
   public final void render(G3MRenderContext rc, GLGlobalState parentState)
   {
     GL gl = rc.getGL();
   
-    GLGlobalState state = new GLGlobalState(parentState);
+    //GLGlobalState state(parentState);
+    GLGlobalState state = new GLGlobalState();
     state.enableBlend();
   
     if (_quadMesh == null)
@@ -118,12 +121,6 @@ public abstract class BusyQuadRenderer extends LeafRenderer implements EffectTar
     }
   
     // init modelview matrix
-    int[] currentViewport = new int[4];
-    gl.getViewport(currentViewport);
-    final int halfWidth = currentViewport[2] / 2;
-    final int halfHeight = currentViewport[3] / 2;
-    MutableMatrix44D M = MutableMatrix44D.createOrthographicProjectionMatrix(-halfWidth, halfWidth, -halfHeight, halfHeight, -halfWidth, halfWidth);
-  
     if (!_projectionMatrix.isValid())
     {
       // init modelview matrix
