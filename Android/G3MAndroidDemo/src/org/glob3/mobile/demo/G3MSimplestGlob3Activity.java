@@ -34,7 +34,6 @@ import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.WMSLayer;
 import org.glob3.mobile.generated.WMSServerVersion;
 import org.glob3.mobile.generated.WidgetUserData;
-import org.glob3.mobile.specific.CameraActivityListener_Android;
 import org.glob3.mobile.specific.Downloader_Android;
 import org.glob3.mobile.specific.G3MBaseActivity;
 import org.glob3.mobile.specific.G3MWidget_Android;
@@ -76,7 +75,7 @@ public class G3MSimplestGlob3Activity
                saveInBackground);
 
       final IThreadUtils threadUtils = new ThreadUtils_Android(_widgetAndroid);
-      final ICameraActivityListener cameraActivityListener = new CameraActivityListener_Android();
+      final ICameraActivityListener cameraActivityListener = null;
 
       final Planet planet = Planet.createEarth();
 
