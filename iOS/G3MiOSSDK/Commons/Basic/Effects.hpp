@@ -26,7 +26,7 @@ public:
 #ifdef C_CODE
   virtual ~EffectTarget() { }
 #else
-  void dispose(){ }
+  void dispose();
 #endif
 };
 
