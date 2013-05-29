@@ -78,6 +78,17 @@ public class TrailsRenderer extends LeafRenderer
     }
   }
 
+  public final void rawRender(G3MRenderContext rc, GLStateTreeNode myStateTreeNode)
+  {
+  }
+  public final boolean isInsideCameraFrustum(G3MRenderContext rc)
+  {
+     return true;
+  }
+  public final void modifiyGLState(GLState state)
+  {
+  }
+
 }
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#pragma mark TrailsRenderer

@@ -26,8 +26,7 @@ package org.glob3.mobile.generated;
 //***************************************************************
 
 
-//C++ TO JAVA CONVERTER TODO TASK: Multiple inheritance is not available in Java:
-public abstract class BusyQuadRenderer extends LeafRenderer implements EffectTarget, GLClient
+public abstract class BusyQuadRenderer extends LeafRenderer
 {
   private double _degrees;
   //  const std::string _textureFilename;

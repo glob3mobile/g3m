@@ -24,8 +24,7 @@ package org.glob3.mobile.generated;
 //class MarkTouchListener;
 //class IFloatBuffer;
 
-//C++ TO JAVA CONVERTER TODO TASK: Multiple inheritance is not available in Java:
-public class MarksRenderer extends LeafRenderer, SceneGraphNode
+public class MarksRenderer extends LeafRenderer
 {
   private final boolean _readyWhenMarksReady;
   private java.util.ArrayList<Mark> _marks = new java.util.ArrayList<Mark>();

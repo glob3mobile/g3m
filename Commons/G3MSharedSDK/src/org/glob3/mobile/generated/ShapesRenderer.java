@@ -17,8 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-//C++ TO JAVA CONVERTER TODO TASK: Multiple inheritance is not available in Java:
-public class ShapesRenderer extends LeafRenderer, GLClient
+public class ShapesRenderer extends LeafRenderer
 {
   private java.util.ArrayList<Shape> _shapes = new java.util.ArrayList<Shape>();
 
@@ -154,6 +153,17 @@ public class ShapesRenderer extends LeafRenderer, GLClient
   
     progState.setAttributeEnabled("TextureCoord", false);
     progState.setAttributeEnabled("Color", false);
+  }
+
+  public final void rawRender(G3MRenderContext rc, GLStateTreeNode myStateTreeNode)
+  {
+  }
+  public final boolean isInsideCameraFrustum(G3MRenderContext rc)
+  {
+     return true;
+  }
+  public final void modifiyGLState(GLState state)
+  {
   }
 
 }

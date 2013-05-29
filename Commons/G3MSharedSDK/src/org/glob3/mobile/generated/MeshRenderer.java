@@ -22,8 +22,7 @@ package org.glob3.mobile.generated;
 //class Mesh;
 
 
-//C++ TO JAVA CONVERTER TODO TASK: Multiple inheritance is not available in Java:
-public class MeshRenderer extends LeafRenderer, GLClient
+public class MeshRenderer extends LeafRenderer
 {
   private java.util.ArrayList<Mesh> _meshes = new java.util.ArrayList<Mesh>();
   private boolean _dirtyGLGlobalStates;
@@ -149,6 +148,17 @@ public class MeshRenderer extends LeafRenderer, GLClient
     progState.setUniformValue("PointSize", (float)1.0);
     progState.setUniformValue("ScaleTexCoord", new Vector2D(1.0,1.0));
     progState.setUniformValue("TranslationTexCoord", new Vector2D(0.0,0.0));
+  }
+
+  public final void rawRender(G3MRenderContext rc, GLStateTreeNode myStateTreeNode)
+  {
+  }
+  public final boolean isInsideCameraFrustum(G3MRenderContext rc)
+  {
+     return true;
+  }
+  public final void modifiyGLState(GLState state)
+  {
   }
 
 }

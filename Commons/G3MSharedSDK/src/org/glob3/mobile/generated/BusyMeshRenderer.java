@@ -27,8 +27,7 @@ package org.glob3.mobile.generated;
 //***************************************************************
 
 
-//C++ TO JAVA CONVERTER TODO TASK: Multiple inheritance is not available in Java:
-public class BusyMeshRenderer extends LeafRenderer, SceneGraphNode
+public class BusyMeshRenderer extends LeafRenderer
 {
   private Mesh _mesh;
   private double _degrees;

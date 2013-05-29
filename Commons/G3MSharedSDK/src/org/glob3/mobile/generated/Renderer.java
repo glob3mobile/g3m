@@ -14,7 +14,8 @@ package org.glob3.mobile.generated;
 //class G3MEventContext;
 //class GLGlobalState;
 
-public abstract class Renderer
+
+public abstract class Renderer extends SceneGraphNode
 {
   public abstract boolean isEnable();
 
