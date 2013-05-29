@@ -30,7 +30,7 @@ public:
   virtual ~EffectTarget() { }
 #endif
 #ifdef JAVA_CODE
-  public void isEffectTarget() { return true;} //CONVERSOR GENERATE ABSTRACT CLASS INSTEAD OF INTERFACE
+  public bool isEffectTarget() { return true;} //CONVERSOR GENERATE ABSTRACT CLASS INSTEAD OF INTERFACE
   public void dispose(){ }
 #endif
 };
