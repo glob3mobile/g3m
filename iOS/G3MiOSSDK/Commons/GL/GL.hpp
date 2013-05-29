@@ -38,8 +38,8 @@ private:
   std::list<const IGLTextureId*> _texturesIdBag;
   long                           _texturesIdAllocationCounter;
   
-//  GLGlobalState *_currentState;
-//  GPUProgram* _currentGPUProgram;
+  //  GLGlobalState *_currentState;
+  //  GPUProgram* _currentGPUProgram;
   
   inline void loadModelView();
   
@@ -47,10 +47,10 @@ private:
   
   const bool _verbose;
   
-//  void setGLGlobalState(const GLGlobalState& state);
-//  void setProgramState(GPUProgramManager& progManager, const GPUProgramState& progState);
-//  
-//  void applyGLGlobalStateAndGPUProgramState(const GLGlobalState& state, GPUProgramManager& progManager, const GPUProgramState& progState);
+  //  void setGLGlobalState(const GLGlobalState& state);
+  //  void setProgramState(GPUProgramManager& progManager, const GPUProgramState& progState);
+  //
+  //  void applyGLGlobalStateAndGPUProgramState(const GLGlobalState& state, GPUProgramManager& progManager, const GPUProgramState& progState);
   
 public:
   
@@ -60,9 +60,9 @@ public:
   _nativeGL(nativeGL),
   _verbose(verbose),
   _texturesIdAllocationCounter(0)
-//  _program(NULL),
-//  _currentState(NULL),
-//  _currentGPUProgram(NULL)
+  //  _program(NULL),
+  //  _currentState(NULL),
+  //  _currentGPUProgram(NULL)
   {
     //Init Constants
     GLCullFace::init(_nativeGL);
@@ -79,7 +79,7 @@ public:
     GLVariable::init(_nativeGL);
     GLError::init(_nativeGL);
     
-//    _currentState = GLGlobalState::newDefault(); //Init after constants
+    //    _currentState = GLGlobalState::newDefault(); //Init after constants
   }
   
   void clearScreen(const GLGlobalState& state);
@@ -95,7 +95,8 @@ public:
   void drawArrays(int mode,
                   int first,
                   int count, const GLGlobalState& state,
-                  GPUProgramManager& progManager,const GPUProgramState* gpuState);
+                  GPUProgramManager& progManager,
+                  const GPUProgramState* gpuState);
   
   void drawArrays(int mode,
                   int first,
@@ -208,7 +209,7 @@ public:
     return _nativeGL->getActiveAttribute(program, i);
   }
   
-//  GLGlobalState* getCurrentState() const{ return _currentState;}
+  //  GLGlobalState* getCurrentState() const{ return _currentState;}
   
   void useProgram(GPUProgram* program) ;
   
