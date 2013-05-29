@@ -23,7 +23,6 @@ package org.glob3.mobile.generated;
 //class IStorage;
 //class IDownloader;
 //class IThreadUtils;
-//class ICameraActivityListener;
 //class Planet;
 //class ICameraConstrainer;
 //class CameraRenderer;

@@ -679,9 +679,12 @@ public class G3MWidget
     if (!handled)
     {
       handled = _cameraRenderer.onTouchEvent(ec, touchEvent);
-      if(handled && _cameraActivityListener != null)
+      if (handled)
       {
-        _cameraActivityListener.touchEventHandled();
+        if (_cameraActivityListener != null)
+        {
+          _cameraActivityListener.touchEventHandled();
+        }
       }
     }
   }

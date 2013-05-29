@@ -106,11 +106,6 @@ public abstract class IG3MBuilder
    */
   private ICameraActivityListener getCameraActivityListener()
   {
-    if (_cameraActivityListener == null)
-    {
-      _cameraActivityListener = createDefaultCameraActivityListener();
-    }
-  
     return _cameraActivityListener;
   }
 
@@ -403,7 +398,6 @@ public abstract class IG3MBuilder
   protected abstract IThreadUtils createDefaultThreadUtils();
   protected abstract IStorage createDefaultStorage();
   protected abstract IDownloader createDefaultDownloader();
-  protected abstract ICameraActivityListener createDefaultCameraActivityListener();
 
 
   public IG3MBuilder()
