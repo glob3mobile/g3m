@@ -23,6 +23,7 @@ class GLState{
   
   GPUProgramState* _programState;
   GLGlobalState*   _globalState;
+  const bool _owner;
   
   void setProgramState(GL* gl, GPUProgramManager& progManager);
   
@@ -30,11 +31,19 @@ public:
   
   GLState():
   _programState(new GPUProgramState()),
-  _globalState(new GLGlobalState()){}
+  _globalState(new GLGlobalState()),
+  _owner(true){}
   
   //For debugging purposes only
   GLState(GLGlobalState*   globalState,
-          GPUProgramState* programState):_programState(programState), _globalState(globalState){}
+          GPUProgramState* programState):_programState(programState), _globalState(globalState), _owner(false){}
+  
+  ~GLState(){
+    if (_owner){
+      delete _programState;
+      delete _globalState;
+    }
+  }
   
   void applyGlobalStateOnGPU(GL* gl);
   
@@ -54,8 +63,8 @@ public:
     }
   }
   
-  static GLGlobalState createCopyOfCurrentGLGlobalState(){
-    return GLGlobalState(_currentGPUGlobalState);
+  static GLGlobalState* createCopyOfCurrentGLGlobalState(){
+    return _currentGPUGlobalState.createCopy();
   }
   
 //  static const GLGlobalState* getCurrentGLGlobalState() {

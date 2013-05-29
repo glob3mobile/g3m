@@ -126,7 +126,7 @@ void GPUProgram::getVariables(GL* gl){
 }
 
 GPUUniform* GPUProgram::getGPUUniform(const std::string name) const{
-  std::map<std::string, GPUUniform*> ::const_iterator it = _uniforms.find(name);
+  std::map<std::string, GPUUniform*>::const_iterator it = _uniforms.find(name);
   if (it != _uniforms.end()){
     return it->second;
   } else{
@@ -180,7 +180,7 @@ GPUUniformMatrix4Float* GPUProgram::getGPUUniformMatrix4Float(const std::string 
 }
 
 GPUAttribute* GPUProgram::getGPUAttribute(const std::string name) const{
-  std::map<std::string, GPUAttribute*> ::const_iterator it = _attributes.find(name);
+  std::map<std::string, GPUAttribute*>::const_iterator it = _attributes.find(name);
   if (it != _attributes.end()){
     return it->second;
   } else{

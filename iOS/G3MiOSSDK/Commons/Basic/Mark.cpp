@@ -531,6 +531,8 @@ void Mark::modifyGPUProgramState(GPUProgramState& progState) const{
 }
 
 bool Mark::isInsideCameraFrustum(const G3MRenderContext* rc){
+  _renderedMark = false;
+  
   const Planet* planet = rc->getPlanet();
   
   const Vector3D* markPosition = getCartesianPosition(planet);
@@ -556,7 +558,9 @@ bool Mark::isInsideCameraFrustum(const G3MRenderContext* rc){
   }
   
   //Checking with frustum
-  return rc->getCurrentCamera()->getFrustumInModelCoordinates()->contains(*_cartesianPosition);
+  
+  _renderedMark = rc->getCurrentCamera()->getFrustumInModelCoordinates()->contains(*_cartesianPosition);
+  return _renderedMark;
 }
 
 void Mark::rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode){

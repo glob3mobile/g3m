@@ -158,9 +158,9 @@ class GPUAttributeValueVecFloat: public GPUAttributeValue{
   int _timeStamp;
 public:
   GPUAttributeValueVecFloat(IFloatBuffer* buffer, int attributeSize, int arrayElementSize, int index, int stride, bool normalized):
+  GPUAttributeValue(GLType::glFloat(), attributeSize, arrayElementSize, index, stride, normalized),
   _buffer(buffer),
-  _timeStamp(buffer->timestamp()),
-  GPUAttributeValue(GLType::glFloat(), attributeSize, arrayElementSize, index, stride, normalized){}
+  _timeStamp(buffer->timestamp()){}
   
   void setAttribute(GL* gl, const int id) const{
     if (_index != 0){

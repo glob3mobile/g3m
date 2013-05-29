@@ -29,15 +29,21 @@ GLStateTreeNode* GLStateTreeNode::getChildNodeForSGNode(SceneGraphNode* node) co
 }
 
 GLStateTreeNode::~GLStateTreeNode(){
+#ifdef C_CODE
   for (std::vector<GLStateTreeNode*>::iterator it = _children.begin(); it != _children.end(); it++) {
     delete (*it);
   }
   delete _state;
+#endif
 }
 
 std::list<SceneGraphNode*> GLStateTreeNode::getHierachy() const{
   std::list<SceneGraphNode*> h;
+#ifdef C_CODE
   const GLStateTreeNode* ancestor = this;
+#else
+  GLStateTreeNode* ancestor = this;
+#endif
   while (ancestor != NULL) {
     h.push_front(ancestor->getSGNode());
     ancestor = ancestor->_parent;
@@ -63,11 +69,17 @@ GLState* GLStateTreeNode::getGLState() {
 
 void GLStateTreeNode::prune(SceneGraphNode* sgNode){
   for (std::vector<GLStateTreeNode*>::iterator it = _children.begin(); it != _children.end(); it++) {
-    (*it)->prune(sgNode);
-    
-    if ((*it)->_sgNode == sgNode){
+    GLStateTreeNode* child = (*it);
+    child->prune(sgNode);
+
+    if (child->_sgNode == sgNode){
+#ifdef C_CODE
       delete (*it);
       _children.erase(it);
+#endif
+#ifdef JAVA_CODE
+      _children.remove(child);
+#endif
     }
   }
 }

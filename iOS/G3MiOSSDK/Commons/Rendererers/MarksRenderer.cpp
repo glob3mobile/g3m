@@ -216,6 +216,10 @@ void MarksRenderer::onTouchEventRecived(const G3MEventContext* ec, const TouchEv
           continue;
         }
         
+        if (!mark->isRendered()){
+          continue;
+        }
+        
         const int textureWidth = mark->getTextureWidth();
         if (textureWidth <= 0) {
           continue;

@@ -140,12 +140,13 @@ const IGLTextureId* GL::uploadTexture(const IImage* image,
     int texture2D = GLTextureType::texture2D();
     
 //    GLGlobalState state(*GLState::getCurrentGLGlobalState());
-    GLGlobalState state = GLState::createCopyOfCurrentGLGlobalState();
-    state.setPixelStoreIAlignmentUnpack(1);
-    state.bindTexture(texId);
+    GLGlobalState* state = GLState::createCopyOfCurrentGLGlobalState();
+    state->setPixelStoreIAlignmentUnpack(1);
+    state->bindTexture(texId);
     
-    GLState glState((GLGlobalState*)&state, NULL);
+    GLState glState(state, NULL);
     glState.applyGlobalStateOnGPU(this);
+    delete state;
     
 //    setGLGlobalState(state);
     

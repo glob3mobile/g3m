@@ -60,6 +60,26 @@ private:
   float _clearColorB;
   float _clearColorA;
   
+  GLGlobalState(const GLGlobalState& parentState) :
+  _depthTest(parentState._depthTest),
+  _blend(parentState._blend),
+  _cullFace(parentState._cullFace),
+  _culledFace(parentState._culledFace),
+  _lineWidth(parentState._lineWidth),
+  _polygonOffsetFactor(parentState._polygonOffsetFactor),
+  _polygonOffsetUnits(parentState._polygonOffsetUnits),
+  _polygonOffsetFill(parentState._polygonOffsetFill),
+  _blendDFactor(parentState._blendDFactor),
+  _blendSFactor(parentState._blendSFactor),
+  _boundTextureId(parentState._boundTextureId),
+  _pixelStoreIAlignmentUnpack(parentState._pixelStoreIAlignmentUnpack),
+  _clearColorR(parentState._clearColorR),
+  _clearColorG(parentState._clearColorG),
+  _clearColorB(parentState._clearColorB),
+  _clearColorA(parentState._clearColorA)
+  {
+  }
+  
 public:
   
   GLGlobalState() :
@@ -86,25 +106,31 @@ public:
     return new GLGlobalState();
   }
   
-//  explicit GLGlobalState(const GLGlobalState& parentState) :
-//  _depthTest(parentState._depthTest),
-//  _blend(parentState._blend),
-//  _cullFace(parentState._cullFace),
-//  _culledFace(parentState._culledFace),
-//  _lineWidth(parentState._lineWidth),
-//  _polygonOffsetFactor(parentState._polygonOffsetFactor),
-//  _polygonOffsetUnits(parentState._polygonOffsetUnits),
-//  _polygonOffsetFill(parentState._polygonOffsetFill),
-//  _blendDFactor(parentState._blendDFactor),
-//  _blendSFactor(parentState._blendSFactor),
-//  _boundTextureId(parentState._boundTextureId),
-//  _pixelStoreIAlignmentUnpack(parentState._pixelStoreIAlignmentUnpack),
-//  _clearColorR(parentState._clearColorR),
-//  _clearColorG(parentState._clearColorG),
-//  _clearColorB(parentState._clearColorB),
-//  _clearColorA(parentState._clearColorA)
-//  {
-//  }
+  GLGlobalState* createCopy(){
+    return new GLGlobalState(*this);
+  }
+  
+  
+  
+  //  explicit GLGlobalState(const GLGlobalState& parentState) :
+  //  _depthTest(parentState._depthTest),
+  //  _blend(parentState._blend),
+  //  _cullFace(parentState._cullFace),
+  //  _culledFace(parentState._culledFace),
+  //  _lineWidth(parentState._lineWidth),
+  //  _polygonOffsetFactor(parentState._polygonOffsetFactor),
+  //  _polygonOffsetUnits(parentState._polygonOffsetUnits),
+  //  _polygonOffsetFill(parentState._polygonOffsetFill),
+  //  _blendDFactor(parentState._blendDFactor),
+  //  _blendSFactor(parentState._blendSFactor),
+  //  _boundTextureId(parentState._boundTextureId),
+  //  _pixelStoreIAlignmentUnpack(parentState._pixelStoreIAlignmentUnpack),
+  //  _clearColorR(parentState._clearColorR),
+  //  _clearColorG(parentState._clearColorG),
+  //  _clearColorB(parentState._clearColorB),
+  //  _clearColorA(parentState._clearColorA)
+  //  {
+  //  }
   
   ~GLGlobalState() {}
   

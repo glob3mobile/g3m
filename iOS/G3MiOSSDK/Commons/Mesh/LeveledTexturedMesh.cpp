@@ -35,7 +35,7 @@ GLGlobalState* LazyTextureMapping::bind(const G3MRenderContext* rc, const GLGlob
   progState.setAttributeEnabled("TextureCoord", true);
   progState.setUniformValue("EnableTexture", true);
   
-  GLGlobalState *state = new GLGlobalState(parentState);
+  GLGlobalState *state = NULL; //new GLGlobalState(parentState);
   //state->enableTextures();
 
 //  state->enableTexture2D();

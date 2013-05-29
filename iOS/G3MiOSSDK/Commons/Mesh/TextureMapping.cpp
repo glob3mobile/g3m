@@ -17,7 +17,9 @@
 
 GLGlobalState* SimpleTextureMapping::bind(const G3MRenderContext* rc, const GLGlobalState& parentState, GPUProgramState& progState) const {
 
-  GLGlobalState* state= new GLGlobalState(parentState);
+  //GLGlobalState* state= new GLGlobalState(parentState);
+  GLGlobalState* state = NULL;
+  
   if (_texCoords != NULL) {
     
     

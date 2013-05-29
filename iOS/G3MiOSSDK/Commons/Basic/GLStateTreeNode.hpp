@@ -22,7 +22,13 @@ class GLStateTreeNode{
 protected:
   SceneGraphNode* _sgNode;
   std::vector<GLStateTreeNode*> _children;  //OTHER IMPLEMENTATIONS MAY HAVE ONLY ONE CHILD (FOR PERFORMANCE)
+  
+#ifdef C_CODE
   const GLStateTreeNode* const _parent;
+#endif
+#ifdef JAVA_CODE
+  protected final GLStateTreeNode _parent;
+#endif
   GLState* _state;
 
   friend class GLStateTree; //Tree can create nodes
