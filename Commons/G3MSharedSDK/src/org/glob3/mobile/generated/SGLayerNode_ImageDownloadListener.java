@@ -1,7 +1,4 @@
 package org.glob3.mobile.generated; 
-//#include "G3MError.hpp"
-//#include "G3MError.hpp"
-
 //#define TEXTURES_DOWNLOAD_PRIORITY 1000000
 
 

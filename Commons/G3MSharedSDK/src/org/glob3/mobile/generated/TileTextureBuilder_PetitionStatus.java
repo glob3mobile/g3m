@@ -1,8 +1,4 @@
 package org.glob3.mobile.generated; 
-//#include "G3MError.hpp"
-//#include "G3MError.hpp"
-
-
 public enum TileTextureBuilder_PetitionStatus
 {
   STATUS_PENDING,

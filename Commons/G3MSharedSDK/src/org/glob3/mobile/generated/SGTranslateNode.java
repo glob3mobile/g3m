@@ -23,6 +23,8 @@ public class SGTranslateNode extends SGNode
   private final double _y;
   private final double _z;
 
+  private MutableMatrix44D _translationMatrix = new MutableMatrix44D();
+
 
   public SGTranslateNode(String id, String sId, double x, double y, double z)
   {
@@ -30,18 +32,39 @@ public class SGTranslateNode extends SGNode
      _x = x;
      _y = y;
      _z = z;
+     _translationMatrix = new MutableMatrix44D(MutableMatrix44D.createTranslationMatrix(_x, _y, _z));
 
   }
 
-  public final GLState createState(G3MRenderContext rc, GLState parentState)
+//  GLGlobalState* createState(const G3MRenderContext* rc,
+//                       const GLGlobalState& parentState);
+//  
+//  GPUProgramState* createGPUProgramState(const G3MRenderContext* rc,
+//                                         const GPUProgramState* parentState);
+
+
+  //GLGlobalState* SGTranslateNode::createState(const G3MRenderContext* rc,
+  //                     const GLGlobalState& parentState) {
+  //  return NULL;
+  //}
+  //
+  //GPUProgramState* SGTranslateNode::createGPUProgramState(const G3MRenderContext* rc,
+  //                                               const GPUProgramState* parentState){
+  //  
+  //  GPUProgramState* progState = new GPUProgramState(parentState);
+  //  progState->multiplyUniformValue("Modelview", MutableMatrix44D::createTranslationMatrix(_x, _y, _z));
+  //  return progState;
+  //  
+  //}
+  
+  public final void modifyGLGlobalState(GLGlobalState GLGlobalState)
   {
   
-    GLState state = new GLState(parentState);
-  
-    state.multiplyModelViewMatrix(MutableMatrix44D.createTranslationMatrix(_x, _y, _z));
-    //SGNode::prepareRender(rc, state);
-  
-    return state;
+  }
+
+  public final void modifyGPUProgramState(GPUProgramState progState)
+  {
+    progState.multiplyUniformValue("Modelview", _translationMatrix);
   }
 
 }

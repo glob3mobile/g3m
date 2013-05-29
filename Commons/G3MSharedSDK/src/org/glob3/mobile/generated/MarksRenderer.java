@@ -17,15 +17,15 @@ package org.glob3.mobile.generated;
 
 
 
-//#include "G3MError.hpp"
-//#include "G3MError.hpp"
+
 
 //class Mark;
 //class Camera;
 //class MarkTouchListener;
 //class IFloatBuffer;
 
-public class MarksRenderer extends LeafRenderer
+//C++ TO JAVA CONVERTER TODO TASK: Multiple inheritance is not available in Java:
+public class MarksRenderer extends LeafRenderer, SceneGraphNode
 {
   private final boolean _readyWhenMarksReady;
   private java.util.ArrayList<Mark> _marks = new java.util.ArrayList<Mark>();
@@ -38,7 +38,7 @@ public class MarksRenderer extends LeafRenderer
 
   private long _downloadPriority;
 
-  private GPUProgramState _programState = new GPUProgramState();
+  private IFloatBuffer _billboardTexCoord;
 
 
   public MarksRenderer(boolean readyWhenMarksReady)
@@ -49,7 +49,6 @@ public class MarksRenderer extends LeafRenderer
      _markTouchListener = null;
      _autoDeleteMarkTouchListener = false;
      _downloadPriority = DownloadPriority.MEDIUM;
-     _programState = new GPUProgramState(null);
   }
 
   public final void setMarkTouchListener(MarkTouchListener markTouchListener, boolean autoDelete)
@@ -79,6 +78,12 @@ public class MarksRenderer extends LeafRenderer
          _markTouchListener.dispose();
     }
     _markTouchListener = null;
+  
+    if (_billboardTexCoord != null)
+    {
+      if (_billboardTexCoord != null)
+         _billboardTexCoord.dispose();
+    }
   }
 
   public void initialize(G3MContext context)
@@ -93,59 +98,23 @@ public class MarksRenderer extends LeafRenderer
     }
   }
 
-  public void render(G3MRenderContext rc, GLState parentState)
+  public void render(G3MRenderContext rc)
   {
-    //  rc.getLogger()->logInfo("MarksRenderer::render()");
-  
     // Saving camera for use in onTouchEvent
     _lastCamera = rc.getCurrentCamera();
   
-    GL gl = rc.getGL();
-  
-    GLState state = new GLState(parentState);
-    state.disableDepthTest();
-    state.enableBlend();
-    state.enableTextures();
-  
-    GPUProgram prog = rc.getGPUProgramManager().getProgram("DefaultProgram");
-    int _WORKING_JM;
-    //UniformBool* enableTexture = prog->getUniformBool("EnableTexture");
-    //enableTexture->set(true);
-  
-    //state.enableTexture2D();
-    state.enableVerticesPosition();
-  
-    Vector2D textureTranslation = new Vector2D(0.0, 0.0);
-    Vector2D textureScale = new Vector2D(1.0, 1.0);
-  
-    state.translateTextureCoordinates(textureTranslation);
-    state.scaleTextureCoordinates(textureScale);
-  
-    state.setBlendFactors(GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha());
-  
     final Camera camera = rc.getCurrentCamera();
     final Vector3D cameraPosition = camera.getCartesianPosition();
-  
-    state.enableBillboarding();
-    state.setViewportSize(camera.getWidth(), camera.getHeight());
-  
-    state.setTextureCoordinates(gl.getBillboardTexCoord(), 2, 0);
   
     final int marksSize = _marks.size();
     for (int i = 0; i < marksSize; i++)
     {
       Mark mark = _marks.get(i);
-      //rc->getLogger()->logInfo("Rendering Mark: \"%s\"", mark->getName().c_str());
-  
       if (mark.isReady())
       {
-        mark.render(rc, cameraPosition, state, _programState);
+        mark.render(rc, cameraPosition);
       }
     }
-  
-    int IS_A_HACK_; //???????
-    int _WORKING_JM2;
-    //enableTexture->set(false); //DISABLING TEXTURES
   }
 
   public final void addMark(Mark mark)
@@ -155,6 +124,8 @@ public class MarksRenderer extends LeafRenderer
     {
       mark.initialize(_context, _downloadPriority);
     }
+  
+    addChild(mark);
   }
 
   public final void removeMark(Mark mark)
@@ -190,8 +161,6 @@ public class MarksRenderer extends LeafRenderer
   {
   
     boolean handled = false;
-  
-  //  if ( (touchEvent->getType() == Down) && (touchEvent->getTouchCount() == 1) ) {
     if (touchEvent.getType() == TouchEventType.DownUp)
     {
   
@@ -319,4 +288,85 @@ public class MarksRenderer extends LeafRenderer
     return _downloadPriority;
   }
 
+
+  public final void rawRender(G3MRenderContext rc, GLStateTreeNode myStateTreeNode)
+  {
+    _lastCamera = rc.getCurrentCamera();
+  }
+
+  public final boolean isInsideCameraFrustum(G3MRenderContext rc)
+  {
+    return true;
+  }
+
+  public final void modifiyGLState(GLState state)
+  {
+
+  }
+
+  public final void onTouchEventRecived(G3MEventContext ec, TouchEvent touchEvent)
+  {
+  
+    if (touchEvent.getType() == TouchEventType.DownUp)
+    {
+  
+      if (_lastCamera != null)
+      {
+        final Vector2I touchedPixel = touchEvent.getTouch(0).getPos();
+        final Planet planet = ec.getPlanet();
+  
+        double minSqDistance = IMathUtils.instance().maxDouble();
+        Mark nearestMark = null;
+  
+        final int marksSize = _marks.size();
+        for (int i = 0; i < marksSize; i++)
+        {
+          Mark mark = _marks.get(i);
+  
+          if (!mark.isReady())
+          {
+            continue;
+          }
+  
+          final int textureWidth = mark.getTextureWidth();
+          if (textureWidth <= 0)
+          {
+            continue;
+          }
+  
+          final int textureHeight = mark.getTextureHeight();
+          if (textureHeight <= 0)
+          {
+            continue;
+          }
+  
+          final Vector3D cartesianMarkPosition = mark.getCartesianPosition(planet);
+          final Vector2I markPixel = _lastCamera.point2Pixel(cartesianMarkPosition);
+  
+          final RectangleI markPixelBounds = new RectangleI(markPixel._x - (textureWidth / 2), markPixel._y - (textureHeight / 2), textureWidth, textureHeight);
+  
+          if (markPixelBounds.contains(touchedPixel._x, touchedPixel._y))
+          {
+            final double distance = markPixel.sub(touchedPixel).squaredLength();
+            if (distance < minSqDistance)
+            {
+              nearestMark = mark;
+              minSqDistance = distance;
+            }
+          }
+        }
+  
+        if (nearestMark != null)
+        {
+          if (!nearestMark.touched())
+          {
+            if (_markTouchListener != null)
+            {
+              _markTouchListener.touchedMark(nearestMark);
+            }
+          }
+        }
+      }
+    }
+  }
 }

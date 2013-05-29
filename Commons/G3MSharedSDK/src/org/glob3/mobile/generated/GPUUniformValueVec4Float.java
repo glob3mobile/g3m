@@ -29,4 +29,21 @@ public class GPUUniformValueVec4Float extends GPUUniformValue
   {
     return new GPUUniformValueVec4Float(_x, _y, _z, _w);
   }
+
+  public final String description()
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addString("Uniform Value Vec4Float: x:");
+    isb.addDouble(_x);
+    isb.addString("y:");
+    isb.addDouble(_y);
+    isb.addString("z:");
+    isb.addDouble(_z);
+    isb.addString("w:");
+    isb.addDouble(_w);
+    String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
+  }
 }

@@ -239,6 +239,12 @@ public class MutableMatrix44D
     return new MutableMatrix44D(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
   }
 
+  public final boolean isIdentity()
+  {
+    final MutableMatrix44D identity = MutableMatrix44D.identity();
+    return isEqualsTo(identity);
+  }
+
   public static MutableMatrix44D invalid()
   {
     return new MutableMatrix44D(false);
@@ -249,11 +255,41 @@ public class MutableMatrix44D
     return _isValid;
   }
 
+  public final String description()
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addString("MUTABLE MATRIX 44D: ");
+    float[] f = getColumnMajorFloatArray();
+    for (int i = 0; i < 16; i++)
+    {
+      isb.addDouble(f[i]);
+      if (i < 15)
+         isb.addString(", ");
+    }
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
+  }
+
   //
   //OPERATIONS
 
   public final MutableMatrix44D multiply(MutableMatrix44D that)
   {
+  
+    if (this.isIdentity())
+    {
+      return that;
+    }
+    else
+    {
+      if (that.isIdentity())
+      {
+        return this;
+      }
+    }
+  
     final double that00 = that._m00;
     final double that10 = that._m10;
     final double that20 = that._m20;

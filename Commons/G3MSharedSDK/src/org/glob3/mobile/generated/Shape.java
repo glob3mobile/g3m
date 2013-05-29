@@ -23,7 +23,8 @@ package org.glob3.mobile.generated;
 //class ShapePendingEffect;
 //class GPUProgramState;
 
-public abstract class Shape implements EffectTarget
+//C++ TO JAVA CONVERTER TODO TASK: Multiple inheritance is not available in Java:
+public abstract class Shape implements EffectTarget, GLClient
 {
   private Geodetic3D _position;
 
@@ -33,6 +34,8 @@ public abstract class Shape implements EffectTarget
   private double _scaleX;
   private double _scaleY;
   private double _scaleZ;
+
+  private Planet _planet; // REMOVED FINAL WORD BY CONVERSOR RULE
 
   private MutableMatrix44D _transformMatrix;
   private MutableMatrix44D createTransformMatrix(Planet planet)
@@ -73,6 +76,7 @@ public abstract class Shape implements EffectTarget
      _scaleY = 1;
      _scaleZ = 1;
      _transformMatrix = null;
+     _planet = null;
 
   }
 
@@ -216,7 +220,7 @@ public abstract class Shape implements EffectTarget
     _pendingEffects.add(new ShapePendingEffect(effect, true));
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState, GPUProgramState parentProgramState)
+  public final void render(G3MRenderContext rc)
   {
     if (isReadyToRender(rc))
     {
@@ -241,22 +245,33 @@ public abstract class Shape implements EffectTarget
         _pendingEffects.clear();
       }
   
-      GLState state = new GLState(parentState);
-      state.multiplyModelViewMatrix(getTransformMatrix(rc.getPlanet()));
-  
-      rawRender(rc, state, parentProgramState);
+  //    GPUProgramState progState(parentProgramState);
+      //progState.multiplyUniformValue("Modelview", *getTransformMatrix( rc->getPlanet() ));
+      rawRender(rc);
     }
   }
 
   public void initialize(G3MContext context)
   {
-
+    _planet = context.getPlanet();
   }
 
   public abstract boolean isReadyToRender(G3MRenderContext rc);
 
-  public abstract void rawRender(G3MRenderContext rc, GLState parentState, GPUProgramState parentProgramState);
+  public abstract void rawRender(G3MRenderContext rc);
 
   public abstract boolean isTransparent(G3MRenderContext rc);
+
+  public void modifyGPUProgramState(GPUProgramState progState)
+  {
+    if (_planet != null)
+    {
+      progState.multiplyUniformValue("Modelview", getTransformMatrix(_planet));
+    }
+    else
+    {
+      ILogger.instance().logError("Shape not initialized");
+    }
+  }
 
 }

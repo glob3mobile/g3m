@@ -34,7 +34,7 @@ public class CameraRenderer extends LeafRenderer
     _processTouchEvents = processTouchEvents;
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final void render(G3MRenderContext rc)
   {
     // create the CameraContext
     if (_cameraContext == null)
@@ -43,18 +43,13 @@ public class CameraRenderer extends LeafRenderer
     }
   
     // render camera object
-    rc.getCurrentCamera().render(rc, parentState);
+  //  rc->getCurrentCamera()->render(rc, parentState);
   
     final int handlersSize = _handlers.size();
     for (int i = 0; i < handlersSize; i++)
     {
       _handlers.get(i).render(rc, _cameraContext);
     }
-  }
-
-  public final void changeGLState(G3MRenderContext rc, GLState state)
-  {
-    rc.getCurrentCamera().changeGLState(state);
   }
 
   public final void initialize(G3MContext context)

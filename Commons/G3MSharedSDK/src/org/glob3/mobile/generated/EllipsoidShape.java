@@ -7,8 +7,6 @@ package org.glob3.mobile.generated;
 //
 //
 
-///#include <math.h>
-
 //
 //  EllipsoidShape.hpp
 //  G3MiOSSDK

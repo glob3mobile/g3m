@@ -20,15 +20,14 @@ package org.glob3.mobile.generated;
 
 
 
-//#include "G3MError.hpp"
-//#include "G3MError.hpp"
+
 
 
 //***************************************************************
 
 
 //C++ TO JAVA CONVERTER TODO TASK: Multiple inheritance is not available in Java:
-public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
+public abstract class BusyQuadRenderer extends LeafRenderer implements EffectTarget, GLClient
 {
   private double _degrees;
   //  const std::string _textureFilename;
@@ -38,8 +37,6 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
   private final boolean _animated;
   private final Vector2D _size ;
   private Color _backgroundColor;
-
-  private GPUProgramState _programState = new GPUProgramState();
 
   private boolean initMesh(G3MRenderContext rc)
   {
@@ -81,6 +78,9 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
     return true;
   }
 
+  private MutableMatrix44D _modelviewMatrix = new MutableMatrix44D();
+  private MutableMatrix44D _projectionMatrix = new MutableMatrix44D();
+
 
   public BusyQuadRenderer(IImage image, Color backgroundColor, Vector2D size, boolean animated)
   {
@@ -90,7 +90,7 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
      _backgroundColor = backgroundColor;
      _animated = animated;
      _size = new Vector2D(size);
-     _programState = new GPUProgramState(null);
+     _projectionMatrix = new MutableMatrix44D(MutableMatrix44D.invalid());
   }
 
   public final void initialize(G3MContext context)
@@ -102,11 +102,11 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
     return true;
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final void render(G3MRenderContext rc, GLGlobalState parentState)
   {
     GL gl = rc.getGL();
   
-    GLState state = new GLState(parentState);
+    GLGlobalState state = new GLGlobalState(parentState);
     state.enableBlend();
   
     if (_quadMesh == null)
@@ -123,21 +123,16 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
     final int halfWidth = currentViewport[2] / 2;
     final int halfHeight = currentViewport[3] / 2;
     MutableMatrix44D M = MutableMatrix44D.createOrthographicProjectionMatrix(-halfWidth, halfWidth, -halfHeight, halfHeight, -halfWidth, halfWidth);
-    //state.getProgram()->setUniform(rc->getGL(), "Projection", M);
   
-    GPUProgram prog = rc.getGPUProgramManager().getProgram("DefaultProgram");
-    int _WORKING_JM;
-  //  UniformMatrix4Float* projection = prog->getUniformMatrix4Float("Projection");
-  //  UniformMatrix4Float* modelview = prog->getUniformMatrix4Float("Modelview");
-  
-    state.setProgram(prog);
-  //  projection->set(M);
-    //modelview->set(MutableMatrix44D::identity());
-    //state.setProjectionMatrix(M);
-  
-    //gl->setProjection(M);
-    state.setModelViewMatrix(MutableMatrix44D.identity());
-    //gl->loadMatrixf(MutableMatrix44D::identity());
+    if (!_projectionMatrix.isValid())
+    {
+      // init modelview matrix
+      int[] currentViewport = new int[4];
+      gl.getViewport(currentViewport);
+      final int halfWidth = currentViewport[2] / 2;
+      final int halfHeight = currentViewport[3] / 2;
+      _projectionMatrix = MutableMatrix44D.createOrthographicProjectionMatrix(-halfWidth, halfWidth, -halfHeight, halfHeight, -halfWidth, halfWidth);
+    }
   
     // clear screen
     state.setClearColor(_backgroundColor);
@@ -145,10 +140,11 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
   
     state.setBlendFactors(GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha());
   
-    MutableMatrix44D R2 = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_degrees), new Vector3D(0, 0, 1));
+  //  MutableMatrix44D R2 = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, 1));
+  //  _programState.setUniformValue("Modelview", _modelviewMatrix);
   
     // draw mesh
-    _quadMesh.render(rc, parentState, _programState);
+    _quadMesh.render(rc);
   }
 
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
@@ -174,6 +170,7 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
     _degrees += value;
     if (_degrees>360)
        _degrees -= 360;
+    _modelviewMatrix = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_degrees), new Vector3D(0, 0, 1));
   }
 
   public final void start(G3MRenderContext rc)
@@ -206,6 +203,35 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
   public final void onDestroy(G3MContext context)
   {
 
+  }
+
+  public final void modifyGLGlobalState(GLGlobalState GLGlobalState)
+  {
+    GLGlobalState.enableBlend();
+    GLGlobalState.setBlendFactors(GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha());
+    GLGlobalState.setClearColor(_backgroundColor);
+  }
+
+  public final void modifyGPUProgramState(GPUProgramState progState)
+  {
+    progState.setUniformValue("EnableTexture", false);
+    progState.setUniformValue("PointSize", (float)1.0);
+    progState.setUniformValue("ScaleTexCoord", new Vector2D(1.0,1.0));
+    progState.setUniformValue("TranslationTexCoord", new Vector2D(0.0,0.0));
+  
+    progState.setUniformValue("ColorPerVertexIntensity", (float)0.0);
+    progState.setUniformValue("EnableFlatColor", false);
+    progState.setUniformValue("FlatColor", (float)0.0, (float)0.0, (float)0.0, (float)0.0);
+    progState.setUniformValue("FlatColorIntensity", (float)0.0);
+  
+    progState.setAttributeEnabled("TextureCoord", false);
+    progState.setAttributeEnabled("Color", false);
+  
+    //Modelview and projection
+    _modelviewMatrix = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_degrees), new Vector3D(0, 0, 1));
+    progState.setUniformValue("Modelview", _modelviewMatrix); //Program state will store a pointer
+  
+    progState.setUniformValue("Projection", _projectionMatrix);
   }
 
 }

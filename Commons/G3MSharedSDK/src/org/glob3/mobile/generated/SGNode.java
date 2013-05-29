@@ -17,12 +17,14 @@ package org.glob3.mobile.generated;
 
 
 
+
 //class G3MContext;
 //class G3MRenderContext;
 //class SGShape;
-//class GLState;
+//class GLGlobalState;
+//class GPUProgramState;
 
-public class SGNode
+public class SGNode extends GLClient
 {
   protected final String _id;
   protected final String _sId;
@@ -45,7 +47,6 @@ public class SGNode
      _sId = sId;
      _context = null;
      _shape = null;
-
   }
 
   public void dispose()
@@ -74,7 +75,7 @@ public class SGNode
 
   public final void addNode(SGNode child)
   {
-  //  child->setParent(this);
+    //  child->setParent(this);
     _children.add(child);
     if (_context != null)
     {
@@ -102,33 +103,46 @@ public class SGNode
     return true;
   }
 
-  public void rawRender(G3MRenderContext rc, GLState parentState)
+  public void rawRender(G3MRenderContext rc)
   {
   
   }
 
-  public void render(G3MRenderContext rc, GLState parentState)
+
+  //GLGlobalState* SGNode::createState(const G3MRenderContext* rc,
+  //                             const GLGlobalState& parentState) {
+  //  return  NULL;
+  //}
+  //
+  //GPUProgramState* SGNode::createGPUProgramState(const G3MRenderContext* rc,
+  //                                               const GPUProgramState* parentState){
+  //  return new GPUProgramState(parentState);
+  //}
+  
+  
+  public void render(G3MRenderContext rc)
   {
-    GLState myState = createState(rc, parentState);
-    GLState state;
-    if (myState == null)
-    {
-      state = (GLState) parentState;
-    }
-    else
-    {
-      state = myState;
-    }
-    rawRender(rc, state);
+  //  GLGlobalState* myState = createState(rc, parentState);
+  //  GLGlobalState* state;
+  //  if (myState == NULL) {
+  //    state = (GLGlobalState*) &parentState;
+  //  }
+  //  else {
+  //    state = myState;
+  //  }
+  
+  //  GPUProgramState* myGPUProgramState = createGPUProgramState(rc, parentProgramState);
+    rawRender(rc);
   
     final int childrenCount = _children.size();
     for (int i = 0; i < childrenCount; i++)
     {
       SGNode child = _children.get(i);
-      child.render(rc, state);
+      child.render(rc);
     }
-    if (myState != null)
-       myState.dispose();
+  
+  //  delete myGPUProgramState;
+  //  delete myState;
   }
 
   //  SGShape* getShape() const {
@@ -141,10 +155,11 @@ public class SGNode
   //    return NULL;
   //  }
 
-  public GLState createState(G3MRenderContext rc, GLState parentState)
-  {
-    return null;
-  }
+//  virtual GLGlobalState* createState(const G3MRenderContext* rc,
+//                               const GLGlobalState& parentState);
+//  
+//  virtual GPUProgramState* createGPUProgramState(const G3MRenderContext* rc,
+//                                                 const GPUProgramState* parentState);
 
   public final int getChildrenCount()
   {
@@ -156,4 +171,18 @@ public class SGNode
     return _children.get(i);
   }
 
+  public final void notifyGLClientChildrenParentHasChanged()
+  {
+  
+    if (_shape != null)
+    {
+      _shape.actualizeGLGlobalState(this);
+    }
+  
+    final int nChildren = getChildrenCount();
+    for (int i = 0; i < nChildren; i++)
+    {
+      _children.get(i).actualizeGLGlobalState(this);
+    }
+  }
 }

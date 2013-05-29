@@ -53,7 +53,7 @@ package org.glob3.mobile.generated;
 
 
 //class G3MContext;
-//class GLState;
+//class GLGlobalState;
 
 public class WidgetUserData
 {

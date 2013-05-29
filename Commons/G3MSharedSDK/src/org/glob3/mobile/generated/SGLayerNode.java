@@ -104,39 +104,60 @@ public class SGLayerNode extends SGNode
     _downloadedImage = image;
   }
 
-  public final GLState createState(G3MRenderContext rc, GLState parentState)
-  {
-    if (!_initialized)
-    {
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  GLGlobalState createState(G3MRenderContext rc, GLGlobalState parentState);
+
+
+  /*
+  GPUProgramState* createGPUProgramState(const G3MRenderContext* rc, const GPUProgramState* parentState){
+  
+    GPUProgramState* progState = new GPUProgramState(parentState);
+    progState->setAttributeEnabled("TextureCoord", true);
+    progState->setUniformValue("EnableTexture", true);
+    return progState;
+  }
+  
+  GLGlobalState* SGLayerNode::createState(const G3MRenderContext* rc,
+                                          const GLGlobalState& parentState) {
+    if (!_initialized) {
       _initialized = true;
       requestImage(rc);
     }
   
-    final IGLTextureId texId = getTextureId(rc);
-    if (texId == null)
-    {
-      return null;
+    const IGLTextureId* texId = getTextureId(rc);
+    if (texId == NULL) {
+      return NULL;
     }
   
-    GLState state = new GLState(parentState);
-    state.enableTextures();
-<<<<<<< HEAD
-=======
-    state.enableTexture2D();
-    state.enableBlend();
+    GLGlobalState* state = new GLGlobalState(parentState);
+    state->bindTexture(texId);
     int __WORKING;
->>>>>>> webgl-port
-  
-    GPUProgram prog = rc.getGPUProgramManager().getProgram("DefaultProgram");
-    int _WORKING_JM;
-    //UniformBool* enableTexture = prog->getUniformBool("EnableTexture");
-    //enableTexture->set(true);
-  
-    //state->enableTexture2D();
-  
-    state.bindTexture(texId);
   
     return state;
+  }
+  */
+  public final void SGLayerNode.modifyGLGlobalState(GLGlobalState GLGlobalState)
+  {
+  
+    int __WORKING;
+    /*if (!_initialized) {
+      _initialized = true;
+      requestImage(rc);
+    }
+    
+    const IGLTextureId* texId = getTextureId(rc);
+    if (texId != NULL) {
+      state.bindTexture(texId);
+    }
+     */
+  }
+
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  void modifyGLGlobalState(GLGlobalState GLGlobalState);
+  public final void modifyGPUProgramState(GPUProgramState progState)
+  {
+    progState.setAttributeEnabled("TextureCoord", true);
+    progState.setUniformValue("EnableTexture", true);
   }
 
 }

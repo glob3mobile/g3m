@@ -2,11 +2,6 @@ package org.glob3.mobile.generated;
 public class G3MWidget
 {
 
-
-  //#include "G3MError.hpp"
-  //#include "G3MError.hpp"
-  
-  
   public static void initSingletons(ILogger logger, IFactory factory, IStringUtils stringUtils, IStringBuilder stringBuilder, IMathUtils mathUtils, IJSONParser jsonParser, ITextUtils textUtils)
   {
     if (ILogger.instance() == null)
@@ -86,26 +81,10 @@ public class G3MWidget
   
     if (_context != null)
        _context.dispose();
-  
-    if (_rootState != null)
-       _rootState.dispose();
   }
 
   public final void render(int width, int height)
   {
-  
-    //Setting Program
-    if (!_mainRendererReady)
-    {
-      GPUProgram prog = _gpuProgramManager.getProgram("DefaultProgram");
-      //_gl->useProgram(prog);
-      ((GLState)_rootState).setProgram(prog);
-      int _WORKING_JM;
-  //    prog->getUniformVec2Float("ScaleTexCoord")->set(Vector2D(1.0,1.0));
-  //    prog->getUniformVec2Float("TranslationTexCoord")->set(Vector2D(0.0,0.0));
-  //    prog->getUniformFloat("PointSize")->set(1);
-  //    prog->getUniformBool("BillBoard")->set(false);
-    }
   
     if (_paused)
     {
@@ -208,19 +187,18 @@ public class G3MWidget
       _selectedRenderer.start(rc);
     }
   
-  
-    ((GLState)_rootState).setClearColor(_backgroundColor);
-    _gl.clearScreen(_rootState);
+    GLGlobalState state = new GLGlobalState();
+    state.setClearColor(_backgroundColor);
+    _gl.clearScreen(state);
   
     if (_mainRendererReady)
     {
-      _cameraRenderer.render(rc, _rootState);
-      _cameraRenderer.changeGLState(rc, (GLState)_rootState);
+      _cameraRenderer.render(rc);
     }
   
     if (_selectedRenderer.isEnable())
     {
-      _selectedRenderer.render(rc, _rootState);
+      _selectedRenderer.render(rc);
     }
   
     java.util.ArrayList<OrderedRenderable> orderedRenderables = rc.getSortedOrderedRenderables();
@@ -230,7 +208,7 @@ public class G3MWidget
       for (int i = 0; i < orderedRenderablesCount; i++)
       {
         OrderedRenderable orderedRenderable = orderedRenderables.get(i);
-        orderedRenderable.render(rc, _rootState);
+        orderedRenderable.render(rc);
         if (orderedRenderable != null)
            orderedRenderable.dispose();
       }
@@ -600,9 +578,6 @@ public class G3MWidget
   private final G3MContext _context;
 
   private boolean _paused;
-
-  private final GLState _rootState;
-
   private boolean _initializationTaskWasRun;
   private boolean _initializationTaskReady;
 
@@ -610,14 +585,10 @@ public class G3MWidget
 
   private GPUProgramManager _gpuProgramManager;
 
+  private SceneGraphRenderer _sgRenderer;
+
   private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager)
-  /*
-   =======
-  _gl( new GL(nativeGL, false) ),
-  >>>>>>> origin/webgl-port
-   */
   {
-     _rootState = GLState.newDefault();
      _frameTasksExecutor = new FrameTasksExecutor();
      _effectsScheduler = new EffectsScheduler();
      _gl = gl;
@@ -653,6 +624,7 @@ public class G3MWidget
      _initializationTaskReady = true;
      _clickOnProcess = false;
      _gpuProgramManager = gpuProgramManager;
+     _sgRenderer = null;
     _effectsScheduler.initialize(_context);
     _cameraRenderer.initialize(_context);
     _mainRenderer.initialize(_context);

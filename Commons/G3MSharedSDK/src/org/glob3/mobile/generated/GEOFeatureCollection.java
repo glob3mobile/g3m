@@ -20,6 +20,9 @@ package org.glob3.mobile.generated;
 
 //class GEOFeature;
 //class GPUProgramState;
+//class GLGlobalState;
+//class GPUProgramState;
+//class GEOSymbolizer;
 
 public class GEOFeatureCollection extends GEOObject
 {
@@ -31,6 +34,23 @@ public class GEOFeatureCollection extends GEOObject
 
   }
 
+//  void addFeature(GEOFeature* feature);
+
+
+  //void GEOFeatureCollection::addFeature(GEOFeature* feature) {
+  //  _features.push_back(feature);
+  //}
+  
+  //void GEOFeatureCollection::render(const G3MRenderContext* rc,
+  //                                  const GLGlobalState& parentState, const GPUProgramState* parentProgramState,
+  //                                  const GEOSymbolizer* symbolizer) {
+  //  const int featuresCount = _features.size();
+  //  for (int i = 0; i < featuresCount; i++) {
+  //    GEOFeature* feature = _features[i];
+  //    feature->render(rc, parentState, parentProgramState, symbolizer);
+  //  }
+  //}
+  
   public void dispose()
   {
     final int featuresCount = _features.size();
@@ -42,21 +62,17 @@ public class GEOFeatureCollection extends GEOObject
     }
   }
 
-<<<<<<< HEAD
-  public final void render(G3MRenderContext rc, GLState parentState, GPUProgramState parentProgramState, GEOSymbolizer symbolizer)
-=======
+//  void render(const G3MRenderContext* rc,
+//              const GLGlobalState& parentState, const GPUProgramState* parentProgramState,
+//              const GEOSymbolizer* symbolizer);
+
   public final void symbolize(G3MRenderContext rc, GEOSymbolizationContext sc)
->>>>>>> webgl-port
   {
     final int featuresCount = _features.size();
     for (int i = 0; i < featuresCount; i++)
     {
       GEOFeature feature = _features.get(i);
-<<<<<<< HEAD
-      feature.render(rc, parentState, parentProgramState, symbolizer);
-=======
       feature.symbolize(rc, sc);
->>>>>>> webgl-port
     }
   }
 

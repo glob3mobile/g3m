@@ -405,10 +405,6 @@ public abstract class IG3MBuilder
   protected abstract IStorage createDefaultStorage();
   protected abstract IDownloader createDefaultDownloader();
 
-
-  //#include "G3MError.hpp"
-  //#include "G3MError.hpp"
-  
   public IG3MBuilder()
   {
      _gl = null;

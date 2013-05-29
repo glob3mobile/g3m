@@ -19,7 +19,7 @@ package org.glob3.mobile.generated;
 
 
 //class GPUUniform;
-//class Attribute;
+//class GPUAttribute;
 
 //class MutableMatrix44D;
 
@@ -165,6 +165,6 @@ public abstract class INativeGL
   public abstract int getProgramiv(GPUProgram program, int param);
 
   public abstract GPUUniform getActiveUniform(GPUProgram program, int i);
-  public abstract Attribute getActiveAttribute(GPUProgram program, int i);
+  public abstract GPUAttribute getActiveAttribute(GPUProgram program, int i);
 
 }

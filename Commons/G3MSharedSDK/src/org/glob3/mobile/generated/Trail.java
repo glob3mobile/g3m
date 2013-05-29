@@ -16,13 +16,11 @@ package org.glob3.mobile.generated;
 //
 
 
-//#include "G3MError.hpp"
-//#include "G3MError.hpp"
 
 //class Mesh;
 //class Planet;
 
-public class Trail
+public class Trail extends GLClient
 {
   private boolean _visible;
   private final int _maxSteps;
@@ -176,14 +174,22 @@ public class Trail
        _mesh.dispose();
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState, GPUProgramState parentProgramState)
+  public final void render(G3MRenderContext rc)
   {
     if (_visible)
     {
+  
+      boolean hasBeenRenderized = (_mesh != null) && !_positionsDirty;
+  
       Mesh mesh = getMesh(rc.getPlanet());
       if (mesh != null)
       {
-        mesh.render(rc, parentState, parentProgramState);
+        if (!hasBeenRenderized)
+        {
+          actualizeGLGlobalState(rc.getCurrentCamera()); //Actualize _mesh GLGlobalState with camera
+        }
+  
+        mesh.render(rc);
       }
     }
   }
@@ -215,6 +221,20 @@ public class Trail
     }
 
     _positions.add(new Geodetic3D(position));
+  }
+
+  public final void notifyGLClientChildrenParentHasChanged()
+  {
+    _mesh.actualizeGLGlobalState(this);
+  }
+  public final void modifyGLGlobalState(GLGlobalState GLGlobalState)
+  {
+  }
+  public final void modifyGPUProgramState(GPUProgramState progState)
+  {
+    progState.setUniformValue("EnableTexture", false);
+    progState.setUniformValue("ScaleTexCoord", new Vector2D(1.0, 1.0));
+    progState.setUniformValue("TranslationTexCoord", new Vector2D(0.0, 0.0));
   }
 
 }

@@ -16,22 +16,18 @@ package org.glob3.mobile.generated;
 //
 
 
-//#include "G3MError.hpp"
-//#include "G3MError.hpp"
 
-public class ShapesRenderer extends LeafRenderer
+//C++ TO JAVA CONVERTER TODO TASK: Multiple inheritance is not available in Java:
+public class ShapesRenderer extends LeafRenderer, GLClient
 {
   private java.util.ArrayList<Shape> _shapes = new java.util.ArrayList<Shape>();
 
   private G3MContext _context;
 
-  private GPUProgramState _programState = new GPUProgramState();
-
 
   public ShapesRenderer()
   {
      _context = null;
-     _programState = new GPUProgramState(null);
 
   }
 
@@ -104,8 +100,11 @@ public class ShapesRenderer extends LeafRenderer
   {
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final void render(G3MRenderContext rc)
   {
+  
+    actualizeGLGlobalState(rc.getCurrentCamera()); // Setting projection and modelview
+  
     final Vector3D cameraPosition = rc.getCurrentCamera().getCartesianPosition();
   
     final int shapesCount = _shapes.size();
@@ -122,9 +121,39 @@ public class ShapesRenderer extends LeafRenderer
       }
       else
       {
-        shape.render(rc, parentState, _programState);
+        shape.render(rc);
       }
     }
+  }
+
+  public final void notifyGLClientChildrenParentHasChanged()
+  {
+    final int shapesCount = _shapes.size();
+    for (int i = 0; i < shapesCount; i++)
+    {
+      Shape shape = _shapes.get(i);
+      shape.actualizeGLGlobalState(this);
+    }
+  }
+  public final void modifyGLGlobalState(GLGlobalState GLGlobalState)
+  {
+    GLGlobalState.enableDepthTest();
+  }
+  public final void modifyGPUProgramState(GPUProgramState progState)
+  {
+  
+    progState.setUniformValue("EnableTexture", false);
+    progState.setUniformValue("PointSize", (float)1.0);
+    progState.setUniformValue("ScaleTexCoord", new Vector2D(1.0,1.0));
+    progState.setUniformValue("TranslationTexCoord", new Vector2D(0.0,0.0));
+  
+    progState.setUniformValue("ColorPerVertexIntensity", (float)0.0);
+    progState.setUniformValue("EnableFlatColor", false);
+    progState.setUniformValue("FlatColor", (float)0.0, (float)0.0, (float)0.0, (float)0.0);
+    progState.setUniformValue("FlatColorIntensity", (float)0.0);
+  
+    progState.setAttributeEnabled("TextureCoord", false);
+    progState.setAttributeEnabled("Color", false);
   }
 
 }

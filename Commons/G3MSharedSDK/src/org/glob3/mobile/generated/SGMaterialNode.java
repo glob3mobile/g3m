@@ -56,18 +56,52 @@ public class SGMaterialNode extends SGNode
        _specularColor.dispose();
   }
 
-  public final GLState createState(G3MRenderContext rc, GLState parentState)
+//  GLGlobalState* createState(const G3MRenderContext* rc,
+//                       const GLGlobalState& parentState);
+//  
+//  GPUProgramState* createGPUProgramState(const G3MRenderContext* rc, const GPUProgramState* parentState);
+
+
+  //GLGlobalState* SGMaterialNode::createState(const G3MRenderContext* rc,
+  //                                     const GLGlobalState& parentState) {
+  //  return NULL;
+  //}
+  //
+  //GPUProgramState* SGMaterialNode::createGPUProgramState(const G3MRenderContext* rc,
+  //                                                       const GPUProgramState* parentState){
+  //  
+  //  
+  //  //  GPUProgramState* progState = new GPUProgramState(parentState);
+  //  
+  //  //  if (_baseColor != NULL){
+  //  //    progState->setUniformValue("EnableFlatColor", true);
+  //  //    progState->setUniformValue("FlatColor",
+  //  //                               (double)_baseColor->getRed(),
+  //  //                               (double)_baseColor->getBlue(),
+  //  //                               (double) _baseColor->getGreen(),
+  //  //                               (double) _baseColor->getAlpha());
+  //  //    const float colorsIntensity = 1;
+  //  //    progState->setUniformValue("FlatColorIntensity", colorsIntensity);
+  //  //  }
+  //  //
+  //  //  return progState;
+  //}
+  
+  
+  public final void modifyGLGlobalState(GLGlobalState GLGlobalState)
   {
-    if (_baseColor == null)
+  
+  }
+  public final void modifyGPUProgramState(GPUProgramState progState)
+  {
+  
+    if (_baseColor != null)
     {
-      return null;
+      progState.setUniformValue("EnableFlatColor", true);
+      progState.setUniformValue("FlatColor", (double)_baseColor.getRed(), (double)_baseColor.getBlue(), (double) _baseColor.getGreen(), (double) _baseColor.getAlpha());
+      final float colorsIntensity = 1F;
+      progState.setUniformValue("FlatColorIntensity", colorsIntensity);
     }
-  
-    GLState state = new GLState(parentState);
-    final float colorsIntensity = 1F;
-    state.enableFlatColor(_baseColor, colorsIntensity);
-  
-    return state;
   }
 
 }

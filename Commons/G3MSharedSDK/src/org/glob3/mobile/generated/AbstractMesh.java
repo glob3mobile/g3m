@@ -17,6 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 //class MutableMatrix44D;
 //class IFloatBuffer;
 //class Color;
@@ -97,7 +98,10 @@ public abstract class AbstractMesh extends Mesh
   
   }
 
-  protected abstract void rawRender(G3MRenderContext rc, GLState parentState, GPUProgramState parentProgramState);
+  protected abstract void rawRender(G3MRenderContext rc);
+
+  protected GLGlobalState _GLGlobalState = new GLGlobalState();
+  protected GPUProgramState _progState = new GPUProgramState();
 
   public void dispose()
   {
@@ -117,48 +121,10 @@ public abstract class AbstractMesh extends Mesh
        _translationMatrix.dispose();
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState, GPUProgramState parentProgramState)
+  public final void render(G3MRenderContext rc)
   {
-    GLState state = new GLState(parentState);
-    state.enableVerticesPosition();
-    state.setLineWidth(_lineWidth);
-    state.setPointSize(_pointSize);
-    if (_colors != null)
-    {
-      state.enableVertexColor(_colors, _colorsIntensity);
-    }
-    if (_flatColor != null)
-    {
-      state.enableFlatColor(_flatColor, _colorsIntensity);
-      if (_flatColor.isTransparent())
-      {
-        state.enableBlend();
-<<<<<<< HEAD
-=======
-        gl.setBlendFuncSrcAlpha();
-      }
-    }
   
-    if (!_depthTest)
-    {
-      state.disableDepthTest();
-    }
-  
-    gl.vertexPointer(3, 0, _vertices);
->>>>>>> webgl-port
-  
-        state.setBlendFactors(GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha());
-      }
-    }
-  
-    state.setVertices(_vertices, 3, 0);
-  
-    if (_translationMatrix != null)
-    {
-      state.multiplyModelViewMatrix(_translationMatrix);
-    }
-  
-    rawRender(rc, state, parentProgramState);
+    rawRender(rc);
   }
 
   public final Extent getExtent()
@@ -188,6 +154,137 @@ public abstract class AbstractMesh extends Mesh
       return false;
     }
     return _flatColor.isTransparent();
+  }
+
+  //Drawable GLClient
+  public final void getGLGlobalStateAndGPUProgramState(GLGlobalState[]GLGlobalState, GPUProgramState[]progState)
+  {
+    _progState.clear();
+    (*GLGlobalState) = _GLGlobalState;
+    (*progState) = _progState;
+  }
+  public final void modifyGLGlobalState(GLGlobalState GLGlobalState)
+  {
+    GLGlobalState.setLineWidth(_lineWidth);
+    if (_flatColor != null && _flatColor.isTransparent())
+    {
+      GLGlobalState.enableBlend();
+      GLGlobalState.setBlendFactors(GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha());
+    }
+  }
+  public final void modifyGPUProgramState(GPUProgramState progState)
+  {
+  
+    progState.setUniformValue("PointSize", _pointSize);
+  
+    progState.setAttributeEnabled("Position", true);
+    progState.setAttributeValue("Position", _vertices, 4, 3, 0, false, 0); //Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
+  
+    if (_colors != null)
+    {
+      progState.setAttributeEnabled("Color", true);
+      progState.setUniformValue("EnableColorPerVertex", true);
+      progState.setAttributeValue("Color", _colors, 4, 4, 0, false, 0); //Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 4 - The attribute is a float vector of 4 elements RGBA
+  
+      progState.setUniformValue("ColorPerVertexIntensity", _colorsIntensity);
+    }
+    else
+    {
+      progState.setAttributeEnabled("Color", false);
+      progState.setUniformValue("EnableColorPerVertex", false);
+      progState.setUniformValue("ColorPerVertexIntensity", (float)0.0);
+    }
+  
+    if (_flatColor != null)
+    {
+      progState.setUniformValue("EnableFlatColor", true);
+      progState.setUniformValue("FlatColor", (double)_flatColor.getRed(), (double)_flatColor.getGreen(), (double) _flatColor.getBlue(), (double) _flatColor.getAlpha());
+  
+      progState.setUniformValue("FlatColorIntensity", _colorsIntensity);
+    }
+    else
+    {
+      progState.setUniformValue("EnableFlatColor", false);
+      progState.setUniformValue("ColorPerVertexIntensity", (float)0.0);
+      progState.setUniformValue("FlatColor", (float)0.0, (float)0.0, (float)0.0, (float)0.0);
+      progState.setUniformValue("FlatColorIntensity", (float)0.0);
+    }
+  
+    if (_translationMatrix != null)
+    {
+      progState.multiplyUniformValue("Modelview", _translationMatrix);
+    }
+  }
+
+  //Scene Graph Node
+//  void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode);
+
+  //Scene Graph Node
+  //void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode){
+  //  
+  //}
+  
+  public final boolean isInsideCameraFrustum(G3MRenderContext rc)
+  {
+    //return getExtent()->touches( rc->getCurrentCamera()->getFrustumInModelCoordinates() );
+  
+    //TODO: NOT VALID FOR BUSYRENDERER
+  
+    return true;
+  }
+  public final void modifiyGLState(GLState state)
+  {
+  
+    GLGlobalState globalState = state.getGLGlobalState();
+  
+    globalState.setLineWidth(_lineWidth);
+    if (_flatColor != null && _flatColor.isTransparent())
+    {
+      globalState.enableBlend();
+      globalState.setBlendFactors(GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha());
+    }
+  
+    GPUProgramState progState = state.getGPUProgramState();
+  
+    progState.setUniformValue("PointSize", _pointSize);
+  
+    progState.setAttributeEnabled("Position", true);
+    progState.setAttributeValue("Position", _vertices, 4, 3, 0, false, 0); //Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
+  
+    if (_colors != null)
+    {
+      progState.setAttributeEnabled("Color", true);
+      progState.setUniformValue("EnableColorPerVertex", true);
+      progState.setAttributeValue("Color", _colors, 4, 4, 0, false, 0); //Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 4 - The attribute is a float vector of 4 elements RGBA
+  
+      progState.setUniformValue("ColorPerVertexIntensity", _colorsIntensity);
+    }
+    else
+    {
+      progState.setAttributeEnabled("Color", false);
+      progState.setUniformValue("EnableColorPerVertex", false);
+      progState.setUniformValue("ColorPerVertexIntensity", (float)0.0);
+    }
+  
+    if (_flatColor != null)
+    {
+      progState.setUniformValue("EnableFlatColor", true);
+      progState.setUniformValue("FlatColor", (double)_flatColor.getRed(), (double)_flatColor.getGreen(), (double) _flatColor.getBlue(), (double) _flatColor.getAlpha());
+  
+      progState.setUniformValue("FlatColorIntensity", _colorsIntensity);
+    }
+    else
+    {
+      progState.setUniformValue("EnableFlatColor", false);
+      progState.setUniformValue("ColorPerVertexIntensity", (float)0.0);
+      progState.setUniformValue("FlatColor", (float)0.0, (float)0.0, (float)0.0, (float)0.0);
+      progState.setUniformValue("FlatColorIntensity", (float)0.0);
+    }
+  
+    if (_translationMatrix != null)
+    {
+      progState.multiplyUniformValue("Modelview", _translationMatrix);
+    }
   }
 
 }

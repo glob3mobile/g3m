@@ -23,4 +23,15 @@ public class GPUUniformValueFloat extends GPUUniformValue
   {
     return new GPUUniformValueFloat(_value);
   }
+
+  public final String description()
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addString("Uniform Value Float: ");
+    isb.addDouble(_value);
+    String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
+  }
 }

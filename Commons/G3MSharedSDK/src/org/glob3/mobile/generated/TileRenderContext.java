@@ -25,9 +25,6 @@ package org.glob3.mobile.generated;
 //class ElevationDataProvider;
 //class LayerTilesRenderParameters;
 
-//#include "G3MError.hpp"
-//#include "G3MError.hpp"
-
 
 public class TileRenderContext
 {

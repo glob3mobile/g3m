@@ -6,4 +6,3 @@ public class GPUUniformFloat extends GPUUniform
      super(name,id, GLType.glFloat());
   }
 }
-////////////////////////////////////////////////////////////////////////

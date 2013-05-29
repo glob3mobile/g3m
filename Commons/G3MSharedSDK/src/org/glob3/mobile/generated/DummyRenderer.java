@@ -26,7 +26,7 @@ package org.glob3.mobile.generated;
 //class GPUProgramManager;
 
 
-public class DummyRenderer extends LeafRenderer
+public abstract class DummyRenderer extends LeafRenderer
 {
 
   private double _halfSize;
@@ -34,22 +34,23 @@ public class DummyRenderer extends LeafRenderer
   private IShortBuffer _indices;
   private IFloatBuffer _vertices;
 
-  private void drawFace(GL gl, GLState parentState, Color color, Vector3D translation, Angle a, Vector3D rotationAxis, GPUProgramManager manager, GPUProgramState parentProgramState)
+  private void drawFace(GL gl, GLGlobalState parentState, Color color, Vector3D translation, Angle a, Vector3D rotationAxis, GPUProgramManager manager, GPUProgramState parentProgramState)
   {
-    GLState state = new GLState(parentState);
   
-    state.enableFlatColor(color, (float)1.0);
-    MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(translation);
-    MutableMatrix44D R = MutableMatrix44D.createRotationMatrix(a, rotationAxis);
-  
-    state.multiplyModelViewMatrix(T.multiply(R));
-    gl.drawElements(GLPrimitive.triangleStrip(), _indices, state, manager, parentProgramState);
+  //  GPUProgramState progState(parentProgramState);
+  //  progState.setUniformValue("FlatColor", color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+  //  progState.setUniformValue("FlatColorIntensity", (float)1.0);
+  //
+  //  MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(translation);
+  //  MutableMatrix44D R = MutableMatrix44D::createRotationMatrix(a, rotationAxis);
+  //
+  //  MutableMatrix44D TR = T.multiply(R);
+  //
+  //  progState.multiplyUniformValue("Modelview", &TR);
+  //
+  //  gl->drawElements(GLPrimitive::triangleStrip(), _indices, parentState, manager, &progState);
   }
 
-
-  //#include "G3MError.hpp"
-  //#include "G3MError.hpp"
-  
   public void dispose()
   {
     if (_indices != null)
@@ -103,27 +104,54 @@ public class DummyRenderer extends LeafRenderer
     _vertices = vertices.create();
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final void render(G3MRenderContext rc, GLGlobalState parentState)
   {
   
-    GPUProgramState progState = new GPUProgramState(null);
+    //TODO: IMPLEMENT
   
-    GLState state = new GLState(parentState);
-    state.enableVerticesPosition();
-    state.setVertices(_vertices, 3, 0);
-    GL gl = rc.getGL();
-    GPUProgramManager manager = rc.getGPUProgramManager();
-    drawFace(gl, state, Color.fromRGBA((float) 1,(float) 0, (float) 0, (float) 1), new Vector3D(_halfSize,0,0), Angle.fromDegrees(0), new Vector3D(0,0,1), manager, progState);
+  //  GPUProgramState progState(NULL);
   
-    drawFace(gl, state, Color.fromRGBA((float) 0,(float) 1, (float) 0, (float) 1), new Vector3D(0,_halfSize,0), Angle.fromDegrees(90), new Vector3D(0,0,1), manager, progState);
-  
-    drawFace(gl, state, Color.fromRGBA((float) 0,(float) 0, (float) 1, (float) 1), new Vector3D(0,-_halfSize,0), Angle.fromDegrees(-90), new Vector3D(0,0,1), manager, progState);
-  
-    drawFace(gl, state, Color.fromRGBA((float) 1,(float) 0, (float) 1, (float) 1), new Vector3D(0,0,-_halfSize), Angle.fromDegrees(90), new Vector3D(0,1,0), manager, progState);
-  
-    drawFace(gl, state, Color.fromRGBA((float) 0,(float) 1, (float) 1, (float) 1), new Vector3D(0,0,_halfSize), Angle.fromDegrees(-90), new Vector3D(0,1,0), manager, progState);
-  
-    drawFace(gl, state, Color.fromRGBA((float) 0.5,(float) 0.5, (float) 0.5, (float) 1), new Vector3D(-_halfSize,0,0), Angle.fromDegrees(180), new Vector3D(0,0,1), manager, progState);
+  //  progState.setAttributeEnabled("Position", true);
+  //  progState.setAttributeValue("Position",
+  //                              _vertices, 4, //The attribute is a float vector of 4 elements
+  //                              3,            //Our buffer contains elements of 3
+  //                              0,            //Index 0
+  //                              false,        //Not normalized
+  //                              0);           //Stride 0
+  //
+  //  GLGlobalState state(parentState);
+  //
+  //  GL* gl = rc->getGL();
+  //  GPUProgramManager* manager = rc->getGPUProgramManager();
+  //  drawFace(gl, state,
+  //           Color::fromRGBA((float) 1,(float)  0, (float) 0, (float) 1),
+  //           Vector3D(_halfSize,0,0),
+  //           Angle::fromDegrees(0), Vector3D(0,0,1), *manager, &progState);
+  //
+  //  drawFace(gl, state,
+  //           Color::fromRGBA((float) 0,(float)  1, (float) 0, (float) 1),
+  //           Vector3D(0,_halfSize,0),
+  //           Angle::fromDegrees(90), Vector3D(0,0,1), *manager, &progState);
+  //
+  //  drawFace(gl, state,
+  //           Color::fromRGBA((float) 0,(float)  0, (float) 1, (float) 1),
+  //           Vector3D(0,-_halfSize,0),
+  //           Angle::fromDegrees(-90), Vector3D(0,0,1), *manager, &progState);
+  //
+  //  drawFace(gl, state,
+  //           Color::fromRGBA((float) 1,(float)  0, (float) 1, (float) 1),
+  //           Vector3D(0,0,-_halfSize),
+  //           Angle::fromDegrees(90), Vector3D(0,1,0), *manager, &progState);
+  //
+  //  drawFace(gl, state,
+  //           Color::fromRGBA((float) 0,(float) 1, (float) 1, (float) 1),
+  //           Vector3D(0,0,_halfSize),
+  //           Angle::fromDegrees(-90), Vector3D(0,1,0), *manager, &progState);
+  //
+  //  drawFace(gl, state,
+  //           Color::fromRGBA((float) 0.5,(float)  0.5, (float) 0.5, (float) 1),
+  //           Vector3D(-_halfSize,0,0),
+  //           Angle::fromDegrees(180), Vector3D(0,0,1), *manager, &progState);
   }
 
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)

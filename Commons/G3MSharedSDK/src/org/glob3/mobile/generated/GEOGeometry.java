@@ -19,7 +19,6 @@ package org.glob3.mobile.generated;
 
 //class GEOSymbol;
 //class GEOFeature;
-//class GPUProgramState;
 
 public abstract class GEOGeometry extends GEOObject
 {
@@ -33,46 +32,8 @@ public abstract class GEOGeometry extends GEOObject
 
   }
 
-<<<<<<< HEAD
-  public final void render(G3MRenderContext rc, GLState parentState, GPUProgramState parentProgramState, GEOSymbolizer symbolizer)
-  {
-  //  Mesh* mesh = getMesh(rc, symbolizer);
-  
-    java.util.ArrayList<Mesh> meshes = getMeshes(rc, symbolizer);
-  
-    if (meshes != null)
-    {
-  
-      final Frustum frustum = rc.getCurrentCamera().getFrustumInModelCoordinates();
-  
-      final int meshesCount = _meshes.size();
-      for (int i = 0; i < meshesCount; i++)
-      {
-        Mesh mesh = meshes.get(0);
-        if (mesh != null)
-        {
-          final Extent extent = mesh.getExtent();
-  
-          if (extent.touches(frustum))
-          {
-            GLState state = new GLState(parentState);
-            state.disableDepthTest();
-            mesh.render(rc, state, parentProgramState);
-          }
-        }
-      }
-    }
-  }
-
-
-  //#include "G3MError.hpp"
-  //#include "G3MError.hpp"
-  
-=======
->>>>>>> webgl-port
   public void dispose()
   {
-  
   }
 
   public final void setFeature(GEOFeature feature)
@@ -102,9 +63,7 @@ public abstract class GEOGeometry extends GEOObject
     for (int i = 0; i < symbolsSize; i++)
     {
       final GEOSymbol symbol = symbols.get(i);
-  
       symbol.symbolize(rc, sc);
-  
       if (symbol != null)
          symbol.dispose();
     }

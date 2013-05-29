@@ -37,16 +37,31 @@ public class GPUUniform
   {
      return _type;
   }
+  public final boolean wasSet()
+  {
+     return _value != null;
+  }
+
+  public final void unset()
+  {
+    if (_value != null)
+    {
+      if (_value != null)
+         _value.dispose();
+      _value = null;
+    }
+    _dirty = false;
+  }
 
   public final void set(GPUUniformValue v)
   {
     if (_type != v.getType()) //type checking
     {
-      if (v != null)
-         v.dispose();
-      throw G3MError("Attempting to set uniform " + _name + "with invalid value type.");
+//      delete v;
+      ILogger.instance().logError("Attempting to set uniform " + _name + "with invalid value type.");
+      return;
     }
-    if (_value == null || _value.isEqualsTo(v))
+    if (_value == null || !_value.isEqualsTo(v))
     {
       _dirty = true;
       if (_value != null)
@@ -55,6 +70,7 @@ public class GPUUniform
            _value.dispose();
       }
       _value = v.deepCopy();
+//      delete v;
     }
   }
 

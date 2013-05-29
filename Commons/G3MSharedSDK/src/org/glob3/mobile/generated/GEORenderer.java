@@ -16,9 +16,6 @@ package org.glob3.mobile.generated;
 //
 
 
-//#include "G3MError.hpp"
-//#include "G3MError.hpp"
-
 
 //class GEOObject;
 //class GEOSymbolizer;
@@ -33,14 +30,9 @@ public class GEORenderer extends LeafRenderer
 
   private final GEOSymbolizer _defaultSymbolizer;
 
-<<<<<<< HEAD
-  private GPUProgramState _programState = new GPUProgramState();
-
-=======
   private MeshRenderer _meshRenderer;
   private ShapesRenderer _shapesRenderer;
   private MarksRenderer _marksRenderer;
->>>>>>> webgl-port
 
 
   /**
@@ -55,16 +47,10 @@ public class GEORenderer extends LeafRenderer
    */
   public GEORenderer(GEOSymbolizer defaultSymbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer)
   {
-<<<<<<< HEAD
-     _symbolizer = symbolizer;
-     _programState = new GPUProgramState(null);
-=======
      _defaultSymbolizer = defaultSymbolizer;
      _meshRenderer = meshRenderer;
      _shapesRenderer = shapesRenderer;
      _marksRenderer = marksRenderer;
->>>>>>> webgl-port
-
   }
 
   public void dispose()
@@ -129,15 +115,11 @@ public class GEORenderer extends LeafRenderer
     return true;
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final void render(G3MRenderContext rc)
   {
     final int childrenCount = _children.size();
     if (childrenCount > 0)
     {
-<<<<<<< HEAD
-      GEOObject geoObject = _children.get(i);
-      geoObject.render(rc, parentState, _programState, _symbolizer);
-=======
   
       for (int i = 0; i < childrenCount; i++)
       {
@@ -155,7 +137,6 @@ public class GEORenderer extends LeafRenderer
            pair.dispose();
       }
       _children.clear();
->>>>>>> webgl-port
     }
   }
 

@@ -18,9 +18,6 @@ package org.glob3.mobile.generated;
 
 
 
-//#include "G3MError.hpp"
-
-//#include "G3MError.hpp"
 
 //class IFloatBuffer;
 
@@ -32,7 +29,7 @@ public class GPUProgram
   //INativeGL* _nativeGL;
   private int _programID;
   private boolean _programCreated;
-  private java.util.HashMap<String, Attribute> _attributes = new java.util.HashMap<String, Attribute>();
+  private java.util.HashMap<String, GPUAttribute> _attributes = new java.util.HashMap<String, GPUAttribute>();
   private java.util.HashMap<String, GPUUniform> _uniforms = new java.util.HashMap<String, GPUUniform>();
   private String _name;
 
@@ -40,9 +37,9 @@ public class GPUProgram
   {
     boolean result = gl.compileShader(shader, source);
   
-  ///#if defined(DEBUG)
-  //  _nativeGL->printShaderInfoLog(shader);
-  ///#endif
+    ///#if defined(DEBUG)
+    //  _nativeGL->printShaderInfoLog(shader);
+    ///#endif
   
     if (result)
     {
@@ -58,9 +55,9 @@ public class GPUProgram
   private boolean linkProgram(GL gl)
   {
     boolean result = gl.linkProgram(_programID);
-  ///#if defined(DEBUG)
-  //  _nativeGL->printProgramInfoLog(_programID);
-  ///#endif
+    ///#if defined(DEBUG)
+    //  _nativeGL->printProgramInfoLog(_programID);
+    ///#endif
     return result;
   }
   private void deleteShader(GL gl, int shader)
@@ -87,7 +84,7 @@ public class GPUProgram
     n = gl.getProgramiv(this, GLVariable.activeAttributes());
     for (int i = 0; i < n; i++)
     {
-      Attribute a = gl.getActiveAttribute(this, i);
+      GPUAttribute a = gl.getActiveAttribute(this, i);
       if (a != null)
          _attributes.put(a.getName(), a);
     }
@@ -98,37 +95,8 @@ public class GPUProgram
   {
   }
 
-  private GPUUniform getUniform(String name)
-  {
-    java.util.HashMap<String, GPUUniform> const_iterator it = _uniforms.indexOf(name);
-    if (it != _uniforms.end())
-    {
-      return it.second;
-    }
-    else
-    {
-      return null;
-    }
-  }
-  //Uniform* getUniform(const std::string name) const;
-  private Attribute getAttribute(String name)
-  {
-    java.util.HashMap<String, Attribute> const_iterator it = _attributes.indexOf(name);
-    if (it != _attributes.end())
-    {
-      return it.second;
-    }
-    else
-    {
-      return null;
-    }
-  }
 
 
-
-  //#include "G3MError.hpp"
-  
-  
   public static GPUProgram createProgram(GL gl, String name, String vertexSource, String fragmentSource)
   {
   
@@ -147,9 +115,11 @@ public class GPUProgram
       ILogger.instance().logError("GPUProgram: ERROR compiling vertex shader\n");
       p.deleteShader(gl, vertexShader);
       p.deleteProgram(gl, p._programID);
-      throw new G3MError("GPUProgram: ERROR compiling vertex shader");
+      ILogger.instance().logError("GPUProgram: ERROR compiling vertex shader");
       return null;
     }
+  
+    System.out.printf("%s", vertexSource);
   
     // compile fragment shader
     int fragmentShader = gl.createShader(ShaderType.FRAGMENT_SHADER);
@@ -158,7 +128,7 @@ public class GPUProgram
       ILogger.instance().logError("GPUProgram: ERROR compiling fragment shader\n");
       p.deleteShader(gl, fragmentShader);
       p.deleteProgram(gl, p._programID);
-      throw new G3MError("GPUProgram: ERROR compiling fragment shader");
+      ILogger.instance().logError("GPUProgram: ERROR compiling fragment shader");
       return null;
     }
   
@@ -171,7 +141,7 @@ public class GPUProgram
       p.deleteShader(gl, vertexShader);
       p.deleteShader(gl, fragmentShader);
       p.deleteProgram(gl, p._programID);
-      throw new G3MError("GPUProgram: ERROR linking graphic program");
+      ILogger.instance().logError("GPUProgram: ERROR linking graphic program");
       return null;
     }
   
@@ -210,9 +180,44 @@ public class GPUProgram
     _programCreated = false;
   }
 
+  public final int getGPUAttributesNumber()
+  {
+     return _attributes.size();
+  }
+  public final int getGPUUniformsNumber()
+  {
+     return _uniforms.size();
+  }
+
+
+  public final GPUUniform getGPUUniform(String name)
+  {
+    java.util.HashMap<String, GPUUniform> const_iterator it = _uniforms.indexOf(name);
+    if (it != _uniforms.end())
+    {
+      return it.second;
+    }
+    else
+    {
+      return null;
+    }
+  }
+  public final GPUAttribute getGPUAttribute(String name)
+  {
+    java.util.HashMap<String, GPUAttribute> const_iterator it = _attributes.indexOf(name);
+    if (it != _attributes.end())
+    {
+      return it.second;
+    }
+    else
+    {
+      return null;
+    }
+  }
+
   public final GPUUniformBool getGPUUniformBool(String name)
   {
-    GPUUniform u = getUniform(name);
+    GPUUniform u = getGPUUniform(name);
     if (u!= null && u.getType() == GLType.glBool())
     {
       return (GPUUniformBool)u;
@@ -224,7 +229,7 @@ public class GPUProgram
   }
   public final GPUUniformVec2Float getGPUUniformVec2Float(String name)
   {
-    GPUUniform u = getUniform(name);
+    GPUUniform u = getGPUUniform(name);
     if (u!= null && u.getType() == GLType.glVec2Float())
     {
       return (GPUUniformVec2Float)u;
@@ -236,7 +241,7 @@ public class GPUProgram
   }
   public final GPUUniformVec4Float getGPUUniformVec4Float(String name)
   {
-    GPUUniform u = getUniform(name);
+    GPUUniform u = getGPUUniform(name);
     if (u!= null && u.getType() == GLType.glVec4Float())
     {
       return (GPUUniformVec4Float)u;
@@ -248,7 +253,7 @@ public class GPUProgram
   }
   public final GPUUniformFloat getGPUUniformFloat(String name)
   {
-    GPUUniform u = getUniform(name);
+    GPUUniform u = getGPUUniform(name);
     if (u!= null && u.getType() == GLType.glFloat())
     {
       return (GPUUniformFloat)u;
@@ -260,7 +265,7 @@ public class GPUProgram
   }
   public final GPUUniformMatrix4Float getGPUUniformMatrix4Float(String name)
   {
-    GPUUniform u = getUniform(name);
+    GPUUniform u = getGPUUniform(name);
     if (u!= null && u.getType() == GLType.glMatrix4Float())
     {
       return (GPUUniformMatrix4Float)u;
@@ -272,48 +277,48 @@ public class GPUProgram
   }
 
 
-  public final AttributeVec1Float getAttributeVec1Float(String name)
+  public final GPUAttributeVec1Float getGPUAttributeVec1Float(String name)
   {
-    AttributeVecFloat a = (AttributeVecFloat)getAttribute(name);
-    if (a!= null && a.getSize() == 1)
+    GPUAttributeVec1Float a = (GPUAttributeVec1Float)getGPUAttribute(name);
+    if (a!= null && a.getSize() == 1 && a.getType() == GLType.glFloat())
     {
-      return (AttributeVec1Float)a;
+      return (GPUAttributeVec1Float)a;
     }
     else
     {
       return null;
     }
   }
-  public final AttributeVec2Float getAttributeVec2Float(String name)
+  public final GPUAttributeVec2Float getGPUAttributeVec2Float(String name)
   {
-    AttributeVecFloat a = (AttributeVecFloat)getAttribute(name);
-    if (a!= null && a.getSize() == 2)
+    GPUAttributeVec2Float a = (GPUAttributeVec2Float)getGPUAttribute(name);
+    if (a!= null && a.getSize() == 2 && a.getType() == GLType.glFloat())
     {
-      return (AttributeVec2Float)a;
+      return (GPUAttributeVec2Float)a;
     }
     else
     {
       return null;
     }
   }
-  public final AttributeVec3Float getAttributeVec3Float(String name)
+  public final GPUAttributeVec3Float getGPUAttributeVec3Float(String name)
   {
-    AttributeVecFloat a = (AttributeVecFloat)getAttribute(name);
-    if (a!= null && a.getSize() == 3)
+    GPUAttributeVec3Float a = (GPUAttributeVec3Float)getGPUAttribute(name);
+    if (a!= null && a.getSize() == 3 && a.getType() == GLType.glFloat())
     {
-      return (AttributeVec3Float)a;
+      return (GPUAttributeVec3Float)a;
     }
     else
     {
       return null;
     }
   }
-  public final AttributeVec4Float getAttributeVec4Float(String name)
+  public final GPUAttributeVec4Float getGPUAttributeVec4Float(String name)
   {
-    AttributeVecFloat a = (AttributeVecFloat)getAttribute(name);
-    if (a!= null && a.getSize() == 4)
+    GPUAttributeVec4Float a = (GPUAttributeVec4Float)getGPUAttribute(name);
+    if (a!= null && a.getSize() == 4 && a.getType() == GLType.glFloat())
     {
-      return (AttributeVec4Float)a;
+      return (GPUAttributeVec4Float)a;
     }
     else
     {
@@ -327,14 +332,26 @@ public class GPUProgram
    */
   public final void onUsed()
   {
-    ILogger.instance().logInfo("GPUProgram %s being used", _name);
+  //  ILogger::instance()->logInfo("GPUProgram %s being used", _name.c_str());
   }
   /**
    Must be called when the program is no longer used
    */
   public final void onUnused()
   {
-      ILogger.instance().logInfo("GPUProgram %s unused", _name);
+    //ILogger::instance()->logInfo("GPUProgram %s unused", _name.c_str());
+  
+    for (java.util.Iterator<String, GPUUniform> iter = _uniforms.iterator(); iter.hasNext();)
+    {
+      GPUUniform u = iter.next().getValue();
+      u.unset();
+    }
+  
+    for (java.util.Iterator<String, GPUAttribute> iter = _attributes.iterator(); iter.hasNext();)
+    {
+      GPUAttribute a = iter.next().getValue();
+      a.unset();
+    }
   }
 
   /**
@@ -343,17 +360,35 @@ public class GPUProgram
   public final void applyChanges(GL gl)
   {
     //ILogger::instance()->logInfo("GPUProgram %s applying changes", _name.c_str());
-  
-    java.util.Iterator<String, GPUUniform> iter;
-    for (iter = _uniforms.iterator(); iter.hasNext();)
+    for (java.util.Iterator<String, GPUUniform> iter = _uniforms.iterator(); iter.hasNext();)
     {
-      iter.second.applyChanges(gl);
+  
+      GPUUniform u = iter.next().getValue();
+      if (u.wasSet())
+      {
+        u.applyChanges(gl);
+      }
+      else
+      {
+        ILogger.instance().logError("Uniform " + u.getName() + " was not set.");
+      }
     }
   
-    java.util.Iterator<String, Attribute> iter2;
-    for (iter2 = _attributes.iterator(); iter2.hasNext();)
+    for (java.util.Iterator<String, GPUAttribute> iter = _attributes.iterator(); iter.hasNext();)
     {
-      iter2.second.applyChanges(gl);
+  
+      GPUAttribute a = iter.next().getValue();
+      if (a.wasSet())
+      {
+        a.applyChanges(gl);
+      }
+      else
+      {
+        if (a.isEnabled())
+        {
+          ILogger.instance().logError("Attribute " + a.getName() + " was not set but it is enabled.");
+        }
+      }
     }
   }
 /*

@@ -48,30 +48,23 @@ public class SimpleTextureMapping extends TextureMapping
     return _texCoords;
   }
 
-
-  //#include "G3MError.hpp"
-  //#include "G3MError.hpp"
-  
-  public final GLState bind(G3MRenderContext rc, GLState parentState)
+  public final GLGlobalState bind(G3MRenderContext rc, GLGlobalState parentState, GPUProgramState progState)
   {
-    GLState state = new GLState(parentState);
-    state.enableTextures();
   
-    GPUProgram prog = rc.getGPUProgramManager().getProgram("DefaultProgram");
-  
-    int _WORKING_JM;
-    //UniformBool* enableTexture = prog->getUniformBool("EnableTexture");
-    //enableTexture->set(true);
-  
-    //state->enableTexture2D();
-  
+    GLGlobalState state = new GLGlobalState(parentState);
     if (_texCoords != null)
     {
-      state.scaleTextureCoordinates(_scale);
-      state.translateTextureCoordinates(_translation);
-      state.bindTexture(_glTextureId);
   
-      state.setTextureCoordinates(_texCoords, 2, 0);
+  
+      //Activating Attribute in Shader program
+      progState.setAttributeEnabled("TextureCoord", true);
+      progState.setUniformValue("EnableTexture", true);
+      progState.setAttributeValue("TextureCoord", _texCoords, 2, 2, 0, false, 0);
+  
+      progState.setUniformValue("ScaleTexCoord", _scale.asVector2D());
+      progState.setUniformValue("TranslationTexCoord", _translation.asVector2D());
+  
+      state.bindTexture(_glTextureId);
     }
     else
     {
@@ -84,6 +77,36 @@ public class SimpleTextureMapping extends TextureMapping
   public final boolean isTransparent(G3MRenderContext rc)
   {
     return _isTransparent;
+  }
+
+  public final void modifyGLGlobalState(GLGlobalState GLGlobalState)
+  {
+    if (_texCoords != null)
+    {
+      GLGlobalState.bindTexture(_glTextureId);
+    }
+    else
+    {
+      ILogger.instance().logError("SimpleTextureMapping::bind() with _texCoords == NULL");
+    }
+  }
+
+  public final void modifyGPUProgramState(GPUProgramState progState)
+  {
+    if (_texCoords != null)
+    {
+      //Activating Attribute in Shader program
+      progState.setAttributeEnabled("TextureCoord", true);
+      progState.setUniformValue("EnableTexture", true);
+      progState.setAttributeValue("TextureCoord", _texCoords, 2, 2, 0, false, 0);
+  
+      progState.setUniformValue("ScaleTexCoord", _scale.asVector2D());
+      progState.setUniformValue("TranslationTexCoord", _translation.asVector2D());
+    }
+    else
+    {
+      ILogger.instance().logError("SimpleTextureMapping::bind() with _texCoords == NULL");
+    }
   }
 
 }

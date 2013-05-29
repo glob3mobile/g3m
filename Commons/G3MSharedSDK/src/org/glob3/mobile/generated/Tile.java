@@ -27,7 +27,7 @@ package org.glob3.mobile.generated;
 //class TileRenderContext;
 //class TileKey;
 //class Vector3D;
-//class GLState;
+//class GLGlobalState;
 //class Extent;
 //class ElevationDataProvider;
 //class ElevationData;
@@ -36,7 +36,7 @@ package org.glob3.mobile.generated;
 //class GPUProgramState;
 
 
-public class Tile
+public class Tile extends GLClient
 {
   private TileTexturizer _texturizer;
   private Tile _parent;
@@ -219,9 +219,8 @@ public class Tile
     return false;
   }
 
-  private void rawRender(G3MRenderContext rc, TileRenderContext trc, GLState parentState, GPUProgramState parentProgramState)
+  private void rawRender(G3MRenderContext rc, TileRenderContext trc)
   {
-  
     Mesh tessellatorMesh = getTessellatorMesh(rc, trc);
     if (tessellatorMesh == null)
     {
@@ -231,7 +230,7 @@ public class Tile
     TileTexturizer texturizer = trc.getTexturizer();
     if (texturizer == null)
     {
-      tessellatorMesh.render(rc, parentState, parentProgramState);
+      tessellatorMesh.render(rc);
     }
     else
     {
@@ -240,26 +239,28 @@ public class Tile
       if (needsToCallTexturizer)
       {
         _texturizedMesh = texturizer.texturize(rc, trc, this, tessellatorMesh, _texturizedMesh);
+  
+        ((LeveledTexturedMesh)_texturizedMesh).setGLClientParent(this);
       }
   
       if (_texturizedMesh != null)
       {
-        _texturizedMesh.render(rc, parentState, parentProgramState);
+        _texturizedMesh.render(rc);
       }
       else
       {
-        tessellatorMesh.render(rc, parentState, parentProgramState);
+        tessellatorMesh.render(rc);
       }
     }
   
   }
 
-  private void debugRender(G3MRenderContext rc, TileRenderContext trc, GLState parentState, GPUProgramState parentProgramState)
+  private void debugRender(G3MRenderContext rc, TileRenderContext trc)
   {
     Mesh debugMesh = getDebugMesh(rc, trc);
     if (debugMesh != null)
     {
-      debugMesh.render(rc, parentState, parentProgramState);
+      debugMesh.render(rc);
     }
   }
 
@@ -489,10 +490,6 @@ public class Tile
     }
   }
 
-
-  //#include "G3MError.hpp"
-  //#include "G3MError.hpp"
-  
   public Tile(TileTexturizer texturizer, Tile parent, Sector sector, int level, int row, int column)
   {
      _texturizer = texturizer;
@@ -600,11 +597,17 @@ public class Tile
       if (needsToCallTexturizer)
       {
         _texturizedMesh = texturizer.texturize(rc, trc, this, tessellatorMesh, _texturizedMesh);
+  
+        ((LeveledTexturedMesh)_texturizedMesh).setGLClientParent(this);
+  
+  
+        //Storing camera matrix values for glclient children and notifying children
+        //this->actualizeGLGlobalState(rc->getCurrentCamera());
       }
     }
   }
 
-  public final void render(G3MRenderContext rc, TileRenderContext trc, GLState parentState, GPUProgramState parentProgramState, java.util.LinkedList<Tile> toVisitInNextIteration)
+  public final void render(G3MRenderContext rc, TileRenderContext trc, java.util.LinkedList<Tile> toVisitInNextIteration)
   {
   
     final float verticalExaggeration = trc.getVerticalExaggeration();
@@ -628,10 +631,10 @@ public class Tile
   
       if (isRawRender)
       {
-        rawRender(rc, trc, parentState, parentProgramState);
+        rawRender(rc, trc);
         if (trc.getParameters()._renderDebug)
         {
-          debugRender(rc, trc, parentState, parentProgramState);
+          debugRender(rc, trc);
         }
   
         statistics.computeTileRendered(this);
@@ -881,6 +884,29 @@ public class Tile
     subTiles.add(createSubTile(splitLatitude, splitLongitude, upper.latitude(), upper.longitude(), nextLevel, row2 + 1, column2 + 1, setParent));
   
     return subTiles;
+  }
+
+  //Not drawable gl client
+  public final void notifyGLClientChildrenParentHasChanged()
+  {
+    if (_texturizedMesh != null)
+    {
+      _texturizedMesh.actualizeGLGlobalState(this);
+    }
+    else
+    {
+      if (_tessellatorMesh != null)
+      {
+        _tessellatorMesh.actualizeGLGlobalState(this);
+      }
+    }
+  }
+  public final void modifyGLGlobalState(GLGlobalState GLGlobalState)
+  {
+    GLGlobalState.enableDepthTest();
+  }
+  public final void modifyGPUProgramState(GPUProgramState progState)
+  {
   }
 
 }

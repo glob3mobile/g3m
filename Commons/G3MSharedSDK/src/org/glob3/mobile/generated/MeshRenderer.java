@@ -17,22 +17,20 @@ package org.glob3.mobile.generated;
 
 
 
-//#include "G3MError.hpp"
-//#include "G3MError.hpp"
+
 
 //class Mesh;
 
 
-public class MeshRenderer extends LeafRenderer
+//C++ TO JAVA CONVERTER TODO TASK: Multiple inheritance is not available in Java:
+public class MeshRenderer extends LeafRenderer, GLClient
 {
   private java.util.ArrayList<Mesh> _meshes = new java.util.ArrayList<Mesh>();
-
-  private GPUProgramState _programState = new GPUProgramState();
-
+  private boolean _dirtyGLGlobalStates;
 
   public MeshRenderer()
   {
-     _programState = new GPUProgramState(null);
+     _dirtyGLGlobalStates = false;
   }
 
   public void dispose()
@@ -49,6 +47,7 @@ public class MeshRenderer extends LeafRenderer
   public final void addMesh(Mesh mesh)
   {
     _meshes.add(mesh);
+    _dirtyGLGlobalStates = true;
   }
 
   public final void clearMeshes()
@@ -88,10 +87,15 @@ public class MeshRenderer extends LeafRenderer
     return true;
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final void render(G3MRenderContext rc)
   {
-  
     final Frustum frustum = rc.getCurrentCamera().getFrustumInModelCoordinates();
+  
+    if (_dirtyGLGlobalStates)
+    {
+      actualizeGLGlobalState(rc.getCurrentCamera());
+      _dirtyGLGlobalStates = true;
+    }
   
     final int meshesCount = _meshes.size();
     for (int i = 0; i < meshesCount; i++)
@@ -101,7 +105,7 @@ public class MeshRenderer extends LeafRenderer
   
       if (extent.touches(frustum))
       {
-        mesh.render(rc, parentState, _programState);
+        mesh.render(rc);
       }
     }
   }
@@ -124,6 +128,27 @@ public class MeshRenderer extends LeafRenderer
   public final void stop(G3MRenderContext rc)
   {
 
+  }
+
+  public final void notifyGLClientChildrenParentHasChanged()
+  {
+    final int meshesCount = _meshes.size();
+    for (int i = 0; i < meshesCount; i++)
+    {
+      Mesh mesh = _meshes.get(i);
+      mesh.actualizeGLGlobalState(this);
+    }
+  }
+  public final void modifyGLGlobalState(GLGlobalState GLGlobalState)
+  {
+    GLGlobalState.enableDepthTest();
+  }
+  public final void modifyGPUProgramState(GPUProgramState progState)
+  {
+    progState.setUniformValue("EnableTexture", false);
+    progState.setUniformValue("PointSize", (float)1.0);
+    progState.setUniformValue("ScaleTexCoord", new Vector2D(1.0,1.0));
+    progState.setUniformValue("TranslationTexCoord", new Vector2D(0.0,0.0));
   }
 
 }

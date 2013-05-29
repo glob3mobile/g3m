@@ -25,4 +25,15 @@ public class GPUUniformValueBool extends GPUUniformValue
   {
     return new GPUUniformValueBool(_value);
   }
+
+  public final String description()
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addString("Uniform Value Boolean: ");
+    isb.addBool(_value);
+    String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
+  }
 }

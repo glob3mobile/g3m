@@ -67,13 +67,13 @@ public class SGTextureNode extends SGNode
 
 
   //void SGTextureNode::rawRender(const G3MRenderContext* rc,
-  //                              const GLState& parentState) {
+  //                              const GLGlobalState& parentState) {
   //  const int layersCount = _layers.size();
   //  for (int i = 0; i < layersCount; i++) {
   //    SGLayerNode* layer = _layers[i];
   //
-  //    const GLState* layerState = layer->createState(rc, parentState);
-  //    const GLState* state;
+  //    const GLGlobalState* layerState = layer->createState(rc, parentState);
+  //    const GLGlobalState* state;
   //    if (layerState == NULL) {
   //      state = &parentState;
   //    }
@@ -100,59 +100,74 @@ public class SGTextureNode extends SGNode
   }
 
 //  void rawRender(const G3MRenderContext* rc,
-//                 const GLState& parentState);
+//                 const GLGlobalState& parentState);
 
-  public final GLState createState(G3MRenderContext rc, GLState parentState)
+  public final GLGlobalState createState(G3MRenderContext rc, GLGlobalState parentState)
   {
     return null;
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
-  {
-    GLState myState = createState(rc, parentState);
-    GLState state2;
-    if (myState == null)
-    {
-      state2 = new GLState(parentState);
-    }
-    else
-    {
-      state2 = myState;
-    }
+//  void render(const G3MRenderContext* rc);
+
+
+  /*
+  void SGTextureNode::render(const G3MRenderContext* rc) {
+  //  GLGlobalState* myState = createState(rc, parentState);
+  //  GLGlobalState* state2;
+  //  if (myState == NULL) {
+  //    state2 = new GLGlobalState(parentState);
+  //  }
+  //  else {
+  //    state2 = myState;
+  //  }
   
     //  rawRender(rc, *state);
   
-    final int layersCount = _layers.size();
-    for (int i = 0; i < layersCount; i++)
-    {
-      SGLayerNode layer = _layers.get(i);
+    const int layersCount = _layers.size();
+    for (int i = 0; i < layersCount; i++) {
+      SGLayerNode* layer = _layers[i];
   
-      final GLState layerState = layer.createState(rc, state2);
-      final GLState state;
-      if (layerState == null)
-      {
+      const GLGlobalState* layerState = layer->createState(rc, *state2);
+      const GLGlobalState* state;
+      if (layerState == NULL) {
         state = state2;
       }
-      else
-      {
+      else {
         state = layerState;
       }
   
       //layer->rawRender(rc, *state);
   
-      final int childrenCount = _children.size();
-      for (int j = 0; j < childrenCount; j++)
-      {
-        SGNode child = _children.get(j);
-        child.render(rc, state);
+      const int childrenCount = _children.size();
+      for (int j = 0; j < childrenCount; j++) {
+        SGNode* child = _children[j];
+        child->render(rc);
       }
   
-      if (layerState != null)
-         layerState.dispose();
+      delete layerState;
     }
+    
+    delete myState;
+  }
+  */
   
-    if (myState != null)
-       myState.dispose();
+  public final void modifyGLGlobalState(GLGlobalState GLGlobalState)
+  {
+    final int layersCount = _layers.size();
+    for (int i = 0; i < layersCount; i++)
+    {
+      SGLayerNode layer = _layers.get(i);
+      layer.modifyGLGlobalState(GLGlobalState);
+    }
+  }
+  public final void modifyGPUProgramState(GPUProgramState progState)
+  {
+    final int layersCount = _layers.size();
+    for (int i = 0; i < layersCount; i++)
+    {
+      SGLayerNode layer = _layers.get(i);
+      layer.modifyGPUProgramState(progState);
+    }
   }
 
 

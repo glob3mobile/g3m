@@ -169,7 +169,7 @@ public abstract class SimplePlanetRenderer extends LeafRenderer
   
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState, GPUProgramState parentProgramState)
+  public final void render(G3MRenderContext rc)
   {
     if (_mesh == null)
     {
@@ -177,7 +177,7 @@ public abstract class SimplePlanetRenderer extends LeafRenderer
     }
     if (_mesh != null)
     {
-      _mesh.render(rc, parentState, parentProgramState);
+      _mesh.render(rc);
     }
   }
 

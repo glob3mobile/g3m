@@ -18,6 +18,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 public class TexturedMesh extends Mesh
 {
   private final Mesh _mesh;
@@ -29,19 +30,13 @@ public class TexturedMesh extends Mesh
 
 
   public TexturedMesh(Mesh mesh, boolean ownedMesh, TextureMapping textureMapping, boolean ownedTexMapping, boolean transparent)
-
   {
      _mesh = mesh;
      _ownedMesh = ownedMesh;
      _textureMapping = textureMapping;
      _ownedTexMapping = ownedTexMapping;
      _transparent = transparent;
-//    GLState* state = _mesh->getGLState();
-//    state->enableTextures();
-//    state->enableTexture2D();
-//    if (_transparent) {
-//      state->enableBlend();
-//    }
+    addChild((Mesh)mesh); //New and only child (not const)!!
   }
 
   public void dispose()
@@ -58,8 +53,10 @@ public class TexturedMesh extends Mesh
     }
   }
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  void render(G3MRenderContext rc, GLState parentState, GPUProgramState parentProgramState);
+  public final void render(G3MRenderContext rc)
+  {
+    _mesh.render(rc);
+  }
 
   public final Extent getExtent()
   {
@@ -84,5 +81,46 @@ public class TexturedMesh extends Mesh
   public final boolean isTransparent(G3MRenderContext rc)
   {
     return _transparent;
+  }
+
+  public final void notifyGLClientChildrenParentHasChanged()
+  {
+    Mesh mesh = (Mesh)_mesh;
+    mesh.actualizeGLGlobalState(this);
+  }
+  public final void modifyGLGlobalState(GLGlobalState GLGlobalState)
+  {
+    _textureMapping.modifyGLGlobalState(GLGlobalState);
+    if (_transparent)
+    {
+      GLGlobalState.enableBlend();
+      GLGlobalState.setBlendFactors(GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha());
+    }
+  }
+  public final void modifyGPUProgramState(GPUProgramState progState)
+  {
+    _textureMapping.modifyGPUProgramState(progState);
+  }
+
+  //Scene Graph Node
+  public final void rawRender(G3MRenderContext rc, GLStateTreeNode myStateTreeNode)
+  {
+  }
+  public final boolean isInsideCameraFrustum(G3MRenderContext rc)
+  {
+    return true;
+  }
+  public final void modifiyGLState(GLState state)
+  {
+    GLGlobalState globalState = state.getGLGlobalState();
+    _textureMapping.modifyGLGlobalState(globalState);
+    if (_transparent)
+    {
+      globalState.enableBlend();
+      globalState.setBlendFactors(GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha());
+    }
+  
+    GPUProgramState progState = state.getGPUProgramState();
+    _textureMapping.modifyGPUProgramState(progState);
   }
 }

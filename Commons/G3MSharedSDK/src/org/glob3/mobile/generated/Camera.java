@@ -2,7 +2,8 @@ package org.glob3.mobile.generated;
 /**
  * Class to control the camera.
  */
-public class Camera
+//C++ TO JAVA CONVERTER TODO TASK: Multiple inheritance is not available in Java:
+public class Camera extends GLClient, SceneGraphNode
 {
   public Camera(Camera that)
   {
@@ -158,25 +159,9 @@ public class Camera
     //cleanCachedValues();
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final void render(G3MRenderContext rc, GLGlobalState parentState)
   {
-    //GL* gl = rc->getGL();
-    //gl->setProjection(getProjectionMatrix());
-    //gl->loadMatrixf(getModelMatrix());
-    //parentState.getProgram()->setUniform(rc->getGL(), "Projection", getProjectionMatrix());
-    int _WORKING_JM;
-  //  GPUProgram* prog = rc->getGPUProgramManager()->getProgram("DefaultProgram");
-  //  UniformMatrix4Float* projection = prog->getUniformMatrix4Float("Projection");
-  //  UniformMatrix4Float* modelview = prog->getUniformMatrix4Float("Modelview");
-  //  projection->set(getProjectionMatrix());
-    //modelview->set(getModelViewMatrix());
-  }
-
-  public final void changeGLState(GLState state)
-  {
-    //state->setProjectionMatrix(getProjectionMatrix());
-    state.setModelViewMatrix(getModelMatrix());
-    state.enableDepthTest();
+    //TODO: NO LONGER NEEDED!!!
   }
 
   public final Vector3D pixel2Ray(Vector2I pixel)
@@ -359,10 +344,6 @@ public class Camera
     return point0.angleBetween(point1);
   }
 
-
-  //#include "G3MError.hpp"
-  //#include "G3MError.hpp"
-  
   public final void initialize(G3MContext context)
   {
     _planet = context.getPlanet();
@@ -471,6 +452,44 @@ public class Camera
     //getFrustumData();
     getProjectionMatrix();
     getModelMatrix();
+  }
+
+  public final void actualizeChildGLGlobalState(GLClient child)
+  {
+    child.actualizeGLGlobalState(this);
+  }
+
+  //GLClient
+  public final void modifyGLGlobalState(GLGlobalState GLGlobalState)
+  {
+  }
+  public final void modifyGPUProgramState(GPUProgramState progState)
+  {
+    getProjectionMatrix();
+    getModelViewMatrix();
+    progState.setUniformValue("Projection", _projectionMatrix);
+    progState.setUniformValue("Modelview", _modelMatrix);
+  }
+
+  //SCENE GRAPH
+
+  public final void rawRender(G3MRenderContext rc, GLStateTreeNode myStateTreeNode)
+  {
+    getModelMatrix();
+    getProjectionMatrix();
+  }
+
+  public final boolean isInsideCameraFrustum(G3MRenderContext rc)
+  {
+    return true;
+  }
+
+  public final void modifiyGLState(GLState state)
+  {
+    getProjectionMatrix();
+    getModelViewMatrix();
+    state.getGPUProgramState().setUniformValue("Projection", _projectionMatrix);
+    state.getGPUProgramState().setUniformValue("Modelview", _modelMatrix);
   }
 
   private Angle getHeading(Vector3D normal)

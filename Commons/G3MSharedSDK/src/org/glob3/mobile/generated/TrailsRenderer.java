@@ -3,11 +3,8 @@ public class TrailsRenderer extends LeafRenderer
 {
   private java.util.ArrayList<Trail> _trails = new java.util.ArrayList<Trail>();
 
-  private GPUProgramState _programState = new GPUProgramState();
-
   public TrailsRenderer()
   {
-     _programState = new GPUProgramState(null);
   }
 
   public final void addTrail(Trail trail)
@@ -44,7 +41,6 @@ public class TrailsRenderer extends LeafRenderer
 
   public final void initialize(G3MContext context)
   {
-
   }
 
   public final boolean isReadyToRender(G3MRenderContext rc)
@@ -72,14 +68,17 @@ public class TrailsRenderer extends LeafRenderer
 
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final void render(G3MRenderContext rc)
   {
     final int trailsCount = _trails.size();
     for (int i = 0; i < trailsCount; i++)
     {
       Trail trail = _trails.get(i);
-      trail.render(rc, parentState, _programState);
+      trail.render(rc);
     }
   }
 
 }
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#pragma mark TrailsRenderer
+

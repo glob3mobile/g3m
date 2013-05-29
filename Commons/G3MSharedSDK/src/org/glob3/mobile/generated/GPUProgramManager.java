@@ -19,8 +19,6 @@ package org.glob3.mobile.generated;
 
 
 
-//#include "G3MError.hpp"
-//#include "G3MError.hpp"
 
 public class GPUProgramManager
 {
@@ -80,8 +78,28 @@ public class GPUProgramManager
 
   public final GPUProgram getProgram(GPUProgramState state)
   {
+
+    for(java.util.Iterator<String, GPUProgram> it = _programs.iterator(); it.hasNext();)
+    {
+      if (state.isLinkableToProgram(it.next().second))
+      {
+        return it.next().getValue();
+      }
+    }
+
     int WORKING_JM;
-    return getProgram("DefaultProgram");
+
+    java.util.ArrayList<String> us = state.getUniformsNames();
+    int size = us.size();
+    for (int i = 0; i < size; i++)
+    {
+      if (us.get(i).compareTo("ViewPortExtent") == 0)
+      {
+        return getProgram("Billboard");
+      }
+    }
+
+    return getProgram("Default");
   }
 
 

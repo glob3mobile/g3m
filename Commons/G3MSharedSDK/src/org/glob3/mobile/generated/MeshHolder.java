@@ -17,8 +17,6 @@ package org.glob3.mobile.generated;
 
 
 
-//#include "G3MError.hpp"
-//#include "G3MError.hpp"
 
 public class MeshHolder extends Mesh
 {
@@ -56,9 +54,9 @@ public class MeshHolder extends Mesh
     return _mesh.getVertex(i);
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState, GPUProgramState parentProgramState)
+  public final void render(G3MRenderContext rc)
   {
-    _mesh.render(rc, parentState, parentProgramState);
+    _mesh.render(rc);
   }
 
   public final Extent getExtent()
@@ -69,6 +67,32 @@ public class MeshHolder extends Mesh
   public final boolean isTransparent(G3MRenderContext rc)
   {
     return _mesh.isTransparent(rc);
+  }
+
+  public final void notifyGLClientChildrenParentHasChanged()
+  {
+    _mesh.actualizeGLGlobalState(this);
+  }
+  public final void modifyGLGlobalState(GLGlobalState GLGlobalState)
+  {
+  }
+  public final void modifyGPUProgramState(GPUProgramState progState)
+  {
+  }
+
+  //Scene Graph Node
+  public final void rawRender(G3MRenderContext rc, GLStateTreeNode myStateTreeNode)
+  {
+    //TODO: Implement
+    //It's necessary a holder with the Scene Graph approach
+  }
+  public final boolean isInsideCameraFrustum(G3MRenderContext rc)
+  {
+    //TODO: Implement
+  }
+  public final void modifiyGLState(GLState state)
+  {
+    //TODO: Implement
   }
 
 }

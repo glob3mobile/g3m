@@ -181,8 +181,6 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 
   private float _verticalExaggeration;
 
-  private GPUProgramState _programState = new GPUProgramState();
-
   public TileRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters parameters, boolean showStatistics, long texturePriority)
   {
      _tessellator = tessellator;
@@ -200,7 +198,6 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
      _lastVisibleSector = null;
      _texturePriority = texturePriority;
      _allFirstLevelTilesAreTextureSolved = false;
-     _programState = new GPUProgramState(null);
     _layerSet.setChangeListener(this);
   }
 
@@ -249,9 +246,16 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
     {
       _elevationDataProvider.initialize(context);
     }
+  
+    //Initializing program State
+  //  _programState.setUniformValue("BillBoard", false);
+  //  _programState.setUniformValue("EnableTexture", false);
+  //  _programState.setUniformValue("PointSize", (float)1.0);
+  //  _programState.setUniformValue("TextureExtent", Vector2D(0.0,0.0));
+  //  _programState.setUniformValue("ViewPortExtent", Vector2D(0.0,0.0));
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final void render(G3MRenderContext rc)
   {
     // Saving camera for use in onTouchEvent
     _lastCamera = rc.getCurrentCamera();
@@ -271,7 +275,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
       for (int i = 0; i < firstLevelTilesCount; i++)
       {
         Tile tile = _firstLevelTiles.get(i);
-        tile.render(rc, trc, parentState, _programState, null);
+        tile.render(rc, trc, null);
       }
     }
     else
@@ -290,7 +294,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
         {
           Tile tile = iter.next();
   
-          tile.render(rc, trc, parentState, _programState, toVisitInNextIteration);
+          tile.render(rc, trc, toVisitInNextIteration);
         }
   
         toVisit = toVisitInNextIteration;
