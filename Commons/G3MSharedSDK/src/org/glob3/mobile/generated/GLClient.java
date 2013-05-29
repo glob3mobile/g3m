@@ -23,11 +23,20 @@ public class GLClient
   {
   }
 
-  //Idle if this is not a drawable client
-  public void getGLGlobalStateAndGPUProgramState(GLGlobalState[]GLGlobalState, GPUProgramState[]progState)
+//  //Idle if this is not a drawable client
+//  virtual void getGLGlobalStateAndGPUProgramState(GLGlobalState** GLGlobalState, GPUProgramState** progState){
+//    (*GLGlobalState) = NULL;
+//    (*progState) = NULL;
+//  }
+
+  public GLGlobalState getGLGlobalState()
   {
-    (*GLGlobalState) = null;
-    (*progState) = null;
+    return null;
+  }
+
+  public GPUProgramState getGPUProgramState()
+  {
+    return null;
   }
 
   public void notifyGLClientChildrenParentHasChanged()
@@ -52,9 +61,9 @@ public class GLClient
     _parent = parent;
     notifyGLClientChildrenParentHasChanged();
 
-    GLGlobalState GLGlobalState;
-    GPUProgramState programState;
-    getGLGlobalStateAndGPUProgramState(GLGlobalState, programState);
+    GLGlobalState GLGlobalState = getGLGlobalState();
+    GPUProgramState programState = getGPUProgramState();
+//    getGLGlobalStateAndGPUProgramState(&GLGlobalState, &programState);
     if (GLGlobalState != null && programState != null)
     {
       //We are a drawable client

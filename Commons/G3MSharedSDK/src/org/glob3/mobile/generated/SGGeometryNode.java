@@ -118,11 +118,19 @@ public class SGGeometryNode extends SGNode
 //  GPUProgramState * createGPUProgramState(const G3MRenderContext *rc, const GPUProgramState *parentState);
 
   //Idle if this is not a drawable client
-  public final void getGLGlobalStateAndGPUProgramState(GLGlobalState[]GLGlobalState, GPUProgramState[]progState)
+//  void getGLGlobalStateAndGPUProgramState(GLGlobalState** GLGlobalState, GPUProgramState** progState){
+//    _programState.clear();
+////    (*GLGlobalState) = &_GLGlobalState;
+////    (*progState) = &_programState;
+//  }
+  public final GLGlobalState getGLGlobalState()
+  {
+    return _GLGlobalState;
+  }
+  public final GPUProgramState getGPUProgramState()
   {
     _programState.clear();
-    (*GLGlobalState) = _GLGlobalState;
-    (*progState) = _programState;
+    return _programState;
   }
 
   public final void modifyGLGlobalState(GLGlobalState GLGlobalState)

@@ -2,8 +2,7 @@ package org.glob3.mobile.generated;
 /**
  * Class to control the camera.
  */
-//C++ TO JAVA CONVERTER TODO TASK: Multiple inheritance is not available in Java:
-public class Camera extends GLClient, SceneGraphNode
+public class Camera extends SceneGraphNode
 {
   public Camera(Camera that)
   {

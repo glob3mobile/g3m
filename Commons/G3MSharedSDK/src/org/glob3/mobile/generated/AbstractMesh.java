@@ -157,12 +157,16 @@ public abstract class AbstractMesh extends Mesh
   }
 
   //Drawable GLClient
-  public final void getGLGlobalStateAndGPUProgramState(GLGlobalState[]GLGlobalState, GPUProgramState[]progState)
+  public final GLGlobalState getGLGlobalState()
+  {
+    return _GLGlobalState;
+  }
+  public final GPUProgramState getGPUProgramState()
   {
     _progState.clear();
-    (*GLGlobalState) = _GLGlobalState;
-    (*progState) = _progState;
+    return _progState;
   }
+//  void getGLGlobalStateAndGPUProgramState(GLGlobalState** GLGlobalState, GPUProgramState** progState);
   public final void modifyGLGlobalState(GLGlobalState GLGlobalState)
   {
     GLGlobalState.setLineWidth(_lineWidth);
@@ -219,6 +223,12 @@ public abstract class AbstractMesh extends Mesh
   //Scene Graph Node
 //  void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode);
 
+  //void AbstractMesh::getGLGlobalStateAndGPUProgramState(GLGlobalState** GLGlobalState, GPUProgramState** progState){
+  //  _progState.clear();
+  ////  (*GLGlobalState) = &_GLGlobalState;
+  ////  (*progState) = &_progState;
+  //}
+  
   //Scene Graph Node
   //void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode){
   //  

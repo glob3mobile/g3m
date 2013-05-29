@@ -1,6 +1,5 @@
 package org.glob3.mobile.generated; 
-//C++ TO JAVA CONVERTER TODO TASK: Multiple inheritance is not available in Java:
-public class Mark extends GLClient, SceneGraphNode
+public class Mark extends SceneGraphNode
 {
   /**
    * The text the mark displays.
@@ -573,12 +572,23 @@ public class Mark extends GLClient, SceneGraphNode
   }
 
   //Drawable client
-  public final void getGLGlobalStateAndGPUProgramState(GLGlobalState[]GLGlobalState, GPUProgramState[]progState)
+  public final GLGlobalState getGLGlobalState()
+  {
+    return _GLGlobalState;
+  }
+  public final GPUProgramState getGPUProgramState()
   {
     _progState.clear();
-    (*GLGlobalState) = _GLGlobalState;
-    (*progState) = _progState;
+    return _progState;
   }
+//  void getGLGlobalStateAndGPUProgramState(GLGlobalState** GLGlobalState, GPUProgramState** progState);
+
+  //void Mark::getGLGlobalStateAndGPUProgramState(GLGlobalState** GLGlobalState, GPUProgramState** progState){
+  //  _progState.clear();
+  ////  (*GLGlobalState) = &_GLGlobalState;
+  ////  (*progState) = &_progState;
+  //}
+  
   public final void modifyGLGlobalState(GLGlobalState GLGlobalState)
   {
     GLGlobalState.disableDepthTest();

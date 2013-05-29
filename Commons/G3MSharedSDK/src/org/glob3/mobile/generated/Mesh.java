@@ -22,8 +22,7 @@ package org.glob3.mobile.generated;
 //class Vector3D;
 //class GPUProgramState;
 
-//C++ TO JAVA CONVERTER TODO TASK: Multiple inheritance is not available in Java:
-public abstract class Mesh extends GLClient, SceneGraphNode
+public abstract class Mesh extends SceneGraphNode
 {
 
   public void dispose()
