@@ -19,10 +19,12 @@ class MutableMatrix44D;
 #include "Effects.hpp"
 #include <vector>
 
+#include "GLClient.hpp"
+
 class ShapePendingEffect;
 class GPUProgramState;
 
-class Shape : public EffectTarget{
+class Shape : public GLClient{
 private:
   Geodetic3D* _position;
   

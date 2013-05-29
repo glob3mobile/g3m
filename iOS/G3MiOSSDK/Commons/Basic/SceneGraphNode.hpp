@@ -19,9 +19,9 @@
 
 
 
-#include "Effects.hpp"
+#include "GLClient.hpp"
 
-class SceneGraphNode: public EffectTarget{
+class SceneGraphNode: public GLClient{
 private:
   GLStateTreeNode* _lastParentStateNode;
   GLStateTreeNode* _lastStateNode;

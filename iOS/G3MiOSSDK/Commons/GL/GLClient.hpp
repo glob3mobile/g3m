@@ -12,7 +12,9 @@
 #include "GPUProgramState.hpp"
 #include "GLGlobalState.hpp"
 
-class GLClient{
+#include "Effects.hpp"
+
+class GLClient: public EffectTarget{
 protected:
   GLClient* _parent;
   

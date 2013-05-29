@@ -18,18 +18,14 @@
 
 #include <vector>
 
-#include "GLClient.hpp"
-//TODO: REMOVE GLCLIENT
-
 class G3MRenderContext;
 class G3MContext;
 
-class EffectTarget :public GLClient{
+class EffectTarget{
 public:
 #ifdef C_CODE
   virtual ~EffectTarget() { }
 #else
-  bool isEffectTarget() { return true;} //CONVERSOR GENERATE ABSTRACT CLASS INSTEAD OF INTERFACE
   void dispose(){ }
 #endif
 };
