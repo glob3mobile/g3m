@@ -29,6 +29,7 @@ public:
 #ifdef C_CODE
   virtual ~EffectTarget() { }
 #else
+  bool isEffectTarget() { return true;} //CONVERSOR GENERATE ABSTRACT CLASS INSTEAD OF INTERFACE
   void dispose(){ }
 #endif
 };
