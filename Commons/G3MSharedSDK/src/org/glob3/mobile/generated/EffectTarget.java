@@ -21,17 +21,11 @@ package org.glob3.mobile.generated;
 
 
 
-//TODO: REMOVE GLCLIENT
-
 //class G3MRenderContext;
 //class G3MContext;
 
-public interface EffectTarget extends GLClient
+public interface EffectTarget
 {
-  public final boolean isEffectTarget() //CONVERSOR GENERATE ABSTRACT CLASS INSTEAD OF INTERFACE
-  {
-     return true;
-  }
   public final void dispose()
   {
   }

@@ -20,10 +20,11 @@ package org.glob3.mobile.generated;
 //class MutableMatrix44D;
 
 
+
 //class ShapePendingEffect;
 //class GPUProgramState;
 
-public abstract class Shape implements EffectTarget
+public abstract class Shape extends GLClient
 {
   private Geodetic3D _position;
 

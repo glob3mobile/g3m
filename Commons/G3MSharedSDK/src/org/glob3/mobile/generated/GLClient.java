@@ -9,7 +9,8 @@ package org.glob3.mobile.generated;
 
 
 
-public class GLClient
+
+public class GLClient implements EffectTarget
 {
   protected GLClient _parent;
 

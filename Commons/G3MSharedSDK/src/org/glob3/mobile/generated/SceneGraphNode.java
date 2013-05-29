@@ -22,7 +22,7 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class SceneGraphNode implements EffectTarget
+public abstract class SceneGraphNode extends GLClient
 {
   private GLStateTreeNode _lastParentStateNode;
   private GLStateTreeNode _lastStateNode;
