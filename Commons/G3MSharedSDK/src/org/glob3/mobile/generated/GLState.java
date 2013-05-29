@@ -26,6 +26,7 @@ public class GLState
 
   private GPUProgramState _programState;
   private GLGlobalState _globalState;
+  private final boolean _owner;
 
   private void setProgramState(GL gl, GPUProgramManager progManager)
   {
@@ -65,6 +66,7 @@ public class GLState
   {
      _programState = new GPUProgramState();
      _globalState = new GLGlobalState();
+     _owner = true;
   }
 
   //For debugging purposes only
@@ -72,6 +74,18 @@ public class GLState
   {
      _programState = programState;
      _globalState = globalState;
+     _owner = false;
+  }
+
+  public void dispose()
+  {
+    if (_owner)
+    {
+      if (_programState != null)
+         _programState.dispose();
+      if (_globalState != null)
+         _globalState.dispose();
+    }
   }
 
   public final void applyGlobalStateOnGPU(GL gl)
@@ -107,7 +121,7 @@ public class GLState
 
   public static GLGlobalState createCopyOfCurrentGLGlobalState()
   {
-    return new GLGlobalState(_currentGPUGlobalState);
+    return _currentGPUGlobalState.createCopy();
   }
 
 //  static const GLGlobalState* getCurrentGLGlobalState() {

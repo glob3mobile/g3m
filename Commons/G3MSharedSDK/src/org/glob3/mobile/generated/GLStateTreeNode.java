@@ -25,7 +25,8 @@ public class GLStateTreeNode
 
   protected SceneGraphNode _sgNode;
   protected java.util.ArrayList<GLStateTreeNode> _children = new java.util.ArrayList<GLStateTreeNode>(); //OTHER IMPLEMENTATIONS MAY HAVE ONLY ONE CHILD (FOR PERFORMANCE)
-  protected final GLStateTreeNode _const _parent;
+
+  protected final GLStateTreeNode _parent;
   protected GLState _state;
 
 //C++ TO JAVA CONVERTER TODO TASK: Java has no concept of a 'friend' class:
@@ -48,7 +49,7 @@ public class GLStateTreeNode
   protected final java.util.LinkedList<SceneGraphNode> getHierachy()
   {
     java.util.LinkedList<SceneGraphNode> h = new java.util.LinkedList<SceneGraphNode>();
-    final GLStateTreeNode ancestor = this;
+    GLStateTreeNode ancestor = this;
     while (ancestor != null)
     {
       h.addFirst(ancestor.getSGNode());
@@ -61,13 +62,12 @@ public class GLStateTreeNode
   {
     for (java.util.Iterator<GLStateTreeNode> it = _children.iterator(); it.hasNext();)
     {
-      (it.next()).prune(sgNode);
+      GLStateTreeNode child = (it.next());
+      child.prune(sgNode);
   
-      if ((it.next())._sgNode == sgNode)
+      if (child._sgNode == sgNode)
       {
-        delete (it.next());
-//C++ TO JAVA CONVERTER TODO TASK: There is no direct equivalent to the STL vector 'erase' method in Java:
-        _children.erase(it);
+        _children.remove(child);
       }
     }
   }
@@ -80,12 +80,6 @@ public class GLStateTreeNode
 
   public void dispose()
   {
-    for (java.util.Iterator<GLStateTreeNode> it = _children.iterator(); it.hasNext();)
-    {
-      delete (it.next());
-    }
-    if (_state != null)
-       _state.dispose();
   }
 
   public final GLStateTreeNode createChildNodeForSGNode(SceneGraphNode sgNode)

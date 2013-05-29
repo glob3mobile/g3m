@@ -192,10 +192,10 @@ public class GPUProgram
 
   public final GPUUniform getGPUUniform(String name)
   {
-    java.util.HashMap<String, GPUUniform> const_iterator it = _uniforms.indexOf(name);
-    if (it != _uniforms.end())
+    java.util.Iterator<String, GPUUniform> it = _uniforms.indexOf(name);
+    if (it.hasNext())
     {
-      return it.second;
+      return it.next().getValue();
     }
     else
     {
@@ -204,10 +204,10 @@ public class GPUProgram
   }
   public final GPUAttribute getGPUAttribute(String name)
   {
-    java.util.HashMap<String, GPUAttribute> const_iterator it = _attributes.indexOf(name);
-    if (it != _attributes.end())
+    java.util.Iterator<String, GPUAttribute> it = _attributes.indexOf(name);
+    if (it.hasNext())
     {
-      return it.second;
+      return it.next().getValue();
     }
     else
     {

@@ -96,7 +96,7 @@ public class LazyTextureMapping extends TextureMapping
     progState.setAttributeEnabled("TextureCoord", true);
     progState.setUniformValue("EnableTexture", true);
   
-    GLGlobalState state = new GLGlobalState(parentState);
+    GLGlobalState state = null; //new GLGlobalState(parentState);
     //state->enableTextures();
   
   //  state->enableTexture2D();

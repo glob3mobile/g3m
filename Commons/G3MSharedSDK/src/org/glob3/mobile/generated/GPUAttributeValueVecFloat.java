@@ -7,9 +7,9 @@ public class GPUAttributeValueVecFloat extends GPUAttributeValue
   private int _timeStamp;
   public GPUAttributeValueVecFloat(IFloatBuffer buffer, int attributeSize, int arrayElementSize, int index, int stride, boolean normalized)
   {
+     super(GLType.glFloat(), attributeSize, arrayElementSize, index, stride, normalized);
      _buffer = buffer;
      _timeStamp = buffer.timestamp();
-     super(GLType.glFloat(), attributeSize, arrayElementSize, index, stride, normalized);
   }
 
   public final void setAttribute(GL gl, int id)

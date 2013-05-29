@@ -210,8 +210,10 @@ public class GL
       state.setPixelStoreIAlignmentUnpack(1);
       state.bindTexture(texId);
   
-      GLState glState = new GLState((GLGlobalState) state, null);
+      GLState glState = new GLState(state, null);
       glState.applyGlobalStateOnGPU(this);
+      if (state != null)
+         state.dispose();
   
   //    setGLGlobalState(state);
   

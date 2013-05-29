@@ -51,7 +51,9 @@ public class SimpleTextureMapping extends TextureMapping
   public final GLGlobalState bind(G3MRenderContext rc, GLGlobalState parentState, GPUProgramState progState)
   {
   
-    GLGlobalState state = new GLGlobalState(parentState);
+    //GLGlobalState* state= new GLGlobalState(parentState);
+    GLGlobalState state = null;
+  
     if (_texCoords != null)
     {
   

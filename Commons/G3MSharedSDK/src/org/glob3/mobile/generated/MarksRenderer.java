@@ -327,6 +327,11 @@ public class MarksRenderer extends LeafRenderer
             continue;
           }
   
+          if (!mark.isRendered())
+          {
+            continue;
+          }
+  
           final int textureWidth = mark.getTextureWidth();
           if (textureWidth <= 0)
           {

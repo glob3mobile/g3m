@@ -682,6 +682,8 @@ public class Mark extends SceneGraphNode
 
   public final boolean isInsideCameraFrustum(G3MRenderContext rc)
   {
+    _renderedMark = false;
+  
     final Planet planet = rc.getPlanet();
   
     final Vector3D markPosition = getCartesianPosition(planet);
@@ -711,7 +713,9 @@ public class Mark extends SceneGraphNode
     }
   
     //Checking with frustum
-    return rc.getCurrentCamera().getFrustumInModelCoordinates().contains(_cartesianPosition);
+  
+    _renderedMark = rc.getCurrentCamera().getFrustumInModelCoordinates().contains(_cartesianPosition);
+    return _renderedMark;
   }
 
   public final void modifiyGLState(GLState state)
