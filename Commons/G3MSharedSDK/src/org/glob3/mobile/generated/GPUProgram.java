@@ -324,16 +324,17 @@ public class GPUProgram
   public final void onUnused()
   {
     //ILogger::instance()->logInfo("GPUProgram %s unused", _name.c_str());
-  
-    for (java.util.Iterator<String, GPUUniform> iter = _uniforms.iterator(); iter.hasNext();)
-    {
-      GPUUniform u = iter.next().getValue();
+    Iterator it = _uniforms.entrySet().iterator();
+    while (it.hasNext()) {
+      Map.Entry pairs = (Map.Entry)it.next();
+      GPUUniform u = (GPUUniform) pairs.getValue();
       u.unset();
     }
   
-    for (java.util.Iterator<String, GPUAttribute> iter = _attributes.iterator(); iter.hasNext();)
-    {
-      GPUAttribute a = iter.next().getValue();
+    Iterator it2 = _attributes.entrySet().iterator();
+    while (it2.hasNext()) {
+      Map.Entry pairs = (Map.Entry)it2.next();
+      GPUAttribute a = (GPUUniform) pairs.getValue();
       a.unset();
     }
   }
@@ -344,36 +345,30 @@ public class GPUProgram
   public final void applyChanges(GL gl)
   {
     //ILogger::instance()->logInfo("GPUProgram %s applying changes", _name.c_str());
-    for (java.util.Iterator<String, GPUUniform> iter = _uniforms.iterator(); iter.hasNext();)
-    {
-  
-      GPUUniform u = iter.next().getValue();
-      if (u.wasSet())
-      {
+    Iterator it = _uniforms.entrySet().iterator();
+    while (it.hasNext()) {
+      Map.Entry pairs = (Map.Entry)it.next();
+      GPUUniform u = (GPUUniform) pairs.getValue();
+      if (u.wasSet()){
         u.applyChanges(gl);
-      }
-      else
-      {
+      } else{
         ILogger.instance().logError("Uniform " + u.getName() + " was not set.");
       }
     }
   
-    for (java.util.Iterator<String, GPUAttribute> iter = _attributes.iterator(); iter.hasNext();)
-    {
-  
-      GPUAttribute a = iter.next().getValue();
-      if (a.wasSet())
-      {
+    Iterator it2 = _attributes.entrySet().iterator();
+    while (it2.hasNext()) {
+      Map.Entry pairs = (Map.Entry)it2.next();
+      GPUAttribute a = (GPUUniform) pairs.getValue();
+      if (a.wasSet()){
         a.applyChanges(gl);
-      }
-      else
-      {
-        if (a.isEnabled())
-        {
+      } else{
+        if (a.isEnabled()){
           ILogger.instance().logError("Attribute " + a.getName() + " was not set but it is enabled.");
         }
       }
     }
+  
   }
 /*
   void setUniform(GL* gl, const std::string& name, const Vector2D& v) const{

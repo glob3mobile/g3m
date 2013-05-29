@@ -34,15 +34,10 @@ public class GPUProgramManager
      _factory = factory;
   }
 
-  public GPUProgramManager()
+  public void dispose()
   {
     if (_factory != null)
        _factory.dispose();
-
-    for (java.util.Iterator<String, GPUProgram> it = _programs.iterator(); it.hasNext();)
-    {
-      it.next().getValue() = null;
-    }
   }
 
   public final GPUProgram getCompiledProgram(String name)
@@ -54,14 +49,9 @@ public class GPUProgramManager
   {
 
     GPUProgram prog = getCompiledProgram(name);
-    if (prog != null)
-    {
-      return prog;
-    }
-    else
+    if (prog == null)
     {
       final GPUProgramSources ps = _factory.get(name);
-      GPUProgram prog = null;
 
       //Compile new Program
       if (ps != null)
@@ -73,22 +63,23 @@ public class GPUProgramManager
           return null;
         }
 
-        //_programs[prog->getName()] = prog;
+        _programs.put(name, prog);
 
-        _programs.insert(std.<String, GPUProgram>pair(prog.getName(),prog));
+        //_programs.insert ( std::pair<std::string, GPUProgram*>(prog->getName(),prog) );
       }
-      return prog;
+
     }
+    return prog;
   }
 
   public final GPUProgram getProgram(GPUProgramState state)
   {
-
-    for(java.util.Iterator<String, GPUProgram> it = _programs.iterator(); it.hasNext();)
-    {
-      if (state.isLinkableToProgram(it.next().second))
-      {
-        return it.next().getValue();
+    Iterator it = _programs.entrySet().iterator();
+    while (it.hasNext()) {
+      Map.Entry pairs = (Map.Entry)it.next();
+      GPUProgram p = (GPUProgram) pairs.getValue();
+      if (state.isLinkableToProgram(p)) {
+        return p;
       }
     }
 
