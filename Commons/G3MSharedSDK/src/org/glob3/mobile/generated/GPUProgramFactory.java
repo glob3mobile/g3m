@@ -15,15 +15,7 @@ public class GPUProgramFactory
 
   public final GPUProgramSources get(String name)
   {
-    java.util.Iterator<String, GPUProgramSources> it = _sources.indexOf(name);
-    if (it.hasNext())
-    {
-      return it.next().getValue();
-    }
-    else
-    {
-      return null;
-    }
+    return _sources.get(name);
   }
 
 

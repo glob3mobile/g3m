@@ -32,20 +32,10 @@ public class GPUProgramState
 
   private void setUniformValue(String name, GPUUniformValue v)
   {
-    java.util.HashMap<String, GPUUniformValue> iterator it = _uniformValues.indexOf(name);
-    if (it != _uniformValues.end())
-    {
-      it.second = null;
-    }
     _uniformValues.put(name, v);
   }
   private void setAttributeValue(String name, GPUAttributeValue v)
   {
-    java.util.HashMap<String, GPUAttributeValue> iterator it = _attributesValues.indexOf(name);
-    if (it != _attributesValues.end())
-    {
-      it.second = null;
-    }
     _attributesValues.put(name, v);
   }
 

@@ -45,13 +45,18 @@ public class GPUProgramManager
     }
   }
 
+  public final GPUProgram getCompiledProgram(String name)
+  {
+    return _programs.get(name);
+  }
+
   public final GPUProgram getProgram(String name)
   {
 
-    java.util.Iterator<String, GPUProgram> it = _programs.indexOf(name);
-    if (it.hasNext())
+    GPUProgram prog = getCompiledProgram(name);
+    if (prog != null)
     {
-      return it.next().getValue();
+      return prog;
     }
     else
     {

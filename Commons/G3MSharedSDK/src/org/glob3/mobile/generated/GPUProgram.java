@@ -192,27 +192,11 @@ public class GPUProgram
 
   public final GPUUniform getGPUUniform(String name)
   {
-    java.util.Iterator<String, GPUUniform> it = _uniforms.indexOf(name);
-    if (it.hasNext())
-    {
-      return it.next().getValue();
-    }
-    else
-    {
-      return null;
-    }
+    return _uniforms.get(name);
   }
   public final GPUAttribute getGPUAttribute(String name)
   {
-    java.util.Iterator<String, GPUAttribute> it = _attributes.indexOf(name);
-    if (it.hasNext())
-    {
-      return it.next().getValue();
-    }
-    else
-    {
-      return null;
-    }
+    return _attributes.get(name);
   }
 
   public final GPUUniformBool getGPUUniformBool(String name)
