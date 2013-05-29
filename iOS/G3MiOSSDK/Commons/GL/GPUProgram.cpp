@@ -126,12 +126,17 @@ void GPUProgram::getVariables(GL* gl){
 }
 
 GPUUniform* GPUProgram::getGPUUniform(const std::string name) const{
+#ifdef C_CODE
   std::map<std::string, GPUUniform*>::const_iterator it = _uniforms.find(name);
   if (it != _uniforms.end()){
     return it->second;
   } else{
     return NULL;
   }
+#endif
+#ifdef JAVA_CODE
+  return _uniforms.get(name);
+#endif
 }
 
 GPUUniformBool* GPUProgram::getGPUUniformBool(const std::string name) const {
@@ -180,12 +185,17 @@ GPUUniformMatrix4Float* GPUProgram::getGPUUniformMatrix4Float(const std::string 
 }
 
 GPUAttribute* GPUProgram::getGPUAttribute(const std::string name) const{
+#ifdef C_CODE
   std::map<std::string, GPUAttribute*>::const_iterator it = _attributes.find(name);
   if (it != _attributes.end()){
     return it->second;
   } else{
     return NULL;
   }
+#endif
+#ifdef JAVA_CODE
+  return _attributes.get(name);
+#endif
 }
 
 GPUAttributeVec1Float* GPUProgram::getGPUAttributeVec1Float(const std::string name) const{

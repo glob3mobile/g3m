@@ -42,12 +42,17 @@ public:
   }
   
   const GPUProgramSources* get(const std::string& name) const{
+#ifdef C_CODE
     std::map<std::string, GPUProgramSources>::const_iterator it = _sources.find(name);
     if (it != _sources.end()){
       return &it->second;
     } else{
       return NULL;
     }
+#endif
+#ifdef JAVA_CODE
+    return _sources.get(name);
+#endif
   }
 
 

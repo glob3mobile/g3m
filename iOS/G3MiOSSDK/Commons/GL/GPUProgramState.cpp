@@ -175,18 +175,22 @@ void GPUProgramState::applyChanges(GL* gl) const{
 }
 
 void GPUProgramState::setUniformValue(const std::string& name, GPUUniformValue* v){
+#ifdef C_CODE
   std::map<std::string, GPUUniformValue*> ::iterator it = _uniformValues.find(name);
   if (it != _uniformValues.end()){
     delete it->second;
   }
+#endif
   _uniformValues[name] = v;
 }
 
 void GPUProgramState::setAttributeValue(const std::string& name, GPUAttributeValue* v){
+#ifdef C_CODE
   std::map<std::string, GPUAttributeValue*> ::iterator it = _attributesValues.find(name);
   if (it != _attributesValues.end()){
     delete it->second;
   }
+#endif
   _attributesValues[name] = v;
 }
 

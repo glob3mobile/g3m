@@ -38,11 +38,25 @@ public:
     }
   }
   
-  GPUProgram* getProgram(const std::string& name){
-    
+  GPUProgram* getCompiledProgram(const std::string& name){
+#ifdef C_CODE
     std::map<std::string, GPUProgram*>::iterator it = _programs.find(name);
     if (it != _programs.end()){
       return it->second;
+    } else{
+      return NULL;
+    }
+#endif
+#ifdef JAVA_CODE
+    return _programs.get(name);
+#endif
+  }
+  
+  GPUProgram* getProgram(const std::string& name){
+    
+    GPUProgram* prog = getCompiledProgram(name);
+    if (prog != NULL){
+      return prog;
     } else{
       const GPUProgramSources* ps = _factory->get(name);
       GPUProgram* prog = NULL;
