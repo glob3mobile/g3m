@@ -28,6 +28,10 @@ package org.glob3.mobile.generated;
 
 public interface EffectTarget extends GLClient
 {
+  public final boolean isEffectTarget() //CONVERSOR GENERATE ABSTRACT CLASS INSTEAD OF INTERFACE
+  {
+     return true;
+  }
   public final void dispose()
   {
   }
