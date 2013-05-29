@@ -36,8 +36,8 @@ public class GL
   private final java.util.LinkedList<IGLTextureId> _texturesIdBag = new java.util.LinkedList<IGLTextureId>();
   private int _texturesIdAllocationCounter;
 
-//  GLGlobalState *_currentState;
-//  GPUProgram* _currentGPUProgram;
+  //  GLGlobalState *_currentState;
+  //  GPUProgram* _currentGPUProgram;
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  void loadModelView();
@@ -91,17 +91,17 @@ public class GL
 
   private final boolean _verbose;
 
-//  void setGLGlobalState(const GLGlobalState& state);
-//  void setProgramState(GPUProgramManager& progManager, const GPUProgramState& progState);
-//  
-//  void applyGLGlobalStateAndGPUProgramState(const GLGlobalState& state, GPUProgramManager& progManager, const GPUProgramState& progState);
+  //  void setGLGlobalState(const GLGlobalState& state);
+  //  void setProgramState(GPUProgramManager& progManager, const GPUProgramState& progState);
+  //
+  //  void applyGLGlobalStateAndGPUProgramState(const GLGlobalState& state, GPUProgramManager& progManager, const GPUProgramState& progState);
 
 
 
   public GL(INativeGL nativeGL, boolean verbose)
-//  _program(NULL),
-//  _currentState(NULL),
-//  _currentGPUProgram(NULL)
+  //  _program(NULL),
+  //  _currentState(NULL),
+  //  _currentGPUProgram(NULL)
   {
      _nativeGL = nativeGL;
      _verbose = verbose;
@@ -121,7 +121,7 @@ public class GL
     GLVariable.init(_nativeGL);
     GLError.init(_nativeGL);
 
-//    _currentState = GLGlobalState::newDefault(); //Init after constants
+    //    _currentState = GLGlobalState::newDefault(); //Init after constants
   }
 
   public final void clearScreen(GLGlobalState state)
@@ -153,8 +153,24 @@ public class GL
     _nativeGL.drawElements(mode, indices.size(), indices);
   }
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  void drawArrays(int mode, int first, int count, GLGlobalState state, GPUProgramManager progManager, GPUProgramState gpuState);
+  public final void drawArrays(int mode, int first, int count, GLGlobalState state, GPUProgramManager progManager, GPUProgramState gpuState)
+  {
+    if (_verbose)
+    {
+      ILogger.instance().logInfo("GL::drawArrays(%d, %d, %d)", mode, first, count);
+    }
+  
+    GLState glState = new GLState((GLGlobalState) state, (GPUProgramState)gpuState);
+    glState.applyOnGPU(this, progManager);
+  
+  //  applyGLGlobalStateAndGPUProgramState(state, progManager, *gpuState);
+  
+  
+    _nativeGL.drawArrays(mode, first, count);
+  
+    //TODO: CHECKING GPU STATUS BY DELETING ALL
+    //progManager.getProgram(*gpuState)->onUnused();
+  }
 
   public final void drawArrays(int mode, int first, int count, GLState state, GPUProgramManager progManager)
   {
@@ -363,7 +379,7 @@ public class GL
     return _nativeGL.getActiveAttribute(program, i);
   }
 
-//  GLGlobalState* getCurrentState() const{ return _currentState;}
+  //  GLGlobalState* getCurrentState() const{ return _currentState;}
 
 
   //void GL::setGLGlobalState(const GLGlobalState& state) {
