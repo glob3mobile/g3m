@@ -28,10 +28,8 @@ class EffectTarget :public GLClient{
 public:
 #ifdef C_CODE
   virtual ~EffectTarget() { }
-#endif
-#ifdef JAVA_CODE
-  public boolean isEffectTarget() { return true;} //CONVERSOR GENERATE ABSTRACT CLASS INSTEAD OF INTERFACE
-  public void dispose(){ }
+#else
+  void dispose(){ }
 #endif
 };
 
