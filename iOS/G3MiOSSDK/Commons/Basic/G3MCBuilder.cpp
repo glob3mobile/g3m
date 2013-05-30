@@ -457,7 +457,7 @@ const URL G3MCBuilder::createSceneDescriptionURL() const {
 std::vector<PeriodicalTask*>* G3MCBuilder::createPeriodicalTasks() {
   std::vector<PeriodicalTask*>* periodicalTasks = new std::vector<PeriodicalTask*>();
   
-  periodicalTasks->push_back(new PeriodicalTask(TimeInterval::fromSeconds(15),
+  periodicalTasks->push_back(new PeriodicalTask(TimeInterval::fromSeconds(5),
                                                 new G3MCBuilder_PullScenePeriodicalTask(this)));
   
   return periodicalTasks;
