@@ -79,7 +79,7 @@ public abstract class G3MCBuilder
   {
     java.util.ArrayList<PeriodicalTask> periodicalTasks = new java.util.ArrayList<PeriodicalTask>();
   
-    periodicalTasks.add(new PeriodicalTask(TimeInterval.fromSeconds(15), new G3MCBuilder_PullScenePeriodicalTask(this)));
+    periodicalTasks.add(new PeriodicalTask(TimeInterval.fromSeconds(5), new G3MCBuilder_PullScenePeriodicalTask(this)));
   
     return periodicalTasks;
   }
