@@ -56,7 +56,7 @@ public:
   
   virtual void modifiyGLState(GLState* state) = 0;
   
-  void initialize(const G3MContext* context);
+  void initializeSGNode(const G3MContext* context);
   
   void render(const G3MRenderContext* rc, GLStateTreeNode* parentStateTreeNode);
   

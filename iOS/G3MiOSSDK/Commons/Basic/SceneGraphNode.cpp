@@ -32,13 +32,13 @@ void SceneGraphNode::render(const G3MRenderContext* rc, GLStateTreeNode* parentS
   }
 }
 
-void SceneGraphNode::initialize(const G3MContext* context){
+void SceneGraphNode::initializeSGNode(const G3MContext* context){
   onInitialize(context);
   for (std::vector<SceneGraphNode*>::iterator it = _children.begin();
        it != _children.end();
        it++) {
     SceneGraphNode* child = *it;
-    child->initialize(context);
+    child->initializeSGNode(context);
   }
 }
 

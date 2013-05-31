@@ -50,7 +50,7 @@ public:
     
     int size = _nodes.size();
     for (int i = 0; i < size; i++) {
-      _nodes[i]->initialize(context);
+      _nodes[i]->initializeSGNode(context);
     }
 //    
 //    MarksRenderer* mr = new MarksRenderer(true);
