@@ -89,6 +89,7 @@ public class MeshHolder extends Mesh
   public final boolean isInsideCameraFrustum(G3MRenderContext rc)
   {
     //TODO: Implement
+    return true;
   }
   public final void modifiyGLState(GLState state)
   {

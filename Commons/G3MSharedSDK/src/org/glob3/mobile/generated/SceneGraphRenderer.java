@@ -1,7 +1,4 @@
-
-
-package org.glob3.mobile.generated;
-
+package org.glob3.mobile.generated; 
 //
 //  SceneGraphRenderer.cpp
 //  G3MiOSSDK
@@ -19,157 +16,146 @@ package org.glob3.mobile.generated;
 //
 
 
-public class SceneGraphRenderer
-         extends
-            Renderer {
-
-   private GLStateTreeNode                     _rootState;
-   private Camera                              _camera;
-
-   private java.util.ArrayList<SceneGraphNode> _nodes = new java.util.ArrayList<SceneGraphNode>();
-   private final boolean                       _usesCurrentCamera;
 
 
-   public SceneGraphRenderer(final java.util.ArrayList<SceneGraphNode> nodes,
-                             final boolean usesCurrentCamera) {
-      _camera = null;
-      _nodes = nodes;
-      _usesCurrentCamera = usesCurrentCamera;
-      System.out.print("SCENE GRAPH CREATED");
+public class SceneGraphRenderer extends Renderer
+{
 
-   }
+  private GLStateTreeNode _rootState;
+  private Camera _camera;
 
+  private java.util.ArrayList<SceneGraphNode> _nodes = new java.util.ArrayList<SceneGraphNode>();
+  private boolean _usesCurrentCamera;
 
-   @Override
-   public final void render(final G3MRenderContext rc) {
+  public SceneGraphRenderer(java.util.ArrayList<SceneGraphNode> nodes, boolean usesCurrentCamera)
+  {
+     _camera = null;
+     _nodes = nodes;
+     _usesCurrentCamera = usesCurrentCamera;
+    System.out.print("SCENE GRAPH CREATED");
 
-      if (_usesCurrentCamera) {
+  }
 
-         if (_camera == null) {
-            _camera = rc.getCurrentCamera();
-            final int nNodes = _nodes.size();
-            for (int i = 0; i < nNodes; i++) {
-               _camera.addChild(_nodes.get(i));
-            }
-         }
-
-         _camera.render(rc, _rootState);
-
+  public final void render(G3MRenderContext rc)
+  {
+  
+    if (_usesCurrentCamera)
+    {
+  
+    if (_camera == null)
+    {
+      _camera = (Camera)rc.getCurrentCamera();
+      int nNodes = _nodes.size();
+      for (int i = 0; i < nNodes; i++)
+      {
+        _camera.addChild(_nodes.get(i));
       }
-      else {
-         final int nNodes = _nodes.size();
-         for (int i = 0; i < nNodes; i++) {
-            _nodes.get(i).render(rc, _rootState);
-         }
+    }
+  
+    _camera.render(rc, _rootState);
+  
+    }
+    else
+    {
+      int nNodes = _nodes.size();
+      for (int i = 0; i < nNodes; i++)
+      {
+        _nodes.get(i).render(rc, _rootState);
       }
-   }
+    }
+  }
 
 
-   /////////////////////////////////
+  /////////////////////////////////
 
-   @Override
-   public final boolean isEnable() {
-      return true;
-   }
+  public final boolean isEnable()
+  {
+    return true;
+  }
 
-
-   @Override
-   public final void setEnable(final boolean enable) {
-   }
-
-
-   @Override
-   public final void initialize(final G3MContext context) {
-      _rootState = GLStateTree.createNodeForSGNode(null); // GLStateTreeNode::createRootNodeForSGNode(NULL);
-
-      final int size = _nodes.size();
-      for (int i = 0; i < size; i++) {
-         _nodes.get(i).initialize(context);
-      }
-      //    
-      //    MarksRenderer* mr = new MarksRenderer(true);
-      //    rc->getCurrentCamera->addChildren(mr);
-      //    
-      //    for (int i = 0; i < 2000; i++){
-      //      const Angle latitude  = Angle::fromDegrees( (int) (arc4random() % 180) - 90 );
-      //      const Angle longitude = Angle::fromDegrees( (int) (arc4random() % 360));
-      //      
-      //      Mark* m = new Mark("Random Mark",
-      //                         Geodetic3D(latitude,
-      //                                    longitude,
-      //                                    0),
-      //                         0);
-      //      
-      //      m->initialize(context, 100);
-      //      mr->addMark(m);
-      //    }
-   }
+  public final void setEnable(boolean enable)
+  {
+  }
 
 
-   @Override
-   public final boolean isReadyToRender(final G3MRenderContext rc) {
-      return true;
-   }
+  public final void initialize(G3MContext context)
+  {
+    _rootState = GLStateTree.createNodeForSGNode(null); // GLStateTreeNode::createRootNodeForSGNode(NULL);
+
+    int size = _nodes.size();
+    for (int i = 0; i < size; i++)
+    {
+      _nodes.get(i).initialize(context);
+    }
+//    
+//    MarksRenderer* mr = new MarksRenderer(true);
+//    rc->getCurrentCamera->addChildren(mr);
+//    
+//    for (int i = 0; i < 2000; i++){
+//      const Angle latitude  = Angle::fromDegrees( (int) (arc4random() % 180) - 90 );
+//      const Angle longitude = Angle::fromDegrees( (int) (arc4random() % 360));
+//      
+//      Mark* m = new Mark("Random Mark",
+//                         Geodetic3D(latitude,
+//                                    longitude,
+//                                    0),
+//                         0);
+//      
+//      m->initialize(context, 100);
+//      mr->addMark(m);
+//    }
+  }
+
+  public final boolean isReadyToRender(G3MRenderContext rc)
+  {
+    return true;
+  }
 
 
-   @Override
-   public final boolean onTouchEvent(final G3MEventContext ec,
-                                     final TouchEvent touchEvent) {
+  public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
+  {
 
-      for (int i = 0; i < _nodes.size(); i++) {
-         _nodes.get(i).touchEvent(ec, touchEvent);
-      }
+    for (int i = 0; i < _nodes.size(); i++)
+    {
+      _nodes.get(i).touchEvent(ec, touchEvent);
+    }
 
-      return false;
-   }
+    return false;
+  }
 
+  public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
+  {
+  }
 
-   @Override
-   public final void onResizeViewportEvent(final G3MEventContext ec,
-                                           final int width,
-                                           final int height) {
-   }
+  public final void start(G3MRenderContext rc)
+  {
+  }
 
+  public final void stop(G3MRenderContext rc)
+  {
+  }
 
-   @Override
-   public final void start(final G3MRenderContext rc) {
-   }
+  public final void onResume(G3MContext context)
+  {
+  }
 
+  public final void onPause(G3MContext context)
+  {
+  }
 
-   @Override
-   public final void stop(final G3MRenderContext rc) {
-   }
+  public final void onDestroy(G3MContext context)
+  {
+  }
 
-
-   @Override
-   public final void onResume(final G3MContext context) {
-   }
-
-
-   @Override
-   public final void onPause(final G3MContext context) {
-   }
-
-
-   @Override
-   public final void onDestroy(final G3MContext context) {
-   }
-
-
-   @Override
-   public final void rawRender(final G3MRenderContext rc,
-                               final GLStateTreeNode myStateTreeNode) {
-   }
-
-
-   @Override
-   public final boolean isInsideCameraFrustum(final G3MRenderContext rc) {
-      return true;
-   }
-
-
-   @Override
-   public final void modifiyGLState(final GLState state) {
-   }
+  public final void rawRender(G3MRenderContext rc, GLStateTreeNode myStateTreeNode)
+  {
+  }
+  public final boolean isInsideCameraFrustum(G3MRenderContext rc)
+  {
+     return true;
+  }
+  public final void modifiyGLState(GLState state)
+  {
+  }
 
 }

@@ -109,7 +109,8 @@ public class SGLayerNode extends SGNode
 
 
   /*
-  GPUProgramState* createGPUProgramState(const G3MRenderContext* rc, const GPUProgramState* parentState){
+//C++ TO JAVA CONVERTER TODO TASK: The following line could not be converted:
+  GPUProgramState* createGPUProgramState(const G3MRenderContext* rc, const GPUProgramState* parentState);
   
     GPUProgramState* progState = new GPUProgramState(parentState);
     progState->setAttributeEnabled("TextureCoord", true);
@@ -151,16 +152,19 @@ public class SGLayerNode extends SGNode
   //   */
   //}
   
-  public final void SGLayerNode.modifyGPUProgramState(GPUProgramState progState)
-  {
-    progState.setAttributeEnabled("TextureCoord", true);
-    progState.setUniformValue("EnableTexture", true);
-  }
+  //void SGLayerNode::modifyGPUProgramState(GPUProgramState& progState) const{
+  //  progState.setAttributeEnabled("TextureCoord", true);
+  //  progState.setUniformValue("EnableTexture", true);
+  //}
+  
 
   public final void modifyGLGlobalState(GLGlobalState GLGlobalState)
   {
   }
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  void modifyGPUProgramState(GPUProgramState progState);
+  public final void modifyGPUProgramState(GPUProgramState progState)
+  {
+    progState.setAttributeEnabled("TextureCoord", true);
+    progState.setUniformValue("EnableTexture", true);
+  }
 
 }
