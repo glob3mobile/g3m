@@ -320,8 +320,8 @@ public class GPUProgram {
       }
 
       final Object[] att = _attributes.values().toArray();
-      for (int i = 0; i < uni.length; i++) {
-         ((GPUAttribute) att[i]).unset();
+      for (final Object element : att) {
+         ((GPUAttribute) element).unset();
       }
    }
 

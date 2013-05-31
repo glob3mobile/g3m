@@ -5,6 +5,7 @@ package org.glob3.mobile.demo;
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GInitializationTask;
+import org.glob3.mobile.generated.GPUProgramSources;
 import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.IBufferDownloadListener;
@@ -20,6 +21,7 @@ import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
+import org.glob3.mobile.specific.GL2Shaders;
 import org.glob3.mobile.specific.JSONParser_Android;
 
 import android.app.Activity;
@@ -45,6 +47,13 @@ public class G3MShowMarkersActivity
       final G3MBuilder_Android builder = new G3MBuilder_Android(getApplicationContext());
       builder.setInitializationTask(getWeatherMarkerLayersTask());
       builder.addRenderer(_weatherMarkers);
+
+      builder.addGPUProgramSources(new GPUProgramSources("Billboard", GL2Shaders._billboardVertexShader,
+               GL2Shaders._billboardFragmentShader));
+      builder.addGPUProgramSources(new GPUProgramSources("Default", GL2Shaders._defaultVertexShader,
+               GL2Shaders._defaultFragmentShader));
+
+
       //Always after setting params
       _widgetAndroid = builder.createWidget();
       final LinearLayout g3mLayout = (LinearLayout) findViewById(R.id.glob3);

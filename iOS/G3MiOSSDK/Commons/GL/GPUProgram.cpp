@@ -259,12 +259,12 @@ void GPUProgram::onUnused(){
 #ifdef JAVA_CODE
   final Object[] uni = _uniforms.values().toArray();
   for (int i = 0; i < uni.length; i++) {
-    ((GPUUniform)uni[i]).unset();
+    ((GPUUniform) uni[i]).unset();
   }
   
   final Object[] att = _attributes.values().toArray();
-  for (int i = 0; i < uni.length; i++) {
-    ((GPUAttribute)att[i]).unset();
+  for (int i = 0; i < att.length; i++) {
+    ((GPUAttribute) att[i]).unset();
   }
 #endif
 }
