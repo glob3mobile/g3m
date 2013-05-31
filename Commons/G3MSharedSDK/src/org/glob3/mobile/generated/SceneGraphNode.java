@@ -65,13 +65,13 @@ public abstract class SceneGraphNode extends GLClient
 
   public abstract void modifiyGLState(GLState state);
 
-  public final void initialize(G3MContext context)
+  public final void initializeSGNode(G3MContext context)
   {
     onInitialize(context);
     for (java.util.Iterator<SceneGraphNode> it = _children.iterator(); it.hasNext();)
     {
       SceneGraphNode child = it.next();
-      child.initialize(context);
+      child.initializeSGNode(context);
     }
   }
 

@@ -85,7 +85,7 @@ public class SceneGraphRenderer extends Renderer
     int size = _nodes.size();
     for (int i = 0; i < size; i++)
     {
-      _nodes.get(i).initialize(context);
+      _nodes.get(i).initializeSGNode(context);
     }
 //    
 //    MarksRenderer* mr = new MarksRenderer(true);
