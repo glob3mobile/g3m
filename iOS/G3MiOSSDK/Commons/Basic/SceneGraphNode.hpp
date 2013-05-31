@@ -68,15 +68,7 @@ public:
     _children.push_back(child);
   }
   
-  void eraseChild(SceneGraphNode* child){
-    for (std::vector<SceneGraphNode*>::iterator it = _children.begin();
-         it != _children.end();
-         it++) {
-      if (*it == child){
-        _children.erase(it);
-      }
-    }
-  }
+  void eraseChild(SceneGraphNode* child);
   
   void touchEvent(const G3MEventContext* ec, const TouchEvent* touchEvent);
   

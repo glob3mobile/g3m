@@ -1,4 +1,7 @@
-package org.glob3.mobile.generated; 
+
+
+package org.glob3.mobile.generated;
+
 //
 //  GPUProgramManager.cpp
 //  G3MiOSSDK
@@ -16,85 +19,85 @@ package org.glob3.mobile.generated;
 //
 
 
+public class GPUProgramManager {
+
+   private final java.util.HashMap<String, GPUProgram> _programs = new java.util.HashMap<String, GPUProgram>();
+
+   private final GPUProgramFactory                     _factory;
+   private final GL                                    _gl;
 
 
+   public GPUProgramManager(final GL gl,
+                            final GPUProgramFactory factory) {
+      _gl = gl;
+      _factory = factory;
+   }
 
 
-public class GPUProgramManager
-{
+   public void dispose() {
 
-  private java.util.HashMap<String, GPUProgram> _programs = new java.util.HashMap<String, GPUProgram>();
+   }
 
-  private GPUProgramFactory _factory;
-  private GL _gl;
 
-  public GPUProgramManager(GL gl, GPUProgramFactory factory)
-  {
-     _gl = gl;
-     _factory = factory;
-  }
+   public final GPUProgram getCompiledProgram(final String name) {
+      return _programs.get(name);
+   }
 
-  public void dispose()
-  {
 
-  }
+   public final GPUProgram getProgram(final String name) {
 
-  public final GPUProgram getCompiledProgram(String name)
-  {
-    return _programs.get(name);
-  }
+      GPUProgram prog = getCompiledProgram(name);
+      if (prog == null) {
+         final GPUProgramSources ps = _factory.get(name);
 
-  public final GPUProgram getProgram(String name)
-  {
+         //Compile new Program
+         if (ps != null) {
+            prog = GPUProgram.createProgram(_gl, ps._name, ps._vertexSource, ps._fragmentSource);
+            if (prog == null) {
+               ILogger.instance().logError("Problem at creating program named %s.", name);
+               return null;
+            }
 
-    GPUProgram prog = getCompiledProgram(name);
-    if (prog == null)
-    {
-      final GPUProgramSources ps = _factory.get(name);
+            _programs.put(name, prog);
 
-      //Compile new Program
-      if (ps != null)
-      {
-        prog = GPUProgram.createProgram(_gl, ps._name, ps._vertexSource, ps._fragmentSource);
-        if (prog == null)
-        {
-          ILogger.instance().logError("Problem at creating program named %s.", name);
-          return null;
-        }
+            //_programs.insert ( std::pair<std::string, GPUProgram*>(prog->getName(),prog) );
+         }
 
-        _programs.put(name, prog);
+      }
+      return prog;
+   }
 
-        //_programs.insert ( std::pair<std::string, GPUProgram*>(prog->getName(),prog) );
+
+   public final GPUProgram getProgram(final GPUProgramState state) {
+
+      final GPUProgram[] progs = (GPUProgram[]) _programs.values().toArray();
+      for (final GPUProgram p : progs) {
+         if (state.isLinkableToProgram(p)) {
+            return p;
+         }
       }
 
-    }
-    return prog;
-  }
-
-  public final GPUProgram getProgram(GPUProgramState state)
-  {
-    GPUProgram[] progs = (GPUProgram[]) _programs.values().toArray();
-    for (int i = 0; i < progs.length; i++) {
-      GPUProgram p = progs[i];
-      if (state.isLinkableToProgram(p)) {
-        return p;
+      final Iterator it = _programs.entrySet().iterator();
+      while (it.hasNext()) {
+         final Map.Entry pairs = (Map.Entry) it.next();
+         final GPUProgram p = (GPUProgram) pairs.getValue();
+         if (state.isLinkableToProgram(p)) {
+            return p;
+         }
       }
-    }
 
-    int WORKING_JM;
+      final int WORKING_JM;
 
-    java.util.ArrayList<String> us = state.getUniformsNames();
-    int size = us.size();
-    for (int i = 0; i < size; i++)
-    {
-      if (us.get(i).compareTo("ViewPortExtent") == 0)
-      {
-        return getProgram("Billboard");
+      final java.util.ArrayList<String> us = state.getUniformsNames();
+      final int size = us.size();
+      for (int i = 0; i < size; i++) {
+         if (us.get(i).compareTo("ViewPortExtent") == 0) {
+            return getProgram("Billboard");
+         }
       }
-    }
 
-    return getProgram("Default");
-  }
+      return getProgram("Default");
+   }
 
 
 }

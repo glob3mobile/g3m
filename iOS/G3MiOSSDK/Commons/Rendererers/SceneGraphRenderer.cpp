@@ -20,7 +20,12 @@ void SceneGraphRenderer::render(const G3MRenderContext* rc){
     }
   }
   
+#ifdef C_CODE
   _camera->SceneGraphNode::render(rc, _rootState);
+#endif
+#ifdef JAVA_CODE
+  _camera.render(rc, _rootState);
+#endif
     
   } else{
     int nNodes = _nodes.size();

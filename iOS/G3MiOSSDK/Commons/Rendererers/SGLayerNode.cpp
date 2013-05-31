@@ -133,20 +133,20 @@ GLGlobalState* SGLayerNode::createState(const G3MRenderContext* rc,
   return state;
 }
 */
-void SGLayerNode::modifyGLGlobalState(GLGlobalState& GLGlobalState) const{
-  
-  int __WORKING;
-  /*if (!_initialized) {
-    _initialized = true;
-    requestImage(rc);
-  }
-  
-  const IGLTextureId* texId = getTextureId(rc);
-  if (texId != NULL) {
-    state.bindTexture(texId);
-  }
-   */
-}
+//void SGLayerNode::modifyGLGlobalState(GLGlobalState& GLGlobalState) const{
+//  
+//  int __WORKING;
+//  /*if (!_initialized) {
+//    _initialized = true;
+//    requestImage(rc);
+//  }
+//  
+//  const IGLTextureId* texId = getTextureId(rc);
+//  if (texId != NULL) {
+//    state.bindTexture(texId);
+//  }
+//   */
+//}
 
 void SGLayerNode::modifyGPUProgramState(GPUProgramState& progState) const{
   progState.setAttributeEnabled("TextureCoord", true);

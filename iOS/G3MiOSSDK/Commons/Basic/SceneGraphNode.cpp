@@ -51,3 +51,18 @@ void SceneGraphNode::touchEvent(const G3MEventContext* ec, const TouchEvent* tou
     child->touchEvent(ec, touchEvent);
   }
 }
+
+void SceneGraphNode::eraseChild(SceneGraphNode* child){
+#ifdef C_CODE
+  for (std::vector<SceneGraphNode*>::iterator it = _children.begin();
+       it != _children.end();
+       it++) {
+    if (*it == child){
+      _children.erase(it);
+    }
+  }
+#endif
+#ifdef JAVA_CODE
+  _children.remove(child);
+#endif
+}
