@@ -473,9 +473,9 @@ std::vector<std::string> GPUProgramState::getUniformsNames() const{
 #endif
   
 #ifdef JAVA_CODE
-  final String[] uniNames = (String[]) _uniformValues.keySet().toArray();
+  final Object[] uniNames = _uniformValues.keySet().toArray();
   for (int i = 0; i < uniNames.length; i++) {
-    final String name = uniNames[i];
+    final String name = (String) uniNames[i];
     us.add(name);
   }
 #endif
@@ -558,15 +558,17 @@ bool GPUProgramState::isLinkableToProgram(const GPUProgram& program) const{
   }
   
   
-  final String[] uniNames = (String[]) _uniformValues.keySet().toArray();
-  for (final String thisName : uniNames) {
+  final Object[] uniNames = _uniformValues.keySet().toArray();
+  for (int i = 0; i < uniNames.length; i++) {
+    String thisName = (String) uniNames[i];
     if (program.getGPUUniform(thisName) == null) {
       return false;
     }
   }
   
-  final String[] attNames = (String[]) _attributesValues.keySet().toArray();
-  for (final String thisName : attNames) {
+  final Object[] attNames = _attributesValues.keySet().toArray();
+  for (int i = 0; i < attNames.length; i++) {
+    String thisName = (String) attNames[i];
     if (program.getGPUAttribute(thisName) == null) {
       return false;
     }
