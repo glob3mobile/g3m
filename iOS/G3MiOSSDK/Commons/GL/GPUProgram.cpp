@@ -309,7 +309,7 @@ void GPUProgram::applyChanges(GL* gl){
   }
   
   final Object[] att = _attributes.values().toArray();
-  for (int i = 0; i < uni.length; i++) {
+  for (int i = 0; i < att.length; i++) {
     GPUAttribute a = (GPUAttribute)att[i];
     if (a.wasSet()){
       a.applyChanges(gl);
