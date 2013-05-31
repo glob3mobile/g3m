@@ -723,43 +723,36 @@ public final class NativeGL2_Android
       final int[] maxLength = new int[1];
       GLES20.glGetProgramiv(program.getProgramID(), GLES20.GL_ACTIVE_UNIFORM_MAX_LENGTH, maxLength, 0);
 
-      final int bufsize = maxLength[0];
+      final int bufsize = maxLength[0] + 1;
 
-      final byte[] name = new byte[maxLength[0]];
+      final byte[] name = new byte[bufsize];
       final int[] length = new int[1];
       final int[] size = new int[1];
       final int[] type = new int[1];
 
       GLES20.glGetActiveUniform(program.getProgramID(), i, bufsize, length, 0, size, 0, type, 0, name, 0);
 
-      try {
-         final String nameStr = new String(name, "UTF-8");
-         final int id = GLES20.glGetUniformLocation(program.getProgramID(), nameStr);
+      String nameStr = new String(name);
+      nameStr = nameStr.substring(0, length[0]);
+      final int id = GLES20.glGetUniformLocation(program.getProgramID(), nameStr);
 
-         ILogger.instance().logInfo("Uniform Name: %s - %d", name, id);
-         switch (type[0]) {
-            case GLES20.GL_FLOAT_MAT4:
-               return new GPUUniformMatrix4Float(nameStr, new GLUniformID_Android(id));
-            case GLES20.GL_FLOAT_VEC4:
-               return new GPUUniformVec4Float(nameStr, new GLUniformID_Android(id));
-            case GLES20.GL_FLOAT:
-               return new GPUUniformFloat(nameStr, new GLUniformID_Android(id));
-            case GLES20.GL_FLOAT_VEC2:
-               return new GPUUniformVec2Float(nameStr, new GLUniformID_Android(id));
-            case GLES20.GL_BOOL:
-               return new GPUUniformBool(nameStr, new GLUniformID_Android(id));
-            case GLES20.GL_SAMPLER_2D:
-               final int NOT_IMPLEMENTED_YET;
-               return null;
-            default:
-               return null;
-         }
-
-      }
-      catch (final UnsupportedEncodingException e) {
-         // TODO Auto-generated catch block
-         e.printStackTrace();
-         return null;
+      ILogger.instance().logInfo("Uniform Name: %s - %d", nameStr, id);
+      switch (type[0]) {
+         case GLES20.GL_FLOAT_MAT4:
+            return new GPUUniformMatrix4Float(nameStr, new GLUniformID_Android(id));
+         case GLES20.GL_FLOAT_VEC4:
+            return new GPUUniformVec4Float(nameStr, new GLUniformID_Android(id));
+         case GLES20.GL_FLOAT:
+            return new GPUUniformFloat(nameStr, new GLUniformID_Android(id));
+         case GLES20.GL_FLOAT_VEC2:
+            return new GPUUniformVec2Float(nameStr, new GLUniformID_Android(id));
+         case GLES20.GL_BOOL:
+            return new GPUUniformBool(nameStr, new GLUniformID_Android(id));
+         case GLES20.GL_SAMPLER_2D:
+            final int NOT_IMPLEMENTED_YET;
+            return null;
+         default:
+            return null;
       }
    }
 
@@ -781,10 +774,11 @@ public final class NativeGL2_Android
       GLES20.glGetActiveAttrib(program.getProgramID(), i, bufsize, length, 0, size, 0, type, 0, name, 0);
 
       try {
-         final String nameStr = new String(name, "UTF-8");
+         String nameStr = new String(name, "UTF-8");
+         nameStr = nameStr.substring(0, length[0]);
          final int id = GLES20.glGetAttribLocation(program.getProgramID(), nameStr);
 
-         ILogger.instance().logInfo("Attribute Name: %s - %d", name, id);
+         ILogger.instance().logInfo("Attribute Name: %s - %d", nameStr, id);
 
          switch (type[0]) {
             case GLES20.GL_FLOAT_VEC4:

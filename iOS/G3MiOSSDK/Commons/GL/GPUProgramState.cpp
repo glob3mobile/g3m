@@ -113,7 +113,7 @@ void GPUProgramState::linkToProgram(GPUProgram& prog) const{
   }
   
   final Object[] attEnabled = _attributesEnabled.values().toArray();
-  final Object[] attEnabledNames = _uniformValues.keySet().toArray();
+  final Object[] attEnabledNames = _attributesEnabled.keySet().toArray();
   for (int i = 0; i < attEnabled.length; i++) {
     final String name = (String) attEnabledNames[i];
     final attributeEnabledStruct ae = (attributeEnabledStruct)attEnabled[i];
