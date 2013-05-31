@@ -79,6 +79,7 @@ public:
   std::string description() const;
   
   bool isLinkableToProgram(const GPUProgram& program) const;
+  
 };
 
 #endif /* defined(__G3MiOSSDK__GPUProgramState__) */

@@ -99,9 +99,45 @@ void GPUProgramState::applyValuesToLinkedProgram() const{
 #endif
 }
 
+
 void GPUProgramState::linkToProgram(GPUProgram& prog) const{
   
   _lastProgramUsed = &prog;
+  
+#ifdef JAVA_CODE
+  final Iterator it = _uniformValues.entrySet().iterator();
+  while (it.hasNext()) {
+    final Map.Entry pairs = (Map.Entry)it.next();
+    final String name =  (String) pairs.getKey();
+    final GPUUniformValue v = (GPUUniformValue) pairs.getValue();
+    
+    
+    int type = v.getType();
+    GPUUniform u = prog.getUniformOfType(name, type);
+    
+    if (u == NULL){
+      ILogger.instance().logError("UNIFORM " + name + " NOT FOUND");
+    } else{
+      v.linkToGPUUniform(u);
+    }
+  }
+  
+  final Iterator it = _attributesEnabled.entrySet().iterator();
+  while (it.hasNext()) {
+    final Map.Entry pairs = (Map.Entry)it.next();
+    final String name =  (String) pairs.getKey();
+    final attributeEnabledStruct ae = (attributeEnabledStruct) pairs.getValue();
+    
+    GPUAttribute a = prog.getGPUAttribute(name);
+    if (a == NULL){
+      ILogger.instance().logError("ATTRIBUTE NOT FOUND " + name + ". COULDN'T CHANGE ENABLED STATE.");
+    } else{
+      ae.attribute = a;
+    }
+  }
+  
+#endif
+  
   
   for(std::map<std::string, GPUUniformValue*> ::const_iterator it = _uniformValues.begin();
       it != _uniformValues.end();
@@ -110,26 +146,27 @@ void GPUProgramState::linkToProgram(GPUProgram& prog) const{
     std::string name = it->first;
     GPUUniformValue* v = it->second;
     
-    GPUUniform* u = NULL;
     const int type = v->getType();
-    if (type == GLType::glBool()){
-      u = prog.getGPUUniformBool(name);
-    } else {
-      if (type == GLType::glVec2Float()){
-        u = prog.getGPUUniformVec2Float(name);
-      } else{
-        if (type == GLType::glVec4Float()){
-          u = prog.getGPUUniformVec4Float(name);
-        } else{
-          if (type == GLType::glFloat()){
-            u = prog.getGPUUniformFloat(name);
-          } else
-            if (type == GLType::glMatrix4Float()){
-              u = prog.getGPUUniformMatrix4Float(name);
-            }
-        }
-      }
-    }
+    
+    GPUUniform* u = prog.getUniformOfType(name, type);
+//    if (type == GLType::glBool()){
+//      u = prog.getGPUUniformBool(name);
+//    } else {
+//      if (type == GLType::glVec2Float()){
+//        u = prog.getGPUUniformVec2Float(name);
+//      } else{
+//        if (type == GLType::glVec4Float()){
+//          u = prog.getGPUUniformVec4Float(name);
+//        } else{
+//          if (type == GLType::glFloat()){
+//            u = prog.getGPUUniformFloat(name);
+//          } else
+//            if (type == GLType::glMatrix4Float()){
+//              u = prog.getGPUUniformMatrix4Float(name);
+//            }
+//        }
+//      }
+//    }
     
     if (u == NULL){
       ILogger::instance()->logError("UNIFORM " + name + " NOT FOUND");
@@ -406,7 +443,7 @@ std::vector<std::string> GPUProgramState::getUniformsNames() const{
   final Iterator it = _uniformValues.entrySet().iterator();
   while (it.hasNext()) {
     final Map.Entry pairs = (Map.Entry)it.next();
-    us.add(pairs.getKey());
+    us.add((String)pairs.getKey());
   }
 #endif
 
@@ -514,6 +551,8 @@ bool GPUProgramState::isLinkableToProgram(const GPUProgram& program) const{
       }
     }
   }
+  
+  return true;
 #endif
 }
 

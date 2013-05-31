@@ -267,7 +267,7 @@ void GPUProgram::onUnused(){
   Iterator it2 = _attributes.entrySet().iterator();
   while (it2.hasNext()) {
     Map.Entry pairs = (Map.Entry)it2.next();
-    GPUAttribute a = (GPUUniform) pairs.getValue();
+    GPUAttribute a = (GPUAttribute) pairs.getValue();
     a.unset();
   }
 #endif
@@ -316,7 +316,7 @@ void GPUProgram::applyChanges(GL* gl){
   Iterator it2 = _attributes.entrySet().iterator();
   while (it2.hasNext()) {
     Map.Entry pairs = (Map.Entry)it2.next();
-    GPUAttribute a = (GPUUniform) pairs.getValue();
+    GPUAttribute a = (GPUAttribute) pairs.getValue();
     if (a.wasSet()){
       a.applyChanges(gl);
     } else{

@@ -1,4 +1,7 @@
-package org.glob3.mobile.generated; 
+
+
+package org.glob3.mobile.generated;
+
 //
 //  GLStateTreeNode.cpp
 //  G3MiOSSDK
@@ -16,107 +19,104 @@ package org.glob3.mobile.generated;
 //
 
 
-
-
 //class SceneGraphNode;
 
-public class GLStateTreeNode
-{
+public class GLStateTreeNode {
 
-  protected SceneGraphNode _sgNode;
-  protected java.util.ArrayList<GLStateTreeNode> _children = new java.util.ArrayList<GLStateTreeNode>(); //OTHER IMPLEMENTATIONS MAY HAVE ONLY ONE CHILD (FOR PERFORMANCE)
+   protected SceneGraphNode                       _sgNode;
+   protected java.util.ArrayList<GLStateTreeNode> _children = new java.util.ArrayList<GLStateTreeNode>(); //OTHER IMPLEMENTATIONS MAY HAVE ONLY ONE CHILD (FOR PERFORMANCE)
+   protected final GLStateTreeNode                _parent;
+   protected GLState                              _state;
 
-  protected final GLStateTreeNode _parent;
-  protected GLState _state;
 
-//C++ TO JAVA CONVERTER TODO TASK: Java has no concept of a 'friend' class:
-//  friend class GLStateTree; //Tree can create nodes
+   //C++ TO JAVA CONVERTER TODO TASK: Java has no concept of a 'friend' class:
+   //  friend class GLStateTree; //Tree can create nodes
 
-  protected GLStateTreeNode(SceneGraphNode sgNode, GLStateTreeNode parent)
-  {
-     _sgNode = sgNode;
-     _state = null;
-     _parent = parent;
-  }
+   protected GLStateTreeNode(final SceneGraphNode sgNode,
+                             final GLStateTreeNode parent) {
+      _sgNode = sgNode;
+      _state = null;
+      _parent = parent;
+   }
 
-  protected GLStateTreeNode()
-  {
-     _sgNode = null;
-     _state = null;
-     _parent = null;
-  }
 
-  protected final java.util.LinkedList<SceneGraphNode> getHierachy()
-  {
-    java.util.LinkedList<SceneGraphNode> h = new java.util.LinkedList<SceneGraphNode>();
-    GLStateTreeNode ancestor = this;
-    while (ancestor != null)
-    {
-      h.addFirst(ancestor.getSGNode());
-      ancestor = ancestor._parent;
-    }
-    return h;
-  }
+   protected GLStateTreeNode() {
+      _sgNode = null;
+      _state = null;
+      _parent = null;
+   }
 
-  protected final void prune(SceneGraphNode sgNode)
-  {
-    for (java.util.Iterator<GLStateTreeNode> it = _children.iterator(); it.hasNext();)
-    {
-      GLStateTreeNode child = (it.next());
-      child.prune(sgNode);
-  
-      if (child._sgNode == sgNode)
-      {
-        _children.remove(child);
+
+   protected final java.util.LinkedList<SceneGraphNode> getHierachy() {
+      final java.util.LinkedList<SceneGraphNode> h = new java.util.LinkedList<SceneGraphNode>();
+      final GLStateTreeNode ancestor = this;
+      while (ancestor != null) {
+         h.addFirst(ancestor.getSGNode());
+         ancestor = ancestor._parent;
       }
-    }
-  }
-
-  protected final SceneGraphNode getSGNode()
-  {
-    return _sgNode;
-  }
+      return h;
+   }
 
 
-  public void dispose()
-  {
-  }
+   protected final void prune(final SceneGraphNode sgNode) {
+      for (final java.util.Iterator<GLStateTreeNode> it = _children.iterator(); it.hasNext();) {
+         (it.next()).prune(sgNode);
 
-  public final GLStateTreeNode createChildNodeForSGNode(SceneGraphNode sgNode)
-  {
-    GLStateTreeNode child = new GLStateTreeNode(sgNode, this);
-    _children.add(child);
-    return child;
-  }
+         if ((it.next())._sgNode == sgNode) {
+            final GLStateTreeNode child = it.next();
+            _children.remove(child);
 
-  public final GLStateTreeNode getChildNodeForSGNode(SceneGraphNode node)
-  {
-    for (java.util.Iterator<GLStateTreeNode> it = _children.iterator(); it.hasNext();)
-    {
-      if ((it.next())._sgNode == node)
-      {
-        return it.next();
+            delete(it.next());
+            //C++ TO JAVA CONVERTER TODO TASK: There is no direct equivalent to the STL vector 'erase' method in Java:
+            _children.erase(it);
+         }
       }
-    }
-    return null;
-  }
+   }
 
-  public final GLState getGLState()
-  {
-    if (_state == null)
-    {
-      //Creating state
-      java.util.LinkedList<SceneGraphNode> hierachi = getHierachy();
-      _state = new GLState();
-      for (java.util.Iterator<SceneGraphNode> it = hierachi.iterator(); it.hasNext();)
-      {
-        SceneGraphNode sgNode = it.next();
-        if (sgNode != null)
-        {
-          sgNode.modifiyGLState(_state);
-        }
+
+   protected final SceneGraphNode getSGNode() {
+      return _sgNode;
+   }
+
+
+   public void dispose() {
+      for (final GLStateTreeNode glStateTreeNode : _children) {
+         delete(glStateTreeNode);
       }
-    }
-    return _state;
-  }
+      if (_state != null) {
+         _state.dispose();
+      }
+   }
+
+
+   public final GLStateTreeNode createChildNodeForSGNode(final SceneGraphNode sgNode) {
+      final GLStateTreeNode child = new GLStateTreeNode(sgNode, this);
+      _children.add(child);
+      return child;
+   }
+
+
+   public final GLStateTreeNode getChildNodeForSGNode(final SceneGraphNode node) {
+      for (final java.util.Iterator<GLStateTreeNode> it = _children.iterator(); it.hasNext();) {
+         if ((it.next())._sgNode == node) {
+            return it.next();
+         }
+      }
+      return null;
+   }
+
+
+   public final GLState getGLState() {
+      if (_state == null) {
+         //Creating state
+         final java.util.LinkedList<SceneGraphNode> hierachi = getHierachy();
+         _state = new GLState();
+         for (final SceneGraphNode sgNode : hierachi) {
+            if (sgNode != null) {
+               sgNode.modifiyGLState(_state);
+            }
+         }
+      }
+      return _state;
+   }
 }

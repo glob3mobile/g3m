@@ -107,7 +107,7 @@ class GPUUniformValueBool:public GPUUniformValue{
 public:
   const bool _value;
   
-  GPUUniformValueBool(bool b):_value(b),GPUUniformValue(GLType::glBool()){} 
+  GPUUniformValueBool(bool b):GPUUniformValue(GLType::glBool()),_value(b){}
   
   void setUniform(GL* gl, const IGLUniformID* id) const{
     if (_value) gl->uniform1i(id, 1);
@@ -138,7 +138,7 @@ class GPUUniformValueVec2Float:public GPUUniformValue{
 public:
   const double _x, _y;
   
-  GPUUniformValueVec2Float(double x, double y):_x(x),_y(y),GPUUniformValue(GLType::glVec2Float()){}
+  GPUUniformValueVec2Float(double x, double y):GPUUniformValue(GLType::glVec2Float()), _x(x),_y(y){}
   
   void setUniform(GL* gl, const IGLUniformID* id) const{
     gl->uniform2f(id, (float)_x, (float)_y);
@@ -172,7 +172,7 @@ public:
   const double _x, _y, _z, _w;
   
   GPUUniformValueVec4Float(double x, double y, double z, double w):
-  _x(x),_y(y), _z(z), _w(w),GPUUniformValue(GLType::glVec4Float()){}
+  GPUUniformValue(GLType::glVec4Float()),_x(x),_y(y), _z(z), _w(w){}
   
   void setUniform(GL* gl, const IGLUniformID* id) const{
     gl->uniform4f(id, (float)_x, (float)_y, (float)_z, (float)_w);
@@ -272,7 +272,7 @@ class GPUUniformValueMatrix4Float:public GPUUniformValue{
 public:
   const MutableMatrix44D _m;
   
-  GPUUniformValueMatrix4Float(const MutableMatrix44D m):_m(m),GPUUniformValue(GLType::glMatrix4Float()){}
+  GPUUniformValueMatrix4Float(const MutableMatrix44D m):GPUUniformValue(GLType::glMatrix4Float()),_m(m){}
   
   void setUniform(GL* gl, const IGLUniformID* id) const{
     gl->uniformMatrix4fv(id, false, &_m);
@@ -306,7 +306,7 @@ class GPUUniformValueFloat:public GPUUniformValue{
 public:
   const double _value;
   
-  GPUUniformValueFloat(double d):_value(d),GPUUniformValue(GLType::glFloat()){}
+  GPUUniformValueFloat(double d):GPUUniformValue(GLType::glFloat()),_value(d){}
   
   void setUniform(GL* gl, const IGLUniformID* id) const{
     gl->uniform1f(id, (float)_value);

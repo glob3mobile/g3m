@@ -37,12 +37,12 @@ class GPUProgram{
   void getVariables(GL* gl);
   
   GPUProgram(){}
-
+  
   
 public:
   
   static GPUProgram* createProgram(GL* gl, const std::string name, const std::string& vertexSource,
-                                               const std::string& fragmentSource);
+                                   const std::string& fragmentSource);
   
   ~GPUProgram();
   
@@ -64,7 +64,7 @@ public:
   GPUUniformVec4Float* getGPUUniformVec4Float(const std::string name) const;
   GPUUniformFloat* getGPUUniformFloat(const std::string name) const;
   GPUUniformMatrix4Float* getGPUUniformMatrix4Float(const std::string name) const;
-
+  
   
   GPUAttributeVec1Float* getGPUAttributeVec1Float(const std::string name) const;
   GPUAttributeVec2Float* getGPUAttributeVec2Float(const std::string name) const;
@@ -74,54 +74,78 @@ public:
   void onUsed();
   void onUnused();
   void applyChanges(GL* gl);
+  
+  GPUUniform* getUniformOfType(const std::string& name, int type) const{
+    GPUUniform* u = NULL;
+    if (type == GLType::glBool()){
+      u = getGPUUniformBool(name);
+    } else {
+      if (type == GLType::glVec2Float()){
+        u = getGPUUniformVec2Float(name);
+      } else{
+        if (type == GLType::glVec4Float()){
+          u = getGPUUniformVec4Float(name);
+        } else{
+          if (type == GLType::glFloat()){
+            u = getGPUUniformFloat(name);
+          } else
+            if (type == GLType::glMatrix4Float()){
+              u = getGPUUniformMatrix4Float(name);
+            }
+        }
+      }
+    }
+  return u;
+  }
+
 /*
-  void setUniform(GL* gl, const std::string& name, const Vector2D& v) const{
-    Uniform* u = getUniform(name);
-    if (u != NULL && u->getType() == GLType::glVec2Float()) {
-      ((UniformVec2Float*)u)->set(gl, v);
-    } else{
-      throw G3MError("Error setting Uniform " + name);
-    }
-  }
-  
-  void setUniform(GL* gl, const std::string& name, double x, double y, double z, double w) const{
-    Uniform* u = getUniform(name);
-    if (u != NULL && u->getType() == GLType::glVec4Float()) {
-      ((UniformVec4Float*)u)->set(gl, x,y,z,w);
-    } else{
-      throw G3MError("Error setting Uniform " + name);
-    }
-  }
-  
-  void setUniform(GL* gl, const std::string& name, bool b) const{
-    Uniform* u = getUniform(name);
-    if (u != NULL && u->getType() == GLType::glBool()) {
-      ((UniformBool*)u)->set(gl, b);
-    } else{
-      throw G3MError("Error setting Uniform " + name);
-    }
-  }
-  
-  void setUniform(GL* gl, const std::string& name, float f) const{
-    Uniform* u = getUniform(name);
-    if (u != NULL && u->getType() == GLType::glFloat()) {
-      ((UniformFloat*)u)->set(gl, f);
-    } else{
-      throw G3MError("Error setting Uniform " + name);
-    }
-  }
-  
-  void setUniform(GL* gl, const std::string& name, const MutableMatrix44D& m) const{
-    Uniform* u = getUniform(name);
-    if (u != NULL && u->getType() == GLType::glMatrix4Float()) {
-      ((UniformMatrix4Float*)u)->set(gl, m);
-    } else{
-      throw G3MError("Error setting Uniform " + name);
-    }
-  }
-  */
-  
-  
+ void setUniform(GL* gl, const std::string& name, const Vector2D& v) const{
+ Uniform* u = getUniform(name);
+ if (u != NULL && u->getType() == GLType::glVec2Float()) {
+ ((UniformVec2Float*)u)->set(gl, v);
+ } else{
+ throw G3MError("Error setting Uniform " + name);
+ }
+ }
+ 
+ void setUniform(GL* gl, const std::string& name, double x, double y, double z, double w) const{
+ Uniform* u = getUniform(name);
+ if (u != NULL && u->getType() == GLType::glVec4Float()) {
+ ((UniformVec4Float*)u)->set(gl, x,y,z,w);
+ } else{
+ throw G3MError("Error setting Uniform " + name);
+ }
+ }
+ 
+ void setUniform(GL* gl, const std::string& name, bool b) const{
+ Uniform* u = getUniform(name);
+ if (u != NULL && u->getType() == GLType::glBool()) {
+ ((UniformBool*)u)->set(gl, b);
+ } else{
+ throw G3MError("Error setting Uniform " + name);
+ }
+ }
+ 
+ void setUniform(GL* gl, const std::string& name, float f) const{
+ Uniform* u = getUniform(name);
+ if (u != NULL && u->getType() == GLType::glFloat()) {
+ ((UniformFloat*)u)->set(gl, f);
+ } else{
+ throw G3MError("Error setting Uniform " + name);
+ }
+ }
+ 
+ void setUniform(GL* gl, const std::string& name, const MutableMatrix44D& m) const{
+ Uniform* u = getUniform(name);
+ if (u != NULL && u->getType() == GLType::glMatrix4Float()) {
+ ((UniformMatrix4Float*)u)->set(gl, m);
+ } else{
+ throw G3MError("Error setting Uniform " + name);
+ }
+ }
+ */
+
+
 };
 
 #endif /* defined(__G3MiOSSDK__GPUProgram__) */

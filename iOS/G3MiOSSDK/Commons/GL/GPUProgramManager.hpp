@@ -31,8 +31,9 @@ public:
   GPUProgramManager(GL* gl, GPUProgramFactory *factory):_gl(gl), _factory(factory){}
   
   ~GPUProgramManager(){
-    delete _factory;
+    
 #ifdef C_CODE
+    delete _factory;
     for (std::map<std::string, GPUProgram*>::iterator it = _programs.begin(); it != _programs.end(); ++it){
       delete it->second;
     }
