@@ -136,28 +136,31 @@ public class SGLayerNode extends SGNode
     return state;
   }
   */
-  public final void SGLayerNode.modifyGLGlobalState(GLGlobalState GLGlobalState)
-  {
+  //void SGLayerNode::modifyGLGlobalState(GLGlobalState& GLGlobalState) const{
+  //
+  //  int __WORKING;
+  //  /*if (!_initialized) {
+  //    _initialized = true;
+  //    requestImage(rc);
+  //  }
+  //
+  //  const IGLTextureId* texId = getTextureId(rc);
+  //  if (texId != NULL) {
+  //    state.bindTexture(texId);
+  //  }
+  //   */
+  //}
   
-    int __WORKING;
-    /*if (!_initialized) {
-      _initialized = true;
-      requestImage(rc);
-    }
-    
-    const IGLTextureId* texId = getTextureId(rc);
-    if (texId != NULL) {
-      state.bindTexture(texId);
-    }
-     */
-  }
-
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  void modifyGLGlobalState(GLGlobalState GLGlobalState);
-  public final void modifyGPUProgramState(GPUProgramState progState)
+  public final void SGLayerNode.modifyGPUProgramState(GPUProgramState progState)
   {
     progState.setAttributeEnabled("TextureCoord", true);
     progState.setUniformValue("EnableTexture", true);
   }
+
+  public final void modifyGLGlobalState(GLGlobalState GLGlobalState)
+  {
+  }
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  void modifyGPUProgramState(GPUProgramState progState);
 
 }

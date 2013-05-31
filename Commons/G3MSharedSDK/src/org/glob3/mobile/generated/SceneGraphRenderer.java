@@ -52,7 +52,7 @@ public class SceneGraphRenderer extends Renderer
       }
     }
   
-    _camera.SceneGraphNode.render(rc, _rootState);
+    _camera.render(rc, _rootState);
   
     }
     else
