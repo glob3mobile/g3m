@@ -1,12 +1,12 @@
 package org.glob3.mobile.generated; 
 public class GPUUniformValueMatrix4Float extends GPUUniformValue
 {
-  public final MutableMatrix44D _m = new MutableMatrix44D();
+  public final MutableMatrix44D _m;
 
   public GPUUniformValueMatrix4Float(MutableMatrix44D m)
   {
      super(GLType.glMatrix4Float());
-     _m = new MutableMatrix44D(m);
+     _m = m;
   }
 
   public final void setUniform(GL gl, IGLUniformID id)

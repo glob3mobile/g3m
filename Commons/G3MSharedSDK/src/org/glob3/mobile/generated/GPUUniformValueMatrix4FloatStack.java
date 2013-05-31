@@ -12,11 +12,14 @@ public class GPUUniformValueMatrix4FloatStack extends GPUUniformValue
 
   public final void setUniform(GL gl, IGLUniformID id)
   {
-    MutableMatrix44D m = new MutableMatrix44D(*_stack.get(0));
+    final MutableMatrix44D pm0 = _stack.get(0);
+    MutableMatrix44D m = pm0;
     final int size = _stack.size();
     for (int i = 1; i < size; i++)
     {
-      m = m.multiply(*_stack.get(i));
+      final MutableMatrix44D pmi = _stack.get(i);
+      MutableMatrix44D mi = pmi;
+      m = m.multiply(mi);
       //m = _stack[i]->multiply(m);
     }
 
@@ -27,19 +30,19 @@ public class GPUUniformValueMatrix4FloatStack extends GPUUniformValue
   {
     //TODO: FIX
     return false;
-//    GPUUniformValueMatrix4FloatStack *v2 = (GPUUniformValueMatrix4FloatStack *)v;
-//    if (_stack.size() != v2->_stack.size()){
-//      return false;
-//    }
-//    
-//    for (int i = _stack.size(); i > -1; i--) {
-//      const MutableMatrix44D* m = v2->_stack[i];
-//      const MutableMatrix44D* m2 = _stack[i];
-//      if (!m->isEqualsTo(*m2)){
-//        return false;
-//      }
-//    }
-//    return true;
+    //    GPUUniformValueMatrix4FloatStack *v2 = (GPUUniformValueMatrix4FloatStack *)v;
+    //    if (_stack.size() != v2->_stack.size()){
+    //      return false;
+    //    }
+    //
+    //    for (int i = _stack.size(); i > -1; i--) {
+    //      const MutableMatrix44D* m = v2->_stack[i];
+    //      const MutableMatrix44D* m2 = _stack[i];
+    //      if (!m->isEqualsTo(*m2)){
+    //        return false;
+    //      }
+    //    }
+    //    return true;
   }
 
   public final void multiplyMatrix(MutableMatrix44D m)

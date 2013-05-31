@@ -57,7 +57,7 @@ public class GPUUniform
   {
     if (_type != v.getType()) //type checking
     {
-//      delete v;
+      //      delete v;
       ILogger.instance().logError("Attempting to set uniform " + _name + "with invalid value type.");
       return;
     }
@@ -70,7 +70,7 @@ public class GPUUniform
            _value.dispose();
       }
       _value = v.deepCopy();
-//      delete v;
+      //      delete v;
     }
   }
 

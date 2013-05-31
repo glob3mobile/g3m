@@ -138,8 +138,23 @@ public class GL
     _nativeGL.clear(GLBufferType.colorBuffer() | GLBufferType.depthBuffer());
   }
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  void drawElements(int mode, IShortBuffer indices, GLGlobalState state, GPUProgramManager progManager, GPUProgramState gpuState);
+  public final void drawElements(int mode, IShortBuffer indices, GLGlobalState state, GPUProgramManager progManager, GPUProgramState gpuState)
+  {
+    if (_verbose)
+    {
+      ILogger.instance().logInfo("GL::drawElements(%d, %s)", mode, indices.description());
+    }
+  
+    GLState glState = new GLState((GLGlobalState) state, (GPUProgramState)gpuState);
+    glState.applyOnGPU(this, progManager);
+  
+    //applyGLGlobalStateAndGPUProgramState(state, progManager, *gpuState);
+  
+    _nativeGL.drawElements(mode, indices.size(), indices);
+  
+    //TODO: CHECKING GPU STATUS BY DELETING ALL
+    //progManager.getProgram(*gpuState)->onUnused();
+  }
 
   public final void drawElements(int mode, IShortBuffer indices, GLState state, GPUProgramManager progManager)
   {
@@ -429,3 +444,7 @@ public class GL
 
 
 }
+//void GL::applyGLGlobalStateAndGPUProgramState(const GLGlobalState& state, GPUProgramManager& progManager, const GPUProgramState& progState){
+//  state.applyChanges(this, *_currentState);
+//  setProgramState(progManager, progState);
+//}
