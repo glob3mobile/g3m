@@ -69,7 +69,7 @@ void GPUProgramState::applyValuesToLinkedProgram() const{
   }
   
   final Object[] attEnabled = _attributesEnabled.values().toArray();
-  for (int i = 0; i < uni.length; i++) {
+  for (int i = 0; i < attEnabled.length; i++) {
     attributeEnabledStruct a = (attributeEnabledStruct) attEnabled[i];
     if (a.attribute == null) {
       ILogger.instance().logError("NO ATTRIBUTE LINKED");
