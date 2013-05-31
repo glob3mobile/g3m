@@ -148,7 +148,7 @@ GLGlobalState* SGLayerNode::createState(const G3MRenderContext* rc,
 //   */
 //}
 
-void SGLayerNode::modifyGPUProgramState(GPUProgramState& progState) const{
-  progState.setAttributeEnabled("TextureCoord", true);
-  progState.setUniformValue("EnableTexture", true);
-}
+//void SGLayerNode::modifyGPUProgramState(GPUProgramState& progState) const{
+//  progState.setAttributeEnabled("TextureCoord", true);
+//  progState.setUniformValue("EnableTexture", true);
+//}

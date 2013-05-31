@@ -81,7 +81,10 @@ public:
   GPUProgramState* createGPUProgramState(const G3MRenderContext* rc, const GPUProgramState* parentState);
 
   void modifyGLGlobalState(GLGlobalState& GLGlobalState) const{}
-  void modifyGPUProgramState(GPUProgramState& progState) const;
+  void modifyGPUProgramState(GPUProgramState& progState) const{
+    progState.setAttributeEnabled("TextureCoord", true);
+    progState.setUniformValue("EnableTexture", true);
+  }
 
 };
 

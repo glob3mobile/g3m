@@ -69,6 +69,7 @@ public:
   }
   bool isInsideCameraFrustum(const G3MRenderContext* rc){
     //TODO: Implement
+    return true;
   }
   void modifiyGLState(GLState* state){
     //TODO: Implement
