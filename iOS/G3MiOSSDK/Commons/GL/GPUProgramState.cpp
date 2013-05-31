@@ -95,11 +95,11 @@ void GPUProgramState::linkToProgram(GPUProgram& prog) const{
   
   _lastProgramUsed = prog;
   
-  final GPUUniformValue[] uni = (GPUUniformValue[]) _uniformValues.values().toArray();
-  final String[] uniNames = (String[]) _uniformValues.keySet().toArray();
+  final Object[] uni = _uniformValues.values().toArray();
+  final Object[] uniNames = _uniformValues.keySet().toArray();
   for (int i = 0; i < uni.length; i++) {
-    final String name = uniNames[i];
-    final GPUUniformValue v = uni[i];
+    final String name = (String)uniNames[i];
+    final GPUUniformValue v = (GPUUniformValue) uni[i];
     
     final int type = v.getType();
     final GPUUniform u = prog.getUniformOfType(name, type);
@@ -112,11 +112,11 @@ void GPUProgramState::linkToProgram(GPUProgram& prog) const{
     }
   }
   
-  final attributeEnabledStruct[] attEnabled = (attributeEnabledStruct[]) _attributesEnabled.values().toArray();
-  final String[] attEnabledNames = (String[]) _uniformValues.keySet().toArray();
+  final Object[] attEnabled = _attributesEnabled.values().toArray();
+  final Object[] attEnabledNames = _uniformValues.keySet().toArray();
   for (int i = 0; i < attEnabled.length; i++) {
-    final String name = attEnabledNames[i];
-    final attributeEnabledStruct ae = attEnabled[i];
+    final String name = (String) attEnabledNames[i];
+    final attributeEnabledStruct ae = (attributeEnabledStruct)attEnabled[i];
     
     final GPUAttribute a = prog.getGPUAttribute(name);
     if (a == null) {
@@ -127,11 +127,11 @@ void GPUProgramState::linkToProgram(GPUProgram& prog) const{
     }
   }
   
-  final GPUAttributeValue[] att = (GPUAttributeValue[]) _attributesValues.values().toArray();
-  final String[] attNames = (String[]) _attributesValues.keySet().toArray();
+  final Object[] att = _attributesValues.values().toArray();
+  final Object[] attNames = _attributesValues.keySet().toArray();
   for (int i = 0; i < att.length; i++) {
-    final String name = attNames[i];
-    final GPUAttributeValue v = att[i];
+    final String name = (String)attNames[i];
+    final GPUAttributeValue v = (GPUAttributeValue)att[i];
     
     final int type = v.getType();
     final int size = v.getAttributeSize();
@@ -362,11 +362,11 @@ void GPUProgramState::setUniformValue(const std::string& name, const MutableMatr
   }
 #endif
 #ifdef JAVA_CODE
-  final GPUUniformValue[] uni = (GPUUniformValue[]) _uniformValues.values().toArray();
-  final String[] uniNames = (String[]) _uniformValues.keySet().toArray();
+  final Object[] uni = _uniformValues.values().toArray();
+  final Object[] uniNames = _uniformValues.keySet().toArray();
   for (int i = 0; i < uni.length; i++) {
-    final String thisName =  uniNames[i];
-    final GPUUniformValue uv = uni[i];
+    final String thisName =  (String)uniNames[i];
+    final GPUUniformValue uv = (GPUUniformValue) uni[i];
     if ((thisName.compareTo(name) == 0) && (uv.getType() == GLType.glMatrix4Float()))
     {
       final GPUUniformValueMatrix4FloatStack v = (GPUUniformValueMatrix4FloatStack)uv;
@@ -397,11 +397,11 @@ void GPUProgramState::multiplyUniformValue(const std::string& name, const Mutabl
   
 #endif
 #ifdef JAVA_CODE
-  final GPUUniformValue[] uni = (GPUUniformValue[]) _uniformValues.values().toArray();
-  final String[] uniNames = (String[]) _uniformValues.keySet().toArray();
+  final Object[] uni = _uniformValues.values().toArray();
+  final Object[] uniNames = _uniformValues.keySet().toArray();
   for (int i = 0; i < uni.length; i++) {
-    final String thisName =  uniNames[i];
-    final GPUUniformValue uv = uni[i];
+    final String thisName =  (String) uniNames[i];
+    final GPUUniformValue uv = (GPUUniformValue) uni[i];
     if ((thisName.compareTo(name) == 0) && (uv.getType() == GLType.glMatrix4Float()))
     {
       final GPUUniformValueMatrix4FloatStack v = (GPUUniformValueMatrix4FloatStack)uv;
@@ -534,11 +534,11 @@ bool GPUProgramState::isLinkableToProgram(const GPUProgram& program) const{
   
   int nDisabledAtt = 0;
   
-  final attributeEnabledStruct[] attEnabled = (attributeEnabledStruct[]) _attributesEnabled.values().toArray();
-  final String[] attEnabledNames = (String[]) _uniformValues.keySet().toArray();
+  final Object[] attEnabled = _attributesEnabled.values().toArray();
+  final Object[] attEnabledNames = _uniformValues.keySet().toArray();
   for (int i = 0; i < attEnabled.length; i++) {
-    final String thisName = attEnabledNames[i];
-    final attributeEnabledStruct ae = attEnabled[i];
+    final String thisName = (String) attEnabledNames[i];
+    final attributeEnabledStruct ae = (attributeEnabledStruct) attEnabled[i];
     
     if (ae.value == false) {
       nDisabledAtt++;
