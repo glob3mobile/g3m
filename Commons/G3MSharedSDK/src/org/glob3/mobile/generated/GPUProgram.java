@@ -324,12 +324,12 @@ public class GPUProgram
   public final void onUnused()
   {
     //ILogger::instance()->logInfo("GPUProgram %s unused", _name.c_str());
-    final Objects[] uni = _uniforms.values().toArray();
+    final Object[] uni = _uniforms.values().toArray();
     for (int i = 0; i < uni.length; i++) {
       ((GPUUniform)uni[i]).unset();
     }
   
-    final Objects[] att = _attributes.values().toArray();
+    final Object[] att = _attributes.values().toArray();
     for (int i = 0; i < uni.length; i++) {
       ((GPUAttribute)att[i]).unset();
     }
@@ -341,7 +341,7 @@ public class GPUProgram
   public final void applyChanges(GL gl)
   {
     //ILogger::instance()->logInfo("GPUProgram %s applying changes", _name.c_str());
-    final Objects[] uni = _uniforms.values().toArray();
+    final Object[] uni = _uniforms.values().toArray();
     for (int i = 0; i < uni.length; i++) {
       GPUUniform u = (GPUUniform)uni[i];
       if (u.wasSet()){
@@ -351,7 +351,7 @@ public class GPUProgram
       }
     }
   
-    final Objects[] att = _attributes.values().toArray();
+    final Object[] att = _attributes.values().toArray();
     for (int i = 0; i < uni.length; i++) {
       GPUAttribute a = (GPUAttribute)att[i];
       if (a.wasSet()){

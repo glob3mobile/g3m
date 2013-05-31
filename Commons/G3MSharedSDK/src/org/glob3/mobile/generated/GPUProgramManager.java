@@ -73,7 +73,7 @@ public class GPUProgramManager
 
   public final GPUProgram getProgram(GPUProgramState state)
   {
-    final Objects[] progs = _programs.values().toArray();
+    final Object[] progs = _programs.values().toArray();
     for (int i = 0; i < progs.length; i++) {
       GPUProgram p = (GPUProgram)progs[i];
       if (state.isLinkableToProgram(p)) {
