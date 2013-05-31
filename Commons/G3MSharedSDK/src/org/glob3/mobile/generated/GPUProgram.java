@@ -324,18 +324,14 @@ public class GPUProgram
   public final void onUnused()
   {
     //ILogger::instance()->logInfo("GPUProgram %s unused", _name.c_str());
-    Iterator it = _uniforms.entrySet().iterator();
-    while (it.hasNext()) {
-      Map.Entry pairs = (Map.Entry)it.next();
-      GPUUniform u = (GPUUniform) pairs.getValue();
-      u.unset();
+    GPUUniform[] uni = (GPUUniform[]) _uniforms.values().toArray();
+    for (int i = 0; i < uni.length; i++) {
+      uni[i].unset();
     }
   
-    Iterator it2 = _attributes.entrySet().iterator();
-    while (it2.hasNext()) {
-      Map.Entry pairs = (Map.Entry)it2.next();
-      GPUAttribute a = (GPUAttribute) pairs.getValue();
-      a.unset();
+    GPUAttribute[] att = (GPUAttribute[]) _attributes.values().toArray();
+    for (int i = 0; i < uni.length; i++) {
+      att[i].unset();
     }
   }
 
@@ -345,10 +341,9 @@ public class GPUProgram
   public final void applyChanges(GL gl)
   {
     //ILogger::instance()->logInfo("GPUProgram %s applying changes", _name.c_str());
-    Iterator it = _uniforms.entrySet().iterator();
-    while (it.hasNext()) {
-      Map.Entry pairs = (Map.Entry)it.next();
-      GPUUniform u = (GPUUniform) pairs.getValue();
+    GPUUniform[] uni = (GPUUniform[]) _uniforms.values().toArray();
+    for (int i = 0; i < uni.length; i++) {
+      GPUUniform u = uni[i];
       if (u.wasSet()){
         u.applyChanges(gl);
       } else{
@@ -356,10 +351,9 @@ public class GPUProgram
       }
     }
   
-    Iterator it2 = _attributes.entrySet().iterator();
-    while (it2.hasNext()) {
-      Map.Entry pairs = (Map.Entry)it2.next();
-      GPUAttribute a = (GPUAttribute) pairs.getValue();
+    GPUAttribute[] att = (GPUAttribute[]) _attributes.values().toArray();
+    for (int i = 0; i < uni.length; i++) {
+      GPUAttribute a = att[i];
       if (a.wasSet()){
         a.applyChanges(gl);
       } else{
@@ -368,7 +362,6 @@ public class GPUProgram
         }
       }
     }
-  
   }
 
   public final GPUUniform getUniformOfType(String name, int type)
