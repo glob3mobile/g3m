@@ -9,11 +9,11 @@ public class GPUUniformValueVec4Float extends GPUUniformValue
 
   public GPUUniformValueVec4Float(double x, double y, double z, double w)
   {
+     super(GLType.glVec4Float());
      _x = x;
      _y = y;
      _z = z;
      _w = w;
-     super(GLType.glVec4Float());
   }
 
   public final void setUniform(GL gl, IGLUniformID id)

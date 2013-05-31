@@ -5,8 +5,8 @@ public class GPUUniformValueMatrix4Float extends GPUUniformValue
 
   public GPUUniformValueMatrix4Float(MutableMatrix44D m)
   {
-     _m = new MutableMatrix44D(m);
      super(GLType.glMatrix4Float());
+     _m = new MutableMatrix44D(m);
   }
 
   public final void setUniform(GL gl, IGLUniformID id)

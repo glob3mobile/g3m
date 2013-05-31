@@ -6,8 +6,8 @@ public class GPUUniformValueFloat extends GPUUniformValue
 
   public GPUUniformValueFloat(double d)
   {
-     _value = d;
      super(GLType.glFloat());
+     _value = d;
   }
 
   public final void setUniform(GL gl, IGLUniformID id)

@@ -7,9 +7,9 @@ public class GPUUniformValueVec2Float extends GPUUniformValue
 
   public GPUUniformValueVec2Float(double x, double y)
   {
+     super(GLType.glVec2Float());
      _x = x;
      _y = y;
-     super(GLType.glVec2Float());
   }
 
   public final void setUniform(GL gl, IGLUniformID id)

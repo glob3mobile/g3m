@@ -36,8 +36,7 @@ public class GPUProgramManager
 
   public void dispose()
   {
-    if (_factory != null)
-       _factory.dispose();
+
   }
 
   public final GPUProgram getCompiledProgram(String name)

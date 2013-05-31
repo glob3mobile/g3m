@@ -6,8 +6,8 @@ public class GPUUniformValueBool extends GPUUniformValue
 
   public GPUUniformValueBool(boolean b)
   {
-     _value = b;
      super(GLType.glBool());
+     _value = b;
   }
 
   public final void setUniform(GL gl, IGLUniformID id)
