@@ -257,18 +257,14 @@ void GPUProgram::onUnused(){
   }
 #endif
 #ifdef JAVA_CODE
-  Iterator it = _uniforms.entrySet().iterator();
-  while (it.hasNext()) {
-    Map.Entry pairs = (Map.Entry)it.next();
-    GPUUniform u = (GPUUniform) pairs.getValue();
-    u.unset();
+  GPUUniform[] uni = (GPUUniform[]) _uniforms.values().toArray();
+  for (int i = 0; i < uni.length; i++) {
+    uni[i].unset();
   }
   
-  Iterator it2 = _attributes.entrySet().iterator();
-  while (it2.hasNext()) {
-    Map.Entry pairs = (Map.Entry)it2.next();
-    GPUAttribute a = (GPUAttribute) pairs.getValue();
-    a.unset();
+  GPUAttribute[] att = (GPUAttribute[]) _attributes.values().toArray();
+  for (int i = 0; i < uni.length; i++) {
+    att[i].unset();
   }
 #endif
 }
@@ -302,10 +298,9 @@ void GPUProgram::applyChanges(GL* gl){
   }
 #endif
 #ifdef JAVA_CODE
-  Iterator it = _uniforms.entrySet().iterator();
-  while (it.hasNext()) {
-    Map.Entry pairs = (Map.Entry)it.next();
-    GPUUniform u = (GPUUniform) pairs.getValue();
+  GPUUniform[] uni = (GPUUniform[]) _uniforms.values().toArray();
+  for (int i = 0; i < uni.length; i++) {
+    GPUUniform u = uni[i];
     if (u.wasSet()){
       u.applyChanges(gl);
     } else{
@@ -313,10 +308,9 @@ void GPUProgram::applyChanges(GL* gl){
     }
   }
   
-  Iterator it2 = _attributes.entrySet().iterator();
-  while (it2.hasNext()) {
-    Map.Entry pairs = (Map.Entry)it2.next();
-    GPUAttribute a = (GPUAttribute) pairs.getValue();
+  GPUAttribute[] att = (GPUAttribute[]) _attributes.values().toArray();
+  for (int i = 0; i < uni.length; i++) {
+    GPUAttribute a = att[i];
     if (a.wasSet()){
       a.applyChanges(gl);
     } else{
@@ -325,6 +319,5 @@ void GPUProgram::applyChanges(GL* gl){
       }
     }
   }
-  
 #endif
 }

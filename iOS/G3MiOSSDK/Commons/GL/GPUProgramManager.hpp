@@ -90,10 +90,9 @@ public:
     }
 #endif
 #ifdef JAVA_CODE
-    Iterator it = _programs.entrySet().iterator();
-    while (it.hasNext()) {
-      Map.Entry pairs = (Map.Entry)it.next();
-      GPUProgram p = (GPUProgram) pairs.getValue();
+    GPUProgram[] progs = (GPUProgram[]) _programs.values().toArray();
+    for (int i = 0; i < progs.length; i++) {
+      GPUProgram p = progs[i];
       if (state.isLinkableToProgram(p)) {
         return p;
       }

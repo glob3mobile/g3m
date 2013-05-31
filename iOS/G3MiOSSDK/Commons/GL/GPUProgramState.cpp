@@ -63,38 +63,24 @@ void GPUProgramState::applyValuesToLinkedProgram() const{
   }
 #endif
 #ifdef JAVA_CODE
-  {
-    final Iterator it = _uniformValues.entrySet().iterator();
-    while (it.hasNext()) {
-      final Map.Entry pairs = (Map.Entry)it.next();
-      final GPUUniformValue v = (GPUUniformValue) pairs.getValue();
-      v.setValueToLinkedUniform();
+  final GPUUniformValue[] uni = (GPUUniformValue[]) _uniformValues.values().toArray();
+  for (final GPUUniformValue v : uni) {
+    v.setValueToLinkedUniform();
+  }
+  
+  final attributeEnabledStruct[] attEnabled = (attributeEnabledStruct[]) _attributesEnabled.values().toArray();
+  for (final attributeEnabledStruct a : attEnabled) {
+    if (a.attribute == null) {
+      ILogger.instance().logError("NO ATTRIBUTE LINKED");
+    }
+    else {
+      a.attribute.setEnable(a.value);
     }
   }
   
-  {
-    final Iterator it = _attributesEnabled.entrySet().iterator();
-    while (it.hasNext()) {
-      final Map.Entry pairs = (Map.Entry)it.next();
-      final attributeEnabledStruct a = (attributeEnabledStruct) pairs.getValue();
-      if (a.attribute == null) {
-        ILogger.instance().logError("NO ATTRIBUTE LINKED");
-      }
-      else
-      {
-        a.attribute.setEnable(a.value);
-      }
-    }
-  }
-  
-  
-  {
-    final Iterator it = _attributesValues.entrySet().iterator();
-    while (it.hasNext()) {
-      final Map.Entry pairs = (Map.Entry)it.next();
-      final GPUAttributeValue a = (GPUAttributeValue) pairs.getValue();
-      a.setValueToLinkedAttribute();
-    }
+  final GPUAttributeValue[] att = (GPUAttributeValue[]) _attributesValues.values().toArray();
+  for (final GPUAttributeValue a : att) {
+    a.setValueToLinkedAttribute();
   }
 #endif
 }
