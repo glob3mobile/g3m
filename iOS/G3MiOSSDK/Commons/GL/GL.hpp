@@ -86,7 +86,8 @@ public:
   
   void drawElements(int mode,
                     IShortBuffer* indices, const GLGlobalState& state,
-                    GPUProgramManager& progManager,const GPUProgramState* gpuState);
+                    GPUProgramManager& progManager,
+                    const GPUProgramState* gpuState);
   
   void drawElements(int mode,
                     IShortBuffer* indices, GLState* state,

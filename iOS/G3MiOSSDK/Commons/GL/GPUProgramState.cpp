@@ -91,38 +91,101 @@ void GPUProgramState::linkToProgram(GPUProgram& prog) const{
   _lastProgramUsed = &prog;
   
 #ifdef JAVA_CODE
-  final Iterator it = _uniformValues.entrySet().iterator();
-  while (it.hasNext()) {
-    final Map.Entry pairs = (Map.Entry)it.next();
-    final String name =  (String) pairs.getKey();
-    final GPUUniformValue v = (GPUUniformValue) pairs.getValue();
+  
+  _lastProgramUsed = prog;
+  
+  final GPUUniformValue[] uni = (GPUUniformValue[]) _uniformValues.values().toArray();
+  final String[] uniNames = (String[]) _uniformValues.keySet().toArray();
+  for (int i = 0; i < uni.length; i++) {
+    final String name = uniNames[i];
+    final GPUUniformValue v = uni[i];
     
+    final int type = v.getType();
+    final GPUUniform u = prog.getUniformOfType(name, type);
     
-    int type = v.getType();
-    GPUUniform u = prog.getUniformOfType(name, type);
-    
-    if (u == NULL){
+    if (u == null) {
       ILogger.instance().logError("UNIFORM " + name + " NOT FOUND");
-    } else{
+    }
+    else {
       v.linkToGPUUniform(u);
     }
   }
   
-  final Iterator it = _attributesEnabled.entrySet().iterator();
-  while (it.hasNext()) {
-    final Map.Entry pairs = (Map.Entry)it.next();
-    final String name =  (String) pairs.getKey();
-    final attributeEnabledStruct ae = (attributeEnabledStruct) pairs.getValue();
+  final attributeEnabledStruct[] attEnabled = (attributeEnabledStruct[]) _attributesEnabled.values().toArray();
+  final String[] attEnabledNames = (String[]) _uniformValues.keySet().toArray();
+  for (int i = 0; i < attEnabled.length; i++) {
+    final String name = attEnabledNames[i];
+    final attributeEnabledStruct ae = attEnabled[i];
     
-    GPUAttribute a = prog.getGPUAttribute(name);
-    if (a == NULL){
+    final GPUAttribute a = prog.getGPUAttribute(name);
+    if (a == null) {
       ILogger.instance().logError("ATTRIBUTE NOT FOUND " + name + ". COULDN'T CHANGE ENABLED STATE.");
-    } else{
+    }
+    else {
       ae.attribute = a;
     }
   }
   
+  final GPUAttributeValue[] att = (GPUAttributeValue[]) _attributesValues.values().toArray();
+  final String[] attNames = (String[]) _attributesValues.keySet().toArray();
+  for (int i = 0; i < att.length; i++) {
+    final String name = attNames[i];
+    final GPUAttributeValue v = att[i];
+    
+    final int type = v.getType();
+    final int size = v.getAttributeSize();
+    if ((type == GLType.glFloat()) && (size == 1)) {
+      final GPUAttributeVec1Float a = prog.getGPUAttributeVec1Float(name);
+      if (a == null) {
+        ILogger.instance().logError("ATTRIBUTE NOT FOUND " + name);
+      }
+      else {
+        v.linkToGPUAttribute(a);
+      }
+      continue;
+    }
+    
+    if ((type == GLType.glFloat()) && (size == 2)) {
+      final GPUAttributeVec2Float a = prog.getGPUAttributeVec2Float(name);
+      if (a == null) {
+        ILogger.instance().logError("ATTRIBUTE NOT FOUND " + name);
+      }
+      else {
+        v.linkToGPUAttribute(a);
+      }
+      continue;
+    }
+    
+    if ((type == GLType.glFloat()) && (size == 3)) {
+      GPUAttribute a = prog.getGPUAttributeVec3Float(name);
+      if (a == null) {
+        a = prog.getGPUAttributeVec4Float(name); //A VEC3 COLUD BE STORED IN A VEC4 ATTRIBUTE
+      }
+      
+      if (a == null) {
+        ILogger.instance().logError("ATTRIBUTE NOT FOUND " + name);
+      }
+      else {
+        v.linkToGPUAttribute(a);
+      }
+      continue;
+    }
+    
+    if ((type == GLType.glFloat()) && (size == 4)) {
+      final GPUAttributeVec4Float a = prog.getGPUAttributeVec4Float(name);
+      if (a == null) {
+        ILogger.instance().logError("ATTRIBUTE NOT FOUND " + name);
+      }
+      else {
+        v.linkToGPUAttribute(a);
+      }
+      continue;
+    }
+    
+  }
+  
 #endif
+#ifdef C_CODE
   
   
   for(std::map<std::string, GPUUniformValue*> ::const_iterator it = _uniformValues.begin();
@@ -135,25 +198,6 @@ void GPUProgramState::linkToProgram(GPUProgram& prog) const{
     const int type = v->getType();
     
     GPUUniform* u = prog.getUniformOfType(name, type);
-//    if (type == GLType::glBool()){
-//      u = prog.getGPUUniformBool(name);
-//    } else {
-//      if (type == GLType::glVec2Float()){
-//        u = prog.getGPUUniformVec2Float(name);
-//      } else{
-//        if (type == GLType::glVec4Float()){
-//          u = prog.getGPUUniformVec4Float(name);
-//        } else{
-//          if (type == GLType::glFloat()){
-//            u = prog.getGPUUniformFloat(name);
-//          } else
-//            if (type == GLType::glMatrix4Float()){
-//              u = prog.getGPUUniformMatrix4Float(name);
-//            }
-//        }
-//      }
-//    }
-    
     if (u == NULL){
       ILogger::instance()->logError("UNIFORM " + name + " NOT FOUND");
     } else{
@@ -227,6 +271,8 @@ void GPUProgramState::linkToProgram(GPUProgram& prog) const{
     }
     
   }
+  
+#endif
 }
 
 void GPUProgramState::applyChanges(GL* gl) const{
@@ -315,11 +361,11 @@ void GPUProgramState::setUniformValue(const std::string& name, const MutableMatr
   }
 #endif
 #ifdef JAVA_CODE
-  final Iterator it = _uniformValues.entrySet().iterator();
-  while (it.hasNext()) {
-    final Map.Entry pairs = (Map.Entry)it.next();
-    final String thisName =  (String) pairs.getKey();
-    final GPUUniformValue uv = (GPUUniformValue) pairs.getValue();
+  final GPUUniformValue[] uni = (GPUUniformValue[]) _uniformValues.values().toArray();
+  final String[] uniNames = (String[]) _uniformValues.keySet().toArray();
+  for (int i = 0; i < uni.length; i++) {
+    final String thisName =  uniNames[i];
+    final GPUUniformValue uv = uni[i];
     if ((thisName.compareTo(name) == 0) && (uv.getType() == GLType.glMatrix4Float()))
     {
       final GPUUniformValueMatrix4FloatStack v = (GPUUniformValueMatrix4FloatStack)uv;
@@ -350,11 +396,11 @@ void GPUProgramState::multiplyUniformValue(const std::string& name, const Mutabl
   
 #endif
 #ifdef JAVA_CODE
-  final Iterator it = _uniformValues.entrySet().iterator();
-  while (it.hasNext()) {
-    final Map.Entry pairs = (Map.Entry)it.next();
-    final String thisName =  (String) pairs.getKey();
-    final GPUUniformValue uv = (GPUUniformValue) pairs.getValue();
+  final GPUUniformValue[] uni = (GPUUniformValue[]) _uniformValues.values().toArray();
+  final String[] uniNames = (String[]) _uniformValues.keySet().toArray();
+  for (int i = 0; i < uni.length; i++) {
+    final String thisName =  uniNames[i];
+    final GPUUniformValue uv = uni[i];
     if ((thisName.compareTo(name) == 0) && (uv.getType() == GLType.glMatrix4Float()))
     {
       final GPUUniformValueMatrix4FloatStack v = (GPUUniformValueMatrix4FloatStack)uv;
@@ -426,10 +472,10 @@ std::vector<std::string> GPUProgramState::getUniformsNames() const{
 #endif
   
 #ifdef JAVA_CODE
-  final Iterator it = _uniformValues.entrySet().iterator();
-  while (it.hasNext()) {
-    final Map.Entry pairs = (Map.Entry)it.next();
-    us.add((String)pairs.getKey());
+  final String[] uniNames = (String[]) _uniformValues.keySet().toArray();
+  for (int i = 0; i < uniNames.length; i++) {
+    final String name = uniNames[i];
+    us.add(name);
   }
 #endif
 
@@ -481,60 +527,47 @@ bool GPUProgramState::isLinkableToProgram(const GPUProgram& program) const{
   return true;
 #endif
 #ifdef JAVA_CODE
-  if (program.getGPUAttributesNumber() != _attributesEnabled.size())
-  {
+  if (program.getGPUAttributesNumber() != _attributesEnabled.size()) {
     return false;
   }
   
   int nDisabledAtt = 0;
-  {
-    final Iterator it = _attributesEnabled.entrySet().iterator();
-    while (it.hasNext()) {
-      final Map.Entry pairs = (Map.Entry)it.next();
-      final String thisName =  (String) pairs.getKey();
-      final attributeEnabledStruct ae =  (attributeEnabledStruct) pairs.getValue();
-      if (ae.value == false)
-      {
-        nDisabledAtt++;
-      }
-      if (program.getGPUAttribute(thisName) == null)
-      {
-        return false;
-      }
+  
+  final attributeEnabledStruct[] attEnabled = (attributeEnabledStruct[]) _attributesEnabled.values().toArray();
+  final String[] attEnabledNames = (String[]) _uniformValues.keySet().toArray();
+  for (int i = 0; i < attEnabled.length; i++) {
+    final String thisName = attEnabledNames[i];
+    final attributeEnabledStruct ae = attEnabled[i];
+    
+    if (ae.value == false) {
+      nDisabledAtt++;
+    }
+    if (program.getGPUAttribute(thisName) == null) {
+      return false;
     }
   }
   
-  if (program.getGPUAttributesNumber() != (_attributesValues.size() + nDisabledAtt))
-  {
+  
+  if (program.getGPUAttributesNumber() != (_attributesValues.size() + nDisabledAtt)) {
     return false;
   }
   
-  if (program.getGPUUniformsNumber() != _uniformValues.size())
-  {
+  if (program.getGPUUniformsNumber() != _uniformValues.size()) {
     return false;
   }
   
-  {
-    final Iterator it = _uniformValues.entrySet().iterator();
-    while (it.hasNext()) {
-      final Map.Entry pairs = (Map.Entry)it.next();
-      final String thisName =  (String) pairs.getKey();
-      if (program.getGPUUniform(thisName) == null)
-      {
-        return false;
-      }
+  
+  final String[] uniNames = (String[]) _uniformValues.keySet().toArray();
+  for (final String thisName : uniNames) {
+    if (program.getGPUUniform(thisName) == null) {
+      return false;
     }
   }
   
-  {
-    final Iterator it = _attributesValues.entrySet().iterator();
-    while (it.hasNext()) {
-      final Map.Entry pairs = (Map.Entry)it.next();
-      final String thisName =  (String) pairs.getKey();
-      if (program.getGPUAttribute(thisName) == null)
-      {
-        return false;
-      }
+  final String[] attNames = (String[]) _attributesValues.keySet().toArray();
+  for (final String thisName : attNames) {
+    if (program.getGPUAttribute(thisName) == null) {
+      return false;
     }
   }
   
