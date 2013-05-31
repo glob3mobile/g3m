@@ -63,13 +63,14 @@ void GPUProgramState::applyValuesToLinkedProgram() const{
   }
 #endif
 #ifdef JAVA_CODE
-  final GPUUniformValue[] uni = (GPUUniformValue[]) _uniformValues.values().toArray();
-  for (final GPUUniformValue v : uni) {
-    v.setValueToLinkedUniform();
+  final Object[] uni = _uniformValues.values().toArray();
+  for (int i = 0; i < uni.length; i++) {
+    ((GPUUniformValue)uni[i]).setValueToLinkedUniform();
   }
   
-  final attributeEnabledStruct[] attEnabled = (attributeEnabledStruct[]) _attributesEnabled.values().toArray();
-  for (final attributeEnabledStruct a : attEnabled) {
+  final Object[] attEnabled = _attributesEnabled.values().toArray();
+  for (int i = 0; i < uni.length; i++) {
+    attributeEnabledStruct a = (attributeEnabledStruct) attEnabled[i];
     if (a.attribute == null) {
       ILogger.instance().logError("NO ATTRIBUTE LINKED");
     }
@@ -78,9 +79,9 @@ void GPUProgramState::applyValuesToLinkedProgram() const{
     }
   }
   
-  final GPUAttributeValue[] att = (GPUAttributeValue[]) _attributesValues.values().toArray();
-  for (final GPUAttributeValue a : att) {
-    a.setValueToLinkedAttribute();
+  final Object[] att = (GPUAttributeValue[]) _attributesValues.values().toArray();
+  for (int i = 0; i < att.length; i++) {
+    ((GPUAttributeValue)att[i]).setValueToLinkedAttribute();
   }
 #endif
 }

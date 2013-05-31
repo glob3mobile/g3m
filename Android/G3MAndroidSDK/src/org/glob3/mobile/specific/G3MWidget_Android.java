@@ -12,6 +12,9 @@ import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.G3MWidget;
 import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.GL;
+import org.glob3.mobile.generated.GPUProgramFactory;
+import org.glob3.mobile.generated.GPUProgramManager;
+import org.glob3.mobile.generated.GPUProgramSources;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
@@ -369,6 +372,13 @@ public final class G3MWidget_Android
       }
    */
 
+   private GPUProgramManager createGPUProgramManager() {
+      final GPUProgramFactory factory = new GPUProgramFactory();
+      factory.add(new GPUProgramSources("Billboard", GL2Shaders._billboardVertexShader, GL2Shaders._billboardFragmentShader));
+      factory.add(new GPUProgramSources("Default", GL2Shaders._defaultVertexShader, GL2Shaders._defaultFragmentShader));
+      return new GPUProgramManager(getGL(), factory);
+   }
+
 
    public void initWidget(final IStorage storage,
                           final IDownloader downloader,
@@ -401,7 +411,7 @@ public final class G3MWidget_Android
                logDownloaderStatistics, //
                initializationTask, //
                autoDeleteInitializationTask, //
-               periodicalTasks);
+               periodicalTasks, createGPUProgramManager());
 
       _g3mWidget.setUserData(userData);
    }

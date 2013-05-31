@@ -62,7 +62,7 @@ public final class ES2Renderer
       final G3MWidget widget = _widgetAndroid.getG3MWidget();
 
       //GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
-      widget.getGL().useProgram(_shaderProgram);
+      //widget.getGL().useProgram(_shaderProgram);
 
       // Enable the depth tests and Cull Face
       //GLES20.glEnable(GLES20.GL_DEPTH_TEST);
