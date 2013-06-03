@@ -105,8 +105,8 @@ public class Mark extends SceneGraphNode
 
   private static IFloatBuffer _billboardTexCoord = null;
   private Planet _planet; // REMOVED FINAL WORD BY CONVERSOR RULE
-  private int viewportWidth;
-  private int viewportHeight;
+  private int _viewportWidth;
+  private int _viewportHeight;
 
   /**
    * Creates a marker with icon and label
@@ -444,17 +444,17 @@ public class Mark extends SceneGraphNode
             rc.getFactory().deleteImage(_textureImage);
             _textureImage = null;
   
-            viewportWidth = rc.getCurrentCamera().getWidth();
-            viewportHeight = rc.getCurrentCamera().getHeight();
+            _viewportWidth = rc.getCurrentCamera().getWidth();
+            _viewportHeight = rc.getCurrentCamera().getHeight();
             actualizeGLGlobalState(rc.getCurrentCamera()); //Ready for rendering
           }
         }
         else
         {
-          if (rc.getCurrentCamera().getWidth() != viewportWidth || rc.getCurrentCamera().getHeight() != viewportHeight)
+          if (rc.getCurrentCamera().getWidth() != _viewportWidth || rc.getCurrentCamera().getHeight() != _viewportHeight)
           {
-            viewportWidth = rc.getCurrentCamera().getWidth();
-            viewportHeight = rc.getCurrentCamera().getHeight();
+            _viewportWidth = rc.getCurrentCamera().getWidth();
+            _viewportHeight = rc.getCurrentCamera().getHeight();
             actualizeGLGlobalState(rc.getCurrentCamera()); //Ready for rendering
           }
         }
@@ -632,7 +632,7 @@ public class Mark extends SceneGraphNode
       progState.setAttributeValue("Position", vertices, 4, 3, 0, false, 0); //Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
   
       progState.setUniformValue("TextureExtent", new Vector2D(_textureWidth, _textureHeight));
-      progState.setUniformValue("ViewPortExtent", new Vector2D((double)viewportWidth, (double)viewportHeight));
+      progState.setUniformValue("ViewPortExtent", new Vector2D((double)_viewportWidth, (double)_viewportHeight));
     }
   }
 
@@ -650,19 +650,17 @@ public class Mark extends SceneGraphNode
         rc.getFactory().deleteImage(_textureImage);
         _textureImage = null;
   
-        viewportWidth = rc.getCurrentCamera().getWidth();
-        viewportHeight = rc.getCurrentCamera().getHeight();
-        actualizeGLGlobalState(rc.getCurrentCamera()); //Ready for rendering
+        _viewportWidth = rc.getCurrentCamera().getWidth();
+        _viewportHeight = rc.getCurrentCamera().getHeight();
+  //      actualizeGLGlobalState(rc->getCurrentCamera()); //Ready for rendering
       }
     }
-    else
+  
+    if (rc.getCurrentCamera().getWidth() != _viewportWidth || rc.getCurrentCamera().getHeight() != _viewportHeight)
     {
-      if (rc.getCurrentCamera().getWidth() != viewportWidth || rc.getCurrentCamera().getHeight() != viewportHeight)
-      {
-        viewportWidth = rc.getCurrentCamera().getWidth();
-        viewportHeight = rc.getCurrentCamera().getHeight();
-        actualizeGLGlobalState(rc.getCurrentCamera()); //Ready for rendering
-      }
+      _viewportWidth = rc.getCurrentCamera().getWidth();
+      _viewportHeight = rc.getCurrentCamera().getHeight();
+      //actualizeGLGlobalState(rc->getCurrentCamera()); //Ready for rendering
     }
   
     if (_textureId != null)
@@ -764,7 +762,7 @@ public class Mark extends SceneGraphNode
       progState.setAttributeValue("Position", vertices, 4, 3, 0, false, 0); //Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
   
       progState.setUniformValue("TextureExtent", new Vector2D(_textureWidth, _textureHeight));
-      progState.setUniformValue("ViewPortExtent", new Vector2D((double)viewportWidth, (double)viewportHeight));
+      progState.setUniformValue("ViewPortExtent", new Vector2D((double)_viewportWidth, (double)_viewportHeight));
     }
   
   }
