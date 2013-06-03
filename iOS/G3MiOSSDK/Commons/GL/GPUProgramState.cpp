@@ -79,7 +79,7 @@ void GPUProgramState::applyValuesToLinkedProgram() const{
     }
   }
   
-  final Object[] att = (GPUAttributeValue[]) _attributesValues.values().toArray();
+  final Object[] att = _attributesValues.values().toArray();
   for (int i = 0; i < att.length; i++) {
     ((GPUAttributeValue)att[i]).setValueToLinkedAttribute();
   }
