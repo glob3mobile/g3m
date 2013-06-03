@@ -189,7 +189,7 @@ public class G3MWidget
       _selectedRenderer.start(rc);
     }
   
-    _gl.clearScreen(_backgroundColor);
+    _gl.clearScreen(*_backgroundColor);
   
     if (_mainRendererReady)
     {
@@ -546,8 +546,7 @@ public class G3MWidget
   
   public final void setBackgroundColor(Color backgroundColor)
   {
-    if (_backgroundColor != null)
-       _backgroundColor.dispose();
+    _backgroundColor = null;
   
     _backgroundColor = new Color(backgroundColor);
   }
@@ -575,7 +574,8 @@ public class G3MWidget
   private Camera _nextCamera;
   private TexturesHandler _texturesHandler;
   private TextureBuilder _textureBuilder;
-  private final Color _backgroundColor;
+
+  private Color _backgroundColor;
 
   private ITimer _timer;
   private int _renderCounter;
