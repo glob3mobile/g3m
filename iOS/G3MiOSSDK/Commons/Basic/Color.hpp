@@ -9,6 +9,8 @@
 #ifndef G3MiOSSDK_Color_hpp
 #define G3MiOSSDK_Color_hpp
 
+#include <string>
+
 class Color {
 private:
   const float _red;
@@ -37,6 +39,8 @@ public:
   }
 
   ~Color() { }
+
+  static Color* parse(const std::string& str);
 
   static Color fromRGBA(const float red,
                         const float green,
@@ -123,7 +127,9 @@ public:
   bool isTransparent() const {
     return (_alpha < 1);
   }
-  
+
+  bool isEqualsTo(const Color& that) const;
+
 };
 
 #endif

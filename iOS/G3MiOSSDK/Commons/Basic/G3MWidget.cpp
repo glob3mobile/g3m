@@ -96,7 +96,7 @@ _width(1),
 _height(1),
 _currentCamera(new Camera(_width, _height)),
 _nextCamera(new Camera(_width, _height)),
-_backgroundColor(backgroundColor),
+_backgroundColor( new Color(backgroundColor) ),
 _timer(IFactory::instance()->createTimer()),
 _renderCounter(0),
 _totalRenderTime(0),
@@ -417,7 +417,7 @@ void G3MWidget::render(int width, int height) {
 //    _effectsScheduler->doOneCyle(&rc);
 //  }
   _effectsScheduler->doOneCyle(&rc);
-  
+  	
   _frameTasksExecutor->doPreRenderCycle(&rc);
 
   Renderer* selectedRenderer = _mainRendererReady ? _mainRenderer : _busyRenderer;
@@ -429,7 +429,7 @@ void G3MWidget::render(int width, int height) {
     _selectedRenderer->start(&rc);
   }
 
-  _gl->clearScreen(_backgroundColor);
+  _gl->clearScreen(*_backgroundColor);
 
   if (_mainRendererReady) {
     _cameraRenderer->render(&rc, *_rootState);
@@ -448,8 +448,6 @@ void G3MWidget::render(int width, int height) {
       delete orderedRenderable;
     }
   }
-
-  //  _frameTasksExecutor->doPostRenderCycle(&rc);
 
   const TimeInterval elapsedTime = _timer->elapsedTime();
   if (elapsedTime.milliseconds() > 100) {
@@ -633,3 +631,9 @@ void G3MWidget::stopCameraAnimation() {
 //void G3MWidget::resetCameraPosition() {
 //  getNextCamera()->resetPosition();
 //}
+
+void G3MWidget::setBackgroundColor(const Color& backgroundColor) {
+  delete _backgroundColor;
+
+  _backgroundColor = new Color(backgroundColor);
+}

@@ -54,6 +54,7 @@
 		CF022386166836F500024B73 /* GEOJSONParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF022384166836F500024B73 /* GEOJSONParser.cpp */; };
 		CF0755961715B9120084CC14 /* GFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF0755941715B9120084CC14 /* GFont.cpp */; };
 		CF0755971715B9570084CC14 /* GFont.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF0755951715B9120084CC14 /* GFont.hpp */; };
+		CF07DD0D175D32CC00839F5D /* Color.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF07DD0B175D32CC00839F5D /* Color.cpp */; };
 		CF0A8183163303E800036277 /* MutableVector2I.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF0A8181163303E800036277 /* MutableVector2I.cpp */; };
 		CF0C396A157F988100646A2F /* Mark.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF0C3969157F988100646A2F /* Mark.cpp */; };
 		CF0D9BB41601F46B00F28B7D /* ByteBuffer_iOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF0D9BB31601F46A00F28B7D /* ByteBuffer_iOS.cpp */; };
@@ -851,6 +852,7 @@
 		CF03683416A499F0006CE160 /* LabelPosition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LabelPosition.h; path = Commons/Basic/LabelPosition.h; sourceTree = "<group>"; };
 		CF0755941715B9120084CC14 /* GFont.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GFont.cpp; path = Commons/Basic/GFont.cpp; sourceTree = "<group>"; };
 		CF0755951715B9120084CC14 /* GFont.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GFont.hpp; path = Commons/Basic/GFont.hpp; sourceTree = "<group>"; };
+		CF07DD0B175D32CC00839F5D /* Color.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Color.cpp; path = Commons/Basic/Color.cpp; sourceTree = "<group>"; };
 		CF08483515D41EF700327171 /* IGLTextureId.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IGLTextureId.hpp; path = Commons/Interfaces/IGLTextureId.hpp; sourceTree = "<group>"; };
 		CF0A8181163303E800036277 /* MutableVector2I.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MutableVector2I.cpp; path = Commons/Geometry/MutableVector2I.cpp; sourceTree = "<group>"; };
 		CF0A8182163303E800036277 /* MutableVector2I.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MutableVector2I.hpp; path = Commons/Geometry/MutableVector2I.hpp; sourceTree = "<group>"; };
@@ -1349,6 +1351,7 @@
 				D8EB78831637F6B500C4EB57 /* CameraGoToPositionEffect.hpp */,
 				CF6D723917184D620043C74B /* CanvasElement.cpp */,
 				CF6D723A17184D620043C74B /* CanvasElement.hpp */,
+				CF07DD0B175D32CC00839F5D /* Color.cpp */,
 				CFF95F761588E82200B56E11 /* Color.hpp */,
 				CF6D724A171861770043C74B /* ColumnCanvasElement.cpp */,
 				CF6D724B171861770043C74B /* ColumnCanvasElement.hpp */,
@@ -2199,6 +2202,7 @@
 				CF2D85DE17526A7B00F4BEC9 /* G3MCSceneDescription.cpp in Sources */,
 				CF2D85E21753B4B600F4BEC9 /* CartoDBLayer.cpp in Sources */,
 				44A00493175500B900C6686D /* ICameraActivityListener.cpp in Sources */,
+				CF07DD0D175D32CC00839F5D /* Color.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

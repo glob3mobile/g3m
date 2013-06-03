@@ -26,6 +26,7 @@ class PeriodicalTask;
 class Layer;
 class LayerSet;
 class G3MCSceneDescription;
+class Color;
 
 #include "URL.hpp"
 
@@ -44,6 +45,10 @@ public:
   virtual void onUserChanged(const std::string& user) = 0;
 
   virtual void onNameChanged(const std::string& name) = 0;
+
+  virtual void onDescriptionChanged(const std::string& description) = 0;
+
+  virtual void onBackgroundColorChanged(const Color& backgroundColor) = 0;
   
 };
 
@@ -77,6 +82,8 @@ private:
   std::string _sceneId;
   std::string _sceneUser;
   std::string _sceneName;
+  std::string _sceneDescription;
+  Color*      _sceneBackgroundColor;
 
   Layer* _baseLayer;
 
@@ -147,6 +154,12 @@ public:
 
   /** Private to G3M, don't call it */
   void setSceneName(const std::string& name);
+
+  /** Private to G3M, don't call it */
+  void setSceneDescription(const std::string& description);
+
+  /** Private to G3M, don't call it */
+  void setSceneBackgroundColor(const Color& backgroundColor);
 
   /** Private to G3M, don't call it */
   const URL createSceneDescriptionURL() const;

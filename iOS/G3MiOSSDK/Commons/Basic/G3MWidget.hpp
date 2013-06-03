@@ -188,6 +188,8 @@ public:
   const G3MContext* getG3MContext() const {
     return _context;
   }
+
+  void setBackgroundColor(const Color& backgroundColor);
   
 private:
   IStorage*           _storage;
@@ -213,7 +215,7 @@ private:
   Camera*          _nextCamera;
   TexturesHandler* _texturesHandler;
   TextureBuilder*  _textureBuilder;
-  const Color      _backgroundColor;
+  const Color*     _backgroundColor;
   
   ITimer*          _timer;
   long             _renderCounter;

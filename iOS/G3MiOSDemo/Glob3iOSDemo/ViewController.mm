@@ -138,7 +138,7 @@ public:
   [self initWithG3MCBuilder];
 
   [[self G3MWidget] startAnimation];
-} 
+}
 
 
 class TestG3MCBuilderScenesDescriptionsListener  : public G3MCBuilderScenesDescriptionsListener {
@@ -557,12 +557,12 @@ public:
     layerSet->addLayer( new OSMLayer(TimeInterval::fromDays(30)) );
   }
 
-  const bool useMapQuestOSM = true;
+  const bool useMapQuestOSM = false;
   if (useMapQuestOSM) {
     layerSet->addLayer( MapQuestLayer::newOSM(TimeInterval::fromDays(30)) );
   }
 
-  const bool useCartoDB = true;
+  const bool useCartoDB = false;
   if (useCartoDB) {
     layerSet->addLayer( new CartoDBLayer("mdelacalle",
                                          "tm_world_borders_simpl_0_3",
@@ -574,10 +574,12 @@ public:
     layerSet->addLayer( MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30)) );
   }
 
-  const bool useMapBox = false;
+  const bool useMapBox = true;
   if (useMapBox) {
-    layerSet->addLayer( new MapBoxLayer("dgd.map-v93trj8v",
-                                        TimeInterval::fromDays(30)) );
+    //const std::string mapKey = "dgd.map-v93trj8v";
+    //const std::string mapKey = "examples.map-cnkhv76j";
+    const std::string mapKey = "examples.map-qogxobv1";
+    layerSet->addLayer( new MapBoxLayer(mapKey, TimeInterval::fromDays(30)) );
   }
 
   const bool useHere = false;

@@ -34,6 +34,7 @@
 #include "JSONArray.hpp"
 #include "G3MCSceneDescription.hpp"
 #include "IThreadUtils.hpp"
+#include "Color.hpp"
 #include "OSMLayer.hpp"
 #include "MapQuestLayer.hpp"
 #include "BingMapsLayer.hpp"
@@ -49,6 +50,8 @@ _sceneTimestamp(-1),
 _sceneId(sceneId),
 _sceneUser(""),
 _sceneName(""),
+_sceneDescription(""),
+_sceneBackgroundColor( Color::newFromRGBA(0, 0, 0, 1) ),
 _gl(NULL),
 _g3mWidget(NULL),
 _storage(NULL),
@@ -263,6 +266,25 @@ public:
       else {
         const JSONString* error = jsonObject->getAsString("error");
         if (error == NULL) {
+
+//          {
+//            user: "aaa",
+//            id: "2g59wh610g6c1kmkt0l",
+//            name: "Example10",
+//            description: "Description",
+//            realTime: "0",
+//            iconURL: "http://http://design.jboss.org/arquillian/logo/final/arquillian_icon_256px.png",
+//            bgColor: "001933",
+//            baseLayer: {
+//              layer: "MapQuest",
+//              imagery: "OSM"
+//            },
+//            tags: [
+//                    ""
+//                  ],
+//            ts: 27
+//          }
+
           const int timestamp = (int) jsonObject->getAsNumber("ts", 0);
           
           if (_builder->getSceneTimestamp() != timestamp) {
@@ -273,6 +295,8 @@ public:
             else {
               _builder->setSceneUser(jsonUser->value());
             }
+
+            //id
             
             const JSONString* jsonName = jsonObject->getAsString("name");
             if (jsonName == NULL) {
@@ -281,7 +305,34 @@ public:
             else {
               _builder->setSceneName(jsonName->value());
             }
-            
+
+            const JSONString* jsonDescription = jsonObject->getAsString("description");
+            if (jsonDescription == NULL) {
+              ILogger::instance()->logError("Attribute 'description' not found in SceneJSON");
+            }
+            else {
+              _builder->setSceneDescription(jsonDescription->value());
+            }
+
+            //realTime
+            //iconURL
+            //bgColor
+
+            const JSONString* jsonBGColor = jsonObject->getAsString("bgColor");
+            if (jsonBGColor == NULL) {
+              ILogger::instance()->logError("Attribute 'bgColor' not found in SceneJSON");
+            }
+            else {
+              const Color* bgColor = Color::parse(jsonBGColor->value());
+              if (bgColor == NULL) {
+                ILogger::instance()->logError("Invalid format in attribute 'bgColor' (%s)",
+                                              jsonBGColor->value().c_str());
+              }
+              else {
+                _builder->setSceneBackgroundColor(*bgColor);
+              }
+            }
+
             const JSONObject* jsonBaseLayer = jsonObject->getAsObject("baseLayer");
             if (jsonBaseLayer == NULL) {
               ILogger::instance()->logError("Attribute 'baseLayer' not found in SceneJSON");
@@ -295,6 +346,8 @@ public:
                 _builder->changeBaseLayer(baseLayer);
               }
             }
+
+            //tags
             
             _builder->setSceneTimestamp(timestamp);
           }
@@ -487,7 +540,7 @@ G3MWidget* G3MCBuilder::create() {
   
   std::vector<ICameraConstrainer*>* cameraConstraints = createCameraConstraints();
   
-  Color backgroundColor = Color::fromRGBA(0, 0.1f, 0.2f, 1);
+  //Color backgroundColor = Color::fromRGBA(0, 0.1f, 0.2f, 1);
   
   // GInitializationTask* initializationTask = new G3MCInitializationTask(this, createSceneDescriptionURL());
   GInitializationTask* initializationTask = NULL;
@@ -506,7 +559,7 @@ G3MWidget* G3MCBuilder::create() {
                                  createCameraRenderer(),
                                  mainRenderer,
                                  createBusyRenderer(),
-                                 backgroundColor,
+                                 *_sceneBackgroundColor,
                                  false,      // logFPS
                                  false,      // logDownloaderStatistics
                                  initializationTask,
@@ -668,6 +721,30 @@ void G3MCBuilder::setSceneName(const std::string& name) {
     
     if (_sceneListener != NULL) {
       _sceneListener->onNameChanged(_sceneName);
+    }
+  }
+}
+
+void G3MCBuilder::setSceneDescription(const std::string& description) {
+  if (_sceneDescription.compare(description) != 0) {
+    _sceneDescription = description;
+
+    if (_sceneListener != NULL) {
+      _sceneListener->onDescriptionChanged(_sceneDescription);
+    }
+  }
+}
+
+void G3MCBuilder::setSceneBackgroundColor(const Color& backgroundColor) {
+  if (!_sceneBackgroundColor->isEqualsTo(backgroundColor)) {
+    _sceneBackgroundColor = new Color(backgroundColor);
+
+    if (_g3mWidget != NULL) {
+      _g3mWidget->setBackgroundColor(*_sceneBackgroundColor);
+    }
+
+    if (_sceneListener != NULL) {
+      _sceneListener->onBackgroundColorChanged(*_sceneBackgroundColor);
     }
   }
 }
