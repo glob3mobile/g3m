@@ -3,6 +3,7 @@
 package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.CachedDownloader;
+import org.glob3.mobile.generated.GPUProgramSources;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IG3MBuilder;
 import org.glob3.mobile.generated.IStorage;
@@ -27,6 +28,12 @@ public class G3MBuilder_Android
 
 
    public G3MWidget_Android createWidget() {
+      //Adding Default Program Sources
+      addGPUProgramSources(new GPUProgramSources("Billboard", GL2Shaders._billboardVertexShader,
+               GL2Shaders._billboardFragmentShader));
+      addGPUProgramSources(new GPUProgramSources("Default", GL2Shaders._defaultVertexShader, GL2Shaders._defaultFragmentShader));
+
+
       setGL(_nativeWidget.getGL());
 
       _nativeWidget.setWidget(create());
