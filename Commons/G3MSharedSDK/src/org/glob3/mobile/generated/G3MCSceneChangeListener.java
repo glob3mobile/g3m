@@ -32,6 +32,7 @@ package org.glob3.mobile.generated;
 //class Layer;
 //class LayerSet;
 //class G3MCSceneDescription;
+//class Color;
 
 
 
@@ -48,5 +49,9 @@ public abstract class G3MCSceneChangeListener
   public abstract void onUserChanged(String user);
 
   public abstract void onNameChanged(String name);
+
+  public abstract void onDescriptionChanged(String description);
+
+  public abstract void onBackgroundColorChanged(Color backgroundColor);
 
 }

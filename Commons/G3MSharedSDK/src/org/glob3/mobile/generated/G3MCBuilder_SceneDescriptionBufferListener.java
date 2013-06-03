@@ -107,6 +107,25 @@ public class G3MCBuilder_SceneDescriptionBufferListener extends IBufferDownloadL
         final JSONString error = jsonObject.getAsString("error");
         if (error == null)
         {
+
+//          {
+//            user: "aaa",
+//            id: "2g59wh610g6c1kmkt0l",
+//            name: "Example10",
+//            description: "Description",
+//            realTime: "0",
+//            iconURL: "http://http://design.jboss.org/arquillian/logo/final/arquillian_icon_256px.png",
+//            bgColor: "001933",
+//            baseLayer: {
+//              layer: "MapQuest",
+//              imagery: "OSM"
+//            },
+//            tags: [
+//                    ""
+//                  ],
+//            ts: 27
+//          }
+
           final int timestamp = (int) jsonObject.getAsNumber("ts", 0);
 
           if (_builder.getSceneTimestamp() != timestamp)
@@ -121,6 +140,8 @@ public class G3MCBuilder_SceneDescriptionBufferListener extends IBufferDownloadL
               _builder.setSceneUser(jsonUser.value());
             }
 
+            //id
+
             final JSONString jsonName = jsonObject.getAsString("name");
             if (jsonName == null)
             {
@@ -129,6 +150,38 @@ public class G3MCBuilder_SceneDescriptionBufferListener extends IBufferDownloadL
             else
             {
               _builder.setSceneName(jsonName.value());
+            }
+
+            final JSONString jsonDescription = jsonObject.getAsString("description");
+            if (jsonDescription == null)
+            {
+              ILogger.instance().logError("Attribute 'description' not found in SceneJSON");
+            }
+            else
+            {
+              _builder.setSceneDescription(jsonDescription.value());
+            }
+
+            //realTime
+            //iconURL
+            //bgColor
+
+            final JSONString jsonBGColor = jsonObject.getAsString("bgColor");
+            if (jsonBGColor == null)
+            {
+              ILogger.instance().logError("Attribute 'bgColor' not found in SceneJSON");
+            }
+            else
+            {
+              final Color bgColor = Color.parse(jsonBGColor.value());
+              if (bgColor == null)
+              {
+                ILogger.instance().logError("Invalid format in attribute 'bgColor' (%s)", jsonBGColor.value());
+              }
+              else
+              {
+                _builder.setSceneBackgroundColor(bgColor);
+              }
             }
 
             final JSONObject jsonBaseLayer = jsonObject.getAsObject("baseLayer");
@@ -148,6 +201,8 @@ public class G3MCBuilder_SceneDescriptionBufferListener extends IBufferDownloadL
                 _builder.changeBaseLayer(baseLayer);
               }
             }
+
+            //tags
 
             _builder.setSceneTimestamp(timestamp);
           }

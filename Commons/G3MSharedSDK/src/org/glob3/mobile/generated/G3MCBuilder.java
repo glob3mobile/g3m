@@ -10,6 +10,8 @@ public abstract class G3MCBuilder
   private String _sceneId;
   private String _sceneUser;
   private String _sceneName;
+  private String _sceneDescription;
+  private Color _sceneBackgroundColor;
 
   private Layer _baseLayer;
 
@@ -128,6 +130,8 @@ public abstract class G3MCBuilder
      _sceneId = sceneId;
      _sceneUser = "";
      _sceneName = "";
+     _sceneDescription = "";
+     _sceneBackgroundColor = Color.newFromRGBA(0, 0, 0, 1);
      _gl = null;
      _g3mWidget = null;
      _storage = null;
@@ -186,7 +190,7 @@ public abstract class G3MCBuilder
   
     java.util.ArrayList<ICameraConstrainer> cameraConstraints = createCameraConstraints();
   
-    Color backgroundColor = Color.fromRGBA(0, 0.1f, 0.2f, 1);
+    //Color backgroundColor = Color::fromRGBA(0, 0.1f, 0.2f, 1);
   
     // GInitializationTask* initializationTask = new G3MCInitializationTask(this, createSceneDescriptionURL());
     GInitializationTask initializationTask = null;
@@ -195,7 +199,7 @@ public abstract class G3MCBuilder
   
     ICameraActivityListener cameraActivityListener = null;
   
-    _g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), cameraActivityListener, createPlanet(), cameraConstraints, createCameraRenderer(), mainRenderer, createBusyRenderer(), backgroundColor, false, false, initializationTask, true, periodicalTasks); // autoDeleteInitializationTask -  logDownloaderStatistics -  logFPS
+    _g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), cameraActivityListener, createPlanet(), cameraConstraints, createCameraRenderer(), mainRenderer, createBusyRenderer(), _sceneBackgroundColor, false, false, initializationTask, true, periodicalTasks); // autoDeleteInitializationTask -  logDownloaderStatistics -  logFPS
   
     //  g3mWidget->setUserData(getUserData());
   
@@ -283,6 +287,39 @@ public abstract class G3MCBuilder
       if (_sceneListener != null)
       {
         _sceneListener.onNameChanged(_sceneName);
+      }
+    }
+  }
+
+  /** Private to G3M, don't call it */
+  public final void setSceneDescription(String description)
+  {
+    if (_sceneDescription.compareTo(description) != 0)
+    {
+      _sceneDescription = description;
+  
+      if (_sceneListener != null)
+      {
+        _sceneListener.onDescriptionChanged(_sceneDescription);
+      }
+    }
+  }
+
+  /** Private to G3M, don't call it */
+  public final void setSceneBackgroundColor(Color backgroundColor)
+  {
+    if (!_sceneBackgroundColor.isEqualsTo(backgroundColor))
+    {
+      _sceneBackgroundColor = new Color(backgroundColor);
+  
+      if (_g3mWidget != null)
+      {
+        _g3mWidget.setBackgroundColor(_sceneBackgroundColor);
+      }
+  
+      if (_sceneListener != null)
+      {
+        _sceneListener.onBackgroundColorChanged(_sceneBackgroundColor);
       }
     }
   }

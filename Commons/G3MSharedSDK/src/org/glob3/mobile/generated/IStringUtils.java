@@ -104,4 +104,6 @@ public abstract class IStringUtils
     return rtrim(ltrim(String));
   }
 
+  public abstract long parseHexInt(String str);
+
 }

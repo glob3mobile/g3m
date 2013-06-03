@@ -214,8 +214,6 @@ public class G3MWidget
       }
     }
   
-    //  _frameTasksExecutor->doPostRenderCycle(&rc);
-  
     final TimeInterval elapsedTime = _timer.elapsedTime();
     if (elapsedTime.milliseconds() > 100)
     {
@@ -541,6 +539,19 @@ public class G3MWidget
     return _context;
   }
 
+
+  //void G3MWidget::resetCameraPosition() {
+  //  getNextCamera()->resetPosition();
+  //}
+  
+  public final void setBackgroundColor(Color backgroundColor)
+  {
+    if (_backgroundColor != null)
+       _backgroundColor.dispose();
+  
+    _backgroundColor = new Color(backgroundColor);
+  }
+
   private IStorage _storage;
   private IDownloader _downloader;
   private IThreadUtils _threadUtils;
@@ -564,7 +575,7 @@ public class G3MWidget
   private Camera _nextCamera;
   private TexturesHandler _texturesHandler;
   private TextureBuilder _textureBuilder;
-  private final Color _backgroundColor ;
+  private final Color _backgroundColor;
 
   private ITimer _timer;
   private int _renderCounter;
@@ -690,6 +701,3 @@ public class G3MWidget
   }
 
 }
-//void G3MWidget::resetCameraPosition() {
-//  getNextCamera()->resetPosition();
-//}
