@@ -533,6 +533,13 @@ void Mark::modifyGPUProgramState(GPUProgramState& progState) const{
 bool Mark::isInsideCameraFrustum(const G3MRenderContext* rc){
   _renderedMark = false;
   
+  _viewportWidth = rc->getCurrentCamera()->getWidth();
+  _viewportHeight = rc->getCurrentCamera()->getHeight();
+  if (_viewportHeight < 2 || _viewportWidth < 2){
+    //ILogger::instance()->logInfo("Viewport has not been set yet.");
+    return false;
+  }
+  
   const Planet* planet = rc->getPlanet();
   
   const Vector3D* markPosition = getCartesianPosition(planet);

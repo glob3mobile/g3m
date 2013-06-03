@@ -51,7 +51,7 @@ public class G3MShowMarkersActivity
       setContentView(R.layout.bar_glob3_template);
       final G3MBuilder_Android builder = new G3MBuilder_Android(getApplicationContext());
 
-      final boolean testingSG = true;
+      final boolean testingSG = false;
       if (!testingSG) {
          builder.setInitializationTask(getWeatherMarkerLayersTask());
       }
@@ -78,9 +78,9 @@ public class G3MShowMarkersActivity
 
          //         mr->setMarkTouchListener(new TestMarkTouchListenerSG(), true);
 
-         for (int i = 0; i < 10; i++) {
-            final Angle latitude = Angle.fromDegrees((int) (Math.random() % 180) - 90);
-            final Angle longitude = Angle.fromDegrees((int) (Math.random() % 360));
+         for (int i = 0; i < 200; i++) {
+            final Angle latitude = Angle.fromDegrees((int) (Math.random() * 180) - 90);
+            final Angle longitude = Angle.fromDegrees((int) (Math.random() * 360));
 
             final String string = "Mark " + latitude.degrees() + ", " + longitude.degrees();
 
