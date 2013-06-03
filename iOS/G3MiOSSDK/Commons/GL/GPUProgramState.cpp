@@ -93,8 +93,6 @@ void GPUProgramState::linkToProgram(GPUProgram& prog) const{
   
 #ifdef JAVA_CODE
   
-  _lastProgramUsed = prog;
-  
   final Object[] uni = _uniformValues.values().toArray();
   final Object[] uniNames = _uniformValues.keySet().toArray();
   for (int i = 0; i < uni.length; i++) {
