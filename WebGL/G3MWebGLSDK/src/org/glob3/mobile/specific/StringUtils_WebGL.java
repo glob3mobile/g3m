@@ -90,4 +90,12 @@ public final class StringUtils_WebGL
    public String toUpperCase(final String string) {
       return string.toUpperCase();
    }
+
+
+   @Override
+   public long parseHexInt(final String str) {
+      return Long.parseLong(str, 16);
+   }
+
+
 }
