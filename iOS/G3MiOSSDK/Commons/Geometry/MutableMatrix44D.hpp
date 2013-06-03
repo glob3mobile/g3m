@@ -152,6 +152,35 @@ public:
     _columnMajorFloatArray  = NULL;
   }
   
+  
+  void copyValue(const MutableMatrix44D &m){
+    
+    _isValid = m._isValid;
+    
+    _m00  = m._m00;
+    _m01  = m._m01;
+    _m02  = m._m02;
+    _m03  = m._m03;
+    
+    _m10  = m._m10;
+    _m11  = m._m11;
+    _m12  = m._m12;
+    _m13  = m._m13;
+    
+    _m20  = m._m20;
+    _m21  = m._m21;
+    _m22  = m._m22;
+    _m23  = m._m23;
+    
+    _m30  = m._m30;
+    _m31  = m._m31;
+    _m32  = m._m32;
+    _m33  = m._m33;
+    
+    _columnMajorFloatBuffer = NULL;
+    _columnMajorFloatArray = NULL;
+  }
+  
   bool isEqualsTo(const MutableMatrix44D& m) const{
     if (_m00 != m._m00) return false;
     if (_m01 != m._m01) return false;

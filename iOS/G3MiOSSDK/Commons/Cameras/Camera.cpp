@@ -40,9 +40,13 @@ void Camera::copyFrom(const Camera &that) {
 
   _frustumData = FrustumData(that._frustumData);
 
-  _projectionMatrix = MutableMatrix44D(that._projectionMatrix);
-  _modelMatrix      = MutableMatrix44D(that._modelMatrix);
-  _modelViewMatrix  = MutableMatrix44D(that._modelViewMatrix);
+//  _projectionMatrix = MutableMatrix44D(that._projectionMatrix);
+//  _modelMatrix      = MutableMatrix44D(that._modelMatrix);
+//  _modelViewMatrix  = MutableMatrix44D(that._modelViewMatrix);
+  
+  _projectionMatrix.copyValue(that._projectionMatrix);
+  _modelMatrix.copyValue(that._modelMatrix);
+  _modelViewMatrix.copyValue(that._modelViewMatrix);
 
   _cartesianCenterOfView = MutableVector3D(that._cartesianCenterOfView);
 
