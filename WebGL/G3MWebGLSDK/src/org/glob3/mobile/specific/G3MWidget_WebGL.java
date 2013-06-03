@@ -389,10 +389,10 @@ public final class G3MWidget_WebGL
 
    public void startWidget() {
       if (_g3mWidget != null) {
-         _shaderProgram = new ShaderProgram(_g3mWidget.getGL());
-         if (_shaderProgram.loadShaders(_vertexShader, _fragmentShader) == false) {
-            ILogger.instance().logInfo("Failed to load shaders");
-         }
+         //         _shaderProgram = new ShaderProgram(_g3mWidget.getGL());
+         //         if (_shaderProgram.loadShaders(_vertexShader, _fragmentShader) == false) {
+         //            ILogger.instance().logInfo("Failed to load shaders");
+         //         }
 
          _motionEventProcessor = new MotionEventProcessor(_g3mWidget, _canvas.getCanvasElement());
          jsAddResizeHandler(_canvas.getCanvasElement());
