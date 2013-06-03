@@ -119,7 +119,7 @@ public class GPUProgram
       return null;
     }
   
-    System.out.printf("%s", vertexSource);
+    ILogger.instance().logInfo("VERTEX SOURCE: \n %s", vertexSource);
   
     // compile fragment shader
     int fragmentShader = gl.createShader(ShaderType.FRAGMENT_SHADER);
@@ -131,6 +131,8 @@ public class GPUProgram
       ILogger.instance().logError("GPUProgram: ERROR compiling fragment shader");
       return null;
     }
+  
+    ILogger.instance().logInfo("FRAGMENT SOURCE: \n %s", fragmentSource);
   
     gl.bindAttribLocation(p, 0, "Position");
   
