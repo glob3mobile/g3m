@@ -16,8 +16,14 @@ Color* Color::parse(const std::string& str) {
   const IStringUtils* su = IStringUtils::instance();
 
   std::string colorStr = su->trim(str);
+
   if ( su->beginsWith(colorStr, "#") ) {
+#ifdef C_CODE
     colorStr = su->trim( su->substring(colorStr, 1) );
+#endif
+#ifdef JAVA_CODE
+    colorStr = su.trim(su.substring(colorStr, 1));
+#endif
   }
 
   const int strSize = colorStr.size();

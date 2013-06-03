@@ -216,12 +216,7 @@ private:
   TexturesHandler* _texturesHandler;
   TextureBuilder*  _textureBuilder;
 
-#ifdef C_CODE
-  const Color*     _backgroundColor;
-#endif
-#ifdef JAVA_CODE
-  private Color _backgroundColor;
-#endif
+  Color*           _backgroundColor;
 
   ITimer*          _timer;
   long             _renderCounter;
