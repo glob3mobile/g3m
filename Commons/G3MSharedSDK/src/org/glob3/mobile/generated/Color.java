@@ -50,9 +50,10 @@ public class Color
     final IStringUtils su = IStringUtils.instance();
   
     String colorStr = su.trim(str);
+  
     if (su.beginsWith(colorStr, "#"))
     {
-      colorStr = su.trim(su.substring(colorStr, colorStr + 1));
+      colorStr = su.trim(su.substring(colorStr, 1));
     }
   
     final int strSize = colorStr.length();
