@@ -51,7 +51,7 @@ public class G3MShowMarkersActivity
       setContentView(R.layout.bar_glob3_template);
       final G3MBuilder_Android builder = new G3MBuilder_Android(getApplicationContext());
 
-      final boolean testingSG = false;
+      final boolean testingSG = true;
       if (!testingSG) {
          builder.setInitializationTask(getWeatherMarkerLayersTask());
       }
