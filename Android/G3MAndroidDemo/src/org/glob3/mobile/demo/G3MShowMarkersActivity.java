@@ -2,7 +2,10 @@
 
 package org.glob3.mobile.demo;
 
+import java.util.ArrayList;
+
 import org.glob3.mobile.generated.Angle;
+import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.GPUProgramSources;
@@ -17,6 +20,8 @@ import org.glob3.mobile.generated.JSONBaseObject;
 import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarksRenderer;
+import org.glob3.mobile.generated.SceneGraphNode;
+import org.glob3.mobile.generated.SceneGraphRenderer;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.specific.G3MBuilder_Android;
@@ -45,7 +50,50 @@ public class G3MShowMarkersActivity
 
       setContentView(R.layout.bar_glob3_template);
       final G3MBuilder_Android builder = new G3MBuilder_Android(getApplicationContext());
-      builder.setInitializationTask(getWeatherMarkerLayersTask());
+
+      final boolean testingSG = true;
+      if (!testingSG) {
+         builder.setInitializationTask(getWeatherMarkerLayersTask());
+      }
+      else {
+         final ArrayList<SceneGraphNode> nodes = new ArrayList<SceneGraphNode>();
+
+         final MarksRenderer mr = new MarksRenderer(true);
+         nodes.add(mr);
+
+         //         class TestMarkTouchListenerSG implements MarkTouchListener {
+         //           public boolean touchedMark(Mark mark) {
+         //             NSString* message = [NSString stringWithFormat: @"Touched on mark \"%s\"", mark->getLabel().c_str()];
+         //             
+         //             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Glob3 Demo"
+         //                                                             message:message
+         //                                                            delegate:nil
+         //                                                   cancelButtonTitle:@"OK"
+         //                                                   otherButtonTitles:nil];
+         //             [alert show];
+         //             
+         //             return true;
+         //           }
+         //         };
+
+         //         mr->setMarkTouchListener(new TestMarkTouchListenerSG(), true);
+
+         for (int i = 0; i < 10; i++) {
+            final Angle latitude = Angle.fromDegrees((int) (Math.random() % 180) - 90);
+            final Angle longitude = Angle.fromDegrees((int) (Math.random() % 360));
+
+            final String string = "Mark " + latitude.degrees() + ", " + longitude.degrees();
+
+            final Mark m = new Mark(string, new Geodetic3D(latitude, longitude, 0), 0, 20, Color.newFromRGBA(1, 1, 1, 1),
+                     Color.newFromRGBA(0, 0, 0, 1), null, true, null, true);
+            mr.addMark(m);
+         }
+
+         final SceneGraphRenderer sgr = new SceneGraphRenderer(nodes, true);
+         builder.addRenderer(sgr);
+      }
+
+
       builder.addRenderer(_weatherMarkers);
 
       builder.addGPUProgramSources(new GPUProgramSources("Billboard", GL2Shaders._billboardVertexShader,

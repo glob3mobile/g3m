@@ -132,8 +132,8 @@ private:
   
   static IFloatBuffer* _billboardTexCoord;
   const Planet* _planet;
-  int viewportWidth;
-  int viewportHeight;
+  int _viewportWidth;
+  int _viewportHeight;
   
 public:
   /**

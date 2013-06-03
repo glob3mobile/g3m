@@ -417,19 +417,6 @@ public:
                          true,
                          NULL,
                          true);
-      
-//      Mark(const std::string& label,
-//           const Geodetic3D&  position,
-//           double             minDistanceToCamera=4.5e+06,
-//           const float        labelFontSize=20,
-//           const Color*       labelFontColor=Color::newFromRGBA(1, 1, 1, 1),
-//           const Color*       labelShadowColor=Color::newFromRGBA(0, 0, 0, 1),
-//           MarkUserData*      userData=NULL,
-//           bool               autoDeleteUserData=true,
-//           MarkTouchListener* listener=NULL,
-//           bool               autoDeleteListener=false);
-      
-      
       mr->addMark(m);
     }
     

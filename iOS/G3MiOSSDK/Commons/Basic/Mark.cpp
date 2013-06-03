@@ -421,15 +421,15 @@ void Mark::render(const G3MRenderContext* rc,
           rc->getFactory()->deleteImage(_textureImage);
           _textureImage = NULL;
           
-          viewportWidth = rc->getCurrentCamera()->getWidth();
-          viewportHeight = rc->getCurrentCamera()->getHeight();
+          _viewportWidth = rc->getCurrentCamera()->getWidth();
+          _viewportHeight = rc->getCurrentCamera()->getHeight();
           actualizeGLGlobalState(rc->getCurrentCamera()); //Ready for rendering
         }
       } else{
-        if (rc->getCurrentCamera()->getWidth() != viewportWidth ||
-            rc->getCurrentCamera()->getHeight() != viewportHeight){
-          viewportWidth = rc->getCurrentCamera()->getWidth();
-          viewportHeight = rc->getCurrentCamera()->getHeight();
+        if (rc->getCurrentCamera()->getWidth() != _viewportWidth ||
+            rc->getCurrentCamera()->getHeight() != _viewportHeight){
+          _viewportWidth = rc->getCurrentCamera()->getWidth();
+          _viewportHeight = rc->getCurrentCamera()->getHeight();
           actualizeGLGlobalState(rc->getCurrentCamera()); //Ready for rendering
         }
       }
@@ -526,7 +526,7 @@ void Mark::modifyGPUProgramState(GPUProgramState& progState) const{
                                 0);           //Stride 0
     
     progState.setUniformValue("TextureExtent", Vector2D(_textureWidth, _textureHeight));
-    progState.setUniformValue("ViewPortExtent", Vector2D( (double)viewportWidth, (double)viewportHeight ));
+    progState.setUniformValue("ViewPortExtent", Vector2D( (double)_viewportWidth, (double)_viewportHeight ));
   }
 }
 
@@ -576,17 +576,17 @@ void Mark::rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNod
       rc->getFactory()->deleteImage(_textureImage);
       _textureImage = NULL;
       
-      viewportWidth = rc->getCurrentCamera()->getWidth();
-      viewportHeight = rc->getCurrentCamera()->getHeight();
-      actualizeGLGlobalState(rc->getCurrentCamera()); //Ready for rendering
+      _viewportWidth = rc->getCurrentCamera()->getWidth();
+      _viewportHeight = rc->getCurrentCamera()->getHeight();
+//      actualizeGLGlobalState(rc->getCurrentCamera()); //Ready for rendering
     }
-  } else{
-    if (rc->getCurrentCamera()->getWidth() != viewportWidth ||
-        rc->getCurrentCamera()->getHeight() != viewportHeight){
-      viewportWidth = rc->getCurrentCamera()->getWidth();
-      viewportHeight = rc->getCurrentCamera()->getHeight();
-      actualizeGLGlobalState(rc->getCurrentCamera()); //Ready for rendering
-    }
+  } 
+  
+  if (rc->getCurrentCamera()->getWidth() != _viewportWidth ||
+      rc->getCurrentCamera()->getHeight() != _viewportHeight){
+    _viewportWidth = rc->getCurrentCamera()->getWidth();
+    _viewportHeight = rc->getCurrentCamera()->getHeight();
+    //actualizeGLGlobalState(rc->getCurrentCamera()); //Ready for rendering
   }
   
   if (_textureId != NULL) {
@@ -658,7 +658,7 @@ void Mark::modifiyGLState(GLState* state){
                                  0);           //Stride 0
     
     progState->setUniformValue("TextureExtent", Vector2D(_textureWidth, _textureHeight));
-    progState->setUniformValue("ViewPortExtent", Vector2D( (double)viewportWidth, (double)viewportHeight ));
+    progState->setUniformValue("ViewPortExtent", Vector2D( (double)_viewportWidth, (double)_viewportHeight ));
   }
   
 }
