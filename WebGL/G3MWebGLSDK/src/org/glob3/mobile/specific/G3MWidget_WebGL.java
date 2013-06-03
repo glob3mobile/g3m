@@ -12,6 +12,9 @@ import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.G3MWidget;
 import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.GL;
+import org.glob3.mobile.generated.GPUProgramFactory;
+import org.glob3.mobile.generated.GPUProgramManager;
+import org.glob3.mobile.generated.GPUProgramSources;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
@@ -335,6 +338,14 @@ public final class G3MWidget_WebGL
    }-*/;
 
 
+   private GPUProgramManager createGPUProgramManager() {
+      final GPUProgramFactory factory = new GPUProgramFactory();
+      factory.add(new GPUProgramSources("Billboard", Shaders_WebGL._billboardVertexShader, Shaders_WebGL._billboardFragmentShader));
+      factory.add(new GPUProgramSources("Default", Shaders_WebGL._defaultVertexShader, Shaders_WebGL._defaultFragmentShader));
+      return new GPUProgramManager(getGL(), factory);
+   }
+
+
    public void initWidget(/*final INativeGL nativeGL,*/
                           final IStorage storage,
                           final IDownloader downloader,
@@ -352,6 +363,7 @@ public final class G3MWidget_WebGL
                           final ArrayList<PeriodicalTask> periodicalTasks,
                           final WidgetUserData userData) {
 
+
       _g3mWidget = G3MWidget.create(//
                _gl, //
                storage, //
@@ -367,7 +379,7 @@ public final class G3MWidget_WebGL
                logDownloaderStatistics, //
                initializationTask, //
                autoDeleteInitializationTask, //
-               periodicalTasks);
+               periodicalTasks, createGPUProgramManager());
 
       _g3mWidget.setUserData(userData);
 
@@ -408,7 +420,7 @@ public final class G3MWidget_WebGL
       //USING PROGRAM
       //      if (_program != null) {
       //jsGLInit();
-      _g3mWidget.getGL().useProgram(_shaderProgram);
+      //      _g3mWidget.getGL().useProgram(_shaderProgram);
       _g3mWidget.render(_width, _height);
 
       //      }

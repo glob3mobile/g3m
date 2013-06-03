@@ -4,6 +4,9 @@ package org.glob3.mobile.specific;
 
 import java.util.ArrayList;
 
+import org.glob3.mobile.generated.GPUAttribute;
+import org.glob3.mobile.generated.GPUProgram;
+import org.glob3.mobile.generated.GPUUniform;
 import org.glob3.mobile.generated.IFloatBuffer;
 import org.glob3.mobile.generated.IGLTextureId;
 import org.glob3.mobile.generated.IGLUniformID;
@@ -633,7 +636,7 @@ public final class NativeGL_WebGL
 
 
    @Override
-   public native void deleteProgram(final int program) /*-{
+   public native boolean deleteProgram(final int program) /*-{
 		var shaderList = this.@org.glob3.mobile.specific.NativeGL_WebGL::_shaderList;
 		var jsoProgram = shaderList.@java.util.ArrayList::get(I)(program);
 
@@ -694,7 +697,7 @@ public final class NativeGL_WebGL
 
 
    @Override
-   public native void deleteShader(final int shader) /*-{
+   public native boolean deleteShader(final int shader) /*-{
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 		var shaderList = this.@org.glob3.mobile.specific.NativeGL_WebGL::_shaderList;
 		var jsoShader = shaderList.@java.util.ArrayList::get(I)(shader);
@@ -741,27 +744,162 @@ public final class NativeGL_WebGL
    }-*/;
 
 
-@Override
-public native int BlendFactor_One() /*-{
-	return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.ONE;
-}-*/;
+   @Override
+   public native int BlendFactor_One() /*-{
+		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.ONE;
+   }-*/;
 
 
-@Override
-public native int BlendFactor_Zero() /*-{
-	return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.ZERO;
-}-*/;
+   @Override
+   public native int BlendFactor_Zero() /*-{
+		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.ZERO;
+   }-*/;
 
 
-@Override
-public native void bindAttribLocation(ShaderProgram program, int loc, String name)  /*-{
-	debugger;
-	var progInt = program.@org.glob3.mobile.generated.ShaderProgram::getProgram()();
-	var shaderList = this.@org.glob3.mobile.specific.NativeGL_WebGL::_shaderList;
-	var jsoProgram = shaderList.@java.util.ArrayList::get(I)(progInt);
-	var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
-	gl.bindAttribLocation(jsoProgram, loc, name);
-}-*/;
+   @Override
+   public native void bindAttribLocation(ShaderProgram program,
+                                         int loc,
+                                         String name) /*-{
+		debugger;
+		var progInt = program.@org.glob3.mobile.generated.ShaderProgram::getProgram()();
+		var shaderList = this.@org.glob3.mobile.specific.NativeGL_WebGL::_shaderList;
+		var jsoProgram = shaderList.@java.util.ArrayList::get(I)(progInt);
+		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+		gl.bindAttribLocation(jsoProgram, loc, name);
+   }-*/;
+
+
+   @Override
+   public native void useProgram(GPUProgram program) /*-{
+		var progInt = program.@org.glob3.mobile.generated.GPUProgram::getProgramID()();
+		var shaderList = this.@org.glob3.mobile.specific.NativeGL_WebGL::_shaderList;
+		var jsoProgram = shaderList.@java.util.ArrayList::get(I)(progInt);
+		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
+				.useProgram(jsoProgram);
+   }-*/;
+
+
+   @Override
+   public native int Type_Vec2Float() /*-{
+		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.FLOAT_VEC2;
+   }-*/;
+
+
+   @Override
+   public native int Type_Vec4Float() /*-{
+		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.FLOAT_VEC4;
+   }-*/;
+
+
+   @Override
+   public native int Type_Bool() /*-{
+		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.BOOL;
+   }-*/;
+
+
+   @Override
+   public native int Type_Matrix4Float() /*-{
+		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.FLOAT_MAT4;
+   }-*/;
+
+
+   @Override
+   public native int Variable_ActiveAttributes() /*-{
+		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.ACTIVE_ATTRIBUTES;
+   }-*/;
+
+
+   @Override
+   public native int Variable_ActiveUniforms() /*-{
+		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.ACTIVE_UNIFORMS;
+   }-*/;
+
+
+   @Override
+   public native void bindAttribLocation(GPUProgram program,
+                                         int loc,
+                                         String name) /*-{
+
+		var progInt = program.@org.glob3.mobile.generated.GPUProgram::getProgramID()();
+		var shaderList = this.@org.glob3.mobile.specific.NativeGL_WebGL::_shaderList;
+		var jsoProgram = shaderList.@java.util.ArrayList::get(I)(progInt);
+
+		bindAttribLocation(jsoProgram, loc, name);
+   }-*/;
+
+
+   @Override
+   public native int getProgramiv(GPUProgram program,
+                                  int param) /*-{
+
+		var progInt = program.@org.glob3.mobile.generated.GPUProgram::getProgramID()();
+		var shaderList = this.@org.glob3.mobile.specific.NativeGL_WebGL::_shaderList;
+		var jsoProgram = shaderList.@java.util.ArrayList::get(I)(progInt);
+
+		//Return the value for the passed pname given the passed program. The type returned is the natural type for the requested pname
+		return getProgramParameter(jsoProgram, param);
+
+   }-*/;
+
+
+   @Override
+   public native GPUUniform getActiveUniform(final GPUProgram program,
+                                             final int i) /*-{
+
+		var progInt = program.@org.glob3.mobile.generated.GPUProgram::getProgramID()();
+		var shaderList = this.@org.glob3.mobile.specific.NativeGL_WebGL::_shaderList;
+		var jsoProgram = shaderList.@java.util.ArrayList::get(I)(progInt);
+
+		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+
+		var info = getActiveUniform(jsoProgram, i);
+		var id = getUniformLocation(jsoProgram, info.name);
+
+		var glUniformID = @org.glob3.mobile.specific.GLUniformID_WebGL::new(Lcom/google/gwt/core/client/JavaScriptObject;)(id);
+
+		switch (info.type) {
+		case gl.GL_FLOAT_MAT4:
+			return @org.glob3.mobile.generated.GPUUniformMatrix4Float::new(Ljava/lang/String;Lorg/glob3/mobile/generated/IGLUniformID;)(info.name, glUniformID);
+		case gl.GL_FLOAT_VEC4:
+			return @org.glob3.mobile.generated.GPUUniformVec4Float::new(Ljava/lang/String;Lorg/glob3/mobile/generated/IGLUniformID;)(info.name, glUniformID);
+		case gl.GL_FLOAT:
+			return new GPUUniformFloat(name, new GLUniformID_iOS(id));
+			return @org.glob3.mobile.generated.GPUUniformFloat::new(Ljava/lang/String;Lorg/glob3/mobile/generated/IGLUniformID;)(info.name, glUniformID);
+		case gl.GL_FLOAT_VEC2:
+			return @org.glob3.mobile.generated.GPUUniformVec2Float::new(Ljava/lang/String;Lorg/glob3/mobile/generated/IGLUniformID;)(info.name, glUniformID);
+		case gl.GL_BOOL:
+			return @org.glob3.mobile.generated.GPUUniformBool::new(Ljava/lang/String;Lorg/glob3/mobile/generated/IGLUniformID;)(info.name, glUniformID);
+		case gl.GL_SAMPLER_2D:
+			return null;
+		default:
+			return null;
+			break;
+		}
+   }-*/;
+
+
+   @Override
+   public native GPUAttribute getActiveAttribute(final GPUProgram program,
+                                                 final int i) /*-{
+		var progInt = program.@org.glob3.mobile.generated.GPUProgram::getProgramID()();
+		var shaderList = this.@org.glob3.mobile.specific.NativeGL_WebGL::_shaderList;
+		var jsoProgram = shaderList.@java.util.ArrayList::get(I)(progInt);
+
+		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+
+		var info = getActiveAttrib(jsoProgram, i);
+		var id = getAttribLocation(jsoProgram, info.name);
+
+		switch (info.type) {
+		case gl.GL_FLOAT_VEC4:
+			return @org.glob3.mobile.generated.GPUAttributeVec4Float::new(Ljava/lang/String;I)(name, id);
+		case gl.GL_FLOAT_VEC2:
+			return @org.glob3.mobile.generated.GPUAttributeVec2Float::new(Ljava/lang/String;I)(name, id);
+		default:
+			return null;
+			break;
+		}
+   }-*/;
 
 
    // @Override

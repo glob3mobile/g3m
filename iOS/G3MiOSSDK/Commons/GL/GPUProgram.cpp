@@ -33,7 +33,7 @@ GPUProgram* GPUProgram::createProgram(GL* gl, const std::string name, const std:
     return NULL;
   }
   
-  printf("%s", vertexSource.c_str());
+  ILogger::instance()->logInfo("VERTEX SOURCE: \n %s", vertexSource.c_str());
   
   // compile fragment shader
   int fragmentShader = gl->createShader(FRAGMENT_SHADER);
@@ -44,6 +44,8 @@ GPUProgram* GPUProgram::createProgram(GL* gl, const std::string name, const std:
     ILogger::instance()->logError("GPUProgram: ERROR compiling fragment shader");
     return NULL;
   }
+  
+  ILogger::instance()->logInfo("FRAGMENT SOURCE: \n %s", fragmentSource.c_str());
   
   gl->bindAttribLocation(p, 0, "Position");
   
