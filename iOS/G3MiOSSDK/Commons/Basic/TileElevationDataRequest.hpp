@@ -26,24 +26,26 @@ private:
   private final Vector2I _resolution;
 #endif
   ElevationDataProvider* _provider;
-  
-  
+
+
   class TileElevationDataRequestListener : public IElevationDataListener {
   public:
     TileElevationDataRequest* _request;
-    
+
     TileElevationDataRequestListener(TileElevationDataRequest* request);
-    
+
     void onData(const Sector& sector,
                 const Vector2I& resolution,
                 ElevationData* elevationData);
-    
+
     void onError(const Sector& sector,
                  const Vector2I& resolution);
-    
+
     void onCancel(const Sector& sector,
                   const Vector2I& resolution);
-    
+
+    ~TileElevationDataRequestListener() {}
+
   };
   
   TileElevationDataRequestListener* _listener;

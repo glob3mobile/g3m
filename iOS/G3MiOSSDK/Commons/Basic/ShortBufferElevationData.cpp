@@ -43,13 +43,11 @@ ShortBufferElevationData::~ShortBufferElevationData() {
 }
 
 double ShortBufferElevationData::getValueInBufferAt(int index) const {
-  const short s = _buffer->get(index);
-  if (s == NO_DATA_VALUE){
+  const short value = _buffer->get(index);
+  if (value == NO_DATA_VALUE){
     return IMathUtils::instance()->NanD();
   }
-  else {
-    return s;
-  }
+  return value;
 }
 
 const std::string ShortBufferElevationData::description(bool detailed) const {
