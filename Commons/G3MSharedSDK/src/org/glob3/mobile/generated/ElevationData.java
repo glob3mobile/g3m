@@ -79,7 +79,7 @@ public abstract class ElevationData
     return _resolution;
   }
 
-  public abstract Geodetic2D getRealResolution();
+//  virtual const Geodetic2D getRealResolution() const = 0;
 
   public abstract double getElevationAt(int x, int y);
 

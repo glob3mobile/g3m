@@ -25,7 +25,7 @@ public class SubviewElevationData extends ElevationData
 
   private boolean _hasNoData;
 
-  private final Geodetic2D _realResolution ;
+//  const Geodetic2D _realResolution;
 
   private IFloatBuffer createDecimatedBuffer(ElevationData elevationData)
   {
@@ -184,9 +184,9 @@ public class SubviewElevationData extends ElevationData
 
   public SubviewElevationData(ElevationData elevationData, Sector sector, Vector2I extent, boolean useDecimation)
                                              //bool ownsElevationData,
+  //_realResolution( elevationData->getRealResolution() )
   {
      super(sector, extent);
-     _realResolution = new Geodetic2D(elevationData.getRealResolution());
     if ((elevationData == null) || (elevationData.getExtentWidth() < 1) || (elevationData.getExtentHeight() < 1))
     {
       ILogger.instance().logError("SubviewElevationData can't subview given elevation data.");
@@ -215,10 +215,9 @@ public class SubviewElevationData extends ElevationData
        _buffer.dispose();
   }
 
-  public final Geodetic2D getRealResolution()
-  {
-    return _realResolution;
-  }
+//  const Geodetic2D getRealResolution() const {
+//    return _realResolution;
+//  }
 
   public final double getElevationAt(int x, int y)
   {
