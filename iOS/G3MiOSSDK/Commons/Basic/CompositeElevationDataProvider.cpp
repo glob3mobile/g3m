@@ -128,7 +128,8 @@ void CompositeElevationDataProvider::cancelRequest(const long long requestId) {
 void CompositeElevationDataProvider::requestFinished(CompositeElevationDataProvider_Request* req) {
   
   req->respondToListener();
-  
+
+#ifdef C_CODE
   std::map<long long, CompositeElevationDataProvider_Request*>::iterator it;
   for (it =  _requests.begin(); it !=  _requests.end(); it++) {
     const CompositeElevationDataProvider_Request* reqI = it->second;
@@ -144,6 +145,21 @@ void CompositeElevationDataProvider::requestFinished(CompositeElevationDataProvi
   if (it == _requests.end()){
     ILogger::instance()->logError("Deleting nonexisting request in CompositeElevationDataProvider.");
   }
+#endif
+
+#ifdef JAVA_CODE
+  for (final java.util.Map.Entry<Long, CompositeElevationDataProvider_Request> entry : _requests.entrySet()) {
+    final CompositeElevationDataProvider_Request reqI = entry.getValue();
+    if (reqI == req) {
+      _requests.remove(entry.getKey());
+      reqI.dispose();
+      return;
+    }
+  }
+
+  ILogger.instance().logError("Deleting nonexisting request in CompositeElevationDataProvider.");
+#endif
+  
 }
 
 
