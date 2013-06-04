@@ -19,8 +19,8 @@ SubviewElevationData::SubviewElevationData(const ElevationData* elevationData,
                                            const Sector& sector,
                                            const Vector2I& extent,
                                            bool useDecimation) :
-ElevationData(sector, extent),
-_realResolution( elevationData->getRealResolution() )
+ElevationData(sector, extent)
+//_realResolution( elevationData->getRealResolution() )
 {
   if ((elevationData == NULL) ||
       (elevationData->getExtentWidth() < 1) ||

@@ -19,7 +19,7 @@ private:
   
   bool _hasNoData;
 
-  const Geodetic2D _realResolution;
+//  const Geodetic2D _realResolution;
 
   IFloatBuffer* createDecimatedBuffer(const ElevationData* elevationData);
   IFloatBuffer* createInterpolatedBuffer(const ElevationData* elevationData);
@@ -40,9 +40,9 @@ public:
 
   ~SubviewElevationData();
 
-  const Geodetic2D getRealResolution() const {
-    return _realResolution;
-  }
+//  const Geodetic2D getRealResolution() const {
+//    return _realResolution;
+//  }
 
   double getElevationAt(int x, int y) const;
 

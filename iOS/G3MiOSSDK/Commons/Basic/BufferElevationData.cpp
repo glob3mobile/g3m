@@ -16,9 +16,9 @@ BufferElevationData::BufferElevationData(const Sector& sector,
                                          const Vector2I& realExtent,
                                          int bufferSize) :
 ElevationData(sector, extent),
-_bufferSize(bufferSize),
-_realResolution(realSector.getDeltaLatitude().div(realExtent._y),
-                realSector.getDeltaLongitude().div(realExtent._x))
+_bufferSize(bufferSize)
+//_realResolution(realSector.getDeltaLatitude().div(realExtent._y),
+//                realSector.getDeltaLongitude().div(realExtent._x))
 {
 
 }

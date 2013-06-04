@@ -15,7 +15,7 @@ class BufferElevationData : public ElevationData {
 private:
   const int _bufferSize;
 
-  const Geodetic2D _realResolution;
+//  const Geodetic2D _realResolution;
 
 protected:
   virtual double getValueInBufferAt(int index) const = 0;
@@ -31,9 +31,9 @@ public:
 
   }
 
-  const Geodetic2D getRealResolution() const {
-    return _realResolution;
-  }
+//  const Geodetic2D getRealResolution() const {
+//    return _realResolution;
+//  }
 
   double getElevationAt(int x,
                         int y) const;

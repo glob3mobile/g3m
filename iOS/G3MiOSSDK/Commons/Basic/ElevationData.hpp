@@ -52,7 +52,7 @@ public:
     return _resolution;
   }
 
-  virtual const Geodetic2D getRealResolution() const = 0;
+//  virtual const Geodetic2D getRealResolution() const = 0;
 
   virtual double getElevationAt(int x,
                                 int y) const = 0;

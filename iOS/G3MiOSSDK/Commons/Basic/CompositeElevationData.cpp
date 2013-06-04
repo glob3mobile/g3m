@@ -114,6 +114,7 @@ Vector3D CompositeElevationData::getMinMaxAverageHeights() const{
                   sumHeight / (_width * _height));
 }
 
-const Geodetic2D CompositeElevationData::getRealResolution() const {
-  int _TODO_complete;
-}
+//const Geodetic2D CompositeElevationData::getRealResolution() const {
+//  int _TODO_complete;
+//  aa;
+//}
