@@ -266,6 +266,8 @@
 		D8A723AE15E4D47E00ABDF07 /* StringBuilder_iOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A723AD15E4D47E00ABDF07 /* StringBuilder_iOS.cpp */; };
 		D8B749AB175E040900046B96 /* Ellipsoid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B749A9175E040800046B96 /* Ellipsoid.cpp */; };
 		D8B749AE175E04FA00046B96 /* Sphere.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B749AC175E04FA00046B96 /* Sphere.cpp */; };
+		D8B749B0175E183900046B96 /* Ellipsoid.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B749AA175E040800046B96 /* Ellipsoid.hpp */; };
+		D8B749B1175E186200046B96 /* Geometry.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B749AF175E051300046B96 /* Geometry.hpp */; };
 		D8D347BA15E5133B00EDB394 /* IStringBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8D347B915E5133B00EDB394 /* IStringBuilder.cpp */; };
 		D8EEF3B91577924D003FEB5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF3B81577924D003FEB5E /* Foundation.framework */; };
 		E705123C165E782C00AEADB9 /* TileRendererBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E705123A165E782C00AEADB9 /* TileRendererBuilder.cpp */; };
@@ -486,6 +488,8 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D8B749B1175E186200046B96 /* Geometry.hpp in CopyFiles */,
+				D8B749B0175E183900046B96 /* Ellipsoid.hpp in CopyFiles */,
 				D80A286D17464CC50058CEC3 /* CameraDoubleDragHandler.hpp in CopyFiles */,
 				CCF45F541743AD420037CA28 /* EllipsoidalPlanet.hpp in CopyFiles */,
 				CCF45F531743AD320037CA28 /* SphericalPlanet.hpp in CopyFiles */,

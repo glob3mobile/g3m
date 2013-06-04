@@ -12,16 +12,18 @@
 
 
 EllipsoidalPlanet::EllipsoidalPlanet(const Vector3D& radii):
-_radii(radii),
-_radiiSquared(Vector3D(radii._x * radii._x ,
-                       radii._y * radii._y,
-                       radii._z * radii._z)),
-_radiiToTheFourth(Vector3D(_radiiSquared._x * _radiiSquared._x ,
-                           _radiiSquared._y * _radiiSquared._y,
-                           _radiiSquared._z * _radiiSquared._z)),
-_oneOverRadiiSquared(Vector3D(1.0 / (radii._x * radii._x ),
-                              1.0 / (radii._y * radii._y),
-                              1.0 / (radii._z * radii._z)))
+//_radii(radii),
+//_radiiSquared(Vector3D(radii._x * radii._x ,
+//                       radii._y * radii._y,
+//                       radii._z * radii._z)),
+//_radiiToTheFourth(Vector3D(_radiiSquared._x * _radiiSquared._x ,
+//                           _radiiSquared._y * _radiiSquared._y,
+//                           _radiiSquared._z * _radiiSquared._z)),
+//_oneOverRadiiSquared(Vector3D(1.0 / (radii._x * radii._x ),
+//                              1.0 / (radii._y * radii._y),
+//                              1.0 / (radii._z * radii._z))),
+
+_ellipsoid(Vector3D(0,0,0), radii)
 {
   
 }
@@ -40,18 +42,20 @@ std::vector<double> EllipsoidalPlanet::intersectionsDistances(const Vector3D& or
                                                           const Vector3D& direction) const {
   std::vector<double> intersections;
   
+  Vector3D oneOverRadiiSquared = _ellipsoid.getOneOverRadiiSquared();
+  
   // By laborious algebraic manipulation....
-  const double a = (direction._x * direction._x * _oneOverRadiiSquared._x +
-                    direction._y * direction._y * _oneOverRadiiSquared._y +
-                    direction._z * direction._z * _oneOverRadiiSquared._z);
+  const double a = (direction._x * direction._x * oneOverRadiiSquared._x +
+                    direction._y * direction._y * oneOverRadiiSquared._y +
+                    direction._z * direction._z * oneOverRadiiSquared._z);
   
-  const double b = 2.0 * (origin._x * direction._x * _oneOverRadiiSquared._x +
-                          origin._y * direction._y * _oneOverRadiiSquared._y +
-                          origin._z * direction._z * _oneOverRadiiSquared._z);
+  const double b = 2.0 * (origin._x * direction._x * oneOverRadiiSquared._x +
+                          origin._y * direction._y * oneOverRadiiSquared._y +
+                          origin._z * direction._z * oneOverRadiiSquared._z);
   
-  const double c = (origin._x * origin._x * _oneOverRadiiSquared._x +
-                    origin._y * origin._y * _oneOverRadiiSquared._y +
-                    origin._z * origin._z * _oneOverRadiiSquared._z - 1.0);
+  const double c = (origin._x * origin._x * oneOverRadiiSquared._x +
+                    origin._y * origin._y * oneOverRadiiSquared._y +
+                    origin._z * origin._z * oneOverRadiiSquared._z - 1.0);
   
   // Solve the quadratic equation: ax^2 + bx + c = 0.
   // Algorithm is from Wikipedia's "Quadratic equation" topic, and Wikipedia credits
@@ -89,7 +93,7 @@ Vector3D EllipsoidalPlanet::toCartesian(const Angle& latitude,
                                     const double height) const {
   const Vector3D n = geodeticSurfaceNormal(latitude, longitude);
   
-  const Vector3D k = _radiiSquared.times(n);
+  const Vector3D k = _ellipsoid.getRadiiSquared().times(n);
   const double gamma = IMathUtils::instance()->sqrt((k._x * n._x) +
                                                     (k._y * n._y) +
                                                     (k._z * n._z));
@@ -120,13 +124,15 @@ Geodetic3D EllipsoidalPlanet::toGeodetic3D(const Vector3D& position) const {
 Vector3D EllipsoidalPlanet::scaleToGeodeticSurface(const Vector3D& position) const {
   const IMathUtils* mu = IMathUtils::instance();
   
-  const double beta = 1.0 / mu->sqrt((position._x * position._x) * _oneOverRadiiSquared._x +
-                                     (position._y * position._y) * _oneOverRadiiSquared._y +
-                                     (position._z * position._z) * _oneOverRadiiSquared._z);
+  Vector3D oneOverRadiiSquared = _ellipsoid.getOneOverRadiiSquared();
   
-  const double n = Vector3D(beta * position._x * _oneOverRadiiSquared._x,
-                            beta * position._y * _oneOverRadiiSquared._y,
-                            beta * position._z * _oneOverRadiiSquared._z).length();
+  const double beta = 1.0 / mu->sqrt((position._x * position._x) * oneOverRadiiSquared._x +
+                                     (position._y * position._y) * oneOverRadiiSquared._y +
+                                     (position._z * position._z) * oneOverRadiiSquared._z);
+  
+  const double n = Vector3D(beta * position._x * oneOverRadiiSquared._x,
+                            beta * position._y * oneOverRadiiSquared._y,
+                            beta * position._z * oneOverRadiiSquared._z).length();
   
   double alpha = (1.0 - beta) * (position.length() / n);
   
@@ -144,9 +150,11 @@ Vector3D EllipsoidalPlanet::scaleToGeodeticSurface(const Vector3D& position) con
   do {
     alpha -= (s / dSdA);
     
-    da = 1.0 + (alpha * _oneOverRadiiSquared._x);
-    db = 1.0 + (alpha * _oneOverRadiiSquared._y);
-    dc = 1.0 + (alpha * _oneOverRadiiSquared._z);
+    Vector3D oneOverRadiiSquared = _ellipsoid.getOneOverRadiiSquared();
+    
+    da = 1.0 + (alpha * oneOverRadiiSquared._x);
+    db = 1.0 + (alpha * oneOverRadiiSquared._y);
+    dc = 1.0 + (alpha * oneOverRadiiSquared._z);
     
     const double da2 = da * da;
     const double db2 = db * db;
@@ -156,14 +164,17 @@ Vector3D EllipsoidalPlanet::scaleToGeodeticSurface(const Vector3D& position) con
     const double db3 = db * db2;
     const double dc3 = dc * dc2;
     
-    s = (x2 / (_radiiSquared._x * da2) +
-         y2 / (_radiiSquared._y * db2) +
-         z2 / (_radiiSquared._z * dc2) - 1.0);
+    Vector3D radiiSquared = _ellipsoid.getRadiiSquared();
+    Vector3D radiiToTheFourth = _ellipsoid.getRadiiToTheFourth();
+    
+    s = (x2 / (radiiSquared._x * da2) +
+         y2 / (radiiSquared._y * db2) +
+         z2 / (radiiSquared._z * dc2) - 1.0);
     
     dSdA = (-2.0 *
-            (x2 / (_radiiToTheFourth._x * da3) +
-             y2 / (_radiiToTheFourth._y * db3) +
-             z2 / (_radiiToTheFourth._z * dc3)));
+            (x2 / (radiiToTheFourth._x * da3) +
+             y2 / (radiiToTheFourth._y * db3) +
+             z2 / (radiiToTheFourth._z * dc3)));
   }
   while (mu->abs(s) > 1e-10);
   
@@ -174,9 +185,12 @@ Vector3D EllipsoidalPlanet::scaleToGeodeticSurface(const Vector3D& position) con
 
 
 Vector3D EllipsoidalPlanet::scaleToGeocentricSurface(const Vector3D& position) const {
-  const double beta = 1.0 / IMathUtils::instance()->sqrt((position._x * position._x) * _oneOverRadiiSquared._x +
-                                                         (position._y * position._y) * _oneOverRadiiSquared._y +
-                                                         (position._z * position._z) * _oneOverRadiiSquared._z);
+  
+  Vector3D oneOverRadiiSquared = _ellipsoid.getOneOverRadiiSquared();
+  
+  const double beta = 1.0 / IMathUtils::instance()->sqrt((position._x * position._x) * oneOverRadiiSquared._x +
+                                                         (position._y * position._y) * oneOverRadiiSquared._y +
+                                                         (position._z * position._z) * oneOverRadiiSquared._z);
   
   return position.times(beta);
 }
@@ -228,7 +242,7 @@ double EllipsoidalPlanet::computePreciseLatLonDistance(const Geodetic2D& g1,
                                                    const Geodetic2D& g2) const {
   const IMathUtils* mu = IMathUtils::instance();
   
-  const Vector3D radius = _radii;
+  const Vector3D radius = _ellipsoid.getRadii();
   const double R = (radius._x + radius._y + radius._z) / 3;
   
   // spheric distance from P to Q
@@ -258,7 +272,7 @@ double EllipsoidalPlanet::computeFastLatLonDistance(const Geodetic2D& g1,
                                                 const Geodetic2D& g2) const {
   const IMathUtils* mu = IMathUtils::instance();
   
-  const Vector3D radius = _radii;
+  const Vector3D radius = _ellipsoid.getRadii();
   const double R = (radius._x + radius._y + radius._z) / 3;
   
   const double medLat = g1.latitude()._degrees;
@@ -295,7 +309,7 @@ Vector3D EllipsoidalPlanet::closestPointToSphere(const Vector3D& pos, const Vect
   double t = 0;
   
   // compute radius for the rotation
-  const double R0 = (_radii._x + _radii._y + _radii._y) /3;
+  const double R0 = _ellipsoid.getMeanRadius();
   
   // compute the point in this ray that are to a distance R from the origin.
   const double U2 = ray.squaredLength();

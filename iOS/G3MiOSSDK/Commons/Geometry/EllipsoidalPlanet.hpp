@@ -17,12 +17,16 @@
 
 #include "MutableVector3D.hpp"
 
+#include "Ellipsoid.hpp"
+
 class EllipsoidalPlanet: public Planet{
 private:
-  const Vector3D _radii;
-  const Vector3D _radiiSquared;
-  const Vector3D _radiiToTheFourth;
-  const Vector3D _oneOverRadiiSquared;
+  //const Vector3D _radii;
+  //const Vector3D _radiiSquared;
+//  const Vector3D _radiiToTheFourth;
+//  const Vector3D _oneOverRadiiSquared;
+  
+  const Ellipsoid _ellipsoid;
   
   
 public:
@@ -34,7 +38,7 @@ public:
   }
   
   Vector3D getRadii() const{
-    return _radii;
+    return _ellipsoid.getRadii();
   }
   
   Vector3D centricSurfaceNormal(const Vector3D& positionOnEllipsoidalPlanet) const {
@@ -42,11 +46,11 @@ public:
   }
   
   Vector3D geodeticSurfaceNormal(const Vector3D& positionOnEllipsoidalPlanet) const {
-    return positionOnEllipsoidalPlanet.times(_oneOverRadiiSquared).normalized();
+    return positionOnEllipsoidalPlanet.times(_ellipsoid.getOneOverRadiiSquared()).normalized();
   }
   
   Vector3D geodeticSurfaceNormal(const MutableVector3D& positionOnEllipsoidalPlanet) const {
-    return positionOnEllipsoidalPlanet.times(_oneOverRadiiSquared).normalized().asVector3D();
+    return positionOnEllipsoidalPlanet.times(_ellipsoid.getOneOverRadiiSquared()).normalized().asVector3D();
   }
   
   
