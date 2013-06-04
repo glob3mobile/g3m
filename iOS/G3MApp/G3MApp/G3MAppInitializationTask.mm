@@ -32,12 +32,14 @@ void G3MAppInitializationTask::run(const G3MContext* context) {
   downloader->requestBuffer(URL("http://poiproxy.mapps.es/browseByLonLat?service=wikilocation&lon=-122.415985&lat=37.766372&dist=50000", false),
                             200000,
                             TimeInterval::forever(),
+                            true,
                             new G3MWikiDownloadListener(this, _widget),
                             true);
   // weatherMarkers data
   downloader->requestBuffer(URL("http://openweathermap.org/data/2.1/find/city?bbox=-180,-90,180,90,2&cluster=yes", false),
                             200000,
                             TimeInterval::fromHours(1.0),
+                            true,
                             new G3MWeatherDownloadListener(this, _widget),
                             true);
   

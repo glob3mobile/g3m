@@ -104,8 +104,6 @@ public:
 
   static TouchEvent* create(const TouchEventType& type,
                             const Touch* touch) {
-    //const Touch * pa[] = { touch };
-    //const std::vector<const Touch*> touchs = std::vector<const Touch*>(pa, &pa[1);
     const std::vector<const Touch*> touchs(1, touch);
 
     return create(type, touchs);

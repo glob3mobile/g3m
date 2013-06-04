@@ -57,6 +57,7 @@
 #import <G3MiOSSDK/PeriodicalTask.hpp>
 #import <G3MiOSSDK/IDownloader.hpp>
 #import <G3MiOSSDK/OSMLayer.hpp>
+#import <G3MiOSSDK/CartoDBLayer.hpp>
 #import <G3MiOSSDK/HereLayer.hpp>
 #import <G3MiOSSDK/MapQuestLayer.hpp>
 #import <G3MiOSSDK/MapBoxLayer.hpp>
@@ -94,7 +95,12 @@
 #import <G3MiOSSDK/IImageUtils.hpp>
 #import <G3MiOSSDK/RectangleF.hpp>
 #import <G3MiOSSDK/ShortBufferElevationData.hpp>
+#import <G3MiOSSDK/SGShape.hpp>
+#import <G3MiOSSDK/SGNode.hpp>
+#import <G3MiOSSDK/SGMaterialNode.hpp>
 
+#import <G3MiOSSDK/G3MCBuilder_iOS.hpp>
+#import <G3MiOSSDK/G3MCSceneDescription.hpp>
 
 
 class TestVisibleSectorListener : public VisibleSectorListener {
@@ -133,9 +139,50 @@ public:
   
   // initialize a customized widget by using a buider
   [self initCustomizedWithBuilder];
-  
+
+//  [self initWithG3MCBuilder];
+
   [[self G3MWidget] startAnimation];
 }
+
+
+class TestG3MCBuilderScenesDescriptionsListener  : public G3MCBuilderScenesDescriptionsListener {
+public:
+  void onDownload(std::vector<G3MCSceneDescription*>* scenesDescriptions) {
+    const int scenesCount = scenesDescriptions->size();
+    for (int i = 0; i < scenesCount; i++) {
+      G3MCSceneDescription* sceneDescription = scenesDescriptions->at(i);
+      ILogger::instance()->logInfo("%s", sceneDescription->description().c_str());
+    }
+
+    for (int i = 0; i < scenesCount; i++) {
+      delete scenesDescriptions->at(i);
+    }
+
+    delete scenesDescriptions;
+  }
+
+  void onError() {
+    ILogger::instance()->logError("Error downloading ScenesDescriptions");
+  }
+
+};
+
+
+- (void) initWithG3MCBuilder
+{
+  G3MCSceneChangeListener* sceneListener = NULL;
+  
+  _g3mcBuilder =  new G3MCBuilder_iOS([self G3MWidget],
+                                      URL("http://localhost:8080/g3mc-server", false),
+                                      "2g59wh610g6c1kmkt0l",
+                                      sceneListener);
+
+  //_g3mcBuilder->requestScenesDescriptions(new TestG3MCBuilderScenesDescriptionsListener(), true);
+
+  _g3mcBuilder->initializeWidget();
+}
+
 
 //- (void) initWithoutBuilder
 //{
@@ -191,13 +238,13 @@ public:
 //
 //}
 
-- (void) initDefaultWithBuilder
+- (void) initWithDefaultBuilder
 {
   G3MBuilder_iOS builder([self G3MWidget]);
-  
-  // initialization
   builder.initializeWidget();
 }
+
+
 
 - (void)  initializeElevationDataProvider: (G3MBuilder_iOS&) builder
 {
@@ -554,16 +601,25 @@ public:
   if (useMapQuestOSM) {
     layerSet->addLayer( MapQuestLayer::newOSM(TimeInterval::fromDays(30)) );
   }
-  
+
+  const bool useCartoDB = false;
+  if (useCartoDB) {
+    layerSet->addLayer( new CartoDBLayer("mdelacalle",
+                                         "tm_world_borders_simpl_0_3",
+                                         TimeInterval::fromDays(30)) );
+  }
+
   const bool useMapQuestOpenAerial = false;
   if (useMapQuestOpenAerial) {
     layerSet->addLayer( MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30)) );
   }
-  
+
   const bool useMapBox = false;
   if (useMapBox) {
-    layerSet->addLayer( new MapBoxLayer("dgd.map-v93trj8v",
-                                        TimeInterval::fromDays(30)) );
+    //const std::string mapKey = "dgd.map-v93trj8v";
+    //const std::string mapKey = "examples.map-cnkhv76j";
+    const std::string mapKey = "examples.map-qogxobv1";
+    layerSet->addLayer( new MapBoxLayer(mapKey, TimeInterval::fromDays(30)) );
   }
   
   const bool useHere = false;
@@ -624,7 +680,7 @@ public:
     //    layerSet->addLayer(i3Landsat);
   }
   
-  const bool useOrtoAyto = true;
+  const bool useOrtoAyto = false;
   if (useOrtoAyto) {
     WMSLayer* ortoAyto = new WMSLayer("orto_refundida,etiquetas_50k,Numeros%20de%20Gobierno,etiquetas%20inicial,etiquetas%2020k,Nombres%20de%20Via,etiquetas%2015k,etiquetas%202k,etiquetas%2010k",
                                       URL("http://195.57.27.86/wms_etiquetas_con_orto.mapdef?", false),
@@ -824,11 +880,15 @@ public:
   const bool useTilesSplitBudget = true;
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
-  
+  const bool renderIncompletePlanet = false;
+  const URL incompletePlanetTexureURL("", false);
+
   return new TilesRenderParameters(renderDebug,
                                    useTilesSplitBudget,
                                    forceFirstLevelTilesRenderOnStart,
-                                   incrementalTileQuality);
+                                   incrementalTileQuality,
+                                   renderIncompletePlanet,
+                                   incompletePlanetTexureURL);
 }
 
 - (TileRenderer*) createTileRenderer: (TilesRenderParameters*) parameters
@@ -1386,6 +1446,61 @@ public:
 };
 
 
+class RadarParser_BufferDownloadListener : public IBufferDownloadListener {
+private:
+  ShapesRenderer* _shapesRenderer;
+
+public:
+  RadarParser_BufferDownloadListener(ShapesRenderer* shapesRenderer) :
+  _shapesRenderer(shapesRenderer)
+  {
+
+  }
+  
+  void onDownload(const URL& url,
+                  IByteBuffer* buffer,
+                  bool expired) {
+
+    SGShape* radarModel = (SGShape*) SceneJSShapesParser::parseFromBSON(buffer,
+                                                                        "http://radar3d.glob3mobile.com/models/",
+                                                                        true);
+
+    SGNode* node  = radarModel->getNode();
+
+    const int childrenCount = node->getChildrenCount();
+    for (int i = 0; i < childrenCount; i++) {
+      SGNode* child = node->getChild(i);
+      SGMaterialNode* material = (SGMaterialNode*) child;
+      material->setBaseColor( NULL );
+    }
+
+//    radarModel->setPosition(Geodetic3D::fromDegrees(0, 0, 0));
+    radarModel->setPosition(new Geodetic3D(Angle::zero(), Angle::zero(), 10000));
+//    radarModel->setPosition(new Geodetic3D(Angle::fromDegreesMinutesSeconds(25, 47, 16),
+//                                           Angle::fromDegreesMinutesSeconds(-80, 13, 27),
+//                                           10000));
+    //radarModel->setScale(10);
+
+    _shapesRenderer->addShape(radarModel);
+
+    delete buffer;
+  }
+
+  void onError(const URL& url) {
+    printf("Error downloading %s\n", url.getPath().c_str());
+  }
+
+  void onCancel(const URL& url) {
+  }
+
+  void onCanceledDownload(const URL& url,
+                          IByteBuffer* buffer,
+                          bool expired) {
+  }
+
+};
+
+
 - (GInitializationTask*) createSampleInitializationTask: (ShapesRenderer*) shapesRenderer
                                             geoRenderer: (GEORenderer*) geoRenderer
                                            meshRenderer: (MeshRenderer*) meshRenderer
@@ -1396,7 +1511,18 @@ public:
     ShapesRenderer* _shapesRenderer;
     GEORenderer*    _geoRenderer;
     MeshRenderer*   _meshRenderer;
-    
+
+    void textRadar(const G3MContext* context) {
+
+      context->getDownloader()->requestBuffer(URL("http://radar3d.glob3mobile.com/models/radar.bson", false),
+                                              1000000,
+                                              TimeInterval::fromDays(1),
+                                              true,
+                                              new RadarParser_BufferDownloadListener(_shapesRenderer),
+                                              true);
+    }
+
+
   public:
     SampleInitializationTask(G3MWidget_iOS*  iosWidget,
                              ShapesRenderer* shapesRenderer,
@@ -1617,14 +1743,21 @@ public:
       
       delete canvas;
     }
-    
+
     void run(const G3MContext* context) {
       printf("Running initialization Task\n");
       
       testCanvas(context->getFactory());
-      
+
       //      const Sector targetSector(Sector::fromDegrees(35, -6, 38, -2));
       
+
+//      const Sector targetSector(Sector::fromDegrees(35, -6, 38, -2));
+
+
+      textRadar(context);
+
+
       _meshRenderer->addMesh( createSectorMesh(context->getPlanet(),
                                                20,
                                                Sector::fromDegrees(35, -6, 38, -2),
@@ -1827,7 +1960,9 @@ public:
                                                               error: nil];
           if (nsCC3dJSON) {
             std::string cc3dJSON = [nsCC3dJSON UTF8String];
-            Shape* cc3d = SceneJSShapesParser::parseFromJSON(cc3dJSON, "file:///");
+            Shape* cc3d = SceneJSShapesParser::parseFromJSON(cc3dJSON,
+                                                             "file:///",
+                                                             false);
             if (cc3d) {
               cc3d->setPosition(new Geodetic3D(Angle::fromDegrees(39.473641),
                                                Angle::fromDegrees(-6.370732),
@@ -1852,23 +1987,11 @@ public:
                   length: length];
           IByteBuffer* buffer = new ByteBuffer_iOS(bytes, length);
           if (buffer) {
-            Shape* plane = SceneJSShapesParser::parseFromBSON(buffer, URL::FILE_PROTOCOL + "textures-A320/");
-            
-            
-            //      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
-            //                                                                ofType: @"json"];
-            /*
-             NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"A320"
-             ofType: @"json"];
-             if (planeFilePath) {
-             NSString *nsPlaneJSON = [NSString stringWithContentsOfFile: planeFilePath
-             encoding: NSUTF8StringEncoding
-             error: nil];
-             if (nsPlaneJSON) {
-             std::string planeJSON = [nsPlaneJSON UTF8String];
-             Shape* plane = SceneJSShapesParser::parseFromJSON(planeJSON, "file:///textures-A320/");
-             //Shape* plane = SceneJSShapesParser::parse(planeJSON, "file:///textures-citation/");
-             */
+            Shape* plane = SceneJSShapesParser::parseFromBSON(buffer,
+                                                              URL::FILE_PROTOCOL + "textures-A320/",
+                                                              false);
+
+
             if (plane) {
               // Washington, DC
               plane->setPosition(new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
@@ -1878,29 +2001,29 @@ public:
               plane->setScale(scale, scale, scale);
               plane->setPitch(Angle::fromDegrees(90));
               _shapesRenderer->addShape(plane);
-              
+
               plane->setAnimatedPosition(TimeInterval::fromSeconds(26),
                                          Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
                                                     Angle::fromDegreesMinutesSeconds(-78, 2, 10.92),
                                                     10000),
                                          true);
-              
+
               /**/
               const double fromDistance = 50000 * 1.5;
               const double toDistance   = 25000 * 1.5 / 2;
-              
+
               // const Angle fromAzimuth = Angle::fromDegrees(-90);
               // const Angle toAzimuth   = Angle::fromDegrees(-90 + 360 + 180);
               const Angle fromAzimuth = Angle::fromDegrees(-90);
               const Angle toAzimuth   = Angle::fromDegrees(-90 + 360);
-              
+
               // const Angle fromAltitude = Angle::fromDegrees(65);
               // const Angle toAltitude   = Angle::fromDegrees(5);
               // const Angle fromAltitude = Angle::fromDegrees(30);
               // const Angle toAltitude   = Angle::fromDegrees(15);
               const Angle fromAltitude = Angle::fromDegrees(90);
               const Angle toAltitude   = Angle::fromDegrees(15);
-              
+
               plane->orbitCamera(TimeInterval::fromSeconds(20),
                                  fromDistance, toDistance,
                                  fromAzimuth,  toAzimuth,

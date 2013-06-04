@@ -49,6 +49,11 @@ public abstract class IStringUtils
 
   public abstract boolean beginsWith(String String, String prefix);
 
+  public abstract boolean endsWith(String String, String suffix);
+
+  public abstract String toUpperCase(String String);
+
+
   public abstract int indexOf(String String, String search);
 
   /*
@@ -98,5 +103,7 @@ public abstract class IStringUtils
   {
     return rtrim(ltrim(String));
   }
+
+  public abstract long parseHexInt(String str);
 
 }

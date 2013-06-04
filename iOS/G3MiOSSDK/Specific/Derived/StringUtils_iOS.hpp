@@ -38,7 +38,15 @@ public:
   std::string rtrim(const std::string& string) const;
   
   std::string ltrim(const std::string& string) const;
-  
+
+
+  bool endsWith(const std::string& string,
+                const std::string& suffix) const;
+
+  std::string toUpperCase(const std::string& string) const;
+
+  long long parseHexInt(const std::string& str) const;
+
 };
 
 #endif

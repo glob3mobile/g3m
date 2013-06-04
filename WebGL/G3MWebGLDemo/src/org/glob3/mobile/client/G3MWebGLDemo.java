@@ -26,6 +26,7 @@ import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.IBufferDownloadListener;
 import org.glob3.mobile.generated.IByteBuffer;
+import org.glob3.mobile.generated.ICameraActivityListener;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IImage;
@@ -127,7 +128,7 @@ public class G3MWebGLDemo
       final ShapesRenderer shapesRenderer = new ShapesRenderer();
       builder.addRenderer(shapesRenderer);
 
-      //builder.setInitializationTask(createMarkersInitializationTask());
+      builder.setInitializationTask(createMarkersInitializationTask());
 
       final GInitializationTask initializationTask = new GInitializationTask() {
          @Override
@@ -352,7 +353,7 @@ public class G3MWebGLDemo
                                                final IByteBuffer buffer,
                                                final boolean expired) {
                            final Shape aircraft = SceneJSShapesParser.parseFromBSON(buffer,
-                                    "http://glob3m.glob3mobile.com/test/aircraft-A320/textures-A320/");
+                                    "http://glob3m.glob3mobile.com/test/aircraft-A320/textures-A320/", false);
 
                            if (aircraft != null) {
                               // Washington, DC
@@ -743,10 +744,12 @@ public class G3MWebGLDemo
          final WidgetUserData userData = null;
 
 
+         final ICameraActivityListener cameraActivityListener = null;
          _widget.initWidget(//
                   storage, // 
                   downloader, //
                   threadUtils, //
+                  cameraActivityListener, //
                   planet, //
                   cameraConstraints, //
                   cameraRenderer, //

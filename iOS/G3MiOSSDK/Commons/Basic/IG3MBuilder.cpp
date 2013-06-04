@@ -12,6 +12,7 @@
 #include "IStorage.hpp"
 #include "IDownloader.hpp"
 #include "IThreadUtils.hpp"
+#include "ICameraActivityListener.hpp"
 #include "GInitializationTask.hpp"
 #include "PeriodicalTask.hpp"
 #include "CameraSingleDragHandler.hpp"
@@ -28,6 +29,7 @@ _gl(NULL),
 _storage(NULL),
 _downloader(NULL),
 _threadUtils(NULL),
+_cameraActivityListener(NULL),
 _planet(NULL),
 _cameraConstraints(NULL),
 _cameraRenderer(NULL), 
@@ -49,6 +51,7 @@ IG3MBuilder::~IG3MBuilder() {
   delete _storage;
   delete _downloader;
   delete _threadUtils;
+  delete _cameraActivityListener;
   delete _planet;
   if (_cameraConstraints) {
     for (int i = 0; i < _cameraConstraints->size(); i++) {
@@ -127,6 +130,16 @@ IThreadUtils* IG3MBuilder::getThreadUtils() {
   
   return _threadUtils;
 }
+
+/**
+ * Returns the _cameraActivityListener. If it does not exist, it will be default initializated.
+ *
+ * @return _threadUtils: IThreadUtils*
+ */
+ICameraActivityListener* IG3MBuilder::getCameraActivityListener() {
+  return _cameraActivityListener;
+}
+
 
 /**
  * Returns the _planet. If it does not exist, it will be default initializated.
@@ -341,6 +354,24 @@ void IG3MBuilder::setThreadUtils(IThreadUtils *threadUtils) {
   }
   _threadUtils = threadUtils;
 }
+
+/**
+ * Sets the _cameraActivityListener
+ *
+ * @param cameraActivityListener - cannot be NULL.
+ */
+void IG3MBuilder::setCameraActivityListener(ICameraActivityListener *cameraActivityListener) {
+  if (_cameraActivityListener) {
+    ILogger::instance()->logError("LOGIC ERROR: _cameraActivityListener already initialized");
+    return;
+  }
+  if (!cameraActivityListener) {
+    ILogger::instance()->logError("LOGIC ERROR: cameraActivityListener cannot be NULL");
+    return;
+  }
+  _cameraActivityListener = cameraActivityListener;
+}
+
 
 /**
  * Sets the _planet
@@ -607,6 +638,7 @@ G3MWidget* IG3MBuilder::create() {
                                             getStorage(), //
                                             getDownloader(), //
                                             getThreadUtils(), //
+                                            getCameraActivityListener(),//
                                             getPlanet(), //
                                             *getCameraConstraints(), //
                                             getCameraRenderer(), //
@@ -625,6 +657,7 @@ G3MWidget* IG3MBuilder::create() {
   _storage = NULL;
   _downloader = NULL;
   _threadUtils = NULL;
+  _cameraActivityListener = NULL;
   _planet = NULL;
   delete _cameraConstraints;
   _cameraConstraints = NULL;

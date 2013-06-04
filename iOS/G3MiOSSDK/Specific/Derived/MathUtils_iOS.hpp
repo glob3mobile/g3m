@@ -35,6 +35,7 @@ public:
   static inline double log_  (double v)           { return log(v);     }
   static inline double floor_(double d)           { return floor(d);   }
   static inline double ceil_ (double d)           { return ceil(d);    }
+  static inline double fmod_ (double d1, double d2){ return fmod(d1, d2);}
 };
 
 class MathUtils_iOS: public IMathUtils {
@@ -172,6 +173,14 @@ public:
 
   float ceil(float f) const {
     return ceilf(f);
+  }
+  
+  double fmod(double d1, double d2) const {
+    return MathAux::fmod_(d1, d2);
+  }
+  
+  float fmod(float f1, float f2) const {
+    return fmodf(f1, f2);
   }
   
 };

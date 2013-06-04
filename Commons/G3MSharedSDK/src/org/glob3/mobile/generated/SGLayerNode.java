@@ -77,6 +77,7 @@ public class SGLayerNode extends SGNode
   }
 
 
+
   public SGLayerNode(String id, String sId, String uri, String applyTo, String blendMode, boolean flipY, String magFilter, String minFilter, String wrapS, String wrapT)
 //  _applyTo(applyTo),
 //  _blendMode(blendMode),
@@ -120,6 +121,8 @@ public class SGLayerNode extends SGNode
     GLState state = new GLState(parentState);
     state.enableTextures();
     state.enableTexture2D();
+    state.enableBlend();
+    //int __WORKING;
   
     GL gl = rc.getGL();
     gl.bindTexture(texId);

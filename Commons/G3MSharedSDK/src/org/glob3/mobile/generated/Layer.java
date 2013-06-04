@@ -179,6 +179,15 @@ public abstract class Layer
     _layerSet = layerSet;
   }
 
+  public final void removeLayerSet(LayerSet layerSet)
+  {
+    if (_layerSet != layerSet)
+    {
+      ILogger.instance().logError("_layerSet doesn't match.");
+    }
+    _layerSet = null;
+  }
+
   public final String getName()
   {
     return _name;

@@ -9,9 +9,12 @@
 #import <UIKit/UIKit.h>
 
 #import <G3MiOSSDK/G3MWidget_iOS.h>
+class G3MCBuilder_iOS;
 
 @interface ViewController : UIViewController {
   IBOutlet G3MWidget_iOS* G3MWidget;
+
+  G3MCBuilder_iOS* _g3mcBuilder;
 }
 
 @property (retain, nonatomic) G3MWidget_iOS* G3MWidget;

@@ -148,6 +148,27 @@ public class LayerSet
     }
   }
 
+  public final void removeAllLayers(boolean deleteLayers)
+  {
+    final int layersSize = _layers.size();
+    if (layersSize > 0)
+    {
+        for (int i = 0; i < layersSize; i++)
+        {
+          Layer layer = _layers.get(i);
+          layer.removeLayerSet(this);
+          if (deleteLayers)
+          {
+            if (layer != null)
+               layer.dispose();
+          }
+        }
+      _layers.clear();
+  
+      layersChanged();
+    }
+  }
+
   public final void addLayer(Layer layer)
   {
     layer.setLayerSet(this);
