@@ -19,7 +19,7 @@ class TileElevationDataRequest {
 private:
   Tile*                  _tile;
   long long              _requestID;
-  Vector2I _resolution;
+  const Vector2I         _resolution;
   ElevationDataProvider* _provider;
   
   
