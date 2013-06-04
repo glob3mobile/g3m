@@ -56,7 +56,7 @@ Vector2I EllipsoidalTileTessellator::calculateResolution(const Vector2I& rawReso
 Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
                                                  const Vector2I& rawResolution,
                                                  const Tile* tile,
-                                                 const InterpolatedElevationData* elevationData,
+                                                 const ElevationData* elevationData,
                                                  float verticalExaggeration,
                                                  bool renderDebug) const {
 

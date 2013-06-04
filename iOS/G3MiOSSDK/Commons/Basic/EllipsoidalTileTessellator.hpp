@@ -38,7 +38,7 @@ public:
   Mesh* createTileMesh(const Planet* planet,
                        const Vector2I& resolution,
                        const Tile* tile,
-                       const InterpolatedElevationData* elevationData,
+                       const ElevationData* elevationData,
                        float verticalExaggeration,
                        bool debug) const;
 

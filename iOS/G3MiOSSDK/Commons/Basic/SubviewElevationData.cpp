@@ -41,25 +41,25 @@ _realResolution( elevationData->getRealResolution() )
 
 const Vector2D SubviewElevationData::getParentXYAt(const ElevationData* elevationData,
                                                    const Geodetic2D& position) const {
-  const Sector parentSector = elevationData.getSector();
+  const Sector parentSector = elevationData->getSector();
   const Geodetic2D parentLower = parentSector.lower();
 
   const double parentX = (
                           ( position.longitude().radians() - parentLower.longitude().radians() )
                           / parentSector.getDeltaLongitude().radians()
-                          * elevationData.getExtentWidth()
+                          * elevationData->getExtentWidth()
                           );
 
   const double parentY = (
                           ( position.latitude().radians() - parentLower.latitude().radians() )
                           / parentSector.getDeltaLatitude().radians()
-                          * elevationData.getExtentHeight()
+                          * elevationData->getExtentHeight()
                           );
 
   return Vector2D(parentX, parentY);
 }
 
-double SubviewElevationData::getElevationBoxAt(const ElevationData& elevationData,
+double SubviewElevationData::getElevationBoxAt(const ElevationData* elevationData,
                                                double x0, double y0,
                                                double x1, double y1) const {
   const IMathUtils* mu = IMathUtils::instance();
@@ -69,8 +69,8 @@ double SubviewElevationData::getElevationBoxAt(const ElevationData& elevationDat
   const double floorX0 = mu->floor(x0);
   const double ceilX1  = mu->ceil(x1);
 
-  const int parentHeight = elevationData.getExtentHeight();
-  const int parentWidth  = elevationData.getExtentWidth();
+  const int parentHeight = elevationData->getExtentHeight();
+  const int parentWidth  = elevationData->getExtentWidth();
 
   if (floorY0 < 0 || ceilY1 >= parentHeight) {
     return 0;
@@ -97,8 +97,8 @@ double SubviewElevationData::getElevationBoxAt(const ElevationData& elevationDat
     const int yy = (int) mu->min(y, maxY);
 
     for (double x = floorX0; x <= ceilX1; x++) {
-      const double height = elevationData.getElevationAt((int) mu->min(x, maxX),
-                                                         yy);
+      const double height = elevationData->getElevationAt((int) mu->min(x, maxX),
+                                                          yy);
 
       if (mu->isNan(height)) {
         return mu->NanD();
@@ -173,8 +173,8 @@ IFloatBuffer* SubviewElevationData::createInterpolatedBuffer(const ElevationData
 
       const int index = ((_height-1-y) * _width) + x;
 
-      const double height = elevationData.getElevationAt(position.latitude(),
-                                                         position.longitude());
+      const double height = elevationData->getElevationAt(position.latitude(),
+                                                          position.longitude());
 
       buffer->rawPut(index, (float) height);
 

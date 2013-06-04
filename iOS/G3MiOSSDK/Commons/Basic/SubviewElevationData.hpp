@@ -24,7 +24,7 @@ private:
   IFloatBuffer* createDecimatedBuffer(const ElevationData* elevationData);
   IFloatBuffer* createInterpolatedBuffer(const ElevationData* elevationData);
 
-  double getElevationBoxAt(const ElevationData& elevationData,
+  double getElevationBoxAt(const ElevationData* elevationData,
                            double x0, double y0,
                            double x1, double y1) const;
 
