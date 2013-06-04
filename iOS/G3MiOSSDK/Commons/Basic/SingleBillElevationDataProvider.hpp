@@ -35,6 +35,9 @@ struct SingleBillElevationDataProvider_Request {
   _autodeleteListener(autodeleteListener)
   {
   }
+
+  ~SingleBillElevationDataProvider_Request() {
+  }
 };
 
 class SingleBillElevationDataProvider : public ElevationDataProvider {
