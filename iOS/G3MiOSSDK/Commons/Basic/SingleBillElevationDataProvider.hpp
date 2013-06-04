@@ -50,7 +50,7 @@ private:
 
 
   long long _currentRequestID;
-  std::map<long long, SingleBillElevationDataProvider_Request*> _requests;
+  std::map<long long, SingleBillElevationDataProvider_Request*> _requestsQueue;
 
 
   ElevationData* _elevationData;

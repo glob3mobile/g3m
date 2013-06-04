@@ -147,13 +147,13 @@ void SingleBillElevationDataProvider::drainQueue() {
     return;
   }
 
-  std::map<long long, SingleBillElevationDataProvider_Request*>::iterator it = _requests.begin();
-  for (; it != _requests.end(); it++) {
+  std::map<long long, SingleBillElevationDataProvider_Request*>::iterator it = _requestsQueue.begin();
+  for (; it != _requestsQueue.end(); it++) {
     SingleBillElevationDataProvider_Request* r = it->second;
     requestElevationData(r->_sector, r->_extent, r->_listener, r->_autodeleteListener);
     delete r;
   }
-  _requests.clear();
+  _requestsQueue.clear();
 }
 
 const long long SingleBillElevationDataProvider::queueRequest(const Sector& sector,
@@ -161,16 +161,15 @@ const long long SingleBillElevationDataProvider::queueRequest(const Sector& sect
                                                               IElevationDataListener* listener,
                                                               bool autodeleteListener) {
   _currentRequestID++;
-  _requests[_currentRequestID] = new SingleBillElevationDataProvider_Request(sector, extent, listener, autodeleteListener);
+  _requestsQueue[_currentRequestID] = new SingleBillElevationDataProvider_Request(sector, extent, listener, autodeleteListener);
   return _currentRequestID;
 }
 
 void SingleBillElevationDataProvider::removeQueueRequest(const long long requestId) {
-
-  std::map<long long, SingleBillElevationDataProvider_Request*>::iterator it = _requests.find(requestId);
-  if (it != _requests.end()){
+  std::map<long long, SingleBillElevationDataProvider_Request*>::iterator it = _requestsQueue.find(requestId);
+  if (it != _requestsQueue.end()){
     delete it->second;
-    _requests.erase(it);
+    _requestsQueue.erase(it);
   }
 }
 
