@@ -19,7 +19,12 @@ class TileElevationDataRequest {
 private:
   Tile*                  _tile;
   long long              _requestID;
+#ifdef C_CODE
   const Vector2I         _resolution;
+#endif
+#ifdef JAVA_CODE
+  private final Vector2I _resolution;
+#endif
   ElevationDataProvider* _provider;
   
   
