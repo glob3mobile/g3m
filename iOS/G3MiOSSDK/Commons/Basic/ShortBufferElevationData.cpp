@@ -12,7 +12,8 @@
 #include "IStringBuilder.hpp"
 #include "Vector3D.hpp"
 
-const short ShortBufferElevationData::NO_DATA_VALUE = IMathUtils::instance()->minInt16();
+//const short ShortBufferElevationData::NO_DATA_VALUE = IMathUtils::instance()->minInt16();
+const short ShortBufferElevationData::NO_DATA_VALUE = -32768;
 
 
 ShortBufferElevationData::ShortBufferElevationData(const Sector& sector,

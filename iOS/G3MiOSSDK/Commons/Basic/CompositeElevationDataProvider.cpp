@@ -69,9 +69,7 @@ const long long CompositeElevationDataProvider::requestElevationData(const Secto
   _currentID++;
   _requests[_currentID] =  req;
 
-  req->launchNewRequest();
-
-//  req->launchNewStep();
+  req->launchNewStep();
 
   return _currentID;
 }
@@ -281,23 +279,30 @@ _request(request){
 }
 
 void CompositeElevationDataProvider::CompositeElevationDataProvider_RequestStepListener::onData(const Sector& sector,
-                                                                                        const Vector2I& extent,
-                                                                                        ElevationData* elevationData){
+                                                                                                const Vector2I& extent,
+                                                                                                ElevationData* elevationData) {
   if (_request != NULL){
     _request->onData(sector, extent, elevationData);
   }
 }
 
 void CompositeElevationDataProvider::CompositeElevationDataProvider_RequestStepListener::onError(const Sector& sector,
-                                                                                         const Vector2I& extent){
+                                                                                                 const Vector2I& extent) {
   if (_request != NULL){
     _request->onError(sector, extent);
   }
 }
 
-//void CompositeElevationDataProvider::CompositeElevationDataProvider_RequestStep::onCancel(const Sector& sector,
-//                                                                                          const Vector2I& extent) {
+//void CompositeElevationDataProvider::CompositeElevationDataProvider_RequestStepListener::onCancel(const Sector& sector,
+//                                                                                                  const Vector2I& extent) {
 //  if (_request != NULL){
 //    _request->onCancel(sector, extent);
 //  }
 //}
+
+void CompositeElevationDataProvider::CompositeElevationDataProvider_RequestStepListener::onCancel(const Sector& sector,
+                                                                                                  const Vector2I& extent) {
+  if (_request != NULL) {
+    _request->onCancel(sector, extent);
+  }
+}

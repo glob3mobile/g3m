@@ -50,7 +50,7 @@ private:
 
   class CompositeElevationDataProvider_Request;
   
-  class CompositeElevationDataProvider_RequestStepListener: public IElevationDataListener{
+  class CompositeElevationDataProvider_RequestStepListener: public IElevationDataListener {
     
   public:
     
@@ -88,7 +88,6 @@ private:
     
   public:
     
-//>>>>>>> 7fb860e4b4f43468814fc002eedb4be0455427e2
     std::vector<ElevationDataProvider*> _providers;
 
     ElevationDataProvider* popBestProvider(std::vector<ElevationDataProvider*>& ps,
@@ -99,17 +98,11 @@ private:
                                            const Vector2I &resolution,
                                            IElevationDataListener *listener,
                                            bool autodelete);
-//<<<<<<< HEAD
-
-    bool launchNewRequest();
-
-//=======
 
     ~CompositeElevationDataProvider_Request(){}
     
     bool launchNewStep();
     
-//>>>>>>> 7fb860e4b4f43468814fc002eedb4be0455427e2
     void onData(const Sector& sector,
                 const Vector2I& extent,
                 ElevationData* elevationData);
@@ -123,8 +116,7 @@ private:
                   const Vector2I& resolution);
     
     void respondToListener() const;
-    
-//>>>>>>> 7fb860e4b4f43468814fc002eedb4be0455427e2
+
   };
 
 
