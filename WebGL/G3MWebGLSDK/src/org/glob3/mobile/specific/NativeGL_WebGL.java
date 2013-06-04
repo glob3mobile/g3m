@@ -698,11 +698,13 @@ public final class NativeGL_WebGL
 
    @Override
    public native boolean deleteShader(final int shader) /*-{
+   	//TODO: IMPLEMENTATION FAILS
+   	//debugger;
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 		var shaderList = this.@org.glob3.mobile.specific.NativeGL_WebGL::_shaderList;
 		var jsoShader = shaderList.@java.util.ArrayList::get(I)(shader);
-
-		gl.deleteShader(jsoShader);
+		return true;
+		//return gl.deleteShader(jsoShader);
    }-*/;
 
 
@@ -819,25 +821,25 @@ public final class NativeGL_WebGL
    public native void bindAttribLocation(GPUProgram program,
                                          int loc,
                                          String name) /*-{
-
 		var progInt = program.@org.glob3.mobile.generated.GPUProgram::getProgramID()();
 		var shaderList = this.@org.glob3.mobile.specific.NativeGL_WebGL::_shaderList;
 		var jsoProgram = shaderList.@java.util.ArrayList::get(I)(progInt);
+		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 
-		bindAttribLocation(jsoProgram, loc, name);
+		gl.bindAttribLocation(jsoProgram, loc, name);
    }-*/;
 
 
    @Override
    public native int getProgramiv(GPUProgram program,
                                   int param) /*-{
-
 		var progInt = program.@org.glob3.mobile.generated.GPUProgram::getProgramID()();
 		var shaderList = this.@org.glob3.mobile.specific.NativeGL_WebGL::_shaderList;
 		var jsoProgram = shaderList.@java.util.ArrayList::get(I)(progInt);
+		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 
 		//Return the value for the passed pname given the passed program. The type returned is the natural type for the requested pname
-		return getProgramParameter(jsoProgram, param);
+		return gl.getProgramParameter(jsoProgram, param);
 
    }-*/;
 
@@ -845,31 +847,29 @@ public final class NativeGL_WebGL
    @Override
    public native GPUUniform getActiveUniform(final GPUProgram program,
                                              final int i) /*-{
-
 		var progInt = program.@org.glob3.mobile.generated.GPUProgram::getProgramID()();
 		var shaderList = this.@org.glob3.mobile.specific.NativeGL_WebGL::_shaderList;
 		var jsoProgram = shaderList.@java.util.ArrayList::get(I)(progInt);
 
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 
-		var info = getActiveUniform(jsoProgram, i);
-		var id = getUniformLocation(jsoProgram, info.name);
+		var info = gl.getActiveUniform(jsoProgram, i);
+		var id = gl.getUniformLocation(jsoProgram, info.name);
 
 		var glUniformID = @org.glob3.mobile.specific.GLUniformID_WebGL::new(Lcom/google/gwt/core/client/JavaScriptObject;)(id);
 
 		switch (info.type) {
-		case gl.GL_FLOAT_MAT4:
+		case gl.FLOAT_MAT4:
 			return @org.glob3.mobile.generated.GPUUniformMatrix4Float::new(Ljava/lang/String;Lorg/glob3/mobile/generated/IGLUniformID;)(info.name, glUniformID);
-		case gl.GL_FLOAT_VEC4:
+		case gl.FLOAT_VEC4:
 			return @org.glob3.mobile.generated.GPUUniformVec4Float::new(Ljava/lang/String;Lorg/glob3/mobile/generated/IGLUniformID;)(info.name, glUniformID);
-		case gl.GL_FLOAT:
-			return new GPUUniformFloat(name, new GLUniformID_iOS(id));
+		case gl.FLOAT:
 			return @org.glob3.mobile.generated.GPUUniformFloat::new(Ljava/lang/String;Lorg/glob3/mobile/generated/IGLUniformID;)(info.name, glUniformID);
-		case gl.GL_FLOAT_VEC2:
+		case gl.FLOAT_VEC2:
 			return @org.glob3.mobile.generated.GPUUniformVec2Float::new(Ljava/lang/String;Lorg/glob3/mobile/generated/IGLUniformID;)(info.name, glUniformID);
-		case gl.GL_BOOL:
+		case gl.BOOL:
 			return @org.glob3.mobile.generated.GPUUniformBool::new(Ljava/lang/String;Lorg/glob3/mobile/generated/IGLUniformID;)(info.name, glUniformID);
-		case gl.GL_SAMPLER_2D:
+		case gl.SAMPLER_2D:
 			return null;
 		default:
 			return null;
@@ -887,14 +887,14 @@ public final class NativeGL_WebGL
 
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 
-		var info = getActiveAttrib(jsoProgram, i);
-		var id = getAttribLocation(jsoProgram, info.name);
+		var info = gl.getActiveAttrib(jsoProgram, i);
+		var id = gl.getAttribLocation(jsoProgram, info.name);
 
 		switch (info.type) {
-		case gl.GL_FLOAT_VEC4:
-			return @org.glob3.mobile.generated.GPUAttributeVec4Float::new(Ljava/lang/String;I)(name, id);
-		case gl.GL_FLOAT_VEC2:
-			return @org.glob3.mobile.generated.GPUAttributeVec2Float::new(Ljava/lang/String;I)(name, id);
+		case gl.FLOAT_VEC4:
+			return @org.glob3.mobile.generated.GPUAttributeVec4Float::new(Ljava/lang/String;I)(info.name, id);
+		case gl.FLOAT_VEC2:
+			return @org.glob3.mobile.generated.GPUAttributeVec2Float::new(Ljava/lang/String;I)(info.name, id);
 		default:
 			return null;
 			break;

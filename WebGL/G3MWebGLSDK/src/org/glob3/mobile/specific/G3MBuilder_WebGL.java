@@ -2,6 +2,9 @@
 
 package org.glob3.mobile.specific;
 
+import org.glob3.mobile.generated.GPUProgramFactory;
+import org.glob3.mobile.generated.GPUProgramManager;
+import org.glob3.mobile.generated.GPUProgramSources;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IG3MBuilder;
 import org.glob3.mobile.generated.IStorage;
@@ -24,6 +27,10 @@ public class G3MBuilder_WebGL
 
    public G3MWidget_WebGL createWidget() {
       if (_nativeWidget.isSupported()) {
+    	  
+    	  //Default gpu programs
+    	  addGPUProgramSources(new GPUProgramSources("Billboard", Shaders_WebGL._billboardVertexShader, Shaders_WebGL._billboardFragmentShader));
+          addGPUProgramSources(new GPUProgramSources("Default", Shaders_WebGL._defaultVertexShader, Shaders_WebGL._defaultFragmentShader));
 
          setGL(_nativeWidget.getGL());
 
