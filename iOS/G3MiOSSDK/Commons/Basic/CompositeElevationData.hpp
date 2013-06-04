@@ -32,9 +32,6 @@ public:
   _hasNoData(data->hasNoData()),
   _interpolator(new BilinearInterpolator())
   {
-    if (data == NULL){
-      ILogger::instance()->logError("Invalid Elevation Data in Composite");
-    }
     _data.push_back(data);
   }
 

@@ -42,13 +42,11 @@ FloatBufferElevationData::~FloatBufferElevationData() {
 }
 
 double FloatBufferElevationData::getValueInBufferAt(int index) const {
-  const float f = _buffer->get(index);
-  if (f == NO_DATA_VALUE){
+  const float value = _buffer->get(index);
+  if (value == NO_DATA_VALUE){
     return IMathUtils::instance()->NanD();
   }
-  else {
-    return f;
-  }
+  return value;
 }
 
 const std::string FloatBufferElevationData::description(bool detailed) const {
