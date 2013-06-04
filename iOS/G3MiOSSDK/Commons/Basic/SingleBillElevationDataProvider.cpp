@@ -147,12 +147,23 @@ void SingleBillElevationDataProvider::drainQueue() {
     return;
   }
 
+#ifdef C_CODE
   std::map<long long, SingleBillElevationDataProvider_Request*>::iterator it = _requestsQueue.begin();
   for (; it != _requestsQueue.end(); it++) {
     SingleBillElevationDataProvider_Request* r = it->second;
     requestElevationData(r->_sector, r->_extent, r->_listener, r->_autodeleteListener);
     delete r;
   }
+#endif
+#ifdef JAVA_CODE
+  for (final Long key : _requestsQueue.keySet()) {
+    final SingleBillElevationDataProvider_Request r = _requestsQueue.get(key);
+    requestElevationData(r._sector, r._extent, r._listener, r._autodeleteListener);
+    if (r != null) {
+      r.dispose();
+    }
+  }
+#endif
   _requestsQueue.clear();
 }
 
@@ -166,11 +177,16 @@ const long long SingleBillElevationDataProvider::queueRequest(const Sector& sect
 }
 
 void SingleBillElevationDataProvider::removeQueueRequest(const long long requestId) {
+#ifdef C_CODE
   std::map<long long, SingleBillElevationDataProvider_Request*>::iterator it = _requestsQueue.find(requestId);
   if (it != _requestsQueue.end()){
     delete it->second;
     _requestsQueue.erase(it);
   }
+#endif
+#ifdef JAVA_CODE
+  _requestsQueue.remove(requestId);
+#endif
 }
 
 //ElevationData* SingleBillElevationDataProvider::createSubviewOfElevationData(ElevationData* elevationData,
