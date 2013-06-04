@@ -25,15 +25,12 @@ public class FloatBufferElevationData extends BufferElevationData
 
   protected final double getValueInBufferAt(int index)
   {
-    final float f = _buffer.get(index);
-    if (f == NO_DATA_VALUE)
+    final float value = _buffer.get(index);
+    if (value == NO_DATA_VALUE)
     {
       return IMathUtils.instance().NanD();
     }
-    else
-    {
-      return f;
-    }
+    return value;
   }
 
 

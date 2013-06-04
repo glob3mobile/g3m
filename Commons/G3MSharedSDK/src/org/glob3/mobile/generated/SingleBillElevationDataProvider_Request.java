@@ -33,4 +33,8 @@ public class SingleBillElevationDataProvider_Request
      _listener = listener;
      _autodeleteListener = autodeleteListener;
   }
+
+  public void dispose()
+  {
+  }
 }
