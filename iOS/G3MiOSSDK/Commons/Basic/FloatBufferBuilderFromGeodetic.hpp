@@ -11,7 +11,7 @@
 
 #include "FloatBufferBuilder.hpp"
 
-#include "Ellipsoid.hpp"
+#include "EllipsoidalPlanet.hpp"
 #include "Geodetic3D.hpp"
 #include "Geodetic2D.hpp"
 #include "Vector3D.hpp"

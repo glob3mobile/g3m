@@ -201,7 +201,7 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
     }
   }
 
-  const Ellipsoid ellipsoid( Vector3D(_radiusX, _radiusY, _radiusZ) );
+  const EllipsoidalPlanet ellipsoid( Vector3D(_radiusX, _radiusY, _radiusZ) );
   const Sector sector(Sector::fullSphere());
 
   FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(), &ellipsoid, Vector3D::zero());

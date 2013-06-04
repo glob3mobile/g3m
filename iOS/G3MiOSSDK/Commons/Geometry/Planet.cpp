@@ -8,13 +8,13 @@
 
 #include "Planet.hpp"
 
-#include "Ellipsoid.hpp"
-#include "Sphere.hpp"
+#include "EllipsoidalPlanet.hpp"
+#include "SphericalPlanet.hpp"
 
 const Planet* Planet::createEarth() {
-  return new Ellipsoid(Vector3D(6378137.0, 6378137.0, 6356752.314245));
+  return new EllipsoidalPlanet(Vector3D(6378137.0, 6378137.0, 6356752.314245));
 }
 
 const Planet* Planet::createSphericalEarth(){
-  return new Sphere(6378137.0);
+  return new SphericalPlanet(6378137.0);
 }
