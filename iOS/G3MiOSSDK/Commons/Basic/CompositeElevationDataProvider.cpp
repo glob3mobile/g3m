@@ -88,17 +88,16 @@ std::vector<const Sector*> CompositeElevationDataProvider::getSectors() const {
 }
 
 const Vector2I CompositeElevationDataProvider::getMinResolution() const {
-
-  int size = _providers.size();
-  double minD = 9999999999;
-  int x= -1, y= -1;
+  const int size = _providers.size();
+  double minD = IMathUtils::instance()->maxDouble();
+  int x = -1;
+  int y = -1;
 
   for (int i = 0; i < size; i++) {
+    const Vector2I res = _providers[i]->getMinResolution();
+    const double d = res.squaredLength();
 
-    Vector2I res = _providers[i]->getMinResolution();
-    double d = res.squaredLength();
-
-    if (minD > d){
+    if (minD > d) {
       minD = d;
       x = res._x;
       y = res._y;
@@ -108,6 +107,7 @@ const Vector2I CompositeElevationDataProvider::getMinResolution() const {
 }
 
 void CompositeElevationDataProvider::cancelRequest(const long long requestId) {
+#ifdef C_CODE
   std::map<long long, CompositeElevationDataProvider_Request*>::iterator it = _requests.find(requestId);
   if (it != _requests.end()) {
     CompositeElevationDataProvider_Request* req = it->second;
@@ -115,6 +115,14 @@ void CompositeElevationDataProvider::cancelRequest(const long long requestId) {
     _requests.erase(requestId);
     delete req;
   }
+#endif
+#ifdef JAVA_CODE
+  final CompositeElevationDataProvider_Request req = _requests.remove(requestId);
+  if (req != null) {
+    req.cancel();
+    req.dispose();
+  }
+#endif
 }
 
 void CompositeElevationDataProvider::requestFinished(CompositeElevationDataProvider_Request* req) {
