@@ -1006,11 +1006,9 @@ public class Tile
       return new SubviewElevationData(ed, getSector(), new Vector2I(_lastTileMeshResolutionX, _lastTileMeshResolutionY), true);
                                       //bool ownsElevationData,
     }
-    else
-    {
-      ILogger.instance().logError("Can't create subview of elevation data from ancestor");
-      return null;
-    }
+  
+    ILogger.instance().logError("Can't create subview of elevation data from ancestor");
+    return null;
   
   }
 

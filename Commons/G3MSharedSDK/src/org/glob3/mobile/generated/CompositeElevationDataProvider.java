@@ -176,11 +176,9 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
     
         return true;
       }
-      else
-      {
-        _currentStep = null; //Waiting for no request
-        return false;
-      }
+    
+      _currentStep = null; //Waiting for no request
+      return false;
     }
 
     public final void onData(Sector sector, Vector2I extent, ElevationData elevationData)

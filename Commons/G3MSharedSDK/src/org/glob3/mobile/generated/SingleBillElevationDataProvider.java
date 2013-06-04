@@ -22,13 +22,12 @@ public class SingleBillElevationDataProvider extends ElevationDataProvider
       return;
     }
   
-    java.util.Iterator<Long, SingleBillElevationDataProvider_Request> it = _requestsQueue.iterator();
-    for (; it.hasNext();)
-    {
-      SingleBillElevationDataProvider_Request r = it.next().getValue();
+    for (final Long key : _requestsQueue.keySet()) {
+      final SingleBillElevationDataProvider_Request r = _requestsQueue.get(key);
       requestElevationData(r._sector, r._extent, r._listener, r._autodeleteListener);
-      if (r != null)
-         r.dispose();
+      if (r != null) {
+        r.dispose();
+      }
     }
     _requestsQueue.clear();
   }
@@ -42,12 +41,7 @@ public class SingleBillElevationDataProvider extends ElevationDataProvider
 
   private void removeQueueRequest(long requestId)
   {
-    java.util.Iterator<Long, SingleBillElevationDataProvider_Request> it = _requestsQueue.indexOf(requestId);
-    if (it.hasNext())
-    {
-      it.next().getValue() = null;
-      _requestsQueue.remove(it);
-    }
+    _requestsQueue.remove(requestId);
   }
 
 
