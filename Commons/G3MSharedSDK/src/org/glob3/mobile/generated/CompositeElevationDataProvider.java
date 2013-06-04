@@ -359,14 +359,10 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
 
   public final void cancelRequest(long requestId)
   {
-    java.util.Iterator<Long, CompositeElevationDataProvider_Request> it = _requests.indexOf(requestId);
-    if (it.hasNext())
-    {
-      CompositeElevationDataProvider_Request req = it.next().getValue();
+    final CompositeElevationDataProvider_Request req = _requests.remove(requestId);
+    if (req != null) {
       req.cancel();
-      _requests.remove(requestId);
-      if (req != null)
-         req.dispose();
+      req.dispose();
     }
   }
 
@@ -388,17 +384,15 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
 
   public final Vector2I getMinResolution()
   {
-  
-    int size = _providers.size();
-    double minD = 9999999999;
+    final int size = _providers.size();
+    double minD = IMathUtils.instance().maxDouble();
     int x = -1;
     int y = -1;
   
     for (int i = 0; i < size; i++)
     {
-  
-      Vector2I res = _providers.get(i).getMinResolution();
-      double d = res.squaredLength();
+      final Vector2I res = _providers.get(i).getMinResolution();
+      final double d = res.squaredLength();
   
       if (minD > d)
       {
