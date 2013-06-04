@@ -113,7 +113,7 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
     private ElevationData _compData;
     private IElevationDataListener _listener;
     private final boolean _autodelete;
-    private final Vector2I _resolution = new Vector2I();
+    private final Vector2I _resolution;
     private final Sector _sector ;
 
 
@@ -153,7 +153,7 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
     {
        _providers = provider.getProviders(sector);
        _sector = new Sector(sector);
-       _resolution = new Vector2I(resolution);
+       _resolution = resolution;
        _listener = listener;
        _autodelete = autodelete;
        _compProvider = provider;
