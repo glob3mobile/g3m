@@ -4,7 +4,7 @@ public class SingleBillElevationDataProvider extends ElevationDataProvider
 
 
   private long _currentRequestID;
-  private java.util.HashMap<Long, SingleBillElevationDataProvider_Request> _requests = new java.util.HashMap<Long, SingleBillElevationDataProvider_Request>();
+  private java.util.HashMap<Long, SingleBillElevationDataProvider_Request> _requestsQueue = new java.util.HashMap<Long, SingleBillElevationDataProvider_Request>();
 
 
   private ElevationData _elevationData;
@@ -22,7 +22,7 @@ public class SingleBillElevationDataProvider extends ElevationDataProvider
       return;
     }
   
-    java.util.Iterator<Long, SingleBillElevationDataProvider_Request> it = _requests.iterator();
+    java.util.Iterator<Long, SingleBillElevationDataProvider_Request> it = _requestsQueue.iterator();
     for (; it.hasNext();)
     {
       SingleBillElevationDataProvider_Request r = it.next().getValue();
@@ -30,24 +30,23 @@ public class SingleBillElevationDataProvider extends ElevationDataProvider
       if (r != null)
          r.dispose();
     }
-    _requests.clear();
+    _requestsQueue.clear();
   }
 
   private long queueRequest(Sector sector, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener)
   {
     _currentRequestID++;
-    _requests.put(_currentRequestID, new SingleBillElevationDataProvider_Request(sector, extent, listener, autodeleteListener));
+    _requestsQueue.put(_currentRequestID, new SingleBillElevationDataProvider_Request(sector, extent, listener, autodeleteListener));
     return _currentRequestID;
   }
 
   private void removeQueueRequest(long requestId)
   {
-  
-    java.util.Iterator<Long, SingleBillElevationDataProvider_Request> it = _requests.indexOf(requestId);
+    java.util.Iterator<Long, SingleBillElevationDataProvider_Request> it = _requestsQueue.indexOf(requestId);
     if (it.hasNext())
     {
       it.next().getValue() = null;
-      _requests.remove(it);
+      _requestsQueue.remove(it);
     }
   }
 
