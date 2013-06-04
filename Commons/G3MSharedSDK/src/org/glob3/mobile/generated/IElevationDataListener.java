@@ -23,17 +23,19 @@ package org.glob3.mobile.generated;
 //class G3MRenderContext;
 
 
-public interface IElevationDataListener
+public abstract class IElevationDataListener
 {
-  public void dispose();
+  public void dispose()
+  {
+  }
 
   /**
    Callback method for ElevationData creation. Pointer is owned by Listener
    */
-  void onData(Sector sector, Vector2I extent, ElevationData elevationData);
+  public abstract void onData(Sector sector, Vector2I extent, ElevationData elevationData);
 
-  void onError(Sector sector, Vector2I extent);
+  public abstract void onError(Sector sector, Vector2I extent);
 
-  void onCancel(Sector sector, Vector2I extent);
+  public abstract void onCancel(Sector sector, Vector2I extent);
 
 }
