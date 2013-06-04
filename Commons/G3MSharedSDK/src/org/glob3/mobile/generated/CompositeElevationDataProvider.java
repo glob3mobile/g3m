@@ -23,7 +23,8 @@ package org.glob3.mobile.generated;
 
 public class CompositeElevationDataProvider extends ElevationDataProvider
 {
-  private final G3MContext _context;
+  private G3MContext _context;
+
   private java.util.ArrayList<ElevationDataProvider> _providers = new java.util.ArrayList<ElevationDataProvider>();
 
   private java.util.ArrayList<ElevationDataProvider> getProviders(Sector s)
@@ -49,27 +50,6 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
     return providers;
   }
   private long _currentID;
-//<<<<<<< HEAD
-//
-//
-//
-//  class CompositeElevationDataProvider_Request: public IElevationDataListener{
-//
-//    ElevationDataProvider* _currentRequestEDP;
-//    long long _currentRequestID;
-//    CompositeElevationDataProvider* const _compProvider;
-//
-//    bool _hasBeenCanceled;
-//
-//  public:
-//
-//    CompositeElevationData* _compData;
-//    IElevationDataListener * _listener;
-//    const bool _autodelete;
-//    const Vector2I _resolution;
-//    const Sector& _sector;
-//
-//=======
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following type could not be found.
 //  class CompositeElevationDataProvider_Request;
