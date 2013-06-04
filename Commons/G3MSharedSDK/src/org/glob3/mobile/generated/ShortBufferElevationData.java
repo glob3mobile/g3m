@@ -25,15 +25,12 @@ public class ShortBufferElevationData extends BufferElevationData
 
   protected final double getValueInBufferAt(int index)
   {
-    final short s = _buffer.get(index);
-    if (s == NO_DATA_VALUE)
+    final short value = _buffer.get(index);
+    if (value == NO_DATA_VALUE)
     {
       return IMathUtils.instance().NanD();
     }
-    else
-    {
-      return s;
-    }
+    return value;
   }
 
 

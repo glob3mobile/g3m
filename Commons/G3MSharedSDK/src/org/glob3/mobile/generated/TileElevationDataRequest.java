@@ -59,6 +59,10 @@ public class TileElevationDataRequest
       }
     }
 
+    public void dispose()
+    {
+    }
+
   }
 
   private TileElevationDataRequestListener _listener;
