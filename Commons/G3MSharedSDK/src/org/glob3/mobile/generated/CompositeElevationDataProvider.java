@@ -276,25 +276,18 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
   
     req.respondToListener();
   
-    java.util.Iterator<Long, CompositeElevationDataProvider_Request> it;
-    for (it = _requests.iterator(); it.hasNext();)
-    {
-      final CompositeElevationDataProvider_Request reqI = it.next().getValue();
-      if (reqI == req)
-      {
-        _requests.remove(it);
   
-        if (req != null)
-           req.dispose();
-  
+    for (final java.util.Map.Entry<Long, CompositeElevationDataProvider_Request> entry : _requests.entrySet()) {
+      final CompositeElevationDataProvider_Request reqI = entry.getValue();
+      if (reqI == req) {
+        _requests.remove(entry.getKey());
+        reqI.dispose();
         return;
       }
     }
   
-    if (it == _requests.end())
-    {
-      ILogger.instance().logError("Deleting nonexisting request in CompositeElevationDataProvider.");
-    }
+    ILogger.instance().logError("Deleting nonexisting request in CompositeElevationDataProvider.");
+  
   }
 
   public CompositeElevationDataProvider()
