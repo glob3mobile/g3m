@@ -52,6 +52,8 @@ private:
     
     void onCancel(const Sector& sector,
                   const Vector2I& extent);
+
+    ~CompositeElevationDataProvider_RequestStepListener() { }
     
   };
   
