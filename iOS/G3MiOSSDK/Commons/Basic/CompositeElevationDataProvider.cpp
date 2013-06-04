@@ -159,7 +159,7 @@ void CompositeElevationDataProvider::requestFinished(CompositeElevationDataProvi
 
   ILogger.instance().logError("Deleting nonexisting request in CompositeElevationDataProvider.");
 #endif
-  
+
 }
 
 
@@ -194,29 +194,68 @@ _currentStep(NULL){
 ElevationDataProvider* CompositeElevationDataProvider::
 CompositeElevationDataProvider_Request::
 popBestProvider(std::vector<ElevationDataProvider*>& ps, const Vector2I& extent) const{
-  std::vector<ElevationDataProvider*>::iterator edp = (std::vector<ElevationDataProvider*>::iterator) ps.end();
+
   double bestRes = extent.squaredLength();
   double selectedRes = IMathUtils::instance()->maxDouble();
   double selectedResDistance = IMathUtils::instance()->maxDouble();
   IMathUtils *mu = IMathUtils::instance();
-  for (std::vector<ElevationDataProvider*>::iterator it = ps.begin() ; it != ps.end(); ++it){
-    double res = (*it)->getMinResolution().squaredLength();
-    double newResDistance = mu->abs(bestRes - res);
+
+
+  ElevationDataProvider* provider = NULL;
+  
+  const int psSize = ps.size();
+  int selectedIndex = -1;
+  for (int i = 0; i < psSize; i++) {
+    ElevationDataProvider* each = ps[i];
+
+    const double res = each->getMinResolution().squaredLength();
+    const double newResDistance = mu->abs(bestRes - res);
 
     if (newResDistance < selectedResDistance || //Closer Resolution
         (newResDistance == selectedResDistance && res < selectedRes)){ //or equal and higher resolution
       selectedResDistance = newResDistance;
       selectedRes = res;
-      edp = it;
+      selectedIndex = i;
+      provider = each;
     }
   }
 
-  ElevationDataProvider* provider = NULL;
-  if (edp != ps.end()){
-    provider = *edp;
-    ps.erase(edp);
+  if (provider != NULL) {
+#ifdef C_CODE
+    ps.erase(ps.begin() + selectedIndex);
+#endif
+#ifdef JAVA_CODE
+    ps.remove(selectedIndex);
+#endif
   }
+  
   return provider;
+
+
+//  std::vector<ElevationDataProvider*>::iterator edp = (std::vector<ElevationDataProvider*>::iterator) ps.end();
+//  double bestRes = extent.squaredLength();
+//  double selectedRes = IMathUtils::instance()->maxDouble();
+//  double selectedResDistance = IMathUtils::instance()->maxDouble();
+//  IMathUtils *mu = IMathUtils::instance();
+//  for (std::vector<ElevationDataProvider*>::iterator it = ps.begin() ; it != ps.end(); ++it){
+//    double res = (*it)->getMinResolution().squaredLength();
+//    double newResDistance = mu->abs(bestRes - res);
+//
+//    if (newResDistance < selectedResDistance || //Closer Resolution
+//        (newResDistance == selectedResDistance && res < selectedRes)){ //or equal and higher resolution
+//      selectedResDistance = newResDistance;
+//      selectedRes = res;
+//      edp = it;
+//    }
+//  }
+//
+//  ElevationDataProvider* provider = NULL;
+//  if (edp != ps.end()){
+//    provider = *edp;
+//    ps.erase(edp);
+//  }
+//
+//  return provider;
 }
 
 bool CompositeElevationDataProvider::CompositeElevationDataProvider_Request::launchNewStep(){
