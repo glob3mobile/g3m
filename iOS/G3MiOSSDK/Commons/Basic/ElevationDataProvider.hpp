@@ -20,7 +20,12 @@ class G3MRenderContext;
 
 class IElevationDataListener {
 public:
+#ifdef C_CODE
   virtual ~IElevationDataListener() { }
+#endif
+#ifdef JAVA_CODE
+  public void dispose();
+#endif
 
   /**
    Callback method for ElevationData creation. Pointer is owned by Listener
