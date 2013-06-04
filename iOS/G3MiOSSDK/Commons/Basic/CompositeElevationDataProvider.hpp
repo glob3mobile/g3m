@@ -21,32 +21,17 @@ class CompositeElevationData;
 
 class CompositeElevationDataProvider: public ElevationDataProvider {
 private:
+#ifdef C_CODE
   const G3MContext* _context;
+#endif
+#ifdef JAVA_CODE
+  private G3MContext _context;
+#endif
+
   std::vector<ElevationDataProvider*> _providers;
 
   std::vector<ElevationDataProvider*> getProviders(const Sector& s) const;
   long long _currentID;
-//<<<<<<< HEAD
-//
-//
-//
-//  class CompositeElevationDataProvider_Request: public IElevationDataListener{
-//
-//    ElevationDataProvider* _currentRequestEDP;
-//    long long _currentRequestID;
-//    CompositeElevationDataProvider* const _compProvider;
-//
-//    bool _hasBeenCanceled;
-//
-//  public:
-//
-//    CompositeElevationData* _compData;
-//    IElevationDataListener * _listener;
-//    const bool _autodelete;
-//    const Vector2I _resolution;
-//    const Sector& _sector;
-//
-//=======
 
   class CompositeElevationDataProvider_Request;
   

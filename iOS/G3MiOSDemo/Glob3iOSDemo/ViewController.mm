@@ -679,7 +679,7 @@ public:
     //                                       TimeInterval::fromDays(30));
     //    layerSet->addLayer(i3Landsat);
   }
-  
+
   const bool useOrtoAyto = false;
   if (useOrtoAyto) {
     WMSLayer* ortoAyto = new WMSLayer("orto_refundida,etiquetas_50k,Numeros%20de%20Gobierno,etiquetas%20inicial,etiquetas%2020k,Nombres%20de%20Via,etiquetas%2015k,etiquetas%202k,etiquetas%2010k",
