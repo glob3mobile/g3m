@@ -199,14 +199,14 @@ bool CompositeElevationDataProvider::CompositeElevationDataProvider_Request::lau
   _currentProvider = popBestProvider(_providers, _resolution);
   if (_currentProvider != NULL){
     _currentStep = new CompositeElevationDataProvider_RequestStepListener(this);
-    
+
     _currentID = _currentProvider->requestElevationData(_sector, _resolution, _currentStep, true);
-    
+
     return true;
-  } else{
-    _currentStep = NULL; //Waiting for no request
-    return false;
   }
+
+  _currentStep = NULL; //Waiting for no request
+  return false;
 }
 
 void CompositeElevationDataProvider::CompositeElevationDataProvider_Request::onData(const Sector& sector,
