@@ -22,7 +22,7 @@ public class TileElevationDataRequest
 {
   private Tile _tile;
   private long _requestID;
-  private final Vector2I _resolution = new Vector2I();
+  private final Vector2I _resolution;
   private ElevationDataProvider _provider;
 
 
@@ -66,7 +66,7 @@ public class TileElevationDataRequest
   public TileElevationDataRequest(Tile tile, Vector2I resolution, ElevationDataProvider provider)
   {
      _tile = tile;
-     _resolution = new Vector2I(resolution);
+     _resolution = resolution;
      _provider = provider;
      _requestID = -1;
      _listener = null;
