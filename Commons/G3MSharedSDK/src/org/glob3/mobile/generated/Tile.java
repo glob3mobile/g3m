@@ -33,7 +33,7 @@ package org.glob3.mobile.generated;
 //class ElevationData;
 //class MeshHolder;
 //class Vector2I;
-//class TileElevationDataListener;
+//class TileElevationDataRequest;
 
 
 public class Tile
@@ -47,10 +47,9 @@ public class Tile
 
   private Mesh _tessellatorMesh;
 
-  //long long      _elevationRequestId;
   private Mesh _debugMesh;
   private Mesh _texturizedMesh;
-  private TileElevationDataListener _elevationDataListener;
+  private TileElevationDataRequest _elevationDataRequest;
 
   private boolean _textureSolved;
   private java.util.ArrayList<Tile> _subtiles;
@@ -512,7 +511,7 @@ public class Tile
      _tileExtent = null;
      _elevationData = null;
      _elevationDataLevel = -1;
-     _elevationDataListener = null;
+     _elevationDataRequest = null;
      _minHeight = 0;
      _maxHeight = 0;
      _verticalExaggeration = 0F;
@@ -555,10 +554,12 @@ public class Tile
        _elevationData.dispose();
     _elevationData = null;
   
-    if (_elevationDataListener != null)
+    if (_elevationDataRequest != null)
     {
-      _elevationDataListener.cancelRequest(); //The listener will auto delete
-      _elevationDataListener = null;
+      _elevationDataRequest.cancelRequest(); //The listener will auto delete
+      if (_elevationDataRequest != null)
+         _elevationDataRequest.dispose();
+      _elevationDataRequest = null;
     }
   }
 
@@ -811,10 +812,9 @@ public class Tile
     if (elevationDataProvider != null)
     {
       //cancelElevationDataRequest(elevationDataProvider);
-  
-      if (_elevationDataListener != null)
+      if (_elevationDataRequest != null)
       {
-        _elevationDataListener.cancelRequest();
+        _elevationDataRequest.cancelRequest();
       }
     }
   }
@@ -873,7 +873,7 @@ public class Tile
 
   public final boolean isElevationDataSolved()
   {
-    return _elevationDataLevel == _level;
+    return (_elevationDataLevel == _level);
   }
 
   public final ElevationData getElevationData()
@@ -913,14 +913,12 @@ public class Tile
     }
   }
 
-  public final void getElevationDataFromAncestor(Vector2I resolution)
+  public final void getElevationDataFromAncestor(Vector2I extent)
   {
-  
     if (_elevationData == null)
     {
-  
-      Tile ancestor = this;
-      while (ancestor != null && !ancestor.isElevationDataSolved())
+      Tile ancestor = getParent();
+      while ((ancestor != null) && !ancestor.isElevationDataSolved())
       {
         ancestor = ancestor.getParent();
       }
@@ -928,12 +926,13 @@ public class Tile
       if (ancestor != null)
       {
         ElevationData subView = createElevationDataSubviewFromAncestor(ancestor);
-        ancestor.getElevationData();
         setElevationData(subView, ancestor.getLevel());
       }
-  
     }
-  
+    else
+    {
+      System.out.print("break point on me\n");
+    }
   }
 
   public final void initializeElevationData(ElevationDataProvider elevationDataProvider, TileTessellator tessellator, Vector2I tileMeshResolution, Planet planet, boolean renderDebug)
@@ -942,14 +941,12 @@ public class Tile
     _lastElevationDataProvider = elevationDataProvider;
     _lastTileMeshResolutionX = tileMeshResolution._x;
     _lastTileMeshResolutionY = tileMeshResolution._y;
-  
-    if (_elevationDataListener == null)
+    if (_elevationDataRequest == null)
     {
   
       Vector2I res = tessellator.getTileMeshResolution(planet, tileMeshResolution, this, renderDebug);
-  
-      _elevationDataListener = new TileElevationDataListener(this, res, elevationDataProvider);
-      _elevationDataListener.sendRequest();
+      _elevationDataRequest = new TileElevationDataRequest(this, res, elevationDataProvider);
+      _elevationDataRequest.sendRequest();
     }
   
     //If after petition we still have no data we request from ancestor
@@ -999,17 +996,21 @@ public class Tile
       return null;
     }
   
-    if (_lastElevationDataProvider != null && _lastTileMeshResolutionX > 0 && _lastTileMeshResolutionY > 0)
+    if ((_lastElevationDataProvider != null) && (_lastTileMeshResolutionX > 0) && (_lastTileMeshResolutionY > 0))
     {
-      ElevationData subView = _lastElevationDataProvider.createSubviewOfElevationData(ed, getSector(), new Vector2I(_lastTileMeshResolutionX, _lastTileMeshResolutionY));
-      return subView;
+  //    ElevationData* subView = _lastElevationDataProvider->createSubviewOfElevationData(ed,
+  //                                                                                      getSector(),
+  //                                                                                      Vector2I(_lastTileMeshResolutionX, _lastTileMeshResolutionY));
+  //    return subView;
+  
+      return new SubviewElevationData(ed, getSector(), new Vector2I(_lastTileMeshResolutionX, _lastTileMeshResolutionY), true);
+                                      //bool ownsElevationData,
     }
     else
     {
       ILogger.instance().logError("Can't create subview of elevation data from ancestor");
       return null;
     }
-  
   
   }
 

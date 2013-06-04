@@ -22,12 +22,11 @@ public class FloatBufferElevationData extends BufferElevationData
 {
   private IFloatBuffer _buffer;
   private boolean _hasNoData;
-  private float _noDataValue;
 
   protected final double getValueInBufferAt(int index)
   {
-    float f = _buffer.get(index);
-    if (f == _noDataValue)
+    final float f = _buffer.get(index);
+    if (f == NO_DATA_VALUE)
     {
       return IMathUtils.instance().NanD();
     }
@@ -37,21 +36,23 @@ public class FloatBufferElevationData extends BufferElevationData
     }
   }
 
-  public FloatBufferElevationData(Sector sector, Vector2I resolution, float noDataValue, IFloatBuffer buffer)
+
+  public static final float NO_DATA_VALUE = IMathUtils.instance().NanF();
+
+  public FloatBufferElevationData(Sector sector, Vector2I extent, Sector realSector, Vector2I realExtent, IFloatBuffer buffer)
   {
-     super(sector, resolution, buffer.size());
+     super(sector, extent, realSector, realExtent, buffer.size());
      _buffer = buffer;
-     _noDataValue = noDataValue;
     if (_buffer.size() != (_width * _height))
     {
       ILogger.instance().logError("Invalid buffer size");
     }
   
-    int size = buffer.size();
+    final int size = buffer.size();
     _hasNoData = false;
     for (int i = 0; i < size; i++)
     {
-      if (buffer.get(i) == noDataValue)
+      if (buffer.get(i) == NO_DATA_VALUE)
       {
         _hasNoData = true;
         break;
@@ -74,7 +75,6 @@ public class FloatBufferElevationData extends BufferElevationData
     isb.addInt(_height);
     isb.addString(" sector=");
     isb.addString(_sector.description());
-    int unusedType = -1;
     if (detailed)
     {
       isb.addString("\n");
@@ -83,7 +83,7 @@ public class FloatBufferElevationData extends BufferElevationData
         //isb->addString("   ");
         for (int col = 0; col < _height; col++)
         {
-          isb.addDouble(getElevationAt(col, row, unusedType));
+          isb.addDouble(getElevationAt(col, row));
           isb.addString(",");
         }
         isb.addString("\n");
@@ -107,17 +107,18 @@ public class FloatBufferElevationData extends BufferElevationData
     for (int i = 0; i < bufferSize; i++)
     {
       final float height = _buffer.get(i);
-  //    if (height != _noDataValue) {
-      if (height < minHeight)
+      if (height != NO_DATA_VALUE)
       {
-        minHeight = height;
+        if (height < minHeight)
+        {
+          minHeight = height;
+        }
+        if (height > maxHeight)
+        {
+          maxHeight = height;
+        }
+        sumHeight += height;
       }
-      if (height > maxHeight)
-      {
-        maxHeight = height;
-      }
-      sumHeight += height;
-  //    }
     }
   
     if (minHeight == mu.maxFloat())

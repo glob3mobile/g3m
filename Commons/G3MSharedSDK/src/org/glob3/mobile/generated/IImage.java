@@ -22,6 +22,7 @@ public abstract class IImage
   public abstract int getWidth();
   public abstract int getHeight();
   public abstract Vector2I getExtent();
+
   public abstract String description();
 
   public abstract IImage shallowCopy();

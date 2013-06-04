@@ -30,8 +30,10 @@ public interface IElevationDataListener
   /**
    Callback method for ElevationData creation. Pointer is owned by Listener
    */
-  void onData(Sector sector, Vector2I resolution, ElevationData elevationData);
+  void onData(Sector sector, Vector2I extent, ElevationData elevationData);
 
-  void onError(Sector sector, Vector2I resolution);
+  void onError(Sector sector, Vector2I extent);
+
+  void onCancel(Sector sector, Vector2I extent);
 
 }

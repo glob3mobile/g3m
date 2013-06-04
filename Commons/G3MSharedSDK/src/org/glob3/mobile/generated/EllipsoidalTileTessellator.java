@@ -61,17 +61,15 @@ public class EllipsoidalTileTessellator extends TileTessellator
 
   public final Mesh createTileMesh(Planet planet, Vector2I rawResolution, Tile tile, ElevationData elevationData, float verticalExaggeration, boolean renderDebug)
   {
-     return createTileMesh(planet, rawResolution, tile, elevationData, verticalExaggeration, renderDebug, 0);
-  }
-  public final Mesh createTileMesh(Planet planet, Vector2I rawResolution, Tile tile, ElevationData elevationData, float verticalExaggeration, boolean renderDebug, double defaultHeight)
-  {
   
     final Sector sector = tile.getSector();
     final Vector2I tileResolution = calculateResolution(rawResolution, sector);
   
     double minHeight = 0;
     FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.givenCenter(), planet, sector.getCenter());
-    int unusedType = -1;
+  
+    final IMathUtils mu = IMathUtils.instance();
+  
     for (int j = 0; j < tileResolution._y; j++)
     {
       final double v = (double) j / (tileResolution._y-1);
@@ -88,13 +86,16 @@ public class EllipsoidalTileTessellator extends TileTessellator
         if (elevationData != null)
         {
   //        height = elevationData->getElevationAt(i, j) * verticalExaggeration;
-          height = elevationData.getElevationAt(position, unusedType, defaultHeight) * verticalExaggeration;
-  
-          if (height < minHeight)
+          final double h = elevationData.getElevationAt(position);
+          if (!mu.isNan(h))
           {
-            minHeight = height;
-          }
+            height = h * verticalExaggeration;
   
+            if (height < minHeight)
+            {
+              minHeight = height;
+            }
+          }
         }
   
         vertices.add(position, height);

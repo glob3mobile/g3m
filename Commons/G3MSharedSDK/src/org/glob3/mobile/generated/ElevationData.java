@@ -21,24 +21,42 @@ package org.glob3.mobile.generated;
 //class Mesh;
 //class Ellipsoid;
 //class Vector3D;
+//class Interpolator;
 
 public abstract class ElevationData
 {
+  private Interpolator _interpolator;
+  private Interpolator getInterpolator()
+  {
+    if (_interpolator == null)
+    {
+      _interpolator = new BilinearInterpolator();
+    }
+    return _interpolator;
+  }
+
   protected final Sector _sector ;
   protected final int _width;
   protected final int _height;
-  protected final Vector2I _resolution = new Vector2I();
 
-  public ElevationData(Sector sector, Vector2I resolution)
+  protected final Geodetic2D _resolution ;
+
+  public ElevationData(Sector sector, Vector2I extent)
   {
      _sector = new Sector(sector);
-     _width = resolution._x;
-     _height = resolution._y;
-     _resolution = new Vector2I(resolution);
+     _width = extent._x;
+     _height = extent._y;
+     _resolution = new Geodetic2D(sector.getDeltaLatitude().div(extent._y), sector.getDeltaLongitude().div(extent._x));
+     _interpolator = null;
   }
 
   public void dispose()
   {
+    if (_interpolator != null)
+    {
+      if (_interpolator != null)
+         _interpolator.dispose();
+    }
   }
 
   public Vector2I getExtent()
@@ -56,25 +74,18 @@ public abstract class ElevationData
     return _height;
   }
 
-  public abstract double getElevationAt(int x, int y, int type)
+  public final Geodetic2D getResolution()
   {
-     return getElevationAt(x, y, type, IMathUtils.instance().NanD());
+    return _resolution;
   }
-  public abstract double getElevationAt(int x, int y, int type, double valueForNoData);
 
-  public abstract double getElevationAt(Angle latitude, Angle longitude, int type)
-  {
-     return getElevationAt(latitude, longitude, type, IMathUtils.instance().NanD());
-  }
-  public abstract double getElevationAt(Angle latitude, Angle longitude, int type, double valueForNoData);
+  public abstract Geodetic2D getRealResolution();
 
-  public final double getElevationAt(Geodetic2D position, int type)
+  public abstract double getElevationAt(int x, int y);
+
+  public final double getElevationAt(Vector2I position)
   {
-     return getElevationAt(position, type, IMathUtils.instance().NanD());
-  }
-  public final double getElevationAt(Geodetic2D position, int type, double valueForNoData)
-  {
-    return getElevationAt(position.latitude(), position.longitude(), type, valueForNoData);
+    return getElevationAt(position._x, position._y);
   }
 
   public abstract String description(boolean detailed);
@@ -96,36 +107,24 @@ public abstract class ElevationData
     FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.firstVertex(), ellipsoid, Vector3D.zero());
     FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
   
-    int type = -1;
+    final IMathUtils mu = IMathUtils.instance();
     for (int x = 0; x < _width; x++)
     {
       final double u = (double) x / (_width - 1);
   
       for (int y = 0; y < _height; y++)
       {
-        double height = getElevationAt(x, y, type, 0);
+        final double height = getElevationAt(x, y);
+        if (mu.isNan(height))
+        {
+          continue;
+        }
   
         final float alpha = (float)((height - minHeight) / deltaHeight);
-  
-        float r = alpha;
-        float g = alpha;
-        float b = alpha;
-        /*
-        if (type == 1) {
-          g = 1;
-        }
-        else if (type == 2) {
-          r = 1;
-          g = 1;
-        }
-        else if (type == 3) {
-          r = 1;
-          b = 1;
-        }
-        else if (type == 4) {
-          r = 1;
-        }
-        */
+        final float r = alpha;
+        final float g = alpha;
+        final float b = alpha;
+        colors.add(r, g, b, 1);
   
         final double v = 1.0 - ((double) y / (_height - 1));
   
@@ -133,12 +132,10 @@ public abstract class ElevationData
   
         vertices.add(position, positionOffset.height() + (height * verticalExaggeration));
   
-        colors.add(r, g, b, 1);
       }
     }
   
     final float lineWidth = 1F;
-  //  const float pointSize = 1;
     Color flatColor = null;
   
     return new DirectMesh(GLPrimitive.points(), true, vertices.getCenter(), vertices.create(), lineWidth, pointSize, flatColor, colors.create());
@@ -152,9 +149,125 @@ public abstract class ElevationData
 
   public abstract boolean hasNoData();
 
-  public final Vector2I getResolution()
+
+  public final double getElevationAt(Angle latitude, Angle longitude)
   {
-    return _resolution;
+  
+    final IMathUtils mu = IMathUtils.instance();
+  
+    final double nanD = mu.NanD();
+  
+    if (!_sector.contains(latitude, longitude))
+    {
+      //    ILogger::instance()->logError("Sector %s doesn't contain lat=%s lon=%s",
+      //                                  _sector.description().c_str(),
+      //                                  latitude.description().c_str(),
+      //                                  longitude.description().c_str());
+      return nanD;
+    }
+  
+  
+    final Vector2D uv = _sector.getUVCoordinates(latitude, longitude);
+    final double u = mu.clamp(uv._x, 0, 1);
+    final double v = mu.clamp(uv._y, 0, 1);
+    final double dX = u * (_width - 1);
+    //const double dY = (1.0 - v) * (_height - 1);
+    final double dY = v * (_height - 1);
+  
+    final int x = (int) dX;
+    final int y = (int) dY;
+    //  const int nextX = (int) (dX + 1.0);
+    //  const int nextY = (int) (dY + 1.0);
+    final int nextX = x + 1;
+    final int nextY = y + 1;
+    final double alphaY = dY - y;
+    final double alphaX = dX - x;
+  
+    //  if (alphaX < 0 || alphaX > 1 ||
+    //      alphaY < 0 || alphaY > 1) {
+    //    printf("break point\n");
+    //  }
+  
+  
+    double result;
+    if (x == dX)
+    {
+      if (y == dY)
+      {
+        // exact on grid point
+        result = getElevationAt(x, y);
+      }
+      else
+      {
+        // linear on Y
+        final double heightY = getElevationAt(x, y);
+        if (mu.isNan(heightY))
+        {
+          return nanD;
+        }
+  
+        final double heightNextY = getElevationAt(x, nextY);
+        if (mu.isNan(heightNextY))
+        {
+          return nanD;
+        }
+  
+        result = mu.linearInterpolation(heightNextY, heightY, alphaY);
+      }
+    }
+    else
+    {
+      if (y == dY)
+      {
+        // linear on X
+        final double heightX = getElevationAt(x, y);
+        if (mu.isNan(heightX))
+        {
+          return nanD;
+        }
+        final double heightNextX = getElevationAt(nextX, y);
+        if (mu.isNan(heightNextX))
+        {
+          return nanD;
+        }
+  
+        result = mu.linearInterpolation(heightX, heightNextX, alphaX);
+      }
+      else
+      {
+        // bilinear
+        final double valueNW = getElevationAt(x, y);
+        if (mu.isNan(valueNW))
+        {
+          return nanD;
+        }
+        final double valueNE = getElevationAt(nextX, y);
+        if (mu.isNan(valueNE))
+        {
+          return nanD;
+        }
+        final double valueSE = getElevationAt(nextX, nextY);
+        if (mu.isNan(valueSE))
+        {
+          return nanD;
+        }
+        final double valueSW = getElevationAt(x, nextY);
+        if (mu.isNan(valueSW))
+        {
+          return nanD;
+        }
+  
+        result = getInterpolator().interpolation(valueSW, valueSE, valueNE, valueNW, alphaX, alphaY);
+      }
+    }
+  
+    return result;
   }
+
+  public final double getElevationAt(Geodetic2D position)
+  {
+    return getElevationAt(position.latitude(), position.longitude());
+  }
+
 
 }

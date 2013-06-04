@@ -16,10 +16,10 @@ package org.glob3.mobile.generated;
 //
 
 
-//class ElevationData;
+//class ShortBufferElevationData;
 //class IByteBuffer;
 //class Sector;
-
+//class Vector2I;
 
 
 public class BilParser
@@ -28,11 +28,10 @@ public class BilParser
 //  BilParser();
 
 
-  public static ElevationData parseBil16(Sector sector, Vector2I extent, short noDataValue, double minValidHeight, IByteBuffer buffer)
+  public static ShortBufferElevationData parseBil16(Sector sector, Vector2I extent, IByteBuffer buffer)
   {
   
     final int size = extent._x * extent._y;
-    //  const int size = (extent._x + margin) * (extent._y + margin);
   
     final int expectedSizeInBytes = size * 2;
     if (buffer.size() != expectedSizeInBytes)
@@ -43,34 +42,25 @@ public class BilParser
   
     ByteBufferIterator iterator = new ByteBufferIterator(buffer);
   
+    final short minValue = IMathUtils.instance().minInt16();
+  
     IShortBuffer shortBuffer = IFactory.instance().createShortBuffer(size);
     for (int i = 0; i < size; i++)
     {
       short height = iterator.nextInt16();
   
-      int WORKING_NODATA;
-      if (height <= minValidHeight)
+      if (height == -9999)
       {
-        height = noDataValue;
+        height = ShortBufferElevationData.NO_DATA_VALUE;
       }
-      else if (height == -9999)
+      else if (height == minValue)
       {
-        height = noDataValue;
+        height = ShortBufferElevationData.NO_DATA_VALUE;
       }
-      else if (height == -32767)
-      {
-        height = noDataValue;
-      }
-      else if (height == -32768)
-      {
-        height = noDataValue;
-      }
-      //    if (height < 0) {
-      //      height = 0;
-      //    }
+  
       shortBuffer.rawPut(i, height);
     }
   
-    return new ShortBufferElevationData(sector, extent, noDataValue, shortBuffer);
+    return new ShortBufferElevationData(sector, extent, sector, extent, shortBuffer);
   }
 }

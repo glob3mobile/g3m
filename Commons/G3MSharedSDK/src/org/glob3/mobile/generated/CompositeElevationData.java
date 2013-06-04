@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  CompositeElevationData.h
+//  CompositeElevationData.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 11/04/13.
@@ -18,7 +18,8 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class CompositeElevationData extends ElevationData
+
+public class CompositeElevationData extends ElevationData
 {
   private java.util.ArrayList<ElevationData> _data = new java.util.ArrayList<ElevationData>();
   private boolean _hasNoData;
@@ -29,7 +30,7 @@ public abstract class CompositeElevationData extends ElevationData
    */
   public CompositeElevationData(ElevationData data)
   {
-     super(data.getSector(), data.getResolution());
+     super(data.getSector(), data.getExtent());
      _hasNoData = data.hasNoData();
      _interpolator = new BilinearInterpolator();
     if (data == null)
@@ -41,10 +42,9 @@ public abstract class CompositeElevationData extends ElevationData
 
   public final void addElevationData(ElevationData data)
   {
-  
     ElevationData d0 = _data.get(0);
   
-    if (data.getExtent()._x != _width || data.getExtent()._y != _height)
+    if ((data.getExtentWidth() != _width) || (data.getExtentHeight() != _height))
     {
       ILogger.instance().logError("Extents don't match.");
     }
@@ -61,14 +61,12 @@ public abstract class CompositeElevationData extends ElevationData
     final IMathUtils mu = IMathUtils.instance();
     _data.add(data);
   
-  
     //Checking NoData
-    int type;
     for (int i = 0; i < _width; i++)
     {
       for (int j = 0; j < _height; j++)
       {
-        double height = getElevationAt(i, j, type);
+        double height = getElevationAt(i, j);
         if (mu.isNan(height))
         {
           _hasNoData = true;
@@ -90,43 +88,21 @@ public abstract class CompositeElevationData extends ElevationData
        _interpolator.dispose();
   }
 
-  public final Vector2I getExtent()
+  public final double getElevationAt(int x, int y)
   {
-    return _data.get(0).getExtent();
-  }
-
-  public final int getExtentWidth()
-  {
-    return _data.get(0).getExtent()._x;
-  }
-
-  public final int getExtentHeight()
-  {
-    return _data.get(0).getExtent()._y;
-  }
-
-  public final double getElevationAt(int x, int y, int type)
-  {
-     return getElevationAt(x, y, type, IMathUtils.instance().NanD());
-  }
-  public final double getElevationAt(int x, int y, int type, double valueForNoData)
-  {
-    IMathUtils mu = IMathUtils.instance();
-    int s = _data.size();
-    for (int i = 0; i < s; i++)
+    final IMathUtils mu = IMathUtils.instance();
+    final int size = _data.size();
+    for (int i = 0; i < size; i++)
     {
-      double h = _data.get(i).getElevationAt(x, y, type);
+      final double h = _data.get(i).getElevationAt(x, y);
       if (!mu.isNan(h))
       {
         return h;
       }
     }
   
-    return valueForNoData;
+    return mu.NanD();
   }
-
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  double getElevationAt(Angle latitude, Angle longitude, int type, double valueForNoData);
 
   public final String description(boolean detailed)
   {
@@ -137,7 +113,6 @@ public abstract class CompositeElevationData extends ElevationData
     isb.addInt(_height);
     isb.addString(" sector=");
     isb.addString(_sector.description());
-    int unusedType = -1;
     if (detailed)
     {
       isb.addString("\n");
@@ -146,7 +121,7 @@ public abstract class CompositeElevationData extends ElevationData
         //isb->addString("   ");
         for (int col = 0; col < _height; col++)
         {
-          isb.addDouble(getElevationAt(col, row, unusedType));
+          isb.addDouble(getElevationAt(col, row));
           isb.addString(",");
         }
         isb.addString("\n");
@@ -161,18 +136,16 @@ public abstract class CompositeElevationData extends ElevationData
 
   public final Vector3D getMinMaxAverageHeights()
   {
-  
     final IMathUtils mu = IMathUtils.instance();
     double minHeight = mu.maxDouble();
     double maxHeight = mu.minDouble();
     double sumHeight = 0.0;
   
-    int type;
     for (int i = 0; i < _width; i++)
     {
       for (int j = 0; j < _height; j++)
       {
-        final double height = getElevationAt(i, j, type);
+        final double height = getElevationAt(i, j);
         if (!mu.isNan(height))
         {
           if (height < minHeight)
@@ -198,12 +171,6 @@ public abstract class CompositeElevationData extends ElevationData
     }
   
     return new Vector3D(minHeight, maxHeight, sumHeight / (_width * _height));
-  
-  }
-
-  public final Mesh createMesh(Ellipsoid ellipsoid, float verticalExaggeration, Geodetic3D positionOffset, float pointSize)
-  {
-    return null;
   }
 
   public final Sector getSector()
@@ -216,5 +183,9 @@ public abstract class CompositeElevationData extends ElevationData
     return _hasNoData;
   }
 
+  public final Geodetic2D getRealResolution()
+  {
+    int _TODO_complete;
+  }
 
 }

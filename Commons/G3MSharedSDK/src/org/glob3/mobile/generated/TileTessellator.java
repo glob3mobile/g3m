@@ -35,11 +35,7 @@ public abstract class TileTessellator
 
   public abstract boolean isReady(G3MRenderContext rc);
 
-  public abstract Mesh createTileMesh(Planet planet, Vector2I resolution, Tile tile, ElevationData elevationData, float verticalExaggeration, boolean debug)
-  {
-     return createTileMesh(planet, resolution, tile, elevationData, verticalExaggeration, debug, 0);
-  }
-  public abstract Mesh createTileMesh(Planet planet, Vector2I resolution, Tile tile, ElevationData elevationData, float verticalExaggeration, boolean debug, double defaultHeight);
+  public abstract Mesh createTileMesh(Planet planet, Vector2I resolution, Tile tile, ElevationData elevationData, float verticalExaggeration, boolean debug);
 
   public abstract Vector2I getTileMeshResolution(Planet planet, Vector2I resolution, Tile tile, boolean debug);
 

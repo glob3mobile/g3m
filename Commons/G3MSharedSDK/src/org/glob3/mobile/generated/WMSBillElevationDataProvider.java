@@ -44,7 +44,7 @@ public class WMSBillElevationDataProvider extends ElevationDataProvider
     _downloader = context.getDownloader();
   }
 
-  public final long requestElevationData(Sector sector, Vector2I resolution, IElevationDataListener listener, boolean autodeleteListener)
+  public final long requestElevationData(Sector sector, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener)
   {
     if (_downloader == null)
     {
@@ -54,19 +54,19 @@ public class WMSBillElevationDataProvider extends ElevationDataProvider
   
     IStringBuilder isb = IStringBuilder.newStringBuilder();
   
-  /*
-    // http://data.worldwind.arc.nasa.gov/elev?REQUEST=GetMap&SERVICE=WMS&VERSION=1.3.0&LAYERS=srtm30&STYLES=&FORMAT=image/bil&CRS=EPSG:4326&BBOX=-180.0,-90.0,180.0,90.0&WIDTH=10&HEIGHT=10
+    /*
+     // http://data.worldwind.arc.nasa.gov/elev?REQUEST=GetMap&SERVICE=WMS&VERSION=1.3.0&LAYERS=srtm30&STYLES=&FORMAT=image/bil&CRS=EPSG:4326&BBOX=-180.0,-90.0,180.0,90.0&WIDTH=10&HEIGHT=10
   
   
-    isb->addString("http://data.worldwind.arc.nasa.gov/elev?");
-    isb->addString("REQUEST=GetMap");
-    isb->addString("&SERVICE=WMS");
-    isb->addString("&VERSION=1.3.0");
-    isb->addString("&LAYERS=srtm30");
-    isb->addString("&STYLES=");
-    isb->addString("&FORMAT=image/bil");
-    isb->addString("&CRS=EPSG:4326");
-  */
+     isb->addString("http://data.worldwind.arc.nasa.gov/elev?");
+     isb->addString("REQUEST=GetMap");
+     isb->addString("&SERVICE=WMS");
+     isb->addString("&VERSION=1.3.0");
+     isb->addString("&LAYERS=srtm30");
+     isb->addString("&STYLES=");
+     isb->addString("&FORMAT=image/bil");
+     isb->addString("&CRS=EPSG:4326");
+     */
   
     isb.addString(_url.getPath());
   
@@ -80,18 +80,16 @@ public class WMSBillElevationDataProvider extends ElevationDataProvider
     isb.addDouble(sector.upper().longitude()._degrees);
   
     isb.addString("&WIDTH=");
-    isb.addInt(resolution._x);
+    isb.addInt(extent._x);
     isb.addString("&HEIGHT=");
-    isb.addInt(resolution._y);
+    isb.addInt(extent._y);
   
     final String path = isb.getString();
     if (isb != null)
        isb.dispose();
   
   
-    final double noDataValue = 0;
-  
-    return _downloader.requestBuffer(new URL(path, false), 2000000000, TimeInterval.fromDays(30), true, new WMSBillElevationDataProvider_BufferDownloadListener(sector, resolution, noDataValue, listener, autodeleteListener), true);
+    return _downloader.requestBuffer(new URL(path, false), 2000000000, TimeInterval.fromDays(30), true, new WMSBillElevationDataProvider_BufferDownloadListener(sector, extent, listener, autodeleteListener), true);
   }
 
   public final void cancelRequest(long requestId)
@@ -109,12 +107,11 @@ public class WMSBillElevationDataProvider extends ElevationDataProvider
   public final Vector2I getMinResolution()
   {
     int WORKING_JM;
-    return new Vector2I(0,0);
+    return Vector2I.zero();
   }
 
-  public final ElevationData createSubviewOfElevationData(ElevationData elevationData, Sector sector, Vector2I resolution)
-  {
-    return new SubviewElevationData(elevationData, false, sector, resolution, false);
-  }
+//  ElevationData* createSubviewOfElevationData(ElevationData* elevationData,
+//                                              const Sector& sector,
+//                                              const Vector2I& extent) const;
 
 }

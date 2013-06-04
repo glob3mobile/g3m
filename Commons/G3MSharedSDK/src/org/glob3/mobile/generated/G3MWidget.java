@@ -90,6 +90,7 @@ public class G3MWidget
 
   public final void render(int width, int height)
   {
+  
     if (_paused)
     {
       return;

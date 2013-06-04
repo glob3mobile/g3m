@@ -1,7 +1,4 @@
-
-
-package org.glob3.mobile.generated;
-
+package org.glob3.mobile.generated; 
 //
 //  CompositeElevationDataProvider.cpp
 //  G3MiOSSDK
@@ -11,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  CompositeElevationDataProvider.h
+//  CompositeElevationDataProvider.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 10/04/13.
@@ -19,357 +16,435 @@ package org.glob3.mobile.generated;
 //
 
 
+
+
+
 //class CompositeElevationData;
 
-public class CompositeElevationDataProvider
-         extends
-            ElevationDataProvider {
-   private final G3MContext                                 _context;
-   private final java.util.ArrayList<ElevationDataProvider> _providers = new java.util.ArrayList<ElevationDataProvider>();
+public class CompositeElevationDataProvider extends ElevationDataProvider
+{
+  private final G3MContext _context;
+  private java.util.ArrayList<ElevationDataProvider> _providers = new java.util.ArrayList<ElevationDataProvider>();
 
-
-   private java.util.ArrayList<ElevationDataProvider> getProviders(final Sector s) {
-      final int size = _providers.size();
-      final java.util.ArrayList<ElevationDataProvider> providers = new java.util.ArrayList<ElevationDataProvider>();
-
-      for (int i = 0; i < size; i++) {
-
-         final ElevationDataProvider edp = _providers.get(i);
-
-         final java.util.ArrayList<Sector> sectorsI = edp.getSectors();
-         final int sizeI = sectorsI.size();
-         for (int j = 0; j < sizeI; j++) {
-            if (sectorsI.get(j).touchesWith(s)) //This provider contains the sector
-            {
-               providers.add(edp);
-            }
-         }
+  private java.util.ArrayList<ElevationDataProvider> getProviders(Sector s)
+  {
+    int size = _providers.size();
+    java.util.ArrayList<ElevationDataProvider> providers = new java.util.ArrayList<ElevationDataProvider>();
+  
+    for (int i = 0; i < size; i++)
+    {
+  
+      ElevationDataProvider edp = _providers.get(i);
+  
+      final java.util.ArrayList<Sector> sectorsI = edp.getSectors();
+      int sizeI = sectorsI.size();
+      for (int j = 0; j < sizeI; j++)
+      {
+        if (sectorsI.get(j).touchesWith(s)) //This provider contains the sector
+        {
+          providers.add(edp);
+        }
       }
-      return providers;
-   }
+    }
+    return providers;
+  }
+  private long _currentID;
+//<<<<<<< HEAD
+//
+//
+//
+//  class CompositeElevationDataProvider_Request: public IElevationDataListener{
+//
+//    ElevationDataProvider* _currentRequestEDP;
+//    long long _currentRequestID;
+//    CompositeElevationDataProvider* const _compProvider;
+//
+//    bool _hasBeenCanceled;
+//
+//  public:
+//
+//    CompositeElevationData* _compData;
+//    IElevationDataListener * _listener;
+//    const bool _autodelete;
+//    const Vector2I _resolution;
+//    const Sector& _sector;
+//
+//=======
 
-   private long _currentID;
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following type could not be found.
+//  class CompositeElevationDataProvider_Request;
+
+  private static class CompositeElevationDataProvider_RequestStepListener implements IElevationDataListener
+  {
 
 
-   private static class CompositeElevationDataProvider_Request
-            implements
-               IElevationDataListener {
+    public CompositeElevationDataProvider_Request _request;
 
-      private ElevationDataProvider                     _currentRequestEDP;
-      private long                                      _currentRequestID;
-      private final CompositeElevationDataProvider      _compProvider;
+    public CompositeElevationDataProvider_RequestStepListener(CompositeElevationDataProvider_Request request)
+    {
+       _request = request;
+    }
 
-      private boolean                                   _hasBeenCanceled;
-
-
-      public CompositeElevationData                     _compData;
-      public IElevationDataListener                     _listener;
-      public final boolean                              _autodelete;
-      public final Vector2I                             _resolution = new Vector2I();
-      public final Sector                               _sector;
-
-      public java.util.ArrayList<ElevationDataProvider> _providers  = new java.util.ArrayList<ElevationDataProvider>();
-
-
-      public final ElevationDataProvider popBestProvider(final java.util.ArrayList<ElevationDataProvider> ps,
-                                                         final Vector2I resolution) {
-         java.util.Iterator<ElevationDataProvider> edp = ps.end();
-         final double bestRes = resolution.squaredLength();
-         double selectedRes = 99999999999;
-         double selectedResDistance = 99999999999999999;
-         final IMathUtils mu = IMathUtils.instance();
-         for (final java.util.Iterator<ElevationDataProvider> it = ps.iterator(); it.hasNext();) {
-            final double res = (it.next()).getMinResolution().squaredLength();
-            final double newResDistance = mu.abs(bestRes - res);
-
-            if ((newResDistance < selectedResDistance) || ((newResDistance == selectedResDistance) && (res < selectedRes))) //or equal and higher resolution - Closer Resolution
-            {
-               selectedResDistance = newResDistance;
-               selectedRes = res;
-               edp = it;
-            }
-         }
-
-         ElevationDataProvider provider = null;
-         if (edp.hasNext()) {
-            provider = edp.next();
-            //C++ TO JAVA CONVERTER TODO TASK: There is no direct equivalent to the STL vector 'erase' method in Java:
-            ps.erase(edp);
-         }
-         return provider;
+    public final void onData(Sector sector, Vector2I extent, ElevationData elevationData)
+    {
+      if (_request != null)
+      {
+        _request.onData(sector, extent, elevationData);
       }
+    }
 
-
-      public CompositeElevationDataProvider_Request(final CompositeElevationDataProvider provider,
-                                                    final Sector sector,
-                                                    final Vector2I resolution,
-                                                    final IElevationDataListener listener,
-                                                    final boolean autodelete) {
-         _providers = provider.getProviders(sector);
-         _sector = new Sector(sector);
-         _resolution = new Vector2I(resolution);
-         _listener = listener;
-         _autodelete = autodelete;
-         _compProvider = provider;
-         _currentRequestEDP = null;
-         _compData = null;
-         _hasBeenCanceled = false;
+    public final void onError(Sector sector, Vector2I extent)
+    {
+      if (_request != null)
+      {
+        _request.onError(sector, extent);
       }
+    }
 
 
-      public final boolean launchNewRequest() {
-         _currentRequestEDP = popBestProvider(_providers, _resolution);
-         if (_currentRequestEDP != null) {
-            _currentRequestID = _currentRequestEDP.requestElevationData(_sector, _resolution, this, false);
-            return true;
-         }
-         else {
-            _currentRequestID = -1; //Waiting for no request
-            return false;
-         }
+    //void CompositeElevationDataProvider::CompositeElevationDataProvider_RequestStepListener::onCancel(const Sector& sector,
+    //                                                                                                  const Vector2I& extent) {
+    //  if (_request != NULL){
+    //    _request->onCancel(sector, extent);
+    //  }
+    //}
+    
+    public final void onCancel(Sector sector, Vector2I extent)
+    {
+      if (_request != null)
+      {
+        _request.onCancel(sector, extent);
       }
+    }
+
+  }
 
 
-      @Override
-      public final void onData(final Sector sector,
-                               final Vector2I resolution,
-                               final ElevationData elevationData) {
-         _currentRequestID = -1; //Waiting for no request
-         if (_hasBeenCanceled) {
-            if (elevationData != null) {
-               elevationData.dispose();
-            }
-            if (_compData != null) {
-               _compData.dispose();
-            }
-            this = null;
-         }
-         else {
 
-            if (_compData == null) {
-               _compData = new CompositeElevationData(elevationData);
-            }
-            else {
-               _compData.addElevationData(elevationData);
-            }
+  private static class CompositeElevationDataProvider_Request
+  {
 
-            if (!_compData.hasNoData()) {
-               _compProvider.requestFinished(this); //If this data is enough we respond
-            }
-            else {
-               if (!launchNewRequest()) //If there are no more providers we respond
-               {
-                  _compProvider.requestFinished(this);
-               }
-            }
-         }
+    private final CompositeElevationDataProvider _compProvider;
+
+    private ElevationDataProvider _currentProvider;
+    private CompositeElevationDataProvider_RequestStepListener _currentStep;
+    private long _currentID;
+
+    private ElevationData _compData;
+    private IElevationDataListener _listener;
+    private final boolean _autodelete;
+    private final Vector2I _resolution = new Vector2I();
+    private final Sector _sector ;
+
+
+    public java.util.ArrayList<ElevationDataProvider> _providers = new java.util.ArrayList<ElevationDataProvider>();
+
+    public final ElevationDataProvider popBestProvider(java.util.ArrayList<ElevationDataProvider> ps, Vector2I extent)
+    {
+      java.util.Iterator<ElevationDataProvider> edp = (java.util.Iterator<ElevationDataProvider>) ps.end();
+      double bestRes = extent.squaredLength();
+      double selectedRes = IMathUtils.instance().maxDouble();
+      double selectedResDistance = IMathUtils.instance().maxDouble();
+      IMathUtils mu = IMathUtils.instance();
+      for (java.util.Iterator<ElevationDataProvider> it = ps.iterator() ; it.hasNext();)
+      {
+        double res = (it.next()).getMinResolution().squaredLength();
+        double newResDistance = mu.abs(bestRes - res);
+    
+        if (newResDistance < selectedResDistance || (newResDistance == selectedResDistance && res < selectedRes)) //or equal and higher resolution - Closer Resolution
+        {
+          selectedResDistance = newResDistance;
+          selectedRes = res;
+          edp = it;
+        }
       }
-
-
-      public final void cancel() {
-         if (_currentRequestEDP != null) {
-            _currentRequestEDP.cancelRequest(_currentRequestID);
-         }
-         _hasBeenCanceled = true;
-
-         if (_currentRequestID == -1) {
-            this = null;
-         }
+    
+      ElevationDataProvider provider = null;
+      if (edp.hasNext())
+      {
+        provider = edp.next();
+//C++ TO JAVA CONVERTER TODO TASK: There is no direct equivalent to the STL vector 'erase' method in Java:
+        ps.erase(edp);
       }
+      return provider;
+    }
 
+    public CompositeElevationDataProvider_Request(CompositeElevationDataProvider provider, Sector sector, Vector2I resolution, IElevationDataListener listener, boolean autodelete)
+    {
+       _providers = provider.getProviders(sector);
+       _sector = new Sector(sector);
+       _resolution = new Vector2I(resolution);
+       _listener = listener;
+       _autodelete = autodelete;
+       _compProvider = provider;
+       _compData = null;
+       _currentStep = null;
+    }
 
-      @Override
-      public final void onError(final Sector sector,
-                                final Vector2I resolution) {
-         _currentRequestID = -1; //Waiting for no request
-         if (_hasBeenCanceled) {
-            this = null;
-         }
-         else {
-            if (!launchNewRequest()) {
-               //If there are no more providers we respond
-               _compProvider.requestFinished(this);
-            }
-         }
+    public void dispose()
+    {
+    }
+
+    public final boolean launchNewStep()
+    {
+      _currentProvider = popBestProvider(_providers, _resolution);
+      if (_currentProvider != null)
+      {
+        _currentStep = new CompositeElevationDataProvider_RequestStepListener(this);
+    
+        _currentID = _currentProvider.requestElevationData(_sector, _resolution, _currentStep, true);
+    
+        return true;
       }
-
-
-      @Override
-      public void dispose() {
-         // TODO Auto-generated method stub
-
+      else
+      {
+        _currentStep = null; //Waiting for no request
+        return false;
       }
+    }
 
-   }
-
-
-   private final java.util.HashMap<Long, CompositeElevationDataProvider_Request> _requests = new java.util.HashMap<Long, CompositeElevationDataProvider_Request>();
-
-
-   private void requestFinished(final CompositeElevationDataProvider_Request req) {
-
-      final CompositeElevationData data = req._compData;
-      final IElevationDataListener listener = req._listener;
-      final boolean autodelete = req._autodelete;
-      final Vector2I resolution = req._resolution;
-      final Sector sector = req._sector;
-
-      if (data == null) {
-         listener.onError(sector, resolution);
-         if (autodelete) {
-            if (listener != null) {
-               listener.dispose();
-            }
-            req._listener = null;
-         }
+    public final void onData(Sector sector, Vector2I extent, ElevationData elevationData)
+    {
+      _currentStep = null;
+      if (_compData == null)
+      {
+        _compData = new CompositeElevationData(elevationData);
       }
-      else {
-         listener.onData(sector, resolution, data);
-         if (autodelete) {
-            if (listener != null) {
-               listener.dispose();
-            }
-            req._listener = null;
-         }
+      else
+      {
+        ((CompositeElevationData)_compData).addElevationData(elevationData);
       }
-      java.util.Iterator<Long, CompositeElevationDataProvider_Request> it;
-      for (it = _requests.iterator(); it.hasNext();) {
-         final CompositeElevationDataProvider_Request reqI = it.next().getValue();
-         if (reqI == req) {
-            _requests.remove(it);
-            break;
-         }
+    
+      if (!_compData.hasNoData())
+      {
+        _compProvider.requestFinished(this); //If this data is enough we respond
       }
-
-      if (it == _requests.end()) {
-         ILogger.instance().logError("Deleting nonexisting request in CompositeElevationDataProvider.");
+      else
+      {
+        if (!launchNewStep()) //If there are no more providers we respond
+        {
+          _compProvider.requestFinished(this);
+        }
       }
-   }
+    }
 
-
-   public CompositeElevationDataProvider() {
-      _context = null;
-      _currentID = 0;
-   }
-
-
-   @Override
-   public void dispose() {
-      final int size = _providers.size();
-      for (int i = 0; i < size; i++) {
-         if (_providers.get(i) != null) {
-            _providers.get(i).dispose();
-         }
+    public final void cancel()
+    {
+    
+      if (_currentStep != null)
+      {
+        _currentStep._request = null;
+        _currentProvider.cancelRequest(_currentID);
+        _currentStep = null;
       }
-   }
-
-
-   public final void addElevationDataProvider(final ElevationDataProvider edp) {
-      _providers.add(edp);
-      if (_context != null) {
-         edp.initialize(_context);
+    
+      _listener.onCancel(_sector, _resolution);
+      if (_autodelete)
+      {
+        if (_listener != null)
+           _listener.dispose();
       }
-   }
+    }
 
-
-   @Override
-   public final boolean isReadyToRender(final G3MRenderContext rc) {
-      final int size = _providers.size();
-      for (int i = 0; i < size; i++) {
-         if (!_providers.get(i).isReadyToRender(rc)) {
-            return false;
-         }
+    public final void onError(Sector sector, Vector2I extent)
+    {
+      _currentStep = null;
+      if (!launchNewStep())
+      {
+        //If there are no more providers we respond
+        _compProvider.requestFinished(this);
       }
-      return true;
-   }
+    }
 
+    public final void onCancel(Sector sector, Vector2I extent)
+    {
+      _currentStep = null;
+    }
 
-   @Override
-   public final void initialize(final G3MContext context) {
-      _context = context;
-      final int size = _providers.size();
-      for (int i = 0; i < size; i++) {
-         _providers.get(i).initialize(context);
+    public final void respondToListener()
+    {
+    
+      if (_compData == null)
+      {
+        _listener.onError(_sector, _resolution);
+        if (_autodelete)
+        {
+          if (_listener != null)
+             _listener.dispose();
+        }
       }
-   }
-
-
-   @Override
-   public final long requestElevationData(final Sector sector,
-                                          final Vector2I resolution,
-                                          final IElevationDataListener listener,
-                                          final boolean autodeleteListener) {
-
-      final CompositeElevationDataProvider_Request req = new CompositeElevationDataProvider_Request(this, sector, resolution,
-               listener, autodeleteListener);
-      _currentID++;
-      _requests.put(_currentID, req);
-
-      req.launchNewRequest();
-
-      return _currentID;
-   }
-
-
-   @Override
-   public final void cancelRequest(final long requestId) {
-      java.util.Iterator<Long, CompositeElevationDataProvider_Request> it = _requests.indexOf(requestId);
-      if (it.hasNext()) {
-         final CompositeElevationDataProvider_Request req = it.next().getValue();
-         req.cancel();
-         _requests.remove(requestId);
-         if (req != null) {
-            req.dispose();
-         }
+      else
+      {
+        _listener.onData(_sector, _resolution, _compData);
+        if (_autodelete)
+        {
+          if (_listener != null)
+             _listener.dispose();
+        }
       }
-   }
+    }
+
+  }
 
 
-   @Override
-   public final java.util.ArrayList<Sector> getSectors() {
-      final java.util.ArrayList<Sector> sectors = new java.util.ArrayList<Sector>();
-      final int size = _providers.size();
-      for (int i = 0; i < size; i++) {
-         final java.util.ArrayList<Sector> sectorsI = _providers.get(i).getSectors();
-         final int sizeI = sectorsI.size();
-         for (int j = 0; j < sizeI; j++) {
-            sectors.add(sectorsI.get(j));
-         }
+  private java.util.HashMap<Long, CompositeElevationDataProvider_Request> _requests = new java.util.HashMap<Long, CompositeElevationDataProvider_Request>();
+
+  private void requestFinished(CompositeElevationDataProvider_Request req)
+  {
+  
+    req.respondToListener();
+  
+    java.util.Iterator<Long, CompositeElevationDataProvider_Request> it;
+    for (it = _requests.iterator(); it.hasNext();)
+    {
+      final CompositeElevationDataProvider_Request reqI = it.next().getValue();
+      if (reqI == req)
+      {
+        _requests.remove(it);
+  
+        if (req != null)
+           req.dispose();
+  
+        return;
       }
-      return sectors;
-   }
+    }
+  
+    if (it == _requests.end())
+    {
+      ILogger.instance().logError("Deleting nonexisting request in CompositeElevationDataProvider.");
+    }
+  }
 
+  public CompositeElevationDataProvider()
+  {
+     _context = null;
+     _currentID = 0;
+  }
 
-   @Override
-   public final Vector2I getMinResolution() {
+  public void dispose()
+  {
+    int size = _providers.size();
+    for (int i = 0; i < size; i++)
+    {
+      if (_providers.get(i) != null)
+         _providers.get(i).dispose();
+    }
+  }
 
-      final int size = _providers.size();
-      double minD = 9999999999;
-      int x = -1;
-      int y = -1;
+  public final void addElevationDataProvider(ElevationDataProvider edp)
+  {
+    _providers.add(edp);
+    if (_context != null)
+    {
+      edp.initialize(_context);
+    }
+  }
 
-      for (int i = 0; i < size; i++) {
-
-         final Vector2I res = _providers.get(i).getMinResolution();
-         final double d = res.squaredLength();
-
-         if (minD > d) {
-            minD = d;
-            x = res._x;
-            y = res._y;
-         }
+  public final boolean isReadyToRender(G3MRenderContext rc)
+  {
+    int size = _providers.size();
+    for (int i = 0; i < size; i++)
+    {
+      if (!_providers.get(i).isReadyToRender(rc))
+      {
+        return false;
       }
-      return new Vector2I(x, y);
-   }
+    }
+    return true;
+  }
 
+  public final void initialize(G3MContext context)
+  {
+    _context = context;
+    int size = _providers.size();
+    for (int i = 0; i < size; i++)
+    {
+      _providers.get(i).initialize(context);
+    }
+  }
 
-   @Override
-   public final ElevationData createSubviewOfElevationData(final ElevationData elevationData,
-                                                           final Sector sector,
-                                                           final Vector2I resolution) {
-      return new SubviewElevationData(elevationData, false, sector, resolution, false);
-   }
+  public final long requestElevationData(Sector sector, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener)
+  {
+  
+    CompositeElevationDataProvider_Request req = new CompositeElevationDataProvider_Request(this, sector, extent, listener, autodeleteListener);
+    _currentID++;
+    _requests.put(_currentID, req);
+  
+    req.launchNewStep();
+  
+    return _currentID;
+  }
+
+  public final void cancelRequest(long requestId)
+  {
+    java.util.Iterator<Long, CompositeElevationDataProvider_Request> it = _requests.indexOf(requestId);
+    if (it.hasNext())
+    {
+      CompositeElevationDataProvider_Request req = it.next().getValue();
+      req.cancel();
+      _requests.remove(requestId);
+      if (req != null)
+         req.dispose();
+    }
+  }
+
+  public final java.util.ArrayList<Sector> getSectors()
+  {
+    final java.util.ArrayList<Sector> sectors = new java.util.ArrayList<Sector>();
+    int size = _providers.size();
+    for (int i = 0; i < size; i++)
+    {
+      final java.util.ArrayList<Sector> sectorsI = _providers.get(i).getSectors();
+      int sizeI = sectorsI.size();
+      for (int j = 0; j < sizeI; j++)
+      {
+        sectors.add(sectorsI.get(j));
+      }
+    }
+    return sectors;
+  }
+
+  public final Vector2I getMinResolution()
+  {
+  
+    int size = _providers.size();
+    double minD = 9999999999;
+    int x = -1;
+    int y = -1;
+  
+    for (int i = 0; i < size; i++)
+    {
+  
+      Vector2I res = _providers.get(i).getMinResolution();
+      double d = res.squaredLength();
+  
+      if (minD > d)
+      {
+        minD = d;
+        x = res._x;
+        y = res._y;
+      }
+    }
+    return new Vector2I(x,y);
+  }
+
+  //  ElevationData* createSubviewOfElevationData(ElevationData* elevationData,
+  //                                              const Sector& sector,
+  //                                              const Vector2I& extent) const;
 
 }
+//ElevationData* CompositeElevationDataProvider::createSubviewOfElevationData(ElevationData* elevationData,
+//                                                                            const Sector& sector,
+//                                                                            const Vector2I& extent) const{
+//  return new SubviewElevationData(elevationData,
+//                                  false,
+//                                  sector,
+//                                  extent,
+//                                  false);
+//}
+
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#pragma mark Request
+
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#pragma mark RequestStep

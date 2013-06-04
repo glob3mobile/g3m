@@ -1,42 +1,7 @@
 package org.glob3.mobile.generated; 
-//
-//  SingleBillElevationDataProvider.cpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 2/21/13.
-//
-//
-
-//
-//  SingleBillElevationDataProvider.hpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 2/21/13.
-//
-//
-
-
-
-//class Vector2I;
-
 public class SingleBillElevationDataProvider extends ElevationDataProvider
 {
 
-  private static class SingleBillElevationDataProvider_Request
-  {
-    public final Sector _sector ;
-    public final Vector2I _resolution;
-    public final IElevationDataListener _listener;
-    public final boolean _autodeleteListener;
-
-    public SingleBillElevationDataProvider_Request(Sector sector, Vector2I resolution, IElevationDataListener listener, boolean autodeleteListener)
-    {
-       _sector = new Sector(sector);
-       _resolution = new Vector2I(resolution);
-       _listener = listener;
-       _autodeleteListener = autodeleteListener;
-    }
-  }
 
   private long _currentRequestID;
   private java.util.HashMap<Long, SingleBillElevationDataProvider_Request> _requests = new java.util.HashMap<Long, SingleBillElevationDataProvider_Request>();
@@ -46,9 +11,8 @@ public class SingleBillElevationDataProvider extends ElevationDataProvider
   private boolean _elevationDataResolved;
   private final URL _bilUrl;
   private final Sector _sector ;
-  private final int _resolutionWidth;
-  private final int _resolutionHeight;
-  private final double _noDataValue;
+  private final int _extentWidth;
+  private final int _extentHeight;
 
   private void drainQueue()
   {
@@ -62,17 +26,17 @@ public class SingleBillElevationDataProvider extends ElevationDataProvider
     for (; it.hasNext();)
     {
       SingleBillElevationDataProvider_Request r = it.next().getValue();
-      requestElevationData(r._sector, r._resolution, r._listener, r._autodeleteListener);
+      requestElevationData(r._sector, r._extent, r._listener, r._autodeleteListener);
       if (r != null)
          r.dispose();
     }
     _requests.clear();
   }
 
-  private long queueRequest(Sector sector, Vector2I resolution, IElevationDataListener listener, boolean autodeleteListener)
+  private long queueRequest(Sector sector, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener)
   {
     _currentRequestID++;
-    _requests.put(_currentRequestID, new SingleBillElevationDataProvider_Request(sector, resolution, listener, autodeleteListener));
+    _requests.put(_currentRequestID, new SingleBillElevationDataProvider_Request(sector, extent, listener, autodeleteListener));
     return _currentRequestID;
   }
 
@@ -88,13 +52,12 @@ public class SingleBillElevationDataProvider extends ElevationDataProvider
   }
 
 
-  public SingleBillElevationDataProvider(URL bilUrl, Sector sector, Vector2I resolution, double noDataValue)
+  public SingleBillElevationDataProvider(URL bilUrl, Sector sector, Vector2I extent)
   {
      _bilUrl = bilUrl;
      _sector = new Sector(sector);
-     _resolutionWidth = resolution._x;
-     _resolutionHeight = resolution._y;
-     _noDataValue = noDataValue;
+     _extentWidth = extent._x;
+     _extentHeight = extent._y;
      _elevationData = null;
      _elevationDataResolved = false;
      _currentRequestID = 0;
@@ -110,27 +73,27 @@ public class SingleBillElevationDataProvider extends ElevationDataProvider
   {
     if (!_elevationDataResolved)
     {
-      context.getDownloader().requestBuffer(_bilUrl, 2000000000, TimeInterval.fromDays(30), true, new SingleBillElevationDataProvider_BufferDownloadListener(this, _sector, _resolutionWidth, _resolutionHeight, _noDataValue), true);
+      context.getDownloader().requestBuffer(_bilUrl, 2000000000, TimeInterval.fromDays(30), true, new SingleBillElevationDataProvider_BufferDownloadListener(this, _sector, _extentWidth, _extentHeight), true);
     }
   }
 
-  public final long requestElevationData(Sector sector, Vector2I resolution, IElevationDataListener listener, boolean autodeleteListener)
+  public final long requestElevationData(Sector sector, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener)
   {
     if (!_elevationDataResolved)
     {
-      return queueRequest(sector, resolution, listener, autodeleteListener);
+      return queueRequest(sector, extent, listener, autodeleteListener);
     }
   
     if (_elevationData == null)
     {
-      listener.onError(sector, resolution);
+      listener.onError(sector, extent);
     }
     else
     {
       int _DGD_working_on_terrain;
       final boolean useDecimation = false;
-      ElevationData elevationData = new SubviewElevationData(_elevationData, false, sector, resolution, useDecimation);
-      listener.onData(sector, resolution, elevationData);
+      ElevationData elevationData = new SubviewElevationData(_elevationData, sector, extent, useDecimation);
+      listener.onData(sector, extent, elevationData);
     }
   
     if (autodeleteListener)
@@ -172,12 +135,11 @@ public class SingleBillElevationDataProvider extends ElevationDataProvider
 
   public final Vector2I getMinResolution()
   {
-    return new Vector2I(_resolutionWidth,_resolutionHeight);
+    return new Vector2I(_extentWidth, _extentHeight);
   }
 
-  public final ElevationData createSubviewOfElevationData(ElevationData elevationData, Sector sector, Vector2I resolution)
-  {
-    return new SubviewElevationData(elevationData, false, sector, resolution, false);
-  }
+  //  ElevationData* createSubviewOfElevationData(ElevationData* elevationData,
+  //                                              const Sector& sector,
+  //                                              const Vector2I& extent};
 
 }

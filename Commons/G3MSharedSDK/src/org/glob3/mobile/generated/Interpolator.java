@@ -19,6 +19,8 @@ package org.glob3.mobile.generated;
 //class Angle;
 //class Geodetic2D;
 
+
+
 public abstract class Interpolator
 {
   protected Interpolator()
@@ -55,5 +57,8 @@ public abstract class Interpolator
   }
 
   public abstract double interpolation(double valueSW, double valueSE, double valueNE, double valueNW, double u, double v);
+
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  String description();
 
 }
