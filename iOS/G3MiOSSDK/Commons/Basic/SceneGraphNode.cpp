@@ -9,9 +9,25 @@
 #include "SceneGraphNode.hpp"
 #include "GLStateTreeNode.hpp"
 
-void SceneGraphNode::render(const G3MRenderContext* rc, GLStateTreeNode* parentStateTreeNode){
+void SceneGraphLeafNode::render(const G3MRenderContext* rc, GLStateTreeNode* parentStateTreeNode){
   
-  if (_isVisible && isInsideCameraFrustum(rc)){
+  if (_enabled && isVisible(rc)){
+    
+    if (_lastParentStateNode != parentStateTreeNode){
+      _lastParentStateNode = parentStateTreeNode;
+      _lastStateNode = parentStateTreeNode->getChildNodeForSGNode(this);
+      if (_lastStateNode == NULL){
+        _lastStateNode = parentStateTreeNode->createChildNodeForSGNode(this);
+      }
+    }
+    
+    rawRender(rc, _lastStateNode);
+  }
+}
+
+void SceneGraphInnerNode::render(const G3MRenderContext* rc, GLStateTreeNode* parentStateTreeNode){
+  
+  if (_enabled && isVisible(rc)){
     
     if (_lastParentStateNode != parentStateTreeNode){
       _lastParentStateNode = parentStateTreeNode;
@@ -32,7 +48,7 @@ void SceneGraphNode::render(const G3MRenderContext* rc, GLStateTreeNode* parentS
   }
 }
 
-void SceneGraphNode::initializeSGNode(const G3MContext* context){
+void SceneGraphInnerNode::initializeSGNode(const G3MContext* context){
   onInitialize(context);
   for (std::vector<SceneGraphNode*>::iterator it = _children.begin();
        it != _children.end();
@@ -42,7 +58,7 @@ void SceneGraphNode::initializeSGNode(const G3MContext* context){
   }
 }
 
-void SceneGraphNode::touchEvent(const G3MEventContext* ec, const TouchEvent* touchEvent){
+void SceneGraphInnerNode::touchEvent(const G3MEventContext* ec, const TouchEvent* touchEvent){
   onTouchEventRecived(ec, touchEvent);
   for (std::vector<SceneGraphNode*>::iterator it = _children.begin();
        it != _children.end();
@@ -52,7 +68,7 @@ void SceneGraphNode::touchEvent(const G3MEventContext* ec, const TouchEvent* tou
   }
 }
 
-void SceneGraphNode::eraseChild(SceneGraphNode* child){
+void SceneGraphInnerNode::eraseChild(SceneGraphNode* child){
 #ifdef C_CODE
   for (std::vector<SceneGraphNode*>::iterator it = _children.begin();
        it != _children.end();

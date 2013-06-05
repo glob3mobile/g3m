@@ -17,38 +17,27 @@
 #include "GLStateTreeNode.hpp"
 #include "TouchEvent.hpp"
 
-
-
 #include "GLClient.hpp"
 
 class SceneGraphNode: public GLClient{
-private:
+
+protected:
+  
   GLStateTreeNode* _lastParentStateNode;
   GLStateTreeNode* _lastStateNode;
   
-  bool _isVisible; //TODO: enable
-  std::vector<SceneGraphNode*> _children;
-  
-protected:
+  bool _enabled;
   
   virtual void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode) = 0;
   
-  virtual bool isInsideCameraFrustum(const G3MRenderContext* rc) = 0; //TODO: isVisible
-  
-//  int getChildrenCount() const {
-//    return _children.size();
-//  }
-//  
-//  const SceneGraphNode* getChild(int i) const {
-//    return _children[i];
-//  }
-  
+  virtual bool isVisible(const G3MRenderContext* rc) = 0; //TODO: isVisible
+
   virtual void onInitialize(const G3MContext* context){}
   
   virtual void onTouchEventRecived(const G3MEventContext* ec, const TouchEvent* touchEvent){}
   
 public:
-  SceneGraphNode():_isVisible(true), _lastParentStateNode(NULL), _lastStateNode(NULL){}
+  SceneGraphNode():_enabled(true), _lastParentStateNode(NULL), _lastStateNode(NULL){}
   
   virtual ~SceneGraphNode(){
     GLStateTree::prune(this); //Deleting states
@@ -56,13 +45,62 @@ public:
   
   virtual void modifiyGLState(GLState* state) = 0;
   
+  virtual void render(const G3MRenderContext* rc, GLStateTreeNode* parentStateTreeNode) = 0;
+  
+  bool isEnabled() const { return _enabled;}
+  
+  void setEnabled(bool v) { _enabled = v;}
+
+  virtual void touchEvent(const G3MEventContext* ec, const TouchEvent* touchEvent) = 0;
+  
+  virtual void initializeSGNode(const G3MContext* context) = 0;
+};
+
+class SceneGraphLeafNode: public SceneGraphNode{
+protected:
+  
+  virtual void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode) = 0;
+  
+  virtual bool isVisible(const G3MRenderContext* rc) = 0; //TODO: isVisible
+  
+public:
+  
+  SceneGraphLeafNode(){}
+  
+  void touchEvent(const G3MEventContext* ec, const TouchEvent* touchEvent){
+    onTouchEventRecived(ec, touchEvent);
+  }
+  
+  void initializeSGNode(const G3MContext* context){
+    onInitialize(context);
+  }
+  
+  void render(const G3MRenderContext* rc, GLStateTreeNode* parentStateTreeNode);
+};
+
+class SceneGraphInnerNode: public SceneGraphNode{
+private:
+  
+  std::vector<SceneGraphNode*> _children;
+  
+protected:
+  
+  virtual void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode){}
+  
+  virtual bool isVisible(const G3MRenderContext* rc){ return true;}
+
+  virtual void onInitialize(const G3MContext* context){}
+  
+  virtual void onTouchEventRecived(const G3MEventContext* ec, const TouchEvent* touchEvent){}
+  
+public:
+  SceneGraphInnerNode(){}
+
+  virtual void modifiyGLState(GLState* state) = 0;
+  
   void initializeSGNode(const G3MContext* context);
   
   void render(const G3MRenderContext* rc, GLStateTreeNode* parentStateTreeNode);
-  
-  bool isVisible() const { return _isVisible;}
-  
-  void setVisible(bool v) { _isVisible = v;}
   
   void addChild(SceneGraphNode* child){
     _children.push_back(child);
@@ -71,8 +109,8 @@ public:
   void eraseChild(SceneGraphNode* child);
   
   void touchEvent(const G3MEventContext* ec, const TouchEvent* touchEvent);
-  
-  
 };
+
+
 
 #endif /* defined(__G3MiOSSDK__SceneGraphNode__) */

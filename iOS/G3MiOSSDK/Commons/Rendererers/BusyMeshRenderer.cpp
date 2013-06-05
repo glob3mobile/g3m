@@ -166,7 +166,7 @@ void BusyMeshRenderer::rawRender(const G3MRenderContext* rc, GLStateTreeNode* my
 //  _mesh->render(rc);
 }
 
-bool BusyMeshRenderer::isInsideCameraFrustum(const G3MRenderContext* rc){
+bool BusyMeshRenderer::isVisible(const G3MRenderContext* rc){
   return true;
 }
 

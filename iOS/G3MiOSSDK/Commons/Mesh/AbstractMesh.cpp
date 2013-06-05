@@ -192,7 +192,7 @@ void AbstractMesh::modifyGPUProgramState(GPUProgramState& progState) const{
 //  
 //}
 
-bool AbstractMesh::isInsideCameraFrustum(const G3MRenderContext* rc){
+bool AbstractMesh::isVisible(const G3MRenderContext* rc){
   //return getExtent()->touches( rc->getCurrentCamera()->getFrustumInModelCoordinates() );
   
   //TODO: NOT VALID FOR BUSYRENDERER

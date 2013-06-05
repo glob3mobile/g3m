@@ -36,7 +36,7 @@ public:
 };
 
 
-class Mark: public SceneGraphNode {
+class Mark: public SceneGraphLeafNode {
 private:
   /**
    * The text the mark displays.
@@ -261,7 +261,7 @@ public:
   //Scene Graph Node
   void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode);
   
-  bool isInsideCameraFrustum(const G3MRenderContext* rc);
+  bool isVisible(const G3MRenderContext* rc);
 
   void modifiyGLState(GLState* state);
   

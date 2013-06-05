@@ -17,7 +17,7 @@ class GLGlobalState;
 
 #include "SceneGraphNode.hpp"
 
-class Renderer: public SceneGraphNode {
+class Renderer: public SceneGraphInnerNode {
 public:
   virtual bool isEnable() const = 0;
   

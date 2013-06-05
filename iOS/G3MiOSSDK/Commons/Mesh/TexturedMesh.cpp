@@ -35,7 +35,7 @@ void TexturedMesh::notifyGLClientChildrenParentHasChanged(){
 
 void TexturedMesh::rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode){}
 
-bool TexturedMesh::isInsideCameraFrustum(const G3MRenderContext* rc){
+bool TexturedMesh::isVisible(const G3MRenderContext* rc){
   return true;
 }
 

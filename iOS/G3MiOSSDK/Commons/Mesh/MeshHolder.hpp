@@ -67,7 +67,7 @@ public:
     //TODO: Implement
     //It's necessary a holder with the Scene Graph approach
   }
-  bool isInsideCameraFrustum(const G3MRenderContext* rc){
+  bool isVisible(const G3MRenderContext* rc){
     //TODO: Implement
     return true;
   }

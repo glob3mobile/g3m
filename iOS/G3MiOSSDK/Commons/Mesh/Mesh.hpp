@@ -19,7 +19,7 @@
 class Vector3D;
 class GPUProgramState;
 
-class Mesh: public SceneGraphNode{
+class Mesh: public SceneGraphInnerNode{
 public:
   
   virtual ~Mesh() { }

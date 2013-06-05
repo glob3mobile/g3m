@@ -530,7 +530,7 @@ void Mark::modifyGPUProgramState(GPUProgramState& progState) const{
   }
 }
 
-bool Mark::isInsideCameraFrustum(const G3MRenderContext* rc){
+bool Mark::isVisible(const G3MRenderContext* rc){
   _renderedMark = false;
   
   _viewportWidth = rc->getCurrentCamera()->getWidth();

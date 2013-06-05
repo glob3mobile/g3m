@@ -104,7 +104,7 @@ public:
     _lastCamera = rc->getCurrentCamera();
   }
   
-  bool isInsideCameraFrustum(const G3MRenderContext* rc){
+  bool isVisible(const G3MRenderContext* rc){
     return true;
   }
   

@@ -100,7 +100,7 @@ public:
   void onDestroy(const G3MContext* context){}
   
   void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode){}
-  bool isInsideCameraFrustum(const G3MRenderContext* rc){ return true;}
+  bool isVisible(const G3MRenderContext* rc){ return true;}
   void modifiyGLState(GLState* state){}
   
 };

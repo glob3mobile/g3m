@@ -117,7 +117,7 @@ public:
 /**
  * Class to control the camera.
  */
-class Camera: public SceneGraphNode {
+class Camera: public SceneGraphInnerNode {
 public:
   Camera(const Camera &that):
   _width(that._width),
@@ -309,7 +309,7 @@ public:
     getProjectionMatrix();
   }
   
-  bool isInsideCameraFrustum(const G3MRenderContext* rc){
+  bool isVisible(const G3MRenderContext* rc){
     return true;
   }
   
