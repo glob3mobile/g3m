@@ -258,13 +258,13 @@ public:
   //  ElevationDataProvider* elevationDataProvider = new WMSBillElevationDataProvider();
   
   //  ElevationDataProvider* elevationDataProvider;
-//  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
-//                                                              Sector::fullSphere(),
-//                                                              Vector2I(2048, 1024));
-
-  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-4096x2048.bil", false),
+  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
                                                               Sector::fullSphere(),
-                                                              Vector2I(4096, 2048));
+                                                              Vector2I(2048, 1024));
+
+//  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-4096x2048.bil", false),
+//                                                              Sector::fullSphere(),
+//                                                              Vector2I(4096, 2048));
 
   //  ElevationDataProvider* elevationDataProvider1;
   //  elevationDataProvider1 = new SingleBillElevationDataProvider(URL("file:///elev-35.0_-6.0_38.0_-2.0_4096x2048.bil", false),
@@ -335,8 +335,8 @@ public:
   //compElevationDataProvider->addElevationDataProvider(elevationDataProvider7);
   //compElevationDataProvider->addElevationDataProvider(elevationDataProvider8);
 
-  builder.getTileRendererBuilder()->setElevationDataProvider(compElevationDataProvider);
-  //builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProvider);
+  //builder.getTileRendererBuilder()->setElevationDataProvider(compElevationDataProvider);
+  builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProvider);
 }
 
 
@@ -601,7 +601,7 @@ public:
   }
   
   //TODO: Check merkator with elevations
-  const bool useMapQuestOSM = true;
+  const bool useMapQuestOSM = false;
   if (useMapQuestOSM) {
     layerSet->addLayer( MapQuestLayer::newOSM(TimeInterval::fromDays(30)) );
   }
@@ -613,7 +613,7 @@ public:
                                          TimeInterval::fromDays(30)) );
   }
 
-  const bool useMapQuestOpenAerial = false;
+  const bool useMapQuestOpenAerial = true;
   if (useMapQuestOpenAerial) {
     layerSet->addLayer( MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30)) );
   }
@@ -1355,8 +1355,8 @@ public:
     //                                                      Geodetic3D::fromDegrees(0.02, 0, 0),
     //                                                      2) );
     
-    const float verticalExaggeration = 3.0f;
-    const float pointSize = 2.0f;
+    const float verticalExaggeration = 10.0f;
+    const float pointSize = 5.0f;
     
     const Sector subSector = _sector.shrinkedByPercent(0.2f);
     //    const Sector subSector = _sector.shrinkedByPercent(0.9f);
@@ -1366,72 +1366,79 @@ public:
     const Vector2I subResolution(251*2, 254*2);
     
     int _DGD_working_on_terrain;
+
+    _meshRenderer->addMesh( elevationData->createMesh(planet,
+                                                      verticalExaggeration,
+                                                      //Geodetic3D::fromDegrees(0.02, 0.02, 0),
+                                                      Geodetic3D::zero(),
+                                                      pointSize) );
+
+
+//    const ElevationData* subElevationDataDecimated = new SubviewElevationData(elevationData,
+//                                                                              subSector,
+//                                                                              subResolution,
+//                                                                              true);
+//    
+//    _meshRenderer->addMesh( subElevationDataDecimated->createMesh(planet,
+//                                                                  verticalExaggeration,
+//                                                                  Geodetic3D::fromDegrees(0.02, 0.02, 0),
+//                                                                  pointSize) );
+
     
-    const ElevationData* subElevationDataDecimated = new SubviewElevationData(elevationData,
-                                                                              subSector,
-                                                                              subResolution,
-                                                                              true);
+//    const ElevationData* subElevationDataNotDecimated = new SubviewElevationData(elevationData,
+//                                                                                 subSector,
+//                                                                                 subResolution,
+//                                                                                 false);
+//    
+//    _meshRenderer->addMesh( subElevationDataNotDecimated->createMesh(planet,
+//                                                                     verticalExaggeration,
+//                                                                     Geodetic3D::fromDegrees(0.02,
+//                                                                                             0.02 + (subSector.getDeltaLongitude()._degrees * 1.05),
+//                                                                                             0),
+//                                                                     pointSize) );
+//    
+//    
+//    IFloatBuffer* deltaBuffer = IFactory::instance()->createFloatBuffer( subResolution._x * subResolution._y );
+//    
+//    IMathUtils* mu = IMathUtils::instance();
+//    for (int x = 0; x < subResolution._x; x++) {
+//      for (int y = 0; y < subResolution._y; y++) {
+//        const double height1 = subElevationDataDecimated->getElevationAt(x, y);
+//        const double height2 = subElevationDataNotDecimated->getElevationAt(x, y);
+//        
+//        const int index = ((subResolution._y-1-y) * subResolution._x) + x;
+//        
+//        if (mu->isNan(height1) || mu->isNan(height2)){
+//          deltaBuffer->rawPut(index,  mu->NanF());
+//        } else{
+//          deltaBuffer->rawPut(index,  (float) (height1 - height2));
+//        }
+//        
+//      }
+//    }
+//    
+//    ElevationData* deltaElevation = new FloatBufferElevationData(subSector,
+//                                                                 subResolution,
+//                                                                 subSector,
+//                                                                 subResolution,
+//                                                                 deltaBuffer);
+//    
+//    _meshRenderer->addMesh( deltaElevation->createMesh(planet,
+//                                                       verticalExaggeration,
+//                                                       Geodetic3D::fromDegrees(0.02,
+//                                                                               0.02 + (subSector.getDeltaLongitude()._degrees * 2.1),
+//                                                                               100),
+//                                                       pointSize) );
+
     
-    _meshRenderer->addMesh( subElevationDataDecimated->createMesh(planet,
-                                                                  verticalExaggeration,
-                                                                  Geodetic3D::fromDegrees(0.02, 0.02, 0),
-                                                                  pointSize) );
-    
-    
-    const ElevationData* subElevationDataNotDecimated = new SubviewElevationData(elevationData,
-                                                                                 subSector,
-                                                                                 subResolution,
-                                                                                 false);
-    
-    _meshRenderer->addMesh( subElevationDataNotDecimated->createMesh(planet,
-                                                                     verticalExaggeration,
-                                                                     Geodetic3D::fromDegrees(0.02,
-                                                                                             0.02 + (subSector.getDeltaLongitude()._degrees * 1.05),
-                                                                                             0),
-                                                                     pointSize) );
-    
-    
-    IFloatBuffer* deltaBuffer = IFactory::instance()->createFloatBuffer( subResolution._x * subResolution._y );
-    
-    IMathUtils* mu = IMathUtils::instance();
-    for (int x = 0; x < subResolution._x; x++) {
-      for (int y = 0; y < subResolution._y; y++) {
-        const double height1 = subElevationDataDecimated->getElevationAt(x, y);
-        const double height2 = subElevationDataNotDecimated->getElevationAt(x, y);
-        
-        const int index = ((subResolution._y-1-y) * subResolution._x) + x;
-        
-        if (mu->isNan(height1) || mu->isNan(height2)){
-          deltaBuffer->rawPut(index,  mu->NanF());
-        } else{
-          deltaBuffer->rawPut(index,  (float) (height1 - height2));
-        }
-        
-      }
-    }
-    
-    ElevationData* deltaElevation = new FloatBufferElevationData(subSector,
-                                                                 subResolution,
-                                                                 subSector,
-                                                                 subResolution,
-                                                                 deltaBuffer);
-    
-    _meshRenderer->addMesh( deltaElevation->createMesh(planet,
-                                                       verticalExaggeration,
-                                                       Geodetic3D::fromDegrees(0.02,
-                                                                               0.02 + (subSector.getDeltaLongitude()._degrees * 2.1),
-                                                                               100),
-                                                       pointSize) );
-    
-    
-    delete deltaElevation;
-    
+//    delete deltaElevation;
+
     delete planet;
     delete elevationData;
     
-    delete subElevationDataDecimated;
-    delete subElevationDataNotDecimated;
-    
+//    delete subElevationDataDecimated;
+//    delete subElevationDataNotDecimated;
+
   }
   
   void onError(const URL& url) {
@@ -1778,7 +1785,7 @@ public:
                                                                    ),
                                                Color::magenta(),
                                                2) );
-      
+
       
       // mesh1
       Angle latFrom(Angle::fromDegreesMinutesSeconds(38, 53, 42.24));
@@ -1863,16 +1870,18 @@ public:
       
       //      targetSector.c
       
-      
-      //       context->getDownloader()->requestBuffer(URL("file:///full-earth-2048x1024.bil", false),
-      //       1000000,
-      //       TimeInterval::fromDays(30),
-      //       new Bil16Parser_IBufferDownloadListener(_shapesRenderer,
-      //       _meshRenderer,
-      //       Vector2I(2048, 1024),
-      //       Sector::fullSphere()),
-      //       true);
-      
+
+      /*
+      context->getDownloader()->requestBuffer(URL("file:///full-earth-2048x1024.bil", false),
+                                              1000000,
+                                              TimeInterval::fromDays(30),
+                                              true,
+                                              new Bil16Parser_IBufferDownloadListener(_shapesRenderer,
+                                                                                      _meshRenderer,
+                                                                                      Vector2I(2048, 1024),
+                                                                                      Sector::fullSphere()),
+                                              true);
+      */
       
       /*
        context->getDownloader()->requestBuffer(//URL("file:///sample_bil16_150x150.bil", false),

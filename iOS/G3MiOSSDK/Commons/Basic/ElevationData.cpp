@@ -99,7 +99,9 @@ Mesh* ElevationData::createMesh(const Ellipsoid* ellipsoid,
                         lineWidth,
                         pointSize,
                         flatColor,
-                        colors.create());
+                        colors.create(),
+                        0,
+                        false);
 }
 
 Interpolator* ElevationData::getInterpolator() const {

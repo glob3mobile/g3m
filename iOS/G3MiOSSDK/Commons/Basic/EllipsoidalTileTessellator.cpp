@@ -346,5 +346,8 @@ Mesh* EllipsoidalTileTessellator::createTileDebugMesh(const Planet* planet,
                          indices.create(),
                          1,
                          1,
-                         color);
+                         color,
+                         NULL, // colors
+                         0, // colorsIntensity
+                         false);
 }
