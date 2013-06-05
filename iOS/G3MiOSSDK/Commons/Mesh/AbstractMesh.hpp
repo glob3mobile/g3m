@@ -77,7 +77,6 @@ public:
   void modifyGPUProgramState(GPUProgramState& progState) const;
   
   //Scene Graph Node
-//  void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode);
   bool isVisible(const G3MRenderContext* rc);
   void modifiyGLState(GLState* state);
   

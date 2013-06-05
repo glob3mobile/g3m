@@ -41,9 +41,9 @@ public:
   void modifyGLGlobalState(GLGlobalState& GLGlobalState) const{}
   void modifyGPUProgramState(GPUProgramState& progState) const{}
   
-  void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode);
-  bool isVisible(const G3MRenderContext* rc);
-  void modifiyGLState(GLState* state);
+//  void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode);
+//  bool isVisible(const G3MRenderContext* rc);
+  void modifiyGLState(GLState* state){}
 
 
 };

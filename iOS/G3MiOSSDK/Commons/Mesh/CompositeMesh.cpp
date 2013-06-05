@@ -103,8 +103,8 @@ void CompositeMesh::notifyGLClientChildrenParentHasChanged(){
   }
 }
 
-void CompositeMesh::rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode){}
-bool CompositeMesh::isVisible(const G3MRenderContext* rc){
-  return true;
-}
-void CompositeMesh::modifiyGLState(GLState* state){}
+//void CompositeMesh::rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode){}
+//bool CompositeMesh::isVisible(const G3MRenderContext* rc){
+//  return true;
+//}
+//void CompositeMesh::modifiyGLState(GLState* state){}

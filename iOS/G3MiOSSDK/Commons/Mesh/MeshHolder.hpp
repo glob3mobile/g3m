@@ -63,14 +63,14 @@ public:
   void modifyGPUProgramState(GPUProgramState& progState) const{}
   
   //Scene Graph Node
-  void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode){
-    //TODO: Implement
-    //It's necessary a holder with the Scene Graph approach
-  }
-  bool isVisible(const G3MRenderContext* rc){
-    //TODO: Implement
-    return true;
-  }
+//  void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode){
+//    //TODO: Implement
+//    //It's necessary a holder with the Scene Graph approach
+//  }
+//  bool isVisible(const G3MRenderContext* rc){
+//    //TODO: Implement
+//    return true;
+//  }
   void modifiyGLState(GLState* state){
     //TODO: Implement
   }

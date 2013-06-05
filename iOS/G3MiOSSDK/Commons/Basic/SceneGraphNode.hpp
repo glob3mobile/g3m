@@ -40,7 +40,7 @@ public:
   SceneGraphNode():_enabled(true), _lastParentStateNode(NULL), _lastStateNode(NULL){}
   
   virtual ~SceneGraphNode(){
-    GLStateTree::prune(this); //Deleting states
+    GLStateTree::prune(this); //Deleting states from tree
   }
   
   virtual void modifiyGLState(GLState* state) = 0;
@@ -59,12 +59,6 @@ public:
 };
 
 class SceneGraphLeafNode: public SceneGraphNode{
-protected:
-  
-  virtual void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode) = 0;
-  
-  virtual bool isVisible(const G3MRenderContext* rc) = 0; //TODO: isVisible
-  
 public:
   
   SceneGraphLeafNode(){}
