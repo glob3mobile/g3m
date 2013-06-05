@@ -258,10 +258,14 @@ public:
   //  ElevationDataProvider* elevationDataProvider = new WMSBillElevationDataProvider();
   
   //  ElevationDataProvider* elevationDataProvider;
-  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
+//  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
+//                                                              Sector::fullSphere(),
+//                                                              Vector2I(2048, 1024));
+
+  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-4096x2048.bil", false),
                                                               Sector::fullSphere(),
-                                                              Vector2I(2048, 1024));
-  
+                                                              Vector2I(4096, 2048));
+
   //  ElevationDataProvider* elevationDataProvider1;
   //  elevationDataProvider1 = new SingleBillElevationDataProvider(URL("file:///elev-35.0_-6.0_38.0_-2.0_4096x2048.bil", false),
   //                                                               Sector::fromDegrees(35, -6, 38, -2),
@@ -285,16 +289,16 @@ public:
   //                                                               Vector2I(2008, 2032),
   //                                                               0);
   
-    ElevationDataProvider* elevationDataProvider4;
-    elevationDataProvider4 = new SingleBillElevationDataProvider(URL("file:///small-caceres.bil", false),
-                                                                Sector::fromDegrees(
-                                                                                    39.4642994358225678,
-                                                                                    -6.3829980000000042,
-                                                                                    39.4829889999999608,
-                                                                                    -6.3645291787065954
-                                                                                    ),
-                                                                Vector2I(251, 254));
-  
+  ElevationDataProvider* elevationDataProvider4;
+  elevationDataProvider4 = new SingleBillElevationDataProvider(URL("file:///small-caceres.bil", false),
+                                                               Sector::fromDegrees(
+                                                                                   39.4642994358225678,
+                                                                                   -6.3829980000000042,
+                                                                                   39.4829889999999608,
+                                                                                   -6.3645291787065954
+                                                                                   ),
+                                                               Vector2I(251, 254));
+
   //  ElevationDataProvider* elevationDataProvider5;
   //  elevationDataProvider5 = new SingleBillElevationDataProvider(URL("file:///elev-35.0_-6.0_38.0_-2.0_4096x2048.bil", false),
   //                                                               Sector::fromDegrees(35, -6, 38, -2),
@@ -312,11 +316,11 @@ public:
   //                                                               Vector2I(256, 256),
   //                                                               0);
   
-    ElevationDataProvider* elevationDataProvider8;
-    elevationDataProvider8 = new WMSBillElevationDataProvider(URL("http://data.worldwind.arc.nasa.gov/elev?REQUEST=GetMap&SERVICE=WMS&VERSION=1.3.0&LAYERS=srtm30&STYLES=&FORMAT=image/bil&CRS=EPSG:4326&BBOX=-180.0,-90.0,180.0,90.0&WIDTH=10&HEIGHT=10", false),
-                                                              Sector::fullSphere());
-  
-  
+//    ElevationDataProvider* elevationDataProvider8;
+//    elevationDataProvider8 = new WMSBillElevationDataProvider(URL("http://data.worldwind.arc.nasa.gov/elev?REQUEST=GetMap&SERVICE=WMS&VERSION=1.3.0&LAYERS=srtm30&STYLES=&FORMAT=image/bil&CRS=EPSG:4326&BBOX=-180.0,-90.0,180.0,90.0&WIDTH=10&HEIGHT=10", false),
+//                                                              Sector::fullSphere());
+
+
   CompositeElevationDataProvider* compElevationDataProvider = new CompositeElevationDataProvider();
   compElevationDataProvider->addElevationDataProvider(elevationDataProvider);
   //CompositeElevationDataProvider* compElevationDataProvider = new CompositeElevationDataProvider();
@@ -330,9 +334,9 @@ public:
   //compElevationDataProvider->addElevationDataProvider(elevationDataProvider6);
   //compElevationDataProvider->addElevationDataProvider(elevationDataProvider7);
   //compElevationDataProvider->addElevationDataProvider(elevationDataProvider8);
-  elevationDataProvider = compElevationDataProvider;
-  
-  builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProvider);
+
+  builder.getTileRendererBuilder()->setElevationDataProvider(compElevationDataProvider);
+  //builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProvider);
 }
 
 
