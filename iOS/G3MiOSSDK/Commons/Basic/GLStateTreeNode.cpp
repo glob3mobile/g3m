@@ -63,6 +63,33 @@ GLState* GLStateTreeNode::getGLState() {
         sgNode->modifiyGLState(_state);
       }
     }
+  } else{
+    
+    //Checking if state is valid
+    GPUProgramState* progState = _state->getGPUProgramState();
+    if (!progState->isValid()){
+      std::vector<std::string> iu = progState->getInvalidUniformValues();
+      std::vector<std::string> ia = progState->getInvalidAttributeValues();
+      std::list<SceneGraphNode*> hierachi = getHierachy();
+
+      for (std::list<SceneGraphNode*>::reverse_iterator it = hierachi.rbegin();
+           it != hierachi.rend() && !progState->isValid();
+           it++) {
+        
+        SceneGraphNode* sgNode = *it;
+        for (int i = 0; i < iu.size(); i++) {
+          sgNode->updateGPUUniform(this, progState, iu[i]);
+        }
+        for (int i = 0; i < ia.size(); i++) {
+          sgNode->updateGPUAttribute(this, progState, ia[i]);
+        }
+      }
+    }
+    if (!progState->isValid()){
+      ILogger::instance()->logError("Couldn't update GLState after invalidation");
+      return NULL;
+    }
+    
   }
   return _state;
 }
@@ -83,6 +110,31 @@ void GLStateTreeNode::prune(SceneGraphNode* sgNode){
     }
   }
 }
+
+void GLStateTreeNode::invalidateGPUUniformValue(const std::string& name){
+  
+  if (_state != NULL){
+    _state->getGPUProgramState()->invalidateGPUUniformValue(name);
+  }
+  
+  for (std::vector<GLStateTreeNode*>::iterator it = _children.begin(); it != _children.end(); it++) {
+    GLStateTreeNode* child = (*it);
+    child->invalidateGPUUniformValue(name);
+  }
+}
+
+void GLStateTreeNode::invalidateGPUAttributeValue(const std::string& name){
+  if (_state != NULL){
+    _state->getGPUProgramState()->invalidateGPUAttributeValue(name);
+  }
+  
+  for (std::vector<GLStateTreeNode*>::iterator it = _children.begin(); it != _children.end(); it++) {
+    GLStateTreeNode* child = (*it);
+    child->invalidateGPUAttributeValue(name);
+  }
+}
+
+#pragma mark GLStateTree
 
 GLStateTreeNode* GLStateTree::createNodeForSGNode(SceneGraphNode* sgNode){
   return new GLStateTreeNode(sgNode, &_rootNode);

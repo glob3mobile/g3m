@@ -56,6 +56,9 @@ public:
   virtual void touchEvent(const G3MEventContext* ec, const TouchEvent* touchEvent) = 0;
   
   virtual void initializeSGNode(const G3MContext* context) = 0;
+  
+  virtual void updateGPUUniform(GLStateTreeNode* stateNode, GPUProgramState* progState, const std::string& name) = 0;
+  virtual void updateGPUAttribute(GLStateTreeNode* stateNode, GPUProgramState* progState, const std::string& name){}
 };
 
 class SceneGraphLeafNode: public SceneGraphNode{
@@ -109,6 +112,7 @@ public:
   void eraseChild(SceneGraphNode* child);
   
   void touchEvent(const G3MEventContext* ec, const TouchEvent* touchEvent);
+  
 };
 
 

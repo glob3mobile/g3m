@@ -711,3 +711,7 @@ void Mark::onInitialize(const G3MContext* context) {
     }
   }
 }
+
+void Mark::updateGPUUniform(GLStateTreeNode* stateNode, GPUProgramState* progState, const std::string& name){
+  
+}

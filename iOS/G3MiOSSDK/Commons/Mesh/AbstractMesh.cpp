@@ -259,3 +259,7 @@ void AbstractMesh::modifiyGLState(GLState* state){
     progState.multiplyUniformValue("Modelview", _translationMatrix);
   }
 }
+
+void AbstractMesh::updateGPUUniform(GLStateTreeNode* stateNode, GPUProgramState* progState, const std::string& name){
+  
+}

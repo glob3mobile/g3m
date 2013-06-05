@@ -46,6 +46,10 @@ protected:
     return _sgNode;
   }
   
+  void invalidateGPUUniformValue(const std::string& name);
+  
+  void invalidateGPUAttributeValue(const std::string& name);
+  
 public:
   
   ~GLStateTreeNode();

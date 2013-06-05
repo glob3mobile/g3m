@@ -267,6 +267,8 @@ public:
   
   void onInitialize(const G3MContext* context);
   
+  void updateGPUUniform(GLStateTreeNode* stateNode, GPUProgramState* progState, const std::string& name);
+  
 };
 
 #endif

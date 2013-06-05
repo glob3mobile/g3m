@@ -79,6 +79,7 @@ public:
   //Scene Graph Node
   bool isVisible(const G3MRenderContext* rc);
   void modifiyGLState(GLState* state);
+  void updateGPUUniform(GLStateTreeNode* stateNode, GPUProgramState* progState, const std::string& name);
   
 };
 

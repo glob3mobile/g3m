@@ -62,6 +62,8 @@ public:
   virtual bool isTileRenderer() {
     return false;
   }
+  
+  void updateGPUUniform(GLStateTreeNode* stateNode, GPUProgramState* progState, const std::string& name){}
 
 };
 

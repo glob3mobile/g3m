@@ -29,8 +29,8 @@ class GPUProgramState{
   std::map<std::string, GPUAttributeValue*> _attributesValues;
   std::map<std::string, attributeEnabledStruct> _attributesEnabled;
   
-  void setUniformValue(const std::string& name, GPUUniformValue* v);
-  void setAttributeValue(const std::string& name, GPUAttributeValue* v);
+  void setGPUUniformValue(const std::string& name, GPUUniformValue* v);
+  void setGPUAttributeValue(const std::string& name, GPUAttributeValue* v);
   
   void applyValuesToLinkedProgram() const;
   
@@ -79,6 +79,16 @@ public:
   std::string description() const;
   
   bool isLinkableToProgram(const GPUProgram& program) const;
+  
+  void invalidateGPUUniformValue(const std::string& name);
+  
+  void invalidateGPUAttributeValue(const std::string& name);
+  
+  bool isValid() const;
+  
+  std::vector<std::string> getInvalidUniformValues() const;
+  
+  std::vector<std::string> getInvalidAttributeValues() const;
   
 };
 
