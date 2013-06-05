@@ -48,6 +48,40 @@ void SceneGraphInnerNode::render(const G3MRenderContext* rc, GLStateTreeNode* pa
   }
 }
 
+void SceneGraphLeafNode::forceRender(const G3MRenderContext* rc, GLStateTreeNode* parentStateTreeNode){
+  
+  if (_lastParentStateNode != parentStateTreeNode){
+    _lastParentStateNode = parentStateTreeNode;
+    _lastStateNode = parentStateTreeNode->getChildNodeForSGNode(this);
+    if (_lastStateNode == NULL){
+      _lastStateNode = parentStateTreeNode->createChildNodeForSGNode(this);
+    }
+  }
+  
+  rawRender(rc, _lastStateNode);
+}
+
+void SceneGraphInnerNode::forceRender(const G3MRenderContext* rc, GLStateTreeNode* parentStateTreeNode){
+  
+  if (_lastParentStateNode != parentStateTreeNode){
+    _lastParentStateNode = parentStateTreeNode;
+    _lastStateNode = parentStateTreeNode->getChildNodeForSGNode(this);
+    if (_lastStateNode == NULL){
+      _lastStateNode = parentStateTreeNode->createChildNodeForSGNode(this);
+    }
+  }
+  
+  rawRender(rc, _lastStateNode);
+  
+  for (std::vector<SceneGraphNode*>::iterator it = _children.begin();
+       it != _children.end();
+       it++) {
+    SceneGraphNode* child = *it;
+    child->render(rc, _lastStateNode);
+  }
+  
+}
+
 void SceneGraphInnerNode::initializeSGNode(const G3MContext* context){
   onInitialize(context);
   for (std::vector<SceneGraphNode*>::iterator it = _children.begin();

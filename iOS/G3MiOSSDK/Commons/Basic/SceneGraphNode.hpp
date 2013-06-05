@@ -47,6 +47,8 @@ public:
   
   virtual void render(const G3MRenderContext* rc, GLStateTreeNode* parentStateTreeNode) = 0;
   
+  virtual void forceRender(const G3MRenderContext* rc, GLStateTreeNode* parentStateTreeNode) = 0;
+  
   bool isEnabled() const { return _enabled;}
   
   void setEnabled(bool v) { _enabled = v;}
@@ -76,6 +78,8 @@ public:
   }
   
   void render(const G3MRenderContext* rc, GLStateTreeNode* parentStateTreeNode);
+  
+  void forceRender(const G3MRenderContext* rc, GLStateTreeNode* parentStateTreeNode);
 };
 
 class SceneGraphInnerNode: public SceneGraphNode{
@@ -101,6 +105,8 @@ public:
   void initializeSGNode(const G3MContext* context);
   
   void render(const G3MRenderContext* rc, GLStateTreeNode* parentStateTreeNode);
+  
+  void forceRender(const G3MRenderContext* rc, GLStateTreeNode* parentStateTreeNode);
   
   void addChild(SceneGraphNode* child){
     _children.push_back(child);
