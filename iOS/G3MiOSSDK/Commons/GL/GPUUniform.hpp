@@ -305,6 +305,58 @@ public:
   
   MutableMatrix44D getValue() const{ return _m;}
 };
+
+class GPUUniformValueMatrix4FloatTransform:public GPUUniformValue{
+  
+  GPUUniformValueMatrix4FloatTransform(const GPUUniformValueMatrix4FloatTransform* that):
+  GPUUniformValue(GLType::glMatrix4Float()),
+  _m(that->_m), _isTransform(that->_isTransform), _transformedMatrix(that->_transformedMatrix){}
+  
+public:
+#ifdef C_CODE
+  const MutableMatrix44D _m;
+#endif
+#ifdef JAVA_CODE
+  public final MutableMatrix44D _m;
+#endif
+  
+  MutableMatrix44D _transformedMatrix;
+  
+  bool _isTransform;
+  
+  GPUUniformValueMatrix4FloatTransform(const MutableMatrix44D& m, bool isTransform):
+  GPUUniformValue(GLType::glMatrix4Float()),_m(m), _isTransform(isTransform), _transformedMatrix(m){}
+  
+  void setLastGPUUniformValue(GPUUniformValue* old){
+    if (_isTransform){
+      MutableMatrix44D lastM = ((GPUUniformValueMatrix4FloatTransform*)old)->getValue();
+      _transformedMatrix = lastM.multiply(_m);
+    }
+  }
+  
+  void setUniform(GL* gl, const IGLUniformID* id) const{
+    gl->uniformMatrix4fv(id, false, &_transformedMatrix);
+  }
+  
+  bool isEqualsTo(const GPUUniformValue* v) const{
+    GPUUniformValueMatrix4FloatTransform *v2 = (GPUUniformValueMatrix4FloatTransform *)v;
+    const MutableMatrix44D* m = &(v2->_transformedMatrix);
+    return _m.isEqualsTo(*m);
+  }
+  GPUUniformValue* deepCopy() const{
+    return new GPUUniformValueMatrix4FloatTransform(this);
+  }
+  
+  std::string description() const{
+    IStringBuilder *isb = IStringBuilder::newStringBuilder();
+    isb->addString("Uniform Value Matrix44D.");
+    std::string s = isb->getString();
+    delete isb;
+    return s;
+  }
+  
+  MutableMatrix44D getValue() const{ return _transformedMatrix;}
+};
 class GPUUniformMatrix4Float: public GPUUniform{
 public:
   GPUUniformMatrix4Float(const std::string&name, IGLUniformID* id):GPUUniform(name,id, GLType::glMatrix4Float()){}

@@ -42,6 +42,8 @@ private:
   
   IFloatBuffer* _billboardTexCoord;
   
+  GLState _glState;
+  
 public:
 
   MarksRenderer(bool readyWhenMarksReady);

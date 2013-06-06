@@ -135,6 +135,8 @@ private:
   int _viewportWidth;
   int _viewportHeight;
   
+  GLState _glState;
+  
 public:
   /**
    * Creates a marker with icon and label
@@ -268,6 +270,9 @@ public:
   void onInitialize(const G3MContext* context);
   
   void updateGPUUniform(GLStateTreeNode* stateNode, GPUProgramState* progState, const std::string& name);
+  
+  void render(const G3MRenderContext* rc,
+              const Vector3D& cameraPosition, const GLState* glState);
   
 };
 

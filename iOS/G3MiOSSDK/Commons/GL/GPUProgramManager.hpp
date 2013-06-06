@@ -72,8 +72,6 @@ public:
         }
         
         _programs[name] = prog;
-        
-        //_programs.insert ( std::pair<std::string, GPUProgram*>(prog->getName(),prog) );
       }
       
     }
@@ -111,6 +109,8 @@ public:
     
     return getProgram("Default");
   }
+  
+  GPUProgram* getProgram(GLState* const glState);
   
   
 };

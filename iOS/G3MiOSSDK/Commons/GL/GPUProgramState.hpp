@@ -21,16 +21,16 @@
 
 class GPUProgramState{
   
-  struct attributeEnabledStruct{
-    bool value;
-    mutable GPUAttribute* attribute;
-  };
+//  struct attributeEnabledStruct{
+//    bool value;
+//    mutable GPUAttribute* attribute;
+//  };
   std::map<std::string, GPUUniformValue*> _uniformValues;
   std::map<std::string, GPUAttributeValue*> _attributesValues;
-  std::map<std::string, attributeEnabledStruct> _attributesEnabled;
+//  std::map<std::string, attributeEnabledStruct> _attributesEnabled;
   
-  void setGPUUniformValue(const std::string& name, GPUUniformValue* v);
-  void setGPUAttributeValue(const std::string& name, GPUAttributeValue* v);
+  bool setGPUUniformValue(const std::string& name, GPUUniformValue* v);
+  bool setGPUAttributeValue(const std::string& name, GPUAttributeValue* v);
   
   void applyValuesToLinkedProgram() const;
   
@@ -44,23 +44,24 @@ public:
   
   void clear();
   
-  void setUniformValue(const std::string& name, bool b);
+  bool setUniformValue(const std::string& name, bool b);
   
-  void setUniformValue(const std::string& name, float f);
+  bool setUniformValue(const std::string& name, float f);
   
-  void setUniformValue(const std::string& name, const Vector2D& v);
+  bool setUniformValue(const std::string& name, const Vector2D& v);
   
-  void setUniformValue(const std::string& name, double x, double y, double z, double w);
+  bool setUniformValue(const std::string& name, double x, double y, double z, double w);
   
-  void setUniformValue(const std::string& name, const MutableMatrix44D* m);
+  bool setUniformValue(const std::string& name, const MutableMatrix44D* m);
   
-  void multiplyUniformValue(const std::string& name, const MutableMatrix44D* m);
+  bool multiplyUniformValue(const std::string& name, const MutableMatrix44D* m);
   
-  void setAttributeValue(const std::string& name,
+  bool setAttributeValue(const std::string& name,
                          IFloatBuffer* buffer, int attributeSize,
                          int arrayElementSize, int index, bool normalized, int stride);
   
   void setAttributeEnabled(const std::string& name, bool enabled);
+  void setAttributeDisabled(const std::string& name);
   
   void applyChanges(GL* gl) const;
   
@@ -89,6 +90,9 @@ public:
   std::vector<std::string> getInvalidUniformValues() const;
   
   std::vector<std::string> getInvalidAttributeValues() const;
+  
+  
+  void updateFromDeltas(const std::vector<GPUProgramState*>& states, const GPUProgramManager& manager);
   
 };
 

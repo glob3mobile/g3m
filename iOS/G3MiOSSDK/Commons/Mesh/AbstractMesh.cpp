@@ -135,7 +135,7 @@ void AbstractMesh::modifyGPUProgramState(GPUProgramState& progState) const{
   
   progState.setUniformValue("PointSize", _pointSize);
   
-  progState.setAttributeEnabled("Position", true);
+//  progState.setAttributeEnabled("Position", true);
   progState.setAttributeValue("Position",
                               _vertices, 4, //The attribute is a float vector of 4 elements
                               3,            //Our buffer contains elements of 3
@@ -144,7 +144,7 @@ void AbstractMesh::modifyGPUProgramState(GPUProgramState& progState) const{
                               0);           //Stride 0
   
   if (_colors != NULL){
-    progState.setAttributeEnabled("Color", true);
+//    progState.setAttributeEnabled("Color", true);
     progState.setUniformValue("EnableColorPerVertex", true);
     progState.setAttributeValue("Color",
                                 _colors, 4,   //The attribute is a float vector of 4 elements RGBA
@@ -155,7 +155,9 @@ void AbstractMesh::modifyGPUProgramState(GPUProgramState& progState) const{
     
     progState.setUniformValue("ColorPerVertexIntensity", _colorsIntensity);
   } else{
-    progState.setAttributeEnabled("Color", false);
+//    progState.setAttributeEnabled("Color", false);
+    progState.setAttributeDisabled("Color");
+    
     progState.setUniformValue("EnableColorPerVertex", false);
     progState.setUniformValue("ColorPerVertexIntensity", (float)0.0);
   }
@@ -214,7 +216,7 @@ void AbstractMesh::modifiyGLState(GLState* state){
   
   progState.setUniformValue("PointSize", _pointSize);
   
-  progState.setAttributeEnabled("Position", true);
+//  progState.setAttributeEnabled("Position", true);
   progState.setAttributeValue("Position",
                               _vertices, 4, //The attribute is a float vector of 4 elements
                               3,            //Our buffer contains elements of 3
@@ -223,7 +225,7 @@ void AbstractMesh::modifiyGLState(GLState* state){
                               0);           //Stride 0
   
   if (_colors != NULL){
-    progState.setAttributeEnabled("Color", true);
+//    progState.setAttributeEnabled("Color", true);
     progState.setUniformValue("EnableColorPerVertex", true);
     progState.setAttributeValue("Color",
                                 _colors, 4,   //The attribute is a float vector of 4 elements RGBA
@@ -234,7 +236,8 @@ void AbstractMesh::modifiyGLState(GLState* state){
     
     progState.setUniformValue("ColorPerVertexIntensity", _colorsIntensity);
   } else{
-    progState.setAttributeEnabled("Color", false);
+//    progState.setAttributeEnabled("Color", false);
+    progState.setAttributeDisabled("Color");
     progState.setUniformValue("EnableColorPerVertex", false);
     progState.setUniformValue("ColorPerVertexIntensity", (float)0.0);
   }

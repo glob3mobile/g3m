@@ -27,16 +27,20 @@ class GLState{
   
   void setProgramState(GL* gl, GPUProgramManager& progManager);
   
+  GLState* _parentGLState;
+  
 public:
   
   GLState():
   _programState(new GPUProgramState()),
   _globalState(new GLGlobalState()),
-  _owner(true){}
+  _owner(true),
+  _parentGLState(NULL){}
   
   //For debugging purposes only
   GLState(GLGlobalState*   globalState,
-          GPUProgramState* programState):_programState(programState), _globalState(globalState), _owner(false){}
+          GPUProgramState* programState):
+  _programState(programState), _globalState(globalState), _owner(false), _parentGLState(NULL){}
   
   ~GLState(){
     if (_owner){
@@ -45,6 +49,14 @@ public:
     }
   }
   
+  GLState* getParent() const{
+    return _parentGLState;
+  }
+  
+  void setParent(GLState* p){
+    _parentGLState = p;
+  }
+
   void applyGlobalStateOnGPU(GL* gl);
   
   void applyOnGPU(GL* gl, GPUProgramManager& progManager);

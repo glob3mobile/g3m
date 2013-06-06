@@ -490,8 +490,8 @@ void Mark::modifyGPUProgramState(GPUProgramState& progState) const{
     ILogger::instance()->logError("Planet NULL");
   } else{
     
-    progState.setAttributeEnabled("Position", true);
-    progState.setAttributeEnabled("TextureCoord", true);
+//    progState.setAttributeEnabled("Position", true);
+//    progState.setAttributeEnabled("TextureCoord", true);
     
     if (_billboardTexCoord == NULL){
       FloatBufferBuilderFromCartesian2D texCoor;
@@ -714,4 +714,74 @@ void Mark::onInitialize(const G3MContext* context) {
 
 void Mark::updateGPUUniform(GLStateTreeNode* stateNode, GPUProgramState* progState, const std::string& name){
   
+}
+
+void Mark::render(const G3MRenderContext* rc,
+                  const Vector3D& cameraPosition, const GLState* glState) {
+  const Planet* planet = rc->getPlanet();
+  
+  const Vector3D* markPosition = getCartesianPosition(planet);
+  
+  const Vector3D markCameraVector = markPosition->sub(cameraPosition);
+  
+  
+  // mark will be renderered only if is renderable by distance and placed on a visible globe area
+  bool renderableByDistance;
+  if (_minDistanceToCamera == 0) {
+    renderableByDistance = true;
+  }
+  else {
+    const double squaredDistanceToCamera = markCameraVector.squaredLength();
+    renderableByDistance = ( squaredDistanceToCamera <= (_minDistanceToCamera * _minDistanceToCamera) );
+  }
+  
+  _renderedMark = false;
+  if (renderableByDistance) {
+    const Vector3D normalAtMarkPosition = planet->geodeticSurfaceNormal(*markPosition);
+    
+    if (normalAtMarkPosition.angleBetween(markCameraVector)._radians > IMathUtils::instance()->halfPi()) {
+      
+      if (_textureId == NULL) {
+        if (_textureImage != NULL) {
+          _textureId = rc->getTexturesHandler()->getGLTextureId(_textureImage,
+                                                                GLFormat::rgba(),
+                                                                _imageID,
+                                                                false);
+          
+          rc->getFactory()->deleteImage(_textureImage);
+          _textureImage = NULL;
+          
+          _viewportWidth = rc->getCurrentCamera()->getWidth();
+          _viewportHeight = rc->getCurrentCamera()->getHeight();
+          actualizeGLGlobalState(rc->getCurrentCamera()); //Ready for rendering
+        }
+      } else{
+        if (rc->getCurrentCamera()->getWidth() != _viewportWidth ||
+            rc->getCurrentCamera()->getHeight() != _viewportHeight){
+          _viewportWidth = rc->getCurrentCamera()->getWidth();
+          _viewportHeight = rc->getCurrentCamera()->getHeight();
+          actualizeGLGlobalState(rc->getCurrentCamera()); //Ready for rendering
+        }
+      }
+      
+      if (_textureId != NULL) {
+        GL* gl = rc->getGL();
+        
+        
+        //        GLGlobalState state(parentState);
+        //        state.bindTexture(_textureId);
+        
+        GPUProgramManager& progManager = *rc->getGPUProgramManager();
+        
+        gl->drawArrays(GLPrimitive::triangleStrip(),
+                       0,
+                       4,
+                       _GLGlobalState,
+                       progManager,
+                       &_progState);
+        
+        _renderedMark = true;
+      }
+    }
+  }
 }

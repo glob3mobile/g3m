@@ -200,6 +200,21 @@ GPUAttribute* GPUProgram::getGPUAttribute(const std::string name) const{
 #endif
 }
 
+GPUAttribute* GPUProgram::getGPUAttributeVecXFloat(const std::string name, int x) const{
+  switch (x) {
+    case 1:
+      return getGPUAttributeVec1Float(name);
+    case 2:
+      return getGPUAttributeVec2Float(name);
+    case 3:
+      return getGPUAttributeVec3Float(name);
+    case 4:
+      return getGPUAttributeVec4Float(name);
+    default:
+      return NULL;
+  }
+}
+
 GPUAttributeVec1Float* GPUProgram::getGPUAttributeVec1Float(const std::string name) const{
   GPUAttributeVec1Float* a = (GPUAttributeVec1Float*)getGPUAttribute(name);
   if (a!= NULL && a->getSize() == 1 && a->getType() == GLType::glFloat()){

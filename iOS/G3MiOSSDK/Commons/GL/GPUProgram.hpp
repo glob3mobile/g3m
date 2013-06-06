@@ -65,7 +65,7 @@ public:
   GPUUniformFloat* getGPUUniformFloat(const std::string name) const;
   GPUUniformMatrix4Float* getGPUUniformMatrix4Float(const std::string name) const;
   
-  
+  GPUAttribute* getGPUAttributeVecXFloat(const std::string name, int x) const;
   GPUAttributeVec1Float* getGPUAttributeVec1Float(const std::string name) const;
   GPUAttributeVec2Float* getGPUAttributeVec2Float(const std::string name) const;
   GPUAttributeVec3Float* getGPUAttributeVec3Float(const std::string name) const;

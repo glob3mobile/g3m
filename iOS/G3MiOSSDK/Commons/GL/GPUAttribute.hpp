@@ -20,6 +20,7 @@ class GPUAttribute;
 
 class GPUAttributeValue{
 protected:
+  const int _enabled;
   const int _type;
   const int _attributeSize;
   const int _index;
@@ -31,7 +32,19 @@ protected:
   mutable GPUAttribute* _attribute;
   
 public:
+  
+  GPUAttributeValue(bool enabled):
+  _enabled(enabled),
+  _type(0),
+  _attributeSize(0),
+  _index(0),
+  _stride(0),
+  _normalized(0),
+  _arrayElementSize(0),
+  _attribute(NULL){}
+  
   GPUAttributeValue(int type, int attributeSize, int arrayElementSize, int index, int stride, bool normalized):
+  _enabled(true),
   _type(type),
   _attributeSize(attributeSize),
   _index(index),
@@ -45,6 +58,7 @@ public:
   int getIndex() const { return _index;}
   int getStride() const { return _stride;}
   bool getNormalized() const { return _normalized;}
+  bool getEnabled() const { return _enabled;}
   virtual ~GPUAttributeValue(){}
   virtual void setAttribute(GL* gl, const int id) const = 0;
   virtual bool isEqualsTo(const GPUAttributeValue* v) const = 0;
@@ -61,6 +75,8 @@ public:
   }
   
   void setValueToLinkedAttribute() const;
+  
+  
 };
 
 class GPUAttribute{
@@ -112,7 +128,7 @@ public:
   }
   
   void set(GPUAttributeValue* v){
-    if (_type != v->getType()){ //type checking
+    if (v->getEnabled() && _type != v->getType()){ //type checking
       //delete v;
       ILogger::instance()->logError("Attempting to set attribute " + _name + "with invalid value type.");
       return;
@@ -127,31 +143,60 @@ public:
     }
   }
   
-  void setEnable(bool b){
-    if (b != _enabled){
-      _enabled = b;
-      _dirtyEnabled = true;
-    }
-  }
+//  void setEnable(bool b){
+//    if (b != _enabled){
+//      _enabled = b;
+//      _dirtyEnabled = true;
+//    }
+//  }
   
   virtual void applyChanges(GL* gl){
-    if (_dirtyEnabled){
-      _dirtyEnabled = false;
-      if (_enabled){
+//    if (_dirtyEnabled){
+//      _dirtyEnabled = false;
+//      if (_enabled){
+//        gl->enableVertexAttribArray(_id);
+//      } else{
+//        gl->disableVertexAttribArray(_id);
+//      }
+//    }
+    
+    if (_dirty){
+      
+      if (_value->getEnabled()){
         gl->enableVertexAttribArray(_id);
+        _value->setAttribute(gl, _id);
       } else{
         gl->disableVertexAttribArray(_id);
       }
-    }
-    
-    if (_dirty){
-      _value->setAttribute(gl, _id);
+      
       _dirty = false;
     }
   }
 };
 
 ///////////
+
+class GPUAttributeValueDisabled: public GPUAttributeValue{
+public:
+  GPUAttributeValueDisabled():
+  GPUAttributeValue(false){}
+  
+  void setAttribute(GL* gl, const int id) const{
+  }
+  
+  bool isEqualsTo(const GPUAttributeValue* v) const{
+    return (v->getEnabled() == false);
+  }
+  
+  GPUAttributeValue* shallowCopy() const{
+    return new GPUAttributeValueDisabled();
+  }
+  
+  std::string description() const{
+    return "Attribute Disabled.";
+  }
+  
+};
 
 class GPUAttributeValueVecFloat: public GPUAttributeValue{
   IFloatBuffer* _buffer;
