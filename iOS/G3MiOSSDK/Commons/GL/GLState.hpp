@@ -29,6 +29,8 @@ class GLState{
   
   GLState* _parentGLState;
   
+  void linkAndApplyToGPUProgram(GPUProgram* prog);
+  
 public:
   
   GLState():

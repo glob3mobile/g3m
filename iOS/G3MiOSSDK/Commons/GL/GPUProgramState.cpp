@@ -376,6 +376,11 @@ bool GPUProgramState::multiplyUniformValue(const std::string& name, const Mutabl
   
 }
 
+bool GPUProgramState::setUniformMatrixValue(const std::string& name, const MutableMatrix44D& m, bool isTransform){
+  GPUUniformValueMatrix4FloatTransform *uv = new GPUUniformValueMatrix4FloatTransform(m, isTransform);
+  return setGPUUniformValue(name, uv);
+}
+
 void GPUProgramState::setAttributeEnabled(const std::string& name, bool enabled){
   //TODO: REMOVE FUNCTION
   if (!enabled){
@@ -561,35 +566,3 @@ std::vector<std::string> GPUProgramState::getInvalidAttributeValues() const{
   }
   return ia;
 }
-
-void GPUProgramState::updateFromDeltas(const std::vector<GPUProgramState*>& states, const GPUProgramManager& manager){
-//  
-//  bool mustReLinkProgram = false;
-//  
-//  for(std::map<std::string, GPUUniformValue*> ::iterator it = _uniformValues.begin();
-//      it != _uniformValues.end();
-//      it++){
-//    
-//    std::string name = it->first;
-//  
-//  const int statesSize = states.size();
-//  for (int i = 0; i < statesSize; i++){
-//    
-//    GPUProgramState* state = states[i];
-//    
-//    std::map<std::string, GPUUniformValue*> ::iterator it2 = state->_uniformValues.find(name);
-//    if (it2 != _uniformValues.end()){
-//      if (!setGPUUniformValue(name, it2->second)){
-//        //Uniform set for first time
-//        
-//      }
-//    }
-//    
-//
-//    
-//  }
-//  
-//  
-//  
-}
-

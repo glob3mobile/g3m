@@ -32,7 +32,7 @@ class GPUProgramState{
   bool setGPUUniformValue(const std::string& name, GPUUniformValue* v);
   bool setGPUAttributeValue(const std::string& name, GPUAttributeValue* v);
   
-  void applyValuesToLinkedProgram() const;
+
   
   mutable GPUProgram* _lastProgramUsed;
   
@@ -55,6 +55,8 @@ public:
   bool setUniformValue(const std::string& name, const MutableMatrix44D* m);
   
   bool multiplyUniformValue(const std::string& name, const MutableMatrix44D* m);
+  
+  bool setUniformMatrixValue(const std::string& name, const MutableMatrix44D& m, bool isTransform);
   
   bool setAttributeValue(const std::string& name,
                          IFloatBuffer* buffer, int attributeSize,
@@ -91,8 +93,7 @@ public:
   
   std::vector<std::string> getInvalidAttributeValues() const;
   
-  
-  void updateFromDeltas(const std::vector<GPUProgramState*>& states, const GPUProgramManager& manager);
+    void applyValuesToLinkedProgram() const;
   
 };
 

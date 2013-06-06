@@ -40,6 +40,8 @@ public:
   }
   
   void setValueToLinkedUniform() const;
+  
+  virtual void setLastGPUUniformValue(GPUUniformValue* old){} //Used with matrix transform value
 };
 
 
@@ -86,6 +88,9 @@ public:
     }
     if (_value == NULL || !_value->isEqualsTo(v)){
       _dirty = true;
+      
+      v->setLastGPUUniformValue(_value); //Multiply matrix when needed
+      
       if (_value != NULL){
         delete _value;
       }
