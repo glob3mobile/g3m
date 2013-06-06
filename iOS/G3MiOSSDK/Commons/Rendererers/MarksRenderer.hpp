@@ -44,6 +44,8 @@ private:
   
   GLState _glState;
   
+  void updateGLState(const G3MRenderContext* rc);
+  
 public:
 
   MarksRenderer(bool readyWhenMarksReady);

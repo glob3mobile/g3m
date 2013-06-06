@@ -192,7 +192,7 @@ void MarksRenderer::render(const G3MRenderContext* rc) {
   for (int i = 0; i < marksSize; i++) {
     Mark* mark = _marks[i];
     if (mark->isReady()) {
-      mark->render(rc, cameraPosition);
+      mark->render(rc, cameraPosition, &_glState);
     }
   }
 }
@@ -256,4 +256,10 @@ void MarksRenderer::onTouchEventRecived(const G3MEventContext* ec, const TouchEv
       }
     }
   }
+}
+
+void MarksRenderer::updateGLState(const G3MRenderContext* rc){
+  GPUProgramState* progState = _glState.getGPUProgramState();
+  progState->setUniformMatrixValue("Projection", rc->getCurrentCamera()->getProjectionMatrix(), false);
+  progState->setUniformMatrixValue("Modelview", rc->getCurrentCamera()->getModelMatrix(), false);
 }

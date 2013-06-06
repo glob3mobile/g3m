@@ -716,8 +716,63 @@ void Mark::updateGPUUniform(GLStateTreeNode* stateNode, GPUProgramState* progSta
   
 }
 
+void Mark::createGLState(){
+  
+  GLGlobalState *globalState = _glState.getGLGlobalState();
+  
+  globalState->disableDepthTest();
+  globalState->enableBlend();
+  globalState->setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
+  globalState->bindTexture(_textureId);
+  
+  GPUProgramState* progState = _glState.getGPUProgramState();
+  
+  if (_planet == NULL){
+    ILogger::instance()->logError("Planet NULL");
+  } else{
+    
+    progState->setAttributeEnabled("Position", true);
+    progState->setAttributeEnabled("TextureCoord", true);
+    
+    if (_billboardTexCoord == NULL){
+      FloatBufferBuilderFromCartesian2D texCoor;
+      texCoor.add(1,1);
+      texCoor.add(1,0);
+      texCoor.add(0,1);
+      texCoor.add(0,0);
+      _billboardTexCoord = texCoor.create();
+    }
+    
+    progState->setAttributeValue("TextureCoord",
+                                 _billboardTexCoord, 2,
+                                 2,
+                                 0,
+                                 false,
+                                 0);
+    
+    const Vector3D* pos = new Vector3D( _planet->toCartesian(_position) );
+    FloatBufferBuilderFromCartesian3D vertex(CenterStrategy::noCenter(), Vector3D::zero());
+    vertex.add(*pos);
+    vertex.add(*pos);
+    vertex.add(*pos);
+    vertex.add(*pos);
+    
+    IFloatBuffer* vertices = vertex.create();
+    
+    progState->setAttributeValue("Position",
+                                 vertices, 4, //The attribute is a float vector of 4 elements
+                                 3,            //Our buffer contains elements of 3
+                                 0,            //Index 0
+                                 false,        //Not normalized
+                                 0);           //Stride 0
+    
+    progState->setUniformValue("TextureExtent", Vector2D(_textureWidth, _textureHeight));
+    progState->setUniformValue("ViewPortExtent", Vector2D( (double)_viewportWidth, (double)_viewportHeight ));
+  }
+}
+
 void Mark::render(const G3MRenderContext* rc,
-                  const Vector3D& cameraPosition, const GLState* glState) {
+                  const Vector3D& cameraPosition, GLState* parentGLState) {
   const Planet* planet = rc->getPlanet();
   
   const Vector3D* markPosition = getCartesianPosition(planet);
@@ -753,32 +808,29 @@ void Mark::render(const G3MRenderContext* rc,
           
           _viewportWidth = rc->getCurrentCamera()->getWidth();
           _viewportHeight = rc->getCurrentCamera()->getHeight();
-          actualizeGLGlobalState(rc->getCurrentCamera()); //Ready for rendering
+          createGLState();
         }
       } else{
         if (rc->getCurrentCamera()->getWidth() != _viewportWidth ||
             rc->getCurrentCamera()->getHeight() != _viewportHeight){
           _viewportWidth = rc->getCurrentCamera()->getWidth();
           _viewportHeight = rc->getCurrentCamera()->getHeight();
-          actualizeGLGlobalState(rc->getCurrentCamera()); //Ready for rendering
+          createGLState(); //Ready for rendering
         }
       }
       
       if (_textureId != NULL) {
         GL* gl = rc->getGL();
         
-        
-        //        GLGlobalState state(parentState);
-        //        state.bindTexture(_textureId);
-        
         GPUProgramManager& progManager = *rc->getGPUProgramManager();
+        
+        _glState.setParent(parentGLState); //Linking with parent
         
         gl->drawArrays(GLPrimitive::triangleStrip(),
                        0,
                        4,
-                       _GLGlobalState,
-                       progManager,
-                       &_progState);
+                       &_glState,
+                       progManager);
         
         _renderedMark = true;
       }

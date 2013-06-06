@@ -315,6 +315,24 @@ public:
     state->getGPUProgramState()->setUniformValue("Projection", &_projectionMatrix);
     state->getGPUProgramState()->setUniformValue("Modelview", &_modelMatrix);
   }
+  
+  // opengl projection matrix
+  MutableMatrix44D getProjectionMatrix() const{
+    if (_dirtyFlags._projectionMatrixDirty) {
+      _dirtyFlags._projectionMatrixDirty = false;
+      _projectionMatrix = MutableMatrix44D::createProjectionMatrix(getFrustumData());
+    }
+    return _projectionMatrix;
+  }
+  
+  // Model matrix, computed in CPU in double precision
+  MutableMatrix44D getModelMatrix() const {
+    if (_dirtyFlags._modelMatrixDirty) {
+      _dirtyFlags._modelMatrixDirty = false;
+      _modelMatrix = MutableMatrix44D::createModelMatrix(_position, _center, _up);
+    }
+    return _modelMatrix;
+  }
 
 private:
   const Angle getHeading(const Vector3D& normal) const;
@@ -378,24 +396,6 @@ private:
       _frustumData = calculateFrustumData();
     }
     return _frustumData;
-  }
-
-  // opengl projection matrix
-  MutableMatrix44D getProjectionMatrix() const{
-    if (_dirtyFlags._projectionMatrixDirty) {
-      _dirtyFlags._projectionMatrixDirty = false;
-      _projectionMatrix = MutableMatrix44D::createProjectionMatrix(getFrustumData());
-    }
-    return _projectionMatrix;
-  }
-
-  // Model matrix, computed in CPU in double precision
-  MutableMatrix44D getModelMatrix() const {
-    if (_dirtyFlags._modelMatrixDirty) {
-      _dirtyFlags._modelMatrixDirty = false;
-      _modelMatrix = MutableMatrix44D::createModelMatrix(_position, _center, _up);
-    }
-    return _modelMatrix;
   }
 
   // multiplication of model * projection
