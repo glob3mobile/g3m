@@ -20,6 +20,9 @@
 #include "GLClient.hpp"
 
 class SceneGraphNode: public GLClient{
+  
+  std::vector<std::string> _uniformsToInvalidate;
+  std::vector<std::string> _attributesToInvalidate;
 
 protected:
   
@@ -35,6 +38,14 @@ protected:
   virtual void onInitialize(const G3MContext* context){}
   
   virtual void onTouchEventRecived(const G3MEventContext* ec, const TouchEvent* touchEvent){}
+  
+  void invalidateGPUUniform(const std::string& name){
+    _uniformsToInvalidate.push_back(name);
+  }
+  
+  void invalidateGPUAttribute(const std::string& name){
+    _attributesToInvalidate.push_back(name);
+  }
   
 public:
   SceneGraphNode():_enabled(true), _lastParentStateNode(NULL), _lastStateNode(NULL){}
@@ -83,7 +94,7 @@ class SceneGraphInnerNode: public SceneGraphNode{
 private:
   
   std::vector<SceneGraphNode*> _children;
-  
+
 protected:
   
   virtual void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode){}
