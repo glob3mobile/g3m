@@ -133,9 +133,9 @@ public:
   //[self initWithDefaultBuilder];
 
   // initialize a customized widget by using a buider
-  //[self initCustomizedWithBuilder];
+  [self initCustomizedWithBuilder];
 
-  [self initWithG3MCBuilder];
+  //[self initWithG3MCBuilder];
 
   [[self G3MWidget] startAnimation];
 }
@@ -557,7 +557,7 @@ public:
     layerSet->addLayer( new OSMLayer(TimeInterval::fromDays(30)) );
   }
 
-  const bool useMapQuestOSM = false;
+  const bool useMapQuestOSM = true;
   if (useMapQuestOSM) {
     layerSet->addLayer( MapQuestLayer::newOSM(TimeInterval::fromDays(30)) );
   }
@@ -574,7 +574,7 @@ public:
     layerSet->addLayer( MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30)) );
   }
 
-  const bool useMapBox = true;
+  const bool useMapBox = false;
   if (useMapBox) {
     //const std::string mapKey = "dgd.map-v93trj8v";
     //const std::string mapKey = "examples.map-cnkhv76j";
