@@ -10,6 +10,7 @@
 
 GPUProgramState::~GPUProgramState(){
   clear();
+  delete _uniformNames;
 }
 
 void GPUProgramState::clear(){
@@ -30,7 +31,7 @@ void GPUProgramState::clear(){
     delete it->second;
   }
 #endif
-//  _attributesEnabled.clear();
+  //  _attributesEnabled.clear();
   _attributesValues.clear();
 }
 
@@ -44,16 +45,16 @@ void GPUProgramState::applyValuesToLinkedProgram() const{
     v->setValueToLinkedUniform();
   }
   
-//  for(std::map<std::string, attributeEnabledStruct> ::const_iterator it = _attributesEnabled.begin();
-//      it != _attributesEnabled.end();
-//      it++){
-//    GPUAttribute* a = it->second.attribute;
-//    if (a == NULL){
-//      ILogger::instance()->logError("NO ATTRIBUTE LINKED");
-//    } else{
-//      a->setEnable(it->second.value);
-//    }
-//  }
+  //  for(std::map<std::string, attributeEnabledStruct> ::const_iterator it = _attributesEnabled.begin();
+  //      it != _attributesEnabled.end();
+  //      it++){
+  //    GPUAttribute* a = it->second.attribute;
+  //    if (a == NULL){
+  //      ILogger::instance()->logError("NO ATTRIBUTE LINKED");
+  //    } else{
+  //      a->setEnable(it->second.value);
+  //    }
+  //  }
   
   for(std::map<std::string, GPUAttributeValue*> ::const_iterator it = _attributesValues.begin();
       it != _attributesValues.end();
@@ -68,16 +69,16 @@ void GPUProgramState::applyValuesToLinkedProgram() const{
     ((GPUUniformValue)uni[i]).setValueToLinkedUniform();
   }
   
-//  final Object[] attEnabled = _attributesEnabled.values().toArray();
-//  for (int i = 0; i < attEnabled.length; i++) {
-//    attributeEnabledStruct a = (attributeEnabledStruct) attEnabled[i];
-//    if (a.attribute == null) {
-//      ILogger.instance().logError("NO ATTRIBUTE LINKED");
-//    }
-//    else {
-//      a.attribute.setEnable(a.value);
-//    }
-//  }
+  //  final Object[] attEnabled = _attributesEnabled.values().toArray();
+  //  for (int i = 0; i < attEnabled.length; i++) {
+  //    attributeEnabledStruct a = (attributeEnabledStruct) attEnabled[i];
+  //    if (a.attribute == null) {
+  //      ILogger.instance().logError("NO ATTRIBUTE LINKED");
+  //    }
+  //    else {
+  //      a.attribute.setEnable(a.value);
+  //    }
+  //  }
   
   final Object[] att = _attributesValues.values().toArray();
   for (int i = 0; i < att.length; i++) {
@@ -253,6 +254,11 @@ bool GPUProgramState::setGPUUniformValue(const std::string& name, GPUUniformValu
   
   v->linkToGPUUniform(prevLinkedUniform);
   _uniformValues[name] = v;
+  
+  if (!uniformExisted){
+    onStructureChanged();
+  }
+  
   return uniformExisted;
 }
 
@@ -265,9 +271,14 @@ bool GPUProgramState::setGPUAttributeValue(const std::string& name, GPUAttribute
     delete it->second;
     attributeExisted = true;
   }
-
+  
   v->linkToGPUAttribute(prevLinkedAttribute);
   _attributesValues[name] = v;
+  
+  if (!attributeExisted){
+    onStructureChanged();
+  }
+  
   return attributeExisted;
 }
 
@@ -394,11 +405,11 @@ void GPUProgramState::setAttributeEnabled(const std::string& name, bool enabled)
     setAttributeDisabled(name);
   }
   
-//  attributeEnabledStruct ae;
-//  ae.value = enabled;
-//  ae.attribute = NULL;
-//  
-//  _attributesEnabled[name] = ae;
+  //  attributeEnabledStruct ae;
+  //  ae.value = enabled;
+  //  ae.attribute = NULL;
+  //
+  //  _attributesEnabled[name] = ae;
 }
 
 void GPUProgramState::setAttributeDisabled(const std::string& name){
@@ -434,26 +445,30 @@ std::string GPUProgramState::description() const{
   return desc;
 }
 
-std::vector<std::string> GPUProgramState::getUniformsNames() const{
-  std::vector<std::string> us;
+std::vector<std::string>* GPUProgramState::getUniformsNames() const{
   
+  if (_uniformNames == NULL){
+    
+    _uniformNames = new std::vector<std::string>();
+    
 #ifdef C_CODE
-  for(std::map<std::string, GPUUniformValue*> ::const_iterator it = /*state->*/_uniformValues.begin();
-      it != _uniformValues.end();
-      it++){
-    us.push_back(it->first);
-  }
+    for(std::map<std::string, GPUUniformValue*> ::const_iterator it = /*state->*/_uniformValues.begin();
+        it != _uniformValues.end();
+        it++){
+      _uniformNames->push_back(it->first);
+    }
 #endif
-  
+    
 #ifdef JAVA_CODE
-  final Object[] uniNames = _uniformValues.keySet().toArray();
-  for (int i = 0; i < uniNames.length; i++) {
-    final String name = (String) uniNames[i];
-    us.add(name);
-  }
+    final Object[] uniNames = _uniformValues.keySet().toArray();
+    for (int i = 0; i < uniNames.length; i++) {
+      final String name = (String) uniNames[i];
+      _uniformNames.add(name);
+    }
 #endif
-  
-  return us;
+    
+  }
+  return _uniformNames;
 }
 
 bool GPUProgramState::isLinkableToProgram(const GPUProgram& program) const{
@@ -485,7 +500,7 @@ bool GPUProgramState::isLinkableToProgram(const GPUProgram& program) const{
   return true;
 #endif
 #ifdef JAVA_CODE
-
+  
   if (program.getGPUAttributesNumber() != (_attributesValues.size())) {
     return false;
   }

@@ -99,10 +99,10 @@ public:
     
     int WORKING_JM;
     
-    std::vector<std::string> us = state.getUniformsNames();
-    int size = us.size();
+    std::vector<std::string>* us = state.getUniformsNames();
+    int size = us->size();
     for (int i = 0; i < size; i++) {
-      if (us[i].compare("ViewPortExtent") == 0){
+      if (us->at(i).compare("ViewPortExtent") == 0){
         return getProgram("Billboard");
       }
     }

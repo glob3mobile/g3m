@@ -51,28 +51,28 @@ public:
    Invoked by parent to change my GLGlobalState and GPUProgramState
    */
   void actualizeGLGlobalState(const GLClient* parent){
-    _parent = (GLClient*)parent;
-    notifyGLClientChildrenParentHasChanged();
-    
-    GLGlobalState* GLGlobalState = getGLGlobalState();
-    GPUProgramState* programState = getGPUProgramState();
-//    getGLGlobalStateAndGPUProgramState(&GLGlobalState, &programState);
-    if (GLGlobalState != NULL && programState != NULL){
-      //We are a drawable client
-      modifyGLGlobalStatesHierarchy(*GLGlobalState, *programState);
-    }
-    
+//    _parent = (GLClient*)parent;
+//    notifyGLClientChildrenParentHasChanged();
+//    
+//    GLGlobalState* GLGlobalState = getGLGlobalState();
+//    GPUProgramState* programState = getGPUProgramState();
+////    getGLGlobalStateAndGPUProgramState(&GLGlobalState, &programState);
+//    if (GLGlobalState != NULL && programState != NULL){
+//      //We are a drawable client
+//      modifyGLGlobalStatesHierarchy(*GLGlobalState, *programState);
+//    }
+//    
   }
   
   /**
    Modifying current children's GLGlobalState and GPUProgramState
    */
   void modifyGLGlobalStatesHierarchy(GLGlobalState& GLGlobalState, GPUProgramState& programState) const{
-    if (_parent != NULL){
-      _parent->modifyGLGlobalStatesHierarchy(GLGlobalState, programState);
-    }
-    modifyGLGlobalState(GLGlobalState);
-    modifyGPUProgramState(programState);
+//    if (_parent != NULL){
+//      _parent->modifyGLGlobalStatesHierarchy(GLGlobalState, programState);
+//    }
+//    modifyGLGlobalState(GLGlobalState);
+//    modifyGPUProgramState(programState);
   }
 };
 

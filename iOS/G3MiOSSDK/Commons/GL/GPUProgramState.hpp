@@ -32,13 +32,19 @@ class GPUProgramState{
   bool setGPUUniformValue(const std::string& name, GPUUniformValue* v);
   bool setGPUAttributeValue(const std::string& name, GPUAttributeValue* v);
   
-
+  mutable std::vector<std::string>* _uniformNames;
   
   mutable GPUProgram* _lastProgramUsed;
   
+  void onStructureChanged(){
+    delete _uniformNames;
+    _uniformNames = NULL;
+    _lastProgramUsed = NULL;
+  }
+  
 public:
   
-  GPUProgramState(): _lastProgramUsed(NULL){}
+  GPUProgramState(): _lastProgramUsed(NULL), _uniformNames(NULL){}
   
   ~GPUProgramState();
   
@@ -77,7 +83,7 @@ public:
     return _lastProgramUsed;
   }
   
-  std::vector<std::string> getUniformsNames() const;
+  std::vector<std::string>* getUniformsNames() const;
   
   std::string description() const;
   
