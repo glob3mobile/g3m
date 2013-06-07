@@ -59,6 +59,7 @@ public:
   int getStride() const { return _stride;}
   bool getNormalized() const { return _normalized;}
   bool getEnabled() const { return _enabled;}
+  GPUAttribute* getLinkedAttribute() const { return _attribute;}
   virtual ~GPUAttributeValue(){}
   virtual void setAttribute(GL* gl, const int id) const = 0;
   virtual bool isEqualsTo(const GPUAttributeValue* v) const = 0;

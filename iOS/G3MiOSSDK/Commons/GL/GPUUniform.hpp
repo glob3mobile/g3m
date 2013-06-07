@@ -29,6 +29,8 @@ public:
   virtual bool isEqualsTo(const GPUUniformValue* v) const = 0;
   virtual GPUUniformValue* deepCopy() const = 0;
   
+  GPUUniform* getLinkedUniform() const { return _uniform;}
+  
   virtual std::string description() const = 0;
   
   void linkToGPUUniform(GPUUniform* u){

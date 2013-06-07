@@ -420,8 +420,9 @@ public:
       mr->addMark(m);
     }
     
-    SceneGraphRenderer* sgr = new SceneGraphRenderer(nodes, true);
-    builder.addRenderer(sgr);
+//    SceneGraphRenderer* sgr = new SceneGraphRenderer(nodes, true);
+//    builder.addRenderer(sgr);
+    builder.addRenderer(mr);
   }
   
   

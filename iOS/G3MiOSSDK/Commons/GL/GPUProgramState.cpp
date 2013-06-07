@@ -241,25 +241,32 @@ void GPUProgramState::applyChanges(GL* gl) const{
 
 bool GPUProgramState::setGPUUniformValue(const std::string& name, GPUUniformValue* v){
   
+  GPUUniform* prevLinkedUniform = NULL;
   bool uniformExisted = false;
   std::map<std::string, GPUUniformValue*> ::iterator it = _uniformValues.find(name);
   if (it != _uniformValues.end()){
+    
+    prevLinkedUniform = it->second->getLinkedUniform();
     delete it->second;
     uniformExisted = true;
   }
   
+  v->linkToGPUUniform(prevLinkedUniform);
   _uniformValues[name] = v;
   return uniformExisted;
 }
 
 bool GPUProgramState::setGPUAttributeValue(const std::string& name, GPUAttributeValue* v){
+  GPUAttribute* prevLinkedAttribute = NULL;
   bool attributeExisted = false;
   std::map<std::string, GPUAttributeValue*> ::iterator it = _attributesValues.find(name);
   if (it != _attributesValues.end()){
+    prevLinkedAttribute = it->second->getLinkedAttribute();
     delete it->second;
     attributeExisted = true;
   }
 
+  v->linkToGPUAttribute(prevLinkedAttribute);
   _attributesValues[name] = v;
   return attributeExisted;
 }

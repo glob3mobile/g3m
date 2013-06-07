@@ -12,15 +12,15 @@ GLGlobalState GLState::_currentGPUGlobalState;
 GPUProgram* GLState::_currentGPUProgram = NULL;
 
 void GLState::applyGlobalStateOnGPU(GL* gl){
+  
+  if (_parentGLState != NULL){
+    _parentGLState->applyGlobalStateOnGPU(gl);
+  }
+  
   _globalState->applyChanges(gl, _currentGPUGlobalState);
 }
 
 void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) {
-  
-  if (_parentGLState != NULL){
-    _parentGLState->applyOnGPU(gl, progManager);
-  }
-  
   applyGlobalStateOnGPU(gl);
   setProgramState(gl, progManager);
 }

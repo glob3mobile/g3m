@@ -187,6 +187,8 @@ void MarksRenderer::render(const G3MRenderContext* rc) {
   
   const Camera* camera = rc->getCurrentCamera();
   const Vector3D cameraPosition = camera->getCartesianPosition();
+  
+  updateGLState(rc);
 
   const int marksSize = _marks.size();
   for (int i = 0; i < marksSize; i++) {
