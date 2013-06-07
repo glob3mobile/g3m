@@ -53,5 +53,5 @@ void GLState::setProgramState(GL* gl, GPUProgramManager& progManager) {
   linkAndApplyToGPUProgram(prog);
   prog->applyChanges(gl);
   
-  prog->onUnused();
+  //prog->onUnused(); //Uncomment to check that all GPUProgramStates are complete
 }

@@ -44,6 +44,9 @@ public:
   void setValueToLinkedUniform() const;
   
   virtual void setLastGPUUniformValue(GPUUniformValue* old){} //Used with matrix transform value
+  
+  
+  virtual void copyFrom(GPUUniformValue* v) = 0;
 };
 
 
@@ -94,10 +97,10 @@ public:
       v->setLastGPUUniformValue(_value); //Multiply matrix when needed
       
       if (_value != NULL){
-        delete _value;
+        _value->copyFrom(v);
+      } else{
+        _value = v->deepCopy();
       }
-      _value = v->deepCopy();
-      //      delete v;
     }
   }
   
@@ -112,7 +115,7 @@ public:
 ////////////////////////////////////////////////////////////////////////
 class GPUUniformValueBool:public GPUUniformValue{
 public:
-  const bool _value;
+  bool _value;
   
   GPUUniformValueBool(bool b):GPUUniformValue(GLType::glBool()),_value(b){}
   
@@ -125,6 +128,10 @@ public:
   }
   GPUUniformValue* deepCopy() const{
     return new GPUUniformValueBool(_value);
+  }
+  
+  void copyFrom(GPUUniformValue* v){
+    _value = ((GPUUniformValueBool*)v)->_value;
   }
   
   std::string description() const{
@@ -143,7 +150,7 @@ public:
 ////////////////////////////////////////////////////////////////////////
 class GPUUniformValueVec2Float:public GPUUniformValue{
 public:
-  const double _x, _y;
+  double _x, _y;
   
   GPUUniformValueVec2Float(double x, double y):GPUUniformValue(GLType::glVec2Float()), _x(x),_y(y){}
   
@@ -156,6 +163,11 @@ public:
   }
   GPUUniformValue* deepCopy() const{
     return new GPUUniformValueVec2Float(_x,_y);
+  }
+  
+  void copyFrom(GPUUniformValue* v){
+    _x = ((GPUUniformValueVec2Float*)v)->_x;
+    _y = ((GPUUniformValueVec2Float*)v)->_y;
   }
   
   std::string description() const{
@@ -176,7 +188,7 @@ public:
 ////////////////////////////////////////////////////////////////////////
 class GPUUniformValueVec4Float:public GPUUniformValue{
 public:
-  const double _x, _y, _z, _w;
+  double _x, _y, _z, _w;
   
   GPUUniformValueVec4Float(double x, double y, double z, double w):
   GPUUniformValue(GLType::glVec4Float()),_x(x),_y(y), _z(z), _w(w){}
@@ -190,6 +202,13 @@ public:
   }
   GPUUniformValue* deepCopy() const{
     return new GPUUniformValueVec4Float(_x,_y,_z,_w);
+  }
+  
+  void copyFrom(GPUUniformValue* v){
+    _x = ((GPUUniformValueVec4Float*)v)->_x;
+    _y = ((GPUUniformValueVec4Float*)v)->_y;
+    _z = ((GPUUniformValueVec4Float*)v)->_z;
+    _w = ((GPUUniformValueVec4Float*)v)->_w;
   }
   
   std::string description() const{
@@ -270,6 +289,9 @@ public:
     return v;
   }
   
+  void copyFrom(GPUUniformValue* v){
+  }
+  
   std::string description() const{
     IStringBuilder *isb = IStringBuilder::newStringBuilder();
     isb->addString("Uniform Value Matrix44D Stack.");
@@ -302,6 +324,9 @@ public:
     return new GPUUniformValueMatrix4Float(_m);
   }
   
+  void copyFrom(GPUUniformValue* v){
+  }
+  
   std::string description() const{
     IStringBuilder *isb = IStringBuilder::newStringBuilder();
     isb->addString("Uniform Value Matrix44D.");
@@ -321,10 +346,10 @@ class GPUUniformValueMatrix4FloatTransform:public GPUUniformValue{
   
 public:
 #ifdef C_CODE
-  const MutableMatrix44D _m;
+  MutableMatrix44D _m;
 #endif
 #ifdef JAVA_CODE
-  public final MutableMatrix44D _m;
+  public MutableMatrix44D _m;
 #endif
   
   MutableMatrix44D _transformedMatrix;
@@ -358,6 +383,11 @@ public:
     return new GPUUniformValueMatrix4FloatTransform(this);
   }
   
+  void copyFrom(GPUUniformValue* v){
+    _m = ((GPUUniformValueMatrix4FloatTransform*)v)->_m;
+    _transformedMatrix = ((GPUUniformValueMatrix4FloatTransform*)v)->_transformedMatrix;
+  }
+  
   std::string description() const{
     IStringBuilder *isb = IStringBuilder::newStringBuilder();
     isb->addString("Uniform Value Matrix44D.");
@@ -375,7 +405,7 @@ public:
 ////////////////////////////////////////////////////////////////////////
 class GPUUniformValueFloat:public GPUUniformValue{
 public:
-  const double _value;
+  double _value;
   
   GPUUniformValueFloat(double d):GPUUniformValue(GLType::glFloat()),_value(d){}
   
@@ -388,6 +418,10 @@ public:
   }
   GPUUniformValue* deepCopy() const{
     return new GPUUniformValueFloat(_value);
+  }
+  
+  void copyFrom(GPUUniformValue* v){
+    _value = ((GPUUniformValueFloat*)v)->_value;
   }
   
   std::string description() const{
