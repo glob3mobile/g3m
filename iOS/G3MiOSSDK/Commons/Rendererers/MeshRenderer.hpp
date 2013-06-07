@@ -23,9 +23,14 @@ class MeshRenderer : public LeafRenderer {
 private:
   std::vector<Mesh*> _meshes;
   bool _dirtyGLGlobalStates;
+  
+  GLState _glState;
+  void createGLState() const;
 public:
   
-  MeshRenderer(): _dirtyGLGlobalStates(false){}
+  MeshRenderer(): _dirtyGLGlobalStates(false){
+    createGLState();
+  }
   
   ~MeshRenderer();
 

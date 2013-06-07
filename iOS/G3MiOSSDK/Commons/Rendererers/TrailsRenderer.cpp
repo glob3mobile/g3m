@@ -156,7 +156,10 @@ void Trail::render(const G3MRenderContext* rc) {
         actualizeGLGlobalState(rc->getCurrentCamera()); //Actualize _mesh GLGlobalState with camera
       }
       
-      mesh->render(rc);
+      _glState.getGPUProgramState()->setUniformMatrixValue("Modelview", rc->getCurrentCamera()->getModelMatrix(), false);
+      _glState.getGPUProgramState()->setUniformMatrixValue("Projection", rc->getCurrentCamera()->getProjectionMatrix(), false);
+      
+      mesh->render(rc, &_glState);
     }
   }
 }
@@ -167,6 +170,13 @@ void Trail::notifyGLClientChildrenParentHasChanged(){
 void Trail::modifyGLGlobalState(GLGlobalState& GLGlobalState) const{}
 
 void Trail::modifyGPUProgramState(GPUProgramState& progState) const{
+  progState.setUniformValue("EnableTexture", false);
+  progState.setUniformValue("ScaleTexCoord", Vector2D(1.0, 1.0));
+  progState.setUniformValue("TranslationTexCoord", Vector2D(0.0, 0.0));
+}
+
+void Trail::createGLState() const{
+  GPUProgramState& progState = *_glState.getGPUProgramState();
   progState.setUniformValue("EnableTexture", false);
   progState.setUniformValue("ScaleTexCoord", Vector2D(1.0, 1.0));
   progState.setUniformValue("TranslationTexCoord", Vector2D(0.0, 0.0));

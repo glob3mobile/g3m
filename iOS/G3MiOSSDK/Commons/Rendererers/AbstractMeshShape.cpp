@@ -31,10 +31,10 @@ bool AbstractMeshShape::isReadyToRender(const G3MRenderContext* rc) {
   return (mesh != NULL);
 }
 
-void AbstractMeshShape::rawRender(const G3MRenderContext* rc) {
-  const Mesh* mesh = getMesh(rc);
+void AbstractMeshShape::rawRender(const G3MRenderContext* rc, GLState* parentGLState) {
+  Mesh* mesh = getMesh(rc);
   if (mesh != NULL) {
-    mesh->render(rc);
+    mesh->render(rc, parentGLState);
   }
 }
 

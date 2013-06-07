@@ -34,6 +34,9 @@ private:
 
   Mesh* _mesh;
   Mesh* getMesh(const Planet* planet);
+  
+  GLState _glState;
+  void createGLState() const;
 
 public:
   Trail(int maxSteps,
@@ -46,6 +49,7 @@ public:
   _color(color),
   _ribbonWidth(ribbonWidth)
   {
+    createGLState();
   }
 
   ~Trail();

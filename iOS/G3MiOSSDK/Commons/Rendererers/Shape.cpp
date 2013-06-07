@@ -71,11 +71,12 @@ MutableMatrix44D* Shape::createTransformMatrix(const Planet* planet) const {
 MutableMatrix44D* Shape::getTransformMatrix(const Planet* planet) const {
   if (_transformMatrix == NULL) {
     _transformMatrix = createTransformMatrix(planet);
+    _glState.getGPUProgramState()->setUniformMatrixValue("Modelview", *_transformMatrix, true);
   }
   return _transformMatrix;
 }
 
-void Shape::render(const G3MRenderContext* rc) {
+void Shape::render(const G3MRenderContext* rc, GLState* parentGLState) {
   if (isReadyToRender(rc)) {
     
     const int pendingEffectsCount = _pendingEffects.size();
@@ -94,9 +95,9 @@ void Shape::render(const G3MRenderContext* rc) {
       _pendingEffects.clear();
     }
     
-//    GPUProgramState progState(parentProgramState);
-    //progState.multiplyUniformValue("Modelview", *getTransformMatrix( rc->getPlanet() ));
-    rawRender(rc);
+    getTransformMatrix(rc->getPlanet()); //Applying transform to _glState
+    _glState.setParent(parentGLState);
+    rawRender(rc, &_glState);
   }
 }
 

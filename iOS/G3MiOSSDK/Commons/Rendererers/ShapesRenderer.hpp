@@ -26,12 +26,15 @@ private:
   private G3MContext _context;
 #endif
   
+  GLState _glState;
+  void createGLState();
+  
 public:
 
   ShapesRenderer() :
   _context(NULL)
   {
-
+    createGLState();
   }
 
   ~ShapesRenderer() {

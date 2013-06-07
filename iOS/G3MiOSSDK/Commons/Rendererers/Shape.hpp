@@ -21,6 +21,8 @@ class MutableMatrix44D;
 
 #include "GLClient.hpp"
 
+#include "GLState.hpp"
+
 class ShapePendingEffect;
 class GPUProgramState;
 
@@ -42,6 +44,8 @@ private:
   MutableMatrix44D* getTransformMatrix(const Planet* planet) const;
   
   std::vector<ShapePendingEffect*> _pendingEffects;
+  
+  GLState _glState;
   
 protected:
   virtual void cleanTransformMatrix();
@@ -165,7 +169,7 @@ public:
                    const Angle& fromAzimuth,  const Angle& toAzimuth,
                    const Angle& fromAltitude, const Angle& toAltitude);
   
-  void render(const G3MRenderContext* rc);
+  void render(const G3MRenderContext* rc, GLState* parentGLState);
 
   virtual void initialize(const G3MContext* context) {
     _planet = context->getPlanet();
@@ -173,7 +177,7 @@ public:
   
   virtual bool isReadyToRender(const G3MRenderContext* rc) = 0;
   
-  virtual void rawRender(const G3MRenderContext* rc) = 0;
+  virtual void rawRender(const G3MRenderContext* rc, GLState* glState) = 0;
 
   virtual bool isTransparent(const G3MRenderContext* rc) = 0;
   

@@ -347,12 +347,12 @@ public:
   //                                                Vector2D(250,194),
   //                                                false);
   
-  bool testingSG = true;
-  if (testingSG){
-    std::vector<SceneGraphNode*> nodes;
-    nodes.push_back((BusyMeshRenderer*)busyRenderer);
-//    busyRenderer = new SceneGraphRenderer(nodes, false);
-  }
+//  bool testingSG = true;
+//  if (testingSG){
+//    std::vector<SceneGraphNode*> nodes;
+//    nodes.push_back((BusyMeshRenderer*)busyRenderer);
+////    busyRenderer = new SceneGraphRenderer(nodes, false);
+//  }
   
   builder.setBusyRenderer(busyRenderer);
   
@@ -363,67 +363,65 @@ public:
   
   
   ShapesRenderer* shapesRenderer = [self createShapesRenderer: builder.getPlanet()];
-  //builder.addRenderer(shapesRenderer);
+  builder.addRenderer(shapesRenderer);
   
   MeshRenderer* meshRenderer = new MeshRenderer();
-  //builder.addRenderer( meshRenderer );
+  builder.addRenderer( meshRenderer );
   
   MarksRenderer* marksRenderer = [self createMarksRenderer];
-  //builder.addRenderer(marksRenderer);
+  builder.addRenderer(marksRenderer);
   
   GEORenderer* geoRenderer = [self createGEORendererMeshRenderer: meshRenderer
                                                   shapesRenderer: shapesRenderer
                                                    marksRenderer: marksRenderer];
-  //builder.addRenderer(geoRenderer);
-  if (testingSG){
-    std::vector<SceneGraphNode*> nodes;
-    
-    MarksRenderer* mr = new MarksRenderer(true);
-    nodes.push_back(mr);
-    
-    class TestMarkTouchListenerSG : public MarkTouchListener {
-    public:
-      bool touchedMark(Mark* mark) {
-        NSString* message = [NSString stringWithFormat: @"Touched on mark \"%s\"", mark->getLabel().c_str()];
-        
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Glob3 Demo"
-                                                        message:message
-                                                       delegate:nil
-                                              cancelButtonTitle:@"OK"
-                                              otherButtonTitles:nil];
-        [alert show];
-        
-        return true;
-      }
-    };
-    
-    mr->setMarkTouchListener(new TestMarkTouchListenerSG(), true);
-    
-    for (int i = 0; i < 2000; i++){
-      const Angle latitude  = Angle::fromDegrees( (int) (arc4random() % 180) - 90 );
-      const Angle longitude = Angle::fromDegrees( (int) (arc4random() % 360));
-      
-      NSString *string = [[NSString alloc] initWithFormat:@"Mark %0.1f, %0.1f", latitude.degrees(), longitude.degrees(), nil];
-      
-      
-      
-      Mark* m = new Mark([string UTF8String],
-                         Geodetic3D(latitude, longitude, 0),
-                         0,
-                         20,
-                         Color::newFromRGBA(1, 1, 1, 1),
-                         Color::newFromRGBA(0, 0, 0, 1),
-                         NULL,
-                         true,
-                         NULL,
-                         true);
-      mr->addMark(m);
-    }
-    
-//    SceneGraphRenderer* sgr = new SceneGraphRenderer(nodes, true);
-//    builder.addRenderer(sgr);
-    builder.addRenderer(mr);
-  }
+  builder.addRenderer(geoRenderer);
+//  if (testingSG){
+//    std::vector<SceneGraphNode*> nodes;
+//    
+//    MarksRenderer* mr = new MarksRenderer(true);
+//    nodes.push_back(mr);
+//    
+//    class TestMarkTouchListenerSG : public MarkTouchListener {
+//    public:
+//      bool touchedMark(Mark* mark) {
+//        NSString* message = [NSString stringWithFormat: @"Touched on mark \"%s\"", mark->getLabel().c_str()];
+//        
+//        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Glob3 Demo"
+//                                                        message:message
+//                                                       delegate:nil
+//                                              cancelButtonTitle:@"OK"
+//                                              otherButtonTitles:nil];
+//        [alert show];
+//        
+//        return true;
+//      }
+//    };
+//    
+//    mr->setMarkTouchListener(new TestMarkTouchListenerSG(), true);
+//    
+//    for (int i = 0; i < 500; i++){
+//      const Angle latitude  = Angle::fromDegrees( (int) (arc4random() % 180) - 90 );
+//      const Angle longitude = Angle::fromDegrees( (int) (arc4random() % 360));
+//      
+//      NSString *string = [[NSString alloc] initWithFormat:@"Mark %0.1f, %0.1f", latitude.degrees(), longitude.degrees(), nil];
+//      
+//      Mark* m = new Mark([string UTF8String],
+//                         Geodetic3D(latitude, longitude, 0),
+//                         0,
+//                         20,
+//                         Color::newFromRGBA(1, 1, 1, 1),
+//                         Color::newFromRGBA(0, 0, 0, 1),
+//                         NULL,
+//                         true,
+//                         NULL,
+//                         true);
+//      mr->addMark(m);
+//    }
+//    
+////    SceneGraphRenderer* sgr = new SceneGraphRenderer(nodes, true);
+////    builder.addRenderer(sgr);
+//    builder.addRenderer(mr);
+//  }
   
   
   //  [self createInterpolationTest: meshRenderer];
