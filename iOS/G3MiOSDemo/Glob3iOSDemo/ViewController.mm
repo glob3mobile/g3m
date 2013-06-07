@@ -1358,13 +1358,13 @@ public:
     const float verticalExaggeration = 10.0f;
     const float pointSize = 5.0f;
     
-    const Sector subSector = _sector.shrinkedByPercent(0.2f);
-    //    const Sector subSector = _sector.shrinkedByPercent(0.9f);
-    //    const Sector subSector = _sector;
-    //    const Vector2I subResolution(512, 512);
-    //    const Vector2I subResolution(251*2, 254*2);
-    const Vector2I subResolution(251*2, 254*2);
-    
+//    const Sector subSector = _sector.shrinkedByPercent(0.2f);
+//    //    const Sector subSector = _sector.shrinkedByPercent(0.9f);
+//    //    const Sector subSector = _sector;
+//    //    const Vector2I subResolution(512, 512);
+//    //    const Vector2I subResolution(251*2, 254*2);
+//    const Vector2I subResolution(251*2, 254*2);
+
     int _DGD_working_on_terrain;
 
     _meshRenderer->addMesh( elevationData->createMesh(planet,
@@ -1871,7 +1871,7 @@ public:
       //      targetSector.c
       
 
-      /*
+      /**/
       context->getDownloader()->requestBuffer(URL("file:///full-earth-2048x1024.bil", false),
                                               1000000,
                                               TimeInterval::fromDays(30),
@@ -1881,7 +1881,7 @@ public:
                                                                                       Vector2I(2048, 1024),
                                                                                       Sector::fullSphere()),
                                               true);
-      */
+      /**/
       
       /*
        context->getDownloader()->requestBuffer(//URL("file:///sample_bil16_150x150.bil", false),
