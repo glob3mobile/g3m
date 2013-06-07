@@ -24,7 +24,7 @@ class MutableMatrix44D;
 class ShapePendingEffect;
 class GPUProgramState;
 
-class Shape : public GLClient{
+class Shape : public GLClient, public EffectTarget{
 private:
   Geodetic3D* _position;
   

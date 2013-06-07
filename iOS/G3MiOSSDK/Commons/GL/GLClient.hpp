@@ -14,7 +14,7 @@
 
 #include "Effects.hpp"
 
-class GLClient: public EffectTarget{
+class GLClient{
 protected:
   GLClient* _parent;
   
