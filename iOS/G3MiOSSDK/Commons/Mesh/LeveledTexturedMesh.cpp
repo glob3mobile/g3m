@@ -313,5 +313,5 @@ void LeveledTexturedMesh::render(const G3MRenderContext* rc, GLState* parentGLSt
   updateGLState();
   
   _glState.setParent(parentGLState);
-  ((Mesh*)_mesh)->render(rc, parentGLState);
+  ((Mesh*)_mesh)->render(rc, &_glState);
 }

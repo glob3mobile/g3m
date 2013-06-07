@@ -336,8 +336,12 @@ public:
   
   void setLastGPUUniformValue(GPUUniformValue* old){
     if (_isTransform){
-      MutableMatrix44D lastM = ((GPUUniformValueMatrix4FloatTransform*)old)->getValue();
-      _transformedMatrix = lastM.multiply(_m);
+      if (old == NULL){
+        ILogger::instance()->logError("Trying to apply transformation to matrix without previous value");
+      } else{
+        MutableMatrix44D lastM = ((GPUUniformValueMatrix4FloatTransform*)old)->getValue();
+        _transformedMatrix = lastM.multiply(_m);
+      }
     }
   }
   

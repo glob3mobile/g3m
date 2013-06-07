@@ -456,7 +456,11 @@ void TileRenderer::render(const G3MRenderContext* rc) {
                         _verticalExaggeration);
 
   const int firstLevelTilesCount = _firstLevelTiles.size();
-
+  
+  _glState.getGPUProgramState()->setUniformMatrixValue("Modelview", rc->getCurrentCamera()->getModelMatrix(), false);
+  _glState.getGPUProgramState()->setUniformMatrixValue("Projection", rc->getCurrentCamera()->getProjectionMatrix(), false);
+  _glState.getGLGlobalState()->enableDepthTest();
+  
   if (_firstRender && _parameters->_forceFirstLevelTilesRenderOnStart) {
     // force one render pass of the firstLevelTiles tiles to make the (toplevel) textures
     // loaded as they will be used as last-chance fallback texture for any tile.
@@ -466,7 +470,8 @@ void TileRenderer::render(const G3MRenderContext* rc) {
       Tile* tile = _firstLevelTiles[i];
       tile->render(rc,
                    &trc,
-                   NULL);
+                   NULL,
+                   &_glState);
     }
   }
   else {
@@ -485,7 +490,8 @@ void TileRenderer::render(const G3MRenderContext* rc) {
 
         tile->render(rc,
                      &trc,
-                     &toVisitInNextIteration);
+                     &toVisitInNextIteration,
+                     &_glState);
       }
 
       toVisit = toVisitInNextIteration;

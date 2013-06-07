@@ -449,7 +449,7 @@ void Tile::prepareForFullRendering(const G3MRenderContext* rc,
 }
 
 void Tile::rawRender(const G3MRenderContext *rc,
-                     const TileRenderContext* trc) {
+                     const TileRenderContext* trc, GLState* glState) {
   Mesh* tessellatorMesh = getTessellatorMesh(rc, trc);
   if (tessellatorMesh == NULL) {
     return;
@@ -471,22 +471,25 @@ void Tile::rawRender(const G3MRenderContext *rc,
       
       ((LeveledTexturedMesh*)_texturizedMesh)->setGLClientParent(this);
     }
-
+    
     if (_texturizedMesh != NULL) {
-      _texturizedMesh->render(rc);
+      //_texturizedMesh->render(rc);
+      _texturizedMesh->render(rc, glState);
     }
     else {
-      tessellatorMesh->render(rc);
+      //tessellatorMesh->render(rc);
+      tessellatorMesh->render(rc, glState);
     }
   }
 
 }
 
 void Tile::debugRender(const G3MRenderContext* rc,
-                       const TileRenderContext* trc) {
+                       const TileRenderContext* trc, GLState* glState) {
   Mesh* debugMesh = getDebugMesh(rc, trc);
   if (debugMesh != NULL) {
-    debugMesh->render(rc);
+    //debugMesh->render(rc);
+    debugMesh->render(rc,glState);
   }
 }
 
@@ -583,7 +586,7 @@ void Tile::deleteTexturizedMesh(TileTexturizer* texturizer) {
 
 void Tile::render(const G3MRenderContext* rc,
                   const TileRenderContext* trc,
-                  std::list<Tile*>* toVisitInNextIteration) {
+                  std::list<Tile*>* toVisitInNextIteration, GLState* glState) {
 
   const float verticalExaggeration =  trc->getVerticalExaggeration();
   if (verticalExaggeration != _verticalExaggeration) {
@@ -607,9 +610,9 @@ void Tile::render(const G3MRenderContext* rc,
                               );
 
     if (isRawRender) {
-      rawRender(rc, trc);
+      rawRender(rc, trc, glState);
       if (trc->getParameters()->_renderDebug) {
-        debugRender(rc, trc);
+        debugRender(rc, trc, glState);
       }
 
       statistics->computeTileRendered(this);
