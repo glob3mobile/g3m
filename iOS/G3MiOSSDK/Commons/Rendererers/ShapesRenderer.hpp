@@ -47,6 +47,8 @@ public:
     }
   }
 
+  void removeAllShapes(bool deleteShapes=true);
+
   void onResume(const G3MContext* context) {
     _context = context;
   }

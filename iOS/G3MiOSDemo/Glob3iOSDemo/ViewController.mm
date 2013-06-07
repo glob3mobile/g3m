@@ -140,7 +140,7 @@ public:
   // initialize a customized widget by using a buider
   [self initCustomizedWithBuilder];
 
-//  [self initWithG3MCBuilder];
+  //[self initWithG3MCBuilder];
 
   [[self G3MWidget] startAnimation];
 }
@@ -599,9 +599,9 @@ public:
   if (useOSM) {
     layerSet->addLayer( new OSMLayer(TimeInterval::fromDays(30)) );
   }
-  
+
   //TODO: Check merkator with elevations
-  const bool useMapQuestOSM = false;
+  const bool useMapQuestOSM = true;
   if (useMapQuestOSM) {
     layerSet->addLayer( MapQuestLayer::newOSM(TimeInterval::fromDays(30)) );
   }
@@ -613,7 +613,7 @@ public:
                                          TimeInterval::fromDays(30)) );
   }
 
-  const bool useMapQuestOpenAerial = true;
+  const bool useMapQuestOpenAerial = false;
   if (useMapQuestOpenAerial) {
     layerSet->addLayer( MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30)) );
   }

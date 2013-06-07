@@ -50,6 +50,26 @@ public class ShapesRenderer extends LeafRenderer
     }
   }
 
+  public final void removeAllShapes()
+  {
+     removeAllShapes(true);
+  }
+  public final void removeAllShapes(boolean deleteShapes)
+  {
+    if (deleteShapes)
+    {
+      final int shapesCount = _shapes.size();
+      for (int i = 0; i < shapesCount; i++)
+      {
+        Shape shape = _shapes.get(i);
+        if (shape != null)
+           shape.dispose();
+      }
+    }
+  
+    _shapes.clear();
+  }
+
   public final void onResume(G3MContext context)
   {
     _context = context;

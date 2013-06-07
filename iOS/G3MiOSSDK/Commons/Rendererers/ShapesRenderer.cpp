@@ -56,3 +56,15 @@ void ShapesRenderer::render(const G3MRenderContext* rc,
     }
   }
 }
+
+void ShapesRenderer::removeAllShapes(bool deleteShapes) {
+  if (deleteShapes) {
+    const int shapesCount = _shapes.size();
+    for (int i = 0; i < shapesCount; i++) {
+      Shape* shape = _shapes[i];
+      delete shape;
+    }
+  }
+
+  _shapes.clear();
+}
