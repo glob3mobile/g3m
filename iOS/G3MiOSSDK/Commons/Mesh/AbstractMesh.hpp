@@ -46,6 +46,11 @@ protected:
                bool depthTest);
 
   virtual void rawRender(const G3MRenderContext* rc) const = 0;
+  virtual void rawRender(const G3MRenderContext* rc, GLState* parentGLState) const = 0;
+  
+  GLState _glState;
+  
+  void createGLState();
 protected:
   
   GLGlobalState _GLGlobalState;
@@ -80,6 +85,8 @@ public:
   bool isVisible(const G3MRenderContext* rc);
   void modifiyGLState(GLState* state);
   void updateGPUUniform(GLStateTreeNode* stateNode, GPUProgramState* progState, const std::string& name);
+  
+  void render(const G3MRenderContext* rc, GLState* parentGLState);
   
 };
 

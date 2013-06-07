@@ -33,6 +33,10 @@ private:
   MutableMatrix44D _projectionMatrix;
   mutable MutableMatrix44D _modelviewMatrix;
   
+  GLState _glState;
+  
+  void createGLState();
+  
 public:    
   BusyMeshRenderer(Color* backgroundColor):
   _degrees(0),
@@ -62,6 +66,7 @@ public:
     _projectionMatrix = MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth, halfWidth,
                                                                               -halfHeight, halfHeight,
                                                                               -halfWidth, halfWidth);
+    _glState.getGPUProgramState()->setUniformMatrixValue("Projection", _projectionMatrix, false);
   }
   
   virtual ~BusyMeshRenderer() {
@@ -73,6 +78,7 @@ public:
     _degrees += value; 
     if (_degrees>360) _degrees -= 360;
     _modelviewMatrix = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, -1));
+    _glState.getGPUProgramState()->setUniformMatrixValue("Modelview", _modelviewMatrix, false);
   }
 
   void start(const G3MRenderContext* rc);
@@ -104,6 +110,8 @@ public:
   bool isVisible(const G3MRenderContext* rc);
   void modifiyGLState(GLState* state);
   void onInitialize(const G3MContext* context);
+  
+  
   
 };
 

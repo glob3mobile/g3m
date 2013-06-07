@@ -351,7 +351,7 @@ public:
   if (testingSG){
     std::vector<SceneGraphNode*> nodes;
     nodes.push_back((BusyMeshRenderer*)busyRenderer);
-    busyRenderer = new SceneGraphRenderer(nodes, false);
+//    busyRenderer = new SceneGraphRenderer(nodes, false);
   }
   
   builder.setBusyRenderer(busyRenderer);

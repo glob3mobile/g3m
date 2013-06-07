@@ -140,6 +140,9 @@ private:
   
   void updateLastUsedMapping(const G3MRenderContext* rc, LazyTextureMapping* mapping) const;
   
+  GLState _glState;
+  void updateGLState();
+  
 public:
   LeveledTexturedMesh(const Mesh* mesh,
                       bool ownedMesh,
@@ -191,6 +194,8 @@ public:
   bool isVisible(const G3MRenderContext* rc);
   void modifiyGLState(GLState* state);
   void updateGPUUniform(GLStateTreeNode* stateNode, GPUProgramState* progState, const std::string& name){}
+  
+  void render(const G3MRenderContext* rc, GLState* parentGLState);
   
 };
 

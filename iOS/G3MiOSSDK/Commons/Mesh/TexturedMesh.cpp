@@ -50,3 +50,20 @@ void TexturedMesh::modifiyGLState(GLState* state){
   GPUProgramState& progState = *state->getGPUProgramState();
   _textureMapping->modifyGPUProgramState(progState);
 }
+
+void TexturedMesh::createGLState(){
+  GLGlobalState& globalState = *_glState.getGLGlobalState();
+  _textureMapping->modifyGLGlobalState(globalState);
+  if (_transparent) {
+    globalState.enableBlend();
+    globalState.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
+  }
+  
+  GPUProgramState& progState = *_glState.getGPUProgramState();
+  _textureMapping->modifyGPUProgramState(progState);
+}
+
+void TexturedMesh::render(const G3MRenderContext* rc, GLState* parentState){
+  _glState.setParent(parentState);
+  _mesh->render(rc, &_glState);
+}

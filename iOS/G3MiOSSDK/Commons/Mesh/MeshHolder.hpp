@@ -77,6 +77,10 @@ public:
   }
   void updateGPUUniform(GLStateTreeNode* stateNode, GPUProgramState* progState, const std::string& name){}
   
+  void render(const G3MRenderContext* rc, GLState* parentGLState){
+    _mesh->render(rc, parentGLState);
+  }
+  
 };
 
 #endif

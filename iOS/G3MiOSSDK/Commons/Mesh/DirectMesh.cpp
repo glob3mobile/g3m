@@ -46,3 +46,11 @@ void DirectMesh::rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateT
   const int verticesCount = getVertexCount();
   gl->drawArrays(_primitive, 0, verticesCount, glState, *rc->getGPUProgramManager());
 }
+
+void DirectMesh::rawRender(const G3MRenderContext* rc, GLState* parentGLState) const{
+  GL* gl = rc->getGL();
+  
+  const int verticesCount = getVertexCount();
+  gl->drawArrays(_primitive, 0, verticesCount, parentGLState, *rc->getGPUProgramManager());
+}
+

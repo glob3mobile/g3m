@@ -89,15 +89,15 @@ public:
   void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height){}
   
-  void start(const G3MRenderContext* rc){}
+//  void start(const G3MRenderContext* rc){}
   
-  void stop(const G3MRenderContext* rc){}
+//  void stop(const G3MRenderContext* rc){}
   
-  void onResume(const G3MContext* context){}
+//  void onResume(const G3MContext* context){}
   
-  void onPause(const G3MContext* context){}
+//  void onPause(const G3MContext* context){}
   
-  void onDestroy(const G3MContext* context){}
+//  void onDestroy(const G3MContext* context){}
   
   void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode){}
   bool isVisible(const G3MRenderContext* rc){ return true;}

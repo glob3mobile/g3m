@@ -301,3 +301,17 @@ bool LeveledTexturedMesh::isVisible(const G3MRenderContext* rc){
 void LeveledTexturedMesh::modifiyGLState(GLState* state){
   
 }
+
+void LeveledTexturedMesh::updateGLState(){
+  LazyTextureMapping* mapping = getCurrentTextureMapping();
+  mapping->modifyGLGlobalState(*_glState.getGLGlobalState());
+  mapping->modifyGPUProgramState(*_glState.getGPUProgramState());
+}
+
+void LeveledTexturedMesh::render(const G3MRenderContext* rc, GLState* parentGLState){
+  
+  updateGLState();
+  
+  _glState.setParent(parentGLState);
+  ((Mesh*)_mesh)->render(rc, parentGLState);
+}

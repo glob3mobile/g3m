@@ -163,7 +163,7 @@ void BusyMeshRenderer::rawRender(const G3MRenderContext* rc, GLStateTreeNode* my
   
   gl->clearScreen(state);
   
-//  _mesh->render(rc);
+  _mesh->render(rc, &_glState);
 }
 
 bool BusyMeshRenderer::isVisible(const G3MRenderContext* rc){
@@ -248,4 +248,35 @@ void BusyMeshRenderer::onInitialize(const G3MContext* context)
                           NULL,
                           colors.create());
   addChild(_mesh);
+}
+
+void BusyMeshRenderer::createGLState(){
+  
+  GLGlobalState& globalState = * _glState.getGLGlobalState();
+  
+  globalState.enableBlend();
+  globalState.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
+  globalState.setClearColor(*_backgroundColor);
+  
+  GPUProgramState& progState = * _glState.getGPUProgramState();
+  
+  progState.setUniformValue("EnableTexture", false);
+  progState.setUniformValue("PointSize", (float)1.0);
+  progState.setUniformValue("ScaleTexCoord", Vector2D(1.0,1.0));
+  progState.setUniformValue("TranslationTexCoord", Vector2D(0.0,0.0));
+  
+  progState.setUniformValue("ColorPerVertexIntensity", (float)0.0);
+  progState.setUniformValue("EnableFlatColor", false);
+  progState.setUniformValue("FlatColor", (float)0.0, (float)0.0, (float)0.0, (float)0.0);
+  progState.setUniformValue("FlatColorIntensity", (float)0.0);
+  
+  progState.setAttributeEnabled("TextureCoord", false);
+  progState.setAttributeEnabled("Color", false);
+  
+  //Modelview and projection
+  _modelviewMatrix = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, -1));
+  progState.setUniformMatrixValue("Modelview", _modelviewMatrix, false);
+  
+  progState.setUniformMatrixValue("Projection", _projectionMatrix, false);
+  
 }

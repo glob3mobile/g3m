@@ -19,16 +19,20 @@
 class TexturedMesh: public Mesh
 {
 private:
-  const Mesh*           _mesh;
+  Mesh*           _mesh;
   const TextureMapping* _textureMapping;
   const bool            _ownedMesh;
   const bool            _ownedTexMapping;
   const bool            _transparent;
+  
+  GLState _glState;
+  
+  void createGLState();
 
   
 public:
   
-  TexturedMesh(const Mesh* mesh,
+  TexturedMesh(Mesh* mesh,
                bool ownedMesh,
                TextureMapping* const textureMapping,
                bool ownedTexMapping,
@@ -39,7 +43,8 @@ public:
   _ownedTexMapping(ownedTexMapping),
   _transparent(transparent)
   {
-    addChild((Mesh*)mesh); //New and only child (not const)!!
+    //addChild((Mesh*)mesh); //New and only child (not const)!!
+    createGLState();
   }
   
   ~TexturedMesh(){
@@ -82,6 +87,9 @@ public:
 //  bool isVisible(const G3MRenderContext* rc);
   void modifiyGLState(GLState* state);
   void updateGPUUniform(GLStateTreeNode* stateNode, GPUProgramState* progState, const std::string& name){}
+  
+  
+  void render(const G3MRenderContext* rc, GLState* parentState);
 };
 
 #endif

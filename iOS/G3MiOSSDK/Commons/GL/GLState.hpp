@@ -27,7 +27,7 @@ class GLState{
   
   void setProgramState(GL* gl, GPUProgramManager& progManager);
   
-  GLState* _parentGLState;
+  mutable GLState* _parentGLState;
   
   void linkAndApplyToGPUProgram(GPUProgram* prog);
   
@@ -55,7 +55,7 @@ public:
     return _parentGLState;
   }
   
-  void setParent(GLState* p){
+  void setParent(GLState* p) const{
     _parentGLState = p;
   }
 

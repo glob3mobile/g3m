@@ -54,3 +54,8 @@ void IndexedMesh::rawRender(const G3MRenderContext* rc, GLStateTreeNode* myState
   GLState* glState = myStateTreeNode->getGLState();
   gl->drawElements(_primitive, _indices, glState, *rc->getGPUProgramManager());
 }
+
+void IndexedMesh::rawRender(const G3MRenderContext* rc, GLState* parentGLState) const{
+  GL* gl = rc->getGL();
+  gl->drawElements(_primitive, _indices, parentGLState, *rc->getGPUProgramManager());
+}

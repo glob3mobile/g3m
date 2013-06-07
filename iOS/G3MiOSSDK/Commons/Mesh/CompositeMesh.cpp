@@ -108,3 +108,11 @@ void CompositeMesh::notifyGLClientChildrenParentHasChanged(){
 //  return true;
 //}
 //void CompositeMesh::modifiyGLState(GLState* state){}
+
+void CompositeMesh::render(const G3MRenderContext* rc, GLState* parentGLState){
+  const int childrenCount = _children.size();
+  for (int i = 0; i < childrenCount; i++) {
+    Mesh* child = _children[i];
+    child->render(rc, parentGLState);
+  }
+}
