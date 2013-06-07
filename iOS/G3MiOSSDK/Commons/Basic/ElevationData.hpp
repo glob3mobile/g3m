@@ -68,6 +68,13 @@ public:
                            const Geodetic3D& positionOffset,
                            float pointSize) const;
 
+  virtual Mesh* createMesh(const Ellipsoid* ellipsoid,
+                           float verticalExaggeration,
+                           const Geodetic3D& positionOffset,
+                           float pointSize,
+                           const Sector& sector,
+                           const Vector2I& resolution) const;
+
   virtual const Sector getSector() const {
     return _sector;
   }

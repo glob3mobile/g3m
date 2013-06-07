@@ -82,8 +82,10 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
       //TODO: MERCATOR!!!
       
       if (elevationData != NULL) {
-//        height = elevationData->getElevationAt(i, j) * verticalExaggeration;
-        const double h = elevationData->getElevationAt(position);
+        int ___WTF_Diego;
+        const Geodetic2D position2 = sector.getInnerPoint(u, 1.0 - v);
+
+        const double h = elevationData->getElevationAt(position2);
         if ( !mu->isNan(h) ) {
           height = h * verticalExaggeration;
 

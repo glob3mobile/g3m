@@ -248,7 +248,7 @@ public:
 
 - (void)  initializeElevationDataProvider: (G3MBuilder_iOS&) builder
 {
-  float verticalExaggeration = 5.0f;
+  float verticalExaggeration = 20.0f;
   builder.getTileRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
   
   int _DGD_working_on_terrain;
@@ -335,8 +335,8 @@ public:
   //compElevationDataProvider->addElevationDataProvider(elevationDataProvider7);
   //compElevationDataProvider->addElevationDataProvider(elevationDataProvider8);
 
-  //builder.getTileRendererBuilder()->setElevationDataProvider(compElevationDataProvider);
-  builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProvider);
+  builder.getTileRendererBuilder()->setElevationDataProvider(compElevationDataProvider);
+  //builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProvider);
 }
 
 
@@ -601,7 +601,7 @@ public:
   }
 
   //TODO: Check merkator with elevations
-  const bool useMapQuestOSM = true;
+  const bool useMapQuestOSM = false;
   if (useMapQuestOSM) {
     layerSet->addLayer( MapQuestLayer::newOSM(TimeInterval::fromDays(30)) );
   }
@@ -648,7 +648,7 @@ public:
                                           TimeInterval::fromDays(30)) );
   }
   
-  const bool blueMarble = false;
+  const bool blueMarble = true;
   if (blueMarble) {
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
                                         URL("http://www.nasa.network.com/wms?", false),
@@ -658,30 +658,37 @@ public:
                                         "EPSG:4326",
                                         "",
                                         false,
-                                        //new LevelTileCondition(0, 6),
-                                        NULL,
+                                        new LevelTileCondition(0, 6),
+                                        //NULL,
                                         TimeInterval::fromDays(30),
                                         true,
                                         new LayerTilesRenderParameters(Sector::fullSphere(),
                                                                        2, 4,
-                                                                       0, 8,
+                                                                       0, 6,
                                                                        LayerTilesRenderParameters::defaultTileTextureResolution(),
                                                                        LayerTilesRenderParameters::defaultTileMeshResolution(),
                                                                        false)
                                         );
     layerSet->addLayer(blueMarble);
-    
-    //    WMSLayer* i3Landsat = new WMSLayer("esat",
-    //                                       URL("http://data.worldwind.arc.nasa.gov/wms?", false),
-    //                                       WMS_1_1_0,
-    //                                       Sector::fullSphere(),
-    //                                       "image/jpeg",
-    //                                       "EPSG:4326",
-    //                                       "",
-    //                                       false,
-    //                                       new LevelTileCondition(7, 100),
-    //                                       TimeInterval::fromDays(30));
-    //    layerSet->addLayer(i3Landsat);
+
+    WMSLayer* i3Landsat = new WMSLayer("esat",
+                                       URL("http://data.worldwind.arc.nasa.gov/wms?", false),
+                                       WMS_1_1_0,
+                                       Sector::fullSphere(),
+                                       "image/jpeg",
+                                       "EPSG:4326",
+                                       "",
+                                       false,
+                                       new LevelTileCondition(7, 100),
+                                       TimeInterval::fromDays(30),
+                                       true,
+                                       new LayerTilesRenderParameters(Sector::fullSphere(),
+                                                                      2, 4,
+                                                                      0, 12,
+                                                                      LayerTilesRenderParameters::defaultTileTextureResolution(),
+                                                                      LayerTilesRenderParameters::defaultTileMeshResolution(),
+                                                                      false));
+    layerSet->addLayer(i3Landsat);
   }
 
   const bool useOrtoAyto = false;
@@ -880,7 +887,7 @@ public:
 
 - (TilesRenderParameters*) createTileRenderParameters
 {
-  const bool renderDebug = true;
+  const bool renderDebug = false;
   const bool useTilesSplitBudget = true;
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
@@ -1356,7 +1363,7 @@ public:
     //                                                      2) );
     
     const float verticalExaggeration = 10.0f;
-    const float pointSize = 5.0f;
+    const float pointSize = 2.0f;
     
 //    const Sector subSector = _sector.shrinkedByPercent(0.2f);
 //    //    const Sector subSector = _sector.shrinkedByPercent(0.9f);
@@ -1367,11 +1374,18 @@ public:
 
     int _DGD_working_on_terrain;
 
+
+    const Sector meshSector = Sector::fromDegrees(-22, -73,
+                                                  -16, -61);
+
+
     _meshRenderer->addMesh( elevationData->createMesh(planet,
                                                       verticalExaggeration,
                                                       //Geodetic3D::fromDegrees(0.02, 0.02, 0),
                                                       Geodetic3D::zero(),
-                                                      pointSize) );
+                                                      pointSize,
+                                                      meshSector,
+                                                      Vector2I(512, 256)) );
 
 
 //    const ElevationData* subElevationDataDecimated = new SubviewElevationData(elevationData,
@@ -1605,7 +1619,19 @@ public:
         
         indices.add(indicesCounter++);
       }
-      
+
+//      const int primitive,
+//      bool owner,
+//      const Vector3D& center,
+//      IFloatBuffer* vertices,
+//      IShortBuffer* indices,
+//      float lineWidth,
+//      float pointSize,
+//      Color* flatColor,
+//      IFloatBuffer* colors,
+//      const float colorsIntensity,
+//      bool depthTest
+
       return new IndexedMesh(GLPrimitive::lineLoop(),
                              true,
                              vertices.getCenter(),
@@ -1613,7 +1639,11 @@ public:
                              indices.create(),
                              lineWidth,
                              1,
-                             new Color(color));
+                             new Color(color),
+                             NULL, //colors
+                             0,    // colorsIntensity
+                             false //depthTest
+                             );
       
     }
     
@@ -1771,22 +1801,32 @@ public:
 
       _meshRenderer->addMesh( createSectorMesh(context->getPlanet(),
                                                20,
-                                               Sector::fromDegrees(35, -6, 38, -2),
+                                               Sector::fromDegrees(35, -6,
+                                                                   38, -2),
                                                Color::white(),
                                                2) );
       
       _meshRenderer->addMesh( createSectorMesh(context->getPlanet(),
                                                20,
-                                               Sector::fromDegrees(
-                                                                   39.4642996294239623,
-                                                                   -6.3829977122432933,
-                                                                   39.4829891936013553,
-                                                                   -6.3645288909498845
-                                                                   ),
+                                               Sector::fromDegrees(39.4642996294239623, -6.3829977122432933,
+                                                                   39.4829891936013553, -6.3645288909498845),
                                                Color::magenta(),
                                                2) );
 
-      
+
+//      sector=(Sector (lat=-22.5d, lon=-73.125000000000014211d) - (lat=-16.875d, lon=-67.5d)))
+//      sector=(Sector (lat=-28.125d, lon=-67.5d) - (lat=-22.5d, lon=-61.874999999999992895d)))
+
+
+      _meshRenderer->addMesh( createSectorMesh(context->getPlanet(),
+                                               32,
+                                               Sector::fromDegrees(-16, -73,
+                                                                   -22, -61),
+                                               Color::yellow(),
+                                               2) );
+
+
+
       // mesh1
       Angle latFrom(Angle::fromDegreesMinutesSeconds(38, 53, 42.24));
       Angle lonFrom(Angle::fromDegreesMinutesSeconds(-77, 2, 10.92));
@@ -1871,7 +1911,7 @@ public:
       //      targetSector.c
       
 
-      /**/
+      /*
       context->getDownloader()->requestBuffer(URL("file:///full-earth-2048x1024.bil", false),
                                               1000000,
                                               TimeInterval::fromDays(30),
@@ -1881,8 +1921,8 @@ public:
                                                                                       Vector2I(2048, 1024),
                                                                                       Sector::fullSphere()),
                                               true);
-      /**/
-      
+      */
+
       /*
        context->getDownloader()->requestBuffer(//URL("file:///sample_bil16_150x150.bil", false),
        //URL("file:///409_554.bil", false),
@@ -1938,7 +1978,16 @@ public:
       //                                                     //Angle::fromDegrees(45),
       //                                                     //Angle::fromDegrees(30)
       //                                                     );
-      
+
+      [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
+                                                     Geodetic3D(Angle::fromDegreesMinutes(36, 6),
+                                                                Angle::fromDegreesMinutes(-112, 6),
+                                                                500000),
+                                                     Angle::zero(),
+                                                     Angle::fromDegrees(30)
+                                                     );
+
+
       /*
        NSString *bsonFilePath = [[NSBundle mainBundle] pathForResource: @"test"
        ofType: @"bson"];
