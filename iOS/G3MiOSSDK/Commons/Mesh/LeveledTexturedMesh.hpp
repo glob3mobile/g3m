@@ -136,9 +136,9 @@ private:
   
   
   GLClient* _parentGLClient; //Tipically tile
-  mutable LazyTextureMapping* _lastUsedMapping;
+//  mutable LazyTextureMapping* _lastUsedMapping;
   
-  void updateLastUsedMapping(const G3MRenderContext* rc, LazyTextureMapping* mapping) const;
+//  void updateLastUsedMapping(const G3MRenderContext* rc, LazyTextureMapping* mapping) const;
   
   GLState _glState;
   void updateGLState();
@@ -153,8 +153,8 @@ public:
   _levelsCount(mappings->size()),
   _currentLevel(mappings->size() + 1),
   _currentLevelIsValid(false),
-  _parentGLClient(NULL),
-  _lastUsedMapping(NULL)
+  _parentGLClient(NULL)
+//  _lastUsedMapping(NULL)
   {
     if (_mappings->size() <= 0) {
       ILogger::instance()->logError("LOGIC ERROR\n");

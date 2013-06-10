@@ -147,14 +147,9 @@ Mesh* Trail::getMesh(const Planet* planet) {
 
 void Trail::render(const G3MRenderContext* rc) {
   if (_visible) {
-    
-    bool hasBeenRenderized = (_mesh != NULL) && !_positionsDirty;
-    
+
     Mesh* mesh = getMesh(rc->getPlanet());
     if (mesh != NULL) {
-      if (!hasBeenRenderized){
-        actualizeGLGlobalState(rc->getCurrentCamera()); //Actualize _mesh GLGlobalState with camera
-      }
       
       _glState.getGPUProgramState()->setUniformMatrixValue("Modelview", rc->getCurrentCamera()->getModelMatrix(), false);
       _glState.getGPUProgramState()->setUniformMatrixValue("Projection", rc->getCurrentCamera()->getProjectionMatrix(), false);
@@ -162,17 +157,6 @@ void Trail::render(const G3MRenderContext* rc) {
       mesh->render(rc, &_glState);
     }
   }
-}
-
-void Trail::notifyGLClientChildrenParentHasChanged(){
-  _mesh->actualizeGLGlobalState(this);
-}
-void Trail::modifyGLGlobalState(GLGlobalState& GLGlobalState) const{}
-
-void Trail::modifyGPUProgramState(GPUProgramState& progState) const{
-  progState.setUniformValue("EnableTexture", false);
-  progState.setUniformValue("ScaleTexCoord", Vector2D(1.0, 1.0));
-  progState.setUniformValue("TranslationTexCoord", Vector2D(0.0, 0.0));
 }
 
 void Trail::createGLState() const{

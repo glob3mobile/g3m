@@ -19,7 +19,7 @@
 class Mesh;
 class Planet;
 
-class Trail: public GLClient {
+class Trail {
 private:
   bool _visible;
   const unsigned long _maxSteps;
@@ -83,10 +83,6 @@ public:
 
     _positions.push_back(new Geodetic3D(position));
   }
-  
-  void notifyGLClientChildrenParentHasChanged();
-  void modifyGLGlobalState(GLGlobalState& GLGlobalState) const;
-  void modifyGPUProgramState(GPUProgramState& progState) const;
 
 };
 
@@ -141,10 +137,6 @@ public:
   }
 
   void render(const G3MRenderContext* rc);
-  
-  void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode){}
-  bool isVisible(const G3MRenderContext* rc){ return true;}
-  void modifiyGLState(GLState* state){}
   
 };
 

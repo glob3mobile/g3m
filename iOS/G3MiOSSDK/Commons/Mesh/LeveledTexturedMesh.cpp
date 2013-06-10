@@ -222,7 +222,6 @@ const IGLTextureId* LeveledTexturedMesh::getTopLevelGLTextureId() const {
 
 void LeveledTexturedMesh::render(const G3MRenderContext* rc) const {
   LazyTextureMapping* mapping = getCurrentTextureMapping();
-  updateLastUsedMapping(rc, mapping);
   if (mapping == NULL) {
     _mesh->render(rc);
   }
@@ -281,14 +280,14 @@ void LeveledTexturedMesh::modifyGPUProgramState(GPUProgramState& progState) cons
   mapping->modifyGPUProgramState(progState);
 }
 
-void LeveledTexturedMesh::updateLastUsedMapping(const G3MRenderContext* rc, LazyTextureMapping* mapping) const{
-  if (_lastUsedMapping != mapping){
-    _lastUsedMapping = mapping;
-    if (_parentGLClient != NULL){
-      _parentGLClient->actualizeGLGlobalState(rc->getCurrentCamera());
-    }
-  }
-}
+//void LeveledTexturedMesh::updateLastUsedMapping(const G3MRenderContext* rc, LazyTextureMapping* mapping) const{
+//  if (_lastUsedMapping != mapping){
+//    _lastUsedMapping = mapping;
+//    if (_parentGLClient != NULL){
+//      _parentGLClient->actualizeGLGlobalState(rc->getCurrentCamera());
+//    }
+//  }
+//}
 
 
 //TODO: Implement!!!!

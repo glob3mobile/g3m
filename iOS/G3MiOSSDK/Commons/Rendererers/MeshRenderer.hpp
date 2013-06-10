@@ -22,13 +22,12 @@ class Mesh;
 class MeshRenderer : public LeafRenderer {
 private:
   std::vector<Mesh*> _meshes;
-  bool _dirtyGLGlobalStates;
   
   GLState _glState;
   void createGLState() const;
 public:
   
-  MeshRenderer(): _dirtyGLGlobalStates(false){
+  MeshRenderer(){
     createGLState();
   }
   
@@ -36,7 +35,6 @@ public:
 
   void addMesh(Mesh* mesh) {
     _meshes.push_back(mesh);
-    _dirtyGLGlobalStates = true;
   }
 
   void clearMeshes();
@@ -80,14 +78,6 @@ public:
   void stop(const G3MRenderContext* rc) {
     
   }
-  
-  void notifyGLClientChildrenParentHasChanged();
-  void modifyGLGlobalState(GLGlobalState& GLGlobalState) const;
-  void modifyGPUProgramState(GPUProgramState& progState) const;
-  
-  void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode){}
-  bool isVisible(const G3MRenderContext* rc){ return true;}
-  void modifiyGLState(GLState* state){}
   
 };
 

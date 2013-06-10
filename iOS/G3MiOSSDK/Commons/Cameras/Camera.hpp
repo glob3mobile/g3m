@@ -117,7 +117,7 @@ public:
 /**
  * Class to control the camera.
  */
-class Camera: public SceneGraphInnerNode {
+class Camera {
 public:
   Camera(const Camera &that):
   _width(that._width),
@@ -287,33 +287,6 @@ public:
     //getFrustumData();
     getProjectionMatrix();
     getModelMatrix();
-  }
-  
-  void actualizeChildGLGlobalState(GLClient* child) const{
-    child->actualizeGLGlobalState(this);
-  }
-  
-  //GLClient
-  void modifyGLGlobalState(GLGlobalState& GLGlobalState) const{}
-  void modifyGPUProgramState(GPUProgramState& progState) const{
-    getProjectionMatrix();
-    getModelViewMatrix();
-    progState.setUniformValue("Projection", &_projectionMatrix);
-    progState.setUniformValue("Modelview", &_modelMatrix);
-  }
-  
-  //SCENE GRAPH
-  
-  void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode){
-    getModelMatrix();
-    getProjectionMatrix();
-  }
-  
-  void modifiyGLState(GLState* state){
-    getProjectionMatrix();
-    getModelViewMatrix();
-    state->getGPUProgramState()->setUniformValue("Projection", &_projectionMatrix);
-    state->getGPUProgramState()->setUniformValue("Modelview", &_modelMatrix);
   }
   
   // opengl projection matrix

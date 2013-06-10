@@ -42,8 +42,6 @@ public:
 
 void ShapesRenderer::render(const G3MRenderContext* rc) {
   
-  actualizeGLGlobalState(rc->getCurrentCamera());// Setting projection and modelview
-  
   const Vector3D cameraPosition = rc->getCurrentCamera()->getCartesianPosition();
   
   //Setting camera matrixes
@@ -63,14 +61,6 @@ void ShapesRenderer::render(const G3MRenderContext* rc) {
     else {
       shape->render(rc, &_glState);
     }
-  }
-}
-
-void ShapesRenderer::notifyGLClientChildrenParentHasChanged(){
-  const int shapesCount = _shapes.size();
-  for (int i = 0; i < shapesCount; i++) {
-    Shape* shape = _shapes[i];
-    shape->actualizeGLGlobalState(this);
   }
 }
 

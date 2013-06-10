@@ -96,23 +96,6 @@ public:
   void onDestroy(const G3MContext* context) {
 
   }
-  
-  void notifyGLClientChildrenParentHasChanged(){
-    _mesh->actualizeGLGlobalState(this);
-  }
-  
-  void modifyGLGlobalState(GLGlobalState& GLGlobalState) const;
-  
-  void modifyGPUProgramState(GPUProgramState& progState) const;
-  
-  //Scene Graph Node
-  void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode);
-  bool isVisible(const G3MRenderContext* rc);
-  void modifiyGLState(GLState* state);
-  void onInitialize(const G3MContext* context);
-  
-  
-  
 };
 
 //***************************************************************
