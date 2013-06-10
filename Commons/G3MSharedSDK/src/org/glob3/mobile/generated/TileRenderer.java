@@ -287,7 +287,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   
     }
   
-    _incompleteShape.rawRender(rc, parentState);
+    _incompleteShape.rawRender(rc, parentState, true);
   }
 
   private EllipsoidShape _incompleteShape;

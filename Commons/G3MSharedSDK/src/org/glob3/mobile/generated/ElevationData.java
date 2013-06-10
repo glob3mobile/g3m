@@ -138,7 +138,88 @@ public abstract class ElevationData
     final float lineWidth = 1F;
     Color flatColor = null;
   
-    return new DirectMesh(GLPrimitive.points(), true, vertices.getCenter(), vertices.create(), lineWidth, pointSize, flatColor, colors.create());
+    return new DirectMesh(GLPrimitive.points(), true, vertices.getCenter(), vertices.create(), lineWidth, pointSize, flatColor, colors.create(), 0, false);
+                          //GLPrimitive::lineStrip(),
+  }
+
+  public Mesh createMesh(Ellipsoid ellipsoid, float verticalExaggeration, Geodetic3D positionOffset, float pointSize, Sector sector, Vector2I resolution)
+  {
+    final Vector3D minMaxAverageHeights = getMinMaxAverageHeights();
+    final double minHeight = minMaxAverageHeights._x;
+    final double maxHeight = minMaxAverageHeights._y;
+    final double deltaHeight = maxHeight - minHeight;
+    final double averageHeight = minMaxAverageHeights._z;
+  
+    ILogger.instance().logInfo("averageHeight=%f, minHeight=%f maxHeight=%f delta=%f", averageHeight, minHeight, maxHeight, deltaHeight);
+  
+    FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.firstVertex(), ellipsoid, Vector3D.zero());
+    FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
+  
+    final IMathUtils mu = IMathUtils.instance();
+  
+    /* */
+    final int width = resolution._x;
+    final int height = resolution._y;
+    for (int x = 0; x < width; x++)
+    {
+      final double u = (double) x / (width - 1);
+  
+      for (int y = 0; y < height; y++)
+      {
+        final double v = 1.0 - ((double) y / (height - 1));
+  
+        final Geodetic2D position = sector.getInnerPoint(u, v);
+  
+        final double height = getElevationAt(position);
+        if (mu.isNan(height))
+        {
+          continue;
+        }
+  
+        final float alpha = (float)((height - minHeight) / deltaHeight);
+        final float r = alpha;
+        final float g = alpha;
+        final float b = alpha;
+        colors.add(r, g, b, 1);
+  
+        vertices.add(position.add(positionOffset.asGeodetic2D()), positionOffset.height() + (height * verticalExaggeration));
+      }
+    }
+    /* */
+  
+  
+  //  for (int x = 0; x < _width; x++) {
+  //    const double u = (double) x / (_width  - 1);
+  //
+  //    for (int y = 0; y < _height; y++) {
+  //      const double v = 1.0 - ( (double) y / (_height - 1) );
+  //      const Geodetic2D position = _sector.getInnerPoint(u, v);
+  //      if (!sector.contains(position)) {
+  //        continue;
+  //      }
+  //
+  //      const double height = getElevationAt(x, y);
+  //      if (mu->isNan(height)) {
+  //        continue;
+  //      }
+  //
+  //      vertices.add(position.add(positionOffset.asGeodetic2D()),
+  //                   positionOffset.height() + (height * verticalExaggeration));
+  //
+  //
+  //      const float alpha = (float) ((height - minHeight) / deltaHeight);
+  //      const float r = alpha;
+  //      const float g = alpha;
+  //      const float b = alpha;
+  //      colors.add(r, g, b, 1);
+  //    }
+  //  }
+  
+  
+    final float lineWidth = 1F;
+    Color flatColor = null;
+  
+    return new DirectMesh(GLPrimitive.points(), true, vertices.getCenter(), vertices.create(), lineWidth, pointSize, flatColor, colors.create(), 0, false);
                           //GLPrimitive::lineStrip(),
   }
 
@@ -171,8 +252,8 @@ public abstract class ElevationData
     final double u = mu.clamp(uv._x, 0, 1);
     final double v = mu.clamp(uv._y, 0, 1);
     final double dX = u * (_width - 1);
-    //const double dY = (1.0 - v) * (_height - 1);
-    final double dY = v * (_height - 1);
+    final double dY = (1.0 - v) * (_height - 1);
+    //const double dY = v * (_height - 1);
   
     final int x = (int) dX;
     final int y = (int) dY;
@@ -182,12 +263,6 @@ public abstract class ElevationData
     final int nextY = y + 1;
     final double alphaY = dY - y;
     final double alphaX = dX - x;
-  
-    //  if (alphaX < 0 || alphaX > 1 ||
-    //      alphaY < 0 || alphaY > 1) {
-    //    printf("break point\n");
-    //  }
-  
   
     double result;
     if (x == dX)

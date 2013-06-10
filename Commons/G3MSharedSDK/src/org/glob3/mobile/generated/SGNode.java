@@ -117,7 +117,7 @@ public class SGNode
   
   }
 
-  public void render(G3MRenderContext rc, GLState parentState)
+  public void render(G3MRenderContext rc, GLState parentState, boolean renderNotReadyShapes)
   {
     final GLState myState = createState(rc, parentState);
     final GLState state;
@@ -138,7 +138,7 @@ public class SGNode
     for (int i = 0; i < childrenCount; i++)
     {
       SGNode child = _children.get(i);
-      child.render(rc, state);
+      child.render(rc, state, renderNotReadyShapes);
     }
   
     cleanUpRender(rc);

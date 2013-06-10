@@ -66,13 +66,13 @@ public abstract class CompositeShape extends Shape
     return false;
   }
 
-  public final void rawRender(G3MRenderContext rc, GLState parentState)
+  public final void rawRender(G3MRenderContext rc, GLState parentState, boolean renderNotReadyShapes)
   {
     int childrenCount = _children.size();
     for (int i = 0; i < childrenCount; i++)
     {
       Shape child = _children.get(i);
-      child.render(rc, parentState);
+      child.render(rc, parentState, renderNotReadyShapes);
     }
   }
 

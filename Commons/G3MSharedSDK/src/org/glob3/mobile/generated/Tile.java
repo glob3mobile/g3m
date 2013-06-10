@@ -943,8 +943,16 @@ public class Tile
     _lastTileMeshResolutionY = tileMeshResolution._y;
     if (_elevationDataRequest == null)
     {
+  //    const Sector caceresSector = Sector::fromDegrees(39.4642996294239623,
+  //                                                     -6.3829977122432933,
+  //                                                     39.4829891936013553,
+  //                                                     -6.3645288909498845);
+  //
+  //    if (caceresSector.touchesWith(_sector)) {
+  //      printf("break point on me\n");
+  //    }
   
-      Vector2I res = tessellator.getTileMeshResolution(planet, tileMeshResolution, this, renderDebug);
+      final Vector2I res = tessellator.getTileMeshResolution(planet, tileMeshResolution, this, renderDebug);
       _elevationDataRequest = new TileElevationDataRequest(this, res, elevationDataProvider);
       _elevationDataRequest.sendRequest();
     }

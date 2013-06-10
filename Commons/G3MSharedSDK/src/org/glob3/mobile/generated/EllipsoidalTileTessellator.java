@@ -85,8 +85,10 @@ public class EllipsoidalTileTessellator extends TileTessellator
   
         if (elevationData != null)
         {
-  //        height = elevationData->getElevationAt(i, j) * verticalExaggeration;
-          final double h = elevationData.getElevationAt(position);
+          int ___WTF_Diego;
+          final Geodetic2D position2 = sector.getInnerPoint(u, 1.0 - v);
+  
+          final double h = elevationData.getElevationAt(position2);
           if (!mu.isNan(h))
           {
             height = h * verticalExaggeration;
@@ -225,7 +227,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
   
     Color color = Color.newFromRGBA((float) 1.0, (float) 0.0, (float) 0, (float) 1.0);
   
-    return new IndexedMesh(GLPrimitive.lineLoop(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, color);
+    return new IndexedMesh(GLPrimitive.lineLoop(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, color, null, 0, false); // colorsIntensity -  colors
   }
 
   public final boolean isReady(G3MRenderContext rc)
