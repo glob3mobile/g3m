@@ -75,19 +75,19 @@ Mesh* ElevationData::createMesh(const Ellipsoid* ellipsoid,
 
       const Geodetic2D position = sector.getInnerPoint(u, v);
 
-      const double height = getElevationAt(position);
-      if ( mu->isNan(height) ) {
+      const double elevation = getElevationAt(position);
+      if ( mu->isNan(elevation) ) {
         continue;
       }
 
-      const float alpha = (float) ((height - minHeight) / deltaHeight);
+      const float alpha = (float) ((elevation - minHeight) / deltaHeight);
       const float r = alpha;
       const float g = alpha;
       const float b = alpha;
       colors.add(r, g, b, 1);
 
       vertices.add(position.add(positionOffset.asGeodetic2D()),
-                   positionOffset.height() + (height * verticalExaggeration));
+                   positionOffset.height() + (elevation * verticalExaggeration));
     }
   }
   /* */
