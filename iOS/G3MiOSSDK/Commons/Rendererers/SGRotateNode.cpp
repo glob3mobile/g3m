@@ -33,5 +33,5 @@ void SGRotateNode::modifyGLGlobalState(GLGlobalState& GLGlobalState) const{
 }
 
 void SGRotateNode::modifyGPUProgramState(GPUProgramState& progState) const{
-  progState.multiplyUniformValue("Modelview", &_rotationMatrix);
+//  progState.multiplyUniformValue("Modelview", _rotationMatrix, true);
 }

@@ -58,9 +58,9 @@ public:
   
   bool setUniformValue(const std::string& name, double x, double y, double z, double w);
   
-  bool setUniformValue(const std::string& name, const MutableMatrix44D* m);
-  
-  bool multiplyUniformValue(const std::string& name, const MutableMatrix44D* m);
+//  bool setUniformValue(const std::string& name, const MutableMatrix44D* m);
+//  
+//  bool multiplyUniformValue(const std::string& name, const MutableMatrix44D* m);
   
   bool setUniformMatrixValue(const std::string& name, const MutableMatrix44D& m, bool isTransform);
   

@@ -439,12 +439,12 @@ void Mark::createGLState(){
                                  false,
                                  0);
     
-    const Vector3D* pos = new Vector3D( _planet->toCartesian(_position) );
+    const Vector3D pos( _planet->toCartesian(_position) );
     FloatBufferBuilderFromCartesian3D vertex(CenterStrategy::noCenter(), Vector3D::zero());
-    vertex.add(*pos);
-    vertex.add(*pos);
-    vertex.add(*pos);
-    vertex.add(*pos);
+    vertex.add(pos);
+    vertex.add(pos);
+    vertex.add(pos);
+    vertex.add(pos);
     
     IFloatBuffer* vertices = vertex.create();
     

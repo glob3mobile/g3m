@@ -31,7 +31,7 @@ void SGTranslateNode::modifyGLGlobalState(GLGlobalState& GLGlobalState) const{
 }
 
 void SGTranslateNode::modifyGPUProgramState(GPUProgramState& progState) const{
-  progState.multiplyUniformValue("Modelview", &_translationMatrix);
+//  progState.multiplyUniformValue("Modelview", _translationMatrix, true);
 }
 
 

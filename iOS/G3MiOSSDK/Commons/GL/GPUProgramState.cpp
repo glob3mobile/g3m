@@ -324,75 +324,75 @@ bool GPUProgramState::setUniformValue(const std::string& name, double x, double 
   return setGPUUniformValue(name, new GPUUniformValueVec4Float(x,y,z,w));
 }
 
-bool GPUProgramState::setUniformValue(const std::string& name, const MutableMatrix44D* m){
-  
-#ifdef C_CODE
-  for(std::map<std::string, GPUUniformValue*> ::iterator it = _uniformValues.begin();
-      it != _uniformValues.end();
-      it++){
-    std::string thisName = it->first;
-    GPUUniformValue* uv = (GPUUniformValue*)it->second;
-    if (thisName.compare(name) == 0 && uv->getType() == GLType::glMatrix4Float()){
-      GPUUniformValueMatrix4FloatStack* v = (GPUUniformValueMatrix4FloatStack*)it->second;
-      v->loadMatrix(m);
-      return true;
-    }
-  }
-#endif
-#ifdef JAVA_CODE
-  final Object[] uni = _uniformValues.values().toArray();
-  final Object[] uniNames = _uniformValues.keySet().toArray();
-  for (int i = 0; i < uni.length; i++) {
-    final String thisName =  (String)uniNames[i];
-    final GPUUniformValue uv = (GPUUniformValue) uni[i];
-    if ((thisName.compareTo(name) == 0) && (uv.getType() == GLType.glMatrix4Float()))
-    {
-      final GPUUniformValueMatrix4FloatStack v = (GPUUniformValueMatrix4FloatStack)uv;
-      v.loadMatrix(m);
-      return true;
-    }
-  }
-#endif
-  
-  return setGPUUniformValue(name, new GPUUniformValueMatrix4FloatStack(m));
-}
+//bool GPUProgramState::setUniformValue(const std::string& name, const MutableMatrix44D* m){
+//  
+//#ifdef C_CODE
+//  for(std::map<std::string, GPUUniformValue*> ::iterator it = _uniformValues.begin();
+//      it != _uniformValues.end();
+//      it++){
+//    std::string thisName = it->first;
+//    GPUUniformValue* uv = (GPUUniformValue*)it->second;
+//    if (thisName.compare(name) == 0 && uv->getType() == GLType::glMatrix4Float()){
+//      GPUUniformValueMatrix4FloatStack* v = (GPUUniformValueMatrix4FloatStack*)it->second;
+//      v->loadMatrix(m);
+//      return true;
+//    }
+//  }
+//#endif
+//#ifdef JAVA_CODE
+//  final Object[] uni = _uniformValues.values().toArray();
+//  final Object[] uniNames = _uniformValues.keySet().toArray();
+//  for (int i = 0; i < uni.length; i++) {
+//    final String thisName =  (String)uniNames[i];
+//    final GPUUniformValue uv = (GPUUniformValue) uni[i];
+//    if ((thisName.compareTo(name) == 0) && (uv.getType() == GLType.glMatrix4Float()))
+//    {
+//      final GPUUniformValueMatrix4FloatStack v = (GPUUniformValueMatrix4FloatStack)uv;
+//      v.loadMatrix(m);
+//      return true;
+//    }
+//  }
+//#endif
+//  
+//  return setGPUUniformValue(name, new GPUUniformValueMatrix4FloatStack(m));
+//}
 
-bool GPUProgramState::multiplyUniformValue(const std::string& name, const MutableMatrix44D* m){
-  
-#ifdef C_CODE
-  
-  for(std::map<std::string, GPUUniformValue*> ::iterator it = _uniformValues.begin();
-      it != _uniformValues.end();
-      it++){
-    std::string thisName = it->first;
-    GPUUniformValue* uv = (GPUUniformValue*)it->second;
-    if (thisName.compare(name) == 0 && uv->getType() == GLType::glMatrix4Float()){
-      GPUUniformValueMatrix4FloatStack* v = (GPUUniformValueMatrix4FloatStack*)it->second;
-      v->multiplyMatrix(m);
-      return true;
-    }
-  }
-  
-#endif
-#ifdef JAVA_CODE
-  final Object[] uni = _uniformValues.values().toArray();
-  final Object[] uniNames = _uniformValues.keySet().toArray();
-  for (int i = 0; i < uni.length; i++) {
-    final String thisName =  (String) uniNames[i];
-    final GPUUniformValue uv = (GPUUniformValue) uni[i];
-    if ((thisName.compareTo(name) == 0) && (uv.getType() == GLType.glMatrix4Float()))
-    {
-      final GPUUniformValueMatrix4FloatStack v = (GPUUniformValueMatrix4FloatStack)uv;
-      v.multiplyMatrix(m);
-      return;
-    }
-  }
-#endif
-  
-  ILogger::instance()->logError("CAN'T MULTIPLY UNLOADED MATRIX");
-  return false;
-  
-}
+//bool GPUProgramState::multiplyUniformValue(const std::string& name, const MutableMatrix44D* m){
+//  
+//#ifdef C_CODE
+//  
+//  for(std::map<std::string, GPUUniformValue*> ::iterator it = _uniformValues.begin();
+//      it != _uniformValues.end();
+//      it++){
+//    std::string thisName = it->first;
+//    GPUUniformValue* uv = (GPUUniformValue*)it->second;
+//    if (thisName.compare(name) == 0 && uv->getType() == GLType::glMatrix4Float()){
+//      GPUUniformValueMatrix4FloatStack* v = (GPUUniformValueMatrix4FloatStack*)it->second;
+//      v->multiplyMatrix(m);
+//      return true;
+//    }
+//  }
+//  
+//#endif
+//#ifdef JAVA_CODE
+//  final Object[] uni = _uniformValues.values().toArray();
+//  final Object[] uniNames = _uniformValues.keySet().toArray();
+//  for (int i = 0; i < uni.length; i++) {
+//    final String thisName =  (String) uniNames[i];
+//    final GPUUniformValue uv = (GPUUniformValue) uni[i];
+//    if ((thisName.compareTo(name) == 0) && (uv.getType() == GLType.glMatrix4Float()))
+//    {
+//      final GPUUniformValueMatrix4FloatStack v = (GPUUniformValueMatrix4FloatStack)uv;
+//      v.multiplyMatrix(m);
+//      return;
+//    }
+//  }
+//#endif
+//  
+//  ILogger::instance()->logError("CAN'T MULTIPLY UNLOADED MATRIX");
+//  return false;
+//  
+//}
 
 bool GPUProgramState::setUniformMatrixValue(const std::string& name, const MutableMatrix44D& m, bool isTransform){
   GPUUniformValueMatrix4FloatTransform *uv = new GPUUniformValueMatrix4FloatTransform(m, isTransform);
