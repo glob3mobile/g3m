@@ -40,6 +40,9 @@ private:
   mutable MutableMatrix44D _modelviewMatrix;
   MutableMatrix44D _projectionMatrix;
   
+  GLState _glState;
+  void createGLState() const;
+  
   
 public:
   BusyQuadRenderer(IImage* image,
@@ -54,6 +57,7 @@ public:
   _size(size),
   _projectionMatrix(MutableMatrix44D::invalid())
   {
+    createGLState();
   }
   
   void initialize(const G3MContext* context) {}
@@ -84,6 +88,7 @@ public:
     _degrees += value;
     if (_degrees>360) _degrees -= 360;
     _modelviewMatrix = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, 1));
+    _glState.getGPUProgramState()->setUniformMatrixValue("Modelview", _modelviewMatrix, false);
   }
   
   void start(const G3MRenderContext* rc);
@@ -101,10 +106,6 @@ public:
   void onDestroy(const G3MContext* context) {
     
   }
-  
-  void modifyGLGlobalState(GLGlobalState& GLGlobalState) const;
-  
-  void modifyGPUProgramState(GPUProgramState& progState) const;
   
 };
 

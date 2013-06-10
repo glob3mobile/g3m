@@ -148,11 +148,3 @@ void Shape::setAnimatedPosition(const TimeInterval& duration,
                                                linearInterpolation);
   _pendingEffects.push_back( new ShapePendingEffect(effect, false) );
 }
-
-void Shape::modifyGPUProgramState(GPUProgramState& progState) const{
-  if (_planet != NULL){
-    progState.multiplyUniformValue("Modelview", getTransformMatrix( _planet ));
-  } else{
-    ILogger::instance()->logError("Shape not initialized");
-  }
-}

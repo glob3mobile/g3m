@@ -99,10 +99,6 @@ void BusyQuadRenderer::render(const G3MRenderContext* rc,
                               const GLGlobalState& parentState) {
   GL* gl = rc->getGL();
 
-  //GLGlobalState state(parentState);
-  GLGlobalState state;
-  state.enableBlend();
-
   if (_quadMesh == NULL){
     if (!initMesh(rc)) {
       return;
@@ -122,25 +118,20 @@ void BusyQuadRenderer::render(const G3MRenderContext* rc,
   }
   
   // clear screen
-  state.setClearColor(*_backgroundColor);
-  gl->clearScreen(state);
-
-  state.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
-
-//  MutableMatrix44D R2 = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, 1));
-//  _programState.setUniformValue("Modelview", _modelviewMatrix);
+  gl->clearScreen(*_glState.getGLGlobalState());
 
   // draw mesh
-  _quadMesh->render(rc);
+  _quadMesh->render(rc, &_glState);
 }
 
-void BusyQuadRenderer::modifyGLGlobalState(GLGlobalState& GLGlobalState) const{
-  GLGlobalState.enableBlend();
-  GLGlobalState.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
-  GLGlobalState.setClearColor(*_backgroundColor);
-}
-
-void BusyQuadRenderer::modifyGPUProgramState(GPUProgramState& progState) const{
+void BusyQuadRenderer::createGLState() const{
+  
+  _glState.getGLGlobalState()->enableBlend();
+  _glState.getGLGlobalState()->setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
+  _glState.getGLGlobalState()->setClearColor(*_backgroundColor);
+  
+  GPUProgramState& progState = *_glState.getGPUProgramState();
+  
   progState.setUniformValue("EnableTexture", false);
   progState.setUniformValue("PointSize", (float)1.0);
   progState.setUniformValue("ScaleTexCoord", Vector2D(1.0,1.0));

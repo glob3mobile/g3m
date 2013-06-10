@@ -178,8 +178,6 @@ public:
 
   virtual bool isTransparent(const G3MRenderContext* rc) = 0;
   
-  virtual void modifyGPUProgramState(GPUProgramState& progState) const; //Reimplemented on AbstractMeshShape
-  
 };
 
 #endif
