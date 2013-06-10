@@ -12,7 +12,6 @@
 #include "LeafRenderer.hpp"
 #include "Shape.hpp"
 #include "GPUProgramState.hpp"
-#include "GLClient.hpp"
 #include <vector>
 
 class ShapesRenderer : public LeafRenderer {
@@ -94,14 +93,6 @@ public:
   }
 
   void render(const G3MRenderContext* rc);
-
-  void notifyGLClientChildrenParentHasChanged();
-  void modifyGLGlobalState(GLGlobalState& GLGlobalState) const;
-  void modifyGPUProgramState(GPUProgramState& progState) const;
-  
-  void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode){}
-  bool isVisible(const G3MRenderContext* rc){ return true;}
-  void modifiyGLState(GLState* state){}
 
 };
 

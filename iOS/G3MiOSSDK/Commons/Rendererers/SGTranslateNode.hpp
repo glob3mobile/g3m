@@ -11,6 +11,8 @@
 
 #include "SGNode.hpp"
 
+#include "MutableMatrix44D.hpp"
+
 class SGTranslateNode : public SGNode {
 private:
   const double _x;

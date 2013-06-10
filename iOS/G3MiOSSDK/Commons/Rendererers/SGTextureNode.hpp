@@ -33,20 +33,6 @@ public:
 
   void initialize(const G3MContext* context,
                   SGShape *shape);
-
-//  void rawRender(const G3MRenderContext* rc,
-//                 const GLGlobalState& parentState);
-
-  GLGlobalState* createState(const G3MRenderContext* rc,
-                       const GLGlobalState& parentState) {
-    return  NULL;
-  }
-
-//  void render(const G3MRenderContext* rc);
-  
-  void modifyGLGlobalState(GLGlobalState& GLGlobalState) const;
-  void modifyGPUProgramState(GPUProgramState& progState) const;
-  
   
 };
 

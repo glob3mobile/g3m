@@ -48,7 +48,6 @@ class GPUProgramManager;
 
 #include "Color.hpp"
 #include "Angle.hpp"
-#include "SceneGraphRenderer.hpp"
 
 class G3MContext;
 class GLGlobalState;
@@ -243,8 +242,6 @@ private:
   bool _clickOnProcess;
   
   GPUProgramManager* _gpuProgramManager;
-  
-  SceneGraphRenderer* _sgRenderer;
   
   G3MWidget(GL*                              gl,
             IStorage*                        storage,

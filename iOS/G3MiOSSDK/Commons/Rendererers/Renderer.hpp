@@ -15,7 +15,7 @@ class G3MRenderContext;
 class G3MEventContext;
 class GLGlobalState;
 
-#include "SceneGraphNode.hpp"
+#include "Effects.hpp"
 
 class Renderer: public EffectTarget {
 public:
@@ -62,8 +62,6 @@ public:
   virtual bool isTileRenderer() {
     return false;
   }
-  
-  void updateGPUUniform(GLStateTreeNode* stateNode, GPUProgramState* progState, const std::string& name){}
 
 };
 

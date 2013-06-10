@@ -12,9 +12,7 @@
 #include "Context.hpp"
 #include "Extent.hpp"
 
-#include "GLClient.hpp"
-
-#include "SceneGraphNode.hpp"
+#include "GLState.hpp"
 
 class Vector3D;
 class GPUProgramState;

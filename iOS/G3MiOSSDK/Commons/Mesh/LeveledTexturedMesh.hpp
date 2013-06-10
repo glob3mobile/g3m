@@ -19,6 +19,8 @@
 
 #include "IGLTextureId.hpp"
 
+#include "GLState.hpp"
+
 class LazyTextureMappingInitializer {
 public:
   virtual ~LazyTextureMappingInitializer() {
@@ -134,12 +136,6 @@ private:
   
   LazyTextureMapping* getCurrentTextureMapping() const;
   
-  
-  GLClient* _parentGLClient; //Tipically tile
-//  mutable LazyTextureMapping* _lastUsedMapping;
-  
-//  void updateLastUsedMapping(const G3MRenderContext* rc, LazyTextureMapping* mapping) const;
-  
   GLState _glState;
   void updateGLState();
   
@@ -152,9 +148,7 @@ public:
   _mappings(mappings),
   _levelsCount(mappings->size()),
   _currentLevel(mappings->size() + 1),
-  _currentLevelIsValid(false),
-  _parentGLClient(NULL)
-//  _lastUsedMapping(NULL)
+  _currentLevelIsValid(false)
   {
     if (_mappings->size() <= 0) {
       ILogger::instance()->logError("LOGIC ERROR\n");
@@ -180,21 +174,7 @@ public:
   const IGLTextureId* getTopLevelGLTextureId() const;
   
   bool isTransparent(const G3MRenderContext* rc) const;
-  
-  void notifyGLClientChildrenParentHasChanged();
-  void modifyGLGlobalState(GLGlobalState& GLGlobalState) const;
-  void modifyGPUProgramState(GPUProgramState& progState) const;
-  
-  void setGLClientParent(GLClient* parent){
-    _parentGLClient = parent;
-  }
-  
-  //Scene Graph Node
-  void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode);
-  bool isVisible(const G3MRenderContext* rc);
-  void modifiyGLState(GLState* state);
-  void updateGPUUniform(GLStateTreeNode* stateNode, GPUProgramState* progState, const std::string& name){}
-  
+
   void render(const G3MRenderContext* rc, GLState* parentGLState);
   
 };

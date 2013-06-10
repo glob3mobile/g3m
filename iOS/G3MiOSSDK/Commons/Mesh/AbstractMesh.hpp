@@ -12,6 +12,7 @@
 #include "Mesh.hpp"
 
 #include "Vector3D.hpp"
+#include "GLState.hpp"
 
 class MutableMatrix44D;
 class IFloatBuffer;

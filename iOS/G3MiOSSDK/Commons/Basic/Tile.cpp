@@ -438,12 +438,6 @@ void Tile::prepareForFullRendering(const G3MRenderContext* rc,
                                               this,
                                               tessellatorMesh,
                                               _texturizedMesh);
-      
-      ((LeveledTexturedMesh*)_texturizedMesh)->setGLClientParent(this);
-      
-      
-      //Storing camera matrix values for glclient children and notifying children
-      //this->actualizeGLGlobalState(rc->getCurrentCamera());
     }
   }
 }
@@ -468,8 +462,6 @@ void Tile::rawRender(const G3MRenderContext *rc,
                                               this,
                                               tessellatorMesh,
                                               _texturizedMesh);
-      
-      ((LeveledTexturedMesh*)_texturizedMesh)->setGLClientParent(this);
     }
     
     if (_texturizedMesh != NULL) {

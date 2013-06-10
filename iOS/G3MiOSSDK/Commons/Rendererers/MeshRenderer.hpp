@@ -14,7 +14,7 @@
 
 #include "GPUProgramState.hpp"
 
-#include "GLClient.hpp"
+#include "GLState.hpp"
 
 class Mesh;
 

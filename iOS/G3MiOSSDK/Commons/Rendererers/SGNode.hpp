@@ -12,15 +12,13 @@
 #include <string>
 #include <vector>
 
-#include "GLClient.hpp"
-
 class G3MContext;
 class G3MRenderContext;
 class SGShape;
 class GLGlobalState;
 class GPUProgramState;
 
-class SGNode: public GLClient {
+class SGNode {
 protected:
   const std::string _id;
   const std::string _sId;
@@ -66,22 +64,6 @@ public:
   
   virtual void render(const G3MRenderContext* rc);
   
-  //  SGShape* getShape() const {
-  //    if (_shape != NULL) {
-  //      return _shape;
-  //    }
-  //    if (_parent != NULL) {
-  //      return _parent->getShape();
-  //    }
-  //    return NULL;
-  //  }
-  
-//  virtual GLGlobalState* createState(const G3MRenderContext* rc,
-//                               const GLGlobalState& parentState);
-//  
-//  virtual GPUProgramState* createGPUProgramState(const G3MRenderContext* rc,
-//                                                 const GPUProgramState* parentState);
-  
   int getChildrenCount() const {
     return _children.size();
   }
@@ -89,8 +71,6 @@ public:
   SGNode* getChild(int i) const {
     return _children[i];
   }
-  
-  void notifyGLClientChildrenParentHasChanged();
 };
 
 #endif

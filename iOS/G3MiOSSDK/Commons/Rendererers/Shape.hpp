@@ -12,21 +12,18 @@
 #include "Geodetic3D.hpp"
 #include "Context.hpp"
 #include "Vector3D.hpp"
-#include "GLClient.hpp"
 
 class MutableMatrix44D;
 
 #include "Effects.hpp"
 #include <vector>
 
-#include "GLClient.hpp"
-
 #include "GLState.hpp"
 
 class ShapePendingEffect;
 class GPUProgramState;
 
-class Shape : public GLClient, public EffectTarget{
+class Shape : public EffectTarget{
 private:
   Geodetic3D* _position;
   

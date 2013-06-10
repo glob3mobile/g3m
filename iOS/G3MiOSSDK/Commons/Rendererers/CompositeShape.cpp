@@ -18,7 +18,6 @@ CompositeShape::~CompositeShape() {
 
 void CompositeShape::addShape(Shape* shape) {
   _children.push_back(shape);
-  shape->actualizeGLGlobalState(this);
 }
 
 bool CompositeShape::isReadyToRender(const G3MRenderContext *rc) {
@@ -38,13 +37,5 @@ void CompositeShape::rawRender(const G3MRenderContext* rc, GLState* parentGLStat
   for (int i = 0; i < childrenCount; i++) {
     Shape* child = _children[i];
     child->render(rc, parentGLState);
-  }
-}
-
-void CompositeShape::notifyGLClientChildrenParentHasChanged(){
-  int childrenCount = _children.size();
-  for (int i = 0; i < childrenCount; i++) {
-    Shape* child = _children[i];
-    child->actualizeGLGlobalState(this);
   }
 }

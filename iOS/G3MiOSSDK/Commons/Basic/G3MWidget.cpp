@@ -118,8 +118,7 @@ _paused(false),
 _initializationTaskWasRun(false),
 _initializationTaskReady(true),
 _clickOnProcess(false),
-_gpuProgramManager(gpuProgramManager),
-_sgRenderer(NULL)
+_gpuProgramManager(gpuProgramManager)
 {
   _effectsScheduler->initialize(_context);
   _cameraRenderer->initialize(_context);

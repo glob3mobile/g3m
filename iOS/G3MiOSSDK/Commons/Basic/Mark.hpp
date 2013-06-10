@@ -17,9 +17,7 @@
 #include "URL.hpp"
 #include "Vector2I.hpp"
 #include "Color.hpp"
-#include "GLClient.hpp"
-
-#include "SceneGraphNode.hpp"
+#include "GLState.hpp"
 
 class IImage;
 class IFloatBuffer;

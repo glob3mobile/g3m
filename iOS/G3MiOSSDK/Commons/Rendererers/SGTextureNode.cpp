@@ -31,27 +31,6 @@ bool SGTextureNode::isReadyToRender(const G3MRenderContext* rc) {
   return SGNode::isReadyToRender(rc);
 }
 
-//void SGTextureNode::rawRender(const G3MRenderContext* rc,
-//                              const GLGlobalState& parentState) {
-//  const int layersCount = _layers.size();
-//  for (int i = 0; i < layersCount; i++) {
-//    SGLayerNode* layer = _layers[i];
-//
-//    const GLGlobalState* layerState = layer->createState(rc, parentState);
-//    const GLGlobalState* state;
-//    if (layerState == NULL) {
-//      state = &parentState;
-//    }
-//    else {
-//      state = layerState;
-//    }
-//
-//    layer->rawRender(rc, *state);
-//
-//    delete layerState;
-//  }
-//}
-
 void SGTextureNode::initialize(const G3MContext* context,
                                SGShape *shape) {
   SGNode::initialize(context, shape);
@@ -68,62 +47,5 @@ SGTextureNode::~SGTextureNode() {
   for (int i = 0; i < layersCount; i++) {
     SGLayerNode* layer = _layers[i];
     delete layer;
-  }
-}
-
-/*
-void SGTextureNode::render(const G3MRenderContext* rc) {
-//  GLGlobalState* myState = createState(rc, parentState);
-//  GLGlobalState* state2;
-//  if (myState == NULL) {
-//    state2 = new GLGlobalState(parentState);
-//  }
-//  else {
-//    state2 = myState;
-//  }
-
-  //  rawRender(rc, *state);
-
-  const int layersCount = _layers.size();
-  for (int i = 0; i < layersCount; i++) {
-    SGLayerNode* layer = _layers[i];
-
-    const GLGlobalState* layerState = layer->createState(rc, *state2);
-    const GLGlobalState* state;
-    if (layerState == NULL) {
-      state = state2;
-    }
-    else {
-      state = layerState;
-    }
-
-    //layer->rawRender(rc, *state);
-
-    const int childrenCount = _children.size();
-    for (int j = 0; j < childrenCount; j++) {
-      SGNode* child = _children[j];
-      child->render(rc);
-    }
-
-    delete layerState;
-  }
-  
-  delete myState;
-}
-*/
-
-void SGTextureNode::modifyGLGlobalState(GLGlobalState& GLGlobalState) const{
-  const int layersCount = _layers.size();
-  for (int i = 0; i < layersCount; i++) {
-    SGLayerNode* layer = _layers[i];
-    layer->modifyGLGlobalState(GLGlobalState);
-  }
-}
-
-void SGTextureNode::modifyGPUProgramState(GPUProgramState& progState) const{
-  const int layersCount = _layers.size();
-  for (int i = 0; i < layersCount; i++) {
-    SGLayerNode* layer = _layers[i];
-    layer->modifyGPUProgramState(progState);
   }
 }

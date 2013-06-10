@@ -11,7 +11,6 @@
 
 #include "Sector.hpp"
 #include <list>
-#include "GLClient.hpp"
 
 class G3MRenderContext;
 class Mesh;
@@ -33,7 +32,9 @@ class GPUProgramState;
 
 #include "ITexturizerData.hpp"
 
-class Tile: public GLClient {
+#include "GLState.hpp"
+
+class Tile {
 private:
   TileTexturizer* _texturizer;
   Tile*           _parent;

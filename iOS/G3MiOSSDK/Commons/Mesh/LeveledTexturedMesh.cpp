@@ -266,41 +266,6 @@ bool LeveledTexturedMesh::isTransparent(const G3MRenderContext* rc) const {
   return mapping->isTransparent(rc);
 }
 
-//void LeveledTexturedMesh::notifyGLClientChildrenParentHasChanged(){
-//  ((Mesh*)_mesh)->actualizeGLGlobalState(this);
-//}
-
-void LeveledTexturedMesh::modifyGLGlobalState(GLGlobalState& GLGlobalState) const{
-  LazyTextureMapping* mapping = getCurrentTextureMapping();
-  mapping->modifyGLGlobalState(GLGlobalState);
-}
-
-void LeveledTexturedMesh::modifyGPUProgramState(GPUProgramState& progState) const{
-  LazyTextureMapping* mapping = getCurrentTextureMapping();
-  mapping->modifyGPUProgramState(progState);
-}
-
-//void LeveledTexturedMesh::updateLastUsedMapping(const G3MRenderContext* rc, LazyTextureMapping* mapping) const{
-//  if (_lastUsedMapping != mapping){
-//    _lastUsedMapping = mapping;
-//    if (_parentGLClient != NULL){
-//      _parentGLClient->actualizeGLGlobalState(rc->getCurrentCamera());
-//    }
-//  }
-//}
-
-
-//TODO: Implement!!!!
-void LeveledTexturedMesh::rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode){}
-
-bool LeveledTexturedMesh::isVisible(const G3MRenderContext* rc){
-  return true;
-}
-
-void LeveledTexturedMesh::modifiyGLState(GLState* state){
-  
-}
-
 void LeveledTexturedMesh::updateGLState(){
   LazyTextureMapping* mapping = getCurrentTextureMapping();
   mapping->modifyGLGlobalState(*_glState.getGLGlobalState());

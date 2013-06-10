@@ -14,7 +14,7 @@
 
 #include "GPUProgramState.hpp"
 
-#include "SceneGraphNode.hpp"
+#include "GLState.hpp"
 
 class Mark;
 class Camera;
@@ -101,11 +101,6 @@ public:
 
   long long getDownloadPriority() const {
     return _downloadPriority;
-  }
-  
-  
-  void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode){
-    _lastCamera = rc->getCurrentCamera();
   }
   
   bool isVisible(const G3MRenderContext* rc){

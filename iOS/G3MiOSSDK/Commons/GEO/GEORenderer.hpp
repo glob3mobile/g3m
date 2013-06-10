@@ -102,11 +102,6 @@ public:
   void stop(const G3MRenderContext* rc) {
     
   }
-  
-  void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode){}
-  bool isVisible(const G3MRenderContext* rc){ return true;}
-  void modifiyGLState(GLState* state){}
-  
 };
 
 #endif

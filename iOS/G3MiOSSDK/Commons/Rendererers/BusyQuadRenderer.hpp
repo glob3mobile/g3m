@@ -19,7 +19,6 @@
 #include "GPUProgramState.hpp"
 
 #include "MutableMatrix44D.hpp"
-#include "GLClient.hpp"
 
 
 //***************************************************************

@@ -262,7 +262,6 @@
 		D87F26F217130AF60048AD70 /* GPUProgram.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8715C1D17032AC700CF7BE2 /* GPUProgram.hpp */; };
 		D87F26F317130BA80048AD70 /* GPUUniform.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D87BF6DB170F0628004D467D /* GPUUniform.hpp */; };
 		D87F26F517130C020048AD70 /* GPUAttribute.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8715C1F170344FB00CF7BE2 /* GPUAttribute.hpp */; };
-		D88F1668173CFFF000ED8823 /* GLClient.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D88F1667173CFF5900ED8823 /* GLClient.hpp */; };
 		D89DA21A15FF6C32008CD5F5 /* Image_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = D89DA21815FF6C31008CD5F5 /* Image_iOS.mm */; };
 		D89FBD7D1725444800FFA541 /* MeshShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D89FBD7B1725444800FFA541 /* MeshShape.cpp */; };
 		D89FBD801725446C00FFA541 /* IImageUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D89FBD7E1725446C00FFA541 /* IImageUtils.cpp */; };
@@ -505,7 +504,6 @@
 			files = (
 				D8B9E009174A484500B865B7 /* GLStateTreeNode.hpp in CopyFiles */,
 				D8B9E005174A3CFD00B865B7 /* GLState.hpp in CopyFiles */,
-				D88F1668173CFFF000ED8823 /* GLClient.hpp in CopyFiles */,
 				D8B2054B1737B68400750AE4 /* GPUProgramFactory.hpp in CopyFiles */,
 				D8A1CB6F1737B364004EF534 /* GPUProgramManager.hpp in CopyFiles */,
 				D87F26F517130C020048AD70 /* GPUAttribute.hpp in CopyFiles */,
@@ -1191,7 +1189,6 @@
 		D87EC5CD15BEB31000E38C36 /* TextureBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TextureBuilder.hpp; path = Commons/Basic/TextureBuilder.hpp; sourceTree = "<group>"; };
 		D87EC5D215BEC73400E38C36 /* RectangleD.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = RectangleD.hpp; path = Commons/Geometry/RectangleD.hpp; sourceTree = "<group>"; };
 		D88B5E5115C162AF0083A43F /* G3MWidget.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = G3MWidget.hpp; path = Commons/Basic/G3MWidget.hpp; sourceTree = "<group>"; };
-		D88F1667173CFF5900ED8823 /* GLClient.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLClient.hpp; sourceTree = "<group>"; };
 		D892FBCB15C930CC00E69254 /* NativeGL2_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NativeGL2_iOS.hpp; path = Specific/GL/NativeGL2_iOS.hpp; sourceTree = "<group>"; };
 		D89DA21715FF6C31008CD5F5 /* Image_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Image_iOS.hpp; path = Specific/Derived/Image_iOS.hpp; sourceTree = "<group>"; };
 		D89DA21815FF6C31008CD5F5 /* Image_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Image_iOS.mm; path = Specific/Derived/Image_iOS.mm; sourceTree = "<group>"; };
@@ -1858,7 +1855,6 @@
 				D87BF6D8170F0333004D467D /* GPUProgramState.cpp */,
 				D87BF6D9170F0333004D467D /* GPUProgramState.hpp */,
 				D87BF6DB170F0628004D467D /* GPUUniform.hpp */,
-				D88F1667173CFF5900ED8823 /* GLClient.hpp */,
 				D8A76ECC1744F02400E0FFE8 /* GPUAttribute.cpp */,
 				D8A76ECE1744F0C900E0FFE8 /* GPUUniform.cpp */,
 				D80A286F1746572E0058CEC3 /* GLState.cpp */,

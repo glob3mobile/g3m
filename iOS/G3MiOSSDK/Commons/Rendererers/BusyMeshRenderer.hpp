@@ -16,9 +16,7 @@
 
 #include "GPUProgramState.hpp"
 
-#include "GLClient.hpp"
-
-#include "SceneGraphNode.hpp"
+#include "GLState.hpp"
 
 
 //***************************************************************

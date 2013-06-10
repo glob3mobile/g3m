@@ -14,7 +14,7 @@
 #include <vector>
 #include "Color.hpp"
 #include "GPUProgramState.hpp"
-#include "GLClient.hpp"
+#include "GLState.hpp"
 
 class Mesh;
 class Planet;
