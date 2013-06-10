@@ -72,23 +72,23 @@ public:
   virtual void updateGPUAttribute(GLStateTreeNode* stateNode, GPUProgramState* progState, const std::string& name){}
 };
 
-class SceneGraphLeafNode: public SceneGraphNode{
-public:
-  
-  SceneGraphLeafNode(){}
-  
-  void touchEvent(const G3MEventContext* ec, const TouchEvent* touchEvent){
-    onTouchEventRecived(ec, touchEvent);
-  }
-  
-  void initializeSGNode(const G3MContext* context){
-    onInitialize(context);
-  }
-  
-  void render(const G3MRenderContext* rc, GLStateTreeNode* parentStateTreeNode);
-  
-  void forceRender(const G3MRenderContext* rc, GLStateTreeNode* parentStateTreeNode);
-};
+//class SceneGraphLeafNode: public SceneGraphNode{
+//public:
+//  
+//  SceneGraphLeafNode(){}
+//  
+//  void touchEvent(const G3MEventContext* ec, const TouchEvent* touchEvent){
+//    onTouchEventRecived(ec, touchEvent);
+//  }
+//  
+//  void initializeSGNode(const G3MContext* context){
+//    onInitialize(context);
+//  }
+//  
+//  void render(const G3MRenderContext* rc, GLStateTreeNode* parentStateTreeNode);
+//  
+//  void forceRender(const G3MRenderContext* rc, GLStateTreeNode* parentStateTreeNode);
+//};
 
 class SceneGraphInnerNode: public SceneGraphNode{
 private:

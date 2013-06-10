@@ -9,21 +9,21 @@
 #include "SceneGraphNode.hpp"
 #include "GLStateTreeNode.hpp"
 
-void SceneGraphLeafNode::render(const G3MRenderContext* rc, GLStateTreeNode* parentStateTreeNode){
-  
-//  if (_enabled && isVisible(rc)){
-//    
-//    if (_lastParentStateNode != parentStateTreeNode){
-//      _lastParentStateNode = parentStateTreeNode;
-//      _lastStateNode = parentStateTreeNode->getChildNodeForSGNode(this);
-//      if (_lastStateNode == NULL){
-//        _lastStateNode = parentStateTreeNode->createChildNodeForSGNode(this);
-//      }
-//    }
-//    
-//    rawRender(rc, _lastStateNode);
-//  }
-}
+//void SceneGraphLeafNode::render(const G3MRenderContext* rc, GLStateTreeNode* parentStateTreeNode){
+//  
+////  if (_enabled && isVisible(rc)){
+////    
+////    if (_lastParentStateNode != parentStateTreeNode){
+////      _lastParentStateNode = parentStateTreeNode;
+////      _lastStateNode = parentStateTreeNode->getChildNodeForSGNode(this);
+////      if (_lastStateNode == NULL){
+////        _lastStateNode = parentStateTreeNode->createChildNodeForSGNode(this);
+////      }
+////    }
+////    
+////    rawRender(rc, _lastStateNode);
+////  }
+//}
 
 void SceneGraphInnerNode::render(const G3MRenderContext* rc, GLStateTreeNode* parentStateTreeNode){
   
@@ -48,18 +48,18 @@ void SceneGraphInnerNode::render(const G3MRenderContext* rc, GLStateTreeNode* pa
 //  }
 }
 
-void SceneGraphLeafNode::forceRender(const G3MRenderContext* rc, GLStateTreeNode* parentStateTreeNode){
-  
-//  if (_lastParentStateNode != parentStateTreeNode){
-//    _lastParentStateNode = parentStateTreeNode;
-//    _lastStateNode = parentStateTreeNode->getChildNodeForSGNode(this);
-//    if (_lastStateNode == NULL){
-//      _lastStateNode = parentStateTreeNode->createChildNodeForSGNode(this);
-//    }
-//  }
+//void SceneGraphLeafNode::forceRender(const G3MRenderContext* rc, GLStateTreeNode* parentStateTreeNode){
 //  
-//  rawRender(rc, _lastStateNode);
-}
+////  if (_lastParentStateNode != parentStateTreeNode){
+////    _lastParentStateNode = parentStateTreeNode;
+////    _lastStateNode = parentStateTreeNode->getChildNodeForSGNode(this);
+////    if (_lastStateNode == NULL){
+////      _lastStateNode = parentStateTreeNode->createChildNodeForSGNode(this);
+////    }
+////  }
+////  
+////  rawRender(rc, _lastStateNode);
+//}
 
 void SceneGraphInnerNode::forceRender(const G3MRenderContext* rc, GLStateTreeNode* parentStateTreeNode){
   

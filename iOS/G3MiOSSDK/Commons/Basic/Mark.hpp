@@ -127,9 +127,6 @@ private:
   
   bool    _renderedMark;
   
-  GLGlobalState _GLGlobalState;
-  GPUProgramState _progState;
-  
   static IFloatBuffer* _billboardTexCoord;
   const Planet* _planet;
   int _viewportWidth;
@@ -249,25 +246,6 @@ public:
   
   void setMinDistanceToCamera(double minDistanceToCamera);
   double getMinDistanceToCamera();
-  
-  //Drawable client
-  GLGlobalState* getGLGlobalState(){
-    return &_GLGlobalState;
-  }
-  GPUProgramState* getGPUProgramState(){
-    _progState.clear();
-    return &_progState;
-  }
-//  void getGLGlobalStateAndGPUProgramState(GLGlobalState** GLGlobalState, GPUProgramState** progState);
-  void modifyGLGlobalState(GLGlobalState& GLGlobalState) const;
-  void modifyGPUProgramState(GPUProgramState& progState) const;
-  
-  //Scene Graph Node
-  void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode);
-  
-  bool isVisible(const G3MRenderContext* rc);
-
-  void modifiyGLState(GLState* state);
 
   void render(const G3MRenderContext* rc,
               const Vector3D& cameraPosition, GLState* parentGLState);
