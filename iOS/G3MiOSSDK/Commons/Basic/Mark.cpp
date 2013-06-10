@@ -423,14 +423,12 @@ void Mark::render(const G3MRenderContext* rc,
           
           _viewportWidth = rc->getCurrentCamera()->getWidth();
           _viewportHeight = rc->getCurrentCamera()->getHeight();
-          actualizeGLGlobalState(rc->getCurrentCamera()); //Ready for rendering
         }
       } else{
         if (rc->getCurrentCamera()->getWidth() != _viewportWidth ||
             rc->getCurrentCamera()->getHeight() != _viewportHeight){
           _viewportWidth = rc->getCurrentCamera()->getWidth();
           _viewportHeight = rc->getCurrentCamera()->getHeight();
-          actualizeGLGlobalState(rc->getCurrentCamera()); //Ready for rendering
         }
       }
       
@@ -472,12 +470,6 @@ double Mark::getMinDistanceToCamera() {
   return _minDistanceToCamera;
 }
 
-//void Mark::getGLGlobalStateAndGPUProgramState(GLGlobalState** GLGlobalState, GPUProgramState** progState){
-//  _progState.clear();
-////  (*GLGlobalState) = &_GLGlobalState;
-////  (*progState) = &_progState;
-//}
-
 void Mark::modifyGLGlobalState(GLGlobalState& GLGlobalState) const{
   GLGlobalState.disableDepthTest();
   GLGlobalState.enableBlend();
@@ -489,9 +481,6 @@ void Mark::modifyGPUProgramState(GPUProgramState& progState) const{
   if (_planet == NULL){
     ILogger::instance()->logError("Planet NULL");
   } else{
-    
-//    progState.setAttributeEnabled("Position", true);
-//    progState.setAttributeEnabled("TextureCoord", true);
     
     if (_billboardTexCoord == NULL){
       FloatBufferBuilderFromCartesian2D texCoor;
@@ -667,52 +656,6 @@ void Mark::modifiyGLState(GLState* state){
     progState->setUniformValue("TextureExtent", Vector2D(_textureWidth, _textureHeight));
     progState->setUniformValue("ViewPortExtent", Vector2D( (double)_viewportWidth, (double)_viewportHeight ));
   }
-  
-}
-
-void Mark::onInitialize(const G3MContext* context) {
-  
-  _planet = context->getPlanet();
-  
-  if (!_textureSolved) {
-    const bool hasLabel   = ( _label.length()             != 0 );
-    const bool hasIconURL = ( _iconURL.getPath().length() != 0 );
-    
-    if (hasIconURL) {
-      IDownloader* downloader = context->getDownloader();
-      
-      int downloadPriority = 100;
-      
-      downloader->requestImage(_iconURL,
-                               downloadPriority,
-                               TimeInterval::fromDays(30),
-                               true,
-                               new IconDownloadListener(this,
-                                                        _label,
-                                                        _labelBottom,
-                                                        _labelFontSize,
-                                                        _labelFontColor,
-                                                        _labelShadowColor,
-                                                        _labelGapSize),
-                               true);
-    }
-    else {
-      if (hasLabel) {
-        ITextUtils::instance()->createLabelImage(_label,
-                                                 _labelFontSize,
-                                                 _labelFontColor,
-                                                 _labelShadowColor,
-                                                 new MarkLabelImageListener(NULL, this),
-                                                 true);
-      }
-      else {
-        ILogger::instance()->logWarning("Marker created without label nor icon");
-      }
-    }
-  }
-}
-
-void Mark::updateGPUUniform(GLStateTreeNode* stateNode, GPUProgramState* progState, const std::string& name){
   
 }
 

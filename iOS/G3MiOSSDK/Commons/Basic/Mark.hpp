@@ -36,7 +36,7 @@ public:
 };
 
 
-class Mark: public SceneGraphLeafNode {
+class Mark {
 private:
   /**
    * The text the mark displays.
@@ -268,10 +268,6 @@ public:
   bool isVisible(const G3MRenderContext* rc);
 
   void modifiyGLState(GLState* state);
-  
-  void onInitialize(const G3MContext* context);
-  
-  void updateGPUUniform(GLStateTreeNode* stateNode, GPUProgramState* progState, const std::string& name);
 
   void render(const G3MRenderContext* rc,
               const Vector3D& cameraPosition, GLState* parentGLState);

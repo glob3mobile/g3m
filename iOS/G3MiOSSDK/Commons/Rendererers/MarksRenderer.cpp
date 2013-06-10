@@ -72,8 +72,6 @@ void MarksRenderer::addMark(Mark* mark) {
   if (_context != NULL) {
     mark->initialize(_context, _downloadPriority);
   }
-  
-  addChild(mark);
 }
 
 void MarksRenderer::removeMark(Mark* mark){
