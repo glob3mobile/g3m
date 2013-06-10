@@ -170,19 +170,19 @@ public abstract class ElevationData
   
         final Geodetic2D position = sector.getInnerPoint(u, v);
   
-        final double height = getElevationAt(position);
-        if (mu.isNan(height))
+        final double elevation = getElevationAt(position);
+        if (mu.isNan(elevation))
         {
           continue;
         }
   
-        final float alpha = (float)((height - minHeight) / deltaHeight);
+        final float alpha = (float)((elevation - minHeight) / deltaHeight);
         final float r = alpha;
         final float g = alpha;
         final float b = alpha;
         colors.add(r, g, b, 1);
   
-        vertices.add(position.add(positionOffset.asGeodetic2D()), positionOffset.height() + (height * verticalExaggeration));
+        vertices.add(position.add(positionOffset.asGeodetic2D()), positionOffset.height() + (elevation * verticalExaggeration));
       }
     }
     /* */
