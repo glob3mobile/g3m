@@ -248,15 +248,17 @@ public:
 
 - (void)  initializeElevationDataProvider: (G3MBuilder_iOS&) builder
 {
+  int _DGD_working_on_terrain;
+
+  /*
   float verticalExaggeration = 20.0f;
   builder.getTileRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
   
-  int _DGD_working_on_terrain;
-  
+
   ElevationDataProvider* elevationDataProvider = NULL;
-  
+
   //  ElevationDataProvider* elevationDataProvider = new WMSBillElevationDataProvider();
-  
+
   //  ElevationDataProvider* elevationDataProvider;
   elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
                                                               Sector::fullSphere(),
@@ -337,6 +339,8 @@ public:
 
   builder.getTileRendererBuilder()->setElevationDataProvider(compElevationDataProvider);
   //builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProvider);
+
+  */
 }
 
 
