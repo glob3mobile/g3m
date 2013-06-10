@@ -15,12 +15,15 @@ class TransparentShapeWrapper : public OrderedRenderable {
 private:
   Shape* _shape;
   const double _squaredDistanceFromEye;
+  const bool _renderNotReadyShapes;
 
 public:
   TransparentShapeWrapper(Shape* shape,
-                          double squaredDistanceFromEye) :
+                          double squaredDistanceFromEye,
+                          bool renderNotReadyShapes) :
   _shape(shape),
-  _squaredDistanceFromEye(squaredDistanceFromEye)
+  _squaredDistanceFromEye(squaredDistanceFromEye),
+  _renderNotReadyShapes(renderNotReadyShapes)
   {
 
   }
@@ -31,10 +34,26 @@ public:
 
   void render(const G3MRenderContext* rc,
               const GLState& parentState) {
-    _shape->render(rc, parentState);
+    _shape->render(rc, parentState, _renderNotReadyShapes);
+  }
+};
+
+bool ShapesRenderer::isReadyToRender(const G3MRenderContext* rc) {
+  if (_renderNotReadyShapes) {
+    return true;
   }
 
-};
+  const int shapesCount = _shapes.size();
+  for (int i = 0; i < shapesCount; i++) {
+    Shape* shape = _shapes[i];
+    const bool shapeReady = shape->isReadyToRender(rc);
+    if (!shapeReady) {
+      return false;
+    }
+  }
+  return true;
+}
+
 
 void ShapesRenderer::render(const G3MRenderContext* rc,
                             const GLState& parentState) {
@@ -43,16 +62,20 @@ void ShapesRenderer::render(const G3MRenderContext* rc,
   const int shapesCount = _shapes.size();
   for (int i = 0; i < shapesCount; i++) {
     Shape* shape = _shapes[i];
-    if (shape->isTransparent(rc)) {
-      const Planet* planet = rc->getPlanet();
-      const Vector3D shapePosition = planet->toCartesian( shape->getPosition() );
-      const double squaredDistanceFromEye = shapePosition.sub(cameraPosition).squaredLength();
 
-      rc->addOrderedRenderable(new TransparentShapeWrapper(shape,
-                                                           squaredDistanceFromEye));
-    }
-    else {
-      shape->render(rc, parentState);
+    if (shape->isEnable()) {
+      if (shape->isTransparent(rc)) {
+        const Planet* planet = rc->getPlanet();
+        const Vector3D shapePosition = planet->toCartesian( shape->getPosition() );
+        const double squaredDistanceFromEye = shapePosition.sub(cameraPosition).squaredLength();
+
+        rc->addOrderedRenderable(new TransparentShapeWrapper(shape,
+                                                             squaredDistanceFromEye,
+                                                             _renderNotReadyShapes));
+      }
+      else {
+        shape->render(rc, parentState, _renderNotReadyShapes);
+      }
     }
   }
 }

@@ -68,7 +68,8 @@ public:
                          const GLState& parentState);
 
   virtual void render(const G3MRenderContext* rc,
-                      const GLState& parentState);
+                      const GLState& parentState,
+                      bool renderNotReadyShapes);
 
 //  SGShape* getShape() const {
 //    if (_shape != NULL) {

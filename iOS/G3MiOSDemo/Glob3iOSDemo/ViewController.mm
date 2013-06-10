@@ -1362,7 +1362,7 @@ public:
     //                                                      Geodetic3D::fromDegrees(0.02, 0, 0),
     //                                                      2) );
     
-    const float verticalExaggeration = 10.0f;
+    const float verticalExaggeration = 20.0f;
     const float pointSize = 2.0f;
     
 //    const Sector subSector = _sector.shrinkedByPercent(0.2f);
@@ -1537,7 +1537,7 @@ public:
     GEORenderer*    _geoRenderer;
     MeshRenderer*   _meshRenderer;
 
-    void textRadar(const G3MContext* context) {
+    void testRadarModel(const G3MContext* context) {
 
       context->getDownloader()->requestBuffer(URL("http://radar3d.glob3mobile.com/models/radar.bson", false),
                                               1000000,
@@ -1796,7 +1796,7 @@ public:
 //      const Sector targetSector(Sector::fromDegrees(35, -6, 38, -2));
 
 
-      textRadar(context);
+//      testRadarModel(context);
 
 
       _meshRenderer->addMesh( createSectorMesh(context->getPlanet(),
@@ -1911,7 +1911,7 @@ public:
       //      targetSector.c
       
 
-      /*
+      /**/
       context->getDownloader()->requestBuffer(URL("file:///full-earth-2048x1024.bil", false),
                                               1000000,
                                               TimeInterval::fromDays(30),
@@ -1921,7 +1921,7 @@ public:
                                                                                       Vector2I(2048, 1024),
                                                                                       Sector::fullSphere()),
                                               true);
-      */
+      /**/
 
       /*
        context->getDownloader()->requestBuffer(//URL("file:///sample_bil16_150x150.bil", false),

@@ -470,7 +470,7 @@ void TileRenderer::renderIncompletePlanet(const G3MRenderContext* rc,
 
   }
 
-  _incompleteShape->rawRender(rc, parentState);
+  _incompleteShape->rawRender(rc, parentState, true);
 }
 
 void TileRenderer::render(const G3MRenderContext* rc,

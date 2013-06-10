@@ -75,9 +75,10 @@ MutableMatrix44D* Shape::getTransformMatrix(const Planet* planet) {
 }
 
 void Shape::render(const G3MRenderContext* rc,
-                   const GLState& parentState) {
-  if (isReadyToRender(rc)) {
-    
+                   const GLState& parentState,
+                   bool renderNotReadyShapes) {
+  if (renderNotReadyShapes || isReadyToRender(rc)) {
+
     const int pendingEffectsCount = _pendingEffects.size();
     if (pendingEffectsCount > 0) {
       EffectsScheduler* effectsScheduler = rc->getEffectsScheduler();
@@ -87,22 +88,22 @@ void Shape::render(const G3MRenderContext* rc,
           EffectTarget* target = pendingEffect->_targetIsCamera ? rc->getNextCamera()->getEffectTarget() : this;
           effectsScheduler->cancelAllEffectsFor(target);
           effectsScheduler->startEffect(pendingEffect->_effect, target);
-          
+
           delete pendingEffect;
         }
       }
       _pendingEffects.clear();
     }
-    
-    
+
+
     GL* gl = rc->getGL();
-    
+
     gl->pushMatrix();
-    
+
     gl->multMatrixf( *getTransformMatrix( rc->getPlanet() ) );
-    
-    rawRender(rc, parentState);
-    
+
+    rawRender(rc, parentState, renderNotReadyShapes);
+
     gl->popMatrix();
   }
 }

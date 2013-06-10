@@ -36,6 +36,8 @@ private:
   MutableMatrix44D* getTransformMatrix(const Planet* planet);
   
   std::vector<ShapePendingEffect*> _pendingEffects;
+
+  bool _enable;
   
 protected:
   virtual void cleanTransformMatrix();
@@ -48,7 +50,8 @@ public:
   _scaleX(1),
   _scaleY(1),
   _scaleZ(1),
-  _transformMatrix(NULL)
+  _transformMatrix(NULL),
+  _enable(true)
   {
     
   }
@@ -159,21 +162,31 @@ public:
                    double fromDistance,       double toDistance,
                    const Angle& fromAzimuth,  const Angle& toAzimuth,
                    const Angle& fromAltitude, const Angle& toAltitude);
-  
-  void render(const G3MRenderContext* rc,
-              const GLState& parentState);
-  
-  virtual void initialize(const G3MContext* context) {
-    
+
+  bool isEnable() const {
+    return _enable;
+  }
+
+  void setEnable(bool enable) {
+    _enable = enable;
   }
   
+  void render(const G3MRenderContext* rc,
+              const GLState& parentState,
+              bool renderNotReadyShapes);
+
+  virtual void initialize(const G3MContext* context) {
+
+  }
+
   virtual bool isReadyToRender(const G3MRenderContext* rc) = 0;
-  
+
   virtual void rawRender(const G3MRenderContext* rc,
-                         const GLState& parentState) = 0;
-  
+                         const GLState& parentState,
+                         bool renderNotReadyShapes) = 0;
+
   virtual bool isTransparent(const G3MRenderContext* rc) = 0;
-  
+
 };
 
 #endif
