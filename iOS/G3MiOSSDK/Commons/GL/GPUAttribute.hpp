@@ -164,10 +164,16 @@ public:
     if (_dirty){
       
       if (_value->getEnabled()){
-        gl->enableVertexAttribArray(_id);
+        if (!_enabled){
+          gl->enableVertexAttribArray(_id);
+          _enabled = true;
+        }
         _value->setAttribute(gl, _id);
       } else{
-        gl->disableVertexAttribArray(_id);
+        if (_enabled){
+          gl->disableVertexAttribArray(_id);
+          _enabled = false;
+        }
       }
       
       _dirty = false;

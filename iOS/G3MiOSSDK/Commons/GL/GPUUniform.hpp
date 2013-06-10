@@ -257,8 +257,8 @@ public:
       if (old == NULL){
         ILogger::instance()->logError("Trying to apply transformation to matrix without previous value");
       } else{
-        MutableMatrix44D lastM = ((GPUUniformValueMatrix4FloatTransform*)old)->getValue();
-        _transformedMatrix = lastM.multiply(_m);
+        const MutableMatrix44D* lastM = ((GPUUniformValueMatrix4FloatTransform*)old)->getValue();
+        _transformedMatrix.copyValue(lastM->multiply(_m));
       }
     }
   }
@@ -269,16 +269,15 @@ public:
   
   bool isEqualsTo(const GPUUniformValue* v) const{
     GPUUniformValueMatrix4FloatTransform *v2 = (GPUUniformValueMatrix4FloatTransform *)v;
-    const MutableMatrix44D* m = &(v2->_transformedMatrix);
-    return _m.isEqualsTo(*m);
+    return _transformedMatrix.isEqualsTo(v2->_transformedMatrix);
   }
   GPUUniformValue* deepCopy() const{
     return new GPUUniformValueMatrix4FloatTransform(this);
   }
   
   void copyFrom(GPUUniformValue* v){
-    _m = ((GPUUniformValueMatrix4FloatTransform*)v)->_m;
-    _transformedMatrix = ((GPUUniformValueMatrix4FloatTransform*)v)->_transformedMatrix;
+    _m.copyValue( ((GPUUniformValueMatrix4FloatTransform*)v)->_m );
+    _transformedMatrix.copyValue( ((GPUUniformValueMatrix4FloatTransform*)v)->_transformedMatrix );
   }
   
   std::string description() const{
@@ -289,7 +288,7 @@ public:
     return s;
   }
   
-  MutableMatrix44D getValue() const{ return _transformedMatrix;}
+  const MutableMatrix44D* getValue() const{ return &_transformedMatrix;}
 };
 class GPUUniformMatrix4Float: public GPUUniform{
 public:
@@ -307,7 +306,7 @@ public:
   }
   bool isEqualsTo(const GPUUniformValue* v) const{
     GPUUniformValueFloat *v2 = (GPUUniformValueFloat *)v;
-    return _value != v2->_value;
+    return _value == v2->_value;
   }
   GPUUniformValue* deepCopy() const{
     return new GPUUniformValueFloat(_value);
