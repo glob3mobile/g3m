@@ -35,17 +35,6 @@ public:
 
   void addMesh(Mesh* mesh);
 
-  //GLClient NotDrawable
-
-  void notifyGLClientChildrenParentHasChanged();
-  void modifyGLGlobalState(GLGlobalState& GLGlobalState) const{}
-  void modifyGPUProgramState(GPUProgramState& progState) const{}
-  
-//  void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode);
-//  bool isVisible(const G3MRenderContext* rc);
-  void modifiyGLState(GLState* state){}
-  void updateGPUUniform(GLStateTreeNode* stateNode, GPUProgramState* progState, const std::string& name){}
-
   void render(const G3MRenderContext* rc, GLState* parentGLState);
 
 };

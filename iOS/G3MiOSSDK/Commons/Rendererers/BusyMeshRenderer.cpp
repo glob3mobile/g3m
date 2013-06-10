@@ -86,11 +86,7 @@ void BusyMeshRenderer::render(const G3MRenderContext* rc)
 {
   GL* gl = rc->getGL();
   
-  // set mesh GLGlobalState
-  GLGlobalState state;
-  state.enableBlend();
-  
-  state.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
+  createGLState();
   
   if (!_projectionMatrix.isValid()){
     // init modelview matrix
@@ -101,12 +97,14 @@ void BusyMeshRenderer::render(const G3MRenderContext* rc)
     _projectionMatrix = MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth, halfWidth,
                                                                              -halfHeight, halfHeight,
                                                                              -halfWidth, halfWidth);
+    
+    _glState.getGPUProgramState()->setUniformMatrixValue("Projection", _projectionMatrix, false);
   }
   
-  state.setClearColor(*_backgroundColor);
-  gl->clearScreen(state);
+  _glState.getGLGlobalState()->setClearColor(*_backgroundColor);
+  gl->clearScreen(*_glState.getGLGlobalState());
   
-  _mesh->render(rc);
+  _mesh->render(rc, &_glState);
 }
 
 void BusyMeshRenderer::createGLState(){

@@ -266,9 +266,9 @@ bool LeveledTexturedMesh::isTransparent(const G3MRenderContext* rc) const {
   return mapping->isTransparent(rc);
 }
 
-void LeveledTexturedMesh::notifyGLClientChildrenParentHasChanged(){
-  ((Mesh*)_mesh)->actualizeGLGlobalState(this);
-}
+//void LeveledTexturedMesh::notifyGLClientChildrenParentHasChanged(){
+//  ((Mesh*)_mesh)->actualizeGLGlobalState(this);
+//}
 
 void LeveledTexturedMesh::modifyGLGlobalState(GLGlobalState& GLGlobalState) const{
   LazyTextureMapping* mapping = getCurrentTextureMapping();

@@ -11,8 +11,6 @@
 
 #include "Shape.hpp"
 
-#include "GLClient.hpp"
-
 class Mesh;
 
 class AbstractMeshShape : public Shape {
@@ -48,8 +46,6 @@ public:
   virtual ~AbstractMeshShape();
 
   bool isTransparent(const G3MRenderContext* rc);
-  
-  void notifyGLClientChildrenParentHasChanged();
 };
 
 #endif

@@ -202,11 +202,6 @@ public:
   inline std::vector<Tile*>* createSubTiles(const Angle& splitLatitude,
                                             const Angle& splitLongitude,
                                             bool setParent);
-  
-  //Not drawable gl client
-  void notifyGLClientChildrenParentHasChanged(); 
-  void modifyGLGlobalState(GLGlobalState& GLGlobalState) const;
-  void modifyGPUProgramState(GPUProgramState& progState) const;
 
 };
 

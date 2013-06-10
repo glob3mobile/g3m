@@ -55,28 +55,7 @@ public:
   bool isTransparent(const G3MRenderContext* rc) const {
     return _mesh->isTransparent(rc);
   }
-  
-  void notifyGLClientChildrenParentHasChanged(){
-    _mesh->actualizeGLGlobalState(this);
-  }
-  void modifyGLGlobalState(GLGlobalState& GLGlobalState) const{}
-  void modifyGPUProgramState(GPUProgramState& progState) const{}
-  
-  //Scene Graph Node
-//  void rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode){
-//    //TODO: Implement
-//    //It's necessary a holder with the Scene Graph approach
-//  }
-//  bool isVisible(const G3MRenderContext* rc){
-//    //TODO: Implement
-//    return true;
-//  }
-  
-  void modifiyGLState(GLState* state){
-    //TODO: Implement
-  }
-  void updateGPUUniform(GLStateTreeNode* stateNode, GPUProgramState* progState, const std::string& name){}
-  
+
   void render(const G3MRenderContext* rc, GLState* parentGLState){
     _mesh->render(rc, parentGLState);
   }

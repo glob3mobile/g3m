@@ -758,21 +758,3 @@ double Tile::getMinHeight() const {
 double Tile::getMaxHeight() const {
   return _maxHeight;
 }
-
-#pragma mark GLClient
-
-void Tile::notifyGLClientChildrenParentHasChanged(){
-  if (_texturizedMesh != NULL){
-    _texturizedMesh->actualizeGLGlobalState(this);
-  } else{
-    if (_tessellatorMesh != NULL){
-      _tessellatorMesh->actualizeGLGlobalState(this);
-    }
-  }
-}
-
-void Tile::modifyGLGlobalState(GLGlobalState& GLGlobalState) const{
-  GLGlobalState.enableDepthTest();
-}
-
-void Tile::modifyGPUProgramState(GPUProgramState& progState) const{}

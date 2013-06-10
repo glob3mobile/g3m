@@ -434,8 +434,6 @@ private:
   FrustumData calculateFrustumData() const;
 
   void _setGeodeticPosition(const Vector3D& pos);
-  
-  void updateGPUUniform(GLStateTreeNode* stateNode, GPUProgramState* progState, const std::string& name){}
 
 };
 

@@ -91,23 +91,7 @@ void CompositeMesh::addMesh(Mesh* mesh) {
   _extent = NULL;
 
   _children.push_back(mesh);
-  
-  SceneGraphInnerNode::addChild(mesh);
 }
-
-void CompositeMesh::notifyGLClientChildrenParentHasChanged(){
-  const int childrenCount = _children.size();
-  for (int i = 0; i < childrenCount; i++) {
-    Mesh* child = _children[i];
-    child->actualizeGLGlobalState(this);
-  }
-}
-
-//void CompositeMesh::rawRender(const G3MRenderContext* rc, GLStateTreeNode* myStateTreeNode){}
-//bool CompositeMesh::isVisible(const G3MRenderContext* rc){
-//  return true;
-//}
-//void CompositeMesh::modifiyGLState(GLState* state){}
 
 void CompositeMesh::render(const G3MRenderContext* rc, GLState* parentGLState){
   const int childrenCount = _children.size();

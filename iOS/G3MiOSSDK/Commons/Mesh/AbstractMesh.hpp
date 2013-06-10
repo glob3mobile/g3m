@@ -51,10 +51,6 @@ protected:
   GLState _glState;
   
   void createGLState();
-protected:
-  
-  GLGlobalState _GLGlobalState;
-  GPUProgramState _progState;
 
 public:
   ~AbstractMesh();
@@ -68,23 +64,6 @@ public:
   const Vector3D getVertex(int i) const;
 
   bool isTransparent(const G3MRenderContext* rc) const;
-
-  //Drawable GLClient
-  GLGlobalState* getGLGlobalState(){
-    return &_GLGlobalState;
-  }
-  GPUProgramState* getGPUProgramState(){
-    _progState.clear();
-    return &_progState;
-  }
-//  void getGLGlobalStateAndGPUProgramState(GLGlobalState** GLGlobalState, GPUProgramState** progState);
-  void modifyGLGlobalState(GLGlobalState& GLGlobalState) const;
-  void modifyGPUProgramState(GPUProgramState& progState) const;
-  
-  //Scene Graph Node
-  bool isVisible(const G3MRenderContext* rc);
-  void modifiyGLState(GLState* state);
-  void updateGPUUniform(GLStateTreeNode* stateNode, GPUProgramState* progState, const std::string& name);
   
   void render(const G3MRenderContext* rc, GLState* parentGLState);
   
