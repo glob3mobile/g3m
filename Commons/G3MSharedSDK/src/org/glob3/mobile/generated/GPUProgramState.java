@@ -274,10 +274,9 @@ public class GPUProgramState
   
       if (u == null) {
         ILogger.instance().logError("UNIFORM " + name + " NOT FOUND");
+        return;
       }
-      else {
-        v.linkToGPUUniform(u);
-      }
+      v.linkToGPUUniform(u);
     }
   
     final Object[] att = _attributesValues.values().toArray();
@@ -300,9 +299,8 @@ public class GPUProgramState
       if (a == null){
         ILogger.instance().logError("ATTRIBUTE NOT FOUND " + name);
         return;
-      } else{
-        v.linkToGPUAttribute(a);
       }
+      v.linkToGPUAttribute(a);
     }
   
   
