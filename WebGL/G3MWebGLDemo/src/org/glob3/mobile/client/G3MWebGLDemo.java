@@ -51,8 +51,6 @@ import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.QuadShape;
 import org.glob3.mobile.generated.RectangleF;
-import org.glob3.mobile.generated.SceneGraphNode;
-import org.glob3.mobile.generated.SceneGraphRenderer;
 import org.glob3.mobile.generated.SceneJSShapesParser;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.Shape;
@@ -129,31 +127,7 @@ public class G3MWebGLDemo
       final ShapesRenderer shapesRenderer = new ShapesRenderer();
       builder.addRenderer(shapesRenderer);
 
-      
-      boolean testingSG = true;
-	if (testingSG ){
-    	  final ArrayList<SceneGraphNode> nodes = new ArrayList<SceneGraphNode>();
-
-          final MarksRenderer mr = new MarksRenderer(true);
-          nodes.add(mr);
-
-     	 for (int i = 0; i < 200; i++) {
-              final Angle latitude = Angle.fromDegrees((int) (Math.random() * 180) - 90);
-              final Angle longitude = Angle.fromDegrees((int) (Math.random() * 360));
-
-              final String string = "Mark " + latitude.degrees() + ", " + longitude.degrees();
-
-              final Mark m = new Mark(string, new Geodetic3D(latitude, longitude, 0), 0, 20, Color.newFromRGBA(1, 1, 1, 1),
-                       Color.newFromRGBA(0, 0, 0, 1), null, true, null, true);
-              mr.addMark(m);
-           }
-
-           final SceneGraphRenderer sgr = new SceneGraphRenderer(nodes, true);
-           builder.addRenderer(sgr);
-      } else{
-
-          builder.setInitializationTask(createMarkersInitializationTask());
-      }
+      builder.setInitializationTask(createMarkersInitializationTask());
       
 
       final GInitializationTask initializationTask = new GInitializationTask() {
