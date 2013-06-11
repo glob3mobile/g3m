@@ -90,22 +90,24 @@ public abstract class ElevationData
 
   public abstract String description(boolean detailed);
 
-  public abstract Vector3D getMinMaxAverageHeights();
+  public abstract Vector3D getMinMaxAverageElevations();
 
   public Mesh createMesh(Ellipsoid ellipsoid, float verticalExaggeration, Geodetic3D positionOffset, float pointSize)
   {
   
-    final Vector3D minMaxAverageHeights = getMinMaxAverageHeights();
-    final double minHeight = minMaxAverageHeights._x;
-    final double maxHeight = minMaxAverageHeights._y;
-    final double deltaHeight = maxHeight - minHeight;
-    final double averageHeight = minMaxAverageHeights._z;
+    final Vector3D minMaxAverageElevations = getMinMaxAverageElevations();
+    final double minElevation = minMaxAverageElevations._x;
+    final double maxElevation = minMaxAverageElevations._y;
+    final double deltaElevation = maxElevation - minElevation;
+    final double averageElevation = minMaxAverageElevations._z;
   
-    ILogger.instance().logInfo("averageHeight=%f, minHeight=%f maxHeight=%f delta=%f", averageHeight, minHeight, maxHeight, deltaHeight);
+    ILogger.instance().logInfo("Elevations: average=%f, min=%f max=%f delta=%f", averageElevation, minElevation, maxElevation, deltaElevation);
   
   
     FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.firstVertex(), ellipsoid, Vector3D.zero());
     FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
+  
+    final Geodetic2D positionOffset2D = positionOffset.asGeodetic2D();
   
     final IMathUtils mu = IMathUtils.instance();
     for (int x = 0; x < _width; x++)
@@ -114,13 +116,13 @@ public abstract class ElevationData
   
       for (int y = 0; y < _height; y++)
       {
-        final double height = getElevationAt(x, y);
-        if (mu.isNan(height))
+        final double elevation = getElevationAt(x, y);
+        if (mu.isNan(elevation))
         {
           continue;
         }
   
-        final float alpha = (float)((height - minHeight) / deltaHeight);
+        final float alpha = (float)((elevation - minElevation) / deltaElevation);
         final float r = alpha;
         final float g = alpha;
         final float b = alpha;
@@ -128,9 +130,9 @@ public abstract class ElevationData
   
         final double v = 1.0 - ((double) y / (_height - 1));
   
-        final Geodetic2D position = _sector.getInnerPoint(u, v).add(positionOffset.asGeodetic2D());
+        final Geodetic2D position = _sector.getInnerPoint(u, v).add(positionOffset2D);
   
-        vertices.add(position, positionOffset.height() + (height * verticalExaggeration));
+        vertices.add(position, positionOffset.height() + (elevation * verticalExaggeration));
   
       }
     }
@@ -144,20 +146,26 @@ public abstract class ElevationData
 
   public Mesh createMesh(Ellipsoid ellipsoid, float verticalExaggeration, Geodetic3D positionOffset, float pointSize, Sector sector, Vector2I resolution)
   {
-    final Vector3D minMaxAverageHeights = getMinMaxAverageHeights();
-    final double minHeight = minMaxAverageHeights._x;
-    final double maxHeight = minMaxAverageHeights._y;
-    final double deltaHeight = maxHeight - minHeight;
-    final double averageHeight = minMaxAverageHeights._z;
+    final Vector3D minMaxAverageElevations = getMinMaxAverageElevations();
+    final double minElevation = minMaxAverageElevations._x;
+    final double maxElevation = minMaxAverageElevations._y;
+    final double deltaElevation = maxElevation - minElevation;
+    final double averageElevation = minMaxAverageElevations._z;
   
-    ILogger.instance().logInfo("averageHeight=%f, minHeight=%f maxHeight=%f delta=%f", averageHeight, minHeight, maxHeight, deltaHeight);
+    ILogger.instance().logInfo("Elevations: average=%f, min=%f max=%f delta=%f", averageElevation, minElevation, maxElevation, deltaElevation);
   
-    FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.firstVertex(), ellipsoid, Vector3D.zero());
+  
+  //  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
+  //                                          ellipsoid,
+  //                                          Vector3D::zero());
+    FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.givenCenter(), ellipsoid, sector.getCenter());
+  
     FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
   
     final IMathUtils mu = IMathUtils.instance();
   
-    /* */
+    final Geodetic2D positionOffset2D = positionOffset.asGeodetic2D();
+  
     final int width = resolution._x;
     final int height = resolution._y;
     for (int x = 0; x < width; x++)
@@ -176,17 +184,15 @@ public abstract class ElevationData
           continue;
         }
   
-        final float alpha = (float)((elevation - minHeight) / deltaHeight);
+        final float alpha = (float)((elevation - minElevation) / deltaElevation);
         final float r = alpha;
         final float g = alpha;
         final float b = alpha;
         colors.add(r, g, b, 1);
   
-        vertices.add(position.add(positionOffset.asGeodetic2D()), positionOffset.height() + (elevation * verticalExaggeration));
+        vertices.add(position.add(positionOffset2D), positionOffset.height() + (elevation * verticalExaggeration));
       }
     }
-    /* */
-  
   
   //  for (int x = 0; x < _width; x++) {
   //    const double u = (double) x / (_width  - 1);
@@ -198,16 +204,16 @@ public abstract class ElevationData
   //        continue;
   //      }
   //
-  //      const double height = getElevationAt(x, y);
-  //      if (mu->isNan(height)) {
+  //      const double elevation = getElevationAt(x, y);
+  //      if (mu->isNan(elevation)) {
   //        continue;
   //      }
   //
-  //      vertices.add(position.add(positionOffset.asGeodetic2D()),
-  //                   positionOffset.height() + (height * verticalExaggeration));
+  //      vertices.add(position.add(positionOffset2D),
+  //                   positionOffset.height() + (elevation * verticalExaggeration));
   //
   //
-  //      const float alpha = (float) ((height - minHeight) / deltaHeight);
+  //      const float alpha = (float) ((elevation - minElevation) / deltaElevation);
   //      const float r = alpha;
   //      const float g = alpha;
   //      const float b = alpha;
