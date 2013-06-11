@@ -132,7 +132,7 @@ public class GPUProgramState
 
 
   //bool GPUProgramState::setUniformValue(const std::string& name, const MutableMatrix44D* m){
-  //  
+  //
   ///#ifdef C_CODE
   //  for(std::map<std::string, GPUUniformValue*> ::iterator it = _uniformValues.begin();
   //      it != _uniformValues.end();
@@ -160,14 +160,14 @@ public class GPUProgramState
   //    }
   //  }
   ///#endif
-  //  
+  //
   //  return setGPUUniformValue(name, new GPUUniformValueMatrix4FloatStack(m));
   //}
   
   //bool GPUProgramState::multiplyUniformValue(const std::string& name, const MutableMatrix44D* m){
-  //  
+  //
   ///#ifdef C_CODE
-  //  
+  //
   //  for(std::map<std::string, GPUUniformValue*> ::iterator it = _uniformValues.begin();
   //      it != _uniformValues.end();
   //      it++){
@@ -179,7 +179,7 @@ public class GPUProgramState
   //      return true;
   //    }
   //  }
-  //  
+  //
   ///#endif
   ///#ifdef JAVA_CODE
   //  final Object[] uni = _uniformValues.values().toArray();
@@ -195,10 +195,10 @@ public class GPUProgramState
   //    }
   //  }
   ///#endif
-  //  
+  //
   //  ILogger::instance()->logError("CAN'T MULTIPLY UNLOADED MATRIX");
   //  return false;
-  //  
+  //
   //}
   
   public final boolean setUniformMatrixValue(String name, MutableMatrix44D m, boolean isTransform)
@@ -263,7 +263,6 @@ public class GPUProgramState
     }
   
   
-  
     final Object[] uni = _uniformValues.values().toArray();
     final Object[] uniNames = _uniformValues.keySet().toArray();
     for (int i = 0; i < uni.length; i++) {
@@ -271,7 +270,7 @@ public class GPUProgramState
       final GPUUniformValue v = (GPUUniformValue) uni[i];
   
       final int type = v.getType();
-      final GPUUniform u = prog.getUniformOfType(name, type);
+      final GPUUniform u = prog.getUniformOfType(name, type); //Getting uniform from program
   
       if (u == null) {
         ILogger.instance().logError("UNIFORM " + name + " NOT FOUND");
@@ -287,56 +286,23 @@ public class GPUProgramState
       final String name = (String)attNames[i];
       final GPUAttributeValue v = (GPUAttributeValue)att[i];
   
-      final int type = v.getType();
-      final int size = v.getAttributeSize();
-      if ((type == GLType.glFloat()) && (size == 1)) {
-        final GPUAttributeVec1Float a = prog.getGPUAttributeVec1Float(name);
-        if (a == null) {
-          ILogger.instance().logError("ATTRIBUTE NOT FOUND " + name);
+      GPUAttribute a = null; //Getting attribute from program
+      if (!v.getEnabled()){
+        a = prog.getGPUAttribute(name);
+      } else{
+        final int type = v.getType();
+        final int size = v.getAttributeSize();
+        if (type==GLType.glFloat()){
+          a = prog.getGPUAttributeVecXFloat(name,size);
         }
-        else {
-          v.linkToGPUAttribute(a);
-        }
-        continue;
       }
   
-      if ((type == GLType.glFloat()) && (size == 2)) {
-        final GPUAttributeVec2Float a = prog.getGPUAttributeVec2Float(name);
-        if (a == null) {
-          ILogger.instance().logError("ATTRIBUTE NOT FOUND " + name);
-        }
-        else {
-          v.linkToGPUAttribute(a);
-        }
-        continue;
+      if (a == null){
+        ILogger.instance().logError("ATTRIBUTE NOT FOUND " + name);
+        return;
+      } else{
+        v.linkToGPUAttribute(a);
       }
-  
-      if ((type == GLType.glFloat()) && (size == 3)) {
-        GPUAttribute a = prog.getGPUAttributeVec3Float(name);
-        if (a == null) {
-          a = prog.getGPUAttributeVec4Float(name); //A VEC3 COLUD BE STORED IN A VEC4 ATTRIBUTE
-        }
-  
-        if (a == null) {
-          ILogger.instance().logError("ATTRIBUTE NOT FOUND " + name);
-        }
-        else {
-          v.linkToGPUAttribute(a);
-        }
-        continue;
-      }
-  
-      if ((type == GLType.glFloat()) && (size == 4)) {
-        final GPUAttributeVec4Float a = prog.getGPUAttributeVec4Float(name);
-        if (a == null) {
-          ILogger.instance().logError("ATTRIBUTE NOT FOUND " + name);
-        }
-        else {
-          v.linkToGPUAttribute(a);
-        }
-        continue;
-      }
-  
     }
   
   
