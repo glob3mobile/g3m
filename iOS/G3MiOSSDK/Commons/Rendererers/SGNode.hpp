@@ -62,7 +62,7 @@ public:
   
   virtual bool isReadyToRender(const G3MRenderContext* rc);
   
-  virtual void rawRender(const G3MRenderContext* rc);
+  virtual void rawRender(const G3MRenderContext* rc){}
   
   virtual void render(const G3MRenderContext* rc);
   
@@ -74,7 +74,7 @@ public:
     return _children[i];
   }
   
-  virtual GLState* getGLState(GLState* parentGLState);
+  virtual GLState* getGLState(GLState* parentGLState){ return parentGLState;}
   
   virtual void rawRender(const G3MRenderContext* rc, GLState* parentGLState){}
   
