@@ -107,10 +107,9 @@ void GPUProgramState::linkToProgram(GPUProgram& prog) const{
     
     if (u == null) {
       ILogger.instance().logError("UNIFORM " + name + " NOT FOUND");
+      return;
     }
-    else {
-      v.linkToGPUUniform(u);
-    }
+    v.linkToGPUUniform(u);
   }
   
   final Object[] att = _attributesValues.values().toArray();
@@ -133,9 +132,8 @@ void GPUProgramState::linkToProgram(GPUProgram& prog) const{
     if (a == null){
       ILogger.instance().logError("ATTRIBUTE NOT FOUND " + name);
       return;
-    } else{
-      v.linkToGPUAttribute(a);
     }
+    v.linkToGPUAttribute(a);
   }
 
 #endif
@@ -153,9 +151,9 @@ void GPUProgramState::linkToProgram(GPUProgram& prog) const{
     GPUUniform* u = prog.getUniformOfType(name, type);
     if (u == NULL){
       ILogger::instance()->logError("UNIFORM " + name + " NOT FOUND");
-    } else{
-      v->linkToGPUUniform(u);
+      return;
     }
+    v->linkToGPUUniform(u);
   }
   
   for(std::map<std::string, GPUAttributeValue*> ::const_iterator it = _attributesValues.begin();
@@ -179,9 +177,8 @@ void GPUProgramState::linkToProgram(GPUProgram& prog) const{
     if (a == NULL){
       ILogger::instance()->logError("ATTRIBUTE NOT FOUND " + name);
       return;
-    } else{
-      v->linkToGPUAttribute(a);
     }
+    v->linkToGPUAttribute(a);
   }
   
 #endif
