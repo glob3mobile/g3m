@@ -92,23 +92,23 @@ public class GPUAttribute
     }
   }
 
-//  void setEnable(bool b){
-//    if (b != _enabled){
-//      _enabled = b;
-//      _dirtyEnabled = true;
-//    }
-//  }
+  //  void setEnable(bool b){
+  //    if (b != _enabled){
+  //      _enabled = b;
+  //      _dirtyEnabled = true;
+  //    }
+  //  }
 
   public void applyChanges(GL gl)
   {
-//    if (_dirtyEnabled){
-//      _dirtyEnabled = false;
-//      if (_enabled){
-//        gl->enableVertexAttribArray(_id);
-//      } else{
-//        gl->disableVertexAttribArray(_id);
-//      }
-//    }
+    //    if (_dirtyEnabled){
+    //      _dirtyEnabled = false;
+    //      if (_enabled){
+    //        gl->enableVertexAttribArray(_id);
+    //      } else{
+    //        gl->disableVertexAttribArray(_id);
+    //      }
+    //    }
 
     if (_dirty)
     {

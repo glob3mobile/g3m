@@ -23,7 +23,16 @@ public class GPUAttributeValueVecFloat extends GPUAttributeValue
 
   public final boolean isEqualsTo(GPUAttributeValue v)
   {
-    return (_buffer == ((GPUAttributeValueVecFloat)v)._buffer) && (_timeStamp == ((GPUAttributeValueVecFloat)v)._timeStamp) && (_type == v.getType()) && (_attributeSize == v.getAttributeSize()) && (_stride == v.getStride()) && (_normalized == v.getNormalized());
+
+    if (!v.getEnabled())
+    {
+      return false; //Is a disabled value
+    }
+    else
+    {
+      GPUAttributeValueVecFloat vecV = (GPUAttributeValueVecFloat)v;
+      return (_buffer == vecV._buffer) && (_timeStamp == vecV._timeStamp) && (_type == v.getType()) && (_attributeSize == v.getAttributeSize()) && (_stride == v.getStride()) && (_normalized == v.getNormalized());
+    }
   }
 
   public final GPUAttributeValue shallowCopy()
