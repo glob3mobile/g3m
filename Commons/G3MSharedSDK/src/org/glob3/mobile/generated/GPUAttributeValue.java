@@ -23,7 +23,7 @@ package org.glob3.mobile.generated;
 
 public abstract class GPUAttributeValue
 {
-  protected final int _enabled;
+  protected final boolean _enabled;
   protected final int _type;
   protected final int _attributeSize;
   protected final int _index;

@@ -126,8 +126,9 @@ public class SGNode
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  virtual GLState getGLState(GLState parentGLState);
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  virtual void rawRender(G3MRenderContext rc, GLState parentGLState);
+  public void rawRender(G3MRenderContext rc, GLState parentGLState)
+  {
+  }
 
   public void render(G3MRenderContext rc, GLState parentGLState)
   {
@@ -140,7 +141,7 @@ public class SGNode
     for (int i = 0; i < childrenCount; i++)
     {
       SGNode child = _children.get(i);
-      child.render(rc, parentGLState);
+      child.render(rc, glState);
     }
   }
 }

@@ -34,13 +34,12 @@ public class GPUProgramState
   
     GPUUniform prevLinkedUniform = null;
     boolean uniformExisted = false;
-    java.util.HashMap<String, GPUUniformValue> iterator it = _uniformValues.indexOf(name);
-    if (it != _uniformValues.end())
-    {
   
-      prevLinkedUniform = it.second.getLinkedUniform();
-      it.second = null;
+  
+    GPUUniformValue pv = _uniformValues.get(name);
+    if (pv != null){
       uniformExisted = true;
+      prevLinkedUniform = pv.getLinkedUniform();
     }
   
     v.linkToGPUUniform(prevLinkedUniform);
@@ -57,12 +56,10 @@ public class GPUProgramState
   {
     GPUAttribute prevLinkedAttribute = null;
     boolean attributeExisted = false;
-    java.util.HashMap<String, GPUAttributeValue> iterator it = _attributesValues.indexOf(name);
-    if (it != _attributesValues.end())
-    {
-      prevLinkedAttribute = it.second.getLinkedAttribute();
-      it.second = null;
+    GPUAttributeValue pv = _attributesValues.get(name);
+    if (pv != null){
       attributeExisted = true;
+      prevLinkedAttribute = pv.getLinkedAttribute();
     }
   
     v.linkToGPUAttribute(prevLinkedAttribute);
@@ -216,20 +213,12 @@ public class GPUProgramState
     {
       case 1:
         return setGPUAttributeValue(name, new GPUAttributeValueVec1Float(buffer, arrayElementSize, index, stride, normalized));
-        break;
-  
       case 2:
         return setGPUAttributeValue(name, new GPUAttributeValueVec2Float(buffer, arrayElementSize, index, stride, normalized));
-        break;
-  
       case 3:
         return setGPUAttributeValue(name, new GPUAttributeValueVec3Float(buffer, arrayElementSize, index, stride, normalized));
-        break;
-  
       case 4:
         return setGPUAttributeValue(name, new GPUAttributeValueVec4Float(buffer, arrayElementSize, index, stride, normalized));
-        break;
-  
       default:
         ILogger.instance().logError("Invalid size for Attribute.");
         return false;
@@ -422,94 +411,28 @@ public class GPUProgramState
     return true;
   }
 
-  public final void invalidateGPUUniformValue(String name)
+  public final void applyValuesToLinkedProgram()
   {
-    java.util.HashMap<String, GPUUniformValue> iterator it = _uniformValues.indexOf(name);
-    if (it != _uniformValues.end())
-    {
-      it.second = null;
-      it.second = null;
-    }
-  }
-
-  public final void invalidateGPUAttributeValue(String name)
-  {
-    java.util.HashMap<String, GPUUniformValue> iterator it = _uniformValues.indexOf(name);
-    if (it != _uniformValues.end())
-    {
-      it.second = null;
-      it.second = null;
-    }
-  }
-
-  public final boolean isValid()
-  {
-    for(java.util.HashMap<String, GPUUniformValue> const_iterator it = _uniformValues.iterator(); it != _uniformValues.end(); it++)
-    {
-      if (it.second == null)
-      {
-        return false;
-      }
+    final Object[] uni = _uniformValues.values().toArray();
+    for (int i = 0; i < uni.length; i++) {
+      ((GPUUniformValue)uni[i]).setValueToLinkedUniform();
     }
   
-    for(java.util.HashMap<String, GPUAttributeValue> const_iterator it = _attributesValues.iterator(); it != _attributesValues.end(); it++)
-    {
-      if (it.second == null)
-      {
-        return false;
-      }
+    //  final Object[] attEnabled = _attributesEnabled.values().toArray();
+    //  for (int i = 0; i < attEnabled.length; i++) {
+    //    attributeEnabledStruct a = (attributeEnabledStruct) attEnabled[i];
+    //    if (a.attribute == null) {
+    //      ILogger.instance().logError("NO ATTRIBUTE LINKED");
+    //    }
+    //    else {
+    //      a.attribute.setEnable(a.value);
+    //    }
+    //  }
+  
+    final Object[] att = _attributesValues.values().toArray();
+    for (int i = 0; i < att.length; i++) {
+      ((GPUAttributeValue)att[i]).setValueToLinkedAttribute();
     }
-    return true;
   }
-
-  public final java.util.ArrayList<String> getInvalidUniformValues()
-  {
-    java.util.ArrayList<String> iu = new java.util.ArrayList<String>();
-    for(java.util.HashMap<String, GPUUniformValue> const_iterator it = _uniformValues.iterator(); it != _uniformValues.end(); it++)
-    {
-      if (it.second == null)
-      {
-        iu.add(it.first);
-      }
-    }
-    return iu;
-  }
-
-  public final java.util.ArrayList<String> getInvalidAttributeValues()
-  {
-    java.util.ArrayList<String> ia = new java.util.ArrayList<String>();
-    for(java.util.HashMap<String, GPUAttributeValue> const_iterator it = _attributesValues.iterator(); it != _attributesValues.end(); it++)
-    {
-      if (it.second == null)
-      {
-        ia.add(it.first);
-      }
-    }
-    return ia;
-  }
-
-    public final void applyValuesToLinkedProgram()
-    {
-      final Object[] uni = _uniformValues.values().toArray();
-      for (int i = 0; i < uni.length; i++) {
-        ((GPUUniformValue)uni[i]).setValueToLinkedUniform();
-      }
-    
-      //  final Object[] attEnabled = _attributesEnabled.values().toArray();
-      //  for (int i = 0; i < attEnabled.length; i++) {
-      //    attributeEnabledStruct a = (attributeEnabledStruct) attEnabled[i];
-      //    if (a.attribute == null) {
-      //      ILogger.instance().logError("NO ATTRIBUTE LINKED");
-      //    }
-      //    else {
-      //      a.attribute.setEnable(a.value);
-      //    }
-      //  }
-    
-      final Object[] att = _attributesValues.values().toArray();
-      for (int i = 0; i < att.length; i++) {
-        ((GPUAttributeValue)att[i]).setValueToLinkedAttribute();
-      }
-    }
 
 }
