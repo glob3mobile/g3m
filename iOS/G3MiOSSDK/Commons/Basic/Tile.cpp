@@ -140,11 +140,13 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
   const LayerTilesRenderParameters* layerTilesRenderParameters = trc->getLayerTilesRenderParameters();
   const Vector2I tileMeshResolution(layerTilesRenderParameters->_tileMeshResolution);
 
-  if (_elevationData == NULL && elevationDataProvider != NULL){
+  if ( (_elevationData == NULL) && (elevationDataProvider != NULL) ) {
     initializeElevationData(elevationDataProvider, tessellator, tileMeshResolution, planet, renderDebug);
   }
 
-  if ( _tessellatorMesh == NULL || _mustActualizeMeshDueToNewElevationData) {
+  const bool mercator = trc->getLayerTilesRenderParameters()->_mercator;
+
+  if ( (_tessellatorMesh == NULL) || _mustActualizeMeshDueToNewElevationData ) {
     _mustActualizeMeshDueToNewElevationData = false;
 
     if (elevationDataProvider == NULL) {
@@ -157,6 +159,7 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
                                                      renderDebug);
     }
     else {
+      int _ASK_JM_1;
       if (_elevationData == NULL) {
         MeshHolder* meshHolder = new MeshHolder( tessellator->createTileMesh(planet,
                                                                              tileMeshResolution,
@@ -165,7 +168,6 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
                                                                              _verticalExaggeration,
                                                                              renderDebug) );
         _tessellatorMesh = meshHolder;
-
       }
       else {
         Mesh* newMesh = tessellator->createTileMesh(planet,
@@ -175,18 +177,19 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
                                                     _verticalExaggeration,
                                                     renderDebug);
 
-        MeshHolder* meshHolder = (MeshHolder*)_tessellatorMesh;
-        if (meshHolder == NULL){
+        MeshHolder* meshHolder = (MeshHolder*) _tessellatorMesh;
+        if (meshHolder == NULL) {
           meshHolder = new MeshHolder(newMesh);
-        } else{
+        }
+        else {
           meshHolder->setMesh(newMesh);
         }
+
+        int _ASK_JM_2;
         _tessellatorMesh = meshHolder;
       }
     }
   }
-
-
 
   return _tessellatorMesh;
 }

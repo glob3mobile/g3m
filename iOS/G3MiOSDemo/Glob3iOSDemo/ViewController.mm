@@ -889,7 +889,7 @@ public:
 
 - (TilesRenderParameters*) createTileRenderParameters
 {
-  const bool renderDebug = false;
+  const bool renderDebug = true;
   const bool useTilesSplitBudget = true;
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
@@ -1365,7 +1365,7 @@ public:
     //                                                      2) );
     
     const float verticalExaggeration = 20.0f;
-    const float pointSize = 2.0f;
+    const float pointSize = 8.0f;
     
 //    const Sector subSector = _sector.shrinkedByPercent(0.2f);
 //    //    const Sector subSector = _sector.shrinkedByPercent(0.9f);
@@ -1383,12 +1383,11 @@ public:
 
     _meshRenderer->addMesh( elevationData->createMesh(planet,
                                                       verticalExaggeration,
-                                                      //Geodetic3D::fromDegrees(0.02, 0.02, 0),
                                                       Geodetic3D::zero(),
                                                       pointSize,
                                                       meshSector,
                                                       Vector2I(512, 256)) );
-
+    
 
 //    const ElevationData* subElevationDataDecimated = new SubviewElevationData(elevationData,
 //                                                                              subSector,
