@@ -63,3 +63,16 @@ void SGNode::render(const G3MRenderContext* rc) {
     child->render(rc);
   }
 }
+
+void SGNode::render(const G3MRenderContext* rc, GLState* parentGLState) {
+  
+  GLState* glState = getGLState(parentGLState);
+  
+  rawRender(rc, glState);
+  
+  const int childrenCount = _children.size();
+  for (int i = 0; i < childrenCount; i++) {
+    SGNode* child = _children[i];
+    child->render(rc, parentGLState);
+  }
+}

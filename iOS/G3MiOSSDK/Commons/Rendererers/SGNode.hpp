@@ -12,6 +12,8 @@
 #include <string>
 #include <vector>
 
+#include "GLState.hpp"
+
 class G3MContext;
 class G3MRenderContext;
 class SGShape;
@@ -71,6 +73,12 @@ public:
   SGNode* getChild(int i) const {
     return _children[i];
   }
+  
+  virtual GLState* getGLState(GLState* parentGLState);
+  
+  virtual void rawRender(const G3MRenderContext* rc, GLState* parentGLState);
+  
+  virtual void render(const G3MRenderContext* rc, GLState* glState);
 };
 
 #endif

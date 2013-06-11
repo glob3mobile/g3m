@@ -11,6 +11,8 @@
 
 #include "SGNode.hpp"
 
+#include "GLState.hpp"
+
 class IFloatBuffer;
 class IShortBuffer;
 class GPUProgramState;
@@ -23,6 +25,9 @@ private:
   IFloatBuffer* _uv;
   IFloatBuffer* _normals;
   IShortBuffer* _indices;
+  
+  GLState _glState;
+  void createGLState() const;
 
 public:
 
@@ -42,7 +47,7 @@ public:
   _normals(normals),
   _indices(indices)
   {
-
+    createGLState();
   }
 
   ~SGGeometryNode();
@@ -51,8 +56,15 @@ public:
   void rawRender(const G3MRenderContext* rc,
                  const GLGlobalState& parentState, const GPUProgramState* parentProgramState);
 
-  void modifyGLGlobalState(GLGlobalState& GLGlobalState) const;
-  void modifyGPUProgramState(GPUProgramState& progState) const;
+//  void modifyGLGlobalState(GLGlobalState& GLGlobalState) const;
+//  void modifyGPUProgramState(GPUProgramState& progState) const;
+  
+  void rawRender(const G3MRenderContext* rc, GLState* glState);
+  
+  GLState* getGLState(GLState* parentGLState){
+    _glState.setParent(parentGLState);
+    return &_glState;
+  }
   
 };
 

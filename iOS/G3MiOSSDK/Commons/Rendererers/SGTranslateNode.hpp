@@ -20,6 +20,8 @@ private:
   const double _z;
   
   MutableMatrix44D _translationMatrix;
+  
+  GLState _glState;
 
 public:
 
@@ -34,18 +36,13 @@ public:
   _z(z),
   _translationMatrix(MutableMatrix44D::createTranslationMatrix(_x, _y, _z))
   {
-
+    _glState.getGPUProgramState()->setUniformMatrixValue("Modelview", _translationMatrix, true);
   }
-
-//  GLGlobalState* createState(const G3MRenderContext* rc,
-//                       const GLGlobalState& parentState);
-//  
-//  GPUProgramState* createGPUProgramState(const G3MRenderContext* rc,
-//                                         const GPUProgramState* parentState);
   
-  void modifyGLGlobalState(GLGlobalState& GLGlobalState) const;
-  
-  void modifyGPUProgramState(GPUProgramState& progState) const;
+  GLState* getGLState(GLState* parentGLState){
+    _glState.setParent(parentGLState);
+    return &_glState;
+  }
 
 };
 

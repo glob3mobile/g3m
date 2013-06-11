@@ -72,6 +72,8 @@ public:
   {
 
   }
+  
+  //TODO: Implement
 
   void onImageDownload(IImage* image);
 
