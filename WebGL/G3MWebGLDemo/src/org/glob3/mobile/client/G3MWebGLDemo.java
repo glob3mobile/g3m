@@ -98,10 +98,10 @@ public class G3MWebGLDemo
          //initWithoutBuilder();
 
          // initialize a default widget by using a builder
-         initDefaultWithBuilder();
+         //initDefaultWithBuilder();
 
          // initialize a customized widget by using a builder
-         //         initCustomizedWithBuilder();
+                  initCustomizedWithBuilder();
 
          final Panel g3mWidgetHolder = RootPanel.get(_g3mWidgetHolderId);
          g3mWidgetHolder.add(_widget);
