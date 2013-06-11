@@ -144,22 +144,22 @@ public:
     }
   }
   
-//  void setEnable(bool b){
-//    if (b != _enabled){
-//      _enabled = b;
-//      _dirtyEnabled = true;
-//    }
-//  }
+  //  void setEnable(bool b){
+  //    if (b != _enabled){
+  //      _enabled = b;
+  //      _dirtyEnabled = true;
+  //    }
+  //  }
   
   virtual void applyChanges(GL* gl){
-//    if (_dirtyEnabled){
-//      _dirtyEnabled = false;
-//      if (_enabled){
-//        gl->enableVertexAttribArray(_id);
-//      } else{
-//        gl->disableVertexAttribArray(_id);
-//      }
-//    }
+    //    if (_dirtyEnabled){
+    //      _dirtyEnabled = false;
+    //      if (_enabled){
+    //        gl->enableVertexAttribArray(_id);
+    //      } else{
+    //        gl->disableVertexAttribArray(_id);
+    //      }
+    //    }
     
     if (_dirty){
       
@@ -224,12 +224,18 @@ public:
   }
   
   bool isEqualsTo(const GPUAttributeValue* v) const{
-    return (_buffer == ((GPUAttributeValueVecFloat*)v)->_buffer) &&
-    (_timeStamp == ((GPUAttributeValueVecFloat*)v)->_timeStamp) &&
-    (_type == v->getType()) &&
-    (_attributeSize == v->getAttributeSize()) &&
-    (_stride == v->getStride()) &&
-    (_normalized == v->getNormalized());
+    
+    if (!v->getEnabled()){
+      return false;          //Is a disabled value
+    } else{
+      GPUAttributeValueVecFloat* vecV = (GPUAttributeValueVecFloat*)v;
+      return (_buffer == vecV->_buffer) &&
+              (_timeStamp == vecV->_timeStamp) &&
+               (_type == v->getType()) &&
+               (_attributeSize == v->getAttributeSize()) &&
+               (_stride == v->getStride()) &&
+               (_normalized == v->getNormalized() ) ;
+    }
   }
   
   GPUAttributeValue* shallowCopy() const{
@@ -312,107 +318,3 @@ public:
 ////////
 
 #endif
-
-
-/*
- 
- class Attribute{
- protected:
- std::string _name;
- int _id;
- 
- bool _wasSet;
- bool _dirty;
- 
- public:
- virtual ~Attribute(){}
- Attribute(std::string name, int id):_name(name),_id(id),_wasSet(false), _dirty(false){}
- 
- const std::string getName() const{ return _name;}
- int getID() const{ return _id;}
- 
- virtual void applyChanges(GL* gl) = 0;
- };
- 
- class AttributeVecFloat: public Attribute{
- protected:
- IFloatBuffer* _buffer;
- int           _timeStamp;
- int           _index;
- int           _stride;
- bool          _normalized;
- 
- int _size;
- 
- 
- bool equalsTo(IFloatBuffer* buffer, int index, int stride, bool normalized) const{
- return !(_buffer != buffer || _index != index || _stride != stride
- || _normalized != normalized || _timeStamp != _buffer->timestamp());
- }
- 
- void save(IFloatBuffer* buffer, int index, int stride, bool normalized){
- _buffer = buffer;
- _index = index;
- _stride = stride;
- _normalized = normalized;
- _timeStamp = _buffer->timestamp();
- }
- 
- public:
- AttributeVecFloat(std::string name, int id, int size):
- Attribute(name, id),
- _buffer(NULL),
- _timeStamp(-1),
- _index(-1),
- _stride(-1),
- _normalized(false),
- _size(size){}
- 
- 
- void set(INativeGL* _nativeGL, IFloatBuffer* buffer, int index, int stride, bool normalized) {
- 
- if (!_wasSet || equalsTo(buffer, index, stride, normalized)){
- //      _nativeGL->vertexAttribPointer(index,//Index
- //                                     _size,//Size
- //                                     normalized,//Normalized
- //                                     stride,//Stride
- //                                     buffer);
- 
- save(buffer, index, stride, normalized);
- _wasSet = true;
- _dirty = true;
- }
- }
- 
- void applyChanges(GL* gl){
- if (_dirty){
- gl->vertexAttribPointer(_index, _size, _normalized, _stride, _buffer);
- _dirty = false;
- }
- }
- 
- int getSize() const { return _size;}
- 
- };
- 
- class AttributeVec1Float: public AttributeVecFloat{
- public:
- AttributeVec1Float(std::string name, int id):AttributeVecFloat(name, id, 1){}
- };
- 
- class AttributeVec2Float: public AttributeVecFloat{
- public:
- AttributeVec2Float(std::string name, int id):AttributeVecFloat(name, id, 2){}
- };
- 
- class AttributeVec3Float: public AttributeVecFloat{
- public:
- AttributeVec3Float(std::string name, int id):AttributeVecFloat(name, id, 3){}
- };
- 
- class AttributeVec4Float: public AttributeVecFloat{
- public:
- AttributeVec4Float(std::string name, int id):AttributeVecFloat(name, id, 4){}
- };
- */
-/////////////////////////////////////////////////////////////////
