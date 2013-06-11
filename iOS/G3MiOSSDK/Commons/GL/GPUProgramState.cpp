@@ -94,7 +94,6 @@ void GPUProgramState::linkToProgram(GPUProgram& prog) const{
     return; //Already linked
   }
   
-  
 #ifdef JAVA_CODE
   
   final Object[] uni = _uniformValues.values().toArray();
@@ -104,7 +103,7 @@ void GPUProgramState::linkToProgram(GPUProgram& prog) const{
     final GPUUniformValue v = (GPUUniformValue) uni[i];
     
     final int type = v.getType();
-    final GPUUniform u = prog.getUniformOfType(name, type);
+    final GPUUniform u = prog.getUniformOfType(name, type); //Getting uniform from program
     
     if (u == null) {
       ILogger.instance().logError("UNIFORM " + name + " NOT FOUND");
@@ -120,62 +119,28 @@ void GPUProgramState::linkToProgram(GPUProgram& prog) const{
     final String name = (String)attNames[i];
     final GPUAttributeValue v = (GPUAttributeValue)att[i];
     
-    final int type = v.getType();
-    final int size = v.getAttributeSize();
-    if ((type == GLType.glFloat()) && (size == 1)) {
-      final GPUAttributeVec1Float a = prog.getGPUAttributeVec1Float(name);
-      if (a == null) {
-        ILogger.instance().logError("ATTRIBUTE NOT FOUND " + name);
+    GPUAttribute a = null; //Getting attribute from program
+    if (!v.getEnabled()){
+      a = prog.getGPUAttribute(name);
+    } else{
+      final int type = v.getType();
+      final int size = v.getAttributeSize();
+      if (type==GLType.glFloat()){
+        a = prog.getGPUAttributeVecXFloat(name,size);
       }
-      else {
-        v.linkToGPUAttribute(a);
-      }
-      continue;
     }
     
-    if ((type == GLType.glFloat()) && (size == 2)) {
-      final GPUAttributeVec2Float a = prog.getGPUAttributeVec2Float(name);
-      if (a == null) {
-        ILogger.instance().logError("ATTRIBUTE NOT FOUND " + name);
-      }
-      else {
-        v.linkToGPUAttribute(a);
-      }
-      continue;
+    if (a == null){
+      ILogger.instance().logError("ATTRIBUTE NOT FOUND " + name);
+      return;
+    } else{
+      v.linkToGPUAttribute(a);
     }
-    
-    if ((type == GLType.glFloat()) && (size == 3)) {
-      GPUAttribute a = prog.getGPUAttributeVec3Float(name);
-      if (a == null) {
-        a = prog.getGPUAttributeVec4Float(name); //A VEC3 COLUD BE STORED IN A VEC4 ATTRIBUTE
-      }
-      
-      if (a == null) {
-        ILogger.instance().logError("ATTRIBUTE NOT FOUND " + name);
-      }
-      else {
-        v.linkToGPUAttribute(a);
-      }
-      continue;
-    }
-    
-    if ((type == GLType.glFloat()) && (size == 4)) {
-      final GPUAttributeVec4Float a = prog.getGPUAttributeVec4Float(name);
-      if (a == null) {
-        ILogger.instance().logError("ATTRIBUTE NOT FOUND " + name);
-      }
-      else {
-        v.linkToGPUAttribute(a);
-      }
-      continue;
-    }
-    
   }
-  
+
 #endif
 #ifdef C_CODE
-  
-  
+
   for(std::map<std::string, GPUUniformValue*> ::const_iterator it = _uniformValues.begin();
       it != _uniformValues.end();
       it++){
@@ -200,29 +165,22 @@ void GPUProgramState::linkToProgram(GPUProgram& prog) const{
     std::string name = it->first;
     GPUAttributeValue* v = it->second;
     
+    GPUAttribute* a = NULL;
     if (!v->getEnabled()){
-      GPUAttribute* a = prog.getGPUAttribute(name);
-      if (a == NULL){
-        ILogger::instance()->logError("ATTRIBUTE NOT FOUND " + name);
-        return;
-      } else{
-        v->linkToGPUAttribute(a);
+      a = prog.getGPUAttribute(name);
+    } else{
+      const int type = v->getType();
+      const int size = v->getAttributeSize();
+      if (type==GLType::glFloat()){
+        a = prog.getGPUAttributeVecXFloat(name,size);
       }
-      continue;
     }
     
-    const int type = v->getType();
-    const int size = v->getAttributeSize();
-    
-    if (type==GLType::glFloat()){
-      GPUAttribute* a = prog.getGPUAttributeVecXFloat(name,size);
-      if (a == NULL){
-        ILogger::instance()->logError("ATTRIBUTE NOT FOUND " + name);
-        return;
-      } else{
-        v->linkToGPUAttribute(a);
-      }
-      continue;
+    if (a == NULL){
+      ILogger::instance()->logError("ATTRIBUTE NOT FOUND " + name);
+      return;
+    } else{
+      v->linkToGPUAttribute(a);
     }
   }
   
@@ -336,7 +294,7 @@ bool GPUProgramState::setUniformValue(const std::string& name, double x, double 
 }
 
 //bool GPUProgramState::setUniformValue(const std::string& name, const MutableMatrix44D* m){
-//  
+//
 //#ifdef C_CODE
 //  for(std::map<std::string, GPUUniformValue*> ::iterator it = _uniformValues.begin();
 //      it != _uniformValues.end();
@@ -364,14 +322,14 @@ bool GPUProgramState::setUniformValue(const std::string& name, double x, double 
 //    }
 //  }
 //#endif
-//  
+//
 //  return setGPUUniformValue(name, new GPUUniformValueMatrix4FloatStack(m));
 //}
 
 //bool GPUProgramState::multiplyUniformValue(const std::string& name, const MutableMatrix44D* m){
-//  
+//
 //#ifdef C_CODE
-//  
+//
 //  for(std::map<std::string, GPUUniformValue*> ::iterator it = _uniformValues.begin();
 //      it != _uniformValues.end();
 //      it++){
@@ -383,7 +341,7 @@ bool GPUProgramState::setUniformValue(const std::string& name, double x, double 
 //      return true;
 //    }
 //  }
-//  
+//
 //#endif
 //#ifdef JAVA_CODE
 //  final Object[] uni = _uniformValues.values().toArray();
@@ -399,10 +357,10 @@ bool GPUProgramState::setUniformValue(const std::string& name, double x, double 
 //    }
 //  }
 //#endif
-//  
+//
 //  ILogger::instance()->logError("CAN'T MULTIPLY UNLOADED MATRIX");
 //  return false;
-//  
+//
 //}
 
 bool GPUProgramState::setUniformMatrixValue(const std::string& name, const MutableMatrix44D& m, bool isTransform){
