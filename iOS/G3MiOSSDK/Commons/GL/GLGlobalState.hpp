@@ -70,7 +70,7 @@ private:
   bool _boundTextureChanged;
   bool _pixelStoreIChanged;
   bool _clearColorChanged;
-/*
+
   GLGlobalState(const GLGlobalState& parentState) :
   _depthTest(parentState._depthTest),
   _blend(parentState._blend),
@@ -87,10 +87,19 @@ private:
   _clearColorR(parentState._clearColorR),
   _clearColorG(parentState._clearColorG),
   _clearColorB(parentState._clearColorB),
-  _clearColorA(parentState._clearColorA)
+  _clearColorA(parentState._clearColorA),
+  _depthTestChanged(parentState._depthTestChanged),
+  _blendChanged(parentState._blendChanged),
+  _cullFaceChanged(parentState._cullFaceChanged),
+  _lineWidthChanged(parentState._lineWidthChanged),
+  _polygonOffsetChanged(parentState._polygonOffsetChanged),
+  _blendFactorsChanged(parentState._blendFactorsChanged),
+  _boundTextureChanged(parentState._boundTextureChanged),
+  _pixelStoreIChanged(parentState._pixelStoreIChanged),
+  _clearColorChanged(parentState._clearColorChanged)
   {
   }
-  */
+  
 public:
   
   GLGlobalState() :
