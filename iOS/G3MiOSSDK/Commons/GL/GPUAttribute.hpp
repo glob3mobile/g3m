@@ -20,7 +20,7 @@ class GPUAttribute;
 
 class GPUAttributeValue{
 protected:
-  const int _enabled;
+  const bool _enabled;
   const int _type;
   const int _attributeSize;
   const int _index;

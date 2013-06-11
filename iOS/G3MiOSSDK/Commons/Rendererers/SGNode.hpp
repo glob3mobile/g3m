@@ -76,7 +76,7 @@ public:
   
   virtual GLState* getGLState(GLState* parentGLState);
   
-  virtual void rawRender(const G3MRenderContext* rc, GLState* parentGLState);
+  virtual void rawRender(const G3MRenderContext* rc, GLState* parentGLState){}
   
   virtual void render(const G3MRenderContext* rc, GLState* glState);
 };

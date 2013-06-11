@@ -244,13 +244,23 @@ bool GPUProgramState::setGPUUniformValue(const std::string& name, GPUUniformValu
   
   GPUUniform* prevLinkedUniform = NULL;
   bool uniformExisted = false;
+  
+  
+#ifdef C_CODE
   std::map<std::string, GPUUniformValue*> ::iterator it = _uniformValues.find(name);
   if (it != _uniformValues.end()){
-    
     prevLinkedUniform = it->second->getLinkedUniform();
     delete it->second;
     uniformExisted = true;
   }
+#endif
+#ifdef JAVA_CODE
+  GPUUniformValue pv = _uniformValues.get(name);
+  if (pv != null){
+    uniformExisted = true;
+    prevLinkedUniform = pv.getLinkedUniform();
+  }
+#endif
   
   v->linkToGPUUniform(prevLinkedUniform);
   _uniformValues[name] = v;
@@ -265,12 +275,21 @@ bool GPUProgramState::setGPUUniformValue(const std::string& name, GPUUniformValu
 bool GPUProgramState::setGPUAttributeValue(const std::string& name, GPUAttributeValue* v){
   GPUAttribute* prevLinkedAttribute = NULL;
   bool attributeExisted = false;
+#ifdef C_CODE
   std::map<std::string, GPUAttributeValue*> ::iterator it = _attributesValues.find(name);
   if (it != _attributesValues.end()){
     prevLinkedAttribute = it->second->getLinkedAttribute();
     delete it->second;
     attributeExisted = true;
   }
+#endif
+#ifdef JAVA_CODE
+  GPUAttributeValue pv = _attributesValues.get(name);
+  if (pv != null){
+    attributeExisted = true;
+    prevLinkedAttribute = pv.getLinkedAttribute();
+  }
+#endif
   
   v->linkToGPUAttribute(prevLinkedAttribute);
   _attributesValues[name] = v;
@@ -288,20 +307,12 @@ bool GPUProgramState::setAttributeValue(const std::string& name,
   switch (attributeSize) {
     case 1:
       return setGPUAttributeValue(name, new GPUAttributeValueVec1Float(buffer, arrayElementSize, index, stride, normalized) );
-      break;
-      
     case 2:
       return setGPUAttributeValue(name, new GPUAttributeValueVec2Float(buffer, arrayElementSize, index, stride, normalized) );
-      break;
-      
     case 3:
       return setGPUAttributeValue(name, new GPUAttributeValueVec3Float(buffer, arrayElementSize, index, stride, normalized) );
-      break;
-      
     case 4:
       return setGPUAttributeValue(name, new GPUAttributeValueVec4Float(buffer, arrayElementSize, index, stride, normalized) );
-      break;
-      
     default:
       ILogger::instance()->logError("Invalid size for Attribute.");
       return false;
@@ -528,63 +539,4 @@ bool GPUProgramState::isLinkableToProgram(const GPUProgram& program) const{
   
   return true;
 #endif
-}
-
-void GPUProgramState::invalidateGPUUniformValue(const std::string& name){
-  std::map<std::string, GPUUniformValue*> ::iterator it = _uniformValues.find(name);
-  if (it != _uniformValues.end()){
-    delete it->second;
-    it->second = NULL;
-  }
-}
-
-void GPUProgramState::invalidateGPUAttributeValue(const std::string& name){
-  std::map<std::string, GPUUniformValue*> ::iterator it = _uniformValues.find(name);
-  if (it != _uniformValues.end()){
-    delete it->second;
-    it->second = NULL;
-  }
-}
-
-bool GPUProgramState::isValid() const{
-  for(std::map<std::string, GPUUniformValue*> ::const_iterator it = _uniformValues.begin();
-      it != _uniformValues.end();
-      it++){
-    if (it->second == NULL){
-      return false;
-    }
-  }
-  
-  for(std::map<std::string, GPUAttributeValue*> ::const_iterator it = _attributesValues.begin();
-      it != _attributesValues.end();
-      it++){
-    if (it->second == NULL){
-      return false;
-    }
-  }
-  return true;
-}
-
-std::vector<std::string> GPUProgramState::getInvalidUniformValues() const{
-  std::vector<std::string> iu;
-  for(std::map<std::string, GPUUniformValue*> ::const_iterator it = _uniformValues.begin();
-      it != _uniformValues.end();
-      it++){
-    if (it->second == NULL){
-      iu.push_back(it->first);
-    }
-  }
-  return iu;
-}
-
-std::vector<std::string> GPUProgramState::getInvalidAttributeValues() const{
-  std::vector<std::string> ia;
-  for(std::map<std::string, GPUAttributeValue*> ::const_iterator it = _attributesValues.begin();
-      it != _attributesValues.end();
-      it++){
-    if (it->second == NULL){
-      ia.push_back(it->first);
-    }
-  }
-  return ia;
 }

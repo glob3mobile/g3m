@@ -89,17 +89,7 @@ public:
   
   bool isLinkableToProgram(const GPUProgram& program) const;
   
-  void invalidateGPUUniformValue(const std::string& name);
-  
-  void invalidateGPUAttributeValue(const std::string& name);
-  
-  bool isValid() const;
-  
-  std::vector<std::string> getInvalidUniformValues() const;
-  
-  std::vector<std::string> getInvalidAttributeValues() const;
-  
-    void applyValuesToLinkedProgram() const;
+  void applyValuesToLinkedProgram() const;
   
 };
 
