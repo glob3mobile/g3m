@@ -48,23 +48,29 @@ Mesh* ElevationData::createMesh(const Ellipsoid* ellipsoid,
                                 float pointSize,
                                 const Sector& sector,
                                 const Vector2I& resolution) const {
-  const Vector3D minMaxAverageHeights = getMinMaxAverageHeights();
-  const double minHeight     = minMaxAverageHeights._x;
-  const double maxHeight     = minMaxAverageHeights._y;
-  const double deltaHeight   = maxHeight - minHeight;
-  const double averageHeight = minMaxAverageHeights._z;
+  const Vector3D minMaxAverageElevations = getMinMaxAverageElevations();
+  const double minElevation     = minMaxAverageElevations._x;
+  const double maxElevation     = minMaxAverageElevations._y;
+  const double deltaElevation   = maxElevation - minElevation;
+  const double averageElevation = minMaxAverageElevations._z;
 
-  ILogger::instance()->logInfo("averageHeight=%f, minHeight=%f maxHeight=%f delta=%f",
-                               averageHeight, minHeight, maxHeight, deltaHeight);
+  ILogger::instance()->logInfo("Elevations: average=%f, min=%f max=%f delta=%f",
+                               averageElevation, minElevation, maxElevation, deltaElevation);
 
-  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
+  
+//  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
+//                                          ellipsoid,
+//                                          Vector3D::zero());
+  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(),
                                           ellipsoid,
-                                          Vector3D::zero());
+                                          sector.getCenter());
+
   FloatBufferBuilderFromColor colors;
 
   const IMathUtils* mu = IMathUtils::instance();
 
-  /* */
+  const Geodetic2D positionOffset2D = positionOffset.asGeodetic2D();
+
   const int width  = resolution._x;
   const int height = resolution._y;
   for (int x = 0; x < width; x++) {
@@ -80,18 +86,16 @@ Mesh* ElevationData::createMesh(const Ellipsoid* ellipsoid,
         continue;
       }
 
-      const float alpha = (float) ((elevation - minHeight) / deltaHeight);
+      const float alpha = (float) ((elevation - minElevation) / deltaElevation);
       const float r = alpha;
       const float g = alpha;
       const float b = alpha;
       colors.add(r, g, b, 1);
 
-      vertices.add(position.add(positionOffset.asGeodetic2D()),
+      vertices.add(position.add(positionOffset2D),
                    positionOffset.height() + (elevation * verticalExaggeration));
     }
   }
-  /* */
-
 
 //  for (int x = 0; x < _width; x++) {
 //    const double u = (double) x / (_width  - 1);
@@ -103,16 +107,16 @@ Mesh* ElevationData::createMesh(const Ellipsoid* ellipsoid,
 //        continue;
 //      }
 //
-//      const double height = getElevationAt(x, y);
-//      if (mu->isNan(height)) {
+//      const double elevation = getElevationAt(x, y);
+//      if (mu->isNan(elevation)) {
 //        continue;
 //      }
 //
-//      vertices.add(position.add(positionOffset.asGeodetic2D()),
-//                   positionOffset.height() + (height * verticalExaggeration));
+//      vertices.add(position.add(positionOffset2D),
+//                   positionOffset.height() + (elevation * verticalExaggeration));
 //
 //
-//      const float alpha = (float) ((height - minHeight) / deltaHeight);
+//      const float alpha = (float) ((elevation - minElevation) / deltaElevation);
 //      const float r = alpha;
 //      const float g = alpha;
 //      const float b = alpha;
@@ -142,14 +146,14 @@ Mesh* ElevationData::createMesh(const Ellipsoid* ellipsoid,
                                 const Geodetic3D& positionOffset,
                                 float pointSize) const {
 
-  const Vector3D minMaxAverageHeights = getMinMaxAverageHeights();
-  const double minHeight     = minMaxAverageHeights._x;
-  const double maxHeight     = minMaxAverageHeights._y;
-  const double deltaHeight   = maxHeight - minHeight;
-  const double averageHeight = minMaxAverageHeights._z;
+  const Vector3D minMaxAverageElevations = getMinMaxAverageElevations();
+  const double minElevation     = minMaxAverageElevations._x;
+  const double maxElevation     = minMaxAverageElevations._y;
+  const double deltaElevation   = maxElevation - minElevation;
+  const double averageElevation = minMaxAverageElevations._z;
 
-  ILogger::instance()->logInfo("averageHeight=%f, minHeight=%f maxHeight=%f delta=%f",
-                               averageHeight, minHeight, maxHeight, deltaHeight);
+  ILogger::instance()->logInfo("Elevations: average=%f, min=%f max=%f delta=%f",
+                               averageElevation, minElevation, maxElevation, deltaElevation);
 
 
   FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
@@ -157,17 +161,19 @@ Mesh* ElevationData::createMesh(const Ellipsoid* ellipsoid,
                                           Vector3D::zero());
   FloatBufferBuilderFromColor colors;
 
+  const Geodetic2D positionOffset2D = positionOffset.asGeodetic2D();
+
   const IMathUtils* mu = IMathUtils::instance();
   for (int x = 0; x < _width; x++) {
     const double u = (double) x / (_width  - 1);
 
     for (int y = 0; y < _height; y++) {
-      const double height = getElevationAt(x, y);
-      if (mu->isNan(height)) {
+      const double elevation = getElevationAt(x, y);
+      if (mu->isNan(elevation)) {
         continue;
       }
 
-      const float alpha = (float) ((height - minHeight) / deltaHeight);
+      const float alpha = (float) ((elevation - minElevation) / deltaElevation);
       const float r = alpha;
       const float g = alpha;
       const float b = alpha;
@@ -175,10 +181,10 @@ Mesh* ElevationData::createMesh(const Ellipsoid* ellipsoid,
 
       const double v = 1.0 - ( (double) y / (_height - 1) );
 
-      const Geodetic2D position = _sector.getInnerPoint(u, v).add(positionOffset.asGeodetic2D());
+      const Geodetic2D position = _sector.getInnerPoint(u, v).add(positionOffset2D);
 
       vertices.add(position,
-                   positionOffset.height() + (height * verticalExaggeration));
+                   positionOffset.height() + (elevation * verticalExaggeration));
 
     }
   }

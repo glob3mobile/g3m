@@ -75,7 +75,7 @@ const std::string ShortBufferElevationData::description(bool detailed) const {
   return s;
 }
 
-Vector3D ShortBufferElevationData::getMinMaxAverageHeights() const {
+Vector3D ShortBufferElevationData::getMinMaxAverageElevations() const {
   const IMathUtils* mu = IMathUtils::instance();
   short minHeight = mu->maxInt16();
   short maxHeight = mu->minInt16();

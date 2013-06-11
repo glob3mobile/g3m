@@ -63,7 +63,7 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
   const Sector sector = tile->getSector();
   const Vector2I tileResolution = calculateResolution(rawResolution, sector);
 
-  double minHeight = 0;
+  double minElevation = 0;
   FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(),
                                           planet,
                                           sector.getCenter());
@@ -71,31 +71,32 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
   const IMathUtils* mu = IMathUtils::instance();
 
   for (int j = 0; j < tileResolution._y; j++) {
-    const double v = (double) j / (tileResolution._y-1);
+    const double v = (double) j / (tileResolution._y - 1);
+
     for (int i = 0; i < tileResolution._x; i++) {
-      const double u = (double) i / (tileResolution._x-1);
+      const double u = (double) i / (tileResolution._x - 1);
 
       const Geodetic2D position = sector.getInnerPoint(u, v);
 
-      double height = 0;
-      
+      double elevation = 0;
+
       //TODO: MERCATOR!!!
-      
+
       if (elevationData != NULL) {
         int ___WTF_Diego;
         const Geodetic2D position2 = sector.getInnerPoint(u, 1.0 - v);
 
-        const double h = elevationData->getElevationAt(position2);
-        if ( !mu->isNan(h) ) {
-          height = h * verticalExaggeration;
+        const double rawElevation = elevationData->getElevationAt(position2);
+        if ( !mu->isNan(rawElevation) ) {
+          elevation = rawElevation * verticalExaggeration;
 
-          if (height < minHeight) {
-            minHeight = height;
+          if (elevation < minElevation) {
+            minElevation = elevation;
           }
         }
       }
 
-      vertices.add( position, height );
+      vertices.add( position, elevation );
     }
   }
 
@@ -119,7 +120,7 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
     // compute skirt height
     const Vector3D sw = planet->toCartesian(sector.getSW());
     const Vector3D nw = planet->toCartesian(sector.getNW());
-    const double skirtHeight = (nw.sub(sw).length() * 0.05 * -1) + minHeight;
+    const double skirtHeight = (nw.sub(sw).length() * 0.05 * -1) + minElevation;
 
     int posS = tileResolution._x * tileResolution._y;
     indices.add((short) (posS-1));
