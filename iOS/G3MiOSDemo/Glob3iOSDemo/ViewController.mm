@@ -250,7 +250,6 @@ public:
 {
   int _DGD_working_on_terrain;
 
-  /*
   float verticalExaggeration = 20.0f;
   builder.getTileRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
   
@@ -340,7 +339,6 @@ public:
   builder.getTileRendererBuilder()->setElevationDataProvider(compElevationDataProvider);
   //builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProvider);
 
-  */
 }
 
 
