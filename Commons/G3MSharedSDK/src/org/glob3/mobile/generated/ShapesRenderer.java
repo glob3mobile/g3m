@@ -23,11 +23,31 @@ public class ShapesRenderer extends LeafRenderer
 
   private G3MContext _context;
 
+  private GLState _glState = new GLState();
+  private void createGLState()
+  {
+    _glState.getGLGlobalState().enableDepthTest();
+  
+    GPUProgramState progState = _glState.getGPUProgramState();
+    progState.setUniformValue("EnableTexture", false);
+    progState.setUniformValue("PointSize", (float)1.0);
+    progState.setUniformValue("ScaleTexCoord", new Vector2D(1.0,1.0));
+    progState.setUniformValue("TranslationTexCoord", new Vector2D(0.0,0.0));
+  
+    progState.setUniformValue("ColorPerVertexIntensity", (float)0.0);
+    progState.setUniformValue("EnableFlatColor", false);
+    progState.setUniformValue("FlatColor", (float)0.0, (float)0.0, (float)0.0, (float)0.0);
+    progState.setUniformValue("FlatColorIntensity", (float)0.0);
+  
+    progState.setAttributeEnabled("TextureCoord", false);
+    progState.setAttributeEnabled("Color", false);
+  }
+
 
   public ShapesRenderer()
   {
      _context = null;
-
+    createGLState();
   }
 
   public void dispose()
@@ -102,9 +122,11 @@ public class ShapesRenderer extends LeafRenderer
   public final void render(G3MRenderContext rc)
   {
   
-    actualizeGLGlobalState(rc.getCurrentCamera()); // Setting projection and modelview
-  
     final Vector3D cameraPosition = rc.getCurrentCamera().getCartesianPosition();
+  
+    //Setting camera matrixes
+    _glState.getGPUProgramState().setUniformMatrixValue("Modelview", rc.getCurrentCamera().getModelMatrix(), false);
+    _glState.getGPUProgramState().setUniformMatrixValue("Projection", rc.getCurrentCamera().getProjectionMatrix(), false);
   
     final int shapesCount = _shapes.size();
     for (int i = 0; i < shapesCount; i++)
@@ -116,54 +138,13 @@ public class ShapesRenderer extends LeafRenderer
         final Vector3D shapePosition = planet.toCartesian(shape.getPosition());
         final double squaredDistanceFromEye = shapePosition.sub(cameraPosition).squaredLength();
   
-        rc.addOrderedRenderable(new TransparentShapeWrapper(shape, squaredDistanceFromEye));
+        rc.addOrderedRenderable(new TransparentShapeWrapper(shape, squaredDistanceFromEye, _glState));
       }
       else
       {
-        shape.render(rc);
+        shape.render(rc, _glState);
       }
     }
-  }
-
-  public final void notifyGLClientChildrenParentHasChanged()
-  {
-    final int shapesCount = _shapes.size();
-    for (int i = 0; i < shapesCount; i++)
-    {
-      Shape shape = _shapes.get(i);
-      shape.actualizeGLGlobalState(this);
-    }
-  }
-  public final void modifyGLGlobalState(GLGlobalState GLGlobalState)
-  {
-    GLGlobalState.enableDepthTest();
-  }
-  public final void modifyGPUProgramState(GPUProgramState progState)
-  {
-  
-    progState.setUniformValue("EnableTexture", false);
-    progState.setUniformValue("PointSize", (float)1.0);
-    progState.setUniformValue("ScaleTexCoord", new Vector2D(1.0,1.0));
-    progState.setUniformValue("TranslationTexCoord", new Vector2D(0.0,0.0));
-  
-    progState.setUniformValue("ColorPerVertexIntensity", (float)0.0);
-    progState.setUniformValue("EnableFlatColor", false);
-    progState.setUniformValue("FlatColor", (float)0.0, (float)0.0, (float)0.0, (float)0.0);
-    progState.setUniformValue("FlatColorIntensity", (float)0.0);
-  
-    progState.setAttributeEnabled("TextureCoord", false);
-    progState.setAttributeEnabled("Color", false);
-  }
-
-  public final void rawRender(G3MRenderContext rc, GLStateTreeNode myStateTreeNode)
-  {
-  }
-  public final boolean isInsideCameraFrustum(G3MRenderContext rc)
-  {
-     return true;
-  }
-  public final void modifiyGLState(GLState state)
-  {
   }
 
 }

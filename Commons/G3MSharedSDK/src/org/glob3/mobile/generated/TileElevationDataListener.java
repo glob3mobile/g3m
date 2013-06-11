@@ -33,5 +33,3 @@ public class TileElevationDataListener implements IElevationDataListener
 
   }
 }
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#pragma mark GLClient

@@ -24,7 +24,7 @@ package org.glob3.mobile.generated;
 //class ShapePendingEffect;
 //class GPUProgramState;
 
-public abstract class Shape extends GLClient
+public abstract class Shape implements EffectTarget
 {
   private Geodetic3D _position;
 
@@ -54,11 +54,14 @@ public abstract class Shape extends GLClient
     if (_transformMatrix == null)
     {
       _transformMatrix = createTransformMatrix(planet);
+      _glState.getGPUProgramState().setUniformMatrixValue("Modelview", _transformMatrix, true);
     }
     return _transformMatrix;
   }
 
   private java.util.ArrayList<ShapePendingEffect> _pendingEffects = new java.util.ArrayList<ShapePendingEffect>();
+
+  private GLState _glState = new GLState();
 
   protected void cleanTransformMatrix()
   {
@@ -220,7 +223,7 @@ public abstract class Shape extends GLClient
     _pendingEffects.add(new ShapePendingEffect(effect, true));
   }
 
-  public final void render(G3MRenderContext rc)
+  public final void render(G3MRenderContext rc, GLState parentGLState)
   {
     if (isReadyToRender(rc))
     {
@@ -245,9 +248,9 @@ public abstract class Shape extends GLClient
         _pendingEffects.clear();
       }
   
-  //    GPUProgramState progState(parentProgramState);
-      //progState.multiplyUniformValue("Modelview", *getTransformMatrix( rc->getPlanet() ));
-      rawRender(rc);
+      getTransformMatrix(rc.getPlanet()); //Applying transform to _glState
+      _glState.setParent(parentGLState);
+      rawRender(rc, _glState);
     }
   }
 
@@ -258,20 +261,8 @@ public abstract class Shape extends GLClient
 
   public abstract boolean isReadyToRender(G3MRenderContext rc);
 
-  public abstract void rawRender(G3MRenderContext rc);
+  public abstract void rawRender(G3MRenderContext rc, GLState glState);
 
   public abstract boolean isTransparent(G3MRenderContext rc);
-
-  public void modifyGPUProgramState(GPUProgramState progState)
-  {
-    if (_planet != null)
-    {
-      progState.multiplyUniformValue("Modelview", getTransformMatrix(_planet));
-    }
-    else
-    {
-      ILogger.instance().logError("Shape not initialized");
-    }
-  }
 
 }

@@ -15,7 +15,7 @@ package org.glob3.mobile.generated;
 //class GLGlobalState;
 
 
-public abstract class Renderer extends SceneGraphNode
+public abstract class Renderer implements EffectTarget
 {
   public abstract boolean isEnable();
 

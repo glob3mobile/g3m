@@ -64,13 +64,17 @@ public class GPUUniform
     if (_value == null || !_value.isEqualsTo(v))
     {
       _dirty = true;
+
+      v.setLastGPUUniformValue(_value); //Multiply matrix when needed
+
       if (_value != null)
       {
-        if (_value != null)
-           _value.dispose();
+        _value.copyFrom(v);
       }
-      _value = v.deepCopy();
-      //      delete v;
+      else
+      {
+        _value = v.deepCopy();
+      }
     }
   }
 

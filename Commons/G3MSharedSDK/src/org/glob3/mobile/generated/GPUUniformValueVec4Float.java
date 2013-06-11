@@ -2,10 +2,10 @@ package org.glob3.mobile.generated;
 ////////////////////////////////////////////////////////////////////////
 public class GPUUniformValueVec4Float extends GPUUniformValue
 {
-  public final double _x;
-  public final double _y;
-  public final double _z;
-  public final double _w;
+  public double _x;
+  public double _y;
+  public double _z;
+  public double _w;
 
   public GPUUniformValueVec4Float(double x, double y, double z, double w)
   {
@@ -28,6 +28,14 @@ public class GPUUniformValueVec4Float extends GPUUniformValue
   public final GPUUniformValue deepCopy()
   {
     return new GPUUniformValueVec4Float(_x, _y, _z, _w);
+  }
+
+  public final void copyFrom(GPUUniformValue v)
+  {
+    _x = ((GPUUniformValueVec4Float)v)._x;
+    _y = ((GPUUniformValueVec4Float)v)._y;
+    _z = ((GPUUniformValueVec4Float)v)._z;
+    _w = ((GPUUniformValueVec4Float)v)._w;
   }
 
   public final String description()

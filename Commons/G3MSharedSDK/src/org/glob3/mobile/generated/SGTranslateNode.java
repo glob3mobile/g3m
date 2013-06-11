@@ -17,6 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 public class SGTranslateNode extends SGNode
 {
   private final double _x;
@@ -24,6 +25,8 @@ public class SGTranslateNode extends SGNode
   private final double _z;
 
   private MutableMatrix44D _translationMatrix = new MutableMatrix44D();
+
+  private GLState _glState = new GLState();
 
 
   public SGTranslateNode(String id, String sId, double x, double y, double z)
@@ -33,38 +36,13 @@ public class SGTranslateNode extends SGNode
      _y = y;
      _z = z;
      _translationMatrix = new MutableMatrix44D(MutableMatrix44D.createTranslationMatrix(_x, _y, _z));
-
+    _glState.getGPUProgramState().setUniformMatrixValue("Modelview", _translationMatrix, true);
   }
 
-//  GLGlobalState* createState(const G3MRenderContext* rc,
-//                       const GLGlobalState& parentState);
-//  
-//  GPUProgramState* createGPUProgramState(const G3MRenderContext* rc,
-//                                         const GPUProgramState* parentState);
-
-
-  //GLGlobalState* SGTranslateNode::createState(const G3MRenderContext* rc,
-  //                     const GLGlobalState& parentState) {
-  //  return NULL;
-  //}
-  //
-  //GPUProgramState* SGTranslateNode::createGPUProgramState(const G3MRenderContext* rc,
-  //                                               const GPUProgramState* parentState){
-  //  
-  //  GPUProgramState* progState = new GPUProgramState(parentState);
-  //  progState->multiplyUniformValue("Modelview", MutableMatrix44D::createTranslationMatrix(_x, _y, _z));
-  //  return progState;
-  //  
-  //}
-  
-  public final void modifyGLGlobalState(GLGlobalState GLGlobalState)
+  public final GLState getGLState(GLState parentGLState)
   {
-  
-  }
-
-  public final void modifyGPUProgramState(GPUProgramState progState)
-  {
-    progState.multiplyUniformValue("Modelview", _translationMatrix);
+    _glState.setParent(parentGLState);
+    return _glState;
   }
 
 }

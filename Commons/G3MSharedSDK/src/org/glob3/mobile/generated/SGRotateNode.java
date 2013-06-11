@@ -27,6 +27,8 @@ public class SGRotateNode extends SGNode
 
   private MutableMatrix44D _rotationMatrix = new MutableMatrix44D();
 
+  private GLState _glState = new GLState();
+
   public SGRotateNode(String id, String sId, double x, double y, double z, double angle)
   {
      super(id, sId);
@@ -35,37 +37,14 @@ public class SGRotateNode extends SGNode
      _z = z;
      _angle = angle;
      _rotationMatrix = new MutableMatrix44D(MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_angle), new Vector3D(_x, _y, _z)));
+    _glState.getGPUProgramState().setUniformMatrixValue("Modelview", _rotationMatrix, true);
   }
 
-//  GLGlobalState* createState(const G3MRenderContext* rc,
-//                       const GLGlobalState& parentState);
-//  
-//  GPUProgramState* createGPUProgramState(const G3MRenderContext* rc,
-//                                         const GPUProgramState* parentState);
-
-
-  //GLGlobalState* SGRotateNode::createState(const G3MRenderContext* rc,
-  //                     const GLGlobalState& parentState) {
-  //  return NULL;
-  //}
-  //
-  //GPUProgramState* SGRotateNode::createGPUProgramState(const G3MRenderContext* rc,
-  //                                                        const GPUProgramState* parentState){
-  //  
-  //  GPUProgramState* progState = new GPUProgramState(parentState);
-  //  progState->multiplyUniformValue("Modelview", MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_angle),
-  //                                                                                      Vector3D(_x, _y, _z)));
-  //  return progState;
-  //  
-  //}
-  
-  public final void modifyGLGlobalState(GLGlobalState GLGlobalState)
+  public final GLState getGLState(GLState parentGLState)
   {
-  
+    _glState.setParent(parentGLState);
+    return _glState;
   }
-  public final void modifyGPUProgramState(GPUProgramState progState)
-  {
-    progState.multiplyUniformValue("Modelview", _rotationMatrix);
-  }
+
 
 }

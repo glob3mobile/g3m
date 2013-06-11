@@ -181,6 +181,8 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 
   private float _verticalExaggeration;
 
+  private GLState _glState = new GLState();
+
   public TileRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters parameters, boolean showStatistics, long texturePriority)
   {
      _tessellator = tessellator;
@@ -266,6 +268,10 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   
     final int firstLevelTilesCount = _firstLevelTiles.size();
   
+    _glState.getGPUProgramState().setUniformMatrixValue("Modelview", rc.getCurrentCamera().getModelMatrix(), false);
+    _glState.getGPUProgramState().setUniformMatrixValue("Projection", rc.getCurrentCamera().getProjectionMatrix(), false);
+    _glState.getGLGlobalState().enableDepthTest();
+  
     if (_firstRender && _parameters._forceFirstLevelTilesRenderOnStart)
     {
       // force one render pass of the firstLevelTiles tiles to make the (toplevel) textures
@@ -275,7 +281,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
       for (int i = 0; i < firstLevelTilesCount; i++)
       {
         Tile tile = _firstLevelTiles.get(i);
-        tile.render(rc, trc, null);
+        tile.render(rc, trc, null, _glState);
       }
     }
     else
@@ -294,7 +300,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
         {
           Tile tile = iter.next();
   
-          tile.render(rc, trc, toVisitInNextIteration);
+          tile.render(rc, trc, toVisitInNextIteration, _glState);
         }
   
         toVisit = toVisitInNextIteration;
@@ -567,17 +573,4 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   {
     return true;
   }
-
-  public final void rawRender(G3MRenderContext rc, GLStateTreeNode myStateTreeNode)
-  {
-  }
-  public final boolean isInsideCameraFrustum(G3MRenderContext rc)
-  {
-     return true;
-  }
-  public final void modifiyGLState(GLState state)
-  {
-  }
-
-
 }

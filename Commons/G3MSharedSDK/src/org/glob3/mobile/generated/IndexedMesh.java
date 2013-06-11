@@ -26,7 +26,7 @@ public class IndexedMesh extends AbstractMesh
   protected final void rawRender(G3MRenderContext rc)
   {
     GL gl = rc.getGL();
-    gl.drawElements(_primitive, _indices, _GLGlobalState, rc.getGPUProgramManager(), _progState);
+  //  gl->drawElements(_primitive, _indices, _GLGlobalState, *rc->getGPUProgramManager(), &_progState);
   }
 
   public IndexedMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, IShortBuffer indices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors, float colorsIntensity)
@@ -65,11 +65,10 @@ public class IndexedMesh extends AbstractMesh
     }
   }
 
-  public final void rawRender(G3MRenderContext rc, GLStateTreeNode myStateTreeNode)
+  public final void rawRender(G3MRenderContext rc, GLState parentGLState)
   {
     GL gl = rc.getGL();
-    GLState glState = myStateTreeNode.getGLState();
-    gl.drawElements(_primitive, _indices, glState, rc.getGPUProgramManager());
+    gl.drawElements(_primitive, _indices, parentGLState, rc.getGPUProgramManager());
   }
 
 }

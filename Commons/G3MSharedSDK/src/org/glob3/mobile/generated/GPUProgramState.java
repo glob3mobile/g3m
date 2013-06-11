@@ -21,59 +21,83 @@ package org.glob3.mobile.generated;
 public class GPUProgramState
 {
 
-  private static class attributeEnabledStruct
-  {
-    public boolean value;
-    public GPUAttribute attribute;
-  }
+//  struct attributeEnabledStruct{
+//    bool value;
+//    mutable GPUAttribute* attribute;
+//  };
   private java.util.HashMap<String, GPUUniformValue> _uniformValues = new java.util.HashMap<String, GPUUniformValue>();
   private java.util.HashMap<String, GPUAttributeValue> _attributesValues = new java.util.HashMap<String, GPUAttributeValue>();
-  private java.util.HashMap<String, attributeEnabledStruct> _attributesEnabled = new java.util.HashMap<String, attributeEnabledStruct>();
+//  std::map<std::string, attributeEnabledStruct> _attributesEnabled;
 
-  private void setUniformValue(String name, GPUUniformValue v)
+  private boolean setGPUUniformValue(String name, GPUUniformValue v)
   {
+  
+    GPUUniform prevLinkedUniform = null;
+    boolean uniformExisted = false;
+    java.util.HashMap<String, GPUUniformValue> iterator it = _uniformValues.indexOf(name);
+    if (it != _uniformValues.end())
+    {
+  
+      prevLinkedUniform = it.second.getLinkedUniform();
+      it.second = null;
+      uniformExisted = true;
+    }
+  
+    v.linkToGPUUniform(prevLinkedUniform);
     _uniformValues.put(name, v);
+  
+    if (!uniformExisted)
+    {
+      onStructureChanged();
+    }
+  
+    return uniformExisted;
   }
-  private void setAttributeValue(String name, GPUAttributeValue v)
+  private boolean setGPUAttributeValue(String name, GPUAttributeValue v)
   {
+    GPUAttribute prevLinkedAttribute = null;
+    boolean attributeExisted = false;
+    java.util.HashMap<String, GPUAttributeValue> iterator it = _attributesValues.indexOf(name);
+    if (it != _attributesValues.end())
+    {
+      prevLinkedAttribute = it.second.getLinkedAttribute();
+      it.second = null;
+      attributeExisted = true;
+    }
+  
+    v.linkToGPUAttribute(prevLinkedAttribute);
     _attributesValues.put(name, v);
+  
+    if (!attributeExisted)
+    {
+      onStructureChanged();
+    }
+  
+    return attributeExisted;
   }
 
-  private void applyValuesToLinkedProgram()
-  {
-    final Object[] uni = _uniformValues.values().toArray();
-    for (int i = 0; i < uni.length; i++) {
-      ((GPUUniformValue)uni[i]).setValueToLinkedUniform();
-    }
-  
-    final Object[] attEnabled = _attributesEnabled.values().toArray();
-    for (int i = 0; i < attEnabled.length; i++) {
-      attributeEnabledStruct a = (attributeEnabledStruct) attEnabled[i];
-      if (a.attribute == null) {
-        ILogger.instance().logError("NO ATTRIBUTE LINKED");
-      }
-      else {
-        a.attribute.setEnable(a.value);
-      }
-    }
-  
-    final Object[] att = _attributesValues.values().toArray();
-    for (int i = 0; i < att.length; i++) {
-      ((GPUAttributeValue)att[i]).setValueToLinkedAttribute();
-    }
-  }
+  private java.util.ArrayList<String> _uniformNames;
 
   private GPUProgram _lastProgramUsed;
+
+  private void onStructureChanged()
+  {
+    _uniformNames = null;
+    _uniformNames = null;
+    _lastProgramUsed = null;
+  }
 
 
   public GPUProgramState()
   {
      _lastProgramUsed = null;
+     _uniformNames = null;
   }
 
   public void dispose()
   {
     clear();
+    _uniformNames = null;
   }
 
   public final void clear()
@@ -81,102 +105,154 @@ public class GPUProgramState
     _lastProgramUsed = null;
     _uniformValues.clear();
   
-    _attributesEnabled.clear();
+    //  _attributesEnabled.clear();
     _attributesValues.clear();
   }
 
-  public final void setUniformValue(String name, boolean b)
+  public final boolean setUniformValue(String name, boolean b)
   {
-    setUniformValue(name, new GPUUniformValueBool(b));
+    return setGPUUniformValue(name, new GPUUniformValueBool(b));
   }
 
-  public final void setUniformValue(String name, float f)
+  public final boolean setUniformValue(String name, float f)
   {
-    setUniformValue(name, new GPUUniformValueFloat(f));
+    return setGPUUniformValue(name, new GPUUniformValueFloat(f));
   }
 
-  public final void setUniformValue(String name, Vector2D v)
+  public final boolean setUniformValue(String name, Vector2D v)
   {
-    setUniformValue(name, new GPUUniformValueVec2Float(v._x, v._y));
+    return setGPUUniformValue(name, new GPUUniformValueVec2Float(v._x, v._y));
   }
 
-  public final void setUniformValue(String name, double x, double y, double z, double w)
+  public final boolean setUniformValue(String name, double x, double y, double z, double w)
   {
-    setUniformValue(name, new GPUUniformValueVec4Float(x,y,z,w));
+    return setGPUUniformValue(name, new GPUUniformValueVec4Float(x,y,z,w));
   }
 
-  public final void setUniformValue(String name, MutableMatrix44D m)
-  {
+//  bool setUniformValue(const std::string& name, const MutableMatrix44D* m);
+//  
+//  bool multiplyUniformValue(const std::string& name, const MutableMatrix44D* m);
+
+
+  //bool GPUProgramState::setUniformValue(const std::string& name, const MutableMatrix44D* m){
+  //  
+  ///#ifdef C_CODE
+  //  for(std::map<std::string, GPUUniformValue*> ::iterator it = _uniformValues.begin();
+  //      it != _uniformValues.end();
+  //      it++){
+  //    std::string thisName = it->first;
+  //    GPUUniformValue* uv = (GPUUniformValue*)it->second;
+  //    if (thisName.compare(name) == 0 && uv->getType() == GLType::glMatrix4Float()){
+  //      GPUUniformValueMatrix4FloatStack* v = (GPUUniformValueMatrix4FloatStack*)it->second;
+  //      v->loadMatrix(m);
+  //      return true;
+  //    }
+  //  }
+  ///#endif
+  ///#ifdef JAVA_CODE
+  //  final Object[] uni = _uniformValues.values().toArray();
+  //  final Object[] uniNames = _uniformValues.keySet().toArray();
+  //  for (int i = 0; i < uni.length; i++) {
+  //    final String thisName =  (String)uniNames[i];
+  //    final GPUUniformValue uv = (GPUUniformValue) uni[i];
+  //    if ((thisName.compareTo(name) == 0) && (uv.getType() == GLType.glMatrix4Float()))
+  //    {
+  //      final GPUUniformValueMatrix4FloatStack v = (GPUUniformValueMatrix4FloatStack)uv;
+  //      v.loadMatrix(m);
+  //      return true;
+  //    }
+  //  }
+  ///#endif
+  //  
+  //  return setGPUUniformValue(name, new GPUUniformValueMatrix4FloatStack(m));
+  //}
   
-    final Object[] uni = _uniformValues.values().toArray();
-    final Object[] uniNames = _uniformValues.keySet().toArray();
-    for (int i = 0; i < uni.length; i++) {
-      final String thisName =  (String)uniNames[i];
-      final GPUUniformValue uv = (GPUUniformValue) uni[i];
-      if ((thisName.compareTo(name) == 0) && (uv.getType() == GLType.glMatrix4Float()))
-      {
-        final GPUUniformValueMatrix4FloatStack v = (GPUUniformValueMatrix4FloatStack)uv;
-        v.loadMatrix(m);
-        return;
-      }
-    }
+  //bool GPUProgramState::multiplyUniformValue(const std::string& name, const MutableMatrix44D* m){
+  //  
+  ///#ifdef C_CODE
+  //  
+  //  for(std::map<std::string, GPUUniformValue*> ::iterator it = _uniformValues.begin();
+  //      it != _uniformValues.end();
+  //      it++){
+  //    std::string thisName = it->first;
+  //    GPUUniformValue* uv = (GPUUniformValue*)it->second;
+  //    if (thisName.compare(name) == 0 && uv->getType() == GLType::glMatrix4Float()){
+  //      GPUUniformValueMatrix4FloatStack* v = (GPUUniformValueMatrix4FloatStack*)it->second;
+  //      v->multiplyMatrix(m);
+  //      return true;
+  //    }
+  //  }
+  //  
+  ///#endif
+  ///#ifdef JAVA_CODE
+  //  final Object[] uni = _uniformValues.values().toArray();
+  //  final Object[] uniNames = _uniformValues.keySet().toArray();
+  //  for (int i = 0; i < uni.length; i++) {
+  //    final String thisName =  (String) uniNames[i];
+  //    final GPUUniformValue uv = (GPUUniformValue) uni[i];
+  //    if ((thisName.compareTo(name) == 0) && (uv.getType() == GLType.glMatrix4Float()))
+  //    {
+  //      final GPUUniformValueMatrix4FloatStack v = (GPUUniformValueMatrix4FloatStack)uv;
+  //      v.multiplyMatrix(m);
+  //      return;
+  //    }
+  //  }
+  ///#endif
+  //  
+  //  ILogger::instance()->logError("CAN'T MULTIPLY UNLOADED MATRIX");
+  //  return false;
+  //  
+  //}
   
-    setUniformValue(name, new GPUUniformValueMatrix4FloatStack(m));
-  }
-
-  public final void multiplyUniformValue(String name, MutableMatrix44D m)
+  public final boolean setUniformMatrixValue(String name, MutableMatrix44D m, boolean isTransform)
   {
-  
-    final Object[] uni = _uniformValues.values().toArray();
-    final Object[] uniNames = _uniformValues.keySet().toArray();
-    for (int i = 0; i < uni.length; i++) {
-      final String thisName =  (String) uniNames[i];
-      final GPUUniformValue uv = (GPUUniformValue) uni[i];
-      if ((thisName.compareTo(name) == 0) && (uv.getType() == GLType.glMatrix4Float()))
-      {
-        final GPUUniformValueMatrix4FloatStack v = (GPUUniformValueMatrix4FloatStack)uv;
-        v.multiplyMatrix(m);
-        return;
-      }
-    }
-  
-    ILogger.instance().logError("CAN'T MULTIPLY UNLOADED MATRIX");
-  
+    GPUUniformValueMatrix4FloatTransform uv = new GPUUniformValueMatrix4FloatTransform(m, isTransform);
+    return setGPUUniformValue(name, uv);
   }
 
-  public final void setAttributeValue(String name, IFloatBuffer buffer, int attributeSize, int arrayElementSize, int index, boolean normalized, int stride)
+  public final boolean setAttributeValue(String name, IFloatBuffer buffer, int attributeSize, int arrayElementSize, int index, boolean normalized, int stride)
   {
     switch (attributeSize)
     {
       case 1:
-        setAttributeValue(name, new GPUAttributeValueVec1Float(buffer, arrayElementSize, index, stride, normalized));
+        return setGPUAttributeValue(name, new GPUAttributeValueVec1Float(buffer, arrayElementSize, index, stride, normalized));
         break;
   
       case 2:
-        setAttributeValue(name, new GPUAttributeValueVec2Float(buffer, arrayElementSize, index, stride, normalized));
+        return setGPUAttributeValue(name, new GPUAttributeValueVec2Float(buffer, arrayElementSize, index, stride, normalized));
         break;
   
       case 3:
-        setAttributeValue(name, new GPUAttributeValueVec3Float(buffer, arrayElementSize, index, stride, normalized));
+        return setGPUAttributeValue(name, new GPUAttributeValueVec3Float(buffer, arrayElementSize, index, stride, normalized));
         break;
   
       case 4:
-        setAttributeValue(name, new GPUAttributeValueVec4Float(buffer, arrayElementSize, index, stride, normalized));
+        return setGPUAttributeValue(name, new GPUAttributeValueVec4Float(buffer, arrayElementSize, index, stride, normalized));
         break;
   
       default:
         ILogger.instance().logError("Invalid size for Attribute.");
-        break;
+        return false;
     }
   }
 
   public final void setAttributeEnabled(String name, boolean enabled)
   {
-    attributeEnabledStruct ae = new attributeEnabledStruct();
-    ae.value = enabled;
-    ae.attribute = null;
+    //TODO: REMOVE FUNCTION
+    if (!enabled)
+    {
+      setAttributeDisabled(name);
+    }
   
-    _attributesEnabled.put(name, ae);
+    //  attributeEnabledStruct ae;
+    //  ae.value = enabled;
+    //  ae.attribute = NULL;
+    //
+    //  _attributesEnabled[name] = ae;
+  }
+  public final void setAttributeDisabled(String name)
+  {
+    setGPUAttributeValue(name, new GPUAttributeValueDisabled());
   }
 
   public final void applyChanges(GL gl)
@@ -192,7 +268,11 @@ public class GPUProgramState
   public final void linkToProgram(GPUProgram prog)
   {
   
-    _lastProgramUsed = prog;
+    if (_lastProgramUsed == prog)
+    {
+      return; //Already linked
+    }
+  
   
   
     final Object[] uni = _uniformValues.values().toArray();
@@ -209,21 +289,6 @@ public class GPUProgramState
       }
       else {
         v.linkToGPUUniform(u);
-      }
-    }
-  
-    final Object[] attEnabled = _attributesEnabled.values().toArray();
-    final Object[] attEnabledNames = _attributesEnabled.keySet().toArray();
-    for (int i = 0; i < attEnabled.length; i++) {
-      final String name = (String) attEnabledNames[i];
-      final attributeEnabledStruct ae = (attributeEnabledStruct)attEnabled[i];
-  
-      final GPUAttribute a = prog.getGPUAttribute(name);
-      if (a == null) {
-        ILogger.instance().logError("ATTRIBUTE NOT FOUND " + name + ". COULDN'T CHANGE ENABLED STATE.");
-      }
-      else {
-        ae.attribute = a;
       }
     }
   
@@ -285,6 +350,9 @@ public class GPUProgramState
   
     }
   
+  
+  
+    _lastProgramUsed = prog;
   }
 
   public final boolean isLinkedToProgram()
@@ -299,16 +367,21 @@ public class GPUProgramState
 
   public final java.util.ArrayList<String> getUniformsNames()
   {
-    java.util.ArrayList<String> us = new java.util.ArrayList<String>();
+  
+    if (_uniformNames == null)
+    {
+  
+      _uniformNames = new java.util.ArrayList<String>();
   
   
-    final Object[] uniNames = _uniformValues.keySet().toArray();
-    for (int i = 0; i < uniNames.length; i++) {
-      final String name = (String) uniNames[i];
-      us.add(name);
+      final Object[] uniNames = _uniformValues.keySet().toArray();
+      for (int i = 0; i < uniNames.length; i++) {
+        final String name = (String) uniNames[i];
+        _uniformNames.add(name);
+      }
+  
     }
-  
-    return us;
+    return _uniformNames;
   }
 
   public final String description()
@@ -320,28 +393,8 @@ public class GPUProgramState
 
   public final boolean isLinkableToProgram(GPUProgram program)
   {
-    if (program.getGPUAttributesNumber() != _attributesEnabled.size()) {
-      return false;
-    }
   
-    int nDisabledAtt = 0;
-  
-    final Object[] attEnabled = _attributesEnabled.values().toArray();
-    final Object[] attEnabledNames = _uniformValues.keySet().toArray();
-    for (int i = 0; i < attEnabled.length; i++) {
-      final String thisName = (String) attEnabledNames[i];
-      final attributeEnabledStruct ae = (attributeEnabledStruct) attEnabled[i];
-  
-      if (ae.value == false) {
-        nDisabledAtt++;
-      }
-      if (program.getGPUAttribute(thisName) == null) {
-        return false;
-      }
-    }
-  
-  
-    if (program.getGPUAttributesNumber() != (_attributesValues.size() + nDisabledAtt)) {
+    if (program.getGPUAttributesNumber() != (_attributesValues.size())) {
       return false;
     }
   
@@ -368,5 +421,95 @@ public class GPUProgramState
   
     return true;
   }
+
+  public final void invalidateGPUUniformValue(String name)
+  {
+    java.util.HashMap<String, GPUUniformValue> iterator it = _uniformValues.indexOf(name);
+    if (it != _uniformValues.end())
+    {
+      it.second = null;
+      it.second = null;
+    }
+  }
+
+  public final void invalidateGPUAttributeValue(String name)
+  {
+    java.util.HashMap<String, GPUUniformValue> iterator it = _uniformValues.indexOf(name);
+    if (it != _uniformValues.end())
+    {
+      it.second = null;
+      it.second = null;
+    }
+  }
+
+  public final boolean isValid()
+  {
+    for(java.util.HashMap<String, GPUUniformValue> const_iterator it = _uniformValues.iterator(); it != _uniformValues.end(); it++)
+    {
+      if (it.second == null)
+      {
+        return false;
+      }
+    }
+  
+    for(java.util.HashMap<String, GPUAttributeValue> const_iterator it = _attributesValues.iterator(); it != _attributesValues.end(); it++)
+    {
+      if (it.second == null)
+      {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  public final java.util.ArrayList<String> getInvalidUniformValues()
+  {
+    java.util.ArrayList<String> iu = new java.util.ArrayList<String>();
+    for(java.util.HashMap<String, GPUUniformValue> const_iterator it = _uniformValues.iterator(); it != _uniformValues.end(); it++)
+    {
+      if (it.second == null)
+      {
+        iu.add(it.first);
+      }
+    }
+    return iu;
+  }
+
+  public final java.util.ArrayList<String> getInvalidAttributeValues()
+  {
+    java.util.ArrayList<String> ia = new java.util.ArrayList<String>();
+    for(java.util.HashMap<String, GPUAttributeValue> const_iterator it = _attributesValues.iterator(); it != _attributesValues.end(); it++)
+    {
+      if (it.second == null)
+      {
+        ia.add(it.first);
+      }
+    }
+    return ia;
+  }
+
+    public final void applyValuesToLinkedProgram()
+    {
+      final Object[] uni = _uniformValues.values().toArray();
+      for (int i = 0; i < uni.length; i++) {
+        ((GPUUniformValue)uni[i]).setValueToLinkedUniform();
+      }
+    
+      //  final Object[] attEnabled = _attributesEnabled.values().toArray();
+      //  for (int i = 0; i < attEnabled.length; i++) {
+      //    attributeEnabledStruct a = (attributeEnabledStruct) attEnabled[i];
+      //    if (a.attribute == null) {
+      //      ILogger.instance().logError("NO ATTRIBUTE LINKED");
+      //    }
+      //    else {
+      //      a.attribute.setEnable(a.value);
+      //    }
+      //  }
+    
+      final Object[] att = _attributesValues.values().toArray();
+      for (int i = 0; i < att.length; i++) {
+        ((GPUAttributeValue)att[i]).setValueToLinkedAttribute();
+      }
+    }
 
 }

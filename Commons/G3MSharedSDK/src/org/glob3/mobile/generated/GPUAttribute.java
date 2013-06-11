@@ -73,7 +73,7 @@ public class GPUAttribute
 
   public final void set(GPUAttributeValue v)
   {
-    if (_type != v.getType()) //type checking
+    if (v.getEnabled() && _type != v.getType()) //type checking
     {
       //delete v;
       ILogger.instance().logError("Attempting to set attribute " + _name + "with invalid value type.");
@@ -92,33 +92,45 @@ public class GPUAttribute
     }
   }
 
-  public final void setEnable(boolean b)
-  {
-    if (b != _enabled)
-    {
-      _enabled = b;
-      _dirtyEnabled = true;
-    }
-  }
+//  void setEnable(bool b){
+//    if (b != _enabled){
+//      _enabled = b;
+//      _dirtyEnabled = true;
+//    }
+//  }
 
   public void applyChanges(GL gl)
   {
-    if (_dirtyEnabled)
-    {
-      _dirtyEnabled = false;
-      if (_enabled)
-      {
-        gl.enableVertexAttribArray(_id);
-      }
-      else
-      {
-        gl.disableVertexAttribArray(_id);
-      }
-    }
+//    if (_dirtyEnabled){
+//      _dirtyEnabled = false;
+//      if (_enabled){
+//        gl->enableVertexAttribArray(_id);
+//      } else{
+//        gl->disableVertexAttribArray(_id);
+//      }
+//    }
 
     if (_dirty)
     {
-      _value.setAttribute(gl, _id);
+
+      if (_value.getEnabled())
+      {
+        if (!_enabled)
+        {
+          gl.enableVertexAttribArray(_id);
+          _enabled = true;
+        }
+        _value.setAttribute(gl, _id);
+      }
+      else
+      {
+        if (_enabled)
+        {
+          gl.disableVertexAttribArray(_id);
+          _enabled = false;
+        }
+      }
+
       _dirty = false;
     }
   }

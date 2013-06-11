@@ -41,6 +41,11 @@ public abstract class GPUUniformValue
   public abstract boolean isEqualsTo(GPUUniformValue v);
   public abstract GPUUniformValue deepCopy();
 
+  public final GPUUniform getLinkedUniform()
+  {
+     return _uniform;
+  }
+
   public abstract String description();
 
   public final void linkToGPUUniform(GPUUniform u)
@@ -70,4 +75,11 @@ public abstract class GPUUniformValue
       //    setUniform(gl, _uniform->getID());
     }
   }
+
+  public void setLastGPUUniformValue(GPUUniformValue old) //Used with matrix transform value
+  {
+  }
+
+
+  public abstract void copyFrom(GPUUniformValue v);
 }

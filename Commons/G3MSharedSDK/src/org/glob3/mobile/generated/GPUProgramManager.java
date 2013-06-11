@@ -63,8 +63,6 @@ public class GPUProgramManager
         }
 
         _programs.put(name, prog);
-
-        //_programs.insert ( std::pair<std::string, GPUProgram*>(prog->getName(),prog) );
       }
 
     }
@@ -93,6 +91,32 @@ public class GPUProgramManager
       }
     }
 
+    return getProgram("Default");
+  }
+
+  public final GPUProgram getProgram(GLState glState)
+  {
+  
+    GLState thisGLState = glState;
+    while (thisGLState != null)
+    {
+      java.util.ArrayList<String> ui = glState.getGPUProgramState().getUniformsNames();
+      int sizeI = ui.size();
+      for (int j = 0; j < sizeI; j++)
+      {
+        String name = ui.get(j);
+  
+        if (name.compareTo("ViewPortExtent") == 0)
+        {
+          return getProgram("Billboard");
+        }
+      }
+  
+  
+      thisGLState = thisGLState.getParent();
+    }
+  
+    int WORKING_JM;
     return getProgram("Default");
   }
 

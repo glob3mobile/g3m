@@ -18,11 +18,10 @@ package org.glob3.mobile.generated;
 
 
 
-
 //class Vector3D;
 //class GPUProgramState;
 
-public abstract class Mesh extends SceneGraphNode
+public abstract class Mesh
 {
 
   public void dispose()
@@ -38,5 +37,7 @@ public abstract class Mesh extends SceneGraphNode
   public abstract Extent getExtent();
 
   public abstract boolean isTransparent(G3MRenderContext rc);
+
+  public abstract void render(G3MRenderContext rc, GLState parentGLState);
 
 }

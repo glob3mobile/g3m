@@ -39,6 +39,15 @@ public class MarksRenderer extends LeafRenderer
 
   private IFloatBuffer _billboardTexCoord;
 
+  private GLState _glState = new GLState();
+
+  private void updateGLState(G3MRenderContext rc)
+  {
+    GPUProgramState progState = _glState.getGPUProgramState();
+    progState.setUniformMatrixValue("Projection", rc.getCurrentCamera().getProjectionMatrix(), false);
+    progState.setUniformMatrixValue("Modelview", rc.getCurrentCamera().getModelMatrix(), false);
+  }
+
 
   public MarksRenderer(boolean readyWhenMarksReady)
   {
@@ -105,13 +114,15 @@ public class MarksRenderer extends LeafRenderer
     final Camera camera = rc.getCurrentCamera();
     final Vector3D cameraPosition = camera.getCartesianPosition();
   
+    updateGLState(rc);
+  
     final int marksSize = _marks.size();
     for (int i = 0; i < marksSize; i++)
     {
       Mark mark = _marks.get(i);
       if (mark.isReady())
       {
-        mark.render(rc, cameraPosition);
+        mark.render(rc, cameraPosition, _glState);
       }
     }
   }
@@ -123,8 +134,6 @@ public class MarksRenderer extends LeafRenderer
     {
       mark.initialize(_context, _downloadPriority);
     }
-  
-    addChild(mark);
   }
 
   public final void removeMark(Mark mark)
@@ -287,13 +296,7 @@ public class MarksRenderer extends LeafRenderer
     return _downloadPriority;
   }
 
-
-  public final void rawRender(G3MRenderContext rc, GLStateTreeNode myStateTreeNode)
-  {
-    _lastCamera = rc.getCurrentCamera();
-  }
-
-  public final boolean isInsideCameraFrustum(G3MRenderContext rc)
+  public final boolean isVisible(G3MRenderContext rc)
   {
     return true;
   }

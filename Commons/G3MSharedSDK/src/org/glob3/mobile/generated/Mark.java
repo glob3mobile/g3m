@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class Mark extends SceneGraphNode
+public class Mark
 {
   /**
    * The text the mark displays.
@@ -100,13 +100,65 @@ public class Mark extends SceneGraphNode
 
   private boolean _renderedMark;
 
-  private GLGlobalState _GLGlobalState = new GLGlobalState();
-  private GPUProgramState _progState = new GPUProgramState();
-
   private static IFloatBuffer _billboardTexCoord = null;
   private Planet _planet; // REMOVED FINAL WORD BY CONVERSOR RULE
   private int _viewportWidth;
   private int _viewportHeight;
+
+  private GLState _glState = new GLState();
+
+  private void createGLState()
+  {
+  
+    GLGlobalState globalState = _glState.getGLGlobalState();
+  
+    globalState.disableDepthTest();
+    globalState.enableBlend();
+    globalState.setBlendFactors(GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha());
+    globalState.bindTexture(_textureId);
+  
+    GPUProgramState progState = _glState.getGPUProgramState();
+  
+    if (_planet == null)
+    {
+      ILogger.instance().logError("Planet NULL");
+    }
+    else
+    {
+  
+      //Test matrix multiplication
+  //    progState->setUniformMatrixValue("Modelview", MutableMatrix44D::createTranslationMatrix(Vector3D(1e7, 0, 0)), true);
+  
+      progState.setAttributeEnabled("Position", true);
+      progState.setAttributeEnabled("TextureCoord", true);
+  
+      if (_billboardTexCoord == null)
+      {
+        FloatBufferBuilderFromCartesian2D texCoor = new FloatBufferBuilderFromCartesian2D();
+        texCoor.add(1,1);
+        texCoor.add(1,0);
+        texCoor.add(0,1);
+        texCoor.add(0,0);
+        _billboardTexCoord = texCoor.create();
+      }
+  
+      progState.setAttributeValue("TextureCoord", _billboardTexCoord, 2, 2, 0, false, 0);
+  
+      final Vector3D pos = new Vector3D(_planet.toCartesian(_position));
+      FloatBufferBuilderFromCartesian3D vertex = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
+      vertex.add(pos);
+      vertex.add(pos);
+      vertex.add(pos);
+      vertex.add(pos);
+  
+      IFloatBuffer vertices = vertex.create();
+  
+      progState.setAttributeValue("Position", vertices, 4, 3, 0, false, 0); //Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
+  
+      progState.setUniformValue("TextureExtent", new Vector2D(_textureWidth, _textureHeight));
+      progState.setUniformValue("ViewPortExtent", new Vector2D((double)_viewportWidth, (double)_viewportHeight));
+    }
+  }
 
   /**
    * Creates a marker with icon and label
@@ -406,76 +458,8 @@ public class Mark extends SceneGraphNode
     }
   }
 
-  public final void render(G3MRenderContext rc, Vector3D cameraPosition)
-  {
-    final Planet planet = rc.getPlanet();
-  
-    final Vector3D markPosition = getCartesianPosition(planet);
-  
-    final Vector3D markCameraVector = markPosition.sub(cameraPosition);
-  
-  
-    // mark will be renderered only if is renderable by distance and placed on a visible globe area
-    boolean renderableByDistance;
-    if (_minDistanceToCamera == 0)
-    {
-      renderableByDistance = true;
-    }
-    else
-    {
-      final double squaredDistanceToCamera = markCameraVector.squaredLength();
-      renderableByDistance = (squaredDistanceToCamera <= (_minDistanceToCamera * _minDistanceToCamera));
-    }
-  
-    _renderedMark = false;
-    if (renderableByDistance)
-    {
-      final Vector3D normalAtMarkPosition = planet.geodeticSurfaceNormal(markPosition);
-  
-      if (normalAtMarkPosition.angleBetween(markCameraVector)._radians > IMathUtils.instance().halfPi())
-      {
-  
-        if (_textureId == null)
-        {
-          if (_textureImage != null)
-          {
-            _textureId = rc.getTexturesHandler().getGLTextureId(_textureImage, GLFormat.rgba(), _imageID, false);
-  
-            rc.getFactory().deleteImage(_textureImage);
-            _textureImage = null;
-  
-            _viewportWidth = rc.getCurrentCamera().getWidth();
-            _viewportHeight = rc.getCurrentCamera().getHeight();
-            actualizeGLGlobalState(rc.getCurrentCamera()); //Ready for rendering
-          }
-        }
-        else
-        {
-          if (rc.getCurrentCamera().getWidth() != _viewportWidth || rc.getCurrentCamera().getHeight() != _viewportHeight)
-          {
-            _viewportWidth = rc.getCurrentCamera().getWidth();
-            _viewportHeight = rc.getCurrentCamera().getHeight();
-            actualizeGLGlobalState(rc.getCurrentCamera()); //Ready for rendering
-          }
-        }
-  
-        if (_textureId != null)
-        {
-          GL gl = rc.getGL();
-  
-  
-          //        GLGlobalState state(parentState);
-          //        state.bindTexture(_textureId);
-  
-          GPUProgramManager progManager = rc.getGPUProgramManager();
-  
-          gl.drawArrays(GLPrimitive.triangleStrip(), 0, 4, _GLGlobalState, progManager, _progState);
-  
-          _renderedMark = true;
-        }
-      }
-    }
-  }
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  void render(G3MRenderContext rc, Vector3D cameraPosition);
 
   public final boolean isReady()
   {
@@ -571,130 +555,14 @@ public class Mark extends SceneGraphNode
     return _minDistanceToCamera;
   }
 
-  //Drawable client
-  public final GLGlobalState getGLGlobalState()
+  public final void render(G3MRenderContext rc, Vector3D cameraPosition, GLState parentGLState)
   {
-    return _GLGlobalState;
-  }
-  public final GPUProgramState getGPUProgramState()
-  {
-    _progState.clear();
-    return _progState;
-  }
-//  void getGLGlobalStateAndGPUProgramState(GLGlobalState** GLGlobalState, GPUProgramState** progState);
-
-  //void Mark::getGLGlobalStateAndGPUProgramState(GLGlobalState** GLGlobalState, GPUProgramState** progState){
-  //  _progState.clear();
-  ////  (*GLGlobalState) = &_GLGlobalState;
-  ////  (*progState) = &_progState;
-  //}
-  
-  public final void modifyGLGlobalState(GLGlobalState GLGlobalState)
-  {
-    GLGlobalState.disableDepthTest();
-    GLGlobalState.enableBlend();
-    GLGlobalState.setBlendFactors(GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha());
-    GLGlobalState.bindTexture(_textureId);
-  }
-  public final void modifyGPUProgramState(GPUProgramState progState)
-  {
-    if (_planet == null)
-    {
-      ILogger.instance().logError("Planet NULL");
-    }
-    else
-    {
-  
-      progState.setAttributeEnabled("Position", true);
-      progState.setAttributeEnabled("TextureCoord", true);
-  
-      if (_billboardTexCoord == null)
-      {
-        FloatBufferBuilderFromCartesian2D texCoor = new FloatBufferBuilderFromCartesian2D();
-        texCoor.add(1,1);
-        texCoor.add(1,0);
-        texCoor.add(0,1);
-        texCoor.add(0,0);
-        _billboardTexCoord = texCoor.create();
-      }
-  
-      progState.setAttributeValue("TextureCoord", _billboardTexCoord, 2, 2, 0, false, 0);
-  
-      final Vector3D pos = new Vector3D(_planet.toCartesian(_position));
-      FloatBufferBuilderFromCartesian3D vertex = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
-      vertex.add(pos);
-      vertex.add(pos);
-      vertex.add(pos);
-      vertex.add(pos);
-  
-      IFloatBuffer vertices = vertex.create();
-  
-      progState.setAttributeValue("Position", vertices, 4, 3, 0, false, 0); //Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
-  
-      progState.setUniformValue("TextureExtent", new Vector2D(_textureWidth, _textureHeight));
-      progState.setUniformValue("ViewPortExtent", new Vector2D((double)_viewportWidth, (double)_viewportHeight));
-    }
-  }
-
-  //Scene Graph Node
-  public final void rawRender(G3MRenderContext rc, GLStateTreeNode myStateTreeNode)
-  {
-    //  printf("RENDERING SGMARK\n");
-  
-    if (_textureId == null)
-    {
-      if (_textureImage != null)
-      {
-        _textureId = rc.getTexturesHandler().getGLTextureId(_textureImage, GLFormat.rgba(), _imageID, false);
-  
-        rc.getFactory().deleteImage(_textureImage);
-        _textureImage = null;
-  
-        _viewportWidth = rc.getCurrentCamera().getWidth();
-        _viewportHeight = rc.getCurrentCamera().getHeight();
-  //      actualizeGLGlobalState(rc->getCurrentCamera()); //Ready for rendering
-      }
-    }
-  
-    if (rc.getCurrentCamera().getWidth() != _viewportWidth || rc.getCurrentCamera().getHeight() != _viewportHeight)
-    {
-      _viewportWidth = rc.getCurrentCamera().getWidth();
-      _viewportHeight = rc.getCurrentCamera().getHeight();
-      //actualizeGLGlobalState(rc->getCurrentCamera()); //Ready for rendering
-    }
-  
-    if (_textureId != null)
-    {
-      _planet = rc.getPlanet();
-  
-      GL gl = rc.getGL();
-  
-      GPUProgramManager progManager = rc.getGPUProgramManager();
-  
-      GLState glState = myStateTreeNode.getGLState();
-  
-      gl.drawArrays(GLPrimitive.triangleStrip(), 0, 4, glState, progManager);
-    }
-  
-  }
-
-  public final boolean isInsideCameraFrustum(G3MRenderContext rc)
-  {
-    _renderedMark = false;
-  
-    _viewportWidth = rc.getCurrentCamera().getWidth();
-    _viewportHeight = rc.getCurrentCamera().getHeight();
-    if (_viewportHeight < 2 || _viewportWidth < 2)
-    {
-      //ILogger::instance()->logInfo("Viewport has not been set yet.");
-      return false;
-    }
-  
     final Planet planet = rc.getPlanet();
   
     final Vector3D markPosition = getCartesianPosition(planet);
   
-    final Vector3D markCameraVector = markPosition.sub(rc.getCurrentCamera().getCartesianPosition());
+    final Vector3D markCameraVector = markPosition.sub(cameraPosition);
+  
   
     // mark will be renderered only if is renderable by distance and placed on a visible globe area
     boolean renderableByDistance;
@@ -712,96 +580,45 @@ public class Mark extends SceneGraphNode
     if (renderableByDistance)
     {
       final Vector3D normalAtMarkPosition = planet.geodeticSurfaceNormal(markPosition);
+  
       if (normalAtMarkPosition.angleBetween(markCameraVector)._radians > IMathUtils.instance().halfPi())
       {
-        return true;
-      }
-    }
   
-    //Checking with frustum
-  
-    _renderedMark = rc.getCurrentCamera().getFrustumInModelCoordinates().contains(_cartesianPosition);
-    return _renderedMark;
-  }
-
-  public final void modifiyGLState(GLState state)
-  {
-  
-    GLGlobalState globalState = state.getGLGlobalState();
-  
-    globalState.disableDepthTest();
-    globalState.enableBlend();
-    globalState.setBlendFactors(GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha());
-    globalState.bindTexture(_textureId);
-  
-    GPUProgramState progState = state.getGPUProgramState();
-  
-    if (_planet == null)
-    {
-      ILogger.instance().logError("Planet NULL");
-    }
-    else
-    {
-  
-      progState.setAttributeEnabled("Position", true);
-      progState.setAttributeEnabled("TextureCoord", true);
-  
-      if (_billboardTexCoord == null)
-      {
-        FloatBufferBuilderFromCartesian2D texCoor = new FloatBufferBuilderFromCartesian2D();
-        texCoor.add(1,1);
-        texCoor.add(1,0);
-        texCoor.add(0,1);
-        texCoor.add(0,0);
-        _billboardTexCoord = texCoor.create();
-      }
-  
-      progState.setAttributeValue("TextureCoord", _billboardTexCoord, 2, 2, 0, false, 0);
-  
-      final Vector3D pos = new Vector3D(_planet.toCartesian(_position));
-      FloatBufferBuilderFromCartesian3D vertex = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
-      vertex.add(pos);
-      vertex.add(pos);
-      vertex.add(pos);
-      vertex.add(pos);
-  
-      IFloatBuffer vertices = vertex.create();
-  
-      progState.setAttributeValue("Position", vertices, 4, 3, 0, false, 0); //Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
-  
-      progState.setUniformValue("TextureExtent", new Vector2D(_textureWidth, _textureHeight));
-      progState.setUniformValue("ViewPortExtent", new Vector2D((double)_viewportWidth, (double)_viewportHeight));
-    }
-  
-  }
-
-  public final void onInitialize(G3MContext context)
-  {
-  
-    _planet = context.getPlanet();
-  
-    if (!_textureSolved)
-    {
-      final boolean hasLabel = (_label.length() != 0);
-      final boolean hasIconURL = (_iconURL.getPath().length() != 0);
-  
-      if (hasIconURL)
-      {
-        IDownloader downloader = context.getDownloader();
-  
-        int downloadPriority = 100;
-  
-        downloader.requestImage(_iconURL, downloadPriority, TimeInterval.fromDays(30), true, new IconDownloadListener(this, _label, _labelBottom, _labelFontSize, _labelFontColor, _labelShadowColor, _labelGapSize), true);
-      }
-      else
-      {
-        if (hasLabel)
+        if (_textureId == null)
         {
-          ITextUtils.instance().createLabelImage(_label, _labelFontSize, _labelFontColor, _labelShadowColor, new MarkLabelImageListener(null, this), true);
+          if (_textureImage != null)
+          {
+            _textureId = rc.getTexturesHandler().getGLTextureId(_textureImage, GLFormat.rgba(), _imageID, false);
+  
+            rc.getFactory().deleteImage(_textureImage);
+            _textureImage = null;
+  
+            _viewportWidth = rc.getCurrentCamera().getWidth();
+            _viewportHeight = rc.getCurrentCamera().getHeight();
+            createGLState();
+          }
         }
         else
         {
-          ILogger.instance().logWarning("Marker created without label nor icon");
+          if (rc.getCurrentCamera().getWidth() != _viewportWidth || rc.getCurrentCamera().getHeight() != _viewportHeight)
+          {
+            _viewportWidth = rc.getCurrentCamera().getWidth();
+            _viewportHeight = rc.getCurrentCamera().getHeight();
+            createGLState(); //Ready for rendering
+          }
+        }
+  
+        if (_textureId != null)
+        {
+          GL gl = rc.getGL();
+  
+          GPUProgramManager progManager = rc.getGPUProgramManager();
+  
+          _glState.setParent(parentGLState); //Linking with parent
+  
+          gl.drawArrays(GLPrimitive.triangleStrip(), 0, 4, _glState, progManager);
+  
+          _renderedMark = true;
         }
       }
     }

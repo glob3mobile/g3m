@@ -2,8 +2,8 @@ package org.glob3.mobile.generated;
 ////////////////////////////////////////////////////////////////////////
 public class GPUUniformValueVec2Float extends GPUUniformValue
 {
-  public final double _x;
-  public final double _y;
+  public double _x;
+  public double _y;
 
   public GPUUniformValueVec2Float(double x, double y)
   {
@@ -24,6 +24,12 @@ public class GPUUniformValueVec2Float extends GPUUniformValue
   public final GPUUniformValue deepCopy()
   {
     return new GPUUniformValueVec2Float(_x, _y);
+  }
+
+  public final void copyFrom(GPUUniformValue v)
+  {
+    _x = ((GPUUniformValueVec2Float)v)._x;
+    _y = ((GPUUniformValueVec2Float)v)._y;
   }
 
   public final String description()

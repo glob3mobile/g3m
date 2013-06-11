@@ -184,16 +184,4 @@ public class CompositeRenderer extends Renderer
       _renderers.get(i).onDestroy(context);
     }
   }
-
-  public final void rawRender(G3MRenderContext rc, GLStateTreeNode myStateTreeNode)
-  {
-  }
-  public final boolean isInsideCameraFrustum(G3MRenderContext rc)
-  {
-     return true;
-  }
-  public final void modifiyGLState(GLState state)
-  {
-  }
-
 }

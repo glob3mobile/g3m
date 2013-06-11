@@ -1,6 +1,4 @@
 package org.glob3.mobile.generated; 
-///////////
-
 public class GPUAttributeValueVecFloat extends GPUAttributeValue
 {
   private IFloatBuffer _buffer;

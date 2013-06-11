@@ -262,7 +262,22 @@ public class GPUProgram
     }
   }
 
-
+  public final GPUAttribute getGPUAttributeVecXFloat(String name, int x)
+  {
+    switch (x)
+    {
+      case 1:
+        return getGPUAttributeVec1Float(name);
+      case 2:
+        return getGPUAttributeVec2Float(name);
+      case 3:
+        return getGPUAttributeVec3Float(name);
+      case 4:
+        return getGPUAttributeVec4Float(name);
+      default:
+        return null;
+    }
+  }
   public final GPUAttributeVec1Float getGPUAttributeVec1Float(String name)
   {
     GPUAttributeVec1Float a = (GPUAttributeVec1Float)getGPUAttribute(name);

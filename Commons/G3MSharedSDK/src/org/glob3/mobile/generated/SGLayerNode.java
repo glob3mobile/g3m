@@ -95,6 +95,8 @@ public class SGLayerNode extends SGNode
 
   }
 
+  //TODO: Implement
+
   public final void onImageDownload(IImage image)
   {
     if (_downloadedImage != null)
@@ -107,64 +109,6 @@ public class SGLayerNode extends SGNode
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  GLGlobalState createState(G3MRenderContext rc, GLGlobalState parentState);
 
-
-  /*
-//C++ TO JAVA CONVERTER TODO TASK: The following line could not be converted:
-  GPUProgramState* createGPUProgramState(const G3MRenderContext* rc, const GPUProgramState* parentState);
-  
-    GPUProgramState* progState = new GPUProgramState(parentState);
-    progState->setAttributeEnabled("TextureCoord", true);
-    progState->setUniformValue("EnableTexture", true);
-    return progState;
-  }
-  
-  GLGlobalState* SGLayerNode::createState(const G3MRenderContext* rc,
-                                          const GLGlobalState& parentState) {
-    if (!_initialized) {
-      _initialized = true;
-      requestImage(rc);
-    }
-  
-    const IGLTextureId* texId = getTextureId(rc);
-    if (texId == NULL) {
-      return NULL;
-    }
-  
-    GLGlobalState* state = new GLGlobalState(parentState);
-    state->bindTexture(texId);
-    int __WORKING;
-  
-    return state;
-  }
-  */
-  //void SGLayerNode::modifyGLGlobalState(GLGlobalState& GLGlobalState) const{
-  //
-  //  int __WORKING;
-  //  /*if (!_initialized) {
-  //    _initialized = true;
-  //    requestImage(rc);
-  //  }
-  //
-  //  const IGLTextureId* texId = getTextureId(rc);
-  //  if (texId != NULL) {
-  //    state.bindTexture(texId);
-  //  }
-  //   */
-  //}
-  
-  //void SGLayerNode::modifyGPUProgramState(GPUProgramState& progState) const{
-  //  progState.setAttributeEnabled("TextureCoord", true);
-  //  progState.setUniformValue("EnableTexture", true);
-  //}
-  
-
-  public final void modifyGLGlobalState(GLGlobalState GLGlobalState)
-  {
-  }
-  public final void modifyGPUProgramState(GPUProgramState progState)
-  {
-    progState.setAttributeEnabled("TextureCoord", true);
-    progState.setUniformValue("EnableTexture", true);
-  }
-
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  GPUProgramState createGPUProgramState(G3MRenderContext rc, GPUProgramState parentState);
 }

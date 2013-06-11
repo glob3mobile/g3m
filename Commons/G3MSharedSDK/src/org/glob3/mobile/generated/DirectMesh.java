@@ -21,10 +21,10 @@ public class DirectMesh extends AbstractMesh
 {
   protected final void rawRender(G3MRenderContext rc)
   {
-    GL gl = rc.getGL();
+  //  GL* gl = rc->getGL();
   
-    final int verticesCount = getVertexCount();
-    gl.drawArrays(_primitive, 0, verticesCount, _GLGlobalState, rc.getGPUProgramManager(), _progState);
+  //  const int verticesCount = getVertexCount();
+  //  gl->drawArrays(_primitive, 0, verticesCount, _GLGlobalState, *rc->getGPUProgramManager(), &_progState);
   }
 
 
@@ -54,13 +54,12 @@ public class DirectMesh extends AbstractMesh
 
   }
 
-  public final void rawRender(G3MRenderContext rc, GLStateTreeNode myStateTreeNode)
+  public final void rawRender(G3MRenderContext rc, GLState parentGLState)
   {
     GL gl = rc.getGL();
-    GLState glState = myStateTreeNode.getGLState();
   
     final int verticesCount = getVertexCount();
-    gl.drawArrays(_primitive, 0, verticesCount, glState, rc.getGPUProgramManager());
+    gl.drawArrays(_primitive, 0, verticesCount, parentGLState, rc.getGPUProgramManager());
   }
 
 }

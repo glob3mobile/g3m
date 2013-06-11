@@ -80,6 +80,36 @@ public abstract class BusyQuadRenderer extends LeafRenderer
   private MutableMatrix44D _modelviewMatrix = new MutableMatrix44D();
   private MutableMatrix44D _projectionMatrix = new MutableMatrix44D();
 
+  private GLState _glState = new GLState();
+  private void createGLState()
+  {
+  
+    _glState.getGLGlobalState().enableBlend();
+    _glState.getGLGlobalState().setBlendFactors(GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha());
+    _glState.getGLGlobalState().setClearColor(_backgroundColor);
+  
+    GPUProgramState progState = _glState.getGPUProgramState();
+  
+    progState.setUniformValue("EnableTexture", false);
+    progState.setUniformValue("PointSize", (float)1.0);
+    progState.setUniformValue("ScaleTexCoord", new Vector2D(1.0,1.0));
+    progState.setUniformValue("TranslationTexCoord", new Vector2D(0.0,0.0));
+  
+    progState.setUniformValue("ColorPerVertexIntensity", (float)0.0);
+    progState.setUniformValue("EnableFlatColor", false);
+    progState.setUniformValue("FlatColor", (float)0.0, (float)0.0, (float)0.0, (float)0.0);
+    progState.setUniformValue("FlatColorIntensity", (float)0.0);
+  
+    progState.setAttributeEnabled("TextureCoord", false);
+    progState.setAttributeEnabled("Color", false);
+  
+    //Modelview and projection
+    _modelviewMatrix = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_degrees), new Vector3D(0, 0, 1));
+    progState.setUniformValue("Modelview", _modelviewMatrix); //Program state will store a pointer
+  
+    progState.setUniformValue("Projection", _projectionMatrix);
+  }
+
 
   public BusyQuadRenderer(IImage image, Color backgroundColor, Vector2D size, boolean animated)
   {
@@ -90,6 +120,7 @@ public abstract class BusyQuadRenderer extends LeafRenderer
      _animated = animated;
      _size = new Vector2D(size);
      _projectionMatrix = new MutableMatrix44D(MutableMatrix44D.invalid());
+    createGLState();
   }
 
   public final void initialize(G3MContext context)
@@ -106,10 +137,6 @@ public abstract class BusyQuadRenderer extends LeafRenderer
   public final void render(G3MRenderContext rc, GLGlobalState parentState)
   {
     GL gl = rc.getGL();
-  
-    //GLGlobalState state(parentState);
-    GLGlobalState state = new GLGlobalState();
-    state.enableBlend();
   
     if (_quadMesh == null)
     {
@@ -131,16 +158,10 @@ public abstract class BusyQuadRenderer extends LeafRenderer
     }
   
     // clear screen
-    state.setClearColor(_backgroundColor);
-    gl.clearScreen(state);
-  
-    state.setBlendFactors(GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha());
-  
-  //  MutableMatrix44D R2 = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, 1));
-  //  _programState.setUniformValue("Modelview", _modelviewMatrix);
+    gl.clearScreen(_glState.getGLGlobalState());
   
     // draw mesh
-    _quadMesh.render(rc);
+    _quadMesh.render(rc, _glState);
   }
 
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
@@ -167,6 +188,7 @@ public abstract class BusyQuadRenderer extends LeafRenderer
     if (_degrees>360)
        _degrees -= 360;
     _modelviewMatrix = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_degrees), new Vector3D(0, 0, 1));
+    _glState.getGPUProgramState().setUniformMatrixValue("Modelview", _modelviewMatrix, false);
   }
 
   public final void start(G3MRenderContext rc)
@@ -199,35 +221,6 @@ public abstract class BusyQuadRenderer extends LeafRenderer
   public final void onDestroy(G3MContext context)
   {
 
-  }
-
-  public final void modifyGLGlobalState(GLGlobalState GLGlobalState)
-  {
-    GLGlobalState.enableBlend();
-    GLGlobalState.setBlendFactors(GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha());
-    GLGlobalState.setClearColor(_backgroundColor);
-  }
-
-  public final void modifyGPUProgramState(GPUProgramState progState)
-  {
-    progState.setUniformValue("EnableTexture", false);
-    progState.setUniformValue("PointSize", (float)1.0);
-    progState.setUniformValue("ScaleTexCoord", new Vector2D(1.0,1.0));
-    progState.setUniformValue("TranslationTexCoord", new Vector2D(0.0,0.0));
-  
-    progState.setUniformValue("ColorPerVertexIntensity", (float)0.0);
-    progState.setUniformValue("EnableFlatColor", false);
-    progState.setUniformValue("FlatColor", (float)0.0, (float)0.0, (float)0.0, (float)0.0);
-    progState.setUniformValue("FlatColorIntensity", (float)0.0);
-  
-    progState.setAttributeEnabled("TextureCoord", false);
-    progState.setAttributeEnabled("Color", false);
-  
-    //Modelview and projection
-    _modelviewMatrix = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_degrees), new Vector3D(0, 0, 1));
-    progState.setUniformValue("Modelview", _modelviewMatrix); //Program state will store a pointer
-  
-    progState.setUniformValue("Projection", _projectionMatrix);
   }
 
 }

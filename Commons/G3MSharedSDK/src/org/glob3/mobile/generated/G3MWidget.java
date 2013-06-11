@@ -585,8 +585,6 @@ public class G3MWidget
 
   private GPUProgramManager _gpuProgramManager;
 
-  private SceneGraphRenderer _sgRenderer;
-
   private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager)
   {
      _frameTasksExecutor = new FrameTasksExecutor();
@@ -624,7 +622,6 @@ public class G3MWidget
      _initializationTaskReady = true;
      _clickOnProcess = false;
      _gpuProgramManager = gpuProgramManager;
-     _sgRenderer = null;
     _effectsScheduler.initialize(_context);
     _cameraRenderer.initialize(_context);
     _mainRenderer.initialize(_context);

@@ -24,7 +24,7 @@ package org.glob3.mobile.generated;
 //class GLGlobalState;
 //class GPUProgramState;
 
-public class SGNode extends GLClient
+public class SGNode
 {
   protected final String _id;
   protected final String _sId;
@@ -83,11 +83,6 @@ public class SGNode extends GLClient
     }
   }
 
-
-  //void SGNode::setParent(SGNode* parent) {
-  //  _parent = parent;
-  //}
-  
   public boolean isReadyToRender(G3MRenderContext rc)
   {
     final int childrenCount = _children.size();
@@ -103,35 +98,11 @@ public class SGNode extends GLClient
     return true;
   }
 
-  public void rawRender(G3MRenderContext rc)
-  {
-  
-  }
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  virtual void rawRender(G3MRenderContext rc);
 
-
-  //GLGlobalState* SGNode::createState(const G3MRenderContext* rc,
-  //                             const GLGlobalState& parentState) {
-  //  return  NULL;
-  //}
-  //
-  //GPUProgramState* SGNode::createGPUProgramState(const G3MRenderContext* rc,
-  //                                               const GPUProgramState* parentState){
-  //  return new GPUProgramState(parentState);
-  //}
-  
-  
   public void render(G3MRenderContext rc)
   {
-  //  GLGlobalState* myState = createState(rc, parentState);
-  //  GLGlobalState* state;
-  //  if (myState == NULL) {
-  //    state = (GLGlobalState*) &parentState;
-  //  }
-  //  else {
-  //    state = myState;
-  //  }
-  
-  //  GPUProgramState* myGPUProgramState = createGPUProgramState(rc, parentProgramState);
     rawRender(rc);
   
     final int childrenCount = _children.size();
@@ -140,26 +111,7 @@ public class SGNode extends GLClient
       SGNode child = _children.get(i);
       child.render(rc);
     }
-  
-  //  delete myGPUProgramState;
-  //  delete myState;
   }
-
-  //  SGShape* getShape() const {
-  //    if (_shape != NULL) {
-  //      return _shape;
-  //    }
-  //    if (_parent != NULL) {
-  //      return _parent->getShape();
-  //    }
-  //    return NULL;
-  //  }
-
-//  virtual GLGlobalState* createState(const G3MRenderContext* rc,
-//                               const GLGlobalState& parentState);
-//  
-//  virtual GPUProgramState* createGPUProgramState(const G3MRenderContext* rc,
-//                                                 const GPUProgramState* parentState);
 
   public final int getChildrenCount()
   {
@@ -171,18 +123,24 @@ public class SGNode extends GLClient
     return _children.get(i);
   }
 
-  public final void notifyGLClientChildrenParentHasChanged()
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  virtual GLState getGLState(GLState parentGLState);
+
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  virtual void rawRender(G3MRenderContext rc, GLState parentGLState);
+
+  public void render(G3MRenderContext rc, GLState parentGLState)
   {
   
-    if (_shape != null)
-    {
-      _shape.actualizeGLGlobalState(this);
-    }
+    GLState glState = getGLState(parentGLState);
   
-    final int nChildren = getChildrenCount();
-    for (int i = 0; i < nChildren; i++)
+    rawRender(rc, glState);
+  
+    final int childrenCount = _children.size();
+    for (int i = 0; i < childrenCount; i++)
     {
-      _children.get(i).actualizeGLGlobalState(this);
+      SGNode child = _children.get(i);
+      child.render(rc, parentGLState);
     }
   }
 }

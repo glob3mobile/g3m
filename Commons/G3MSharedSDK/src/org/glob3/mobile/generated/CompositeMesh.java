@@ -126,38 +126,16 @@ public class CompositeMesh extends Mesh
     _extent = null;
   
     _children.add(mesh);
-  
-    super.addChild(mesh);
   }
 
-  //GLClient NotDrawable
-
-  public final void notifyGLClientChildrenParentHasChanged()
+  public final void render(G3MRenderContext rc, GLState parentGLState)
   {
     final int childrenCount = _children.size();
     for (int i = 0; i < childrenCount; i++)
     {
       Mesh child = _children.get(i);
-      child.actualizeGLGlobalState(this);
+      child.render(rc, parentGLState);
     }
   }
-  public final void modifyGLGlobalState(GLGlobalState GLGlobalState)
-  {
-  }
-  public final void modifyGPUProgramState(GPUProgramState progState)
-  {
-  }
-
-  public final void rawRender(G3MRenderContext rc, GLStateTreeNode myStateTreeNode)
-  {
-  }
-  public final boolean isInsideCameraFrustum(G3MRenderContext rc)
-  {
-    return true;
-  }
-  public final void modifiyGLState(GLState state)
-  {
-  }
-
 
 }

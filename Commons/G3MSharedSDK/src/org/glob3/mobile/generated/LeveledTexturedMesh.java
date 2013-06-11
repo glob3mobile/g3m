@@ -65,20 +65,12 @@ public class LeveledTexturedMesh extends Mesh
     return _currentLevelIsValid ? _mappings.get(_currentLevel) : null;
   }
 
-
-  private GLClient _parentGLClient; //Tipically tile
-  private LazyTextureMapping _lastUsedMapping;
-
-  private void updateLastUsedMapping(G3MRenderContext rc, LazyTextureMapping mapping)
+  private GLState _glState = new GLState();
+  private void updateGLState()
   {
-    if (_lastUsedMapping != mapping)
-    {
-      _lastUsedMapping = mapping;
-      if (_parentGLClient != null)
-      {
-        _parentGLClient.actualizeGLGlobalState(rc.getCurrentCamera());
-      }
-    }
+    LazyTextureMapping mapping = getCurrentTextureMapping();
+    mapping.modifyGLGlobalState(_glState.getGLGlobalState());
+    mapping.modifyGPUProgramState(_glState.getGPUProgramState());
   }
 
   public LeveledTexturedMesh(Mesh mesh, boolean ownedMesh, java.util.ArrayList<LazyTextureMapping> mappings)
@@ -89,8 +81,6 @@ public class LeveledTexturedMesh extends Mesh
      _levelsCount = mappings.size();
      _currentLevel = mappings.size() + 1;
      _currentLevelIsValid = false;
-     _parentGLClient = null;
-     _lastUsedMapping = null;
     if (_mappings.size() <= 0)
     {
       ILogger.instance().logError("LOGIC ERROR\n");
@@ -136,7 +126,6 @@ public class LeveledTexturedMesh extends Mesh
   public final void render(G3MRenderContext rc)
   {
     LazyTextureMapping mapping = getCurrentTextureMapping();
-    updateLastUsedMapping(rc, mapping);
     if (mapping == null)
     {
       _mesh.render(rc);
@@ -212,39 +201,13 @@ public class LeveledTexturedMesh extends Mesh
     return mapping.isTransparent(rc);
   }
 
-  public final void notifyGLClientChildrenParentHasChanged()
-  {
-    ((Mesh)_mesh).actualizeGLGlobalState(this);
-  }
-  public final void modifyGLGlobalState(GLGlobalState GLGlobalState)
-  {
-    LazyTextureMapping mapping = getCurrentTextureMapping();
-    mapping.modifyGLGlobalState(GLGlobalState);
-  }
-  public final void modifyGPUProgramState(GPUProgramState progState)
-  {
-    LazyTextureMapping mapping = getCurrentTextureMapping();
-    mapping.modifyGPUProgramState(progState);
-  }
-
-  public final void setGLClientParent(GLClient parent)
-  {
-    _parentGLClient = parent;
-  }
-
-  //Scene Graph Node
-
-  //TODO: Implement!!!!
-  public final void rawRender(G3MRenderContext rc, GLStateTreeNode myStateTreeNode)
-  {
-  }
-  public final boolean isInsideCameraFrustum(G3MRenderContext rc)
-  {
-    return true;
-  }
-  public final void modifiyGLState(GLState state)
+  public final void render(G3MRenderContext rc, GLState parentGLState)
   {
   
+    updateGLState();
+  
+    _glState.setParent(parentGLState);
+    ((Mesh)_mesh).render(rc, _glState);
   }
 
 }

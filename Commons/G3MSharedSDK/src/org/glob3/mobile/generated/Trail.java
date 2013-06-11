@@ -20,7 +20,7 @@ package org.glob3.mobile.generated;
 //class Mesh;
 //class Planet;
 
-public class Trail extends GLClient
+public class Trail
 {
   private boolean _visible;
   private final int _maxSteps;
@@ -158,6 +158,15 @@ public class Trail extends GLClient
     return _mesh;
   }
 
+  private GLState _glState = new GLState();
+  private void createGLState()
+  {
+    GPUProgramState progState = _glState.getGPUProgramState();
+    progState.setUniformValue("EnableTexture", false);
+    progState.setUniformValue("ScaleTexCoord", new Vector2D(1.0, 1.0));
+    progState.setUniformValue("TranslationTexCoord", new Vector2D(0.0, 0.0));
+  }
+
   public Trail(int maxSteps, Color color, float ribbonWidth)
   {
      _maxSteps = maxSteps;
@@ -166,6 +175,7 @@ public class Trail extends GLClient
      _mesh = null;
      _color = new Color(color);
      _ribbonWidth = ribbonWidth;
+    createGLState();
   }
 
   public void dispose()
@@ -179,17 +189,14 @@ public class Trail extends GLClient
     if (_visible)
     {
   
-      boolean hasBeenRenderized = (_mesh != null) && !_positionsDirty;
-  
       Mesh mesh = getMesh(rc.getPlanet());
       if (mesh != null)
       {
-        if (!hasBeenRenderized)
-        {
-          actualizeGLGlobalState(rc.getCurrentCamera()); //Actualize _mesh GLGlobalState with camera
-        }
   
-        mesh.render(rc);
+        _glState.getGPUProgramState().setUniformMatrixValue("Modelview", rc.getCurrentCamera().getModelMatrix(), false);
+        _glState.getGPUProgramState().setUniformMatrixValue("Projection", rc.getCurrentCamera().getProjectionMatrix(), false);
+  
+        mesh.render(rc, _glState);
       }
     }
   }
@@ -221,20 +228,6 @@ public class Trail extends GLClient
     }
 
     _positions.add(new Geodetic3D(position));
-  }
-
-  public final void notifyGLClientChildrenParentHasChanged()
-  {
-    _mesh.actualizeGLGlobalState(this);
-  }
-  public final void modifyGLGlobalState(GLGlobalState GLGlobalState)
-  {
-  }
-  public final void modifyGPUProgramState(GPUProgramState progState)
-  {
-    progState.setUniformValue("EnableTexture", false);
-    progState.setUniformValue("ScaleTexCoord", new Vector2D(1.0, 1.0));
-    progState.setUniformValue("TranslationTexCoord", new Vector2D(0.0, 0.0));
   }
 
 }

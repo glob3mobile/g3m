@@ -2,7 +2,7 @@ package org.glob3.mobile.generated;
 /**
  * Class to control the camera.
  */
-public class Camera extends SceneGraphNode
+public class Camera
 {
   public Camera(Camera that)
   {
@@ -457,42 +457,26 @@ public class Camera extends SceneGraphNode
     getModelMatrix();
   }
 
-  public final void actualizeChildGLGlobalState(GLClient child)
+  // opengl projection matrix
+  public final MutableMatrix44D getProjectionMatrix()
   {
-    child.actualizeGLGlobalState(this);
+    if (_dirtyFlags._projectionMatrixDirty)
+    {
+      _dirtyFlags._projectionMatrixDirty = false;
+      _projectionMatrix = MutableMatrix44D.createProjectionMatrix(getFrustumData());
+    }
+    return _projectionMatrix;
   }
 
-  //GLClient
-  public final void modifyGLGlobalState(GLGlobalState GLGlobalState)
+  // Model matrix, computed in CPU in double precision
+  public final MutableMatrix44D getModelMatrix()
   {
-  }
-  public final void modifyGPUProgramState(GPUProgramState progState)
-  {
-    getProjectionMatrix();
-    getModelViewMatrix();
-    progState.setUniformValue("Projection", _projectionMatrix);
-    progState.setUniformValue("Modelview", _modelMatrix);
-  }
-
-  //SCENE GRAPH
-
-  public final void rawRender(G3MRenderContext rc, GLStateTreeNode myStateTreeNode)
-  {
-    getModelMatrix();
-    getProjectionMatrix();
-  }
-
-  public final boolean isInsideCameraFrustum(G3MRenderContext rc)
-  {
-    return true;
-  }
-
-  public final void modifiyGLState(GLState state)
-  {
-    getProjectionMatrix();
-    getModelViewMatrix();
-    state.getGPUProgramState().setUniformValue("Projection", _projectionMatrix);
-    state.getGPUProgramState().setUniformValue("Modelview", _modelMatrix);
+    if (_dirtyFlags._modelMatrixDirty)
+    {
+      _dirtyFlags._modelMatrixDirty = false;
+      _modelMatrix = MutableMatrix44D.createModelMatrix(_position, _center, _up);
+    }
+    return _modelMatrix;
   }
 
   private Angle getHeading(Vector3D normal)
@@ -585,28 +569,6 @@ public class Camera extends SceneGraphNode
       _frustumData = calculateFrustumData();
     }
     return _frustumData;
-  }
-
-  // opengl projection matrix
-  private MutableMatrix44D getProjectionMatrix()
-  {
-    if (_dirtyFlags._projectionMatrixDirty)
-    {
-      _dirtyFlags._projectionMatrixDirty = false;
-      _projectionMatrix = MutableMatrix44D.createProjectionMatrix(getFrustumData());
-    }
-    return _projectionMatrix;
-  }
-
-  // Model matrix, computed in CPU in double precision
-  private MutableMatrix44D getModelMatrix()
-  {
-    if (_dirtyFlags._modelMatrixDirty)
-    {
-      _dirtyFlags._modelMatrixDirty = false;
-      _modelMatrix = MutableMatrix44D.createModelMatrix(_position, _center, _up);
-    }
-    return _modelMatrix;
   }
 
   // multiplication of model * projection

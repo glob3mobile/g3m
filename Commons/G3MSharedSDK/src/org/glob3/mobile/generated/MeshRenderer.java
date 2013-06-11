@@ -25,11 +25,23 @@ package org.glob3.mobile.generated;
 public class MeshRenderer extends LeafRenderer
 {
   private java.util.ArrayList<Mesh> _meshes = new java.util.ArrayList<Mesh>();
-  private boolean _dirtyGLGlobalStates;
+
+  private GLState _glState = new GLState();
+  private void createGLState()
+  {
+  
+    _glState.getGLGlobalState().enableDepthTest();
+  
+    GPUProgramState progState = _glState.getGPUProgramState();
+    progState.setUniformValue("EnableTexture", false);
+    progState.setUniformValue("PointSize", (float)1.0);
+    progState.setUniformValue("ScaleTexCoord", new Vector2D(1.0,1.0));
+    progState.setUniformValue("TranslationTexCoord", new Vector2D(0.0,0.0));
+  }
 
   public MeshRenderer()
   {
-     _dirtyGLGlobalStates = false;
+    createGLState();
   }
 
   public void dispose()
@@ -46,7 +58,6 @@ public class MeshRenderer extends LeafRenderer
   public final void addMesh(Mesh mesh)
   {
     _meshes.add(mesh);
-    _dirtyGLGlobalStates = true;
   }
 
   public final void clearMeshes()
@@ -90,11 +101,8 @@ public class MeshRenderer extends LeafRenderer
   {
     final Frustum frustum = rc.getCurrentCamera().getFrustumInModelCoordinates();
   
-    if (_dirtyGLGlobalStates)
-    {
-      actualizeGLGlobalState(rc.getCurrentCamera());
-      _dirtyGLGlobalStates = true;
-    }
+    _glState.getGPUProgramState().setUniformMatrixValue("Modelview", rc.getCurrentCamera().getModelMatrix(), false);
+    _glState.getGPUProgramState().setUniformMatrixValue("Projection", rc.getCurrentCamera().getProjectionMatrix(), false);
   
     final int meshesCount = _meshes.size();
     for (int i = 0; i < meshesCount; i++)
@@ -104,7 +112,7 @@ public class MeshRenderer extends LeafRenderer
   
       if (extent.touches(frustum))
       {
-        mesh.render(rc);
+        mesh.render(rc, _glState);
       }
     }
   }
@@ -127,38 +135,6 @@ public class MeshRenderer extends LeafRenderer
   public final void stop(G3MRenderContext rc)
   {
 
-  }
-
-  public final void notifyGLClientChildrenParentHasChanged()
-  {
-    final int meshesCount = _meshes.size();
-    for (int i = 0; i < meshesCount; i++)
-    {
-      Mesh mesh = _meshes.get(i);
-      mesh.actualizeGLGlobalState(this);
-    }
-  }
-  public final void modifyGLGlobalState(GLGlobalState GLGlobalState)
-  {
-    GLGlobalState.enableDepthTest();
-  }
-  public final void modifyGPUProgramState(GPUProgramState progState)
-  {
-    progState.setUniformValue("EnableTexture", false);
-    progState.setUniformValue("PointSize", (float)1.0);
-    progState.setUniformValue("ScaleTexCoord", new Vector2D(1.0,1.0));
-    progState.setUniformValue("TranslationTexCoord", new Vector2D(0.0,0.0));
-  }
-
-  public final void rawRender(G3MRenderContext rc, GLStateTreeNode myStateTreeNode)
-  {
-  }
-  public final boolean isInsideCameraFrustum(G3MRenderContext rc)
-  {
-     return true;
-  }
-  public final void modifiyGLState(GLState state)
-  {
   }
 
 }

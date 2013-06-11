@@ -2,7 +2,7 @@ package org.glob3.mobile.generated;
 ////////////////////////////////////////////////////////////////////////
 public class GPUUniformValueBool extends GPUUniformValue
 {
-  public final boolean _value;
+  public boolean _value;
 
   public GPUUniformValueBool(boolean b)
   {
@@ -24,6 +24,11 @@ public class GPUUniformValueBool extends GPUUniformValue
   public final GPUUniformValue deepCopy()
   {
     return new GPUUniformValueBool(_value);
+  }
+
+  public final void copyFrom(GPUUniformValue v)
+  {
+    _value = ((GPUUniformValueBool)v)._value;
   }
 
   public final String description()

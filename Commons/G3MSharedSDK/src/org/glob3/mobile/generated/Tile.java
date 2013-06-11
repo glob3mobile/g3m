@@ -36,7 +36,8 @@ package org.glob3.mobile.generated;
 //class GPUProgramState;
 
 
-public class Tile extends GLClient
+
+public class Tile
 {
   private TileTexturizer _texturizer;
   private Tile _parent;
@@ -219,7 +220,7 @@ public class Tile extends GLClient
     return false;
   }
 
-  private void rawRender(G3MRenderContext rc, TileRenderContext trc)
+  private void rawRender(G3MRenderContext rc, TileRenderContext trc, GLState glState)
   {
     Mesh tessellatorMesh = getTessellatorMesh(rc, trc);
     if (tessellatorMesh == null)
@@ -239,28 +240,29 @@ public class Tile extends GLClient
       if (needsToCallTexturizer)
       {
         _texturizedMesh = texturizer.texturize(rc, trc, this, tessellatorMesh, _texturizedMesh);
-  
-        ((LeveledTexturedMesh)_texturizedMesh).setGLClientParent(this);
       }
   
       if (_texturizedMesh != null)
       {
-        _texturizedMesh.render(rc);
+        //_texturizedMesh->render(rc);
+        _texturizedMesh.render(rc, glState);
       }
       else
       {
-        tessellatorMesh.render(rc);
+        //tessellatorMesh->render(rc);
+        tessellatorMesh.render(rc, glState);
       }
     }
   
   }
 
-  private void debugRender(G3MRenderContext rc, TileRenderContext trc)
+  private void debugRender(G3MRenderContext rc, TileRenderContext trc, GLState glState)
   {
     Mesh debugMesh = getDebugMesh(rc, trc);
     if (debugMesh != null)
     {
-      debugMesh.render(rc);
+      //debugMesh->render(rc);
+      debugMesh.render(rc, glState);
     }
   }
 
@@ -597,17 +599,11 @@ public class Tile extends GLClient
       if (needsToCallTexturizer)
       {
         _texturizedMesh = texturizer.texturize(rc, trc, this, tessellatorMesh, _texturizedMesh);
-  
-        ((LeveledTexturedMesh)_texturizedMesh).setGLClientParent(this);
-  
-  
-        //Storing camera matrix values for glclient children and notifying children
-        //this->actualizeGLGlobalState(rc->getCurrentCamera());
       }
     }
   }
 
-  public final void render(G3MRenderContext rc, TileRenderContext trc, java.util.LinkedList<Tile> toVisitInNextIteration)
+  public final void render(G3MRenderContext rc, TileRenderContext trc, java.util.LinkedList<Tile> toVisitInNextIteration, GLState glState)
   {
   
     final float verticalExaggeration = trc.getVerticalExaggeration();
@@ -631,10 +627,10 @@ public class Tile extends GLClient
   
       if (isRawRender)
       {
-        rawRender(rc, trc);
+        rawRender(rc, trc, glState);
         if (trc.getParameters()._renderDebug)
         {
-          debugRender(rc, trc);
+          debugRender(rc, trc, glState);
         }
   
         statistics.computeTileRendered(this);
@@ -884,29 +880,6 @@ public class Tile extends GLClient
     subTiles.add(createSubTile(splitLatitude, splitLongitude, upper.latitude(), upper.longitude(), nextLevel, row2 + 1, column2 + 1, setParent));
   
     return subTiles;
-  }
-
-  //Not drawable gl client
-  public final void notifyGLClientChildrenParentHasChanged()
-  {
-    if (_texturizedMesh != null)
-    {
-      _texturizedMesh.actualizeGLGlobalState(this);
-    }
-    else
-    {
-      if (_tessellatorMesh != null)
-      {
-        _tessellatorMesh.actualizeGLGlobalState(this);
-      }
-    }
-  }
-  public final void modifyGLGlobalState(GLGlobalState GLGlobalState)
-  {
-    GLGlobalState.enableDepthTest();
-  }
-  public final void modifyGPUProgramState(GPUProgramState progState)
-  {
   }
 
 }

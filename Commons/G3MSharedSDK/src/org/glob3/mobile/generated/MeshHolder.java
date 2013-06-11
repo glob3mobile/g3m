@@ -69,31 +69,9 @@ public class MeshHolder extends Mesh
     return _mesh.isTransparent(rc);
   }
 
-  public final void notifyGLClientChildrenParentHasChanged()
+  public final void render(G3MRenderContext rc, GLState parentGLState)
   {
-    _mesh.actualizeGLGlobalState(this);
-  }
-  public final void modifyGLGlobalState(GLGlobalState GLGlobalState)
-  {
-  }
-  public final void modifyGPUProgramState(GPUProgramState progState)
-  {
-  }
-
-  //Scene Graph Node
-  public final void rawRender(G3MRenderContext rc, GLStateTreeNode myStateTreeNode)
-  {
-    //TODO: Implement
-    //It's necessary a holder with the Scene Graph approach
-  }
-  public final boolean isInsideCameraFrustum(G3MRenderContext rc)
-  {
-    //TODO: Implement
-    return true;
-  }
-  public final void modifiyGLState(GLState state)
-  {
-    //TODO: Implement
+    _mesh.render(rc, parentGLState);
   }
 
 }
