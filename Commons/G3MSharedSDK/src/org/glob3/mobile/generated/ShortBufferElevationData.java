@@ -97,7 +97,7 @@ public class ShortBufferElevationData extends BufferElevationData
     return s;
   }
 
-  public final Vector3D getMinMaxAverageHeights()
+  public final Vector3D getMinMaxAverageElevations()
   {
     final IMathUtils mu = IMathUtils.instance();
     short minHeight = mu.maxInt16();
