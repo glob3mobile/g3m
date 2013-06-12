@@ -1,69 +1,10 @@
 package org.glob3.mobile.generated; 
-//
-//  TileElevationDataListener.cpp
-//  G3MiOSSDK
-//
-//  Created by Jose Miguel SN on 23/04/13.
-//
-//
-
-//
-//  TileElevationDataListener.h
-//  G3MiOSSDK
-//
-//  Created by Jose Miguel SN on 23/04/13.
-//
-//
-
-
-
-
 public class TileElevationDataRequest
 {
   private Tile _tile;
   private long _requestID;
   private final Vector2I _resolution;
   private ElevationDataProvider _provider;
-
-
-  private static class TileElevationDataRequestListener implements IElevationDataListener
-  {
-    public TileElevationDataRequest _request;
-
-    public TileElevationDataRequestListener(TileElevationDataRequest request)
-    {
-       _request = request;
-    }
-
-    public final void onData(Sector sector, Vector2I resolution, ElevationData elevationData)
-    {
-      if (_request != null)
-      {
-        _request.onData(sector, resolution, elevationData);
-      }
-    }
-
-    public final void onError(Sector sector, Vector2I resolution)
-    {
-      if (_request != null)
-      {
-        _request.onError(sector, resolution);
-      }
-    }
-
-    public final void onCancel(Sector sector, Vector2I resolution)
-    {
-      if (_request != null)
-      {
-        _request.onCancel(sector, resolution);
-      }
-    }
-
-    public void dispose()
-    {
-    }
-
-  }
 
   private TileElevationDataRequestListener _listener;
 
