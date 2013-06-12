@@ -37,7 +37,21 @@ void GLState::linkAndApplyToGPUProgram(GPUProgram* prog){
 
 void GLState::setProgramState(GL* gl, GPUProgramManager& progManager) {
   
-  GPUProgram* prog = progManager.getProgram(this);
+  GPUProgram* prog = _programState->getLinkedProgram();
+  if (prog != NULL){
+    GLState* parent = _parentGLState;
+    while (parent != NULL && prog != NULL) {
+      if (prog != parent->getGPUProgramState()->getLinkedProgram()){
+        prog = NULL;
+      }
+      parent = parent->getParent();
+    }
+  }
+  
+  if (prog == NULL){
+    prog = progManager.getProgram(this);
+  }
+  
   if (prog != NULL){
     if (prog != _currentGPUProgram){
       if (_currentGPUProgram != NULL){
@@ -49,6 +63,7 @@ void GLState::setProgramState(GL* gl, GPUProgramManager& progManager) {
   } else{
     ILogger::instance()->logError("No GPUProgram found.");
   }
+  
   
   linkAndApplyToGPUProgram(prog);
   prog->applyChanges(gl);

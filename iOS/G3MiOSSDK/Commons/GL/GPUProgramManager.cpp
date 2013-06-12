@@ -11,7 +11,6 @@
 #include "GLState.hpp"
 
 GPUProgram* GPUProgramManager::getProgram(GLState* const glState) {
-  
   GLState* thisGLState = glState;
   while (thisGLState != NULL) {
     std::vector<std::string>* ui = glState->getGPUProgramState()->getUniformsNames();
