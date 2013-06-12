@@ -1397,6 +1397,7 @@ public:
                                                                      meshSector,
                                                                      meshResolution,
                                                                      false);
+
     _meshRenderer->addMesh( subElevationData->createMesh(planet,
                                                          verticalExaggeration,
                                                          Geodetic3D::fromDegrees(meshSector.getDeltaLatitude().degrees() + 0.1,
@@ -1406,6 +1407,7 @@ public:
 
     delete subElevationData;
 
+    
 //    const ElevationData* subElevationDataDecimated = new SubviewElevationData(elevationData,
 //                                                                              subSector,
 //                                                                              subResolution,

@@ -37,6 +37,8 @@ ElevationData(sector, extent)
   else {
     _buffer = createInterpolatedBuffer( elevationData );
   }
+  
+  //isEquivalentTo(elevationData);
 }
 
 const Vector2D SubviewElevationData::getParentXYAt(const ElevationData* elevationData,
@@ -171,9 +173,7 @@ IFloatBuffer* SubviewElevationData::createInterpolatedBuffer(const ElevationData
 
     for (int y = 0; y < _height; y++) {
       const double v = 1.0 - ( (double) y / (_height - 1) );
-      //const double v = (double) y / (_height - 1);
 
-      int __XXXX;
       const Angle latitude = _sector.getInnerPointLatitude(v);
 
       const int index = ((_height-1-y) * _width) + x;
