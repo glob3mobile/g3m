@@ -156,6 +156,7 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
                                                      this,
                                                      NULL,
                                                      _verticalExaggeration,
+                                                     mercator,
                                                      renderDebug);
     }
     else {
@@ -166,6 +167,7 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
                                                                              this,
                                                                              NULL,
                                                                              _verticalExaggeration,
+                                                                             mercator,
                                                                              renderDebug) );
         _tessellatorMesh = meshHolder;
       }
@@ -175,6 +177,7 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
                                                     this,
                                                     _elevationData,
                                                     _verticalExaggeration,
+                                                    mercator,
                                                     renderDebug);
 
         MeshHolder* meshHolder = (MeshHolder*) _tessellatorMesh;

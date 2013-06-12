@@ -58,6 +58,7 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
                                                  const Tile* tile,
                                                  const ElevationData* elevationData,
                                                  float verticalExaggeration,
+                                                 bool mercator,
                                                  bool renderDebug) const {
 
   const Sector sector = tile->getSector();
@@ -85,7 +86,6 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
       if (elevationData != NULL) {
         int ___WTF_Diego;
         const Geodetic2D position2 = sector.getInnerPoint(u, 1.0 - v);
-
         const double rawElevation = elevationData->getElevationAt(position2);
         if ( !mu->isNan(rawElevation) ) {
           elevation = rawElevation * verticalExaggeration;
@@ -142,21 +142,21 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
       indices.add((short) i);
       indices.add((short) posS++);
     }
-    
+
     // west side
     for (int j = 0; j < tileResolution._y-1; j++) {
       vertices.add(sector.getInnerPoint(0, (double)j/(tileResolution._y-1)),
                    skirtHeight);
-      
+
       indices.add((short) (j*tileResolution._x));
       indices.add((short) posS++);
     }
-    
+
     // south side
     for (int i = 0; i < tileResolution._x-1; i++) {
       vertices.add(sector.getInnerPoint((double)i/(tileResolution._x-1), 1),
                    skirtHeight);
-      
+
       indices.add((short) ((tileResolution._y-1)*tileResolution._x + i));
       indices.add((short) posS++);
     }

@@ -256,7 +256,9 @@ public:
 
   ElevationDataProvider* elevationDataProvider = NULL;
 
-  //  ElevationDataProvider* elevationDataProvider = new WMSBillElevationDataProvider();
+//  elevationDataProvider = new WMSBillElevationDataProvider(URL("http://data.worldwind.arc.nasa.gov/elev", false),
+//                                                           Sector::fullSphere());
+//  builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProvider);
 
   //  ElevationDataProvider* elevationDataProvider;
   elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
@@ -338,7 +340,6 @@ public:
 
   builder.getTileRendererBuilder()->setElevationDataProvider(compElevationDataProvider);
   //builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProvider);
-
 }
 
 
@@ -353,7 +354,7 @@ public:
   
   builder.setPlanet(Planet::createEarth());
   
-  Color* bgColor = Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1);
+  Color* bgColor = Color::newFromRGBA(0.0f, 0.1f, 0.2f, 1.0f);
   builder.setBackgroundColor(bgColor);
   
   LayerSet* layerSet = [self createLayerSet];
@@ -641,16 +642,16 @@ public:
                                             TimeInterval::fromDays(30)) );
   }
   
-  const bool useBingMaps = false;
+  const bool useBingMaps = true;
   if (useBingMaps) {
     layerSet->addLayer( new BingMapsLayer(//BingMapType::Road(),
-                                          //BingMapType::AerialWithLabels(),
-                                          BingMapType::Aerial(),
-                                          "ArtXu2Z-XSlDVCRVtxtYqtIPVR_0qqLcrfsRyZK_ishjUKvTheYBUH9rDDmAPcnj",
+                                          BingMapType::AerialWithLabels(),
+                                          //BingMapType::Aerial(),
+                                          "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
                                           TimeInterval::fromDays(30)) );
   }
   
-  const bool blueMarble = true;
+  const bool blueMarble = false;
   if (blueMarble) {
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
                                         URL("http://www.nasa.network.com/wms?", false),
@@ -889,7 +890,7 @@ public:
 
 - (TilesRenderParameters*) createTileRenderParameters
 {
-  const bool renderDebug = true;
+  const bool renderDebug = false;
   const bool useTilesSplitBudget = true;
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
@@ -1365,7 +1366,7 @@ public:
     //                                                      2) );
     
     const float verticalExaggeration = 20.0f;
-    const float pointSize = 8.0f;
+    const float pointSize = 2.0f;
     
 //    const Sector subSector = _sector.shrinkedByPercent(0.2f);
 //    //    const Sector subSector = _sector.shrinkedByPercent(0.9f);
@@ -1380,14 +1381,28 @@ public:
     const Sector meshSector = Sector::fromDegrees(-22, -73,
                                                   -16, -61);
 
+    const Vector2I meshResolution(512, 256);
+
 
     _meshRenderer->addMesh( elevationData->createMesh(planet,
                                                       verticalExaggeration,
                                                       Geodetic3D::zero(),
                                                       pointSize,
                                                       meshSector,
-                                                      Vector2I(512, 256)) );
-    
+                                                      meshResolution) );
+
+    const ElevationData* subElevationData = new SubviewElevationData(elevationData,
+                                                                                 meshSector,
+                                                                                 meshResolution,
+                                                                                 false);
+    _meshRenderer->addMesh( subElevationData->createMesh(planet,
+                                                         verticalExaggeration,
+                                                         Geodetic3D::fromDegrees(meshSector.getDeltaLatitude().degrees() + 0.1,
+                                                                                 0,
+                                                                                 0),
+                                                         pointSize) );
+
+    delete subElevationData;
 
 //    const ElevationData* subElevationDataDecimated = new SubviewElevationData(elevationData,
 //                                                                              subSector,
