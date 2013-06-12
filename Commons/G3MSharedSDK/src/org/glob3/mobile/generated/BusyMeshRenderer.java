@@ -108,6 +108,7 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
     // clear screen
     gl.clearScreen(_backgroundColor.getRed(), _backgroundColor.getGreen(), _backgroundColor.getBlue(), _backgroundColor.getAlpha());
   
+  
     gl.pushMatrix();
     MutableMatrix44D R1 = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_degrees), new Vector3D(0, 0, -1));
     gl.multMatrixf(R1);

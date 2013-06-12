@@ -414,13 +414,18 @@ public class Sector
   // (u,v)=(0,0) in NW point, and (1,1) in SE point
   public final Geodetic2D getInnerPoint(double u, double v)
   {
-    return new Geodetic2D(Angle.linearInterpolation(_lower.latitude(), _upper.latitude(), (1.0-v)), Angle.linearInterpolation(_lower.longitude(), _upper.longitude(), u));
+    return new Geodetic2D(Angle.linearInterpolation(_lower.latitude(), _upper.latitude(), 1.0 - v), Angle.linearInterpolation(_lower.longitude(), _upper.longitude(), u));
   }
 
+  public final Angle getInnerPointLongitude(double u)
+  {
+    return Angle.linearInterpolation(_lower.longitude(), _upper.longitude(), u);
+  }
   public final Angle getInnerPointLatitude(double v)
   {
-    return Angle.linearInterpolation(_lower.latitude(), _upper.latitude(), (float)(1.0-v));
+    return Angle.linearInterpolation(_lower.latitude(), _upper.latitude(), 1.0 - v);
   }
+
 
   public final Vector2D getUVCoordinates(Geodetic2D point)
   {
