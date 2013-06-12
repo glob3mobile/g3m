@@ -114,6 +114,75 @@ public:
 };
 
 
+Mesh* createSectorMesh(const Planet* planet,
+                       const int resolution,
+                       const Sector& sector,
+                       const Color& color,
+                       const int lineWidth) {
+  // create vectors
+  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(),
+                                          planet,
+                                          sector.getCenter());
+
+  // create indices
+  ShortBufferBuilder indices;
+
+  const int resolutionMinus1 = resolution - 1;
+  int indicesCounter = 0;
+
+  const double offset = 0;
+
+  // west side
+  for (int j = 0; j < resolutionMinus1; j++) {
+    const Geodetic3D g(sector.getInnerPoint(0, (double)j/resolutionMinus1),
+                       offset);
+    vertices.add(g);
+
+    indices.add(indicesCounter++);
+  }
+
+  // south side
+  for (int i = 0; i < resolutionMinus1; i++) {
+    const Geodetic3D g(sector.getInnerPoint((double)i/resolutionMinus1, 1),
+                       offset);
+    vertices.add(g);
+
+    indices.add(indicesCounter++);
+  }
+
+  // east side
+  for (int j = resolutionMinus1; j > 0; j--) {
+    const Geodetic3D g(sector.getInnerPoint(1, (double)j/resolutionMinus1),
+                       offset);
+    vertices.add(g);
+
+    indices.add(indicesCounter++);
+  }
+
+  // north side
+  for (int i = resolutionMinus1; i > 0; i--) {
+    const Geodetic3D g(sector.getInnerPoint((double)i/resolutionMinus1, 0),
+                       offset);
+    vertices.add(g);
+
+    indices.add(indicesCounter++);
+  }
+
+  return new IndexedMesh(GLPrimitive::lineLoop(),
+                         true,
+                         vertices.getCenter(),
+                         vertices.create(),
+                         indices.create(),
+                         lineWidth,
+                         1,
+                         new Color(color),
+                         NULL, //colors
+                         0,    // colorsIntensity
+                         false //depthTest
+                         );
+}
+
+
 @implementation ViewController
 
 @synthesize G3MWidget;
@@ -1404,6 +1473,12 @@ public:
 
     int _DGD_working_on_terrain;
 
+    _meshRenderer->addMesh( createSectorMesh(planet,
+                                             32,
+                                             Sector::fromDegrees(-22, -73,
+                                                                 -16, -61),
+                                             Color::yellow(),
+                                             2) );
 
     const Sector meshSector = Sector::fromDegrees(-22, -73,
                                                   -16, -61);
@@ -1545,91 +1620,6 @@ public:
       
     }
     
-    Mesh* createSectorMesh(const Planet* planet,
-                           const int resolution,
-                           const Sector& sector,
-                           const Color& color,
-                           const int lineWidth) {
-      // create vectors
-      FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(),
-                                              planet,
-                                              sector.getCenter());
-      
-      // create indices
-      ShortBufferBuilder indices;
-      
-      const int resolutionMinus1 = resolution - 1;
-      int indicesCounter = 0;
-      
-      // compute offset for vertices
-      //    const Vector3D sw = planet->toVector3D(sector->getSW());
-      //    const Vector3D nw = planet->toVector3D(sector->getNW());
-      //    const double offset = nw.sub(sw).length(); // * 1e-3;
-      //      const double offset = 5000;
-      const double offset = 100;
-      
-      // west side
-      for (int j = 0; j < resolutionMinus1; j++) {
-        const Geodetic3D g(sector.getInnerPoint(0, (double)j/resolutionMinus1),
-                           offset);
-        vertices.add(g);
-        
-        indices.add(indicesCounter++);
-      }
-      
-      // south side
-      for (int i = 0; i < resolutionMinus1; i++) {
-        const Geodetic3D g(sector.getInnerPoint((double)i/resolutionMinus1, 1),
-                           offset);
-        vertices.add(g);
-        
-        indices.add(indicesCounter++);
-      }
-      
-      // east side
-      for (int j = resolutionMinus1; j > 0; j--) {
-        const Geodetic3D g(sector.getInnerPoint(1, (double)j/resolutionMinus1),
-                           offset);
-        vertices.add(g);
-        
-        indices.add(indicesCounter++);
-      }
-      
-      // north side
-      for (int i = resolutionMinus1; i > 0; i--) {
-        const Geodetic3D g(sector.getInnerPoint((double)i/resolutionMinus1, 0),
-                           offset);
-        vertices.add(g);
-        
-        indices.add(indicesCounter++);
-      }
-
-//      const int primitive,
-//      bool owner,
-//      const Vector3D& center,
-//      IFloatBuffer* vertices,
-//      IShortBuffer* indices,
-//      float lineWidth,
-//      float pointSize,
-//      Color* flatColor,
-//      IFloatBuffer* colors,
-//      const float colorsIntensity,
-//      bool depthTest
-
-      return new IndexedMesh(GLPrimitive::lineLoop(),
-                             true,
-                             vertices.getCenter(),
-                             vertices.create(),
-                             indices.create(),
-                             lineWidth,
-                             1,
-                             new Color(color),
-                             NULL, //colors
-                             0,    // colorsIntensity
-                             false //depthTest
-                             );
-      
-    }
     
     Mesh* createCameraPathMesh(const G3MContext* context,
                                const Geodetic2D& fromPosition,
@@ -1802,12 +1792,6 @@ public:
 //      sector=(Sector (lat=-28.125d, lon=-67.5d) - (lat=-22.5d, lon=-61.874999999999992895d)))
 
 
-      _meshRenderer->addMesh( createSectorMesh(context->getPlanet(),
-                                               32,
-                                               Sector::fromDegrees(-16, -73,
-                                                                   -22, -61),
-                                               Color::yellow(),
-                                               2) );
 
 
 

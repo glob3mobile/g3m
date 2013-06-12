@@ -117,7 +117,7 @@ const long long SingleBillElevationDataProvider::requestElevationData(const Sect
     listener->onError(sector, extent);
   }
   else {
-    int _DGD_working_on_terrain;
+    //int _DGD_working_on_terrain;
     const bool useDecimation = false;
     ElevationData *elevationData = new SubviewElevationData(_elevationData,
                                                             sector,
