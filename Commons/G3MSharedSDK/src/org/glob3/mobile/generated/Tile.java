@@ -72,12 +72,14 @@ public class Tile
     final LayerTilesRenderParameters layerTilesRenderParameters = trc.getLayerTilesRenderParameters();
     final Vector2I tileMeshResolution = new Vector2I(layerTilesRenderParameters._tileMeshResolution);
   
-    if (_elevationData == null && elevationDataProvider != null)
+    if ((_elevationData == null) && (elevationDataProvider != null))
     {
       initializeElevationData(elevationDataProvider, tessellator, tileMeshResolution, planet, renderDebug);
     }
   
-    if (_tessellatorMesh == null || _mustActualizeMeshDueToNewElevationData)
+    final boolean mercator = trc.getLayerTilesRenderParameters()._mercator;
+  
+    if ((_tessellatorMesh == null) || _mustActualizeMeshDueToNewElevationData)
     {
       _mustActualizeMeshDueToNewElevationData = false;
   
@@ -88,17 +90,17 @@ public class Tile
       }
       else
       {
+        int _ASK_JM_1;
         if (_elevationData == null)
         {
           MeshHolder meshHolder = new MeshHolder(tessellator.createTileMesh(planet, tileMeshResolution, this, null, _verticalExaggeration, renderDebug));
           _tessellatorMesh = meshHolder;
-  
         }
         else
         {
           Mesh newMesh = tessellator.createTileMesh(planet, tileMeshResolution, this, _elevationData, _verticalExaggeration, renderDebug);
   
-          MeshHolder meshHolder = (MeshHolder)_tessellatorMesh;
+          MeshHolder meshHolder = (MeshHolder) _tessellatorMesh;
           if (meshHolder == null)
           {
             meshHolder = new MeshHolder(newMesh);
@@ -107,12 +109,12 @@ public class Tile
           {
             meshHolder.setMesh(newMesh);
           }
+  
+          int _ASK_JM_2;
           _tessellatorMesh = meshHolder;
         }
       }
     }
-  
-  
   
     return _tessellatorMesh;
   }

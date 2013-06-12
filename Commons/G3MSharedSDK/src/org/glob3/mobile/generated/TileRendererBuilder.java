@@ -197,7 +197,6 @@ public class TileRendererBuilder
   }
   private TileTessellator createTileTessellator()
   {
-    //return new EllipsoidalTileTessellator(getParameters()->_tileMeshResolution, true);
     return new EllipsoidalTileTessellator(true);
   }
 
