@@ -20,16 +20,20 @@ class IDownloader;
 
 class WMSBillElevationDataProvider : public ElevationDataProvider {
 private:
-  IDownloader* _downloader;
-  URL          _url;
-  Sector       _sector;
+  IDownloader*      _downloader;
+  URL               _url;
+  const std::string _layerName;
+  Sector            _sector;
 
 public:
   WMSBillElevationDataProvider(const URL& url,
+                               const std::string& layerName,
                                const Sector& sector) :
   _url(url),
   _sector(sector),
-  _downloader(NULL) {
+  _downloader(NULL),
+  _layerName(layerName)
+  {
 
   }
 

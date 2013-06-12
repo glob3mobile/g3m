@@ -113,7 +113,9 @@ const long long WMSBillElevationDataProvider::requestElevationData(const Sector&
   isb->addString("?REQUEST=GetMap");
   isb->addString("&SERVICE=WMS");
   isb->addString("&VERSION=1.3.0");
-  isb->addString("&LAYERS=srtm30");
+//  isb->addString("&LAYERS=srtm30");
+  isb->addString("&LAYERS=");
+  isb->addString(_layerName);
   isb->addString("&STYLES=");
   isb->addString("&FORMAT=image/bil");
   isb->addString("&CRS=EPSG:4326");
@@ -127,6 +129,15 @@ const long long WMSBillElevationDataProvider::requestElevationData(const Sector&
   isb->addDouble(sector.upper().latitude()._degrees);
   isb->addString(",");
   isb->addDouble(sector.upper().longitude()._degrees);
+
+int TODO_WMS_1_1_1;
+//  isb->addDouble(sector.lower().longitude()._degrees);
+//  isb->addString(",");
+//  isb->addDouble(sector.lower().latitude()._degrees);
+//  isb->addString(",");
+//  isb->addDouble(sector.upper().longitude()._degrees);
+//  isb->addString(",");
+//  isb->addDouble(sector.upper().latitude()._degrees);
 
   isb->addString("&WIDTH=");
   isb->addInt(extent._x);

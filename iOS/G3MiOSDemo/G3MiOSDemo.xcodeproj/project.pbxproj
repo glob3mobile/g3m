@@ -24,6 +24,7 @@
 		CF8C0EBB16FC99C400DBEDE4 /* cc3d4326.json in Resources */ = {isa = PBXBuildFile; fileRef = CF8C0EBA16FC99C400DBEDE4 /* cc3d4326.json */; };
 		CF8EE55B16CE94E40033AB7A /* mercator_debug.png in Resources */ = {isa = PBXBuildFile; fileRef = CF8EE55A16CE94E40033AB7A /* mercator_debug.png */; };
 		CF91C53016D7C03C00E25C24 /* full-earth-4096x2048.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF91C52F16D7C03B00E25C24 /* full-earth-4096x2048.bil */; };
+		CF945F871768D59300215A4F /* MDT200-A_CORUNIA.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF945F861768D59300215A4F /* MDT200-A_CORUNIA.bil */; };
 		CF9B5AD7175FC167002FB1B3 /* full-earth-2048x1024.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF9B5AD6175FC167002FB1B3 /* full-earth-2048x1024.bil */; };
 		CFC39A8916FB9DB7004992C2 /* small-caceres.bil in Resources */ = {isa = PBXBuildFile; fileRef = CFC39A8816FB9DB7004992C2 /* small-caceres.bil */; };
 		CFCC53F316D50D8900671DC4 /* full-earth-512x512.bil in Resources */ = {isa = PBXBuildFile; fileRef = CFCC53F216D50D8900671DC4 /* full-earth-512x512.bil */; };
@@ -99,6 +100,7 @@
 		CF8C0EBA16FC99C400DBEDE4 /* cc3d4326.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = cc3d4326.json; sourceTree = "<group>"; };
 		CF8EE55A16CE94E40033AB7A /* mercator_debug.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mercator_debug.png; sourceTree = "<group>"; };
 		CF91C52F16D7C03B00E25C24 /* full-earth-4096x2048.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "full-earth-4096x2048.bil"; sourceTree = "<group>"; };
+		CF945F861768D59300215A4F /* MDT200-A_CORUNIA.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MDT200-A_CORUNIA.bil"; sourceTree = "<group>"; };
 		CF9B5AD6175FC167002FB1B3 /* full-earth-2048x1024.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "full-earth-2048x1024.bil"; sourceTree = "<group>"; };
 		CFC39A8816FB9DB7004992C2 /* small-caceres.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "small-caceres.bil"; sourceTree = "<group>"; };
 		CFCC53F216D50D8900671DC4 /* full-earth-512x512.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "full-earth-512x512.bil"; sourceTree = "<group>"; };
@@ -235,6 +237,7 @@
 		D8EEF4271577B0D6003FEB5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CF945F861768D59300215A4F /* MDT200-A_CORUNIA.bil */,
 				CF9B5AD6175FC167002FB1B3 /* full-earth-2048x1024.bil */,
 				CF04CCF916D3E4D5004DFACF /* 409_554.bil */,
 				E70B224C1700DBA300172DF3 /* A320.bson */,
@@ -400,6 +403,7 @@
 				CF8C0EBB16FC99C400DBEDE4 /* cc3d4326.json in Resources */,
 				E70B224D1700DBA300172DF3 /* A320.bson in Resources */,
 				CF9B5AD7175FC167002FB1B3 /* full-earth-2048x1024.bil in Resources */,
+				CF945F871768D59300215A4F /* MDT200-A_CORUNIA.bil in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
