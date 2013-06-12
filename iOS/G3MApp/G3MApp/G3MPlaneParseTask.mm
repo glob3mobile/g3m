@@ -50,7 +50,7 @@ void G3MPlaneParseTask::run(const G3MContext* context) {
     
     IByteBuffer* buffer = new ByteBuffer_iOS(bytes, length);
     if (buffer) {
-      Shape* plane = SceneJSShapesParser::parseFromBSON(buffer, URL::FILE_PROTOCOL);
+      Shape* plane = SceneJSShapesParser::parseFromBSON(buffer, URL::FILE_PROTOCOL, false);
       if (plane) {
         ((G3MAppUserData*) [_widget userData])->setPlane(plane);
         plane->setPosition(new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),

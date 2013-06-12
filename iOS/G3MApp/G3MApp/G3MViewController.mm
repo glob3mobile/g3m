@@ -169,6 +169,7 @@
                                  true,
                                  NULL,
                                  TimeInterval::fromDays(30),
+                                 true,
                                  LayerTilesRenderParameters::createDefaultMercator(1, 19));
   csiro->setEnable(false);
   layers->addLayer(csiro);
