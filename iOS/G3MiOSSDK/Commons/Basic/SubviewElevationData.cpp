@@ -37,6 +37,8 @@ ElevationData(sector, extent)
   else {
     _buffer = createInterpolatedBuffer( elevationData );
   }
+  
+  isEquivalentTo(elevationData);
 }
 
 const Vector2D SubviewElevationData::getParentXYAt(const ElevationData* elevationData,
