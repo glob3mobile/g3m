@@ -258,13 +258,18 @@ public:
   //builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProvider);
 
 
-  ElevationDataProvider* elevationDataProviderACorunia;
-  elevationDataProviderACorunia = new SingleBillElevationDataProvider(URL("file:///MDT200-A_CORUNIA.bil", false),
-                                                                      Sector::fromDegrees(42.4785417976084858, -9.3819593635107914,
-                                                                                          43.8317114006282011, -7.6284544428640784),
-                                                                      Vector2I(968, 747));
+//  ElevationDataProvider* elevationDataProviderACorunia;
+//  elevationDataProviderACorunia = new SingleBillElevationDataProvider(URL("file:///MDT200-A_CORUNIA.bil", false),
+//                                                                      Sector::fromDegrees(42.4785417976084858, -9.3819593635107914,
+//                                                                                          43.8317114006282011, -7.6284544428640784),
+//                                                                      Vector2I(968, 747));
+//
+//  builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProviderACorunia);
 
-  builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProviderACorunia);
+  ElevationDataProvider* elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
+                                                                                     Sector::fullSphere(),
+                                                                                     Vector2I(2048, 1024));
+  builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProvider);
 
 
 //  elevationDataProvider = new WMSBillElevationDataProvider(URL("http://data.worldwind.arc.nasa.gov/elev", false),
