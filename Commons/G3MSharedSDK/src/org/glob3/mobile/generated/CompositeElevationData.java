@@ -130,7 +130,7 @@ public class CompositeElevationData extends ElevationData
     return s;
   }
 
-  public final Vector3D getMinMaxAverageHeights()
+  public final Vector3D getMinMaxAverageElevations()
   {
     final IMathUtils mu = IMathUtils.instance();
     double minHeight = mu.maxDouble();

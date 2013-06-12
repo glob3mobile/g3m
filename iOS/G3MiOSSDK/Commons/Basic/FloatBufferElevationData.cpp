@@ -74,7 +74,7 @@ const std::string FloatBufferElevationData::description(bool detailed) const {
   return s;
 }
 
-Vector3D FloatBufferElevationData::getMinMaxAverageHeights() const {
+Vector3D FloatBufferElevationData::getMinMaxAverageElevations() const {
   const IMathUtils* mu = IMathUtils::instance();
   float minHeight = mu->maxFloat();
   float maxHeight = mu->minFloat();

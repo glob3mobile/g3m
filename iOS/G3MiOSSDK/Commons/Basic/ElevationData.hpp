@@ -61,7 +61,7 @@ public:
 
   virtual const std::string description(bool detailed) const = 0;
 
-  virtual Vector3D getMinMaxAverageHeights() const = 0;
+  virtual Vector3D getMinMaxAverageElevations() const = 0;
 
   virtual Mesh* createMesh(const Ellipsoid* ellipsoid,
                            float verticalExaggeration,

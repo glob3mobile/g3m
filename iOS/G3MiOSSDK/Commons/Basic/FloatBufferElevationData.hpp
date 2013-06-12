@@ -34,7 +34,7 @@ public:
 
   const std::string description(bool detailed) const;
 
-  Vector3D getMinMaxAverageHeights() const;
+  Vector3D getMinMaxAverageElevations() const;
   
   bool hasNoData() const { return _hasNoData;}
 

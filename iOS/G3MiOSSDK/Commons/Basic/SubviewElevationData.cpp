@@ -247,7 +247,7 @@ const std::string SubviewElevationData::description(bool detailed) const {
 
 }
 
-Vector3D SubviewElevationData::getMinMaxAverageHeights() const {
+Vector3D SubviewElevationData::getMinMaxAverageElevations() const {
   const IMathUtils* mu = IMathUtils::instance();
 
   double minHeight = mu->maxDouble();

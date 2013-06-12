@@ -43,14 +43,14 @@ void TileElevationDataRequest::onCancel(const Sector& sector,
   _listener = NULL;
 }
 
-void TileElevationDataRequest::cancelRequest(){
-  if (_listener != NULL){
+void TileElevationDataRequest::cancelRequest() {
+  if (_listener != NULL) {
     _listener->_request = NULL;
     _provider->cancelRequest(_requestID);
   }
 }
 
-void TileElevationDataRequest::sendRequest(){
+void TileElevationDataRequest::sendRequest() {
   _listener = new TileElevationDataRequestListener(this);
   _requestID = _provider->requestElevationData(_tile->getSector(),
                                                _resolution,
@@ -59,27 +59,29 @@ void TileElevationDataRequest::sendRequest(){
 
 #pragma mark TileElevationDataRequestListener
 
-TileElevationDataRequest::TileElevationDataRequestListener::
-TileElevationDataRequestListener(TileElevationDataRequest* request):_request(request){}
+TileElevationDataRequestListener::TileElevationDataRequestListener(TileElevationDataRequest* request) :
+_request(request)
+{
+}
 
-void TileElevationDataRequest::TileElevationDataRequestListener::onData(const Sector& sector,
-                                                                        const Vector2I& resolution,
-                                                                        ElevationData* elevationData) {
-  if (_request != NULL){
+void TileElevationDataRequestListener::onData(const Sector& sector,
+                                              const Vector2I& resolution,
+                                              ElevationData* elevationData) {
+  if (_request != NULL) {
     _request->onData(sector, resolution, elevationData);
   }
 }
 
-void TileElevationDataRequest::TileElevationDataRequestListener::onError(const Sector& sector,
-                                                                         const Vector2I& resolution) {
-  if (_request != NULL){
+void TileElevationDataRequestListener::onError(const Sector& sector,
+                                               const Vector2I& resolution) {
+  if (_request != NULL) {
     _request->onError(sector, resolution);
   }
 }
 
-void TileElevationDataRequest::TileElevationDataRequestListener::onCancel(const Sector& sector,
-                                                                          const Vector2I& resolution) {
-  if (_request != NULL){
+void TileElevationDataRequestListener::onCancel(const Sector& sector,
+                                                const Vector2I& resolution) {
+  if (_request != NULL) {
     _request->onCancel(sector, resolution);
   }
 }

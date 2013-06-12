@@ -81,7 +81,7 @@ const std::string CompositeElevationData::description(bool detailed) const{
   return s;
 }
 
-Vector3D CompositeElevationData::getMinMaxAverageHeights() const{
+Vector3D CompositeElevationData::getMinMaxAverageElevations() const{
   const IMathUtils* mu = IMathUtils::instance();
   double minHeight = mu->maxDouble();
   double maxHeight = mu->minDouble();
