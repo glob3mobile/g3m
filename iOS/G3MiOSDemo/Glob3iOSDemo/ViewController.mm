@@ -1393,86 +1393,25 @@ public:
                                                       meshSector,
                                                       meshResolution) );
 
-    const ElevationData* subElevationData = new SubviewElevationData(elevationData,
-                                                                     meshSector,
-                                                                     meshResolution,
-                                                                     false);
+//    const ElevationData* subElevationData = new SubviewElevationData(elevationData,
+//                                                                     meshSector,
+//                                                                     meshResolution,
+//                                                                     false);
+//
+//    _meshRenderer->addMesh( subElevationData->createMesh(planet,
+//                                                         verticalExaggeration,
+//                                                         Geodetic3D::fromDegrees(meshSector.getDeltaLatitude().degrees() + 0.1,
+//                                                                                 0,
+//                                                                                 0),
+//                                                         pointSize) );
+//
+//    delete subElevationData;
 
-    _meshRenderer->addMesh( subElevationData->createMesh(planet,
-                                                         verticalExaggeration,
-                                                         Geodetic3D::fromDegrees(meshSector.getDeltaLatitude().degrees() + 0.1,
-                                                                                 0,
-                                                                                 0),
-                                                         pointSize) );
 
-    delete subElevationData;
-
-    
-//    const ElevationData* subElevationDataDecimated = new SubviewElevationData(elevationData,
-//                                                                              subSector,
-//                                                                              subResolution,
-//                                                                              true);
-//    
-//    _meshRenderer->addMesh( subElevationDataDecimated->createMesh(planet,
-//                                                                  verticalExaggeration,
-//                                                                  Geodetic3D::fromDegrees(0.02, 0.02, 0),
-//                                                                  pointSize) );
-
-    
-//    const ElevationData* subElevationDataNotDecimated = new SubviewElevationData(elevationData,
-//                                                                                 subSector,
-//                                                                                 subResolution,
-//                                                                                 false);
-//    
-//    _meshRenderer->addMesh( subElevationDataNotDecimated->createMesh(planet,
-//                                                                     verticalExaggeration,
-//                                                                     Geodetic3D::fromDegrees(0.02,
-//                                                                                             0.02 + (subSector.getDeltaLongitude()._degrees * 1.05),
-//                                                                                             0),
-//                                                                     pointSize) );
-//    
-//    
-//    IFloatBuffer* deltaBuffer = IFactory::instance()->createFloatBuffer( subResolution._x * subResolution._y );
-//    
-//    IMathUtils* mu = IMathUtils::instance();
-//    for (int x = 0; x < subResolution._x; x++) {
-//      for (int y = 0; y < subResolution._y; y++) {
-//        const double height1 = subElevationDataDecimated->getElevationAt(x, y);
-//        const double height2 = subElevationDataNotDecimated->getElevationAt(x, y);
-//        
-//        const int index = ((subResolution._y-1-y) * subResolution._x) + x;
-//        
-//        if (mu->isNan(height1) || mu->isNan(height2)){
-//          deltaBuffer->rawPut(index,  mu->NanF());
-//        } else{
-//          deltaBuffer->rawPut(index,  (float) (height1 - height2));
-//        }
-//        
-//      }
-//    }
-//    
-//    ElevationData* deltaElevation = new FloatBufferElevationData(subSector,
-//                                                                 subResolution,
-//                                                                 subSector,
-//                                                                 subResolution,
-//                                                                 deltaBuffer);
-//    
-//    _meshRenderer->addMesh( deltaElevation->createMesh(planet,
-//                                                       verticalExaggeration,
-//                                                       Geodetic3D::fromDegrees(0.02,
-//                                                                               0.02 + (subSector.getDeltaLongitude()._degrees * 2.1),
-//                                                                               100),
-//                                                       pointSize) );
-
-    
-//    delete deltaElevation;
 
     delete planet;
     delete elevationData;
     
-//    delete subElevationDataDecimated;
-//    delete subElevationDataNotDecimated;
-
   }
   
   void onError(const URL& url) {
