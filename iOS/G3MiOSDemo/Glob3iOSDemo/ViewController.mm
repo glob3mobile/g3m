@@ -255,6 +255,8 @@ public:
   
 
   ElevationDataProvider* elevationDataProvider = NULL;
+  //builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProvider);
+
 
 //  elevationDataProvider = new WMSBillElevationDataProvider(URL("http://data.worldwind.arc.nasa.gov/elev", false),
 //                                                           Sector::fullSphere());
@@ -339,7 +341,7 @@ public:
   //compElevationDataProvider->addElevationDataProvider(elevationDataProvider8);
 
   builder.getTileRendererBuilder()->setElevationDataProvider(compElevationDataProvider);
-  //builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProvider);
+
 }
 
 
@@ -1392,9 +1394,9 @@ public:
                                                       meshResolution) );
 
     const ElevationData* subElevationData = new SubviewElevationData(elevationData,
-                                                                                 meshSector,
-                                                                                 meshResolution,
-                                                                                 false);
+                                                                     meshSector,
+                                                                     meshResolution,
+                                                                     false);
     _meshRenderer->addMesh( subElevationData->createMesh(planet,
                                                          verticalExaggeration,
                                                          Geodetic3D::fromDegrees(meshSector.getDeltaLatitude().degrees() + 0.1,
