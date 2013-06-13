@@ -118,7 +118,7 @@ public:
   bool wasSet() const{ return _value != NULL;}
   bool isEnabled() const { return _enabled;}
   
-  void unset(){
+  void unset(GL* gl){
     if (_value != NULL){
       delete _value;
       _value = NULL;
@@ -126,6 +126,8 @@ public:
     _enabled = false;
     _dirty = false;
     _dirtyEnabled = false;
+    
+    gl->disableVertexAttribArray(_id);
   }
   
   void set(GPUAttributeValue* v){

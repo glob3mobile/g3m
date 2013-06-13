@@ -55,7 +55,7 @@ void GLState::setProgramState(GL* gl, GPUProgramManager& progManager) {
   if (prog != NULL){
     if (prog != _currentGPUProgram){
       if (_currentGPUProgram != NULL){
-        _currentGPUProgram->onUnused();
+        _currentGPUProgram->onUnused(gl);
       }
       _currentGPUProgram = prog;
       gl->useProgram(prog);

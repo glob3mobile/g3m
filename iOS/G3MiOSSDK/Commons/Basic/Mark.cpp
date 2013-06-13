@@ -420,8 +420,8 @@ void Mark::createGLState(){
     //Test matrix multiplication
 //    progState->setUniformMatrixValue("Modelview", MutableMatrix44D::createTranslationMatrix(Vector3D(1e7, 0, 0)), true);
     
-    progState->setAttributeEnabled("Position", true);
-    progState->setAttributeEnabled("TextureCoord", true);
+//    progState->setAttributeEnabled("aPosition", true);
+//    progState->setAttributeEnabled("aTextureCoord", true);
     
     if (_billboardTexCoord == NULL){
       FloatBufferBuilderFromCartesian2D texCoor;
@@ -432,7 +432,7 @@ void Mark::createGLState(){
       _billboardTexCoord = texCoor.create();
     }
     
-    progState->setAttributeValue("TextureCoord",
+    progState->setAttributeValue("aTextureCoord",
                                  _billboardTexCoord, 2,
                                  2,
                                  0,
@@ -448,17 +448,17 @@ void Mark::createGLState(){
     
     IFloatBuffer* vertices = vertex.create();
     
-    progState->setAttributeValue("Position",
+    progState->setAttributeValue("aPosition",
                                  vertices, 4, //The attribute is a float vector of 4 elements
                                  3,            //Our buffer contains elements of 3
                                  0,            //Index 0
                                  false,        //Not normalized
                                  0);           //Stride 0
     
-    progState->setUniformValue("TextureExtent", Vector2D(_textureWidth, _textureHeight));
-    progState->setUniformValue("ViewPortExtent", Vector2D( (double)_viewportWidth, (double)_viewportHeight ));
+    progState->setUniformValue("uTextureExtent", Vector2D(_textureWidth, _textureHeight));
+    progState->setUniformValue("uViewPortExtent", Vector2D( (double)_viewportWidth, (double)_viewportHeight ));
     
-    progState->setAttributeDisabled("Color");
+//    progState->setAttributeDisabled("Color");
   }
 }
 

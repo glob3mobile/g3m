@@ -47,7 +47,7 @@ GPUProgram* GPUProgram::createProgram(GL* gl, const std::string name, const std:
   
   ILogger::instance()->logInfo("FRAGMENT SOURCE: \n %s", fragmentSource.c_str());
   
-  gl->bindAttribLocation(p, 0, "Position");
+  //gl->bindAttribLocation(p, 0, "Position");
   
   // link program
   if (!p->linkProgram(gl)) {
@@ -64,6 +64,10 @@ GPUProgram* GPUProgram::createProgram(GL* gl, const std::string name, const std:
   p->deleteShader(gl, fragmentShader);
   
   p->getVariables(gl);
+  
+  if (gl->getError() != GLError::noError()){
+    ILogger::instance()->logError("Error while compiling program");
+  }
   
   return p;
 }
@@ -260,7 +264,7 @@ void GPUProgram::onUsed(){
 /**
  Must be called when the program is no longer used
  */
-void GPUProgram::onUnused(){
+void GPUProgram::onUnused(GL* gl){
   //ILogger::instance()->logInfo("GPUProgram %s unused", _name.c_str());
 #ifdef C_CODE
   for (std::map<std::string, GPUUniform*>::iterator iter = _uniforms.begin(); iter != _uniforms.end(); iter++) {
@@ -270,7 +274,7 @@ void GPUProgram::onUnused(){
   
   for (std::map<std::string, GPUAttribute*>::iterator iter = _attributes.begin(); iter != _attributes.end(); iter++) {
     GPUAttribute* a = iter->second;
-    a->unset();
+    a->unset(gl);
   }
 #endif
 #ifdef JAVA_CODE

@@ -72,7 +72,7 @@ public:
   GPUAttributeVec4Float* getGPUAttributeVec4Float(const std::string name) const;
   
   void onUsed();
-  void onUnused();
+  void onUnused(GL* gl);
   void applyChanges(GL* gl);
   
   GPUUniform* getUniformOfType(const std::string& name, int type) const{

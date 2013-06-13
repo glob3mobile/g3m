@@ -18,7 +18,7 @@ GPUProgram* GPUProgramManager::getProgram(GLState* const glState) {
     for (int j = 0; j < sizeI; j++) {
       std::string& name = ui->at(j);
       
-      if (name.compare("ViewPortExtent") == 0){
+      if (name.compare("uViewPortExtent") == 0){
         return getProgram("Billboard");
       }
     }

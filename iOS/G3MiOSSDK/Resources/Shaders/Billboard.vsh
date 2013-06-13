@@ -4,26 +4,28 @@
 //  Created by José Miguel Santana Núñez
 //
 
-attribute vec4 Position;
-attribute vec2 TextureCoord;
-attribute vec4 Color;
+attribute vec4 aPosition;
+attribute vec2 aTextureCoord;
+//attribute vec4 Color;
 
-uniform mat4 Projection;
-uniform mat4 Modelview;
+uniform mat4 uProjection;
+uniform mat4 uModelview;
 
-uniform vec2 TextureExtent;
-uniform vec2 ViewPortExtent;
+uniform vec2 uTextureExtent;
+uniform vec2 uViewPortExtent;
 
-varying vec4 VertexColor;
+//varying vec4 VertexColor;
 varying vec2 TextureCoordOut;
 
 void main() {
-  gl_Position = Projection * Modelview * Position;
+  gl_Position = uProjection * uModelview * aPosition;
   
-  gl_Position.x += ((TextureCoord.x - 0.5) * 2.0 * TextureExtent.x / ViewPortExtent.x) * gl_Position.w;
-  gl_Position.y -= ((TextureCoord.y - 0.5) * 2.0 * TextureExtent.y / ViewPortExtent.y) * gl_Position.w;
+  gl_Position.x += ((aTextureCoord.x - 0.5) * 2.0 * uTextureExtent.x / uViewPortExtent.x) * gl_Position.w;
+  gl_Position.y -= ((aTextureCoord.y - 0.5) * 2.0 * uTextureExtent.y / uViewPortExtent.y) * gl_Position.w;
   
-  TextureCoordOut = TextureCoord;
+  TextureCoordOut = aTextureCoord;
   
-  VertexColor = Color; //Needed ???
+  //vec4 x = Color;
+  
+  //VertexColor = Color; //Needed ???
 }
