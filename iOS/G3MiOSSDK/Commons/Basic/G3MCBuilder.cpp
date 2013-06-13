@@ -237,7 +237,7 @@ private:
     if (srs.compare("EPSG_4326") == 0) {
       layerTilesRenderParameters = LayerTilesRenderParameters::createDefaultNonMercator(Sector::fullSphere());
     }
-    else if (srs.compare("EPSG_900913")) {
+    else if (srs.compare("EPSG_900913") == 0) {
       layerTilesRenderParameters = LayerTilesRenderParameters::createDefaultMercator(0, 17);
     }
     const bool isTransparent = jsonBaseLayer->getAsBoolean("transparent", false);
