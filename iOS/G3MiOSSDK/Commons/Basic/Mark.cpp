@@ -417,12 +417,6 @@ void Mark::createGLState(){
     ILogger::instance()->logError("Planet NULL");
   } else{
     
-    //Test matrix multiplication
-//    progState->setUniformMatrixValue("Modelview", MutableMatrix44D::createTranslationMatrix(Vector3D(1e7, 0, 0)), true);
-    
-//    progState->setAttributeEnabled("aPosition", true);
-//    progState->setAttributeEnabled("aTextureCoord", true);
-    
     if (_billboardTexCoord == NULL){
       FloatBufferBuilderFromCartesian2D texCoor;
       texCoor.add(1,1);
@@ -457,8 +451,6 @@ void Mark::createGLState(){
     
     progState->setUniformValue("uTextureExtent", Vector2D(_textureWidth, _textureHeight));
     progState->setUniformValue("uViewPortExtent", Vector2D( (double)_viewportWidth, (double)_viewportHeight ));
-    
-//    progState->setAttributeDisabled("Color");
   }
 }
 

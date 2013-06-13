@@ -6,7 +6,6 @@
 
 attribute vec4 aPosition;
 attribute vec2 aTextureCoord;
-//attribute vec4 Color;
 
 uniform mat4 uProjection;
 uniform mat4 uModelview;
@@ -14,7 +13,6 @@ uniform mat4 uModelview;
 uniform vec2 uTextureExtent;
 uniform vec2 uViewPortExtent;
 
-//varying vec4 VertexColor;
 varying vec2 TextureCoordOut;
 
 void main() {
@@ -24,8 +22,4 @@ void main() {
   gl_Position.y -= ((aTextureCoord.y - 0.5) * 2.0 * uTextureExtent.y / uViewPortExtent.y) * gl_Position.w;
   
   TextureCoordOut = aTextureCoord;
-  
-  //vec4 x = Color;
-  
-  //VertexColor = Color; //Needed ???
 }

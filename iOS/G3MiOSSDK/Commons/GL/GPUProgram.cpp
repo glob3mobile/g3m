@@ -285,7 +285,7 @@ void GPUProgram::onUnused(GL* gl){
   
   final Object[] att = _attributes.values().toArray();
   for (int i = 0; i < att.length; i++) {
-    ((GPUAttribute) att[i]).unset();
+    ((GPUAttribute) att[i]).unset(gl);
   }
 #endif
 }

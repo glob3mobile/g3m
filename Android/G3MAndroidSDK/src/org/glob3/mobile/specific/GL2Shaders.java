@@ -73,30 +73,28 @@ public final class GL2Shaders {
                                                           + "  gl_PointSize = PointSize;\n" + "}";
 
    public final static String  _billboardFragmentShader = "varying mediump vec2 TextureCoordOut;\n"
-                                                          + "varying mediump vec4 VertexColor;\n"
                                                           + "uniform sampler2D Sampler;\n" + "\n" + "void main() {\n" + "  \n"
                                                           + "  gl_FragColor = texture2D(Sampler, TextureCoordOut);\n" + "}";
 
-   public final static String  _billboardVertexShader   = "attribute vec4 Position;\n"
-                                                          + "attribute vec2 TextureCoord;\n"
-                                                          + "attribute vec4 Color;\n"
-                                                          + "\n"
-                                                          + "uniform mat4 Projection;\n"
-                                                          + "uniform mat4 Modelview;\n"
-                                                          + "\n"
-                                                          + "uniform vec2 TextureExtent;\n"
-                                                          + "uniform vec2 ViewPortExtent;\n"
-                                                          + "\n"
-                                                          + "varying vec4 VertexColor;\n"
-                                                          + "varying vec2 TextureCoordOut;\n"
-                                                          + "\n"
-                                                          + "void main() {\n"
-                                                          + "  gl_Position = Projection * Modelview * Position;\n"
-                                                          + "  \n"
-                                                          + "  gl_Position.x += ((TextureCoord.x - 0.5) * 2.0 * TextureExtent.x / ViewPortExtent.x) * gl_Position.w;\n"
-                                                          + "  gl_Position.y -= ((TextureCoord.y - 0.5) * 2.0 * TextureExtent.y / ViewPortExtent.y) * gl_Position.w;\n"
-                                                          + "  \n" + "  TextureCoordOut = TextureCoord;\n" + "  \n"
-                                                          + "  VertexColor = Color; //Needed ???\n" + "}";
+   public final static String  _billboardVertexShader   = "attribute vec4 aPosition;\n" + 
+													   		"attribute vec2 aTextureCoord;\n" + 
+													   		"\n" + 
+													   		"uniform mat4 uProjection;\n" + 
+													   		"uniform mat4 uModelview;\n" + 
+													   		"\n" + 
+													   		"uniform vec2 uTextureExtent;\n" + 
+													   		"uniform vec2 uViewPortExtent;\n" + 
+													   		"\n" + 
+													   		"varying vec2 TextureCoordOut;\n" + 
+													   		"\n" + 
+													   		"void main() {\n" + 
+													   		"  gl_Position = uProjection * uModelview * aPosition;\n" + 
+													   		"  \n" + 
+													   		"  gl_Position.x += ((aTextureCoord.x - 0.5) * 2.0 * uTextureExtent.x / uViewPortExtent.x) * gl_Position.w;\n" + 
+													   		"  gl_Position.y -= ((aTextureCoord.y - 0.5) * 2.0 * uTextureExtent.y / uViewPortExtent.y) * gl_Position.w;\n" + 
+													   		"  \n" + 
+													   		"  TextureCoordOut = aTextureCoord;\n" + 
+													   		"}";
 
 
    ////////////////////////////////////////////////////////////////////////////////////////
