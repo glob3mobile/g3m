@@ -63,6 +63,8 @@ public final class NativeGL2_Android
                          final float y) {
       checkOpenGLThread();
       GLES20.glUniform2f(((GLUniformID_Android) loc).getID(), x, y);
+      
+      //ILogger.instance().logInfo("UNIFORM " + loc + " " + x + " " + y);
    }
 
 
@@ -71,6 +73,8 @@ public final class NativeGL2_Android
                          final float x) {
       checkOpenGLThread();
       GLES20.glUniform1f(((GLUniformID_Android) loc).getID(), x);
+      
+      //ILogger.instance().logInfo("UNIFORM " + loc + " " + x);
    }
 
 
@@ -79,6 +83,8 @@ public final class NativeGL2_Android
                          final int v) {
       checkOpenGLThread();
       GLES20.glUniform1i(((GLUniformID_Android) loc).getID(), v);
+      
+      //ILogger.instance().logInfo("UNIFORM " + loc + " " + v);
    }
 
 
@@ -104,6 +110,8 @@ public final class NativeGL2_Android
                matrix.getColumnMajorFloatArray(), //
                0 //
       );
+      
+//      ILogger.instance().logInfo("UNIFORM MATRIX " + location );
    }
 
 
@@ -132,6 +140,8 @@ public final class NativeGL2_Android
                          final float v3) {
       checkOpenGLThread();
       GLES20.glUniform4f(((GLUniformID_Android) location).getID(), v0, v1, v2, v3);
+      
+//      ILogger.instance().logInfo("UNIFORM " + location + " " + v0 + " " + v1 + " " + v2 + " " + v3);
    }
 
 
@@ -199,6 +209,7 @@ public final class NativeGL2_Android
    public void enableVertexAttribArray(final int location) {
       checkOpenGLThread();
       GLES20.glEnableVertexAttribArray(location);
+      //ILogger.instance().logInfo("Attrib Enabled " + location);
    }
 
 
@@ -206,6 +217,7 @@ public final class NativeGL2_Android
    public void disableVertexAttribArray(final int location) {
       checkOpenGLThread();
       GLES20.glDisableVertexAttribArray(location);
+      //ILogger.instance().logInfo("Attrib Disabled " + location);
    }
 
 
@@ -285,11 +297,11 @@ public final class NativeGL2_Android
       checkOpenGLThread();
       final FloatBuffer floatBuffer = ((FloatBuffer_Android) buffer).getBuffer();
 
-      //      System.err.println("vertexAttribPointer(index=" + index + //
-      //                         ", size=" + size + //
-      //                         ", normalized=" + normalized + //
-      //                         ", stride=" + stride + //
-      //                         ", floatBuffer=" + floatBuffer + ")");
+//      ILogger.instance().logInfo("vertexAttribPointer(index=" + index + //
+//                               ", size=" + size + //
+//                               ", normalized=" + normalized + //
+//                               ", stride=" + stride + //
+//                               ", floatBuffer=" + floatBuffer + ")");
 
       GLES20.glVertexAttribPointer(index, size, GLES20.GL_FLOAT, normalized, stride, floatBuffer);
    }
@@ -654,12 +666,14 @@ public final class NativeGL2_Android
    public void bindAttribLocation(final ShaderProgram program,
                                   final int loc,
                                   final String name) {
+	  checkOpenGLThread();
       GLES20.glBindAttribLocation(program.getProgram(), loc, name);
    }
 
 
    @Override
    public void useProgram(final GPUProgram program) {
+	  checkOpenGLThread();
       GLES20.glUseProgram(program.getProgramID());
    }
 
@@ -704,6 +718,7 @@ public final class NativeGL2_Android
    public void bindAttribLocation(final GPUProgram program,
                                   final int loc,
                                   final String name) {
+	  checkOpenGLThread();
       GLES20.glBindAttribLocation(program.getProgramID(), loc, name);
    }
 
@@ -711,6 +726,7 @@ public final class NativeGL2_Android
    @Override
    public int getProgramiv(final GPUProgram program,
                            final int param) {
+	  checkOpenGLThread();
       final int[] i = new int[1];
       GLES20.glGetProgramiv(program.getProgramID(), param, i, 0);
       return i[0];
@@ -720,6 +736,7 @@ public final class NativeGL2_Android
    @Override
    public GPUUniform getActiveUniform(final GPUProgram program,
                                       final int i) {
+	  checkOpenGLThread();
       final int[] maxLength = new int[1];
       GLES20.glGetProgramiv(program.getProgramID(), GLES20.GL_ACTIVE_UNIFORM_MAX_LENGTH, maxLength, 0);
 
@@ -760,7 +777,7 @@ public final class NativeGL2_Android
    @Override
    public GPUAttribute getActiveAttribute(final GPUProgram program,
                                           final int i) {
-
+	  checkOpenGLThread();
       final int[] maxLength = new int[1];
       GLES20.glGetProgramiv(program.getProgramID(), GLES20.GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, maxLength, 0);
 
