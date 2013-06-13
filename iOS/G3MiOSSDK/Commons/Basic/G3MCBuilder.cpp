@@ -232,12 +232,12 @@ private:
     if (imageFormat.compare("JPG") == 0) {
       imageFormat = "image/jpeg";
     }
-    const std::string srs = jsonBaseLayer->getAsString("projection", "EPSG_4326");
+    const std::string srs = jsonBaseLayer->getAsString("projection", "EPSG:4326");
     LayerTilesRenderParameters* layerTilesRenderParameters = NULL;
-    if (srs.compare("EPSG_4326") == 0) {
+    if (srs.compare("EPSG:4326") == 0) {
       layerTilesRenderParameters = LayerTilesRenderParameters::createDefaultNonMercator(Sector::fullSphere());
     }
-    else if (srs.compare("EPSG_900913") == 0) {
+    else if (srs.compare("EPSG:900913") == 0) {
       layerTilesRenderParameters = LayerTilesRenderParameters::createDefaultMercator(0, 17);
     }
     const bool isTransparent = jsonBaseLayer->getAsBoolean("transparent", false);
