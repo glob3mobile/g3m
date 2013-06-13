@@ -126,12 +126,6 @@ public class Mark
     else
     {
   
-      //Test matrix multiplication
-  //    progState->setUniformMatrixValue("Modelview", MutableMatrix44D::createTranslationMatrix(Vector3D(1e7, 0, 0)), true);
-  
-  //    progState->setAttributeEnabled("aPosition", true);
-  //    progState->setAttributeEnabled("aTextureCoord", true);
-  
       if (_billboardTexCoord == null)
       {
         FloatBufferBuilderFromCartesian2D texCoor = new FloatBufferBuilderFromCartesian2D();
@@ -157,8 +151,6 @@ public class Mark
   
       progState.setUniformValue("uTextureExtent", new Vector2D(_textureWidth, _textureHeight));
       progState.setUniformValue("uViewPortExtent", new Vector2D((double)_viewportWidth, (double)_viewportHeight));
-  
-  //    progState->setAttributeDisabled("Color");
     }
   }
 
