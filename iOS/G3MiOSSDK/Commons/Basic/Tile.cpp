@@ -700,6 +700,8 @@ void Tile::setElevationData(ElevationData* ed, int level){
       }
     }
 
+  } else{
+    delete ed;
   }
 }
 

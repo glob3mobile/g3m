@@ -7,6 +7,7 @@
 //
 
 #include "TileElevationDataRequest.hpp"
+#include "ElevationData.hpp"
 
 #pragma mark TileElevationDataRequest
 
@@ -30,6 +31,8 @@ void TileElevationDataRequest::onData(const Sector& sector,
   _listener = NULL;
   if (_tile != NULL){
     _tile->setElevationData(elevationData, _tile->getLevel());
+  } else{
+    delete elevationData;
   }
 }
 
@@ -69,6 +72,8 @@ void TileElevationDataRequestListener::onData(const Sector& sector,
                                               ElevationData* elevationData) {
   if (_request != NULL) {
     _request->onData(sector, resolution, elevationData);
+  } else{
+    delete elevationData;
   }
 }
 

@@ -76,13 +76,16 @@ public:
   }
 
   void onCancel(const URL& url) {
-
+    if (_autodeleteListener) {
+      delete _listener;
+      _listener = NULL;
+    }
   }
 
   void onCanceledDownload(const URL& url,
                           IByteBuffer* data,
                           bool expired) {
-
+      printf("WMS ELEVATION CANCELED\n");
   }
 
 

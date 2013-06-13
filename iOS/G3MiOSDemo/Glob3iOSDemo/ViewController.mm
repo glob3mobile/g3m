@@ -256,14 +256,14 @@ public:
 
   ElevationDataProvider* elevationDataProvider = NULL;
 
-//  elevationDataProvider = new WMSBillElevationDataProvider(URL("http://data.worldwind.arc.nasa.gov/elev", false),
-//                                                           Sector::fullSphere());
-//  builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProvider);
+  elevationDataProvider = new WMSBillElevationDataProvider(URL("http://data.worldwind.arc.nasa.gov/elev", false),
+                                                           Sector::fullSphere());
+  builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProvider);
 
   //  ElevationDataProvider* elevationDataProvider;
-  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
-                                                              Sector::fullSphere(),
-                                                              Vector2I(2048, 1024));
+//  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
+//                                                              Sector::fullSphere(),
+//                                                              Vector2I(2048, 1024));
 
 //  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-4096x2048.bil", false),
 //                                                              Sector::fullSphere(),
@@ -292,15 +292,15 @@ public:
   //                                                               Vector2I(2008, 2032),
   //                                                               0);
   
-  ElevationDataProvider* elevationDataProvider4;
-  elevationDataProvider4 = new SingleBillElevationDataProvider(URL("file:///small-caceres.bil", false),
-                                                               Sector::fromDegrees(
-                                                                                   39.4642994358225678,
-                                                                                   -6.3829980000000042,
-                                                                                   39.4829889999999608,
-                                                                                   -6.3645291787065954
-                                                                                   ),
-                                                               Vector2I(251, 254));
+//  ElevationDataProvider* elevationDataProvider4;
+//  elevationDataProvider4 = new SingleBillElevationDataProvider(URL("file:///small-caceres.bil", false),
+//                                                               Sector::fromDegrees(
+//                                                                                   39.4642994358225678,
+//                                                                                   -6.3829980000000042,
+//                                                                                   39.4829889999999608,
+//                                                                                   -6.3645291787065954
+//                                                                                   ),
+//                                                               Vector2I(251, 254));
 
   //  ElevationDataProvider* elevationDataProvider5;
   //  elevationDataProvider5 = new SingleBillElevationDataProvider(URL("file:///elev-35.0_-6.0_38.0_-2.0_4096x2048.bil", false),
@@ -324,22 +324,22 @@ public:
 //                                                              Sector::fullSphere());
 
 
-  CompositeElevationDataProvider* compElevationDataProvider = new CompositeElevationDataProvider();
-  compElevationDataProvider->addElevationDataProvider(elevationDataProvider);
+//  CompositeElevationDataProvider* compElevationDataProvider = new CompositeElevationDataProvider();
+//  compElevationDataProvider->addElevationDataProvider(elevationDataProvider);
   //CompositeElevationDataProvider* compElevationDataProvider = new CompositeElevationDataProvider();
   //compElevationDataProvider->addElevationDataProvider(elevationDataProvider1);
   //compElevationDataProvider->addElevationDataProvider(elevationDataProvider1);
   //compElevationDataProvider->addElevationDataProvider(elevationDataProvider2);
   //compElevationDataProvider->addElevationDataProvider(elevationDataProvider3);
-  compElevationDataProvider->addElevationDataProvider(elevationDataProvider4);
+//  compElevationDataProvider->addElevationDataProvider(elevationDataProvider4);
   //compElevationDataProvider->addElevationDataProvider(elevationDataProvider5);
   //elevationDataProvider = compElevationDataProvider;
   //compElevationDataProvider->addElevationDataProvider(elevationDataProvider6);
   //compElevationDataProvider->addElevationDataProvider(elevationDataProvider7);
   //compElevationDataProvider->addElevationDataProvider(elevationDataProvider8);
 
-  builder.getTileRendererBuilder()->setElevationDataProvider(compElevationDataProvider);
-  //builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProvider);
+//  builder.getTileRendererBuilder()->setElevationDataProvider(compElevationDataProvider);
+  builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProvider);
 }
 
 
@@ -642,7 +642,7 @@ public:
                                             TimeInterval::fromDays(30)) );
   }
   
-  const bool useBingMaps = true;
+  const bool useBingMaps = false;
   if (useBingMaps) {
     layerSet->addLayer( new BingMapsLayer(//BingMapType::Road(),
                                           BingMapType::AerialWithLabels(),
@@ -718,7 +718,7 @@ public:
     layerSet->addLayer(ortoAyto);
   }
   
-  bool useWMSBing = false;
+  bool useWMSBing = true;
   if (useWMSBing) {
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
                                         URL("http://www.nasa.network.com/wms?", false),
@@ -750,7 +750,7 @@ public:
     layerSet->addLayer(bing);
   }
   
-  if (false) {
+  if (true) {
     WMSLayer* political = new WMSLayer("topp:cia",
                                        URL("http://worldwind22.arc.nasa.gov/geoserver/wms?", false),
                                        WMS_1_1_0,
@@ -1393,11 +1393,11 @@ public:
 
     const ElevationData* subElevationData = new SubviewElevationData(elevationData,
                                                                                  meshSector,
-                                                                                 meshResolution,
-                                                                                 true);
+                                                                                 elevationData->getExtent(),
+                                                                                 false);
     _meshRenderer->addMesh( subElevationData->createMesh(planet,
                                                          verticalExaggeration,
-                                                         Geodetic3D::fromDegrees(meshSector.getDeltaLatitude().degrees() + 0.1,
+                                                         Geodetic3D::fromDegrees(meshSector.getDeltaLatitude().degrees() + 20,
                                                                                  0,
                                                                                  0),
                                                          pointSize) );
