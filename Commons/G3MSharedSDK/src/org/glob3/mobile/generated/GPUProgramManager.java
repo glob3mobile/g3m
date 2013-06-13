@@ -96,7 +96,6 @@ public class GPUProgramManager
 
   public final GPUProgram getProgram(GLState glState)
   {
-  
     GLState thisGLState = glState;
     while (thisGLState != null)
     {

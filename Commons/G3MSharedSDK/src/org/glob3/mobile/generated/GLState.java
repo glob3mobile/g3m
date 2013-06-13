@@ -31,7 +31,25 @@ public class GLState
   private void setProgramState(GL gl, GPUProgramManager progManager)
   {
   
-    GPUProgram prog = progManager.getProgram(this);
+    GPUProgram prog = _programState.getLinkedProgram();
+    if (prog != null)
+    {
+      GLState parent = _parentGLState;
+      while (parent != null && prog != null)
+      {
+        if (prog != parent.getGPUProgramState().getLinkedProgram())
+        {
+          prog = null;
+        }
+        parent = parent.getParent();
+      }
+    }
+  
+    if (prog == null)
+    {
+      prog = progManager.getProgram(this);
+    }
+  
     if (prog != null)
     {
       if (prog != _currentGPUProgram)
@@ -48,6 +66,7 @@ public class GLState
     {
       ILogger.instance().logError("No GPUProgram found.");
     }
+  
   
     linkAndApplyToGPUProgram(prog);
     prog.applyChanges(gl);
