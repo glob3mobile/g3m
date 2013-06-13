@@ -93,7 +93,7 @@ public class FloatBufferElevationData extends BufferElevationData
     return s;
   }
 
-  public final Vector3D getMinMaxAverageHeights()
+  public final Vector3D getMinMaxAverageElevations()
   {
     final IMathUtils mu = IMathUtils.instance();
     float minHeight = mu.maxFloat();

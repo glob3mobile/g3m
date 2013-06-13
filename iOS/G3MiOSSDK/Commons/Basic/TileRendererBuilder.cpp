@@ -301,7 +301,6 @@ TilesRenderParameters* TileRendererBuilder::createTileRendererParameters() {
 }
 
 TileTessellator* TileRendererBuilder::createTileTessellator() {
-  //return new EllipsoidalTileTessellator(getParameters()->_tileMeshResolution, true);
   return new EllipsoidalTileTessellator(true);
 }
 

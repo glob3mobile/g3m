@@ -50,7 +50,7 @@ public:
 
   const std::string description(bool detailed) const;
 
-  Vector3D getMinMaxAverageHeights() const;
+  Vector3D getMinMaxAverageElevations() const;
 
   const Sector getSector() const {
     return _sector;

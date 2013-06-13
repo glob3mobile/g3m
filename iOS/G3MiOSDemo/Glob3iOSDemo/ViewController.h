@@ -11,6 +11,15 @@
 #import <G3MiOSSDK/G3MWidget_iOS.h>
 class G3MCBuilder_iOS;
 
+class Sector;
+class Mesh;
+
+Mesh* createSectorMesh(const Planet* planet,
+                       const int resolution,
+                       const Sector& sector,
+                       const Color& color,
+                       const int lineWidth);
+
 @interface ViewController : UIViewController {
   IBOutlet G3MWidget_iOS* G3MWidget;
 

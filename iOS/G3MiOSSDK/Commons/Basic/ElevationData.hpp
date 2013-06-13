@@ -61,7 +61,7 @@ public:
 
   virtual const std::string description(bool detailed) const = 0;
 
-  virtual Vector3D getMinMaxAverageHeights() const = 0;
+  virtual Vector3D getMinMaxAverageElevations() const = 0;
 
   virtual Mesh* createMesh(const Ellipsoid* ellipsoid,
                            float verticalExaggeration,
@@ -90,7 +90,30 @@ public:
                           position.longitude());
   }
   
-  
+//  bool isEquivalentTo(const ElevationData* ed){
+//    bool equivalent = true;
+//    const int width  = 3;
+//    const int height = 3;
+//    for (int x = 0; x < width; x++) {
+//      const double u = (double) x / (width  - 1);
+//      
+//      for (int y = 0; y < height; y++) {
+//        const double v = 1.0 - ( (double) y / (height - 1) );
+//        
+//        const Geodetic2D position = _sector.getInnerPoint(u, v);
+//        
+//        const double elevation = getElevationAt(position);
+//        const double elevation2 = ed->getElevationAt(position);
+//        
+//        if (elevation != elevation2){
+//          printf("%s -> %f != %f\n", position.description().c_str(), elevation, elevation2);
+//          equivalent = false;
+//        }
+//      }
+//    }
+//    return equivalent;
+//  }
+
 };
 
 #endif

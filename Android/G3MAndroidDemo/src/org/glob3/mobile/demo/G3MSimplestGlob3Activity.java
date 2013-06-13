@@ -13,6 +13,7 @@ import org.glob3.mobile.generated.CameraRotationHandler;
 import org.glob3.mobile.generated.CameraSingleDragHandler;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.CompositeRenderer;
+import org.glob3.mobile.generated.ElevationDataProvider;
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.ICameraActivityListener;
@@ -22,17 +23,18 @@ import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.LayerTilesRenderParameters;
+import org.glob3.mobile.generated.MapQuestLayer;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.SimpleCameraConstrainer;
+import org.glob3.mobile.generated.SingleBillElevationDataProvider;
 import org.glob3.mobile.generated.TileRenderer;
 import org.glob3.mobile.generated.TileRendererBuilder;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
-import org.glob3.mobile.generated.WMSLayer;
-import org.glob3.mobile.generated.WMSServerVersion;
+import org.glob3.mobile.generated.Vector2I;
 import org.glob3.mobile.generated.WidgetUserData;
 import org.glob3.mobile.specific.Downloader_Android;
 import org.glob3.mobile.specific.G3MBaseActivity;
@@ -114,21 +116,22 @@ public class G3MSimplestGlob3Activity
       //final Sector bbox = new Sector(new Geodetic2D(Angle.fromDegrees(-6.858), Angle.fromDegrees(39.182)), new Geodetic2D(
       //         Angle.fromDegrees(-6.089), Angle.fromDegrees(39.657)));
 
-      final WMSLayer aytoLayer = new WMSLayer( //
-               "sigaytocc:AytoCC", //
-               new URL("http://195.57.27.86:8080/geoserver/gwc/service/wms?", false), //
-               WMSServerVersion.WMS_1_1_0, //
-               //Sector.fromDegrees(-85.05, -180.0, 85.05, 180.0), //
-               Sector.fullSphere(), //
-               "image/jpeg", //
-               "EPSG:4326", //
-               "", //
-               false, //
-               null, //
-               TimeInterval.fromDays(30), //
-               true, params);
 
-      layerSet.addLayer(aytoLayer);
+      //      final WMSLayer aytoLayer = new WMSLayer( //
+      //               "sigaytocc:AytoCC", //
+      //               new URL("http://195.57.27.86:8080/geoserver/gwc/service/wms?", false), //
+      //               WMSServerVersion.WMS_1_1_0, //
+      //               //Sector.fromDegrees(-85.05, -180.0, 85.05, 180.0), //
+      //               Sector.fullSphere(), //
+      //               "image/jpeg", //
+      //               "EPSG:4326", //
+      //               "", //
+      //               false, //
+      //               null, //
+      //               TimeInterval.fromDays(30), //
+      //               true, params);
+      //
+      //      layerSet.addLayer(aytoLayer);
 
 
       //      final WMSLayer blueMarbleL = new WMSLayer( //
@@ -153,34 +156,21 @@ public class G3MSimplestGlob3Activity
       //                        LayerTilesRenderParameters.defaultTileMeshResolution(), //
       //                        false));
       //      layerSet.addLayer(blueMarbleL);
-      //
-      //
-      //      final WMSLayer ortoAyto = new WMSLayer( //
-      //               "orto_refundida", //
-      //               new URL("http://195.57.27.86/wms_etiquetas_con_orto.mapdef?", false), //
-      //               WMSServerVersion.WMS_1_1_0, //
-      //               Sector.fromDegrees(39.350228, -6.508713, 39.536351, -6.25946), //
-      //               //               new Sector(Geodetic2D.fromDegrees(39.350228, -6.508713), //
-      //               //                        Geodetic2D.fromDegrees(39.536351, -6.25946)), //
-      //               "image/jpeg", //
-      //               "EPSG:4326", //
-      //               "", //
-      //               false, //
-      //               new LevelTileCondition(4, 19), //
-      //               TimeInterval.fromDays(30), //
-      //               new LayerTilesRenderParameters(//
-      //                        Sector.fullSphere(), //
-      //                        2, //
-      //                        4, //
-      //                        0, //
-      //                        19, //
-      //                        LayerTilesRenderParameters.defaultTileTextureResolution(), //
-      //                        LayerTilesRenderParameters.defaultTileMeshResolution(), //
-      //                        false));
-      //      layerSet.addLayer(ortoAyto);
 
+      layerSet.addLayer(MapQuestLayer.newOSM(TimeInterval.fromDays(30)));
 
       final TileRendererBuilder tlBuilder = new TileRendererBuilder();
+
+      final ElevationDataProvider elevationDataProvider = new SingleBillElevationDataProvider( //
+               new URL("file:///full-earth-2048x1024.bil", false), //
+               Sector.fullSphere(), //
+               new Vector2I(2048, 1024) //
+      );
+      tlBuilder.setElevationDataProvider(elevationDataProvider);
+
+      tlBuilder.setVerticalExaggeration(20);
+
+
       tlBuilder.setLayerSet(layerSet);
       tlBuilder.setRenderDebug(false);
       final TileRenderer tileRenderer = tlBuilder.create();

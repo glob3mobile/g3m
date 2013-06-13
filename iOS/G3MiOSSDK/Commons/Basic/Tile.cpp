@@ -140,11 +140,13 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
   const LayerTilesRenderParameters* layerTilesRenderParameters = trc->getLayerTilesRenderParameters();
   const Vector2I tileMeshResolution(layerTilesRenderParameters->_tileMeshResolution);
 
-  if (_elevationData == NULL && elevationDataProvider != NULL){
+  if ( (_elevationData == NULL) && (elevationDataProvider != NULL) ) {
     initializeElevationData(elevationDataProvider, tessellator, tileMeshResolution, planet, renderDebug);
   }
 
-  if ( _tessellatorMesh == NULL || _mustActualizeMeshDueToNewElevationData) {
+  const bool mercator = trc->getLayerTilesRenderParameters()->_mercator;
+
+  if ( (_tessellatorMesh == NULL) || _mustActualizeMeshDueToNewElevationData ) {
     _mustActualizeMeshDueToNewElevationData = false;
 
     if (elevationDataProvider == NULL) {
@@ -154,39 +156,29 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
                                                      this,
                                                      NULL,
                                                      _verticalExaggeration,
+                                                     mercator,
                                                      renderDebug);
     }
     else {
-      if (_elevationData == NULL) {
-        MeshHolder* meshHolder = new MeshHolder( tessellator->createTileMesh(planet,
-                                                                             tileMeshResolution,
-                                                                             this,
-                                                                             NULL,
-                                                                             _verticalExaggeration,
-                                                                             renderDebug) );
-        _tessellatorMesh = meshHolder;
+      Mesh* tessellatorMesh = tessellator->createTileMesh(planet,
+                                                          tileMeshResolution,
+                                                          this,
+                                                          _elevationData,
+                                                          _verticalExaggeration,
+                                                          mercator,
+                                                          renderDebug);
 
+      MeshHolder* meshHolder = (MeshHolder*) _tessellatorMesh;
+      if (meshHolder == NULL) {
+        meshHolder = new MeshHolder(tessellatorMesh);
+        _tessellatorMesh = meshHolder;
       }
       else {
-        Mesh* newMesh = tessellator->createTileMesh(planet,
-                                                    tileMeshResolution,
-                                                    this,
-                                                    _elevationData,
-                                                    _verticalExaggeration,
-                                                    renderDebug);
-
-        MeshHolder* meshHolder = (MeshHolder*)_tessellatorMesh;
-        if (meshHolder == NULL){
-          meshHolder = new MeshHolder(newMesh);
-        } else{
-          meshHolder->setMesh(newMesh);
-        }
-        _tessellatorMesh = meshHolder;
+        meshHolder->setMesh(tessellatorMesh);
       }
     }
+
   }
-
-
 
   return _tessellatorMesh;
 }

@@ -37,6 +37,8 @@ ElevationData(sector, extent)
   else {
     _buffer = createInterpolatedBuffer( elevationData );
   }
+  
+  //isEquivalentTo(elevationData);
 }
 
 const Vector2D SubviewElevationData::getParentXYAt(const ElevationData* elevationData,
@@ -162,24 +164,27 @@ IFloatBuffer* SubviewElevationData::createDecimatedBuffer(const ElevationData* e
 IFloatBuffer* SubviewElevationData::createInterpolatedBuffer(const ElevationData* elevationData) {
   IFloatBuffer* buffer = IFactory::instance()->createFloatBuffer(_width * _height);
 
-
   IMathUtils *mu = IMathUtils::instance();
 
   for (int x = 0; x < _width; x++) {
     const double u = (double) x / (_width - 1);
+
+    const Angle longitude = _sector.getInnerPointLongitude(u);
+
     for (int y = 0; y < _height; y++) {
-      const double v = (double) y / (_height - 1);
-      const Geodetic2D position = _sector.getInnerPoint(u, v);
+      const double v = 1.0 - ( (double) y / (_height - 1) );
+
+      const Angle latitude = _sector.getInnerPointLatitude(v);
 
       const int index = ((_height-1-y) * _width) + x;
 
-      const double height = elevationData->getElevationAt(position.latitude(),
-                                                          position.longitude());
+      const double height = elevationData->getElevationAt(latitude,
+                                                          longitude);
 
       buffer->rawPut(index, (float) height);
 
       if (!_hasNoData) {
-        if (mu->isNan(height)){
+        if ( mu->isNan(height) ) {
           _hasNoData = true;
         }
       }
@@ -196,27 +201,26 @@ SubviewElevationData::~SubviewElevationData() {
   delete _buffer;
 }
 
-double SubviewElevationData::getElevationAt(int x,
-                                            int y) const {
+double SubviewElevationData::getElevationAt(int x, int y) const {
 
-//  if (_buffer != NULL) {
-    const int index = ((_height-1-y) * _width) + x;
+  //  if (_buffer != NULL) {
+  const int index = ((_height-1-y) * _width) + x;
 
-    if ( (index < 0) || (index >= _buffer->size()) ) {
-      printf("break point on me\n");
-      return IMathUtils::instance()->NanD();
-    }
+  if ( (index < 0) || (index >= _buffer->size()) ) {
+    printf("break point on me\n");
+    return IMathUtils::instance()->NanD();
+  }
 
-    return _buffer->get(index);
-//  }
-//
-//
-//  const double u = (double) x / (_width - 1);
-//  const double v = (double) y / (_height - 1);
-//  const Geodetic2D position = _sector.getInnerPoint(u, v);
-//
-//  return getElevationAt(position.latitude(),
-//                        position.longitude());
+  return _buffer->get(index);
+  //  }
+  //
+  //
+  //  const double u = (double) x / (_width - 1);
+  //  const double v = (double) y / (_height - 1);
+  //  const Geodetic2D position = _sector.getInnerPoint(u, v);
+  //
+  //  return getElevationAt(position.latitude(),
+  //                        position.longitude());
 }
 
 const std::string SubviewElevationData::description(bool detailed) const {
@@ -245,7 +249,7 @@ const std::string SubviewElevationData::description(bool detailed) const {
 
 }
 
-Vector3D SubviewElevationData::getMinMaxAverageHeights() const {
+Vector3D SubviewElevationData::getMinMaxAverageElevations() const {
   const IMathUtils* mu = IMathUtils::instance();
 
   double minHeight = mu->maxDouble();

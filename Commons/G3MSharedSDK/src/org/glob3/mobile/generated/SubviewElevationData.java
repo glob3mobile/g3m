@@ -72,20 +72,23 @@ public class SubviewElevationData extends ElevationData
   {
     IFloatBuffer buffer = IFactory.instance().createFloatBuffer(_width * _height);
   
-  
     IMathUtils mu = IMathUtils.instance();
   
     for (int x = 0; x < _width; x++)
     {
       final double u = (double) x / (_width - 1);
+  
+      final Angle longitude = _sector.getInnerPointLongitude(u);
+  
       for (int y = 0; y < _height; y++)
       {
-        final double v = (double) y / (_height - 1);
-        final Geodetic2D position = _sector.getInnerPoint(u, v);
+        final double v = 1.0 - ((double) y / (_height - 1));
+  
+        final Angle latitude = _sector.getInnerPointLatitude(v);
   
         final int index = ((_height-1-y) * _width) + x;
   
-        final double height = elevationData.getElevationAt(position.latitude(), position.longitude());
+        final double height = elevationData.getElevationAt(latitude, longitude);
   
         buffer.rawPut(index, (float) height);
   
@@ -203,6 +206,8 @@ public class SubviewElevationData extends ElevationData
     {
       _buffer = createInterpolatedBuffer(elevationData);
     }
+  
+    //isEquivalentTo(elevationData);
   }
                        //bool ownsElevationData,
 
@@ -222,25 +227,25 @@ public class SubviewElevationData extends ElevationData
   public final double getElevationAt(int x, int y)
   {
   
-  //  if (_buffer != NULL) {
-      final int index = ((_height-1-y) * _width) + x;
+    //  if (_buffer != NULL) {
+    final int index = ((_height-1-y) * _width) + x;
   
-      if ((index < 0) || (index >= _buffer.size()))
-      {
-        System.out.print("break point on me\n");
-        return IMathUtils.instance().NanD();
-      }
+    if ((index < 0) || (index >= _buffer.size()))
+    {
+      System.out.print("break point on me\n");
+      return IMathUtils.instance().NanD();
+    }
   
-      return _buffer.get(index);
-  //  }
-  //
-  //
-  //  const double u = (double) x / (_width - 1);
-  //  const double v = (double) y / (_height - 1);
-  //  const Geodetic2D position = _sector.getInnerPoint(u, v);
-  //
-  //  return getElevationAt(position.latitude(),
-  //                        position.longitude());
+    return _buffer.get(index);
+    //  }
+    //
+    //
+    //  const double u = (double) x / (_width - 1);
+    //  const double v = (double) y / (_height - 1);
+    //  const Geodetic2D position = _sector.getInnerPoint(u, v);
+    //
+    //  return getElevationAt(position.latitude(),
+    //                        position.longitude());
   }
 
   public final String description(boolean detailed)
@@ -274,7 +279,7 @@ public class SubviewElevationData extends ElevationData
   
   }
 
-  public final Vector3D getMinMaxAverageHeights()
+  public final Vector3D getMinMaxAverageElevations()
   {
     final IMathUtils mu = IMathUtils.instance();
   

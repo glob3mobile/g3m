@@ -72,47 +72,39 @@ public class Tile
     final LayerTilesRenderParameters layerTilesRenderParameters = trc.getLayerTilesRenderParameters();
     final Vector2I tileMeshResolution = new Vector2I(layerTilesRenderParameters._tileMeshResolution);
   
-    if (_elevationData == null && elevationDataProvider != null)
+    if ((_elevationData == null) && (elevationDataProvider != null))
     {
       initializeElevationData(elevationDataProvider, tessellator, tileMeshResolution, planet, renderDebug);
     }
   
-    if (_tessellatorMesh == null || _mustActualizeMeshDueToNewElevationData)
+    final boolean mercator = trc.getLayerTilesRenderParameters()._mercator;
+  
+    if ((_tessellatorMesh == null) || _mustActualizeMeshDueToNewElevationData)
     {
       _mustActualizeMeshDueToNewElevationData = false;
   
       if (elevationDataProvider == null)
       {
         // no elevation data provider, just create a simple mesh without elevation
-        _tessellatorMesh = tessellator.createTileMesh(planet, tileMeshResolution, this, null, _verticalExaggeration, renderDebug);
+        _tessellatorMesh = tessellator.createTileMesh(planet, tileMeshResolution, this, null, _verticalExaggeration, mercator, renderDebug);
       }
       else
       {
-        if (_elevationData == null)
-        {
-          MeshHolder meshHolder = new MeshHolder(tessellator.createTileMesh(planet, tileMeshResolution, this, null, _verticalExaggeration, renderDebug));
-          _tessellatorMesh = meshHolder;
+        Mesh tessellatorMesh = tessellator.createTileMesh(planet, tileMeshResolution, this, _elevationData, _verticalExaggeration, mercator, renderDebug);
   
+        MeshHolder meshHolder = (MeshHolder) _tessellatorMesh;
+        if (meshHolder == null)
+        {
+          meshHolder = new MeshHolder(tessellatorMesh);
+          _tessellatorMesh = meshHolder;
         }
         else
         {
-          Mesh newMesh = tessellator.createTileMesh(planet, tileMeshResolution, this, _elevationData, _verticalExaggeration, renderDebug);
-  
-          MeshHolder meshHolder = (MeshHolder)_tessellatorMesh;
-          if (meshHolder == null)
-          {
-            meshHolder = new MeshHolder(newMesh);
-          }
-          else
-          {
-            meshHolder.setMesh(newMesh);
-          }
-          _tessellatorMesh = meshHolder;
+          meshHolder.setMesh(tessellatorMesh);
         }
       }
+  
     }
-  
-  
   
     return _tessellatorMesh;
   }
