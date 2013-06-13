@@ -40,6 +40,8 @@
 #include "BingMapsLayer.hpp"
 #include "CartoDBLayer.hpp"
 #include "MapBoxLayer.hpp"
+#include "WMSLayer.hpp"
+#include "LayerTilesRenderParameters.hpp"
 
 
 G3MCBuilder::G3MCBuilder(const URL& serverURL,
@@ -206,6 +208,50 @@ private:
     return new MapBoxLayer(mapKey, timeToCache);
   }
   
+  WMSLayer* parseWMSLayer(const JSONObject* jsonBaseLayer) const {
+    
+    const std::string mapLayer = jsonBaseLayer->getAsString("layerName", "");
+    const URL mapServerURL = URL(jsonBaseLayer->getAsString("server", ""), false);
+    const std::string versionStr = jsonBaseLayer->getAsString("version", "");
+    WMSServerVersion mapServerVersion = WMS_1_1_0;
+    if (versionStr.compare("WMS_1_3_0") == 0) {
+      mapServerVersion = WMS_1_3_0;
+    }
+    const std::string queryLayer = jsonBaseLayer->getAsString("queryLayer", "");
+    const std::string style = jsonBaseLayer->getAsString("style", "");
+    const URL queryServerURL = URL("", false);
+    const WMSServerVersion queryServerVersion = mapServerVersion;
+    const double lowerLat = jsonBaseLayer->getAsNumber("lowerLat", -90.0);
+    const double lowerLon = jsonBaseLayer->getAsNumber("lowerLon", -180.0);
+    const double upperLat = jsonBaseLayer->getAsNumber("upperLat", 90.0);
+    const double upperLon = jsonBaseLayer->getAsNumber("upperLon", 180.0);
+    const Sector sector = Sector(Geodetic2D(Angle::fromDegrees(lowerLat), Angle::fromDegrees(lowerLon)),
+                                 Geodetic2D(Angle::fromDegrees(upperLat), Angle::fromDegrees(upperLon)));
+    const std::string format = jsonBaseLayer->getAsString("imageFormat", "PNG");
+    const std::string srs = jsonBaseLayer->getAsString("projection", "EPSG_4326");
+    const bool isTransparent = jsonBaseLayer->getAsBoolean("transparent", false);
+    const double expiration = jsonBaseLayer->getAsNumber("expiration", 0);
+    const long long milliseconds = IMathUtils::instance()->round(expiration);
+    const TimeInterval timeToCache = TimeInterval::fromMilliseconds(milliseconds);
+    const bool readExpired = jsonBaseLayer->getAsBoolean("acceptExpiration", false);
+    
+    return new WMSLayer(mapLayer,
+                        mapServerURL,
+                        mapServerVersion,
+                        queryLayer,
+                        queryServerURL,
+                        queryServerVersion,
+                        sector,
+                        format,
+                        srs,
+                        style,
+                        isTransparent,
+                        NULL,
+                        timeToCache,
+                        readExpired,
+                        NULL);
+  }
+  
   Layer* parseLayer(const JSONObject* jsonBaseLayer) const {
     const TimeInterval defaultTimeToCache = TimeInterval::fromDays(30);
     
@@ -234,6 +280,9 @@ private:
     }
     else if (layerType.compare("MapBox") == 0) {
       return parseMapBoxLayer(jsonBaseLayer, defaultTimeToCache);
+    }
+    else if (layerType.compare("WMS") == 0) {
+      return parseWMSLayer(jsonBaseLayer);
     }
     else {
       ILogger::instance()->logError("Unsupported layer type \"%s\"", layerType.c_str());
