@@ -818,19 +818,19 @@ public class GL
       {
         _nativeGL.uniform1i(GlobalMembersGL.Uniforms.EnableColorPerVertex, 1);
         _nativeGL.enableVertexAttribArray(GlobalMembersGL.Attributes.Color);
-        IFloatBuffer colors = state.getColors();
-        if ((_colors != colors) || (_colorsTimestamp != colors.timestamp()))
-        {
-          _nativeGL.vertexAttribPointer(GlobalMembersGL.Attributes.Color, 4, false, 0, colors);
-          _colors = colors;
-          _colorsTimestamp = _colors.timestamp();
-        }
       }
       else
       {
         _nativeGL.disableVertexAttribArray(GlobalMembersGL.Attributes.Color);
         _nativeGL.uniform1i(GlobalMembersGL.Uniforms.EnableColorPerVertex, 0);
       }
+    }
+    IFloatBuffer colors = state.getColors();
+    if (colors != null && ((_colors != colors) || (_colorsTimestamp != colors.timestamp())))
+    {
+      _nativeGL.vertexAttribPointer(GlobalMembersGL.Attributes.Color, 4, false, 0, colors);
+      _colors = colors;
+      _colorsTimestamp = _colors.timestamp();
     }
   
     // Vertices Position
@@ -879,17 +879,17 @@ public class GL
       if (_enableCullFace)
       {
         _nativeGL.enable(GLFeature.cullFace());
-        final int face = state.getCulledFace();
-        if (_cullFace_face != face)
-        {
-          _nativeGL.cullFace(face);
-          _cullFace_face = face;
-        }
       }
       else
       {
         _nativeGL.disable(GLFeature.cullFace());
       }
+    }
+    final int face = state.getCulledFace();
+    if (_cullFace_face != face)
+    {
+      _nativeGL.cullFace(face);
+      _cullFace_face = face;
     }
   
     final float lineWidth = state.lineWidth();

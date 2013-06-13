@@ -86,34 +86,24 @@ public class Tile
       if (elevationDataProvider == null)
       {
         // no elevation data provider, just create a simple mesh without elevation
-        _tessellatorMesh = tessellator.createTileMesh(planet, tileMeshResolution, this, null, _verticalExaggeration, renderDebug);
+        _tessellatorMesh = tessellator.createTileMesh(planet, tileMeshResolution, this, null, _verticalExaggeration, mercator, renderDebug);
       }
       else
       {
-        int _ASK_JM_1;
-        if (_elevationData == null)
+        Mesh tessellatorMesh = tessellator.createTileMesh(planet, tileMeshResolution, this, _elevationData, _verticalExaggeration, mercator, renderDebug);
+  
+        MeshHolder meshHolder = (MeshHolder) _tessellatorMesh;
+        if (meshHolder == null)
         {
-          MeshHolder meshHolder = new MeshHolder(tessellator.createTileMesh(planet, tileMeshResolution, this, null, _verticalExaggeration, renderDebug));
+          meshHolder = new MeshHolder(tessellatorMesh);
           _tessellatorMesh = meshHolder;
         }
         else
         {
-          Mesh newMesh = tessellator.createTileMesh(planet, tileMeshResolution, this, _elevationData, _verticalExaggeration, renderDebug);
-  
-          MeshHolder meshHolder = (MeshHolder) _tessellatorMesh;
-          if (meshHolder == null)
-          {
-            meshHolder = new MeshHolder(newMesh);
-          }
-          else
-          {
-            meshHolder.setMesh(newMesh);
-          }
-  
-          int _ASK_JM_2;
-          _tessellatorMesh = meshHolder;
+          meshHolder.setMesh(tessellatorMesh);
         }
       }
+  
     }
   
     return _tessellatorMesh;

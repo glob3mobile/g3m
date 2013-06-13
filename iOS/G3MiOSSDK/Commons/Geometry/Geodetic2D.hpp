@@ -72,13 +72,19 @@ public:
                    to.latitude(),
                    to.longitude());
   }
-  
-  
+
+
   Geodetic2D(const Angle& latitude,
-             const Angle& longitude): _latitude(latitude), _longitude(longitude) {
+             const Angle& longitude) :
+  _latitude(latitude),
+  _longitude(longitude)
+  {
   }
-  
-  Geodetic2D(const Geodetic2D& g): _latitude(g._latitude), _longitude(g._longitude) {
+
+  Geodetic2D(const Geodetic2D& g) :
+  _latitude(g._latitude),
+  _longitude(g._longitude)
+  {
   }
   
   const Angle latitude() const {

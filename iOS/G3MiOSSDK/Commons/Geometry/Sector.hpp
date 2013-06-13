@@ -166,7 +166,9 @@ public:
   // (u,v)=(0,0) in NW point, and (1,1) in SE point
   const Geodetic2D getInnerPoint(double u, double v) const;
 
+  const Angle getInnerPointLongitude(double u) const;
   const Angle getInnerPointLatitude(double v) const;
+
 
   const Vector2D getUVCoordinates(const Geodetic2D& point) const {
     return getUVCoordinates(point.latitude(), point.longitude());

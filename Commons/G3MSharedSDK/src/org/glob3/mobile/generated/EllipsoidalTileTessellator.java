@@ -59,7 +59,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
   }
 
 
-  public final Mesh createTileMesh(Planet planet, Vector2I rawResolution, Tile tile, ElevationData elevationData, float verticalExaggeration, boolean renderDebug)
+  public final Mesh createTileMesh(Planet planet, Vector2I rawResolution, Tile tile, ElevationData elevationData, float verticalExaggeration, boolean mercator, boolean renderDebug)
   {
   
     final Sector sector = tile.getSector();
@@ -86,10 +86,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
   
         if (elevationData != null)
         {
-          int ___WTF_Diego;
-          final Geodetic2D position2 = sector.getInnerPoint(u, 1.0 - v);
-  
-          final double rawElevation = elevationData.getElevationAt(position2);
+          final double rawElevation = elevationData.getElevationAt(position);
           if (!mu.isNan(rawElevation))
           {
             elevation = rawElevation * verticalExaggeration;

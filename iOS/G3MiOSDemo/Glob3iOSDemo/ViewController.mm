@@ -250,14 +250,36 @@ public:
 {
   int _DGD_working_on_terrain;
 
-  float verticalExaggeration = 20.0f;
+  float verticalExaggeration = 6.0f;
   builder.getTileRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
   
 
-  ElevationDataProvider* elevationDataProvider = NULL;
+  //ElevationDataProvider* elevationDataProvider = NULL;
+  //builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProvider);
 
-  elevationDataProvider = new WMSBillElevationDataProvider(URL("http://data.worldwind.arc.nasa.gov/elev", false),
-                                                           Sector::fullSphere());
+
+//  ElevationDataProvider* elevationDataProviderACorunia;
+//  elevationDataProviderACorunia = new SingleBillElevationDataProvider(URL("file:///MDT200-A_CORUNIA.bil", false),
+//                                                                      Sector::fromDegrees(42.4785417976084858, -9.3819593635107914,
+//                                                                                          43.8317114006282011, -7.6284544428640784),
+//                                                                      Vector2I(968, 747));
+//
+//  builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProviderACorunia);
+
+  ElevationDataProvider* elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
+                                                                                     Sector::fullSphere(),
+                                                                                     Vector2I(2048, 1024));
+  builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProvider);
+
+
+//  elevationDataProvider = new WMSBillElevationDataProvider(URL("http://data.worldwind.arc.nasa.gov/elev", false),
+//                                                           Sector::fullSphere());
+//  builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProvider);
+
+  elevationDataProvider = new WMSBillElevationDataProvider(URL("http://igosoftware.dyndns.org:8080/geoserver/wms", false),
+                                                           "igo:corunia",
+                                                           Sector::fromDegrees(42.4785417976085213, -9.3819593635107914,
+                                                                               43.8317114006282011, -7.6284544428641370));
   builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProvider);
 
   //  ElevationDataProvider* elevationDataProvider;
@@ -302,11 +324,11 @@ public:
 //                                                                                   ),
 //                                                               Vector2I(251, 254));
 
-  //  ElevationDataProvider* elevationDataProvider5;
-  //  elevationDataProvider5 = new SingleBillElevationDataProvider(URL("file:///elev-35.0_-6.0_38.0_-2.0_4096x2048.bil", false),
-  //                                                               Sector::fromDegrees(35, -6, 38, -2),
-  //                                                               Vector2I(4096, 2048),0);
-  
+//  ElevationDataProvider* elevationDataProvider5;
+//  elevationDataProvider5 = new SingleBillElevationDataProvider(URL("file:///elev-35.0_-6.0_38.0_-2.0_4096x2048.bil", false),
+//                                                               Sector::fromDegrees(35, -6, 38, -2),
+//                                                               Vector2I(4096, 2048));
+
   //  ElevationDataProvider* elevationDataProvider6;
   //  elevationDataProvider6 = new SingleBillElevationDataProvider(URL("file:///full-earth-512x512.bil", false),
   //                                                               Sector::fullSphere(),
@@ -338,8 +360,10 @@ public:
   //compElevationDataProvider->addElevationDataProvider(elevationDataProvider7);
   //compElevationDataProvider->addElevationDataProvider(elevationDataProvider8);
 
+//  compElevationDataProvider->addElevationDataProvider(elevationDataProviderACorunia);
+
 //  builder.getTileRendererBuilder()->setElevationDataProvider(compElevationDataProvider);
-  builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProvider);
+
 }
 
 
@@ -1391,84 +1415,25 @@ public:
                                                       meshSector,
                                                       meshResolution) );
 
-    const ElevationData* subElevationData = new SubviewElevationData(elevationData,
-                                                                                 meshSector,
-                                                                                 elevationData->getExtent(),
-                                                                                 false);
-    _meshRenderer->addMesh( subElevationData->createMesh(planet,
-                                                         verticalExaggeration,
-                                                         Geodetic3D::fromDegrees(meshSector.getDeltaLatitude().degrees() + 20,
-                                                                                 0,
-                                                                                 0),
-                                                         pointSize) );
+//    const ElevationData* subElevationData = new SubviewElevationData(elevationData,
+//                                                                     meshSector,
+//                                                                     meshResolution,
+//                                                                     false);
+//
+//    _meshRenderer->addMesh( subElevationData->createMesh(planet,
+//                                                         verticalExaggeration,
+//                                                         Geodetic3D::fromDegrees(meshSector.getDeltaLatitude().degrees() + 0.1,
+//                                                                                 0,
+//                                                                                 0),
+//                                                         pointSize) );
+//
+//    delete subElevationData;
 
-    delete subElevationData;
 
-//    const ElevationData* subElevationDataDecimated = new SubviewElevationData(elevationData,
-//                                                                              subSector,
-//                                                                              subResolution,
-//                                                                              true);
-//    
-//    _meshRenderer->addMesh( subElevationDataDecimated->createMesh(planet,
-//                                                                  verticalExaggeration,
-//                                                                  Geodetic3D::fromDegrees(0.02, 0.02, 0),
-//                                                                  pointSize) );
-
-    
-//    const ElevationData* subElevationDataNotDecimated = new SubviewElevationData(elevationData,
-//                                                                                 subSector,
-//                                                                                 subResolution,
-//                                                                                 false);
-//    
-//    _meshRenderer->addMesh( subElevationDataNotDecimated->createMesh(planet,
-//                                                                     verticalExaggeration,
-//                                                                     Geodetic3D::fromDegrees(0.02,
-//                                                                                             0.02 + (subSector.getDeltaLongitude()._degrees * 1.05),
-//                                                                                             0),
-//                                                                     pointSize) );
-//    
-//    
-//    IFloatBuffer* deltaBuffer = IFactory::instance()->createFloatBuffer( subResolution._x * subResolution._y );
-//    
-//    IMathUtils* mu = IMathUtils::instance();
-//    for (int x = 0; x < subResolution._x; x++) {
-//      for (int y = 0; y < subResolution._y; y++) {
-//        const double height1 = subElevationDataDecimated->getElevationAt(x, y);
-//        const double height2 = subElevationDataNotDecimated->getElevationAt(x, y);
-//        
-//        const int index = ((subResolution._y-1-y) * subResolution._x) + x;
-//        
-//        if (mu->isNan(height1) || mu->isNan(height2)){
-//          deltaBuffer->rawPut(index,  mu->NanF());
-//        } else{
-//          deltaBuffer->rawPut(index,  (float) (height1 - height2));
-//        }
-//        
-//      }
-//    }
-//    
-//    ElevationData* deltaElevation = new FloatBufferElevationData(subSector,
-//                                                                 subResolution,
-//                                                                 subSector,
-//                                                                 subResolution,
-//                                                                 deltaBuffer);
-//    
-//    _meshRenderer->addMesh( deltaElevation->createMesh(planet,
-//                                                       verticalExaggeration,
-//                                                       Geodetic3D::fromDegrees(0.02,
-//                                                                               0.02 + (subSector.getDeltaLongitude()._degrees * 2.1),
-//                                                                               100),
-//                                                       pointSize) );
-
-    
-//    delete deltaElevation;
 
     delete planet;
     delete elevationData;
     
-//    delete subElevationDataDecimated;
-//    delete subElevationDataNotDecimated;
-
   }
   
   void onError(const URL& url) {
@@ -1894,40 +1859,8 @@ public:
       
       //      [_iosWidget setCameraPosition: Geodetic3D(posFrom, 60000)];
       //      [_iosWidget setCameraPitch: Angle::fromDegrees(95)];
-      
-      
-      //      FloatBufferBuilderFromGeodetic vertices(CenterStrategy::noCenter(),
-      //                                              context->getPlanet(),
-      //                                              Vector3D::zero());
-      //
-      //      for (double t = 0; t <= 1; t += 0.1) {
-      //        Geodetic2D position( Geodetic2D::linearInterpolation(posFrom, posTo, t) );
-      //
-      //        const double height = IMathUtils::instance()->quadraticBezierInterpolation(fromHeight, middleHeight, toHeight, t);
-      //        vertices.add(position, height);
-      //      }
-      //
-      //      Mesh* mesh = new DirectMesh(GLPrimitive::lineStrip(),
-      //                                  true,
-      //                                  vertices.getCenter(),
-      //                                  vertices.create(),
-      //                                  2,
-      //                                  1,
-      //                                  Color::newFromRGBA(1, 1, 0, 1));
-      //
-      //      _meshRenderer->addMesh( mesh );
-      
-      
-      
-      
-      
-      
-      //      Geodetic3D
-      
-      //      targetSector.c
-      
 
-      /**/
+      /*
       context->getDownloader()->requestBuffer(URL("file:///full-earth-2048x1024.bil", false),
                                               1000000,
                                               TimeInterval::fromDays(30),
@@ -1937,56 +1870,9 @@ public:
                                                                                       Vector2I(2048, 1024),
                                                                                       Sector::fullSphere()),
                                               true);
-      /**/
+      */
 
-      /*
-       context->getDownloader()->requestBuffer(//URL("file:///sample_bil16_150x150.bil", false),
-       //URL("file:///409_554.bil", false),
-       //URL("file:///full-earth-512x512.bil", false),
-       URL("file:///elev-35.0_-6.0_38.0_-2.0_4096x2048.bil", false),
-       1000000,
-       TimeInterval::fromDays(30),
-       new Bil16Parser_IBufferDownloadListener(_shapesRenderer,
-       _meshRenderer,
-       Vector2I(4096, 2048),
-       Sector::fromDegrees(35, -6, 38, -2)),
-       true);
-       */
-      
-      
-      /*
-       context->getDownloader()->requestBuffer(URL("file:///caceres-2008x2032.bil", false),
-       1000000,
-       TimeInterval::fromDays(30),
-       new Bil16Parser_IBufferDownloadListener(_shapesRenderer,
-       _meshRenderer,
-       Vector2I(2008, 2032),
-       Sector::fromDegrees(
-       39.4642996294239623,
-       -6.3829977122432933,
-       39.4829891936013553,
-       -6.3645288909498845
-       )),
-       true);
-       */
-      
-      /*
-       context->getDownloader()->requestBuffer(URL("file:///small-caceres.bil", false),
-       1000000,
-       TimeInterval::fromDays(30),
-       new Bil16Parser_IBufferDownloadListener(_shapesRenderer,
-       _meshRenderer,
-       Vector2I(251, 254),
-       Sector::fromDegrees(
-       39.4642994358225678,
-       -6.3829980000000042,
-       39.4829889999999608,
-       -6.3645291787065954
-       )
-       ),
-       true);
-       */
-      
+           
       //      [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
       //                                                     Geodetic3D(Angle::fromDegrees(37.78333333),
       //                                                                Angle::fromDegrees(-122.41666666666667),
@@ -1995,12 +1881,12 @@ public:
       //                                                     //Angle::fromDegrees(30)
       //                                                     );
 
-      // go to Grand Canyon
-      [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
-                                                     Geodetic3D(Angle::fromDegreesMinutes(36, 6),
-                                                                Angle::fromDegreesMinutes(-112, 6),
-                                                                250000)
-                                                     );
+//      // go to Grand Canyon
+//      [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
+//                                                     Geodetic3D(Angle::fromDegreesMinutes(36, 6),
+//                                                                Angle::fromDegreesMinutes(-112, 6),
+//                                                                250000)
+//                                                     );
 
 
       /*
