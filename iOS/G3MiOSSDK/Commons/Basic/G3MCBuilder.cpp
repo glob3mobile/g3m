@@ -228,8 +228,18 @@ private:
     const double upperLon = jsonBaseLayer->getAsNumber("upperLon", 180.0);
     const Sector sector = Sector(Geodetic2D(Angle::fromDegrees(lowerLat), Angle::fromDegrees(lowerLon)),
                                  Geodetic2D(Angle::fromDegrees(upperLat), Angle::fromDegrees(upperLon)));
-    const std::string format = jsonBaseLayer->getAsString("imageFormat", "PNG");
+    std::string imageFormat = jsonBaseLayer->getAsString("imageFormat", "image/png");
+    if (imageFormat.compare("JPG") == 0) {
+      imageFormat = "image/jpeg";
+    }
     const std::string srs = jsonBaseLayer->getAsString("projection", "EPSG_4326");
+    LayerTilesRenderParameters* layerTilesRenderParameters = NULL;
+    if (srs.compare("EPSG_4326") == 0) {
+      layerTilesRenderParameters = LayerTilesRenderParameters::createDefaultNonMercator(Sector::fullSphere());
+    }
+    else if (srs.compare("EPSG_900913")) {
+      layerTilesRenderParameters = LayerTilesRenderParameters::createDefaultMercator(0, 17);
+    }
     const bool isTransparent = jsonBaseLayer->getAsBoolean("transparent", false);
     const double expiration = jsonBaseLayer->getAsNumber("expiration", 0);
     const long long milliseconds = IMathUtils::instance()->round(expiration);
@@ -243,14 +253,14 @@ private:
                         queryServerURL,
                         queryServerVersion,
                         sector,
-                        format,
+                        imageFormat,
                         srs,
                         style,
                         isTransparent,
                         NULL,
                         timeToCache,
                         readExpired,
-                        NULL);
+                        layerTilesRenderParameters);
   }
   
   Layer* parseLayer(const JSONObject* jsonBaseLayer) const {
