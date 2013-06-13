@@ -457,6 +457,8 @@ void Mark::createGLState(){
     
     progState->setUniformValue("TextureExtent", Vector2D(_textureWidth, _textureHeight));
     progState->setUniformValue("ViewPortExtent", Vector2D( (double)_viewportWidth, (double)_viewportHeight ));
+    
+    progState->setAttributeDisabled("Color");
   }
 }
 
