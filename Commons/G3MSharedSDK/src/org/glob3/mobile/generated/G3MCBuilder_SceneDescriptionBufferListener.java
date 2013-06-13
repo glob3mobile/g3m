@@ -69,7 +69,7 @@ public class G3MCBuilder_SceneDescriptionBufferListener extends IBufferDownloadL
     {
       layerTilesRenderParameters = LayerTilesRenderParameters.createDefaultNonMercator(Sector.fullSphere());
     }
-    else if (srs.compareTo("EPSG_900913"))
+    else if (srs.compareTo("EPSG_900913") == 0)
     {
       layerTilesRenderParameters = LayerTilesRenderParameters.createDefaultMercator(0, 17);
     }
