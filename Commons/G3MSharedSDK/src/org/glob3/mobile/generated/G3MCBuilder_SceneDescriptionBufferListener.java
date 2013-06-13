@@ -38,6 +38,37 @@ public class G3MCBuilder_SceneDescriptionBufferListener extends IBufferDownloadL
     return new MapBoxLayer(mapKey, timeToCache);
   }
 
+  private WMSLayer parseWMSLayer(JSONObject jsonBaseLayer)
+  {
+
+    final String mapLayer = jsonBaseLayer.getAsString("layerName", "");
+    final URL mapServerURL = new URL(jsonBaseLayer.getAsString("server", ""), false);
+    final String versionStr = jsonBaseLayer.getAsString("version", "");
+    WMSServerVersion mapServerVersion = WMSServerVersion.WMS_1_1_0;
+    if (versionStr.compareTo("WMS_1_3_0") == 0)
+    {
+      mapServerVersion = WMSServerVersion.WMS_1_3_0;
+    }
+    final String queryLayer = jsonBaseLayer.getAsString("queryLayer", "");
+    final String style = jsonBaseLayer.getAsString("style", "");
+    final URL queryServerURL = new URL("", false);
+    final WMSServerVersion queryServerVersion = mapServerVersion;
+    final double lowerLat = jsonBaseLayer.getAsNumber("lowerLat", -90.0);
+    final double lowerLon = jsonBaseLayer.getAsNumber("lowerLon", -180.0);
+    final double upperLat = jsonBaseLayer.getAsNumber("upperLat", 90.0);
+    final double upperLon = jsonBaseLayer.getAsNumber("upperLon", 180.0);
+    final Sector sector = new Sector(new Geodetic2D(Angle.fromDegrees(lowerLat), Angle.fromDegrees(lowerLon)), new Geodetic2D(Angle.fromDegrees(upperLat), Angle.fromDegrees(upperLon)));
+    final String format = jsonBaseLayer.getAsString("imageFormat", "PNG");
+    final String srs = jsonBaseLayer.getAsString("projection", "EPSG_4326");
+    final boolean isTransparent = jsonBaseLayer.getAsBoolean("transparent", false);
+    final double expiration = jsonBaseLayer.getAsNumber("expiration", 0);
+    final long milliseconds = IMathUtils.instance().round(expiration);
+    final TimeInterval timeToCache = TimeInterval.fromMilliseconds(milliseconds);
+    final boolean readExpired = jsonBaseLayer.getAsBoolean("acceptExpiration", false);
+
+    return new WMSLayer(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, sector, format, srs, style, isTransparent, null, timeToCache, readExpired, null);
+  }
+
   private Layer parseLayer(JSONObject jsonBaseLayer)
   {
     final TimeInterval defaultTimeToCache = TimeInterval.fromDays(30);
@@ -72,6 +103,10 @@ public class G3MCBuilder_SceneDescriptionBufferListener extends IBufferDownloadL
     else if (layerType.compareTo("MapBox") == 0)
     {
       return parseMapBoxLayer(jsonBaseLayer, defaultTimeToCache);
+    }
+    else if (layerType.compareTo("WMS") == 0)
+    {
+      return parseWMSLayer(jsonBaseLayer);
     }
     else
     {
