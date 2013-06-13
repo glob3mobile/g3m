@@ -237,6 +237,7 @@ public class G3MCBuilder_SceneDescriptionBufferListener extends IBufferDownloadL
               }
             }
 
+            Layer overlayLayer = null;
             final JSONObject jsonOverlayLayer = jsonObject.getAsObject("overlayLayer");
             if (jsonOverlayLayer == null)
             {
@@ -244,16 +245,13 @@ public class G3MCBuilder_SceneDescriptionBufferListener extends IBufferDownloadL
             }
             else
             {
-              Layer overlayLayer = parseLayer(jsonOverlayLayer);
+              overlayLayer = parseLayer(jsonOverlayLayer);
               if (overlayLayer == null)
               {
                 ILogger.instance().logError("Can't parse attribute 'overlayLayer' in SceneJSON");
               }
-              else
-              {
-                _builder.changeOverlayLayer(overlayLayer);
-              }
             }
+            _builder.changeOverlayLayer(overlayLayer);
 
             //tags
 
