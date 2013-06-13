@@ -63,13 +63,13 @@ public class G3MCBuilder_SceneDescriptionBufferListener extends IBufferDownloadL
     {
       imageFormat = "image/jpeg";
     }
-    final String srs = jsonBaseLayer.getAsString("projection", "EPSG:4326");
+    final String srs = jsonBaseLayer.getAsString("projection", "EPSG_4326");
     LayerTilesRenderParameters layerTilesRenderParameters = null;
-    if (srs.compareTo("EPSG:4326") == 0)
+    if (srs.compareTo("EPSG_4326") == 0)
     {
       layerTilesRenderParameters = LayerTilesRenderParameters.createDefaultNonMercator(Sector.fullSphere());
     }
-    else if (srs.compareTo("EPSG:900913") == 0)
+    else if (srs.compareTo("EPSG_900913") == 0)
     {
       layerTilesRenderParameters = LayerTilesRenderParameters.createDefaultMercator(0, 17);
     }
@@ -79,7 +79,7 @@ public class G3MCBuilder_SceneDescriptionBufferListener extends IBufferDownloadL
     final TimeInterval timeToCache = TimeInterval.fromMilliseconds(milliseconds);
     final boolean readExpired = jsonBaseLayer.getAsBoolean("acceptExpiration", false);
 
-    return new WMSLayer(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, sector, imageFormat, srs, style, isTransparent, null, timeToCache, readExpired, layerTilesRenderParameters);
+    return new WMSLayer(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, sector, imageFormat, (srs.compareTo("EPSG_4326") == 0) ? "EPSG:4326" : "EPSG:900913", style, isTransparent, null, timeToCache, readExpired, layerTilesRenderParameters);
   }
 
   private Layer parseLayer(JSONObject jsonBaseLayer)
