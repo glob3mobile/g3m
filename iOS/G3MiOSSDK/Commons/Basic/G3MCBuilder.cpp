@@ -60,6 +60,7 @@ _storage(NULL),
 _threadUtils(NULL),
 _layerSet( new LayerSet() ),
 _baseLayer(NULL),
+_overlayLayer(NULL),
 _downloader(NULL),
 _sceneListener(sceneListener)
 {
@@ -395,6 +396,20 @@ public:
                 _builder->changeBaseLayer(baseLayer);
               }
             }
+            
+            const JSONObject* jsonOverlayLayer = jsonObject->getAsObject("overlayLayer");
+            if (jsonOverlayLayer == NULL) {
+              ILogger::instance()->logInfo("Attribute 'overlayLayer' not found in SceneJSON");
+            }
+            else {
+              Layer* overlayLayer = parseLayer(jsonOverlayLayer);
+              if (overlayLayer == NULL)  {
+                ILogger::instance()->logError("Can't parse attribute 'overlayLayer' in SceneJSON");
+              }
+              else {
+                _builder->changeOverlayLayer(overlayLayer);
+              }
+            }
 
             //tags
             
@@ -531,6 +546,9 @@ void G3MCBuilder::recreateLayerSet() {
   if (_baseLayer != NULL) {
     _layerSet->addLayer(_baseLayer);
   }
+  if (_overlayLayer != NULL) {
+    _layerSet->addLayer(_overlayLayer);
+  }
 }
 
 void G3MCBuilder::changeBaseLayer(Layer* baseLayer) {
@@ -544,6 +562,21 @@ void G3MCBuilder::changeBaseLayer(Layer* baseLayer) {
     
     if (_sceneListener != NULL) {
       _sceneListener->onBaseLayerChanged(_baseLayer);
+    }
+  }
+}
+
+void G3MCBuilder::changeOverlayLayer(Layer* overlayLayer) {
+  if (_overlayLayer != overlayLayer) {
+    if (_overlayLayer != NULL) {
+      delete _overlayLayer;
+    }
+    _overlayLayer = overlayLayer;
+    
+    recreateLayerSet();
+    
+    if (_sceneListener != NULL) {
+      _sceneListener->onOverlayLayerChanged(_overlayLayer);
     }
   }
 }

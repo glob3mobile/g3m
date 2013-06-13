@@ -41,6 +41,8 @@ public:
   }
 
   virtual void onBaseLayerChanged(Layer* baseLayer) = 0;
+  
+  virtual void onOverlayLayerChanged(Layer* overlayLayer) = 0;
 
   virtual void onUserChanged(const std::string& user) = 0;
 
@@ -86,6 +88,7 @@ private:
   Color*      _sceneBackgroundColor;
 
   Layer* _baseLayer;
+  Layer* _overlayLayer;
 
   GL* _gl;
 //  bool _glob3Created;
@@ -142,6 +145,9 @@ public:
 
   /** Private to G3M, don't call it */
   void changeBaseLayer(Layer* baseLayer);
+  
+  /** Private to G3M, don't call it */
+  void changeOverlayLayer(Layer* overlayLayer);
 
   /** Private to G3M, don't call it */
   int getSceneTimestamp() const;
