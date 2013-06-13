@@ -58,7 +58,7 @@ public class GPUAttribute
      return _enabled;
   }
 
-  public final void unset()
+  public final void unset(GL gl)
   {
     if (_value != null)
     {
@@ -69,6 +69,8 @@ public class GPUAttribute
     _enabled = false;
     _dirty = false;
     _dirtyEnabled = false;
+
+    gl.disableVertexAttribArray(_id);
   }
 
   public final void set(GPUAttributeValue v)

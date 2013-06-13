@@ -56,7 +56,7 @@ public class GLState
       {
         if (_currentGPUProgram != null)
         {
-          _currentGPUProgram.onUnused();
+          _currentGPUProgram.onUnused(gl);
         }
         _currentGPUProgram = prog;
         gl.useProgram(prog);

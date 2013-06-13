@@ -134,7 +134,7 @@ public class GPUProgram
   
     ILogger.instance().logInfo("FRAGMENT SOURCE: \n %s", fragmentSource);
   
-    gl.bindAttribLocation(p, 0, "Position");
+    //gl->bindAttribLocation(p, 0, "Position");
   
     // link program
     if (!p.linkProgram(gl))
@@ -152,6 +152,11 @@ public class GPUProgram
     p.deleteShader(gl, fragmentShader);
   
     p.getVariables(gl);
+  
+    if (gl.getError() != GLError.noError())
+    {
+      ILogger.instance().logError("Error while compiling program");
+    }
   
     return p;
   }
@@ -338,7 +343,7 @@ public class GPUProgram
   /**
    Must be called when the program is no longer used
    */
-  public final void onUnused()
+  public final void onUnused(GL gl)
   {
     //ILogger::instance()->logInfo("GPUProgram %s unused", _name.c_str());
     final Object[] uni = _uniforms.values().toArray();

@@ -105,7 +105,7 @@ public class GPUProgramManager
       {
         String name = ui.get(j);
   
-        if (name.compareTo("ViewPortExtent") == 0)
+        if (name.compareTo("uViewPortExtent") == 0)
         {
           return getProgram("Billboard");
         }
