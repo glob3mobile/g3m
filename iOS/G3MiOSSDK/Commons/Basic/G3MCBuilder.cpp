@@ -397,19 +397,18 @@ public:
               }
             }
             
+            Layer* overlayLayer = NULL;
             const JSONObject* jsonOverlayLayer = jsonObject->getAsObject("overlayLayer");
             if (jsonOverlayLayer == NULL) {
               ILogger::instance()->logInfo("Attribute 'overlayLayer' not found in SceneJSON");
             }
             else {
-              Layer* overlayLayer = parseLayer(jsonOverlayLayer);
+              overlayLayer = parseLayer(jsonOverlayLayer);
               if (overlayLayer == NULL)  {
                 ILogger::instance()->logError("Can't parse attribute 'overlayLayer' in SceneJSON");
               }
-              else {
-                _builder->changeOverlayLayer(overlayLayer);
-              }
             }
+            _builder->changeOverlayLayer(overlayLayer);
 
             //tags
             
