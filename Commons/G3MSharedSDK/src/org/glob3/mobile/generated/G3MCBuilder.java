@@ -14,6 +14,7 @@ public abstract class G3MCBuilder
   private Color _sceneBackgroundColor;
 
   private Layer _baseLayer;
+  private Layer _overlayLayer;
 
   private GL _gl;
 //  bool _glob3Created;
@@ -101,6 +102,10 @@ public abstract class G3MCBuilder
     {
       _layerSet.addLayer(_baseLayer);
     }
+    if (_overlayLayer != null)
+    {
+      _layerSet.addLayer(_overlayLayer);
+    }
   }
 
   private IThreadUtils _threadUtils;
@@ -138,6 +143,7 @@ public abstract class G3MCBuilder
      _threadUtils = null;
      _layerSet = new LayerSet();
      _baseLayer = null;
+     _overlayLayer = null;
      _downloader = null;
      _sceneListener = sceneListener;
   
@@ -247,6 +253,27 @@ public abstract class G3MCBuilder
       if (_sceneListener != null)
       {
         _sceneListener.onBaseLayerChanged(_baseLayer);
+      }
+    }
+  }
+
+  /** Private to G3M, don't call it */
+  public final void changeOverlayLayer(Layer overlayLayer)
+  {
+    if (_overlayLayer != overlayLayer)
+    {
+      if (_overlayLayer != null)
+      {
+        if (_overlayLayer != null)
+           _overlayLayer.dispose();
+      }
+      _overlayLayer = overlayLayer;
+  
+      recreateLayerSet();
+  
+      if (_sceneListener != null)
+      {
+        _sceneListener.onOverlayLayerChanged(_overlayLayer);
       }
     }
   }

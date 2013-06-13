@@ -237,6 +237,24 @@ public class G3MCBuilder_SceneDescriptionBufferListener extends IBufferDownloadL
               }
             }
 
+            final JSONObject jsonOverlayLayer = jsonObject.getAsObject("overlayLayer");
+            if (jsonOverlayLayer == null)
+            {
+              ILogger.instance().logInfo("Attribute 'overlayLayer' not found in SceneJSON");
+            }
+            else
+            {
+              Layer overlayLayer = parseLayer(jsonOverlayLayer);
+              if (overlayLayer == null)
+              {
+                ILogger.instance().logError("Can't parse attribute 'overlayLayer' in SceneJSON");
+              }
+              else
+              {
+                _builder.changeOverlayLayer(overlayLayer);
+              }
+            }
+
             //tags
 
             _builder.setSceneTimestamp(timestamp);
