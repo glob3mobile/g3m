@@ -157,6 +157,8 @@ public class Mark
   
       progState.setUniformValue("TextureExtent", new Vector2D(_textureWidth, _textureHeight));
       progState.setUniformValue("ViewPortExtent", new Vector2D((double)_viewportWidth, (double)_viewportHeight));
+  
+      progState.setAttributeDisabled("Color");
     }
   }
 
