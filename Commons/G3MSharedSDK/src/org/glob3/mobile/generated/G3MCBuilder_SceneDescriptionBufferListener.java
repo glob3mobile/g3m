@@ -58,15 +58,28 @@ public class G3MCBuilder_SceneDescriptionBufferListener extends IBufferDownloadL
     final double upperLat = jsonBaseLayer.getAsNumber("upperLat", 90.0);
     final double upperLon = jsonBaseLayer.getAsNumber("upperLon", 180.0);
     final Sector sector = new Sector(new Geodetic2D(Angle.fromDegrees(lowerLat), Angle.fromDegrees(lowerLon)), new Geodetic2D(Angle.fromDegrees(upperLat), Angle.fromDegrees(upperLon)));
-    final String format = jsonBaseLayer.getAsString("imageFormat", "PNG");
+    String imageFormat = jsonBaseLayer.getAsString("imageFormat", "image/png");
+    if (imageFormat.compareTo("JPG") == 0)
+    {
+      imageFormat = "image/jpeg";
+    }
     final String srs = jsonBaseLayer.getAsString("projection", "EPSG_4326");
+    LayerTilesRenderParameters layerTilesRenderParameters = null;
+    if (srs.compareTo("EPSG_4326") == 0)
+    {
+      layerTilesRenderParameters = LayerTilesRenderParameters.createDefaultNonMercator(Sector.fullSphere());
+    }
+    else if (srs.compareTo("EPSG_900913"))
+    {
+      layerTilesRenderParameters = LayerTilesRenderParameters.createDefaultMercator(0, 17);
+    }
     final boolean isTransparent = jsonBaseLayer.getAsBoolean("transparent", false);
     final double expiration = jsonBaseLayer.getAsNumber("expiration", 0);
     final long milliseconds = IMathUtils.instance().round(expiration);
     final TimeInterval timeToCache = TimeInterval.fromMilliseconds(milliseconds);
     final boolean readExpired = jsonBaseLayer.getAsBoolean("acceptExpiration", false);
 
-    return new WMSLayer(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, sector, format, srs, style, isTransparent, null, timeToCache, readExpired, null);
+    return new WMSLayer(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, sector, imageFormat, srs, style, isTransparent, null, timeToCache, readExpired, layerTilesRenderParameters);
   }
 
   private Layer parseLayer(JSONObject jsonBaseLayer)
