@@ -44,14 +44,7 @@ public class G3MShowMarkersActivity
       setContentView(R.layout.bar_glob3_template);
       final G3MBuilder_Android builder = new G3MBuilder_Android(getApplicationContext());
 
-      //builder.setInitializationTask(getWeatherMarkerLayersTask());
-      
-      Mark m3 = new Mark("Washington, DC",
-              new Geodetic3D(Angle.fromDegreesMinutesSeconds(38, 53, 42.24),
-                         Angle.fromDegreesMinutesSeconds(-77, 2, 10.92),
-                         0),
-              0);
-      _weatherMarkers.addMark(m3);
+      builder.setInitializationTask(getWeatherMarkerLayersTask());
 
       builder.addRenderer(_weatherMarkers);
 
