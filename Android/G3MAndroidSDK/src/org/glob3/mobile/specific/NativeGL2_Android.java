@@ -64,7 +64,7 @@ public final class NativeGL2_Android
       checkOpenGLThread();
       GLES20.glUniform2f(((GLUniformID_Android) loc).getID(), x, y);
       
-      ILogger.instance().logInfo("UNIFORM " + ((GLUniformID_Android) loc).getID() + " " + x + " " + y);
+//      ILogger.instance().logInfo("UNIFORM " + ((GLUniformID_Android) loc).getID() + " " + x + " " + y);
    }
 
 
@@ -74,7 +74,7 @@ public final class NativeGL2_Android
       checkOpenGLThread();
       GLES20.glUniform1f(((GLUniformID_Android) loc).getID(), x);
       
-      ILogger.instance().logInfo("UNIFORM " + ((GLUniformID_Android) loc).getID() + " " + x);
+//      ILogger.instance().logInfo("UNIFORM " + ((GLUniformID_Android) loc).getID() + " " + x);
    }
 
 
@@ -84,7 +84,7 @@ public final class NativeGL2_Android
       checkOpenGLThread();
       GLES20.glUniform1i(((GLUniformID_Android) loc).getID(), v);
       
-      ILogger.instance().logInfo("UNIFORM " + ((GLUniformID_Android) loc).getID() + " " + v);
+//      ILogger.instance().logInfo("UNIFORM " + ((GLUniformID_Android) loc).getID() + " " + v);
    }
 
 
@@ -111,7 +111,7 @@ public final class NativeGL2_Android
                0 //
       );
       
-      ILogger.instance().logInfo("UNIFORM MATRIX " + ((GLUniformID_Android) location).getID() + " " + matrix.description() );
+//      ILogger.instance().logInfo("UNIFORM MATRIX " + ((GLUniformID_Android) location).getID() + " " + matrix.description() );
    }
 
 
@@ -141,7 +141,7 @@ public final class NativeGL2_Android
       checkOpenGLThread();
       GLES20.glUniform4f(((GLUniformID_Android) location).getID(), v0, v1, v2, v3);
       
-      ILogger.instance().logInfo("UNIFORM " + ((GLUniformID_Android) location).getID() + " " + v0 + " " + v1 + " " + v2 + " " + v3);
+//      ILogger.instance().logInfo("UNIFORM " + ((GLUniformID_Android) location).getID() + " " + v0 + " " + v1 + " " + v2 + " " + v3);
    }
 
 
@@ -209,7 +209,7 @@ public final class NativeGL2_Android
    public void enableVertexAttribArray(final int location) {
       checkOpenGLThread();
       GLES20.glEnableVertexAttribArray(location);
-      ILogger.instance().logInfo("Attrib Enabled " + location);
+//      ILogger.instance().logInfo("Attrib Enabled " + location);
    }
 
 
@@ -217,7 +217,7 @@ public final class NativeGL2_Android
    public void disableVertexAttribArray(final int location) {
       checkOpenGLThread();
       GLES20.glDisableVertexAttribArray(location);
-      ILogger.instance().logInfo("Attrib Disabled " + location);
+//      ILogger.instance().logInfo("Attrib Disabled " + location);
    }
 
 
@@ -297,11 +297,11 @@ public final class NativeGL2_Android
       checkOpenGLThread();
       final FloatBuffer floatBuffer = ((FloatBuffer_Android) buffer).getBuffer();
 
-      ILogger.instance().logInfo("vertexAttribPointer(index=" + index + //
-                               ", size=" + size + //
-                               ", normalized=" + normalized + //
-                               ", stride=" + stride + //
-                               ", floatBuffer=" + floatBuffer + ")");
+//      ILogger.instance().logInfo("vertexAttribPointer(index=" + index + //
+//                               ", size=" + size + //
+//                               ", normalized=" + normalized + //
+//                               ", stride=" + stride + //
+//                               ", floatBuffer=" + floatBuffer + ")");
 
       GLES20.glVertexAttribPointer(index, size, GLES20.GL_FLOAT, normalized, stride, floatBuffer);
    }
