@@ -85,24 +85,7 @@ public:
     _dirty = false;
   }
   
-  void set(GPUUniformValue* v){
-    if (_type != v->getType()){ //type checking
-      //      delete v;
-      ILogger::instance()->logError("Attempting to set uniform " + _name + "with invalid value type.");
-      return;
-    }
-    if (_value == NULL || !_value->isEqualsTo(v)){
-      _dirty = true;
-      
-      v->setLastGPUUniformValue(_value); //Multiply matrix when needed
-      
-      if (_value != NULL){
-        _value->copyFrom(v);
-      } else{
-        _value = v->deepCopy();
-      }
-    }
-  }
+  void set(GPUUniformValue* v);
   
   virtual void applyChanges(GL* gl){
     if (_dirty){
@@ -235,7 +218,9 @@ class GPUUniformValueMatrix4FloatTransform:public GPUUniformValue{
   
   GPUUniformValueMatrix4FloatTransform(const GPUUniformValueMatrix4FloatTransform* that):
   GPUUniformValue(GLType::glMatrix4Float()),
-  _m(that->_m), _isTransform(that->_isTransform), _transformedMatrix(that->_transformedMatrix){}
+  _m(MutableMatrix44D(that->_m)),
+  _isTransform(that->_isTransform),
+  _transformedMatrix(MutableMatrix44D(that->_transformedMatrix)){}
   
 public:
 #ifdef C_CODE

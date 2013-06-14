@@ -67,14 +67,14 @@ public class GPUUniform
 
       v.setLastGPUUniformValue(_value); //Multiply matrix when needed
 
-      if (_value != null)
-      {
-        _value.copyFrom(v);
-      }
-      else
-      {
+//      if (_value != null)
+//      {
+//        _value.copyFrom(v);
+//      }
+//      else
+//      {
         _value = v.deepCopy();
-      }
+//      }
     }
   }
 
