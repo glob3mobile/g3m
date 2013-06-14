@@ -53,30 +53,8 @@ public class GPUUniform
     _dirty = false;
   }
 
-  public final void set(GPUUniformValue v)
-  {
-    if (_type != v.getType()) //type checking
-    {
-      //      delete v;
-      ILogger.instance().logError("Attempting to set uniform " + _name + "with invalid value type.");
-      return;
-    }
-    if (_value == null || !_value.isEqualsTo(v))
-    {
-      _dirty = true;
-
-      v.setLastGPUUniformValue(_value); //Multiply matrix when needed
-
-//      if (_value != null)
-//      {
-//        _value.copyFrom(v);
-//      }
-//      else
-//      {
-        _value = v.deepCopy();
-//      }
-    }
-  }
+//C++ TO JAVA CONVERTER TODO TASK: The following statement was not recognized, possibly due to an unrecognized macro:
+  void set(GPUUniformValue* v);
 
   public void applyChanges(GL gl)
   {

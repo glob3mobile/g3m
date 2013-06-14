@@ -65,14 +65,11 @@ public abstract class GPUUniformValue
   {
     if (_uniform == null)
     {
-      ILogger.instance().logError("Uniform unlinked");
+      ILogger.instance().logError("Uniform value unlinked");
     }
     else
     {
       _uniform.set((GPUUniformValue)this);
-  //    _uniform->applyChanges(gl);
-  
-      //    setUniform(gl, _uniform->getID());
     }
   }
 
