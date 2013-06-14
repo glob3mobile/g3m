@@ -746,6 +746,30 @@ public:
                                           "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
                                           TimeInterval::fromDays(30)) );
   }
+
+  const bool useOSMEditMap = false;
+  if (useOSMEditMap) {
+    // http://d.tiles.mapbox.com/v3/enf.osm-edit-date/4/4/5.png
+
+    std::vector<std::string> subdomains;
+    subdomains.push_back("a.");
+    subdomains.push_back("b.");
+    subdomains.push_back("c.");
+    subdomains.push_back("d.");
+
+    MercatorTiledLayer* osmEditMapLayer = new MercatorTiledLayer("osm-edit-map",
+                                                                 "http://",
+                                                                 "tiles.mapbox.com/v3/enf.osm-edit-date",
+                                                                 subdomains,
+                                                                 "png",
+                                                                 TimeInterval::fromDays(30),
+                                                                 true,
+                                                                 Sector::fullSphere(),
+                                                                 2,
+                                                                 11,
+                                                                 NULL);
+    layerSet->addLayer(osmEditMapLayer);
+  }
   
   const bool blueMarble = false;
   if (blueMarble) {
