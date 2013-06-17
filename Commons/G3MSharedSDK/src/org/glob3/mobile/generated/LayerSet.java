@@ -130,7 +130,7 @@ public class LayerSet
     }
   }
 
-  private final G3MContext _context;
+  private G3MContext _context;
 
   public LayerSet()
   {
