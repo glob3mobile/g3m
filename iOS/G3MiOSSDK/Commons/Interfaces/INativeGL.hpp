@@ -15,12 +15,13 @@ class IShortBuffer;
 class IImage;
 class IGLUniformID;
 class IGLTextureId;
-class GPUProgram;
 
 #include <vector>
 #include <string>
 
-#include "ShaderProgram.hpp"
+#include "GPUProgram.hpp"
+
+class GPUProgram;
 
 class GPUUniform;
 class GPUAttribute;
@@ -32,15 +33,7 @@ public:
 
   virtual ~INativeGL() { };
 
-  virtual void useProgram(ShaderProgram* program) const = 0;
-  
   virtual void useProgram(GPUProgram* program) const = 0;
-
-  virtual int getAttribLocation(ShaderProgram* program,
-                                const std::string& name) const = 0;
-
-  virtual IGLUniformID* getUniformLocation(ShaderProgram* program,
-                                           const std::string& name) const = 0;
 
   virtual void uniform2f(const IGLUniformID* loc,
                          float x,
@@ -190,7 +183,6 @@ public:
   virtual bool linkProgram(int program) const = 0;
   virtual void printProgramInfoLog(int program) const = 0;
   
-  virtual void bindAttribLocation(ShaderProgram* program, int loc, const std::string& name) const = 0;
   virtual void bindAttribLocation(const GPUProgram* program, int loc, const std::string& name) const = 0;
   
   virtual int getProgramiv(const GPUProgram* program, int param) const = 0;

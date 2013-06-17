@@ -20,30 +20,15 @@
 #include "Image_iOS.hpp"
 #include "MutableMatrix44D.hpp"
 #include "GPUProgram.hpp"
+#include "GPUAttribute.hpp"
+#include "GPUUniform.hpp"
+
 
 class NativeGL2_iOS: public INativeGL {
 public:
 
-  void useProgram(ShaderProgram* program) const {
-//    glUseProgram(((GLProgramId_iOS*)program)->getID());
-    glUseProgram(program->getProgram());
-  }
-  
   void useProgram(GPUProgram* program) const {
     glUseProgram(program->getProgramID());
-  }
-
-  int getAttribLocation(ShaderProgram* program,
-                        const std::string& name) const {
-//    return glGetAttribLocation(((GLProgramId_iOS*)program)->getID(), name.c_str());
-    return glGetAttribLocation(program->getProgram(), name.c_str());
-  }
-
-  IGLUniformID* getUniformLocation(ShaderProgram* program,
-                                   const std::string& name) const {
-//    const int id = glGetUniformLocation(((GLProgramId_iOS*)program)->getID(), name.c_str());
-    const int id = glGetUniformLocation(program->getProgram(), name.c_str());
-    return (IGLUniformID*) new GLUniformID_iOS(id);
   }
 
   void uniform2f(const IGLUniformID* loc,
@@ -485,10 +470,6 @@ public:
       NSLog(@"Program link log:\n%s", log);
       free(log);
     }
-  }
-  
-  void bindAttribLocation(ShaderProgram* program, int loc, const std::string& name) const{
-    glBindAttribLocation(program->getProgram(), loc, name.c_str());
   }
   
   void bindAttribLocation(const GPUProgram* program, int loc, const std::string& name) const{

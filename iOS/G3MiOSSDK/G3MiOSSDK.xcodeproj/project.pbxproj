@@ -38,7 +38,6 @@
 		CC596F2415C46D4F008FC230 /* CameraDoubleDragHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC596F1E15C46D4F008FC230 /* CameraDoubleDragHandler.cpp */; };
 		CC596F2A15C46DE2008FC230 /* CameraSingleDragHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC596F2915C46DE2008FC230 /* CameraSingleDragHandler.cpp */; };
 		CC596F2D15C472EF008FC230 /* CameraRotationHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC596F2C15C472EF008FC230 /* CameraRotationHandler.cpp */; };
-		CC733B491637F79E0035C4CC /* ShaderProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC733B481637F79E0035C4CC /* ShaderProgram.cpp */; };
 		CC96079215AF23F600D438D4 /* TextureMapping.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC96079115AF23F600D438D4 /* TextureMapping.cpp */; };
 		CCB2565015B5A33A00079B96 /* TexturedMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCB2564F15B5A33A00079B96 /* TexturedMesh.cpp */; };
 		CCB2566415B5F58500079B96 /* Box.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCB2566315B5F58500079B96 /* Box.cpp */; };
@@ -302,7 +301,6 @@
 		E780A50B16D3ADF0000F0395 /* JSONVisitor.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF4FAAC71695D010009734CA /* JSONVisitor.hpp */; };
 		E780A50C16D3ADFE000F0395 /* GL.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D81BA16E15CBF19E004EF0B0 /* GL.hpp */; };
 		E780A50D16D3ADFE000F0395 /* GLGlobalState.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CC8EFFFC163BE8A0006586B0 /* GLGlobalState.hpp */; };
-		E780A50E16D3ADFE000F0395 /* ShaderProgram.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CC733B461637EF040035C4CC /* ShaderProgram.hpp */; };
 		E780A50F16D3ADFE000F0395 /* GLConstants.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8E76950160742FD008EC7B9 /* GLConstants.hpp */; };
 		E780A51016D3AE37000F0395 /* ByteBufferBuilder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF4FAAC21695C66F009734CA /* ByteBufferBuilder.hpp */; };
 		E780A51116D3AE37000F0395 /* ByteBufferIterator.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF7EDA0416948302002C760A /* ByteBufferIterator.hpp */; };
@@ -738,7 +736,6 @@
 				E780A53E16D3AE37000F0395 /* URL.hpp in CopyFiles */,
 				E780A50C16D3ADFE000F0395 /* GL.hpp in CopyFiles */,
 				E780A50D16D3ADFE000F0395 /* GLGlobalState.hpp in CopyFiles */,
-				E780A50E16D3ADFE000F0395 /* ShaderProgram.hpp in CopyFiles */,
 				E780A50F16D3ADFE000F0395 /* GLConstants.hpp in CopyFiles */,
 				E780A4FD16D3ADF0000F0395 /* BSONGenerator.hpp in CopyFiles */,
 				E780A4FE16D3ADF0000F0395 /* BSONParser.hpp in CopyFiles */,
@@ -830,8 +827,6 @@
 		CC596F2915C46DE2008FC230 /* CameraSingleDragHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = CameraSingleDragHandler.cpp; path = Commons/Cameras/CameraSingleDragHandler.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CC596F2B15C472BA008FC230 /* CameraRotationHandler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = CameraRotationHandler.hpp; path = Commons/Cameras/CameraRotationHandler.hpp; sourceTree = "<group>"; };
 		CC596F2C15C472EF008FC230 /* CameraRotationHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CameraRotationHandler.cpp; path = Commons/Cameras/CameraRotationHandler.cpp; sourceTree = "<group>"; };
-		CC733B461637EF040035C4CC /* ShaderProgram.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ShaderProgram.hpp; sourceTree = "<group>"; };
-		CC733B481637F79E0035C4CC /* ShaderProgram.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ShaderProgram.cpp; sourceTree = "<group>"; };
 		CC8EFFFC163BE8A0006586B0 /* GLGlobalState.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLGlobalState.hpp; sourceTree = "<group>"; };
 		CC94D7FA15D0FDF70074B12A /* CameraEventHandler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = CameraEventHandler.hpp; path = Commons/Cameras/CameraEventHandler.hpp; sourceTree = "<group>"; };
 		CC96079115AF23F600D438D4 /* TextureMapping.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TextureMapping.cpp; path = Commons/Mesh/TextureMapping.cpp; sourceTree = "<group>"; };
@@ -1835,8 +1830,6 @@
 				D81BA16E15CBF19E004EF0B0 /* GL.hpp */,
 				D81D2071160748EA009A8BA6 /* GLConstants.cpp */,
 				CC8EFFFC163BE8A0006586B0 /* GLGlobalState.hpp */,
-				CC733B461637EF040035C4CC /* ShaderProgram.hpp */,
-				CC733B481637F79E0035C4CC /* ShaderProgram.cpp */,
 				D8E76950160742FD008EC7B9 /* GLConstants.hpp */,
 				D8B17F5916F76939007A9E43 /* GLGlobalState.cpp */,
 				D8715C1C17032AC700CF7BE2 /* GPUProgram.cpp */,
@@ -2109,7 +2102,6 @@
 				CF0A8183163303E800036277 /* MutableVector2I.cpp in Sources */,
 				CFCEFF26163476F100FC4AB0 /* RectangleI.cpp in Sources */,
 				CFCEFF4D163721EA00FC4AB0 /* TrailsRenderer.cpp in Sources */,
-				CC733B491637F79E0035C4CC /* ShaderProgram.cpp in Sources */,
 				CFA0BB62163DCFF6009185FE /* ShapesRenderer.cpp in Sources */,
 				CF5EA5D4163DDC7900D8F797 /* Shape.cpp in Sources */,
 				CF5EA5D8163DDCB900D8F797 /* QuadShape.cpp in Sources */,

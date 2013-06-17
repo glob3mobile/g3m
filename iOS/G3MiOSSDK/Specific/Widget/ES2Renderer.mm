@@ -41,7 +41,6 @@ enum {
   self = [super init];
     
   if (self) {
-      _shaderProgram = NULL;
       NativeGL2_iOS* nGL = new NativeGL2_iOS();
       _gl = new GL(nGL,false);
     _firstRender = true;
@@ -140,13 +139,6 @@ enum {
   const std::string fragmentSource ([[NSString stringWithContentsOfFile: fragShaderPathname
                                                                encoding: NSUTF8StringEncoding
                                                                   error: nil] UTF8String]);
-
-  // Create shader program
-  _shaderProgram = new ShaderProgram(_gl);
-  if (_shaderProgram->loadShaders(vertexSource, fragmentSource)==false) {
-    NSLog(@"Failed to load shaders");
-    return FALSE;
-  }
 //  
 //  try {
 //    _gpuProgram = GPUProgram::createProgram(_gl->getNative(), "", vertexSource, fragmentSource);
@@ -201,11 +193,6 @@ enum {
   if (depthRenderbuffer) {
     glDeleteRenderbuffers(1, &depthRenderbuffer);
     depthRenderbuffer = 0;
-  }
-    
-  if (_shaderProgram!=NULL) {
-    delete _shaderProgram;
-    _shaderProgram = NULL;
   }
   
   // Tear down context

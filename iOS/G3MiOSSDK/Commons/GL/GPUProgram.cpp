@@ -9,8 +9,8 @@
 #include "GPUProgram.hpp"
 
 #include "GL.hpp"
-
-#include "ShaderProgram.hpp"
+#include "GPUAttribute.hpp"
+#include "GPUUniform.hpp"
 
 GPUProgram* GPUProgram::createProgram(GL* gl, const std::string name, const std::string& vertexSource,
                                       const std::string& fragmentSource){
@@ -335,4 +335,27 @@ void GPUProgram::applyChanges(GL* gl){
     }
   }
 #endif
+}
+
+GPUUniform* GPUProgram::getUniformOfType(const std::string& name, int type) const{
+  GPUUniform* u = NULL;
+  if (type == GLType::glBool()){
+    u = getGPUUniformBool(name);
+  } else {
+    if (type == GLType::glVec2Float()){
+      u = getGPUUniformVec2Float(name);
+    } else{
+      if (type == GLType::glVec4Float()){
+        u = getGPUUniformVec4Float(name);
+      } else{
+        if (type == GLType::glFloat()){
+          u = getGPUUniformFloat(name);
+        } else
+          if (type == GLType::glMatrix4Float()){
+            u = getGPUUniformMatrix4Float(name);
+          }
+      }
+    }
+  }
+  return u;
 }

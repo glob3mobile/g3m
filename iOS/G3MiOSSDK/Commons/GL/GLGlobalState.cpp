@@ -12,6 +12,8 @@
 #include "IGLTextureId.hpp"
 
 #include "GPUProgram.hpp"
+#include "INativeGL.hpp"
+#include "GL.hpp"
 
 
 void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const{

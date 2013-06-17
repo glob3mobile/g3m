@@ -28,8 +28,9 @@ class IGLUniformID;
 
 class GPUProgramManager;
 class GPUProgramState;
-class GPUProgram;
 class GLState;
+
+#include "GPUProgram.hpp"
 
 class GL {
 private:
