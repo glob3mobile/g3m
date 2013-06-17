@@ -21,6 +21,7 @@ protected:
   IStorage*     createDefaultStorage();
   IDownloader*  createDefaultDownloader();
 
+
 public:
   G3MBuilder_iOS(G3MWidget_iOS* nativeWidget);
 

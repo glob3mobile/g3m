@@ -15,7 +15,7 @@
 
 #include "ILogger.hpp"
 #include "IMathUtils.hpp"
-
+#include <string>
 
 class Color {
 private:
@@ -83,6 +83,8 @@ public:
   }
 
   ~Color() { }
+
+  static Color* parse(const std::string& str);
 
   static Color fromRGBA(const float red,
                         const float green,
@@ -173,7 +175,9 @@ public:
   bool isTransparent() const {
     return (_alpha < 1);
   }
-  
+
+  bool isEqualsTo(const Color& that) const;
+
 };
 
 #endif

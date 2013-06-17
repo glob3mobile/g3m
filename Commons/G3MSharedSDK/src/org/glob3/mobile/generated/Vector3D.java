@@ -108,7 +108,7 @@ public class Vector3D
   public final Vector3D normalized()
   {
     final double d = length();
-    return new Vector3D(_x / d, _y /d, _z / d);
+    return new Vector3D(_x / d, _y / d, _z / d);
   }
 
   public final double length()

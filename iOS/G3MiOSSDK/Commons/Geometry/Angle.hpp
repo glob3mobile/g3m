@@ -70,13 +70,15 @@ public:
   }
 
   static Angle midAngle(const Angle& angle1, const Angle& angle2) {
-    return Angle::fromDegrees((angle1._degrees + angle2._degrees) / 2);
+    //return Angle::fromDegrees((angle1._degrees + angle2._degrees) / 2);
+    return Angle::fromRadians((angle1._radians + angle2._radians) / 2);
   }
 
   static Angle linearInterpolation(const Angle& from,
                                    const Angle& to,
                                    double alpha) {
-    return Angle::fromDegrees( (1.0-alpha) * from._degrees + alpha * to._degrees );
+    //return Angle::fromDegrees( (1.0-alpha) * from._degrees + alpha * to._degrees );
+    return Angle::fromRadians( (1.0-alpha) * from._radians + alpha * to._radians );
   }
 
   bool isNan() const {
@@ -174,13 +176,19 @@ public:
 
 #ifdef JAVA_CODE
   @Override
-	public int hashCode() {
-		return Double.toString(_degrees).hashCode();
-	}
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    long temp;
+    temp = Double.doubleToLongBits(_radians);
+    result = (prime * result) + (int) (temp ^ (temp >>> 32));
+    return result;
+  }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
+
+  @Override
+  public boolean equals(final Object obj) {
+    if (this == obj) {
       return true;
     }
     if (obj == null) {
@@ -190,11 +198,11 @@ public:
       return false;
     }
     final Angle other = (Angle) obj;
-    if (_degrees != other._degrees) {
+    if (Double.doubleToLongBits(_radians) != Double.doubleToLongBits(other._radians)) {
       return false;
     }
     return true;
-	}
+  }
 #endif
 
   ~Angle() {

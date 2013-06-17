@@ -135,5 +135,4 @@ public class Geodetic3D
   {
     return new Geodetic3D(_latitude.div(magnitude), _longitude.div(magnitude), _height / magnitude);
   }
-
 }

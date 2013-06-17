@@ -131,6 +131,8 @@ public:
 
   void setLayerSet(LayerSet* layerSet);
 
+  void removeLayerSet(LayerSet* layerSet);
+
   const std::string getName();
 
   const LayerTilesRenderParameters* getLayerTilesRenderParameters() const {

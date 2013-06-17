@@ -44,15 +44,17 @@ bool Sector::touchesWith(const Sector &that) const {
 // (u,v) are similar to texture coordinates inside the Sector
 // (u,v)=(0,0) in NW point, and (1,1) in SE point
 const Geodetic2D Sector::getInnerPoint(double u, double v) const {
-  return Geodetic2D(Angle::linearInterpolation( _lower.latitude(),  _upper.latitude(),  (float) (1.0-v) ),
-                    Angle::linearInterpolation( _lower.longitude(), _upper.longitude(), (float)      u  ) );
+  return Geodetic2D(Angle::linearInterpolation( _lower.latitude(),  _upper.latitude(),  1.0 - v ),
+                    Angle::linearInterpolation( _lower.longitude(), _upper.longitude(),       u ) );
+}
+
+const Angle Sector::getInnerPointLongitude(double u) const {
+  return Angle::linearInterpolation( _lower.longitude(), _upper.longitude(), u );
 }
 
 const Angle Sector::getInnerPointLatitude(double v) const {
-  return Angle::linearInterpolation( _lower.latitude(), _upper.latitude(),  (float) (1.0-v) );
+  return Angle::linearInterpolation( _lower.latitude(), _upper.latitude(), 1.0 - v );
 }
-
-
 
 class Sector_Geodetic2DCachedData {
 private:
@@ -116,7 +118,7 @@ bool Sector::isBackOriented(const G3MRenderContext *rc,
   const Vector3D cartesianSE = planet->toCartesian(getSE());
   if (planet->geodeticSurfaceNormal(cartesianSE).dot(eye.sub(cartesianSE)) > 0) { return false; }
   */
-
+  
   // compute angle with normal in the closest point to the camera
   const Geodetic2D center = camera->getGeodeticCenterOfView().asGeodetic2D();
 

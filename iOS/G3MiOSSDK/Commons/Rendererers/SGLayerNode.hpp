@@ -44,6 +44,7 @@ private:
 
   URL getURL() const;
 
+
 public:
 
   SGLayerNode(const std::string& id,
@@ -71,6 +72,8 @@ public:
   {
 
   }
+
+  bool isReadyToRender(const G3MRenderContext* rc);
 
   void onImageDownload(IImage* image);
 

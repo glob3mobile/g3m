@@ -47,9 +47,10 @@ public:
   }
 
   void render(const G3MRenderContext* rc,
-              const GLState& parentState);
-  
-  
+              const GLState& parentState,
+              bool renderNotReadyShapes);
+
+
 };
 
 #endif

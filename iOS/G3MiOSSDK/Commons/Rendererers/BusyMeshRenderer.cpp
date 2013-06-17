@@ -105,6 +105,7 @@ void BusyMeshRenderer::render(const G3MRenderContext* rc,
                   _backgroundColor->getGreen(),
                   _backgroundColor->getBlue(),
                   _backgroundColor->getAlpha());
+  
 
   gl->pushMatrix();
   MutableMatrix44D R1 = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, -1));

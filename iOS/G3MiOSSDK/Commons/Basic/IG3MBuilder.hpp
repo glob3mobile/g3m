@@ -15,6 +15,7 @@ class GL;
 class IStorage;
 class IDownloader;
 class IThreadUtils;
+class ICameraActivityListener;
 class CameraRenderer;
 class ICameraConstrainer;
 class Color;
@@ -27,11 +28,12 @@ class Renderer;
 class WidgetUserData;
 
 class IG3MBuilder {
-
+  
 private:
   GL* _gl;
   IDownloader* _downloader;
   IThreadUtils* _threadUtils;
+  ICameraActivityListener* _cameraActivityListener;
   const Planet* _planet;
   std::vector<ICameraConstrainer*>* _cameraConstraints;
   CameraRenderer* _cameraRenderer;
@@ -49,6 +51,7 @@ private:
   GL* getGL();
   IDownloader* getDownloader();
   IThreadUtils* getThreadUtils();
+  ICameraActivityListener* getCameraActivityListener();
   std::vector<ICameraConstrainer*>* getCameraConstraints();
   CameraRenderer* getCameraRenderer();
   Renderer* getBusyRenderer();
@@ -60,29 +63,30 @@ private:
   bool getAutoDeleteInitializationTask();
   std::vector<PeriodicalTask*>* getPeriodicalTasks();
   WidgetUserData* getUserData();
-
-
+  
+  
   std::vector<ICameraConstrainer*>* createDefaultCameraConstraints();
   CameraRenderer* createDefaultCameraRenderer();
   std::vector<Renderer*>* createDefaultRenderers();
   std::vector<PeriodicalTask*>* createDefaultPeriodicalTasks();
-
+  
   void pvtSetInitializationTask(GInitializationTask* initializationTask,
                                 const bool autoDeleteInitializationTask);
   
   bool containsTileRenderer(std::vector<Renderer*> renderers);
-
+  
 protected:
   IStorage* _storage;
   
   IStorage* getStorage();
-
+  
   G3MWidget* create();
-
+  
   virtual IThreadUtils* createDefaultThreadUtils() = 0;
   virtual IStorage*     createDefaultStorage()     = 0;
   virtual IDownloader*  createDefaultDownloader()  = 0;
-
+  
+  
 public:
   IG3MBuilder();
   virtual ~IG3MBuilder();
@@ -90,6 +94,7 @@ public:
   void setStorage(IStorage* storage);
   void setDownloader(IDownloader* downloader);
   void setThreadUtils(IThreadUtils* threadUtils);
+  void setCameraActivityListener(ICameraActivityListener* cameraActivityListener);
   void setPlanet(const Planet* planet);
   void addCameraConstraint(ICameraConstrainer* cameraConstraint);
   void setCameraConstrainsts(std::vector<ICameraConstrainer*> cameraConstraints);
@@ -116,9 +121,9 @@ public:
                              true /* parameter ignored in Java code */);
   }
 #endif
-
+  
   const Planet* getPlanet();
   TileRendererBuilder* getTileRendererBuilder();
 };
 
-#endif /* defined(__G3MiOSSDK__IG3MBuilder__) */
+#endif

@@ -151,6 +151,7 @@
                                                           subdomains,
                                                           "png",
                                                           TimeInterval::fromDays(90),
+                                                          true,
                                                           Sector::fullSphere(),
                                                           2,
                                                           17,
@@ -168,6 +169,7 @@
                                  true,
                                  NULL,
                                  TimeInterval::fromDays(30),
+                                 true,
                                  LayerTilesRenderParameters::createDefaultMercator(1, 19));
   csiro->setEnable(false);
   layers->addLayer(csiro);

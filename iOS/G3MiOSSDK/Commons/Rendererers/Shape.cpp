@@ -13,23 +13,25 @@
 #include "ShapeScaleEffect.hpp"
 #include "ShapeOrbitCameraEffect.hpp"
 #include "ShapePositionEffect.hpp"
+#include "ShapeFullPositionEffect.hpp"
+
 #include "Camera.hpp"
 
 class ShapePendingEffect {
 public:
   Effect* _effect;
   bool    _targetIsCamera;
-
+  
   ShapePendingEffect(Effect* effect,
-                bool    targetIsCamera) :
+                     bool    targetIsCamera) :
   _effect(effect),
   _targetIsCamera(targetIsCamera)
   {
     
   }
-
+  
   ~ShapePendingEffect() {
-
+    
   }
 };
 
@@ -40,12 +42,12 @@ Shape::~Shape() {
     ShapePendingEffect* pendingEffect = _pendingEffects[i];
     delete pendingEffect;
   }
-
+  
   delete _position;
-
+  
   delete _heading;
   delete _pitch;
-
+  
   delete _transformMatrix;
 }
 
@@ -56,12 +58,12 @@ void Shape::cleanTransformMatrix() {
 
 MutableMatrix44D* Shape::createTransformMatrix(const Planet* planet) {
   const MutableMatrix44D geodeticTransform   = (_position == NULL) ? MutableMatrix44D::identity() : planet->createGeodeticTransformMatrix(*_position);
-
+  
   const MutableMatrix44D headingRotation = MutableMatrix44D::createRotationMatrix(*_heading, Vector3D::downZ());
   const MutableMatrix44D pitchRotation   = MutableMatrix44D::createRotationMatrix(*_pitch,   Vector3D::upX());
   const MutableMatrix44D scale           = MutableMatrix44D::createScaleMatrix(_scaleX, _scaleY, _scaleZ);
   const MutableMatrix44D localTransform  = headingRotation.multiply(pitchRotation).multiply(scale);
-
+  
   return new MutableMatrix44D( geodeticTransform.multiply(localTransform) );
 }
 
@@ -73,8 +75,9 @@ MutableMatrix44D* Shape::getTransformMatrix(const Planet* planet) {
 }
 
 void Shape::render(const G3MRenderContext* rc,
-                   const GLState& parentState) {
-  if (isReadyToRender(rc)) {
+                   const GLState& parentState,
+                   bool renderNotReadyShapes) {
+  if (renderNotReadyShapes || isReadyToRender(rc)) {
 
     const int pendingEffectsCount = _pendingEffects.size();
     if (pendingEffectsCount > 0) {
@@ -99,7 +102,7 @@ void Shape::render(const G3MRenderContext* rc,
 
     gl->multMatrixf( *getTransformMatrix( rc->getPlanet() ) );
 
-    rawRender(rc, parentState);
+    rawRender(rc, parentState, renderNotReadyShapes);
 
     gl->popMatrix();
   }
@@ -113,7 +116,7 @@ void Shape::setAnimatedScale(const TimeInterval& duration,
                                         this,
                                         _scaleX, _scaleY, _scaleZ,
                                         scaleX, scaleY, scaleZ);
-  _pendingEffects.push_back( new ShapePendingEffect(effect, false) );
+  addShapeEffect(effect);
 }
 
 void Shape::orbitCamera(const TimeInterval& duration,
@@ -128,6 +131,10 @@ void Shape::orbitCamera(const TimeInterval& duration,
   _pendingEffects.push_back( new ShapePendingEffect(effect, true) );
 }
 
+void Shape::addShapeEffect(Effect* effect){
+  _pendingEffects.push_back( new ShapePendingEffect(effect, false) );
+}
+
 void Shape::setAnimatedPosition(const TimeInterval& duration,
                                 const Geodetic3D& position,
                                 bool linearInterpolation) {
@@ -136,5 +143,19 @@ void Shape::setAnimatedPosition(const TimeInterval& duration,
                                            *_position,
                                            position,
                                            linearInterpolation);
-  _pendingEffects.push_back( new ShapePendingEffect(effect, false) );
+  addShapeEffect(effect);
+}
+
+void Shape::setAnimatedPosition(const TimeInterval& duration,
+                                const Geodetic3D& position,
+                                const Angle& pitch,
+                                const Angle& heading,
+                                bool linearInterpolation) {
+  Effect* effect = new ShapeFullPositionEffect(duration,
+                                               this,
+                                               *_position,
+                                               position,
+                                               *_pitch, pitch,*_heading,heading,
+                                               linearInterpolation);
+  addShapeEffect(effect);
 }

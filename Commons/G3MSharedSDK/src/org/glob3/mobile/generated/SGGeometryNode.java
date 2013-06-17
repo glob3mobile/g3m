@@ -56,6 +56,7 @@ public class SGGeometryNode extends SGNode
        _indices.dispose();
   }
 
+
   public final void rawRender(G3MRenderContext rc, GLState parentState)
   {
     GL gl = rc.getGL();

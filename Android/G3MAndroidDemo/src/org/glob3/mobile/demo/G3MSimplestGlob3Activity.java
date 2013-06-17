@@ -15,11 +15,13 @@ import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.CompositeRenderer;
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GInitializationTask;
+import org.glob3.mobile.generated.ICameraActivityListener;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.LayerSet;
+import org.glob3.mobile.generated.LayerTilesRenderParameters;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.Sector;
@@ -73,6 +75,7 @@ public class G3MSimplestGlob3Activity
                saveInBackground);
 
       final IThreadUtils threadUtils = new ThreadUtils_Android(_widgetAndroid);
+      final ICameraActivityListener cameraActivityListener = null;
 
       final Planet planet = Planet.createEarth();
 
@@ -90,9 +93,30 @@ public class G3MSimplestGlob3Activity
 
       final CompositeRenderer mainRenderer = new CompositeRenderer();
       final LayerSet layerSet = new LayerSet();
-      final WMSLayer osm = new WMSLayer( //
-               "osm_auto:all", //
-               new URL("http://129.206.228.72/cached/osm", false), //
+      //      final WMSLayer osm = new WMSLayer( //
+      //               "osm_auto:all", //
+      //               new URL("http://129.206.228.72/cached/osm", false), //
+      //               WMSServerVersion.WMS_1_1_0, //
+      //               //Sector.fromDegrees(-85.05, -180.0, 85.05, 180.0), //
+      //               Sector.fullSphere(), //
+      //               "image/jpeg", //
+      //               "EPSG:4326", //
+      //               "", //
+      //               false, //
+      //               null, //
+      //               TimeInterval.fromDays(30), //
+      //               true);
+      //      layerSet.addLayer(osm);
+
+      final LayerTilesRenderParameters params = new LayerTilesRenderParameters(Sector.fullSphere(), 2, 4, 1, 19,
+               LayerTilesRenderParameters.defaultTileTextureResolution(), LayerTilesRenderParameters.defaultTileMeshResolution(),
+               false);
+      //final Sector bbox = new Sector(new Geodetic2D(Angle.fromDegrees(-6.858), Angle.fromDegrees(39.182)), new Geodetic2D(
+      //         Angle.fromDegrees(-6.089), Angle.fromDegrees(39.657)));
+
+      final WMSLayer aytoLayer = new WMSLayer( //
+               "sigaytocc:AytoCC", //
+               new URL("http://195.57.27.86:8080/geoserver/gwc/service/wms?", false), //
                WMSServerVersion.WMS_1_1_0, //
                //Sector.fromDegrees(-85.05, -180.0, 85.05, 180.0), //
                Sector.fullSphere(), //
@@ -102,8 +126,9 @@ public class G3MSimplestGlob3Activity
                false, //
                null, //
                TimeInterval.fromDays(30), //
-               true);
-      layerSet.addLayer(osm);
+               true, params);
+
+      layerSet.addLayer(aytoLayer);
 
 
       //      final WMSLayer blueMarbleL = new WMSLayer( //
@@ -332,6 +357,7 @@ public class G3MSimplestGlob3Activity
                storage, // 
                downloader, //
                threadUtils, //
+               cameraActivityListener,//
                planet, //
                cameraConstraints, //
                cameraRenderer, //

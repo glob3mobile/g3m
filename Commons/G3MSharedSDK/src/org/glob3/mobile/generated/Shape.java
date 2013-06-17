@@ -56,6 +56,8 @@ public abstract class Shape implements EffectTarget
 
   private java.util.ArrayList<ShapePendingEffect> _pendingEffects = new java.util.ArrayList<ShapePendingEffect>();
 
+  private boolean _enable;
+
   protected void cleanTransformMatrix()
   {
     if (_transformMatrix != null)
@@ -72,6 +74,7 @@ public abstract class Shape implements EffectTarget
      _scaleY = 1;
      _scaleZ = 1;
      _transformMatrix = null;
+     _enable = true;
 
   }
 
@@ -120,6 +123,11 @@ public abstract class Shape implements EffectTarget
     cleanTransformMatrix();
   }
 
+  public final void addShapeEffect(Effect effect)
+  {
+    _pendingEffects.add(new ShapePendingEffect(effect, false));
+  }
+
   public final void setAnimatedPosition(TimeInterval duration, Geodetic3D position)
   {
      setAnimatedPosition(duration, position, false);
@@ -127,7 +135,17 @@ public abstract class Shape implements EffectTarget
   public final void setAnimatedPosition(TimeInterval duration, Geodetic3D position, boolean linearInterpolation)
   {
     Effect effect = new ShapePositionEffect(duration, this, _position, position, linearInterpolation);
-    _pendingEffects.add(new ShapePendingEffect(effect, false));
+    addShapeEffect(effect);
+  }
+
+  public final void setAnimatedPosition(TimeInterval duration, Geodetic3D position, Angle pitch, Angle heading)
+  {
+     setAnimatedPosition(duration, position, pitch, heading, false);
+  }
+  public final void setAnimatedPosition(TimeInterval duration, Geodetic3D position, Angle pitch, Angle heading, boolean linearInterpolation)
+  {
+    Effect effect = new ShapeFullPositionEffect(duration, this, _position, position, _pitch, pitch, _heading,heading, linearInterpolation);
+    addShapeEffect(effect);
   }
 
   public final void setAnimatedPosition(Geodetic3D position)
@@ -155,6 +173,11 @@ public abstract class Shape implements EffectTarget
     cleanTransformMatrix();
   }
 
+  public final void setScale(double scale)
+  {
+    setScale(scale, scale, scale);
+  }
+
   public final void setScale(double scaleX, double scaleY, double scaleZ)
   {
     _scaleX = scaleX;
@@ -176,7 +199,7 @@ public abstract class Shape implements EffectTarget
   public final void setAnimatedScale(TimeInterval duration, double scaleX, double scaleY, double scaleZ)
   {
     Effect effect = new ShapeScaleEffect(duration, this, _scaleX, _scaleY, _scaleZ, scaleX, scaleY, scaleZ);
-    _pendingEffects.add(new ShapePendingEffect(effect, false));
+    addShapeEffect(effect);
   }
 
   public final void setAnimatedScale(double scaleX, double scaleY, double scaleZ)
@@ -200,9 +223,19 @@ public abstract class Shape implements EffectTarget
     _pendingEffects.add(new ShapePendingEffect(effect, true));
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final boolean isEnable()
   {
-    if (isReadyToRender(rc))
+    return _enable;
+  }
+
+  public final void setEnable(boolean enable)
+  {
+    _enable = enable;
+  }
+
+  public final void render(G3MRenderContext rc, GLState parentState, boolean renderNotReadyShapes)
+  {
+    if (renderNotReadyShapes || isReadyToRender(rc))
     {
   
       final int pendingEffectsCount = _pendingEffects.size();
@@ -232,7 +265,7 @@ public abstract class Shape implements EffectTarget
   
       gl.multMatrixf(getTransformMatrix(rc.getPlanet()));
   
-      rawRender(rc, parentState);
+      rawRender(rc, parentState, renderNotReadyShapes);
   
       gl.popMatrix();
     }
@@ -245,7 +278,7 @@ public abstract class Shape implements EffectTarget
 
   public abstract boolean isReadyToRender(G3MRenderContext rc);
 
-  public abstract void rawRender(G3MRenderContext rc, GLState parentState);
+  public abstract void rawRender(G3MRenderContext rc, GLState parentState, boolean renderNotReadyShapes);
 
   public abstract boolean isTransparent(G3MRenderContext rc);
 

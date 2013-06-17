@@ -398,4 +398,18 @@ public final class MathUtils_Android
       return (float) Math.ceil(f);
    }
 
+
+   @Override
+   public double fmod(final double d1,
+                      final double d2) {
+      return d1 % d2;
+   }
+
+
+   @Override
+   public float fmod(final float f1,
+                     final float f2) {
+      return f1 % f2;
+   }
+
 }

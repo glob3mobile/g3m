@@ -190,11 +190,13 @@ public class TileRendererBuilder
   }
   private TilesRenderParameters createTileRendererParameters()
   {
-    return new TilesRenderParameters(getRenderDebug(), getUseTilesSplitBudget(), getForceFirstLevelTilesRenderOnStart(), getIncrementalTileQuality());
+    int __TODO_MakeConfigurable_renderIncompletePlanet;
+    final boolean renderIncompletePlanet = false;
+    final URL incompletePlanetTexureURL = new URL("", false);
+    return new TilesRenderParameters(getRenderDebug(), getUseTilesSplitBudget(), getForceFirstLevelTilesRenderOnStart(), getIncrementalTileQuality(), renderIncompletePlanet, incompletePlanetTexureURL);
   }
   private TileTessellator createTileTessellator()
   {
-    //return new EllipsoidalTileTessellator(getParameters()->_tileMeshResolution, true);
     return new EllipsoidalTileTessellator(true);
   }
 

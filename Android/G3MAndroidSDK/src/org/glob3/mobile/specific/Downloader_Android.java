@@ -211,7 +211,6 @@ public final class Downloader_Android
          requestId = _requestIdCounter++;
          final String path = url.getPath();
          handler = _downloadingHandlers.get(path);
-
          if (handler == null) {
             handler = _queuedHandlers.get(path);
             if (handler == null) {

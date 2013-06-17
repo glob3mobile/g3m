@@ -71,6 +71,13 @@ public class ByteBufferIterator
   
     final int iResult = ((int) b1) | ((int)(b2 << 8));
     final short result = (short) iResult;
+  //  if (result != -9999) {
+  //    printf("break point on me\n");
+  //  }
+  
+  //  if (result > 0) {
+  //    printf("break point on me\n");
+  //  }
     return result;
   }
   public final int nextInt32()

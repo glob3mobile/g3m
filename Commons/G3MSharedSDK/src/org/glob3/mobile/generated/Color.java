@@ -1,13 +1,19 @@
 package org.glob3.mobile.generated; 
 //
+//  Color.cpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 6/3/13.
+//
+//
+
+//
 //  Color.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 13/06/12.
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
-
-
 
 
 
@@ -78,6 +84,80 @@ public class Color
 
   public void dispose()
   {
+  }
+
+  public static Color parse(String str)
+  {
+    final IStringUtils su = IStringUtils.instance();
+  
+    String colorStr = su.trim(str);
+  
+    if (su.beginsWith(colorStr, "#"))
+    {
+      colorStr = su.trim(su.substring(colorStr, 1));
+    }
+  
+    final int strSize = colorStr.length();
+  
+    String rs;
+    String gs;
+    String bs;
+    String as;
+    if (strSize == 3)
+    {
+      // RGB
+      rs = su.substring(colorStr, 0, 1);
+      gs = su.substring(colorStr, 1, 2);
+      bs = su.substring(colorStr, 2, 3);
+      as = "ff";
+  
+      rs = rs + rs;
+      gs = gs + gs;
+      bs = bs + bs;
+    }
+    else if (strSize == 4)
+    {
+      // RGBA
+      rs = su.substring(colorStr, 0, 1);
+      gs = su.substring(colorStr, 1, 2);
+      bs = su.substring(colorStr, 2, 3);
+      as = su.substring(colorStr, 3, 4);
+  
+      rs = rs + rs;
+      gs = gs + gs;
+      bs = bs + bs;
+      as = as + as;
+    }
+    else if (strSize == 6)
+    {
+      // RRGGBB
+      rs = su.substring(colorStr, 0, 2);
+      gs = su.substring(colorStr, 2, 4);
+      bs = su.substring(colorStr, 4, 6);
+      as = "ff";
+    }
+    else if (strSize == 8)
+    {
+      // RRGGBBAA
+      rs = su.substring(colorStr, 0, 2);
+      gs = su.substring(colorStr, 2, 4);
+      bs = su.substring(colorStr, 4, 6);
+      as = su.substring(colorStr, 6, 8);
+    }
+    else
+    {
+      ILogger.instance().logError("Invalid color format: \"%s\"", str);
+      return null;
+    }
+  
+    final IMathUtils mu = IMathUtils.instance();
+  
+    final float r = mu.clamp((float) su.parseHexInt(rs) / 255.0f, 0, 1);
+    final float g = mu.clamp((float) su.parseHexInt(gs) / 255.0f, 0, 1);
+    final float b = mu.clamp((float) su.parseHexInt(bs) / 255.0f, 0, 1);
+    final float a = mu.clamp((float) su.parseHexInt(as) / 255.0f, 0, 1);
+  
+    return Color.newFromRGBA(r, g, b, a);
   }
 
   public static Color fromRGBA(float red, float green, float blue, float alpha)
@@ -181,6 +261,11 @@ public class Color
   public final boolean isTransparent()
   {
     return (_alpha < 1);
+  }
+
+  public final boolean isEqualsTo(Color that)
+  {
+    return (_red == that._red) && (_green == that._green) && (_blue == that._blue) && (_alpha == that._alpha);
   }
 
 }

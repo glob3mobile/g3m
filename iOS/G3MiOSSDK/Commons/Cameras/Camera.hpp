@@ -80,7 +80,7 @@ public:
     if (_frustumDataDirty) d+= "FD ";
     if (_projectionMatrixDirty) d += "PM ";
     if (_modelMatrixDirty) d+= "MM ";
-    
+
     if (_modelViewMatrixDirty) d+= "MVM ";
     if (_cartesianCenterOfViewDirty) d += "CCV ";
     if (_geodeticCenterOfViewDirty) d+= "GCV ";
@@ -274,7 +274,7 @@ public:
                       double distance,
                       const Angle& azimuth,
                       const Angle& altitude);
-  
+
   void forceMatrixCreation(){
     //MutableMatrix44D projectionMatrix = MutableMatrix44D::createProjectionMatrix(_frustumData);
     //getFrustumData();
@@ -294,7 +294,7 @@ private:
   MutableVector3D _position;            // position
   MutableVector3D _center;              // point where camera is looking at
   MutableVector3D _up;                  // vertical vector
-  
+
   mutable Geodetic3D*     _geodeticPosition;    //Must be updated when changing position
 
   mutable CameraDirtyFlags _dirtyFlags;
@@ -423,11 +423,11 @@ private:
     }
     return _halfFrustumInModelCoordinates;
   }
-
+  
   FrustumData calculateFrustumData() const;
-
+  
   void _setGeodeticPosition(const Vector3D& pos);
-
+  
 };
 
 #endif

@@ -681,10 +681,17 @@ public class Camera
     //                       bottom, top,
     //                       znear, zfar);
   
-    int __Testing_new_zNear_zFar_politic;
-  
     final double height = getGeodeticPosition().height();
     double zNear = height * 0.1;
+  
+    /*
+    // compute zfar value using distance to horizon (Agustin version)
+    const double distanceToPlanetCenter = _position.length();
+    const double planetRadius = distanceToPlanetCenter - height;
+    const double distanceToHorizon = sqrt(distanceToPlanetCenter*distanceToPlanetCenter-planetRadius*planetRadius);
+    const double zfar = distanceToHorizon * 2.0;
+    printf ("ratio z = %f\n", zfar/znear);
+     */
   
     double zFar = 10000 * zNear;
     final double distance2ToPlanetCenter = _position.squaredLength();

@@ -106,7 +106,6 @@ public:
                       _longitude.div(magnitude),
                       _height / magnitude);
   }
-  
 };
 
 

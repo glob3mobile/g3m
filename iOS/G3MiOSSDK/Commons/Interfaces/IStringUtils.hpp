@@ -46,6 +46,12 @@ public:
 
   virtual bool beginsWith(const std::string& string,
                           const std::string& prefix) const = 0;
+  
+  virtual bool endsWith(const std::string& string,
+                        const std::string& suffix) const = 0;
+
+  virtual std::string toUpperCase(const std::string& string) const = 0;
+
 
   virtual int indexOf(const std::string& string,
                       const std::string& search) const = 0;
@@ -98,6 +104,8 @@ public:
     return rtrim(ltrim(string));
   }
   virtual std::string capitalize(const std::string& string) const = 0;
+
+  virtual long long parseHexInt(const std::string& str) const = 0;
 
 };
 

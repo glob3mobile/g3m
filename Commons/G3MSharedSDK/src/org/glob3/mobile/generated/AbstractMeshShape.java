@@ -61,7 +61,7 @@ public abstract class AbstractMeshShape extends Shape
     return (mesh != null);
   }
 
-  public final void rawRender(G3MRenderContext rc, GLState parentState)
+  public final void rawRender(G3MRenderContext rc, GLState parentState, boolean renderNotReadyShapes)
   {
     final Mesh mesh = getMesh(rc);
     if (mesh != null)

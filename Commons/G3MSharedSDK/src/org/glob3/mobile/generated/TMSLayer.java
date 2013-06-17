@@ -18,8 +18,7 @@ package org.glob3.mobile.generated;
 
 
 
-
-public class TMSLayer extends Layer
+public abstract class TMSLayer extends Layer
 {
 
   private final URL _mapServerURL;

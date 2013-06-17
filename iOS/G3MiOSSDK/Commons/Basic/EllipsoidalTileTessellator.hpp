@@ -40,6 +40,7 @@ public:
                        const Tile* tile,
                        const ElevationData* elevationData,
                        float verticalExaggeration,
+                       bool mercator,
                        bool debug) const;
 
   Mesh* createTileDebugMesh(const Planet* planet,

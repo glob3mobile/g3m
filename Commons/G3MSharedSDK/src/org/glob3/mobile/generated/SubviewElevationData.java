@@ -16,21 +16,26 @@ package org.glob3.mobile.generated;
 //
 
 
+
 //class IFloatBuffer;
 
 public class SubviewElevationData extends ElevationData
 {
-  private final ElevationData _elevationData;
-  private final boolean _ownsElevationData;
   private final IFloatBuffer _buffer;
 
-  private IFloatBuffer createDecimatedBuffer()
+  private boolean _hasNoData;
+
+//  const Geodetic2D _realResolution;
+
+  private IFloatBuffer createDecimatedBuffer(ElevationData elevationData)
   {
     IFloatBuffer buffer = IFactory.instance().createFloatBuffer(_width * _height);
   
-    final Vector2D parentXYAtLower = getParentXYAt(_sector.lower());
-    final Vector2D parentXYAtUpper = getParentXYAt(_sector.upper());
+    final Vector2D parentXYAtLower = getParentXYAt(elevationData, _sector.lower());
+    final Vector2D parentXYAtUpper = getParentXYAt(elevationData, _sector.upper());
     final Vector2D parentDeltaXY = parentXYAtUpper.sub(parentXYAtLower);
+  
+    IMathUtils mu = IMathUtils.instance();
   
     for (int x = 0; x < _width; x++)
     {
@@ -48,42 +53,60 @@ public class SubviewElevationData extends ElevationData
   
         final int index = ((_height-1-y) * _width) + x;
   
-        final double height = getElevationBoxAt(x0, y0, x1, y1);
+        final double height = getElevationBoxAt(elevationData, x0, y0, x1, y1);
         buffer.rawPut(index, (float) height);
+  
+        if (!_hasNoData)
+        {
+          if (mu.isNan(height))
+          {
+            _hasNoData = true;
+          }
+        }
       }
     }
   
     return buffer;
   }
-  private IFloatBuffer createInterpolatedBuffer()
+  private IFloatBuffer createInterpolatedBuffer(ElevationData elevationData)
   {
     IFloatBuffer buffer = IFactory.instance().createFloatBuffer(_width * _height);
   
-    int unusedType = -1;
+    IMathUtils mu = IMathUtils.instance();
+  
     for (int x = 0; x < _width; x++)
     {
       final double u = (double) x / (_width - 1);
+  
+      final Angle longitude = _sector.getInnerPointLongitude(u);
+  
       for (int y = 0; y < _height; y++)
       {
-        final double v = (double) y / (_height - 1);
-        final Geodetic2D position = _sector.getInnerPoint(u, v);
+        final double v = 1.0 - ((double) y / (_height - 1));
+  
+        final Angle latitude = _sector.getInnerPointLatitude(v);
   
         final int index = ((_height-1-y) * _width) + x;
   
-        final double height = _elevationData.getElevationAt(position.latitude(), position.longitude(), unusedType);
+        final double height = elevationData.getElevationAt(latitude, longitude);
   
         buffer.rawPut(index, (float) height);
   
+        if (!_hasNoData)
+        {
+          if (mu.isNan(height))
+          {
+            _hasNoData = true;
+          }
+        }
       }
     }
   
     return buffer;
   }
 
-  private double getElevationBoxAt(double x0, double y0, double x1, double y1)
+  private double getElevationBoxAt(ElevationData elevationData, double x0, double y0, double x1, double y1)
   {
-    //  aaa;
-  
     final IMathUtils mu = IMathUtils.instance();
   
     final double floorY0 = mu.floor(y0);
@@ -91,8 +114,8 @@ public class SubviewElevationData extends ElevationData
     final double floorX0 = mu.floor(x0);
     final double ceilX1 = mu.ceil(x1);
   
-    final int parentHeight = _elevationData.getExtentHeight();
-    final int parentWidth = _elevationData.getExtentWidth();
+    final int parentHeight = elevationData.getExtentHeight();
+    final int parentWidth = elevationData.getExtentWidth();
   
     if (floorY0 < 0 || ceilY1 >= parentHeight)
     {
@@ -102,8 +125,6 @@ public class SubviewElevationData extends ElevationData
     {
       return 0;
     }
-  
-    int unusedType = -1;
   
     double heightSum = 0;
     double area = 0;
@@ -127,7 +148,12 @@ public class SubviewElevationData extends ElevationData
   
       for (double x = floorX0; x <= ceilX1; x++)
       {
-        final double height = _elevationData.getElevationAt((int) mu.min(x, maxX), yy, unusedType);
+        final double height = elevationData.getElevationAt((int) mu.min(x, maxX), yy);
+  
+        if (mu.isNan(height))
+        {
+          return mu.NanD();
+        }
   
         double size = ysize;
         if (x < x0)
@@ -147,80 +173,79 @@ public class SubviewElevationData extends ElevationData
     return heightSum/area;
   }
 
-  private Vector2D getParentXYAt(Geodetic2D position)
+  private Vector2D getParentXYAt(ElevationData elevationData, Geodetic2D position)
   {
-    final Sector parentSector = _elevationData.getSector();
+    final Sector parentSector = elevationData.getSector();
     final Geodetic2D parentLower = parentSector.lower();
   
-    final double parentX = ((position.longitude().radians() - parentLower.longitude().radians()) / parentSector.getDeltaLongitude().radians() * _elevationData.getExtentWidth());
+    final double parentX = ((position.longitude().radians() - parentLower.longitude().radians()) / parentSector.getDeltaLongitude().radians() * elevationData.getExtentWidth());
   
-    final double parentY = ((position.latitude().radians() - parentLower.latitude().radians()) / parentSector.getDeltaLatitude().radians() * _elevationData.getExtentHeight());
+    final double parentY = ((position.latitude().radians() - parentLower.latitude().radians()) / parentSector.getDeltaLatitude().radians() * elevationData.getExtentHeight());
   
     return new Vector2D(parentX, parentY);
   }
 
-  public SubviewElevationData(ElevationData elevationData, boolean ownsElevationData, Sector sector, Vector2I resolution, double noDataValue, boolean useDecimation)
+  public SubviewElevationData(ElevationData elevationData, Sector sector, Vector2I extent, boolean useDecimation)
+                                             //bool ownsElevationData,
+  //_realResolution( elevationData->getRealResolution() )
   {
-     super(sector, resolution, noDataValue);
-     _elevationData = elevationData;
-     _ownsElevationData = ownsElevationData;
+     super(sector, extent);
+    if ((elevationData == null) || (elevationData.getExtentWidth() < 1) || (elevationData.getExtentHeight() < 1))
+    {
+      ILogger.instance().logError("SubviewElevationData can't subview given elevation data.");
+      _buffer = null;
+      return;
+    }
+  
+    _hasNoData = false;
     if (useDecimation)
     {
-      _buffer = createDecimatedBuffer();
+      _buffer = createDecimatedBuffer(elevationData);
     }
     else
     {
-      _buffer = createInterpolatedBuffer();
+      _buffer = createInterpolatedBuffer(elevationData);
     }
+  
+    //isEquivalentTo(elevationData);
   }
+                       //bool ownsElevationData,
 
   public void dispose()
   {
-    if (_ownsElevationData)
-    {
-      if (_elevationData != null)
-         _elevationData.dispose();
-    }
+    //  if (_ownsElevationData) {
+  //  delete _elevationData;
+    //  }
     if (_buffer != null)
        _buffer.dispose();
   }
 
-  public final double getElevationAt(int x, int y, int type)
-  {
-  
-    if (_buffer != null)
-    {
-      final int index = ((_height-1-y) * _width) + x;
-  
-      if ((index < 0) || (index >= _buffer.size()))
-      {
-        System.out.print("break point on me\n");
-        type = 0;
-        return _noDataValue;
-      }
-      type = 1;
-      return _buffer.get(index);
-    }
-  
-  
-    final double u = (double) x / (_width - 1);
-    final double v = (double) y / (_height - 1);
-    final Geodetic2D position = _sector.getInnerPoint(u, v);
-  
-    return getElevationAt(position.latitude(), position.longitude(), type);
-  }
+//  const Geodetic2D getRealResolution() const {
+//    return _realResolution;
+//  }
 
-  public final double getElevationAt(Angle latitude, Angle longitude, int type)
+  public final double getElevationAt(int x, int y)
   {
-    if (!_sector.contains(latitude, longitude))
+  
+    //  if (_buffer != NULL) {
+    final int index = ((_height-1-y) * _width) + x;
+  
+    if ((index < 0) || (index >= _buffer.size()))
     {
-      //    ILogger::instance()->logError("Sector %s doesn't contain lat=%s lon=%s",
-      //                                  _sector.description().c_str(),
-      //                                  latitude.description().c_str(),
-      //                                  longitude.description().c_str());
-      return _noDataValue;
+      System.out.print("break point on me\n");
+      return IMathUtils.instance().NanD();
     }
-    return _elevationData.getElevationAt(latitude, longitude, type);
+  
+    return _buffer.get(index);
+    //  }
+    //
+    //
+    //  const double u = (double) x / (_width - 1);
+    //  const double v = (double) y / (_height - 1);
+    //  const Geodetic2D position = _sector.getInnerPoint(u, v);
+    //
+    //  return getElevationAt(position.latitude(),
+    //                        position.longitude());
   }
 
   public final String description(boolean detailed)
@@ -232,16 +257,29 @@ public class SubviewElevationData extends ElevationData
     isb.addInt(_height);
     isb.addString(" sector=");
     isb.addString(_sector.description());
-    isb.addString(" on ElevationData=");
-    isb.addString(_elevationData.description(detailed));
+    if (detailed)
+    {
+      isb.addString("\n");
+      for (int row = 0; row < _width; row++)
+      {
+        //isb->addString("   ");
+        for (int col = 0; col < _height; col++)
+        {
+          isb.addDouble(getElevationAt(col, row));
+          isb.addString(",");
+        }
+        isb.addString("\n");
+      }
+    }
     isb.addString(")");
     final String s = isb.getString();
     if (isb != null)
        isb.dispose();
     return s;
+  
   }
 
-  public final Vector3D getMinMaxAverageHeights()
+  public final Vector3D getMinMaxAverageElevations()
   {
     final IMathUtils mu = IMathUtils.instance();
   
@@ -249,24 +287,23 @@ public class SubviewElevationData extends ElevationData
     double maxHeight = mu.minDouble();
     double sumHeight = 0.0;
   
-    int unusedType = 0;
-  
     for (int x = 0; x < _width; x++)
     {
       for (int y = 0; y < _height; y++)
       {
-        final double height = getElevationAt(x, y, unusedType);
-        //      if (height != _noDataValue) {
-        if (height < minHeight)
+        final double height = getElevationAt(x, y);
+        if (!mu.isNan(height))
         {
-          minHeight = height;
+          if (height < minHeight)
+          {
+            minHeight = height;
+          }
+          if (height > maxHeight)
+          {
+            maxHeight = height;
+          }
+          sumHeight += height;
         }
-        if (height > maxHeight)
-        {
-          maxHeight = height;
-        }
-        sumHeight += height;
-        //      }
       }
     }
   
@@ -280,6 +317,11 @@ public class SubviewElevationData extends ElevationData
     }
   
     return new Vector3D(minHeight, maxHeight, sumHeight / (_width * _height));
+  }
+
+  public final boolean hasNoData()
+  {
+     return _hasNoData;
   }
 
 }
