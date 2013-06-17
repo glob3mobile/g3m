@@ -14,9 +14,10 @@ package org.glob3.mobile.generated;
 //class IImage;
 //class IGLUniformID;
 //class IGLTextureId;
+
+
+
 //class GPUProgram;
-
-
 
 //class GPUUniform;
 //class GPUAttribute;
@@ -30,13 +31,7 @@ public abstract class INativeGL
   {
   }
 
-  public abstract void useProgram(ShaderProgram program);
-
   public abstract void useProgram(GPUProgram program);
-
-  public abstract int getAttribLocation(ShaderProgram program, String name);
-
-  public abstract IGLUniformID getUniformLocation(ShaderProgram program, String name);
 
   public abstract void uniform2f(IGLUniformID loc, float x, float y);
 
@@ -159,7 +154,6 @@ public abstract class INativeGL
   public abstract boolean linkProgram(int program);
   public abstract void printProgramInfoLog(int program);
 
-  public abstract void bindAttribLocation(ShaderProgram program, int loc, String name);
   public abstract void bindAttribLocation(GPUProgram program, int loc, String name);
 
   public abstract int getProgramiv(GPUProgram program, int param);

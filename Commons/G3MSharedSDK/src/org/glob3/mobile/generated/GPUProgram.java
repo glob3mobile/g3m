@@ -1,28 +1,4 @@
 package org.glob3.mobile.generated; 
-//
-//  GPUProgram.cpp
-//  G3MiOSSDK
-//
-//  Created by Jose Miguel SN on 27/03/13.
-//
-//
-
-//
-//  GPUProgram.h
-//  G3MiOSSDK
-//
-//  Created by Jose Miguel SN on 27/03/13.
-//
-//
-
-
-
-
-
-//class IFloatBuffer;
-
-//class GL;
-
 public class GPUProgram
 {
 
@@ -413,55 +389,6 @@ public class GPUProgram
         }
       }
     }
-  return u;
+    return u;
   }
-
-/*
- void setUniform(GL* gl, const std::string& name, const Vector2D& v) const{
- Uniform* u = getUniform(name);
- if (u != NULL && u->getType() == GLType::glVec2Float()) {
- ((UniformVec2Float*)u)->set(gl, v);
- } else{
- throw G3MError("Error setting Uniform " + name);
- }
- }
- 
- void setUniform(GL* gl, const std::string& name, double x, double y, double z, double w) const{
- Uniform* u = getUniform(name);
- if (u != NULL && u->getType() == GLType::glVec4Float()) {
- ((UniformVec4Float*)u)->set(gl, x,y,z,w);
- } else{
- throw G3MError("Error setting Uniform " + name);
- }
- }
- 
- void setUniform(GL* gl, const std::string& name, bool b) const{
- Uniform* u = getUniform(name);
- if (u != NULL && u->getType() == GLType::glBool()) {
- ((UniformBool*)u)->set(gl, b);
- } else{
- throw G3MError("Error setting Uniform " + name);
- }
- }
- 
- void setUniform(GL* gl, const std::string& name, float f) const{
- Uniform* u = getUniform(name);
- if (u != NULL && u->getType() == GLType::glFloat()) {
- ((UniformFloat*)u)->set(gl, f);
- } else{
- throw G3MError("Error setting Uniform " + name);
- }
- }
- 
- void setUniform(GL* gl, const std::string& name, const MutableMatrix44D& m) const{
- Uniform* u = getUniform(name);
- if (u != NULL && u->getType() == GLType::glMatrix4Float()) {
- ((UniformMatrix4Float*)u)->set(gl, m);
- } else{
- throw G3MError("Error setting Uniform " + name);
- }
- }
- */
-
-
 }

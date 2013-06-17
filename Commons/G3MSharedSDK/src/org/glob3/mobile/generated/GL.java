@@ -26,8 +26,8 @@ package org.glob3.mobile.generated;
 
 //class GPUProgramManager;
 //class GPUProgramState;
-//class GPUProgram;
 //class GLState;
+
 
 public class GL
 {
