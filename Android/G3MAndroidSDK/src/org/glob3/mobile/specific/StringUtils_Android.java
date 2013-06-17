@@ -88,6 +88,8 @@ public final class StringUtils_Android
       return string;
    }
 
+
+   @Override
    public boolean endsWith(final String string,
                            final String suffix) {
       return string.endsWith(suffix);
@@ -105,6 +107,4 @@ public final class StringUtils_Android
       return Long.parseLong(str, 16);
    }
 
-
->>>>>>> webgl-port
 }
