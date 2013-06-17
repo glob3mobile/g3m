@@ -17,6 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 public class Color
 {
   private final float _red;
