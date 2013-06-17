@@ -14,7 +14,6 @@ import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.INativeGL;
 import org.glob3.mobile.generated.IShortBuffer;
 import org.glob3.mobile.generated.MutableMatrix44D;
-import org.glob3.mobile.generated.ShaderProgram;
 import org.glob3.mobile.generated.ShaderType;
 
 import com.google.gwt.core.client.JavaScriptObject;
@@ -586,43 +585,6 @@ public final class NativeGL_WebGL
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.NO_ERROR;
    }-*/;
 
-
-   @Override
-   public native void useProgram(final ShaderProgram program) /*-{
-		var progInt = program.@org.glob3.mobile.generated.ShaderProgram::getProgram()();
-		var shaderList = this.@org.glob3.mobile.specific.NativeGL_WebGL::_shaderList;
-		var jsoProgram = shaderList.@java.util.ArrayList::get(I)(progInt);
-		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
-				.useProgram(jsoProgram);
-   }-*/;
-
-
-   @Override
-   public native int getAttribLocation(final ShaderProgram program,
-                                       final String name) /*-{
-		var progInt = program.@org.glob3.mobile.generated.ShaderProgram::getProgram()();
-		var shaderList = this.@org.glob3.mobile.specific.NativeGL_WebGL::_shaderList;
-		var jsoProgram = shaderList.@java.util.ArrayList::get(I)(progInt);
-
-		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
-				.getAttribLocation(jsoProgram, name);
-   }-*/;
-
-
-   @Override
-   public native IGLUniformID getUniformLocation(final ShaderProgram program,
-                                                 final String name) /*-{
-		var progInt = program.@org.glob3.mobile.generated.ShaderProgram::getProgram()();
-		var shaderList = this.@org.glob3.mobile.specific.NativeGL_WebGL::_shaderList;
-		var jsoProgram = shaderList.@java.util.ArrayList::get(I)(progInt);
-		var uniformLoc = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
-				.getUniformLocation(jsoProgram, name);
-		var glUniformID = @org.glob3.mobile.specific.GLUniformID_WebGL::new(Lcom/google/gwt/core/client/JavaScriptObject;)(uniformLoc);
-
-		return glUniformID;
-   }-*/;
-
-
    @Override
    public native int createProgram() /*-{
 		var shaderList = this.@org.glob3.mobile.specific.NativeGL_WebGL::_shaderList;
@@ -756,20 +718,6 @@ public final class NativeGL_WebGL
    public native int BlendFactor_Zero() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.ZERO;
    }-*/;
-
-
-   @Override
-   public native void bindAttribLocation(ShaderProgram program,
-                                         int loc,
-                                         String name) /*-{
-		debugger;
-		var progInt = program.@org.glob3.mobile.generated.ShaderProgram::getProgram()();
-		var shaderList = this.@org.glob3.mobile.specific.NativeGL_WebGL::_shaderList;
-		var jsoProgram = shaderList.@java.util.ArrayList::get(I)(progInt);
-		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
-		gl.bindAttribLocation(jsoProgram, loc, name);
-   }-*/;
-
 
    @Override
    public native void useProgram(GPUProgram program) /*-{

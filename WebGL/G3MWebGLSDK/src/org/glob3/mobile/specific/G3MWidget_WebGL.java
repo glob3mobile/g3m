@@ -32,7 +32,6 @@ import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.Renderer;
-import org.glob3.mobile.generated.ShaderProgram;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.WidgetUserData;
 
@@ -137,8 +136,6 @@ public final class G3MWidget_WebGL
    private int                  _height;
    private MotionEventProcessor _motionEventProcessor;
    private GL                   _gl;
-   private ShaderProgram        _shaderProgram;
-   //   private ShaderProgram                 _shaderProgram2;
    private G3MWidget            _g3mWidget;
 
 

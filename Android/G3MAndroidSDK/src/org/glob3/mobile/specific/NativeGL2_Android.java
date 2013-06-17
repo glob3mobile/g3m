@@ -25,7 +25,6 @@ import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.INativeGL;
 import org.glob3.mobile.generated.IShortBuffer;
 import org.glob3.mobile.generated.MutableMatrix44D;
-import org.glob3.mobile.generated.ShaderProgram;
 import org.glob3.mobile.generated.ShaderType;
 
 import android.graphics.Bitmap;
@@ -534,31 +533,6 @@ public final class NativeGL2_Android
       return GLES20.GL_NO_ERROR;
    }
 
-
-   @Override
-   public void useProgram(final ShaderProgram program) {
-      checkOpenGLThread();
-      GLES20.glUseProgram(program.getProgram());
-   }
-
-
-   @Override
-   public int getAttribLocation(final ShaderProgram program,
-                                final String name) {
-      checkOpenGLThread();
-      return GLES20.glGetAttribLocation(program.getProgram(), name);
-   }
-
-
-   @Override
-   public IGLUniformID getUniformLocation(final ShaderProgram program,
-                                          final String name) {
-      checkOpenGLThread();
-      final int id = GLES20.glGetUniformLocation(program.getProgram(), name);
-      return new GLUniformID_Android(id);
-   }
-
-
    @Override
    public int createProgram() {
       checkOpenGLThread();
@@ -660,16 +634,6 @@ public final class NativeGL2_Android
    public int BlendFactor_Zero() {
       return GLES20.GL_ZERO;
    }
-
-
-   @Override
-   public void bindAttribLocation(final ShaderProgram program,
-                                  final int loc,
-                                  final String name) {
-	  checkOpenGLThread();
-      GLES20.glBindAttribLocation(program.getProgram(), loc, name);
-   }
-
 
    @Override
    public void useProgram(final GPUProgram program) {
