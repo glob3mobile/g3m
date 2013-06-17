@@ -346,22 +346,10 @@ public class GPUProgram
   public final void onUnused(GL gl)
   {
     //ILogger::instance()->logInfo("GPUProgram %s unused", _name.c_str());
-//    final Object[] uni = _uniforms.values().toArray();
-//    for (int i = 0; i < uni.length; i++) {
-//      ((GPUUniform) uni[i]).unset();
-//    }
-//  
-//    final Object[] att = _attributes.values().toArray();
-//    for (int i = 0; i < att.length; i++) {
-//      ((GPUAttribute) att[i]).unset(gl);
-//    }
-//    
-//    final Object[] uni = _uniforms.values().toArray();
     for (final GPUUniform uni : _uniforms.values()) {
       uni.unset();
     }
   
-//    final Object[] att = _attributes.values().toArray();
     for (final GPUAttribute att : _attributes.values()) {
       att.unset(gl);
     }
@@ -373,46 +361,14 @@ public class GPUProgram
   public final void applyChanges(GL gl)
   {
     //ILogger::instance()->logInfo("GPUProgram %s applying changes", _name.c_str());
-//    final Object[] uni = _uniforms.values().toArray();
-//    for (int i = 0; i < uni.length; i++) {
-//      GPUUniform u = (GPUUniform)uni[i];
-//      if (u.wasSet()){
-//        u.applyChanges(gl);
-//      } else{
-//        ILogger.instance().logError("Uniform " + u.getName() + " was not set.");
-//      }
-//    }
-//    
-//    for (java.util.Map.Entry<String, GPUUniform> entry : _uniforms.entrySet()){
-//            GPUUniform u = entry.getValue();
-//            if (u.wasSet()){
-//              u.applyChanges(gl);
-//            } else{
-//              ILogger.instance().logError("Uniform " + u.getName() + " was not set.");
-//            }
-//    }
-    
     for (final GPUUniform u : _uniforms.values()){
-        if (u.wasSet()){
-          u.applyChanges(gl);
-        } else{
-          ILogger.instance().logError("Uniform " + u.getName() + " was not set.");
-        }
+      if (u.wasSet()){
+        u.applyChanges(gl);
+      } else{
+        ILogger.instance().logError("Uniform " + u.getName() + " was not set.");
+      }
     }
-    
   
-//    final Object[] att = _attributes.values().toArray();
-//    for (int i = 0; i < att.length; i++) {
-//      GPUAttribute a = (GPUAttribute)att[i];
-//      if (a.wasSet()){
-//        a.applyChanges(gl);
-//      } else{
-//        if (a.isEnabled()){
-//          ILogger.instance().logError("Attribute " + a.getName() + " was not set but it is enabled.");
-//        }
-//      }
-//    }
-    
     for (final GPUAttribute a : _attributes.values()) {
       if (a.wasSet()){
         a.applyChanges(gl);
