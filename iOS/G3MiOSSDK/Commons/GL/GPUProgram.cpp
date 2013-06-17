@@ -278,14 +278,12 @@ void GPUProgram::onUnused(GL* gl){
   }
 #endif
 #ifdef JAVA_CODE
-  final Object[] uni = _uniforms.values().toArray();
-  for (int i = 0; i < uni.length; i++) {
-    ((GPUUniform) uni[i]).unset();
+  for (final GPUUniform uni : _uniforms.values()) {
+    uni.unset();
   }
   
-  final Object[] att = _attributes.values().toArray();
-  for (int i = 0; i < att.length; i++) {
-    ((GPUAttribute) att[i]).unset(gl);
+  for (final GPUAttribute att : _attributes.values()) {
+    att.unset(gl);
   }
 #endif
 }
@@ -319,19 +317,15 @@ void GPUProgram::applyChanges(GL* gl){
   }
 #endif
 #ifdef JAVA_CODE
-  final Object[] uni = _uniforms.values().toArray();
-  for (int i = 0; i < uni.length; i++) {
-    GPUUniform u = (GPUUniform)uni[i];
+  for (final GPUUniform u : _uniforms.values()){
     if (u.wasSet()){
       u.applyChanges(gl);
     } else{
       ILogger.instance().logError("Uniform " + u.getName() + " was not set.");
     }
   }
-  
-  final Object[] att = _attributes.values().toArray();
-  for (int i = 0; i < att.length; i++) {
-    GPUAttribute a = (GPUAttribute)att[i];
+
+  for (final GPUAttribute a : _attributes.values()) {
     if (a.wasSet()){
       a.applyChanges(gl);
     } else{

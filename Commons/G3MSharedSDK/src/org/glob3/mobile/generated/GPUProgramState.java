@@ -1,4 +1,6 @@
 package org.glob3.mobile.generated; 
+
+import com.sun.corba.se.impl.encoding.OSFCodeSetRegistry.Entry;
 //
 //  GPUProgramState.cpp
 //  G3MiOSSDK
@@ -263,11 +265,18 @@ public class GPUProgramState
     }
   
   
-    final Object[] uni = _uniformValues.values().toArray();
-    final Object[] uniNames = _uniformValues.keySet().toArray();
-    for (int i = 0; i < uni.length; i++) {
-      final String name = (String)uniNames[i];
-      final GPUUniformValue v = (GPUUniformValue) uni[i];
+//    final Object[] uni = _uniformValues.values().toArray();
+//    final Object[] uniNames = _uniformValues.keySet().toArray();
+//    for (int i = 0; i < uni.length; i++) {
+    	
+    	
+    for (final java.util.Map.Entry<String, GPUUniformValue> entry : _uniformValues.entrySet()){
+    	
+//      final String name = (String)uniNames[i];
+//      final GPUUniformValue v = (GPUUniformValue) uni[i];
+    	
+    	final String name = entry.getKey();
+    	final GPUUniformValue v = entry.getValue();
   
       final int type = v.getType();
       final GPUUniform u = prog.getUniformOfType(name, type); //Getting uniform from program
@@ -279,11 +288,17 @@ public class GPUProgramState
       v.linkToGPUUniform(u);
     }
   
-    final Object[] att = _attributesValues.values().toArray();
-    final Object[] attNames = _attributesValues.keySet().toArray();
-    for (int i = 0; i < att.length; i++) {
-      final String name = (String)attNames[i];
-      final GPUAttributeValue v = (GPUAttributeValue)att[i];
+//    final Object[] att = _attributesValues.values().toArray();
+//    final Object[] attNames = _attributesValues.keySet().toArray();
+//    for (int i = 0; i < att.length; i++) {
+//      final String name = (String)attNames[i];
+//      final GPUAttributeValue v = (GPUAttributeValue)att[i];
+      
+      for (final java.util.Map.Entry<String, GPUAttributeValue> entry : _attributesValues.entrySet()){
+      
+      	
+      	final String name = entry.getKey();
+      	final GPUAttributeValue v = entry.getValue();
   
       GPUAttribute a = null; //Getting attribute from program
       if (!v.getEnabled()){
@@ -324,14 +339,17 @@ public class GPUProgramState
     if (_uniformNames == null)
     {
   
+//      _uniformNames = new java.util.ArrayList<String>();
+//  
+//  
+//      final Object[] uniNames = _uniformValues.keySet().toArray();
+//      for (int i = 0; i < uniNames.length; i++) {
+//        final String name = (String) uniNames[i];
+//        _uniformNames.add(name);
+//      }
+      
       _uniformNames = new java.util.ArrayList<String>();
-  
-  
-      final Object[] uniNames = _uniformValues.keySet().toArray();
-      for (int i = 0; i < uniNames.length; i++) {
-        final String name = (String) uniNames[i];
-        _uniformNames.add(name);
-      }
+      _uniformNames.addAll(_uniformValues.keySet());
   
     }
     return _uniformNames;
@@ -377,10 +395,12 @@ public class GPUProgramState
 
   public final void applyValuesToLinkedProgram()
   {
-    final Object[] uni = _uniformValues.values().toArray();
-    for (int i = 0; i < uni.length; i++) {
-      ((GPUUniformValue)uni[i]).setValueToLinkedUniform();
-    }
+//    final Object[] uni = _uniformValues.values().toArray();
+//    for (int i = 0; i < uni.length; i++) {
+//      ((GPUUniformValue)uni[i]).setValueToLinkedUniform();
+//    }
+    
+
   
     //  final Object[] attEnabled = _attributesEnabled.values().toArray();
     //  for (int i = 0; i < attEnabled.length; i++) {
@@ -393,9 +413,17 @@ public class GPUProgramState
     //    }
     //  }
   
-    final Object[] att = _attributesValues.values().toArray();
-    for (int i = 0; i < att.length; i++) {
-      ((GPUAttributeValue)att[i]).setValueToLinkedAttribute();
+//    final Object[] att = _attributesValues.values().toArray();
+//    for (int i = 0; i < att.length; i++) {
+//      ((GPUAttributeValue)att[i]).setValueToLinkedAttribute();
+//    }
+    
+    for (final GPUUniformValue u : _uniformValues.values()){
+    	u.setValueToLinkedUniform();
+    }
+    
+    for (final GPUAttributeValue a : _attributesValues.values()){
+    	a.setValueToLinkedAttribute();
     }
   }
 

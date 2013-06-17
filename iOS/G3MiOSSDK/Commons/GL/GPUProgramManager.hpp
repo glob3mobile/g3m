@@ -88,10 +88,8 @@ public:
     }
 #endif
 #ifdef JAVA_CODE
-    final Object[] progs = _programs.values().toArray();
-    for (int i = 0; i < progs.length; i++) {
-      GPUProgram p = (GPUProgram)progs[i];
-      if (state.isLinkableToProgram(p)) {
+    for (final GPUProgram p : _programs.values()){
+    	if (state.isLinkableToProgram(p)) {
         return p;
       }
     }
