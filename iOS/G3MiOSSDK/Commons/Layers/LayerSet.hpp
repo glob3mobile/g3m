@@ -41,7 +41,12 @@ private:
   LayerTilesRenderParameters* createLayerTilesRenderParameters() const;
   void layersChanged() const;
   
+#ifdef C_CODE
   mutable const G3MContext* _context;
+#endif
+#ifdef JAVA_CODE
+  private final G3MContext _context;
+#endif
   
 public:
   LayerSet() :
