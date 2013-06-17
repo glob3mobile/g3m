@@ -45,7 +45,7 @@ private:
   mutable const G3MContext* _context;
 #endif
 #ifdef JAVA_CODE
-  private final G3MContext _context;
+  private G3MContext _context;
 #endif
   
 public:
