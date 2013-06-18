@@ -377,7 +377,7 @@ public final class G3MWidget_Android
       final GPUProgramFactory factory = new GPUProgramFactory();
       factory.add(new GPUProgramSources("Billboard", GL2Shaders._billboardVertexShader, GL2Shaders._billboardFragmentShader));
       factory.add(new GPUProgramSources("Default", GL2Shaders._defaultVertexShader, GL2Shaders._defaultFragmentShader));
-      return new GPUProgramManager(getGL(), factory);
+      return new GPUProgramManager(factory);
    }
 
 

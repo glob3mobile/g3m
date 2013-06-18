@@ -340,7 +340,7 @@ public final class G3MWidget_WebGL
       final GPUProgramFactory factory = new GPUProgramFactory();
       factory.add(new GPUProgramSources("Billboard", Shaders_WebGL._billboardVertexShader, Shaders_WebGL._billboardFragmentShader));
       factory.add(new GPUProgramSources("Default", Shaders_WebGL._defaultVertexShader, Shaders_WebGL._defaultFragmentShader));
-      return new GPUProgramManager(getGL(), factory);
+      return new GPUProgramManager(factory);
    }
 
 

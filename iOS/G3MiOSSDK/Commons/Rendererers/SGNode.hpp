@@ -66,9 +66,6 @@ public:
 
   virtual void cleanUpRender(const G3MRenderContext* rc);
 
-  virtual void rawRender(const G3MRenderContext* rc,
-                         const GLState& parentState);
-
   virtual void render(const G3MRenderContext* rc,
                       GLState* parentState,
                       bool renderNotReadyShapes);

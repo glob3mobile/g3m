@@ -62,11 +62,6 @@ void SGNode::cleanUpRender(const G3MRenderContext* rc) {
 
 }
 
-void SGNode::rawRender(const G3MRenderContext* rc,
-                       const GLState& parentState) {
-
-}
-
 const GLState* SGNode::createState(const G3MRenderContext* rc,
                                    const GLState& parentState) {
   return  NULL;

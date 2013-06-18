@@ -79,7 +79,7 @@ void SGTextureNode::render(const G3MRenderContext* rc,
       state = layerState;
     }
 
-    layer->rawRender(rc, *state);
+    layer->rawRender(rc, state);
 
     const int childrenCount = _children.size();
     for (int j = 0; j < childrenCount; j++) {

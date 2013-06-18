@@ -4,6 +4,9 @@ package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.G3MCBuilder;
 import org.glob3.mobile.generated.G3MCSceneChangeListener;
+import org.glob3.mobile.generated.GPUProgramFactory;
+import org.glob3.mobile.generated.GPUProgramManager;
+import org.glob3.mobile.generated.GPUProgramSources;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IThreadUtils;
@@ -58,6 +61,22 @@ public class G3MCBuilder_WebGL
       final int delayMillis = 10;
       return new ThreadUtils_WebGL(delayMillis);
    }
+
+
+@Override
+protected GPUProgramManager createGPUProgramManager() {
+	  GPUProgramFactory gpuProgramFactory = new GPUProgramFactory();
+	  
+	  gpuProgramFactory.add(new GPUProgramSources("Billboard", 
+			  										Shaders_WebGL._billboardVertexShader, 
+			  										Shaders_WebGL._billboardFragmentShader));
+	  
+	  gpuProgramFactory.add(new GPUProgramSources("Default", 
+			  					Shaders_WebGL._defaultVertexShader, 
+			  					Shaders_WebGL._defaultFragmentShader));
+	  
+	  return new GPUProgramManager(gpuProgramFactory);
+}
 
 
 }

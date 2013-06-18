@@ -5,6 +5,9 @@ package org.glob3.mobile.specific;
 import org.glob3.mobile.generated.CachedDownloader;
 import org.glob3.mobile.generated.G3MCBuilder;
 import org.glob3.mobile.generated.G3MCSceneChangeListener;
+import org.glob3.mobile.generated.GPUProgramFactory;
+import org.glob3.mobile.generated.GPUProgramManager;
+import org.glob3.mobile.generated.GPUProgramSources;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IThreadUtils;
@@ -62,6 +65,22 @@ public class G3MCBuilder_Android
 
       return _nativeWidget;
    }
+
+
+@Override
+protected GPUProgramManager createGPUProgramManager() {
+	  GPUProgramFactory gpuProgramFactory = new GPUProgramFactory();
+	  
+	  gpuProgramFactory.add(new GPUProgramSources("Billboard", 
+			  										GL2Shaders._billboardVertexShader, 
+			  										GL2Shaders._billboardFragmentShader));
+	  
+	  gpuProgramFactory.add(new GPUProgramSources("Default", 
+													GL2Shaders._defaultVertexShader, 
+													GL2Shaders._defaultFragmentShader));
+	  
+	  return new GPUProgramManager(gpuProgramFactory);
+}
 
 
 }

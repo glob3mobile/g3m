@@ -108,11 +108,6 @@ public class SGNode
   
   }
 
-  public void rawRender(G3MRenderContext rc, GLState parentState)
-  {
-  
-  }
-
 
   //void SGNode::render(const G3MRenderContext* rc,
   //                    const GLState& parentState,
