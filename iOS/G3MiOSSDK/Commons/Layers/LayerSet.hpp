@@ -41,10 +41,13 @@ private:
   LayerTilesRenderParameters* createLayerTilesRenderParameters() const;
   void layersChanged() const;
 
+  mutable const G3MContext* _context;
+
 public:
   LayerSet() :
   _listener(NULL),
-  _layerTilesRenderParameters(NULL)
+  _layerTilesRenderParameters(NULL),
+  _context(NULL)
   {
 
   }

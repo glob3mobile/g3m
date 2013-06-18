@@ -78,10 +78,14 @@ bool LayerSet::onTerrainTouchEvent(const G3MEventContext* ec,
   return false;
 }
 
-void LayerSet::initialize(const G3MContext* context)const{
-  for (int i = 0; i<_layers.size(); i++){
+void LayerSet::initialize(const G3MContext* context) const {
+  const int layersCount = _layers.size();
+
+  for (int i = 0; i < layersCount; i++){
     _layers[i]->initialize(context);
   }
+
+  _context = context;
 }
 
 bool LayerSet::isReady() const {
@@ -120,7 +124,11 @@ Layer* LayerSet::getLayer(const std::string &name) {
 void LayerSet::addLayer(Layer* layer) {
   layer->setLayerSet(this);
   _layers.push_back(layer);
-  
+
+  if (_context != NULL) {
+    layer->initialize(_context);
+  }
+
   layersChanged();
 }
 
