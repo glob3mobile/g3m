@@ -268,14 +268,13 @@ public class LayerSet
 
   public final void initialize(G3MContext context)
   {
-    final int layersCount = _layers.size();
+    _context = context;
   
+    final int layersCount = _layers.size();
     for (int i = 0; i < layersCount; i++)
     {
       _layers.get(i).initialize(context);
     }
-  
-    _context = context;
   }
 
   public final int size()
