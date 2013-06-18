@@ -170,8 +170,7 @@ _autoDeleteUserData(autoDeleteUserData),
 _minDistanceToCamera(minDistanceToCamera),
 _listener(listener),
 _autoDeleteListener(autoDeleteListener),
-_imageID( iconURL.getPath() + "_" + label ),
-_planet(NULL)
+_imageID( iconURL.getPath() + "_" + label )
 {
   
 }
@@ -207,8 +206,7 @@ _autoDeleteUserData(autoDeleteUserData),
 _minDistanceToCamera(minDistanceToCamera),
 _listener(listener),
 _autoDeleteListener(autoDeleteListener),
-_imageID( "_" + label ),
-_planet(NULL)
+_imageID( "_" + label )
 {
   
 }
@@ -241,8 +239,7 @@ _autoDeleteUserData(autoDeleteUserData),
 _minDistanceToCamera(minDistanceToCamera),
 _listener(listener),
 _autoDeleteListener(autoDeleteListener),
-_imageID( iconURL.getPath() + "_" ),
-_planet(NULL)
+_imageID( iconURL.getPath() + "_" )
 {
   
 }
@@ -276,17 +273,13 @@ _autoDeleteUserData(autoDeleteUserData),
 _minDistanceToCamera(minDistanceToCamera),
 _listener(listener),
 _autoDeleteListener(autoDeleteListener),
-_imageID( imageID ),
-_planet(NULL)
+_imageID( imageID )
 {
   
 }
 
 void Mark::initialize(const G3MContext* context,
                       long long downloadPriority) {
-  
-  _planet = context->getPlanet();
-  
   if (!_textureSolved) {
     const bool hasLabel   = ( _label.length()             != 0 );
     const bool hasIconURL = ( _iconURL.getPath().length() != 0 );
@@ -402,7 +395,10 @@ double Mark::getMinDistanceToCamera() {
   return _minDistanceToCamera;
 }
 
-void Mark::createGLState(){
+void Mark::createGLState(const Planet* planet, int viewportWidth, int viewportHeigth){
+  
+  _viewportHeight = viewportHeigth;
+  _viewportWidth = viewportWidth;
   
   GLGlobalState *globalState = _glState.getGLGlobalState();
   
@@ -413,45 +409,40 @@ void Mark::createGLState(){
   
   GPUProgramState* progState = _glState.getGPUProgramState();
   
-  if (_planet == NULL){
-    ILogger::instance()->logError("Planet NULL");
-  } else{
-    
-    if (_billboardTexCoord == NULL){
-      FloatBufferBuilderFromCartesian2D texCoor;
-      texCoor.add(1,1);
-      texCoor.add(1,0);
-      texCoor.add(0,1);
-      texCoor.add(0,0);
-      _billboardTexCoord = texCoor.create();
-    }
-    
-    progState->setAttributeValue("aTextureCoord",
-                                 _billboardTexCoord, 2,
-                                 2,
-                                 0,
-                                 false,
-                                 0);
-    
-    const Vector3D pos( _planet->toCartesian(_position) );
-    FloatBufferBuilderFromCartesian3D vertex(CenterStrategy::noCenter(), Vector3D::zero());
-    vertex.add(pos);
-    vertex.add(pos);
-    vertex.add(pos);
-    vertex.add(pos);
-    
-    IFloatBuffer* vertices = vertex.create();
-    
-    progState->setAttributeValue("aPosition",
-                                 vertices, 4, //The attribute is a float vector of 4 elements
-                                 3,            //Our buffer contains elements of 3
-                                 0,            //Index 0
-                                 false,        //Not normalized
-                                 0);           //Stride 0
-    
-    progState->setUniformValue("uTextureExtent", Vector2D(_textureWidth, _textureHeight));
-    progState->setUniformValue("uViewPortExtent", Vector2D( (double)_viewportWidth, (double)_viewportHeight ));
+  if (_billboardTexCoord == NULL){
+    FloatBufferBuilderFromCartesian2D texCoor;
+    texCoor.add(1,1);
+    texCoor.add(1,0);
+    texCoor.add(0,1);
+    texCoor.add(0,0);
+    _billboardTexCoord = texCoor.create();
   }
+  
+  progState->setAttributeValue("aTextureCoord",
+                               _billboardTexCoord, 2,
+                               2,
+                               0,
+                               false,
+                               0);
+  
+  const Vector3D pos( planet->toCartesian(_position) );
+  FloatBufferBuilderFromCartesian3D vertex(CenterStrategy::noCenter(), Vector3D::zero());
+  vertex.add(pos);
+  vertex.add(pos);
+  vertex.add(pos);
+  vertex.add(pos);
+  
+  IFloatBuffer* vertices = vertex.create();
+  
+  progState->setAttributeValue("aPosition",
+                               vertices, 4, //The attribute is a float vector of 4 elements
+                               3,            //Our buffer contains elements of 3
+                               0,            //Index 0
+                               false,        //Not normalized
+                               0);           //Stride 0
+  
+  progState->setUniformValue("uTextureExtent", Vector2D(_textureWidth, _textureHeight));
+  progState->setUniformValue("uViewPortExtent", Vector2D( (double)_viewportWidth, (double)_viewportHeight ));
 }
 
 void Mark::render(const G3MRenderContext* rc,
@@ -488,19 +479,14 @@ void Mark::render(const G3MRenderContext* rc,
           
           rc->getFactory()->deleteImage(_textureImage);
           _textureImage = NULL;
-          
-          _viewportWidth = rc->getCurrentCamera()->getWidth();
-          _viewportHeight = rc->getCurrentCamera()->getHeight();
-          createGLState();
-        }
-      } else{
-        if (rc->getCurrentCamera()->getWidth() != _viewportWidth ||
-            rc->getCurrentCamera()->getHeight() != _viewportHeight){
-          _viewportWidth = rc->getCurrentCamera()->getWidth();
-          _viewportHeight = rc->getCurrentCamera()->getHeight();
-          createGLState(); //Ready for rendering
         }
       }
+      
+      if (_textureId != NULL &&
+          (rc->getCurrentCamera()->getWidth() != _viewportWidth ||
+           rc->getCurrentCamera()->getHeight() != _viewportHeight)){
+            createGLState(rc->getPlanet(), rc->getCurrentCamera()->getWidth(), rc->getCurrentCamera()->getHeight());
+          }
       
       if (_textureId != NULL) {
         GL* gl = rc->getGL();

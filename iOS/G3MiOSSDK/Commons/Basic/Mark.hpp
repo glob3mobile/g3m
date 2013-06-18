@@ -126,13 +126,12 @@ private:
   bool    _renderedMark;
   
   static IFloatBuffer* _billboardTexCoord;
-  const Planet* _planet;
   int _viewportWidth;
   int _viewportHeight;
   
   GLState _glState;
   
-  void createGLState();
+  void createGLState(const Planet* planet, int viewportWidth, int viewportHeigth);
   
 public:
   /**
