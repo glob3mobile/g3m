@@ -26,7 +26,6 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) {
 }
 
 void GLState::linkAndApplyToGPUProgram(GPUProgram* prog){
-  
   if (_parentGLState != NULL){
     _parentGLState->linkAndApplyToGPUProgram(prog);
   }
@@ -60,13 +59,13 @@ void GLState::setProgramState(GL* gl, GPUProgramManager& progManager) {
       _currentGPUProgram = prog;
       gl->useProgram(prog);
     }
+    
+    linkAndApplyToGPUProgram(prog);
+    prog->applyChanges(gl);
   } else{
     ILogger::instance()->logError("No GPUProgram found.");
   }
-  
-  
-  linkAndApplyToGPUProgram(prog);
-  prog->applyChanges(gl);
+
   
   //prog->onUnused(); //Uncomment to check that all GPUProgramStates are complete
 }

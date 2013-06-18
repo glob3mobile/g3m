@@ -15,35 +15,35 @@
 #include "GPUProgram.hpp"
 #include "GPUProgramState.hpp"
 
-GLGlobalState* SimpleTextureMapping::bind(const G3MRenderContext* rc, const GLGlobalState& parentState, GPUProgramState& progState) const {
-
-  //GLGlobalState* state= new GLGlobalState(parentState);
-  GLGlobalState* state = NULL;
-  
-  if (_texCoords != NULL) {
-    
-    
-    //Activating Attribute in Shader program
-    progState.setAttributeEnabled("TextureCoord", true);
-    progState.setUniformValue("EnableTexture", true);
-    progState.setAttributeValue("TextureCoord",
-                                _texCoords, 2,
-                                2,
-                                0,
-                                false,
-                                0);
-    
-    progState.setUniformValue("ScaleTexCoord", _scale.asVector2D());
-    progState.setUniformValue("TranslationTexCoord", _translation.asVector2D());
-  
-    state->bindTexture(_glTextureId);
-  }
-  else {
-    ILogger::instance()->logError("SimpleTextureMapping::bind() with _texCoords == NULL");
-  }
-  
-  return state;
-}
+//GLGlobalState* SimpleTextureMapping::bind(const G3MRenderContext* rc, const GLGlobalState& parentState, GPUProgramState& progState) const {
+//
+//  //GLGlobalState* state= new GLGlobalState(parentState);
+//  GLGlobalState* state = NULL;
+//  
+//  if (_texCoords != NULL) {
+//    
+//    
+//    //Activating Attribute in Shader program
+//    progState.setAttributeEnabled("TextureCoord", true);
+//    progState.setUniformValue("EnableTexture", true);
+//    progState.setAttributeValue("TextureCoord",
+//                                _texCoords, 2,
+//                                2,
+//                                0,
+//                                false,
+//                                0);
+//    
+//    progState.setUniformValue("ScaleTexCoord", _scale.asVector2D());
+//    progState.setUniformValue("TranslationTexCoord", _translation.asVector2D());
+//  
+//    state->bindTexture(_glTextureId);
+//  }
+//  else {
+//    ILogger::instance()->logError("SimpleTextureMapping::bind() with _texCoords == NULL");
+//  }
+//  
+//  return state;
+//}
 
 SimpleTextureMapping::~SimpleTextureMapping() {
   if (_ownedTexCoords) {

@@ -28,7 +28,7 @@ public:
   /**
    Returns a new GLGlobalState and changes the current program state
    */
-  virtual GLGlobalState* bind(const G3MRenderContext* rc, const GLGlobalState& parentState, GPUProgramState& progState) const = 0;
+//  virtual GLGlobalState* bind(const G3MRenderContext* rc, const GLGlobalState& parentState, GPUProgramState& progState) const = 0;
 
   virtual bool isTransparent(const G3MRenderContext* rc) const = 0;
   
@@ -82,7 +82,7 @@ public:
     return _texCoords;
   }
   
-  GLGlobalState* bind(const G3MRenderContext* rc, const GLGlobalState& parentState, GPUProgramState& progState) const;
+//  GLGlobalState* bind(const G3MRenderContext* rc, const GLGlobalState& parentState, GPUProgramState& progState) const;
 
   bool isTransparent(const G3MRenderContext* rc) const {
     return _isTransparent;

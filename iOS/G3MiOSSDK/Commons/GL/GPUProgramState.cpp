@@ -39,7 +39,6 @@ void GPUProgramState::applyValuesToLinkedProgram() const{
   for(std::map<std::string, GPUUniformValue*> ::const_iterator it = _uniformValues.begin();
       it != _uniformValues.end();
       it++){
-    std::string name = it->first;
     GPUUniformValue* v = it->second;
     v->setValueToLinkedUniform();
   }

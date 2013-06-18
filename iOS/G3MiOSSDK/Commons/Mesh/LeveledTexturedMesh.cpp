@@ -18,51 +18,51 @@
 #include "Camera.hpp"
 
 
-GLGlobalState* LazyTextureMapping::bind(const G3MRenderContext* rc, const GLGlobalState& parentState, GPUProgramState& progState) const {
-  if (!_initialized) {
-    _initializer->initialize();
-
-    _scale       = _initializer->getScale();
-    _translation = _initializer->getTranslation();
-    _texCoords   = _initializer->createTextCoords();
-
-    delete _initializer;
-    _initializer = NULL;
-
-    _initialized = true;
-  }
-  
-  progState.setAttributeEnabled("TextureCoord", true);
-  progState.setUniformValue("EnableTexture", true);
-  
-  GLGlobalState *state = NULL; //new GLGlobalState(parentState);
-  //state->enableTextures();
-
-//  state->enableTexture2D();
-
-  if (_texCoords != NULL) {
-    progState.setUniformValue("ScaleTexCoord", _scale.asVector2D());
-    progState.setUniformValue("TranslationTexCoord", _translation.asVector2D());
-//    state->scaleTextureCoordinates(_scale);
-//    state->translateTextureCoordinates(_translation);
-    state->bindTexture(_glTextureId);
-//    state->setTextureCoordinates(_texCoords, 2, 0);
-    
-    progState.setAttributeValue("TextureCoord",
-                                _texCoords, 2,
-                                2,
-                                0,
-                                false,
-                                0);
-    
-  }
-  else {
-    ILogger::instance()->logError("LazyTextureMapping::bind() with _texCoords == NULL");
-  }
-  
-  
-  return state;
-}
+//GLGlobalState* LazyTextureMapping::bind(const G3MRenderContext* rc, const GLGlobalState& parentState, GPUProgramState& progState) const {
+//  if (!_initialized) {
+//    _initializer->initialize();
+//
+//    _scale       = _initializer->getScale();
+//    _translation = _initializer->getTranslation();
+//    _texCoords   = _initializer->createTextCoords();
+//
+//    delete _initializer;
+//    _initializer = NULL;
+//
+//    _initialized = true;
+//  }
+//  
+//  progState.setAttributeEnabled("TextureCoord", true);
+//  progState.setUniformValue("EnableTexture", true);
+//  
+//  GLGlobalState *state = NULL; //new GLGlobalState(parentState);
+//  //state->enableTextures();
+//
+////  state->enableTexture2D();
+//
+//  if (_texCoords != NULL) {
+//    progState.setUniformValue("ScaleTexCoord", _scale.asVector2D());
+//    progState.setUniformValue("TranslationTexCoord", _translation.asVector2D());
+////    state->scaleTextureCoordinates(_scale);
+////    state->translateTextureCoordinates(_translation);
+//    state->bindTexture(_glTextureId);
+////    state->setTextureCoordinates(_texCoords, 2, 0);
+//    
+//    progState.setAttributeValue("TextureCoord",
+//                                _texCoords, 2,
+//                                2,
+//                                0,
+//                                false,
+//                                0);
+//    
+//  }
+//  else {
+//    ILogger::instance()->logError("LazyTextureMapping::bind() with _texCoords == NULL");
+//  }
+//  
+//  
+//  return state;
+//}
 
 void LazyTextureMapping::modifyGLGlobalState(GLGlobalState& GLGlobalState) const{
   if (!_initialized) {
