@@ -10,6 +10,11 @@
 #define __G3MiOSSDK__IWebSocketListener__
 
 class IWebSocketListener {
+public:
+  
+  virtual ~IWebSocketListener() {
+
+  }
 
 };
 
