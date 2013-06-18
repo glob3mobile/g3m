@@ -21,7 +21,9 @@ public:
 
   }
 
-  
+  void send(const std::string& message);
+
+  void close();
 
 };
 

@@ -7,3 +7,12 @@
 //
 
 #include "WebSocket_iOS.hpp"
+
+
+void WebSocket_iOS::send(const std::string& message) {
+  int __DIEGO_AT_WebSocket;
+}
+
+void WebSocket_iOS::close() {
+  int __DIEGO_AT_WebSocket;
+}

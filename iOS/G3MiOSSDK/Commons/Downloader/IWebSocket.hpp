@@ -40,6 +40,10 @@ protected:
 public:
 
   virtual ~IWebSocket();
+
+  virtual void send(const std::string& message) = 0;
+
+  virtual void close() = 0;
   
 };
 
