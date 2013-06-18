@@ -82,6 +82,12 @@
 		CF35DD5016C69B08002EFC96 /* Vector2F.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF35DD4E16C69B08002EFC96 /* Vector2F.cpp */; };
 		CF3E07E81649B65000B5CA51 /* CompositeShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF3E07E61649B65000B5CA51 /* CompositeShape.cpp */; };
 		CF3F3FF01620FB2A00A92CC8 /* Vector4D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF3F3FEE1620FB2A00A92CC8 /* Vector4D.cpp */; };
+		CF4027CC1770DC8400D5A80C /* IWebSocketListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF4027CA1770DC8400D5A80C /* IWebSocketListener.cpp */; };
+		CF4027CF1770DCB400D5A80C /* IWebSocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF4027CD1770DCB300D5A80C /* IWebSocket.cpp */; };
+		CF4027D21770DD5C00D5A80C /* WebSocket_iOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF4027D01770DD5C00D5A80C /* WebSocket_iOS.cpp */; };
+		CF4027D31770DE7B00D5A80C /* IWebSocketListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF4027CB1770DC8400D5A80C /* IWebSocketListener.hpp */; };
+		CF4027D41770DE7B00D5A80C /* IWebSocket.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF4027CE1770DCB400D5A80C /* IWebSocket.hpp */; };
+		CF4027D51770DEA800D5A80C /* WebSocket_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF4027D11770DD5C00D5A80C /* WebSocket_iOS.hpp */; };
 		CF41B7DB1726BFDC007DECD8 /* IImageUtils.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D89FBD7F1725446C00FFA541 /* IImageUtils.hpp */; };
 		CF41B7DC1726BFDC007DECD8 /* RectangleF.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D89FBD7A172543D100FFA541 /* RectangleF.hpp */; };
 		CF45E025164851C5004746BB /* AbstractMeshShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF45E023164851C5004746BB /* AbstractMeshShape.cpp */; };
@@ -500,6 +506,9 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF4027D51770DEA800D5A80C /* WebSocket_iOS.hpp in CopyFiles */,
+				CF4027D31770DE7B00D5A80C /* IWebSocketListener.hpp in CopyFiles */,
+				CF4027D41770DE7B00D5A80C /* IWebSocket.hpp in CopyFiles */,
 				CFE248EF175F769D000A6764 /* MeshShape.hpp in CopyFiles */,
 				CF9AB329172E9E210014547A /* TileElevationDataRequest.hpp in CopyFiles */,
 				CF9AB32A172E9E210014547A /* CompositeElevationData.hpp in CopyFiles */,
@@ -909,6 +918,12 @@
 		CF3E07E71649B65000B5CA51 /* CompositeShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = CompositeShape.hpp; path = Commons/Rendererers/CompositeShape.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF3F3FEE1620FB2A00A92CC8 /* Vector4D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Vector4D.cpp; path = Commons/Geometry/Vector4D.cpp; sourceTree = "<group>"; };
 		CF3F3FEF1620FB2A00A92CC8 /* Vector4D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Vector4D.hpp; path = Commons/Geometry/Vector4D.hpp; sourceTree = "<group>"; };
+		CF4027CA1770DC8400D5A80C /* IWebSocketListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IWebSocketListener.cpp; path = Commons/Downloader/IWebSocketListener.cpp; sourceTree = "<group>"; };
+		CF4027CB1770DC8400D5A80C /* IWebSocketListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IWebSocketListener.hpp; path = Commons/Downloader/IWebSocketListener.hpp; sourceTree = "<group>"; };
+		CF4027CD1770DCB300D5A80C /* IWebSocket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IWebSocket.cpp; path = Commons/Downloader/IWebSocket.cpp; sourceTree = "<group>"; };
+		CF4027CE1770DCB400D5A80C /* IWebSocket.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IWebSocket.hpp; path = Commons/Downloader/IWebSocket.hpp; sourceTree = "<group>"; };
+		CF4027D01770DD5C00D5A80C /* WebSocket_iOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = WebSocket_iOS.cpp; path = Specific/Derived/WebSocket_iOS.cpp; sourceTree = "<group>"; };
+		CF4027D11770DD5C00D5A80C /* WebSocket_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = WebSocket_iOS.hpp; path = Specific/Derived/WebSocket_iOS.hpp; sourceTree = "<group>"; };
 		CF45E023164851C5004746BB /* AbstractMeshShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AbstractMeshShape.cpp; path = Commons/Rendererers/AbstractMeshShape.cpp; sourceTree = "<group>"; };
 		CF45E024164851C5004746BB /* AbstractMeshShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = AbstractMeshShape.hpp; path = Commons/Rendererers/AbstractMeshShape.hpp; sourceTree = "<group>"; };
 		CF47030915EFB4C000426B8B /* ThreadUtils_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ThreadUtils_iOS.mm; path = Specific/Derived/ThreadUtils_iOS.mm; sourceTree = "<group>"; };
@@ -1323,6 +1338,8 @@
 				CF47030A15EFB4C000426B8B /* ThreadUtils_iOS.hpp */,
 				CF47030915EFB4C000426B8B /* ThreadUtils_iOS.mm */,
 				CF31CBF315878BE40085E8F1 /* Timer_iOS.hpp */,
+				CF4027D01770DD5C00D5A80C /* WebSocket_iOS.cpp */,
+				CF4027D11770DD5C00D5A80C /* WebSocket_iOS.hpp */,
 			);
 			name = Derived;
 			sourceTree = "<group>";
@@ -1911,6 +1928,10 @@
 				D8CD6F7815A6FFAC00279BE7 /* IBufferDownloadListener.hpp */,
 				CFE029531601367100D1E75B /* IImageDownloadListener.hpp */,
 				382D4B92159DC26000FE9296 /* NullStorage.hpp */,
+				CF4027CA1770DC8400D5A80C /* IWebSocketListener.cpp */,
+				CF4027CB1770DC8400D5A80C /* IWebSocketListener.hpp */,
+				CF4027CD1770DCB300D5A80C /* IWebSocket.cpp */,
+				CF4027CE1770DCB400D5A80C /* IWebSocket.hpp */,
 			);
 			name = Downloader;
 			sourceTree = "<group>";
@@ -2253,6 +2274,9 @@
 				CF2D85E21753B4B600F4BEC9 /* CartoDBLayer.cpp in Sources */,
 				44A00493175500B900C6686D /* ICameraActivityListener.cpp in Sources */,
 				CF07DD0D175D32CC00839F5D /* Color.cpp in Sources */,
+				CF4027CC1770DC8400D5A80C /* IWebSocketListener.cpp in Sources */,
+				CF4027CF1770DCB400D5A80C /* IWebSocket.cpp in Sources */,
+				CF4027D21770DD5C00D5A80C /* WebSocket_iOS.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
