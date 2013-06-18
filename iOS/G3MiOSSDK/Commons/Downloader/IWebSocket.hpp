@@ -15,7 +15,13 @@ class IWebSocketListener;
 
 class IWebSocket {
 private:
-  const URL           _url;
+#ifdef C_CODE
+  const URL     _url;
+#endif
+#ifdef JAVA_CODE
+  final private URL _url; //Conversor creates class "Url"
+#endif
+
   IWebSocketListener* _listener;
   bool                _autodeleteListener;
 
