@@ -130,10 +130,13 @@ public class LayerSet
     }
   }
 
+  private G3MContext _context;
+
   public LayerSet()
   {
      _listener = null;
      _layerTilesRenderParameters = null;
+     _context = null;
 
   }
 
@@ -153,16 +156,16 @@ public class LayerSet
     final int layersSize = _layers.size();
     if (layersSize > 0)
     {
-        for (int i = 0; i < layersSize; i++)
+      for (int i = 0; i < layersSize; i++)
+      {
+        Layer layer = _layers.get(i);
+        layer.removeLayerSet(this);
+        if (deleteLayers)
         {
-          Layer layer = _layers.get(i);
-          layer.removeLayerSet(this);
-          if (deleteLayers)
-          {
-            if (layer != null)
-               layer.dispose();
-          }
+          if (layer != null)
+             layer.dispose();
         }
+      }
       _layers.clear();
   
       layersChanged();
@@ -173,6 +176,11 @@ public class LayerSet
   {
     layer.setLayerSet(this);
     _layers.add(layer);
+  
+    if (_context != null)
+    {
+      layer.initialize(_context);
+    }
   
     layersChanged();
   }
@@ -260,10 +268,14 @@ public class LayerSet
 
   public final void initialize(G3MContext context)
   {
-    for (int i = 0; i<_layers.size(); i++)
+    final int layersCount = _layers.size();
+  
+    for (int i = 0; i < layersCount; i++)
     {
       _layers.get(i).initialize(context);
     }
+  
+    _context = context;
   }
 
   public final int size()
@@ -318,6 +330,6 @@ public class LayerSet
     return _layerTilesRenderParameters;
   }
 
-//  const Angle calculateSplitLatitude(const Tile* tile) const;
+  //  const Angle calculateSplitLatitude(const Tile* tile) const;
 
 }

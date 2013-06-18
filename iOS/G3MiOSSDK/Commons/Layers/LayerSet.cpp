@@ -79,13 +79,12 @@ bool LayerSet::onTerrainTouchEvent(const G3MEventContext* ec,
 }
 
 void LayerSet::initialize(const G3MContext* context) const {
-  const int layersCount = _layers.size();
+  _context = context;
 
-  for (int i = 0; i < layersCount; i++){
+  const int layersCount = _layers.size();
+  for (int i = 0; i < layersCount; i++) {
     _layers[i]->initialize(context);
   }
-
-  _context = context;
 }
 
 bool LayerSet::isReady() const {
@@ -135,15 +134,15 @@ void LayerSet::addLayer(Layer* layer) {
 void LayerSet::removeAllLayers(const bool deleteLayers) {
   const int layersSize = _layers.size();
   if (layersSize > 0) {
-      for (unsigned int i = 0; i < layersSize; i++) {
-        Layer* layer = _layers[i];
-        layer->removeLayerSet(this);
-        if (deleteLayers) {
-          delete layer;
-        }
+    for (unsigned int i = 0; i < layersSize; i++) {
+      Layer* layer = _layers[i];
+      layer->removeLayerSet(this);
+      if (deleteLayers) {
+        delete layer;
       }
+    }
     _layers.clear();
-
+    
     layersChanged();
   }
 }
