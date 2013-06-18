@@ -21,14 +21,15 @@ package org.glob3.mobile.generated;
 
 public class IWebSocket
 {
-  private Url _url = new URL();
+  final private URL _url; //Conversor creates class "Url"
+
   private IWebSocketListener _listener;
   private boolean _autodeleteListener;
 
 
   protected IWebSocket(URL url, IWebSocketListener listener, boolean autodeleteListener)
   {
-     _url = new URL(url);
+     _url = url;
      _listener = listener;
      _autodeleteListener = autodeleteListener;
 
