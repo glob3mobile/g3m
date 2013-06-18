@@ -47,7 +47,7 @@ public class GLState
   
     if (prog == null)
     {
-      prog = progManager.getProgram(this);
+      prog = progManager.getProgram(gl, this);
     }
   
     if (prog != null)

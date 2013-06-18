@@ -181,9 +181,8 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 
   private float _verticalExaggeration;
 
-<<<<<<< HEAD
   private GLState _glState = new GLState();
-=======
+
   private boolean isReadyToRenderTiles(G3MRenderContext rc)
   {
     if (!_layerSet.isReady())
@@ -264,7 +263,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   
     return true;
   }
-  private void renderIncompletePlanet(G3MRenderContext rc, GLState parentState)
+  private void renderIncompletePlanet(G3MRenderContext rc)
   {
   
     if (_incompleteShape == null)
@@ -290,12 +289,11 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   
     }
   
-    _incompleteShape.rawRender(rc, parentState, true);
+    _incompleteShape.rawRender(rc, _glState, true);
   }
 
   private EllipsoidShape _incompleteShape;
 
->>>>>>> webgl-port
 
   public TileRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters parameters, boolean showStatistics, long texturePriority)
   {
@@ -378,12 +376,15 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   public final void render(G3MRenderContext rc)
   {
   
+    _glState.getGPUProgramState().setUniformMatrixValue("Modelview", rc.getCurrentCamera().getModelMatrix(), false);
+    _glState.getGPUProgramState().setUniformMatrixValue("Projection", rc.getCurrentCamera().getProjectionMatrix(), false);
+    _glState.getGLGlobalState().enableDepthTest();
+  
     if (!isReadyToRenderTiles(rc) && _parameters._renderIncompletePlanet)
     {
-      renderIncompletePlanet(rc, parentState);
+      renderIncompletePlanet(rc);
       return;
     }
-  
   
     // Saving camera for use in onTouchEvent
     _lastCamera = rc.getCurrentCamera();
@@ -393,10 +394,6 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
     TileRenderContext trc = new TileRenderContext(_tessellator, _elevationDataProvider, _texturizer, _layerSet, _parameters, statistics, _lastSplitTimer, _firstRender, _texturePriority, _verticalExaggeration); // if first render, force full render
   
     final int firstLevelTilesCount = _firstLevelTiles.size();
-  
-    _glState.getGPUProgramState().setUniformMatrixValue("Modelview", rc.getCurrentCamera().getModelMatrix(), false);
-    _glState.getGPUProgramState().setUniformMatrixValue("Projection", rc.getCurrentCamera().getProjectionMatrix(), false);
-    _glState.getGLGlobalState().enableDepthTest();
   
     if (_firstRender && _parameters._forceFirstLevelTilesRenderOnStart)
     {

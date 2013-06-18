@@ -76,6 +76,8 @@ public class SGLayerNode extends SGNode
     return new URL(path, false);
   }
 
+  private GLState _glState = new GLState();
+
 
 
   public SGLayerNode(String id, String sId, String uri, String applyTo, String blendMode, boolean flipY, String magFilter, String minFilter, String wrapS, String wrapT)
@@ -92,12 +94,10 @@ public class SGLayerNode extends SGNode
      _downloadedImage = null;
      _textureId = null;
      _initialized = false;
-
   }
 
-<<<<<<< HEAD
   //TODO: Implement
-=======
+
   public final boolean isReadyToRender(G3MRenderContext rc)
   {
     if (!_initialized)
@@ -109,7 +109,6 @@ public class SGLayerNode extends SGNode
     final IGLTextureId textureId = getTextureId(rc);
     return (textureId != null);
   }
->>>>>>> webgl-port
 
   public final void onImageDownload(IImage image)
   {
@@ -120,11 +119,13 @@ public class SGLayerNode extends SGNode
     _downloadedImage = image;
   }
 
-<<<<<<< HEAD
+//  GLGlobalState* createState(const G3MRenderContext* rc,
+//                             const GLGlobalState& parentState);
+
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  GLGlobalState createState(G3MRenderContext rc, GLGlobalState parentState);
-=======
-  public final GLState createState(G3MRenderContext rc, GLState parentState)
+//  GPUProgramState createGPUProgramState(G3MRenderContext rc, GPUProgramState parentState);
+
+  public final GLState createGLState(G3MRenderContext rc, GLState parentGLState)
   {
     if (!_initialized)
     {
@@ -138,19 +139,18 @@ public class SGLayerNode extends SGNode
       return null;
     }
   
-    GLState state = new GLState(parentState);
-    state.enableTextures();
-    state.enableTexture2D();
-    state.enableBlend();
-    //int __WORKING;
+    _glState.setParent(parentGLState);
   
-    GL gl = rc.getGL();
-    gl.bindTexture(textureId);
+    _glState.getGPUProgramState().setUniformValue("EnableTexture", true);
+    _glState.getGPUProgramState().setAttributeEnabled("TextureCoord", true);
+    //_glState.getGLGlobalState()->enableTexture2D();
+    _glState.getGLGlobalState().enableBlend();
+    int __WORKING;
   
-    return state;
+  //  GL* gl = rc->getGL();
+  //  gl->bindTexture(textureId);
+    _glState.getGLGlobalState().bindTexture(textureId);
+  
+    return _glState;
   }
->>>>>>> webgl-port
-
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  GPUProgramState createGPUProgramState(G3MRenderContext rc, GPUProgramState parentState);
 }

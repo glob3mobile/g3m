@@ -254,7 +254,6 @@ public abstract class IG3MBuilder
   {
     return _userData;
   }
-
   private GPUProgramManager getGPUProgramManager()
   {
     //GPU Program Manager
@@ -263,11 +262,9 @@ public abstract class IG3MBuilder
     {
       gpuProgramFactory.add(_sources.get(i));
     }
-    GPUProgramManager gpuProgramManager = new GPUProgramManager(getGL(), gpuProgramFactory);
+    GPUProgramManager gpuProgramManager = new GPUProgramManager(gpuProgramFactory);
     return gpuProgramManager;
   }
-
-
   private java.util.ArrayList<ICameraConstrainer> createDefaultCameraConstraints()
   {
     java.util.ArrayList<ICameraConstrainer> cameraConstraints = new java.util.ArrayList<ICameraConstrainer>();
@@ -387,14 +384,10 @@ public abstract class IG3MBuilder
       mainRenderer = getTileRendererBuilder().create();
     }
   
-<<<<<<< HEAD
   
   
   
-    G3MWidget g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), getPlanet(), getCameraConstraints(), getCameraRenderer(), mainRenderer, getBusyRenderer(), getBackgroundColor(), getLogFPS(), getLogDownloaderStatistics(), getInitializationTask(), getAutoDeleteInitializationTask(), getPeriodicalTasks(), getGPUProgramManager());
-=======
-    G3MWidget g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), getCameraActivityListener(), getPlanet(), getCameraConstraints(), getCameraRenderer(), mainRenderer, getBusyRenderer(), getBackgroundColor(), getLogFPS(), getLogDownloaderStatistics(), getInitializationTask(), getAutoDeleteInitializationTask(), getPeriodicalTasks());
->>>>>>> webgl-port
+    G3MWidget g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), getCameraActivityListener(), getPlanet(), getCameraConstraints(), getCameraRenderer(), mainRenderer, getBusyRenderer(), getBackgroundColor(), getLogFPS(), getLogDownloaderStatistics(), getInitializationTask(), getAutoDeleteInitializationTask(), getPeriodicalTasks(), getGPUProgramManager());
   
     g3mWidget.setUserData(getUserData());
   

@@ -68,21 +68,13 @@ public abstract class CompositeShape extends Shape
     return false;
   }
 
-<<<<<<< HEAD
-  public final void rawRender(G3MRenderContext rc, GLState parentGLState)
-=======
   public final void rawRender(G3MRenderContext rc, GLState parentState, boolean renderNotReadyShapes)
->>>>>>> webgl-port
   {
     int childrenCount = _children.size();
     for (int i = 0; i < childrenCount; i++)
     {
       Shape child = _children.get(i);
-<<<<<<< HEAD
-      child.render(rc, parentGLState);
-=======
       child.render(rc, parentState, renderNotReadyShapes);
->>>>>>> webgl-port
     }
   }
 }

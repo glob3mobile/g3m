@@ -26,11 +26,9 @@ public class GPUProgramManager
   private java.util.HashMap<String, GPUProgram> _programs = new java.util.HashMap<String, GPUProgram>();
 
   private GPUProgramFactory _factory;
-  private GL _gl;
 
-  public GPUProgramManager(GL gl, GPUProgramFactory factory)
+  public GPUProgramManager(GPUProgramFactory factory)
   {
-     _gl = gl;
      _factory = factory;
   }
 
@@ -44,7 +42,7 @@ public class GPUProgramManager
     return _programs.get(name);
   }
 
-  public final GPUProgram getProgram(String name)
+  public final GPUProgram getProgram(GL gl, String name)
   {
 
     GPUProgram prog = getCompiledProgram(name);
@@ -55,7 +53,7 @@ public class GPUProgramManager
       //Compile new Program
       if (ps != null)
       {
-        prog = GPUProgram.createProgram(_gl, ps._name, ps._vertexSource, ps._fragmentSource);
+        prog = GPUProgram.createProgram(gl, ps._name, ps._vertexSource, ps._fragmentSource);
         if (prog == null)
         {
           ILogger.instance().logError("Problem at creating program named %s.", name);
@@ -69,7 +67,7 @@ public class GPUProgramManager
     return prog;
   }
 
-  public final GPUProgram getProgram(GPUProgramState state)
+  public final GPUProgram getProgram(GL gl, GPUProgramState state)
   {
     for (final GPUProgram p : _programs.values()){
     	if (state.isLinkableToProgram(p)) {
@@ -85,14 +83,14 @@ public class GPUProgramManager
     {
       if (us.get(i).compareTo("ViewPortExtent") == 0)
       {
-        return getProgram("Billboard");
+        return getProgram(gl, "Billboard");
       }
     }
 
-    return getProgram("Default");
+    return getProgram(gl, "Default");
   }
 
-  public final GPUProgram getProgram(GLState glState)
+  public final GPUProgram getProgram(GL gl, GLState glState)
   {
     GLState thisGLState = glState;
     while (thisGLState != null)
@@ -105,7 +103,7 @@ public class GPUProgramManager
   
         if (name.compareTo("uViewPortExtent") == 0)
         {
-          return getProgram("Billboard");
+          return getProgram(gl, "Billboard");
         }
       }
   
@@ -114,7 +112,7 @@ public class GPUProgramManager
     }
   
     int WORKING_JM;
-    return getProgram("Default");
+    return getProgram(gl, "Default");
   }
 
 

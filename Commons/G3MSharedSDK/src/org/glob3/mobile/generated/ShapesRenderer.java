@@ -163,7 +163,6 @@ public class ShapesRenderer extends LeafRenderer
 
   public final void render(G3MRenderContext rc)
   {
-  
     final Vector3D cameraPosition = rc.getCurrentCamera().getCartesianPosition();
   
     //Setting camera matrixes
@@ -174,14 +173,6 @@ public class ShapesRenderer extends LeafRenderer
     for (int i = 0; i < shapesCount; i++)
     {
       Shape shape = _shapes.get(i);
-  
-<<<<<<< HEAD
-        rc.addOrderedRenderable(new TransparentShapeWrapper(shape, squaredDistanceFromEye, _glState));
-      }
-      else
-      {
-        shape.render(rc, _glState);
-=======
       if (shape.isEnable())
       {
         if (shape.isTransparent(rc))
@@ -190,13 +181,12 @@ public class ShapesRenderer extends LeafRenderer
           final Vector3D shapePosition = planet.toCartesian(shape.getPosition());
           final double squaredDistanceFromEye = shapePosition.sub(cameraPosition).squaredLength();
   
-          rc.addOrderedRenderable(new TransparentShapeWrapper(shape, squaredDistanceFromEye, _renderNotReadyShapes));
+          rc.addOrderedRenderable(new TransparentShapeWrapper(shape, squaredDistanceFromEye, _glState, _renderNotReadyShapes));
         }
         else
         {
-          shape.render(rc, parentState, _renderNotReadyShapes);
+          shape.render(rc, _glState, _renderNotReadyShapes);
         }
->>>>>>> webgl-port
       }
     }
   }

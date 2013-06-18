@@ -98,28 +98,65 @@ public class SGNode
     return true;
   }
 
-  public void rawRender(G3MRenderContext rc)
+  public void prepareRender(G3MRenderContext rc)
   {
+  
   }
 
-<<<<<<< HEAD
-  public void render(G3MRenderContext rc)
-=======
-  public void render(G3MRenderContext rc, GLState parentState, boolean renderNotReadyShapes)
->>>>>>> webgl-port
+  public void cleanUpRender(G3MRenderContext rc)
   {
-    rawRender(rc);
+  
+  }
+
+  public void rawRender(G3MRenderContext rc, GLState parentState)
+  {
+  
+  }
+
+
+  //void SGNode::render(const G3MRenderContext* rc,
+  //                    const GLState& parentState,
+  //                    bool renderNotReadyShapes) {
+  //  const GLState* myState = createState(rc, parentState);
+  //  const GLState* state;
+  //  if (myState == NULL) {
+  //    state = &parentState;
+  //  }
+  //  else {
+  //    state = myState;
+  //  }
+  //
+  //  prepareRender(rc);
+  //
+  //  rawRender(rc, *state);
+  //
+  //  const int childrenCount = _children.size();
+  //  for (int i = 0; i < childrenCount; i++) {
+  //    SGNode* child = _children[i];
+  //    child->render(rc, *state, renderNotReadyShapes);
+  //  }
+  //}
+  
+  public void render(G3MRenderContext rc, GLState parentGLState, boolean renderNotReadyShapes)
+  {
+  
+    GLState glState = getGLState(parentGLState);
+  
+    prepareRender(rc);
+  
+    rawRender(rc, glState);
   
     final int childrenCount = _children.size();
     for (int i = 0; i < childrenCount; i++)
     {
       SGNode child = _children.get(i);
-<<<<<<< HEAD
-      child.render(rc);
-=======
-      child.render(rc, state, renderNotReadyShapes);
->>>>>>> webgl-port
+      child.render(rc, glState, renderNotReadyShapes);
     }
+  }
+
+  public GLState createState(G3MRenderContext rc, GLState parentState)
+  {
+    return null;
   }
 
   public final int getChildrenCount()
@@ -139,20 +176,5 @@ public class SGNode
 
   public void rawRender(G3MRenderContext rc, GLState parentGLState)
   {
-  }
-
-  public void render(G3MRenderContext rc, GLState parentGLState)
-  {
-  
-    GLState glState = getGLState(parentGLState);
-  
-    rawRender(rc, glState);
-  
-    final int childrenCount = _children.size();
-    for (int i = 0; i < childrenCount; i++)
-    {
-      SGNode child = _children.get(i);
-      child.render(rc, glState);
-    }
   }
 }

@@ -47,12 +47,9 @@ package org.glob3.mobile.generated;
 //class ITextUtils;
 //class G3MEventContext;
 
-<<<<<<< HEAD
 //class GPUProgram;
 //class GPUProgramManager;
-=======
 //class ICameraActivityListener;
->>>>>>> webgl-port
 
 
 

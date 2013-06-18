@@ -77,30 +77,11 @@ public class SGTextureNode extends SGNode
     }
   }
 
-<<<<<<< HEAD
-=======
-//  void rawRender(const G3MRenderContext* rc,
-//                 const GLState& parentState);
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  void prepareRender(G3MRenderContext rc);
 
-  public final void prepareRender(G3MRenderContext rc)
-  {
-    final int layersCount = _layers.size();
-    for (int i = 0; i < layersCount; i++)
-    {
-      SGLayerNode layer = _layers.get(i);
-      layer.prepareRender(rc);
-    }
-  }
-
-  public final void cleanUpRender(G3MRenderContext rc)
-  {
-    final int layersCount = _layers.size();
-    for (int i = 0; i < layersCount; i++)
-    {
-      SGLayerNode layer = _layers.get(i);
-      layer.cleanUpRender(rc);
-    }
-  }
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  void cleanUpRender(G3MRenderContext rc);
 
   public final GLState createState(G3MRenderContext rc, GLState parentState)
   {
@@ -109,16 +90,14 @@ public class SGTextureNode extends SGNode
 
   public final void render(G3MRenderContext rc, GLState parentState, boolean renderNotReadyShapes)
   {
-    final GLState myState = createState(rc, parentState);
-    final GLState state2;
-    if (myState == null)
-    {
-      state2 = parentState;
-    }
-    else
-    {
-      state2 = myState;
-    }
+  //  const GLState* myState = createState(rc, parentState);
+    GLState state2 = parentState;
+  //  if (myState == NULL) {
+  //    state2 = parentState;
+  //  }
+  //  else {
+  //    state2 = myState;
+  //  }
   
     prepareRender(rc);
   
@@ -129,8 +108,8 @@ public class SGTextureNode extends SGNode
     {
       SGLayerNode layer = _layers.get(i);
   
-      final GLState layerState = layer.createState(rc, state2);
-      final GLState state;
+      GLState layerState = layer.createGLState(rc, state2);
+      GLState state;
       if (layerState == null)
       {
         state = state2;
@@ -155,10 +134,7 @@ public class SGTextureNode extends SGNode
   
     cleanUpRender(rc);
   
-    if (myState != null)
-       myState.dispose();
+  //  delete myState;
   }
 
-
->>>>>>> webgl-port
 }

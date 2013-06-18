@@ -33,12 +33,9 @@ package org.glob3.mobile.generated;
 //class ElevationData;
 //class MeshHolder;
 //class Vector2I;
-<<<<<<< HEAD
 //class GPUProgramState;
-
-=======
 //class TileElevationDataRequest;
->>>>>>> webgl-port
+
 
 
 public class Tile

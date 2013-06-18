@@ -61,11 +61,9 @@ public abstract class Shape implements EffectTarget
 
   private java.util.ArrayList<ShapePendingEffect> _pendingEffects = new java.util.ArrayList<ShapePendingEffect>();
 
-<<<<<<< HEAD
-  private GLState _glState = new GLState();
-=======
   private boolean _enable;
->>>>>>> webgl-port
+
+  private GLState _glState = new GLState();
 
   protected void cleanTransformMatrix()
   {
@@ -83,11 +81,8 @@ public abstract class Shape implements EffectTarget
      _scaleY = 1;
      _scaleZ = 1;
      _transformMatrix = null;
-<<<<<<< HEAD
      _planet = null;
-=======
      _enable = true;
->>>>>>> webgl-port
 
   }
 
@@ -236,9 +231,6 @@ public abstract class Shape implements EffectTarget
     _pendingEffects.add(new ShapePendingEffect(effect, true));
   }
 
-<<<<<<< HEAD
-  public final void render(G3MRenderContext rc, GLState parentGLState)
-=======
   public final boolean isEnable()
   {
     return _enable;
@@ -249,12 +241,10 @@ public abstract class Shape implements EffectTarget
     _enable = enable;
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState, boolean renderNotReadyShapes)
->>>>>>> webgl-port
+  public final void render(G3MRenderContext rc, GLState parentGLState, boolean renderNotReadyShapes)
   {
     if (renderNotReadyShapes || isReadyToRender(rc))
     {
-  
       final int pendingEffectsCount = _pendingEffects.size();
       if (pendingEffectsCount > 0)
       {
@@ -275,37 +265,19 @@ public abstract class Shape implements EffectTarget
         _pendingEffects.clear();
       }
   
-<<<<<<< HEAD
       getTransformMatrix(rc.getPlanet()); //Applying transform to _glState
       _glState.setParent(parentGLState);
-      rawRender(rc, _glState);
-=======
-  
-      GL gl = rc.getGL();
-  
-      gl.pushMatrix();
-  
-      gl.multMatrixf(getTransformMatrix(rc.getPlanet()));
-  
-      rawRender(rc, parentState, renderNotReadyShapes);
-  
-      gl.popMatrix();
->>>>>>> webgl-port
+      rawRender(rc, _glState, renderNotReadyShapes);
     }
   }
 
   public void initialize(G3MContext context)
   {
-    _planet = context.getPlanet();
   }
 
   public abstract boolean isReadyToRender(G3MRenderContext rc);
 
-<<<<<<< HEAD
-  public abstract void rawRender(G3MRenderContext rc, GLState glState);
-=======
-  public abstract void rawRender(G3MRenderContext rc, GLState parentState, boolean renderNotReadyShapes);
->>>>>>> webgl-port
+  public abstract void rawRender(G3MRenderContext rc, GLState parentGLState, boolean renderNotReadyShapes);
 
   public abstract boolean isTransparent(G3MRenderContext rc);
 
