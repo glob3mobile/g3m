@@ -15,21 +15,28 @@ class IShortBuffer;
 class ShortBufferElevationData : public BufferElevationData {
 private:
   IShortBuffer*  _buffer;
+  bool           _hasNoData;
 
 protected:
   double getValueInBufferAt(int index) const;
 
 public:
+
+  static const short NO_DATA_VALUE;
+
   ShortBufferElevationData(const Sector& sector,
-                           const Vector2I& resolution,
-                           double noDataValue,
+                           const Vector2I& extent,
+                           const Sector& realSector,
+                           const Vector2I& realExtent,
                            IShortBuffer* buffer);
 
   virtual ~ShortBufferElevationData();
 
   const std::string description(bool detailed) const;
 
-  Vector3D getMinMaxAverageHeights() const;
+  Vector3D getMinMaxAverageElevations() const;
+  
+  bool hasNoData() const { return _hasNoData;}
 
 };
 

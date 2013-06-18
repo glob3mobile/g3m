@@ -20,10 +20,17 @@ public class G3MWidget
     }
   }
 
+<<<<<<< HEAD
   public static G3MWidget create(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager)
   {
   
     return new G3MWidget(gl, storage, downloader, threadUtils, planet, cameraConstrainers, cameraRenderer, mainRenderer, busyRenderer, backgroundColor, logFPS, logDownloaderStatistics, initializationTask, autoDeleteInitializationTask, periodicalTasks, gpuProgramManager);
+=======
+  public static G3MWidget create(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks)
+  {
+  
+    return new G3MWidget(gl, storage, downloader, threadUtils, cameraActivityListener, planet, cameraConstrainers, cameraRenderer, mainRenderer, busyRenderer, backgroundColor, logFPS, logDownloaderStatistics, initializationTask, autoDeleteInitializationTask, periodicalTasks);
+>>>>>>> webgl-port
   }
 
   public void dispose()
@@ -63,6 +70,8 @@ public class G3MWidget
        _storage.dispose();
     if (_threadUtils != null)
        _threadUtils.dispose();
+    if (_cameraActivityListener != null)
+       _cameraActivityListener.dispose();
   
     for (int n = 0; n < _cameraConstrainers.size(); n++)
     {
@@ -124,7 +133,7 @@ public class G3MWidget
       }
     }
   
-    //Start periodical task
+    // Start periodical tasks
     final int periodicalTasksCount = _periodicalTasks.size();
     for (int i = 0; i < periodicalTasksCount; i++)
     {
@@ -213,8 +222,6 @@ public class G3MWidget
            orderedRenderable.dispose();
       }
     }
-  
-    //  _frameTasksExecutor->doPostRenderCycle(&rc);
   
     final TimeInterval elapsedTime = _timer.elapsedTime();
     if (elapsedTime.milliseconds() > 100)
@@ -416,6 +423,15 @@ public class G3MWidget
     addPeriodicalTask(new PeriodicalTask(interval, task));
   }
 
+  public final void resetPeriodicalTasksTimeouts()
+  {
+    final int periodicalTasksCount = _periodicalTasks.size();
+    for (int i = 0; i < periodicalTasksCount; i++)
+    {
+      PeriodicalTask pt = _periodicalTasks.get(i);
+      pt.resetTimeout();
+    }
+  }
 
   public final void setCameraPosition(Geodetic3D position)
   {
@@ -520,7 +536,7 @@ public class G3MWidget
     _effectsScheduler.cancelAllEffectsFor(target);
   }
 
-//  void resetCameraPosition();
+  //  void resetCameraPosition();
 
   public final CameraRenderer getCameraRenderer()
   {
@@ -532,9 +548,23 @@ public class G3MWidget
     return _context;
   }
 
+
+  //void G3MWidget::resetCameraPosition() {
+  //  getNextCamera()->resetPosition();
+  //}
+  
+  public final void setBackgroundColor(Color backgroundColor)
+  {
+    if (_backgroundColor != null)
+       _backgroundColor.dispose();
+  
+    _backgroundColor = new Color(backgroundColor);
+  }
+
   private IStorage _storage;
   private IDownloader _downloader;
   private IThreadUtils _threadUtils;
+  private ICameraActivityListener _cameraActivityListener;
 
   private FrameTasksExecutor _frameTasksExecutor;
   private GL _gl;
@@ -554,7 +584,8 @@ public class G3MWidget
   private Camera _nextCamera;
   private TexturesHandler _texturesHandler;
   private TextureBuilder _textureBuilder;
-  private final Color _backgroundColor ;
+
+  private Color _backgroundColor;
 
   private ITimer _timer;
   private int _renderCounter;
@@ -583,9 +614,18 @@ public class G3MWidget
 
   private boolean _clickOnProcess;
 
+<<<<<<< HEAD
   private GPUProgramManager _gpuProgramManager;
 
   private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager)
+=======
+  private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks)
+  /*
+   =======
+  _gl( new GL(nativeGL, false) ),
+  >>>>>>> origin/webgl-port
+   */
+>>>>>>> webgl-port
   {
      _frameTasksExecutor = new FrameTasksExecutor();
      _effectsScheduler = new EffectsScheduler();
@@ -593,6 +633,7 @@ public class G3MWidget
      _downloader = downloader;
      _storage = storage;
      _threadUtils = threadUtils;
+     _cameraActivityListener = cameraActivityListener;
      _texturesHandler = new TexturesHandler(_gl, false);
      _textureBuilder = new CPUTextureBuilder();
      _planet = planet;
@@ -661,11 +702,15 @@ public class G3MWidget
   
     if (!handled)
     {
-      _cameraRenderer.onTouchEvent(ec, touchEvent);
+      handled = _cameraRenderer.onTouchEvent(ec, touchEvent);
+      if (handled)
+      {
+        if (_cameraActivityListener != null)
+        {
+          _cameraActivityListener.touchEventHandled();
+        }
+      }
     }
   }
 
 }
-//void G3MWidget::resetCameraPosition() {
-//  getNextCamera()->resetPosition();
-//}

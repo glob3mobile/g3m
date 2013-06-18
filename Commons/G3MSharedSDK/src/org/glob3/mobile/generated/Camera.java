@@ -683,8 +683,6 @@ public class Camera
     //                       bottom, top,
     //                       znear, zfar);
   
-    int __Testing_new_zNear_zFar_politic;
-  
     final double height = getGeodeticPosition().height();
     double zNear = height * 0.1;
   

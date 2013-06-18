@@ -27,6 +27,8 @@ class LayerTilesRenderParameters;
 #include "LayerSet.hpp"
 #include "GPUProgramState.hpp"
 
+class EllipsoidShape;
+
 class TileRenderContext {
 private:
   const TileTessellator*       _tessellator;
@@ -325,6 +327,12 @@ private:
   float _verticalExaggeration;
   
   GLState _glState;
+
+  bool isReadyToRenderTiles(const G3MRenderContext* rc);
+  void renderIncompletePlanet(const G3MRenderContext* rc);
+
+  EllipsoidShape* _incompleteShape;
+
 
 public:
   TileRenderer(const TileTessellator* tessellator,

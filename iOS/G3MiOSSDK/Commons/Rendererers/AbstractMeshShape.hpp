@@ -41,7 +41,9 @@ public:
 
   bool isReadyToRender(const G3MRenderContext* rc);
 
-  void rawRender(const G3MRenderContext* rc, GLState* parentGLState);
+  void rawRender(const G3MRenderContext* rc,
+                 GLState* parentState,
+                 bool renderNotReadyShapes);
 
   virtual ~AbstractMeshShape();
 

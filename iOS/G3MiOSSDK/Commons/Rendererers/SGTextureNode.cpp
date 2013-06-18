@@ -49,3 +49,48 @@ SGTextureNode::~SGTextureNode() {
     delete layer;
   }
 }
+
+void SGTextureNode::render(const G3MRenderContext* rc,
+                           GLState* parentState,
+                           bool renderNotReadyShapes) {
+//  const GLState* myState = createState(rc, parentState);
+  GLState* state2 = parentState;
+//  if (myState == NULL) {
+//    state2 = parentState;
+//  }
+//  else {
+//    state2 = myState;
+//  }
+
+  prepareRender(rc);
+
+  //  rawRender(rc, *state);
+
+  const int layersCount = _layers.size();
+  for (int i = 0; i < layersCount; i++) {
+    SGLayerNode* layer = _layers[i];
+
+    GLState* layerState = layer->createGLState(rc, state2);
+    GLState* state;
+    if (layerState == NULL) {
+      state = state2;
+    }
+    else {
+      state = layerState;
+    }
+
+    layer->rawRender(rc, *state);
+
+    const int childrenCount = _children.size();
+    for (int j = 0; j < childrenCount; j++) {
+      SGNode* child = _children[j];
+      child->render(rc, state, renderNotReadyShapes);
+    }
+
+    delete layerState;
+  }
+  
+  cleanUpRender(rc);
+  
+//  delete myState;
+}

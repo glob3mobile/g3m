@@ -25,10 +25,9 @@ class GPUProgramManager{
   std::map<std::string, GPUProgram*> _programs;
   
   GPUProgramFactory *_factory;
-  GL* _gl;
 public:
   
-  GPUProgramManager(GL* gl, GPUProgramFactory *factory):_gl(gl), _factory(factory){}
+  GPUProgramManager(GPUProgramFactory *factory):_factory(factory){}
   
   ~GPUProgramManager(){
     
@@ -54,7 +53,7 @@ public:
 #endif
   }
   
-  GPUProgram* getProgram(const std::string& name){
+  GPUProgram* getProgram(GL* gl, const std::string& name){
     
     GPUProgram* prog = getCompiledProgram(name);
     if (prog == NULL){
@@ -62,7 +61,7 @@ public:
       
       //Compile new Program
       if (ps != NULL){
-        prog = GPUProgram::createProgram(_gl,
+        prog = GPUProgram::createProgram(gl,
                                          ps->_name,
                                          ps->_vertexSource,
                                          ps->_fragmentSource);
@@ -78,7 +77,7 @@ public:
     return prog;
   }
   
-  GPUProgram* getProgram(const GPUProgramState& state) {
+  GPUProgram* getProgram(GL* gl, const GPUProgramState& state) {
 #ifdef C_CODE
     for(std::map<std::string, GPUProgram*>::const_iterator it = _programs.begin();
         it != _programs.end(); it++){
@@ -101,14 +100,14 @@ public:
     int size = us->size();
     for (int i = 0; i < size; i++) {
       if (us->at(i).compare("ViewPortExtent") == 0){
-        return getProgram("Billboard");
+        return getProgram(gl, "Billboard");
       }
     }
     
-    return getProgram("Default");
+    return getProgram(gl, "Default");
   }
   
-  GPUProgram* getProgram(GLState* const glState);
+  GPUProgram* getProgram(GL* gl, GLState* const glState);
   
   
 };

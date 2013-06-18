@@ -26,6 +26,7 @@ import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.IBufferDownloadListener;
 import org.glob3.mobile.generated.IByteBuffer;
+import org.glob3.mobile.generated.ICameraActivityListener;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IImage;
@@ -744,10 +745,12 @@ public class G3MWebGLDemo
          final WidgetUserData userData = null;
 
 
+         final ICameraActivityListener cameraActivityListener = null;
          _widget.initWidget(//
                   storage, // 
                   downloader, //
                   threadUtils, //
+                  cameraActivityListener, //
                   planet, //
                   cameraConstraints, //
                   cameraRenderer, //

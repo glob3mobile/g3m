@@ -76,9 +76,10 @@ MutableMatrix44D* Shape::getTransformMatrix(const Planet* planet) const {
   return _transformMatrix;
 }
 
-void Shape::render(const G3MRenderContext* rc, GLState* parentGLState) {
-  if (isReadyToRender(rc)) {
-    
+void Shape::render(const G3MRenderContext* rc,
+                   GLState* parentGLState,
+                   bool renderNotReadyShapes) {
+  if (renderNotReadyShapes || isReadyToRender(rc)) {
     const int pendingEffectsCount = _pendingEffects.size();
     if (pendingEffectsCount > 0) {
       EffectsScheduler* effectsScheduler = rc->getEffectsScheduler();
@@ -88,7 +89,7 @@ void Shape::render(const G3MRenderContext* rc, GLState* parentGLState) {
           EffectTarget* target = pendingEffect->_targetIsCamera ? rc->getNextCamera()->getEffectTarget() : this;
           effectsScheduler->cancelAllEffectsFor(target);
           effectsScheduler->startEffect(pendingEffect->_effect, target);
-          
+
           delete pendingEffect;
         }
       }
@@ -97,7 +98,7 @@ void Shape::render(const G3MRenderContext* rc, GLState* parentGLState) {
     
     getTransformMatrix(rc->getPlanet()); //Applying transform to _glState
     _glState.setParent(parentGLState);
-    rawRender(rc, &_glState);
+    rawRender(rc, &_glState, renderNotReadyShapes);
   }
 }
 
@@ -109,7 +110,7 @@ void Shape::setAnimatedScale(const TimeInterval& duration,
                                         this,
                                         _scaleX, _scaleY, _scaleZ,
                                         scaleX, scaleY, scaleZ);
-  _pendingEffects.push_back( new ShapePendingEffect(effect, false) );
+  addShapeEffect(effect);
 }
 
 void Shape::orbitCamera(const TimeInterval& duration,
@@ -124,6 +125,10 @@ void Shape::orbitCamera(const TimeInterval& duration,
   _pendingEffects.push_back( new ShapePendingEffect(effect, true) );
 }
 
+void Shape::addShapeEffect(Effect* effect){
+  _pendingEffects.push_back( new ShapePendingEffect(effect, false) );
+}
+
 void Shape::setAnimatedPosition(const TimeInterval& duration,
                                 const Geodetic3D& position,
                                 bool linearInterpolation) {
@@ -132,7 +137,7 @@ void Shape::setAnimatedPosition(const TimeInterval& duration,
                                            *_position,
                                            position,
                                            linearInterpolation);
-  _pendingEffects.push_back( new ShapePendingEffect(effect, false) );
+  addShapeEffect(effect);
 }
 
 void Shape::setAnimatedPosition(const TimeInterval& duration,
@@ -146,5 +151,5 @@ void Shape::setAnimatedPosition(const TimeInterval& duration,
                                                position,
                                                *_pitch, pitch,*_heading,heading,
                                                linearInterpolation);
-  _pendingEffects.push_back( new ShapePendingEffect(effect, false) );
+  addShapeEffect(effect);
 }

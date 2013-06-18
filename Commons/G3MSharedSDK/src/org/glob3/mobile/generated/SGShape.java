@@ -57,9 +57,15 @@ public class SGShape extends Shape
     return _node.isReadyToRender(rc);
   }
 
+<<<<<<< HEAD
   public final void rawRender(G3MRenderContext rc, GLState glState)
   {
     _node.render(rc);
+=======
+  public final void rawRender(G3MRenderContext rc, GLState parentState, boolean renderNotReadyShapes)
+  {
+    _node.render(rc, parentState, renderNotReadyShapes);
+>>>>>>> webgl-port
   }
 
   public final boolean isTransparent(G3MRenderContext rc)

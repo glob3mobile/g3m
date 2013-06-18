@@ -95,7 +95,21 @@ public class SGLayerNode extends SGNode
 
   }
 
+<<<<<<< HEAD
   //TODO: Implement
+=======
+  public final boolean isReadyToRender(G3MRenderContext rc)
+  {
+    if (!_initialized)
+    {
+      _initialized = true;
+      requestImage(rc);
+    }
+  
+    final IGLTextureId textureId = getTextureId(rc);
+    return (textureId != null);
+  }
+>>>>>>> webgl-port
 
   public final void onImageDownload(IImage image)
   {
@@ -106,8 +120,36 @@ public class SGLayerNode extends SGNode
     _downloadedImage = image;
   }
 
+<<<<<<< HEAD
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  GLGlobalState createState(G3MRenderContext rc, GLGlobalState parentState);
+=======
+  public final GLState createState(G3MRenderContext rc, GLState parentState)
+  {
+    if (!_initialized)
+    {
+      _initialized = true;
+      requestImage(rc);
+    }
+  
+    final IGLTextureId textureId = getTextureId(rc);
+    if (textureId == null)
+    {
+      return null;
+    }
+  
+    GLState state = new GLState(parentState);
+    state.enableTextures();
+    state.enableTexture2D();
+    state.enableBlend();
+    //int __WORKING;
+  
+    GL gl = rc.getGL();
+    gl.bindTexture(textureId);
+  
+    return state;
+  }
+>>>>>>> webgl-port
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  GPUProgramState createGPUProgramState(G3MRenderContext rc, GPUProgramState parentState);

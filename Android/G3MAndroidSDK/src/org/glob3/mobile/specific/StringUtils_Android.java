@@ -92,4 +92,11 @@ public final class StringUtils_Android
       return string.toUpperCase(Locale.ENGLISH);
    }
 
+
+   @Override
+   public long parseHexInt(final String str) {
+      return Long.parseLong(str, 16);
+   }
+
+
 }

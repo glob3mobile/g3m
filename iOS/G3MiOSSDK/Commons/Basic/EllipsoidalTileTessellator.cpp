@@ -58,35 +58,43 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
                                                  const Tile* tile,
                                                  const ElevationData* elevationData,
                                                  float verticalExaggeration,
+                                                 bool mercator,
                                                  bool renderDebug) const {
 
   const Sector sector = tile->getSector();
   const Vector2I tileResolution = calculateResolution(rawResolution, sector);
 
-  double minHeight = 0;
+  double minElevation = 0;
   FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(),
                                           planet,
                                           sector.getCenter());
 
-  int unusedType = -1;
+  const IMathUtils* mu = IMathUtils::instance();
+
   for (int j = 0; j < tileResolution._y; j++) {
-    const double v = (double) j / (tileResolution._y-1);
+    const double v = (double) j / (tileResolution._y - 1);
+
     for (int i = 0; i < tileResolution._x; i++) {
-      const double u = (double) i / (tileResolution._x-1);
+      const double u = (double) i / (tileResolution._x - 1);
 
       const Geodetic2D position = sector.getInnerPoint(u, v);
 
-      double height = 0;
+      double elevation = 0;
+
+      //TODO: MERCATOR!!!
+
       if (elevationData != NULL) {
-//        height = elevationData->getElevationAt(i, j) * verticalExaggeration;
-        height = elevationData->getElevationAt(position,
-                                               &unusedType) * verticalExaggeration;
-        if (height < minHeight) {
-          minHeight = height;
+        const double rawElevation = elevationData->getElevationAt(position);
+        if ( !mu->isNan(rawElevation) ) {
+          elevation = rawElevation * verticalExaggeration;
+
+          if (elevation < minElevation) {
+            minElevation = elevation;
+          }
         }
       }
 
-      vertices.add( position, height );
+      vertices.add( position, elevation );
     }
   }
 
@@ -110,7 +118,7 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
     // compute skirt height
     const Vector3D sw = planet->toCartesian(sector.getSW());
     const Vector3D nw = planet->toCartesian(sector.getNW());
-    const double skirtHeight = (nw.sub(sw).length() * 0.05 * -1) + minHeight;
+    const double skirtHeight = (nw.sub(sw).length() * 0.05 * -1) + minElevation;
 
     int posS = tileResolution._x * tileResolution._y;
     indices.add((short) (posS-1));
@@ -132,21 +140,21 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
       indices.add((short) i);
       indices.add((short) posS++);
     }
-    
+
     // west side
     for (int j = 0; j < tileResolution._y-1; j++) {
       vertices.add(sector.getInnerPoint(0, (double)j/(tileResolution._y-1)),
                    skirtHeight);
-      
+
       indices.add((short) (j*tileResolution._x));
       indices.add((short) posS++);
     }
-    
+
     // south side
     for (int i = 0; i < tileResolution._x-1; i++) {
       vertices.add(sector.getInnerPoint((double)i/(tileResolution._x-1), 1),
                    skirtHeight);
-      
+
       indices.add((short) ((tileResolution._y-1)*tileResolution._x + i));
       indices.add((short) posS++);
     }
@@ -330,7 +338,7 @@ Mesh* EllipsoidalTileTessellator::createTileDebugMesh(const Planet* planet,
     indices.add(posS++);
   }
 
-  Color *color = Color::newFromRGBA((float) 1.0, (float) 0, (float) 0, (float) 1.0);
+  Color *color = Color::newFromRGBA((float) 1.0, (float) 0.0, (float) 0, (float) 1.0);
 
   return new IndexedMesh(GLPrimitive::lineLoop(),
                          true,
@@ -339,5 +347,8 @@ Mesh* EllipsoidalTileTessellator::createTileDebugMesh(const Planet* planet,
                          indices.create(),
                          1,
                          1,
-                         color);
+                         color,
+                         NULL, // colors
+                         0, // colorsIntensity
+                         false);
 }

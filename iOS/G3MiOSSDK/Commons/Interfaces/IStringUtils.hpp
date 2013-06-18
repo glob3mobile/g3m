@@ -104,6 +104,8 @@ public:
     return rtrim(ltrim(string));
   }
 
+  virtual long long parseHexInt(const std::string& str) const = 0;
+
 };
 
 #endif

@@ -49,7 +49,7 @@ void GLState::setProgramState(GL* gl, GPUProgramManager& progManager) {
   }
   
   if (prog == NULL){
-    prog = progManager.getProgram(this);
+    prog = progManager.getProgram(gl, this);
   }
   
   if (prog != NULL){

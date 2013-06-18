@@ -61,7 +61,11 @@ public abstract class Shape implements EffectTarget
 
   private java.util.ArrayList<ShapePendingEffect> _pendingEffects = new java.util.ArrayList<ShapePendingEffect>();
 
+<<<<<<< HEAD
   private GLState _glState = new GLState();
+=======
+  private boolean _enable;
+>>>>>>> webgl-port
 
   protected void cleanTransformMatrix()
   {
@@ -79,7 +83,11 @@ public abstract class Shape implements EffectTarget
      _scaleY = 1;
      _scaleZ = 1;
      _transformMatrix = null;
+<<<<<<< HEAD
      _planet = null;
+=======
+     _enable = true;
+>>>>>>> webgl-port
 
   }
 
@@ -128,6 +136,11 @@ public abstract class Shape implements EffectTarget
     cleanTransformMatrix();
   }
 
+  public final void addShapeEffect(Effect effect)
+  {
+    _pendingEffects.add(new ShapePendingEffect(effect, false));
+  }
+
   public final void setAnimatedPosition(TimeInterval duration, Geodetic3D position)
   {
      setAnimatedPosition(duration, position, false);
@@ -135,7 +148,7 @@ public abstract class Shape implements EffectTarget
   public final void setAnimatedPosition(TimeInterval duration, Geodetic3D position, boolean linearInterpolation)
   {
     Effect effect = new ShapePositionEffect(duration, this, _position, position, linearInterpolation);
-    _pendingEffects.add(new ShapePendingEffect(effect, false));
+    addShapeEffect(effect);
   }
 
   public final void setAnimatedPosition(TimeInterval duration, Geodetic3D position, Angle pitch, Angle heading)
@@ -145,7 +158,7 @@ public abstract class Shape implements EffectTarget
   public final void setAnimatedPosition(TimeInterval duration, Geodetic3D position, Angle pitch, Angle heading, boolean linearInterpolation)
   {
     Effect effect = new ShapeFullPositionEffect(duration, this, _position, position, _pitch, pitch, _heading,heading, linearInterpolation);
-    _pendingEffects.add(new ShapePendingEffect(effect, false));
+    addShapeEffect(effect);
   }
 
   public final void setAnimatedPosition(Geodetic3D position)
@@ -199,7 +212,7 @@ public abstract class Shape implements EffectTarget
   public final void setAnimatedScale(TimeInterval duration, double scaleX, double scaleY, double scaleZ)
   {
     Effect effect = new ShapeScaleEffect(duration, this, _scaleX, _scaleY, _scaleZ, scaleX, scaleY, scaleZ);
-    _pendingEffects.add(new ShapePendingEffect(effect, false));
+    addShapeEffect(effect);
   }
 
   public final void setAnimatedScale(double scaleX, double scaleY, double scaleZ)
@@ -223,9 +236,23 @@ public abstract class Shape implements EffectTarget
     _pendingEffects.add(new ShapePendingEffect(effect, true));
   }
 
+<<<<<<< HEAD
   public final void render(G3MRenderContext rc, GLState parentGLState)
+=======
+  public final boolean isEnable()
   {
-    if (isReadyToRender(rc))
+    return _enable;
+  }
+
+  public final void setEnable(boolean enable)
+  {
+    _enable = enable;
+  }
+
+  public final void render(G3MRenderContext rc, GLState parentState, boolean renderNotReadyShapes)
+>>>>>>> webgl-port
+  {
+    if (renderNotReadyShapes || isReadyToRender(rc))
     {
   
       final int pendingEffectsCount = _pendingEffects.size();
@@ -248,9 +275,22 @@ public abstract class Shape implements EffectTarget
         _pendingEffects.clear();
       }
   
+<<<<<<< HEAD
       getTransformMatrix(rc.getPlanet()); //Applying transform to _glState
       _glState.setParent(parentGLState);
       rawRender(rc, _glState);
+=======
+  
+      GL gl = rc.getGL();
+  
+      gl.pushMatrix();
+  
+      gl.multMatrixf(getTransformMatrix(rc.getPlanet()));
+  
+      rawRender(rc, parentState, renderNotReadyShapes);
+  
+      gl.popMatrix();
+>>>>>>> webgl-port
     }
   }
 
@@ -261,7 +301,11 @@ public abstract class Shape implements EffectTarget
 
   public abstract boolean isReadyToRender(G3MRenderContext rc);
 
+<<<<<<< HEAD
   public abstract void rawRender(G3MRenderContext rc, GLState glState);
+=======
+  public abstract void rawRender(G3MRenderContext rc, GLState parentState, boolean renderNotReadyShapes);
+>>>>>>> webgl-port
 
   public abstract boolean isTransparent(G3MRenderContext rc);
 

@@ -62,7 +62,11 @@ public abstract class AbstractMeshShape extends Shape
     return (mesh != null);
   }
 
+<<<<<<< HEAD
   public final void rawRender(G3MRenderContext rc, GLState parentGLState)
+=======
+  public final void rawRender(G3MRenderContext rc, GLState parentState, boolean renderNotReadyShapes)
+>>>>>>> webgl-port
   {
     Mesh mesh = getMesh(rc);
     if (mesh != null)

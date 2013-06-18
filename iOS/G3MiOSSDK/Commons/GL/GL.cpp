@@ -238,33 +238,6 @@ void GL::deleteTexture(const IGLTextureId* textureId) {
   }
 }
 
-//void GL::setGLGlobalState(const GLGlobalState& state) {
-//  state.applyChanges(this, *_currentState);
-//}
-//
-//void GL::setProgramState(GPUProgramManager& progManager, const GPUProgramState& progState) {
-//  GPUProgram* prog = NULL;
-//  if (!progState.isLinkedToProgram()) {
-//    prog = progManager.getProgram(progState);
-//    progState.linkToProgram(*prog);
-//  } else{
-//    prog = progState.getLinkedProgram();
-//  }
-//  if (prog != NULL){
-//    if (prog != _currentGPUProgram){
-//      if (_currentGPUProgram != NULL){
-//        _currentGPUProgram->onUnused();
-//      }
-//      _currentGPUProgram = prog;
-//      useProgram(prog);
-//    }
-//    
-//    progState.applyChanges(this);
-//  } else{
-//    ILogger::instance()->logError("No available GPUProgram for this state.");
-//  }
-//}
-
 void GL::useProgram(GPUProgram* program) {
   _nativeGL->useProgram(program);
   program->onUsed();

@@ -58,6 +58,15 @@ public:
   }
 };
 
+bool SGLayerNode::isReadyToRender(const G3MRenderContext* rc) {
+  if (!_initialized) {
+    _initialized = true;
+    requestImage(rc);
+  }
+
+  const IGLTextureId* textureId = getTextureId(rc);
+  return (textureId != NULL);
+}
 
 void SGLayerNode::onImageDownload(IImage* image) {
   if (_downloadedImage != NULL) {
@@ -103,4 +112,30 @@ const IGLTextureId* SGLayerNode::getTextureId(const G3MRenderContext* rc) {
     }
   }
   return _textureId;
+}
+
+GLState* SGLayerNode::createGLState(const G3MRenderContext* rc, GLState* parentGLState) {
+  if (!_initialized) {
+    _initialized = true;
+    requestImage(rc);
+  }
+
+  const IGLTextureId* textureId = getTextureId(rc);
+  if (textureId == NULL) {
+    return NULL;
+  }
+  
+  _glState.setParent(parentGLState);
+
+  _glState.getGPUProgramState()->setUniformValue("EnableTexture", true);
+  _glState.getGPUProgramState()->setAttributeEnabled("TextureCoord", true);
+  //_glState.getGLGlobalState()->enableTexture2D();
+  _glState.getGLGlobalState()->enableBlend();
+  int __WORKING;
+
+//  GL* gl = rc->getGL();
+//  gl->bindTexture(textureId);
+  _glState.getGLGlobalState()->bindTexture(textureId);
+
+  return &_glState;
 }

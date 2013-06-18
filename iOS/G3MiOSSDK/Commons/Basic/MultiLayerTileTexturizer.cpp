@@ -373,7 +373,7 @@ public:
       if (_mesh == NULL) {
         return;
       }
-      
+
       std::vector<const IImage*>     images;
       std::vector<RectangleF*> sourceRects;
       std::vector<RectangleF*> destRects;
@@ -384,10 +384,9 @@ public:
       for (int i = 0; i < _petitionsCount; i++) {
         const Petition* petition = _petitions[i];
         IImage* image = petition->getImage();
-        
+
         if (image != NULL) {
           const Sector imageSector = petition->getSector();
-
           //Finding intersection image sector - tile sector = srcReq
           const Sector intersectionSector = tileSector.intersection(imageSector);
 
@@ -412,7 +411,6 @@ public:
                                                 _tileTextureResolution._y,
                                                 tileSector,
                                                 intersectionSector));
-
           textureId += petition->getURL().getPath();
           textureId += "_";
         }
@@ -462,7 +460,7 @@ public:
       }
       
       IFactory::instance()->deleteImage(image);
-      
+
       for (int i = 0; i < srcRects.size(); i++) {
         delete srcRects[i];
       }

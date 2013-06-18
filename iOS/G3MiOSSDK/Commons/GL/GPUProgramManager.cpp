@@ -10,7 +10,7 @@
 
 #include "GLState.hpp"
 
-GPUProgram* GPUProgramManager::getProgram(GLState* const glState) {
+GPUProgram* GPUProgramManager::getProgram(GL* gl, GLState* const glState) {
   GLState* thisGLState = glState;
   while (thisGLState != NULL) {
     std::vector<std::string>* ui = glState->getGPUProgramState()->getUniformsNames();
@@ -19,7 +19,7 @@ GPUProgram* GPUProgramManager::getProgram(GLState* const glState) {
       std::string& name = ui->at(j);
       
       if (name.compare("uViewPortExtent") == 0){
-        return getProgram("Billboard");
+        return getProgram(gl, "Billboard");
       }
     }
     
@@ -28,5 +28,5 @@ GPUProgram* GPUProgramManager::getProgram(GLState* const glState) {
   }
   
   int WORKING_JM;
-  return getProgram("Default");
+  return getProgram(gl, "Default");
 }

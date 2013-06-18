@@ -59,37 +59,46 @@ public class EllipsoidalTileTessellator extends TileTessellator
   }
 
 
-  public final Mesh createTileMesh(Planet planet, Vector2I rawResolution, Tile tile, ElevationData elevationData, float verticalExaggeration, boolean renderDebug)
+  public final Mesh createTileMesh(Planet planet, Vector2I rawResolution, Tile tile, ElevationData elevationData, float verticalExaggeration, boolean mercator, boolean renderDebug)
   {
   
     final Sector sector = tile.getSector();
     final Vector2I tileResolution = calculateResolution(rawResolution, sector);
   
-    double minHeight = 0;
+    double minElevation = 0;
     FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.givenCenter(), planet, sector.getCenter());
   
-    int unusedType = -1;
+    final IMathUtils mu = IMathUtils.instance();
+  
     for (int j = 0; j < tileResolution._y; j++)
     {
-      final double v = (double) j / (tileResolution._y-1);
+      final double v = (double) j / (tileResolution._y - 1);
+  
       for (int i = 0; i < tileResolution._x; i++)
       {
-        final double u = (double) i / (tileResolution._x-1);
+        final double u = (double) i / (tileResolution._x - 1);
   
         final Geodetic2D position = sector.getInnerPoint(u, v);
   
-        double height = 0;
+        double elevation = 0;
+  
+        //TODO: MERCATOR!!!
+  
         if (elevationData != null)
         {
-  //        height = elevationData->getElevationAt(i, j) * verticalExaggeration;
-          height = elevationData.getElevationAt(position, unusedType) * verticalExaggeration;
-          if (height < minHeight)
+          final double rawElevation = elevationData.getElevationAt(position);
+          if (!mu.isNan(rawElevation))
           {
-            minHeight = height;
+            elevation = rawElevation * verticalExaggeration;
+  
+            if (elevation < minElevation)
+            {
+              minElevation = elevation;
+            }
           }
         }
   
-        vertices.add(position, height);
+        vertices.add(position, elevation);
       }
     }
   
@@ -117,7 +126,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
       // compute skirt height
       final Vector3D sw = planet.toCartesian(sector.getSW());
       final Vector3D nw = planet.toCartesian(sector.getNW());
-      final double skirtHeight = (nw.sub(sw).length() * 0.05 * -1) + minHeight;
+      final double skirtHeight = (nw.sub(sw).length() * 0.05 * -1) + minElevation;
   
       int posS = tileResolution._x * tileResolution._y;
       indices.add((short)(posS-1));
@@ -214,9 +223,9 @@ public class EllipsoidalTileTessellator extends TileTessellator
       indices.add(posS++);
     }
   
-    Color color = Color.newFromRGBA((float) 1.0, (float) 0, (float) 0, (float) 1.0);
+    Color color = Color.newFromRGBA((float) 1.0, (float) 0.0, (float) 0, (float) 1.0);
   
-    return new IndexedMesh(GLPrimitive.lineLoop(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, color);
+    return new IndexedMesh(GLPrimitive.lineLoop(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, color, null, 0, false); // colorsIntensity -  colors
   }
 
   public final boolean isReady(G3MRenderContext rc)

@@ -13,7 +13,6 @@ import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.IBufferDownloadListener;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IImageDownloadListener;
-import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 
@@ -212,7 +211,6 @@ public final class Downloader_Android
          requestId = _requestIdCounter++;
          final String path = url.getPath();
          handler = _downloadingHandlers.get(path);
-         ILogger.instance().logWarning(path);
          if (handler == null) {
             handler = _queuedHandlers.get(path);
             if (handler == null) {

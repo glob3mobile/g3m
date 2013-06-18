@@ -126,7 +126,10 @@ public:
 
   virtual void stop(const G3MRenderContext *rc,
                     const TimeInterval& when) {
-    rc->getNextCamera()->setGeodeticPosition(_toPosition);
+    Camera* camera = rc->getNextCamera();
+    camera->setGeodeticPosition(_toPosition);
+    camera->setPitch(_toPitch);
+    camera->setHeading(_toHeading);
   }
 
   virtual void cancel(const TimeInterval& when) {

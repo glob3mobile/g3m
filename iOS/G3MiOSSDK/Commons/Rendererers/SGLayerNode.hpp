@@ -43,6 +43,8 @@ private:
 #endif
 
   URL getURL() const;
+  
+  GLState _glState;
 
 
 public:
@@ -70,17 +72,20 @@ public:
   _textureId(NULL),
   _initialized(false)
   {
-
   }
   
   //TODO: Implement
 
+  bool isReadyToRender(const G3MRenderContext* rc);
+
   void onImageDownload(IImage* image);
 
-  GLGlobalState* createState(const G3MRenderContext* rc,
-                             const GLGlobalState& parentState);
+//  GLGlobalState* createState(const G3MRenderContext* rc,
+//                             const GLGlobalState& parentState);
   
   GPUProgramState* createGPUProgramState(const G3MRenderContext* rc, const GPUProgramState* parentState);
+  
+  GLState* createGLState(const G3MRenderContext* rc, GLState* parentGLState);
 };
 
 #endif

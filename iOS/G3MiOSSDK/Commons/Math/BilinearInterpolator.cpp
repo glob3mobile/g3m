@@ -13,7 +13,7 @@ double BilinearInterpolator::interpolation(double valueSW,
                                            double valueNE,
                                            double valueNW,
                                            double u,
-                                           double v) {
+                                           double v) const {
   const double alphaSW = (1.0 - u) * v;
   const double alphaSE = u         * v;
   const double alphaNE = u         * (1.0 - v);

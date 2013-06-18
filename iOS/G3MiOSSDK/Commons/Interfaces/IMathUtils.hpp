@@ -127,6 +127,9 @@ public:
 
   virtual double ceil(double d) const = 0;
   virtual float  ceil(float f)  const = 0;
+  
+  virtual double fmod(double d1, double d2) const = 0;
+  virtual float  fmod(float f1, float f2)  const = 0;
 
   virtual double linearInterpolation(double from,
                                      double to,

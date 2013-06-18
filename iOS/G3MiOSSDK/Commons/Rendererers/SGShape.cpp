@@ -18,6 +18,8 @@ bool SGShape::isReadyToRender(const G3MRenderContext* rc) {
   return _node->isReadyToRender(rc);
 }
 
-void SGShape::rawRender(const G3MRenderContext* rc, GLState* glState) {
-  _node->render(rc);
+void SGShape::rawRender(const G3MRenderContext* rc,
+                        GLState* parentState,
+                        bool renderNotReadyShapes) {
+  _node->render(rc, parentState, renderNotReadyShapes);
 }

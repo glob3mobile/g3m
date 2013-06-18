@@ -54,25 +54,59 @@ bool SGNode::isReadyToRender(const G3MRenderContext* rc) {
   return true;
 }
 
-void SGNode::render(const G3MRenderContext* rc) {
-  rawRender(rc);
-  
-  const int childrenCount = _children.size();
-  for (int i = 0; i < childrenCount; i++) {
-    SGNode* child = _children[i];
-    child->render(rc);
-  }
+void SGNode::prepareRender(const G3MRenderContext* rc) {
+
 }
 
-void SGNode::render(const G3MRenderContext* rc, GLState* parentGLState) {
+void SGNode::cleanUpRender(const G3MRenderContext* rc) {
+
+}
+
+void SGNode::rawRender(const G3MRenderContext* rc,
+                       const GLState& parentState) {
+
+}
+
+const GLState* SGNode::createState(const G3MRenderContext* rc,
+                                   const GLState& parentState) {
+  return  NULL;
+}
+
+
+//void SGNode::render(const G3MRenderContext* rc,
+//                    const GLState& parentState,
+//                    bool renderNotReadyShapes) {
+//  const GLState* myState = createState(rc, parentState);
+//  const GLState* state;
+//  if (myState == NULL) {
+//    state = &parentState;
+//  }
+//  else {
+//    state = myState;
+//  }
+//
+//  prepareRender(rc);
+//
+//  rawRender(rc, *state);
+//
+//  const int childrenCount = _children.size();
+//  for (int i = 0; i < childrenCount; i++) {
+//    SGNode* child = _children[i];
+//    child->render(rc, *state, renderNotReadyShapes);
+//  }
+//}
+
+void SGNode::render(const G3MRenderContext* rc, GLState* parentGLState, bool renderNotReadyShapes) {
   
   GLState* glState = getGLState(parentGLState);
+  
+  prepareRender(rc);
   
   rawRender(rc, glState);
   
   const int childrenCount = _children.size();
   for (int i = 0; i < childrenCount; i++) {
     SGNode* child = _children[i];
-    child->render(rc, glState);
+    child->render(rc, glState, renderNotReadyShapes);
   }
 }

@@ -8,6 +8,8 @@
 
 #include "StringUtils_iOS.hpp"
 #include <algorithm>
+#include <sstream>
+#include <iostream>
 
 std::string StringUtils_iOS::createString(unsigned char* data,
                                           int            length) const {
@@ -81,6 +83,15 @@ bool StringUtils_iOS::endsWith(const std::string& string,
 std::string StringUtils_iOS::toUpperCase(const std::string& string) const {
   std::string result = string;
   std::transform(result.begin(), result.end(), result.begin(), ::toupper);
+
+  return result;
+}
+
+long long StringUtils_iOS::parseHexInt(const std::string& str) const {
+  long long result;
+  std::stringstream ss;
+  ss << std::hex << str;
+  ss >> result;
 
   return result;
 }

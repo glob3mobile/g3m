@@ -57,6 +57,13 @@ short ByteBufferIterator::nextInt16() {
 
   const int iResult = ((int) b1) | ((int) (b2 << 8));
   const short result = (short) iResult;
+//  if (result != -9999) {
+//    printf("break point on me\n");
+//  }
+
+//  if (result > 0) {
+//    printf("break point on me\n");
+//  }
   return result;
 }
 

@@ -41,6 +41,8 @@ private:
   MutableMatrix44D* getTransformMatrix(const Planet* planet) const;
   
   std::vector<ShapePendingEffect*> _pendingEffects;
+
+  bool _enable;
   
   GLState _glState;
   
@@ -56,7 +58,8 @@ public:
   _scaleY(1),
   _scaleZ(1),
   _transformMatrix(NULL),
-  _planet(NULL)
+  _planet(NULL),
+  _enable(true)
   {
     
   }
@@ -80,6 +83,8 @@ public:
     _position = position;
     cleanTransformMatrix();
   }
+  
+  void addShapeEffect(Effect* effect);
   
   void setAnimatedPosition(const TimeInterval& duration,
                            const Geodetic3D& position,
@@ -165,19 +170,29 @@ public:
                    double fromDistance,       double toDistance,
                    const Angle& fromAzimuth,  const Angle& toAzimuth,
                    const Angle& fromAltitude, const Angle& toAltitude);
-  
-  void render(const G3MRenderContext* rc, GLState* parentGLState);
 
-  virtual void initialize(const G3MContext* context) {
-    _planet = context->getPlanet();
+  bool isEnable() const {
+    return _enable;
   }
-  
+
+  void setEnable(bool enable) {
+    _enable = enable;
+  }
+
+  void render(const G3MRenderContext* rc,
+              GLState* parentState,
+              bool renderNotReadyShapes);
+
+  virtual void initialize(const G3MContext* context) {}
+
   virtual bool isReadyToRender(const G3MRenderContext* rc) = 0;
-  
-  virtual void rawRender(const G3MRenderContext* rc, GLState* glState) = 0;
+
+  virtual void rawRender(const G3MRenderContext* rc,
+                         GLState* parentGLState,
+                         bool renderNotReadyShapes) = 0;
 
   virtual bool isTransparent(const G3MRenderContext* rc) = 0;
-  
+
 };
 
 #endif

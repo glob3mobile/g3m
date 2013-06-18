@@ -19,4 +19,4 @@ public:
 };
 
 
-#endif /* defined(__G3MiOSSDK__DownloadPriority__) */
+#endif

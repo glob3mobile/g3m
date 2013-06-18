@@ -19,6 +19,8 @@ package org.glob3.mobile.generated;
 
 public class ShapesRenderer extends LeafRenderer
 {
+  private final boolean _renderNotReadyShapes;
+
   private java.util.ArrayList<Shape> _shapes = new java.util.ArrayList<Shape>();
 
   private G3MContext _context;
@@ -46,6 +48,11 @@ public class ShapesRenderer extends LeafRenderer
 
   public ShapesRenderer()
   {
+     this(true);
+  }
+  public ShapesRenderer(boolean renderNotReadyShapes)
+  {
+     _renderNotReadyShapes = renderNotReadyShapes;
      _context = null;
     createGLState();
   }
@@ -68,6 +75,26 @@ public class ShapesRenderer extends LeafRenderer
     {
       shape.initialize(_context);
     }
+  }
+
+  public final void removeAllShapes()
+  {
+     removeAllShapes(true);
+  }
+  public final void removeAllShapes(boolean deleteShapes)
+  {
+    if (deleteShapes)
+    {
+      final int shapesCount = _shapes.size();
+      for (int i = 0; i < shapesCount; i++)
+      {
+        Shape shape = _shapes.get(i);
+        if (shape != null)
+           shape.dispose();
+      }
+    }
+  
+    _shapes.clear();
   }
 
   public final void onResume(G3MContext context)
@@ -99,6 +126,21 @@ public class ShapesRenderer extends LeafRenderer
 
   public final boolean isReadyToRender(G3MRenderContext rc)
   {
+    if (_renderNotReadyShapes)
+    {
+      return true;
+    }
+  
+    final int shapesCount = _shapes.size();
+    for (int i = 0; i < shapesCount; i++)
+    {
+      Shape shape = _shapes.get(i);
+      final boolean shapeReady = shape.isReadyToRender(rc);
+      if (!shapeReady)
+      {
+        return false;
+      }
+    }
     return true;
   }
 
@@ -132,17 +174,29 @@ public class ShapesRenderer extends LeafRenderer
     for (int i = 0; i < shapesCount; i++)
     {
       Shape shape = _shapes.get(i);
-      if (shape.isTransparent(rc))
-      {
-        final Planet planet = rc.getPlanet();
-        final Vector3D shapePosition = planet.toCartesian(shape.getPosition());
-        final double squaredDistanceFromEye = shapePosition.sub(cameraPosition).squaredLength();
   
+<<<<<<< HEAD
         rc.addOrderedRenderable(new TransparentShapeWrapper(shape, squaredDistanceFromEye, _glState));
       }
       else
       {
         shape.render(rc, _glState);
+=======
+      if (shape.isEnable())
+      {
+        if (shape.isTransparent(rc))
+        {
+          final Planet planet = rc.getPlanet();
+          final Vector3D shapePosition = planet.toCartesian(shape.getPosition());
+          final double squaredDistanceFromEye = shapePosition.sub(cameraPosition).squaredLength();
+  
+          rc.addOrderedRenderable(new TransparentShapeWrapper(shape, squaredDistanceFromEye, _renderNotReadyShapes));
+        }
+        else
+        {
+          shape.render(rc, parentState, _renderNotReadyShapes);
+        }
+>>>>>>> webgl-port
       }
     }
   }

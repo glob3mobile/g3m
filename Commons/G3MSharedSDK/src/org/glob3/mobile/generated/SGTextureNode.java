@@ -77,4 +77,88 @@ public class SGTextureNode extends SGNode
     }
   }
 
+<<<<<<< HEAD
+=======
+//  void rawRender(const G3MRenderContext* rc,
+//                 const GLState& parentState);
+
+  public final void prepareRender(G3MRenderContext rc)
+  {
+    final int layersCount = _layers.size();
+    for (int i = 0; i < layersCount; i++)
+    {
+      SGLayerNode layer = _layers.get(i);
+      layer.prepareRender(rc);
+    }
+  }
+
+  public final void cleanUpRender(G3MRenderContext rc)
+  {
+    final int layersCount = _layers.size();
+    for (int i = 0; i < layersCount; i++)
+    {
+      SGLayerNode layer = _layers.get(i);
+      layer.cleanUpRender(rc);
+    }
+  }
+
+  public final GLState createState(G3MRenderContext rc, GLState parentState)
+  {
+    return null;
+  }
+
+  public final void render(G3MRenderContext rc, GLState parentState, boolean renderNotReadyShapes)
+  {
+    final GLState myState = createState(rc, parentState);
+    final GLState state2;
+    if (myState == null)
+    {
+      state2 = parentState;
+    }
+    else
+    {
+      state2 = myState;
+    }
+  
+    prepareRender(rc);
+  
+    //  rawRender(rc, *state);
+  
+    final int layersCount = _layers.size();
+    for (int i = 0; i < layersCount; i++)
+    {
+      SGLayerNode layer = _layers.get(i);
+  
+      final GLState layerState = layer.createState(rc, state2);
+      final GLState state;
+      if (layerState == null)
+      {
+        state = state2;
+      }
+      else
+      {
+        state = layerState;
+      }
+  
+      layer.rawRender(rc, state);
+  
+      final int childrenCount = _children.size();
+      for (int j = 0; j < childrenCount; j++)
+      {
+        SGNode child = _children.get(j);
+        child.render(rc, state, renderNotReadyShapes);
+      }
+  
+      if (layerState != null)
+         layerState.dispose();
+    }
+  
+    cleanUpRender(rc);
+  
+    if (myState != null)
+       myState.dispose();
+  }
+
+
+>>>>>>> webgl-port
 }

@@ -38,6 +38,8 @@
 #include "GPUProgramState.hpp"
 #include "GLGlobalState.hpp"
 
+#include "ICameraActivityListener.hpp"
+
 void G3MWidget::initSingletons(ILogger*            logger,
                                IFactory*           factory,
                                const IStringUtils* stringUtils,
@@ -63,6 +65,7 @@ G3MWidget::G3MWidget(GL*                              gl,
                      IStorage*                        storage,
                      IDownloader*                     downloader,
                      IThreadUtils*                    threadUtils,
+                     ICameraActivityListener*         cameraActivityListener,
                      const Planet*                    planet,
                      std::vector<ICameraConstrainer*> cameraConstrainers,
                      CameraRenderer*                  cameraRenderer,
@@ -81,6 +84,7 @@ _gl(gl),
 _downloader(downloader),
 _storage(storage),
 _threadUtils(threadUtils),
+_cameraActivityListener(cameraActivityListener),
 _texturesHandler( new TexturesHandler(_gl, false) ),
 _textureBuilder( new CPUTextureBuilder() ),
 _planet(planet),
@@ -92,7 +96,7 @@ _width(1),
 _height(1),
 _currentCamera(new Camera(_width, _height)),
 _nextCamera(new Camera(_width, _height)),
-_backgroundColor(backgroundColor),
+_backgroundColor( new Color(backgroundColor) ),
 _timer(IFactory::instance()->createTimer()),
 _renderCounter(0),
 _totalRenderTime(0),
@@ -150,6 +154,7 @@ G3MWidget* G3MWidget::create(GL*                              gl,
                              IStorage*                        storage,
                              IDownloader*                     downloader,
                              IThreadUtils*                    threadUtils,
+                             ICameraActivityListener*         cameraActivityListener,
                              const Planet*                    planet,
                              std::vector<ICameraConstrainer*> cameraConstrainers,
                              CameraRenderer*                  cameraRenderer,
@@ -167,6 +172,7 @@ G3MWidget* G3MWidget::create(GL*                              gl,
                        storage,
                        downloader,
                        threadUtils,
+                       cameraActivityListener,
                        planet,
                        cameraConstrainers,
                        cameraRenderer,
@@ -202,6 +208,7 @@ G3MWidget::~G3MWidget() {
 
   delete _storage;
   delete _threadUtils;
+  delete _cameraActivityListener;
 
   for (unsigned int n=0; n < _cameraConstrainers.size(); n++) {
     delete _cameraConstrainers[n];
@@ -224,7 +231,12 @@ void G3MWidget::notifyTouchEvent(const G3MEventContext &ec,
   }
 
   if (!handled) {
-    _cameraRenderer->onTouchEvent(&ec, touchEvent);
+    handled = _cameraRenderer->onTouchEvent(&ec, touchEvent);
+    if (handled) {
+      if (_cameraActivityListener != NULL) {
+        _cameraActivityListener->touchEventHandled();
+      }
+    }
   }
 }
 
@@ -302,8 +314,16 @@ void G3MWidget::onResizeViewportEvent(int width, int height) {
   }
 }
 
-void G3MWidget::render(int width, int height) {
 
+void G3MWidget::resetPeriodicalTasksTimeouts() {
+  const int periodicalTasksCount = _periodicalTasks.size();
+  for (int i = 0; i < periodicalTasksCount; i++) {
+    PeriodicalTask* pt = _periodicalTasks[i];
+    pt->resetTimeout();
+  }
+}
+
+void G3MWidget::render(int width, int height) {
   if (_paused) {
     return;
   }
@@ -335,7 +355,7 @@ void G3MWidget::render(int width, int height) {
     }
   }
 
-  //Start periodical task
+  // Start periodical tasks
   const int periodicalTasksCount = _periodicalTasks.size();
   for (int i = 0; i < periodicalTasksCount; i++) {
     PeriodicalTask* pt = _periodicalTasks[i];
@@ -401,7 +421,7 @@ void G3MWidget::render(int width, int height) {
 //    _effectsScheduler->doOneCyle(&rc);
 //  }
   _effectsScheduler->doOneCyle(&rc);
-  
+  	
   _frameTasksExecutor->doPreRenderCycle(&rc);
 
   Renderer* selectedRenderer = _mainRendererReady ? _mainRenderer : _busyRenderer;
@@ -412,9 +432,9 @@ void G3MWidget::render(int width, int height) {
     _selectedRenderer = selectedRenderer;
     _selectedRenderer->start(&rc);
   }
-  
+
   GLGlobalState state;
-  state.setClearColor(_backgroundColor);
+  state.setClearColor(*_backgroundColor);
   _gl->clearScreen(state);
 
   if (_mainRendererReady) {
@@ -434,8 +454,6 @@ void G3MWidget::render(int width, int height) {
       delete orderedRenderable;
     }
   }
-
-  //  _frameTasksExecutor->doPostRenderCycle(&rc);
 
   const TimeInterval elapsedTime = _timer->elapsedTime();
   if (elapsedTime.milliseconds() > 100) {
@@ -619,3 +637,9 @@ void G3MWidget::stopCameraAnimation() {
 //void G3MWidget::resetCameraPosition() {
 //  getNextCamera()->resetPosition();
 //}
+
+void G3MWidget::setBackgroundColor(const Color& backgroundColor) {
+  delete _backgroundColor;
+
+  _backgroundColor = new Color(backgroundColor);
+}

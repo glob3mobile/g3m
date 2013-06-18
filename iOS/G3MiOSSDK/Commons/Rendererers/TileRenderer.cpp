@@ -23,6 +23,8 @@
 #include "MercatorUtils.hpp"
 
 #include "GPUProgramState.hpp"
+#include "EllipsoidShape.hpp"
+#include "Color.hpp"
 
 #include <algorithm>
 
@@ -126,7 +128,8 @@ _firstRender(false),
 _context(NULL),
 _lastVisibleSector(NULL),
 _texturePriority(texturePriority),
-_allFirstLevelTilesAreTextureSolved(false)
+_allFirstLevelTilesAreTextureSolved(false),
+_incompleteShape(NULL)
 {
   _layerSet->setChangeListener(this);
 }
@@ -162,6 +165,8 @@ void TileRenderer::changed(const LayerSet* layerSet) {
 
 TileRenderer::~TileRenderer() {
   clearFirstLevelTiles();
+
+  delete _incompleteShape;
 
   delete _tessellator;
   delete _elevationDataProvider;
@@ -365,7 +370,7 @@ void TileRenderer::initialize(const G3MContext* context) {
 //  _programState.setUniformValue("ViewPortExtent", Vector2D(0.0,0.0));
 }
 
-bool TileRenderer::isReadyToRender(const G3MRenderContext *rc) {
+bool TileRenderer::isReadyToRenderTiles(const G3MRenderContext *rc) {
   if (!_layerSet->isReady()) {
     return false;
   }
@@ -434,11 +439,58 @@ bool TileRenderer::isReadyToRender(const G3MRenderContext *rc) {
       _allFirstLevelTilesAreTextureSolved = true;
     }
   }
-
+  
   return true;
 }
 
+bool TileRenderer::isReadyToRender(const G3MRenderContext *rc) {
+  return isReadyToRenderTiles(rc) || _parameters->_renderIncompletePlanet;
+}
+
+void TileRenderer::renderIncompletePlanet(const G3MRenderContext* rc) {
+
+  if (_incompleteShape == NULL) {
+    const short resolution = 16;
+    const float borderWidth = 0;
+    const bool texturedInside = false;
+    const bool mercator = false;
+
+//    Color* surfaceColor = Color::newFromRGBA(0.5f, 0.5f, 0.5f, 0.5f);
+//    Color* borderColor  = Color::newFromRGBA(1, 1, 1, 1);
+
+//    _incompleteShape = new EllipsoidShape(new Geodetic3D(Angle::zero(), Angle::zero(), 0),
+//                                          rc->getPlanet()->getRadii(),
+//                                          resolution,
+//                                          borderWidth,
+//                                          texturedInside,
+//                                          mercator,
+//                                          surfaceColor,
+//                                          borderColor);
+
+    _incompleteShape = new EllipsoidShape(new Geodetic3D(Angle::zero(), Angle::zero(), 0),
+                                          _parameters->_incompletePlanetTexureURL,
+                                          rc->getPlanet()->getRadii(),
+                                          resolution,
+                                          borderWidth,
+                                          texturedInside,
+                                          mercator);
+
+  }
+
+  _incompleteShape->rawRender(rc, &_glState, true);
+}
+
 void TileRenderer::render(const G3MRenderContext* rc) {
+  
+  _glState.getGPUProgramState()->setUniformMatrixValue("Modelview", rc->getCurrentCamera()->getModelMatrix(), false);
+  _glState.getGPUProgramState()->setUniformMatrixValue("Projection", rc->getCurrentCamera()->getProjectionMatrix(), false);
+  _glState.getGLGlobalState()->enableDepthTest();
+
+  if (!isReadyToRenderTiles(rc) && _parameters->_renderIncompletePlanet) {
+    renderIncompletePlanet(rc);
+    return;
+  }
+
   // Saving camera for use in onTouchEvent
   _lastCamera = rc->getCurrentCamera();
   
@@ -456,10 +508,6 @@ void TileRenderer::render(const G3MRenderContext* rc) {
                         _verticalExaggeration);
 
   const int firstLevelTilesCount = _firstLevelTiles.size();
-  
-  _glState.getGPUProgramState()->setUniformMatrixValue("Modelview", rc->getCurrentCamera()->getModelMatrix(), false);
-  _glState.getGPUProgramState()->setUniformMatrixValue("Projection", rc->getCurrentCamera()->getProjectionMatrix(), false);
-  _glState.getGLGlobalState()->enableDepthTest();
   
   if (_firstRender && _parameters->_forceFirstLevelTilesRenderOnStart) {
     // force one render pass of the firstLevelTiles tiles to make the (toplevel) textures

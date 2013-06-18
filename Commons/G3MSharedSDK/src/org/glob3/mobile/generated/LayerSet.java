@@ -148,6 +148,27 @@ public class LayerSet
     }
   }
 
+  public final void removeAllLayers(boolean deleteLayers)
+  {
+    final int layersSize = _layers.size();
+    if (layersSize > 0)
+    {
+        for (int i = 0; i < layersSize; i++)
+        {
+          Layer layer = _layers.get(i);
+          layer.removeLayerSet(this);
+          if (deleteLayers)
+          {
+            if (layer != null)
+               layer.dispose();
+          }
+        }
+      _layers.clear();
+  
+      layersChanged();
+    }
+  }
+
   public final void addLayer(Layer layer)
   {
     layer.setLayerSet(this);
@@ -166,6 +187,7 @@ public class LayerSet
       Layer layer = _layers.get(i);
       if (layer.isAvailable(rc, tile))
       {
+  
         Tile petitionTile = tile;
         final int maxLevel = layer.getLayerTilesRenderParameters()._maxLevel;
         while ((petitionTile.getLevel() > maxLevel) && (petitionTile != null))
@@ -177,15 +199,13 @@ public class LayerSet
         {
           ILogger.instance().logError("Can't find a valid tile for petitions");
         }
-        else
-        {
-          java.util.ArrayList<Petition> tilePetitions = layer.createTileMapPetitions(rc, petitionTile);
   
-          final int tilePetitionsSize = tilePetitions.size();
-          for (int j = 0; j < tilePetitionsSize; j++)
-          {
-            petitions.add(tilePetitions.get(j));
-          }
+        java.util.ArrayList<Petition> tilePetitions = layer.createTileMapPetitions(rc, petitionTile);
+  
+        final int tilePetitionsSize = tilePetitions.size();
+        for (int j = 0; j < tilePetitionsSize; j++)
+        {
+          petitions.add(tilePetitions.get(j));
         }
       }
     }

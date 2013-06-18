@@ -57,6 +57,7 @@
 #import <G3MiOSSDK/PeriodicalTask.hpp>
 #import <G3MiOSSDK/IDownloader.hpp>
 #import <G3MiOSSDK/OSMLayer.hpp>
+#import <G3MiOSSDK/CartoDBLayer.hpp>
 #import <G3MiOSSDK/HereLayer.hpp>
 #import <G3MiOSSDK/MapQuestLayer.hpp>
 #import <G3MiOSSDK/MapBoxLayer.hpp>
@@ -86,13 +87,20 @@
 #import <G3MiOSSDK/GEOMarkSymbol.hpp>
 #import <G3MiOSSDK/GFont.hpp>
 
+#import <G3MiOSSDK/CompositeElevationDataProvider.hpp>
 #import <G3MiOSSDK/LayerTilesRenderParameters.hpp>
+#import <G3MiOSSDK/RectangleI.hpp>
+#import <G3MiOSSDK/LayerTilesRenderParameters.hpp>
+#import <G3MiOSSDK/QuadShape.hpp>
 #import <G3MiOSSDK/IImageUtils.hpp>
 #import <G3MiOSSDK/RectangleF.hpp>
+#import <G3MiOSSDK/ShortBufferElevationData.hpp>
 #import <G3MiOSSDK/SGShape.hpp>
 #import <G3MiOSSDK/SGNode.hpp>
 #import <G3MiOSSDK/SGMaterialNode.hpp>
 
+#import <G3MiOSSDK/G3MCBuilder_iOS.hpp>
+#import <G3MiOSSDK/G3MCSceneDescription.hpp>
 
 #include <G3MiOSSDK/GPUProgramFactory.hpp>
 
@@ -106,6 +114,75 @@ public:
                                  cameraPosition.description().c_str());
   }
 };
+
+
+Mesh* createSectorMesh(const Planet* planet,
+                       const int resolution,
+                       const Sector& sector,
+                       const Color& color,
+                       const int lineWidth) {
+  // create vectors
+  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(),
+                                          planet,
+                                          sector.getCenter());
+
+  // create indices
+  ShortBufferBuilder indices;
+
+  const int resolutionMinus1 = resolution - 1;
+  int indicesCounter = 0;
+
+  const double offset = 0;
+
+  // west side
+  for (int j = 0; j < resolutionMinus1; j++) {
+    const Geodetic3D g(sector.getInnerPoint(0, (double)j/resolutionMinus1),
+                       offset);
+    vertices.add(g);
+
+    indices.add(indicesCounter++);
+  }
+
+  // south side
+  for (int i = 0; i < resolutionMinus1; i++) {
+    const Geodetic3D g(sector.getInnerPoint((double)i/resolutionMinus1, 1),
+                       offset);
+    vertices.add(g);
+
+    indices.add(indicesCounter++);
+  }
+
+  // east side
+  for (int j = resolutionMinus1; j > 0; j--) {
+    const Geodetic3D g(sector.getInnerPoint(1, (double)j/resolutionMinus1),
+                       offset);
+    vertices.add(g);
+
+    indices.add(indicesCounter++);
+  }
+
+  // north side
+  for (int i = resolutionMinus1; i > 0; i--) {
+    const Geodetic3D g(sector.getInnerPoint((double)i/resolutionMinus1, 0),
+                       offset);
+    vertices.add(g);
+
+    indices.add(indicesCounter++);
+  }
+
+  return new IndexedMesh(GLPrimitive::lineLoop(),
+                         true,
+                         vertices.getCenter(),
+                         vertices.create(),
+                         indices.create(),
+                         lineWidth,
+                         1,
+                         new Color(color),
+                         NULL, //colors
+                         0,    // colorsIntensity
+                         false //depthTest
+                         );
+}
 
 
 @implementation ViewController
@@ -133,9 +210,47 @@ public:
   
   // initialize a customized widget by using a buider
   [self initCustomizedWithBuilder];
-  
   [[self G3MWidget] startAnimation];
 }
+
+
+class TestG3MCBuilderScenesDescriptionsListener  : public G3MCBuilderScenesDescriptionsListener {
+public:
+  void onDownload(std::vector<G3MCSceneDescription*>* scenesDescriptions) {
+    const int scenesCount = scenesDescriptions->size();
+    for (int i = 0; i < scenesCount; i++) {
+      G3MCSceneDescription* sceneDescription = scenesDescriptions->at(i);
+      ILogger::instance()->logInfo("%s", sceneDescription->description().c_str());
+    }
+
+    for (int i = 0; i < scenesCount; i++) {
+      delete scenesDescriptions->at(i);
+    }
+
+    delete scenesDescriptions;
+  }
+
+  void onError() {
+    ILogger::instance()->logError("Error downloading ScenesDescriptions");
+  }
+
+};
+
+
+- (void) initWithG3MCBuilder
+{
+  G3MCSceneChangeListener* sceneListener = NULL;
+  
+  _g3mcBuilder =  new G3MCBuilder_iOS([self G3MWidget],
+                                      URL("http://localhost:8080/g3mc-server", false),
+                                      "2g59wh610g6c1kmkt0l",
+                                      sceneListener);
+
+  //_g3mcBuilder->requestScenesDescriptions(new TestG3MCBuilderScenesDescriptionsListener(), true);
+
+  _g3mcBuilder->initializeWidget();
+}
+
 
 //- (void) initWithoutBuilder
 //{
@@ -191,66 +306,134 @@ public:
 //
 //}
 
-- (void) initDefaultWithBuilder
+- (void) initWithDefaultBuilder
 {
   G3MBuilder_iOS builder([self G3MWidget]);
-  
-  // initialization
   builder.initializeWidget();
 }
 
+
+
 - (void)  initializeElevationDataProvider: (G3MBuilder_iOS&) builder
 {
-  float verticalExaggeration = 5.0f;
-  builder.getTileRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
-  
   int _DGD_working_on_terrain;
-  
-  ElevationDataProvider* elevationDataProvider = NULL;
-  
-  //  ElevationDataProvider* elevationDataProvider = new WMSBillElevationDataProvider();
-  
-  //  ElevationDataProvider* elevationDataProvider;
-  //  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
-  //                                                              Sector::fullSphere(),
-  //                                                              Vector2I(2048, 1024),
-  //                                                              0);
-  
-  //  ElevationDataProvider* elevationDataProvider;
-  //  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///elev-35.0_-6.0_38.0_-2.0_4096x2048.bil", false),
-  //                                                              Sector::fromDegrees(35, -6, 38, -2),
-  //                                                              Vector2I(4096, 2048),
-  //                                                              0);
-  
-  //  ElevationDataProvider* elevationDataProvider;
-  //  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-4096x2048.bil", false),
-  //                                                              Sector::fullSphere(),
-  //                                                              Vector2I(4096, 2048),
-  //                                                              0);
-  
-  //  ElevationDataProvider* elevationDataProvider;
-  //  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///caceres-2008x2032.bil", false),
-  //                                                              Sector::fromDegrees(
-  //                                                                                  39.4642996294239623,
-  //                                                                                  -6.3829977122432933,
-  //                                                                                  39.4829891936013553,
-  //                                                                                  -6.3645288909498845
-  //                                                                                  ),
-  //                                                              Vector2I(2008, 2032),
-  //                                                              0);
-  
-  //  ElevationDataProvider* elevationDataProvider;
-  //  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///small-caceres.bil", false),
-  //                                                              Sector::fromDegrees(
-  //                                                                                  39.4642994358225678,
-  //                                                                                  -6.3829980000000042,
-  //                                                                                  39.4829889999999608,
-  //                                                                                  -6.3645291787065954
-  //                                                                                  ),
-  //                                                              Vector2I(251, 254),
-  //                                                              0);
-  
+
+  float verticalExaggeration = 6.0f;
+  builder.getTileRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
+
+  //ElevationDataProvider* elevationDataProvider = NULL;
+  //builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProvider);
+
+
+//  ElevationDataProvider* elevationDataProviderACorunia;
+//  elevationDataProviderACorunia = new SingleBillElevationDataProvider(URL("file:///MDT200-A_CORUNIA.bil", false),
+//                                                                      Sector::fromDegrees(42.4785417976084858, -9.3819593635107914,
+//                                                                                          43.8317114006282011, -7.6284544428640784),
+//                                                                      Vector2I(968, 747));
+//
+//  builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProviderACorunia);
+
+  ElevationDataProvider* elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
+                                                                                     Sector::fullSphere(),
+                                                                                     Vector2I(2048, 1024));
   builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProvider);
+
+
+//  elevationDataProvider = new WMSBillElevationDataProvider(URL("http://data.worldwind.arc.nasa.gov/elev", false),
+//                                                           Sector::fullSphere());
+//  builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProvider);
+
+//  elevationDataProvider = new WMSBillElevationDataProvider(URL("http://igosoftware.dyndns.org:8080/geoserver/wms", false),
+//                                                           "igo:corunia",
+//                                                           Sector::fromDegrees(42.4785417976085213, -9.3819593635107914,
+//                                                                               43.8317114006282011, -7.6284544428641370));
+//  builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProvider);
+
+  /*
+  //  ElevationDataProvider* elevationDataProvider;
+  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
+                                                              Sector::fullSphere(),
+                                                              Vector2I(2048, 1024));
+
+//  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-4096x2048.bil", false),
+//                                                              Sector::fullSphere(),
+//                                                              Vector2I(4096, 2048));
+
+  //  ElevationDataProvider* elevationDataProvider1;
+  //  elevationDataProvider1 = new SingleBillElevationDataProvider(URL("file:///elev-35.0_-6.0_38.0_-2.0_4096x2048.bil", false),
+  //                                                               Sector::fromDegrees(35, -6, 38, -2),
+  //                                                               Vector2I(4096, 2048),
+  //                                                               0);
+  
+  //  ElevationDataProvider* elevationDataProvider2;
+  //  elevationDataProvider2 = new SingleBillElevationDataProvider(URL("file:///full-earth-4096x2048.bil", false),
+  //                                                              Sector::fullSphere(),
+  //                                                              Vector2I(4096, 2048),
+  //                                                              0);
+
+  //  ElevationDataProvider* elevationDataProvider3;
+  //  elevationDataProvider3 = new SingleBillElevationDataProvider(URL("file:///caceres-2008x2032.bil", false),
+  //                                                               Sector::fromDegrees(
+  //                                                                                   39.4642996294239623,
+  //                                                                                   -6.3829977122432933,
+  //                                                                                   39.4829891936013553,
+  //                                                                                   -6.3645288909498845
+  //                                                                                   ),
+  //                                                               Vector2I(2008, 2032),
+  //                                                               0);
+  
+//  ElevationDataProvider* elevationDataProvider4;
+//  elevationDataProvider4 = new SingleBillElevationDataProvider(URL("file:///small-caceres.bil", false),
+//                                                               Sector::fromDegrees(
+//                                                                                   39.4642994358225678,
+//                                                                                   -6.3829980000000042,
+//                                                                                   39.4829889999999608,
+//                                                                                   -6.3645291787065954
+//                                                                                   ),
+//                                                               Vector2I(251, 254));
+
+//  ElevationDataProvider* elevationDataProvider5;
+//  elevationDataProvider5 = new SingleBillElevationDataProvider(URL("file:///elev-35.0_-6.0_38.0_-2.0_4096x2048.bil", false),
+//                                                               Sector::fromDegrees(35, -6, 38, -2),
+//                                                               Vector2I(4096, 2048));
+
+  //  ElevationDataProvider* elevationDataProvider6;
+  //  elevationDataProvider6 = new SingleBillElevationDataProvider(URL("file:///full-earth-512x512.bil", false),
+  //                                                               Sector::fullSphere(),
+  //                                                               Vector2I(512, 512),
+  //                                                               0);
+  
+  //  ElevationDataProvider* elevationDataProvider7;
+  //  elevationDataProvider7 = new SingleBillElevationDataProvider(URL("file:///full-earth-256x256.bil", false),
+  //                                                               Sector::fullSphere(),
+  //                                                               Vector2I(256, 256),
+  //                                                               0);
+  
+//    ElevationDataProvider* elevationDataProvider8;
+//    elevationDataProvider8 = new WMSBillElevationDataProvider(URL("http://data.worldwind.arc.nasa.gov/elev?REQUEST=GetMap&SERVICE=WMS&VERSION=1.3.0&LAYERS=srtm30&STYLES=&FORMAT=image/bil&CRS=EPSG:4326&BBOX=-180.0,-90.0,180.0,90.0&WIDTH=10&HEIGHT=10", false),
+//                                                              Sector::fullSphere());
+
+
+
+
+  CompositeElevationDataProvider* compElevationDataProvider = new CompositeElevationDataProvider();
+  compElevationDataProvider->addElevationDataProvider(elevationDataProvider);
+  //CompositeElevationDataProvider* compElevationDataProvider = new CompositeElevationDataProvider();
+  //compElevationDataProvider->addElevationDataProvider(elevationDataProvider1);
+  //compElevationDataProvider->addElevationDataProvider(elevationDataProvider1);
+  //compElevationDataProvider->addElevationDataProvider(elevationDataProvider2);
+  //compElevationDataProvider->addElevationDataProvider(elevationDataProvider3);
+//  compElevationDataProvider->addElevationDataProvider(elevationDataProvider4);
+  //compElevationDataProvider->addElevationDataProvider(elevationDataProvider5);
+  //elevationDataProvider = compElevationDataProvider;
+  //compElevationDataProvider->addElevationDataProvider(elevationDataProvider6);
+  //compElevationDataProvider->addElevationDataProvider(elevationDataProvider7);
+  //compElevationDataProvider->addElevationDataProvider(elevationDataProvider8);
+
+  compElevationDataProvider->addElevationDataProvider(elevationDataProviderACorunia);
+
+//  builder.getTileRendererBuilder()->setElevationDataProvider(compElevationDataProvider);
+   */
 }
 
 - (GPUProgramSources) loadDefaultGPUProgramSourcesFromDisk{
@@ -311,8 +494,8 @@ public:
   builder.setCameraRenderer([self createCameraRenderer]);
   
   builder.setPlanet(Planet::createEarth());
-  
-  Color* bgColor = Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1);
+
+  Color* bgColor = Color::newFromRGBA(0.0f, 0.1f, 0.2f, 1.0f);
   builder.setBackgroundColor(bgColor);
   
   LayerSet* layerSet = [self createLayerSet];
@@ -346,7 +529,6 @@ public:
   //                                                Color::newFromRGBA(0.0, 0.0, 0.0, 1.0),
   //                                                Vector2D(250,194),
   //                                                false);
-
   
   builder.setBusyRenderer(busyRenderer);
   
@@ -570,12 +752,19 @@ public:
   if (useOSM) {
     layerSet->addLayer( new OSMLayer(TimeInterval::fromDays(30)) );
   }
-  
+
+  //TODO: Check merkator with elevations
   const bool useMapQuestOSM = false;
   if (useMapQuestOSM) {
     layerSet->addLayer( MapQuestLayer::newOSM(TimeInterval::fromDays(30)) );
   }
-  
+
+  const bool useCartoDB = false;
+  if (useCartoDB) {
+    layerSet->addLayer( new CartoDBLayer("mdelacalle",
+                                         "tm_world_borders_simpl_0_3",
+                                         TimeInterval::fromDays(30)) );
+  }
   const bool useMapQuestOpenAerial = false;
   if (useMapQuestOpenAerial) {
     layerSet->addLayer( MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30)) );
@@ -583,8 +772,10 @@ public:
   
   const bool useMapBox = false;
   if (useMapBox) {
-    layerSet->addLayer( new MapBoxLayer("dgd.map-v93trj8v",
-                                        TimeInterval::fromDays(30)) );
+    //const std::string mapKey = "dgd.map-v93trj8v";
+    //const std::string mapKey = "examples.map-cnkhv76j";
+    const std::string mapKey = "examples.map-qogxobv1";
+    layerSet->addLayer( new MapBoxLayer(mapKey, TimeInterval::fromDays(30)) );
   }
   
   const bool useHere = false;
@@ -599,19 +790,41 @@ public:
     layerSet->addLayer( new GoogleMapsLayer("AIzaSyC9pospBjqsfpb0Y9N3E3uNMD8ELoQVOrc",
                                             TimeInterval::fromDays(30)) );
   }
-  
-  const bool useBingMaps = false;
+
+  const bool useBingMaps = true;
   if (useBingMaps) {
     layerSet->addLayer( new BingMapsLayer(//BingMapType::Road(),
-                                          //BingMapType::AerialWithLabels(),
-                                          BingMapType::Aerial(),
-                                          "ArtXu2Z-XSlDVCRVtxtYqtIPVR_0qqLcrfsRyZK_ishjUKvTheYBUH9rDDmAPcnj",
+                                          BingMapType::AerialWithLabels(),
+                                          //BingMapType::Aerial(),
+                                          "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
                                           TimeInterval::fromDays(30)) );
   }
+
+  const bool useOSMEditMap = false;
+  if (useOSMEditMap) {
+    // http://d.tiles.mapbox.com/v3/enf.osm-edit-date/4/4/5.png
+
+    std::vector<std::string> subdomains;
+    subdomains.push_back("a.");
+    subdomains.push_back("b.");
+    subdomains.push_back("c.");
+    subdomains.push_back("d.");
+
+    MercatorTiledLayer* osmEditMapLayer = new MercatorTiledLayer("osm-edit-map",
+                                                                 "http://",
+                                                                 "tiles.mapbox.com/v3/enf.osm-edit-date",
+                                                                 subdomains,
+                                                                 "png",
+                                                                 TimeInterval::fromDays(30),
+                                                                 true,
+                                                                 Sector::fullSphere(),
+                                                                 2,
+                                                                 11,
+                                                                 NULL);
+    layerSet->addLayer(osmEditMapLayer);
+  }
   
-  
-  
-  const bool blueMarble = true;
+  const bool blueMarble = false;
   if (blueMarble) {
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
                                         URL("http://www.nasa.network.com/wms?", false),
@@ -621,34 +834,39 @@ public:
                                         "EPSG:4326",
                                         "",
                                         false,
-                                        //new LevelTileCondition(0, 6),
-                                        NULL,
+                                        new LevelTileCondition(0, 6),
+                                        //NULL,
                                         TimeInterval::fromDays(30),
                                         true,
                                         new LayerTilesRenderParameters(Sector::fullSphere(),
-                                                                       2,
-                                                                       4,
-                                                                       0,
-                                                                       8,
+                                                                       2, 4,
+                                                                       0, 6,
                                                                        LayerTilesRenderParameters::defaultTileTextureResolution(),
                                                                        LayerTilesRenderParameters::defaultTileMeshResolution(),
                                                                        false)
                                         );
     layerSet->addLayer(blueMarble);
-    
-    //    WMSLayer* i3Landsat = new WMSLayer("esat",
-    //                                       URL("http://data.worldwind.arc.nasa.gov/wms?", false),
-    //                                       WMS_1_1_0,
-    //                                       Sector::fullSphere(),
-    //                                       "image/jpeg",
-    //                                       "EPSG:4326",
-    //                                       "",
-    //                                       false,
-    //                                       new LevelTileCondition(7, 100),
-    //                                       TimeInterval::fromDays(30));
-    //    layerSet->addLayer(i3Landsat);
+
+    WMSLayer* i3Landsat = new WMSLayer("esat",
+                                       URL("http://data.worldwind.arc.nasa.gov/wms?", false),
+                                       WMS_1_1_0,
+                                       Sector::fullSphere(),
+                                       "image/jpeg",
+                                       "EPSG:4326",
+                                       "",
+                                       false,
+                                       new LevelTileCondition(7, 100),
+                                       TimeInterval::fromDays(30),
+                                       true,
+                                       new LayerTilesRenderParameters(Sector::fullSphere(),
+                                                                      2, 4,
+                                                                      0, 12,
+                                                                      LayerTilesRenderParameters::defaultTileTextureResolution(),
+                                                                      LayerTilesRenderParameters::defaultTileMeshResolution(),
+                                                                      false));
+    layerSet->addLayer(i3Landsat);
   }
-  
+
   const bool useOrtoAyto = false;
   if (useOrtoAyto) {
     WMSLayer* ortoAyto = new WMSLayer("orto_refundida,etiquetas_50k,Numeros%20de%20Gobierno,etiquetas%20inicial,etiquetas%2020k,Nombres%20de%20Via,etiquetas%2015k,etiquetas%202k,etiquetas%2010k",
@@ -672,8 +890,7 @@ public:
                                                                      false));
     layerSet->addLayer(ortoAyto);
   }
-  
-  
+
   bool useWMSBing = false;
   if (useWMSBing) {
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
@@ -705,8 +922,8 @@ public:
                                   true);
     layerSet->addLayer(bing);
   }
-  
-  if (true) {
+
+  if (false) {
     WMSLayer* political = new WMSLayer("topp:cia",
                                        URL("http://worldwind22.arc.nasa.gov/geoserver/wms?", false),
                                        WMS_1_1_0,
@@ -851,10 +1068,15 @@ public:
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
   
+  const bool renderIncompletePlanet = false;
+  const URL incompletePlanetTexureURL("", false);
+
   return new TilesRenderParameters(renderDebug,
                                    useTilesSplitBudget,
                                    forceFirstLevelTilesRenderOnStart,
-                                   incrementalTileQuality);
+                                   incrementalTileQuality,
+                                   renderIncompletePlanet,
+                                   incompletePlanetTexureURL);
 }
 
 - (TileRenderer*) createTileRenderer: (TilesRenderParameters*) parameters
@@ -931,13 +1153,12 @@ public:
 - (ShapesRenderer*) createShapesRenderer: (const Planet*) planet
 {
   ShapesRenderer* shapesRenderer = new ShapesRenderer();
-  
-  //  Shape* quad1 = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
-  //                                              Angle::fromDegrees(-122),
-  //                                              8000),
-  //                               URL("file:///g3m-marker.png", false),
-  //                               50000, 50000);
-  //  shapesRenderer->addShape(quad1);
+  Shape* quad1 = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
+                                              Angle::fromDegrees(-122),
+                                              8000),
+                               URL("file:///g3m-marker.png", false),
+                               50000, 50000);
+  shapesRenderer->addShape(quad1);
   
   Shape* quad2 = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
                                               Angle::fromDegrees(-123),
@@ -1260,7 +1481,7 @@ public:
 //class TestElevationDataListener : public IElevationDataListener {
 //public:
 //  void onData(const Sector& sector,
-//              const Vector2I& resolution,
+//              const Vector2I& extent,
 //              ElevationData* elevationData) {
 //    if (elevationData != NULL) {
 //      ILogger::instance()->logInfo("Elevation data for sector=%s", sector.description().c_str());
@@ -1270,7 +1491,7 @@ public:
 //  }
 //
 //  void onError(const Sector& sector,
-//               const Vector2I& resolution) {
+//               const Vector2I& extent) {
 //
 //  }
 //};
@@ -1299,12 +1520,9 @@ public:
   void onDownload(const URL& url,
                   IByteBuffer* buffer,
                   bool expired) {
-    
-    const ElevationData* elevationData = BilParser::parseBil16(_sector,
-                                                               _extent,
-                                                               0,
-                                                               100,
-                                                               buffer);
+    const ShortBufferElevationData* elevationData = BilParser::parseBil16(_sector,
+                                                                          _extent,
+                                                                          buffer);
     delete buffer;
     
     if (elevationData == NULL) {
@@ -1319,80 +1537,57 @@ public:
     //                                                      5,
     //                                                      Geodetic3D::fromDegrees(0.02, 0, 0),
     //                                                      2) );
-    
-    const float verticalExaggeration = 3.0f;
+
+    const float verticalExaggeration = 20.0f;
     const float pointSize = 2.0f;
     
-    const Sector subSector = _sector.shrinkedByPercent(0.2f);
-    //    const Sector subSector = _sector.shrinkedByPercent(0.9f);
-    //    const Sector subSector = _sector;
-    //    const Vector2I subResolution(512, 512);
-    //    const Vector2I subResolution(251*2, 254*2);
-    const Vector2I subResolution(251*2, 254*2);
-    
+//    const Sector subSector = _sector.shrinkedByPercent(0.2f);
+//    //    const Sector subSector = _sector.shrinkedByPercent(0.9f);
+//    //    const Sector subSector = _sector;
+//    //    const Vector2I subResolution(512, 512);
+//    //    const Vector2I subResolution(251*2, 254*2);
+//    const Vector2I subResolution(251*2, 254*2);
+
     int _DGD_working_on_terrain;
-    
-    const ElevationData* subElevationDataDecimated = new SubviewElevationData(elevationData,
-                                                                              false,
-                                                                              subSector,
-                                                                              subResolution,
-                                                                              0,
-                                                                              true);
-    
-    //    _meshRenderer->addMesh( subElevationDataDecimated->createMesh(planet,
-    //                                                                  verticalExaggeration,
-    //                                                                  Geodetic3D::fromDegrees(0.02, 0.02, 0),
-    //                                                                  pointSize) );
-    
-    
-    const ElevationData* subElevationDataNotDecimated = new SubviewElevationData(elevationData,
-                                                                                 false,
-                                                                                 subSector,
-                                                                                 subResolution,
-                                                                                 0,
-                                                                                 false);
-    
-    //    _meshRenderer->addMesh( subElevationDataNotDecimated->createMesh(planet,
-    //                                                                     verticalExaggeration,
-    //                                                                     Geodetic3D::fromDegrees(0.02,
-    //                                                                                             0.02 + (subSector.getDeltaLongitude()._degrees * 1.05),
-    //                                                                                             0),
-    //                                                                     pointSize) );
-    
-    
-    IFloatBuffer* deltaBuffer = IFactory::instance()->createFloatBuffer( subResolution._x * subResolution._y );
-    
-    int unusedType = -1;
-    for (int x = 0; x < subResolution._x; x++) {
-      for (int y = 0; y < subResolution._y; y++) {
-        const double height1 = subElevationDataDecimated->getElevationAt(x, y, &unusedType);
-        const double height2 = subElevationDataNotDecimated->getElevationAt(x, y, &unusedType);
-        
-        const int index = ((subResolution._y-1-y) * subResolution._x) + x;
-        deltaBuffer->rawPut(index,  (float) (height1 - height2));
-      }
-    }
-    
-    ElevationData* deltaElevation = new FloatBufferElevationData(subSector,
-                                                                 subResolution,
-                                                                 0,
-                                                                 deltaBuffer);
-    
-    _meshRenderer->addMesh( deltaElevation->createMesh(planet,
-                                                       verticalExaggeration,
-                                                       Geodetic3D::fromDegrees(0.02,
-                                                                               0.02 + (subSector.getDeltaLongitude()._degrees * 2.1),
-                                                                               100),
-                                                       pointSize) );
-    
-    
-    delete deltaElevation;
-    
+
+    _meshRenderer->addMesh( createSectorMesh(planet,
+                                             32,
+                                             Sector::fromDegrees(-22, -73,
+                                                                 -16, -61),
+                                             Color::yellow(),
+                                             2) );
+
+    const Sector meshSector = Sector::fromDegrees(-22, -73,
+                                                  -16, -61);
+
+    const Vector2I meshResolution(512, 256);
+
+
+    _meshRenderer->addMesh( elevationData->createMesh(planet,
+                                                      verticalExaggeration,
+                                                      Geodetic3D::zero(),
+                                                      pointSize,
+                                                      meshSector,
+                                                      meshResolution) );
+
+//    const ElevationData* subElevationData = new SubviewElevationData(elevationData,
+//                                                                     meshSector,
+//                                                                     meshResolution,
+//                                                                     false);
+//
+//    _meshRenderer->addMesh( subElevationData->createMesh(planet,
+//                                                         verticalExaggeration,
+//                                                         Geodetic3D::fromDegrees(meshSector.getDeltaLatitude().degrees() + 0.1,
+//                                                                                 0,
+//                                                                                 0),
+//                                                         pointSize) );
+//
+//    delete subElevationData;
+
+
+
     delete planet;
     delete elevationData;
-    
-    delete subElevationDataDecimated;
-    delete subElevationDataNotDecimated;
   }
   
   void onError(const URL& url) {
@@ -1406,7 +1601,6 @@ public:
   void onCanceledDownload(const URL& url,
                           IByteBuffer* data,
                           bool expired) {
-    
   }
   
 };
@@ -1477,15 +1671,15 @@ public:
     ShapesRenderer* _shapesRenderer;
     GEORenderer*    _geoRenderer;
     MeshRenderer*   _meshRenderer;
-    
-    void textRadar(const G3MContext* context) {
-      
-      //      context->getDownloader()->requestBuffer(URL("http://radar3d.glob3mobile.com/models/radar.bson", false),
-      //                                              1000000,
-      //                                              TimeInterval::fromDays(1),
-      //                                              true,
-      //                                              new RadarParser_BufferDownloadListener(_shapesRenderer),
-      //                                              true);
+
+    void testRadarModel(const G3MContext* context) {
+
+      context->getDownloader()->requestBuffer(URL("http://radar3d.glob3mobile.com/models/radar.bson", false),
+                                              1000000,
+                                              TimeInterval::fromDays(1),
+                                              true,
+                                              new RadarParser_BufferDownloadListener(_shapesRenderer),
+                                              true);
     }
     
     
@@ -1499,77 +1693,7 @@ public:
     _geoRenderer(geoRenderer),
     _meshRenderer(meshRenderer)
     {
-      
-    }
-    
-    Mesh* createSectorMesh(const Planet* planet,
-                           const int resolution,
-                           const Sector& sector,
-                           const Color& color,
-                           const int lineWidth) {
-      // create vectors
-      FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(),
-                                              planet,
-                                              sector.getCenter());
-      
-      // create indices
-      ShortBufferBuilder indices;
-      
-      const int resolutionMinus1 = resolution - 1;
-      int indicesCounter = 0;
-      
-      // compute offset for vertices
-      //    const Vector3D sw = planet->toVector3D(sector->getSW());
-      //    const Vector3D nw = planet->toVector3D(sector->getNW());
-      //    const double offset = nw.sub(sw).length(); // * 1e-3;
-      //      const double offset = 5000;
-      const double offset = 100;
-      
-      // west side
-      for (int j = 0; j < resolutionMinus1; j++) {
-        const Geodetic3D g(sector.getInnerPoint(0, (double)j/resolutionMinus1),
-                           offset);
-        vertices.add(g);
-        
-        indices.add(indicesCounter++);
-      }
-      
-      // south side
-      for (int i = 0; i < resolutionMinus1; i++) {
-        const Geodetic3D g(sector.getInnerPoint((double)i/resolutionMinus1, 1),
-                           offset);
-        vertices.add(g);
-        
-        indices.add(indicesCounter++);
-      }
-      
-      // east side
-      for (int j = resolutionMinus1; j > 0; j--) {
-        const Geodetic3D g(sector.getInnerPoint(1, (double)j/resolutionMinus1),
-                           offset);
-        vertices.add(g);
-        
-        indices.add(indicesCounter++);
-      }
-      
-      // north side
-      for (int i = resolutionMinus1; i > 0; i--) {
-        const Geodetic3D g(sector.getInnerPoint((double)i/resolutionMinus1, 0),
-                           offset);
-        vertices.add(g);
-        
-        indices.add(indicesCounter++);
-      }
-      
-      return new IndexedMesh(GLPrimitive::lineLoop(),
-                             true,
-                             vertices.getCenter(),
-                             vertices.create(),
-                             indices.create(),
-                             lineWidth,
-                             1,
-                             new Color(color));
-      
+
     }
     
     Mesh* createCameraPathMesh(const G3MContext* context,
@@ -1709,37 +1833,35 @@ public:
       
       delete canvas;
     }
-    
-    
+
     void run(const G3MContext* context) {
       printf("Running initialization Task\n");
       
       testCanvas(context->getFactory());
-      
+
+
       //      const Sector targetSector(Sector::fromDegrees(35, -6, 38, -2));
       
-      
-      textRadar(context);
-      
-      
+
+//      const Sector targetSector(Sector::fromDegrees(35, -6, 38, -2));
+
+
+//      testRadarModel(context);
+
       _meshRenderer->addMesh( createSectorMesh(context->getPlanet(),
                                                20,
-                                               Sector::fromDegrees(35, -6, 38, -2),
+                                               Sector::fromDegrees(35, -6,
+                                                                   38, -2),
                                                Color::white(),
                                                2) );
       
       _meshRenderer->addMesh( createSectorMesh(context->getPlanet(),
                                                20,
-                                               Sector::fromDegrees(
-                                                                   39.4642996294239623,
-                                                                   -6.3829977122432933,
-                                                                   39.4829891936013553,
-                                                                   -6.3645288909498845
-                                                                   ),
+                                               Sector::fromDegrees(39.4642996294239623, -6.3829977122432933,
+                                                                   39.4829891936013553, -6.3645288909498845),
                                                Color::magenta(),
                                                2) );
-      
-      
+
       // mesh1
       Angle latFrom(Angle::fromDegreesMinutesSeconds(38, 53, 42.24));
       Angle lonFrom(Angle::fromDegreesMinutesSeconds(-77, 2, 10.92));
@@ -1791,94 +1913,19 @@ public:
       
       //      [_iosWidget setCameraPosition: Geodetic3D(posFrom, 60000)];
       //      [_iosWidget setCameraPitch: Angle::fromDegrees(95)];
-      
-      
-      //      FloatBufferBuilderFromGeodetic vertices(CenterStrategy::noCenter(),
-      //                                              context->getPlanet(),
-      //                                              Vector3D::zero());
-      //
-      //      for (double t = 0; t <= 1; t += 0.1) {
-      //        Geodetic2D position( Geodetic2D::linearInterpolation(posFrom, posTo, t) );
-      //
-      //        const double height = IMathUtils::instance()->quadraticBezierInterpolation(fromHeight, middleHeight, toHeight, t);
-      //        vertices.add(position, height);
-      //      }
-      //
-      //      Mesh* mesh = new DirectMesh(GLPrimitive::lineStrip(),
-      //                                  true,
-      //                                  vertices.getCenter(),
-      //                                  vertices.create(),
-      //                                  2,
-      //                                  1,
-      //                                  Color::newFromRGBA(1, 1, 0, 1));
-      //
-      //      _meshRenderer->addMesh( mesh );
-      
-      
-      
-      
-      
-      
-      //      Geodetic3D
-      
-      //      targetSector.c
-      
+
       /*
-       context->getDownloader()->requestBuffer(URL("file:///full-earth-2048x1024.bil", false),
-       1000000,
-       TimeInterval::fromDays(30),
-       new Bil16Parser_IBufferDownloadListener(_shapesRenderer,
-       _meshRenderer,
-       Vector2I(2048, 1024),
-       Sector::fullSphere()),
-       true);
-       */
-      /*
-       context->getDownloader()->requestBuffer(//URL("file:///sample_bil16_150x150.bil", false),
-       //URL("file:///409_554.bil", false),
-       //URL("file:///full-earth-512x512.bil", false),
-       URL("file:///elev-35.0_-6.0_38.0_-2.0_4096x2048.bil", false),
-       1000000,
-       TimeInterval::fromDays(30),
-       new Bil16Parser_IBufferDownloadListener(_shapesRenderer,
-       _meshRenderer,
-       Vector2I(4096, 2048),
-       Sector::fromDegrees(35, -6, 38, -2)),
-       true);
-       */
-      /*
-       context->getDownloader()->requestBuffer(URL("file:///caceres-2008x2032.bil", false),
-       1000000,
-       TimeInterval::fromDays(30),
-       new Bil16Parser_IBufferDownloadListener(_shapesRenderer,
-       _meshRenderer,
-       Vector2I(2008, 2032),
-       Sector::fromDegrees(
-       39.4642996294239623,
-       -6.3829977122432933,
-       39.4829891936013553,
-       -6.3645288909498845
-       )),
-       true);
-       */
-      
-      /*
-       context->getDownloader()->requestBuffer(URL("file:///small-caceres.bil", false),
-       1000000,
-       TimeInterval::fromDays(30),
-       new Bil16Parser_IBufferDownloadListener(_shapesRenderer,
-       _meshRenderer,
-       Vector2I(251, 254),
-       Sector::fromDegrees(
-       39.4642994358225678,
-       -6.3829980000000042,
-       39.4829889999999608,
-       -6.3645291787065954
-       )
-       ),
-       true);
-       */
-      
+      context->getDownloader()->requestBuffer(URL("file:///full-earth-2048x1024.bil", false),
+                                              1000000,
+                                              TimeInterval::fromDays(30),
+                                              true,
+                                              new Bil16Parser_IBufferDownloadListener(_shapesRenderer,
+                                                                                      _meshRenderer,
+                                                                                      Vector2I(2048, 1024),
+                                                                                      Sector::fullSphere()),
+                                              true);
+      */
+
       //      [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
       //                                                     Geodetic3D(Angle::fromDegrees(37.78333333),
       //                                                                Angle::fromDegrees(-122.41666666666667),
@@ -1886,7 +1933,14 @@ public:
       //                                                     //Angle::fromDegrees(45),
       //                                                     //Angle::fromDegrees(30)
       //                                                     );
-      
+      // go to Grand Canyon
+      [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
+                                                     Geodetic3D(Angle::fromDegreesMinutes(36, 6),
+                                                                Angle::fromDegreesMinutes(-112, 6),
+                                                                25000),
+                                                     Angle::zero(),
+                                                     Angle::fromDegrees(75)
+                                                     );
       /*
        NSString *bsonFilePath = [[NSBundle mainBundle] pathForResource: @"test"
        ofType: @"bson"];
@@ -1950,21 +2004,7 @@ public:
             Shape* plane = SceneJSShapesParser::parseFromBSON(buffer,
                                                               URL::FILE_PROTOCOL + "textures-A320/",
                                                               false);
-            
-            //      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
-            //                                                                ofType: @"json"];
-            /*
-             NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"A320"
-             ofType: @"json"];
-             if (planeFilePath) {
-             NSString *nsPlaneJSON = [NSString stringWithContentsOfFile: planeFilePath
-             encoding: NSUTF8StringEncoding
-             error: nil];
-             if (nsPlaneJSON) {
-             std::string planeJSON = [nsPlaneJSON UTF8String];
-             Shape* plane = SceneJSShapesParser::parseFromJSON(planeJSON, "file:///textures-A320/");
-             //Shape* plane = SceneJSShapesParser::parse(planeJSON, "file:///textures-citation/");
-             */
+
             if (plane) {
               // Washington, DC
               plane->setPosition(new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
@@ -2008,14 +2048,7 @@ public:
       }
       /**/
       
-      
-      
-      
-      /**/
-      //      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/coastline"
-      //                                                                  ofType: @"geojson"];
-      
-      
+
       //      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/boundary_lines_land"
       //                                                                  ofType: @"geojson"];
       NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/cities"
@@ -2023,19 +2056,6 @@ public:
       
       //      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/extremadura-roads"
       //                                                                  ofType: @"geojson"];
-      
-      if (geoJSONFilePath) {
-        NSString *nsGEOJSON = [NSString stringWithContentsOfFile: geoJSONFilePath
-                                                        encoding: NSUTF8StringEncoding
-                                                           error: nil];
-        if (nsGEOJSON) {
-          std::string geoJSON = [nsGEOJSON UTF8String];
-          
-          GEOObject* geoObject = GEOJSONParser::parse(geoJSON);
-          
-          _geoRenderer->addGEOObject(geoObject);
-        }
-      }
       
       if (geoJSONFilePath) {
         NSString *nsGEOJSON = [NSString stringWithContentsOfFile: geoJSONFilePath

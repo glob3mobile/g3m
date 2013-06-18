@@ -102,7 +102,11 @@ public class SGNode
   {
   }
 
+<<<<<<< HEAD
   public void render(G3MRenderContext rc)
+=======
+  public void render(G3MRenderContext rc, GLState parentState, boolean renderNotReadyShapes)
+>>>>>>> webgl-port
   {
     rawRender(rc);
   
@@ -110,7 +114,11 @@ public class SGNode
     for (int i = 0; i < childrenCount; i++)
     {
       SGNode child = _children.get(i);
+<<<<<<< HEAD
       child.render(rc);
+=======
+      child.render(rc, state, renderNotReadyShapes);
+>>>>>>> webgl-port
     }
   }
 

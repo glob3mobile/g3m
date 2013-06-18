@@ -17,16 +17,17 @@ class TransparentShapeWrapper : public OrderedRenderable {
 private:
   Shape* _shape;
   const double _squaredDistanceFromEye;
-  
   GLState* _parentGLState;
-
+  const bool _renderNotReadyShapes;
 public:
   TransparentShapeWrapper(Shape* shape,
                           double squaredDistanceFromEye,
-                          GLState* parentGLState) :
+                          GLState* parentGLState,
+                          bool renderNotReadyShapes) :
   _shape(shape),
   _squaredDistanceFromEye(squaredDistanceFromEye),
-  _parentGLState(parentGLState)
+  _parentGLState(parentGLState),
+  _renderNotReadyShapes(renderNotReadyShapes)
   {
   }
 
@@ -35,13 +36,28 @@ public:
   }
 
   void render(const G3MRenderContext* rc) {
-    _shape->render(rc, _parentGLState);
+    _shape->render(rc, _parentGLState, _renderNotReadyShapes);
   }
-
 };
 
+bool ShapesRenderer::isReadyToRender(const G3MRenderContext* rc) {
+  if (_renderNotReadyShapes) {
+    return true;
+  }
+
+  const int shapesCount = _shapes.size();
+  for (int i = 0; i < shapesCount; i++) {
+    Shape* shape = _shapes[i];
+    const bool shapeReady = shape->isReadyToRender(rc);
+    if (!shapeReady) {
+      return false;
+    }
+  }
+  return true;
+}
+
+
 void ShapesRenderer::render(const G3MRenderContext* rc) {
-  
   const Vector3D cameraPosition = rc->getCurrentCamera()->getCartesianPosition();
   
   //Setting camera matrixes
@@ -51,17 +67,34 @@ void ShapesRenderer::render(const G3MRenderContext* rc) {
   const int shapesCount = _shapes.size();
   for (int i = 0; i < shapesCount; i++) {
     Shape* shape = _shapes[i];
-    if (shape->isTransparent(rc)) {
-      const Planet* planet = rc->getPlanet();
-      const Vector3D shapePosition = planet->toCartesian( shape->getPosition() );
-      const double squaredDistanceFromEye = shapePosition.sub(cameraPosition).squaredLength();
+    if (shape->isEnable()) {
+      if (shape->isTransparent(rc)) {
+        const Planet* planet = rc->getPlanet();
+        const Vector3D shapePosition = planet->toCartesian( shape->getPosition() );
+        const double squaredDistanceFromEye = shapePosition.sub(cameraPosition).squaredLength();
 
-      rc->addOrderedRenderable(new TransparentShapeWrapper(shape, squaredDistanceFromEye, &_glState));
-    }
-    else {
-      shape->render(rc, &_glState);
+        rc->addOrderedRenderable(new TransparentShapeWrapper(shape,
+                                                             squaredDistanceFromEye,
+                                                             &_glState,
+                                                             _renderNotReadyShapes));
+      }
+      else {
+        shape->render(rc, &_glState, _renderNotReadyShapes);
+      }
     }
   }
+}
+
+void ShapesRenderer::removeAllShapes(bool deleteShapes) {
+  if (deleteShapes) {
+    const int shapesCount = _shapes.size();
+    for (int i = 0; i < shapesCount; i++) {
+      Shape* shape = _shapes[i];
+      delete shape;
+    }
+  }
+
+  _shapes.clear();
 }
 
 void ShapesRenderer::createGLState(){

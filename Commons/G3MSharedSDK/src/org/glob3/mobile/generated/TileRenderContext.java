@@ -26,6 +26,11 @@ package org.glob3.mobile.generated;
 //class LayerTilesRenderParameters;
 
 
+<<<<<<< HEAD
+=======
+//class EllipsoidShape;
+
+>>>>>>> webgl-port
 public class TileRenderContext
 {
   private final TileTessellator _tessellator;

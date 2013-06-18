@@ -61,11 +61,21 @@ public:
   void addNode(SGNode* child);
   
   virtual bool isReadyToRender(const G3MRenderContext* rc);
-  
-  virtual void rawRender(const G3MRenderContext* rc){}
-  
-  virtual void render(const G3MRenderContext* rc);
-  
+
+  virtual void prepareRender(const G3MRenderContext* rc);
+
+  virtual void cleanUpRender(const G3MRenderContext* rc);
+
+  virtual void rawRender(const G3MRenderContext* rc,
+                         const GLState& parentState);
+
+  virtual void render(const G3MRenderContext* rc,
+                      GLState* parentState,
+                      bool renderNotReadyShapes);
+
+  virtual const GLState* createState(const G3MRenderContext* rc,
+                                     const GLState& parentState);
+
   int getChildrenCount() const {
     return _children.size();
   }
@@ -77,8 +87,6 @@ public:
   virtual GLState* getGLState(GLState* parentGLState){ return parentGLState;}
   
   virtual void rawRender(const G3MRenderContext* rc, GLState* parentGLState){}
-  
-  virtual void render(const G3MRenderContext* rc, GLState* glState);
 };
 
 #endif

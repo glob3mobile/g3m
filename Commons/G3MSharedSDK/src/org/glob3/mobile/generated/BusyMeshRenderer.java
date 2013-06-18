@@ -141,8 +141,15 @@ public class BusyMeshRenderer extends LeafRenderer
       final int halfHeight = currentViewport[3] / 2;
       _projectionMatrix = MutableMatrix44D.createOrthographicProjectionMatrix(-halfWidth, halfWidth, -halfHeight, halfHeight, -halfWidth, halfWidth);
   
+<<<<<<< HEAD
       _glState.getGPUProgramState().setUniformMatrixValue("Projection", _projectionMatrix, false);
     }
+=======
+  
+    gl.pushMatrix();
+    MutableMatrix44D R1 = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_degrees), new Vector3D(0, 0, -1));
+    gl.multMatrixf(R1);
+>>>>>>> webgl-port
   
     _glState.getGLGlobalState().setClearColor(_backgroundColor);
     gl.clearScreen(_glState.getGLGlobalState());
