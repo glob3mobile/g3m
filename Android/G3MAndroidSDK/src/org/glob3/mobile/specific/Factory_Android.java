@@ -15,6 +15,9 @@ import org.glob3.mobile.generated.IIntBuffer;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IShortBuffer;
 import org.glob3.mobile.generated.ITimer;
+import org.glob3.mobile.generated.IWebSocket;
+import org.glob3.mobile.generated.IWebSocketListener;
+import org.glob3.mobile.generated.URL;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -183,6 +186,14 @@ public final class Factory_Android
    @Override
    public ICanvas createCanvas() {
       return new Canvas_Android();
+   }
+
+
+   @Override
+   public IWebSocket createWebSocket(final URL url,
+                                     final IWebSocketListener listener,
+                                     final boolean autodeleteListener) {
+      return new WebSocket_Android(url, listener, autodeleteListener);
    }
 
 }

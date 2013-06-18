@@ -13,6 +13,9 @@ import org.glob3.mobile.generated.IImageListener;
 import org.glob3.mobile.generated.IIntBuffer;
 import org.glob3.mobile.generated.IShortBuffer;
 import org.glob3.mobile.generated.ITimer;
+import org.glob3.mobile.generated.IWebSocket;
+import org.glob3.mobile.generated.IWebSocketListener;
+import org.glob3.mobile.generated.URL;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
@@ -152,6 +155,14 @@ public final class Factory_WebGL
    @Override
    public ICanvas createCanvas() {
       return new Canvas_WebGL();
+   }
+
+
+   @Override
+   public IWebSocket createWebSocket(final URL url,
+                                     final IWebSocketListener listener,
+                                     final boolean autodeleteListener) {
+      return new WebSocket_WebGL(url, listener, autodeleteListener);
    }
 
 }
