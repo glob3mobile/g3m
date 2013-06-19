@@ -291,6 +291,12 @@ void GPUProgram::onUnused(GL* gl){
 /**
  Must be called before drawing to apply Uniforms and Attributes new values
  */
+
+//int TexEnabledCounter = 0, TexDisabledCounter = 0;
+//int FlatColorEnabledCounter = 0, FlatColorDisabledCounter = 0;
+//int ColorEnabledCounter = 0, ColorDisabledCounter = 0;
+
+
 void GPUProgram::applyChanges(GL* gl){
   //ILogger::instance()->logInfo("GPUProgram %s applying changes", _name.c_str());
 #ifdef C_CODE
@@ -302,7 +308,36 @@ void GPUProgram::applyChanges(GL* gl){
     } else{
       ILogger::instance()->logError("Uniform " + u->getName() + " was not set.");
     }
+    
+//    if (u->getName().compare("EnableTexture") == 0){
+//      if (((GPUUniformValueBool*)u->getSetValue())->_value){
+//        TexEnabledCounter++;
+//      } else{
+//        TexDisabledCounter++;
+//      }
+//    }
+//    
+//    if (u->getName().compare("EnableFlatColor") == 0){
+//      if (((GPUUniformValueBool*)u->getSetValue())->_value){
+//        FlatColorEnabledCounter++;
+//      } else{
+//        FlatColorDisabledCounter++;
+//      }
+//    }
+//    
+//    if (u->getName().compare("EnableColorPerVertex") == 0){
+//      if (((GPUUniformValueBool*)u->getSetValue())->_value){
+//        ColorEnabledCounter++;
+//      } else{
+//        ColorDisabledCounter++;
+//      }
+//    }
   }
+  
+//  printf("TexEnabled: %f, FlatColorEnabled: %f, ColorEnabled: %f\n",
+//         ((double)TexEnabledCounter) / (TexEnabledCounter+ TexDisabledCounter),
+//         ((double)FlatColorEnabledCounter) / (FlatColorEnabledCounter+ FlatColorDisabledCounter),
+//         ((double)ColorEnabledCounter) / (ColorEnabledCounter+ ColorDisabledCounter));
   
   for (std::map<std::string, GPUAttribute*>::iterator iter = _attributes.begin(); iter != _attributes.end(); iter++) {
     

@@ -76,6 +76,7 @@ public:
   const IGLUniformID* getID() const{ return _id;}
   int getType() const{ return _type;}
   bool wasSet() const { return _value != NULL;}
+  GPUUniformValue* getSetValue() const { return _value;}
   
   void unset(){
     if (_value != NULL){
