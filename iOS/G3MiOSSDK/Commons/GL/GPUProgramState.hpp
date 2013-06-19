@@ -56,6 +56,8 @@ public:
   
   bool setUniformValue(const std::string& name, const Vector2D& v);
   
+  bool setUniformValue(const std::string& name, double x, double y);
+  
   bool setUniformValue(const std::string& name, double x, double y, double z, double w);
   
 //  bool setUniformValue(const std::string& name, const MutableMatrix44D* m);

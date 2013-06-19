@@ -480,15 +480,12 @@ void Mark::render(const G3MRenderContext* rc,
           rc->getFactory()->deleteImage(_textureImage);
           _textureImage = NULL;
         }
-      }
-      
-      if (_textureId != NULL &&
-          (rc->getCurrentCamera()->getWidth() != _viewportWidth ||
-           rc->getCurrentCamera()->getHeight() != _viewportHeight)){
-            createGLState(rc->getPlanet(), rc->getCurrentCamera()->getWidth(), rc->getCurrentCamera()->getHeight());
-          }
-      
-      if (_textureId != NULL) {
+      } else{
+        if (rc->getCurrentCamera()->getWidth() != _viewportWidth ||
+            rc->getCurrentCamera()->getHeight() != _viewportHeight){
+          createGLState(rc->getPlanet(), rc->getCurrentCamera()->getWidth(), rc->getCurrentCamera()->getHeight());
+        }
+        
         GL* gl = rc->getGL();
         
         GPUProgramManager& progManager = *rc->getGPUProgramManager();
@@ -505,4 +502,5 @@ void Mark::render(const G3MRenderContext* rc,
       }
     }
   }
+  
 }

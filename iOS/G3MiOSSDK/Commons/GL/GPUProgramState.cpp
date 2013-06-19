@@ -462,3 +462,7 @@ bool GPUProgramState::isLinkableToProgram(const GPUProgram& program) const{
   return true;
 #endif
 }
+
+bool GPUPsetUniformValue(const std::string& name, double x, double y){
+  
+}
