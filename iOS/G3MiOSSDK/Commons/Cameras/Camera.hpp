@@ -303,6 +303,15 @@ public:
     }
     return _modelMatrix;
   }
+  
+  // multiplication of model * projection
+  MutableMatrix44D getModelViewMatrix() const {
+    if (_dirtyFlags._modelViewMatrixDirty) {
+      _dirtyFlags._modelViewMatrixDirty = false;
+      _modelViewMatrix = getProjectionMatrix().multiply(getModelMatrix());
+    }
+    return _modelViewMatrix;
+  }
 
 private:
   const Angle getHeading(const Vector3D& normal) const;
@@ -366,15 +375,6 @@ private:
       _frustumData = calculateFrustumData();
     }
     return _frustumData;
-  }
-
-  // multiplication of model * projection
-  MutableMatrix44D getModelViewMatrix() const {
-    if (_dirtyFlags._modelViewMatrixDirty) {
-      _dirtyFlags._modelViewMatrixDirty = false;
-      _modelViewMatrix = getProjectionMatrix().multiply(getModelMatrix());
-    }
-    return _modelViewMatrix;
   }
 
   // intersection of view direction with globe in(x,y,z)

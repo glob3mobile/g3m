@@ -565,7 +565,7 @@ public:
   PeriodicalTask* periodicalTask = [self createSamplePeriodicalTask: &builder];
   builder.addPeriodicalTask(periodicalTask);
   
-  const bool logFPS = false;
+  const bool logFPS = true;
   builder.setLogFPS(logFPS);
   
   const bool logDownloaderStatistics = false;
