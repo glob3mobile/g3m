@@ -442,7 +442,6 @@ void Mark::createGLState(const Planet* planet, int viewportWidth, int viewportHe
                                0);           //Stride 0
   
   progState->setUniformValue("uTextureExtent", Vector2D(_textureWidth, _textureHeight));
-  progState->setUniformValue("uViewPortExtent", Vector2D( (double)_viewportWidth, (double)_viewportHeight ));
 }
 
 void Mark::render(const G3MRenderContext* rc,
@@ -452,7 +451,6 @@ void Mark::render(const G3MRenderContext* rc,
   const Vector3D* markPosition = getCartesianPosition(planet);
   
   const Vector3D markCameraVector = markPosition->sub(cameraPosition);
-  
   
   // mark will be renderered only if is renderable by distance and placed on a visible globe area
   bool renderableByDistance;

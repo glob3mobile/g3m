@@ -260,6 +260,9 @@ void MarksRenderer::onTouchEventRecived(const G3MEventContext* ec, const TouchEv
 
 void MarksRenderer::updateGLState(const G3MRenderContext* rc){
   GPUProgramState* progState = _glState.getGPUProgramState();
-  progState->setUniformMatrixValue("uProjection", rc->getCurrentCamera()->getProjectionMatrix(), false);
-  progState->setUniformMatrixValue("uModelview", rc->getCurrentCamera()->getModelMatrix(), false);
+  const Camera* cc = rc->getCurrentCamera();
+  progState->setUniformMatrixValue("uProjection", cc->getProjectionMatrix(), false);
+  progState->setUniformMatrixValue("uModelview", cc->getModelMatrix(), false);
+  
+  progState->setUniformValue("uViewPortExtent", Vector2D(cc->getWidth(), cc->getHeight()));
 }

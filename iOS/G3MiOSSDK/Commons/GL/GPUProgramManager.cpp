@@ -13,7 +13,7 @@
 GPUProgram* GPUProgramManager::getProgram(GL* gl, GLState* const glState) {
   GLState* thisGLState = glState;
   while (thisGLState != NULL) {
-    std::vector<std::string>* ui = glState->getGPUProgramState()->getUniformsNames();
+    std::vector<std::string>* ui = thisGLState->getGPUProgramState()->getUniformsNames();
     int sizeI = ui->size();
     for (int j = 0; j < sizeI; j++) {
       std::string& name = ui->at(j);
