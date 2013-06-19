@@ -21,6 +21,10 @@ GPUProgram* GPUProgramManager::getProgram(GL* gl, GLState* const glState) {
       if (name.compare("uViewPortExtent") == 0){
         return getProgram(gl, "Billboard");
       }
+      
+      if (name.compare("uFlatColor") == 0){
+        return getProgram(gl, "FlatColorMesh");
+      }
     }
     
     
@@ -28,5 +32,6 @@ GPUProgram* GPUProgramManager::getProgram(GL* gl, GLState* const glState) {
   }
   
   int WORKING_JM;
+  
   return getProgram(gl, "Default");
 }

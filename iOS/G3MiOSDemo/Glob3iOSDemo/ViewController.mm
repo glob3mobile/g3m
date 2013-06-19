@@ -580,6 +580,9 @@ public:
   GPUProgramSources sourcesBillboard = [self loadDefaultGPUProgramSourcesWithName:@"Billboard"];
   builder.addGPUProgramSources(sourcesBillboard);
   
+  GPUProgramSources sourcesFlatColorMesh = [self loadDefaultGPUProgramSourcesWithName:@"FlatColorMesh"];
+  builder.addGPUProgramSources(sourcesFlatColorMesh);
+  
   //  WidgetUserData* userData = NULL;
   //  builder.setUserData(userData);
   
