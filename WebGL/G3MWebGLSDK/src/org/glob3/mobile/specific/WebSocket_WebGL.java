@@ -44,7 +44,7 @@ public class WebSocket_WebGL
 				listener.@org.glob3.mobile.generated.IWebSocketListener::onClose(Lorg/glob3/mobile/generated/IWebSocket;)(webSocket);
 			}
 			socket.onerror = function(event) {
-				listener.@org.glob3.mobile.generated.IWebSocketListener::onError(Lorg/glob3/mobile/generated/IWebSocket;Ljava/lang/String;)(webSocket, event.data);
+				listener.@org.glob3.mobile.generated.IWebSocketListener::onError(Lorg/glob3/mobile/generated/IWebSocket;Ljava/lang/String;)(webSocket, "" + event);
 			}
 			socket.onmessage = function(event) {
 				if (typeof event.data === "string") {
