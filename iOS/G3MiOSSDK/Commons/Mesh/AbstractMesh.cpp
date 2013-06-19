@@ -133,9 +133,27 @@ void AbstractMesh::createGLState(){
   
   GPUProgramState& progState = *_glState.getGPUProgramState();
   
+  if (_flatColor != NULL && _colors == NULL){  //FlatColorMesh Shader
+    progState.setAttributeValue("Position",
+                                _vertices, 4, //The attribute is a float vector of 4 elements
+                                3,            //Our buffer contains elements of 3
+                                0,            //Index 0
+                                false,        //Not normalized
+                                0);           //Stride 0
+    progState.setUniformValue("FlatColor",
+                              (double)_flatColor->getRed(),
+                              (double)_flatColor->getGreen(),
+                              (double) _flatColor->getBlue(),
+                              (double) _flatColor->getAlpha());
+    if (_translationMatrix != NULL){
+      progState.setUniformMatrixValue("uModelview", *_translationMatrix, true);
+    }
+    return;
+  }
+  
+  
   progState.setUniformValue("PointSize", _pointSize);
   
-  //  progState.setAttributeEnabled("Position", true);
   progState.setAttributeValue("Position",
                               _vertices, 4, //The attribute is a float vector of 4 elements
                               3,            //Our buffer contains elements of 3
@@ -144,7 +162,6 @@ void AbstractMesh::createGLState(){
                               0);           //Stride 0
   
   if (_colors != NULL){
-    //    progState.setAttributeEnabled("Color", true);
     progState.setUniformValue("EnableColorPerVertex", true);
     progState.setAttributeValue("Color",
                                 _colors, 4,   //The attribute is a float vector of 4 elements RGBA
@@ -155,27 +172,26 @@ void AbstractMesh::createGLState(){
     
     progState.setUniformValue("ColorPerVertexIntensity", _colorsIntensity);
   } else{
-    //    progState.setAttributeEnabled("Color", false);
     progState.setAttributeDisabled("Color");
     progState.setUniformValue("EnableColorPerVertex", false);
     progState.setUniformValue("ColorPerVertexIntensity", (float)0.0);
   }
   
-  if (_flatColor != NULL){
-    progState.setUniformValue("EnableFlatColor", true);
-    progState.setUniformValue("FlatColor",
-                              (double)_flatColor->getRed(),
-                              (double)_flatColor->getGreen(),
-                              (double) _flatColor->getBlue(),
-                              (double) _flatColor->getAlpha());
-    
-    progState.setUniformValue("FlatColorIntensity", _colorsIntensity);
-  } else{
-    progState.setUniformValue("EnableFlatColor", false);
+//  if (_flatColor != NULL){
+//    progState.setUniformValue("EnableFlatColor", true);
+//    progState.setUniformValue("FlatColor",
+//                              (double)_flatColor->getRed(),
+//                              (double)_flatColor->getGreen(),
+//                              (double) _flatColor->getBlue(),
+//                              (double) _flatColor->getAlpha());
+//    
+//    progState.setUniformValue("FlatColorIntensity", _colorsIntensity);
+//  } else{
+//    progState.setUniformValue("EnableFlatColor", false);
     progState.setUniformValue("ColorPerVertexIntensity", (float)0.0);
-    progState.setUniformValue("FlatColor", (float)0.0, (float)0.0, (float)0.0, (float)0.0);
-    progState.setUniformValue("FlatColorIntensity", (float)0.0);
-  }
+//    progState.setUniformValue("FlatColor", (float)0.0, (float)0.0, (float)0.0, (float)0.0);
+//    progState.setUniformValue("FlatColorIntensity", (float)0.0);
+//  }
   
   if (_translationMatrix != NULL){
     progState.setUniformMatrixValue("uModelview", *_translationMatrix, true);

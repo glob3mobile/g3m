@@ -11,6 +11,11 @@
 #include "GLState.hpp"
 
 GPUProgram* GPUProgramManager::getProgram(GL* gl, GLState* const glState) {
+  
+  bool texture = false;
+  bool flatColor = false;
+  bool billboard = false;
+  
   GLState* thisGLState = glState;
   while (thisGLState != NULL) {
     std::vector<std::string>* ui = thisGLState->getGPUProgramState()->getUniformsNames();
@@ -19,19 +24,29 @@ GPUProgram* GPUProgramManager::getProgram(GL* gl, GLState* const glState) {
       std::string& name = ui->at(j);
       
       if (name.compare("uViewPortExtent") == 0){
-        return getProgram(gl, "Billboard");
+        billboard = true;
       }
       
-      if (name.compare("uFlatColor") == 0){
-        return getProgram(gl, "FlatColorMesh");
+      if (name.compare("FlatColor") == 0){
+        flatColor = true;
+      }
+      
+      if (name.compare("TranslationTexCoord")==0){
+        texture = true;
       }
     }
-    
     
     thisGLState = thisGLState->getParent();
   }
   
-  int WORKING_JM;
+  if (billboard){
+    return getProgram(gl, "Billboard");
+  } else{
+    if (flatColor && !texture){
+      return getProgram(gl, "FlatColorMesh");
+    } else{
+      return getProgram(gl, "Default"); 
+    }
+  }
   
-  return getProgram(gl, "Default");
 }

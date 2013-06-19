@@ -113,7 +113,7 @@ void GPUProgramState::linkToProgram(GPUProgram& prog) const{
       it != _uniformValues.end();
       it++){
     
-    std::string name = it->first;
+    const std::string& name = it->first;
     GPUUniformValue* v = it->second;
     
     const int type = v->getType();
@@ -130,7 +130,7 @@ void GPUProgramState::linkToProgram(GPUProgram& prog) const{
       it != _attributesValues.end();
       it++){
     
-    std::string name = it->first;
+    const std::string& name = it->first;
     GPUAttributeValue* v = it->second;
     
     GPUAttribute* a = NULL;
