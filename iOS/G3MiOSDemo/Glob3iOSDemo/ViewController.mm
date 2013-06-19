@@ -101,6 +101,7 @@
 
 #import <G3MiOSSDK/G3MCBuilder_iOS.hpp>
 #import <G3MiOSSDK/G3MCSceneDescription.hpp>
+#import <G3MiOSSDK/IWebSocketListener.hpp>
 
 
 class TestVisibleSectorListener : public VisibleSectorListener {
@@ -1783,8 +1784,41 @@ public:
       delete canvas;
     }
 
+    void testWebSocket(const G3MContext* context) {
+
+      class WSListener : public IWebSocketListener {
+        void onOpen(IWebSocket* ws) {
+
+        }
+
+        void onError(IWebSocket* ws,
+                     const std::string& error) {
+
+        }
+
+        void onMesssage(IWebSocket* ws,
+                        const std::string& message) {
+
+        }
+
+        void onClose(IWebSocket* ws) {
+
+        }
+
+      };
+
+      const URL wsURL("ws://127.0.0.1:8888/tube/scene/2g59wh610g6c1kmkt0l", false);
+      context->getFactory()->createWebSocket(wsURL,
+                                             new WSListener(),
+                                             true,
+                                             true);
+
+    }
+
     void run(const G3MContext* context) {
       printf("Running initialization Task\n");
+
+      testWebSocket(context);
       
       testCanvas(context->getFactory());
 

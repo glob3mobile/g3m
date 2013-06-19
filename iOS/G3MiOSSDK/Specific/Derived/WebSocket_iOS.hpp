@@ -10,20 +10,29 @@
 #define __G3MiOSSDK__WebSocket_iOS__
 
 #include "IWebSocket.hpp"
+@class SRWebSocket;
+@class WebSocketDelegate;
+
+NSString* toNSString(const std::string& cppStr);
+std::string toSTDString(NSString* nsString);
+
 
 class WebSocket_iOS : public IWebSocket {
+private:
+  SRWebSocket*       _srWebSocket;
+  WebSocketDelegate* _delegate;
+
 public:
   WebSocket_iOS(const URL& url,
                 IWebSocketListener* listener,
-                bool autodeleteListener) :
-  IWebSocket(url, listener, autodeleteListener)
-  {
-
-  }
+                bool autodeleteListener,
+                bool autodeleteWebSocket);
 
   void send(const std::string& message);
 
   void close();
+
+  ~WebSocket_iOS();
 
 };
 

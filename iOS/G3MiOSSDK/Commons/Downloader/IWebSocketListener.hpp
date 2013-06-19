@@ -10,6 +10,7 @@
 #define __G3MiOSSDK__IWebSocketListener__
 
 #include <string>
+class IWebSocket;
 
 class IWebSocketListener {
 public:
@@ -18,13 +19,15 @@ public:
 
   }
 
-  virtual void onOpen() = 0;
+  virtual void onOpen(IWebSocket* ws) = 0;
 
-  virtual void onError(const std::string& error) = 0;
+  virtual void onError(IWebSocket* ws,
+                       const std::string& error) = 0;
 
-  virtual void onMesssage(const std::string& message) = 0;
+  virtual void onMesssage(IWebSocket* ws,
+                          const std::string& message) = 0;
 
-  virtual void onClose() = 0;
+  virtual void onClose(IWebSocket* ws) = 0;
   
 };
 

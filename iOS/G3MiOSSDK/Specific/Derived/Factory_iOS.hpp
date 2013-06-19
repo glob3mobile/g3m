@@ -149,8 +149,12 @@ public:
 
   IWebSocket* createWebSocket(const URL& url,
                               IWebSocketListener* listener,
-                              bool autodeleteListener) {
-    return new WebSocket_iOS(url, listener, autodeleteListener);
+                              bool autodeleteListener,
+                              bool autodeleteWebSocket) const {
+    return new WebSocket_iOS(url,
+                             listener,
+                             autodeleteListener,
+                             autodeleteWebSocket);
   }
 
 };

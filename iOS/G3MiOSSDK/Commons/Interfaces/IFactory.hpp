@@ -95,7 +95,8 @@ public:
 
   virtual IWebSocket* createWebSocket(const URL& url,
                                       IWebSocketListener* listener,
-                                      bool autodeleteListener) = 0;
+                                      bool autodeleteListener,
+                                      bool autodeleteWebSocket) const = 0;
 
 };
 

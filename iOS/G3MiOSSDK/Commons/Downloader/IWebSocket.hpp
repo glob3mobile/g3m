@@ -23,21 +23,37 @@ private:
 #endif
 
   IWebSocketListener* _listener;
-  bool                _autodeleteListener;
+  const bool          _autodeleteListener;
+  const bool          _autodeleteWebSocket;
+
 
 protected:
-
   IWebSocket(const URL& url,
              IWebSocketListener* listener,
-             bool autodeleteListener) :
+             bool autodeleteListener,
+             bool autodeleteWebSocket) :
   _url(url),
   _listener(listener),
-  _autodeleteListener(autodeleteListener)
+  _autodeleteListener(autodeleteListener),
+  _autodeleteWebSocket(autodeleteWebSocket)
   {
 
   }
 
+
+
 public:
+  URL getURL() const {
+    return _url;
+  }
+  
+  IWebSocketListener* getListener() const {
+    return _listener;
+  }
+
+  bool getAutodeleteWebSocket() const {
+    return _autodeleteWebSocket;
+  }
 
   virtual ~IWebSocket();
 

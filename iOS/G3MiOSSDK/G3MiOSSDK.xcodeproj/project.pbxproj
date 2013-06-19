@@ -84,10 +84,16 @@
 		CF3F3FF01620FB2A00A92CC8 /* Vector4D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF3F3FEE1620FB2A00A92CC8 /* Vector4D.cpp */; };
 		CF4027CC1770DC8400D5A80C /* IWebSocketListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF4027CA1770DC8400D5A80C /* IWebSocketListener.cpp */; };
 		CF4027CF1770DCB400D5A80C /* IWebSocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF4027CD1770DCB300D5A80C /* IWebSocket.cpp */; };
-		CF4027D21770DD5C00D5A80C /* WebSocket_iOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF4027D01770DD5C00D5A80C /* WebSocket_iOS.cpp */; };
+		CF4027D21770DD5C00D5A80C /* WebSocket_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF4027D01770DD5C00D5A80C /* WebSocket_iOS.mm */; };
 		CF4027D31770DE7B00D5A80C /* IWebSocketListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF4027CB1770DC8400D5A80C /* IWebSocketListener.hpp */; };
 		CF4027D41770DE7B00D5A80C /* IWebSocket.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF4027CE1770DCB400D5A80C /* IWebSocket.hpp */; };
 		CF4027D51770DEA800D5A80C /* WebSocket_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF4027D11770DD5C00D5A80C /* WebSocket_iOS.hpp */; };
+		CF4027DD1770E7B900D5A80C /* base64.c in Sources */ = {isa = PBXBuildFile; fileRef = CF4027D61770E7B900D5A80C /* base64.c */; };
+		CF4027DE1770E7B900D5A80C /* NSData+SRB64Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = CF4027D91770E7B900D5A80C /* NSData+SRB64Additions.m */; };
+		CF4027DF1770E7B900D5A80C /* SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = CF4027DC1770E7B900D5A80C /* SRWebSocket.m */; };
+		CF4027E11770E84700D5A80C /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CF4027E01770E84700D5A80C /* libicucore.dylib */; };
+		CF4027E31770E84E00D5A80C /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF4027E21770E84E00D5A80C /* CFNetwork.framework */; };
+		CF4027E51770E85500D5A80C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF4027E41770E85500D5A80C /* Security.framework */; };
 		CF41B7DB1726BFDC007DECD8 /* IImageUtils.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D89FBD7F1725446C00FFA541 /* IImageUtils.hpp */; };
 		CF41B7DC1726BFDC007DECD8 /* RectangleF.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D89FBD7A172543D100FFA541 /* RectangleF.hpp */; };
 		CF45E025164851C5004746BB /* AbstractMeshShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF45E023164851C5004746BB /* AbstractMeshShape.cpp */; };
@@ -922,8 +928,18 @@
 		CF4027CB1770DC8400D5A80C /* IWebSocketListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IWebSocketListener.hpp; path = Commons/Downloader/IWebSocketListener.hpp; sourceTree = "<group>"; };
 		CF4027CD1770DCB300D5A80C /* IWebSocket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IWebSocket.cpp; path = Commons/Downloader/IWebSocket.cpp; sourceTree = "<group>"; };
 		CF4027CE1770DCB400D5A80C /* IWebSocket.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IWebSocket.hpp; path = Commons/Downloader/IWebSocket.hpp; sourceTree = "<group>"; };
-		CF4027D01770DD5C00D5A80C /* WebSocket_iOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = WebSocket_iOS.cpp; path = Specific/Derived/WebSocket_iOS.cpp; sourceTree = "<group>"; };
+		CF4027D01770DD5C00D5A80C /* WebSocket_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = WebSocket_iOS.mm; path = Specific/Derived/WebSocket_iOS.mm; sourceTree = "<group>"; };
 		CF4027D11770DD5C00D5A80C /* WebSocket_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = WebSocket_iOS.hpp; path = Specific/Derived/WebSocket_iOS.hpp; sourceTree = "<group>"; };
+		CF4027D61770E7B900D5A80C /* base64.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = base64.c; sourceTree = "<group>"; };
+		CF4027D71770E7B900D5A80C /* base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = base64.h; sourceTree = "<group>"; };
+		CF4027D81770E7B900D5A80C /* NSData+SRB64Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+SRB64Additions.h"; sourceTree = "<group>"; };
+		CF4027D91770E7B900D5A80C /* NSData+SRB64Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+SRB64Additions.m"; sourceTree = "<group>"; };
+		CF4027DA1770E7B900D5A80C /* SocketRocket-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SocketRocket-Prefix.pch"; sourceTree = "<group>"; };
+		CF4027DB1770E7B900D5A80C /* SRWebSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRWebSocket.h; sourceTree = "<group>"; };
+		CF4027DC1770E7B900D5A80C /* SRWebSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRWebSocket.m; sourceTree = "<group>"; };
+		CF4027E01770E84700D5A80C /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
+		CF4027E21770E84E00D5A80C /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		CF4027E41770E85500D5A80C /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		CF45E023164851C5004746BB /* AbstractMeshShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AbstractMeshShape.cpp; path = Commons/Rendererers/AbstractMeshShape.cpp; sourceTree = "<group>"; };
 		CF45E024164851C5004746BB /* AbstractMeshShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = AbstractMeshShape.hpp; path = Commons/Rendererers/AbstractMeshShape.hpp; sourceTree = "<group>"; };
 		CF47030915EFB4C000426B8B /* ThreadUtils_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ThreadUtils_iOS.mm; path = Specific/Derived/ThreadUtils_iOS.mm; sourceTree = "<group>"; };
@@ -1276,6 +1292,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				D8EEF3B91577924D003FEB5E /* Foundation.framework in Frameworks */,
+				CF4027E51770E85500D5A80C /* Security.framework in Frameworks */,
+				CF4027E31770E84E00D5A80C /* CFNetwork.framework in Frameworks */,
+				CF4027E11770E84700D5A80C /* libicucore.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1285,6 +1304,13 @@
 		383BD3771577EDA20012AC53 /* Specific */ = {
 			isa = PBXGroup;
 			children = (
+				CF4027D61770E7B900D5A80C /* base64.c */,
+				CF4027D71770E7B900D5A80C /* base64.h */,
+				CF4027D81770E7B900D5A80C /* NSData+SRB64Additions.h */,
+				CF4027D91770E7B900D5A80C /* NSData+SRB64Additions.m */,
+				CF4027DA1770E7B900D5A80C /* SocketRocket-Prefix.pch */,
+				CF4027DB1770E7B900D5A80C /* SRWebSocket.h */,
+				CF4027DC1770E7B900D5A80C /* SRWebSocket.m */,
 				CF8B21BD15DD345D0068601A /* SQDatabase.h */,
 				CF8B21BE15DD345D0068601A /* SQDatabase.m */,
 				CC14B636157D34AB00793C92 /* GL */,
@@ -1338,7 +1364,7 @@
 				CF47030A15EFB4C000426B8B /* ThreadUtils_iOS.hpp */,
 				CF47030915EFB4C000426B8B /* ThreadUtils_iOS.mm */,
 				CF31CBF315878BE40085E8F1 /* Timer_iOS.hpp */,
-				CF4027D01770DD5C00D5A80C /* WebSocket_iOS.cpp */,
+				CF4027D01770DD5C00D5A80C /* WebSocket_iOS.mm */,
 				CF4027D11770DD5C00D5A80C /* WebSocket_iOS.hpp */,
 			);
 			name = Derived;
@@ -1939,7 +1965,6 @@
 		D8EEF3AA1577924D003FEB5E = {
 			isa = PBXGroup;
 			children = (
-				CFCCFE0A16F506210082F383 /* GLKit.framework */,
 				E70B56DF16D3CCCD00C5FFFB /* Resources */,
 				383BD3881577EDE30012AC53 /* Commons */,
 				D8EEF3B71577924D003FEB5E /* Frameworks */,
@@ -1960,7 +1985,11 @@
 		D8EEF3B71577924D003FEB5E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CF4027E21770E84E00D5A80C /* CFNetwork.framework */,
 				D8EEF3B81577924D003FEB5E /* Foundation.framework */,
+				CFCCFE0A16F506210082F383 /* GLKit.framework */,
+				CF4027E01770E84700D5A80C /* libicucore.dylib */,
+				CF4027E41770E85500D5A80C /* Security.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -2276,7 +2305,10 @@
 				CF07DD0D175D32CC00839F5D /* Color.cpp in Sources */,
 				CF4027CC1770DC8400D5A80C /* IWebSocketListener.cpp in Sources */,
 				CF4027CF1770DCB400D5A80C /* IWebSocket.cpp in Sources */,
-				CF4027D21770DD5C00D5A80C /* WebSocket_iOS.cpp in Sources */,
+				CF4027D21770DD5C00D5A80C /* WebSocket_iOS.mm in Sources */,
+				CF4027DD1770E7B900D5A80C /* base64.c in Sources */,
+				CF4027DE1770E7B900D5A80C /* NSData+SRB64Additions.m in Sources */,
+				CF4027DF1770E7B900D5A80C /* SRWebSocket.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
