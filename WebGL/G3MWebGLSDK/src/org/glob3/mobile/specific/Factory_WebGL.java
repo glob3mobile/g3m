@@ -161,8 +161,9 @@ public final class Factory_WebGL
    @Override
    public IWebSocket createWebSocket(final URL url,
                                      final IWebSocketListener listener,
-                                     final boolean autodeleteListener) {
-      return new WebSocket_WebGL(url, listener, autodeleteListener);
+                                     final boolean autodeleteListener,
+                                     final boolean autodeleteWebSocket) {
+      return new WebSocket_WebGL(url, listener, autodeleteListener, autodeleteWebSocket);
    }
 
 }

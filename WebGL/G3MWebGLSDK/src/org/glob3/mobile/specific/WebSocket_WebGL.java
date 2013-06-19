@@ -13,8 +13,22 @@ public class WebSocket_WebGL
 
    WebSocket_WebGL(final URL url,
                    final IWebSocketListener listener,
-                   final boolean autodeleteListener) {
-      super(url, listener, autodeleteListener);
+                   final boolean autodeleteListener,
+                   final boolean autodeleteWebSocket) {
+      super(url, listener, autodeleteListener, autodeleteWebSocket);
    }
+
+
+   @Override
+   public void send(final String message) {
+      throw new RuntimeException("NOT YET IMPLEMENTED!");
+   }
+
+
+   @Override
+   public void close() {
+      throw new RuntimeException("NOT YET IMPLEMENTED!");
+   }
+
 
 }

@@ -192,8 +192,9 @@ public final class Factory_Android
    @Override
    public IWebSocket createWebSocket(final URL url,
                                      final IWebSocketListener listener,
-                                     final boolean autodeleteListener) {
-      return new WebSocket_Android(url, listener, autodeleteListener);
+                                     final boolean autodeleteListener,
+                                     final boolean autodeleteWebSocket) {
+      return new WebSocket_Android(url, listener, autodeleteListener, autodeleteWebSocket);
    }
 
 }
