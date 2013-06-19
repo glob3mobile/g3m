@@ -60,7 +60,7 @@ public:
   virtual void send(const std::string& message) = 0;
 
   virtual void close() = 0;
-  
+
 };
 
 #endif

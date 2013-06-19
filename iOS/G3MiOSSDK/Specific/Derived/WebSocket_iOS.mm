@@ -105,7 +105,7 @@ IWebSocket(url, listener, autodeleteListener, autodeleteWebSocket)
   }
   else {
     listener->onError(this, "Invalid URL");
-    if (autodeleteWebSocket) {
+    if (getAutodeleteWebSocket()) {
       delete this;
     }
   }

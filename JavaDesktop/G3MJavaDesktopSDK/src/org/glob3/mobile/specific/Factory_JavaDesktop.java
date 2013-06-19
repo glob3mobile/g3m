@@ -115,7 +115,8 @@ public class Factory_JavaDesktop
    @Override
    public IWebSocket createWebSocket(final URL url,
                                      final IWebSocketListener listener,
-                                     final boolean autodeleteListener) {
+                                     final boolean autodeleteListener,
+                                     final boolean autodeleteWebSocket) {
       throw new RuntimeException("Not yet implemented");
    }
 

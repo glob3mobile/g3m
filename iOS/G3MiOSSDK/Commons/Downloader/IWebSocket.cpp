@@ -10,6 +10,8 @@
 
 #include "IWebSocketListener.hpp"
 
+#include "IStringBuilder.hpp"
+
 IWebSocket::~IWebSocket() {
   if (_autodeleteListener) {
     delete _listener;
