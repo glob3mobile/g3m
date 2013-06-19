@@ -147,7 +147,5 @@ void BusyQuadRenderer::createGLState() const{
   
   //Modelview and projection
   _modelviewMatrix = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, 1));
-  progState.setUniformMatrixValue("Modelview", _modelviewMatrix, false); //Program state will store a pointer
-  
-  progState.setUniformMatrixValue("Projection", _projectionMatrix, false);
+  _glState.getGPUProgramState()->setUniformMatrixValue("uModelview", _projectionMatrix.multiply(_modelviewMatrix), false);
 }

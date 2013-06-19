@@ -61,8 +61,7 @@ void ShapesRenderer::render(const G3MRenderContext* rc) {
   const Vector3D cameraPosition = rc->getCurrentCamera()->getCartesianPosition();
   
   //Setting camera matrixes
-  _glState.getGPUProgramState()->setUniformMatrixValue("Modelview", rc->getCurrentCamera()->getModelMatrix(), false);
-  _glState.getGPUProgramState()->setUniformMatrixValue("Projection", rc->getCurrentCamera()->getProjectionMatrix(), false);
+  _glState.getGPUProgramState()->setUniformMatrixValue("uModelview", rc->getCurrentCamera()->getModelViewMatrix(), false);
   
   const int shapesCount = _shapes.size();
   for (int i = 0; i < shapesCount; i++) {

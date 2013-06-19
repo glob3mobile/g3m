@@ -178,7 +178,7 @@ void AbstractMesh::createGLState(){
   }
   
   if (_translationMatrix != NULL){
-    progState.setUniformMatrixValue("Modelview", *_translationMatrix, true);
+    progState.setUniformMatrixValue("uModelview", *_translationMatrix, true);
   }
 }
 

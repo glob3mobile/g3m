@@ -36,7 +36,7 @@ public:
   _z(z),
   _translationMatrix(MutableMatrix44D::createTranslationMatrix(_x, _y, _z))
   {
-    _glState.getGPUProgramState()->setUniformMatrixValue("Modelview", _translationMatrix, true);
+    _glState.getGPUProgramState()->setUniformMatrixValue("uModelview", _translationMatrix, true);
   }
   
   GLState* getGLState(GLState* parentGLState){

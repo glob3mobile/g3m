@@ -38,7 +38,7 @@ public:
   _angle(angle),
   _rotationMatrix(MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_angle), Vector3D(_x, _y, _z)))
   {
-    _glState.getGPUProgramState()->setUniformMatrixValue("Modelview", _rotationMatrix, true);
+    _glState.getGPUProgramState()->setUniformMatrixValue("uModelview", _rotationMatrix, true);
   }
 
   GLState* getGLState(GLState* parentGLState){
