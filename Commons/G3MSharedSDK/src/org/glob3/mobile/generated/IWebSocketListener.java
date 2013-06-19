@@ -16,12 +16,22 @@ package org.glob3.mobile.generated;
 //
 
 
-public class IWebSocketListener
+//class IWebSocket;
+
+public abstract class IWebSocketListener
 {
 
   public void dispose()
   {
 
   }
+
+  public abstract void onOpen(IWebSocket ws);
+
+  public abstract void onError(IWebSocket ws, String error);
+
+  public abstract void onMesssage(IWebSocket ws, String message);
+
+  public abstract void onClose(IWebSocket ws);
 
 }

@@ -84,6 +84,6 @@ public abstract class IFactory
 
   public abstract ICanvas createCanvas();
 
-  public abstract IWebSocket createWebSocket(URL url, IWebSocketListener listener, boolean autodeleteListener);
+  public abstract IWebSocket createWebSocket(URL url, IWebSocketListener listener, boolean autodeleteListener, boolean autodeleteWebSocket);
 
 }
