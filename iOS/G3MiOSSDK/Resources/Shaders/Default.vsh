@@ -5,7 +5,7 @@
 //
 
 attribute vec4 aPosition;
-attribute vec2 TextureCoord;
+attribute vec2 aTextureCoord;
 attribute vec4 Color;
 
 uniform mediump vec2 TranslationTexCoord;
@@ -22,7 +22,7 @@ varying vec2 TextureCoordOut;
 void main() {
   gl_Position = uModelview * aPosition;
   
-  TextureCoordOut = (TextureCoord * ScaleTexCoord) + TranslationTexCoord;
+  TextureCoordOut = (aTextureCoord * ScaleTexCoord) + TranslationTexCoord;
   
   VertexColor = Color;
   

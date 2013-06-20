@@ -32,7 +32,7 @@
 //    _initialized = true;
 //  }
 //  
-//  progState.setAttributeEnabled("TextureCoord", true);
+//  progState.setAttributeEnabled("aTextureCoord", true);
 //  progState.setUniformValue("EnableTexture", true);
 //  
 //  GLGlobalState *state = NULL; //new GLGlobalState(parentState);
@@ -48,7 +48,7 @@
 //    state->bindTexture(_glTextureId);
 ////    state->setTextureCoordinates(_texCoords, 2, 0);
 //    
-//    progState.setAttributeValue("TextureCoord",
+//    progState.setAttributeValue("aTextureCoord",
 //                                _texCoords, 2,
 //                                2,
 //                                0,
@@ -101,14 +101,14 @@ void LazyTextureMapping::modifyGPUProgramState(GPUProgramState& progState) const
     _initialized = true;
   }
   
-  progState.setAttributeEnabled("TextureCoord", true);
+  progState.setAttributeEnabled("aTextureCoord", true);
   progState.setUniformValue("EnableTexture", true);
   
   if (_texCoords != NULL) {
     progState.setUniformValue("ScaleTexCoord", _scale.asVector2D());
     progState.setUniformValue("TranslationTexCoord", _translation.asVector2D());
     
-    progState.setAttributeValue("TextureCoord",
+    progState.setAttributeValue("aTextureCoord",
                                 _texCoords, 2,
                                 2,
                                 0,

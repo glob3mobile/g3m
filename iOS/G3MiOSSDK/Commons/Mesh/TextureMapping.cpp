@@ -24,9 +24,9 @@
 //    
 //    
 //    //Activating Attribute in Shader program
-//    progState.setAttributeEnabled("TextureCoord", true);
+//    progState.setAttributeEnabled("aTextureCoord", true);
 //    progState.setUniformValue("EnableTexture", true);
-//    progState.setAttributeValue("TextureCoord",
+//    progState.setAttributeValue("aTextureCoord",
 //                                _texCoords, 2,
 //                                2,
 //                                0,
@@ -63,9 +63,9 @@ void SimpleTextureMapping::modifyGLGlobalState(GLGlobalState& GLGlobalState) con
 void SimpleTextureMapping::modifyGPUProgramState(GPUProgramState& progState) const{
   if (_texCoords != NULL) {
     //Activating Attribute in Shader program
-    progState.setAttributeEnabled("TextureCoord", true);
+    progState.setAttributeEnabled("aTextureCoord", true);
     progState.setUniformValue("EnableTexture", true);
-    progState.setAttributeValue("TextureCoord",
+    progState.setAttributeValue("aTextureCoord",
                                 _texCoords, 2,
                                 2,
                                 0,

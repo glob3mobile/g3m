@@ -52,7 +52,7 @@ SGGeometryNode::~SGGeometryNode() {
 //  }
 //  
 //  if (_uv != NULL){
-//    progState->setAttributeValue("TextureCoord",
+//    progState->setAttributeValue("aTextureCoord",
 //                                 _uv, 2,
 //                                 2,
 //                                 0,
@@ -103,7 +103,7 @@ void SGGeometryNode::rawRender(const G3MRenderContext* rc,
 //  }
 //  
 //  if (_uv != NULL){
-//    progState.setAttributeValue("TextureCoord",
+//    progState.setAttributeValue("aTextureCoord",
 //                                _uv, 2,
 //                                2,
 //                                0,
@@ -144,7 +144,7 @@ void SGGeometryNode::createGLState() const{
   }
   
   if (_uv != NULL){
-    progState.setAttributeValue("TextureCoord",
+    progState.setAttributeValue("aTextureCoord",
                                 _uv, 2,
                                 2,
                                 0,
