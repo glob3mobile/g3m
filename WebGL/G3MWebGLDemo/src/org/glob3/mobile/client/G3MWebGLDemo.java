@@ -161,6 +161,11 @@ public class G3MWebGLDemo
                public void onClose(final IWebSocket ws) {
                   ILogger.instance().logError(ws + " closed!");
                }
+
+
+               @Override
+               public void dispose() {
+               }
             };
             context.getFactory().createWebSocket(url, listener, true, true);
 
