@@ -8,6 +8,10 @@ public class G3MCBuilder_TubeSceneListener implements IWebSocketListener
      _builder = builder;
   }
 
+  public void dispose()
+  {
+  }
+
   public final void onOpen(IWebSocket ws)
   {
   }
