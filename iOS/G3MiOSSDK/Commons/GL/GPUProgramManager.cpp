@@ -27,7 +27,7 @@ GPUProgram* GPUProgramManager::getProgram(GL* gl, GLState* const glState) {
         billboard = true;
       }
       
-      if (name.compare("FlatColor") == 0){
+      if (name.compare("uFlatColor") == 0){
         flatColor = true;
       }
       

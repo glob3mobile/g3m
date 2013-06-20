@@ -77,7 +77,7 @@ void DummyRenderer::drawFace(GL* gl, const GLGlobalState& parentState,
 {
   
 //  GPUProgramState progState(parentProgramState);
-//  progState.setUniformValue("FlatColor", color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+//  progState.setUniformValue("uFlatColor", color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
 //  progState.setUniformValue("FlatColorIntensity", (float)1.0);
 //
 //  MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(translation);

@@ -15,3 +15,8 @@ void GPUUniformValue::setValueToLinkedUniform() const{
     _uniform->set((GPUUniformValue*)this);
   }
 }
+
+void GPUUniform::createMetadata(){
+  
+  
+}

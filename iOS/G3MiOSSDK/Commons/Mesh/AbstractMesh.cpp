@@ -140,7 +140,7 @@ void AbstractMesh::createGLState(){
                                 0,            //Index 0
                                 false,        //Not normalized
                                 0);           //Stride 0
-    progState.setUniformValue("FlatColor",
+    progState.setUniformValue("uFlatColor",
                               (double)_flatColor->getRed(),
                               (double)_flatColor->getGreen(),
                               (double) _flatColor->getBlue(),
@@ -179,7 +179,7 @@ void AbstractMesh::createGLState(){
   
 //  if (_flatColor != NULL){
 //    progState.setUniformValue("EnableFlatColor", true);
-//    progState.setUniformValue("FlatColor",
+//    progState.setUniformValue("uFlatColor",
 //                              (double)_flatColor->getRed(),
 //                              (double)_flatColor->getGreen(),
 //                              (double) _flatColor->getBlue(),
@@ -189,7 +189,7 @@ void AbstractMesh::createGLState(){
 //  } else{
 //    progState.setUniformValue("EnableFlatColor", false);
     progState.setUniformValue("ColorPerVertexIntensity", (float)0.0);
-//    progState.setUniformValue("FlatColor", (float)0.0, (float)0.0, (float)0.0, (float)0.0);
+//    progState.setUniformValue("uFlatColor", (float)0.0, (float)0.0, (float)0.0, (float)0.0);
 //    progState.setUniformValue("FlatColorIntensity", (float)0.0);
 //  }
   

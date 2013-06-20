@@ -51,6 +51,9 @@ public:
 
 
 class GPUUniform{
+  
+  void createMetadata();
+  
 protected:
   const std::string _name;
   const IGLUniformID* _id;
@@ -58,6 +61,12 @@ protected:
   bool _dirty;
   GPUUniformValue* _value;
   const int _type;
+  
+  //Uniform metadata based in our shaders
+  long _key;
+  long _group;
+  long _priority;
+  
 public:
   
   virtual ~GPUUniform(){
@@ -77,6 +86,11 @@ public:
   int getType() const{ return _type;}
   bool wasSet() const { return _value != NULL;}
   GPUUniformValue* getSetValue() const { return _value;}
+  
+  //Uniform metadata based in our shaders
+  long getKey() const { return _key;}
+  long getGroup() const { return _group;}
+  long getPriority() const { return _priority;}
   
   void unset(){
     if (_value != NULL){

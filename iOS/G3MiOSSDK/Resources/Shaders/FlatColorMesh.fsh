@@ -4,8 +4,8 @@
 //  Created by José Miguel Santana Núñez
 //
 
-uniform lowp vec4 FlatColor;
+uniform lowp vec4 uFlatColor;
 
 void main() {
-  gl_FragColor = FlatColor;
+  gl_FragColor = uFlatColor;
 }

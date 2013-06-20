@@ -10,7 +10,7 @@ varying mediump vec4 VertexColor;
 
 uniform sampler2D Sampler;
 uniform bool EnableTexture;
-uniform lowp vec4 FlatColor;
+uniform lowp vec4 uFlatColor;
 
 uniform bool EnableColorPerVertex;
 uniform bool EnableFlatColor;
@@ -25,7 +25,7 @@ void main() {
     if (EnableFlatColor || EnableColorPerVertex){
       lowp vec4 color;
       if (EnableFlatColor) {
-        color = FlatColor;
+        color = uFlatColor;
         if (EnableColorPerVertex) {
           color = color * VertexColor;
         }
@@ -45,11 +45,11 @@ void main() {
     if (EnableColorPerVertex) {
       gl_FragColor = VertexColor;
       if (EnableFlatColor) {
-        gl_FragColor = gl_FragColor * FlatColor;
+        gl_FragColor = gl_FragColor * uFlatColor;
       }
     }
     else {
-      gl_FragColor = FlatColor;
+      gl_FragColor = uFlatColor;
     }
     
   }

@@ -139,7 +139,7 @@ void BusyQuadRenderer::createGLState() const{
   
   progState.setUniformValue("ColorPerVertexIntensity", (float)0.0);
   progState.setUniformValue("EnableFlatColor", false);
-  progState.setUniformValue("FlatColor", (float)0.0, (float)0.0, (float)0.0, (float)0.0);
+  progState.setUniformValue("uFlatColor", (float)0.0, (float)0.0, (float)0.0, (float)0.0);
   progState.setUniformValue("FlatColorIntensity", (float)0.0);
   
   progState.setAttributeEnabled("TextureCoord", false);
