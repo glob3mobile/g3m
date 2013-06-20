@@ -242,9 +242,12 @@ public:
 - (void) initWithG3MCBuilder
 {
   G3MCSceneChangeListener* sceneListener = NULL;
+  const bool useWebSockets = true;
   
   _g3mcBuilder =  new G3MCBuilder_iOS([self G3MWidget],
                                       URL("http://192.168.0.103:8080/g3mc-server", false),
+                                      URL("ws://192.168.0.103:8888/tube", false),
+                                      useWebSockets,
                                       "2g59wh610g6c1kmkt0l",
                                       sceneListener);
 

@@ -27,6 +27,14 @@ class Layer;
 class LayerSet;
 class G3MCSceneDescription;
 class Color;
+class JSONBaseObject;
+class JSONObject;
+class TimeInterval;
+class MapQuestLayer;
+class BingMapsLayer;
+class CartoDBLayer;
+class MapBoxLayer;
+class WMSLayer;
 
 #include "URL.hpp"
 
@@ -75,10 +83,14 @@ private:
 
 #ifdef C_CODE
   const URL         _serverURL;
+  const URL         _tubesURL;
 #endif
 #ifdef JAVA_CODE
   private final URL _serverURL;
+  private final URL _tubesURL;
 #endif
+
+  const bool _useWebSockets;
 
   G3MCSceneChangeListener* _sceneListener;
 
@@ -123,8 +135,33 @@ private:
 
   void resetG3MWidget();
 
+  GInitializationTask* createInitializationTask();
+
+
+
+  Layer* parseLayer(const JSONBaseObject* jsonBaseObjectLayer) const;
+  
+  MapQuestLayer* parseMapQuestLayer(const JSONObject* jsonBaseLayer,
+                                    const TimeInterval& timeToCache) const;
+
+  BingMapsLayer* parseBingMapsLayer(const JSONObject* jsonBaseLayer,
+                                    const TimeInterval& timeToCache);
+
+  CartoDBLayer* parseCartoDBLayer(const JSONObject* jsonBaseLayer,
+                                  const TimeInterval& timeToCache) const;
+
+  BingMapsLayer* parseBingMapsLayer(const JSONObject* jsonBaseLayer,
+                                    const TimeInterval& timeToCache) const;
+
+  MapBoxLayer* parseMapBoxLayer(const JSONObject* jsonBaseLayer,
+                                const TimeInterval& timeToCache) const;
+
+  WMSLayer* parseWMSLayer(const JSONObject* jsonBaseLayer) const;
+
 protected:
   G3MCBuilder(const URL& serverURL,
+              const URL& tubesURL,
+              bool useWebSockets,
               const std::string& sceneId,
               G3MCSceneChangeListener* sceneListener);
   
@@ -173,16 +210,23 @@ public:
   void setSceneBackgroundColor(const Color& backgroundColor);
 
   /** Private to G3M, don't call it */
-  const URL createSceneDescriptionURL() const;
+  const URL createPollingSceneDescriptionURL() const;
+
+  /** Private to G3M, don't call it */
+  const URL createTubeSceneURL() const;
 
   /** Private to G3M, don't call it */
   void rawChangeScene(const std::string& sceneId);
 
-  void changeScene(const std::string& sceneId);
-
+  /** Private to G3M, don't call it */
   void requestScenesDescriptions(G3MCBuilderScenesDescriptionsListener* listener,
                                  bool autoDelete = true);
 
+  /** Private to G3M, don't call it */
+  void parseSceneDescription(const std::string& json,
+                             const URL& url);
+
+  void changeScene(const std::string& sceneId);
 };
 
 #endif

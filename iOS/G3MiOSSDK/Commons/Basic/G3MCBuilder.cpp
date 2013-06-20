@@ -42,12 +42,17 @@
 #include "MapBoxLayer.hpp"
 #include "WMSLayer.hpp"
 #include "LayerTilesRenderParameters.hpp"
-
+#include "IWebSocketListener.hpp"
+#include "IWebSocket.hpp"
 
 G3MCBuilder::G3MCBuilder(const URL& serverURL,
+                         const URL& tubesURL,
+                         bool useWebSockets,
                          const std::string& sceneId,
                          G3MCSceneChangeListener* sceneListener) :
 _serverURL(serverURL),
+_tubesURL(tubesURL),
+_useWebSockets(useWebSockets),
 _sceneId(sceneId),
 _sceneTimestamp(-1),
 _sceneBaseLayer(NULL),
@@ -170,138 +175,215 @@ Renderer* G3MCBuilder::createBusyRenderer() {
   return new BusyMeshRenderer(Color::newFromRGBA(0, 0, 0, 1));
 }
 
+MapQuestLayer* G3MCBuilder::parseMapQuestLayer(const JSONObject* jsonBaseLayer,
+                                               const TimeInterval& timeToCache) const {
+  const std::string imagery = jsonBaseLayer->getAsString("imagery", "<imagery not present>");
+  if (imagery.compare("OpenAerial") == 0) {
+    return MapQuestLayer::newOpenAerial(timeToCache);
+  }
+
+  // defaults to OSM
+  return MapQuestLayer::newOSM(timeToCache);
+}
+
+BingMapsLayer* G3MCBuilder::parseBingMapsLayer(const JSONObject* jsonBaseLayer,
+                                               const TimeInterval& timeToCache) const {
+  const std::string key = jsonBaseLayer->getAsString("key", "");
+  const std::string imagerySet = jsonBaseLayer->getAsString("imagerySet", "Aerial");
+
+  return new BingMapsLayer(imagerySet, key, timeToCache);
+}
+
+CartoDBLayer* G3MCBuilder::parseCartoDBLayer(const JSONObject* jsonBaseLayer,
+                                             const TimeInterval& timeToCache) const {
+  const std::string userName = jsonBaseLayer->getAsString("userName", "");
+  const std::string table    = jsonBaseLayer->getAsString("table",    "");
+
+  return new CartoDBLayer(userName, table, timeToCache);
+}
+
+MapBoxLayer* G3MCBuilder::parseMapBoxLayer(const JSONObject* jsonBaseLayer,
+                                           const TimeInterval& timeToCache) const {
+  const std::string mapKey = jsonBaseLayer->getAsString("mapKey", "");
+
+  return new MapBoxLayer(mapKey, timeToCache);
+}
+
+WMSLayer* G3MCBuilder::parseWMSLayer(const JSONObject* jsonBaseLayer) const {
+
+  const std::string mapLayer = jsonBaseLayer->getAsString("layerName", "");
+  const URL mapServerURL = URL(jsonBaseLayer->getAsString("server", ""), false);
+  const std::string versionStr = jsonBaseLayer->getAsString("version", "");
+  WMSServerVersion mapServerVersion = WMS_1_1_0;
+  if (versionStr.compare("WMS_1_3_0") == 0) {
+    mapServerVersion = WMS_1_3_0;
+  }
+  const std::string queryLayer = jsonBaseLayer->getAsString("queryLayer", "");
+  const std::string style = jsonBaseLayer->getAsString("style", "");
+  const URL queryServerURL = URL("", false);
+  const WMSServerVersion queryServerVersion = mapServerVersion;
+  const double lowerLat = jsonBaseLayer->getAsNumber("lowerLat", -90.0);
+  const double lowerLon = jsonBaseLayer->getAsNumber("lowerLon", -180.0);
+  const double upperLat = jsonBaseLayer->getAsNumber("upperLat", 90.0);
+  const double upperLon = jsonBaseLayer->getAsNumber("upperLon", 180.0);
+  const Sector sector = Sector(Geodetic2D(Angle::fromDegrees(lowerLat), Angle::fromDegrees(lowerLon)),
+                               Geodetic2D(Angle::fromDegrees(upperLat), Angle::fromDegrees(upperLon)));
+  std::string imageFormat = jsonBaseLayer->getAsString("imageFormat", "image/png");
+  if (imageFormat.compare("JPG") == 0) {
+    imageFormat = "image/jpeg";
+  }
+  const std::string srs = jsonBaseLayer->getAsString("projection", "EPSG_4326");
+  LayerTilesRenderParameters* layerTilesRenderParameters = NULL;
+  if (srs.compare("EPSG_4326") == 0) {
+    layerTilesRenderParameters = LayerTilesRenderParameters::createDefaultNonMercator(Sector::fullSphere());
+  }
+  else if (srs.compare("EPSG_900913") == 0) {
+    layerTilesRenderParameters = LayerTilesRenderParameters::createDefaultMercator(0, 17);
+  }
+  const bool isTransparent = jsonBaseLayer->getAsBoolean("transparent", false);
+  const double expiration = jsonBaseLayer->getAsNumber("expiration", 0);
+  const long long milliseconds = IMathUtils::instance()->round(expiration);
+  const TimeInterval timeToCache = TimeInterval::fromMilliseconds(milliseconds);
+  const bool readExpired = jsonBaseLayer->getAsBoolean("acceptExpiration", false);
+
+  return new WMSLayer(mapLayer,
+                      mapServerURL,
+                      mapServerVersion,
+                      queryLayer,
+                      queryServerURL,
+                      queryServerVersion,
+                      sector,
+                      imageFormat,
+                      (srs.compare("EPSG_4326") == 0) ? "EPSG:4326" : "EPSG:900913",
+                      style,
+                      isTransparent,
+                      NULL,
+                      timeToCache,
+                      readExpired,
+                      layerTilesRenderParameters);
+}
+
+
+Layer* G3MCBuilder::parseLayer(const JSONBaseObject* jsonBaseObjectLayer) const {
+
+  if (jsonBaseObjectLayer->asNull() != NULL) {
+    return NULL;
+  }
+
+  const TimeInterval defaultTimeToCache = TimeInterval::fromDays(30);
+
+  const JSONObject* jsonBaseLayer = jsonBaseObjectLayer->asObject();
+  if (jsonBaseLayer == NULL) {
+    ILogger::instance()->logError("Layer is not a json object");
+    return NULL;
+  }
+
+  const std::string layerType = jsonBaseLayer->getAsString("layer", "<layer not present>");
+  if (layerType.compare("OSM") == 0) {
+    return new OSMLayer(defaultTimeToCache);
+  }
+  else if (layerType.compare("MapQuest") == 0) {
+    return parseMapQuestLayer(jsonBaseLayer, defaultTimeToCache);
+  }
+  else if (layerType.compare("BingMaps") == 0) {
+    return parseBingMapsLayer(jsonBaseLayer, defaultTimeToCache);
+  }
+  else if (layerType.compare("CartoDB") == 0) {
+    return parseCartoDBLayer(jsonBaseLayer, defaultTimeToCache);
+  }
+  else if (layerType.compare("MapBox") == 0) {
+    return parseMapBoxLayer(jsonBaseLayer, defaultTimeToCache);
+  }
+  else if (layerType.compare("WMS") == 0) {
+    return parseWMSLayer(jsonBaseLayer);
+  }
+  else {
+    ILogger::instance()->logError("Unsupported layer type \"%s\"", layerType.c_str());
+    return NULL;
+  }
+}
+
+
+void G3MCBuilder::parseSceneDescription(const std::string& json,
+                                        const URL& url) {
+  const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(json, true);
+
+  if (jsonBaseObject == NULL) {
+    ILogger::instance()->logError("Can't parse SceneJSON from %s",
+                                  url.getPath().c_str());
+  }
+  else {
+    const JSONObject* jsonObject = jsonBaseObject->asObject();
+    if (jsonObject == NULL) {
+      ILogger::instance()->logError("Invalid SceneJSON (1)");
+    }
+    else {
+      const JSONString* error = jsonObject->getAsString("error");
+      if (error == NULL) {
+        const int timestamp = (int) jsonObject->getAsNumber("ts", 0);
+
+        if (getSceneTimestamp() != timestamp) {
+          const JSONString* jsonUser = jsonObject->getAsString("user");
+          if (jsonUser != NULL) {
+            setSceneUser(jsonUser->value());
+          }
+
+          //id
+
+          const JSONString* jsonName = jsonObject->getAsString("name");
+          if (jsonName != NULL) {
+            setSceneName(jsonName->value());
+          }
+
+          const JSONString* jsonDescription = jsonObject->getAsString("description");
+          if (jsonDescription != NULL) {
+            setSceneDescription(jsonDescription->value());
+          }
+
+          const JSONString* jsonBGColor = jsonObject->getAsString("bgColor");
+          if (jsonBGColor != NULL) {
+            const Color* bgColor = Color::parse(jsonBGColor->value());
+            if (bgColor == NULL) {
+              ILogger::instance()->logError("Invalid format in attribute 'bgColor' (%s)",
+                                            jsonBGColor->value().c_str());
+            }
+            else {
+              setSceneBackgroundColor(*bgColor);
+              delete bgColor;
+            }
+          }
+
+          const JSONBaseObject* jsonBaseLayer = jsonObject->get("baseLayer");
+          if (jsonBaseLayer != NULL) {
+            setSceneBaseLayer( parseLayer(jsonBaseLayer) );
+          }
+
+          const JSONBaseObject* jsonOverlayLayer = jsonObject->get("overlayLayer");
+          if (jsonOverlayLayer != NULL) {
+            setSceneOverlayLayer( parseLayer(jsonOverlayLayer) );
+          }
+
+          //tags
+
+          setSceneTimestamp(timestamp);
+        }
+      }
+      else {
+        ILogger::instance()->logError("Server Error: %s",
+                                      error->value().c_str());
+      }
+    }
+
+    delete jsonBaseObject;
+  }
+
+}
+
 
 class G3MCBuilder_SceneDescriptionBufferListener : public IBufferDownloadListener {
 private:
   G3MCBuilder* _builder;
-  
-  MapQuestLayer* parseMapQuestLayer(const JSONObject* jsonBaseLayer,
-                                    const TimeInterval& timeToCache) const {
-    const std::string imagery = jsonBaseLayer->getAsString("imagery", "<imagery not present>");
-    if (imagery.compare("OpenAerial") == 0) {
-      return MapQuestLayer::newOpenAerial(timeToCache);
-    }
-    
-    // defaults to OSM
-    return MapQuestLayer::newOSM(timeToCache);
-  }
-  
-  BingMapsLayer* parseBingMapsLayer(const JSONObject* jsonBaseLayer,
-                                    const TimeInterval& timeToCache) const {
-    const std::string key = jsonBaseLayer->getAsString("key", "");
-    const std::string imagerySet = jsonBaseLayer->getAsString("imagerySet", "Aerial");
-    
-    return new BingMapsLayer(imagerySet, key, timeToCache);
-  }
-  
-  CartoDBLayer* parseCartoDBLayer(const JSONObject* jsonBaseLayer,
-                                  const TimeInterval& timeToCache) const {
-    const std::string userName = jsonBaseLayer->getAsString("userName", "");
-    const std::string table    = jsonBaseLayer->getAsString("table",    "");
-    
-    return new CartoDBLayer(userName, table, timeToCache);
-  }
-  
-  MapBoxLayer* parseMapBoxLayer(const JSONObject* jsonBaseLayer,
-                                const TimeInterval& timeToCache) const {
-    const std::string mapKey = jsonBaseLayer->getAsString("mapKey", "");
-    
-    return new MapBoxLayer(mapKey, timeToCache);
-  }
-  
-  WMSLayer* parseWMSLayer(const JSONObject* jsonBaseLayer) const {
-    
-    const std::string mapLayer = jsonBaseLayer->getAsString("layerName", "");
-    const URL mapServerURL = URL(jsonBaseLayer->getAsString("server", ""), false);
-    const std::string versionStr = jsonBaseLayer->getAsString("version", "");
-    WMSServerVersion mapServerVersion = WMS_1_1_0;
-    if (versionStr.compare("WMS_1_3_0") == 0) {
-      mapServerVersion = WMS_1_3_0;
-    }
-    const std::string queryLayer = jsonBaseLayer->getAsString("queryLayer", "");
-    const std::string style = jsonBaseLayer->getAsString("style", "");
-    const URL queryServerURL = URL("", false);
-    const WMSServerVersion queryServerVersion = mapServerVersion;
-    const double lowerLat = jsonBaseLayer->getAsNumber("lowerLat", -90.0);
-    const double lowerLon = jsonBaseLayer->getAsNumber("lowerLon", -180.0);
-    const double upperLat = jsonBaseLayer->getAsNumber("upperLat", 90.0);
-    const double upperLon = jsonBaseLayer->getAsNumber("upperLon", 180.0);
-    const Sector sector = Sector(Geodetic2D(Angle::fromDegrees(lowerLat), Angle::fromDegrees(lowerLon)),
-                                 Geodetic2D(Angle::fromDegrees(upperLat), Angle::fromDegrees(upperLon)));
-    std::string imageFormat = jsonBaseLayer->getAsString("imageFormat", "image/png");
-    if (imageFormat.compare("JPG") == 0) {
-      imageFormat = "image/jpeg";
-    }
-    const std::string srs = jsonBaseLayer->getAsString("projection", "EPSG_4326");
-    LayerTilesRenderParameters* layerTilesRenderParameters = NULL;
-    if (srs.compare("EPSG_4326") == 0) {
-      layerTilesRenderParameters = LayerTilesRenderParameters::createDefaultNonMercator(Sector::fullSphere());
-    }
-    else if (srs.compare("EPSG_900913") == 0) {
-      layerTilesRenderParameters = LayerTilesRenderParameters::createDefaultMercator(0, 17);
-    }
-    const bool isTransparent = jsonBaseLayer->getAsBoolean("transparent", false);
-    const double expiration = jsonBaseLayer->getAsNumber("expiration", 0);
-    const long long milliseconds = IMathUtils::instance()->round(expiration);
-    const TimeInterval timeToCache = TimeInterval::fromMilliseconds(milliseconds);
-    const bool readExpired = jsonBaseLayer->getAsBoolean("acceptExpiration", false);
-    
-    return new WMSLayer(mapLayer,
-                        mapServerURL,
-                        mapServerVersion,
-                        queryLayer,
-                        queryServerURL,
-                        queryServerVersion,
-                        sector,
-                        imageFormat,
-                        (srs.compare("EPSG_4326") == 0) ? "EPSG:4326" : "EPSG:900913",
-                        style,
-                        isTransparent,
-                        NULL,
-                        timeToCache,
-                        readExpired,
-                        layerTilesRenderParameters);
-  }
-  
-  Layer* parseLayer(const JSONBaseObject* jsonBaseObjectLayer) const {
 
-    if (jsonBaseObjectLayer->asNull() != NULL) {
-      return NULL;
-    }
-
-    const TimeInterval defaultTimeToCache = TimeInterval::fromDays(30);
-
-    const JSONObject* jsonBaseLayer = jsonBaseObjectLayer->asObject();
-    if (jsonBaseLayer == NULL) {
-      ILogger::instance()->logError("Layer is not a json object");
-      return NULL;
-    }
-
-    const std::string layerType = jsonBaseLayer->getAsString("layer", "<layer not present>");
-    if (layerType.compare("OSM") == 0) {
-      return new OSMLayer(defaultTimeToCache);
-    }
-    else if (layerType.compare("MapQuest") == 0) {
-      return parseMapQuestLayer(jsonBaseLayer, defaultTimeToCache);
-    }
-    else if (layerType.compare("BingMaps") == 0) {
-      return parseBingMapsLayer(jsonBaseLayer, defaultTimeToCache);
-    }
-    else if (layerType.compare("CartoDB") == 0) {
-      return parseCartoDBLayer(jsonBaseLayer, defaultTimeToCache);
-    }
-    else if (layerType.compare("MapBox") == 0) {
-      return parseMapBoxLayer(jsonBaseLayer, defaultTimeToCache);
-    }
-    else if (layerType.compare("WMS") == 0) {
-      return parseWMSLayer(jsonBaseLayer);
-    }
-    else {
-      ILogger::instance()->logError("Unsupported layer type \"%s\"", layerType.c_str());
-      return NULL;
-    }
-  }
-  
 public:
   G3MCBuilder_SceneDescriptionBufferListener(G3MCBuilder* builder) :
   _builder(builder)
@@ -312,82 +394,83 @@ public:
   void onDownload(const URL& url,
                   IByteBuffer* buffer,
                   bool expired) {
-    
-    const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(buffer, true);
-    
-    if (jsonBaseObject == NULL) {
-      ILogger::instance()->logError("Can't parse SceneJSON from %s",
-                                    url.getPath().c_str());
-    }
-    else {
-      const JSONObject* jsonObject = jsonBaseObject->asObject();
-      if (jsonObject == NULL) {
-        ILogger::instance()->logError("Invalid SceneJSON (1)");
-      }
-      else {
-        const JSONString* error = jsonObject->getAsString("error");
-        if (error == NULL) {
-          const int timestamp = (int) jsonObject->getAsNumber("ts", 0);
-          
-          if (_builder->getSceneTimestamp() != timestamp) {
-            const JSONString* jsonUser = jsonObject->getAsString("user");
-            if (jsonUser != NULL) {
-              _builder->setSceneUser(jsonUser->value());
-            }
 
-            //id
-            
-            const JSONString* jsonName = jsonObject->getAsString("name");
-            if (jsonName != NULL) {
-              _builder->setSceneName(jsonName->value());
-            }
-
-            const JSONString* jsonDescription = jsonObject->getAsString("description");
-            if (jsonDescription != NULL) {
-              _builder->setSceneDescription(jsonDescription->value());
-            }
-
-            const JSONString* jsonBGColor = jsonObject->getAsString("bgColor");
-            if (jsonBGColor != NULL) {
-              const Color* bgColor = Color::parse(jsonBGColor->value());
-              if (bgColor == NULL) {
-                ILogger::instance()->logError("Invalid format in attribute 'bgColor' (%s)",
-                                              jsonBGColor->value().c_str());
-              }
-              else {
-                _builder->setSceneBackgroundColor(*bgColor);
-                delete bgColor;
-              }
-            }
-
-            const JSONBaseObject* jsonBaseLayer = jsonObject->get("baseLayer");
-            if (jsonBaseLayer != NULL) {
-              _builder->setSceneBaseLayer( parseLayer(jsonBaseLayer) );
-            }
-            
-            const JSONBaseObject* jsonOverlayLayer = jsonObject->get("overlayLayer");
-            if (jsonOverlayLayer != NULL) {
-              _builder->setSceneOverlayLayer( parseLayer(jsonOverlayLayer) );
-            }
-
-            //tags
-            
-            _builder->setSceneTimestamp(timestamp);
-          }
-        }
-        else {
-          ILogger::instance()->logError("Server Error: %s",
-                                        error->value().c_str());
-        }
-      }
-      
-      delete jsonBaseObject;
-    }
-    
+    _builder->parseSceneDescription(buffer->getAsString(), url);
     delete buffer;
     
-    //    int __TODO_flag_initialization_task_as_initialized;
-    //    _initializationTask->setInitialized(true);
+//    const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(buffer, true);
+//    
+//    if (jsonBaseObject == NULL) {
+//      ILogger::instance()->logError("Can't parse SceneJSON from %s",
+//                                    url.getPath().c_str());
+//    }
+//    else {
+//      const JSONObject* jsonObject = jsonBaseObject->asObject();
+//      if (jsonObject == NULL) {
+//        ILogger::instance()->logError("Invalid SceneJSON (1)");
+//      }
+//      else {
+//        const JSONString* error = jsonObject->getAsString("error");
+//        if (error == NULL) {
+//          const int timestamp = (int) jsonObject->getAsNumber("ts", 0);
+//          
+//          if (_builder->getSceneTimestamp() != timestamp) {
+//            const JSONString* jsonUser = jsonObject->getAsString("user");
+//            if (jsonUser != NULL) {
+//              _builder->setSceneUser(jsonUser->value());
+//            }
+//
+//            //id
+//            
+//            const JSONString* jsonName = jsonObject->getAsString("name");
+//            if (jsonName != NULL) {
+//              _builder->setSceneName(jsonName->value());
+//            }
+//
+//            const JSONString* jsonDescription = jsonObject->getAsString("description");
+//            if (jsonDescription != NULL) {
+//              _builder->setSceneDescription(jsonDescription->value());
+//            }
+//
+//            const JSONString* jsonBGColor = jsonObject->getAsString("bgColor");
+//            if (jsonBGColor != NULL) {
+//              const Color* bgColor = Color::parse(jsonBGColor->value());
+//              if (bgColor == NULL) {
+//                ILogger::instance()->logError("Invalid format in attribute 'bgColor' (%s)",
+//                                              jsonBGColor->value().c_str());
+//              }
+//              else {
+//                _builder->setSceneBackgroundColor(*bgColor);
+//                delete bgColor;
+//              }
+//            }
+//
+//            const JSONBaseObject* jsonBaseLayer = jsonObject->get("baseLayer");
+//            if (jsonBaseLayer != NULL) {
+//              _builder->setSceneBaseLayer( parseLayer(jsonBaseLayer) );
+//            }
+//            
+//            const JSONBaseObject* jsonOverlayLayer = jsonObject->get("overlayLayer");
+//            if (jsonOverlayLayer != NULL) {
+//              _builder->setSceneOverlayLayer( parseLayer(jsonOverlayLayer) );
+//            }
+//
+//            //tags
+//            
+//            _builder->setSceneTimestamp(timestamp);
+//          }
+//        }
+//        else {
+//          ILogger::instance()->logError("Server Error: %s",
+//                                        error->value().c_str());
+//        }
+//      }
+//      
+//      delete jsonBaseObject;
+//    }
+//
+//    delete buffer;
+
   }
   
   void onError(const URL& url) {
@@ -444,7 +527,7 @@ public:
 //};
 
 
-class G3MCBuilder_PullScenePeriodicalTask : public GTask {
+class G3MCBuilder_PollingScenePeriodicalTask : public GTask {
 private:
   G3MCBuilder* _builder;
   
@@ -454,7 +537,7 @@ private:
   URL getURL() const {
     const int sceneTimestamp = _builder->getSceneTimestamp();
     
-    const URL _sceneDescriptionURL = _builder->createSceneDescriptionURL();
+    const URL _sceneDescriptionURL = _builder->createPollingSceneDescriptionURL();
     
     if (sceneTimestamp < 0) {
       return _sceneDescriptionURL;
@@ -475,7 +558,7 @@ private:
   
   
 public:
-  G3MCBuilder_PullScenePeriodicalTask(G3MCBuilder* builder) :
+  G3MCBuilder_PollingScenePeriodicalTask(G3MCBuilder* builder) :
   _builder(builder),
   _requestId(-1)
   {
@@ -543,9 +626,14 @@ void G3MCBuilder::setSceneOverlayLayer(Layer* overlayLayer) {
   }
 }
 
+const URL G3MCBuilder::createTubeSceneURL() const {
+  const std::string tubesPath = _tubesURL.getPath();
 
-const URL G3MCBuilder::createSceneDescriptionURL() const {
-  std::string serverPath = _serverURL.getPath();
+  return URL(tubesPath + "/scene/" + _sceneId, false);
+}
+
+const URL G3MCBuilder::createPollingSceneDescriptionURL() const {
+  const std::string serverPath = _serverURL.getPath();
   
   return URL(serverPath + "/scenes/" + _sceneId, false);
 }
@@ -553,10 +641,12 @@ const URL G3MCBuilder::createSceneDescriptionURL() const {
 
 std::vector<PeriodicalTask*>* G3MCBuilder::createPeriodicalTasks() {
   std::vector<PeriodicalTask*>* periodicalTasks = new std::vector<PeriodicalTask*>();
-  
-  periodicalTasks->push_back(new PeriodicalTask(TimeInterval::fromSeconds(2),
-                                                new G3MCBuilder_PullScenePeriodicalTask(this)));
-  
+
+  if (!_useWebSockets) {
+    periodicalTasks->push_back(new PeriodicalTask(TimeInterval::fromSeconds(2),
+                                                  new G3MCBuilder_PollingScenePeriodicalTask(this)));
+  }
+
   return periodicalTasks;
 }
 
@@ -567,10 +657,70 @@ IStorage* G3MCBuilder::getStorage() {
   return _storage;
 }
 
+class G3MCBuilder_TubeSceneListener : public IWebSocketListener {
+private:
+  G3MCBuilder* _builder;
+
+public:
+  G3MCBuilder_TubeSceneListener(G3MCBuilder* builder) :
+  _builder(builder)
+  {
+  }
+
+  void onOpen(IWebSocket* ws) {
+  }
+
+  void onError(IWebSocket* ws,
+               const std::string& error) {
+    ILogger::instance()->logError("Error '%s' on Tube '%s' Error: ",
+                                  error.c_str(),
+                                  ws->getURL().getPath().c_str());
+  }
+
+  void onMesssage(IWebSocket* ws,
+                  const std::string& message) {
+    _builder->parseSceneDescription(message, ws->getURL());
+  }
+
+  void onClose(IWebSocket* ws) {
+    ILogger::instance()->logError("Tube '%s' Closed",
+                                  ws->getURL().getPath().c_str());
+  }
+};
+
+class G3MCBuilder_WebSocketConnector : public GInitializationTask {
+private:
+  G3MCBuilder* _builder;
+
+public:
+  G3MCBuilder_WebSocketConnector(G3MCBuilder* builder) :
+  _builder(builder)
+  {
+  }
+
+  void run(const G3MContext* context) {
+    const bool autodeleteListener  = true;
+    const bool autodeleteWebSocket = true;
+
+    context->getFactory()->createWebSocket(_builder->createTubeSceneURL(),
+                                           new G3MCBuilder_TubeSceneListener(_builder),
+                                           autodeleteListener,
+                                           autodeleteWebSocket);
+  }
+
+  bool isDone(const G3MContext* context) {
+    return true;
+  }
+};
+
+
+GInitializationTask* G3MCBuilder::createInitializationTask() {
+  return _useWebSockets ? new G3MCBuilder_WebSocketConnector(this) : NULL;
+}
 
 G3MWidget* G3MCBuilder::create() {
   if (_g3mWidget != NULL) {
-    ILogger::instance()->logError("The G3MWidget was already created, can't create more than one");
+    ILogger::instance()->logError("The G3MWidget was already created, can't be created more than once");
     return NULL;
   }
   
@@ -587,7 +737,7 @@ G3MWidget* G3MCBuilder::create() {
   //Color backgroundColor = Color::fromRGBA(0, 0.1f, 0.2f, 1);
   
   // GInitializationTask* initializationTask = new G3MCInitializationTask(this, createSceneDescriptionURL());
-  GInitializationTask* initializationTask = NULL;
+  GInitializationTask* initializationTask = createInitializationTask();
   
   std::vector<PeriodicalTask*>* periodicalTasks = createPeriodicalTasks();
 
@@ -617,7 +767,6 @@ G3MWidget* G3MCBuilder::create() {
   
   return _g3mWidget;
 }
-
 
 class G3MCBuilder_ScenesDescriptionsBufferListener : public IBufferDownloadListener {
 private:
@@ -725,7 +874,7 @@ public:
 };
 
 const URL G3MCBuilder::createScenesDescriptionsURL() const {
-  std::string serverPath = _serverURL.getPath();
+  const std::string serverPath = _serverURL.getPath();
   
   return URL(serverPath + "/scenes/", false);
 }
