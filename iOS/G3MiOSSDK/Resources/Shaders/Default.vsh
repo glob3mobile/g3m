@@ -13,7 +13,7 @@ uniform mediump vec2 uScaleTexCoord;
 
 uniform mat4 uModelview;
 
-uniform float PointSize;
+uniform float uPointSize;
 
 varying vec4 VertexColor;
 varying vec2 TextureCoordOut;
@@ -26,5 +26,5 @@ void main() {
   
   VertexColor = aColor;
   
-  gl_PointSize = PointSize;
+  gl_PointSize = uPointSize;
 }

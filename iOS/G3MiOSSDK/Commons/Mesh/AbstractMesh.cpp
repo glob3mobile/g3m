@@ -152,7 +152,7 @@ void AbstractMesh::createGLState(){
   }
   
   
-  progState.setUniformValue("PointSize", _pointSize);
+  progState.setUniformValue("uPointSize", _pointSize);
   
   progState.setAttributeValue("aPosition",
                               _vertices, 4, //The attribute is a float vector of 4 elements
