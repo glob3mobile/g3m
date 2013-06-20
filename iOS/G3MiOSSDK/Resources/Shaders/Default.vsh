@@ -6,10 +6,10 @@
 
 attribute vec4 aPosition;
 attribute vec2 aTextureCoord;
-attribute vec4 Color;
+attribute vec4 aColor;
 
-uniform mediump vec2 TranslationTexCoord;
-uniform mediump vec2 ScaleTexCoord;
+uniform mediump vec2 uTranslationTexCoord;
+uniform mediump vec2 uScaleTexCoord;
 
 uniform mat4 uModelview;
 
@@ -22,9 +22,9 @@ varying vec2 TextureCoordOut;
 void main() {
   gl_Position = uModelview * aPosition;
   
-  TextureCoordOut = (aTextureCoord * ScaleTexCoord) + TranslationTexCoord;
+  TextureCoordOut = (aTextureCoord * uScaleTexCoord) + uTranslationTexCoord;
   
-  VertexColor = Color;
+  VertexColor = aColor;
   
   gl_PointSize = PointSize;
 }

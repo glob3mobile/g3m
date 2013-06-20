@@ -33,8 +33,8 @@
 //                                false,
 //                                0);
 //    
-//    progState.setUniformValue("ScaleTexCoord", _scale.asVector2D());
-//    progState.setUniformValue("TranslationTexCoord", _translation.asVector2D());
+//    progState.setUniformValue("uScaleTexCoord", _scale.asVector2D());
+//    progState.setUniformValue("uTranslationTexCoord", _translation.asVector2D());
 //  
 //    state->bindTexture(_glTextureId);
 //  }
@@ -72,8 +72,8 @@ void SimpleTextureMapping::modifyGPUProgramState(GPUProgramState& progState) con
                                 false,
                                 0);
     
-    progState.setUniformValue("ScaleTexCoord", _scale.asVector2D());
-    progState.setUniformValue("TranslationTexCoord", _translation.asVector2D());
+    progState.setUniformValue("uScaleTexCoord", _scale.asVector2D());
+    progState.setUniformValue("uTranslationTexCoord", _translation.asVector2D());
   }
   else {
     ILogger::instance()->logError("SimpleTextureMapping::bind() with _texCoords == NULL");

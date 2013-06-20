@@ -41,8 +41,8 @@
 ////  state->enableTexture2D();
 //
 //  if (_texCoords != NULL) {
-//    progState.setUniformValue("ScaleTexCoord", _scale.asVector2D());
-//    progState.setUniformValue("TranslationTexCoord", _translation.asVector2D());
+//    progState.setUniformValue("uScaleTexCoord", _scale.asVector2D());
+//    progState.setUniformValue("uTranslationTexCoord", _translation.asVector2D());
 ////    state->scaleTextureCoordinates(_scale);
 ////    state->translateTextureCoordinates(_translation);
 //    state->bindTexture(_glTextureId);
@@ -105,8 +105,8 @@ void LazyTextureMapping::modifyGPUProgramState(GPUProgramState& progState) const
   progState.setUniformValue("EnableTexture", true);
   
   if (_texCoords != NULL) {
-    progState.setUniformValue("ScaleTexCoord", _scale.asVector2D());
-    progState.setUniformValue("TranslationTexCoord", _translation.asVector2D());
+    progState.setUniformValue("uScaleTexCoord", _scale.asVector2D());
+    progState.setUniformValue("uTranslationTexCoord", _translation.asVector2D());
     
     progState.setAttributeValue("aTextureCoord",
                                 _texCoords, 2,

@@ -163,7 +163,7 @@ void AbstractMesh::createGLState(){
   
   if (_colors != NULL){
     progState.setUniformValue("EnableColorPerVertex", true);
-    progState.setAttributeValue("Color",
+    progState.setAttributeValue("aColor",
                                 _colors, 4,   //The attribute is a float vector of 4 elements RGBA
                                 4,            //Our buffer contains elements of 4
                                 0,            //Index 0
@@ -172,7 +172,7 @@ void AbstractMesh::createGLState(){
     
     progState.setUniformValue("ColorPerVertexIntensity", _colorsIntensity);
   } else{
-    progState.setAttributeDisabled("Color");
+    progState.setAttributeDisabled("aColor");
     progState.setUniformValue("EnableColorPerVertex", false);
     progState.setUniformValue("ColorPerVertexIntensity", (float)0.0);
   }

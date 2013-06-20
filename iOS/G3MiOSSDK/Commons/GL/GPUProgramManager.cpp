@@ -31,7 +31,7 @@ GPUProgram* GPUProgramManager::getProgram(GL* gl, GLState* const glState) {
         flatColor = true;
       }
       
-      if (name.compare("TranslationTexCoord")==0){
+      if (name.compare("uTranslationTexCoord")==0){
         texture = true;
       }
     }

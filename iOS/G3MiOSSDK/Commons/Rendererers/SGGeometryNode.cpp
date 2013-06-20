@@ -36,9 +36,9 @@ SGGeometryNode::~SGGeometryNode() {
 //                               0);           //Stride 0
 //  
 //  if (_colors != NULL){
-//    progState->setAttributeEnabled("Color", true);
+//    progState->setAttributeEnabled("aColor", true);
 //    progState->setUniformValue("EnableColorPerVertex", true);
-//    progState->setAttributeValue("Color",
+//    progState->setAttributeValue("aColor",
 //                                 _colors, 4,   //The attribute is a float vector of 4 elements RGBA
 //                                 4,            //Our buffer contains elements of 4
 //                                 0,            //Index 0
@@ -47,7 +47,7 @@ SGGeometryNode::~SGGeometryNode() {
 //    const float colorsIntensity = 1;
 //    progState->setUniformValue("FlatColorIntensity", colorsIntensity);
 //  } else{
-//    progState->setAttributeEnabled("Color", false);
+//    progState->setAttributeEnabled("aColor", false);
 //    progState->setUniformValue("EnableColorPerVertex", false);
 //  }
 //  
@@ -59,8 +59,8 @@ SGGeometryNode::~SGGeometryNode() {
 //                                 false,
 //                                 0);
 //    
-//    progState->setUniformValue("ScaleTexCoord", Vector2D(1.0, 1.0));
-//    progState->setUniformValue("TranslationTexCoord", Vector2D(0.0, 0.0));
+//    progState->setUniformValue("uScaleTexCoord", Vector2D(1.0, 1.0));
+//    progState->setUniformValue("uTranslationTexCoord", Vector2D(0.0, 0.0));
 //  }
 //  
 //  return progState;
@@ -87,9 +87,9 @@ void SGGeometryNode::rawRender(const G3MRenderContext* rc,
 //                              0);           //Stride 0
 //  
 //  if (_colors != NULL){
-//    progState.setAttributeEnabled("Color", true);
+//    progState.setAttributeEnabled("aColor", true);
 //    progState.setUniformValue("EnableColorPerVertex", true);
-//    progState.setAttributeValue("Color",
+//    progState.setAttributeValue("aColor",
 //                                _colors, 4,   //The attribute is a float vector of 4 elements RGBA
 //                                4,            //Our buffer contains elements of 4
 //                                0,            //Index 0
@@ -98,7 +98,7 @@ void SGGeometryNode::rawRender(const G3MRenderContext* rc,
 //    const float colorsIntensity = 1;
 //    progState.setUniformValue("FlatColorIntensity", colorsIntensity);
 //  } else{
-//    progState.setAttributeEnabled("Color", false);
+//    progState.setAttributeEnabled("aColor", false);
 //    progState.setUniformValue("EnableColorPerVertex", false);
 //  }
 //  
@@ -110,8 +110,8 @@ void SGGeometryNode::rawRender(const G3MRenderContext* rc,
 //                                false,
 //                                0);
 //    
-//    progState.setUniformValue("ScaleTexCoord", Vector2D(1.0, 1.0));
-//    progState.setUniformValue("TranslationTexCoord", Vector2D(0.0, 0.0));
+//    progState.setUniformValue("uScaleTexCoord", Vector2D(1.0, 1.0));
+//    progState.setUniformValue("uTranslationTexCoord", Vector2D(0.0, 0.0));
 //  }
 //}
 
@@ -128,9 +128,9 @@ void SGGeometryNode::createGLState() const{
                               0);           //Stride 0
   
   if (_colors != NULL){
-    progState.setAttributeEnabled("Color", true);
+    progState.setAttributeEnabled("aColor", true);
     progState.setUniformValue("EnableColorPerVertex", true);
-    progState.setAttributeValue("Color",
+    progState.setAttributeValue("aColor",
                                 _colors, 4,   //The attribute is a float vector of 4 elements RGBA
                                 4,            //Our buffer contains elements of 4
                                 0,            //Index 0
@@ -139,7 +139,7 @@ void SGGeometryNode::createGLState() const{
     const float colorsIntensity = 1;
     progState.setUniformValue("FlatColorIntensity", colorsIntensity);
   } else{
-    progState.setAttributeEnabled("Color", false);
+    progState.setAttributeEnabled("aColor", false);
     progState.setUniformValue("EnableColorPerVertex", false);
   }
   
@@ -151,8 +151,8 @@ void SGGeometryNode::createGLState() const{
                                 false,
                                 0);
     
-    progState.setUniformValue("ScaleTexCoord", Vector2D(1.0, 1.0));
-    progState.setUniformValue("TranslationTexCoord", Vector2D(0.0, 0.0));
+    progState.setUniformValue("uScaleTexCoord", Vector2D(1.0, 1.0));
+    progState.setUniformValue("uTranslationTexCoord", Vector2D(0.0, 0.0));
   }
 }
 
