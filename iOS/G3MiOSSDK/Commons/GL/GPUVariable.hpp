@@ -43,6 +43,19 @@ public:
   static const int SCALE_TEXTURE_COORDS;
   static const int POINT_SIZE;
   
+  static const int POSITION;
+  static const int TEXTURE_COORDS;
+  static const int COLOR;
+  
+  //To be deleted
+  static const int EnableColorPerVertex;
+  static const int EnableTexture;
+  static const int EnableFlatColor;
+  static const int FlatColorIntensity;
+  static const int ColorPerVertexIntensity;
+  
+  
+  
   static const int GROUP_COLOR;
   static const int GROUP_NOGROUP;
   

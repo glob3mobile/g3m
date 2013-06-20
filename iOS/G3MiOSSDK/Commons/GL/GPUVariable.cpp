@@ -18,8 +18,19 @@ const int GPUVariable::TRANSLATION_TEXTURE_COORDS = 5;
 const int GPUVariable::SCALE_TEXTURE_COORDS = 6;
 const int GPUVariable::POINT_SIZE = 7;
 
+const int GPUVariable::POSITION = 8;
+const int GPUVariable::TEXTURE_COORDS = 9;
+const int GPUVariable::COLOR = 10;
+
 const int GPUVariable::GROUP_NOGROUP = -1;
 const int GPUVariable::GROUP_COLOR = 1;
+
+//TODO: DELETE
+const int GPUVariable::EnableColorPerVertex = 11;
+const int GPUVariable::EnableTexture = 12;
+const int GPUVariable::EnableFlatColor = 13;
+const int GPUVariable::FlatColorIntensity = 14;
+const int GPUVariable::ColorPerVertexIntensity = 15;
 
 void GPUVariable::createMetadata(){
   _group = GROUP_NOGROUP;
@@ -51,12 +62,43 @@ void GPUVariable::createMetadata(){
     }
     
     if (_name.compare("uScaleTexCoord") == 0){
-      _key = SCALE_TEXTURE_COORDS;
+      _key = TRANSLATION_TEXTURE_COORDS;
       _group = GROUP_COLOR;
     }
     
-    if (_name.compare("uPointSize") == 0){
-      _key = POINT_SIZE;
+    
+    if (true){ //DELETE
+      if (_name.compare("EnableColorPerVertex") == 0){
+        _key = EnableColorPerVertex;
+        _group = GROUP_COLOR;
+      }
+      
+      if (_name.compare("EnableTexture") == 0){
+        _key = EnableTexture;
+        _group = GROUP_COLOR;
+      }
+      
+      if (_name.compare("EnableFlatColor") == 0){
+        _key = EnableFlatColor;
+        _group = GROUP_COLOR;
+      }
+      
+      if (_name.compare("FlatColorIntensity") == 0){
+        _key = FlatColorIntensity;
+        _group = GROUP_COLOR;
+        _group = GROUP_COLOR;
+      }
+      
+      if (_name.compare("ColorPerVertexIntensity") == 0){
+        _key = ColorPerVertexIntensity;
+        _group = GROUP_COLOR;
+        _group = GROUP_COLOR;
+      }
+      
+      if (_name.compare("uPointSize") == 0){
+        _key = POINT_SIZE;
+        _group = GROUP_COLOR;
+      }
     }
     
     if (_key == UNRECOGNIZED){
@@ -66,16 +108,16 @@ void GPUVariable::createMetadata(){
   
   if (_variableType == ATTRIBUTE){
     if (_name.compare("aPosition") == 0){
-      _key = FLAT_COLOR;
+      _key = POSITION;
     }
     
     if (_name.compare("aColor") == 0){
-      _key = MODELVIEW;
+      _key = COLOR;
       _group = GROUP_COLOR;
     }
     
     if (_name.compare("aTextureCoord") == 0){
-      _key = TEXTURE_EXTENT;
+      _key = TEXTURE_COORDS;
       _group = GROUP_COLOR;
     }
     
