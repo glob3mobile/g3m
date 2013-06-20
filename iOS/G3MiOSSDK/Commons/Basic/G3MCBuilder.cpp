@@ -48,8 +48,10 @@ G3MCBuilder::G3MCBuilder(const URL& serverURL,
                          const std::string& sceneId,
                          G3MCSceneChangeListener* sceneListener) :
 _serverURL(serverURL),
-_sceneTimestamp(-1),
 _sceneId(sceneId),
+_sceneTimestamp(-1),
+_sceneBaseLayer(NULL),
+_sceneOverlayLayer(NULL),
 _sceneUser(""),
 _sceneName(""),
 _sceneDescription(""),
@@ -59,8 +61,6 @@ _g3mWidget(NULL),
 _storage(NULL),
 _threadUtils(NULL),
 _layerSet( new LayerSet() ),
-_baseLayer(NULL),
-_overlayLayer(NULL),
 _downloader(NULL),
 _sceneListener(sceneListener)
 {
@@ -263,19 +263,20 @@ private:
                         layerTilesRenderParameters);
   }
   
-  Layer* parseLayer(const JSONObject* jsonBaseLayer) const {
+  Layer* parseLayer(const JSONBaseObject* jsonBaseObjectLayer) const {
+
+    if (jsonBaseObjectLayer->asNull() != NULL) {
+      return NULL;
+    }
+
     const TimeInterval defaultTimeToCache = TimeInterval::fromDays(30);
-    
-    /*
-     "OSM"
-     "MapQuest"
-     "BingMaps"
-     "MapBox"
-     "CartoDB"
-     
-     "WMS"
-     */
-    
+
+    const JSONObject* jsonBaseLayer = jsonBaseObjectLayer->asObject();
+    if (jsonBaseLayer == NULL) {
+      ILogger::instance()->logError("Layer is not a json object");
+      return NULL;
+    }
+
     const std::string layerType = jsonBaseLayer->getAsString("layer", "<layer not present>");
     if (layerType.compare("OSM") == 0) {
       return new OSMLayer(defaultTimeToCache);
@@ -312,7 +313,7 @@ public:
                   IByteBuffer* buffer,
                   bool expired) {
     
-    const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(buffer);
+    const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(buffer, true);
     
     if (jsonBaseObject == NULL) {
       ILogger::instance()->logError("Can't parse SceneJSON from %s",
@@ -326,63 +327,28 @@ public:
       else {
         const JSONString* error = jsonObject->getAsString("error");
         if (error == NULL) {
-
-//          {
-//            user: "aaa",
-//            id: "2g59wh610g6c1kmkt0l",
-//            name: "Example10",
-//            description: "Description",
-//            realTime: "0",
-//            iconURL: "http://http://design.jboss.org/arquillian/logo/final/arquillian_icon_256px.png",
-//            bgColor: "001933",
-//            baseLayer: {
-//              layer: "MapQuest",
-//              imagery: "OSM"
-//            },
-//            tags: [
-//                    ""
-//                  ],
-//            ts: 27
-//          }
-
           const int timestamp = (int) jsonObject->getAsNumber("ts", 0);
           
           if (_builder->getSceneTimestamp() != timestamp) {
             const JSONString* jsonUser = jsonObject->getAsString("user");
-            if (jsonUser == NULL) {
-              ILogger::instance()->logError("Attribute 'user' not found in SceneJSON");
-            }
-            else {
+            if (jsonUser != NULL) {
               _builder->setSceneUser(jsonUser->value());
             }
 
             //id
             
             const JSONString* jsonName = jsonObject->getAsString("name");
-            if (jsonName == NULL) {
-              ILogger::instance()->logError("Attribute 'name' not found in SceneJSON");
-            }
-            else {
+            if (jsonName != NULL) {
               _builder->setSceneName(jsonName->value());
             }
 
             const JSONString* jsonDescription = jsonObject->getAsString("description");
-            if (jsonDescription == NULL) {
-              ILogger::instance()->logError("Attribute 'description' not found in SceneJSON");
-            }
-            else {
+            if (jsonDescription != NULL) {
               _builder->setSceneDescription(jsonDescription->value());
             }
 
-            //realTime
-            //iconURL
-            //bgColor
-
             const JSONString* jsonBGColor = jsonObject->getAsString("bgColor");
-            if (jsonBGColor == NULL) {
-              ILogger::instance()->logError("Attribute 'bgColor' not found in SceneJSON");
-            }
-            else {
+            if (jsonBGColor != NULL) {
               const Color* bgColor = Color::parse(jsonBGColor->value());
               if (bgColor == NULL) {
                 ILogger::instance()->logError("Invalid format in attribute 'bgColor' (%s)",
@@ -390,35 +356,19 @@ public:
               }
               else {
                 _builder->setSceneBackgroundColor(*bgColor);
+                delete bgColor;
               }
             }
 
-            const JSONObject* jsonBaseLayer = jsonObject->getAsObject("baseLayer");
-            if (jsonBaseLayer == NULL) {
-              ILogger::instance()->logError("Attribute 'baseLayer' not found in SceneJSON");
-            }
-            else {
-              Layer* baseLayer = parseLayer(jsonBaseLayer);
-              if (baseLayer == NULL)  {
-                ILogger::instance()->logError("Can't parse attribute 'baseLayer' in SceneJSON");
-              }
-              else {
-                _builder->changeBaseLayer(baseLayer);
-              }
+            const JSONBaseObject* jsonBaseLayer = jsonObject->get("baseLayer");
+            if (jsonBaseLayer != NULL) {
+              _builder->setSceneBaseLayer( parseLayer(jsonBaseLayer) );
             }
             
-            Layer* overlayLayer = NULL;
-            const JSONObject* jsonOverlayLayer = jsonObject->getAsObject("overlayLayer");
-            if (jsonOverlayLayer == NULL) {
-              ILogger::instance()->logInfo("Attribute 'overlayLayer' not found in SceneJSON");
+            const JSONBaseObject* jsonOverlayLayer = jsonObject->get("overlayLayer");
+            if (jsonOverlayLayer != NULL) {
+              _builder->setSceneOverlayLayer( parseLayer(jsonOverlayLayer) );
             }
-            else {
-              overlayLayer = parseLayer(jsonOverlayLayer);
-              if (overlayLayer == NULL)  {
-                ILogger::instance()->logError("Can't parse attribute 'overlayLayer' in SceneJSON");
-              }
-            }
-            _builder->changeOverlayLayer(overlayLayer);
 
             //tags
             
@@ -552,40 +502,43 @@ public:
 
 void G3MCBuilder::recreateLayerSet() {
   _layerSet->removeAllLayers(false);
-  if (_baseLayer != NULL) {
-    _layerSet->addLayer(_baseLayer);
+
+  if (_sceneBaseLayer != NULL) {
+    _layerSet->addLayer(_sceneBaseLayer);
   }
-  if (_overlayLayer != NULL) {
-    _layerSet->addLayer(_overlayLayer);
+
+  if (_sceneOverlayLayer != NULL) {
+    _layerSet->addLayer(_sceneOverlayLayer);
   }
 }
 
-void G3MCBuilder::changeBaseLayer(Layer* baseLayer) {
-  if (_baseLayer != baseLayer) {
-    if (_baseLayer != NULL) {
-      delete _baseLayer;
-    }
-    _baseLayer = baseLayer;
+void G3MCBuilder::setSceneBaseLayer(Layer* baseLayer) {
+  if (baseLayer == NULL) {
+    ILogger::instance()->logError("Base Layer can't be NULL");
+    return;
+  }
+
+  if (_sceneBaseLayer != baseLayer) {
+    delete _sceneBaseLayer;
+    _sceneBaseLayer = baseLayer;
     
     recreateLayerSet();
     
     if (_sceneListener != NULL) {
-      _sceneListener->onBaseLayerChanged(_baseLayer);
+      _sceneListener->onBaseLayerChanged(_sceneBaseLayer);
     }
   }
 }
 
-void G3MCBuilder::changeOverlayLayer(Layer* overlayLayer) {
-  if (_overlayLayer != overlayLayer) {
-    if (_overlayLayer != NULL) {
-      delete _overlayLayer;
-    }
-    _overlayLayer = overlayLayer;
+void G3MCBuilder::setSceneOverlayLayer(Layer* overlayLayer) {
+  if (_sceneOverlayLayer != overlayLayer) {
+    delete _sceneOverlayLayer;
+    _sceneOverlayLayer = overlayLayer;
     
     recreateLayerSet();
     
     if (_sceneListener != NULL) {
-      _sceneListener->onOverlayLayerChanged(_overlayLayer);
+      _sceneListener->onOverlayLayerChanged(_sceneOverlayLayer);
     }
   }
 }
@@ -828,6 +781,7 @@ void G3MCBuilder::setSceneDescription(const std::string& description) {
 
 void G3MCBuilder::setSceneBackgroundColor(const Color& backgroundColor) {
   if (!_sceneBackgroundColor->isEqualsTo(backgroundColor)) {
+    delete _sceneBackgroundColor;
     _sceneBackgroundColor = new Color(backgroundColor);
 
     if (_g3mWidget != NULL) {
@@ -858,26 +812,53 @@ public:
   }
 };
 
-void G3MCBuilder::rawChangeScene(const std::string& sceneId) {
-  if (sceneId.compare(_sceneId) != 0) {
-    _layerSet->removeAllLayers(false);
-    if (_baseLayer != NULL) {
-      delete _baseLayer;
-      _baseLayer = NULL;
-    }
-    _sceneTimestamp = -1;
-    _sceneId = sceneId;
-    
-    if (_g3mWidget != NULL) {
-      // force inmediate ejecution of PeriodicalTasks
-      _g3mWidget->resetPeriodicalTasksTimeouts();
-    }
-  }
-}
-
 void G3MCBuilder::changeScene(const std::string& sceneId) {
   if (sceneId.compare(_sceneId) != 0) {
     getThreadUtils()->invokeInRendererThread(new G3MCBuilder_ChangeSceneIdTask(this, sceneId),
                                              true);
+  }
+}
+
+void G3MCBuilder::resetScene(const std::string& sceneId) {
+  _sceneId = sceneId;
+
+  _sceneTimestamp = -1;
+
+  delete _sceneBaseLayer;
+  _sceneBaseLayer = NULL;
+
+  delete _sceneOverlayLayer;
+  _sceneOverlayLayer = NULL;
+
+  _sceneUser = "";
+
+  _sceneName = "";
+
+  _sceneDescription = "";
+
+  delete _sceneBackgroundColor;
+  _sceneBackgroundColor = Color::newFromRGBA(0, 0, 0, 1);
+}
+
+void G3MCBuilder::resetG3MWidget() {
+  _layerSet->removeAllLayers(false);
+
+  if (_g3mWidget != NULL) {
+    _g3mWidget->setBackgroundColor(*_sceneBackgroundColor);
+
+    // force inmediate ejecution of PeriodicalTasks
+    _g3mWidget->resetPeriodicalTasksTimeouts();
+  }
+}
+
+void G3MCBuilder::rawChangeScene(const std::string& sceneId) {
+  if (sceneId.compare(_sceneId) != 0) {
+    resetScene(sceneId);
+
+    resetG3MWidget();
+
+    if (_sceneListener != NULL) {
+      _sceneListener->onSceneChanged(sceneId);
+    }
   }
 }

@@ -40,6 +40,8 @@ public:
 
   }
 
+  virtual void onSceneChanged(const std::string& sceneId) = 0;
+
   virtual void onBaseLayerChanged(Layer* baseLayer) = 0;
   
   virtual void onOverlayLayerChanged(Layer* overlayLayer) = 0;
@@ -80,15 +82,15 @@ private:
 
   G3MCSceneChangeListener* _sceneListener;
 
-  int _sceneTimestamp;
   std::string _sceneId;
+  int         _sceneTimestamp;
+  Layer*      _sceneBaseLayer;
+  Layer*      _sceneOverlayLayer;
   std::string _sceneUser;
   std::string _sceneName;
   std::string _sceneDescription;
   Color*      _sceneBackgroundColor;
 
-  Layer* _baseLayer;
-  Layer* _overlayLayer;
 
   GL* _gl;
 //  bool _glob3Created;
@@ -117,6 +119,10 @@ private:
   IDownloader* _downloader;
   IDownloader* getDownloader();
 
+  void resetScene(const std::string& sceneId);
+
+  void resetG3MWidget();
+
 protected:
   G3MCBuilder(const URL& serverURL,
               const std::string& sceneId,
@@ -142,18 +148,17 @@ protected:
   virtual IThreadUtils* createThreadUtils() = 0;
   
 public:
-
-  /** Private to G3M, don't call it */
-  void changeBaseLayer(Layer* baseLayer);
-  
-  /** Private to G3M, don't call it */
-  void changeOverlayLayer(Layer* overlayLayer);
-
   /** Private to G3M, don't call it */
   int getSceneTimestamp() const;
 
   /** Private to G3M, don't call it */
   void setSceneTimestamp(const int timestamp);
+
+  /** Private to G3M, don't call it */
+  void setSceneBaseLayer(Layer* baseLayer);
+  
+  /** Private to G3M, don't call it */
+  void setSceneOverlayLayer(Layer* overlayLayer);
 
   /** Private to G3M, don't call it */
   void setSceneUser(const std::string& user);

@@ -109,6 +109,7 @@
 		CF5A8A321656B67F00508C38 /* BoxShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF5A8A301656B67F00508C38 /* BoxShape.cpp */; };
 		CF5EA5D4163DDC7900D8F797 /* Shape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF5EA5D2163DDC7900D8F797 /* Shape.cpp */; };
 		CF5EA5D8163DDCB900D8F797 /* QuadShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF5EA5D6163DDCB900D8F797 /* QuadShape.cpp */; };
+		CF60500317724C5C00EB48A6 /* JSONNull.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF60500117724C5C00EB48A6 /* JSONNull.cpp */; };
 		CF65361316BC41B2001F9139 /* ShapePositionEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF65361116BC41B2001F9139 /* ShapePositionEffect.cpp */; };
 		CF6873A515F77F54002EDFD0 /* IFloatBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6873A315F77F54002EDFD0 /* IFloatBuffer.cpp */; };
 		CF6873AA15F77FFC002EDFD0 /* IIntBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6873A815F77FFC002EDFD0 /* IIntBuffer.cpp */; };
@@ -965,6 +966,8 @@
 		CF5EA5D3163DDC7900D8F797 /* Shape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Shape.hpp; path = Commons/Rendererers/Shape.hpp; sourceTree = "<group>"; };
 		CF5EA5D6163DDCB900D8F797 /* QuadShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = QuadShape.cpp; path = Commons/Rendererers/QuadShape.cpp; sourceTree = "<group>"; };
 		CF5EA5D7163DDCB900D8F797 /* QuadShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = QuadShape.hpp; path = Commons/Rendererers/QuadShape.hpp; sourceTree = "<group>"; };
+		CF60500117724C5C00EB48A6 /* JSONNull.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JSONNull.cpp; sourceTree = "<group>"; };
+		CF60500217724C5C00EB48A6 /* JSONNull.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JSONNull.hpp; sourceTree = "<group>"; };
 		CF65361116BC41B2001F9139 /* ShapePositionEffect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ShapePositionEffect.cpp; path = Commons/Rendererers/ShapePositionEffect.cpp; sourceTree = "<group>"; };
 		CF65361216BC41B2001F9139 /* ShapePositionEffect.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ShapePositionEffect.hpp; path = Commons/Rendererers/ShapePositionEffect.hpp; sourceTree = "<group>"; };
 		CF6873A315F77F54002EDFD0 /* IFloatBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IFloatBuffer.cpp; path = Commons/Basic/IFloatBuffer.cpp; sourceTree = "<group>"; };
@@ -1677,6 +1680,8 @@
 				A70F5617161C94A100340256 /* JSONString.hpp */,
 				CF4FAAC61695D010009734CA /* JSONVisitor.cpp */,
 				CF4FAAC71695D010009734CA /* JSONVisitor.hpp */,
+				CF60500117724C5C00EB48A6 /* JSONNull.cpp */,
+				CF60500217724C5C00EB48A6 /* JSONNull.hpp */,
 			);
 			name = JSON;
 			path = Commons/JSON;
@@ -2309,6 +2314,7 @@
 				CF4027DD1770E7B900D5A80C /* base64.c in Sources */,
 				CF4027DE1770E7B900D5A80C /* NSData+SRB64Additions.m in Sources */,
 				CF4027DF1770E7B900D5A80C /* SRWebSocket.m in Sources */,
+				CF60500317724C5C00EB48A6 /* JSONNull.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

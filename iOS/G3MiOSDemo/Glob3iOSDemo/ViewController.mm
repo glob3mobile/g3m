@@ -208,9 +208,9 @@ Mesh* createSectorMesh(const Planet* planet,
   //  [self initDefaultWithBuilder];
   
   // initialize a customized widget by using a buider
-  [self initCustomizedWithBuilder];
+  //[self initCustomizedWithBuilder];
 
-  //[self initWithG3MCBuilder];
+  [self initWithG3MCBuilder];
 
   [[self G3MWidget] startAnimation];
 }
@@ -244,7 +244,7 @@ public:
   G3MCSceneChangeListener* sceneListener = NULL;
   
   _g3mcBuilder =  new G3MCBuilder_iOS([self G3MWidget],
-                                      URL("http://localhost:8080/g3mc-server", false),
+                                      URL("http://192.168.0.103:8080/g3mc-server", false),
                                       "2g59wh610g6c1kmkt0l",
                                       sceneListener);
 

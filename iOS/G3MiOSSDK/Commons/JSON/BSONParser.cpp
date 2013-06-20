@@ -19,8 +19,10 @@
 #include "JSONDouble.hpp"
 #include "JSONFloat.hpp"
 #include "JSONBoolean.hpp"
+#include "JSONNull.hpp"
 
-JSONBaseObject* BSONParser::parse(IByteBuffer* buffer) {
+JSONBaseObject* BSONParser::parse(IByteBuffer* buffer,
+                                  bool nullAsObject) {
 
   ByteBufferIterator iterator(buffer);
   const int bufferSize = iterator.nextInt32();
@@ -40,7 +42,7 @@ JSONBaseObject* BSONParser::parse(IByteBuffer* buffer) {
     }
 
     const std::string key = iterator.nextZeroTerminatedString();
-    JSONBaseObject* value = parseValue(type, &iterator);
+    JSONBaseObject* value = parseValue(type, &iterator, nullAsObject);
     if (value != NULL) {
       result->put(key, value);
     }
@@ -50,32 +52,27 @@ JSONBaseObject* BSONParser::parse(IByteBuffer* buffer) {
 }
 
 JSONBaseObject* BSONParser::parseValue(const unsigned char type,
-                                       ByteBufferIterator* iterator) {
+                                       ByteBufferIterator* iterator,
+                                       bool nullAsObject) {
   switch (type) {
-    case 0x02: {
+    case 0x02:
       return parseString(iterator);
-    }
-    case 0x04: {
-      return parseArray(iterator);
-    }
-    case 0x01: {
+    case 0x04:
+      return parseArray(iterator, nullAsObject);
+    case 0x01:
       return parseDouble(iterator);
-    }
-    case 0x10: {
+    case 0x10:
       return parseInt32(iterator);
-    }
-    case 0x12: {
+    case 0x12:
       return parseInt64(iterator);
-    }
-    case 0x08: {
+    case 0x08:
       return parseBool(iterator);
-    }
-    case 0x03: {
-      return parseObject(iterator);
-    }
-    case 0x44: {
-      return parseCustomizedArray(iterator);
-    }
+    case 0x03:
+      return parseObject(iterator, nullAsObject);
+    case 0x44:
+      return parseCustomizedArray(iterator, nullAsObject);
+    case 0x0A:
+      return nullAsObject ? new JSONNull() : NULL;
     default: {
       ILogger::instance()->logError("Unknown type %d", type);
       return NULL;
@@ -97,7 +94,8 @@ JSONString* BSONParser::parseString(ByteBufferIterator* iterator) {
   return NULL;
 }
 
-JSONArray* BSONParser::parseArray(ByteBufferIterator* iterator) {
+JSONArray* BSONParser::parseArray(ByteBufferIterator* iterator,
+                                  bool nullAsObject) {
   //const int arraySize = iterator->nextInt32();
   iterator->nextInt32(); // consumes the size
 
@@ -110,7 +108,7 @@ JSONArray* BSONParser::parseArray(ByteBufferIterator* iterator) {
     
     // const std::string key = iterator->nextZeroTerminatedString();
     iterator->nextZeroTerminatedString(); // consumes the key
-    JSONBaseObject* value = parseValue(type, iterator);
+    JSONBaseObject* value = parseValue(type, iterator, nullAsObject);
     if (value != NULL) {
       result->add(value);
     }
@@ -119,7 +117,8 @@ JSONArray* BSONParser::parseArray(ByteBufferIterator* iterator) {
   return result;
 }
 
-JSONArray* BSONParser::parseCustomizedArray(ByteBufferIterator* iterator) {
+JSONArray* BSONParser::parseCustomizedArray(ByteBufferIterator* iterator,
+                                            bool nullAsObject) {
   //const int arraySize = iterator->nextInt32();
   iterator->nextInt32(); // consumes the size
 
@@ -131,7 +130,7 @@ JSONArray* BSONParser::parseCustomizedArray(ByteBufferIterator* iterator) {
     }
 
     //const std::string key = iterator->nextZeroTerminatedString();
-    JSONBaseObject* value = parseValue(type, iterator);
+    JSONBaseObject* value = parseValue(type, iterator, nullAsObject);
     if (value != NULL) {
       result->add(value);
     }
@@ -166,7 +165,8 @@ JSONBoolean* BSONParser::parseBool(ByteBufferIterator* iterator) {
   return new JSONBoolean(false);
 }
 
-JSONObject* BSONParser::parseObject(ByteBufferIterator* iterator) {
+JSONObject* BSONParser::parseObject(ByteBufferIterator* iterator,
+                                    bool nullAsObject) {
   //const int objectSize = iterator->nextInt32();
   iterator->nextInt32(); // consumes the size
 
@@ -178,7 +178,7 @@ JSONObject* BSONParser::parseObject(ByteBufferIterator* iterator) {
     }
 
     const std::string key = iterator->nextZeroTerminatedString();
-    JSONBaseObject* value = parseValue(type, iterator);
+    JSONBaseObject* value = parseValue(type, iterator, nullAsObject);
     if (value != NULL) {
       result->put(key, value);
     }
