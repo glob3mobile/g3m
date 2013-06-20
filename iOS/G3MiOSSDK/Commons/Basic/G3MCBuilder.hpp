@@ -35,6 +35,8 @@ class BingMapsLayer;
 class CartoDBLayer;
 class MapBoxLayer;
 class WMSLayer;
+class G3MContext;
+class IWebSocket;
 
 #include "URL.hpp"
 
@@ -108,6 +110,9 @@ private:
 //  bool _glob3Created;
   G3MWidget* _g3mWidget;
   IStorage* _storage;
+
+  IWebSocket* _sceneTubeWebSocket;
+  bool        _isSceneTubeOpen;
 
   LayerSet* _layerSet;
   TileRenderer* createTileRenderer();
@@ -213,7 +218,7 @@ public:
   const URL createPollingSceneDescriptionURL() const;
 
   /** Private to G3M, don't call it */
-  const URL createTubeSceneURL() const;
+  const URL createSceneTubeURL() const;
 
   /** Private to G3M, don't call it */
   void rawChangeScene(const std::string& sceneId);
@@ -225,6 +230,15 @@ public:
   /** Private to G3M, don't call it */
   void parseSceneDescription(const std::string& json,
                              const URL& url);
+
+  /** Private to G3M, don't call it */
+  void openSceneTube(const G3MContext* context);
+
+  void setSceneTubeOpened(bool open);
+
+  bool isSceneTubeOpen() const {
+    return _isSceneTubeOpen;
+  }
 
   void changeScene(const std::string& sceneId);
 };

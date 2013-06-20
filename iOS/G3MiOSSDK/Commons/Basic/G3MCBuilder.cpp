@@ -67,7 +67,9 @@ _storage(NULL),
 _threadUtils(NULL),
 _layerSet( new LayerSet() ),
 _downloader(NULL),
-_sceneListener(sceneListener)
+_sceneListener(sceneListener),
+_isSceneTubeOpen(false),
+_sceneTubeWebSocket(NULL)
 {
   
 }
@@ -118,11 +120,6 @@ TileRenderer* G3MCBuilder::createTileRenderer() {
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
   const bool renderIncompletePlanet = false;
-  
-  // int _TODO_select_PlanetIncompletedTexture;
-  // const URL incompletePlanetTexureURL("http://steve.files.wordpress.com/2006/03/Matrix%20tut%202.jpg", false);
-  // const URL incompletePlanetTexureURL("http://www.myfreetextures.com/wp-content/uploads/2011/06/stripes1.jpg", false);
-  // const URL incompletePlanetTexureURL("http://images.fineartamerica.com/images-medium-large/optical-illusion-the-grid-sumit-mehndiratta.jpg", false);
   const URL incompletePlanetTexureURL("", false);
   
   const TilesRenderParameters* parameters = new TilesRenderParameters(renderDebug,
@@ -397,80 +394,6 @@ public:
 
     _builder->parseSceneDescription(buffer->getAsString(), url);
     delete buffer;
-    
-//    const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(buffer, true);
-//    
-//    if (jsonBaseObject == NULL) {
-//      ILogger::instance()->logError("Can't parse SceneJSON from %s",
-//                                    url.getPath().c_str());
-//    }
-//    else {
-//      const JSONObject* jsonObject = jsonBaseObject->asObject();
-//      if (jsonObject == NULL) {
-//        ILogger::instance()->logError("Invalid SceneJSON (1)");
-//      }
-//      else {
-//        const JSONString* error = jsonObject->getAsString("error");
-//        if (error == NULL) {
-//          const int timestamp = (int) jsonObject->getAsNumber("ts", 0);
-//          
-//          if (_builder->getSceneTimestamp() != timestamp) {
-//            const JSONString* jsonUser = jsonObject->getAsString("user");
-//            if (jsonUser != NULL) {
-//              _builder->setSceneUser(jsonUser->value());
-//            }
-//
-//            //id
-//            
-//            const JSONString* jsonName = jsonObject->getAsString("name");
-//            if (jsonName != NULL) {
-//              _builder->setSceneName(jsonName->value());
-//            }
-//
-//            const JSONString* jsonDescription = jsonObject->getAsString("description");
-//            if (jsonDescription != NULL) {
-//              _builder->setSceneDescription(jsonDescription->value());
-//            }
-//
-//            const JSONString* jsonBGColor = jsonObject->getAsString("bgColor");
-//            if (jsonBGColor != NULL) {
-//              const Color* bgColor = Color::parse(jsonBGColor->value());
-//              if (bgColor == NULL) {
-//                ILogger::instance()->logError("Invalid format in attribute 'bgColor' (%s)",
-//                                              jsonBGColor->value().c_str());
-//              }
-//              else {
-//                _builder->setSceneBackgroundColor(*bgColor);
-//                delete bgColor;
-//              }
-//            }
-//
-//            const JSONBaseObject* jsonBaseLayer = jsonObject->get("baseLayer");
-//            if (jsonBaseLayer != NULL) {
-//              _builder->setSceneBaseLayer( parseLayer(jsonBaseLayer) );
-//            }
-//            
-//            const JSONBaseObject* jsonOverlayLayer = jsonObject->get("overlayLayer");
-//            if (jsonOverlayLayer != NULL) {
-//              _builder->setSceneOverlayLayer( parseLayer(jsonOverlayLayer) );
-//            }
-//
-//            //tags
-//            
-//            _builder->setSceneTimestamp(timestamp);
-//          }
-//        }
-//        else {
-//          ILogger::instance()->logError("Server Error: %s",
-//                                        error->value().c_str());
-//        }
-//      }
-//      
-//      delete jsonBaseObject;
-//    }
-//
-//    delete buffer;
-
   }
   
   void onError(const URL& url) {
@@ -489,42 +412,6 @@ public:
   }
   
 };
-
-
-//class G3MCBuilder_InitializationTask : public GInitializationTask {
-//private:
-//  G3MCBuilder* _builder;
-//  const URL    _sceneDescriptionURL;
-//
-//  bool _isInitialized;
-//
-//public:
-//  G3MCBuilder_InitializationTask(G3MCBuilder* builder,
-//                         const URL& sceneDescriptionURL) :
-//  _builder(builder),
-//  _sceneDescriptionURL(sceneDescriptionURL),
-//  _isInitialized(false)
-//  {
-//
-//  }
-//
-//  void run(const G3MContext* context) {
-//    IDownloader* downloader = context->getDownloader();
-//
-//    downloader->requestBuffer(_sceneDescriptionURL,
-//                              DownloadPriority::HIGHEST,
-//                              TimeInterval::zero(),
-//                              true,
-//                              new G3MCSceneDescriptionBufferListener(_builder),
-//                              true);
-//  }
-//
-//  bool isDone(const G3MContext* context) {
-//    //return _isInitialized;
-//    int __FIX_IT;
-//    return true;
-//  }
-//};
 
 
 class G3MCBuilder_PollingScenePeriodicalTask : public GTask {
@@ -565,9 +452,7 @@ public:
     
   }
   
-  void run(const G3MContext* context) {
-    //ILogger::instance()->logInfo("G3MCPeriodicalTask executed");
-    
+  void run(const G3MContext* context) {    
     IDownloader* downloader = context->getDownloader();
     if (_requestId >= 0) {
       downloader->cancelRequest(_requestId);
@@ -626,7 +511,7 @@ void G3MCBuilder::setSceneOverlayLayer(Layer* overlayLayer) {
   }
 }
 
-const URL G3MCBuilder::createTubeSceneURL() const {
+const URL G3MCBuilder::createSceneTubeURL() const {
   const std::string tubesPath = _tubesURL.getPath();
 
   return URL(tubesPath + "/scene/" + _sceneId, false);
@@ -639,10 +524,33 @@ const URL G3MCBuilder::createPollingSceneDescriptionURL() const {
 }
 
 
+class G3MCBuilder_TubeWatchdogPeriodicalTask : public GTask {
+private:
+  G3MCBuilder* _builder;
+
+public:
+  G3MCBuilder_TubeWatchdogPeriodicalTask(G3MCBuilder* builder) :
+  _builder(builder)
+  {
+  }
+
+  void run(const G3MContext* context) {
+    if (!_builder->isSceneTubeOpen()) {
+      _builder->openSceneTube(context);
+    }
+  }
+
+};
+
+
 std::vector<PeriodicalTask*>* G3MCBuilder::createPeriodicalTasks() {
   std::vector<PeriodicalTask*>* periodicalTasks = new std::vector<PeriodicalTask*>();
 
-  if (!_useWebSockets) {
+  if (_useWebSockets) {
+    periodicalTasks->push_back(new PeriodicalTask(TimeInterval::fromSeconds(2),
+                                                  new G3MCBuilder_TubeWatchdogPeriodicalTask(this)));
+  }
+  else {
     periodicalTasks->push_back(new PeriodicalTask(TimeInterval::fromSeconds(2),
                                                   new G3MCBuilder_PollingScenePeriodicalTask(this)));
   }
@@ -657,25 +565,28 @@ IStorage* G3MCBuilder::getStorage() {
   return _storage;
 }
 
-class G3MCBuilder_TubeSceneListener : public IWebSocketListener {
+class G3MCBuilder_SceneTubeListener : public IWebSocketListener {
 private:
   G3MCBuilder* _builder;
 
 public:
-  G3MCBuilder_TubeSceneListener(G3MCBuilder* builder) :
+  G3MCBuilder_SceneTubeListener(G3MCBuilder* builder) :
   _builder(builder)
   {
   }
 
-  ~G3MCBuilder_TubeSceneListener() {
+  ~G3MCBuilder_SceneTubeListener() {
   }
 
   void onOpen(IWebSocket* ws) {
+    ILogger::instance()->logError("Tube '%s' opened!",
+                                  ws->getURL().getPath().c_str());
+    _builder->setSceneTubeOpened(true);
   }
 
   void onError(IWebSocket* ws,
                const std::string& error) {
-    ILogger::instance()->logError("Error '%s' on Tube '%s' Error: ",
+    ILogger::instance()->logError("Error '%s' on Tube '%s'",
                                   error.c_str(),
                                   ws->getURL().getPath().c_str());
   }
@@ -686,30 +597,24 @@ public:
   }
 
   void onClose(IWebSocket* ws) {
-    ILogger::instance()->logError("Tube '%s' Closed",
+    ILogger::instance()->logError("Tube '%s' closed!",
                                   ws->getURL().getPath().c_str());
-    int TODO_reconnect_to_tube;
+    _builder->setSceneTubeOpened(false);
   }
 };
 
-class G3MCBuilder_WebSocketConnector : public GInitializationTask {
+class G3MCBuilder_SceneTubeConnector : public GInitializationTask {
 private:
   G3MCBuilder* _builder;
 
 public:
-  G3MCBuilder_WebSocketConnector(G3MCBuilder* builder) :
+  G3MCBuilder_SceneTubeConnector(G3MCBuilder* builder) :
   _builder(builder)
   {
   }
 
   void run(const G3MContext* context) {
-    const bool autodeleteListener  = true;
-    const bool autodeleteWebSocket = true;
-
-    context->getFactory()->createWebSocket(_builder->createTubeSceneURL(),
-                                           new G3MCBuilder_TubeSceneListener(_builder),
-                                           autodeleteListener,
-                                           autodeleteWebSocket);
+    _builder->openSceneTube(context);
   }
 
   bool isDone(const G3MContext* context) {
@@ -717,9 +622,19 @@ public:
   }
 };
 
+void G3MCBuilder::openSceneTube(const G3MContext* context) {
+  const bool autodeleteListener  = true;
+  const bool autodeleteWebSocket = true;
+
+  _sceneTubeWebSocket = context->getFactory()->createWebSocket(createSceneTubeURL(),
+                                                               new G3MCBuilder_SceneTubeListener(this),
+                                                               autodeleteListener,
+                                                               autodeleteWebSocket);
+}
+
 
 GInitializationTask* G3MCBuilder::createInitializationTask() {
-  return _useWebSockets ? new G3MCBuilder_WebSocketConnector(this) : NULL;
+  return _useWebSockets ? new G3MCBuilder_SceneTubeConnector(this) : NULL;
 }
 
 G3MWidget* G3MCBuilder::create() {
@@ -730,17 +645,12 @@ G3MWidget* G3MCBuilder::create() {
   
   
   CompositeRenderer* mainRenderer = new CompositeRenderer();
-  
-  
+
   TileRenderer* tileRenderer = createTileRenderer();
   mainRenderer->addRenderer(tileRenderer);
   
-  
   std::vector<ICameraConstrainer*>* cameraConstraints = createCameraConstraints();
   
-  //Color backgroundColor = Color::fromRGBA(0, 0.1f, 0.2f, 1);
-  
-  // GInitializationTask* initializationTask = new G3MCInitializationTask(this, createSceneDescriptionURL());
   GInitializationTask* initializationTask = createInitializationTask();
   
   std::vector<PeriodicalTask*>* periodicalTasks = createPeriodicalTasks();
@@ -763,9 +673,7 @@ G3MWidget* G3MCBuilder::create() {
                                  initializationTask,
                                  true,       // autoDeleteInitializationTask
                                  *periodicalTasks);
-  
-  //  g3mWidget->setUserData(getUserData());
-  
+    
   delete cameraConstraints;
   delete periodicalTasks;
   
@@ -1004,6 +912,15 @@ void G3MCBuilder::resetG3MWidget() {
   }
 }
 
+void G3MCBuilder::setSceneTubeOpened(bool open) {
+  if (_isSceneTubeOpen != open) {
+    _isSceneTubeOpen = open;
+    if (!_isSceneTubeOpen) {
+      _sceneTubeWebSocket = NULL;
+    }
+  }
+}
+
 void G3MCBuilder::rawChangeScene(const std::string& sceneId) {
   if (sceneId.compare(_sceneId) != 0) {
     resetScene(sceneId);
@@ -1014,6 +931,8 @@ void G3MCBuilder::rawChangeScene(const std::string& sceneId) {
       _sceneListener->onSceneChanged(sceneId);
     }
 
-    int TODO_change_tube_scene;
+    if (_sceneTubeWebSocket != NULL) {
+      _sceneTubeWebSocket->close();
+    }
   }
 }
