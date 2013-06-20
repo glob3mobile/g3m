@@ -6,15 +6,15 @@ public abstract class G3MCBuilder
 
   private G3MCSceneChangeListener _sceneListener;
 
-  private int _sceneTimestamp;
   private String _sceneId;
+  private int _sceneTimestamp;
+  private Layer _sceneBaseLayer;
+  private Layer _sceneOverlayLayer;
   private String _sceneUser;
   private String _sceneName;
   private String _sceneDescription;
   private Color _sceneBackgroundColor;
 
-  private Layer _baseLayer;
-  private Layer _overlayLayer;
 
   private GL _gl;
 //  bool _glob3Created;
@@ -98,13 +98,15 @@ public abstract class G3MCBuilder
   private void recreateLayerSet()
   {
     _layerSet.removeAllLayers(false);
-    if (_baseLayer != null)
+  
+    if (_sceneBaseLayer != null)
     {
-      _layerSet.addLayer(_baseLayer);
+      _layerSet.addLayer(_sceneBaseLayer);
     }
-    if (_overlayLayer != null)
+  
+    if (_sceneOverlayLayer != null)
     {
-      _layerSet.addLayer(_overlayLayer);
+      _layerSet.addLayer(_sceneOverlayLayer);
     }
   }
 
@@ -128,11 +130,51 @@ public abstract class G3MCBuilder
     return _downloader;
   }
 
+  private void resetScene(String sceneId)
+  {
+    _sceneId = sceneId;
+  
+    _sceneTimestamp = -1;
+  
+    if (_sceneBaseLayer != null)
+       _sceneBaseLayer.dispose();
+    _sceneBaseLayer = null;
+  
+    if (_sceneOverlayLayer != null)
+       _sceneOverlayLayer.dispose();
+    _sceneOverlayLayer = null;
+  
+    _sceneUser = "";
+  
+    _sceneName = "";
+  
+    _sceneDescription = "";
+  
+    if (_sceneBackgroundColor != null)
+       _sceneBackgroundColor.dispose();
+    _sceneBackgroundColor = Color.newFromRGBA(0, 0, 0, 1);
+  }
+
+  private void resetG3MWidget()
+  {
+    _layerSet.removeAllLayers(false);
+  
+    if (_g3mWidget != null)
+    {
+      _g3mWidget.setBackgroundColor(_sceneBackgroundColor);
+  
+      // force inmediate ejecution of PeriodicalTasks
+      _g3mWidget.resetPeriodicalTasksTimeouts();
+    }
+  }
+
   protected G3MCBuilder(URL serverURL, String sceneId, G3MCSceneChangeListener sceneListener)
   {
      _serverURL = serverURL;
-     _sceneTimestamp = -1;
      _sceneId = sceneId;
+     _sceneTimestamp = -1;
+     _sceneBaseLayer = null;
+     _sceneOverlayLayer = null;
      _sceneUser = "";
      _sceneName = "";
      _sceneDescription = "";
@@ -142,8 +184,6 @@ public abstract class G3MCBuilder
      _storage = null;
      _threadUtils = null;
      _layerSet = new LayerSet();
-     _baseLayer = null;
-     _overlayLayer = null;
      _downloader = null;
      _sceneListener = sceneListener;
   
@@ -235,49 +275,6 @@ public abstract class G3MCBuilder
 
   protected abstract IThreadUtils createThreadUtils();
 
-
-  /** Private to G3M, don't call it */
-  public final void changeBaseLayer(Layer baseLayer)
-  {
-    if (_baseLayer != baseLayer)
-    {
-      if (_baseLayer != null)
-      {
-        if (_baseLayer != null)
-           _baseLayer.dispose();
-      }
-      _baseLayer = baseLayer;
-  
-      recreateLayerSet();
-  
-      if (_sceneListener != null)
-      {
-        _sceneListener.onBaseLayerChanged(_baseLayer);
-      }
-    }
-  }
-
-  /** Private to G3M, don't call it */
-  public final void changeOverlayLayer(Layer overlayLayer)
-  {
-    if (_overlayLayer != overlayLayer)
-    {
-      if (_overlayLayer != null)
-      {
-        if (_overlayLayer != null)
-           _overlayLayer.dispose();
-      }
-      _overlayLayer = overlayLayer;
-  
-      recreateLayerSet();
-  
-      if (_sceneListener != null)
-      {
-        _sceneListener.onOverlayLayerChanged(_overlayLayer);
-      }
-    }
-  }
-
   /** Private to G3M, don't call it */
   public final int getSceneTimestamp()
   {
@@ -288,6 +285,48 @@ public abstract class G3MCBuilder
   public final void setSceneTimestamp(int timestamp)
   {
     _sceneTimestamp = timestamp;
+  }
+
+  /** Private to G3M, don't call it */
+  public final void setSceneBaseLayer(Layer baseLayer)
+  {
+    if (baseLayer == null)
+    {
+      ILogger.instance().logError("Base Layer can't be NULL");
+      return;
+    }
+  
+    if (_sceneBaseLayer != baseLayer)
+    {
+      if (_sceneBaseLayer != null)
+         _sceneBaseLayer.dispose();
+      _sceneBaseLayer = baseLayer;
+  
+      recreateLayerSet();
+  
+      if (_sceneListener != null)
+      {
+        _sceneListener.onBaseLayerChanged(_sceneBaseLayer);
+      }
+    }
+  }
+
+  /** Private to G3M, don't call it */
+  public final void setSceneOverlayLayer(Layer overlayLayer)
+  {
+    if (_sceneOverlayLayer != overlayLayer)
+    {
+      if (_sceneOverlayLayer != null)
+         _sceneOverlayLayer.dispose();
+      _sceneOverlayLayer = overlayLayer;
+  
+      recreateLayerSet();
+  
+      if (_sceneListener != null)
+      {
+        _sceneListener.onOverlayLayerChanged(_sceneOverlayLayer);
+      }
+    }
   }
 
   /** Private to G3M, don't call it */
@@ -337,6 +376,8 @@ public abstract class G3MCBuilder
   {
     if (!_sceneBackgroundColor.isEqualsTo(backgroundColor))
     {
+      if (_sceneBackgroundColor != null)
+         _sceneBackgroundColor.dispose();
       _sceneBackgroundColor = new Color(backgroundColor);
   
       if (_g3mWidget != null)
@@ -364,20 +405,13 @@ public abstract class G3MCBuilder
   {
     if (sceneId.compareTo(_sceneId) != 0)
     {
-      _layerSet.removeAllLayers(false);
-      if (_baseLayer != null)
-      {
-        if (_baseLayer != null)
-           _baseLayer.dispose();
-        _baseLayer = null;
-      }
-      _sceneTimestamp = -1;
-      _sceneId = sceneId;
+      resetScene(sceneId);
   
-      if (_g3mWidget != null)
+      resetG3MWidget();
+  
+      if (_sceneListener != null)
       {
-        // force inmediate ejecution of PeriodicalTasks
-        _g3mWidget.resetPeriodicalTasksTimeouts();
+        _sceneListener.onSceneChanged(sceneId);
       }
     }
   }

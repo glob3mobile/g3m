@@ -44,6 +44,8 @@ public abstract class G3MCSceneChangeListener
 
   }
 
+  public abstract void onSceneChanged(String sceneId);
+
   public abstract void onBaseLayerChanged(Layer baseLayer);
 
   public abstract void onOverlayLayerChanged(Layer overlayLayer);

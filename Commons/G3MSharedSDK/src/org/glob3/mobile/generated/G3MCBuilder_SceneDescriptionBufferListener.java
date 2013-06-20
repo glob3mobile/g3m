@@ -82,19 +82,22 @@ public class G3MCBuilder_SceneDescriptionBufferListener extends IBufferDownloadL
     return new WMSLayer(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, sector, imageFormat, (srs.compareTo("EPSG_4326") == 0) ? "EPSG:4326" : "EPSG:900913", style, isTransparent, null, timeToCache, readExpired, layerTilesRenderParameters);
   }
 
-  private Layer parseLayer(JSONObject jsonBaseLayer)
+  private Layer parseLayer(JSONBaseObject jsonBaseObjectLayer)
   {
+
+    if (jsonBaseObjectLayer.asNull() != null)
+    {
+      return null;
+    }
+
     final TimeInterval defaultTimeToCache = TimeInterval.fromDays(30);
 
-    /*
-     "OSM"
-     "MapQuest"
-     "BingMaps"
-     "MapBox"
-     "CartoDB"
-     
-     "WMS"
-     */
+    final JSONObject jsonBaseLayer = jsonBaseObjectLayer.asObject();
+    if (jsonBaseLayer == null)
+    {
+      ILogger.instance().logError("Layer is not a json object");
+      return null;
+    }
 
     final String layerType = jsonBaseLayer.getAsString("layer", "<layer not present>");
     if (layerType.compareTo("OSM") == 0)
@@ -137,7 +140,7 @@ public class G3MCBuilder_SceneDescriptionBufferListener extends IBufferDownloadL
   public final void onDownload(URL url, IByteBuffer buffer, boolean expired)
   {
 
-    final JSONBaseObject jsonBaseObject = IJSONParser.instance().parse(buffer);
+    final JSONBaseObject jsonBaseObject = IJSONParser.instance().parse(buffer, true);
 
     if (jsonBaseObject == null)
     {
@@ -155,35 +158,12 @@ public class G3MCBuilder_SceneDescriptionBufferListener extends IBufferDownloadL
         final JSONString error = jsonObject.getAsString("error");
         if (error == null)
         {
-
-//          {
-//            user: "aaa",
-//            id: "2g59wh610g6c1kmkt0l",
-//            name: "Example10",
-//            description: "Description",
-//            realTime: "0",
-//            iconURL: "http://http://design.jboss.org/arquillian/logo/final/arquillian_icon_256px.png",
-//            bgColor: "001933",
-//            baseLayer: {
-//              layer: "MapQuest",
-//              imagery: "OSM"
-//            },
-//            tags: [
-//                    ""
-//                  ],
-//            ts: 27
-//          }
-
           final int timestamp = (int) jsonObject.getAsNumber("ts", 0);
 
           if (_builder.getSceneTimestamp() != timestamp)
           {
             final JSONString jsonUser = jsonObject.getAsString("user");
-            if (jsonUser == null)
-            {
-              ILogger.instance().logError("Attribute 'user' not found in SceneJSON");
-            }
-            else
+            if (jsonUser != null)
             {
               _builder.setSceneUser(jsonUser.value());
             }
@@ -191,35 +171,19 @@ public class G3MCBuilder_SceneDescriptionBufferListener extends IBufferDownloadL
             //id
 
             final JSONString jsonName = jsonObject.getAsString("name");
-            if (jsonName == null)
-            {
-              ILogger.instance().logError("Attribute 'name' not found in SceneJSON");
-            }
-            else
+            if (jsonName != null)
             {
               _builder.setSceneName(jsonName.value());
             }
 
             final JSONString jsonDescription = jsonObject.getAsString("description");
-            if (jsonDescription == null)
-            {
-              ILogger.instance().logError("Attribute 'description' not found in SceneJSON");
-            }
-            else
+            if (jsonDescription != null)
             {
               _builder.setSceneDescription(jsonDescription.value());
             }
 
-            //realTime
-            //iconURL
-            //bgColor
-
             final JSONString jsonBGColor = jsonObject.getAsString("bgColor");
-            if (jsonBGColor == null)
-            {
-              ILogger.instance().logError("Attribute 'bgColor' not found in SceneJSON");
-            }
-            else
+            if (jsonBGColor != null)
             {
               final Color bgColor = Color.parse(jsonBGColor.value());
               if (bgColor == null)
@@ -229,42 +193,22 @@ public class G3MCBuilder_SceneDescriptionBufferListener extends IBufferDownloadL
               else
               {
                 _builder.setSceneBackgroundColor(bgColor);
+                if (bgColor != null)
+                   bgColor.dispose();
               }
             }
 
-            final JSONObject jsonBaseLayer = jsonObject.getAsObject("baseLayer");
-            if (jsonBaseLayer == null)
+            final JSONBaseObject jsonBaseLayer = jsonObject.get("baseLayer");
+            if (jsonBaseLayer != null)
             {
-              ILogger.instance().logError("Attribute 'baseLayer' not found in SceneJSON");
-            }
-            else
-            {
-              Layer baseLayer = parseLayer(jsonBaseLayer);
-              if (baseLayer == null)
-              {
-                ILogger.instance().logError("Can't parse attribute 'baseLayer' in SceneJSON");
-              }
-              else
-              {
-                _builder.changeBaseLayer(baseLayer);
-              }
+              _builder.setSceneBaseLayer(parseLayer(jsonBaseLayer));
             }
 
-            Layer overlayLayer = null;
-            final JSONObject jsonOverlayLayer = jsonObject.getAsObject("overlayLayer");
-            if (jsonOverlayLayer == null)
+            final JSONBaseObject jsonOverlayLayer = jsonObject.get("overlayLayer");
+            if (jsonOverlayLayer != null)
             {
-              ILogger.instance().logInfo("Attribute 'overlayLayer' not found in SceneJSON");
+              _builder.setSceneOverlayLayer(parseLayer(jsonOverlayLayer));
             }
-            else
-            {
-              overlayLayer = parseLayer(jsonOverlayLayer);
-              if (overlayLayer == null)
-              {
-                ILogger.instance().logError("Can't parse attribute 'overlayLayer' in SceneJSON");
-              }
-            }
-            _builder.changeOverlayLayer(overlayLayer);
 
             //tags
 
