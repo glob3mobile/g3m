@@ -14,10 +14,13 @@ class IWebSocket;
 
 class IWebSocketListener {
 public:
+#ifdef C_CODE
+  virtual ~IWebSocketListener() { }
+#endif
+#ifdef JAVA_CODE
+  public void dispose();
+#endif
 
-  virtual ~IWebSocketListener() {
-
-  }
 
   virtual void onOpen(IWebSocket* ws) = 0;
 
