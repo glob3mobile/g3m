@@ -13,6 +13,7 @@
 #include "GLConstants.hpp"
 #include "IGLUniformID.hpp"
 #include "IStringBuilder.hpp"
+#include "GPUVariable.hpp"
 
 class GPUUniform;
 
@@ -50,23 +51,14 @@ public:
 };
 
 
-class GPUUniform{
-  
-  void createMetadata();
+class GPUUniform: public GPUVariable{
   
 protected:
-  const std::string _name;
   const IGLUniformID* _id;
   
   bool _dirty;
   GPUUniformValue* _value;
   const int _type;
-  
-  //Uniform metadata based in our shaders
-  long _key;
-  long _group;
-  long _priority;
-  
 public:
   
   virtual ~GPUUniform(){
@@ -75,7 +67,7 @@ public:
   }
   
   GPUUniform(const std::string&name, IGLUniformID* id, int type):
-  _name(name),
+  GPUVariable(name, UNIFORM),
   _id(id),
   _dirty(false),
   _value(NULL),
@@ -86,11 +78,6 @@ public:
   int getType() const{ return _type;}
   bool wasSet() const { return _value != NULL;}
   GPUUniformValue* getSetValue() const { return _value;}
-  
-  //Uniform metadata based in our shaders
-  long getKey() const { return _key;}
-  long getGroup() const { return _group;}
-  long getPriority() const { return _priority;}
   
   void unset(){
     if (_value != NULL){

@@ -16,6 +16,8 @@
 
 #include "IStringBuilder.hpp"
 
+#include "GPUVariable.hpp"
+
 class GPUAttribute;
 
 class GPUAttributeValue{
@@ -80,9 +82,8 @@ public:
   
 };
 
-class GPUAttribute{
+class GPUAttribute: public GPUVariable{
 protected:
-  const std::string _name;
   const int _id;
   
   bool _dirty;
@@ -90,7 +91,6 @@ protected:
   
   const int _type;
   const int _size;
-  
   
   bool _dirtyEnabled;
   bool _enabled;
@@ -102,7 +102,7 @@ public:
   }
   
   GPUAttribute(const std::string&name, int id, int type, int size):
-  _name(name),
+  GPUVariable(name, ATTRIBUTE),
   _id(id),
   _dirty(false),
   _value(NULL),
@@ -142,26 +142,11 @@ public:
         delete _value;
       }
       _value = v->shallowCopy();
-      //delete v;
     }
   }
   
-  //  void setEnable(bool b){
-  //    if (b != _enabled){
-  //      _enabled = b;
-  //      _dirtyEnabled = true;
-  //    }
-  //  }
   
   virtual void applyChanges(GL* gl){
-    //    if (_dirtyEnabled){
-    //      _dirtyEnabled = false;
-    //      if (_enabled){
-    //        gl->enableVertexAttribArray(_id);
-    //      } else{
-    //        gl->disableVertexAttribArray(_id);
-    //      }
-    //    }
     
     if (_dirty){
       
