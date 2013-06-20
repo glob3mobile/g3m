@@ -134,7 +134,7 @@ void AbstractMesh::createGLState(){
   GPUProgramState& progState = *_glState.getGPUProgramState();
   
   if (_flatColor != NULL && _colors == NULL){  //FlatColorMesh Shader
-    progState.setAttributeValue("Position",
+    progState.setAttributeValue("aPosition",
                                 _vertices, 4, //The attribute is a float vector of 4 elements
                                 3,            //Our buffer contains elements of 3
                                 0,            //Index 0
@@ -154,7 +154,7 @@ void AbstractMesh::createGLState(){
   
   progState.setUniformValue("PointSize", _pointSize);
   
-  progState.setAttributeValue("Position",
+  progState.setAttributeValue("aPosition",
                               _vertices, 4, //The attribute is a float vector of 4 elements
                               3,            //Our buffer contains elements of 3
                               0,            //Index 0

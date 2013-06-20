@@ -27,8 +27,8 @@ SGGeometryNode::~SGGeometryNode() {
 //GPUProgramState * SGGeometryNode::createGPUProgramState(const G3MRenderContext *rc, const GPUProgramState *parentState){
 //  GPUProgramState* progState = new GPUProgramState(parentState);
 //  
-//  progState->setAttributeEnabled("Position", true);
-//  progState->setAttributeValue("Position",
+//  progState->setAttributeEnabled("aPosition", true);
+//  progState->setAttributeValue("aPosition",
 //                               _vertices, 4, //The attribute is a float vector of 4 elements
 //                               3,            //Our buffer contains elements of 3
 //                               0,            //Index 0
@@ -78,8 +78,8 @@ void SGGeometryNode::rawRender(const G3MRenderContext* rc,
 //
 //void SGGeometryNode::modifyGPUProgramState(GPUProgramState& progState) const{
 //  
-//  progState.setAttributeEnabled("Position", true);
-//  progState.setAttributeValue("Position",
+//  progState.setAttributeEnabled("aPosition", true);
+//  progState.setAttributeValue("aPosition",
 //                              _vertices, 4, //The attribute is a float vector of 4 elements
 //                              3,            //Our buffer contains elements of 3
 //                              0,            //Index 0
@@ -119,8 +119,8 @@ void SGGeometryNode::createGLState() const{
   
   GPUProgramState& progState = *_glState.getGPUProgramState();
   
-  progState.setAttributeEnabled("Position", true);
-  progState.setAttributeValue("Position",
+  progState.setAttributeEnabled("aPosition", true);
+  progState.setAttributeValue("aPosition",
                               _vertices, 4, //The attribute is a float vector of 4 elements
                               3,            //Our buffer contains elements of 3
                               0,            //Index 0

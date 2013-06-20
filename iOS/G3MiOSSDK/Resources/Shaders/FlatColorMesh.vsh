@@ -4,7 +4,7 @@
 //  Created by José Miguel Santana Núñez
 //
 
-attribute vec4 Position;
+attribute vec4 aPosition;
 uniform mat4 uModelview;
 
 void main() {

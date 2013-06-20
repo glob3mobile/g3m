@@ -4,7 +4,7 @@
 //  Created by José Miguel Santana Núñez
 //
 
-attribute vec4 Position;
+attribute vec4 aPosition;
 attribute vec2 TextureCoord;
 attribute vec4 Color;
 
@@ -20,7 +20,7 @@ varying vec2 TextureCoordOut;
 
 
 void main() {
-  gl_Position = uModelview * Position;
+  gl_Position = uModelview * aPosition;
   
   TextureCoordOut = (TextureCoord * ScaleTexCoord) + TranslationTexCoord;
   

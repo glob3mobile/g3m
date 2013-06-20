@@ -97,8 +97,8 @@ void DummyRenderer::render(const G3MRenderContext* rc,
   
 //  GPUProgramState progState(NULL);
   
-//  progState.setAttributeEnabled("Position", true);
-//  progState.setAttributeValue("Position",
+//  progState.setAttributeEnabled("aPosition", true);
+//  progState.setAttributeValue("aPosition",
 //                              _vertices, 4, //The attribute is a float vector of 4 elements
 //                              3,            //Our buffer contains elements of 3
 //                              0,            //Index 0
