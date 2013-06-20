@@ -119,21 +119,23 @@ void GPUProgram::getVariables(GL* gl){
   int n = gl->getProgramiv(this, GLVariable::activeUniforms());
   for (int i = 0; i < n; i++) {
     GPUUniform* u = gl->getActiveUniform(this, i);
-    if (u != NULL) _uniforms[u->getName()] = u;
+    if (u != NULL) _uniforms[u->getKey()] = u;
   }
   
   //Attributes
   n = gl->getProgramiv(this, GLVariable::activeAttributes());
   for (int i = 0; i < n; i++) {
     GPUAttribute* a = gl->getActiveAttribute(this, i);
-    if (a != NULL) _attributes[a->getName()] = a;
+    if (a != NULL) _attributes[a->getKey()] = a;
   }
   
 }
 
 GPUUniform* GPUProgram::getGPUUniform(const std::string name) const{
+  int key = GPUVariable::getKeyForName(name, UNIFORM);
+  
 #ifdef C_CODE
-  std::map<std::string, GPUUniform*>::const_iterator it = _uniforms.find(name);
+  std::map<int, GPUUniform*>::const_iterator it = _uniforms.find(key);
   if (it != _uniforms.end()){
     return it->second;
   } else{
@@ -191,8 +193,9 @@ GPUUniformMatrix4Float* GPUProgram::getGPUUniformMatrix4Float(const std::string 
 }
 
 GPUAttribute* GPUProgram::getGPUAttribute(const std::string name) const{
+  const int key = GPUVariable::getKeyForName(name, ATTRIBUTE);
 #ifdef C_CODE
-  std::map<std::string, GPUAttribute*>::const_iterator it = _attributes.find(name);
+  std::map<int, GPUAttribute*>::const_iterator it = _attributes.find(key);
   if (it != _attributes.end()){
     return it->second;
   } else{
@@ -259,7 +262,7 @@ GPUAttributeVec4Float* GPUProgram::getGPUAttributeVec4Float(const std::string na
  Must be called when the program is used
  */
 void GPUProgram::onUsed(){
-//  ILogger::instance()->logInfo("GPUProgram %s being used", _name.c_str());
+  //  ILogger::instance()->logInfo("GPUProgram %s being used", _name.c_str());
 }
 /**
  Must be called when the program is no longer used
@@ -267,12 +270,12 @@ void GPUProgram::onUsed(){
 void GPUProgram::onUnused(GL* gl){
   //ILogger::instance()->logInfo("GPUProgram %s unused", _name.c_str());
 #ifdef C_CODE
-  for (std::map<std::string, GPUUniform*>::iterator iter = _uniforms.begin(); iter != _uniforms.end(); iter++) {
+  for (std::map<int, GPUUniform*>::iterator iter = _uniforms.begin(); iter != _uniforms.end(); iter++) {
     GPUUniform* u = iter->second;
     u->unset();
   }
   
-  for (std::map<std::string, GPUAttribute*>::iterator iter = _attributes.begin(); iter != _attributes.end(); iter++) {
+  for (std::map<int, GPUAttribute*>::iterator iter = _attributes.begin(); iter != _attributes.end(); iter++) {
     GPUAttribute* a = iter->second;
     a->unset(gl);
   }
@@ -300,7 +303,7 @@ void GPUProgram::onUnused(GL* gl){
 void GPUProgram::applyChanges(GL* gl){
   //ILogger::instance()->logInfo("GPUProgram %s applying changes", _name.c_str());
 #ifdef C_CODE
-  for (std::map<std::string, GPUUniform*>::iterator iter = _uniforms.begin(); iter != _uniforms.end(); iter++) {
+  for (std::map<int, GPUUniform*>::iterator iter = _uniforms.begin(); iter != _uniforms.end(); iter++) {
     
     GPUUniform* u = iter->second;
     if (u->wasSet()){
@@ -309,37 +312,37 @@ void GPUProgram::applyChanges(GL* gl){
       ILogger::instance()->logError("Uniform " + u->getName() + " was not set.");
     }
     
-//    if (u->getName().compare("EnableTexture") == 0){
-//      if (((GPUUniformValueBool*)u->getSetValue())->_value){
-//        TexEnabledCounter++;
-//      } else{
-//        TexDisabledCounter++;
-//      }
-//    }
-//    
-//    if (u->getName().compare("EnableFlatColor") == 0){
-//      if (((GPUUniformValueBool*)u->getSetValue())->_value){
-//        FlatColorEnabledCounter++;
-//      } else{
-//        FlatColorDisabledCounter++;
-//      }
-//    }
-//    
-//    if (u->getName().compare("EnableColorPerVertex") == 0){
-//      if (((GPUUniformValueBool*)u->getSetValue())->_value){
-//        ColorEnabledCounter++;
-//      } else{
-//        ColorDisabledCounter++;
-//      }
-//    }
+    //    if (u->getName().compare("EnableTexture") == 0){
+    //      if (((GPUUniformValueBool*)u->getSetValue())->_value){
+    //        TexEnabledCounter++;
+    //      } else{
+    //        TexDisabledCounter++;
+    //      }
+    //    }
+    //
+    //    if (u->getName().compare("EnableFlatColor") == 0){
+    //      if (((GPUUniformValueBool*)u->getSetValue())->_value){
+    //        FlatColorEnabledCounter++;
+    //      } else{
+    //        FlatColorDisabledCounter++;
+    //      }
+    //    }
+    //
+    //    if (u->getName().compare("EnableColorPerVertex") == 0){
+    //      if (((GPUUniformValueBool*)u->getSetValue())->_value){
+    //        ColorEnabledCounter++;
+    //      } else{
+    //        ColorDisabledCounter++;
+    //      }
+    //    }
   }
   
-//  printf("TexEnabled: %f, FlatColorEnabled: %f, ColorEnabled: %f\n",
-//         ((double)TexEnabledCounter) / (TexEnabledCounter+ TexDisabledCounter),
-//         ((double)FlatColorEnabledCounter) / (FlatColorEnabledCounter+ FlatColorDisabledCounter),
-//         ((double)ColorEnabledCounter) / (ColorEnabledCounter+ ColorDisabledCounter));
+  //  printf("TexEnabled: %f, FlatColorEnabled: %f, ColorEnabled: %f\n",
+  //         ((double)TexEnabledCounter) / (TexEnabledCounter+ TexDisabledCounter),
+  //         ((double)FlatColorEnabledCounter) / (FlatColorEnabledCounter+ FlatColorDisabledCounter),
+  //         ((double)ColorEnabledCounter) / (ColorEnabledCounter+ ColorDisabledCounter));
   
-  for (std::map<std::string, GPUAttribute*>::iterator iter = _attributes.begin(); iter != _attributes.end(); iter++) {
+  for (std::map<int, GPUAttribute*>::iterator iter = _attributes.begin(); iter != _attributes.end(); iter++) {
     
     GPUAttribute* a = iter->second;
     if (a->wasSet()){
@@ -359,7 +362,7 @@ void GPUProgram::applyChanges(GL* gl){
       ILogger.instance().logError("Uniform " + u.getName() + " was not set.");
     }
   }
-
+  
   for (final GPUAttribute a : _attributes.values()) {
     if (a.wasSet()){
       a.applyChanges(gl);
@@ -393,4 +396,41 @@ GPUUniform* GPUProgram::getUniformOfType(const std::string& name, int type) cons
     }
   }
   return u;
+}
+
+GPUUniform* GPUProgram::getGPUUniform(int key) const{
+#ifdef C_CODE
+  std::map<int, GPUUniform*>::const_iterator it = _uniforms.find(key);
+  if (it != _uniforms.end()){
+    return it->second;
+  } else{
+    return NULL;
+  }
+#endif
+#ifdef JAVA_CODE
+  return _uniforms.get(name);
+#endif
+}
+
+GPUAttribute* GPUProgram::getGPUAttribute(int key) const{
+#ifdef C_CODE
+  std::map<int, GPUAttribute*>::const_iterator it = _attributes.find(key);
+  if (it != _attributes.end()){
+    return it->second;
+  } else{
+    return NULL;
+  }
+#endif
+#ifdef JAVA_CODE
+  return _uniforms.get(name);
+#endif
+}
+
+GPUAttribute* GPUProgram::getGPUAttributeVecXFloat(int key, int x) const{
+  
+  GPUAttribute* a = getGPUAttribute(key);
+  if (a->getType() == GLType::glFloat() && a->getSize() == x){
+    return a;
+  }
+  return NULL;
 }

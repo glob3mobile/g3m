@@ -21,57 +21,88 @@
 
 class GPUProgramState{
   
-//  struct attributeEnabledStruct{
-//    bool value;
-//    mutable GPUAttribute* attribute;
-//  };
-  std::map<std::string, GPUUniformValue*> _uniformValues;
-  std::map<std::string, GPUAttributeValue*> _attributesValues;
-//  std::map<std::string, attributeEnabledStruct> _attributesEnabled;
+  std::map<int, GPUUniformValue*> _uniformValues;
+  std::map<int, GPUAttributeValue*> _attributesValues;
   
-  bool setGPUUniformValue(const std::string& name, GPUUniformValue* v);
-  bool setGPUAttributeValue(const std::string& name, GPUAttributeValue* v);
+  bool setGPUUniformValue(int key, GPUUniformValue* v);
+  bool setGPUAttributeValue(int key, GPUAttributeValue* v);
   
-  mutable std::vector<std::string>* _uniformNames;
+  mutable std::vector<int>* _uniformKeys;
   
   mutable GPUProgram* _lastProgramUsed;
   
   void onStructureChanged(){
-    delete _uniformNames;
-    _uniformNames = NULL;
+    delete _uniformKeys;
+    _uniformKeys = NULL;
     _lastProgramUsed = NULL;
   }
   
 public:
   
-  GPUProgramState(): _lastProgramUsed(NULL), _uniformNames(NULL){}
+  GPUProgramState(): _lastProgramUsed(NULL), _uniformKeys(NULL){}
   
   ~GPUProgramState();
   
   void clear();
   
-  bool setUniformValue(const std::string& name, bool b);
+  bool setUniformValue(const std::string& name, bool b){
+    return setUniformValue(GPUVariable::getKeyForName(name, UNIFORM), b);
+  }
   
-  bool setUniformValue(const std::string& name, float f);
+  bool setUniformValue(const std::string& name, float f){
+    return setUniformValue(GPUVariable::getKeyForName(name, UNIFORM), f);
+  }
   
-  bool setUniformValue(const std::string& name, const Vector2D& v);
+  bool setUniformValue(const std::string& name, const Vector2D& v){
+    return setUniformValue(GPUVariable::getKeyForName(name, UNIFORM), v);
+  }
   
-  bool setUniformValue(const std::string& name, double x, double y);
+  bool setUniformValue(const std::string& name, double x, double y){
+    return setUniformValue(GPUVariable::getKeyForName(name, UNIFORM), x, y);
+  }
   
-  bool setUniformValue(const std::string& name, double x, double y, double z, double w);
+  bool setUniformValue(const std::string& name, double x, double y, double z, double w){
+    return setUniformValue(GPUVariable::getKeyForName(name, UNIFORM), x, y, z, w);
+  }
   
-//  bool setUniformValue(const std::string& name, const MutableMatrix44D* m);
-//  
-//  bool multiplyUniformValue(const std::string& name, const MutableMatrix44D* m);
-  
-  bool setUniformMatrixValue(const std::string& name, const MutableMatrix44D& m, bool isTransform);
+  bool setUniformMatrixValue(const std::string& name, const MutableMatrix44D& m, bool isTransform){
+    return setUniformMatrixValue(GPUVariable::getKeyForName(name, UNIFORM), m, isTransform);
+  }
   
   bool setAttributeValue(const std::string& name,
                          IFloatBuffer* buffer, int attributeSize,
+                         int arrayElementSize, int index, bool normalized, int stride){
+    return setAttributeValue(GPUVariable::getKeyForName(name, ATTRIBUTE),
+                             buffer, attributeSize,
+                             arrayElementSize, index, normalized, stride);
+  }
+  
+  void setAttributeEnabled(const std::string& name, bool enabled){
+    setAttributeEnabled(GPUVariable::getKeyForName(name, ATTRIBUTE), enabled);
+  }
+  void setAttributeDisabled(const std::string& name){
+    setAttributeDisabled(GPUVariable::getKeyForName(name, ATTRIBUTE));
+  }
+  
+  
+  bool setUniformValue(int key, bool b);
+  
+  bool setUniformValue(int key, float f);
+  
+  bool setUniformValue(int key, const Vector2D& v);
+  
+  bool setUniformValue(int key, double x, double y);
+  
+  bool setUniformValue(int key, double x, double y, double z, double w);
+  
+  bool setUniformMatrixValue(int key, const MutableMatrix44D& m, bool isTransform);
+  
+  bool setAttributeValue(int key,
+                         IFloatBuffer* buffer, int attributeSize,
                          int arrayElementSize, int index, bool normalized, int stride);
   
-  void setAttributeEnabled(const std::string& name, bool enabled);
-  void setAttributeDisabled(const std::string& name);
+  void setAttributeEnabled(int key, bool enabled);
+  void setAttributeDisabled(int key);
   
   void applyChanges(GL* gl) const;
   
@@ -85,11 +116,11 @@ public:
     return _lastProgramUsed;
   }
   
-  std::vector<std::string>* getUniformsNames() const;
+  std::vector<int>* getUniformsKeys() const;
   
   std::string description() const;
   
-  bool isLinkableToProgram(const GPUProgram& program) const;
+  //  bool isLinkableToProgram(const GPUProgram& program) const;
   
   void applyValuesToLinkedProgram() const;
   

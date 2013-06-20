@@ -18,20 +18,20 @@ GPUProgram* GPUProgramManager::getProgram(GL* gl, GLState* const glState) {
   
   GLState* thisGLState = glState;
   while (thisGLState != NULL) {
-    std::vector<std::string>* ui = thisGLState->getGPUProgramState()->getUniformsNames();
+    std::vector<int>* ui = thisGLState->getGPUProgramState()->getUniformsKeys();
     int sizeI = ui->size();
     for (int j = 0; j < sizeI; j++) {
-      std::string& name = ui->at(j);
+      int key = ui->at(j);
       
-      if (name.compare("uViewPortExtent") == 0){
+      if (key == GPUVariable::VIEWPORT_EXTENT){
         billboard = true;
       }
       
-      if (name.compare("uFlatColor") == 0){
+      if (key == GPUVariable::FLAT_COLOR){
         flatColor = true;
       }
       
-      if (name.compare("uTranslationTexCoord")==0){
+      if (key == GPUVariable::TRANSLATION_TEXTURE_COORDS){
         texture = true;
       }
     }

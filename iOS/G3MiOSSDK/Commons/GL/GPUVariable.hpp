@@ -54,6 +54,8 @@ public:
   static const int FlatColorIntensity;
   static const int ColorPerVertexIntensity;
   
+  static int getKeyForName(const std::string& name, int variableType);
+  
   
   
   static const int GROUP_COLOR;

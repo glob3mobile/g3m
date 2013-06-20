@@ -42,8 +42,8 @@ class GPUProgram{
   //INativeGL* _nativeGL;
   int _programID;
   bool _programCreated;
-  std::map<std::string, GPUAttribute*> _attributes;
-  std::map<std::string, GPUUniform*> _uniforms;
+  std::map<int, GPUAttribute*> _attributes;
+  std::map<int, GPUUniform*> _uniforms;
   std::string _name;
   
   bool compileShader(GL* gl, int shader, const std::string& source) const;
@@ -92,6 +92,10 @@ public:
   void applyChanges(GL* gl);
   
   GPUUniform* getUniformOfType(const std::string& name, int type) const;
+  
+  GPUUniform* getGPUUniform(int key) const;
+  GPUAttribute* getGPUAttribute(int key) const;
+  GPUAttribute* getGPUAttributeVecXFloat(int key, int x) const;
 };
 
 #endif /* defined(__G3MiOSSDK__GPUProgram__) */

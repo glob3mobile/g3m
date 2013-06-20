@@ -22,9 +22,6 @@ const int GPUVariable::POSITION = 8;
 const int GPUVariable::TEXTURE_COORDS = 9;
 const int GPUVariable::COLOR = 10;
 
-const int GPUVariable::GROUP_NOGROUP = -1;
-const int GPUVariable::GROUP_COLOR = 1;
-
 //TODO: DELETE
 const int GPUVariable::EnableColorPerVertex = 11;
 const int GPUVariable::EnableTexture = 12;
@@ -32,97 +29,138 @@ const int GPUVariable::EnableFlatColor = 13;
 const int GPUVariable::FlatColorIntensity = 14;
 const int GPUVariable::ColorPerVertexIntensity = 15;
 
-void GPUVariable::createMetadata(){
-  _group = GROUP_NOGROUP;
-  _priority = -1;
-  _key = UNRECOGNIZED;
+const int GPUVariable::GROUP_NOGROUP = -1;
+const int GPUVariable::GROUP_COLOR = 1;
+
+int GPUVariable::getKeyForName(const std::string& name, int variableType){
   
-  if (_variableType == UNIFORM){
-    if (_name.compare("uFlatColor") == 0){
-      _key = FLAT_COLOR;
-      _group = GROUP_COLOR;
+  if (variableType == UNIFORM){
+    if (name.compare("uFlatColor") == 0){
+      return FLAT_COLOR;
     }
     
-    if (_name.compare("uModelview") == 0){
-      _key = MODELVIEW;
+    if (name.compare("uModelview") == 0){
+      return MODELVIEW;
     }
     
-    if (_name.compare("uTextureExtent") == 0){
-      _key = TEXTURE_EXTENT;
-      _group = GROUP_COLOR;
+    if (name.compare("uTextureExtent") == 0){
+      return TEXTURE_EXTENT;
     }
     
-    if (_name.compare("uViewPortExtent") == 0){
-      _key = VIEWPORT_EXTENT;
+    if (name.compare("uViewPortExtent") == 0){
+      return  VIEWPORT_EXTENT;
     }
     
-    if (_name.compare("uTranslationTexCoord") == 0){
-      _key = TRANSLATION_TEXTURE_COORDS;
-      _group = GROUP_COLOR;
+    if (name.compare("uTranslationTexCoord") == 0){
+      return  TRANSLATION_TEXTURE_COORDS;
     }
     
-    if (_name.compare("uScaleTexCoord") == 0){
-      _key = TRANSLATION_TEXTURE_COORDS;
-      _group = GROUP_COLOR;
+    if (name.compare("uScaleTexCoord") == 0){
+      return  SCALE_TEXTURE_COORDS;
     }
     
     
     if (true){ //DELETE
-      if (_name.compare("EnableColorPerVertex") == 0){
-        _key = EnableColorPerVertex;
-        _group = GROUP_COLOR;
+      if (name.compare("EnableColorPerVertex") == 0){
+        return  EnableColorPerVertex;
       }
       
-      if (_name.compare("EnableTexture") == 0){
-        _key = EnableTexture;
-        _group = GROUP_COLOR;
+      if (name.compare("EnableTexture") == 0){
+        return  EnableTexture;
       }
       
-      if (_name.compare("EnableFlatColor") == 0){
-        _key = EnableFlatColor;
-        _group = GROUP_COLOR;
+      if (name.compare("EnableFlatColor") == 0){
+        return  EnableFlatColor;
       }
       
-      if (_name.compare("FlatColorIntensity") == 0){
-        _key = FlatColorIntensity;
-        _group = GROUP_COLOR;
-        _group = GROUP_COLOR;
+      if (name.compare("FlatColorIntensity") == 0){
+        return  FlatColorIntensity;
       }
       
-      if (_name.compare("ColorPerVertexIntensity") == 0){
-        _key = ColorPerVertexIntensity;
-        _group = GROUP_COLOR;
-        _group = GROUP_COLOR;
+      if (name.compare("ColorPerVertexIntensity") == 0){
+        return  ColorPerVertexIntensity;
       }
       
-      if (_name.compare("uPointSize") == 0){
-        _key = POINT_SIZE;
-        _group = GROUP_COLOR;
+      if (name.compare("uPointSize") == 0){
+        return  POINT_SIZE;
       }
     }
+  }
+  
+  if (variableType == ATTRIBUTE){
+    if (name.compare("aPosition") == 0){
+      return POSITION;
+    }
     
-    if (_key == UNRECOGNIZED){
-      ILogger::instance()->logError("Unrecognized GPU uniform %s\n", _name.c_str());
+    if (name.compare("aColor") == 0){
+      return  COLOR;
+    }
+    
+    if (name.compare("aTextureCoord") == 0){
+      return  TEXTURE_COORDS;
+    }
+  }
+  
+  return UNRECOGNIZED;
+}
+
+void GPUVariable::createMetadata(){
+  _group = GROUP_NOGROUP;
+  _priority = -1;
+  _key = getKeyForName(_name, _variableType);
+  
+  if (_key == UNRECOGNIZED){
+    ILogger::instance()->logError("Unrecognized GPU VARAIBLE %s\n", _name.c_str());
+  }
+  
+  if (_variableType == UNIFORM){
+    if (_key == FLAT_COLOR){
+      _group = GROUP_COLOR;
+    }
+    
+    if (_key == TEXTURE_EXTENT){
+      _group = GROUP_COLOR;
+    }
+    
+    if (_key == TRANSLATION_TEXTURE_COORDS){
+      _group = GROUP_COLOR;
+    }
+    
+    if (_key == TRANSLATION_TEXTURE_COORDS){
+      _group = GROUP_COLOR;
+    }
+
+    if (true){ //DELETE
+      if (_key == EnableColorPerVertex){
+        _group = GROUP_COLOR;
+      }
+      
+      if (_key == EnableTexture){
+        _group = GROUP_COLOR;
+      }
+      
+      if ( _key == EnableFlatColor){
+        _group = GROUP_COLOR;
+      }
+      
+      if (_key == FlatColorIntensity){
+        _group = GROUP_COLOR;
+      }
+      
+      if (_key == ColorPerVertexIntensity){
+        _group = GROUP_COLOR;
+      }
     }
   }
   
   if (_variableType == ATTRIBUTE){
-    if (_name.compare("aPosition") == 0){
-      _key = POSITION;
-    }
-    
-    if (_name.compare("aColor") == 0){
-      _key = COLOR;
+
+    if (_key == COLOR){
       _group = GROUP_COLOR;
     }
     
-    if (_name.compare("aTextureCoord") == 0){
-      _key = TEXTURE_COORDS;
+    if (_key == TEXTURE_COORDS){
       _group = GROUP_COLOR;
-    }
-    
-    if (_key == UNRECOGNIZED){
-      ILogger::instance()->logError("Unrecognized GPU attribute %s\n", _name.c_str());
     }
   }
   
