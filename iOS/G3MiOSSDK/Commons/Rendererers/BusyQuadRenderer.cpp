@@ -139,7 +139,7 @@ void BusyQuadRenderer::createGLState() const{
   
   progState.setUniformValue("ColorPerVertexIntensity", (float)0.0);
   progState.setUniformValue("EnableFlatColor", false);
-  progState.setUniformValue("uFlatColor", (float)0.0, (float)0.0, (float)0.0, (float)0.0);
+  progState.setUniformValue(GPUVariable::FLAT_COLOR, (float)0.0, (float)0.0, (float)0.0, (float)0.0);
   progState.setUniformValue("FlatColorIntensity", (float)0.0);
   
   progState.setAttributeEnabled("aTextureCoord", false);
@@ -147,5 +147,5 @@ void BusyQuadRenderer::createGLState() const{
   
   //Modelview and projection
   _modelviewMatrix = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, 1));
-  _glState.getGPUProgramState()->setUniformMatrixValue("uModelview", _projectionMatrix.multiply(_modelviewMatrix), false);
+  _glState.getGPUProgramState()->setUniformMatrixValue(GPUVariable::MODELVIEW, _projectionMatrix.multiply(_modelviewMatrix), false);
 }

@@ -434,7 +434,7 @@ void Mark::createGLState(const Planet* planet, int viewportWidth, int viewportHe
   
   IFloatBuffer* vertices = vertex.create();
   
-  progState->setAttributeValue("aPosition",
+  progState->setAttributeValue(GPUVariable::POSITION,
                                vertices, 4, //The attribute is a float vector of 4 elements
                                3,            //Our buffer contains elements of 3
                                0,            //Index 0

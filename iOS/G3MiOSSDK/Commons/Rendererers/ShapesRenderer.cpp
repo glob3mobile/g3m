@@ -61,7 +61,7 @@ void ShapesRenderer::render(const G3MRenderContext* rc) {
   const Vector3D cameraPosition = rc->getCurrentCamera()->getCartesianPosition();
   
   //Setting camera matrixes
-  _glState.getGPUProgramState()->setUniformMatrixValue("uModelview", rc->getCurrentCamera()->getModelViewMatrix(), false);
+  _glState.getGPUProgramState()->setUniformMatrixValue(GPUVariable::MODELVIEW, rc->getCurrentCamera()->getModelViewMatrix(), false);
   
   const int shapesCount = _shapes.size();
   for (int i = 0; i < shapesCount; i++) {
@@ -107,7 +107,7 @@ void ShapesRenderer::createGLState(){
   
   progState.setUniformValue("ColorPerVertexIntensity", (float)0.0);
   progState.setUniformValue("EnableFlatColor", false);
-  progState.setUniformValue("uFlatColor", (float)0.0, (float)0.0, (float)0.0, (float)0.0);
+  progState.setUniformValue(GPUVariable::FLAT_COLOR, (float)0.0, (float)0.0, (float)0.0, (float)0.0);
   progState.setUniformValue("FlatColorIntensity", (float)0.0);
   
   progState.setAttributeEnabled("aTextureCoord", false);

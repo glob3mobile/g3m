@@ -25,7 +25,7 @@
 //  
 //  //  if (_baseColor != NULL){
 //  //    progState->setUniformValue("EnableFlatColor", true);
-//  //    progState->setUniformValue("uFlatColor",
+//  //    progState->setUniformValue(GPUVariable::FLAT_COLOR,
 //  //                               (double)_baseColor->getRed(),
 //  //                               (double)_baseColor->getBlue(),
 //  //                               (double) _baseColor->getGreen(),
@@ -45,7 +45,7 @@ void SGMaterialNode::modifyGPUProgramState(GPUProgramState& progState) const{
   
   if (_baseColor != NULL){
     progState.setUniformValue("EnableFlatColor", true);
-    progState.setUniformValue("uFlatColor",
+    progState.setUniformValue(GPUVariable::FLAT_COLOR,
                               (double)_baseColor->getRed(),
                               (double)_baseColor->getBlue(),
                               (double) _baseColor->getGreen(),

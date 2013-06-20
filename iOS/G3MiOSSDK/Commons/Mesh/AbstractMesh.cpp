@@ -134,19 +134,19 @@ void AbstractMesh::createGLState(){
   GPUProgramState& progState = *_glState.getGPUProgramState();
   
   if (_flatColor != NULL && _colors == NULL){  //FlatColorMesh Shader
-    progState.setAttributeValue("aPosition",
+    progState.setAttributeValue(GPUVariable::POSITION,
                                 _vertices, 4, //The attribute is a float vector of 4 elements
                                 3,            //Our buffer contains elements of 3
                                 0,            //Index 0
                                 false,        //Not normalized
                                 0);           //Stride 0
-    progState.setUniformValue("uFlatColor",
+    progState.setUniformValue(GPUVariable::FLAT_COLOR,
                               (double)_flatColor->getRed(),
                               (double)_flatColor->getGreen(),
                               (double) _flatColor->getBlue(),
                               (double) _flatColor->getAlpha());
     if (_translationMatrix != NULL){
-      progState.setUniformMatrixValue("uModelview", *_translationMatrix, true);
+      progState.setUniformMatrixValue(GPUVariable::MODELVIEW, *_translationMatrix, true);
     }
     return;
   }
@@ -154,7 +154,7 @@ void AbstractMesh::createGLState(){
   
   progState.setUniformValue("uPointSize", _pointSize);
   
-  progState.setAttributeValue("aPosition",
+  progState.setAttributeValue(GPUVariable::POSITION,
                               _vertices, 4, //The attribute is a float vector of 4 elements
                               3,            //Our buffer contains elements of 3
                               0,            //Index 0
@@ -179,7 +179,7 @@ void AbstractMesh::createGLState(){
   
 //  if (_flatColor != NULL){
 //    progState.setUniformValue("EnableFlatColor", true);
-//    progState.setUniformValue("uFlatColor",
+//    progState.setUniformValue(GPUVariable::FLAT_COLOR,
 //                              (double)_flatColor->getRed(),
 //                              (double)_flatColor->getGreen(),
 //                              (double) _flatColor->getBlue(),
@@ -189,12 +189,12 @@ void AbstractMesh::createGLState(){
 //  } else{
 //    progState.setUniformValue("EnableFlatColor", false);
     progState.setUniformValue("ColorPerVertexIntensity", (float)0.0);
-//    progState.setUniformValue("uFlatColor", (float)0.0, (float)0.0, (float)0.0, (float)0.0);
+//    progState.setUniformValue(GPUVariable::FLAT_COLOR, (float)0.0, (float)0.0, (float)0.0, (float)0.0);
 //    progState.setUniformValue("FlatColorIntensity", (float)0.0);
 //  }
   
   if (_translationMatrix != NULL){
-    progState.setUniformMatrixValue("uModelview", *_translationMatrix, true);
+    progState.setUniformMatrixValue(GPUVariable::MODELVIEW, *_translationMatrix, true);
   }
 }
 

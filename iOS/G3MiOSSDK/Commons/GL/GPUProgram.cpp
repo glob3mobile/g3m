@@ -47,7 +47,7 @@ GPUProgram* GPUProgram::createProgram(GL* gl, const std::string name, const std:
   
   ILogger::instance()->logInfo("FRAGMENT SOURCE: \n %s", fragmentSource.c_str());
   
-  //gl->bindAttribLocation(p, 0, "aPosition");
+  //gl->bindAttribLocation(p, 0, GPUVariable::POSITION);
   
   // link program
   if (!p->linkProgram(gl)) {
