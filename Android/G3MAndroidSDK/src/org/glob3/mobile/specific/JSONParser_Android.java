@@ -84,10 +84,12 @@ public class JSONParser_Android
          final int length = jsonArray.length();
          for (int i = 0; i < length; i++) {
             try {
-               final JSONBaseObject child = jsonArray.isNull(i) //
-                                                               ? (nullAsObject ? new JSONNull() : null) //
-                                                               : convert(jsonArray.get(i), nullAsObject);
-               result.add(child);
+               if (jsonArray.isNull(i)) {
+                  result.add(nullAsObject ? new JSONNull() : null);
+               }
+               else {
+                  result.add(convert(jsonArray.get(i), nullAsObject));
+               }
             }
             catch (final org.json.JSONException e) {
                e.printStackTrace();
@@ -103,12 +105,12 @@ public class JSONParser_Android
          for (int i = 0; i < length; i++) {
             try {
                final String key = attributes.getString(i);
-
-               final JSONBaseObject value = jsonObj.isNull(key) //
-                                                               ? (nullAsObject ? new JSONNull() : null) //
-                                                               : convert(jsonObj.get(key), nullAsObject);
-
-               result.put(key, value);
+               if (jsonObj.isNull(key)) {
+                  result.put(key, nullAsObject ? new JSONNull() : null);
+               }
+               else {
+                  result.put(key, convert(jsonObj.get(key), nullAsObject));
+               }
             }
             catch (final org.json.JSONException e) {
                e.printStackTrace();
