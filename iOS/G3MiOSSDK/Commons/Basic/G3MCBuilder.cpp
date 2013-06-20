@@ -667,6 +667,9 @@ public:
   {
   }
 
+  ~G3MCBuilder_TubeSceneListener() {
+  }
+
   void onOpen(IWebSocket* ws) {
   }
 
