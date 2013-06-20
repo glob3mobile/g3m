@@ -41,6 +41,8 @@ package org.glob3.mobile.generated;
 //class CartoDBLayer;
 //class MapBoxLayer;
 //class WMSLayer;
+//class G3MContext;
+//class IWebSocket;
 
 
 

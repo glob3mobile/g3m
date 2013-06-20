@@ -24,6 +24,9 @@ public abstract class G3MCBuilder
   private G3MWidget _g3mWidget;
   private IStorage _storage;
 
+  private IWebSocket _sceneTubeWebSocket;
+  private boolean _isSceneTubeOpen;
+
   private LayerSet _layerSet;
   private TileRenderer createTileRenderer()
   {
@@ -38,11 +41,6 @@ public abstract class G3MCBuilder
     final boolean forceFirstLevelTilesRenderOnStart = true;
     final boolean incrementalTileQuality = false;
     final boolean renderIncompletePlanet = false;
-  
-    // int _TODO_select_PlanetIncompletedTexture;
-    // const URL incompletePlanetTexureURL("http://steve.files.wordpress.com/2006/03/Matrix%20tut%202.jpg", false);
-    // const URL incompletePlanetTexureURL("http://www.myfreetextures.com/wp-content/uploads/2011/06/stripes1.jpg", false);
-    // const URL incompletePlanetTexureURL("http://images.fineartamerica.com/images-medium-large/optical-illusion-the-grid-sumit-mehndiratta.jpg", false);
     final URL incompletePlanetTexureURL = new URL("", false);
   
     final TilesRenderParameters parameters = new TilesRenderParameters(renderDebug, useTilesSplitBudget, forceFirstLevelTilesRenderOnStart, incrementalTileQuality, renderIncompletePlanet, incompletePlanetTexureURL);
@@ -85,7 +83,11 @@ public abstract class G3MCBuilder
   {
     java.util.ArrayList<PeriodicalTask> periodicalTasks = new java.util.ArrayList<PeriodicalTask>();
   
-    if (!_useWebSockets)
+    if (_useWebSockets)
+    {
+      periodicalTasks.add(new PeriodicalTask(TimeInterval.fromSeconds(2), new G3MCBuilder_TubeWatchdogPeriodicalTask(this)));
+    }
+    else
     {
       periodicalTasks.add(new PeriodicalTask(TimeInterval.fromSeconds(2), new G3MCBuilder_PollingScenePeriodicalTask(this)));
     }
@@ -176,7 +178,7 @@ public abstract class G3MCBuilder
 
   private GInitializationTask createInitializationTask()
   {
-    return _useWebSockets ? new G3MCBuilder_WebSocketConnector(this) : null;
+    return _useWebSockets ? new G3MCBuilder_SceneTubeConnector(this) : null;
   }
 
 
@@ -332,6 +334,8 @@ public abstract class G3MCBuilder
      _layerSet = new LayerSet();
      _downloader = null;
      _sceneListener = sceneListener;
+     _isSceneTubeOpen = false;
+     _sceneTubeWebSocket = null;
   
   }
 
@@ -375,16 +379,11 @@ public abstract class G3MCBuilder
   
     CompositeRenderer mainRenderer = new CompositeRenderer();
   
-  
     TileRenderer tileRenderer = createTileRenderer();
     mainRenderer.addRenderer(tileRenderer);
   
-  
     java.util.ArrayList<ICameraConstrainer> cameraConstraints = createCameraConstraints();
   
-    //Color backgroundColor = Color::fromRGBA(0, 0.1f, 0.2f, 1);
-  
-    // GInitializationTask* initializationTask = new G3MCInitializationTask(this, createSceneDescriptionURL());
     GInitializationTask initializationTask = createInitializationTask();
   
     java.util.ArrayList<PeriodicalTask> periodicalTasks = createPeriodicalTasks();
@@ -392,8 +391,6 @@ public abstract class G3MCBuilder
     ICameraActivityListener cameraActivityListener = null;
   
     _g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), cameraActivityListener, createPlanet(), cameraConstraints, createCameraRenderer(), mainRenderer, createBusyRenderer(), _sceneBackgroundColor, false, false, initializationTask, true, periodicalTasks); // autoDeleteInitializationTask -  logDownloaderStatistics -  logFPS
-  
-    //  g3mWidget->setUserData(getUserData());
   
     cameraConstraints = null;
     periodicalTasks = null;
@@ -547,7 +544,7 @@ public abstract class G3MCBuilder
   }
 
   /** Private to G3M, don't call it */
-  public final URL createTubeSceneURL()
+  public final URL createSceneTubeURL()
   {
     final String tubesPath = _tubesURL.getPath();
   
@@ -568,7 +565,10 @@ public abstract class G3MCBuilder
         _sceneListener.onSceneChanged(sceneId);
       }
   
-      int TODO_change_tube_scene;
+      if (_sceneTubeWebSocket != null)
+      {
+        _sceneTubeWebSocket.close();
+      }
     }
   }
 
@@ -670,6 +670,32 @@ public abstract class G3MCBuilder
          jsonBaseObject.dispose();
     }
   
+  }
+
+  /** Private to G3M, don't call it */
+  public final void openSceneTube(G3MContext context)
+  {
+    final boolean autodeleteListener = true;
+    final boolean autodeleteWebSocket = true;
+  
+    _sceneTubeWebSocket = context.getFactory().createWebSocket(createSceneTubeURL(), new G3MCBuilder_SceneTubeListener(this), autodeleteListener, autodeleteWebSocket);
+  }
+
+  public final void setSceneTubeOpened(boolean open)
+  {
+    if (_isSceneTubeOpen != open)
+    {
+      _isSceneTubeOpen = open;
+      if (!_isSceneTubeOpen)
+      {
+        _sceneTubeWebSocket = null;
+      }
+    }
+  }
+
+  public final boolean isSceneTubeOpen()
+  {
+    return _isSceneTubeOpen;
   }
 
   public final void changeScene(String sceneId)

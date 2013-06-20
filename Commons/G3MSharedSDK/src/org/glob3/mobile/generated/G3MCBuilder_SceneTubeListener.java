@@ -1,9 +1,9 @@
 package org.glob3.mobile.generated; 
-public class G3MCBuilder_TubeSceneListener implements IWebSocketListener
+public class G3MCBuilder_SceneTubeListener implements IWebSocketListener
 {
   private G3MCBuilder _builder;
 
-  public G3MCBuilder_TubeSceneListener(G3MCBuilder builder)
+  public G3MCBuilder_SceneTubeListener(G3MCBuilder builder)
   {
      _builder = builder;
   }
@@ -14,11 +14,13 @@ public class G3MCBuilder_TubeSceneListener implements IWebSocketListener
 
   public final void onOpen(IWebSocket ws)
   {
+    ILogger.instance().logError("Tube '%s' opened!", ws.getURL().getPath());
+    _builder.setSceneTubeOpened(true);
   }
 
   public final void onError(IWebSocket ws, String error)
   {
-    ILogger.instance().logError("Error '%s' on Tube '%s' Error: ", error, ws.getURL().getPath());
+    ILogger.instance().logError("Error '%s' on Tube '%s'", error, ws.getURL().getPath());
   }
 
   public final void onMesssage(IWebSocket ws, String message)
@@ -28,7 +30,7 @@ public class G3MCBuilder_TubeSceneListener implements IWebSocketListener
 
   public final void onClose(IWebSocket ws)
   {
-    ILogger.instance().logError("Tube '%s' Closed", ws.getURL().getPath());
-    int TODO_reconnect_to_tube;
+    ILogger.instance().logError("Tube '%s' closed!", ws.getURL().getPath());
+    _builder.setSceneTubeOpened(false);
   }
 }
