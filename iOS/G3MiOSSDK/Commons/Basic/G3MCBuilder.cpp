@@ -688,6 +688,7 @@ public:
   void onClose(IWebSocket* ws) {
     ILogger::instance()->logError("Tube '%s' Closed",
                                   ws->getURL().getPath().c_str());
+    int TODO_reconnect_to_tube;
   }
 };
 
@@ -1012,5 +1013,7 @@ void G3MCBuilder::rawChangeScene(const std::string& sceneId) {
     if (_sceneListener != NULL) {
       _sceneListener->onSceneChanged(sceneId);
     }
+
+    int TODO_change_tube_scene;
   }
 }

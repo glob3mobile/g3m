@@ -110,6 +110,7 @@
 		CF5EA5D4163DDC7900D8F797 /* Shape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF5EA5D2163DDC7900D8F797 /* Shape.cpp */; };
 		CF5EA5D8163DDCB900D8F797 /* QuadShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF5EA5D6163DDCB900D8F797 /* QuadShape.cpp */; };
 		CF60500317724C5C00EB48A6 /* JSONNull.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF60500117724C5C00EB48A6 /* JSONNull.cpp */; };
+		CF605004177376A600EB48A6 /* JSONNull.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF60500217724C5C00EB48A6 /* JSONNull.hpp */; };
 		CF65361316BC41B2001F9139 /* ShapePositionEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF65361116BC41B2001F9139 /* ShapePositionEffect.cpp */; };
 		CF6873A515F77F54002EDFD0 /* IFloatBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6873A315F77F54002EDFD0 /* IFloatBuffer.cpp */; };
 		CF6873AA15F77FFC002EDFD0 /* IIntBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6873A815F77FFC002EDFD0 /* IIntBuffer.cpp */; };
@@ -513,6 +514,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF605004177376A600EB48A6 /* JSONNull.hpp in CopyFiles */,
 				CF4027D51770DEA800D5A80C /* WebSocket_iOS.hpp in CopyFiles */,
 				CF4027D31770DE7B00D5A80C /* IWebSocketListener.hpp in CopyFiles */,
 				CF4027D41770DE7B00D5A80C /* IWebSocket.hpp in CopyFiles */,
