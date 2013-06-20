@@ -35,7 +35,7 @@ package org.glob3.mobile.generated;
 //};
 
 
-public class G3MCBuilder_PullScenePeriodicalTask extends GTask
+public class G3MCBuilder_PollingScenePeriodicalTask extends GTask
 {
   private G3MCBuilder _builder;
 
@@ -46,7 +46,7 @@ public class G3MCBuilder_PullScenePeriodicalTask extends GTask
   {
     final int sceneTimestamp = _builder.getSceneTimestamp();
 
-    final URL _sceneDescriptionURL = _builder.createSceneDescriptionURL();
+    final URL _sceneDescriptionURL = _builder.createPollingSceneDescriptionURL();
 
     if (sceneTimestamp < 0)
     {
@@ -68,7 +68,7 @@ public class G3MCBuilder_PullScenePeriodicalTask extends GTask
   }
 
 
-  public G3MCBuilder_PullScenePeriodicalTask(G3MCBuilder builder)
+  public G3MCBuilder_PollingScenePeriodicalTask(G3MCBuilder builder)
   {
      _builder = builder;
      _requestId = -1;

@@ -3,6 +3,9 @@ public abstract class G3MCBuilder
 {
 
   private final URL _serverURL;
+  private final URL _tubesURL;
+
+  private final boolean _useWebSockets;
 
   private G3MCSceneChangeListener _sceneListener;
 
@@ -82,14 +85,17 @@ public abstract class G3MCBuilder
   {
     java.util.ArrayList<PeriodicalTask> periodicalTasks = new java.util.ArrayList<PeriodicalTask>();
   
-    periodicalTasks.add(new PeriodicalTask(TimeInterval.fromSeconds(2), new G3MCBuilder_PullScenePeriodicalTask(this)));
+    if (!_useWebSockets)
+    {
+      periodicalTasks.add(new PeriodicalTask(TimeInterval.fromSeconds(2), new G3MCBuilder_PollingScenePeriodicalTask(this)));
+    }
   
     return periodicalTasks;
   }
 
   private URL createScenesDescriptionsURL()
   {
-    String serverPath = _serverURL.getPath();
+    final String serverPath = _serverURL.getPath();
   
     return new URL(serverPath + "/scenes/", false);
   }
@@ -168,9 +174,149 @@ public abstract class G3MCBuilder
     }
   }
 
-  protected G3MCBuilder(URL serverURL, String sceneId, G3MCSceneChangeListener sceneListener)
+  private GInitializationTask createInitializationTask()
+  {
+    return _useWebSockets ? new G3MCBuilder_WebSocketConnector(this) : null;
+  }
+
+
+
+  private Layer parseLayer(JSONBaseObject jsonBaseObjectLayer)
+  {
+  
+    if (jsonBaseObjectLayer.asNull() != null)
+    {
+      return null;
+    }
+  
+    final TimeInterval defaultTimeToCache = TimeInterval.fromDays(30);
+  
+    final JSONObject jsonBaseLayer = jsonBaseObjectLayer.asObject();
+    if (jsonBaseLayer == null)
+    {
+      ILogger.instance().logError("Layer is not a json object");
+      return null;
+    }
+  
+    final String layerType = jsonBaseLayer.getAsString("layer", "<layer not present>");
+    if (layerType.compareTo("OSM") == 0)
+    {
+      return new OSMLayer(defaultTimeToCache);
+    }
+    else if (layerType.compareTo("MapQuest") == 0)
+    {
+      return parseMapQuestLayer(jsonBaseLayer, defaultTimeToCache);
+    }
+    else if (layerType.compareTo("BingMaps") == 0)
+    {
+      return parseBingMapsLayer(jsonBaseLayer, defaultTimeToCache);
+    }
+    else if (layerType.compareTo("CartoDB") == 0)
+    {
+      return parseCartoDBLayer(jsonBaseLayer, defaultTimeToCache);
+    }
+    else if (layerType.compareTo("MapBox") == 0)
+    {
+      return parseMapBoxLayer(jsonBaseLayer, defaultTimeToCache);
+    }
+    else if (layerType.compareTo("WMS") == 0)
+    {
+      return parseWMSLayer(jsonBaseLayer);
+    }
+    else
+    {
+      ILogger.instance().logError("Unsupported layer type \"%s\"", layerType);
+      return null;
+    }
+  }
+
+  private MapQuestLayer parseMapQuestLayer(JSONObject jsonBaseLayer, TimeInterval timeToCache)
+  {
+    final String imagery = jsonBaseLayer.getAsString("imagery", "<imagery not present>");
+    if (imagery.compareTo("OpenAerial") == 0)
+    {
+      return MapQuestLayer.newOpenAerial(timeToCache);
+    }
+  
+    // defaults to OSM
+    return MapQuestLayer.newOSM(timeToCache);
+  }
+
+  private BingMapsLayer parseBingMapsLayer(JSONObject jsonBaseLayer, TimeInterval timeToCache)
+  {
+    final String key = jsonBaseLayer.getAsString("key", "");
+    final String imagerySet = jsonBaseLayer.getAsString("imagerySet", "Aerial");
+  
+    return new BingMapsLayer(imagerySet, key, timeToCache);
+  }
+
+  private CartoDBLayer parseCartoDBLayer(JSONObject jsonBaseLayer, TimeInterval timeToCache)
+  {
+    final String userName = jsonBaseLayer.getAsString("userName", "");
+    final String table = jsonBaseLayer.getAsString("table", "");
+  
+    return new CartoDBLayer(userName, table, timeToCache);
+  }
+
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  BingMapsLayer parseBingMapsLayer(JSONObject jsonBaseLayer, TimeInterval timeToCache);
+
+  private MapBoxLayer parseMapBoxLayer(JSONObject jsonBaseLayer, TimeInterval timeToCache)
+  {
+    final String mapKey = jsonBaseLayer.getAsString("mapKey", "");
+  
+    return new MapBoxLayer(mapKey, timeToCache);
+  }
+
+  private WMSLayer parseWMSLayer(JSONObject jsonBaseLayer)
+  {
+  
+    final String mapLayer = jsonBaseLayer.getAsString("layerName", "");
+    final URL mapServerURL = new URL(jsonBaseLayer.getAsString("server", ""), false);
+    final String versionStr = jsonBaseLayer.getAsString("version", "");
+    WMSServerVersion mapServerVersion = WMSServerVersion.WMS_1_1_0;
+    if (versionStr.compareTo("WMS_1_3_0") == 0)
+    {
+      mapServerVersion = WMSServerVersion.WMS_1_3_0;
+    }
+    final String queryLayer = jsonBaseLayer.getAsString("queryLayer", "");
+    final String style = jsonBaseLayer.getAsString("style", "");
+    final URL queryServerURL = new URL("", false);
+    final WMSServerVersion queryServerVersion = mapServerVersion;
+    final double lowerLat = jsonBaseLayer.getAsNumber("lowerLat", -90.0);
+    final double lowerLon = jsonBaseLayer.getAsNumber("lowerLon", -180.0);
+    final double upperLat = jsonBaseLayer.getAsNumber("upperLat", 90.0);
+    final double upperLon = jsonBaseLayer.getAsNumber("upperLon", 180.0);
+    final Sector sector = new Sector(new Geodetic2D(Angle.fromDegrees(lowerLat), Angle.fromDegrees(lowerLon)), new Geodetic2D(Angle.fromDegrees(upperLat), Angle.fromDegrees(upperLon)));
+    String imageFormat = jsonBaseLayer.getAsString("imageFormat", "image/png");
+    if (imageFormat.compareTo("JPG") == 0)
+    {
+      imageFormat = "image/jpeg";
+    }
+    final String srs = jsonBaseLayer.getAsString("projection", "EPSG_4326");
+    LayerTilesRenderParameters layerTilesRenderParameters = null;
+    if (srs.compareTo("EPSG_4326") == 0)
+    {
+      layerTilesRenderParameters = LayerTilesRenderParameters.createDefaultNonMercator(Sector.fullSphere());
+    }
+    else if (srs.compareTo("EPSG_900913") == 0)
+    {
+      layerTilesRenderParameters = LayerTilesRenderParameters.createDefaultMercator(0, 17);
+    }
+    final boolean isTransparent = jsonBaseLayer.getAsBoolean("transparent", false);
+    final double expiration = jsonBaseLayer.getAsNumber("expiration", 0);
+    final long milliseconds = IMathUtils.instance().round(expiration);
+    final TimeInterval timeToCache = TimeInterval.fromMilliseconds(milliseconds);
+    final boolean readExpired = jsonBaseLayer.getAsBoolean("acceptExpiration", false);
+  
+    return new WMSLayer(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, sector, imageFormat, (srs.compareTo("EPSG_4326") == 0) ? "EPSG:4326" : "EPSG:900913", style, isTransparent, null, timeToCache, readExpired, layerTilesRenderParameters);
+  }
+
+  protected G3MCBuilder(URL serverURL, URL tubesURL, boolean useWebSockets, String sceneId, G3MCSceneChangeListener sceneListener)
   {
      _serverURL = serverURL;
+     _tubesURL = tubesURL;
+     _useWebSockets = useWebSockets;
      _sceneId = sceneId;
      _sceneTimestamp = -1;
      _sceneBaseLayer = null;
@@ -222,7 +368,7 @@ public abstract class G3MCBuilder
   {
     if (_g3mWidget != null)
     {
-      ILogger.instance().logError("The G3MWidget was already created, can't create more than one");
+      ILogger.instance().logError("The G3MWidget was already created, can't be created more than once");
       return null;
     }
   
@@ -239,7 +385,7 @@ public abstract class G3MCBuilder
     //Color backgroundColor = Color::fromRGBA(0, 0.1f, 0.2f, 1);
   
     // GInitializationTask* initializationTask = new G3MCInitializationTask(this, createSceneDescriptionURL());
-    GInitializationTask initializationTask = null;
+    GInitializationTask initializationTask = createInitializationTask();
   
     java.util.ArrayList<PeriodicalTask> periodicalTasks = createPeriodicalTasks();
   
@@ -393,11 +539,19 @@ public abstract class G3MCBuilder
   }
 
   /** Private to G3M, don't call it */
-  public final URL createSceneDescriptionURL()
+  public final URL createPollingSceneDescriptionURL()
   {
-    String serverPath = _serverURL.getPath();
+    final String serverPath = _serverURL.getPath();
   
     return new URL(serverPath + "/scenes/" + _sceneId, false);
+  }
+
+  /** Private to G3M, don't call it */
+  public final URL createTubeSceneURL()
+  {
+    final String tubesPath = _tubesURL.getPath();
+  
+    return new URL(tubesPath + "/scene/" + _sceneId, false);
   }
 
   /** Private to G3M, don't call it */
@@ -416,14 +570,7 @@ public abstract class G3MCBuilder
     }
   }
 
-  public final void changeScene(String sceneId)
-  {
-    if (sceneId.compareTo(_sceneId) != 0)
-    {
-      getThreadUtils().invokeInRendererThread(new G3MCBuilder_ChangeSceneIdTask(this, sceneId), true);
-    }
-  }
-
+  /** Private to G3M, don't call it */
   public final void requestScenesDescriptions(G3MCBuilderScenesDescriptionsListener listener)
   {
      requestScenesDescriptions(listener, true);
@@ -433,4 +580,101 @@ public abstract class G3MCBuilder
     getDownloader().requestBuffer(createScenesDescriptionsURL(), DownloadPriority.HIGHEST, TimeInterval.zero(), true, new G3MCBuilder_ScenesDescriptionsBufferListener(listener, autoDelete), true);
   }
 
+  /** Private to G3M, don't call it */
+  public final void parseSceneDescription(String json, URL url)
+  {
+    final JSONBaseObject jsonBaseObject = IJSONParser.instance().parse(json, true);
+  
+    if (jsonBaseObject == null)
+    {
+      ILogger.instance().logError("Can't parse SceneJSON from %s", url.getPath());
+    }
+    else
+    {
+      final JSONObject jsonObject = jsonBaseObject.asObject();
+      if (jsonObject == null)
+      {
+        ILogger.instance().logError("Invalid SceneJSON (1)");
+      }
+      else
+      {
+        final JSONString error = jsonObject.getAsString("error");
+        if (error == null)
+        {
+          final int timestamp = (int) jsonObject.getAsNumber("ts", 0);
+  
+          if (getSceneTimestamp() != timestamp)
+          {
+            final JSONString jsonUser = jsonObject.getAsString("user");
+            if (jsonUser != null)
+            {
+              setSceneUser(jsonUser.value());
+            }
+  
+            //id
+  
+            final JSONString jsonName = jsonObject.getAsString("name");
+            if (jsonName != null)
+            {
+              setSceneName(jsonName.value());
+            }
+  
+            final JSONString jsonDescription = jsonObject.getAsString("description");
+            if (jsonDescription != null)
+            {
+              setSceneDescription(jsonDescription.value());
+            }
+  
+            final JSONString jsonBGColor = jsonObject.getAsString("bgColor");
+            if (jsonBGColor != null)
+            {
+              final Color bgColor = Color.parse(jsonBGColor.value());
+              if (bgColor == null)
+              {
+                ILogger.instance().logError("Invalid format in attribute 'bgColor' (%s)", jsonBGColor.value());
+              }
+              else
+              {
+                setSceneBackgroundColor(bgColor);
+                if (bgColor != null)
+                   bgColor.dispose();
+              }
+            }
+  
+            final JSONBaseObject jsonBaseLayer = jsonObject.get("baseLayer");
+            if (jsonBaseLayer != null)
+            {
+              setSceneBaseLayer(parseLayer(jsonBaseLayer));
+            }
+  
+            final JSONBaseObject jsonOverlayLayer = jsonObject.get("overlayLayer");
+            if (jsonOverlayLayer != null)
+            {
+              setSceneOverlayLayer(parseLayer(jsonOverlayLayer));
+            }
+  
+            //tags
+  
+            setSceneTimestamp(timestamp);
+          }
+        }
+        else
+        {
+          ILogger.instance().logError("Server Error: %s", error.value());
+        }
+      }
+  
+      if (jsonBaseObject != null)
+         jsonBaseObject.dispose();
+    }
+  
+  }
+
+  public final void changeScene(String sceneId)
+  {
+    if (sceneId.compareTo(_sceneId) != 0)
+    {
+      getThreadUtils().invokeInRendererThread(new G3MCBuilder_ChangeSceneIdTask(this, sceneId), true);
+    }
+  }
 }
