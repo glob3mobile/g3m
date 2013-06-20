@@ -24,17 +24,17 @@
 //    
 //    
 //    //Activating Attribute in Shader program
-//    progState.setAttributeEnabled("aTextureCoord", true);
-//    progState.setUniformValue("EnableTexture", true);
-//    progState.setAttributeValue("aTextureCoord",
+//    progState.setAttributeEnabled(GPUVariable::TEXTURE_COORDS, true);
+//    progState.setUniformValue(GPUVariable::EnableTexture, true);
+//    progState.setAttributeValue(GPUVariable::TEXTURE_COORDS,
 //                                _texCoords, 2,
 //                                2,
 //                                0,
 //                                false,
 //                                0);
 //    
-//    progState.setUniformValue("uScaleTexCoord", _scale.asVector2D());
-//    progState.setUniformValue("uTranslationTexCoord", _translation.asVector2D());
+//    progState.setUniformValue(GPUVariable::SCALE_TEXTURE_COORDS, _scale.asVector2D());
+//    progState.setUniformValue(GPUVariable::TRANSLATION_TEXTURE_COORDS, _translation.asVector2D());
 //  
 //    state->bindTexture(_glTextureId);
 //  }
@@ -63,17 +63,17 @@ void SimpleTextureMapping::modifyGLGlobalState(GLGlobalState& GLGlobalState) con
 void SimpleTextureMapping::modifyGPUProgramState(GPUProgramState& progState) const{
   if (_texCoords != NULL) {
     //Activating Attribute in Shader program
-    progState.setAttributeEnabled("aTextureCoord", true);
-    progState.setUniformValue("EnableTexture", true);
-    progState.setAttributeValue("aTextureCoord",
+    progState.setAttributeEnabled(GPUVariable::TEXTURE_COORDS, true);
+    progState.setUniformValue(GPUVariable::EnableTexture, true);
+    progState.setAttributeValue(GPUVariable::TEXTURE_COORDS,
                                 _texCoords, 2,
                                 2,
                                 0,
                                 false,
                                 0);
     
-    progState.setUniformValue("uScaleTexCoord", _scale.asVector2D());
-    progState.setUniformValue("uTranslationTexCoord", _translation.asVector2D());
+    progState.setUniformValue(GPUVariable::SCALE_TEXTURE_COORDS, _scale.asVector2D());
+    progState.setUniformValue(GPUVariable::TRANSLATION_TEXTURE_COORDS, _translation.asVector2D());
   }
   else {
     ILogger::instance()->logError("SimpleTextureMapping::bind() with _texCoords == NULL");

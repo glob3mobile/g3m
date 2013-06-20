@@ -45,6 +45,7 @@ public:
   
   void clear();
   
+  /*
   bool setUniformValue(const std::string& name, bool b){
     return setUniformValue(GPUVariable::getKeyForName(name, UNIFORM), b);
   }
@@ -83,7 +84,7 @@ public:
   void setAttributeDisabled(const std::string& name){
     setAttributeDisabled(GPUVariable::getKeyForName(name, ATTRIBUTE));
   }
-  
+  */
   
   bool setUniformValue(int key, bool b);
   

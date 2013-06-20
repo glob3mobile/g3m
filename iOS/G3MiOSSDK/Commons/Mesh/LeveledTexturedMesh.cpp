@@ -32,8 +32,8 @@
 //    _initialized = true;
 //  }
 //  
-//  progState.setAttributeEnabled("aTextureCoord", true);
-//  progState.setUniformValue("EnableTexture", true);
+//  progState.setAttributeEnabled(GPUVariable::TEXTURE_COORDS, true);
+//  progState.setUniformValue(GPUVariable::EnableTexture, true);
 //  
 //  GLGlobalState *state = NULL; //new GLGlobalState(parentState);
 //  //state->enableTextures();
@@ -41,14 +41,14 @@
 ////  state->enableTexture2D();
 //
 //  if (_texCoords != NULL) {
-//    progState.setUniformValue("uScaleTexCoord", _scale.asVector2D());
-//    progState.setUniformValue("uTranslationTexCoord", _translation.asVector2D());
+//    progState.setUniformValue(GPUVariable::SCALE_TEXTURE_COORDS, _scale.asVector2D());
+//    progState.setUniformValue(GPUVariable::TRANSLATION_TEXTURE_COORDS, _translation.asVector2D());
 ////    state->scaleTextureCoordinates(_scale);
 ////    state->translateTextureCoordinates(_translation);
 //    state->bindTexture(_glTextureId);
 ////    state->setTextureCoordinates(_texCoords, 2, 0);
 //    
-//    progState.setAttributeValue("aTextureCoord",
+//    progState.setAttributeValue(GPUVariable::TEXTURE_COORDS,
 //                                _texCoords, 2,
 //                                2,
 //                                0,

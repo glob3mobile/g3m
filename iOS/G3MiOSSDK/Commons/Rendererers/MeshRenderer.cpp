@@ -49,8 +49,8 @@ void MeshRenderer::createGLState() const{
   _glState.getGLGlobalState()->enableDepthTest();
   
 //  GPUProgramState& progState = *_glState.getGPUProgramState();
-//  progState.setUniformValue("EnableTexture", false);
-//  progState.setUniformValue("uPointSize", (float)1.0);
-//  progState.setUniformValue("uScaleTexCoord", Vector2D(1.0,1.0));
-//  progState.setUniformValue("uTranslationTexCoord", Vector2D(0.0,0.0));
+//  progState.setUniformValue(GPUVariable::EnableTexture, false);
+//  progState.setUniformValue(GPUVariable::POINT_SIZE, (float)1.0);
+//  progState.setUniformValue(GPUVariable::SCALE_TEXTURE_COORDS, Vector2D(1.0,1.0));
+//  progState.setUniformValue(GPUVariable::TRANSLATION_TEXTURE_COORDS, Vector2D(0.0,0.0));
 }

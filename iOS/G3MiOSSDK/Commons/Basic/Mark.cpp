@@ -418,7 +418,7 @@ void Mark::createGLState(const Planet* planet, int viewportWidth, int viewportHe
     _billboardTexCoord = texCoor.create();
   }
   
-  progState->setAttributeValue("aTextureCoord",
+  progState->setAttributeValue(GPUVariable::TEXTURE_COORDS,
                                _billboardTexCoord, 2,
                                2,
                                0,
@@ -441,7 +441,7 @@ void Mark::createGLState(const Planet* planet, int viewportWidth, int viewportHe
                                false,        //Not normalized
                                0);           //Stride 0
   
-  progState->setUniformValue("uTextureExtent", Vector2D(_textureWidth, _textureHeight));
+  progState->setUniformValue(GPUVariable::TEXTURE_EXTENT, _textureWidth, _textureHeight);
 }
 
 void Mark::render(const G3MRenderContext* rc,

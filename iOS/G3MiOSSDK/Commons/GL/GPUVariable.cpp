@@ -59,8 +59,11 @@ int GPUVariable::getKeyForName(const std::string& name, int variableType){
       return  SCALE_TEXTURE_COORDS;
     }
     
+    if (name.compare("uPointSize") == 0){
+      return  POINT_SIZE;
+    }
     
-    if (true){ //DELETE
+    if (true){ //TO BE DELETED
       if (name.compare("EnableColorPerVertex") == 0){
         return  EnableColorPerVertex;
       }
@@ -79,10 +82,6 @@ int GPUVariable::getKeyForName(const std::string& name, int variableType){
       
       if (name.compare("ColorPerVertexIntensity") == 0){
         return  ColorPerVertexIntensity;
-      }
-      
-      if (name.compare("uPointSize") == 0){
-        return  POINT_SIZE;
       }
     }
   }

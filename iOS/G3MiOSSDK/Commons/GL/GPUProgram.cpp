@@ -312,7 +312,7 @@ void GPUProgram::applyChanges(GL* gl){
       ILogger::instance()->logError("Uniform " + u->getName() + " was not set.");
     }
     
-    //    if (u->getName().compare("EnableTexture") == 0){
+    //    if (u->getName().compare(GPUVariable::EnableTexture) == 0){
     //      if (((GPUUniformValueBool*)u->getSetValue())->_value){
     //        TexEnabledCounter++;
     //      } else{
@@ -320,7 +320,7 @@ void GPUProgram::applyChanges(GL* gl){
     //      }
     //    }
     //
-    //    if (u->getName().compare("EnableFlatColor") == 0){
+    //    if (u->getName().compare(GPUVariable::EnableFlatColor) == 0){
     //      if (((GPUUniformValueBool*)u->getSetValue())->_value){
     //        FlatColorEnabledCounter++;
     //      } else{
@@ -328,7 +328,7 @@ void GPUProgram::applyChanges(GL* gl){
     //      }
     //    }
     //
-    //    if (u->getName().compare("EnableColorPerVertex") == 0){
+    //    if (u->getName().compare(GPUVariable::EnableColorPerVertex) == 0){
     //      if (((GPUUniformValueBool*)u->getSetValue())->_value){
     //        ColorEnabledCounter++;
     //      } else{
