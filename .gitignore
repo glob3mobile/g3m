@@ -23,6 +23,7 @@ target
 .xcodeproj/ !*.xcodeproj/project.pbxproj
 *.xcactivitylog
 *.d
+*/bin/
 
 converter/compile_errors.txt
 
@@ -38,5 +39,9 @@ Android/G3MAndroidSDK/bin/
 Android/G3MAndroidSDK/gen/
 Android/G3MAndroidDemo/bin/
 Android/G3MAndroidDemo/gen/
+
+JavaDesktop/G3MJavaDesktopSDK/bin/
+
+Commons/G3MSharedSDK/bin
 
 iOS/G3MiOSSDK/Commons/Debug
