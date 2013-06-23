@@ -265,6 +265,8 @@
 		D81BA17115CBF19F004EF0B0 /* GL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81BA16F15CBF19E004EF0B0 /* GL.cpp */; };
 		D81D2072160748EA009A8BA6 /* GLConstants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81D2071160748EA009A8BA6 /* GLConstants.cpp */; };
 		D8228EBF157F7F7900BBAF60 /* MutableMatrix44D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */; };
+		D84625CE177720E100FC4862 /* AbstractGeometryMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84625CC177720E100FC4862 /* AbstractGeometryMesh.cpp */; };
+		D84625D1177722B500FC4862 /* IndexedGeometryMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84625CF177722B500FC4862 /* IndexedGeometryMesh.cpp */; };
 		D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */; };
 		D8715C1E17032AC700CF7BE2 /* GPUProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8715C1C17032AC700CF7BE2 /* GPUProgram.cpp */; };
 		D87BF6DA170F0333004D467D /* GPUProgramState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87BF6D8170F0333004D467D /* GPUProgramState.cpp */; };
@@ -1202,6 +1204,10 @@
 		D81FB47C1636A5AE00CC2CA7 /* PeriodicalTask.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PeriodicalTask.hpp; path = Commons/Basic/PeriodicalTask.hpp; sourceTree = "<group>"; };
 		D8228EBC157F7F6100BBAF60 /* MutableMatrix44D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MutableMatrix44D.hpp; path = Commons/Geometry/MutableMatrix44D.hpp; sourceTree = "<group>"; };
 		D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = MutableMatrix44D.cpp; path = Commons/Geometry/MutableMatrix44D.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		D84625CC177720E100FC4862 /* AbstractGeometryMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AbstractGeometryMesh.cpp; sourceTree = "<group>"; };
+		D84625CD177720E100FC4862 /* AbstractGeometryMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AbstractGeometryMesh.hpp; sourceTree = "<group>"; };
+		D84625CF177722B500FC4862 /* IndexedGeometryMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IndexedGeometryMesh.cpp; sourceTree = "<group>"; };
+		D84625D0177722B500FC4862 /* IndexedGeometryMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IndexedGeometryMesh.hpp; sourceTree = "<group>"; };
 		D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MutableVector3D.cpp; path = Commons/Geometry/MutableVector3D.cpp; sourceTree = "<group>"; };
 		D84D5A30157E0EAA000C5E35 /* MutableVector3D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = MutableVector3D.hpp; path = Commons/Geometry/MutableVector3D.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8715C1C17032AC700CF7BE2 /* GPUProgram.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GPUProgram.cpp; sourceTree = "<group>"; };
@@ -1959,6 +1965,10 @@
 				CFD3D8A416D15BC900CE9242 /* MeshHolder.hpp */,
 				D882B1CE171D8D6100C2AD9C /* LeveledMesh.cpp */,
 				D882B1CF171D8D6100C2AD9C /* LeveledMesh.hpp */,
+				D84625CC177720E100FC4862 /* AbstractGeometryMesh.cpp */,
+				D84625CD177720E100FC4862 /* AbstractGeometryMesh.hpp */,
+				D84625CF177722B500FC4862 /* IndexedGeometryMesh.cpp */,
+				D84625D0177722B500FC4862 /* IndexedGeometryMesh.hpp */,
 			);
 			name = Mesh;
 			sourceTree = "<group>";
@@ -2325,6 +2335,8 @@
 				44A00493175500B900C6686D /* ICameraActivityListener.cpp in Sources */,
 				CF07DD0D175D32CC00839F5D /* Color.cpp in Sources */,
 				D8D894ED17731870007E41A5 /* GPUVariable.cpp in Sources */,
+				D84625CE177720E100FC4862 /* AbstractGeometryMesh.cpp in Sources */,
+				D84625D1177722B500FC4862 /* IndexedGeometryMesh.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
