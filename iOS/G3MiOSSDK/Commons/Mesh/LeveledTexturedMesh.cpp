@@ -101,8 +101,8 @@ void LazyTextureMapping::modifyGPUProgramState(GPUProgramState& progState) const
     _initialized = true;
   }
   
-  progState.setAttributeEnabled(GPUVariable::TEXTURE_COORDS, true);
-  progState.setUniformValue(GPUVariable::EnableTexture, true);
+  //progState.setAttributeEnabled(GPUVariable::TEXTURE_COORDS, true);
+  //progState.setUniformValue(GPUVariable::EnableTexture, true);
 
   if (_texCoords != NULL) {
     progState.setUniformValue(GPUVariable::SCALE_TEXTURE_COORDS, _scale.asVector2D());

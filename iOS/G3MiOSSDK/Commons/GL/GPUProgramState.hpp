@@ -28,6 +28,7 @@ class GPUProgramState{
   bool setGPUAttributeValue(int key, GPUAttributeValue* v);
   
   mutable std::vector<int>* _uniformKeys;
+  mutable std::vector<int>* _attributeKeys;
   
   mutable GPUProgram* _lastProgramUsed;
   
@@ -35,11 +36,16 @@ class GPUProgramState{
     delete _uniformKeys;
     _uniformKeys = NULL;
     _lastProgramUsed = NULL;
+    
+    if (_attributeKeys != NULL){
+      delete _attributeKeys;
+      _attributeKeys = NULL;
+    }
   }
   
 public:
   
-  GPUProgramState(): _lastProgramUsed(NULL), _uniformKeys(NULL){}
+  GPUProgramState(): _lastProgramUsed(NULL), _uniformKeys(NULL), _attributeKeys(NULL){}
   
   ~GPUProgramState();
   
@@ -118,6 +124,7 @@ public:
   }
   
   std::vector<int>* getUniformsKeys() const;
+  std::vector<int>* getAttributeKeys() const;
   
   std::string description() const;
   

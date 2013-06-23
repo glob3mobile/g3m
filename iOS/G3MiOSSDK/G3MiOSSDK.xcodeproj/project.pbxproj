@@ -267,6 +267,11 @@
 		D8228EBF157F7F7900BBAF60 /* MutableMatrix44D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */; };
 		D84625CE177720E100FC4862 /* AbstractGeometryMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84625CC177720E100FC4862 /* AbstractGeometryMesh.cpp */; };
 		D84625D1177722B500FC4862 /* IndexedGeometryMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84625CF177722B500FC4862 /* IndexedGeometryMesh.cpp */; };
+		D84625D4177724A000FC4862 /* FlatColorMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84625D2177724A000FC4862 /* FlatColorMesh.cpp */; };
+		D84625D71777291F00FC4862 /* TexturedMesh.fsh in Sources */ = {isa = PBXBuildFile; fileRef = D84625D51777291F00FC4862 /* TexturedMesh.fsh */; };
+		D84625D81777291F00FC4862 /* TexturedMesh.vsh in Sources */ = {isa = PBXBuildFile; fileRef = D84625D61777291F00FC4862 /* TexturedMesh.vsh */; };
+		D84625DF177732A900FC4862 /* ColorMesh.fsh in Sources */ = {isa = PBXBuildFile; fileRef = D84625DD177732A900FC4862 /* ColorMesh.fsh */; };
+		D84625E0177732A900FC4862 /* ColorMesh.vsh in Sources */ = {isa = PBXBuildFile; fileRef = D84625DE177732A900FC4862 /* ColorMesh.vsh */; };
 		D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */; };
 		D8715C1E17032AC700CF7BE2 /* GPUProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8715C1C17032AC700CF7BE2 /* GPUProgram.cpp */; };
 		D87BF6DA170F0333004D467D /* GPUProgramState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87BF6D8170F0333004D467D /* GPUProgramState.cpp */; };
@@ -1208,6 +1213,12 @@
 		D84625CD177720E100FC4862 /* AbstractGeometryMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AbstractGeometryMesh.hpp; sourceTree = "<group>"; };
 		D84625CF177722B500FC4862 /* IndexedGeometryMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IndexedGeometryMesh.cpp; sourceTree = "<group>"; };
 		D84625D0177722B500FC4862 /* IndexedGeometryMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IndexedGeometryMesh.hpp; sourceTree = "<group>"; };
+		D84625D2177724A000FC4862 /* FlatColorMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FlatColorMesh.cpp; sourceTree = "<group>"; };
+		D84625D3177724A000FC4862 /* FlatColorMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FlatColorMesh.hpp; sourceTree = "<group>"; };
+		D84625D51777291F00FC4862 /* TexturedMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TexturedMesh.fsh; sourceTree = "<group>"; };
+		D84625D61777291F00FC4862 /* TexturedMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TexturedMesh.vsh; sourceTree = "<group>"; };
+		D84625DD177732A900FC4862 /* ColorMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ColorMesh.fsh; sourceTree = "<group>"; };
+		D84625DE177732A900FC4862 /* ColorMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ColorMesh.vsh; sourceTree = "<group>"; };
 		D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MutableVector3D.cpp; path = Commons/Geometry/MutableVector3D.cpp; sourceTree = "<group>"; };
 		D84D5A30157E0EAA000C5E35 /* MutableVector3D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = MutableVector3D.hpp; path = Commons/Geometry/MutableVector3D.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8715C1C17032AC700CF7BE2 /* GPUProgram.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GPUProgram.cpp; sourceTree = "<group>"; };
@@ -1969,6 +1980,8 @@
 				D84625CD177720E100FC4862 /* AbstractGeometryMesh.hpp */,
 				D84625CF177722B500FC4862 /* IndexedGeometryMesh.cpp */,
 				D84625D0177722B500FC4862 /* IndexedGeometryMesh.hpp */,
+				D84625D2177724A000FC4862 /* FlatColorMesh.cpp */,
+				D84625D3177724A000FC4862 /* FlatColorMesh.hpp */,
 			);
 			name = Mesh;
 			sourceTree = "<group>";
@@ -2040,6 +2053,10 @@
 		E70B56E016D3CCCD00C5FFFB /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
+				D84625DD177732A900FC4862 /* ColorMesh.fsh */,
+				D84625DE177732A900FC4862 /* ColorMesh.vsh */,
+				D84625D51777291F00FC4862 /* TexturedMesh.fsh */,
+				D84625D61777291F00FC4862 /* TexturedMesh.vsh */,
 				D8D0CDB51771C91300D25CB6 /* FlatColorMesh.fsh */,
 				D8D0CDB61771C91300D25CB6 /* FlatColorMesh.vsh */,
 				D8CE5D36173BB68200C7AAE6 /* Billboard.fsh */,
@@ -2337,6 +2354,11 @@
 				D8D894ED17731870007E41A5 /* GPUVariable.cpp in Sources */,
 				D84625CE177720E100FC4862 /* AbstractGeometryMesh.cpp in Sources */,
 				D84625D1177722B500FC4862 /* IndexedGeometryMesh.cpp in Sources */,
+				D84625D4177724A000FC4862 /* FlatColorMesh.cpp in Sources */,
+				D84625D71777291F00FC4862 /* TexturedMesh.fsh in Sources */,
+				D84625D81777291F00FC4862 /* TexturedMesh.vsh in Sources */,
+				D84625DF177732A900FC4862 /* ColorMesh.fsh in Sources */,
+				D84625E0177732A900FC4862 /* ColorMesh.vsh in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

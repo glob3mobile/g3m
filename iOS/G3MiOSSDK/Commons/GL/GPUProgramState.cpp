@@ -339,6 +339,25 @@ std::vector<int>* GPUProgramState::getUniformsKeys() const{
   return _uniformKeys;
 }
 
+std::vector<int>* GPUProgramState::getAttributeKeys() const{
+  
+  if (_attributeKeys == NULL){
+    
+    _attributeKeys = new std::vector<int>();
+    
+#ifdef C_CODE
+    for(std::map<int, GPUAttributeValue*> ::const_iterator it = _attributesValues.begin();
+        it != _attributesValues.end();
+        it++){
+      _attributeKeys->push_back(it->first);
+    }
+#endif
+    
+    
+  }
+  return _uniformKeys;
+}
+
 /*
 bool GPUProgramState::isLinkableToProgram(const GPUProgram& program) const{
 #ifdef C_CODE

@@ -583,6 +583,12 @@ public:
   GPUProgramSources sourcesFlatColorMesh = [self loadDefaultGPUProgramSourcesWithName:@"FlatColorMesh"];
   builder.addGPUProgramSources(sourcesFlatColorMesh);
   
+  GPUProgramSources sourcesTexturedMesh = [self loadDefaultGPUProgramSourcesWithName:@"TexturedMesh"];
+  builder.addGPUProgramSources(sourcesTexturedMesh);
+  
+  GPUProgramSources sourcesColorMesh = [self loadDefaultGPUProgramSourcesWithName:@"ColorMesh"];
+  builder.addGPUProgramSources(sourcesColorMesh);
+  
   //  WidgetUserData* userData = NULL;
   //  builder.setUserData(userData);
   

@@ -15,6 +15,7 @@ GPUProgram* GPUProgramManager::getProgram(GL* gl, GLState* const glState) {
   bool texture = false;
   bool flatColor = false;
   bool billboard = false;
+  bool color = false;
   
   GLState* thisGLState = glState;
   while (thisGLState != NULL) {
@@ -36,17 +37,40 @@ GPUProgram* GPUProgramManager::getProgram(GL* gl, GLState* const glState) {
       }
     }
     
+    std::vector<int>* ai = thisGLState->getGPUProgramState()->getAttributeKeys();
+    sizeI = ai->size();
+    for (int j = 0; j < sizeI; j++) {
+      int key = ui->at(j);
+      
+//      if (key == GPUVariable::TEXTURE_COORDS){
+//        color = true;
+//      }
+      
+      if (key == GPUVariable::COLOR){
+        color = true;
+      }
+    }
+    
     thisGLState = thisGLState->getParent();
   }
   
   if (billboard){
     return getProgram(gl, "Billboard");
   } else{
-    if (flatColor && !texture){
+    if (flatColor && !texture && !color){
       return getProgram(gl, "FlatColorMesh");
-    } else{
-      return getProgram(gl, "Default"); 
     }
+   
+    if (!flatColor && texture && !color){
+      return getProgram(gl, "TexturedMesh");
+    }
+    
+    if (!flatColor && !texture && color){
+      return getProgram(gl, "ColorMesh");
+    }
+    
   }
+  
+  return getProgram(gl, "Default"); 
   
 }

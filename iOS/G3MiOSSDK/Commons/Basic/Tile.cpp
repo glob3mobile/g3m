@@ -29,6 +29,8 @@
 
 #include "TileElevationDataRequest.hpp"
 
+#include "FlatColorMesh.hpp"
+
 Tile::Tile(TileTexturizer* texturizer,
            Tile* parent,
            const Sector& sector,
@@ -43,6 +45,7 @@ _row(row),
 _column(column),
 _tessellatorMesh(NULL),
 _debugMesh(NULL),
+_flatColorMesh(NULL),
 _texturizedMesh(NULL),
 _textureSolved(false),
 _texturizerDirty(true),
@@ -74,6 +77,9 @@ Tile::~Tile() {
 
   delete _debugMesh;
   _debugMesh = NULL;
+  
+  delete _flatColorMesh;
+  _flatColorMesh = NULL;
 
   delete _tessellatorMesh;
   _tessellatorMesh = NULL;
@@ -378,12 +384,17 @@ void Tile::rawRender(const G3MRenderContext *rc,
     }
     
     if (_texturizedMesh != NULL) {
-      //_texturizedMesh->render(rc);
       _texturizedMesh->render(rc, glState);
     }
     else {
-      //tessellatorMesh->render(rc);
-      tessellatorMesh->render(rc, glState);
+      //Adding flat color if no texture set on the mesh
+      if (_flatColorMesh == NULL){
+        _flatColorMesh = new FlatColorMesh(tessellatorMesh, false,
+                                           Color::newFromRGBA((float) 1.0, (float) 1.0, (float) 1.0, (float) 1.0), true);
+      }
+      _flatColorMesh->render(rc, glState);      
+      
+      //tessellatorMesh->render(rc, glState);
     }
   }
 

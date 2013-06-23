@@ -79,6 +79,8 @@ GPUProgramManager* G3MCBuilder_iOS::createGPUProgramManager(){
   gpuProgramFactory->add(loadDefaultGPUProgramSources("Billboard"));
   gpuProgramFactory->add(loadDefaultGPUProgramSources("Default"));
   gpuProgramFactory->add(loadDefaultGPUProgramSources("FlatColorMesh"));
+  gpuProgramFactory->add(loadDefaultGPUProgramSources("TexturedMesh"));
+  gpuProgramFactory->add(loadDefaultGPUProgramSources("ColorMesh"));
   
   return new GPUProgramManager(gpuProgramFactory);
 }

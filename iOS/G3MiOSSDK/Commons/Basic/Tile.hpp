@@ -49,6 +49,8 @@ private:
   Mesh* _debugMesh;
   Mesh* _texturizedMesh;
   TileElevationDataRequest* _elevationDataRequest;
+  
+  Mesh* _flatColorMesh;
 
   bool _textureSolved;
   std::vector<Tile*>* _subtiles;
