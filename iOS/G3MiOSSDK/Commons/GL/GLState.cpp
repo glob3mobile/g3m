@@ -62,10 +62,10 @@ void GLState::setProgramState(GL* gl, GPUProgramManager& progManager) {
     
     linkAndApplyToGPUProgram(prog);
     prog->applyChanges(gl);
+
+    //prog->onUnused(); //Uncomment to check that all GPUProgramStates are complete
   } else{
     ILogger::instance()->logError("No GPUProgram found.");
   }
 
-  
-  //prog->onUnused(); //Uncomment to check that all GPUProgramStates are complete
 }

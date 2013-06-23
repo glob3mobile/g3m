@@ -101,15 +101,16 @@ int AbstractGeometryMesh::getVertexCount() const {
   return _vertices->size() / 3;
 }
 
-void AbstractGeometryMesh::render(const G3MRenderContext *rc) const {
-  rawRender(rc);
-}
-
 void AbstractGeometryMesh::createGLState(){
   
   GLGlobalState* globalState = _glState.getGLGlobalState();
   
   globalState->setLineWidth(_lineWidth);
+  if (_depthTest){
+    globalState->enableDepthTest();
+  } else{
+    globalState->disableDepthTest();
+  }
   
   GPUProgramState& progState = *_glState.getGPUProgramState();
   

@@ -126,6 +126,12 @@ void AbstractMesh::createGLState(){
   GLGlobalState* globalState = _glState.getGLGlobalState();
   
   globalState->setLineWidth(_lineWidth);
+  if (_depthTest){
+    globalState->enableDepthTest();
+  } else{
+    globalState->disableDepthTest();
+  }
+  
   if (_flatColor != NULL && _flatColor->isTransparent()){
     globalState->enableBlend();
     globalState->setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
@@ -162,7 +168,7 @@ void AbstractMesh::createGLState(){
                               0);           //Stride 0
   
   if (_colors != NULL){
-    progState.setUniformValue(GPUVariable::EnableColorPerVertex, true);
+//    progState.setUniformValue(GPUVariable::EnableColorPerVertex, true);
     progState.setAttributeValue(GPUVariable::COLOR,
                                 _colors, 4,   //The attribute is a float vector of 4 elements RGBA
                                 4,            //Our buffer contains elements of 4
@@ -170,11 +176,11 @@ void AbstractMesh::createGLState(){
                                 false,        //Not normalized
                                 0);           //Stride 0
     
-    progState.setUniformValue(GPUVariable::ColorPerVertexIntensity, _colorsIntensity);
+//    progState.setUniformValue(GPUVariable::ColorPerVertexIntensity, _colorsIntensity);
   } else{
-    progState.setAttributeDisabled(GPUVariable::COLOR);
-    progState.setUniformValue(GPUVariable::EnableColorPerVertex, false);
-    progState.setUniformValue(GPUVariable::ColorPerVertexIntensity, (float)0.0);
+//    progState.setAttributeDisabled(GPUVariable::COLOR);
+//    progState.setUniformValue(GPUVariable::EnableColorPerVertex, false);
+//    progState.setUniformValue(GPUVariable::ColorPerVertexIntensity, (float)0.0);
   }
   
 //  if (_flatColor != NULL){
@@ -188,7 +194,7 @@ void AbstractMesh::createGLState(){
 //    progState.setUniformValue(GPUVariable::FlatColorIntensity, _colorsIntensity);
 //  } else{
 //    progState.setUniformValue(GPUVariable::EnableFlatColor, false);
-    progState.setUniformValue(GPUVariable::ColorPerVertexIntensity, (float)0.0);
+//    progState.setUniformValue(GPUVariable::ColorPerVertexIntensity, (float)0.0);
 //    progState.setUniformValue(GPUVariable::FLAT_COLOR, (float)0.0, (float)0.0, (float)0.0, (float)0.0);
 //    progState.setUniformValue(GPUVariable::FlatColorIntensity, (float)0.0);
 //  }

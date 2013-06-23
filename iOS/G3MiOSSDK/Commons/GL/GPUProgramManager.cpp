@@ -69,7 +69,12 @@ GPUProgram* GPUProgramManager::getProgram(GL* gl, GLState* const glState) {
       return getProgram(gl, "ColorMesh");
     }
     
+    if (!flatColor && !texture && !color){
+      return NULL;   //Shapes with texture not loaded yet
+    }
+    
   }
+  
   
   return getProgram(gl, "Default"); 
   

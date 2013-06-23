@@ -97,7 +97,7 @@ void ShapesRenderer::removeAllShapes(bool deleteShapes) {
 }
 
 void ShapesRenderer::createGLState(){
-  _glState.getGLGlobalState()->enableDepthTest();
+//  _glState.getGLGlobalState()->enableDepthTest();
   
 //  GPUProgramState& progState = *_glState.getGPUProgramState();
 //  progState.setUniformValue(GPUVariable::EnableTexture, false);

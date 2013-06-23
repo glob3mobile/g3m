@@ -63,8 +63,8 @@ void SimpleTextureMapping::modifyGLGlobalState(GLGlobalState& GLGlobalState) con
 void SimpleTextureMapping::modifyGPUProgramState(GPUProgramState& progState) const{
   if (_texCoords != NULL) {
     //Activating Attribute in Shader program
-    progState.setAttributeEnabled(GPUVariable::TEXTURE_COORDS, true);
-    progState.setUniformValue(GPUVariable::EnableTexture, true);
+//    progState.setAttributeEnabled(GPUVariable::TEXTURE_COORDS, true);
+//    progState.setUniformValue(GPUVariable::EnableTexture, true);
     progState.setAttributeValue(GPUVariable::TEXTURE_COORDS,
                                 _texCoords, 2,
                                 2,

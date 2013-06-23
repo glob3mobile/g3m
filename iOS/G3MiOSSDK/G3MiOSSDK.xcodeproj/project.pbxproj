@@ -268,10 +268,6 @@
 		D84625CE177720E100FC4862 /* AbstractGeometryMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84625CC177720E100FC4862 /* AbstractGeometryMesh.cpp */; };
 		D84625D1177722B500FC4862 /* IndexedGeometryMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84625CF177722B500FC4862 /* IndexedGeometryMesh.cpp */; };
 		D84625D4177724A000FC4862 /* FlatColorMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84625D2177724A000FC4862 /* FlatColorMesh.cpp */; };
-		D84625D71777291F00FC4862 /* TexturedMesh.fsh in Sources */ = {isa = PBXBuildFile; fileRef = D84625D51777291F00FC4862 /* TexturedMesh.fsh */; };
-		D84625D81777291F00FC4862 /* TexturedMesh.vsh in Sources */ = {isa = PBXBuildFile; fileRef = D84625D61777291F00FC4862 /* TexturedMesh.vsh */; };
-		D84625DF177732A900FC4862 /* ColorMesh.fsh in Sources */ = {isa = PBXBuildFile; fileRef = D84625DD177732A900FC4862 /* ColorMesh.fsh */; };
-		D84625E0177732A900FC4862 /* ColorMesh.vsh in Sources */ = {isa = PBXBuildFile; fileRef = D84625DE177732A900FC4862 /* ColorMesh.vsh */; };
 		D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */; };
 		D8715C1E17032AC700CF7BE2 /* GPUProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8715C1C17032AC700CF7BE2 /* GPUProgram.cpp */; };
 		D87BF6DA170F0333004D467D /* GPUProgramState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87BF6D8170F0333004D467D /* GPUProgramState.cpp */; };
@@ -2355,10 +2351,6 @@
 				D84625CE177720E100FC4862 /* AbstractGeometryMesh.cpp in Sources */,
 				D84625D1177722B500FC4862 /* IndexedGeometryMesh.cpp in Sources */,
 				D84625D4177724A000FC4862 /* FlatColorMesh.cpp in Sources */,
-				D84625D71777291F00FC4862 /* TexturedMesh.fsh in Sources */,
-				D84625D81777291F00FC4862 /* TexturedMesh.vsh in Sources */,
-				D84625DF177732A900FC4862 /* ColorMesh.fsh in Sources */,
-				D84625E0177732A900FC4862 /* ColorMesh.vsh in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

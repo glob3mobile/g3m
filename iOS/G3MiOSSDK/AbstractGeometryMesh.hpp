@@ -40,7 +40,6 @@ protected:
                        float pointSize,
                        bool depthTest);
   
-  virtual void rawRender(const G3MRenderContext* rc) const = 0;
   virtual void rawRender(const G3MRenderContext* rc, GLState* parentGLState) const = 0;
   
   GLState _glState;
@@ -50,7 +49,7 @@ protected:
 public:
   ~AbstractGeometryMesh();
   
-  void render(const G3MRenderContext* rc) const;
+  void render(const G3MRenderContext* rc) const{}
   
   Extent* getExtent() const;
   
