@@ -11,7 +11,7 @@
 GLGlobalState GLState::_currentGPUGlobalState;
 GPUProgram* GLState::_currentGPUProgram = NULL;
 
-void GLState::applyGlobalStateOnGPU(GL* gl){
+void GLState::applyGlobalStateOnGPU(GL* gl) const{
   
   if (_parentGLState != NULL){
     _parentGLState->applyGlobalStateOnGPU(gl);
@@ -25,7 +25,7 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) {
   setProgramState(gl, progManager);
 }
 
-void GLState::linkAndApplyToGPUProgram(GPUProgram* prog){
+void GLState::linkAndApplyToGPUProgram(GPUProgram* prog) const{
   if (_parentGLState != NULL){
     _parentGLState->linkAndApplyToGPUProgram(prog);
   }
@@ -38,7 +38,7 @@ void GLState::setProgramState(GL* gl, GPUProgramManager& progManager) {
   
   GPUProgram* prog = _programState->getLinkedProgram();
   if (prog != NULL){
-    GLState* parent = _parentGLState;
+    const GLState* parent = _parentGLState;
     while (parent != NULL && prog != NULL) {
       if (prog != parent->getGPUProgramState()->getLinkedProgram()){
         prog = NULL;

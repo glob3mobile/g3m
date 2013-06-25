@@ -34,7 +34,7 @@ public:
   
   virtual std::string description() const = 0;
   
-  void linkToGPUUniform(GPUUniform* u){
+  void linkToGPUUniform(GPUUniform* u) const{
     _uniform = u;
   }
   

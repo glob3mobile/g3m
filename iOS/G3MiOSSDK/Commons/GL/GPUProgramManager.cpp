@@ -17,7 +17,7 @@ GPUProgram* GPUProgramManager::getProgram(GL* gl, GLState* const glState) {
   bool billboard = false;
   bool color = false;
   
-  GLState* thisGLState = glState;
+  const GLState* thisGLState = glState;
   while (thisGLState != NULL) {
     std::vector<int>* ui = thisGLState->getGPUProgramState()->getUniformsKeys();
     int sizeI = ui->size();

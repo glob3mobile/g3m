@@ -245,7 +245,7 @@ public:
   double getMinDistanceToCamera();
 
   void render(const G3MRenderContext* rc,
-              const Vector3D& cameraPosition, GLState* parentGLState);
+              const Vector3D& cameraPosition, const GLState* parentGLState);
   
 };
 

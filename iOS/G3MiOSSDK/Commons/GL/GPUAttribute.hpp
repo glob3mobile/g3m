@@ -69,7 +69,7 @@ public:
   
   virtual std::string description() const = 0;
   
-  void linkToGPUAttribute(GPUAttribute* a){
+  void linkToGPUAttribute(GPUAttribute* a) const{
     _attribute = a;
   }
   
