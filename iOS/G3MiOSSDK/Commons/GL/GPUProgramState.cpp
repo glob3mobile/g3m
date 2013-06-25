@@ -355,7 +355,7 @@ std::vector<int>* GPUProgramState::getAttributeKeys() const{
     
     
   }
-  return _uniformKeys;
+  return _attributeKeys;
 }
 
 /*

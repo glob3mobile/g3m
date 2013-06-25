@@ -35,7 +35,7 @@ public:
 
   void addMesh(Mesh* mesh);
 
-  void render(const G3MRenderContext* rc, GLState* parentGLState);
+  void render(const G3MRenderContext* rc, const GLState* parentGLState);
 
 };
 

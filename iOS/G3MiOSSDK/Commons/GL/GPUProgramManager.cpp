@@ -10,7 +10,7 @@
 
 #include "GLState.hpp"
 
-GPUProgram* GPUProgramManager::getProgram(GL* gl, GLState* const glState) {
+GPUProgram* GPUProgramManager::getProgram(GL* gl, const GLState* glState) {
   
   bool texture = false;
   bool flatColor = false;
@@ -40,7 +40,7 @@ GPUProgram* GPUProgramManager::getProgram(GL* gl, GLState* const glState) {
     std::vector<int>* ai = thisGLState->getGPUProgramState()->getAttributeKeys();
     sizeI = ai->size();
     for (int j = 0; j < sizeI; j++) {
-      int key = ui->at(j);
+      int key = ai->at(j);
       
 //      if (key == GPUVariable::TEXTURE_COORDS){
 //        color = true;

@@ -31,7 +31,7 @@ void FlatColorMesh::createGLState(){
   
 }
 
-void FlatColorMesh::render(const G3MRenderContext* rc, GLState* parentState){
+void FlatColorMesh::render(const G3MRenderContext* rc, const GLState* parentState){
   _glState.setParent(parentState);
   _mesh->render(rc, &_glState);
 }

@@ -204,7 +204,7 @@ void AbstractMesh::createGLState(){
   }
 }
 
-void AbstractMesh::render(const G3MRenderContext* rc, GLState* parentGLState) {
+void AbstractMesh::render(const G3MRenderContext* rc, const GLState* parentGLState) {
   
   _glState.setParent(parentGLState);
   rawRender(rc, &_glState);

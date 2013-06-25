@@ -25,7 +25,7 @@ class GLState{
   GLGlobalState*   _globalState;
   const bool _owner;
   
-  void setProgramState(GL* gl, GPUProgramManager& progManager);
+  void setProgramState(GL* gl, GPUProgramManager& progManager) const;
   
   mutable const GLState* _parentGLState;
   
@@ -61,7 +61,7 @@ public:
 
   void applyGlobalStateOnGPU(GL* gl) const;
   
-  void applyOnGPU(GL* gl, GPUProgramManager& progManager);
+  void applyOnGPU(GL* gl, GPUProgramManager& progManager) const;
   
   GPUProgramState* getGPUProgramState() const{
     return _programState;

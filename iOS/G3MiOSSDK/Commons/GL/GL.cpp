@@ -62,7 +62,7 @@ void GL::drawElements(int mode,
 }
 
 void GL::drawElements(int mode,
-                  IShortBuffer* indices, GLState* state,
+                  IShortBuffer* indices, const GLState* state,
                   GPUProgramManager& progManager){
   if (_verbose) {
     ILogger::instance()->logInfo("GL::drawElements(%d, %s)",
@@ -105,7 +105,7 @@ void GL::drawArrays(int mode,
 
 void GL::drawArrays(int mode,
                 int first,
-                int count, GLState* state,
+                int count, const GLState* state,
                 GPUProgramManager& progManager){
   if (_verbose) {
     ILogger::instance()->logInfo("GL::drawArrays(%d, %d, %d)",

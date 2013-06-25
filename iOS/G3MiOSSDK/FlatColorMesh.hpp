@@ -71,7 +71,7 @@ public:
     return _flatColor->getAlpha() != 1.0;
   }
   
-  void render(const G3MRenderContext* rc, GLState* parentState);
+  void render(const G3MRenderContext* rc, const GLState* parentState);
 };
 
 #endif /* defined(__G3MiOSSDK__FlatColorMesh__) */

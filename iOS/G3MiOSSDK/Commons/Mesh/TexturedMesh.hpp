@@ -78,7 +78,7 @@ public:
     return _transparent;
   }
   
-  void render(const G3MRenderContext* rc, GLState* parentState);
+  void render(const G3MRenderContext* rc, const GLState* parentState);
 };
 
 #endif

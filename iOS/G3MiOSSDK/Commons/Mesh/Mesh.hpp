@@ -32,7 +32,7 @@ public:
   
   virtual bool isTransparent(const G3MRenderContext* rc) const = 0;
   
-  virtual void render(const G3MRenderContext* rc, GLState* parentGLState) = 0;
+  virtual void render(const G3MRenderContext* rc, const GLState* parentGLState) = 0;
 
 };
 

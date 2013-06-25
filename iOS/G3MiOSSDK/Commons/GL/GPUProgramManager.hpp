@@ -107,7 +107,7 @@ public:
 //    return getProgram(gl, "Default");
 //  }
   
-  GPUProgram* getProgram(GL* gl, GLState* const glState);
+  GPUProgram* getProgram(GL* gl, const GLState* glState);
   
   
 };

@@ -175,7 +175,7 @@ public:
   
   bool isTransparent(const G3MRenderContext* rc) const;
 
-  void render(const G3MRenderContext* rc, GLState* parentGLState);
+  void render(const G3MRenderContext* rc, const GLState* parentGLState);
   
 };
 

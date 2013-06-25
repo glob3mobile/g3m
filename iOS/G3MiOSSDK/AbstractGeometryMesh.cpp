@@ -129,7 +129,7 @@ void AbstractGeometryMesh::createGLState(){
   progState.setUniformValue(GPUVariable::POINT_SIZE, _pointSize);
 }
 
-void AbstractGeometryMesh::render(const G3MRenderContext* rc, GLState* parentGLState) {
+void AbstractGeometryMesh::render(const G3MRenderContext* rc, const GLState* parentGLState) {
   _glState.setParent(parentGLState);
   rawRender(rc, &_glState);
 }

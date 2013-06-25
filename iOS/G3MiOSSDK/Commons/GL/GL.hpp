@@ -91,7 +91,7 @@ public:
                     const GPUProgramState* gpuState);
   
   void drawElements(int mode,
-                    IShortBuffer* indices, GLState* state,
+                    IShortBuffer* indices, const GLState* state,
                     GPUProgramManager& progManager);
   
   void drawArrays(int mode,
@@ -102,7 +102,7 @@ public:
   
   void drawArrays(int mode,
                   int first,
-                  int count, GLState* state,
+                  int count, const GLState* state,
                   GPUProgramManager& progManager);
   
   int getError();

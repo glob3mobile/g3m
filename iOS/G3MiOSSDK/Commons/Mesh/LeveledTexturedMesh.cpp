@@ -271,7 +271,7 @@ void LeveledTexturedMesh::updateGLState(){
   mapping->modifyGPUProgramState(*_glState.getGPUProgramState());
 }
 
-void LeveledTexturedMesh::render(const G3MRenderContext* rc, GLState* parentGLState){
+void LeveledTexturedMesh::render(const G3MRenderContext* rc, const GLState* parentGLState){
   
   updateGLState();
   

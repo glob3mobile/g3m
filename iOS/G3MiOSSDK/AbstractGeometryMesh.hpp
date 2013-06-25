@@ -40,7 +40,7 @@ protected:
                        float pointSize,
                        bool depthTest);
   
-  virtual void rawRender(const G3MRenderContext* rc, GLState* parentGLState) const = 0;
+  virtual void rawRender(const G3MRenderContext* rc, const GLState* parentGLState) const = 0;
   
   GLState _glState;
   
@@ -61,7 +61,7 @@ public:
     return false; //TODO: CHECK
   }
   
-  void render(const G3MRenderContext* rc, GLState* parentGLState);
+  void render(const G3MRenderContext* rc, const GLState* parentGLState);
   
 };
 
