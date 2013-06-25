@@ -5,8 +5,8 @@ public class GPUProgram
   //INativeGL* _nativeGL;
   private int _programID;
   private boolean _programCreated;
-  private java.util.HashMap<String, GPUAttribute> _attributes = new java.util.HashMap<String, GPUAttribute>();
-  private java.util.HashMap<String, GPUUniform> _uniforms = new java.util.HashMap<String, GPUUniform>();
+  private java.util.HashMap<Integer, GPUAttribute> _attributes = new java.util.HashMap<Integer, GPUAttribute>();
+  private java.util.HashMap<Integer, GPUUniform> _uniforms = new java.util.HashMap<Integer, GPUUniform>();
   private String _name;
 
   private boolean compileShader(GL gl, int shader, String source)
@@ -53,7 +53,7 @@ public class GPUProgram
     {
       GPUUniform u = gl.getActiveUniform(this, i);
       if (u != null)
-         _uniforms.put(u.getName(), u);
+         _uniforms.put(u.getKey(), u);
     }
   
     //Attributes
@@ -62,7 +62,7 @@ public class GPUProgram
     {
       GPUAttribute a = gl.getActiveAttribute(this, i);
       if (a != null)
-         _attributes.put(a.getName(), a);
+         _attributes.put(a.getKey(), a);
     }
   
   }
@@ -110,7 +110,7 @@ public class GPUProgram
   
     ILogger.instance().logInfo("FRAGMENT SOURCE: \n %s", fragmentSource);
   
-    //gl->bindAttribLocation(p, 0, "Position");
+    //gl->bindAttribLocation(p, 0, GPUVariable::POSITION);
   
     // link program
     if (!p.linkProgram(gl))
@@ -175,10 +175,13 @@ public class GPUProgram
 
   public final GPUUniform getGPUUniform(String name)
   {
+    int key = GPUVariable.getKeyForName(name, GPUVariableType.UNIFORM);
+  
     return _uniforms.get(name);
   }
   public final GPUAttribute getGPUAttribute(String name)
   {
+    final int key = GPUVariable.getKeyForName(name, GPUVariableType.ATTRIBUTE);
     return _attributes.get(name);
   }
 
@@ -314,7 +317,7 @@ public class GPUProgram
    */
   public final void onUsed()
   {
-  //  ILogger::instance()->logInfo("GPUProgram %s being used", _name.c_str());
+    //  ILogger::instance()->logInfo("GPUProgram %s being used", _name.c_str());
   }
   /**
    Must be called when the program is no longer used
@@ -334,6 +337,12 @@ public class GPUProgram
   /**
    Must be called before drawing to apply Uniforms and Attributes new values
    */
+  
+  //int TexEnabledCounter = 0, TexDisabledCounter = 0;
+  //int FlatColorEnabledCounter = 0, FlatColorDisabledCounter = 0;
+  //int ColorEnabledCounter = 0, ColorDisabledCounter = 0;
+  
+  
   public final void applyChanges(GL gl)
   {
     //ILogger::instance()->logInfo("GPUProgram %s applying changes", _name.c_str());
@@ -390,5 +399,24 @@ public class GPUProgram
       }
     }
     return u;
+  }
+
+  public final GPUUniform getGPUUniform(int key)
+  {
+    return _uniforms.get(name);
+  }
+  public final GPUAttribute getGPUAttribute(int key)
+  {
+    return _uniforms.get(name);
+  }
+  public final GPUAttribute getGPUAttributeVecXFloat(int key, int x)
+  {
+  
+    GPUAttribute a = getGPUAttribute(key);
+    if (a.getType() == GLType.glFloat() && a.getSize() == x)
+    {
+      return a;
+    }
+    return null;
   }
 }

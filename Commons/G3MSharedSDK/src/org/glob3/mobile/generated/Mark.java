@@ -101,14 +101,16 @@ public class Mark
   private boolean _renderedMark;
 
   private static IFloatBuffer _billboardTexCoord = null;
-  private Planet _planet; // REMOVED FINAL WORD BY CONVERSOR RULE
   private int _viewportWidth;
   private int _viewportHeight;
 
   private GLState _glState = new GLState();
 
-  private void createGLState()
+  private void createGLState(Planet planet, int viewportWidth, int viewportHeigth)
   {
+  
+    _viewportHeight = viewportHeigth;
+    _viewportWidth = viewportWidth;
   
     GLGlobalState globalState = _glState.getGLGlobalState();
   
@@ -119,39 +121,30 @@ public class Mark
   
     GPUProgramState progState = _glState.getGPUProgramState();
   
-    if (_planet == null)
+    if (_billboardTexCoord == null)
     {
-      ILogger.instance().logError("Planet NULL");
+      FloatBufferBuilderFromCartesian2D texCoor = new FloatBufferBuilderFromCartesian2D();
+      texCoor.add(1,1);
+      texCoor.add(1,0);
+      texCoor.add(0,1);
+      texCoor.add(0,0);
+      _billboardTexCoord = texCoor.create();
     }
-    else
-    {
   
-      if (_billboardTexCoord == null)
-      {
-        FloatBufferBuilderFromCartesian2D texCoor = new FloatBufferBuilderFromCartesian2D();
-        texCoor.add(1,1);
-        texCoor.add(1,0);
-        texCoor.add(0,1);
-        texCoor.add(0,0);
-        _billboardTexCoord = texCoor.create();
-      }
+    progState.setAttributeValue(GPUVariable.TEXTURE_COORDS, _billboardTexCoord, 2, 2, 0, false, 0);
   
-      progState.setAttributeValue("aTextureCoord", _billboardTexCoord, 2, 2, 0, false, 0);
+    final Vector3D pos = new Vector3D(planet.toCartesian(_position));
+    FloatBufferBuilderFromCartesian3D vertex = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
+    vertex.add(pos);
+    vertex.add(pos);
+    vertex.add(pos);
+    vertex.add(pos);
   
-      final Vector3D pos = new Vector3D(_planet.toCartesian(_position));
-      FloatBufferBuilderFromCartesian3D vertex = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
-      vertex.add(pos);
-      vertex.add(pos);
-      vertex.add(pos);
-      vertex.add(pos);
+    IFloatBuffer vertices = vertex.create();
   
-      IFloatBuffer vertices = vertex.create();
+    progState.setAttributeValue(GPUVariable.POSITION, vertices, 4, 3, 0, false, 0); //Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
   
-      progState.setAttributeValue("aPosition", vertices, 4, 3, 0, false, 0); //Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
-  
-      progState.setUniformValue("uTextureExtent", new Vector2D(_textureWidth, _textureHeight));
-      progState.setUniformValue("uViewPortExtent", new Vector2D((double)_viewportWidth, (double)_viewportHeight));
-    }
+    progState.setUniformValue(GPUVariable.TEXTURE_EXTENT, _textureWidth, _textureHeight);
   }
 
   /**
@@ -221,7 +214,6 @@ public class Mark
      _listener = listener;
      _autoDeleteListener = autoDeleteListener;
      _imageID = iconURL.getPath() + "_" + label;
-     _planet = null;
   
   }
 
@@ -284,7 +276,6 @@ public class Mark
      _listener = listener;
      _autoDeleteListener = autoDeleteListener;
      _imageID = "_" + label;
-     _planet = null;
   
   }
 
@@ -335,7 +326,6 @@ public class Mark
      _listener = listener;
      _autoDeleteListener = autoDeleteListener;
      _imageID = iconURL.getPath() + "_";
-     _planet = null;
   
   }
 
@@ -386,7 +376,6 @@ public class Mark
      _listener = listener;
      _autoDeleteListener = autoDeleteListener;
      _imageID = imageID;
-     _planet = null;
   
   }
 
@@ -424,9 +413,6 @@ public class Mark
 
   public final void initialize(G3MContext context, long downloadPriority)
   {
-  
-    _planet = context.getPlanet();
-  
     if (!_textureSolved)
     {
       final boolean hasLabel = (_label.length() != 0);
@@ -557,7 +543,6 @@ public class Mark
   
     final Vector3D markCameraVector = markPosition.sub(cameraPosition);
   
-  
     // mark will be renderered only if is renderable by distance and placed on a visible globe area
     boolean renderableByDistance;
     if (_minDistanceToCamera == 0)
@@ -586,24 +571,15 @@ public class Mark
   
             rc.getFactory().deleteImage(_textureImage);
             _textureImage = null;
-  
-            _viewportWidth = rc.getCurrentCamera().getWidth();
-            _viewportHeight = rc.getCurrentCamera().getHeight();
-            createGLState();
           }
         }
         else
         {
           if (rc.getCurrentCamera().getWidth() != _viewportWidth || rc.getCurrentCamera().getHeight() != _viewportHeight)
           {
-            _viewportWidth = rc.getCurrentCamera().getWidth();
-            _viewportHeight = rc.getCurrentCamera().getHeight();
-            createGLState(); //Ready for rendering
+            createGLState(rc.getPlanet(), rc.getCurrentCamera().getWidth(), rc.getCurrentCamera().getHeight());
           }
-        }
   
-        if (_textureId != null)
-        {
           GL gl = rc.getGL();
   
           GPUProgramManager progManager = rc.getGPUProgramManager();
@@ -616,6 +592,7 @@ public class Mark
         }
       }
     }
+  
   }
 
 }

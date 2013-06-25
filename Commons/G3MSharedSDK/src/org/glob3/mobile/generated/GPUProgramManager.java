@@ -67,52 +67,119 @@ public class GPUProgramManager
     return prog;
   }
 
-  public final GPUProgram getProgram(GL gl, GPUProgramState state)
-  {
-    for (final GPUProgram p : _programs.values()){
-    	if (state.isLinkableToProgram(p)) {
-        return p;
-      }
-    }
-
-    int WORKING_JM;
-
-    java.util.ArrayList<String> us = state.getUniformsNames();
-    int size = us.size();
-    for (int i = 0; i < size; i++)
-    {
-      if (us.get(i).compareTo("ViewPortExtent") == 0)
-      {
-        return getProgram(gl, "Billboard");
-      }
-    }
-
-    return getProgram(gl, "Default");
-  }
+//  GPUProgram* getProgram(GL* gl, const GPUProgramState& state) {
+///#ifdef C_CODE
+//    for(std::map<std::string, GPUProgram*>::const_iterator it = _programs.begin();
+//        it != _programs.end(); it++){
+//      if (state.isLinkableToProgram(*it->second)){
+//        return it->second;
+//      }
+//    }
+///#endif
+///#ifdef JAVA_CODE
+//    for (final GPUProgram p : _programs.values()){
+//    	if (state.isLinkableToProgram(p)) {
+//        return p;
+//      }
+//    }
+///#endif
+//    
+//    int WORKING_JM;
+//    
+//    std::vector<std::string>* us = state.getUniformsNames();
+//    int size = us->size();
+//    for (int i = 0; i < size; i++) {
+//      if (us->at(i).compare("ViewPortExtent") == 0){
+//        return getProgram(gl, "Billboard");
+//      }
+//    }
+//    
+//    return getProgram(gl, "Default");
+//  }
 
   public final GPUProgram getProgram(GL gl, GLState glState)
   {
-    GLState thisGLState = glState;
+  
+    boolean texture = false;
+    boolean flatColor = false;
+    boolean billboard = false;
+    boolean color = false;
+  
+    final GLState thisGLState = glState;
     while (thisGLState != null)
     {
-      java.util.ArrayList<String> ui = glState.getGPUProgramState().getUniformsNames();
+      java.util.ArrayList<Integer> ui = thisGLState.getGPUProgramState().getUniformsKeys();
       int sizeI = ui.size();
       for (int j = 0; j < sizeI; j++)
       {
-        String name = ui.get(j);
+        int key = ui.get(j);
   
-        if (name.compareTo("uViewPortExtent") == 0)
+        if (key == GPUVariable.VIEWPORT_EXTENT)
         {
-          return getProgram(gl, "Billboard");
+          billboard = true;
+        }
+  
+        if (key == GPUVariable.FLAT_COLOR)
+        {
+          flatColor = true;
+        }
+  
+        if (key == GPUVariable.TRANSLATION_TEXTURE_COORDS)
+        {
+          texture = true;
         }
       }
   
+      java.util.ArrayList<Integer> ai = thisGLState.getGPUProgramState().getAttributeKeys();
+      sizeI = ai.size();
+      for (int j = 0; j < sizeI; j++)
+      {
+        int key = ai.get(j);
+  
+  //      if (key == GPUVariable::TEXTURE_COORDS){
+  //        color = true;
+  //      }
+  
+        if (key == GPUVariable.COLOR)
+        {
+          color = true;
+        }
+      }
   
       thisGLState = thisGLState.getParent();
     }
   
-    int WORKING_JM;
+    if (billboard)
+    {
+      return getProgram(gl, "Billboard");
+    }
+    else
+    {
+      if (flatColor && !texture && !color)
+      {
+        return getProgram(gl, "FlatColorMesh");
+      }
+  
+      if (!flatColor && texture && !color)
+      {
+        return getProgram(gl, "TexturedMesh");
+      }
+  
+      if (!flatColor && !texture && color)
+      {
+        return getProgram(gl, "ColorMesh");
+      }
+  
+      if (!flatColor && !texture && !color)
+      {
+        return null; //Shapes with texture not loaded yet
+      }
+  
+    }
+  
+  
     return getProgram(gl, "Default");
+  
   }
 
 

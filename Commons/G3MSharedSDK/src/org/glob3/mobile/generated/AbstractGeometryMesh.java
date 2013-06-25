@@ -1,17 +1,17 @@
 package org.glob3.mobile.generated; 
 //
-//  AbstractMesh.cpp
+//  AbstractGeometryMesh.cpp
 //  G3MiOSSDK
 //
-//  Created by Diego Gomez Deck on 12/1/12.
+//  Created by Jose Miguel SN on 23/06/13.
 //
 //
 
 //
-//  AbstractMesh.hpp
+//  AbstractGeometryMesh.h
 //  G3MiOSSDK
 //
-//  Created by Diego Gomez Deck on 12/1/12.
+//  Created by Jose Miguel SN on 23/06/13.
 //
 //
 
@@ -22,16 +22,13 @@ package org.glob3.mobile.generated;
 //class IFloatBuffer;
 //class Color;
 
-public abstract class AbstractMesh extends Mesh
+public abstract class AbstractGeometryMesh extends Mesh
 {
   protected final int _primitive;
   protected final boolean _owner;
   protected Vector3D _center ;
   protected final MutableMatrix44D _translationMatrix;
   protected IFloatBuffer _vertices;
-  protected Color _flatColor;
-  protected IFloatBuffer _colors;
-  protected final float _colorsIntensity;
   protected final float _lineWidth;
   protected final float _pointSize;
   protected final boolean _depthTest;
@@ -81,14 +78,11 @@ public abstract class AbstractMesh extends Mesh
     return new Box(new Vector3D(minX, minY, minZ), new Vector3D(maxX, maxY, maxZ));
   }
 
-  protected AbstractMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors, float colorsIntensity, boolean depthTest)
+  protected AbstractGeometryMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, boolean depthTest)
   {
      _primitive = primitive;
      _owner = owner;
      _vertices = vertices;
-     _flatColor = flatColor;
-     _colors = colors;
-     _colorsIntensity = colorsIntensity;
      _extent = null;
      _center = new Vector3D(center);
      _translationMatrix = (center.isNan() || center.isZero()) ? null : new MutableMatrix44D(MutableMatrix44D.createTranslationMatrix(center));
@@ -98,7 +92,6 @@ public abstract class AbstractMesh extends Mesh
     createGLState();
   }
 
-  protected abstract void rawRender(G3MRenderContext rc);
   protected abstract void rawRender(G3MRenderContext rc, GLState parentGLState);
 
   protected GLState _glState = new GLState();
@@ -118,64 +111,17 @@ public abstract class AbstractMesh extends Mesh
       globalState.disableDepthTest();
     }
   
-    if (_flatColor != null && _flatColor.isTransparent())
-    {
-      globalState.enableBlend();
-      globalState.setBlendFactors(GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha());
-    }
-  
     GPUProgramState progState = _glState.getGPUProgramState();
   
-    if (_flatColor != null && _colors == null) //FlatColorMesh Shader
-    {
-      progState.setAttributeValue(GPUVariable.POSITION, _vertices, 4, 3, 0, false, 0); //Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
-      progState.setUniformValue(GPUVariable.FLAT_COLOR, (double)_flatColor.getRed(), (double)_flatColor.getGreen(), (double) _flatColor.getBlue(), (double) _flatColor.getAlpha());
-      if (_translationMatrix != null)
-      {
-        progState.setUniformMatrixValue(GPUVariable.MODELVIEW, _translationMatrix, true);
-      }
-      return;
-    }
-  
-  
-    progState.setUniformValue(GPUVariable.POINT_SIZE, _pointSize);
-  
     progState.setAttributeValue(GPUVariable.POSITION, _vertices, 4, 3, 0, false, 0); //Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
-  
-    if (_colors != null)
-    {
-  //    progState.setUniformValue(GPUVariable::EnableColorPerVertex, true);
-      progState.setAttributeValue(GPUVariable.COLOR, _colors, 4, 4, 0, false, 0); //Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 4 - The attribute is a float vector of 4 elements RGBA
-  
-  //    progState.setUniformValue(GPUVariable::ColorPerVertexIntensity, _colorsIntensity);
-    }
-    else
-    {
-  //    progState.setAttributeDisabled(GPUVariable::COLOR);
-  //    progState.setUniformValue(GPUVariable::EnableColorPerVertex, false);
-  //    progState.setUniformValue(GPUVariable::ColorPerVertexIntensity, (float)0.0);
-    }
-  
-  //  if (_flatColor != NULL){
-  //    progState.setUniformValue(GPUVariable::EnableFlatColor, true);
-  //    progState.setUniformValue(GPUVariable::FLAT_COLOR,
-  //                              (double)_flatColor->getRed(),
-  //                              (double)_flatColor->getGreen(),
-  //                              (double) _flatColor->getBlue(),
-  //                              (double) _flatColor->getAlpha());
-  //
-  //    progState.setUniformValue(GPUVariable::FlatColorIntensity, _colorsIntensity);
-  //  } else{
-  //    progState.setUniformValue(GPUVariable::EnableFlatColor, false);
-  //    progState.setUniformValue(GPUVariable::ColorPerVertexIntensity, (float)0.0);
-  //    progState.setUniformValue(GPUVariable::FLAT_COLOR, (float)0.0, (float)0.0, (float)0.0, (float)0.0);
-  //    progState.setUniformValue(GPUVariable::FlatColorIntensity, (float)0.0);
-  //  }
   
     if (_translationMatrix != null)
     {
       progState.setUniformMatrixValue(GPUVariable.MODELVIEW, _translationMatrix, true);
     }
+  
+  
+    progState.setUniformValue(GPUVariable.POINT_SIZE, _pointSize);
   }
 
   public void dispose()
@@ -184,10 +130,6 @@ public abstract class AbstractMesh extends Mesh
     {
       if (_vertices != null)
          _vertices.dispose();
-      if (_colors != null)
-         _colors.dispose();
-      if (_flatColor != null)
-         _flatColor.dispose();
     }
   
     if (_extent != null)
@@ -198,7 +140,6 @@ public abstract class AbstractMesh extends Mesh
 
   public final void render(G3MRenderContext rc)
   {
-    rawRender(rc);
   }
 
   public final Extent getExtent()
@@ -223,16 +164,11 @@ public abstract class AbstractMesh extends Mesh
 
   public final boolean isTransparent(G3MRenderContext rc)
   {
-    if (_flatColor == null)
-    {
-      return false;
-    }
-    return _flatColor.isTransparent();
+    return false; //TODO: CHECK
   }
 
   public final void render(G3MRenderContext rc, GLState parentGLState)
   {
-  
     _glState.setParent(parentGLState);
     rawRender(rc, _glState);
   }

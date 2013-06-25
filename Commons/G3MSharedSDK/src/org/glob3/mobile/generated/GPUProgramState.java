@@ -21,15 +21,10 @@ package org.glob3.mobile.generated;
 public class GPUProgramState
 {
 
-//  struct attributeEnabledStruct{
-//    bool value;
-//    mutable GPUAttribute* attribute;
-//  };
-  private java.util.HashMap<String, GPUUniformValue> _uniformValues = new java.util.HashMap<String, GPUUniformValue>();
-  private java.util.HashMap<String, GPUAttributeValue> _attributesValues = new java.util.HashMap<String, GPUAttributeValue>();
-//  std::map<std::string, attributeEnabledStruct> _attributesEnabled;
+  private java.util.HashMap<Integer, GPUUniformValue> _uniformValues = new java.util.HashMap<Integer, GPUUniformValue>();
+  private java.util.HashMap<Integer, GPUAttributeValue> _attributesValues = new java.util.HashMap<Integer, GPUAttributeValue>();
 
-  private boolean setGPUUniformValue(String name, GPUUniformValue v)
+  private boolean setGPUUniformValue(int key, GPUUniformValue v)
   {
   
     GPUUniform prevLinkedUniform = null;
@@ -43,7 +38,7 @@ public class GPUProgramState
     }
   
     v.linkToGPUUniform(prevLinkedUniform);
-    _uniformValues.put(name, v);
+    _uniformValues.put(key, v);
   
     if (!uniformExisted)
     {
@@ -52,7 +47,7 @@ public class GPUProgramState
   
     return uniformExisted;
   }
-  private boolean setGPUAttributeValue(String name, GPUAttributeValue v)
+  private boolean setGPUAttributeValue(int key, GPUAttributeValue v)
   {
     GPUAttribute prevLinkedAttribute = null;
     boolean attributeExisted = false;
@@ -63,7 +58,7 @@ public class GPUProgramState
     }
   
     v.linkToGPUAttribute(prevLinkedAttribute);
-    _attributesValues.put(name, v);
+    _attributesValues.put(key, v);
   
     if (!attributeExisted)
     {
@@ -73,28 +68,36 @@ public class GPUProgramState
     return attributeExisted;
   }
 
-  private java.util.ArrayList<String> _uniformNames;
+  private java.util.ArrayList<Integer> _uniformKeys;
+  private java.util.ArrayList<Integer> _attributeKeys;
 
   private GPUProgram _lastProgramUsed;
 
   private void onStructureChanged()
   {
-    _uniformNames = null;
-    _uniformNames = null;
+    _uniformKeys = null;
+    _uniformKeys = null;
     _lastProgramUsed = null;
+
+    if (_attributeKeys != null)
+    {
+      _attributeKeys = null;
+      _attributeKeys = null;
+    }
   }
 
 
   public GPUProgramState()
   {
      _lastProgramUsed = null;
-     _uniformNames = null;
+     _uniformKeys = null;
+     _attributeKeys = null;
   }
 
   public void dispose()
   {
     clear();
-    _uniformNames = null;
+    _uniformKeys = null;
   }
 
   public final void clear()
@@ -105,142 +108,107 @@ public class GPUProgramState
     _attributesValues.clear();
   }
 
-  public final boolean setUniformValue(String name, boolean b)
-  {
-    return setGPUUniformValue(name, new GPUUniformValueBool(b));
+  /*
+  bool setUniformValue(const std::string& name, bool b){
+    return setUniformValue(GPUVariable::getKeyForName(name, UNIFORM), b);
   }
-
-  public final boolean setUniformValue(String name, float f)
-  {
-    return setGPUUniformValue(name, new GPUUniformValueFloat(f));
-  }
-
-  public final boolean setUniformValue(String name, Vector2D v)
-  {
-    return setGPUUniformValue(name, new GPUUniformValueVec2Float(v._x, v._y));
-  }
-
-  public final boolean setUniformValue(String name, double x, double y, double z, double w)
-  {
-    return setGPUUniformValue(name, new GPUUniformValueVec4Float(x,y,z,w));
-  }
-
-//  bool setUniformValue(const std::string& name, const MutableMatrix44D* m);
-//  
-//  bool multiplyUniformValue(const std::string& name, const MutableMatrix44D* m);
-
-
-  //bool GPUProgramState::setUniformValue(const std::string& name, const MutableMatrix44D* m){
-  //
-  ///#ifdef C_CODE
-  //  for(std::map<std::string, GPUUniformValue*> ::iterator it = _uniformValues.begin();
-  //      it != _uniformValues.end();
-  //      it++){
-  //    std::string thisName = it->first;
-  //    GPUUniformValue* uv = (GPUUniformValue*)it->second;
-  //    if (thisName.compare(name) == 0 && uv->getType() == GLType::glMatrix4Float()){
-  //      GPUUniformValueMatrix4FloatStack* v = (GPUUniformValueMatrix4FloatStack*)it->second;
-  //      v->loadMatrix(m);
-  //      return true;
-  //    }
-  //  }
-  ///#endif
-  ///#ifdef JAVA_CODE
-  //  final Object[] uni = _uniformValues.values().toArray();
-  //  final Object[] uniNames = _uniformValues.keySet().toArray();
-  //  for (int i = 0; i < uni.length; i++) {
-  //    final String thisName =  (String)uniNames[i];
-  //    final GPUUniformValue uv = (GPUUniformValue) uni[i];
-  //    if ((thisName.compareTo(name) == 0) && (uv.getType() == GLType.glMatrix4Float()))
-  //    {
-  //      final GPUUniformValueMatrix4FloatStack v = (GPUUniformValueMatrix4FloatStack)uv;
-  //      v.loadMatrix(m);
-  //      return true;
-  //    }
-  //  }
-  ///#endif
-  //
-  //  return setGPUUniformValue(name, new GPUUniformValueMatrix4FloatStack(m));
-  //}
   
-  //bool GPUProgramState::multiplyUniformValue(const std::string& name, const MutableMatrix44D* m){
-  //
-  ///#ifdef C_CODE
-  //
-  //  for(std::map<std::string, GPUUniformValue*> ::iterator it = _uniformValues.begin();
-  //      it != _uniformValues.end();
-  //      it++){
-  //    std::string thisName = it->first;
-  //    GPUUniformValue* uv = (GPUUniformValue*)it->second;
-  //    if (thisName.compare(name) == 0 && uv->getType() == GLType::glMatrix4Float()){
-  //      GPUUniformValueMatrix4FloatStack* v = (GPUUniformValueMatrix4FloatStack*)it->second;
-  //      v->multiplyMatrix(m);
-  //      return true;
-  //    }
-  //  }
-  //
-  ///#endif
-  ///#ifdef JAVA_CODE
-  //  final Object[] uni = _uniformValues.values().toArray();
-  //  final Object[] uniNames = _uniformValues.keySet().toArray();
-  //  for (int i = 0; i < uni.length; i++) {
-  //    final String thisName =  (String) uniNames[i];
-  //    final GPUUniformValue uv = (GPUUniformValue) uni[i];
-  //    if ((thisName.compareTo(name) == 0) && (uv.getType() == GLType.glMatrix4Float()))
-  //    {
-  //      final GPUUniformValueMatrix4FloatStack v = (GPUUniformValueMatrix4FloatStack)uv;
-  //      v.multiplyMatrix(m);
-  //      return;
-  //    }
-  //  }
-  ///#endif
-  //
-  //  ILogger::instance()->logError("CAN'T MULTIPLY UNLOADED MATRIX");
-  //  return false;
-  //
-  //}
+  bool setUniformValue(const std::string& name, float f){
+    return setUniformValue(GPUVariable::getKeyForName(name, UNIFORM), f);
+  }
   
-  public final boolean setUniformMatrixValue(String name, MutableMatrix44D m, boolean isTransform)
+  bool setUniformValue(const std::string& name, const Vector2D& v){
+    return setUniformValue(GPUVariable::getKeyForName(name, UNIFORM), v);
+  }
+  
+  bool setUniformValue(const std::string& name, double x, double y){
+    return setUniformValue(GPUVariable::getKeyForName(name, UNIFORM), x, y);
+  }
+  
+  bool setUniformValue(const std::string& name, double x, double y, double z, double w){
+    return setUniformValue(GPUVariable::getKeyForName(name, UNIFORM), x, y, z, w);
+  }
+  
+  bool setUniformMatrixValue(const std::string& name, const MutableMatrix44D& m, bool isTransform){
+    return setUniformMatrixValue(GPUVariable::getKeyForName(name, UNIFORM), m, isTransform);
+  }
+  
+  bool setAttributeValue(const std::string& name,
+                         IFloatBuffer* buffer, int attributeSize,
+                         int arrayElementSize, int index, bool normalized, int stride){
+    return setAttributeValue(GPUVariable::getKeyForName(name, ATTRIBUTE),
+                             buffer, attributeSize,
+                             arrayElementSize, index, normalized, stride);
+  }
+  
+  void setAttributeEnabled(const std::string& name, bool enabled){
+    setAttributeEnabled(GPUVariable::getKeyForName(name, ATTRIBUTE), enabled);
+  }
+  void setAttributeDisabled(const std::string& name){
+    setAttributeDisabled(GPUVariable::getKeyForName(name, ATTRIBUTE));
+  }
+  */
+
+  public final boolean setUniformValue(int key, boolean b)
+  {
+    return setGPUUniformValue(key, new GPUUniformValueBool(b));
+  }
+
+  public final boolean setUniformValue(int key, float f)
+  {
+    return setGPUUniformValue(key, new GPUUniformValueFloat(f));
+  }
+
+  public final boolean setUniformValue(int key, Vector2D v)
+  {
+    return setGPUUniformValue(key, new GPUUniformValueVec2Float(v._x, v._y));
+  }
+
+  public final boolean setUniformValue(int key, double x, double y)
+  {
+    return setGPUUniformValue(key, new GPUUniformValueVec2Float(x, y));
+  }
+
+  public final boolean setUniformValue(int key, double x, double y, double z, double w)
+  {
+    return setGPUUniformValue(key, new GPUUniformValueVec4Float(x,y,z,w));
+  }
+
+  public final boolean setUniformMatrixValue(int key, MutableMatrix44D m, boolean isTransform)
   {
     GPUUniformValueMatrix4FloatTransform uv = new GPUUniformValueMatrix4FloatTransform(m, isTransform);
-    return setGPUUniformValue(name, uv);
+    return setGPUUniformValue(key, uv);
   }
 
-  public final boolean setAttributeValue(String name, IFloatBuffer buffer, int attributeSize, int arrayElementSize, int index, boolean normalized, int stride)
+  public final boolean setAttributeValue(int key, IFloatBuffer buffer, int attributeSize, int arrayElementSize, int index, boolean normalized, int stride)
   {
     switch (attributeSize)
     {
       case 1:
-        return setGPUAttributeValue(name, new GPUAttributeValueVec1Float(buffer, arrayElementSize, index, stride, normalized));
+        return setGPUAttributeValue(key, new GPUAttributeValueVec1Float(buffer, arrayElementSize, index, stride, normalized));
       case 2:
-        return setGPUAttributeValue(name, new GPUAttributeValueVec2Float(buffer, arrayElementSize, index, stride, normalized));
+        return setGPUAttributeValue(key, new GPUAttributeValueVec2Float(buffer, arrayElementSize, index, stride, normalized));
       case 3:
-        return setGPUAttributeValue(name, new GPUAttributeValueVec3Float(buffer, arrayElementSize, index, stride, normalized));
+        return setGPUAttributeValue(key, new GPUAttributeValueVec3Float(buffer, arrayElementSize, index, stride, normalized));
       case 4:
-        return setGPUAttributeValue(name, new GPUAttributeValueVec4Float(buffer, arrayElementSize, index, stride, normalized));
+        return setGPUAttributeValue(key, new GPUAttributeValueVec4Float(buffer, arrayElementSize, index, stride, normalized));
       default:
         ILogger.instance().logError("Invalid size for Attribute.");
         return false;
     }
   }
 
-  public final void setAttributeEnabled(String name, boolean enabled)
+  public final void setAttributeEnabled(int key, boolean enabled)
   {
     //TODO: REMOVE FUNCTION
     if (!enabled)
     {
-      setAttributeDisabled(name);
+      setAttributeDisabled(key);
     }
-  
-    //  attributeEnabledStruct ae;
-    //  ae.value = enabled;
-    //  ae.attribute = NULL;
-    //
-    //  _attributesEnabled[name] = ae;
   }
-  public final void setAttributeDisabled(String name)
+  public final void setAttributeDisabled(int key)
   {
-    setGPUAttributeValue(name, new GPUAttributeValueDisabled());
+    setGPUAttributeValue(key, new GPUAttributeValueDisabled());
   }
 
   public final void applyChanges(GL gl)
@@ -313,59 +281,47 @@ public class GPUProgramState
     return _lastProgramUsed;
   }
 
-  public final java.util.ArrayList<String> getUniformsNames()
+  public final java.util.ArrayList<Integer> getUniformsKeys()
   {
   
-    if (_uniformNames == null)
+    if (_uniformKeys == null)
     {
   
-      _uniformNames = new java.util.ArrayList<String>();
+      _uniformKeys = new java.util.ArrayList<Integer>();
   
   
       _uniformNames = new java.util.ArrayList<String>();
       _uniformNames.addAll(_uniformValues.keySet());
   
     }
-    return _uniformNames;
+    return _uniformKeys;
+  }
+  public final java.util.ArrayList<Integer> getAttributeKeys()
+  {
+  
+    if (_attributeKeys == null)
+    {
+  
+      _attributeKeys = new java.util.ArrayList<Integer>();
+  
+  
+  
+    }
+    return _attributeKeys;
   }
 
   public final String description()
   {
-    String desc = "PROGRAM STATE\n==========\n";
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addString("PROGRAM STATE\n==========\n");
     //TODO: IMPLEMENT
-    return desc;
+    String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
   }
 
-  public final boolean isLinkableToProgram(GPUProgram program)
-  {
-  
-    if (program.getGPUAttributesNumber() != (_attributesValues.size())) {
-      return false;
-    }
-  
-    if (program.getGPUUniformsNumber() != _uniformValues.size()) {
-      return false;
-    }
-  
-  
-    final Object[] uniNames = _uniformValues.keySet().toArray();
-    for (int i = 0; i < uniNames.length; i++) {
-      String thisName = (String) uniNames[i];
-      if (program.getGPUUniform(thisName) == null) {
-        return false;
-      }
-    }
-  
-    final Object[] attNames = _attributesValues.keySet().toArray();
-    for (int i = 0; i < attNames.length; i++) {
-      String thisName = (String) attNames[i];
-      if (program.getGPUAttribute(thisName) == null) {
-        return false;
-      }
-    }
-  
-    return true;
-  }
+  //  bool isLinkableToProgram(const GPUProgram& program) const;
 
   public final void applyValuesToLinkedProgram()
   {
@@ -379,3 +335,63 @@ public class GPUProgramState
   }
 
 }
+/*
+bool GPUProgramState::isLinkableToProgram(const GPUProgram& program) const{
+#ifdef C_CODE
+  if (program.getGPUAttributesNumber() != _attributesValues.size()){
+    return false;
+  }
+  
+  if (program.getGPUUniformsNumber()   != _uniformValues.size()){
+    return false;
+  }
+  
+  for(std::map<int, GPUUniformValue*> ::const_iterator it = _uniformValues.begin();
+      it != _uniformValues.end();
+      it++){
+    if (program.getGPUUniform(it->first) == NULL){
+      return false;
+    }
+  }
+  
+  for(std::map<std::string, GPUAttributeValue*> ::const_iterator it = _attributesValues.begin();
+      it != _attributesValues.end();
+      it++){
+    if (program.getGPUAttribute(it->first) == NULL){
+      return false;
+    }
+  }
+  
+  return true;
+#endif
+#ifdef JAVA_CODE
+  
+  if (program.getGPUAttributesNumber() != (_attributesValues.size())) {
+    return false;
+  }
+  
+  if (program.getGPUUniformsNumber() != _uniformValues.size()) {
+    return false;
+  }
+  
+  
+  final Object[] uniNames = _uniformValues.keySet().toArray();
+  for (int i = 0; i < uniNames.length; i++) {
+    String thisName = (String) uniNames[i];
+    if (program.getGPUUniform(thisName) == null) {
+      return false;
+    }
+  }
+  
+  final Object[] attNames = _attributesValues.keySet().toArray();
+  for (int i = 0; i < attNames.length; i++) {
+    String thisName = (String) attNames[i];
+    if (program.getGPUAttribute(thisName) == null) {
+      return false;
+    }
+  }
+  
+  return true;
+#endif
+}
+*/

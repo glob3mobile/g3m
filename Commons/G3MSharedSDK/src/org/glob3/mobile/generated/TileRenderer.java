@@ -367,8 +367,8 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   
     //Initializing program State
   //  _programState.setUniformValue("BillBoard", false);
-  //  _programState.setUniformValue("EnableTexture", false);
-  //  _programState.setUniformValue("PointSize", (float)1.0);
+  //  _programState.setUniformValue(GPUVariable::EnableTexture, false);
+  //  _programState.setUniformValue(GPUVariable::POINT_SIZE, (float)1.0);
   //  _programState.setUniformValue("TextureExtent", Vector2D(0.0,0.0));
   //  _programState.setUniformValue("ViewPortExtent", Vector2D(0.0,0.0));
   }
@@ -376,8 +376,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   public final void render(G3MRenderContext rc)
   {
   
-    _glState.getGPUProgramState().setUniformMatrixValue("Modelview", rc.getCurrentCamera().getModelMatrix(), false);
-    _glState.getGPUProgramState().setUniformMatrixValue("Projection", rc.getCurrentCamera().getProjectionMatrix(), false);
+    _glState.getGPUProgramState().setUniformMatrixValue(GPUVariable.MODELVIEW, rc.getCurrentCamera().getModelViewMatrix(), false);
     _glState.getGLGlobalState().enableDepthTest();
   
     if (!isReadyToRenderTiles(rc) && _parameters._renderIncompletePlanet)

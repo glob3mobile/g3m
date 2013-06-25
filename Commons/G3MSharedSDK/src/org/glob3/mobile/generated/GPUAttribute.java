@@ -1,7 +1,6 @@
 package org.glob3.mobile.generated; 
-public class GPUAttribute
+public class GPUAttribute extends GPUVariable
 {
-  protected final String _name;
   protected final int _id;
 
   protected boolean _dirty;
@@ -9,7 +8,6 @@ public class GPUAttribute
 
   protected final int _type;
   protected final int _size;
-
 
   protected boolean _dirtyEnabled;
   protected boolean _enabled;
@@ -23,7 +21,7 @@ public class GPUAttribute
 
   public GPUAttribute(String name, int id, int type, int size)
   {
-     _name = name;
+     super(name, GPUVariableType.ATTRIBUTE);
      _id = id;
      _dirty = false;
      _value = null;
@@ -90,27 +88,12 @@ public class GPUAttribute
            _value.dispose();
       }
       _value = v.shallowCopy();
-      //delete v;
     }
   }
 
-  //  void setEnable(bool b){
-  //    if (b != _enabled){
-  //      _enabled = b;
-  //      _dirtyEnabled = true;
-  //    }
-  //  }
 
   public void applyChanges(GL gl)
   {
-    //    if (_dirtyEnabled){
-    //      _dirtyEnabled = false;
-    //      if (_enabled){
-    //        gl->enableVertexAttribArray(_id);
-    //      } else{
-    //        gl->disableVertexAttribArray(_id);
-    //      }
-    //    }
 
     if (_dirty)
     {

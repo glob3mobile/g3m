@@ -36,7 +36,7 @@ public class SGTranslateNode extends SGNode
      _y = y;
      _z = z;
      _translationMatrix = new MutableMatrix44D(MutableMatrix44D.createTranslationMatrix(_x, _y, _z));
-    _glState.getGPUProgramState().setUniformMatrixValue("Modelview", _translationMatrix, true);
+    _glState.getGPUProgramState().setUniformMatrixValue(GPUVariable.MODELVIEW, _translationMatrix, true);
   }
 
   public final GLState getGLState(GLState parentGLState)

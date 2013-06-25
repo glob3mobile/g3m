@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated; 
-public class GPUUniform
+public class GPUUniform extends GPUVariable
 {
-  protected final String _name;
+
   protected final IGLUniformID _id;
 
   protected boolean _dirty;
@@ -18,7 +18,7 @@ public class GPUUniform
 
   public GPUUniform(String name, IGLUniformID id, int type)
   {
-     _name = name;
+     super(name, GPUVariableType.UNIFORM);
      _id = id;
      _dirty = false;
      _value = null;
@@ -40,6 +40,10 @@ public class GPUUniform
   public final boolean wasSet()
   {
      return _value != null;
+  }
+  public final GPUUniformValue getSetValue()
+  {
+     return _value;
   }
 
   public final void unset()

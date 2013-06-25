@@ -28,21 +28,21 @@ public class ShapesRenderer extends LeafRenderer
   private GLState _glState = new GLState();
   private void createGLState()
   {
-    _glState.getGLGlobalState().enableDepthTest();
+  //  _glState.getGLGlobalState()->enableDepthTest();
   
-    GPUProgramState progState = _glState.getGPUProgramState();
-    progState.setUniformValue("EnableTexture", false);
-    progState.setUniformValue("PointSize", (float)1.0);
-    progState.setUniformValue("ScaleTexCoord", new Vector2D(1.0,1.0));
-    progState.setUniformValue("TranslationTexCoord", new Vector2D(0.0,0.0));
-  
-    progState.setUniformValue("ColorPerVertexIntensity", (float)0.0);
-    progState.setUniformValue("EnableFlatColor", false);
-    progState.setUniformValue("FlatColor", (float)0.0, (float)0.0, (float)0.0, (float)0.0);
-    progState.setUniformValue("FlatColorIntensity", (float)0.0);
-  
-    progState.setAttributeEnabled("TextureCoord", false);
-    progState.setAttributeEnabled("Color", false);
+  //  GPUProgramState& progState = *_glState.getGPUProgramState();
+  //  progState.setUniformValue(GPUVariable::EnableTexture, false);
+  //  progState.setUniformValue(GPUVariable::POINT_SIZE, (float)1.0);
+  //  progState.setUniformValue(GPUVariable::SCALE_TEXTURE_COORDS, Vector2D(1.0,1.0));
+  //  progState.setUniformValue(GPUVariable::TRANSLATION_TEXTURE_COORDS, Vector2D(0.0,0.0));
+  //
+  //  progState.setUniformValue(GPUVariable::ColorPerVertexIntensity, (float)0.0);
+  //  progState.setUniformValue(GPUVariable::EnableFlatColor, false);
+  //  progState.setUniformValue(GPUVariable::FLAT_COLOR, (float)0.0, (float)0.0, (float)0.0, (float)0.0);
+  //  progState.setUniformValue(GPUVariable::FlatColorIntensity, (float)0.0);
+  //
+  //  progState.setAttributeEnabled(GPUVariable::TEXTURE_COORDS, false);
+  //  progState.setAttributeEnabled(GPUVariable::COLOR, false);
   }
 
 
@@ -166,8 +166,7 @@ public class ShapesRenderer extends LeafRenderer
     final Vector3D cameraPosition = rc.getCurrentCamera().getCartesianPosition();
   
     //Setting camera matrixes
-    _glState.getGPUProgramState().setUniformMatrixValue("Modelview", rc.getCurrentCamera().getModelMatrix(), false);
-    _glState.getGPUProgramState().setUniformMatrixValue("Projection", rc.getCurrentCamera().getProjectionMatrix(), false);
+    _glState.getGPUProgramState().setUniformMatrixValue(GPUVariable.MODELVIEW, rc.getCurrentCamera().getModelViewMatrix(), false);
   
     final int shapesCount = _shapes.size();
     for (int i = 0; i < shapesCount; i++)

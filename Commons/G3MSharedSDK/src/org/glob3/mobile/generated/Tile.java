@@ -53,6 +53,8 @@ public class Tile
   private Mesh _texturizedMesh;
   private TileElevationDataRequest _elevationDataRequest;
 
+  private Mesh _flatColorMesh;
+
   private boolean _textureSolved;
   private java.util.ArrayList<Tile> _subtiles;
   private boolean _justCreatedSubtiles;
@@ -241,13 +243,18 @@ public class Tile
   
       if (_texturizedMesh != null)
       {
-        //_texturizedMesh->render(rc);
         _texturizedMesh.render(rc, glState);
       }
       else
       {
-        //tessellatorMesh->render(rc);
-        tessellatorMesh.render(rc, glState);
+        //Adding flat color if no texture set on the mesh
+        if (_flatColorMesh == null)
+        {
+          _flatColorMesh = new FlatColorMesh(tessellatorMesh, false, Color.newFromRGBA((float) 1.0, (float) 1.0, (float) 1.0, (float) 1.0), true);
+        }
+        _flatColorMesh.render(rc, glState);
+  
+        //tessellatorMesh->render(rc, glState);
       }
     }
   
@@ -497,6 +504,7 @@ public class Tile
      _column = column;
      _tessellatorMesh = null;
      _debugMesh = null;
+     _flatColorMesh = null;
      _texturizedMesh = null;
      _textureSolved = false;
      _texturizerDirty = true;
@@ -529,6 +537,10 @@ public class Tile
     if (_debugMesh != null)
        _debugMesh.dispose();
     _debugMesh = null;
+  
+    if (_flatColorMesh != null)
+       _flatColorMesh.dispose();
+    _flatColorMesh = null;
   
     if (_tessellatorMesh != null)
        _tessellatorMesh.dispose();

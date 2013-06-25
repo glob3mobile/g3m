@@ -181,43 +181,10 @@ public class MutableMatrix44D
 
   public final boolean isEqualsTo(MutableMatrix44D m)
   {
-    if (_m00 != m._m00)
-       return false;
-    if (_m01 != m._m01)
-       return false;
-    if (_m02 != m._m02)
-       return false;
-    if (_m03 != m._m03)
-       return false;
+    if ((_m00 == m._m00) && (_m01 == m._m01) && (_m02 == m._m02) && (_m03 == m._m03) && (_m10 == m._m10) && (_m11 == m._m11) && (_m12 == m._m12) && (_m13 == m._m13) && (_m20 == m._m20) && (_m21 == m._m21) && (_m22 == m._m22) && (_m23 == m._m23) && (_m30 == m._m30) && (_m31 == m._m31) && (_m32 == m._m32) && (_m33 == m._m33))
+       return true;
 
-    if (_m10 != m._m10)
-       return false;
-    if (_m11 != m._m11)
-       return false;
-    if (_m12 != m._m12)
-       return false;
-    if (_m13 != m._m13)
-       return false;
-
-    if (_m20 != m._m20)
-       return false;
-    if (_m21 != m._m21)
-       return false;
-    if (_m22 != m._m22)
-       return false;
-    if (_m23 != m._m23)
-       return false;
-
-    if (_m30 != m._m30)
-       return false;
-    if (_m31 != m._m31)
-       return false;
-    if (_m32 != m._m32)
-       return false;
-    if (_m33 != m._m33)
-       return false;
-
-    return true;
+    return false;
   }
 
   public final MutableMatrix44D copyFrom(MutableMatrix44D that)
@@ -488,8 +455,8 @@ public class MutableMatrix44D
     return _columnMajorFloatBuffer;
   }
 
-  public final float[] getColumnMajorFloatArray()
-  {
+    public final float[] getColumnMajorFloatArray()
+    {
       if (_columnMajorFloatArray == null)
       {
         _columnMajorFloatArray = new float[16];
@@ -515,7 +482,7 @@ public class MutableMatrix44D
         _columnMajorFloatArray[15] = (float) _m33;
       }
       return _columnMajorFloatArray;
-  }
+    }
 
 
     public final void print(String name, ILogger log)

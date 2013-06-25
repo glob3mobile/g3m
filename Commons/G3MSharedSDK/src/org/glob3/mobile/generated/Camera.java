@@ -479,6 +479,17 @@ public class Camera
     return _modelMatrix;
   }
 
+  // multiplication of model * projection
+  public final MutableMatrix44D getModelViewMatrix()
+  {
+    if (_dirtyFlags._modelViewMatrixDirty)
+    {
+      _dirtyFlags._modelViewMatrixDirty = false;
+      _modelViewMatrix = getProjectionMatrix().multiply(getModelMatrix());
+    }
+    return _modelViewMatrix;
+  }
+
   private Angle getHeading(Vector3D normal)
   {
     final Vector3D north2D = Vector3D.upZ().projectionInPlane(normal);
@@ -569,17 +580,6 @@ public class Camera
       _frustumData = calculateFrustumData();
     }
     return _frustumData;
-  }
-
-  // multiplication of model * projection
-  private MutableMatrix44D getModelViewMatrix()
-  {
-    if (_dirtyFlags._modelViewMatrixDirty)
-    {
-      _dirtyFlags._modelViewMatrixDirty = false;
-      _modelViewMatrix = getProjectionMatrix().multiply(getModelMatrix());
-    }
-    return _modelViewMatrix;
   }
 
   // intersection of view direction with globe in(x,y,z)

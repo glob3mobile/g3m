@@ -35,7 +35,7 @@ public abstract class TextureMapping
   /**
    Returns a new GLGlobalState and changes the current program state
    */
-  public abstract GLGlobalState bind(G3MRenderContext rc, GLGlobalState parentState, GPUProgramState progState);
+//  virtual GLGlobalState* bind(const G3MRenderContext* rc, const GLGlobalState& parentState, GPUProgramState& progState) const = 0;
 
   public abstract boolean isTransparent(G3MRenderContext rc);
 

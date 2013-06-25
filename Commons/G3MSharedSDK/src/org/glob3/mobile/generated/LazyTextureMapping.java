@@ -76,64 +76,53 @@ public class LazyTextureMapping extends TextureMapping
     _glTextureId = glTextureId;
   }
 
-  public final GLGlobalState bind(G3MRenderContext rc, GLGlobalState parentState, GPUProgramState progState)
-  {
-    if (!_initialized)
-    {
-      _initializer.initialize();
+  //GLGlobalState* bind(const G3MRenderContext* rc, const GLGlobalState& parentState, GPUProgramState& progState) const {
+  //  if (!_initialized) {
+  //    _initializer->initialize();
+  //
+  //    _scale       = _initializer->getScale();
+  //    _translation = _initializer->getTranslation();
+  //    _texCoords   = _initializer->createTextCoords();
+  //
+  //    delete _initializer;
+  //    _initializer = NULL;
+  //
+  //    _initialized = true;
+  //  }
+  //
+  //  progState.setAttributeEnabled(GPUVariable::TEXTURE_COORDS, true);
+  //  progState.setUniformValue(GPUVariable::EnableTexture, true);
+  //
+  //  GLGlobalState *state = NULL; //new GLGlobalState(parentState);
+  //  //state->enableTextures();
+  //
+  ////  state->enableTexture2D();
+  //
+  //  if (_texCoords != NULL) {
+  //    progState.setUniformValue(GPUVariable::SCALE_TEXTURE_COORDS, _scale.asVector2D());
+  //    progState.setUniformValue(GPUVariable::TRANSLATION_TEXTURE_COORDS, _translation.asVector2D());
+  ////    state->scaleTextureCoordinates(_scale);
+  ////    state->translateTextureCoordinates(_translation);
+  //    state->bindTexture(_glTextureId);
+  ////    state->setTextureCoordinates(_texCoords, 2, 0);
+  //
+  //    progState.setAttributeValue(GPUVariable::TEXTURE_COORDS,
+  //                                _texCoords, 2,
+  //                                2,
+  //                                0,
+  //                                false,
+  //                                0);
+  //
+  //  }
+  //  else {
+  //    ILogger::instance()->logError("LazyTextureMapping::bind() with _texCoords == NULL");
+  //  }
+  //
+  //
+  //  return state;
+  //}
   
-      _scale = _initializer.getScale();
-      _translation = _initializer.getTranslation();
-      _texCoords = _initializer.createTextCoords();
-  
-      if (_initializer != null)
-         _initializer.dispose();
-      _initializer = null;
-  
-      _initialized = true;
-    }
-  
-    progState.setAttributeEnabled("TextureCoord", true);
-    progState.setUniformValue("EnableTexture", true);
-  
-    GLGlobalState state = null; //new GLGlobalState(parentState);
-    //state->enableTextures();
-  
-  //  state->enableTexture2D();
-  
-    if (_texCoords != null)
-    {
-      progState.setUniformValue("ScaleTexCoord", _scale.asVector2D());
-      progState.setUniformValue("TranslationTexCoord", _translation.asVector2D());
-  //    state->scaleTextureCoordinates(_scale);
-  //    state->translateTextureCoordinates(_translation);
-      state.bindTexture(_glTextureId);
-  //    state->setTextureCoordinates(_texCoords, 2, 0);
-  
-      progState.setAttributeValue("TextureCoord", _texCoords, 2, 2, 0, false, 0);
-  
-    }
-    else
-    {
-      ILogger.instance().logError("LazyTextureMapping::bind() with _texCoords == NULL");
-    }
-  
-  
-    return state;
-  }
-
-
-  public final IGLTextureId getGLTextureId()
-  {
-    return _glTextureId;
-  }
-
-  public final boolean isTransparent(G3MRenderContext rc)
-  {
-    return _transparent;
-  }
-
-  public final void modifyGLGlobalState(GLGlobalState GLGlobalState)
+  public final void LazyTextureMapping.modifyGLGlobalState(GLGlobalState GLGlobalState)
   {
     if (!_initialized)
     {
@@ -161,6 +150,20 @@ public class LazyTextureMapping extends TextureMapping
   
   }
 
+
+  public final IGLTextureId getGLTextureId()
+  {
+    return _glTextureId;
+  }
+
+  public final boolean isTransparent(G3MRenderContext rc)
+  {
+    return _transparent;
+  }
+
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  void modifyGLGlobalState(GLGlobalState GLGlobalState);
+
   public final void modifyGPUProgramState(GPUProgramState progState)
   {
     if (!_initialized)
@@ -178,15 +181,14 @@ public class LazyTextureMapping extends TextureMapping
       _initialized = true;
     }
   
-    progState.setAttributeEnabled("TextureCoord", true);
-    progState.setUniformValue("EnableTexture", true);
+    //progState.setAttributeEnabled(GPUVariable::TEXTURE_COORDS, true);
+    //progState.setUniformValue(GPUVariable::EnableTexture, true);
   
     if (_texCoords != null)
     {
-      progState.setUniformValue("ScaleTexCoord", _scale.asVector2D());
-      progState.setUniformValue("TranslationTexCoord", _translation.asVector2D());
-  
-      progState.setAttributeValue("TextureCoord", _texCoords, 2, 2, 0, false, 0);
+      progState.setUniformValue(GPUVariable.SCALE_TEXTURE_COORDS, _scale.asVector2D());
+      progState.setUniformValue(GPUVariable.TRANSLATION_TEXTURE_COORDS, _translation.asVector2D());
+      progState.setAttributeValue(GPUVariable.TEXTURE_COORDS, _texCoords, 2, 2, 0, false, 0);
     }
     else
     {

@@ -32,11 +32,11 @@ public class MeshRenderer extends LeafRenderer
   
     _glState.getGLGlobalState().enableDepthTest();
   
-    GPUProgramState progState = _glState.getGPUProgramState();
-    progState.setUniformValue("EnableTexture", false);
-    progState.setUniformValue("PointSize", (float)1.0);
-    progState.setUniformValue("ScaleTexCoord", new Vector2D(1.0,1.0));
-    progState.setUniformValue("TranslationTexCoord", new Vector2D(0.0,0.0));
+  //  GPUProgramState& progState = *_glState.getGPUProgramState();
+  //  progState.setUniformValue(GPUVariable::EnableTexture, false);
+  //  progState.setUniformValue(GPUVariable::POINT_SIZE, (float)1.0);
+  //  progState.setUniformValue(GPUVariable::SCALE_TEXTURE_COORDS, Vector2D(1.0,1.0));
+  //  progState.setUniformValue(GPUVariable::TRANSLATION_TEXTURE_COORDS, Vector2D(0.0,0.0));
   }
 
   public MeshRenderer()
@@ -101,8 +101,7 @@ public class MeshRenderer extends LeafRenderer
   {
     final Frustum frustum = rc.getCurrentCamera().getFrustumInModelCoordinates();
   
-    _glState.getGPUProgramState().setUniformMatrixValue("Modelview", rc.getCurrentCamera().getModelMatrix(), false);
-    _glState.getGPUProgramState().setUniformMatrixValue("Projection", rc.getCurrentCamera().getProjectionMatrix(), false);
+    _glState.getGPUProgramState().setUniformMatrixValue(GPUVariable.MODELVIEW, rc.getCurrentCamera().getModelViewMatrix(), false);
   
     final int meshesCount = _meshes.size();
     for (int i = 0; i < meshesCount; i++)
