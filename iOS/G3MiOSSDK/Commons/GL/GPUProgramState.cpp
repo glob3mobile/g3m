@@ -116,12 +116,9 @@ void GPUProgramState::linkToProgram(GPUProgram* prog) const{
     const int key = it->first;
     GPUUniformValue* v = it->second;
     
-    GPUUniform* u = prog->getGPUUniform(key);
-    if (u == NULL){
-      ILogger::instance()->logError("UNIFORM WITH KEY %d NOT FOUND", key);
+    if (!v->linkToGPUProgram(prog, key)){
       return;
     }
-    v->linkToGPUUniform(u);
   }
   
   for(std::map<int, GPUAttributeValue*> ::const_iterator it = _attributesValues.begin();
@@ -131,22 +128,9 @@ void GPUProgramState::linkToProgram(GPUProgram* prog) const{
     const int key = it->first;
     GPUAttributeValue* v = it->second;
     
-    GPUAttribute* a = NULL;
-    if (!v->getEnabled()){
-      a = prog->getGPUAttribute(key);
-    } else{
-      const int type = v->getType();
-      if (type==GLType::glFloat()){
-        const int size = v->getAttributeSize();
-        a = prog->getGPUAttributeVecXFloat(key,size);
-      }
-    }
-    
-    if (a == NULL){
-      ILogger::instance()->logError("ATTRIBUTE WITH KEY %d NOT FOUND ", key);
+    if (!v->linkToGPUProgram(prog, key)){
       return;
     }
-    v->linkToGPUAttribute(a);
   }
   
 #endif

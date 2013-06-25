@@ -79,6 +79,7 @@ public:
   
   void setValueToLinkedAttribute() const;
   
+  bool linkToGPUProgram(const GPUProgram* prog, int key) const;
   
 };
 
