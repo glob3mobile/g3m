@@ -21,17 +21,19 @@ void GLState::applyGlobalStateOnGPU(GL* gl) const{
 }
 
 void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
-  applyGlobalStateOnGPU(gl);
+//  applyGlobalStateOnGPU(gl);
   setProgramState(gl, progManager);
 }
 
-void GLState::linkAndApplyToGPUProgram(GPUProgram* prog) const{
+void GLState::linkAndApplyToGPUProgram(GL* gl, GPUProgram* prog) const{
   if (_parentGLState != NULL){
-    _parentGLState->linkAndApplyToGPUProgram(prog);
+    _parentGLState->linkAndApplyToGPUProgram(gl, prog);
   }
   
   _programState->linkToProgram(*prog);
   _programState->applyValuesToLinkedProgram();
+  
+  _globalState->applyChanges(gl, _currentGPUGlobalState);
 }
 
 void GLState::setProgramState(GL* gl, GPUProgramManager& progManager) const{
@@ -39,11 +41,12 @@ void GLState::setProgramState(GL* gl, GPUProgramManager& progManager) const{
   GPUProgram* prog = _programState->getLinkedProgram();
   if (prog != NULL){
     const GLState* parent = _parentGLState;
-    while (parent != NULL && prog != NULL) {
-      if (prog != parent->getGPUProgramState()->getLinkedProgram()){
+    while (parent != NULL) {
+      if (prog != parent->_programState->getLinkedProgram()){
         prog = NULL;
+        break;
       }
-      parent = parent->getParent();
+      parent = parent->_parentGLState;
     }
   }
   
@@ -60,7 +63,7 @@ void GLState::setProgramState(GL* gl, GPUProgramManager& progManager) const{
       gl->useProgram(prog);
     }
     
-    linkAndApplyToGPUProgram(prog);
+    linkAndApplyToGPUProgram(gl, prog);
     prog->applyChanges(gl);
 
     //prog->onUnused(); //Uncomment to check that all GPUProgramStates are complete

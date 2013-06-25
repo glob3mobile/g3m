@@ -29,7 +29,7 @@ class GLState{
   
   mutable const GLState* _parentGLState;
   
-  void linkAndApplyToGPUProgram(GPUProgram* prog) const;
+  void linkAndApplyToGPUProgram(GL* gl, GPUProgram* prog) const;
   
 public:
   

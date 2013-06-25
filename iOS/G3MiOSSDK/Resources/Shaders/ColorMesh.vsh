@@ -5,7 +5,6 @@
 //
 
 attribute vec4 aPosition;
-attribute vec2 aTextureCoord;
 attribute vec4 aColor;
 
 uniform mat4 uModelview;
