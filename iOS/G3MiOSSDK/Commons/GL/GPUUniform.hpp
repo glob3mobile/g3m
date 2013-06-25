@@ -89,18 +89,17 @@ public:
   
   void set(GPUUniformValue* v){
     if (_type != v->getType()){ //type checking
-      //      delete v;
       ILogger::instance()->logError("Attempting to set uniform " + _name + "with invalid value type.");
       return;
     }
     if (_value == NULL || !_value->isEqualsTo(v)){
       _dirty = true;
       
-      if (_value != NULL){
+      if (_value == NULL){
+        _value = v->deepCopy();
+      } else{
         v->setLastGPUUniformValue(_value); //Multiply matrix when needed
         _value->copyFrom(v);
-      } else{
-        _value = v->deepCopy();
       }
     }
   }
@@ -109,6 +108,10 @@ public:
     if (_dirty){
       _value->setUniform(gl, _id);
       _dirty = false;
+    } else{
+      if (_value == NULL){
+        ILogger::instance()->logError("Uniform " + _name + " was not set.");
+      }
     }
   }
 };
@@ -121,8 +124,7 @@ public:
   GPUUniformValueBool(bool b):GPUUniformValue(GLType::glBool()),_value(b){}
   
   void setUniform(GL* gl, const IGLUniformID* id) const{
-    if (_value) gl->uniform1i(id, 1);
-    else gl->uniform1i(id, 0);
+    _value? gl->uniform1i(id, 1) : gl->uniform1i(id, 0);
   }
   bool isEqualsTo(const GPUUniformValue* v) const{
     return _value == ((GPUUniformValueBool*)v)->_value;

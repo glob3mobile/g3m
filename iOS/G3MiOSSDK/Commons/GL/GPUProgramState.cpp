@@ -62,9 +62,9 @@ void GPUProgramState::applyValuesToLinkedProgram() const{
 }
 
 
-void GPUProgramState::linkToProgram(GPUProgram& prog) const{
+void GPUProgramState::linkToProgram(GPUProgram* prog) const{
   
-  if (_lastProgramUsed == &prog){
+  if (_lastProgramUsed == prog){
     return; //Already linked
   }
   
@@ -116,9 +116,7 @@ void GPUProgramState::linkToProgram(GPUProgram& prog) const{
     const int key = it->first;
     GPUUniformValue* v = it->second;
     
-    //const int type = v->getType();
-    
-    GPUUniform* u = prog.getGPUUniform(key);
+    GPUUniform* u = prog->getGPUUniform(key);
     if (u == NULL){
       ILogger::instance()->logError("UNIFORM WITH KEY %d NOT FOUND", key);
       return;
@@ -135,12 +133,12 @@ void GPUProgramState::linkToProgram(GPUProgram& prog) const{
     
     GPUAttribute* a = NULL;
     if (!v->getEnabled()){
-      a = prog.getGPUAttribute(key);
+      a = prog->getGPUAttribute(key);
     } else{
       const int type = v->getType();
-      const int size = v->getAttributeSize();
       if (type==GLType::glFloat()){
-        a = prog.getGPUAttributeVecXFloat(key,size);
+        const int size = v->getAttributeSize();
+        a = prog->getGPUAttributeVecXFloat(key,size);
       }
     }
     
@@ -154,7 +152,7 @@ void GPUProgramState::linkToProgram(GPUProgram& prog) const{
 #endif
   
   
-  _lastProgramUsed = &prog;
+  _lastProgramUsed = prog;
 }
 
 void GPUProgramState::applyChanges(GL* gl) const{

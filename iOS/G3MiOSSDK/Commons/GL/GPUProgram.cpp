@@ -136,11 +136,14 @@ GPUUniform* GPUProgram::getGPUUniform(const std::string name) const{
   
 #ifdef C_CODE
   std::map<int, GPUUniform*>::const_iterator it = _uniforms.find(key);
-  if (it != _uniforms.end()){
-    return it->second;
-  } else{
-    return NULL;
-  }
+//  if (it != _uniforms.end()){
+//    return it->second;
+//  } else{
+//    return NULL;
+//  }
+  
+  return (it == _uniforms.end()) ? NULL : it->second;
+  
 #endif
 #ifdef JAVA_CODE
   return _uniforms.get(name);
@@ -294,64 +297,17 @@ void GPUProgram::onUnused(GL* gl){
 /**
  Must be called before drawing to apply Uniforms and Attributes new values
  */
-
-//int TexEnabledCounter = 0, TexDisabledCounter = 0;
-//int FlatColorEnabledCounter = 0, FlatColorDisabledCounter = 0;
-//int ColorEnabledCounter = 0, ColorDisabledCounter = 0;
-
-
 void GPUProgram::applyChanges(GL* gl){
   //ILogger::instance()->logInfo("GPUProgram %s applying changes", _name.c_str());
 #ifdef C_CODE
   for (std::map<int, GPUUniform*>::iterator iter = _uniforms.begin(); iter != _uniforms.end(); iter++) {
-    
     GPUUniform* u = iter->second;
-    if (u->wasSet()){
-      u->applyChanges(gl);
-    } else{
-      ILogger::instance()->logError("Uniform " + u->getName() + " was not set.");
-    }
-    
-    //    if (u->getName().compare(GPUVariable::EnableTexture) == 0){
-    //      if (((GPUUniformValueBool*)u->getSetValue())->_value){
-    //        TexEnabledCounter++;
-    //      } else{
-    //        TexDisabledCounter++;
-    //      }
-    //    }
-    //
-    //    if (u->getName().compare(GPUVariable::EnableFlatColor) == 0){
-    //      if (((GPUUniformValueBool*)u->getSetValue())->_value){
-    //        FlatColorEnabledCounter++;
-    //      } else{
-    //        FlatColorDisabledCounter++;
-    //      }
-    //    }
-    //
-    //    if (u->getName().compare(GPUVariable::EnableColorPerVertex) == 0){
-    //      if (((GPUUniformValueBool*)u->getSetValue())->_value){
-    //        ColorEnabledCounter++;
-    //      } else{
-    //        ColorDisabledCounter++;
-    //      }
-    //    }
+    u->applyChanges(gl);
   }
   
-  //  printf("TexEnabled: %f, FlatColorEnabled: %f, ColorEnabled: %f\n",
-  //         ((double)TexEnabledCounter) / (TexEnabledCounter+ TexDisabledCounter),
-  //         ((double)FlatColorEnabledCounter) / (FlatColorEnabledCounter+ FlatColorDisabledCounter),
-  //         ((double)ColorEnabledCounter) / (ColorEnabledCounter+ ColorDisabledCounter));
-  
   for (std::map<int, GPUAttribute*>::iterator iter = _attributes.begin(); iter != _attributes.end(); iter++) {
-    
     GPUAttribute* a = iter->second;
-    if (a->wasSet()){
-      a->applyChanges(gl);
-    } else{
-      if (a->isEnabled()){
-        ILogger::instance()->logError("Attribute " + a->getName() + " was not set but it is enabled.");
-      }
-    }
+    a->applyChanges(gl);
   }
 #endif
 #ifdef JAVA_CODE

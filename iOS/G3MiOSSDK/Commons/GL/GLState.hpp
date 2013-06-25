@@ -25,11 +25,17 @@ class GLState{
   GLGlobalState*   _globalState;
   const bool _owner;
   
-  void setProgramState(GL* gl, GPUProgramManager& progManager) const;
+//  void setProgramState(GL* gl, GPUProgramManager& progManager) const;
   
   mutable const GLState* _parentGLState;
   
   void linkAndApplyToGPUProgram(GL* gl, GPUProgram* prog) const;
+  
+  explicit GLState(const GLState& state):
+  _programState(new GPUProgramState()),
+  _globalState(new GLGlobalState()),
+  _owner(true),
+  _parentGLState(NULL){}
   
 public:
   

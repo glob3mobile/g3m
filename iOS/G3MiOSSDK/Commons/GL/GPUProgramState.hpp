@@ -113,7 +113,7 @@ public:
   
   void applyChanges(GL* gl) const;
   
-  void linkToProgram(GPUProgram& prog) const;
+  void linkToProgram(GPUProgram* prog) const;
   
   bool isLinkedToProgram() const{
     return _lastProgramUsed != NULL;

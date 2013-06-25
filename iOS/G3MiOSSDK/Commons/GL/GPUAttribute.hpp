@@ -148,22 +148,30 @@ public:
   
   virtual void applyChanges(GL* gl){
     
-    if (_dirty){
-      
-      if (_value->getEnabled()){
-        if (!_enabled){
-          gl->enableVertexAttribArray(_id);
-          _enabled = true;
-        }
-        _value->setAttribute(gl, _id);
-      } else{
-        if (_enabled){
-          gl->disableVertexAttribArray(_id);
-          _enabled = false;
-        }
+    if (_value == NULL){
+      if (_enabled){
+        ILogger::instance()->logError("Attribute " + _name + " was not set but it is enabled.");
       }
-      
-      _dirty = false;
+    } else{
+      if (_dirty){
+        
+        if (_value->getEnabled()){
+          if (!_enabled){
+            gl->enableVertexAttribArray(_id);
+            _enabled = true;
+          }
+          _value->setAttribute(gl, _id);
+        } else{
+          if (_enabled){
+            gl->disableVertexAttribArray(_id);
+            _enabled = false;
+          }
+        }
+        
+        _dirty = false;
+      } else{
+        
+      }
     }
   }
 };
@@ -217,11 +225,11 @@ public:
     } else{
       GPUAttributeValueVecFloat* vecV = (GPUAttributeValueVecFloat*)v;
       return (_buffer == vecV->_buffer) &&
-              (_timeStamp == vecV->_timeStamp) &&
-               (_type == v->getType()) &&
-               (_attributeSize == v->getAttributeSize()) &&
-               (_stride == v->getStride()) &&
-               (_normalized == v->getNormalized() ) ;
+      (_timeStamp == vecV->_timeStamp) &&
+      (_type == v->getType()) &&
+      (_attributeSize == v->getAttributeSize()) &&
+      (_stride == v->getStride()) &&
+      (_normalized == v->getNormalized() ) ;
     }
   }
   
