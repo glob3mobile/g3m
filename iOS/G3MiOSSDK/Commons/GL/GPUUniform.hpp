@@ -28,7 +28,6 @@ public:
   virtual ~GPUUniformValue(){}
   virtual void setUniform(GL* gl, const IGLUniformID* id) const = 0;
   virtual bool isEqualsTo(const GPUUniformValue* v) const = 0;
-  virtual GPUUniformValue* deepCopy() const = 0;
   
   GPUUniform* getLinkedUniform() const { return _uniform;}
   
@@ -44,13 +43,18 @@ public:
   
   void setValueToLinkedUniform() const;
   
-  virtual void setLastGPUUniformValue(GPUUniformValue* old){} //Used with matrix transform value
-  
-  
-  virtual void copyFrom(GPUUniformValue* v) = 0;
-  
-  
   virtual GPUUniformValue* copyOrCreate(GPUUniformValue* value){return value;}
+  
+  bool linkToGPUProgram(const GPUProgram* prog, int key) const{
+    GPUUniform* u = prog->getGPUUniform(key);
+    if (u == NULL){
+      ILogger::instance()->logError("UNIFORM WITH KEY %d NOT FOUND", key);
+      return false;
+    } else{
+      _uniform = u;
+      return true;
+    }
+  }
 };
 
 
@@ -97,15 +101,7 @@ public:
     }
     if (_value == NULL || !_value->isEqualsTo(v)){
       _dirty = true;
-      
       _value = v->copyOrCreate(_value);
-      
-//      if (_value == NULL){
-//        _value = v->deepCopy();
-//      } else{
-//        v->setLastGPUUniformValue(_value); //Multiply matrix when needed
-//        _value->copyFrom(v);
-//      }
     }
   }
   
@@ -134,9 +130,6 @@ public:
   bool isEqualsTo(const GPUUniformValue* v) const{
     return _value == ((GPUUniformValueBool*)v)->_value;
   }
-  GPUUniformValue* deepCopy() const{
-    return new GPUUniformValueBool(_value);
-  }
   
   GPUUniformValue* copyOrCreate(GPUUniformValue* value){
     if (value == NULL){
@@ -145,10 +138,6 @@ public:
       ((GPUUniformValueBool*)value)->_value = _value;
       return value;
     }
-  }
-  
-  void copyFrom(GPUUniformValue* v){
-    _value = ((GPUUniformValueBool*)v)->_value;
   }
   
   std::string description() const{
@@ -177,14 +166,6 @@ public:
   bool isEqualsTo(const GPUUniformValue* v) const{
     GPUUniformValueVec2Float *v2 = (GPUUniformValueVec2Float *)v;
     return (_x == v2->_x) && (_y == v2->_y);
-  }
-  GPUUniformValue* deepCopy() const{
-    return new GPUUniformValueVec2Float(_x,_y);
-  }
-  
-  void copyFrom(GPUUniformValue* v){
-    _x = ((GPUUniformValueVec2Float*)v)->_x;
-    _y = ((GPUUniformValueVec2Float*)v)->_y;
   }
   
   GPUUniformValue* copyOrCreate(GPUUniformValue* value){
@@ -226,16 +207,6 @@ public:
   bool isEqualsTo(const GPUUniformValue* v) const{
     GPUUniformValueVec4Float *v2 = (GPUUniformValueVec4Float *)v;
     return (_x == v2->_x) && (_y == v2->_y) && (_z == v2->_z) && (_w == v2->_w);
-  }
-  GPUUniformValue* deepCopy() const{
-    return new GPUUniformValueVec4Float(_x,_y,_z,_w);
-  }
-  
-  void copyFrom(GPUUniformValue* v){
-    _x = ((GPUUniformValueVec4Float*)v)->_x;
-    _y = ((GPUUniformValueVec4Float*)v)->_y;
-    _z = ((GPUUniformValueVec4Float*)v)->_z;
-    _w = ((GPUUniformValueVec4Float*)v)->_w;
   }
   
   GPUUniformValue* copyOrCreate(GPUUniformValue* value){
@@ -291,16 +262,6 @@ public:
   GPUUniformValueMatrix4FloatTransform(const MutableMatrix44D& m, bool isTransform):
   GPUUniformValue(GLType::glMatrix4Float()),_m(m), _isTransform(isTransform)/*, _transformedMatrix(m)*/{}
   
-  void setLastGPUUniformValue(GPUUniformValue* old){
-    if (_isTransform){
-      if (old == NULL){
-        ILogger::instance()->logError("Trying to apply transformation to matrix without previous value");
-      } else{
-        const MutableMatrix44D* lastM = ((GPUUniformValueMatrix4FloatTransform*)old)->getValue();
-      }
-    }
-  }
-  
   void setUniform(GL* gl, const IGLUniformID* id) const{
     gl->uniformMatrix4fv(id, false, &_m);
   }
@@ -308,13 +269,6 @@ public:
   bool isEqualsTo(const GPUUniformValue* v) const{
     GPUUniformValueMatrix4FloatTransform *v2 = (GPUUniformValueMatrix4FloatTransform *)v;
     return _m.isEqualsTo(v2->_m);
-  }
-  GPUUniformValue* deepCopy() const{
-    return new GPUUniformValueMatrix4FloatTransform(this);
-  }
-  
-  void copyFrom(GPUUniformValue* v){
-    _m.copyValue( ((GPUUniformValueMatrix4FloatTransform*)v)->_m );
   }
   
   GPUUniformValue* copyOrCreate(GPUUniformValue* value){
@@ -361,13 +315,6 @@ public:
   bool isEqualsTo(const GPUUniformValue* v) const{
     GPUUniformValueFloat *v2 = (GPUUniformValueFloat *)v;
     return _value == v2->_value;
-  }
-  GPUUniformValue* deepCopy() const{
-    return new GPUUniformValueFloat(_value);
-  }
-  
-  void copyFrom(GPUUniformValue* v){
-    _value = ((GPUUniformValueFloat*)v)->_value;
   }
   
   GPUUniformValue* copyOrCreate(GPUUniformValue* value){
