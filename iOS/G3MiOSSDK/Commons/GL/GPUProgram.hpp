@@ -53,7 +53,8 @@ class GPUProgram{
   void getVariables(GL* gl);
   
   GPUProgram(){}
-  
+
+  GPUProgram(const GPUProgram& that);
   
 public:
   
