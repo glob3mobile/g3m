@@ -168,7 +168,6 @@
 		CF9AB329172E9E210014547A /* TileElevationDataRequest.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D89D9CC7172E95370058CA9D /* TileElevationDataRequest.hpp */; };
 		CF9AB32A172E9E210014547A /* CompositeElevationData.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D89D9CC9172E95370058CA9D /* CompositeElevationData.hpp */; };
 		CF9AB32B172E9E210014547A /* CompositeElevationDataProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D89D9CCB172E95370058CA9D /* CompositeElevationDataProvider.hpp */; };
-		CF9AB32C172E9E210014547A /* LeveledMesh.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D882B1CF171D8D6100C2AD9C /* LeveledMesh.hpp */; };
 		CF9AEBC2159B3FEB004C3558 /* EllipsoidalTileTessellator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9AEBC1159B3FEA004C3558 /* EllipsoidalTileTessellator.cpp */; };
 		CF9CD89A15DBE2C800C6FD7E /* CachedDownloader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9CD89815DBE2C800C6FD7E /* CachedDownloader.cpp */; };
 		CF9D2D8815F7D3C100B5CE2E /* IBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9D2D8615F7D3C100B5CE2E /* IBuffer.cpp */; };
@@ -265,11 +264,12 @@
 		D81BA17115CBF19F004EF0B0 /* GL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81BA16F15CBF19E004EF0B0 /* GL.cpp */; };
 		D81D2072160748EA009A8BA6 /* GLConstants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81D2071160748EA009A8BA6 /* GLConstants.cpp */; };
 		D8228EBF157F7F7900BBAF60 /* MutableMatrix44D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */; };
-		D84625CE177720E100FC4862 /* AbstractGeometryMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84625CC177720E100FC4862 /* AbstractGeometryMesh.cpp */; };
-		D84625D1177722B500FC4862 /* IndexedGeometryMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84625CF177722B500FC4862 /* IndexedGeometryMesh.cpp */; };
-		D84625D4177724A000FC4862 /* FlatColorMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84625D2177724A000FC4862 /* FlatColorMesh.cpp */; };
 		D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */; };
 		D8715C1E17032AC700CF7BE2 /* GPUProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8715C1C17032AC700CF7BE2 /* GPUProgram.cpp */; };
+		D8765D041779C3AE004B62F4 /* AbstractGeometryMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8765CFC1779C3AE004B62F4 /* AbstractGeometryMesh.cpp */; };
+		D8765D051779C3AE004B62F4 /* IndexedGeometryMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8765CFE1779C3AE004B62F4 /* IndexedGeometryMesh.cpp */; };
+		D8765D061779C3AE004B62F4 /* LeveledMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8765D001779C3AE004B62F4 /* LeveledMesh.cpp */; };
+		D8765D071779C3AE004B62F4 /* FlatColorMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8765D021779C3AE004B62F4 /* FlatColorMesh.cpp */; };
 		D87BF6DA170F0333004D467D /* GPUProgramState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87BF6D8170F0333004D467D /* GPUProgramState.cpp */; };
 		D87EC5C715BEB12F00E38C36 /* LayerSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87EC5C215BEB12F00E38C36 /* LayerSet.cpp */; };
 		D87EC5C915BEB12F00E38C36 /* WMSLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87EC5C415BEB12F00E38C36 /* WMSLayer.cpp */; };
@@ -278,7 +278,6 @@
 		D87F26F217130AF60048AD70 /* GPUProgram.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8715C1D17032AC700CF7BE2 /* GPUProgram.hpp */; };
 		D87F26F317130BA80048AD70 /* GPUUniform.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D87BF6DB170F0628004D467D /* GPUUniform.hpp */; };
 		D87F26F517130C020048AD70 /* GPUAttribute.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8715C1F170344FB00CF7BE2 /* GPUAttribute.hpp */; };
-		D882B1D0171D8D6100C2AD9C /* LeveledMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D882B1CE171D8D6100C2AD9C /* LeveledMesh.cpp */; };
 		D89D9CCC172E95370058CA9D /* TileElevationDataRequest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D89D9CC6172E95370058CA9D /* TileElevationDataRequest.cpp */; };
 		D89D9CCD172E95370058CA9D /* CompositeElevationData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D89D9CC8172E95370058CA9D /* CompositeElevationData.cpp */; };
 		D89D9CCE172E95370058CA9D /* CompositeElevationDataProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D89D9CCA172E95370058CA9D /* CompositeElevationDataProvider.cpp */; };
@@ -530,7 +529,6 @@
 				CF9AB329172E9E210014547A /* TileElevationDataRequest.hpp in CopyFiles */,
 				CF9AB32A172E9E210014547A /* CompositeElevationData.hpp in CopyFiles */,
 				CF9AB32B172E9E210014547A /* CompositeElevationDataProvider.hpp in CopyFiles */,
-				CF9AB32C172E9E210014547A /* LeveledMesh.hpp in CopyFiles */,
 				D8A1BF541729369600B103E3 /* IImageUtils.cpp in CopyFiles */,
 				44A0049417550C7300C6686D /* ICameraActivityListener.hpp in CopyFiles */,
 				CF2D85E31753B4F200F4BEC9 /* CartoDBLayer.hpp in CopyFiles */,
@@ -1205,12 +1203,6 @@
 		D81FB47C1636A5AE00CC2CA7 /* PeriodicalTask.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PeriodicalTask.hpp; path = Commons/Basic/PeriodicalTask.hpp; sourceTree = "<group>"; };
 		D8228EBC157F7F6100BBAF60 /* MutableMatrix44D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MutableMatrix44D.hpp; path = Commons/Geometry/MutableMatrix44D.hpp; sourceTree = "<group>"; };
 		D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = MutableMatrix44D.cpp; path = Commons/Geometry/MutableMatrix44D.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		D84625CC177720E100FC4862 /* AbstractGeometryMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AbstractGeometryMesh.cpp; sourceTree = "<group>"; };
-		D84625CD177720E100FC4862 /* AbstractGeometryMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AbstractGeometryMesh.hpp; sourceTree = "<group>"; };
-		D84625CF177722B500FC4862 /* IndexedGeometryMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IndexedGeometryMesh.cpp; sourceTree = "<group>"; };
-		D84625D0177722B500FC4862 /* IndexedGeometryMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IndexedGeometryMesh.hpp; sourceTree = "<group>"; };
-		D84625D2177724A000FC4862 /* FlatColorMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FlatColorMesh.cpp; sourceTree = "<group>"; };
-		D84625D3177724A000FC4862 /* FlatColorMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FlatColorMesh.hpp; sourceTree = "<group>"; };
 		D84625D51777291F00FC4862 /* TexturedMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TexturedMesh.fsh; sourceTree = "<group>"; };
 		D84625D61777291F00FC4862 /* TexturedMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TexturedMesh.vsh; sourceTree = "<group>"; };
 		D84625DD177732A900FC4862 /* ColorMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ColorMesh.fsh; sourceTree = "<group>"; };
@@ -1220,6 +1212,14 @@
 		D8715C1C17032AC700CF7BE2 /* GPUProgram.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GPUProgram.cpp; sourceTree = "<group>"; };
 		D8715C1D17032AC700CF7BE2 /* GPUProgram.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GPUProgram.hpp; sourceTree = "<group>"; };
 		D8715C1F170344FB00CF7BE2 /* GPUAttribute.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GPUAttribute.hpp; sourceTree = "<group>"; };
+		D8765CFC1779C3AE004B62F4 /* AbstractGeometryMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AbstractGeometryMesh.cpp; path = Commons/Mesh/AbstractGeometryMesh.cpp; sourceTree = "<group>"; };
+		D8765CFD1779C3AE004B62F4 /* AbstractGeometryMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = AbstractGeometryMesh.hpp; path = Commons/Mesh/AbstractGeometryMesh.hpp; sourceTree = "<group>"; };
+		D8765CFE1779C3AE004B62F4 /* IndexedGeometryMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IndexedGeometryMesh.cpp; path = Commons/Mesh/IndexedGeometryMesh.cpp; sourceTree = "<group>"; };
+		D8765CFF1779C3AE004B62F4 /* IndexedGeometryMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IndexedGeometryMesh.hpp; path = Commons/Mesh/IndexedGeometryMesh.hpp; sourceTree = "<group>"; };
+		D8765D001779C3AE004B62F4 /* LeveledMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LeveledMesh.cpp; path = Commons/Mesh/LeveledMesh.cpp; sourceTree = "<group>"; };
+		D8765D011779C3AE004B62F4 /* LeveledMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = LeveledMesh.hpp; path = Commons/Mesh/LeveledMesh.hpp; sourceTree = "<group>"; };
+		D8765D021779C3AE004B62F4 /* FlatColorMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FlatColorMesh.cpp; path = Commons/Mesh/FlatColorMesh.cpp; sourceTree = "<group>"; };
+		D8765D031779C3AE004B62F4 /* FlatColorMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FlatColorMesh.hpp; path = Commons/Mesh/FlatColorMesh.hpp; sourceTree = "<group>"; };
 		D87BF6D8170F0333004D467D /* GPUProgramState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GPUProgramState.cpp; sourceTree = "<group>"; };
 		D87BF6D9170F0333004D467D /* GPUProgramState.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GPUProgramState.hpp; sourceTree = "<group>"; };
 		D87BF6DB170F0628004D467D /* GPUUniform.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GPUUniform.hpp; sourceTree = "<group>"; };
@@ -1232,8 +1232,6 @@
 		D87EC5CC15BEB31000E38C36 /* CPUTextureBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = CPUTextureBuilder.hpp; path = Commons/Basic/CPUTextureBuilder.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D87EC5CD15BEB31000E38C36 /* TextureBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TextureBuilder.hpp; path = Commons/Basic/TextureBuilder.hpp; sourceTree = "<group>"; };
 		D87EC5D215BEC73400E38C36 /* RectangleD.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = RectangleD.hpp; path = Commons/Geometry/RectangleD.hpp; sourceTree = "<group>"; };
-		D882B1CE171D8D6100C2AD9C /* LeveledMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LeveledMesh.cpp; sourceTree = "<group>"; };
-		D882B1CF171D8D6100C2AD9C /* LeveledMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LeveledMesh.hpp; sourceTree = "<group>"; };
 		D88B5E5115C162AF0083A43F /* G3MWidget.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = G3MWidget.hpp; path = Commons/Basic/G3MWidget.hpp; sourceTree = "<group>"; };
 		D892FBCB15C930CC00E69254 /* NativeGL2_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NativeGL2_iOS.hpp; path = Specific/GL/NativeGL2_iOS.hpp; sourceTree = "<group>"; };
 		D89D9CC6172E95370058CA9D /* TileElevationDataRequest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileElevationDataRequest.cpp; path = Commons/Basic/TileElevationDataRequest.cpp; sourceTree = "<group>"; };
@@ -1952,6 +1950,14 @@
 		D8A5601915AEF47300035086 /* Mesh */ = {
 			isa = PBXGroup;
 			children = (
+				D8765CFC1779C3AE004B62F4 /* AbstractGeometryMesh.cpp */,
+				D8765CFD1779C3AE004B62F4 /* AbstractGeometryMesh.hpp */,
+				D8765CFE1779C3AE004B62F4 /* IndexedGeometryMesh.cpp */,
+				D8765CFF1779C3AE004B62F4 /* IndexedGeometryMesh.hpp */,
+				D8765D001779C3AE004B62F4 /* LeveledMesh.cpp */,
+				D8765D011779C3AE004B62F4 /* LeveledMesh.hpp */,
+				D8765D021779C3AE004B62F4 /* FlatColorMesh.cpp */,
+				D8765D031779C3AE004B62F4 /* FlatColorMesh.hpp */,
 				CFDFC05B166AB22A0065BC1F /* AbstractMesh.cpp */,
 				CFDFC05C166AB22A0065BC1F /* AbstractMesh.hpp */,
 				CFCB5ED816582BCC007D051A /* CompositeMesh.cpp */,
@@ -1970,14 +1976,6 @@
 				CCB2564D15B5A30900079B96 /* TextureMapping.hpp */,
 				CFD3D8A316D15BC800CE9242 /* MeshHolder.cpp */,
 				CFD3D8A416D15BC900CE9242 /* MeshHolder.hpp */,
-				D882B1CE171D8D6100C2AD9C /* LeveledMesh.cpp */,
-				D882B1CF171D8D6100C2AD9C /* LeveledMesh.hpp */,
-				D84625CC177720E100FC4862 /* AbstractGeometryMesh.cpp */,
-				D84625CD177720E100FC4862 /* AbstractGeometryMesh.hpp */,
-				D84625CF177722B500FC4862 /* IndexedGeometryMesh.cpp */,
-				D84625D0177722B500FC4862 /* IndexedGeometryMesh.hpp */,
-				D84625D2177724A000FC4862 /* FlatColorMesh.cpp */,
-				D84625D3177724A000FC4862 /* FlatColorMesh.hpp */,
 			);
 			name = Mesh;
 			sourceTree = "<group>";
@@ -2322,7 +2320,6 @@
 				CF1871C3170389AB00092888 /* GEOSymbolizationContext.cpp in Sources */,
 				CF1871CA1703983C00092888 /* GEOShapeSymbol.cpp in Sources */,
 				CF83D50617049AB9009A39A5 /* GEOMarkSymbol.cpp in Sources */,
-				D882B1D0171D8D6100C2AD9C /* LeveledMesh.cpp in Sources */,
 				CFA59ECB171467890095E2EF /* ICanvas.cpp in Sources */,
 				CFA59ECE171482560095E2EF /* Canvas_iOS.mm in Sources */,
 				CF0755961715B9120084CC14 /* GFont.cpp in Sources */,
@@ -2348,9 +2345,10 @@
 				44A00493175500B900C6686D /* ICameraActivityListener.cpp in Sources */,
 				CF07DD0D175D32CC00839F5D /* Color.cpp in Sources */,
 				D8D894ED17731870007E41A5 /* GPUVariable.cpp in Sources */,
-				D84625CE177720E100FC4862 /* AbstractGeometryMesh.cpp in Sources */,
-				D84625D1177722B500FC4862 /* IndexedGeometryMesh.cpp in Sources */,
-				D84625D4177724A000FC4862 /* FlatColorMesh.cpp in Sources */,
+				D8765D041779C3AE004B62F4 /* AbstractGeometryMesh.cpp in Sources */,
+				D8765D051779C3AE004B62F4 /* IndexedGeometryMesh.cpp in Sources */,
+				D8765D061779C3AE004B62F4 /* LeveledMesh.cpp in Sources */,
+				D8765D071779C3AE004B62F4 /* FlatColorMesh.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
