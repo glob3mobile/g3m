@@ -263,6 +263,10 @@
 		CFE676B316ECDA9100CB93B9 /* BingMapsLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFE676B116ECDA7C00CB93B9 /* BingMapsLayer.hpp */; };
 		CFEBDF1E16E8C9C80063B49F /* MercatorUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFEBDF1C16E8C9C70063B49F /* MercatorUtils.cpp */; };
 		CFEEE4BD164867B600F45F59 /* CircleShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFEEE4BB164867B600F45F59 /* CircleShape.cpp */; };
+		CFF1A661177B57BC00775E3E /* AbstractGeometryMesh.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8765CFD1779C3AE004B62F4 /* AbstractGeometryMesh.hpp */; };
+		CFF1A662177B57BC00775E3E /* IndexedGeometryMesh.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8765CFF1779C3AE004B62F4 /* IndexedGeometryMesh.hpp */; };
+		CFF1A663177B57BC00775E3E /* LeveledMesh.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8765D011779C3AE004B62F4 /* LeveledMesh.hpp */; };
+		CFF1A664177B57BC00775E3E /* FlatColorMesh.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8765D031779C3AE004B62F4 /* FlatColorMesh.hpp */; };
 		CFF76BE5168614AD00F658CC /* MeshRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFF76BE3168614AD00F658CC /* MeshRenderer.cpp */; };
 		CFF8C4BD15DEB6A70034A576 /* RCObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFF8C4BB15DEB6A70034A576 /* RCObject.cpp */; };
 		CFFAFD6F169F2C1500BCE129 /* ITextUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFAFD6D169F2C1500BCE129 /* ITextUtils.cpp */; };
@@ -531,6 +535,10 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CFF1A661177B57BC00775E3E /* AbstractGeometryMesh.hpp in CopyFiles */,
+				CFF1A662177B57BC00775E3E /* IndexedGeometryMesh.hpp in CopyFiles */,
+				CFF1A663177B57BC00775E3E /* LeveledMesh.hpp in CopyFiles */,
+				CFF1A664177B57BC00775E3E /* FlatColorMesh.hpp in CopyFiles */,
 				D8D894EE17731B6A007E41A5 /* GPUVariable.hpp in CopyFiles */,
 				D8B9E005174A3CFD00B865B7 /* GLState.hpp in CopyFiles */,
 				D8B2054B1737B68400750AE4 /* GPUProgramFactory.hpp in CopyFiles */,
