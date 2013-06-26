@@ -25,8 +25,6 @@ package org.glob3.mobile.generated;
 public abstract class AbstractGeometryMesh extends Mesh
 {
 
-  abstract void rawRender(G3MRenderContext rc, GLState parentGLState);
-
   protected final int _primitive;
   protected final boolean _owner;
   protected Vector3D _center ;
@@ -124,6 +122,8 @@ public abstract class AbstractGeometryMesh extends Mesh
   
     progState.setUniformValue(GPUVariable.POINT_SIZE, _pointSize);
   }
+
+  protected abstract void rawRender(G3MRenderContext rc, GLState parentGLState);
 
   public void dispose()
   {
