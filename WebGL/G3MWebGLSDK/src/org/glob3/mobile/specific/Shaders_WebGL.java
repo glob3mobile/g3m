@@ -71,29 +71,83 @@ public final class Shaders_WebGL {
                                                              + "  \n" + "  VertexColor = Color;\n" + "  \n"
                                                              + "  gl_PointSize = PointSize;\n" + "}";
 
-    public final static String  _billboardFragmentShader = "varying mediump vec2 TextureCoordOut;\n"
-	           + "uniform sampler2D Sampler;\n" + "\n" + "void main() {\n" + "  \n"
-	           + "  gl_FragColor = texture2D(Sampler, TextureCoordOut);\n" + "}";
-	
-	public final static String  _billboardVertexShader   = "attribute vec4 aPosition;\n" + 
-			   		"attribute vec2 aTextureCoord;\n" + 
-			   		"\n" + 
-			   		"uniform mat4 uProjection;\n" + 
-			   		"uniform mat4 uModelview;\n" + 
-			   		"\n" + 
-			   		"uniform vec2 uTextureExtent;\n" + 
-			   		"uniform vec2 uViewPortExtent;\n" + 
-			   		"\n" + 
-			   		"varying vec2 TextureCoordOut;\n" + 
-			   		"\n" + 
-			   		"void main() {\n" + 
-			   		"  gl_Position = uProjection * uModelview * aPosition;\n" + 
-			   		"  \n" + 
-			   		"  gl_Position.x += ((aTextureCoord.x - 0.5) * 2.0 * uTextureExtent.x / uViewPortExtent.x) * gl_Position.w;\n" + 
-			   		"  gl_Position.y -= ((aTextureCoord.y - 0.5) * 2.0 * uTextureExtent.y / uViewPortExtent.y) * gl_Position.w;\n" + 
-			   		"  \n" + 
-			   		"  TextureCoordOut = aTextureCoord;\n" + 
-			   		"}";
+	public final static String _billboardFragmentShader = "varying mediump vec2 TextureCoordOut;\n" + 
+			"uniform sampler2D Sampler;\n" + 
+			"\n" + 
+			"void main() {\n" + 
+			"  gl_FragColor = texture2D(Sampler, TextureCoordOut);\n" + 
+			"}";
+
+	public final static String _billboardVertexShader = "attribute vec4 aPosition;\n" + 
+			"attribute vec2 aTextureCoord;\n" + 
+			"\n" + 
+			"uniform mat4 uModelview;\n" + 
+			"\n" + 
+			"uniform vec2 uTextureExtent;\n" + 
+			"uniform vec2 uViewPortExtent;\n" + 
+			"\n" + 
+			"varying vec2 TextureCoordOut;\n" + 
+			"\n" + 
+			"void main() {\n" + 
+			"  gl_Position = uModelview * aPosition;\n" + 
+			"  \n" + 
+			"  gl_Position.x += ((aTextureCoord.x - 0.5) * 2.0 * uTextureExtent.x / uViewPortExtent.x) * gl_Position.w;\n" + 
+			"  gl_Position.y -= ((aTextureCoord.y - 0.5) * 2.0 * uTextureExtent.y / uViewPortExtent.y) * gl_Position.w;\n" + 
+			"  \n" + 
+			"  TextureCoordOut = aTextureCoord;\n" + 
+			"}";
+
+	public final static String _colorMeshFragmentShader = "varying mediump vec4 VertexColor;\n"
+			+ "\n"
+			+ "void main() {\n"
+			+ "  gl_FragColor = VertexColor;\n"
+			+ "}";
+
+	public final static String _colorMeshVertexShader = "attribute vec4 aPosition;\n"
+			+ "attribute vec4 aColor;\n"
+			+ "\n"
+			+ "uniform mat4 uModelview;\n"
+			+ "uniform float uPointSize;\n"
+			+ "\n"
+			+ "varying vec4 VertexColor;\n"
+			+ "\n"
+			+ "void main() {\n"
+			+ "  gl_Position = uModelview * aPosition;\n"
+			+ "  VertexColor = aColor;\n"
+			+ "  gl_PointSize = uPointSize;\n"
+			+ "}";
+
+	public final static String _texturedMeshFragmentShader = "varying mediump vec2 TextureCoordOut;\n"
+			+ "varying mediump vec4 VertexColor;\n"
+			+ "\n"
+			+ "uniform sampler2D Sampler;\n"
+			+ "\n"
+			+ "void main() {\n"
+			+ "  gl_FragColor = texture2D(Sampler, TextureCoordOut);\n" + "}";
+	public final static String _texturedMeshVertexShader = "attribute vec4 aPosition;\n"
+			+ "attribute vec2 aTextureCoord;\n"
+			+ "\n"
+			+ "uniform mediump vec2 uTranslationTexCoord;\n"
+			+ "uniform mediump vec2 uScaleTexCoord;\n"
+			+ "uniform mat4 uModelview;\n"
+			+ "uniform float uPointSize;\n"
+			+ "\n"
+			+ "varying vec4 VertexColor;\n"
+			+ "varying vec2 TextureCoordOut;\n"
+			+ "\n"
+			+ "void main() {\n"
+			+ "  gl_Position = uModelview * aPosition;\n"
+			+ "  \n"
+			+ "  TextureCoordOut = (aTextureCoord * uScaleTexCoord) + uTranslationTexCoord;\n"
+			+ "  \n" + "  gl_PointSize = uPointSize;\n" + "}";
+
+	public final static String _flatColorMeshFragmentShader = "uniform lowp vec4 uFlatColor;\n"
+			+ "\n" + "void main() {\n" + "  gl_FragColor = uFlatColor;\n" + "}";
+	public final static String _flatColorMeshVertexShader = "attribute vec4 aPosition;\n"
+			+ "uniform mat4 uModelview;\n"
+			+ "\n"
+			+ "void main() {\n"
+			+ "  gl_Position = uModelview * aPosition;\n" + "}";
 
 
    ////////////////////////////////////////////////////////////////////////////////////////

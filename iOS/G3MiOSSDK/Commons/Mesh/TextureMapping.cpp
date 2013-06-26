@@ -38,8 +38,17 @@ void SimpleTextureMapping::modifyGLState(GLState& state) const{
                                 false,
                                 0);
     
-    progState->setUniformValue(GPUVariable::SCALE_TEXTURE_COORDS, _scale.asVector2D());
-    progState->setUniformValue(GPUVariable::TRANSLATION_TEXTURE_COORDS, _translation.asVector2D());
+    if (!_scale.isEqualsTo(1.0, 1.0) || !_translation.isEqualsTo(0.0, 0.0)){
+      progState->setUniformValue(GPUVariable::SCALE_TEXTURE_COORDS, _scale.asVector2D());
+      progState->setUniformValue(GPUVariable::TRANSLATION_TEXTURE_COORDS, _translation.asVector2D());
+    } else{
+      //ILogger::instance()->logInfo("No transformed TC");
+      progState->removeGPUUniformValue(GPUVariable::SCALE_TEXTURE_COORDS);
+      progState->removeGPUUniformValue(GPUVariable::TRANSLATION_TEXTURE_COORDS);
+    }
+    
+//    progState->setUniformValue(GPUVariable::SCALE_TEXTURE_COORDS, _scale.asVector2D());
+//    progState->setUniformValue(GPUVariable::TRANSLATION_TEXTURE_COORDS, _translation.asVector2D());
     
   }
   else {

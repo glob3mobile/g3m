@@ -22,10 +22,11 @@ public class G3MCBuilder_WebGL
 
 
    public G3MCBuilder_WebGL(final URL serverURL,
+                            final URL tubesURL,
+                            final boolean useWebSockets,
                             final String sceneId,
                             final G3MCSceneChangeListener sceneListener) {
-      super(serverURL, sceneId, sceneListener);
-
+      super(serverURL, tubesURL, useWebSockets, sceneId, sceneListener);
       _nativeWidget = new G3MWidget_WebGL();
    }
 
@@ -74,6 +75,18 @@ protected GPUProgramManager createGPUProgramManager() {
 	  gpuProgramFactory.add(new GPUProgramSources("Default", 
 			  					Shaders_WebGL._defaultVertexShader, 
 			  					Shaders_WebGL._defaultFragmentShader));
+	  
+	  gpuProgramFactory.add(new GPUProgramSources("ColorMesh",
+				Shaders_WebGL._colorMeshVertexShader,
+				Shaders_WebGL._colorMeshFragmentShader));
+
+	  gpuProgramFactory.add(new GPUProgramSources("TexturedMesh",
+				Shaders_WebGL._texturedMeshVertexShader,
+				Shaders_WebGL._texturedMeshFragmentShader));
+
+	  gpuProgramFactory.add(new GPUProgramSources("FlatColorMesh",
+				Shaders_WebGL._flatColorMeshVertexShader,
+				Shaders_WebGL._flatColorMeshFragmentShader));
 	  
 	  return new GPUProgramManager(gpuProgramFactory);
 }

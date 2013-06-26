@@ -323,3 +323,24 @@ std::vector<int>* GPUProgramState::getAttributeKeys() const{
   }
   return _attributeKeys;
 }
+
+bool GPUProgramState::removeGPUUniformValue(int key){
+  bool uniformExisted = false;
+#ifdef C_CODE
+  std::map<int, GPUUniformValue*> ::iterator it = _uniformValues.find(key);
+  if (it != _uniformValues.end()){
+    delete it->second;
+    _uniformValues.erase(it);
+    uniformExisted = true;
+  }
+#endif
+#ifdef JAVA_CODE
+  uniformExisted = (null != _uniformValues.remove(key));
+#endif
+  
+  if (uniformExisted){
+    onStructureChanged();
+  }
+  
+  return uniformExisted;
+}

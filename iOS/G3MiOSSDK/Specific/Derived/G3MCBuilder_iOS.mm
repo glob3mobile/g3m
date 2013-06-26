@@ -15,9 +15,11 @@
 
 G3MCBuilder_iOS::G3MCBuilder_iOS(G3MWidget_iOS* nativeWidget,
                                  const URL& serverURL,
+                                 const URL& tubesURL,
+                                 bool useWebSockets,
                                  const std::string& sceneId,
                                  G3MCSceneChangeListener* sceneListener) :
-G3MCBuilder(serverURL, sceneId, sceneListener),
+G3MCBuilder(serverURL, tubesURL, useWebSockets, sceneId, sceneListener),
 _nativeWidget(nativeWidget)
 {
   [_nativeWidget initSingletons];
@@ -81,6 +83,7 @@ GPUProgramManager* G3MCBuilder_iOS::createGPUProgramManager(){
   gpuProgramFactory->add(loadDefaultGPUProgramSources("FlatColorMesh"));
   gpuProgramFactory->add(loadDefaultGPUProgramSources("TexturedMesh"));
   gpuProgramFactory->add(loadDefaultGPUProgramSources("ColorMesh"));
+  gpuProgramFactory->add(loadDefaultGPUProgramSources("TransformedTexCoorTexturedMesh"));
   
   return new GPUProgramManager(gpuProgramFactory);
 }

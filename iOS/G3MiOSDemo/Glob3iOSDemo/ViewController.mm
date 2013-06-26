@@ -101,6 +101,7 @@
 
 #import <G3MiOSSDK/G3MCBuilder_iOS.hpp>
 #import <G3MiOSSDK/G3MCSceneDescription.hpp>
+#import <G3MiOSSDK/IWebSocketListener.hpp>
 
 #include <G3MiOSSDK/GPUProgramFactory.hpp>
 
@@ -240,9 +241,12 @@ public:
 - (void) initWithG3MCBuilder
 {
   G3MCSceneChangeListener* sceneListener = NULL;
+  const bool useWebSockets = true;
   
   _g3mcBuilder =  new G3MCBuilder_iOS([self G3MWidget],
-                                      URL("http://localhost:8080/g3mc-server", false),
+                                      URL("http://192.168.0.103:8080/g3mc-server", false),
+                                      URL("ws://192.168.0.103:8888/tube", false),
+                                      useWebSockets,
                                       "2g59wh610g6c1kmkt0l",
                                       sceneListener);
 
@@ -588,6 +592,9 @@ public:
   
   GPUProgramSources sourcesColorMesh = [self loadDefaultGPUProgramSourcesWithName:@"ColorMesh"];
   builder.addGPUProgramSources(sourcesColorMesh);
+  
+  GPUProgramSources sourcesTCTexturedMesh = [self loadDefaultGPUProgramSourcesWithName:@"TransformedTexCoorTexturedMesh"];
+  builder.addGPUProgramSources(sourcesTCTexturedMesh);
   
   //  WidgetUserData* userData = NULL;
   //  builder.setUserData(userData);
@@ -1843,8 +1850,41 @@ public:
       delete canvas;
     }
 
+    void testWebSocket(const G3MContext* context) {
+
+      class WSListener : public IWebSocketListener {
+        void onOpen(IWebSocket* ws) {
+
+        }
+
+        void onError(IWebSocket* ws,
+                     const std::string& error) {
+
+        }
+
+        void onMesssage(IWebSocket* ws,
+                        const std::string& message) {
+
+        }
+
+        void onClose(IWebSocket* ws) {
+
+        }
+
+      };
+
+      const URL wsURL("ws://127.0.0.1:8888/tube/scene/2g59wh610g6c1kmkt0l", false);
+      context->getFactory()->createWebSocket(wsURL,
+                                             new WSListener(),
+                                             true,
+                                             true);
+
+    }
+
     void run(const G3MContext* context) {
       printf("Running initialization Task\n");
+
+      testWebSocket(context);
       
       testCanvas(context->getFactory());
 

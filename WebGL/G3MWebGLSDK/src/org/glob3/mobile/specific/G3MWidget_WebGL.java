@@ -340,6 +340,19 @@ public final class G3MWidget_WebGL
       final GPUProgramFactory factory = new GPUProgramFactory();
       factory.add(new GPUProgramSources("Billboard", Shaders_WebGL._billboardVertexShader, Shaders_WebGL._billboardFragmentShader));
       factory.add(new GPUProgramSources("Default", Shaders_WebGL._defaultVertexShader, Shaders_WebGL._defaultFragmentShader));
+      
+      factory.add(new GPUProgramSources("ColorMesh",
+				Shaders_WebGL._colorMeshVertexShader,
+				Shaders_WebGL._colorMeshFragmentShader));
+
+      factory.add(new GPUProgramSources("TexturedMesh",
+				Shaders_WebGL._texturedMeshVertexShader,
+				Shaders_WebGL._texturedMeshFragmentShader));
+
+      factory.add(new GPUProgramSources("FlatColorMesh",
+				Shaders_WebGL._flatColorMeshVertexShader,
+				Shaders_WebGL._flatColorMeshFragmentShader));
+      
       return new GPUProgramManager(factory);
    }
 

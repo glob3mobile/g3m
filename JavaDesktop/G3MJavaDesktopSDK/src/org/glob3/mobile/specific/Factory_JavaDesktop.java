@@ -11,6 +11,9 @@ import org.glob3.mobile.generated.IImageListener;
 import org.glob3.mobile.generated.IIntBuffer;
 import org.glob3.mobile.generated.IShortBuffer;
 import org.glob3.mobile.generated.ITimer;
+import org.glob3.mobile.generated.IWebSocket;
+import org.glob3.mobile.generated.IWebSocketListener;
+import org.glob3.mobile.generated.URL;
 
 
 public class Factory_JavaDesktop
@@ -21,8 +24,7 @@ public class Factory_JavaDesktop
    public void createImageFromFileName(final String pFilename,
                                        final IImageListener pListener,
                                        final boolean pAutodelete) {
-      // TODO Auto-generated method stub
-
+      throw new RuntimeException("Not yet implemented");
    }
 
 
@@ -30,29 +32,25 @@ public class Factory_JavaDesktop
    public void createImageFromBuffer(final IByteBuffer pBuffer,
                                      final IImageListener pListener,
                                      final boolean pAutodelete) {
-      // TODO Auto-generated method stub
-
+      throw new RuntimeException("Not yet implemented");
    }
 
 
    @Override
    public void deleteImage(final IImage pImage) {
-      // TODO Auto-generated method stub
-
+      throw new RuntimeException("Not yet implemented");
    }
 
 
    @Override
    public ITimer createTimer() {
-      // TODO Auto-generated method stub
-      return null;
+      throw new RuntimeException("Not yet implemented");
    }
 
 
    @Override
    public void deleteTimer(final ITimer pTimer) {
-      // TODO Auto-generated method stub
-
+      throw new RuntimeException("Not yet implemented");
    }
 
 
@@ -79,21 +77,19 @@ public class Factory_JavaDesktop
                                          final float pF13,
                                          final float pF14,
                                          final float pF15) {
-      // TODO Auto-generated method stub
-      return null;
+      throw new RuntimeException("Not yet implemented");
    }
 
 
    @Override
    public IIntBuffer createIntBuffer(final int pSize) {
-      // TODO Auto-generated method stub
-      return null;
+      throw new RuntimeException("Not yet implemented");
    }
 
 
    @Override
    public IShortBuffer createShortBuffer(final int size) {
-      return null;
+      throw new RuntimeException("Not yet implemented");
    }
 
 
@@ -112,8 +108,16 @@ public class Factory_JavaDesktop
 
    @Override
    public ICanvas createCanvas() {
-      // TODO Auto-generated method stub
-      return null;
+      throw new RuntimeException("Not yet implemented");
+   }
+
+
+   @Override
+   public IWebSocket createWebSocket(final URL url,
+                                     final IWebSocketListener listener,
+                                     final boolean autodeleteListener,
+                                     final boolean autodeleteWebSocket) {
+      throw new RuntimeException("Not yet implemented");
    }
 
 }

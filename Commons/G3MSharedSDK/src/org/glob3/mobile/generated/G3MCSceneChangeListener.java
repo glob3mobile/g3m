@@ -34,6 +34,16 @@ package org.glob3.mobile.generated;
 //class G3MCSceneDescription;
 //class Color;
 //class GPUProgramManager;
+//class JSONBaseObject;
+//class JSONObject;
+//class TimeInterval;
+//class MapQuestLayer;
+//class BingMapsLayer;
+//class CartoDBLayer;
+//class MapBoxLayer;
+//class WMSLayer;
+//class G3MContext;
+//class IWebSocket;
 
 
 
@@ -44,6 +54,8 @@ public abstract class G3MCSceneChangeListener
   {
 
   }
+
+  public abstract void onSceneChanged(String sceneId);
 
   public abstract void onBaseLayerChanged(Layer baseLayer);
 

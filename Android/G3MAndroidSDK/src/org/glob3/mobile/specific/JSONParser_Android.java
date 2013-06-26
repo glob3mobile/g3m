@@ -11,6 +11,7 @@ import org.glob3.mobile.generated.JSONDouble;
 import org.glob3.mobile.generated.JSONFloat;
 import org.glob3.mobile.generated.JSONInteger;
 import org.glob3.mobile.generated.JSONLong;
+import org.glob3.mobile.generated.JSONNull;
 import org.glob3.mobile.generated.JSONString;
 
 
@@ -19,13 +20,15 @@ public class JSONParser_Android
             IJSONParser {
 
    @Override
-   public JSONBaseObject parse(final IByteBuffer buffer) {
-      return parse(buffer.getAsString());
+   public JSONBaseObject parse(final IByteBuffer buffer,
+                               final boolean nullAsObject) {
+      return parse(buffer.getAsString(), nullAsObject);
    }
 
 
    @Override
-   public JSONBaseObject parse(final String jsonString) {
+   public JSONBaseObject parse(final String jsonString,
+                               final boolean nullAsObject) {
       if (jsonString == null) {
          ILogger.instance().logError("Can't parse a null string");
          return null;
@@ -33,7 +36,7 @@ public class JSONParser_Android
 
       try {
          final Object jsonObject = new org.json.JSONTokener(jsonString).nextValue();
-         return convert(jsonObject);
+         return convert(jsonObject, nullAsObject);
       }
       catch (final org.json.JSONException e) {
          e.printStackTrace();
@@ -42,7 +45,8 @@ public class JSONParser_Android
    }
 
 
-   private static JSONBaseObject convert(final Object jsonObject) {
+   private static JSONBaseObject convert(final Object jsonObject,
+                                         final boolean nullAsObject) {
       // JSONObject, JSONArray, String, Boolean, Integer, Long, Double or NULL.
 
       if (jsonObject == null) {
@@ -80,8 +84,12 @@ public class JSONParser_Android
          final int length = jsonArray.length();
          for (int i = 0; i < length; i++) {
             try {
-               final Object child = jsonArray.isNull(i) ? null : jsonArray.get(i);
-               result.add(convert(child));
+               if (jsonArray.isNull(i)) {
+                  result.add(nullAsObject ? new JSONNull() : null);
+               }
+               else {
+                  result.add(convert(jsonArray.get(i), nullAsObject));
+               }
             }
             catch (final org.json.JSONException e) {
                e.printStackTrace();
@@ -97,8 +105,12 @@ public class JSONParser_Android
          for (int i = 0; i < length; i++) {
             try {
                final String key = attributes.getString(i);
-               final Object value = jsonObj.isNull(key) ? null : jsonObj.get(key);
-               result.put(key, convert(value));
+               if (jsonObj.isNull(key)) {
+                  result.put(key, nullAsObject ? new JSONNull() : null);
+               }
+               else {
+                  result.put(key, convert(jsonObj.get(key), nullAsObject));
+               }
             }
             catch (final org.json.JSONException e) {
                e.printStackTrace();
@@ -111,4 +123,6 @@ public class JSONParser_Android
          return null;
       }
    }
+
+
 }
