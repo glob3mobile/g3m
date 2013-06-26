@@ -364,7 +364,7 @@ GPUUniform* GPUProgram::getGPUUniform(int key) const{
   }
 #endif
 #ifdef JAVA_CODE
-  return _uniforms.get(name);
+  return _uniforms.get(key);
 #endif
 }
 
@@ -378,7 +378,7 @@ GPUAttribute* GPUProgram::getGPUAttribute(int key) const{
   }
 #endif
 #ifdef JAVA_CODE
-  return _uniforms.get(name);
+  return _attributes.get(key);
 #endif
 }
 

@@ -18,14 +18,12 @@ void TexturedMesh::render(const G3MRenderContext* rc) const {
 
 void TexturedMesh::createGLState(){
   GLGlobalState& globalState = *_glState.getGLGlobalState();
-  _textureMapping->modifyGLGlobalState(globalState);
   if (_transparent) {
     globalState.enableBlend();
     globalState.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
   }
   
-  GPUProgramState& progState = *_glState.getGPUProgramState();
-  _textureMapping->modifyGPUProgramState(progState);
+  _textureMapping->modifyGLState(_glState);
 }
 
 void TexturedMesh::render(const G3MRenderContext* rc, const GLState* parentState){

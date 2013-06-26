@@ -32,7 +32,7 @@ const int GPUVariable::ColorPerVertexIntensity = 15;
 const int GPUVariable::GROUP_NOGROUP = -1;
 const int GPUVariable::GROUP_COLOR = 1;
 
-int GPUVariable::getKeyForName(const std::string& name, int variableType){
+int GPUVariable::getKeyForName(const std::string& name, GPUVariableType variableType){
   
   if (variableType == UNIFORM){
     if (name.compare("uFlatColor") == 0){

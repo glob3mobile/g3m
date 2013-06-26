@@ -25,9 +25,12 @@ class GLState{
   GLGlobalState*   _globalState;
   const bool _owner;
   
-//  void setProgramState(GL* gl, GPUProgramManager& progManager) const;
-  
+#ifdef C_CODE
   mutable const GLState* _parentGLState;
+#endif
+#ifdef JAVA_CODE
+  private GLState _parentGLState;
+#endif
   
   void linkAndApplyToGPUProgram(GL* gl, GPUProgram* prog) const;
   
@@ -86,14 +89,6 @@ public:
   static GLGlobalState* createCopyOfCurrentGLGlobalState(){
     return _currentGPUGlobalState.createCopy();
   }
-  
-//  static const GLGlobalState* getCurrentGLGlobalState() {
-//    return &_currentGPUGlobalState;
-//  }
-  
-//  static const GPUProgram* getGPUProgram() {
-//    return _currentGPUProgram;
-//  }
 };
 
 #endif /* defined(__G3MiOSSDK__GLState__) */

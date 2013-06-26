@@ -54,10 +54,8 @@ public:
   static const int FlatColorIntensity;
   static const int ColorPerVertexIntensity;
   
-  static int getKeyForName(const std::string& name, int variableType);
-  
-  
-  
+  static int getKeyForName(const std::string& name, GPUVariableType variableType);
+
   static const int GROUP_COLOR;
   static const int GROUP_NOGROUP;
   

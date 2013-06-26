@@ -114,9 +114,7 @@ public:
     return _transparent;
   }
   
-  void modifyGLGlobalState(GLGlobalState& GLGlobalState) const;
-  
-  void modifyGPUProgramState(GPUProgramState& progState) const;
+  void modifyGLState(GLState& state) const;
   
 };
 

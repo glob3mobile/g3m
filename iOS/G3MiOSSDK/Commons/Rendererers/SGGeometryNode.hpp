@@ -56,9 +56,6 @@ public:
   void rawRender(const G3MRenderContext* rc,
                  const GLGlobalState& parentState, const GPUProgramState* parentProgramState);
 
-//  void modifyGLGlobalState(GLGlobalState& GLGlobalState) const;
-//  void modifyGPUProgramState(GPUProgramState& progState) const;
-  
   void rawRender(const G3MRenderContext* rc, GLState* glState);
   
   GLState* getGLState(GLState* parentGLState){

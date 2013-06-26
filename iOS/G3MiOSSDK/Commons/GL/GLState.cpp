@@ -20,11 +20,6 @@ void GLState::applyGlobalStateOnGPU(GL* gl) const{
   _globalState->applyChanges(gl, _currentGPUGlobalState);
 }
 
-//void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
-////  applyGlobalStateOnGPU(gl);
-//  setProgramState(gl, progManager);
-//}
-
 void GLState::linkAndApplyToGPUProgram(GL* gl, GPUProgram* prog) const{
   if (_parentGLState != NULL){
     _parentGLState->linkAndApplyToGPUProgram(gl, prog);
@@ -40,7 +35,12 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
   
   GPUProgram* prog = _programState->getLinkedProgram();
   if (prog != NULL){
+#ifdef C_CODE
     const GLState* parent = _parentGLState;
+#endif
+#ifdef JAVA_CODE
+    GLState parent = _parentGLState;
+#endif
     while (parent != NULL) {
       if (prog != parent->_programState->getLinkedProgram()){
         prog = NULL;

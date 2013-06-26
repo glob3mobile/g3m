@@ -18,6 +18,7 @@ class G3MRenderContext;
 class IFloatBuffer;
 class GLGlobalState;
 class GPUProgramState;
+class GLState;
 
 class TextureMapping {
 public:
@@ -25,15 +26,9 @@ public:
   virtual ~TextureMapping() {
   }
   
-  /**
-   Returns a new GLGlobalState and changes the current program state
-   */
-//  virtual GLGlobalState* bind(const G3MRenderContext* rc, const GLGlobalState& parentState, GPUProgramState& progState) const = 0;
-
   virtual bool isTransparent(const G3MRenderContext* rc) const = 0;
   
-  virtual void modifyGLGlobalState(GLGlobalState& GLGlobalState) const = 0;
-  virtual void modifyGPUProgramState(GPUProgramState& progState) const= 0;
+  virtual void modifyGLState(GLState& state) const = 0;
 };
 
 
@@ -88,9 +83,11 @@ public:
     return _isTransparent;
   }
   
-  void modifyGLGlobalState(GLGlobalState& GLGlobalState) const;
+//  void modifyGLGlobalState(GLGlobalState& GLGlobalState) const;
+//  
+//  void modifyGPUProgramState(GPUProgramState& progState) const;
   
-  void modifyGPUProgramState(GPUProgramState& progState) const;
+  void modifyGLState(GLState& state) const;
 
 };
 #endif
