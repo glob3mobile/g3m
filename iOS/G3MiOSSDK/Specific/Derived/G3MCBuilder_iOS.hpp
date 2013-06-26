@@ -33,6 +33,8 @@ protected:
 public:
   G3MCBuilder_iOS(G3MWidget_iOS* nativeWidget,
                   const URL& serverURL,
+                  const URL& tubesURL,
+                  bool useWebSockets,
                   const std::string& sceneId,
                   G3MCSceneChangeListener* sceneListener);
 

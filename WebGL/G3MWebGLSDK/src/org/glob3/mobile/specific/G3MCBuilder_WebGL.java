@@ -22,10 +22,11 @@ public class G3MCBuilder_WebGL
 
 
    public G3MCBuilder_WebGL(final URL serverURL,
+                            final URL tubesURL,
+                            final boolean useWebSockets,
                             final String sceneId,
                             final G3MCSceneChangeListener sceneListener) {
-      super(serverURL, sceneId, sceneListener);
-
+      super(serverURL, tubesURL, useWebSockets, sceneId, sceneListener);
       _nativeWidget = new G3MWidget_WebGL();
    }
 

@@ -114,6 +114,12 @@ void BSONGenerator::visitString(const JSONString* value) {
   _builder->addStringZeroTerminated(str);
 }
 
+void BSONGenerator::visitNull() {
+  _builder->add((unsigned char) 0x0A); // null string
+
+  addCurrentKey();
+}
+
 void BSONGenerator::visitArrayBeforeChildren(const JSONArray* value) {
 //  _builder->add((unsigned char) 0x04); // type array
   _builder->add((unsigned char) 0x44); // type customized-array

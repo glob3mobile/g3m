@@ -36,6 +36,8 @@ public:
   virtual void visitBoolean(const JSONBoolean* value) = 0;
   virtual void visitString(const JSONString* value) = 0;
 
+  virtual void visitNull() = 0;
+
   virtual void visitArrayBeforeChildren(const JSONArray* value) = 0;
   virtual void visitArrayInBetweenChildren(const JSONArray* value) = 0;
   virtual void visitArrayBeforeChild(const JSONArray* value,

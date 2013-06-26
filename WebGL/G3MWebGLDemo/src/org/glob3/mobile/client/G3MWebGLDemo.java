@@ -37,6 +37,8 @@ import org.glob3.mobile.generated.IJSONParser;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IThreadUtils;
+import org.glob3.mobile.generated.IWebSocket;
+import org.glob3.mobile.generated.IWebSocketListener;
 import org.glob3.mobile.generated.JSONArray;
 import org.glob3.mobile.generated.JSONBaseObject;
 import org.glob3.mobile.generated.JSONObject;
@@ -128,73 +130,50 @@ public class G3MWebGLDemo
       final ShapesRenderer shapesRenderer = new ShapesRenderer();
       builder.addRenderer(shapesRenderer);
 
+<<<<<<< HEAD
       builder.setInitializationTask(createMarkersInitializationTask());
       
+=======
+      //builder.setInitializationTask(createMarkersInitializationTask());
+>>>>>>> webgl-port
 
       final GInitializationTask initializationTask = new GInitializationTask() {
          @Override
          public void run(final G3MContext context) {
-            //            final ICanvas canvas = context.getFactory().createCanvas();
-            //
-            //
-            //            final String text = "Hello World!";
-            //            //final GFont font = GFont.serif();
-            //            //final GFont font = GFont.monospaced();
-            //            final GFont font = GFont.sansSerif();
-            //
-            //            canvas.setFont(font);
-            //
-            //            final Vector2F textExtent = canvas.textExtent(text);
-            //
-            //            canvas.initialize(256, 256);
-            //
-            //            canvas.setFillColor(Color.fromRGBA(1f, 1f, 1f, 0.75f));
-            //            canvas.fillRoundedRectangle(0, 0, 256, 256, 32);
-            //            //canvas.fillRectangle(0, 0, 256, 256);
-            //
-            //            canvas.setShadow(Color.black(), 5f, 3.5f, -3.5f);
-            //            canvas.setFillColor(Color.fromRGBA(1f, 0f, 0f, 0.5f));
-            //            canvas.fillRectangle(32, 64, 64, 128);
-            //            canvas.removeShadow();
-            //
-            //
-            //            canvas.setStrokeColor(Color.fromRGBA(1f, 0f, 1f, 0.9f));
-            //            canvas.setStrokeWidth(2.5f);
-            //            final float margin = 1.25f;
-            //            canvas.strokeRoundedRectangle(0 + margin, 0 + margin, 256 - (margin * 2), 256 - (margin * 2), 32);
-            //            //canvas.strokeRectangle(0 + margin, 0 + margin, 256 - (margin * 2), 256 - (margin * 2));
-            //
-            //            canvas.setFillColor(Color.fromRGBA(1, 1, 0, 0.9f));
-            //            canvas.setStrokeWidth(1.1f);
-            //            canvas.setStrokeColor(Color.fromRGBA(0, 0, 0, 0.9f));
-            //            canvas.fillAndStrokeRoundedRectangle(128, 16, 64, 64, 8);
-            //            //canvas.fillAndStrokeRectangle(128, 16, 64, 64);
-            //
-            //            final int __DGD_working_at_Canvas;
-            //
-            //
-            //            canvas.setFillColor(Color.white());
-            //            canvas.setShadow(Color.black(), 5, 1, -1);
-            //            canvas.fillText(text, 128 - (textExtent._x / 2), 128 - (textExtent._y / 2));
-            //
-            //            canvas.removeShadow();
-            //            canvas.setFillColor(Color.black());
-            //            canvas.fillRectangle(10, 10, 5, 5);
-            //
-            //            final IImageListener listener = new IImageListener() {
-            //
-            //               @Override
-            //               public void imageCreated(final IImage image) {
-            //                  final Shape quad = new QuadShape( //
-            //                           new Geodetic3D(Angle.fromDegrees(37.78333333), Angle.fromDegrees(-121.5), 8000), //
-            //                           image, //
-            //                           50000, 50000);
-            //                  shapesRenderer.addShape(quad);
-            //               }
-            //            };
-            //            canvas.createImage(listener, true);
-            //
-            //            canvas.dispose();
+            final URL url = new URL("ws://192.168.0.103:8888/tube/scene/2g59wh610g6c1kmkt0l", false);
+            final IWebSocketListener listener = new IWebSocketListener() {
+               @Override
+               public void onOpen(final IWebSocket ws) {
+                  ILogger.instance().logError(ws + " opened!");
+               }
+
+
+               @Override
+               public void onMesssage(final IWebSocket ws,
+                                      final String message) {
+                  ILogger.instance().logError(ws + " message \"" + message + "\"");
+               }
+
+
+               @Override
+               public void onError(final IWebSocket ws,
+                                   final String error) {
+                  ILogger.instance().logError(ws + " error \"" + error + "\"");
+               }
+
+
+               @Override
+               public void onClose(final IWebSocket ws) {
+                  ILogger.instance().logError(ws + " closed!");
+               }
+
+
+               @Override
+               public void dispose() {
+               }
+            };
+            context.getFactory().createWebSocket(url, listener, true, true);
+
 
          }
 

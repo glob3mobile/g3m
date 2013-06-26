@@ -28,21 +28,26 @@ private:
   }
 
   static JSONBaseObject* parseValue(const unsigned char type,
-                                    ByteBufferIterator* iterator);
+                                    ByteBufferIterator* iterator,
+                                    bool nullAsObject);
 
 
   static JSONString*  parseString(ByteBufferIterator* iterator);
-  static JSONArray*   parseArray(ByteBufferIterator* iterator);
-  static JSONArray*   parseCustomizedArray(ByteBufferIterator* iterator);
+  static JSONArray*   parseArray(ByteBufferIterator* iterator,
+                                 bool nullAsObject);
+  static JSONArray*   parseCustomizedArray(ByteBufferIterator* iterator,
+                                           bool nullAsObject);
   static JSONNumber*  parseDouble(ByteBufferIterator* iterator);
   static JSONInteger* parseInt32(ByteBufferIterator* iterator);
   static JSONLong*    parseInt64(ByteBufferIterator* iterator);
   static JSONBoolean* parseBool(ByteBufferIterator* iterator);
-  static JSONObject*  parseObject(ByteBufferIterator* iterator);
+  static JSONObject*  parseObject(ByteBufferIterator* iterator,
+                                  bool nullAsObject);
 
 public:
 
-  static JSONBaseObject* parse(IByteBuffer* buffer);
+  static JSONBaseObject* parse(IByteBuffer* buffer,
+                               bool nullAsObject = false);
 
 };
 

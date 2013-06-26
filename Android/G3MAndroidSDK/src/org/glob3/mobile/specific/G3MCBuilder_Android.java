@@ -25,6 +25,7 @@ public class G3MCBuilder_Android extends G3MCBuilder {
 		_nativeWidget = new G3MWidget_Android(context);
 	}
 
+<<<<<<< HEAD
 	@Override
 	protected IStorage createStorage() {
 		return new SQLiteStorage_Android("g3m.cache",
@@ -42,6 +43,19 @@ public class G3MCBuilder_Android extends G3MCBuilder {
 				getStorage(), //
 				saveInBackground);
 	}
+=======
+   public G3MCBuilder_Android(final Context context,
+                              final URL serverURL,
+                              final URL tubesURL,
+                              final boolean useWebSockets,
+                              final String sceneId,
+                              final G3MCSceneChangeListener sceneListener) {
+      super(serverURL, tubesURL, useWebSockets, sceneId, sceneListener);
+
+      _nativeWidget = new G3MWidget_Android(context);
+
+   }
+>>>>>>> webgl-port
 
 	@Override
 	protected IThreadUtils createThreadUtils() {

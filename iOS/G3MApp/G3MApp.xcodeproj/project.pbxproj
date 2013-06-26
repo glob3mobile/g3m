@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CFC59BAC176F68DB002806D6 /* full-earth-2048x1024.bil in Resources */ = {isa = PBXBuildFile; fileRef = CFC59BAB176F68DB002806D6 /* full-earth-2048x1024.bil */; };
 		E7040CF016D7937700E19C28 /* G3MPlaneParseTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7040CEF16D7937700E19C28 /* G3MPlaneParseTask.mm */; };
 		E7040CF416D79AD900E19C28 /* G3MAppUserData.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7040CF316D79AD900E19C28 /* G3MAppUserData.mm */; };
 		E7040CF716D7AE1300E19C28 /* G3MMarkerUserData.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7040CF616D7AE1300E19C28 /* G3MMarkerUserData.mm */; };
@@ -77,6 +78,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		CFC59BAB176F68DB002806D6 /* full-earth-2048x1024.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "full-earth-2048x1024.bil"; sourceTree = "<group>"; };
 		E7040CEE16D7937700E19C28 /* G3MPlaneParseTask.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MPlaneParseTask.hpp; sourceTree = "<group>"; };
 		E7040CEF16D7937700E19C28 /* G3MPlaneParseTask.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MPlaneParseTask.mm; sourceTree = "<group>"; };
 		E7040CF216D79AD900E19C28 /* G3MAppUserData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MAppUserData.hpp; sourceTree = "<group>"; };
@@ -309,6 +311,7 @@
 		E7D1B7F116D2750400AF47C1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CFC59BAB176F68DB002806D6 /* full-earth-2048x1024.bil */,
 				E75321CE16D3DFA700CB3F8D /* Shaders */,
 				E780A3D316D29FAA000F0395 /* 3DModels */,
 				E7D1B7FC16D27C4300AF47C1 /* Images */,
@@ -434,6 +437,7 @@
 				E780A3DE16D29FAA000F0395 /* NWA.png in Resources */,
 				E75321CF16D3DFA700CB3F8D /* Shader.fsh in Resources */,
 				E75321D016D3DFA700CB3F8D /* Shader.vsh in Resources */,
+				CFC59BAC176F68DB002806D6 /* full-earth-2048x1024.bil in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
