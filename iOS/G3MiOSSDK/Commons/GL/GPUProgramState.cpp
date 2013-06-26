@@ -330,6 +330,7 @@ bool GPUProgramState::removeGPUUniformValue(int key){
   std::map<int, GPUUniformValue*> ::iterator it = _uniformValues.find(key);
   if (it != _uniformValues.end()){
     delete it->second;
+    _uniformValues.erase(it);
     uniformExisted = true;
   }
 #endif
