@@ -125,7 +125,11 @@ public:
   GPUUniformValueBool(bool b):GPUUniformValue(GLType::glBool()),_value(b){}
   
   void setUniform(GL* gl, const IGLUniformID* id) const{
-    _value? gl->uniform1i(id, 1) : gl->uniform1i(id, 0);
+    if (_value){
+      gl->uniform1i(id, 1);
+    } else{
+      gl->uniform1i(id, 0);
+    }
   }
   bool isEqualsTo(const GPUUniformValue* v) const{
     return _value == ((GPUUniformValueBool*)v)->_value;
@@ -133,7 +137,7 @@ public:
   
   GPUUniformValue* copyOrCreate(GPUUniformValue* value){
     if (value == NULL){
-      return new GPUUniformValueBool(_value); 
+      return new GPUUniformValueBool(_value);
     } else{
       ((GPUUniformValueBool*)value)->_value = _value;
       return value;
@@ -247,7 +251,7 @@ class GPUUniformValueMatrix4FloatTransform:public GPUUniformValue{
   GPUUniformValue(GLType::glMatrix4Float()),
   _m(MutableMatrix44D(that->_m)),
   _isTransform(that->_isTransform)
-   {}
+  {}
   
 public:
 #ifdef C_CODE
@@ -294,7 +298,7 @@ public:
   }
   
   const MutableMatrix44D* getValue() const{
-//    return &_transformedMatrix;
+    //    return &_transformedMatrix;
     return &_m;
   }
 };

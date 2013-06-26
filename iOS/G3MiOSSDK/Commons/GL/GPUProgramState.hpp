@@ -51,47 +51,6 @@ public:
   
   void clear();
   
-  /*
-  bool setUniformValue(const std::string& name, bool b){
-    return setUniformValue(GPUVariable::getKeyForName(name, UNIFORM), b);
-  }
-  
-  bool setUniformValue(const std::string& name, float f){
-    return setUniformValue(GPUVariable::getKeyForName(name, UNIFORM), f);
-  }
-  
-  bool setUniformValue(const std::string& name, const Vector2D& v){
-    return setUniformValue(GPUVariable::getKeyForName(name, UNIFORM), v);
-  }
-  
-  bool setUniformValue(const std::string& name, double x, double y){
-    return setUniformValue(GPUVariable::getKeyForName(name, UNIFORM), x, y);
-  }
-  
-  bool setUniformValue(const std::string& name, double x, double y, double z, double w){
-    return setUniformValue(GPUVariable::getKeyForName(name, UNIFORM), x, y, z, w);
-  }
-  
-  bool setUniformMatrixValue(const std::string& name, const MutableMatrix44D& m, bool isTransform){
-    return setUniformMatrixValue(GPUVariable::getKeyForName(name, UNIFORM), m, isTransform);
-  }
-  
-  bool setAttributeValue(const std::string& name,
-                         IFloatBuffer* buffer, int attributeSize,
-                         int arrayElementSize, int index, bool normalized, int stride){
-    return setAttributeValue(GPUVariable::getKeyForName(name, ATTRIBUTE),
-                             buffer, attributeSize,
-                             arrayElementSize, index, normalized, stride);
-  }
-  
-  void setAttributeEnabled(const std::string& name, bool enabled){
-    setAttributeEnabled(GPUVariable::getKeyForName(name, ATTRIBUTE), enabled);
-  }
-  void setAttributeDisabled(const std::string& name){
-    setAttributeDisabled(GPUVariable::getKeyForName(name, ATTRIBUTE));
-  }
-  */
-  
   bool setUniformValue(int key, bool b);
   
   bool setUniformValue(int key, float f);
@@ -128,9 +87,49 @@ public:
   
   std::string description() const;
   
-  //  bool isLinkableToProgram(const GPUProgram& program) const;
-  
   void applyValuesToLinkedProgram() const;
+  
+  
+  /*
+   bool setUniformValue(const std::string& name, bool b){
+   return setUniformValue(GPUVariable::getKeyForName(name, UNIFORM), b);
+   }
+   
+   bool setUniformValue(const std::string& name, float f){
+   return setUniformValue(GPUVariable::getKeyForName(name, UNIFORM), f);
+   }
+   
+   bool setUniformValue(const std::string& name, const Vector2D& v){
+   return setUniformValue(GPUVariable::getKeyForName(name, UNIFORM), v);
+   }
+   
+   bool setUniformValue(const std::string& name, double x, double y){
+   return setUniformValue(GPUVariable::getKeyForName(name, UNIFORM), x, y);
+   }
+   
+   bool setUniformValue(const std::string& name, double x, double y, double z, double w){
+   return setUniformValue(GPUVariable::getKeyForName(name, UNIFORM), x, y, z, w);
+   }
+   
+   bool setUniformMatrixValue(const std::string& name, const MutableMatrix44D& m, bool isTransform){
+   return setUniformMatrixValue(GPUVariable::getKeyForName(name, UNIFORM), m, isTransform);
+   }
+   
+   bool setAttributeValue(const std::string& name,
+   IFloatBuffer* buffer, int attributeSize,
+   int arrayElementSize, int index, bool normalized, int stride){
+   return setAttributeValue(GPUVariable::getKeyForName(name, ATTRIBUTE),
+   buffer, attributeSize,
+   arrayElementSize, index, normalized, stride);
+   }
+   
+   void setAttributeEnabled(const std::string& name, bool enabled){
+   setAttributeEnabled(GPUVariable::getKeyForName(name, ATTRIBUTE), enabled);
+   }
+   void setAttributeDisabled(const std::string& name){
+   setAttributeDisabled(GPUVariable::getKeyForName(name, ATTRIBUTE));
+   }
+   */
   
 };
 

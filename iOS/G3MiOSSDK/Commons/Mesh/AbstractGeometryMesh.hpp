@@ -19,6 +19,10 @@ class IFloatBuffer;
 class Color;
 
 class AbstractGeometryMesh : public Mesh {
+private:
+  
+  virtual void rawRender(const G3MRenderContext* rc, const GLState* parentGLState) const = 0;
+  
 protected:
   const int               _primitive;
   const bool              _owner;
@@ -39,8 +43,6 @@ protected:
                        float lineWidth,
                        float pointSize,
                        bool depthTest);
-  
-  virtual void rawRender(const G3MRenderContext* rc, const GLState* parentGLState) const = 0;
   
   GLState _glState;
   

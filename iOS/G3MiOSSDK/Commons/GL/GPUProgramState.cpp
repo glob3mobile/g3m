@@ -295,8 +295,7 @@ std::vector<int>* GPUProgramState::getUniformsKeys() const{
 #endif
     
 #ifdef JAVA_CODE
-    _uniformNames = new java.util.ArrayList<String>();
-    _uniformNames.addAll(_uniformValues.keySet());
+    _uniformKeys.addAll(_uniformValues.keySet());
 #endif
     
   }
@@ -316,69 +315,11 @@ std::vector<int>* GPUProgramState::getAttributeKeys() const{
       _attributeKeys->push_back(it->first);
     }
 #endif
+#ifdef JAVA_CODE
+    _attributeKeys.addAll(_attributesValues.keySet());
+#endif
     
     
   }
   return _attributeKeys;
 }
-
-/*
-bool GPUProgramState::isLinkableToProgram(const GPUProgram& program) const{
-#ifdef C_CODE
-  if (program.getGPUAttributesNumber() != _attributesValues.size()){
-    return false;
-  }
-  
-  if (program.getGPUUniformsNumber()   != _uniformValues.size()){
-    return false;
-  }
-  
-  for(std::map<int, GPUUniformValue*> ::const_iterator it = _uniformValues.begin();
-      it != _uniformValues.end();
-      it++){
-    if (program.getGPUUniform(it->first) == NULL){
-      return false;
-    }
-  }
-  
-  for(std::map<std::string, GPUAttributeValue*> ::const_iterator it = _attributesValues.begin();
-      it != _attributesValues.end();
-      it++){
-    if (program.getGPUAttribute(it->first) == NULL){
-      return false;
-    }
-  }
-  
-  return true;
-#endif
-#ifdef JAVA_CODE
-  
-  if (program.getGPUAttributesNumber() != (_attributesValues.size())) {
-    return false;
-  }
-  
-  if (program.getGPUUniformsNumber() != _uniformValues.size()) {
-    return false;
-  }
-  
-  
-  final Object[] uniNames = _uniformValues.keySet().toArray();
-  for (int i = 0; i < uniNames.length; i++) {
-    String thisName = (String) uniNames[i];
-    if (program.getGPUUniform(thisName) == null) {
-      return false;
-    }
-  }
-  
-  final Object[] attNames = _attributesValues.keySet().toArray();
-  for (int i = 0; i < attNames.length; i++) {
-    String thisName = (String) attNames[i];
-    if (program.getGPUAttribute(thisName) == null) {
-      return false;
-    }
-  }
-  
-  return true;
-#endif
-}
-*/
