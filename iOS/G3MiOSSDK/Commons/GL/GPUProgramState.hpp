@@ -89,6 +89,8 @@ public:
   
   void applyValuesToLinkedProgram() const;
   
+  bool removeGPUUniformValue(int key);
+  
   
   /*
    bool setUniformValue(const std::string& name, bool b){
