@@ -56,11 +56,6 @@ public class SGMaterialNode extends SGNode
        _specularColor.dispose();
   }
 
-//  GLGlobalState* createState(const G3MRenderContext* rc,
-//                       const GLGlobalState& parentState);
-//  
-//  GPUProgramState* createGPUProgramState(const G3MRenderContext* rc, const GPUProgramState* parentState);
-
 
   //GLGlobalState* SGMaterialNode::createState(const G3MRenderContext* rc,
   //                                     const GLGlobalState& parentState) {

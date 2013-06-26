@@ -113,10 +113,10 @@ public class GPUVariable
   public static final int FlatColorIntensity = 14;
   public static final int ColorPerVertexIntensity = 15;
 
-  public static int getKeyForName(String name, int variableType)
+  public static int getKeyForName(String name, GPUVariableType variableType)
   {
   
-    if (variableType == GPUVariableType.UNIFORM.getValue())
+    if (variableType == GPUVariableType.UNIFORM)
     {
       if (name.compareTo("uFlatColor") == 0)
       {
@@ -182,7 +182,7 @@ public class GPUVariable
       }
     }
   
-    if (variableType == GPUVariableType.ATTRIBUTE.getValue())
+    if (variableType == GPUVariableType.ATTRIBUTE)
     {
       if (name.compareTo("aPosition") == 0)
       {
@@ -202,8 +202,6 @@ public class GPUVariable
   
     return UNRECOGNIZED;
   }
-
-
 
   public static final int GROUP_COLOR = 1;
   public static final int GROUP_NOGROUP = -1;

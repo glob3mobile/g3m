@@ -24,6 +24,7 @@ package org.glob3.mobile.generated;
 //class IFloatBuffer;
 //class GLGlobalState;
 //class GPUProgramState;
+//class GLState;
 
 public abstract class TextureMapping
 {
@@ -32,13 +33,7 @@ public abstract class TextureMapping
   {
   }
 
-  /**
-   Returns a new GLGlobalState and changes the current program state
-   */
-//  virtual GLGlobalState* bind(const G3MRenderContext* rc, const GLGlobalState& parentState, GPUProgramState& progState) const = 0;
-
   public abstract boolean isTransparent(G3MRenderContext rc);
 
-  public abstract void modifyGLGlobalState(GLGlobalState GLGlobalState);
-  public abstract void modifyGPUProgramState(GPUProgramState progState);
+  public abstract void modifyGLState(GLState state);
 }

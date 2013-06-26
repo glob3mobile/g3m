@@ -69,8 +69,7 @@ public class LeveledTexturedMesh extends Mesh
   private void updateGLState()
   {
     LazyTextureMapping mapping = getCurrentTextureMapping();
-    mapping.modifyGLGlobalState(_glState.getGLGlobalState());
-    mapping.modifyGPUProgramState(_glState.getGPUProgramState());
+    mapping.modifyGLState(_glState);
   }
 
   public LeveledTexturedMesh(Mesh mesh, boolean ownedMesh, java.util.ArrayList<LazyTextureMapping> mappings)

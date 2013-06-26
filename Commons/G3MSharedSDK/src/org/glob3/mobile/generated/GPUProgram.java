@@ -399,11 +399,11 @@ public class GPUProgram
 
   public final GPUUniform getGPUUniform(int key)
   {
-    return _uniforms.get(name);
+    return _uniforms.get(key);
   }
   public final GPUAttribute getGPUAttribute(int key)
   {
-    return _uniforms.get(name);
+    return _attributes.get(key);
   }
   public final GPUAttribute getGPUAttributeVecXFloat(int key, int x)
   {

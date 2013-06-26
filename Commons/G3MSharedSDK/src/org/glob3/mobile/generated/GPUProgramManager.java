@@ -105,7 +105,7 @@ public class GPUProgramManager
     boolean billboard = false;
     boolean color = false;
   
-    final GLState thisGLState = glState;
+    GLState thisGLState = glState;
     while (thisGLState != null)
     {
       java.util.ArrayList<Integer> ui = thisGLState.getGPUProgramState().getUniformsKeys();

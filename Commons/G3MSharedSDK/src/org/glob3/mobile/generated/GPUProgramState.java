@@ -31,7 +31,7 @@ public class GPUProgramState
     boolean uniformExisted = false;
   
   
-    GPUUniformValue pv = _uniformValues.get(name);
+    GPUUniformValue pv = _uniformValues.get(key);
     if (pv != null){
       uniformExisted = true;
       prevLinkedUniform = pv.getLinkedUniform();
@@ -51,7 +51,7 @@ public class GPUProgramState
   {
     GPUAttribute prevLinkedAttribute = null;
     boolean attributeExisted = false;
-    GPUAttributeValue pv = _attributesValues.get(name);
+    GPUAttributeValue pv = _attributesValues.get(key);
     if (pv != null){
       attributeExisted = true;
       prevLinkedAttribute = pv.getLinkedAttribute();
@@ -230,40 +230,22 @@ public class GPUProgramState
     }
   
   
-    for (java.util.Map.Entry<String, GPUUniformValue> entry : _uniformValues.entrySet()){
-      final String name = entry.getKey();
+    for (java.util.Map.Entry<Integer, GPUUniformValue> entry : _uniformValues.entrySet()){
+      final Integer key = entry.getKey();
       final GPUUniformValue v = entry.getValue();
   
-      final int type = v.getType();
-      final GPUUniform u = prog.getUniformOfType(name, type); //Getting uniform from program
-  
-      if (u == null) {
-        ILogger.instance().logError("UNIFORM " + name + " NOT FOUND");
+      if (!v.linkToGPUProgram(prog, key)){
         return;
       }
-      v.linkToGPUUniform(u);
     }
   
-    for (java.util.Map.Entry<String, GPUAttributeValue> entry : _attributesValues.entrySet()){
-      final String name = entry.getKey();
+    for (java.util.Map.Entry<Integer, GPUAttributeValue> entry : _attributesValues.entrySet()){
+      final Integer key = entry.getKey();
       final GPUAttributeValue v = entry.getValue();
   
-      GPUAttribute a = null; //Getting attribute from program
-      if (!v.getEnabled()){
-        a = prog.getGPUAttribute(name);
-      } else{
-        final int type = v.getType();
-        final int size = v.getAttributeSize();
-        if (type==GLType.glFloat()){
-          a = prog.getGPUAttributeVecXFloat(name,size);
-        }
-      }
-  
-      if (a == null){
-        ILogger.instance().logError("ATTRIBUTE NOT FOUND " + name);
+      if (!v.linkToGPUProgram(prog, key)){
         return;
       }
-      v.linkToGPUAttribute(a);
     }
   
   

@@ -28,16 +28,8 @@ public class GLState
   private GLGlobalState _globalState;
   private final boolean _owner;
 
-//  void setProgramState(GL* gl, GPUProgramManager& progManager) const;
+  private GLState _parentGLState;
 
-  private final GLState _parentGLState;
-
-
-  //void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
-  ////  applyGlobalStateOnGPU(gl);
-  //  setProgramState(gl, progManager);
-  //}
-  
   private void linkAndApplyToGPUProgram(GL gl, GPUProgram prog)
   {
     if (_parentGLState != null)
@@ -115,7 +107,7 @@ public class GLState
     GPUProgram prog = _programState.getLinkedProgram();
     if (prog != null)
     {
-      final GLState parent = _parentGLState;
+      GLState parent = _parentGLState;
       while (parent != null)
       {
         if (prog != parent._programState.getLinkedProgram())
@@ -178,12 +170,4 @@ public class GLState
   {
     return _currentGPUGlobalState.createCopy();
   }
-
-//  static const GLGlobalState* getCurrentGLGlobalState() {
-//    return &_currentGPUGlobalState;
-//  }
-
-//  static const GPUProgram* getGPUProgram() {
-//    return _currentGPUProgram;
-//  }
 }
