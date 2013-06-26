@@ -71,6 +71,8 @@ public class GPUProgram
   {
   }
 
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  GPUProgram(GPUProgram that);
 
 
   public static GPUProgram createProgram(GL gl, String name, String vertexSource, String fragmentSource)
@@ -337,12 +339,6 @@ public class GPUProgram
   /**
    Must be called before drawing to apply Uniforms and Attributes new values
    */
-  
-  //int TexEnabledCounter = 0, TexDisabledCounter = 0;
-  //int FlatColorEnabledCounter = 0, FlatColorDisabledCounter = 0;
-  //int ColorEnabledCounter = 0, ColorDisabledCounter = 0;
-  
-  
   public final void applyChanges(GL gl)
   {
     //ILogger::instance()->logInfo("GPUProgram %s applying changes", _name.c_str());

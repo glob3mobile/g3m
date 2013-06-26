@@ -95,28 +95,42 @@ public class GPUAttribute extends GPUVariable
   public void applyChanges(GL gl)
   {
 
-    if (_dirty)
+    if (_value == null)
     {
-
-      if (_value.getEnabled())
+      if (_enabled)
       {
-        if (!_enabled)
+        ILogger.instance().logError("Attribute " + _name + " was not set but it is enabled.");
+      }
+    }
+    else
+    {
+      if (_dirty)
+      {
+
+        if (_value.getEnabled())
         {
-          gl.enableVertexAttribArray(_id);
-          _enabled = true;
+          if (!_enabled)
+          {
+            gl.enableVertexAttribArray(_id);
+            _enabled = true;
+          }
+          _value.setAttribute(gl, _id);
         }
-        _value.setAttribute(gl, _id);
+        else
+        {
+          if (_enabled)
+          {
+            gl.disableVertexAttribArray(_id);
+            _enabled = false;
+          }
+        }
+
+        _dirty = false;
       }
       else
       {
-        if (_enabled)
-        {
-          gl.disableVertexAttribArray(_id);
-          _enabled = false;
-        }
-      }
 
-      _dirty = false;
+      }
     }
   }
 }

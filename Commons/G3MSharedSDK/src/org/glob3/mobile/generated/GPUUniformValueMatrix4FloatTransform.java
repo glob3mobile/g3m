@@ -4,62 +4,53 @@ public class GPUUniformValueMatrix4FloatTransform extends GPUUniformValue
 {
 
   private GPUUniformValueMatrix4FloatTransform(GPUUniformValueMatrix4FloatTransform that)
-  {
+   {
      super(GLType.glMatrix4Float());
      _m = new MutableMatrix44D(that._m);
      _isTransform = that._isTransform;
-     _transformedMatrix = new MutableMatrix44D(new MutableMatrix44D(that._transformedMatrix));
-  }
+   }
 
   public MutableMatrix44D _m;
 
-  public MutableMatrix44D _transformedMatrix = new MutableMatrix44D();
-
   public boolean _isTransform;
 
-  public GPUUniformValueMatrix4FloatTransform(MutableMatrix44D m, boolean isTransform)
-  {
+  public GPUUniformValueMatrix4FloatTransform(MutableMatrix44D m, boolean isTransform) //, _transformedMatrix(m)
+{
      super(GLType.glMatrix4Float());
      _m = m;
      _isTransform = isTransform;
-     _transformedMatrix = new MutableMatrix44D(m);
-  }
-
-  public final void setLastGPUUniformValue(GPUUniformValue old)
-  {
-    if (_isTransform)
-    {
-      if (old == null)
-      {
-        ILogger.instance().logError("Trying to apply transformation to matrix without previous value");
-      }
-      else
-      {
-        final MutableMatrix44D lastM = ((GPUUniformValueMatrix4FloatTransform)old).getValue();
-        _transformedMatrix.copyValue(lastM.multiply(_m));
-      }
-    }
-  }
+}
 
   public final void setUniform(GL gl, IGLUniformID id)
   {
-    gl.uniformMatrix4fv(id, false, _transformedMatrix);
+    gl.uniformMatrix4fv(id, false, _m);
   }
 
   public final boolean isEqualsTo(GPUUniformValue v)
   {
     GPUUniformValueMatrix4FloatTransform v2 = (GPUUniformValueMatrix4FloatTransform)v;
-    return _transformedMatrix.isEqualsTo(v2._transformedMatrix);
-  }
-  public final GPUUniformValue deepCopy()
-  {
-    return new GPUUniformValueMatrix4FloatTransform(this);
+    return _m.isEqualsTo(v2._m);
   }
 
-  public final void copyFrom(GPUUniformValue v)
+  public final GPUUniformValue copyOrCreate(GPUUniformValue value)
   {
-    _m.copyValue(((GPUUniformValueMatrix4FloatTransform)v)._m);
-    _transformedMatrix.copyValue(((GPUUniformValueMatrix4FloatTransform)v)._transformedMatrix);
+    if (value == null)
+    {
+      return new GPUUniformValueMatrix4FloatTransform(_m, _isTransform);
+    }
+    else
+    {
+      GPUUniformValueMatrix4FloatTransform valueM = (GPUUniformValueMatrix4FloatTransform)value;
+      if (_isTransform)
+      {
+        valueM._m.copyValue(valueM._m.multiply(_m));
+      }
+      else
+      {
+        valueM._m.copyValue(_m);
+      }
+      return value;
+    }
   }
 
   public final String description()
@@ -74,6 +65,7 @@ public class GPUUniformValueMatrix4FloatTransform extends GPUUniformValue
 
   public final MutableMatrix44D getValue()
   {
-     return _transformedMatrix;
+//    return &_transformedMatrix;
+    return _m;
   }
 }

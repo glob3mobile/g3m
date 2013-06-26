@@ -61,23 +61,13 @@ public class GPUUniform extends GPUVariable
   {
     if (_type != v.getType()) //type checking
     {
-      //      delete v;
       ILogger.instance().logError("Attempting to set uniform " + _name + "with invalid value type.");
       return;
     }
     if (_value == null || !_value.isEqualsTo(v))
     {
       _dirty = true;
-
-      if (_value != null)
-      {
-        v.setLastGPUUniformValue(_value); //Multiply matrix when needed
-        _value.copyFrom(v);
-      }
-      else
-      {
-        _value = v.deepCopy();
-      }
+      _value = v.copyOrCreate(_value);
     }
   }
 
@@ -87,6 +77,13 @@ public class GPUUniform extends GPUVariable
     {
       _value.setUniform(gl, _id);
       _dirty = false;
+    }
+    else
+    {
+      if (_value == null)
+      {
+        ILogger.instance().logError("Uniform " + _name + " was not set.");
+      }
     }
   }
 }

@@ -125,5 +125,29 @@ public abstract class GPUAttributeValue
     }
   }
 
+  public final boolean linkToGPUProgram(GPUProgram prog, int key)
+  {
+    if (_enabled)
+    {
+      if (_type == GLType.glFloat())
+      {
+        _attribute = prog.getGPUAttributeVecXFloat(key, _attributeSize);
+      }
+    }
+    else
+    {
+      _attribute = prog.getGPUAttribute(key);
+    }
+  
+    if (_attribute == null)
+    {
+      ILogger.instance().logError("ATTRIBUTE WITH KEY %d NOT FOUND ", key);
+      return false;
+    }
+    else
+    {
+      return true;
+    }
+  }
 
 }

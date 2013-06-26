@@ -28,63 +28,35 @@ public class GLState
   private GLGlobalState _globalState;
   private final boolean _owner;
 
-  private void setProgramState(GL gl, GPUProgramManager progManager)
-  {
-  
-    GPUProgram prog = _programState.getLinkedProgram();
-    if (prog != null)
-    {
-      final GLState parent = _parentGLState;
-      while (parent != null && prog != null)
-      {
-        if (prog != parent.getGPUProgramState().getLinkedProgram())
-        {
-          prog = null;
-        }
-        parent = parent.getParent();
-      }
-    }
-  
-    if (prog == null)
-    {
-      prog = progManager.getProgram(gl, this);
-    }
-  
-    if (prog != null)
-    {
-      if (prog != _currentGPUProgram)
-      {
-        if (_currentGPUProgram != null)
-        {
-          _currentGPUProgram.onUnused(gl);
-        }
-        _currentGPUProgram = prog;
-        gl.useProgram(prog);
-      }
-  
-      linkAndApplyToGPUProgram(prog);
-      prog.applyChanges(gl);
-  
-      //prog->onUnused(); //Uncomment to check that all GPUProgramStates are complete
-    }
-    else
-    {
-      ILogger.instance().logError("No GPUProgram found.");
-    }
-  
-  }
+//  void setProgramState(GL* gl, GPUProgramManager& progManager) const;
 
   private final GLState _parentGLState;
 
-  private void linkAndApplyToGPUProgram(GPUProgram prog)
+
+  //void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
+  ////  applyGlobalStateOnGPU(gl);
+  //  setProgramState(gl, progManager);
+  //}
+  
+  private void linkAndApplyToGPUProgram(GL gl, GPUProgram prog)
   {
     if (_parentGLState != null)
     {
-      _parentGLState.linkAndApplyToGPUProgram(prog);
+      _parentGLState.linkAndApplyToGPUProgram(gl, prog);
     }
   
     _programState.linkToProgram(prog);
     _programState.applyValuesToLinkedProgram();
+  
+    _globalState.applyChanges(gl, _currentGPUGlobalState);
+  }
+
+  private GLState(GLState state)
+  {
+     _programState = new GPUProgramState();
+     _globalState = new GLGlobalState();
+     _owner = true;
+     _parentGLState = null;
   }
 
 
@@ -139,8 +111,49 @@ public class GLState
 
   public final void applyOnGPU(GL gl, GPUProgramManager progManager)
   {
-    applyGlobalStateOnGPU(gl);
-    setProgramState(gl, progManager);
+  
+    GPUProgram prog = _programState.getLinkedProgram();
+    if (prog != null)
+    {
+      final GLState parent = _parentGLState;
+      while (parent != null)
+      {
+        if (prog != parent._programState.getLinkedProgram())
+        {
+          prog = null;
+          break;
+        }
+        parent = parent._parentGLState;
+      }
+    }
+  
+    if (prog == null)
+    {
+      prog = progManager.getProgram(gl, this);
+    }
+  
+    if (prog != null)
+    {
+      if (prog != _currentGPUProgram)
+      {
+        if (_currentGPUProgram != null)
+        {
+          _currentGPUProgram.onUnused(gl);
+        }
+        _currentGPUProgram = prog;
+        gl.useProgram(prog);
+      }
+  
+      linkAndApplyToGPUProgram(gl, prog);
+      prog.applyChanges(gl);
+  
+      //prog->onUnused(); //Uncomment to check that all GPUProgramStates are complete
+    }
+    else
+    {
+      ILogger.instance().logError("No GPUProgram found.");
+    }
+  
   }
 
   public final GPUProgramState getGPUProgramState()

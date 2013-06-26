@@ -39,7 +39,6 @@ public abstract class GPUUniformValue
   }
   public abstract void setUniform(GL gl, IGLUniformID id);
   public abstract boolean isEqualsTo(GPUUniformValue v);
-  public abstract GPUUniformValue deepCopy();
 
   public final GPUUniform getLinkedUniform()
   {
@@ -73,10 +72,23 @@ public abstract class GPUUniformValue
     }
   }
 
-  public void setLastGPUUniformValue(GPUUniformValue old) //Used with matrix transform value
+  public GPUUniformValue copyOrCreate(GPUUniformValue value)
   {
+     return value;
   }
 
-
-  public abstract void copyFrom(GPUUniformValue v);
+  public final boolean linkToGPUProgram(GPUProgram prog, int key)
+  {
+    GPUUniform u = prog.getGPUUniform(key);
+    if (u == null)
+    {
+      ILogger.instance().logError("UNIFORM WITH KEY %d NOT FOUND", key);
+      return false;
+    }
+    else
+    {
+      _uniform = u;
+      return true;
+    }
+  }
 }
