@@ -75,6 +75,18 @@ protected GPUProgramManager createGPUProgramManager() {
 			  					Shaders_WebGL._defaultVertexShader, 
 			  					Shaders_WebGL._defaultFragmentShader));
 	  
+	  gpuProgramFactory.add(new GPUProgramSources("ColorMesh",
+				Shaders_WebGL._colorMeshVertexShader,
+				Shaders_WebGL._colorMeshFragmentShader));
+
+	  gpuProgramFactory.add(new GPUProgramSources("TexturedMesh",
+				Shaders_WebGL._texturedMeshVertexShader,
+				Shaders_WebGL._texturedMeshFragmentShader));
+
+	  gpuProgramFactory.add(new GPUProgramSources("FlatColorMesh",
+				Shaders_WebGL._flatColorMeshVertexShader,
+				Shaders_WebGL._flatColorMeshFragmentShader));
+	  
 	  return new GPUProgramManager(gpuProgramFactory);
 }
 
