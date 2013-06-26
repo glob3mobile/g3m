@@ -2031,13 +2031,13 @@ public:
                                          true);
               
               /**/
-              const double fromDistance = 50000 * 1.5;
-              const double toDistance   = 25000 * 1.5 / 2;
+              const double fromDistance = 75000;
+              const double toDistance   = 18750;
               
               // const Angle fromAzimuth = Angle::fromDegrees(-90);
               // const Angle toAzimuth   = Angle::fromDegrees(-90 + 360 + 180);
               const Angle fromAzimuth = Angle::fromDegrees(-90);
-              const Angle toAzimuth   = Angle::fromDegrees(-90 + 360);
+              const Angle toAzimuth   = Angle::fromDegrees(270);
               
               // const Angle fromAltitude = Angle::fromDegrees(65);
               // const Angle toAltitude   = Angle::fromDegrees(5);
