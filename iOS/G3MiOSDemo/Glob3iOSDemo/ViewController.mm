@@ -593,6 +593,9 @@ public:
   GPUProgramSources sourcesColorMesh = [self loadDefaultGPUProgramSourcesWithName:@"ColorMesh"];
   builder.addGPUProgramSources(sourcesColorMesh);
   
+  GPUProgramSources sourcesTCTexturedMesh = [self loadDefaultGPUProgramSourcesWithName:@"TransformedTexCoorTexturedMesh"];
+  builder.addGPUProgramSources(sourcesTCTexturedMesh);
+  
   //  WidgetUserData* userData = NULL;
   //  builder.setUserData(userData);
   

@@ -130,12 +130,7 @@ public class G3MWebGLDemo
       final ShapesRenderer shapesRenderer = new ShapesRenderer();
       builder.addRenderer(shapesRenderer);
 
-<<<<<<< HEAD
       builder.setInitializationTask(createMarkersInitializationTask());
-      
-=======
-      //builder.setInitializationTask(createMarkersInitializationTask());
->>>>>>> webgl-port
 
       final GInitializationTask initializationTask = new GInitializationTask() {
          @Override

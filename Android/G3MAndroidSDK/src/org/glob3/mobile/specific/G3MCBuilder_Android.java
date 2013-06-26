@@ -18,14 +18,6 @@ public class G3MCBuilder_Android extends G3MCBuilder {
 
 	private final G3MWidget_Android _nativeWidget;
 
-	public G3MCBuilder_Android(final Context context, final URL serverURL,
-			final String sceneID, final G3MCSceneChangeListener sceneListener) {
-		super(serverURL, sceneID, sceneListener);
-
-		_nativeWidget = new G3MWidget_Android(context);
-	}
-
-<<<<<<< HEAD
 	@Override
 	protected IStorage createStorage() {
 		return new SQLiteStorage_Android("g3m.cache",
@@ -43,7 +35,7 @@ public class G3MCBuilder_Android extends G3MCBuilder {
 				getStorage(), //
 				saveInBackground);
 	}
-=======
+
    public G3MCBuilder_Android(final Context context,
                               final URL serverURL,
                               final URL tubesURL,
@@ -55,7 +47,6 @@ public class G3MCBuilder_Android extends G3MCBuilder {
       _nativeWidget = new G3MWidget_Android(context);
 
    }
->>>>>>> webgl-port
 
 	@Override
 	protected IThreadUtils createThreadUtils() {

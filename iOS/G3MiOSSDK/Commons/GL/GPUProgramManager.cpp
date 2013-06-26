@@ -67,7 +67,7 @@ GPUProgram* GPUProgramManager::getProgram(GL* gl, const GLState* glState) {
     }
    
     if (!flatColor && texture && !color){
-      return getProgram(gl, "TexturedMesh");
+      return getProgram(gl, "TransformedTexCoorTexturedMesh");
     }
     
     if (!flatColor && !texture && color){

@@ -1224,6 +1224,8 @@
 		CFFEC12215C2EA5F003FA986 /* Downloader_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Downloader_iOS.mm; path = Specific/Derived/Downloader_iOS.mm; sourceTree = "<group>"; };
 		CFFEC12415C2EB96003FA986 /* URL.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = URL.hpp; path = Commons/Basic/URL.hpp; sourceTree = "<group>"; };
 		CFFEC12515C2EBA6003FA986 /* URL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = URL.cpp; path = Commons/Basic/URL.cpp; sourceTree = "<group>"; };
+		D802448B177B314800F58D0D /* TransformedTexCoorTexturedMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorTexturedMesh.fsh; sourceTree = "<group>"; };
+		D802448C177B314800F58D0D /* TransformedTexCoorTexturedMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorTexturedMesh.vsh; sourceTree = "<group>"; };
 		D80A286F1746572E0058CEC3 /* GLState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLState.cpp; sourceTree = "<group>"; };
 		D80A28701746572E0058CEC3 /* GLState.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLState.hpp; sourceTree = "<group>"; };
 		D80D3A5D160A0A47004831C5 /* IGLUniformID.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IGLUniformID.hpp; path = Commons/Interfaces/IGLUniformID.hpp; sourceTree = "<group>"; };
@@ -2104,6 +2106,8 @@
 		E70B56E016D3CCCD00C5FFFB /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
+				D802448B177B314800F58D0D /* TransformedTexCoorTexturedMesh.fsh */,
+				D802448C177B314800F58D0D /* TransformedTexCoorTexturedMesh.vsh */,
 				D84625DD177732A900FC4862 /* ColorMesh.fsh */,
 				D84625DE177732A900FC4862 /* ColorMesh.vsh */,
 				D84625D51777291F00FC4862 /* TexturedMesh.fsh */,
