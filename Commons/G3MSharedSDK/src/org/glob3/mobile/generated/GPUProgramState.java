@@ -108,47 +108,6 @@ public class GPUProgramState
     _attributesValues.clear();
   }
 
-  /*
-  bool setUniformValue(const std::string& name, bool b){
-    return setUniformValue(GPUVariable::getKeyForName(name, UNIFORM), b);
-  }
-  
-  bool setUniformValue(const std::string& name, float f){
-    return setUniformValue(GPUVariable::getKeyForName(name, UNIFORM), f);
-  }
-  
-  bool setUniformValue(const std::string& name, const Vector2D& v){
-    return setUniformValue(GPUVariable::getKeyForName(name, UNIFORM), v);
-  }
-  
-  bool setUniformValue(const std::string& name, double x, double y){
-    return setUniformValue(GPUVariable::getKeyForName(name, UNIFORM), x, y);
-  }
-  
-  bool setUniformValue(const std::string& name, double x, double y, double z, double w){
-    return setUniformValue(GPUVariable::getKeyForName(name, UNIFORM), x, y, z, w);
-  }
-  
-  bool setUniformMatrixValue(const std::string& name, const MutableMatrix44D& m, bool isTransform){
-    return setUniformMatrixValue(GPUVariable::getKeyForName(name, UNIFORM), m, isTransform);
-  }
-  
-  bool setAttributeValue(const std::string& name,
-                         IFloatBuffer* buffer, int attributeSize,
-                         int arrayElementSize, int index, bool normalized, int stride){
-    return setAttributeValue(GPUVariable::getKeyForName(name, ATTRIBUTE),
-                             buffer, attributeSize,
-                             arrayElementSize, index, normalized, stride);
-  }
-  
-  void setAttributeEnabled(const std::string& name, bool enabled){
-    setAttributeEnabled(GPUVariable::getKeyForName(name, ATTRIBUTE), enabled);
-  }
-  void setAttributeDisabled(const std::string& name){
-    setAttributeDisabled(GPUVariable::getKeyForName(name, ATTRIBUTE));
-  }
-  */
-
   public final boolean setUniformValue(int key, boolean b)
   {
     return setGPUUniformValue(key, new GPUUniformValueBool(b));
@@ -272,8 +231,7 @@ public class GPUProgramState
       _uniformKeys = new java.util.ArrayList<Integer>();
   
   
-      _uniformNames = new java.util.ArrayList<String>();
-      _uniformNames.addAll(_uniformValues.keySet());
+      _uniformKeys.addAll(_uniformValues.keySet());
   
     }
     return _uniformKeys;
@@ -286,6 +244,7 @@ public class GPUProgramState
   
       _attributeKeys = new java.util.ArrayList<Integer>();
   
+      _attributeKeys.addAll(_attributesValues.keySet());
   
   
     }
@@ -303,8 +262,6 @@ public class GPUProgramState
     return s;
   }
 
-  //  bool isLinkableToProgram(const GPUProgram& program) const;
-
   public final void applyValuesToLinkedProgram()
   {
     for (final GPUUniformValue u : _uniformValues.values()){
@@ -316,64 +273,46 @@ public class GPUProgramState
     }
   }
 
+
+  /*
+   bool setUniformValue(const std::string& name, bool b){
+   return setUniformValue(GPUVariable::getKeyForName(name, UNIFORM), b);
+   }
+   
+   bool setUniformValue(const std::string& name, float f){
+   return setUniformValue(GPUVariable::getKeyForName(name, UNIFORM), f);
+   }
+   
+   bool setUniformValue(const std::string& name, const Vector2D& v){
+   return setUniformValue(GPUVariable::getKeyForName(name, UNIFORM), v);
+   }
+   
+   bool setUniformValue(const std::string& name, double x, double y){
+   return setUniformValue(GPUVariable::getKeyForName(name, UNIFORM), x, y);
+   }
+   
+   bool setUniformValue(const std::string& name, double x, double y, double z, double w){
+   return setUniformValue(GPUVariable::getKeyForName(name, UNIFORM), x, y, z, w);
+   }
+   
+   bool setUniformMatrixValue(const std::string& name, const MutableMatrix44D& m, bool isTransform){
+   return setUniformMatrixValue(GPUVariable::getKeyForName(name, UNIFORM), m, isTransform);
+   }
+   
+   bool setAttributeValue(const std::string& name,
+   IFloatBuffer* buffer, int attributeSize,
+   int arrayElementSize, int index, bool normalized, int stride){
+   return setAttributeValue(GPUVariable::getKeyForName(name, ATTRIBUTE),
+   buffer, attributeSize,
+   arrayElementSize, index, normalized, stride);
+   }
+   
+   void setAttributeEnabled(const std::string& name, bool enabled){
+   setAttributeEnabled(GPUVariable::getKeyForName(name, ATTRIBUTE), enabled);
+   }
+   void setAttributeDisabled(const std::string& name){
+   setAttributeDisabled(GPUVariable::getKeyForName(name, ATTRIBUTE));
+   }
+   */
+
 }
-/*
-bool GPUProgramState::isLinkableToProgram(const GPUProgram& program) const{
-#ifdef C_CODE
-  if (program.getGPUAttributesNumber() != _attributesValues.size()){
-    return false;
-  }
-  
-  if (program.getGPUUniformsNumber()   != _uniformValues.size()){
-    return false;
-  }
-  
-  for(std::map<int, GPUUniformValue*> ::const_iterator it = _uniformValues.begin();
-      it != _uniformValues.end();
-      it++){
-    if (program.getGPUUniform(it->first) == NULL){
-      return false;
-    }
-  }
-  
-  for(std::map<std::string, GPUAttributeValue*> ::const_iterator it = _attributesValues.begin();
-      it != _attributesValues.end();
-      it++){
-    if (program.getGPUAttribute(it->first) == NULL){
-      return false;
-    }
-  }
-  
-  return true;
-#endif
-#ifdef JAVA_CODE
-  
-  if (program.getGPUAttributesNumber() != (_attributesValues.size())) {
-    return false;
-  }
-  
-  if (program.getGPUUniformsNumber() != _uniformValues.size()) {
-    return false;
-  }
-  
-  
-  final Object[] uniNames = _uniformValues.keySet().toArray();
-  for (int i = 0; i < uniNames.length; i++) {
-    String thisName = (String) uniNames[i];
-    if (program.getGPUUniform(thisName) == null) {
-      return false;
-    }
-  }
-  
-  final Object[] attNames = _attributesValues.keySet().toArray();
-  for (int i = 0; i < attNames.length; i++) {
-    String thisName = (String) attNames[i];
-    if (program.getGPUAttribute(thisName) == null) {
-      return false;
-    }
-  }
-  
-  return true;
-#endif
-}
-*/

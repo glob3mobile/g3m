@@ -12,7 +12,14 @@ public class GPUUniformValueBool extends GPUUniformValue
 
   public final void setUniform(GL gl, IGLUniformID id)
   {
-    _value? gl.uniform1i(id, 1) : gl.uniform1i(id, 0);
+    if (_value)
+    {
+      gl.uniform1i(id, 1);
+    }
+    else
+    {
+      gl.uniform1i(id, 0);
+    }
   }
   public final boolean isEqualsTo(GPUUniformValue v)
   {
