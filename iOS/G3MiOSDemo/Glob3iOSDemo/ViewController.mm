@@ -23,6 +23,7 @@
 #import <G3MiOSSDK/WMSLayer.hpp>
 #import <G3MiOSSDK/CameraSingleDragHandler.hpp>
 #import <G3MiOSSDK/CameraDoubleDragHandler.hpp>
+#import <G3MiOSSDK/CameraZoomAndRotateHandler.hpp>
 #import <G3MiOSSDK/CameraRotationHandler.hpp>
 #import <G3MiOSSDK/CameraDoubleTapHandler.hpp>
 #import <G3MiOSSDK/LevelTileCondition.hpp>
@@ -674,8 +675,10 @@ public:
   cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
   const bool processRotation = true;
   const bool processZoom = true;
-  cameraRenderer->addHandler(new CameraDoubleDragHandler(processRotation,
-                                                         processZoom));
+  
+  //cameraRenderer->addHandler(new CameraDoubleDragHandler(processRotation, processZoom));
+  cameraRenderer->addHandler(new CameraZoomAndRotateHandler(processRotation, processZoom));
+  
   cameraRenderer->addHandler(new CameraRotationHandler());
   cameraRenderer->addHandler(new CameraDoubleTapHandler());
   
