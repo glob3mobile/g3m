@@ -23,7 +23,7 @@ public class IndexedGeometryMesh extends AbstractGeometryMesh
 {
   private IShortBuffer _indices;
 
-  private void rawRender(G3MRenderContext rc, GLState parentGLState)
+  protected void rawRender(G3MRenderContext rc, GLState parentGLState)
   {
     GL gl = rc.getGL();
     gl.drawElements(_primitive, _indices, parentGLState, rc.getGPUProgramManager());

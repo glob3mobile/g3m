@@ -19,9 +19,6 @@ class IFloatBuffer;
 class Color;
 
 class AbstractGeometryMesh : public Mesh {
-private:
-  
-  virtual void rawRender(const G3MRenderContext* rc, const GLState* parentGLState) const = 0;
   
 protected:
   const int               _primitive;
@@ -47,6 +44,8 @@ protected:
   GLState _glState;
   
   void createGLState();
+  
+  virtual void rawRender(const G3MRenderContext* rc, const GLState* parentGLState) const = 0;
   
 public:
   ~AbstractGeometryMesh();

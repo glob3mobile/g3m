@@ -25,7 +25,7 @@ package org.glob3.mobile.generated;
 public abstract class AbstractGeometryMesh extends Mesh
 {
 
-  private abstract void rawRender(G3MRenderContext rc, GLState parentGLState);
+  abstract void rawRender(G3MRenderContext rc, GLState parentGLState);
 
   protected final int _primitive;
   protected final boolean _owner;
