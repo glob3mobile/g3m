@@ -80,30 +80,31 @@ public final class GL2Shaders {
 			+ "  \n"
 			+ "  gl_PointSize = PointSize;\n" + "}";
 
-	public final static String _billboardFragmentShader = "varying mediump vec2 TextureCoordOut;\n"
-			+ "uniform sampler2D Sampler;\n"
-			+ "\n"
-			+ "void main() {\n"
-			+ "  \n"
-			+ "  gl_FragColor = texture2D(Sampler, TextureCoordOut);\n" + "}";
+	public final static String _billboardFragmentShader = "varying mediump vec2 TextureCoordOut;\n" + 
+			"uniform sampler2D Sampler;\n" + 
+			"\n" + 
+			"void main() {\n" + 
+			"  gl_FragColor = texture2D(Sampler, TextureCoordOut);\n" + 
+			"}";
 
-	public final static String _billboardVertexShader = "attribute vec4 aPosition;\n"
-			+ "attribute vec2 aTextureCoord;\n"
-			+ "\n"
-			+ "uniform mat4 uProjection;\n"
-			+ "uniform mat4 uModelview;\n"
-			+ "\n"
-			+ "uniform vec2 uTextureExtent;\n"
-			+ "uniform vec2 uViewPortExtent;\n"
-			+ "\n"
-			+ "varying vec2 TextureCoordOut;\n"
-			+ "\n"
-			+ "void main() {\n"
-			+ "  gl_Position = uProjection * uModelview * aPosition;\n"
-			+ "  \n"
-			+ "  gl_Position.x += ((aTextureCoord.x - 0.5) * 2.0 * uTextureExtent.x / uViewPortExtent.x) * gl_Position.w;\n"
-			+ "  gl_Position.y -= ((aTextureCoord.y - 0.5) * 2.0 * uTextureExtent.y / uViewPortExtent.y) * gl_Position.w;\n"
-			+ "  \n" + "  TextureCoordOut = aTextureCoord;\n" + "}";
+	public final static String _billboardVertexShader = "attribute vec4 aPosition;\n" + 
+			"attribute vec2 aTextureCoord;\n" + 
+			"\n" + 
+			"uniform mat4 uModelview;\n" + 
+			"\n" + 
+			"uniform vec2 uTextureExtent;\n" + 
+			"uniform vec2 uViewPortExtent;\n" + 
+			"\n" + 
+			"varying vec2 TextureCoordOut;\n" + 
+			"\n" + 
+			"void main() {\n" + 
+			"  gl_Position = uModelview * aPosition;\n" + 
+			"  \n" + 
+			"  gl_Position.x += ((aTextureCoord.x - 0.5) * 2.0 * uTextureExtent.x / uViewPortExtent.x) * gl_Position.w;\n" + 
+			"  gl_Position.y -= ((aTextureCoord.y - 0.5) * 2.0 * uTextureExtent.y / uViewPortExtent.y) * gl_Position.w;\n" + 
+			"  \n" + 
+			"  TextureCoordOut = aTextureCoord;\n" + 
+			"}";
 
 	public final static String _colorMeshFragmentShader = "varying mediump vec4 VertexColor;\n"
 			+ "\n"

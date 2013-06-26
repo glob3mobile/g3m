@@ -281,9 +281,19 @@ public:
     } else{
       GPUUniformValueMatrix4FloatTransform* valueM = (GPUUniformValueMatrix4FloatTransform*)value;
       if (_isTransform){
+#ifdef C_CODE
         valueM->_m.copyValue(valueM->_m.multiply(_m));
+#endif
+#ifdef JAVA_CODE
+        valueM._m = valueM._m.multiply(_m);
+#endif
       } else{
+#ifdef C_CODE
         valueM->_m.copyValue(_m);
+#endif
+#ifdef JAVA_CODE
+        valueM._m = new MutableMatrix44D(_m);
+#endif
       }
       return value;
     }
