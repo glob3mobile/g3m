@@ -33,9 +33,7 @@ package org.glob3.mobile.generated;
 //class LayerSet;
 //class G3MCSceneDescription;
 //class Color;
-<<<<<<< HEAD
 //class GPUProgramManager;
-=======
 //class JSONBaseObject;
 //class JSONObject;
 //class TimeInterval;
@@ -46,7 +44,6 @@ package org.glob3.mobile.generated;
 //class WMSLayer;
 //class G3MContext;
 //class IWebSocket;
->>>>>>> webgl-port
 
 
 

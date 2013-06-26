@@ -138,7 +138,6 @@ public abstract class G3MCBuilder
     return _downloader;
   }
 
-<<<<<<< HEAD
   private GPUProgramManager _gpuProgramManager;
   private GPUProgramManager getGPUProgramManager()
   {
@@ -149,8 +148,6 @@ public abstract class G3MCBuilder
     return _gpuProgramManager;
   }
 
-  protected G3MCBuilder(URL serverURL, String sceneId, G3MCSceneChangeListener sceneListener)
-=======
   private void resetScene(String sceneId)
   {
     _sceneId = sceneId;
@@ -328,7 +325,6 @@ public abstract class G3MCBuilder
   }
 
   protected G3MCBuilder(URL serverURL, URL tubesURL, boolean useWebSockets, String sceneId, G3MCSceneChangeListener sceneListener)
->>>>>>> webgl-port
   {
      _serverURL = serverURL;
      _tubesURL = tubesURL;
@@ -348,12 +344,9 @@ public abstract class G3MCBuilder
      _layerSet = new LayerSet();
      _downloader = null;
      _sceneListener = sceneListener;
-<<<<<<< HEAD
      _gpuProgramManager = null;
-=======
      _isSceneTubeOpen = false;
      _sceneTubeWebSocket = null;
->>>>>>> webgl-port
   
   }
 
@@ -409,7 +402,6 @@ public abstract class G3MCBuilder
     ICameraActivityListener cameraActivityListener = null;
   
     _g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), cameraActivityListener, createPlanet(), cameraConstraints, createCameraRenderer(), mainRenderer, createBusyRenderer(), _sceneBackgroundColor, false, false, initializationTask, true, periodicalTasks, getGPUProgramManager()); // autoDeleteInitializationTask -  logDownloaderStatistics -  logFPS
-  
     cameraConstraints = null;
     periodicalTasks = null;
   
@@ -436,16 +428,13 @@ public abstract class G3MCBuilder
 
   protected abstract IThreadUtils createThreadUtils();
 
-<<<<<<< HEAD
   protected abstract GPUProgramManager createGPUProgramManager();
 
-=======
   /** Private to G3M, don't call it */
   public final int getSceneTimestamp()
   {
     return _sceneTimestamp;
   }
->>>>>>> webgl-port
 
   /** Private to G3M, don't call it */
   public final void setSceneTimestamp(int timestamp)
