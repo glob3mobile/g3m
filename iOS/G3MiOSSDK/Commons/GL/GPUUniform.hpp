@@ -280,21 +280,20 @@ public:
       return new GPUUniformValueMatrix4FloatTransform(_m, _isTransform);
     } else{
       GPUUniformValueMatrix4FloatTransform* valueM = (GPUUniformValueMatrix4FloatTransform*)value;
+#ifdef C_CODE
       if (_isTransform){
-#ifdef C_CODE
         valueM->_m.copyValue(valueM->_m.multiply(_m));
-#endif
-#ifdef JAVA_CODE
-        valueM._m = valueM._m.multiply(_m);
-#endif
-      } else{
-#ifdef C_CODE
+      } else {
         valueM->_m.copyValue(_m);
+      }
 #endif
 #ifdef JAVA_CODE
+      if (_isTransform){
+        valueM._m = valueM._m.multiply(_m);
+      } else {
         valueM._m = new MutableMatrix44D(_m);
-#endif
       }
+#endif
       return value;
     }
   }
