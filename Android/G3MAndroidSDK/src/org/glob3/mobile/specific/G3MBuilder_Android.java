@@ -33,6 +33,15 @@ public class G3MBuilder_Android
                GL2Shaders._billboardFragmentShader));
       addGPUProgramSources(new GPUProgramSources("Default", GL2Shaders._defaultVertexShader, GL2Shaders._defaultFragmentShader));
 
+      addGPUProgramSources(new GPUProgramSources("ColorMesh", 
+    		  				GL2Shaders._colorMeshVertexShader, GL2Shaders._colorMeshFragmentShader));
+      
+      addGPUProgramSources(new GPUProgramSources("TexturedMesh", 
+				GL2Shaders._texturedMeshVertexShader, GL2Shaders._texturedMeshFragmentShader));
+      
+      addGPUProgramSources(new GPUProgramSources("FlatColorMesh", 
+				GL2Shaders._flatColorMeshVertexShader, GL2Shaders._flatColorMeshFragmentShader));
+      
 
       setGL(_nativeWidget.getGL());
 

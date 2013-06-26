@@ -1,5 +1,3 @@
-
-
 package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.CachedDownloader;
@@ -16,71 +14,73 @@ import org.glob3.mobile.generated.URL;
 
 import android.content.Context;
 
+public class G3MCBuilder_Android extends G3MCBuilder {
 
-public class G3MCBuilder_Android
-         extends
-            G3MCBuilder {
+	private final G3MWidget_Android _nativeWidget;
 
-   private final G3MWidget_Android _nativeWidget;
+	public G3MCBuilder_Android(final Context context, final URL serverURL,
+			final String sceneID, final G3MCSceneChangeListener sceneListener) {
+		super(serverURL, sceneID, sceneListener);
 
+		_nativeWidget = new G3MWidget_Android(context);
+	}
 
-   public G3MCBuilder_Android(final Context context,
-                              final URL serverURL,
-                              final String sceneID,
-                              final G3MCSceneChangeListener sceneListener) {
-      super(serverURL, sceneID, sceneListener);
+	@Override
+	protected IStorage createStorage() {
+		return new SQLiteStorage_Android("g3m.cache",
+				_nativeWidget.getContext());
+	}
 
-      _nativeWidget = new G3MWidget_Android(context);
-   }
+	@Override
+	protected IDownloader createDownloader() {
+		final TimeInterval connectTimeout = TimeInterval.fromSeconds(10);
+		final TimeInterval readTimeout = TimeInterval.fromSeconds(15);
+		final boolean saveInBackground = true;
+		return new CachedDownloader( //
+				new Downloader_Android(8, connectTimeout, readTimeout,
+						_nativeWidget.getContext()), //
+				getStorage(), //
+				saveInBackground);
+	}
 
+	@Override
+	protected IThreadUtils createThreadUtils() {
+		return new ThreadUtils_Android(_nativeWidget);
+	}
 
-   @Override
-   protected IStorage createStorage() {
-      return new SQLiteStorage_Android("g3m.cache", _nativeWidget.getContext());
-   }
+	public G3MWidget_Android createWidget() {
+		setGL(_nativeWidget.getGL());
 
+		_nativeWidget.setWidget(create());
 
-   @Override
-   protected IDownloader createDownloader() {
-      final TimeInterval connectTimeout = TimeInterval.fromSeconds(10);
-      final TimeInterval readTimeout = TimeInterval.fromSeconds(15);
-      final boolean saveInBackground = true;
-      return new CachedDownloader( //
-               new Downloader_Android(8, connectTimeout, readTimeout, _nativeWidget.getContext()), //
-               getStorage(), //
-               saveInBackground);
-   }
+		return _nativeWidget;
+	}
 
+	@Override
+	protected GPUProgramManager createGPUProgramManager() {
+		GPUProgramFactory gpuProgramFactory = new GPUProgramFactory();
 
-   @Override
-   protected IThreadUtils createThreadUtils() {
-      return new ThreadUtils_Android(_nativeWidget);
-   }
+		gpuProgramFactory.add(new GPUProgramSources("Billboard",
+				GL2Shaders._billboardVertexShader,
+				GL2Shaders._billboardFragmentShader));
 
+		gpuProgramFactory.add(new GPUProgramSources("Default",
+				GL2Shaders._defaultVertexShader,
+				GL2Shaders._defaultFragmentShader));
 
-   public G3MWidget_Android createWidget() {
-      setGL(_nativeWidget.getGL());
+		gpuProgramFactory.add(new GPUProgramSources("ColorMesh",
+				GL2Shaders._colorMeshVertexShader,
+				GL2Shaders._colorMeshFragmentShader));
 
-      _nativeWidget.setWidget(create());
+		gpuProgramFactory.add(new GPUProgramSources("TexturedMesh",
+				GL2Shaders._texturedMeshVertexShader,
+				GL2Shaders._texturedMeshFragmentShader));
 
-      return _nativeWidget;
-   }
+		gpuProgramFactory.add(new GPUProgramSources("FlatColorMesh",
+				GL2Shaders._flatColorMeshVertexShader,
+				GL2Shaders._flatColorMeshFragmentShader));
 
-
-@Override
-protected GPUProgramManager createGPUProgramManager() {
-	  GPUProgramFactory gpuProgramFactory = new GPUProgramFactory();
-	  
-	  gpuProgramFactory.add(new GPUProgramSources("Billboard", 
-			  										GL2Shaders._billboardVertexShader, 
-			  										GL2Shaders._billboardFragmentShader));
-	  
-	  gpuProgramFactory.add(new GPUProgramSources("Default", 
-													GL2Shaders._defaultVertexShader, 
-													GL2Shaders._defaultFragmentShader));
-	  
-	  return new GPUProgramManager(gpuProgramFactory);
-}
-
+		return new GPUProgramManager(gpuProgramFactory);
+	}
 
 }
