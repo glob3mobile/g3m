@@ -41,13 +41,10 @@ public class GPUUniformValueMatrix4FloatTransform extends GPUUniformValue
     else
     {
       GPUUniformValueMatrix4FloatTransform valueM = (GPUUniformValueMatrix4FloatTransform)value;
-      if (_isTransform)
-      {
-        valueM._m.copyValue(valueM._m.multiply(_m));
-      }
-      else
-      {
-        valueM._m.copyValue(_m);
+      if (_isTransform){
+        valueM._m = valueM._m.multiply(_m);
+      } else {
+        valueM._m = new MutableMatrix44D(_m);
       }
       return value;
     }
