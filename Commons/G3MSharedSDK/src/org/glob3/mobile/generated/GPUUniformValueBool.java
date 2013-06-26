@@ -12,23 +12,24 @@ public class GPUUniformValueBool extends GPUUniformValue
 
   public final void setUniform(GL gl, IGLUniformID id)
   {
-    if (_value)
-       gl.uniform1i(id, 1);
-    else
-       gl.uniform1i(id, 0);
+    _value? gl.uniform1i(id, 1) : gl.uniform1i(id, 0);
   }
   public final boolean isEqualsTo(GPUUniformValue v)
   {
     return _value == ((GPUUniformValueBool)v)._value;
   }
-  public final GPUUniformValue deepCopy()
-  {
-    return new GPUUniformValueBool(_value);
-  }
 
-  public final void copyFrom(GPUUniformValue v)
+  public final GPUUniformValue copyOrCreate(GPUUniformValue value)
   {
-    _value = ((GPUUniformValueBool)v)._value;
+    if (value == null)
+    {
+      return new GPUUniformValueBool(_value);
+    }
+    else
+    {
+      ((GPUUniformValueBool)value)._value = _value;
+      return value;
+    }
   }
 
   public final String description()

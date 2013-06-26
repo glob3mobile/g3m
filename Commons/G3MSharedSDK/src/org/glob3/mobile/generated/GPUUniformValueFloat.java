@@ -19,14 +19,18 @@ public class GPUUniformValueFloat extends GPUUniformValue
     GPUUniformValueFloat v2 = (GPUUniformValueFloat)v;
     return _value == v2._value;
   }
-  public final GPUUniformValue deepCopy()
-  {
-    return new GPUUniformValueFloat(_value);
-  }
 
-  public final void copyFrom(GPUUniformValue v)
+  public final GPUUniformValue copyOrCreate(GPUUniformValue value)
   {
-    _value = ((GPUUniformValueFloat)v)._value;
+    if (value == null)
+    {
+      return new GPUUniformValueFloat(_value);
+    }
+    else
+    {
+      ((GPUUniformValueFloat)value)._value = _value;
+      return value;
+    }
   }
 
   public final String description()

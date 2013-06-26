@@ -25,17 +25,21 @@ public class GPUUniformValueVec4Float extends GPUUniformValue
     GPUUniformValueVec4Float v2 = (GPUUniformValueVec4Float)v;
     return (_x == v2._x) && (_y == v2._y) && (_z == v2._z) && (_w == v2._w);
   }
-  public final GPUUniformValue deepCopy()
-  {
-    return new GPUUniformValueVec4Float(_x, _y, _z, _w);
-  }
 
-  public final void copyFrom(GPUUniformValue v)
+  public final GPUUniformValue copyOrCreate(GPUUniformValue value)
   {
-    _x = ((GPUUniformValueVec4Float)v)._x;
-    _y = ((GPUUniformValueVec4Float)v)._y;
-    _z = ((GPUUniformValueVec4Float)v)._z;
-    _w = ((GPUUniformValueVec4Float)v)._w;
+    if (value == null)
+    {
+      return new GPUUniformValueVec4Float(_x, _y, _z, _w);
+    }
+    else
+    {
+      ((GPUUniformValueVec4Float)value)._x = _x;
+      ((GPUUniformValueVec4Float)value)._y = _y;
+      ((GPUUniformValueVec4Float)value)._z = _z;
+      ((GPUUniformValueVec4Float)value)._w = _w;
+      return value;
+    }
   }
 
   public final String description()
