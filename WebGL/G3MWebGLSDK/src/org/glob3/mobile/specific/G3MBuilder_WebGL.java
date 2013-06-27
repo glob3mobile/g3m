@@ -1,7 +1,5 @@
 package org.glob3.mobile.specific;
 
-import org.glob3.mobile.generated.GPUProgramFactory;
-import org.glob3.mobile.generated.GPUProgramManager;
 import org.glob3.mobile.generated.GPUProgramSources;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IG3MBuilder;

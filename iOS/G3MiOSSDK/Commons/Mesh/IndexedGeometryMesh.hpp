@@ -17,7 +17,7 @@ class IndexedGeometryMesh : public AbstractGeometryMesh{
 private:
   IShortBuffer*       _indices;
 protected:
-  void rawRender(const G3MRenderContext* rc, const GLState* parentGLState) const;
+  void rawRender(const G3MRenderContext* rc) const;
   
 public:
   IndexedGeometryMesh(const int primitive,
