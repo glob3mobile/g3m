@@ -43,10 +43,8 @@ public:
   
   void setValueToLinkedUniform() const;
   
-  virtual GPUUniformValue* copyOrCreate(GPUUniformValue* value) const {
-    return value;
-  }
-  
+  virtual GPUUniformValue* copyOrCreate(GPUUniformValue* value) const = 0;
+
   bool linkToGPUProgram(const GPUProgram* prog, int key) const{
     GPUUniform* u = prog->getGPUUniform(key);
     if (u == NULL){
