@@ -34,7 +34,8 @@ public:
 
   ~IndexedMesh();
   
-  void rawRender(const G3MRenderContext* rc, const GLState* parentGLState) const;
+  void rawRender(const G3MRenderContext* rc,
+                 const GLState* parentGLState) const;
 
 };
 

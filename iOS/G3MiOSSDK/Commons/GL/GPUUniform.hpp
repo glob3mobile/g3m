@@ -267,7 +267,7 @@ public:
     return _m.isEqualsTo(v2->_m);
   }
   
-  GPUUniformValue* copyOrCreate(GPUUniformValue* value);
+  GPUUniformValue* copyOrCreate(GPUUniformValue* value) const;
 
   std::string description() const{
     IStringBuilder *isb = IStringBuilder::newStringBuilder();

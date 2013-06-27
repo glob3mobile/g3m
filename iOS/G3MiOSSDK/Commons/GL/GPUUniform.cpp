@@ -48,7 +48,7 @@ void GPUUniform::applyChanges(GL* gl) {
   }
 }
 
-GPUUniformValue* GPUUniformValueMatrix4FloatTransform::copyOrCreate(GPUUniformValue* value){
+GPUUniformValue* GPUUniformValueMatrix4FloatTransform::copyOrCreate(GPUUniformValue* value) const {
   if (value == NULL){
     return new GPUUniformValueMatrix4FloatTransform(_m, _isTransform);
   } else{
