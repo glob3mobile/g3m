@@ -24,14 +24,14 @@ package org.glob3.mobile.generated;
 
 public abstract class GPUAttributeValue
 {
-  protected final boolean _enabled;
-  protected final int _type;
-  protected final int _attributeSize;
-  protected final int _index;
+  protected boolean _enabled;
+  protected int _type;
+  protected int _attributeSize;
+  protected int _index;
   protected int _stride;
   protected boolean _normalized;
 
-  protected final int _arrayElementSize;
+  protected int _arrayElementSize;
 
   protected GPUAttribute _attribute;
 
@@ -58,6 +58,18 @@ public abstract class GPUAttributeValue
      _normalized = normalized;
      _arrayElementSize = arrayElementSize;
      _attribute = null;
+  }
+
+  public final void changeParameters(boolean enabled, int type, int attributeSize, int arrayElementSize, int index, int stride, boolean normalized)
+  {
+    _enabled = enabled;
+    _type = type;
+    _attributeSize = attributeSize;
+    _index = index;
+    _stride = stride;
+    _normalized = normalized;
+    _arrayElementSize = arrayElementSize;
+    _attribute = null;
   }
 
   public final int getType()
@@ -149,5 +161,7 @@ public abstract class GPUAttributeValue
       return true;
     }
   }
+
+  public abstract GPUAttributeValue copyOrCreate(GPUAttributeValue oldAtt);
 
 }

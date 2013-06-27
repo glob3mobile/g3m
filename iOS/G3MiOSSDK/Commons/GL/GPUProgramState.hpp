@@ -30,12 +30,12 @@ class GPUProgramState{
   mutable std::vector<int>* _uniformKeys;
   mutable std::vector<int>* _attributeKeys;
   
-  mutable GPUProgram* _lastProgramUsed;
+  mutable GPUProgram* _linkedProgram;
   
   void onStructureChanged(){
     delete _uniformKeys;
     _uniformKeys = NULL;
-    _lastProgramUsed = NULL;
+    _linkedProgram = NULL;
     
     if (_attributeKeys != NULL){
       delete _attributeKeys;
@@ -45,7 +45,7 @@ class GPUProgramState{
   
 public:
   
-  GPUProgramState(): _lastProgramUsed(NULL), _uniformKeys(NULL), _attributeKeys(NULL){}
+  GPUProgramState(): _linkedProgram(NULL), _uniformKeys(NULL), _attributeKeys(NULL){}
   
   ~GPUProgramState();
   
@@ -75,11 +75,11 @@ public:
   void linkToProgram(GPUProgram* prog) const;
   
   bool isLinkedToProgram() const{
-    return _lastProgramUsed != NULL;
+    return _linkedProgram != NULL;
   }
   
   GPUProgram* getLinkedProgram() const{
-    return _lastProgramUsed;
+    return _linkedProgram;
   }
   
   std::vector<int>* getUniformsKeys() const;

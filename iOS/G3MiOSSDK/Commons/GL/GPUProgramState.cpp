@@ -14,7 +14,7 @@ GPUProgramState::~GPUProgramState(){
 }
 
 void GPUProgramState::clear(){
-  _lastProgramUsed = NULL;
+  _linkedProgram = NULL;
 #ifdef C_CODE
   for(std::map<int, GPUUniformValue*> ::const_iterator it = _uniformValues.begin();
       it != _uniformValues.end();
@@ -64,7 +64,7 @@ void GPUProgramState::applyValuesToLinkedProgram() const{
 
 void GPUProgramState::linkToProgram(GPUProgram* prog) const{
   
-  if (_lastProgramUsed == prog){
+  if (_linkedProgram == prog){
     return; //Already linked
   }
   
@@ -118,15 +118,15 @@ void GPUProgramState::linkToProgram(GPUProgram* prog) const{
 #endif
   
   
-  _lastProgramUsed = prog;
+  _linkedProgram = prog;
 }
 
 void GPUProgramState::applyChanges(GL* gl) const{
-  if (_lastProgramUsed == NULL){
+  if (_linkedProgram == NULL){
     ILogger::instance()->logError("Trying to use unlinked GPUProgramState.");
   }
   applyValuesToLinkedProgram();
-  _lastProgramUsed->applyChanges(gl);
+  _linkedProgram->applyChanges(gl);
 }
 
 bool GPUProgramState::setGPUUniformValue(int key, GPUUniformValue* v){

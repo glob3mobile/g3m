@@ -269,6 +269,72 @@ public class MutableMatrix44D
     return s;
   }
 
+  public final void copyValueOfMultiplication(MutableMatrix44D m1, MutableMatrix44D m2)
+  {
+  
+    final double this00 = m1._m00;
+    final double this10 = m1._m10;
+    final double this20 = m1._m20;
+    final double this30 = m1._m30;
+  
+    final double this01 = m1._m01;
+    final double this11 = m1._m11;
+    final double this21 = m1._m21;
+    final double this31 = m1._m31;
+  
+    final double this02 = m1._m02;
+    final double this12 = m1._m12;
+    final double this22 = m1._m22;
+    final double this32 = m1._m32;
+  
+    final double this03 = m1._m03;
+    final double this13 = m1._m13;
+    final double this23 = m1._m23;
+    final double this33 = m1._m33;
+  
+  
+    final double that00 = m2._m00;
+    final double that10 = m2._m10;
+    final double that20 = m2._m20;
+    final double that30 = m2._m30;
+  
+    final double that01 = m2._m01;
+    final double that11 = m2._m11;
+    final double that21 = m2._m21;
+    final double that31 = m2._m31;
+  
+    final double that02 = m2._m02;
+    final double that12 = m2._m12;
+    final double that22 = m2._m22;
+    final double that32 = m2._m32;
+  
+    final double that03 = m2._m03;
+    final double that13 = m2._m13;
+    final double that23 = m2._m23;
+    final double that33 = m2._m33;
+  
+    //Rows of this X Columns of that
+    _m00 = (this00 * that00) + (this01 * that10) + (this02 * that20) + (this03 * that30);
+    _m01 = (this00 * that01) + (this01 * that11) + (this02 * that21) + (this03 * that31);
+    _m02 = (this00 * that02) + (this01 * that12) + (this02 * that22) + (this03 * that32);
+    _m03 = (this00 * that03) + (this01 * that13) + (this02 * that23) + (this03 * that33);
+  
+    _m10 = (this10 * that00) + (this11 * that10) + (this12 * that20) + (this13 * that30);
+    _m11 = (this10 * that01) + (this11 * that11) + (this12 * that21) + (this13 * that31);
+    _m12 = (this10 * that02) + (this11 * that12) + (this12 * that22) + (this13 * that32);
+    _m13 = (this10 * that03) + (this11 * that13) + (this12 * that23) + (this13 * that33);
+  
+    _m20 = (this20 * that00) + (this21 * that10) + (this22 * that20) + (this23 * that30);
+    _m21 = (this20 * that01) + (this21 * that11) + (this22 * that21) + (this23 * that31);
+    _m22 = (this20 * that02) + (this21 * that12) + (this22 * that22) + (this23 * that32);
+    _m23 = (this20 * that03) + (this21 * that13) + (this22 * that23) + (this23 * that33);
+  
+    _m30 = (this30 * that00) + (this31 * that10) + (this32 * that20) + (this33 * that30);
+    _m31 = (this30 * that01) + (this31 * that11) + (this32 * that21) + (this33 * that31);
+    _m32 = (this30 * that02) + (this31 * that12) + (this32 * that22) + (this33 * that32);
+    _m33 = (this30 * that03) + (this31 * that13) + (this32 * that23) + (this33 * that33);
+  }
+
   //
   //OPERATIONS
 

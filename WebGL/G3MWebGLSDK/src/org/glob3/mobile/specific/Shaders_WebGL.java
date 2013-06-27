@@ -117,29 +117,60 @@ public final class Shaders_WebGL {
 			+ "  gl_PointSize = uPointSize;\n"
 			+ "}";
 
-	public final static String _texturedMeshFragmentShader = "varying mediump vec2 TextureCoordOut;\n"
-			+ "varying mediump vec4 VertexColor;\n"
-			+ "\n"
-			+ "uniform sampler2D Sampler;\n"
-			+ "\n"
-			+ "void main() {\n"
-			+ "  gl_FragColor = texture2D(Sampler, TextureCoordOut);\n" + "}";
-	public final static String _texturedMeshVertexShader = "attribute vec4 aPosition;\n"
-			+ "attribute vec2 aTextureCoord;\n"
-			+ "\n"
-			+ "uniform mediump vec2 uTranslationTexCoord;\n"
-			+ "uniform mediump vec2 uScaleTexCoord;\n"
-			+ "uniform mat4 uModelview;\n"
-			+ "uniform float uPointSize;\n"
-			+ "\n"
-			+ "varying vec4 VertexColor;\n"
-			+ "varying vec2 TextureCoordOut;\n"
-			+ "\n"
-			+ "void main() {\n"
-			+ "  gl_Position = uModelview * aPosition;\n"
-			+ "  \n"
-			+ "  TextureCoordOut = (aTextureCoord * uScaleTexCoord) + uTranslationTexCoord;\n"
-			+ "  \n" + "  gl_PointSize = uPointSize;\n" + "}";
+	public final static String _texturedMeshFragmentShader = "varying mediump vec2 TextureCoordOut;\n" + 
+			"varying mediump vec4 VertexColor;\n" + 
+			"\n" + 
+			"uniform sampler2D Sampler;\n" + 
+			"\n" + 
+			"void main() {\n" + 
+			"  gl_FragColor = texture2D(Sampler, TextureCoordOut);\n" + 
+			"}";
+	public final static String _texturedMeshVertexShader = "attribute vec4 aPosition;\n" + 
+			"attribute vec2 aTextureCoord;\n" + 
+			"\n" + 
+			"uniform mat4 uModelview;\n" + 
+			"uniform float uPointSize;\n" + 
+			"\n" + 
+			"varying vec4 VertexColor;\n" + 
+			"varying vec2 TextureCoordOut;\n" + 
+			"\n" + 
+			"void main() {\n" + 
+			"  gl_Position = uModelview * aPosition;\n" + 
+			"  \n" + 
+			"  TextureCoordOut = aTextureCoord;\n" + 
+			"  \n" + 
+			"  gl_PointSize = uPointSize;\n" + 
+			"}\n" + 
+			"";
+	
+	public final static String _transformedTexCoortexturedMeshFragmentShader = "varying mediump vec2 TextureCoordOut;\n" + 
+			"varying mediump vec4 VertexColor;\n" + 
+			"\n" + 
+			"uniform sampler2D Sampler;\n" + 
+			"\n" + 
+			"void main() {\n" + 
+			"  gl_FragColor = texture2D(Sampler, TextureCoordOut);\n" + 
+			"}";
+	
+	public final static String _transformedTexCoortexturedMeshVertexShader = "attribute vec4 aPosition;\n" + 
+			"attribute vec2 aTextureCoord;\n" + 
+			"\n" + 
+			"uniform mediump vec2 uTranslationTexCoord;\n" + 
+			"uniform mediump vec2 uScaleTexCoord;\n" + 
+			"uniform mat4 uModelview;\n" + 
+			"uniform float uPointSize;\n" + 
+			"\n" + 
+			"varying vec4 VertexColor;\n" + 
+			"varying vec2 TextureCoordOut;\n" + 
+			"\n" + 
+			"void main() {\n" + 
+			"  gl_Position = uModelview * aPosition;\n" + 
+			"  \n" + 
+			"  TextureCoordOut = (aTextureCoord * uScaleTexCoord) + uTranslationTexCoord;\n" + 
+			"  \n" + 
+			"  gl_PointSize = uPointSize;\n" + 
+			"}";
+	
 
 	public final static String _flatColorMeshFragmentShader = "uniform lowp vec4 uFlatColor;\n"
 			+ "\n" + "void main() {\n" + "  gl_FragColor = uFlatColor;\n" + "}";

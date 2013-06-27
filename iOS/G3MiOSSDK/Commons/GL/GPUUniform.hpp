@@ -267,29 +267,8 @@ public:
     return _m.isEqualsTo(v2->_m);
   }
   
-  GPUUniformValue* copyOrCreate(GPUUniformValue* value) const {
-    if (value == NULL){
-      return new GPUUniformValueMatrix4FloatTransform(_m, _isTransform);
-    } else{
-      GPUUniformValueMatrix4FloatTransform* valueM = (GPUUniformValueMatrix4FloatTransform*)value;
-#ifdef C_CODE
-      if (_isTransform){
-        valueM->_m.copyValue(valueM->_m.multiply(_m));
-      } else {
-        valueM->_m.copyValue(_m);
-      }
-#endif
-#ifdef JAVA_CODE
-      if (_isTransform){
-        valueM._m = valueM._m.multiply(_m);
-      } else {
-        valueM._m = new MutableMatrix44D(_m);
-      }
-#endif
-      return value;
-    }
-  }
-  
+  GPUUniformValue* copyOrCreate(GPUUniformValue* value);
+
   std::string description() const{
     IStringBuilder *isb = IStringBuilder::newStringBuilder();
     isb->addString("Uniform Value Matrix44D.");

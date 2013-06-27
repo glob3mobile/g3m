@@ -22,14 +22,14 @@ class GPUAttribute;
 
 class GPUAttributeValue{
 protected:
-  const bool _enabled;
-  const int _type;
-  const int _attributeSize;
-  const int _index;
+  bool _enabled;
+  int _type;
+  int _attributeSize;
+  int _index;
   int           _stride;
   bool          _normalized;
   
-  const int _arrayElementSize;
+  int _arrayElementSize;
   
   mutable GPUAttribute* _attribute;
   
@@ -54,6 +54,17 @@ public:
   _normalized(normalized),
   _arrayElementSize(arrayElementSize),
   _attribute(NULL){}
+  
+  void changeParameters(bool enabled, int type, int attributeSize, int arrayElementSize, int index, int stride, bool normalized){
+    _enabled = enabled;
+    _type = type;
+    _attributeSize = attributeSize;
+    _index = index;
+    _stride = stride;
+    _normalized = normalized;
+    _arrayElementSize = arrayElementSize;
+    _attribute = NULL;
+  }
   
   int getType() const { return _type;}
   int getAttributeSize() const { return _attributeSize;}
@@ -80,6 +91,8 @@ public:
   void setValueToLinkedAttribute() const;
   
   bool linkToGPUProgram(const GPUProgram* prog, int key) const;
+  
+  virtual GPUAttributeValue* copyOrCreate(GPUAttributeValue* oldAtt) const = 0;
   
 };
 
@@ -139,10 +152,11 @@ public:
     }
     if (_value == NULL || !_value->isEqualsTo(v)){
       _dirty = true;
-      if (_value != NULL){
-        delete _value;
-      }
-      _value = v->shallowCopy();
+//      if (_value != NULL){
+//        delete _value;
+//      }
+//      _value = v->shallowCopy();
+      _value = v->copyOrCreate(_value);
     }
   }
   
@@ -199,6 +213,21 @@ public:
     return "Attribute Disabled.";
   }
   
+  GPUAttributeValue* copyOrCreate(GPUAttributeValue* oldAtt) const{
+    
+    if (oldAtt == NULL){
+      return new GPUAttributeValueDisabled();
+    } else{
+      if (oldAtt->getEnabled()){
+        delete oldAtt;
+        return new GPUAttributeValueDisabled();
+      } else{
+        return oldAtt;
+      }
+    }
+    
+  }
+  
 };
 
 class GPUAttributeValueVecFloat: public GPUAttributeValue{
@@ -209,6 +238,33 @@ public:
   GPUAttributeValue(GLType::glFloat(), attributeSize, arrayElementSize, index, stride, normalized),
   _buffer(buffer),
   _timeStamp(buffer->timestamp()){}
+  
+  GPUAttributeValue* copyOrCreate(GPUAttributeValue* oldAtt) const{
+    
+    if (oldAtt == NULL){
+      GPUAttributeValueVecFloat* v = new GPUAttributeValueVecFloat(_buffer, _attributeSize,
+                                                                   _arrayElementSize,
+                                                                   _index,
+                                                                   _stride,
+                                                                   _normalized);
+      v->_timeStamp = _timeStamp;
+      return v;
+    } else{
+      GPUAttributeValueVecFloat* oldAttVF = (GPUAttributeValueVecFloat*)oldAtt;
+      
+      oldAttVF->changeParameters(_enabled,
+                               _type,
+                               _attributeSize,
+                               _arrayElementSize,
+                               _index,
+                               _stride,
+                               _normalized);
+      oldAttVF->_buffer = _buffer;
+      oldAttVF->_timeStamp = _timeStamp;
+      return oldAttVF;
+    }
+    
+  }
   
   void setAttribute(GL* gl, const int id) const{
     if (_index != 0){
