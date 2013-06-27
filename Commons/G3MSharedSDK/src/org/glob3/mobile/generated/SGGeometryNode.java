@@ -58,8 +58,8 @@ public class SGGeometryNode extends SGNode
     {
       progState.setAttributeValue(GPUVariable.TEXTURE_COORDS, _uv, 2, 2, 0, false, 0);
   
-      progState.setUniformValue(GPUVariable.SCALE_TEXTURE_COORDS, new Vector2D(1.0, 1.0));
-      progState.setUniformValue(GPUVariable.TRANSLATION_TEXTURE_COORDS, new Vector2D(0.0, 0.0));
+  //    progState.setUniformValue(GPUVariable::SCALE_TEXTURE_COORDS, Vector2D(1.0, 1.0));
+  //    progState.setUniformValue(GPUVariable::TRANSLATION_TEXTURE_COORDS, Vector2D(0.0, 0.0));
     }
   }
 
