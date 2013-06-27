@@ -239,6 +239,8 @@ public:
     return s;
   }
   
+  void copyValueOfMultiplication(const MutableMatrix44D& m1, const MutableMatrix44D& m2);
+  
   //
   //OPERATIONS
   

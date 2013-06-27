@@ -105,6 +105,71 @@ const IFloatBuffer* MutableMatrix44D::getColumnMajorFloatBuffer() const {
   return _columnMajorFloatBuffer;
 }
 
+void MutableMatrix44D::copyValueOfMultiplication(const MutableMatrix44D& m1, const MutableMatrix44D& m2){
+  
+  const double this00 = m1._m00;
+  const double this10 = m1._m10;
+  const double this20 = m1._m20;
+  const double this30 = m1._m30;
+  
+  const double this01 = m1._m01;
+  const double this11 = m1._m11;
+  const double this21 = m1._m21;
+  const double this31 = m1._m31;
+  
+  const double this02 = m1._m02;
+  const double this12 = m1._m12;
+  const double this22 = m1._m22;
+  const double this32 = m1._m32;
+  
+  const double this03 = m1._m03;
+  const double this13 = m1._m13;
+  const double this23 = m1._m23;
+  const double this33 = m1._m33;
+  
+  
+  const double that00 = m2._m00;
+  const double that10 = m2._m10;
+  const double that20 = m2._m20;
+  const double that30 = m2._m30;
+  
+  const double that01 = m2._m01;
+  const double that11 = m2._m11;
+  const double that21 = m2._m21;
+  const double that31 = m2._m31;
+  
+  const double that02 = m2._m02;
+  const double that12 = m2._m12;
+  const double that22 = m2._m22;
+  const double that32 = m2._m32;
+  
+  const double that03 = m2._m03;
+  const double that13 = m2._m13;
+  const double that23 = m2._m23;
+  const double that33 = m2._m33;
+  
+  //Rows of this X Columns of that
+  _m00 = (this00 * that00) + (this01 * that10) + (this02 * that20) + (this03 * that30);
+  _m01 = (this00 * that01) + (this01 * that11) + (this02 * that21) + (this03 * that31);
+  _m02 = (this00 * that02) + (this01 * that12) + (this02 * that22) + (this03 * that32);
+  _m03 = (this00 * that03) + (this01 * that13) + (this02 * that23) + (this03 * that33);
+  
+  _m10 = (this10 * that00) + (this11 * that10) + (this12 * that20) + (this13 * that30);
+  _m11 = (this10 * that01) + (this11 * that11) + (this12 * that21) + (this13 * that31);
+  _m12 = (this10 * that02) + (this11 * that12) + (this12 * that22) + (this13 * that32);
+  _m13 = (this10 * that03) + (this11 * that13) + (this12 * that23) + (this13 * that33);
+  
+  _m20 = (this20 * that00) + (this21 * that10) + (this22 * that20) + (this23 * that30);
+  _m21 = (this20 * that01) + (this21 * that11) + (this22 * that21) + (this23 * that31);
+  _m22 = (this20 * that02) + (this21 * that12) + (this22 * that22) + (this23 * that32);
+  _m23 = (this20 * that03) + (this21 * that13) + (this22 * that23) + (this23 * that33);
+  
+  _m30 = (this30 * that00) + (this31 * that10) + (this32 * that20) + (this33 * that30);
+  _m31 = (this30 * that01) + (this31 * that11) + (this32 * that21) + (this33 * that31);
+  _m32 = (this30 * that02) + (this31 * that12) + (this32 * that22) + (this33 * that32);
+  _m33 = (this30 * that03) + (this31 * that13) + (this32 * that23) + (this33 * that33);
+}
+
 MutableMatrix44D MutableMatrix44D::multiply(const MutableMatrix44D &that) const {
   
   if (this->isIdentity()){
