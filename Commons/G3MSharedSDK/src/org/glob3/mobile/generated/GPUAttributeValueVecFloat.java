@@ -10,6 +10,27 @@ public class GPUAttributeValueVecFloat extends GPUAttributeValue
      _timeStamp = buffer.timestamp();
   }
 
+  public final GPUAttributeValue copyOrCreate(GPUAttributeValue oldAtt)
+  {
+
+    if (oldAtt == null)
+    {
+      GPUAttributeValueVecFloat v = new GPUAttributeValueVecFloat(_buffer, _attributeSize, _arrayElementSize, _index, _stride, _normalized);
+      v._timeStamp = _timeStamp;
+      return v;
+    }
+    else
+    {
+      GPUAttributeValueVecFloat oldAttVF = (GPUAttributeValueVecFloat)oldAtt;
+
+      oldAttVF.changeParameters(_enabled, _type, _attributeSize, _arrayElementSize, _index, _stride, _normalized);
+      oldAttVF._buffer = _buffer;
+      oldAttVF._timeStamp = _timeStamp;
+      return oldAttVF;
+    }
+
+  }
+
   public final void setAttribute(GL gl, int id)
   {
     if (_index != 0)

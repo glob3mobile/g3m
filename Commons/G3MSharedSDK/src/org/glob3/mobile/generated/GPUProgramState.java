@@ -71,13 +71,13 @@ public class GPUProgramState
   private java.util.ArrayList<Integer> _uniformKeys;
   private java.util.ArrayList<Integer> _attributeKeys;
 
-  private GPUProgram _lastProgramUsed;
+  private GPUProgram _linkedProgram;
 
   private void onStructureChanged()
   {
     _uniformKeys = null;
     _uniformKeys = null;
-    _lastProgramUsed = null;
+    _linkedProgram = null;
 
     if (_attributeKeys != null)
     {
@@ -89,7 +89,7 @@ public class GPUProgramState
 
   public GPUProgramState()
   {
-     _lastProgramUsed = null;
+     _linkedProgram = null;
      _uniformKeys = null;
      _attributeKeys = null;
   }
@@ -102,7 +102,7 @@ public class GPUProgramState
 
   public final void clear()
   {
-    _lastProgramUsed = null;
+    _linkedProgram = null;
     _uniformValues.clear();
   
     _attributesValues.clear();
@@ -172,18 +172,18 @@ public class GPUProgramState
 
   public final void applyChanges(GL gl)
   {
-    if (_lastProgramUsed == null)
+    if (_linkedProgram == null)
     {
       ILogger.instance().logError("Trying to use unlinked GPUProgramState.");
     }
     applyValuesToLinkedProgram();
-    _lastProgramUsed.applyChanges(gl);
+    _linkedProgram.applyChanges(gl);
   }
 
   public final void linkToProgram(GPUProgram prog)
   {
   
-    if (_lastProgramUsed == prog)
+    if (_linkedProgram == prog)
     {
       return; //Already linked
     }
@@ -209,17 +209,17 @@ public class GPUProgramState
   
   
   
-    _lastProgramUsed = prog;
+    _linkedProgram = prog;
   }
 
   public final boolean isLinkedToProgram()
   {
-    return _lastProgramUsed != null;
+    return _linkedProgram != null;
   }
 
   public final GPUProgram getLinkedProgram()
   {
-    return _lastProgramUsed;
+    return _linkedProgram;
   }
 
   public final java.util.ArrayList<Integer> getUniformsKeys()
@@ -271,6 +271,19 @@ public class GPUProgramState
     for (final GPUAttributeValue a : _attributesValues.values()){
       a.setValueToLinkedAttribute();
     }
+  }
+
+  public final boolean removeGPUUniformValue(int key)
+  {
+    boolean uniformExisted = false;
+    uniformExisted = (null != _uniformValues.remove(key));
+  
+    if (uniformExisted)
+    {
+      onStructureChanged();
+    }
+  
+    return uniformExisted;
   }
 
 

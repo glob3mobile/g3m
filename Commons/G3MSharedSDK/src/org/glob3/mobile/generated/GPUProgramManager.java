@@ -104,6 +104,7 @@ public class GPUProgramManager
     boolean flatColor = false;
     boolean billboard = false;
     boolean color = false;
+    boolean transformTC = false;
   
     GLState thisGLState = glState;
     while (thisGLState != null)
@@ -124,9 +125,13 @@ public class GPUProgramManager
           flatColor = true;
         }
   
-        if (key == GPUVariable.TRANSLATION_TEXTURE_COORDS)
+  //      if (key == GPUVariable::TRANSLATION_TEXTURE_COORDS){
+  //        texture = true;
+  //      }
+  
+        if (key == GPUVariable.TRANSLATION_TEXTURE_COORDS || key == GPUVariable.SCALE_TEXTURE_COORDS)
         {
-          texture = true;
+          transformTC = true;
         }
       }
   
@@ -136,9 +141,10 @@ public class GPUProgramManager
       {
         int key = ai.get(j);
   
-  //      if (key == GPUVariable::TEXTURE_COORDS){
-  //        color = true;
-  //      }
+        if (key == GPUVariable.TEXTURE_COORDS)
+        {
+          texture = true;
+        }
   
         if (key == GPUVariable.COLOR)
         {
@@ -162,7 +168,14 @@ public class GPUProgramManager
   
       if (!flatColor && texture && !color)
       {
-        return getProgram(gl, "TexturedMesh");
+        if (transformTC)
+        {
+          return getProgram(gl, "TransformedTexCoorTexturedMesh");
+        }
+        else
+        {
+          return getProgram(gl, "TexturedMesh");
+        }
       }
   
       if (!flatColor && !texture && color)
@@ -170,15 +183,10 @@ public class GPUProgramManager
         return getProgram(gl, "ColorMesh");
       }
   
-      if (!flatColor && !texture && !color)
-      {
-        return null; //Shapes with texture not loaded yet
-      }
-  
     }
   
   
-    return getProgram(gl, "Default");
+    return null;
   
   }
 

@@ -27,4 +27,27 @@ public class GPUAttributeValueDisabled extends GPUAttributeValue
     return "Attribute Disabled.";
   }
 
+  public final GPUAttributeValue copyOrCreate(GPUAttributeValue oldAtt)
+  {
+
+    if (oldAtt == null)
+    {
+      return new GPUAttributeValueDisabled();
+    }
+    else
+    {
+      if (oldAtt.getEnabled())
+      {
+        if (oldAtt != null)
+           oldAtt.dispose();
+        return new GPUAttributeValueDisabled();
+      }
+      else
+      {
+        return oldAtt;
+      }
+    }
+
+  }
+
 }
