@@ -1,5 +1,4 @@
 package org.glob3.mobile.generated; 
-////////////////////////////////////////////////////////////////////////
 public class GPUUniformValueBool extends GPUUniformValue
 {
   public boolean _value;

@@ -99,7 +99,7 @@ public abstract class AbstractMesh extends Mesh
   }
 
   protected abstract void rawRender(G3MRenderContext rc);
-  protected abstract void rawRender(G3MRenderContext rc, GLState parentGLState);
+//  virtual void rawRender(const G3MRenderContext* rc, const GLState* parentGLState) const = 0;
 
   protected GLState _glState = new GLState();
 
@@ -234,7 +234,7 @@ public abstract class AbstractMesh extends Mesh
   {
   
     _glState.setParent(parentGLState);
-    rawRender(rc, _glState);
+    rawRender(rc);
   }
 
 }

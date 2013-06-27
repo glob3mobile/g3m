@@ -46,7 +46,7 @@ public class BusyMeshRenderer extends LeafRenderer
     globalState.setBlendFactors(GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha());
     globalState.setClearColor(_backgroundColor);
   
-    GPUProgramState progState = _glState.getGPUProgramState();
+  //  GPUProgramState& progState = * _glState.getGPUProgramState();
   
   //  progState.setUniformValue(GPUVariable::EnableTexture, false);
   //  progState.setUniformValue(GPUVariable::POINT_SIZE, (float)1.0);

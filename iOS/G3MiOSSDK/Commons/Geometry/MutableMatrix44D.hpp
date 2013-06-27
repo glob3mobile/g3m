@@ -152,7 +152,6 @@ public:
     _columnMajorFloatArray  = NULL;
   }
 
-  
   void copyValue(const MutableMatrix44D &m){
     
     _isValid = m._isValid;

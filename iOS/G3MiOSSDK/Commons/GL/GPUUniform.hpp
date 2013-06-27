@@ -256,7 +256,7 @@ public:
   bool _isTransform;
   
   GPUUniformValueMatrix4FloatTransform(const MutableMatrix44D& m, bool isTransform):
-  GPUUniformValue(GLType::glMatrix4Float()),_m(m), _isTransform(isTransform)/*, _transformedMatrix(m)*/{}
+  GPUUniformValue(GLType::glMatrix4Float()),_m(MutableMatrix44D(m)), _isTransform(isTransform)/*, _transformedMatrix(m)*/{}
   
   void setUniform(GL* gl, const IGLUniformID* id) const{
     gl->uniformMatrix4fv(id, false, &_m);
