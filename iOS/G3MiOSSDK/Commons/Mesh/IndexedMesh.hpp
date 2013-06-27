@@ -33,14 +33,6 @@ public:
               bool depthTest = true);
 
   ~IndexedMesh();
-  
-<<<<<<< HEAD
-//  void rawRender(const G3MRenderContext* rc, const GLState* parentGLState) const;
-=======
-  void rawRender(const G3MRenderContext* rc,
-                 const GLState* parentGLState) const;
->>>>>>> 78fb281b001904ef2c62c2a67a6d0dd8b6db004f
-
 };
 
 #endif

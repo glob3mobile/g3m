@@ -82,47 +82,8 @@ public:
   _id(id),
   _dirty(false),
   _value(NULL),
-<<<<<<< HEAD
-  _type(type){}
-  
-  const std::string getName() const{ return _name;}
-  const IGLUniformID* getID() const{ return _id;}
-  int getType() const{ return _type;}
-  bool wasSet() const { return _value != NULL;}
-  GPUUniformValue* getSetValue() const { return _value;}
-  
-  void unset(){
-    if (_value != NULL){
-      delete _value;
-      _value = NULL;
-    }
-    _dirty = false;
-  }
-  
-  void set(GPUUniformValue* v){
-    if (_type != v->getType()){ //type checking
-      ILogger::instance()->logError("Attempting to set uniform " + _name + "with invalid value type.");
-      return;
-    }
-    if (_value == NULL || !_value->isEqualsTo(v)){
-      _dirty = true;
-      _value = v->copyOrCreate(_value);
-    }
-  }
-  
-  void applyChanges(GL* gl){
-    if (_dirty){
-      _value->setUniform(gl, _id);
-      _dirty = false;
-    } else{
-      if (_value == NULL){
-        ILogger::instance()->logError("Uniform " + _name + " was not set.");
-      }
-    }
-=======
   _type(type)
   {
->>>>>>> 78fb281b001904ef2c62c2a67a6d0dd8b6db004f
   }
 
   const std::string getName() const { return _name; }
