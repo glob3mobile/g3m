@@ -46,148 +46,61 @@ void CameraZoomAndRotateHandler::onDown(const G3MEventContext *eventContext,
   cameraContext->setCurrentGesture(DoubleDrag);
   
   // double dragging
-  Vector2I pixel0 = touchEvent.getTouch(0)->getPos();
-  _initialPoint0  = _camera0.pixel2PlanetPoint(pixel0).asMutableVector3D();
-  Vector2I pixel1 = touchEvent.getTouch(1)->getPos();
-  _initialPoint1  = _camera0.pixel2PlanetPoint(pixel1).asMutableVector3D();
-  
-  // both pixels must intersect globe
-  if (_initialPoint0.isNan() || _initialPoint1.isNan()) {
-    cameraContext->setCurrentGesture(None);
-    return;
+  _initialPixel0 = touchEvent.getTouch(0)->getPos().asMutableVector2I();
+  _initialPixel1 = touchEvent.getTouch(1)->getPos().asMutableVector2I();
   }
-  
-  // middle point in 3D
-  const Planet *planet = eventContext->getPlanet();
-  Geodetic2D g0 = planet->toGeodetic2D(_initialPoint0.asVector3D());
-  Geodetic2D g1 = planet->toGeodetic2D(_initialPoint1.asVector3D());
-  Geodetic2D g  = planet->getMidPoint(g0, g1);
-  _initialPoint = planet->toCartesian(g).asMutableVector3D();
-  
-  // fingers difference
-  Vector2I difPixel = pixel1.sub(pixel0);
-  _initialFingerSeparation = difPixel.length();
-  _initialFingerInclination = difPixel.orientation()._radians;
-  
-  //printf ("down 2 finger\n");
-}
 
 
 void CameraZoomAndRotateHandler::onMove(const G3MEventContext *eventContext,
                                      const TouchEvent& touchEvent,
                                      CameraContext *cameraContext) {
-  
-  const IMathUtils* mu = IMathUtils::instance();
-  
-  if (cameraContext->getCurrentGesture() != DoubleDrag) return;
-  if (_initialPoint.isNan()) return;
+  //const IMathUtils* mu = IMathUtils::instance();
   
   Vector2I pixel0 = touchEvent.getTouch(0)->getPos();
   Vector2I pixel1 = touchEvent.getTouch(1)->getPos();
-  Vector2I difPixel = pixel1.sub(pixel0);
-  double finalFingerSeparation = difPixel.length();
-  double factor = finalFingerSeparation/_initialFingerSeparation;
-  
-  // compute camera translation using numerical iterations until convergence
-  double dAccum=0;
-  {
-    Camera tempCamera(_camera0);
-    Angle originalAngle = _initialPoint0.angleBetween(_initialPoint1);
-    double angle = originalAngle._degrees;
+
+  // if it is the first move, let's decide if make zoom or rotate
+  if (cameraContext->getCurrentGesture() == DoubleDrag) {
+    Vector2I difPixel0 = pixel0.sub(_initialPixel0.asVector2I());
+    Vector2I difPixel1 = pixel1.sub(_initialPixel1.asVector2I());
+    if ((difPixel0._y<-1 && difPixel1._y>1) || (difPixel0._y>1 && difPixel1._y<-1) ||
+        (difPixel0._x<-1 && difPixel1._x>1) || (difPixel0._x>1 && difPixel1._x<-1)) {
+      printf ("zoom..\n");
+      cameraContext->setCurrentGesture(Zoom);
+    };
     
-    // compute estimated camera translation
-    Vector3D centerPoint = tempCamera.getXYZCenterOfView();
-    double distance = tempCamera.getCartesianPosition().sub(centerPoint).length();
-    double d = distance*(factor-1)/factor;
-    tempCamera.moveForward(d);
-    dAccum += d;
-    //tempCamera.updateModelMatrix();
-    double angle0 = tempCamera.compute3DAngularDistance(pixel0, pixel1)._degrees;
-    if (mu->isNan(angle0)) return;
-    //printf("distancia angular original = %.4f     d=%.1f   angulo step0=%.4f\n", angle, d, angle0);
+    if ((difPixel0._y<-1 && difPixel1._y<-1) || (difPixel0._y>1 && difPixel1._y>1) ||
+        (difPixel0._x<-1 && difPixel1._x<-1) || (difPixel0._x>1 && difPixel1._x>1)) {
+      printf ("rotate..\n");
+      cameraContext->setCurrentGesture(Rotate);
+    };
+
     
-    // step 1
-    d = mu->abs((distance-d)*0.3);
-    if (angle0 < angle) d*=-1;
-    tempCamera.moveForward(d);
-    dAccum += d;
-    //tempCamera.updateModelMatrix();
-    double angle1 = tempCamera.compute3DAngularDistance(pixel0, pixel1)._degrees;
-    double angle_n1=angle0, angle_n=angle1;
-    
-    // iterations
-    //    int iter=0;
-    double precision = mu->pow(10, mu->log10(distance)-8.5);
-    while (mu->abs(angle_n-angle) > precision) {
-      //      iter++;
-      if ((angle_n1-angle_n)/(angle_n-angle) < 0) d*=-0.5;
-      tempCamera.moveForward(d);
-      dAccum += d;
-      //tempCamera.updateModelMatrix();
-      angle_n1 = angle_n;
-      angle_n = tempCamera.compute3DAngularDistance(pixel0, pixel1)._degrees;
-    }
-    //printf("-----------  iteraciones=%d  precision=%f angulo final=%.4f  distancia final=%.1f\n", iter, precision, angle_n, dAccum);
+    /*
+      // compute intersection of view direction with the globe
+      validFingerPos = camera.IntersectionViewWithGlobe (center);
+      if (!validFingerPos) return false;
+      // save the initial two points
+      fingerSep0 = (float) sqrt((float)((c2x-c1x)*(c2x-c1x)+(c2y-c1y)*(c2y-c1y)));
+      lastAngle = angle0 = atan2(c2y-c1y, c2x-c1x);
+      camera0 = Camera(camera);//camera0 = camera;
+      //WARNING: probably, when viewer be very close to the ground, looking at horizon,
+      // the intersection with a point of lower scanlines must be found
+      
+      //iprintf (" --- empiezo zoom. Fingersep0=%.2f. angle0=%.2f.  Gesture anterior=%d\n", fingerSep0, angle0, gesture);
+      gesture=Zoom;*/
   }
   
-  // create temp camera to test gesture first
-  Camera tempCamera(_camera0);
-  
-  // computer center view point
-  Vector3D centerPoint = tempCamera.getXYZCenterOfView();
-  
-  // drag from initialPoint to centerPoint
-  {
-    Vector3D initialPoint = _initialPoint.asVector3D();
-    const Vector3D rotationAxis = initialPoint.cross(centerPoint);
-    const Angle rotationDelta = Angle::fromRadians( - mu->acos(initialPoint.normalized().dot(centerPoint.normalized())) );
-    if (rotationDelta.isNan()) return;
-    tempCamera.rotateWithAxis(rotationAxis, rotationDelta);
+  // call specific transformation
+  switch (cameraContext->getCurrentGesture()) {
+    case Zoom:
+      if (_processZoom) zoom();
+      break;
+      
+    case Rotate:
+      if (_processRotation) rotate();
+      break;
   }
-  
-  // move the camera
-  if (_processZoom) {
-    tempCamera.moveForward(dAccum);
-  }
-  
-  // compute 3D point of view center
-  //tempCamera.updateModelMatrix();
-  Vector3D centerPoint2 = tempCamera.getXYZCenterOfView();
-  
-  // middle point in 3D
-  Vector3D P0 = tempCamera.pixel2PlanetPoint(pixel0);
-  Vector3D P1 = tempCamera.pixel2PlanetPoint(pixel1);
-  const Planet *planet = eventContext->getPlanet();
-  Geodetic2D g = planet->getMidPoint(planet->toGeodetic2D(P0), planet->toGeodetic2D(P1));
-  Vector3D finalPoint = planet->toCartesian(g);
-  
-  // drag globe from centerPoint to finalPoint
-  const Vector3D rotationAxis = centerPoint2.cross(finalPoint);
-  const Angle rotationDelta = Angle::fromRadians( - mu->acos(centerPoint2.normalized().dot(finalPoint.normalized())) );
-  if (rotationDelta.isNan()) {
-    return;
-  }
-  tempCamera.rotateWithAxis(rotationAxis, rotationDelta);
-  
-  // the gesture was valid. Copy data to final camera
-  //tempCamera.updateModelMatrix();
-  
-  // camera rotation
-  if (_processRotation) {
-    Vector3D normal = planet->geodeticSurfaceNormal(centerPoint2);
-    Vector3D v0     = _initialPoint0.asVector3D().sub(centerPoint2).projectionInPlane(normal);
-    Vector3D v1     = tempCamera.pixel2PlanetPoint(pixel0).sub(centerPoint2).projectionInPlane(normal);
-    double angle    = v0.angleBetween(v1)._degrees;
-    double sign     = v1.cross(v0).dot(normal);
-    if (sign<0) angle = -angle;
-    tempCamera.rotateWithAxisAndPoint(normal, centerPoint2, Angle::fromDegrees(angle));
-  }
-  
-  // copy final transformation to camera
-  //tempCamera.updateModelMatrix();
-  cameraContext->getNextCamera()->copyFrom(tempCamera);
-  
-  //printf ("moving 2 fingers\n");
 }
 
 
@@ -196,7 +109,7 @@ void CameraZoomAndRotateHandler::onUp(const G3MEventContext *eventContext,
                                    CameraContext *cameraContext)
 {
   cameraContext->setCurrentGesture(None);
-  _initialPixel = Vector3D::nan().asMutableVector3D();
+  //_initialPixel0 = _initialPixel1 = Vector2I(-1,-1);
   
   //printf ("end 2 fingers.  gesture=%d\n", _currentGesture);
 }
@@ -242,4 +155,14 @@ void CameraZoomAndRotateHandler::render(const G3MRenderContext* rc,
   //    }
   //  }
   
+}
+
+void CameraZoomAndRotateHandler::zoom()
+{
+  printf ("zooming.....\n");
+}
+
+void CameraZoomAndRotateHandler::rotate()
+{
+  printf ("rotating....\n");
 }
