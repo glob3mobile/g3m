@@ -144,7 +144,7 @@ public:
     gl->disableVertexAttribArray(_id);
   }
   
-  void set(GPUAttributeValue* v){
+  void set(const GPUAttributeValue* v) {
     if (v->getEnabled() && _type != v->getType()){ //type checking
       //delete v;
       ILogger::instance()->logError("Attempting to set attribute " + _name + "with invalid value type.");

@@ -49,7 +49,12 @@ _indices(indices)
 ////  gl->drawElements(_primitive, _indices, _GLGlobalState, *rc->getGPUProgramManager(), &_progState);
 //}
 
+<<<<<<< HEAD
 void IndexedMesh::rawRender(const G3MRenderContext* rc) const{
+=======
+void IndexedMesh::rawRender(const G3MRenderContext* rc,
+                            const GLState* parentGLState) const{
+>>>>>>> 78fb281b001904ef2c62c2a67a6d0dd8b6db004f
   GL* gl = rc->getGL();
   gl->drawElements(_primitive, _indices, &_glState, *rc->getGPUProgramManager());
 }

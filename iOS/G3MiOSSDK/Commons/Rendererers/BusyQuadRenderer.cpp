@@ -130,8 +130,8 @@ void BusyQuadRenderer::createGLState() const{
   _glState.getGLGlobalState()->setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
   _glState.getGLGlobalState()->setClearColor(*_backgroundColor);
   
-  GPUProgramState& progState = *_glState.getGPUProgramState();
-  
+//  GPUProgramState& progState = *_glState.getGPUProgramState();
+
 //  progState.setUniformValue(GPUVariable::EnableTexture, false);
 //  progState.setUniformValue(GPUVariable::POINT_SIZE, (float)1.0);
 //  progState.setUniformValue(GPUVariable::SCALE_TEXTURE_COORDS, Vector2D(1.0,1.0));
