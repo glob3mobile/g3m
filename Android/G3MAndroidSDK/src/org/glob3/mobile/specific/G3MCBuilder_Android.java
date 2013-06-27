@@ -80,6 +80,10 @@ public class G3MCBuilder_Android extends G3MCBuilder {
 		gpuProgramFactory.add(new GPUProgramSources("TexturedMesh",
 				GL2Shaders._texturedMeshVertexShader,
 				GL2Shaders._texturedMeshFragmentShader));
+		
+		gpuProgramFactory.add(new GPUProgramSources("TransformedTexCoorTexturedMesh", 
+					GL2Shaders._transformedTexCoortexturedMeshVertexShader, 
+					GL2Shaders._transformedTexCoortexturedMeshFragmentShader));
 
 		gpuProgramFactory.add(new GPUProgramSources("FlatColorMesh",
 				GL2Shaders._flatColorMeshVertexShader,

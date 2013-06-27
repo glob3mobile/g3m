@@ -39,6 +39,9 @@ public class G3MBuilder_Android
       addGPUProgramSources(new GPUProgramSources("TexturedMesh", 
 				GL2Shaders._texturedMeshVertexShader, GL2Shaders._texturedMeshFragmentShader));
       
+      addGPUProgramSources(new GPUProgramSources("TransformedTexCoorTexturedMesh", 
+				GL2Shaders._transformedTexCoortexturedMeshVertexShader, GL2Shaders._transformedTexCoortexturedMeshFragmentShader));
+      
       addGPUProgramSources(new GPUProgramSources("FlatColorMesh", 
 				GL2Shaders._flatColorMeshVertexShader, GL2Shaders._flatColorMeshFragmentShader));
       

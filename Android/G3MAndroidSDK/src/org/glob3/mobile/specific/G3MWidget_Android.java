@@ -385,7 +385,11 @@ public final class G3MWidget_Android
       factory.add(new GPUProgramSources("TexturedMesh",
 				GL2Shaders._texturedMeshVertexShader,
 				GL2Shaders._texturedMeshFragmentShader));
-
+      
+      factory.add(new GPUProgramSources("TransformedTexCoorTexturedMesh", 
+				GL2Shaders._transformedTexCoortexturedMeshVertexShader,
+				GL2Shaders._transformedTexCoortexturedMeshFragmentShader));
+   
       factory.add(new GPUProgramSources("FlatColorMesh",
 				GL2Shaders._flatColorMeshVertexShader,
 				GL2Shaders._flatColorMeshFragmentShader));
