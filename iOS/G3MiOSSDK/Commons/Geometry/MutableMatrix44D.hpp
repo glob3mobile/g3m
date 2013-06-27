@@ -151,7 +151,7 @@ public:
     _columnMajorFloatBuffer = NULL;
     _columnMajorFloatArray  = NULL;
   }
-  
+
   
   void copyValue(const MutableMatrix44D &m){
     
