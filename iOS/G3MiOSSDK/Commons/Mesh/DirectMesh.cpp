@@ -32,17 +32,17 @@ AbstractMesh(primitive,
 {
 }
 
-void DirectMesh::rawRender(const G3MRenderContext* rc) const {
-//  GL* gl = rc->getGL();
+//void DirectMesh::rawRender(const G3MRenderContext* rc) const {
+////  GL* gl = rc->getGL();
+//
+////  const int verticesCount = getVertexCount();
+////  gl->drawArrays(_primitive, 0, verticesCount, _GLGlobalState, *rc->getGPUProgramManager(), &_progState);
+//}
 
-//  const int verticesCount = getVertexCount();
-//  gl->drawArrays(_primitive, 0, verticesCount, _GLGlobalState, *rc->getGPUProgramManager(), &_progState);
-}
-
-void DirectMesh::rawRender(const G3MRenderContext* rc, const GLState* parentGLState) const{
+void DirectMesh::rawRender(const G3MRenderContext* rc) const{
   GL* gl = rc->getGL();
   
   const int verticesCount = getVertexCount();
-  gl->drawArrays(_primitive, 0, verticesCount, parentGLState, *rc->getGPUProgramManager());
+  gl->drawArrays(_primitive, 0, verticesCount, &_glState, *rc->getGPUProgramManager());
 }
 
