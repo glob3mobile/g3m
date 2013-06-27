@@ -131,9 +131,9 @@ public abstract class GPUAttributeValue
     }
     else
     {
-  
-      _attribute.set((GPUAttributeValue)this);
-  //    _attribute->applyChanges(gl);
+  //    _attribute->set((GPUAttributeValue*)this);
+      _attribute.set(this);
+      //    _attribute->applyChanges(gl);
     }
   }
 

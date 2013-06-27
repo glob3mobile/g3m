@@ -1,12 +1,12 @@
 package org.glob3.mobile.generated; 
 public class GPUUniform extends GPUVariable
 {
-
   protected final IGLUniformID _id;
 
   protected boolean _dirty;
   protected GPUUniformValue _value;
   protected final int _type;
+
 
   public void dispose()
   {
@@ -49,29 +49,15 @@ public class GPUUniform extends GPUVariable
   public final void unset()
   {
     if (_value != null)
-    {
-      if (_value != null)
-         _value.dispose();
-      _value = null;
-    }
+       _value.dispose();
+    _value = null;
     _dirty = false;
   }
 
-  public final void set(GPUUniformValue v)
-  {
-    if (_type != v.getType()) //type checking
-    {
-      ILogger.instance().logError("Attempting to set uniform " + _name + "with invalid value type.");
-      return;
-    }
-    if (_value == null || !_value.isEqualsTo(v))
-    {
-      _dirty = true;
-      _value = v.copyOrCreate(_value);
-    }
-  }
+//C++ TO JAVA CONVERTER TODO TASK: The following statement was not recognized, possibly due to an unrecognized macro:
+  void set(const GPUUniformValue* v);
 
-  public void applyChanges(GL gl)
+  public final void applyChanges(GL gl)
   {
     if (_dirty)
     {
@@ -86,4 +72,5 @@ public class GPUUniform extends GPUVariable
       }
     }
   }
+
 }

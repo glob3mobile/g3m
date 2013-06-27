@@ -1,5 +1,4 @@
 package org.glob3.mobile.generated; 
-////////////////////////////////////////////////////////////////////////
 public class GPUUniformValueMatrix4FloatTransform extends GPUUniformValue
 {
 
@@ -17,7 +16,7 @@ public class GPUUniformValueMatrix4FloatTransform extends GPUUniformValue
   public GPUUniformValueMatrix4FloatTransform(MutableMatrix44D m, boolean isTransform) //, _transformedMatrix(m)
 {
      super(GLType.glMatrix4Float());
-     _m = m;
+     _m = new MutableMatrix44D(m);
      _isTransform = isTransform;
 }
 

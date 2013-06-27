@@ -1,5 +1,4 @@
 package org.glob3.mobile.generated; 
-////////////////////////////////////////////////////////////////////////
 public class GPUUniformValueVec4Float extends GPUUniformValue
 {
   public double _x;

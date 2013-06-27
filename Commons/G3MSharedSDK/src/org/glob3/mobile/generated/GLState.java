@@ -112,6 +112,7 @@ public class GLState
       {
         if (prog != parent._programState.getLinkedProgram())
         {
+          int ____TALK_WITH_JM;
           prog = null;
           break;
         }

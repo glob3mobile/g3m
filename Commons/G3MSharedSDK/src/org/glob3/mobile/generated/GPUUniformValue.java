@@ -57,9 +57,6 @@ public abstract class GPUUniformValue
     _uniform = null;
   }
 
-  ////////////////////////////////////////////////////////////////////////
-  
-  
   public final void setValueToLinkedUniform()
   {
     if (_uniform == null)
@@ -68,13 +65,14 @@ public abstract class GPUUniformValue
     }
     else
     {
-      _uniform.set((GPUUniformValue)this);
+      //_uniform->set((GPUUniformValue*)this);
+      _uniform.set(this);
     }
   }
 
   public GPUUniformValue copyOrCreate(GPUUniformValue value)
   {
-     return value;
+    return value;
   }
 
   public final boolean linkToGPUProgram(GPUProgram prog, int key)

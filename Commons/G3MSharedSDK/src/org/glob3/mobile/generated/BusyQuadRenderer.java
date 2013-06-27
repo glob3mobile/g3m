@@ -88,7 +88,7 @@ public abstract class BusyQuadRenderer extends LeafRenderer
     _glState.getGLGlobalState().setBlendFactors(GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha());
     _glState.getGLGlobalState().setClearColor(_backgroundColor);
   
-    GPUProgramState progState = _glState.getGPUProgramState();
+  //  GPUProgramState& progState = *_glState.getGPUProgramState();
   
   //  progState.setUniformValue(GPUVariable::EnableTexture, false);
   //  progState.setUniformValue(GPUVariable::POINT_SIZE, (float)1.0);
