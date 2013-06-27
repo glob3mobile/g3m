@@ -36,6 +36,10 @@ public class G3MBuilder_WebGL extends IG3MBuilder {
 			addGPUProgramSources(new GPUProgramSources("TexturedMesh",
 					Shaders_WebGL._texturedMeshVertexShader,
 					Shaders_WebGL._texturedMeshFragmentShader));
+			
+			addGPUProgramSources(new GPUProgramSources("TransformedTexCoorTexturedMesh", 
+					Shaders_WebGL._transformedTexCoortexturedMeshVertexShader, 
+					Shaders_WebGL._transformedTexCoortexturedMeshFragmentShader));
 
 			addGPUProgramSources(new GPUProgramSources("FlatColorMesh",
 					Shaders_WebGL._flatColorMeshVertexShader,

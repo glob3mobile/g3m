@@ -348,6 +348,10 @@ public final class G3MWidget_WebGL
       factory.add(new GPUProgramSources("TexturedMesh",
 				Shaders_WebGL._texturedMeshVertexShader,
 				Shaders_WebGL._texturedMeshFragmentShader));
+      
+      factory.add(new GPUProgramSources("TransformedTexCoorTexturedMesh", 
+				Shaders_WebGL._transformedTexCoortexturedMeshVertexShader, 
+				Shaders_WebGL._transformedTexCoortexturedMeshFragmentShader));
 
       factory.add(new GPUProgramSources("FlatColorMesh",
 				Shaders_WebGL._flatColorMeshVertexShader,

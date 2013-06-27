@@ -83,6 +83,10 @@ protected GPUProgramManager createGPUProgramManager() {
 	  gpuProgramFactory.add(new GPUProgramSources("TexturedMesh",
 				Shaders_WebGL._texturedMeshVertexShader,
 				Shaders_WebGL._texturedMeshFragmentShader));
+	  
+	gpuProgramFactory.add(new GPUProgramSources("TransformedTexCoorTexturedMesh", 
+				Shaders_WebGL._transformedTexCoortexturedMeshVertexShader, 
+				Shaders_WebGL._transformedTexCoortexturedMeshFragmentShader));
 
 	  gpuProgramFactory.add(new GPUProgramSources("FlatColorMesh",
 				Shaders_WebGL._flatColorMeshVertexShader,
