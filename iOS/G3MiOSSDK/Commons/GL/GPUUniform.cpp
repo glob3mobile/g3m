@@ -8,10 +8,42 @@
 
 #include "GPUUniform.hpp"
 
-void GPUUniformValue::setValueToLinkedUniform() const{
-  if (_uniform == NULL){
+void GPUUniformValue::setValueToLinkedUniform() const {
+  if (_uniform == NULL) {
     ILogger::instance()->logError("Uniform value unlinked");
-  } else{
-    _uniform->set((GPUUniformValue*)this);
+  }
+  else {
+    //_uniform->set((GPUUniformValue*)this);
+    _uniform->set(this);
+  }
+}
+
+void GPUUniform::unset() {
+  delete _value;
+  _value = NULL;
+  _dirty = false;
+}
+
+void GPUUniform::set(const GPUUniformValue* v) {
+  if (_type == v->getType()) { //type checking
+    if (_value == NULL || !_value->isEqualsTo(v)) {
+      _dirty = true;
+      _value = v->copyOrCreate(_value);
+    }
+  }
+  else {
+    ILogger::instance()->logError("Attempting to set uniform " + _name + " with invalid value type.");
+  }
+}
+
+void GPUUniform::applyChanges(GL* gl) {
+  if (_dirty) {
+    _value->setUniform(gl, _id);
+    _dirty = false;
+  }
+  else {
+    if (_value == NULL) {
+      ILogger::instance()->logError("Uniform " + _name + " was not set.");
+    }
   }
 }

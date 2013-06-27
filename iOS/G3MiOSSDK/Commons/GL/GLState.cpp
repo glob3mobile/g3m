@@ -43,6 +43,7 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
 #endif
     while (parent != NULL) {
       if (prog != parent->_programState->getLinkedProgram()){
+        int ____TALK_WITH_JM;
         prog = NULL;
         break;
       }

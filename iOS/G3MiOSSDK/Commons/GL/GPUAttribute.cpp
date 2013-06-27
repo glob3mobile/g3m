@@ -8,13 +8,14 @@
 
 #include "GPUAttribute.hpp"
 
-void GPUAttributeValue::setValueToLinkedAttribute() const{
-  if (_attribute == NULL){
+void GPUAttributeValue::setValueToLinkedAttribute() const {
+  if (_attribute == NULL) {
     ILogger::instance()->logError("Attribute unlinked");
-  } else{
-    
-    _attribute->set((GPUAttributeValue*)this);
-//    _attribute->applyChanges(gl);
+  }
+  else {
+//    _attribute->set((GPUAttributeValue*)this);
+    _attribute->set(this);
+    //    _attribute->applyChanges(gl);
   }
 }
 
