@@ -58,9 +58,15 @@ public class GPUAttribute extends GPUVariable
   {
      return _enabled;
   }
-  public final int getKey()
+  public final GPUAttributeKey getKey()
   {
-     return _key.getValue();
+     return _key;
+  }
+
+
+  public final int getIndex()
+  {
+    return _key.getValue();
   }
 
   public final void unset(GL gl)
