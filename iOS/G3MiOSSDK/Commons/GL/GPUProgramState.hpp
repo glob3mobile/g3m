@@ -21,8 +21,11 @@
 
 class GPUProgramState{
   
-  std::map<int, GPUUniformValue*> _uniformValues;
-  std::map<int, GPUAttributeValue*> _attributesValues;
+//  std::map<GPUUniformKey, GPUUniformValue*> _uniformValues;
+//  std::map<GPUAttributeKey, GPUAttributeValue*> _attributesValues;
+
+  GPUUniformValue* _uniformValues[32];
+  GPUAttributeValue* _attributeValues[32];
   
   bool setGPUUniformValue(GPUUniformKey key, GPUUniformValue* v);
   bool setGPUAttributeValue(GPUAttributeKey key, GPUAttributeValue* v);
@@ -45,7 +48,13 @@ class GPUProgramState{
   
 public:
   
-  GPUProgramState(): _linkedProgram(NULL), _uniformKeys(NULL), _attributeKeys(NULL){}
+  GPUProgramState(): _linkedProgram(NULL), _uniformKeys(NULL), _attributeKeys(NULL){
+    for (int i = 0; i < 32; i++) {
+      _uniformValues[i] = NULL;
+      _attributeValues[i] = NULL;
+    }
+
+  }
   
   ~GPUProgramState();
   
