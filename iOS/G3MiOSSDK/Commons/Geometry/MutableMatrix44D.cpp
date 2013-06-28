@@ -58,28 +58,6 @@ MutableMatrix44D::~MutableMatrix44D() {
 
 const IFloatBuffer* MutableMatrix44D::getColumnMajorFloatBuffer() const {
   if (_columnMajorFloatBuffer == NULL){
-    //    _columnMajorFloatBuffer = IFactory::instance()->createFloatBuffer(16);
-    //
-    //    _columnMajorFloatBuffer->rawPut( 0, (float) _m00);
-    //    _columnMajorFloatBuffer->rawPut( 1, (float) _m10);
-    //    _columnMajorFloatBuffer->rawPut( 2, (float) _m20);
-    //    _columnMajorFloatBuffer->rawPut( 3, (float) _m30);
-    //
-    //    _columnMajorFloatBuffer->rawPut( 4, (float) _m01);
-    //    _columnMajorFloatBuffer->rawPut( 5, (float) _m11);
-    //    _columnMajorFloatBuffer->rawPut( 6, (float) _m21);
-    //    _columnMajorFloatBuffer->rawPut( 7, (float) _m31);
-    //
-    //    _columnMajorFloatBuffer->rawPut( 8, (float) _m02);
-    //    _columnMajorFloatBuffer->rawPut( 9, (float) _m12);
-    //    _columnMajorFloatBuffer->rawPut(10, (float) _m22);
-    //    _columnMajorFloatBuffer->rawPut(11, (float) _m32);
-    //
-    //    _columnMajorFloatBuffer->rawPut(12, (float) _m03);
-    //    _columnMajorFloatBuffer->rawPut(13, (float) _m13);
-    //    _columnMajorFloatBuffer->rawPut(14, (float) _m23);
-    //    _columnMajorFloatBuffer->rawPut(15, (float) _m33);
-
     _columnMajorFloatBuffer = IFactory::instance()->createFloatBuffer(
                                                                       (float) _m00,
                                                                       (float) _m10,
@@ -148,6 +126,7 @@ void MutableMatrix44D::copyValueOfMultiplication(const MutableMatrix44D& m1, con
   const double m2_23 = m2._m23;
   const double m2_33 = m2._m33;
   
+  
   //Rows of m1_ X Columns of m2_
   _m00 = (m1_00 * m2_00) + (m1_01 * m2_10) + (m1_02 * m2_20) + (m1_03 * m2_30);
   _m01 = (m1_00 * m2_01) + (m1_01 * m2_11) + (m1_02 * m2_21) + (m1_03 * m2_31);
@@ -168,6 +147,72 @@ void MutableMatrix44D::copyValueOfMultiplication(const MutableMatrix44D& m1, con
   _m31 = (m1_30 * m2_01) + (m1_31 * m2_11) + (m1_32 * m2_21) + (m1_33 * m2_31);
   _m32 = (m1_30 * m2_02) + (m1_31 * m2_12) + (m1_32 * m2_22) + (m1_33 * m2_32);
   _m33 = (m1_30 * m2_03) + (m1_31 * m2_13) + (m1_32 * m2_23) + (m1_33 * m2_33);
+
+  delete _columnMajorFloatBuffer;
+  _columnMajorFloatBuffer = NULL;
+
+  delete [] _columnMajorFloatArray;
+  _columnMajorFloatArray = NULL;
+
+//  const double m00 = (m1_00 * m2_00) + (m1_01 * m2_10) + (m1_02 * m2_20) + (m1_03 * m2_30);
+//  const double m01 = (m1_00 * m2_01) + (m1_01 * m2_11) + (m1_02 * m2_21) + (m1_03 * m2_31);
+//  const double m02 = (m1_00 * m2_02) + (m1_01 * m2_12) + (m1_02 * m2_22) + (m1_03 * m2_32);
+//  const double m03 = (m1_00 * m2_03) + (m1_01 * m2_13) + (m1_02 * m2_23) + (m1_03 * m2_33);
+//
+//  const double m10 = (m1_10 * m2_00) + (m1_11 * m2_10) + (m1_12 * m2_20) + (m1_13 * m2_30);
+//  const double m11 = (m1_10 * m2_01) + (m1_11 * m2_11) + (m1_12 * m2_21) + (m1_13 * m2_31);
+//  const double m12 = (m1_10 * m2_02) + (m1_11 * m2_12) + (m1_12 * m2_22) + (m1_13 * m2_32);
+//  const double m13 = (m1_10 * m2_03) + (m1_11 * m2_13) + (m1_12 * m2_23) + (m1_13 * m2_33);
+//
+//  const double m20 = (m1_20 * m2_00) + (m1_21 * m2_10) + (m1_22 * m2_20) + (m1_23 * m2_30);
+//  const double m21 = (m1_20 * m2_01) + (m1_21 * m2_11) + (m1_22 * m2_21) + (m1_23 * m2_31);
+//  const double m22 = (m1_20 * m2_02) + (m1_21 * m2_12) + (m1_22 * m2_22) + (m1_23 * m2_32);
+//  const double m23 = (m1_20 * m2_03) + (m1_21 * m2_13) + (m1_22 * m2_23) + (m1_23 * m2_33);
+//
+//  const double m30 = (m1_30 * m2_00) + (m1_31 * m2_10) + (m1_32 * m2_20) + (m1_33 * m2_30);
+//  const double m31 = (m1_30 * m2_01) + (m1_31 * m2_11) + (m1_32 * m2_21) + (m1_33 * m2_31);
+//  const double m32 = (m1_30 * m2_02) + (m1_31 * m2_12) + (m1_32 * m2_22) + (m1_33 * m2_32);
+//  const double m33 = (m1_30 * m2_03) + (m1_31 * m2_13) + (m1_32 * m2_23) + (m1_33 * m2_33);
+//
+//  const bool t00 = (_m00 != m00);
+//  const bool t01 = (_m01 != m01);
+//  const bool t02 = (_m02 != m02);
+//  const bool t03 = (_m03 != m03);
+//
+//  const bool t10 = (_m10 != m10);
+//  const bool t11 = (_m11 != m11);
+//  const bool t12 = (_m12 != m12);
+//  const bool t13 = (_m13 != m13);
+//
+//  const bool t20 = (_m20 != m20);
+//  const bool t21 = (_m21 != m21);
+//  const bool t22 = (_m22 != m22);
+//  const bool t23 = (_m23 != m23);
+//  
+//  const bool t30 = (_m30 != m30);
+//  const bool t31 = (_m31 != m31);
+//  const bool t32 = (_m32 != m32);
+//  const bool t33 = (_m33 != m33);
+//
+//  if ((_m00 != m00) || (_m01 != m01) || (_m02 != m02) || (_m03 != m03) ||
+//      (_m10 != m10) || (_m11 != m11) || (_m12 != m12) || (_m13 != m13) ||
+//      (_m20 != m20) || (_m21 != m21) || (_m22 != m22) || (_m23 != m23) ||
+//      (_m30 != m30) || (_m31 != m31) || (_m32 != m32) || (_m33 != m33)
+//      ) {
+//    _m00 = m00;  _m01 = m01;  _m02 = m02;  _m03 = m03;
+//    _m10 = m10;  _m11 = m11;  _m12 = m12;  _m13 = m13;
+//    _m20 = m20;  _m21 = m21;  _m22 = m22;  _m23 = m23;
+//    _m30 = m30;  _m31 = m31;  _m32 = m32;  _m33 = m33;
+//
+//    delete _columnMajorFloatBuffer;
+//    _columnMajorFloatBuffer = NULL;
+//
+//    delete [] _columnMajorFloatArray;
+//    _columnMajorFloatArray = NULL;
+//  }
+//  else {
+//    printf("break point on me\n");
+//  }
 }
 
 MutableMatrix44D MutableMatrix44D::multiply(const MutableMatrix44D &that) const {
@@ -500,3 +545,38 @@ MutableMatrix44D MutableMatrix44D::createGeodeticRotationMatrix(const Angle& lat
   return changeReferenceCoordinatesSystem.multiply(longitudeRotation).multiply(latitudeRotation);
 }
 
+
+
+void MutableMatrix44D::copyValue(const MutableMatrix44D &m){
+//  if (isEqualsTo(m)) {
+//    return;
+//  }
+
+  _isValid = m._isValid;
+
+  _m00  = m._m00;
+  _m01  = m._m01;
+  _m02  = m._m02;
+  _m03  = m._m03;
+
+  _m10  = m._m10;
+  _m11  = m._m11;
+  _m12  = m._m12;
+  _m13  = m._m13;
+
+  _m20  = m._m20;
+  _m21  = m._m21;
+  _m22  = m._m22;
+  _m23  = m._m23;
+
+  _m30  = m._m30;
+  _m31  = m._m31;
+  _m32  = m._m32;
+  _m33  = m._m33;
+
+  delete _columnMajorFloatBuffer;
+  _columnMajorFloatBuffer = NULL;
+  
+  delete [] _columnMajorFloatArray;
+  _columnMajorFloatArray = NULL;
+}
