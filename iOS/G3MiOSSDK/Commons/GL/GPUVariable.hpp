@@ -12,8 +12,26 @@
 #include <string>
 
 enum GPUVariableType{
-  ATTRIBUTE,
-  UNIFORM
+  ATTRIBUTE = 1,
+  UNIFORM = 2
+};
+
+enum GPUUniformKey{
+  UNRECOGNIZED_UNIFORM = 0,
+  FLAT_COLOR = 1,
+  MODELVIEW = 2,
+  TEXTURE_EXTENT = 3,
+  VIEWPORT_EXTENT = 4,
+  TRANSLATION_TEXTURE_COORDS = 5,
+  SCALE_TEXTURE_COORDS = 6,
+  POINT_SIZE= 7
+};
+
+enum GPUAttributeKey{
+  UNRECOGNIZED_ATTRIBUTE = 0,
+  POSITION = 1,
+  TEXTURE_COORDS = 2,
+  COLOR = 3
 };
 
 class GPUVariable{
