@@ -37,30 +37,6 @@ public class GPUVariable
 
 //  static int getKeyForName(const std::string& name, GPUVariableType variableType);
 
-
-  //const int UNRECOGNIZED = -1;
-  //const int FLAT_COLOR = 1;
-  //const int MODELVIEW = 2;
-  //const int TEXTURE_EXTENT = 3;
-  //const int VIEWPORT_EXTENT = 4;
-  //const int TRANSLATION_TEXTURE_COORDS = 5;
-  //const int SCALE_TEXTURE_COORDS = 6;
-  //const int POINT_SIZE = 7;
-  //
-  //const int POSITION = 8;
-  //const int TEXTURE_COORDS = 9;
-  //const int COLOR = 10;
-  //
-  ////TODO: DELETE
-  //const int EnableColorPerVertex = 11;
-  //const int EnableTexture = 12;
-  //const int EnableFlatColor = 13;
-  //const int FlatColorIntensity = 14;
-  //const int ColorPerVertexIntensity = 15;
-  //
-  //const int GROUP_NOGROUP = -1;
-  //const int GROUP_COLOR = 1;
-  
   public static GPUUniformKey getUniformKey(String name)
   {
   
@@ -120,6 +96,49 @@ public class GPUVariable
     }
   
     return GPUAttributeKey.UNRECOGNIZED_ATTRIBUTE;
+  }
+
+
+  //const int UNRECOGNIZED = -1;
+  //const int FLAT_COLOR = 1;
+  //const int MODELVIEW = 2;
+  //const int TEXTURE_EXTENT = 3;
+  //const int VIEWPORT_EXTENT = 4;
+  //const int TRANSLATION_TEXTURE_COORDS = 5;
+  //const int SCALE_TEXTURE_COORDS = 6;
+  //const int POINT_SIZE = 7;
+  //
+  //const int POSITION = 8;
+  //const int TEXTURE_COORDS = 9;
+  //const int COLOR = 10;
+  //
+  ////TODO: DELETE
+  //const int EnableColorPerVertex = 11;
+  //const int EnableTexture = 12;
+  //const int EnableFlatColor = 13;
+  //const int FlatColorIntensity = 14;
+  //const int ColorPerVertexIntensity = 15;
+  //
+  //const int GROUP_NOGROUP = -1;
+  //const int GROUP_COLOR = 1;
+  
+  public static int getUniformCode(GPUUniformKey u)
+  {
+    if (u == GPUUniformKey.UNRECOGNIZED_UNIFORM)
+    {
+      return 0;
+    }
+    final int index = u.getValue();
+    return 0x00000001 << index;
+  }
+  public static int getAttributeCode(GPUAttributeKey a)
+  {
+    if (a == GPUAttributeKey.UNRECOGNIZED_ATTRIBUTE)
+    {
+      return 0;
+    }
+    final int index = a.getValue();
+    return 0x00000001 << index;
   }
 
 //  static const int GROUP_COLOR;
