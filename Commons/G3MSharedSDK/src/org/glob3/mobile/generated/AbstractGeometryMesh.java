@@ -123,7 +123,7 @@ public abstract class AbstractGeometryMesh extends Mesh
     progState.setUniformValue(GPUVariable.POINT_SIZE, _pointSize);
   }
 
-  protected abstract void rawRender(G3MRenderContext rc, GLState parentGLState);
+  protected abstract void rawRender(G3MRenderContext rc);
 
   public void dispose()
   {
@@ -171,7 +171,7 @@ public abstract class AbstractGeometryMesh extends Mesh
   public final void render(G3MRenderContext rc, GLState parentGLState)
   {
     _glState.setParent(parentGLState);
-    rawRender(rc, _glState);
+    rawRender(rc);
   }
 
 }

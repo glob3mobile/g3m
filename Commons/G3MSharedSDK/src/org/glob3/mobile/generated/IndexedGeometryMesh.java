@@ -22,10 +22,10 @@ package org.glob3.mobile.generated;
 public class IndexedGeometryMesh extends AbstractGeometryMesh
 {
   private IShortBuffer _indices;
-  protected final void rawRender(G3MRenderContext rc, GLState parentGLState)
+  protected final void rawRender(G3MRenderContext rc)
   {
     GL gl = rc.getGL();
-    gl.drawElements(_primitive, _indices, parentGLState, rc.getGPUProgramManager());
+    gl.drawElements(_primitive, _indices, _glState, rc.getGPUProgramManager());
   }
 
   public IndexedGeometryMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, IShortBuffer indices, float lineWidth, float pointSize)
