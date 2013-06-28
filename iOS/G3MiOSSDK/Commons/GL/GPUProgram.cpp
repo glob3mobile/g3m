@@ -20,7 +20,6 @@ GPUProgram* GPUProgram::createProgram(GL* gl, const std::string name, const std:
   p->_name = name;
   
   p->_programCreated = false;
-  //p->_nativeGL = gl->getNative();
   p->_programID = gl->createProgram();
   
   // compile vertex shader
@@ -114,17 +113,22 @@ void GPUProgram::deleteProgram(GL* gl, int p){
 }
 
 void GPUProgram::getVariables(GL* gl){
+
+  for (int i = 0; i < 32; i++) {
+    _uniforms[i] = NULL;
+    _attributes[i] = NULL;
+  }
   
   //Uniforms
-  int n = gl->getProgramiv(this, GLVariable::activeUniforms());
-  for (int i = 0; i < n; i++) {
+  _nUniforms = gl->getProgramiv(this, GLVariable::activeUniforms());
+  for (int i = 0; i < _nUniforms; i++) {
     GPUUniform* u = gl->getActiveUniform(this, i);
     if (u != NULL) _uniforms[u->getKey()] = u;
   }
   
   //Attributes
-  n = gl->getProgramiv(this, GLVariable::activeAttributes());
-  for (int i = 0; i < n; i++) {
+  _nAttributes = gl->getProgramiv(this, GLVariable::activeAttributes());
+  for (int i = 0; i < _nAttributes; i++) {
     GPUAttribute* a = gl->getActiveAttribute(this, i);
     if (a != NULL) _attributes[a->getKey()] = a;
   }
@@ -133,21 +137,7 @@ void GPUProgram::getVariables(GL* gl){
 
 GPUUniform* GPUProgram::getGPUUniform(const std::string name) const{
   int key = GPUVariable::getKeyForName(name, UNIFORM);
-  
-#ifdef C_CODE
-  std::map<int, GPUUniform*>::const_iterator it = _uniforms.find(key);
-//  if (it != _uniforms.end()){
-//    return it->second;
-//  } else{
-//    return NULL;
-//  }
-  
-  return (it == _uniforms.end()) ? NULL : it->second;
-  
-#endif
-#ifdef JAVA_CODE
-  return _uniforms.get(name);
-#endif
+  return _uniforms[key];
 }
 
 GPUUniformBool* GPUProgram::getGPUUniformBool(const std::string name) const {
@@ -197,17 +187,7 @@ GPUUniformMatrix4Float* GPUProgram::getGPUUniformMatrix4Float(const std::string 
 
 GPUAttribute* GPUProgram::getGPUAttribute(const std::string name) const{
   const int key = GPUVariable::getKeyForName(name, ATTRIBUTE);
-#ifdef C_CODE
-  std::map<int, GPUAttribute*>::const_iterator it = _attributes.find(key);
-  if (it != _attributes.end()){
-    return it->second;
-  } else{
-    return NULL;
-  }
-#endif
-#ifdef JAVA_CODE
-  return _attributes.get(name);
-#endif
+  return _attributes[key];
 }
 
 GPUAttribute* GPUProgram::getGPUAttributeVecXFloat(const std::string name, int x) const{
@@ -272,63 +252,34 @@ void GPUProgram::onUsed(){
  */
 void GPUProgram::onUnused(GL* gl){
   //ILogger::instance()->logInfo("GPUProgram %s unused", _name.c_str());
-#ifdef C_CODE
-  for (std::map<int, GPUUniform*>::iterator iter = _uniforms.begin(); iter != _uniforms.end(); iter++) {
-    GPUUniform* u = iter->second;
-    u->unset();
+
+  for (int i = 0; i < 32; i++) {
+    GPUUniform* u = _uniforms[i];
+    GPUAttribute* a = _attributes[i];
+    if (u != NULL){
+      u->unset();
+    }
+    if (a != NULL){
+      a->unset(gl);
+    }
   }
-  
-  for (std::map<int, GPUAttribute*>::iterator iter = _attributes.begin(); iter != _attributes.end(); iter++) {
-    GPUAttribute* a = iter->second;
-    a->unset(gl);
-  }
-#endif
-#ifdef JAVA_CODE
-  for (final GPUUniform uni : _uniforms.values()) {
-    uni.unset();
-  }
-  
-  for (final GPUAttribute att : _attributes.values()) {
-    att.unset(gl);
-  }
-#endif
 }
 
 /**
  Must be called before drawing to apply Uniforms and Attributes new values
  */
 void GPUProgram::applyChanges(GL* gl){
-  //ILogger::instance()->logInfo("GPUProgram %s applying changes", _name.c_str());
-#ifdef C_CODE
-  for (std::map<int, GPUUniform*>::iterator iter = _uniforms.begin(); iter != _uniforms.end(); iter++) {
-    GPUUniform* u = iter->second;
-    u->applyChanges(gl);
-  }
-  
-  for (std::map<int, GPUAttribute*>::iterator iter = _attributes.begin(); iter != _attributes.end(); iter++) {
-    GPUAttribute* a = iter->second;
-    a->applyChanges(gl);
-  }
-#endif
-#ifdef JAVA_CODE
-  for (final GPUUniform u : _uniforms.values()){
-    if (u.wasSet()){
-      u.applyChanges(gl);
-    } else{
-      ILogger.instance().logError("Uniform " + u.getName() + " was not set.");
+
+  for (int i = 0; i < 32; i++) {
+    GPUUniform* u = _uniforms[i];
+    GPUAttribute* a = _attributes[i];
+    if (u != NULL){
+      u->applyChanges(gl);
+    }
+    if (a != NULL){
+      a->applyChanges(gl);
     }
   }
-  
-  for (final GPUAttribute a : _attributes.values()) {
-    if (a.wasSet()){
-      a.applyChanges(gl);
-    } else{
-      if (a.isEnabled()){
-        ILogger.instance().logError("Attribute " + a.getName() + " was not set but it is enabled.");
-      }
-    }
-  }
-#endif
 }
 
 GPUUniform* GPUProgram::getUniformOfType(const std::string& name, int type) const{
@@ -355,35 +306,14 @@ GPUUniform* GPUProgram::getUniformOfType(const std::string& name, int type) cons
 }
 
 GPUUniform* GPUProgram::getGPUUniform(int key) const{
-#ifdef C_CODE
-  std::map<int, GPUUniform*>::const_iterator it = _uniforms.find(key);
-  if (it != _uniforms.end()){
-    return it->second;
-  } else{
-    return NULL;
-  }
-#endif
-#ifdef JAVA_CODE
-  return _uniforms.get(key);
-#endif
+  return _uniforms[key];
 }
 
 GPUAttribute* GPUProgram::getGPUAttribute(int key) const{
-#ifdef C_CODE
-  std::map<int, GPUAttribute*>::const_iterator it = _attributes.find(key);
-  if (it != _attributes.end()){
-    return it->second;
-  } else{
-    return NULL;
-  }
-#endif
-#ifdef JAVA_CODE
-  return _attributes.get(key);
-#endif
+  return _attributes[key];
 }
 
 GPUAttribute* GPUProgram::getGPUAttributeVecXFloat(int key, int x) const{
-  
   GPUAttribute* a = getGPUAttribute(key);
   if (a->getType() == GLType::glFloat() && a->getSize() == x){
     return a;

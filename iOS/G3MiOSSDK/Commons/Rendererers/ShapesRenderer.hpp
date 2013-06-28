@@ -28,15 +28,16 @@ private:
 #endif
   
   GLState _glState;
-  void createGLState();
-  
+  GLState _glStateTransparent;
+//  void createGLState();
+
 public:
 
   ShapesRenderer(bool renderNotReadyShapes=true) :
   _renderNotReadyShapes(renderNotReadyShapes),
   _context(NULL)
   {
-    createGLState();
+//    createGLState();
   }
 
   ~ShapesRenderer() {

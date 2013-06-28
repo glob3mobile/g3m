@@ -42,8 +42,14 @@ class GPUProgram{
   //INativeGL* _nativeGL;
   int _programID;
   bool _programCreated;
-  std::map<int, GPUAttribute*> _attributes;
-  std::map<int, GPUUniform*> _uniforms;
+//  std::map<int, GPUAttribute*> _attributes;
+//  std::map<int, GPUUniform*> _uniforms;
+
+  GPUUniform* _uniforms[32];
+  GPUAttribute* _attributes[32];
+  int _nAttributes;
+  int _nUniforms;
+
   std::string _name;
   
   bool compileShader(GL* gl, int shader, const std::string& source) const;
@@ -69,8 +75,8 @@ public:
   bool isCreated() const{ return _programCreated;}
   void deleteProgram(GL* gl, int p);
   
-  int getGPUAttributesNumber() const { return _attributes.size();}
-  int getGPUUniformsNumber() const { return _uniforms.size();}
+  int getGPUAttributesNumber() const { return _nAttributes;}
+  int getGPUUniformsNumber() const { return _nUniforms;}
   
   
   GPUUniform* getGPUUniform(const std::string name) const;

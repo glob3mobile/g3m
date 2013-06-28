@@ -246,13 +246,7 @@ class GPUUniformValueMatrix4FloatTransform:public GPUUniformValue{
   {}
   
 public:
-#ifdef C_CODE
   MutableMatrix44D _m;
-#endif
-#ifdef JAVA_CODE
-  public MutableMatrix44D _m;
-#endif
-  
   bool _isTransform;
   
   GPUUniformValueMatrix4FloatTransform(const MutableMatrix44D& m, bool isTransform):
