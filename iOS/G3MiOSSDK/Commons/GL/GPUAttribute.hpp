@@ -134,7 +134,16 @@ public:
   int getSize() const{ return _size;}
   bool wasSet() const{ return _value != NULL;}
   bool isEnabled() const { return _enabled;}
-  int getKey() const { return _key;}
+  GPUAttributeKey getKey() const { return _key;}
+
+  int getIndex() const {
+#ifdef C_CODE
+    return _key;
+#endif
+#ifdef JAVA_CODE
+    return _key.getValue();
+#endif
+  }
   
   void unset(GL* gl){
     if (_value != NULL){

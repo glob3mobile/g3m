@@ -94,7 +94,16 @@ public:
   int getType() const { return _type; }
   bool wasSet() const { return _value != NULL; }
   GPUUniformValue* getSetValue() const { return _value; }
-  int getKey() const { return _key;}
+  GPUUniformKey getKey() const { return _key;}
+
+  int getIndex() const {
+#ifdef C_CODE
+    return _key;
+#endif
+#ifdef JAVA_CODE
+    return _key.getValue();
+#endif
+  }
 
   void unset();
 

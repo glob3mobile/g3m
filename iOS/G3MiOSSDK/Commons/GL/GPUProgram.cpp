@@ -123,20 +123,25 @@ void GPUProgram::getVariables(GL* gl){
   _nUniforms = gl->getProgramiv(this, GLVariable::activeUniforms());
   for (int i = 0; i < _nUniforms; i++) {
     GPUUniform* u = gl->getActiveUniform(this, i);
-    if (u != NULL) _uniforms[u->getKey()] = u;
+    if (u != NULL) _uniforms[u->getIndex()] = u;
   }
   
   //Attributes
   _nAttributes = gl->getProgramiv(this, GLVariable::activeAttributes());
   for (int i = 0; i < _nAttributes; i++) {
     GPUAttribute* a = gl->getActiveAttribute(this, i);
-    if (a != NULL) _attributes[a->getKey()] = a;
+    if (a != NULL) _attributes[a->getIndex()] = a;
   }
   
 }
 
 GPUUniform* GPUProgram::getGPUUniform(const std::string name) const{
-  int key = GPUVariable::getUniformKey(name);
+#ifdef C_CODE
+  const int key = GPUVariable::getUniformKey(name);
+#endif
+#ifdef JAVA_CODE
+  final int key = GPUVariable.getUniformKey(name).getValue();
+#endif
   return _uniforms[key];
 }
 
@@ -186,7 +191,12 @@ GPUUniformMatrix4Float* GPUProgram::getGPUUniformMatrix4Float(const std::string 
 }
 
 GPUAttribute* GPUProgram::getGPUAttribute(const std::string name) const{
+#ifdef C_CODE
   const int key = GPUVariable::getAttributeKey(name);
+#endif
+#ifdef JAVA_CODE
+  final int key = GPUVariable.getAttributeKey(name).getValue();
+#endif
   return _attributes[key];
 }
 

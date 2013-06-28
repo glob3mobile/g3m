@@ -133,10 +133,17 @@ bool GPUProgramState::setGPUUniformValue(GPUUniformKey key, GPUUniformValue* v){
   
   GPUUniform* prevLinkedUniform = NULL;
   bool uniformExisted = false;
+
+#ifdef C_CODE
+  const int index = key;
+#endif
+#ifdef JAVA_CODE
+  final int index = key.getValue();
+#endif
   
   
 #ifdef C_CODE
-  std::map<int, GPUUniformValue*> ::iterator it = _uniformValues.find(key);
+  std::map<int, GPUUniformValue*> ::iterator it = _uniformValues.find(index);
   if (it != _uniformValues.end()){
     prevLinkedUniform = it->second->getLinkedUniform();
     delete it->second;
@@ -144,7 +151,7 @@ bool GPUProgramState::setGPUUniformValue(GPUUniformKey key, GPUUniformValue* v){
   }
 #endif
 #ifdef JAVA_CODE
-  GPUUniformValue pv = _uniformValues.get(key);
+  GPUUniformValue pv = _uniformValues.get(index);
   if (pv != null){
     uniformExisted = true;
     prevLinkedUniform = pv.getLinkedUniform();
@@ -164,8 +171,16 @@ bool GPUProgramState::setGPUUniformValue(GPUUniformKey key, GPUUniformValue* v){
 bool GPUProgramState::setGPUAttributeValue(GPUAttributeKey key, GPUAttributeValue* v){
   GPUAttribute* prevLinkedAttribute = NULL;
   bool attributeExisted = false;
+
 #ifdef C_CODE
-  std::map<int, GPUAttributeValue*> ::iterator it = _attributesValues.find(key);
+  const int index = key;
+#endif
+#ifdef JAVA_CODE
+  final int index = key.getValue();
+#endif
+
+#ifdef C_CODE
+  std::map<int, GPUAttributeValue*> ::iterator it = _attributesValues.find(index);
   if (it != _attributesValues.end()){
     prevLinkedAttribute = it->second->getLinkedAttribute();
     delete it->second;
@@ -173,7 +188,7 @@ bool GPUProgramState::setGPUAttributeValue(GPUAttributeKey key, GPUAttributeValu
   }
 #endif
 #ifdef JAVA_CODE
-  GPUAttributeValue pv = _attributesValues.get(key);
+  GPUAttributeValue pv = _attributesValues.get(index);
   if (pv != null){
     attributeExisted = true;
     prevLinkedAttribute = pv.getLinkedAttribute();
