@@ -7,204 +7,123 @@ public class GPUVariable
   protected final String _name;
 
   //Uniform metadata based in our shaders
-  protected int _key;
-  protected int _group;
-  protected int _priority;
+//  long _key;
+//  long _group;
+//  long _priority;
 
-  protected final void createMetadata()
-  {
-    _group = GROUP_NOGROUP;
-    _priority = -1;
-    _key = getKeyForName(_name, _variableType);
-  
-    if (_key == UNRECOGNIZED)
-    {
-      ILogger.instance().logError("Unrecognized GPU VARAIBLE %s\n", _name);
-    }
-  
-    if (_variableType == GPUVariableType.UNIFORM)
-    {
-      if (_key == FLAT_COLOR)
-      {
-        _group = GROUP_COLOR;
-      }
-  
-      if (_key == TEXTURE_EXTENT)
-      {
-        _group = GROUP_COLOR;
-      }
-  
-      if (_key == TRANSLATION_TEXTURE_COORDS)
-      {
-        _group = GROUP_COLOR;
-      }
-  
-      if (_key == TRANSLATION_TEXTURE_COORDS)
-      {
-        _group = GROUP_COLOR;
-      }
-  
-      if (true) //DELETE
-      {
-        if (_key == EnableColorPerVertex)
-        {
-          _group = GROUP_COLOR;
-        }
-  
-        if (_key == EnableTexture)
-        {
-          _group = GROUP_COLOR;
-        }
-  
-        if (_key == EnableFlatColor)
-        {
-          _group = GROUP_COLOR;
-        }
-  
-        if (_key == FlatColorIntensity)
-        {
-          _group = GROUP_COLOR;
-        }
-  
-        if (_key == ColorPerVertexIntensity)
-        {
-          _group = GROUP_COLOR;
-        }
-      }
-    }
-  
-    if (_variableType == GPUVariableType.ATTRIBUTE)
-    {
-  
-      if (_key == COLOR)
-      {
-        _group = GROUP_COLOR;
-      }
-  
-      if (_key == TEXTURE_COORDS)
-      {
-        _group = GROUP_COLOR;
-      }
-    }
-  
-  
-  }
+//  void createMetadata();
 
 
+//  static const int UNRECOGNIZED;
+//  
+//  static const int FLAT_COLOR;
+//  static const int MODELVIEW;
+//  static const int TEXTURE_EXTENT;
+//  static const int VIEWPORT_EXTENT;
+//  static const int TRANSLATION_TEXTURE_COORDS;
+//  static const int SCALE_TEXTURE_COORDS;
+//  static const int POINT_SIZE;
+//  
+//  static const int POSITION;
+//  static const int TEXTURE_COORDS;
+//  static const int COLOR;
+//  
+//  //To be deleted
+//  static const int EnableColorPerVertex;
+//  static const int EnableTexture;
+//  static const int EnableFlatColor;
+//  static const int FlatColorIntensity;
+//  static const int ColorPerVertexIntensity;
 
-  public static final int UNRECOGNIZED = -1;
+//  static int getKeyForName(const std::string& name, GPUVariableType variableType);
 
-  public static final int FLAT_COLOR = 1;
-  public static final int MODELVIEW = 2;
-  public static final int TEXTURE_EXTENT = 3;
-  public static final int VIEWPORT_EXTENT = 4;
-  public static final int TRANSLATION_TEXTURE_COORDS = 5;
-  public static final int SCALE_TEXTURE_COORDS = 6;
-  public static final int POINT_SIZE = 7;
 
-  public static final int POSITION = 8;
-  public static final int TEXTURE_COORDS = 9;
-  public static final int COLOR = 10;
-
-  //To be deleted
-  public static final int EnableColorPerVertex = 11;
-  public static final int EnableTexture = 12;
-  public static final int EnableFlatColor = 13;
-  public static final int FlatColorIntensity = 14;
-  public static final int ColorPerVertexIntensity = 15;
-
-  public static int getKeyForName(String name, GPUVariableType variableType)
+  //const int UNRECOGNIZED = -1;
+  //const int FLAT_COLOR = 1;
+  //const int MODELVIEW = 2;
+  //const int TEXTURE_EXTENT = 3;
+  //const int VIEWPORT_EXTENT = 4;
+  //const int TRANSLATION_TEXTURE_COORDS = 5;
+  //const int SCALE_TEXTURE_COORDS = 6;
+  //const int POINT_SIZE = 7;
+  //
+  //const int POSITION = 8;
+  //const int TEXTURE_COORDS = 9;
+  //const int COLOR = 10;
+  //
+  ////TODO: DELETE
+  //const int EnableColorPerVertex = 11;
+  //const int EnableTexture = 12;
+  //const int EnableFlatColor = 13;
+  //const int FlatColorIntensity = 14;
+  //const int ColorPerVertexIntensity = 15;
+  //
+  //const int GROUP_NOGROUP = -1;
+  //const int GROUP_COLOR = 1;
+  
+  public static GPUUniformKey getUniformKey(String name)
   {
   
-    if (variableType == GPUVariableType.UNIFORM)
+    if (name.compareTo("uFlatColor") == 0)
     {
-      if (name.compareTo("uFlatColor") == 0)
-      {
-        return FLAT_COLOR;
-      }
-  
-      if (name.compareTo("uModelview") == 0)
-      {
-        return MODELVIEW;
-      }
-  
-      if (name.compareTo("uTextureExtent") == 0)
-      {
-        return TEXTURE_EXTENT;
-      }
-  
-      if (name.compareTo("uViewPortExtent") == 0)
-      {
-        return VIEWPORT_EXTENT;
-      }
-  
-      if (name.compareTo("uTranslationTexCoord") == 0)
-      {
-        return TRANSLATION_TEXTURE_COORDS;
-      }
-  
-      if (name.compareTo("uScaleTexCoord") == 0)
-      {
-        return SCALE_TEXTURE_COORDS;
-      }
-  
-      if (name.compareTo("uPointSize") == 0)
-      {
-        return POINT_SIZE;
-      }
-  
-      if (true) //TO BE DELETED
-      {
-        if (name.compareTo("EnableColorPerVertex") == 0)
-        {
-          return EnableColorPerVertex;
-        }
-  
-        if (name.compareTo("EnableTexture") == 0)
-        {
-          return EnableTexture;
-        }
-  
-        if (name.compareTo("EnableFlatColor") == 0)
-        {
-          return EnableFlatColor;
-        }
-  
-        if (name.compareTo("FlatColorIntensity") == 0)
-        {
-          return FlatColorIntensity;
-        }
-  
-        if (name.compareTo("ColorPerVertexIntensity") == 0)
-        {
-          return ColorPerVertexIntensity;
-        }
-      }
+      return GPUUniformKey.FLAT_COLOR;
     }
   
-    if (variableType == GPUVariableType.ATTRIBUTE)
+    if (name.compareTo("uModelview") == 0)
     {
-      if (name.compareTo("aPosition") == 0)
-      {
-        return POSITION;
-      }
-  
-      if (name.compareTo("aColor") == 0)
-      {
-        return COLOR;
-      }
-  
-      if (name.compareTo("aTextureCoord") == 0)
-      {
-        return TEXTURE_COORDS;
-      }
+      return GPUUniformKey.MODELVIEW;
     }
   
-    return UNRECOGNIZED;
+    if (name.compareTo("uTextureExtent") == 0)
+    {
+      return GPUUniformKey.TEXTURE_EXTENT;
+    }
+  
+    if (name.compareTo("uViewPortExtent") == 0)
+    {
+      return GPUUniformKey.VIEWPORT_EXTENT;
+    }
+  
+    if (name.compareTo("uTranslationTexCoord") == 0)
+    {
+      return GPUUniformKey.TRANSLATION_TEXTURE_COORDS;
+    }
+  
+    if (name.compareTo("uScaleTexCoord") == 0)
+    {
+      return GPUUniformKey.SCALE_TEXTURE_COORDS;
+    }
+  
+    if (name.compareTo("uPointSize") == 0)
+    {
+      return GPUUniformKey.POINT_SIZE;
+    }
+  
+    return GPUUniformKey.UNRECOGNIZED_UNIFORM;
+  }
+  public static GPUAttributeKey getAttributeKey(String name)
+  {
+  
+    if (name.compareTo("aPosition") == 0)
+    {
+      return GPUAttributeKey.POSITION;
+    }
+  
+    if (name.compareTo("aColor") == 0)
+    {
+      return GPUAttributeKey.COLOR;
+    }
+  
+    if (name.compareTo("aTextureCoord") == 0)
+    {
+      return GPUAttributeKey.TEXTURE_COORDS;
+    }
+  
+    return GPUAttributeKey.UNRECOGNIZED_ATTRIBUTE;
   }
 
-  public static final int GROUP_COLOR = 1;
-  public static final int GROUP_NOGROUP = -1;
+//  static const int GROUP_COLOR;
+//  static const int GROUP_NOGROUP;
 
   public void dispose()
   {
@@ -214,22 +133,76 @@ public class GPUVariable
   {
      _name = name;
      _variableType = type;
-    createMetadata();
+//    createMetadata();
   }
 
   //Uniform metadata based in our shaders
-  public final int getKey()
-  {
-     return _key;
-  }
-  public final int getGroup()
-  {
-     return _group;
-  }
-  public final int getPriority()
-  {
-     return _priority;
-  }
+//  long getKey() const { return _key;}
+//  long getGroup() const { return _group;}
+//  long getPriority() const { return _priority;}
 
 }
-//TODO: DELETE
+/*
+void createMetadata(){
+  _group = GROUP_NOGROUP;
+  _priority = -1;
+  _key = getKeyForName(_name, _variableType);
+
+  if (_key == UNRECOGNIZED){
+    ILogger::instance()->logError("Unrecognized GPU VARAIBLE %s\n", _name.c_str());
+  }
+
+  if (_variableType == UNIFORM){
+    if (_key == FLAT_COLOR){
+      _group = GROUP_COLOR;
+    }
+
+    if (_key == TEXTURE_EXTENT){
+      _group = GROUP_COLOR;
+    }
+
+    if (_key == TRANSLATION_TEXTURE_COORDS){
+      _group = GROUP_COLOR;
+    }
+
+    if (_key == TRANSLATION_TEXTURE_COORDS){
+      _group = GROUP_COLOR;
+    }
+//
+//    if (true){ //DELETE
+//      if (_key == EnableColorPerVertex){
+//        _group = GROUP_COLOR;
+//      }
+//
+//      if (_key == EnableTexture){
+//        _group = GROUP_COLOR;
+//      }
+//
+//      if ( _key == EnableFlatColor){
+//        _group = GROUP_COLOR;
+//      }
+//
+//      if (_key == FlatColorIntensity){
+//        _group = GROUP_COLOR;
+//      }
+//
+//      if (_key == ColorPerVertexIntensity){
+//        _group = GROUP_COLOR;
+//      }
+//    }
+  }
+
+  if (_variableType == ATTRIBUTE){
+
+    if (_key == COLOR){
+      _group = GROUP_COLOR;
+    }
+
+    if (_key == TEXTURE_COORDS){
+      _group = GROUP_COLOR;
+    }
+  }
+
+
+}
+*/

@@ -112,15 +112,15 @@ public abstract class AbstractGeometryMesh extends Mesh
   
     GPUProgramState progState = _glState.getGPUProgramState();
   
-    progState.setAttributeValue(GPUVariable.POSITION, _vertices, 4, 3, 0, false, 0); //Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
+    progState.setAttributeValue(GPUAttributeKey.POSITION, _vertices, 4, 3, 0, false, 0); //Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
   
     if (_translationMatrix != null)
     {
-      progState.setUniformMatrixValue(GPUVariable.MODELVIEW, _translationMatrix, true);
+      progState.setUniformMatrixValue(GPUUniformKey.MODELVIEW, _translationMatrix, true);
     }
   
   
-    progState.setUniformValue(GPUVariable.POINT_SIZE, _pointSize);
+    progState.setUniformValue(GPUUniformKey.POINT_SIZE, _pointSize);
   }
 
   protected abstract void rawRender(G3MRenderContext rc);

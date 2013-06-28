@@ -7,6 +7,8 @@ public class GPUUniform extends GPUVariable
   protected GPUUniformValue _value;
   protected final int _type;
 
+  protected final GPUUniformKey _key;
+
 
   public void dispose()
   {
@@ -23,6 +25,7 @@ public class GPUUniform extends GPUVariable
      _dirty = false;
      _value = null;
      _type = type;
+     _key = getUniformKey(name);
   }
 
   public final String getName()
@@ -44,6 +47,10 @@ public class GPUUniform extends GPUVariable
   public final GPUUniformValue getSetValue()
   {
      return _value;
+  }
+  public final int getKey()
+  {
+     return _key;
   }
 
   public final void unset()

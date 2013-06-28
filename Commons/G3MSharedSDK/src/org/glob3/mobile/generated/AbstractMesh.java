@@ -128,53 +128,53 @@ public abstract class AbstractMesh extends Mesh
   
     if (_flatColor != null && _colors == null) //FlatColorMesh Shader
     {
-      progState.setAttributeValue(GPUVariable.POSITION, _vertices, 4, 3, 0, false, 0); //Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
-      progState.setUniformValue(GPUVariable.FLAT_COLOR, (double)_flatColor.getRed(), (double)_flatColor.getGreen(), (double) _flatColor.getBlue(), (double) _flatColor.getAlpha());
+      progState.setAttributeValue(GPUAttributeKey.POSITION, _vertices, 4, 3, 0, false, 0); //Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
+      progState.setUniformValue(GPUUniformKey.FLAT_COLOR, (double)_flatColor.getRed(), (double)_flatColor.getGreen(), (double) _flatColor.getBlue(), (double) _flatColor.getAlpha());
       if (_translationMatrix != null)
       {
-        progState.setUniformMatrixValue(GPUVariable.MODELVIEW, _translationMatrix, true);
+        progState.setUniformMatrixValue(GPUUniformKey.MODELVIEW, _translationMatrix, true);
       }
       return;
     }
   
   
-    progState.setUniformValue(GPUVariable.POINT_SIZE, _pointSize);
+    progState.setUniformValue(GPUUniformKey.POINT_SIZE, _pointSize);
   
-    progState.setAttributeValue(GPUVariable.POSITION, _vertices, 4, 3, 0, false, 0); //Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
+    progState.setAttributeValue(GPUAttributeKey.POSITION, _vertices, 4, 3, 0, false, 0); //Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
   
     if (_colors != null)
     {
-  //    progState.setUniformValue(GPUVariable::EnableColorPerVertex, true);
-      progState.setAttributeValue(GPUVariable.COLOR, _colors, 4, 4, 0, false, 0); //Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 4 - The attribute is a float vector of 4 elements RGBA
+  //    progState.setUniformValue(EnableColorPerVertex, true);
+      progState.setAttributeValue(GPUAttributeKey.COLOR, _colors, 4, 4, 0, false, 0); //Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 4 - The attribute is a float vector of 4 elements RGBA
   
-  //    progState.setUniformValue(GPUVariable::ColorPerVertexIntensity, _colorsIntensity);
+  //    progState.setUniformValue(ColorPerVertexIntensity, _colorsIntensity);
     }
     else
     {
-  //    progState.setAttributeDisabled(GPUVariable::COLOR);
-  //    progState.setUniformValue(GPUVariable::EnableColorPerVertex, false);
-  //    progState.setUniformValue(GPUVariable::ColorPerVertexIntensity, (float)0.0);
+  //    progState.setAttributeDisabled(COLOR);
+  //    progState.setUniformValue(EnableColorPerVertex, false);
+  //    progState.setUniformValue(ColorPerVertexIntensity, (float)0.0);
     }
   
   //  if (_flatColor != NULL){
-  //    progState.setUniformValue(GPUVariable::EnableFlatColor, true);
-  //    progState.setUniformValue(GPUVariable::FLAT_COLOR,
+  //    progState.setUniformValue(EnableFlatColor, true);
+  //    progState.setUniformValue(FLAT_COLOR,
   //                              (double)_flatColor->getRed(),
   //                              (double)_flatColor->getGreen(),
   //                              (double) _flatColor->getBlue(),
   //                              (double) _flatColor->getAlpha());
   //
-  //    progState.setUniformValue(GPUVariable::FlatColorIntensity, _colorsIntensity);
+  //    progState.setUniformValue(FlatColorIntensity, _colorsIntensity);
   //  } else{
-  //    progState.setUniformValue(GPUVariable::EnableFlatColor, false);
-  //    progState.setUniformValue(GPUVariable::ColorPerVertexIntensity, (float)0.0);
-  //    progState.setUniformValue(GPUVariable::FLAT_COLOR, (float)0.0, (float)0.0, (float)0.0, (float)0.0);
-  //    progState.setUniformValue(GPUVariable::FlatColorIntensity, (float)0.0);
+  //    progState.setUniformValue(EnableFlatColor, false);
+  //    progState.setUniformValue(ColorPerVertexIntensity, (float)0.0);
+  //    progState.setUniformValue(FLAT_COLOR, (float)0.0, (float)0.0, (float)0.0, (float)0.0);
+  //    progState.setUniformValue(FlatColorIntensity, (float)0.0);
   //  }
   
     if (_translationMatrix != null)
     {
-      progState.setUniformMatrixValue(GPUVariable.MODELVIEW, _translationMatrix, true);
+      progState.setUniformMatrixValue(GPUUniformKey.MODELVIEW, _translationMatrix, true);
     }
   }
 

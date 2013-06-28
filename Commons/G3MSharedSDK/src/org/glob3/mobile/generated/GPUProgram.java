@@ -123,7 +123,7 @@ public class GPUProgram
   
     ILogger.instance().logInfo("FRAGMENT SOURCE: \n %s", fragmentSource);
   
-    //gl->bindAttribLocation(p, 0, GPUVariable::POSITION);
+    //gl->bindAttribLocation(p, 0, POSITION);
   
     // link program
     if (!p.linkProgram(gl))
@@ -188,12 +188,12 @@ public class GPUProgram
 
   public final GPUUniform getGPUUniform(String name)
   {
-    int key = GPUVariable.getKeyForName(name, GPUVariableType.UNIFORM);
+    int key = (int)GPUVariable.getUniformKey(name);
     return _uniforms[key];
   }
   public final GPUAttribute getGPUAttribute(String name)
   {
-    final int key = GPUVariable.getKeyForName(name, GPUVariableType.ATTRIBUTE);
+    final int key = (int)GPUVariable.getAttributeKey(name);
     return _attributes[key];
   }
 

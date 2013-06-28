@@ -24,7 +24,7 @@ public class GPUProgramState
   private java.util.HashMap<Integer, GPUUniformValue> _uniformValues = new java.util.HashMap<Integer, GPUUniformValue>();
   private java.util.HashMap<Integer, GPUAttributeValue> _attributesValues = new java.util.HashMap<Integer, GPUAttributeValue>();
 
-  private boolean setGPUUniformValue(int key, GPUUniformValue v)
+  private boolean setGPUUniformValue(GPUUniformKey key, GPUUniformValue v)
   {
   
     GPUUniform prevLinkedUniform = null;
@@ -47,7 +47,7 @@ public class GPUProgramState
   
     return uniformExisted;
   }
-  private boolean setGPUAttributeValue(int key, GPUAttributeValue v)
+  private boolean setGPUAttributeValue(GPUAttributeKey key, GPUAttributeValue v)
   {
     GPUAttribute prevLinkedAttribute = null;
     boolean attributeExisted = false;
@@ -108,38 +108,38 @@ public class GPUProgramState
     _attributesValues.clear();
   }
 
-  public final boolean setUniformValue(int key, boolean b)
+  public final boolean setUniformValue(GPUUniformKey key, boolean b)
   {
     return setGPUUniformValue(key, new GPUUniformValueBool(b));
   }
 
-  public final boolean setUniformValue(int key, float f)
+  public final boolean setUniformValue(GPUUniformKey key, float f)
   {
     return setGPUUniformValue(key, new GPUUniformValueFloat(f));
   }
 
-  public final boolean setUniformValue(int key, Vector2D v)
+  public final boolean setUniformValue(GPUUniformKey key, Vector2D v)
   {
     return setGPUUniformValue(key, new GPUUniformValueVec2Float(v._x, v._y));
   }
 
-  public final boolean setUniformValue(int key, double x, double y)
+  public final boolean setUniformValue(GPUUniformKey key, double x, double y)
   {
     return setGPUUniformValue(key, new GPUUniformValueVec2Float(x, y));
   }
 
-  public final boolean setUniformValue(int key, double x, double y, double z, double w)
+  public final boolean setUniformValue(GPUUniformKey key, double x, double y, double z, double w)
   {
     return setGPUUniformValue(key, new GPUUniformValueVec4Float(x,y,z,w));
   }
 
-  public final boolean setUniformMatrixValue(int key, MutableMatrix44D m, boolean isTransform)
+  public final boolean setUniformMatrixValue(GPUUniformKey key, MutableMatrix44D m, boolean isTransform)
   {
     GPUUniformValueMatrix4FloatTransform uv = new GPUUniformValueMatrix4FloatTransform(m, isTransform);
     return setGPUUniformValue(key, uv);
   }
 
-  public final boolean setAttributeValue(int key, IFloatBuffer buffer, int attributeSize, int arrayElementSize, int index, boolean normalized, int stride)
+  public final boolean setAttributeValue(GPUAttributeKey key, IFloatBuffer buffer, int attributeSize, int arrayElementSize, int index, boolean normalized, int stride)
   {
     switch (attributeSize)
     {
@@ -157,7 +157,7 @@ public class GPUProgramState
     }
   }
 
-  public final void setAttributeEnabled(int key, boolean enabled)
+  public final void setAttributeEnabled(GPUAttributeKey key, boolean enabled)
   {
     //TODO: REMOVE FUNCTION
     if (!enabled)
@@ -165,7 +165,7 @@ public class GPUProgramState
       setAttributeDisabled(key);
     }
   }
-  public final void setAttributeDisabled(int key)
+  public final void setAttributeDisabled(GPUAttributeKey key)
   {
     setGPUAttributeValue(key, new GPUAttributeValueDisabled());
   }
@@ -273,7 +273,7 @@ public class GPUProgramState
     }
   }
 
-  public final boolean removeGPUUniformValue(int key)
+  public final boolean removeGPUUniformValue(GPUUniformKey key)
   {
     boolean uniformExisted = false;
     uniformExisted = (null != _uniformValues.remove(key));
@@ -289,42 +289,42 @@ public class GPUProgramState
 
   /*
    bool setUniformValue(const std::string& name, bool b){
-   return setUniformValue(GPUVariable::getKeyForName(name, UNIFORM), b);
+   return setUniformValue(getKeyForName(name, UNIFORM), b);
    }
    
    bool setUniformValue(const std::string& name, float f){
-   return setUniformValue(GPUVariable::getKeyForName(name, UNIFORM), f);
+   return setUniformValue(getKeyForName(name, UNIFORM), f);
    }
    
    bool setUniformValue(const std::string& name, const Vector2D& v){
-   return setUniformValue(GPUVariable::getKeyForName(name, UNIFORM), v);
+   return setUniformValue(getKeyForName(name, UNIFORM), v);
    }
    
    bool setUniformValue(const std::string& name, double x, double y){
-   return setUniformValue(GPUVariable::getKeyForName(name, UNIFORM), x, y);
+   return setUniformValue(getKeyForName(name, UNIFORM), x, y);
    }
    
    bool setUniformValue(const std::string& name, double x, double y, double z, double w){
-   return setUniformValue(GPUVariable::getKeyForName(name, UNIFORM), x, y, z, w);
+   return setUniformValue(getKeyForName(name, UNIFORM), x, y, z, w);
    }
    
    bool setUniformMatrixValue(const std::string& name, const MutableMatrix44D& m, bool isTransform){
-   return setUniformMatrixValue(GPUVariable::getKeyForName(name, UNIFORM), m, isTransform);
+   return setUniformMatrixValue(getKeyForName(name, UNIFORM), m, isTransform);
    }
    
    bool setAttributeValue(const std::string& name,
    IFloatBuffer* buffer, int attributeSize,
    int arrayElementSize, int index, bool normalized, int stride){
-   return setAttributeValue(GPUVariable::getKeyForName(name, ATTRIBUTE),
+   return setAttributeValue(getKeyForName(name, ATTRIBUTE),
    buffer, attributeSize,
    arrayElementSize, index, normalized, stride);
    }
    
    void setAttributeEnabled(const std::string& name, bool enabled){
-   setAttributeEnabled(GPUVariable::getKeyForName(name, ATTRIBUTE), enabled);
+   setAttributeEnabled(getKeyForName(name, ATTRIBUTE), enabled);
    }
    void setAttributeDisabled(const std::string& name){
-   setAttributeDisabled(GPUVariable::getKeyForName(name, ATTRIBUTE));
+   setAttributeDisabled(getKeyForName(name, ATTRIBUTE));
    }
    */
 

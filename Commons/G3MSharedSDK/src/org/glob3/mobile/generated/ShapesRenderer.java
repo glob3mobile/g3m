@@ -151,9 +151,9 @@ public class ShapesRenderer extends LeafRenderer
   
     //Setting camera matrixes
     MutableMatrix44D m = rc.getCurrentCamera().getModelViewMatrix();
-    _glState.getGPUProgramState().setUniformMatrixValue(GPUVariable.MODELVIEW, m, false);
+    _glState.getGPUProgramState().setUniformMatrixValue(GPUUniformKey.MODELVIEW, m, false);
   
-    _glStateTransparent.getGPUProgramState().setUniformMatrixValue(GPUVariable.MODELVIEW, m, false);
+    _glStateTransparent.getGPUProgramState().setUniformMatrixValue(GPUUniformKey.MODELVIEW, m, false);
   
     final int shapesCount = _shapes.size();
     for (int i = 0; i < shapesCount; i++)

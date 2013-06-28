@@ -115,21 +115,21 @@ public class GPUProgramManager
       {
         int key = ui.get(j);
   
-        if (key == GPUVariable.VIEWPORT_EXTENT)
+        if (key == GPUUniformKey.VIEWPORT_EXTENT.getValue())
         {
           billboard = true;
         }
   
-        if (key == GPUVariable.FLAT_COLOR)
+        if (key == GPUUniformKey.FLAT_COLOR.getValue())
         {
           flatColor = true;
         }
   
-  //      if (key == GPUVariable::TRANSLATION_TEXTURE_COORDS){
+  //      if (key == TRANSLATION_TEXTURE_COORDS){
   //        texture = true;
   //      }
   
-        if (key == GPUVariable.TRANSLATION_TEXTURE_COORDS || key == GPUVariable.SCALE_TEXTURE_COORDS)
+        if (key == GPUUniformKey.TRANSLATION_TEXTURE_COORDS.getValue() || key == GPUUniformKey.SCALE_TEXTURE_COORDS.getValue())
         {
           transformTC = true;
         }
@@ -141,12 +141,12 @@ public class GPUProgramManager
       {
         int key = ai.get(j);
   
-        if (key == GPUVariable.TEXTURE_COORDS)
+        if (key == GPUAttributeKey.TEXTURE_COORDS.getValue())
         {
           texture = true;
         }
   
-        if (key == GPUVariable.COLOR)
+        if (key == GPUAttributeKey.COLOR.getValue())
         {
           color = true;
         }
