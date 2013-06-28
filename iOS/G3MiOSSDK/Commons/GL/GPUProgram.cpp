@@ -46,7 +46,7 @@ GPUProgram* GPUProgram::createProgram(GL* gl, const std::string name, const std:
   
   ILogger::instance()->logInfo("FRAGMENT SOURCE: \n %s", fragmentSource.c_str());
   
-  //gl->bindAttribLocation(p, 0, GPUVariable::POSITION);
+  //gl->bindAttribLocation(p, 0, POSITION);
   
   // link program
   if (!p->linkProgram(gl)) {
@@ -136,7 +136,7 @@ void GPUProgram::getVariables(GL* gl){
 }
 
 GPUUniform* GPUProgram::getGPUUniform(const std::string name) const{
-  int key = GPUVariable::getKeyForName(name, UNIFORM);
+  int key = GPUVariable::getUniformKey(name);
   return _uniforms[key];
 }
 
@@ -186,7 +186,7 @@ GPUUniformMatrix4Float* GPUProgram::getGPUUniformMatrix4Float(const std::string 
 }
 
 GPUAttribute* GPUProgram::getGPUAttribute(const std::string name) const{
-  const int key = GPUVariable::getKeyForName(name, ATTRIBUTE);
+  const int key = GPUVariable::getAttributeKey(name);
   return _attributes[key];
 }
 

@@ -261,7 +261,7 @@ void MarksRenderer::onTouchEventRecived(const G3MEventContext* ec, const TouchEv
 void MarksRenderer::updateGLState(const G3MRenderContext* rc){
   GPUProgramState* progState = _glState.getGPUProgramState();
   const Camera* cc = rc->getCurrentCamera();
-  progState->setUniformMatrixValue(GPUVariable::MODELVIEW, cc->getModelViewMatrix(), false);
+  progState->setUniformMatrixValue(MODELVIEW, cc->getModelViewMatrix(), false);
   
-  progState->setUniformValue(GPUVariable::VIEWPORT_EXTENT, cc->getWidth(), cc->getHeight());
+  progState->setUniformValue(VIEWPORT_EXTENT, cc->getWidth(), cc->getHeight());
 }

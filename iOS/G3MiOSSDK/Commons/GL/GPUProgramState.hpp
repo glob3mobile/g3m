@@ -24,8 +24,8 @@ class GPUProgramState{
   std::map<int, GPUUniformValue*> _uniformValues;
   std::map<int, GPUAttributeValue*> _attributesValues;
   
-  bool setGPUUniformValue(int key, GPUUniformValue* v);
-  bool setGPUAttributeValue(int key, GPUAttributeValue* v);
+  bool setGPUUniformValue(GPUUniformKey key, GPUUniformValue* v);
+  bool setGPUAttributeValue(GPUAttributeKey key, GPUAttributeValue* v);
   
   mutable std::vector<int>* _uniformKeys;
   mutable std::vector<int>* _attributeKeys;
@@ -51,24 +51,24 @@ public:
   
   void clear();
   
-  bool setUniformValue(int key, bool b);
+  bool setUniformValue(GPUUniformKey key, bool b);
   
-  bool setUniformValue(int key, float f);
+  bool setUniformValue(GPUUniformKey key, float f);
   
-  bool setUniformValue(int key, const Vector2D& v);
+  bool setUniformValue(GPUUniformKey key, const Vector2D& v);
   
-  bool setUniformValue(int key, double x, double y);
+  bool setUniformValue(GPUUniformKey key, double x, double y);
   
-  bool setUniformValue(int key, double x, double y, double z, double w);
+  bool setUniformValue(GPUUniformKey key, double x, double y, double z, double w);
   
-  bool setUniformMatrixValue(int key, const MutableMatrix44D& m, bool isTransform);
+  bool setUniformMatrixValue(GPUUniformKey key, const MutableMatrix44D& m, bool isTransform);
   
-  bool setAttributeValue(int key,
+  bool setAttributeValue(GPUAttributeKey key,
                          IFloatBuffer* buffer, int attributeSize,
                          int arrayElementSize, int index, bool normalized, int stride);
   
-  void setAttributeEnabled(int key, bool enabled);
-  void setAttributeDisabled(int key);
+  void setAttributeEnabled(GPUAttributeKey key, bool enabled);
+  void setAttributeDisabled(GPUAttributeKey key);
   
   void applyChanges(GL* gl) const;
   
@@ -89,47 +89,47 @@ public:
   
   void applyValuesToLinkedProgram() const;
   
-  bool removeGPUUniformValue(int key);
+  bool removeGPUUniformValue(GPUUniformKey key);
   
   
   /*
    bool setUniformValue(const std::string& name, bool b){
-   return setUniformValue(GPUVariable::getKeyForName(name, UNIFORM), b);
+   return setUniformValue(getKeyForName(name, UNIFORM), b);
    }
    
    bool setUniformValue(const std::string& name, float f){
-   return setUniformValue(GPUVariable::getKeyForName(name, UNIFORM), f);
+   return setUniformValue(getKeyForName(name, UNIFORM), f);
    }
    
    bool setUniformValue(const std::string& name, const Vector2D& v){
-   return setUniformValue(GPUVariable::getKeyForName(name, UNIFORM), v);
+   return setUniformValue(getKeyForName(name, UNIFORM), v);
    }
    
    bool setUniformValue(const std::string& name, double x, double y){
-   return setUniformValue(GPUVariable::getKeyForName(name, UNIFORM), x, y);
+   return setUniformValue(getKeyForName(name, UNIFORM), x, y);
    }
    
    bool setUniformValue(const std::string& name, double x, double y, double z, double w){
-   return setUniformValue(GPUVariable::getKeyForName(name, UNIFORM), x, y, z, w);
+   return setUniformValue(getKeyForName(name, UNIFORM), x, y, z, w);
    }
    
    bool setUniformMatrixValue(const std::string& name, const MutableMatrix44D& m, bool isTransform){
-   return setUniformMatrixValue(GPUVariable::getKeyForName(name, UNIFORM), m, isTransform);
+   return setUniformMatrixValue(getKeyForName(name, UNIFORM), m, isTransform);
    }
    
    bool setAttributeValue(const std::string& name,
    IFloatBuffer* buffer, int attributeSize,
    int arrayElementSize, int index, bool normalized, int stride){
-   return setAttributeValue(GPUVariable::getKeyForName(name, ATTRIBUTE),
+   return setAttributeValue(getKeyForName(name, ATTRIBUTE),
    buffer, attributeSize,
    arrayElementSize, index, normalized, stride);
    }
    
    void setAttributeEnabled(const std::string& name, bool enabled){
-   setAttributeEnabled(GPUVariable::getKeyForName(name, ATTRIBUTE), enabled);
+   setAttributeEnabled(getKeyForName(name, ATTRIBUTE), enabled);
    }
    void setAttributeDisabled(const std::string& name){
-   setAttributeDisabled(GPUVariable::getKeyForName(name, ATTRIBUTE));
+   setAttributeDisabled(getKeyForName(name, ATTRIBUTE));
    }
    */
   

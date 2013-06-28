@@ -418,7 +418,7 @@ void Mark::createGLState(const Planet* planet, int viewportWidth, int viewportHe
     _billboardTexCoord = texCoor.create();
   }
   
-  progState->setAttributeValue(GPUVariable::TEXTURE_COORDS,
+  progState->setAttributeValue(TEXTURE_COORDS,
                                _billboardTexCoord, 2,
                                2,
                                0,
@@ -434,14 +434,14 @@ void Mark::createGLState(const Planet* planet, int viewportWidth, int viewportHe
   
   IFloatBuffer* vertices = vertex.create();
   
-  progState->setAttributeValue(GPUVariable::POSITION,
+  progState->setAttributeValue(POSITION,
                                vertices, 4, //The attribute is a float vector of 4 elements
                                3,            //Our buffer contains elements of 3
                                0,            //Index 0
                                false,        //Not normalized
                                0);           //Stride 0
   
-  progState->setUniformValue(GPUVariable::TEXTURE_EXTENT, _textureWidth, _textureHeight);
+  progState->setUniformValue(TEXTURE_EXTENT, _textureWidth, _textureHeight);
 }
 
 void Mark::render(const G3MRenderContext* rc,

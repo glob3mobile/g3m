@@ -24,14 +24,14 @@
 //  //  GPUProgramState* progState = new GPUProgramState(parentState);
 //  
 //  //  if (_baseColor != NULL){
-//  //    progState->setUniformValue(GPUVariable::EnableFlatColor, true);
-//  //    progState->setUniformValue(GPUVariable::FLAT_COLOR,
+//  //    progState->setUniformValue(EnableFlatColor, true);
+//  //    progState->setUniformValue(FLAT_COLOR,
 //  //                               (double)_baseColor->getRed(),
 //  //                               (double)_baseColor->getBlue(),
 //  //                               (double) _baseColor->getGreen(),
 //  //                               (double) _baseColor->getAlpha());
 //  //    const float colorsIntensity = 1;
-//  //    progState->setUniformValue(GPUVariable::FlatColorIntensity, colorsIntensity);
+//  //    progState->setUniformValue(FlatColorIntensity, colorsIntensity);
 //  //  }
 //  //
 //  //  return progState;
@@ -44,13 +44,13 @@ void SGMaterialNode::modifyGLGlobalState(GLGlobalState& GLGlobalState) const{
 void SGMaterialNode::modifyGPUProgramState(GPUProgramState& progState) const{
   
   if (_baseColor != NULL){
-    progState.setUniformValue(GPUVariable::EnableFlatColor, true);
-    progState.setUniformValue(GPUVariable::FLAT_COLOR,
+//    progState.setUniformValue(EnableFlatColor, true);
+    progState.setUniformValue(FLAT_COLOR,
                               (double)_baseColor->getRed(),
                               (double)_baseColor->getBlue(),
                               (double) _baseColor->getGreen(),
                               (double) _baseColor->getAlpha());
     const float colorsIntensity = 1;
-    progState.setUniformValue(GPUVariable::FlatColorIntensity, colorsIntensity);
+//    progState.setUniformValue(FlatColorIntensity, colorsIntensity);
   }
 }

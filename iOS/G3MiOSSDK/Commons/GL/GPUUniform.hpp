@@ -68,6 +68,8 @@ protected:
   GPUUniformValue* _value;
   const int _type;
 
+  const GPUUniformKey _key;
+
 public:
 
   virtual ~GPUUniform(){
@@ -82,7 +84,8 @@ public:
   _id(id),
   _dirty(false),
   _value(NULL),
-  _type(type)
+  _type(type),
+  _key(getUniformKey(name))
   {
   }
 
@@ -91,6 +94,7 @@ public:
   int getType() const { return _type; }
   bool wasSet() const { return _value != NULL; }
   GPUUniformValue* getSetValue() const { return _value; }
+  int getKey() const { return _key;}
 
   void unset();
 

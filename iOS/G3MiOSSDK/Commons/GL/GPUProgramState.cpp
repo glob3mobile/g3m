@@ -129,7 +129,7 @@ void GPUProgramState::applyChanges(GL* gl) const{
   _linkedProgram->applyChanges(gl);
 }
 
-bool GPUProgramState::setGPUUniformValue(int key, GPUUniformValue* v){
+bool GPUProgramState::setGPUUniformValue(GPUUniformKey key, GPUUniformValue* v){
   
   GPUUniform* prevLinkedUniform = NULL;
   bool uniformExisted = false;
@@ -161,7 +161,7 @@ bool GPUProgramState::setGPUUniformValue(int key, GPUUniformValue* v){
   return uniformExisted;
 }
 
-bool GPUProgramState::setGPUAttributeValue(int key, GPUAttributeValue* v){
+bool GPUProgramState::setGPUAttributeValue(GPUAttributeKey key, GPUAttributeValue* v){
   GPUAttribute* prevLinkedAttribute = NULL;
   bool attributeExisted = false;
 #ifdef C_CODE
@@ -190,7 +190,7 @@ bool GPUProgramState::setGPUAttributeValue(int key, GPUAttributeValue* v){
   return attributeExisted;
 }
 
-bool GPUProgramState::setAttributeValue(int key,
+bool GPUProgramState::setAttributeValue(GPUAttributeKey key,
                                         IFloatBuffer* buffer, int attributeSize,
                                         int arrayElementSize, int index, bool normalized, int stride){
   switch (attributeSize) {
@@ -208,39 +208,39 @@ bool GPUProgramState::setAttributeValue(int key,
   }
 }
 
-bool GPUProgramState::setUniformValue(int key, bool b){
+bool GPUProgramState::setUniformValue(GPUUniformKey key, bool b){
   return setGPUUniformValue(key, new GPUUniformValueBool(b) );
 }
 
-bool GPUProgramState::setUniformValue(int key, float f){
+bool GPUProgramState::setUniformValue(GPUUniformKey key, float f){
   return setGPUUniformValue(key, new GPUUniformValueFloat(f));
 }
 
-bool GPUProgramState::setUniformValue(int key, const Vector2D& v){
+bool GPUProgramState::setUniformValue(GPUUniformKey key, const Vector2D& v){
   return setGPUUniformValue(key, new GPUUniformValueVec2Float(v._x, v._y));
 }
 
-bool GPUProgramState::setUniformValue(int key, double x, double y, double z, double w){
+bool GPUProgramState::setUniformValue(GPUUniformKey key, double x, double y, double z, double w){
   return setGPUUniformValue(key, new GPUUniformValueVec4Float(x,y,z,w));
 }
 
-bool GPUProgramState::setUniformValue(int key, double x, double y){
+bool GPUProgramState::setUniformValue(GPUUniformKey key, double x, double y){
   return setGPUUniformValue(key, new GPUUniformValueVec2Float(x, y));
 }
 
-bool GPUProgramState::setUniformMatrixValue(int key, const MutableMatrix44D& m, bool isTransform){
+bool GPUProgramState::setUniformMatrixValue(GPUUniformKey key, const MutableMatrix44D& m, bool isTransform){
   GPUUniformValueMatrix4FloatTransform *uv = new GPUUniformValueMatrix4FloatTransform(m, isTransform);
   return setGPUUniformValue(key, uv);
 }
 
-void GPUProgramState::setAttributeEnabled(int key, bool enabled){
+void GPUProgramState::setAttributeEnabled(GPUAttributeKey key, bool enabled){
   //TODO: REMOVE FUNCTION
   if (!enabled){
     setAttributeDisabled(key);
   }
 }
 
-void GPUProgramState::setAttributeDisabled(int key){
+void GPUProgramState::setAttributeDisabled(GPUAttributeKey key){
   setGPUAttributeValue(key, new GPUAttributeValueDisabled());
 }
 
@@ -324,7 +324,7 @@ std::vector<int>* GPUProgramState::getAttributeKeys() const{
   return _attributeKeys;
 }
 
-bool GPUProgramState::removeGPUUniformValue(int key){
+bool GPUProgramState::removeGPUUniformValue(GPUUniformKey key){
   bool uniformExisted = false;
 #ifdef C_CODE
   std::map<int, GPUUniformValue*> ::iterator it = _uniformValues.find(key);
