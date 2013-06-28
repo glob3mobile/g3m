@@ -20,6 +20,7 @@ import org.glob3.mobile.generated.DirectMesh;
 import org.glob3.mobile.generated.FloatBufferBuilderFromColor;
 import org.glob3.mobile.generated.FloatBufferBuilderFromGeodetic;
 import org.glob3.mobile.generated.G3MContext;
+import org.glob3.mobile.generated.G3MEventContext;
 import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.GLPrimitive;
 import org.glob3.mobile.generated.Geodetic2D;
@@ -59,6 +60,8 @@ import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.Shape;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.SimpleCameraConstrainer;
+import org.glob3.mobile.generated.TerrainTouchEvent;
+import org.glob3.mobile.generated.TerrainTouchEventListener;
 import org.glob3.mobile.generated.TileRenderer;
 import org.glob3.mobile.generated.TileRendererBuilder;
 import org.glob3.mobile.generated.TimeInterval;
@@ -224,9 +227,21 @@ public class G3MWebGLDemo
                   TimeInterval.fromDays(30), //
                   true);
          layerSet.addLayer(blueMarbleL);
+         blueMarbleL.addTerrainTouchEventListener(new TerrainTouchEventListener() {
+ 
+        	 @Override
+			public boolean onTerrainTouch(G3MEventContext context,
+					TerrainTouchEvent ev) {
+            	Window.alert("touching terrain blueMarble");
+   				return false;
+			}
+
+			@Override
+			public void dispose() {}
+          });
       }
 
-      final boolean useOrtoAyto = true;
+      final boolean useOrtoAyto = false;
       if (useOrtoAyto) {
 
          final LayerTilesRenderParameters ltrp = new LayerTilesRenderParameters(Sector.fullSphere(), 2, 4, 0, 19, new Vector2I(
@@ -251,6 +266,7 @@ public class G3MWebGLDemo
       }
 
       builder.setInitializationTask(initializationTask);
+      builder.getTileRendererBuilder().setLayerSet(layerSet);
 
       _widget = builder.createWidget();
 
