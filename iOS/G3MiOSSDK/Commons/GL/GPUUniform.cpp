@@ -24,18 +24,6 @@ void GPUUniform::unset() {
   _dirty = false;
 }
 
-void GPUUniform::set(const GPUUniformValue* v) {
-  if (_type == v->getType()) { //type checking
-    if (_value == NULL || !_value->isEqualsTo(v)) {
-      _dirty = true;
-      _value = v->copyOrCreate(_value);
-    }
-  }
-  else {
-    ILogger::instance()->logError("Attempting to set uniform " + _name + " with invalid value type.");
-  }
-}
-
 void GPUUniform::applyChanges(GL* gl) {
   if (_dirty) {
     _value->setUniform(gl, _id);
