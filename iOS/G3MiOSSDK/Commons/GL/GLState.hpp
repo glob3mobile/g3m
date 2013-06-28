@@ -17,13 +17,21 @@
 #include "GPUProgramManager.hpp"
 
 class GLState{
-  
+
+  /////////////////////////////////////////////////
+  //CURRENT GL STATUS
   static GLGlobalState _currentGPUGlobalState;
   static GPUProgram*   _currentGPUProgram;
+  /////////////////////////////////////////////////
   
   GPUProgramState* _programState;
   GLGlobalState*   _globalState;
   const bool _owner;
+
+  mutable int _uniformsCode;
+  mutable int _attributesCode;
+  mutable bool _totalGPUProgramStateChanged;
+  mutable GPUProgram* _lastGPUProgramUsed;
   
 #ifdef C_CODE
   mutable const GLState* _parentGLState;
@@ -32,13 +40,16 @@ class GLState{
   private GLState _parentGLState;
 #endif
   
-  void linkAndApplyToGPUProgram(GL* gl, GPUProgram* prog) const;
+  void applyStates(GL* gl, GPUProgram* prog) const;
   
   explicit GLState(const GLState& state):
   _programState(new GPUProgramState()),
   _globalState(new GLGlobalState()),
   _owner(true),
-  _parentGLState(NULL){}
+  _parentGLState(NULL),
+  _uniformsCode(0),
+  _attributesCode(0),
+  _totalGPUProgramStateChanged(true){}
   
 public:
   
@@ -46,12 +57,21 @@ public:
   _programState(new GPUProgramState()),
   _globalState(new GLGlobalState()),
   _owner(true),
-  _parentGLState(NULL){}
+  _parentGLState(NULL),
+  _uniformsCode(0),
+  _attributesCode(0),
+  _totalGPUProgramStateChanged(true){}
   
   //For debugging purposes only
   GLState(GLGlobalState*   globalState,
           GPUProgramState* programState):
-  _programState(programState), _globalState(globalState), _owner(false), _parentGLState(NULL){}
+  _programState(programState),
+  _globalState(globalState),
+  _owner(false),
+  _parentGLState(NULL),
+  _uniformsCode(0),
+  _attributesCode(0),
+  _totalGPUProgramStateChanged(true){}
   
   ~GLState(){
     if (_owner){
@@ -66,6 +86,28 @@ public:
   
   void setParent(const GLState* p) const{
     _parentGLState = p;
+    if (p != NULL){
+      int newUniformsCode = p->getUniformsCode() | _programState->getUniformsCode();
+      int newAttributesCode = p->getAttributesCode() | _programState->getAttributesCode();
+
+      _totalGPUProgramStateChanged = (newAttributesCode != _attributesCode) || (newUniformsCode != _uniformsCode);
+      _uniformsCode = newUniformsCode;
+      _attributesCode = newAttributesCode;
+    }
+  }
+
+  int getUniformsCode() const{
+    if (_uniformsCode == 0){
+      return _programState->getUniformsCode();
+    }
+    return _uniformsCode;
+  }
+
+  int getAttributesCode() const{
+    if (_attributesCode == 0){
+      return _programState->getAttributesCode();
+    }
+    return _attributesCode;
   }
 
   void applyGlobalStateOnGPU(GL* gl) const;

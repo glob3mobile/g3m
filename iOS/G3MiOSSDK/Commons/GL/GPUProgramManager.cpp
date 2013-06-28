@@ -85,7 +85,15 @@ GPUProgram* GPUProgramManager::getProgram(GL* gl, const GLState* glState) {
     
   }
   
-  
   return NULL;
-  
+}
+
+GPUProgram* GPUProgramManager::getCompiledProgram(int uniformsCode, int attributesCode){
+  for (std::map<std::string, GPUProgram*>::iterator it = _programs.begin(); it != _programs.end(); ++it){
+    GPUProgram* p = it->second;
+    if (p->getUniformsCode() == uniformsCode && p->getAttributesCode() == attributesCode){
+      return p;
+    }
+  }
+  return NULL;
 }

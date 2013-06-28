@@ -108,6 +108,16 @@ public:
 //  }
   
   GPUProgram* getProgram(GL* gl, const GLState* glState);
+
+  GPUProgram* getCompiledProgram(int uniformsCode, int attributesCode);
+
+  GPUProgram* getProgram(GL* gl, const GLState* glState, int uniformsCode, int attributesCode){
+    GPUProgram* p = getCompiledProgram(uniformsCode, attributesCode);
+    if (p == NULL){
+      p = getProgram(gl, glState);
+    }
+    return p;
+  }
   
   
 };

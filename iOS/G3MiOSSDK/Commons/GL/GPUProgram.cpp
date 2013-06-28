@@ -343,3 +343,21 @@ GPUAttribute* GPUProgram::getGPUAttributeVecXFloat(int key, int x) const{
   }
   return NULL;
 }
+
+void GPUProgram::setGPUUniformValue(int key, GPUUniformValue* v){
+  GPUUniform* u = _uniforms[key];
+  if (u == NULL){
+    ILogger::instance()->logError("Uniform not found");
+    return;
+  }
+  u->set(v);
+}
+
+void GPUProgram::setGPUAttributeValue(int key, GPUAttributeValue* v){
+  GPUAttribute* a = _attributes[key];
+  if (a == NULL){
+    ILogger::instance()->logError("Attribute not found");
+    return;
+  }
+  a->set(v);
+}

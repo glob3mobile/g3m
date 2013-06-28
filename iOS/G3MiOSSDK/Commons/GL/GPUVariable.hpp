@@ -79,6 +79,9 @@ public:
   static int getUniformCode(GPUUniformKey u);
   static int getAttributeCode(GPUAttributeKey a);
 
+  static int getUniformCode(int u);
+  static int getAttributeCode(int a);
+
 //  static const int GROUP_COLOR;
 //  static const int GROUP_NOGROUP;
 

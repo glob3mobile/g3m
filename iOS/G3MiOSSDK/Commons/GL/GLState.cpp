@@ -20,52 +20,36 @@ void GLState::applyGlobalStateOnGPU(GL* gl) const{
   _globalState->applyChanges(gl, _currentGPUGlobalState);
 }
 
-void GLState::linkAndApplyToGPUProgram(GL* gl, GPUProgram* prog) const{
+void GLState::applyStates(GL* gl, GPUProgram* prog) const{
   if (_parentGLState != NULL){
-    _parentGLState->linkAndApplyToGPUProgram(gl, prog);
+    _parentGLState->applyStates(gl, prog);
   }
-  
-  _programState->linkToProgram(prog);
-  _programState->applyValuesToLinkedProgram();
-  
+
+//  _programState->linkToProgram(prog);
+//  _programState->applyValuesToLinkedProgram();
+  _programState->applyValuesToProgram(prog);
+
   _globalState->applyChanges(gl, _currentGPUGlobalState);
 }
 
 void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
-  
-  GPUProgram* prog = _programState->getLinkedProgram();
-  if (prog != NULL){
-#ifdef C_CODE
-    const GLState* parent = _parentGLState;
-#endif
-#ifdef JAVA_CODE
-    GLState parent = _parentGLState;
-#endif
-    while (parent != NULL) {
-      if (prog != parent->_programState->getLinkedProgram()){
-        int ____TALK_WITH_JM;
-        prog = NULL;
-        break;
-      }
-      parent = parent->_parentGLState;
-    }
+
+  if (_lastGPUProgramUsed == NULL || _totalGPUProgramStateChanged){
+    //ILogger::instance()->logInfo("Total State for GPUProgram has changed since last apply");
+    _lastGPUProgramUsed = progManager.getProgram(gl, this, getUniformsCode(), getAttributesCode());
   }
-  
-  if (prog == NULL){
-    prog = progManager.getProgram(gl, this);
-  }
-  
-  if (prog != NULL){
-    if (prog != _currentGPUProgram){
+
+  if (_lastGPUProgramUsed != NULL){
+    if (_lastGPUProgramUsed != _currentGPUProgram){
       if (_currentGPUProgram != NULL){
         _currentGPUProgram->onUnused(gl);
       }
-      _currentGPUProgram = prog;
-      gl->useProgram(prog);
+      _currentGPUProgram = _lastGPUProgramUsed;
+      gl->useProgram(_lastGPUProgramUsed);
     }
     
-    linkAndApplyToGPUProgram(gl, prog);
-    prog->applyChanges(gl);
+    applyStates(gl, _lastGPUProgramUsed);
+    _lastGPUProgramUsed->applyChanges(gl);
 
     //prog->onUnused(); //Uncomment to check that all GPUProgramStates are complete
   } else{
