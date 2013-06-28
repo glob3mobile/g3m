@@ -20,6 +20,7 @@ import org.glob3.mobile.generated.DirectMesh;
 import org.glob3.mobile.generated.FloatBufferBuilderFromColor;
 import org.glob3.mobile.generated.FloatBufferBuilderFromGeodetic;
 import org.glob3.mobile.generated.G3MContext;
+import org.glob3.mobile.generated.G3MEventContext;
 import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.GLPrimitive;
 import org.glob3.mobile.generated.Geodetic2D;
@@ -59,6 +60,8 @@ import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.Shape;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.SimpleCameraConstrainer;
+import org.glob3.mobile.generated.TerrainTouchEvent;
+import org.glob3.mobile.generated.TerrainTouchEventListener;
 import org.glob3.mobile.generated.TileRenderer;
 import org.glob3.mobile.generated.TileRendererBuilder;
 import org.glob3.mobile.generated.TimeInterval;
@@ -115,17 +118,44 @@ public class G3MWebGLDemo
    public void initDefaultWithBuilder() {
       final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
 
-      _markersRenderer = new MarksRenderer(true);
-      _markersRenderer.setMarkTouchListener(new MarkTouchListener() {
+      final boolean useMarkers = true;
+      if (useMarkers) {
+         // marks renderer
+         final boolean readyWhenMarksReady = true;
+         final MarksRenderer marksRenderer = new MarksRenderer(readyWhenMarksReady);
 
-         @Override
-         public boolean touchedMark(final Mark mark) {
-            Window.alert(mark.getLabel());
-            return false;
-         }
-      }, true);
+         /*marksRenderer.setMarkTouchListener(new MarkTouchListener() {
+            @Override
+            public boolean touchedMark(final Mark mark) {
+               Window.alert("Touched on mark: " + mark.getLabel());
+               return true;
+            }
+         }, true);*/
 
-      builder.addRenderer(_markersRenderer);
+
+         final Mark m1 = new Mark( //
+                  "Paris", 
+                  new URL("http://icons.iconarchive.com/icons/icons-land/vista-map-markers/48/Map-Marker-Flag-3-Left-Chartreuse-icon.png", false), //
+                  new Geodetic3D(Angle.fromDegrees(48.859746), Angle.fromDegrees(2.352051), 0),
+                  0,
+                  true,
+                  15);
+         //m1->addTouchListener(listener);
+         marksRenderer.addMark(m1);
+
+         final Mark m2 = new Mark( //
+                  "Las Palmas", //
+                  new URL("http://icons.iconarchive.com/icons/icons-land/vista-map-markers/48/Map-Marker-Flag-3-Right-Pink-icon.png", false), //
+                  new Geodetic3D(Angle.fromDegrees(28.116956), Angle.fromDegrees(-15.440453), 0), //
+                  0, //
+                  true,
+                  15);
+                  
+         //m2->addTouchListener(listener);
+         marksRenderer.addMark(m2);
+
+         builder.addRenderer(marksRenderer);
+      }
 
       final ShapesRenderer shapesRenderer = new ShapesRenderer();
       builder.addRenderer(shapesRenderer);
@@ -197,9 +227,21 @@ public class G3MWebGLDemo
                   TimeInterval.fromDays(30), //
                   true);
          layerSet.addLayer(blueMarbleL);
+         blueMarbleL.addTerrainTouchEventListener(new TerrainTouchEventListener() {
+ 
+        	 @Override
+			public boolean onTerrainTouch(G3MEventContext context,
+					TerrainTouchEvent ev) {
+            	Window.alert("touching terrain blueMarble");
+   				return false;
+			}
+
+			@Override
+			public void dispose() {}
+          });
       }
 
-      final boolean useOrtoAyto = true;
+      final boolean useOrtoAyto = false;
       if (useOrtoAyto) {
 
          final LayerTilesRenderParameters ltrp = new LayerTilesRenderParameters(Sector.fullSphere(), 2, 4, 0, 19, new Vector2I(
@@ -224,6 +266,7 @@ public class G3MWebGLDemo
       }
 
       builder.setInitializationTask(initializationTask);
+      builder.getTileRendererBuilder().setLayerSet(layerSet);
 
       _widget = builder.createWidget();
 
