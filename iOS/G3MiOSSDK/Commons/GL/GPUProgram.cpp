@@ -118,21 +118,34 @@ void GPUProgram::getVariables(GL* gl){
     _uniforms[i] = NULL;
     _attributes[i] = NULL;
   }
-  
+
   //Uniforms
+  _uniformsCode = 0;
   _nUniforms = gl->getProgramiv(this, GLVariable::activeUniforms());
   for (int i = 0; i < _nUniforms; i++) {
     GPUUniform* u = gl->getActiveUniform(this, i);
-    if (u != NULL) _uniforms[u->getIndex()] = u;
+    if (u != NULL){
+      _uniforms[u->getIndex()] = u;
+
+      int code = GPUVariable::getUniformCode(u->getKey());
+      _uniformsCode = _uniformsCode | code;
+    }
   }
   
   //Attributes
+  _attributesCode = 0;
   _nAttributes = gl->getProgramiv(this, GLVariable::activeAttributes());
   for (int i = 0; i < _nAttributes; i++) {
     GPUAttribute* a = gl->getActiveAttribute(this, i);
-    if (a != NULL) _attributes[a->getIndex()] = a;
+    if (a != NULL){
+      _attributes[a->getIndex()] = a;
+
+      int code = GPUVariable::getAttributeCode(a->getKey());
+      _attributesCode = _attributesCode | code;
+    }
   }
-  
+
+  ILogger::instance()->logInfo("Program with Uniforms Bitcode: %d and Attributes Bitcode: %d", _uniformsCode, _attributesCode);
 }
 
 GPUUniform* GPUProgram::getGPUUniform(const std::string name) const{

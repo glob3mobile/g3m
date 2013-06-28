@@ -17,21 +17,21 @@ enum GPUVariableType{
 };
 
 enum GPUUniformKey{
-  UNRECOGNIZED_UNIFORM = 0,
-  FLAT_COLOR = 1,
-  MODELVIEW = 2,
-  TEXTURE_EXTENT = 3,
-  VIEWPORT_EXTENT = 4,
-  TRANSLATION_TEXTURE_COORDS = 5,
-  SCALE_TEXTURE_COORDS = 6,
-  POINT_SIZE= 7
+  UNRECOGNIZED_UNIFORM = -1,
+  FLAT_COLOR = 0,
+  MODELVIEW = 1,
+  TEXTURE_EXTENT = 2,
+  VIEWPORT_EXTENT = 3,
+  TRANSLATION_TEXTURE_COORDS = 4,
+  SCALE_TEXTURE_COORDS = 5,
+  POINT_SIZE= 6
 };
 
 enum GPUAttributeKey{
-  UNRECOGNIZED_ATTRIBUTE = 0,
-  POSITION = 1,
-  TEXTURE_COORDS = 2,
-  COLOR = 3
+  UNRECOGNIZED_ATTRIBUTE = -1,
+  POSITION = 0,
+  TEXTURE_COORDS = 1,
+  COLOR = 2
 };
 
 class GPUVariable{
@@ -75,6 +75,9 @@ public:
 
   static GPUUniformKey getUniformKey(const std::string& name);
   static GPUAttributeKey getAttributeKey(const std::string& name);
+
+  static int getUniformCode(GPUUniformKey u);
+  static int getAttributeCode(GPUAttributeKey a);
 
 //  static const int GROUP_COLOR;
 //  static const int GROUP_NOGROUP;

@@ -50,6 +50,9 @@ class GPUProgram{
   int _nAttributes;
   int _nUniforms;
 
+  int _uniformsCode;
+  int _attributesCode;
+
   std::string _name;
   
   bool compileShader(GL* gl, int shader, const std::string& source) const;
@@ -77,7 +80,6 @@ public:
   
   int getGPUAttributesNumber() const { return _nAttributes;}
   int getGPUUniformsNumber() const { return _nUniforms;}
-  
   
   GPUUniform* getGPUUniform(const std::string name) const;
   GPUAttribute* getGPUAttribute(const std::string name) const;
