@@ -21,8 +21,11 @@ package org.glob3.mobile.generated;
 public class GPUProgramState
 {
 
-  private java.util.HashMap<Integer, GPUUniformValue> _uniformValues = new java.util.HashMap<Integer, GPUUniformValue>();
-  private java.util.HashMap<Integer, GPUAttributeValue> _attributesValues = new java.util.HashMap<Integer, GPUAttributeValue>();
+//  std::map<GPUUniformKey, GPUUniformValue*> _uniformValues;
+//  std::map<GPUAttributeKey, GPUAttributeValue*> _attributesValues;
+
+  private GPUUniformValue[] _uniformValues = new GPUUniformValue[32];
+  private GPUAttributeValue[] _attributeValues = new GPUAttributeValue[32];
 
   private boolean setGPUUniformValue(GPUUniformKey key, GPUUniformValue v)
   {
@@ -32,15 +35,34 @@ public class GPUProgramState
   
     final int index = key.getValue();
   
-  
-    GPUUniformValue pv = _uniformValues.get(index);
-    if (pv != null){
+    GPUUniformValue u = _uniformValues[index];
+    if (u != null)
+    {
+      prevLinkedUniform = u.getLinkedUniform();
+      if (u != null)
+         u.dispose();
       uniformExisted = true;
-      prevLinkedUniform = pv.getLinkedUniform();
     }
   
+  
+    ///#ifdef C_CODE
+    //  std::map<int, GPUUniformValue*> ::iterator it = _uniformValues.find(index);
+    //  if (it != _uniformValues.end()){
+    //    prevLinkedUniform = it->second->getLinkedUniform();
+    //    delete it->second;
+    //    uniformExisted = true;
+    //  }
+    ///#endif
+    ///#ifdef JAVA_CODE
+    //  GPUUniformValue pv = _uniformValues.get(index);
+    //  if (pv != null){
+    //    uniformExisted = true;
+    //    prevLinkedUniform = pv.getLinkedUniform();
+    //  }
+    ///#endif
+  
     v.linkToGPUUniform(prevLinkedUniform);
-    _uniformValues.put(index, v);
+    _uniformValues[index] = v;
   
     if (!uniformExisted)
     {
@@ -56,14 +78,33 @@ public class GPUProgramState
   
     final int index = key.getValue();
   
-    GPUAttributeValue pv = _attributesValues.get(index);
-    if (pv != null){
+    GPUAttributeValue a = _attributeValues[index];
+    if (a != null)
+    {
+      prevLinkedAttribute = a.getLinkedAttribute();
+      if (a != null)
+         a.dispose();
       attributeExisted = true;
-      prevLinkedAttribute = pv.getLinkedAttribute();
     }
   
+    ///#ifdef C_CODE
+    //  std::map<int, GPUAttributeValue*> ::iterator it = _attributesValues.find(index);
+    //  if (it != _attributesValues.end()){
+    //    prevLinkedAttribute = it->second->getLinkedAttribute();
+    //    delete it->second;
+    //    attributeExisted = true;
+    //  }
+    ///#endif
+    ///#ifdef JAVA_CODE
+    //  GPUAttributeValue pv = _attributesValues.get(index);
+    //  if (pv != null){
+    //    attributeExisted = true;
+    //    prevLinkedAttribute = pv.getLinkedAttribute();
+    //  }
+    ///#endif
+  
     v.linkToGPUAttribute(prevLinkedAttribute);
-    _attributesValues.put(index, v);
+    _attributeValues[index] = v;
   
     if (!attributeExisted)
     {
@@ -97,6 +138,12 @@ public class GPUProgramState
      _linkedProgram = null;
      _uniformKeys = null;
      _attributeKeys = null;
+    for (int i = 0; i < 32; i++)
+    {
+      _uniformValues[i] = null;
+      _attributeValues[i] = null;
+    }
+
   }
 
   public void dispose()
@@ -108,9 +155,35 @@ public class GPUProgramState
   public final void clear()
   {
     _linkedProgram = null;
-    _uniformValues.clear();
   
-    _attributesValues.clear();
+    for (int i = 0; i < 32; i++)
+    {
+      if (_uniformValues[i] != null)
+         _uniformValues[i].dispose();
+      _uniformValues[i] = null;
+      if (_attributeValues[i] != null)
+         _attributeValues[i].dispose();
+      _attributeValues[i] = null;
+    }
+  
+  
+    ///#ifdef C_CODE
+    //  for(std::map<GPUAttributeKey, GPUUniformValue*> ::const_iterator it = _uniformValues.begin();
+    //      it != _uniformValues.end();
+    //      it++){
+    //    delete it->second;
+    //  }
+    ///#endif
+    //  _uniformValues.clear();
+    //
+    ///#ifdef C_CODE
+    //  for(std::map<int, GPUAttributeValue*> ::const_iterator it = _attributesValues.begin();
+    //      it != _attributesValues.end();
+    //      it++){
+    //    delete it->second;
+    //  }
+    ///#endif
+    //  _attributesValues.clear();
   }
 
   public final boolean setUniformValue(GPUUniformKey key, boolean b)
@@ -193,25 +266,75 @@ public class GPUProgramState
       return; //Already linked
     }
   
-  
-    for (java.util.Map.Entry<Integer, GPUUniformValue> entry : _uniformValues.entrySet()){
-      final Integer key = entry.getKey();
-      final GPUUniformValue v = entry.getValue();
-  
-      if (!v.linkToGPUProgram(prog, key)){
-        return;
+    for (int i = 0; i < 32; i++)
+    {
+      GPUUniformValue u = _uniformValues[i];
+      if (u != null)
+      {
+        if (!u.linkToGPUProgram(prog, i))
+        {
+          return;
+        }
+      }
+      GPUAttributeValue a = _attributeValues[i];
+      if (a != null)
+      {
+        if (!a.linkToGPUProgram(prog, i))
+        {
+          return;
+        }
       }
     }
   
-    for (java.util.Map.Entry<Integer, GPUAttributeValue> entry : _attributesValues.entrySet()){
-      final Integer key = entry.getKey();
-      final GPUAttributeValue v = entry.getValue();
-  
-      if (!v.linkToGPUProgram(prog, key)){
-        return;
-      }
-    }
-  
+    //
+    ///#ifdef JAVA_CODE
+    //
+    //  for (java.util.Map.Entry<Integer, GPUUniformValue> entry : _uniformValues.entrySet()){
+    //    final Integer key = entry.getKey();
+    //    final GPUUniformValue v = entry.getValue();
+    //
+    //    if (!v.linkToGPUProgram(prog, key)){
+    //      return;
+    //    }
+    //  }
+    //
+    //  for (java.util.Map.Entry<Integer, GPUAttributeValue> entry : _attributesValues.entrySet()){
+    //    final Integer key = entry.getKey();
+    //    final GPUAttributeValue v = entry.getValue();
+    //
+    //    if (!v.linkToGPUProgram(prog, key)){
+    //      return;
+    //    }
+    //  }
+    //
+    ///#endif
+    ///#ifdef C_CODE
+    //
+    //  for(std::map<int, GPUUniformValue*> ::const_iterator it = _uniformValues.begin();
+    //      it != _uniformValues.end();
+    //      it++){
+    //
+    //    const int key = it->first;
+    //    GPUUniformValue* v = it->second;
+    //
+    //    if (!v->linkToGPUProgram(prog, key)){
+    //      return;
+    //    }
+    //  }
+    //
+    //  for(std::map<int, GPUAttributeValue*> ::const_iterator it = _attributesValues.begin();
+    //      it != _attributesValues.end();
+    //      it++){
+    //
+    //    const int key = it->first;
+    //    GPUAttributeValue* v = it->second;
+    //
+    //    if (!v->linkToGPUProgram(prog, key)){
+    //      return;
+    //    }
+    //  }
+    //
+    ///#endif
   
   
     _linkedProgram = prog;
@@ -235,8 +358,25 @@ public class GPUProgramState
   
       _uniformKeys = new java.util.ArrayList<Integer>();
   
+  ///#ifdef C_CODE
+  //    for(std::map<int, GPUUniformValue*> ::const_iterator it = _uniformValues.begin();
+  //        it != _uniformValues.end();
+  //        it++){
+  //      _uniformKeys->push_back(it->first);
+  //    }
+  ///#endif
+  //
+  ///#ifdef JAVA_CODE
+  //    _uniformKeys.addAll(_uniformValues.keySet());
+  ///#endif
   
-      _uniformKeys.addAll(_uniformValues.keySet());
+      for (int i = 0; i < 32; i++)
+      {
+        if (_uniformValues[i] != null)
+        {
+          _uniformKeys.add(i);
+        }
+      }
   
     }
     return _uniformKeys;
@@ -249,7 +389,24 @@ public class GPUProgramState
   
       _attributeKeys = new java.util.ArrayList<Integer>();
   
-      _attributeKeys.addAll(_attributesValues.keySet());
+  ///#ifdef C_CODE
+  //    for(std::map<int, GPUAttributeValue*> ::const_iterator it = _attributesValues.begin();
+  //        it != _attributesValues.end();
+  //        it++){
+  //      _attributeKeys->push_back(it->first);
+  //    }
+  ///#endif
+  ///#ifdef JAVA_CODE
+  //    _attributeKeys.addAll(_attributesValues.keySet());
+  ///#endif
+  
+      for (int i = 0; i < 32; i++)
+      {
+        if (_attributeValues[i] != null)
+        {
+          _attributeKeys.add(i);
+        }
+      }
   
   
     }
@@ -260,7 +417,58 @@ public class GPUProgramState
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     isb.addString("PROGRAM STATE\n==========\n");
-    //TODO: IMPLEMENT
+  
+    for(int i = 0; i < 32; i++)
+    {
+      GPUUniformValue v = _uniformValues[i];
+      if (v != null)
+      {
+        isb.addString("Uniform ");
+        isb.addInt(i);
+        isb.addString(":\n");
+        isb.addString(v.description() + "\n");
+      }
+    }
+  
+    for(int i = 0; i < 32; i++)
+    {
+      GPUAttributeValue v = _attributeValues[i];
+      if (v != null)
+      {
+        isb.addString("Uniform ");
+        isb.addInt(i);
+        isb.addString(":\n");
+        isb.addString(v.description() + "\n");
+      }
+    }
+  
+  
+    //  for(std::map<int, GPUUniformValue*> ::const_iterator it = _uniformValues.begin();
+    //      it != _uniformValues.end();
+    //      it++){
+    //
+    //    int key = it->first;
+    //    GPUUniformValue* v = it->second;
+    //
+    //    isb->addString("Uniform ");
+    //    isb->addInt(key);
+    //    isb->addString(":\n");
+    //    isb->addString(v->description() + "\n");
+    //  }
+    //
+    //  for(std::map<int, GPUAttributeValue*> ::const_iterator it = _attributesValues.begin();
+    //      it != _attributesValues.end();
+    //      it++){
+    //
+    //    GPUAttributeValue* v = it->second;
+    //    int key = it->first;
+    //
+    //    isb->addString("Uniform ");
+    //    isb->addInt(key);
+    //    isb->addString(":\n");
+    //    isb->addString(v->description() + "\n");
+    //  }
+  
     String s = isb.getString();
     if (isb != null)
        isb.dispose();
@@ -269,26 +477,83 @@ public class GPUProgramState
 
   public final void applyValuesToLinkedProgram()
   {
-    for (final GPUUniformValue u : _uniformValues.values()){
-      u.setValueToLinkedUniform();
-    }
   
-    for (final GPUAttributeValue a : _attributesValues.values()){
-      a.setValueToLinkedAttribute();
+    for (int i = 0; i < 32; i++)
+    {
+      GPUUniformValue u = _uniformValues[i];
+      if (u != null)
+      {
+        u.setValueToLinkedUniform();
+      }
+      GPUAttributeValue a = _attributeValues[i];
+      if (a != null)
+      {
+        a.setValueToLinkedAttribute();
+      }
     }
+    //
+    //
+    ///#ifdef C_CODE
+    //  for(std::map<int, GPUUniformValue*> ::const_iterator it = _uniformValues.begin();
+    //      it != _uniformValues.end();
+    //      it++){
+    //    GPUUniformValue* v = it->second;
+    //    v->setValueToLinkedUniform();
+    //  }
+    //
+    //  for(std::map<int, GPUAttributeValue*> ::const_iterator it = _attributesValues.begin();
+    //      it != _attributesValues.end();
+    //      it++){
+    //    GPUAttributeValue* v = it->second;
+    //    v->setValueToLinkedAttribute();
+    //  }
+    ///#endif
+    ///#ifdef JAVA_CODE
+    //  for (final GPUUniformValue u : _uniformValues.values()){
+    //    u.setValueToLinkedUniform();
+    //  }
+    //
+    //  for (final GPUAttributeValue a : _attributesValues.values()){
+    //    a.setValueToLinkedAttribute();
+    //  }
+    ///#endif
   }
 
   public final boolean removeGPUUniformValue(GPUUniformKey key)
   {
-    boolean uniformExisted = false;
-    uniformExisted = (null != _uniformValues.remove(key));
+  //  bool uniformExisted = false;
+  ///#ifdef C_CODE
+  //  std::map<int, GPUUniformValue*> ::iterator it = _uniformValues.find(key);
+  //  if (it != _uniformValues.end()){
+  //    delete it->second;
+  //    _uniformValues.erase(it);
+  //    uniformExisted = true;
+  //  }
+  ///#endif
+  ///#ifdef JAVA_CODE
+  //  uniformExisted = (null != _uniformValues.remove(key));
+  ///#endif
   
-    if (uniformExisted)
+    final int index = key.getValue();
+  
+    if (_uniformValues[index] != null)
     {
+      if (_uniformValues[index] != null)
+         _uniformValues[index].dispose();
+      _uniformValues[index] = null;
       onStructureChanged();
+      return true;
+    }
+    else
+    {
+      return false;
     }
   
-    return uniformExisted;
+  //  if (uniformExisted){
+  //    onStructureChanged();
+  //  }
+  //
+  //  return uniformExisted;
   }
 
 
