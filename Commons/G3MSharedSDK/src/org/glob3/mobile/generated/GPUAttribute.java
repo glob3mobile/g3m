@@ -12,6 +12,8 @@ public class GPUAttribute extends GPUVariable
   protected boolean _dirtyEnabled;
   protected boolean _enabled;
 
+  protected final GPUAttributeKey _key;
+
 
   public void dispose()
   {
@@ -29,6 +31,7 @@ public class GPUAttribute extends GPUVariable
      _size = size;
      _enabled = false;
      _dirtyEnabled = false;
+     _key = getAttributeKey(name);
   }
 
   public final String getName()
@@ -54,6 +57,16 @@ public class GPUAttribute extends GPUVariable
   public final boolean isEnabled()
   {
      return _enabled;
+  }
+  public final GPUAttributeKey getKey()
+  {
+     return _key;
+  }
+
+
+  public final int getIndex()
+  {
+    return _key.getValue();
   }
 
   public final void unset(GL gl)

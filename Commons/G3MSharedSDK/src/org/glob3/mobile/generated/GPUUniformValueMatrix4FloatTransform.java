@@ -5,18 +5,17 @@ public class GPUUniformValueMatrix4FloatTransform extends GPUUniformValue
   private GPUUniformValueMatrix4FloatTransform(GPUUniformValueMatrix4FloatTransform that)
   {
      super(GLType.glMatrix4Float());
-     _m = new MutableMatrix44D(that._m);
+     _m = new MutableMatrix44D(new MutableMatrix44D(that._m));
      _isTransform = that._isTransform;
   }
 
-  public MutableMatrix44D _m;
-
+  public MutableMatrix44D _m = new MutableMatrix44D();
   public boolean _isTransform;
 
   public GPUUniformValueMatrix4FloatTransform(MutableMatrix44D m, boolean isTransform) //, _transformedMatrix(m)
 {
      super(GLType.glMatrix4Float());
-     _m = new MutableMatrix44D(m);
+     _m = new MutableMatrix44D(new MutableMatrix44D(m));
      _isTransform = isTransform;
 }
 

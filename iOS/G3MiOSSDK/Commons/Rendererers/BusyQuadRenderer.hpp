@@ -88,7 +88,7 @@ public:
     _degrees += value;
     if (_degrees>360) _degrees -= 360;
     _modelviewMatrix = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, 1));
-    _glState.getGPUProgramState()->setUniformMatrixValue(GPUVariable::MODELVIEW, _projectionMatrix.multiply(_modelviewMatrix), false);
+    _glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW, _projectionMatrix.multiply(_modelviewMatrix), false);
   }
   
   void start(const G3MRenderContext* rc);

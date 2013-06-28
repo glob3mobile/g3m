@@ -26,24 +26,8 @@ public class ShapesRenderer extends LeafRenderer
   private G3MContext _context;
 
   private GLState _glState = new GLState();
-  private void createGLState()
-  {
-  //  _glState.getGLGlobalState()->enableDepthTest();
-  
-  //  GPUProgramState& progState = *_glState.getGPUProgramState();
-  //  progState.setUniformValue(GPUVariable::EnableTexture, false);
-  //  progState.setUniformValue(GPUVariable::POINT_SIZE, (float)1.0);
-  //  progState.setUniformValue(GPUVariable::SCALE_TEXTURE_COORDS, Vector2D(1.0,1.0));
-  //  progState.setUniformValue(GPUVariable::TRANSLATION_TEXTURE_COORDS, Vector2D(0.0,0.0));
-  //
-  //  progState.setUniformValue(GPUVariable::ColorPerVertexIntensity, (float)0.0);
-  //  progState.setUniformValue(GPUVariable::EnableFlatColor, false);
-  //  progState.setUniformValue(GPUVariable::FLAT_COLOR, (float)0.0, (float)0.0, (float)0.0, (float)0.0);
-  //  progState.setUniformValue(GPUVariable::FlatColorIntensity, (float)0.0);
-  //
-  //  progState.setAttributeEnabled(GPUVariable::TEXTURE_COORDS, false);
-  //  progState.setAttributeEnabled(GPUVariable::COLOR, false);
-  }
+  private GLState _glStateTransparent = new GLState();
+//  void createGLState();
 
 
   public ShapesRenderer()
@@ -54,7 +38,7 @@ public class ShapesRenderer extends LeafRenderer
   {
      _renderNotReadyShapes = renderNotReadyShapes;
      _context = null;
-    createGLState();
+//    createGLState();
   }
 
   public void dispose()
@@ -166,7 +150,10 @@ public class ShapesRenderer extends LeafRenderer
     final Vector3D cameraPosition = rc.getCurrentCamera().getCartesianPosition();
   
     //Setting camera matrixes
-    _glState.getGPUProgramState().setUniformMatrixValue(GPUVariable.MODELVIEW, rc.getCurrentCamera().getModelViewMatrix(), false);
+    MutableMatrix44D m = rc.getCurrentCamera().getModelViewMatrix();
+    _glState.getGPUProgramState().setUniformMatrixValue(GPUUniformKey.MODELVIEW, m, false);
+  
+    _glStateTransparent.getGPUProgramState().setUniformMatrixValue(GPUUniformKey.MODELVIEW, m, false);
   
     final int shapesCount = _shapes.size();
     for (int i = 0; i < shapesCount; i++)
@@ -180,7 +167,7 @@ public class ShapesRenderer extends LeafRenderer
           final Vector3D shapePosition = planet.toCartesian(shape.getPosition());
           final double squaredDistanceFromEye = shapePosition.sub(cameraPosition).squaredLength();
   
-          rc.addOrderedRenderable(new TransparentShapeWrapper(shape, squaredDistanceFromEye, _glState, _renderNotReadyShapes));
+          rc.addOrderedRenderable(new TransparentShapeWrapper(shape, squaredDistanceFromEye, _glStateTransparent, _renderNotReadyShapes));
         }
         else
         {

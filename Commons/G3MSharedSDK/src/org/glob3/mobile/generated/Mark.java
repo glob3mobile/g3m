@@ -131,7 +131,7 @@ public class Mark
       _billboardTexCoord = texCoor.create();
     }
   
-    progState.setAttributeValue(GPUVariable.TEXTURE_COORDS, _billboardTexCoord, 2, 2, 0, false, 0);
+    progState.setAttributeValue(GPUAttributeKey.TEXTURE_COORDS, _billboardTexCoord, 2, 2, 0, false, 0);
   
     final Vector3D pos = new Vector3D(planet.toCartesian(_position));
     FloatBufferBuilderFromCartesian3D vertex = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
@@ -142,9 +142,9 @@ public class Mark
   
     IFloatBuffer vertices = vertex.create();
   
-    progState.setAttributeValue(GPUVariable.POSITION, vertices, 4, 3, 0, false, 0); //Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
+    progState.setAttributeValue(GPUAttributeKey.POSITION, vertices, 4, 3, 0, false, 0); //Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
   
-    progState.setUniformValue(GPUVariable.TEXTURE_EXTENT, _textureWidth, _textureHeight);
+    progState.setUniformValue(GPUUniformKey.TEXTURE_EXTENT, _textureWidth, _textureHeight);
   }
 
   /**

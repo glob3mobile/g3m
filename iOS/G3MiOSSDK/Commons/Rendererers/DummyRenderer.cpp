@@ -77,8 +77,8 @@ void DummyRenderer::drawFace(GL* gl, const GLGlobalState& parentState,
 {
   
 //  GPUProgramState progState(parentProgramState);
-//  progState.setUniformValue(GPUVariable::FLAT_COLOR, color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
-//  progState.setUniformValue(GPUVariable::FlatColorIntensity, (float)1.0);
+//  progState.setUniformValue(FLAT_COLOR, color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+//  progState.setUniformValue(FlatColorIntensity, (float)1.0);
 //
 //  MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(translation);
 //  MutableMatrix44D R = MutableMatrix44D::createRotationMatrix(a, rotationAxis);
@@ -97,8 +97,8 @@ void DummyRenderer::render(const G3MRenderContext* rc,
   
 //  GPUProgramState progState(NULL);
   
-//  progState.setAttributeEnabled(GPUVariable::POSITION, true);
-//  progState.setAttributeValue(GPUVariable::POSITION,
+//  progState.setAttributeEnabled(POSITION, true);
+//  progState.setAttributeValue(POSITION,
 //                              _vertices, 4, //The attribute is a float vector of 4 elements
 //                              3,            //Our buffer contains elements of 3
 //                              0,            //Index 0

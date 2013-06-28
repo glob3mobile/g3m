@@ -45,9 +45,9 @@ public class MarksRenderer extends LeafRenderer
   {
     GPUProgramState progState = _glState.getGPUProgramState();
     final Camera cc = rc.getCurrentCamera();
-    progState.setUniformMatrixValue(GPUVariable.MODELVIEW, cc.getModelViewMatrix(), false);
+    progState.setUniformMatrixValue(GPUUniformKey.MODELVIEW, cc.getModelViewMatrix(), false);
   
-    progState.setUniformValue(GPUVariable.VIEWPORT_EXTENT, cc.getWidth(), cc.getHeight());
+    progState.setUniformValue(GPUUniformKey.VIEWPORT_EXTENT, cc.getWidth(), cc.getHeight());
   }
 
 

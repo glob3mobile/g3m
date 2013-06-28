@@ -31,7 +31,7 @@ MeshRenderer::~MeshRenderer() {
 void MeshRenderer::render(const G3MRenderContext* rc) {
   const Frustum* frustum = rc->getCurrentCamera()->getFrustumInModelCoordinates();
 
-  _glState.getGPUProgramState()->setUniformMatrixValue(GPUVariable::MODELVIEW, rc->getCurrentCamera()->getModelViewMatrix(), false);
+  _glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW, rc->getCurrentCamera()->getModelViewMatrix(), false);
 
   const int meshesCount = _meshes.size();
   for (int i = 0; i < meshesCount; i++) {
@@ -49,8 +49,8 @@ void MeshRenderer::createGLState() const{
   _glState.getGLGlobalState()->enableDepthTest();
   
 //  GPUProgramState& progState = *_glState.getGPUProgramState();
-//  progState.setUniformValue(GPUVariable::EnableTexture, false);
-//  progState.setUniformValue(GPUVariable::POINT_SIZE, (float)1.0);
-//  progState.setUniformValue(GPUVariable::SCALE_TEXTURE_COORDS, Vector2D(1.0,1.0));
-//  progState.setUniformValue(GPUVariable::TRANSLATION_TEXTURE_COORDS, Vector2D(0.0,0.0));
+//  progState.setUniformValue(EnableTexture, false);
+//  progState.setUniformValue(POINT_SIZE, (float)1.0);
+//  progState.setUniformValue(SCALE_TEXTURE_COORDS, Vector2D(1.0,1.0));
+//  progState.setUniformValue(TRANSLATION_TEXTURE_COORDS, Vector2D(0.0,0.0));
 }

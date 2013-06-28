@@ -5,8 +5,17 @@ public class GPUProgram
   //INativeGL* _nativeGL;
   private int _programID;
   private boolean _programCreated;
-  private java.util.HashMap<Integer, GPUAttribute> _attributes = new java.util.HashMap<Integer, GPUAttribute>();
-  private java.util.HashMap<Integer, GPUUniform> _uniforms = new java.util.HashMap<Integer, GPUUniform>();
+//  std::map<int, GPUAttribute*> _attributes;
+//  std::map<int, GPUUniform*> _uniforms;
+
+  private GPUUniform[] _uniforms = new GPUUniform[32];
+  private GPUAttribute[] _attributes = new GPUAttribute[32];
+  private int _nAttributes;
+  private int _nUniforms;
+
+  private int _uniformsCode;
+  private int _attributesCode;
+
   private String _name;
 
   private boolean compileShader(GL gl, int shader, String source)
@@ -47,24 +56,43 @@ public class GPUProgram
   private void getVariables(GL gl)
   {
   
+    for (int i = 0; i < 32; i++)
+    {
+      _uniforms[i] = null;
+      _attributes[i] = null;
+    }
+  
     //Uniforms
-    int n = gl.getProgramiv(this, GLVariable.activeUniforms());
-    for (int i = 0; i < n; i++)
+    _uniformsCode = 0;
+    _nUniforms = gl.getProgramiv(this, GLVariable.activeUniforms());
+    for (int i = 0; i < _nUniforms; i++)
     {
       GPUUniform u = gl.getActiveUniform(this, i);
       if (u != null)
-         _uniforms.put(u.getKey(), u);
+      {
+        _uniforms[u.getIndex()] = u;
+  
+        int code = GPUVariable.getUniformCode(u.getKey());
+        _uniformsCode = _uniformsCode | code;
+      }
     }
   
     //Attributes
-    n = gl.getProgramiv(this, GLVariable.activeAttributes());
-    for (int i = 0; i < n; i++)
+    _attributesCode = 0;
+    _nAttributes = gl.getProgramiv(this, GLVariable.activeAttributes());
+    for (int i = 0; i < _nAttributes; i++)
     {
       GPUAttribute a = gl.getActiveAttribute(this, i);
       if (a != null)
-         _attributes.put(a.getKey(), a);
+      {
+        _attributes[a.getIndex()] = a;
+  
+        int code = GPUVariable.getAttributeCode(a.getKey());
+        _attributesCode = _attributesCode | code;
+      }
     }
   
+    ILogger.instance().logInfo("Program with Uniforms Bitcode: %d and Attributes Bitcode: %d", _uniformsCode, _attributesCode);
   }
 
   private GPUProgram()
@@ -83,7 +111,6 @@ public class GPUProgram
     p._name = name;
   
     p._programCreated = false;
-    //p->_nativeGL = gl->getNative();
     p._programID = gl.createProgram();
   
     // compile vertex shader
@@ -112,7 +139,7 @@ public class GPUProgram
   
     ILogger.instance().logInfo("FRAGMENT SOURCE: \n %s", fragmentSource);
   
-    //gl->bindAttribLocation(p, 0, GPUVariable::POSITION);
+    //gl->bindAttribLocation(p, 0, POSITION);
   
     // link program
     if (!p.linkProgram(gl))
@@ -167,24 +194,22 @@ public class GPUProgram
 
   public final int getGPUAttributesNumber()
   {
-     return _attributes.size();
+     return _nAttributes;
   }
   public final int getGPUUniformsNumber()
   {
-     return _uniforms.size();
+     return _nUniforms;
   }
-
 
   public final GPUUniform getGPUUniform(String name)
   {
-    int key = GPUVariable.getKeyForName(name, GPUVariableType.UNIFORM);
-  
-    return _uniforms.get(name);
+    final int key = GPUVariable.getUniformKey(name).getValue();
+    return _uniforms[key];
   }
   public final GPUAttribute getGPUAttribute(String name)
   {
-    final int key = GPUVariable.getKeyForName(name, GPUVariableType.ATTRIBUTE);
-    return _attributes.get(name);
+    final int key = GPUVariable.getAttributeKey(name).getValue();
+    return _attributes[key];
   }
 
   public final GPUUniformBool getGPUUniformBool(String name)
@@ -327,12 +352,19 @@ public class GPUProgram
   public final void onUnused(GL gl)
   {
     //ILogger::instance()->logInfo("GPUProgram %s unused", _name.c_str());
-    for (final GPUUniform uni : _uniforms.values()) {
-      uni.unset();
-    }
   
-    for (final GPUAttribute att : _attributes.values()) {
-      att.unset(gl);
+    for (int i = 0; i < 32; i++)
+    {
+      GPUUniform u = _uniforms[i];
+      GPUAttribute a = _attributes[i];
+      if (u != null)
+      {
+        u.unset();
+      }
+      if (a != null)
+      {
+        a.unset(gl);
+      }
     }
   }
 
@@ -341,22 +373,18 @@ public class GPUProgram
    */
   public final void applyChanges(GL gl)
   {
-    //ILogger::instance()->logInfo("GPUProgram %s applying changes", _name.c_str());
-    for (final GPUUniform u : _uniforms.values()){
-      if (u.wasSet()){
-        u.applyChanges(gl);
-      } else{
-        ILogger.instance().logError("Uniform " + u.getName() + " was not set.");
-      }
-    }
   
-    for (final GPUAttribute a : _attributes.values()) {
-      if (a.wasSet()){
+    for (int i = 0; i < 32; i++)
+    {
+      GPUUniform u = _uniforms[i];
+      GPUAttribute a = _attributes[i];
+      if (u != null)
+      {
+        u.applyChanges(gl);
+      }
+      if (a != null)
+      {
         a.applyChanges(gl);
-      } else{
-        if (a.isEnabled()){
-          ILogger.instance().logError("Attribute " + a.getName() + " was not set but it is enabled.");
-        }
       }
     }
   }
@@ -399,15 +427,14 @@ public class GPUProgram
 
   public final GPUUniform getGPUUniform(int key)
   {
-    return _uniforms.get(key);
+    return _uniforms[key];
   }
   public final GPUAttribute getGPUAttribute(int key)
   {
-    return _attributes.get(key);
+    return _attributes[key];
   }
   public final GPUAttribute getGPUAttributeVecXFloat(int key, int x)
   {
-  
     GPUAttribute a = getGPUAttribute(key);
     if (a.getType() == GLType.glFloat() && a.getSize() == x)
     {

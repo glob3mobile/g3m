@@ -41,7 +41,7 @@ public class FlatColorMesh extends Mesh
   
     GPUProgramState progState = _glState.getGPUProgramState();
   
-    progState.setUniformValue(GPUVariable.FLAT_COLOR, (double)_flatColor.getRed(), (double)_flatColor.getGreen(), (double) _flatColor.getBlue(), (double) _flatColor.getAlpha());
+    progState.setUniformValue(GPUUniformKey.FLAT_COLOR, (double) _flatColor.getRed(), (double) _flatColor.getGreen(), (double) _flatColor.getBlue(), (double) _flatColor.getAlpha());
   
   
   }

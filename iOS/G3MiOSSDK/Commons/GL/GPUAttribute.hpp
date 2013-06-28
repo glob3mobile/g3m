@@ -108,6 +108,8 @@ protected:
   
   bool _dirtyEnabled;
   bool _enabled;
+
+  const GPUAttributeKey _key;
   
 public:
   
@@ -123,7 +125,8 @@ public:
   _type(type),
   _size(size),
   _enabled(false),
-  _dirtyEnabled(false){}
+  _dirtyEnabled(false),
+  _key(getAttributeKey(name)){}
   
   const std::string getName() const{ return _name;}
   const int getID() const{ return _id;}
@@ -131,6 +134,17 @@ public:
   int getSize() const{ return _size;}
   bool wasSet() const{ return _value != NULL;}
   bool isEnabled() const { return _enabled;}
+  GPUAttributeKey getKey() const { return _key;}
+
+  
+  int getIndex() const {
+#ifdef C_CODE
+    return _key;
+#endif
+#ifdef JAVA_CODE
+    return _key.getValue();
+#endif
+  }
   
   void unset(GL* gl){
     if (_value != NULL){

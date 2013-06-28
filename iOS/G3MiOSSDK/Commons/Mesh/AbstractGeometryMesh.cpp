@@ -114,7 +114,7 @@ void AbstractGeometryMesh::createGLState(){
   
   GPUProgramState& progState = *_glState.getGPUProgramState();
   
-  progState.setAttributeValue(GPUVariable::POSITION,
+  progState.setAttributeValue(POSITION,
                               _vertices, 4, //The attribute is a float vector of 4 elements
                               3,            //Our buffer contains elements of 3
                               0,            //Index 0
@@ -122,11 +122,11 @@ void AbstractGeometryMesh::createGLState(){
                               0);           //Stride 0
   
   if (_translationMatrix != NULL){
-    progState.setUniformMatrixValue(GPUVariable::MODELVIEW, *_translationMatrix, true);
+    progState.setUniformMatrixValue(MODELVIEW, *_translationMatrix, true);
   }
   
   
-  progState.setUniformValue(GPUVariable::POINT_SIZE, _pointSize);
+  progState.setUniformValue(POINT_SIZE, _pointSize);
 }
 
 void AbstractGeometryMesh::render(const G3MRenderContext* rc, const GLState* parentGLState) {

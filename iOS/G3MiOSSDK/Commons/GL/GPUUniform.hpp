@@ -66,6 +66,8 @@ protected:
   GPUUniformValue* _value;
   const int _type;
 
+  const GPUUniformKey _key;
+
 public:
 
   virtual ~GPUUniform(){
@@ -80,7 +82,8 @@ public:
   _id(id),
   _dirty(false),
   _value(NULL),
-  _type(type)
+  _type(type),
+  _key(getUniformKey(name))
   {
   }
 
@@ -89,10 +92,31 @@ public:
   int getType() const { return _type; }
   bool wasSet() const { return _value != NULL; }
   GPUUniformValue* getSetValue() const { return _value; }
+  GPUUniformKey getKey() const { return _key;}
+
+  
+  int getIndex() const {
+#ifdef C_CODE
+    return _key;
+#endif
+#ifdef JAVA_CODE
+    return _key.getValue();
+#endif
+  }
 
   void unset();
 
-  void set(const GPUUniformValue* v);
+  void set(const GPUUniformValue* v) {
+    if (_type == v->getType()) { //type checking
+      if (_value == NULL || !_value->isEqualsTo(v)) {
+        _dirty = true;
+        _value = v->copyOrCreate(_value);
+      }
+    }
+    else {
+      ILogger::instance()->logError("Attempting to set uniform " + _name + " with invalid value type.");
+    }
+  }
 
   void applyChanges(GL* gl);
 
@@ -244,13 +268,7 @@ class GPUUniformValueMatrix4FloatTransform:public GPUUniformValue{
   {}
   
 public:
-#ifdef C_CODE
   MutableMatrix44D _m;
-#endif
-#ifdef JAVA_CODE
-  public MutableMatrix44D _m;
-#endif
-  
   bool _isTransform;
   
   GPUUniformValueMatrix4FloatTransform(const MutableMatrix44D& m, bool isTransform):

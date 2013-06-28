@@ -127,8 +127,8 @@ GLState* SGLayerNode::createGLState(const G3MRenderContext* rc, GLState* parentG
   
   _glState.setParent(parentGLState);
 
-  _glState.getGPUProgramState()->setUniformValue(GPUVariable::EnableTexture, true);
-  _glState.getGPUProgramState()->setAttributeEnabled(GPUVariable::TEXTURE_COORDS, true);
+//  _glState.getGPUProgramState()->setUniformValue(EnableTexture, true);
+  _glState.getGPUProgramState()->setAttributeEnabled(TEXTURE_COORDS, true);
   //_glState.getGLGlobalState()->enableTexture2D();
   _glState.getGLGlobalState()->enableBlend();
   int __WORKING;

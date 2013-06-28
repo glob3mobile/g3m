@@ -30,19 +30,19 @@ GPUProgram* GPUProgramManager::getProgram(GL* gl, const GLState* glState) {
     for (int j = 0; j < sizeI; j++) {
       int key = ui->at(j);
       
-      if (key == GPUVariable::VIEWPORT_EXTENT){
+      if (key == VIEWPORT_EXTENT){
         billboard = true;
       }
       
-      if (key == GPUVariable::FLAT_COLOR){
+      if (key == FLAT_COLOR){
         flatColor = true;
       }
       
-//      if (key == GPUVariable::TRANSLATION_TEXTURE_COORDS){
+//      if (key == TRANSLATION_TEXTURE_COORDS){
 //        texture = true;
 //      }
       
-      if (key == GPUVariable::TRANSLATION_TEXTURE_COORDS || key == GPUVariable::SCALE_TEXTURE_COORDS){
+      if (key == TRANSLATION_TEXTURE_COORDS || key == SCALE_TEXTURE_COORDS){
         transformTC = true;
       }
     }
@@ -52,11 +52,11 @@ GPUProgram* GPUProgramManager::getProgram(GL* gl, const GLState* glState) {
     for (int j = 0; j < sizeI; j++) {
       int key = ai->at(j);
       
-      if (key == GPUVariable::TEXTURE_COORDS){
+      if (key == TEXTURE_COORDS){
         texture = true;
       }
       
-      if (key == GPUVariable::COLOR){
+      if (key == COLOR){
         color = true;
       }
     }

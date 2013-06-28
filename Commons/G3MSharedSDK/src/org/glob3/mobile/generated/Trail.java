@@ -162,9 +162,9 @@ public class Trail
   private void createGLState()
   {
   //  GPUProgramState& progState = *_glState.getGPUProgramState();
-  //  progState.setUniformValue(GPUVariable::EnableTexture, false);
-  //  progState.setUniformValue(GPUVariable::SCALE_TEXTURE_COORDS, Vector2D(1.0, 1.0));
-  //  progState.setUniformValue(GPUVariable::TRANSLATION_TEXTURE_COORDS, Vector2D(0.0, 0.0));
+  //  progState.setUniformValue(EnableTexture, false);
+  //  progState.setUniformValue(SCALE_TEXTURE_COORDS, Vector2D(1.0, 1.0));
+  //  progState.setUniformValue(TRANSLATION_TEXTURE_COORDS, Vector2D(0.0, 0.0));
   }
 
   public Trail(int maxSteps, Color color, float ribbonWidth)
@@ -193,7 +193,7 @@ public class Trail
       if (mesh != null)
       {
   
-        _glState.getGPUProgramState().setUniformMatrixValue(GPUVariable.MODELVIEW, rc.getCurrentCamera().getModelViewMatrix(), false);
+        _glState.getGPUProgramState().setUniformMatrixValue(GPUUniformKey.MODELVIEW, rc.getCurrentCamera().getModelViewMatrix(), false);
   
         mesh.render(rc, _glState);
       }

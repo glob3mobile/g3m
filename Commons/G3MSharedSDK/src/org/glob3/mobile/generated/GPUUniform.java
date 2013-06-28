@@ -7,6 +7,8 @@ public class GPUUniform extends GPUVariable
   protected GPUUniformValue _value;
   protected final int _type;
 
+  protected final GPUUniformKey _key;
+
 
   public void dispose()
   {
@@ -23,6 +25,7 @@ public class GPUUniform extends GPUVariable
      _dirty = false;
      _value = null;
      _type = type;
+     _key = getUniformKey(name);
   }
 
   public final String getName()
@@ -45,6 +48,16 @@ public class GPUUniform extends GPUVariable
   {
      return _value;
   }
+  public final GPUUniformKey getKey()
+  {
+     return _key;
+  }
+
+
+  public final int getIndex()
+  {
+    return _key.getValue();
+  }
 
   public final void unset()
   {
@@ -54,8 +67,21 @@ public class GPUUniform extends GPUVariable
     _dirty = false;
   }
 
-//C++ TO JAVA CONVERTER TODO TASK: The following statement was not recognized, possibly due to an unrecognized macro:
-  void set(const GPUUniformValue* v);
+  public final void set(GPUUniformValue v)
+  {
+    if (_type == v.getType()) //type checking
+    {
+      if (_value == null || !_value.isEqualsTo(v))
+      {
+        _dirty = true;
+        _value = v.copyOrCreate(_value);
+      }
+    }
+    else
+    {
+      ILogger.instance().logError("Attempting to set uniform " + _name + " with invalid value type.");
+    }
+  }
 
   public final void applyChanges(GL gl)
   {
