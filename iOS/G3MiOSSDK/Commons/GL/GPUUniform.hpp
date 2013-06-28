@@ -20,43 +20,45 @@ class GPUUniform;
 class GPUUniformValue{
   const int _type;
   
-  mutable GPUUniform* _uniform;
-  
+//  mutable GPUUniform* _uniform;
+
 public:
-  GPUUniformValue(int type):_type(type), _uniform(NULL){}
+  GPUUniformValue(int type):_type(type)
+  //, _uniform(NULL)
+  {}
   int getType() const { return _type;}
   virtual ~GPUUniformValue(){}
   virtual void setUniform(GL* gl, const IGLUniformID* id) const = 0;
   virtual bool isEqualsTo(const GPUUniformValue* v) const = 0;
   
-  GPUUniform* getLinkedUniform() const { return _uniform;}
-  
+//  GPUUniform* getLinkedUniform() const { return _uniform;}
+
   virtual std::string description() const = 0;
   
-  void linkToGPUUniform(GPUUniform* u) const{
-    _uniform = u;
-  }
-  
-  void unLinkToGPUUniform(){
-    _uniform = NULL;
-  }
-  
-  void setValueToLinkedUniform() const;
-  
+//  void linkToGPUUniform(GPUUniform* u) const{
+//    _uniform = u;
+//  }
+//  
+//  void unLinkToGPUUniform(){
+//    _uniform = NULL;
+//  }
+
+//  void setValueToLinkedUniform() const;
+
   virtual GPUUniformValue* copyOrCreate(GPUUniformValue* value) const {
     return value;
   }
   
-  bool linkToGPUProgram(const GPUProgram* prog, int key) const{
-    GPUUniform* u = prog->getGPUUniform(key);
-    if (u == NULL){
-      ILogger::instance()->logError("UNIFORM WITH KEY %d NOT FOUND", key);
-      return false;
-    } else{
-      _uniform = u;
-      return true;
-    }
-  }
+//  bool linkToGPUProgram(const GPUProgram* prog, int key) const{
+//    GPUUniform* u = prog->getGPUUniform(key);
+//    if (u == NULL){
+//      ILogger::instance()->logError("UNIFORM WITH KEY %d NOT FOUND", key);
+//      return false;
+//    } else{
+//      _uniform = u;
+//      return true;
+//    }
+//  }
 };
 
 

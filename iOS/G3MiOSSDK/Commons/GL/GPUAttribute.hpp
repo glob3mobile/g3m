@@ -31,8 +31,8 @@ protected:
   
   int _arrayElementSize;
   
-  mutable GPUAttribute* _attribute;
-  
+//  mutable GPUAttribute* _attribute;
+
 public:
   
   GPUAttributeValue(bool enabled):
@@ -42,8 +42,10 @@ public:
   _index(0),
   _stride(0),
   _normalized(0),
-  _arrayElementSize(0),
-  _attribute(NULL){}
+  _arrayElementSize(0)
+//  ,
+//  _attribute(NULL)
+  {}
   
   GPUAttributeValue(int type, int attributeSize, int arrayElementSize, int index, int stride, bool normalized):
   _enabled(true),
@@ -52,8 +54,10 @@ public:
   _index(index),
   _stride(stride),
   _normalized(normalized),
-  _arrayElementSize(arrayElementSize),
-  _attribute(NULL){}
+  _arrayElementSize(arrayElementSize)
+  //,
+//  _attribute(NULL)
+  {}
   
   void changeParameters(bool enabled, int type, int attributeSize, int arrayElementSize, int index, int stride, bool normalized){
     _enabled = enabled;
@@ -63,7 +67,7 @@ public:
     _stride = stride;
     _normalized = normalized;
     _arrayElementSize = arrayElementSize;
-    _attribute = NULL;
+//    _attribute = NULL;
   }
   
   int getType() const { return _type;}
@@ -72,7 +76,7 @@ public:
   int getStride() const { return _stride;}
   bool getNormalized() const { return _normalized;}
   bool getEnabled() const { return _enabled;}
-  GPUAttribute* getLinkedAttribute() const { return _attribute;}
+//  GPUAttribute* getLinkedAttribute() const { return _attribute;}
   virtual ~GPUAttributeValue(){}
   virtual void setAttribute(GL* gl, const int id) const = 0;
   virtual bool isEqualsTo(const GPUAttributeValue* v) const = 0;
@@ -80,18 +84,18 @@ public:
   
   virtual std::string description() const = 0;
   
-  void linkToGPUAttribute(GPUAttribute* a) const{
-    _attribute = a;
-  }
-  
-  void unLinkToGPUAttribute(){
-    _attribute = NULL;
-  }
-  
-  void setValueToLinkedAttribute() const;
-  
-  bool linkToGPUProgram(const GPUProgram* prog, int key) const;
-  
+//  void linkToGPUAttribute(GPUAttribute* a) const{
+//    _attribute = a;
+//  }
+//  
+//  void unLinkToGPUAttribute(){
+//    _attribute = NULL;
+//  }
+
+//  void setValueToLinkedAttribute() const;
+
+//  bool linkToGPUProgram(const GPUProgram* prog, int key) const;
+
   virtual GPUAttributeValue* copyOrCreate(GPUAttributeValue* oldAtt) const = 0;
   
 };

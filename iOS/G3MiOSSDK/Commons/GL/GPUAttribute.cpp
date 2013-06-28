@@ -7,7 +7,7 @@
 //
 
 #include "GPUAttribute.hpp"
-
+/*
 void GPUAttributeValue::setValueToLinkedAttribute() const {
   if (_attribute == NULL) {
     ILogger::instance()->logError("Attribute unlinked");
@@ -35,3 +35,4 @@ bool GPUAttributeValue::linkToGPUProgram(const GPUProgram* prog, int key) const{
     return true;
   }
 }
+*/

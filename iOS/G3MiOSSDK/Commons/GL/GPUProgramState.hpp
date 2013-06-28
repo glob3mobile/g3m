@@ -37,12 +37,12 @@ class GPUProgramState{
   mutable std::vector<int>* _uniformKeys;
   mutable std::vector<int>* _attributeKeys;
   
-  mutable GPUProgram* _linkedProgram;
-  
+//  mutable GPUProgram* _linkedProgram;
+
   void onStructureChanged(){
     delete _uniformKeys;
     _uniformKeys = NULL;
-    _linkedProgram = NULL;
+//    _linkedProgram = NULL;
     _uniformsCode = 0;
     _attributeCode = 0;
     
@@ -54,7 +54,7 @@ class GPUProgramState{
   
 public:
   
-  GPUProgramState(): _linkedProgram(NULL), _uniformKeys(NULL), _attributeKeys(NULL), _uniformsCode(0), _attributeCode(0){
+  GPUProgramState(): /*_linkedProgram(NULL),*/ _uniformKeys(NULL), _attributeKeys(NULL), _uniformsCode(0), _attributeCode(0){
     for (int i = 0; i < 32; i++) {
       _uniformValues[i] = NULL;
       _attributeValues[i] = NULL;
@@ -86,23 +86,23 @@ public:
   
   void applyChanges(GL* gl) const;
   
-  void linkToProgram(GPUProgram* prog) const;
-  
-  bool isLinkedToProgram() const{
-    return _linkedProgram != NULL;
-  }
-  
-  GPUProgram* getLinkedProgram() const{
-    return _linkedProgram;
-  }
-  
+//  void linkToProgram(GPUProgram* prog) const;
+//  
+//  bool isLinkedToProgram() const{
+//    return _linkedProgram != NULL;
+//  }
+//  
+//  GPUProgram* getLinkedProgram() const{
+//    return _linkedProgram;
+//  }
+
   std::vector<int>* getUniformsKeys() const;
   std::vector<int>* getAttributeKeys() const;
   
   std::string description() const;
   
-  void applyValuesToLinkedProgram() const;
-  
+//  void applyValuesToLinkedProgram() const;
+
   bool removeGPUUniformValue(GPUUniformKey key);
 
   int getUniformsCode() const;
@@ -150,6 +150,8 @@ public:
    setAttributeDisabled(getKeyForName(name, ATTRIBUTE));
    }
    */
+
+  void applyValuesToProgram(GPUProgram* prog) const;
   
 };
 

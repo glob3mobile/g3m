@@ -8,15 +8,15 @@
 
 #include "GPUUniform.hpp"
 
-void GPUUniformValue::setValueToLinkedUniform() const {
-  if (_uniform == NULL) {
-    ILogger::instance()->logError("Uniform value unlinked");
-  }
-  else {
-    //_uniform->set((GPUUniformValue*)this);
-    _uniform->set(this);
-  }
-}
+//void GPUUniformValue::setValueToLinkedUniform() const {
+//  if (_uniform == NULL) {
+//    ILogger::instance()->logError("Uniform value unlinked");
+//  }
+//  else {
+//    //_uniform->set((GPUUniformValue*)this);
+//    _uniform->set(this);
+//  }
+//}
 
 void GPUUniform::unset() {
   delete _value;

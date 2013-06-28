@@ -17,9 +17,12 @@
 #include "GPUProgramManager.hpp"
 
 class GLState{
-  
+
+  /////////////////////////////////////////////////
+  //CURRENT GL STATUS
   static GLGlobalState _currentGPUGlobalState;
   static GPUProgram*   _currentGPUProgram;
+  /////////////////////////////////////////////////
   
   GPUProgramState* _programState;
   GLGlobalState*   _globalState;
@@ -28,6 +31,7 @@ class GLState{
   mutable int _uniformsCode;
   mutable int _attributesCode;
   mutable bool _totalGPUProgramStateChanged;
+  mutable GPUProgram* _lastGPUProgramUsed;
   
 #ifdef C_CODE
   mutable const GLState* _parentGLState;
@@ -36,7 +40,7 @@ class GLState{
   private GLState _parentGLState;
 #endif
   
-  void linkAndApplyToGPUProgram(GL* gl, GPUProgram* prog) const;
+  void applyStates(GL* gl, GPUProgram* prog) const;
   
   explicit GLState(const GLState& state):
   _programState(new GPUProgramState()),

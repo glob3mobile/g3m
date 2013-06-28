@@ -25,6 +25,8 @@ class GPUAttributeVec1Float;
 class GPUAttributeVec2Float;
 class GPUAttributeVec3Float;
 class GPUAttributeVec4Float;
+class GPUUniformValue;
+class GPUAttributeValue;
 
 
 
@@ -108,6 +110,9 @@ public:
 
   int getAttributesCode() const{ return _attributesCode;}
   int getUniformsCode() const{ return _uniformsCode;}
+
+  void setGPUUniformValue(int key, GPUUniformValue* v);
+  void setGPUAttributeValue(int key, GPUAttributeValue* v);
 };
 
 #endif /* defined(__G3MiOSSDK__GPUProgram__) */
