@@ -40,7 +40,7 @@ public class GPUProgramState
     }
   
     v.linkToGPUUniform(prevLinkedUniform);
-    _uniformValues.put(key, v);
+    _uniformValues.put(index, v);
   
     if (!uniformExisted)
     {
@@ -63,7 +63,7 @@ public class GPUProgramState
     }
   
     v.linkToGPUAttribute(prevLinkedAttribute);
-    _attributesValues.put(key, v);
+    _attributesValues.put(index, v);
   
     if (!attributeExisted)
     {

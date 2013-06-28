@@ -159,7 +159,7 @@ bool GPUProgramState::setGPUUniformValue(GPUUniformKey key, GPUUniformValue* v){
 #endif
   
   v->linkToGPUUniform(prevLinkedUniform);
-  _uniformValues[key] = v;
+  _uniformValues[index] = v;
   
   if (!uniformExisted){
     onStructureChanged();
@@ -196,7 +196,7 @@ bool GPUProgramState::setGPUAttributeValue(GPUAttributeKey key, GPUAttributeValu
 #endif
   
   v->linkToGPUAttribute(prevLinkedAttribute);
-  _attributesValues[key] = v;
+  _attributesValues[index] = v;
   
   if (!attributeExisted){
     onStructureChanged();

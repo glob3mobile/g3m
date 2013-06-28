@@ -96,6 +96,7 @@ public:
   GPUUniformValue* getSetValue() const { return _value; }
   GPUUniformKey getKey() const { return _key;}
 
+  
   int getIndex() const {
 #ifdef C_CODE
     return _key;

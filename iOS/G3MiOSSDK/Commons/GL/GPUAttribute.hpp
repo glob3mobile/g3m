@@ -136,6 +136,7 @@ public:
   bool isEnabled() const { return _enabled;}
   GPUAttributeKey getKey() const { return _key;}
 
+  
   int getIndex() const {
 #ifdef C_CODE
     return _key;
