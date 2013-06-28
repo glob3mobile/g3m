@@ -13,6 +13,9 @@ public class GPUProgram
   private int _nAttributes;
   private int _nUniforms;
 
+  private int _uniformsCode;
+  private int _attributesCode;
+
   private String _name;
 
   private boolean compileShader(GL gl, int shader, String source)
@@ -60,23 +63,36 @@ public class GPUProgram
     }
   
     //Uniforms
+    _uniformsCode = 0;
     _nUniforms = gl.getProgramiv(this, GLVariable.activeUniforms());
     for (int i = 0; i < _nUniforms; i++)
     {
       GPUUniform u = gl.getActiveUniform(this, i);
       if (u != null)
-         _uniforms[u.getIndex()] = u;
+      {
+        _uniforms[u.getIndex()] = u;
+  
+        int code = GPUVariable.getUniformCode(u.getKey());
+        _uniformsCode = _uniformsCode | code;
+      }
     }
   
     //Attributes
+    _attributesCode = 0;
     _nAttributes = gl.getProgramiv(this, GLVariable.activeAttributes());
     for (int i = 0; i < _nAttributes; i++)
     {
       GPUAttribute a = gl.getActiveAttribute(this, i);
       if (a != null)
-         _attributes[a.getIndex()] = a;
+      {
+        _attributes[a.getIndex()] = a;
+  
+        int code = GPUVariable.getAttributeCode(a.getKey());
+        _attributesCode = _attributesCode | code;
+      }
     }
   
+    ILogger.instance().logInfo("Program with Uniforms Bitcode: %d and Attributes Bitcode: %d", _uniformsCode, _attributesCode);
   }
 
   private GPUProgram()
@@ -184,7 +200,6 @@ public class GPUProgram
   {
      return _nUniforms;
   }
-
 
   public final GPUUniform getGPUUniform(String name)
   {

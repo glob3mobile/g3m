@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated; 
 public enum GPUUniformKey
 {
-  UNRECOGNIZED_UNIFORM(0),
-  FLAT_COLOR(1),
-  MODELVIEW(2),
-  TEXTURE_EXTENT(3),
-  VIEWPORT_EXTENT(4),
-  TRANSLATION_TEXTURE_COORDS(5),
-  SCALE_TEXTURE_COORDS(6),
-  POINT_SIZE(7);
+  UNRECOGNIZED_UNIFORM(-1),
+  FLAT_COLOR(0),
+  MODELVIEW(1),
+  TEXTURE_EXTENT(2),
+  VIEWPORT_EXTENT(3),
+  TRANSLATION_TEXTURE_COORDS(4),
+  SCALE_TEXTURE_COORDS(5),
+  POINT_SIZE(6);
 
    private int intValue;
    private static java.util.HashMap<Integer, GPUUniformKey> mappings;
