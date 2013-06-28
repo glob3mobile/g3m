@@ -65,7 +65,7 @@ public class GPUProgram
     {
       GPUUniform u = gl.getActiveUniform(this, i);
       if (u != null)
-         _uniforms[u.getKey()] = u;
+         _uniforms[u.getIndex()] = u;
     }
   
     //Attributes
@@ -74,7 +74,7 @@ public class GPUProgram
     {
       GPUAttribute a = gl.getActiveAttribute(this, i);
       if (a != null)
-         _attributes[a.getKey()] = a;
+         _attributes[a.getIndex()] = a;
     }
   
   }
@@ -188,12 +188,12 @@ public class GPUProgram
 
   public final GPUUniform getGPUUniform(String name)
   {
-    int key = (int)GPUVariable.getUniformKey(name);
+    final int key = GPUVariable.getUniformKey(name).getValue();
     return _uniforms[key];
   }
   public final GPUAttribute getGPUAttribute(String name)
   {
-    final int key = (int)GPUVariable.getAttributeKey(name);
+    final int key = GPUVariable.getAttributeKey(name).getValue();
     return _attributes[key];
   }
 

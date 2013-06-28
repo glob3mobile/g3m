@@ -30,8 +30,10 @@ public class GPUProgramState
     GPUUniform prevLinkedUniform = null;
     boolean uniformExisted = false;
   
+    final int index = key.getValue();
   
-    GPUUniformValue pv = _uniformValues.get(key);
+  
+    GPUUniformValue pv = _uniformValues.get(index);
     if (pv != null){
       uniformExisted = true;
       prevLinkedUniform = pv.getLinkedUniform();
@@ -51,7 +53,10 @@ public class GPUProgramState
   {
     GPUAttribute prevLinkedAttribute = null;
     boolean attributeExisted = false;
-    GPUAttributeValue pv = _attributesValues.get(key);
+  
+    final int index = key.getValue();
+  
+    GPUAttributeValue pv = _attributesValues.get(index);
     if (pv != null){
       attributeExisted = true;
       prevLinkedAttribute = pv.getLinkedAttribute();

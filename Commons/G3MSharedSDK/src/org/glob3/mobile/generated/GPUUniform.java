@@ -48,9 +48,14 @@ public class GPUUniform extends GPUVariable
   {
      return _value;
   }
-  public final int getKey()
+  public final GPUUniformKey getKey()
   {
      return _key;
+  }
+
+  public final int getIndex()
+  {
+    return _key.getValue();
   }
 
   public final void unset()
