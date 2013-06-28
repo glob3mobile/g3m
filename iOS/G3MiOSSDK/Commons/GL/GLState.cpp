@@ -24,7 +24,7 @@ void GLState::linkAndApplyToGPUProgram(GL* gl, GPUProgram* prog) const{
   if (_parentGLState != NULL){
     _parentGLState->linkAndApplyToGPUProgram(gl, prog);
   }
-  
+
   _programState->linkToProgram(prog);
   _programState->applyValuesToLinkedProgram();
   
@@ -32,35 +32,13 @@ void GLState::linkAndApplyToGPUProgram(GL* gl, GPUProgram* prog) const{
 }
 
 void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
-  
+
   GPUProgram* prog = _programState->getLinkedProgram();
-  if (prog != NULL){
-#ifdef C_CODE
-    const GLState* parent = _parentGLState;
-#endif
-#ifdef JAVA_CODE
-    GLState parent = _parentGLState;
-#endif
-    while (parent != NULL) {
-      if (prog != parent->_programState->getLinkedProgram()){
-        int ____TALK_WITH_JM;
-        prog = NULL;
-        break;
-      }
-      parent = parent->_parentGLState;
-    }
-  }
-  
-  if (prog == NULL){
-    prog = progManager.getProgram(gl, this);
+  if (_totalGPUProgramStateChanged){
+    //ILogger::instance()->logInfo("Total State for GPUProgram has changed since last apply");
+    prog = progManager.getProgram(gl, this, getUniformsCode(), getAttributesCode());
   }
 
-  if (_currentGPUProgram != NULL &&
-      _currentGPUProgram->getAttributesCode() == getAttributesCode() &&
-      _currentGPUProgram->getUniformsCode() == getUniformsCode()){
-    ILogger::instance()->logInfo("Reusing program");
-  }
-  
   if (prog != NULL){
     if (prog != _currentGPUProgram){
       if (_currentGPUProgram != NULL){

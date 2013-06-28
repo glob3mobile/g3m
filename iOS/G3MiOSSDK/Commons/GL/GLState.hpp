@@ -27,6 +27,7 @@ class GLState{
 
   mutable int _uniformsCode;
   mutable int _attributesCode;
+  mutable bool _totalGPUProgramStateChanged;
   
 #ifdef C_CODE
   mutable const GLState* _parentGLState;
@@ -43,7 +44,8 @@ class GLState{
   _owner(true),
   _parentGLState(NULL),
   _uniformsCode(0),
-  _attributesCode(0){}
+  _attributesCode(0),
+  _totalGPUProgramStateChanged(true){}
   
 public:
   
@@ -51,7 +53,10 @@ public:
   _programState(new GPUProgramState()),
   _globalState(new GLGlobalState()),
   _owner(true),
-  _parentGLState(NULL){}
+  _parentGLState(NULL),
+  _uniformsCode(0),
+  _attributesCode(0),
+  _totalGPUProgramStateChanged(true){}
   
   //For debugging purposes only
   GLState(GLGlobalState*   globalState,
@@ -61,7 +66,8 @@ public:
   _owner(false),
   _parentGLState(NULL),
   _uniformsCode(0),
-  _attributesCode(0){}
+  _attributesCode(0),
+  _totalGPUProgramStateChanged(true){}
   
   ~GLState(){
     if (_owner){
@@ -77,8 +83,12 @@ public:
   void setParent(const GLState* p) const{
     _parentGLState = p;
     if (p != NULL){
-      _uniformsCode = p->getUniformsCode() | _programState->getUniformsCode();
-      _attributesCode = p->getAttributesCode() | _programState->getAttributesCode();
+      int newUniformsCode = p->getUniformsCode() | _programState->getUniformsCode();
+      int newAttributesCode = p->getAttributesCode() | _programState->getAttributesCode();
+
+      _totalGPUProgramStateChanged = (newAttributesCode != _attributesCode) || (newUniformsCode != _uniformsCode);
+      _uniformsCode = newUniformsCode;
+      _attributesCode = newAttributesCode;
     }
   }
 
