@@ -105,6 +105,9 @@ public:
   GPUUniform* getGPUUniform(int key) const;
   GPUAttribute* getGPUAttribute(int key) const;
   GPUAttribute* getGPUAttributeVecXFloat(int key, int x) const;
+
+  int getAttributesCode() const{ return _attributesCode;}
+  int getUniformsCode() const{ return _uniformsCode;}
 };
 
 #endif /* defined(__G3MiOSSDK__GPUProgram__) */

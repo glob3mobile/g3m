@@ -54,6 +54,12 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
   if (prog == NULL){
     prog = progManager.getProgram(gl, this);
   }
+
+  if (_currentGPUProgram != NULL &&
+      _currentGPUProgram->getAttributesCode() == getAttributesCode() &&
+      _currentGPUProgram->getUniformsCode() == getUniformsCode()){
+    ILogger::instance()->logInfo("Reusing program");
+  }
   
   if (prog != NULL){
     if (prog != _currentGPUProgram){

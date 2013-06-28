@@ -262,3 +262,25 @@ bool GPUProgramState::removeGPUUniformValue(GPUUniformKey key){
     return false;
   }
 }
+
+int GPUProgramState::getUniformsCode() const{
+  if (_uniformsCode == 0){
+    for (int i = 0; i < 32; i++){
+      if (_uniformValues[i] != NULL){
+        _uniformsCode = _uniformsCode | GPUVariable::getUniformCode(i);
+      }
+    }
+  }
+  return _uniformsCode;
+}
+
+int GPUProgramState::getAttributesCode() const{
+  if (_attributeCode == 0){
+    for (int i = 0; i < 32; i++){
+      if (_attributeValues[i] != NULL){
+        _attributeCode = _attributeCode | GPUVariable::getAttributeCode(i);
+      }
+    }
+  }
+  return _attributeCode;
+}

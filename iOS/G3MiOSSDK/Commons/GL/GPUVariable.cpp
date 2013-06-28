@@ -32,6 +32,13 @@
 //const int GROUP_NOGROUP = -1;
 //const int GROUP_COLOR = 1;
 
+int GPUVariable::getUniformCode(int u){
+  return 0x00000001  << u;
+}
+int GPUVariable::getAttributeCode(int a){
+  return 0x00000001  << a;
+}
+
 int GPUVariable::getUniformCode(GPUUniformKey u){
   if (u == UNRECOGNIZED_UNIFORM){
     return 0;
@@ -42,7 +49,7 @@ int GPUVariable::getUniformCode(GPUUniformKey u){
 #ifdef JAVA_CODE
   final int index = u.getValue();
 #endif
-  return 0x00000001  << index;
+  return getUniformCode(index);
 }
 
 int GPUVariable::getAttributeCode(GPUAttributeKey a){
@@ -55,7 +62,7 @@ int GPUVariable::getAttributeCode(GPUAttributeKey a){
 #ifdef JAVA_CODE
   final int index = a.getValue();
 #endif
-  return 0x00000001  << index;
+  return getUniformCode(index);
 }
 
 GPUUniformKey GPUVariable::getUniformKey(const std::string& name){

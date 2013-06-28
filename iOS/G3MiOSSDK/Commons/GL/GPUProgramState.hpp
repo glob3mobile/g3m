@@ -29,6 +29,10 @@ class GPUProgramState{
   
   bool setGPUUniformValue(GPUUniformKey key, GPUUniformValue* v);
   bool setGPUAttributeValue(GPUAttributeKey key, GPUAttributeValue* v);
+
+  mutable int _uniformsCode;
+  mutable int _attributeCode;
+
   
   mutable std::vector<int>* _uniformKeys;
   mutable std::vector<int>* _attributeKeys;
@@ -39,6 +43,8 @@ class GPUProgramState{
     delete _uniformKeys;
     _uniformKeys = NULL;
     _linkedProgram = NULL;
+    _uniformsCode = 0;
+    _attributeCode = 0;
     
     if (_attributeKeys != NULL){
       delete _attributeKeys;
@@ -48,12 +54,11 @@ class GPUProgramState{
   
 public:
   
-  GPUProgramState(): _linkedProgram(NULL), _uniformKeys(NULL), _attributeKeys(NULL){
+  GPUProgramState(): _linkedProgram(NULL), _uniformKeys(NULL), _attributeKeys(NULL), _uniformsCode(0), _attributeCode(0){
     for (int i = 0; i < 32; i++) {
       _uniformValues[i] = NULL;
       _attributeValues[i] = NULL;
     }
-
   }
   
   ~GPUProgramState();
@@ -99,6 +104,10 @@ public:
   void applyValuesToLinkedProgram() const;
   
   bool removeGPUUniformValue(GPUUniformKey key);
+
+  int getUniformsCode() const;
+
+  int getAttributesCode() const;
   
   
   /*
