@@ -178,9 +178,6 @@
 		D8EEF37B1577920A003FEB5E = {
 			isa = PBXGroup;
 			children = (
-				CF4027EA1770E90000D5A80C /* Security.framework */,
-				CF4027E81770E8F900D5A80C /* CFNetwork.framework */,
-				CF4027E61770E8F100D5A80C /* libicucore.dylib */,
 				D8EEF3891577920B003FEB5E /* Frameworks */,
 				D8EEF3901577920B003FEB5E /* G3MiOSDemo */,
 				D8EEF4161577AEC8003FEB5E /* G3MiOSSDK.xcodeproj */,
@@ -199,6 +196,9 @@
 		D8EEF3891577920B003FEB5E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CF4027E61770E8F100D5A80C /* libicucore.dylib */,
+				CF4027E81770E8F900D5A80C /* CFNetwork.framework */,
+				CF4027EA1770E90000D5A80C /* Security.framework */,
 				44EEB5DF159B2B8B0086F243 /* libsqlite3.dylib */,
 				CFCCFE0C16F506C20082F383 /* GLKit.framework */,
 				443BBC8215A5C21F00EAE280 /* CoreData.framework */,
