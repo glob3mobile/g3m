@@ -52,6 +52,9 @@ class GPUProgram{
   int _nAttributes;
   int _nUniforms;
 
+  GPUUniform** _createdUniforms;
+  GPUAttribute** _createdAttributes;
+
   int _uniformsCode;
   int _attributesCode;
 
@@ -63,7 +66,13 @@ class GPUProgram{
   
   void getVariables(GL* gl);
   
-  GPUProgram(){}
+  GPUProgram():
+  _createdAttributes(NULL),
+  _createdUniforms(NULL),
+  _nUniforms(0),
+  _nAttributes(0),
+  _uniformsCode(0),
+  _attributesCode(0){}
 
   GPUProgram(const GPUProgram& that);
   

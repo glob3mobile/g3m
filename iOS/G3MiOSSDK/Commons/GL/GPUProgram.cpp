@@ -73,6 +73,8 @@ GPUProgram* GPUProgram::createProgram(GL* gl, const std::string name, const std:
 
 
 GPUProgram::~GPUProgram(){
+  delete[] _createdAttributes;
+  delete[] _createdUniforms;
 }
 
 bool GPUProgram::linkProgram(GL* gl) const {
@@ -122,6 +124,10 @@ void GPUProgram::getVariables(GL* gl){
   //Uniforms
   _uniformsCode = 0;
   _nUniforms = gl->getProgramiv(this, GLVariable::activeUniforms());
+
+  int counter = 0;
+  _createdUniforms = new GPUUniform*[_nUniforms];
+
   for (int i = 0; i < _nUniforms; i++) {
     GPUUniform* u = gl->getActiveUniform(this, i);
     if (u != NULL){
@@ -130,11 +136,17 @@ void GPUProgram::getVariables(GL* gl){
       int code = GPUVariable::getUniformCode(u->getKey());
       _uniformsCode = _uniformsCode | code;
     }
+
+    _createdUniforms[counter++] = u; //Adding to created uniforms array
   }
   
   //Attributes
   _attributesCode = 0;
   _nAttributes = gl->getProgramiv(this, GLVariable::activeAttributes());
+
+  counter = 0;
+  _createdAttributes = new GPUAttribute*[_nAttributes];
+
   for (int i = 0; i < _nAttributes; i++) {
     GPUAttribute* a = gl->getActiveAttribute(this, i);
     if (a != NULL){
@@ -143,6 +155,8 @@ void GPUProgram::getVariables(GL* gl){
       int code = GPUVariable::getAttributeCode(a->getKey());
       _attributesCode = _attributesCode | code;
     }
+
+    _createdAttributes[counter++] = a;
   }
 
   ILogger::instance()->logInfo("Program with Uniforms Bitcode: %d and Attributes Bitcode: %d", _uniformsCode, _attributesCode);
@@ -276,16 +290,26 @@ void GPUProgram::onUsed(){
 void GPUProgram::onUnused(GL* gl){
   //ILogger::instance()->logInfo("GPUProgram %s unused", _name.c_str());
 
-  for (int i = 0; i < 32; i++) {
-    GPUUniform* u = _uniforms[i];
-    GPUAttribute* a = _attributes[i];
-    if (u != NULL){
-      u->unset();
-    }
-    if (a != NULL){
-      a->unset(gl);
+  for (int i = 0; i < _nUniforms; i++) {
+    if (_createdUniforms[i] != NULL){ //Texture Samplers return null
+      _createdUniforms[i]->unset();
     }
   }
+
+  for (int i = 0; i < _nAttributes; i++) {
+    _createdAttributes[i]->unset(gl);
+  }
+
+//  for (int i = 0; i < 32; i++) {
+//    GPUUniform* u = _uniforms[i];
+//    GPUAttribute* a = _attributes[i];
+//    if (u != NULL){
+//      u->unset();
+//    }
+//    if (a != NULL){
+//      a->unset(gl);
+//    }
+//  }
 }
 
 /**
@@ -293,16 +317,27 @@ void GPUProgram::onUnused(GL* gl){
  */
 void GPUProgram::applyChanges(GL* gl){
 
-  for (int i = 0; i < 32; i++) {
-    GPUUniform* u = _uniforms[i];
-    GPUAttribute* a = _attributes[i];
-    if (u != NULL){
-      u->applyChanges(gl);
-    }
-    if (a != NULL){
-      a->applyChanges(gl);
+  for (int i = 0; i < _nUniforms; i++) {
+    if (_createdUniforms[i] != NULL){ //Texture Samplers return null
+      _createdUniforms[i]->applyChanges(gl);
     }
   }
+
+  for (int i = 0; i < _nAttributes; i++) {
+    _createdAttributes[i]->applyChanges(gl);
+  }
+
+
+//  for (int i = 0; i < 32; i++) {
+//    GPUUniform* u = _uniforms[i];
+//    GPUAttribute* a = _attributes[i];
+//    if (u != NULL){
+//      u->applyChanges(gl);
+//    }
+//    if (a != NULL){
+//      a->applyChanges(gl);
+//    }
+//  }
 }
 
 GPUUniform* GPUProgram::getUniformOfType(const std::string& name, int type) const{

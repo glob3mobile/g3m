@@ -8,6 +8,30 @@
 
 #include "GPUProgramState.hpp"
 
+void GPUProgramState::onStructureChanged(){
+  delete _uniformKeys;
+  _uniformKeys = NULL;
+  //    _linkedProgram = NULL;
+  _uniformsCode = 0;
+  _attributeCode = 0;
+
+  if (_attributeKeys != NULL){
+    delete _attributeKeys;
+    _attributeKeys = NULL;
+  }
+
+  _highestAttributeKey = 0;
+  _highestUniformKey = 0;
+  for (int i = 0; i < 32; i++) {
+    if (_uniformValues[i] != NULL){
+      _highestUniformKey = i;
+    }
+    if (_attributeValues[i] != NULL){
+      _highestAttributeKey = i;
+    }
+  }
+}
+
 GPUProgramState::~GPUProgramState(){
   clear();
   delete _uniformKeys;
@@ -40,16 +64,30 @@ void GPUProgramState::clear(){
 
 void GPUProgramState::applyValuesToProgram(GPUProgram* prog) const{
 
-  for (int i = 0; i < 32; i++) {
+  for (int i = 0; i <= _highestUniformKey; i++) {
     GPUUniformValue* u = _uniformValues[i];
     if (u != NULL){
       prog->setGPUUniformValue(i, u);
     }
+  }
+
+  for (int i = 0; i <= _highestAttributeKey; i++) {
     GPUAttributeValue* a = _attributeValues[i];
     if (a != NULL){
       prog->setGPUAttributeValue(i, a);
     }
   }
+
+//  for (int i = 0; i < 32; i++) {
+//    GPUUniformValue* u = _uniformValues[i];
+//    if (u != NULL){
+//      prog->setGPUUniformValue(i, u);
+//    }
+//    GPUAttributeValue* a = _attributeValues[i];
+//    if (a != NULL){
+//      prog->setGPUAttributeValue(i, a);
+//    }
+//  }
 }
 
 //void GPUProgramState::linkToProgram(GPUProgram* prog) const{
@@ -199,7 +237,7 @@ std::string GPUProgramState::description() const{
   IStringBuilder *isb = IStringBuilder::newStringBuilder();
   isb->addString("PROGRAM STATE\n==========\n");
 
-  for(int i = 0; i < 32; i++){
+  for(int i = 0; i <= _highestUniformKey; i++){
     GPUUniformValue* v = _uniformValues[i];
     if (v != NULL){
       isb->addString("Uniform ");
@@ -209,7 +247,7 @@ std::string GPUProgramState::description() const{
     }
   }
 
-  for(int i = 0; i < 32; i++){
+  for(int i = 0; i <= _highestAttributeKey; i++){
     GPUAttributeValue* v = _attributeValues[i];
     if (v != NULL){
       isb->addString("Uniform ");
@@ -230,7 +268,7 @@ std::vector<int>* GPUProgramState::getUniformsKeys() const{
 
     _uniformKeys = new std::vector<int>();
 
-    for (int i = 0; i < 32; i++){
+    for (int i = 0; i <= _highestUniformKey; i++){
       if (_uniformValues[i] != NULL){
         _uniformKeys->push_back(i);
       }
@@ -246,7 +284,7 @@ std::vector<int>* GPUProgramState::getAttributeKeys() const{
 
     _attributeKeys = new std::vector<int>();
 
-    for (int i = 0; i < 32; i++){
+    for (int i = 0; i <= _highestAttributeKey; i++){
       if (_attributeValues[i] != NULL){
         _attributeKeys->push_back(i);
       }
@@ -278,7 +316,7 @@ bool GPUProgramState::removeGPUUniformValue(GPUUniformKey key){
 
 int GPUProgramState::getUniformsCode() const{
   if (_uniformsCode == 0){
-    for (int i = 0; i < 32; i++){
+    for (int i = 0; i <= _highestUniformKey; i++){
       if (_uniformValues[i] != NULL){
         _uniformsCode = _uniformsCode | GPUVariable::getUniformCode(i);
       }
@@ -289,7 +327,7 @@ int GPUProgramState::getUniformsCode() const{
 
 int GPUProgramState::getAttributesCode() const{
   if (_attributeCode == 0){
-    for (int i = 0; i < 32; i++){
+    for (int i = 0; i <= _highestAttributeKey; i++){
       if (_attributeValues[i] != NULL){
         _attributeCode = _attributeCode | GPUVariable::getAttributeCode(i);
       }
