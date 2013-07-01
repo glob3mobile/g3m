@@ -306,9 +306,11 @@
 		D8A1CB6F1737B364004EF534 /* GPUProgramManager.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D80E59B4170B155C00E7C799 /* GPUProgramManager.hpp */; };
 		D8A5601F15AEF64E00035086 /* IndexedMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A5601B15AEF64E00035086 /* IndexedMesh.cpp */; };
 		D8A5602115AEF64E00035086 /* Mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A5601D15AEF64E00035086 /* Mesh.cpp */; };
+		D8A6C0D11781CC31007BC175 /* Matrix44D.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B17D011781C90000A4E5F4 /* Matrix44D.hpp */; };
 		D8A723AE15E4D47E00ABDF07 /* StringBuilder_iOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A723AD15E4D47E00ABDF07 /* StringBuilder_iOS.cpp */; };
 		D8A76ECD1744F02400E0FFE8 /* GPUAttribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A76ECC1744F02400E0FFE8 /* GPUAttribute.cpp */; };
 		D8A76ECF1744F0C900E0FFE8 /* GPUUniform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A76ECE1744F0C900E0FFE8 /* GPUUniform.cpp */; };
+		D8B17D021781C90000A4E5F4 /* Matrix44D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B17D001781C90000A4E5F4 /* Matrix44D.cpp */; };
 		D8B17F5B16F7693A007A9E43 /* GLGlobalState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B17F5916F76939007A9E43 /* GLGlobalState.cpp */; };
 		D8B2054B1737B68400750AE4 /* GPUProgramFactory.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B2054A1737B65A00750AE4 /* GPUProgramFactory.hpp */; };
 		D8B9E005174A3CFD00B865B7 /* GLState.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D80A28701746572E0058CEC3 /* GLState.hpp */; };
@@ -535,6 +537,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D8A6C0D11781CC31007BC175 /* Matrix44D.hpp in CopyFiles */,
 				CFF1A661177B57BC00775E3E /* AbstractGeometryMesh.hpp in CopyFiles */,
 				CFF1A662177B57BC00775E3E /* IndexedGeometryMesh.hpp in CopyFiles */,
 				CFF1A663177B57BC00775E3E /* LeveledMesh.hpp in CopyFiles */,
@@ -1303,6 +1306,8 @@
 		D8A723AD15E4D47E00ABDF07 /* StringBuilder_iOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = StringBuilder_iOS.cpp; path = Specific/Derived/StringBuilder_iOS.cpp; sourceTree = "<group>"; };
 		D8A76ECC1744F02400E0FFE8 /* GPUAttribute.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GPUAttribute.cpp; sourceTree = "<group>"; };
 		D8A76ECE1744F0C900E0FFE8 /* GPUUniform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GPUUniform.cpp; sourceTree = "<group>"; };
+		D8B17D001781C90000A4E5F4 /* Matrix44D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Matrix44D.cpp; sourceTree = "<group>"; };
+		D8B17D011781C90000A4E5F4 /* Matrix44D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Matrix44D.hpp; sourceTree = "<group>"; };
 		D8B17F5916F76939007A9E43 /* GLGlobalState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLGlobalState.cpp; sourceTree = "<group>"; };
 		D8B2054A1737B65A00750AE4 /* GPUProgramFactory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GPUProgramFactory.hpp; sourceTree = "<group>"; };
 		D8B3A95F160B691C0085D553 /* GLTextureId_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = GLTextureId_iOS.hpp; path = Specific/GL/GLTextureId_iOS.hpp; sourceTree = "<group>"; };
@@ -1673,6 +1678,8 @@
 				CF35DD4B16C6995C002EFC96 /* Vector3F.hpp */,
 				CF35DD4E16C69B08002EFC96 /* Vector2F.cpp */,
 				CF35DD4F16C69B08002EFC96 /* Vector2F.hpp */,
+				D8B17D001781C90000A4E5F4 /* Matrix44D.cpp */,
+				D8B17D011781C90000A4E5F4 /* Matrix44D.hpp */,
 			);
 			name = Geometry;
 			sourceTree = "<group>";
@@ -2425,6 +2432,7 @@
 				CF4027DE1770E7B900D5A80C /* NSData+SRB64Additions.m in Sources */,
 				CF4027DF1770E7B900D5A80C /* SRWebSocket.m in Sources */,
 				CF60500317724C5C00EB48A6 /* JSONNull.cpp in Sources */,
+				D8B17D021781C90000A4E5F4 /* Matrix44D.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

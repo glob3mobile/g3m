@@ -15,6 +15,7 @@ class IShortBuffer;
 class IImage;
 class IGLUniformID;
 class IGLTextureId;
+class Matrix44D;
 
 #include <vector>
 #include <string>
@@ -48,6 +49,10 @@ public:
   virtual void uniformMatrix4fv(const IGLUniformID* location,
                                 bool transpose,
                                 const MutableMatrix44D* matrix) const = 0;
+
+  virtual void uniformMatrix4fv(const IGLUniformID* location,
+                                bool transpose,
+                                const Matrix44D* matrix) const = 0;
 
   virtual void clearColor(float red,
                           float green,

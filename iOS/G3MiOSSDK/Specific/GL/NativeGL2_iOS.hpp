@@ -59,6 +59,16 @@ public:
     glUniformMatrix4fv(loc, 1, transpose, pointer);
   }
 
+  void uniformMatrix4fv(const IGLUniformID* location,
+                        bool transpose,
+                        const Matrix44D* matrix) const {
+    const int loc = ((GLUniformID_iOS*)location)->getID();
+
+    GLfloat* pointer = matrix->getColumnMajorFloatArray();
+
+    glUniformMatrix4fv(loc, 1, transpose, pointer);
+  }
+
   void clearColor(float red, float green, float blue, float alpha) const {
     glClearColor(red, green, blue, alpha);
   }
