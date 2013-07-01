@@ -36,7 +36,7 @@ class GPUProgramState{
   int _highestUniformKey;
   int _highestAttributeKey;
   
-  mutable std::vector<int>* _uniformKeys;
+//  mutable std::vector<int>* _uniformKeys;
   mutable std::vector<int>* _attributeKeys;
   
 //  mutable GPUProgram* _linkedProgram;
@@ -45,9 +45,13 @@ class GPUProgramState{
   
 public:
   
-  GPUProgramState(): /*_linkedProgram(NULL),*/ _uniformKeys(NULL),
-  _attributeKeys(NULL), _uniformsCode(0), _attributeCode(0),
-  _highestUniformKey(0), _highestAttributeKey(0){
+  GPUProgramState(): /*_linkedProgram(NULL),*/
+//  _uniformKeys(NULL),
+//  _attributeKeys(NULL),
+  _uniformsCode(0),
+  _attributeCode(0),
+  _highestUniformKey(0),
+  _highestAttributeKey(0){
     for (int i = 0; i < 32; i++) {
       _uniformValues[i] = NULL;
       _attributeValues[i] = NULL;
@@ -89,9 +93,9 @@ public:
 //    return _linkedProgram;
 //  }
 
-  std::vector<int>* getUniformsKeys() const;
-  std::vector<int>* getAttributeKeys() const;
-  
+//  std::vector<int>* getUniformsKeys() const;
+//  std::vector<int>* getAttributeKeys() const;
+
   std::string description() const;
   
 //  void applyValuesToLinkedProgram() const;

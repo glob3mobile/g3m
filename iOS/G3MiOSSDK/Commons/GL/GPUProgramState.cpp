@@ -9,16 +9,16 @@
 #include "GPUProgramState.hpp"
 
 void GPUProgramState::onStructureChanged(){
-  delete _uniformKeys;
-  _uniformKeys = NULL;
+//  delete _uniformKeys;
+//  _uniformKeys = NULL;
   //    _linkedProgram = NULL;
   _uniformsCode = 0;
   _attributeCode = 0;
 
-  if (_attributeKeys != NULL){
-    delete _attributeKeys;
-    _attributeKeys = NULL;
-  }
+//  if (_attributeKeys != NULL){
+//    delete _attributeKeys;
+//    _attributeKeys = NULL;
+//  }
 
   _highestAttributeKey = 0;
   _highestUniformKey = 0;
@@ -34,7 +34,7 @@ void GPUProgramState::onStructureChanged(){
 
 GPUProgramState::~GPUProgramState(){
   clear();
-  delete _uniformKeys;
+//  delete _uniformKeys;
 }
 
 void GPUProgramState::clear(){
@@ -261,7 +261,7 @@ std::string GPUProgramState::description() const{
   delete isb;
   return s;
 }
-
+/*
 std::vector<int>* GPUProgramState::getUniformsKeys() const{
 
   if (_uniformKeys == NULL){
@@ -294,7 +294,7 @@ std::vector<int>* GPUProgramState::getAttributeKeys() const{
   }
   return _attributeKeys;
 }
-
+*/
 bool GPUProgramState::removeGPUUniformValue(GPUUniformKey key){
 
 #ifdef C_CODE

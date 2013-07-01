@@ -36,7 +36,7 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
 
   if (_lastGPUProgramUsed == NULL || _totalGPUProgramStateChanged){
     //ILogger::instance()->logInfo("Total State for GPUProgram has changed since last apply");
-    _lastGPUProgramUsed = progManager.getProgram(gl, this, getUniformsCode(), getAttributesCode());
+    _lastGPUProgramUsed = progManager.getProgram(gl, getUniformsCode(), getAttributesCode());
   }
 
   if (_lastGPUProgramUsed != NULL){

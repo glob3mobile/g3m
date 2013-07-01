@@ -82,6 +82,13 @@ public:
   static int getUniformCode(int u);
   static int getAttributeCode(int a);
 
+  static bool codeContainsUniform(int code, int u);
+  static bool codeContainsAttribute(int code, int a);
+
+  static bool codeContainsUniform(int code, GPUUniformKey u);
+  static bool codeContainsAttribute(int code, GPUAttributeKey a);
+
+
 //  static const int GROUP_COLOR;
 //  static const int GROUP_NOGROUP;
 

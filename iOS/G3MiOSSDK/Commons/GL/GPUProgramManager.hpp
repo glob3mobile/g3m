@@ -107,14 +107,14 @@ public:
 //    return getProgram(gl, "Default");
 //  }
   
-  GPUProgram* getProgram(GL* gl, const GLState* glState);
+  GPUProgram* getNewProgram(GL* gl, int uniformsCode, int attributesCode);
 
   GPUProgram* getCompiledProgram(int uniformsCode, int attributesCode);
 
-  GPUProgram* getProgram(GL* gl, const GLState* glState, int uniformsCode, int attributesCode){
+  GPUProgram* getProgram(GL* gl, int uniformsCode, int attributesCode){
     GPUProgram* p = getCompiledProgram(uniformsCode, attributesCode);
     if (p == NULL){
-      p = getProgram(gl, glState);
+      p = getNewProgram(gl, uniformsCode, attributesCode);
     }
     return p;
   }

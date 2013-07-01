@@ -10,14 +10,16 @@
 
 #include "GLState.hpp"
 
-GPUProgram* GPUProgramManager::getProgram(GL* gl, const GLState* glState) {
+GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attributesCode) {
   
-  bool texture = false;
-  bool flatColor = false;
-  bool billboard = false;
-  bool color = false;
-  bool transformTC = false;
-  
+  bool texture = GPUVariable::codeContainsAttribute(attributesCode, TEXTURE_COORDS);
+  bool flatColor = GPUVariable::codeContainsUniform(uniformsCode, FLAT_COLOR);
+  bool billboard = GPUVariable::codeContainsUniform(uniformsCode, VIEWPORT_EXTENT);
+  bool color = GPUVariable::codeContainsAttribute(attributesCode, COLOR);
+  bool transformTC = GPUVariable::codeContainsUniform(uniformsCode, TRANSLATION_TEXTURE_COORDS) ||
+  GPUVariable::codeContainsUniform(uniformsCode, SCALE_TEXTURE_COORDS);
+
+  /*
 #ifdef C_CODE
   const GLState* thisGLState = glState;
 #endif
@@ -32,6 +34,12 @@ GPUProgram* GPUProgramManager::getProgram(GL* gl, const GLState* glState) {
       
       if (key == VIEWPORT_EXTENT){
         billboard = true;
+
+        if (!GPUVariable::codeContainsUniform(uniformsCode, VIEWPORT_EXTENT)){
+          int a = 0;
+          a++;
+        }
+
       }
       
       if (key == FLAT_COLOR){
@@ -52,18 +60,23 @@ GPUProgram* GPUProgramManager::getProgram(GL* gl, const GLState* glState) {
     for (int j = 0; j < sizeI; j++) {
       int key = ai->at(j);
       
-      if (key == TEXTURE_COORDS){
-        texture = true;
-      }
-      
+//      if (key == TEXTURE_COORDS){
+//        texture = true;
+//      }
+
       if (key == COLOR){
         color = true;
+
+        if (!GPUVariable::codeContainsAttribute(attributesCode, COLOR)){
+          int a = 0;
+          a++;
+        }
       }
     }
     
     thisGLState = thisGLState->getParent();
   }
-  
+  */
   if (billboard){
     return getProgram(gl, "Billboard");
   } else{

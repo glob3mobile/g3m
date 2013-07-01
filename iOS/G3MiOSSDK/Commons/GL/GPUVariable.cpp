@@ -32,6 +32,40 @@
 //const int GROUP_NOGROUP = -1;
 //const int GROUP_COLOR = 1;
 
+bool GPUVariable::codeContainsUniform(int code, GPUUniformKey u){
+  if (u == UNRECOGNIZED_UNIFORM){
+    return 0;
+  }
+#ifdef C_CODE
+  const int index = u;
+#endif
+#ifdef JAVA_CODE
+  final int index = u.getValue();
+#endif
+  return codeContainsUniform(code, index);
+}
+
+bool GPUVariable::codeContainsAttribute(int code, GPUAttributeKey a){
+  if (a == UNRECOGNIZED_ATTRIBUTE){
+    return 0;
+  }
+#ifdef C_CODE
+  const int index = a;
+#endif
+#ifdef JAVA_CODE
+  final int index = a.getValue();
+#endif
+  return codeContainsAttribute(code, index);
+}
+
+bool GPUVariable::codeContainsUniform(int code, int u){
+  return (code >> u) & 0x00000001;
+}
+
+bool GPUVariable::codeContainsAttribute(int code, int a){
+  return (code >> a) & 0x00000001;
+}
+
 int GPUVariable::getUniformCode(int u){
   return 0x00000001  << u;
 }
