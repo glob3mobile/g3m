@@ -18,7 +18,6 @@
 #include "FloatBuffer_iOS.hpp"
 #include "ShortBuffer_iOS.hpp"
 #include "Image_iOS.hpp"
-#include "MutableMatrix44D.hpp"
 #include "GPUProgram.hpp"
 #include "GPUAttribute.hpp"
 #include "GPUUniform.hpp"
@@ -47,16 +46,6 @@ public:
                  int v) const {
     const int location = ((GLUniformID_iOS*)loc)->getID();
     glUniform1i(location, v);
-  }
-
-  void uniformMatrix4fv(const IGLUniformID* location,
-                        bool transpose,
-                        const MutableMatrix44D* matrix) const {
-    const int loc = ((GLUniformID_iOS*)location)->getID();
-
-    GLfloat* pointer = matrix->getColumnMajorFloatArray();
-
-    glUniformMatrix4fv(loc, 1, transpose, pointer);
   }
 
   void uniformMatrix4fv(const IGLUniformID* location,

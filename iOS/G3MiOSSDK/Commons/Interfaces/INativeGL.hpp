@@ -27,8 +27,6 @@ class GPUProgram;
 class GPUUniform;
 class GPUAttribute;
 
-class MutableMatrix44D;
-
 class INativeGL {
 public:
 
@@ -45,10 +43,6 @@ public:
 
   virtual void uniform1i(const IGLUniformID* loc,
                          int v) const = 0;
-
-  virtual void uniformMatrix4fv(const IGLUniformID* location,
-                                bool transpose,
-                                const MutableMatrix44D* matrix) const = 0;
 
   virtual void uniformMatrix4fv(const IGLUniformID* location,
                                 bool transpose,

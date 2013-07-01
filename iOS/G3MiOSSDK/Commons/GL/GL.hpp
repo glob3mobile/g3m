@@ -179,8 +179,8 @@ public:
   
   void uniformMatrix4fv(const IGLUniformID* location,
                         bool transpose,
-                        const MutableMatrix44D* matrix) const{
-    _nativeGL->uniformMatrix4fv(location, transpose, matrix->asMatrix44D());
+                        const Matrix44D* matrix) const{
+    _nativeGL->uniformMatrix4fv(location, transpose, matrix);
   }
   
   void uniform4f(const IGLUniformID* location,

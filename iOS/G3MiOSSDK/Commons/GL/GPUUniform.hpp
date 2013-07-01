@@ -281,7 +281,7 @@ public:
   GPUUniformValue(GLType::glMatrix4Float()),_m(MutableMatrix44D(m)), _isTransform(isTransform)/*, _transformedMatrix(m)*/{}
   
   void setUniform(GL* gl, const IGLUniformID* id) const{
-    gl->uniformMatrix4fv(id, false, &_m);
+    gl->uniformMatrix4fv(id, false, _m.asMatrix44D());
   }
   
   bool isEqualsTo(const GPUUniformValue* v) const{

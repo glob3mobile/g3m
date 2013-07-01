@@ -53,8 +53,8 @@ private:
   double _m32;
   double _m33;
 
-//  mutable IFloatBuffer* _columnMajorFloatBuffer;
-  mutable float*        _columnMajorFloatArray;
+  //  mutable IFloatBuffer* _columnMajorFloatBuffer;
+  //  mutable float*        _columnMajorFloatArray;
 
   mutable Matrix44D* _matrix44D;
 
@@ -65,9 +65,6 @@ private:
   _isValid(isValid),
   _matrix44D(NULL)
   {
-//    _columnMajorFloatBuffer = NULL;
-    _columnMajorFloatArray  = NULL;
-    _matrix44D = NULL;
   }
 
 public:
@@ -101,8 +98,6 @@ public:
     _m32  = m32;
     _m33  = m33;
 
-//    _columnMajorFloatBuffer = NULL;
-    _columnMajorFloatArray = NULL;
     _matrix44D = NULL;
   }
 
@@ -129,9 +124,6 @@ public:
     _m31 = 0.0;
     _m32 = 0.0;
     _m33 = 0.0;
-
-//    _columnMajorFloatBuffer = NULL;
-    _columnMajorFloatArray  = NULL;
   }
 
   MutableMatrix44D(const MutableMatrix44D &m):
@@ -158,8 +150,6 @@ public:
     _m32 = m._m32;
     _m33 = m._m33;
 
-//    _columnMajorFloatBuffer = NULL;
-    _columnMajorFloatArray  = NULL;
   }
 
   Matrix44D* asMatrix44D() const{
@@ -210,7 +200,7 @@ public:
   std::string description() const{
     IStringBuilder *isb = IStringBuilder::newStringBuilder();
     isb->addString("MUTABLE MATRIX 44D: ");
-    float* f = getColumnMajorFloatArray();
+    float* f = asMatrix44D()->getColumnMajorFloatArray();
     for (int i = 0; i < 16; i++) {
       isb->addDouble(f[i]);
       if (i < 15) isb->addString(", ");
@@ -274,112 +264,77 @@ public:
     }
   }
 
-//  const IFloatBuffer* getColumnMajorFloatBuffer() const;
+  void print(const std::string& name, const ILogger* log) const;
 
-#ifdef C_CODE
-  float* getColumnMajorFloatArray() const {
-#else
-    float[] getColumnMajorFloatArray() const {
-#endif
-      if (_columnMajorFloatArray == NULL) {
-        _columnMajorFloatArray = new float[16];
-
-        _columnMajorFloatArray[ 0] = (float) _m00;
-        _columnMajorFloatArray[ 1] = (float) _m10;
-        _columnMajorFloatArray[ 2] = (float) _m20;
-        _columnMajorFloatArray[ 3] = (float) _m30;
-
-        _columnMajorFloatArray[ 4] = (float) _m01;
-        _columnMajorFloatArray[ 5] = (float) _m11;
-        _columnMajorFloatArray[ 6] = (float) _m21;
-        _columnMajorFloatArray[ 7] = (float) _m31;
-
-        _columnMajorFloatArray[ 8] = (float) _m02;
-        _columnMajorFloatArray[ 9] = (float) _m12;
-        _columnMajorFloatArray[10] = (float) _m22;
-        _columnMajorFloatArray[11] = (float) _m32;
-
-        _columnMajorFloatArray[12] = (float) _m03;
-        _columnMajorFloatArray[13] = (float) _m13;
-        _columnMajorFloatArray[14] = (float) _m23;
-        _columnMajorFloatArray[15] = (float) _m33;
-      }
-
-      return _columnMajorFloatArray;
-    }
-
-
-    void print(const std::string& name, const ILogger* log) const;
-
-    Vector3D unproject(const Vector3D& pixel3D,
-                       const int vpLeft,
-                       const int vpTop,
-                       const int vpWidth,
-                       const int vpHeight) const;
-
-    Vector2D project(const Vector3D& point,
+  Vector3D unproject(const Vector3D& pixel3D,
                      const int vpLeft,
                      const int vpTop,
                      const int vpWidth,
                      const int vpHeight) const;
 
-    Vector2F project(const Vector3F& point,
-                     const int vpLeft,
-                     const int vpTop,
-                     const int vpWidth,
-                     const int vpHeight) const;
+  Vector2D project(const Vector3D& point,
+                   const int vpLeft,
+                   const int vpTop,
+                   const int vpWidth,
+                   const int vpHeight) const;
 
-    static MutableMatrix44D createTranslationMatrix(const Vector3D& t);
+  Vector2F project(const Vector3F& point,
+                   const int vpLeft,
+                   const int vpTop,
+                   const int vpWidth,
+                   const int vpHeight) const;
 
-    static MutableMatrix44D createTranslationMatrix(double x,
-                                                    double y,
-                                                    double z);
+  static MutableMatrix44D createTranslationMatrix(const Vector3D& t);
 
-    static MutableMatrix44D createRotationMatrix(const Angle& angle,
-                                                 const Vector3D& axis);
+  static MutableMatrix44D createTranslationMatrix(double x,
+                                                  double y,
+                                                  double z);
 
-    static MutableMatrix44D createGeneralRotationMatrix(const Angle& angle,
-                                                        const Vector3D& axis,
-                                                        const Vector3D& point);
+  static MutableMatrix44D createRotationMatrix(const Angle& angle,
+                                               const Vector3D& axis);
 
-    static MutableMatrix44D createModelMatrix(const MutableVector3D& pos,
-                                              const MutableVector3D& center,
-                                              const MutableVector3D& up);
+  static MutableMatrix44D createGeneralRotationMatrix(const Angle& angle,
+                                                      const Vector3D& axis,
+                                                      const Vector3D& point);
 
-    static MutableMatrix44D createProjectionMatrix(double left, double right,
-                                                   double bottom, double top,
-                                                   double znear, double zfar);
+  static MutableMatrix44D createModelMatrix(const MutableVector3D& pos,
+                                            const MutableVector3D& center,
+                                            const MutableVector3D& up);
 
-    static MutableMatrix44D createProjectionMatrix(const FrustumData& data);
+  static MutableMatrix44D createProjectionMatrix(double left, double right,
+                                                 double bottom, double top,
+                                                 double znear, double zfar);
 
-    static MutableMatrix44D createOrthographicProjectionMatrix(double left, double right,
-                                                               double bottom, double top,
-                                                               double znear, double zfar);
+  static MutableMatrix44D createProjectionMatrix(const FrustumData& data);
+
+  static MutableMatrix44D createOrthographicProjectionMatrix(double left, double right,
+                                                             double bottom, double top,
+                                                             double znear, double zfar);
 
 
-    static MutableMatrix44D createScaleMatrix(double scaleX,
-                                              double scaleY,
-                                              double scaleZ) {
-      return MutableMatrix44D(scaleX, 0, 0, 0,
-                              0, scaleY, 0, 0,
-                              0, 0, scaleZ, 0,
-                              0, 0, 0, 1);
+  static MutableMatrix44D createScaleMatrix(double scaleX,
+                                            double scaleY,
+                                            double scaleZ) {
+    return MutableMatrix44D(scaleX, 0, 0, 0,
+                            0, scaleY, 0, 0,
+                            0, 0, scaleZ, 0,
+                            0, 0, 0, 1);
 
-    }
+  }
 
-    static MutableMatrix44D createScaleMatrix(const Vector3D& scale);
+  static MutableMatrix44D createScaleMatrix(const Vector3D& scale);
 
-    static MutableMatrix44D createGeodeticRotationMatrix(const Angle& latitude,
-                                                         const Angle& longitude);
+  static MutableMatrix44D createGeodeticRotationMatrix(const Angle& latitude,
+                                                       const Angle& longitude);
 
-    static MutableMatrix44D createGeodeticRotationMatrix(const Geodetic2D& position) {
-      return MutableMatrix44D::createGeodeticRotationMatrix(position.latitude(), position.longitude());
-    }
+  static MutableMatrix44D createGeodeticRotationMatrix(const Geodetic2D& position) {
+    return MutableMatrix44D::createGeodeticRotationMatrix(position.latitude(), position.longitude());
+  }
 
-    static MutableMatrix44D createGeodeticRotationMatrix(const Geodetic3D& position) {
-      return MutableMatrix44D::createGeodeticRotationMatrix(position.latitude(), position.longitude());
-    }
-    
-  };
+  static MutableMatrix44D createGeodeticRotationMatrix(const Geodetic3D& position) {
+    return MutableMatrix44D::createGeodeticRotationMatrix(position.latitude(), position.longitude());
+  }
   
+};
+
 #endif
