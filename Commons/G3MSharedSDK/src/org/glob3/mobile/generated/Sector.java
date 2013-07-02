@@ -470,13 +470,9 @@ public class Sector
     // compute angle with camera position
     //const Vector3D centerCamera = camera->getCartesianPosition();
     //double angle = centerCamera.angleBetween(getCartesianCenter(planet)).radians();
-    double angle = IMathUtils.instance().acos(camera.getNormalizedPosition().dot(getNormalizedCartesianCenter(planet)));
-    if (angle-getDeltaRadius() > camera.getAngle2Horizon())
-    {
-      return true;
-    }
-    else
-      return false;
+    final double angle = IMathUtils.instance().acos(camera.getNormalizedPosition().dot(getNormalizedCartesianCenter(planet)));
+  
+    return (angle-getDeltaRadius() > camera.getAngle2Horizon());
   }
 
   public final Geodetic2D clamp(Geodetic2D position)
@@ -654,7 +650,9 @@ public class Sector
   public final Vector3D getNormalizedCartesianCenter(Planet planet)
   {
     if (_normalizedCartesianCenter == null)
+    {
       _normalizedCartesianCenter = new Vector3D(planet.toCartesian(_center).normalized());
+    }
     return _normalizedCartesianCenter;
   }
 }
