@@ -24,13 +24,13 @@ package org.glob3.mobile.generated;
 public class EllipsoidalPlanet extends Planet
 {
 
-  private final Ellipsoid _ellipsoid;
+  private Ellipsoid _ellipsoid = new Ellipsoid();
 
 
 
   public EllipsoidalPlanet(Vector3D radii)
   {
-     _ellipsoid = new <type missing>(new Vector3D(0,0,0), radii);
+     _ellipsoid = new Ellipsoid(new Vector3D(0,0,0), radii);
   
   }
 
@@ -221,7 +221,6 @@ public class EllipsoidalPlanet extends Planet
 
   public final Vector3D scaleToGeocentricSurface(Vector3D position)
   {
-  
     Vector3D oneOverRadiiSquared = _ellipsoid.getOneOverRadiiSquared();
   
     final double beta = 1.0 / IMathUtils.instance().sqrt((position._x * position._x) * oneOverRadiiSquared._x + (position._y * position._y) * oneOverRadiiSquared._y + (position._z * position._z) * oneOverRadiiSquared._z);
