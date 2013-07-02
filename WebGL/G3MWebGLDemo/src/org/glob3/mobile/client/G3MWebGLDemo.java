@@ -214,26 +214,7 @@ public class G3MWebGLDemo
 
       final LayerSet layerSet = new LayerSet();
 
-      final WMSLayer bingLayer = LayerBuilder.createBingLayer(true);
-      layerSet.addLayer(bingLayer);
-      bingLayer.addTerrainTouchEventListener(new TerrainTouchEventListener() {
-    	  
-     	 @Override
-			public boolean onTerrainTouch(G3MEventContext context,
-					TerrainTouchEvent ev) {
-     		 Geodetic3D position = ev.getPosition();
-     		 Window.alert("touching terrain at coords (" +
-      				NumberFormat.getFormat("#.00").format(position.latitude().degrees()) + ", " +
-     				NumberFormat.getFormat("#.00").format(position.longitude().degrees()) + ")");
-				return false;
-			}
-
-			@Override
-			public void dispose() {}
-       });
-
-      
-/*      final boolean blueMarble = false;
+ /*      final boolean blueMarble = false;
       if (blueMarble) {
          final WMSLayer blueMarbleL = new WMSLayer( //
                   "bmng200405", //
@@ -357,6 +338,28 @@ public class G3MWebGLDemo
       /*final MapQuestLayer mqlOSM = MapQuestLayer.newOSM(TimeInterval.fromDays(30));
       layerSet.addLayer(mqlOSM);*/
 
+      final WMSLayer bingLayer = LayerBuilder.createBingLayer(true);
+      layerSet.addLayer(bingLayer);
+      bingLayer.addTerrainTouchEventListener(new TerrainTouchEventListener() {
+    	  
+     	 @Override
+			public boolean onTerrainTouch(G3MEventContext context,
+					TerrainTouchEvent ev) {
+     		 Geodetic2D position = ev.getPosition().asGeodetic2D();
+     		 Window.alert("touching terrain at coords (" +
+      				NumberFormat.getFormat("#.00").format(position.latitude().degrees()) + ", " +
+     				NumberFormat.getFormat("#.00").format(position.longitude().degrees()) + ")");
+     		 //URL url = bingLayer.getFeatureInfoURL(position, ev.getSector());
+     		 //Window.alert(url.toString());
+     		 
+				return false;
+			}
+
+			@Override
+			public void dispose() {}
+       });
+
+      
       builder.setInitializationTask(initializationTask);
       builder.getTileRendererBuilder().setLayerSet(layerSet);
 
