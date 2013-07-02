@@ -11,8 +11,8 @@
 #include "EllipsoidalPlanet.hpp"
 
 
-EllipsoidalPlanet::EllipsoidalPlanet(const Vector3D& radii):
-_ellipsoid(Vector3D(0,0,0), radii)
+EllipsoidalPlanet::EllipsoidalPlanet(const Ellipsoid& ellipsoid):
+_ellipsoid(ellipsoid)
 {
 
 }
