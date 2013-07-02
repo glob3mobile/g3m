@@ -745,7 +745,7 @@ public:
                                             TimeInterval::fromDays(30)) );
   }
   
-  const bool useBingMaps = true;
+  const bool useBingMaps = false;
   if (useBingMaps) {
     layerSet->addLayer( new BingMapsLayer(//BingMapType::Road(),
                                           BingMapType::AerialWithLabels(),
@@ -1011,6 +1011,42 @@ public:
     
     layerSet->addLayer(catastro);
   }
+  
+  if (true) {
+    WMSLayer* bing = LayerBuilder::createBingLayer(true);
+    layerSet->addLayer(bing);
+  }
+
+  if (false) {
+    WMSLayer* temp = new WMSLayer("temp",
+                                  URL("http://wms.openweathermap.org/service", false),
+                                  WMS_1_1_0,
+                                  Sector::fullSphere(),
+                                  "image/png",
+                                  "EPSG:4326",
+                                  "",
+                                  true,
+                                  NULL,
+                                  TimeInterval::zero(),
+                                  true);
+    layerSet->addLayer(temp);
+    
+    class TempTerrainTouchEventListener : public TerrainTouchEventListener {
+    public:
+      bool onTerrainTouch(const G3MEventContext* context,
+                          const TerrainTouchEvent& event) {
+        const URL url = event.getLayer()->getFeatureInfoURL(event.getPosition().asGeodetic2D(),
+                                                            event.getSector());
+        
+        printf ("touched Temperature. Feature info = %s\n", url.getPath().c_str());
+        
+        return true;
+      }
+    };
+    
+    temp->addTerrainTouchEventListener(new TempTerrainTouchEventListener());
+  }
+
   
   return layerSet;
 }
