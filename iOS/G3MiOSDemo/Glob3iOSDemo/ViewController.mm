@@ -1373,23 +1373,25 @@ public:
                                                                         "http://radar3d.glob3mobile.com/models/",
                                                                         true);
 
-    SGNode* node  = radarModel->getNode();
+    if (radarModel != NULL) {
+      SGNode* node  = radarModel->getNode();
 
-    const int childrenCount = node->getChildrenCount();
-    for (int i = 0; i < childrenCount; i++) {
-      SGNode* child = node->getChild(i);
-      SGMaterialNode* material = (SGMaterialNode*) child;
-      material->setBaseColor( NULL );
+      const int childrenCount = node->getChildrenCount();
+      for (int i = 0; i < childrenCount; i++) {
+        SGNode* child = node->getChild(i);
+        SGMaterialNode* material = (SGMaterialNode*) child;
+        material->setBaseColor( NULL );
+      }
+
+      //    radarModel->setPosition(Geodetic3D::fromDegrees(0, 0, 0));
+      radarModel->setPosition(new Geodetic3D(Angle::zero(), Angle::zero(), 10000));
+      //    radarModel->setPosition(new Geodetic3D(Angle::fromDegreesMinutesSeconds(25, 47, 16),
+      //                                           Angle::fromDegreesMinutesSeconds(-80, 13, 27),
+      //                                           10000));
+      //radarModel->setScale(10);
+
+      _shapesRenderer->addShape(radarModel);
     }
-
-//    radarModel->setPosition(Geodetic3D::fromDegrees(0, 0, 0));
-    radarModel->setPosition(new Geodetic3D(Angle::zero(), Angle::zero(), 10000));
-//    radarModel->setPosition(new Geodetic3D(Angle::fromDegreesMinutesSeconds(25, 47, 16),
-//                                           Angle::fromDegreesMinutesSeconds(-80, 13, 27),
-//                                           10000));
-    //radarModel->setScale(10);
-
-    _shapesRenderer->addShape(radarModel);
 
     delete buffer;
   }
