@@ -24,13 +24,13 @@ package org.glob3.mobile.generated;
 public class EllipsoidalPlanet extends Planet
 {
 
-  private Ellipsoid _ellipsoid = new Ellipsoid();
+  private final Ellipsoid _ellipsoid;
 
 
 
-  public EllipsoidalPlanet(Vector3D radii)
+  public EllipsoidalPlanet(Ellipsoid ellipsoid)
   {
-     _ellipsoid = new Ellipsoid(new Vector3D(0,0,0), radii);
+     _ellipsoid = ellipsoid;
   
   }
 
