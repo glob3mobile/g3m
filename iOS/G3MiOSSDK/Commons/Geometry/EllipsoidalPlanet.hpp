@@ -24,9 +24,8 @@ private:
   
 #ifdef C_CODE
   const Ellipsoid _ellipsoid;
-#endif
-#ifdef JAVA_CODE
-  private final Ellipsoid _ellipsoid;
+#else
+  Ellipsoid _ellipsoid;
 #endif
 
 
