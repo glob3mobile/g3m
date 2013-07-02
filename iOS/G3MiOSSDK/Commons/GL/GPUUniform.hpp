@@ -264,6 +264,44 @@ public:
   GPUUniformVec4Float(const std::string&name, IGLUniformID* id):GPUUniform(name,id, GLType::glVec4Float()){}
 };
 
+class GPUUniformValueMatrix4Float:public GPUUniformValue{
+
+  GPUUniformValueMatrix4Float(const GPUUniformValueMatrix4Float* that):
+  GPUUniformValue(GLType::glMatrix4Float()),
+  _m(Matrix44D(that->_m))
+  {}
+
+public:
+  Matrix44D _m;
+
+  GPUUniformValueMatrix4Float(const Matrix44D& m):
+  GPUUniformValue(GLType::glMatrix4Float()),_m(Matrix44D(m)){}
+
+  void setUniform(GL* gl, const IGLUniformID* id) const{
+    gl->uniformMatrix4fv(id, false, &_m);
+  }
+
+  bool isEqualsTo(const GPUUniformValue* v) const{
+    GPUUniformValueMatrix4Float *v2 = (GPUUniformValueMatrix4Float *)v;
+    return _m.isEqualsTo(v2->_m);
+  }
+
+  GPUUniformValue* copyOrCreate(GPUUniformValue* value) const;
+
+  std::string description() const{
+    IStringBuilder *isb = IStringBuilder::newStringBuilder();
+    isb->addString("Uniform Value Matrix44D.");
+    std::string s = isb->getString();
+    delete isb;
+    return s;
+  }
+
+  const Matrix44D* getValue() const{
+    return &_m;
+  }
+};
+
+
 
 class GPUUniformValueMatrix4FloatTransform:public GPUUniformValue{
   

@@ -47,8 +47,16 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
       _currentGPUProgram = _lastGPUProgramUsed;
       gl->useProgram(_lastGPUProgramUsed);
     }
-    
+
     applyStates(gl, _lastGPUProgramUsed);
+
+    //APPLY TO GPU STATE MODELVIEW
+    Matrix44D* modelview = getAccumulatedModelView();
+    if (modelview != NULL){
+      GPUUniformValueMatrix4Float valueModelview(*getAccumulatedModelView());
+      _lastGPUProgramUsed->getGPUUniform(MODELVIEW)->set(&valueModelview);
+    }
+
     _lastGPUProgramUsed->applyChanges(gl);
 
     //prog->onUnused(); //Uncomment to check that all GPUProgramStates are complete
@@ -57,3 +65,20 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
   }
 
 }
+
+void GLState::setModelView(const Matrix44D& modelview, bool modifiesParents){
+  _modelview = new Matrix44D(modelview);
+  _modelviewModifiesParents = modifiesParents;
+}
+
+Matrix44D* GLState::getAccumulatedModelView() const{
+  if (_accumulatedModelview != NULL){
+    return _accumulatedModelview;
+  } else{
+    if (_parentGLState != NULL){
+      return _parentGLState->getAccumulatedModelView();
+    } else{
+      return NULL;
+    }
+  }
+};

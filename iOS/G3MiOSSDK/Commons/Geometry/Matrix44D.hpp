@@ -37,6 +37,8 @@ private:
 
 public:
 
+  explicit Matrix44D(const Matrix44D& m);
+
   Matrix44D(double m00, double m10, double m20, double m30,
             double m01, double m11, double m21, double m31,
             double m02, double m12, double m22, double m32,
@@ -45,6 +47,8 @@ public:
   ~Matrix44D(){
     delete [] _columnMajorFloatArray;
   }
+
+  Matrix44D* multiply(const Matrix44D &that) const;
 
 #ifdef C_CODE
   float* getColumnMajorFloatArray() const {
@@ -77,6 +81,8 @@ public:
 
       return _columnMajorFloatArray;
     }
+
+    bool isEqualsTo(const Matrix44D& m) const;
 
 };
 

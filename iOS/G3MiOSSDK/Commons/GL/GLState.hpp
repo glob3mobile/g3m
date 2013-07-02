@@ -32,6 +32,11 @@ class GLState{
   mutable int _attributesCode;
   mutable bool _totalGPUProgramStateChanged;
   mutable GPUProgram* _lastGPUProgramUsed;
+
+  Matrix44D* _modelview;
+  mutable Matrix44D* _accumulatedModelview;
+  mutable Matrix44D* _lastParentsModelview;
+  bool _modelviewModifiesParents;
   
 #ifdef C_CODE
   mutable const GLState* _parentGLState;
@@ -49,7 +54,10 @@ class GLState{
   _parentGLState(NULL),
   _uniformsCode(0),
   _attributesCode(0),
-  _totalGPUProgramStateChanged(true){}
+  _totalGPUProgramStateChanged(true),
+  _modelview(new Matrix44D(*state._modelview)),
+  _accumulatedModelview(new Matrix44D(*state._accumulatedModelview)),
+  _modelviewModifiesParents(state._modelviewModifiesParents){}
   
 public:
   
@@ -60,7 +68,10 @@ public:
   _parentGLState(NULL),
   _uniformsCode(0),
   _attributesCode(0),
-  _totalGPUProgramStateChanged(true){}
+  _totalGPUProgramStateChanged(true),
+  _modelview(NULL),
+  _accumulatedModelview(NULL),
+  _modelviewModifiesParents(false){}
   
   //For debugging purposes only
   GLState(GLGlobalState*   globalState,
@@ -71,7 +82,10 @@ public:
   _parentGLState(NULL),
   _uniformsCode(0),
   _attributesCode(0),
-  _totalGPUProgramStateChanged(true){}
+  _totalGPUProgramStateChanged(true),
+  _modelview(NULL),
+  _accumulatedModelview(NULL),
+  _modelviewModifiesParents(false){}
   
   ~GLState(){
     if (_owner){
@@ -87,12 +101,30 @@ public:
   void setParent(const GLState* p) const{
     _parentGLState = p;
     if (p != NULL){
+      //UNIFORMS AND ATTRIBUTES CODES
       int newUniformsCode = p->getUniformsCode() | _programState->getUniformsCode();
       int newAttributesCode = p->getAttributesCode() | _programState->getAttributesCode();
 
       _totalGPUProgramStateChanged = (newAttributesCode != _attributesCode) || (newUniformsCode != _uniformsCode);
       _uniformsCode = newUniformsCode;
       _attributesCode = newAttributesCode;
+
+      //MODELVIEW
+      if (_modelviewModifiesParents){
+        Matrix44D* parentsM = p->getAccumulatedModelView();
+        if (parentsM == NULL){
+          ILogger::instance()->logError("CAN'T MODIFIE PARENTS MODELVIEW");
+        }
+
+        if (_lastParentsModelview != parentsM && _modelview != NULL){
+          delete _accumulatedModelview;
+          _accumulatedModelview = parentsM->multiply(*_modelview);
+        }
+        
+      }
+
+
+      
     }
   }
 
@@ -131,6 +163,9 @@ public:
   static GLGlobalState* createCopyOfCurrentGLGlobalState(){
     return _currentGPUGlobalState.createCopy();
   }
+
+  void setModelView(const Matrix44D& modelview, bool modifiesParents);
+  Matrix44D* getAccumulatedModelView() const;
 };
 
 #endif /* defined(__G3MiOSSDK__GLState__) */
