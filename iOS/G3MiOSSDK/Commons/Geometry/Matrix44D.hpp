@@ -12,6 +12,16 @@
 #include <iostream.h>
 #include "IFloatBuffer.hpp"
 
+#include <vector.h>
+
+class Matrix44D;
+
+class Matrix44DListener{
+public:
+  virtual ~Matrix44DListener() {}
+  virtual void onMatrixBeingDeleted(const Matrix44D* m) = 0;
+};
+
 class Matrix44D {
 
 private:
@@ -36,6 +46,8 @@ private:
 
   mutable float*        _columnMajorFloatArray;
   mutable IFloatBuffer* _columnMajorFloatBuffer;
+
+  std::vector<Matrix44DListener*> _listeners;
 
 public:
 
@@ -85,6 +97,20 @@ public:
     const IFloatBuffer* getColumnMajorFloatBuffer() const;
 
     bool isEqualsTo(const Matrix44D& m) const;
+
+    void addListener(Matrix44DListener* l){
+      _listeners.push_back(l);
+    }
+
+    void removeListener(Matrix44DListener* l){
+      for (std::vector<Matrix44DListener*>::iterator it = _listeners.begin();
+           it != _listeners.end(); it++) {
+        if (*it == l){
+          _listeners.erase(it);
+          return;
+        }
+      }
+    }
 
 };
 
