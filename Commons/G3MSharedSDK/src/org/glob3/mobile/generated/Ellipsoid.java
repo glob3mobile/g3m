@@ -20,7 +20,6 @@ package org.glob3.mobile.generated;
 
 public class Ellipsoid extends Geometry3D
 {
-
   private final Vector3D _center ;
   private final Vector3D _radii ;
 
@@ -40,28 +39,32 @@ public class Ellipsoid extends Geometry3D
 
   public final Vector3D getCenter()
   {
-     return _center;
+    return _center;
   }
+
   public final Vector3D getRadii()
   {
-     return _radii;
+    return _radii;
   }
+
   public final Vector3D getRadiiSquared()
   {
-     return _radiiSquared;
+    return _radiiSquared;
   }
+
   public final Vector3D getRadiiToTheFourth()
   {
-     return _radiiToTheFourth;
+    return _radiiToTheFourth;
   }
+
   public final Vector3D getOneOverRadiiSquared()
   {
-     return _oneOverRadiiSquared;
+    return _oneOverRadiiSquared;
   }
 
   public final double getMeanRadius()
   {
-     return (_radii._x + _radii._y + _radii._y) /3;
+    return (_radii._x + _radii._y + _radii._y) /3;
   }
 
 

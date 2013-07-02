@@ -26,7 +26,7 @@ public abstract class Planet
   }
   public static Planet createSphericalEarth()
   {
-    return new SphericalPlanet(6378137.0);
+    return new SphericalPlanet(new Sphere(Vector3D.zero(), 6378137.0));
   }
 
   public void dispose()

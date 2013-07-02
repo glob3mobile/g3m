@@ -20,20 +20,13 @@ package org.glob3.mobile.generated;
 
 public class SphericalPlanet extends Planet
 {
-  //const double _radii;
-  //const double _radiiSquared;
-  //const double _oneOverRadiiSquared;
-
-  private Sphere _sphere = new Sphere();
+  private Sphere _sphere;
 
 
 
-  public SphericalPlanet(double radii)
-  //_radii(radii),
-  //_radiiSquared(radii*radii),
-  //_oneOverRadiiSquared(1.0/radii/radii),
+  public SphericalPlanet(Sphere sphere)
   {
-     _sphere = new Sphere(new Vector3D(0,0,0), radii);
+     _sphere = sphere;
   
   }
 
@@ -44,7 +37,6 @@ public class SphericalPlanet extends Planet
 
   public final Vector3D getRadii()
   {
-    //return Vector3D(_radii, _radii, _radii);
     return new Vector3D(_sphere.getRadius(), _sphere.getRadius(), _sphere.getRadius());
   }
 
