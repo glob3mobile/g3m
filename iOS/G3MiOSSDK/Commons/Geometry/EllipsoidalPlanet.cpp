@@ -12,17 +12,6 @@
 
 
 EllipsoidalPlanet::EllipsoidalPlanet(const Vector3D& radii):
-//_radii(radii),
-//_radiiSquared(Vector3D(radii._x * radii._x ,
-//                       radii._y * radii._y,
-//                       radii._z * radii._z)),
-//_radiiToTheFourth(Vector3D(_radiiSquared._x * _radiiSquared._x ,
-//                           _radiiSquared._y * _radiiSquared._y,
-//                           _radiiSquared._z * _radiiSquared._z)),
-//_oneOverRadiiSquared(Vector3D(1.0 / (radii._x * radii._x ),
-//                              1.0 / (radii._y * radii._y),
-//                              1.0 / (radii._z * radii._z))),
-
 _ellipsoid(Vector3D(0,0,0), radii)
 {
   
@@ -124,8 +113,10 @@ Geodetic3D EllipsoidalPlanet::toGeodetic3D(const Vector3D& position) const {
 Vector3D EllipsoidalPlanet::scaleToGeodeticSurface(const Vector3D& position) const {
   const IMathUtils* mu = IMathUtils::instance();
   
-  Vector3D oneOverRadiiSquared = _ellipsoid.getOneOverRadiiSquared();
-  
+  const Vector3D oneOverRadiiSquared = _ellipsoid.getOneOverRadiiSquared();
+  const Vector3D radiiSquared        = _ellipsoid.getRadiiSquared();
+  const Vector3D radiiToTheFourth    = _ellipsoid.getRadiiToTheFourth();
+
   const double beta = 1.0 / mu->sqrt((position._x * position._x) * oneOverRadiiSquared._x +
                                      (position._y * position._y) * oneOverRadiiSquared._y +
                                      (position._z * position._z) * oneOverRadiiSquared._z);
@@ -149,9 +140,7 @@ Vector3D EllipsoidalPlanet::scaleToGeodeticSurface(const Vector3D& position) con
   
   do {
     alpha -= (s / dSdA);
-    
-    Vector3D oneOverRadiiSquared = _ellipsoid.getOneOverRadiiSquared();
-    
+        
     da = 1.0 + (alpha * oneOverRadiiSquared._x);
     db = 1.0 + (alpha * oneOverRadiiSquared._y);
     dc = 1.0 + (alpha * oneOverRadiiSquared._z);
@@ -163,10 +152,7 @@ Vector3D EllipsoidalPlanet::scaleToGeodeticSurface(const Vector3D& position) con
     const double da3 = da * da2;
     const double db3 = db * db2;
     const double dc3 = dc * dc2;
-    
-    Vector3D radiiSquared = _ellipsoid.getRadiiSquared();
-    Vector3D radiiToTheFourth = _ellipsoid.getRadiiToTheFourth();
-    
+
     s = (x2 / (radiiSquared._x * da2) +
          y2 / (radiiSquared._y * db2) +
          z2 / (radiiSquared._z * dc2) - 1.0);

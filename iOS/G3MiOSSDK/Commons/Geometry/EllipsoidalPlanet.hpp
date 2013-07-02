@@ -21,14 +21,15 @@
 
 class EllipsoidalPlanet: public Planet{
 private:
-  //const Vector3D _radii;
-  //const Vector3D _radiiSquared;
-//  const Vector3D _radiiToTheFourth;
-//  const Vector3D _oneOverRadiiSquared;
   
+#ifdef C_CODE
   const Ellipsoid _ellipsoid;
-  
-  
+#endif
+#ifdef JAVA_CODE
+  private final Ellipsoid _ellipsoid;
+#endif
+
+
 public:
   
   EllipsoidalPlanet(const Vector3D& radii);
