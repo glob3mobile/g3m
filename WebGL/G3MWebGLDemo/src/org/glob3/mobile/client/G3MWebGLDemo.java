@@ -43,9 +43,11 @@ import org.glob3.mobile.generated.IWebSocketListener;
 import org.glob3.mobile.generated.JSONArray;
 import org.glob3.mobile.generated.JSONBaseObject;
 import org.glob3.mobile.generated.JSONObject;
+import org.glob3.mobile.generated.LayerBuilder;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.LayerTilesRenderParameters;
 import org.glob3.mobile.generated.LevelTileCondition;
+import org.glob3.mobile.generated.MapQuestLayer;
 import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarkTouchListener;
 import org.glob3.mobile.generated.MarksRenderer;
@@ -77,6 +79,7 @@ import org.glob3.mobile.specific.G3MWidget_WebGL;
 import org.glob3.mobile.specific.ThreadUtils_WebGL;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Panel;
@@ -118,7 +121,7 @@ public class G3MWebGLDemo
    public void initDefaultWithBuilder() {
       final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
 
-      final boolean useMarkers = true;
+      final boolean useMarkers = false;
       if (useMarkers) {
          // marks renderer
          final boolean readyWhenMarksReady = true;
@@ -211,7 +214,26 @@ public class G3MWebGLDemo
 
       final LayerSet layerSet = new LayerSet();
 
-      final boolean blueMarble = true;
+      final WMSLayer bingLayer = LayerBuilder.createBingLayer(true);
+      layerSet.addLayer(bingLayer);
+      bingLayer.addTerrainTouchEventListener(new TerrainTouchEventListener() {
+    	  
+     	 @Override
+			public boolean onTerrainTouch(G3MEventContext context,
+					TerrainTouchEvent ev) {
+     		 Geodetic3D position = ev.getPosition();
+     		 Window.alert("touching terrain at coords (" +
+      				NumberFormat.getFormat("#.00").format(position.latitude().degrees()) + ", " +
+     				NumberFormat.getFormat("#.00").format(position.longitude().degrees()) + ")");
+				return false;
+			}
+
+			@Override
+			public void dispose() {}
+       });
+
+      
+/*      final boolean blueMarble = false;
       if (blueMarble) {
          final WMSLayer blueMarbleL = new WMSLayer( //
                   "bmng200405", //
@@ -239,7 +261,7 @@ public class G3MWebGLDemo
 			@Override
 			public void dispose() {}
           });
-      }
+      }*/
 
       final boolean useOrtoAyto = false;
       if (useOrtoAyto) {
@@ -264,6 +286,76 @@ public class G3MWebGLDemo
                   ltrp);
          layerSet.addLayer(ortoAyto);
       }
+      
+      final boolean useOsm = false;
+      if (useOsm) {
+    	  final WMSLayer osm = new WMSLayer(
+              "osm_auto:all",                                       // layer name
+              new URL("http://129.206.228.72/cached/osm", false),   // server url 
+              WMSServerVersion.WMS_1_1_0,                           // server version
+              Sector.fullSphere(),                                  // initial bounding box
+              "image/jpeg",                                         // image format
+              "EPSG:4326",                                          // SRS 
+              "",                                                   // style
+              false,                                                // include transparency
+              null,                                                 // layer condition
+              TimeInterval.fromDays(30),                            // time interval to cache
+              true);                                                // read expired
+    	  layerSet.addLayer(osm);
+          osm.addTerrainTouchEventListener(new TerrainTouchEventListener() {
+        	  
+         	 @Override
+ 			public boolean onTerrainTouch(G3MEventContext context,
+ 					TerrainTouchEvent ev) {
+         		 Geodetic3D position = ev.getPosition();
+             	Window.alert("touching terrain on osm layer "+ Double.toString(position.latitude().degrees()) +
+             			","+Double.toString(position.longitude().degrees()));
+    				return false;
+ 			}
+
+ 			@Override
+ 			public void dispose() {}
+           });
+      }
+      
+      final boolean useLatlon = false;
+      if (useLatlon) {
+    	  final WMSLayer latlon = new WMSLayer("latlon",
+    		                                 new URL("http://wms.latlon.org/",false),
+    		                                 WMSServerVersion.WMS_1_1_0,
+    		                                 Sector.fromDegrees(-85.05, -180.0, 85.5, 180.0),
+    		                                 "image/jpeg",
+    		                                 "EPSG:4326",
+    		                                 "",
+    		                                 false,
+    		                                 null,                                                 // layer condition
+    		                                 TimeInterval.fromDays(30),                            // time interval to cache
+    		                                 true);                                                // read expired
+    	  layerSet.addLayer(latlon);
+      }
+      
+      final boolean useBing = false;
+      if (useBing) {
+	      final WMSLayer bing = new WMSLayer( //
+	              "ve", //
+	              new URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?", false), //
+	              WMSServerVersion.WMS_1_1_0, //
+	              Sector.fullSphere(), //
+	              "image/jpeg", //
+	              "EPSG:4326", //
+	              "", //
+	              false, //
+	              null,                                                 // layer condition
+	              TimeInterval.fromDays(30),                            // time interval to cache
+	              true); 
+	     layerSet.addLayer(bing);
+      }
+
+      /*final WMSLayer political = new WMSLayer("topp:cia", new URL("http://worldwind22.arc.nasa.gov/geoserver/wms?", false), WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/png", "EPSG:4326", "countryboundaries", true, null, TimeInterval.fromDays(30), true);
+      layerSet.addLayer(political);*/
+      
+      /*final MapQuestLayer mqlOSM = MapQuestLayer.newOSM(TimeInterval.fromDays(30));
+      layerSet.addLayer(mqlOSM);*/
 
       builder.setInitializationTask(initializationTask);
       builder.getTileRendererBuilder().setLayerSet(layerSet);
