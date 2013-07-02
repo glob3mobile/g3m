@@ -17,23 +17,23 @@
 
 class SphericalPlanet: public Planet {
 private:
-  //const double _radii;
-  //const double _radiiSquared;
-  //const double _oneOverRadiiSquared;
-  
-  Sphere _sphere;
+#ifdef C_CODE
+  const Sphere _sphere;
+#endif
+#ifdef JAVA_CODE
+  private Sphere _sphere;
+#endif
 
 
 public:
 
-  SphericalPlanet(double radii);
+  SphericalPlanet(const Sphere& sphere);
 
   ~SphericalPlanet() {
 
   }
 
   Vector3D getRadii() const{
-    //return Vector3D(_radii, _radii, _radii);
     return Vector3D(_sphere.getRadius(), _sphere.getRadius(), _sphere.getRadius());
   }
 

@@ -9,11 +9,8 @@
 #include "SphericalPlanet.hpp"
 
 
-SphericalPlanet::SphericalPlanet(double radii):
-//_radii(radii),
-//_radiiSquared(radii*radii),
-//_oneOverRadiiSquared(1.0/radii/radii),
-_sphere(Vector3D(0,0,0), radii)
+SphericalPlanet::SphericalPlanet(const Sphere& sphere):
+_sphere(sphere)
 {
 
 }
