@@ -65,7 +65,8 @@ public:
                                                                               -halfHeight, halfHeight,
                                                                               -halfWidth, halfWidth);
     
-    _glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW, _projectionMatrix.multiply(_modelviewMatrix), false);
+    //_glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW, _projectionMatrix.multiply(_modelviewMatrix), false);
+    _glState.setModelView(*(_projectionMatrix.multiply(_modelviewMatrix).asMatrix44D()), false);
   }
   
   virtual ~BusyMeshRenderer() {
@@ -78,7 +79,8 @@ public:
     if (_degrees>360) _degrees -= 360;
     _modelviewMatrix = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, -1));
     
-    _glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW, _projectionMatrix.multiply(_modelviewMatrix), false);
+    //_glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW, _projectionMatrix.multiply(_modelviewMatrix), false);
+    _glState.setModelView(*(_projectionMatrix.multiply(_modelviewMatrix).asMatrix44D()), false);
   }
 
   void start(const G3MRenderContext* rc);

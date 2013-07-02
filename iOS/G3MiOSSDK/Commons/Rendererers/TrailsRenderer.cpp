@@ -151,8 +151,9 @@ void Trail::render(const G3MRenderContext* rc) {
     Mesh* mesh = getMesh(rc->getPlanet());
     if (mesh != NULL) {
       
-      _glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW, rc->getCurrentCamera()->getModelViewMatrix(), false);
-      
+      //_glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW, rc->getCurrentCamera()->getModelViewMatrix(), false);
+      _glState.setModelView(*(rc->getCurrentCamera()->getModelViewMatrix().asMatrix44D()), false);
+
       mesh->render(rc, &_glState);
     }
   }

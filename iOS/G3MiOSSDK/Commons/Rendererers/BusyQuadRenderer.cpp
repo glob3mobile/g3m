@@ -124,7 +124,7 @@ void BusyQuadRenderer::render(const G3MRenderContext* rc,
   _quadMesh->render(rc, &_glState);
 }
 
-void BusyQuadRenderer::createGLState() const{
+void BusyQuadRenderer::createGLState(){
   
   _glState.getGLGlobalState()->enableBlend();
   _glState.getGLGlobalState()->setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
@@ -147,5 +147,6 @@ void BusyQuadRenderer::createGLState() const{
   
   //Modelview and projection
   _modelviewMatrix = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, 1));
-  _glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW, _projectionMatrix.multiply(_modelviewMatrix), false);
+  //_glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW, _projectionMatrix.multiply(_modelviewMatrix), false);
+  _glState.setModelView(*(_projectionMatrix.multiply(_modelviewMatrix).asMatrix44D()), false);
 }

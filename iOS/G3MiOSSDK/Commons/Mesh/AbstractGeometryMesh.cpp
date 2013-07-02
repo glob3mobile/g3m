@@ -122,8 +122,8 @@ void AbstractGeometryMesh::createGLState(){
                               0);           //Stride 0
   
   if (_translationMatrix != NULL){
-    progState.setUniformMatrixValue(MODELVIEW, *_translationMatrix, true);
-    //_glState.setModelView(*_translationMatrix->asMatrix44D(), true);
+    //progState.setUniformMatrixValue(MODELVIEW, *_translationMatrix, true);
+    _glState.setModelView(*_translationMatrix->asMatrix44D(), true);
   }
   
   

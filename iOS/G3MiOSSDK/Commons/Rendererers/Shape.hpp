@@ -44,7 +44,7 @@ private:
 
   bool _enable;
   
-  GLState _glState;
+  mutable GLState _glState;
   
 protected:
   virtual void cleanTransformMatrix();
