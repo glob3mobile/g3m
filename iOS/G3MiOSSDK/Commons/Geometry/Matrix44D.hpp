@@ -10,6 +10,7 @@
 #define __G3MiOSSDK__Matrix44D__
 
 #include <iostream.h>
+#include "IFloatBuffer.hpp"
 
 class Matrix44D {
 
@@ -34,6 +35,7 @@ private:
   const double _m33;
 
   mutable float*        _columnMajorFloatArray;
+  mutable IFloatBuffer* _columnMajorFloatBuffer;
 
 public:
 
@@ -44,9 +46,7 @@ public:
             double m02, double m12, double m22, double m32,
             double m03, double m13, double m23, double m33);
 
-  ~Matrix44D(){
-    delete [] _columnMajorFloatArray;
-  }
+  ~Matrix44D();
 
   Matrix44D* multiply(const Matrix44D &that) const;
 
@@ -81,6 +81,8 @@ public:
 
       return _columnMajorFloatArray;
     }
+
+    const IFloatBuffer* getColumnMajorFloatBuffer() const;
 
     bool isEqualsTo(const Matrix44D& m) const;
 

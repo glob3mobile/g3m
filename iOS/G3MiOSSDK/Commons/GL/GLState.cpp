@@ -24,26 +24,33 @@ void GLState::setParent(const GLState* p) const{
 
     //MODELVIEW
     if (_modelviewModifiesParents){
-      Matrix44D* parentsM = p->getAccumulatedModelView();
-      if (parentsM == NULL){
-        ILogger::instance()->logError("CAN'T MODIFY PARENTS MODELVIEW");
-      }
+      if (_modelview != NULL){
+        Matrix44D* parentsM = p->getAccumulatedModelView();
+        if (parentsM == NULL){
+          ILogger::instance()->logError("CAN'T MODIFY PARENTS MODELVIEW");
+        } else{
 
-      if (_lastParentsModelview != parentsM && _modelview != NULL){
-        delete _accumulatedModelview;
-        _accumulatedModelview = parentsM->multiply(*_modelview);
-      }
+          //if (_lastParentsModelview != parentsM){
+            delete _accumulatedModelview;
+            _accumulatedModelview = parentsM->multiply(*_modelview);
+            _lastParentsModelview = parentsM;
+          //}
+          //        else{
+          //          ILogger::instance()->logInfo("REUSING MODELVIEW");
+          //        }
 
+        }
+      }
     }
   }
 }
 
 void GLState::applyGlobalStateOnGPU(GL* gl) const{
-  
+
   if (_parentGLState != NULL){
     _parentGLState->applyGlobalStateOnGPU(gl);
   }
-  
+
   _globalState->applyChanges(gl, _currentGPUGlobalState);
 }
 
@@ -52,8 +59,8 @@ void GLState::applyStates(GL* gl, GPUProgram* prog) const{
     _parentGLState->applyStates(gl, prog);
   }
 
-//  _programState->linkToProgram(prog);
-//  _programState->applyValuesToLinkedProgram();
+  //  _programState->linkToProgram(prog);
+  //  _programState->applyValuesToLinkedProgram();
   _programState->applyValuesToProgram(prog);
 
   _globalState->applyChanges(gl, _currentGPUGlobalState);
@@ -94,10 +101,17 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
 }
 
 void GLState::setModelView(const Matrix44D& modelview, bool modifiesParents){
-  delete _modelview;
-  _modelview = new Matrix44D(modelview);
+
   _modelviewModifiesParents = modifiesParents;
-  _lastParentsModelview = NULL;
+
+  if (_modelview == NULL || !_modelview->isEqualsTo(modelview)){
+    delete _modelview;
+    _modelview = new Matrix44D(modelview);
+    _lastParentsModelview = NULL;
+  }
+  //  else{
+  //    ILogger::instance()->logInfo("Same modelview set.");
+  //  }
 }
 
 Matrix44D* GLState::getAccumulatedModelView() const{

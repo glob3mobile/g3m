@@ -8,6 +8,8 @@
 
 #include "Matrix44D.hpp"
 
+#include "IFactory.hpp"
+
 Matrix44D::Matrix44D(double m00, double m10, double m20, double m30,
                      double m01, double m11, double m21, double m31,
                      double m02, double m12, double m22, double m32,
@@ -32,6 +34,13 @@ _m31(m31),
 _m32(m32),
 _m33(m33){
   _columnMajorFloatArray = NULL;
+  _columnMajorFloatBuffer = NULL;
+}
+
+Matrix44D::~Matrix44D()
+{
+  delete[] _columnMajorFloatArray;
+  delete _columnMajorFloatBuffer;
 }
 
 Matrix44D::Matrix44D(const Matrix44D& m):
@@ -55,6 +64,7 @@ _m31(m._m31),
 _m32(m._m32),
 _m33(m._m33){
   _columnMajorFloatArray = NULL;
+  _columnMajorFloatBuffer = NULL;
 }
 
 Matrix44D* Matrix44D::multiply(const Matrix44D &that) const {
@@ -101,9 +111,9 @@ Matrix44D* Matrix44D::multiply(const Matrix44D &that) const {
   const double m33 = (_m30 * that03) + (_m31 * that13) + (_m32 * that23) + (_m33 * that33);
 
   return new Matrix44D(m00, m10, m20, m30,
-                   m01, m11, m21, m31,
-                   m02, m12, m22, m32,
-                   m03, m13, m23, m33);
+                       m01, m11, m21, m31,
+                       m02, m12, m22, m32,
+                       m03, m13, m23, m33);
 }
 
 bool Matrix44D::isEqualsTo(const Matrix44D& m) const{
@@ -113,4 +123,31 @@ bool Matrix44D::isEqualsTo(const Matrix44D& m) const{
           (_m20 == m._m20) && (_m21 == m._m21) && (_m22 == m._m22) && (_m23 == m._m23) &&
           (_m30 == m._m30) && (_m31 == m._m31) && (_m32 == m._m32) && (_m33 == m._m33)
           );
+}
+
+const IFloatBuffer* Matrix44D::getColumnMajorFloatBuffer() const {
+  if (_columnMajorFloatBuffer == NULL){
+    _columnMajorFloatBuffer = IFactory::instance()->createFloatBuffer(
+                                                                      (float) _m00,
+                                                                      (float) _m10,
+                                                                      (float) _m20,
+                                                                      (float) _m30,
+
+                                                                      (float) _m01,
+                                                                      (float) _m11,
+                                                                      (float) _m21,
+                                                                      (float) _m31,
+
+                                                                      (float) _m02,
+                                                                      (float) _m12,
+                                                                      (float) _m22,
+                                                                      (float) _m32,
+
+                                                                      (float) _m03,
+                                                                      (float) _m13,
+                                                                      (float) _m23,
+                                                                      (float) _m33
+                                                                      );
+  }
+  return _columnMajorFloatBuffer;
 }
