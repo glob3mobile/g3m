@@ -23,28 +23,14 @@ package org.glob3.mobile.generated;
 
 public class EllipsoidalPlanet extends Planet
 {
-  //const Vector3D _radii;
-  //const Vector3D _radiiSquared;
-//  const Vector3D _radiiToTheFourth;
-//  const Vector3D _oneOverRadiiSquared;
 
-  private final Ellipsoid _ellipsoid = new Ellipsoid();
+  private final Ellipsoid _ellipsoid;
 
 
 
   public EllipsoidalPlanet(Vector3D radii)
-  //_radii(radii),
-  //_radiiSquared(Vector3D(radii._x * radii._x ,
-  //                       radii._y * radii._y,
-  //                       radii._z * radii._z)),
-  //_radiiToTheFourth(Vector3D(_radiiSquared._x * _radiiSquared._x ,
-  //                           _radiiSquared._y * _radiiSquared._y,
-  //                           _radiiSquared._z * _radiiSquared._z)),
-  //_oneOverRadiiSquared(Vector3D(1.0 / (radii._x * radii._x ),
-  //                              1.0 / (radii._y * radii._y),
-  //                              1.0 / (radii._z * radii._z))),
   {
-     _ellipsoid = new Ellipsoid(new Vector3D(0,0,0), radii);
+     _ellipsoid = new <type missing>(new Vector3D(0,0,0), radii);
   
   }
 
@@ -187,7 +173,9 @@ public class EllipsoidalPlanet extends Planet
   {
     final IMathUtils mu = IMathUtils.instance();
   
-    Vector3D oneOverRadiiSquared = _ellipsoid.getOneOverRadiiSquared();
+    final Vector3D oneOverRadiiSquared = _ellipsoid.getOneOverRadiiSquared();
+    final Vector3D radiiSquared = _ellipsoid.getRadiiSquared();
+    final Vector3D radiiToTheFourth = _ellipsoid.getRadiiToTheFourth();
   
     final double beta = 1.0 / mu.sqrt((position._x * position._x) * oneOverRadiiSquared._x + (position._y * position._y) * oneOverRadiiSquared._y + (position._z * position._z) * oneOverRadiiSquared._z);
   
@@ -210,8 +198,6 @@ public class EllipsoidalPlanet extends Planet
     {
       alpha -= (s / dSdA);
   
-      Vector3D oneOverRadiiSquared = _ellipsoid.getOneOverRadiiSquared();
-  
       da = 1.0 + (alpha * oneOverRadiiSquared._x);
       db = 1.0 + (alpha * oneOverRadiiSquared._y);
       dc = 1.0 + (alpha * oneOverRadiiSquared._z);
@@ -223,9 +209,6 @@ public class EllipsoidalPlanet extends Planet
       final double da3 = da * da2;
       final double db3 = db * db2;
       final double dc3 = dc * dc2;
-  
-      Vector3D radiiSquared = _ellipsoid.getRadiiSquared();
-      Vector3D radiiToTheFourth = _ellipsoid.getRadiiToTheFourth();
   
       s = (x2 / (radiiSquared._x * da2) + y2 / (radiiSquared._y * db2) + z2 / (radiiSquared._z * dc2) - 1.0);
   
