@@ -30,14 +30,21 @@ void GLState::setParent(const GLState* p) const{
           ILogger::instance()->logError("CAN'T MODIFY PARENTS MODELVIEW");
         } else{
 
-          //if (_lastParentsModelview != parentsM){
+          if (_lastParentsModelview != parentsM){
             delete _accumulatedModelview;
             _accumulatedModelview = parentsM->multiply(*_modelview);
+
+            if (_lastParentsModelview != NULL){
+              _lastParentsModelview->removeListener(&_parentMatrixListener);
+            }
+
             _lastParentsModelview = parentsM;
-          //}
-          //        else{
-          //          ILogger::instance()->logInfo("REUSING MODELVIEW");
-          //        }
+
+            _lastParentsModelview->addListener(&_parentMatrixListener);
+          }
+//          else{
+//            ILogger::instance()->logInfo("REUSING MODELVIEW");
+//          }
 
         }
       }
@@ -107,6 +114,11 @@ void GLState::setModelView(const Matrix44D& modelview, bool modifiesParents){
   if (_modelview == NULL || !_modelview->isEqualsTo(modelview)){
     delete _modelview;
     _modelview = new Matrix44D(modelview);
+
+    if (_lastParentsModelview != NULL){
+      _lastParentsModelview->removeListener(&_parentMatrixListener);
+    }
+
     _lastParentsModelview = NULL;
   }
   //  else{

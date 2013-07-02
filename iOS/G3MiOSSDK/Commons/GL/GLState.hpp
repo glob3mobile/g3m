@@ -37,6 +37,17 @@ class GLState{
   mutable Matrix44D* _accumulatedModelview;
   mutable Matrix44D* _lastParentsModelview;
   bool _modelviewModifiesParents;
+
+  class ParentModelviewListener: public Matrix44DListener{
+    const GLState* _state;
+  public:
+    ParentModelviewListener(GLState* state):_state(state){}
+    void onMatrixBeingDeleted(const Matrix44D* m){
+      //ILogger::instance()->logError("BORRADO");
+      _state->_lastParentsModelview = NULL;
+    }
+  };
+  mutable ParentModelviewListener _parentMatrixListener;
   
 #ifdef C_CODE
   mutable const GLState* _parentGLState;
@@ -57,7 +68,9 @@ class GLState{
   _totalGPUProgramStateChanged(true),
   _modelview(new Matrix44D(*state._modelview)),
   _accumulatedModelview(new Matrix44D(*state._accumulatedModelview)),
-  _modelviewModifiesParents(state._modelviewModifiesParents){}
+  _modelviewModifiesParents(state._modelviewModifiesParents),
+  _lastParentsModelview(new Matrix44D(*state._lastParentsModelview)),
+  _parentMatrixListener(this){}
   
 public:
   
@@ -71,7 +84,9 @@ public:
   _totalGPUProgramStateChanged(true),
   _modelview(NULL),
   _accumulatedModelview(NULL),
-  _modelviewModifiesParents(false){}
+  _modelviewModifiesParents(false),
+    _parentMatrixListener(this),
+  _lastParentsModelview(NULL){}
   
   //For debugging purposes only
   GLState(GLGlobalState*   globalState,
@@ -85,9 +100,14 @@ public:
   _totalGPUProgramStateChanged(true),
   _modelview(NULL),
   _accumulatedModelview(NULL),
-  _modelviewModifiesParents(false){}
+  _modelviewModifiesParents(false),
+    _parentMatrixListener(this),
+  _lastParentsModelview(NULL){}
   
   ~GLState(){
+    if (_lastParentsModelview != NULL){
+      _lastParentsModelview->removeListener(&_parentMatrixListener);
+    }
     if (_owner){
       delete _programState;
       delete _globalState;
