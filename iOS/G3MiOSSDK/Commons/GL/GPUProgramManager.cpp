@@ -102,11 +102,20 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
 }
 
 GPUProgram* GPUProgramManager::getCompiledProgram(int uniformsCode, int attributesCode){
+#ifdef C_CODE
   for (std::map<std::string, GPUProgram*>::iterator it = _programs.begin(); it != _programs.end(); ++it){
     GPUProgram* p = it->second;
     if (p->getUniformsCode() == uniformsCode && p->getAttributesCode() == attributesCode){
       return p;
     }
   }
+#endif
+#ifdef JAVA_CODE
+  for (final GPUProgram p : _programs.values()) {
+    if ((p.getUniformsCode() == uniformsCode) && (p.getAttributesCode() == attributesCode)) {
+      return p;
+    }
+  }
+#endif
   return NULL;
 }
