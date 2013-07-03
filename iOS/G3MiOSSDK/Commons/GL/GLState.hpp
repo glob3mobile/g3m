@@ -36,7 +36,7 @@ class GLState{
   const Matrix44D* _modelview;
   mutable const Matrix44D* _accumulatedModelview;
   mutable const Matrix44D* _lastParentsModelview;
-  bool _modelviewModifiesParents;
+  bool _multiplyModelview;
 
 //  class ParentModelviewListener: public Matrix44DListener{
 //    const GLState* _state;
@@ -57,7 +57,7 @@ class GLState{
 #endif
   
   void applyStates(GL* gl, GPUProgram* prog) const;
-  
+ 
   explicit GLState(const GLState& state):
   _programState(new GPUProgramState()),
   _globalState(new GLGlobalState()),
@@ -68,11 +68,10 @@ class GLState{
   _totalGPUProgramStateChanged(true),
   _modelview(new Matrix44D(*state._modelview)),
   _accumulatedModelview(new Matrix44D(*state._accumulatedModelview)),
-  _modelviewModifiesParents(state._modelviewModifiesParents),
+  _multiplyModelview(state._multiplyModelview),
   _lastParentsModelview(new Matrix44D(*state._lastParentsModelview))
-//  ,
-//  _parentMatrixListener(this)
   {
+    
   }
   
 public:
@@ -87,8 +86,7 @@ public:
   _totalGPUProgramStateChanged(true),
   _modelview(NULL),
   _accumulatedModelview(NULL),
-  _modelviewModifiesParents(false),
-//    _parentMatrixListener(this),
+  _multiplyModelview(false),
   _lastParentsModelview(NULL){}
   
   //For debugging purposes only
@@ -103,7 +101,7 @@ public:
   _totalGPUProgramStateChanged(true),
   _modelview(NULL),
   _accumulatedModelview(NULL),
-  _modelviewModifiesParents(false),
+  _multiplyModelview(false),
 //    _parentMatrixListener(this),
   _lastParentsModelview(NULL){}
   

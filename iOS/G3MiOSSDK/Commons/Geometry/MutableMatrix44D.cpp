@@ -17,6 +17,7 @@
 #include "Vector3F.hpp"
 #include "Vector2F.hpp"
 
+
 MutableMatrix44D& MutableMatrix44D::operator=(const MutableMatrix44D &that) {
   if (this != &that){
     _m00 = that._m00;

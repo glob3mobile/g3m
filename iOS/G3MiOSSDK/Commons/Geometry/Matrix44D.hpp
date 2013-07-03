@@ -62,7 +62,7 @@ public:
 
   ~Matrix44D();
 
-  Matrix44D* multiply(const Matrix44D &that) const;
+  Matrix44D* createMultiplication(const Matrix44D &that) const;
 
 #ifdef C_CODE
   float* getColumnMajorFloatArray() const {

@@ -32,15 +32,15 @@ void GLState::setParent(const GLState* p) const{
   _parentGLState = p;
   if (p != NULL){
     //UNIFORMS AND ATTRIBUTES CODES
-    int newUniformsCode = p->getUniformsCode() | _programState->getUniformsCode();
-    int newAttributesCode = p->getAttributesCode() | _programState->getAttributesCode();
+    const int newUniformsCode = p->getUniformsCode() | _programState->getUniformsCode();
+    const int newAttributesCode = p->getAttributesCode() | _programState->getAttributesCode();
 
     _totalGPUProgramStateChanged = (newAttributesCode != _attributesCode) || (newUniformsCode != _uniformsCode);
     _uniformsCode = newUniformsCode;
     _attributesCode = newAttributesCode;
 
     //MODELVIEW
-    if (_modelviewModifiesParents){
+    if (_multiplyModelview){
       if (_modelview != NULL){
         const Matrix44D* parentsM = p->getAccumulatedModelView();
         if (parentsM == NULL){
@@ -52,7 +52,7 @@ void GLState::setParent(const GLState* p) const{
             if (_accumulatedModelview != NULL){
               _accumulatedModelview->_release();
             }
-            _accumulatedModelview = parentsM->multiply(*_modelview);
+            _accumulatedModelview = parentsM->createMultiplication(*_modelview);
 
             if (_lastParentsModelview != NULL){
 //              _lastParentsModelview->removeListener(&_parentMatrixListener);
@@ -129,17 +129,23 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
 
 }
 
-void GLState::setModelView(const Matrix44D* modelview, bool modifiesParents){
+void GLState::setModelView(const Matrix44D* modelview, bool multiply){
 
-  _modelviewModifiesParents = modifiesParents;
+  _multiplyModelview = multiply;
 
   if (_modelview == NULL || _modelview != modelview){
 //    delete _modelview;
 //    _modelview = new Matrix44D(modelview);
 
+    if (_modelview != NULL){
+      _modelview->_release();
+    }
+
     _modelview = modelview;
     _modelview->_retain();
 
+
+    //Forcing matrix multiplication next time even when parent's modelview is the same
     if (_lastParentsModelview != NULL){
 //      _lastParentsModelview->removeListener(&_parentMatrixListener);
       _lastParentsModelview->_release();
@@ -154,7 +160,7 @@ void GLState::setModelView(const Matrix44D* modelview, bool modifiesParents){
 
 const Matrix44D* GLState::getAccumulatedModelView() const{
 
-  if (!_modelviewModifiesParents && _modelview != NULL){
+  if (!_multiplyModelview && _modelview != NULL){
     return _modelview;
   }
 

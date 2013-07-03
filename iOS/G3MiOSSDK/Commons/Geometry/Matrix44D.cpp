@@ -72,7 +72,7 @@ _m33(m._m33){
   _columnMajorFloatBuffer = NULL;
 }
 
-Matrix44D* Matrix44D::multiply(const Matrix44D &that) const {
+Matrix44D* Matrix44D::createMultiplication(const Matrix44D &that) const {
 
   const double that00 = that._m00;
   const double that10 = that._m10;
