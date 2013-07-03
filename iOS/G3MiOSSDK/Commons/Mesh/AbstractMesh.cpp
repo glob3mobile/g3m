@@ -153,7 +153,7 @@ void AbstractMesh::createGLState(){
                               (double) _flatColor->getAlpha());
     if (_translationMatrix != NULL){
       //progState.setUniformMatrixValue(MODELVIEW, *_translationMatrix, true);
-      _glState.setModelView(*_translationMatrix->asMatrix44D(), true);
+      _glState.setModelView(_translationMatrix->asMatrix44D(), true);
     }
     return;
   }
@@ -202,7 +202,7 @@ void AbstractMesh::createGLState(){
   
   if (_translationMatrix != NULL){
     //progState.setUniformMatrixValue(MODELVIEW, *_translationMatrix, true);
-    _glState.setModelView(*_translationMatrix->asMatrix44D(), true);
+    _glState.setModelView(_translationMatrix->asMatrix44D(), true);
   }
 }
 

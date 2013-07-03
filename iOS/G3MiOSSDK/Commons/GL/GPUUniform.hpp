@@ -268,22 +268,30 @@ class GPUUniformValueMatrix4Float:public GPUUniformValue{
 
   GPUUniformValueMatrix4Float(const GPUUniformValueMatrix4Float* that):
   GPUUniformValue(GLType::glMatrix4Float()),
-  _m(Matrix44D(that->_m))
-  {}
+  _m(that->_m)
+  {
+    that->_m->_retain();
+  }
 
 public:
-  Matrix44D _m;
+  const Matrix44D* _m;
 
   GPUUniformValueMatrix4Float(const Matrix44D& m):
-  GPUUniformValue(GLType::glMatrix4Float()),_m(Matrix44D(m)){}
+  GPUUniformValue(GLType::glMatrix4Float()),_m(&m){
+    m._retain();
+  }
+
+  ~GPUUniformValueMatrix4Float(){
+    _m->_release();
+  }
 
   void setUniform(GL* gl, const IGLUniformID* id) const{
-    gl->uniformMatrix4fv(id, false, &_m);
+    gl->uniformMatrix4fv(id, false, _m);
   }
 
   bool isEqualsTo(const GPUUniformValue* v) const{
     GPUUniformValueMatrix4Float *v2 = (GPUUniformValueMatrix4Float *)v;
-    return _m.isEqualsTo(v2->_m);
+    return _m->isEqualsTo(*v2->_m);
   }
 
   GPUUniformValue* copyOrCreate(GPUUniformValue* value) const;
@@ -294,10 +302,6 @@ public:
     std::string s = isb->getString();
     delete isb;
     return s;
-  }
-
-  const Matrix44D* getValue() const{
-    return &_m;
   }
 };
 

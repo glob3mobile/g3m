@@ -32,7 +32,7 @@ void MeshRenderer::render(const G3MRenderContext* rc) {
   const Frustum* frustum = rc->getCurrentCamera()->getFrustumInModelCoordinates();
 
   //_glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW, rc->getCurrentCamera()->getModelViewMatrix(), false);
-  _glState.setModelView(*(rc->getCurrentCamera()->getModelViewMatrix().asMatrix44D()), false);
+  _glState.setModelView(rc->getCurrentCamera()->getModelViewMatrix().asMatrix44D(), false);
 
 
   const int meshesCount = _meshes.size();

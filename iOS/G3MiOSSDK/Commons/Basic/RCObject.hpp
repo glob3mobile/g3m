@@ -29,10 +29,11 @@ protected:
 
   }
 
-public:
   virtual ~RCObject() {
 
   }
+
+public:
 
   void _retain() const {
     _referenceCounter++;

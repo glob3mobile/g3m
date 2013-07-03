@@ -41,7 +41,9 @@ MutableMatrix44D& MutableMatrix44D::operator=(const MutableMatrix44D &that) {
 
     _isValid = that._isValid;
 
-    delete _matrix44D;
+    if (_matrix44D != NULL){
+      _matrix44D->_release();
+    }
     _matrix44D = NULL;
   }
 
@@ -51,7 +53,9 @@ MutableMatrix44D& MutableMatrix44D::operator=(const MutableMatrix44D &that) {
 MutableMatrix44D::~MutableMatrix44D() {
 //  delete _columnMajorFloatBuffer;
 //  delete [] _columnMajorFloatArray;
-  delete _matrix44D;
+  if (_matrix44D != NULL){
+    _matrix44D->_release();
+  }
 }
 
 //const IFloatBuffer* MutableMatrix44D::getColumnMajorFloatBuffer() const {
@@ -146,7 +150,9 @@ void MutableMatrix44D::copyValueOfMultiplication(const MutableMatrix44D& m1, con
   _m32 = (m1_30 * m2_02) + (m1_31 * m2_12) + (m1_32 * m2_22) + (m1_33 * m2_32);
   _m33 = (m1_30 * m2_03) + (m1_31 * m2_13) + (m1_32 * m2_23) + (m1_33 * m2_33);
 
-  delete _matrix44D;
+  if (_matrix44D != NULL){
+    _matrix44D->_release();
+  }
   _matrix44D = NULL;
 
 //  const double m00 = (m1_00 * m2_00) + (m1_01 * m2_10) + (m1_02 * m2_20) + (m1_03 * m2_30);
@@ -569,6 +575,8 @@ void MutableMatrix44D::copyValue(const MutableMatrix44D &m){
   _m32  = m._m32;
   _m33  = m._m33;
 
-  delete _matrix44D;
+  if (_matrix44D != NULL){
+    _matrix44D->_release();
+  }
   _matrix44D = NULL;
 }

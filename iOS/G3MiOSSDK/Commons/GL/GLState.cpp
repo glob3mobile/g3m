@@ -11,6 +11,23 @@
 GLGlobalState GLState::_currentGPUGlobalState;
 GPUProgram* GLState::_currentGPUProgram = NULL;
 
+GLState::~GLState(){
+  if (_lastParentsModelview != NULL){
+    //      _lastParentsModelview->removeListener(&_parentMatrixListener);
+    _lastParentsModelview->_release();
+  }
+  if (_modelview != NULL){
+    _modelview->_release();
+  }
+  if (_accumulatedModelview != NULL){
+    _accumulatedModelview->_release();
+  }
+  if (_owner){
+    delete _programState;
+    delete _globalState;
+  }
+}
+
 void GLState::setParent(const GLState* p) const{
   _parentGLState = p;
   if (p != NULL){
@@ -25,22 +42,27 @@ void GLState::setParent(const GLState* p) const{
     //MODELVIEW
     if (_modelviewModifiesParents){
       if (_modelview != NULL){
-        Matrix44D* parentsM = p->getAccumulatedModelView();
+        const Matrix44D* parentsM = p->getAccumulatedModelView();
         if (parentsM == NULL){
           ILogger::instance()->logError("CAN'T MODIFY PARENTS MODELVIEW");
         } else{
 
           if (_lastParentsModelview != parentsM){
-            delete _accumulatedModelview;
+
+            if (_accumulatedModelview != NULL){
+              _accumulatedModelview->_release();
+            }
             _accumulatedModelview = parentsM->multiply(*_modelview);
 
             if (_lastParentsModelview != NULL){
-              _lastParentsModelview->removeListener(&_parentMatrixListener);
+//              _lastParentsModelview->removeListener(&_parentMatrixListener);
+              _lastParentsModelview->_release();
             }
 
             _lastParentsModelview = parentsM;
+            _lastParentsModelview->_retain();
 
-            _lastParentsModelview->addListener(&_parentMatrixListener);
+//            _lastParentsModelview->addListener(&_parentMatrixListener);
           }
 //          else{
 //            ILogger::instance()->logInfo("REUSING MODELVIEW");
@@ -92,9 +114,9 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
     applyStates(gl, _lastGPUProgramUsed);
 
     //APPLY TO GPU STATE MODELVIEW
-    Matrix44D* modelview = getAccumulatedModelView();
+    const Matrix44D* modelview = getAccumulatedModelView();
     if (modelview != NULL){
-      GPUUniformValueMatrix4Float valueModelview(*getAccumulatedModelView());
+      GPUUniformValueMatrix4Float valueModelview(*modelview);
       _lastGPUProgramUsed->getGPUUniform(MODELVIEW)->set(&valueModelview);
     }
 
@@ -107,16 +129,20 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
 
 }
 
-void GLState::setModelView(const Matrix44D& modelview, bool modifiesParents){
+void GLState::setModelView(const Matrix44D* modelview, bool modifiesParents){
 
   _modelviewModifiesParents = modifiesParents;
 
-  if (_modelview == NULL || !_modelview->isEqualsTo(modelview)){
-    delete _modelview;
-    _modelview = new Matrix44D(modelview);
+  if (_modelview == NULL || _modelview != modelview){
+//    delete _modelview;
+//    _modelview = new Matrix44D(modelview);
+
+    _modelview = modelview;
+    _modelview->_retain();
 
     if (_lastParentsModelview != NULL){
-      _lastParentsModelview->removeListener(&_parentMatrixListener);
+//      _lastParentsModelview->removeListener(&_parentMatrixListener);
+      _lastParentsModelview->_release();
     }
 
     _lastParentsModelview = NULL;
@@ -126,7 +152,7 @@ void GLState::setModelView(const Matrix44D& modelview, bool modifiesParents){
   //  }
 }
 
-Matrix44D* GLState::getAccumulatedModelView() const{
+const Matrix44D* GLState::getAccumulatedModelView() const{
 
   if (!_modelviewModifiesParents && _modelview != NULL){
     return _modelview;

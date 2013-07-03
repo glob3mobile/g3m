@@ -33,22 +33,22 @@ class GLState{
   mutable bool _totalGPUProgramStateChanged;
   mutable GPUProgram* _lastGPUProgramUsed;
 
-  Matrix44D* _modelview;
-  mutable Matrix44D* _accumulatedModelview;
-  mutable Matrix44D* _lastParentsModelview;
+  const Matrix44D* _modelview;
+  mutable const Matrix44D* _accumulatedModelview;
+  mutable const Matrix44D* _lastParentsModelview;
   bool _modelviewModifiesParents;
 
-  class ParentModelviewListener: public Matrix44DListener{
-    const GLState* _state;
-  public:
-    ParentModelviewListener(GLState* state):_state(state){}
-    void onMatrixBeingDeleted(const Matrix44D* m){
-      //ILogger::instance()->logError("BORRADO");
-      _state->_lastParentsModelview = NULL;
-    }
-  };
-  mutable ParentModelviewListener _parentMatrixListener;
-  
+//  class ParentModelviewListener: public Matrix44DListener{
+//    const GLState* _state;
+//  public:
+//    ParentModelviewListener(GLState* state):_state(state){}
+//    void onMatrixBeingDeleted(const Matrix44D* m){
+//      //ILogger::instance()->logError("BORRADO");
+//      _state->_lastParentsModelview = NULL;
+//    }
+//  };
+//  mutable ParentModelviewListener _parentMatrixListener;
+
 #ifdef C_CODE
   mutable const GLState* _parentGLState;
 #endif
@@ -69,8 +69,11 @@ class GLState{
   _modelview(new Matrix44D(*state._modelview)),
   _accumulatedModelview(new Matrix44D(*state._accumulatedModelview)),
   _modelviewModifiesParents(state._modelviewModifiesParents),
-  _lastParentsModelview(new Matrix44D(*state._lastParentsModelview)),
-  _parentMatrixListener(this){}
+  _lastParentsModelview(new Matrix44D(*state._lastParentsModelview))
+//  ,
+//  _parentMatrixListener(this)
+  {
+  }
   
 public:
   
@@ -85,7 +88,7 @@ public:
   _modelview(NULL),
   _accumulatedModelview(NULL),
   _modelviewModifiesParents(false),
-    _parentMatrixListener(this),
+//    _parentMatrixListener(this),
   _lastParentsModelview(NULL){}
   
   //For debugging purposes only
@@ -101,18 +104,10 @@ public:
   _modelview(NULL),
   _accumulatedModelview(NULL),
   _modelviewModifiesParents(false),
-    _parentMatrixListener(this),
+//    _parentMatrixListener(this),
   _lastParentsModelview(NULL){}
   
-  ~GLState(){
-    if (_lastParentsModelview != NULL){
-      _lastParentsModelview->removeListener(&_parentMatrixListener);
-    }
-    if (_owner){
-      delete _programState;
-      delete _globalState;
-    }
-  }
+  ~GLState();
   
   const GLState* getParent() const{
     return _parentGLState;
@@ -156,8 +151,8 @@ public:
     return _currentGPUGlobalState.createCopy();
   }
 
-  void setModelView(const Matrix44D& modelview, bool modifiesParents);
-  Matrix44D* getAccumulatedModelView() const;
+  void setModelView(const Matrix44D* modelview, bool modifiesParents);
+  const Matrix44D* getAccumulatedModelView() const;
 };
 
 #endif /* defined(__G3MiOSSDK__GLState__) */

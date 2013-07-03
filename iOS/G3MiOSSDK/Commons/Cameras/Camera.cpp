@@ -27,6 +27,7 @@ void Camera::initialize(const G3MContext* context)
 
 
 void Camera::copyFrom(const Camera &that) {
+  //TODO: IMPROVE PERFORMANCE
   _width  = that._width;
   _height = that._height;
 

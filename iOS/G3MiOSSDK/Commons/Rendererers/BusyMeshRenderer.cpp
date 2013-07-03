@@ -99,7 +99,7 @@ void BusyMeshRenderer::render(const G3MRenderContext* rc)
                                                                              -halfWidth, halfWidth);
     
     //_glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW, _projectionMatrix.multiply(_modelviewMatrix), false);
-    _glState.setModelView(*(_projectionMatrix.multiply(_modelviewMatrix).asMatrix44D()), false);
+    _glState.setModelView(_projectionMatrix.multiply(_modelviewMatrix).asMatrix44D(), false);
   }
   
   _glState.getGLGlobalState()->setClearColor(*_backgroundColor);
@@ -135,6 +135,6 @@ void BusyMeshRenderer::createGLState(){
   _modelviewMatrix = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, -1));
   //_glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW,
   //                                                     _projectionMatrix.multiply(_modelviewMatrix), false);
-  _glState.setModelView(*(_projectionMatrix.multiply(_modelviewMatrix).asMatrix44D()), false);
+  _glState.setModelView(_projectionMatrix.multiply(_modelviewMatrix).asMatrix44D(), false);
   
 }

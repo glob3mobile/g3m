@@ -61,5 +61,5 @@ GPUUniformValue* GPUUniformValueMatrix4FloatTransform::copyOrCreate(GPUUniformVa
 
 GPUUniformValue* GPUUniformValueMatrix4Float::copyOrCreate(GPUUniformValue* value) const{
   delete value;
-  return new GPUUniformValueMatrix4Float(_m);
+  return new GPUUniformValueMatrix4Float(*_m);
 }
