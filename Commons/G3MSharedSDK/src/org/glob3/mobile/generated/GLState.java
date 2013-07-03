@@ -182,7 +182,7 @@ public class GLState
               {
                 _accumulatedModelview._release();
               }
-              _accumulatedModelview = parentsM.createMultiplication(*_modelview);
+              _accumulatedModelview = parentsM.createMultiplication(_modelview);
   
               if (_lastParentModelview != null)
               {
