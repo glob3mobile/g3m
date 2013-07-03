@@ -272,6 +272,7 @@
 		CFFEC11E15C2E645003FA986 /* IDownloader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFEC11D15C2E645003FA986 /* IDownloader.cpp */; };
 		CFFEC12315C2EA5F003FA986 /* Downloader_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFFEC12215C2EA5F003FA986 /* Downloader_iOS.mm */; };
 		CFFEC12615C2EBA6003FA986 /* URL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFEC12515C2EBA6003FA986 /* URL.cpp */; };
+		CFFF30831781C6FC005B7428 /* CameraDoubleDragHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB0BB673177B60C90034CC52 /* CameraDoubleDragHandler.hpp */; };
 		D80D521215EE2B0100ACEA16 /* IMathUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80D521115EE2B0100ACEA16 /* IMathUtils.cpp */; };
 		D80D525915EE698E00ACEA16 /* TileTessellator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80D525815EE698E00ACEA16 /* TileTessellator.cpp */; };
 		D81BA17115CBF19F004EF0B0 /* GL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81BA16F15CBF19E004EF0B0 /* GL.cpp */; };
@@ -515,6 +516,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CFFF30831781C6FC005B7428 /* CameraDoubleDragHandler.hpp in CopyFiles */,
 				FB0BB677177B62D30034CC52 /* CameraZoomAndRotateHandler.hpp in CopyFiles */,
 				CF605004177376A600EB48A6 /* JSONNull.hpp in CopyFiles */,
 				CF4027D51770DEA800D5A80C /* WebSocket_iOS.hpp in CopyFiles */,
