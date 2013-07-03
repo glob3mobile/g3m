@@ -33,9 +33,16 @@ class GLState{
   mutable bool _totalGPUProgramStateChanged;
   mutable GPUProgram* _lastGPUProgramUsed;
 
+#ifdef C_CODE
   const Matrix44D* _modelview;
   mutable const Matrix44D* _accumulatedModelview;
   mutable const Matrix44D* _lastParentModelview;
+#endif
+#ifdef JAVA_CODE
+  private Matrix44D _modelview;
+  private Matrix44D _accumulatedModelview;
+  private Matrix44D _lastParentModelview;
+#endif
   bool _multiplyModelview;
 
 //  class ParentModelviewListener: public Matrix44DListener{

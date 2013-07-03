@@ -16,9 +16,9 @@ bool FrameTasksExecutor::canExecutePreRenderStep(const G3MRenderContext* rc,
                                                  int executedCounter) {
   const int tasksCount = _preRenderTasks.size();
   if (tasksCount <= _minimumExecutionsPerFrame) {
-    if (_stressed) {
-      rc->getLogger()->logWarning("Abandon STRESSED mode");
-    }
+    //if (_stressed) {
+    //  rc->getLogger()->logWarning("Abandon STRESSED mode");
+    //}
     _stressed = false;
   }
 
@@ -32,10 +32,9 @@ bool FrameTasksExecutor::canExecutePreRenderStep(const G3MRenderContext* rc,
   
   if (tasksCount > _maximumQueuedTasks) {
     if (!_stressed) {
-      rc->getLogger()->logWarning("Too many queued tasks (%d). Goes to STRESSED mode",
-                                  _preRenderTasks.size());
+      //rc->getLogger()->logWarning("Too many queued tasks (%d). Goes to STRESSED mode",
+      //                            _preRenderTasks.size());
     }
-
     _stressed = true;
   }
   

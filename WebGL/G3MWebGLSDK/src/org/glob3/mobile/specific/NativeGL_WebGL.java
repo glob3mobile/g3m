@@ -13,7 +13,7 @@ import org.glob3.mobile.generated.IGLUniformID;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.INativeGL;
 import org.glob3.mobile.generated.IShortBuffer;
-import org.glob3.mobile.generated.MutableMatrix44D;
+import org.glob3.mobile.generated.Matrix44D;
 import org.glob3.mobile.generated.ShaderType;
 
 import com.google.gwt.core.client.JavaScriptObject;
@@ -136,9 +136,9 @@ public final class NativeGL_WebGL
    @Override
    public native void uniformMatrix4fv(final IGLUniformID location,
                                        final boolean transpose,
-                                       final MutableMatrix44D matrix) /*-{
+                                       final Matrix44D matrix) /*-{
 		var id = location.@org.glob3.mobile.specific.GLUniformID_WebGL::getId()();
-		var buffer = matrix.@org.glob3.mobile.generated.MutableMatrix44D::getColumnMajorFloatBuffer()();
+		var buffer = matrix.@org.glob3.mobile.generated.Matrix44D::getColumnMajorFloatBuffer()();
 		var value = buffer.@org.glob3.mobile.specific.FloatBuffer_WebGL::getBuffer()();
 		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.uniformMatrix4fv(
 				id, transpose, value);
@@ -585,6 +585,7 @@ public final class NativeGL_WebGL
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.NO_ERROR;
    }-*/;
 
+
    @Override
    public native int createProgram() /*-{
 		var shaderList = this.@org.glob3.mobile.specific.NativeGL_WebGL::_shaderList;
@@ -660,8 +661,8 @@ public final class NativeGL_WebGL
 
    @Override
    public native boolean deleteShader(final int shader) /*-{
-   	//TODO: IMPLEMENTATION FAILS
-   	//debugger;
+		//TODO: IMPLEMENTATION FAILS
+		//debugger;
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 		var shaderList = this.@org.glob3.mobile.specific.NativeGL_WebGL::_shaderList;
 		var jsoShader = shaderList.@java.util.ArrayList::get(I)(shader);
@@ -718,6 +719,7 @@ public final class NativeGL_WebGL
    public native int BlendFactor_Zero() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.ZERO;
    }-*/;
+
 
    @Override
    public native void useProgram(GPUProgram program) /*-{

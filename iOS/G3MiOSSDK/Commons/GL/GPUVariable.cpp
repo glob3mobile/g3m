@@ -34,7 +34,7 @@
 
 bool GPUVariable::codeContainsUniform(int code, GPUUniformKey u){
   if (u == UNRECOGNIZED_UNIFORM){
-    return 0;
+    return false;
   }
 #ifdef C_CODE
   const int index = u;
@@ -47,7 +47,7 @@ bool GPUVariable::codeContainsUniform(int code, GPUUniformKey u){
 
 bool GPUVariable::codeContainsAttribute(int code, GPUAttributeKey a){
   if (a == UNRECOGNIZED_ATTRIBUTE){
-    return 0;
+    return false;
   }
 #ifdef C_CODE
   const int index = a;
@@ -59,11 +59,11 @@ bool GPUVariable::codeContainsAttribute(int code, GPUAttributeKey a){
 }
 
 bool GPUVariable::codeContainsUniform(int code, int u){
-  return (code >> u) & 0x00000001;
+  return ((code >> u) & 0x00000001) != 0;
 }
 
 bool GPUVariable::codeContainsAttribute(int code, int a){
-  return (code >> a) & 0x00000001;
+  return ((code >> a) & 0x00000001) != 0;
 }
 
 int GPUVariable::getUniformCode(int u){
