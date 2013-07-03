@@ -199,11 +199,8 @@ public class GPUProgramManager
 
   public final GPUProgram getCompiledProgram(int uniformsCode, int attributesCode)
   {
-    for (java.util.Iterator<String, GPUProgram> it = _programs.iterator(); it.hasNext();)
-    {
-      GPUProgram p = it.next().getValue();
-      if (p.getUniformsCode() == uniformsCode && p.getAttributesCode() == attributesCode)
-      {
+    for (final GPUProgram p : _programs.values()) {
+      if ((p.getUniformsCode() == uniformsCode) && (p.getAttributesCode() == attributesCode)) {
         return p;
       }
     }
