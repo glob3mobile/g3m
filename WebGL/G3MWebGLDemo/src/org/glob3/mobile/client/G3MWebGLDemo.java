@@ -361,10 +361,15 @@ public class G3MWebGLDemo
        });*/
       
 
+      final WMSLayer blueMarble = LayerBuilder.createBlueMarbleLayer(true);
+      layerSet.addLayer(blueMarble);
+      
+      final WMSLayer pnoa = LayerBuilder.createPNOALayer(true);
+      layerSet.addLayer(pnoa);
 
       
       builder.setInitializationTask(initializationTask);
-      //builder.getTileRendererBuilder().setLayerSet(layerSet);
+      builder.getTileRendererBuilder().setLayerSet(layerSet);
 
       _widget = builder.createWidget();
       
